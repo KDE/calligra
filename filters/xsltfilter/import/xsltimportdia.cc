@@ -105,7 +105,7 @@ void XSLTImportDia::okSlot()
 	hide();
 	kdDebug() << "XSLT FILTER --> BEGIN" << endl;
 	_out->open("root");
-	QString stylesheet = _currentFile.directory() + "/" + _currentFile.filename();
+	QString stylesheet = _currentFile.directory() + "/" + _currentFile.fileName();
 
 	/* Create a temp file */
 	QString tempFileName = tempnam(NULL, "xslt");

@@ -4,7 +4,7 @@
 // The main module for the KDE Kugar shell.
 
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kcmdlineargs.h>

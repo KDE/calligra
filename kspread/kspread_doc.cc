@@ -65,7 +65,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
   m_bDelayCalculation = false;
-   
+
   if ( s_docs == 0 )
       s_docs = new QPtrList<KSpreadDoc>;
   s_docs->append( this );
@@ -547,7 +547,7 @@ QString KSpreadDoc::completeHeading( const QString &_data, int _page, const QStr
     if ( pathFileName.isNull() )
         pathFileName="";
 
-    QString fileName(url().filename());
+    QString fileName(url().fileName());
     if( fileName.isNull())
         fileName="";
 
@@ -970,12 +970,12 @@ void KSpreadDoc::emitEndOperation()
 {
    KSpreadTable *t = NULL;
    CellBinding* b = NULL;
-   
+
    m_bDelayCalculation = false;
    for ( t = m_pMap->firstTable(); t != NULL; t = m_pMap->nextTable() )
    {
       t->update();
-      
+
       for (b = t->firstCellBinding(); b != NULL; b = t->nextCellBinding())
       {
 	b->cellChanged(NULL);

@@ -106,7 +106,7 @@ void XSLTExportDia::okSlot()
 	hide();
 	kdDebug() << "XSLT FILTER --> BEGIN" << endl;
 	_in->open("root");
-	QString stylesheet = _currentFile.directory() + "/" + _currentFile.filename();
+	QString stylesheet = _currentFile.directory() + "/" + _currentFile.fileName();
 
 	/* Save the input file in a temp file */
 	QByteArray array = _in->read(_in->size());

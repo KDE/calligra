@@ -3,9 +3,9 @@
 // This file contains the implementation of the Kugar KPart.
 
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kinstance.h>
 #include <kaboutdata.h>
 #include <kaction.h>

@@ -52,7 +52,7 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <krun.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kurl.h>
 
 class Thesaurus : public KDataTool
@@ -62,7 +62,7 @@ class Thesaurus : public KDataTool
 public:
     Thesaurus(QObject* parent, const char* name, const QStringList &);
     ~Thesaurus();
-    virtual bool run(const QString& command, void* data, 
+    virtual bool run(const QString& command, void* data,
         const QString& datatype, const QString& mimetype);
 
 protected slots:
@@ -96,9 +96,9 @@ protected:
     QString m_no_match;
 
     int m_history_pos;
-    
+
     bool m_replacement;        // does this dialog offer a replace button etc.?
-    
+
     KProcess *m_thesproc;
     QString m_thesproc_stdout;
     QString m_thesproc_stderr;
@@ -109,17 +109,17 @@ protected:
 
     Mode m_mode;
 
-    QFrame *m_page;    
+    QFrame *m_page;
     QVBoxLayout *m_top_layout;
 
     KDialogBase *m_dialog;
     QTabWidget *m_tab;
     QVBox *vbox;
     QVBox *vbox2;
-    
+
     QPushButton *m_back;
     QPushButton *m_forward;
-    
+
     KHistoryCombo *m_edit;
     QLabel *m_edit_label;
 
@@ -129,7 +129,7 @@ protected:
     // WordNet:
     QTextBrowser *m_resultbox;
     QComboBox *m_combobox;
-    
+
     // Thesaurus:
     QVBox *vbox_syn;
     QListBox *m_thes_syn;

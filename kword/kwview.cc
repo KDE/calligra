@@ -320,11 +320,11 @@ void KWView::setupActions()
     actionExtraCreateTemplate = new KAction( i18n( "&Create Template from Document..." ), 0,
                                              this, SLOT( extraCreateTemplate() ),
                                              actionCollection(), "extra_template" );
-    actionExtraCreateTemplate->setStatusText( i18n( "Save this document and use it later as a template" ) );
+    actionExtraCreateTemplate->setToolTip( i18n( "Save this document and use it later as a template" ) );
     actionExtraCreateTemplate->setWhatsThis( i18n( "You can save this document as a template.<br><br>You can use this new template as a starting point for another document." ) );
 
     actionFileStatistics = new KAction( i18n( "Statistics" ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
-    actionFileStatistics->setStatusText( i18n( "Sentence, word and letter counts for this document" ) );
+    actionFileStatistics->setToolTip( i18n( "Sentence, word and letter counts for this document" ) );
     actionFileStatistics->setWhatsThis( i18n( "Information on the number of letters, words, syllables and sentences for this document.<p>Evaluates readability using the Flesch reading score." ) );
     // -------------- Edit actions
     actionEditCut = KStdAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
@@ -344,7 +344,7 @@ void KWView::setupActions()
     actionEditDelFrame = new KAction( i18n( "&Delete Frame" ), 0,
                                       this, SLOT( editDeleteFrame() ),
                                       actionCollection(), "edit_delframe" );
-    actionEditDelFrame->setStatusText( i18n( "Delete the currently selected frame." ) );
+    actionEditDelFrame->setToolTip( i18n( "Delete the currently selected frame." ) );
     actionEditDelFrame->setWhatsThis( i18n( "Delete the currently selected frame." ) );
 
     /*
@@ -362,7 +362,7 @@ void KWView::setupActions()
     actionViewTextMode = new KToggleAction( i18n( "Text mode" ), 0,
                                             this, SLOT( viewTextMode() ),
                                             actionCollection(), "view_textmode" );
-    actionViewTextMode->setStatusText( i18n( "Text mode." ) );
+    actionViewTextMode->setToolTip( i18n( "Text mode." ) );
     actionViewTextMode->setWhatsThis( i18n( "Text mode." ) );
 
     actionViewTextMode->setExclusiveGroup( "viewmodes" );
@@ -370,7 +370,7 @@ void KWView::setupActions()
                                             this, SLOT( viewPageMode() ),
                                             actionCollection(), "view_pagemode" );
     actionViewPageMode->setWhatsThis( i18n( "Switch from preview mode to page mode.<br><br>Page mode is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to Preview mode." ) );
-    actionViewPageMode->setStatusText( i18n( "Switch from preview mode to page editing mode." ) );
+    actionViewPageMode->setToolTip( i18n( "Switch from preview mode to page editing mode." ) );
 
     actionViewPageMode->setExclusiveGroup( "viewmodes" );
     actionViewPageMode->setChecked( true );
@@ -378,32 +378,32 @@ void KWView::setupActions()
                                             this, SLOT( viewPreviewMode() ),
                                             actionCollection(), "view_previewmode" );
     actionViewPreviewMode->setWhatsThis( i18n( "Zoom out from your document to get a look at several pages of your document.<br><br>The number of pages per line can be customized." ) );
-    actionViewPreviewMode->setStatusText( i18n( "Zoom out to a multiple page view." ) );
+    actionViewPreviewMode->setToolTip( i18n( "Zoom out to a multiple page view." ) );
 
     actionViewPreviewMode->setExclusiveGroup( "viewmodes" );
 
     actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
                                                    this, SLOT( slotViewFormattingChars() ),
                                                    actionCollection(), "view_formattingchars" );
-    actionViewFormattingChars->setStatusText( i18n( "Toggle the display of non-printing characters." ) );
+    actionViewFormattingChars->setToolTip( i18n( "Toggle the display of non-printing characters." ) );
     actionViewFormattingChars->setWhatsThis( i18n( "Toggle the display of non-printing characters.<br><br>When this is enabled, KWord shows you tabs, spaces, carriage returns and other non-printing characters." ) );
 
     actionViewFrameBorders = new KToggleAction( i18n( "Frame &Borders" ), 0,
                                                    this, SLOT( slotViewFrameBorders() ),
                                                    actionCollection(), "view_frameborders" );
-    actionViewFrameBorders->setStatusText( i18n( "Turns the border display on and off." ) );
+    actionViewFrameBorders->setToolTip( i18n( "Turns the border display on and off." ) );
     actionViewFrameBorders->setWhatsThis( i18n( "Turns the border display on and off.<br><br>The borders are never printed. This option is useful to see how the document will appear on the printed page." ) );
 
     actionViewHeader = new KToggleAction( i18n( "&Header" ), 0,
                                           this, SLOT( viewHeader() ),
                                           actionCollection(), "view_header" );
-    actionViewHeader->setStatusText( i18n( "Shows and hides header display." ) );
+    actionViewHeader->setToolTip( i18n( "Shows and hides header display." ) );
     actionViewHeader->setWhatsThis( i18n( "Selecting this option toggles the display of headers in KWord.<br><br>Headers are special frames at the top of each page which can contain page numbers or other information." ) );
 
     actionViewFooter = new KToggleAction( i18n( "Foo&ter" ), 0,
                                           this, SLOT( viewFooter() ),
                                           actionCollection(), "view_footer" );
-    actionViewFooter->setStatusText( i18n( "Shows and hides footer display." ) );
+    actionViewFooter->setToolTip( i18n( "Shows and hides footer display." ) );
     actionViewFooter->setWhatsThis( i18n( "Selecting this option toggles the display of footers in KWord. <br><br>Footers are special frames at the bottom of each page which can contain page numbers or other information." ) );
 
     actionViewFootNotes = new KToggleAction( i18n( "Foot&notes" ), 0,
@@ -433,19 +433,19 @@ void KWView::setupActions()
                         ALT + SHIFT + Key_C,
                         this, SLOT( insertSpecialChar() ),
                         actionCollection(), "insert_specialchar" );
-    actionInsertSpecialChar->setStatusText( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
+    actionInsertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
     actionInsertSpecialChar->setWhatsThis( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
 
     actionInsertFrameBreak = new KAction( i18n( "&Hard Frame Break" ), CTRL + Key_Return,
                                           this, SLOT( insertFrameBreak() ),
                                           actionCollection(), "insert_framebreak" );
-    actionInsertFrameBreak->setStatusText( i18n( "Force the remainder of the text into the next frame." ) );
+    actionInsertFrameBreak->setToolTip( i18n( "Force the remainder of the text into the next frame." ) );
     actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next frame in the frameset." ) );
 
      actionInsertLink = new KAction( i18n( "Insert link" ), 0,
                                         this, SLOT( insertLink() ),
                                         actionCollection(), "insert_link" );
-    actionInsertLink->setStatusText( i18n( "Insert a web address, email address or hyperlink to a file." ) );
+    actionInsertLink->setToolTip( i18n( "Insert a web address, email address or hyperlink to a file." ) );
     actionInsertLink->setWhatsThis( i18n( "Insert a web address, email address or hyperlink to a file." ) );
 
     // TODO
@@ -456,7 +456,7 @@ void KWView::setupActions()
     actionInsertContents = new KAction( i18n( "Table of &Contents" ), 0,
                                         this, SLOT( insertContents() ),
                                         actionCollection(), "insert_contents" );
-    actionInsertContents->setStatusText( i18n( "Insert table of contents at the current cursor position." ) );
+    actionInsertContents->setToolTip( i18n( "Insert table of contents at the current cursor position." ) );
     actionInsertContents->setWhatsThis( i18n( "Insert table of contents at the current cursor position." ) );
 
     m_variableDefMap.clear();
@@ -485,7 +485,7 @@ void KWView::setupActions()
     actionRefreshAllVariable = new KAction( i18n( "&Refresh all variables" ), 0,
                                     this, SLOT( refreshAllVariable() ),
                                     actionCollection(), "refresh_all_variable" );
-    actionRefreshAllVariable->setStatusText( i18n( "Update all variables to current values." ) );
+    actionRefreshAllVariable->setToolTip( i18n( "Update all variables to current values." ) );
     actionRefreshAllVariable->setWhatsThis( i18n( "Update all variables in the document to current values.<br><br>This will update page numbers, dates or any other variables that need updating." ) );
 
     actionInsertVariable->insert(actionRefreshAllVariable);
@@ -497,7 +497,7 @@ void KWView::setupActions()
     actionToolsCreateText = new KToggleAction( i18n( "Te&xt Frame" ), "frame_text", Key_F2,
                                                this, SLOT( toolsCreateText() ),
                                                actionCollection(), "tools_createtext" );
-    actionToolsCreateText->setStatusText( i18n( "Create a new text frame." ) );
+    actionToolsCreateText->setToolTip( i18n( "Create a new text frame." ) );
     actionToolsCreateText->setWhatsThis( i18n( "Create a new text frame." ) );
 
     actionToolsCreateText->setExclusiveGroup( "tools" );
@@ -505,28 +505,28 @@ void KWView::setupActions()
                                               Key_F3 /*same as kpr*/,
                                               this, SLOT( insertPicture() ),
                                               actionCollection(), "insert_picture" );
-    actionToolsCreatePix->setStatusText( i18n( "Create a new frame for a picture." ) );
+    actionToolsCreatePix->setToolTip( i18n( "Create a new frame for a picture." ) );
     actionToolsCreatePix->setWhatsThis( i18n( "Create a new frame for a picture." ) );
 
     actionToolsCreatePix->setExclusiveGroup( "tools" );
     actionInsertFormula = new KAction( i18n( "For&mula" ), "frame_formula", Key_F4,
                                        this, SLOT( insertFormula() ),
                                        actionCollection(), "tools_formula" );
-    actionInsertFormula->setStatusText( i18n( "Insert a formula into a new frame." ) );
+    actionInsertFormula->setToolTip( i18n( "Insert a formula into a new frame." ) );
     actionInsertFormula->setWhatsThis( i18n( "Insert a formula into a new frame." ) );
 
     actionInsertTable = new KAction( i18n( "&Table..." ), "inline_table",
                         Key_F5,
                         this, SLOT( insertTable() ),
                         actionCollection(), "insert_table" );
-    actionInsertTable->setStatusText( i18n( "Create a table." ) );
+    actionInsertTable->setToolTip( i18n( "Create a table." ) );
     actionInsertTable->setWhatsThis( i18n( "Create a table.<br><br>The table can either exist in a frame of its own or inline." ) );
 
     actionToolsCreatePart = new KoPartSelectAction( i18n( "&Object Frame" ), "frame_query",
                                                     /*CTRL+Key_F2 same as kpr,*/
                                                     this, SLOT( toolsPart() ),
                                                     actionCollection(), "tools_part" );
-    actionToolsCreatePart->setStatusText( i18n( "Insert an object into a new frame." ) );
+    actionToolsCreatePart->setToolTip( i18n( "Insert an object into a new frame." ) );
     actionToolsCreatePart->setWhatsThis( i18n( "Insert an object into a new frame." ) );
 
     //actionToolsCreatePart->setExclusiveGroup( "tools" );
@@ -535,31 +535,31 @@ void KWView::setupActions()
     actionFormatFont = new KAction( i18n( "&Font..." ), ALT + CTRL + Key_F,
                                     this, SLOT( formatFont() ),
                                     actionCollection(), "format_font" );
-    actionFormatFont->setStatusText( i18n( "Change character size, font, boldface, italics, etc." ) );
+    actionFormatFont->setToolTip( i18n( "Change character size, font, boldface, italics, etc." ) );
     actionFormatFont->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
 
     actionFormatParag = new KAction( i18n( "&Paragraph..." ), ALT + CTRL + Key_P,
                                      this, SLOT( formatParagraph() ),
                                      actionCollection(), "format_paragraph" );
-    actionFormatParag->setStatusText( i18n( "Change paragraph margins, text flow, borders, bullets, numbering, etc." ) );
+    actionFormatParag->setToolTip( i18n( "Change paragraph margins, text flow, borders, bullets, numbering, etc." ) );
     actionFormatParag->setWhatsThis( i18n( "Change paragraph margins, text flow, borders, bullets, numbering, etc.<p>Select text in multiple paragraphs to change the formating of all selected paragraphs.<p>If no text is selected, the paragraph with the cursor will be changed." ) );
 
     actionFormatFrameSet = new KAction( i18n( "F&rame/Frameset..." ), 0,
                                      this, SLOT( formatFrameSet() ),
                                      actionCollection(), "format_frameset" );
-    actionFormatFrameSet->setStatusText( i18n( "Alter frameset properties." ) );
+    actionFormatFrameSet->setToolTip( i18n( "Alter frameset properties." ) );
     actionFormatFrameSet->setWhatsThis( i18n( "Alter frameset properties.<p>Currently you can change the frame background." ) );
 
     actionFormatPage = new KAction( i18n( "P&age..." ), 0,
                         this, SLOT( formatPage() ),
                         actionCollection(), "format_page" );
-    actionFormatPage->setStatusText( i18n( "Change properties of entire page." ) );
+    actionFormatPage->setToolTip( i18n( "Change properties of entire page." ) );
     actionFormatPage->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings." ) );
 
     actionFormatStylist = new KAction( i18n( "&Stylist..." ), ALT + CTRL + Key_S,
                         this, SLOT( extraStylist() ),
                         actionCollection(), "format_stylist" );
-    actionFormatStylist->setStatusText( i18n( "Change attributes of styles." ) );
+    actionFormatStylist->setToolTip( i18n( "Change attributes of styles." ) );
     actionFormatStylist->setWhatsThis( i18n( "Change font and paragraph attributes of styles.<p>Multiple styles can be changed using the dialog box." ) );
 
     actionFormatFontSize = new KFontSizeAction( i18n( "Font Size" ), 0,
@@ -585,7 +585,7 @@ void KWView::setupActions()
     actionFormatDefault=new KAction( i18n( "Default Format" ), 0,
                                           this, SLOT( textDefaultFormat() ),
                                           actionCollection(), "text_default" );
-    actionFormatDefault->setStatusText( i18n( "Change font and paragraph attributes to their default values." ) );
+    actionFormatDefault->setToolTip( i18n( "Change font and paragraph attributes to their default values." ) );
     actionFormatDefault->setWhatsThis( i18n( "Change font and paragraph attributes to their default values." ) );
 
     actionFormatBold = new KToggleAction( i18n( "&Bold" ), "text_bold", CTRL + Key_B,
@@ -685,7 +685,7 @@ void KWView::setupActions()
 
 
     actionBackgroundColor = new TKSelectColorAction( i18n( "Text Background Color..." ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor",true);
-    actionBackgroundColor->setStatusText( i18n( "Change background color for currently selected text." ) );
+    actionBackgroundColor->setToolTip( i18n( "Change background color for currently selected text." ) );
     actionBackgroundColor->setWhatsThis( i18n( "Change background color for currently selected text." ) );
 
     connect(actionBackgroundColor,SIGNAL(activated()),SLOT(backgroundColor() ));
@@ -696,49 +696,49 @@ void KWView::setupActions()
     actionTableInsertRow = new KAction( i18n( "&Insert Row..." ), "insert_table_row", 0,
                                this, SLOT( tableInsertRow() ),
                                actionCollection(), "table_insrow" );
-    actionTableInsertRow->setStatusText( i18n( "Insert one or more rows at cursor location." ) );
+    actionTableInsertRow->setToolTip( i18n( "Insert one or more rows at cursor location." ) );
     actionTableInsertRow->setWhatsThis( i18n( "Insert one or more rows at current cursor location." ) );
 
     actionTableInsertCol = new KAction( i18n( "I&nsert Column..." ), "insert_table_col", 0,
                                this, SLOT( tableInsertCol() ),
                                actionCollection(), "table_inscol" );
-    actionTableInsertCol->setStatusText( i18n( "Insert one or more columns into the current table." ) );
+    actionTableInsertCol->setToolTip( i18n( "Insert one or more columns into the current table." ) );
     actionTableInsertCol->setWhatsThis( i18n( "Insert one or more columns into the current table." ) );
 
     actionTableDelRow = new KAction( i18n( "&Delete Row..." ), "delete_table_row", 0,
                                      this, SLOT( tableDeleteRow() ),
                                      actionCollection(), "table_delrow" );
-    actionTableDelRow->setStatusText( i18n( "Delete one row from the current table." ) );
+    actionTableDelRow->setToolTip( i18n( "Delete one row from the current table." ) );
     actionTableDelRow->setWhatsThis( i18n( "Delete one row from the current table.<p>Your cursor does not need to be in the row to be deleted. You will be given the opportunity to specify which row to delete." ) );
 
     actionTableDelCol = new KAction( i18n( "D&elete Column..." ), "delete_table_col", 0,
                                      this, SLOT( tableDeleteCol() ),
                                      actionCollection(), "table_delcol" );
-    actionTableDelCol->setStatusText( i18n( "Delete one column from the current table." ) );
+    actionTableDelCol->setToolTip( i18n( "Delete one column from the current table." ) );
     actionTableDelCol->setWhatsThis( i18n( "Delete one column from the current table.<p>Your cursor does not need to be in the column to be deleted. You will be given the opportunity to specify which row to delete.." ) );
 
     actionTableJoinCells = new KAction( i18n( "&Join Cells" ), 0,
                                         this, SLOT( tableJoinCells() ),
                                         actionCollection(), "table_joincells" );
-    actionTableJoinCells->setStatusText( i18n( "Join two or more cells into one large cell." ) );
+    actionTableJoinCells->setToolTip( i18n( "Join two or more cells into one large cell." ) );
     actionTableJoinCells->setWhatsThis( i18n( "Join two or more cells into one large cell.<p>This is a good way to create titles and labels within a table." ) );
 
     actionTableSplitCells= new KAction( i18n( "&Split Cells..." ), 0,
                                          this, SLOT( tableSplitCells() ),
                                          actionCollection(), "table_splitcells" );
-    actionTableSplitCells->setStatusText( i18n( "Split one cell into two or more cells." ) );
+    actionTableSplitCells->setToolTip( i18n( "Split one cell into two or more cells." ) );
     actionTableSplitCells->setWhatsThis( i18n( "Split one cell into two or more cells.<p>Cells can be split horizontally, vertically or both directions at once. ." ) );
 
     actionTableUngroup = new KAction( i18n( "&Ungroup Table" ), 0,
                                       this, SLOT( tableUngroupTable() ),
                                       actionCollection(), "table_ungroup" );
-    actionTableUngroup->setStatusText( i18n( "Break a table into individual frames." ) );
+    actionTableUngroup->setToolTip( i18n( "Break a table into individual frames." ) );
     actionTableUngroup->setWhatsThis( i18n( "Break a table into individual frames<p>Each frame can be moved independently around the page." ) );
 
     actionTableDelete = new KAction( i18n( "Delete &Table" ), 0,
                                      this, SLOT( tableDelete() ),
                                      actionCollection(), "table_delete" );
-    actionTableDelete->setStatusText( i18n( "Delete the entire table." ) );
+    actionTableDelete->setToolTip( i18n( "Delete the entire table." ) );
     actionTableDelete->setWhatsThis( i18n( "Deletes all cells and the content within the cells of the currently selected table." ) );
 
 
@@ -748,19 +748,19 @@ void KWView::setupActions()
     actionAutoFormat = new KAction( i18n( "&Autocorrection..." ), 0,
                         this, SLOT( extraAutoFormat() ),
                         actionCollection(), "extra_autocorrection" );
-    actionAutoFormat->setStatusText( i18n( "Change autocorrection options." ) );
+    actionAutoFormat->setToolTip( i18n( "Change autocorrection options." ) );
     actionAutoFormat->setWhatsThis( i18n( "Change autocorrection options including:<p> <UL><LI><P>exceptions to autocorrection</P> <LI><P>add/remove autocorrection replacement text</P> <LI><P>and basic autocorrection options</P>." ) );
 
     actionEditPersonnalExpr=new KAction( i18n( "Edit personal expressions..." ), 0,
                                          this, SLOT( editPersonalExpr() ),
                                      actionCollection(), "personal_expr" );
-    actionEditPersonnalExpr->setStatusText( i18n( "Add or change one or more personal expressions." ) );
+    actionEditPersonnalExpr->setToolTip( i18n( "Add or change one or more personal expressions." ) );
     actionEditPersonnalExpr->setWhatsThis( i18n( "Add or change one or more personal expressions.<p>Personal expressions are a way to quickly insert commonly used phrases or text into your document." ) );
 
     actionChangeCase=new KAction( i18n( "Change case..." ), 0,
                                      this, SLOT( changeCaseOfText() ),
                                      actionCollection(), "change_case" );
-    actionChangeCase->setStatusText( i18n( "Alter the capitalization of selected text." ) );
+    actionChangeCase->setToolTip( i18n( "Alter the capitalization of selected text." ) );
     actionChangeCase->setWhatsThis( i18n( "Alter the capitalization of selected text to one of three pre-defined patterns.<p>You can also switch all letters from uppercase to lower case and from lower case to upper case in one move." ) );
 
     //------------------------ Settings menu
@@ -792,7 +792,7 @@ void KWView::setupActions()
     actionShowDocStruct = new KToggleAction( i18n( "Show doc structure" ), 0,
                                             this, SLOT( showDocStructure() ),
                                             actionCollection(), "show_docstruct" );
-    actionShowDocStruct->setStatusText( i18n( "Open document structure sidebar." ) );
+    actionShowDocStruct->setToolTip( i18n( "Open document structure sidebar." ) );
     actionShowDocStruct->setWhatsThis( i18n( "Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables, etc." ) );
 
     // ------------------- Actions with a key binding and no GUI item

@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kcharsets.h>
 #include <kglobal.h>
-#include <kapp.h>
+#include <kapplication.h>
 
 #include <ExportDialogUI.h>
 #include <ExportDialog.h>

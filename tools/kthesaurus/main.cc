@@ -4,7 +4,7 @@
     begin            : 2001-12-22
     copyright        : (C) 2001 by Daniel Naber
     email            : daniel.naber@t-online.de
-	$Id: $
+	$Id$
  ***************************************************************************/
 
 /***************************************************************************
@@ -19,7 +19,7 @@
 #include <qstring.h>
 
 #include <kaboutdata.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kdatatool.h>
 #include <kdebug.h>
@@ -83,6 +83,6 @@ int main(int argc, char **argv)
 	tool->run(command, &text, datatype, mimetype);
 
 	delete tool;
-	
+
 	return 0;
 }

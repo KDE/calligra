@@ -26,7 +26,7 @@
 #include <kcharsets.h>
 #include <kglobal.h>
 #include <kdebug.h>
-#include <kapp.h>
+#include <kapplication.h>
 
 #include <ExportDialogUI.h>
 #include <ExportDialog.h>
@@ -37,7 +37,7 @@ HtmlExportDialog :: HtmlExportDialog(QWidget* parent)
 {
 
     kapp->restoreOverrideCursor();
-    
+
     m_dialog->comboBoxEncoding->insertStringList(KGlobal::charsets()->availableEncodingNames());
     //m_dialog->comboBoxEncoding->insertStringList(KGlobal::charsets()->descriptiveEncodingNames());
 

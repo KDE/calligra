@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmimetype.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <koFilterManager.h>
 

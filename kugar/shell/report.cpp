@@ -1,16 +1,16 @@
-// Copyright (c) 1999 Mutiny Bay Software                         
+// Copyright (c) 1999 Mutiny Bay Software
 // Copyright (c) 2000 Phil Thompson <phil@river-bank.demon.co.uk>
 //
 // This file contains the implementation of the KDE GUI wrapper around the
 // report viewer widget.
 
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kstdaction.h>
 #include <ktoolbar.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kurl.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>

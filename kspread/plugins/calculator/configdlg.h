@@ -39,7 +39,7 @@
 #include <qlabel.h>
 #include <qframe.h>
 #include <qspinbox.h>
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 
 #include "kcalc.h"
 

@@ -74,11 +74,10 @@ int ToolSelectAction::plug( QWidget* widget, int index )
 void ToolSelectAction::setDefaultAction( KAction* a )
 {
   KAction::setText(a->text());
-  setAccel(a->accel());
+  setShortcut(KShortcut(a->shortcut().keyCodeQt()));
   setGroup(a->group());
   setWhatsThis(a->whatsThis());
   setToolTip(a->toolTip());
-  setStatusText(a->statusText());
   setEnabled(a->isEnabled());
   setIcon(a->icon());
 

@@ -26,7 +26,7 @@
 #include <kcharsets.h>
 #include <kglobal.h>
 #include <kdebug.h>
-#include <kapp.h>
+#include <kapplication.h>
 
 #include <ImportDialogUI.h>
 #include <ImportDialog.h>
