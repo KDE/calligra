@@ -381,12 +381,12 @@ QTextCursor KoTextView::selectWordUnderCursor()
     return c2;
 }
 
-QTextCursor KoTextView::selectLineUnderCursor()
+QTextCursor KoTextView::selectParagUnderCursor()
 {
     QTextCursor c1 = *m_cursor;
     QTextCursor c2 = *m_cursor;
-    c1.gotoLineStart();
-    c2.gotoLineEnd();
+    c1.setIndex(0);
+    c2.setIndex(c1.parag()->string()->length() - 1);
     textDocument()->setSelectionStart( QTextDocument::Standard, &c1 );
     textDocument()->setSelectionEnd( QTextDocument::Standard, &c2 );
     return c2;
@@ -547,7 +547,7 @@ void KoTextView::handleMouseTripleClickEvent( QMouseEvent*ev, const QPoint& /* C
     }
 
     inDoubleClick = FALSE;
-    *m_cursor = selectLineUnderCursor();
+    *m_cursor = selectParagUnderCursor();
     textObject()->selectionChangedNotify();
     // No auto-copy, will readd with Qt 3 using setSelectionMode(true/false)
     // But auto-copy in readonly mode, since there is no action available in that case.

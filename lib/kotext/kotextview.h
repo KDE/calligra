@@ -113,7 +113,7 @@ public:
     bool maybeStartDrag( QMouseEvent* e );
 
     QTextCursor selectWordUnderCursor();
-    QTextCursor selectLineUnderCursor();
+    QTextCursor selectParagUnderCursor();
 
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.
