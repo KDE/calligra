@@ -111,6 +111,12 @@ KexiTablePart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, b
 		return 0;
 	}
 
+	if (designMode) {
+		//DESIGN MODE
+
+	}
+
+	//DATA VIEW MODE
 	KexiDB::Cursor *c = win->project()->dbConnection()->prepareQuery(*sch);
 
 	kdDebug() << "KexiTablePart::execute(): cursor is " << c << endl;

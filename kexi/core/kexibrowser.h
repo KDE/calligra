@@ -62,6 +62,7 @@ class KEXICORE_EXPORT KexiBrowser : public KexiDockBase
 		void		slotRemoveItem(const KexiPart::Item &item);
 
 		void clear();
+		virtual void setFocus();
 
 	signals: 
 		void openItem( KexiPart::Item*, bool designMode );

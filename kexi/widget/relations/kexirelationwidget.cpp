@@ -113,6 +113,8 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	for (int i=0;i<(int)m_db->tableNames().count();i++)
 		QTimer::singleShot(100,this,SLOT(slotAddTable()));
 #endif
+
+	invalidateActions();
 }
 
 KexiRelationWidget::~KexiRelationWidget()

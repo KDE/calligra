@@ -188,6 +188,8 @@ KexiMainWindow::KexiMainWindow()
 
 	m_pTaskBar->setCaption(i18n("Task bar"));	//js TODO: move this to KMDIlib
 //	QTimer::singleShot(0, this, SLOT(parseCmdLineOptions()));
+
+	invalidateActions();
 }
 
 KexiMainWindow::~KexiMainWindow()
@@ -264,7 +266,7 @@ KexiMainWindow::initActions()
 		SHIFT+Key_Delete, "edit_delete_row");
 
 	//VIEW MENU
-	d->action_view_nav = new KAction(i18n("Navigator"), "", ALT + Key_1,
+	d->action_view_nav = new KAction(i18n("Project navigator"), "", ALT + Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
 
 	new KAction(i18n("From File..."), "fileopen", 0, 
@@ -294,7 +296,6 @@ KexiMainWindow::initActions()
 	 actionCollection(), "kexi_settings");
 	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
 
-	invalidateActions();
 }
 
 /* moved to host:*/
@@ -628,10 +629,7 @@ KexiMainWindow::initNavigator()
 		}
 	}
 	d->nav->setFocus();
-	
-//	d->action_show_nav->setChecked(d->nav->isVisible());
-//TODO	d->nav->plugToggleAction(m_actionBrowser);
-
+	invalidateActions();
 }
 
 void KexiMainWindow::slotPartLoaded(KexiPart::Part* p)

@@ -47,7 +47,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *parent )
 	QHBoxLayout *lyr = new QHBoxLayout(this);
 	m_list = new KListView(this, "list");
 	lyr->addWidget(m_list);
-	setFocusProxy(m_list);
+//	setFocusProxy(m_list);
 //	m_list->installEventFilter(this);
 //	m_ac = m_parent->actionCollection();
 //	KexiActionProxy ap;
@@ -57,7 +57,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *parent )
 	plugSharedAction("edit_copy",SLOT(slotCopy()));
 	plugSharedAction("edit_paste",SLOT(slotPaste()));
 
-	setCaption(i18n("Navigator"));
+	setCaption(i18n("Project Navigator"));
 	setIcon(*parent->icon());
 
 	m_list->header()->hide();
@@ -229,10 +229,11 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 {
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(i);
 	bool gotitem = it && it->item();
+	bool gotgroup = it && !it->item();
 	setAvailable("edit_delete",gotitem);
 	setAvailable("edit_cut",gotitem);
 	setAvailable("edit_copy",gotitem);
-	setAvailable("edit_paste",!gotitem);
+	setAvailable("edit_paste",gotgroup);
 }
 
 /*void
@@ -305,6 +306,20 @@ void KexiBrowser::slotPaste()
 	//TODO
 }
 
+void KexiBrowser::setFocus()
+{
+	m_list->setFocus();
+	if (!m_list->selectedItem() && m_list->firstChild())//select first
+		m_list->setSelected(m_list->firstChild(), true);
+}
+
+/*void KexiBrowser::focusInEvent( QFocusEvent *e )
+{
+	KexiDockBase::focusInEvent(e);
+	if (m_list->selectedItem() && m_list->firstChild())//select first
+		m_list->setSelected(m_list->firstChild(), true);
+	m_list->setFocus();
+}*/
 
 #include "kexibrowser.moc"
 
