@@ -683,7 +683,6 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                         KoVariable * var =doc->getVariableCollection()->createVariable( type, -1, doc->variableFormatCollection(), varFormat,kwTextDocument(),doc, true , loadFootNote);
                         if ( var )
                         {
-                            kdDebug()<<" variable inserr !!!!!!!!!!!!!!!!!!\n";
                             var->load( varElem );
                             KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont() );
                             setCustomItem( index, var, document()->formatCollection()->format( &f ) );
