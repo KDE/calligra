@@ -55,7 +55,7 @@ public:
 
     /** Normal coord -> view coord */
     QRect normalToView( const QRect & nRect )
-    { return QRect( normalToView( nRect.topLeft() ), normalToView( nRect.bottomRight() ) ); }
+    { return QRect( normalToView( nRect.topLeft() ), nRect.size() ); }
 
     /** View coord -> normal coord */
     virtual QPoint viewToNormal( const QPoint & vPoint ) = 0;
@@ -112,7 +112,7 @@ public:
     /** Return the name of the viewmode, used for loading/saving. */
     virtual const QString type() = 0;
 
-    /** Answers the question if argument frameset has to be drawn as a text-mode 
+    /** Answers the question if argument frameset has to be drawn as a text-mode
      *  text area if true, or if false as a frame with its own contents. */
     virtual bool isTextModeFrameset(KWFrameSet *) const { return false; }
 
