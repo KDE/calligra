@@ -315,7 +315,7 @@ void KPTResource::copy(KPTResource *resource) {
     cost.overtimeRate = resource->overtimeRate();
     cost.fixed = resource->fixedCost();
     
-    m_calendar = resource->calendar();
+    m_calendar = resource->m_calendar;
 }
 
 void KPTResource::addWorkingHour(QTime from, QTime until) {
@@ -325,7 +325,9 @@ void KPTResource::addWorkingHour(QTime from, QTime until) {
 }
 
 KPTCalendar *KPTResource::calendar() const {
-    return m_calendar; //hmmm, default calendar?
+    if (!m_calendar && project())
+        return project()->defaultCalendar();
+    return m_calendar;
 }
 
 KPTCalendar *KPTResource::calendar(const QString id) const {
@@ -407,20 +409,21 @@ void KPTResource::clearAppointments() {
 
 void KPTResource::makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task) {
     //kdDebug()<<k_funcinfo<<task->name()<<": "<<start.toString()<<" dur "<<duration.toString()<<endl;
-    if (!m_calendar) {
+    KPTCalendar *cal = calendar();
+    if (!cal) {
         kdWarning()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
-        return; // FIXME: hmmm, what todo?
+        return; 
     }
     //TODO: units and moderated by availability, and standard non-working days
     KPTDateTime time = start;
     KPTDateTime end = start+duration;
     while (time < end) {
         //kdDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
-        if (!m_calendar->hasInterval(time, end)) {
+        if (!cal->hasInterval(time, end)) {
             //kdDebug()<<time.toString()<<" to "<<end.toString()<<": No (more) interval(s)"<<endl;
             return; // nothing more to do
         }
-        QPair<KPTDateTime, KPTDateTime> i = m_calendar->interval(time, end);
+        QPair<KPTDateTime, KPTDateTime> i = cal->interval(time, end);
         if (time == i.second)
             return; // hmmm, didn't get a new interval, avoid loop
         KPTAppointment *a = new KPTAppointment(i.first, i.second - i.first, this, task);
@@ -442,8 +445,9 @@ void KPTResource::saveAppointments(QDomElement &element) const {
 KPTDuration KPTResource::effort(const KPTDateTime &start, const KPTDuration &duration) const {
     //kdDebug()<<k_funcinfo<<m_name<<": "<<start.date().toString()<<" for duration "<<duration.toString(KPTDuration::Format_Day)<<endl;
     KPTDuration e;
-    if (m_calendar)
-        e = (m_calendar->effort(start, duration) * m_units)/100;
+    KPTCalendar *cal = calendar();
+    if (cal)
+        e = (cal->effort(start, duration) * m_units)/100;
     
     //kdDebug()<<k_funcinfo<<"e="<<e.toString(KPTDuration::Format_Day)<<" ("<<m_units<<")"<<endl;
     return e;
@@ -451,15 +455,17 @@ KPTDuration KPTResource::effort(const KPTDateTime &start, const KPTDuration &dur
 
 KPTDateTime KPTResource::availableAfter(const KPTDateTime &time) {
     KPTDateTime t;
-    if (m_calendar)
-        t = m_calendar->availableAfter(time);
+    KPTCalendar *cal = calendar();
+    if (cal)
+        t = cal->availableAfter(time);
     return t;
 }
 
 KPTDateTime KPTResource::availableBefore(const KPTDateTime &time) {
     KPTDateTime t;
-    if (m_calendar)
-        t = m_calendar->availableBefore(time);
+    KPTCalendar *cal = calendar();
+    if (cal)
+        t = cal->availableBefore(time);
     return t;
 }
 
