@@ -58,7 +58,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	initConfig();
 
 	if( name )
-		dcopObject();
+	dcopObject();
 }
 
 KarbonPart::~KarbonPart()
@@ -87,19 +87,19 @@ KarbonPart::initDoc()
 										"*.karbon", i18n("Karbon14"), KoTemplateChooseDia::Everything, "karbon_template");
 	m_pageLayout.ptWidth = KoUnit::ptFromUnit( PG_A4_WIDTH, KoUnit::U_MM );
 	m_pageLayout.ptHeight = KoUnit::ptFromUnit( PG_A4_HEIGHT, KoUnit::U_MM );
-        if ( result == KoTemplateChooseDia::Template )
-        {
-            QFileInfo fileInfo(file );
-            QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".karbon" );
-            resetURL();
-            bool ok = loadNativeFormat( fileName );
-            initUnit();
-            setEmpty();
-            return ok;
-        }
+	if( result == KoTemplateChooseDia::Template )
+	{
+		QFileInfo fileInfo( file );
+		QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".karbon" );
+		resetURL();
+		bool ok = loadNativeFormat( fileName );
+		initUnit();
+		setEmpty();
+		return ok;
+	}
 	else if( result == KoTemplateChooseDia::Empty )
 	{
-            	initUnit();
+		initUnit();
 		return true;
 	}
 	else if( result == KoTemplateChooseDia::File )
@@ -124,17 +124,17 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 {
 	QDomElement root = document.documentElement();
 	QDomElement paper = root.namedItem( "PAPER" ).toElement();
-        QString unitName="mm";
+	QString unitName="mm";
 	if( !paper.isNull() )
 	{
 		m_pageLayout.ptWidth = paper.attribute( "width", "0.0" ).toDouble();
 		m_pageLayout.ptHeight = paper.attribute( "height", "0.0" ).toDouble();
-                if ( paper.hasAttribute("unit"))
-                {
-                    unitName = paper.attribute("unit");
-                }
+		if( paper.hasAttribute( "unit" ) )
+		{
+			unitName = paper.attribute("unit");
+		}
 	}
-        setUnit(KoUnit::unit( unitName ));
+	setUnit(KoUnit::unit( unitName ));
 	return m_doc.loadXML( root );
 }
 
@@ -147,7 +147,7 @@ KarbonPart::saveXML()
 	QDomElement paper = doc.createElement( "PAPER" );
 	paper.setAttribute( "width", m_pageLayout.ptWidth );
 	paper.setAttribute( "height", m_pageLayout.ptHeight );
-        paper.setAttribute( "unit", KoUnit::unitName(getUnit()) );
+	paper.setAttribute( "unit", KoUnit::unitName( getUnit() ) );
 
 	me.appendChild( paper );
 
@@ -203,8 +203,7 @@ KarbonPart::repaintAllViews( bool repaint )
 	QPtrListIterator<KoView> itr( views() );
 	for( ; itr.current() ; ++itr )
 	{
- 		static_cast<KarbonView*>( itr.current() )->
-			canvasWidget()->repaintAll( repaint );
+ 		static_cast<KarbonView*>( itr.current() )->canvasWidget()->repaintAll( repaint );
 	}
 }
 
@@ -226,12 +225,10 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 
 	m_doc.selection()->clear();
 	QPtrListIterator<VLayer> itr( m_doc.layers() );
-	for( ; itr.current(); ++itr ) {
-		//if( itr.current()->visible() )
-		{
-		    KoRect r = KoRect::fromQRect( rect );
-		    itr.current()->draw( p, &r );
-		}
+	for( ; itr.current(); ++itr )
+	{
+	    KoRect r = KoRect::fromQRect( rect );
+	    itr.current()->draw( p, &r );
 	}
 
 	p->end();
@@ -284,10 +281,10 @@ void KarbonPart::initUnit()
     //load unit config after we load file.
     //load it for new file or empty file
     KConfig *config = KarbonPart::instance()->config();
-    if(config->hasGroup("Misc") )
+    if( config->hasGroup( "Misc" ) )
     {
         config->setGroup( "Misc" );
-        m_unit=KoUnit::unit( config->readEntry("Units",KoUnit::unitName(KoUnit::U_MM  )));
+        m_unit=KoUnit::unit( config->readEntry("Units", KoUnit::unitName( KoUnit::U_MM ) ) );
     }
 }
 
@@ -297,7 +294,7 @@ void KarbonPart::setUnit(KoUnit::Unit _unit)
     QPtrListIterator<KoView> itr( views() );
     for( ; itr.current(); ++itr )
     {
-        static_cast<KarbonView*>( itr.current() )->setUnit(_unit);
+        static_cast<KarbonView*>( itr.current() )->setUnit( _unit );
     }
 }
 

@@ -48,7 +48,7 @@ public:
 	virtual ~KarbonPart();
 
 	virtual void paintContent( QPainter& painter, const QRect& rect,
-		bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
+								bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
 	/// standard koDocument inherited methods
 	virtual bool initDoc();
@@ -86,6 +86,7 @@ public:
     KoUnit::Unit getUnit()const { return m_unit; }
     void setUnit(KoUnit::Unit _unit);
     void initUnit();
+
 public slots:
 	/// repaint all views attached to this koDocument
 	void repaintAllViews( bool repaint = true );
@@ -103,7 +104,7 @@ private:
 	bool m_bShowStatusBar;				/// enable/disable status bar in attached view(s)
 	int m_maxRecentFiles;				/// max. number of files shown in open recent menu item
 	DCOPObject *dcop;
-        KoUnit::Unit m_unit;
+	KoUnit::Unit m_unit;
 };
 
 #endif
