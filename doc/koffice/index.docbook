@@ -605,32 +605,32 @@ Here's a simple example of such an rc-file.
 <title>An example of a simple rc-file</title>
 <screen>
 <![ CDATA [
-<!DOCTYPE QConfig ><QConfig>
-<MenuBar>
- <Menu name="Edit"><text>Edit</text>
-  <Action name="edit_cut"/>
-  <Action name="edit_copy"/>
-  <Action name="edit_paste"/>
-  <Separator/>
-  <Action name="edit_find"/>
- </Menu>
- <Menu name="Insert"><text>Insert</text>
-  <Action name="insert_picture"/>
-  <Action name="insert_clipart"/>
-  <Menu name="Variable"><text>Variable</text>
-   <Action name="insert_var_datefix"/>
-   <Action name="insert_var_datevar"/>
-  </Menu>
- </Menu>
-</MenuBar>
-<ToolBars>
- <ToolBar name="edit_toolbar" position="right">
-  <Action name="edit_cut"/>
-  <Action name="edit_copy"/>
-  <Action name="edit_paste"/>
- </ToolBar>
-</ToolBars>
-</QConfig>
+<!DOCTYPE QConfig ><qconfig>
+<menubar>
+ <menu name="Edit"><text>Edit</text>
+  <action name="edit_cut"/>
+  <action name="edit_copy"/>
+  <action name="edit_paste"/>
+  <separator/>
+  <action name="edit_find"/>
+ </menu>
+ <menu name="Insert"><text>Insert</text>
+  <action name="insert_picture"/>
+  <action name="insert_clipart"/>
+  <menu name="Variable"><text>Variable</text>
+   <action name="insert_var_datefix"/>
+   <action name="insert_var_datevar"/>
+  </menu>
+ </menu>
+</menubar>
+<toolbars>
+ <toolbar name="edit_toolbar" position="right">
+  <action name="edit_cut"/>
+  <action name="edit_copy"/>
+  <action name="edit_paste"/>
+ </toolbar>
+</toolbars>
+</qconfig>
 ]]>
 </screen>
 </example>
@@ -1017,5 +1017,5 @@ for details.
 </glossary>
 
 
-<![ %addindex; [ &kdedocindex; ]]>
+<![ %addindex; [ &documentation.index; ]]>
 </book>

@@ -151,7 +151,7 @@ information at <link linkend="GettingBinaries">Getting Binary Packages</link>.  
 
 <para>or from one of many mirror sites.  The current list of mirror sites can be found at:</para>
 <para><ulink url="http://www.kde.org/mirrors.html">http://www.kde.org/mirrors.html</ulink></para>
-<Note><para>It is important that you find a binary package that is compatable with your system.  If you are unable to find it here, you may be able to obtain a pre-compiled binary from the website of your distribution.</para></Note>
+<note><para>It is important that you find a binary package that is compatable with your system.  If you are unable to find it here, you may be able to obtain a pre-compiled binary from the website of your distribution.</para></note>
 
 
 </sect1>
@@ -356,5 +356,5 @@ This program is licensed under the terms of the <ulink url="common/gpl-license.h
 </para>
 </chapter>
 
-<![ %addindex; [ &kdedocindex; ]]>
+<![ %addindex; [ &documentation.index; ]]>
 </book>
