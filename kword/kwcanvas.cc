@@ -1424,7 +1424,11 @@ KWTableFrameSet *KWCanvas::getTable()
 {
     if( !m_currentFrameSetEdit)
         return 0L;
-    return m_currentFrameSetEdit->frameSet()->getGroupManager();
+
+    if(m_currentFrameSetEdit->frameSet()->getFrameType() == FT_TABLE)
+        return static_cast<KWTableFrameSet *> (m_currentFrameSetEdit->frameSet());
+
+    return 0L;
 }
 
 void KWCanvas::deleteFrame( KWFrame * frame )

@@ -201,6 +201,8 @@ public:
     /** returns true if we have a cell occupying that position */
     bool contains( unsigned int mx, unsigned int my );
 
+    virtual void zoom();
+
     QString anchorType();
     QString anchorInstance();
 

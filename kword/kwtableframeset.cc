@@ -140,10 +140,8 @@ KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int 
 /*================================================================*/
 KWTableFrameSet::Cell *KWTableFrameSet::getCellByPos( int mx, int my )
 {
-    QListIterator<Cell> it( m_cells );
-    for ( ; it.current() ; ++it )
-        if ( it.current()->contains( mx, my ) )
-            return it.current();
+    KWFrame *f = getFrame(mx,my);
+    if(f) return static_cast<KWTableFrameSet::Cell *> (f->getFrameSet());
     return 0L;
 }
 
@@ -917,8 +915,10 @@ void KWTableFrameSet::updateTempHeaders()
 /*================================================================*/
 void KWTableFrameSet::ungroup()
 {
-    for ( unsigned int i = 0; i < m_cells.count(); i++ )
+    for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
         m_cells.at( i )->setGroupManager( 0L );
+        m_doc->addFrameSet(m_cells.at( i ));
+    }
 
     m_cells.setAutoDelete( false );
     m_cells.clear();
@@ -1378,6 +1378,16 @@ void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
         m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged );
 
 }
+
+void KWTableFrameSet::zoom() {
+kdDebug() << "zoom table" << endl;
+    for (unsigned int i =0; i < m_cells.count(); i++) {
+        m_cells.at(i)->zoom();
+    }
+}
+
+
+
 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col ) :
     KWTextFrameSet( table->m_doc )
