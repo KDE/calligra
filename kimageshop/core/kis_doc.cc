@@ -79,14 +79,14 @@ KisDoc::KisDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, 
 {
 kdDebug(0) << "KisDoc::KisDoc() entering" << endl;
 
-    setInstance( KisFactory::global() );
+    bool loadPlugins = true;    
+    setInstance( KisFactory::global(), loadPlugins );
     m_pCurrent = 0L;
     m_pNewDialog = 0L;
     m_pClipImage = 0L;
     m_Images.setAutoDelete(false);
     
-    kdDebug(0) << "QPixmap::defaultDepth(): " << QPixmap::defaultDepth() << endl; 
-       
+kdDebug(0) << "QPixmap::defaultDepth(): " << QPixmap::defaultDepth() << endl; 
 kdDebug(0) << "KisDoc::KisDoc() leavring" << endl;    
 }
 
@@ -298,17 +298,17 @@ kdDebug(0) << "KisDoc::completeSaving() entering" << endl;
 
     for (KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
     {
-        for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
-	{
+      for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
+	  {
 	    QString url = QString( "layers/%1/channels/ch%2.bin" ).arg( lay->name() )
 			.arg( static_cast<int>(ch->channelId()) );
 
-            if ( store->open( url ) )
-	    {
-                  ch->writeToStore(store);
-		  store->close();
-	    }
-	}
+          if ( store->open( url ) )
+	      {
+              ch->writeToStore(store);
+		      store->close();
+	      }
+	  }
     }
 
 kdDebug(0) << "KisDoc::completeSaving() leaving" << endl;    
@@ -328,16 +328,16 @@ kdDebug(0) << "KisDoc::loadXML() entering" << endl;
 
     if ( doc.doctype().name() != "image" )
     {
-        kdDebug(0) << "KisDoc::loadXML() no doctype name error" << endl;    
-	return false;
+      kdDebug(0) << "KisDoc::loadXML() no doctype name error" << endl;    
+	  return false;
     }
 
     QDomElement image = doc.documentElement();
 
     if (image.attribute( "mime" ) != "application/x-kimageshop") 
     {
-        kdDebug(0) << "KisDoc::loadXML() no mime name error" << endl;        
-        return false;
+      kdDebug(0) << "KisDoc::loadXML() no mime name error" << endl;        
+      return false;
     }
     
     // this assumes that we are loading an existing image
@@ -359,32 +359,31 @@ kdDebug(0) << "bitDepth: " << bd << endl;
 
     switch (cm)
     {
-        case 0:
+      case 0:
 	    colorMode = cm_Indexed;
 	    break;
-	case 1:
+	  case 1:
 	    colorMode = cm_Greyscale;
 	    break;
-	case 2:
+	  case 2:
 	    colorMode = cm_RGB;
 	    break;
-	case 3:
+	  case 3:
 	    colorMode = cm_RGBA;
 	    break;
-	case 4:
+	  case 4:
 	    colorMode = cm_CMYK;
 	    break;
-	case 5:
+	  case 5:
 	    colorMode = cm_CMYKA;
 	    break;
-	case 6:
+	  case 6:
 	    colorMode = cm_Lab;
 	    break;
-	case 7:
+	  case 7:
 	    colorMode = cm_LabA;
 	    break;
-            
-	default:
+	  default:
 	    return false;
     }
 
@@ -413,25 +412,24 @@ kdDebug(0) << "bitDepth: " << bd << endl;
         QDomElement layer = l.toElement();
         if (layer.tagName() != "layer" ) continue;
 
-	cout << "--- layer ---" << endl;
+	    cout << "--- layer ---" << endl;
 
-	// channels element
-	QDomElement channels = layer.namedItem( "channels" ).toElement();
-	if (channels.isNull()) continue;
+	    // channels element
+	    QDomElement channels = layer.namedItem( "channels" ).toElement();
+	    if (channels.isNull()) continue;
 
-	// channel elements
-	QDomNode c = channels.firstChild();
+	    // channel elements
+	    QDomNode c = channels.firstChild();
 	
-	while (!c.isNull())
-	{
-	    QDomElement channel = c.toElement();
-	    if (channel.tagName() != "channel" ) continue;
+	    while (!c.isNull())
+	    {
+	      QDomElement channel = c.toElement();
+	      if (channel.tagName() != "channel" ) continue;
 
-            cout << "--- channel ---" << endl;
-	    c = c.nextSibling();
-	}
-
-	l = l.nextSibling();
+          cout << "--- channel ---" << endl;
+	      c = c.nextSibling();
+	    }
+	    l = l.nextSibling();
     }
 
     /* add background layer 
@@ -462,18 +460,18 @@ kdDebug(0) << "KisDoc::completeLoading() entering" << endl;
 
     for (KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
     {
-        for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
-	{
+      for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
+	  {
 	    QString url = QString( "layers/%1/channels/ch%2.bin" ).arg( lay->name() )
 			.arg( static_cast<int>(ch->channelId()) );
 
-            if ( store->open( url ) )
-	    {
-                kdDebug(0) << "KisDoc::completeLoading() ch->loadFromStore()" << endl;            
-                ch->loadFromStore(store);
-		store->close();
+          if ( store->open( url ) )
+	      {
+            kdDebug(0) << "KisDoc::completeLoading() ch->loadFromStore()" << endl;            
+            ch->loadFromStore(store);
+		    store->close();
 	    }
-	}
+	  }
     }
 
     // need this to force redraw of image data just loaded
@@ -535,11 +533,11 @@ kdDebug() << "KisDoc::setCurrentImage entering" << endl; //jwc
 
     while (img)
     {
-        if (img->name() == _name)
-	{
+      if (img->name() == _name)
+	  {
 	    setCurrentImage(img);
 	    return;
-	}
+	  }
         
         img = m_Images.next();
     }
@@ -556,8 +554,8 @@ QStringList KisDoc::images()
 
     while (img)
     {
-        lst.append(img->name());
-        img = m_Images.next();
+      lst.append(img->name());
+      img = m_Images.next();
     }
     
     return lst;
@@ -604,7 +602,14 @@ KisDoc::~KisDoc()
     if(m_pClipImage != 0L)
     {
         delete m_pClipImage;
-    }        
+        m_pClipImage = 0L;
+    }   
+    
+    if(m_pSelection != 0L)
+    {
+        delete m_pSelection;
+        m_pSelection = 0L;
+    }    
 }
 
 
@@ -636,7 +641,6 @@ bool KisDoc::saveAsQtImage( QString file)
     p.begin (buffer);
     p.setBackgroundColor (Qt::white);
     p.eraseRect (0, 0, w, h);
-    //p.scale (RESOLUTION / 72.0, RESOLUTION / 72.0);
 
     /* draw the contents of the document into the painter
     Note that later this can be used to trim the image to a
@@ -744,7 +748,6 @@ void KisDoc::CopyToLayer(KisView *pView)
     effects.  -jwc-
 */
 
-
 bool KisDoc::QtImageToLayer(QImage *qimage, KisView *pView)
 {
     KisImage *img = current();
@@ -756,16 +759,16 @@ bool KisDoc::QtImageToLayer(QImage *qimage, KisView *pView)
 
     // FIXME: Implement this for non-RGB modes.
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	return false;
+	  return false;
 
     /* if dealing with 1 or 8 bit images, convert to 16 bit */
     if(qimage->depth() < 16)
     {
-        QImage Converted = qimage->smoothScale(qimage->width(), 
-            qimage->height());
+        QImage Converted = qimage->smoothScale(qimage->width(), qimage->height());
         qimg = &Converted;
     }
     
+    bool grayScale = false;
     int startx = 0;
     int starty = 0;
 
@@ -794,49 +797,53 @@ bool KisDoc::QtImageToLayer(QImage *qimage, KisView *pView)
   
     for (int y = sy; y <= ey; y++)
     {
-        sl = qimg->scanLine(y);
+      sl = qimg->scanLine(y);
 
-        for (int x = sx; x <= ex; x++)
-	{
-            // destination binary values by channel
+      for (int x = sx; x <= ex; x++)
+	  {
+        // destination binary values by channel
 	    r = lay->pixel(0, startx + x, starty + y);
 	    g = lay->pixel(1, startx + x, starty + y);
 	    b = lay->pixel(2, startx + x, starty + y);
 
-            // source binary value for grayscale - not used here
-	    bv = *(sl + x);
+        if(grayScale)
+        {
+          // source binary value for grayscale - not used here
+	      bv = *(sl + x);
             
-            // skip black pixels in source - only for gray scale 
-	    // if (bv == 0) continue;
+          // skip black pixels in source - only for gray scale 
+	      if (bv == 0) continue;
 
-            // inverse of gray scale binary value - the darker the higher
-            // the value
-	    invbv = 255 - bv;
+          // inverse of gray scale binary value - the darker the higher
+          // the value - only used forgray scale images
+	      invbv = 255 - bv;
 
-	    r = ((red * bv) + (r * invbv))/255;
-	    g = ((green * bv) + (g * invbv))/255;
-            b = ((blue * bv) + (b * invbv))/255;
+	      r = ((red * bv) + (r * invbv))/255;
+	      g = ((green * bv) + (g * invbv))/255;
+          b = ((blue * bv) + (b * invbv))/255;
+        }
 
-            uint *p = (uint *)qimg->scanLine(y) + x;
+        uint *p = (uint *)qimg->scanLine(y) + x;
             
 	    lay->setPixel(0, startx + x, starty + y, qRed(*p));
 	    lay->setPixel(1, startx + x, starty + y, qGreen(*p));
 	    lay->setPixel(2, startx + x, starty + y, qBlue(*p));
                        	  
-            if (alpha)
+        if (alpha)
 	    {
-#if 0
-	        a = lay->pixel(3, startx + x, starty + y);
+	      a = lay->pixel(3, startx + x, starty + y);
+          
+          if(grayScale)
+          {
+		    v = a + bv;
+		    if (v < 0 ) v = 0;
+		    if (v > 255 ) v = 255;
+		    a = (uchar) v;
+          }
 
-		v = a + bv;
-		if (v < 0 ) v = 0;
-		if (v > 255 ) v = 255;
-		a = (uchar) v;
-			  
-		lay->setPixel(3, startx + x, starty + y, a);
-#endif
+		  lay->setPixel(3, startx + x, starty + y, a);
 	    }
-	} 
+	  } 
     }
     
     return true;
@@ -862,7 +869,7 @@ bool KisDoc::LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect)
 
     // FIXME: Implement this for non-RGB modes.
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	return false;
+	  return false;
 
     /* if dealing with 1 or 8 bit images, convert to 16 bit */
     if(qimage->depth() < 16)
@@ -902,48 +909,48 @@ bool KisDoc::LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect)
     {
         sl = qimg->scanLine(y);
 
-        for (int x = sx; x <= ex; x++)
-	{
-            // destination binary values by channel
+      for (int x = sx; x <= ex; x++)
+	  {
+        // destination binary values by channel
 	    r = lay->pixel(0, startx + x, starty + y);
 	    g = lay->pixel(1, startx + x, starty + y);
 	    b = lay->pixel(2, startx + x, starty + y);
 
-            // source binary value for grayscale - not used here
+        // source binary value for grayscale - not used here
 	    bv = *(sl + x);
             
-            // skip black pixels in source - only for gray scale 
+        // skip black pixels in source - only for gray scale 
 	    // if (bv == 0) continue;
 
-            // inverse of gray scale binary value - the darker the higher
-            // the value
+        // inverse of gray scale binary value - the darker the higher
+        // the value
 	    invbv = 255 - bv;
 
 	    r = ((red * bv) + (r * invbv))/255;
 	    g = ((green * bv) + (g * invbv))/255;
-            b = ((blue * bv) + (b * invbv))/255;
+        b = ((blue * bv) + (b * invbv))/255;
 
-            uint *p = (uint *)qimg->scanLine(y) + x;
+        uint *p = (uint *)qimg->scanLine(y) + x;
             
 	    lay->setPixel(0, startx + x, starty + y, qRed(*p));
 	    lay->setPixel(1, startx + x, starty + y, qGreen(*p));
 	    lay->setPixel(2, startx + x, starty + y, qBlue(*p));
                        	  
-            if (alpha)
+        if (alpha)
 	    {
 #if 0
-	        a = lay->pixel(3, startx + x, starty + y);
+	      a = lay->pixel(3, startx + x, starty + y);
 
-		v = a + bv;
-		if (v < 0 ) v = 0;
-		if (v > 255 ) v = 255;
-		a = (uchar) v;
+		  v = a + bv;
+		  if (v < 0 ) v = 0;
+		  if (v > 255 ) v = 255;
+		  a = (uchar) v;
 			  
-		lay->setPixel(3, startx + x, starty + y, a);
+		  lay->setPixel(3, startx + x, starty + y, a);
 #endif
 	    }
-	} 
-    }
+	  } 
+  }
     
     return true;
 }
@@ -1002,21 +1009,21 @@ bool KisDoc::setClipImage( )
     // in image layer, using channel data at x+dx, y+dy offset into layer 
     for (int y = 0; y < dy; y++)
     {
-        for (int x = 0; x < dx; x++)
-	{
+      for (int x = 0; x < dx; x++)
+	  {
             // source binary values by channel
 	    r = lay->pixel(0, sx + x, sy + y);
 	    g = lay->pixel(1, sx + x, sy + y);
 	    b = lay->pixel(2, sx + x, sy + y);
             
-            // dest binary data in scanline at x offset
-            // is set at this point
-            p = (uint *)m_pClipImage->scanLine(y) + x;
-            *p = qRgb(r, g, b);
-        }
-    }
+        // dest binary data in scanline at x offset
+        // is set at this point
+        p = (uint *)m_pClipImage->scanLine(y) + x;
+        *p = qRgb(r, g, b);
+      }
+  }
     
-    return true;    
+  return true;    
 }
 
 
@@ -1063,12 +1070,12 @@ void KisDoc::slotRemoveImage( const QString& _name )
 
     while (img)
     {
-        if (img->name() == _name)
-	{
-	  removeImage(img);
-	  return;
-	}
-        img = m_Images.next();
+      if (img->name() == _name)
+	  {
+	    removeImage(img);
+	    return;
+	  }
+      img = m_Images.next();
     }
 }
 
@@ -1168,6 +1175,7 @@ QCString KisDoc::mimeType() const
 
 KoView* KisDoc::createViewInstance( QWidget* parent, const char* name )
 {
+    if(name == 0) name = "View";    
     KisView* view = new KisView( this, parent, name );
     
 //jwc - undo-redo nonfunctional  
@@ -1228,7 +1236,6 @@ void KisDoc::paintPixmap(QPainter *p, QRect area)
     {
         kdDebug(0) <<  "###Error KisDoc::paintPixmap called - no m_pCurrent" << endl;     
     }    
-    
 }
 
 /* 

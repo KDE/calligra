@@ -58,54 +58,55 @@ bool KisSelection::erase()
     }
 
     selectionRect = pDoc->getSelectRect();    
-    int startx = selectionRect.left();
-    int starty = selectionRect.top();
+    //int startx = selectionRect.left();
+    //int starty = selectionRect.top();
 
-    QRect clipRect(startx, starty, selectionRect.right(), selectionRect.bottom());
-
+    //QRect clipRect(startx, starty, selectionRect.right(), selectionRect.bottom());
+    QRect clipRect = selectionRect;
+    
     if (!clipRect.intersects(img->getCurrentLayer()->imageExtents()))
         return false;
   
     clipRect = clipRect.intersect(img->getCurrentLayer()->imageExtents());
 
-    int sx = clipRect.left() - startx;
-    int sy = clipRect.top() - starty;
-    int ex = clipRect.right() - startx;
-    int ey = clipRect.bottom() - starty;
+    int sx = clipRect.left();
+    int sy = clipRect.top(); 
+    int ex = clipRect.right();
+    int ey = clipRect.bottom();
 
     uchar r, g, b, a;
-    int   v;
+    //int   v;
 
     //int red     = pView->fgColor().R();
     //int green   = pView->fgColor().G();
     //int blue    = pView->fgColor().B();
 
     bool alpha = (img->colorMode() == cm_RGBA);
-    uint p     = qRgb(0, 0, 0);
+    // uint p     = qRgb(0, 0, 0);
       
     for (int y = sy; y <= ey; y++)
     {
         for (int x = sx; x <= ex; x++)
 	    {
             // destination binary values by channel
-	      r = lay->pixel(0, startx + x, starty + y);
-	      g = lay->pixel(1, startx + x, starty + y);
-	      b = lay->pixel(2, startx + x, starty + y);
+	      r = lay->pixel(0, x,  y);
+	      g = lay->pixel(1, x,  y);
+	      b = lay->pixel(2, x,  y);
             
-	      lay->setPixel(0, startx + x, starty + y, 255);
-	      lay->setPixel(1, startx + x, starty + y, 255);
-	      lay->setPixel(2, startx + x, starty + y, 255);
+	      lay->setPixel(0, x, y, 255);
+	      lay->setPixel(1, x, y, 255);
+	      lay->setPixel(2, x, y, 255);
                        	  
           if (alpha)
 	      {
-	          a = lay->pixel(3, startx + x, starty + y);
+	          a = lay->pixel(3, x, y);
 
               /* v = a + bv;
 		      if (v < 0 ) v = 0;
 		      if (v > 255 ) v = 255;
 		      a = (uchar) v; */
 			  
-		    lay->setPixel(3, startx + x, starty + y, a);
+		    lay->setPixel(3, x, y, a);
 	    }
 	  } 
     }

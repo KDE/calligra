@@ -18,31 +18,34 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __kis_selection_h__
-#define __kis_selection_h__
+#ifndef __kis_painter_h__
+#define __kis_painter_h__
 
 #include <qobject.h>
 #include <qimage.h>
+#include <qpixmap.h>
 #include "kis_doc.h"
 
 class KisDoc;
 
-class KisSelection : public QObject 
+class KisPainter : public QObject 
 {
   Q_OBJECT
 
 public:
-  KisSelection(KisDoc *doc);
-  ~KisSelection();
-  bool erase();
-  
-  QImage selectionImage;
-  QRect selectionRect;
+  	KisPainter(KisDoc *doc);
+  	~KisPainter();
   
 protected:
-          
+	void toLayer();	
+    void clear();
+
 private:
-  KisDoc *pDoc;
+  	QImage painterImage;
+  	QPixmap painterPixmap;
+  	QRect updateRect;
+
+  	KisDoc *pDoc;
 };
 
 #endif

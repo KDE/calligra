@@ -51,5 +51,6 @@ public:
   static QCursor penCursor();           // pen tool cursor
   static QCursor brushCursor();         // brush tool cursor
   static QCursor pickerCursor();        // color picker cursor
+  static QCursor selectCursor();        // color picker cursor
 };
 #endif // __kis_cursor_h__

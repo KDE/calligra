@@ -69,6 +69,7 @@
 #include "kis_tool_gradient.h"
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_eraser.h"
+#include "kis_tool_fill.h"
 
 //#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
@@ -88,6 +89,9 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     m_fg = KisColor::black();
     m_bg = KisColor::white();
 
+// this is the original configuration that works but tools
+// need to be set up before canvas 
+
     setupCanvas();
     setupScrollBars();
     setupRulers();
@@ -98,6 +102,9 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     setupTools();
 }
 
+KisView::~KisView()
+{
+}
 
 /*
     Canvas for document (image) area
@@ -174,8 +181,9 @@ void KisView::setupScrollBars()
     m_pHorz->setGeometry(20, height()-16, width()-36, 16);
     m_pHorz->setValue(0);
     m_pVert->setValue(0);
-    m_pVert->show();
-    m_pHorz->show();
+    
+    //m_pVert->show();
+    //m_pHorz->show();
 
     QObject::connect(m_pVert, SIGNAL(valueChanged(int)), this, SLOT(scrollV(int)));
     QObject::connect(m_pHorz, SIGNAL(valueChanged(int)), this, SLOT(scrollH(int)));
@@ -214,7 +222,6 @@ void KisView::setupTabBar()
 
     QObject::connect( m_pDoc, SIGNAL( imageListUpdated() ),
 		    m_pTabBar, SLOT( slotImageListUpdated( ) ) );
-
 
     // tabbar control buttons
     m_pTabFirst = new QPushButton( this );
@@ -266,6 +273,9 @@ void KisView::setupTools()
 
     // gradient tool
     m_pGradientTool = new GradientTool( m_pDoc, this, m_pCanvas, m_pGradient );
+
+    // fill tool
+    m_pFill = new Fill( m_pDoc, this );
 
     // start with pen as active tool
     m_tool_pen->setChecked( true );
@@ -320,11 +330,11 @@ void KisView::setupActions()
     // import/export actions
 
     new KAction( i18n("Import Image"), 
-        "import", 0, this, SLOT( insert_layer_image() ), 
+        "wizard", 0, this, SLOT( insert_layer_image() ), 
         actionCollection(), "import_image" );
 
     new KAction( i18n("Export Image"), 
-        "export", 0, this, SLOT( save_layer_image() ), 
+        "wizard", 0, this, SLOT( save_layer_image() ), 
         actionCollection(), "export_image" );
 
     // view actions
@@ -366,7 +376,7 @@ void KisView::setupActions()
     m_tool_move->setExclusiveGroup( "tools" );
 
     m_tool_zoom = new KToggleAction( i18n("&Zoom tool"), 
-        "zoom", 0, this, SLOT( tool_zoom() ),
+        "viewmag", 0, this, SLOT( tool_zoom() ),
         actionCollection(), "tool_zoom");
         
     m_tool_zoom->setExclusiveGroup( "tools" );
@@ -397,7 +407,7 @@ void KisView::setupActions()
 	//m_tool_airbrush->setEnabled( false ); 
 
     m_tool_fill = new KToggleAction( i18n("&Filler tool"), 
-        "airbrush", 0, this, SLOT( tool_airbrush() ),
+        "fill", 0, this, SLOT( tool_fill() ),
         actionCollection(), "tool_fill");
         
     m_tool_fill->setExclusiveGroup( "tools" );
@@ -524,10 +534,6 @@ void KisView::setupActions()
     m_layer_rotate90->setEnabled( false );  
     m_layer_mirrorX->setEnabled( false );  
     m_layer_mirrorY->setEnabled( false );  
-
-    //m_cut->setEnabled( false );
-    //m_copy->setEnabled( false );
-    //m_paste->setEnabled( false );
 }
 
 
@@ -543,24 +549,41 @@ void KisView::resizeEvent(QResizeEvent*)
     int sideW;
 
     // show or hid sidebar - important!
-    if(m_side_bar->isChecked())
-        sideW = m_pSideBar->width();
-    else    
+    if(!m_pSideBar)
         sideW = 0;
+    else
+    {  
+        if(m_side_bar->isChecked())
+        {
+            sideW = m_pSideBar->width();
+        }    
+        else    
+            sideW = 0;
+    }        
     
     // sidebar geometry - only set if visible
-    if(m_side_bar->isChecked())
+    if(m_pSideBar &&  m_side_bar->isChecked())
+    {
         m_pSideBar->setGeometry(width()-sideW, 0, sideW, height());
-
+        m_pSideBar->show();
+    }
+    
     // ruler geometry
     m_pHRuler->setGeometry(20, 0, width()-20-sideW, 20);
     m_pVRuler->setGeometry(0, 20, 20, height()-36);
 
     // tabbar control buttons
     m_pTabFirst->setGeometry(0, height()-16, 16, 16);
+    m_pTabFirst->show();
+    
     m_pTabLeft->setGeometry(16, height()-16, 16, 16);
+    m_pTabLeft->show();
+    
     m_pTabRight->setGeometry(32, height()-16, 16, 16);
+    m_pTabRight->show();
+    
     m_pTabLast->setGeometry(48, height()-16, 16, 16);
+    m_pTabLast->show();
 
     // KisView heigth/width - ruler heigth/width
     int drawH = height() - 20 - 16;
@@ -575,39 +598,58 @@ void KisView::resizeEvent(QResizeEvent*)
       m_pHorz->hide();
       m_pVert->setValue(0);
       m_pHorz->setValue(0);
+
       m_pCanvas->setGeometry(20, 20, drawW, drawH);
+      m_pCanvas->show();
+
       m_pTabBar->setGeometry(64, height() - 16 , width() - sideW - 64, 16);
+      m_pTabBar->show();
     }
     else if (docH <= drawH) // we need a horizontal scrollbar
     {
       m_pVert->hide();
       m_pVert->setValue(0);
+
       m_pHorz->setRange(0, docW - drawW);
       m_pHorz->setGeometry(64  + (width()-sideW-64)/2, height()-16, (width()-sideW-64)/2, 16);
       m_pHorz->show();
+
       m_pCanvas->setGeometry(20, 20, drawW, drawH);
+      m_pCanvas->show();
+
       m_pTabBar->setGeometry(64, height() - 16 , (width()-sideW-64)/2, 16);
+      m_pTabBar->show();
     }
     else if(docW <= drawW) // we need a vertical scrollbar
     {
       m_pHorz->hide();
       m_pHorz->setValue(0);
+
       m_pVert->setRange(0, docH - drawH);
       m_pVert->setGeometry(width()-16-sideW, 20, 16, height()-36);
       m_pVert->show();
+      
       m_pCanvas->setGeometry(20, 20, drawW-16, drawH);
+      m_pCanvas->show();
+      
       m_pTabBar->setGeometry(64, height() - 16 , width() - sideW - 64, 16);
+      m_pTabBar->show();
     }
     else // we need both scrollbars
     {
       m_pVert->setRange(0, docH - drawH);
       m_pVert->setGeometry(width()-16-sideW, 20, 16, height()-36);
       m_pVert->show();
+      
       m_pHorz->setRange(0, docW - drawW);
       m_pHorz->setGeometry(64  + (width()-sideW-64)/2, height()-16, (width()-sideW-64)/2, 16);
       m_pHorz->show();
+      
       m_pCanvas->setGeometry(20, 20, drawW-16, drawH);
+      m_pCanvas->show();
+      
       m_pTabBar->setGeometry(64, height() - 16 , (width()-sideW-64)/2, 16);
+      m_pTabBar->show();
     }
 
     // ruler ranges
@@ -624,16 +666,15 @@ void KisView::resizeEvent(QResizeEvent*)
         m_pHRuler->setOffset(m_pHorz->value());
     else
         m_pHRuler->setOffset(-xPaintOffset());
+        
+    m_pHRuler->show();    
+    m_pVRuler->show();    
 }
 
 
 void KisView::updateReadWrite( bool /*readwrite*/ )
 {
-#ifdef __GNUC__
-#warning TODO
-#endif
 }
-
 
 void KisView::scrollH(int)
 {
@@ -839,7 +880,6 @@ void KisView::activateTool(KisTool* t)
     if (!t) return;
 
     if (m_pTool) QObject::disconnect(m_pTool);
-
     m_pTool = t;
 
     QObject::connect( this, SIGNAL( canvasMousePressEvent( QMouseEvent* ) ),
@@ -905,6 +945,11 @@ void KisView::tool_gradient()
   activateTool( m_pGradientTool );
 }
 
+void KisView::tool_fill()
+{
+  activateTool( m_pFill );
+}
+
 /*
  * edit action slots
  */
@@ -959,7 +1004,6 @@ void KisView::cut()
     KisImage* img = m_pDoc->current();
     QRect updateRect(0, 0, img->width(), img->height());
     m_pDoc->current()->markDirty(updateRect);
-      
 }
 
 void KisView::paste()
@@ -1108,9 +1152,7 @@ void KisView::insert_layer_image()
         
         QPixmap *buffer = new QPixmap(w, h);
         buffer->fill (Qt::white);
-        
         bitBlt (buffer, 0, 0, filePixmap, 0, 0, w, h);
-        
         QImage fileImage = buffer->convertToImage();
         
         delete filePixmap;
@@ -1136,7 +1178,7 @@ void KisView::save_layer_image()
 
     if( !url.isEmpty() )
     {
-        //  save as standard image file (jpg, png, xpm, gif)
+        //  save as standard image file (jpg, png, xpm, bmp, NO gif)
         
         if(!m_pDoc->saveAsQtImage(url.path()))
             kdDebug(0) << "Can't save doc as standard qt image" << endl;
@@ -1184,20 +1226,23 @@ void KisView::layer_mirrorY()
 void KisView::add_new_image_tab()
 {
     if (m_pDoc->current())
-	   bool ok = m_pDoc->slotNewImage();
+    {
+	    if(!m_pDoc->slotNewImage())
+            kdDebug(0) << "Couldn't add image tab" << endl;
+    }
 }
 
 void KisView::remove_current_image_tab()
 {
     if (m_pDoc->current())
-	m_pDoc->removeImage(m_pDoc->current());
+	    m_pDoc->removeImage(m_pDoc->current());
 }
 
 
 void KisView::merge_all_layers()
 {
     if (m_pDoc->current())
-	m_pDoc->current()->mergeAllLayers();
+	    m_pDoc->current()->mergeAllLayers();
 }
 
 
@@ -1211,7 +1256,7 @@ void KisView::merge_visible_layers()
 void KisView::merge_linked_layers()
 {
     if (m_pDoc->current())
-	m_pDoc->current()->mergeLinkedLayers();
+	    m_pDoc->current()->mergeLinkedLayers();
 }
 
 
@@ -1350,16 +1395,17 @@ void KisView::slotSetBGColor(const KisColor& c)
 }
 
 
-void KisView::slotUndoRedoChanged( QString undo, QString redo )
+void KisView::slotUndoRedoChanged( QString /*undo*/, QString /*redo*/ )
 {
   //####### FIXME
-
+#if 0
   m_undo->setEnabled( !undo.isEmpty() );
   m_redo->setEnabled( !redo.isEmpty() );
+#endif  
 }
 
 
-void KisView::slotUndoRedoChanged( QStringList undo, QStringList redo )
+void KisView::slotUndoRedoChanged( QStringList /*undo*/, QStringList /*redo*/ )
 {
   //####### FIXME
 
@@ -1386,7 +1432,6 @@ void KisView::slotUndoRedoChanged( QStringList undo, QStringList redo )
     m_redo->setEnabled( false );
   }
 #endif
-
 }
 
 #include "kis_view.moc"

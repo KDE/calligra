@@ -1,5 +1,5 @@
 /*
- *  kis_gradient.h - part of KImageShop
+ *  kis_gradient.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *
@@ -18,32 +18,36 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __kis_selection_h__
-#define __kis_selection_h__
 
-#include <qobject.h>
-#include <qimage.h>
+#include <qcolor.h>
+#include <qclipboard.h>
+#include <kapp.h>
+#include <kdebug.h>
+
 #include "kis_doc.h"
+#include "kis_view.h"
+#include "kis_vec.h"
+#include "kis_cursor.h"
+#include "kis_util.h"
+#include "kis_painter.h"
 
-class KisDoc;
 
-class KisSelection : public QObject 
+KisPainter::KisPainter(KisDoc *doc)
 {
-  Q_OBJECT
+  	pDoc  = doc;
+}
 
-public:
-  KisSelection(KisDoc *doc);
-  ~KisSelection();
-  bool erase();
-  
-  QImage selectionImage;
-  QRect selectionRect;
-  
-protected:
-          
-private:
-  KisDoc *pDoc;
-};
+KisPainter::~KisPainter()
+{
+}
 
-#endif
+void KisPainter::toLayer()
+{
+}
+
+void KisPainter::clear()
+{
+}
+
+//#include "kis_painter.moc"
 

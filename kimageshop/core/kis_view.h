@@ -60,6 +60,7 @@ class ZoomTool;
 class KisGradient;
 class GradientTool;
 class ColorPicker;
+class Fill;
 class QButton;
 
 
@@ -70,7 +71,8 @@ class KisView : public KoView
  public:        // constructors
  
     KisView( KisDoc* doc, QWidget* parent = 0, const char* name = 0 );
-
+    ~KisView();
+    
     KisColor& fgColor() { return m_fg; }
     KisColor& bgColor() { return m_bg; }
 
@@ -140,6 +142,7 @@ class KisView : public KoView
     void tool_eraser();
     void tool_gradient();
     void tool_colorpicker();
+    void tool_fill();
 
     // settings action slots
     void showMenubar();
@@ -227,6 +230,7 @@ class KisView : public KoView
     KisGradient           *m_pGradient;
     GradientTool          *m_pGradientTool;
     ColorPicker           *m_pColorPicker;
+    Fill                  *m_pFill;    
     const KisBrush        *m_pBrush; // current brush
 
     // sidebar dock widgets
