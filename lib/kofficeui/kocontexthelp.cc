@@ -445,6 +445,35 @@ void KoContextHelpAction::closePopup()
 	setChecked( false ); // For a unknown reason, this is needed...
 } // KoContextHelpAction::closePopup
 
+
+KoContextHelpWidget::KoContextHelpWidget( QWidget* parent, const char* name )
+		: QWidget( parent, name )
+{
+	setCaption( i18n( "Context Help" ) );
+	QGridLayout* layout = new QGridLayout( this );
+	layout->addWidget( m_helpIcon = new QLabel( this ), 0, 0 );
+	layout->addWidget( m_helpTitle = new KoVerticalLabel( this ), 1, 0 );
+	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 1, 1, 1 );
+	layout->setMargin( 2 );
+	layout->setSpacing( 1 );
+	layout->setRowStretch( 1, 1 );
+	this->setMinimumSize( 180, 120 );
+	this->show();
+	setContextHelp( i18n( "Context Help" ), i18n( "Here will be shown help according to your actions" ), 0 );
+} // KoContextHelpWidget::KoContextHelpWidget
+
+KoContextHelpWidget::~KoContextHelpWidget()
+{
+} // KoContextHelpWidget::~KoContextHelpWidget
+
+void KoContextHelpWidget::setContextHelp( const QString& title, const QString& text, const QPixmap* icon )
+{
+	m_helpIcon->setPixmap( icon ? *icon : BarIcon( "help" ) );
+	m_helpTitle->setText( title );
+	m_helpViewer->setText( text );
+} // KoContextHelpWidget::updateHelp
+
+
 KoContextHelpDocker::KoContextHelpDocker( QWidget* parent, const char* name )
 		: QDockWindow( parent, name )
 {

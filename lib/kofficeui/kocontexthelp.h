@@ -190,6 +190,23 @@ class KoContextHelpAction : public KToggleAction
 		KoContextHelpPopup* m_popup;
 }; // KoContextHelpAction
 
+class KoContextHelpWidget : public QWidget
+{
+	Q_OBJECT
+	
+	public:
+		KoContextHelpWidget( QWidget* parent = 0, const char* name = 0 );
+		~KoContextHelpWidget();
+		
+	public slots:
+		void setContextHelp( const QString& title, const QString& text, const QPixmap* icon = 0 );
+		
+	private:
+		KoHelpWidget*    m_helpViewer;
+		KoVerticalLabel* m_helpTitle;
+		QLabel*          m_helpIcon;
+}; // KoContextHelpWidget
+
 class KoContextHelpDocker : public QDockWindow
 {
 	Q_OBJECT
