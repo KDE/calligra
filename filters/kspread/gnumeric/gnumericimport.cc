@@ -1498,9 +1498,16 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
     }
 
     QDomDocument doc;
-
-    // ### TODO: error message
-    doc.setContent(in);
+    QString errorMsg;
+    int errorLine, errorColumn;
+    if ( !doc.setContent(in, &errorMsg, &errorLine, &errorColumn) )
+    {
+        kdError(30521) << "Parsing error in " << from << "! Aborting!" << endl
+            << " In line: " << errorLine << ", column: " << errorColumn << endl
+            << " Error message: " << errorMsg << endl;
+        in->close();
+        return KoFilter::ParsingError;
+    }
 
     in->close();
     delete in;
