@@ -42,7 +42,6 @@ public:
   virtual ~KoShellWindow();
 
   virtual bool openDocument( const KURL & url );
-  virtual bool closeDocument();
   virtual void setRootDocument( KoDocument *doc );
 
   virtual QString configFile() const;
@@ -57,13 +56,17 @@ public:
 
 protected slots:
 
-  //virtual void slotFileClose();
+  virtual void slotFileNew();
+  virtual void slotFileClose();
 
   void slotKoolBar( int _grp, int _item );
 
 protected:
 
+  virtual bool queryClose();
   virtual KoDocument* createDoc();
+
+  void closeDocument();
 
   struct Page
   {
@@ -74,6 +77,8 @@ protected:
 
   QValueList<Page> m_lstPages;
   QValueList<Page>::Iterator m_activePage;
+
+  void switchToPage( QValueList<Page>::Iterator it );
 
   KoKoolBar* m_pKoolBar;
 
