@@ -100,7 +100,7 @@ public:
     void pasteSubType( QTextCursor * cursor, QTextFormat * currentFormat, const QCString& );
 
     /** Set format changes on selection or current cursor */
-    void setFormat( QTextCursor * cursor, QTextFormat *currentFormat, QTextFormat *format, int flags);
+    void setFormat( QTextCursor * cursor, QTextFormat * & currentFormat, QTextFormat *format, int flags);
 
     enum KeyboardActionPrivate { // keep in sync with QTextEdit
 	ActionBackspace,
@@ -134,9 +134,11 @@ public:
 signals:
     void hideCursor();
     void showCursor();
-    // Emitted when the formatting may have changed.
+    // Emitted when the formatting under the cursor may have changed.
     // The Edit object should re-read settings and update the UI.
     void updateUI();
+    // Same thing, when the current format (of the edit object) was changed
+    void showCurrentFormat();
     // Emitted when, well, what was changed should be repainted by the views
     void repaintChanged();
     // The views should make sure the cursor is visible
@@ -295,6 +297,7 @@ private slots:
     void hideCursor() { drawCursor( false ); }
     void showCursor() { drawCursor( true ); }
     void ensureCursorVisible();
+    void showCurrentFormat();
 
 private:
 

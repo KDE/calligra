@@ -1480,7 +1480,7 @@ void KWTextFrameSet::checkUndoRedoInfo( QTextCursor * cursor, UndoRedoInfo::Type
     undoRedoInfo.cursor = cursor;
 }
 
-void KWTextFrameSet::setFormat( QTextCursor * cursor, QTextFormat *currentFormat, QTextFormat *format, int flags ) {
+void KWTextFrameSet::setFormat( QTextCursor * cursor, QTextFormat * & currentFormat, QTextFormat *format, int flags ) {
     QTextDocument * textdoc = textDocument();
     if ( textdoc->hasSelection( QTextDocument::Standard ) ) {
         emit hideCursor();
@@ -1505,6 +1505,7 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, QTextFormat *currentFormat
         formatMore();
         emit showCursor();
     }
+    //kdDebug() << "KWTextFrameSet::setFormat currentFormat:" << currentFormat->key() << " new format:" << format->key() << endl;
     if ( currentFormat && currentFormat->key() != format->key() ) {
         currentFormat->removeRef();
         currentFormat = textdoc->formatCollection()->format( format );
@@ -1512,7 +1513,8 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, QTextFormat *currentFormat
             currentFormat->removeRef();
             currentFormat = textdoc->formatCollection()->format( currentFormat->font(), currentFormat->color() );
         }
-        emit updateUI();
+        emit showCurrentFormat();
+        //kdDebug() << "KWTextFrameSet::setFormat index=" << cursor->index() << " length-1=" << cursor->parag()->length() - 1 << endl;
         if ( cursor->index() == cursor->parag()->length() - 1 ) {
             currentFormat->addRef();
             cursor->parag()->string()->setFormat( cursor->index(), currentFormat, TRUE );
@@ -1528,6 +1530,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     connect( fs, SIGNAL( hideCursor() ), this, SLOT( hideCursor() ) );
     connect( fs, SIGNAL( showCursor() ), this, SLOT( showCursor() ) );
     connect( fs, SIGNAL( updateUI() ), this, SLOT( updateUI() ) );
+    connect( fs, SIGNAL( showCurrentFormat() ), this, SLOT( showCurrentFormat() ) );
     connect( fs, SIGNAL( repaintChanged() ), canvas, SLOT( repaintChanged() ) );
     connect( fs, SIGNAL( ensureCursorVisible() ), this, SLOT( ensureCursorVisible() ) );
 
@@ -2055,6 +2058,7 @@ void KWTextFrameSetEdit::setBold( bool on ) {
     QTextFormat format( *currentFormat );
     format.setBold( on );
     textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Bold );
+    kdDebug() << "KWTextFrameSetEdit::setBold new currentFormat " << currentFormat << " " << currentFormat->key() << endl;
 }
 
 void KWTextFrameSetEdit::setItalic( bool on ) {
@@ -2144,7 +2148,7 @@ void KWTextFrameSetEdit::updateUI()
     int i = cursor->index();
     if ( i > 0 )
 	--i;
-    //kdDebug() << "KWTextFrameSet::updateUI currentFormat=" << currentFormat->key() << " parag format=" << cursor->parag()->at( i )->format()->key() << endl;
+    //kdDebug() << "KWTextFrameSet::updateUI currentFormat=" << currentFormat << " " << currentFormat->key() << " parag format=" << cursor->parag()->at( i )->format()->key() << endl;
     if ( currentFormat->key() != cursor->parag()->at( i )->format()->key() && textDocument()->useFormatCollection() ) {
 	if ( currentFormat )
 	    currentFormat->removeRef();
@@ -2153,8 +2157,7 @@ void KWTextFrameSetEdit::updateUI()
 	    currentFormat->removeRef();
 	    currentFormat = textDocument()->formatCollection()->format( currentFormat->font(), currentFormat->color() );
 	}
-        // TODO use a signal instead - with splitted views we should do this only if active
-        m_canvas->gui()->getView()->showFormat(*currentFormat);
+        showCurrentFormat();
         textDocument()->formatCollection()->debug();
     }
 
@@ -2216,6 +2219,11 @@ void KWTextFrameSetEdit::updateUI()
     // For instance parag and line spacing stuff, borders etc.
 
     // TODO: ruler stuff
+}
+
+void KWTextFrameSetEdit::showCurrentFormat()
+{
+    m_canvas->gui()->getView()->showFormat(*currentFormat);
 }
 
 #include "kwtextframeset.moc"
