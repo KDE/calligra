@@ -110,7 +110,7 @@ void KPTTask::addRequest(KPTResourceGroup *group, int numResources) {
 
 void KPTTask::addRequest(KPTResourceGroupRequest *request) {
     if (!m_requests)
-        m_requests = new KPTResourceRequestCollection();
+        m_requests = new KPTResourceRequestCollection(*this);
     m_requests->addRequest(request);
 }
 

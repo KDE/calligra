@@ -21,6 +21,7 @@
 #include "kptresourcespanel.h"
 #include "kptproject.h"
 #include "kptresourcedialog.h"
+#include "kptcommand.h"
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -39,6 +40,7 @@ namespace KPlato
 
 class KPTGroupLBItem;
 class KPTResourceItem;
+class KPTPart;
 
 class KPTGroupItem {
 public:
@@ -85,7 +87,7 @@ public:
     QString name() { return m_resource->name(); }
     void setName(const QString &newName) { m_resource->setName(newName); setState(Modified); }
 
-    void saveResource(KPTGroupItem *gitem);
+    KCommand *saveResource(KPTPart *part, KPTGroupItem *gitem);
 
     KPTResource *m_originalResource;
     KPTResource *m_resource; // work on a local copy
@@ -149,14 +151,45 @@ void KPTResourceItem::setState(State s) {
     m_state = s;
 }
 
-void KPTResourceItem::saveResource(KPTGroupItem *gitem) {
-    if (m_state == New)
-        gitem->m_group->addResource(m_resource, 0);
-    else if (m_state == Modified)
+KCommand *KPTResourceItem::saveResource(KPTPart *part, KPTGroupItem *gitem) {
+    KMacroCommand *m=0;
+    if (m_state == New) {
+        //kdDebug()<<k_funcinfo<<"Add resource: "<<m_resource->name()<<endl;
+        if (!m)
+            m = new KMacroCommand("Add resource");
+        m->addCommand(new KPTAddResourceCmd(part, gitem->m_group, m_resource));
+    } else if (m_state == Modified) {
+        //kdDebug()<<k_funcinfo<<"Modify resource: "<<m_originalResource->name()<<endl;
+        if (!m)
+            m = new KMacroCommand("Modify resource");
+        
+        if (m_resource->name() != m_originalResource->name()) {
+            m->addCommand(new KPTModifyResourceNameCmd(part, m_originalResource, m_resource->name()));
+        }
+        if (m_resource->initials() != m_originalResource->initials()) {
+            m->addCommand(new KPTModifyResourceInitialsCmd(part, m_originalResource, m_resource->initials()));
+        }
+        if (m_resource->email() != m_originalResource->email()) {
+            m->addCommand(new KPTModifyResourceEmailCmd(part, m_originalResource, m_resource->email()));
+        }
+        if (m_resource->type() != m_originalResource->type()) {
+            m->addCommand(new KPTModifyResourceTypeCmd(part, m_originalResource, m_resource->type()));
+        }
+        if (m_resource->normalRate() != m_originalResource->normalRate()) {
+            m->addCommand(new KPTModifyResourceNormalRateCmd(part, m_originalResource, m_resource->normalRate()));
+        }
+        if (m_resource->overtimeRate() != m_originalResource->overtimeRate()) {
+            m->addCommand(new KPTModifyResourceOvertimeRateCmd(part, m_originalResource, m_resource->overtimeRate()));
+        }
+        if (m_resource->fixedCost() != m_originalResource->fixedCost()) {
+            m->addCommand(new KPTModifyResourceFixedCostCmd(part, m_originalResource, m_resource->fixedCost()));
+        }
         m_originalResource->copy(m_resource);
+    }
+    return m;
 }
 
-////////////////////////////   KPTResourcesPanel   //////////////////////////////////
+////////////////////   KPTResourcesPanel   //////////////////////
 
 KPTResourcesPanel::KPTResourcesPanel(QWidget *parent, KPTProject *p) : ResourcesPanelBase(parent) {
     project = p;
@@ -348,12 +381,20 @@ void KPTResourcesPanel::slotResourceRename( const QString &newName) {
 }
 
 void KPTResourcesPanel::ok() {
+}
+
+KCommand *KPTResourcesPanel::buildCommand(KPTPart *part) {
+    KMacroCommand *m=0;
     KPTGroupItem *gitem;
 
+    QString cmdName = "Modify resourcegroups";
     QPtrListIterator<KPTGroupItem> dgit(m_deletedGroupItems);
     for (; (gitem = dgit.current()) != 0; ++dgit) {
+        if (!m)
+            m = new KMacroCommand(cmdName);
+        
         //kdDebug()<<k_funcinfo<<"Remove group: '"<<gitem->m_name<<"'"<<endl;
-        project->removeResourceGroup(gitem->m_group); // remove group and its resources from project
+        m->addCommand(new KPTRemoveResourceGroupCmd(part, gitem->m_group));
     }
 
     QPtrListIterator<KPTGroupItem> git(m_groupItems);
@@ -363,24 +404,36 @@ void KPTResourcesPanel::ok() {
         QPtrListIterator<KPTResourceItem> dit( gitem->m_deletedItems );
         KPTResourceItem *ditem;
         for (; (ditem = dit.current()) != 0; ++dit) {
-            //kdDebug()<<k_funcinfo<<" Deleting resource: '"<<ditem->m_name<<"'"<<endl;
-            gitem->m_group->removeResource(ditem->m_originalResource); // remove resource from project
+            if (!m)
+                m = new KMacroCommand(cmdName);
+            //kdDebug()<<k_funcinfo<<" Deleting resource: '"<<ditem->m_originalResource->name()<<"'"<<endl;            
+            m->addCommand(new KPTRemoveResourceCmd(part, gitem->m_group, ditem->m_originalResource));
         }
         // Now add/modify group/resources
         if (gitem->m_state == KPTGroupItem::New) {
+            if (!m)
+                m = new KMacroCommand(cmdName);
             //kdDebug()<<k_funcinfo<<" Adding group: '"<<gitem->m_name<<"'"<<endl;
-            project->addResourceGroup(gitem->m_group);
+            m->addCommand(new KPTAddResourceGroupCmd(part, gitem->m_group));
         } else if (gitem->m_state == KPTGroupItem::Modified) {
+            if (!m)
+                m = new KMacroCommand(cmdName);
             //kdDebug()<<k_funcinfo<<" Modifying group: '"<<gitem->m_name<<"'"<<endl;
-            gitem->m_group->setName(gitem->m_name);
+            m->addCommand(new KPTModifyResourceGroupNameCmd(part, gitem->m_group, gitem->m_name));
         }
         QPtrListIterator<KPTResourceItem> it( gitem->m_resourceItems );
-        KPTResourceItem *ritem;
-        for (; (ritem = it.current()) != 0; ++it) {
-            ritem->saveResource(gitem);
+        for (; it.current() != 0; ++it) {
+            KCommand *cmd = it.current()->saveResource(part, gitem);
+            if (cmd) {
+                if (!m)
+                    m = new KMacroCommand("Modify Resources");
+                m->addCommand(cmd);
+            }
         }
     }
+    return m;
 }
+
 
 }  //KPlato namespace
 

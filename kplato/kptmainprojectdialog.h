@@ -24,11 +24,14 @@
 
 #include <kdialogbase.h>
 
+class KCommand;
+
 namespace KPlato
 {
 
 class KPTProject;
 class KPTResourcesPanel;
+class KPTPart;
 
 class KPTMainProjectDialogImpl : public KPTMainProjectDialogBase {
     Q_OBJECT
@@ -50,6 +53,8 @@ class KPTMainProjectDialog : public KDialogBase {
 public:
     KPTMainProjectDialog(KPTProject &project, QWidget *parent=0, const char *name=0);
 
+    KCommand *buildCommand(KPTPart *part);
+    
 protected slots:
     void slotOk();
 

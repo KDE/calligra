@@ -44,6 +44,7 @@ class KPTResourceRequest;
 class KPTResourceGroupRequest;
 class KPTProject;
 class KPTCalendar;
+class KPTResourceRequestCollection;
 
 /**
   * This class represents a group of similar resources to be assigned to a task
@@ -68,6 +69,8 @@ class KPTResourceGroup {
           void generateId();
           static KPTResourceGroup *find(const QString id);
           
+          KPTProject *project() { return m_project; }
+          
 	      void setName(QString n) {m_name=n;}
 	      const QString &name() const {return m_name;}
           void setType(Type type) { m_type = type; }
@@ -84,6 +87,7 @@ class KPTResourceGroup {
 	      void addResource(KPTResource*, KPTRisk*);
           void insertResource( unsigned int index, KPTResource *resource );
           void removeResource( KPTResource *resource );
+          KPTResource *takeResource( KPTResource *resource );
 	      void removeResource(int);
 
 	      KPTResource* getResource(int);
@@ -132,6 +136,13 @@ class KPTResourceGroup {
 
           int units();
         
+          void registerRequest(KPTResourceGroupRequest *request)
+            { m_requests.append(request); }
+          void unregisterRequest(KPTResourceGroupRequest *request)
+            { m_requests.removeRef(request); }
+          const QPtrList<KPTResourceGroupRequest> &requests() const
+            { return m_requests; }
+
 #ifndef NDEBUG
         void printDebug(QString ident);
 #endif
@@ -148,6 +159,8 @@ class KPTResourceGroup {
 
         KPTCalendar *m_defaultCalendar;
         Type m_type;
+        
+        QPtrList<KPTResourceGroupRequest> m_requests;
         
         static QDict<KPTResourceGroup> resourceGroupIdDict;
 
@@ -252,7 +265,9 @@ class KPTResource {
             { m_requests.append(request); }
         void unregisterRequest(const KPTResourceRequest *request)
             { m_requests.removeRef(request); }
-        
+        const QPtrList<KPTResourceRequest> &requests() const
+            { return m_requests; }
+            
         KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration) const;
 
         KPTDateTime availableAfter(const KPTDateTime &time);
@@ -431,6 +446,9 @@ class KPTResourceGroupRequest {
         KPTResourceGroupRequest(KPTResourceGroup *group=0, int units=0);
         ~KPTResourceGroupRequest();
 
+        void setParent(KPTResourceRequestCollection *parent) { m_parent = parent;}
+        KPTResourceRequestCollection *parent() const { return m_parent; }
+        
         KPTResourceGroup *group() const { return m_group; }
         QPtrList<KPTResourceRequest> &resourceRequests() { return m_resourceRequests; }
         void addResourceRequest(KPTResourceRequest *request);
@@ -474,7 +492,8 @@ class KPTResourceGroupRequest {
     private:
         KPTResourceGroup *m_group;
         int m_units;
-
+        KPTResourceRequestCollection *m_parent;
+        
         QPtrList<KPTResourceRequest> m_resourceRequests;
         KPTDateTime m_start;
         KPTDuration m_duration;
@@ -487,11 +506,14 @@ public:
 
 class KPTResourceRequestCollection {
 public:
-    KPTResourceRequestCollection();
+    KPTResourceRequestCollection(KPTTask &task);
     ~KPTResourceRequestCollection();
 
     const QPtrList<KPTResourceGroupRequest> &requests() const { return m_requests; }
-    void addRequest(KPTResourceGroupRequest *request) { m_requests.append(request); }
+    void addRequest(KPTResourceGroupRequest *request) {                 
+        m_requests.append(request);
+        request->setParent(this);
+    }
     void removeRequest(KPTResourceGroupRequest *request) { m_requests.removeRef(request); }
     void takeRequest(KPTResourceGroupRequest *request) { m_requests.take(m_requests.findRef(request)); }
     KPTResourceGroupRequest *find(KPTResourceGroup *resource) const;
@@ -532,6 +554,8 @@ public:
      */
     void reserve(const KPTDateTime &start, const KPTDuration &duration);
 
+    KPTTask &task() const { return m_task; }
+    
 protected:
     struct Interval {
         KPTDateTime start;
@@ -541,6 +565,7 @@ protected:
     
 
 private:
+    KPTTask &m_task;
     QPtrList<KPTResourceGroupRequest> m_requests;
 
 #ifndef NDEBUG

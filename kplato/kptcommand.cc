@@ -23,6 +23,7 @@
 #include "kpttask.h"
 #include "kptcalendar.h"
 #include "kptrelation.h"
+#include "kptresource.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -646,6 +647,15 @@ void KPTAddResourceGroupRequestCmd::unexecute() {
         m_part->setCommandType(1);
 }
 
+KPTRemoveResourceGroupRequestCmd::KPTRemoveResourceGroupRequestCmd(KPTPart *part, KPTResourceGroupRequest *request, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_task(request->parent()->task()),
+      m_request(request) {
+      
+    m_mine = false;
+}
+
 KPTRemoveResourceGroupRequestCmd::KPTRemoveResourceGroupRequestCmd(KPTPart *part, KPTTask &task, KPTResourceGroupRequest *request, QString name)
     : KNamedCommand(name),
       m_part(part),
@@ -668,5 +678,251 @@ void KPTRemoveResourceGroupRequestCmd::unexecute() {
     if (m_part)
         m_part->setCommandType(1);
 }
+
+KPTAddResourceCmd::KPTAddResourceCmd(KPTPart *part, KPTResourceGroup *group, KPTResource *resource, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_group(group),
+      m_resource(resource) {
+      
+    m_mine = true;
+}
+KPTAddResourceCmd::~KPTAddResourceCmd() {
+    if (m_mine)
+        delete m_resource;
+}
+void KPTAddResourceCmd::execute() {
+    m_group->addResource(m_resource, 0/*risk*/); 
+    m_mine = false;
+    if (m_part)
+        m_part->setCommandType(0);
+}
+void KPTAddResourceCmd::unexecute() {
+    m_group->takeResource(m_resource);
+    m_mine = true;
+    if (m_part)
+        m_part->setCommandType(0);
+}
+
+KPTRemoveResourceCmd::KPTRemoveResourceCmd(KPTPart *part, KPTResourceGroup *group, KPTResource *resource, QString name)
+    : KPTAddResourceCmd(part, group, resource, name) {
+
+    m_mine = false;
+    m_list = m_resource->requests();
+}
+void KPTRemoveResourceCmd::execute() {
+    QPtrListIterator<KPTResourceRequest> it = m_list;
+    for (; it.current(); ++it) {
+        it.current()->parent()->takeResourceRequest(it.current());
+        //kdDebug()<<"Remove request for"<<it.current()->resource()->name()<<endl;
+    }
+    KPTAddResourceCmd::unexecute();
+}
+void KPTRemoveResourceCmd::unexecute() {
+    QPtrListIterator<KPTResourceRequest> it = m_list;
+    for (; it.current(); ++it) {
+        it.current()->parent()->addResourceRequest(it.current());
+        //kdDebug()<<"Add request for "<<it.current()->resource()->name()<<endl;
+    }
+    KPTAddResourceCmd::execute();
+}
+
+KPTModifyResourceNameCmd::KPTModifyResourceNameCmd(KPTPart *part, KPTResource *resource, QString value, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_resource(resource),
+      m_newvalue(value) {
+    m_oldvalue = resource->name();
+}
+void KPTModifyResourceNameCmd::execute() {
+    m_resource->setName(m_newvalue);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+void KPTModifyResourceNameCmd::unexecute() {
+    m_resource->setName(m_oldvalue);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+KPTModifyResourceInitialsCmd::KPTModifyResourceInitialsCmd(KPTPart *part, KPTResource *resource, QString value, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_resource(resource),
+      m_newvalue(value) {
+    m_oldvalue = resource->initials();
+}
+void KPTModifyResourceInitialsCmd::execute() {
+    m_resource->setInitials(m_newvalue);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+void KPTModifyResourceInitialsCmd::unexecute() {
+    m_resource->setInitials(m_oldvalue);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+KPTModifyResourceEmailCmd::KPTModifyResourceEmailCmd(KPTPart *part, KPTResource *resource, QString value, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_resource(resource),
+      m_newvalue(value) {
+    m_oldvalue = resource->email();
+}
+void KPTModifyResourceEmailCmd::execute() {
+    m_resource->setEmail(m_newvalue);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+void KPTModifyResourceEmailCmd::unexecute() {
+    m_resource->setEmail(m_oldvalue);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+KPTModifyResourceTypeCmd::KPTModifyResourceTypeCmd(KPTPart *part, KPTResource *resource, int value, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_resource(resource),
+      m_newvalue(value) {
+    m_oldvalue = resource->type();
+}
+void KPTModifyResourceTypeCmd::execute() {
+    m_resource->setType((KPTResource::Type)m_newvalue);
+    if (m_part)
+        m_part->setCommandType(0); //FIXME
+}
+void KPTModifyResourceTypeCmd::unexecute() {
+    m_resource->setType((KPTResource::Type)m_oldvalue);
+    if (m_part)
+        m_part->setCommandType(0); //FIXME
+}
+
+KPTModifyResourceNormalRateCmd::KPTModifyResourceNormalRateCmd(KPTPart *part, KPTResource *resource, double value, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_resource(resource),
+      m_newvalue(value) {
+    m_oldvalue = resource->normalRate();
+}
+void KPTModifyResourceNormalRateCmd::execute() {
+    m_resource->setNormalRate(m_newvalue);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+void KPTModifyResourceNormalRateCmd::unexecute() {
+    m_resource->setNormalRate(m_oldvalue);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+KPTModifyResourceOvertimeRateCmd::KPTModifyResourceOvertimeRateCmd(KPTPart *part, KPTResource *resource, double value, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_resource(resource),
+      m_newvalue(value) {
+    m_oldvalue = resource->overtimeRate();
+}
+void KPTModifyResourceOvertimeRateCmd::execute() {
+    m_resource->setOvertimeRate(m_newvalue);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+void KPTModifyResourceOvertimeRateCmd::unexecute() {
+    m_resource->setOvertimeRate(m_oldvalue);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+KPTModifyResourceFixedCostCmd::KPTModifyResourceFixedCostCmd(KPTPart *part, KPTResource *resource, double value, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_resource(resource),
+      m_newvalue(value) {
+    m_oldvalue = resource->normalRate();
+}
+void KPTModifyResourceFixedCostCmd::execute() {
+    m_resource->setFixedCost(m_newvalue);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+void KPTModifyResourceFixedCostCmd::unexecute() {
+    m_resource->setFixedCost(m_oldvalue);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+
+KPTRemoveResourceGroupCmd::KPTRemoveResourceGroupCmd(KPTPart *part, KPTResourceGroup *group, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_group(group) {
+            
+    m_mine = false;
+}
+KPTRemoveResourceGroupCmd::~KPTRemoveResourceGroupCmd() {
+    if (m_mine)
+        delete m_group;
+}
+void KPTRemoveResourceGroupCmd::execute() {
+    // remove all requests to this group
+    int c=0;
+    QPtrListIterator<KPTResourceGroupRequest> it = m_group->requests();
+    for (; it.current(); ++it) {
+        if (it.current()->parent()) {
+            it.current()->parent()->takeRequest(it.current());
+        }
+        c = 1;
+    }
+    if (m_group->project())
+        m_group->project()->takeResourceGroup(m_group);
+    m_mine = true;
+    if (m_part)
+        m_part->setCommandType(c);
+}
+void KPTRemoveResourceGroupCmd::unexecute() {
+    // add all requests
+    int c=0;
+    QPtrListIterator<KPTResourceGroupRequest> it = m_group->requests();
+    for (; it.current(); ++it) {
+        if (it.current()->parent()) {
+            it.current()->parent()->addRequest(it.current());
+        }
+        c = 1;
+    }
+    if (m_group->project())
+        m_group->project()->addResourceGroup(m_group);
+        
+    m_mine = false;
+    if (m_part)
+        m_part->setCommandType(c);
+}
+
+KPTAddResourceGroupCmd::KPTAddResourceGroupCmd(KPTPart *part, KPTResourceGroup *group, QString name)
+    : KPTRemoveResourceGroupCmd(part, group, name) {
+                
+    m_mine = true;
+}
+void KPTAddResourceGroupCmd::execute() {
+    KPTRemoveResourceGroupCmd::unexecute();
+}
+void KPTAddResourceGroupCmd::unexecute() {
+    KPTRemoveResourceGroupCmd::execute();
+}
+
+KPTModifyResourceGroupNameCmd::KPTModifyResourceGroupNameCmd(KPTPart *part, KPTResourceGroup *group, QString value, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_group(group),
+      m_newvalue(value) {
+    m_oldvalue = group->name();
+}
+void KPTModifyResourceGroupNameCmd::execute() {
+    m_group->setName(m_newvalue);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+void KPTModifyResourceGroupNameCmd::unexecute() {
+    m_group->setName(m_oldvalue);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+
+
 
 }  //KPlato namespace

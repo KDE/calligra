@@ -301,9 +301,12 @@ void KPTView::slotViewResources() {
 
 void KPTView::slotProjectEdit() {
     KPTMainProjectDialog *dia = new KPTMainProjectDialog(getProject());
-    if (dia->exec())
-	    slotUpdate(true);
-
+    if (dia->exec()) {
+        KCommand *cmd = dia->buildCommand(getPart());
+        if (cmd) {
+            getPart()->addCommand(cmd);
+        }
+    }
     delete dia;
 }
 

@@ -104,6 +104,10 @@ void KPTResourceGroup::removeResource(KPTResource *resource) {
     m_resources.removeRef(resource);
 }
 
+KPTResource *KPTResourceGroup::takeResource(KPTResource *resource) {
+    return m_resources.take(m_resources.findRef(resource));
+}
+
 void KPTResourceGroup::removeResource(int) {
 }
 
@@ -606,11 +610,14 @@ KPTResourceGroupRequest::KPTResourceGroupRequest(KPTResourceGroup *group, int un
     : m_group(group), m_units(units) {
 
     //kdDebug()<<k_funcinfo<<"Request to: "<<(group ? group->name() : QString("None"))<<endl;
+    if (group)
+        group->registerRequest(this);
     m_resourceRequests.setAutoDelete(true);
 }
 
 KPTResourceGroupRequest::~KPTResourceGroupRequest() {
     //kdDebug()<<k_funcinfo<<"Group: "<<m_group->name()<<endl;
+    m_group->unregisterRequest(this);
     m_resourceRequests.clear();
 }
 
@@ -638,11 +645,13 @@ KPTResourceRequest *KPTResourceGroupRequest::find(KPTResource *resource) const {
 
 bool KPTResourceGroupRequest::load(QDomElement &element, KPTProject *project) {
     //kdDebug()<<k_funcinfo<<endl;
-    m_group = project->group(element.attribute("group-id"));
+    m_group = KPTResourceGroup::find(element.attribute("group-id"));
     if (m_group == 0) {
         kdDebug()<<k_funcinfo<<"The referenced resource group does not exist: group id="<<element.attribute("group-id")<<endl;
         return false;
     }
+    m_group->registerRequest(this);
+    
     m_units  = element.attribute("units").toInt();
 
     QDomNodeList list = element.childNodes();
@@ -774,7 +783,8 @@ void KPTResourceGroupRequest::reserve(const KPTDateTime &start, const KPTDuratio
 }
 
 /////////
-KPTResourceRequestCollection::KPTResourceRequestCollection() {
+KPTResourceRequestCollection::KPTResourceRequestCollection(KPTTask &task)
+    : m_task(task) {
     m_requests.setAutoDelete(true);
 }
 

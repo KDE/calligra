@@ -90,6 +90,8 @@ public:
     virtual void insertResourceGroup(unsigned int index, KPTResourceGroup *resource);
     void removeResourceGroup(KPTResourceGroup *resource);
     void removeResourceGroup(int number);
+    KPTResourceGroup *takeResourceGroup(KPTResourceGroup *resource)
+        { return m_resourceGroups.take(m_resourceGroups.findRef(resource)); }
 
     QPtrList<KPTAppointment> appointments(const KPTTask *task);
 

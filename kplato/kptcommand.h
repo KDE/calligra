@@ -36,6 +36,8 @@ class KPTPart;
 class KPTRelation;
 class KPTResourceGroupRequest;
 class KPTResourceRequest;
+class KPTResourceGroup;
+class KPTResource;
 
 class KPTCalendarAddCmd : public KNamedCommand
 {
@@ -418,6 +420,7 @@ private:
 class KPTRemoveResourceGroupRequestCmd : public KNamedCommand
 {
 public:
+    KPTRemoveResourceGroupRequestCmd(KPTPart *part, KPTResourceGroupRequest *request, QString name=0);
     KPTRemoveResourceGroupRequestCmd(KPTPart *part, KPTTask &task, KPTResourceGroupRequest *request, QString name=0);
     void execute();
     void unexecute();
@@ -428,6 +431,162 @@ private:
     KPTResourceGroupRequest *m_request;
     bool m_mine;
 };
+
+class KPTAddResourceCmd : public KNamedCommand
+{
+public:
+    KPTAddResourceCmd(KPTPart *part, KPTResourceGroup *group, KPTResource *resource, QString name=0);
+    ~KPTAddResourceCmd();
+    void execute();
+    void unexecute();
+
+protected:
+    KPTPart *m_part;
+    KPTResourceGroup *m_group;
+    KPTResource *m_resource;
+    bool m_mine;
+};
+
+class KPTRemoveResourceCmd : public KPTAddResourceCmd
+{
+public:
+    KPTRemoveResourceCmd(KPTPart *part, KPTResourceGroup *group, KPTResource *resource, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    QPtrList<KPTResourceRequest> m_list;
+};
+
+class KPTModifyResourceNameCmd : public KNamedCommand
+{
+public:
+    KPTModifyResourceNameCmd(KPTPart *part, KPTResource *resource, QString value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTResource *m_resource;
+    QString m_newvalue;
+    QString m_oldvalue;
+};
+class KPTModifyResourceInitialsCmd : public KNamedCommand
+{
+public:
+    KPTModifyResourceInitialsCmd(KPTPart *part, KPTResource *resource, QString value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTResource *m_resource;
+    QString m_newvalue;
+    QString m_oldvalue;
+};
+class KPTModifyResourceEmailCmd : public KNamedCommand
+{
+public:
+    KPTModifyResourceEmailCmd(KPTPart *part, KPTResource *resource, QString value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTResource *m_resource;
+    QString m_newvalue;
+    QString m_oldvalue;
+};
+class KPTModifyResourceTypeCmd : public KNamedCommand
+{
+public:
+    KPTModifyResourceTypeCmd(KPTPart *part, KPTResource *resource, int value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTResource *m_resource;
+    int m_newvalue;
+    int m_oldvalue;
+};
+
+class KPTModifyResourceNormalRateCmd : public KNamedCommand
+{
+public:
+    KPTModifyResourceNormalRateCmd(KPTPart *part, KPTResource *resource, double value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTResource *m_resource;
+    double m_newvalue;
+    double m_oldvalue;
+};
+class KPTModifyResourceOvertimeRateCmd : public KNamedCommand
+{
+public:
+    KPTModifyResourceOvertimeRateCmd(KPTPart *part, KPTResource *resource, double value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTResource *m_resource;
+    double m_newvalue;
+    double m_oldvalue;
+};
+class KPTModifyResourceFixedCostCmd : public KNamedCommand
+{
+public:
+    KPTModifyResourceFixedCostCmd(KPTPart *part, KPTResource *resource, double value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTResource *m_resource;
+    double m_newvalue;
+    double m_oldvalue;
+};
+
+class KPTRemoveResourceGroupCmd : public KNamedCommand
+{
+public:
+    KPTRemoveResourceGroupCmd(KPTPart *part, KPTResourceGroup *group, QString name=0);
+    ~KPTRemoveResourceGroupCmd();
+    void execute();
+    void unexecute();
+
+protected:
+    KPTPart *m_part;
+    KPTResourceGroup *m_group;
+    bool m_mine;
+};
+
+class KPTAddResourceGroupCmd : public KPTRemoveResourceGroupCmd
+{
+public:
+    KPTAddResourceGroupCmd(KPTPart *part, KPTResourceGroup *group, QString name=0);
+    void execute();
+    void unexecute();
+};
+
+class KPTModifyResourceGroupNameCmd : public KNamedCommand
+{
+public:
+    KPTModifyResourceGroupNameCmd(KPTPart *part, KPTResourceGroup *group, QString value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTResourceGroup *m_group;
+    QString m_newvalue;
+    QString m_oldvalue;
+};
+
 
 }  //KPlato namespace
 

@@ -104,6 +104,10 @@ void KPTMainProjectDialog::slotOk() {
     accept();
 }
 
+KCommand *KPTMainProjectDialog::buildCommand(KPTPart *part) {
+    return resourcesTab->buildCommand(part);
+}
+
 KPTMainProjectDialogImpl::KPTMainProjectDialogImpl (QWidget *parent) : KPTMainProjectDialogBase(parent) {
     startDateTime->setEnabled(false);
     endDateTime->setEnabled(false);

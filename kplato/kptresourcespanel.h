@@ -26,6 +26,8 @@
 #include <qlistbox.h>
 #include <qstring.h>
 
+class KCommand;
+
 namespace KPlato
 {
 
@@ -33,13 +35,15 @@ class KPTProject;
 class KPTGroupItem;
 class KPTResourceItem;
 class KPTGroupLBItem;
+class KPTPart;
 
 class KPTResourcesPanel : public ResourcesPanelBase {
     Q_OBJECT
 public:
     KPTResourcesPanel (QWidget *parent, KPTProject *project);
 
-	void ok();
+    void ok();
+    KCommand *buildCommand(KPTPart *part);
 
     void sendChanged();
 
