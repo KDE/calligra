@@ -673,24 +673,10 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		double _x2 = gradient.vector().x();
 		double _y2 = gradient.origin().y();
 		double _y1 = gradient.vector().y();
-		//kdDebug() << "_x1 : " << _x1 << endl;
-		//kdDebug() << "_y1 : " << _y1 << endl;
-		//kdDebug() << "_x2 : " << _x2 << endl;
-		//kdDebug() << "_y2 : " << _y2 << endl;
-		// Adjust to gradientTransform
-		//QWMatrix m;// = gradient.gradientTransform();
-		//m.map(_x1, _y1, &_x1, &_y1);
-		//m.map(_x2, _y2, &_x2, &_y2);
-		//kdDebug() << "2_x1 : " << _x1 << endl;
-		//kdDebug() << "_y1 : " << _y1 << endl;
-		//kdDebug() << "_x2 : " << _x2 << endl;
-		//kdDebug() << "_y2 : " << _y2 << endl;
-		//double _y1n = _y1;
 
 		double dx = ( _x2 - _x1 ) * m_zoomFactor;
 		_y1 = m_matrix.m22() * _y1 + m_matrix.dy() / m_zoomFactor;
 		_y2 = m_matrix.m22() * _y2 + m_matrix.dy() / m_zoomFactor;
-		//kdDebug() << "_y1 : " << _y1 << ", _y2 " << _y2 << endl;
 		double dy = ( _y1 - _y2 ) * m_zoomFactor;
 		double scale = 1.0 / ( dx * dx + dy * dy );
 
@@ -698,10 +684,6 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		linear->b = dy * scale;
 		linear->c = -( ( _x1 * m_zoomFactor + m_matrix.dx() ) * linear->a +
 					   ( _y2 * m_zoomFactor ) * linear->b );
-
-		//kdDebug() << "linear->a" << linear->a << endl;
-		//kdDebug() << "linear->b" << linear->b << endl;
-		//kdDebug() << "linear->c" << linear->c << endl;
 
 		// get stop array
 		int offsets = -1;
@@ -719,8 +701,6 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 	}
 	else if( gradient.type() == VGradient::radial )
 	{
-		//kdDebug() << "x1 : " << x1 << ", x0 " << x0 << endl;
-		//kdDebug() << "y1 : " << y1 << ", y0 " << y0 << endl;
 		ArtGradientRadial *radial = new ArtGradientRadial();
 
 		// TODO : make variable
@@ -826,7 +806,6 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 		double ramp = colorStops[ offset ]->rampPoint;
 		//double mid  = colorStops[ offset ]->midPoint;
 		(*stopArray)[ offset * 2 ].offset = ramp;
-		//kdDebug() << " (*stopArray)[ offset * 2 ].offset : " <<  (*stopArray)[ offset * 2 ].offset << endl;
 
 		QColor qStopColor = colorStops[ offset ]->color;
 		int r = qRed( qStopColor.rgb() );
@@ -848,11 +827,7 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 
 		if( offset + 1 != offsets )
 		{
-			//kdDebug() << " colorStops[ offset ].midPoint : " <<  colorStops[ offset ].midPoint << endl;
-			//kdDebug() << " colorStops[ offset + 1 ].rampPoint : " <<  colorStops[ offset + 1 ].rampPoint << endl;
 			(*stopArray)[ offset * 2 + 1 ].offset = ramp + ( colorStops[ offset + 1 ]->rampPoint - ramp ) * colorStops[ offset ]->midPoint;
-			//kdDebug() << "(*stopArray)[ offset * 2  ].offset : " << (*stopArray)[ offset * 2  ].offset << endl;
-			//kdDebug() << "(*stopArray)[ offset * 2 + 1 ].offset : " << (*stopArray)[ offset * 2 + 1 ].offset << endl;
 
 			QColor qStopColor2 = colorStops[ offset + 1 ]->color;
 			rgba = int(r + ((qRed(qStopColor2.rgb()) - r)) * 0.5) << 24 |
