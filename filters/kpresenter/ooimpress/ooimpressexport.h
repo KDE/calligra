@@ -56,6 +56,7 @@ private:
     void setLineGeometry( QDomElement & source, QDomElement & target );
     void appendPolyline( QDomDocument & doc, QDomElement & source, QDomElement & target,  bool polygone = false);
 
+    QString rotateValue( double val );
 
     int m_currentPage;
     float m_pageHeight;

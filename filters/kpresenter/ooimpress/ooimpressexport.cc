@@ -624,6 +624,15 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
     float y = orig.attribute( "y" ).toFloat();
     y -= m_pageHeight * ( m_currentPage - 1 );
 
+    QDomElement angle = source.namedItem( "ANGLE").toElement();
+    if ( !angle.isNull() )
+    {
+        QString returnAngle = rotateValue( angle.attribute( "value" ).toDouble() );
+        if ( !returnAngle.isEmpty() )
+            target.setAttribute("draw:transform",returnAngle );
+    }
+
+
     target.setAttribute( "svg:x", StyleFactory::toCM( orig.attribute( "x" ) ) );
     target.setAttribute( "svg:y", QString( "%1cm" ).arg( KoUnit::toCM( y ) ) );
     target.setAttribute( "svg:width", StyleFactory::toCM( size.attribute( "width" ) ) );
@@ -714,13 +723,31 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
     }
 }
 
+QString OoImpressExport::rotateValue( double val )
+{
+    QString str;
+    if ( val!=0.0 )
+    {
+        double value = -1 * ( ( double )val* M_PI )/180.0;
+        str=QString( "rotate (%1)" ).arg( value );
+    }
+    return str;
+}
+
+
 void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & target )
 {
     QDomElement orig = source.namedItem( "ORIG" ).toElement();
     QDomElement size = source.namedItem( "SIZE" ).toElement();
     QDomElement linetype = source.namedItem( "LINETYPE" ).toElement();
     QDomElement name = source.namedItem( "OBJECTNAME").toElement();
-
+    QDomElement angle = source.namedItem( "ANGLE").toElement();
+    if ( !angle.isNull() )
+    {
+        QString returnAngle = rotateValue( angle.attribute( "value" ).toDouble() );
+        if ( !returnAngle.isEmpty() )
+            target.setAttribute("draw:transform",returnAngle );
+    }
     float x1 = orig.attribute( "x" ).toFloat();
     float y1 = orig.attribute( "y" ).toFloat();
     float x2 = size.attribute( "width" ).toFloat();
