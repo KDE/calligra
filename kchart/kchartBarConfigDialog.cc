@@ -21,7 +21,7 @@ KChartBarConfigDialog::KChartBarConfigDialog( KChartParameters* params,
     addTab( _barpage, i18n( "&Bars" ) );
 
     // Fill pages with values
-    defaults();
+    //defaults();
 
     setCaption( i18n( "Configuration of bar charts" ) );
 }

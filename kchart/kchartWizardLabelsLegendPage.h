@@ -19,6 +19,7 @@ public:
   ~kchartWizardLabelsLegendPage();
 
   //void placementChanged( int );
+  bool ytitle2;
 public slots:
   void apply();
   void changeXLabelFont();
@@ -28,6 +29,9 @@ public slots:
   void changeYLabelColor(const QColor &);
   void changeTitleColor(const QColor &);
   void changeYTitle2Color(const QColor &);
+protected:
+  void paintEvent( QPaintEvent * );
+
 private:
   KChartPart* _chart;
   kchartWidget* preview;

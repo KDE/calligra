@@ -184,10 +184,10 @@ void kchartEngine::computeSize() {
       }
     }
   }
-  
+
   graphwidth = imagewidth - ( ( (params->hard_size && params->hard_xorig)? params->hard_xorig:
 				( ytitle_hgt +
-				  ylabel_wth +
+                                  ylabel_wth +
 				  ytics ) )
 			      + vtics
 			      + vtitle_hgt
@@ -198,7 +198,7 @@ void kchartEngine::computeSize() {
   params->hard_graphwidth = graphwidth;
 
   qDebug( "done graphwidth computation" );
-  
+
   /* ----- scale to gif size ----- */
   /* offset to 0 at lower left (where it should be) */
   xscl = (float)(graphwidth-xdepth_3Dtotal) / (float)(num_points + (params->do_bar()?2:0));

@@ -140,8 +140,13 @@ void KChartView::config()
     case KCHARTTYPE_3DLINE:
     case KCHARTTYPE_3DPIE:
     case KCHARTTYPE_2DPIE:
-	qDebug( "Sorry, not implemented: no config dialog for this chart type" );
-	break;
+        {
+        //qDebug( "Sorry, not implemented: no config dialog for this chart type" );
+        KChartConfigDialog* d = new KChartConfigDialog( params, this );
+	d->exec();
+	delete d;
+        break;
+        }
     default:
 	qDebug( "Unknown chart type" );
     }

@@ -20,13 +20,16 @@ class kchartWizardSetupAxesPage : public QWidget
 public:
   kchartWizardSetupAxesPage( QWidget* parent, KChartPart* chart );
   ~kchartWizardSetupAxesPage();
-
+  bool chart3d;
 public slots:
       void apply();
       void changeLabelColor(const QColor &);
       void changeLabelFont();
       void changeBorderColor(const QColor &);
       void changeGridColor(const QColor &);
+protected:
+      void paintEvent( QPaintEvent *_ev );
+
 private:
   kchartWidget* preview;
   KChartPart* _chart;
@@ -36,6 +39,7 @@ private:
   QLineEdit *y_max;
   QLineEdit *y_min;
   QLineEdit *ylabel_fmt;
+  QLineEdit *ylabel2_fmt;
   QSpinBox *angle;
   QSpinBox *depth;
   QSpinBox *barWidth;

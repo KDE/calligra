@@ -57,6 +57,7 @@ kchartWizard::kchartWizard ( KChartPart* chart, QWidget *parent, const char* nam
   connect( this ,SIGNAL( finished()),_selectchartsubtypepage,SLOT(apply()));
   connect( _selectcharttypepage ,SIGNAL( chartChange(int)),this,SLOT(subType(int)));
   //resize( 620, 380 );
+  subType((int)_chart->params()->type);
   cerr << "kchartwizard created\n";
 }
 
@@ -84,6 +85,30 @@ void kchartWizard::subType(int _type)
         {
          _selectchartsubtypepage->chartSubType=false;
         }
+ if(((KChartType)_type==KCHARTTYPE_3DBAR)||((KChartType)_type==KCHARTTYPE_3DLINE)
+        ||((KChartType)_type==KCHARTTYPE_3DHILOCLOSE)||((KChartType)_type==KCHARTTYPE_3DCOMBO_LINE_BAR)
+        ||((KChartType)_type==KCHARTTYPE_3DCOMBO_LINE_AREA)||((KChartType)_type==KCHARTTYPE_3DCOMBO_HLC_BAR)
+        ||((KChartType)_type==KCHARTTYPE_3DCOMBO_HLC_AREA)||((KChartType)_type==KCHARTTYPE_3DAREA)
+        ||((KChartType)_type==KCHARTTYPE_3DPIE))
+        {
+         _axespage->chart3d=true;
+        }
+ else
+        {
+         _axespage->chart3d=false;
+        }
+if(((KChartType)_type==KCHARTTYPE_3DHILOCLOSE)||((KChartType)_type==KCHARTTYPE_3DCOMBO_LINE_BAR)
+        ||((KChartType)_type==KCHARTTYPE_3DCOMBO_LINE_AREA)||((KChartType)_type==KCHARTTYPE_3DCOMBO_HLC_BAR)
+        ||((KChartType)_type==KCHARTTYPE_3DCOMBO_HLC_AREA))
+
+        {
+         _labelslegendpage->ytitle2=true;
+        }
+ else
+        {
+         _labelslegendpage->ytitle2=false;
+        }
+
 
 }
 bool kchartWizard::appropriate( QWidget * w ) const

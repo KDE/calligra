@@ -28,6 +28,8 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
     _colorpage = new KChartColorConfigPage( this );
     addTab( _colorpage, i18n( "&Colors" ) );
 
+    //init
+    defaults();
 	// setup buttons
     setDefaultButton( i18n( "Defaults" ) );
     setCancelButton( i18n( "Cancel" ) );
@@ -38,7 +40,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
 
 void KChartConfigDialog::apply()
 {
-    // Copy application data from dialog into parameter structure that is also 
+    // Copy application data from dialog into parameter structure that is also
     // being used by the application.
 
     // color page

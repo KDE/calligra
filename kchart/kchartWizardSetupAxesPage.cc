@@ -17,6 +17,7 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
   QWidget( parent ),
   _chart( chart )
 {
+  chart3d=true;
   QFrame* tmpQFrame;
   tmpQFrame = new QFrame( this, "Frame_2" );
   tmpQFrame->setGeometry( 10, 10, 240, 220 );
@@ -115,6 +116,19 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
   barWidth = new QSpinBox(1, 200, 1, this);
   barWidth->setValue(_chart->params()->bar_width);
   barWidth->setGeometry( 320, 60, 110, 30 );
+
+  tmpLabel=new QLabel(this);
+  tmpLabel->setText(i18n("YLabel2 format : "));
+  tmpLabel->setGeometry(250,100,80,30);
+  ylabel2_fmt=new QLineEdit(this);
+
+  if( !_chart->params()->ylabel2_fmt.isEmpty())
+        {
+        int len=_chart->params()->ylabel2_fmt.length();
+         ylabel2_fmt->setText(_chart->params()->ylabel2_fmt.right(len-3));
+        }
+  ylabel2_fmt->setGeometry( 320, 100, 110, 30 );
+
 
   /*
   QGroupBox* ticksettingsGB = new QGroupBox( i18n( "Tick settings" ), this );
@@ -248,21 +262,37 @@ void kchartWizardSetupAxesPage::changeLabelFont()
       return;
 }
 
+void kchartWizardSetupAxesPage::paintEvent( QPaintEvent *_ev )
+{
+if(chart3d)
+        {
+        angle->setEnabled(true);
+        depth->setEnabled(true);
+        barWidth->setEnabled(true);
+        }
+else
+        {
+        angle->setEnabled(false);
+        depth->setEnabled(false);
+        barWidth->setEnabled(false);
+        }
+}
+
 void kchartWizardSetupAxesPage::apply()
 {
  _chart->params()->grid =grid->isChecked() ;
  if( !y_interval->text().isEmpty())
         _chart->params()->requested_yinterval=y_interval->text().toDouble();
  else
-        _chart->params()->requested_yinterval=-MAXDOUBLE;
+        _chart->params()->requested_yinterval=0;
  if( !y_max->text().isEmpty())
         _chart->params()->requested_ymax=y_max->text().toDouble();
  else
-        _chart->params()->requested_ymax= -MAXDOUBLE;
+        _chart->params()->requested_ymax=0;
  if( !y_min->text().isEmpty())
         _chart->params()->requested_ymin=y_min->text().toDouble();
  else
-        _chart->params()->requested_ymin=MAXDOUBLE;
+        _chart->params()->requested_ymin=0;
 
  _chart->params()->border =border->isChecked() ;
  _chart->params()->_3d_angle=angle->value();
@@ -281,6 +311,15 @@ void kchartWizardSetupAxesPage::apply()
  _chart->params()->LineColor=colorBorder;
  _chart->params()->_3d_depth=depth->value();
  _chart->params()->bar_width=barWidth->value();
+ if(! ylabel2_fmt->text().isEmpty())
+        {
+        QString tmp="%g "+ylabel2_fmt->text();
+        _chart->params()->ylabel2_fmt=tmp;
+        }
+ else
+        {
+        _chart->params()->ylabel2_fmt="";
+        }
 }
 /*
 void kchartWizardSetupAxesPage::setYTicksNum( const QString & newValue )

@@ -15,7 +15,7 @@ kchartWizardLabelsLegendPage::kchartWizardLabelsLegendPage( QWidget* parent, KCh
   QWidget( parent ),
   _chart( chart )
 {
-
+  ytitle2=true;
   QLabel* titleLA = new QLabel( i18n( "Title:" ), this );
   titleLA->setGeometry( 270, 10, 100, 30 );
 
@@ -68,7 +68,7 @@ kchartWizardLabelsLegendPage::kchartWizardLabelsLegendPage( QWidget* parent, KCh
   ytitlecolor->setColor( y_color );
 
   //ytitle2 doesn't work
-  /*QLabel* ylabelLA2 = new QLabel( i18n( "Y-Title2:" ), this );
+  QLabel* ylabelLA2 = new QLabel( i18n( "Y-Title2:" ), this );
   ylabelLA2->setGeometry( 270, 240, 100, 30 );
 
   _ylabel2ED = new QLineEdit( this );
@@ -83,7 +83,7 @@ kchartWizardLabelsLegendPage::kchartWizardLabelsLegendPage( QWidget* parent, KCh
   xlabel=_chart->params()->xTitleFont();
   ylabel=_chart->params()->yTitleFont();
   title=_chart->params()->titleFont();
-  */
+
 
   /*
   QButtonGroup* placementBG = new QButtonGroup( i18n( "Legend placement" ),
@@ -144,9 +144,9 @@ kchartWizardLabelsLegendPage::kchartWizardLabelsLegendPage( QWidget* parent, KCh
                 this,SLOT(changeYLabelColor(const QColor &)));
   connect(titlecolor,SIGNAL(changed( const QColor & )),
                 this,SLOT(changeTitleColor(const QColor &)));
-  /*connect(ytitle2color,SIGNAL(changed( const QColor & )),
+  connect(ytitle2color,SIGNAL(changed( const QColor & )),
                 this,SLOT(changeYTitle2Color(const QColor &)));
-  */
+
   resize( 600, 300 );
 }
 
@@ -195,6 +195,20 @@ void kchartWizardLabelsLegendPage::changeYTitle2Color(const QColor &_color)
 y_color2=_color;
 }
 
+void kchartWizardLabelsLegendPage::paintEvent( QPaintEvent * )
+{
+if(ytitle2)
+        {
+        _ylabel2ED->setEnabled(true);
+        ytitle2color->setEnabled(true);
+        }
+else
+        {
+        _ylabel2ED->setEnabled(false);
+        ytitle2color->setEnabled(false);
+        }
+}
+
 void kchartWizardLabelsLegendPage::apply(  )
 {
    _chart->params()->setXTitleFont(xlabel);
@@ -206,8 +220,8 @@ void kchartWizardLabelsLegendPage::apply(  )
    _chart->params()->XTitleColor=x_color;
    _chart->params()->YTitleColor=y_color;
    _chart->params()->TitleColor=title_color;
-   //_chart->params()->YTitle2Color=y_color2;
-   //_chart->params()->ytitle2=_ylabel2ED->text();
+   _chart->params()->YTitle2Color=y_color2;
+   _chart->params()->ytitle2=_ylabel2ED->text();
 
 }
 #include "kchartWizardLabelsLegendPage.moc"

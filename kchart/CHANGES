@@ -21,3 +21,9 @@
 -Now you can choose a "sub type chart"
 -Add new parameters depth3d width3d
 -bugfix
+
+2000-01-09 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Now ytitle2 works
+-Add new parameters ylabel2_fmt
+

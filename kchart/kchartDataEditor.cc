@@ -38,7 +38,7 @@ void kchartDataEditor::getData(KChartData* dat) {
     for (int row = 0;row < _widget->rows();row++) {
       for (int col = 0;col < _widget->cols();col++) {
 	// m_pData->setYValue( row, col, _widget->getCell(row,col) );
-	KChartValue t; 
+	KChartValue t;
 	double val =  _widget->getCell(row,col);
 	if( ( row >= _widget->usedRows() )  ||
 	    ( col >= _widget->usedCols() ) )
@@ -51,5 +51,4 @@ void kchartDataEditor::getData(KChartData* dat) {
 	//   maxY = _widget->getCell(row,col) > maxY ? _widget->getCell(row,col) : maxY;
       }
     }
-
 }

@@ -25,19 +25,22 @@ int kchartEngine::doLabels() {
   for( int labels = 0; labels < data->cols(); labels++ ) {
     debug( "Retrieving value at position %d", labels );
     const KChartValue& cellval = data->cell( 0, labels );
-    debug( "type of field %d in row 0 is %s", labels, QVariant::typeToName( cellval.value.type() ).latin1() );
+    debug( "type of field %d in row 0 is %s", labels, QVariant::typeToName( cellval.value.type() ) );
     if( !cellval.exists ) {
       debug( "No value for x label in col %d", labels );
       continue;
     }
-    if( cellval.value.type() != QVariant::String ) {
+    //if( cellval.value.type() != QVariant::String ) {
+    if( cellval.value.type() != QVariant::CString ) {
       debug( "Value for x label in col %d is not a string", labels );
       continue;
     }
 
-    debug( "Setting label %d to %s", labels, cellval.value.stringValue().latin1() );
+    //debug( "Setting label %d to %s", labels, cellval.value.stringValue().latin1() );
+    debug( "Setting label %d to %s", labels, cellval.value.toString().latin1() );
     //		QString l = cellval.value.stringValue();
-    xlbl.at( labels ) = cellval.value.stringValue();
+    //xlbl.at( labels ) = cellval.value.stringValue();
+    xlbl.at( labels ) = cellval.value.toString();
     debug( "Done setting label" );
     hasxlabels = true;
   }
@@ -113,29 +116,29 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	else
 	  tmp_y = MIN( 0, highest ); // step down to lowest
 
-      if( i == 1 )	
+      if( i == 1 )
 	if( highest <= 0.0 ) //	all neg plotting
 	  continue;
 	else
 	  tmp_y = MAX( 0, lowest ); // step up to highest
 
-      
+
       //			if( !(highest > 0 && lowest < 0) )
       // doesn't straddle 0
       //				{
-      //				if( i == -1 )				
+      //				if( i == -1 )
       // only do once: normal
       //					continue;
       //				}
       //			else
       //				tmp_y = 0;
-      
+
       do {	// while( (tmp_y (+-)= ylbl_interval) < [highest,lowest] )
 	int		n, d, w;
 	char	*price_to_str( float, int*, int*, int*, const char* );
 	char	nmrtr[3+1], dmntr[3+1], whole[8];
 	char	all_whole = ylbl_interval<1.0? FALSE: TRUE;
-	
+
 	char	*ylbl_str = price_to_str( tmp_y,&n,&d,&w,
 					  do_ylbl_fractions? QString::null: params->ylabel_fmt );
 	if( do_ylbl_fractions )	{
@@ -143,9 +146,9 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	  sprintf( dmntr, "%d", d );
 	  sprintf( whole, "%d", w );
 	}
-	
+
 	//qDebug( "drawing 1" );
-	
+
 	if( params->grid ) {
 	  int	x1, x2, y1, y2;
 	  // int	gridline_clr = tmp_y == 0.0? LineColor: GridColor;
@@ -156,7 +159,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	  setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
 	num_sets:
 	  1;			// backmost
-	  x2 = PX(0);		y2 = PY(tmp_y);					
+	  x2 = PX(0);		y2 = PY(tmp_y);
 	  // w/ new setno
 	  p->setPen( GridColor );
 	  p->drawLine( x1, y1, x2, y2 );		// depth for 3Ds
@@ -165,12 +168,12 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	  setno = 0;
 	  // set back to foremost
 	}
-	
+
 	// qDebug( "drawing 2" );
-	
+
 	// PENDING(kalle) Originally, here was always used one
 	// font smaller than params->yAxisFont. Do that again?
-	if( params->yaxis ) 
+	if( params->yaxis )
 	  if( do_ylbl_fractions ) {
 	    if( w || (!w && !n && !d) ) {
 	      p->setPen( labelcolor );
@@ -213,9 +216,9 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 			 PY(tmp_y)-params->yAxisFontHeight()/2,
 			 ylbl_str );
 	  }
-	
+
 	  // qDebug( "drawing 4" );
-	
+
 	if( params->do_vol() && params->yaxis2 ) {
 	  char	vylbl[16];
 	  /* opposite of PV(y) */
@@ -244,7 +247,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
     }
 
     // qDebug( "drawing 5" );
-    
+
     /* catch last (bottom) grid line - specific to an "off" requested interval */
     if( params->grid && params->threeD() ) {
       setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
@@ -254,7 +257,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
       p->drawLine( PX(0), PY(lowest), PX(num_points-1+(params->do_bar()?2:0)), PY(lowest) );
       setno = 0;											// set back to foremost
     }
-    
+
     /* vy axis title */
     drawVYAxisTitle();
     /* y axis title */
@@ -265,16 +268,24 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 void kchartEngine::drawVYAxisTitle() {
     /* vy axis title */
     if( params->do_vol() && !params->ytitle2.isEmpty() ) {
-      QColor	titlecolor = params->YTitle2Color== Qt::black ?
-	VolColor: params->YTitle2Color;
+      //you can choose YTitle2Color and VolColor
+      /*QColor	titlecolor = params->YTitle2Color== Qt::black ?
+	VolColor: params->YTitle2Color;*/
+      QColor titlecolor= params->YTitle2Color;
       // PENDING(kalle) Check whether this really prints correctly
       p->setFont( params->yTitleFont() );
       p->setPen( titlecolor );
       p->rotate( 90 );
-      p->drawText( imagewidth-(1+params->yTitleFontHeight()),
+      //when you make a rotate axes are rotating
+      // in drawText x=>y and y=>-x
+
+      /*p->drawText( imagewidth-(1+params->yTitleFontHeight()),
 		   params->ytitle2.length()*params->yTitleFontWidth()/2 +
 		   grapheight/2, params->ytitle2 );
-
+      */
+      p->drawText(params->ytitle2.length()*params->yTitleFontWidth()/2 +
+		   grapheight/2 ,-(imagewidth-(1+params->yTitleFontHeight())),
+                   params->ytitle2 );
       p->rotate( -90 );
     }
 }
@@ -299,7 +310,7 @@ void kchartEngine::draw3DGrids() {
     p->drawLine( PX(0), PY(lowest), PX(0), PY(highest) );
     p->drawLine( PX(0), PY(lowest), PX(num_points-1+(params->do_bar()?2:0)), PY(lowest) );
   }
-  setno = 0;  
+  setno = 0;
 }
 
 
@@ -316,7 +327,7 @@ void kchartEngine::drawShelfGrids() {
   p->setPen( LineColor );
   p->drawLine( x1, y1, x2, y2 );			// depth for 3Ds
   p->drawLine( x2, y2, PX(num_points-1+(params->do_bar()?2:0)), y2 );
-  setno = 0;										       	// set back to foremost  
+  setno = 0;										       	// set back to foremost
 }
 
 
@@ -328,7 +339,7 @@ void kchartEngine::drawXTicks() {
       (num_lf_xlbls*(params->xAxisFontHeight()-1))/num_points );
   QColor labelcolor = params->XLabelColor== Qt::black ?
     LineColor: params->XLabelColor;
-  
+
   for(int i=0; i<num_points+(params->do_bar()?2:0); ++i ) {
     if( (i%(1+num_points/num_xlbls) == 0) ||   // labels are regulated
 	(num_xlbls >= num_points)         ||
@@ -350,14 +361,14 @@ void kchartEngine::drawXTicks() {
 	p->drawLine( x2, y2, x2,  PY(highest) );
 	setno = 0;											// reset to foremost
       }
-      
-      /*		       	  
+
+      /*
 				  if( !do_bar || (i>0 && xi<num_points) )
 				  // no label stuff yet
 				  if( params->xaxis && hasxlabels ) {
 				  // waiting for GDCImageStringUpNL()
 				  #define	LBXH		params->xAxisFontHeight()
-				  #define LBXW        params->xAxisFontWidth()						
+				  #define LBXW        params->xAxisFontWidth()
 				  int		xlen = 0;
 				  short	xstrs_num = cnt_nl( xlbl[xi], &xlen );
 				  //   char	sub_xlbl[xlen+1];
