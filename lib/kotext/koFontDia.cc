@@ -118,6 +118,7 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
              this, SLOT( slotFontChanged(const QFont &) ) );
 
 }
+
 void KoFontChooser::setupTab2()
 {
     QWidget *page = new QWidget( this );
@@ -183,6 +184,14 @@ void KoFontChooser::setupTab2()
     connect( m_underlineType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlineType( int )));
     connect( d->m_shadow, SIGNAL(clicked()), this, SLOT( slotShadowClicked() ) );
     connect( d->m_relativeSize, SIGNAL( valueChanged(int) ), this, SLOT( slotRelativeSizeChanged( int )));
+    updatePositionButton();
+}
+
+void KoFontChooser::updatePositionButton()
+{
+    bool state = (m_superScript->isChecked() || m_subScript->isChecked());
+    d->m_relativeSize->setEnabled( state );
+    d->m_lRelativeSize->setEnabled( state );
 }
 
 bool KoFontChooser::getShadowText()const
@@ -264,6 +273,7 @@ void KoFontChooser::slotSubScriptClicked()
     if(m_superScript->isChecked())
         m_superScript->setChecked(false);
     m_changedFlags |= KoTextFormat::VAlign;
+    updatePositionButton();
 }
 
 void KoFontChooser::slotSuperScriptClicked()
@@ -271,6 +281,7 @@ void KoFontChooser::slotSuperScriptClicked()
     if(m_subScript->isChecked())
         m_subScript->setChecked(false);
     m_changedFlags |= KoTextFormat::VAlign;
+    updatePositionButton();
 }
 
 void KoFontChooser::slotRelativeSizeChanged( int )
@@ -591,6 +602,7 @@ void KoFontDia::slotReset()
     m_chooser->setStrikeOutLineStyle(m_strikeOutLineStyle);
     m_chooser->setShadowText( m_shadowText);
     m_chooser->setRelativeTextSize( m_relativeSize);
+    m_chooser->updatePositionButton();
 }
 
 #include "koFontDia.moc"

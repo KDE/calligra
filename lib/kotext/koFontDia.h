@@ -78,6 +78,7 @@ public:
     int changedFlags() const { return m_changedFlags; }
     void setupTab1(bool _withSubSuperScript, uint fontListCriteria );
     void setupTab2();
+    void updatePositionButton();
 protected slots:
     void slotSuperScriptClicked();
     void slotSubScriptClicked();
