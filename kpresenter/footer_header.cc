@@ -374,9 +374,12 @@ void KPFooterHeaderEditor::slotHeaderPenBrush()
 	header->setPen( styleDia->getPen() );
 	header->setBrush( styleDia->getBrush() );
 	header->setFillType( styleDia->getFillType() );
-	header->setGColor1( styleDia->getGColor2() );
-	header->setGColor2( styleDia->getGColor1() );
+	header->setGColor1( styleDia->getGColor1() );
+	header->setGColor2( styleDia->getGColor2() );
 	header->setGType( styleDia->getGType() );
+	header->setGUnbalanced( styleDia->getGUnbalanced() );
+	header->setGXFactor( styleDia->getGXFactor() );
+	header->setGYFactor( styleDia->getGYFactor() );
     }
 
     delete styleDia;
@@ -409,9 +412,12 @@ void KPFooterHeaderEditor::slotFooterPenBrush()
 	footer->setPen( styleDia->getPen() );
 	footer->setBrush( styleDia->getBrush() );
 	footer->setFillType( styleDia->getFillType() );
-	footer->setGColor1( styleDia->getGColor2() );
-	footer->setGColor2( styleDia->getGColor1() );
+	footer->setGColor1( styleDia->getGColor1() );
+	footer->setGColor2( styleDia->getGColor2() );
 	footer->setGType( styleDia->getGType() );
+	footer->setGUnbalanced( styleDia->getGUnbalanced() );
+	footer->setGXFactor( styleDia->getGXFactor() );
+	footer->setGYFactor( styleDia->getGYFactor() );
     }
 
     delete styleDia;

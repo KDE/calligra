@@ -353,3 +353,4 @@ Reggie, 2.7.1999:
 - Switching unbalanced gradients on/off using a checkbox (not a radiobutton)
 - Some gradient update fixes
 - Some fixes
+- Fixed gradients in headers/footers
