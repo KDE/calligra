@@ -13,18 +13,10 @@ VSelection::VSelection()
 
 VSelection::~VSelection()
 {
-	VObjectListIterator itr = m_objects;
-	for ( ; itr.current(); ++itr )
-	{
-		delete( itr.current() );
-	}
 }
 
 void
 VSelection::draw( VPainter *painter, const KoRect& rect )
 {
-	VObjectListIterator itr = m_objects;
-	for ( ; itr.current(); ++itr )
-		itr.current()->draw( painter, rect );
 }
 

@@ -19,7 +19,7 @@ VGroupCmd::VGroupCmd( VDocument *doc )
 void
 VGroupCmd::execute()
 {
-	m_group = new VGroup();
+	m_group = new VGroup( m_doc->activeLayer() );
 
 	VObjectListIterator itr( m_objects.objects() );
 	for ( ; itr.current() ; ++itr )
@@ -37,15 +37,29 @@ void
 VGroupCmd::unexecute()
 {
 	m_doc->deselect();
+
 	VObjectListIterator itr( m_group->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
-		m_doc->select( *( itr.current() ) );
+		m_doc->select( *itr.current() );
 	}
-	// TODO : remove from corresponding VLayer
-	m_group->ungroup();
+
+	VGroup* parent;
+	if( ( parent = dynamic_cast<VGroup*>( m_group->parent() ) ) )
+	{
+		// unregister from parent:
+		parent->take( m_group );
+
+		// inform all objects in this group about their new parent
+		VObjectListIterator itr = m_objects.objects();
+
+		for ( ; itr.current() ; ++itr )
+			parent->append( itr.current() );
+
+		m_group->clear();
+	}
+	
 	delete m_group;
 	m_group = 0L;
 }
-

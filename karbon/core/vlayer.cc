@@ -39,6 +39,14 @@ VLayer::~VLayer()
 void
 VLayer::draw( VPainter* painter, const KoRect& rect )
 {
+	if(
+		state() == state_deleted ||
+		state() == state_hidden ||
+		state() == state_hidden_locked )
+	{
+		return;
+	}
+
 	VObjectListIterator itr = m_objects;
 
 	for ( ; itr.current(); ++itr )
@@ -46,40 +54,42 @@ VLayer::draw( VPainter* painter, const KoRect& rect )
 }
 
 void
-VLayer::bringToFront( const VObject* /*object*/ )
+VLayer::bringToFront( const VObject& /*object*/ )
 {
 }
 
 void
-VLayer::upwards( const VObject* object )
+VLayer::upwards( const VObject& object )
 {
-	if( m_objects.getLast() == object ) return;
+	if( m_objects.getLast() == &object ) return;
 
-//	int index = m_objects.find( object );
-	//kdDebug() << "Index : " << index << endl;
 	m_objects.remove();
+
 	if( m_objects.current() != m_objects.getLast() )
 	{
 		m_objects.next();
-		m_objects.insert( m_objects.at(), object );
+		m_objects.insert( m_objects.at(), &object );
 	}
-	else m_objects.append( object );
+	else
+		m_objects.append( &object );
 }
 
 void
-VLayer::downwards( const VObject* object )
+VLayer::downwards( const VObject& object )
 {
-	if( m_objects.getFirst() == object ) return;
+	if( m_objects.getFirst() == &object ) return;
 
 //	int index = m_objects.find( object );
-	bool bLast = m_objects.getLast() == object;
+	bool bLast = m_objects.getLast() == &object;
 	m_objects.remove();
+
 	if( !bLast ) m_objects.prev();
-	m_objects.insert( m_objects.at(), object );
+
+	m_objects.insert( m_objects.at(), &object );
 }
 
 void
-VLayer::sentToBack( const VObject* /*object*/ )
+VLayer::sentToBack( const VObject& /*object*/ )
 {
 }
 
@@ -168,5 +178,12 @@ VLayer::load( const QDomElement& element )
 			}
 		}
 	}
+}
+
+
+VObject*
+VLayer::clone() const
+{
+	return new VLayer( *this );
 }
 

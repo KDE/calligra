@@ -34,20 +34,20 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
-	virtual VObject* clone() const { return 0L; }
+	virtual VObject* clone() const;
 
 
-	void bringToFront( const VObject* object );
+	void bringToFront( const VObject& object );
 
 	/// moves the object one step up the list.
 	/// When the object is at the top this method has no effect.
-	void upwards( const VObject* object );
+	void upwards( const VObject& object );
 
 	/// moves the object one step down the list.
 	/// When the object is at the bottom this method has no effect.
-	void downwards( const VObject* object );
+	void downwards( const VObject& object );
 
-	void sentToBack( const VObject* object );
+	void sentToBack( const VObject& object );
 
 
 	/// selects all objects that intersect with rect.

@@ -45,8 +45,13 @@ VPath::~VPath()
 void
 VPath::draw( VPainter *painter, const KoRect& rect )
 {
-	if( state() == state_deleted )
+	if(
+		state() == state_deleted ||
+		state() == state_hidden ||
+		state() == state_hidden_locked )
+	{
 		return;
+	}
 
 	double zoomFactor = painter->zoomFactor();
 

@@ -40,7 +40,7 @@ public:
 	// TODO
 	virtual void transform( const QWMatrix& ) {}
 
-	virtual VObject* clone() const { return 0L; }
+	virtual VObject* clone() const;
 
 	const QString& mime() { return m_mime; }
 	void setMime( const QString& mime ) { m_mime = mime; }
@@ -78,6 +78,7 @@ public:
 
 
 	// move up/down within layer
+// TODO: move these functions into a command:
 	void moveSelectionToTop();
 	void moveSelectionToBottom();
 	void moveSelectionDown();

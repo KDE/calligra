@@ -95,6 +95,13 @@ VDocument::saveXML( QDomDocument& doc ) const
 		itr.current()->save( me );
 }
 
+
+VObject*
+VDocument::clone() const
+{
+	return new VDocument( *this );
+}
+
 bool
 VDocument::loadXML( const QDomElement& doc )
 {

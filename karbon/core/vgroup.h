@@ -38,29 +38,29 @@ public:
 
 	virtual bool isInside( const KoRect& rect ) const;
 
-	virtual void setState( const VState state );
-
 	virtual void setStroke( const VStroke& stroke );
 	virtual void setFill( const VFill& fill );
+
+	virtual void setState( const VState state );
 
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
 	virtual VObject* clone() const;
 
+	virtual void accept( VVisitor& visitor );
 
-	/// removes the reference to the object, not the object itself
+
+	/// Removes the reference to the object, not the object itself
 	void take( const VObject& object );
 
 	void prepend( VObject* object );
 	void append( VObject* object );
 
-	void clear() { kdDebug() << "notimplemnted!!!" << endl; }
+	/// Clears the group, without destroying the grouped objects.
+	void clear();
 
-	// clear the group without deleting the objects
-	void ungroup();	// TODO !!! use clear()?
-
-	// read-only access to objects:
+	/// Read only access to the grouped objects.
 	const VObjectList& objects() const { return m_objects; }
 
 protected:

@@ -40,6 +40,14 @@ VGroup::~VGroup()
 void
 VGroup::draw( VPainter* painter, const KoRect& rect )
 {
+	if(
+		state() == state_deleted ||
+		state() == state_hidden ||
+		state() == state_hidden_locked )
+	{
+		return;
+	}
+
 	VObjectListIterator itr = m_objects;
 
 	for ( ; itr.current(); ++itr )
@@ -53,15 +61,6 @@ VGroup::transform( const QWMatrix& m )
 
 	for ( ; itr.current() ; ++itr )
 		itr.current()->transform( m );
-}
-
-void
-VGroup::setState( const VState state )
-{
-	VObjectListIterator itr = m_objects;
-
-	for ( ; itr.current() ; ++itr )
-		itr.current()->setState( state );
 }
 
 const KoRect&
@@ -125,6 +124,17 @@ VGroup::setStroke( const VStroke& stroke )
 }
 
 void
+VGroup::setState( const VState state )
+{
+	VObjectListIterator itr = m_objects;
+
+	for ( ; itr.current() ; ++itr )
+		itr.current()->setState( state );
+
+	VObject::setState( state );
+}
+
+void
 VGroup::save( QDomElement& element ) const
 {
 	QDomElement me = element.ownerDocument().createElement( "GROUP" );
@@ -175,6 +185,15 @@ VGroup::take( const VObject& object )
 }
 
 void
+VGroup::accept( VVisitor& visitor )
+{
+	VObjectListIterator itr = m_objects;
+
+	for ( ; itr.current() ; ++itr )
+		itr.current()->accept( visitor );
+}
+
+void
 VGroup::prepend( VObject* object )
 {
 	object->setParent( this );
@@ -195,21 +214,7 @@ VGroup::append( VObject* object )
 }
 
 void
-VGroup::ungroup()
+VGroup::clear()
 {
-	VLayer *layer = static_cast<VLayer *>( parent() );
-	if( !layer )
-		return;
-
-	// unregister from parent layer
-	layer->take( this );
-	// inform all objects in this group their new parent
-	VObjectListIterator itr = m_objects;
-
-	for ( ; itr.current() ; ++itr )
-		layer->append( itr.current() );
-
-	// done
 	m_objects.clear();
 }
-
