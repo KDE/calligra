@@ -671,17 +671,17 @@ QByteArray& AIElement::asByteArray()
 
 /*!
   Returns TRUE if the aielement's type can be cast to the requested
-  type, \a t. Such casting is done automatically when calling the
+  type, \p t. Such casting is done automatically when calling the
   toInt(), ... or asInt(), ... methods.
 
   The following casts are done automatically:
-  \list
-  \i CString => String
-  \i Double => String, Int, UInt
-  \i Int => String, Double, UInt
-  \i String => CString, Int, Uint, Double
-  \i UInt => String, Double, Int
-  \endlist
+  <ul>
+  <li> CString => String
+  <li> Double => String, Int, UInt
+  <li> Int => String, Double, UInt
+  <li> String => CString, Int, Uint, Double
+  <li> UInt => String, Double, Int
+  </ul>
 */
 bool AIElement::canCast( Type t ) const
 {
@@ -702,14 +702,18 @@ bool AIElement::canCast( Type t ) const
 }
 
 /*!
-  Casts the aielement to the requested type.  If the cast cannot be
+  \brief Casts the aielement to the requested type.
+  
+  If the cast cannot be
   done, the aielement is set to the default value of the requested type
-  (e.g. an empty string if the requested type \a t is
-  AIElement::String, an empty point array if the requested type \a t is
-  AIElement::PointArray, etc).  Returns TRUE if the current type of the
+  (e.g. an empty string if the requested type \p t is
+  AIElement::String, an empty point array if the requested type \p t is
+  AIElement::PointArray, etc).
+
+  \returns TRUE if the current type of the
   aielement was successfully casted; otherwise returns FALSE.
 
-  \sa canCast()
+  \see canCast()
 */
 
 bool AIElement::cast( Type t )
