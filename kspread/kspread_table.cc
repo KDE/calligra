@@ -6957,6 +6957,13 @@ void KSpreadTable::setHeadFootLine( const QString &_headl, const QString &_headm
   m_pDoc->setModified( TRUE );
 }
 
+void KSpreadTable::setPaperOrientation(KoOrientation _orient)
+{
+  m_orientation = _orient;
+  calcPaperSize();
+}
+
+
 void KSpreadTable::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
                                    KoFormat _paper, KoOrientation _orientation )
 {

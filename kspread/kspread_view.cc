@@ -2970,11 +2970,9 @@ void KSpreadView::setupPrinter( KPrinter &prt )
 
 void KSpreadView::print( KPrinter &prt )
 {
-//    prt.preparePrinting();
 
     //store the current setting in a temporary variable
     KoOrientation _orient =  m_pTable->orientation();
-
     
     QPainter painter;
 
