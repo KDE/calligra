@@ -37,7 +37,6 @@
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
-#include <config.h>
 #include <assert.h>
 
 KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
