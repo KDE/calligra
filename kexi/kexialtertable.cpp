@@ -45,7 +45,6 @@ KexiAlterTable::KexiAlterTable(QWidget *parent, QString table, const char *name)
 	m_view->addColumn(i18n("Field Name"), QVariant::String, true);
 	
 	QStringList strings;
-	strings.append(i18n("Select Datatype"));
 	
 	for(int i = 1; i < 18; i++)
 	{
@@ -77,7 +76,7 @@ void KexiAlterTable::initTable()
 		KexiTableItem *it = new KexiTableItem(m_view);
 		it->setValue(0, record->fieldInfo(i)->name());
 		m_fieldnames.append(record->fieldInfo(i)->name());
-		it->setValue(1, record->fieldInfo(i)->sqlType());
+		it->setValue(1, record->fieldInfo(i)->sqlType() - 1);
 		it->setValue(2, record->fieldInfo(i)->length());
 		it->setValue(3, record->fieldInfo(i)->not_null());
 		it->setValue(4, record->fieldInfo(i)->defaultValue());
@@ -87,6 +86,7 @@ void KexiAlterTable::initTable()
 
 	// Insert item
 	KexiTableItem *insert = new KexiTableItem(m_view);
+	insert->setValue(1, KexiDBField::SQLVarchar - 1);
 	insert->setHint(QVariant(fc));
 	insert->setInsertItem(true);
 	
@@ -110,6 +110,7 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 				i->setInsertItem(false);
 				m_fieldnames.append(i->getValue(0).toString());
 				KexiTableItem *newinsert = new KexiTableItem(m_view);
+				newinsert->setValue(1, KexiDBField::SQLVarchar - 1);
 				newinsert->setHint(QVariant(i->getHint().toInt() + 1));
 				newinsert->setInsertItem(true);
 			}
