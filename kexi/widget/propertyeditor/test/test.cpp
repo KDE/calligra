@@ -50,7 +50,7 @@ test::test()
 	m_buffer->add(new KexiProperty("Time", QTime::currentTime(),"Time"));
 	m_buffer->add(new KexiProperty("DateTime", QDateTime::currentDateTime(),"DateTime"));
 	
-	KexiPropertyEditor *edit = new KexiPropertyEditor(this,false);
+	KexiPropertyEditor *edit = new KexiPropertyEditor(this,true/*autosync*/);
 	setCentralWidget(edit);
 	edit->setBuffer(m_buffer);
 	resize(500,500);
