@@ -256,11 +256,12 @@ KWFindReplace::KWFindReplace( KWCanvas * canvas, KWSearchDia * dialog )
       m_findDlg( dialog ), // guaranteed to remain alive while we live
       m_replaceDlg( 0L ),
       m_options( dialog->options() ),
-      m_canvas( canvas )
+      m_canvas( canvas ),
+      m_currentFrameSet( 0L ),
+      m_macroCmd( 0L )
 {
     connect( m_find, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
              this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
-    m_currentFrameSet = 0L;
 }
 
 KWFindReplace::KWFindReplace( KWCanvas * canvas, KWReplaceDia * dialog )
@@ -269,14 +270,14 @@ KWFindReplace::KWFindReplace( KWCanvas * canvas, KWReplaceDia * dialog )
       m_findDlg( 0L ),
       m_replaceDlg( dialog ), // guaranteed to remain alive while we live
       m_options( dialog->options() ),
-      m_canvas( canvas )
+      m_canvas( canvas ),
+      m_currentFrameSet( 0L ),
+      m_macroCmd( 0L )
 {
     connect( m_replace, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
              this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
     connect( m_replace, SIGNAL( replace( const QString &, int , int, int, const QRect & ) ),
              this, SLOT( replace( const QString &, int , int,int, const QRect & ) ) );
-    m_currentFrameSet = 0L;
-    macroCmd=0L;
 }
 
 KWFindReplace::~KWFindReplace()
@@ -342,8 +343,8 @@ void KWFindReplace::proceed()
             }
         }
     }
-    if(macroCmd)
-        m_canvas->kWordDocument()->addCommand(macroCmd);
+    if(m_macroCmd)
+        m_canvas->kWordDocument()->addCommand(m_macroCmd);
 }
 
 bool KWFindReplace::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int firstIndex,
@@ -422,8 +423,8 @@ void KWFindReplace::highlight( const QString &, int matchingIndex, int matchingL
 void KWFindReplace::replace( const QString &, int matchingIndex,
                              int /*matchingLength*/ ,int matchedLength,  const QRect &/*expose*/ )
 {
-    if(!macroCmd)
-        macroCmd=new KMacroCommand(i18n("Insert Replacement"));
+    if(!m_macroCmd)
+        m_macroCmd=new KMacroCommand(i18n("Insert Replacement"));
     int index = m_offset + matchingIndex;
     // highlight might not have happened (if 'prompt on replace' is off)
     m_currentFrameSet->highlightPortion( m_currentParag, index, matchedLength, m_canvas );
@@ -431,7 +432,7 @@ void KWFindReplace::replace( const QString &, int matchingIndex,
     QTextCursor cursor( textdoc );
     cursor.setParag( m_currentParag );
     cursor.setIndex( index );
-    macroCmd->addCommand(m_currentFrameSet->replaceSelection( &cursor,m_replaceDlg->replacement(),KWTextFrameSet::HighlightSelection, i18n("Insert Replacement")));
+    m_macroCmd->addCommand(m_currentFrameSet->replaceSelection( &cursor,m_replaceDlg->replacement(),KWTextFrameSet::HighlightSelection, i18n("Insert Replacement")));
 }
 
 #include "searchdia.moc"

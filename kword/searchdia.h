@@ -185,7 +185,7 @@ private:
     KWCanvas *m_canvas;
     KWTextFrameSet *m_currentFrameSet;
     QTextParag *m_currentParag;
-    KMacroCommand *macroCmd;
+    KMacroCommand *m_macroCmd;
     int m_offset;
 };
 
