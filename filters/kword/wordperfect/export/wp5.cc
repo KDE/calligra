@@ -65,8 +65,6 @@ bool WPFiveWorker::doCloseFile(void)
   outfile.at( 20 );
   output << total_filesize;
 
-qDebug(  "Filesize %d\n", total_filesize );
-
   // offset 4, int32, pointer to document area
   outfile.at( 4 );
   output << document_area_ptr;
@@ -133,7 +131,6 @@ bool WPFiveWorker::doOpenDocument(void)
 
 bool WPFiveWorker::doCloseDocument(void)
 {
-qDebug("****** close document\n");
   return true;
 }
 
