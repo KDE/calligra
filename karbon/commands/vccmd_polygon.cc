@@ -31,15 +31,22 @@ VCCmdPolygon::createPath()
 	VPath* path = new VPath();
 
 	// we start at m_angle + VGlobal::pi_2:
-	path->moveTo(
+	KoPoint p(
 		m_radius * cos( m_angle + VGlobal::pi_2 ),
 		m_radius * sin( m_angle + VGlobal::pi_2 ) );
 
+	path->moveTo( p );
+
 	for ( uint i = 0; i < m_edges; ++i )
 	{
-		path->lineTo(
-			m_radius * cos( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1 ) ),
-			m_radius * sin( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1 ) ) );
+		p.setX(
+			m_radius * cos( m_angle + VGlobal::pi_2
+			+ VGlobal::twopi / m_edges * ( i + 1 ) ) );
+		p.setY(
+			m_radius * sin( m_angle + VGlobal::pi_2
+			+ VGlobal::twopi / m_edges * ( i + 1 ) ) );
+
+		path->lineTo( p );
 	}
 	path->close();
 

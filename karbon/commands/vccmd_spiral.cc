@@ -37,30 +37,21 @@ VCCmdSpiral::createPath()
 	double adv_ang = ( m_clockWise ? -1.0 : 1.0 ) * VGlobal::pi_2;
 	// radius of first segment is non-faded m_radius:
 	double r = m_radius;
-	double old_x = 0.0;
-	double old_y = ( m_clockWise ? -1.0 : 1.0 ) * m_radius;
-	double new_x;
-	double new_y;
-	double new_centerX = 0.0;
-	double new_centerY = 0.0;
-	path->moveTo( old_x, old_y );
+
+	KoPoint oldP( 0.0, ( m_clockWise ? -1.0 : 1.0 ) * m_radius );
+	KoPoint newP;
+	KoPoint newCenter( 0.0, 0.0 );
+	path->moveTo( oldP );
 
 	for ( uint i = 0; i < m_segments; ++i )
 	{
-		new_x = r * cos( adv_ang * ( i + 2 ) ) + new_centerX;
-		new_y = r * sin( adv_ang * ( i + 2 ) ) + new_centerY;
+		newP.setX( r * cos( adv_ang * ( i + 2 ) ) + newCenter.x() );
+		newP.setY( r * sin( adv_ang * ( i + 2 ) ) + newCenter.y() );
 
-		path->arcTo(
-			old_x + new_x - new_centerX,
-			old_y + new_y - new_centerY,
-			new_x, new_y,
-			r
-		);
+		path->arcTo( oldP + newP - newCenter, newP, r );
 
-		new_centerX += ( new_x - new_centerX ) * ( 1.0 - m_fade );
-		new_centerY += ( new_y - new_centerY ) * ( 1.0 - m_fade );
-		old_x = new_x;
-		old_y = new_y;
+		newCenter += ( newP - newCenter ) * ( 1.0 - m_fade );
+		oldP = newP;
 		r *= m_fade;
 	}
 

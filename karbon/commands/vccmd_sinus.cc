@@ -25,42 +25,76 @@ VCCmdSinus::createPath()
 {
 	VPath* path = new VPath();
 
-	path->moveTo( 0.0, 0.0 );
+	KoPoint p1;
+	KoPoint p2;
+	KoPoint p3( 0.0, 0.0 );
+	path->moveTo( p3 );
 
 	for ( uint i = 0; i < m_periods; ++i )
 	{
-		path->curveTo(
-			i + 1.0/24.0,	( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7,
-			i + 1.0/12.0,	( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7,
-			i + 1.0/8.0,	VGlobal::sqrt2 * 0.5 );
-		path->curveTo(
-			i + 1.0/6.0,	( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7,
-			i + 5.0/24.0,	1.0,
-			i + 1.0/4.0,	1.0  );
-		path->curveTo(
-			i + 7.0/24.0,	1.0,
-			i + 1.0/3.0,	( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7,
-			i + 3.0/8.0,	VGlobal::sqrt2 * 0.5 );
-		path->curveTo(
-			i + 5.0/12.0,	( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7,
-			i + 11.0/24.0,	( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7,
-			i + 1.0/2.0,	0.0 );
-		path->curveTo(
-			i + 13.0/24.0,	-( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7,
-			i + 7.0/12.0,	-( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7,
-			i + 5.0/8.0,	-VGlobal::sqrt2 * 0.5 );
-		path->curveTo(
-			i + 2.0/3.0,	-( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7,
-			i + 17.0/24.0,	-1.0,
-			i + 3.0/4.0,	-1.0 );
-		path->curveTo(
-			i + 19.0/24.0,	-1.0,
-			i + 5.0/6.0,	-( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7,
-			i + 7.0/8.0,	-VGlobal::sqrt2 * 0.5 );
-		path->curveTo(
-			i + 11.0/12.0,	-( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7,
-			i + 23.0/24.0,	-( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7,
-			i + 1.0,		0.0 );
+		p1.setX( i + 1.0/24.0 );
+		p1.setY( ( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7 );
+		p2.setX( i + 1.0/12.0 );
+		p2.setY( ( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7 );
+		p3.setX( i + 1.0/8.0 );
+		p3.setY( VGlobal::sqrt2 * 0.5 );
+		path->curveTo( p1, p2, p3 );
+
+		p1.setX( i + 1.0/6.0 );
+		p1.setY( ( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7 );
+		p2.setX( i + 5.0/24.0 );
+		p2.setY( 1.0 );
+		p3.setX( i + 1.0/4.0 );
+		p3.setY( 1.0 );
+		path->curveTo( p1, p2, p3 );
+
+		p1.setX( i + 7.0/24.0 );
+		p1.setY( 1.0 );
+		p2.setX( i + 1.0/3.0 );
+		p2.setY( ( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7 );
+		p3.setX( i + 3.0/8.0 );
+		p3.setY( VGlobal::sqrt2 * 0.5 );
+		path->curveTo( p1, p2, p3 );
+
+		p1.setX( i + 5.0/12.0 );
+		p1.setY( ( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7 );
+		p2.setX( i + 11.0/24.0 );
+		p2.setY( ( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7 );
+		p3.setX( i + 1.0/2.0 );
+		p3.setY( 0.0 );
+		path->curveTo( p1, p2, p3 );
+
+		p1.setX( i + 13.0/24.0 );
+		p1.setY( -( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7 );
+		p2.setX( i + 7.0/12.0 );
+		p2.setY( -( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7 );
+		p3.setX( i + 5.0/8.0 );
+		p3.setY( -VGlobal::sqrt2 * 0.5 );
+		path->curveTo( p1, p2, p3 );
+
+		p1.setX( i + 2.0/3.0 );
+		p1.setY( -( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7 );
+		p2.setX( i + 17.0/24.0 );
+		p2.setY( -1.0 );
+		p3.setX( i + 3.0/4.0 );
+		p3.setY( -1.0 );
+		path->curveTo( p1, p2, p3 );
+
+		p1.setX( i + 19.0/24.0 );
+		p1.setY( -1.0 );
+		p2.setX( i + 5.0/6.0 );
+		p2.setY( -( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7 );
+		p3.setX( i + 7.0/8.0 );
+		p3.setY( -VGlobal::sqrt2 * 0.5 );
+		path->curveTo( p1, p2, p3 );
+
+		p1.setX( i + 11.0/12.0 );
+		p1.setY( -( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7 );
+		p2.setX( i + 23.0/24.0 );
+		p2.setY( -( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7 );
+		p3.setX( i + 1.0 );
+		p3.setY( 0.0 );
+		path->curveTo( p1, p2, p3 );
 	}
 
 	double w = m_brX - m_tlX;

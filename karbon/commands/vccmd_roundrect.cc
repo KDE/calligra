@@ -51,19 +51,19 @@ VCCmdRoundRect::createPath()
 {
 	VPath* path = new VPath();
 
-	path->moveTo( m_tlX, m_tlY - m_edgeR );
+	path->moveTo( KoPoint( m_tlX, m_tlY - m_edgeR ) );
 	path->arcTo(
-		m_tlX, m_tlY,
-		m_tlX + m_edgeR, m_tlY, m_edgeR );
+		KoPoint( m_tlX, m_tlY ),
+		KoPoint( m_tlX + m_edgeR, m_tlY ), m_edgeR );
 	path->arcTo(
-		m_brX, m_tlY,
-		m_brX, m_tlY - m_edgeR, m_edgeR );
+		KoPoint( m_brX, m_tlY ),
+		KoPoint( m_brX, m_tlY - m_edgeR ), m_edgeR );
 	path->arcTo(
-		m_brX, m_brY,
-		m_brX - m_edgeR, m_brY, m_edgeR );
+		KoPoint( m_brX, m_brY ),
+		KoPoint( m_brX - m_edgeR, m_brY ), m_edgeR );
 	path->arcTo(
-		m_tlX, m_brY,
-		m_tlX, m_brY + m_edgeR, m_edgeR );
+		KoPoint( m_tlX, m_brY ),
+		KoPoint( m_tlX, m_brY + m_edgeR ), m_edgeR );
 	path->close();
 
 	return path;

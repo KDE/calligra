@@ -3,8 +3,6 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <math.h>
-
 #include <qdom.h>
 #include "vpainter.h"
 #include <qwmatrix.h>
@@ -221,198 +219,72 @@ VPath::draw( VPainter *painter, const QRect& rect,
 const KoPoint&
 VPath::currentPoint() const
 {
-	return
-		m_segmentLists.getLast()->getLast()->point( 3 );
+	return m_segmentLists.getLast()->currentPoint();
 }
 
-VPath&
-VPath::moveTo( const double& x, const double& y )
+bool
+VPath::moveTo( const KoPoint& p )
 {
-	if( isClosed() ) return *this;
+	if( isClosed() ) return false;
 
 	// move "begin" when path is still empty:
-	if( m_segmentLists.getLast()->getLast()->type() == segment_begin )
-		m_segmentLists.getLast()->getLast()->setPoint( 3, KoPoint( x, y ) );
+	if( m_segmentLists.getLast()->moveTo( p ) )
+	{
+		return true;
+	}
 	// otherwise create a new subpath:
 	else
 	{
 		// add an initial segmentlist:
 		VSegmentList* list = new VSegmentList();
-
 		m_segmentLists.append( list );
-		m_segmentLists.getLast()->getLast()->setPoint( 3, KoPoint( x, y ) );
+		m_segmentLists.getLast()->moveTo( p );
 	}
 
-	return *this;
+	return false;
 }
 
-VPath&
-VPath::lineTo( const double& x, const double& y )
+bool
+VPath::lineTo( const KoPoint& p )
 {
-	if( isClosed() ) return *this;
-
-	VSegment* s = new VSegment();
-	s->setType( segment_line );
-	s->setPoint( 3, KoPoint( x, y ) );
-	m_segmentLists.getLast()->append( s );
-
-	return *this;
+	return m_segmentLists.getLast()->lineTo( p );
 }
 
-VPath&
+bool
 VPath::curveTo(
-	const double& x1, const double& y1,
-	const double& x2, const double& y2,
-	const double& x3, const double& y3 )
+	const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
-	if( isClosed() ) return *this;
-
-	VSegment* s = new VSegment();
-	s->setType( segment_curve );
-	s->setPoint( 1, KoPoint( x1, y1 ) );
-	s->setPoint( 2, KoPoint( x2, y2 ) );
-	s->setPoint( 3, KoPoint( x3, y3 ) );
-
-	m_segmentLists.getLast()->append( s );
-
-	return *this;
+	return m_segmentLists.getLast()->curveTo( p1, p2, p3 );
 }
 
-VPath&
-VPath::curve1To(
-	const double& x2, const double& y2,
-	const double& x3, const double& y3 )
+bool
+VPath::curve1To( const KoPoint& p2, const KoPoint& p3 )
 {
-	if( isClosed() ) return *this;
-
-	VSegment* s = new VSegment();
-	s->setType( segment_curve1 );
-	s->setPoint( 2, KoPoint( x2, y2 ) );
-	s->setPoint( 3, KoPoint( x3, y3 ) );
-
-	m_segmentLists.getLast()->append( s );
-
-	return *this;
+	return m_segmentLists.getLast()->curve1To( p2, p3 );
 }
 
-VPath&
-VPath::curve2To(
-	const double& x1, const double& y1,
-	const double& x3, const double& y3 )
+bool
+VPath::curve2To( const KoPoint& p1, const KoPoint& p3 )
 {
-	if( isClosed() ) return *this;
-
-	VSegment* s = new VSegment();
-	s->setType( segment_curve2 );
-	s->setPoint( 1, KoPoint( x1, y1 ) );
-	s->setPoint( 3, KoPoint( x3, y3 ) );
-
-	m_segmentLists.getLast()->append( s );
-
-	return *this;
+	return m_segmentLists.getLast()->curve2To( p1, p3 );
 }
 
-VPath&
-VPath::arcTo(
-	const double& x1, const double& y1,
-	const double& x2, const double& y2, const double& r )
+bool
+VPath::arcTo( const KoPoint& p1, const KoPoint& p2, const double r )
 {
-	// parts of this routine are inspired by GNU ghostscript
-
-	if( isClosed() ) return *this;
-
-	// we need to calculate the tangent points. therefore calculate tangents
-	// D10=P1P0 and D12=P1P2 first:
-	double dx10 = currentPoint().x() - x1;
-	double dy10 = currentPoint().y() - y1;
-	double dx12 = x2 - x1;
-	double dy12 = y2 - y1;
-
-	// calculate distance squares:
-	double dsq10 = dx10*dx10 + dy10*dy10;
-	double dsq12 = dx12*dx12 + dy12*dy12;
-
-	// we now calculate tan(a/2) where a is the angular between D10 and D12.
-	// we take advantage of D10*D12=d10*d12*cos(a), |D10xD12|=d10*d12*sin(a)
-	// (cross product) and tan(a/2)=sin(a)/[1-cos(a)].
-	double num   = dx10*dy12 - dy10*dx12;
-	double denom = sqrt( dsq10*dsq12 ) - dx10*dx12 + dy10*dy12;
-
-	if( 1.0 + denom == 1.0 )	// points are co-linear
-		lineTo( x1, y1 );	// just add a line to first point
-    else
-    {
-		// calculate distances from P1 to tangent points:
-		double dist = fabs( r*num / denom );
-		double d1t0 = dist / sqrt(dsq10);
-		double d1t1 = dist / sqrt(dsq12);
-
-// TODO: check for r<0
-
-		double bx0 = x1 + dx10*d1t0;
-		double by0 = y1 + dy10*d1t0;
-
-		// if(bx0,by0) deviates from current point, add a line to it:
-// TODO: decide via radius<XXX or sthg?
-		if(
-			bx0 != currentPoint().x() ||
-			by0 != currentPoint().y() )
-		{
-			lineTo( bx0, by0 );
-		}
-
-		double bx3 = x1 + dx12*d1t1;
-		double by3 = y1 + dy12*d1t1;
-
-		// the two bezier-control points are located on the tangents at a fraction
-		// of the distance [tangent points<->tangent intersection].
-		double distsq = (x1 - bx0)*(x1 - bx0) + (y1 - by0)*(y1 - by0);
-		double rsq = r*r;
-		double fract;
-
-// TODO: make this nicer?
-
-		if( distsq >= rsq * 1.0e8 ) // r is very small
-			fract = 0.0; // dist==r==0
-		else
-			fract = ( 4.0 / 3.0 ) / ( 1.0 + sqrt( 1.0 + distsq / rsq ) );
-
-		double bx1 = bx0 + (x1 - bx0) * fract;
-		double by1 = by0 + (y1 - by0) * fract;
-		double bx2 = bx3 + (x1 - bx3) * fract;
-		double by2 = by3 + (y1 - by3) * fract;
-
-		// finally add the bezier-segment:
-		curveTo( bx1, by1, bx2, by2, bx3, by3 );
-	}
-
-	return *this;
+	return m_segmentLists.getLast()->arcTo( p1, p2, r );
 }
 
-VPath&
+void
 VPath::close()
 {
-	if( m_segmentLists.getLast() == 0L )
-		return *this;
-
 	m_segmentLists.getLast()->close();
-
-	return *this;
 }
 
 bool
 VPath::isClosed() const
 {
-	if( m_segmentLists.getLast() == 0L )
-		return false;
-
 	return m_segmentLists.getLast()->isClosed();
-}
-
-VPath*
-VPath::revert() const
-{
-	return 0L;
 }
 
 VPath*
@@ -437,22 +309,14 @@ VPath::combineSegmentList( const VSegmentList& segmentList )
 	m_segmentLists.append( new VSegmentList( segmentList ) );
 }
 
-VObject&
+void
 VPath::transform( const QWMatrix& m )
 {
 	QPtrListIterator<VSegmentList> itr( m_segmentLists );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
-		VSegmentListIterator itr2( *( itr.current() ) );
-		for( ; itr2.current() ; ++itr2 )
-		{
-			itr2.current()->setPoint( 1, itr2.current()->point( 1 ).transform( m ) );
-			itr2.current()->setPoint( 2, itr2.current()->point( 2 ).transform( m ) );
-			itr2.current()->setPoint( 3, itr2.current()->point( 3 ).transform( m ) );
-		}
+		itr.current()->transform( m );
 	}
-
-	return *this;
 }
 
 QRect

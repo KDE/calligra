@@ -21,10 +21,10 @@ VCCmdRectangle::createPath()
 {
 	VPath* path = new VPath();
 
-	path->moveTo( m_tlX, m_tlY );
-	path->lineTo( m_brX, m_tlY );
-	path->lineTo( m_brX, m_brY );
-	path->lineTo( m_tlX, m_brY );
+	path->moveTo( KoPoint( m_tlX, m_tlY ) );
+	path->lineTo( KoPoint( m_brX, m_tlY ) );
+	path->lineTo( KoPoint( m_brX, m_brY ) );
+	path->lineTo( KoPoint( m_tlX, m_brY ) );
 	path->close();
 
 	return path;

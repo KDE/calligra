@@ -32,18 +32,24 @@ VCCmdStar::createPath()
 	VPath* path = new VPath();
 
 	// we start at m_angle + VGlobal::pi_2:
-	path->moveTo(
+	KoPoint p(
 		m_outerR * cos( m_angle + VGlobal::pi_2 ),
 		m_outerR * sin( m_angle + VGlobal::pi_2 ) );
+	path->moveTo( p );
 
 	for ( uint i = 0; i < m_edges; ++i )
 	{
-		path->lineTo(
-			m_innerR * cos( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 0.5 ) ),
-			m_innerR * sin( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 0.5 ) ) );
-		path->lineTo(
-			m_outerR * cos( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1.0 ) ),
-			m_outerR * sin( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1.0 ) ) );
+		p.setX( m_innerR *
+			cos( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 0.5 ) ) );
+		p.setY( m_innerR *
+			sin( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 0.5 ) ) );
+		path->lineTo( p );
+
+		p.setX( m_outerR *
+			cos( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1.0 ) ) );
+		p.setY( m_outerR *
+			sin( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1.0 ) ) );
+		path->lineTo( p );
 	}
 	path->close();
 

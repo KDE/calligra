@@ -29,7 +29,7 @@ public:
 	virtual void draw( VPainter *painter, const QRect& rect,
 		const double zoomFactor = 1.0 );
 
-	virtual VObject& transform( const QWMatrix& m );
+	virtual void transform( const QWMatrix& m );
 
 	virtual QRect boundingBox( const double zoomFactor ) const;
 	virtual bool intersects( const QRect& rect, const double zoomFactor ) const;

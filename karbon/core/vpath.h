@@ -28,13 +28,8 @@ public:
 	const KoPoint& currentPoint() const;
 
 	// postscript-like commands:
-	VPath& moveTo( const double& x, const double& y );
-	VPath& moveTo( const KoPoint& p )
-		{ return moveTo( p.x(), p.y() ); }
-
-	VPath& lineTo( const double& x, const double& y );
-	VPath& lineTo( const KoPoint& p )
-		{ return lineTo( p.x(), p.y() ); }
+	bool moveTo( const KoPoint& p );
+	bool lineTo( const KoPoint& p );
 
 	/*
 	curveTo():
@@ -46,15 +41,9 @@ public:
 	    x          x
 	currP          p3
 	*/
-	VPath& curveTo(
-		const double& x1, const double& y1,
-		const double& x2, const double& y2,
-		const double& x3, const double& y3 );
-	VPath& curveTo(
-		const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
-	{
-		return curveTo( p1.x(), p1.y(), p2.x(), p2.y(), p3.x(), p3.y() );
-	}
+
+	bool curveTo(
+		const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 );
 
 	/*
 	curve1To():
@@ -66,14 +55,8 @@ public:
 	    x          x
 	currP          p3
 	*/
-	VPath& curve1To(
-		const double& x2, const double& y2,
-		const double& x3, const double& y3 );
-	VPath& curve1To(
-		const KoPoint& p2, const KoPoint& p3 )
-	{
-		return curve1To( p2.x(), p2.y(), p3.x(), p3.y() );
-	}
+
+	bool curve1To( const KoPoint& p2, const KoPoint& p3 );
 
 	/*
 	curve2To():
@@ -85,31 +68,17 @@ public:
 	    x          x
 	currP          p3
 	*/
-	VPath& curve2To(
-		const double& x1, const double& y1,
-		const double& x3, const double& y3 );
-	VPath& curve2To(
-		const KoPoint& p1, const KoPoint& p3 )
-	{
-		return curve2To( p1.x(), p1.y(), p3.x(), p3.y() );
-	}
+
+	bool curve2To( const KoPoint& p1, const KoPoint& p3 );
 
 	// this is a convenience function to approximate circular arcs with
 	// beziers. input: 2 tangent vectors and a radius (same as in postscript):
-	VPath& arcTo(
-		const double& x1, const double& y1,
-		const double& x2, const double& y2, const double& r );
-	VPath& arcTo(
-		const KoPoint& p1, const KoPoint& p2, const double& r )
-	{
-		return arcTo( p1.x(), p1.y(), p2.x(), p2.y(), r );
-	}
 
-	VPath& close();
+	bool arcTo(
+		const KoPoint& p1, const KoPoint& p2, double r );
+
+	void close();
 	bool isClosed() const;
-
-	// return a reverted path:
-	VPath* revert() const;
 
 	// perform a boolean operation (unite(0), intersect(1), substract(2), xor(3)):
 	VPath* booleanOp( const VPath* path, int type = 0 ) const;
@@ -124,7 +93,7 @@ public:
 		{ return m_segmentLists.getLast()->getLast(); }
 
 	// apply an affine map:
-	virtual VObject& transform( const QWMatrix& m );
+	virtual void transform( const QWMatrix& m );
 
 	virtual QRect boundingBox( const double zoomFactor ) const;
 	virtual bool intersects( const QRect& rect, const double zoomFactor ) const;

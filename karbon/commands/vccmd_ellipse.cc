@@ -43,11 +43,11 @@ VCCmdEllipse::createPath()
 {
 	// first create (half-)unity circle around origin (0,0):
 	VPath* path = new VPath();
-	path->moveTo( -0.5, 0.0 );
-	path->arcTo( -0.5,  0.5,  0.0,  0.5, 0.5 );
-	path->arcTo(  0.5,  0.5,  0.5,  0.0, 0.5 );
-	path->arcTo(  0.5, -0.5,  0.0, -0.5, 0.5 );
-	path->arcTo( -0.5, -0.5, -0.5,  0.0, 0.5 );
+	path->moveTo( KoPoint( -0.5, 0.0 ) );
+	path->arcTo( KoPoint(-0.5,  0.5 ), KoPoint( 0.0,  0.5 ), 0.5 );
+	path->arcTo( KoPoint( 0.5,  0.5 ), KoPoint( 0.5,  0.0 ), 0.5 );
+	path->arcTo( KoPoint( 0.5, -0.5 ), KoPoint( 0.0, -0.5 ), 0.5 );
+	path->arcTo( KoPoint(-0.5, -0.5 ), KoPoint(-0.5,  0.0 ), 0.5 );
 	path->close();
 
 	double w = m_brX - m_tlX;

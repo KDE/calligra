@@ -157,13 +157,12 @@ VText::draw( VPainter* painter, const QRect& rect,
 	}
 }
 
-VObject&
+void
 VText::transform( const QWMatrix& m )
 {
 	VObjectListIterator itr = m_glyphs;
 	for ( ; itr.current() ; ++itr )
 		itr.current()->transform( m );
-	return *this;
 }
 
 QRect

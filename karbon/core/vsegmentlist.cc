@@ -2,7 +2,10 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <math.h>
+
 #include <qdom.h>
+#include <qwmatrix.h>
 
 #include "vsegmentlist.h"
 
@@ -13,7 +16,7 @@ VSegmentList::VSegmentList()
 {
 	setAutoDelete( true );
 
-	// add initial segment:
+	// add an initial ("begin") segment:
 	append( new VSegment() );
 }
 
@@ -35,6 +38,156 @@ VSegmentList::~VSegmentList()
 {
 }
 
+const KoPoint&
+VSegmentList::currentPoint() const
+{
+	return getLast()->point( 3 );
+}
+
+bool
+VSegmentList::moveTo( const KoPoint& p )
+{
+	if( isClosed() ) return false;
+
+	// move "begin" when path is still empty:
+	if( getLast()->type() == segment_begin )
+	{
+		getLast()->setPoint( 3, p );
+		return true;
+	}
+
+	return false;
+}
+
+bool
+VSegmentList::lineTo( const KoPoint& p )
+{
+	if( isClosed() ) return false;
+
+	VSegment* s = new VSegment();
+	s->setType( segment_line );
+	s->setPoint( 3, p );
+	append( s );
+
+	return true;
+}
+
+bool
+VSegmentList::curveTo(
+	const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
+{
+	if( isClosed() ) return false;
+
+	VSegment* s = new VSegment();
+	s->setType( segment_curve );
+	s->setPoint( 1, p1 );
+	s->setPoint( 2, p2 );
+	s->setPoint( 3, p3 );
+	append( s );
+
+	return true;
+}
+
+bool
+VSegmentList::curve1To( const KoPoint& p2, const KoPoint& p3 )
+{
+	if( isClosed() ) return false;
+
+	VSegment* s = new VSegment();
+	s->setType( segment_curve1 );
+	s->setPoint( 2, p2 );
+	s->setPoint( 3, p3 );
+	append( s );
+
+	return true;
+}
+
+bool
+VSegmentList::curve2To( const KoPoint& p1, const KoPoint& p3 )
+{
+	if( isClosed() );
+
+	VSegment* s = new VSegment();
+	s->setType( segment_curve2 );
+	s->setPoint( 1, p1 );
+	s->setPoint( 3, p3 );
+	append( s );
+
+	return true;
+}
+
+bool
+VSegmentList::arcTo(
+	const KoPoint& p1, const KoPoint& p2, const double r )
+{
+	// parts of this routine are inspired by GNU ghostscript
+
+	if( isClosed() ) return false;
+
+	// we need to calculate the tangent points. therefore calculate tangents
+	// D10=P1P0 and D12=P1P2 first:
+	KoPoint d10 = currentPoint() - p1;
+	KoPoint d12 = p2 - p1;
+
+	// calculate distance squares:
+	double dsq10 = d10.x()*d10.x() + d10.y()*d10.y();
+	double dsq12 = d12.x()*d12.x() + d12.y()*d12.y();
+
+	// we now calculate tan(a/2) where a is the angular between D10 and D12.
+	// we take advantage of D10*D12=d10*d12*cos(a), |D10xD12|=d10*d12*sin(a)
+	// (cross product) and tan(a/2)=sin(a)/[1-cos(a)].
+	double num   = d10.x() * d12.y() - d10.y() * d12.x();
+	double denom =
+		sqrt( dsq10 * dsq12 )
+		- d10.x() * d12.x()
+		+ d10.y() * d12.y();
+
+	if( 1.0 + denom == 1.0 )	// points are co-linear
+		lineTo( p1 );	// just add a line to first point
+    else
+    {
+		// calculate distances from P1 to tangent points:
+		double dist = fabs( r*num / denom );
+		double d1t0 = dist / sqrt(dsq10);
+		double d1t1 = dist / sqrt(dsq12);
+
+// TODO: check for r<0
+
+		KoPoint b0 = p1 + d10 * d1t0;
+
+		// if b0 deviates from current point, add a line to it:
+// TODO: decide via radius<XXX or sthg?
+		if( b0 !=  currentPoint() )
+			lineTo( b0 );
+
+		KoPoint b3 = p1 + d12 * d1t1;
+
+		// the two bezier-control points are located on the tangents at a fraction
+		// of the distance [tangent points<->tangent intersection].
+		double distsq =
+			( p1.x() - b0.x() )*( p1.x() - b0.x() ) +
+			( p1.y() - b0.y() )*( p1.y() - b0.y() );
+		double rsq = r*r;
+		double fract;
+
+// TODO: make this nicer?
+
+		if( distsq >= rsq * 1.0e8 ) // r is very small
+			fract = 0.0; // dist==r==0
+		else
+			fract = ( 4.0 / 3.0 ) / ( 1.0 + sqrt( 1.0 + distsq / rsq ) );
+
+		KoPoint b1 = b0 + ( p1 - b0 ) * fract;
+		KoPoint b2 = b3 + ( p1 - b3 ) * fract;
+
+		// finally add the bezier-segment:
+		curveTo( b1, b2, b3 );
+	}
+
+	return true;
+}
+
+
 void
 VSegmentList::close()
 {
@@ -55,6 +208,18 @@ VSegmentList::close()
 	
 
 	m_isClosed = true;
+}
+
+void
+VSegmentList::transform( const QWMatrix& m )
+{
+	VSegmentListIterator itr( *this );
+	for( ; itr.current() ; ++itr )
+	{
+		itr.current()->setPoint( 1, itr.current()->point( 1 ).transform( m ) );
+		itr.current()->setPoint( 2, itr.current()->point( 2 ).transform( m ) );
+		itr.current()->setPoint( 3, itr.current()->point( 3 ).transform( m ) );
+	}
 }
 
 void

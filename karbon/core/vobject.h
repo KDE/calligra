@@ -39,7 +39,7 @@ public:
 	virtual void draw( VPainter* painter, const QRect& rect,
 		const double zoomFactor = 1.0  ) = 0;
 
-	virtual VObject& transform( const QWMatrix& m ) = 0;
+	virtual void transform( const QWMatrix& m ) = 0;
 
 	virtual QRect boundingBox( const double /*zoomFactor*/ ) const
 		{ return QRect(); }
