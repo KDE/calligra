@@ -315,6 +315,7 @@ don't put a </?xml...> at the end of the file!).
                             3...Part frame (defined in EMBEDDED at the doc level)
                             4...Formula frame (contains a FORMULA tag)
                             5...Clipart frame (contains a CLIPART tag, only for KWord 1.1)
+                            6...Horizontal line frame (contains a CLIPART tag, only for KWord 1.1)
                             10..reserved (internally for tables)
 
             frameInfo:      0...normal text (or non-text frame)
