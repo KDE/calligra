@@ -2448,13 +2448,6 @@ void KWDocument::framesChanged( const QList<KWFrame> & frames, KWView * view )
 void KWDocument::setHeaderVisible( bool h )
 {
     m_headerVisible = h;
-    QListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWFrameSet * frameSet = fit.current();
-        if ( frameSet->isAHeader() )
-            static_cast<KWTextFrameSet*>(frameSet)->hideCustomItems(h);
-    }
     recalcFrames();
     updateAllFrames();
     layout();
@@ -2464,15 +2457,6 @@ void KWDocument::setHeaderVisible( bool h )
 void KWDocument::setFooterVisible( bool f )
 {
     m_footerVisible = f;
-    QListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWFrameSet * frameSet = fit.current();
-        //don't break loop because there is some header/footer
-        // (odd, even etc...) If we break it it doesn't work
-        if ( frameSet->isAFooter() )
-            static_cast<KWTextFrameSet*>(frameSet)->hideCustomItems(f);
-    }
     recalcFrames();
     updateAllFrames();
     layout();

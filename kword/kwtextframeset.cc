@@ -1411,11 +1411,21 @@ void KWTextFrameSet::zoom( bool forPrint )
     KWFrameSet::zoom( forPrint );
 }
 
-void KWTextFrameSet::hideCustomItems(bool _hide)
+void KWTextFrameSet::setVisible(bool visible)
+{
+    setInlineFramesVisible( visible );
+    KWFrameSet::setVisible( visible );
+}
+
+void KWTextFrameSet::setInlineFramesVisible(bool visible)
 {
     QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
     for ( ; cit.current() ; ++cit )
-        static_cast<KWAnchor *>( cit.current() )->frameSet()->setVisible( _hide );
+    {
+	KWAnchor *anc = dynamic_cast<KWAnchor *>( cit.current() );
+	if (anc)
+            anc->frameSet()->setVisible( visible );
+    }
 }
 
 void KWTextFrameSet::unzoom()
