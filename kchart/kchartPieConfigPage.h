@@ -25,12 +25,15 @@
 #include <qwidget.h>
 #include <qlistview.h>
 
+#include <koChart.h>
+
 class QSpinBox;
 class QLineEdit;
 class QCheckBox;
 class QPushButton;
 class QFont;
 class QRadioButton;
+
 
 namespace KChart
 {
@@ -42,7 +45,7 @@ class KChartPieConfigPage : public QWidget
     Q_OBJECT
 
 public:
-    KChartPieConfigPage( KChartParams* params, QWidget* parent );
+    KChartPieConfigPage( KChartParams* params, QWidget* parent, KoChart::Data* data);
     void init();
     void apply();
     void initList();

@@ -35,11 +35,13 @@
 
 #include "kchart_params.h"
 
+
 namespace KChart
 {
 
 KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
-                                          QWidget* parent ) :
+                                          QWidget* parent,
+                                          KoChart::Data* data) :
     QWidget( parent ),_params( params )
 {
     //    col=_params->colPie;
@@ -55,8 +57,7 @@ KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
     label->resize( label->sizeHint() );
     grid->addWidget( label,0,1);
 
-    // PENDING(kalle) Put back in
-    column = new QSpinBox(1,/*params->xlbl.count()*/0, 1, this);
+    column = new QSpinBox(1, data->cols(), 1, this);
     column->resize(100, column->sizeHint().height() );
     grid->addWidget( column,1,1);
 

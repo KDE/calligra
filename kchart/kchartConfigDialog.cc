@@ -137,7 +137,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
 								 this );
             addTab( _parameterpiepage, i18n( "&Axes" ) );
 
-            _piepage = new KChartPieConfigPage(m_params, this );
+            _piepage = new KChartPieConfigPage(m_params, this, dat );
             addTab( _piepage, i18n( "&Pie" ) );
         }
 
