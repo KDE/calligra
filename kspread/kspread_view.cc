@@ -144,6 +144,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_pTabBar = new KSpreadTabBar( this );
     QObject::connect( m_pTabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeTable( const QString& ) ) );
 
+
     // Paper and Border widgets
     m_pFrame = new QWidget( this );
     m_pFrame->raise();
@@ -512,7 +513,8 @@ void KSpreadView::initialPosition()
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
         {
-	  if(tbl->getAutoCalc()) tbl->recalc(true);
+        if(tbl->getAutoCalc())
+                tbl->recalc(true);
         tbl->refreshMergedCell();
         }
 

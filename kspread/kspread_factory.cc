@@ -62,7 +62,7 @@ KAboutData* KSpreadFactory::aboutData()
         version, description, KAboutData::License_GPL,
         "(c) 1998-2000, Torben Weis");
   aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
-  aboutData->addAuthor("Laurent Montel",0, "montell@club-internet.fr");
+  aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
   aboutData->addAuthor("David Faure",0, "faure@kde.org");
   return aboutData;
 }
