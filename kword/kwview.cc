@@ -3538,10 +3538,7 @@ void KWView::configureHeaderFooter()
     int flags = KW_HEADER_AND_FOOTER;
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags ) ) {
-        if( !(tmpOldLayout._pgLayout==pgLayout)||
-            tmpOldLayout._cl.columns!=cl.columns ||
-            tmpOldLayout._cl.ptColumnSpacing!=cl.ptColumnSpacing||
-            tmpOldLayout._hf.header!=kwhf.header||
+        if( tmpOldLayout._hf.header!=kwhf.header||
             tmpOldLayout._hf.footer!=kwhf.footer||
             tmpOldLayout._hf.ptHeaderBodySpacing != kwhf.ptHeaderBodySpacing ||
             tmpOldLayout._hf.ptFooterBodySpacing != kwhf.ptFooterBodySpacing)
