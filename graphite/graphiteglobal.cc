@@ -441,10 +441,10 @@ QDomElement GraphiteGlobal::createElement(const QString &tagName, const FxRect &
     static const QString &attrHeight=KGlobal::staticQString("height");
 
     QDomElement e=doc.createElement(tagName);
-    e.setAttribute(attrX, QString::number(rect.left(), 'g', DBL_MANT_DIG));
-    e.setAttribute(attrY, QString::number(rect.top(), 'g', DBL_MANT_DIG));
-    e.setAttribute(attrWidth, QString::number(rect.width(), 'g', DBL_MANT_DIG));
-    e.setAttribute(attrHeight, QString::number(rect.height(), 'g', DBL_MANT_DIG));
+    e.setAttribute(attrX, QString::number(rect.left(), 'g', DBL_DIG));
+    e.setAttribute(attrY, QString::number(rect.top(), 'g', DBL_DIG));
+    e.setAttribute(attrWidth, QString::number(rect.width(), 'g', DBL_DIG));
+    e.setAttribute(attrHeight, QString::number(rect.height(), 'g', DBL_DIG));
     return e;
 }
 

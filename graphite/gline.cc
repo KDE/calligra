@@ -150,12 +150,12 @@ QDomElement GLine::save(QDomDocument &doc) const {
 
     QDomElement e=doc.createElement(tagGLine);
     QDomElement point=doc.createElement(tagStart);
-    point.setAttribute(attrX, QString::number(m_a.x(), 'g', DBL_MANT_DIG));
-    point.setAttribute(attrY, QString::number(m_a.y(), 'g', DBL_MANT_DIG));
+    point.setAttribute(attrX, QString::number(m_a.x(), 'g', DBL_DIG));
+    point.setAttribute(attrY, QString::number(m_a.y(), 'g', DBL_DIG));
     e.appendChild(point);
     point=doc.createElement(tagEnd);
-    point.setAttribute(attrX, QString::number(m_b.x(), 'g', DBL_MANT_DIG));
-    point.setAttribute(attrY, QString::number(m_b.y(), 'g', DBL_MANT_DIG));
+    point.setAttribute(attrX, QString::number(m_b.x(), 'g', DBL_DIG));
+    point.setAttribute(attrY, QString::number(m_b.y(), 'g', DBL_DIG));
     e.appendChild(point);
     e.appendChild(GObject::save(doc));
     return e;
