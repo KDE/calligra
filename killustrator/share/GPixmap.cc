@@ -39,6 +39,7 @@ GPixmap::GPixmap (const char* filename) : url (filename) {
     if (pix->isNull ()) {
       delete pix;
       pix = 0L;
+      cout << "pixmap is null !!!" << endl;
     }
   }
   if (pix) {

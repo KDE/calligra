@@ -38,7 +38,7 @@ bin_PROGRAMS = 	killustrator
 killustrator_SOURCES	= KIllustrator.cc main.cc
 
 # the library search path
-killustrator_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+killustrator_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
@@ -46,7 +46,7 @@ FILTER_LIBS = ../filter/libfilter.a
 XML_LIBS = ../xmlutils/libxml.a
 KSHARE_LIBS = ../share/libkillu.a
 killustrator_LDADD   =  $(FILTER_LIBS) $(KSHARE_LIBS) $(XML_LIBS) \
-	   $(LIBQIMGIO) $(LIB_KFILE)
+	   $(LIB_KIMGIO) -lgif $(LIB_KFILE) 
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = KIllustrator.h

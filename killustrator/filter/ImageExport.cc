@@ -29,6 +29,7 @@
 #include <qimage.h>
 #include <qimageio.h>
 #include <qglobal.h>
+#include <kimgio.h>
 #include "Painter.h"
 #include "ImageExport.h"
 #include "gif.h"
@@ -36,11 +37,12 @@
 #define RESOLUTION 72.0
 
 ImageExport::ImageExport () {
-#ifdef HAVE_QIMGIO
-  qInitImageIO ();
-#endif
+  // #ifdef HAVE_QIMGIO
+  //    qInitImageIO ();
+  // #endif
+  kimgioRegister ();
   QImageIO::defineIOHandler ("GIF", "^GIF[0-9][0-9][a-z]", 0, 
-			     0, write_gif_image);
+			     0, write_gif_file);
 }
 
 ImageExport::~ImageExport () {

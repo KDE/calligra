@@ -5,7 +5,8 @@ FILTER_LIBS = ./../filter/libfilter.a
 XML_LIBS = ./../xmlutils/libxml.a
 KSHARE_LIBS = ./../share/libkillu.a
 LDADD = $(FILTER_LIBS) $(KSHARE_LIBS) $(XML_LIBS) $(KOFFICE_LIBS) \
-	-lkparts -lkpartsui -lkom $(LIBMICO) $(LIB_KIO) $(LIBQIMGIO) $(LIB_KFILE) 
+	-lkparts -lkpartsui -lkom $(LIBMICO) $(LIB_KIO) \
+	$(LIB_KIMGIO) -lgif $(LIB_KFILE)
 
 ####### Files
 

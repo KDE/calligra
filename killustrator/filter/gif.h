@@ -7,8 +7,7 @@
 #ifndef _SSK_QGIF_H
 #define _SSK_QGIF_H
 
-extern "C" {
-extern void write_gif_image(QImageIO *imageio);
-}
+extern void write_gif_file (QImageIO *imageio);
+extern void read_gif_file (QImageIO *imageio);
 
 #endif
