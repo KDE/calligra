@@ -1219,10 +1219,6 @@ void RTFImport::parseFontTable( RTFProperty * )
 	    // Add font to font table
 	    *strchr( token.text, ';' ) = 0; // ### TODO: is this allowed with multi-byte Asian characters?
 	    font.name += textCodec->toUnicode( token.text );
-#if 1
-           // ### FIXME
-           fontTable.insert(  state.format.font, font.name );
-#else
 	    // Use Qt to look up the closest matching installed font
 	    QFont qFont( font.name );
 	    qFont.setFixedPitch( (font.fixedPitch == 1) );
@@ -1235,11 +1231,14 @@ void RTFImport::parseFontTable( RTFProperty * )
 		font.name.truncate(space);
 		qFont.setFamily( font.name );
 	    }
-	    QFontInfo *info=new QFontInfo( qFont );
-	    fontTable.insert( state.format.font, info->family() );
-	    //kdDebug(30515) << "Font " << state.format.font << " asked: " << font.name << " given: " << info->family() << endl;
-            delete info;
-#endif
+            const QFontInfo info( qFont );
+            const QString newFontName ( info.family() );
+            kdDebug(30515) << "Font " << state.format.font << " asked: " << font.name << " given: " << newFontName << endl;
+
+            if ( newFontName.isEmpty() )
+               fontTable.insert(  state.format.font, font.name );
+            else
+               fontTable.insert( state.format.font, newFontName );
 	    font.name.truncate( 0 );
 	    font.styleHint = QFont::AnyStyle;
 	    font.fixedPitch = 0;
