@@ -492,20 +492,23 @@ private:
    */
   void extendCurrentSelection(QPoint cell);
 
-  void moveDirection(KSpread::MoveTo direction, bool extendSelection);
+  /**
+   * returns the rect that needs to be redrawn
+   */
+  QRect moveDirection(KSpread::MoveTo direction, bool extendSelection);
 
   void processEnterKey(QKeyEvent *event);
   void processArrowKey(QKeyEvent *event);
   void processEscapeKey(QKeyEvent *event);
-  void processHomeKey(QKeyEvent *event);
-  void processEndKey(QKeyEvent *event);
-  void processPriorKey(QKeyEvent *event);
-  void processNextKey(QKeyEvent *event);
+  bool processHomeKey(QKeyEvent *event);
+  bool processEndKey(QKeyEvent *event);
+  bool processPriorKey(QKeyEvent *event);
+  bool processNextKey(QKeyEvent *event);
   void processDeleteKey(QKeyEvent *event);
   void processF2Key(QKeyEvent *event);
   void processF4Key(QKeyEvent *event);
   void processOtherKey(QKeyEvent *event);
-  void processControlArrowKey(QKeyEvent *event);
+  bool processControlArrowKey(QKeyEvent *event);
 
   void updateChooseRect(const QPoint &newMarker, const QPoint &newAnchor);
 

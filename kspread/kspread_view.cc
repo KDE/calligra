@@ -1917,9 +1917,6 @@ void KSpreadView::initialPosition()
     m_pCanvas->gotoLocation( col, row );
 
     updateBorderButton();
-
-    // make paint effective:
-    m_pDoc->decreaseNumOperation();
     updateShowTableMenu();
 
     m_tableFormat->setEnabled(false);
@@ -1938,11 +1935,17 @@ void KSpreadView::initialPosition()
     m_protectChanges->setEnabled( m_pDoc->map()->changes() );
     m_commentChanges->setEnabled( m_pDoc->map()->changes() );
 
+    // make paint effective:
+    m_pDoc->decreaseNumOperation();
     m_insertChartFrame->setEnabled(false);
 
-    slotUpdateView( activeTable() );
-    m_bLoading =true;
+    QRect vr( activeTable()->visibleRect( m_pCanvas ) );
 
+    m_pDoc->emitBeginOperation( false );
+    activeTable()->setRegionPaintDirty( vr );
+    m_pDoc->emitEndOperation( KSpreadDoc::Paint, vr );
+
+    m_bLoading = true;
     
     if ( koDocument()->isReadWrite() )
       initConfig();
