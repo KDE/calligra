@@ -79,20 +79,28 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
     return true;
 }
 
-bool HtmlWorker::makeImage(const FrameAnchor& anchor)
+QString HtmlWorker::getAdditionalFileName(const QString& additionalName)
 {
-    QString strImageName=m_fileName;
-    strImageName+='.';
+    // TODO: put every file in a sub-directory
+    QString strReturn(m_fileName);
+    strReturn+='.';
 
-    const int result=anchor.picture.koStoreName.findRev("/");
+    const int result=additionalName.findRev("/");
     if (result>=0)
     {
-        strImageName+=anchor.picture.koStoreName.mid(result+1);
+        strReturn+=additionalName.mid(result+1);
     }
     else
     {
-        strImageName+=anchor.picture.koStoreName;
+        strReturn+=additionalName;
     }
+    kdDebug(30503) << "Add: " << additionalName << " = " << strReturn << endl;
+    return strReturn;
+}
+
+bool HtmlWorker::makeImage(const FrameAnchor& anchor)
+{
+    QString strImageName(getAdditionalFileName(anchor.picture.koStoreName));
 
     QByteArray image;
 
@@ -109,7 +117,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
         file.writeBlock(image);
         file.close();
 
-        *m_streamOut << "<img "; // This is an emüty element!
+        *m_streamOut << "<img "; // This is an empty element!
         *m_streamOut << "src=\"" << escapeHtmlText(strImageName) << "\" ";
         *m_streamOut << "alt=\"" << escapeHtmlText(anchor.picture.key) << "\"";
         *m_streamOut << (isXML()?"/>":">") << "\n";
@@ -127,19 +135,14 @@ bool HtmlWorker::makeClipart(const FrameAnchor& anchor)
     kdDebug(30506) << "New clipart: " << anchor.picture.koStoreName
         << " , " << anchor.picture.key <<endl;
 
-    QString strImageName=m_fileName;
-    strImageName+='.';
-    const int result=anchor.picture.koStoreName.findRev("/");
-    if (result>=0)
+    QString strAdditionalName(anchor.picture.koStoreName);
+    if (!strAdditionalName.endsWith(".svg"))
     {
-        strImageName+=anchor.picture.koStoreName.mid(result+1);
+        // TODO: remove the extension of the KoStore name (could it make duplicated files?)
+        strAdditionalName+=".svg";
     }
-    else
-    {
-        strImageName+=anchor.picture.koStoreName;
-    }
-    // TODO: remove the extension of the KoStore name
-    strImageName+=".svg";
+
+    QString strImageName(getAdditionalFileName(strAdditionalName));
 
     const double height=anchor.bottom - anchor.top;
     const double width =anchor.right  - anchor.left;

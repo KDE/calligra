@@ -69,6 +69,10 @@ public:
     inline void setCodec(QTextCodec* codec) { m_codec=codec; }
 protected:
     QString escapeHtmlText(const QString& strText) const;
+    // get file name for an additional file (like an image file).
+    // additionalName is the wanted name
+    // returns the path where the file has to be written
+    QString getAdditionalFileName(const QString& additionalName);
 private:
     void ProcessParagraphData ( const QString& strTag, const QString &paraText,
         const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
