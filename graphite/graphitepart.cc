@@ -17,8 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-//#include <kglobal.h>
-//#include <kconfig.h>
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kdebug.h>
@@ -65,6 +63,32 @@ void GraphitePart::setGlobalZoom(const double &zoom) {
 }
 
 void GraphitePart::paintContent(QPainter &painter, const QRect &rect, bool transparent) {
+
+    // first draw the page borders (if needed)
+    int right=Graphite::double2Int(m_pageLayout.width()*GraphiteGlobal::self()->zoomedResolution());
+    int bottom=Graphite::double2Int(m_pageLayout.height()*GraphiteGlobal::self()->zoomedResolution());
+    if(rect.top()<=bottom) {
+        if(rect.left()==0)
+            painter.drawLine(0, rect.top(), 0, bottom);
+        if(rect.right()>=right) {
+            painter.drawLine(right, rect.top(), right, bottom);
+            painter.setPen(QPen(Qt::lightGray, 3));
+            painter.drawLine(right+2, rect.top(), right+2, bottom+4);
+            painter.setPen(Qt::black);
+        }
+    }
+    if(rect.left()<=right) {
+        if(rect.top()==0)
+            painter.drawLine(rect.left(), 0, right, 0);
+        if(rect.bottom()>=bottom) {
+            painter.drawLine(rect.left(), bottom, right, bottom);
+            painter.setPen(QPen(Qt::lightGray, 3));
+            painter.drawLine(rect.left(), bottom+2, right+4, bottom+2);
+            painter.setPen(Qt::black);
+        }
+    }
+
+    // then all the objects
     m_nodeZero->setTransparent(transparent);
     m_nodeZero->draw(painter, rect);
 }
