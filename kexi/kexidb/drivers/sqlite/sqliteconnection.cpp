@@ -121,6 +121,7 @@ bool SQLiteConnection::drv_createDatabase( const QString &dbName )
 
 bool SQLiteConnection::drv_useDatabase( const QString &/*dbName*/ )
 {
+	KexiDBDrvDbg << "drv_useDatabase(): " << m_data->fileName() << endl;
 #ifdef SQLITE2
 	d->data = sqlite_open( QFile::encodeName( m_data->fileName() ), 0/*mode: unused*/, 
 		&d->errmsg_p );

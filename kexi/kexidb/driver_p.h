@@ -104,6 +104,10 @@ class KEXI_DB_EXPORT DriverBehaviour
 	 is empty or not, we need to fetch first record. Particularly, it's true for SQLite.
 	 The flag is used in Cursor::open(). By default this flag is false. */
 	bool _1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY : 1;
+
+	/*! True if "SELECT 1 from (subquery)" is supported. False by default.
+	 Used in Connection::resultExists() for optimization. It's set to true for SQLite driver. */
+	bool SELECT_1_SUBQUERY_SUPPORTED : 1;
 };
 
 /*! Private driver's data members. Available for implementation. */

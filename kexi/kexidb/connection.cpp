@@ -1781,7 +1781,14 @@ bool Connection::querySingleNumber(const QString& sql, int &number)
 bool Connection::resultExists(const QString& sql, bool &success)
 {
 	KexiDB::Cursor *cursor;
-	m_sql = QString("SELECT 1 FROM (") + sql + ") LIMIT 1"; // is this safe?;
+	//optimization
+	if (m_driver->beh->SELECT_1_SUBQUERY_SUPPORTED) {
+		//this is at least for sqlite
+		m_sql = QString("SELECT 1 FROM (") + sql + ") LIMIT 1"; // is this safe?;
+	}
+	else {
+		m_sql = sql + " LIMIT 1"; //not always safe!
+	}
 	if (!(cursor = executeQuery( m_sql ))) {
 		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
 		success = false;
