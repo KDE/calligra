@@ -1005,7 +1005,7 @@ void KPrPage::raiseObjs(bool forward)
                 break;
             }
             if ( forward )
-                _new.insert( QMIN( i+1, _new.count()),  kpobject);
+                _new.insert( QMIN( i+1, static_cast<int>(_new.count())),  kpobject);
             else
                 _new.append( kpobject );
 	}
@@ -3686,11 +3686,6 @@ bool KPrPage::getProtect( bool p )
     return p;
 }
 
-void KPrPage::setProtect( bool p )
-{
-    //todo
-}
-
 bool KPrPage::getKeepRatio( bool p )
 {
     QPtrListIterator<KPObject> it( m_objectList );
@@ -3703,11 +3698,6 @@ bool KPrPage::getKeepRatio( bool p )
             return it.current()->isKeepRatio();
     }
     return p;
-}
-
-void KPrPage::setKeepRatio( bool p )
-{
-    //todo
 }
 
 KoRect KPrPage::getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc)

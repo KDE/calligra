@@ -124,10 +124,8 @@ public:
     bool setLineBegin( LineEnd lb );
 
     bool getProtect( bool p );
-    void setProtect( bool p );
 
     bool getKeepRatio( bool p );
-    void setKeepRatio( bool p );
 
 
     KCommand *setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,const  QColor& g1, const QColor &g2,
