@@ -27,10 +27,14 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
+class MatrixSequenceElement;
+
 /**
  * A matrix.
  */
 class MatrixElement : public BasicElement {
+    friend class MatrixSequenceElement;
+    friend class KFCInsertRow;
 public:
     MatrixElement(uint rows = 1, uint columns = 1, BasicElement* parent = 0);
     ~MatrixElement();
@@ -197,7 +201,7 @@ protected:
 
 private:
 
-    SequenceElement* getElement(uint row, uint column)
+    MatrixSequenceElement* getElement(uint row, uint column)
         { return content.at(row)->at(column); }
 
     /**
@@ -210,7 +214,7 @@ private:
     /**
      * The elements we contain.
      */
-    QPtrList<QPtrList<SequenceElement> > content;
+    QPtrList< QPtrList< MatrixSequenceElement > > content;
 };
 
 KFORMULA_NAMESPACE_END

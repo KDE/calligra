@@ -205,14 +205,20 @@ enum RequestID {
     req_addSymbol,
     req_addText,
     req_addTextChar,
+    req_appendColumn,
+    req_appendRow,
     req_changeMatrix,
     req_compactExpression,
     req_copy,
     req_cut,
+    req_insertColumn,
+    req_insertRow,
     req_makeGreek,
     req_paste,
     req_remove,
-    req_removeEnclosing
+    req_removeEnclosing,
+    req_removeColumn,
+    req_removeRow
 };
 
 

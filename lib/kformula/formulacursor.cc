@@ -20,6 +20,8 @@
 
 #include <qpainter.h>
 
+#include <kdebug.h>
+
 #include "formulacursor.h"
 #include "formulaelement.h"
 #include "indexelement.h"
@@ -597,6 +599,7 @@ void FormulaCursor::elementWillVanish(BasicElement* element)
             // cause the deletion.
             child->getParent()->moveLeft(this, child);
             setSelection(false);
+            hasChangedFlag = true;
             return;
         }
         child = child->getParent();

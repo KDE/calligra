@@ -61,9 +61,11 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
 	    case Qt::Key_8: document->document()->changeMatrix(); return;
             case Qt::Key_0: importOld("oldformula"); return;
             case Qt::Key_A: slotSelectAll(); return;
+            case Qt::Key_B: document->document()->appendRow(); return;
             case Qt::Key_C: document->document()->copy(); return;
             case Qt::Key_D: document->document()->removeEnclosing(); return;
             case Qt::Key_G: document->document()->makeGreek(); return;
+            case Qt::Key_I: document->document()->insertRow(); return;
             case Qt::Key_L: document->document()->addGenericLowerIndex(); return;
             case Qt::Key_M: document->loadMathMl("mathml.xml"); return;
             case Qt::Key_O: document->load("test.xml"); return;

@@ -149,6 +149,14 @@ public:
     KAction* getRemoveEnclosingAction();
     KAction* getMakeGreekAction();
     KAction* getInsertSymbolAction();
+
+    KAction* getAppendColumnAction();
+    KAction* getInsertColumnAction();
+    KAction* getRemoveColumnAction();
+    KAction* getAppendRowAction();
+    KAction* getInsertRowAction();
+    KAction* getRemoveRowAction();
+
     KSelectAction* getLeftBracketAction();
     KSelectAction* getRightBracketAction();
     KSelectAction* getSymbolNamesAction();
@@ -188,6 +196,13 @@ public slots:
     void removeEnclosing();
     void makeGreek();
     void insertSymbol();
+
+    void appendColumn();
+    void insertColumn();
+    void removeColumn();
+    void appendRow();
+    void insertRow();
+    void removeRow();
 
     void toggleSyntaxHighlighting();
     void delimiterLeft();

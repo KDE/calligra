@@ -20,13 +20,16 @@
 
 #include <qmemarray.h>
 #include <qpainter.h>
+#include <qptrlist.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "MatrixDialog.h"
 #include "formulaelement.h"
 #include "formulacursor.h"
 #include "kformulacontainer.h"
+#include "kformulacommand.h"
 #include "matrixelement.h"
 #include "sequenceelement.h"
 
@@ -51,9 +54,51 @@ public:
 };
 
 
+class KFCInsertRow : public Command {
+public:
+    KFCInsertRow( const QString& name, Container* document, MatrixElement* m, uint p );
+    ~KFCInsertRow();
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    MatrixElement* matrix;
+    uint pos;
+
+    QPtrList<MatrixSequenceElement>* row;
+};
+
+
 Command* MatrixSequenceElement::buildCommand( Container* container, Request* request )
 {
     switch ( *request ) {
+    case req_appendColumn:
+        break;
+    case req_appendRow: {
+        MatrixElement* matrix = static_cast<MatrixElement*>( getParent() );
+        uint rows = matrix->getRows();
+        return new KFCInsertRow( i18n( "Append Row" ), container, matrix, rows );
+    }
+    case req_insertColumn:
+        break;
+    case req_insertRow: {
+        MatrixElement* matrix = static_cast<MatrixElement*>( getParent() );
+        FormulaCursor* cursor = container->activeCursor();
+        for ( uint row = 0; row < matrix->getRows(); row++ ) {
+            for ( uint col = 0; col < matrix->getColumns(); col++ ) {
+                if ( matrix->getElement( row, col ) == cursor->getElement() ) {
+                    return new KFCInsertRow( i18n( "Insert Row" ), container, matrix, row );
+                }
+            }
+        }
+        kdDebug( DEBUGID ) << "MatrixSequenceElement::buildCommand: Sequence not found." << endl;
+        break;
+    }
+    case req_removeColumn:
+        break;
+    case req_removeRow:
+        break;
     case req_changeMatrix: {
         //FormulaCursor* cursor = container->activeCursor();
         MatrixElement* matrix = static_cast<MatrixElement*>( getParent() );
@@ -75,11 +120,52 @@ Command* MatrixSequenceElement::buildCommand( Container* container, Request* req
 }
 
 
+KFCInsertRow::KFCInsertRow( const QString& name, Container* document, MatrixElement* m, uint p )
+    : Command( name, document ), matrix( m ), pos( p )
+{
+    row = new QPtrList< MatrixSequenceElement >;
+    row->setAutoDelete( true );
+    for ( uint i = 0; i < matrix->getColumns(); i++ ) {
+        row->append( new MatrixSequenceElement( matrix ) );
+    }
+}
+
+KFCInsertRow::~KFCInsertRow()
+{
+    delete row;
+}
+
+void KFCInsertRow::execute()
+{
+    matrix->content.insert( pos, row );
+    row = 0;
+    FormulaCursor* cursor = getExecuteCursor();
+    //setUnexecuteCursor(cursor);
+    matrix->content.at( pos )->at( 0 )->goInside( cursor );
+    matrix->formula()->changed();
+    testDirty();
+}
+
+void KFCInsertRow::unexecute()
+{
+    /*FormulaCursor* cursor =*/ //getUnexecuteCursor();
+    getExecuteCursor();
+    row = matrix->content.at( pos );
+    FormulaElement* formula = matrix->formula();
+    for ( uint i = matrix->getColumns(); i > 0; i-- ) {
+        formula->elementRemoval( row->at( i-1 ) );
+    }
+    matrix->content.take( pos );
+    formula->changed();
+    testDirty();
+}
+
+
 MatrixElement::MatrixElement(uint rows, uint columns, BasicElement* parent)
     : BasicElement(parent)
 {
     for (uint r = 0; r < rows; r++) {
-        QPtrList<SequenceElement>* list = new QPtrList<SequenceElement>;
+        QPtrList< MatrixSequenceElement >* list = new QPtrList< MatrixSequenceElement >;
         list->setAutoDelete(true);
         for (uint c = 0; c < columns; c++) {
             list->append(new MatrixSequenceElement(this));
@@ -202,7 +288,7 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     uint columns = getColumns();
 
     for (uint r = 0; r < rows; r++) {
-        QPtrList<SequenceElement>* list = content.at(r);
+        QPtrList< MatrixSequenceElement >* list = content.at(r);
         for (uint c = 0; c < columns; c++) {
             SequenceElement* element = list->at(c);
             element->calcSizes(style, style.convertTextStyleFraction(tstyle),
@@ -219,7 +305,7 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
 
     luPixel yPos = 0;
     for (uint r = 0; r < rows; r++) {
-        QPtrList<SequenceElement>* list = content.at(r);
+        QPtrList< MatrixSequenceElement >* list = content.at(r);
         luPixel xPos = 0;
         yPos += toMidlines[r];
         for (uint c = 0; c < columns; c++) {
@@ -570,11 +656,11 @@ bool MatrixElement::readAttributesFromDom(QDomElement& element)
 
     content.clear();
     for (uint r = 0; r < rows; r++) {
-        QPtrList<SequenceElement>* list = new QPtrList<SequenceElement>;
+        QPtrList< MatrixSequenceElement >* list = new QPtrList< MatrixSequenceElement >;
         list->setAutoDelete(true);
         content.append(list);
         for (uint c = 0; c < cols; c++) {
-            SequenceElement* element = new MatrixSequenceElement(this);
+            MatrixSequenceElement* element = new MatrixSequenceElement(this);
             list->append(element);
 	}
     }

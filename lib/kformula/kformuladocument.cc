@@ -88,6 +88,13 @@ struct Document::Document_Impl {
     KAction* makeGreekAction;
     KAction* insertSymbolAction;
 
+    KAction* appendColumnAction;
+    KAction* insertColumnAction;
+    KAction* removeColumnAction;
+    KAction* appendRowAction;
+    KAction* insertRowAction;
+    KAction* removeRowAction;
+
     KToggleAction* syntaxHighlightingAction;
     KSelectAction* leftBracket;
     KSelectAction* rightBracket;
@@ -171,6 +178,14 @@ KAction* Document::getAddGenericLowerAction()  { return impl->addGenericLowerAct
 KAction* Document::getRemoveEnclosingAction()  { return impl->removeEnclosingAction; }
 KAction* Document::getMakeGreekAction()        { return impl->makeGreekAction; }
 KAction* Document::getInsertSymbolAction()     { return impl->insertSymbolAction; }
+
+KAction* Document::getAppendColumnAction()     { return impl->appendColumnAction; }
+KAction* Document::getInsertColumnAction()     { return impl->insertColumnAction; }
+KAction* Document::getRemoveColumnAction()     { return impl->removeColumnAction; }
+KAction* Document::getAppendRowAction()        { return impl->appendRowAction; }
+KAction* Document::getInsertRowAction()        { return impl->insertRowAction; }
+KAction* Document::getRemoveRowAction()        { return impl->removeRowAction; }
+
 KSelectAction* Document::getLeftBracketAction()  { return impl->leftBracket; }
 KSelectAction* Document::getRightBracketAction() { return impl->rightBracket; }
 KSelectAction* Document::getSymbolNamesAction()  { return impl->symbolNamesAction; }
@@ -396,6 +411,31 @@ void Document::createActions(KActionCollection* collection)
                                   CTRL + Key_G,
                                   this, SLOT(makeGreek()),
                                   collection, "formula_makegreek");
+
+    impl->appendColumnAction = new KAction( i18n( "Append Column" ),
+                                            0,
+                                            this, SLOT( appendColumn() ),
+                                            collection, "formula_appendcolumn" );
+    impl->insertColumnAction = new KAction( i18n( "Insert Column" ),
+                                            0,
+                                            this, SLOT( insertColumn() ),
+                                            collection, "formula_insertcolumn" );
+    impl->removeColumnAction = new KAction( i18n( "Remove Column" ),
+                                            0,
+                                            this, SLOT( removeColumn() ),
+                                            collection, "formula_removecolumn" );
+    impl->appendRowAction = new KAction( i18n( "Append Row" ),
+                                         0,
+                                         this, SLOT( appendRow() ),
+                                         collection, "formula_appendrow" );
+    impl->insertRowAction = new KAction( i18n( "Insert Row" ),
+                                         0,
+                                         this, SLOT( insertRow() ),
+                                         collection, "formula_insertrow" );
+    impl->removeRowAction = new KAction( i18n( "Remove Row" ),
+                                         0,
+                                         this, SLOT( removeRow() ),
+                                         collection, "formula_removerow" );
 
     impl->syntaxHighlightingAction = new KToggleAction(i18n("Syntax highlighting"),
                                                  0,
@@ -676,6 +716,54 @@ void Document::insertSymbol()
             TextRequest r( impl->selectedName );
             formula()->performRequest( &r );
         }
+    }
+}
+
+void Document::appendColumn()
+{
+    if ( hasFormula() ) {
+        Request r( req_appendColumn );
+        formula()->performRequest( &r );
+    }
+}
+
+void Document::insertColumn()
+{
+    if ( hasFormula() ) {
+        Request r( req_insertColumn );
+        formula()->performRequest( &r );
+    }
+}
+
+void Document::removeColumn()
+{
+    if ( hasFormula() ) {
+        Request r( req_removeColumn );
+        formula()->performRequest( &r );
+    }
+}
+
+void Document::appendRow()
+{
+    if ( hasFormula() ) {
+        Request r( req_appendRow );
+        formula()->performRequest( &r );
+    }
+}
+
+void Document::insertRow()
+{
+    if ( hasFormula() ) {
+        Request r( req_insertRow );
+        formula()->performRequest( &r );
+    }
+}
+
+void Document::removeRow()
+{
+    if ( hasFormula() ) {
+        Request r( req_removeRow );
+        formula()->performRequest( &r );
     }
 }
 

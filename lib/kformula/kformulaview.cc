@@ -272,6 +272,7 @@ void View::slotFormulaLoaded(FormulaElement* formula)
 void View::slotElementWillVanish(BasicElement* element)
 {
     cursor()->elementWillVanish(element);
+    emitCursorChanged();
 }
 
 void View::slotSelectAll()
