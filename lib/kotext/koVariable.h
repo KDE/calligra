@@ -26,7 +26,7 @@
 #include <qptrlist.h>
 #include <qmap.h>
 #include <qobject.h>
-
+class QDomElement;
 // Always add new types at the _end_ of this list.
 // (and update KWView::setupActions)
 enum VariableType { VT_NONE = -1,
@@ -36,6 +36,22 @@ enum VariableType { VT_NONE = -1,
 enum VariableFormat { VF_DATE = 0, VF_TIME = 1, VF_STRING = 2, VF_NUM = 3 };
 
 class KoVariable;
+
+class KoVariableSettings
+{
+ public:
+    KoVariableSettings();
+    virtual ~KoVariableSettings() {}
+    int numberOffset(){return m_offset;}
+    void setNumberOffset(int _offset){ m_offset=_offset;}
+
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
+
+ private:
+    int m_offset;
+};
+
 /**
  * Class: KoVariableFormat
  * Base class for a variable format - held by KWDocument.
@@ -154,6 +170,7 @@ class KoVariableCollection : public QObject
     Q_OBJECT
 public:
     KoVariableCollection();
+    ~KoVariableCollection();
     void registerVariable( KoVariable *var );
     void unregisterVariable( KoVariable *var );
     void recalcVariables(int type);
@@ -166,11 +183,14 @@ public:
         return variables;
     }
 
+    KoVariableSettings *variableSetting(){return m_variableSettings;}
+
  signals:
     void repaintVariable();
  private:
     QPtrList<KoVariable> variables;
     QMap< QString, QString > varValues;
+    KoVariableSettings *m_variableSettings;
 };
 
 

@@ -39,6 +39,27 @@
 #include "timeformatwidget_impl.h"
 #include "dateformatwidget_impl.h"
 
+KoVariableSettings::KoVariableSettings()
+{
+    m_offset=0;
+}
+
+void KoVariableSettings::save( QDomElement &parentElem )
+{
+    QDomElement elem = parentElem.ownerDocument().createElement( "VARIABLESETTINGS" );
+    parentElem.appendChild( elem );
+    elem.setAttribute( "number_offset", m_offset );
+}
+
+void KoVariableSettings::load( QDomElement &elem )
+{
+    QDomElement e = elem.namedItem( "VARIABLESETTINGS" ).toElement();
+    if (!e.isNull())
+    {
+        m_offset = e.attribute("number_offset").toInt();
+    }
+}
+
 KoVariableDateFormat::KoVariableDateFormat() : KoVariableFormat()
 {
     m_bShort = false;
@@ -161,8 +182,13 @@ KoVariableFormat * KoVariableFormatCollection::createFormat( const QCString &key
 /******************************************************************/
 KoVariableCollection::KoVariableCollection()
 {
+    m_variableSettings=new KoVariableSettings();
 }
 
+KoVariableCollection::~KoVariableCollection()
+{
+    delete m_variableSettings;
+}
 
 void KoVariableCollection::registerVariable( KoVariable *var )
 {
