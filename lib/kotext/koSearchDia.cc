@@ -354,7 +354,7 @@ void KoFindReplace::proceed()
     }
     if(!m_destroying && m_macroCmd)
         emitNewCommand(m_macroCmd);
-
+    m_macroCmd= 0L;
     kdDebug() << "KWFindReplace::findInFrameSet done" << endl;
 }
 
