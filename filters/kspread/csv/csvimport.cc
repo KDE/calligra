@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1999 David Faure <faure@kde.org>
+   Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -95,13 +96,13 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     //if (config != QString::null)
     //    csv_delimiter = config[0];
 
-    QByteArray inputFile(in.size());
-    in.readBlock(inputFile.data(), in.size());
+    QByteArray inputFile( in.readAll() );
     in.close();
 
     CSVDialog *dialog = new CSVDialog(0L, inputFile, csv_delimiter);
     if (!dialog->exec())
         return KoFilter::UserCancelled;
+    inputFile.resize( 0 ); // Release memory (input file content)
 
     ElapsedTime t( "Filling data into document" );
 
