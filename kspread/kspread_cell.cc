@@ -86,6 +86,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_bValue = FALSE;
   m_bBool = FALSE;
   m_bDate = FALSE;
+  m_bTime = FALSE;
   m_bProgressFlag = FALSE;
   m_bDisplayDirtyFlag = false;
 
@@ -825,7 +826,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   else if(m_eFormatNumber==TextDate)
         m_strOutText=KGlobal::locale()->formatDate(m_Date,false);
   }
-
+  else if( m_bTime)
+  {
+  if( m_eFormatNumber==Time)
+        m_strOutText=KGlobal::locale()->formatTime(m_Time,false);
+  else if(m_eFormatNumber==SecondeTime)
+        m_strOutText=KGlobal::locale()->formatTime(m_Time,true);
+  }
   else if ( m_bValue &&!m_pTable->getShowFormular() )
   {
     // First get some locale information
@@ -961,7 +968,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   int a = m_eAlign;
   if ( a == KSpreadCell::Undefined )
   {
-    if ( m_bValue  || m_bDate)
+    if ( m_bValue  || m_bDate ||m_bTime)
       a = KSpreadCell::Right;
     else
       a = KSpreadCell::Left;
@@ -1424,7 +1431,7 @@ switch( m_eAlignY )
 
 if ( a == KSpreadCell::Undefined )
   {
-    if ( m_bValue || m_bDate)
+    if ( m_bValue || m_bDate || m_bTime)
       a = KSpreadCell::Right;
     else
       a = KSpreadCell::Left;
@@ -1655,6 +1662,7 @@ bool KSpreadCell::makeFormular()
     m_bBool = false;
     m_bValue = false;
     m_bDate=false;
+    m_bTime=false;
     m_dValue = 0.0;
     m_bLayoutDirtyFlag = true;
     DO_UPDATE;
@@ -1687,6 +1695,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bValue = false;
     m_bBool = false;
     m_bDate =false;
+    m_bTime=false;
     m_strFormularOut = "####";
     m_bLayoutDirtyFlag = true;
     if ( m_style == ST_Select )
@@ -1732,6 +1741,7 @@ bool KSpreadCell::calc( bool _makedepend )
 	      m_bValue = false;
 	      m_bBool = false;
               m_bDate=false;
+              m_bTime=false;
 	      m_bProgressFlag = false;
 	      if ( m_style == ST_Select )
 	      {
@@ -1756,6 +1766,7 @@ bool KSpreadCell::calc( bool _makedepend )
 	  m_bValue = false;
 	  m_bBool = false;
           m_bDate = false;
+          m_bTime=false;
 	  m_bProgressFlag = false;
 	  // m_bLayoutDirtyFlag = true;
 	  if ( m_style == ST_Select )
@@ -1782,6 +1793,7 @@ bool KSpreadCell::calc( bool _makedepend )
       m_bValue = false;
       m_bBool = false;
       m_bDate =false;
+      m_bTime=false;
       m_bLayoutDirtyFlag = true;
       DO_UPDATE;
       // Print out exception if any
@@ -1811,6 +1823,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bValue = true;
     m_bBool = false;
     m_bDate =false;
+    m_bTime=false;
     // m_strFormularOut.sprintf( "%f", m_dValue );
     m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
   }
@@ -1820,6 +1833,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bValue = true;
     m_bBool = false;
     m_bDate = false;
+    m_bTime=false;
     // m_strFormularOut.sprintf( "%f", m_dValue );
     m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
   }
@@ -1828,6 +1842,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bValue = false;
     m_bBool = true;
     m_bDate =false;
+    m_bTime=false;
     m_dValue = context.value()->boolValue() ? 1.0 : 0.0;
     // (David): i18n'ed True and False - hope it's ok
     m_strFormularOut = context.value()->boolValue() ? i18n("True") : i18n("False");
@@ -1837,6 +1852,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bValue = false;
     m_bBool = false;
     m_bDate=false;
+    m_bTime=false;
     m_strFormularOut = context.value()->toString( context );
   }
 
@@ -2140,7 +2156,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	int a = m_eAlign;
 	if ( a == KSpreadCell::Undefined )
 	{
-	  if ( m_bValue || m_bDate)
+	  if ( m_bValue || m_bDate || m_bTime)
 	    a = KSpreadCell::Right;
 	  else
 	    a = KSpreadCell::Left;
@@ -2181,7 +2197,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	int a = m_eAlign;
 	if ( a == KSpreadCell::Undefined )
 	{
-	  if ( m_bValue || m_bDate)
+	  if ( m_bValue || m_bDate ||m_bTime)
 	    a = KSpreadCell::Right;
 	  else
 	    a = KSpreadCell::Left;
@@ -2843,6 +2859,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
     m_bCalcDirtyFlag = true;
     m_bLayoutDirtyFlag= true;
     m_content = Formula;
+    checkFormat(true);
     if ( !m_pTable->isLoading() )
 	if ( !makeFormular() )
 	    kdError(36002) << "ERROR: Syntax ERROR" << endl;
@@ -2860,6 +2877,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
     m_bValue = false;
     m_bBool = false;
     m_bDate=false;
+    m_bTime=false;
     m_bLayoutDirtyFlag = true;
     m_content = RichText;
   }
@@ -2874,6 +2892,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
     m_bValue = false;
     m_bBool = false;
     m_bDate = false;
+    m_bTime=false;
     m_bLayoutDirtyFlag = true;
     m_content = VisualFormula;
   }
@@ -2933,6 +2952,7 @@ void KSpreadCell::setValue( double _d )
     m_bValue = true;
     m_bBool = false;
     m_bDate =false;
+    m_bTime=false;
     m_dValue = _d;
     m_bLayoutDirtyFlag = true;
     m_content = Text;
@@ -3002,6 +3022,7 @@ void KSpreadCell::checkValue()
     m_dValue = 0;
     m_bBool = false;
     m_bDate = false;
+    m_bTime=false;
     // If the input is empty, we dont have a value
     if ( m_strText.isEmpty() )
     {
@@ -3085,64 +3106,18 @@ void KSpreadCell::checkValue()
                 }
         }
     */
-    //test if text is a percent value
-    if(m_strText.at(m_strText.length()-1)=='%')
+    QTime tmpTime;
+    if((tmpTime=KGlobal::locale()->readTime(m_strText)).isValid())
         {
-        QString tmp;
-        tmp=m_strText.left(m_strText.length()-1);
-        tmp=tmp.simplifyWhiteSpace();
-        bool ok;
-        double val=tmp.toDouble(&ok);
-        if(ok)
-                {
-                m_bValue=true;
-                m_dValue=val;
-                m_eFormatNumber=Percentage;
-                m_strText=tmp.setNum(m_dValue);
-                setFaktor(100.0);
-                setPrecision(2);
-                return;
-                }
-
+        m_bTime = true;
+        m_dValue = 0;
+        if( m_eFormatNumber!=SecondeTime)
+                m_eFormatNumber=Time;
+        m_Time=tmpTime;
+        m_strText=KGlobal::locale()->formatTime(m_Time,true);
+        return;
         }
 
-    int pos=0;
-
-    if((pos=m_strText.find(KGlobal::locale()->currencySymbol()))!=-1)
-        {
-        if(pos==0) // example $ 154.545
-                {
-                tmp=m_strText.right(m_strText.length()-1);
-                tmp=tmp.simplifyWhiteSpace();
-                val=tmp.toDouble(&ok);
-                if(ok)
-                        {
-                        m_bValue=true;
-                        m_dValue=val;
-                        m_eFormatNumber=Money;
-                        m_strText=tmp.setNum(m_dValue);
-                        setFaktor(1.0);
-                        setPrecision(2);
-                        return;
-                        }
-                }
-        else if(pos==(m_strText.length()-1)) //example 125.55 F
-                {
-                tmp=m_strText.left(m_strText.length()-1);
-                tmp=tmp.simplifyWhiteSpace();
-                val=tmp.toDouble(&ok);
-                if(ok)
-                        {
-                        m_bValue=true;
-                        m_dValue=val;
-                        m_eFormatNumber=Money;
-                        m_strText=tmp.setNum(m_dValue);
-                        setFaktor(1.0);
-                        setPrecision(2);
-                        return;
-                        }
-                }
-        }
     QDate tmpDate;
     if((tmpDate=KGlobal::locale()->readDate(m_strText)).isValid())
         {
@@ -3154,9 +3129,83 @@ void KSpreadCell::checkValue()
         m_strText=KGlobal::locale()->formatDate(m_Date,true); //short format date
         return;
         }
+    checkFormat();
     /* if ( old_value != bValue )
 	displayDirtyFlag = TRUE; */
 }
+
+void KSpreadCell::checkFormat(bool _formular)
+{
+   QString tmpText=m_strText;
+   double val=0;
+   bool ok=false;
+   int pos=0;
+   QString tmp;
+   if(_formular)
+        tmpText=tmpText.right(tmpText.length()-1);
+   //test if text is a percent value
+    if(tmpText.at(tmpText.length()-1)=='%')
+        {
+        tmp=tmpText.left(tmpText.length()-1);
+        tmp=tmp.simplifyWhiteSpace();
+        val=tmp.toDouble(&ok);
+        if(ok)
+                {
+                m_bValue=true;
+                m_dValue=val;
+                m_eFormatNumber=Percentage;
+                m_dValue/=100.0;
+                m_strText=tmp.setNum(m_dValue);
+                setFaktor(100.0);
+                setPrecision(2);
+                if(_formular)
+                        m_strText="="+m_strText;
+                return;
+                }
+
+        }
+
+    if((pos=tmpText.find(KGlobal::locale()->currencySymbol()))!=-1)
+        {
+        if(pos==0) // example $ 154.545
+                {
+                tmp=tmpText.right(tmpText.length()-1);
+                tmp=tmp.simplifyWhiteSpace();
+                val=tmp.toDouble(&ok);
+                if(ok)
+                        {
+                        m_bValue=true;
+                        m_dValue=val;
+                        m_eFormatNumber=Money;
+                        m_strText=tmp.setNum(m_dValue);
+                        if(_formular)
+                                m_strText="="+m_strText;
+                        setFaktor(1.0);
+                        setPrecision(2);
+                        return;
+                        }
+                }
+        else if(pos==(tmpText.length()-1)) //example 125.55 F
+                {
+                tmp=tmpText.left(tmpText.length()-1);
+                tmp=tmp.simplifyWhiteSpace();
+                val=tmp.toDouble(&ok);
+                if(ok)
+                        {
+                        m_bValue=true;
+                        m_dValue=val;
+                        m_eFormatNumber=Money;
+                        m_strText=tmp.setNum(m_dValue);
+                        if(_formular)
+                                m_strText="="+m_strText;
+                        setFaktor(1.0);
+                        setPrecision(2);
+                        return;
+                        }
+                }
+        }
+}
+
 
 void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row )
 {
@@ -3427,6 +3476,14 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
       QDomElement text = doc.createElement( "text" );
       QString tmp;
       tmp=tmp.setNum(m_Date.year())+"/"+tmp.setNum(m_Date.month())+"/"+tmp.setNum(m_Date.day());
+      text.appendChild( doc.createTextNode( tmp ) );
+      cell.appendChild( text );
+    }
+    else if( (getFormatNumber()==Time || getFormatNumber()==SecondeTime)&& m_bTime )
+    {
+      QDomElement text = doc.createElement( "text" );
+      QString tmp;
+      tmp=m_Time.toString();
       text.appendChild( doc.createTextNode( tmp ) );
       cell.appendChild( text );
     }
@@ -3786,6 +3843,23 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         m_Date=QDate(year,month,day);
         if(m_Date.isValid() )
                 setCellText(KGlobal::locale()->formatDate(m_Date,true),false);
+        else
+                setCellText( pasteOperation( t, m_strText, op ), false );
+        }
+        else if( getFormatNumber()==Time || getFormatNumber()==SecondeTime)
+        {
+        int hours=-1;
+        int minutes=-1;
+        int seconde=-1;
+        int pos,pos1;
+        pos=t.find(':');
+        hours=t.mid(0,pos).toInt();
+        pos1=t.find(':',pos+1);
+        minutes=t.mid(pos+1,((pos1-1)-pos)).toInt();
+        seconde=t.right(t.length()-pos1-1).toInt();
+        m_Time=QTime(hours,minutes,seconde);
+        if(m_Time.isValid() )
+                setCellText(KGlobal::locale()->formatTime(m_Time,true),false);
         else
                 setCellText( pasteOperation( t, m_strText, op ), false );
         }

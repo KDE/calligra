@@ -740,3 +740,11 @@ it works.
 but there are against a lot of bug.
 -bug fix
 -Add new script function (setComment(QString))
+
+2000-07-08-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Add new format : time format
+there is a bug into klocale, you can't write : 12:15 am
+you must write 12:15:08 am (save in international format)
+-Bug fix into merge cell
+-Now kspread check format into formular.

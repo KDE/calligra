@@ -602,7 +602,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
     //box = new QGroupBox( this, "Box");
     QButtonGroup *grp = new QButtonGroup( i18n("Format"),this);
-    grid = new QGridLayout(grp,6,2,15,7);
+    grid = new QGridLayout(grp,7,2,15,7);
     grp->setRadioButtonExclusive( TRUE );
     number=new QRadioButton(i18n("Number"),grp);
     grid->addWidget(number,0,0);
@@ -622,8 +622,11 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     fraction=new QRadioButton(i18n("Fraction"),grp);
     grid->addWidget(fraction,5,0);
 
+    time=new QRadioButton(i18n("Time Format"),grp);
+    grid->addWidget(time,6,0);
+
     listFormat=new QListBox(grp);
-    grid->addMultiCellWidget(listFormat,0,5,1,1);
+    grid->addMultiCellWidget(listFormat,0,6,1,1);
     layout->addWidget(grp);
 
     if(!dlg->bFormatNumber)
@@ -641,6 +644,9 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
         else if(dlg->formatNumber==KSpreadCell::TextDate ||
         dlg->formatNumber==KSpreadCell::ShortDate)
                 date->setChecked(true);
+        else if(dlg->formatNumber==KSpreadCell::Time ||
+        dlg->formatNumber==KSpreadCell::SecondeTime)
+                time->setChecked(true);
         else if(dlg->formatNumber==KSpreadCell::fraction_half ||
         dlg->formatNumber==KSpreadCell::fraction_quarter ||
         dlg->formatNumber==KSpreadCell::fraction_eighth ||
@@ -655,6 +661,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     connect(scientific,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     connect(number,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     connect(percent,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
+    connect(time,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     slotChangeState();
     this->resize( 400, 400 );
 }
@@ -709,7 +716,19 @@ else if(fraction->isChecked())
         else
                 listFormat->setCurrentItem(0);
         }
-
+else if(time->isChecked())
+        {
+        listFormat->setEnabled(true);
+        list+=KGlobal::locale()->formatTime(QTime::currentTime(),false);
+        list+=KGlobal::locale()->formatTime(QTime::currentTime(),true);
+        listFormat->insertStringList(list);
+        if( dlg->formatNumber==KSpreadCell::Time )
+                listFormat->setCurrentItem(0);
+        else if(dlg->formatNumber==KSpreadCell::SecondeTime)
+                listFormat->setCurrentItem(1);
+        else
+                listFormat->setCurrentItem(0);
+        }
 
 }
 void CellLayoutPageFloat::apply( KSpreadCell *_obj )
@@ -781,6 +800,13 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
                 _obj->setFormatNumber(KSpreadCell::ShortDate );
         else if(listFormat->currentItem()==1)
                 _obj->setFormatNumber(KSpreadCell::TextDate );
+        }
+    else if(time->isChecked())
+        {
+        if( listFormat->currentItem()==0)
+                _obj->setFormatNumber(KSpreadCell::Time );
+        else if(listFormat->currentItem()==1)
+                _obj->setFormatNumber(KSpreadCell::SecondeTime );
         }
     else if(money->isChecked())
         _obj->setFormatNumber(KSpreadCell::Money);

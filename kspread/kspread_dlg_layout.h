@@ -209,6 +209,7 @@ protected:
     QRadioButton *money;
     QRadioButton *scientific;
     QRadioButton *fraction;
+    QRadioButton *time;
     QListBox *listFormat;
     CellLayoutDlg *dlg;
 };

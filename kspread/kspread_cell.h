@@ -118,7 +118,7 @@ public:
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
     enum Content { Text, RichText, Formula, VisualFormula };
     enum formatNumber { Number=0,Money=10,Percentage=25,Scientific=30,ShortDate=35,TextDate=36, Time=50,
-     fraction_half=70,fraction_quarter=71,fraction_eighth=72,fraction_sixteenth=73,
+    SecondeTime=51,fraction_half=70,fraction_quarter=71,fraction_eighth=72,fraction_sixteenth=73,
      fraction_tenth=74,fraction_hundredth=75};
 
     KSpreadCell( KSpreadTable *_table, int _column, int _row );
@@ -394,10 +394,12 @@ public:
     bool isBool() const {  return m_bBool; }
     bool valueBool() const { return ( m_dValue != 0.0 ); }
     bool isDate() const {  return m_bDate; }
+    bool isTime() const {  return m_bTime; }
     double valueDouble() const { return m_dValue; }
     QString valueString() const;
     void setValue( double _d );
     QDate valueDate() const {return m_Date;}
+    QTime valueTime() const {return m_Time;}
 
     /**
      * When you insert a cell at bottom or right
@@ -653,6 +655,7 @@ public:
 
     QString createFormat(double value);
     QString createFractionFormat(double value);
+    void checkFormat(bool formular=false);
     /**
      * Used for comparing cells (when sorting)
      */
@@ -737,8 +740,9 @@ protected:
     bool m_bBool;
     bool m_bError;
     bool m_bDate;
+    bool m_bTime;
     QDate m_Date;
-
+    QTime m_Time;
     /**
      * Flag showing whether the current layout is OK.
      * If you change for example the fonts point size, set this flag. When the cell
