@@ -85,7 +85,6 @@ void KoZoomAction::setZoom( int zoom )
 
 void KoZoomAction::activated( const QString& text )
 {
-qDebug("ACTIVATED %s", text.latin1());
   setZoom( text );
   emit zoomChanged( text );
 }
