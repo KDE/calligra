@@ -393,7 +393,7 @@ QScrollBar* KSpreadCanvas::vertScrollBar() const
 
 KSpreadSheet* KSpreadCanvas::findSheet( const QString& _name ) const
 {
-  return d->view->map()->findSheet( _name );
+  return d->view->doc()->map()->findSheet( _name );
 }
 
 KSpreadSheet* KSpreadCanvas::activeSheet() const
@@ -1091,7 +1091,7 @@ void KSpreadCanvas::processLeftClickAnchor()
     }
     else
     {
-        gotoLocation( KSpreadPoint( d->anchor, d->view->map() ) );
+        gotoLocation( KSpreadPoint( d->anchor, d->view->doc()->map() ) );
     }
 }
 

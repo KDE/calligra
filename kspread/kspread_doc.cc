@@ -458,7 +458,7 @@ KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
 {
     if ( name == 0 )
         name = "View";
-    return new KSpreadView( parent, name, d->docinfo );
+    return new KSpreadView( parent, name, this );
 }
 
 bool KSpreadDoc::saveChildren( KoStore* _store )

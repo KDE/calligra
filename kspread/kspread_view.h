@@ -33,7 +33,6 @@
 #include <qvaluelist.h>
 
 #include <koView.h>
-#include "docbase.h"
 
 class QScrollBar;
 
@@ -77,7 +76,7 @@ class Damage;
  *  \li tab bar to select active worksheet
  *
  */
-class KSPREAD_EXPORT KSpreadView : public KoView, public KSpread::DocBase
+class KSPREAD_EXPORT KSpreadView : public KoView
 {
     friend class KSpreadCanvas;
 
@@ -86,10 +85,12 @@ public:
 
     /** Creates a new view */
     KSpreadView( QWidget *_parent, const char *_name,
-        KSpread::DocInfo *docinfo );
+        KSpreadDoc *doc );
 
     /** Destroys the view */
     ~KSpreadView();
+    
+    KSpreadDoc* doc();
 
     /** Returns the canvas of the view */
     KSpreadCanvas* canvasWidget() const;
