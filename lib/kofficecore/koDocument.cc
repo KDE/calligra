@@ -125,8 +125,9 @@ KoDocument::KoDocument( QObject* parent, const char* name, bool singleViewMode )
 
   if ( singleViewMode )
   {
-    d->m_wrapperWidget = new KoViewWrapperWidget( (QWidget *)parent );
-    setWidget( d->m_wrapperWidget );
+      ASSERT( parent->inherits( "QWidget" ) );
+      d->m_wrapperWidget = new KoViewWrapperWidget( (QWidget *)parent );
+      setWidget( d->m_wrapperWidget );
   }
 }
 
@@ -139,7 +140,7 @@ KoDocument::~KoDocument()
   for (; it.current(); ++it )
     disconnect( it.current(), SIGNAL( destroyed() ),
 		this, SLOT( slotViewDestroyed() ) );
-  
+
   delete d;
 }
 

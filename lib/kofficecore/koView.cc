@@ -58,6 +58,8 @@ public:
 KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
  : QWidget( parent, name )
 {
+  ASSERT( document );
+    
   //kdDebug(31000) << "KoView::KoView " << this << endl;
   d = new KoViewPrivate;
   d->m_doc = document;
@@ -355,7 +357,7 @@ void KoView::slotChildActivated( bool a )
   QGuardedPtr<KoFrame> chFrame = ch->frame();
   if ( docChild && chFrame && chFrame->view() )
     docChild->document()->setViewContainerStates( chFrame->view(), chFrame->view()->containerStates() );
-  
+
   d->m_children.remove( ch );
 
   // #### HACK

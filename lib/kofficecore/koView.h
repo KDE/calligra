@@ -42,12 +42,33 @@ namespace KParts
   class PartSelectEvent;
 };
 
+/**
+ * This class is used to display a @ref KoDocument.
+ *
+ * Multiple views can be attached to one document at a time.
+ */
 class KoView : public QWidget, public KParts::PartBase
 {
   friend class KoDocument;
   Q_OBJECT
 public:
+  /**
+   * Creates a new view for the document. Usually you dont create views yourself
+   * since the koffice components come with their own view classes which inherit
+   * KoView.
+   *
+   * The standard way to retrieve a KoView is to call @ref KoDocument::createView.
+   *
+   * @param document is the document which should be displayed in this view. This pointer
+   *                 must not be zero.
+   *  @param name   Name of the view. The name is used in DCOP, so the name should
+   *                match the pattern [A-Za-z_][A-Za-z_0-9]*.
+   * 
+   */
   KoView( KoDocument *document, QWidget *parent = 0, const char *name = 0 );
+  /**
+   * Destroys the view and unregisters at the document.
+   */
   virtual ~KoView();
 
   /**
@@ -58,6 +79,17 @@ public:
   virtual void setPartManager( KParts::PartManager *manager );
   virtual KParts::PartManager *partManager() const;
 
+  /**
+   * Returns the action described action object. In fact only the "name" attribute
+   * of @ref #element is of interest here. The method searches in the
+   * @ref KActionCollection of this view.
+   *
+   * Please notice that KoView indirectly inherits KXMLGUIClient.
+   *
+   * @see KXMLGUIClient
+   * @see KXMLGUIClient::actionCollection
+   * @see KoDocument::action
+   */       
   virtual KAction *action( const QDomElement &element );
 
   /**
@@ -65,13 +97,56 @@ public:
    */
   virtual KoDocument *hitTest( const QPoint &pos );
 
+  /**
+   * Retrieves the left border width that is displayed around the content if
+   * the view is active.
+   *
+   * In a spread sheet this border is for example used to display the
+   * rows, while a top border is used to display the names of the cells
+   * and a right and bottom border is used to display scrollbars. If the view
+   * becomes inactive, then this stuff is not displayed anymore.
+   *
+   * @ref KoFrame uses this border information. If an embedded document becomes active
+   * then it is resized so that it has enough space to display the borders and to
+   * display the same content as before the activation.
+   * So if for example all of your borders are 20 pixel, then activating the embedded
+   * document causes the KoView to move 20 pixel up/left and the size and width increas
+   * by 20+20 pixel each.
+   *
+   * The default border is 0.
+   */
   virtual int leftBorder() const;
+  /**
+   * @see #leftBorder
+   */
   virtual int rightBorder() const;
+  /**
+   * @see #leftBorder
+   */
   virtual int topBorder() const;
+  /**
+   * @see #leftBorder
+   */
   virtual int bottomBorder() const;
 
+  /**
+   * Scales the view on the content. This does not affect the contents
+   * data structures. You can use this mechanism to implement a zoom
+   * for example.
+   *
+   * The method calls @ref QWidget::update so that the scaled content
+   * is automatically displayed.
+   *
+   * The default scaling is 1.0 in both orientations.
+   */
   virtual void setScaling( double x, double y );
+  /**
+   * @see #setScaling
+   */
   virtual double xScaling() const;
+  /**
+   * @see #setScaling
+   */
   virtual double yScaling() const;
 
   /**
@@ -104,7 +179,7 @@ public:
    * @return the selected child. The function returns 0 if
    *         no direct child is currently selected.
    */
-  virtual KoDocumentChild *selectedChild();
+   virtual KoDocumentChild *selectedChild();
 
   /**
    * @return the active child. The function returns 0 if
@@ -112,18 +187,48 @@ public:
    */
   virtual KoDocumentChild *activeChild();
 
+    // #########
   virtual void paintEverything( QPainter &painter, const QRect &rect, bool transparent = false );
 
+  /**
+   * @return TRUE if the document @p doc is represented in this view by
+   *         some KoViewChild.
+   *
+   * This is just a convenience function for @ref #child.
+   */
   bool hasDocumentInWindow( KoDocument *doc );
 
+  /**
+   * Returns the matrix which is used by the view to transform the content.
+   * Currently only sclaing is supported.
+   *
+   * The matrix changes when calling @ref #setScaling.
+   */
   QWMatrix matrix() const;
 
+  /**
+   * @return the KoViewChild which is responsible for the @p view or 0.
+   *
+   * This method does no recursion.
+   */
   KoViewChild *child( KoView *view );
+  /**
+   * A convenience function which returns the KoViewChild which in turn holds the
+   * @ref KoView that in turn holds the @p document.
+   */
   KoViewChild *child( KoDocument *document );
 
 protected:
+  /**
+   * This method handles two events: @ref KParts::PartActivateEvent and @ref KParts::PartSelectEvent.
+   * The handlers @ref #partActivateEvent or @ref #partSelectEvent are called if such an event is found.
+   */
   virtual void customEvent( QCustomEvent *ev );
 
+  /**
+   * Handles the event KParts::PartActivateEvent.
+   *
+   * 
   virtual void partActivateEvent( KParts::PartActivateEvent *event );
   virtual void partSelectEvent( KParts::PartSelectEvent *event );
 

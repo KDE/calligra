@@ -30,6 +30,12 @@
  *  This class handles given arguments giving on the command line and
  *  shows a generic about dialog for all KOffice apps.
  *
+ * In addition it adds the standard directories where KOffice applications
+ * can find their images etc.
+ *
+ * If the last mainwindow becomes closed, KoApplication automatically
+ * calls @ref QApplication::quit.
+ *
  *  @short Base class for all KOffice apps.
  */
 class KoApplication : public KApplication
@@ -39,21 +45,28 @@ class KoApplication : public KApplication
 public:
 
     /**
-     *  Constructor
+     * Creates an application object, adds some standard directories and
+     * initializes kimgio.
      */
     KoApplication();
-    
-    
+
+
     /**
      *  Destructor.
      */
     virtual ~KoApplication();
 
+    // ######### Bad name
     /**
-     *  Call this to start the application.
+     * Call this to start the application.
      *
-     *  Parses command line arguments and creates the initial shells and docs
-     *  from them (or an empty doc if no cmd-line argument
+     * Parses command line arguments and creates the initial shells and docs
+     * from them (or an empty doc if no cmd-line argument is specified ).
+     *
+     * You must call this method directly before calling @ref QApplication::exec.
+     *
+     * It is valid behaviour not to call this method at all. In this case you
+     * have to process your command line parameters by yourself.
      */
     virtual void start();
 };

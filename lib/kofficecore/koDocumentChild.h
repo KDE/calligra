@@ -200,7 +200,12 @@ public:
    *  is done in @ref Document_impl. This function just stores information
    *  about the position and id of the embedded document.
    *
+   *  The OBJECT element is not added to the document. It is just created
+   *  and returned.
+   *  
    *  Use this function if your application uses the DOM.
+   *
+   *  @return the element containing the OBJECT tag.
    */
   virtual QDomElement save( QDomDocument& doc );
 

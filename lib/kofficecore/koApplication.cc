@@ -32,17 +32,21 @@
 KoApplication::KoApplication()
 	: KApplication()
 {
+    // Install some standard paths
     KGlobal::locale()->insertCatalogue("koffice");
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/toolbar/");
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/pics/");
 
     kimgioRegister();
 
+    // Quit when last window closed
     connect( this, SIGNAL( lastWindowClosed() ), this, SLOT( quit() ) );
 }
 
 void KoApplication::start()
 {
+    // Find out about the mimetype which is natively supported
+    // by this application.
     QCString nativeFormat = KoDocument::readNativeFormatMimeType();
     if ( nativeFormat.isEmpty() )
     {
@@ -50,6 +54,7 @@ void KoApplication::start()
         ::exit(1);
     }
 
+    // Find the *.desktop file corresponding to the mime type
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( nativeFormat );
     if ( entry.isEmpty() )
     {
@@ -57,12 +62,11 @@ void KoApplication::start()
         ::exit(1);
     }
 
-
+    // Get the command line arguments which we have to parse
     KCmdLineArgs *args= KCmdLineArgs::parsedArgs();
+    int argsCount = args->count();
 
-    int argsCount=args->count();
-
-    // No argument
+    // No argument -> create an empty document
     if (!argsCount) {
         KoDocument* doc = entry.createDoc( 0, "Document" );
         KoMainWindow* shell = doc->createShell();
@@ -79,18 +83,21 @@ void KoApplication::start()
         short int n=0;
         for(int i=0; i < argsCount; i++ )
         {
+	    // For now create an empty document
             KoDocument* doc = entry.createDoc( 0 );
             if ( doc )
             {
                 // show a shell asap
                 KoMainWindow* shell = doc->createShell();
                 shell->show();
+		// now try to load
                 if ( doc->openURL( args->url(i) ) )
-                {
-                  shell->setRootDocument( doc );
-                  n++;
+	        {
+		    shell->setRootDocument( doc );
+		    n++;
                 } else {
-                  delete shell;
+		    // .... if failed
+		    delete shell;
                 }
             }
         }

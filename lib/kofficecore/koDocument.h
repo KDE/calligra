@@ -55,34 +55,89 @@ class KoDocument : public KParts::ReadWritePart
 
 public:
 
+  // ####### Better make two constructors!
   /**
    *  Constructor.
+   *
+   * @param parent may be another KoDocument or a class derived from @ref QWidget.
+   * @param name is used to identify this document via DCOP so you may want to
+   *        pass a meaningful name here which matches the pattern [A-Za-z_][A-Za-z_0-9]*.
+   * @param singleViewMode determines wether the document may only have one view. In this case
+   *        the @param parent must be a QWidget derived class. KoDocument will then create a wrapper widget
+   *        (@ref KoViewWrapperWidget) which is a child of @param parent. This widget can be retrieved
+   *        by calling @ref #widget.
    */
   KoDocument( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
 
   /**
    *  Destructor.
+   *
+   * The destructor does not delete any attached @ref KoView objects and it does not
+   * delete the attached widget as returned by @ref #widget.
    */
   virtual ~KoDocument();
 
+  /**
+   * Tells wether this document is in singleview mode. This mode can only be set
+   * in the constructor.
+   */
   bool singleViewMode() const;
 
+    // ####### Why not return KoViewWrapperWidget ?
+  /**
+   * If the widget is in singleview mode, then this method returns a pointer to the
+   * wrapper widget (@ref KoViewWrapperWidget).
+   */
   virtual QWidget *widget();
 
+    // ######## Where and why is this needed ?
+  /**
+   * Returns the action described action object. In fact only the "name" attribute
+   * of @ref #element is of interest here. The method searches first in the
+   * @ref KActionCollection of the first view and then in the KActionCollection of this
+   * document.
+   *
+   * Please notice that KoDocument indirectly inherits KXMLGUIClient.
+   *
+   * @see KXMLGUIClient
+   * @see KXMLGUIClient::actionCollection
+   * @see KoView::action
+   */
   virtual KAction *action( const QDomElement &element );
-
+    
+    // ######## Where and why is this needed ?
+  /**
+   * Returns the DOM document which describes the GUI of the
+   * first view.
+   */
   virtual QDomDocument document() const;
 
   virtual void setManager( KParts::PartManager *manager );
 
+  /**
+   * Sets wether the document can be edited or is read only.
+   * This recursively applied to all child documents and
+   * @ref KoView::updateReadWrite is called for every attached
+   * view.
+   */
   virtual void setReadWrite( bool readwrite = true );
 
   /**
-   * Used by KoApplication, when no document exists yet
+   * Used by KoApplication, when no document exists yet.
+   *
+   * With the help of @param instance or @ref KApplication::instance() this
+   * method figures out which .desktop file matches this application. In this
+   * file it searches for the "X-KDE-NativeMimeType" entry and returns it.
+   *
+   * @see KService
+   * @see KDesktopFile
    */
   static QCString readNativeFormatMimeType( KInstance *instance = 0L );
+
   /**
-   * To be preferred when a document exists (a lot faster)
+   * To be preferred when a document exists. It is fast when calling
+   * it multiple times since it caches the result that @ref #readNativeFormatMimeType
+   * delivers.
    */
   QCString nativeFormatMimeType();
 
@@ -91,10 +146,13 @@ public:
    *
    *  You need to overload this method to create a view of your desired type.
    *
-   *  @param parent Parent widget of the view.
-   *  @param name   Name of the view.
+   *  After creating the new view your implementation should call @ref #addView.
    *
-   *  @see createShell
+   *  @param parent Parent widget of the view.
+   *  @param name   Name of the view. The name is used in DCOP, so the name should
+   *                match the pattern [A-Za-z_][A-Za-z_0-9]*.
+   *
+   *  @see #createShell
    */
   virtual KoView *createView( QWidget *parent = 0, const char *name = 0 ) = 0;
 
@@ -104,12 +162,22 @@ public:
    *
    *  You have to overload this method to return a shell of your desired type.
    *
-   *  @see createView
+   *  @see #createView
    */
   virtual KoMainWindow *createShell() = 0;
 
   /**
-   *  Adds a view to the document.
+   * Adds a view to the document.
+   *
+   * This calls @ref KoView::updateReadWrite to tell the new view
+   * wether the document is readonly or not.
+   *
+   * You may want to call this method after you created a new view.
+   * Usually this is done by @ref #createView for you, so you dont need to
+   * call this method anyway.
+   *
+   * The document detects automatically when a view is destroyed since this
+   * triggers the @ref #slotViewDestroyed slot.
    */
   virtual void addView( KoView *view );
 
@@ -142,7 +210,7 @@ public:
    *
    *  This function has to be overloaded if the document features child documents.
    *
-   *  @param matrix transforms points from the documens coordinate system
+   *  @param matrix transforms points from the documents coordinate system
    *         to the coordinate system of the questionable point.
    *  @param p is in some unknown coordinate system, but the matrix can
    *         be used to transform a point of this parts coordinate system
@@ -157,27 +225,28 @@ public:
    *
    *  @param painter     The painter object into that should be drawn.
    *  @param rect        The rect that should be used in the painter object.
-   *  @param transparent .
-   *  @param view        .
+   *  @param transparent If TRUE then the entire rectangle is erased before painting.
+   *  @param view        The KoView is needed to fid about about the active widget.
    */
   virtual void paintEverything( QPainter &painter, const QRect &rect, bool transparent = false, KoView *view = 0L );
 
   /**
-   *  Paints the whole document and all its children into the given painter object.
+   *  Paints all of the documents children into the given painter object.
    *
-   *  @see #paintChild #paintChildren #paintContent
+   *  @see #paintChild #paintEverything #paintContent
    */
   virtual void paintChildren( QPainter &painter, const QRect &rect, KoView *view );
 
   /**
    *  Paint a special child. Normally called by @ref paintChildren.
    *
-   *  @see #paintEverything #paintChildren
+   *  @see #paintEverything #paintChildren #paintContent
    */
   virtual void paintChild( KoDocumentChild *child, QPainter &painter, KoView *view );
 
   /**
-   *  Paints the data itself. Normally called by @ref paintEverthing
+   *  Paints the data itself. Normally called by @ref paintEverthing. It does not
+   *  paint the children.
    *
    *  @see #paintEverything
    */
@@ -196,7 +265,7 @@ public:
   virtual void setModified( bool _mod );
 
   /**
-   *  Did a filter change this document?
+   *  Sets wether a filter change this document.
    */
   virtual void changedByFilter( bool changed=true ) const;
 
@@ -208,31 +277,40 @@ public:
   /**
    *  Sets the document to empty. Used after loading a template
    *  (which is not empty, but not the user's input).
+   *
+   * @ref #isEmpty
    */
   virtual void setEmpty() { m_bEmpty = true; }
 
+    // ############# Can be protected, or ?
   /**
-   *  Loads a document from m_file (KParts takes care of downloading
-   *  remote documents)
+   *  Loads a document from @ref KReadOnlyPart::m_file (KParts takes care of downloading
+   *  remote documents).
    *  Applies a filter if necessary, and calls loadNativeFormat in any case
    *  You should not have to reimplement, except for very special cases.
+   *
+   * This method is called from the @ref KReadOnlyPart::openURL method.
    */
   virtual bool openFile();
 
+    // ############# Can be protected, or ?
   /**
    *  Loads a document in the native format from a given URL.
    *  Reimplement if your native format isn't XML.
-   *  @param file the file to load - m_file or the result of a filter
+   *
+   *  @param file the file to load - usually @ref KReadOnlyPart::m_file or the result of a filter
    */
   virtual bool loadNativeFormat( const QString & file );
 
   /**
    *  Loads a document from a store.
    *  You should never have to reimplement.
-   * @param url An internal url, like tar:/1/2
+   
+   *  @param url An internal url, like tar:/1/2
    */
   virtual bool loadFromStore( KoStore* store, const KURL& url );
 
+        // ############# Can be protected or friend, or ?
   /**
    *  This method is needed for the new filter API. You have to
    *  reimplement it to load XML if you want to support filters
@@ -241,15 +319,16 @@ public:
    */
   virtual bool loadXML( const QDomDocument&, KoStore* = 0L ) { return false; }
 
-
+    // ############# Can be protected, or ?
   /**
-   *  Saves a document to m_file (KParts takes care of uploading
+   *  Saves a document to @ref KReadOnlyPart::m_file (KParts takes care of uploading
    *  remote documents)
    *  Applies a filter if necessary, and calls saveNativeFormat in any case
    *  You should not have to reimplement, except for very special cases.
    */
   virtual bool saveFile();
 
+    // ############# Can be protected, or ?
   /**
    *  Saves the document in native format, to a given file
    *  You should never have to reimplement.
@@ -263,12 +342,18 @@ public:
 
   /**
    *  Retrieves the mimetype of the document.
+   *
+   *  You need to reimplement this method.
    */
   virtual QCString mimeType() const = 0;
 
   /**
    * Inserts the new child in the list of children and emits the
    * @ref #childChanged signal.
+   *
+   * At the same time this method marks this document as modified.
+   *
+   * @see #isModified
    */
   virtual void insertChild( KoDocumentChild *child );
 
@@ -297,7 +382,7 @@ signals:
    *
    * If one of your child documents emits the childChanged signal, then you may
    * usually just want to redraw this child. In this case you can ignore the parameter
-   * passes by the signal.
+   * passed by the signal.
    */
   void childChanged( KoDocumentChild *child );
 
@@ -348,7 +433,7 @@ protected:
    *
    *  An example implementation may look like this:
    *  <PRE>
-   *  QListIterator<KSpreadChild> it( m_lstChildren );
+   *  QListIterator<KoDocumentChild> it( children() );
    *  for( ; it.current(); ++it )
    *  {
    *    if ( !it.current()->loadDocument( _store ) )
@@ -366,14 +451,12 @@ protected:
    *  to overload this function. An implementation may look like this:
    *  <PRE>
    *  int i = 0;
-   *  QListIterator<KWordChild> it( m_lstChildren );
-   *  for( ; it.current(); ++it )
-   *  {
-   *      // set the child document's url to an internal url (ex: "tar:/0/1")
-   *      QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-   *      KOffice::Document_var doc = it.current()->document();
-   *      if ( !doc->saveToStore( _store, 0L, internURL ) )
-   *         return false;
+   *
+   *  QListIterator<KoDocumentChild> it( children() );
+   *  for( ; it.current(); ++it ) {
+   *    QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
+   *    if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, "", internURL ) )
+   *      return false;
    *  }
    *  return true;
    *  </PRE>
@@ -400,6 +483,8 @@ protected:
 
   /**
    *  Saves only an OBJECT tag for this document.
+   *
+   *  This method is obsolete, dont use.
    */
   virtual bool save( ostream&, const char* format );
 
@@ -408,18 +493,20 @@ protected:
 
   /**
    *  Overload this function with your personal text.
+   *  By default an empty string is returned.
    */
   virtual QString copyright() const;
 
   /**
    *  Retrieves a comment of the document.
+   *  By default an empty string is returned.
    */
   virtual QString comment() const;
 
   /**
    *  An example implementation may look like this one:
    *  <PRE>
-   *  QListIterator<KSpreadChild> it( m_lstChildren );
+   *  QListIterator<KoDocumentChild> it( children() );
    *  for( ; it.current(); ++it )
    *  {
    *    if ( !it.current()->isStoredExtern() )
@@ -449,7 +536,18 @@ protected:
    */
   void resetURL() { m_url = KURL(); }
 
+  /**
+   * Appends the shell to the list of shells which show this
+   * document as their root document.
+   *
+   * This method is automatically called from @ref KoMainWindow::setRootDocument,
+   * so you dont need to call it.
+   */
   void addShell( KoMainWindow *shell );
+  /**
+   * Removes the shell from the list. That happens automatically if the shell changes its
+   * root document. Usually you dont need to call this method.
+   */
   void removeShell( KoMainWindow *shell );
 
 private:
