@@ -25,7 +25,7 @@
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qlabel.h>
-#include <qlayout.h>
+
 
 
 
@@ -41,17 +41,36 @@ public:
   void init();
   QString create_formula();
   QString make_formula(QString _text,int nb_line);
+  void setText(QString text);
+  KSpreadView *view(){return m_pView;}
+  int nb_button(){return button_select;}
+
+  QString t_name(){return tab_name;}
+
+  void set_nbbutton(int nb){ button_select=nb;}
   int nb_param;
+
+
+  int dx;
+  int dy;
+  int Param(){return nb_param;}
 public slots:
   void slotOk();
   void slotClose();
-  void slotSelect();
-  void slotSelectionChanged( KSpreadTable* _table, const QRect& _selection );
+  void slotFselect();
+  void slotSselect();
+  void slotTselect();
+  void slotFOselect();
+  void slotFIselect();
 
 protected:
   enum type_create {type_double,type_string,type_logic};
+  enum type_editor { editWidget,editCell};
+  QString old_text;
+  type_editor editor;
   KSpreadView* m_pView;
   QString name;
+  QString tab_name;
   QString old_formula;
   QLineEdit* f_param;
   QLineEdit* s_param;
@@ -60,7 +79,12 @@ protected:
   QLineEdit* fi_param;
   QPushButton* m_pOk;
   QPushButton* m_pClose;
-  QPushButton* select;
+  QPushButton* f_select;
+  QPushButton* s_select;
+  QPushButton* t_select;
+  QPushButton* fo_select;
+  QPushButton* fi_select;
+
   type_create edit[5];
   QLabel *f_text;
   QLabel *s_text;
@@ -68,9 +92,7 @@ protected:
   QLabel *fo_text;
   QLabel *fi_text;
   QLabel *exp_text;
-  QVBoxLayout *lay1;
-  QHBoxLayout *lay2;
-
+  int button_select;
 };
 
 #endif

@@ -372,7 +372,7 @@ public:
     void BackgroundColor();
     void sortincr();
     void sortdecrease();
-
+     void layoutDlg();
     virtual void cleanUp();
 
 protected slots:
@@ -405,6 +405,8 @@ protected slots:
      * Popup menu
      */
     void slotLayoutDlg();
+
+
 
     /**
      * @ref #tabBar is connected to this slot.

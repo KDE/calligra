@@ -860,6 +860,11 @@ length_namecell= name_cell.length();
 m_pEditor->setFocus();
 }
 
+void KSpreadCanvas::mouseDoubleClickEvent( QMouseEvent*  )
+{
+m_pView->layoutDlg();
+}
+
 void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
 {
   if ( m_pDoc->isLoading() )

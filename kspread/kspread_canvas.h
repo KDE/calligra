@@ -200,7 +200,7 @@ protected:
     virtual void mousePressEvent( QMouseEvent* _ev );
     virtual void mouseReleaseEvent( QMouseEvent* _ev );
     virtual void mouseMoveEvent( QMouseEvent* _ev );
-
+    virtual void mouseDoubleClickEvent( QMouseEvent*);
 private:
     /**
      * Hides the marker. Hiding it multiple times means that it has to be shown ( using @ref #showMarker ) multiple times

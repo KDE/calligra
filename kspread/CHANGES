@@ -36,3 +36,8 @@ if it works on others languages.
 this dialogBox which arrived and show you what do you write.
 It give the number of parameters etc ...
 -fixbug
+
+1999-09-15 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------	
+-Now Kspread_dlg_create works ,you can select with mouse.
+-MouseDoubleClick on canvas call layout_dlg.

@@ -1960,6 +1960,26 @@ void KSpreadView::slotLayoutDlg()
   m_pCanvas->showMarker();
 }
 
+void KSpreadView::layoutDlg()
+{
+  QRect selection( m_pTable->selectionRect() );
+
+  m_pCanvas->hideMarker();
+
+  cout << "#######################################" << endl;
+
+  if ( selection.contains( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ) )
+    CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
+		       selection.right(), selection.bottom() );
+  else
+    CellLayoutDlg dlg( this, m_pTable, m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+
+  m_pDoc->setModified( true );
+
+  cout << "------------------------------------------" << endl;
+
+  m_pCanvas->showMarker();
+}
 void KSpreadView::paperLayoutDlg()
 {
   m_pDoc->paperLayoutDlg();
