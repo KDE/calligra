@@ -109,12 +109,18 @@ void KexiViewBase::propertyBufferReloaded()
 
 void KexiViewBase::setDirty(bool set)
 {
-	if (m_dirty == set)
+/*	if (m_dirty == set) {//no change here
+		if (m_dialog) {
+			// however, it's a change from dialog perspective
+			if (m_dialog->dirty()!=set)
+				m_dialog->dirtyChanged();
+		}
 		return;
+	}*/
 	m_dirty = set;
 	m_dirty = dirty();
-	if (m_dirty!=set)//eventually didn't change
-		return;
+//	if (m_dirty!=set)//eventually didn't change
+//		return;
 	if (m_parentView) {
 		m_parentView->setDirty(m_dirty);
 	}
