@@ -4971,9 +4971,12 @@ void KSpreadView::refreshView()
     else
       d->frame->setGeometry( 0, top, width() - widthVScrollbar,
                              height() - heightHScrollbar - top );
-    d->horzScrollBar->setGeometry( width() / 2,
+                             
+    int hsleft = d->doc->showTabBar() ? (width()/2) : 0;
+    int hswidth = d->doc->showTabBar() ? (width()/2) : width();
+    d->horzScrollBar->setGeometry( hsleft,
                                    height() - heightHScrollbar,
-                                   width() / 2 - widthVScrollbar,
+                                   hswidth - widthVScrollbar,
                                    heightHScrollbar );
     d->horzScrollBar->setSteps( 20 /*linestep*/, d->horzScrollBar->width() /*pagestep*/);
   }
