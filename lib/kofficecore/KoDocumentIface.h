@@ -116,6 +116,8 @@ k_dcop:
     QString documentInfoCompanyName() const;
     QString documentInfoTitle() const;
     QString documentInfoAbstract() const;
+    QString documentInfoKeywords() const;
+    QString documentInfoSubject() const;
     QString documentInfoTelephone() const;
     QString documentInfoTelephoneWork() const;
     QString documentInfoTelephoneHome() const;
@@ -139,6 +141,8 @@ k_dcop:
     void setDocumentInfoStreet(const QString &text);
     void setDocumentInfoAbstract(const QString &text);
     void setDocumentInfoInitial(const QString & text);
+    void setDocumentInfoKeywords(const QString & text );
+    void setDocumentInfoSubject(const QString & text);
 
 public:
     virtual QCStringList functionsDynamic();

@@ -305,6 +305,55 @@ QString KoDocumentIface::documentInfoAbstract() const
         return aboutPage->abstract();
 }
 
+QString KoDocumentIface::documentInfoKeywords() const
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
+    if ( !aboutPage )
+    {
+        kdWarning() << "'About' page not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return aboutPage->keywords();
+}
+
+QString KoDocumentIface::documentInfoSubject() const
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
+    if ( !aboutPage )
+    {
+        kdWarning() << "'About' page not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return aboutPage->subject();
+}
+void KoDocumentIface::setDocumentInfoKeywords(const QString & text )
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
+    if ( !aboutPage )
+    {
+        kdWarning() << "'About' page not found in documentInfo !" << endl;
+    }
+    else
+       aboutPage->setKeywords(text);
+}
+
+void KoDocumentIface::setDocumentInfoSubject(const QString & text)
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
+    if ( !aboutPage )
+    {
+        kdWarning() << "'About' page not found in documentInfo !" << endl;
+    }
+    else
+       aboutPage->setSubject(text);
+}
+
 void KoDocumentIface::setDocumentInfoAuthorName(const QString & text)
 {
     KoDocumentInfo * info = m_pDoc->documentInfo();
