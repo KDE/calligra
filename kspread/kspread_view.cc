@@ -1251,7 +1251,7 @@ void ViewPrivate::initActions()
 
   // -- special action, only for developers --
 
-  actions->internalTests = new KAction( i18n("Run Internal Tests..."), "internalTests", 
+  actions->internalTests = new KAction( i18n("Run Internal Tests..."), "internalTests",
       Qt::CTRL+ Qt::SHIFT + Qt::Key_T, view, SLOT( runInternalTests() ), ac, "internalTests" );
 }
 
@@ -1585,10 +1585,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QObject::connect( d->doc, SIGNAL( sig_addAreaName( const QString & ) ), d->posWidget, SLOT( slotAddAreaName( const QString & ) ) );
 
     QObject::connect( d->doc, SIGNAL( sig_removeAreaName( const QString & ) ), d->posWidget, SLOT( slotRemoveAreaName( const QString & ) ) );
-    
-    QObject::connect( d->doc, SIGNAL( damagesFlushed( const QValueList<KSpread::Damage*>& ) ), 
+
+    QObject::connect( d->doc, SIGNAL( damagesFlushed( const QValueList<KSpread::Damage*>& ) ),
         this, SLOT( handleDamages( const QValueList<KSpread::Damage*>& ) ) );
-    
+
     KoView::setZoom( d->doc->zoomedResolutionY() /* KoView only supports one zoom */ ); // initial value
     //when kspread is embedded into konqueror apply a zoom=100
     //in konqueror we can't change zoom -- ### TODO ?
@@ -1655,7 +1655,7 @@ KSpreadView::~KSpreadView()
      * Note that canvas must the one to be created, since other
      * widgets might depend on it.
      */
-     
+
 void KSpreadView::initView()
 {
     d->viewLayout = new QGridLayout( this, 3, 4 );
@@ -1707,12 +1707,12 @@ void KSpreadView::initView()
     QWidget* bottomPart = new QWidget( this );
     d->tabScrollBarLayout = new QHBoxLayout( bottomPart );
     d->tabScrollBarLayout->setAutoAdd( true );
-    d->tabBar = new KoTabBar( bottomPart );    
+    d->tabBar = new KoTabBar( bottomPart );
     d->horzScrollBar = new QScrollBar( bottomPart, "ScrollBar_1" );
-    
+
     d->horzScrollBar->setRange( 0, 4096 );
     d->horzScrollBar->setOrientation( QScrollBar::Horizontal );
-    
+
     QObject::connect( d->tabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeTable( const QString& ) ) );
     QObject::connect( d->tabBar, SIGNAL( tabMoved( unsigned, unsigned ) ),
       this, SLOT( moveTable( unsigned, unsigned ) ) );
@@ -1720,16 +1720,16 @@ void KSpreadView::initView()
       this, SLOT( popupTabBarMenu( const QPoint& ) ) );
     QObject::connect( d->tabBar, SIGNAL( doubleClicked() ),
       this, SLOT( slotRename() ) );
-      
-    d->viewLayout->setColStretch( 1, 10 );  
-    d->viewLayout->setRowStretch( 2, 10 );  
+
+    d->viewLayout->setColStretch( 1, 10 );
+    d->viewLayout->setRowStretch( 2, 10 );
     d->viewLayout->addMultiCellWidget( d->toolWidget, 0, 0, 0, 2 );
-    d->viewLayout->addMultiCellWidget( d->hBorderWidget, 1, 1, 1, 2 );    
+    d->viewLayout->addMultiCellWidget( d->hBorderWidget, 1, 1, 1, 2 );
     d->viewLayout->addWidget( d->vBorderWidget, 2, 0 );
     d->viewLayout->addWidget( d->canvas, 2, 1 );
     d->viewLayout->addWidget( d->vertScrollBar, 2, 2 );
     d->viewLayout->addMultiCellWidget( bottomPart, 3, 3, 0, 2 );
-    
+
     KStatusBar * sb = statusBar();
     Q_ASSERT(sb);
     d->calcLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
@@ -4885,7 +4885,7 @@ void KSpreadView::refreshView()
 
   d->adjustActions( !table->isProtected() );
   d->actions->viewZoom->setZoom( d->doc->zoom() );
-  
+
   bool active = table->getShowFormula();
   if ( table && !table->isProtected() )
   {
@@ -4895,7 +4895,7 @@ void KSpreadView::refreshView()
   }
 
   d->tabBar->setReadOnly( !d->doc->isReadWrite() );
-    
+
   d->toolWidget->setShown( d->doc->showFormulaBar() );
   editWidget()->showEditWidget( d->doc->showFormulaBar() );
   d->hBorderWidget->setShown( d->doc->showColumnHeader() );
@@ -4906,15 +4906,16 @@ void KSpreadView::refreshView()
   if ( statusBar() ) statusBar()->setShown( d->doc->showStatusBar() );
 
   d->canvas->updatePosWidget();
-  
+
   d->hBorderWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
-  d->hBorderWidget->setMinimumHeight( d->doc->zoomItY( KSpreadFormat::globalRowHeight() + 2 ) );  
+  d->hBorderWidget->setMinimumHeight( d->doc->zoomItY( KSpreadFormat::globalRowHeight() + 2 ) );
   d->vBorderWidget->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
   d->vBorderWidget->setMinimumWidth( d->doc->zoomItX( YBORDER_WIDTH ) );
-  
+
   KSpreadSheet::LayoutDirection sheetDir = table->layoutDirection();
   bool interfaceIsRTL = QApplication::reverseLayout();
 
+  kdDebug()<<" sheetDir == KSpreadSheet::LeftToRight :"<<( sheetDir == KSpreadSheet::LeftToRight )<<endl;
   if ((sheetDir == KSpreadSheet::LeftToRight && !interfaceIsRTL) ||
       (sheetDir == KSpreadSheet::RightToLeft && interfaceIsRTL))
   {
@@ -6663,34 +6664,34 @@ void KSpreadView::handleDamages( const QValueList<Damage*>& damages )
     {
         Damage* damage = *it;
         if( !damage ) continue;
-        
+
         if( damage->type() == Damage::Sheet )
         {
             SheetDamage* sd = static_cast<SheetDamage*>( damage );
             KSpreadSheet* damagedSheet = sd->sheet();
-            
+
             if( sd->action() == SheetDamage::PropertiesChanged )
             {
                 CellBinding  * b = 0;
-                for ( b = damagedSheet->firstCellBinding(); b != 0; 
+                for ( b = damagedSheet->firstCellBinding(); b != 0;
                     b = damagedSheet->nextCellBinding() )
                         b->cellChanged( 0 );
 
-                d->activeSheet->setRegionPaintDirty( QRect(QPoint(0,0), 
+                d->activeSheet->setRegionPaintDirty( QRect(QPoint(0,0),
                     QPoint(KS_colMax, KS_rowMax)));
-                    
+
                 paintUpdates();
                 refreshView();
             }
-        
+
         }
-        
+
     }
 }
 
 void KSpreadView::runInternalTests()
 {
-    // run various tests, only for developers	
+    // run various tests, only for developers
     KSpread::TestRunner* runner = new KSpread::TestRunner();
     runner->exec();
     delete runner;

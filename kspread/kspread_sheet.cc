@@ -240,7 +240,6 @@ public:
   // password of protected sheet
   QCString password;
 
-  bool rightToLeft;
 
   bool showGrid;
   bool showFormula;
@@ -323,12 +322,13 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &tableName, const cha
     s_mapTables = new QIntDict<KSpreadSheet>;
 
   d = new SheetPrivate;
-  d->rightToLeft = false;
 
   d->id = s_id++;
   s_mapTables->insert( d->id, this );
   d->workbook = map;
   d->doc = map->doc();
+
+  d->layoutDirection = LeftToRight;
 
   d->defaultFormat = new KSpreadFormat( this, d->doc->styleManager()->defaultStyle() );
 
@@ -6838,6 +6838,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         QDomElement rowElement = rowNode.toElement();
         if( !rowElement.isNull() )
         {
+            kdDebug()<<" KSpreadSheet::loadOasis rowElement.tagName() :"<<rowElement.tagName()<<endl;
             if ( rowElement.tagName()=="table:table-column" )
             {
                 kdDebug ()<<" table-column found : index column before "<< indexCol<<endl;
