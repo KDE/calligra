@@ -27,18 +27,18 @@
 #include "karbon_part.h"
 #include "vrectangle.h"
 #include "vrectangletool.h"
-
+#include "vunitspinbox.h"
 
 VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart*part, QWidget* parent, const char* name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part(part)
 {
 	// add width/height-input:
 	m_widthLabel = new QLabel( i18n( "Width:" ), this );
-	m_width = new KDoubleNumInput( 0, this );
-	m_width->setSuffix( m_part->getUnitName() );
+	m_width = new VUnitDoubleSpinBox( 0.0, 1000.0, 0.5, 0.0, 2, this );
 	m_heightLabel = new QLabel( i18n( "Height:" ), this );
-	m_height = new KDoubleNumInput( 0, this );
-	m_height->setSuffix( m_part->getUnitName() );
+	m_height = new VUnitDoubleSpinBox( 0.0, 1000.0, 0.5, 0.0, 2, this );
+
+	refreshUnit();
 
 	setInsideMargin( 4 );
 	setInsideSpacing( 2 );
@@ -69,10 +69,10 @@ VRectangleTool::VRectangleOptionsWidget::setHeight( double value )
 }
 
 void
-VRectangleTool::VRectangleOptionsWidget::refreshUnit ()
+VRectangleTool::VRectangleOptionsWidget::refreshUnit()
 {
-	m_width->setSuffix( m_part->getUnitName() );
-	m_height->setSuffix( m_part->getUnitName() );
+	m_width->setUnit( m_part->getUnit() );
+	m_height->setUnit( m_part->getUnit() );
 }
 
 VRectangleTool::VRectangleTool( KarbonView* view )

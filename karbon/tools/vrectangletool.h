@@ -27,7 +27,7 @@
 
 #include "vshapetool.h"
 
-class KDoubleNumInput;
+class VUnitDoubleSpinBox;
 class KarbonPart;
 class QLabel;
 
@@ -55,14 +55,14 @@ private:
 		double height() const;
 		void setWidth( double value );
 		void setHeight( double value );
-		void refreshUnit ();
+		void refreshUnit();
 
 	private:
-		KDoubleNumInput	*m_width;
-		KDoubleNumInput	*m_height;
-		KarbonPart		*m_part;
-		QLabel			*m_heightLabel;
-		QLabel			*m_widthLabel;
+		VUnitDoubleSpinBox	*m_width;
+		VUnitDoubleSpinBox	*m_height;
+		KarbonPart			*m_part;
+		QLabel				*m_heightLabel;
+		QLabel				*m_widthLabel;
 	};
 
 	VRectangleOptionsWidget* m_optionsWidget;
