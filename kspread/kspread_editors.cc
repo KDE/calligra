@@ -213,7 +213,8 @@ void KSpreadTextEditor::handleKeyPressEvent( QKeyEvent * _ev )
 
     // this is ugly, and sort of hack
     // FIXME rewrite to use the real KSpreadTokenizer
-    for( unsigned i = 0; i < 10; i++ )
+    unsigned i;
+    for( i = 0; i < 10; i++ )
     {
       tmp =  m_pEdit->text().left( cur+i );
       tmp2 = m_pEdit->text().right( m_pEdit->text().length() - cur - i );
