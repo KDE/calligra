@@ -4244,7 +4244,7 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
     KoTextFormat *lastFormat = 0;
     int lastY = -1;
     // This is necessary with the current code, but in theory it shouldn't
-    // be necessary, if setMatrix really gives us fully proportionnal chars....
+    // be necessary, if Xft really gives us fully proportionnal chars....
 #define CHECK_PIXELXADJ
 
 #ifdef CHECK_PIXELXADJ
