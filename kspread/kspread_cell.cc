@@ -2160,10 +2160,20 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( QMAX( rect.left(),   corner.x() ),
-                      QMAX( rect.top(),    corner.y() + dt ),
-                      QMIN( rect.right(), corner.x() ),
-                      QMIN( rect.bottom(),  corner.y() + height - db ) );
+    //If we are on paper printout, we limit the length of the lines
+    //On paper, we always have full cells, on screen not
+    if ( painter.device()->isExtDev() )
+    {
+      painter.drawLine( QMAX( rect.left(),   corner.x() ),
+                        QMAX( rect.top(),    corner.y() + dt ),
+                        QMIN( rect.right(),  corner.x() ),
+                        QMIN( rect.bottom(), corner.y() + height - db ) );
+    }
+    else
+    {
+      painter.drawLine( corner.x(), corner.y() + dt,
+                        corner.x(), corner.y() + height - db );
+    }
   }
 
   /* should we do the right border? */
@@ -2193,10 +2203,20 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( QMAX( rect.left(),   corner.x() + width ),
-                      QMAX( rect.top(),    corner.y() + dt ),
-                      QMIN( rect.right(), corner.x() + width ),
-                      QMIN( rect.bottom(),  corner.y() + height - db ) );
+    //If we are on paper printout, we limit the length of the lines
+    //On paper, we always have full cells, on screen not
+    if ( painter.device()->isExtDev() )
+    {
+      painter.drawLine( QMAX( rect.left(),   corner.x() + width ),
+                        QMAX( rect.top(),    corner.y() + dt ),
+                        QMIN( rect.right(),  corner.x() + width ),
+                        QMIN( rect.bottom(), corner.y() + height - db ) );
+    }
+    else
+    {
+      painter.drawLine( corner.x() + width, corner.y() + dt,
+                        corner.x() + width, corner.y() + height - db );
+    }
   }
 
   /* should we do the top border? */
@@ -2225,10 +2245,20 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( QMAX( rect.left(),   corner.x() + dl ),
-                      QMAX( rect.top(),    corner.y() ),
-                      QMIN( rect.right(), corner.x() + width - dr ),
-                      QMIN( rect.bottom(),  corner.y() ) );
+    //If we are on paper printout, we limit the length of the lines
+    //On paper, we always have full cells, on screen not
+    if ( painter.device()->isExtDev() )
+    {
+      painter.drawLine( QMAX( rect.left(),   corner.x() + dl ),
+                        QMAX( rect.top(),    corner.y() ),
+                        QMIN( rect.right(),  corner.x() + width - dr ),
+                        QMIN( rect.bottom(), corner.y() ) );
+    }
+    else
+    {
+      painter.drawLine( corner.x() + dl,         corner.y(),
+                        corner.x() + width - dr, corner.y() );
+    }
   }
 
   /* should we do the bottom border? */
@@ -2257,10 +2287,20 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( QMAX( rect.left(),   corner.x() + dl ),
-                      QMAX( rect.top(),    corner.y() + height ),
-                      QMIN( rect.right(), corner.x() + width - dr ),
-                      QMIN( rect.bottom(),  corner.y() + height ) );
+    //If we are on paper printout, we limit the length of the lines
+    //On paper, we always have full cells, on screen not
+    if ( painter.device()->isExtDev() )
+    {
+      painter.drawLine( QMAX( rect.left(),   corner.x() + dl ),
+                        QMAX( rect.top(),    corner.y() + height ),
+                        QMIN( rect.right(),  corner.x() + width - dr ),
+                        QMIN( rect.bottom(), corner.y() + height ) );
+    }
+    else
+    {
+      painter.drawLine( corner.x() + dl,         corner.y() + height,
+                        corner.x() + width - dr, corner.y() + height );
+    }
   }
 }
 
