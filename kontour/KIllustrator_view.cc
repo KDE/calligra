@@ -203,45 +203,44 @@ void KIllustratorView::createMyGUI()
     kdDebug(38000)<<"inside createMyGUI(): a: "<<time.elapsed()<<" msecs elapsed"<<endl;
 
     // Tools
-    m_selectTool = new KToggleAction( i18n("Select objects"), "frame_edit", CTRL+Key_1, actionCollection(), "mouse" );
+    m_selectTool = new KToggleAction( i18n("Select objects"), "frame_edit", CTRL+Key_1, this, SLOT(slotSelectTool( ) ),actionCollection(), "mouse" );
     m_selectTool->setExclusiveGroup( "Tools" );
-    connect( m_selectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotSelectTool( bool ) ) );
 
-    m_pointTool = new KToggleAction( i18n("Edit points"), "pointtool", CTRL+Key_2, actionCollection(), "point" );
+
+    m_pointTool = new KToggleAction( i18n("Edit points"), "pointtool", CTRL+Key_2, this, SLOT(slotPointTool( ) ),actionCollection(), "point" );
     m_pointTool->setExclusiveGroup( "Tools" );
-    connect( m_pointTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPointTool( bool ) ) );
 
-    m_freehandTool = new KToggleAction( i18n("Freehand"), "freehandtool", CTRL+Key_3, actionCollection(), "freehand" );
+    m_freehandTool = new KToggleAction( i18n("Freehand"), "freehandtool", CTRL+Key_3, this, SLOT(slotFreehandTool( )), actionCollection(), "freehand" );
     m_freehandTool->setExclusiveGroup( "Tools" );
-    connect( m_freehandTool, SIGNAL( toggled( bool ) ), this, SLOT( slotFreehandTool( bool ) ) );
 
-    m_lineTool = new KToggleAction( i18n("Line"), "linetool", CTRL+Key_4, actionCollection(), "line" );
+
+    m_lineTool = new KToggleAction( i18n("Line"), "linetool", CTRL+Key_4, this, SLOT(slotLineTool( ) ), actionCollection(), "line" );
     m_lineTool->setExclusiveGroup( "Tools" );
-    connect( m_lineTool, SIGNAL( toggled( bool ) ), this, SLOT( slotLineTool( bool ) ) );
 
-    m_bezierTool = new KToggleAction( i18n("Bezier"), "beziertool", CTRL+Key_5, actionCollection(), "bezier" );
+
+    m_bezierTool = new KToggleAction( i18n("Bezier"), "beziertool", CTRL+Key_5, this, SLOT(slotBezierTool( )), actionCollection(), "bezier" );
     m_bezierTool->setExclusiveGroup( "Tools" );
-    connect( m_bezierTool, SIGNAL( toggled( bool ) ), this, SLOT( slotBezierTool( bool ) ) );
 
-    m_rectTool = new KToggleAction( i18n("Rectangle"), "recttool", CTRL+Key_6, actionCollection(), "rectangle" );
+
+    m_rectTool = new KToggleAction( i18n("Rectangle"), "recttool", CTRL+Key_6, this, SLOT(slotRectTool()), actionCollection(), "rectangle" );
     m_rectTool->setExclusiveGroup( "Tools" );
-    connect( m_rectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotRectTool( bool ) ) );
 
-    m_polygonTool = new KToggleAction( i18n("Polygon"), "polygontool", CTRL+Key_7, actionCollection(), "polygon" );
+
+    m_polygonTool = new KToggleAction( i18n("Polygon"), "polygontool", CTRL+Key_7, this, SLOT(slotPolygonTool( ) ), actionCollection(), "polygon" );
     m_polygonTool->setExclusiveGroup( "Tools" );
-    connect( m_polygonTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPolygonTool( bool ) ) );
 
-    m_ellipseTool = new KToggleAction( i18n("Ellipse"), "ellipsetool", CTRL+Key_8, actionCollection(), "ellipse" );
+
+    m_ellipseTool = new KToggleAction( i18n("Ellipse"), "ellipsetool", CTRL+Key_8, this, SLOT(slotEllipseTool( ) ), actionCollection(), "ellipse" );
     m_ellipseTool->setExclusiveGroup( "Tools" );
-    connect( m_ellipseTool, SIGNAL( toggled( bool ) ), this, SLOT( slotEllipseTool( bool ) ) );
 
-    m_textTool = new KToggleAction( i18n("Text"), "frame_text", CTRL+Key_9, actionCollection(), "text" );
+
+    m_textTool = new KToggleAction( i18n("Text"), "frame_text", CTRL+Key_9, this, SLOT( slotTextTool()), actionCollection(), "text" );
     m_textTool->setExclusiveGroup( "Tools" );
-    connect( m_textTool, SIGNAL( toggled( bool ) ), this, SLOT( slotTextTool( bool ) ) );
 
-    m_zoomTool = new KToggleAction( i18n("Zoom"), "viewmag", CTRL+Key_0, actionCollection(), "zoom" );
+
+    m_zoomTool = new KToggleAction( i18n("Zoom"), "viewmag", CTRL+Key_0, this, SLOT( slotZoomTool()), actionCollection(), "zoom" );
     m_zoomTool->setExclusiveGroup( "Tools" );
-    connect( m_zoomTool, SIGNAL( toggled( bool ) ), this, SLOT( slotZoomTool( bool ) ) );
+
 
     m_insertPartTool = new KoPartSelectAction( i18n("Insert Part"), "frame_query", this, SLOT( slotInsertPartTool( ) ), actionCollection(), "insertpart" );
     //m_insertPartTool->setExclusiveGroup( "Tools" );
@@ -314,18 +313,18 @@ void KIllustratorView::createMyGUI()
                          colorList,
                          actionCollection(), "colorbar" );
     // Node Toolbar
-    m_moveNode = new KToggleAction( i18n("Move Node "), "moveNode", 0, actionCollection(), "moveNode" );
+    m_moveNode = new KToggleAction( i18n("Move Node "), "moveNode", 0, this, SLOT( slotMoveNode()), actionCollection(), "moveNode" );
     m_moveNode->setExclusiveGroup( "Node" );
-    connect( m_moveNode, SIGNAL( toggled( bool ) ), this, SLOT( slotMoveNode( bool ) ) );
-    m_newNode = new KToggleAction( i18n("New Node"), "newNode", 0, actionCollection(), "newNode" );
+
+    m_newNode = new KToggleAction( i18n("New Node"), "newNode", 0, this, SLOT( slotNewNode()), actionCollection(), "newNode" );
     m_newNode->setExclusiveGroup( "Node" );
-    connect( m_newNode, SIGNAL( toggled( bool ) ), this, SLOT( slotNewNode( bool ) ) );
-    m_deleteNode = new KToggleAction( i18n("Delete Node "), "deleteNode", 0, actionCollection(), "deleteNode" );
+
+    m_deleteNode = new KToggleAction( i18n("Delete Node "), "deleteNode", 0, this, SLOT( slotDeleteNode()), actionCollection(), "deleteNode" );
     m_deleteNode->setExclusiveGroup( "Node" );
-    connect( m_deleteNode, SIGNAL( toggled( bool ) ), this, SLOT( slotDeleteNode( bool ) ) );
-    m_splitLine = new KToggleAction( i18n("Split line"), "split", 0, actionCollection(), "splitLine" );
+
+    m_splitLine = new KToggleAction( i18n("Split line"), "split", 0, this, SLOT( slotSplitLine()), actionCollection(), "splitLine" );
     m_splitLine->setExclusiveGroup( "Node" );
-    connect( m_splitLine, SIGNAL( toggled( bool ) ), this, SLOT( slotSplitLine( bool ) ) );
+
     m_normal->setChecked( true );
     m_showRuler->setChecked( true );
     m_showHelplines->setChecked(activeDocument()->showHelplines());
@@ -1127,7 +1126,13 @@ void KIllustratorView::slotPenChosen( const QColor & c  )
     }
 }
 
-void KIllustratorView::slotSelectTool( bool  )
+void KIllustratorView::slotSelectTool(bool b   )
+{
+    if ( b )
+        tcontroller->toolSelected( Tool::ToolSelect  );
+}
+
+void KIllustratorView::slotSelectTool(   )
 {
     if (  m_selectTool->isChecked() )
         tcontroller->toolSelected( Tool::ToolSelect  );
@@ -1155,7 +1160,7 @@ bool KIllustratorView::eventFilter(QObject *o, QEvent *e)
    return false;
 }
 
-void KIllustratorView::slotPointTool(bool )
+void KIllustratorView::slotPointTool( )
 {
     if ( m_pointTool->isChecked() )
         tcontroller->toolSelected( Tool::ToolEditPoint );
@@ -1180,7 +1185,7 @@ void KIllustratorView::toolActivated(Tool::ToolID id, bool b )
    }
 }
 
-void KIllustratorView::slotFreehandTool( bool  )
+void KIllustratorView::slotFreehandTool(   )
 {
     if ( m_freehandTool->isChecked() )
         tcontroller->toolSelected( Tool::ToolFreeHand );
@@ -1188,7 +1193,7 @@ void KIllustratorView::slotFreehandTool( bool  )
         m_freehandTool->setChecked( true ); // always one has to be checked !
 }
 
-void KIllustratorView::slotLineTool( bool  )
+void KIllustratorView::slotLineTool(  )
 {
 
     if ( m_lineTool->isChecked() )
@@ -1197,7 +1202,7 @@ void KIllustratorView::slotLineTool( bool  )
         m_lineTool->setChecked( true ); // always one has to be checked !
 }
 
-void KIllustratorView::slotBezierTool( bool  )
+void KIllustratorView::slotBezierTool(   )
 {
     if ( m_bezierTool->isChecked() )
         tcontroller->toolSelected( Tool::ToolBezier );
@@ -1205,7 +1210,7 @@ void KIllustratorView::slotBezierTool( bool  )
         m_bezierTool->setChecked( true ); // always one has to be checked !
 }
 
-void KIllustratorView::slotRectTool( bool  )
+void KIllustratorView::slotRectTool(   )
 {
     if ( m_rectTool->isChecked() )
         tcontroller->toolSelected( Tool::ToolRectangle );
@@ -1213,7 +1218,7 @@ void KIllustratorView::slotRectTool( bool  )
         m_rectTool->setChecked( true ); // always one has to be checked !
 }
 
-void KIllustratorView::slotPolygonTool( bool )
+void KIllustratorView::slotPolygonTool(  )
 {
     if ( m_polygonTool->isChecked() )
         tcontroller->toolSelected( Tool::ToolPolygon );
@@ -1221,7 +1226,7 @@ void KIllustratorView::slotPolygonTool( bool )
         m_polygonTool->setChecked( true ); // always one has to be checked !
 }
 
-void KIllustratorView::slotEllipseTool( bool  )
+void KIllustratorView::slotEllipseTool( )
 {
     if ( m_ellipseTool->isChecked() )
         tcontroller->toolSelected( Tool::ToolEllipse );
@@ -1229,7 +1234,7 @@ void KIllustratorView::slotEllipseTool( bool  )
         m_ellipseTool->setChecked( true ); // always one has to be checked
 }
 
-void KIllustratorView::slotTextTool( bool  )
+void KIllustratorView::slotTextTool(   )
 {
     if ( m_textTool->isChecked() )
         tcontroller->toolSelected( Tool::ToolText );
@@ -1237,7 +1242,7 @@ void KIllustratorView::slotTextTool( bool  )
         m_textTool->setChecked( true ); // always one has to be checked
 }
 
-void KIllustratorView::slotZoomTool( bool   )
+void KIllustratorView::slotZoomTool( )
 {
     if ( m_zoomTool->isChecked() )
         tcontroller->toolSelected( Tool::ToolZoom );
@@ -1253,26 +1258,40 @@ void KIllustratorView::slotInsertPartTool( )
 
 void KIllustratorView::slotMoveNode( bool b )
 {
-    if ( b )
-        editPointTool->setMode (EditPointTool::MovePoint);
+    if(b)
+        editPointTool->setMode(EditPointTool::MovePoint);
 }
 
-void KIllustratorView::slotNewNode( bool b )
+void KIllustratorView::slotMoveNode(  )
 {
-    if ( b )
+    if ( m_moveNode->isChecked() )
+        editPointTool->setMode(EditPointTool::MovePoint);
+    else
+        m_moveNode->setChecked( true ); // always one has to be checked
+}
+
+void KIllustratorView::slotNewNode(  )
+{
+    if ( m_newNode->isChecked() )
         editPointTool->setMode (EditPointTool::InsertPoint);
+    else
+        m_newNode->setChecked( true ); // always one has to be checked
 }
 
-void KIllustratorView::slotDeleteNode( bool b )
+void KIllustratorView::slotDeleteNode(  )
 {
-    if ( b )
+    if ( m_deleteNode->isChecked() )
         editPointTool->setMode (EditPointTool::RemovePoint);
+    else
+        m_deleteNode->setChecked( true ); // always one has to be checked
 }
 
-void KIllustratorView::slotSplitLine( bool b )
+void KIllustratorView::slotSplitLine(   )
 {
-    if ( b )
+    if ( m_splitLine->isChecked() )
         editPointTool->setMode (EditPointTool::Split);
+    else
+        m_splitLine->setChecked( true ); // always one has to be checked
 }
 
 void KIllustratorView::slotLayersPanel(bool b)
