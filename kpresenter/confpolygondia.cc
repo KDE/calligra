@@ -229,6 +229,7 @@ void ConfPolygonDia::slotReset()
     if ( oldCheckConcavePolygon )
     {
         m_convexPolygon->setChecked( false );
+
         polygonPreview->slotConcavePolygon();
     }
     else
@@ -236,6 +237,8 @@ void ConfPolygonDia::slotReset()
         m_convexPolygon->setChecked( true );
         polygonPreview->slotConvexPolygon();
     }
+    checkConcavePolygon = oldCheckConcavePolygon;
+
     m_concavePolygon->setChecked( oldCheckConcavePolygon );
     m_sharpness->setEnabled( oldCheckConcavePolygon );
     m_sharpness->setValue( oldSharpnessValue );
