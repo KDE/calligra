@@ -94,6 +94,7 @@ public:
 
 protected:
     void contentsDropEvent( QDropEvent *e );
+    void movableDropEvent( QListViewItem* parent, QListViewItem* target );
     OutlineSlideItem* slideItem( int pageNumber );
 
 signals: // all page numbers 0-based

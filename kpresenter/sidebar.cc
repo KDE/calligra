@@ -726,23 +726,19 @@ void Outline::addItem( int /*pos*/ )
 // move an Outline Item so that not the hole list has to be recerated
 void Outline::moveItem( int oldPos, int newPos )
 {
-    int page = 0;
-
+    kdDebug(33001)<< "Outline::moveItem " << oldPos << " to " << newPos << endl;
+    
     int lowPage = oldPos > newPos ? newPos : oldPos;
     int highPage = oldPos < newPos ? newPos : oldPos;
-	
+    
     // update, for all between lowPage & highPage
-    QListViewItemIterator it( this );
-    for ( ; it.current(); ++it ) {
-        if ( page >= lowPage && page <= highPage) {
-            OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(it.current());
-                if( slideItem ) {
-            	    KPrPage* newPage = doc->pageList().at(page);
-				    slideItem->setPage( newPage );
-                    if ( page == highPage ) return;
-				}
-        }
-        page++;
+    int page = lowPage;
+    OutlineSlideItem* item = slideItem( page );
+    for( ; item ; ++page ) {
+        KPrPage* newPage = doc->pageList().at( page );
+        item->setPage( newPage );
+        item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() );
+        if ( page == highPage ) break;
     }
 }
 
@@ -836,6 +832,16 @@ void Outline::contentsDropEvent( QDropEvent *e )
     connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
 }
 
+// when item is about to move (using drag-and-drop), make sure:
+// it's not moved right after object. only slides can move, objects can't.
+void Outline::movableDropEvent( QListViewItem* parent, QListViewItem* target )
+{
+    // slide doesn't have parent (always 0)
+    if( parent ) return;
+    
+    KListView::movableDropEvent( parent, target );
+}
+
 void Outline::movedItems( QListViewItem *i, QListViewItem *, QListViewItem *newAfter )
 {
     movedItem = i;
@@ -845,15 +851,17 @@ void Outline::movedItems( QListViewItem *i, QListViewItem *, QListViewItem *newA
 
 void Outline::doMoveItems()
 {
-    int num = movedItem->text( 1 ).toInt() - 1;
-    int numNow;
-    if ( !movedAfter ) {
-        numNow = 0;
-    } else {
-        numNow = movedAfter->text( 1 ).toInt();
-        if ( numNow > num )
-            numNow--;
-    }
+    OutlineSlideItem* srcItem = dynamic_cast<OutlineSlideItem*>(movedItem);
+    if( !srcItem ) return;
+    
+    int num = doc->pageList().find( srcItem->page() );
+    
+    OutlineSlideItem* dstItem = dynamic_cast<OutlineSlideItem*>(movedAfter);
+    if( movedAfter && !dstItem ) return;
+
+    int numNow = movedAfter ? doc->pageList().find( dstItem->page() ) : 0;
+    if ( numNow < num ) numNow++;
+    
     if(num!=numNow) {
         emit movePage( num, numNow );
         // this has to be done because moving a page is take + insert the page
