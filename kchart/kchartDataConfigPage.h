@@ -17,56 +17,43 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KCHARTFONTCONFIGPAGE_H__
-#define __KCHARTFONTCONFIGPAGE_H__
+#ifndef __KCHARTDATACONFIGPAGE_H__
+#define __KCHARTDATACONFIGPAGE_H__
 
 #include <qwidget.h>
 #include <qbutton.h>
 
 #include "kchartcolorarray.h"
 #include "kchartDataEditor.h"
-class QLineEdit;
-class QListBox;
-class QPushButton;
+
+class QRadioButton;
 
 namespace KChart
 {
 
 class KChartParams;
 
-class KChartFontConfigPage : public QWidget
+class KChartDataConfigPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartFontConfigPage( KChartParams* params,QWidget* parent, KoChart::Data *dat);
+    KChartDataConfigPage( KChartParams* params, QWidget* parent,
+			  KoChart::Data *dat);
     void init();
     void apply();
-    void initList();
 
 public slots:
-    void changeLabelFont();
+
 private:
-    KChartParams* _params;
-    QLineEdit *font;
-    QListBox *list;
-    QPushButton *fontButton;
-    QFont xTitle;
-    QFont yTitle;
-    QFont label;
-    QFont yAxis;
-    QFont xAxis;
-    QFont legend;
-    QButton::ToggleState xTitleIsRelative;
-    QButton::ToggleState yTitleIsRelative;
-    QButton::ToggleState labelIsRelative;
-    QButton::ToggleState yAxisIsRelative;
-    QButton::ToggleState xAxisIsRelative;
-    QButton::ToggleState legendIsRelative;
+    KChartParams *m_params;
+
+    QRadioButton* m_rowMajor;
+    QRadioButton* m_colMajor;
+
     KoChart::Data *data;
 };
 
 }  //KChart namespace
 
 #endif
-

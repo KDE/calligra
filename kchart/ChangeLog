@@ -1,3 +1,12 @@
+2005-02-19  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+
+	Start of a new page in the config dialog for configuring Data.
+	This is not yet finished.
+	* kchartDataConfigPage.h: New file
+	* kchartDataConfigPage.cc: New file
+	* kchartConfigDialog.h (KChartConfigDialog::m_datapage): New member
+	* kchartConfigDialog.cc (KChartConfigDialog): Create the data page
+
 2005-01-07  Raphael Langerhorst <raphael-langerhorst@gmx.at>
 
 	Put all KChart classes into the KChart namespace

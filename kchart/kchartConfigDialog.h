@@ -36,6 +36,7 @@ class KChartParameterConfigPage;
 class KChartParameter3dConfigPage;
 class KChartParameterPieConfigPage;
 class KChartFontConfigPage;
+class KChartDataConfigPage;
 class KChartPieConfigPage;
 class KChartComboPage;
 class KChartBackgroundPixmapConfigPage;
@@ -59,6 +60,7 @@ signals:
 protected:
     KChartParams                 *m_params;
 
+    KChartDataConfigPage         *m_datapage;
     KChartSubTypeChartPage       *m_subTypePage;
     KChartHeaderFooterConfigPage *m_headerfooterpage;
     KChartLegendConfigPage       *m_legendPage;
@@ -68,7 +70,7 @@ protected:
     KChartColorConfigPage* _colorpage;
     KChartParameter3dConfigPage*_parameter3dpage;
     KChartParameterPieConfigPage*_parameterpiepage;
-    KChartFontConfigPage*_parameterfontpage;
+    KChartFontConfigPage  *_parameterfontpage;
     KChartPieConfigPage*_piepage;
     KChartBackgroundPixmapConfigPage* _backgroundpixpage;
     //KChartComboPage *_hlcChart;

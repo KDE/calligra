@@ -28,6 +28,7 @@
 #include "kchartColorConfigPage.h"
 #include "kchartParameterPieConfigPage.h"
 #include "kchartFontConfigPage.h"
+#include "kchartDataConfigPage.h"
 #include "kchartComboConfigPage.h"
 #include "kchartParameterConfigPage.h"
 #include "kchartPieConfigPage.h"
@@ -53,6 +54,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     QTabDialog( parent, "Chart config dialog", true ),
     m_params( params ),
 
+    m_datapage(0),
     m_subTypePage(0),
     m_headerfooterpage(0),
     m_legendPage(0),
@@ -104,6 +106,10 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     }
     else if( flags & KC_ALL )
     {
+	// The data page
+        m_datapage = new KChartDataConfigPage(m_params, this, dat);
+        addTab( m_datapage, i18n( "&Data" ) );
+
 	// The subtype page
         initSubtypePage();
 
@@ -183,6 +189,10 @@ void KChartConfigDialog::apply()
     kdDebug(35001) << "***KChartConfig::apply()\n";
     // Copy application data from dialog into parameter structure that is also
     // being used by the application.
+
+    // Data page
+    if (m_datapage)
+        m_datapage->apply();
 
     // color page
 
@@ -277,7 +287,11 @@ void KChartConfigDialog::apply()
 
 void KChartConfigDialog::defaults()
 {
-    // color page
+    // Data page
+    if (m_datapage)
+        m_datapage->init();
+
+    // Color page
     if(_colorpage)
     {
         _colorpage->setLineColor( m_params->outlineDataColor() );
