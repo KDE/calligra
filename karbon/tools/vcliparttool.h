@@ -37,95 +37,95 @@ class QHButtonGroup;
 
 class VClipartIconItem : public KoIconItem
 {
-	public:
-		VClipartIconItem( const VObject* clipart, QString filename );
-		VClipartIconItem( const VClipartIconItem& item );
-		~VClipartIconItem();
+public:
+	VClipartIconItem( const VObject* clipart, QString filename );
+	VClipartIconItem( const VClipartIconItem& item );
+	~VClipartIconItem();
 		
-		virtual QPixmap& thumbPixmap() const { return (QPixmap&)m_thumbPixmap; }
-		virtual QPixmap& pixmap() const { return (QPixmap&)m_pixmap; }
-		const VObject* clipart() const { return m_clipart; }
-		QString filename() const { return m_filename; }
-		bool canDelete() const { return m_delete; }
-		VClipartIconItem* clone();
+	virtual QPixmap& thumbPixmap() const { return (QPixmap&)m_thumbPixmap; }
+	virtual QPixmap& pixmap() const { return (QPixmap&)m_pixmap; }
+	const VObject* clipart() const { return m_clipart; }
+	QString filename() const { return m_filename; }
+	bool canDelete() const { return m_delete; }
+	VClipartIconItem* clone();
 
-	private:
-		QPixmap  m_pixmap;
-		QPixmap  m_thumbPixmap;
-		VObject* m_clipart;
-		QString  m_filename;
-		bool     m_delete;
+private:
+	QPixmap  m_pixmap;
+	QPixmap  m_thumbPixmap;
+	VObject* m_clipart;
+	QString  m_filename;
+	bool     m_delete;
 }; // VClipartIconItem
 
 class VClipartWidget : public QFrame
 {
-	Q_OBJECT
+Q_OBJECT
+public:
+	VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonView* view, QWidget* parent = 0L );
+	~VClipartWidget();
 
-	public:
-		VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonView* view, QWidget* parent = 0L );
-		~VClipartWidget();
+	VClipartIconItem* selectedClipart();
 
-		VClipartIconItem* selectedClipart();
+public slots:
+	void addClipart();
+	void deleteClipart();
+	void clipartSelected( KoIconItem* item );
 
-	public slots:
-		void addClipart();
-		void deleteClipart();
-		void clipartSelected( KoIconItem* item );
-		
-		void slotButtonClicked( int id );
+	void slotButtonClicked( int id );
 
-	private:
-		KoIconChooser*        m_clipartChooser;
-		QHButtonGroup*        m_buttonGroup;
-		QToolButton*          m_importClipartButton;
-		QToolButton*          m_deleteClipartButton;
-		KarbonView*           m_view;
-		VClipartIconItem*     m_clipartItem;
+private:
+	KoIconChooser*        m_clipartChooser;
+	QHButtonGroup*        m_buttonGroup;
+	QToolButton*          m_importClipartButton;
+	QToolButton*          m_deleteClipartButton;
+	KarbonView*           m_view;
+	VClipartIconItem*     m_clipartItem;
+	VClipartIconItem*     m_selectedItem;
 }; // VClipartWidget
 
 class VClipartTool : public VTool
 {
-	public:
-		VClipartTool( KarbonView* view );
-		~VClipartTool();
+public:
+	VClipartTool( KarbonView* view );
+	~VClipartTool();
 
-		virtual void activate();
+	virtual void activate();
 
-		virtual QString name() { return "Clipart tool"; }
-		virtual QString contextHelp();
-		virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	virtual QString name() { return "Clipart tool"; }
+	virtual QString contextHelp();
+	virtual QWidget* optionsWidget() { return m_optionsWidget; }
 
-	protected:
-		virtual void draw();
-	
-		virtual void mouseButtonPress();
-		virtual void mouseButtonRelease();
-		virtual void mouseDrag();
-		virtual void mouseDragShiftPressed();
-		virtual void mouseDragShiftReleased();
-		virtual void mouseDragRelease();
-		virtual void cancel();
+protected:
+	virtual void draw();
 
-	private:
-		class VClipartCmd : public VCommand
-		{
-			public:
-				VClipartCmd( VDocument* doc, const QString& name, VObject* clipart );
-				virtual ~VClipartCmd() {}
+	virtual void mouseButtonPress();
+	virtual void mouseButtonRelease();
+	virtual void mouseDrag();
+	virtual void mouseDragShiftPressed();
+	virtual void mouseDragShiftReleased();
+	virtual void mouseDragRelease();
+	virtual void cancel();
 
-				virtual void execute();
-				virtual void unexecute();
-				virtual bool isExecuted() { return m_executed; }
+private:
+	class VClipartCmd : public VCommand
+	{
+		public:
+			VClipartCmd( VDocument* doc, const QString& name, VObject* clipart );
+			virtual ~VClipartCmd() {}
 
-			private:
-				VObject* m_clipart;
-				bool     m_executed;
-		}; // VClipartCmd
+			virtual void execute();
+			virtual void unexecute();
+			virtual bool isExecuted() { return m_executed; }
 
-		VObject*        m_clipart;
-		KoPoint         m_last;
-		VClipartWidget* m_optionsWidget;
-		bool            m_keepRatio;
+		private:
+			VObject* m_clipart;
+			bool     m_executed;
+	}; // VClipartCmd
+
+	VObject*        m_clipart;
+	KoPoint         m_last;
+	VClipartWidget* m_optionsWidget;
+	bool            m_keepRatio;
 }; // VClipartTool
 
 #endif /* __VCLIPARTTOOL_H__ */

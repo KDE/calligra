@@ -144,7 +144,8 @@ void VClipartWidget::clipartSelected( KoIconItem* item )
 		delete m_clipartItem;
 		VClipartIconItem* clipartItem = (VClipartIconItem*)item;
 		m_deleteClipartButton->setEnabled( clipartItem->canDelete() );
-		m_clipartItem = clipartItem->clone();
+		m_selectedItem = clipartItem;
+		m_clipartItem  = clipartItem->clone();
 	}
 } // VClipartWidget::clipartSelected
 
@@ -183,7 +184,7 @@ void VClipartWidget::deleteClipart()
 {
 	VClipartIconItem* clipartItem = m_clipartItem;
 	KarbonFactory::rServer()->removeClipart( clipartItem );
-	m_clipartChooser->removeItem( clipartItem );
+	m_clipartChooser->removeItem( m_selectedItem );
 	m_clipartChooser->updateContents();
 } // VClipartWidget::deleteClipart
 
