@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 2002-2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2002-2003 Norbert Andres <nandres@web.de>
    Copyright 2002 John Dailey <dailey@vt.edu>
@@ -10,7 +10,7 @@
    Copyright 1998-2000 Torben Weis <weis@kde.org>
    Copyright 1998-1999 Stephan Kulow <coolo@kde.org>
    Copyright 1998 Reginald Stadlbauer <reggie@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -575,10 +575,10 @@ void KSpreadSheet::autofill( QRect &src, QRect &dest )
 
     doc()->emitBeginOperation();
 
-    if ( !m_pDoc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
-      KSpreadUndoAutofill *undo = new KSpreadUndoAutofill( m_pDoc, this, dest );
-      m_pDoc->addCommand( undo );
+      KSpreadUndoAutofill *undo = new KSpreadUndoAutofill( doc(), this, dest );
+      doc()->addCommand( undo );
     }
 
     // Fill from left to right
