@@ -63,7 +63,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     : KDataTool(parent, name)
 {
     
-    m_dialog = new KDialogBase(KJanusWidget::Plain, i18n("KWord Thesaurus & WordNet"),
+    m_dialog = new KDialogBase(KJanusWidget::Plain, i18n("Related words"),
         KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok);
     m_dialog->setButtonOKText(i18n("Replace"));
     m_dialog->setHelp(QString::null, "thesaurus");
