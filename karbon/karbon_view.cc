@@ -127,10 +127,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		m_strokeDocker = new VStrokeDocker( part(), this );
 
 		m_TransformDocker = new VTransformDocker( part(), this );
-
-		//create toolbars
-		m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
-		mainWindow()->addToolBar( m_selectToolBar );
 	}
 
 	setNumberOfRecentFiles( part()->maxRecentFiles() );
@@ -227,6 +223,10 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 			connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
 			connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
 			selectionChanged();
+
+			//create toolbars
+			m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
+			mainWindow()->addToolBar( m_selectToolBar );
 
 			m_documentDocker = new VDocumentDocker( this );
 			mainWindow()->addDockWindow( m_documentDocker, DockRight );
