@@ -798,7 +798,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     {
         if ( (*fIt)->runAround() == KWFrame::RA_BOUNDINGRECT )
         {
-            KoRect rectOnTop = theFrame->intersect( (*fIt)->outerKoRect() );
+            KoRect rectOnTop = theFrame->intersect( (*fIt)->runAroundRect() );
 #ifdef DEBUG_MARGINS
             kdDebugBody(32002) << "   getMargins found rect-on-top at (normal coords) " << rectOnTop << endl;
 #endif
@@ -1078,7 +1078,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
         {
             if ( (*fIt)->runAround() == KWFrame::RA_SKIP )
             {
-                KoRect rectOnTop = frameIt.current()->intersect( (*fIt)->outerKoRect() );
+                KoRect rectOnTop = frameIt.current()->intersect( (*fIt)->runAroundRect() );
                 QPoint iTop, iBottom; // top and bottom in internal coordinates
                 if ( documentToInternal( rectOnTop.topLeft(), iTop ) &&
                      iTop.y() <= yp + hp &&

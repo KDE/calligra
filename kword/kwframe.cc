@@ -279,6 +279,16 @@ KoRect KWFrame::outerKoRect() const
     return outerRect;
 }
 
+KoRect KWFrame::runAroundRect() const
+{
+    KoRect raRect = outerKoRect();
+    raRect.rLeft() -= m_runAroundGap;
+    raRect.rTop() -= m_runAroundGap;
+    raRect.rRight() += m_runAroundGap;
+    raRect.rBottom() += m_runAroundGap;
+    return raRect;
+}
+
 void KWFrame::save( QDomElement &frameElem )
 {
     // setAttribute( double ) uses a default precision of 6, and this seems

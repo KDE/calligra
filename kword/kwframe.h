@@ -165,12 +165,20 @@ public:
     void setTopBorder( KoBorder _brd ) { brd_top = _brd; }
     void setBottomBorder( KoBorder _brd ) { brd_bottom = _brd; }
 
-    /** Return the _zoomed_ rectangle for this frame, including the border - for drawing */
+    /** Return the _zoomed_ rectangle for this frame, including the border - for drawing
+     */
     QRect outerRect() const;
+
     /** Return the unzoomed rectangle, including the border, for the frames-on-top list.
-        The default border of size 1-pixel that is drawn on screen is _not_ included here
-        [since it depends on the zoom] */
+     * The default border of size 1-pixel that is drawn on screen is _not_ included here
+     * [since it depends on the zoom]
+     */
     KoRect outerKoRect() const;
+
+    /** Return the rectangle for this frame including the border and the runaround gap.
+     * This is the rectangle that the surrounding text must run around.
+     */
+    KoRect runAroundRect() const;
 
     /** Resize handles (in kwcanvas.h) are the dots that are drawn on selected
        frames, this creates and deletes them */

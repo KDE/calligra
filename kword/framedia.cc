@@ -550,7 +550,6 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
     form1Layout->addItem( spacer_2 );
 
 
-    eRGap->setEnabled( false ); // ### not implemented currently
     bool show=true;
     KWFrame::RunAround ra = KWFrame::RA_NO;
     if ( frame )
