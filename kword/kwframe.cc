@@ -77,7 +77,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
 
 KWFrame::~KWFrame()
 {
-    //kdDebug() << "KWFrame::~KWFrame " << this << endl;
+    kdDebug() << "KWFrame::~KWFrame " << this << endl;
     if (selected)
         removeResizeHandles();
 }
@@ -1475,7 +1475,8 @@ void KWClipartFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRec
     QSize s ( kWordDocument()->zoomItX( frame->width() ), kWordDocument()->zoomItY( frame->height() ) );
     painter->save();
     QRect vp( 0, 0, s.width(), s.height() );
-    painter->setViewport( painter->worldMatrix().map( vp ) ); // stolen from killu
+    painter->setViewport( painter->worldMatrix().map( vp ) ); // stolen from kontour
+    painter->setWorldMatrix (QWMatrix ());
     painter->drawPicture( *m_clipart.picture() );
     painter->restore();
 }

@@ -4249,9 +4249,14 @@ QTextCursor KWTextFrameSetEdit::selectWordUnderCursor()
 {
     QTextCursor c1 = *cursor;
     QTextCursor c2 = *cursor;
-    if ( cursor->index() > 0 && !cursor->parag()->at( cursor->index()-1 )->c.isSpace() && !cursor->parag()->at( cursor->index()-1 )->isCustom())
+    if ( cursor->index() > 0
+         && !cursor->parag()->at( cursor->index()-1 )->c.isSpace()
+         && !cursor->parag()->at( cursor->index()-1 )->isCustom())
         c1.gotoWordLeft();
-    if ( !cursor->parag()->at( cursor->index() )->c.isSpace() && !cursor->atParagEnd() && !cursor->parag()->at( cursor->index() )->isCustom())
+
+    if ( !cursor->parag()->at( cursor->index() )->c.isSpace()
+         && !cursor->atParagEnd()
+         && !cursor->parag()->at( cursor->index() )->isCustom())
         c2.gotoWordRight();
 
     textDocument()->setSelectionStart( QTextDocument::Standard, &c1 );
