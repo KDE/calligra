@@ -85,7 +85,7 @@ static void TreatAbiProps(QString strProps,QValueList<AbiProps> &abiPropsList)
                 position=result+1;
             }
         }
-        kdDebug() << "========== (Property :" << name << "=" << value <<":)"<<endl;
+        kdDebug(30506) << "========== (Property :" << name << "=" << value <<":)"<<endl;
         //Now treat the name and the value that we have just found
         QValueList<AbiProps>::Iterator iterator;
         for (iterator=abiPropsList.begin();iterator!=abiPropsList.end();iterator++)
@@ -211,12 +211,12 @@ static void FillStandardLayout(QDomElement& layoutElement)
 bool StructureParser :: startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes)
 {
     //Warning: be careful that the element names can be lower case or upper case (not very XML)
-    kdDebug() << indent << " <" << name << ">" << endl;
+    kdDebug(30506) << indent << " <" << name << ">" << endl;
     indent += "*"; //DEBUG
     
     if (structureStack.isEmpty())
     {
-        kdError() << "Stack is empty!! Aborting! (in StructureParser::startElement)" << endl;
+        kdError(30506) << "Stack is empty!! Aborting! (in StructureParser::startElement)" << endl;
         return false;
     }
 
@@ -240,7 +240,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
             abiPropsList.append( AbiProps("text-decoration",&strDecoration));
             abiPropsList.append( AbiProps("text-position",&strTextPosition));
             abiPropsList.append( AbiProps("color",&strColour));
-            kdDebug()<< "========== props=\"" << attributes.value("props") << "\"" << endl;
+            kdDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
             // Treat the props attributes in the two available flavors: lower case and upper case.
             TreatAbiProps(attributes.value("props"),abiPropsList);
             TreatAbiProps(attributes.value("PROPS"),abiPropsList);
@@ -275,7 +275,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         }
         else
         {//we are not nested correctly, so consider it a parse error!
-            kdError() << "Abiword Import: parse error <c> tag not nested in neither a <p>  nor a <c> tag" << endl;
+            kdError(30506) << "Abiword Import: parse error <c> tag not nested in neither a <p>  nor a <c> tag" << endl;
             return false;
         }
     }
@@ -318,11 +318,11 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
 bool StructureParser :: endElement( const QString&, const QString& , const QString& name)
 {
     indent.remove( 0, 1 ); // DEBUG
-    kdDebug() << indent << " </" << name << ">" << endl;
+    kdDebug(30506) << indent << " </" << name << ">" << endl;
 
     if (structureStack.isEmpty())
     {
-        kdError() << "Stack is empty!! Aborting! (in StructureParser::endElement)" << endl;
+        kdError(30506) << "Stack is empty!! Aborting! (in StructureParser::endElement)" << endl;
         return false;
     }
 
@@ -336,7 +336,7 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
         }
         else
         {
-            kdError() << "Wrong element type!! Aborting! (</c> in StructureParser::endElement)" << endl;
+            kdError(30506) << "Wrong element type!! Aborting! (</c> in StructureParser::endElement)" << endl;
             return false;
         }
     }
@@ -348,7 +348,7 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
         }
         else
         {
-            kdError() << "Wrong element type!! Aborting! (</p> in StructureParser::endElement)" << endl;
+            kdError(30506) << "Wrong element type!! Aborting! (</p> in StructureParser::endElement)" << endl;
             return false;
         }
     }
@@ -362,16 +362,16 @@ bool StructureParser :: characters ( const QString & ch )
     // DEBUG start
     if (ch=="\n")
     {
-        kdDebug() << indent << " (LINEFEED)" << endl;
+        kdDebug(30506) << indent << " (LINEFEED)" << endl;
     }
     else
     {
-        kdDebug() << indent << " :" << ch << ":" << endl;
+        kdDebug(30506) << indent << " :" << ch << ":" << endl;
     }
     // DEBUG end
     if (structureStack.isEmpty())
     {
-        kdError() << "Stack is empty!! Aborting! (in StructureParser::characters)" << endl;
+        kdError(30506) << "Stack is empty!! Aborting! (in StructureParser::characters)" << endl;
         return false;
     }
     StackItem *stackItem=structureStack.current();
@@ -474,7 +474,7 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
 
 
     //The warning is serious!! (KWord crashes if it does not find a few things in its XML code)
-    kdDebug()<<"WARNING: AbiWord to KWord Import filter can crash KWord!!"<<endl;
+    kdDebug(30506)<<"WARNING: AbiWord to KWord Import filter can crash KWord!!"<<endl;
 
     QString fileToParseName(fileIn); //Name of the file to parse
     bool otherFile=false; //Do we have an intermediary file;
@@ -489,7 +489,7 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
         strExt=fileIn.mid(result);
     }
 
-    kdDebug() << "AbiWord Filter: -" << strExt << "-" << endl;
+    kdDebug(30506) << "AbiWord Filter: -" << strExt << "-" << endl;
 
     if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (logical extension)
         ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
@@ -508,7 +508,7 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
         gzFile gzfile=gzopen(fileIn.local8Bit(),"rb");
         if (!gzfile)
         {
-            kdError() << "Could not open gzipped file! Aborting!" << endl;
+            kdError(30506) << "Could not open gzipped file! Aborting!" << endl;
             return false;
         }
         for (;;)
@@ -524,7 +524,7 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
                 else
                 {
                     // error!
-                    kdError() << "Cannot write temp file! Aborting!" << endl;
+                    kdError(30506) << "Cannot write temp file! Aborting!" << endl;
                     gzclose(gzfile);
                     return false;
                 }
@@ -537,13 +537,13 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
             else
             {
                 // error!
-                kdError() << "Error reading gzipped file! Aborting!" << endl;
+                kdError(30506) << "Error reading gzipped file! Aborting!" << endl;
                 gzclose(gzfile);
                 return false;
             }
         }
         gzclose(gzfile);
-        kdDebug()<< "Gzipped file uncompressed!" << endl;
+        kdDebug(30506)<< "Gzipped file uncompressed!" << endl;
 
         fileToParseName=tempFileIn.name();
         otherFile=true;
@@ -579,7 +579,7 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     QXmlInputSource source(in);
     if (!reader.parse( source ))
     {
-        kdError() << "AbiWord Import: Parsing unsuccessful. Aborting!" << endl;
+        kdError(30506) << "AbiWord Import: Parsing unsuccessful. Aborting!" << endl;
         return false;
     }
 
@@ -593,7 +593,7 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     KoStore out=KoStore(fileOut, KoStore::Write);
     if(!out.open("root"))
     {
-        kdError() << "AbiWord Import unable to open output file!" << endl;
+        kdError(30506) << "AbiWord Import unable to open output file!" << endl;
         out.close();
         return false;
     }
@@ -603,7 +603,7 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     out.write((const char*)strOut, strOut.length());
     out.close();
 
-    kdDebug() << "Now importing to KWord!" << endl;
+    kdDebug(30506) << "Now importing to KWord!" << endl;
 
     return true;
 }
