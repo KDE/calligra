@@ -4,7 +4,7 @@ INCLUDES= -I$(srcdir) -I$(top_srcdir)/kspread $(KOFFICE_INCLUDES) \
 -I$(top_srcdir)/lib/kscript -I$(top_srcdir)/lib/koscript $(all_includes)
 
 ####### Files
-lib_LTLIBRARIES = libgnumericexport.la libgnumericimport.la 
+kde_module_LTLIBRARIES = libgnumericexport.la libgnumericimport.la 
 
 libgnumericexport_la_SOURCES = gnumericexport.cc gnumericexport_factory.cc
 libgnumericexport_la_LDFLAGS = -module -avoid-version -no-undefined
