@@ -106,50 +106,6 @@ VCanvas::setYMirroring( bool edit )
 	p->setWorldMatrix( mat );
 }
 
-// TODO maybe this belongs in VDocument
-void
-drawPage( VPainter *p )
-{
-#define LEFT   20
-#define RIGHT  550
-#define BOTTOM 20
-#define TOP    830
-
-	p->setPen( Qt::black );
-	p->setBrush( Qt::white );
-	p->newPath();
-	p->moveTo( KoPoint( LEFT,  BOTTOM ) );
-	p->lineTo( KoPoint( RIGHT, BOTTOM ) );
-	p->lineTo( KoPoint( RIGHT, TOP ) );
-	p->lineTo( KoPoint( LEFT,  TOP ) );
-	p->lineTo( KoPoint( LEFT,  BOTTOM ) );
-	p->fillPath();
-	p->strokePath();
-
-	p->setPen( Qt::NoPen );
-	p->setBrush( Qt::black );
-	p->newPath();
-	p->moveTo( KoPoint( RIGHT,     BOTTOM - 2 ) );
-	p->lineTo( KoPoint( RIGHT + 2, BOTTOM - 2 ) );
-	p->lineTo( KoPoint( RIGHT + 2, TOP ) );
-	p->lineTo( KoPoint( RIGHT,     TOP ) );
-	p->fillPath();
-
-	p->newPath();
-	p->moveTo( KoPoint( LEFT,  BOTTOM ) );
-	p->lineTo( KoPoint( LEFT,  BOTTOM - 2 ) );
-	p->lineTo( KoPoint( RIGHT, BOTTOM - 2 ) );
-	p->lineTo( KoPoint( RIGHT, BOTTOM ) );
-	p->fillPath();
-
-	p->newPath();
-	p->moveTo( KoPoint( LEFT,  TOP ) );
-	p->lineTo( KoPoint( LEFT,  TOP + 1 ) );
-	p->lineTo( KoPoint( RIGHT, TOP + 1 ) );
-	p->lineTo( KoPoint( RIGHT, TOP ) );
-	p->fillPath();
-}
-
 void
 VCanvas::viewportPaintEvent( QPaintEvent *e )
 {
@@ -164,8 +120,8 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		p->clear( QColor( 195, 194, 193 ) );
 		p->setZoomFactor( m_view->zoom() );
 		setYMirroring( false );
-		drawPage( p );
 
+		m_part->document().drawPage( p );
 		m_part->document().draw( p, &r );
 
 		m_bScrolling = false;
@@ -206,8 +162,8 @@ VCanvas::drawDocument( QPainter* /*painter*/, const KoRect& rect, bool drawVObje
 		p->clear( QColor( 195, 194, 193 ) );
 		p->setZoomFactor( m_view->zoom() );
 		setYMirroring( false );
-		drawPage( p );
 
+		m_part->document().drawPage( p );
 		m_part->document().draw( p, &rect );
 
 		p->end();
