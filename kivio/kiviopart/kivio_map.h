@@ -30,7 +30,7 @@ class QDomDocument;
 
 #include <qintdict.h>
 #include <qobject.h>
-#include <qlist.h>
+#include <qptrlist.h>
 /*
  * A map is a simple container for all pages. Usually a complete map is saved in one file.
  */
@@ -84,7 +84,7 @@ public:
    */
   KivioPage* nextPage();
 
-  QList<KivioPage>& pageList() { return m_lstPages; }
+  QPtrList<KivioPage>& pageList() { return m_lstPages; }
 
   /**
    * @return amount of pages in this map.
@@ -96,7 +96,7 @@ public:
   KivioDoc* doc();
 
 private:
-  QList<KivioPage> m_lstPages;
+  QPtrList<KivioPage> m_lstPages;
   KivioDoc* m_pDoc;
 };
 

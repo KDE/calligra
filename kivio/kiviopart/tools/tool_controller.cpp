@@ -142,7 +142,7 @@ void ToolController::init()
   tb->hide();
 
   tools.sort();
-  QListIterator<Tool> it(tools);
+  QPtrListIterator<Tool> it(tools);
   while ( it.current() ) {
     KAction* ta = it.current()->action();
     if ( ta && tb ) {
@@ -200,7 +200,7 @@ void ToolController::selectTool( Tool* t )
 
   m_pActiveTool = t;
 
-  QListIterator<Tool> it(tools);
+  QPtrListIterator<Tool> it(tools);
   while ( it.current() ) {
     if (it.current()->action()){
       if ( it.current() != m_pActiveTool )
@@ -256,7 +256,7 @@ void ToolController::toolActivated()
   ToolSelectAction* ta = (ToolSelectAction*)sender();
   ta->setToggleState(true);
 
-  QListIterator<Tool> it(tools);
+  QPtrListIterator<Tool> it(tools);
   while ( it.current() ) {
     if ( it.current()->action() == ta ) {
       selectTool(it.current());
@@ -273,7 +273,7 @@ void ToolController::activateDefault()
 
 Tool* ToolController::findTool(const QString& name)
 {
-  QListIterator<Tool> it(tools);
+  QPtrListIterator<Tool> it(tools);
   while ( it.current() ) {
     if ( QString(it.current()->name()) == name ) {
       return it.current();

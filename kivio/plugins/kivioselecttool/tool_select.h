@@ -19,7 +19,7 @@
 #ifndef TOOL_SELECT_H
 #define TOOL_SELECT_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include "tool.h"
 #include "tkunits.h"
 
@@ -112,7 +112,7 @@ private:
     char m_keys[32];
     bool m_shiftKey;
     int m_customDragID;
-    QList <KivioSelectDragData> m_lstOldGeometry;
+    QPtrList <KivioSelectDragData> m_lstOldGeometry;
 
     KActionMenu *m_pMenu;
 };

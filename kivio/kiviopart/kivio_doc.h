@@ -42,7 +42,7 @@ class QDomDocument;
 #include <koDocument.h>
 #include <koMainWindow.h>
 #include "kivio_grid_data.h"
-#include <qlist.h>
+#include <qptrlist.h>
 //#include <iostream.h>
 
 #include <qobject.h>
@@ -93,7 +93,7 @@ public:
   KivioStencilSpawnerSet *addSpawnerSetDuringLoad( QString );
   bool removeSpawnerSet( KivioStencilSpawnerSet * );
 
-  QList<KivioStencilSpawnerSet> *spawnerSets() { return m_pLstSpawnerSets; }
+  QPtrList<KivioStencilSpawnerSet> *spawnerSets() { return m_pLstSpawnerSets; }
 
   KivioStencilSpawner *findStencilSpawner( const QString& setId, const QString& stencilId );
   KivioStencilSpawner *findInternalStencilSpawner( const QString& title );
@@ -111,7 +111,7 @@ public:
   void printContent( KPrinter& prn );
   bool exportPage( KivioPage *pPage, const QString &fileName, ExportPageDialog * );
 
-  static QList<KivioDoc>& documents();
+  static QPtrList<KivioDoc>& documents();
 
   KivioGroupStencil *clipboard();
   void setClipboard( KivioGroupStencil * );
@@ -157,7 +157,7 @@ protected:
   /**
    * List of stencil spawner sets
    */
-  QList <KivioStencilSpawnerSet> *m_pLstSpawnerSets;
+  QPtrList <KivioStencilSpawnerSet> *m_pLstSpawnerSets;
 
 
   /**
@@ -200,7 +200,7 @@ protected:
 
   KivioGroupStencil *m_pClipboard;
 
-  static QList<KivioDoc>* s_docs;
+  static QPtrList<KivioDoc>* s_docs;
   static int s_docId;
 
   KivioStencilSpawnerSet* m_pInternalSet;

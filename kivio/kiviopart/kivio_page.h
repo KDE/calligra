@@ -38,9 +38,9 @@ class KivioGuideLines;
 
 #include <koprinter.h>
 #include <qpen.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qintdict.h>
-#include <qarray.h>
+#include <qmemarray.h>
 #include <qrect.h>
 #include <qpalette.h>
 #include <qwidget.h>
@@ -118,7 +118,7 @@ public:
   void selectStencil( KivioStencil * );
   void selectStencils( float, float, float, float );
   bool stencilInRect( float, float, float, float, KivioStencil * );
-  QList<KivioStencil> *selectedStencils() { return &m_lstSelection; }
+  QPtrList<KivioStencil> *selectedStencils() { return &m_lstSelection; }
 
   KivioRect getRectForAllSelectedStencils();
   KivioRect getRectForAllStencils();
@@ -132,7 +132,7 @@ public:
   KivioLayer *curLayer() { return m_pCurLayer; }
   void setCurLayer( KivioLayer *pLayer ) { m_pCurLayer=pLayer; }
 
-  QList<KivioLayer> *layers() { return &m_lstLayers; }
+  QPtrList<KivioLayer> *layers() { return &m_lstLayers; }
   KivioLayer *firstLayer();
   KivioLayer *nextLayer();
   KivioLayer *lastLayer();
@@ -181,10 +181,10 @@ protected:
   KivioMap *m_pMap;
   KivioDoc *m_pDoc;
 
-  QList<KivioLayer> m_lstLayers;
+  QPtrList<KivioLayer> m_lstLayers;
   KivioLayer *m_pCurLayer;
 
-  QList<KivioStencil> m_lstSelection;
+  QPtrList<KivioStencil> m_lstSelection;
 
   int m_id;
   bool m_bPageHide;

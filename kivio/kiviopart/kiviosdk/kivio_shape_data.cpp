@@ -77,7 +77,7 @@ KivioShapeData::KivioShapeData()
     : m_pOriginalPointList(NULL),
       m_pFillStyle(NULL)
 {
-    m_pOriginalPointList = new QList<KivioPoint>;
+    m_pOriginalPointList = new QPtrList<KivioPoint>;
     m_pOriginalPointList->setAutoDelete(true);
 
     m_pFillStyle = new KivioFillStyle();
@@ -100,7 +100,7 @@ KivioShapeData::KivioShapeData( const KivioShapeData &source )
 {
     // Allocate a new point list
     KivioPoint *pPoint;
-    m_pOriginalPointList = new QList<KivioPoint>;
+    m_pOriginalPointList = new QPtrList<KivioPoint>;
     m_pOriginalPointList->setAutoDelete(true);
 
     // Copy over the point list
@@ -191,7 +191,7 @@ void KivioShapeData::copyInto( KivioShapeData *pTarget ) const
     }
 
     // Create a new point list and copy it over    
-    pTarget->m_pOriginalPointList = new QList<KivioPoint>;
+    pTarget->m_pOriginalPointList = new QPtrList<KivioPoint>;
     pTarget->m_pOriginalPointList->setAutoDelete(true);  
     pPoint = m_pOriginalPointList->first();
     while( pPoint )

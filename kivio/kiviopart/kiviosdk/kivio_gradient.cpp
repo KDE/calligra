@@ -29,11 +29,11 @@ KivioGradient::KivioGradient()
       m_pPoints(NULL)
 {
     // Allocate the color list
-    m_pColors = new QList<QColor>;
+    m_pColors = new QPtrList<QColor>;
     m_pColors->setAutoDelete(true);
 
     // Allocate the point list
-    m_pPoints = new QList<KivioPoint>;
+    m_pPoints = new QPtrList<KivioPoint>;
     m_pPoints->setAutoDelete(true);
 
     m_gradientType = kgtNone;
@@ -78,7 +78,7 @@ KivioGradient::KivioGradient( const KivioGradient &source )
 
     // Duplicate the colors list
     QColor *pColor;
-    m_pColors = new QList<QColor>;
+    m_pColors = new QPtrList<QColor>;
     pColor = source.m_pColors->first();
     while( pColor )
     {
@@ -90,7 +90,7 @@ KivioGradient::KivioGradient( const KivioGradient &source )
 
     // Duplicate the point list
     KivioPoint *pPoint;
-    m_pPoints = new QList<KivioPoint>;
+    m_pPoints = new QPtrList<KivioPoint>;
     pPoint = source.m_pPoints->first();
     while( pPoint )
     {
@@ -124,7 +124,7 @@ void KivioGradient::copyInto( KivioGradient *pTarget ) const
     }
 
     // Allocate a new color array
-    pTarget->m_pColors = new QList<QColor>;
+    pTarget->m_pColors = new QPtrList<QColor>;
     pTarget->m_pColors->setAutoDelete(true);
 
 
@@ -144,7 +144,7 @@ void KivioGradient::copyInto( KivioGradient *pTarget ) const
         pTarget->m_pPoints = NULL;
     }
 
-    pTarget->m_pPoints = new QList<KivioPoint>;
+    pTarget->m_pPoints = new QPtrList<KivioPoint>;
     pTarget->m_pPoints->setAutoDelete(true);
 
     KivioPoint *pPoint;

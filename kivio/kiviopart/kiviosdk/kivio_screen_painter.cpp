@@ -499,7 +499,7 @@ void KivioScreenPainter::fillEllipse( float x1, float y1, float w1, float h1 )
  * The list of points should contain a list of points in
  * pairs.  Lines are drawn from p1->p2 p3->p4 p5->p6, etc...
  */
-void KivioScreenPainter::drawLineArray( QList<KivioPoint> *pList )
+void KivioScreenPainter::drawLineArray( QPtrList<KivioPoint> *pList )
 {
     PAINTER_CHECK();
 
@@ -533,7 +533,7 @@ void KivioScreenPainter::drawLineArray( QList<KivioPoint> *pList )
  *
  * Draws a polyline (hollow) from p1->p2->p3->pn
  */
-void KivioScreenPainter::drawPolyline( QList<KivioPoint> *pList )
+void KivioScreenPainter::drawPolyline( QPtrList<KivioPoint> *pList )
 {
     PAINTER_CHECK();
 
@@ -564,7 +564,7 @@ void KivioScreenPainter::drawPolyline( QList<KivioPoint> *pList )
  *
  * Draws a filled (if set) polygon from p1->p2->p3->pn->p1
  */
-void KivioScreenPainter::drawPolygon( QList<KivioPoint> *pList )
+void KivioScreenPainter::drawPolygon( QPtrList<KivioPoint> *pList )
 {
     PAINTER_CHECK();
 
@@ -669,14 +669,14 @@ void KivioScreenPainter::drawLineArray( QPointArray &pArray )
  * Draws a filled (if set) curve with the points stored
  * in pPoints.  They can be made up of bezier, arc, and normal points.
  */
-void KivioScreenPainter::drawClosedPath( QList<KivioPoint> *pPoints )
+void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
 {
     PAINTER_CHECK();
 
     QBrush brush;
 
     KivioPoint *pPoint, *pPoint2, *pPoint3, *pPoint4;
-    QList <KivioPoint> *pPointList = pPoints;
+    QPtrList <KivioPoint> *pPointList = pPoints;
     QPointArray controlPoints(4), bPoints(0), tmpPoints;
 
     int pointIndex=0;
@@ -789,14 +789,14 @@ void KivioScreenPainter::drawClosedPath( QList<KivioPoint> *pPoints )
     }
 }
 
-void KivioScreenPainter::drawOpenPath( QList<KivioPoint> *pPoints )
+void KivioScreenPainter::drawOpenPath( QPtrList<KivioPoint> *pPoints )
 {
     PAINTER_CHECK();
 
     QBrush brush;
 
     KivioPoint *pPoint, *pPoint2, *pPoint3, *pPoint4;
-    QList <KivioPoint> *pPointList = pPoints;
+    QPtrList <KivioPoint> *pPointList = pPoints;
     QPointArray controlPoints(4), bPoints(0), tmpPoints;
 
     int pointIndex=0;

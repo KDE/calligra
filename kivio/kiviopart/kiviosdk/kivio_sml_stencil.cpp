@@ -53,13 +53,13 @@ KivioSMLStencil::KivioSMLStencil()
       m_pSubSelection(NULL),
       m_pConnectorTargets(NULL)
 {
-    m_pShapeList = new QList<KivioShape>;
+    m_pShapeList = new QPtrList<KivioShape>;
     m_pShapeList->setAutoDelete(true);
 
-    m_pConnectorTargets = new QList<KivioConnectorTarget>;
+    m_pConnectorTargets = new QPtrList<KivioConnectorTarget>;
     m_pConnectorTargets->setAutoDelete(true);
 
-//    m_pOriginalConnectorTargets = new QList<KivioConnectorTarget>;
+//    m_pOriginalConnectorTargets = new QPtrList<KivioConnectorTarget>;
 //    m_pOriginalConnectorTargets->setAutoDelete(true);
 }
 
@@ -425,7 +425,7 @@ void KivioSMLStencil::drawOutlineBezier( KivioShape *pShape, KivioIntraStencilDa
 	pShapeData = pShape->shapeData();
 
 	KivioPoint *pPoint, *pPoint2, *pPoint3, *pPoint4;
-	QList <KivioPoint> *pPointList = pShapeData->pointList();
+	QPtrList <KivioPoint> *pPointList = pShapeData->pointList();
 	QPointArray controlPoints( 4 );
 
 
@@ -453,8 +453,8 @@ void KivioSMLStencil::drawOutlineOpenPath( KivioShape *pShape, KivioIntraStencil
     float defWidth = m_pSpawner->defWidth();
     float defHeight = m_pSpawner->defHeight();
 
-    QList <KivioPoint> *pPointList = pShapeData->pointList();
-    QList <KivioPoint> *pNewPoints = new QList<KivioPoint>;
+    QPtrList <KivioPoint> *pPointList = pShapeData->pointList();
+    QPtrList <KivioPoint> *pNewPoints = new QPtrList<KivioPoint>;
     pNewPoints->setAutoDelete(true);
 
     pPoint = pPointList->first();
@@ -483,8 +483,8 @@ void KivioSMLStencil::drawOutlineClosedPath( KivioShape *pShape, KivioIntraStenc
     float defWidth = m_pSpawner->defWidth();
     float defHeight = m_pSpawner->defHeight();
 
-    QList <KivioPoint> *pPointList = pShapeData->pointList();
-    QList <KivioPoint> *pNewPoints = new QList<KivioPoint>;
+    QPtrList <KivioPoint> *pPointList = pShapeData->pointList();
+    QPtrList <KivioPoint> *pNewPoints = new QPtrList<KivioPoint>;
     pNewPoints->setAutoDelete(true);
 
     pPoint = pPointList->first();
@@ -535,7 +535,7 @@ void KivioSMLStencil::drawOutlineLineArray( KivioShape *pShape, KivioIntraStenci
     float _x, _y, defWidth, defHeight;
     KivioPainter *painter;
     KivioShapeData *pShapeData;
-    QList <KivioPoint> *pList;
+    QPtrList <KivioPoint> *pList;
 
     pShapeData = pShape->shapeData();
 
@@ -634,7 +634,7 @@ void KivioSMLStencil::drawOutlinePolygon( KivioShape *pShape, KivioIntraStencilD
     float _x, _y, defWidth, defHeight;
     KivioPainter *painter;
     KivioShapeData *pShapeData;
-    QList <KivioPoint> *pList;
+    QPtrList <KivioPoint> *pList;
 
     pShapeData = pShape->shapeData();
 
@@ -670,7 +670,7 @@ void KivioSMLStencil::drawOutlinePolyline( KivioShape *pShape, KivioIntraStencil
     float _x, _y, defWidth, defHeight;
     KivioPainter *painter;
     KivioShapeData *pShapeData;
-    QList <KivioPoint> *pList;
+    QPtrList <KivioPoint> *pList;
 
     pShapeData = pShape->shapeData();
 
@@ -913,7 +913,7 @@ void KivioSMLStencil::drawBezier( KivioShape *pShape, KivioIntraStencilData *pDa
 	pShapeData = pShape->shapeData();
 
 	KivioPoint *pPoint, *pPoint2, *pPoint3, *pPoint4;
-	QList <KivioPoint> *pPointList = pShapeData->pointList();
+	QPtrList <KivioPoint> *pPointList = pShapeData->pointList();
 	QPointArray controlPoints( 4 );
 
 
@@ -945,8 +945,8 @@ void KivioSMLStencil::drawOpenPath( KivioShape *pShape, KivioIntraStencilData *p
     float defWidth = m_pSpawner->defWidth();
     float defHeight = m_pSpawner->defHeight();
 
-    QList <KivioPoint> *pPointList = pShapeData->pointList();
-    QList <KivioPoint> *pNewPoints = new QList<KivioPoint>;
+    QPtrList <KivioPoint> *pPointList = pShapeData->pointList();
+    QPtrList <KivioPoint> *pNewPoints = new QPtrList<KivioPoint>;
     pNewPoints->setAutoDelete(true);
 
     pPoint = pPointList->first();
@@ -980,8 +980,8 @@ void KivioSMLStencil::drawClosedPath( KivioShape *pShape, KivioIntraStencilData 
     float defWidth = m_pSpawner->defWidth();
     float defHeight = m_pSpawner->defHeight();
 
-    QList <KivioPoint> *pPointList = pShapeData->pointList();
-    QList <KivioPoint> *pNewPoints = new QList<KivioPoint>;
+    QPtrList <KivioPoint> *pPointList = pShapeData->pointList();
+    QPtrList <KivioPoint> *pNewPoints = new QPtrList<KivioPoint>;
     pNewPoints->setAutoDelete(true);
 
     pPoint = pPointList->first();
@@ -1081,7 +1081,7 @@ void KivioSMLStencil::drawLineArray( KivioShape *pShape, KivioIntraStencilData *
     float _x, _y, defWidth, defHeight;
     KivioPainter *painter;
     KivioShapeData *pShapeData;
-    QList <KivioPoint> *pList;
+    QPtrList <KivioPoint> *pList;
 
     pShapeData = pShape->shapeData();
 
@@ -1222,7 +1222,7 @@ void KivioSMLStencil::drawPolygon( KivioShape *pShape, KivioIntraStencilData *pD
     float _x, _y, defWidth, defHeight, lineWidth;
     KivioPainter *painter;
     KivioShapeData *pShapeData;
-    QList <KivioPoint> *pList;
+    QPtrList <KivioPoint> *pList;
 
     pShapeData = pShape->shapeData();
 
@@ -1284,7 +1284,7 @@ void KivioSMLStencil::drawPolyline( KivioShape *pShape, KivioIntraStencilData *p
     float _x, _y, defWidth, defHeight, lineWidth;
     KivioPainter *painter;
     KivioShapeData *pShapeData;
-    QList <KivioPoint> *pList;
+    QPtrList <KivioPoint> *pList;
 
     pShapeData = pShape->shapeData();
 
@@ -1522,7 +1522,7 @@ void KivioSMLStencil::updateGeometry()
     defWidth = m_pSpawner->defWidth();
     defHeight = m_pSpawner->defHeight();
 
-    QList<KivioConnectorTarget> *pOriginalTargets;
+    QPtrList<KivioConnectorTarget> *pOriginalTargets;
 
     KivioSMLStencilSpawner *smlSpawner = dynamic_cast<KivioSMLStencilSpawner *>(m_pSpawner);
     KivioDiaStencilSpawner *diaSpawner = dynamic_cast<KivioDiaStencilSpawner *>(m_pSpawner);
@@ -1935,7 +1935,7 @@ bool KivioSMLStencil::checkCollisionPolygon( KivioShape *pShape, KivioPoint *pCh
 {
     float _x, _y, defWidth, defHeight;
     KivioShapeData *pShapeData;
-    QList<KivioPoint> *pList;
+    QPtrList<KivioPoint> *pList;
     KivioPoint *pPoints;
 
 

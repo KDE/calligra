@@ -749,8 +749,8 @@ void KivioPage::groupSelectedStencils()
 void KivioPage::ungroupSelectedStencils()
 {
     KivioStencil *pSelStencil, *pStencil;
-    QList<KivioStencil> *pList;
-    QList<KivioStencil> *pSelectThese = new QList<KivioStencil>;
+    QPtrList<KivioStencil> *pList;
+    QPtrList<KivioStencil> *pSelectThese = new QPtrList<KivioStencil>;
 
     pSelectThese->setAutoDelete(false);
 
@@ -826,7 +826,7 @@ void KivioPage::bringToFront()
     KivioStencil *pStencil, *pMove;
     KivioLayer *pLayer;
 
-    QList <KivioStencil> newList;
+    QPtrList <KivioStencil> newList;
 
     pLayer = m_pCurLayer;
 
@@ -873,7 +873,7 @@ void KivioPage::sendToBack()
     KivioStencil *pStencil, *pMove;
     KivioLayer *pLayer;
 
-    QList <KivioStencil> newList;
+    QPtrList <KivioStencil> newList;
 
     pLayer = m_pCurLayer;
 
@@ -994,8 +994,8 @@ void KivioPage::paste()
 {
     KivioStencil *pGroup;
     KivioStencil *pStencil, *pDup;
-    QList<KivioStencil> *pList;
-    QList<KivioStencil> *pSelectThese = new QList<KivioStencil>;
+    QPtrList<KivioStencil> *pList;
+    QPtrList<KivioStencil> *pSelectThese = new QPtrList<KivioStencil>;
 
     pSelectThese->setAutoDelete(false);
 
@@ -1192,13 +1192,13 @@ void KivioPage::alignStencils(AlignData d)
     }
 }
 
-class XYSortedStencilList : public QList<KivioStencil>
+class XYSortedStencilList : public QPtrList<KivioStencil>
 {
 public:
   XYSortedStencilList(bool sortX) :xsort(sortX) {};
 
 protected:
-  int compareItems(QCollection::Item i1, QCollection::Item i2)
+  int compareItems(QPtrCollection::Item i1, QPtrCollection::Item i2)
   {
     KivioStencil* s1 = (KivioStencil*)i1;
     KivioStencil* s2 = (KivioStencil*)i2;

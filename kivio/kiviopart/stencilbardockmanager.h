@@ -20,7 +20,7 @@
 #define STENCILBARDOCKMANAGER_H
 
 #include <qwidget.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class QSplitter;
 class DragBarButton;
@@ -63,8 +63,8 @@ private:
   DragBarButton* dragButton;
   QWidget* dragWidget;
   StencilBarMoveManager* moveManager;
-  QList<KivioStackBar> m_pBars;
-  QList<KivioStackBar> m_pTopLevelBars;
+  QPtrList<KivioStackBar> m_pBars;
+  QPtrList<KivioStackBar> m_pTopLevelBars;
   QSplitter* split1;
   QSplitter* split2;
   QWidget* m_pView;

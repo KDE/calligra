@@ -19,7 +19,7 @@
 #ifndef KIVIO_SML_STENCIL_H
 #define KIVIO_SML_STENCIL_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include "kivio_stencil.h"
 class QDomElement;
@@ -36,10 +36,10 @@ class KivioSMLStencil : public KivioStencil
 protected:
     friend class KivioSMLStencilSpawner;
 
-    QList<KivioShape> *m_pShapeList;
+    QPtrList<KivioShape> *m_pShapeList;
     KivioShape *m_pSubSelection;
-    QList<KivioConnectorTarget> *m_pConnectorTargets;
-//    QList<KivioConnectorTarget> *m_pOriginalConnectorTargets;
+    QPtrList<KivioConnectorTarget> *m_pConnectorTargets;
+//    QPtrList<KivioConnectorTarget> *m_pOriginalConnectorTargets;
 
     // Offsets and scale which get reused in between
     // various drawing routines.  To save time and
@@ -100,7 +100,7 @@ public:
     virtual bool loadXML( const QDomElement & );
     virtual QDomElement saveXML( QDomDocument & );
 
-    virtual QList<KivioShape> *shapeList() { return m_pShapeList; }
+    virtual QPtrList<KivioShape> *shapeList() { return m_pShapeList; }
     virtual KivioShape *subSelection() { return m_pSubSelection; }
 
     virtual void paintOutline( KivioIntraStencilData * );

@@ -2,7 +2,7 @@
 #define KIVIO_VIEWMANAGER_PANEL_H
 
 #include <qlistview.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include "kivio_rect.h"
 
 class KAction;
@@ -19,7 +19,7 @@ struct ViewItemData
   bool isPage;
 };
 /*********************************************************/
-typedef QList<ViewItemData> ViewItemDataList;
+typedef QPtrList<ViewItemData> ViewItemDataList;
 
 class ViewItemList : public QObject
 { Q_OBJECT

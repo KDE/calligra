@@ -3,7 +3,7 @@
 
 #include <qdom.h>
 #include <qbitmap.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class KivioPage;
 class KivioCanvas;
@@ -28,13 +28,13 @@ private:
   Qt::Orientation orient;
 };
 /*****************************************************************/
-class KivioGuidesList : public QList<KivioGuideLineData>
+class KivioGuidesList : public QPtrList<KivioGuideLineData>
 {
 public:
   KivioGuidesList() {};
 
 protected:
-  int compareItems(QCollection::Item i1, QCollection::Item i2)
+  int compareItems(QPtrCollection::Item i1, QPtrCollection::Item i2)
   {
     KivioGuideLineData* s1 = (KivioGuideLineData*)i1;
     KivioGuideLineData* s2 = (KivioGuideLineData*)i2;

@@ -35,7 +35,7 @@ protected:
 //    void drawSelectionHandles( KivioPainter * );
 
     // The list of child stencils
-    QList<KivioStencil> *m_pGroupList;
+    QPtrList<KivioStencil> *m_pGroupList;
 
 public:
     KivioGroupStencil();
@@ -89,7 +89,7 @@ public:
     
     // Group operations
     virtual void addToGroup( KivioStencil * );
-    virtual QList<KivioStencil> *groupList() { return m_pGroupList; }
+    virtual QPtrList<KivioStencil> *groupList() { return m_pGroupList; }
 
     
     // Position / Dimension operations

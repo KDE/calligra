@@ -71,7 +71,7 @@ void KivioGuideLines::resize(QSize s,KivioDoc* doc)
   size = s;
 
   KivioMap* map = doc->map();
-  QList<KivioPage> pageList = map->pageList();
+  QPtrList<KivioPage> pageList = map->pageList();
   for (KivioPage* page = pageList.first(); page; page = pageList.next())
     page->guideLines()->resize();
 }
@@ -290,7 +290,7 @@ int KivioGuideLines::selectedCount()
 
 void KivioGuideLines::removeSelected()
 {
-  QList<KivioGuideLineData> rlines;
+  QPtrList<KivioGuideLineData> rlines;
   for (KivioGuideLineData* g = lines.first(); g; g = lines.next())
     if (g->isSelected())
       rlines.append(g);

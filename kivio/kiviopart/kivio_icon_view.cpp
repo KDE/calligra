@@ -33,7 +33,7 @@
 #include <kdebug.h>
 
 KivioStencilSpawner* KivioIconView::m_pCurDrag = 0L;
-QList<KivioIconView> KivioIconView::objList;
+QPtrList<KivioIconView> KivioIconView::objList;
 KivioIconViewVisual  KivioIconView::visual;
 
 

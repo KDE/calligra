@@ -37,7 +37,7 @@ extern "C" {
 KivioPyStencil::KivioPyStencil()
     : KivioStencil()
 {
-   m_pConnectorTargets = new QList<KivioConnectorTarget>;
+   m_pConnectorTargets = new QPtrList<KivioConnectorTarget>;
    m_pConnectorTargets->setAutoDelete(true);
 
    static bool first_time = true;
@@ -243,8 +243,8 @@ void KivioPyStencil::updateGeometry()
    // stuff from KivioSMLStensil
 
     KivioConnectorTarget *pTarget, *pOriginal;
-	
-    QList<KivioConnectorTarget> *pOriginalTargets = ((KivioPyStencilSpawner*)m_pSpawner)->targets();
+
+    QPtrList<KivioConnectorTarget> *pOriginalTargets = ((KivioPyStencilSpawner*)m_pSpawner)->targets();
 
     pTarget = m_pConnectorTargets->first();
     pOriginal = pOriginalTargets->first();
@@ -438,7 +438,7 @@ void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
        double y2 = getDoubleFromDict(shape,"y2")*scale;
 
        // get points list
-       QList<KivioPoint> points;
+       QPtrList<KivioPoint> points;
        points.setAutoDelete(true);
        PyObject *pyPoints = PyDict_GetItemString( shape, "points" );
        if ( pyPoints && PyList_Check(pyPoints) ) {
