@@ -34,7 +34,7 @@
 VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
 {
-	new QLabel( i18n( "Orientation:" ), this );
+	new QLabel( i18n( "Type:" ), this );
 	m_type = new KComboBox( false, this );
 	m_type->insertItem( i18n( "Star outline" ), 0 );
 	m_type->insertItem( i18n( "Spoke" ), 1 );
