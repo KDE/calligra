@@ -17,7 +17,7 @@
     </property>
     <property stdset="1">
         <name>caption</name>
-        <string>Insert Page</string>
+        <string>Insert Slide</string>
     </property>
     <grid>
         <property stdset="1">
@@ -33,13 +33,13 @@
             <item>
                 <property>
                     <name>text</name>
-                    <string>Before Current Page</string>
+                    <string>Before Current Slide</string>
                 </property>
             </item>
             <item>
                 <property>
                     <name>text</name>
-                    <string>After Current Page</string>
+                    <string>After Current Slide</string>
                 </property>
             </item>
             <property stdset="1">

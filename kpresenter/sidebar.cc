@@ -909,8 +909,8 @@ void Outline::renamePageTitle()
     
     bool ok = false;
     QString activeTitle = item->text( 0 );
-    QString newTitle = KLineEditDlg::getText( i18n("Rename Page"),
-        i18n("Page title:"), activeTitle, &ok, this );
+    QString newTitle = KLineEditDlg::getText( i18n("Rename Slide"),
+        i18n("Slide title:"), activeTitle, &ok, this );
 
     // Have a different name ?
     if ( ok ) { // User pushed an OK button.

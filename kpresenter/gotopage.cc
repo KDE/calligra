@@ -37,7 +37,7 @@
 KPGotoPage::KPGotoPage( const KPresenterDoc *doc,
 			const QValueList<int> &slides, int start,
 			QWidget *parent, const char *name )
-    : KDialogBase( parent, name, true, i18n("Goto Page..."), Ok|Cancel)
+    : KDialogBase( parent, name, true, i18n("Goto Slide..."), Ok|Cancel)
     , oldPage(start)
 {
 

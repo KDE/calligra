@@ -669,7 +669,7 @@ void KPresenterView::insertPage()
     if ( dia.exec() != QDialog::Accepted )
         return;
     InsertPos pos = (InsertPos)dia.locationCombo->currentItem();
-    int pg = m_pKPresenterDoc->insertNewPage( i18n("Insert new page"), currPg, pos,
+    int pg = m_pKPresenterDoc->insertNewPage( i18n("Insert new slide"), currPg, pos,
                                               dia.radioDifferent->isChecked(), QString::null );
     setRanges();
     if ( pg != -1 )
@@ -5316,7 +5316,7 @@ void KPresenterView::spellCheckerReady()
         return;
     }
     //kdDebug(33001) << "KPresenterView::spellCheckerReady done" << endl;
-    if(!switchInOtherPage(i18n( "Do you want to spellcheck new page?")))
+    if(!switchInOtherPage(i18n( "Do you want to spellcheck new slide?")))
     {
         // Done
         m_pKPresenterDoc->setReadWrite(true);
@@ -7085,7 +7085,7 @@ void KPresenterView::applyAutoFormat()
         macro->addCommand( cmd2 );
     }
 
-    while(switchInOtherPage(i18n( "Do you want to apply autoformat in new page?")) )
+    while(switchInOtherPage(i18n( "Do you want to apply autoformat in new slide?")) )
     {
         KCommand * cmd = applyAutoFormatToCurrentPage(m_canvas->activePage()->allTextObjects());
         if ( cmd )
