@@ -86,6 +86,11 @@ public:
 
 
 	/**
+	 * create a horizontal ruler layout
+	 **/
+	void createHR(QDomElement paragraph, int width=1);
+
+	/**
 	 *
 	 **/
 	QDomElement currentLayout(QDomElement paragraph);

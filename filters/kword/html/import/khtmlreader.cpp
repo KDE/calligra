@@ -353,7 +353,7 @@ bool KHTMLReader::parse_p(DOM::Element e) {
 
 bool KHTMLReader::parse_hr(DOM::Element e) {
 	startNewParagraph();
-	_writer->addText(state()->paragraph,"--------------------------------FIXME:HR-------------");
+	_writer->createHR(state()->paragraph);
 	startNewParagraph();
 	return true;
 }

@@ -201,6 +201,10 @@ void KWDWriter::finishTable(int tableno) {
 }
 
 
+void KWDWriter::createHR(QDomElement paragraph, int width) {
+	layoutAttribute(paragraph,"BOTTOMBORDER","width",QString("%1").arg(width));
+}
+
 void KWDWriter::finishTable(int tableno,QRect rect) {
 	int ncols=0;
 	int nrows=0;
