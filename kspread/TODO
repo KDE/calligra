@@ -43,8 +43,7 @@ Other things: (please add the things you are working on!)
 - more chart types
 - much more formulas (financial,...)
 - Scrollbar that supports jumping one row/column forward or back
-- Named areas (see below)
-- support "<>" as not equal (in addition to "!=")
+- Named areas with something like "=x+5" ("='x'+5" works already)
 - other bug fixes                               (everybody, every time)
 
 
@@ -67,9 +66,9 @@ Philipp
 Norbert
 =======
 
-- Improve sort for sorting by more than one column/row
-- insert data from databases                                    (Norbert)
-- Styles                                          
+- insert data from databases                                    (Norbert - almost done)
+- Styles                                                        ( after 1.2 cause it requires bigger changes
+                                                                  than expected )
 - implement more Excel shortcuts like CTRL+Shift+!, *, ^, ...   (Norbert - almost done)
   (see Todo-list below)
 

@@ -1,9 +1,22 @@
 Changes from 1.1 to 1.2
 =======================
 
+Until beta2:
+------------
+
 - bug fixes
 - perfomance enhancements
 - added show/hide grid on printout option
+- Sort enhanced for
+    - sorting by up to three rows or columns
+    - possibility of putting the result of sorting some place else
+    - you can use a custom lists (like days of week) as a primary key
+    - option if you want to copy the layout or not
+    - you can define a row header which gets copied but not sorted
+- auto continuation support for every direction and all types supported in
+  KSpread and for more complex series like 1,3,4,6,...
+- just one "copy" instead of "copy" and "copy as text"
+- insertion of series supports now doubles and decreasing series
 
 Until beta1:
 ------------
@@ -39,14 +52,3 @@ New functions added:
    WEIBULL, EXPONDIST, NORMDIST, NORMSDIST, FISHER, 
    FISHERINV, LOGNORMDIST
   
-
-After Beta1:
-------------
-- Bug fixes
-- auto continuation support for every direction and all types supported in
-  KSpread and for more complex series like 1,3,4,6,...
-- just one "copy" instead of "copy" and "copy as text"
-- insertion of series supports now doubles and decreasing series
-
-After Beta2:
-------------
