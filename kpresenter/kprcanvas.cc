@@ -6566,11 +6566,11 @@ void KPrCanvas::ensureVisible( int x, int y, int xmargin, int ymargin )
 {
 /*
     kdDebug()<<" x :"<<x << " y :"<<y<<" xmargin :"<<xmargin<<" ymargin :"<<ymargin<<endl;
+
     kdDebug()<<" DEBUGRECT ( visibleRect ) :"<<DEBUGRECT(visibleRect())<<endl;
     kdDebug()<<" diffx :"<<diffx() <<" diffy') :" <<diffy()<<endl;
 */
     int newy= (y+ymargin)-(visibleRect().bottom()+diffy());
-    //kdDebug()<<" newy "<<newy<<endl;
 
     if( newy > 0)
     {

@@ -1213,9 +1213,8 @@ void KPTextView::ensureCursorVisible()
     int w = 1;
     KPresenterDoc *doc= m_kptextobj->kPresenterDocument();
     KoPoint pt= kpTextObject()->getRect().topLeft();
-
-    pt.setX( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelXToPt( x)+pt.x()));
-    pt.setX( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelYToPt( y )+pt.y()) );
+    pt.setX( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelXToPt( x) ) +pt.x());
+    pt.setY( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelYToPt( y ))+pt.y() );
 
     QPoint p = m_kptextobj->kPresenterDocument()->zoomHandler()->zoomPoint( pt );
     w = m_kptextobj->kPresenterDocument()->zoomHandler()->layoutUnitToPixelX( w );
