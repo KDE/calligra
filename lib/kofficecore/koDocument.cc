@@ -911,6 +911,7 @@ bool KoDocument::openFile()
         m_file = u.directory();
         kdDebug() << "KoDocument::openFile loading maindoc.xml, using directory store for " << m_file << endl;
     }
+    kdDebug() << "KoDocument::openFile " << m_file << " type:" << typeName << endl;
 
     QString importedFile = m_file;
 
@@ -986,7 +987,6 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
     kdDebug(30003) << "KoDocument::loadNativeFormat( " << file << " )" << endl;
 
-    // This isn't needed anymore, KoDirectoryStore takes care of raw XML files
     QFile in(file);
     if ( !in.open( IO_ReadOnly ) )
     {
@@ -995,7 +995,6 @@ bool KoDocument::loadNativeFormat( const QString & file )
         return false;
     }
 
-#if 0
     // Try to find out whether it is a mime multi part file
     char buf[5];
     if ( in.readBlock( buf, 4 ) < 4 )
@@ -1008,8 +1007,8 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
     //kdDebug(30003) << "PATTERN=" << buf << endl;
 
-    // Is it plain XML ?
-    if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
+    // Is it plain XML, and not a directory store ? (e.g. a template)
+    if ( strncasecmp( buf, "<?xm", 4 ) == 0 && d->m_specialOutputFlag != SaveAsDirectoryStore )
     {
         in.at(0);
         QString errorMsg;
@@ -1038,7 +1037,6 @@ bool KoDocument::loadNativeFormat( const QString & file )
         m_bEmpty = false;
         return res;
     } else
-#endif
     { // It's a koffice store (tar.gz, zip etc.)
         in.close();
         KoStore * store = KoStore::createStore( file, KoStore::Read );
