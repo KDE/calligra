@@ -35,7 +35,8 @@ KImagePreferencesDialog::KImagePreferencesDialog(QWidget *parent, const char *na
 	m_pLineEdit = new QLineEdit( this, "inputtext" );
 	
 	// Label
-	QLabel* label = new QLabel( m_pLineEdit, inputtitle, this );
+	//QLabel* label = new QLabel( m_pLineEdit, inputtitle, this );
+	new QLabel( m_pLineEdit, inputtitle, this );
 
 	// OK-Button
 

@@ -43,6 +43,11 @@
 #include "kimage_doc.h"
 #include "kimage_view.h"
 #include "kimage_shell.h"
+#include "macros.h"
+
+#define CHECK_DOCUMENT if( m_pDoc->isEmpty() ) return;
+#define CHECK_RUNNING if( m_runningCommand ) return;
+#define CHECK_ALL CHECK_DOCUMENT
 
 /*****************************************************************************
  *
@@ -64,9 +69,9 @@ KImageView::KImageView( QWidget *_parent, const char *_name, KImageDoc* _doc )
 
   QObject::connect( m_pDoc, SIGNAL( sig_updateView() ), this, SLOT( slotUpdateView() ) );
 
-  m_drawMode = 0;
+  m_drawMode = OriginalSize;
   m_centerMode = 0;
-
+  m_zoomFactor = QPoint( 100, 100 );
   slotUpdateView();
 }
 
@@ -149,79 +154,21 @@ bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory 
     return true;
   }
 
-  m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON("fittoview.xpm") );
-  CORBA::WString_var toolTip = Q2C( i18n( "Fit image to view" ) );
-  m_idButtonEdit_Lines = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ),
-							this, "viewFitToView", true,
-							toolTip, -1 );
-
-  pix = OPUIUtils::convertPixmap( ICON("fitwithprops.xpm") );
-  toolTip = Q2C( i18n( "Fit to view and keep proportions" ) );
-  m_idButtonEdit_Areas = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ),
-							this, "viewFitWithProportions",
-							true, toolTip, -1 );
-
-  pix = OPUIUtils::convertPixmap( ICON("originalsize.xpm") );
-  toolTip = Q2C( i18n( "Keep original image size" ) );
-  m_idButtonEdit_Bars = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ),
-						       this, "viewOriginalSize", true,
-						       toolTip, -1 );
-
-  m_vToolBarEdit->insertSeparator( -1 );
-
-  pix = OPUIUtils::convertPixmap( ICON("mini/unknown.xpm") );
-  toolTip = Q2C( i18n( "Edit image" ) );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 4, SIGNAL( clicked() ),
-							this, "editEditImage", true,
-							toolTip, -1 );
-
-  m_vToolBarEdit->insertSeparator( -1 );
-
-  pix = OPUIUtils::convertPixmap( ICON("undo.xpm") );
-  toolTip = Q2C( i18n( "Undo" ) );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
-							this, "editUndo", true,
-							toolTip, -1 );
-
-  pix = OPUIUtils::convertPixmap( ICON("redo.xpm") );
-  toolTip = Q2C( i18n( "Redo" ) );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
-							this, "editRedo", true,
-							toolTip, -1 );
-
-  m_vToolBarEdit->insertSeparator( -1 );
-
-  pix = OPUIUtils::convertPixmap( ICON("editpaste.xpm") );
-  toolTip = Q2C( i18n( "Edit image" ) );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
-							this, "editEditImage", true,
-							toolTip, -1 );
-
-  pix = OPUIUtils::convertPixmap( ICON("areaselect.xpm") );
-  toolTip = Q2C( i18n( "Select Area" ) );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
-							this, "selectArea", true,
-							toolTip, -1 );
-
-  pix = OPUIUtils::convertPixmap( ICON("airbrush.xpm") );
-  toolTip = Q2C( i18n( "Airbrush" ) );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
-							this, "airbrush", true,
-							toolTip, -1 );
-
-  pix = OPUIUtils::convertPixmap( ICON("circle.xpm") );
-  toolTip = Q2C( i18n( "Circle" ) );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
-							this, "circle", true,
-							toolTip, -1 );
-
-  pix = OPUIUtils::convertPixmap( ICON("eraser.xpm") );
-  toolTip = Q2C( i18n( "Eraser" ) );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
-							this, "eraser", true,
-							toolTip, -1 );
+  TOOLBAR( m_vToolBarEdit );
+  BUTTON1( m_idButtonEdit_Lines, m_vToolBarEdit, "fittoview.xpm", 1, "viewFitToView", "Fit image to view" );
+  BUTTON1( m_idButtonEdit_Areas, m_vToolBarEdit, "fitwithprops.xpm", 2, "viewFitWithProportions", "Fit to view and keep proportions" );
+  BUTTON1( m_idButtonEdit_Bars, m_vToolBarEdit, "originalsize.xpm", 3, "viewOriginalSize", "Keep original image size" );
+  TB_SEPARATOR( m_vToolBarEdit );
+  BUTTON1( m_idButtonEdit_Cakes, m_vToolBarEdit, "mini/unknown.xpm", 4, "editEditImage", "Edit image" );
+  TB_SEPARATOR( m_vToolBarEdit );
+  BUTTON1( m_idButtonEdit_Cakes, m_vToolBarEdit, "undo.xpm", 5, "editUndo", "Undo" );
+  BUTTON1( m_idButtonEdit_Cakes, m_vToolBarEdit, "redo.xpm", 6, "editRedo", "Redo" );
+  TB_SEPARATOR( m_vToolBarEdit );
+  BUTTON1( m_idButtonEdit_Cakes, m_vToolBarEdit, "editpaste.xpm", 7, "editEditImage", "Edit image" );
+  BUTTON1( m_idButtonEdit_Cakes, m_vToolBarEdit, "areaselect.xpm", 8, "selectArea", "Select Area" );
+  BUTTON1( m_idButtonEdit_Cakes, m_vToolBarEdit, "airbrush.xpm", 9, "airbrush", "Airbrush" );
+  BUTTON1( m_idButtonEdit_Cakes, m_vToolBarEdit, "circle.xpm", 10, "circle", "Circle" );
+  BUTTON1( m_idButtonEdit_Cakes, m_vToolBarEdit, "eraser.xpm", 11, "eraser", "Eraser" );
 
   m_vToolBarEdit->enable( OpenPartsUI::Show );
 
@@ -252,119 +199,58 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     return true;
   }
 
-  CORBA::WString_var text;
-  OpenPartsUI::Pixmap_var pix;
-   
   // Edit
-  text = Q2C( i18n( "&Edit" ) );
-  _menubar->insertMenu( text, m_vMenuEdit, -1, -1 );
-
-  pix = OPUIUtils::convertPixmap( ICON("undo.xpm") );
-  text = Q2C( i18n("no Undo possible") );
-  m_idMenuEdit_Edit = m_vMenuEdit->insertItem6( pix, text, this, "editUndo", CTRL + Key_E, -1, -1 );
-
-  pix = OPUIUtils::convertPixmap( ICON("redo.xpm") );
-  text = Q2C( i18n("no Redo possible") );
-  m_idMenuEdit_Edit = m_vMenuEdit->insertItem6( pix, text, this, "editRedo", CTRL + Key_E, -1, -1 );
-
-  pix = OPUIUtils::convertPixmap( ICON("mini/unknown.xpm") );
-  text = Q2C( i18n("&Edit image") );
-  m_idMenuEdit_Edit = m_vMenuEdit->insertItem6( pix, text, this, "editEditImage", 0, -1, -1 );
-
-  m_vMenuEdit->insertSeparator( -1 );
-
-  text = Q2C( i18n("&Import image") );
-  m_idMenuEdit_Import = m_vMenuEdit->insertItem( text, this, "editImportImage", CTRL + Key_I );
-  text = Q2C( i18n("E&xport image") );
-  m_idMenuEdit_Export = m_vMenuEdit->insertItem( text, this, "editExportImage", CTRL + Key_X );
-  text = Q2C( i18n("E&mbed Part") );
-  m_idMenuEdit_Export = m_vMenuEdit->insertItem( text, this, "editEmpedPart", 0 );
-
-  m_vMenuEdit->insertSeparator( -1 );
-
-  text = Q2C( i18n("&Page Layout") );
-  m_idMenuEdit_Page = m_vMenuEdit->insertItem( text, this, "editPageLayout", CTRL + Key_L );
-  text = Q2C( i18n("P&references...") );
-  m_idMenuEdit_Preferences = m_vMenuEdit->insertItem( text, this, "editPreferences", 0 );
+  MENU( m_vMenuEdit, "&Edit" )
+  ITEM3( m_idMenuEdit_Undo, m_vMenuEdit, "undo,xpm", "no Undo possible", "editUndo" )
+  ITEM3( m_idMenuEdit_Redo, m_vMenuEdit, "redo,xpm", "no Redo possible", "editRedo" )
+  ITEM3( m_idMenuEdit_Edit, m_vMenuEdit, "mini/unknown,xpm", "&Edit image", "editEditImage" )
+  SEPARATOR( m_vMenuEdit )
+  ITEM2( m_idMenuEdit_Import, m_vMenuEdit, "&Import image", "editImportImage", CTRL + Key_I )
+  ITEM2( m_idMenuEdit_Export, m_vMenuEdit, "E&xport image", "editExportImage", CTRL + Key_X )
+  ITEM1( m_idMenuEdit_Export, m_vMenuEdit, "E&mbed Part", "editEmpedPart" )
+  SEPARATOR( m_vMenuEdit )
+  ITEM2( m_idMenuEdit_Page, m_vMenuEdit, "&Page Layout", "editPageLayout", CTRL + Key_L )
+  ITEM1( m_idMenuEdit_Preferences, m_vMenuEdit, "P&references...", "editPreferences" )
 
   // View
-  text = Q2C( i18n( "&View" ) );
-  _menubar->insertMenu( text, m_vMenuView, -1, -1 );
-
-  text = Q2C( i18n("Zoom...") );
-  m_idMenuView_ZoomFactor = m_vMenuView->insertItem( text, this, "viewZoomFactor", 0 );
-
-  pix = OPUIUtils::convertPixmap( ICON("fittoview.xpm") );
-  text = Q2C( i18n("Fit to &view") );
-  m_idMenuView_FitToView = m_vMenuView->insertItem6( pix, text, this, "viewFitToView", CTRL + Key_V, -1, -1 );
-  pix = OPUIUtils::convertPixmap( ICON("fitwithprops.xpm") );
-  text = Q2C( i18n("Fit and keep &proportions") );
-  m_idMenuView_FitWithProps = m_vMenuView->insertItem6( pix, text, this, "viewFitWithProportions", CTRL + Key_P, -1, -1 );
-  pix = OPUIUtils::convertPixmap( ICON("originalsize.xpm") );
-  text = Q2C( i18n("&Original size") );
-  m_idMenuView_Original = m_vMenuView->insertItem6( pix, text, this, "viewOriginalSize", CTRL + Key_O, -1, -1 );
-
-  m_vMenuView->insertSeparator( -1 );
-
-  text = Q2C( i18n("&Centered") );
-  m_idMenuView_Center = m_vMenuView->insertItem( text, this, "viewCentered", 0 );
-  text = Q2C( i18n("&Scrollbars") );
-  m_idMenuView_Info = m_vMenuView->insertItem( text, this, "viewScrollbars", 0 );
-  text = Q2C( i18n("I&nfomations") );
-  m_idMenuView_Info = m_vMenuView->insertItem( text, this, "viewInfoImage", 0 );
-  text = Q2C( i18n("Background color") );
-  m_idMenuView_BackgroundColor = m_vMenuView->insertItem( text, this, "viewBackgroundColor", 0 );
+  MENU( m_vMenuView, "&View" )
+  ITEM1( m_idMenuView_ZoomFactor, m_vMenuView, "Zoom...", "viewZoomFactor" )
+  ITEM4( m_idMenuView_FitToView, m_vMenuView, "fittoview.xpm", "Fit to &view", "viewFitToView", CTRL + Key_V )
+  ITEM4( m_idMenuView_FitWithProps, m_vMenuView, "fitwithprops.xpm", "Fit and keep &proportions", "viewFitWithProportions", CTRL + Key_P )
+  ITEM4( m_idMenuView_Original, m_vMenuView, "originalsize.xpm", "&Original size", "viewOriginalSize", CTRL + Key_O )
+  SEPARATOR( m_vMenuView )
+  ITEM1( m_idMenuView_Center, m_vMenuView, "&Centered", "viewCentered" )
+  ITEM1( m_idMenuView_Info, m_vMenuView, "&Scrollbars", "viewScrollbars" )
+  ITEM1( m_idMenuView_Info, m_vMenuView, "I&nformations", "viewInfoImage" )
+  ITEM1( m_idMenuView_BackgroundColor, m_vMenuView, "Background color", "viewBackgroundColor" )
 
   // Transform
-  text = Q2C( i18n( "&Transform" ) );
-  _menubar->insertMenu( text, m_vMenuTransform, -1, -1 );
-
-  text = Q2C( i18n("Rotate clockwise") );
-  m_idMenuTransform_RotateRight = m_vMenuTransform->insertItem( text, this, "transformRotateRight", 0 );
-  text = Q2C( i18n("Rotate anti-clockwise") );
-  m_idMenuTransform_RotateLeft = m_vMenuTransform->insertItem( text, this, "transformRotateLeft", 0 );
-  text = Q2C( i18n("Rotate with angle...") );
-  m_idMenuTransform_RotateAngle = m_vMenuTransform->insertItem( text, this, "transformRotateAngle", 0 );
-  text = Q2C( i18n("Flip vertical") );
-  m_idMenuTransform_FlipVertical = m_vMenuTransform->insertItem( text, this, "transformFlipVertical", 0 );
-  text = Q2C( i18n("Flip honrizontal") );
-  m_idMenuTransform_FlipHorizontal = m_vMenuTransform->insertItem( text, this, "transformFlipHorizontal", 0 );
-
-  m_vMenuTransform->insertSeparator( -1 );
-
-  text = Q2C( i18n("&Zoom...") );
-  m_idMenuTransform_ZoomFactor = m_vMenuTransform->insertItem( text, this, "transformZoomFactor", 0 );
-  text = Q2C( i18n("Zoom &in 10%") );
-  m_idMenuTransform_ZoomIn10 = m_vMenuTransform->insertItem( text, this, "transformZoomIn10", 0 );
-  text = Q2C( i18n("Zoom &out 10%") );
-  m_idMenuTransform_ZoomOut10 = m_vMenuTransform->insertItem( text, this, "transformZoomOut10", 0 );
-  text = Q2C( i18n("&Double size") );
-  m_idMenuTransform_ZoomDouble = m_vMenuTransform->insertItem( text, this, "transformZoomDouble", 0 );
-  text = Q2C( i18n("&Half size") );
-  m_idMenuTransform_ZoomHalf = m_vMenuTransform->insertItem( text, this, "transformZoomHalf", 0 );
-  text = Q2C( i18n("&Max") );
-  m_idMenuTransform_ZoomMax = m_vMenuTransform->insertItem( text, this, "transformZoomMax", 0 );
-  text = Q2C( i18n("Max/&aspect") );
-  m_idMenuTransform_ZoomMaxAspect = m_vMenuTransform->insertItem( text, this, "transformZoomMaxAspect", 0 );
+  MENU( m_vMenuTransform, "&Transform" )
+  ITEM1( m_idMenuTransform_RotateRight, m_vMenuTransform, "Rotate clockwise", "transformRotateRight" )
+  ITEM1( m_idMenuTransform_RotateLeft, m_vMenuTransform, "Rotate anti-clockwise", "transformRotateLeft" )
+  ITEM1( m_idMenuTransform_RotateAngle, m_vMenuTransform, "Rotate with angle...", "transformRotateAngle" )
+  ITEM1( m_idMenuTransform_FlipVertical, m_vMenuTransform, "Flip vertical", "transformFlipVertical" )
+  ITEM1( m_idMenuTransform_FlipHorizontal, m_vMenuTransform, "Flip honrizontal", "transformFlipHorizontal" )
+  SEPARATOR( m_vMenuTransform )
+  ITEM1( m_idMenuTransform_ZoomFactor, m_vMenuTransform, "&Zoom...", "transformZoomFactor" )
+  ITEM1( m_idMenuTransform_ZoomIn10, m_vMenuTransform, "Zoom &in 10%", "transformZoomIn10" )
+  ITEM1( m_idMenuTransform_ZoomOut10, m_vMenuTransform, "Zoom &out 10%", "transformZoomOut10" )
+  ITEM1( m_idMenuTransform_ZoomDouble, m_vMenuTransform, "&Double size", "transformZoomDouble" )
+  ITEM1( m_idMenuTransform_ZoomHalf, m_vMenuTransform, "&Half size", "transformZoomHalf" )
+  ITEM1( m_idMenuTransform_ZoomMax, m_vMenuTransform, "&Max", "transformZoomMax" )
+  ITEM1( m_idMenuTransform_ZoomMaxAspect, m_vMenuTransform, "Max/&aspect", "transformZoomMaxAspect" )
 
   // Filter
-  text = Q2C( i18n( "F&ilter" ) );
-  _menubar->insertMenu( text, m_vMenuFilter, -1, -1 );
+  MENU( m_vMenuFilter, "&Filter" )
 
   // PlugIns
-  text = Q2C( i18n( "&Plug-Ins" ) );
-  _menubar->insertMenu( text, m_vMenuPlugIns, -1, -1 );
+  MENU( m_vMenuPlugIns, "&Plug-Ins" )
 
   // Extras
-  text = Q2C( i18n( "&Extras" ) );
-  _menubar->insertMenu( text, m_vMenuExtras, -1, -1 );
-
-  text = Q2C( i18n("Run &Gimp") );
-  m_idMenuExtras_RunGimp = m_vMenuExtras->insertItem( text, this, "extrasRunGimp", 0 );
-  text = Q2C( i18n("Run &xv") );
-  m_idMenuExtras_RunXV = m_vMenuExtras->insertItem( text, this, "extrasRunXV", 0 );
-  text = Q2C( i18n("Run &Command...") );
-  m_idMenuExtras_RunCommand = m_vMenuExtras->insertItem( text, this, "extrasRunCommand", 0 );
+  MENU( m_vMenuExtras, "&Extras" )
+  ITEM1( m_idMenuExtras_RunGimp, m_vMenuExtras, "Run &Gimp", "extrasRunGimp" )
+  ITEM1( m_idMenuExtras_RunXV, m_vMenuExtras, "Run &xv", "extrasRunXV" )
+  ITEM1( m_idMenuExtras_RunCommand, m_vMenuExtras, "Run &Command...", "extrasRunCommand" )
 
   return true;
 }
@@ -409,24 +295,28 @@ void KImageView::slotUpdateView()
     return;
   }
 
-  double dh = (double) height() / (double) m_pDoc->image().height();
-  double dw = (double) width() / (double) m_pDoc->image().width();
-  double d = ( dh < dw ? dh : dw );
+  double dh, dw, d;
 	
   switch ( m_drawMode )
   {
-    default:
-  	case 0:
+  	case OriginalSize:
 	  m_pixmap.convertFromImage( m_pDoc->image() );
   	  break;
-  	case 1:
+  	case FitToView:
 	  m_pixmap.convertFromImage( m_pDoc->image().smoothScale( width(), height() ) );
   	  break;
-  	case 2:
+  	case FitWithProps:
+      dh = (double) height() / (double) m_pDoc->image().height();
+      dw = (double) width() / (double) m_pDoc->image().width();
+      d = ( dh < dw ? dh : dw );
 	  m_pixmap.convertFromImage( m_pDoc->image().smoothScale( int( d * m_pDoc->image().width() ), int ( d * m_pDoc->image().height() ) ) );
   	  break;
+    case ZoomFactor:
+      dw = m_pDoc->image().width() * m_zoomFactor.x() / 100;
+      dh = m_pDoc->image().height() * m_zoomFactor.y() / 100;
+	  m_pixmap.convertFromImage( m_pDoc->image().smoothScale( int( dw * m_pDoc->image().width() ), int ( dh * m_pDoc->image().height() ) ) );
+  	  break;
   }
-
   QWidget::update();
 }
 
@@ -436,7 +326,7 @@ void KImageView::viewFitToView()
   {
     return;
   }
-  m_drawMode = 1;
+  m_drawMode = FitToView;
   slotUpdateView();
 }
 
@@ -446,7 +336,7 @@ void KImageView::viewFitWithProportions()
   {
     return;
   }
-  m_drawMode = 2;
+  m_drawMode = FitWithProps;
   slotUpdateView();
 }
 
@@ -456,7 +346,7 @@ void KImageView::viewOriginalSize()
   {
     return;
   }
-  m_drawMode = 0;
+  m_drawMode = OriginalSize;
   slotUpdateView();
 }
 
@@ -528,14 +418,13 @@ void KImageView::viewZoomFactor()
     QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nAction not available."), i18n( "OK" ) );
     return;
   }
-
-  QPoint factor( 100, 100 );
   KZoomFactorDialog dlg( NULL, "KImage" ); 
-
-  if( dlg.getValue( factor ) != QDialog::Accepted )
+  if( dlg.getValue( m_zoomFactor ) != QDialog::Accepted )
   {
     return;
   }
+  debug( "zoom factor: X: %i, Y: %i", m_zoomFactor.x(), m_zoomFactor.y() );
+  m_drawMode = ZoomFactor;
   slotUpdateView();
 }
 
@@ -555,8 +444,7 @@ void KImageView::viewCentered()
  */
 void KImageView::transformRotateRight()
 {
-  if( m_pDoc->isEmpty() )
-    return;
+  CHECK_ALL;
 
   debug( "Rotate Right" );
 
@@ -571,8 +459,7 @@ void KImageView::transformRotateRight()
  */
 void KImageView::transformRotateLeft()
 {
-  if( m_pDoc->isEmpty() )
-    return;
+  CHECK_ALL;
 
   debug( "Rotate Left" );
 
@@ -587,8 +474,7 @@ void KImageView::transformRotateLeft()
  */
 void KImageView::transformRotateAngle()
 {
-  if( m_pDoc->isEmpty() )
-    return;
+  CHECK_ALL;
 
   debug( "Rotate Angle" );
 
@@ -611,8 +497,7 @@ void KImageView::transformRotateAngle()
  */
 void KImageView::transformFlipVertical()
 {
-  if( m_pDoc->isEmpty() )
-    return;
+  CHECK_ALL;
 
   debug( "flipVertical" );
 
@@ -628,8 +513,7 @@ void KImageView::transformFlipVertical()
  */
 void KImageView::transformFlipHorizontal()
 {
-  if( m_pDoc->isEmpty() )
-    return;
+  CHECK_ALL;
 
   debug( "flipHorizontal" );
 
@@ -656,8 +540,7 @@ void KImageView::viewBackgroundColor()
 
 void KImageView::transformZoomFactor()
 {
-  if( m_pDoc->isEmpty() )
-    return;
+  CHECK_ALL;
 
   debug( "Zoom Factor" );
 
@@ -676,8 +559,7 @@ void KImageView::transformZoomFactor()
 
 void KImageView::transformZoomIn10()
 {
-  if( m_pDoc->isEmpty() )
-    return;
+  CHECK_ALL;
 
   debug( "Zoom In 10" );
 
@@ -689,8 +571,7 @@ void KImageView::transformZoomIn10()
 
 void KImageView::transformZoomOut10()
 {
-  if( m_pDoc->isEmpty() )
-    return;
+  CHECK_ALL;
 
   debug( "Zoom Out 10" );
 
@@ -702,8 +583,7 @@ void KImageView::transformZoomOut10()
 
 void KImageView::transformZoomDouble()
 {
-  if( m_pDoc->isEmpty() )
-    return;
+  CHECK_ALL;
 
   debug( "Zoom Double" );
 
@@ -715,8 +595,7 @@ void KImageView::transformZoomDouble()
 
 void KImageView::transformZoomHalf()
 {
-  if( m_pDoc->isEmpty() )
-    return;
+  CHECK_ALL;
 
   debug( "Zoom Half" );
 
@@ -728,8 +607,7 @@ void KImageView::transformZoomHalf()
 
 void KImageView::transformZoomMax()
 {
-  if( m_pDoc->isEmpty() )
-    return;
+  CHECK_ALL;
 
   debug( "Zoom Max" );
 
@@ -740,8 +618,7 @@ void KImageView::transformZoomMax()
 
 void KImageView::transformZoomMaxAspect()
 {
-  if( m_pDoc->isEmpty() )
-    return;
+  CHECK_ALL;
 
   debug( "Zoom Max Aspect" );
 
@@ -763,56 +640,49 @@ QString KImageView::tmpFilename()
   return file;
 }
 
+void KImageView::slotCommandExecuted()
+{
+  if( !m_pDoc->openDocument( m_tmpFile, 0L ) )
+  {
+    QString tmp;
+    tmp.sprintf( i18n( "Could not open\n%s" ), m_tmpFile.data() );
+    QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+    return;
+  }
+  debug( "ending process" );
+}
+
 void KImageView::executeCommand( KProcess& proc )
 {
   debug( "starting process" );
 
-  QString file = tmpFilename();
+  m_tmpFile = tmpFilename();
 
-  parentWidget()->hide(); 
-  
-  if( !m_pDoc->saveDocument( file, 0L ) )
+  if( !m_pDoc->saveDocument( m_tmpFile, 0L ) )
   {
     QString tmp;
-    tmp.sprintf( i18n( "Could not save\n%s" ), file.data() );
+    tmp.sprintf( i18n( "Could not save\n%s" ), m_tmpFile.data() );
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
     return;
   }
-
-  proc << file;
-  proc.start( KProcess::Block );
-
-  if( !m_pDoc->openDocument( file, 0L ) )
-  {
-    QString tmp;
-    tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
-    QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
-    return;
-  }
-
-  parentWidget()->show(); 
-
-  debug( "ending process" );
+  QApplication::connect( &proc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCommandExecuted() ) );
+  proc << m_tmpFile;
+  proc.start( KProcess::NotifyOnExit );
 }
 
 void KImageView::extrasRunGimp()
 {
-  if( m_pDoc->isEmpty() )
-  {
-    return;
-  }
+  CHECK_ALL;
+
   KProcess proc;
   proc << "gimp";
-  //proc << "/t";
   executeCommand( proc );
 }
 
 void KImageView::extrasRunXV()
 {
-  if( m_pDoc->isEmpty() )
-  {
-    return;
-  }
+  CHECK_ALL;
+
   KProcess proc;
   proc << "xv";
   executeCommand( proc );
@@ -820,10 +690,8 @@ void KImageView::extrasRunXV()
 
 void KImageView::extrasRunCommand()
 {
-  if( m_pDoc->isEmpty() )
-  {
-    return;
-  }
+  CHECK_ALL;
+
   QString tmp;
   KInputDialog dlg( 0, i18n( "Execute Command" ), i18n( "Commandline:" ) );
   if( dlg.getStr( tmp ) != KDialog::Accepted )
@@ -837,10 +705,7 @@ void KImageView::extrasRunCommand()
 
 void KImageView::resizeEvent( QResizeEvent *_ev )
 {
-  if( m_pDoc->isEmpty() )
-  {
-    return;
-  }
+  CHECK_ALL;
 }
 
 KImageDoc* KImageView::doc()

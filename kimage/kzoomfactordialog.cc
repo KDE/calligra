@@ -40,22 +40,18 @@ KZoomFactorDialog::KZoomFactorDialog( QWidget* parent, const char* name, WFlags 
   // Inputline X
   m_pLineEditXFactor = new KIntLineEdit( this, i18n( "inputZoomX" ) );
   grid->addMultiCellWidget( m_pLineEditXFactor, 1, 1, 0, 3 );
-  QLabel* label = new QLabel( m_pLineEditXFactor, i18n( "Test" ), this );
+  QLabel* label = new QLabel( m_pLineEditXFactor, i18n( "Zoom factor for width in % (1x = 100)" ), this );
   grid->addWidget( label, 0, 0 );
 
   // Inputline Y
   m_pLineEditYFactor = new KIntLineEdit( this, i18n( "inputZoomX" ) );
-  grid->addMultiCellWidget( m_pLineEditYFactor, 3, 1, 0, 3 );
-  label = new QLabel( m_pLineEditYFactor, i18n( "Test" ), this );
+  grid->addMultiCellWidget( m_pLineEditYFactor, 3, 3, 0, 3 );
+  label = new QLabel( m_pLineEditYFactor, i18n( "Zoom factor for height in % (1x = 100)" ), this );
   grid->addWidget( label, 2, 0 );
 
   // OK-Button
   QPushButton* buttonOK = new QPushButton( this, "ButtonOK" );
   buttonOK->setText( i18n( "OK" ) );
-  buttonOK->setAutoRepeat(false);
-  buttonOK->setAutoResize(false);
-  buttonOK->setAutoDefault(true);
-  buttonOK->setDefault(true);
   buttonOK->resize( buttonOK->sizeHint() );
   connect( buttonOK, SIGNAL( clicked() ), this, SLOT( accept() ) );
   grid->addWidget( buttonOK, 5, 2 );

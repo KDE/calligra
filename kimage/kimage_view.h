@@ -85,7 +85,11 @@ public slots:
   // Document signals
   void slotUpdateView();
 
+  void slotCommandExecuted();
+
 protected:
+  enum DrawMode { OriginalSize, FitToView, FitWithProps, ZoomFactor };
+
   virtual void init();
   virtual bool event( const char* _event, const CORBA::Any& _value );
   virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
@@ -106,6 +110,8 @@ protected:
 
   // edit menu
   OpenPartsUI::Menu_var m_vMenuEdit;
+  CORBA::Long m_idMenuEdit_Undo;
+  CORBA::Long m_idMenuEdit_Redo;
   CORBA::Long m_idMenuEdit_Edit;
   CORBA::Long m_idMenuEdit_Import;
   CORBA::Long m_idMenuEdit_Export;
@@ -155,9 +161,11 @@ protected:
   CORBA::Long m_idMenuHelp_Using;
     
 private:
+  QPoint m_zoomFactor;
+  QString m_tmpFile;
   KImageDoc* m_pDoc;  
   QPixmap m_pixmap;
-  int m_drawMode;
+  DrawMode m_drawMode;
   int m_centerMode;
 };
 
