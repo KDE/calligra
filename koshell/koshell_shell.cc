@@ -6,10 +6,12 @@
 #include <koFrame.h>
 #include <koMainWindow.h>
 #include <koQueryTypes.h>
+#include <koQueryTrader.h>
 #include <opMainWindowIf.h>
 #include <opMenuBarManager.h>
 #include <opToolBar.h>
 #include <opMenu.h>
+#include <opApplication.h>
 
 #include <kfiledialog.h>
 #include <kapp.h>
@@ -26,12 +28,6 @@ KoShellWindow::KoShellWindow()
   
   s_lstShells->append( this );
 
-  /* if ( m_pFrame )
-  {
-    delete m_pFrame;
-    m_pFrame = 0L;
-    } */
-
   QWidget *w = new QWidget( opToolBar(1) );
   QBoxLayout *ml = new QVBoxLayout(w);
 
@@ -47,17 +43,6 @@ KoShellWindow::KoShellWindow()
       m_mapComponents[ id ] = &*it;
     }
   
-    /* QPixmap pix;
-  pix.load( "/opt/kde/share/icons/image.xpm" );
-  m_pKoolBar->insertItem( file, pix );
-  pix.load( "/opt/kde/share/icons/html.xpm" );
-  m_pKoolBar->insertItem( file, pix );
-  pix.load( "/opt/kde/share/icons/txt.xpm" );
-  m_pKoolBar->insertItem( file, pix );
-  pix.load( "/opt/kde/share/icons/kfm.xpm" );
-  m_pKoolBar->insertItem( file, pix );
-  m_pKoolBar->insertGroup("Edit");
-  m_pKoolBar->insertGroup("View"); */
   m_grpDocuments = m_pKoolBar->insertGroup("Documents");
   m_pKoolBar->insertGroup("Snippets");
 
@@ -70,6 +55,8 @@ KoShellWindow::KoShellWindow()
   opToolBar(1)->insertWidget( 1, 80, w );
   
   opToolBar(1)->setBarPos(KToolBar::Left);
+
+  m_pKfmFrame = m_pFrame;
 }
 
 KoShellWindow::~KoShellWindow()
@@ -260,6 +247,7 @@ bool KoShellWindow::newPage( KoDocumentEntry& _e )
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
+  opToolBar()->setFullWidth(false);
 
   return true;
 }
@@ -419,8 +407,8 @@ void KoShellWindow::slotFileNew()
       QMessageBox::critical( this, i18n("KImage Error"), i18n("Could not create new document"), i18n("OK") ); */
 }
 
-void KoShellWindow::slotFileOpen()
-{
+//void KoShellWindow::slotFileOpen()
+//{
   /* QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
 
   if ( file.isNull() )
@@ -432,7 +420,7 @@ void KoShellWindow::slotFileOpen()
     tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
     } */
-}
+//}
 
 void KoShellWindow::slotFileSave()
 {
@@ -510,6 +498,58 @@ KOffice::View_ptr KoShellWindow::view()
     return 0L;
 
   return KOffice::View::_duplicate( m_activePage->m_vView );
+}
+
+void KoShellWindow::slotFileOpen()
+{
+  if ( !CORBA::is_nil( m_vKfm ) )
+  {
+    if ( m_pFrame && m_pFrame != m_pKfmFrame )
+      m_pFrame->hide();
+    m_pFrame = m_pKfmFrame;
+    m_pFrame->raise();
+    setView( m_pFrame );
+    m_pFrame->show();
+    interface()->setActivePart( m_vKfm->id() );
+    return;
+  }
+  
+  CosTrading::OfferIterator_var offer_itr;
+  CosTrading::PolicyNameSeq_var limits_applied;
+  CosTrading::OfferSeq_var offers;
+  koQueryTrader( "FileManager", "", 1, offers, offer_itr, limits_applied );
+  cerr << "################ FileManager=" << offers->length() << " ###########" << endl;
+
+  if ( offers->length() > 0 )
+  {
+    OpenParts::Application_var app = OpenParts::Application::_narrow( (*offers)[0].reference );
+    assert( !CORBA::is_nil( app ) );
+
+    if ( m_pFrame && m_pFrame != m_pKfmFrame )
+      m_pFrame->hide();
+    m_pFrame = m_pKfmFrame;
+    m_pFrame->raise();
+    setView( m_pFrame );
+    m_pFrame->show();
+
+    m_vKfm = app->createPart();
+    assert( !CORBA::is_nil( m_vKfm ) );
+    m_vKfm->setMainWindow( this->koInterface() );
+    m_pFrame->OPFrame::attach( m_vKfm );
+    interface()->setActivePart( m_vKfm->id() );
+  }
+
+  if( m_pFileMenu )
+  {
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
+  }
+  
+  opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
+  opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
+  opToolBar()->setFullWidth(false);
 }
 
 #include "koshell_shell.moc"

@@ -31,7 +31,7 @@ void koInitPreferences()
 {
   // Try to read the config file with the users preferences
   QString file = kapp->localkdedir().data();
-  file += "/share/apps/koffice/preferences.kfg";
+  file += "/share/apps/kio_trader/preferences.kfg";
   struct stat buff;
   if ( stat( file, &buff ) == -1 )
     return;

@@ -26,3 +26,4 @@ ActivationMode=shared
 Type=OpenPart
 Icon=kdiagramm.xpm
 MiniIcon=kdiagramm.xpm
+ServiceType=KOfficeDocument

@@ -21,3 +21,4 @@ ActivationMode=shared
 Type=OpenPart
 Icon=kohtml.xpm
 MiniIcon=unknown.xpm
+ServiceType=KOfficeDocument

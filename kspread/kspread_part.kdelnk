@@ -27,3 +27,4 @@ ActivationMode=shared
 Type=OpenPart
 Icon=kspread.xpm
 MiniIcon=kspread.xpm
+ServiceType=KOfficeDocument

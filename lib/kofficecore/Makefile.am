@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES= $(KOML_INCLUDES) $(KSTORE_INCLUDES) -I$(idldir) $(all_includes) $(MICO_INCLUDES)
+INCLUDES= $(KOML_INCLUDES) $(KSTORE_INCLUDES) -I$(srcdir)/../ -I$(idldir) $(all_includes) $(MICO_INCLUDES)
 LDFLAGS	= $(all_libraries)  -version-info 1:0:0
 LIBADD  = -lkom $(LIB_KFILE) $(LIBMICO) 
 

@@ -28,3 +28,4 @@ ActivationMode=shared
 Type=OpenPart
 Icon=killustrator.xpm
 MiniIcon=killustrator.xpm
+ServiceType=KOfficeDocument

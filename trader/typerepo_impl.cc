@@ -74,7 +74,7 @@ TypeRepository::add_type( const char* name,
    * Check for duplicate property names
    */
   map<string,bool> mp;
-  for( int j = 0; j < type.props.length(); j++ )
+  for( CORBA::ULong j = 0; j < type.props.length(); j++ )
   {
     map<string,bool>::iterator it = mp.find( static_cast<const char*>(type.props[j].name) );
     if ( it != mp.end() )
@@ -92,14 +92,14 @@ TypeRepository::add_type( const char* name,
   // Make a copy
   TypeStruct t2 = type;
   // Recursion over all super types to get all properties
-  for( int k = 0; k < type.super_types.length(); k++ )
+  for( CORBA::ULong k = 0; k < type.super_types.length(); k++ )
   {
     map<string,CosTradingRepos::ServiceTypeRepository::TypeStruct>::iterator it2 = checkServiceType( type.super_types[ k ] );
     fully_describe_type( &t2, it2->second );
   }
   // Find duplicate properties
   map<string,CosTradingRepos::ServiceTypeRepository::PropStruct> map2;
-  for( int l = 0; l < t2.props.length(); l++ )
+  for( CORBA::ULong l = 0; l < t2.props.length(); l++ )
   {
     map<string,CosTradingRepos::ServiceTypeRepository::PropStruct>::iterator it =
       map2.find( static_cast<const char*>(t2.props[l].name) );
@@ -240,9 +240,9 @@ TypeRepository::fully_describe_type( const char* name )
   /**
    * Recursion over all super types
    */
-  for( int i = 0; i < t->super_types.length(); i++ )
+  for( CORBA::ULong i = 0; i < it->second.super_types.length(); i++ )
   {
-    map<string,CosTradingRepos::ServiceTypeRepository::TypeStruct>::iterator it2 = checkServiceType( t->super_types[ i ] );
+    map<string,CosTradingRepos::ServiceTypeRepository::TypeStruct>::iterator it2 = checkServiceType( it->second.super_types[ i ] );
     fully_describe_type( t, it2->second );
   }
 
@@ -255,9 +255,9 @@ void TypeRepository::fully_describe_type( CosTradingRepos::ServiceTypeRepository
   /**
    * Add properties
    */
-  int len = result->props.length();
+  CORBA::ULong len = result->props.length();
   result->props.length( len + super_type.props.length() );
-  for( int k = 0; k < super_type.props.length(); k++ )
+  for( CORBA::ULong k = 0; k < super_type.props.length(); k++ )
   {
     result->props[ len + k ] = super_type.props[ k ];
   }
@@ -265,10 +265,10 @@ void TypeRepository::fully_describe_type( CosTradingRepos::ServiceTypeRepository
   /**
    * Recursion over all super types
    */
-  for( int i = 0; i < super_type.super_types.length(); i++ )
+  for( CORBA::ULong i = 0; i < super_type.super_types.length(); i++ )
   {
     // Add supertypes
-    int len = result->super_types.length();
+    CORBA::ULong len = result->super_types.length();
     result->super_types.length( len + 1 );
     result->super_types[ len ] = super_type.super_types[ i ];
 
@@ -338,7 +338,7 @@ bool TypeRepository::isSubTypeOf( const char* sub, const char* super )
   
   CosTradingRepos::ServiceTypeRepository::TypeStruct_var v = fully_describe_type( sub );
   
-  for( int i = 0; i < v->super_types.length(); i++ )
+  for( CORBA::ULong i = 0; i < v->super_types.length(); i++ )
     if ( strcmp( v->super_types[i], super ) == 0 )
       return true;
   

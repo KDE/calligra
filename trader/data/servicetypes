@@ -113,3 +113,109 @@
     };
   };
 };
+
+
+'servicetype' 'KOMApplication'
+{
+  'Interface'<string> = 'IDL:KOM/Component:1.0';
+  'properties' 'properties'
+  {
+    'property' 'Comment'
+    {
+	'Type'<string> = 'string' ;
+    };
+    'property' 'Name'
+    {
+	'Type'<string> = 'string' ;
+    };
+    'property' 'Exec'
+    {
+	'Type'<string> = 'string' ;
+    };
+    'property' 'ActivationMode'
+    {
+	'Type'<string> = 'string' ;
+    };
+    'property' 'RepoID'
+    {
+	'Type'<string> = '@string' ;
+    };
+    'property' 'MiniIcon'
+    {
+	'Type'<string> = 'string' ;
+    };
+    'property' 'Icon'
+    {
+	'Type'<string> = 'string' ;
+    };
+  };
+};
+
+
+'servicetype' 'OPApplication'
+{
+  'SuperTypes'<@string> = { 'KOMApplication' };
+  'Interface'<string> = 'IDL:OpenParts/Application:1.0';
+  'properties' 'properties'
+  {
+    'property' 'MimeTypes'
+    {
+	'Type'<string> = '@string' ;
+    };
+    'property' 'DocumentFactory'
+    {
+	'Type'<string> = 'boolean';
+    };
+    'property' 'PartFactory'
+    {
+	'Type'<string> = 'boolean';
+    };
+    'property' 'WindowFactory'
+    {
+	'Type'<string> = 'boolean';
+    };
+  };
+};
+
+'servicetype' 'FileManager'
+{
+  'SuperTypes'<@string> = { 'OPApplication' };
+  'Interface'<string> = 'IDL:KFM/Application:1.0';
+  'properties' 'properties'
+  {
+  };
+};
+
+
+'servicetype' 'WWW-Browser'
+{
+  'SuperTypes'<@string> = { 'OPApplication' };
+  'Interface'<string> = 'IDL:Browser/Application:1.0';
+  'properties' 'properties'
+  {
+   'property' 'HTML-Version'
+   {
+	'Type'<string> = 'float';
+   };
+   'property' 'Features'
+   {
+	'Type'<string> = '@string';
+   };
+   'property' 'SSL'
+   {
+	'Type'<string> = 'boolean';
+   };
+   'property' 'Java'
+   {
+	'Type'<string> = 'boolean';
+   };
+   'property' 'JDK-Version'
+   {
+	'Type'<string> = 'float';
+   };
+   'property' 'JavaScript'
+   {
+	'Type'<string> = 'boolean';
+   };
+  };
+};

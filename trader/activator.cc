@@ -186,6 +186,7 @@ CORBA::Object_ptr Activator::activate( const char *_server, const char *_repoid,
   if ( CORBA::is_nil( obj ) )
   {
     cout << "could not bind to server: " << _server << endl;
+    cout << "Searching for id: " << _repoid << endl;
     return CORBA::Object::_nil();
   }
   /*

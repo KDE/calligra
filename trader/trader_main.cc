@@ -107,6 +107,7 @@ Trader::Trader( CORBA::Object_ptr _obj )
   initServiceTypes( this );
   koScanParts( this, m_pLookup->_orbnc() );
   koScanFilters( this, m_pLookup->_orbnc() );
+  koScanOfficeParts( this, m_pLookup->_orbnc() );
 }
 
 Trader::Trader( const CORBA::BOA::ReferenceData &tag )
@@ -132,6 +133,7 @@ Trader::Trader( const CORBA::BOA::ReferenceData &tag )
   initServiceTypes( this );
   koScanParts( this, m_pLookup->_orbnc() );
   koScanFilters( this, m_pLookup->_orbnc() );
+  koScanOfficeParts( this, m_pLookup->_orbnc() );
 }
   
 CosTrading::Lookup_ptr Trader::lookup_if()
@@ -243,7 +245,7 @@ void Trader::export( Offer *_offer )
     delete _offer;
     mico_throw( exc );
   }
-  
+
   // Check wether property names are duplicated and
   // wether the types of the property values match the ones of the repository
   list<string> names;
@@ -251,9 +253,11 @@ void Trader::export( Offer *_offer )
   for( CORBA::ULong l = 0; l < len; l++ )
   {
     // Check for dupes
-    list<string>::iterator it = find( names.begin(), names.end(), _offer->properties[l].name.in() );
+    list<string>::iterator it = find( names.begin(), names.end(),
+				      _offer->properties[l].name.in() );
     if ( it != names.end() )
     {
+      cerr << "Duplicate EXC" << endl;
       CosTrading::DuplicatePropertyName exc;
       exc.name = CORBA::string_dup( _offer->properties[l].name.in() );
       delete _offer;
@@ -441,7 +445,6 @@ void Trader::import( const char* type, const char* constr, const char* pref, con
     }
     else if ( strcmp( "RequestId", policies[i].name ) == 0 )
     {
-      CORBA::Boolean b;
       if ( ! ( policies[i].value >>= stem ) )
       {
 	CosTrading::Lookup::PolicyTypeMismatch exc;
@@ -729,7 +732,6 @@ void Trader::import( const char* type, const char* constr, const char* pref, con
       PreferencesMaxima m;
       m.type = PreferencesMaxima::PM_INVALID_INT;
       maxima[ ts->props[l].name.in() ] = m;
-      cerr << "NUM=" << ts->props[l].name.in() << endl;
     }
     else if ( ts->props[l].value_type->equaltype( CORBA::_tc_float ) )
     {
@@ -934,7 +936,7 @@ void Trader::import( const char* type, const char* constr, const char* pref, con
 	      string name;
 	      name.assign( recipe, start, p - start );
 	      // Find property with that name
-	      CORBA::Long l = 0;
+	      CORBA::ULong l = 0;
 	      while( l < it4->offer->properties.length() &&
 		     name != it4->offer->properties[l].name.in() )
 		l++;
@@ -952,15 +954,12 @@ void Trader::import( const char* type, const char* constr, const char* pref, con
 	}
       }
       
-      cerr << "->Proxy" << endl;
       it4->offer->vProxy->target->query( type, constraint.c_str(), pref, policies, desired_props, 1, seq, itr, limits );
-      cerr << "Proxy-<" << endl;
       // TODO: catch all exceptions here
 
       // Release iterator at once
       if ( !CORBA::is_nil( itr ) )
       {
-	cerr << "Destruct" << endl;
 	itr->destroy();
 	CORBA::release( itr );
       }
@@ -980,7 +979,6 @@ void Trader::import( const char* type, const char* constr, const char* pref, con
       }
       
       o.reference = seq[0].reference;
-      cerr << "Proxy call done" << endl;
     }
       
     /**
@@ -1051,7 +1049,6 @@ void Trader::import( const char* type, const char* constr, const char* pref, con
 	char *s;
 	if ( !( (*offers)[x].properties[y].value >>= s ) )
 	{
-	  cerr << "Value " << (*offers)[x].properties[y].name << " is not of type string as expected" << endl;
 	  continue;
 	}
 	string filename = (const char*)s;
@@ -1098,6 +1095,9 @@ CosTrading::Register::OfferInfo* Trader::describe( const char* id )
   CosTrading::UnknownOfferId exc;
   exc.id = CORBA::string_dup( id );
   mico_throw( exc );
+
+  // never reached, but we want the compiler to shutup
+  return 0;
 }
 
 void Trader::modify( const char* id, const CosTrading::PropertyNameSeq& del_list,
@@ -1319,8 +1319,6 @@ char* Trader::export_proxy( CosTrading::Lookup_ptr target, const char* type,
 			    const CosTrading::PropertySeq& properties, CORBA::Boolean if_match_all,
 			    const char* recipe, const CosTrading::PolicySeq& policies_to_pass_on )
 {
-  cerr << "ADDING proxy of type " << type << endl;
-  
   CosTrading::Proxy::ProxyInfo* info = new CosTrading::Proxy::ProxyInfo;
   info->target = CosTrading::Lookup::_duplicate( target );
   info->type = CORBA::string_dup( type );
@@ -1393,6 +1391,9 @@ CosTrading::Proxy::ProxyInfo* Trader::describe_proxy( const char* id )
   CosTrading::UnknownOfferId exc;
   exc.id = id;
   mico_throw( exc );  
+
+  // Never reached, but we want the compiler to shutup
+  return 0;
 }
 
 /***********************************************************

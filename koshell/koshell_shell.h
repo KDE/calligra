@@ -4,6 +4,7 @@
 #include <koMainWindow.h>
 #include <koQueryTypes.h>
 #include <koKoolBar.h>
+#include <openparts.h>
 
 #include <qlist.h>
 #include <qtimer.h>
@@ -73,8 +74,16 @@ protected:
   
   vector<KoDocumentEntry> m_lstComponents;
   map<int,KoDocumentEntry*> m_mapComponents;
+
+  OpenParts::Part_var m_vKfm;
+  KoFrame* m_pKfmFrame;
   
   static QList<KoShellWindow>* s_lstShells;
 };
 
 #endif
+
+
+
+
+

@@ -27,3 +27,4 @@ ActivationMode=shared
 Type=OpenPart
 Icon=kpresenter.xpm
 MiniIcon=kpresenter.xpm
+ServiceType=KOfficeDocument

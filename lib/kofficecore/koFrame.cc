@@ -272,7 +272,7 @@ void KoFrame::paintEvent( QPaintEvent * )
   painter.end();
 }
 
-void KoFrame::resizeEvent( QResizeEvent * )
+void KoFrame::resizeEvent( QResizeEvent *_ev )
 {
   if ( !CORBA::is_nil( m_vView ) )
   {
@@ -282,7 +282,12 @@ void KoFrame::resizeEvent( QResizeEvent * )
     else
       XMoveResizeWindow( qt_xdisplay(), win, 0, 0, width(), height() );
   }
-  
+  else if ( !CORBA::is_nil( m_rPart ) )
+  {
+    OPFrame::resizeEvent( _ev );
+    return;
+  }
+
   if ( m_bResizeMode )
   {
     m_pResizeWin1->move( 0, 0 );
