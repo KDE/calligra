@@ -762,6 +762,9 @@ void KWordView::formatStyle()
 /*===============================================================*/
 void KWordView::extraSpelling()
 {
+  currParag = 0L;
+  currFrameSetNum = -1;
+  kspell = new KSpell(0L,i18n("Spell Checking"),this,SLOT(spellCheckerReady()));
 }
 
 /*===============================================================*/
@@ -1340,7 +1343,8 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   // extra menu
   _menubar->insertMenu( i18n( "&Extra" ), m_vMenuExtra, -1, -1 );
 
-  m_idMenuExtra_Spelling = m_vMenuExtra->insertItem4( i18n("&Spelling..."), this, "extraSpelling", ALT + Key_C, -1, -1 );
+  pix = OPUIUtils::convertPixmap(ICON("spellcheck.xpm"));
+  m_idMenuExtra_Spelling = m_vMenuExtra->insertItem6( pix, i18n("&Spell Cheking..."), this, "extraSpelling", ALT + Key_C, -1, -1 );
   m_idMenuExtra_Stylist = m_vMenuExtra->insertItem4( i18n("&Stylist..."), this, "extraStylist", ALT + Key_S, -1, -1 );
 
   m_vMenuExtra->insertSeparator( -1 );
@@ -1407,6 +1411,13 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   // paste
   pix = OPUIUtils::convertPixmap(ICON("editpaste.xpm"));
   m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editPaste", true, i18n("Paste"), -1);
+
+  m_vToolBarEdit->insertSeparator( -1 );
+
+  // spelling
+  pix = OPUIUtils::convertPixmap(ICON("spellcheck.xpm"));
+  m_idButtonEdit_Spelling = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraSpelling", 
+							   true, i18n("Spell Checking"), -1);
 
   m_vToolBarEdit->enable( OpenPartsUI::Show );
 
@@ -1909,6 +1920,90 @@ void KWordView::newPageLayout(KoPageLayout _layout)
 
   if (m_pKWordDoc->getProcessingType() == KWordDocument::DTP)
     gui->getPaperWidget()->frameSizeChanged(_layout);
+}
+
+/*================================================================*/
+void KWordView::spellCheckerReady()
+{
+  if (!currParag && currFrameSetNum == -1)
+    {
+      QObject::connect(kspell,SIGNAL(misspelling(char*,QStrList*,unsigned)),this,SLOT(spellCheckerMisspelling(char*,QStrList*,unsigned)));
+      QObject::connect(kspell,SIGNAL(corrected(char*,char*,unsigned)),this,SLOT(spellCheckerCorrected(char*,char*,unsigned)));
+      QObject::connect(kspell,SIGNAL(done(char*)),this,SLOT(spellCheckerDone(char*)));
+      currParag = 0L;
+      for (unsigned int i = 0;i < m_pKWordDoc->getNumFrameSets();i++)
+	{
+	  KWFrameSet *frameset = m_pKWordDoc->getFrameSet(i);
+	  if (frameset->getFrameType() != FT_TEXT) continue;
+	  currFrameSetNum = i;
+	  currParag = dynamic_cast<KWTextFrameSet*>(frameset)->getFirstParag();
+	  break;
+	}
+      if (!currParag)
+	{
+	  kspell->cleanUp();
+	  QObject::disconnect(kspell,SIGNAL(misspelling(char*,QStrList*,unsigned)),this,
+			      SLOT(spellCheckerMisspelling(char*,QStrList*,unsigned)));
+	  QObject::disconnect(kspell,SIGNAL(corrected(char*,char*,unsigned)),this,SLOT(spellCheckerCorrected(char*,char*,unsigned)));
+	  QObject::disconnect(kspell,SIGNAL(done(char*)),this,SLOT(spellCheckerDone(char*)));
+	  delete kspell;
+	  return;
+	}
+    }
+  else currParag = currParag->getNext();
+
+  if (!currParag)
+    {
+      currFrameSetNum++;
+      if (currFrameSetNum >= static_cast<int>(m_pKWordDoc->getNumFrameSets()))
+	{
+	  kspell->cleanUp();
+	  QObject::disconnect(kspell,SIGNAL(misspelling(char*,QStrList*,unsigned)),this,
+			      SLOT(spellCheckerMisspelling(char*,QStrList*,unsigned)));
+	  QObject::disconnect(kspell,SIGNAL(corrected(char*,char*,unsigned)),this,SLOT(spellCheckerCorrected(char*,char*,unsigned)));
+	  QObject::disconnect(kspell,SIGNAL(done(char*)),this,SLOT(spellCheckerDone(char*)));
+	  delete kspell;
+	  return;
+	}
+      currParag = 0L;
+      for (unsigned int i = currFrameSetNum;i < m_pKWordDoc->getNumFrameSets();i++)
+	{
+	  KWFrameSet *frameset = m_pKWordDoc->getFrameSet(i);
+	  if (frameset->getFrameType() != FT_TEXT) continue;
+	  currFrameSetNum = i;
+	  currParag = dynamic_cast<KWTextFrameSet*>(frameset)->getFirstParag();
+	  break;
+	}
+      if (!currParag)
+	{
+	  kspell->cleanUp();
+	  QObject::disconnect(kspell,SIGNAL(misspelling(char*,QStrList*,unsigned)),this,
+			      SLOT(spellCheckerMisspelling(char*,QStrList*,unsigned)));
+	  QObject::disconnect(kspell,SIGNAL(corrected(char*,char*,unsigned)),this,SLOT(spellCheckerCorrected(char*,char*,unsigned)));
+	  QObject::disconnect(kspell,SIGNAL(done(char*)),this,SLOT(spellCheckerDone(char*)));
+	  delete kspell;
+	  return;
+	}
+    }
+
+  QString text = currParag->getKWString()->toString(0,currParag->getTextLen());
+  kspell->check((char*)text.data());
+}
+
+/*================================================================*/
+void KWordView::spellCheckerMisspelling(char* orig,QStrList* suggestions,unsigned pos)
+{
+}
+
+/*================================================================*/
+void KWordView::spellCheckerCorrected(char* orig,char* correct,unsigned pos)
+{
+}
+
+/*================================================================*/
+void KWordView::spellCheckerDone(char*)
+{
+  spellCheckerReady(); 
 }
 
 /*================================================================*/

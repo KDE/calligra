@@ -90,7 +90,7 @@ void KWStyleManager::setupTab2()
 {
   tab2 = new QWidget(this);
 
-  grid2 = new QGridLayout(tab2,5,2,15,7);
+  grid2 = new QGridLayout(tab2,8,1,15,7);
 
   cFont = new QComboBox(false,tab2);
   cFont->insertItem(i18n("Don't update Fonts"));
@@ -117,45 +117,50 @@ void KWStyleManager::setupTab2()
   cAlign->insertItem(i18n("Don't update Aligns/Flows"));
   cAlign->insertItem(i18n("Update Aligns/Flows"));
   cAlign->resize(cFont->sizeHint());
-  grid2->addWidget(cAlign,0,1);
+  grid2->addWidget(cAlign,3,0);
 
   cNumbering = new QComboBox(false,tab2);
   cNumbering->insertItem(i18n("Don't update Numbering"));
   cNumbering->insertItem(i18n("Update Numbering"));
   cNumbering->resize(cFont->sizeHint());
-  grid2->addWidget(cNumbering,1,1);
+  grid2->addWidget(cNumbering,4,0);
 
   cBorder = new QComboBox(false,tab2);
   cBorder->insertItem(i18n("Don't update Borders"));
   cBorder->insertItem(i18n("Update Borders"));
   cBorder->resize(cFont->sizeHint());
-  grid2->addWidget(cBorder,2,1);
+  grid2->addWidget(cBorder,5,0);
 
   cTabs = new QComboBox(false,tab2);
   cTabs->insertItem(i18n("Don't update Tabulators"));
   cTabs->insertItem(i18n("Update Tabulators"));
   cTabs->resize(cFont->sizeHint());
-  grid2->addWidget(cTabs,3,0);
+  grid2->addWidget(cTabs,6,0);
 
   grid2->addColSpacing(0,cFont->width());
-  grid2->addColSpacing(1,cAlign->width());
+  grid2->addColSpacing(0,cAlign->width());
   grid2->addColSpacing(0,cColor->width());
-  grid2->addColSpacing(1,cNumbering->width());
+  grid2->addColSpacing(0,cNumbering->width());
   grid2->addColSpacing(0,cIndent->width());
-  grid2->addColSpacing(1,cBorder->width());
+  grid2->addColSpacing(0,cBorder->width());
   grid2->addColSpacing(0,cTabs->width());
   grid2->setColStretch(0,1);
-  grid2->setColStretch(1,1);
 
   grid2->addRowSpacing(0,cFont->height());
   grid2->addRowSpacing(1,cColor->height());
   grid2->addRowSpacing(2,cIndent->height());
-  grid2->addRowSpacing(3,cTabs->height());
+  grid2->addRowSpacing(3,cAlign->height());
+  grid2->addRowSpacing(4,cNumbering->height());
+  grid2->addRowSpacing(5,cBorder->height());
+  grid2->addRowSpacing(6,cTabs->height());
   grid2->setRowStretch(0,0);
   grid2->setRowStretch(1,0);
   grid2->setRowStretch(2,0);
   grid2->setRowStretch(3,0);
-  grid2->setRowStretch(4,1);
+  grid2->setRowStretch(4,0);
+  grid2->setRowStretch(5,0);
+  grid2->setRowStretch(6,0);
+  grid2->setRowStretch(7,1);
 
   grid2->activate();
 

@@ -89,7 +89,7 @@
 			hasFooter CDATA #IMPLIED>
 
 
-<!--	Container that as a number of FRAMESET children.
+<!--	Container that has a number of FRAMESET children.
 -->
 <!ELEMENT FRAMESETS (FRAMESET+)>
 
@@ -108,12 +108,27 @@
 
 
 <!ELEMENT FRAME	EMPTY>
+
+<!--
+	Describes a frame of a frameset
+
+	Attributes:	
+
+	right, leftm, top, bottom: absolute coordinates in pt
+	runaround: 1 if text should run around overalpping frames, 
+			2 if text should not run around overlapping frames (only for text frames)
+	runaroundGap: when runaround is 1 specify here the distance between overlapping frames and runaround text
+	frameInfo: 1 = normal text, 2 = header for first page, 3 = header for odd pages, 4 = header for even pages,
+			5 = footer for first pages, 6 = footer for odd pages, 7 footer for even pages
+
+-->
 <!ATTLIST FRAME	left CDATA #REQUIRED
 				right CDATA #REQUIRED
 				top CDATA #REQUIRED
 				bottom CDATA #REQUIRED
-				runaround CDATA #REQUIRED
-				runaroundGap CDATA #REQUIRED>
+				runaround CDATA #IMPLIED
+				runaroundGap CDATA #IMPLIED
+				frameInfo CDATA #IMPLIED>
 <!ELEMENT PARAGRAPH (TEXT|FORMATS|LAYOUT)*>
 <!ELEMENT TEXT EMPTY>
 <!ATTLIST TEXT	value CDATA #IMPLIED>

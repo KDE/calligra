@@ -48,10 +48,14 @@ class KWPaintWindow;
 #include "format.h"
 #include "paraglayout.h"
 #include "paragdia.h"
+#include "parag.h"
+#include "frame.h"
 #include "stylist.h"
 
 #include <koPageLayoutDia.h>
 #include <koPartSelectDia.h>
+
+#include <kspell.h>
 
 class KWPartFrameSet;
 
@@ -197,7 +201,11 @@ public slots:
   void openPageLayoutDia()
     { formatPage(); }
   void newPageLayout(KoPageLayout _layout);
-  
+  void spellCheckerReady();
+  void spellCheckerMisspelling(char*,QStrList*,unsigned);
+  void spellCheckerCorrected(char*,char*,unsigned);
+  void spellCheckerDone(char*);
+
 protected:
   // C++
   virtual void init();
@@ -285,6 +293,7 @@ protected:
   CORBA::Long m_idButtonEdit_Cut;
   CORBA::Long m_idButtonEdit_Copy;
   CORBA::Long m_idButtonEdit_Paste;
+  CORBA::Long m_idButtonEdit_Spelling;
 
   // insert toolbar
   OpenPartsUI::ToolBar_var m_vToolBarInsert;
@@ -346,6 +355,10 @@ protected:
 
   KWParagDia *paragDia;
   KWStyleManager *styleManager;
+  KSpell *kspell;
+
+  KWParag *currParag;
+  int currFrameSetNum;
 
   static const int ID_TOOL_EDIT = 2;
   static const int ID_TOOL_EDIT_FRAME = 3;
@@ -444,6 +457,7 @@ protected:
   KWordDocument *doc;
   KWordView *view;
   KoTabChooser *tabChooser;
+
 };
 
 #endif

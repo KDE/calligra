@@ -87,6 +87,10 @@ KWordDocument::KWordDocument()
   _loaded = false;
   _header = false;
   _footer = false;
+
+  cUserFont = 0L;
+  cParagLayout = 0L;
+  cDisplayFont = 0L;
 }
 
 /*================================================================*/
@@ -1322,38 +1326,72 @@ QPen KWordDocument::setBorderPen(KWParagLayout::Border _brd)
 /*================================================================*/
 KWUserFont* KWordDocument::findUserFont(QString _userfontname)
 {
+  if (cUserFont)
+    {
+      if (cUserFont->getFontName() == _userfontname) return cUserFont;
+    }
+
   KWUserFont* font = 0L;
   for (font = userFontList.first();font != 0L;font = userFontList.next())
-    if (font->getFontName() == _userfontname)
-      return font;
-  
+    {
+      if (font->getFontName() == _userfontname)
+	{
+	  cUserFont = font;
+	  return font;
+	}
+    }
+
   font = new KWUserFont(this,_userfontname);
+  cUserFont = font;
+
   return font;
 }
 
 /*================================================================*/
 KWDisplayFont* KWordDocument::findDisplayFont(KWUserFont* _font,unsigned int _size,int _weight,bool _italic,bool _underline)
 {
+  if (cDisplayFont)
+    {
+      if (cDisplayFont->getUserFont()->getFontName() == _font->getFontName() && cDisplayFont->getPTSize() == _size &&
+	  cDisplayFont->weight() == _weight && cDisplayFont->italic() == _italic && cDisplayFont->underline() == _underline)
+	return cDisplayFont;
+    }
+
   KWDisplayFont* font = 0L;
   for (font = displayFontList.first();font != 0L;font = displayFontList.next())
     {
       if (font->getUserFont()->getFontName() == _font->getFontName() && font->getPTSize() == _size &&
 	  font->weight() == _weight && font->italic() == _italic && font->underline() == _underline)
-	return font;
+	{
+	  cDisplayFont = font;
+	  return font;
+	}
     }
   
   font = new KWDisplayFont(this,_font,_size,_weight,_italic,_underline);
+  cDisplayFont = font;
+
   return font;
 }
 
 /*================================================================*/
 KWParagLayout* KWordDocument::findParagLayout(QString _name)
 {
+  if (cParagLayout)
+    {
+      if (cParagLayout->getName() == _name) return cParagLayout;
+    }
+
   KWParagLayout* p;
   for (p = paragLayoutList.first();p != 0L;p = paragLayoutList.next())
-    if (p->getName() == _name)
-      return p;
-  
+    {
+      if (p->getName() == _name)
+	{
+	  cParagLayout = p;
+	  return p;
+	}
+    }
+
   return 0L;
 }
 

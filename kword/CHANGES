@@ -563,3 +563,10 @@ Reggie, 26.12.1998:
 -------------------
 - Printing of different headers/footers of even and odd pages works now
 - Bugfixes
+
+Reggie, 27.12.1998:
+-------------------
+- Speed improvements again (now the number of used fonts/formats doesn't influence the speed anymore)
+- Worked a bit on the DTD
+- Reorganized UI of stylist (with german translation ig got much too wide)
+- Started implementing spellchecking

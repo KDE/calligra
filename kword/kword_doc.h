@@ -429,6 +429,10 @@ protected:
   QPixmap ret_pix;
 
   bool _header,_footer;
+
+  KWUserFont *cUserFont;
+  KWDisplayFont *cDisplayFont;
+  KWParagLayout *cParagLayout;
   
 };
 
