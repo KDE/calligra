@@ -20,7 +20,7 @@ koffice (1:1.1-20010404-1) unstable; urgency=low
     individual application packages.
   * Registered kword as capable of handling mime type application/x-abiword.
   * Made links so killustrator icons show up beneath /usr/share/icons/.
-  * Removed debconf-related material that is no longer used by koffice-libs.
+  * Instated a new debconf warning for koffice-libs.
   * Added various man pages.
   * Added icons to the debian menu items.
   * Changed the hint for the KWord debian menu item from "Word processors"

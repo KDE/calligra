@@ -1,0 +1,12 @@
+Template: koffice-libs/welcome-pre-1.1
+Type: note
+Description: KOffice is Pre-Alpha!!!
+ This version of KOffice is a development snapshot between releases 1.0
+ and 1.1.  Most day to day functions will work.  However, things like
+ filters are incomplete and will (note will, not can) cause crashes.
+ In addition the HTML user documentation is completely broken due to a
+ transition in the documentation system.
+ .
+ The main reason for including this version of KOffice at this time is to
+ work out packaging problems and non-filter/documentation related bugs.
+

@@ -105,10 +105,10 @@ binary-arch: build install
 	dh_installdocs -a
 	dh_installexamples -a
 	# Rename a couple of newly installed files.
-	-mv $(tmp)/debian/koffice-libs/usr/share/doc/HOWTO \
-	  $(tmp)/debian/koffice-libs/usr/share/doc/filters.HOWTO
-	-mv $(tmp)/debian/kugar/usr/share/doc/examples/kugar.examples.README \
-	  $(tmp)/debian/kugar/usr/share/doc/examples/README.examples
+	-mv debian/koffice-libs/usr/share/doc/HOWTO \
+	  debian/koffice-libs/usr/share/doc/filters.HOWTO
+	-mv debian/kugar/usr/share/doc/examples/kugar.examples.README \
+	  debian/kugar/usr/share/doc/examples/README.examples
 	dh_installmenu -a
 	dh_installmime -a
 	dh_installman -a
