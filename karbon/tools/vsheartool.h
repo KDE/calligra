@@ -23,12 +23,18 @@ protected:
 
 	virtual void setCursor( const KoPoint& current ) const;
 	virtual void mouseButtonPress( const KoPoint& current );
+	virtual void mouseDrag( const KoPoint& current );
 	virtual void mouseDragRelease( const KoPoint& current );
 
 private:
+	void recalc();
+
 	double m_s1, m_s2;
 
 	VHandleNode m_activeNode;
+
+	// A list of temporary objects:
+	VObjectList m_objects;
 };
 
 #endif

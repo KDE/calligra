@@ -22,6 +22,7 @@
 
 VShearTool::VShearTool( KarbonView* view ) : VTool( view )
 {
+	m_objects.setAutoDelete( true );
 }
 
 VShearTool::~VShearTool()
@@ -38,6 +39,15 @@ VShearTool::activate()
 void
 VShearTool::draw()
 {
+	VPainter* painter = view()->painterFactory()->editpainter();
+	painter->setRasterOp( Qt::NotROP );
+
+	VObjectListIterator itr = m_objects;
+	painter->setZoomFactor( view()->zoom() );
+	for( ; itr.current(); ++itr )
+		itr.current()->draw( painter, itr.current()->boundingBox() );
+
+	painter->setZoomFactor( 1.0 );
 /*
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
@@ -145,8 +155,26 @@ VShearTool::setCursor( const KoPoint& current ) const
 void
 VShearTool::mouseButtonPress( const KoPoint& current )
 {
+	view()->painterFactory()->painter()->end();
 //	m_activeNode = view()->part()->document().selection()->handleNode( mouse_event->pos() );
+	recalc();
+
+	// Draw new object:
+	draw();
 }
+
+void
+VShearTool::mouseDrag( const KoPoint& /*current*/ )
+{
+	// Erase old object:
+	draw();
+
+	recalc();
+
+	// Draw new object:
+	draw();
+}
+
 
 void
 VShearTool::mouseDragRelease( const KoPoint& current )
@@ -154,4 +182,64 @@ VShearTool::mouseDragRelease( const KoPoint& current )
 	view()->part()->addCommand(
 		new VShearCmd( &view()->part()->document(), current, m_s1, m_s2 ),
 		true );
+}
+
+void
+VShearTool::recalc()
+{
+	KoRect rect = view()->part()->document().selection()->boundingBox();
+		/*if( m_activeNode == node_lt )
+		{
+		}
+		else if( m_activeNode == node_mt )
+		{
+			m_s1 = 0;
+			m_s2 = ( last().y() - first().y() ) / double( ( rect.height() / 2 ) * view()->zoom() );
+		}
+		else if( m_activeNode == node_rt )
+		{
+		}
+		else if( m_activeNode == node_rm)
+		{*/
+			m_s1 = ( last().x() - first().x() ) / double( ( rect.width() / 2 ) * view()->zoom() );
+			m_s2 = 0;
+		/*}
+		else if( m_activeNode == node_rb )
+		{
+		}
+		else if( m_activeNode == node_mb )
+		{
+			m_s1 = 0;
+			m_s2 = ( last().y() - first().y() ) / double( ( rect.height() / 2 ) * view()->zoom() );
+		}
+		else if( m_activeNode == node_lb )
+		{
+		}
+		else if( m_activeNode == node_lm )
+		{
+			m_s1 = ( last().x() - first().x() ) / double( ( rect.width() / 2 ) * view()->zoom() );
+			m_s2 = 0;
+		}*/
+
+	// Build affine matrix:
+		QWMatrix mat;
+		mat.translate( first().x() / view()->zoom(), first().y() / view()->zoom() );
+		mat.shear( m_s1, m_s2 );
+		mat.translate(	- ( first().x() + view()->canvasWidget()->contentsX() ) / view()->zoom(),
+						- ( first().y() + view()->canvasWidget()->contentsY() ) / view()->zoom() );
+
+
+	// Copy selected objects and transform:
+	m_objects.clear();
+	VObject* copy;
+
+	VObjectListIterator itr = view()->part()->document().selection()->objects();
+	for ( ; itr.current() ; ++itr )
+	{
+		copy = itr.current()->clone();
+		copy->transform( mat );
+		copy->setState( VObject::edit );
+
+		m_objects.append( copy );
+	}
 }
