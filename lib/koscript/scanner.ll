@@ -249,6 +249,15 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 			  return T_RANGE;
 		       };
 
+"'"+[A-Za-z]+"'" {
+			  if ( !s_kspread )
+			  {
+			  	yylval.ident = new QString( yytext );
+			  	return T_IDENTIFIER;
+			  }
+                          yylval._str = new QString( yytext );
+			  return T_RANGE;
+		       };
 "{"			return T_LEFT_CURLY_BRACKET;
 "}"			return T_RIGHT_CURLY_BRACKET;
 "["		 	return T_LEFT_SQUARE_BRACKET;
