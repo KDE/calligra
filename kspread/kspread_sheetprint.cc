@@ -777,7 +777,7 @@ void KSpreadSheetPrint::resetPrintRange ()
 void KSpreadSheetPrint::replaceHeadFootLineMacro ( QString &_text, const QString &_search, const QString &_replace )
 {
     if ( _search != _replace )
-        _text.replace ( QRegExp( "<" + _search + ">" ), "<" + _replace + ">" );
+        _text.replace ( QString( "<" + _search + ">" ), "<" + _replace + ">" );
 }
 
 QString KSpreadSheetPrint::localizeHeadFootLine ( const QString &_text )

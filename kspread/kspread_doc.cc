@@ -819,9 +819,9 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
     // painter.eraseRect( rect );
 
     double xpos;
-    double ypos;   
+    double ypos;
     int left_col  = table->leftColumn( unzoomItX( rect.x() ), xpos );
-    int right_col = table->rightColumn( unzoomItX( rect.right() ) ); 
+    int right_col = table->rightColumn( unzoomItX( rect.right() ) );
     int top_row = table->topRow( unzoomItY( rect.y() ), ypos );
     int bottom_row = table->bottomRow( unzoomItY( rect.bottom() ) );
 

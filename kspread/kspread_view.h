@@ -324,7 +324,6 @@ public slots:
     void borderRemove();
     void changeBorderColor();
     void tableFormat();
-    // void oszilloscope();
     void autoSum();
     void resizeRow();
     void resizeColumn();
@@ -620,7 +619,6 @@ private:
     KAction* m_borderRemove;
     TKSelectColorAction* m_borderColor;
     KAction* m_tableFormat;
-    // KAction* m_oszi;
     KAction* m_autoSum;
     KToggleAction* m_showPageBorders;
     KActionMenu* m_scripts;
@@ -662,7 +660,7 @@ private:
     KToggleAction* m_protectChanges;
     KAction* m_filterChanges;
     KAction* m_acceptRejectChanges;
-    KAction* m_commentChanges;    
+    KAction* m_commentChanges;
     KAction* m_mergeDocument;
 
     KToggleAction* m_menuCalcMin;
