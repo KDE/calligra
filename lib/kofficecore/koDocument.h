@@ -518,16 +518,17 @@ protected:
    *  QPtrListIterator<KoDocumentChild> it( children() );
    *  for( ; it.current(); ++it ) {
    *    KoDocument* childDoc = static_cast<KoDocumentChild*>(it.current())->document();
-   *    if ( childDoc->isStoredExtern() )
-   *    {
-   *        if ( !childDoc->save() )
-   *            return FALSE;
-   *    }
-   *    else {
-   *        QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-   *        if ( !childDoc->saveToStore( _store, internURL ) )
-   *            return FALSE;
-   *    }
+   *    if ( childDoc )
+   *      if ( childDoc->isStoredExtern() )
+   *      {
+   *          if ( !childDoc->save() )
+   *              return FALSE;
+   *      }
+   *      else {
+   *          QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
+   *          if ( !childDoc->saveToStore( _store, internURL ) )
+   *              return FALSE;
+   *      }
    *  }
    *  return true;
    *  </PRE>
