@@ -1374,14 +1374,13 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
         return KoFilter::FileNotFound;
     }
     
-    QString UncompressedContents="";
+    QDomDocument doc;
 
-    QDomDocument doc( "gnumeric" );
-
+    // ### TODO: error message
     doc.setContent(in);
     
     in->close();
-
+    delete in;
 
     int row, column;
     int value = 0;
@@ -1569,8 +1568,6 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
     if ( selTable )
       ksdoc->setDisplayTable( selTable );
       
-    delete in;
-
     emit sigProgress(100);
     if ( bSuccess )
         return KoFilter::OK;
