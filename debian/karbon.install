@@ -19,7 +19,7 @@ usr/lib/kde3/libkarbonbase.so
 usr/lib/kde3/libkarbonpart.la
 usr/lib/kde3/libkarbonpart.so
 usr/lib/kde3/libkarbonaiimport.la
-usr/lib/kde3/libkarbonaiimport.so
+usr/lib/kde3/libkarbonaiimport.so*
 usr/lib/kde3/libkarbonepsexport.la
 usr/lib/kde3/libkarbonepsexport.so
 usr/lib/kde3/libkarbonepsimport.la
