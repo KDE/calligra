@@ -120,10 +120,12 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     if(pos!=-1) strExt = strImageName.mid(pos+1).lower();
 
     QString strTag;
-    if (strExt=="bmp")
-        strTag="\\dibitmap";
-    else if (strExt=="png")
+    if (strExt=="png")
         strTag="\\pngblip";
+#if 0
+    else if (strExt=="bmp")
+        strTag="\\dibitmap";
+#endif
     else if ( (strExt=="jpeg") || (strExt=="jpg") )
         strTag="\\jpegblip";
     else if (strExt=="wmf")
