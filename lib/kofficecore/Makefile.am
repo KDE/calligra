@@ -26,7 +26,7 @@ include_HEADERS = koFilter.h \
 	koStream.h koDocument.h \
 	koMainWindow.h \
 	koApplication.h koQueryTrader.h \
-	koFilterManager.h koUndo.h koIcons.h \
+	koFilterManager.h koUndo.h \
 	koDataTool.h koDocumentInfo.h \
 	koFilterDialog.h koView.h koFrame.h handler.h koDocumentChild.h \
 	koDocumentInfoDlg.h koFactory.h koChild.h
