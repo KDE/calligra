@@ -28,6 +28,7 @@ PropertyEditor::PropertyEditor( Place p, QWidget * parent, const char * name, WF
     QDockWindow(p, parent, name, f)
 {
     setCloseMode(QDockWindow::Always);
+    setResizeEnabled(true);
 
     QWidget *container = new QWidget(this);
 
@@ -50,18 +51,19 @@ PropertyEditor::PropertyEditor( Place p, QWidget * parent, const char * name, WF
 PropertyEditor::~PropertyEditor(){
 }
 
-void PropertyEditor::populateProperties(std::map<QString, Property* > *v_props)
+void PropertyEditor::populateProperties(std::map<QString, PropPtr > *v_props)
 {
     props = v_props;
 
     table->setNumRows(0);
     
-    for (std::map<QString, Property* >::const_iterator it = props->begin(); it != props->end(); ++it)
+    for (std::map<QString, PropPtr >::const_iterator it = props->begin(); it != props->end(); ++it)
     {
         int row = table->numRows() + 1;
         table->setNumRows(row);
 
         table->setText(row-1, 0, (*it).first);
+
         QWidget *w = (*it).second->editorOfType();
         table->setCellWidget(row-1, 1, w);
     }

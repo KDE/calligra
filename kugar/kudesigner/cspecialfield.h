@@ -28,7 +28,7 @@ public:
     virtual void draw(QPainter &painter);
     virtual void updateGeomProps()
     {
-	CanvasLabel::updateGeomProps();
+        CanvasLabel::updateGeomProps();
     }
 };
 

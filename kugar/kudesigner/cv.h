@@ -28,7 +28,7 @@ class CanvasReportItem;
 class QMouseEvent;
 class QCanvasItemList;
 class CanvasBox;
-class Property;
+class PropPtr;
 
 class SelectionRect: public QCanvasRectangle{
 public:
@@ -87,7 +87,7 @@ be unchecked. */
 
   /** Emitted when selection is made, so that property editor can display properties
       for the selected items. */
-  void selectionMade(std::map<QString, Property* > *v_props);
+  void selectionMade(std::map<QString, PropPtr > *v_props);
   void selectionClear();
 };
 

@@ -25,7 +25,7 @@
 class QWidget;
 class QTable;
 class QString;
-class Property;
+class PropPtr;
 
 /**
   *@author Alexander Dymo
@@ -40,12 +40,12 @@ public:
     ~PropertyEditor();
 
 public slots:
-    void populateProperties(std::map<QString, Property* > *v_props);
+    void populateProperties(std::map<QString, PropPtr> *v_props);
     void clearProperties();
             
 private:
     QTable *table;
-    std::map<QString, Property* > *props;
+    std::map<QString, PropPtr> *props;
 };
 
 #endif

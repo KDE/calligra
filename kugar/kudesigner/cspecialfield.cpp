@@ -16,44 +16,39 @@
  ***************************************************************************/
 #include <klocale.h>
 #include "cspecialfield.h"
+#include "property.h"
 
 CanvasSpecialField::CanvasSpecialField(int x, int y, int width, int height, QCanvas * canvas):
-	CanvasLabel(x, y, width, height, canvas)
+    CanvasLabel(x, y, width, height, canvas)
 {
-    std::pair<QString, QStringList> propValues;
+    std::map<QString, QString> m;
 
-    propValues.first = "0";
-    propValues.second << i18n("Field type to display");
-    propValues.second << "int_from_list";
-    propValues.second << i18n("0 - Date")
-	    << i18n("1 - PageNumber");
-    props["Type"] = propValues;
-    propValues.second.clear();
+    m["Date"] = "0";
+    m["PageNumber"] = "1";
+    props["Type"] = *(new PropPtr(new DescriptionProperty("Type", m, i18n("Field type to display"), "0")));
+    m.clear();
 
-    propValues.first = "11";
-    propValues.second << i18n("Date format");
-    propValues.second << "int_from_list";
-    propValues.second << i18n("0 - m/d/y")
-	    << i18n("1 - m-d-y")
-	    << i18n("2 - mm/dd/y")
-	    << i18n("3 - mm-dd-y")
-	    << i18n("4 - m/d/yyyy")
-	    << i18n("5 - m-d-yyyy")
-	    << i18n("6 - mm/dd/yyyy")
-	    << i18n("7 - mm-dd-yyyy")
-	    << i18n("8 - yyyy/m/d")
-	    << i18n("9 - yyyy-m-d")
-	    << i18n("10 - dd.mm.yy")
-	    << i18n("11 - dd.mm.yyyy");
-    props["DateFormat"] = propValues;
-    propValues.second.clear();
+    m["m/d/y"] = "0";
+    m["m-d-y"] = "1";
+    m["mm/dd/y"] = "2";
+    m["mm-dd-y"] = "3";
+    m["m/d/yyyy"] = "4";
+    m["m-d-yyyy"] = "5";
+    m["mm/dd/yyyy"] = "6";
+    m["mm-dd-yyyy"] = "7";
+    m["yyyy/m/d"] = "8";
+    m["yyyy-m-d"] = "9";
+    m["dd.mm.yy"] = "10";
+    m["dd.mm.yyyy"] = "11";
+    //TODO: make date format not hard-coded, use locale settings
+    props["DateFormat"] = *(new PropPtr(new DescriptionProperty("DateFormat", m, i18n("Date format"), "11")));
 }
 
 void CanvasSpecialField::draw(QPainter &painter)
 {
-    props["Text"].first = "[" +
-			  QString(props["Type"].first.toInt()?i18n("PageNo"):i18n("Date"))
-			  + "]";
+    props["Text"]->setValue("[" +
+        QString(props["Type"]->value().toInt()?i18n("PageNo"):i18n("Date"))
+        + "]");
     CanvasLabel::draw(painter);
 }
 

@@ -67,8 +67,8 @@ KudesignerView::KudesignerView( KudesignerPart* part, QWidget* parent, const cha
         shell()->addDockWindow(pe, DockRight);
         pe->show();
 
-        connect(rc, SIGNAL( selectionMade(std::map<QString, Property* >*) ), pe,
-            SLOT( populateProperties(std::map<QString, Property* >*) ));
+        connect(rc, SIGNAL( selectionMade(std::map<QString, PropPtr >*) ), pe,
+            SLOT( populateProperties(std::map<QString, PropPtr >*) ));
         connect(rc, SIGNAL( selectionClear() ), pe, SLOT( clearProperties() ));
     }
 
@@ -156,108 +156,108 @@ void KudesignerView::resizeEvent(QResizeEvent* _ev)
 void KudesignerView::slotAddReportHeader(){
     if (!(((KudesignerPart *)(koDocument())))->canvas()->templ->reportHeader)
     {
-    	CanvasReportHeader *rh = new CanvasReportHeader(((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"].first.toInt(),
-	    	0, ((KudesignerPart *)(koDocument()))->canvas()->templ->width() - ((KudesignerPart *)(koDocument()))->canvas()->templ->props["RightMargin"].first.toInt() -
-		    ((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"].first.toInt(),
-    		50, ((KudesignerPart *)(koDocument()))->canvas());
-	    ((KudesignerPart *)(koDocument()))->canvas()->templ->reportHeader = rh;
-    	((KudesignerPart *)(koDocument()))->canvas()->templ->arrangeSections();
-	((KudesignerPart *)(koDocument()))->setModified(true);
+        CanvasReportHeader *rh = new CanvasReportHeader(((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+            0, ((KudesignerPart *)(koDocument()))->canvas()->templ->width() - ((KudesignerPart *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
+            ((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+            50, ((KudesignerPart *)(koDocument()))->canvas());
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->reportHeader = rh;
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->arrangeSections();
+        ((KudesignerPart *)(koDocument()))->setModified(true);
     }
 }
 
 void KudesignerView::slotAddReportFooter(){
     if (!((KudesignerPart *)(koDocument()))->canvas()->templ->reportFooter)
     {
-    	CanvasReportFooter *rf = new CanvasReportFooter(((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"].first.toInt(),
-	    	0, ((KudesignerPart *)(koDocument()))->canvas()->templ->width() - ((KudesignerPart *)(koDocument()))->canvas()->templ->props["RightMargin"].first.toInt() -
-    		((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"].first.toInt(),
-	    	50, ((KudesignerPart *)(koDocument()))->canvas());
-    	((KudesignerPart *)(koDocument()))->canvas()->templ->reportFooter = rf;
-    	((KudesignerPart *)(koDocument()))->canvas()->templ->arrangeSections();
-	((KudesignerPart *)(koDocument()))->setModified(true);
+        CanvasReportFooter *rf = new CanvasReportFooter(((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+            0, ((KudesignerPart *)(koDocument()))->canvas()->templ->width() - ((KudesignerPart *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
+            ((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+            50, ((KudesignerPart *)(koDocument()))->canvas());
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->reportFooter = rf;
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->arrangeSections();
+        ((KudesignerPart *)(koDocument()))->setModified(true);
     }
 }
 
 void KudesignerView::slotAddPageHeader(){
     if (!((KudesignerPart *)(koDocument()))->canvas()->templ->pageHeader)
     {
-    	CanvasPageHeader *ph = new CanvasPageHeader(((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"].first.toInt(),
-	    	0, ((KudesignerPart *)(koDocument()))->canvas()->templ->width() - ((KudesignerPart *)(koDocument()))->canvas()->templ->props["RightMargin"].first.toInt() -
-    		((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"].first.toInt(),
-	    	50, ((KudesignerPart *)(koDocument()))->canvas());
-	    ((KudesignerPart *)(koDocument()))->canvas()->templ->pageHeader = ph;
-    	((KudesignerPart *)(koDocument()))->canvas()->templ->arrangeSections();
-	((KudesignerPart *)(koDocument()))->setModified(true);
+        CanvasPageHeader *ph = new CanvasPageHeader(((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+            0, ((KudesignerPart *)(koDocument()))->canvas()->templ->width() - ((KudesignerPart *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
+            ((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+            50, ((KudesignerPart *)(koDocument()))->canvas());
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->pageHeader = ph;
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->arrangeSections();
+        ((KudesignerPart *)(koDocument()))->setModified(true);
     }
 }
 
 void KudesignerView::slotAddPageFooter(){
     if (!((KudesignerPart *)(koDocument()))->canvas()->templ->pageFooter)
     {
-    	CanvasPageFooter *pf = new CanvasPageFooter(((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"].first.toInt(),
-	    	0, ((KudesignerPart *)(koDocument()))->canvas()->templ->width() - ((KudesignerPart *)(koDocument()))->canvas()->templ->props["RightMargin"].first.toInt() -
-    		((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"].first.toInt(),
-    		50, ((KudesignerPart *)(koDocument()))->canvas());
-    	((KudesignerPart *)(koDocument()))->canvas()->templ->pageFooter = pf;
-    	((KudesignerPart *)(koDocument()))->canvas()->templ->arrangeSections();
-	((KudesignerPart *)(koDocument()))->setModified(true);
+        CanvasPageFooter *pf = new CanvasPageFooter(((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+            0, ((KudesignerPart *)(koDocument()))->canvas()->templ->width() - ((KudesignerPart *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
+            ((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+            50, ((KudesignerPart *)(koDocument()))->canvas());
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->pageFooter = pf;
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->arrangeSections();
+        ((KudesignerPart *)(koDocument()))->setModified(true);
     }
 }
 
 void KudesignerView::slotAddDetailHeader(){
     bool Ok = false;
     unsigned int level = QInputDialog::getInteger(i18n("Add Detail Header"), i18n("Enter detail level:"),
-				    0, 0, 100, 1, &Ok, this);
+        0, 0, 100, 1, &Ok, this);
     if (!Ok) return;
     if (((KudesignerPart *)(koDocument()))->canvas()->templ->detailsCount >= level)
     {
-    	CanvasDetailHeader *dh = new CanvasDetailHeader(((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"].first.toInt(),
-	    	0, ((KudesignerPart *)(koDocument()))->canvas()->templ->width() - ((KudesignerPart *)(koDocument()))->canvas()->templ->props["RightMargin"].first.toInt() -
-    		((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"].first.toInt(),
-	    	50, ((KudesignerPart *)(koDocument()))->canvas());
-    	dh->props["Level"].first = QString("%1").arg(level);
-	    ((KudesignerPart *)(koDocument()))->canvas()->templ->details[level].first.first = dh;
-    	((KudesignerPart *)(koDocument()))->canvas()->templ->arrangeSections();
-	((KudesignerPart *)(koDocument()))->setModified(true);
+        CanvasDetailHeader *dh = new CanvasDetailHeader(((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+            0, ((KudesignerPart *)(koDocument()))->canvas()->templ->width() - ((KudesignerPart *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
+            ((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+            50, ((KudesignerPart *)(koDocument()))->canvas());
+        dh->props["Level"]->setValue(QString("%1").arg(level));
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->details[level].first.first = dh;
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->arrangeSections();
+        ((KudesignerPart *)(koDocument()))->setModified(true);
     }
 }
 
 void KudesignerView::slotAddDetail(){
     bool Ok = false;
     unsigned int level = QInputDialog::getInteger(i18n("Add Detail"), i18n("Enter detail level:"),
-				    0, 0, 100, 1, &Ok, this);
+        0, 0, 100, 1, &Ok, this);
     if (!Ok) return;
     if ( ((level == 0) && (((KudesignerPart *)(koDocument()))->canvas()->templ->detailsCount == 0))
-    	|| (((KudesignerPart *)(koDocument()))->canvas()->templ->detailsCount == level))
+        || (((KudesignerPart *)(koDocument()))->canvas()->templ->detailsCount == level))
     {
-    	CanvasDetail *d = new CanvasDetail(((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"].first.toInt(),
-	    	0, ((KudesignerPart *)(koDocument()))->canvas()->templ->width() - ((KudesignerPart *)(koDocument()))->canvas()->templ->props["RightMargin"].first.toInt() -
-        	((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"].first.toInt(),
-    		50, ((KudesignerPart *)(koDocument()))->canvas());
-    	d->props["Level"].first = QString("%1").arg(level);
-    	((KudesignerPart *)(koDocument()))->canvas()->templ->details[level].second = d;
-    	((KudesignerPart *)(koDocument()))->canvas()->templ->arrangeSections();
-    	((KudesignerPart *)(koDocument()))->canvas()->templ->detailsCount++;
-	((KudesignerPart *)(koDocument()))->setModified(true);
+        CanvasDetail *d = new CanvasDetail(((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+            0, ((KudesignerPart *)(koDocument()))->canvas()->templ->width() - ((KudesignerPart *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
+            ((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+            50, ((KudesignerPart *)(koDocument()))->canvas());
+        d->props["Level"]->setValue(QString("%1").arg(level));
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->details[level].second = d;
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->arrangeSections();
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->detailsCount++;
+        ((KudesignerPart *)(koDocument()))->setModified(true);
     }
 }
 
 void KudesignerView::slotAddDetailFooter(){
     bool Ok = false;
     unsigned int level = QInputDialog::getInteger(i18n("Add Detail Footer"), i18n("Enter detail level:"),
-				    0, 0, 100, 1, &Ok, this);
+        0, 0, 100, 1, &Ok, this);
     if (!Ok) return;
     if (((KudesignerPart *)(koDocument()))->canvas()->templ->detailsCount >= level)
     {
-    	CanvasDetailFooter *df = new CanvasDetailFooter(((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"].first.toInt(),
-	    	0, ((KudesignerPart *)(koDocument()))->canvas()->templ->width() - ((KudesignerPart *)(koDocument()))->canvas()->templ->props["RightMargin"].first.toInt() -
-    		((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"].first.toInt(),
-	    	50, ((KudesignerPart *)(koDocument()))->canvas());
-    	df->props["Level"].first = QString("%1").arg(level);
-	    ((KudesignerPart *)(koDocument()))->canvas()->templ->details[level].first.second = df;
-    	((KudesignerPart *)(koDocument()))->canvas()->templ->arrangeSections();
-	((KudesignerPart *)(koDocument()))->setModified(true);
+        CanvasDetailFooter *df = new CanvasDetailFooter(((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+            0, ((KudesignerPart *)(koDocument()))->canvas()->templ->width() - ((KudesignerPart *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
+            ((KudesignerPart *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+            50, ((KudesignerPart *)(koDocument()))->canvas());
+        df->props["Level"]->setValue(QString("%1").arg(level));
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->details[level].first.second = df;
+        ((KudesignerPart *)(koDocument()))->canvas()->templ->arrangeSections();
+        ((KudesignerPart *)(koDocument()))->setModified(true);
     }
 }
 
@@ -277,8 +277,8 @@ void KudesignerView::slotAddItemLabel(){
     {
         if (rc->itemToInsert)
             delete rc->itemToInsert;
-	    CanvasLabel *l = new CanvasLabel(0, 0, 50, 20, ((KudesignerPart *)(koDocument()))->canvas());
-    	rc->itemToInsert = l;
+        CanvasLabel *l = new CanvasLabel(0, 0, 50, 20, ((KudesignerPart *)(koDocument()))->canvas());
+        rc->itemToInsert = l;
     }
 }
 

@@ -28,7 +28,7 @@ public:
     virtual void draw(QPainter &painter);
     virtual void updateGeomProps()
     {
-	CanvasField::updateGeomProps();
+        CanvasField::updateGeomProps();
     }
 };
 

@@ -20,8 +20,8 @@
 #include "propertywidgets.h"
 #include "property.h"
 
-Property::Property(int type, QString name, QString value):
-    m_type(type), m_name(name), m_value(value)
+Property::Property(int type, QString name, QString description, QString value):
+    m_type(type), m_name(name), m_description(description), m_value(value)
 {
 }
 
@@ -63,26 +63,35 @@ QString Property::value() const
 }
 
 void Property::setValue(QString value)
-    {
+{
     m_value = value;
 }
 
+QString Property::description() const
+{
+    return m_description;
+}
+
+void Property::setDescription(QString description)
+{
+    m_description = description;
+}
 
 QWidget *Property::editorOfType()
 {
     switch (type())
     {
         case IntegerValue:
-            return new PLineEdit(0);
+//            return new PLineEdit(0);
 
         case LineStyle:
-            return new PLineEdit(0);
+//            return new PLineEdit(0);
 
         case Color:
-            return new PLineEdit(0);
+//            return new PLineEdit(0);
 
         case FontName:
-            return new PLineEdit(0);
+//            return new PLineEdit(0);
 
         case ValueFromList:
         case StringValue:
@@ -95,8 +104,9 @@ QWidget *Property::editorOfType()
     return 0;
 }
 
-DescriptionProperty::DescriptionProperty(QString name, QString value, std::map<QString, QString> v_correspList):
-    Property(ValueFromList, name, value), correspList(v_correspList)
+DescriptionProperty::DescriptionProperty(QString name, std::map<QString, QString> v_correspList,
+    QString description, QString value):
+    Property(ValueFromList, name, description, value), correspList(v_correspList)
 {
     
 }

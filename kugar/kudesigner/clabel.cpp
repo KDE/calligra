@@ -16,241 +16,173 @@
  ***************************************************************************/
 #include <klocale.h>
 #include "clabel.h"
+#include "property.h"
 #include <qpainter.h>
 
 CanvasLabel::CanvasLabel(int x, int y, int width, int height, QCanvas * canvas):
-	CanvasReportItem(x, y, width, height, canvas)
+    CanvasReportItem(x, y, width, height, canvas)
 {
-    std::pair<QString, QStringList> propValues;
+    std::map<QString, QString> m;
 
-    propValues.first = i18n("Text");
-    propValues.second << i18n("Text to display");
-    propValues.second << "string";
-    props["Text"] = propValues;
-    propValues.second.clear();
+    props["Text"] = *(new PropPtr(new Property(StringValue, "Text", i18n("Text to display"), i18n("Text"))));
 
-    propValues.first = QString("%1").arg(x);
-    propValues.second << i18n("X coordinate corresponding to section");
-    propValues.second << "int";
-    props["X"] = propValues;
-    propValues.second.clear();
+    props["X"] = *(new PropPtr(new Property(IntegerValue, "X", i18n("X coordinate corresponding to section"), QString("%1").arg(x))));
 
-    propValues.first = QString("%1").arg(y);
-    propValues.second << i18n("Y coordinate corresponding to section");
-    propValues.second << "int";
-    props["Y"] = propValues;
-    propValues.second.clear();
+    props["Y"] = *(new PropPtr(new Property(IntegerValue, "Y", i18n("Y coordinate corresponding to section"), QString("%1").arg(y))));
 
-    propValues.first = QString("%1").arg(width);
-    propValues.second << i18n("Width");
-    propValues.second << "int";
-    props["Width"] = propValues;
-    propValues.second.clear();
+    props["Width"] = *(new PropPtr(new Property(IntegerValue, "Width", i18n("Width"), QString("%1").arg(width))));
 
-    propValues.first = QString("%1").arg(height);
-    propValues.second << i18n("Height");
-    propValues.second << "int";
-    props["Height"] = propValues;
-    propValues.second.clear();
+    props["Height"] = *(new PropPtr(new Property(IntegerValue, "Height", i18n("Height"), QString("%1").arg(height))));
 
-    propValues.first = "255,255,255";
-    propValues.second << i18n("Background color");
-    propValues.second << "color";
-    props["BackgroundColor"] = propValues;
-    propValues.second.clear();
+    props["BackgroundColor"] = *(new PropPtr(new Property(Color, "BackgroundColor", i18n("Background color"), "255,255,255")));
 
-    propValues.first = "0,0,0";
-    propValues.second << i18n("Text color");
-    propValues.second << "color";
-    props["ForegroundColor"] = propValues;
-    propValues.second.clear();
+    props["ForegroundColor"] = *(new PropPtr(new Property(Color, "ForegroundColor", i18n("Text color"), "0,0,0")));
 
-    propValues.first = "0,0,0";
-    propValues.second << i18n("Border color");
-    propValues.second << "color";
-    props["BorderColor"] = propValues;
-    propValues.second.clear();
+    props["BorderColor"] = *(new PropPtr(new Property(Color, "BorderColor", i18n("Border color"), "0,0,0")));
 
-    propValues.first = "1";
-    propValues.second << i18n("Border width");
-    propValues.second << "int";
-    props["BorderWidth"] = propValues;
-    propValues.second.clear();
+    props["BorderWidth"] = *(new PropPtr(new Property(IntegerValue, "BorderWidth", i18n("Border width"), "1")));
 
-    propValues.first = "1";
-    propValues.second << i18n("Border style");
-    propValues.second << "int_from_list";
-    propValues.second << i18n("0 - No pen")
-	    << i18n("1 - Solid line")
-	    << i18n("2 - Dash line")
-	    << i18n("3 - Dot line")
-	    << i18n("4 - Dash dot line")
-	    << i18n("5 - Dash dot dot line");
-    props["BorderStyle"] = propValues;
-    propValues.second.clear();
+    props["BorderStyle"] = *(new PropPtr(new Property(LineStyle, "BorderStyle", i18n("Border style"), "1")));
 
-    propValues.first = "Times New Roman";
-    propValues.second << i18n("Font family");
-    propValues.second << "font";
-    props["FontFamily"] = propValues;
-    propValues.second.clear();
+    props["FontFamily"] = *(new PropPtr(new Property(FontName, "FontFamily", i18n("Font family"), "Times New Roman")));
 
-    propValues.first = "12";
-    propValues.second << i18n("Font size");
-    propValues.second << "int";
-    props["FontSize"] = propValues;
-    propValues.second.clear();
+    props["FontSize"] = *(new PropPtr(new Property(IntegerValue, "FontSize", i18n("Font size"), "12")));
 
-    propValues.first = "50";
-    propValues.second << i18n("Font weight");
-    propValues.second << "int_from_list";
-    propValues.second << i18n("25 - Light")
-	    << i18n("50 - Normal")
-	    << i18n("63 - DemiBold")
-	    << i18n("75 - Bold")
-	    << i18n("87 - Black");
-    props["FontWeight"] = propValues;
-    propValues.second.clear();
+    m["Light"] = "25";
+    m["Normal"] = "50";
+    m["DemiBold"] = "63";
+    m["Bold"] = "75";
+    m["Black"] = "87";
+    props["FontWeight"] = *(new PropPtr(new DescriptionProperty("FontWeight", m, i18n("Font weight"), "50")));
+    m.clear();
 
-    propValues.first = "0";
-    propValues.second << i18n("Italic font");
-    propValues.second << "int_from_list";
-    propValues.second << i18n("0 - False")
-	    << i18n("1 - True");
-    props["FontItalic"] = propValues;
-    propValues.second.clear();
+    m["Regular"] = "0";
+    m["Italic"] = "1";
+    props["FontItalic"] = *(new PropPtr(new DescriptionProperty("FontItalic", m, i18n("Italic font"), "0")));
+    m.clear();
 
-    if (QString("").isRightToLeft())
-	propValues.first = "2";
-    else
-        propValues.first = "0";
-    propValues.second << i18n("Text horizontal alignment");
-    propValues.second << "int_from_list";
-    propValues.second << i18n("0 - Left")
-	    << i18n("1 - Center")
-	    << i18n("2 - Right");
-    props["HAlignment"] = propValues;
-    propValues.second.clear();
+    m["Left"] = "0";
+    m["Center"] = "1";
+    m["Right"] = "2";
+    props["HAlignment"] = *(new PropPtr(new DescriptionProperty("HAlignment", m, i18n("Text horizontal alignment"),
+        QString("").isRightToLeft()?"2":"0")));
+    m.clear();
 
-    propValues.first = "1";
-    propValues.second << i18n("Text vertical alignment");
-    propValues.second << "int_from_list";
-    propValues.second << i18n("0 - Top")
-	    << i18n("1 - Middle")
-	    << i18n("2 - Bottom");
-    props["VAlignment"] = propValues;
-    propValues.second.clear();
+    m["Top"] = "0";
+    m["Middle"] = "1";
+    m["Bottom"] = "2";
+    props["VAlignment"] = *(new PropPtr(new DescriptionProperty("VAlignment", m, i18n("Text vertical alignment"), "1")));
+    m.clear();
 
-    propValues.first = "0";
-    propValues.second << i18n("Word wrap");
-    propValues.second << "int_from_list";
-    propValues.second << i18n("0 - False")
-	    << i18n("1 - True");
-    props["WordWrap"] = propValues;
-    propValues.second.clear();
+    m["False"] = "0";
+    m["True"] = "1";
+    props["WordWrap"] = *(new PropPtr(new DescriptionProperty("WordWrap", m, i18n("Word wrap"), "0")));
 }
 
 int CanvasLabel::getTextAlignment()
 {
     int result = 0;
-    switch (props["HAlignment"].first.toInt())
+    switch (props["HAlignment"]->value().toInt())
     {
-	case 0: result = AlignLeft;
-		break;
-	case 1: result = AlignHCenter;
-		break;
-	case 2: result = AlignRight;
-		break;
-	default: result = AlignHCenter;
+        case 0: result = AlignLeft;
+            break;
+        case 1: result = AlignHCenter;
+            break;
+        case 2: result = AlignRight;
+            break;
+        default: result = AlignHCenter;
     }
-    switch (props["VAlignment"].first.toInt())
+    switch (props["VAlignment"]->value().toInt())
     {
-	case 0: result = result | AlignTop;
-		break;
-	case 1: result = result | AlignVCenter;
-		break;
-	case 2: result = result | AlignBottom;
-		break;
-	default: result = result | AlignVCenter;
+        case 0: result = result | AlignTop;
+            break;
+        case 1: result = result | AlignVCenter;
+            break;
+        case 2: result = result | AlignBottom;
+            break;
+        default: result = result | AlignVCenter;
     }
     return result;
 }
 
 int CanvasLabel::getTextWrap()
 {
-    switch (props["WordWrap"].first.toInt())
+    switch (props["WordWrap"]->value().toInt())
     {
         case 0: return SingleLine;
-		break;
-	case 1: return WordBreak;
-		break;
-	default: return SingleLine;
+            break;
+        case 1: return WordBreak;
+            break;
+        default: return SingleLine;
     }
 }
 
 QFont CanvasLabel::getFont()
 {
-    return QFont(props["FontFamily"].first,
-		 props["FontSize"].first.toInt(),
-		 props["FontWeight"].first.toInt(),
-		 props["FontItalic"].first.toInt());
+    return QFont(props["FontFamily"]->value(),
+        props["FontSize"]->value().toInt(),
+        props["FontWeight"]->value().toInt(),
+        props["FontItalic"]->value().toInt());
 }
 
 QPen CanvasLabel::getPenForText()
 {
-    return QPen(QColor(props["ForegroundColor"].first.section(',', 0, 0).toInt(),
-		       props["ForegroundColor"].first.section(',', 1, 1).toInt(),
-		       props["ForegroundColor"].first.section(',', 2, 2).toInt()));
+    return QPen(QColor(props["ForegroundColor"]->value().section(',', 0, 0).toInt(),
+        props["ForegroundColor"]->value().section(',', 1, 1).toInt(),
+        props["ForegroundColor"]->value().section(',', 2, 2).toInt()));
 }
 
 QPen CanvasLabel::getPenForShape()
 {
     PenStyle style = SolidLine;
-    switch (props["BorderStyle"].first.toInt())
+    switch (props["BorderStyle"]->value().toInt())
     {
         case 0: style = NoPen;
-		break;
-	case 1: style = SolidLine;
-		break;
-	case 2: style = DashLine;
-		break;
-	case 3: style = DotLine;
-		break;
-	case 4: style = DashDotLine;
-		break;
-	case 5: style = DashDotDotLine;
-		break;
+            break;
+        case 1: style = SolidLine;
+            break;
+        case 2: style = DashLine;
+            break;
+        case 3: style = DotLine;
+            break;
+        case 4: style = DashDotLine;
+            break;
+        case 5: style = DashDotDotLine;
+            break;
     }
-    return QPen(QColor(props["BorderColor"].first.section(',', 0, 0).toInt(),
-		       props["BorderColor"].first.section(',', 1, 1).toInt(),
-		       props["BorderColor"].first.section(',', 2, 2).toInt()),
-		props["BorderWidth"].first.toInt(), style);
+    return QPen(QColor(props["BorderColor"]->value().section(',', 0, 0).toInt(),
+        props["BorderColor"]->value().section(',', 1, 1).toInt(),
+        props["BorderColor"]->value().section(',', 2, 2).toInt()),
+        props["BorderWidth"]->value().toInt(), style);
 }
 
 QBrush CanvasLabel::getBrush()
 {
-    return QBrush(QColor(props["BackgroundColor"].first.section(',', 0, 0).toInt(),
-			 props["BackgroundColor"].first.section(',', 1, 1).toInt(),
-			 props["BackgroundColor"].first.section(',', 2, 2).toInt()));
+    return QBrush(QColor(props["BackgroundColor"]->value().section(',', 0, 0).toInt(),
+        props["BackgroundColor"]->value().section(',', 1, 1).toInt(),
+        props["BackgroundColor"]->value().section(',', 2, 2).toInt()));
 }
 
 void CanvasLabel::draw(QPainter &painter)
 {
     //update dimensions
     if (!section()) return;
-    setX(props["X"].first.toInt() + section()->x());
-    setY(props["Y"].first.toInt() + section()->y());
-    setSize(props["Width"].first.toInt(), props["Height"].first.toInt());
+
+    setX(props["X"]->value().toInt() + section()->x());
+    setY(props["Y"]->value().toInt() + section()->y());
+    setSize(props["Width"]->value().toInt(), props["Height"]->value().toInt());
+
     //draw border and background
     painter.setPen(getPenForShape());
     painter.setBrush(getBrush());
     painter.drawRect(rect());
+
     //draw text inside
     painter.setFont(getFont());
     painter.setPen(getPenForText());
     painter.drawText((int)x(), (int)y(), width(), height(),
-		     getTextAlignment() | getTextWrap(),
-		     props["Text"].first);
+        getTextAlignment() | getTextWrap(),
+        props["Text"]->value());
 
     //draw resizable region
     if (isSelected())

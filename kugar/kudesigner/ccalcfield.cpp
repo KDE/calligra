@@ -16,22 +16,19 @@
  ***************************************************************************/
 #include <klocale.h>
 #include "ccalcfield.h"
+#include "property.h"
 
 CanvasCalculatedField::CanvasCalculatedField(int x, int y, int width, int height, QCanvas * canvas):
-	CanvasField(x, y, width, height, canvas)
+    CanvasField(x, y, width, height, canvas)
 {
-    std::pair<QString, QStringList> propValues;
+    std::map<QString, QString> m;
 
-    propValues.first = "1";
-    propValues.second << i18n("Calculation type");
-    propValues.second << "int_from_list";
-    propValues.second << i18n("0 - Count")
-	    << i18n("1 - Sum")
-	    << i18n("2 - Average")
-	    << i18n("3 - Variance")
-	    << i18n("4 - StandardDeviation");
-    props["CalculationType"] = propValues;
-    propValues.second.clear();
+    m["Count"] = "0";
+    m["Sum"] = "1";
+    m["Average"] = "2";
+    m["Variance"] = "3";
+    m["StandardDeviation"] = "4";
+    props["CalculationType"] = *(new PropPtr(new DescriptionProperty("CalculationType", m, i18n("Calculation type"), "1")));
 }
 
 void CanvasCalculatedField::draw(QPainter &painter)

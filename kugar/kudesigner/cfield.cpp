@@ -16,79 +16,52 @@
  ***************************************************************************/
 #include <klocale.h>
 #include "cfield.h"
+#include "property.h"
 
 CanvasField::CanvasField(int x, int y, int width, int height, QCanvas * canvas):
-	CanvasLabel(x, y, width, height, canvas)
+    CanvasLabel(x, y, width, height, canvas)
 {
-    std::pair<QString, QStringList> propValues;
+    std::map<QString, QString> m;
 
-    propValues.first = i18n("Field");
-    propValues.second << i18n("Field to display");
-    propValues.second << "string";
-    props["Field"] = propValues;
-    propValues.second.clear();
+    props["Field"] = *(new PropPtr(new Property(StringValue, "Field", i18n("Field to display"), i18n("Field Name"))));
 
-    propValues.first = "0";
-    propValues.second << i18n("Data type");
-    propValues.second << "int_from_list";
-    propValues.second << i18n("0 - String")
-	    << i18n("1 - Integer")
-	    << i18n("2 - Float")
-	    << i18n("3 - Date")
-	    << i18n("4 - Currency");
-    props["DataType"] = propValues;
-    propValues.second.clear();
+    m["String"] = "0";
+    m["Integer"] = "1";
+    m["Float"] = "2";
+    m["Date"] = "3";
+    m["Currency"] = "4";
+    props["DataType"] = *(new PropPtr(new DescriptionProperty("DataType", m, i18n("Data type"), "0")));
+    m.clear();
 
-    propValues.first = "11";
-    propValues.second << i18n("Date format");
-    propValues.second << "int_from_list";
-    propValues.second << i18n("0 - m/d/y")
-	    << i18n("1 - m-d-y")
-	    << i18n("2 - mm/dd/y")
-	    << i18n("3 - mm-dd-y")
-	    << i18n("4 - m/d/yyyy")
-	    << i18n("5 - m-d-yyyy")
-	    << i18n("6 - mm/dd/yyyy")
-	    << i18n("7 - mm-dd-yyyy")
-	    << i18n("8 - yyyy/m/d")
-	    << i18n("9 - yyyy-m-d")
-	    << i18n("10 - dd.mm.yy")
-	    << i18n("11 - dd.mm.yyyy");
-    props["DateFormat"] = propValues;
-    propValues.second.clear();
+    m["m/d/y"] = "0";
+    m["m-d-y"] = "1";
+    m["mm/dd/y"] = "2";
+    m["mm-dd-y"] = "3";
+    m["m/d/yyyy"] = "4";
+    m["m-d-yyyy"] = "5";
+    m["mm/dd/yyyy"] = "6";
+    m["mm-dd-yyyy"] = "7";
+    m["yyyy/m/d"] = "8";
+    m["yyyy-m-d"] = "9";
+    m["dd.mm.yy"] = "10";
+    m["dd.mm.yyyy"] = "11";
+    //TODO: make date format not hard-coded, use locale settings
+    props["DateFormat"] = *(new PropPtr(new DescriptionProperty("DateFormat", m, i18n("Date format"), "11")));
+    m.clear();
 
-    propValues.first = "2";
-    propValues.second << i18n("Number of digits after comma");
-    propValues.second << "int";
-    props["Precision"] = propValues;
-    propValues.second.clear();
+    props["Precision"] = *(new PropPtr(new Property(IntegerValue, "Precision", i18n("Number of digits after comma"), "2")));
 
-    propValues.first = "32";
-    propValues.second << i18n("Currency symbol");
-    propValues.second << "int_from_list";
-    propValues.second << i18n("20 - ' '")
-	    << i18n("36 - '$'");
-    props["Currency"] = propValues;
-    propValues.second.clear();
+    //TODO: make currency locale-aware
+    props["Currency"] = *(new PropPtr(new Property(Symbol, "Currency", i18n("Currency symbol"), "32")));
 
-    propValues.first = "0,0,0";
-    propValues.second << i18n("Negative value color");
-    propValues.second << "color";
-    props["NegValueColor"] = propValues;
-    propValues.second.clear();
+    props["NegValueColor"] = *(new PropPtr(new Property(Color, "NegValueColor", i18n("Negative value color"), "0,0,0")));
 
-    propValues.first = "44";
-    propValues.second << i18n("Comma separator");
-    propValues.second << "int_from_list";
-    propValues.second << i18n("44 - ','")
-	    << i18n("46 - '.'");
-    props["CommaSeparator"] = propValues;
-    propValues.second.clear();
+    props["CommaSeparator"] = *(new PropPtr(new Property(Symbol, "CommaSeparator", i18n("Comma separator"), "44")));
 }
 
 void CanvasField::draw(QPainter &painter)
 {
-    props["Text"].first = "[" + props["Field"].first + "]";
+    props["Text"]->setValue("[" + props["Field"]->value() + "]");
     CanvasLabel::draw(painter);
 }
 

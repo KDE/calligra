@@ -67,7 +67,7 @@ enum PropertyType {
 class Property {
 public:
     Property() {}
-    Property(int type, QString name, QString value=QString::null);
+    Property(int type, QString name, QString description="", QString value=QString::null);
     virtual ~Property();
 
     bool operator<(const Property &prop) const;
@@ -78,12 +78,15 @@ public:
     void setType(int type);
     QString value() const;
     void setValue(QString value);
+    QString description() const;
+    void setDescription(QString description);
 
     virtual QWidget *editorOfType();
 
 protected:
     int m_type;
     QString m_name;
+    QString m_description;
     QString m_value;
 };
 
@@ -94,12 +97,60 @@ class DescriptionProperty: public Property {
 public:
     DescriptionProperty(): Property() {}
     /** map<description, value> <-> map<QString, QString> */
-    DescriptionProperty(QString name, QString value, std::map<QString, QString> v_correspList);
+    DescriptionProperty(QString name, std::map<QString, QString> v_correspList,
+        QString description="", QString value=QString::null);
 
     void setCorrespList(std::map<QString, QString> list);
     std::map<QString, QString> correspList;
 
     virtual QWidget *editorOfType();
+};
+
+
+class PropPtr{
+public:
+    PropPtr()
+    {
+        m_prop = 0;
+    }
+    PropPtr(Property *prop): m_prop(prop) {}
+
+    ~PropPtr()
+    {
+        if (m_prop != 0)
+            delete m_prop;
+    }
+    
+    Property *operator->()
+    {
+        if (m_prop != 0)
+            return m_prop;
+        else
+            return new Property();
+    }
+
+    Property *operator->() const
+    {
+        if (m_prop != 0)
+            return m_prop;
+        else
+            return new Property();
+    }
+
+    bool operator<(const PropPtr& p) const
+    {
+        if ((prop()->type() < p.prop()->type()) && (prop()->name() < p.prop()->name()))
+            return true;
+        else
+            return false;        
+    }
+
+    Property *prop() const
+    {
+        return m_prop;
+    }
+private:
+    Property *m_prop;
 };
 
 #endif

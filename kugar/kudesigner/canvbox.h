@@ -20,6 +20,7 @@
 #include <map>
 #include <qcanvas.h>
 #include "canvdefs.h"
+#include "property.h"
 
 class QString;
 class QStringList;
@@ -30,7 +31,6 @@ class CanvasReportHeader;
 class CanvasReportFooter;
 class CanvasPageHeader;
 class CanvasPageFooter;
-class Property;
 
 class CanvasBox: public QCanvasRectangle{
 public:
@@ -57,12 +57,12 @@ public:
                          -- to organize appropriate input
 		      << probably_key_value << ... -- values
     */
-    std::map<QString, std::pair<QString, QStringList> > props;
+//    std::map<QString, std::pair<QString, QStringList> > props;
     /**
       NEW property format
-      map<QString, Property* >
+      map<QString, PropPtr >
     */
-//    std::map<QString, Property* > props;
+    std::map<QString, PropPtr > props;
 };
 
 class CanvasSection: public CanvasBox{

@@ -27,6 +27,7 @@
 #include "clabel.h"
 #include "cline.h"
 #include "cspecialfield.h"
+#include "property.h"
 
 #include <koTemplateChooseDia.h>
 
@@ -142,12 +143,12 @@ bool KudesignerPart::loadXML( QIODevice *, const QDomDocument & rt)
     //creating KugarTemplate object
     CanvasKugarTemplate *templ = new CanvasKugarTemplate(0, 0, width, height, docCanvas);
     templ->show();
-    templ->props["PageSize"].first = attributes.namedItem("PageSize").nodeValue();
-    templ->props["PageOrientation"].first = attributes.namedItem("PageOrientation").nodeValue();
-    templ->props["TopMargin"].first = attributes.namedItem("TopMargin").nodeValue();
-    templ->props["BottomMargin"].first = attributes.namedItem("BottomMargin").nodeValue();
-    templ->props["LeftMargin"].first = attributes.namedItem("LeftMargin").nodeValue();
-    templ->props["RightMargin"].first = attributes.namedItem("RightMargin").nodeValue();
+    templ->props["PageSize"]->setValue(attributes.namedItem("PageSize").nodeValue());
+    templ->props["PageOrientation"]->setValue(attributes.namedItem("PageOrientation").nodeValue());
+    templ->props["TopMargin"]->setValue(attributes.namedItem("TopMargin").nodeValue());
+    templ->props["BottomMargin"]->setValue(attributes.namedItem("BottomMargin").nodeValue());
+    templ->props["LeftMargin"]->setValue(attributes.namedItem("LeftMargin").nodeValue());
+    templ->props["RightMargin"]->setValue(attributes.namedItem("RightMargin").nodeValue());
 
     // Get all the child report elements
     QDomNodeList children = report.childNodes();
@@ -155,7 +156,7 @@ bool KudesignerPart::loadXML( QIODevice *, const QDomDocument & rt)
     for (int j = 0; j < childCount; j++)
     {
         QDomNode child = children.item(j);
-	
+
         if (child.nodeType() == QDomNode::ElementNode)
         {
             if (child.nodeName() == "ReportHeader")
@@ -227,11 +228,11 @@ void KudesignerPart::setReportHeaderAttributes(QDomNode *node)
 {
     QDomNamedNodeMap attributes = node->attributes();
 
-    CanvasReportHeader *rh = new CanvasReportHeader(docCanvas->templ->props["LeftMargin"].first.toInt(),
-		0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"].first.toInt() -
-		docCanvas->templ->props["LeftMargin"].first.toInt(),
-		attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
-    rh->props["Height"].first = attributes.namedItem("Height").nodeValue();
+    CanvasReportHeader *rh = new CanvasReportHeader(docCanvas->templ->props["LeftMargin"]->value().toInt(),
+        0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"]->value().toInt() -
+        docCanvas->templ->props["LeftMargin"]->value().toInt(),
+        attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
+    rh->props["Height"]->setValue(attributes.namedItem("Height").nodeValue());
     docCanvas->templ->reportHeader = rh;
     addReportItems(node, rh);
 }
@@ -240,11 +241,11 @@ void KudesignerPart::setReportFooterAttributes(QDomNode *node)
 {
     QDomNamedNodeMap attributes = node->attributes();
 
-    CanvasReportFooter *rf = new CanvasReportFooter(docCanvas->templ->props["LeftMargin"].first.toInt(),
-		0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"].first.toInt() -
-		docCanvas->templ->props["LeftMargin"].first.toInt(),
-		attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
-    rf->props["Height"].first = attributes.namedItem("Height").nodeValue();
+    CanvasReportFooter *rf = new CanvasReportFooter(docCanvas->templ->props["LeftMargin"]->value().toInt(),
+        0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"]->value().toInt() -
+        docCanvas->templ->props["LeftMargin"]->value().toInt(),
+        attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
+    rf->props["Height"]->setValue(attributes.namedItem("Height").nodeValue());
     docCanvas->templ->reportFooter = rf;
     addReportItems(node, rf);
 }
@@ -253,11 +254,11 @@ void KudesignerPart::setPageHeaderAttributes(QDomNode *node)
 {
     QDomNamedNodeMap attributes = node->attributes();
 
-    CanvasPageHeader *ph = new CanvasPageHeader(docCanvas->templ->props["LeftMargin"].first.toInt(),
-		0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"].first.toInt() -
-		docCanvas->templ->props["LeftMargin"].first.toInt(),
-		attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
-    ph->props["Height"].first = attributes.namedItem("Height").nodeValue();
+    CanvasPageHeader *ph = new CanvasPageHeader(docCanvas->templ->props["LeftMargin"]->value().toInt(),
+        0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"]->value().toInt() -
+        docCanvas->templ->props["LeftMargin"]->value().toInt(),
+        attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
+    ph->props["Height"]->setValue(attributes.namedItem("Height").nodeValue());
     docCanvas->templ->pageHeader = ph;
     addReportItems(node, ph);
 }
@@ -266,11 +267,11 @@ void KudesignerPart::setPageFooterAttributes(QDomNode *node)
 {
     QDomNamedNodeMap attributes = node->attributes();
 
-    CanvasPageFooter *pf = new CanvasPageFooter(docCanvas->templ->props["LeftMargin"].first.toInt(),
-		0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"].first.toInt() -
-		docCanvas->templ->props["LeftMargin"].first.toInt(),
-		attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
-    pf->props["Height"].first = attributes.namedItem("Height").nodeValue();
+    CanvasPageFooter *pf = new CanvasPageFooter(docCanvas->templ->props["LeftMargin"]->value().toInt(),
+        0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"]->value().toInt() -
+        docCanvas->templ->props["LeftMargin"]->value().toInt(),
+        attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
+    pf->props["Height"]->setValue(attributes.namedItem("Height").nodeValue());
     docCanvas->templ->pageFooter = pf;
     addReportItems(node, pf);
 }
@@ -279,12 +280,12 @@ void KudesignerPart::setDetailHeaderAttributes(QDomNode *node)
 {
     QDomNamedNodeMap attributes = node->attributes();
 
-    CanvasDetailHeader *dh = new CanvasDetailHeader(docCanvas->templ->props["LeftMargin"].first.toInt(),
-		0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"].first.toInt() -
-		docCanvas->templ->props["LeftMargin"].first.toInt(),
-		attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
-    dh->props["Level"].first = attributes.namedItem("Level").nodeValue();
-    dh->props["Height"].first = attributes.namedItem("Height").nodeValue();
+    CanvasDetailHeader *dh = new CanvasDetailHeader(docCanvas->templ->props["LeftMargin"]->value().toInt(),
+        0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"]->value().toInt() -
+        docCanvas->templ->props["LeftMargin"]->value().toInt(),
+        attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
+    dh->props["Level"]->setValue(attributes.namedItem("Level").nodeValue());
+    dh->props["Height"]->setValue(attributes.namedItem("Height").nodeValue());
     docCanvas->templ->details[attributes.namedItem("Level").nodeValue().toInt()].first.first = dh;
     addReportItems(node, dh);
 }
@@ -293,12 +294,12 @@ void KudesignerPart::setDetailAttributes(QDomNode *node)
 {
     QDomNamedNodeMap attributes = node->attributes();
 
-    CanvasDetail *d = new CanvasDetail(docCanvas->templ->props["LeftMargin"].first.toInt(),
-		0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"].first.toInt() -
-		docCanvas->templ->props["LeftMargin"].first.toInt(),
-		attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
-    d->props["Level"].first = attributes.namedItem("Level").nodeValue();
-    d->props["Height"].first = attributes.namedItem("Height").nodeValue();
+    CanvasDetail *d = new CanvasDetail(docCanvas->templ->props["LeftMargin"]->value().toInt(),
+        0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"]->value().toInt() -
+        docCanvas->templ->props["LeftMargin"]->value().toInt(),
+        attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
+    d->props["Level"]->setValue(attributes.namedItem("Level").nodeValue());
+    d->props["Height"]->setValue(attributes.namedItem("Height").nodeValue());
     docCanvas->templ->details[attributes.namedItem("Level").nodeValue().toInt()].second = d;
     addReportItems(node, d);
 }
@@ -307,12 +308,12 @@ void KudesignerPart::setDetailFooterAttributes(QDomNode *node)
 {
     QDomNamedNodeMap attributes = node->attributes();
 
-    CanvasDetailFooter *df = new CanvasDetailFooter(docCanvas->templ->props["LeftMargin"].first.toInt(),
-		0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"].first.toInt() -
-		docCanvas->templ->props["LeftMargin"].first.toInt(),
-		attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
-    df->props["Level"].first = attributes.namedItem("Level").nodeValue();
-    df->props["Height"].first = attributes.namedItem("Height").nodeValue();
+    CanvasDetailFooter *df = new CanvasDetailFooter(docCanvas->templ->props["LeftMargin"]->value().toInt(),
+        0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"]->value().toInt() -
+        docCanvas->templ->props["LeftMargin"]->value().toInt(),
+        attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
+    df->props["Level"]->setValue(attributes.namedItem("Level").nodeValue());
+    df->props["Height"]->setValue(attributes.namedItem("Height").nodeValue());
     docCanvas->templ->details[attributes.namedItem("Level").nodeValue().toInt()].first.second = df;
     addReportItems(node, df);
 }
@@ -334,7 +335,7 @@ void KudesignerPart::addReportItems(QDomNode *node, CanvasBand *section)
                 section->items.append(line);
                 setReportItemAttributes(&child, line);
                 line->setSectionUndestructive(section);
-        //		line->show();
+                //line->show();
             }
             else if (child.nodeName() == "Label")
             {
@@ -342,7 +343,7 @@ void KudesignerPart::addReportItems(QDomNode *node, CanvasBand *section)
                 section->items.append(label);
                 setReportItemAttributes(&child, label);
                 label->setSectionUndestructive(section);
-        //		label->show();
+                //label->show();
             }
             else if (child.nodeName() == "Special")
             {
@@ -350,7 +351,7 @@ void KudesignerPart::addReportItems(QDomNode *node, CanvasBand *section)
                 section->items.append(special);
                 setReportItemAttributes(&child, special);
                 special->setSectionUndestructive(section);
-        //		special->show();
+                //special->show();
             }
             else if (child.nodeName() == "Field")
             {
@@ -358,7 +359,7 @@ void KudesignerPart::addReportItems(QDomNode *node, CanvasBand *section)
                 section->items.append(field);
                 setReportItemAttributes(&child, field);
                 field->setSectionUndestructive(section);
-        //		field->show();
+                //field->show();
             }
             else if (child.nodeName() == "CalculatedField")
             {
@@ -366,7 +367,7 @@ void KudesignerPart::addReportItems(QDomNode *node, CanvasBand *section)
                 section->items.append(calcField);
                 setReportItemAttributes(&child, calcField);
                 calcField->setSectionUndestructive(section);
-        //		calcField->show();
+                //calcField->show();
             }
         }
     }
@@ -378,7 +379,7 @@ void KudesignerPart::setReportItemAttributes(QDomNode *node, CanvasReportItem *i
 
     for (unsigned int i = 0; i < attributes.count(); i++)
     {
-        item->props[attributes.item(i).nodeName()].first = attributes.item(i).nodeValue();
+        item->props[attributes.item(i).nodeName()]->setValue(attributes.item(i).nodeValue());
     }
 }
 

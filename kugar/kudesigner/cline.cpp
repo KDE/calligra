@@ -19,57 +19,21 @@
 #include "cline.h"
 
 CanvasLine::CanvasLine(int x, int y, int width, int height, QCanvas * canvas):
-	CanvasReportItem(x, y, width, height, canvas)
+    CanvasReportItem(x, y, width, height, canvas)
 {
-    std::pair<QString, QStringList> propValues;
+    props["X1"] = *(new PropPtr(new Property(IntegerValue, "X1", i18n("X1 coordinate corresponding to section"), QString("%1").arg(x))));
 
-    propValues.first = QString("%1").arg(x);
-    propValues.second << i18n("X1 coordinate corresponding to section");
-    propValues.second << "int";
-    props["X1"] = propValues;
-    propValues.second.clear();
+    props["Y1"] = *(new PropPtr(new Property(IntegerValue, "Y1", i18n("Y1 coordinate corresponding to section"), QString("%1").arg(y))));
 
-    propValues.first = QString("%1").arg(y);
-    propValues.second << i18n("Y1 coordinate corresponding to section");
-    propValues.second << "int";
-    props["Y1"] = propValues;
-    propValues.second.clear();
+    props["X2"] = *(new PropPtr(new Property(IntegerValue, "X2", i18n("X2 coordinate corresponding to section"), QString("%1").arg(x + width))));
 
-    propValues.first = QString("%1").arg(x + width);
-    propValues.second << i18n("X2 coordinate corresponding to section");
-    propValues.second << "int";
-    props["X2"] = propValues;
-    propValues.second.clear();
+    props["Y2"] = *(new PropPtr(new Property(IntegerValue, "Y2", i18n("Y2 coordinate corresponding to section"), QString("%1").arg(y + height))));
 
-    propValues.first = QString("%1").arg(y + height);
-    propValues.second << i18n("Y2 coordinate corresponding to section");
-    propValues.second << "int";
-    props["Y2"] = propValues;
-    propValues.second.clear();
+    props["Color"] = *(new PropPtr(new Property(Color, "Color", i18n("Color"), "0,0,0")));
 
-    propValues.first = "0,0,0";
-    propValues.second << i18n("Color");
-    propValues.second << "color";
-    props["Color"] = propValues;
-    propValues.second.clear();
+    props["Width"] = *(new PropPtr(new Property(IntegerValue, "Width", i18n("Width"), "1")));
 
-    propValues.first = "1";
-    propValues.second << i18n("Width");
-    propValues.second << "int";
-    props["Width"] = propValues;
-    propValues.second.clear();		    
-		    
-    propValues.first = "1";
-    propValues.second << i18n("Line style");
-    propValues.second << "int_from_list";
-    propValues.second << i18n("0 - No pen")
-	    << i18n("1 - Solid line")
-	    << i18n("2 - Dash line")
-	    << i18n("3 - Dot line")
-	    << i18n("4 - Dash dot line")
-	    << i18n("5 - Dash dot dot line");
-    props["Style"] = propValues;
-    propValues.second.clear();
+    props["Style"] = *(new PropPtr(new Property(LineStyle, "Style", i18n("Line style"), "1")));
 }
 
 QString CanvasLine::getXml()
@@ -80,42 +44,43 @@ QString CanvasLine::getXml()
 QPen CanvasLine::getPenForShape()
 {
     PenStyle style = SolidLine;
-    switch (props["Style"].first.toInt())
+    switch (props["Style"]->value().toInt())
     {
         case 0: style = NoPen;
-                break;
+            break;
         case 1: style = SolidLine;
-                break;
+            break;
         case 2: style = DashLine;
-                break;
+            break;
         case 3: style = DotLine;
-                break;
+            break;
         case 4: style = DashDotLine;
-	        break;
+            break;
         case 5: style = DashDotDotLine;
-		break;
+            break;
     }
-    return QPen(QColor(props["Color"].first.section(',', 0, 0).toInt(),
-	props["Color"].first.section(',', 1, 1).toInt(),
-	props["Color"].first.section(',', 2, 2).toInt()),
-	props["Width"].first.toInt(), style);
+    return QPen(QColor(props["Color"]->value().section(',', 0, 0).toInt(),
+        props["Color"]->value().section(',', 1, 1).toInt(),
+        props["Color"]->value().section(',', 2, 2).toInt()),
+        props["Width"]->value().toInt(), style);
 }
 
 void CanvasLine::draw(QPainter &painter)
 {
     //update dimensions
     if (!section()) return;
-    setX(props["X1"].first.toInt() + section()->x());
-    setY(props["Y1"].first.toInt() + section()->y());
-    setSize(props["X2"].first.toInt()-props["X1"].first.toInt(),
-    	props["Y2"].first.toInt()-props["Y1"].first.toInt());
+    setX(props["X1"]->value().toInt() + section()->x());
+    setY(props["Y1"]->value().toInt() + section()->y());
+    setSize(props["X2"]->value().toInt()-props["X1"]->value().toInt(),
+        props["Y2"]->value().toInt()-props["Y1"]->value().toInt());
+
     //draw border and background
     painter.setPen(getPenForShape());
     painter.setBrush(QColor(0, 0, 0));
-    painter.drawLine(props["X1"].first.toInt() + (int)section()->x(),
-    	props["Y1"].first.toInt() + (int)section()->y(),
-     	props["X2"].first.toInt() + (int)section()->x(),
-      	props["Y2"].first.toInt() + (int)section()->y());
+    painter.drawLine(props["X1"]->value().toInt() + (int)section()->x(),
+        props["Y1"]->value().toInt() + (int)section()->y(),
+        props["X2"]->value().toInt() + (int)section()->x(),
+        props["Y2"]->value().toInt() + (int)section()->y());
 
     painter.setPen(QColor(0, 0, 0));
     painter.setBrush(QColor(0, 0, 0));
@@ -129,17 +94,17 @@ void CanvasLine::draw(QPainter &painter)
 
 void CanvasLine::setSection(CanvasBand *section)
 {
-    props["X1"].first = QString("%1").arg((int)(x() - section->x()));
-    props["Y1"].first = QString("%1").arg((int)(y() - section->y()));
+    props["X1"]->setValue(QString("%1").arg((int)(x() - section->x())));
+    props["Y1"]->setValue(QString("%1").arg((int)(y() - section->y())));
     parentSection = section;
 }
 
 void CanvasLine::updateGeomProps()
 {
-    props["X1"].first = QString("%1").arg((int)(x() - section()->x()));
-    props["Y1"].first = QString("%1").arg((int)(y() - section()->y()));
-    props["X2"].first = QString("%1").arg((int)(x() - section()->x() + width()));
-    props["Y2"].first = QString("%1").arg((int)(y() - section()->y() + height()));
+    props["X1"]->setValue(QString("%1").arg((int)(x() - section()->x())));
+    props["Y1"]->setValue(QString("%1").arg((int)(y() - section()->y())));
+    props["X2"]->setValue(QString("%1").arg((int)(x() - section()->x() + width())));
+    props["Y2"]->setValue(QString("%1").arg((int)(y() - section()->y() + height())));
 
 //    if (width() )
 }
