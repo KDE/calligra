@@ -821,15 +821,15 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     if ( toolEditMode != INS_LINE )
         insRect = insRect.normalize();
 
-    QPoint mv;
-    QSize sz;
+    KoPoint mv;
+    KoSize sz;
     if ( toolEditMode == TEM_MOUSE && modType != MT_NONE && modType != MT_MOVE  && resizeObjNum != -1 ) {
         kpobject = objectList().at( resizeObjNum );
         if ( kpobject ) {
-            mv = QPoint( kpobject->getOrig().x() - oldRect.x(),
-                         kpobject->getOrig().y() - oldRect.y() );
-            sz = QSize( kpobject->getSize().width() - oldRect.width(),
-                        kpobject->getSize().height() - oldRect.height() );
+            mv = KoPoint( kpobject->getOrig().x() - m_view->zoomHandler()->unzoomItX( oldRect.x()),
+                         kpobject->getOrig().y() - m_view->zoomHandler()->unzoomItY(oldRect.y()) );
+            sz = KoSize( kpobject->getSize().width() - m_view->zoomHandler()->unzoomItX(oldRect.width()),
+                        kpobject->getSize().height() - m_view->zoomHandler()->unzoomItY(oldRect.height()) );
         }
         kpobject = 0L;
     }
@@ -4606,9 +4606,9 @@ void KPrCanvas::scalePixmapToBeOrigIn( const QSize &/*origSize*/, const QSize &c
     double faktY = (double)presSize.height() / (double)QApplication::desktop()->height();
     int w = (int)( (double)pgSize.width() * faktX );
     int h = (int)( (double)pgSize.height() * faktY );
-
+//FIXME
     ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Scale Picture to be shown 1:1 in presentation mode" ),
-                                          QPoint( 0, 0 ), QSize( w - currentSize.width(), h - currentSize.height() ),
+                                          KoPoint( 0, 0 ), KoSize( w - currentSize.width(), h - currentSize.height() ),
                                           obj, m_view->kPresenterDoc() );
     resizeCmd->execute();
     m_view->kPresenterDoc()->addCommand( resizeCmd );

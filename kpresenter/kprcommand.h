@@ -183,7 +183,7 @@ protected:
 class ResizeCmd : public KCommand
 {
 public:
-    ResizeCmd( QString _name, QPoint _m_diff, QSize _r_diff, KPObject *_object, KPresenterDoc *_doc );
+    ResizeCmd( const QString &_name, const KoPoint &_m_diff, const KoSize &_r_diff, KPObject *_object, KPresenterDoc *_doc );
     ~ResizeCmd();
 
     virtual void execute();
@@ -192,8 +192,8 @@ public:
 
 protected:
 
-    QPoint m_diff;
-    QSize r_diff;
+    KoPoint m_diff;
+    KoSize r_diff;
     KPObject *object;
     KPresenterDoc *doc;
 

@@ -1515,7 +1515,7 @@ void RectValueCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-ResizeCmd::ResizeCmd( QString _name, QPoint _m_diff, QSize _r_diff, KPObject *_object, KPresenterDoc *_doc )
+ResizeCmd::ResizeCmd( const QString &_name, const KoPoint &_m_diff, const KoSize &_r_diff, KPObject *_object, KPresenterDoc *_doc )
     : KCommand( _name ), m_diff( _m_diff ), r_diff( _r_diff )
 {
     object = _object;
@@ -1536,9 +1536,7 @@ void ResizeCmd::execute()
 
     oldRect = doc->zoomHandler()->zoomRect( object->getBoundingRect( ));
     object->moveBy( m_diff );
-#if 0 //FIXME
     object->resizeBy( r_diff );
-#endif
     if ( object->getType() == OT_TEXT )
     {
 	( (KPTextObject*)object )->recalcPageNum( doc );
