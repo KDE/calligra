@@ -27,6 +27,7 @@ Boston, MA 02111-1307, USA.
 #include <kdebug.h>
 
 #include "ImportTags.h"
+#include "ImportEntities.h"
 #include "ImportParser.h"
 
 typedef enum
@@ -731,17 +732,16 @@ QChar HtmlParser::resolveEntity(const QString& strEntity)
     }
     else
     {
-        // PROVISORY!
-        if (strEntity=="amp")
-            return '&';
-        else if (strEntity=="lt")
-            return '<';
-        else if (strEntity=="gt")
-            return '>';
-        else if (strEntity=="quot")
-            return '"';
+        MapEntities::ConstIterator it=m_mapEntities.find(strEntity);
+
+        if (it==m_mapEntities.end())
+        {
+            return QChar(); // NULL
+        }
         else
-            return QChar(); // NULL!
+        {
+            return QChar(it.data());
+        }
     }
 }
 

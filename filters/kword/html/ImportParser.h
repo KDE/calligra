@@ -24,6 +24,7 @@ Boston, MA 02111-1307, USA.
 
 #include <qmap.h>
 #include "ImportTags.h"
+#include "ImportEntities.h"
 
 class HtmlAttributes : public QMap<QString,QString>
 {
@@ -68,6 +69,7 @@ protected:
     QChar resolveEntity(const QString& strEntity);
 private:
     MapTag m_mapTag;
+    MapEntities m_mapEntities;
     QTextStream& m_streamIn;
     QChar m_unch; // unget char
     bool m_unchok; // Is unget active?
