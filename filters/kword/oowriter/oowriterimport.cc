@@ -214,6 +214,7 @@ void OoWriterImport::createStyles( QDomDocument& doc )
         // ### In KWord the style says "I'm part of the outline" (TOC)
         // ### In OOo the paragraph says that (text:h)
         // Hence this hack...
+        // OASIS solution for this: style:default-outline-level attribute
         bool outline = styleName.startsWith( "Heading" );
         if ( outline )
             styleElem.setAttribute( "outline", "true" );
@@ -222,7 +223,7 @@ void OoWriterImport::createStyles( QDomDocument& doc )
         writeLayout( doc, styleElem );
 
         // writeLayout doesn't load the counter. It's modelled differently for parags and for styles.
-        // ### missing info in the format!
+        // ### missing info in the format! (fixed in OASIS)
         const int level = styleName.right(1).toInt(); // ## HACK
         bool listOK = false;
         if ( level > 0 ) {
@@ -991,14 +992,17 @@ bool OoWriterImport::pushListLevelStyle( const QString& listStyleName, // for de
 
 void OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list, QDomElement& currentFramesetElement )
 {
-    //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
+    //kdDebug(30518) << k_funcinfo << "parseList"<< endl;
 
     m_insideOrderedList = ( list.tagName() == "text:ordered-list" );
-    const QString listStyleName = list.attribute( "text:style-name" );
-    bool listOK = !listStyleName.isEmpty();
+    QString oldListStyleName = m_currentListStyleName;
+    if ( list.hasAttribute( "text:style-name" ) )
+        m_currentListStyleName = list.attribute( "text:style-name" );
+    bool listOK = !m_currentListStyleName.isEmpty();
     const int level = m_listStyleStack.level() + 1;
+    //kdDebug(30518) << k_funcinfo << " listOK=" << listOK << " level=" << level << endl;
     if ( listOK )
-        listOK = pushListLevelStyle( listStyleName, level );
+        listOK = pushListLevelStyle( m_currentListStyleName, level );
 
     // Iterate over list items
     for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() )
@@ -1015,6 +1019,7 @@ void OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list, QDom
     }
     if ( listOK )
         m_listStyleStack.pop();
+    m_currentListStyleName = oldListStyleName;
 }
 
 static int numberOfParagraphs( const QDomElement& frameset )
@@ -1684,13 +1689,9 @@ void OoWriterImport::importCommonFrameProperties( QDomElement& frameElementOut )
     if ( transparent )
         frameElementOut.setAttribute( "bkStyle", 0 );
     else if ( bgColor.isValid() ) {
+        // OOwriter doesn't support fill patterns (bkStyle).
+        // But the file support is more generic, and supports: draw:stroke, svg:stroke-color, draw:fill, draw:fill-color
         frameElementOut.setAttribute( "bkStyle", 1 );
-        // TODO the OO format doesn't support fill patterns (bkStyle)
-        // To implement this in an OO-like way, we'd need to
-        // 1) convert the Qt fill patterns to draw:hatch elements (in office:styles)
-        // 2) refer to those using draw:fill="hatch" draw:fill-hatch-name="..."
-        // (OASIS extension requested, 17/01/2004)
-        // Hmm, some docu talks about: draw:stroke, svg:stroke-color, draw:fill, draw:fill-color
         frameElementOut.setAttribute( "bkRed", bgColor.red() );
         frameElementOut.setAttribute( "bkBlue", bgColor.blue() );
         frameElementOut.setAttribute( "bkGreen", bgColor.green() );

@@ -105,6 +105,7 @@ private:
     bool m_hasHeader;
     bool m_hasFooter;
     int m_restartNumbering;
+    QString m_currentListStyleName;
     QString m_currentMasterPage;
     QDomElement m_currentFrameset; // set by parseBodyOrSimilar
 
