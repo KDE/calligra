@@ -1085,6 +1085,11 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
     {
         helpLineOasis+="H"+QString::number( zoomHandler()->zoomItY(*it ) );
     }
+    for(QValueList<KoPoint>::Iterator it = m_helpPoints.begin(); it != m_helpPoints.end(); ++it)
+    {
+        QString str( "P%1,%2" );
+        helpLineOasis+=str.arg( QString::number( zoomHandler()->zoomItX(( *it ).x() ) ) ).arg( QString::number( zoomHandler()->zoomItX(( *it ).y() ) ) );
+    }
     if ( !helpLineOasis.isEmpty() )
     {
         settingsWriter.addAttribute( "config:name", "SnapLinesDrawing" );
