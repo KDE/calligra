@@ -976,7 +976,7 @@ QString KSpreadcreate::make_formula( const QString& _text,int nb_line)
 		//so don't find "
 		text+="\"";
 	    }
-	    else if(pos_car < text.length())
+	    else if(pos_car < (int)text.length())
 	    {
 		//todo
 	    }

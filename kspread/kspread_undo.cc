@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include <qprinter.h>
 #include "kspread_undo.h"
@@ -33,10 +33,10 @@
 KSpreadUndo::KSpreadUndo( KSpreadDoc *_doc )
 {
     m_pDoc = _doc;
-    
+
     m_stckUndo.setAutoDelete( FALSE );
     m_stckRedo.setAutoDelete( FALSE );
-    
+
     m_bLocked = FALSE;
 }
 
@@ -49,7 +49,7 @@ void KSpreadUndo::appendUndo( KSpreadUndoAction *_action )
 {
     if ( m_bLocked )
 	return;
-    
+
     m_stckRedo.setAutoDelete( TRUE );
     m_stckRedo.clear();
     m_stckRedo.setAutoDelete( FALSE );
@@ -67,13 +67,13 @@ void KSpreadUndo::clear()
 {
     if ( m_bLocked )
 	return;
-    
+
     m_stckUndo.setAutoDelete( TRUE );
     m_stckRedo.setAutoDelete( TRUE );
 
     m_stckUndo.clear();
     m_stckRedo.clear();
-    
+
     m_stckUndo.setAutoDelete( FALSE );
     m_stckRedo.setAutoDelete( FALSE );
 }
@@ -118,16 +118,16 @@ void KSpreadUndo::redo()
 KSpreadUndoDeleteColumn::KSpreadUndoDeleteColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column ) :
     KSpreadUndoAction( _doc )
 {
-  m_pTable = _table;
-  m_iColumn= _column;
-  m_lstCells.setAutoDelete( TRUE );
-  m_pColumnLayout = 0L; 
+    m_pTable = _table;
+    m_iColumn= _column;
+    m_lstCells.setAutoDelete( TRUE );
+    m_pColumnLayout = 0L;
 }
-    
+
 KSpreadUndoDeleteColumn::~KSpreadUndoDeleteColumn()
 {
-  if ( m_pColumnLayout )
-    delete m_pColumnLayout;
+    if ( m_pColumnLayout )
+	delete m_pColumnLayout;
 }
 
 void KSpreadUndoDeleteColumn::undo()
@@ -142,13 +142,17 @@ void KSpreadUndoDeleteColumn::undo()
     if ( m_pColumnLayout )
 	m_pTable->insertColumnLayout( m_pColumnLayout );
 
+    // HACK
+    m_lstCells.setAutoDelete( FALSE );
+    m_lstCells.clear();
+    m_lstCells.setAutoDelete( TRUE );
     // TODO
     /*
     if ( m_pTable->gui() )
     {
 	m_pTable->drawVisibleObjects( TRUE );
 	m_pTable->gui()->hBorderWidget()->repaint();
-	m_pTable->gui()->vBorderWidget()->repaint();    
+	m_pTable->gui()->vBorderWidget()->repaint();
     }
     */
     m_pDoc->undoBuffer()->unlock();
@@ -178,7 +182,7 @@ KSpreadUndoInsertColumn::KSpreadUndoInsertColumn( KSpreadDoc *_doc, KSpreadTable
     m_pTable = _table;
     m_iColumn= _column;
 }
-    
+
 KSpreadUndoInsertColumn::~KSpreadUndoInsertColumn()
 {
 }
@@ -211,7 +215,7 @@ KSpreadUndoDeleteRow::KSpreadUndoDeleteRow( KSpreadDoc *_doc, KSpreadTable *_tab
     m_lstCells.setAutoDelete( TRUE );
     m_pRowLayout = 0L;
 }
-    
+
 KSpreadUndoDeleteRow::~KSpreadUndoDeleteRow()
 {
     if ( m_pRowLayout )
@@ -237,7 +241,7 @@ void KSpreadUndoDeleteRow::undo()
     {
 	m_pTable->drawVisibleObjects( TRUE );
 	m_pTable->gui()->hBorderWidget()->repaint();
-	m_pTable->gui()->vBorderWidget()->repaint();    
+	m_pTable->gui()->vBorderWidget()->repaint();
     }
     */
     m_pDoc->undoBuffer()->unlock();
@@ -267,7 +271,7 @@ KSpreadUndoInsertRow::KSpreadUndoInsertRow( KSpreadDoc *_doc, KSpreadTable *_tab
     m_pTable = _table;
     m_iRow = _row;
 }
-    
+
 KSpreadUndoInsertRow::~KSpreadUndoInsertRow()
 {
 }
@@ -357,21 +361,21 @@ KSpreadUndoCellLayout::KSpreadUndoCellLayout( KSpreadDoc *_doc, KSpreadTable *_t
   m_rctRect = _selection;
   m_pTable = _table;
   m_lstLayouts.setAutoDelete( TRUE );
-    
+
   copyLayout( m_lstLayouts );
 }
 
 void KSpreadUndoCellLayout::copyLayout( QList<KSpreadLayout> &list)
 {
     list.clear();
-    
+
     for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
 	for ( int x = m_rctRect.left(); x <= m_rctRect.right(); x++ )
 	{
 	    KSpreadLayout *l = new KSpreadLayout( m_pTable );
 	    l->copy( *(m_pTable->cellAt( x, y )) );
 	    list.append( l );
-	}   
+	}
 }
 
 KSpreadUndoCellLayout::~KSpreadUndoCellLayout()
@@ -383,10 +387,10 @@ void KSpreadUndoCellLayout::undo()
     m_pDoc->undoBuffer()->lock();
 
     copyLayout( m_lstRedoLayouts );
-    
+
     KSpreadLayout *l;
     l = m_lstLayouts.first();
-    
+
     for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
 	for ( int x = m_rctRect.left(); x <= m_rctRect.right(); x++ )
 	{
@@ -411,7 +415,7 @@ void KSpreadUndoCellLayout::redo()
 
     KSpreadLayout *l;
     l = m_lstRedoLayouts.first();
-    
+
     for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
 	for ( int x = m_rctRect.left(); x <= m_rctRect.right(); x++ )
 	{
@@ -420,7 +424,7 @@ void KSpreadUndoCellLayout::redo()
 	    cell->setLayoutDirtyFlag();
 	    l = m_lstRedoLayouts.next();
 	}
-    
+
     // TODO
     /*
     if ( m_pTable->gui() )
@@ -441,13 +445,13 @@ KSpreadUndoDelete::KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadTable *, QRect &)
 {
   /* rect = _rect;
     m_pTable = _table;
-    
+
     QBuffer device( array );
     device.open( IO_WriteOnly );
 
     KorbSession *korb = new KorbSession( &device );
     KSpreadCell o_root;
-    
+
     o_root = m_pTable->saveCells( korb, rect.left(), rect.top(), rect.right(), rect.bottom() );
 
     if ( o_root != 0 )

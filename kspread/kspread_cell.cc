@@ -100,87 +100,100 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_firstCondition = 0;
   m_secondCondition = 0;
   m_thirdCondition = 0;
-  conditionIsTrue=false;
-  numberOfCond=-1;
+  m_conditionIsTrue=false;
+  m_numberOfCond=-1;
 }
 
 void KSpreadCell::copyLayout( int _column, int _row )
 {
-  KSpreadCell *o = m_pTable->cellAt( _column, _row );
+    KSpreadCell *o = m_pTable->cellAt( _column, _row );
 
-  setAlign( o->align() );
-  setAlignY( o->alignY());
-  setTextFont( o->textFont() );
-  setTextColor( o->textColor() );
-  setBgColor( o->bgColor( _column, _row) );
-  setLeftBorderWidth( o->leftBorderWidth( _column, _row ) );
-  setLeftBorderStyle( o->leftBorderStyle( _column, _row ) );
-  setLeftBorderColor( o->leftBorderColor( _column, _row ) );
-  setTopBorderWidth( o->topBorderWidth( _column, _row ) );
-  setTopBorderStyle( o->topBorderStyle( _column, _row ) );
-  setTopBorderColor( o->topBorderColor( _column, _row ) );
-  setBottomBorderWidth( o->bottomBorderWidth( _column, _row ) );
-  setBottomBorderStyle( o->bottomBorderStyle( _column, _row ) );
-  setBottomBorderColor( o->bottomBorderColor( _column, _row ) );
-  setRightBorderWidth( o->rightBorderWidth( _column, _row ) );
-  setRightBorderStyle( o->rightBorderStyle( _column, _row ) );
-  setRightBorderColor( o->rightBorderColor( _column, _row ) );
-  setFallDiagonalWidth( o->fallDiagonalWidth( _column, _row ) );
-  setFallDiagonalStyle( o->fallDiagonalStyle( _column, _row ) );
-  setFallDiagonalColor( o->fallDiagonalColor( _column, _row ) );
-  setGoUpDiagonalWidth( o->goUpDiagonalWidth( _column, _row ) );
-  setGoUpDiagonalStyle( o->goUpDiagonalStyle( _column, _row ) );
-  setGoUpDiagonalColor( o->goUpDiagonalColor( _column, _row ) );
-  setBackGroundBrushColor(o->backGroundBrushColor( _column, _row) );
-  setBackGroundBrushStyle(o->backGroundBrushStyle( _column, _row) );
-  setPrecision( o->precision() );
-  setPrefix( o->prefix() );
-  setPostfix( o->postfix() );
-  setFloatFormat( o->floatFormat() );
-  setFloatColor( o->floatColor() );
-  setFaktor( o->faktor() );
-  setMultiRow( o->multiRow() );
-  KSpreadConditional *tmpCondition=0;
-  //tmpCondition=o->getFirstCondition(0);
-  if(o->getFirstCondition(0)!=0)
-    	{
+    setAlign( o->align() );
+    setAlignY( o->alignY());
+    setTextFont( o->textFont() );
+    setTextColor( o->textColor() );
+    setBgColor( o->bgColor( _column, _row) );
+    setLeftBorderWidth( o->leftBorderWidth( _column, _row ) );
+    setLeftBorderStyle( o->leftBorderStyle( _column, _row ) );
+    setLeftBorderColor( o->leftBorderColor( _column, _row ) );
+    setTopBorderWidth( o->topBorderWidth( _column, _row ) );
+    setTopBorderStyle( o->topBorderStyle( _column, _row ) );
+    setTopBorderColor( o->topBorderColor( _column, _row ) );
+    setBottomBorderWidth( o->bottomBorderWidth( _column, _row ) );
+    setBottomBorderStyle( o->bottomBorderStyle( _column, _row ) );
+    setBottomBorderColor( o->bottomBorderColor( _column, _row ) );
+    setRightBorderWidth( o->rightBorderWidth( _column, _row ) );
+    setRightBorderStyle( o->rightBorderStyle( _column, _row ) );
+    setRightBorderColor( o->rightBorderColor( _column, _row ) );
+    setFallDiagonalWidth( o->fallDiagonalWidth( _column, _row ) );
+    setFallDiagonalStyle( o->fallDiagonalStyle( _column, _row ) );
+    setFallDiagonalColor( o->fallDiagonalColor( _column, _row ) );
+    setGoUpDiagonalWidth( o->goUpDiagonalWidth( _column, _row ) );
+    setGoUpDiagonalStyle( o->goUpDiagonalStyle( _column, _row ) );
+    setGoUpDiagonalColor( o->goUpDiagonalColor( _column, _row ) );
+    setBackGroundBrushColor(o->backGroundBrushColor( _column, _row) );
+    setBackGroundBrushStyle(o->backGroundBrushStyle( _column, _row) );
+    setPrecision( o->precision() );
+    setPrefix( o->prefix() );
+    setPostfix( o->postfix() );
+    setFloatFormat( o->floatFormat() );
+    setFloatColor( o->floatColor() );
+    setFaktor( o->faktor() );
+    setMultiRow( o->multiRow() );
+    setStyle( o->style() );
+    
+    KSpreadConditional *tmpCondition;
+    if( o->getFirstCondition(0) )
+    {
   	tmpCondition=getFirstCondition();
   	tmpCondition->val1=o->getFirstCondition(0)->val1;
   	tmpCondition->val2=o->getFirstCondition(0)->val2;
   	tmpCondition->colorcond=o->getFirstCondition(0)->colorcond;
   	tmpCondition->fontcond=o->getFirstCondition(0)->fontcond;
   	tmpCondition->m_cond=o->getFirstCondition(0)->m_cond;
-	}
-  if(o->getSecondCondition(0)!=0)
-    	{
+    }
+    if( o->getSecondCondition(0) )
+    {
   	tmpCondition=getSecondCondition();
   	tmpCondition->val1=o->getSecondCondition(0)->val1;
   	tmpCondition->val2=o->getSecondCondition(0)->val2;
   	tmpCondition->colorcond=o->getSecondCondition(0)->colorcond;
   	tmpCondition->fontcond=o->getSecondCondition(0)->fontcond;
   	tmpCondition->m_cond=o->getSecondCondition(0)->m_cond;
-	}
-  if(o->getThirdCondition(0)!=0)
-    	{
+    }
+    if( o->getThirdCondition(0) )
+    {
   	tmpCondition=getThirdCondition();
   	tmpCondition->val1=o->getThirdCondition(0)->val1;
   	tmpCondition->val2=o->getThirdCondition(0)->val2;
   	tmpCondition->colorcond=o->getThirdCondition(0)->colorcond;
   	tmpCondition->fontcond=o->getThirdCondition(0)->fontcond;
   	tmpCondition->m_cond=o->getThirdCondition(0)->m_cond;
-	}
-
+    }
 }
 
+void KSpreadCell::copyAll( KSpreadCell *cell )
+{
+    copyLayout( cell );
+    setText( cell->text() );
+    setAction(cell->action() );
+
+    if ( m_pPrivate )
+	delete m_pPrivate;
+    m_pPrivate = 0;
+    if ( cell->m_pPrivate )
+	m_pPrivate = cell->m_pPrivate->copy( this );
+}
+
+/* The old implementation
 void KSpreadCell::copyAll( KSpreadCell *cell)
 {
-
-  setText(cell->text());
-  setAlign( cell->align() );
-  setAlignY( cell->alignY());
-  setTextFont( cell->textFont() );
-  setTextColor( cell->textColor() );
-  setBgColor( cell->bgColor( ) );
+    setText(cell->text());
+    setAlign( cell->align() );
+    setAlignY( cell->alignY());
+    setTextFont( cell->textFont() );
+    setTextColor( cell->textColor() );
+    setBgColor( cell->bgColor( ) );
   //When you use column() and row() it don't work
 
   //setLeftBorderWidth( cell->leftBorderWidth( ) );
@@ -205,7 +218,7 @@ void KSpreadCell::copyAll( KSpreadCell *cell)
   KSpreadConditional *tmpCondition=0;
   //tmpCondition=o->getFirstCondition(0);
   if(cell->getFirstCondition(0)!=0)
-    	{
+ {
   	tmpCondition=getFirstCondition();
   	tmpCondition->val1=cell->getFirstCondition(0)->val1;
   	tmpCondition->val2=cell->getFirstCondition(0)->val2;
@@ -233,6 +246,7 @@ void KSpreadCell::copyAll( KSpreadCell *cell)
 	}
 
 }
+*/
 
 void KSpreadCell::defaultStyle()
 {
@@ -278,8 +292,8 @@ void KSpreadCell::defaultStyle()
   	delete m_secondCondition;
   m_secondCondition=0;
 
-  conditionIsTrue=false;
-  numberOfCond=-1;
+  m_conditionIsTrue=false;
+  m_numberOfCond=-1;
 }
 
 void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
@@ -382,9 +396,10 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
     QObject::connect( popup, SIGNAL( activated( int ) ),
 		      s, SLOT( slotItemSelected( int ) ) );
     int id = 0;
-    const char *t;
-    for( t = s->m_lstItems.first(); t != 0L; t = s->m_lstItems.next() )
-      popup->insertItem( t, id++ );
+    QStringList::ConstIterator it = s->m_lstItems.begin();
+    for( ; it != s->m_lstItems.end(); ++it )
+	popup->insertItem( *it, id++ );
+
     RowLayout *rl = m_pTable->rowLayout( row() );
     int tx = m_pTable->columnPos( column(), _canvas );
     int ty = m_pTable->rowPos( row(), _canvas );
@@ -821,7 +836,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   /**
    * A usual numeric, boolean or string value.
    */
-  const char *ptext;
+  QString ptext;
   // If this is a select box, find out about the selected item
   // in the KSpreadPrivate data struct
   if ( m_style == ST_Select )
@@ -834,7 +849,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   else
     ptext = m_strText;
 
-  if ( ptext == 0L || *ptext == 0 )
+  if ( ptext.isEmpty() )
   {
     m_strOutText = QString::null;
     if ( isDefault() )
@@ -911,10 +926,10 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     verifyCondition();
     if ( floatColor() == KSpreadCell::NegRed && v < 0.0 )
       m_textPen.setColor( Qt::red );
-    else if(conditionIsTrue)
+    else if(m_conditionIsTrue)
     	{
     	KSpreadConditional *tmpCondition=0;
-	switch(numberOfCond)
+	switch(m_numberOfCond)
 		{	
 		case 0:
 			tmpCondition=m_firstCondition;
@@ -941,10 +956,10 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
   _painter.setPen( m_textPen );
   verifyCondition();
-  if(conditionIsTrue)
+  if(m_conditionIsTrue)
         {
         KSpreadConditional *tmpCondition=0;
-        switch(numberOfCond)
+        switch(m_numberOfCond)
 		{	
 		case 0:
 			tmpCondition=m_firstCondition;
@@ -1218,9 +1233,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
 void KSpreadCell::verifyCondition()
 {
-numberOfCond=-1;
+m_numberOfCond=-1;
 double v = m_dValue * m_dFaktor;
-conditionIsTrue=false;
+m_conditionIsTrue=false;
 KSpreadConditional *tmpCondition=0;
 if(m_bValue)
 {
@@ -1247,24 +1262,24 @@ if(tmpCondition!=0 && tmpCondition->m_cond!=None)
                 case Equal :
                 if(v==tmpCondition->val1)
                         {
-                        conditionIsTrue=true;
-                        numberOfCond=i;
+                        m_conditionIsTrue=true;
+                        m_numberOfCond=i;
                         }
                 break;
 
                 case Superior :
                 if(v>tmpCondition->val1)
                         {
-                        conditionIsTrue=true;
-                        numberOfCond=i;
+                        m_conditionIsTrue=true;
+                        m_numberOfCond=i;
                         }
                 break;
 
                 case Inferior :
                 if(v<tmpCondition->val1)
                         {
-                        conditionIsTrue=true;
-                        numberOfCond=i;
+                        m_conditionIsTrue=true;
+                        m_numberOfCond=i;
                         }
 
                 break;
@@ -1272,8 +1287,8 @@ if(tmpCondition!=0 && tmpCondition->m_cond!=None)
                 case SuperiorEqual :
                 if(v>=tmpCondition->val1)
                         {
-                        conditionIsTrue=true;
-                        numberOfCond=i;
+                        m_conditionIsTrue=true;
+                        m_numberOfCond=i;
                         }
 
                 break;
@@ -1281,8 +1296,8 @@ if(tmpCondition!=0 && tmpCondition->m_cond!=None)
                 case InferiorEqual :
                 if(v<=tmpCondition->val1)
                         {
-                        conditionIsTrue=true;
-                        numberOfCond=i;
+                        m_conditionIsTrue=true;
+                        m_numberOfCond=i;
                         }
 
                 break;
@@ -1290,23 +1305,23 @@ if(tmpCondition!=0 && tmpCondition->m_cond!=None)
                 case Between :
                 if((v>QMIN(tmpCondition->val1,tmpCondition->val2))&&(v<QMAX(tmpCondition->val1,tmpCondition->val2)))
                         {
-                        conditionIsTrue=true;
-                        numberOfCond=i;
+                        m_conditionIsTrue=true;
+                        m_numberOfCond=i;
                         }
                 break;
 
                 case Different :
                 if((v<QMIN(tmpCondition->val1,tmpCondition->val2))||(v>QMAX(tmpCondition->val1,tmpCondition->val2)))
                         {
-                        conditionIsTrue=true;
-                        numberOfCond=i;
+                        m_conditionIsTrue=true;
+                        m_numberOfCond=i;
                         }
                 break;
 
                 default:
                         cout<<"Pb in Conditional\n";
 
-                        conditionIsTrue=false;
+                        m_conditionIsTrue=false;
                         break;
 
                 }
@@ -1370,9 +1385,9 @@ int h = rl->height();
 KSpreadConditional *tmpCondition=0;
 
 
-if(conditionIsTrue)
+if(m_conditionIsTrue)
         {
-        switch(numberOfCond)
+        switch(m_numberOfCond)
 		{	
 		case 0:
 			tmpCondition=m_firstCondition;
@@ -1952,10 +1967,10 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
 
 
     verifyCondition();
-    if(conditionIsTrue)
+    if(m_conditionIsTrue)
         {
         KSpreadConditional *tmpCondition=0;
-        switch(numberOfCond)
+        switch(m_numberOfCond)
 	{	
 	case 0:
 		tmpCondition=m_firstCondition;
@@ -2123,10 +2138,10 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
     {
       _painter.setPen( m_textPen );
       verifyCondition();
-      if(conditionIsTrue)
+      if(m_conditionIsTrue)
       	{
         KSpreadConditional *tmpCondition=0;
-        switch(numberOfCond)
+        switch(m_numberOfCond)
 		{	
 		case 0:
 			tmpCondition=m_firstCondition;
@@ -3056,7 +3071,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   	}
   if ( m_textPen != m_pTable->defaultCell()->textPen() )
     {
-    if(conditionIsTrue)
+    if(m_conditionIsTrue)
     	{
 	m_textPen.setColor( m_textColor );
 	}    	
@@ -3556,10 +3571,16 @@ void KSpreadCell::setStyle( Style _s )
 QString KSpreadCell::testAnchor( int _x, int _y, QWidget* _w )
 {
   if ( !m_pQML )
-    return QString();
+    return QString::null;
 
   QPainter p( _w );
   return m_pQML->anchor( &p, QPoint( _x, _y ) );
+}
+
+void KSpreadCell::tableDies()
+{
+    m_iExtraXCells = 0;
+    m_iExtraYCells = 0;
 }
 
 KSpreadCell::~KSpreadCell()
@@ -3586,60 +3607,49 @@ KSpreadCell::~KSpreadCell()
  *
  ***************************************************/
 
-void SelectPrivate::parse( const char* _text )
+void SelectPrivate::parse( const QString& _text )
 {
-  m_lstItems.clear();
+    m_lstItems.clear();
 
-  if ( !_text )
-    return;
+    if ( _text.isEmpty() )
+	return;
 
-  char *p = new char[ strlen( _text ) + 1 ];
-  strcpy( p, _text );
-  char *str = p;
+    m_lstItems = QStringList::split( '\\', _text );
 
-  char *s;
-  while ( ( s = strchr( str, '\\' ) ) != 0L )
-  {
-    *s++ = 0;
-    if ( strlen( str ) > 0 )
-      m_lstItems.append( str );
-    str = s;
-  }
-
-  if ( strlen( str ) > 0 )
-    m_lstItems.append( str );
-
-  if ( m_iIndex != -1 && m_iIndex < m_lstItems.count() )
-  { }
-  else if ( m_lstItems.count() > 0 )
-    m_iIndex = 0;
-  else
-    m_iIndex = -1;
-
-  delete[] p;
+    if ( m_iIndex != -1 && m_iIndex < (int)m_lstItems.count() )
+    { }
+    else if ( m_lstItems.count() > 0 )
+	m_iIndex = 0;
+    else
+	m_iIndex = -1;
 }
 
 void SelectPrivate::slotItemSelected( int _id )
 {
-  m_iIndex = _id;
+    m_iIndex = _id;
 
-  m_pCell->setLayoutDirtyFlag();
-  m_pCell->checkValue();
-  m_pCell->update();
+    m_pCell->setLayoutDirtyFlag();
+    m_pCell->checkValue();
+    m_pCell->update();
 
-  m_pCell->table()->emit_updateCell( m_pCell, m_pCell->column(), m_pCell->row() );
+    m_pCell->table()->emit_updateCell( m_pCell, m_pCell->column(), m_pCell->row() );
 }
 
-const char* SelectPrivate::text()
+QString SelectPrivate::text() const
 {
-  if ( m_iIndex == -1 )
-    return "";
+    if ( m_iIndex == -1 )
+	return QString::null;
 
-  const char* p = m_lstItems.at( m_iIndex );
-  if ( p == 0L )
-    return "";
+    return m_lstItems[ m_iIndex ];
+}
 
-  return p;
+KSpreadCellPrivate* SelectPrivate::copy( KSpreadCell* cell )
+{
+    SelectPrivate* p = new SelectPrivate( cell );
+    p->m_lstItems = m_lstItems;
+    p->m_iIndex = m_iIndex;
+    
+    return p;
 }
 
 #include "kspread_cell.moc"

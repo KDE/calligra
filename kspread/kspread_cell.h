@@ -72,31 +72,39 @@ struct KSpreadDepend
 
 class KSpreadCellPrivate : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  KSpreadCellPrivate( KSpreadCell* _cell ) { m_pCell = _cell; }
-  virtual ~KSpreadCellPrivate() { }
+    KSpreadCellPrivate( KSpreadCell* _cell ) { m_pCell = _cell; }
+    virtual ~KSpreadCellPrivate() { }
 
+    /**
+     * Used in @ref KSpreadCell::copyAll to make a copy
+     * of some cell.
+     */
+    virtual KSpreadCellPrivate* copy( KSpreadCell* cell ) = 0;
+    
 protected:
-  KSpreadCell* m_pCell;
+    KSpreadCell* m_pCell;
 };
 
 class SelectPrivate : public KSpreadCellPrivate
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  SelectPrivate( KSpreadCell* _cell ) : KSpreadCellPrivate( _cell ) { m_iIndex = -1; }
-  virtual ~SelectPrivate() { }
+    SelectPrivate( KSpreadCell* _cell ) : KSpreadCellPrivate( _cell ) { m_iIndex = -1; }
+    virtual ~SelectPrivate() { }
 
-  const char* text();
+    KSpreadCellPrivate* copy( KSpreadCell* cell );
+    
+    QString text() const;
 
-  void parse( const char* _text );
+    void parse( const QString& _text );
 
-  QStrList m_lstItems;
-  int m_iIndex;
+    QStringList m_lstItems;
+    int m_iIndex;
 
 public slots:
-   void slotItemSelected( int _id );
+    void slotItemSelected( int _id );
 };
 
 /**
@@ -110,8 +118,23 @@ public:
     enum Content { Text, RichText, Formula, VisualFormula };
 
     KSpreadCell( KSpreadTable *_table, int _column, int _row );
+    /**
+     * @see #tableDies
+     */
     ~KSpreadCell();
 
+    /**
+     * The @ref KSpreadTable calls this method if the table becomes deleted.
+     * At the time this method is called other cells may already be deleted or
+     * in some inconsistent state.
+     *
+     * The purpose of this method is to clear up some variables so that the destructor
+     * runs without any crash. Especially all variables referencing other cells
+     * must be voided. This method may not call anz other method since the whole table
+     * and all remaining cells are in an inconsistent state now.
+     */
+    void tableDies();
+    
     virtual QDomElement saveRightMostBorder( QDomDocument& doc, int _x_offset, int _y_offset );
     virtual QDomElement saveBottomMostBorder( QDomDocument& doc, int _x_offset, int _y_offset );
     virtual QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0 );
@@ -122,15 +145,24 @@ public:
 
     /**
      * Copyies the layout from the cell at the position (_column|_row).
+     *
+     * @see #copyAll
      */
     void copyLayout( int _column, int _row );
     /**
      * A convenience function.
+     *
+     * @see #copyAll
      */
     void copyLayout( KSpreadCell *_cell ) { copyLayout( _cell->column(), _cell->row() ); }
 
-
+    /**
+     * Copies the layout and the content.
+     *
+     * @see #copyLayout
+     */
     void copyAll( KSpreadCell *cell);
+
     /**
      * Paints the cell.
      */
@@ -316,7 +348,15 @@ public:
 
     const QColor& bgColor() const { return m_bgColor; }
 
+    /**
+     * @see #setStyle
+     * @see #m_style
+     */
     Style style() const { return m_style; }
+    /**
+     * @see #setAction
+     * @see #m_strAction
+     */
     QString action() const { return m_strAction; }
 
     /**
@@ -340,12 +380,15 @@ public:
     QString valueString() const;
     void setValue( double _d );
 
-    /** when you insert a cell at bottom or right
-    * and the size is not the same so text offset
-    * will not good => recalc offset
-    */
+    /**
+     * When you insert a cell at bottom or right
+     * and the size is not the same so text offset
+     * will not good => recalc offset
+     */
     void offsetAlign(int _col,int _row);
-    /* return size of the text*/
+    /**
+     * return size of the text
+     */
     int textWidth() {return m_iOutTextWidth; }
     int textHeight() {return m_iOutTextHeight; }
     int richTextWidth() {return m_richWidth; }
@@ -486,7 +529,7 @@ public:
      * @return TRUE if the cell is forced to obscure other cells.
      */
     bool isForceExtraCells() const { return m_bForceExtraCells; }
-    void setExtraCells( int x, int y ) { m_iExtraXCells = x; m_iExtraYCells = y; }
+
     /**
      * @return the amount of obscured cells in the horizontal direction
      */
@@ -614,17 +657,23 @@ protected:
      * This cells row.
      * If it is 0, this is the default cell and its row/column can
      * not be determined.
+     *
+     * @persistent
      */
     int m_iRow;
     /**
      * This cells column.
      * If it is 0, this is the default cell and its row/column can
      * not be determined.
+     *
+     * @persistent
      */
     int m_iColumn;
 
     /**
      * Holds the users input
+     *
+     * @persistent
      */
     QString m_strText;
 
@@ -635,8 +684,11 @@ protected:
     int m_iOutTextWidth;
     int m_iOutTextHeight;
     int m_iTextX, m_iTextY;
-    int m_fmAscent; // result of "fm.ascent()" in makeLayout
-                    // used in offsetAlign
+    /**
+     * Result of "fm.ascent()" in makeLayout.
+     * used in offsetAlign.
+     */
+    int m_fmAscent; 
 
     double m_dValue;
     bool m_bValue;
@@ -659,6 +711,7 @@ protected:
     bool m_bCalcDirtyFlag;
 
     QList<KSpreadDepend> m_lstDepends;
+
     /**
      * The value we got from calculation.
      * If @ref #isFormular is TRUE, @ref #makeLayout will use @ref #m_strFormularOut
@@ -686,10 +739,14 @@ protected:
 
     /**
      * The amount of additional cells horizontal
+     *
+     * @persistent
      */
     int m_iExtraXCells;
     /**
      * The amount of additional cells vertical
+     *
+     * @persistent
      */
     int m_iExtraYCells;
 
@@ -728,11 +785,31 @@ protected:
      */
     int m_iObscuringCellsRow;
 
+    /**
+     * Tells wether the cell is a button, combobox etc.
+     *
+     * @persistent
+     */
     Style m_style;
+    /**
+     * Used for example if the cell is displayed as a button.
+     * It tells which command has to be executed.
+     *
+     * @see #action
+     * @see #setAction
+     *
+     * @persistent
+     */
     QString m_strAction;
 
     KSpreadCellPrivate *m_pPrivate;
 
+    /**
+     * Tells which kind of content the cell holds.
+     *
+     * @see #content
+     * @see #setText
+     */
     Content m_content;
 
     /**
@@ -754,19 +831,49 @@ protected:
      */
     static char decimal_point;
 
-   /**
-   * size of richText
-   */
+    /**
+     * Width of richText
+     */
     int m_richWidth;
+    /**
+     * Height of richText
+     */
     int m_richHeight;
 
+    /**
+     * Set to TRUE if one of the conditions apply.
+     *
+     * @see #m_firstCondition
+     * @see #m_secondCondition
+     * @see #m_thirdCondition
+     * @see #m_numberOfCond
+     */
+    bool m_conditionIsTrue;
 
-    bool conditionIsTrue;
-
+    /**
+     * Pointer to the first condition. May be 0.
+     *
+     * @persistent
+     */
     KSpreadConditional *m_firstCondition;
+    /**
+     * Pointer to the second condition. May be 0.
+     *
+     * @persistent
+     */
     KSpreadConditional *m_secondCondition;
+    /**
+     * Pointer to the third condition. May be 0.
+     *
+     * @persistent     
+     */
     KSpreadConditional *m_thirdCondition;
-    int numberOfCond;
+    /**
+     * If a condition apples, then this variable tells which.
+     * The value if always in the range of 0..2 if a condition
+     * applies and undefined otherwise.
+     */
+    int m_numberOfCond;
 };
 
 #endif

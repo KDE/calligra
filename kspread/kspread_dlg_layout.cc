@@ -1155,7 +1155,8 @@ setColor( Qt::black );
 setChanged(true);
 }
 
-KSpreadBord::KSpreadBord( QWidget *parent, const char *_name ) :QFrame(parent)
+KSpreadBord::KSpreadBord( QWidget *parent, const char *_name ) 
+    : QFrame( parent, _name )
 {
 }
 
