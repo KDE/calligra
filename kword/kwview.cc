@@ -1712,7 +1712,7 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
 
 }
 
-void KWView::showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin )
+void KWView::showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin, bool rtl )
 {
   KoRuler * hRuler = m_gui ? m_gui->getHorzRuler() : 0;
   if ( hRuler )
@@ -1720,6 +1720,7 @@ void KWView::showRulerIndent( double _leftMargin, double _firstLine, double _rig
       hRuler->setFirstIndent( KoUnit::ptToUnit( _firstLine + _leftMargin, m_doc->getUnit() ) );
       hRuler->setLeftIndent( KoUnit::ptToUnit( _leftMargin, m_doc->getUnit() ) );
       hRuler->setRightIndent( KoUnit::ptToUnit( _rightMargin, m_doc->getUnit() ) );
+      hRuler->setDirection( rtl );
       actionFormatDecreaseIndent->setEnabled( _leftMargin>0);
   }
 }

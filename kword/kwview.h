@@ -97,7 +97,7 @@ public:
                           const KoBorder& _top, const KoBorder& _bottom );
 
     void showStyle( const QString & styleName );
-    void showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin );
+    void showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin, bool rtl );
     void showZoom( int zoom ); // show a zoom value in the combo
     void setZoom( int zoom, bool updateViews ); // change the zoom value
 
