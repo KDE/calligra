@@ -1,5 +1,5 @@
 
-KDE_CXXFLAGS = $(USE_RTTI) 
+KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(all_includes)
 LDFLAGS   = $(all_libraries)
 
@@ -19,7 +19,7 @@ libkscript_la_METASOURCES = kscript_ext_qt.moc
 
 libkscript_la_LDFLAGS = -version-info 1:0:0
 
-libkscript_la_LIBADD = $(LIB_KDECORE)
+libkscript_la_LIBADD = $(LIB_KDECORE) $(LIB_KDEUI)
 
 bin_PROGRAMS = kscript
 
