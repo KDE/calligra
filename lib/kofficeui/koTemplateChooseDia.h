@@ -16,7 +16,7 @@
 #ifndef koTemplateChooseDia_h
 #define koTemplateChooseDia_h
 
-#include <qtabdlg.h>
+#include <qdialog.h>
 #include <qwidget.h>
 #include <qlabel.h>
 #include <qstring.h>
@@ -27,51 +27,102 @@
 #include <qstring.h>
 #include <qevent.h>
 #include <qfile.h>
-#include <qcolor.h>
+#include <qvbox.h>
+#include <qradiobutton.h>
+#include <qtabwidget.h>
 
 #include <kiconloaderdialog.h>
 #include <kapp.h>
+
+class MyIconCanvas : public KIconLoaderCanvas
+{
+  Q_OBJECT
+  
+public:
+  MyIconCanvas(QWidget *parent = 0,const QString &name = QString::null)
+    : KIconLoaderCanvas(parent,name) {}
+  
+  bool isCurrentValid() { return sel_id >= 0 && sel_id < (int)name_list.count() && !getCurrent().isEmpty(); }
+  
+protected:
+  void mousePressEvent(QMouseEvent *e) {
+    KIconLoaderCanvas::mousePressEvent(e);
+    if (sel_id >= 0 && sel_id < (int)name_list.count()) {
+      QString s = getCurrent();
+      emit currentChanged(s);
+    } else {
+      QString s = "";
+      emit currentChanged(s);
+    }
+  }
+  
+signals:
+  void currentChanged(const QString &);
+
+};
+
 
 /******************************************************************/
 /* Class: KoTemplateChooseDia                                     */
 /******************************************************************/
 
-class KoTemplateChooseDia : public QTabDialog
+class KoTemplateChooseDia : public QDialog
 {
   Q_OBJECT
 
 public:
-  KoTemplateChooseDia(QWidget *parent,const char *name,QString _globalTemplatePath,QString _personalTemplatePath,bool _hasCancel);
+  enum ReturnType {Cancel,Template,File,Empty};
+  
+  KoTemplateChooseDia(QWidget *parent,const char *name,QString _globalTemplatePath,QString _personalTemplatePath,bool _hasCancel,bool _onlyTemplates);
   ~KoTemplateChooseDia() {;}
 
-  static bool chooseTemplate(QString _globalTemplatePath,QString _personalTemplatePath,QString &_template,bool _hasCancel);
+  static ReturnType chooseTemplate(QString _globalTemplatePath,QString _personalTemplatePath,QString &_template,bool _hasCancel,bool _onlyTemplates = true);
 
   QString getTemplate() { return templateName; }
   QString getFullTemplate() { return fullTemplateName; }
-
+  ReturnType getReturnType() { return returnType; }
+  
 protected:
   struct Group
   {
     QFileInfo dir;
     QString name;
     QWidget *tab;
-    KIconLoaderCanvas *loadWid;
+    MyIconCanvas *loadWid;
     QLabel *label;
   };
 
   void getGroups();
   void setupTabs();
-  void resizeEvent(QResizeEvent *);
-
+  void resizeEvent(QResizeEvent *e) {
+    QDialog::resizeEvent(e);
+    back->resize(size());
+  }
+  
   QList<Group> groupList;
   Group *grpPtr;
   QString globalTemplatePath,personalTemplatePath;
   QString templateName,fullTemplateName;
-
+  bool onlyTemplates;
+  QVBox *back;
+  QRadioButton *rbTemplates,*rbFile,*rbEmpty;
+  QLabel *lFile;
+  QPushButton *bFile,*ok;
+  QTabWidget *tabs;
+  ReturnType returnType;
+    
 private slots:
   void nameChanged(const QString &);
   void chosen();
-
+  void currentChanged(const QString &);
+  
+  void openTemplate();
+  void openFile();
+  void openEmpty();
+  void chooseFile();
+  void tabsChanged(const QString &)
+  { openTemplate(); }
+  
 signals:
   void templateChosen(const QString &);
 
