@@ -618,6 +618,32 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
         }
         else
             target.setAttribute( "draw:kind", "section");//by default
+	QDomElement pieAngle = source.namedItem( "PIEANGLE").toElement();   
+	int startangle = 45;
+	if( !pieAngle.isNull() )
+	  {
+	    startangle = (pieAngle.attribute("value").toInt())/16;
+	    target.setAttribute( "draw:start-angle", startangle);
+	  }
+	else
+	  {
+	    //default value take it into kppieobject
+	    target.setAttribute( "draw:start-angle", 45 );
+	  }
+	QDomElement pieLength = source.namedItem( "PIELENGTH").toElement();   
+	if( !pieLength.isNull() )
+	  {
+	    int value = pieLength.attribute("value").toInt();
+	    value = value /16;
+	    value = value + startangle;
+	    target.setAttribute( "draw:end-angle", value );
+	  }
+	else
+	  {
+	    //default value take it into kppieobject
+	    //default is 90° into kpresenter
+	    target.setAttribute( "draw:end-angle", (90+startangle) );
+	  }
     }
 }
 
