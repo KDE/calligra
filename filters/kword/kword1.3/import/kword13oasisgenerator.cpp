@@ -1111,8 +1111,12 @@ void KWord13OasisGenerator::writePreviewFile(void)
     }
     
     // We have a 256x256x8 preview and we need a 128x128x32 preview with alpha channel
-    QImage preview( image.convertDepth( 32 ) );
-    preview.smoothScale( 128, 128 );
+    QImage preview( image.convertDepth( 32 ).smoothScale( 128, 128 ) );
+    if ( preview.isNull() )
+    {
+        kdWarning(30520) << "Could not create preview!" << endl;
+        return;
+    }
     if ( !preview.hasAlphaBuffer() )
     {
         // ### TODO: this probably sets garbage as alpha
@@ -1121,7 +1125,7 @@ void KWord13OasisGenerator::writePreviewFile(void)
     m_store->open("Thumbnails/Thumbnail.png");
     KoStoreDevice io ( m_store );
     io.open( IO_WriteOnly );  // ### TODO: check error!
-    preview.save( &io, "png" ); // ### TODO What is -9 in quality terms?
+    preview.save( &io, "PNG" ); // ### TODO What is -9 in quality terms?
     io.close();
     m_store->close();
 
