@@ -161,7 +161,6 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
 
     // We use the formatting of the first char as the formatting of the counter
     KoTextFormat *format = KoParagCounter::counterFormat( this );
-    double ulw=format->height()/(18*25);
     p->save();
 
     //QColor textColor( format->color() );
@@ -209,7 +208,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
         {
             if ( rtl )
                 prefix.prepend( ' ' /*the space before the bullet in RTL mode*/ );
-            KoTextParag::drawFontEffectsHelper( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, width, y, height, 0, prefix.length(), this, ulw );
+            KoTextParag::drawFontEffectsHelper( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, width, y, height, 0, prefix.length(), this );
 
             int posY =y + base - format->offsetFromBaseLine();
             //we must move to bottom text because we create
@@ -248,7 +247,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
                     bulletFont.setFamily( m_layout.counter->customBulletFont() );
                     p->setFont( bulletFont );
                 }
-                KoTextParag::drawFontEffectsHelper( p, format, zh, format->screenFont( zh ), textColor, xBullet, base, width, y, height, 0, 1, this, ulw );
+                KoTextParag::drawFontEffectsHelper( p, format, zh, format->screenFont( zh ), textColor, xBullet, base, width, y, height, 0, 1, this );
 
                 posY =y + base- format->offsetFromBaseLine();
                 //we must move to bottom text because we create
@@ -268,7 +267,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
             if ( !rtl )
                 suffix += ' ' /*the space after the bullet*/;
 
-            KoTextParag::drawFontEffectsHelper( p, format, zh, format->screenFont( zh ), textColor, xBullet + width, base, counterWidth, y,height,  0, suffix.length(), this, ulw );
+            KoTextParag::drawFontEffectsHelper( p, format, zh, format->screenFont( zh ), textColor, xBullet + width, base, counterWidth, y,height,  0, suffix.length(), this );
 
             int posY =y + base- format->offsetFromBaseLine();
             //we must move to bottom text because we create
@@ -284,7 +283,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
         QString counterText = m_layout.counter->text( this );
         // There are no bullets...any parent bullets have already been suppressed.
         // Just draw the text! Note: one space is always appended.
-        KoTextParag::drawFontEffectsHelper( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, counterWidth, y, height, 0, counterText.length(), this, ulw);
+        KoTextParag::drawFontEffectsHelper( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, counterWidth, y, height, 0, counterText.length(), this );
 
         if ( !counterText.isEmpty() )
         {
@@ -564,8 +563,6 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
                 bool nextLowercase = nextchr->c.upper() != nextchr->c;
                 flush = isLowercase != nextLowercase;
             }
-	    // we flush on underline width change
-	    flush = flush || ( nextchr->ulw != chr->ulw );
 	    // we flush on start of run
 	    flush = flush || nextchr->startOfRun;
 	    // we flush on bidi changes
@@ -633,7 +630,7 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
                         drawParagString( painter, qstr, paintStart, i - paintStart + 1, xstart, cy,
                                          baseLine, xend-xstart, h, drawSelections,
                                          chr->format(), selectionStarts, selectionEnds,
-                                         cg, chr->rightToLeft, line, chr->ulw );
+                                         cg, chr->rightToLeft, line );
                         else
                             if ( chr->customItem()->placement() == KoTextCustomItem::PlaceInline ) {
                                 chr->customItem()->draw( &painter, chr->x, cy + baseLine - chr->customItem()->ascent(), clipx - r.x(), clipy - r.y(), clipw, cliph, cg,
@@ -657,7 +654,7 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
 void KoTextParag::drawParagString( QPainter &painter, const QString &s, int start, int len, int startX,
                                    int lastY, int baseLine, int bw, int h, bool drawSelections,
                                    KoTextFormat *format, const QMemArray<int> &selectionStarts,
-                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, double ulw /*underlinewidth*/ )
+                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line )
 {
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     assert(zh);
@@ -705,7 +702,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
                                lastY_pix, baseLine_pix,
                                draw_bw,
                                h_pix, drawSelections, format, selectionStarts,
-                               selectionEnds, cg, rightToLeft, line, zh, ulw );
+                               selectionEnds, cg, rightToLeft, line, zh );
     }
 
     if ( !textDocument()->drawingShadow() && textDocument()->drawFormattingChars() )
@@ -726,7 +723,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
 void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, int start, int len, int startX,
                                    int lastY, int baseLine, int bw, int h, bool drawSelections,
                                    KoTextFormat *format, const QMemArray<int> &selectionStarts,
-                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoZoomHandler* zh, double ulw )
+                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoZoomHandler* zh )
 {
 #ifdef DEBUG_PAINT
     kdDebug(32500) << "KoTextParag::drawParagStringInternal start=" << start << " len=" << len << endl;
@@ -778,7 +775,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	}
     }
 
-    KoTextParag::drawFontEffectsHelper( &painter, format, zh, font, textColor, startX, baseLine, bw, lastY, h, start, len, this, ulw);
+    KoTextParag::drawFontEffectsHelper( &painter, format, zh, font, textColor, startX, baseLine, bw, lastY, h, start, len, this );
 
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
 
@@ -1385,7 +1382,7 @@ void KoTextParag::printRTDebug( int info )
 #endif
 
 
-void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h, int startText, int len, KoTextParag *_parag, double ulw)
+void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h, int startText, int len, KoTextParag *_parag )
 {
     //kdDebug()<<" bw :"<<bw<<endl;
     if ( _parag->shadowY( zh ) < 0)
@@ -1393,7 +1390,7 @@ void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZ
     if ( !format->wordByWord() ||
          (format->wordByWord() && !format->isStrikeUnderline()))
     {
-        KoTextParag::drawFontEffects( p, format, zh, font, color, startX, baseLine, bw , lastY, h, ulw);
+        KoTextParag::drawFontEffects( p, format, zh, font, color, startX, baseLine, bw , lastY, h );
     }
     else
     {
@@ -1418,7 +1415,7 @@ void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZ
                 }
                 else
                 {
-                    KoTextParag::drawFontEffects( p, format, zh, font, color, tmpStartX, baseLine, zh->layoutUnitToPixelX(tmpStartX, large ), lastY, h, ulw);
+                    KoTextParag::drawFontEffects( p, format, zh, font, color, tmpStartX, baseLine, zh->layoutUnitToPixelX(tmpStartX, large ), lastY, h );
                     tmpStartX += _parag->at( index )->width;
                     tmpStartX += large;
                     large = 0;
@@ -1429,13 +1426,14 @@ void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZ
         }
         if ( noDraw && noSpace )
         {
-            KoTextParag::drawFontEffects( p, format, zh, font, color, tmpStartX, baseLine, /*bw*/zh->layoutUnitToPixelX(tmpStartX, large) , lastY, h, ulw);
+            KoTextParag::drawFontEffects( p, format, zh, font, color, tmpStartX, baseLine, /*bw*/zh->layoutUnitToPixelX(tmpStartX, large) , lastY, h );
         }
     }
 }
 
-void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int /*h*/, double ulw )
+void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int /*h*/ )
 {
+    double ulw=format->underLineWidth();
     if ( format->doubleUnderline())
     {
         // For double-underlining, both lines are of width 0.5 (*zoom), in the hopes

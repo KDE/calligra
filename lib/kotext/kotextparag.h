@@ -144,9 +144,9 @@ public:
     /** draw underline and double underline. Static because it's used
      *  for draw double/simple in variable.
      */
-     static void drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int y,  int h, double ulw);
+     static void drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int y,  int h );
 
-     static void drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h, int startText, int len, KoTextParag *_parag, double ulw);
+     static void drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h, int startText, int len, KoTextParag *_parag );
     /** a bit more clever than KoTextString::toString, e.g. with numbered lists */
     QString toString( int from = 0, int length = 0xffffffff ) const;
 
@@ -164,11 +164,11 @@ protected:
     void drawParagString( QPainter &painter, const QString &str, int start, int len, int startX,
                           int lastY, int baseLine, int bw, int h, bool drawSelections,
                           KoTextFormat *lastFormat, const QMemArray<int> &selectionStarts,
-                          const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, double ulw );
+                          const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line );
     void drawParagStringInternal( QPainter &painter, const QString &s, int start, int len, int startX,
                                   int lastY, int baseLine, int bw, int h, bool drawSelections,
                                   KoTextFormat *lastFormat, const QMemArray<int> &selectionStarts,
-                                  const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoZoomHandler* zh, double ulw );
+                                  const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoZoomHandler* zh );
 
     /** Hook for KWTextParag. Default implementation does nothing. See KWTextParag for params meaning */
     virtual void drawFormattingChars( QPainter &, const QString &, int, int, // start, len

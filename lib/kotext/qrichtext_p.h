@@ -116,7 +116,7 @@ class Q_EXPORT KoTextStringChar
 
 public:
     // this is never called, initialize variables in KoTextString::insert()!!!
-    KoTextStringChar() : lineStart( 0 ), type( Regular ), startOfRun( 0 ) {d.format=0; ulw=1.0; }
+    KoTextStringChar() : lineStart( 0 ), type( Regular ), startOfRun( 0 ) {d.format=0; }
     ~KoTextStringChar();
 
     QChar c;
@@ -133,7 +133,6 @@ public:
     short int pixelwidth; // width in pixels
     short int width; // width in LU
 
-    double ulw;
     int x;
     int height() const;
     int ascent() const;
@@ -1490,17 +1489,17 @@ class Q_EXPORT KoTextFormatCollection
 
 public:
     KoTextFormatCollection();
-    KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage, bool hyphen ); //// kotext addition
+    KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage, bool hyphen, double ulw ); //// kotext addition
     virtual ~KoTextFormatCollection();
 
     void setDefaultFormat( KoTextFormat *f );
     KoTextFormat *defaultFormat() const;
     virtual KoTextFormat *format( const KoTextFormat *f );
     virtual KoTextFormat *format( KoTextFormat *of, KoTextFormat *nf, int flags );
-    virtual KoTextFormat *format( const QFont &f, const QColor &c , const QString &_language, bool hyphen );
+    virtual KoTextFormat *format( const QFont &f, const QColor &c , const QString &_language, bool hyphen, double ulw );
     virtual void remove( KoTextFormat *f );
     virtual KoTextFormat *createFormat( const KoTextFormat &f ) { return new KoTextFormat( f ); }
-    virtual KoTextFormat *createFormat( const QFont &f, const QColor &c, const QString & _language, bool hyphen) { return new KoTextFormat( f, c, _language, hyphen, this ); }
+    virtual KoTextFormat *createFormat( const QFont &f, const QColor &c, const QString & _language, bool hyphen, double ulw) { return new KoTextFormat( f, c, _language, hyphen, ulw, this ); }
     void debug();
 
     //void setPainter( QPainter *p );

@@ -53,6 +53,7 @@ KoTextFormat::KoTextFormat()
     m_strikeOutLineStyle = S_SOLID;
     m_language = KGlobal::locale()->language();
     d->m_bHyphenation = false;
+    d->m_underLineWidth = 1.0;
     d->m_bShadowText = true;
     d->m_relativeTextSize = 0.66;
     d->m_offsetFromBaseLine= 0;
@@ -64,7 +65,7 @@ KoTextFormat::KoTextFormat()
 //#endif
 }
 
-KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_language, bool hyphenation, KoTextFormatCollection *parent )
+KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_language, bool hyphenation, double ulw, KoTextFormatCollection *parent )
     : fn( f ), col( c ), /*fm( QFontMetrics( f ) ),*/ linkColor( TRUE )
 {
 #ifdef DEBUG_COLLECTION
@@ -102,6 +103,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_lan
     d->m_bWordByWord = false;
     d->m_charStyle = 0L;
     d->m_bHyphenation = hyphenation;
+    d->m_underLineWidth = ulw;
     m_attributeFont = ATT_NONE;
     ////
     generateKey();
@@ -160,6 +162,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     m_strikeOutLineStyle = f.m_strikeOutLineStyle;
     m_language = f.m_language;
     d->m_bHyphenation=f.d->m_bHyphenation;
+    d->m_underLineWidth=f.d->m_underLineWidth;
     d->m_bShadowText = f.d->m_bShadowText;
     d->m_relativeTextSize = f.d->m_relativeTextSize;
     d->m_offsetFromBaseLine = f.d->m_offsetFromBaseLine;
@@ -237,6 +240,8 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
         setAttributeFont(nf.attributeFont());
     if( flags & KoTextFormat::Hyphenation )
         setHyphenation( nf.hyphenation());
+    if( flags & KoTextFormat::UnderLineWidth )
+        setUnderLineWidth( nf.underLineWidth());
     //////
     update();
     //kdDebug(32500) << "KoTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf << " " << nf.key() << " flags=" << flags
@@ -370,6 +375,8 @@ void KoTextFormat::generateKey()
     k += QString::number( (int)m_attributeFont);
     k += '/';
     k += QString::number( (int)d->m_bHyphenation);
+    k += '/';
+    k += QString::number( (double)d->m_underLineWidth);
     ////
 }
 
@@ -411,6 +418,8 @@ QString KoTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelle
     k += "0"; //no font attribute
     k += '/';
     k += "0"; //no hyphen
+    k += '/';
+    k += "0"; //no ulw
 
 
     ////
@@ -564,6 +573,8 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::Attribute;
     if( hyphenation() != format.hyphenation() )
         flags |= KoTextFormat::Hyphenation;
+    if( underLineWidth() != format.underLineWidth() )
+        flags |= KoTextFormat::UnderLineWidth;
     return flags;
 }
 
@@ -957,6 +968,15 @@ void KoTextFormat::setHyphenation( bool b )
     if ( d->m_bHyphenation == b )
         return;
     d->m_bHyphenation = b;
+    update();
+
+}
+
+void KoTextFormat::setUnderLineWidth( double ulw )
+{
+    if ( d->m_underLineWidth == ulw )
+        return;
+    d->m_underLineWidth = ulw;
     update();
 
 }

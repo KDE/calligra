@@ -617,7 +617,13 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
 	    avg/=18.0;
 	    avg/=25.0;
 	    for(int j=i-nc;j<=i;j++)
-		string->at(j).ulw=avg;
+	    {
+		KoTextFormat* tmpfmt=new KoTextFormat(*string->at(j).format());
+		tmpfmt->setUnderLineWidth(avg);
+		tmpfmt=format->parent()->format(tmpfmt);
+		string->at(j).setFormat(tmpfmt);
+		delete tmpfmt;
+	    }
 	    nc=0;
 	    current=0;
 	}

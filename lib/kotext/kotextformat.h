@@ -62,6 +62,7 @@ public:
     int m_offsetFromBaseLine;
     bool m_bWordByWord;
     bool m_bHyphenation;
+    double m_underLineWidth;
     KoCharStyle *m_charStyle;
 };
 
@@ -86,7 +87,7 @@ public:
     ~KoTextFormat();
 
     //KoTextFormat( const QStyleSheetItem *s );
-    KoTextFormat( const QFont &f, const QColor &c, const QString &_language, bool hyphenation, KoTextFormatCollection *parent = 0 );
+    KoTextFormat( const QFont &f, const QColor &c, const QString &_language, bool hyphenation, double ulw, KoTextFormatCollection *parent = 0 );
     KoTextFormat( const KoTextFormat &fm );
     //KoTextFormat makeTextFormat( const QStyleSheetItem *style, const QMap<QString,QString>& attr ) const;
     KoTextFormat& operator=( const KoTextFormat &fm );
@@ -157,7 +158,7 @@ public:
     int compare( const KoTextFormat & format ) const;
 
     /** Extending the base KoTextFormat enum */
-    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 , Language = 4096, ShadowText = 8192, OffsetFromBaseLine = 16384, WordByWord = 32768, Attribute = 65536, Hyphenation = 131072 };
+    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 , Language = 4096, ShadowText = 8192, OffsetFromBaseLine = 16384, WordByWord = 32768, Attribute = 65536, Hyphenation = 131072, UnderLineWidth = 262144 };
 
     enum UnderlineLineType { U_NONE = 0, U_SIMPLE = 1, U_DOUBLE = 2, U_SIMPLE_BOLD = 3, U_WAVE = 4};
     enum StrikeOutLineType { S_NONE = 0, S_SIMPLE = 1, S_DOUBLE = 2, S_SIMPLE_BOLD = 3};
@@ -195,6 +196,9 @@ public:
 
     void setHyphenation( bool b );
     bool hyphenation() const { return d->m_bHyphenation; }
+
+    void setUnderLineWidth( double ulw );
+    double underLineWidth() const { return d->m_underLineWidth; }
 
 
     void setAttributeFont( KoTextFormat::AttributeStyle _att );

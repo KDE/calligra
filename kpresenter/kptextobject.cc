@@ -104,7 +104,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     m_doc=doc;
     m_textVertAlign = KP_TOP;
     // Default color should be QColor() ... but kpresenter isn't fully color-scheme-aware yet
-    KoTextFormatCollection* fc = new KoTextFormatCollection( doc->defaultFont(), Qt::black, doc->globalLanguage(), doc->globalHyphenation() );
+    KoTextFormatCollection* fc = new KoTextFormatCollection( doc->defaultFont(), Qt::black, doc->globalLanguage(), doc->globalHyphenation(), 1.0 );
     KPrTextDocument * textdoc = new KPrTextDocument( this, fc );
     if ( m_doc->tabStopValue() != -1 )
         textdoc->setTabStops( m_doc->zoomHandler()->ptToLayoutUnitPixX( m_doc->tabStopValue() ));

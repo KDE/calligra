@@ -43,11 +43,11 @@ public:
     bool abortFormatting;
 };
 
-KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage, bool hyphenation, KoStyle* defaultStyle, int _tabStopWidth,
+KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage, bool hyphenation, double ulw, KoStyle* defaultStyle, int _tabStopWidth,
                             QObject* parent, const char *name )
     : QObject( parent, name ), m_defaultStyle( defaultStyle ), undoRedoInfo( this )
 {
-    textdoc = new KoTextDocument( zh, new KoTextFormatCollection( defaultFont, QColor(),defaultLanguage, hyphenation ) );
+    textdoc = new KoTextDocument( zh, new KoTextFormatCollection( defaultFont, QColor(),defaultLanguage, hyphenation, ulw ) );
     if ( _tabStopWidth != -1 )
         textdoc->setTabStops( _tabStopWidth );
     init();

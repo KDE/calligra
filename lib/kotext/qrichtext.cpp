@@ -5353,20 +5353,20 @@ KoTextFormatCollection::KoTextFormatCollection()
 #ifdef DEBUG_COLLECTION
     qDebug("KoTextFormatCollection::KoTextFormatCollection %p", this);
 #endif
-    defFormat = new KoTextFormat( QApplication::font(), QColor(), KGlobal::locale()->language(), false ); //// kotext: need to use default QColor here
+    defFormat = new KoTextFormat( QApplication::font(), QColor(), KGlobal::locale()->language(), false, 1.0 ); //// kotext: need to use default QColor here
     lastFormat = cres = 0;
     cflags = -1;
     cKey.setAutoDelete( TRUE );
     cachedFormat = 0;
 }
 
-KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage, bool hyphen  )
+KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage, bool hyphen, double ulw )
     : cKey( 307 ), sheet( 0 )
 {
 #ifdef DEBUG_COLLECTION
     qDebug("KoTextFormatCollection::KoTextFormatCollection %p", this);
 #endif
-    defFormat = new KoTextFormat( defaultFont, defaultColor, defaultLanguage, hyphen );
+    defFormat = new KoTextFormat( defaultFont, defaultColor, defaultLanguage, hyphen, ulw );
     lastFormat = cres = 0;
     cflags = -1;
     cKey.setAutoDelete( TRUE );
@@ -5477,7 +5477,7 @@ KoTextFormat *KoTextFormatCollection::format( KoTextFormat *of, KoTextFormat *nf
     return cres;
 }
 
-KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, const QString & language, bool hyphen )
+KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, const QString & language, bool hyphen, double ulw )
 {
     if ( cachedFormat && cfont == f && ccol == c ) {
 #ifdef DEBUG_COLLECTION
@@ -5503,7 +5503,7 @@ KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, c
     if ( key == defFormat->key() )
 	return defFormat;
 
-    cachedFormat = createFormat( f, c,language, hyphen );
+    cachedFormat = createFormat( f, c,language, hyphen, ulw );
     cachedFormat->collection = this;
     cKey.insert( cachedFormat->key(), cachedFormat );
     if ( cachedFormat->key() != key )

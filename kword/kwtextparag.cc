@@ -83,8 +83,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                             zh->layoutUnitToPixelY( ch.ascent() ), // baseline
                             width, zh->layoutUnitToPixelY( ch.height() ), // bw and h
                             drawSelections, &format, selectionStarts,
-                            selectionEnds, cg2, rightToLeft, line, zh,
-			    format.height()/(18*25) );
+                            selectionEnds, cg2, rightToLeft, line, zh );
                     }
                     else
                     {

@@ -98,7 +98,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     m_lastTextDocHeight = 0;
     // Create the text document to set in the text object
     KWTextDocument* textdoc = new KWTextDocument( this,
-        new KoTextFormatCollection( _doc->defaultFont(), QColor(), _doc->globalLanguage(), _doc->globalHyphenation() ),
+        new KoTextFormatCollection( _doc->defaultFont(), QColor(), _doc->globalLanguage(), _doc->globalHyphenation(), 1.0 ),
                                                   new KWTextFormatter( this ) );
     textdoc->setFlow( this );
     textdoc->setPageBreakEnabled( true );              // get verticalBreak to be called
