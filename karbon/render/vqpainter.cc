@@ -36,6 +36,12 @@ VQPainter::resize( unsigned int w, unsigned int h )
 }
 
 void
+VQPainter::blit( const QRect & )
+{
+	end();
+}
+
+void
 VQPainter::begin()
 {
 	if( !m_painter->isActive() )
@@ -52,9 +58,9 @@ VQPainter::end()
 }
 
 void
-VQPainter::setWorldMatrix( const QWMatrix& /*mat*/ )
+VQPainter::setWorldMatrix( const QWMatrix& mat )
 {
-	//m_painter->setWorldMatrix( mat );
+	m_painter->setWorldMatrix( mat );
 }
 
 void
@@ -110,13 +116,14 @@ VQPainter::curveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
 void
 VQPainter::newPath()
 {
+	m_index = 0;
 }
 
 void
 VQPainter::fillPath()
 {
 	// we probably dont need filling for qpainter
-	m_index = 0;
+	//m_index = 0;
 }
 
 void
