@@ -39,7 +39,7 @@ KAboutData * newKudesignerAboutData()
         I18N_NOOP("Maintainer, Report Designer, Kugar library enhancements"), "cloudtemple@mksat.net",
         "http://www.cloudtemple.mksat.net");
     aboutData->addAuthor("Joseph Wenninger",
-        I18N_NOOP("major bugfixes, additional features and kexi integration"), "jowenn@kde.org",
+        I18N_NOOP("Major bugfixes, additional features and Kexi integration"), "jowenn@kde.org",
         "");
     aboutData->addCredit("Per Winkvist",
         I18N_NOOP("Fast property editing for report items"), "per.winkvist@cellnetwork.com",

@@ -43,6 +43,6 @@ int main( int argc, char **argv )
     app.dcopClient()->registerAs( "kudesigner" );
 
     if (!app.start()) // parses command line args, create initial docs and shells
-	return 1;
+        return 1;
     return app.exec();
 }

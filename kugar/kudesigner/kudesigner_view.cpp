@@ -20,7 +20,7 @@
 #include "kudesigner_view.h"
 #include "kudesigner_factory.h"
 #include "kudesigner_doc.h"
-#include "kudesigner_command.h"
+#include <kudesigner_command.h>
 
 #include <map>
 
@@ -37,24 +37,24 @@
 
 #include <cv.h>
 
-#include "canvdefs.h"
-#include "cfield.h"
-#include "ccalcfield.h"
-#include "clabel.h"
-#include "cline.h"
-#include "cspecialfield.h"
-#include "mycanvas.h"
-#include "propertyeditor.h"
-#include "property.h"
+#include <canvdefs.h>
+#include <cfield.h>
+#include <ccalcfield.h>
+#include <clabel.h>
+#include <cline.h>
+#include <cspecialfield.h>
+#include <mycanvas.h>
+#include <propertyeditor.h>
+#include <property.h>
 
-#include "canvkutemplate.h"
-#include "canvreportheader.h"
-#include "canvreportfooter.h"
-#include "canvpageheader.h"
-#include "canvpagefooter.h"
-#include "canvdetailheader.h"
-#include "canvdetailfooter.h"
-#include "canvdetail.h"
+#include <canvkutemplate.h>
+#include <canvreportheader.h>
+#include <canvreportfooter.h>
+#include <canvpageheader.h>
+#include <canvpagefooter.h>
+#include <canvdetailheader.h>
+#include <canvdetailfooter.h>
+#include <canvdetail.h>
 
 KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char* name )
     : KoView( part, parent, name ),pe(0),m_doc(part)
@@ -82,6 +82,7 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
 
     connect(rc, SIGNAL(selectedActionProcessed()), this, SLOT(unselectItemAction()));
     connect(rc, SIGNAL(modificationPerformed()), part, SLOT(setModified()));
+    connect(rc, SIGNAL(itemPlaced(int, int, int, int)), this, SLOT(placeItem(int, int, int, int)));
 }
 
 KudesignerView::~KudesignerView() 
@@ -167,28 +168,28 @@ void KudesignerView::resizeEvent(QResizeEvent* /*_ev*/)
 void KudesignerView::slotAddReportHeader(){
     if (!(((KudesignerDoc *)(koDocument())))->canvas()->templ->reportHeader)
     {
-        m_doc->addCommand( new AddReportHeaderCommand(m_doc) );
+        m_doc->addCommand( new AddReportHeaderCommand(m_doc->canvas()) );
     }
 }
 
 void KudesignerView::slotAddReportFooter(){
     if (!m_doc->canvas()->templ->reportFooter)
     {
-        m_doc->addCommand( new AddReportFooterCommand(m_doc) );
+        m_doc->addCommand( new AddReportFooterCommand(m_doc->canvas()) );
     }
 }
 
 void KudesignerView::slotAddPageHeader(){
     if (!m_doc->canvas()->templ->pageHeader)
     {
-        m_doc->addCommand( new AddPageHeaderCommand(m_doc) );
+        m_doc->addCommand( new AddPageHeaderCommand(m_doc->canvas()) );
     }
 }
 
 void KudesignerView::slotAddPageFooter(){
     if (!m_doc->canvas()->templ->pageFooter)
     {
-        m_doc->addCommand( new AddPageFooterCommand(m_doc) );
+        m_doc->addCommand( new AddPageFooterCommand(m_doc->canvas()) );
     }
 }
 
@@ -199,7 +200,7 @@ void KudesignerView::slotAddDetailHeader(){
     if (!Ok) return;
     if (m_doc->canvas()->templ->detailsCount >= level)
     {
-        m_doc->addCommand( new AddDetailHeaderCommand(level, m_doc) );
+        m_doc->addCommand( new AddDetailHeaderCommand(level, m_doc->canvas()) );
     }
 }
 
@@ -211,7 +212,7 @@ void KudesignerView::slotAddDetail(){
     if ( ((level == 0) && (m_doc->canvas()->templ->detailsCount == 0))
         || (m_doc->canvas()->templ->detailsCount == level))
     {
-        m_doc->addCommand( new AddDetailCommand(level, m_doc) );
+        m_doc->addCommand( new AddDetailCommand(level, m_doc->canvas()) );
     }
 }
 
@@ -223,7 +224,7 @@ void KudesignerView::slotAddDetailFooter(){
 
     if (m_doc->canvas()->templ->detailsCount >= level)
     {
-        m_doc->addCommand( new AddDetailFooterCommand(level, m_doc) );
+        m_doc->addCommand( new AddDetailFooterCommand(level, m_doc->canvas()) );
     }
 }
 
@@ -293,7 +294,7 @@ void KudesignerView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 		}
 	        shell()->addDockWindow(pe, m_doc->propertyPosition());
 	        pe->show();
-	    
+
 	        connect(rc, SIGNAL( selectionMade(std::map<QString, PropPtr >*,CanvasBox*) ), pe,
         	    SLOT( populateProperties(std::map<QString, PropPtr >*, CanvasBox*) ));
 	        connect(rc, SIGNAL( selectionClear() ), pe, SLOT( clearProperties() ));
@@ -312,5 +313,9 @@ void KudesignerView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     KoView::guiActivateEvent( ev );
 }
 
+void KudesignerView::placeItem( int x, int y, int band, int bandLevel )
+{
+    m_doc->addCommand(new AddReportItemCommand(m_doc->canvas(), rc, x, y, (KuDesignerCanvasRtti)band, bandLevel) );
+}
 
 #include "kudesigner_view.moc"

@@ -20,14 +20,15 @@
 #include "kudesigner_doc.h"
 #include "kudesigner_factory.h"
 #include "kudesigner_view.h"
-#include "canvbox.h"
-#include "creportitem.h"
-#include "ccalcfield.h"
-#include "cfield.h"
-#include "clabel.h"
-#include "cline.h"
-#include "cspecialfield.h"
-#include "property.h"
+
+#include <canvbox.h>
+#include <creportitem.h>
+#include <ccalcfield.h>
+#include <cfield.h>
+#include <clabel.h>
+#include <cline.h>
+#include <cspecialfield.h>
+#include <property.h>
 
 #include <koTemplateChooseDia.h>
 #include <kparts/componentfactory.h>
@@ -42,19 +43,19 @@
 #include <qfileinfo.h>
 #include <qdockwindow.h>
 
-#include "mycanvas.h"
+#include <mycanvas.h>
 
-#include "canvkutemplate.h"
-#include "canvreportheader.h"
-#include "canvreportfooter.h"
-#include "canvpageheader.h"
-#include "canvpagefooter.h"
-#include "canvdetailheader.h"
-#include "canvdetailfooter.h"
-#include "canvdetail.h"
+#include <canvkutemplate.h>
+#include <canvreportheader.h>
+#include <canvreportfooter.h>
+#include <canvpageheader.h>
+#include <canvpagefooter.h>
+#include <canvdetailheader.h>
+#include <canvdetailfooter.h>
+#include <canvdetail.h>
 
 KudesignerDoc::KudesignerDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),m_plugin(0),m_propPos(DockRight)
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )/*,m_plugin(0)*/,m_propPos(DockRight)
 {
     setInstance( KudesignerFactory::global(), false );
     history = new KCommandHistory(actionCollection());
@@ -154,7 +155,7 @@ bool KudesignerDoc::loadXML( QIODevice *, const QDomDocument & rt)
     delete printer;
 
     //creating canvas
-    docCanvas = new MyCanvas(width, height,this);
+    docCanvas = new MyCanvas(width, height);
     docCanvas->setAdvancePeriod(30);
 
     //creating KugarTemplate object
@@ -300,7 +301,9 @@ void KudesignerDoc::setDetailHeaderAttributes(QDomNode *node)
     CanvasDetailHeader *dh = new CanvasDetailHeader(docCanvas->templ->props["LeftMargin"]->value().toInt(),
         0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"]->value().toInt() -
         docCanvas->templ->props["LeftMargin"]->value().toInt(),
-        attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
+        attributes.namedItem("Height").nodeValue().toInt(),
+        attributes.namedItem("Level").nodeValue().toInt(),
+        docCanvas);
     dh->props["Level"]->setValue(attributes.namedItem("Level").nodeValue());
     dh->props["Height"]->setValue(attributes.namedItem("Height").nodeValue());
     docCanvas->templ->details[attributes.namedItem("Level").nodeValue().toInt()].first.first = dh;
@@ -314,7 +317,9 @@ void KudesignerDoc::setDetailAttributes(QDomNode *node)
     CanvasDetail *d = new CanvasDetail(docCanvas->templ->props["LeftMargin"]->value().toInt(),
         0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"]->value().toInt() -
         docCanvas->templ->props["LeftMargin"]->value().toInt(),
-        attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
+        attributes.namedItem("Height").nodeValue().toInt(),
+        attributes.namedItem("Level").nodeValue().toInt(),
+        docCanvas);
     d->props["Level"]->setValue(attributes.namedItem("Level").nodeValue());
     d->props["Height"]->setValue(attributes.namedItem("Height").nodeValue());
     docCanvas->templ->details[attributes.namedItem("Level").nodeValue().toInt()].second = d;
@@ -328,7 +333,9 @@ void KudesignerDoc::setDetailFooterAttributes(QDomNode *node)
     CanvasDetailFooter *df = new CanvasDetailFooter(docCanvas->templ->props["LeftMargin"]->value().toInt(),
         0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"]->value().toInt() -
         docCanvas->templ->props["LeftMargin"]->value().toInt(),
-        attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
+        attributes.namedItem("Height").nodeValue().toInt(),
+        attributes.namedItem("Level").nodeValue().toInt(),
+        docCanvas);
     df->props["Level"]->setValue(attributes.namedItem("Level").nodeValue());
     df->props["Height"]->setValue(attributes.namedItem("Height").nodeValue());
     docCanvas->templ->details[attributes.namedItem("Level").nodeValue().toInt()].first.second = df;
@@ -398,7 +405,7 @@ void KudesignerDoc::setReportItemAttributes(QDomNode *node, CanvasReportItem *it
     {
         QString propertyName=attributes.item(i).nodeName();
         QString propertyValue=attributes.item(i).nodeValue();
-        if (m_plugin) m_plugin->modifyItemPropertyOnLoad(item,item->props[propertyName],propertyName,propertyValue);
+        if (canvas()->plugin()) canvas()->plugin()->modifyItemPropertyOnLoad(item,item->props[propertyName],propertyName,propertyValue);
         item->props[propertyName]->setValue(propertyValue);
     }
 }
@@ -407,26 +414,26 @@ void KudesignerDoc::loadPlugin(const QString &name)
 {
 	kdDebug()<<"Trying to load plugin: "<<name<<endl;
 	KuDesignerPlugin *plug=KParts::ComponentFactory::createInstanceFromLibrary<KuDesignerPlugin>(name.utf8(),this);
-	m_plugin=plug;
-	if (m_plugin) kdDebug()<<"plugin has been loaded"<<endl;
+	canvas()->setPlugin(plug);
+	if (canvas()->plugin()) kdDebug()<<"plugin has been loaded"<<endl;
 	else kdDebug()<<"plugin couldn't be loaded :("<<endl;
 }
 
 bool KudesignerDoc::completeSaving( KoStore* store )
 {
-	if (m_plugin) return m_plugin->store(store);
+	if (plugin()) return plugin()->store(store);
 	return true;
 }
 
 bool KudesignerDoc::completeLoading( KoStore* store )
 {
-	if (m_plugin) return m_plugin->load(store);
+	if (plugin()) return plugin()->load(store);
 	return true;
 }
 
 KuDesignerPlugin *KudesignerDoc::plugin()
 {
-	return m_plugin;
+	return canvas()->plugin();
 }
 
 Qt::Dock KudesignerDoc::propertyPosition()

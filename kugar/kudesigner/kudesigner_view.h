@@ -32,6 +32,7 @@ class KudesignerDoc;
 class ReportCanvas;
 class CanvasReportItem;
 class PropertyEditor;
+class CanvasBand;
 
 class KudesignerView : public KoView
 {
@@ -57,7 +58,7 @@ protected slots:
     void slotAddItemField();
     void slotAddItemLabel();
     void unselectItemAction();
-
+    void placeItem(int x, int y, int band, int bandLevel);
 
 protected:
     void paintEvent( QPaintEvent* );

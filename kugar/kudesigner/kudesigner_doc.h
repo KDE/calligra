@@ -51,9 +51,9 @@ public:
     KuDesignerPlugin *plugin();
     Dock propertyPosition();
     void setForcedPropertyEditorPosition(Dock);
-    
+
     void addCommand(KCommand *cmd);
-    
+
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
     virtual bool completeSaving( KoStore* store );
@@ -68,7 +68,7 @@ private:
 
     MyCanvas *docCanvas;
 
-    KuDesignerPlugin *m_plugin;
+//    KuDesignerPlugin *m_plugin;
     Dock m_propPos;
 
     void setReportItemAttributes(QDomNode *node, CanvasReportItem *item);
