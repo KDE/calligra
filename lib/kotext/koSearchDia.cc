@@ -257,6 +257,7 @@ bool KoFindReplace::findNext()
                 setData( c.second );
             else
                 setData( c.second, m_matchingIndex );
+            m_currentParagraphModified = false;
         }
 
         if ( m_find )
