@@ -927,6 +927,13 @@ void KoVariable::load( QDomElement & )
 
 void KoVariable::loadOasis( const QDomElement &/*elem*/, KoOasisContext& /*context*/ )
 {
+    // nothing to do here, reimplemented in subclasses (make it pure virtual?)
+}
+
+void KoVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    // TODO implement saving variables
+    kdWarning(32500) << "Not implemented: OASIS saving of variables" << endl;
 }
 
 void KoVariable::setVariableFormat( KoVariableFormat *_varFormat )

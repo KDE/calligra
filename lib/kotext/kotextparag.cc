@@ -1873,14 +1873,14 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         KoTextFormat * newFormat = static_cast<KoTextFormat *>( ch.format() );
         if ( !curFormat )
             curFormat = newFormat;
+        if ( newFormat != curFormat || ch.isCustom() ) { // Format changed, save previous one.
+            WRITESPAN( i )
+            startPos = i;
+            curFormat = newFormat;
+        }
         if ( ch.isCustom() ) {
-            // TODO implement saving custom items
-        } else {
-            if ( newFormat != curFormat ) { // Format changed, save previous one.
-                WRITESPAN( i )
-                startPos = i;
-                curFormat = newFormat;
-            }
+            KoTextCustomItem* customItem = ch.customItem();
+            customItem->saveOasis( writer, context );
         }
     }
 

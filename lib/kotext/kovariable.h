@@ -389,7 +389,8 @@ public:
     void recalcAndRepaint();
 
     /** Save the variable. Public API, does the common job and then calls saveVariable. */
-    void save( QDomElement &parentElem );
+    virtual void save( QDomElement &parentElem );
+    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
     virtual void load( QDomElement &elem );
     virtual void loadOasis( const QDomElement &elem, KoOasisContext& context );
 

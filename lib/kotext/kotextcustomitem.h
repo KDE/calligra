@@ -28,7 +28,9 @@ public:
     virtual KCommand * deleteCommand() { return 0L; }
 
     /** Save to XML */
-    virtual void save( QDomElement & /*formatElem*/ ) = 0;
+    virtual void save( QDomElement& formatElem ) = 0;
+    /** Save to Oasis XML */
+    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const = 0;
     /** Return type of custom item. See DTD for VARIABLE.id docu. */
     virtual int typeId() const = 0;
 
