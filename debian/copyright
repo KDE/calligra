@@ -6,7 +6,7 @@ Copyright:
  
 All programs in this package are released under either the GPL or the LGPL
  
-kimageshop, parts of killustrator,  and parts of kspread seem to be GPL'd 
+kimageshop, parts of killustrator,  and parts of kspread are GPL'd 
 while everything else falls under the LGPL.  
 
 Please see /usr/share/common-licenses/* for full copies of these licenses.

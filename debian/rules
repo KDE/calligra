@@ -137,6 +137,7 @@ binary-arch: build install binary-indep
 	dh_installdocs
 	dh_installmenu
 	dh_installchangelogs
+	dh_installmime
 	dh_strip
 	dh_perl
 	dh_compress
