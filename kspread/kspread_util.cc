@@ -42,7 +42,7 @@
  */
 static int readInt(const QString &str, uint &pos)
 {
-  if (!str.at(pos).isDigit()) 
+  if (!str.at(pos).isDigit())
     return -1;
   int result = 0;
   for ( ; str.length() > pos && str.at(pos).isDigit(); pos++ )
@@ -50,11 +50,11 @@ static int readInt(const QString &str, uint &pos)
     result *= 10;
     result += str.at(pos).digitValue();
   }
-  
+
   return result;
 }
 
-QDateTime util_readTime( const QString & intstr, KLocale * locale, bool withSeconds, 
+QDateTime util_readTime( const QString & intstr, KLocale * locale, bool withSeconds,
                          bool * ok, bool & duration )
 {
   duration = false;
@@ -81,11 +81,11 @@ QDateTime util_readTime( const QString & intstr, KLocale * locale, bool withSeco
 
   while (l > formatpos || sl > strpos)
   {
-    if ( !(l > formatpos && sl > strpos) ) 
+    if ( !(l > formatpos && sl > strpos) )
       goto error;
 
     QChar c( format.at( formatpos++ ) );
-    
+
     if (c != '%')
     {
       if (c.isSpace())
@@ -94,11 +94,11 @@ QDateTime util_readTime( const QString & intstr, KLocale * locale, bool withSeco
         goto error;
       continue;
     }
-    
+
     // remove space at the begining
     if (sl > strpos && str.at( strpos).isSpace() )
       ++strpos;
-    
+
     c = format.at( formatpos++ );
     switch (c)
     {
@@ -116,7 +116,7 @@ QDateTime util_readTime( const QString & intstr, KLocale * locale, bool withSeco
         {
           s = locale->translate("am").lower();
           len = s.length();
-          if (str.mid(strpos, len) == s) 
+          if (str.mid(strpos, len) == s)
           {
             pm = false;
             strpos += len;
@@ -126,7 +126,7 @@ QDateTime util_readTime( const QString & intstr, KLocale * locale, bool withSeco
         }
       }
       break;
-      
+
      case 'k':
      case 'H':
       g_12h = false;
@@ -138,35 +138,35 @@ QDateTime util_readTime( const QString & intstr, KLocale * locale, bool withSeco
         days = (int)(hour / 24);
         hour %= 24;
       }
-      
+
       break;
-      
+
      case 'l':
      case 'I':
       g_12h = true;
       hour = readInt(str, strpos);
       if (hour < 1 || hour > 12)
         goto error;
-      
+
       break;
-      
+
      case 'M':
       minute = readInt(str, strpos);
       if (minute < 0 || minute > 59)
         goto error;
-      
+
       break;
-      
+
      case 'S':
       second = readInt(str, strpos);
       if (second < 0 || second > 59)
         goto error;
-      
+
       break;
     }
   }
-  
-  if (g_12h) 
+
+  if (g_12h)
   {
     hour %= 12;
     if (pm) hour += 12;
@@ -178,12 +178,12 @@ QDateTime util_readTime( const QString & intstr, KLocale * locale, bool withSeco
     duration = true;
   }
 
-  if (ok) 
+  if (ok)
     *ok = true;
   return QDateTime( refDate, QTime( hour, minute, second ) );
 
  error:
-  if (ok) 
+  if (ok)
     *ok = false;
   return QDateTime( refDate, QTime( -1, -1, -1 ) ); // return invalid date if it didn't work
 }
@@ -369,7 +369,7 @@ util_timeFormat(KLocale * locale, const QDateTime & dt,
 
     h += d * 24;
 
-    if (fmtType == KSpreadCell::Time_format6) 
+    if (fmtType == KSpreadCell::Time_format6)
     {	// [mm]:ss
       m += (h * 60);
       return QString("%1:%2").arg(m, 1).arg(second, 2);
@@ -377,7 +377,7 @@ util_timeFormat(KLocale * locale, const QDateTime & dt,
     if (fmtType == KSpreadCell::Time_format7) {	// [h]:mm:ss
 	return QString("%1:%2:%3").arg(h, 1).arg(minute, 2).arg(second, 2);
     }
-    if (fmtType == KSpreadCell::Time_format8) 
+    if (fmtType == KSpreadCell::Time_format8)
     {	// [h]:mm
       m += (h * 60);
       return QString("%1:%2").arg(h, 1).arg(minute, 2);
@@ -614,7 +614,7 @@ QString util_rangeName(KSpreadSheet * _table, const QRect &_area)
 QDomElement util_createElement( const QString & tagName, const QFont & font, QDomDocument & doc )
 {
   QDomElement e( doc.createElement( tagName ) );
-  
+
   e.setAttribute( "family", font.family() );
   e.setAttribute( "size", font.pointSize() );
   e.setAttribute( "weight", font.weight() );
@@ -644,14 +644,14 @@ QFont util_toFont( QDomElement & element )
 {
   QFont f;
   f.setFamily( element.attribute( "family" ) );
-  
+
   bool ok;
   f.setPointSize( element.attribute("size").toInt( &ok ) );
-  if ( !ok ) 
+  if ( !ok )
     return QFont();
-  
+
   f.setWeight( element.attribute("weight").toInt( &ok ) );
-  if ( !ok ) 
+  if ( !ok )
     return QFont();
 
   if ( element.hasAttribute( "italic" ) && element.attribute("italic") == "yes" )
@@ -659,10 +659,10 @@ QFont util_toFont( QDomElement & element )
 
   if ( element.hasAttribute( "bold" ) && element.attribute("bold") == "yes" )
     f.setBold( TRUE );
-  
+
   if ( element.hasAttribute( "underline" ) && element.attribute("underline") == "yes" )
     f.setUnderline( TRUE );
-  
+
   if ( element.hasAttribute( "strikeout" ) && element.attribute("strikeout") == "yes" )
     f.setStrikeOut( TRUE );
 
@@ -670,7 +670,7 @@ QFont util_toFont( QDomElement & element )
      + save a document-global charset
      if ( element.hasAttribute( "charset" ) )
        KGlobal::charsets()->setQFont( f, element.attribute("charset") );
-      else 
+      else
   */
   // ######## Not needed anymore in 3.0?
   //KGlobal::charsets()->setQFont( f, KGlobal::locale()->charset() );
@@ -684,15 +684,15 @@ QPen util_toPen( QDomElement & element )
   QPen p;
 
   p.setStyle( (Qt::PenStyle)element.attribute("style").toInt( &ok ) );
-  if ( !ok ) 
+  if ( !ok )
     return QPen();
 
   p.setWidth( element.attribute("width").toInt( &ok ) );
-  if ( !ok ) 
+  if ( !ok )
     return QPen();
 
   p.setColor( QColor( element.attribute("color") ) );
-  
+
   return p;
 }
 
@@ -823,28 +823,37 @@ void KSpreadPoint::init(const QString & _str)
     pos = QPoint( x, y );
 }
 
-KSpreadPoint::KSpreadPoint(const QString & _str, KSpreadMap * _map,
-			   KSpreadSheet * _table)
+KSpreadPoint::KSpreadPoint( const QString & _str, KSpreadMap * _map,
+                            KSpreadSheet * _table )
 {
     uint p = 0;
-    int p2 = _str.find('!');
-    if (p2 != -1) {
-	tableName = _str.left(p2++);
+    int p2 = _str.find( '!' );
+    if ( p2 != -1 )
+    {
+        tableName = _str.left( p2++ );
         while ( true )
         {
-          table = _map->findTable(tableName);
-          if ( !table && tableName[0] == ' ' )
-          {
-            tableName = tableName.right( tableName.length() - 1 );
-            continue;
-          }
-          break;
+            table = _map->findTable( tableName );
+            if ( !table && tableName[0] == ' ' )
+            {
+                tableName = tableName.right( tableName.length() - 1 );
+                continue;
+            }
+            break;
         }
-	p = p2;
-    } else
-	table = _table;
+        p = p2;
 
-    init(_str.mid(p));
+        //If the loop didn't return a table, better keep a string for isValid
+        if ( tableName.isEmpty() )
+        {
+            kdDebug(36001) << "KSpreadPoint: tableName is unknown" << endl;
+            tableName = "unknown";
+        }
+    }
+    else
+        table = _table;
+
+    init( _str.mid( p ) );
 }
 
 KSpreadCell *KSpreadPoint::cell()
@@ -1038,7 +1047,7 @@ int util_penCompare( QPen const & pen1, QPen const & pen2 )
 
   if ( pen1.width() < pen2.width() )
     return -1;
-  
+
   if ( pen1.width() > pen2.width() )
     return 1;
 
