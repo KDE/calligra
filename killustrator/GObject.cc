@@ -77,6 +77,7 @@ void GObject::setDefaultFillInfo (const FillInfo& fi) {
     defaultFillInfo.pattern = fi.pattern;
   if (fi.mask & FillInfo::GradientInfo)
     defaultFillInfo.gradient = fi.gradient;
+  defaultFillInfo.mask = fi.mask;
 }
 
 GObject::OutlineInfo GObject::getDefaultOutlineInfo () {
@@ -302,6 +303,8 @@ void GObject::setFillInfo (const GObject::FillInfo& info) {
     fillInfo.pattern = info.pattern;
   if (info.mask & FillInfo::GradientInfo)
     fillInfo.gradient = info.gradient;
+  if( info.mask != 0 )
+    fillInfo.mask = info.mask;
   gShape.setInvalid ();
   updateRegion (false);
   updateProperties(Prop_Fill, info.mask);
