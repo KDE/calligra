@@ -488,7 +488,7 @@ public:
     /**
      * Checks whether the document is currently in the process of autosaving
      */
-    bool isAutosaving();
+    bool isAutosaving() const;
 
     /**
      * Set whether the next openURL call should check for an auto-saved file
@@ -508,7 +508,7 @@ public:
      * Checks whether error message boxes should be shown.
      * @since 1.3.1
      */
-    bool isAutoErrorHandlingEnabled();
+    bool isAutoErrorHandlingEnabled() const;
 
     /**
      * Retrieve the default value for autosave in seconds.

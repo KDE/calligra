@@ -513,7 +513,7 @@ void KoDocument::setAutoErrorHandlingEnabled( bool b )
     d->m_autoErrorHandlingEnabled = b;
 }
 
-bool KoDocument::isAutoErrorHandlingEnabled()
+bool KoDocument::isAutoErrorHandlingEnabled() const
 {
     return d->m_autoErrorHandlingEnabled;
 }
@@ -1968,7 +1968,7 @@ void KoDocument::setErrorMessage( const QString& errMsg )
     d->lastErrorMessage = errMsg;
 }
 
-bool KoDocument::isAutosaving() // BIC: add const
+bool KoDocument::isAutosaving() const
 {
     return d->m_autosaving;
 }
