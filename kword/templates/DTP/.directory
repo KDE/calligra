@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Page layout
 Name[af]=bladsy uitleg
-Name[ara]=وضع الصفحة
 Name[az]=Səhifə Düzülüşü
 Name[bg]=Подредба на страница
 Name[cs]=Rozvržení stránky
@@ -22,9 +21,9 @@ Name[ja]=ページレイアウト
 Name[lt]=Puslapio išdėstymas
 Name[lv]=Lapas Izkārtojums
 Name[mt]=Tqassim tal-Paġna
+Name[nb]=Sideutseende
 Name[nl]=Paginaopmaak
-Name[no]=Sideutseende
-Name[no_NY]=Sideoppsett
+Name[nn]=Sideoppsett
 Name[pl]=Układ strony
 Name[pt]=Formato da página
 Name[pt_BR]=Formato da página
@@ -38,6 +37,6 @@ Name[tr]=Sayfa yerleşimi
 Name[uk]=Розклад сторінки
 Name[vi]=Bố trí trang 
 Name[xh]=Ubeko njani lwephepha
-Name[xxx]=xx
+Name[xx]=xx
 Name[zh_CN.GB2312]=页面布局
 Name[zh_TW.Big5]=頁面布局
