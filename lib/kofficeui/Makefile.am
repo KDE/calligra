@@ -18,7 +18,8 @@ libkofficeui_la_SOURCES = \
 	koRect.cpp koPictureFilePreview.cc koUnitWidgets.cc \
 	tkaction.cpp tkcoloractions.cpp tkcombobox.cpp tktoolbarbutton.cpp \
 	koCharSelectDia.cc koInsertLink.cc koeditpath.cc kocommandhistory.cpp \
-	koselectaction.cpp kolinewidthaction.cpp kolinestyleaction.cpp
+	koselectaction.cpp kolinewidthaction.cpp kolinestyleaction.cpp \
+	kotooldockbase.cpp kotooldockmanager.cpp kotooldockmovemanager.cpp
 libkofficeui_la_LDFLAGS	= -version-info 2:0:0 -no-undefined $(all_libraries)
 libkofficeui_la_LIBADD  = $(LIB_KOFFICECORE) 
 
@@ -32,6 +33,7 @@ include_HEADERS = \
 	tkaction.h tkcoloractions.h tktoolbarbutton.h tkcombobox.h \
 	koCharSelectDia.h koInsertLink.h kotoolbutton.h koeditpath.h \
 	kocommandhistory.h \
-	koselectaction.h kolinewidthaction.h kolinestyleaction.h
+	koselectaction.h kolinewidthaction.h kolinestyleaction.h \
+	kotooldockbase.h kotooldockmanager.h kotooldockmovemanager.h
 
 METASOURCES = AUTO
