@@ -922,6 +922,7 @@ void KWParagDia::setupTab4()
     // TODO: make this a spinbox or a combo, with values depending on the type
     // of numbering.
     eStart = new KWSpinBox(gText);
+    eStart->setMinValue ( 1);
     txtgrid->addWidget( eStart, 2, 1 );
     connect( eStart, SIGNAL( valueChanged ( const QString &  )  ), this, SLOT( numStartChanged( const QString & ) ) );
 
@@ -1456,7 +1457,7 @@ void KWParagDia::numRightTextChanged( const QString & _c )
 /*================================================================*/
 void KWParagDia::numStartChanged( const QString & /*_c*/ )
 {
-    m_counter.setStartNumber( QMAX(eStart->value(),0) ); // HACK
+    m_counter.setStartNumber( QMAX(eStart->value(),1) ); // HACK
 }
 
 /*================================================================*/
@@ -1490,7 +1491,7 @@ void KWParagDia::setCounter( Counter _counter )
     // What we really need is a combobox filled with values depending on
     // the type of numbering - or a spinbox. (DF)
     //eStart->editor()->setText( QString::number( m_counter.startNumber() ) ); // HACK
-    eStart->setValue(  m_counter.startNumber()  ); // HACK
+    eStart->setValue(  QMAX(m_counter.startNumber(),1)  ); // HACK
 }
 
 /*================================================================*/
