@@ -73,7 +73,7 @@ namespace Kivio {
     QString tmpFile;
 
     if(!KIO::NetAccess::download(url, tmpFile, this)) {
-      KMessageBox::error(this, i18n("Could not find the stencil set archive %1!").arg(url.prettyURL()));
+      KMessageBox::error(this, i18n("Could not find the stencil set archive %1.").arg(url.prettyURL()));
       return;
     }
 
@@ -84,16 +84,16 @@ namespace Kivio {
     QStringList dirs = checkDirs(rootDir);
 
     if(dirs.isEmpty()) {
-      KMessageBox::error(this, i18n("The file isn't a valid stencil set archive!"));
+      KMessageBox::error(this, i18n("The file is not a valid stencil set archive."));
       archive.close();
       KIO::NetAccess::removeTempFile(tmpFile);
       return;
     }
 
     if(installStencilSets(rootDir, dirs)) {
-      KMessageBox::information(this, i18n("The stencil set archive installed without errors!"));
+      KMessageBox::information(this, i18n("The stencil set archive installed without errors."));
     } else {
-      KMessageBox::error(this, i18n("The entire archive could not be installed successfully!"));
+      KMessageBox::error(this, i18n("The entire archive could not be installed successfully."));
     }
 
     archive.close();
