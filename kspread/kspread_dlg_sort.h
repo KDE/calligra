@@ -28,6 +28,7 @@
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qstringlist.h>
+#include <qcheckbox.h>
 
 class KSpreadView;
 class KSpreadTable;
@@ -61,7 +62,7 @@ protected:
   QStringList list_row;
   sort_type _sort;
   QRect r;
-
+  QCheckBox *decrease;
 };
 
 #endif

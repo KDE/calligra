@@ -71,11 +71,6 @@ m_pView->canvasWidget()->hideMarker();
 m_pView->canvasWidget()->setgotohorz(true);
 m_pView->canvasWidget()->setgotovert(true);
 m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp, m_pView->doc()->map() ) );
-KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
-if ( cell->text() != 0L )
-	m_pView->editWidget()->setText( cell->text() );
- else
-	m_pView->editWidget()->setText( "" );
 m_pView->canvasWidget()->showMarker();
 
 

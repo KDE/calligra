@@ -1,0 +1,20 @@
+1999-08-31 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+Now when you write "=" in cell and you click on the table
+you create link between cells.
+
+1999-09-05 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+Improved Special paste now you can paste with link between different tables
+(Now link : Table2!A7 if you change table)
+Now copy all border (right and bottom)
+
+1999-09-10 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+Now you can use Key_home : go to cell "A1"
+	Key_Prior =>Key_PageUp : Decrease of 10 cells => go to cell "x(n-10)"
+	Key_Next =>Key_PageDown: Increase of 10 cells => go to cell "x(n+10)"
+Add new function in Kspread_dlg_sort Now you can sort in mode Decrease or
+Increase.
+bugs fix
+Add CTRL+Key_G => call dlg : goto

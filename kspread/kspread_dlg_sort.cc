@@ -22,7 +22,6 @@
 
 #include "kspread_dlg_sort.h"
 #include "kspread_view.h"
-#include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_table.h"
 #include "kspread_util.h"
@@ -41,7 +40,7 @@ KSpreadsort::KSpreadsort( KSpreadView* parent, const char* name)
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
-  QGridLayout *lay2 = new QGridLayout( lay1,2,2 );
+  QGridLayout *lay2 = new QGridLayout( lay1,3,2 );
   lay2->setSpacing( 15 );
 
   QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, "Sort by",this);
@@ -55,12 +54,14 @@ KSpreadsort::KSpreadsort( KSpreadView* parent, const char* name)
   combo=new QComboBox(this);
   lay2->addWidget(combo,0,1);
 
+  decrease=new QCheckBox(i18n("Decrease mode"),this);
+  lay2->addWidget(decrease,1,0);
 
   m_pOk = new QPushButton( i18n("Sort"), this );
 
-  lay2->addWidget(m_pOk,1,0);
+  lay2->addWidget(m_pOk,2,0);
   m_pClose = new QPushButton( i18n("Close"), this );
-  lay2->addWidget(m_pClose,1,1);
+  lay2->addWidget(m_pClose,2,1);
   init();
 
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
@@ -172,20 +173,48 @@ switch(_sort)
 	case ONLY :
 		break;
 	case ONLY_COLUMN :
-		m_pView->activeTable()->onlyRow();
+		if(!decrease->isChecked())
+			{
+			m_pView->activeTable()->onlyRow();
+			}
+		else
+			{
+			m_pView->activeTable()->onlyRow(KSpreadTable::Decrease);
+			}
 		break;
 	case ONLY_ROW :
-		m_pView->activeTable()->onlyColumn();
+		if(!decrease->isChecked())
+			{
+			m_pView->activeTable()->onlyColumn();
+			}
+		else
+			{
+			m_pView->activeTable()->onlyColumn(KSpreadTable::Decrease);
+			}
 		break;
 	case ALL :
 		if( rb_row->isChecked())
 			{
-			m_pView->activeTable()->Row(combo->currentItem()+r.top());
+			if(!decrease->isChecked())
+				{
+				m_pView->activeTable()->Row(combo->currentItem()+r.top());
+				}
+			else
+				{
+				 m_pView->activeTable()->Row(combo->currentItem()+r.top(),KSpreadTable::Decrease);
+				}
 			
 			}
 		else if(rb_column->isChecked())
 			{
-			m_pView->activeTable()->Column(combo->currentItem()+r.left());
+			if(!decrease->isChecked())
+				{
+				m_pView->activeTable()->Column(combo->currentItem()+r.left());
+				}
+			else
+				{
+				m_pView->activeTable()->Column(combo->currentItem()+r.left(),KSpreadTable::Decrease);
+				}
 			}
 		else
 			{

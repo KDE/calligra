@@ -366,15 +366,16 @@ public:
     void copySelection( const QPoint &_marker );
     void cutSelection( const QPoint &_marker );
     enum Special_paste { ALL,Formula,Format,Wborder,Link,ALL_trans,Formula_trans,Format_trans,Wborder_trans,Link_trans};
+    enum Mode_sort{ Increase,Decrease};
     void paste( const QPoint &_marker,Special_paste=ALL );
 
     bool replace( const QPoint &_marker,QString _find,QString _replace );
-    void onlyRow();
-    void onlyColumn();
-    void Row(int ref_row);
-    void Column(int ref_column);
-
-
+    void onlyRow(Mode_sort=Increase);
+    void onlyColumn(Mode_sort=Increase);
+    void Row(int ref_row,Mode_sort=Increase);
+    void Column(int ref_column,Mode_sort=Increase);
+    bool isSort(){return _sort;}
+    void setSort(bool sort) { _sort=sort;}
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
      */
@@ -649,6 +650,7 @@ protected:
   
     static int s_id;
     static QIntDict<KSpreadTable>* s_mapTables;
+    bool _sort;
 };
 
 #endif

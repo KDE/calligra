@@ -199,7 +199,7 @@ KSpreadTable::KSpreadTable( KSpreadDoc *_doc, const char *_name )
   m_iMaxColumn = 256;
   m_iMaxRow = 256;
   m_bScrollbarUpdates = true;
-
+  setSort(false);
   initInterpreter();
 }
 
@@ -1187,99 +1187,216 @@ bool KSpreadTable::replace( const QPoint &_marker,QString _find,QString _replace
     }
 }
 
-void KSpreadTable::onlyRow()
+void KSpreadTable::onlyRow(Mode_sort mode)
 {
-
 QRect r( selectionRect() );
-KSpreadCell *tmp = new KSpreadCell( this, 0, 0 );
+setSort(true);
+KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
 for ( int d = r.left();  d<= r.right(); d++ )
 	{
 	KSpreadCell *cell1 = cellAt( d,r.top() );
+	if(!cell1->isEmpty())
+	{
 	for ( int y = r.left(); y <= r.right(); y++ )
 		{
 		KSpreadCell *cell2 = cellAt( y,r.top());
-		if(strcmp(cell2->text(), cell1->text())>0)
+		if(!cell2->isEmpty())
+		{
+		if(mode==Increase)
 			{
-			tmp->copyALL(cell1);
-			cell1->copyALL(cell2);
-			cell2->copyALL(tmp);
+			if(strcmp(cell2->text(), cell1->text())>0)
+				{
+				tmp->copyALL(cell1);
+				cell1->copyALL(cell2);
+				cell2->copyALL(tmp);
+				}
+			}
+		else if(mode==Decrease)
+			{
+			 if(strcmp(cell2->text(), cell1->text())<0)
+				{
+				tmp->copyALL(cell1);
+				cell1->copyALL(cell2);
+				cell2->copyALL(tmp);
+				}
+			}
+		else
+			{
+			cout <<"Err in Mode_sort\n";
 			}
 		}
+		}
 	}
+	}
+setSort(false);
 emit sig_updateView( this, r );
 }
 
-void KSpreadTable::onlyColumn()
+void KSpreadTable::onlyColumn(Mode_sort mode)
 {
-
+setSort(true);
 QRect r( selectionRect() );
-KSpreadCell *tmp = new KSpreadCell( this, 0, 0 );
+KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
 for ( int d = r.top();  d<= r.bottom(); d++ )
 	{
 	KSpreadCell *cell1 = cellAt( r.right(), d );
+	if(!cell1->isEmpty())
+	{
 	for ( int y = r.top(); y <= r.bottom(); y++ )
 		{
 		KSpreadCell *cell2 = cellAt( r.right(), y );
-		if(strcmp(cell2->text(), cell1->text())>0)
+		if(!cell2->isEmpty())
+		{
+		if(mode==Increase)
 			{
-			tmp->copyALL(cell1);
-			cell1->copyALL(cell2);
-			cell2->copyALL(tmp);
+			if(strcmp(cell2->text(), cell1->text())>0)
+				{
+				tmp->copyALL(cell1);
+				cell1->copyALL(cell2);
+				cell2->copyALL(tmp);
+				}
+			}
+		else if(mode==Decrease)
+			{
+			 if(strcmp(cell2->text(), cell1->text())<0)
+				{
+				tmp->copyALL(cell1);
+				cell1->copyALL(cell2);
+				cell2->copyALL(tmp);
+				}
+			}
+		else
+			{
+			cout <<"Err in Mode_sort\n";
 			}
 		}
+		}
 	}
+	}
+setSort(false);
 emit sig_updateView( this, r );
 }
 
-void KSpreadTable::Row(int ref_row)
+void KSpreadTable::Row(int ref_row,Mode_sort mode)
 {
+
 QRect r( selectionRect() );
-KSpreadCell *tmp = new KSpreadCell( this, 0, 0 );
+setSort(true);
+KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
 for ( int d = r.left();  d<= r.right(); d++ )
 	{
 	KSpreadCell *cell1 = cellAt( d,ref_row  );
+	if(!cell1->isEmpty())
+	{
 	for ( int y = r.left(); y <= r.right(); y++ )
 		{
 		KSpreadCell *cell2 = cellAt( y,ref_row );
-		if(strcmp(cell2->text(), cell1->text())>0)
+		if(!cell2->isEmpty())
+		{
+		if(mode==Increase)
 			{
-			for(int x=r.top();x<=r.bottom();x++)
+			if(strcmp(cell2->text(), cell1->text())>0)
 				{
-				KSpreadCell *ref1 = cellAt( d,x );
-				KSpreadCell *ref2 = cellAt( y,x );
-				tmp->copyALL(ref1);
-				ref1->copyALL(ref2);
-				ref2->copyALL(tmp);
+				for(int x=r.top();x<=r.bottom();x++)
+					{
+					KSpreadCell *ref1 = cellAt( d,x );
+					KSpreadCell *ref2 = cellAt( y,x );
+					if(!ref1->isEmpty()&&!ref2->isEmpty())
+						{
+						tmp->copyALL(ref1);
+						ref1->copyALL(ref2);
+						ref2->copyALL(tmp);
+						}
+					}
 				}
 			}
+		else if(mode==Decrease)
+			{
+			if(strcmp(cell2->text(), cell1->text())<0)
+				{
+				for(int x=r.top();x<=r.bottom();x++)
+					{
+					KSpreadCell *ref1 = cellAt( d,x );
+					KSpreadCell *ref2 = cellAt( y,x );
+					if(!ref1->isEmpty()&&!ref2->isEmpty())
+						{
+						tmp->copyALL(ref1);
+						ref1->copyALL(ref2);
+						ref2->copyALL(tmp);
+						}
+					}
+				}
+			}
+		else
+			{
+			cout <<"Err in mode_sort\n";
+		        }
+		}
 		}
 	}
+	}
+setSort(false);
 emit sig_updateView( this, r );
 }
 
-void KSpreadTable::Column(int ref_column)
+void KSpreadTable::Column(int ref_column,Mode_sort mode)
 {
 QRect r( selectionRect() );
-KSpreadCell *tmp = new KSpreadCell( this, 0, 0 );
+setSort(true);
+KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
 for ( int d = r.top();  d<= r.bottom(); d++ )
 	{
 	KSpreadCell *cell1 = cellAt( ref_column, d );
+	if(!cell1->isEmpty())
+	{
 	for ( int y = r.top(); y <= r.bottom(); y++ )
 		{
 		KSpreadCell *cell2 = cellAt( ref_column, y );
-		if(strcmp(cell2->text(), cell1->text())>0)
+		if(!cell2->isEmpty())
+		{
+		if(mode==Increase)
 			{
-			for(int x=r.left();x<=r.right();x++)
+			if(strcmp(cell2->text(), cell1->text())>0)
 				{
-				KSpreadCell *ref1 = cellAt( x, d );
-				KSpreadCell *ref2 = cellAt( x, y );
-				tmp->copyALL(ref1);
-				ref1->copyALL(ref2);
-				ref2->copyALL(tmp);
+				for(int x=r.left();x<=r.right();x++)
+					{
+					KSpreadCell *ref1 = cellAt( x, d );
+					KSpreadCell *ref2 = cellAt( x, y );
+					if(!ref1->isEmpty()&&!ref2->isEmpty())
+						{
+						tmp->copyALL(ref1);
+						ref1->copyALL(ref2);
+						ref2->copyALL(tmp);
+						}
+					}
 				}
 			}
+		else if(mode ==Decrease)
+			{
+			if(strcmp(cell2->text(), cell1->text())<0)
+				{
+				for(int x=r.left();x<=r.right();x++)
+					{
+					KSpreadCell *ref1 = cellAt( x, d );
+					KSpreadCell *ref2 = cellAt( x, y );
+					if(!ref1->isEmpty()&&!ref2->isEmpty())
+						{
+						tmp->copyALL(ref1);
+						ref1->copyALL(ref2);
+						ref2->copyALL(tmp);
+						}
+					}
+				}
+			}
+		else
+			{
+			cout <<"Err in Sort_mode\n";
+			}
+		}
 		}
 	}
+	}
+setSort(false);
 emit sig_updateView( this, r );
 }
 
@@ -2029,7 +2146,7 @@ void KSpreadTable::copySelection( const QPoint &_marker )
 
   QClipboard *clip = QApplication::clipboard();
   clip->setText( data.c_str() );
-
+  //cout <<" copy : " <<data.c_str()<<endl;
 }
 
 void KSpreadTable::cutSelection( const QPoint &_marker )

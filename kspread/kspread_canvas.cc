@@ -139,8 +139,6 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   setMouseTracking( TRUE );
 
   setBackgroundMode( NoBackground );
-
-  //laurent
   setEditorActivate(false);
 }
 
@@ -234,6 +232,12 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 
   setMarkerColumn( _cell.pos.x() );
   setMarkerRow( _cell.pos.y() );
+
+  KSpreadCell *cell = m_pView->activeTable()->cellAt( markerColumn(),markerRow() );
+  if ( cell->text() != 0L )
+	m_pView->editWidget()->setText( cell->text() );
+ else
+	m_pView->editWidget()->setText( "" );
 }
 
 void KSpreadCanvas::slotScrollHorz( int _value )
@@ -255,7 +259,9 @@ void KSpreadCanvas::slotScrollHorz( int _value )
   if(isgotohorz()==true)
   	{
   	setgotohorz(false);
+
   	m_pView->horzScrollBar()->setValue(_value);
+  	
   	}
   showMarker();
 
@@ -774,6 +780,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   if ( !m_strAnchor.isEmpty() )
   {
     debug("ANCHOR=%s",m_strAnchor.ascii() );
+    setgotovert(true);
+    setgotohorz(true);
     gotoLocation( KSpreadPoint( m_strAnchor, m_pDoc->map() ) );
   }
 
@@ -929,7 +937,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
 void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 {
   KSpreadTable *table = activeTable();
-
+  QString tmp;
   if ( !table )
     return;
 
@@ -1048,7 +1056,81 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
       setEditorActivate(false);
       hide_choose_cell();
       return;
-
+    case Key_Home :
+    	tmp=m_pView->activeTable()->name() + "!A1" ;
+    	hideMarker();
+    	setgotovert(true);
+    	setgotohorz(true);
+    	gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
+    	showMarker();
+    	setFocus();
+    	break;
+    	
+    case Key_Prior :
+    	if ( m_pEditor )
+		{
+	 	 setFocus();
+	  	m_pView->setText( m_pEditor->text() );
+	  	delete m_pEditor;
+	  	m_pEditor = 0;
+		}
+    	if(markerRow() == 1)
+    		return;
+    		
+    	setgotovert(true);
+    	setgotohorz(true);
+    	
+    	if((markerRow() >1) &&( markerRow()<11))
+    		{
+    		tmp=m_pView->activeTable()->name() + "!"+util_columnLabel(markerColumn())+"1";
+    		hideMarker();
+    		gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
+    		showMarker();
+    		setFocus();
+    		}
+    	else
+    		{
+    		tmp=tmp.setNum(markerRow()-10);
+    		tmp=m_pView->activeTable()->name() + "!"+util_columnLabel(markerColumn())+tmp;
+    		hideMarker();
+    		gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
+    		showMarker();
+    		setFocus();
+    		}
+    	break;
+    	
+    	case Key_Next :
+    	if ( m_pEditor )
+		{
+	  	setFocus();
+	  	m_pView->setText( m_pEditor->text() );
+	  	delete m_pEditor;
+	  	m_pEditor = 0;
+		}
+		
+    	if(markerRow() == 0x7FFF)
+    		return;
+    	setgotovert(true);
+    	setgotohorz(true);
+    	if((markerRow() >0x7FF5) &&( markerRow()<0x7FFF))
+    		{
+    		tmp=tmp.setNum(0x7FFF,16);
+    		tmp=m_pView->activeTable()->name() + "!"+util_columnLabel(markerColumn())+tmp;
+    		hideMarker();
+    		gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
+    		showMarker();
+    		setFocus();
+    		}
+    	else
+    		{
+    		tmp=tmp.setNum(markerRow()+10);
+    		tmp=m_pView->activeTable()->name() + "!"+util_columnLabel(markerColumn())+tmp;
+    		hideMarker();
+    		gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
+    		showMarker();
+    		setFocus();
+    		}
+    	break;
     default:
       // No null character ...
       if ( _ev->ascii() == 0 )

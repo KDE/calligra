@@ -691,7 +691,6 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   m_idButtonLayout_sort_incr = m_vToolBarLayout->insertButton2( pix, 16, SIGNAL( clicked() ), this, "sortincr", true, ( wstr = Q2C( i18n( "Sort Increase" ) ) ), -1 );
 
   m_vToolBarLayout->enable( OpenPartsUI::Show );
-  //laurent
 
   m_vToolBarMath = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarMath->setFullWidth(false);
@@ -794,7 +793,7 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   // Data
   _menubar->insertMenu( ( wstr = Q2C( i18n( "D&ata" ) ) ), m_vMenuData, -1, -1 );
-  m_idMenuData_goto = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Goto cell" ) ) ), this, "gotocell", 0 );
+  m_idMenuData_goto = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Goto cell" ) ) ), this, "gotocell", CTRL+Key_G );
 
   m_vMenuData->insertSeparator( -1 );
   m_idMenuData_replace = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Replace" ) ) ), this, "replace", 0 );
@@ -1357,7 +1356,10 @@ void KSpreadView::copySelection()
 void KSpreadView::cutSelection()
 {
   if ( m_pTable )
-    m_pTable->cutSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+  	{
+    	m_pTable->cutSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+        editWidget()->setText("");
+        }
 }
 
 void KSpreadView::paste()
@@ -1969,6 +1971,7 @@ void KSpreadView::slotCut()
   assert( m_pTable );
 
   m_pTable->cutSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+  editWidget()->setText( "" );
 }
 
 void KSpreadView::slotPaste()
@@ -1990,6 +1993,7 @@ void KSpreadView::slotDelete()
   assert( m_pTable );
 
   m_pTable->deleteSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+  editWidget()->setText( "" );
 }
 
 void KSpreadView::slotLayoutDlg()
@@ -2281,6 +2285,8 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
 
 void KSpreadView::slotUpdateCell( KSpreadTable *_table, KSpreadCell *_cell, int _col, int _row )
 {
+  if(m_pTable->isSort()==false)
+  {
   printf("void KSpreadView::slotUpdateCell( KSpreadTable *_table, KSpreadCell *_cell, _col=%i, _row=%i )\n",_col,_row);
 
   // Do we display this table ?
@@ -2291,6 +2297,7 @@ void KSpreadView::slotUpdateCell( KSpreadTable *_table, KSpreadCell *_cell, int 
 
   if ( _col == m_pCanvas->markerColumn() && _row == m_pCanvas->markerRow() )
     editWidget()->setText( _cell->text() );
+  }
 }
 
 void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
