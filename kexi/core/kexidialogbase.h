@@ -100,6 +100,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 
 	public slots:
 //		virtual void detach();
+		virtual void setFocus();
 
 	signals:
 		void updateContextHelp();

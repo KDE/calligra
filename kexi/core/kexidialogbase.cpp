@@ -188,5 +188,15 @@ bool KexiDialogBase::switchToViewMode( int viewMode )
 	return true;
 }
 
+void KexiDialogBase::setFocus()
+{
+	if (m_stack->visibleWidget()) {
+		m_stack->visibleWidget()->setFocus();
+	}
+	else {
+		KMdiChildView::setFocus();
+	}
+}
+
 #include "kexidialogbase.moc"
 

@@ -36,12 +36,33 @@ unsigned short KexiTableViewData::charTable[]=
 	#include "chartable.txt"
 };
 
-KexiTableViewColumn::KexiTableViewColumn(KexiDB::Field& f)
+KexiTableViewColumn::KexiTableViewColumn(KexiDB::Field& f, bool owner)
 : field(&f)
 {
 	isDBAware = false;
+	m_fieldOwned = owner;
 
 	m_nameOrCaption = field->captionOrName();
+	m_readOnly = false;
+}
+
+KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype,
+	uint cconst,
+	uint options,
+	uint length, uint precision,
+	QVariant defaultValue,
+	const QString& caption, const QString& helpText, uint width)
+{
+	field = new KexiDB::Field(
+		name, ctype,
+		cconst,
+		options,
+		length, precision,
+		defaultValue,
+		caption, helpText, width);
+
+	m_nameOrCaption = field->captionOrName();
+	m_fieldOwned = true;
 	m_readOnly = false;
 }
 
@@ -50,6 +71,7 @@ KexiTableViewColumn::KexiTableViewColumn(
 : field(&f)
 {
 	isDBAware = true;
+	m_fieldOwned = false;
 	//setup column's caption:
 	if (!field->caption().isEmpty()) {
 		m_nameOrCaption = field->caption();
@@ -71,6 +93,12 @@ KexiTableViewColumn::KexiTableViewColumn(bool)
 	isDBAware = false;
 }
 
+KexiTableViewColumn::~KexiTableViewColumn() 
+{
+	if (m_fieldOwned)
+		delete field;
+}
+
 bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
 {
 	if (field->isNumericType()) {
@@ -84,10 +112,6 @@ bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
 		return false;
 		
 	return true;
-}
-
-KexiTableViewColumn::~KexiTableViewColumn() 
-{
 }
 
 //------------------------------------------------------

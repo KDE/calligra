@@ -1445,14 +1445,14 @@ KexiMainWindow::openObject(KexiPart::Item* item, int viewMode)
 		return false;
 	KexiDialogBase *dlg = d->dialogs[ item->identifier() ];
 	if (dlg) {
-		if (dlg->currentViewMode()==viewMode) {
-			if (activateWindow(item->identifier())) {
-				invalidateViewModeActions();
-				return dlg;
+		if (dlg->currentViewMode()!=viewMode) {
+			//try to switch
+			if (!dlg->switchToViewMode(viewMode)) {
+				//js TODO: add error msg...
+				return 0;
 			}
 		}
-		//try to switch
-		if (!dlg->switchToViewMode(viewMode)) {
+		if (!activateWindow(item->identifier())) {
 			//js TODO: add error msg...
 			return 0;
 		}

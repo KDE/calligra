@@ -45,10 +45,25 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		typedef QPtrList<KexiTableViewColumn> List;
 		typedef QPtrListIterator<KexiTableViewColumn> ListIterator;
 
-	//		KexiTableViewColumn();
-		KexiTableViewColumn(KexiDB::Field& f);
-		//! db-aware version
+		/*! Not db-aware ctor. if \a owner is true, the field \a will be owned by this column,
+		 so you shouldn't care about destroying this field. */
+		KexiTableViewColumn(KexiDB::Field& f, bool owner = false);
+
+		/*! Convenience ctor, like above. The field is created using specifed parameters that are 
+		 equal to these accepted nby KexiDB::Field ctor. The column will be the owner 
+		 of this automatically generated field.
+		 */
+		KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype,
+			uint cconst=KexiDB::Field::NoConstraints,
+			uint options = KexiDB::Field::NoOptions,
+			uint length=0, uint precision=0,
+			QVariant defaultValue=QVariant(),
+			const QString& caption = QString::null, const QString& helpText = QString::null,
+			uint width = 0);
+
+		//! Db-aware version.
 		KexiTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::Field& f);
+
 		virtual ~KexiTableViewColumn();
 
 		virtual bool acceptsFirstChar(const QChar& ch) const;
@@ -84,6 +99,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 
 		QString m_nameOrCaption;
 		bool m_readOnly : 1;
+		bool m_fieldOwned : 1;
 		
 	friend class KexiTableViewData;
 };

@@ -356,6 +356,10 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 		d->pInsertItem->init(cols());
 	}
 
+	//update gui mode
+	d->navBtnNew->setEnabled(isInsertingEnabled());
+	d->pVerticalHeader->showInsertRow(isInsertingEnabled());
+
 	//set current row:
 	d->pCurrentItem = 0;
 	int curRow = -1, curCol = -1;
@@ -382,6 +386,7 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 	updateRowCountInfo();
 	
 	setCursor(curRow, curCol);
+	ensureVisible(0,0);
 	updateContents();
 }
 
@@ -1014,12 +1019,14 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	QString txt; //text to draw
 
 	QVariant cell_value;
-	if (d->pCurrentItem == item) {
-		//we're displaying values from edit buffer, if available
-		cell_value = *bufferedValueAt(col);
-	}
-	else {
-		cell_value = item->at(col);
+	if ((uint)col < item->count()) {
+		if (d->pCurrentItem == item) {
+			//we're displaying values from edit buffer, if available
+			cell_value = *bufferedValueAt(col);
+		}
+		else {
+			cell_value = item->at(col);
+		}
 	}
 
 	/*if (d->pCurrentItem == item && d->rowEditing && m_data->rowEditBuffer())
@@ -2087,11 +2094,11 @@ void KexiTableView::ensureCellVisible(int row, int col/*=-1*/)
 	QRect r( columnPos(col==-1 ? d->curCol : col), rowPos(row), 
 		columnWidth(col==-1 ? d->curCol : col), rowHeight());
 
-	if (d->navPanel && horizontalScrollBar()->isHidden()) {
+	if (d->navPanel && horizontalScrollBar()->isHidden() && row == (rows()-1)) {
 		//when cursor is moved down and navigator covers the cursor's area,
 		//area is scrolled up
 		if ((viewport()->height() - d->navPanel->height()) < r.bottom()) {
-			scrollBy(0,r.bottom() - (viewport()->height() - d->navPanel->height())+10);
+			scrollBy(0,r.bottom() - (viewport()->height() - d->navPanel->height()));
 		}
 	}
 
@@ -2621,7 +2628,8 @@ void KexiTableView::setInsertingEnabled(bool set)
 	if (!m_data->isInsertingEnabled() && set)
 		return; //not allowed!
 	d->insertingEnabled = (set ? 1 : 0);
-	d->navBtnNext->setEnabled(set);
+	d->navBtnNew->setEnabled(set);
+	d->pVerticalHeader->showInsertRow(set);
 }
 
 bool KexiTableView::isInsertingEnabled() const
