@@ -1,14 +1,5 @@
-	conn_data.setFileName( "db" );
-
-	conn = driver->createConnection(conn_data);
-	if (driver->error()) {
-		kdDebug() << driver->errorMsg() << endl;
-		return 1;
-	}
-	if (!conn->connect()) {
-		kdDebug() << conn->errorMsg() << endl;
-		return 1;
-	}
+int schemaTest()
+{
 	if (!conn->useDatabase( "db" )) {
 		kdDebug() << conn->errorMsg() << endl;
 		return 1;
@@ -35,4 +26,5 @@
 //			iter.current()->setName("   ");
 		}
 	}*/
-	
+	return 0;
+}

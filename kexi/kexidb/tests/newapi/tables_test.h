@@ -1,20 +1,8 @@
-	if (argc<=3) {
-		kdDebug() << prgname << ": name for db?" << endl;
-		usage();
-		return 0;
-	}
-	QCString db_name = QCString(argv[3]);
-	conn_data.setFileName( db_name );
+int tablesTest()
+{
+	if (dbCreationTest()!=0)
+		return 1;
 
-	conn = driver->createConnection(conn_data);
-	if (driver->error()) {
-		driver->debugError();
-		return 1;
-	}
-	if (!conn->connect()) {
-		conn->debugError();
-		return 1;
-	}
 	if (!conn->useDatabase( /*default*/ )) {
 		conn->debugError();
 		return 1;
@@ -45,4 +33,5 @@
 	kdDebug() << "-- CARS created --" << endl;
 	
 
-
+	return 0;
+}

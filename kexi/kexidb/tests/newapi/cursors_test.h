@@ -1,14 +1,5 @@
-	conn_data.setFileName( "mydb" );
-
-	KexiDB::Connection *conn = driver->createConnection(conn_data);
-	if (driver->error()) {
-		driver->debugError();
-		return 1;
-	}
-	if (!conn->connect()) {
-		conn->debugError();
-		return 1;
-	}
+int cursorsTest()
+{
 	if (!conn->databaseExists( "mydb" )) {
 		if (!conn->createDatabase( "mydb" )) {
 			conn->debugError();
@@ -36,3 +27,5 @@
 		kdDebug()<<"Cursor::eof() == "<<cursor->eof()<<endl;*/
 		conn->deleteCursor(cursor);
 	}
+	return 0;
+}

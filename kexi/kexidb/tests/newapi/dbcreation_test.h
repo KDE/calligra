@@ -1,20 +1,5 @@
-	if (argc<=3) {
-		kdDebug() << prgname << ": name for new db?" << endl;
-		usage();
-		return 0;
-	}
-	QCString db_name = QCString(argv[3]);
-	conn_data.setFileName( db_name );
-
-	conn = driver->createConnection(conn_data);
-	if (driver->error()) {
-		driver->debugError();
-		return 1;
-	}
-	if (!conn->connect()) {
-		conn->debugError();
-		return 1;
-	}
+int dbCreationTest()
+{
 	if (conn->databaseExists( db_name )) {
 		if (!conn->dropDatabase(  )) {
 			conn->debugError();
@@ -47,3 +32,5 @@
 		kdDebug()<<"Cursor::eof() == "<<cursor->eof()<<endl;*/
 //		conn->deleteCursor(cursor);
 //	}
+	return 0;
+}
