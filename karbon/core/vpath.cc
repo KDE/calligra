@@ -5,6 +5,7 @@
 
 #include <math.h>
 
+#include <qdom.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
 
@@ -18,7 +19,7 @@
 
 
 VPath::VPath()
-	: VObject(), m_isClosed( false )
+	: VObject(), m_closed( false )
 {
 	m_segments.setAutoDelete( true );
 	m_holes.setAutoDelete( true );
@@ -174,7 +175,7 @@ VPath::currentPoint() const
 VPath&
 VPath::moveTo( const double& x, const double& y )
 {
-	if( isClosed() ) return *this;
+	if( closed() ) return *this;
 
 	if( m_segments.getLast()->type() == VSegment::begin )
 	{
@@ -187,7 +188,7 @@ VPath::moveTo( const double& x, const double& y )
 VPath&
 VPath::lineTo( const double& x, const double& y )
 {
-	if( isClosed() ) return *this;
+	if( closed() ) return *this;
 
 	VSegment* s = new VSegment();
 	s->setType( VSegment::line );
@@ -203,7 +204,7 @@ VPath::curveTo(
 	const double& x2, const double& y2,
 	const double& x3, const double& y3 )
 {
-	if( isClosed() ) return *this;
+	if( closed() ) return *this;
 
 	VSegment* s = new VSegment();
 	s->setType( VSegment::curve );
@@ -221,7 +222,7 @@ VPath::curve1To(
 	const double& x2, const double& y2,
 	const double& x3, const double& y3 )
 {
-	if( isClosed() ) return *this;
+	if( closed() ) return *this;
 
 	VSegment* s = new VSegment();
 	s->setType( VSegment::curve1 );
@@ -238,7 +239,7 @@ VPath::curve2To(
 	const double& x1, const double& y1,
 	const double& x3, const double& y3 )
 {
-	if( isClosed() ) return *this;
+	if( closed() ) return *this;
 
 	VSegment* s = new VSegment();
 	s->setType( VSegment::curve2 );
@@ -257,7 +258,7 @@ VPath::arcTo(
 {
 	// parts of this routine are inspired by GNU ghostscript
 
-	if( isClosed() ) return *this;
+	if( closed() ) return *this;
 
 	// we need to calculate the tangent points. therefore calculate tangents
 	// D10=P1P0 and D12=P1P2 first:
@@ -330,7 +331,7 @@ VPath::arcTo(
 VPath&
 VPath::close()
 {
-	if( isClosed() ) return *this;
+	if( closed() ) return *this;
 
 // TODO: add tolerance
 	if( currentPoint() != m_segments.getFirst()->point( 3 ) )
@@ -341,7 +342,7 @@ VPath::close()
 		m_segments.append( s );
 	}
 
-	m_isClosed = true;
+	m_closed = true;
 
 	return *this;
 }
@@ -424,4 +425,44 @@ VObject*
 VPath::clone()
 {
 	return new VPath( *this );
+}
+
+void
+VPath::save( QDomElement& element ) const
+{
+	if( state() != deleted )
+	{
+		QDomElement me = element.ownerDocument().createElement( "PATH" );
+		element.appendChild( me );
+		me.setAttribute( "closed", m_closed );
+
+		// outline:
+		QDomElement outline = element.ownerDocument().createElement( "OUTLINE" );
+		me.appendChild( outline );
+
+		VSegmentListIterator itr( m_segments );
+		for( ; itr.current() ; ++itr )
+		{
+			itr.current()->save( outline );
+		}
+
+		// holes:
+		QPtrListIterator<VSegmentList> holeItr( m_holes );
+		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
+		{
+			QDomElement hole = element.ownerDocument().createElement( "HOLE" );
+			me.appendChild( hole );
+
+			VSegmentListIterator itr2( *( holeItr.current() ) );
+			for( ; itr2.current() ; ++itr2 )
+			{
+				itr2.current()->save( hole );
+			}
+		}
+	}
+}
+
+void
+VPath::load( const QDomElement& element )
+{
 }

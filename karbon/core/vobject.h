@@ -9,6 +9,7 @@
 #include <qptrlist.h>
 #include <qrect.h>
 
+class QDomElement;
 class QPainter;
 class QWMatrix;
 
@@ -38,6 +39,9 @@ public:
 	VState state() const { return m_state; }
 
 	virtual VObject *clone() = 0;
+
+	virtual void save( QDomElement& element ) const = 0;
+	virtual void load( const QDomElement& element ) = 0;
 
 private:
 	VState m_state;

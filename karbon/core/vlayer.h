@@ -11,6 +11,8 @@
 
 #include "vobject.h"
 
+class QDomElement;
+
 // all vobjects exist inside a layer.
 
 class VLayer
@@ -30,17 +32,23 @@ public:
 	// clean up object list:
 	void removeDeletedObjects();
 
-	bool isVisible() const { return m_isVisible; }
-	bool isReadOnly() const { return m_isReadOnly; }
+	bool visible() const { return m_visible; }
+	bool readOnly() const { return m_readOnly; }
+	
+	const QString& name() { return m_name; }
+	void setName( const QString& name ) { m_name= name; }
 
 	// read-only access to objects:
 	const VObjectList& objects() const { return m_objects; }
 
+	virtual void save( QDomElement& element ) const;
+	virtual void load( const QDomElement& element );
+
 private:
 	VObjectList m_objects;
 	QString m_name;
-	bool m_isVisible;
-	bool m_isReadOnly;
+	bool m_visible;
+	bool m_readOnly;
 };
 
 typedef QPtrList<VLayer> VLayerList;

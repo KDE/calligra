@@ -3,6 +3,9 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <qdom.h>
+
+#include <klocale.h>
 #include <koRect.h>
 
 #include "vlayer.h"
@@ -11,13 +14,13 @@
 #include <kdebug.h>
 
 VLayer::VLayer()
-	: m_isVisible( true ), m_isReadOnly( false )
+	: m_visible( true ), m_readOnly( false ), m_name( i18n( "Layer" ) )
 {
 }
 
 VLayer::~VLayer()
 {
-	QPtrListIterator<VObject> itr = m_objects;
+	VObjectListIterator itr = m_objects;
 	for ( ; itr.current(); ++itr )
 	{
 		delete( itr.current() );
@@ -28,7 +31,7 @@ void
 VLayer::draw( QPainter& painter, const QRect& rect,
 	const double zoomFactor )
 {
-	QPtrListIterator<VObject> itr = m_objects;
+	VObjectListIterator itr = m_objects;
 	for ( ; itr.current(); ++itr )
 		itr.current()->draw( painter, rect, zoomFactor );
 }
@@ -70,4 +73,23 @@ VLayer::removeDeletedObjects()
 			m_objects.remove();
 		}
 	}
+}
+
+void
+VLayer::save( QDomElement& element ) const
+{
+	QDomElement me = element.ownerDocument().createElement( "LAYER" );
+	element.appendChild( me );
+	me.setAttribute( "name", m_name );
+	me.setAttribute( "visible", m_visible );
+
+	// save objects:
+	VObjectListIterator itr = m_objects;
+	for ( ; itr.current(); ++itr )
+		itr.current()->save( me );
+}
+
+void
+VLayer::load( const QDomElement& element )
+{
 }

@@ -9,9 +9,10 @@
 #include <qptrlist.h>
 #include <koPoint.h>
 
+class QDomElement;
+
 // all classes which have to traverse a segment list should derive from this class.
 // it hides the implementation details of segments.
-
 
 class VSegment;
 typedef QPtrList<VSegment> VSegmentList;
@@ -62,7 +63,7 @@ public:
 		end
 	};
 	
-	VSegmentType type() { return m_type; }
+	VSegmentType type() const { return m_type; }
 	void setType( VSegmentType t ) { m_type = t; }
 
 	const KoPoint& point( uint i ) const
@@ -75,6 +76,9 @@ public:
 
 	void setPoint( uint i, const KoPoint& p )
 		{ if( i > 0 && i < 4 ) m_point[--i] = p; }
+
+	virtual void save( QDomElement& element ) const;
+	virtual void load( const QDomElement& element );
 
 private:
 	VSegmentType m_type;

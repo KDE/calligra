@@ -122,18 +122,25 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& )
 QDomDocument
 KarbonPart::saveXML()
 {
-	QDomDocument doc( "karbon" );
+	QDomDocument doc( "DOC" );
 
 	doc.appendChild(
 		doc.createProcessingInstruction(
 			"xml",
 			"version=\"0.1\" encoding=\"UTF-8\"") );
 
-	QDomElement app = doc.createElement( "karbon14" );
+	QDomElement app = doc.createElement( "DOC" );
 	app.setAttribute( "editor", "karbon14 0.0.1" );
 	app.setAttribute( "mime", "application/x-karbon" );
 	app.setAttribute( "version", "0.1" );
 	doc.appendChild( app );
+
+	// save layers:
+	QPtrListIterator<VLayer> itr( m_layers );
+	for ( ; itr.current(); ++itr )
+	{
+		itr.current()->save( app );
+	}
 
 	return doc;
 }

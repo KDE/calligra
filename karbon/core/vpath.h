@@ -16,6 +16,7 @@
 #include "vpath_stroke.h"
 #include "vsegment.h"
 
+class QDomElement;
 class QWMatrix;
 
 class VPath : public VObject
@@ -106,7 +107,7 @@ public:
 	}
 
 	VPath& close();
-	bool isClosed() const { return m_isClosed; }
+	bool closed() const { return m_closed; }
 
 	// return a reverted path:
 	VPath* revert() const;
@@ -129,7 +130,11 @@ public:
 
 	virtual VObject* clone();
 
+	virtual void save( QDomElement& element ) const;
+	virtual void load( const QDomElement& element );
+
 private:
+// TODO: this looks ugly somehow:
 	void drawBox( QPainter &painter, double x, double y, uint handleSize = 3 ); // helper function for draw()
 
 private:
@@ -139,7 +144,7 @@ private:
 	VPathStroke m_stroke;		// stroke.
 	VPathFill m_fill;			// fill.
 
-	bool m_isClosed;
+	bool m_closed;
 };
 
 #endif
