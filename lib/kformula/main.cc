@@ -202,9 +202,9 @@ int main(int argc, char** argv)
     if (destruct != 0) {
         std::cerr << "BasicElement::EvilDestructionCount: " << destruct << std::endl;
     }
-    destruct = Command::getEvilDestructionCount();
+    destruct = PlainCommand::getEvilDestructionCount();
     if (destruct != 0) {
-        std::cerr << "Command::EvilDestructionCount: " << destruct << std::endl;
+        std::cerr << "PlainCommand::EvilDestructionCount: " << destruct << std::endl;
     }
     destruct = ElementType::getEvilDestructionCount();
     if (destruct != 0) {

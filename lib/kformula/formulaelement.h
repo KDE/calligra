@@ -121,8 +121,10 @@ public:
      */
     virtual QString toLatex();
 
-    double getBaseSize() const { return baseSize; }
-    void setBaseSize( double size );
+    int getBaseSize() const { return baseSize; }
+    void setBaseSize( int size );
+
+    bool hasOwnBaseSize() const { return ownBaseSize; }
 
 protected:
 
@@ -168,7 +170,7 @@ private:
     /**
      * The base font size.
      */
-    double baseSize;
+    int baseSize;
 
     /**
      * Whether we want to use the default base size.

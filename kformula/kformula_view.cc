@@ -56,12 +56,16 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
     scrollview = new QScrollView(this, "scrollview");
     formulaWidget = new KFormulaWidget(_doc->getFormula(), scrollview->viewport(), "formulaWidget");
     scrollview->addChild(formulaWidget);
-    formulaWidget->setFocus();
+
+    scrollview->viewport()->setFocusProxy( scrollview );
+    scrollview->viewport()->setFocusPolicy( WheelFocus );
+    scrollview->setFocus();
+    //formulaWidget->setFocus();
 
     // Nice parts start in read only mode.
     formulaWidget->setReadOnly(true);
 
-    //KFormulaContainer* formula = m_pDoc->getFormula();
+    KFormula::Container* formula = m_pDoc->getFormula();
     KFormula::Document* document = m_pDoc->getDocument();
 
     // copy&paste
@@ -99,10 +103,10 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 
     KFontSizeAction* actionTextSize = new KFontSizeAction(i18n( "Size" ),0,
                                                           actionCollection(),"formula_textsize");
-    // default is "20" which is the 8. item.
-    actionTextSize->setCurrentItem( 8 );
+    actionTextSize->setFontSize( m_pDoc->getFormula()->fontSize() );
 
     connect( actionTextSize, SIGNAL( fontSizeChanged( int ) ), this, SLOT( sizeSelected( int ) ) );
+    connect( formula, SIGNAL( baseSizeChanged( int ) ), actionTextSize, SLOT( setFontSize( int ) ) );
 
 //     KToggleAction* actionElement_Text_Bold = new KToggleAction(i18n( "Bold" ),
 //                                                   "bold",

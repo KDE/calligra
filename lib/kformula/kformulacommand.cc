@@ -25,6 +25,7 @@
 
 #include "kformulacommand.h"
 #include "formulacursor.h"
+#include "formulaelement.h"
 #include "indexelement.h"
 #include "matrixelement.h"
 #include "sequenceelement.h"
@@ -32,17 +33,26 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-int Command::evilDestructionCount = 0;
+int PlainCommand::evilDestructionCount = 0;
 
-Command::Command(const QString &name, Container* document)
-        : KNamedCommand(name), cursordata(0), undocursor(0), doc(document)
+PlainCommand::PlainCommand( const QString& name )
+    : KNamedCommand(name)
 {
     evilDestructionCount++;
 }
 
-Command::~Command()
+PlainCommand::~PlainCommand()
 {
     evilDestructionCount--;
+}
+
+Command::Command(const QString &name, Container* document)
+        : PlainCommand(name), cursordata(0), undocursor(0), doc(document)
+{
+}
+
+Command::~Command()
+{
     delete undocursor;
     delete cursordata;
 }
@@ -316,6 +326,26 @@ void KFCAddIndex::unexecute()
 {
     addIndex.unexecute();
     KFCAddReplacing::unexecute();
+}
+
+
+KFCChangeBaseSize::KFCChangeBaseSize( const QString& name, Container* document,
+                                      FormulaElement* formula, int size )
+    : PlainCommand( name ), m_document( document ), m_formula( formula ), m_size( size )
+{
+    m_oldSize = formula->getBaseSize();
+}
+
+void KFCChangeBaseSize::execute()
+{
+    m_formula->setBaseSize( m_size );
+    m_document->recalc();
+}
+
+void KFCChangeBaseSize::unexecute()
+{
+    m_formula->setBaseSize( m_oldSize );
+    m_document->recalc();
 }
 
 KFORMULA_NAMESPACE_END

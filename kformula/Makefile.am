@@ -36,7 +36,7 @@ kdelnkdir = $(kde_appsdir)/Office
 rc_DATA = kformula.rc
 rcdir = $(kde_datadir)/kformula
 
-#SUBDIRS =  pics
+SUBDIRS =  pics
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kformula_aboutdata.h -o $(podir)/kformula.pot

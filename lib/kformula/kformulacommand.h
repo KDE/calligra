@@ -31,6 +31,7 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
+
 /**
  * Base for all kformula commands.
  *
@@ -45,7 +46,41 @@ KFORMULA_NAMESPACE_BEGIN
  *
  * If you don't like what you've done feel free to @ref unexecute .
  */
-class Command : public KNamedCommand
+class PlainCommand : public KNamedCommand
+{
+public:
+
+    /**
+     * Sets up the command. Be careful not to change the cursor in
+     * the constructor of any command. Each command must use the selection
+     * it finds when it is executed for the first time. This way
+     * you can use the @ref KMacroCommand .
+     *
+     * @param name a description to be used as menu entry.
+     * @param document the container we are working for.
+     */
+    PlainCommand(const QString& name);
+    virtual ~PlainCommand();
+
+    /**
+     * A command might have no effect.
+     * @returns true if nothing happened.
+     */
+    virtual bool isSenseless() { return false; }
+
+    /**
+     * debug only.
+     */
+    static int getEvilDestructionCount() { return evilDestructionCount; }
+
+private:
+
+    // debug
+    static int evilDestructionCount;
+};
+
+
+class Command : public PlainCommand
 {
 public:
 
@@ -60,29 +95,6 @@ public:
      */
     Command(const QString& name, Container* document);
     virtual ~Command();
-
-    /**
-     * Executes the command using the Container's active
-     * cursor.
-     */
-    virtual void execute() = 0;
-
-    /**
-     * Undoes the command using the Container's active
-     * cursor.
-     */
-    virtual void unexecute() = 0;
-
-    /**
-     * A command might have no effect.
-     * @returns true if nothing happened.
-     */
-    virtual bool isSenseless() { return false; }
-
-    /**
-     * debug only.
-     */
-    static int getEvilDestructionCount() { return evilDestructionCount; }
 
 protected:
 
@@ -146,9 +158,6 @@ private:
      * The container we belong to.
      */
     Container* doc;
-
-    // debug
-    static int evilDestructionCount;
 };
 
 
@@ -357,6 +366,23 @@ public:
 
 private:
     KFCAddGenericIndex addIndex;
+};
+
+
+class FormulaElement;
+
+class KFCChangeBaseSize : public PlainCommand {
+public:
+    KFCChangeBaseSize( const QString& name, Container* document, FormulaElement* formula, int size );
+
+    void execute();
+    void unexecute();
+
+private:
+    Container* m_document;
+    FormulaElement* m_formula;
+    int m_size;
+    int m_oldSize;
 };
 
 KFORMULA_NAMESPACE_END

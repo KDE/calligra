@@ -174,6 +174,17 @@ void Container::removeFormula( FormulaCursor* cursor )
     emit leaveFormula( cursor, REMOVE_FORMULA );
 }
 
+void Container::baseSizeChanged( int size, bool owned )
+{
+    if ( owned ) {
+        emit baseSizeChanged( size );
+    }
+    else {
+        const ContextStyle& context = document()->getContextStyle();
+        emit baseSizeChanged( context.baseSize() );
+    }
+}
+
 FormulaCursor* Container::activeCursor()
 {
     return impl->activeCursor;
@@ -337,7 +348,7 @@ void Container::cut()
 }
 
 
-void Container::execute(Command* command)
+void Container::execute(PlainCommand* command)
 {
     if ( command != 0 ) {
         command->execute();
@@ -388,12 +399,22 @@ void Container::moveTo( int x, int y )
     rootElement()->setY( context.pixelToLayoutUnitY( y ) );
 }
 
+int Container::fontSize() const
+{
+    if ( rootElement()->hasOwnBaseSize() ) {
+        return rootElement()->getBaseSize();
+    }
+    else {
+        const ContextStyle& context = document()->getContextStyle();
+        return static_cast<int>( context.baseSize() );
+    }
+}
 
 void Container::setFontSize( int pointSize, bool /*forPrint*/ )
 {
-    kdDebug() << "Container::setFontSize " << pointSize << endl;
-    rootElement()->setBaseSize( pointSize );
-    recalc();
+    if ( rootElement()->getBaseSize() != pointSize ) {
+        execute( new KFCChangeBaseSize( i18n( "Base Size Change" ), this, rootElement(), pointSize ) );
+    }
 }
 
 

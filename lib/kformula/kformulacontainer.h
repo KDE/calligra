@@ -43,11 +43,11 @@ class KPrinter;
 KFORMULA_NAMESPACE_BEGIN
 
 class BasicElement;
+class Document;
 class FormulaCursor;
 class FormulaElement;
 class IndexElement;
-class Command;
-class Document;
+class PlainCommand;
 class SymbolTable;
 
 
@@ -73,6 +73,7 @@ public:
     virtual void moveOutLeft( FormulaCursor* ) = 0;
     virtual void moveOutRight( FormulaCursor* ) = 0;
     virtual void removeFormula( FormulaCursor* ) {}
+    virtual void baseSizeChanged( int, bool ) {}
     virtual const SymbolTable& getSymbolTable() const = 0;
 };
 
@@ -130,6 +131,11 @@ public:
     void moveOutLeft( FormulaCursor* );
     void moveOutRight( FormulaCursor* );
     void removeFormula( FormulaCursor* );
+
+    /**
+     * The base size changed. If not owned it uses the default one now.
+     */
+    void baseSizeChanged( int size, bool owned );
 
     /**
      * Draws the whole thing.
@@ -255,6 +261,8 @@ public:
 
     virtual const SymbolTable& getSymbolTable() const;
 
+    int fontSize() const;
+
     /**
      * Sets the base font size of this formula.
      */
@@ -296,6 +304,11 @@ signals:
      */
     void commandExecuted();
 
+    /**
+     * We've got a new base size.
+     */
+    void baseSizeChanged( int );
+
 public:
 
     /**
@@ -336,7 +349,7 @@ private:
     /**
      * Execute the command if it makes sense.
      */
-    void execute(Command *command);
+    void execute(PlainCommand *command);
 
     /**
      * Emits a signal if the cursor had moved.

@@ -37,7 +37,7 @@ FormulaElement::FormulaElement(FormulaDocument* container)
 }
 
 
-void FormulaElement::setBaseSize( double size )
+void FormulaElement::setBaseSize( int size )
 {
     if ( size > 0 ) {
         baseSize = size;
@@ -46,6 +46,7 @@ void FormulaElement::setBaseSize( double size )
     else {
         ownBaseSize = false;
     }
+    document->baseSizeChanged( size, ownBaseSize );
 }
 
 
