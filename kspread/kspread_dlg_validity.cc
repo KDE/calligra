@@ -153,6 +153,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
      connect( this, SIGNAL(user1Clicked()), SLOT(OkPressed()) );
      connect( this, SIGNAL(user2Clicked()), SLOT(clearAllPressed()) );
      init();
+     resize(400,300);
 }
 
 void KSpreadDlgValidity::changeIndexType(int _index)
