@@ -152,7 +152,6 @@ void KoTextFormatterTest::counterAndBigChar()
     counter.setStyle( KoParagCounter::STYLE_NUM );
     parag->setCounter( &counter );
     parag->format();
-    parag->printRTDebug( 1 );
     assert( parag->lines() == 1 );
     assert( parag->isValid() );
     assert( parag->rect().width() == 2000 );
