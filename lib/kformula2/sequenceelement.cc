@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -36,6 +36,7 @@
 #include "symbolelement.h"
 #include "textelement.h"
 
+using namespace std;
 
 SequenceElement::SequenceElement(BasicElement* parent)
         : BasicElement(parent), parseTree(0), relativeSize(0)
@@ -60,7 +61,7 @@ BasicElement* SequenceElement::goToPos(FormulaCursor* cursor, bool& handled,
     if (e != 0) {
         QPoint myPos(parentOrigin.x() + getX(),
                      parentOrigin.y() + getY());
-        
+
         uint count = children.count();
         for (uint i = 0; i < count; i++) {
             BasicElement* child = children.at(i);
@@ -76,7 +77,7 @@ BasicElement* SequenceElement::goToPos(FormulaCursor* cursor, bool& handled,
 
         int dx = point.x() - myPos.x();
         //int dy = point.y() - myPos.y();
-        
+
         for (uint i = 0; i < count; i++) {
             BasicElement* child = children.at(i);
             if (dx < child->getX()) {
@@ -156,7 +157,7 @@ void SequenceElement::calcSizes(const ContextStyle& context, int parentSize)
         }
 
         bool noBaseline = toBaseline == 0;
-        
+
         // Now all normal elements without a base line.
         for (uint i = 0; i < count; i++) {
             BasicElement* child = children.at(i);
@@ -214,7 +215,7 @@ void SequenceElement::draw(QPainter& painter, const QRect& r,
                  parentOrigin.y() + getY());
     if (!QRect(myPos, getSize()).intersects(r))
         return;
-    
+
     if (!isEmpty()) {
         int mySize = parentSize - relativeSize;
         uint count = children.count();
@@ -250,7 +251,7 @@ void SequenceElement::calcCursorSize(FormulaCursor* cursor, bool smallCursor)
         int markX = getChildPosition(mark);
         int x = QMIN(posX, markX);
         int width = abs(posX - markX);
-        
+
         if (smallCursor) {
             cursor->cursorSize.setRect(point.x()+x, point.y(), width, height);
         }
@@ -317,13 +318,13 @@ int SequenceElement::getChildPosition(uint child)
 
 
 // navigation
-// 
+//
 // The elements are responsible to handle cursor movement themselves.
 // To do this they need to know the direction the cursor moves and
 // the element it comes from.
 //
 // The cursor might be in normal or in selection mode.
-    
+
 /**
  * Enters this element while moving to the left starting inside
  * the element `from'. Searches for a cursor position inside
@@ -826,7 +827,7 @@ void SequenceElement::writeDom(QDomElement& element)
     QDomDocument doc = element.ownerDocument();
     getChildrenDom(doc, element, 0, count);
 }
-    
+
 /**
  * Reads our attributes from the element.
  * Returns false if it failed.
@@ -849,7 +850,7 @@ bool SequenceElement::readContentFromDom(QDomNode& node)
     if (!BasicElement::readContentFromDom(node)) {
         return false;
     }
-    
+
     return buildChildrenFromDom(children, node);
 }
 
@@ -876,7 +877,7 @@ QString SequenceElement::toLatex()
 {
     QString content;
     if (!isEmpty()) {
-    
+
         uint count = children.count();
 	if(count > 1) content+="{";
         for (uint i = 0; i < count; i++) {
@@ -889,10 +890,10 @@ QString SequenceElement::toLatex()
     	    }
 	    else
 		content+=child->toLatex();
-	
+
     	if(count>1)
-	    content+=" ";             
-	
+	    content+=" ";
+
 	}
     	if(count > 1) content+="}";
 

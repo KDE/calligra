@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -25,6 +25,7 @@
 #include "sequenceelement.h"
 #include "symbolelement.h"
 
+using namespace std;
 
 SymbolElement::SymbolElement(SymbolType type, BasicElement* parent)
     : BasicElement(parent), symbol(type)
@@ -84,7 +85,7 @@ BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
                 return lower;
             }
         }
-        
+
         return this;
     }
     return 0;
@@ -105,7 +106,7 @@ void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
     content->calcSizes(style, mySize);
 
     //symbol.scale(((double)parentSize)/symbol.getHeight()*2);
-    
+
     int upperWidth = 0;
     int upperHeight = 0;
     if (hasUpper()) {
@@ -136,7 +137,7 @@ void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
 
     setWidth(QMAX(content->getX() + content->getWidth(),
                   QMAX(upperWidth, lowerWidth)));
-    
+
     // heights
     //int toMidline = QMAX(content->getHeight() / 2,
     int toMidline = QMAX(content->getMidline(),
@@ -213,9 +214,9 @@ void SymbolElement::draw(QPainter& painter, const QRect& r,
     //                 myPos.x()+getWidth(), myPos.y()+getMidline());
 }
 
-    
+
 // navigation
-// 
+//
 // The elements are responsible to handle cursor movement themselves.
 // To do this they need to know the direction the cursor moves and
 // the element it comes from.
@@ -236,7 +237,7 @@ void SymbolElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         bool linear = cursor->getLinearMovement();
         if (from == getParent()) {
             content->moveLeft(cursor, this);
-        }            
+        }
         else if (from == content) {
             if (linear && hasLower()) {
                 lower->moveLeft(cursor, this);
@@ -255,7 +256,7 @@ void SymbolElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
             else {
                 getParent()->moveLeft(cursor, this);
             }
-        }            
+        }
         else if (from == upper) {
             getParent()->moveLeft(cursor, this);
         }
@@ -284,7 +285,7 @@ void SymbolElement::moveRight(FormulaCursor* cursor, BasicElement* from)
             else {
                 content->moveRight(cursor, this);
             }
-        }            
+        }
         else if (from == upper) {
             if (linear && hasLower()) {
                 lower->moveRight(cursor, this);
@@ -295,7 +296,7 @@ void SymbolElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         }
         else if (from == lower) {
             content->moveRight(cursor, this);
-        }            
+        }
         else if (from == content) {
             getParent()->moveRight(cursor, this);
         }
@@ -320,13 +321,13 @@ void SymbolElement::moveUp(FormulaCursor* cursor, BasicElement* from)
             else {
                 getParent()->moveUp(cursor, this);
             }
-        }            
+        }
         else if (from == upper) {
             getParent()->moveUp(cursor, this);
-        }            
+        }
         else if ((from == getParent()) || (from == lower)) {
             content->moveRight(cursor, this);
-        }            
+        }
     }
 }
 
@@ -348,18 +349,18 @@ void SymbolElement::moveDown(FormulaCursor* cursor, BasicElement* from)
             else {
                 getParent()->moveDown(cursor, this);
             }
-        }            
+        }
         else if (from == lower) {
             getParent()->moveDown(cursor, this);
-        }            
+        }
         else if ((from == getParent()) || (from == upper)) {
             content->moveRight(cursor, this);
-        }            
+        }
     }
 }
 
 // children
-    
+
 // main child
 //
 // If an element has children one has to become the main one.
@@ -372,7 +373,7 @@ void SymbolElement::setMainChild(SequenceElement* child)
     formula()->changed();
 }
 
-    
+
 /**
  * Inserts all new children at the cursor position. Places the
  * cursor according to the direction.
@@ -389,7 +390,7 @@ void SymbolElement::insert(FormulaCursor* cursor,
 {
     SequenceElement* index = static_cast<SequenceElement*>(newChildren.take(0));
     index->setParent(this);
-    
+
     switch (cursor->getPos()) {
     case upperPos:
         upper = index;
@@ -464,7 +465,7 @@ void SymbolElement::normalize(FormulaCursor* cursor, Direction direction)
         content->moveRight(cursor, this);
     }
 }
-    
+
 /**
  * Returns the child at the cursor.
  */
@@ -556,7 +557,7 @@ void SymbolElement::writeDom(QDomElement& element)
     element.setAttribute("TYPE", symbol.getType());
 
     QDomDocument doc = element.ownerDocument();
-    
+
     QDomElement con = doc.createElement("CONTENT");
     con.appendChild(content->getElementDom(doc));
     element.appendChild(con);
@@ -572,7 +573,7 @@ void SymbolElement::writeDom(QDomElement& element)
         element.appendChild(ind);
     }
 }
-    
+
 /**
  * Reads our attributes from the element.
  * Returns false if it failed.
@@ -601,7 +602,7 @@ bool SymbolElement::readContentFromDom(QDomNode& node)
     if (!BasicElement::readContentFromDom(node)) {
         return false;
     }
-    
+
     delete content;
     content = buildChild(node, "CONTENT");
     if (content == 0) {
@@ -619,16 +620,16 @@ bool SymbolElement::readContentFromDom(QDomNode& node)
     if (upper != 0) {
         node = node.nextSibling();
     }
-    
+
     return true;
 }
 
 QString SymbolElement::toLatex()
 {
     QString sym;
-    
+
     switch(symbol.getType()) {
-	
+
 	case 1001:
 	 sym="\\int";
 	break;
@@ -638,29 +639,29 @@ QString SymbolElement::toLatex()
 	case 1003:
 	 sym="\\prod";
 	break;
-	
+
 	default:
 	 sym=" ";
-    
-    } 
-    
-    
+
+    }
+
+
     if(hasLower()) {
         sym+="_{";
 	sym+=lower->toLatex();
 	sym+="}";
     }
-    
+
     if(hasUpper()) {
         sym+="^{";
 	sym+=upper->toLatex();
 	sym+="}";
     }
-    
+
         sym+="{";
 	sym+=content->toLatex();
 	sym+="}";
-    
-    
+
+
     return sym;
 }

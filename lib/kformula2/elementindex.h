@@ -28,7 +28,7 @@
 
 class ElementIndex;
 
-typedef auto_ptr<ElementIndex> ElementIndexPtr;
+typedef std::auto_ptr<ElementIndex> ElementIndexPtr;
 
 
 /**

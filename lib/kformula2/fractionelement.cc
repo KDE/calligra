@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -26,6 +26,7 @@
 #include "fractionelement.h"
 #include "sequenceelement.h"
 
+using namespace std;
 
 FractionElement::FractionElement(BasicElement* parent)
     : BasicElement(parent)
@@ -73,7 +74,7 @@ BasicElement* FractionElement::goToPos(FormulaCursor* cursor, bool& handled,
             handled = true;
             return denominator;
         }
-        
+
         return this;
     }
     return 0;
@@ -342,16 +343,16 @@ void FractionElement::writeDom(QDomElement& element)
     BasicElement::writeDom(element);
 
     QDomDocument doc = element.ownerDocument();
-    
+
     QDomElement num = doc.createElement("NUMERATOR");
     num.appendChild(numerator->getElementDom(doc));
     element.appendChild(num);
-    
+
     QDomElement den = doc.createElement("DENOMINATOR");
     den.appendChild(denominator->getElementDom(doc));
     element.appendChild(den);
 }
-    
+
 /**
  * Reads our attributes from the element.
  * Returns false if it failed.
@@ -374,7 +375,7 @@ bool FractionElement::readContentFromDom(QDomNode& node)
     if (!BasicElement::readContentFromDom(node)) {
         return false;
     }
-    
+
     delete numerator;
     numerator = buildChild(node, "NUMERATOR");
     if (numerator == 0) {
@@ -390,7 +391,7 @@ bool FractionElement::readContentFromDom(QDomNode& node)
         return false;
     }
     node = node.nextSibling();
-    
+
     return true;
 }
 

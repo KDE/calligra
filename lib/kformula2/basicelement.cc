@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -25,6 +25,8 @@
 #include "basicelement.h"
 #include "formulacursor.h"
 #include "sequenceelement.h"
+
+using namespace std;
 
 
 int BasicElement::evilDestructionCount = 0;
@@ -170,7 +172,7 @@ bool BasicElement::buildFromDom(QDomElement& element)
 void BasicElement::writeDom(QDomElement&)
 {
 }
-    
+
 /**
  * Reads our attributes from the element.
  * Returns false if it failed.

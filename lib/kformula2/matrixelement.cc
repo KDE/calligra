@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -26,6 +26,7 @@
 #include "matrixelement.h"
 #include "sequenceelement.h"
 
+using namespace std;
 
 MatrixElement::MatrixElement(uint rows, uint columns, BasicElement* parent)
     : BasicElement(parent)
@@ -86,7 +87,7 @@ BasicElement* MatrixElement::goToPos(FormulaCursor* cursor, bool& handled,
             return element;
         }
         row--;
-        
+
         uint column = columns;
         for (uint c = 0; c < columns; c++) {
             BasicElement* element = getElement(row, c);
@@ -135,7 +136,7 @@ BasicElement* MatrixElement::goToPos(FormulaCursor* cursor, bool& handled,
 // fonts, spaces and such.
 // It is essential to calculate elements size with the same context
 // before you draw.
-    
+
 /**
  * Calculates our width and height and
  * our children's parentPosition.
@@ -143,7 +144,7 @@ BasicElement* MatrixElement::goToPos(FormulaCursor* cursor, bool& handled,
 void MatrixElement::calcSizes(const ContextStyle& style, int parentSize)
 {
     int mySize = parentSize;
-    
+
     QArray<int> toMidlines(getRows());
     QArray<int> fromMidlines(getRows());
     QArray<int> widths(getColumns());
@@ -193,7 +194,7 @@ void MatrixElement::calcSizes(const ContextStyle& style, int parentSize)
         }
         yPos += fromMidlines[r] + distY;
     }
-    
+
     int width = distX * (columns - 1);
     int height = distY * (rows - 1);
 
@@ -234,9 +235,9 @@ void MatrixElement::draw(QPainter& painter, const QRect& rect,
     //painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
 }
 
-    
+
 // navigation
-// 
+//
 // The elements are responsible to handle cursor movement themselves.
 // To do this they need to know the direction the cursor moves and
 // the element it comes from.
@@ -415,9 +416,9 @@ void MatrixElement::writeDom(QDomElement& element)
 
     uint rows = getRows();
     uint cols = getColumns();
-   
+
     element.setAttribute("ROWS", rows);
-    element.setAttribute("COLUMNS", cols); 
+    element.setAttribute("COLUMNS", cols);
 
     QDomDocument doc = element.ownerDocument();
 
@@ -426,10 +427,10 @@ void MatrixElement::writeDom(QDomElement& element)
     	    QDomElement tmp = getElement(r,c)->getElementDom(doc);
             element.appendChild(tmp);
 	}
-        element.appendChild(doc.createComment("end of row")); 
+        element.appendChild(doc.createComment("end of row"));
     }
 }
-    
+
 /**
  * Reads our attributes from the element.
  * Returns false if it failed.
@@ -448,7 +449,7 @@ bool MatrixElement::readAttributesFromDom(QDomElement& element)
         cerr << "Rows <= 0 in MatrixElement.\n";
         return false;
     }
-    
+
     QString columnStr = element.attribute("COLUMNS");
     uint cols = 0;
     if(!columnStr.isNull()) {
@@ -485,7 +486,7 @@ bool MatrixElement::readContentFromDom(QDomNode& node)
 
     uint rows = getRows();
     uint cols = getColumns();
-    
+
     for (uint r = 0; r < rows; r++) {
         for (uint c = 0; c < cols; c++) {
             if (node.isElement()) {
@@ -507,17 +508,17 @@ bool MatrixElement::readContentFromDom(QDomNode& node)
 QString MatrixElement::toLatex()
 {
     //All the border handling must be implemented here too
-    
+
     QString matrix;
     uint cols=getColumns();
     uint rows=getRows();
-    
+
     matrix="\\begin{array}{ ";
     for(uint i=0;i<cols;i++)
 	matrix+="c ";
-    
+
     matrix+="}";
-     
+
     for (uint r = 0; r < rows; r++) {
         for (uint c = 0; c < cols; c++) {
             matrix+=getElement(r, c)->toLatex();
@@ -525,8 +526,8 @@ QString MatrixElement::toLatex()
         }
     	if(r < rows-1 ) matrix+=" \\\\ ";
     }
-    
+
     matrix+="\\end{array}";
-    
+
     return matrix;
 }

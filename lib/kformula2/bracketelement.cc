@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -30,6 +30,7 @@
 #include "formulaelement.h"
 #include "sequenceelement.h"
 
+using namespace std;
 
 BracketElement::BracketElement(char l, char r, BasicElement* parent)
     : BasicElement(parent)
@@ -86,7 +87,7 @@ void BracketElement::calcSizes(const ContextStyle& style, int parentSize)
     content->calcSizes(style, mySize);
     int contentHeight = 2 * QMAX(content->getMidline(),
                                  content->getHeight() - content->getMidline());
-    
+
     left->calcSizes(style, contentHeight + style.getSizeReduction());
     right->calcSizes(style, contentHeight + style.getSizeReduction());
 
@@ -99,7 +100,7 @@ void BracketElement::calcSizes(const ContextStyle& style, int parentSize)
     setHeight(QMAX(content->getHeight(),
                    QMAX(left->getHeight(), right->getHeight())));
     setMidline(getHeight() / 2);
-    
+
     left   ->setY((getHeight() - left   ->getHeight())/2);
     right  ->setY((getHeight() - right  ->getHeight())/2);
 
@@ -124,7 +125,7 @@ void BracketElement::draw(QPainter& painter, const QRect& r,
 
     int contentHeight = 2 * QMAX(content->getMidline(),
                                  content->getHeight() - content->getMidline());
-    
+
     left->draw(painter, r, style, contentHeight + style.getSizeReduction(), myPos);
     content->draw(painter, r, style, mySize, myPos);
     right->draw(painter, r, style, contentHeight + style.getSizeReduction(), myPos);
@@ -279,7 +280,7 @@ void BracketElement::writeDom(QDomElement& element)
     con.appendChild(content->getElementDom(doc));
     element.appendChild(con);
 }
-    
+
 /**
  * Reads our attributes from the element.
  * Returns false if it failed.
@@ -324,8 +325,8 @@ QString BracketElement::toLatex()
 {
     QString ls,rs,cs;
     cs=content->toLatex();
-    ls="\\left"+latexString(left->getType());    
-    rs="\\right"+latexString(right->getType());    
+    ls="\\left"+latexString(left->getType());
+    rs="\\right"+latexString(right->getType());
 
     return ls+cs+rs;
 }
@@ -333,19 +334,19 @@ QString BracketElement::toLatex()
 QString BracketElement::latexString(char type)
 {
     switch (type) {
-	case ']': 
+	case ']':
 	    return "]";
-	case '[': 
+	case '[':
 	    return "[";
-	case '{': 
+	case '{':
 	    return "\\{";
-	case '}': 
+	case '}':
 	    return "\\}";
-	case '(': 
+	case '(':
 	    return "(";
-	case ')': 
+	case ')':
 	    return ")";
-    
+
     }
     return " ";  //this must be a space
 }

@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -27,6 +27,7 @@
 #include "rootelement.h"
 #include "sequenceelement.h"
 
+using namespace std;
 
 RootElement::RootElement(BasicElement* parent)
     : BasicElement(parent)
@@ -72,7 +73,7 @@ BasicElement* RootElement::goToPos(FormulaCursor* cursor, bool& handled,
                 return index;
             }
         }
-        
+
         return this;
     }
     return 0;
@@ -88,7 +89,7 @@ void RootElement::calcSizes(const ContextStyle& style, int parentSize)
     int mySize = parentSize;
 
     content->calcSizes(style, mySize);
-    
+
     int indexWidth = 0;
     int indexHeight = 0;
     if (hasIndex()) {
@@ -97,7 +98,7 @@ void RootElement::calcSizes(const ContextStyle& style, int parentSize)
         indexWidth = index->getWidth();
         indexHeight = index->getHeight();
     }
-    
+
     int distX = style.getDistanceX(mySize);
     int distY = style.getDistanceY(mySize);
     int unit = (content->getHeight() + distY)/ 3;
@@ -128,7 +129,7 @@ void RootElement::calcSizes(const ContextStyle& style, int parentSize)
     setWidth(content->getWidth() + unit+unit/3+ rootOffset.x() + distX/2);
     setHeight(content->getHeight() + distY + rootOffset.y());
     setMidline(getHeight() - content->getHeight() + content->getMidline());
-    
+
     content->setX(rootOffset.x() + unit+unit/3);
     content->setY(rootOffset.y() + distY);
     calcBaseline();
@@ -305,7 +306,7 @@ void RootElement::insert(FormulaCursor* cursor,
         formula()->changed();
     }
 }
-    
+
 /**
  * Removes all selected children and returns them. Places the
  * cursor to where the children have been.
@@ -417,7 +418,7 @@ void RootElement::writeDom(QDomElement& element)
         element.appendChild(ind);
     }
 }
-    
+
 /**
  * Reads our attributes from the element.
  * Returns false if it failed.
@@ -440,7 +441,7 @@ bool RootElement::readContentFromDom(QDomNode& node)
     if (!BasicElement::readContentFromDom(node)) {
         return false;
     }
-    
+
     delete content;
     content = buildChild(node, "CONTENT");
     if (content == 0) {
@@ -448,7 +449,7 @@ bool RootElement::readContentFromDom(QDomNode& node)
         return false;
     }
     node = node.nextSibling();
-    
+
     index = buildChild(node, "INDEX");
     if (index != 0) {
         node = node.nextSibling();
@@ -465,10 +466,10 @@ QString RootElement::toLatex()
         root+="[";
 	root+=index->toLatex();
 	root+="]";
-    }	
+    }
     root+="{";
     root+=content->toLatex();
     root+="}";
-    
+
     return root;
 }

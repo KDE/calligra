@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -34,6 +34,7 @@
 #include "kformuladocument.h"
 #include "kformulamimesource.h"
 
+using namespace std;
 
 KFormulaMimeSource::KFormulaMimeSource(QDomDocument formula)
 {
@@ -72,14 +73,14 @@ bool KFormulaMimeSource::provides ( const char * format) const
      return true;
 
     else
-     return false; 
-     
+     return false;
+
 }
 
 QByteArray KFormulaMimeSource::encodedData ( const char *format ) const
 {
 QString fmt=format;  //case sensitive?
-    
+
     if(fmt=="text/plain")
       fmt="text/x-tex";
 
@@ -91,9 +92,9 @@ QString fmt=format;  //case sensitive?
 
 	return d;
     }
-    else 
+    else
     if(fmt=="image/ppm") {
-	
+
 	cerr << "asking image" << endl;
         KFormulaDocument document;
         KFormulaContainer tmpContainer(&document);
@@ -117,12 +118,12 @@ QString fmt=format;  //case sensitive?
 	ima.detach();
 	io.setImage(ima);
 	if(!io.write())
-	    return QByteArray(); 
-     	
+	    return QByteArray();
+
 	buff.close();
     	return d;
 
-	
+
     }
     else
     if(fmt=="text/x-tex") {
@@ -139,10 +140,10 @@ QString fmt=format;  //case sensitive?
 
 	QByteArray d=tmpContainer.texString().utf8();
 	d.truncate(d.size()-1);
-	
+
     	return d;
     }
-    else 
+    else
 	return QByteArray();
 }
 

@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -26,6 +26,8 @@
 #include "formulacursor.h"
 #include "formulaelement.h"
 #include "sequenceelement.h"
+
+using namespace std;
 
 
 IndexElement::IndexElement(BasicElement* parent)
@@ -142,7 +144,7 @@ BasicElement* IndexElement::goToPos(FormulaCursor* cursor, bool& handled,
                 return content;
             }
         }
-        
+
         return this;
     }
     return 0;
@@ -178,7 +180,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
     int mySize = parentSize;
     //int distX = contextStyle.getDistanceX(mySize);
     int distY = contextStyle.getDistanceY(mySize);
-    
+
     // get the indexes size
     int ulWidth = 0, ulHeight = 0, ulMidline = 0;
     if (hasUpperLeft()) {
@@ -259,7 +261,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
         setMiddleX(llWidth, width);
         width += llWidth;
     }
-    
+
     if (hasUpperRight()) {
         upperRight->setX(width);
     }
@@ -319,7 +321,7 @@ void IndexElement::draw(QPainter& painter, const QRect& r,
     int mySize = parentSize;
     if (!QRect(myPos, getSize()).intersects(r))
         return;
-    
+
     content->draw(painter, r, contextStyle, mySize, myPos);
     if (hasUpperLeft()) {
         upperLeft->draw(painter, r, contextStyle, mySize, myPos);
@@ -348,9 +350,9 @@ void IndexElement::draw(QPainter& painter, const QRect& r,
     //                 myPos.x()+getWidth(), myPos.y()+getMidline());
 }
 
-    
+
 // navigation
-// 
+//
 // The elements are responsible to handle cursor movement themselves.
 // To do this they need to know the direction the cursor moves and
 // the element it comes from.
@@ -562,10 +564,10 @@ void IndexElement::moveUp(FormulaCursor* cursor, BasicElement* from)
         }
         else if ((from == upperLeft) || (from == upperMiddle) || (from == upperRight)) {
             getParent()->moveUp(cursor, this);
-        }            
+        }
         else if ((from == getParent()) || (from == lowerLeft) || (from == lowerMiddle)) {
             content->moveRight(cursor, this);
-        }            
+        }
         else if (from == lowerRight) {
             content->moveLeft(cursor, this);
         }
@@ -606,13 +608,13 @@ void IndexElement::moveDown(FormulaCursor* cursor, BasicElement* from)
             else {
                 getParent()->moveDown(cursor, this);
             }
-        }            
+        }
         else if ((from == lowerLeft) || (from == lowerMiddle) || (from == lowerRight)) {
             getParent()->moveDown(cursor, this);
-        }            
+        }
         else if ((from == getParent()) || (from == upperLeft) || (from == upperMiddle)) {
             content->moveRight(cursor, this);
-        }            
+        }
         if (from == upperRight) {
             content->moveLeft(cursor, this);
         }
@@ -622,7 +624,7 @@ void IndexElement::moveDown(FormulaCursor* cursor, BasicElement* from)
 
 // children
 
-    
+
 // main child
 //
 // If an element has children one has to become the main one.
@@ -652,7 +654,7 @@ void IndexElement::insert(FormulaCursor* cursor,
 {
     SequenceElement* index = static_cast<SequenceElement*>(newChildren.take(0));
     index->setParent(this);
-    
+
     switch (cursor->getPos()) {
     case upperLeftPos:
         upperLeft = index;
@@ -1003,7 +1005,7 @@ void IndexElement::writeDom(QDomElement& element)
         element.appendChild(ind);
     }
 }
-    
+
 /**
  * Reads our attributes from the element.
  * Returns false if it failed.
@@ -1034,7 +1036,7 @@ bool IndexElement::readContentFromDom(QDomNode& node)
         return false;
     }
     node = node.nextSibling();
-    
+
     upperLeft = buildChild(node, "UPPERLEFT");
     if (upperLeft != 0) {
         node = node.nextSibling();
@@ -1096,6 +1098,8 @@ QString IndexElement::toLatex()
     bool onlyRight=!hasUpperLeft() && !hasLowerLeft() 
 		    && !hasUpperMiddle() && !hasLowerMiddle();    
 
+    bool onlyRight=!hasUpperLeft() & !hasLowerLeft() & !hasUpperMiddle() & !hasLowerMiddle();
+
     if(onlyRight){
 
         index+="{"+content->toLatex()+"}";
@@ -1107,21 +1111,21 @@ QString IndexElement::toLatex()
     }
     else
     {
-	
+
 	if(hasUpperMiddle()) {
        	    index+="\\overset{";
             index+="^{"+upperMiddle->toLatex()+"}";
 	    index+="}{";
-	
+
 	}
 
 	if(hasLowerMiddle()) {
        	    index+="\\underset{";
             index+="^{"+lowerMiddle->toLatex()+"}";
 	    index+="}{";
-	
+
 	}
-	
+
 	index+="\\sideset{";
 
 	if(hasUpperLeft())
@@ -1131,7 +1135,7 @@ QString IndexElement::toLatex()
     	    index+="_{"+lowerLeft->toLatex()+"}";
 
 	index+="}{";
-	
+
 	if(hasUpperRight())
 	    index+="^{"+upperRight->toLatex()+"}";
 	if(hasLowerRight())
@@ -1139,10 +1143,10 @@ QString IndexElement::toLatex()
 	index+="}";
 
         index+="{"+content->toLatex()+"}";
-	
+
 	if(hasUpperMiddle()) index+="}";
 	if(hasLowerMiddle()) index+="}";
-	
-    }	
+
+    }
     return index;
 }

@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -22,7 +22,7 @@
 #include <qstring.h>
 #include "kformulamathmlread.h"
 
-
+using namespace std;
 
 
 MathMl2KFormula::MathMl2KFormula(QDomDocument * mmldoc)
@@ -215,7 +215,7 @@ bool MathMl2KFormula::processElement(QDomNode * node,QDomDocument * doc,
 	    QString subtag;
 	    int rows=0,cols=0;
 	    QDomNode n = element->firstChild();
-	
+
 
 	    while (!n.isNull()) {
 		if (n.isElement()) {
@@ -228,18 +228,18 @@ bool MathMl2KFormula::processElement(QDomNode * node,QDomDocument * doc,
 /* Determins the number of columns */
 
     			    QDomNode cellnode = e.firstChild();
-    			    int cc=0;	    		
+    			    int cc=0;
 
 			    while (!cellnode.isNull()) {
-				if (cellnode.isElement()) 
-				    cc++;  
-				
+				if (cellnode.isElement())
+				    cc++;
+
 				cellnode = cellnode.nextSibling();
 			    }
-		
+
 			    if(cc>cols) cols=cc;
 
-			}		    
+			}
 		}
 		n = n.nextSibling();
 	    }
@@ -252,7 +252,7 @@ bool MathMl2KFormula::processElement(QDomNode * node,QDomDocument * doc,
 	    QDomElement matrix = doc->createElement("MATRIX");
 	    matrix.setAttribute("COLUMNS",cols);
 	    matrix.setAttribute("ROWS",rows);
-	    
+
 
 	    while (!n.isNull()) {
 		if (n.isElement()) {
@@ -261,26 +261,26 @@ bool MathMl2KFormula::processElement(QDomNode * node,QDomDocument * doc,
 		    if (subtag == "mtr") {
 
     			QDomNode cellnode = e.firstChild();
-			int cc=0;	    		
+			int cc=0;
 			while (!cellnode.isNull()) {
 			    if (cellnode.isElement()) {
 			        cc++;
 				QDomElement cell = doc->createElement("SEQUENCE");
 				QDomElement cellelement = cellnode.toElement();
 		  		processElement(&cellelement,doc,&cell);
-				matrix.appendChild(cell);				
-		
+				matrix.appendChild(cell);
+
 			    }
 			    cellnode = cellnode.nextSibling();
 			}
-			
-			
+
+
 			/* Add empty elements */
 			for(;cc<cols;cc++) {
 			    QDomElement cell = doc->createElement("SEQUENCE");
-			    matrix.appendChild(cell);			
+			    matrix.appendChild(cell);
 			}
-			    
+
 
 
 		    }
