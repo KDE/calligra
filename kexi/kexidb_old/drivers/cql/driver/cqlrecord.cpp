@@ -20,6 +20,7 @@ Boston, MA 02111-1307, USA.
 #include <iostream.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <kexidberror.h>
 
@@ -36,6 +37,7 @@ CqlRecord::CqlRecord(SqlHandle *handle, const QString statement)
 		try
 		{
 			m_cursor->open();
+			setupCursor();
 		}
 		catch(CqlException &err)
 		{
@@ -47,12 +49,14 @@ CqlRecord::CqlRecord(SqlHandle *handle, const QString statement)
 		cerr << err << endl;
 		throw KexiDBError(0, CqlDB::errorText(err));
 	}
+	
+//	m_cursor->GetResultInfo();
 }
 
 bool
 CqlRecord::readOnly()
 {
-	return false;
+	return true;
 }
 
 void
@@ -70,41 +74,55 @@ CqlRecord::commit(unsigned int record, bool insertBuffer=false)
 QVariant
 CqlRecord::value(unsigned int field)
 {
+	return QVariant(CqlDB::cqlString(m_data[field]));
+	kdDebug() << "CqlRecord::value" << endl;
 }
 
 QVariant
 CqlRecord::value(QString field)
 {
+	kdDebug() << "CqlRecord::value" << endl;
 }
 
 QVariant::Type
 CqlRecord::type(unsigned int field)
 {
+	return m_fields[field]->type();
+	kdDebug() << "CqlRecord::type" << endl;
 }
 
 QVariant::Type
 CqlRecord::type(QString field)
 {
+	kdDebug() << "CqlRecord::type" << endl;
 }
 
 KexiDBField::ColumnType
 CqlRecord::sqlType(unsigned int field)
 {
+	kdDebug() << "CqlRecord::sqlType" << endl;
 }
 
 KexiDBField::ColumnType
 CqlRecord::sqlType(QString field)
 {
+	kdDebug() << "CqlRecord::sqlType" << endl;
 }
 
 KexiDBField*
 CqlRecord::fieldInfo(unsigned int column)
 {
+	kdDebug() << "CqlRecord::fieldInfo" << endl;
+	return m_fields[column];
+/*
+ l,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,.
+*/
 }
 
 KexiDBField*
 CqlRecord::fieldInfo(QString column)
 {
+	kdDebug() << "CqlRecord::filedInfo" << endl;
 }
 
 bool
@@ -135,21 +153,51 @@ CqlRecord::gotoRecord(unsigned int record)
 unsigned int
 CqlRecord::fieldCount()
 {
+	return m_fieldCount;
 }
 
 QString
 CqlRecord::fieldName(unsigned int field)
 {
+	kdDebug() << "CqlRecord::fieldName" << endl;
+	return m_fields[field]->name();
 }
 
 bool
 CqlRecord::next()
 {
+	kdDebug() << "CqlRecord::next" << endl;
+	if(!m_cursor)
+		return false;
+
+	return false;
+//	return m_cursor->fetch();
 }
 
 unsigned long
 CqlRecord::last_id()
 {
+}
+
+void
+CqlRecord::setupCursor()
+{
+	unsigned int fields = 0;
+	ColumnMetadataList *metalist = m_cursor->describe();
+	for(ColumnMetadata *meta = metalist->first(); meta; meta = metalist->next())
+	{
+		CqlField *cfield = new CqlField(meta);
+		m_fields.insert(fields, cfield);
+
+		CqlString data;
+		bool flag;
+		m_cursor->bindColumn(fields, data, flag);
+
+		kdDebug() << "CqlRecord::setupCursor: bind cursor " << fields << endl;
+		fields++;
+	}
+
+	m_fieldCount = fields;
 }
 
 CqlRecord::~CqlRecord()

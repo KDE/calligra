@@ -20,8 +20,17 @@ Boston, MA 02111-1307, USA.
 #ifndef CQLRECORD_H
 #define CQLRECORD_H
 
+#include <qintdict.h>
+#include <qmap.h>
+
 #include <kexidbrecord.h>
 #include <CqlSqlInclude.h>
+#include <qvariant.h>
+
+#include "cqlfield.h"
+
+typedef QIntDict<CqlField> FieldIndex;
+typedef QMap<uint,CqlString> RecordSet;
 
 class CqlRecord : public KexiDBRecord
 {
@@ -65,7 +74,12 @@ class CqlRecord : public KexiDBRecord
 
 
 	protected:
+		void		setupCursor();
+
 		Cursor		*m_cursor;
+		unsigned int	m_fieldCount;
+		FieldIndex	m_fields;
+		RecordSet	m_data;
 };
 
 #endif

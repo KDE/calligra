@@ -133,6 +133,7 @@ CqlDB::queryRecord(QString statement, bool buffer)
 	try
 	{
 		CqlRecord *record = new CqlRecord(m_db, rs);
+		return record;
 	}
 	catch(KexiDBError *err)
 	{
