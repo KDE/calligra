@@ -54,9 +54,9 @@ Form::createToplevel(QWidget *container, const QString &classname)
 	m_topTree = new ObjectTree(classname, container->name(), container, m_toplevel);
 	m_toplevel->setObjectTree(m_topTree);
 	m_toplevel->setForm(this);
-	
+
 	m_topTree->setWidget(container);
-	m_topTree->addModProperty("caption");
+	m_topTree->addModProperty("caption", name());
 	//m_topTree->addModProperty("icon");
 
 	connect(container, SIGNAL(destroyed()), this, SLOT(formDeleted()));
@@ -239,14 +239,14 @@ Form::fixNames(QDomElement el)
 				type.appendChild(valueE);
 				n.toElement().appendChild(type);
 			}
-			
+
 		}
 		if(n.toElement().tagName() == "widget")
 		{
 			fixNames(n.toElement());
 		}
 	}
-	
+
 }
 
 QDomElement
@@ -311,7 +311,7 @@ Form::fixPos(QDomElement el)
 		return el;
 	else
 		return fixPos(el, QPoint(r.x(), r.y()));
-		
+
 }
 
 Form::~Form()

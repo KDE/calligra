@@ -75,7 +75,7 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		QTabWidget *tab = new QTabWidget(p, n);
 		container->form()->objectTree()->addChild(container->tree(), new KFormDesigner::ObjectTreeItem(c, n, tab));
 		tab->installEventFilter(container);
-		
+
 		if(container->form()->interactiveMode())
 		{
 			m_widget=tab;
@@ -106,7 +106,7 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 		menu->insertItem(i18n("Change title"), this, SLOT(chTitle()) );
 		return;
 	}
-	
+
 	else if(classname == "QTabWidget")
 	{
 		menu->insertItem(i18n("Add Page"), this, SLOT(AddTabPage()) );
@@ -115,7 +115,7 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 	else if(classname == "QWidget")
 	{
 	}
-	
+
 	return;
 }
 
@@ -128,7 +128,7 @@ void ContainerFactory::AddTabPage()
 	QTabWidget *tab = (QTabWidget *)m_widget;
 	QWidget *page = new QWidget(tab,name.latin1());
 	new KFormDesigner::Container(m_container,page,tab);
-	
+
 	QString n;
 	n.setNum(tab->count()+1);
 	n.prepend("Page ");
@@ -136,14 +136,14 @@ void ContainerFactory::AddTabPage()
 	tab->showPage(page);
 
 	KFormDesigner::ObjectTreeItem *item = m_container->form()->objectTree()->lookup(name);
-	item->addModProperty("title");
+	item->addModProperty("title", n);
 }
 
 void ContainerFactory::chTitle()
 {
 	if(!m_widget->isA("QButtonGroup"))  { return; }
 	QButtonGroup *btngrp = (QButtonGroup*)m_widget;
-	
+
 	bool ok;
 	QString text = KLineEditDlg::getText(i18n("New Title"), i18n("Enter a new title for the button group"),
 		btngrp->title(), &ok);

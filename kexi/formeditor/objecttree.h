@@ -44,7 +44,7 @@ typedef QMap<QString, int> Names;
  //! An item representing a widget
 class KFORMEDITOR_EXPORT ObjectTreeItem
 {
-	
+
 	public:
 		ObjectTreeItem(const QString &className, const QString &name, QWidget *widget, Container *container=0);
 		virtual ~ObjectTreeItem();
@@ -55,9 +55,9 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		ObjectTreeItem* parent() const { return m_parent; }
 		ObjectTreeC*	children() { return &m_children; }
 		//PropertyMap	properties() { return m_properties; }
-		QStringList*	modifProp() { return &m_props;}
+		QMap<QString, QVariant>* modifProp() { return &m_props;}
 		Container*	container() { return m_container;}
-		
+
 		void		setWidget(QWidget *w) { m_widget = w; }
 		void 		setParent(ObjectTreeItem *parent)  { m_parent = parent;}
 
@@ -66,18 +66,18 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 
 		virtual void	addChild(ObjectTreeItem *it);
 		void 		remChild(ObjectTreeItem *it);
-		
+
 		/*! Adds \a property in the list of the modified properties for this object.
 		    These modified properties are written in the .ui files when saving the form.
 		*/
-		void		addModProperty(const QString &property);
+		void		addModProperty(const QString &property, const QVariant &value);
 
 	protected:
 		QString		m_className;
 		QString		m_name;
 		ObjectTreeC	m_children;
 		Container*	m_container;
-		QStringList	m_props;
+		QMap<QString, QVariant> m_props;
 		ObjectTreeItem* m_parent;
 		QWidget*	m_widget;
 };

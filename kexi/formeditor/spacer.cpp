@@ -104,7 +104,7 @@ Spacer::loadSpacer(const QString &wname, Container *container, WidgetLibrary *li
 
 			QVariant val = FormIO::readProp(n.toElement().firstChild(), w, name);
 			w->setProperty(name.latin1(), val);
-			tree->addModProperty(name);
+			tree->addModProperty(name, val);
 		}
 	}
 	w->show();

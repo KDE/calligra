@@ -22,7 +22,6 @@
 #include <qpixmap.h>
 #include <qrect.h>
 #include <qcursor.h>
-#include <qobjectlist.h>
 #include <qlayout.h>
 
 #include <kdebug.h>
@@ -38,7 +37,7 @@
 namespace KFormDesigner {
 
 // Helper classes for sorting widgets before inserting them in the layout
-class HorWidgetList : public QObjectList
+class HorWidgetList : public WidgetList
 {
 	public:
 	HorWidgetList() {;}
@@ -55,7 +54,7 @@ class HorWidgetList : public QObjectList
 	}
 };
 
-class VerWidgetList : public QObjectList
+class VerWidgetList : public WidgetList
 {
 	public:
 	VerWidgetList() {;}
@@ -132,7 +131,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			if(!m_form->manager()->isTopLevel(m_moving) && m_moving->parent()->inherits("QWidgetStack"))
 			{
 				m_moving = m_moving->parentWidget()->parentWidget();
-				kdDebug() << "composed widget  " << m_moving->name() << endl; 
+				kdDebug() << "composed widget  " << m_moving->name() << endl;
 			}
 
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
@@ -252,17 +251,26 @@ Container::eventFilter(QObject *s, QEvent *e)
 					break;
 				int gridX = Form::gridX();
 				int gridY = Form::gridY();
-				int tmpx = (((m_moving->x()+mev->x()-m_grab.x())+gridX/2)/gridX)*gridX;
-				int tmpy = (((m_moving->y()+mev->y()-m_grab.y())+gridY/2)/gridY)*gridY;
+
+				for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
+				{
+					kdDebug() << "moving widget " << w->name() << " by " << (mev->x() - m_grab.x()) << endl;
+					int tmpx = ( ( w->x() + mev->x() - m_grab.x()) / gridX ) * gridX;
+					int tmpy = ( ( w->y() + mev->y() - m_grab.y()) / gridY ) * gridY;
+					if((tmpx != w->x()) ||(tmpy != w->y()))
+						w->move(tmpx,tmpy);
+				}
+				/*int tmpx = (((m_moving->x()+mev->x()-m_grab.x()))/gridX)*gridX;
+				int tmpy = (((m_moving->y()+mev->y()-m_grab.y()))/gridY)*gridY;
 				if((tmpx!=m_moving->x()) ||(tmpy!=m_moving->y()))
-					m_moving->move(tmpx,tmpy);
+					m_moving->move(tmpx,tmpy);*/
 				m_move = true;
 			}
 			return true; // eat
 		}
 		case QEvent::Paint:
 		{
-		
+
 			if(s != m_container)
 				return false;
 			int gridX = Form::gridX();
@@ -277,7 +285,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			{
 				for(int colcursor = 1; colcursor < cols; ++colcursor)
 				{
-					p.drawPoint(colcursor *gridX, rowcursor *gridY);
+					p.drawPoint(-1 + colcursor *gridX, -1 + rowcursor *gridY);
 				}
 			}
 			return false;
@@ -416,31 +424,16 @@ Container::setLayout(LayoutType type)
 }
 
 void
-Container::createBoxLayout(QObjectList *list)
+Container::createBoxLayout(WidgetList *list)
 {
-	QObjectList *olist = m_container->queryList("QWidget", 0, true, false);
 	QBoxLayout *layout = static_cast<QBoxLayout*>(m_layout);
-	QObject *obj;
 
-	QObjectListIt iter(*olist);
-	while ((obj = iter.current()) != 0)
-	{
-		if(obj->isA("ResizeHandle"))
-			break;
-		list->append(obj);
-		++iter;
-	}
-	delete olist;
-
+	for(ObjectTreeItem *tree = m_tree->children()->first(); tree; tree = m_tree->children()->next())
+		list->append( tree->widget());
 	list->sort();
 
-	QObjectListIt it(*list);
-	while ((obj = it.current()) != 0)
-	{
-		QWidget *w = static_cast<QWidget*>(obj);
-		layout->addWidget(w);
-		++it;
-	}
+	for(QWidget *obj = list->first(); obj; obj = list->next())
+		layout->addWidget(obj);
 	delete list;
 
 //	if(!m_container->parentWidget()->inherits("QWidgetStack"))

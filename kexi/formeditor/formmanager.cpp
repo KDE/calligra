@@ -63,7 +63,7 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 	m_editor = 0;
 }
 
-void 
+void
 FormManager::setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview)
 {
 	m_editor = editor;
@@ -90,7 +90,7 @@ FormManager::insertWidget(const QString &classname)
 	{
 		form->toplevelContainer()->widget()->setCursor(QCursor(CrossCursor));
 	}
-	
+
 	m_inserting = true;
 	m_insertClass = classname;
 }
@@ -216,22 +216,6 @@ FormManager::createBlankForm(const QString &classname, const char *name, QWidget
 	initForm(form);
 
 	return 0;
-/*
-	m_forms.append(form);
-	m_treeview->setForm(form);
-	m_active = form;
-	m_count++;
-	m_buffer->setWidget(w);
-
-	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget*)));
-	connect(form, SIGNAL(selectionChanged(QWidget*)), m_treeview, SLOT(setSelWidget(QWidget*)));
-	connect(form, SIGNAL(childAdded(ObjectTreeItem* )), m_treeview, SLOT(addItem(ObjectTreeItem*)));
-	connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
-	connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), form, SLOT(changeName(const QString&, const QString&)));
-	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget*)));
-
-	return w;
-*/
 }
 
 void
@@ -254,12 +238,14 @@ FormManager::loadForm()
 {
 //	QString n = "Form" + QString::number(m_count + 1);
 	Form *form = new Form(this);//, n.latin1());
-	if(!FormIO::loadForm(form, m_parent))
+	QWidget *w = new QWidget(m_parent);
+	form->createToplevel(w);
+	if(!FormIO::loadForm(form, w))
 	{
 		delete form;
 		return;
 	}
-
+	w->show();
 	initForm(form);
 }
 
@@ -305,6 +291,19 @@ FormManager::saveFormAs()
 	m_buffer->checkModifiedProp();
 	if (activeForm())
 		FormIO::saveForm(activeForm());
+}
+
+void
+FormManager::previewForm(Form *form, QWidget *container)
+{
+	QDomDocument domDoc;
+	FormIO::saveFormToDom(form, domDoc);
+
+	Form *myform = new Form(this, form->objectTree()->name().latin1());
+	myform->createToplevel(container);
+	FormIO::loadFormFromDom(myform, container, domDoc);
+
+	container->show();
 }
 
 bool
@@ -355,7 +354,7 @@ FormManager::copyWidget()
 		parent = m_domDoc.createElement("UI");
 		m_domDoc.appendChild(parent);
 	}
-	
+
 	QWidget *w;
 	for(w = list->first(); w; w= list->next())
 	{
@@ -380,7 +379,7 @@ FormManager::pasteWidget()
 		return;
 	if(!activeForm())
 		return;
-	
+
 	if(m_domDoc.namedItem("UI").firstChild().nextSibling().isNull())
 	{
 		QDomElement widg = m_domDoc.namedItem("UI").firstChild().toElement();

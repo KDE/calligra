@@ -27,6 +27,7 @@
 class QEvent;
 class QWidget;
 class QLayout;
+typedef QPtrList<QWidget> WidgetList;
 
 namespace KFormDesigner {
 
@@ -45,7 +46,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 
 	public:
 		enum LayoutType { NoLayout=0, HBox, VBox, Grid };
-	
+
 		/**
 		 * Creates a Container from the widget \a container, which have \a toplevel as parent Container.
 		 */
@@ -124,7 +125,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		/*! Internal function to create a HBoxLayout or VBoxLayout for this container. \a list is a subclass of QObjectList that can sort widgets
 		   following their position (such as HorWidgetList or VerWidgetList).
 		  */
-		void		createBoxLayout(QObjectList *list);
+		void		createBoxLayout(WidgetList *list);
 
 	private:
 		// the watched container and it's toplevel one...

@@ -49,7 +49,7 @@ ObjectPropertyBuffer::changeProperty(const QString &property, const QVariant &va
 {
 	kdDebug() << "ObjPropBuffer::changeProperty(): changing: " << property << endl;
 	KexiPropertyBuffer::changeProperty(property, value);
-	
+
 	if(property == "name")
 		emit nameChanged(m_object->name(), value.toString());
 
@@ -70,6 +70,9 @@ ObjectPropertyBuffer::changeProperty(const QString &property, const QVariant &va
 		}
 		else
 		{
+			if(property == "geometry")
+				return;
+
 			QWidget *w;
 			for(w = m_widgets.first(); w; w = m_widgets.next())
 			{
@@ -85,7 +88,8 @@ void
 ObjectPropertyBuffer::setWidget(QWidget *widg)
 {
 	kdDebug() << "ObjectPropertyBuffer::setWidget()" << endl;
-	QObject *obj = (QObject*)widg; 
+	QObject *obj = (QObject*)widg;
+
 	if(obj==m_object && !m_multiple)
 		return;
 
@@ -94,7 +98,7 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 	m_multiple = false;
 	checkModifiedProp();
 	kdDebug() << "loading object = " << widg->name() << endl;
-	
+
 	if(m_object)
 		m_object->removeEventFilter(this);
 
@@ -127,7 +131,7 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 				else
 				{
 					QStringList values = descList(QStringList::fromStrList(keys));
-					
+
 					add(new KexiProperty(meta->name(), meta->valueToKey(obj->property(meta->name()).toInt()),
 						QStringList::fromStrList(keys), values, desc));
 				}
@@ -135,8 +139,16 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 			else
 				add(new KexiProperty(meta->name(), obj->property(meta->name()), desc));
 		}
+
+		ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(widg->name());
+		if(tree->modifProp()->contains(meta->name()))
+		{
+			QVariant v = (*this)[meta->name()]->value();
+			(*this)[meta->name()]->setValue( tree->modifProp()->find(meta->name()).data() , false);
+			(*this)[meta->name()]->setValue(v, true);
+		}
 	}
-	
+
 	if(m_manager->activeForm())
 	{
 		ObjectTreeItem *objectIt = m_manager->activeForm()->objectTree()->lookup(widg->name());
@@ -206,7 +218,7 @@ ObjectPropertyBuffer::showMultipleProperty(const QString &property, const QStrin
 bool
 ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
 {
-	if(o==m_object)
+	if(o==m_object && !m_multiple)
 	{
 		if((ev->type() == QEvent::Resize) || (ev->type() == QEvent::Move))
 		{
@@ -237,7 +249,7 @@ ObjectPropertyBuffer::checkModifiedProp()
 				if((name == "hAlign") || (name == "vAlign") || (name == "wordbreak") || (name == "layout"))
 						return;
 				if(it.current()->changed())
-					treeIt->addModProperty(name);
+					treeIt->addModProperty(name, it.current()->oldValue());
 			}
 		}
 	}
@@ -288,7 +300,7 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QObject *ob
 	QStringList keys = QStringList::fromStrList( meta->valueToKeys(obj->property("alignment").toInt()) );
 	kdDebug() << "keys is " << keys.join("|") << endl;
 
-	
+
 	if(!keys.grep("AlignHCenter").empty())
 		value = "AlignHCenter";
 	else if(!keys.grep("AlignRight").empty())

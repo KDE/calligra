@@ -77,7 +77,7 @@ ObjectTreeViewItem::paintCell(QPainter *p, const QColorGroup & cg, int column, i
 			p->fillRect(0,0,width, height(), QBrush(cg.highlight()));
 			p->setPen(cg.highlightedText());
 		}
-		
+
 		QFont f = listView()->font();
 		p->save();
 		if(isSelected())
@@ -85,11 +85,11 @@ ObjectTreeViewItem::paintCell(QPainter *p, const QColorGroup & cg, int column, i
 		p->setFont(f);
 		p->drawText(QRect(margin,0,width, height()-1), Qt::AlignVCenter, text(0));
 		p->restore();
-		
+
 		p->setPen( QColor(200,200,200) ); //like in t.v.
 		p->drawLine(width-1, 0, width-1, height()-1);
 	}
-	
+
 	p->setPen( QColor(200,200,200) ); //like in t.v.
 	p->drawLine(-150, height()-1, width, height()-1 );
 }
@@ -101,18 +101,18 @@ ObjectTreeViewItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int
 	KListViewItem *item = (KListViewItem*)firstChild();
 	if(!item)
 		return;
-	
+
 	p->save();
 	p->translate(0,y);
 	while(item)
 	{
 		p->fillRect(0,0,w, item->height(), QBrush(item->backgroundColor()));
-		p->fillRect(-50,0,50, item->height(), QBrush(item->backgroundColor()));
+		p->fillRect(-150,0,150, item->height(), QBrush(item->backgroundColor()));
 		p->save();
 		p->setPen( QColor(200,200,200) ); //like in t.v.
 		p->drawLine(-150, item->height()-1, w, item->height()-1 );
 		p->restore();
-		
+
 		if(item->isSelected())
 		{
 			p->fillRect(0,0,w, item->height(), QBrush(cg.highlight()));
@@ -125,7 +125,7 @@ ObjectTreeViewItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int
 		if(!item->isOpen())
 			p->drawLine(6, item->height()/2 - 2, 6, item->height()/2 +2);
 		}
-		
+
 		p->translate(0, item->totalHeight());
 		item = (KListViewItem*)item->nextSibling();
 	}
@@ -156,7 +156,7 @@ ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name)
 	addColumn(i18n("Class"), 100);
 
 	connect((QObject*)header(), SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotColumnSizeChanged(int)));
-	connect(this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(emitSelChanged(QListViewItem*))); 
+	connect(this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(emitSelChanged(QListViewItem*)));
 
 	setFullWidth(true);
 	setAllColumnsShowFocus(true);
@@ -240,7 +240,7 @@ ObjectTreeView::setForm(Form *form)
 		return;
 	m_form = form;
 	clear();
-	m_topItem = new ObjectTreeViewItem(this); // Creates the hidden top Item 
+	m_topItem = new ObjectTreeViewItem(this); // Creates the hidden top Item
 	ObjectTree *tree = m_form->objectTree();
 	loadTree(tree, m_topItem);
 	m_topItem->setOpen(true);

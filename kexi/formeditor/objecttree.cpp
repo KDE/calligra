@@ -20,6 +20,7 @@
 #include <kdebug.h>
 #include <qwidget.h>
 #include <qstringlist.h>
+#include <qvariant.h>
 
 #include "form.h"
 #include "container.h"
@@ -84,12 +85,12 @@ ObjectTreeItem::debug(int ident)
 }
 
 void
-ObjectTreeItem::addModProperty(const QString &property)
+ObjectTreeItem::addModProperty(const QString &property, const QVariant &oldValue)
 {
-	if(m_props.grep(property).isEmpty())
+	if(!m_props.contains(property))
 	{
-		m_props.append(property);
-		kdDebug() << "added " << property << "   property is now: " << m_props.join("|") << endl;
+		m_props.insert(property, oldValue);
+		kdDebug() << "added " << property << endl;
 	}
 }
 
@@ -106,6 +107,12 @@ ObjectTree::ObjectTree(const QString &classn, const QString &name, QWidget *widg
 bool
 ObjectTree::rename(const QString &oldname, const QString &newname)
 {
+	if(oldname == m_name)
+	{
+		ObjectTreeItem::rename(newname);
+		return true;
+	}
+
 	ObjectTreeItem *it = lookup(oldname);
 	if(!it->rename(newname))  { return false;}
 	m_treeDict.remove(oldname);

@@ -71,7 +71,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		//! \return A pointer to the WidgetLibrary owned by this Manager.
 		WidgetLibrary*    lib() const { return m_lib; }
-		/*! \return true if one of the insert buttons was pressed and the forms are ready to create a widget. 
+		/*! \return true if one of the insert buttons was pressed and the forms are ready to create a widget.
 		 \return false otherwise.
 		 */
 		bool              inserting() const { return m_inserting; }
@@ -83,7 +83,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  to this one before showing it. This menu contains Copy/cut/paste/remove.
 		 */
 		KPopupMenu*       popupMenu() const { return m_popup; }
-		/*! The Container use this function to indicate the exec point of the contextual menu, which is used to position the 
+		/*! The Container use this function to indicate the exec point of the contextual menu, which is used to position the
 		  pasted widgets.
 		 */
 		void              setInsertPoint(const QPoint &p);
@@ -96,7 +96,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		*/
 		bool              isTopLevel(QWidget *w);
 
-		//! \return A pointer to the KexiPropertyEditor we use. 
+		//! \return A pointer to the KexiPropertyEditor we use.
 		KexiPropertyEditor* editor() const { return m_editor; }
 
 		/*! Creates a new blank Form, whose toplevel widget inherits \a classname. The Form is automatically shown. */
@@ -124,11 +124,11 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  is used if there is one (using Form::filename()).
 		 */
 		void saveForm();
-		/*! Save the active Form into a UI file. A "Save File" dialog is shown to choose a name for the file, even if the Form has 
+		/*! Save the active Form into a UI file. A "Save File" dialog is shown to choose a name for the file, even if the Form has
 		    already been saved.
 		 */
 		void saveFormAs();
-
+		void previewForm(Form *form, QWidget *w);
 		/*! Deletes the selected widget in active Form and all of its children. */
 		void deleteWidget();
 		/*! Copies the slected widget and all its children of the active Form using an XML representation. */
@@ -140,7 +140,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		 */
 		void pasteWidget();
 
-		/*! This slot is called when the user presses a "Widget" toolbar button or a "Widget" menu item. Prepares all Forms for 
+		/*! This slot is called when the user presses a "Widget" toolbar button or a "Widget" menu item. Prepares all Forms for
 		  creation of a new widget (ie changes cursor ...).
 		 */
 		void insertWidget(const QString &classname);

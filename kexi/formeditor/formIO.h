@@ -39,34 +39,37 @@ class WidgetLibrary;
 
 /** This class act as a namespace for all .ui files related functions, ie saving/loading .ui files.
     You don't need to create a FormIO object, as all methods are static.\n
-    This class is able to read and write Forms to .ui files, and to save each type of properties, including set and enum 
+    This class is able to read and write Forms to .ui files, and to save each type of properties, including set and enum
     properties, and pixmaps(pixmap-related code was taken from Qt Designer).
  **/
  //! A class to save/load forms from .ui files
 class KFORMEDITOR_EXPORT FormIO : public QObject
 {
 	Q_OBJECT
-	
+
 	public:
 		FormIO(QObject *parent, const char *name);
 		~FormIO(){;}
 
+		static int saveFormToDom(Form *form, QDomDocument &domDoc);
 		/*! \return 0 if saving failed, 1 otherwise\n
-		    Save the Form \a form to the file \a filename. If \a filename is null or not given, 
+		    Save the Form \a form to the file \a filename. If \a filename is null or not given,
 		    a Save File dialog will be shown to choose dest file.
 		    \todo Add errors code and error dialog
 		*/
 		static int saveForm(Form *form, const QString &filename=QString::null);
-
 		/*! \return 0 if faild otherwiese 1
 		 * uses a QByteArray as dest
 		 */
 		static int saveForm(Form *form, QByteArray &dest);
 
+		static int loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf);
+
 		/*! \return 0 if faild otherwise 1
 		 * loads widgets on ground and sets properties to ground
 		 */
-		static int loadForm(Form *form, QByteArray &src, QWidget *ground);
+		static int loadForm(Form *form, QWidget *container, QByteArray &src);
+
 
 		/*! \return 0 if loading failed, 1 otherwise\n
 		   Load the .ui file \a filename in the Form \a form. If \a filename is null or not given,
@@ -74,16 +77,16 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		   createToplevelWidget() is used to load the Form's toplevel widget.
 		   \todo Add errors code and error dialog
 		*/
-		static int loadForm(Form *form, QWidget *parent, const QString &filename=QString::null);
+		static int loadForm(Form *form, QWidget *container, const QString &filename=QString::null);
 
-		/*! Save the widget associated to the ObjectTreeItem \a item into DOM document \a domDoc, 
+		/*! Save the widget associated to the ObjectTreeItem \a item into DOM document \a domDoc,
 		    with \a parent as parent node.
-		    It calls readProp() for each object property, readAttribute() for each attribute and 
+		    It calls readProp() for each object property, readAttribute() for each attribute and
 		    itself to save child widgets.\n
 		    This is used to copy/paste widgets.
 		*/
 		static void         saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc);
-		/*! Loads the widget associated to the QDomElement \a el into the Container \a container, 
+		/*! Loads the widget associated to the QDomElement \a el into the Container \a container,
 		    with \a parent as parent widget. \a lib is the WidgetLibrary to use to create the widget.
 		    If parent = 0, the Container::widget() is used as parent widget.
 		    This is used to copy/paste widgets.
@@ -114,7 +117,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		/*! Creates a toplevel widget from the QDomElement \a element in the Form \a form, with \a parent as parent widget.
 		  It calls readProp() and loadWidget() to load child widgets.
 		*/
-		static void         createToplevelWidget(Form *form, QWidget *parent, QDomElement &element);
+		static void         createToplevelWidget(Form *form, QWidget *container, QDomElement &element);
 
 		/*! \return the name of the pixmap saved, to use to access it
 		    This function save the QPixmap \a pixmap into the DOM document \a domDoc.
@@ -126,7 +129,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    Decoding code is taken from QT Designer.
 		*/
 		static QPixmap      loadImage(QDomDocument domDoc, QString name);
-		/*! Loads the layout (ie calls Container::setLayout() ) which type is \a name, 
+		/*! Loads the layout (ie calls Container::setLayout() ) which type is \a name,
 		   and belonging to the widget represented by the ObjectTreeItem \a tree. */
 		static void         loadLayout(const QString &name, ObjectTreeItem *tree);
 
