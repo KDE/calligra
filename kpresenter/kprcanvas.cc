@@ -513,25 +513,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
                     firstX = contentsPoint.x();
                     firstY = contentsPoint.y();
-#if 0
-                    if ( (int)objectList().count() - 1 >= 0 ) {
-                        for ( int i = objectList().count() - 1; i >= 0 ; i-- ) {
-                            kpobject = objectList().at( i );
-                            KoSize s = kpobject->getSize();
-                            KoPoint pnt = kpobject->getOrig();
-                            KoRect rect(pnt.x() , pnt.y() , s.width(), s.height() );
-                            if ( rect.contains( docPoint ) ) {
-                                overObject = true;
-                                if ( kpobject->isSelected() && modType == MT_MOVE ) deSelAll = false;
-                                if ( kpobject->isSelected() && modType != MT_MOVE && modType != MT_NONE ) {
-                                    oldBoundingRect=getOldBoundingRect(kpobject);
-                                    resizeObjNum = i;
-                                }
-                                break;
-                            }
-                       }
-                    }
-#endif
 		    kpobject=m_activePage->getObjectResized(docPoint, modType, deSelAll, overObject );
 		    if(kpobject)
 		      {
@@ -669,9 +650,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         }
 
         if ( e->button() == RightButton && toolEditMode == TEM_MOUSE ) {
-            int num = getObjectAt( docPoint );
-            if ( num != -1 ) {
-                kpobject = objectList().at( num );
+            KPObject*obj = getObjectAt( docPoint );
+            if ( obj ) {
+                kpobject = obj;
 		QPoint pnt = QCursor::pos();
 		mousePressed = false;
                 bool state=!( e->state() & ShiftButton ) && !( e->state() & ControlButton ) && !kpobject->isSelected();
@@ -1645,15 +1626,14 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
 }
 
 /*========================== get object ==========================*/
-int KPrCanvas::getObjectAt( const KoPoint&pos )
+KPObject* KPrCanvas::getObjectAt( const KoPoint&pos )
 {
-    for ( int i = objectList().count() - 1; i >= 0 ; i-- ) {
-        KPObject * kpobject = objectList().at( i );
-        if ( kpobject->contains( pos ) )
-            return i;
+  KPObject *kpobject=m_activePage->getObjectAt(pos);
+  if( !kpobject)
+    {
+      kpobject=m_view->kPresenterDoc()->stickyPage()->getObjectAt(pos);
     }
-
-    return -1;
+  return kpobject;
 }
 
 /*======================= select object ==========================*/

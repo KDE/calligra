@@ -241,6 +241,7 @@ public:
 
     KPObject * getObjectResized(const KoPoint &pos, ModifyType modType, bool &desel, bool &_over );
     KPObject * getEditObj(const KoPoint & pos);
+    KPObject* getObjectAt( const KoPoint&pos );
 
 protected:
 

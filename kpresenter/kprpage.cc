@@ -3486,7 +3486,7 @@ KPObject * KPrPage::getObjectResized(const KoPoint &pos, ModifyType modType, boo
 		{
 		  return kpobject;
 		}
-	    }
+	    } 
 	}
     }
   kpobject=0L;
@@ -3509,4 +3509,18 @@ KPObject * KPrPage::getEditObj(const KoPoint & pos)
     }
   kpobject=0L;
   return kpobject;
+}
+
+
+KPObject* KPrPage::getObjectAt( const KoPoint&pos )
+{
+  KPObject *obj=0L;
+  for ( int i = m_objectList.count() - 1; i >= 0 ; i-- ) {
+    obj = m_objectList.at( i );
+    if ( obj->contains( pos ) )
+      return obj;
+  }
+  obj=0L;
+
+  return obj;
 }

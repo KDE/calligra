@@ -251,7 +251,7 @@ protected:
     virtual void mouseDoubleClickEvent( QMouseEvent *e );
     virtual void wheelEvent( QWheelEvent *e );
     virtual void resizeEvent( QResizeEvent *e );
-    int getObjectAt( const KoPoint&pos );
+    KPObject *getObjectAt( const KoPoint&pos );
     virtual void focusInEvent( QFocusEvent* ) {}
     virtual void focusOutEvent( QFocusEvent* ) {}
     virtual void enterEvent( QEvent *e );
