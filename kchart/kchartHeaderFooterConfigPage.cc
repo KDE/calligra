@@ -6,6 +6,7 @@
 #include "kchartHeaderFooterConfigPage.moc"
 
 #include <kapplication.h>
+#include <kdialog.h>
 #include <klocale.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -24,8 +25,10 @@ KChartHeaderFooterConfigPage::KChartHeaderFooterConfigPage( KChartParams* params
     QGridLayout* layout = new QGridLayout( 1, 3 );
     toplevel->addLayout( layout );
 
-    QButtonGroup* gb1 = new QButtonGroup( i18n("Header/Footer"), this );
-    QGridLayout *grid1 = new QGridLayout(gb1,3,4,15,8);
+    QButtonGroup* gb1 = new QButtonGroup( 0, Qt::Vertical, i18n("Header/Footer"), this );
+    gb1->layout()->setSpacing(KDialog::spacingHint());
+    gb1->layout()->setMargin(KDialog::marginHint());
+    QGridLayout *grid1 = new QGridLayout(gb1->layout(),3,4);
 
     QLabel *lab=new QLabel(i18n("Title:"),gb1);
     grid1->addWidget(lab,0,0);
