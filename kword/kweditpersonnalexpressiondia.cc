@@ -217,7 +217,6 @@ void KWEditPersonnalExpression::slotDelGroup()
     m_typeExpression->removeItem(m_typeExpression->currentItem());
     m_typeExpression->setCurrentItem(0 );
     slotExpressionActivated( m_typeExpression->currentText() );
-    m_listOfExpression->clear();
     bool state=(m_typeExpression->count()>0);
     m_addExpression->setEnabled(state);
     m_delExpression->setEnabled(state);
