@@ -92,6 +92,11 @@ void ApplicationWindowSpell::spellCheckerFinished()
 void ApplicationWindowSpell::spellCheckerMisspelling( const QString &text, const QStringList &, unsigned int pos)
 {
     kdDebug()<<" void ApplicationWindowSpell::spellCheckerMisspelling( const QString &text, const QStringList &, unsigned int ) :"<<text<<" pos :"<<pos<<endl;
+//todo fix me parag id !!!!
+    kdDebug()<<" pos :"<<pos<<" text :"<<text<<" text.length() :"<<text.length()<<endl;
+    multi->removeSelection();
+    multi->setSelection( 0, pos, 0, pos +text.length());
+
 }
 
 void ApplicationWindowSpell::spellCheckerCorrected( const QString &orig , const QString & newWord , unsigned int pos )

@@ -342,7 +342,7 @@ void KOSpell::nextWord()
         if (ignorelist.findIndex(word.lower())!=-1)
             searchAgain = true;
     }
-    while ( searchAgain && (lastpos < origbuffer.length()-1));
+    while ( (word.isEmpty() || searchAgain) && (lastpos < origbuffer.length()-1));
 
     spellWord( word );
 }
@@ -407,7 +407,7 @@ void KOSpell::dialog(const QString & word, QStringList & sugg )
 
     connect (ksdlg, SIGNAL (command (int)), this, SLOT (dialog2(int)));
     ksdlg->init (word, &sugg);
-    emit misspelling (word, sugg, lastpos);
+    emit misspelling (word, sugg, lastpos-word.length()-1 /* -1 for next space*/);
 
     emitProgress();
     ksdlg->show();
