@@ -1743,6 +1743,7 @@ bool KSpreadTable::shiftRow( const QPoint &_marker )
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( _marker, false, KSpreadTable::ColumnInsert, name() );
     refreshChart(_marker, false, KSpreadTable::ColumnInsert);
+    refreshMergedCell();
     emit sig_updateView( this );
 
     return res;
@@ -1758,6 +1759,7 @@ bool KSpreadTable::shiftColumn( const QPoint& marker )
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( marker, false, KSpreadTable::RowInsert, name() );
     refreshChart(marker, false, KSpreadTable::RowInsert);
+    refreshMergedCell();
     emit sig_updateView( this );
 
     return res;
@@ -1773,6 +1775,7 @@ void KSpreadTable::unshiftColumn( const QPoint& marker )
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( marker, false, KSpreadTable::RowRemove, name() );
     refreshChart( marker, false, KSpreadTable::RowRemove );
+    refreshMergedCell();
     emit sig_updateView( this );
 }
 
@@ -1786,6 +1789,7 @@ void KSpreadTable::unshiftRow( const QPoint& marker )
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( marker, false, KSpreadTable::ColumnRemove, name() );
     refreshChart( marker, false, KSpreadTable::ColumnRemove );
+    refreshMergedCell();
     emit sig_updateView( this );
 }
 
@@ -1807,6 +1811,7 @@ bool KSpreadTable::insertColumn( int col )
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert, name() );
     refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert );
+    refreshMergedCell();
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
 
@@ -1831,6 +1836,7 @@ bool KSpreadTable::insertRow( int row )
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowInsert, name() );
     refreshChart( QPoint( 1, row ), true, KSpreadTable::RowInsert );
+    refreshMergedCell();
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
 
@@ -1855,6 +1861,7 @@ void KSpreadTable::removeColumn( int col )
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove, name() );
     refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove );
+    refreshMergedCell();
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
 }
@@ -1877,6 +1884,7 @@ void KSpreadTable::removeRow( int row )
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowRemove, name() );
     refreshChart(QPoint( 1, row ), true, KSpreadTable::RowRemove);
+    refreshMergedCell();
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
 }
@@ -1920,6 +1928,18 @@ KSpreadCell* c = m_cells.firstCell();
                 bind->cellChanged( 0 );
         }
 }
+
+void KSpreadTable::refreshMergedCell()
+{
+KSpreadCell* c = m_cells.firstCell();
+  for( ;c; c = c->nextCell() )
+  {
+  if(c->isForceExtraCells())
+        c->forceExtraCells( c->column(), c->row(), c->extraXCells(), c->extraYCells() );
+  }
+
+}
+
 
 void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref, QString tabname)
 {

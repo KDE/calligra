@@ -321,8 +321,8 @@ void KSpreadCell::move( int col, int row )
     setCalcDirtyFlag();
     setDisplayDirtyFlag();
 
-    int ex = extraXCells();
-    int ey = extraYCells();
+    //int ex = extraXCells();
+    //int ey = extraYCells();
 
     if ( m_pObscuringCell )
         m_pObscuringCell = 0;
@@ -340,8 +340,8 @@ void KSpreadCell::move( int col, int row )
     m_iRow = row;
 
     // Reobscure cells if we are forced to do so.
-    if ( m_bForceExtraCells )
-        forceExtraCells( col, row, ex, ey );
+    //if ( m_bForceExtraCells )
+      //  forceExtraCells( col, row, ex, ey );
 }
 
 void KSpreadCell::setLayoutDirtyFlag()

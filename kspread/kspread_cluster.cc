@@ -140,7 +140,7 @@ void KSpreadCluster::insert( KSpreadCell* cell, int x, int y )
     }
     m_first = cell;
 }
-
+    
 void KSpreadCluster::remove( int x, int y )
 {
     if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
@@ -165,6 +165,10 @@ void KSpreadCluster::remove( int x, int y )
     {
 	if ( m_first == c )
 	    m_first = c->nextCell();
+        if(c->isForceExtraCells())
+        {
+                    c->forceExtraCells(c->column(),c->row(),0,0);
+        }
 	delete c;
     }
     else
@@ -222,7 +226,7 @@ KSpreadCell* KSpreadCluster::firstCell()
 bool KSpreadCluster::shiftRow( const QPoint& marker, bool& work )
 {
     work = FALSE;
-	
+
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
 	return FALSE;
@@ -257,7 +261,7 @@ bool KSpreadCluster::shiftRow( const QPoint& marker, bool& work )
 	    for( int k = right; k >= left; --k )
 	    {
 		KSpreadCell* c = cl[ dy * KSPREAD_CLUSTER_LEVEL2 + k ];
-		if ( c )		
+		if ( c )
 	        {
 		    remove( c->column(), c->row() );
 		    c->move( c->column() + 1, c->row() );
@@ -301,7 +305,7 @@ bool KSpreadCluster::shiftColumn( const QPoint& marker, bool& work )
 	if ( cl )
         {
 	    work = TRUE;
-	
+
 	    int top = 0;
 	    if ( i == cy )
 		top = dy;
@@ -311,7 +315,7 @@ bool KSpreadCluster::shiftColumn( const QPoint& marker, bool& work )
 	    for( int k = bottom; k >= top; --k )
 	    {
 		KSpreadCell* c = cl[ k * KSPREAD_CLUSTER_LEVEL2 + dx ];
-		if ( c )		
+		if ( c )
 	        {
 		    remove( c->column(), c->row() );
 		    c->move( c->column(), c->row() + 1 );
@@ -401,7 +405,7 @@ void KSpreadCluster::unshiftColumn( const QPoint& marker, bool& work )
 	if ( cl )
         {
 	    work = TRUE;
-	
+
 	    int top = 0;
 	    if ( i == cy )
 		top = dy + 1;
@@ -409,7 +413,7 @@ void KSpreadCluster::unshiftColumn( const QPoint& marker, bool& work )
 	    for( int k = top; k <= bottom; ++k )
 	    {
 		KSpreadCell* c = cl[ k * KSPREAD_CLUSTER_LEVEL2 + dx ];
-		if ( c )		
+		if ( c )
 	        {
 		    remove( c->column(), c->row() );
 		    c->move( c->column(), c->row() - 1 );
@@ -445,7 +449,7 @@ void KSpreadCluster::unshiftRow( const QPoint& marker, bool& work )
 	if ( cl )
         {
 	    work = TRUE;
-	
+
 	    int left = 0;
 	    if ( i == cx )
 		left = dx + 1;
@@ -453,7 +457,7 @@ void KSpreadCluster::unshiftRow( const QPoint& marker, bool& work )
 	    for( int k = left; k <= right; ++k )
 	    {
 		KSpreadCell* c = cl[ dy * KSPREAD_CLUSTER_LEVEL2 + k ];
-		if ( c )		
+		if ( c )
 	        {
 		    remove( c->column(), c->row() );
 		    c->move( c->column() - 1, c->row() );
@@ -482,7 +486,7 @@ void KSpreadCluster::removeColumn( int col )
 		if ( cl[ y2 * KSPREAD_CLUSTER_LEVEL2 + dx ] )
 		    remove( col, y1 * KSPREAD_CLUSTER_LEVEL2 + y2 );
     }
-		
+
     for( int t1 = 0; t1 < KSPREAD_CLUSTER_LEVEL1; ++t1 )
     {
 	bool work = TRUE;
@@ -789,7 +793,7 @@ bool KSpreadColumnCluster::removeColumn( int column )
 	    for( int k = left; k <= right; ++k )
 	    {
 		ColumnLayout* c = cl[ k ];
-		if ( c )		
+		if ( c )
 	        {
 		    removeElement( c->column() );
 		    c->setColumn( c->column() - 1 );
@@ -1010,7 +1014,7 @@ bool KSpreadRowCluster::insertRow( int row )
 	    for( int k = right; k >= left; --k )
 	    {
 		RowLayout* c = cl[ k ];
-		if ( c )		
+		if ( c )
 	        {
 		    removeElement( c->row() );
 		    c->setRow( c->row() + 1 );
@@ -1050,7 +1054,7 @@ bool KSpreadRowCluster::removeRow( int row )
 	    for( int k = left; k <= right; ++k )
 	    {
 		RowLayout* c = cl[ k ];
-		if ( c )		
+		if ( c )
 	        {
 		    removeElement( c->row() );
 		    c->setRow( c->row() - 1 );

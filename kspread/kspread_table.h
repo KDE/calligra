@@ -533,6 +533,11 @@ public:
      */
     void refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref);
     /**
+     * Refresh merged cell when you insert or remove row or column
+     */
+    void refreshMergedCell();
+
+    /**
      * @return true if this table is hidden
      */
     bool isHidden() { return m_bTableHide; }
