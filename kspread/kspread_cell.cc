@@ -335,35 +335,21 @@ QString KSpreadCell::columnName() const
 
 QString KSpreadCell::columnName( int column )
 {
-    int tmp;
-
-    /* we start with zero */
-    tmp = column - 1;
-
-    if (tmp < 26) /* A-Z */
-        return QString("%1").arg((char) ('A' + tmp));
-
-    tmp -= 26;
-    if (tmp < 26*26) /* AA-ZZ */
-        return QString("%1%2").arg( (char) ('A' + tmp / 26) )
-            .arg( (char) ('A' + tmp % 26) );
-
-    tmp -= 26*26;
-    if (tmp < 26 * 26 * 26 ) /* AAA-ZZZ */
-        return QString("%1%2%3").arg( (char) ('A' + tmp / (26 * 26)) )
-            .arg( (char) ('A' + (tmp / 26) % 26 ) )
-            .arg( (char) ('A' + tmp % 26) );
-
-    tmp -= 26*26*26;
-    if (tmp < 26 * 26 * 26 * 26) /* AAAA-ZZZZ */
-        return QString("%1%2%3%4").arg( (char) ('A' + (tmp / (26 * 26 * 26 )      ) ))
-            .arg( (char) ('A' + (tmp / (26 * 26      ) % 26 ) ))
-            .arg( (char) ('A' + (tmp / (26           ) % 26 ) ))
-            .arg( (char) ('A' + (tmp                   % 26 ) ));
-
-    /* limit is currently 26^4 + 26^3 + 26^2 + 26^1 = 475254 */
-    kdDebug(36001) << "invalid column\n";
-    return QString("@@@");
+    QString str;
+    unsigned digits = 1;
+    unsigned offset = 0;
+  
+    column--;
+  
+    if( column > 4058115285 ) return  QString("@@@");
+  
+    for( unsigned limit = 26; column >= limit+offset; limit *= 26, digits++ )
+        offset += limit;
+      
+    for( unsigned c = column - offset; digits; --digits, c/=26 )
+        str.prepend( QChar( 'A' + (c%26) ) );
+    
+    return str;
 }
 
 KSpreadCell::Content KSpreadCell::content() const
