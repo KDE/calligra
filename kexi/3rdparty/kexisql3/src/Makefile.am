@@ -47,7 +47,7 @@ libkexisql3_la_SOURCES = \
 
 #tclsqlite.c
 
-AM_CFLAGS = -DNO_TCL=1 -DHAVE_READLINE=1
+AM_CFLAGS = -DNO_TCL=1
 
 ksqlite_SOURCES = shell.c
 ksqlite_LDADD = $(top_builddir)/kexi/3rdparty/kexisql3/src/libkexisql3.la $(LIBREADLINE)

@@ -10,7 +10,7 @@ libkexisql2_la_SOURCES = attach.c auth.c btree.c btree_rb.c build.c date.c expr.
 insert.c os.c pager.c parse.c pragma.c printf.c random.c select.c copy.c delete.c encode.c \
 table.c tokenize.c trigger.c update.c util.c vacuum.c vdbe.c vdbeaux.c where.c opcodes.c main.c
 
-AM_CFLAGS = -DNO_TCL=1 -DHAVE_READLINE=1
+AM_CFLAGS = -DNO_TCL=1
 
 ksqlite2_SOURCES = shell.c
 ksqlite2_LDADD = $(top_builddir)/kexi/3rdparty/kexisql/src/libkexisql2.la $(LIBREADLINE)
