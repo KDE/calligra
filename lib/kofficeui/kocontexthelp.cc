@@ -31,6 +31,8 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kcursor.h>
+#include <kapplication.h>
+#include <qstring.h>
 
 KoVerticalLabel::KoVerticalLabel( QWidget* parent, const char* name )
 		: QWidget( parent, name, Qt::WRepaintNoErase )
@@ -215,6 +217,23 @@ void KoHelpView::mouseReleaseEvent( QMouseEvent* e )
 	if ( ( !currentAnchor.isEmpty() ) && ( currentAnchor == currentText->anchorAt( e->pos() ) ) )
 	{
 		e->accept();
+		if (currentAnchor.startsWith("help://#")) {
+			//that's not really usefull, since koffice documents can be embedded
+			kapp->invokeHelp(currentAnchor.right(currentAnchor.length()-8));
+		}
+		else
+		if (currentAnchor.startsWith("help://")) {
+			// that's the usefull version of a help link
+			QString helpapp=currentAnchor.right(currentAnchor.length()-7);
+			QString helpanchor;
+			int pos;
+			if ((pos=helpapp.find("#"))!=-1) {
+				helpanchor=helpapp.right(helpapp.length()-pos-1);
+				helpapp=helpapp.left(pos);
+			}
+			kapp->invokeHelp(helpanchor,helpapp);
+		}
+		else
 		emit linkClicked( currentAnchor );
 		currentAnchor = "";
 	}
