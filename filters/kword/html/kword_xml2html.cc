@@ -287,18 +287,15 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
         return;
     }
 
-    kdDebug() << "SearchText. Markup found. Token=" << pToken->zText << endl;
+    //kdDebug() << "SearchText. Markup found. Token=" << pToken->zText << endl;
 
     if(!(strcmp(pToken->zText,"FRAMESET"))) {
-        int iValue;
-        int iHaveRow;
-        int iAmImage;
+        int iValue = 0;
+        int iHaveRow = 0;
+        int iAmImage = 0;
         int iRowValue,iColValue;
-        Arg *pArg;
-        iHaveRow = 0;
-        iAmImage = 0;
-        iValue = 0;
-        pArg = ((Markup *)pToken)->pArg;
+        Arg *pArg = ((Markup *)pToken)->pArg;
+        int iFrameInfo = 0;
         while(pArg) {
             if(!(strcmp(pArg->zName,"FRAMETYPE"))) {
                 iValue = atoi(pArg->zValue);
@@ -309,14 +306,17 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 if(iValue==2) {
                     iAmImage = 1;
                 }
+                //kdDebug() << "This frame has a frame type of " << iValue << endl;
             }
             else if(!(strcmp(pArg->zName,"ROW"))) {
                 iHaveRow = 1;
                 iRowValue = atoi(pArg->zValue);
             }
-            else if(!(strcmp(pArg->zName,"COL"))) {
+            else if(!(strcmp(pArg->zName,"COL")))
                 iColValue = atoi(pArg->zValue);
-            }
+            else if(!(strcmp(pArg->zName,"FRAMEINFO")))
+                iFrameInfo = atoi(pArg->zValue);
+
             pArg=pArg->pNext;
         }
         /* If we have found a row (and a column), then we have a new table cell.
@@ -424,7 +424,11 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
             pHTMLTree->u.Image.iBottom = 0;
             pHTMLTree->u.Image.zFileName = 0;
         }
-        SearchText(((Markup*)pToken)->pContent,pHTMLTree,Start);
+        // Ignore frames which are not FI_BODY (e.g. headers and footers)
+        // i.e. only look into normal frames
+        if ( iFrameInfo == 0 )
+            SearchText(((Markup*)pToken)->pContent,pHTMLTree,Start);
+
         SearchText(pToken->pNext,pHTMLTree,Start);
     }
     else if(!(strcmp(pToken->zText,"TEXT"))) {
@@ -516,9 +520,8 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 if(pHTMLTree->ObjectType != HTML_Text)
                     kdWarning() << "Shouldn't that be a text ? " << (int)pHTMLTree->ObjectType << endl;
                 pFormat = pHTMLTree->u.TextStruct.pFormat;
-                kdDebug() << "Format set to " << pFormat << endl;
+                //kdDebug() << "Format set to " << pFormat << endl;
             }
-            kdDebug() << "Processing FORMAT tag" << endl;
             pArg = ((Markup *)pToken)->pArg;
             while(pFormat->pNext) {
                 pFormat = pFormat->pNext;
@@ -628,7 +631,6 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
             }
             else {
                 pFormat = pHTMLTree->u.TextStruct.pFormat;
-                kdDebug() << "COLOR. Setting format to " << pFormat << endl;
                 pTextStruct = &(pHTMLTree->u.TextStruct);
             }
             if(!pTextStruct->zText) {}
@@ -2054,9 +2056,8 @@ void mainFunc( const char *data ) {
     pToken = ParseXml(zXmlFile,&j);
 
     // Debug
-    PrintXml( pToken, 0 );
+    //PrintXml( pToken, 0 );
 
-    kdDebug() << "Calling SearchText" << endl;
     SearchText(pToken,pHTMLTree,Scratch);
 
     while((pHTMLTree)&&(pHTMLTree->ObjectType!=HTML_Null)) {
