@@ -27,15 +27,15 @@ using namespace Sidewinder;
 class FormatFont::Private
 {
 public:
-  bool null;
+  bool null : 1 ;
+  bool bold  : 1;
+  bool italic : 1;
+  bool underline : 1;
+  bool strikeout : 1;
+  bool subscript : 1;
+  bool superscript : 1;
   UString fontFamily;
   double fontSize;
-  bool bold;
-  bool italic;
-  bool underline;
-  bool strikeout;
-  bool subscript;
-  bool superscript;
 };
 
 FormatFont::FormatFont()
