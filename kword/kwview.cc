@@ -1668,7 +1668,7 @@ void KWView::extraCreateTemplate()
     QPixmap pix( 45, 60 );
     pix.fill( Qt::white );
 
-    KTempFile tempFile;
+    KTempFile tempFile( QString::null, ".kwt" );
     tempFile.setAutoDelete(true);
 
     doc->saveNativeFormat( tempFile.name() );
