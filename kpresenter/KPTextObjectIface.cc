@@ -47,12 +47,6 @@ bool KPTextObjectIface::hasSelection() const
     return m_textobject->textObject()->hasSelection();
 }
 
-int KPTextObjectIface::numberOfParagraphs()
-{
-    return -1; // FIXME m_textobject->textObject()->paragraphs();
-}
-
-
 QString KPTextObjectIface::selectedText() const
 {
     return m_textobject->textObject()->selectedText();
@@ -61,4 +55,9 @@ QString KPTextObjectIface::selectedText() const
 void KPTextObjectIface::selectAll( bool select )
 {
     m_textobject->textObject()->selectAll(select);
+}
+
+void KPTextObjectIface::recalcPageNum( )
+{
+    m_textobject->recalcPageNum(m_textobject->kPresenterDocument());
 }

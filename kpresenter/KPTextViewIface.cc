@@ -44,3 +44,28 @@ void KPTextViewIface::insertLink(const QString &_linkName, const QString & hrefN
 {
     m_textview->insertLink(_linkName,hrefName);
 }
+
+void KPTextViewIface::clearSelection()
+{
+    m_textview->clearSelection();
+}
+
+void KPTextViewIface::selectAll()
+{
+    m_textview->selectAll();
+}
+
+void KPTextViewIface::cut()
+{
+    m_textview->cut();
+}
+
+void KPTextViewIface::copy()
+{
+    m_textview->copy();
+}
+
+void KPTextViewIface::paste()
+{
+    m_textview->paste();
+}

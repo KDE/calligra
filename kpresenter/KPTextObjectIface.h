@@ -36,9 +36,9 @@ public:
 k_dcop:
     DCOPRef startEditing();
     bool hasSelection() const;
-    int numberOfParagraphs();
     QString selectedText() const;
     void selectAll( bool select );
+    void recalcPageNum( );
 private:
     KPTextObject *m_textobject;
 

@@ -38,6 +38,13 @@ k_dcop:
     void insertVariable( int type, int subtype = 0 );
     void insertCustomVariable( const QString &name);
     void insertLink(const QString &_linkName, const QString & hrefName);
+    void clearSelection();
+    void selectAll();
+
+    void cut();
+    void copy();
+    void paste();
+
 private:
     KPTextView *m_textview;
 
