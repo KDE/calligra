@@ -25,7 +25,8 @@
 #include <qregexp.h>
 #include <qpaintdevicemetrics.h>
 #include <qprogressdialog.h>
-
+#include <qlabel.h>
+#include <qgroupbox.h>
 
 #include <koAutoFormatDia.h>
 #include "defs.h"
@@ -825,81 +826,6 @@ void KWView::insertNewCustomVariable()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->insertVariable( VT_CUSTOM, 0 );
-}
-
-void KWView::fileStatistics()
-{
-    ulong charsWithSpace = 0L;
-    ulong charsWithoutSpace = 0L;
-    ulong words = 0L;
-    ulong sentences = 0L;
-    ulong syllables = 0L;
-    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
-    int paragraphs = 0;
-    // count paragraphs for progress dialog:
-    for ( ; framesetIt.current(); ++framesetIt )
-    {
-        KWFrameSet *frameSet = framesetIt.current();
-        if ( frameSet->frameSetInfo() == KWFrameSet::FI_BODY && frameSet->isVisible() )
-            paragraphs += frameSet->paragraphs();
-    }
-    QProgressDialog progress( i18n( "Counting..." ), i18n( "Cancel" ), paragraphs, 0, "count", true );
-    progress.setMinimumDuration( 1000 );
-    progress.setProgress( 0 );
-    QPtrListIterator<KWFrameSet> framesetIt2( m_doc->framesetsIterator() );
-    for ( ; framesetIt2.current(); ++framesetIt2 )
-    {
-        KWFrameSet *frameSet = framesetIt2.current();
-        // Exclude headers and footers
-        if ( frameSet->frameSetInfo() == KWFrameSet::FI_BODY && frameSet->isVisible() )
-        {
-            if( ! frameSet->statistics( &progress, charsWithSpace, charsWithoutSpace, words, sentences, syllables ) )
-            {
-                // someone pressed "Cancel"
-                return;
-            }
-        }
-    }
-    // calculate Flesch reading ease score:
-    float flesch_score = 0;
-    if( words > 0 && sentences > 0 )
-        flesch_score = 206.835 - (1.015 * (words/sentences)) - (84.6 * syllables/words);
-    QString flesch;
-    QString flesch_score_string;
-    KLocale locale("kword");
-    flesch_score_string = locale.formatNumber(flesch_score, 1);
-    if( words < 200 ) {
-        // a kind of warning if too few words:
-        flesch = i18n("approximately %1").arg(flesch_score_string);
-    } else {
-        flesch = flesch_score_string;
-    }
-
-    KDialogBase dlg( KDialogBase::Plain, i18n( "Document Statistics" ),
-                     KDialogBase::Ok, KDialogBase::Ok, this, 0, true,
-                     true /* separator */ );
-
-    QVBoxLayout * vlayout = new QVBoxLayout( dlg.plainPage() );
-    vlayout->addWidget( new QLabel(
-              "<qt><center>" +i18n("Document Statistics") +"</center><hr/><br/>"
-              "<table>"
-              "<tr><td>" +i18n("Characters including spaces:")+
-              "</td> <td align=\"right\"><b>" +locale.formatNumber(charsWithSpace, 0)+ "</b></td></tr>"
-              "<tr><td>" +i18n("Characters without spaces:")+
-              "</td> <td align=\"right\"><b>" +locale.formatNumber(charsWithoutSpace, 0)+ "</b></td></tr>"
-              "<tr><td>" +i18n("Syllables:")+
-              "</td> <td align=\"right\"><b>" +locale.formatNumber(syllables, 0)+ "</b></td></tr>"
-              "<tr><td>" +i18n("Words:")+
-              "</td> <td align=\"right\"><b>" +locale.formatNumber(words, 0)+ "</b></td></tr>"
-              "<tr><td>" +i18n("Sentences:")+
-              "</td> <td align=\"right\"><b>" +locale.formatNumber(sentences, 0)+ "</b></td></tr>"
-              "<tr><td>&nbsp;</td></tr>"
-              "<tr><td>" +i18n("Flesch reading ease:")+
-              "</td> <td align=\"right\"><b>" +flesch+ "</b></td></tr>"
-              "</table></qt>",
-	dlg.plainPage() ) );
-    dlg.setInitialSize( QSize( 400, 200 ) ); // not too good for long translations... -> use a real layout and 5 labels
-    dlg.exec();
 }
 
 /*======================== create GUI ==========================*/
@@ -3879,4 +3805,197 @@ void KWGUI::unitChanged( QString u )
     view->kWordDocument()->setUnit( KoUnit::unit( u ) );
 }
 
+void KWView::fileStatistics()
+{
+    KWStatisticsDialog *statisticsDialog = new KWStatisticsDialog( this, m_doc );
+    if ( !statisticsDialog->wasCanceled() )
+        statisticsDialog->exec();
+    delete statisticsDialog;
+}
+
+// Implementation of KWStatisticsDialog
+KWStatisticsDialog::KWStatisticsDialog( QWidget *_parent, KWDocument *_doc )
+    : KDialogBase( KJanusWidget::Tabbed,
+                   i18n("Statistics"),
+                   KDialogBase::Ok,
+                   KDialogBase::Ok,
+                   _parent,
+                   "statistics",
+                   true,
+                   false )
+{
+    QFrame *pageAll = 0;
+    QFrame *pageSelected = 0;
+    for (int i=0; i < 6; ++i) {
+        resultLabelAll[i] = 0;
+        resultLabelSelected[i] = 0;
+    }
+    m_doc = _doc;
+    m_parent = _parent;
+    m_canceled = true;
+
+    // add Tab "All"
+    pageAll = addPage( i18n( "All" ) );
+    addBox( pageAll, resultLabelAll );
+
+    // let's see if there's selected text
+    bool b = docHasSelection();
+    if ( b ) {
+        // add Tab "Selected"
+        pageSelected = addPage( i18n( "Selected" ) );
+        addBox( pageSelected, resultLabelSelected);
+        // assign results
+        if ( !calcStats( resultLabelSelected, true ) )
+            return;
+        if ( !calcStats( resultLabelAll, false ) )
+            return;
+        showPage( 1 );
+    } else {
+        // assign results
+        if ( !calcStats( resultLabelAll, false ) )
+            return;
+        //if ( !calcStats( resultLabelAll, false ) ) return;
+        showPage( 0 );
+    }
+    m_canceled = false;
+}
+
+bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection )
+{
+    ulong charsWithSpace = 0L;
+    ulong charsWithoutSpace = 0L;
+    ulong words = 0L;
+    ulong sentences = 0L;
+    ulong syllables = 0L;
+
+    // safety check result labels
+    for (int i=0; i < 6; ++i) {
+        if ( !resultLabel[i] ) {
+            kdDebug() << "Warning: KWStatisticsDiaolog::calcStats result table not initialized." << endl;
+            return false;
+        }
+    }
+
+    // count paragraphs for progress dialog:
+    ulong paragraphs = 0L;
+    QListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+    for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt ) {
+        KWFrameSet *frameSet = framesetIt.current();
+        if ( frameSet->frameSetInfo() == KWFrameSet::FI_BODY && frameSet->isVisible() ) {
+            if ( selection && false )
+                paragraphs += frameSet->paragraphsSelected();
+            else
+                paragraphs += frameSet->paragraphs();
+        }
+    }
+    QProgressDialog progress( i18n( "Counting..." ), i18n( "Cancel" ), paragraphs, this, "count", true );
+    progress.setMinimumDuration( 1000 );
+    progress.setProgress( 0 );
+
+    // do the actual counting
+    for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt ) {
+        KWFrameSet *frameSet = framesetIt.current();
+        // Exclude headers and footers
+        if ( frameSet->frameSetInfo() == KWFrameSet::FI_BODY && frameSet->isVisible() ) {
+            if( ! frameSet->statistics( &progress, charsWithSpace, charsWithoutSpace,
+                                        words, sentences, syllables, selection ) ) {
+                // someone pressed "Cancel"
+                return false;
+            }
+        }
+    }
+
+    // assign results
+    KLocale *locale = KGlobal::locale();
+    resultLabel[0]->setText( locale->formatNumber( charsWithSpace, 0) );
+    resultLabel[1]->setText( locale->formatNumber( charsWithoutSpace, 0 ) );
+    resultLabel[2]->setText( locale->formatNumber( syllables, 0 ) );
+    resultLabel[3]->setText( locale->formatNumber( words, 0 ) );
+    resultLabel[4]->setText( locale->formatNumber( sentences, 0 ) );
+    // add flesch
+    double f = calcFlesch( sentences, words, syllables );
+    QString flesch;
+    QString flesch_score_string;
+    flesch_score_string = locale->formatNumber( f , 1 );
+    if( words < 200 ) {
+        // a kind of warning if too few words:
+        flesch = i18n("approximately %1").arg( flesch_score_string );
+    } else {
+        flesch = flesch_score_string;
+    }
+    resultLabel[5]->setText( flesch );
+    return true;
+}
+
+double KWStatisticsDialog::calcFlesch( ulong sentences, ulong words, ulong syllables )
+{
+    // calculate Flesch reading ease score:
+    float flesch_score = 0;
+    if( words > 0 && sentences > 0 )
+        flesch_score = 206.835 - (1.015 * (words / sentences)) - (84.6 * syllables / words);
+    return flesch_score;
+}
+
+void KWStatisticsDialog::addBox( QFrame *page, QLabel **resultLabel )
+{
+    // Layout Managers
+    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, 6 );
+    QGroupBox *box = new QGroupBox( i18n( "Statistics" ), page );
+    QGridLayout *grid = new QGridLayout( box, 7, 3, KDialog::marginHint(), KDialog::spacingHint() );
+
+    // margins
+    int fHeight = box->fontMetrics().height();
+    grid->setMargin( fHeight );
+    grid->addColSpacing( 1, fHeight );
+    grid->addRowSpacing( 0, fHeight );
+
+    //maximum size for result column (don't know how to do this better..)
+    QString init = i18n("approximately %1").arg( "00000000" );
+
+    // insert labels
+    QLabel *label1 = new QLabel( i18n( "Characters including spaces:" ), box );
+    grid->addWidget( label1, 1, 0, 1 );
+    resultLabel[0] = new QLabel( "", box );
+    grid->addWidget( resultLabel[0], 1, 2, 2 );
+
+    QLabel *label2 = new QLabel( i18n( "Characters without spaces:" ), box );
+    grid->addWidget( label2, 2, 0, 1 );
+    resultLabel[1] = new QLabel( "", box );
+    grid->addWidget( resultLabel[1], 2, 2, 2 );
+
+    QLabel *label3 = new QLabel( i18n( "Syllables:" ), box );
+    grid->addWidget( label3, 3, 0, 1 );
+    resultLabel[2] = new QLabel( "", box );
+    grid->addWidget( resultLabel[2], 3, 2, 2 );
+
+    QLabel *label4 = new QLabel( i18n( "Words:" ), box );
+    grid->addWidget( label4, 4, 0, 1 );
+    resultLabel[3] = new QLabel( "", box );
+    grid->addWidget( resultLabel[3], 4, 2, 2 );
+
+    QLabel *label5 = new QLabel( i18n( "Sentences:" ), box );
+    grid->addWidget( label5, 5, 0, 1 );
+    resultLabel[4] = new QLabel( "", box );
+    grid->addWidget( resultLabel[4], 5, 2, 2 );
+
+    QLabel *label6 = new QLabel( i18n( "Flesch reading ease:" ), box );
+    grid->addWidget( label6, 6, 0, 1 );
+    resultLabel[5] = new QLabel( init, box );
+    grid->addWidget( resultLabel[5], 6, 2, 2 );
+
+    topLayout->addWidget( box );
+}
+
+bool KWStatisticsDialog::docHasSelection()
+{
+    QListIterator<KWFrameSet> fsIt( m_doc->framesetsIterator() );
+
+    for ( ; fsIt.current(); ++fsIt ) {
+        KWFrameSet *fs = fsIt.current();
+        if ( fs->paragraphsSelected() ) {
+            return true;
+        }
+    }
+    return false;
+}
 #include "kwview.moc"

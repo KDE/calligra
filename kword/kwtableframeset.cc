@@ -1581,11 +1581,19 @@ int KWTableFrameSet::paragraphs()
     return paragraphs;
 }
 
+int KWTableFrameSet::paragraphsSelected()
+{
+    int paragraphs = 0;
+    for (unsigned int i =0; i < m_cells.count(); i++)
+        paragraphs += m_cells.at(i)->paragraphsSelected();
+    return paragraphs;
+}
+
 bool KWTableFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words,
-    ulong & sentences, ulong & syllables )
+    ulong & sentences, ulong & syllables, bool selected )
 {
     for (unsigned int i =0; i < m_cells.count(); i++) {
-        if( ! m_cells.at(i)->statistics( progress, charsWithSpace, charsWithoutSpace, words, sentences, syllables ) )
+        if( ! m_cells.at(i)->statistics( progress, charsWithSpace, charsWithoutSpace, words, sentences, syllables, selected ) )
         {
             return false;
         }

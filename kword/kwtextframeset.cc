@@ -535,8 +535,19 @@ int KWTextFrameSet::paragraphs()
     return paragraphs;
 }
 
+int KWTextFrameSet::paragraphsSelected()
+{
+    int paragraphs = 0;
+    Qt3::QTextParag *parag = textDocument()->firstParag();
+    for ( ; parag ; parag = parag->next() ) {
+        if ( parag->hasSelection( QTextDocument::Standard ) )
+            paragraphs++;
+    }
+    return paragraphs;
+}
+
 bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words,
-    ulong & sentences, ulong & syllables )
+    ulong & sentences, ulong & syllables, bool selected )
 {
     // parts of words for better counting of syllables:
     QStringList subs_syl;
@@ -544,22 +555,38 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
     QStringList add_syl;
     add_syl << "ia" << "riet" << "dien" << "iu" << "io" << "ii" << "[aeiouym]bl$" << "[aeiou]{3}"
             << "^mc" << "ism$" << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
+    QString s;
 
     Qt3::QTextParag * parag = textDocument()->firstParag();
     for ( ; parag ; parag = parag->next() )
     {
         progress->setProgress(progress->progress()+1);
+        // MA: resizing if KWStatisticsDialog does not work correct with this enabled, don't know why
         kapp->processEvents();
         if ( progress->wasCancelled() )
             return false;
 
-        if ( parag->at(0)->isCustom() )     // start of a table
-            continue;
+        // start of a table
+        if ( parag->at(0)->isCustom() )
+             continue;
 
-        QString s = parag->string()->toString();
+        bool hasTrailingSpace = true;
+        if ( !selected ) {
+            s = parag->string()->toString();
+        } else {
+            if ( parag->hasSelection( 0 ) ) {
+                hasTrailingSpace = false;
+                s = parag->string()->toString();
+                if ( !( parag->fullSelected( 0 ) ) ) {
+                    s = s.mid( parag->selectionStart( 0 ), parag->selectionEnd( 0 ) - parag->selectionStart( 0 ) );
+                }
+            } else {
+                continue;
+            }
+        }
 
         // Character count
-        for ( uint i = 0 ; i < s.length() - 1 /*trailing-space*/ ; ++i )
+        for ( uint i = 0 ; i < s.length() - ( hasTrailingSpace ? 1 : 0 ) ; ++i )
         {
             QChar ch = s[i];
             ++charsWithSpace;

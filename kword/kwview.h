@@ -539,4 +539,35 @@ protected:
 
 };
 
+/******************************************************************/
+/* Class: KWStatisticsDialog                                      */
+/******************************************************************/
+/**
+* Is not intended to inherit from
+*/
+
+class KWStatisticsDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    KWStatisticsDialog( QWidget *_parent, KWDocument *_doc );
+    bool wasCanceled() { return m_canceled; }
+
+private:
+    KWDocument *m_doc;
+    QWidget *m_parent;
+    bool m_canceled;
+    QLabel *resultLabelAll[6];
+    QLabel *resultLabelSelected[6];
+
+    void addBox( QFrame *page, QLabel **resultLabel );
+    bool calcStats( QLabel **resultLabel, bool selection );
+    bool docHasSelection();
+    double calcFlesch(ulong sentences, ulong words, ulong syllables);
+
+protected:
+
+};
+
 #endif

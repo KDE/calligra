@@ -173,9 +173,10 @@ public:
     virtual void invalidate();
 
     virtual int paragraphs();
+    virtual int paragraphsSelected();
     /** Calculate statistics for this frameset */
     virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace,
-        ulong & words, ulong& sentences, ulong & syllables );
+        ulong & words, ulong& sentences, ulong & syllables, bool selected );
 
     /** reimplemented from QTextFlow, implements flowing around frames etc. */
     virtual int adjustLMargin( int yp, int h, int margin, int space );

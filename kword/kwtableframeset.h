@@ -230,8 +230,9 @@ public:
 
     /** Contribute to the document statistics */
     virtual int paragraphs();
+    virtual int paragraphsSelected();
     virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words,
-        ulong & sentences, ulong & syllables );
+        ulong & sentences, ulong & syllables, bool selected );
 
     virtual void finalize();
 
