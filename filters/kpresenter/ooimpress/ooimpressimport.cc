@@ -780,8 +780,8 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
     if ( m_styleStack.hasAttribute( "draw:fill" ) )
     {
         const QString fill = m_styleStack.attribute( "draw:fill" );
-
-        if ( fill == "solid" )
+        //kdDebug()<<"void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e ) :"<<fill<<endl;
+        if (  fill == "solid"  )
         {
             QDomElement brush = doc.createElement( "BRUSH" );
             brush.setAttribute( "style", 1 );
@@ -1751,8 +1751,10 @@ void OoImpressImport::fillStyleStack( const QDomElement& object )
 {
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttribute( "presentation:style-name" ) )
+    {
+        kdDebug()<<" presentation:style-name **************************** :"<<object.attribute( "presentation:style-name" )<<endl;
         addStyles( m_styles[object.attribute( "presentation:style-name" )] );
-
+    }
     if ( object.hasAttribute( "draw:style-name" ) )
         addStyles( m_styles[object.attribute( "draw:style-name" )] );
 
@@ -1767,8 +1769,11 @@ void OoImpressImport::addStyles( const QDomElement* style )
 {
     // this function is necessary as parent styles can have parents themself
     if ( style->hasAttribute( "style:parent-style-name" ) )
+    {
+        kdDebug()<<"m_styles[style->attribute( style:parent-style-name )] :"<<m_styles[style->attribute( "style:parent-style-name" )]<<endl;
         addStyles( m_styles[style->attribute( "style:parent-style-name" )] );
-
+    }
+    kdDebug()<<" void OoImpressImport::addStyles( const QDomElement* style ) :"<<style<<endl;
     m_styleStack.push( *style );
 }
 
