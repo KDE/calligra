@@ -13,9 +13,10 @@ libkscript_la_SOURCES = kscript_proxy.cc kscript_eval.cc kscript_object.cc kscri
 		  kscript_ext_qcheckbox.cc kscript_struct.cc kscript_interface.cc \
 		  kscript_typecode.cc kscript_corbafunc.cc kscript_corba.cc kscript_ext_qvboxlayout.cc \
 		  kscript_ext_qcombobox.cc kscript_ext_qbutton.cc kscript_ext_qbuttongroup.cc kscript_ext_qdialog.cc \
-		  kscript_ext_qstructs.cc kscript_ext_qhboxlayout.cc kscript_ext_qboxlayout.cc
+		  kscript_ext_qstructs.cc kscript_ext_qhboxlayout.cc kscript_ext_qboxlayout.cc \
+		  kscript_scriptmenu.cc
 
-libkscript_la_METASOURCES = kscript_ext_qt.moc
+libkscript_la_METASOURCES = kscript_ext_qt.moc kscript_scriptmenu.moc
 
 libkscript_la_LDFLAGS = -version-info 1:0:0
 
@@ -31,7 +32,8 @@ noinst_HEADERS = kscript_eval.h kscript_object.h kscript_class.h kscript_func.h 
 		 kscript_ext_qcheckbox.h kscript_struct.h kscript_interface.h kscript_proxy.h \
 		 kscript_typecode.h kscript_corbafunc.h kscript_corba.h kscript_ptr.h kscript_ext_qvboxlayout.h \
 		 kscript_ext_qcombobox.h kscript_ext_qbutton.h kscript_ext_qbuttongroup.h kscript_ext_qdialog.h \
-		 kscript_synext.h kscript_ext_qstructs.h kscript_ext_qhboxlayout.h kscript_ext_qboxlayout.h
+		 kscript_synext.h kscript_ext_qstructs.h kscript_ext_qhboxlayout.h kscript_ext_qboxlayout.h \
+		 kscript_scriptmenu.h
 
 kscript_LDADD = ./libkscript.la
 kscript_LDFLAGS = $(KDE_RPATH)
