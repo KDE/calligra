@@ -94,6 +94,7 @@ public:
     void setPage( KPrPage* p );
 
     void update();
+    void updateTitle();
 
 private:
     KPrPage* m_page;
@@ -570,11 +571,7 @@ void OutlineSlideItem::update()
 {
     if( !m_page ) return;
     KPresenterDoc *doc = m_page->kPresenterDoc();
-    int index = doc->pageList().findRef( m_page );
-    QString title = m_page->pageTitle();
-    if ( !doc->isSlideSelected( index ) )
-        title = i18n( "(%1)" ).arg( title );
-    setText( 0, title );
+    updateTitle();
 
     // add all objects
     OutlineObjectItem *ooi = 0;
@@ -634,6 +631,13 @@ void OutlineSlideItem::update()
         (ooi->listView())->setSelected( ooi, true );
 }
 
+void OutlineSlideItem::updateTitle()
+{
+    QString title = m_page->pageTitle();
+    if ( ! m_page->isSlideSelected() )
+        title = i18n( "(%1)" ).arg( title );
+    setText( 0, title );
+}
 
 OutlineObjectItem::OutlineObjectItem( OutlineSlideItem* parent, KPObject* _object,
                                       bool sticky, const QString& name )
@@ -725,14 +729,16 @@ Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     m_outlineTip = new OutlineToolTip(this);
 
     connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
-    connect( this, SIGNAL( moved( QListViewItem *, QListViewItem *, QListViewItem * ) ),
-             this, SLOT( movedItems( QListViewItem *, QListViewItem *, QListViewItem * ) ) );
     connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int ) ),
              this, SLOT( rightButtonPressed( QListViewItem *, const QPoint &, int ) ) );
 
     connect( this, SIGNAL( doubleClicked ( QListViewItem * )),
              this, SLOT(renamePageTitle()));
+    connect( this, SIGNAL( dropped( QDropEvent*, QListViewItem*, QListViewItem* ) ),
+             this, SLOT( slotDropped( QDropEvent*, QListViewItem*, QListViewItem*  ) ));
 
+    setItemsMovable( false );
+    setDragEnabled( true );
     setAcceptDrops( true );
     setDropVisualizer( true );
     setFullWidth( true );
@@ -814,15 +820,25 @@ void Outline::moveItem( int oldPos, int newPos )
     int lowPage = oldPos > newPos ? newPos : oldPos;
     int highPage = oldPos < newPos ? newPos : oldPos;
 
-    // update, for all between lowPage & highPage
-    int page = lowPage;
-    OutlineSlideItem* item = slideItem( page );
-    for( ; item ; ++page ) {
-        KPrPage* newPage = m_doc->pageList().at( page );
-        item->setPage( newPage );
-        item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() );
-        if ( page == highPage ) break;
+    OutlineSlideItem *item = dynamic_cast<OutlineSlideItem*>( firstChild() );
+    QListViewItem *itemToMove = 0;
+    QListViewItem *itemAfter = 0;
+
+    // moving backwards
+    if ( newPos < oldPos )
+        newPos--;
+    
+    for ( int index = 0; item; ++index, item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() ) ) 
+    {
+        if ( index == oldPos )
+            itemToMove = item;
+        if ( index == newPos )
+            itemAfter = item;
+        if ( index >= lowPage && index <= highPage )
+            item->updateTitle();
     }
+
+    KListView::moveItem( itemToMove, 0, itemAfter );
 }
 
 void Outline::removeItem( int pos )
@@ -898,6 +914,51 @@ void Outline::itemClicked( QListViewItem *item )
     }
 }
 
+/** 
+ * The listview no longer moves the item by itself. It just calls m_doc->movePage
+ * which then moves the item. At the moment the method only works as long as
+ * only one object is moves.
+ * When an item is about to move (using drag-and-drop), it makes shure that 
+ * it's not moved right after an object.
+ */
+void Outline::slotDropped( QDropEvent *e, QListViewItem *parent, QListViewItem *target )
+{
+    kdDebug(33001) << "slotDropped" << endl;
+    /* slide doesn't have parent (always 0)
+     * Only slides can move at the moment, objects can't. */
+    if ( parent ) 
+        return;
+
+    // This code is taken from KListView
+    for (QListViewItem *i = firstChild(), *iNext = 0; i != 0; i = iNext)
+    {
+        iNext = i->itemBelow();
+        if ( !i->isSelected() )
+            continue;
+
+        // don't drop an item after itself, or else
+        // it moves to the top of the list
+        if ( i == target )
+            continue;
+
+        i->setSelected( false );
+
+        // don't move the item as it is allready 
+        moveItem(i, parent, target );
+
+        // Only one item can be moved
+        break;
+    }
+}
+
+// We have to overwrite this method as it checks if an item is movable
+// and we have disabled it.
+bool Outline::acceptDrag( QDropEvent* e ) const
+{
+    return acceptDrops() && (e->source()==viewport());
+}
+
+
 void Outline::setCurrentPage( int pg )
 {
     OutlineSlideItem *item = slideItem( pg );
@@ -918,41 +979,28 @@ void Outline::contentsDropEvent( QDropEvent *e )
     connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
 }
 
-// when item is about to move (using drag-and-drop), make sure:
-// it's not moved right after object. only slides can move, objects can't.
-void Outline::movableDropEvent( QListViewItem* parent, QListViewItem* target )
+void Outline::moveItem( QListViewItem *i, QListViewItem *, QListViewItem *newAfter )
 {
-    // slide doesn't have parent (always 0)
-    if( parent ) return;
-
-    KListView::movableDropEvent( parent, target );
-}
-
-void Outline::movedItems( QListViewItem *i, QListViewItem *, QListViewItem *newAfter )
-{
-    m_movedItem = i;
-    m_movedAfter = newAfter;
-    QTimer::singleShot( 300, this, SLOT( doMoveItems() ) );
-}
-
-void Outline::doMoveItems()
-{
-    OutlineSlideItem* srcItem = dynamic_cast<OutlineSlideItem*>(m_movedItem);
-    if( !srcItem ) return;
+    OutlineSlideItem* srcItem = dynamic_cast<OutlineSlideItem*>( i );
+    if ( !srcItem ) 
+        return;
 
     int num = m_doc->pageList().findRef( srcItem->page() );
 
-    OutlineSlideItem* dstItem = dynamic_cast<OutlineSlideItem*>(m_movedAfter);
-    if( m_movedAfter && !dstItem ) return;
+    int numNow = 0;
+    if ( newAfter )
+    {
+        OutlineSlideItem* dstItem = dynamic_cast<OutlineSlideItem*>( newAfter );
+        if( !dstItem ) 
+            return;
 
-    int numNow = m_movedAfter ? m_doc->pageList().findRef( dstItem->page() ) : -1;
-    if ( numNow < num ) numNow++;
-
-    if(num!=numNow) {
-        emit movePage( num, numNow );
-        // this has to be done because moving a page is take + insert the page
-        setSelected( m_movedItem, true );
+        numNow = m_doc->pageList().findRef( dstItem->page() );
+        if ( numNow < num ) 
+            numNow++;
     }
+
+    if ( num!=numNow )
+        m_doc->movePage( num, numNow );
 }
 
 void Outline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )

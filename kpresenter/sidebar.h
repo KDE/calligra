@@ -94,8 +94,9 @@ public:
 
 protected:
     void contentsDropEvent( QDropEvent *e );
-    void movableDropEvent( QListViewItem* parent, QListViewItem* target );
+    void moveItem( QListViewItem *i, QListViewItem *firstAfter, QListViewItem *newAfter );
     OutlineSlideItem* slideItem( int pageNumber );
+    bool acceptDrag( QDropEvent* e ) const;
 
 signals: // all page numbers 0-based
     void showPage( int i );
@@ -108,9 +109,8 @@ public slots:
 
 private slots:
     void itemClicked( QListViewItem *i );
+    void slotDropped( QDropEvent *e, QListViewItem *parent, QListViewItem *target );
     void rightButtonPressed( QListViewItem *i, const QPoint &pnt, int c );
-    void movedItems( QListViewItem *i, QListViewItem *firstAfter, QListViewItem *newAfter );
-    void doMoveItems();
 
 private:
     KPresenterDoc *m_doc;
