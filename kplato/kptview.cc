@@ -41,23 +41,23 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* name)
 
     // The main project view
     listview = new KListView(this);
-    listview->addColumn("Project");
-    KListViewItem *i = new KListViewItem(listview, "item 1");
+    listview->addColumn(i18n("Project"));
+    KListViewItem *i = new KListViewItem(listview, i18n("item 1"));
     i->setOpen(true);
-    new KListViewItem(i, "item 2");
+    new KListViewItem(i, i18n("item 2"));
 
     connect(listview, SIGNAL(selectionChanged(QListViewItem *)),
 	    this, SLOT(slotSelectionChanged(QListViewItem *)));
 
     // The menu items
-    new KAction("Edit Main Project...", "edit_project", 0, this,
+    new KAction(i18n("Edit Main Project..."), "edit_project", 0, this,
 		SLOT(slotEditProject()), actionCollection(), "edit_project");
-    new KAction("Add Subproject...", "add_sub_project", 0, this,
+    new KAction(i18n("Add Subproject..."), "add_sub_project", 0, this,
 		SLOT(slotAddSubProject()), actionCollection(),
 		"add_sub_project");
-    new KAction("Add Task...", "add_task", 0, this,
+    new KAction(i18n("Add Task..."), "add_task", 0, this,
 		SLOT(slotAddTask()), actionCollection(), "add_task");
-    new KAction("Add Milestone...", "add_milestone", 0, this,
+    new KAction(i18n("Add Milestone..."), "add_milestone", 0, this,
 		SLOT(slotAddMilestone()), actionCollection(), "add_milestone");
 }
 
