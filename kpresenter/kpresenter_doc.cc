@@ -2387,6 +2387,9 @@ void KPresenterDoc::makeUsedSoundFileList()
 KoView* KPresenterDoc::createViewInstance( QWidget* parent, const char* name )
 {
     m_kpresenterView = new KPresenterView( this, parent, name );
+    //the page numbers have to be recalced for the sticky objects
+    //as it could not be done during the constructor of KPresenterView
+    recalcPageNum();
     return (KoView *)m_kpresenterView;
 }
 

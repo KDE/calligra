@@ -3374,7 +3374,11 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom )
     drawAllObjectsInPage( &p, m_view->kPresenterDoc()->pageList().at( currPresPage-1 )->objectList() );
 
     //draw sticky object
+    //the numbers for the sticky page have to be recalculated
+    KPrPage* saveActivePage = m_activePage;
+    setActivePage(m_view->kPresenterDoc()->pageList().at(currPresPage-1));
     drawAllObjectsInPage( &p, stickyPage()->objectList() );
+    setActivePage( saveActivePage );
 
     editMode = _editMode;
     p.end();
@@ -4891,7 +4895,8 @@ void KPrCanvas::gotoPage( int pg )
         subPresStep = 0;
         //change active page
         m_activePage=m_view->kPresenterDoc()->pageList().at(currPresPage-1);
-
+        //recalculate the page numbers
+        m_view->kPresenterDoc()->recalcPageNum();
 
         resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
         repaint( false );
@@ -5743,6 +5748,7 @@ void KPrCanvas::setActivePage( KPrPage* _active)
     Q_ASSERT(_active);
     //kdDebug(33001)<<"KPrCanvas::setActivePage( KPrPage* _active) :"<<_active<<endl;
     m_activePage=_active;
+    m_view->kPresenterDoc()->recalcPageNum();
 }
 
 void KPrCanvas::slotSetActivePage( KPrPage* _active)
@@ -5750,6 +5756,7 @@ void KPrCanvas::slotSetActivePage( KPrPage* _active)
     Q_ASSERT(_active);
     //kdDebug(33001)<<"void KPrCanvas::slotSetActivePage( KPrPage* _active) :"<<_active<<endl;
     m_activePage=_active;
+    m_view->kPresenterDoc()->recalcPageNum();
 }
 
 //return true if object is a header/footer hidden

@@ -4492,9 +4492,6 @@ void KPresenterView::skipToPage( int num )
         notebar->setCurrentNoteText( text );
     }
     refreshPageButton();
-    //recalc pagenum when we change page
-    //necessary for sticky obj
-    m_pKPresenterDoc->recalcPageNum();
     //(Laurent) deselect object when we change page.
     //otherwise you can change object properties on other page
     m_canvas->deSelectAllObj();
