@@ -364,7 +364,7 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 /*================================================================*/
 void KWParag::save( QTextStream&out )
 {
-    out << indent << "<TEXT>" << text << "</TEXT>" << endl;
+    out << indent << "<TEXT>" << text.decoded() << "</TEXT>" << endl;
     if ( info == PI_FOOTNOTE || info == PI_CONTENTS )
         out << indent << "<NAME name=\"" << correctQString( paragName ) << "\"/>" << endl;
     out << indent << "<INFO info=\"" << static_cast<int>( info ) << "\"/>" << endl;

@@ -43,9 +43,9 @@ KWVariableNameDia::KWVariableNameDia( QWidget *parent, QList<KWVariable> *vars )
     : QDialog( parent, "", TRUE ), variables( vars )
 {
     if ( variables )
-	setCaption( i18n( "Variable Name" ) );
+        setCaption( i18n( "Variable Name" ) );
     else
-	setCaption( i18n( "Entry Name" ) );
+        setCaption( i18n( "Entry Name" ) );
 
     back = new QVBox( this );
     back->setSpacing( 5 );
@@ -57,13 +57,14 @@ KWVariableNameDia::KWVariableNameDia( QWidget *parent, QList<KWVariable> *vars )
     QLabel *l = new QLabel( i18n( "Name:" ), row1 );
     l->setFixedSize( l->sizeHint() );
     names = new QComboBox( TRUE, row1 );
+    names->setFocus();
 
     if ( variables ) {
-	KWVariable *var = 0;
-	for ( var = variables->first(); var; var = variables->next() ) {
-	    if ( var->getType() == VT_CUSTOM )
-		names->insertItem( ( (KWCustomVariable*) var )->getName(), -1 );
-	}
+        KWVariable *var = 0;
+        for ( var = variables->first(); var; var = variables->next() ) {
+            if ( var->getType() == VT_CUSTOM )
+                names->insertItem( ( (KWCustomVariable*) var )->getName(), -1 );
+        }
     }
 
     KButtonBox *bb = new KButtonBox( back );
@@ -74,9 +75,9 @@ KWVariableNameDia::KWVariableNameDia( QWidget *parent, QList<KWVariable> *vars )
     bb->layout();
 
     connect( ok, SIGNAL( clicked() ),
-	     this, SLOT( accept() ) );
+             this, SLOT( accept() ) );
     connect( cancel, SIGNAL( clicked() ),
-	     this, SLOT( reject() ) );
+             this, SLOT( reject() ) );
 
     resize( 350, 100 );
 }
@@ -112,9 +113,9 @@ KWVariableValueListItem::KWVariableValueListItem( QListView *parent )
 void KWVariableValueListItem::setup()
 {
     setHeight( QMAX( listView()->fontMetrics().height(),
-		     editWidget->sizeHint().height() ) );
+                     editWidget->sizeHint().height() ) );
     if ( listView()->columnWidth( 1 ) < editWidget->sizeHint().width() )
-	listView()->setColumnWidth( 1, editWidget->sizeHint().width() );
+        listView()->setColumnWidth( 1, editWidget->sizeHint().width() );
 }
 
 /*================================================================*/
@@ -122,7 +123,7 @@ void KWVariableValueListItem::update()
 {
     editWidget->resize( listView()->header()->cellSize( 1 ), height() );
     listView()->moveChild( editWidget, listView()->header()->cellPos( 1 ),
-			   listView()->itemPos( this ) + listView()->contentsY() );
+                           listView()->itemPos( this ) + listView()->contentsY() );
     editWidget->show();
 }
 
@@ -161,9 +162,9 @@ KWVariableValueList::KWVariableValueList( QWidget *parent )
     addColumn( i18n( "Variable" ) );
     addColumn( i18n( "Value" ) );
     connect( header(), SIGNAL( sizeChange( int, int, int ) ),
-	     this, SLOT( columnSizeChange( int, int, int ) ) );
+             this, SLOT( columnSizeChange( int, int, int ) ) );
     connect( header(), SIGNAL( sectionClicked( int ) ),
-	     this, SLOT( sectionClicked( int ) ) );
+             this, SLOT( sectionClicked( int ) ) );
     setColumnWidthMode( 0, Manual );
     setColumnWidthMode( 1, Manual );
 
@@ -175,14 +176,14 @@ void KWVariableValueList::setValues()
 {
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it )
-	( (KWVariableValueListItem *)it.current() )->applyValue();
+        ( (KWVariableValueListItem *)it.current() )->applyValue();
 }
 
 /*================================================================*/
 void KWVariableValueList::columnSizeChange( int c, int, int )
 {
     if ( c == 0 || c == 1 )
-	updateItems();
+        updateItems();
 }
 
 /*================================================================*/
@@ -196,7 +197,7 @@ void KWVariableValueList::updateItems()
 {
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it )
-	( (KWVariableValueListItem*)it.current() )->update();
+        ( (KWVariableValueListItem*)it.current() )->update();
 }
 
 /******************************************************************
@@ -220,14 +221,14 @@ KWVariableValueDia::KWVariableValueDia( QWidget *parent, QList<KWVariable> *vars
     QStringList lst;
     KWVariable *var = 0;
     for ( var = variables->first(); var; var = variables->next() ) {
-	if ( var->getType() == VT_CUSTOM ) {
-	    KWCustomVariable *v = (KWCustomVariable*)var;
-	    if ( !lst.contains( v->getName() ) ) {
-		lst.append( v->getName() );
-		KWVariableValueListItem *item = new KWVariableValueListItem( list );
-		item->setVariable( v );
-	    }
-	}
+        if ( var->getType() == VT_CUSTOM ) {
+            KWCustomVariable *v = (KWCustomVariable*)var;
+            if ( !lst.contains( v->getName() ) ) {
+                lst.append( v->getName() );
+                KWVariableValueListItem *item = new KWVariableValueListItem( list );
+                item->setVariable( v );
+            }
+        }
     }
 
     resize( 600, 400 );

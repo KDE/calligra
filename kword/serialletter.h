@@ -26,6 +26,7 @@
 #include <qdialog.h>
 #include <qvbox.h>
 #include <qlistview.h>
+#include <qspinbox.h>
 
 #include <qtextstream.h>
 
@@ -173,13 +174,25 @@ protected:
     QVBox *back;
     KWSerialLetterDataBase *db;
 
+    QToolButton *first;
+    QToolButton *back_;
+    QToolButton *forward;
+    QToolButton *finish;
+    QToolButton *newRecord;
+    QToolButton *newEntry;
+    QToolButton *deleteRecord;
+    QToolButton *deleteEntry;
+
 protected slots:
     void changeRecord( int i );
     void addEntry();
     void addRecord();
     void removeEntry();
     void removeRecord();
-
+    void firstRecord() { records->setValue(1); }
+    void prevRecord() { records->setValue(records->value()-1); }
+    void nextRecord() { records->setValue(records->value()+1); }
+    void lastRecord() { records->setValue(records->maxValue()); }
 };
 
 #endif

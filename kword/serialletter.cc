@@ -25,7 +25,6 @@
 #include <qvalidator.h>
 #include <qheader.h>
 #include <qtoolbutton.h>
-#include <qspinbox.h>
 #include <qtooltip.h>
 
 #include <kdebug.h>
@@ -159,9 +158,6 @@ void KWSerialLetterDataBase::load( KOMLParser &parser, QValueList<KOMLAttrib> &l
 
         if ( name == "SAMPLE" ) {
             parser.parseTag( tag, name, lst );
-            //vector<KOMLAttrib>::const_iterator it = lst.begin();
-            //for( ; it != lst.end(); it++ ) {
-            //}
             while ( parser.open( QString::null, tag ) ) {
                 parser.parseTag( tag, name, lst );
                 if ( name == "ENTRY" ) {
@@ -181,16 +177,10 @@ void KWSerialLetterDataBase::load( KOMLParser &parser, QValueList<KOMLAttrib> &l
             }
         } else if ( name == "DB" ) {
             parser.parseTag( tag, name, lst );
-            //vector<KOMLAttrib>::const_iterator it = lst.begin();
-            //for( ; it != lst.end(); it++ ) {
-            //}
             while ( parser.open( QString::null, tag ) ) {
                 parser.parseTag( tag, name, lst );
                 if ( name == "RECORD" ) {
                     parser.parseTag( tag, name, lst );
-                    //vector<KOMLAttrib>::const_iterator it = lst.begin();
-                    //for( ; it != lst.end(); it++ ) {
-                    //}
                     appendRecord();
                     while ( parser.open( QString::null, tag ) ) {
                         parser.parseTag( tag, name, lst );
@@ -460,54 +450,56 @@ KWSerialLetterEditor::KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataB
 
     QHBox *toolbar = new QHBox( back );
 
-    QToolButton *first = new QToolButton( toolbar );
+    first = new QToolButton( toolbar );
     first->setPixmap( BarIcon( "start" ) );
     first->setFixedSize( first->sizeHint() );
+    connect(first, SIGNAL(clicked()), this, SLOT(firstRecord()));
 
-    QToolButton *back_ = new QToolButton( toolbar );
+    back_ = new QToolButton( toolbar );
     back_->setPixmap( BarIcon( "back" ) );
     back_->setFixedSize( back_->sizeHint() );
+    connect(back_, SIGNAL(clicked()), this, SLOT(prevRecord()));
 
     records = new QSpinBox( 1, db->getNumRecords(), 1, toolbar );
-    if ( db->getNumRecords() == 0 )
-        records->setRange( 0, 0 );
     records->setMaximumHeight( records->sizeHint().height() );
     connect( records, SIGNAL( valueChanged( int ) ),
              this, SLOT( changeRecord( int ) ) );
 
-    QToolButton *forward = new QToolButton( toolbar );
+    forward = new QToolButton( toolbar );
     forward->setPixmap( BarIcon( "forward" ) );
     forward->setFixedSize( forward->sizeHint() );
+    connect(forward, SIGNAL(clicked()), this, SLOT(nextRecord()));
 
-    QToolButton *finish = new QToolButton( toolbar );
+    finish = new QToolButton( toolbar );
     finish->setPixmap( BarIcon( "finish" ) );
     finish->setFixedSize( finish->sizeHint() );
+    connect(finish, SIGNAL(clicked()), this, SLOT(lastRecord()));
 
     QWidget *sep = new QWidget( toolbar );
     sep->setMaximumWidth( 10 );
 
-    QToolButton *newRecord = new QToolButton( toolbar );
+    newRecord = new QToolButton( toolbar );
     newRecord->setPixmap( KWBarIcon( "sl_addrecord" ) );
     newRecord->setFixedSize( newRecord->sizeHint() );
     connect( newRecord, SIGNAL( clicked() ),
              this, SLOT( addRecord() ) );
     QToolTip::add( newRecord, i18n( "Add Record" ) );
 
-    QToolButton *newEntry = new QToolButton( toolbar );
+    newEntry = new QToolButton( toolbar );
     newEntry->setPixmap( KWBarIcon( "sl_addentry" ) );
     newEntry->setFixedSize( newEntry->sizeHint() );
     connect( newEntry, SIGNAL( clicked() ),
              this, SLOT( addEntry() ) );
     QToolTip::add( newEntry, i18n( "Add Entry" ) );
 
-    QToolButton *deleteRecord = new QToolButton( toolbar );
+    deleteRecord = new QToolButton( toolbar );
     deleteRecord->setPixmap( KWBarIcon( "sl_delrecord" ) );
     deleteRecord->setFixedSize( deleteRecord->sizeHint() );
     connect( deleteRecord, SIGNAL( clicked() ),
              this, SLOT( removeRecord() ) );
     QToolTip::add( deleteRecord, i18n( "Remove Record" ) );
 
-    QToolButton *deleteEntry = new QToolButton( toolbar );
+    deleteEntry = new QToolButton( toolbar );
     deleteEntry->setPixmap( KWBarIcon( "sl_delentry" ) );
     deleteEntry->setFixedSize( deleteEntry->sizeHint() );
     connect( deleteEntry, SIGNAL( clicked() ),
@@ -518,11 +510,17 @@ KWSerialLetterEditor::KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataB
 
     if ( db->getNumRecords() > 0 ) {
         records->setValue( 1 );
-        changeRecord( 1 );
         dbList->updateItems();
-    } else
-        records->setEnabled( FALSE );
-
+    } else {
+        first->setEnabled(false);
+        back_->setEnabled(false);
+        forward->setEnabled(false);
+        finish->setEnabled(false);
+        newRecord->setEnabled(false);
+        deleteEntry->setEnabled(false);
+        deleteRecord->setEnabled(false);
+        records->setEnabled(true);
+    }
     resize( 600, 400 );
 }
 
@@ -542,12 +540,20 @@ void KWSerialLetterEditor::changeRecord( int i )
 /*================================================================*/
 void KWSerialLetterEditor::addEntry()
 {
-    if ( db->getNumRecords() == 0 )
-        return;
-
     KWVariableNameDia
         *dia = new KWVariableNameDia( this, 0 );
     if ( dia->exec() == QDialog::Accepted ) {
+        if ( db->getNumRecords() == 0 ) {
+            first->setEnabled(true);
+            back_->setEnabled(true);
+            forward->setEnabled(true);
+            finish->setEnabled(true);
+            newRecord->setEnabled(true);
+            deleteEntry->setEnabled(true);
+            deleteRecord->setEnabled(true);
+            records->setEnabled(true);
+            addRecord();
+        }
         dbList->clear();
         db->addEntry( dia->getName() );
         changeRecord( records->value() );
@@ -562,7 +568,6 @@ void KWSerialLetterEditor::addRecord()
     db->appendRecord();
     records->setRange( records->minValue(), records->maxValue() + 1 );
     records->setValue( db->getNumRecords() );
-    changeRecord( records->value() );
 }
 
 /*================================================================*/
@@ -591,8 +596,7 @@ void KWSerialLetterEditor::removeRecord()
     db->removeRecord( records->value() - 1 );
     if ( db->getNumRecords() > 0 ) {
         records->setRange( records->minValue(), records->maxValue() - 1 );
-        records->setValue( 0 );
-        changeRecord( 1 );
+        records->setValue( 1 );
         dbList->updateItems();
     } else
         records->setEnabled( FALSE );
