@@ -1250,6 +1250,7 @@ void KPresenterView::sizeSelected()
 {
     tbFont.setPointSize( ( (KFontSizeAction*)actionTextFontSize )->fontSize() );
     page->setTextFont( &tbFont );
+    qDebug( "sizeSelected() %d", tbFont.pointSize() );
 }
 
 /*===============================================================*/
@@ -1257,6 +1258,7 @@ void KPresenterView::fontSelected()
 {
     tbFont.setFamily( ( (KFontAction*)actionTextFontFamily )->currentText() );
     page->setTextFont( &tbFont );
+    qDebug( "fontSelected() %s", tbFont.family().latin1() );
 }
 
 /*===============================================================*/
@@ -1810,13 +1812,15 @@ void KPresenterView::setupActions()
 				   this, SLOT( mtextFont() ),
 				   actionCollection(), "text_font" );
 
-    actionTextFontSize = new KFontSizeAction( i18n( "Font Size" ), 0, this,
-					      SLOT( sizeSelected() ),
+    actionTextFontSize = new KFontSizeAction( i18n( "Font Size" ), 0,
 					      actionCollection(), "text_fontsize" );
+    connect( ( ( KFontAction* )actionTextFontSize ), SIGNAL( activated( const QString & ) ),	
+	     this, SLOT( sizeSelected() ) );
 
-    actionTextFontFamily = new KFontAction( i18n( "Font Family" ), 0, this,
-					    SLOT( fontSelected() ),
+    actionTextFontFamily = new KFontAction( i18n( "Font Family" ), 0,
 					      actionCollection(), "text_fontfamily" );
+    connect( ( ( KFontAction* )actionTextFontFamily ), SIGNAL( activated( const QString & ) ),	
+	     this, SLOT( fontSelected() ) );
 
     actionTextBold = new KToggleAction( i18n( "&Bold" ), KPBarIcon( "bold" ), CTRL + Key_B,
 					   this, SLOT( textBold() ),
