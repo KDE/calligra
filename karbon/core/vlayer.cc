@@ -85,8 +85,13 @@ VLayer::downwards( const VObject& object )
 }
 
 void
-VLayer::sendToBack( const VObject& /*object*/ )
+VLayer::sendToBack( const VObject& object )
 {
+	if( m_objects.getFirst() == &object ) return;
+
+	m_objects.remove( &object );
+
+	m_objects.prepend( &object );
 }
 
 void

@@ -12,6 +12,7 @@ noinst_HEADERS = \
 	vfillcmd.h \
 	vflattencmd.h \
 	vgroupcmd.h \
+	vorderselectioncmd.h \
 	vinsertknotscmd.h \
 	vroundcornerscmd.h \
 	vshapecmd.h \
@@ -25,6 +26,7 @@ libkarboncommands_la_SOURCES = \
 	vfillcmd.cc \
 	vflattencmd.cc \
 	vgroupcmd.cc \
+	vorderselectioncmd.cc \
 	vinsertknotscmd.cc \
 	vroundcornerscmd.cc \
 	vshapecmd.cc \

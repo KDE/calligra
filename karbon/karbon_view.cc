@@ -37,6 +37,7 @@
 #include "vfillcmd.h"
 #include "vflattencmd.h"
 #include "vgroupcmd.h"
+#include "vorderselectioncmd.h"
 #include "vinsertknotscmd.h"
 #include "vroundcornerscmd.h"
 #include "vstrokecmd.h"
@@ -321,13 +322,10 @@ KarbonView::editPurgeHistory()
 	}
 }
 
-
-
 void
 KarbonView::selectionMoveToTop()
 {
-	m_part->document().moveSelectionToTop();
-	m_part->repaintAllViews();
+	m_part->addCommand( new VOrderSelectionCmd( &m_part->document(), VOrderSelectionCmd::bringtofront ), true );
 }
 
 void
@@ -347,8 +345,7 @@ KarbonView::selectionMoveDown()
 void
 KarbonView::selectionMoveToBottom()
 {
-	m_part->document().moveSelectionToBottom();
-	m_part->repaintAllViews();
+	m_part->addCommand( new VOrderSelectionCmd( &m_part->document(), VOrderSelectionCmd::sendtoback ), true );
 }
 
 void
