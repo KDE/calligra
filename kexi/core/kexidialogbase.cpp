@@ -415,8 +415,10 @@ bool KexiDialogBase::storeNewData()
 	sdata.setDescription( m_item->description() );
 
 	m_schemaData = v->storeNewData(sdata);
-	if (!m_schemaData)
+	if (!m_schemaData) {
+		setStatus(i18n("Saving object's definition failed."),""); 
 		return false;
+	}
 	v->setDirty(false);
 	//new schema data has now ID updated to a unique value 
 	//-assign that to item's identifier
