@@ -298,7 +298,7 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
 
 
-=== BETA 3 HOT TODO ===
+=== BETA 4 HOT TODO ===
 - make SQL GUI designer working reasonable
 - make SQL text designer working again
 - implement query storage
@@ -315,6 +315,7 @@ KFormDesigner
    are now painted in white XORed color on top of all other widgets
 - fixed widget raising to top on clicking: also container members 
    are raised (eg. for tab widget)
+- more guarded ptrs added; fixed crash on ObjectTree destruction
 
 2004-06-09
 KexiTableViewPropertyBuffer:
