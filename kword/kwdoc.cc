@@ -103,12 +103,12 @@ bool KWChild::load( const QDomElement& element )
 
     if ( m_tmpURL.isEmpty() )
     {
-        kdDebug(30003) << "Empty 'url' attribute in OBJECT" << endl;
+        kdDebug(32001) << "Empty 'url' attribute in OBJECT" << endl;
         return false;
     }
     if ( m_tmpMimeType.isEmpty() )
     {
-        kdDebug(30003) << "Empty 'mime' attribute in OBJECT" << endl;
+        kdDebug(32001) << "Empty 'mime' attribute in OBJECT" << endl;
         return false;
     }
 
@@ -125,7 +125,7 @@ bool KWChild::load( const QDomElement& element )
     }
     else
     {
-        kdDebug(30003) << "Missing RECT in OBJECT" << endl;
+        kdDebug(32001) << "Missing RECT in OBJECT" << endl;
         return false;
     }
 
@@ -473,13 +473,13 @@ void KWDocument::recalcFrames()
             if ( fs->isVisible() )
             {
                 for (int n = fs->getNumFrames()-1;  n >=0; n--) {
-                    kdDebug() << "KWDocument::recalcFrames frameset " << m << " frame " << n << " bottom=" << fs->getFrame(n)->bottom() << endl;
+                    //kdDebug(32002) << "KWDocument::recalcFrames frameset " << m << " frame " << n << " bottom=" << fs->getFrame(n)->bottom() << endl;
                     pages2=QMAX(pages2, fs->getFrame(n)->bottom());
                 }
             }
         }
         pages2=static_cast<int>( ceil( pages2 / ptPaperHeight() ) );
-        kdDebug() << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2 << " ptPaperHeight=" << ptPaperHeight() << endl;
+        //kdDebug(32002) << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2 << " ptPaperHeight=" << ptPaperHeight() << endl;
 
         m_pages=QMAX(pages2, m_pages);
         if ( m_pages != oldPages )
@@ -2039,7 +2039,7 @@ bool KWDocument::canRemovePage( int num, KWFrame *f )
                 return FALSE;
         }
     }
-    kdDebug() << "KWDocument::removePage " << num << " frame=" << f << "-> TRUE" << endl;
+    kdDebug(32002) << "KWDocument::removePage " << num << " frame=" << f << "-> TRUE" << endl;
     return TRUE;
 }
 

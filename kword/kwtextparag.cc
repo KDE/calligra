@@ -708,6 +708,7 @@ void KWTextParag::printRTDebug()
     kdDebug() << "Paragraph " << this << "   (" << paragId() << ") ------------------ " << endl;
     if ( prev() && prev()->paragId() + 1 != paragId() )
         kdWarning() << "Previous paragraph " << prev() << " has ID " << prev()->paragId() << endl;
+    /*
     QVector<QStyleSheetItem> vec = styleSheetItems();
     for ( uint i = 0 ; i < vec.size() ; ++i )
     {
@@ -716,17 +717,18 @@ void KWTextParag::printRTDebug()
         kdDebug() << "        italic=" << item->fontItalic() << " underline=" << item->fontUnderline() << " fontSize=" << item->fontSize() << endl;
         kdDebug() << "        align=" << item->alignment() << " leftMargin=" << item->margin(QStyleSheetItem::MarginLeft) << " rightMargin=" << item->margin(QStyleSheetItem::MarginRight) << " topMargin=" << item->margin(QStyleSheetItem::MarginTop) << " bottomMargin=" << item->margin(QStyleSheetItem::MarginBottom) << endl;
         kdDebug() << "        displaymode=" << dm[item->displayMode()] << endl;
-    }
+    }*/
     kdDebug() << "  Style: " << styleName() << endl;
     kdDebug() << "  Text: " << string()->toString() << endl;
     if ( counter() )
-        kdDebug() << "  Counter style=" << counter()->style() << " depth=" << counter()->depth() << endl;
+        kdDebug() << "  Counter style=" << counter()->style() << " depth=" << counter()->depth() << " text=" << m_layout.counter->text( this ) << " width=" << m_layout.counter->width( this ) << endl;
 
-/*    kdDebug() << "  Paragraph format=" << paragFormat() << endl;
+    /*
+    kdDebug() << "  Paragraph format=" << paragFormat() << "  size:" << dynamic_cast<KWTextFormat *>(paragFormat())->pointSizeFloat() << endl;
     QTextString * s = string();
     for ( int i = 0 ; i < s->length() ; ++i )
-        kdDebug() << i << ": '" << QString(s->at(i).c) << "'" << s->at(i).format() << endl;
-*/
+        kdDebug() << i << ": '" << QString(s->at(i).c) << "'" << s->at(i).format() << " size:" << dynamic_cast<KWTextFormat *>(s->at(i).format())->pointSizeFloat() << endl;
+        */
 }
 
 

@@ -365,7 +365,7 @@ QString Counter::suffix() const
 QString Counter::text( const KWTextParag *paragraph )
 {
     // Return cached value if possible.
-    if ( m_cache.text != QString::null )
+    if ( !m_cache.text.isNull() )
         return m_cache.text;
 
     // Recurse to find the text of the preceeding level.
@@ -464,7 +464,8 @@ int Counter::width( const KWTextParag *paragraph )
         return m_cache.width;
 
     // Ensure paragraph text is valid.
-    text( paragraph );
+    if ( m_cache.text.isNull() )
+        text( paragraph );
 
     // Now calculate width.
     QTextFormat *format = paragraph->paragFormat();

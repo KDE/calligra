@@ -37,6 +37,7 @@ public:
     //KWTextFormat& operator=( const KWTextFormat &fm );
 
     void setPointSizeFloat( float );
+    float pointSizeFloat() const { return fn.pointSizeFloat(); }
 
 protected:
     virtual void generateKey();

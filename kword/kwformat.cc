@@ -18,6 +18,7 @@
 */
 
 #include "kwformat.h"
+#include <kdebug.h>
 
 KWTextFormatCollection::KWTextFormatCollection()
     : QTextFormatCollection(), m_cachedFormat( 0L )
@@ -53,11 +54,15 @@ QTextFormat *KWTextFormatCollection::format( const QFont &f, const QColor &c )
 
 void KWTextFormat::setPointSizeFloat( float size )
 {
+    if ( fn.pointSizeFloat() == size )
+        return;
     fn.setPointSizeFloat( size );
+    update();
 }
 
 void KWTextFormat::generateKey()
 {
     QTextFormat::generateKey();
-    k += QString::number( (int)(fn.pointSizeFloat() * 10) ); // SYNC with ::format above
+    QString k = key();
+    setKey( k + QString::number( (int)(fn.pointSizeFloat() * 10) ) ); // SYNC with ::format above
 }

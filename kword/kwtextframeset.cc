@@ -566,7 +566,7 @@ void KWTextFrameSet::updateFrames()
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame * frame = frameIt.current();
-            kdDebug(32002) << "KWTextFrameSet::updateFrames adding frame " << frame << " height:" << frame->height() << " zoomed height:" << kWordDocument()->zoomItY( frame->height() ) << endl;
+            //kdDebug(32002) << "KWTextFrameSet::updateFrames adding frame " << frame << " height:" << frame->height() << " zoomed height:" << kWordDocument()->zoomItY( frame->height() ) << endl;
             ASSERT( !frames.contains(frame) );
             frames.append( frame );
             m_availableHeight += kWordDocument()->zoomItY( frame->height() );
@@ -680,7 +680,7 @@ void KWTextFrameSet::zoom()
         KWTextFormat * format = dynamic_cast<KWTextFormat *>(it.current());
         ASSERT( format );
         m_origFontSizes.insert( format, new int( format->font().pointSize() ) );
-        //kdDebug(32002) << "KWTextFrameSet::zooming format " << format->key() << " to " << static_cast<float>( format->font().pointSize() ) * factor << endl;
+        kdDebug(32002) << "KWTextFrameSet::zooming format " << format->key() << " from " << format->font().pointSizeFloat() << " to " << format->font().pointSizeFloat() * factor << endl;
         format->setPointSizeFloat( format->font().pointSizeFloat() * factor );
     }
 
@@ -704,6 +704,8 @@ void KWTextFrameSet::zoom()
     }
     m_lastFormatted = textdoc->firstParag();
     m_availableHeight = -1; // to be recalculated
+    //formatMore();
+    ensureCursorVisible();
 }
 
 void KWTextFrameSet::unzoom()
@@ -1032,9 +1034,12 @@ void KWTextFrameSet::formatMore()
              && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
         {
             kdDebug(32002) << "KWTextFrameSet::formatMore too much space (" << m_availableHeight << ") , trying to remove last frame" << endl;
-            // Last frame is empty -> try removing last page
-            if ( doc->canRemovePage( doc->getPages() - 1, frames.last() ) )
+            // Last frame is empty -> try removing last page, and more if necessary
+            while ( frames.count() > 1 && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) &&
+                    doc->canRemovePage( doc->getPages() - 1, frames.last() ) )
+            {
                 doc->removePage( doc->getPages() - 1 );
+            }
         }
 
     if ( lastFormatted )
