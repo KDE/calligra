@@ -549,6 +549,9 @@ protected:
 
     bool spellSwitchToNewPage();
     void spellAddTextObject();
+
+    bool searchInOtherPage();
+
 private:
 // ********** variables **********
 
@@ -807,7 +810,8 @@ private:
 
     KoSearchContext *m_searchEntry, *m_replaceEntry;
     KPrFindReplace *m_findReplace;
-
+    int m_searchPage;
+    int m_initSearchPage;
 };
 
 #endif

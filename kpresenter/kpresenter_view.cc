@@ -246,6 +246,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_searchEntry = 0L;
     m_replaceEntry = 0L;
     m_findReplace = 0L;
+    m_searchPage=-1;
 
     m_pKPresenterDoc = _doc;
 
@@ -4239,7 +4240,7 @@ bool KPresenterView::spellSwitchToNewPage()
     if(m_pKPresenterDoc->pageList().count()==1)
         return false;
     m_spell.currentSpellPage++;
-    if( m_spell.currentSpellPage==m_pKPresenterDoc->pageList().count())
+    if( m_spell.currentSpellPage>=m_pKPresenterDoc->pageList().count())
         m_spell.currentSpellPage=0;
     if( m_spell.currentSpellPage==m_spell.firstSpellPage)
         return false;
@@ -4795,7 +4796,7 @@ void KPresenterView::editFind()
     KPTextView * edit = m_canvas->currentTextObjectView();
     bool hasSelection=edit && (edit->kpTextObject())->textObject()->hasSelection();
     KoSearchDia dialog( m_canvas, "find", m_searchEntry,hasSelection );
-
+    m_searchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     if ( dialog.exec() == QDialog::Accepted )
     {
         m_findReplace = new KPrFindReplace( m_canvas, &dialog,edit ,m_canvas->objectText());
@@ -4825,6 +4826,7 @@ void KPresenterView::editReplace()
     if( list.count()==0)
         KMessageBox::sorry( this, i18n( "Sorry, there is not text object!" ) );
     return;
+    m_searchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     if ( dialog.exec() == QDialog::Accepted )
     {
 
@@ -4833,13 +4835,39 @@ void KPresenterView::editReplace()
     }
 }
 
+bool KPresenterView::searchInOtherPage()
+{
+    //there is not other page
+    if(m_pKPresenterDoc->pageList().count()==1)
+        return false;
+    m_searchPage++;
+    if( m_searchPage>=m_pKPresenterDoc->pageList().count())
+        m_searchPage=0;
+    if( m_searchPage==m_initSearchPage)
+        return false;
+    if ( KMessageBox::questionYesNo( this,
+                                     i18n( "Do you want to search in new page?") )
+         != KMessageBox::Yes )
+        return false;
+    skipToPage(m_searchPage);
+    return true;
+}
+
 void KPresenterView::doFindReplace()
 {
     KPrFindReplace* findReplace = m_findReplace; // keep a copy. "this" might be deleted before we exit this method
-
+    m_searchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
+    m_initSearchPage=m_searchPage;
     findReplace->proceed();
 
     bool aborted = findReplace->aborted();
+    while(!aborted && searchInOtherPage() )
+    {
+        m_findReplace->changeListObject(m_canvas->objectText());
+        findReplace->proceed();
+        aborted = findReplace->aborted();
+    }
+
     delete findReplace;
     if ( !aborted ) // Only if we still exist....
         m_findReplace = 0L;
