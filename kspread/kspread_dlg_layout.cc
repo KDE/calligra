@@ -830,10 +830,53 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     dlg = _dlg;
 
     QVBoxLayout* layout = new QVBoxLayout( this, 6,10 );
+
+    QButtonGroup *grp = new QButtonGroup( i18n("Format"),this);
+    QGridLayout *grid = new QGridLayout(grp,8,2,15,7);
+    grp->setRadioButtonExclusive( TRUE );
+    number=new QRadioButton(i18n("Number"),grp);
+    grid->addWidget(number,0,0);
+
+    percent=new QRadioButton(i18n("Percent"),grp);
+    grid->addWidget(percent,1,0);
+
+    money=new QRadioButton(i18n("Money"),grp);
+    grid->addWidget(money,2,0);
+
+    scientific=new QRadioButton(i18n("Scientific"),grp);
+    grid->addWidget(scientific,3,0);
+
+    fraction=new QRadioButton(i18n("Fraction"),grp);
+    grid->addWidget(fraction,4,0);
+
+    date=new QRadioButton(i18n("Date format"),grp);
+    grid->addWidget(date,5,0);
+
+    time=new QRadioButton(i18n("Time format"),grp);
+    grid->addWidget(time,6,0);
+
+    textFormat=new QRadioButton(i18n("Text"),grp);
+    grid->addWidget(textFormat,7,0);
+
+    QGroupBox *box2 = new QGroupBox( grp, "Box");
+    box2->setTitle(i18n("Preview"));
+    QGridLayout *grid3 = new QGridLayout(box2,1,3,14,7);
+
+    exampleLabel=new QLabel(box2);
+    grid3->addWidget(exampleLabel,0,1);
+
+    grid->addMultiCellWidget(box2,6,7,1,1);
+
+    listFormat=new QListBox(grp);
+    grid->addMultiCellWidget(listFormat,0,5,1,1);
+    layout->addWidget(grp);
+
+
+    /* *** */
+
     QGroupBox *box = new QGroupBox( this, "Box");
 
-    QGridLayout *grid = new QGridLayout(box,3,4,7,7);
-
+    grid = new QGridLayout(box,3,4,7,7);
 
     postfix = new QLineEdit( box, "LineEdit_1" );
     grid->addWidget(postfix,2,1);
@@ -897,47 +940,6 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     else if ( dlg->floatFormat == KSpreadCell::AlwaysSigned && dlg->floatColor == KSpreadCell::NegRed )
         format->setCurrentItem( 4 );
     layout->addWidget(box);
-
-
-    QButtonGroup *grp = new QButtonGroup( i18n("Format"),this);
-    grid = new QGridLayout(grp,8,2,15,7);
-    grp->setRadioButtonExclusive( TRUE );
-    number=new QRadioButton(i18n("Number"),grp);
-    grid->addWidget(number,0,0);
-
-    percent=new QRadioButton(i18n("Percent"),grp);
-    grid->addWidget(percent,1,0);
-
-    money=new QRadioButton(i18n("Money"),grp);
-    grid->addWidget(money,2,0);
-
-    scientific=new QRadioButton(i18n("Scientific"),grp);
-    grid->addWidget(scientific,3,0);
-
-    fraction=new QRadioButton(i18n("Fraction"),grp);
-    grid->addWidget(fraction,4,0);
-
-    date=new QRadioButton(i18n("Date format"),grp);
-    grid->addWidget(date,5,0);
-
-    time=new QRadioButton(i18n("Time format"),grp);
-    grid->addWidget(time,6,0);
-
-    textFormat=new QRadioButton(i18n("Text"),grp);
-    grid->addWidget(textFormat,7,0);
-
-    QGroupBox *box2 = new QGroupBox( grp, "Box");
-    box2->setTitle(i18n("Preview"));
-    QGridLayout *grid3 = new QGridLayout(box2,1,3,14,7);
-
-    exampleLabel=new QLabel(box2);
-    grid3->addWidget(exampleLabel,0,1);
-
-    grid->addMultiCellWidget(box2,0,1,1,1);
-
-    listFormat=new QListBox(grp);
-    grid->addMultiCellWidget(listFormat,2,7,1,1);
-    layout->addWidget(grp);
 
     cellFormatType=dlg->formatType;
 
