@@ -101,25 +101,18 @@ static const int CURRENT_SYNTAX_VERSION = 2;
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 static const char * CURRENT_DTD_VERSION = "1.2";
 
-/******************************************************************/
-/* class KPresenterChild					  */
-/******************************************************************/
-
-/*====================== constructor =============================*/
 KPresenterChild::KPresenterChild( KPresenterDoc *_kpr, KoDocument* _doc, const QRect& _rect )
     : KoDocumentChild( _kpr, _doc, _rect )
 {
     m_parent = _kpr;
 }
 
-/*====================== constructor =============================*/
 KPresenterChild::KPresenterChild( KPresenterDoc *_kpr ) :
     KoDocumentChild( _kpr )
 {
     m_parent = _kpr;
 }
 
-/*====================== destructor ==============================*/
 KPresenterChild::~KPresenterChild()
 {
 }
@@ -129,11 +122,6 @@ KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
     return 0L;
 }
 
-/******************************************************************/
-/* class KPresenterDoc						  */
-/******************************************************************/
-
-/*====================== constructor =============================*/
 KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name,
                               bool singleViewMode )
     : KoDocument( parentWidget,widgetName, parent, name, singleViewMode ),
@@ -435,7 +423,6 @@ void KPresenterDoc::initConfig()
 
 }
 
-/*==============================================================*/
 DCOPObject* KPresenterDoc::dcopObject()
 {
     if ( !dcop )
@@ -444,7 +431,6 @@ DCOPObject* KPresenterDoc::dcopObject()
     return dcop;
 }
 
-/*==============================================================*/
 KPresenterDoc::~KPresenterDoc()
 {
     if(isReadWrite())
@@ -486,7 +472,6 @@ void KPresenterDoc::addCommand( KCommand * cmd )
     setModified( true );
 }
 
-/*======================= make child list intern ================*/
 bool KPresenterDoc::saveChildren( KoStore* _store )
 {
     int i = 0;
@@ -529,7 +514,6 @@ bool KPresenterDoc::saveChildren( KoStore* _store )
     return true;
 }
 
-/*========================== save ===============================*/
 QDomDocument KPresenterDoc::saveXML()
 {
     if ( saveOnlyPage == -1 ) {
@@ -684,9 +668,7 @@ QDomDocument KPresenterDoc::saveXML()
     makeUsedPixmapList();
 
     if (specialOutputFlag()==SaveAsKOffice1dot1)
-    {
         m_pictureCollection.saveXMLAsKOffice1Dot1( doc, presenter, usedPictures );
-    }
     else
     {
         QDomElement pictures = m_pictureCollection.saveXML( KoPictureCollection::CollectionPicture, doc, usedPictures );
@@ -708,7 +690,8 @@ QDomDocument KPresenterDoc::saveXML()
     return doc;
 }
 
-void KPresenterDoc::saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentChild>& childList ,QDomDocument &doc,QDomElement &presenter )
+void KPresenterDoc::saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentChild>& childList,
+                                       QDomDocument &doc,QDomElement &presenter )
 {
     QPtrListIterator<KoDocumentChild> chl( childList );
     double offset=m_pageList.find(page)*page->getPageRect().height();
@@ -717,7 +700,8 @@ void KPresenterDoc::saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentC
     }
 }
 
-void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl,QDomDocument &doc,QDomElement &presenter, double offset )
+void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDomDocument &doc,
+                                       QDomElement &presenter, double offset )
 {
     QPtrListIterator<KPObject> oIt(page->objectList());
     for (; oIt.current(); ++oIt )
@@ -757,7 +741,6 @@ void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl,QDomD
 
 }
 
-/*===============================================================*/
 void KPresenterDoc::enableEmbeddedParts( bool f )
 {
     KPrPage *page=0L;
@@ -765,7 +748,6 @@ void KPresenterDoc::enableEmbeddedParts( bool f )
         page->enableEmbeddedParts(f);
 }
 
-/*========================== save background ====================*/
 QDomDocumentFragment KPresenterDoc::saveBackground( QDomDocument &doc )
 {
     KPBackGround *kpbackground = 0;
@@ -779,7 +761,6 @@ QDomDocumentFragment KPresenterDoc::saveBackground( QDomDocument &doc )
     return fragment;
 }
 
-/*========================== save objects =======================*/
 QDomElement KPresenterDoc::saveObjects( QDomDocument &doc )
 {
     QDomElement objects=doc.createElement("OBJECTS");
@@ -800,7 +781,6 @@ QDomElement KPresenterDoc::saveObjects( QDomDocument &doc )
     return objects;
 }
 
-/*========================== save page title ====================*/
 QDomElement KPresenterDoc::saveTitle( QDomDocument &doc )
 {
     QDomElement titles=doc.createElement("PAGETITLES");
@@ -823,7 +803,6 @@ QDomElement KPresenterDoc::saveTitle( QDomDocument &doc )
     return titles;
 }
 
-/*===================== save page note ========================*/
 QDomElement KPresenterDoc::saveNote( QDomDocument &doc )
 {
     QDomElement notes=doc.createElement("PAGENOTES");
@@ -882,7 +861,6 @@ QDomElement KPresenterDoc::saveUsedSoundFileToXML( QDomDocument &_doc, QStringLi
     return soundFiles;
 }
 
-/*==============================================================*/
 bool KPresenterDoc::completeSaving( KoStore* _store )
 {
     if ( !_store ) {
@@ -932,8 +910,6 @@ void KPresenterDoc::saveUsedSoundFileToStore( KoStore *_store, QStringList _list
     }
 }
 
-
-/*========================== load ===============================*/
 bool KPresenterDoc::loadChildren( KoStore* _store )
 {
     if ( objStartY == 0 && _clean) // Don't do this when inserting a template or a page...
@@ -960,7 +936,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
     {
         // This is an old style document, before the current TextObject
         // We have kprconverter.pl for it
-        kdWarning() << "KPresenter document version 1. Launching perl script to convert it." << endl;
+        kdWarning(33001) << "KPresenter document version 1. Launching perl script to convert it." << endl;
 
         // Read the full XML and write it to a temp file
         KTempFile tmpFileIn;
@@ -1067,7 +1043,7 @@ void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement topElem, KMacroC
             kppartobject->setOrig(kppartobject->getOrig().x(),newPos);
 
             InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Part Object" ), kppartobject, this,page );
-            kdDebug()<<" InsertCmd *insertCmd*********************\n";
+            kdDebug(33001)<<" InsertCmd *insertCmd*********************\n";
             insertCmd->execute();
             if ( !macroCmd )
                 macroCmd = new KMacroCommand( i18n("Insert Part Object"));
@@ -1076,7 +1052,6 @@ void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement topElem, KMacroC
     }
 }
 
-/*========================== load ===============================*/
 bool KPresenterDoc::loadXML( const QDomDocument &doc )
 {
     emit sigProgress( 0 );
@@ -1103,7 +1078,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     QDomElement document=doc.documentElement();
     // DOC
     if(document.tagName()!="DOC") {
-        kdWarning() << "Missing DOC" << endl;
+        kdWarning(33001) << "Missing DOC" << endl;
         setErrorMessage( i18n("Invalid document, DOC tag missing") );
         return false;
     }
@@ -1111,7 +1086,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     if(!document.hasAttribute("mime") ||  (
            document.attribute("mime")!="application/x-kpresenter" &&
            document.attribute("mime")!="application/vnd.kde.kpresenter" ) ) {
-        kdError() << "Unknown mime type " << document.attribute("mime") << endl;
+        kdError(33001) << "Unknown mime type " << document.attribute("mime") << endl;
         setErrorMessage( i18n("Invalid document, expected mimetype application/x-kpresenter or application/vnd.kde.kpresenter, got %1").arg(document.attribute("mime")) );
         return false;
     }
@@ -1361,7 +1336,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                                     m_pageList.append(new KPrPage(this));
                             }
                             m_pageList.at(nr)->slideSelected(show);
-                        } else kdWarning() << "Parse error. No nr in <SLIDE> !" << endl;
+                        } else kdWarning(33001) << "Parse error. No nr in <SLIDE> !" << endl;
                     }
                     slide=slide.nextSibling().toElement();
                 }
@@ -1398,26 +1373,19 @@ void KPresenterDoc::loadPictureMap ( const QDomElement& domElement )
     // <PICTURES>
     QDomElement picturesElem = domElement.namedItem( "PICTURES" ).toElement();
     if ( !picturesElem.isNull() )
-    {
        m_pictureCollection.readXML( picturesElem, m_pictureMap );
-    }
 
     // <PIXMAPS>
     QDomElement pixmapsElem = domElement.namedItem( "PIXMAPS" ).toElement();
     if ( !pixmapsElem.isNull() )
-    {
        m_pictureCollection.readXML( pixmapsElem, m_pictureMap );
-    }
 
     // <CLIPARTS>
     QDomElement clipartsElem = domElement.namedItem( "CLIPARTS" ).toElement();
     if ( !clipartsElem.isNull() )
-    {
        m_pictureCollection.readXML( pixmapsElem, m_pictureMap );
-    }
 }
 
-/*====================== load background =========================*/
 void KPresenterDoc::loadBackground( const QDomElement &element )
 {
     kdDebug(33001) << "KPresenterDoc::loadBackground" << endl;
@@ -1439,7 +1407,6 @@ void KPresenterDoc::loadBackground( const QDomElement &element )
     }
 }
 
-/*========================= load objects =========================*/
 KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
 {
     ObjType t = OT_LINE;
@@ -1808,7 +1775,6 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
     }
 }
 
-/*========================= load page title =========================*/
 void KPresenterDoc::loadTitle( const QDomElement &element )
 {
     QDomElement title=element.firstChild().toElement();
@@ -1832,7 +1798,6 @@ void KPresenterDoc::loadTitle( const QDomElement &element )
     }
 }
 
-/*========================= load page note =========================*/
 void KPresenterDoc::loadNote( const QDomElement &element )
 {
     QDomElement note=element.firstChild().toElement();
@@ -1892,7 +1857,7 @@ void KPresenterDoc::loadImagesFromStore( KoStore *_store )
         m_pictureMap.clear(); // Release memory
     }
 }
-/*===================================================================*/
+
 bool KPresenterDoc::completeLoading( KoStore* _store )
 {
     emit sigProgress( 80 );
@@ -1992,7 +1957,6 @@ void KPresenterDoc::loadUsedSoundFileFromStore( KoStore *_store, QStringList _li
     }
 }
 
-/*===================== set page layout ==========================*/
 void KPresenterDoc::setPageLayout( const KoPageLayout &pgLayout )
 {
     //     if ( _pageLayout == pgLayout )
@@ -2065,7 +2029,6 @@ bool KPresenterDoc::insertNewTemplate( bool clean )
         return false;
 }
 
-/*================================================================*/
 void KPresenterDoc::initEmpty()
 {
     QString fileName( locate("kpresenter_template", "Screenpresentations/.source/Plain.kpt",
@@ -2077,7 +2040,6 @@ void KPresenterDoc::initEmpty()
     resetURL();
 }
 
-/*======================= set rasters ===========================*/
 void KPresenterDoc::setGridValue( double _x, double _y, bool _replace )
 {
     oldGridX = m_gridX;
@@ -2128,7 +2090,6 @@ void KPresenterDoc::layout()
     }
 }
 
-/*===================== repaint =================================*/
 void KPresenterDoc::repaint( KPObject *kpobject )
 {
     repaint( m_zoomHandler->zoomRect(kpobject->getBoundingRect()) );
@@ -2162,19 +2123,16 @@ QRect KPresenterDoc::getPageRect( bool decBorders ) const
     return QRect( bl, bt, pw, ph );
 }
 
-/*================================================================*/
 int KPresenterDoc::getLeftBorder() const
 {
     return static_cast<int>(m_pageLayout.ptLeft);
 }
 
-/*================================================================*/
 int KPresenterDoc::getTopBorder() const
 {
     return static_cast<int>(m_pageLayout.ptTop);
 }
 
-/*================================================================*/
 int KPresenterDoc::getBottomBorder() const
 {
     return static_cast<int>(m_pageLayout.ptBottom);
@@ -2185,9 +2143,6 @@ int KPresenterDoc::getRightBorder() const
     return static_cast<int>(m_pageLayout.ptRight);
 }
 
-
-
-/*================================================================*/
 void KPresenterDoc::deletePage( int _page )
 {
     kdDebug(33001) << "KPresenterDoc::deletePage " << _page << endl;
@@ -2288,7 +2243,7 @@ QString KPresenterDoc::templateFileName(bool chooseTemplate, const QString &theF
         KURL src, dest;
         src.setPath( fileName );
         dest.setPath( locateLocal( "appdata", "default.kpr" ) );
-        kdDebug() << "Copying template  (in KPresenterDoc::templateFileName)" << endl
+        kdDebug(33001) << "Copying template  (in KPresenterDoc::templateFileName)" << endl
             << "  from: " << src.prettyURL() << endl
             << "  to: " << dest.prettyURL() << endl;
         KIO::NetAccess::del( dest ); // copy does *not* delete, so have to do it explicitely!
@@ -2297,7 +2252,8 @@ QString KPresenterDoc::templateFileName(bool chooseTemplate, const QString &theF
     return fileName;
 }
 
-int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile )
+int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _insPos,
+                                  bool chooseTemplate, const QString &theFile )
 {
     kdDebug(33001) << "KPresenterDoc::insertNewPage " << _page << endl;
 
@@ -2330,7 +2286,6 @@ int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _
     return _page;
 }
 
-/*=============================================================*/
 void KPresenterDoc::savePage( const QString &file, int pgnum )
 {
     saveOnlyPage = pgnum;
@@ -2338,8 +2293,6 @@ void KPresenterDoc::savePage( const QString &file, int pgnum )
     saveOnlyPage = -1;
 }
 
-
-/*====================== replace objects =========================*/
 void KPresenterDoc::replaceObjs( bool createUndoRedo )
 {
     KMacroCommand * macroCmd = 0L;
@@ -2356,6 +2309,7 @@ void KPresenterDoc::replaceObjs( bool createUndoRedo )
         else
             delete cmd;
     }
+
     if(macroCmd)
     {
         macroCmd->execute();
@@ -2363,13 +2317,11 @@ void KPresenterDoc::replaceObjs( bool createUndoRedo )
     }
 }
 
-/*========================= restore background ==================*/
 void KPresenterDoc::restoreBackground( KPrPage *page )
 {
     page->background()->reload();
 }
 
-/*==================== load pasted objects ==============================*/
 KCommand * KPresenterDoc::loadPastedObjs( const QString &in,KPrPage* _page )
 {
     QDomDocument doc;
@@ -2379,7 +2331,7 @@ KCommand * KPresenterDoc::loadPastedObjs( const QString &in,KPrPage* _page )
 
     // DOC
     if (document.tagName()!="DOC") {
-        kdError() << "Missing DOC" << endl;
+        kdError(33001) << "Missing DOC" << endl;
         return 0L;
     }
 
@@ -2399,7 +2351,6 @@ KCommand * KPresenterDoc::loadPastedObjs( const QString &in,KPrPage* _page )
     return cmd;
 }
 
-/*================= deselect all objs ===========================*/
 void KPresenterDoc::deSelectAllObj()
 {
     QPtrListIterator<KoView> it( views() );
@@ -2461,7 +2412,6 @@ void KPresenterDoc::makeUsedPixmapList()
     }
 }
 
-/*================================================================*/
 void KPresenterDoc::makeUsedSoundFileList()
 {
     if ( saveOnlyPage != -1 )
@@ -2488,7 +2438,6 @@ void KPresenterDoc::makeUsedSoundFileList()
     }
 }
 
-/*================================================================*/
 KoView* KPresenterDoc::createViewInstance( QWidget* parent, const char* name )
 {
     //the page numbers have to be recalced for the sticky objects
@@ -2497,8 +2446,8 @@ KoView* KPresenterDoc::createViewInstance( QWidget* parent, const char* name )
     return new KPresenterView( this, parent, name );
 }
 
-/*================================================================*/
-void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, double zoomX, double zoomY )
+void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect,
+                                  bool /*transparent*/, double zoomX, double zoomY )
 {
     m_zoomHandler->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     if ( zoomHandler()->zoomedResolutionX() != zoomX || zoomHandler()->zoomedResolutionY() != zoomY )
@@ -2566,7 +2515,7 @@ void KPresenterDoc::copyPage( int from, int to )
 
     loadNativeFormat( tempFile.name() );
 
-    KPrInsertPageCmd *cmd=new KPrInsertPageCmd(i18n("Duplicate Slide") ,to, newpage, this );
+    KPrInsertPageCmd *cmd=new KPrInsertPageCmd(i18n("Duplicate Slide"), to, newpage, this );
     cmd->execute();
     addCommand(cmd);
 
@@ -2853,8 +2802,6 @@ void KPresenterDoc::displayActivePage(KPrPage * _page)
     m_initialActivePage = _page;
 }
 
-
-
 void KPresenterDoc::updateZoomRuler()
 {
     QPtrListIterator<KoView> it( views() );
@@ -2944,18 +2891,16 @@ void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
         if ( !nameElem.isNull() )
         {
             sty->setName( nameElem.attribute("value") );
-            //kdDebug() << "KoStyle created " << this << " name=" << m_name << endl;
+            //kdDebug(33001) << "KoStyle created " << this << " name=" << m_name << endl;
         } else
-            kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
+            kdWarning(33001) << "No NAME tag in LAYOUT -> no name for this style!" << endl;
 
         sty->setFollowingStyle( sty );
 
 
         QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
-        {
             sty->format() = KPTextObject::loadFormat( formatElem, 0L, defaultFont(), globalLanguage(), globalHyphenation() );
-        }
         else
             kdWarning(33001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 
@@ -2967,7 +2912,7 @@ void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
             followingStyles.append( following );
         }
         else
-            kdWarning () << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
+            kdWarning (33001) << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
     }
 
     Q_ASSERT( followingStyles.count() == m_styleList.count() );
@@ -3017,7 +2962,6 @@ void KPresenterDoc::startBackgroundSpellCheck()
             m_bgSpellCheck->startBackgroundSpellCheck();
         }
     }
-
 }
 
 void KPresenterDoc::enableBackgroundSpellCheck( bool b )
@@ -3026,7 +2970,6 @@ void KPresenterDoc::enableBackgroundSpellCheck( bool b )
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it )
         ((KPresenterView*)it.current())->updateBgSpellCheckingState();
-
 }
 
 bool KPresenterDoc::backgroundSpellCheckEnabled() const
@@ -3106,7 +3049,6 @@ void KPresenterDoc::setShowHelplines(bool b)
 void KPresenterDoc::horizHelplines(const QValueList<double> &lines)
 {
     m_horizHelplines = lines;
-
 }
 
 void KPresenterDoc::vertHelplines(const QValueList<double> &lines)
@@ -3130,7 +3072,6 @@ int KPresenterDoc::indexOfVertHelpline(double pos)
         if(pos - 4.0 < *i && pos + 4.0 > *i)
             return ret;
     return -1;
-
 }
 
 void KPresenterDoc::updateHorizHelpline(int idx, double pos)
@@ -3156,7 +3097,7 @@ void KPresenterDoc::addVertHelpline(double pos)
 void KPresenterDoc::removeHorizHelpline(int index)
 {
     if ( index >= (int)m_horizHelplines.count())
-        kdDebug(33001)<<" index of remove horiz helpline doesn't exit !\n";
+        kdDebug(33001)<<" index of remove horiz helpline doesn't exist !\n";
     else
         m_horizHelplines.remove(m_horizHelplines[index]);
 }
@@ -3164,7 +3105,7 @@ void KPresenterDoc::removeHorizHelpline(int index)
 void KPresenterDoc::removeVertHelpline( int index )
 {
     if ( index >= (int)m_vertHelplines.count())
-        kdDebug(33001)<<" index of remove vertical helpline doesn't exit !\n";
+        kdDebug(33001)<<" index of remove vertical helpline doesn't exist !\n";
     else
         m_vertHelplines.remove(m_vertHelplines[index]);
 }
@@ -3185,19 +3126,14 @@ void KPresenterDoc::loadHelpLines( const QDomElement &element )
         helplines=element;
 
     helplines=helplines.firstChild().toElement();
-    while ( !helplines.isNull() ) {
+    while ( !helplines.isNull() )
+    {
         if ( helplines.tagName()=="Vertical" )
-        {
             m_vertHelplines.append(helplines.attribute("value").toDouble());
-        }
         else if ( helplines.tagName()=="Horizontal" )
-        {
             m_horizHelplines.append(helplines.attribute("value").toDouble());
-        }
         else if ( helplines.tagName()=="HelpPoint" )
-        {
             m_helpPoints.append( KoPoint( helplines.attribute("posX").toDouble(), helplines.attribute("posY").toDouble()));
-        }
         helplines=helplines.nextSibling().toElement();
     }
 }
@@ -3226,7 +3162,6 @@ void KPresenterDoc::saveHelpLines( QDomDocument &doc, QDomElement& element )
         element.appendChild( point );
     }
 }
-
 
 void KPresenterDoc::updateGridButton()
 {
@@ -3279,7 +3214,6 @@ void KPresenterDoc::clearIgnoreWordAll( )
     m_spellListIgnoreAll.clear();
     m_bgSpellCheck->clearIgnoreWordAll( );
 }
-
 
 void KPresenterDoc::updateObjectStatusBarItem()
 {
@@ -3338,7 +3272,6 @@ void KPresenterDoc::setCursorInProtectedArea( bool b )
     testAndCloseAllTextObjectProtectedContent();
 }
 
-
 void KPresenterDoc::testAndCloseAllTextObjectProtectedContent()
 {
     if ( !m_cursorInProtectectedArea )
@@ -3348,7 +3281,6 @@ void KPresenterDoc::testAndCloseAllTextObjectProtectedContent()
             static_cast<KPresenterView*>(it.current())->testAndCloseAllTextObjectProtectedContent();
     }
 }
-
 
 void KPresenterDoc::insertFile(const QString & file )
 {
@@ -3443,7 +3375,6 @@ void KPresenterDoc::updateStyleListOrder( const QStringList &list )
     styleCollection()->updateStyleListOrder( list );
 }
 
-
 void KPresenterDoc::updateDirectCursorButton()
 {
     QPtrListIterator<KoView> it( views() );
@@ -3491,4 +3422,4 @@ void KPresenterDoc::setKOSpellConfig(KOSpellConfig _kspell)
 #endif
 
 
-#include <kpresenter_doc.moc>
+#include "kpresenter_doc.moc"
