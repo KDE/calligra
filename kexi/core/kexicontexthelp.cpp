@@ -20,6 +20,7 @@
 #include "kexicontexthelp.h"
 #include <kocontexthelp.h>
 #include <kxmlguiclient.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <qlayout.h>
 
@@ -29,6 +30,8 @@ KexiContextHelp::KexiContextHelp(KexiView *view,QWidget *parent, const char *nam
 	setCaption(i18n("Context Help"));
 	( new QVBoxLayout(this))->setAutoAdd(true);
 	m_widget=new KoContextHelpWidget(this);
+	connect(m_widget,SIGNAL(linkClicked( const QString& )),
+		this,SLOT(linkClickedInternal( const QString& )));
 	m_guiClient= new KXMLGUIClient();
         registerAs(KexiDialogBase::ToolWindow);
 }
@@ -36,6 +39,10 @@ KexiContextHelp::KexiContextHelp(KexiView *view,QWidget *parent, const char *nam
 void KexiContextHelp::setContextHelp( const QString& title, const QString& text, const QPixmap* icon = 0 )
 {
 	m_widget->setContextHelp(title,text,icon);
+}
+
+void KexiContextHelp::linkClickedInternal(const QString& link) {
+
 }
 
 

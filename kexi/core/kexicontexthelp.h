@@ -33,8 +33,12 @@ class KexiContextHelp : public KexiDialogBase
 		~KexiContextHelp();
                 void setContextHelp( const QString& title, const QString& text, const QPixmap* icon = 0 );
 		KXMLGUIClient *guiClient();
+	private slots:
+		void linkClickedInternal(const QString &link);
+	signals:
+		void linkClicked( const QString& link );
 	private:
-		KoContextHelpWidget *m_widget; 		
+		KoContextHelpWidget *m_widget;
 		KXMLGUIClient *m_guiClient;
 };
 

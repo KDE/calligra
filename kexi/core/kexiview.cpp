@@ -143,7 +143,7 @@ void KexiView::initHelper()
         m_help->setCloseMode(QDockWindow::Always);
 //	mainWindow()->moveDockWindow(help,DockLeft);
 	mainWindow()->moveDockWindow(m_help, DockLeft);*/
-	m_help->setContextHelp(i18n("Welcome"), i18n("kexi is based on relational databases. Before you start creating tables you should think about the general <a>database design</a>."));
+	m_help->setContextHelp(i18n("Welcome"), i18n("kexi is based on <a href=\"help://kexi#glossary-relationaldatabase\">relational databases</a>. Before you start creating tables you should think about the general database design.<br><br>Further readings:<br><ul><li><a href=\"help://kexi#databasedesign\">Relational Database Design</a></li><li><a href=\"help://kexi#entityrelationship\">The entity relationship model</a></li></ul>"));
 }
 
 void KexiView::initActions()
