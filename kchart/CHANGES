@@ -2,6 +2,8 @@ Changes since KChart 1.2
 ------------------------
 
 Fix paininting of surrounding frame (see also #46251 Legend not completely visible )
+Fix for x-Achses texts always the same when several charts embedded
+Fix for x-Achses texts and label texts not correctly recognized when embedded in KSpread
 
 
 Changes since KChart 1.1
