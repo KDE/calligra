@@ -129,8 +129,8 @@ public:
      */
     ~KSpreadCell();
 
-    KSpreadCell* previousCell() { return m_previousCell; }
-    KSpreadCell* nextCell() { return m_nextCell; }
+    KSpreadCell* previousCell()const { return m_previousCell; }
+    KSpreadCell* nextCell()const { return m_nextCell; }
     void setPreviousCell( KSpreadCell* c ) { m_previousCell = c; }
     void setNextCell( KSpreadCell* c ) { m_nextCell = c; }
 
