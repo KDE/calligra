@@ -11,13 +11,14 @@ lib_LTLIBRARIES = libkofficecore.la
 libkofficecore_la_SOURCES = koDocument.cc koView.cc koffice.idl \
 	koFrame.cc koStream.cc koFilterManager.cc \
 	koPrintExt.cc koMainWindow.cc koScanTools.cc \
-	koScanPlugins.cc koApplication.cc koQueryTrader.cc
+	koScanPlugins.cc koApplication.cc koQueryTrader.cc \
+	koUndo.cc
 
 include_HEADERS = koffice.h koView.h koFrame.h \
 	koStream.h koDocument.h koPrintExt.h koFactory.h \
 	koMainWindow.h koScanTools.h koScanPlugins.h \
 	koApplication.h koQueryTypes.h \
-	koFilterManager.h
+	koFilterManager.h koUndo.h
 
 libkofficecore_la_METASOURCES = koFrame.moc koMainWindow.moc koApplication.moc
 
