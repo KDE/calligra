@@ -297,26 +297,6 @@ CC_MAIL: dkite@shaw.ca
 CCPASTEUR: 
 	-why pixmap's code is in kexiproperty/kexipropertybuffer?
 	-perhaps we'd reuse KDE Menu editor GUI?
-TODO: RENAME IN FORMS:
- -s/Spacer/Spring/
- -s/A spacer widget to fill in blanks/A spring to place between widgets/
- -s/A simple push button to execute a command/A simple push button to execute actions
- -we need to find a better name for 'listview'
- -(for Frame): s/A very simple container/A simple container with a frame
- -(Stack widget): s/A container with multiple pages/A container with a stack of pages
- -s/HBox/Horizontal Box ?
- -s/VBox/Vertical Box ?
- -s/Grid/Grid Box
- +s/A widget with this name already exists. Please choose another name or rename 
-this widget before./A widget with this name already exists. Please choose another name or rename existing widget.
- +s/Set the current style to view./Set the current view style.
- +app name: s/A KDE KPart Application/
- +s/&Name :/&Name:/
- +s/&Size :/&Size:/
- +s/Edit Pixmap Collection : %1/Edit Pixmap Collection: %1/
- +s/Do you really want/Do you want
- +"<qt>Do you really want to remove <b>%1</b> from %2 ?</qt>" -impossible 
-   to effectively translate
  
 TODO:
 add KexiViewBase::removeDataBlock() so we can use it in KexiFormPart::remove()
@@ -334,19 +314,36 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
       (needed for switching back to GUI editor from texdt mode)
 - remove single-char token names with chars (more readable + more effective)
 
+2004-07-20..21
+Kexi Browser
+- "rename object" action added (inline editor uses IdentifierValidator)
+- popup menu for group nodes now have a title
+Core
+- KexiProject, KexiPart supports object renaming
+- KexiProject::removeObject() and KexiProject::renameObject() 
+  now operate within transaction.
+- KexiProject: more error mesages added.
+KexiDB
+- Connection::drv_executeSQL() is now protected. Connection::executeSQL() public
+  method added which remembers last executed sql statement for better error handling.
+
 2004-07-19
 Kexi
 - We've now --final-mode and --design-mode CL-options for completness.
 KexiCore, KexiMain
-- KexiStartupHandler introduced: handles startup actions, thet 
+- KexiStartupHandler introduced: handles startup actions, that 
  are new performed independently from Main Window's stuff. 
  We're now prepared to having 'startup mode' 
  database's property, which can be overriden by --final-* CL-options.
-FormDesigner
+Form Designer
 - A small fix to reduce widget flickering on resizing: 
   when we're dragging left, top-left or top
   handle, both size and position of widget changes. We're now hiding 
   the widget and showing it again after transformation.
+
+2004-07-16
+Form Designer
+- some strings fixed
 
 ===================== Kexi 0.1 Beta 4 =====================
 

@@ -158,22 +158,3 @@ TODO: put more props. todo - creator, created date, etc. (also to KexiProjectDat
 		
 -----------------------------------------------------------------
 
-
-JOWENN:: plan to implement KexiStorage that abstracts storage using:
-1) db engine
-2) kostore xml format
-
-this 2) storage method is also proposal for OASIS db format
-
-
-JOWENN: proposals for better reporting tools for OOo and kexi
-
-
------------------------------------------------------------------
-PRAGMA table_info(table-name);
-For each column in the named table, invoke the callback function 
-once with information about that column, including the 
-column name, data type, whether or not the column can be NULL, 
-and the default value for the column.
------------------------------------------------------------------
-

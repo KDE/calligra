@@ -95,15 +95,16 @@ COMMIT;
 	3. Move data from previous to new table.
 	4. Drop previous table.
 
- THE ALGORITHM
+4. PROPOSED ALGORITHM
 
 
-4. Useful documentation
+
+5. Useful documentation
 	http://dev.mysql.com/doc/mysql/en/ALTER_TABLE.html
 
 
-5. History
-2004-07-20
+6. Document History
+2004-07-20 js
 	Started
 	Asked Richard Hipp about RENAME TABLE
 

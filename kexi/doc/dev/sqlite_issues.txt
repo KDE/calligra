@@ -76,4 +76,13 @@ These checks should be made in KexiDB SQLite engine driver. In fact for each dri
 		of disallowing for editing given field in a context of given query.
 
 
+----------------------------------------------------------------
+
+HINTS:
+
+PRAGMA table_info(table-name);
+For each column in the named table, invoke the callback function 
+once with information about that column, including the 
+column name, data type, whether or not the column can be NULL, 
+and the default value for the column.
 
