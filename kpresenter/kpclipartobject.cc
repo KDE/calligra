@@ -118,11 +118,11 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     if ( m_clipart.isNull() )
         return;
 
-    double ox = orig.x();
-    double oy = orig.y();
-    double ow = ext.width();
-    double oh = ext.height();
-    QSize size = _zoomHandler->zoomSize( ext );
+    const double ox = orig.x();
+    const double oy = orig.y();
+    const double ow = ext.width();
+    const double oh = ext.height();
+    const QSize size = _zoomHandler->zoomSize( ext );
 
     _painter->save();
 
@@ -139,56 +139,12 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     _painter->setPen( pen2 );
     int penw = pen.width() / 2;
 
-    if ( angle == 0 ) {
-        _painter->setPen( Qt::NoPen );
-	if ( !drawContour )
-	    _painter->setBrush( brush );
+    _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
-        if ( fillType == FT_BRUSH || !gradient || drawContour )
-            _painter->drawRect( _zoomHandler->zoomItX (ox + penw),
-				_zoomHandler->zoomItY( oy + penw),
-				_zoomHandler->zoomItX( ext.width() - 2 * penw),
-				_zoomHandler->zoomItY( ext.height() - 2 * penw) );
-        else {
-            gradient->setSize( size );
-            _painter->drawPixmap( _zoomHandler->zoomItX( ox + penw),
-				  _zoomHandler->zoomItY( oy + penw), gradient->pixmap(),
-                                  0, 0, _zoomHandler->zoomItX(ow - 2 * penw),
-				  _zoomHandler->zoomItY(oh - 2 * penw) );
-        }
-
-	if ( !drawContour ) {
-#if 1
-            // TODO: verify!
-            m_clipart.draw(*_painter,
-                _zoomHandler->zoomItX(ox) /*+1*/, _zoomHandler->zoomItY(oy) /*+1*/,
-                _zoomHandler->zoomItX( ext.width()), _zoomHandler->zoomItY( ext.height()),
-                0, 0, 0, 0);
-#else
-	    _painter->save();
-	    QRect br = m_clipart.picture()->boundingRect();
-	    _painter->translate( _zoomHandler->zoomItX(ox) /*+1*/,
-				 _zoomHandler->zoomItY(oy) /*+1*/ );
-	    if ( br.width() && br.height() )
-		_painter->scale( (double)(_zoomHandler->zoomItX( ext.width()))
-				 / (double) br.width(),
-				 (double)(_zoomHandler->zoomItY( ext.height())
-				 / (double) br.height() );
-	    _painter->drawPicture( *m_clipart.picture() );
-	    _painter->restore();
-#endif
-	}
-
-        _painter->setPen( pen2 );
-        _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect(_zoomHandler->zoomItX( ox + penw),
-			   _zoomHandler->zoomItY( oy + penw),
-			   _zoomHandler->zoomItX( ow - 2 * penw),
-			   _zoomHandler->zoomItY( oh - 2 * penw ));
-    }
-    else {
-        _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
-
+    kdDebug() << "Angle: " << angle << " (in KPClipartObject::draw)" << endl;
+    if ( kAbs( angle ) > DBL_EPSILON )
+    {
+        kdDebug() << "Non-null angle!" << endl;
         QRect br( QPoint( 0, 0 ), size );
         int pw = br.width();
         int ph = br.height();
@@ -204,54 +160,40 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         m.translate( rr.left() + pixXPos, rr.top() + pixYPos );
 
         _painter->setWorldMatrix( m, true /* always keep previous transformations */ );
-
-        _painter->setPen( Qt::NoPen );
-	if ( !drawContour )
-	    _painter->setBrush( brush );
-
-        if ( fillType == FT_BRUSH || !gradient || drawContour )
-            _painter->drawRect( _zoomHandler->zoomItX( penw ),
-				_zoomHandler->zoomItY( penw ),
-                                _zoomHandler->zoomItX( ext.width() - 2 * penw),
-				_zoomHandler->zoomItY( ext.height() - 2 * penw) );
-        else {
-            gradient->setSize( size );
-            _painter->drawPixmap( _zoomHandler->zoomItX( penw ),
-				  _zoomHandler->zoomItY( penw ),
-                                  gradient->pixmap(), 0, 0,
-				  _zoomHandler->zoomItX(ow - 2 * penw),
-				  _zoomHandler->zoomItY(oh - 2 * penw) );
-        }
-
-	if ( !drawContour ) {
-#if 1
-            // TODO: verify!
-            m_clipart.draw(*_painter,
-                _zoomHandler->zoomItX(ox) /*+1*/, _zoomHandler->zoomItY(oy) /*+1*/,
-                _zoomHandler->zoomItX( ext.width()), _zoomHandler->zoomItY( ext.height()),
-                0, 0, 0, 0);
-#else
-
-	    _painter->save();
-	    QRect _boundingRect = m_clipart.picture()->boundingRect();
-	    if ( _boundingRect.width() && _boundingRect.height() )
-		_painter->scale( (double)( _zoomHandler->zoomItX( ext.width() ) )
-				 / (double) _boundingRect.width(),
-				 (double)(_zoomHandler->zoomItY( ext.height() ) )
-				 / (double) _boundingRect.height() );
-	    _painter->drawPicture( *m_clipart.picture() );
-	    _painter->restore();
-#endif
-	}
-
-        _painter->setPen( pen2 );
-        _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect( _zoomHandler->zoomItX( penw ),
-			    _zoomHandler->zoomItY( penw ),
-                            _zoomHandler->zoomItX( ow - 2 * penw),
-			    _zoomHandler->zoomItY( oh - 2 * penw) );
-
     }
+
+    _painter->setPen( Qt::NoPen );
+    if ( !drawContour )
+        _painter->setBrush( brush );
+
+    if ( fillType == FT_BRUSH || !gradient || drawContour )
+        _painter->drawRect( _zoomHandler->zoomItX( penw ),
+                            _zoomHandler->zoomItY( penw ),
+                            _zoomHandler->zoomItX( ext.width() - 2 * penw),
+                            _zoomHandler->zoomItY( ext.height() - 2 * penw) );
+    else {
+        gradient->setSize( size );
+        _painter->drawPixmap( _zoomHandler->zoomItX( penw ),
+                              _zoomHandler->zoomItY( penw ),
+                              gradient->pixmap(), 0, 0,
+                              _zoomHandler->zoomItX(ow - 2 * penw),
+                              _zoomHandler->zoomItY(oh - 2 * penw) );
+    }
+
+    if ( !drawContour ) {
+        m_clipart.draw(*_painter,
+            0, 0,
+            _zoomHandler->zoomItX( ext.width()), _zoomHandler->zoomItY( ext.height()),
+            0, 0, 0, 0);
+    }
+    
+    _painter->setPen( pen2 );
+    _painter->setBrush( Qt::NoBrush );
+    _painter->drawRect( _zoomHandler->zoomItX( penw ),
+                        _zoomHandler->zoomItY( penw ),
+                        _zoomHandler->zoomItX( ow - 2 * penw),
+                        _zoomHandler->zoomItY( oh - 2 * penw) );
+
     _painter->restore();
     KPObject::draw( _painter, _zoomHandler, selectionMode, drawContour );
 }
