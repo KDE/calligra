@@ -18,7 +18,9 @@ k_dcop:
     virtual QString url();
     virtual DCOPRef firstView();
     virtual DCOPRef nextView();
-
+    virtual int getNumObjects();
+    virtual DCOPRef getObject( int num );
+    
 private:
     KPresenterDoc *doc;
 

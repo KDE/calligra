@@ -4,6 +4,8 @@
 <FUNC name="url" qual=""><RET type="QString"/></FUNC>
 <FUNC name="firstView" qual=""><RET type="DCOPRef"/></FUNC>
 <FUNC name="nextView" qual=""><RET type="DCOPRef"/></FUNC>
+<FUNC name="getNumObjects" qual=""><RET type="int"/></FUNC>
+<FUNC name="getObject" qual=""><RET type="DCOPRef"/><ARG name="num" type="int"/></FUNC>
 </CLASS>
 <INCLUDE file="qstring.h"/>
 <INCLUDE file="dcopref.h"/>

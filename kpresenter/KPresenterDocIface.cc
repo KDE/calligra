@@ -27,3 +27,14 @@ DCOPRef KPresenterDocIface::nextView()
     return DCOPRef( kapp->dcopClient()->appId(), 
 		    doc->getNextView()->dcopObject()->objId() );
 }
+
+int KPresenterDocIface::getNumObjects()
+{
+    return doc->objNums();
+}
+
+DCOPRef KPresenterDocIface::getObject( int num )
+{
+    return DCOPRef( kapp->dcopClient()->appId(), 
+		    doc->objectList()->at( num )->dcopObject()->objId() );
+}

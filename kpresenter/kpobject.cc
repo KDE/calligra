@@ -13,6 +13,8 @@
 /* Module: Base class for objects                                 */
 /******************************************************************/
 
+#include "KPresenterObjectIface.h"
+
 #include "kpobject.h"
 #include "kptextobject.h"
 
@@ -60,6 +62,7 @@ KPObject::KPObject()
     inObjList = true;
     cmds = 0;
     move = false;
+    dcop = 0;
 }
 
 /*================================================================*/
@@ -390,4 +393,13 @@ void KPObject::paintSelection( QPainter *_painter )
 void KPObject::doDelete()
 {
     if ( cmds == 0 && !inObjList ) delete this;
+}
+
+/*=============================================================*/
+DCOPObject* KPObject::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPresenterObjectIface( this );
+
+    return dcop;
 }

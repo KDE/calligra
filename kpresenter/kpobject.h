@@ -32,6 +32,7 @@
 #include "kpgradient.h"
 
 class QPainter;
+class DCOPObject;
 
 /******************************************************************/
 /* Class: KPObject                                                */
@@ -43,6 +44,8 @@ public:
     KPObject();
 
     KPObject &operator=( const KPObject & );
+
+    virtual DCOPObject* dcopObject();
     
     virtual void setSelected( bool _selected )
     { selected = _selected; }
@@ -185,6 +188,8 @@ protected:
     bool inObjList;
     int cmds;
     bool move;
+
+    DCOPObject *dcop;
 
 };
 
