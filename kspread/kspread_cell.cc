@@ -5225,6 +5225,20 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             if( ok ) setValue( value );
         }
 
+    // currency value
+    if( element.hasAttribute( "table:value-type" ) )
+        if( element.attribute( "table:value-type" ) == "currency" )
+        {
+            bool ok = false;
+            double value = element.attribute( "table:value" ).toDouble( &ok ); 
+            if( ok )
+            {
+                setValue( value );
+                setCurrency( 1, element.attribute( "table:currency" ) );
+                setFormatType( KSpreadFormat::Money );
+            }
+        }
+
     // number formatted as percentage
     if( element.hasAttribute( "table:value-type" ) )
         if( element.attribute( "table:value-type" ) == "percentage" )
