@@ -408,3 +408,42 @@ bool KSpreadCellIface::textFontStrike() const
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->textFontStrike( m_point.x(), m_point.y() );
 }
+
+void KSpreadCellIface::setTextFontSize( int _size )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setTextFontSize( _size );
+    cell->update();
+}
+
+int KSpreadCellIface::textFontSize() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->textFontSize( m_point.x(), m_point.y() );
+}
+
+void KSpreadCellIface::setTextFontFamily( const QString& _font )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setTextFontFamily( _font );
+    cell->update();
+}
+
+QString KSpreadCellIface::textFontFamily() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->textFontFamily( m_point.x(), m_point.y() );
+}
+
+void KSpreadCellIface::setFaktor( double _factor )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setFaktor( _factor );
+    cell->update();
+}
+
+double KSpreadCellIface::faktor() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->faktor( m_point.x(), m_point.y() );
+}

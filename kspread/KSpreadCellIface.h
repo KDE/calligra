@@ -45,6 +45,8 @@ k_dcop:
     virtual QString getFormatNumber() const;
     virtual void setPrecision(int  _p);
     virtual int precision() const;
+    virtual void setFaktor( double _factor );
+    virtual double faktor()const;
     //font
     virtual void setTextFontBold( bool _b );
     virtual bool textFontBold( ) const;
@@ -54,6 +56,10 @@ k_dcop:
     virtual bool textFontUnderline(  ) const;
     virtual void setTextFontStrike( bool _b );
     virtual bool textFontStrike( ) const;
+    virtual void setTextFontSize( int _size );
+    virtual int textFontSize() const;
+    virtual void setTextFontFamily( const QString& _font );
+    virtual QString textFontFamily() const;
 private:
     QPoint m_point;
     KSpreadTable* m_table;
