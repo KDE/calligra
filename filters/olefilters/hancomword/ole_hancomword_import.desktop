@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KWord HancomWord Import Filter
+X-KDE-Export=application/x-kword
+X-KDE-Import=application/x-hancomword
+X-KDE-Weight=1
+X-KDE-Library=libolefilter
+ServiceTypes=KOfficeFilter

@@ -35,6 +35,8 @@ DESCRIPTION
 #include <excelfilter.h>
 #include <powerpointfilter.h>
 #include <wordfilter.h>
+#include <hancomwordfilter.h>
+
 #include <myfile.h>
 
 const int OLEFilter::s_area = 30510;
@@ -77,7 +79,8 @@ KoFilter::ConversionStatus OLEFilter::convert( const QCString& from, const QCStr
        from!="application/vnd.ms-excel" &&
        from!="application/msword" &&
        from!="application/msexcel" &&
-       from!="application/mspowerpoint")
+       from!="application/mspowerpoint" &&
+       from!="application/x-hancomword")
         return KoFilter::NotImplemented;
 
     QFile in(m_chain->inputFile());
@@ -410,6 +413,16 @@ void OLEFilter::convert( const QCString& mimeTypeHint )
 
             myFilter=new PowerPointFilter(main, currentUser);
         }
+        else if ( mimeType == "application/x-hancomword" ) {
+            // HancomWord 6
+            myFile prvText;
+            KLaola::NodeList tmp;
+
+            tmp = docfile->find( "PrvText", true );
+            if( tmp.count() == 1 ) prvText = docfile->stream( tmp.at( 0 ) );
+
+            myFilter = new HancomWordFilter( prvText );
+        }
 
         if(!myFilter) {
             // Unknown type. We turn it into a dummy kword document...
@@ -491,6 +504,8 @@ QCString OLEFilter::mimeTypeHelper()
             return "application/x-kspread";
         else if ( node->name() == "PowerPoint Document" )
             return "application/x-kpresenter";
+        else if ( node->name() == "PrvText" || node->name() == "BodyText" )
+            return "application/x-hancomword";
         else
             node = list.next();
     }
