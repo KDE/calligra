@@ -3617,14 +3617,14 @@ void KPresenterView::rotateOk()
     float _newAngle=rotateDia->angle();
     KMacroCommand *macro=0L;
 
-    KCommand *cmd=m_canvas->activePage()->rotateObj(_newAngle);
+    KCommand *cmd=m_canvas->activePage()->rotateSelectedObjects(_newAngle);
     if( cmd)
     {
         if ( !macro )
             macro=new KMacroCommand(i18n( "Change Rotation" ));
         macro->addCommand(cmd);
     }
-    cmd=stickyPage()->rotateObj(_newAngle);
+    cmd=stickyPage()->rotateSelectedObjects(_newAngle);
     if( cmd)
     {
         if ( !macro )

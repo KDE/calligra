@@ -519,11 +519,10 @@ private:
     bool showingLastSlide;
     bool mousePressed;
     bool drawContour;
-    double startAngle;
     ModifyType modType;
     unsigned int oldMx, oldMy;
 
-    KPObject *editNum, *rotateNum;
+    KPObject *editNum;
 
     bool fillBlack;
     KPresenterView *m_view;
@@ -538,7 +537,6 @@ private:
     QValueList<int>::Iterator slideListIterator;
     int PM_DM, PM_SM;
     int firstX, firstY;
-    double axisX, axisY;
     int delPageId;
     bool drawRubber;
     QRect rubber;
@@ -552,6 +550,14 @@ private:
     bool m_keepRatio;
     // ratio of the object ( width / height )
     double m_ratio;
+    
+    //---- stuff needed for rotating ----
+    // object which gets rotated
+    KPObject *m_rotateObject;
+    // center of the rotated object
+    KoPoint m_rotateCenter;
+    // angle of the object at start of rotate 
+    double m_angleBeforeRotate;
     
     ToolEditMode toolEditMode;
     QRect insRect;

@@ -245,59 +245,63 @@ void SetBackCmd::unexecute()
     }
 }
 
-RotateCmd::RotateCmd( const QString &_name, QPtrList<RotateValues> &_oldRotate, float _newAngle,
-                      QPtrList<KPObject> &_objects, KPresenterDoc *_doc, bool _addAngle )
-    : KNamedCommand( _name ), oldRotate( _oldRotate ), objects( _objects )
+RotateCmd::RotateCmd( const QString &_name, float newAngle, QPtrList<KPObject> &objects, 
+                      KPresenterDoc *doc, bool addAngle )
+    : KNamedCommand( _name ), m_doc( doc ), m_newAngle( newAngle ), m_addAngle( addAngle )
 {
-    objects.setAutoDelete( false );
-    oldRotate.setAutoDelete( false );
-    doc = _doc;
-    newAngle = _newAngle;
-
-    addAngle = _addAngle;
-
-    m_page = doc->findSideBarPage( _objects );
-
+    m_objects.setAutoDelete( false );
+    m_oldAngles.setAutoDelete( false );
+    
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
+    {
+        m_objects.append( it.current() );
+        
+        RotateValues *old = new RotateValues;
+        old->angle = it.current()->getAngle();
+        m_oldAngles.append( old );
+        
         it.current()->incCmdRef();
+    }
+    
+    m_page = m_doc->findSideBarPage( m_objects );
 }
 
 RotateCmd::~RotateCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
-    oldRotate.setAutoDelete( true );
-    oldRotate.clear();
+    m_oldAngles.setAutoDelete( true );
+    m_oldAngles.clear();
 }
 
 void RotateCmd::execute()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
-        if ( addAngle )
-            it.current()->rotate( it.current()->getAngle()+newAngle );
+        if ( m_addAngle )
+            it.current()->rotate( it.current()->getAngle() + m_newAngle );
         else
-            it.current()->rotate( newAngle );
+            it.current()->rotate( m_newAngle );
     }
-    doc->updateRuler();
-    doc->repaint( false );
+    m_doc->updateRuler();
+    m_doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    int pos=m_doc->pageList().findRef(m_page);
+    m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
 }
 
 void RotateCmd::unexecute()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at(i)->rotate( oldRotate.at( i )->angle );
-    doc->updateRuler();
-    doc->repaint( false );
+    for ( unsigned int i = 0; i < m_objects.count(); i++ )
+        m_objects.at(i)->rotate( m_oldAngles.at( i )->angle );
+    m_doc->updateRuler();
+    m_doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    int pos=m_doc->pageList().findRef(m_page);
+    m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
 }
 
 

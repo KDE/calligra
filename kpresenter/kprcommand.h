@@ -149,20 +149,20 @@ public:
         float angle;
     };
 
-    RotateCmd( const QString &_name, QPtrList<RotateValues> &_oldRotate, float _newAngle,
-               QPtrList<KPObject> &_objects, KPresenterDoc *_doc, bool _addAngle = false );
+    RotateCmd( const QString &_name, float newAngle, QPtrList<KPObject> &objects, 
+               KPresenterDoc *doc, bool addAngle = false );
     ~RotateCmd();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-    KPresenterDoc *doc;
-    QPtrList<RotateValues> oldRotate;
-    QPtrList<KPObject> objects;
-    float newAngle;
+    KPresenterDoc *m_doc;
+    QPtrList<RotateValues> m_oldAngles;
+    QPtrList<KPObject> m_objects;
+    float m_newAngle;
     //necessary for duplicate object, we can duplicated and add angle.
-    bool addAngle;
+    bool m_addAngle;
     KPrPage *m_page;
 };
 

@@ -294,7 +294,7 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle,
 
     if ( angle != 0.0)
     {
-        KCommand *cmd = rotateObj(angle, true);
+        KCommand *cmd = rotateSelectedObjects(angle, true);
         if (cmd )
         {
             if ( !macro )
@@ -2272,49 +2272,32 @@ void KPrPage::repaintObj()
     }
 }
 
-KCommand *KPrPage::rotateObj(float _newAngle,  bool addAngle)
+KCommand *KPrPage::rotateSelectedObjects( float _newAngle, bool addAngle )
 {
-    RotateCmd *rotateCmd=0L;
-    bool newAngle=false;
-    QPtrList<KPObject> _objects;
-    QPtrList<RotateCmd::RotateValues> _oldRotate;
-    RotateCmd::RotateValues *tmp;
+    RotateCmd * cmd = NULL;
 
+    QPtrList<KPObject> _objects;
     _objects.setAutoDelete( false );
-    _oldRotate.setAutoDelete( false );
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        //don't rotate a header/footer
-        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer() )
             continue;
-
-        if ( it.current()->isSelected() ) {
-            tmp = new RotateCmd::RotateValues;
-            tmp->angle =it.current()->getAngle();
-
-            if(!newAngle &&tmp->angle!= _newAngle)
-                newAngle=true;
-
-            _oldRotate.append( tmp );
+        if( it.current()->isSelected() )
+        {
             _objects.append( it.current() );
         }
     }
 
-    if ( !_objects.isEmpty() && newAngle )
-    {
-        rotateCmd = new RotateCmd( i18n( "Change Rotation" ),
-                                   _oldRotate, _newAngle, _objects, m_doc,addAngle );
-        rotateCmd->execute();
+    if ( !_objects.isEmpty() ) {
+        cmd = new RotateCmd( i18n( "Change Rotation" ), _newAngle, _objects, m_doc, addAngle );
+        cmd->execute();
     }
-    else
-    {
-        _oldRotate.setAutoDelete( true );
-        _oldRotate.clear();
-    }
-    return rotateCmd;
+    
+    return cmd;
 }
+
 //necessary to use currentPage otherwise when we unsticke object
 //it not take from sticky page.
 KCommand *KPrPage::stickyObj(bool _sticky, KPrPage * currentPage)

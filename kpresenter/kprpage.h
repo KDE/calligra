@@ -263,7 +263,7 @@ public:
     KCommand *moveObject(KPresenterView *_view, double diffx, double diffy);
     KCommand *moveObject(KPresenterView *m_view,const KoPoint &_move,bool key);
 
-    KCommand *rotateObj(float _newAngle, bool addAngle=false);
+    KCommand *rotateSelectedObjects(float _newAngle, bool addAngle=false);
     KCommand *shadowObj(ShadowDirection dir,int dist, const QColor &col);
     KCommand *stickyObj(bool _sticky, KPrPage * currentPage);
 

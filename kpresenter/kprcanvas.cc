@@ -111,7 +111,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         modType = MT_NONE;
         m_resizeObject = 0L;
         editNum = 0L;
-        rotateNum = 0L;
+        m_rotateObject = 0L;
         setBackgroundMode( Qt::NoBackground );
         m_view = _view;
         setupMenus();
@@ -750,8 +750,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 rubber = QRect( e->x(), e->y(), 0, 0 );
             }break;
             case TEM_ROTATE: {
-                //bool deSelAll = true;
-                //bool _resizeObj = false;
                 KPObject *kpobject = 0;
 
                 firstX = contentsPoint.x();
@@ -772,23 +770,16 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 // we don't support rotating multiple objects yet
                 deSelectAllObj();
 
-                // deselect all if no object is found
-                if ( !kpobject )
-                    deSelectAllObj();
-
-                // select and raise object
-                else {
-                    rotateNum = kpobject;
-                    startAngle = -kpobject->getAngle();
+                if ( kpobject )
+                {
+                    m_rotateObject = kpobject;
+                    m_angleBeforeRotate = kpobject->getAngle();
                     selectObj( kpobject );
                     raiseObject( kpobject );
-                }
 
-                // set axis to center of selected objects bounding rect
-                if ( kpobject ) {
+                    // set center of selected object bounding rect
                     calcBoundingRect();
-                    axisX = m_boundingRect.center().x();
-                    axisY = m_boundingRect.center().y();
+                    m_rotateCenter = m_boundingRect.center();
                 }
             } break;
             case INS_FREEHAND: case INS_CLOSED_FREEHAND: {
@@ -1312,19 +1303,24 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     }break;
     case TEM_ROTATE: {
         drawContour = FALSE;
-        if ( !rotateNum )
+        if ( !m_rotateObject )
             break;
-        if ( startAngle != rotateNum->getAngle() ) {
-            QPtrList<RotateCmd::RotateValues> list;
-            RotateCmd::RotateValues *v = new RotateCmd::RotateValues;
-            v->angle = startAngle;
-            list.append( v );
+        if ( m_angleBeforeRotate != m_rotateObject->getAngle() ) {
             QPtrList<KPObject> objects;
-            objects.append( rotateNum );
-            RotateCmd *rotateCmd = new RotateCmd( i18n( "Change Rotation" ), list,
-                                                  rotateNum->getAngle(),
+            objects.append( m_rotateObject );
+            
+            /* As the object is allready rotated set the angle to 
+             * the m_angleBeforeRotate for the creation of the command, and 
+             * back afterwards. No need for executing the command */
+            float newAngle = m_rotateObject->getAngle();
+            m_rotateObject->rotate( m_angleBeforeRotate );
+            
+            RotateCmd *rotateCmd = new RotateCmd( i18n( "Change Rotation" ), newAngle,
                                                   objects, m_view->kPresenterDoc() );
             m_view->kPresenterDoc()->addCommand( rotateCmd );
+            
+            m_rotateObject->rotate( newAngle );
+            m_rotateObject = NULL;
         }
     }break;
     case INS_LINE: {
@@ -1563,21 +1559,25 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 }
             }break;
             case TEM_ROTATE: {
-                drawContour = TRUE;
-                double angle = KoPoint::getAngle( KoPoint( e->x() + diffx(), e->y() + diffy() ),
-                                                  KoPoint( axisX, axisY ) );
-                double angle1 = KoPoint::getAngle( KoPoint( firstX, firstY ),
-                                                   KoPoint( axisX, axisY ) );
+                if ( m_rotateObject )
+                {
+                    drawContour = TRUE;
+                    // angle to mouse pos
+                    double angle = KoPoint::getAngle( m_rotateCenter, docPoint );
+                    // angle to start of mouse pos
+                    double angle1 = KoPoint::getAngle( m_rotateCenter,
+                                        m_view->zoomHandler()->unzoomPoint( QPoint( firstX, firstY ) ) );
 
-                angle -= angle1;
-                angle -= startAngle;
-                if ( angle < 0 )
-                    angle += 360;
-                else if ( angle > 360 )
-                    angle -= 360;
+                    angle -= angle1;
+                    angle += m_angleBeforeRotate;
+                    if ( angle < 0 )
+                        angle += 360;
+                    else if ( angle > 360 )
+                        angle -= 360;
 
-                activePage()->rotateObj( angle );
-                stickyPage()->rotateObj( angle );
+                    m_rotateObject->rotate( angle );
+                    _repaint( m_rotateObject );  
+                }
             }break;
             case INS_TEXT: case INS_OBJECT: case INS_TABLE:
             case INS_DIAGRAMM: case INS_FORMULA: case INS_AUTOFORM:
