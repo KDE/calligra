@@ -2040,7 +2040,7 @@ void KWRenameBookmarkCommand::unexecute()
     m_doc->renameBookMark( m_newName, m_oldName);
 }
 
-bool KWIsItATableVisitor::visit( KoTextParag *parag, int start, int end )
+bool KWCollectFramesetsVisitor::visit( KoTextParag *parag, int start, int end )
 {
   for ( int i = start ; i < end ; ++i )
   {

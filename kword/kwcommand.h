@@ -875,10 +875,10 @@ protected:
     QString m_newName;
 };
 
-class KWIsItATableVisitor : public KoParagVisitor // see kotextdocument.h
+class KWCollectFramesetsVisitor : public KoParagVisitor // see kotextdocument.h
 {
   public:
-    KWIsItATableVisitor(): KoParagVisitor() {;};
+    KWCollectFramesetsVisitor(): KoParagVisitor() {;}
     bool visit( KoTextParag *parag, int start, int end );
     QPtrList<KWFrameSet> frameSets(){return m_framesets;};
   private:

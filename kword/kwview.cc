@@ -4482,7 +4482,7 @@ QPtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
 	// simply return the current textEdit
 	lst.append( currentTextEdit() );
 	kdDebug() << "text frame name: " << currentTextEdit()->textFrameSet()->name() << endl;
-	KWIsItATableVisitor visitor;
+	KWCollectFramesetsVisitor visitor;
 	currentTextEdit()->textDocument()->visitSelection( KoTextDocument::Standard, &visitor ); //find all KWFrameSet-objects in the selection
 	QPtrList<KWFrameSet> frameset = visitor.frameSets();
 	for (QPtrListIterator<KWFrameSet> it( frameset ); it.current(); ++it )
