@@ -43,7 +43,7 @@ using namespace std;
 
 /*================================================================*/
 KPBackGround::KPBackGround( KPImageCollection *_imageCollection, KPGradientCollection *_gradientCollection,
-                            KPClipartCollection *_clipartCollection, KPRPage *_page )
+                            KPClipartCollection *_clipartCollection, KPrPage *_page )
     : footerHeight( 0 )
 {
     dcop = 0;

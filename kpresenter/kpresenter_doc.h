@@ -73,7 +73,7 @@ class KPresenterChild : public KoDocumentChild
 public:
 
     // constructor - destructor
-    KPresenterChild( KPresenterDoc *_kpr, KoDocument* _doc, const QRect& _rect, int, int );
+    KPresenterChild( KPresenterDoc *_kpr, KoDocument* _doc, const QRect& _rect );
     KPresenterChild( KPresenterDoc *_kpr );
     ~KPresenterChild();
 
@@ -114,16 +114,16 @@ public:
     // change geometry of a child
 
     // page layout
-    void setPageLayout( KoPageLayout, int, int );
+    void setPageLayout( KoPageLayout );
     KoPageLayout pageLayout() const { return _pageLayout; }
 
     // insert a page
     unsigned int insertNewPage( int, int, bool _restore=true );
     bool insertNewTemplate( int, int, bool clean=false );
 
-    const QPtrList<KPRPage> & getPageList() const {return m_pageList;}
-
-    QPtrList<KPRPage> pageList() const { return m_pageList;}
+    const QPtrList<KPrPage> & getPageList() const {return m_pageList;}
+    // We need one that's not const, due to QPtrList::at() not being const
+    QPtrList<KPrPage>& pageList() { return m_pageList;}
 
     void insertObjectInPage(int offset, KPObject *_obj);
 
@@ -163,17 +163,17 @@ public:
     // repaint all views
     void repaint( bool );
 
-    void repaint( QRect );
+    void repaint( const QRect& );
     void repaint( KPObject* );
 
     // stuff for screen-presentations
-    QValueList<int> reorderPage( unsigned int, int, int, float fakt = 1.0 );
+    QValueList<int> reorderPage( unsigned int, float fakt = 1.0 );
 
     QPen presPen() const { return _presPen; }
     void setPresPen( QPen p ) {_presPen = p; }
 
-    void restoreBackground( KPRPage * );
-    void loadPastedObjs( const QString &in, int currPage, KPRPage* _page );
+    void restoreBackground( KPrPage * );
+    void loadPastedObjs( const QString &in, int currPage, KPrPage* _page );
 
     void deSelectAllObj();
 
@@ -303,7 +303,7 @@ signals:
     void pageNumChanged();
     void sig_updateRuler();
     void sig_terminateEditing( KPTextObject * );
-    void sig_changeActivePage( KPRPage* );
+    void sig_changeActivePage( KPrPage* );
 
 protected slots:
     void slotDocumentRestored();
@@ -324,7 +324,7 @@ protected:
     QDomElement saveTitle( QDomDocument &doc );
     QDomElement saveNote( QDomDocument &doc );
     void loadBackground( const QDomElement &element );
-    void loadObjects( const QDomElement &element, bool _paste = false, KPRPage *_page=0L );
+    void loadObjects( const QDomElement &element, bool _paste = false, KPrPage *_page=0L );
     void loadTitle( const QDomElement &element );
     void loadNote( const QDomElement &element );
     virtual bool completeLoading( KoStore* /* _store */ );
@@ -407,7 +407,7 @@ protected:
 
 private:
     KPresenterView *m_kpresenterView;;
-    QPtrList<KPRPage> m_pageList;
+    QPtrList<KPrPage> m_pageList;
 };
 
 #endif

@@ -33,7 +33,7 @@ class QPicture;
 class DCOPObject;
 class QDomDocument;
 class QDomElement;
-class KPRPage;
+class KPrPage;
 
 /******************************************************************/
 /* Class: KPBackGround                                            */
@@ -44,7 +44,7 @@ class KPBackGround
 {
 public:
     KPBackGround( KPImageCollection *_imageCollection, KPGradientCollection *_gradientCollection,
-                  KPClipartCollection *_clipartCollection, KPRPage *_page );
+                  KPClipartCollection *_clipartCollection, KPrPage *_page );
     ~KPBackGround()
     {; }
 
@@ -146,7 +146,7 @@ protected:
     KPClipart backClipart;
 
     QSize ext;
-    KPRPage *m_page;
+    KPrPage *m_page;
     int footerHeight;
 
     DCOPObject *dcop;

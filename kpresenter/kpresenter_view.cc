@@ -201,8 +201,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     presStructView = 0;
     confPieDia = 0;
     confRectDia = 0;
-    xOffset = 0;
-    yOffset = 0;
     v_ruler = 0;
     h_ruler = 0;
     pen = QPen( black, 1, SolidLine );
@@ -290,7 +288,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateRuler()));
 
     //change table active.
-    connect( m_pKPresenterDoc, SIGNAL( sig_changeActivePage( KPRPage* ) ), m_canvas, SLOT( slotSetActivePage( KPRPage* ) ) );
+    connect( m_pKPresenterDoc, SIGNAL( sig_changeActivePage( KPrPage* ) ), m_canvas, SLOT( slotSetActivePage( KPrPage* ) ) );
 
     KStatusBar * sb = statusBar();
     m_sbPageLabel = 0L;
@@ -399,7 +397,7 @@ void KPresenterView::editCut()
 {
     if ( !m_canvas->currentTextObjectView() ) {
 	m_canvas->setToolEditMode( TEM_MOUSE );
-	m_canvas->activePage()->copyObjs( xOffset, yOffset );
+	m_canvas->activePage()->copyObjs();
 	m_canvas->activePage()->deleteObjs();
     } else {
 	m_canvas->currentTextObjectView()->cut();
@@ -411,7 +409,7 @@ void KPresenterView::editCopy()
 {
     if ( !m_canvas->currentTextObjectView() ) {
 	m_canvas->setToolEditMode( TEM_MOUSE );
-	m_canvas->activePage()->copyObjs( xOffset, yOffset );
+	m_canvas->activePage()->copyObjs();
     } else {
 	m_canvas->currentTextObjectView()->copy();
     }
@@ -432,7 +430,7 @@ void KPresenterView::editPaste()
         else if ( data->provides( "application/x-kpresenter-selection" ) )
         {
             m_canvas->activePage()->pasteObjs( data->encodedData("application/x-kpresenter-selection"),
-                                         xOffset, yOffset, currPg );
+                                               currPg );
 
             m_canvas->setMouseSelectedObject(true);
             emit objectSelectedChanged();
@@ -455,7 +453,7 @@ void KPresenterView::editPaste()
             pix.save( tmpFile.name(), "PNG" );
             QCursor c = cursor();
             setCursor( waitCursor );
-            m_canvas->activePage()->insertPicture( tmpFile.name(), xOffset, yOffset );
+            m_canvas->activePage()->insertPicture( tmpFile.name() );
             setCursor( c );
         }
     } else {
@@ -566,7 +564,7 @@ void KPresenterView::insertPicture()
     QCursor c = m_canvas->cursor();
     m_canvas->setCursor( waitCursor );
     if ( !file.isEmpty() )
-        m_canvas->activePage()->insertPicture( file, xOffset, yOffset );
+        m_canvas->activePage()->insertPicture( file );
     m_canvas->setCursor( c );
 }
 
@@ -579,7 +577,7 @@ void KPresenterView::insertPicture(const QString &file)
     QCursor c = m_canvas->cursor();
     m_canvas->setCursor( waitCursor );
     if ( !file.isEmpty() )
-        m_canvas->activePage()->insertPicture( file, xOffset, yOffset );
+        m_canvas->activePage()->insertPicture( file );
     m_canvas->setCursor( c );
 }
 
@@ -605,7 +603,7 @@ void KPresenterView::insertClipart()
         return;
 
     if ( !file.isEmpty() )
-        m_canvas->activePage()->insertClipart( file, xOffset, yOffset );
+        m_canvas->activePage()->insertClipart( file );
 }
 
 /*==============================================================*/
@@ -933,14 +931,14 @@ void KPresenterView::extraConfigPolygon()
 void KPresenterView::extraRaise()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->activePage()->raiseObjs( xOffset, yOffset );
+    m_canvas->activePage()->raiseObjs();
 }
 
 /*===============================================================*/
 void KPresenterView::extraLower()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->activePage()->lowerObjs( xOffset, yOffset );
+    m_canvas->activePage()->lowerObjs();
 }
 
 /*===============================================================*/
@@ -1262,19 +1260,19 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         float _presFakt = QMIN(_presFaktW,_presFaktH);
         kdDebug(33001) << "KPresenterView::startScreenPres page->setPresFakt " << _presFakt << endl;
 
-        xOffsetSaved = xOffset;
-        yOffsetSaved = yOffset;
-        xOffset = 0;
-        yOffset = 0;
+        //xOffsetSaved = xOffset;
+        //yOffsetSaved = yOffset;
+        //xOffset = 0;
+        //yOffset = 0;
 
         // Center the slide in the screen, if it's smaller...
         pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, _presFakt, false );
         kdDebug(33001) << "                                pgRect: " << pgRect.x() << "," << pgRect.y()
                   << " " << pgRect.width() << "x" << pgRect.height() << endl;
-        if ( deskw > pgRect.width() )
+        /*if ( deskw > pgRect.width() )
             xOffset -= ( deskw - pgRect.width() ) / 2;
         if ( deskh > pgRect.height() )
-            yOffset -= ( deskh - pgRect.height() ) / 2;
+            yOffset -= ( deskh - pgRect.height() ) / 2;*/
 
         vert->setEnabled( false );
         horz->setEnabled( false );
@@ -1318,8 +1316,8 @@ void KPresenterView::screenStop()
         m_canvas->hide();
         m_canvas->reparent( pageBase, 0, QPoint( 0, 0 ), true );
         m_canvas->lower();
-        xOffset = xOffsetSaved;
-        yOffset = yOffsetSaved;
+        //xOffset = xOffsetSaved;
+        //yOffset = yOffsetSaved;
         m_canvas->stopScreenPresentation();
         presStarted = false;
         vert->setEnabled( true );
@@ -1379,10 +1377,12 @@ void KPresenterView::screenPrev()
             m_canvas->setNextPageTimer( true );
         }
 	if ( m_canvas->pPrev( true ) ) {
+#if 0 // TODO currentPage-- instead
             QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, m_canvas->presFakt(), false );
 	    yOffset = ( m_canvas->presPage() - 1 ) * pgRect.height();
 	    if ( m_canvas->height() > pgRect.height() )
 		yOffset -= ( m_canvas->height() - pgRect.height() ) / 2;
+#endif
 	    m_canvas->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
 	    m_canvas->repaint( false );
 	    m_canvas->setFocus();
@@ -1402,10 +1402,12 @@ void KPresenterView::screenNext()
         return;
     if ( presStarted ) {
 	if ( m_canvas->pNext( true ) ) {
+#if 0 // TODO currentPage-- instead
             QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, m_canvas->presFakt(), false );
 	    yOffset = ( m_canvas->presPage() - 1 ) * pgRect.height();
 	    if ( m_canvas->height() > pgRect.height() )
 		yOffset -= ( m_canvas->height() - pgRect.height() ) / 2;
+#endif
 	    m_canvas->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
 	    m_canvas->setFocus();
 
@@ -1886,7 +1888,7 @@ void KPresenterView::extraPenStyleNoPen()
 /*===============================================================*/
 void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
 {
-    KPRPage *doc = m_canvas->activePage();
+    KPrPage *doc = m_canvas->activePage();
     QPen e_pen = QPen( (doc->getPen( pen )).color(), (doc->getPen( pen )).width(), style );
     doc->setPenBrush( e_pen,
                       doc->getBrush( brush ), doc->getLineBegin( lineBegin ),
@@ -1962,7 +1964,7 @@ void KPresenterView::extraPenWidth10()
 void KPresenterView::setExtraPenWidth( unsigned int width )
 {
     //KPresenterDoc *doc = m_pKPresenterDoc;
-    KPRPage *doc=m_canvas->activePage();
+    KPrPage *doc=m_canvas->activePage();
     QPen e_pen = QPen( (doc->getPen( pen )).color(), width,
                        (doc->getPen( pen )).style() );
     doc->setPenBrush( e_pen,
@@ -3010,15 +3012,12 @@ unsigned int KPresenterView::getCurrPgNum() const
 }
 
 /*================== scroll horizontal ===========================*/
-void KPresenterView::scrollH( int _value )
+void KPresenterView::scrollH( int value )
 {
     if ( !presStarted ) {
-	int xo = xOffset;
-
-	xOffset = _value;
-	m_canvas->scroll( xo - _value, 0 );
+	m_canvas->scrollX( value );
 	if ( h_ruler )
-	    h_ruler->setOffset( xOffset, 0 );
+	    h_ruler->setOffset( value, 0 );
     }
 }
 
@@ -3026,13 +3025,9 @@ void KPresenterView::scrollH( int _value )
 void KPresenterView::scrollV( int value )
 {
     if ( !presStarted ) {
-	int yo = yOffset;
-
-	yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg + value;
-	m_canvas->scroll( 0, yo /*- yOffset*/ );
-
+        m_canvas->scrollY( value );
 	if ( v_ruler )
-	    v_ruler->setOffset( 0, yo/*-kPresenterDoc()->getPageRect( getCurrPgNum() - 1, xOffset, yOffset, 1.0, false ).y()*/ );
+	    v_ruler->setOffset( 0, value );
     }
 }
 
@@ -3109,6 +3104,7 @@ void KPresenterView::screenPenColor()
     }
 }
 
+#if 0
 /*====================== paint event ============================*/
 void KPresenterView::repaint( bool erase )
 {
@@ -3130,6 +3126,7 @@ void KPresenterView::repaint( QRect r, bool erase )
     QWidget::repaint( r, erase );
     m_canvas->repaint( r, erase );
 }
+#endif
 
 /*====================== change pciture =========================*/
 void KPresenterView::changePicture( const QString & filename )
@@ -3503,6 +3500,8 @@ void KPresenterView::unitChanged( QString u )
 void KPresenterView::setRanges()
 {
     if ( vert && horz && m_canvas && m_pKPresenterDoc ) {
+        int xOffset = m_canvas->diffx();
+        int yOffset = m_canvas->diffy();
 	vert->setSteps( 10, m_canvas->height() );
 	vert->setRange( 0, QMAX( 0, m_pKPresenterDoc->getPageRect( 0, xOffset, yOffset, 1.0, false ).height()  - m_canvas->height() ) );
 	horz->setSteps( 10, m_pKPresenterDoc->getPageRect( 0, xOffset, yOffset, 1.0, false ).width() +
@@ -3533,7 +3532,7 @@ void KPresenterView::skipToPage( int num )
     }
     refreshPageButton();
 //FIXME
-    yOffset = 0;//kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg;
+    //yOffset = 0;//kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg;
     //(Laurent) deselect object when we change page.
     //otherwise you can change object properties on other page
     m_canvas->deSelectAllObj();
@@ -3646,13 +3645,13 @@ QWidget* KPresenterView::canvas()
 /*================================================================*/
 int KPresenterView::canvasXOffset() const
 {
-    return getDiffX();
+    return m_canvas->diffx();
 }
 
 /*================================================================*/
 int KPresenterView::canvasYOffset() const
 {
-    return getDiffY();
+    return m_canvas->diffy();
 }
 
 /*================================================================*/
@@ -4587,8 +4586,8 @@ void KPresenterView::slotUpdateRuler()
         if ( txtobj )
         {
             QRect r= txtobj->getBoundingRect( );
-            getHRuler()->setFrameStartEnd( r.left() +xOffset/*- pc.x()*/, r.right()+xOffset /*- pc.x()*/ );
-            getVRuler()->setFrameStartEnd( r.top()+ yOffset/*- pc.y()*/, r.bottom()+ yOffset/*- pc.y()*/ );
+            getHRuler()->setFrameStartEnd( r.left() + m_canvas->diffx()/*- pc.x()*/, r.right()+m_canvas->diffx() /*- pc.x()*/ );
+            getVRuler()->setFrameStartEnd( r.top()+ m_canvas->diffy()/*- pc.y()*/, r.bottom()+m_canvas->diffy()/*- pc.y()*/ );
             if( getHRuler())
             {
                 getHRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);

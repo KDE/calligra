@@ -598,7 +598,7 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n )
         format.setAnchorHref(n.attribute(attrHrefName));
     }
 
-    kdDebug()<<"loadFormat :"<<format.key()<<endl;
+    //kdDebug()<<"loadFormat :"<<format.key()<<endl;
     return format;
 }
 
@@ -899,7 +899,7 @@ void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisi
     iPoint.rx() += xadj;
     vPoint.rx() += xadj;
     // very small clipping around the cursor
-    QRect clip( vPoint.x() - 5, vPoint.y() - canvas->getView()->getDiffY(), 10, cursorHeight );
+    QRect clip( vPoint.x() - 5, vPoint.y() - canvas->diffy(), 10, cursorHeight );
     setupClipRegion( p, clip );
 
     QPixmap *pix = 0;
@@ -938,7 +938,7 @@ void KPTextObject::slotAvailableHeightNeeded()
 {
     int ah = m_doc->zoomHandler()->pixelToLayoutUnitY( getSize().height() );
     m_textobj->setAvailableHeight( ah );
-    kdDebug()<<"slotAvailableHeightNeeded: height=:"<<ah<<endl;
+    //kdDebug()<<"slotAvailableHeightNeeded: height=:"<<ah<<endl;
 }
 
 void KPTextObject::slotRepaintChanged()
@@ -1245,10 +1245,8 @@ void KPTextView::drawCursor( bool b )
     //kpTextObject()->kPresenterDocument()->repaint( kpTextObject() );
 
     QPainter painter( m_canvas );
-    //painter.translate( -m_canvas->contentsX(), -m_canvas->contentsY() );
-    //painter.setBrushOrigin( -m_canvas->contentsX(), -m_canvas->contentsY() );
-    painter.translate( -m_canvas->getView()->getDiffX(), -m_canvas->getView()->getDiffY() );
-    //painter.setBrushOrigin( -m_canvas->contentsX(), -m_canvas->contentsY() );
+    painter.translate( -m_canvas->diffx(), -m_canvas->diffy() );
+    painter.setBrushOrigin( -m_canvas->diffx(), -m_canvas->diffy() );
 
     kpTextObject()->drawCursor( &painter, cursor(), b, m_canvas );
 }

@@ -54,7 +54,7 @@ public:
     virtual ObjType getType() const
     { return OT_PIE; }
     virtual QString getTypeString() const
-    { 
+    {
       switch ( pieType ) {
       case PT_PIE:
         return i18n("Pie");
@@ -66,6 +66,7 @@ public:
         return i18n("Chord");
         break;
       }
+      return QString::null;
     }
 
     virtual PieType getPieType() const

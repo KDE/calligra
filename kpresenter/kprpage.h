@@ -34,15 +34,15 @@ class KoRect;
 class KoPageLayout;
 class KCommand;
 
-class KPRPage 
+class KPrPage
 {
 public:
 
     // constructor - destructor
-    KPRPage(KPresenterDoc *_doc);
-    virtual ~KPRPage();
+    KPrPage(KPresenterDoc *_doc);
+    virtual ~KPrPage();
 
-    KPresenterDoc * kPresenterDoc() const {return m_doc; } 
+    KPresenterDoc * kPresenterDoc() const {return m_doc; }
 
     void setPageLayout(KoPageLayout pgLayout);
 
@@ -75,15 +75,15 @@ public:
 
     void deleteObjs( bool _add=true );
     int numSelected() const;
-    void pasteObjs( const QByteArray & data, int diffx, int diffy, int currPage );
+    void pasteObjs( const QByteArray & data, int currPage );
     KCommand * replaceObjs( bool createUndoRedo, unsigned int _orastX,unsigned int _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol);
 
-    void copyObjs( int diffx, int diffy );
+    void copyObjs();
     KPObject* getSelectedObj();
     void groupObjects();
     void ungroupObjects();
-    void raiseObjs( int /*diffx*/, int /*diffy*/ );
-    void lowerObjs( int /*diffx*/, int /*diffy*/ );
+    void raiseObjs();
+    void lowerObjs();
     bool getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue, int *_sharpnessValue );
     int getRndY( int _ry );
     int getRndX( int _rx );
@@ -111,25 +111,25 @@ public:
     QPen getPen( const QPen & pen );
 
     // insert an object
-    virtual void insertObject( const QRect&, KoDocumentEntry&, int, int );
+    virtual void insertObject( const QRect&, KoDocumentEntry& );
 
-    void insertRectangle( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,BCType gt, int rndX, int rndY, bool unbalanced, int xfactor, int yfactor, int diffx, int diffy );
+    void insertRectangle( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,BCType gt, int rndX, int rndY, bool unbalanced, int xfactor, int yfactor );
 
-    void insertCircleOrEllipse( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2, BCType gt, bool unbalanced, int xfactor, int yfactor, int diffx, int diffy );
+    void insertCircleOrEllipse( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2, BCType gt, bool unbalanced, int xfactor, int yfactor );
 
-    void insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,BCType gt, PieType pt, int _angle, int _len, LineEnd lb,LineEnd le,bool unbalanced, int xfactor, int yfactor, int diffx, int diffy );
+    void insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,BCType gt, PieType pt, int _angle, int _len, LineEnd lb,LineEnd le,bool unbalanced, int xfactor, int yfactor );
 
-    void insertText( QRect r, int diffx, int diffy, QString text= QString::null, KPresenterView *_view=0L );
-    void insertLine( QRect r, QPen pen, LineEnd lb, LineEnd le, LineType lt, int diffx, int diffy );
+    void insertTextObject( const QRect& r, const QString& text = QString::null, KPresenterView *_view = 0L );
+    void insertLine( QRect r, QPen pen, LineEnd lb, LineEnd le, LineType lt );
 
-    void insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft,QColor g1, QColor g2, BCType gt, const QString &fileName, bool unbalanced,int xfactor, int yfactor, int diffx, int diffy );
+    void insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft,QColor g1, QColor g2, BCType gt, const QString &fileName, bool unbalanced,int xfactor, int yfactor );
 
-    void insertFreehand( const QPointArray &points, QRect r, QPen pen,LineEnd lb, LineEnd le, int diffx, int diffy );
-    void insertPolyline( const QPointArray &points, QRect r, QPen pen,LineEnd lb, LineEnd le, int diffx, int diffy );
-    void insertQuadricBezierCurve( const QPointArray &points, const QPointArray &allPoints, QRect r, QPen pen,LineEnd lb, LineEnd le, int diffx, int diffy );
-    void insertCubicBezierCurve( const QPointArray &points, const QPointArray &allPoints, QRect r, QPen pen,LineEnd lb, LineEnd le, int diffx, int diffy );
+    void insertFreehand( const QPointArray &points, QRect r, QPen pen,LineEnd lb, LineEnd le );
+    void insertPolyline( const QPointArray &points, QRect r, QPen pen,LineEnd lb, LineEnd le );
+    void insertQuadricBezierCurve( const QPointArray &points, const QPointArray &allPoints, QRect r, QPen pen,LineEnd lb, LineEnd le );
+    void insertCubicBezierCurve( const QPointArray &points, const QPointArray &allPoints, QRect r, QPen pen,LineEnd lb, LineEnd le );
 
-    void insertPolygon( const QPointArray &points, QRect r, QPen pen, QBrush brush, FillType ft,QColor g1, QColor g2, BCType gt, bool unbalanced, int xfactor, int yfactor, int diffx, int diffy, bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
+    void insertPolygon( const QPointArray &points, QRect r, QPen pen, QBrush brush, FillType ft,QColor g1, QColor g2, BCType gt, bool unbalanced, int xfactor, int yfactor, bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
 
 
     void alignObjsLeft();
@@ -150,8 +150,8 @@ public:
     void recalcPageNum();
     void changePicture( const QString & filename );
     void changeClipart( const QString & filename );
-    void insertPicture( const QString &, int, int, int _x = 10, int _y = 10 );
-    void insertClipart( const QString &, int, int );
+    void insertPicture( const QString &, int _x = 10, int _y = 10 );
+    void insertClipart( const QString & );
 
     void enableEmbeddedParts( bool f );
     void deletePage( );
@@ -165,7 +165,7 @@ public:
     void setBackClipart(  const KPClipartKey & key );
     void setBackView( BackView backView );
     void setBackType( BackType backType );
-    
+
     void setPageEffect(  PageEffect pageEffect );
     void setPageTimer(  int pageTimer );
     void setPageSoundEffect(  bool soundEffect );

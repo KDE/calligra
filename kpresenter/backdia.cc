@@ -47,7 +47,7 @@
  *******************************************************************/
 
 /*=============================================================*/
-BackPreview::BackPreview( QWidget *parent, KPRPage *m_page )
+BackPreview::BackPreview( QWidget *parent, KPrPage *m_page )
     : QFrame( parent )
 {
     setFrameStyle( WinPanel | Sunken );
@@ -92,7 +92,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
                   const QString &backPic, const QDateTime &picLM,
                   const QString &backClip, const QDateTime &clipLM,
                   BackView backPicView, bool _unbalanced,
-                  int _xfactor, int _yfactor, KPRPage *m_page )
+                  int _xfactor, int _yfactor, KPrPage *m_page )
     : KDialogBase( parent, name, true, "",KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel|KDialogBase::User1 ), picLastModified( picLM ), clipLastModified( clipLM )
 {
     lockUpdate = true;

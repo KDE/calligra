@@ -25,12 +25,10 @@
 #include <qptrlist.h>
 #include <qpicture.h>
 #include <qvaluelist.h>
-
-#include <koRuler.h>
 #include <qpixmap.h>
 
+#include <koRuler.h>
 #include <koQueryTrader.h>
-#include <kprinter.h>
 
 #include <global.h>
 
@@ -62,14 +60,16 @@ class QPoint;
 class KPresenterSoundPlayer;
 class KoTextObject;
 class KoParagCounter;
-class KPRPage;
+class KPrPage;
+class KPrinter;
 
 class KPTextView;
 
-/**********************************************************************/
-/* class KPCanvas - There is ONE instance of this class for a given view  */
-/* It manages the graphical representation of all the objects         */
-/**********************************************************************/
+/**
+ * Class KPCanvas - There is a single instance of this class for a given view.
+ *
+ * It manages the graphical representation of all the objects.
+ */
 class KPrCanvas : public QWidget
 {
     Q_OBJECT
@@ -79,6 +79,16 @@ public:
     // constructor - destructor
     KPrCanvas( QWidget *parent=0,const char *name=0,KPresenterView *_view=0 );
     ~KPrCanvas();
+
+    KPresenterView * getView() { return m_view; }
+
+    // The equivalent of contentsX() and contentsY() for a QScrollView
+    // The Canvas is a widget, not a scrollview (because we handle the scrollbars ourselves,
+    // to have the "goto page" buttons at the bottom of the scrollbars etc.)
+    int diffx() const { return m_xOffset; }
+    int diffy() const { return m_yOffset; }
+    void scrollX( int x );
+    void scrollY( int y );
 
     // public functions
     void selectAllObj();
@@ -141,8 +151,8 @@ public:
 
     void gotoPage( int pg );
 
-    KPRPage* activePage();
-    void setActivePage( KPRPage* _active);
+    KPrPage* activePage();
+    void setActivePage( KPrPage* _active);
 
     QPtrList<KoTextObject> objectText();
     bool oneObjectTextExist();
@@ -167,13 +177,9 @@ public:
 
     KPTextView *currentTextObjectView() const { return m_currentTextObjectView; }
 
-    KPresenterView * getView(){return view;}
     QPtrList<KPObject> objectList();
 
     void stopSound();
-
-    int diffx() const;
-    int diffy() const;
 
     //for KPTextView
     void dragStarted() { mousePressed = false; }
@@ -198,7 +204,7 @@ public slots:
     void picViewOrig1280x1024();
     void picViewOrig1600x1200();
     void picViewOrigFactor();
-    void slotSetActivePage( KPRPage* _active);
+    void slotSetActivePage( KPrPage* _active);
 
 
 signals:
@@ -270,12 +276,12 @@ protected:
     void _repaint( QRect r );
     void _repaint( KPObject *o );
 
-    void printPage( QPainter*, int, QRect );
+    void printPage( QPainter*, int pageNum );
     void changePages( QPixmap, QPixmap, PageEffect );
     void doObjEffects();
     void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );
 
-    void insertText( QRect );
+    void insertTextObject( const QRect& );
     void insertLineH( QRect, bool );
     void insertLineV( QRect, bool );
     void insertLineD1( QRect, bool );
@@ -311,6 +317,36 @@ protected:
 #endif
 
 private:
+    QValueList<int> pages(const QString &range);
+    bool pagesHelper(const QString &chunk, QValueList<int> &list);
+    void picViewOrigHelper(int x, int y);
+
+    void moveObject( int x, int y, bool key );
+    void resizeObject( ModifyType _modType, int _dx, int _dy );
+
+    void raiseObject();
+    void lowerObject();
+    int selectedObjectPosition;
+
+    bool nextPageTimer;
+
+    void playSound( const QString &soundFileName );
+
+    QRect getDrawRect( const QPointArray &_points );
+
+    void drawPolygon( const QPoint &startPoint, const QPoint &endPoint );
+
+private slots:
+    void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
+    void toColorChanged( const QColor &color ) { emit colorChanged( color ); }
+    void toAlignChanged( int a ) { emit alignChanged( a ); }
+    void drawingMode();
+    void switchingMode();
+    void slotGotoPage();
+    void slotExitPres();
+    void terminateEditing( KPTextObject * );
+
+private:
     // variables
     QPopupMenu *presMenu;
     bool mousePressed;
@@ -318,7 +354,7 @@ private:
     unsigned int oldMx, oldMy;
     int resizeObjNum, editNum;
     bool fillBlack;
-    KPresenterView *view;
+    KPresenterView *m_view;
     bool editMode, goingBack, drawMode;
     bool drawLineInDrawMode;
     bool mouseSelectedObject;
@@ -356,37 +392,9 @@ private:
     bool m_drawCubicBezierCurve;
     bool m_drawLineWithCubicBezierCurve;
 
-    KPRPage *m_activePage;
-
-private:
-    QValueList<int> pages(const QString &range);
-    bool pagesHelper(const QString &chunk, QValueList<int> &list);
-    void picViewOrigHelper(int x, int y);
-
-    void moveObject( int x, int y, bool key );
-    void resizeObject( ModifyType _modType, int _dx, int _dy );
-
-    void raiseObject();
-    void lowerObject();
-    int selectedObjectPosition;
-
-    bool nextPageTimer;
-
-    void playSound( const QString &soundFileName );
-
-    QRect getDrawRect( const QPointArray &_points );
-
-    void drawPolygon( const QPoint &startPoint, const QPoint &endPoint );
-
-private slots:
-    void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
-    void toColorChanged( const QColor &color ) { emit colorChanged( color ); }
-    void toAlignChanged( int a ) { emit alignChanged( a ); }
-    void drawingMode();
-    void switchingMode();
-    void slotGotoPage();
-    void slotExitPres();
-    void terminateEditing( KPTextObject * );
+    KPrPage *m_activePage;
+    int m_xOffset, m_yOffset;
+    int m_xOffsetSaved, m_yOffsetSaved; // saved when going fullscreen
 };
 
 #endif //PAGE_H

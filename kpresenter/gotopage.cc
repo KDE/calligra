@@ -54,9 +54,10 @@ KPGotoPage::KPGotoPage( const KPresenterDoc *doc, float fakt,
 	     this, SLOT(accept()) );
     ml->addWidget( spinbox );
 
+    QPtrList<KPrPage> pageList = doc->getPageList(); // because of const doc, we can't do doc->pageList()->at()
     QValueList<int>::ConstIterator it = slides.begin();
     for ( ; it != slides.end(); ++it ) {
-        QString t(doc->pageList().at(*it)->pageTitle( i18n( "Slide %1" ).arg( *it ) ));
+        QString t(pageList.at(*it)->pageTitle( i18n( "Slide %1" ).arg( *it ) ));
         // cut ultra long titles...
         if(t.length() > 30) {
             t.truncate(30);

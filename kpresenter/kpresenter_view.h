@@ -315,22 +315,18 @@ public:
     // create GUI
     virtual void createGUI();
 
-    // get - set offsets
-    int getDiffX() const { return xOffset; }
-    int getDiffY() const { return yOffset; }
-    void setDiffX( int _x ) {xOffset = _x; }
-    void setDiffY( int _y ) {yOffset = _y; }
-
     // get current pagenum, 1-based
     unsigned int getCurrPgNum() const;
 
     // return pointer to document
-    class KPresenterDoc *kPresenterDoc() const {return m_pKPresenterDoc; }
+    KPresenterDoc *kPresenterDoc() const {return m_pKPresenterDoc; }
 
+#if 0
     // repaint page
     void repaint( bool );
     void repaint( unsigned int, unsigned int, unsigned int, unsigned int, bool );
     void repaint( QRect, bool );
+#endif
 
     // properties
     void changePicture( const QString & );
@@ -557,8 +553,6 @@ private:
 
     // scrollbars
     QScrollBar *vert, *horz;
-    int xOffset, yOffset;
-    int xOffsetSaved, yOffsetSaved; // saved when going fullscreen
 
     // dialogs
     BackDia *backDia;

@@ -94,8 +94,8 @@ static const int CURRENT_SYNTAX_VERSION = 2;
 /******************************************************************/
 
 /*====================== constructor =============================*/
-KPresenterChild::KPresenterChild( KPresenterDoc *_kpr, KoDocument* _doc, const QRect& _rect, int _diffx, int _diffy )
-    : KoDocumentChild( _kpr, _doc, QRect( _rect.left() + _diffx, _rect.top() + _diffy, _rect.width(), _rect.height() ) )
+KPresenterChild::KPresenterChild( KPresenterDoc *_kpr, KoDocument* _doc, const QRect& _rect )
+    : KoDocumentChild( _kpr, _doc, QRect( _rect.left(), _rect.top(), _rect.width(), _rect.height() ) )
 {
 }
 
@@ -176,12 +176,12 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     _pageLayout.unit = KoUnit::U_MM;
     m_indent = MM_TO_POINT( 10.0 );
-    KPRPage *newpage=new KPRPage(this);
+    KPrPage *newpage=new KPrPage(this);
     m_pageList.insert( 0,newpage);
     emit sig_changeActivePage(newpage );
 
     objStartY = 0;
-    setPageLayout( _pageLayout, 0, 0 );
+    setPageLayout( _pageLayout );
     _presPen = QPen( red, 3, SolidLine );
     presSpeed = 2;
     pasting = false;
@@ -348,7 +348,7 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
       for( ; it.current(); ++it ) {
           // Don't save children that are only in the undo/redo history
           // but not anymore in the presentation
-          KPRPage *page;
+          KPrPage *page;
           for ( page = m_pageList.first(); page ; page = m_pageList.next() )
           {
               QPtrListIterator<KPObject> oIt(page->objectList());
@@ -503,7 +503,7 @@ QDomDocument KPresenterDoc::saveXML()
 /*===============================================================*/
 void KPresenterDoc::enableEmbeddedParts( bool f )
 {
-    KPRPage *page=0L;
+    KPrPage *page=0L;
     for(page=pageList().first(); page; page=pageList().next())
         page->enableEmbeddedParts(f);
 }
@@ -993,7 +993,7 @@ void KPresenterDoc::loadBackground( const QDomElement &element )
         //test if there is a page at this index
         //=> don't add new page if there is again a page
         if(i>(m_pageList.count()-1))
-            m_pageList.append(new KPRPage(this));
+            m_pageList.append(new KPrPage(this));
         m_pageList.at(i)->background()->load(page);
         page=page.nextSibling().toElement();
         i++;
@@ -1001,7 +1001,7 @@ void KPresenterDoc::loadBackground( const QDomElement &element )
 }
 
 /*========================= load objects =========================*/
-void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPRPage *_page )
+void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPage *_page )
 {
     ObjType t = OT_LINE;
     QDomElement obj=element.firstChild().toElement();
@@ -1188,7 +1188,7 @@ void KPresenterDoc::loadTitle( const QDomElement &element )
             //test if there is a page at this index
             //=> don't add new page if there is again a page
             if(i>(m_pageList.count()-1))
-                m_pageList.append(new KPRPage(this));
+                m_pageList.append(new KPrPage(this));
             m_pageList.at(i)->insertManualTitle(title.attribute("title"));
             i++;
         }
@@ -1207,7 +1207,7 @@ void KPresenterDoc::loadNote( const QDomElement &element )
             //test if there is a page at this index
             //=> don't add new page if there is again a page
             if(i>(m_pageList.count()-1))
-                m_pageList.append(new KPRPage(this));
+                m_pageList.append(new KPrPage(this));
             m_pageList.at(i)->setNoteText(note.attribute("note"));
             i++;
         }
@@ -1267,22 +1267,22 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 //	_pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
 
 	if ( _clean )
-	    setPageLayout( __pgLayout, 0, 0 );
+	    setPageLayout( __pgLayout );
 	else {
 	    QRect r = m_pageList.last()->getZoomPageRect();
             m_pageList.last()->background()->setBgSize(r.size());
 	}
 
 
-          KPRPage *page;
+          KPrPage *page;
           for ( page = m_pageList.first(); page ; page = m_pageList.next() )
               page->completeLoading( _clean, lastObj );
 
     } else {
 	if ( _clean )
-	    setPageLayout( __pgLayout, 0, 0 );
+	    setPageLayout( __pgLayout );
 	else
-	    setPageLayout( _pageLayout, 0, 0 );
+	    setPageLayout( _pageLayout );
     }
     recalcVariables( VT_FIELD );
     return true;
@@ -1290,7 +1290,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 
 
 /*===================== set page layout ==========================*/
-void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
+void KPresenterDoc::setPageLayout( KoPageLayout pgLayout )
 {
     //     if ( _pageLayout == pgLayout )
     //	return;
@@ -1392,20 +1392,20 @@ void KPresenterDoc::repaint( bool erase )
 }
 
 /*===================== repaint =================================*/
-void KPresenterDoc::repaint( QRect rect )
+void KPresenterDoc::repaint( const QRect& rect )
 {
-
     QRect r;
 
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it ) {
 	r = rect;
-	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)it.current())->getDiffX(),
-			       r.y() - ((KPresenterView*)it.current())->getDiffY() ) );
+	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)it.current())->getCanvas()->diffx(),
+			       r.y() - ((KPresenterView*)it.current())->getCanvas()->diffy() ) );
 
 	// I am doing a cast to KPresenterView here, since some austrian hacker :-)
 	// decided to overload the non virtual repaint method!
-	((KPresenterView*)it.current())->repaint( r, false );
+	//((KPresenterView*)it.current())->repaint( r, false );
+	it.current()->update( r );
     }
 }
 
@@ -1418,17 +1418,14 @@ void KPresenterDoc::repaint( KPObject *kpobject )
     for( ; it.current(); ++it )
     {
 	r = kpobject->getBoundingRect(  );
-	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)it.current())->getDiffX(),
-			       r.y() - ((KPresenterView*)it.current())->getDiffY() ) );
-
-	// I am doing a cast to KPresenterView here, since some austrian hacker :-)
-	// decided to overload the non virtual repaint method!
-	((KPresenterView*)it.current())->repaint( r, false );
+	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)it.current())->getCanvas()->diffx(),
+			       r.y() - ((KPresenterView*)it.current())->getCanvas()->diffy() ) );
+	it.current()->update( r );
     }
 }
 
 /*==================== reorder page =============================*/
-QValueList<int> KPresenterDoc::reorderPage( unsigned int num, int diffx, int diffy, float fakt )
+QValueList<int> KPresenterDoc::reorderPage( unsigned int num, float fakt )
 {
     QValueList<int> orderList;
 
@@ -1581,7 +1578,7 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
     setModified(true);
 
     //insert page.
-    KPRPage *newpage=new KPRPage(this);
+    KPrPage *newpage=new KPrPage(this);
     m_pageList.insert( _page,newpage);
     emit sig_changeActivePage(newpage );
 
@@ -1641,13 +1638,13 @@ void KPresenterDoc::replaceObjs( bool createUndoRedo )
 }
 
 /*========================= restore background ==================*/
-void KPresenterDoc::restoreBackground( KPRPage *page )
+void KPresenterDoc::restoreBackground( KPrPage *page )
 {
     page->background()->restore();
 }
 
 /*==================== load pasted objects ==============================*/
-void KPresenterDoc::loadPastedObjs( const QString &in, int,KPRPage* _page )
+void KPresenterDoc::loadPastedObjs( const QString &in, int,KPrPage* _page )
 {
     QDomDocument doc;
     doc.setContent( in );
@@ -1930,7 +1927,7 @@ void KPresenterDoc::recalcVariables( int type )
 
 void KPresenterDoc::slotRepaintVariable()
 {
-    KPRPage *page=0L;
+    KPrPage *page=0L;
     for(page=pageList().first(); page; page=pageList().next())
         page->slotRepaintVariable();
 }
@@ -1965,7 +1962,7 @@ void KPresenterDoc::updateRuler()
 
 void KPresenterDoc::recalcPageNum()
 {
-    KPRPage *page=0L;
+    KPrPage *page=0L;
     for(page=pageList().first(); page; page=pageList().next())
         page->recalcPageNum();
 }
@@ -1977,7 +1974,7 @@ void KPresenterDoc::insertObjectInPage(int offset, KPObject *_obj)
     if( page > (m_pageList.count()-1))
     {
         for (int i=(m_pageList.count()-1); i<page;i++)
-            m_pageList.append(new KPRPage(this));
+            m_pageList.append(new KPrPage(this));
     }
     _obj->setOrig(_obj->getOrig().x(),newPos);
     m_pageList.at(page)->appendObject(_obj);

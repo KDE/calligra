@@ -156,7 +156,7 @@ SetBackCmd::SetBackCmd( QString _name, QColor _backColor1, QColor _backColor2, B
 			bool _oldBackUnbalanced, int _oldBackXFactor, int _oldBackYFactor,
 			const KPClipartKey & _oldBackPix, const KPClipartKey & _oldBackClip,
                         BackView _oldBackView, BackType _oldBackType,
-			bool _takeGlobal, KPresenterDoc *_doc, KPRPage *_page )
+			bool _takeGlobal, KPresenterDoc *_doc, KPrPage *_page )
     : KCommand( _name ), backColor1( _backColor1 ), backColor2( _backColor2 ), unbalanced( _backUnbalanced ),
       xfactor( _backXFactor ), yfactor( _backYFactor ), backPix( _backPix ), backClip( _backClip ),
       oldBackColor1( _oldBackColor1 ), oldBackColor2( _oldBackColor2 ), oldUnbalanced( _oldBackUnbalanced ),
@@ -187,7 +187,7 @@ void SetBackCmd::execute()
 	doc->restoreBackground( m_page );
     } else {
 	unsigned int i = 0;
-        QPtrListIterator<KPRPage> it( doc->getPageList() );
+        QPtrListIterator<KPrPage> it( doc->getPageList() );
         for ( ; it.current() ; ++it )
         {
  	    it.current()->setBackColor(  backColor1, backColor2, bcType,
@@ -215,7 +215,7 @@ void SetBackCmd::unexecute()
 	m_page->setBackClipart( oldBackClip );
 	doc->restoreBackground( m_page );
     } else {
-        QPtrListIterator<KPRPage> it( doc->getPageList() );
+        QPtrListIterator<KPrPage> it( doc->getPageList() );
         for ( ; it.current() ; ++it )
         {
  	    it.current()->setBackColor(  oldBackColor1, oldBackColor2, oldBcType,
@@ -315,7 +315,7 @@ void ChgClipCmd::unexecute()
 
 /*======================== constructor ===========================*/
 ChgPixCmd::ChgPixCmd( QString _name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
-                      KPresenterDoc *_doc, KPRPage *_page)
+                      KPresenterDoc *_doc, KPrPage *_page)
     : KCommand( _name )
 {
     oldObject = _oldObject;
@@ -354,7 +354,7 @@ void ChgPixCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-DeleteCmd::DeleteCmd( QString _name, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPRPage *_page )
+DeleteCmd::DeleteCmd( QString _name, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page )
     : KCommand( _name ), objects( _objects )
 {
     objects.setAutoDelete( false );
@@ -474,7 +474,7 @@ void EffectCmd::unexecute()
 /*==============================================================*/
 GroupObjCmd::GroupObjCmd( const QString &_name,
 			  const QPtrList<KPObject> &_objects,
-			  KPresenterDoc *_doc, KPRPage *_page )
+			  KPresenterDoc *_doc, KPrPage *_page )
     : KCommand( _name ), objects( _objects )
 {
     objects.setAutoDelete( false );
@@ -549,7 +549,7 @@ void GroupObjCmd::unexecute()
 /*==============================================================*/
 UnGroupObjCmd::UnGroupObjCmd( const QString &_name,
 			  KPGroupObject *grpObj_,
-			  KPresenterDoc *_doc, KPRPage *_page )
+			  KPresenterDoc *_doc, KPrPage *_page )
     : KCommand( _name ), objects( grpObj_->getObjects() )
 {
     objects.setAutoDelete( false );
@@ -619,7 +619,7 @@ void UnGroupObjCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-InsertCmd::InsertCmd( QString _name, KPObject *_object, KPresenterDoc *_doc, KPRPage *_page )
+InsertCmd::InsertCmd( QString _name, KPObject *_object, KPresenterDoc *_doc, KPrPage *_page )
     : KCommand( _name )
 {
     object = _object;
@@ -663,7 +663,7 @@ void InsertCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-LowerRaiseCmd::LowerRaiseCmd( QString _name, QPtrList<KPObject> _oldList, QPtrList<KPObject> _newList, KPresenterDoc *_doc, KPRPage *_page )
+LowerRaiseCmd::LowerRaiseCmd( QString _name, QPtrList<KPObject> _oldList, QPtrList<KPObject> _newList, KPresenterDoc *_doc, KPrPage *_page )
     : KCommand( _name )
 {
     oldList = _oldList;
@@ -706,7 +706,7 @@ void LowerRaiseCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd::MoveByCmd( QString _name, QPoint _diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc,KPRPage *_page )
+MoveByCmd::MoveByCmd( QString _name, QPoint _diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc,KPrPage *_page )
     : KCommand( _name ), diff( _diff ), objects( _objects )
 {
     objects.setAutoDelete( false );
@@ -1273,7 +1273,7 @@ PgConfCmd::PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
                       bool _oldManualSwitch, bool _oldInfinitLoop,
                       PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, int _oldPageTimer,
                       bool _oldSoundEffect, QString _oldFileName,
-                      KPresenterDoc *_doc, KPRPage *_page )
+                      KPresenterDoc *_doc, KPrPage *_page )
     : KCommand( _name )
 {
     manualSwitch = _manualSwitch;
@@ -1335,7 +1335,7 @@ PgLayoutCmd::PgLayoutCmd( QString _name, KoPageLayout _layout, KoPageLayout _old
 /*====================== execute =================================*/
 void PgLayoutCmd::execute()
 {
-    view->kPresenterDoc()->setPageLayout( layout, view->getDiffX(), view->getDiffY() );
+    view->kPresenterDoc()->setPageLayout( layout );
     view->getHRuler()->setPageLayout( layout );
     view->getVRuler()->setPageLayout( layout );
     view->setRanges();
@@ -1344,7 +1344,7 @@ void PgLayoutCmd::execute()
 /*====================== unexecute ===============================*/
 void PgLayoutCmd::unexecute()
 {
-    view->kPresenterDoc()->setPageLayout( oldLayout, view->getDiffX(), view->getDiffY() );
+    view->kPresenterDoc()->setPageLayout( oldLayout );
     view->getHRuler()->setPageLayout( oldLayout );
     view->getVRuler()->setPageLayout( oldLayout );
     view->setRanges();

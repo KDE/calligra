@@ -47,7 +47,7 @@ class KPGroupObject;
 class KPresenterView;
 class KPClipartObject;
 class KoParagLayout;
-class KPRPage;
+class KPrPage;
 
 /******************************************************************/
 /* Class: ShadowCmd                                               */
@@ -120,7 +120,7 @@ public:
 		bool _oldBackUnbalanced, int _oldBackXFactor, int _oldBackYFactor,
 		const KPImageKey & _oldBackPix, const KPClipartKey & _oldBackClip,
                 BackView _oldBackView, BackType _oldBackType,
-		bool _takeGlobal, KPresenterDoc *_doc, KPRPage *_page );
+		bool _takeGlobal, KPresenterDoc *_doc, KPrPage *_page );
 
     virtual void execute();
     virtual void unexecute();
@@ -145,7 +145,7 @@ protected:
     BackType oldBackType;
     bool takeGlobal;
     KPresenterDoc *doc;
-    KPRPage *m_page;
+    KPrPage *m_page;
 
 };
 
@@ -228,7 +228,7 @@ class ChgPixCmd : public KCommand
 {
 public:
     ChgPixCmd( QString _name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
-               KPresenterDoc *_doc, KPRPage *_page );
+               KPresenterDoc *_doc, KPrPage *_page );
     ~ChgPixCmd();
 
     virtual void execute();
@@ -238,7 +238,7 @@ protected:
 
     KPPixmapObject *oldObject, *newObject;
     KPresenterDoc *doc;
-    KPRPage *m_page;
+    KPrPage *m_page;
 
 };
 
@@ -249,7 +249,7 @@ protected:
 class DeleteCmd : public KCommand
 {
 public:
-    DeleteCmd( QString _name, QPtrList<KPObject> &_objects, KPresenterDoc *_doc , KPRPage *_page);
+    DeleteCmd( QString _name, QPtrList<KPObject> &_objects, KPresenterDoc *_doc , KPrPage *_page);
     ~DeleteCmd();
 
     virtual void execute();
@@ -259,7 +259,7 @@ protected:
 
     QPtrList<KPObject> objects;
     KPresenterDoc *doc;
-    KPRPage *m_page;
+    KPrPage *m_page;
 
 };
 
@@ -305,7 +305,7 @@ class GroupObjCmd : public KCommand
 public:
     GroupObjCmd( const QString &_name,
 		 const QPtrList<KPObject> &_objects,
-		 KPresenterDoc *_doc, KPRPage *_page );
+		 KPresenterDoc *_doc, KPrPage *_page );
     ~GroupObjCmd();
 
     virtual void execute();
@@ -316,7 +316,7 @@ protected:
     QPtrList<KPObject> objects;
     KPresenterDoc *doc;
     KPGroupObject *grpObj;
-    KPRPage *m_page;
+    KPrPage *m_page;
 
 };
 
@@ -329,7 +329,7 @@ class UnGroupObjCmd : public KCommand
 public:
     UnGroupObjCmd( const QString &_name,
 		 KPGroupObject *grpObj_,
-		 KPresenterDoc *_doc, KPRPage *_page );
+		 KPresenterDoc *_doc, KPrPage *_page );
     ~UnGroupObjCmd();
 
     virtual void execute();
@@ -340,7 +340,7 @@ protected:
     QPtrList<KPObject> objects;
     KPresenterDoc *doc;
     KPGroupObject *grpObj;
-    KPRPage *m_page;
+    KPrPage *m_page;
 
 };
 
@@ -352,7 +352,7 @@ protected:
 class InsertCmd : public KCommand
 {
 public:
-    InsertCmd( QString _name, KPObject *_object, KPresenterDoc *_doc, KPRPage *_page );
+    InsertCmd( QString _name, KPObject *_object, KPresenterDoc *_doc, KPrPage *_page );
     ~InsertCmd();
 
     virtual void execute();
@@ -362,7 +362,7 @@ protected:
 
     KPObject *object;
     KPresenterDoc *doc;
-    KPRPage *m_page;
+    KPrPage *m_page;
 
 };
 
@@ -373,7 +373,7 @@ protected:
 class LowerRaiseCmd : public KCommand
 {
 public:
-    LowerRaiseCmd( QString _name, QPtrList<KPObject> _oldList, QPtrList<KPObject> _newList, KPresenterDoc *_doc, KPRPage *_page );
+    LowerRaiseCmd( QString _name, QPtrList<KPObject> _oldList, QPtrList<KPObject> _newList, KPresenterDoc *_doc, KPrPage *_page );
     ~LowerRaiseCmd();
 
     virtual void execute();
@@ -384,7 +384,7 @@ protected:
     QPtrList<KPObject> oldList, newList;
     KPresenterDoc *doc;
     bool m_executed;
-    KPRPage *m_page;
+    KPrPage *m_page;
 
 };
 
@@ -395,7 +395,7 @@ protected:
 class MoveByCmd : public KCommand
 {
 public:
-    MoveByCmd( QString _name, QPoint _diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPRPage *_page );
+    MoveByCmd( QString _name, QPoint _diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page );
     ~MoveByCmd();
 
     virtual void execute();
@@ -406,7 +406,7 @@ protected:
     QPoint diff;
     QPtrList<KPObject> objects;
     KPresenterDoc *doc;
-    KPRPage *m_page;
+    KPrPage *m_page;
 
 };
 
@@ -509,7 +509,7 @@ public:
                bool _oldManualSwitch, bool _oldInfinitLoop,
                PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, int _oldPageTimer,
                bool _oldSoundEffect, QString _oldFileName,
-               KPresenterDoc *_doc, KPRPage *_page );
+               KPresenterDoc *_doc, KPrPage *_page );
 
     virtual void execute();
     virtual void unexecute();
@@ -522,7 +522,7 @@ protected:
     int pageTimer, oldPageTimer;
     bool soundEffect, oldSoundEffect;
     QString fileName, oldFileName;
-    KPRPage *m_page;
+    KPrPage *m_page;
     KPresenterDoc *doc;
 
 };

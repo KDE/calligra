@@ -53,12 +53,12 @@
 #include <qapplication.h>
 
 /******************************************************************/
-/* class KPRPage - KPRPage                                        */
+/* class KPrPage - KPrPage                                        */
 /******************************************************************/
 
-KPRPage::KPRPage(KPresenterDoc *_doc )
+KPrPage::KPrPage(KPresenterDoc *_doc )
 {
-    kdDebug()<<"create page : KPRPage::KPRPage(KPresenterDoc *_doc )\n";
+    kdDebug()<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )\n";
     m_doc=_doc;
     kpbackground= new KPBackGround( (m_doc->getImageCollection()), (m_doc->getGradientCollection()),
                                     (m_doc->getClipartCollection()), this );
@@ -68,49 +68,49 @@ KPRPage::KPRPage(KPresenterDoc *_doc )
     noteText=QString::null;
 }
 
-KPRPage::~KPRPage()
+KPrPage::~KPrPage()
 {
-    kdDebug()<<"Delete page :KPRPage::~KPRPage() \n";
+    kdDebug()<<"Delete page :KPrPage::~KPrPage() \n";
     //delete object list.
     m_objectList.setAutoDelete( true );
     m_objectList.clear();
     delete kpbackground;
 }
 
-void KPRPage::setPageLayout(KoPageLayout pgLayout)
+void KPrPage::setPageLayout(KoPageLayout pgLayout)
 {
     //refresh background
     //FIXME
 }
 
-void KPRPage::appendObject(KPObject *_obj)
+void KPrPage::appendObject(KPObject *_obj)
 {
     m_objectList.append(_obj);
 }
 
-void KPRPage::takeObject(KPObject *_obj)
+void KPrPage::takeObject(KPObject *_obj)
 {
     m_objectList.take( m_objectList.findRef( _obj ) );
 }
 
-void KPRPage::insertObject(KPObject *_oldObj, KPObject *_newObject)
+void KPrPage::insertObject(KPObject *_oldObj, KPObject *_newObject)
 {
     unsigned int pos = m_objectList.findRef( _oldObj );
     m_objectList.take( pos );
     m_objectList.insert( pos, _newObject );
 }
 
-void KPRPage::insertObject(KPObject *_obj,int pos)
+void KPrPage::insertObject(KPObject *_obj,int pos)
 {
     m_objectList.insert(pos,_obj);
 }
 
-void KPRPage::removeObject( int pos)
+void KPrPage::removeObject( int pos)
 {
     m_objectList.remove(pos);
 }
 
-void KPRPage::deleteObjs( bool _add )
+void KPrPage::deleteObjs( bool _add )
 {
     //todo
     QPtrList<KPObject> _objects;
@@ -133,7 +133,7 @@ void KPRPage::deleteObjs( bool _add )
     m_doc->setModified(true);
 }
 
-void KPRPage::copyObjs( int diffx, int diffy )
+void KPrPage::copyObjs()
 {
     if ( !numSelected() )
         return;
@@ -163,12 +163,12 @@ void KPRPage::copyObjs( int diffx, int diffy )
     QApplication::clipboard()->setData( drag );
 }
 
-void KPRPage::pasteObjs( const QByteArray & data, int diffx, int diffy, int currPage )
+void KPrPage::pasteObjs( const QByteArray & data, int currPage )
 {
     m_doc->deSelectAllObj();
     m_doc->pasting = true;
-    m_doc->pasteXOffset = diffx + 20;
-    m_doc->pasteYOffset = diffy + 20;
+    m_doc->pasteXOffset = 20;
+    m_doc->pasteYOffset = 20;
     QString clip_str = QString::fromUtf8( data );
     if ( clip_str.isEmpty() ) return;
     m_doc->loadPastedObjs( clip_str, currPage,this );
@@ -177,7 +177,7 @@ void KPRPage::pasteObjs( const QByteArray & data, int diffx, int diffy, int curr
     m_doc->setModified(true);
 }
 
-int KPRPage::numSelected() const
+int KPrPage::numSelected() const
 {
     int num = 0;
 
@@ -191,18 +191,19 @@ int KPRPage::numSelected() const
     return num;
 }
 
-KPObject* KPRPage::getSelectedObj()
+KPObject* KPrPage::getSelectedObj()
 {
     KPObject *kpobject = 0;
-
+    // ### Use iterator!
     for ( int i = 0; i < static_cast<int>( m_objectList.count() ); i++ ) {
 	kpobject = m_objectList.at( i );
 	if ( kpobject->isSelected() )
             return kpobject;
     }
+    return 0L;
 }
 
-void KPRPage::groupObjects()
+void KPrPage::groupObjects()
 {
     QPtrList<KPObject> objs;
     objs.setAutoDelete( false );
@@ -219,7 +220,7 @@ void KPRPage::groupObjects()
     }
 }
 
-void KPRPage::ungroupObjects()
+void KPrPage::ungroupObjects()
 {
     KPObject *kpobject = getSelectedObj();
     if ( kpobject && kpobject->getType() == OT_GROUP ) {
@@ -231,7 +232,7 @@ void KPRPage::ungroupObjects()
 }
 
 /*=============================================================*/
-QPen KPRPage::getPen( const QPen &pen )
+QPen KPrPage::getPen( const QPen &pen )
 {
     KPObject *kpobject = 0;
     QPtrListIterator<KPObject> it( m_objectList );
@@ -292,7 +293,7 @@ QPen KPRPage::getPen( const QPen &pen )
 }
 
 /*========================= get line begin ========================*/
-LineEnd KPRPage::getLineBegin( LineEnd lb )
+LineEnd KPrPage::getLineBegin( LineEnd lb )
 {
     KPObject *kpobject = 0;
 
@@ -334,7 +335,7 @@ LineEnd KPRPage::getLineBegin( LineEnd lb )
 }
 
 /*========================= get line end =========================*/
-LineEnd KPRPage::getLineEnd( LineEnd le )
+LineEnd KPrPage::getLineEnd( LineEnd le )
 {
     KPObject *kpobject = 0;
 
@@ -375,7 +376,7 @@ LineEnd KPRPage::getLineEnd( LineEnd le )
 }
 
 /*========================= get brush =============================*/
-QBrush KPRPage::getBrush( const QBrush &brush )
+QBrush KPrPage::getBrush( const QBrush &brush )
 {
     KPObject *kpobject = 0;
 
@@ -422,7 +423,7 @@ QBrush KPRPage::getBrush( const QBrush &brush )
 }
 
 /*================================================================*/
-FillType KPRPage::getFillType( FillType ft )
+FillType KPrPage::getFillType( FillType ft )
 {
     KPObject *kpobject = 0;
     QPtrListIterator<KPObject> it( m_objectList );
@@ -468,7 +469,7 @@ FillType KPRPage::getFillType( FillType ft )
 }
 
 /*================================================================*/
-QColor KPRPage::getGColor1( const QColor &g1 )
+QColor KPrPage::getGColor1( const QColor &g1 )
 {
     KPObject *kpobject = 0;
 
@@ -515,7 +516,7 @@ QColor KPRPage::getGColor1( const QColor &g1 )
 }
 
 /*================================================================*/
-QColor KPRPage::getGColor2( const QColor &g2 )
+QColor KPrPage::getGColor2( const QColor &g2 )
 {
     KPObject *kpobject = 0;
 
@@ -562,7 +563,7 @@ QColor KPRPage::getGColor2( const QColor &g2 )
 }
 
 /*================================================================*/
-BCType KPRPage::getGType( BCType gt )
+BCType KPrPage::getGType( BCType gt )
 {
     KPObject *kpobject = 0;
 
@@ -609,7 +610,7 @@ BCType KPRPage::getGType( BCType gt )
 }
 
 /*================================================================*/
-bool KPRPage::getGUnbalanced( bool  unbalanced )
+bool KPrPage::getGUnbalanced( bool  unbalanced )
 {
     KPObject *kpobject = 0;
 
@@ -656,7 +657,7 @@ bool KPRPage::getGUnbalanced( bool  unbalanced )
 }
 
 /*================================================================*/
-int KPRPage::getGXFactor( int xfactor )
+int KPrPage::getGXFactor( int xfactor )
 {
     KPObject *kpobject = 0;
 
@@ -703,7 +704,7 @@ int KPRPage::getGXFactor( int xfactor )
 }
 
 /*================================================================*/
-int KPRPage::getGYFactor( int yfactor )
+int KPrPage::getGYFactor( int yfactor )
 {
     KPObject *kpobject = 0;
 
@@ -750,7 +751,7 @@ int KPRPage::getGYFactor( int yfactor )
 }
 
 /*================================================================*/
-PieType KPRPage::getPieType( PieType pieType )
+PieType KPrPage::getPieType( PieType pieType )
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -762,7 +763,7 @@ PieType KPRPage::getPieType( PieType pieType )
     return pieType;
 }
 
-bool KPRPage::getSticky( bool s )
+bool KPrPage::getSticky( bool s )
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -775,7 +776,7 @@ bool KPRPage::getSticky( bool s )
 }
 
 /*================================================================*/
-int KPRPage::getPieLength( int pieLength )
+int KPrPage::getPieLength( int pieLength )
 {
 
     QPtrListIterator<KPObject> it( m_objectList );
@@ -789,7 +790,7 @@ int KPRPage::getPieLength( int pieLength )
 }
 
 /*================================================================*/
-int KPRPage::getPieAngle( int pieAngle )
+int KPrPage::getPieAngle( int pieAngle )
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -802,7 +803,7 @@ int KPRPage::getPieAngle( int pieAngle )
 }
 
 /*================================================================*/
-int KPRPage::getRndX( int _rx )
+int KPrPage::getRndX( int _rx )
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -819,7 +820,7 @@ int KPRPage::getRndX( int _rx )
 }
 
 /*================================================================*/
-int KPRPage::getRndY( int _ry )
+int KPrPage::getRndY( int _ry )
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -836,7 +837,7 @@ int KPRPage::getRndY( int _ry )
 }
 
 /*================================================================*/
-bool KPRPage::getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue, int *_sharpnessValue )
+bool KPrPage::getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue, int *_sharpnessValue )
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -863,7 +864,7 @@ bool KPRPage::getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue
 }
 
 /*======================== lower objects =========================*/
-void KPRPage::lowerObjs( int /*diffx*/, int /*diffy*/ )
+void KPrPage::lowerObjs()
 {
     KPObject *kpobject = 0;
 
@@ -889,7 +890,7 @@ void KPRPage::lowerObjs( int /*diffx*/, int /*diffy*/ )
 }
 
 /*========================= raise object =========================*/
-void KPRPage::raiseObjs( int /*diffx*/, int /*diffy*/ )
+void KPrPage::raiseObjs()
 {
     KPObject *kpobject = 0;
 
@@ -913,10 +914,10 @@ void KPRPage::raiseObjs( int /*diffx*/, int /*diffy*/ )
     m_doc->raiseAndLowerObject = true;
 }
 
-void KPRPage::insertLine( QRect r, QPen pen, LineEnd lb, LineEnd le, LineType lt, int diffx, int diffy )
+void KPrPage::insertLine( QRect r, QPen pen, LineEnd lb, LineEnd le, LineType lt )
 {
     KPLineObject *kplineobject = new KPLineObject( pen, lb, le, lt );
-    kplineobject->setOrig( r.x() + diffx, r.y() + diffy );
+    kplineobject->setOrig( r.x(), r.y() );
     kplineobject->setSize( r.width(), r.height() );
     kplineobject->setSelected( true );
 
@@ -927,12 +928,12 @@ void KPRPage::insertLine( QRect r, QPen pen, LineEnd lb, LineEnd le, LineType lt
 }
 
 /*===================== insert a rectangle =======================*/
-void KPRPage::insertRectangle( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
-				     BCType gt, int rndX, int rndY, bool unbalanced, int xfactor, int yfactor, int diffx, int diffy )
+void KPrPage::insertRectangle( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
+				     BCType gt, int rndX, int rndY, bool unbalanced, int xfactor, int yfactor )
 {
     KPRectObject *kprectobject = new KPRectObject( pen, brush, ft, g1, g2, gt, rndX, rndY,
 						   unbalanced, xfactor, yfactor );
-    kprectobject->setOrig( r.x()+diffx , r.y()+diffy );
+    kprectobject->setOrig( r.x() , r.y() );
     kprectobject->setSize( r.width(), r.height() );
     kprectobject->setSelected( true );
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, m_doc,this );
@@ -941,12 +942,12 @@ void KPRPage::insertRectangle( QRect r, QPen pen, QBrush brush, FillType ft, QCo
 }
 
 /*===================== insert a circle or ellipse ===============*/
-void KPRPage::insertCircleOrEllipse( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
-					   BCType gt, bool unbalanced, int xfactor, int yfactor, int diffx, int diffy )
+void KPrPage::insertCircleOrEllipse( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
+					   BCType gt, bool unbalanced, int xfactor, int yfactor )
 {
     KPEllipseObject *kpellipseobject = new KPEllipseObject( pen, brush, ft, g1, g2, gt,
 							    unbalanced, xfactor, yfactor );
-    kpellipseobject->setOrig( r.x() + diffx, r.y() + diffy );
+    kpellipseobject->setOrig( r.x(), r.y() );
     kpellipseobject->setSize( r.width(), r.height() );
     kpellipseobject->setSelected( true );
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, m_doc,this );
@@ -955,13 +956,13 @@ void KPRPage::insertCircleOrEllipse( QRect r, QPen pen, QBrush brush, FillType f
 }
 
 /*================================================================*/
-void KPRPage::insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
+void KPrPage::insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
 			       BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le,
-			       bool unbalanced, int xfactor, int yfactor, int diffx, int diffy )
+			       bool unbalanced, int xfactor, int yfactor )
 {
     KPPieObject *kppieobject = new KPPieObject( pen, brush, ft, g1, g2, gt, pt, _angle,
 						_len, lb, le, unbalanced, xfactor, yfactor );
-    kppieobject->setOrig( r.x() + diffx, r.y() + diffy );
+    kppieobject->setOrig( r.x(), r.y() );
     kppieobject->setSize( r.width(), r.height() );
     kppieobject->setSelected( true );
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chord" ), kppieobject, m_doc,this );
@@ -970,10 +971,10 @@ void KPRPage::insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1
 }
 
 /*===================== insert a textobject =====================*/
-void KPRPage::insertText( QRect r, int diffx, int diffy, QString text, KPresenterView *_view )
+void KPrPage::insertTextObject( const QRect& r, const QString& text, KPresenterView *_view )
 {
     KPTextObject *kptextobject = new KPTextObject( m_doc );
-    kptextobject->setOrig( r.x() + diffx, r.y() + diffy );
+    kptextobject->setOrig( r.x(), r.y() );
     kptextobject->setSize( r.width(), r.height() );
     kptextobject->setSelected( true );
     if ( !text.isEmpty() && _view ) {
@@ -993,9 +994,9 @@ void KPRPage::insertText( QRect r, int diffx, int diffy, QString text, KPresente
 }
 
 /*======================= insert an autoform ====================*/
-void KPRPage::insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft,
+void KPrPage::insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft,
                               QColor g1, QColor g2, BCType gt, const QString &fileName, bool unbalanced,
-                              int xfactor, int yfactor, int diffx, int diffy ){
+                              int xfactor, int yfactor ){
     KPAutoformObject *kpautoformobject = new KPAutoformObject( pen, brush, fileName, lb, le, ft,
 							       g1, g2, gt, unbalanced, xfactor, yfactor );
     kpautoformobject->setOrig( r.x() , r.y()  );
@@ -1006,12 +1007,12 @@ void KPRPage::insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb, LineE
     m_doc->addCommand( insertCmd );
 }
 
-void KPRPage::insertFreehand( const QPointArray &points, QRect r, QPen pen,
-                                    LineEnd lb, LineEnd le, int diffx, int diffy )
+void KPrPage::insertFreehand( const QPointArray &points, QRect r, QPen pen,
+                                    LineEnd lb, LineEnd le )
 {
     QSize size( r.width(), r.height() );
     KPFreehandObject *kpfreehandobject = new KPFreehandObject( points, size, pen, lb, le );
-    kpfreehandobject->setOrig( r.x() + diffx, r.y() + diffy );
+    kpfreehandobject->setOrig( r.x(), r.y() );
     kpfreehandobject->setSize( r.width(), r.height() );
     kpfreehandobject->setSelected( true );
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Freehand" ), kpfreehandobject, m_doc, this );
@@ -1019,12 +1020,12 @@ void KPRPage::insertFreehand( const QPointArray &points, QRect r, QPen pen,
     m_doc->addCommand( insertCmd );
 }
 
-void KPRPage::insertPolyline( const QPointArray &points, QRect r, QPen pen,
-                                    LineEnd lb, LineEnd le, int diffx, int diffy )
+void KPrPage::insertPolyline( const QPointArray &points, QRect r, QPen pen,
+                                    LineEnd lb, LineEnd le )
 {
     QSize size( r.width(), r.height() );
     KPPolylineObject *kppolylineobject = new KPPolylineObject( points, size, pen, lb, le );
-    kppolylineobject->setOrig( r.x() + diffx, r.y() + diffy );
+    kppolylineobject->setOrig( r.x(), r.y() );
     kppolylineobject->setSize( r.width(), r.height() );
     kppolylineobject->setSelected( true );
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polyline" ), kppolylineobject, m_doc, this );
@@ -1033,13 +1034,13 @@ void KPRPage::insertPolyline( const QPointArray &points, QRect r, QPen pen,
 }
 
 /*================ insert a quadric bezier curve =================*/
-void KPRPage::insertQuadricBezierCurve( const QPointArray &points, const QPointArray &allPoints, QRect r, QPen pen,
-                                            LineEnd lb, LineEnd le, int diffx, int diffy )
+void KPrPage::insertQuadricBezierCurve( const QPointArray &points, const QPointArray &allPoints, QRect r, QPen pen,
+                                            LineEnd lb, LineEnd le )
 {
     QSize size( r.width(), r.height() );
 
     KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject( points, allPoints, size, pen, lb, le );
-    kpQuadricBezierCurveObject->setOrig( r.x() + diffx, r.y() + diffy );
+    kpQuadricBezierCurveObject->setOrig( r.x(), r.y() );
     kpQuadricBezierCurveObject->setSize( r.width(), r.height() );
     kpQuadricBezierCurveObject->setSelected( true );
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject, m_doc,this );
@@ -1048,13 +1049,13 @@ void KPRPage::insertQuadricBezierCurve( const QPointArray &points, const QPointA
 }
 
 /*================= insert a cubic bezier curve ==================*/
-void KPRPage::insertCubicBezierCurve( const QPointArray &points, const QPointArray &allPoints, QRect r, QPen pen,
-                                            LineEnd lb, LineEnd le, int diffx, int diffy )
+void KPrPage::insertCubicBezierCurve( const QPointArray &points, const QPointArray &allPoints, QRect r, QPen pen,
+                                            LineEnd lb, LineEnd le )
 {
     QSize size( r.width(), r.height() );
 
     KPCubicBezierCurveObject *kpCubicBezierCurveObject = new KPCubicBezierCurveObject( points, allPoints, size, pen, lb, le );
-    kpCubicBezierCurveObject->setOrig( r.x() + diffx, r.y() + diffy );
+    kpCubicBezierCurveObject->setOrig( r.x(), r.y() );
     kpCubicBezierCurveObject->setSize( r.width(), r.height() );
     kpCubicBezierCurveObject->setSelected( true );
 
@@ -1064,16 +1065,16 @@ void KPRPage::insertCubicBezierCurve( const QPointArray &points, const QPointArr
 }
 
 /*======================= insert polygon ===========================*/
-void KPRPage::insertPolygon( const QPointArray &points, QRect r, QPen pen, QBrush brush, FillType ft,
+void KPrPage::insertPolygon( const QPointArray &points, QRect r, QPen pen, QBrush brush, FillType ft,
                                    QColor g1, QColor g2, BCType gt, bool unbalanced, int xfactor, int yfactor,
-                                   int diffx, int diffy, bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
+                                   bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
 {
     QSize size( r.width(), r.height() );
 
     KPPolygonObject *kpPolygonObject = new KPPolygonObject( points, size, pen, brush, ft,
                                                             g1, g2, gt, unbalanced, xfactor, yfactor,
                                                             _checkConcavePolygon, _cornersValue, _sharpnessValue );
-    kpPolygonObject->setOrig( r.x() + diffx, r.y() + diffy );
+    kpPolygonObject->setOrig( r.x(), r.y() );
     kpPolygonObject->setSize( r.width(), r.height() );
     kpPolygonObject->setSelected( true );
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polygon" ), kpPolygonObject, m_doc, this );
@@ -1082,7 +1083,7 @@ void KPRPage::insertPolygon( const QPointArray &points, QRect r, QPen pen, QBrus
 }
 
 /*======================== align objects left ===================*/
-void KPRPage::alignObjsLeft()
+void KPrPage::alignObjsLeft()
 {
     bool newPosition=false;
     QPtrList<KPObject> _objects;
@@ -1117,7 +1118,7 @@ void KPRPage::alignObjsLeft()
 }
 
 /*==================== align objects center h ===================*/
-void KPRPage::alignObjsCenterH()
+void KPrPage::alignObjsCenterH()
 {
     bool newPosition=false;
     QPtrList<KPObject> _objects;
@@ -1154,7 +1155,7 @@ void KPRPage::alignObjsCenterH()
 }
 
 /*==================== align objects right ======================*/
-void KPRPage::alignObjsRight()
+void KPrPage::alignObjsRight()
 {
     bool newPosition=false;
     QPtrList<KPObject> _objects;
@@ -1188,7 +1189,7 @@ void KPRPage::alignObjsRight()
 }
 
 /*==================== align objects top ========================*/
-void KPRPage::alignObjsTop()
+void KPrPage::alignObjsTop()
 {
     bool newPosition=false;
     QPtrList<KPObject> _objects;
@@ -1224,7 +1225,7 @@ void KPRPage::alignObjsTop()
 }
 
 /*==================== align objects center v ===================*/
-void KPRPage::alignObjsCenterV()
+void KPrPage::alignObjsCenterV()
 {
     bool newPosition=false;
     QPtrList<KPObject> _objects;
@@ -1261,7 +1262,7 @@ void KPRPage::alignObjsCenterV()
     }
 }
 
-void KPRPage::alignObjsBottom()
+void KPrPage::alignObjsBottom()
 {
     bool newPosition=false;
     QPtrList<KPObject> _objects;
@@ -1298,7 +1299,7 @@ void KPRPage::alignObjsBottom()
 
 
 
-void KPRPage::insertClipart( const QString &filename, int diffx, int diffy )
+void KPrPage::insertClipart( const QString &filename )
 {
     KPClipartKey key = m_doc->getClipartCollection()->loadClipart( filename ).key();
     kdDebug(33001) << "KPresenterDoc::insertClipart key=" << key.toString() << endl;
@@ -1313,7 +1314,7 @@ void KPRPage::insertClipart( const QString &filename, int diffx, int diffy )
     m_doc->addCommand( insertCmd );
 }
 
-void KPRPage::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _diffx, int _diffy )
+void KPrPage::insertObject( const QRect& _rect, KoDocumentEntry& _e )
 {
 
     KoDocument* doc = _e.createDoc( m_doc );
@@ -1321,12 +1322,12 @@ void KPRPage::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _diffx,
 	return;
     }
 
-    KPresenterChild* ch = new KPresenterChild( m_doc, doc, _rect, _diffx, _diffy );
+    KPresenterChild* ch = new KPresenterChild( m_doc, doc, _rect );
 
     m_doc->insertObject( ch );
 
     KPPartObject *kppartobject = new KPPartObject( ch );
-    kppartobject->setOrig( _rect.x() + _diffx, _rect.y() + _diffy );
+    kppartobject->setOrig( _rect.x(), _rect.y() );
     kppartobject->setSize( _rect.width(), _rect.height() );
     kppartobject->setSelected( true );
     QWidget::connect(ch, SIGNAL(changed(KoChild *)), kppartobject, SLOT(slot_changed(KoChild *)) );
@@ -1338,7 +1339,7 @@ void KPRPage::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _diffx,
     m_doc->repaint( false );
 }
 
-bool KPRPage::setLineEnd( LineEnd le )
+bool KPrPage::setLineEnd( LineEnd le )
 {
     KPObject *kpobject = 0;
     bool ret = false;
@@ -1430,7 +1431,7 @@ bool KPRPage::setLineEnd( LineEnd le )
     return ret;
 }
 
-bool KPRPage::setLineBegin( LineEnd lb )
+bool KPrPage::setLineBegin( LineEnd lb )
 {
     KPObject *kpobject = 0;
     bool ret = false;
@@ -1523,7 +1524,7 @@ bool KPRPage::setLineBegin( LineEnd lb )
 
 
 /*===================== set pen and brush ========================*/
-bool KPRPage::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft, QColor g1, QColor g2,
+bool KPrPage::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft, QColor g1, QColor g2,
 				 BCType gt, bool unbalanced, int xfactor, int yfactor, bool sticky )
 {
     KPObject *kpobject = 0;
@@ -1715,7 +1716,7 @@ bool KPRPage::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillT
     return ret;
 }
 
-int KPRPage::getPenBrushFlags()
+int KPrPage::getPenBrushFlags()
 {
     int flags = 0;
 
@@ -1759,7 +1760,7 @@ int KPRPage::getPenBrushFlags()
 }
 
 
-bool KPRPage::setPieSettings( PieType pieType, int angle, int len )
+bool KPrPage::setPieSettings( PieType pieType, int angle, int len )
 {
     bool ret = false;
 
@@ -1806,7 +1807,7 @@ bool KPRPage::setPieSettings( PieType pieType, int angle, int len )
     return ret;
 }
 
-bool KPRPage::setRectSettings( int _rx, int _ry )
+bool KPrPage::setRectSettings( int _rx, int _ry )
 {
     bool ret = false;
     bool changed=false;
@@ -1854,7 +1855,7 @@ bool KPRPage::setRectSettings( int _rx, int _ry )
     return ret;
 }
 
-bool KPRPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
+bool KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
 {
     bool ret = false;
     bool changed = false;
@@ -1910,7 +1911,7 @@ bool KPRPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, 
     return ret;
 }
 
-bool KPRPage::setPenColor( QColor c, bool fill )
+bool KPrPage::setPenColor( QColor c, bool fill )
 {
     KPObject *kpobject = 0;
     bool ret = false;
@@ -2079,7 +2080,7 @@ bool KPRPage::setPenColor( QColor c, bool fill )
     return ret;
 }
 
-bool KPRPage::setBrushColor( QColor c, bool fill )
+bool KPrPage::setBrushColor( QColor c, bool fill )
 {
     KPObject *kpobject = 0;
     bool ret = false;
@@ -2222,7 +2223,7 @@ bool KPRPage::setBrushColor( QColor c, bool fill )
     return ret;
 }
 
-void KPRPage::slotRepaintVariable()
+void KPrPage::slotRepaintVariable()
 {
     KPObject *kpobject;
     for ( kpobject = m_objectList.first(); kpobject; kpobject = m_objectList.next() )
@@ -2232,7 +2233,7 @@ void KPRPage::slotRepaintVariable()
     }
 }
 
-void KPRPage::recalcPageNum()
+void KPrPage::recalcPageNum()
 {
     KPObject *kpobject = 0;
     for ( kpobject = m_objectList.first(); kpobject; kpobject = m_objectList.next() ) {
@@ -2241,7 +2242,7 @@ void KPRPage::recalcPageNum()
     }
 }
 
-void KPRPage::changePicture( const QString & filename )
+void KPrPage::changePicture( const QString & filename )
 {
     // filename has been chosen in KPresenterView with a filedialog,
     // so we know it exists
@@ -2264,7 +2265,7 @@ void KPRPage::changePicture( const QString & filename )
     m_doc->setModified(true);
 }
 
-void KPRPage::changeClipart( const QString & filename )
+void KPrPage::changeClipart( const QString & filename )
 {
     // filename has been chosen in KPresenterView with a filedialog,
     // so we know it exists
@@ -2289,7 +2290,7 @@ void KPRPage::changeClipart( const QString & filename )
 }
 
 
-void KPRPage::insertPicture( const QString &filename, int diffx, int diffy, int _x , int _y )
+void KPrPage::insertPicture( const QString &filename, int _x , int _y )
 {
     //FIXME
 #if 0
@@ -2320,7 +2321,7 @@ void KPRPage::insertPicture( const QString &filename, int diffx, int diffy, int 
 #endif
 }
 
-void KPRPage::enableEmbeddedParts( bool f )
+void KPrPage::enableEmbeddedParts( bool f )
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -2330,7 +2331,7 @@ void KPRPage::enableEmbeddedParts( bool f )
     }
 }
 
-void KPRPage::deletePage( )
+void KPrPage::deletePage( )
 {
     KPObject *kpobject = 0L;
     for ( int i = 0; i < static_cast<int>( m_objectList.count() ); i++ ) {
@@ -2348,7 +2349,7 @@ void KPRPage::deletePage( )
 #endif
 }
 
-void KPRPage::setBackColor( QColor backColor1, QColor backColor2, BCType bcType,
+void KPrPage::setBackColor( QColor backColor1, QColor backColor2, BCType bcType,
 				  bool unbalanced, int xfactor, int yfactor )
 {
     kpbackground->setBackColor1( backColor1 );
@@ -2359,127 +2360,127 @@ void KPRPage::setBackColor( QColor backColor1, QColor backColor2, BCType bcType,
     kpbackground->setBackYFactor( yfactor );
 }
 
-void KPRPage::setBackPixmap( const KPImageKey & key )
+void KPrPage::setBackPixmap( const KPImageKey & key )
 {
     kpbackground->setBackPixmap( key.filename(), key.lastModified() );
 }
 
-bool KPRPage::getBackUnbalanced(  )
+bool KPrPage::getBackUnbalanced(  )
 {
     return kpbackground->getBackUnbalanced();
 }
 
-void KPRPage::setBackClipart( const KPClipartKey & key )
+void KPrPage::setBackClipart( const KPClipartKey & key )
 {
     kpbackground->setBackClipart( key.filename(), key.lastModified() );
 }
 
-void KPRPage::setBackView( BackView backView )
+void KPrPage::setBackView( BackView backView )
 {
     kpbackground->setBackView( backView );
 }
 
-void KPRPage::setBackType( BackType backType )
+void KPrPage::setBackType( BackType backType )
 {
     kpbackground->setBackType( backType );
 }
 
-void KPRPage::setPageEffect(  PageEffect pageEffect )
+void KPrPage::setPageEffect(  PageEffect pageEffect )
 {
     kpbackground->setPageEffect( pageEffect );
 }
 
-void KPRPage::setPageTimer(  int pageTimer )
+void KPrPage::setPageTimer(  int pageTimer )
 {
     kpbackground->setPageTimer( pageTimer );
 }
 
-void KPRPage::setPageSoundEffect(  bool soundEffect )
+void KPrPage::setPageSoundEffect(  bool soundEffect )
 {
     kpbackground->setPageSoundEffect( soundEffect );
 }
 
-void KPRPage::setPageSoundFileName(  const QString &fileName )
+void KPrPage::setPageSoundFileName(  const QString &fileName )
 {
     kpbackground->setPageSoundFileName( fileName );
 }
 
 
-BackType KPRPage::getBackType(  )
+BackType KPrPage::getBackType(  )
 {
     return kpbackground->getBackType();
 }
 
-BackView KPRPage::getBackView( )
+BackView KPrPage::getBackView( )
 {
     return kpbackground->getBackView();
 }
 
-KoImageKey KPRPage::getBackPixKey( )
+KoImageKey KPrPage::getBackPixKey( )
 {
     return kpbackground->getBackPixKey();
 }
 
-KPClipartKey KPRPage::getBackClipKey(  )
+KPClipartKey KPrPage::getBackClipKey(  )
 {
     return kpbackground->getBackClipKey();
 }
 
-QColor KPRPage::getBackColor1( )
+QColor KPrPage::getBackColor1( )
 {
     return kpbackground->getBackColor1();
 }
 
-QColor KPRPage::getBackColor2(  )
+QColor KPrPage::getBackColor2(  )
 {
     return kpbackground->getBackColor2();
 }
 
-int KPRPage::getBackXFactor(  )
+int KPrPage::getBackXFactor(  )
 {
     return kpbackground->getBackXFactor();
 }
 
-int KPRPage::getBackYFactor(  )
+int KPrPage::getBackYFactor(  )
 {
     return kpbackground->getBackYFactor();
 }
 
-BCType KPRPage::getBackColorType( )
+BCType KPrPage::getBackColorType( )
 {
     return kpbackground->getBackColorType();
 }
 
-PageEffect KPRPage::getPageEffect( )
+PageEffect KPrPage::getPageEffect( )
 {
     return kpbackground->getPageEffect();
 }
 
-int KPRPage::getPageTimer(  )
+int KPrPage::getPageTimer(  )
 {
     return kpbackground->getPageTimer();
 }
 
-bool KPRPage::getPageSoundEffect( )
+bool KPrPage::getPageSoundEffect( )
 {
     return kpbackground->getPageSoundEffect();
 }
 
-QString KPRPage::getPageSoundFileName(  )
+QString KPrPage::getPageSoundFileName(  )
 {
     return kpbackground->getPageSoundFileName();
 }
 
-KoRect KPRPage::getPageRect() const {
+KoRect KPrPage::getPageRect() const {
     const KoPageLayout& p = m_doc->pageLayout();
     return KoRect( p.ptLeft, p.ptTop, p.ptWidth - p.ptRight - p.ptLeft, p.ptHeight - p.ptTop - p.ptBottom );
 }
 
-QRect KPRPage::getZoomPageRect()const {
+QRect KPrPage::getZoomPageRect()const {
     return m_doc->zoomHandler()->zoomRect(getPageRect());
 }
 
-void KPRPage::completeLoading( bool _clean, int lastObj )
+void KPrPage::completeLoading( bool _clean, int lastObj )
 {
     KPObject *kpobject = 0;
     for ( kpobject = m_objectList.first(); kpobject; kpobject = m_objectList.next() ) {
@@ -2495,7 +2496,7 @@ void KPRPage::completeLoading( bool _clean, int lastObj )
 
 
 /*====================== replace objects =========================*/
-KCommand * KPRPage::replaceObjs( bool createUndoRedo, unsigned int _orastX,unsigned int _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol )
+KCommand * KPrPage::replaceObjs( bool createUndoRedo, unsigned int _orastX,unsigned int _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol )
 {
     KPObject *kpobject = 0;
     int ox, oy;
@@ -2528,17 +2529,17 @@ KCommand * KPRPage::replaceObjs( bool createUndoRedo, unsigned int _orastX,unsig
 }
 
 
-QString KPRPage::getManualTitle()
+QString KPrPage::getManualTitle()
 {
     return manualTitle;
 }
 
-void KPRPage::insertManualTitle(const QString & title)
+void KPrPage::insertManualTitle(const QString & title)
 {
     manualTitle=title;
 }
 
-QString KPRPage::pageTitle( const QString &_title ) const
+QString KPrPage::pageTitle( const QString &_title ) const
 {
     // If a user sets a title with manual, return it.
     if ( !manualTitle.isEmpty() )
@@ -2582,14 +2583,14 @@ QString KPRPage::pageTitle( const QString &_title ) const
 }
 
 
-void KPRPage::setNoteText(  const QString &_text )
+void KPrPage::setNoteText(  const QString &_text )
 {
     noteText=_text;
     if(!_text.isEmpty())
         m_doc->setModified(true);
 }
 
-QString KPRPage::getNoteText(  )
+QString KPrPage::getNoteText(  )
 {
     if(noteText.isEmpty())
         return QString("");
