@@ -1586,7 +1586,6 @@ void KSpreadCell::clearFormula()
 
 bool KSpreadCell::calc(bool delay)
 {
-  QString strFormulaOutBegin = m_strFormulaOut;
   if ( testFlag(Flag_Progress) )
   {
     /* This may not be a circular error - if we're calculating a dependancy,
@@ -1611,6 +1610,8 @@ bool KSpreadCell::calc(bool delay)
 
   if ( !testFlag(Flag_CalcDirty) )
     return true;
+
+  QString strFormulaOutBegin = m_strFormulaOut;
 
   if (delay)
   {
