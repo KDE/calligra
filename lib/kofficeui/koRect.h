@@ -32,7 +32,7 @@ class KoRect {
 
 public:
     KoRect()
-        : m_tl(), m_br(-1, -1) {}
+        : m_tl(), m_br() {}
     KoRect(const KoPoint &topleft, const KoPoint &bottomright)
         : m_tl(topleft), m_br(bottomright) {}
     KoRect(const KoPoint &topleft, const KoSize &size)
