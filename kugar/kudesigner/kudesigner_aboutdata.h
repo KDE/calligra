@@ -34,10 +34,14 @@ KAboutData * newKudesignerAboutData()
     // It must also match the name of the application's .desktop file.
     KAboutData * aboutData=new KAboutData( "kudesigner", I18N_NOOP("Kugar Report Designer"),
                                            version, description, KAboutData::License_LGPL,
-                                           "(c) 2002, Alexander Dymo");
+                                           "(c) 2002,2003, Alexander Dymo (and the Kugar Team)");
     aboutData->addAuthor("Alexander Dymo",
         I18N_NOOP("Maintainer, Report Designer, Kugar library enhancements"), "cloudtemple@mksat.net",
         "http://www.cloudtemple.mksat.net");
+    aboutData->addAuthor("Joseph Wenninger",
+        I18N_NOOP("smaller fixes and kexi integration"), "jowenn@kde.org",
+        "");
+    aboutData->setTranslator(I18N_NOOP("_:NAME OF TRANSLATORS\nNames"), I18N_NOOP("_:EMAIL OF TRANSLATORS\ne-mail"));
     return aboutData;
 }
 
