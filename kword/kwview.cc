@@ -567,6 +567,10 @@ void KWView::setupActions()
     connect( actionFormatFontSize, SIGNAL( fontSizeChanged( int ) ),
              this, SLOT( textSizeSelected( int ) ) );
     actionFormatFontSize->setComboWidth( 30 );
+
+    actionFontSizeIncrease = new KAction( i18n("Increase Fontsize") , CTRL + Key_Greater, this, SLOT( increaseFontSize() ), actionCollection(), "increase_fontsize" );
+    actionFontSizeDecrease = new KAction( i18n("Decrease Fontsize"), CTRL + Key_Less, this, SLOT( decreaseFontSize() ), actionCollection(), "decrease_fontsize" );   
+
     actionFormatFontFamily = new KFontAction( i18n( "Font Family" ), 0,
                                               actionCollection(), "format_fontfamily" );
     connect( actionFormatFontFamily, SIGNAL( activated( const QString & ) ),
@@ -2907,6 +2911,22 @@ void KWView::textStyleSelected( int index )
             edit->applyStyle( m_doc->styleAt( index ) );
         m_gui->canvasWidget()->setFocus(); // the combo keeps focus...
     }
+}
+
+void KWView::increaseFontSize()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    KoTextFormat *format = edit->currentFormat();
+    if ( edit )
+        edit->setPointSize( format->font().pointSize() + 1 );
+}
+
+void KWView::decreaseFontSize()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    KoTextFormat *format = edit->currentFormat();
+    if ( edit && format->font().pointSize() > 1)
+        edit->setPointSize( format->font().pointSize() - 1 );
 }
 
 void KWView::textSizeSelected( int size )

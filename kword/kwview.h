@@ -222,6 +222,8 @@ public slots:
 
     void textStyleSelected( int );
     void textSizeSelected( int );
+    void increaseFontSize();
+    void decreaseFontSize();
     void textFontSelected( const QString & );
     void textBold();
     void textItalic();
@@ -399,6 +401,9 @@ private:
     KAction *actionFormatStylist;
     KAction *actionFormatPage;
 
+    KAction *actionFontSizeIncrease;
+    KAction *actionFontSizeDecrease;
+    
     KFontSizeAction *actionFormatFontSize;
     KFontAction *actionFormatFontFamily;
     KSelectAction *actionFormatStyle;
