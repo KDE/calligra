@@ -21,6 +21,7 @@ class KWordDocument;
 class KWordChild;
 class KWordGUI;
 class KWPaintWindow;
+class KWordShell;
 
 #include <koView.h>
 #include <koDocument.h>
@@ -108,6 +109,8 @@ public:
   KWordView( QWidget *_parent, const char *_name, KWordDocument *_doc );
   virtual ~KWordView();
 
+  void setShell(KWordShell *_shell) { shell = _shell; }
+  
   // IDL
   virtual void editUndo();
   virtual void editRedo();
@@ -135,7 +138,7 @@ public:
   virtual void insertVariableTimeVar();
   virtual void insertVariablePageNum();
   virtual void insertVariableOther();
-  
+
   virtual void formatFont();
   virtual void formatColor();
   virtual void formatParagraph();
@@ -233,6 +236,8 @@ public:
   void changeUndo(QString,bool);
   void changeRedo(QString,bool);
 
+  void sendFocusEvent();
+  
 public slots:
   void slotInsertObject(KWordChild *_child,KWPartFrameSet *_kwpf);
   void slotUpdateChildGeometry(KWordChild *_child);
@@ -265,7 +270,8 @@ protected:
   void mousePressEvent(QMouseEvent *e);
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
-
+  void focusInEvent(QFocusEvent *e);
+  
   enum PType {TXT_COLOR,FRAME_COLOR,BACK_COLOR};
   QString colorToPixString(QColor,PType _type);
   void getFonts();
@@ -309,7 +315,7 @@ protected:
   CORBA::Long m_idMenuInsert_VariableTimeVar;
   CORBA::Long m_idMenuInsert_VariablePageNum;
   CORBA::Long m_idMenuInsert_VariableOther;
-  
+
   // format menu
   OpenPartsUI::Menu_var m_vMenuFormat;
   CORBA::Long m_idMenuFormat_Font;
@@ -452,6 +458,8 @@ protected:
   int currFrameSetNum;
   OpenPartsUI::BarPosition oldFramePos,oldTextPos;
 
+  KWordShell *shell;
+  
   static const int ID_TOOL_EDIT = 2;
   static const int ID_TOOL_EDIT_FRAME = 3;
   static const int ID_TOOL_CREATE_TEXT = 4;

@@ -128,6 +128,9 @@ void KWPage::init()
 /*================================================================*/
 void KWPage::mouseMoveEvent(QMouseEvent *e)
 {
+  if (!hasFocus())
+    gui->getView()->sendFocusEvent();
+      
   mouseMoved = true;
 
   if (mousePressed)
@@ -576,6 +579,8 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 /*================================================================*/
 void KWPage::mousePressEvent(QMouseEvent *e)
 {
+  if (gui->getView()) gui->getView()->sendFocusEvent();
+  
   if (editNum != -1)
     {
       if (doc->getFrameSet(editNum)->getFrameType() == FT_PART)
@@ -1133,7 +1138,7 @@ void KWPage::recalcText()
       if (doc->getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->y() > yOffset + height() + 20)
 	bend = true;
     }
-  
+
   painter.end();
 }
 

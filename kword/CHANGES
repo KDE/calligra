@@ -896,3 +896,8 @@ Reggie, 8.3.1999:
   (there may be some redraw problems now, but I couldn't find some)
 - Fixes in cursor navigation
 - Implemented inserting variable and fix time variables
+
+Reggie, 9.3.1999:
+-----------------
+- Small fix in the GUI
+- Fixed hopefully most of the focus problems now

@@ -108,6 +108,7 @@ void KWordShell::setDocument( KWordDocument *_doc )
   m_pDoc = _doc;
   m_pDoc->_ref();
   m_pView = _doc->createWordView();
+  m_pView->setShell(this);
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
@@ -147,6 +148,7 @@ bool KWordShell::newDocument()
   }
 
   m_pView = m_pDoc->createWordView();
+  m_pView->setShell(this);
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   cerr << "*1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
@@ -194,6 +196,7 @@ bool KWordShell::openDocument( const char *_url, const char *_format )
     return false;
 
   m_pView = m_pDoc->createWordView();
+  m_pView->setShell(this);
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
