@@ -1555,6 +1555,11 @@ void KWPage::editReconnectFrame()
         delete frameDia;
         frameDia = 0;
     }
+    //you can't reconnect a header/footer
+    //because it's not a "real" frame
+    if(isAFooter(frame->getFrameSet()->getFrameInfo())||
+       isAHeader(frame->getFrameSet()->getFrameInfo()) )
+        return;
 
     frameDia = new KWFrameDia( this,  frame,doc,frame->getFrameType());
 
@@ -3696,6 +3701,11 @@ void KWPage::femProps()
 {
     //repaintScreen( FALSE );
     KWFrame *frame=doc->getFirstSelectedFrame();
+    //you can edit header/footer properties
+    //because it's no a real frame
+    if(isAFooter(frame->getFrameSet()->getFrameInfo())||
+       isAHeader(frame->getFrameSet()->getFrameInfo()) )
+        return;
     if(frame) {
         if ( frameDia ) {
             frameDia->close();
