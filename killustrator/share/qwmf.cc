@@ -563,8 +563,7 @@ void QWinMetaFile::polypolygon(short num, short* parm)
   QPointArray* pa;
   int i;
   int polyCount = parm[0];
-  //  kauto_array<int> vertices(polyCount);
-  int vertices[polyCount];
+  int *vertices = new int[polyCount];
   bool bgMode = FALSE;
   QT_PRFX::RasterOp rop = mPainter.rasterOp();
   QBrush fgBrush(mPainter.brush());
@@ -597,6 +596,7 @@ void QWinMetaFile::polypolygon(short num, short* parm)
     // else mPainter.setRasterOp(rop);
   }
   mPainter.setRasterOp(rop);
+  delete [] vertices;
 }
 
 
