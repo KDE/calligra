@@ -258,6 +258,7 @@ static void ProcessFrameTag ( QDomNode myNode, void *tagData,
 
         << AttrProcessing ( "autoCreateNewFrame",  "int",  &frameAnchor->frame.autoCreateNewFrame )
         << AttrProcessing ( "newFrameBehavior",    "int",  &frameAnchor->frame.newFrameBehavior   )
+        << AttrProcessing ( "newFrameBehaviour", frameAnchor->frame.newFrameBehavior ) // Depreciated name
 
         << AttrProcessing ( "copy",       "int",  &frameAnchor->frame.copy      )
         << AttrProcessing ( "sheetSide",  "int",  &frameAnchor->frame.sheetSide )
@@ -299,6 +300,21 @@ static void ProcessFrameTag ( QDomNode myNode, void *tagData,
         << AttrProcessing ( "btoppt",      "double",  &frameAnchor->frame.btoppt    )
         << AttrProcessing ( "bbottompt",   "double",  &frameAnchor->frame.bbottompt )
         ;
+
+    if ( leader->m_oldSyntax )
+    {
+        attrProcessingList
+            << AttrProcessing ( "bleftmm" )
+            << AttrProcessing ( "bleftinch" )
+            << AttrProcessing ( "brightmm" )
+            << AttrProcessing ( "brightinch" )
+            << AttrProcessing ( "btopmm" )
+            << AttrProcessing ( "btopinch" )
+            << AttrProcessing ( "bbottommm" )
+            << AttrProcessing ( "bbottominch" )
+            ;
+    }
+
     ProcessAttributes (myNode, attrProcessingList);
 
     frameAnchor->frame.lColor.setRgb( lRed, lGreen, lBlue );
