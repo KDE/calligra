@@ -1810,7 +1810,10 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
         }
 
         double wantedPosition = 0;
-        switch ( frames.last()->frameBehavior() ) {
+        KWFrame::FrameBehavior frmBehavior = frames.last()->frameBehavior();
+        if ( frmBehavior == KWFrame::AutoExtendFrame && isProtectSize())
+            frmBehavior = KWFrame::Ignore;
+        switch ( frmBehavior ) {
         case KWFrame::AutoExtendFrame:
         {
             int difference = ( bottom + 2 ) - availHeight; // in layout unit pixels
@@ -1984,7 +1987,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
     // Handle the case where the last frame is in AutoExtendFrame mode
     // and there is less text than space
     else if ( !lastFormatted && bottom + 2 < availHeight &&
-              frames.last()->frameBehavior() == KWFrame::AutoExtendFrame )
+              (frames.last()->frameBehavior() == KWFrame::AutoExtendFrame&& !isProtectSize()) )
     {
         // The + 2 here leaves 2 pixels below the last line. Without it we hit
         // the "break at end of frame" case in formatVertically (!!).
