@@ -8,8 +8,8 @@
 
 #include <qdom.h>
 
-VDocument::VDocument()
-	: m_mime( "application/x-karbon" ), m_version( "0.1" ),
+VDocument::VDocument() : VObject( 0L ),
+		m_mime( "application/x-karbon" ), m_version( "0.1" ),
 		m_editor( "karbon14 0.0.1" ), m_syntaxVersion( "0.1" )
 {
 	// create a layer. we need at least one:
@@ -27,6 +27,15 @@ VDocument::~VDocument()
 }
 
 void
+VDocument::draw( VPainter *painter, const KoRect& rect )
+{
+	QPtrListIterator<VLayer> i = m_layers;
+	for ( ; i.current(); ++i )
+		if ( i.current()->visible() )
+			i.current()->draw( painter, rect );
+}
+
+void
 VDocument::insertLayer( VLayer* layer )
 {
 	qDebug ("insert layer");
@@ -41,7 +50,7 @@ VDocument::appendObject( VShape* object )
 }
 
 void
-VDocument::save( QDomDocument& doc ) const
+VDocument::saveXML( QDomDocument& doc ) const
 {
 	QDomElement me = doc.createElement( "DOC" );
 
@@ -80,7 +89,7 @@ VDocument::save( QDomDocument& doc ) const
 }
 
 bool
-VDocument::load( const QDomElement& doc )
+VDocument::loadXML( const QDomElement& doc )
 {
     if( doc.attribute( "mime" ) != "application/x-karbon" ||
 		doc.attribute( "syntaxVersion" ) != "0.1" )

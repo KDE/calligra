@@ -74,7 +74,7 @@ QDomDocument
 KarbonPart::saveXML()
 {
 	QDomDocument document( "DOC" );
-	m_doc.save( document );
+	m_doc.saveXML( document );
 	return document;
 }
 

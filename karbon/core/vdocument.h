@@ -6,6 +6,7 @@
 #ifndef VDOCUMENT_H
 #define VDOCUMENT_H
 
+#include "vobject.h"
 #include "vlayer.h"
 #include "vcolor.h"
 
@@ -18,11 +19,16 @@ class VShape;
 // The karbon part uses this class.
 // Filters can use this class as well instead of
 // the visually oriented karbon part.
-class VDocument
+class VDocument : public VObject
 {
 public: 
 	VDocument();
 	~VDocument();
+
+	virtual void draw( VPainter* painter, const KoRect& rect );
+
+	// TODO
+	virtual void transform( const QWMatrix& ) {}
 
 	const QString& mime() { return m_mime; }
 	void setMime( const QString& mime ) { m_mime = mime; }
@@ -40,8 +46,10 @@ public:
 
 	const VLayerList& layers() const { return m_layers; }
 
-	void save( QDomDocument& doc ) const;
-	bool load( const QDomElement& element );
+	void saveXML( QDomDocument& doc ) const;
+	bool loadXML( const QDomElement& element );
+	virtual void save( QDomElement& ) const {}
+	virtual void load( const QDomElement& element ) { loadXML( element ); }
 
 	// manipulate selection:
 	const VObjectList& selection() const { return m_selection; }
