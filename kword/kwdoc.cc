@@ -1351,12 +1351,12 @@ void KWDocument::loadFrameSets( QDomElement framesets )
 
         switch ( frameType ) {
             case FT_TEXT: {
-                KWTextFrameSet *frame = new KWTextFrameSet( this );
-                frame->setVisible( _visible );
-                frame->setName( fsname );
-                frame->load( frameset );
-                frame->setFrameInfo( frameInfo );
-                frame->setIsRemoveableHeader( removeable );
+                KWTextFrameSet *fs = new KWTextFrameSet( this );
+                fs->setVisible( _visible );
+                fs->setName( fsname );
+                fs->load( frameset );
+                fs->setFrameInfo( frameInfo );
+                fs->setIsRemoveableHeader( removeable );
 
                 if ( !_name.isEmpty() ) {
                     KWGroupManager *grpMgr = 0L;
@@ -1374,15 +1374,19 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                         grpMgr->setName( _name );
                         addGroupManager( grpMgr );
                     }
-                    frame->setGroupManager( grpMgr );
-                    grpMgr->addFrameSet( frame, _row, _col );
+                    fs->setGroupManager( grpMgr );
+                    grpMgr->addFrameSet( fs, _row, _col );
                     KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
                     if ( cell ) {
                         cell->rows = _rows;
                         cell->cols = _cols;
                     }
                 } else
-                    frames.append( frame );
+                    frames.append( fs );
+
+                // Now we can start the formatting (which creates more pages/frames if necessary)
+                fs->formatMore();
+
             } break;
             case FT_PICTURE: {
                 KWPictureFrameSet *frame = new KWPictureFrameSet( this );
@@ -2005,8 +2009,8 @@ void KWDocument::refreshAllFrames()
 /*================================================================*/
 void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppendPage*/ )
 {
-    kdDebug() << "KWDocument::appendPage" << endl;
-    int thisPageNum  = pages-1;
+    int thisPageNum = pages-1;
+    kdDebug() << "KWDocument::appendPage pages=" << pages << " so thisPageNum=" << thisPageNum << endl;
     pages++;
 
     QListIterator<KWFrameSet> fit = framesetsIterator();
@@ -2024,6 +2028,8 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
                                   - it is on the former page and the frame is set to double sided.
                                   - AND the frame is set to be reconnected or copied
                                   -  */
+            //kdDebug() << "KWDocument::appendPage thisPageNum=" << thisPageNum << " frame->getPageNum()=" << frame->getPageNum() << endl;
+            //kdDebug() << "KWDocument::appendPage frame->getNewFrameBehaviour()==" << frame->getNewFrameBehaviour() << " Reconnect=" << Reconnect << endl;
             if ( (frame->getPageNum() == thisPageNum ||
                   (frame->getPageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide)) &&
                  (frame->getNewFrameBehaviour()==Reconnect ||
@@ -2059,7 +2065,7 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
     updateAllViewportSizes();
 
     if ( isHeaderVisible() || isFooterVisible() )
-        recalcFrames( false);
+        recalcFrames( false );  // Get headers and footers on the new page
     setModified(TRUE);
 }
 
@@ -2425,8 +2431,9 @@ void KWDocument::print( QPainter */*painter*/, QPrinter */*printer*/,
 void KWDocument::updateAllFrames()
 {
     kdDebug() << "KWDocument::updateAllFrames" << endl;
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ )
-        getFrameSet( i )->update();
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+        fit.current()->updateFrames();
 
     QList<KWFrame> _frames;
     QList<KWGroupManager> mgrs;

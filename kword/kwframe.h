@@ -321,7 +321,7 @@ public:
     {}
 
     /** reshuffle frames so text is always displayed from top-left down and then right. */
-    virtual void update() {; }
+    virtual void updateFrames() {}
 
     /** relayout text in frames, so that it flows correctly around other frames */
     virtual void layout() {}
@@ -449,7 +449,7 @@ public:
 
     KWChild *getChild() { return child; }
 
-    virtual void update();
+    virtual void updateFrames();
 
     void drawContents( QPainter * p, int cx, int cy, int cw, int ch,
                        QColorGroup &, bool onlyChanged );
@@ -504,7 +504,7 @@ public:
     virtual void activate( QWidget *_widget );
     virtual void deactivate();
 
-    virtual void update();
+    virtual void updateFrames();
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &attributes );

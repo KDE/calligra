@@ -69,7 +69,7 @@ KWFrameSetEdit * KWTextFrameSet::createFrameSetEdit( KWCanvas * canvas )
 
 int KWTextFrameSet::availableHeight() const
 {
-    // Actually we shouldn't need this - update() calculates it
+    // Actually we shouldn't need this - updateFrames() calculates it
 #if 0
     if ( m_availableHeight != -1 )
         return m_availableHeight;
@@ -466,11 +466,11 @@ KWTextFrameSet::~KWTextFrameSet()
 }
 
 /*================================================================*/
-void KWTextFrameSet::update()
+void KWTextFrameSet::updateFrames()
 {
     if ( !frames.isEmpty() )
     {
-        kdDebug() << "KWTextFrameSet::update " << this << " setWidth=" << frames.first()->width() << endl;
+        //kdDebug() << "KWTextFrameSet::updateFrames " << this << " setWidth=" << frames.first()->width() << endl;
         text->setWidth( frames.first()->width() ); // ## we need support for variable width....
     } else kdWarning() << "KWTextFrameSet::update no frames" << endl;
 
@@ -564,7 +564,7 @@ void KWTextFrameSet::update()
             }
         }
     }
-    kdDebug() << "KWTextFrameSet::update m_availableHeight=" << m_availableHeight << endl;
+    //kdDebug() << "KWTextFrameSet::update m_availableHeight=" << m_availableHeight << endl;
     ASSERT( m_availableHeight >= text->height() );
     frames.setAutoDelete( true );
 }
@@ -630,9 +630,6 @@ void KWTextFrameSet::load( QDomElement &attributes )
         lastParagraph = parag;
         doc->progressItemLoaded();
     }
-
-    // Get the format timer going now.
-    formatMore();
 }
 
 /*================================================================*/
@@ -817,9 +814,28 @@ void KWTextFrameSet::formatMore()
 
     if ( bottom > availableHeight() )
     {
+        kdDebug() << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " m_availableHeight=" << m_availableHeight << endl;
         // #### KWFormatContext::makeLineLayout had much code about this,
-        // with AutoCreateNewFrame, etc. etc. TODO.
-        doc->appendPage();
+        // especially for tables. TODO.
+
+        if ( !frames.isEmpty() )
+        {
+            switch ( frames.last()->getFrameBehaviour() )
+            {
+                case AutoExtendFrame:
+                    // TODO
+                    break;
+                case AutoCreateNewFrame:
+                    doc->appendPage();
+                    break;
+                case Ignore:
+                    break;
+            }
+        }
+        else
+        {
+            kdWarning() << "KWTextFrameSet::formatMore no more space, but no frame !" << endl;
+        }
     }
     if ( frames.count() > 1 && lastBottom < availableHeight() - frames.last()->height() )
     {

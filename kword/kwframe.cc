@@ -352,7 +352,7 @@ void KWFrameSet::addFrame( KWFrame *_frame )
 
     frames.append( _frame );
     _frame->setFrameSet(this);
-    update();
+    updateFrames();
 }
 
 /*================================================================*/
@@ -390,7 +390,7 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
     else
         frames.remove( _num );
 
-    update();
+    updateFrames();
 }
 
 /*================================================================*/
@@ -685,7 +685,7 @@ void KWFrameSet::load( QDomElement &attributes )
         frame->setFrameBehaviour( autoCreateNewValue );
         frame->setSheetSide( sheetSide );
         frame->setNewFrameBehaviour( newFrameBehaviour);
-        frames.append( frame );
+        addFrame( frame ); // this will call updateFrames, and will update m_availableHeight
         doc->progressItemLoaded();
     }
 }
@@ -888,12 +888,6 @@ KWPartFrameSet::~KWPartFrameSet()
 /*================================================================*/
 QPicture *KWPartFrameSet::getPicture()
 {
-    //if ( !_enableDrawing )
-    //    return 0;
-
-    // No ! This moves back the child, when moving it while activated (David)
-    //update();
-
     QPainter p( &pic );
     //child->transform( p );
 
@@ -928,7 +922,7 @@ void KWPartFrameSet::drawContents( QPainter * painter, int cx, int cy, int cw, i
 /*================================================================*/
 void KWPartFrameSet::activate( QWidget *_widget )
 {
-    update();
+    updateFrames();
     KWView *view = (KWView*)_widget;
     KoDocument* part = child->document();
     if ( !part )
@@ -944,7 +938,7 @@ void KWPartFrameSet::deactivate()
 }
 
 /*================================================================*/
-void KWPartFrameSet::update()
+void KWPartFrameSet::updateFrames()
 {
     child->setGeometry( QRect( frames.at( 0 )->x(), frames.at( 0 )->y(),
                                frames.at( 0 )->width(), frames.at( 0 )->height() ) );
@@ -1043,7 +1037,7 @@ void KWFormulaFrameSet::setFormat( const QFont &f, const QColor &c )
         formulaEdit->getFormula()->makeDirty();
         formulaEdit->redraw( TRUE );
     }
-    update();
+    updateFrames();
 }
 
 /*================================================================*/
@@ -1088,7 +1082,7 @@ void KWFormulaFrameSet::insertChar( int c )
 void KWFormulaFrameSet::create( QWidget *parent )
 {
     if ( formulaEdit ) {
-        update();
+        updateFrames();
         return;
     }
 
@@ -1099,11 +1093,11 @@ void KWFormulaFrameSet::create( QWidget *parent )
     formulaEdit->getFormula()->setForeColor( color );
     formulaEdit->hide();
     formulaEdit->setText( text );
-    update();
+    updateFrames();
 }
 
 /*================================================================*/
-void KWFormulaFrameSet::update()
+void KWFormulaFrameSet::updateFrames()
 {
     if ( !formulaEdit )
         return;

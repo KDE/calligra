@@ -47,7 +47,7 @@ public:
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * canvas );
 
     /** reshuffle frames so text is always displayed from top-left down and then right. */
-    virtual void update();
+    virtual void updateFrames();
 
     virtual bool isPTYInFrame( unsigned int _frame, unsigned int _ypos );
 
@@ -119,7 +119,7 @@ public:
     void applyStyle( QTextCursor * cursor, const KWStyle * style, int selectionId = QTextDocument::Standard );
     void applyStyleChange( const QString & changedStyle );
 
-    void setTabList( QTextCursor * cursor,const QList<KoTabulator> *tabList ); 
+    void setTabList( QTextCursor * cursor,const QList<KoTabulator> *tabList );
 
     virtual void layout();
 
@@ -278,7 +278,7 @@ public:
     void applyStyle( const KWStyle * style ) { textFrameSet()->applyStyle( cursor, style ); }
 
     const KWParagLayout & currentParagLayout() const { return m_paragLayout; }
-    
+
     void setTabList( const QList<KoTabulator> *tabList ){textFrameSet()->setTabList(cursor,tabList); }
 
 public slots:
