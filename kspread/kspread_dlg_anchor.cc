@@ -56,7 +56,7 @@ KSpreadLinkDlg::KSpreadLinkDlg( KSpreadView* parent, const char* /*name*/ )
   _cellAnchor = new  cellAnchor(parent,page );
 
   connect(this, SIGNAL(okClicked()),this,SLOT(slotOk()));
-  resize(350,250);
+  resize(400,300);
 }
 
 void KSpreadLinkDlg::slotOk()
