@@ -47,14 +47,15 @@ enum StackItemElementType{
     ElementTypeRealData,    // <d>
     ElementTypeAnchor,      // <a>
     ElementTypeAnchorContent,// <c> when child of <a>
-    ElementTypeIgnoreWord   // <iw>
+    ElementTypeIgnoreWord,  // <iw>
+    ElementTypeRealMetaData // <m>
 };
 
 // Tags that we do not care of:
 //  <abiword> (or <awml>), <data>, <styles>, <ignorewords>, <lists>, <metadata>
 //
 // Tags that we do not support (however KWord could):
-//  <bookmark>, <l>, <m>, <table>, <cell>
+//  <bookmark>, <l>, <table>, <cell>
 //
 // Tags that we cannot support (lack of support in KWord):
 //  N/A
@@ -86,9 +87,11 @@ public:
     int         textPosition; //Normal (0), subscript(1), superscript (2)
     QString     strTemp1; // for <d>: mime type
                           // for <a>: link reference
+                          // for <m>: key
     QString     strTemp2; // for <d>: collecting the data
                           // for <a>: link name
                           // for <iw>: collecting the data (i.e. word to ignore)
+                          // for <m>: value of the meta data
 };
 
 class StackItemStack : public QPtrStack<StackItem>

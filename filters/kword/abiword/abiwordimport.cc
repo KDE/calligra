@@ -59,11 +59,12 @@ K_EXPORT_COMPONENT_FACTORY( libabiwordimport, ABIWORDImportFactory( "kwordabiwor
 class StructureParser : public QXmlDefaultHandler
 {
 public:
-    StructureParser(QDomDocument& doc, KoFilterChain* chain)
-        : mainDocument("DOC"), m_chain(chain), m_pictureNumber(0), m_pictureFrameNumber(0)
+    StructureParser(QDomDocument& doc, QDomDocument& info, KoFilterChain* chain)
+        : mainDocument("DOC"), m_info("document-info"), m_chain(chain), m_pictureNumber(0), m_pictureFrameNumber(0)
     {
         createDocument();
         doc=mainDocument;
+        info=m_info;
         structureStack.setAutoDelete(true);
         StackItem *stackItem=new(StackItem);
         stackItem->elementType=ElementTypeBottom;
@@ -92,13 +93,16 @@ private:
     bool StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
         const QXmlAttributes& attributes);
     bool EndElementD (StackItem* stackItem);
+    bool EndElementM (StackItem* stackItem);
     bool StartElementSection(StackItem* stackItem, StackItem* stackCurrent,
         const QXmlAttributes& attributes);
 private:
     void createDocument(void);
+    void createDocInfo(void);
     QString indent; //DEBUG
     StackItemStack structureStack;
     QDomDocument mainDocument;
+    QDomDocument m_info;
     QDomElement framesetsPluralElement; // <FRAMESETS>
     QDomElement mainFramesetElement;    // The main <FRAMESET> where the body text will be under.
     QDomElement m_picturesElement;      // <PICTURES>
@@ -109,6 +113,7 @@ private:
     KoFilterChain* m_chain;
     uint m_pictureNumber;                   // unique: increment *before* use
     uint m_pictureFrameNumber;              // unique: increment *before* use
+    QMap<QString,QString> m_metadataMap;    // Map for <m> elements
 };
 
 // Element <c>
@@ -687,6 +692,56 @@ bool StructureParser::EndElementD (StackItem* stackItem)
     return true;
 }
 
+// <m>
+static bool StartElementM(StackItem* stackItem, StackItem* /*stackCurrent*/,
+    const QXmlAttributes& attributes)
+{
+    // We do not assume when we are called or if we are or not a child of <metadata>
+    stackItem->elementType=ElementTypeRealMetaData;
+
+    QString strKey=attributes.value("key").stripWhiteSpace();
+    kdDebug(30506) << "Metadata key: " << strKey << endl;
+
+    if (strKey.isEmpty())
+    {
+        kdWarning(30506) << "Metadata has no key!" << endl;
+        stackItem->elementType=ElementTypeIgnore;
+        return true;
+    }
+    
+    stackItem->strTemp1=strKey;        // Key
+    stackItem->strTemp2=QString::null;  // Meta data
+
+    return true;
+}
+
+static bool CharactersElementM (StackItem* stackItem, const QString & ch)
+{
+    // As we have no guarantee to have the whole data in one call, we must store the data.
+    stackItem->strTemp2+=ch;
+    return true;
+}
+
+bool StructureParser::EndElementM (StackItem* stackItem)
+{
+    if (!stackItem->elementType==ElementTypeRealData)
+    {
+        kdError(30506) << "Wrong element type!! Aborting! (in endElementM)" << endl;
+        return false;
+    }
+    
+    if (stackItem->strTemp1.isEmpty())
+    {
+        // Probably an internal error!
+        kdError(30506) << "Key name was erased! Aborting! (in endElementM)" << endl;
+        return false;
+    }
+    
+    // Just add it to the metadata map, we do not do something special with the values.
+    m_metadataMap[stackItem->strTemp1]=stackItem->strTemp2;
+    
+    return true;
+}
 
 // <br> (forced line break)
 static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
@@ -898,7 +953,10 @@ bool StructureParser::complexForcedPageBreak(StackItem* stackItem)
     StackItemStack auxilaryStack;
 
     if (!clearStackUntilParagraph(auxilaryStack))
+    {
+        kdError(30506) << "Could not clear stack until a paragraph!" << endl;
         return false;
+    }
 
     // Now we are a child of a <p> element!
 
@@ -1105,6 +1163,10 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         stackItem->elementType=ElementTypeIgnoreWord;
         success=true;
     }
+    else if (name=="m") // No upper-case
+    {
+        success=StartElementM(stackItem,structureStack.current(),attributes);
+    }
     else
     {
         stackItem->elementType=ElementTypeUnknown;
@@ -1165,6 +1227,10 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     {
         success=EndElementIW(stackItem,structureStack.current(), mainDocument, m_ignoreWordsElement);
     }
+    else if (name=="m") // No upper-case
+    {
+        success=EndElementM(stackItem);
+    }
     else
     {
         success=true; // No problem, so authorisation to continue parsing
@@ -1172,7 +1238,7 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     if (!success)
     {
         // If we have no success, then it was surely a tag mismatch. Help debugging!
-        kdDebug(30506) << "Found tag name: " << name
+        kdError(30506) << "Found tag name: " << name
             << " expected: " << stackItem->itemName << endl;
     }
     delete stackItem;
@@ -1233,6 +1299,10 @@ bool StructureParser :: characters ( const QString & ch )
         stackItem->strTemp2+=ch; // Just collect the data
         success=true;
     }
+    else if (stackItem->elementType==ElementTypeRealMetaData)
+    {
+        success=CharactersElementM(stackItem,ch);
+    }
     else
     {
         success=true;
@@ -1246,6 +1316,34 @@ bool StructureParser::startDocument(void)
     indent = QString::null;  //DEBUG
     styleDataMap.defineDefaultStyles();
     return true;
+}
+
+void StructureParser::createDocInfo(void)
+{
+    QDomImplementation implementation;
+    QDomDocument doc(implementation.createDocumentType("document-info",
+        "-//KDE//DTD document-info 1.2//EN", "http://www.koffice.org/DTD/document-info-1.2.dtd"));
+
+    m_info=doc;
+
+    m_info.appendChild(
+        mainDocument.createProcessingInstruction(
+        "xml","version=\"1.0\" encoding=\"UTF-8\""));
+
+    QDomElement elementDoc(mainDocument.createElement("document-info"));
+    elementDoc.setAttribute("xmlns","http://www.koffice.org/DTD/document-info");
+    m_info.appendChild(elementDoc);
+
+    QDomElement about(mainDocument.createElement("about"));
+    elementDoc.appendChild(about);
+    
+    QDomElement abstract(mainDocument.createElement("abstract"));
+    about.appendChild(abstract);
+    abstract.appendChild(mainDocument.createTextNode(m_metadataMap["dc.description"]));
+    
+    QDomElement title(mainDocument.createElement("title"));
+    about.appendChild(title);
+    title.appendChild(mainDocument.createTextNode(m_metadataMap["dc.title"]));
 }
 
 bool StructureParser::endDocument(void)
@@ -1283,6 +1381,8 @@ bool StructureParser::endDocument(void)
     }
     kdDebug(30506) << "######  End Style List  ######" << endl;
 
+    createDocInfo();
+    
     return true;
 }
 
@@ -1406,8 +1506,8 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
 
     kdDebug(30506)<<"AbiWord to KWord Import filter"<<endl;
 
-    QDomDocument documentOut;
-    StructureParser handler(documentOut,m_chain);
+    QDomDocument documentOut, infoOut;
+    StructureParser handler(documentOut,infoOut,m_chain);
 
     //We arbitrarily decide that Qt can handle the encoding in which the file was written!!
     QXmlSimpleReader reader;
@@ -1463,15 +1563,30 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     }
     delete in;
 
-    KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
+    QCString strOut;
+    KoStoreDevice* out;
+    
+    out=m_chain->storageFile( "documentinfo.xml", KoStore::Write );
     if(!out)
     {
-        kdError(30506) << "AbiWord Import unable to open output file!" << endl;
+        kdError(30506) << "AbiWord Import unable to open output file! (Documentinfo)" << endl;
+        return KoFilter::StorageCreationError;
+    }
+
+    //Write the document information!
+    strOut=infoOut.toCString(); // UTF-8
+    // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
+    out->writeBlock(strOut,strOut.length());
+    
+    out=m_chain->storageFile( "root", KoStore::Write );
+    if(!out)
+    {
+        kdError(30506) << "AbiWord Import unable to open output file! (Root)" << endl;
         return KoFilter::StorageCreationError;
     }
 
     //Write the document!
-    QCString strOut=documentOut.toCString(); // UTF-8
+    strOut=documentOut.toCString(); // UTF-8
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
     out->writeBlock(strOut,strOut.length());
 
