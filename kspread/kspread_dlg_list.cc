@@ -97,7 +97,7 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
   if(list->count()<=2)
     m_pRemove->setEnabled(false);
   resize( 600, 250 );
-
+  m_bChanged=false;
 }
 
 
@@ -196,6 +196,7 @@ void KSpreadList::slotAdd()
   entryList->setEnabled(false);
   entryList->setFocus();
   slotTextClicked(0L);
+  m_bChanged=true;
 }
 
 void KSpreadList::slotNew()
@@ -222,35 +223,39 @@ void KSpreadList::slotRemove()
   entryList->setText("");
   if(list->count()<=2)
     m_pRemove->setEnabled(false);
+  m_bChanged=true;
 }
 
 void KSpreadList::slotOk()
 {
-  if(!entryList->text().isEmpty())
+    if(!entryList->text().isEmpty())
     {
-      int ret = KMessageBox::warningYesNo( this, i18n("Entry area is not empty.\nDo you want to continue?"));
-      if(ret==4) // reponse = No
-	return;
+        int ret = KMessageBox::warningYesNo( this, i18n("Entry area is not empty.\nDo you want to continue?"));
+        if(ret==4) // reponse = No
+            return;
     }
-  QStringList result;
-  result.append("\\");
-  //don't save the two first line
-  for(unsigned int i=2;i<list->count();i++)
+    if(m_bChanged)
     {
-      QStringList tmp=result.split(", ",list->text(i));
-      result+=tmp;
-      result+="\\";
+        QStringList result;
+        result.append("\\");
+        //don't save the two first line
+        for(unsigned int i=2;i<list->count();i++)
+        {
+            QStringList tmp=result.split(", ",list->text(i));
+            result+=tmp;
+            result+="\\";
+        }
+        config->setGroup( "Parameters" );
+        config->writeEntry("Other list",result);
+        //todo refresh AutoFillSequenceItem::other
+        // I don't know how to do for the moment
+        if(AutoFillSequenceItem::other!=0L)
+        {
+            delete(AutoFillSequenceItem::other);
+            AutoFillSequenceItem::other=0L;
+        }
     }
-  config->setGroup( "Parameters" );
-  config->writeEntry("Other list",result);
-  //todo refresh AutoFillSequenceItem::other
-  // I don't know how to do for the moment
-  if(AutoFillSequenceItem::other!=0L)
-    {
-    delete(AutoFillSequenceItem::other);
-    AutoFillSequenceItem::other=0L;
-    }
-  accept();
+    accept();
 }
 
 void KSpreadList::slotModify()

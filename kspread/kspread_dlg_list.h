@@ -59,6 +59,7 @@ protected:
   QPushButton* m_pAdd;
   QPushButton* m_pModify;
   QPushButton* m_pCopy;
+  bool m_bChanged;
 };
 
 #endif
