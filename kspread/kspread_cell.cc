@@ -2843,45 +2843,6 @@ int KSpreadCell::height( int _row, KSpreadCanvas *_canvas )
 //
 ///////////////////////////////////////////
 
-bool KSpreadCell::hasProperty( Properties p ) const
-{
-    if ( !m_pObscuringCell )
-        return KSpreadLayout::hasProperty( p );
-
-    // An obscured cell may only have a property if
-    // the parent has it and if it is related to borders.
-
-    if ( !m_pObscuringCell->hasProperty( p ) )
-        return FALSE;
-
-    switch( p )
-    {
-    case PBackgroundBrush:
-    case PBackgroundColor:
-        return TRUE;
-    case PLeftBorder:
-        if ( column() == m_pObscuringCell->column() )
-            return TRUE;
-        break;
-    case PRightBorder:
-        if ( column() == m_pObscuringCell->column() + m_pObscuringCell->extraXCells() )
-            return TRUE;
-        break;
-    case PTopBorder:
-        if ( row() == m_pObscuringCell->row() )
-            return TRUE;
-        break;
-    case PBottomBorder:
-        if ( row() == m_pObscuringCell->row() + m_pObscuringCell->extraYCells() )
-            return TRUE;
-        break;
-    default:
-        return FALSE;
-    }
-
-    return FALSE;
-}
-
 const QBrush& KSpreadCell::backGroundBrush( int _col, int _row ) const
 {
     if ( m_pObscuringCell )

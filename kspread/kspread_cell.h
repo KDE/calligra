@@ -660,13 +660,6 @@ public:
     bool operator > ( const KSpreadCell & ) const;
     bool operator < ( const KSpreadCell & ) const;
 
-    /**
-     * Reimplemented since obscured cells tell that they have
-     * almost no property, even if they physically have.
-     */
-    virtual bool hasProperty( Properties p ) const;
-
-
     void freeAllObscuredCells();
 
     QString dataTypeToString( DataType dt ) const;
