@@ -257,6 +257,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     QDomElement pageNoteElement = doc.createElement( "PAGENOTES" );
     QDomElement backgroundElement = doc.createElement( "BACKGROUND" );
     QDomElement soundElement = doc.createElement( "SOUNDS" );
+    QDomElement selSlideElement = doc.createElement( "SELSLIDES" );
 
     // parse all pages
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
@@ -265,7 +266,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         m_styleStack.clear(); // remove all styles
         fillStyleStack( dp );
         m_styleStack.save();
-
+        int pagePos = dp.attribute( "draw:id" ).toInt() - 1;
         // take care of a possible page background or slide transition or sound
         if ( m_styleStack.hasAttribute( "draw:fill" )
              || m_styleStack.hasAttribute( "presentation:transition-style" ))
@@ -280,7 +281,17 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             m_styleStack.restore();
             kdDebug()<<" load standard bacground \n";
         }
+        if ( m_styleStack.hasAttribute( "presentation:visibility" ) )
+        {
+            QString str = m_styleStack.attribute( "presentation:visibility" );
+            QDomElement slide = doc.createElement("SLIDE");
+            slide.setAttribute( "nr", pagePos );
+            slide.setAttribute( "show", ( ( str=="hidden" ) ? "0" : "1" ));
+            selSlideElement.appendChild( slide );
 
+            //todo add support
+            kdDebug()<<"m_styleStack.hasAttribute( presentation:visibility ) :"<<str<<" position page "<<pagePos<<endl;
+        }
         // set the pagetitle
         QDomElement titleElement = doc.createElement( "Title" );
         titleElement.setAttribute( "title", dp.attribute( "draw:name" ) );
@@ -305,6 +316,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     docElement.appendChild( pageTitleElement );
     docElement.appendChild( pageNoteElement );
     docElement.appendChild( objectElement );
+    docElement.appendChild( selSlideElement );
     docElement.appendChild( soundElement );
     docElement.appendChild( pictureElement );
 
