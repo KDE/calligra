@@ -33,10 +33,10 @@ public:
     Color
   };
 
-  TKSelectColorAction( const QString& text, Type type, QObject* parent, const char* name );
+  TKSelectColorAction( const QString& text, Type type, QObject* parent, const char* name, bool inMenu );
   TKSelectColorAction( const QString& text, Type type,
                        QObject* receiver, const char* slot,
-                       QObject* parent, const char* name );
+                       QObject* parent, const char* name, bool inMenu );
 
   virtual ~TKSelectColorAction();
 
@@ -76,6 +76,7 @@ protected:
 private:
   class TKSelectColorActionPrivate;
   TKSelectColorActionPrivate *d;
+  bool m_inMenu;
 };
 /****************************************************************************************/
 class TKColorPanelButton : public QFrame
