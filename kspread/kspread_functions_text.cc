@@ -576,6 +576,48 @@ bool kspreadfunc_t( KSContext& context )
   return true;
 }
 
+// Function: TEXT
+bool kspreadfunc_text( KSContext& context )
+{
+  QString format_text;
+
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( KSUtil::checkArgumentsCount( context, 2, "TEXT", false ) )
+  {
+    if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
+      return false;
+    format_text = args[1]->stringValue();
+  }
+  else if ( !KSUtil::checkArgumentsCount( context, 1, "TEXT", true ) )
+    return false;
+
+  // not yet Excel-compatible because format_text is omitted
+
+  QString result = "";
+
+  if( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
+    result = args[0]->stringValue();
+
+  else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
+    result = args[0]->boolValue() ? i18n("True") : i18n("False");
+
+  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
+    result = KGlobal::locale()->formatNumber( args[0]->doubleValue() );
+
+  else if( KSUtil::checkType( context, args[0], KSValue::TimeType, false ) )
+    result = KGlobal::locale()->formatTime( args[0]->timeValue() );
+
+  else if( KSUtil::checkType( context, args[0], KSValue::DateType, false ) )
+    result = KGlobal::locale()->formatDate( args[0]->dateValue() );
+
+  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
+    result = KGlobal::locale()->formatNumber( args[0]->intValue() );
+
+  context.setValue( new KSValue( result ));
+  return true;
+}
+
 // Function: TOGGLE
 bool kspreadfunc_toggle( KSContext& context )
 {

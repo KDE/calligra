@@ -167,7 +167,7 @@ bool kspreadfunc_search( KSContext& context ); //TODO
 bool kspreadfunc_sleek( KSContext& context );   // KSpread-specific
 bool kspreadfunc_substitute( KSContext& context ); //TODO
 bool kspreadfunc_t( KSContext& context ); 
-bool kspreadfunc_text( KSContext& context ); //TODO
+bool kspreadfunc_text( KSContext& context ); 
 bool kspreadfunc_toggle( KSContext& context );  // KSpread-specific
 bool kspreadfunc_trim(KSContext& context );
 bool kspreadfunc_upper( KSContext& context );
@@ -653,7 +653,7 @@ static const functionEntry funcTab[] = {
   { "SLEEK", kspreadfunc_sleek },
   //{ "SUBSTITUTE", kspreadfunc_substitute },
   { "T", kspreadfunc_t },
-  //{ "TEXT", kspreadfunc_text },
+  { "TEXT", kspreadfunc_text },
   { "TOGGLE", kspreadfunc_toggle },
   { "TRIM", kspreadfunc_trim },
   { "UPPER", kspreadfunc_upper },
