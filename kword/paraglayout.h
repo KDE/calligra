@@ -62,7 +62,7 @@ public:
     KWParagLayout( KWordDocument *_doc, bool _add = true, QString _name = "Standard" );
     ~KWParagLayout();
 
-    KWParagLayout& operator=( KWParagLayout &_layout );
+    KWParagLayout& operator=( const KWParagLayout &_layout );
 
     void setFormat( KWFormat &_format );
     void setFirstLineLeftIndent( KWUnit _i ) { firstLineLeftIndent = _i; }

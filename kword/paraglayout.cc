@@ -65,35 +65,40 @@ KWParagLayout::~KWParagLayout()
 }
 
 /*================================================================*/
-KWParagLayout& KWParagLayout::operator=( KWParagLayout &_layout )
+KWParagLayout& KWParagLayout::operator=( const KWParagLayout &_layout )
 {
-    flow = _layout.getFlow();
-    paragFootOffset = _layout.getParagFootOffset();
-    paragHeadOffset = _layout.getParagHeadOffset();
-    firstLineLeftIndent = _layout.getFirstLineLeftIndent();
-    leftIndent = _layout.getLeftIndent();
-    leftIndent = _layout.getLeftIndent();
-    counter.counterType = static_cast<CounterType>( _layout.getCounterType() );
-    counter.counterDepth = _layout.getCounterDepth();
-    counter.counterBullet = _layout.getCounterBullet();
-    counter.counterLeftText = qstrdup( _layout.getCounterLeftText() );
-    counter.counterRightText = qstrdup( _layout.getCounterRightText() );
-    followingParagLayout = _layout.getFollowingParagLayout();
-    lineSpacing = _layout.getLineSpacing();
-    counter.startCounter = _layout.getStartCounter();
-    counter.numberingType = _layout.getNumberingType();
-    counter.bulletFont = _layout.getBulletFont();
-    name = _layout.getName();
+    flow = _layout.flow;
+    paragFootOffset = _layout.paragFootOffset;
+    paragHeadOffset = _layout.paragHeadOffset;
+    firstLineLeftIndent = _layout.firstLineLeftIndent;
+    leftIndent = _layout.leftIndent;
+    //rightIndent = _layout.rightIndent;
+    counter.counterType = _layout.counter.counterType;
+    counter.counterDepth = _layout.counter.counterDepth;
+    counter.counterBullet = _layout.counter.counterBullet;
+    counter.counterLeftText = _layout.counter.counterLeftText;
+    counter.counterRightText = _layout.counter.counterRightText;
+    followingParagLayout = _layout.followingParagLayout;
+    lineSpacing = _layout.lineSpacing;
+    counter.startCounter = _layout.counter.startCounter;
+    counter.numberingType = _layout.counter.numberingType;
+    counter.bulletFont = _layout.counter.bulletFont;
+    name = _layout.name;
 
-    left = _layout.getLeftBorder();
-    right = _layout.getRightBorder();
-    top = _layout.getTopBorder();
-    bottom = _layout.getBottomBorder();
+    left = _layout.left;
+    right = _layout.right;
+    top = _layout.top;
+    bottom = _layout.bottom;
 
-    format = _layout.getFormat();
+    format = _layout.format;
 
-    setTabList( _layout.getTabList() );
-
+    tabList.setAutoDelete( true );
+    tabList.clear();
+    tabList.setAutoDelete( false );
+    specialTabs = false;
+    QList<KoTabulator> *_tabList = &_layout.tabList;
+    setTabList( _tabList );
+    
     return *this;
 }
 

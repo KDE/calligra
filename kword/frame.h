@@ -139,7 +139,7 @@ protected:
     KWUnit bleft, bright, btop, bbottom;
 
 private:
-    KWFrame &operator=( KWFrame &_frame );
+    KWFrame &operator=( const KWFrame &_frame );
     KWFrame ( const KWFrame &_frame );
 
 };

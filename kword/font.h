@@ -22,10 +22,10 @@ public:
 
     QString getFontName() { return fontName; }
 
-    bool operator==( KWUserFont &_font )
-    { return _font.getFontName() == fontName; }
-    bool operator!=( KWUserFont &_font )
-    { return _font.getFontName() != fontName; }
+    bool operator==( const KWUserFont &_font )
+    { return _font.fontName == fontName; }
+    bool operator!=( const KWUserFont &_font )
+    { return _font.fontName != fontName; }
 
 protected:
     QString fontName;
