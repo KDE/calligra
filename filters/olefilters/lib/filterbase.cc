@@ -75,6 +75,7 @@ const bool FilterBase::filter() {
     newstr.append("\" autoCreateNewFrame=\"1\" newFrameBehaviour=\"0\"/>\n"
         "   <PARAGRAPH>\n"
         "    <TEXT>");
+    newstr.append("Cannot import OLE streams of type: ");
     newstr.append(m_oleStreams.join(","));
     newstr.append("</TEXT>\n"
         "   </PARAGRAPH>\n"
