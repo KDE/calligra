@@ -631,7 +631,10 @@ void KSpreadView::updateEditWidget()
 
     m_toolbarLock = TRUE;
 
-    KSpreadCell* cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+    int column=m_pCanvas->markerColumn();
+    int row=m_pCanvas->markerRow();
+
+    KSpreadCell* cell = m_pTable->cellAt( column,row );
     if ( !cell )
     {
         editWidget()->setText( "" );
@@ -643,47 +646,47 @@ void KSpreadView::updateEditWidget()
     else
         editWidget()->setText( cell->text() );
 
-    QColor color=cell->textColor( m_pCanvas->markerColumn(), m_pCanvas->markerRow());
+    QColor color=cell->textColor( column,row);
     if(!color.isValid())
         color=QApplication::palette().active().text();
     m_textColor->setCurrentColor( color );
 
-    color=cell->bgColor( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+    color=cell->bgColor(  column,row);
 
     if(!color.isValid())
         color=QApplication::palette().active().base();
 
     m_bgColor->setCurrentColor( color );
 
-    m_selectFontSize->setFontSize( cell->textFontSize( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    m_selectFont->setFont( cell->textFontFamily( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    m_bold->setChecked( cell->textFontBold( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    m_italic->setChecked( cell->textFontItalic( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    m_underline->setChecked( cell->textFontUnderline( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    m_strikeOut->setChecked( cell->textFontStrike( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_selectFontSize->setFontSize( cell->textFontSize( column,row ) );
+    m_selectFont->setFont( cell->textFontFamily( column,row ) );
+    m_bold->setChecked( cell->textFontBold(  column,row) );
+    m_italic->setChecked( cell->textFontItalic(  column,row) );
+    m_underline->setChecked( cell->textFontUnderline( column,row ) );
+    m_strikeOut->setChecked( cell->textFontStrike( column,row ) );
 
-    m_alignLeft->setChecked( cell->align( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Left );
-    m_alignRight->setChecked( cell->align( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Right );
-    m_alignCenter->setChecked(cell->align( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Center );
+    m_alignLeft->setChecked( cell->align( column,row ) == KSpreadLayout::Left );
+    m_alignRight->setChecked( cell->align(  column,row) == KSpreadLayout::Right );
+    m_alignCenter->setChecked(cell->align( column,row ) == KSpreadLayout::Center );
 
-    m_alignTop->setChecked( cell->alignY( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Top );
-    m_alignMiddle->setChecked( cell->alignY( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Middle );
-    m_alignBottom->setChecked( cell->alignY( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Bottom );
+    m_alignTop->setChecked( cell->alignY( column,row ) == KSpreadLayout::Top );
+    m_alignMiddle->setChecked( cell->alignY( column,row ) == KSpreadLayout::Middle );
+    m_alignBottom->setChecked( cell->alignY(  column,row) == KSpreadLayout::Bottom );
 
-    m_verticalText->setChecked( cell->verticalText( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_verticalText->setChecked( cell->verticalText( column,row ) );
 
-    m_multiRow->setChecked( cell->multiRow( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_multiRow->setChecked( cell->multiRow( column,row ) );
 
-    bool state=cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow()) == KSpreadCell::Percentage ;
+    bool state=cell->getFormatNumber( column,row) == KSpreadCell::Percentage ;
     m_percent->setChecked( state );
 
-    state=cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow()) == KSpreadCell::Money;
+    state=cell->getFormatNumber( column,row) == KSpreadCell::Money;
     m_money->setChecked( state );
 
-    state= cell->comment(m_pCanvas->markerColumn(), m_pCanvas->markerRow()).isEmpty();
+    state= cell->comment(column,row).isEmpty();
     m_removeComment->setEnabled( state );
 
-    m_decreaseIndent->setEnabled(cell->getIndent(m_pCanvas->markerColumn(), m_pCanvas->markerRow())>0);
+    m_decreaseIndent->setEnabled(cell->getIndent(column,row)>0);
 
     m_toolbarLock = FALSE;
 }
