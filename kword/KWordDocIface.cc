@@ -22,7 +22,7 @@
 #include "kwdoc.h"
 
 #include <dcopclient.h>
-
+#include <koVariable.h>
 KWordDocIface::KWordDocIface( KWDocument *doc_ )
     : KoDocumentIface( doc_ )
 {
@@ -155,3 +155,9 @@ void KWordDocIface::setUndoRedoLimit(int _val)
     doc->setUndoRedoLimit(_val);
 }
 
+
+void KWordDocIface::recalcAllVariables()
+{
+    //recalc all variable
+    doc->recalcVariables(VT_ALL);
+}
