@@ -717,7 +717,6 @@ void RTFImport::setPlainFormatting( RTFProperty * )
     format.baseline	= 0;
     format.color	= -1;
     format.bgcolor	= -1;
-    format.uc		= 1;
     format.vertAlign	= RTFFormat::Normal;
     format.bold		= false;
     format.italic	= false;
@@ -733,6 +732,8 @@ void RTFImport::setPlainFormatting( RTFProperty * )
     format.underlineDot		= false;
     format.underlineDashDot	= false;
     format.underlineDashDotDot	= false;
+    
+    // Do not reset format.uc !
 }
 
 /**
