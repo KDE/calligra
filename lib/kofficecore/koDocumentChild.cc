@@ -521,8 +521,10 @@ bool KoDocumentChild::loadDocument( KoStore* _store )
     return false;
   }
 
-  // ######## Torben: Do some error handling on createDoc here
-  setDocument( e.createDoc( (KoDocument*)parent() ), m_tmpGeometry );
+  KoDocument * doc = e.createDoc( (KoDocument*)parent() );
+  if (!doc)
+      return false;
+  setDocument( doc, m_tmpGeometry );
 
   bool res;
   if ( m_tmpURL.left( STORE_PROTOCOL_LENGTH ) == STORE_PROTOCOL )

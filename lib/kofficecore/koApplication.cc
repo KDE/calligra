@@ -70,9 +70,11 @@ void KoApplication::start()
     // No argument -> create an empty document
     if (!argsCount) {
         KoDocument* doc = entry.createDoc( 0, "Document" );
+        if ( !doc )
+            ::exit(1);
         KoMainWindow* shell = doc->createShell();
         shell->show();
-        if ( doc && ( doc->initDoc() ) )
+        if ( doc->initDoc() )
         {
           shell->setRootDocument( doc );
         }

@@ -284,7 +284,7 @@ bool KoMainWindow::openDocument( const KURL & url )
     KoDocument* doc = rootDocument();
 	
     KoDocument* newdoc = createDoc();
-    if ( !newdoc->openURL( url ) )
+    if ( !newdoc || !newdoc->openURL( url ) )
     {
 	delete newdoc;
 	return FALSE;
@@ -489,7 +489,8 @@ void KoMainWindow::slotDocumentInfo()
 void KoMainWindow::slotFileClose()
 {
     // Close without asking if more than one view
-    if ( rootDocument()->viewCount() > 1 || queryClose() )
+    if ( ( rootDocument() && rootDocument()->viewCount() > 1 )
+         || queryClose() )
     {
         setRootDocument( 0L );
 	close();
