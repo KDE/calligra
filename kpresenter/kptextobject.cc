@@ -274,21 +274,20 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
     if ( !drawingShadow ) {
         // Handle the rotation, draw the background/border, then call drawText()
-        int penw = pen.width() / 2;
         if ( fillType == FT_BRUSH || !gradient ) {
             _painter->setBrush( brush );
         }
         else {
             QSize size( _zoomHandler->zoomSize( ext ) );
             gradient->setSize( size );
-            _painter->drawPixmap( penw, penw, gradient->pixmap(), 0, 0,
-                                  _zoomHandler->zoomItX( ow - 2 * penw ),
-                                  _zoomHandler->zoomItY( oh - 2 * penw ) );
+            _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX(pw), gradient->pixmap(), 0, 0,
+                                  _zoomHandler->zoomItX( ow - 2 * pw ),
+                                  _zoomHandler->zoomItY( oh - 2 * pw ) );
         }
         /// #### Port this to KoBorder, see e.g. kword/kwframe.cc:590
         // (so that the border gets drawn OUTSIDE of the object area)
-        _painter->drawRect( penw, penw, _zoomHandler->zoomItX( ow - 2 * penw),
-                            _zoomHandler->zoomItY( oh - 2 * penw) );
+        _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX( ow - 2 * pw),
+                            _zoomHandler->zoomItY( oh - 2 * pw) );
     }
     else
         _painter->setBrush( Qt::NoBrush );
