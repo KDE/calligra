@@ -292,6 +292,13 @@ VObjectListViewItem::VObjectListViewItem( QListViewItem* parent, VObject* object
 	: QListViewItem( parent, 0L ), m_object( object )
 {
 	update();
+	if( dynamic_cast<VGroup *>( object ) )
+	{
+		VObjectListIterator itr = dynamic_cast<VGroup *>( object )->objects();
+		for( ; itr.current();++itr )
+			if( itr.current()->state() != VObject::deleted )
+				new VObjectListViewItem( this, itr.current() );
+	}
 }
 
 void
@@ -304,11 +311,12 @@ VObjectListViewItem::update()
 	// Y mirroring
 	QWMatrix mat;
 	mat.scale( 1, -1 );
-	mat.translate( 0,  -16 );
+	KoRect bbox = m_object->boundingBox();
+	mat.translate( bbox.x(), bbox.y() );
 	p.setWorldMatrix( mat );
 
 	// TODO: When the document will support page size, change the following line.
-	p.setZoomFactor( 16. / 800. );
+	p.setZoomFactor( kMin( bbox.width(), bbox.height() ) / 16. );
 	m_object->draw( &p );
 	p.end();
 
@@ -324,6 +332,11 @@ VLayerListViewItem::VLayerListViewItem( QListView* parent, VLayer* layer )
 	: QCheckListItem( parent, 0L, CheckBox ), m_layer( layer )
 {
 	update();
+	VObjectListIterator itr = layer->objects();
+	for( ; itr.current();++itr )
+		if( itr.current()->state() != VObject::deleted )
+			new VObjectListViewItem( this, itr.current() );
+
 } // VLayerListViewItem::VLayerListViewItem
 
 void
@@ -438,7 +451,8 @@ VLayersTab::selectionChanged( QListViewItem* item, const QPoint &, int col )
 {
 	if ( item )
 	{
-		VLayerListViewItem* layerItem = (VLayerListViewItem*)item;
+		VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( item );
+		if( !layerItem ) return;
 		m_document->setActiveLayer( layerItem->layer() );
 		m_document->selection()->clear();
 		if ( col == 1 )
@@ -456,6 +470,7 @@ VLayersTab::renameLayer( QListViewItem* item, const QPoint&, int col )
 	if ( ( item ) && col == 2 )
 	{
 		VLayerListViewItem* layerItem = (VLayerListViewItem*)item;
+		if( !layerItem ) return;
 		bool ok = true;
 		QString name = QInputDialog::getText( i18n( "Current Layer" ), i18n( "Change the name of the current layer:" ),
 																QLineEdit::Normal, layerItem->layer()->name(), &ok, this );
@@ -540,18 +555,12 @@ VLayersTab::updateLayers()
 	QPtrVector<VLayer> vector;
 	m_document->layers().toVector( &vector );
 	VLayerListViewItem* item;
-	VObjectListViewItem *item2;
 	KIconLoader il;
 	for( int i = vector.count() - 1; i >= 0; i-- )
 	{
 		if ( vector[i]->state() != VObject::deleted )
 		{
 			item = new VLayerListViewItem( m_layersListView, vector[i] );
-			VObjectListIterator itr = vector[i]->objects();
-			for( ; itr.current();++itr )
-				if( itr.current()->state() != VObject::deleted )
-					item2 = new VObjectListViewItem( item, itr.current() );
-
 			item->setOpen( true );
 		}
 	}
