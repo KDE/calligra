@@ -144,14 +144,14 @@ void GraphiteView::slotViewZoom(const QString &t) {
         // further sanity checks (safe zoom range: 10% - 1000%)
         if(zoomValue<0.1) {
             zoomValue=0.1;
-            if(percent)
+            if(percent) // xgettext:no-c-format
                 corrected=i18n("10%");
             else
                 corrected=QString::fromLatin1("0.1");
         }
         else if(zoomValue>10.0) {
             zoomValue=10.0;
-            if(percent)
+            if(percent) // xgettext:no-c-format
                 corrected=i18n("1000%");
             else
                 corrected=QString::fromLatin1("10.0");
@@ -234,11 +234,17 @@ void GraphiteView::setupActions() {
                                    actionCollection(), "view_zoom");
     connect(m_zoomAction, SIGNAL(activated(const QString &)), this, SLOT(slotViewZoom(const QString &)));
     QStringList lst;
+    // xgettext:no-c-format
     lst << i18n("50%");
+    // xgettext:no-c-format
     lst << i18n("100%");
+    // xgettext:no-c-format
     lst << i18n("150%");
+    // xgettext:no-c-format
     lst << i18n("200%");
+    // xgettext:no-c-format
     lst << i18n("250%");
+    // xgettext:no-c-format
     lst << i18n("300%");
     m_zoomAction->setItems(lst);
     m_zoomAction->setCurrentItem(1);
