@@ -491,11 +491,6 @@ void KSpreadView::initializeEditActions()
                              "copy" );
   m_copy->setToolTip("Copy the cell object to the clipboard.");
 
-  m_copy_as_text=new KAction( i18n("Copy as Text"),0, this, SLOT( copyAsText() ),
-                              actionCollection(), "copy_as_text" );
-  m_copy_as_text->setToolTip
-    ("Copy the text result of the cell to the clipboard.");
-
   m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(),
                                "paste" );
   m_paste->setToolTip("Paste the contents of the clipboard at the cursor");
@@ -3432,8 +3427,6 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_cut->plug( m_pPopupMenu );
     m_copy->plug( m_pPopupMenu );
     m_paste->plug( m_pPopupMenu );
-
-    m_copy_as_text->plug(m_pPopupMenu );
 
     m_specialPaste->plug( m_pPopupMenu );
     m_insertCellCopy->plug( m_pPopupMenu );

@@ -455,7 +455,6 @@ private:
     KToggleAction* m_alignBottom;
     KAction* m_transform;
     KAction* m_copy;
-    KAction* m_copy_as_text;
     KAction* m_paste;
     KAction* m_cut;
     KAction* m_specialPaste;
