@@ -1212,3 +1212,12 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
     }
 
 }
+
+QString KoTextParag::toString( int from, int length ) const
+{
+    QString str;
+    if ( from == 0 && m_layout.counter )
+        str += m_layout.counter->text( this ) + ' ';
+    // ### is this correct for RTL text?
+    return str + string()->toString().mid( from, length );
+}
