@@ -52,7 +52,8 @@ private:
     void writeFormat( QDomDocument& doc, QDomElement& parentElement, int id, int pos, int length );
     // Reads from m_styleStack, writes the paragraph properties to layoutElement
     void writeLayout( QDomDocument& doc, QDomElement& layoutElement );
-    void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool headerFooter );
+    enum NewFrameBehavior { Reconnect=0, NoFollowup=1, Copy=2 };
+    QDomElement createInitialFrame( QDomElement& parentFramesetElem, double left, double right, double top, double bottom, bool autoExtend, NewFrameBehavior nfb );
     void createStyles( QDomDocument &doc );
     void createDocumentInfo( QDomDocument &docinfo );
     void createDocumentContent( QDomDocument &doccontent, QDomElement& mainFramesetElement );
@@ -64,8 +65,9 @@ private:
     void importDateTimeStyle( const QDomElement& parent );
     void fillStyleStack( const QDomElement& object, const QString& attrName );
     void addStyles( const QDomElement* style );
-    QString appendPicture(QDomDocument& doc, const QDomElement& object);
-    QString appendTextBox(QDomDocument& doc, const QDomElement& object);
+    void importFootnote( QDomDocument& doc, const QDomElement& object, QDomElement& formats, uint pos, const QString& tagName );
+    QString appendPicture( QDomDocument& doc, const QDomElement& object );
+    QString appendTextBox( QDomDocument& doc, const QDomElement& object );
     void importFrame( QDomElement& frameElementOut, const QDomElement& object, bool isText );
     void anchorFrameset( QDomDocument& doc, QDomElement& formats, uint pos, const QString& frameName );
     void appendField(QDomDocument& doc, QDomElement& outputFormats, QDomElement& object, uint pos);

@@ -115,7 +115,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     mainFramesetElement.setAttribute("name", i18n( "Main Text Frameset" ) );
     framesetsElem.appendChild(mainFramesetElement);
 
-    createInitialFrame( mainFramesetElement, 42, 566, false );
+    createInitialFrame( mainFramesetElement, 29, 798, 42, 566, false, Reconnect );
     createStyles( mainDocument );
     createDocumentContent( mainDocument, mainFramesetElement );
 
@@ -392,18 +392,20 @@ void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& f
     }
 }
 
-void OoWriterImport::createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool headerFooter )
+// Copied from the msword importer
+QDomElement OoWriterImport::createInitialFrame( QDomElement& parentFramesetElem, double left, double right, double top, double bottom, bool autoExtend, NewFrameBehavior nfb )
 {
     QDomElement frameElementOut = parentFramesetElem.ownerDocument().createElement("FRAME");
-    // Those values are unused. The paper margins make recalcFrames() resize this frame.
-    frameElementOut.setAttribute( "left", 28 );
-    frameElementOut.setAttribute( "right", 798 );
+    frameElementOut.setAttribute( "left", left );
+    frameElementOut.setAttribute( "right", right );
     frameElementOut.setAttribute( "top", top );
     frameElementOut.setAttribute( "bottom", bottom );
     frameElementOut.setAttribute( "runaround", 1 );
-    // AutoExtendFrame for header/footers, AutoCreateNewFrame for body text
-    frameElementOut.setAttribute( "autoCreateNewFrame", headerFooter ? 0 : 1 );
+    // AutoExtendFrame for header/footer/footnote/endnote, AutoCreateNewFrame for body text
+    frameElementOut.setAttribute( "autoCreateNewFrame", autoExtend ? 0 : 1 );
+    frameElementOut.setAttribute( "newFrameBehavior", nfb );
     parentFramesetElem.appendChild( frameElementOut );
+    return frameElementOut;
 }
 
 KoFilter::ConversionStatus OoWriterImport::loadAndParse(const QString& filename, QDomDocument& doc)
@@ -964,6 +966,12 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         {
             textData = '\n';
             shouldWriteFormat=true;
+        }
+        else if ( textFoo &&
+                  ( tagName == "text:footnote" || tagName == "text:endnote" ) )
+        {
+            textData = '#'; // anchor placeholder
+            importFootnote( doc, ts, outputFormats, pos, tagName );
         }
         else if ( tagName == "draw:image" )
         {
@@ -1666,6 +1674,42 @@ QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& obje
     return frameName;
 }
 
+void OoWriterImport::importFootnote( QDomDocument& doc, const QDomElement& object, QDomElement& formats, uint pos, const QString& tagName )
+{
+    const QString frameName( object.attribute("text:id") );
+    QDomElement citationElem = object.namedItem( tagName + "-citation" ).toElement();
+
+    bool endnote = tagName == "text:endnote";
+
+    QString label = citationElem.attribute( "text:label" );
+    bool autoNumbered = label.isEmpty();
+
+    // The var
+    QDomElement footnoteElem = doc.createElement( "FOOTNOTE" );
+    if ( autoNumbered )
+        footnoteElem.setAttribute( "value", 1 ); // KWord will renumber anyway
+    else
+        footnoteElem.setAttribute( "value", label );
+    footnoteElem.setAttribute( "notetype", endnote ? "endnote" : "footnote" );
+    footnoteElem.setAttribute( "numberingtype", autoNumbered ? "auto" : "manual" );
+    footnoteElem.setAttribute( "frameset", frameName );
+
+    appendKWordVariable( doc, formats, citationElem, pos, "STRI", 11 /*KWord code for footnotes*/, footnoteElem );
+
+    // The frameset
+    QDomElement framesetElement( doc.createElement("FRAMESET") );
+    framesetElement.setAttribute( "frameType", 1 /* text */ );
+    framesetElement.setAttribute( "frameInfo", 7 /* footnote/endnote */ );
+    framesetElement.setAttribute( "name" , frameName );
+    QDomElement framesetsPluralElement (doc.documentElement().namedItem("FRAMESETS").toElement());
+    framesetsPluralElement.appendChild(framesetElement);
+    createInitialFrame( framesetElement, 29, 798, 567, 567+41, true, NoFollowup );
+
+    // The text inside the frameset
+    QDomElement bodyElem = object.namedItem( tagName + "-body" ).toElement();
+    parseBodyOrSimilar( doc, bodyElem, framesetElement );
+}
+
 QString OoWriterImport::appendPicture(QDomDocument& doc, const QDomElement& object)
 {
     const QString frameName ( object.attribute("draw:name") ); // ### TODO: what if empty, i.e. non-unique
@@ -2193,6 +2237,5 @@ void OoWriterImport::appendBookmark( QDomDocument& doc, int paragId, int pos, in
 }
 
 #include "oowriterimport.moc"
-
 // TODO style:num-format, default number format for page styles,
 // used for page numbers (2.3.1)
