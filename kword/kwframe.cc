@@ -845,10 +845,9 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
 
         QRect r(crect);
         QRect normalFrameRect( m_doc->zoomRect( *frame ) );
-        //QRect frameRect( viewMode->normalToView( normalFrameRect ) );
-        QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
+        QRect frameRect( viewMode->normalToView( normalFrameRect ) );
         //kdDebug(32002) << "                    frame=" << frame << " crect=" << DEBUGRECT(r) << endl;
-        r = r.intersect( outerRect ); // Intersect with the outerrect since we draw the border too
+        r = r.intersect( frameRect );
         //kdDebug(32002) << "                    framerect=" << DEBUGRECT(*frame) << " intersec=" << DEBUGRECT(r) << " todraw=" << !r.isEmpty() << endl;
         if ( !r.isEmpty() )
         {
@@ -862,8 +861,11 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             QRect icrect = viewMode->viewToNormal( r );
             //kdDebug() << "KWFrameSet::drawContents crect after view-to-normal:" << DEBUGRECT( icrect )  << endl;
             // y=-1 means all (in QRT), so let's not go there !
-            QPoint tl( QMAX( 0, icrect.left() - offsetX ), QMAX( 0, icrect.top() - offsetY ) );
-            icrect.moveTopLeft( tl );
+            //QPoint tl( QMAX( 0, icrect.left() - offsetX ), QMAX( 0, icrect.top() - offsetY ) );
+            //icrect.moveTopLeft( tl );
+            icrect.moveBy( -offsetX, -offsetY );
+            ASSERT( icrect.x() >= 0 );
+            ASSERT( icrect.y() >= 0 );
 
             // icrect is now the portion of the frame to be drawn, in qrt coords
             //kdDebug() << "KWFrameSet::drawContents in internal coords:" << DEBUGRECT( icrect ) << endl;
@@ -871,7 +873,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             // The settings come from this frame
             KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
 
-            QRegion reg = frameClipRegion( p, frame, crect, viewMode, onlyChanged );
+            QRegion reg = frameClipRegion( p, frame, r, viewMode, onlyChanged );
             if ( !reg.isEmpty() )
             {
                 p->save();
@@ -886,14 +888,20 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
 
                 p->restore();
             }
+        }
+        QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
+        r = crect.intersect( outerRect );
+        if ( !r.isEmpty() )
+        {
             // Now draw the frame border
             // Clip frames on top if onlyChanged, but don't clip to the frame
-            reg = frameClipRegion( p, 0L, crect, viewMode, onlyChanged );
+            QRegion reg = frameClipRegion( p, 0L, r, viewMode, onlyChanged );
             if ( !reg.isEmpty() )
             {
                 p->save();
                 p->setClipRegion( reg );
-                drawFrameBorder( p, frame, settingsFrame, crect, viewMode );
+                KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
+                drawFrameBorder( p, frame, settingsFrame, r, viewMode );
                 p->restore();
             }// else kdDebug() << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
         }
