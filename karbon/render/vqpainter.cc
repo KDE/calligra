@@ -13,7 +13,7 @@
 #include <qwidget.h>
 #include <qpen.h>
 
-VQPainter::VQPainter( QWidget *target, int w, int h ) : VPainter( target, w, h ), m_painter( 0L )
+VQPainter::VQPainter( QWidget *target, int w, int h ) : VPainter( target, w, h ), m_painter( 0L ), m_target( target ), m_width( w ), m_height( h )
 {
 	m_painter = new QPainter( target );
 }
@@ -26,12 +26,18 @@ VQPainter::~VQPainter()
 void
 VQPainter::resize( int w, int h )
 {
+	m_width = w;
+	m_height = h;
 }
 
 void
 VQPainter::begin()
 {
-	//m_painter->begin();
+	if( !m_painter->isActive() )
+	{
+		m_painter->begin( m_target );
+		m_painter->eraseRect( 0, 0, m_width, m_height );
+	}
 }
 
 void

@@ -50,6 +50,9 @@ public:
 
 private:
 	QPainter *m_painter;
+	QWidget  *m_target;
+	int m_width;
+	int m_height;
 };
 
 #endif

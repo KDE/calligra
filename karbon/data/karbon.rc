@@ -59,6 +59,7 @@
 		<Action name="view_zoom_in"/>
 		<Action name="view_zoom_out"/>
 		<Action name="view_zoom"/>
+        <Action name="view_wireframe"/>
 	</Menu>
 	</MenuBar>
 	<ToolBar name="zoom_toolbar" fullWidth="false">

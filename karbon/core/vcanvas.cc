@@ -45,7 +45,7 @@ VCanvas::drawDocument( QPainter* painter, const QRect& rect )
 	VPainter *p = VPainterFactory::painter();
 	p->begin();
 	//VPainter *p = VPainterFactory::painter( this, visibleWidth(), visibleHeight() );
-	erase( rect );
+	//erase( rect );
 
 	QPtrListIterator<VLayer> i = m_part->layers();
 	for ( ; i.current(); ++i )

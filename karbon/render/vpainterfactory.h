@@ -21,7 +21,9 @@ public:
 	void setPainter( QWidget *target, int w = 0, int h = 0 );
 
 	static VPainter *editpainter();
-	void setEditpainter( QWidget *target, int w = 0, int h = 0 );
+	void setEditPainter( QWidget *target, int w = 0, int h = 0 );
+
+	void setWireframePainter( QWidget *target, int w = 0, int h = 0 );
 
 private:
 	static VPainter *m_painter;

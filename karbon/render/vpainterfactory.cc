@@ -43,10 +43,18 @@ VPainterFactory::editpainter()
 }
 
 void
-VPainterFactory::setEditpainter( QWidget *target, int w = 0, int h = 0 )
+VPainterFactory::setEditPainter( QWidget *target, int w = 0, int h = 0 )
 {
 	if( m_editpainter )
 		delete m_editpainter;
 	m_editpainter = new VQPainter( target, w, h );
+}
+
+void
+VPainterFactory::setWireframePainter( QWidget *target, int w = 0, int h = 0 )
+{
+	if( m_painter )
+		delete m_painter;
+	m_painter = new VQPainter( target, w, h );
 }
 

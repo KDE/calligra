@@ -15,7 +15,6 @@ class QRect;
 
 class VCommand;
 class VCommandHistory;
-class VPainterFactory;
 
 class KarbonPart : public KoDocument
 {
@@ -69,7 +68,6 @@ private:
 	VObjectList m_selection;		// a list of selected objects.
 
 	VCommandHistory* m_commandHistory;	// everybody loves undo/redo.
-	VPainterFactory *m_painterFactory;
 };
 
 #endif

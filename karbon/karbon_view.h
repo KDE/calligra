@@ -19,6 +19,7 @@ class KToggleAction;
 class KarbonPart;
 class VTool;
 class VToolContainer;
+class VPainterFactory;
 
 class KarbonView : public KoView
 {
@@ -76,6 +77,7 @@ protected slots:
 
 	// zooming:
 	void zoomChanged();
+	void slotShowWireframe();
 
 protected:
 	virtual void updateReadWrite( bool rw );
@@ -88,6 +90,8 @@ private:
 	VCanvas* m_canvas;
 
 	VTool* s_currentTool;
+
+	VPainterFactory *m_painterFactory;
 
 	// zoom action:
 	KSelectAction* m_zoomAction;
@@ -103,9 +107,10 @@ private:
 	KToggleAction* m_sinusToolAction;
 	KToggleAction* m_spiralToolAction;
 	KToggleAction* m_starToolAction;
+	KToggleAction* m_wireframeAction;
 
 	//toolbox
-	VToolContainer *toolbox;
+	VToolContainer *m_toolbox;
 };
 
 #endif

@@ -50,12 +50,19 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 	// initial tool is select-tool:
 	selectTool();
+
+	// set up factory
+	m_painterFactory = new VPainterFactory;
+	m_painterFactory->setPainter( canvasWidget()->viewport(), width(), height() );
+	m_painterFactory->setEditPainter( canvasWidget()->viewport(), width(), height() );
 }
 
 KarbonView::~KarbonView()
 {
 	delete m_canvas;
 	m_canvas = 0L;
+
+	delete m_painterFactory;
 }
 
 void
@@ -272,6 +279,20 @@ KarbonView::zoomChanged()
 }
 
 void
+KarbonView::slotShowWireframe( )
+{
+    kdDebug() << "KarbonView::slotShowWireframe : " << m_wireframeAction->isChecked() << endl;
+	if( m_wireframeAction->isChecked() )
+	{
+		m_painterFactory->setWireframePainter( canvasWidget()->viewport(), width(), height() );
+	}
+	else
+	{
+		m_painterFactory->setPainter( canvasWidget()->viewport(), width(), height() );
+	}
+}
+
+void
 KarbonView::initActions()
 {
 	// edit ----->
@@ -373,6 +394,10 @@ KarbonView::initActions()
 		i18n( "&Zoom" ), 0, this,
 		SLOT( zoomChanged() ), actionCollection(), "view_zoom" );
 
+	m_wireframeAction = new KToggleAction(
+		i18n( "&Wireframe" ), 0, 0, this,
+		SLOT( slotShowWireframe() ), actionCollection(), "view_wireframe" );
+
 	QStringList stl;
 	stl
 		<< i18n( "25%" )
@@ -387,20 +412,20 @@ KarbonView::initActions()
 	m_zoomAction->setEditable( true );
 	// zoom <-----
 
-	toolbox = new VToolContainer( this );
-	connect(toolbox, SIGNAL(selectToolActivated()),		this, SLOT(selectTool()));
-	connect(toolbox, SIGNAL(scaleToolActivated()),		this, SLOT(scaleTool()));
-	connect(toolbox, SIGNAL(rotateToolActivated()),		this, SLOT(rotateTool()));
-	connect(toolbox, SIGNAL(shearToolActivated()),		this, SLOT(shearTool()));
-	connect(toolbox, SIGNAL(ellipseToolActivated()),	this, SLOT(ellipseTool()));
-	connect(toolbox, SIGNAL(rectangleToolActivated()),	this, SLOT(rectangleTool()));
-	connect(toolbox, SIGNAL(roundRectToolActivated()),	this, SLOT(roundRectTool()));
-	connect(toolbox, SIGNAL(polygonToolActivated()),	this, SLOT(polygonTool()));
-	connect(toolbox, SIGNAL(starToolActivated()),		this, SLOT(starTool()));
-	connect(toolbox, SIGNAL(sinusToolActivated()),		this, SLOT(sinusTool()));
-	connect(toolbox, SIGNAL(spiralToolActivated()),		this, SLOT(spiralTool()));
-	shell()->moveDockWindow( toolbox, Qt::DockLeft );
-	toolbox->show();
+	m_toolbox = new VToolContainer( this );
+	connect( m_toolbox, SIGNAL(selectToolActivated()),		this, SLOT(selectTool()) );
+	connect( m_toolbox, SIGNAL(scaleToolActivated()),		this, SLOT(scaleTool()) );
+	connect( m_toolbox, SIGNAL(rotateToolActivated()),		this, SLOT(rotateTool()) );
+	connect( m_toolbox, SIGNAL(shearToolActivated()),		this, SLOT(shearTool()) );
+	connect( m_toolbox, SIGNAL(ellipseToolActivated()),	this, SLOT(ellipseTool()) );
+	connect( m_toolbox, SIGNAL(rectangleToolActivated()),	this, SLOT(rectangleTool()) );
+	connect( m_toolbox, SIGNAL(roundRectToolActivated()),	this, SLOT(roundRectTool()) );
+	connect( m_toolbox, SIGNAL(polygonToolActivated()),	this, SLOT(polygonTool()) );
+	connect( m_toolbox, SIGNAL(starToolActivated()),		this, SLOT(starTool()) );
+	connect( m_toolbox, SIGNAL(sinusToolActivated()),		this, SLOT(sinusTool()) );
+	connect( m_toolbox, SIGNAL(spiralToolActivated()),		this, SLOT(spiralTool()) );
+	shell()->moveDockWindow( m_toolbox, Qt::DockLeft );
+	m_toolbox->show();
 }
 
 void
