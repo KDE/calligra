@@ -90,10 +90,20 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	}
 
 	uint i = 0;
-	KexiDB::Field::List *list = m_cursor->query()->fields();
+	KexiDB::Field::List *list = m_cursor->query()->fieldsExpanded();
 	KexiDB::Field *f = list->first();
 	while (f) {
-		addColumn(f->caption().isEmpty() ? f->name() : f->caption(), f->variantType(), true);
+		QString fname;
+		if (!f->caption().isEmpty())
+			fname = f->caption();
+		else {
+			//reuse alias if available:
+			fname = m_cursor->query()->alias(f);
+			//last hance: use field name
+			if (fname.isEmpty())
+				fname = f->name();
+		}
+		addColumn(fname, f->variantType(), true);
 		f = list->next();
 	}
 
