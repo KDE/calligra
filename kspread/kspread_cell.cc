@@ -1161,7 +1161,7 @@ void KSpreadCell::setOutputText()
   }
   else if( isTime() )
   {
-    m_strOutText = util_timeFormat( locale(), valueTime(), formatType() );
+    m_strOutText = util_timeFormat( locale(), m_value.asDateTime(), formatType() );
   }
   else if ( m_value.isNumber() )
   {
@@ -1795,7 +1795,7 @@ bool KSpreadCell::calc(bool delay)
     }
     else
     {
-      m_strFormulaOut = util_timeFormat(locale(), m_value.asDateTime().time(), tmpFormat);
+      m_strFormulaOut = util_timeFormat(locale(), m_value.asDateTime(), tmpFormat);
     }
   }
   else if ( context.value()->type() == KSValue::DateType)
@@ -3836,8 +3836,7 @@ bool KSpreadCell::isDate() const
   FormatType ft = formatType();
   // workaround, since date/time is stored as floating-point
   return m_value.isNumber() 
-    &&  ( ft == ShortDate || ft == TextDate || ( (ft >= date_format1) && (ft <= date_format26) ) 
-          || ft == CustomDate );
+    &&  ( ft == ShortDate || ft == TextDate || ( (ft >= date_format1) && (ft <= date_format26) ) );
 }
 
 bool KSpreadCell::isTime() const
@@ -3846,8 +3845,7 @@ bool KSpreadCell::isTime() const
 
   // workaround, since date/time is stored as floating-point
   return m_value.isNumber() 
-    && ( ( (ft >= Time) && (ft <= Time_format6) ) 
-         || ft == CustomTime );
+    && ( ( (ft >= Time) && (ft <= Time_format7) ) );
 }
 
 QDate KSpreadCell::valueDate() const

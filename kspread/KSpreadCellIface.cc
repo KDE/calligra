@@ -363,6 +363,7 @@ QString KSpreadCellIface::getFormatType() const
         case KSpreadCell::Time_format4:
         case KSpreadCell::Time_format5:
         case KSpreadCell::Time_format6:
+        case KSpreadCell::Time_format7:
                 stringFormat="time format";
                 break;
         case KSpreadCell::fraction_half:

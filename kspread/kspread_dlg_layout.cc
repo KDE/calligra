@@ -284,12 +284,12 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
     else if(obj->isDate())
     {
       m_bDate=true;
-      m_date=obj->valueDate();
+      m_time  = obj->value().asDateTime();
     }
     else if(obj->isTime())
     {
-      m_bTime=true;
-      m_time=obj->valueTime();
+      m_bTime = true;
+      m_time  = obj->value().asDateTime();
     }
 
     RowFormat *rl;
@@ -889,7 +889,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     QVBoxLayout* layout = new QVBoxLayout( this, 6,10 );
 
     QButtonGroup *grp = new QButtonGroup( i18n("Format"),this);
-    QGridLayout *grid = new QGridLayout(grp,9,2,15,7);
+    QGridLayout *grid = new QGridLayout(grp,10,2,15,7);
 
     int fHeight = grp->fontMetrics().height();
     grid->addRowSpacing( 0, fHeight/2 ); // groupbox title
@@ -919,6 +919,9 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     textFormat=new QRadioButton(i18n("Text"),grp);
     grid->addWidget(textFormat,8,0);
 
+    customFormat=new QRadioButton(i18n("Custom"),grp);
+    grid->addWidget(customFormat,9,0);
+
     QGroupBox *box2 = new QGroupBox( grp, "Box");
     box2->setTitle(i18n("Preview"));
     QGridLayout *grid3 = new QGridLayout(box2,1,3,14,7);
@@ -926,10 +929,14 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     exampleLabel=new QLabel(box2);
     grid3->addWidget(exampleLabel,0,1);
 
-    grid->addMultiCellWidget(box2,7,8,1,1);
+    grid->addMultiCellWidget(box2,8,9,1,1);
+
+    customFormatEdit = new QLineEdit( grp );
+    grid->addMultiCellWidget( customFormatEdit, 1, 1, 1, 1 );
+    customFormatEdit->setHidden( true );
 
     listFormat=new QListBox(grp);
-    grid->addMultiCellWidget(listFormat,1,6,1,1);
+    grid->addMultiCellWidget(listFormat,2,7,1,1);
     layout->addWidget(grp);
 
     /* *** */
@@ -1076,7 +1083,8 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
                   ||cellFormatType==KSpreadCell::Time_format3
                   ||cellFormatType==KSpreadCell::Time_format4
                   ||cellFormatType==KSpreadCell::Time_format5
-                  ||cellFormatType==KSpreadCell::Time_format6)
+                  ||cellFormatType==KSpreadCell::Time_format6
+                  ||cellFormatType==KSpreadCell::Time_format7)
           time->setChecked(true);
         else if ( cellFormatType==KSpreadCell::fraction_half 
                   || cellFormatType==KSpreadCell::fraction_quarter ||
@@ -1090,6 +1098,8 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
           fraction->setChecked(true);
 	else if (cellFormatType==KSpreadCell::Text_format)
 	  textFormat->setChecked(true);
+	else if (cellFormatType==KSpreadCell::Custom)
+	  customFormat->setChecked(true);
         }
 
     connect(fraction,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
@@ -1100,6 +1110,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     connect(percent,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     connect(time,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     connect(textFormat,SIGNAL(clicked()),this,SLOT(slotChangeState()));
+    connect(customFormat,SIGNAL(clicked()),this,SLOT(slotChangeState()));
 
     connect(listFormat,SIGNAL(selectionChanged ()),this,SLOT(makeformat()));
     connect(precision,SIGNAL(valueChanged(int)),this,SLOT(slotChangeValue(int)));
@@ -1210,13 +1221,14 @@ void CellFormatPageFloat::slotChangeState()
 
             list+=i18n("System: ")+dlg->locale()->formatTime(QTime::currentTime(),false);
             list+=i18n("System: ")+dlg->locale()->formatTime(QTime::currentTime(),true);
-            QTime tmpTime(10,35,25);
+            QDateTime tmpTime(QDate(1900, 1, 2), QTime(10, 35, 25));
             list+= util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format1);
             list+= util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format2);
             list+= util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format3);
             list+= util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format4);
             list+= util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format5);
-            list+= ( util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format6) + i18n(" (=mm::ss)") );
+            list+= ( util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format6) + i18n(" (=[mm]::ss)") );
+            list+= ( util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format7) + i18n(" (=[hh]::mm::ss)") );
             listFormat->insertStringList(list);
 
             if( cellFormatType==KSpreadCell::Time )
@@ -1235,6 +1247,8 @@ void CellFormatPageFloat::slotChangeState()
                 listFormat->setCurrentItem(6);
             else if(cellFormatType==KSpreadCell::Time_format6)
                 listFormat->setCurrentItem(7);
+            else if(cellFormatType==KSpreadCell::Time_format7)
+                listFormat->setCurrentItem(8);
             else
                 listFormat->setCurrentItem(0);
         }
@@ -1242,6 +1256,19 @@ void CellFormatPageFloat::slotChangeState()
       {
 	listFormat->setEnabled(false);
       }
+
+    if(customFormat->isChecked())
+    {
+      customFormatEdit->setHidden( false );
+      precision->setEnabled(false);
+      prefix->setEnabled(false);
+      postfix->setEnabled(false);
+      format->setEnabled(false);
+      listFormat->setEnabled(true);
+    }
+    else
+      customFormatEdit->setHidden( true );
+
     m_bFormatTypeChanged=true;
     if( date->isChecked() && dlg->m_bDate)
         makeDateFormat();
@@ -1309,7 +1336,7 @@ void CellFormatPageFloat::makeDateFormat()
         tmpFormat=KSpreadCell::date_format25;
     else if( listFormat->currentItem()==27)
         tmpFormat=KSpreadCell::date_format26;
-    tmp= util_dateFormat( dlg->locale(), dlg->m_date, tmpFormat);
+    tmp= util_dateFormat( dlg->locale(), dlg->m_time.date(), tmpFormat);
     exampleLabel->setText(tmp);
 }
 
@@ -1431,7 +1458,6 @@ void CellFormatPageFloat::init()
 void CellFormatPageFloat::makeTimeFormat()
 {
     QString tmp;
-    QString tmpTime;
     int current = listFormat->currentItem();
     KSpreadCell::FormatType tmpFormat=KSpreadCell::Time;
     if( current==0)
@@ -1450,6 +1476,8 @@ void CellFormatPageFloat::makeTimeFormat()
         tmpFormat=KSpreadCell::Time_format5;
     else if(current==7)
         tmpFormat=KSpreadCell::Time_format6;
+    else if(current==8)
+        tmpFormat=KSpreadCell::Time_format7;
 
     tmp = util_timeFormat( dlg->locale(), dlg->m_time, tmpFormat);
     exampleLabel->setText(tmp);
@@ -1565,6 +1593,10 @@ void CellFormatPageFloat::makeformat()
 	    else if(textFormat->isChecked())
 	      {
 		tmp=QString::number(dlg->m_value);
+	      }
+	    else if(customFormat->isChecked())
+	      {
+                // TODO!
 	      }
             if ( precision->value() == -1 && tmp.find(decimal_point) >= 0 && !textFormat->isChecked())
                 {
@@ -1768,6 +1800,8 @@ void CellFormatPageFloat::applyFormat( KSpreadFormat *_obj )
                         _obj->setFormatType(KSpreadCell::Time_format5 );
                     else if(current==7)
                         _obj->setFormatType(KSpreadCell::Time_format6 );
+                    else if(current==8)
+                        _obj->setFormatType(KSpreadCell::Time_format7 );
                 }
             else if(money->isChecked())
             {
@@ -1799,6 +1833,8 @@ void CellFormatPageFloat::applyFormat( KSpreadFormat *_obj )
                 _obj->setFormatType(KSpreadCell::Scientific);
 	    else if(textFormat->isChecked())
 	      _obj->setFormatType(KSpreadCell::Text_format);
+	    else if(customFormat->isChecked())
+	      _obj->setFormatType(KSpreadCell::Custom);
         }
 }
 

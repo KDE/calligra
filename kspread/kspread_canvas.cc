@@ -1087,12 +1087,14 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     return;
   }
 
+  // In which cell did the user click ?
+  double xpos;
+  double ypos;
+  int col  = table->leftColumn( ev_PosX, xpos );
+  int row  = table->topRow( ev_PosY, ypos );
+
   {
     // start drag ?
-    double xpos;
-    double ypos;
-    int col  = table->leftColumn( ev_PosX, xpos );
-    int row  = table->topRow( ev_PosY, ypos );
     double width  = 0.0;
     double height = 0.0;
     int i;
@@ -1126,11 +1128,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
       return;
     }
   }
-
-  // In which cell did the user click ?
-  double tmp;
-  int col = table->leftColumn( ev_PosX, tmp );
-  int row = table->topRow( ev_PosY, tmp );
 
   kdDebug() << "Clicked in cell " << col << ", " << row << endl;
 

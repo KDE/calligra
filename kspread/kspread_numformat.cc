@@ -25,6 +25,7 @@
 #include <ctype.h>
 #include <math.h>
 
+#include "kspread_util.h"
 #include "kspread_value.h"
 
 enum { Unkown, TimeDate, Number, Scientific, Fraction } Type;
@@ -105,7 +106,7 @@ namespace KSpreadNumFormat_Local
     QString    prefix;
   };
 
-  class Format
+  class BaseFormat
   {
    public: 
     int        type;
@@ -114,7 +115,7 @@ namespace KSpreadNumFormat_Local
     QString    prefix;
   };
 
-  class NumberFormat : public Format
+  class NumberFormat : public BaseFormat
   {
    public:
     bool       thSet;
@@ -128,7 +129,7 @@ namespace KSpreadNumFormat_Local
     int        leftSpace;
   };
 
-  class FractionFormat : public Format
+  class FractionFormat : public BaseFormat
   {
    public:
     bool       thSet;
@@ -142,14 +143,14 @@ namespace KSpreadNumFormat_Local
     int        fractionDigists;
   };
 
-  class DateTimeFormat : public Format
+  class DateTimeFormat : public BaseFormat
   {
    public:
     bool       ampm;    
     QString    format;
   };
 
-  class ScientificFormat : public Format
+  class ScientificFormat : public BaseFormat
   {
    public:
     bool       thSet;
@@ -168,7 +169,7 @@ namespace KSpreadNumFormat_Local
   {
    public:
 
-    int  getType( QString const & format, Format * f ) const
+    int  getType( QString const & format, BaseFormat * f ) const
     {
       FormatMap::const_iterator iter = m_formats.find( format );
       if ( iter == m_formats.end() )
@@ -202,7 +203,7 @@ namespace KSpreadNumFormat_Local
     }
 
    private:
-    class FormatMap : public QMap<QString, Format *> {};
+    class FormatMap : public QMap<QString, BaseFormat *> {};
     FormatMap    m_formats;
   };
 
@@ -366,7 +367,7 @@ void parseNegativePart( QString & format, int i,
   }
 }
 
-void createNumberStruct( Format * data, QString const & format, bool insert )
+void createNumberStruct( BaseFormat * data, QString const & format, bool insert )
 {
   NumberFormat * d = new NumberFormat();
   d->type       = Number;
@@ -387,7 +388,7 @@ void createNumberStruct( Format * data, QString const & format, bool insert )
   data = d;
 }
 
-void createDateTimeStruct( Format * data, QString const & format, 
+void createDateTimeStruct( BaseFormat * data, QString const & format, 
                            QString const & optFormat, bool insert )
 {
   DateTimeFormat * d = new DateTimeFormat();
@@ -402,7 +403,7 @@ void createDateTimeStruct( Format * data, QString const & format,
   data = d;
 }
 
-void createScientificStruct( Format * data, QString const & format, bool insert )
+void createScientificStruct( BaseFormat * data, QString const & format, bool insert )
 {
   ScientificFormat * d = new ScientificFormat();
   d->type       = Scientific;
@@ -426,7 +427,7 @@ void createScientificStruct( Format * data, QString const & format, bool insert 
 
 
 int doPreScan( QString & format, QString const & formatBack, KLocale const * const /* locale */,
-               bool insert, Format * data )
+               bool insert, BaseFormat * data )
 {  
   int type = g_formatStore.getType( format, data );
   if ( data != 0 )
@@ -1566,7 +1567,7 @@ QString formatNumber( KSpreadValue const & value, QString format, bool & setRed,
 
   QString backup( format );
   QString result;
-  Format * data = 0;
+  BaseFormat * data = 0;
   setRed = false;
 
   int t = doPreScan( format, backup, locale, insert, data );

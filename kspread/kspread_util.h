@@ -158,11 +158,14 @@ QString util_encodeColumnLabelText( int column );
 
 QString util_dateFormat( KLocale* locale, const QDate &_date, KSpreadCell::FormatType fmtType);
 
-QString util_timeFormat( KLocale* locale, const QTime &_time, KSpreadCell::FormatType fmtType);
+QString util_timeFormat( KLocale* locale, const QDateTime &_time, KSpreadCell::FormatType fmtType);
 
 QString util_dateTimeFormat( KLocale * locale, double date, KSpreadCell::FormatType fmtType, QString const & format );
 
 QString util_fractionFormat( double value , KSpreadCell::FormatType fmtType);
+
+QString formatNumber( KSpreadValue const & value, QString format, bool & setRed,
+                      KLocale const * const locale, bool insert );
 
 double util_fact( double val, double end );
 

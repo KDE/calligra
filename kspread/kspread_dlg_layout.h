@@ -247,7 +247,9 @@ protected:
     QRadioButton *fraction;
     QRadioButton *time;
     QRadioButton *textFormat;
+    QRadioButton *customFormat;
     QListBox *listFormat;
+    QLineEdit* customFormatEdit;
     QLabel *exampleLabel;
     CellFormatDlg *dlg;
     KSpreadCell::FormatType cellFormatType;
@@ -614,8 +616,7 @@ public:
     bool m_bDate;
     bool m_bTime;
 
-    QTime m_time;
-    QDate m_date;
+    QDateTime m_time;
     QString cellText;
     double m_value;
 
