@@ -185,7 +185,7 @@ bool KSpreadDoc::initDoc()
 
 void KSpreadDoc::saveConfig()
 {
-    if ( isEmbedded() )
+    if ( isEmbedded() ||!isReadWrite())
         return;
     KConfig *config = KSpreadFactory::global()->config();
     config->setGroup( "Parameters" );
