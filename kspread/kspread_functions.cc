@@ -18,7 +18,7 @@ static KSpreadParameterType toType( const QString& type )
 	return KSpread_String;
     if ( type == "Any" )
 	return KSpread_Any;
-    
+
     return KSpread_Float;
 }
 
@@ -56,7 +56,7 @@ static QString toString( KSpreadParameterType type, bool range = FALSE )
 	    return i18n("A range of any kind of values");
 	}
     }
-    
+
     return QString::null;
 }
 
@@ -152,13 +152,13 @@ QString KSpreadFunctionDescription::toQML() const
     text += name();
     text += "</h1><p>";
     text += helpText();
-    text += "</p><p><b>Return type: </b>";
+    text += i18n("</p><p><b>Return type: </b>");
     text += toString( type() );
     text += "</p>";
 
     if ( !m_examples.isEmpty() )
     {
-	text += "<h2>Syntax</h2><ul>";
+	text += i18n("<h2>Syntax</h2><ul>");
 	QStringList::ConstIterator it = m_syntax.begin();
 	for( ; it != m_syntax.end(); ++it )
 	{
@@ -170,13 +170,13 @@ QString KSpreadFunctionDescription::toQML() const
 
     if ( !m_params.isEmpty() )
     {
-	text += "<h2>Parameters</h2><ul>";
+	text += i18n("<h2>Parameters</h2><ul>");
 	QValueList<KSpreadFunctionParameter>::ConstIterator it = m_params.begin();
 	for( ; it != m_params.end(); ++it )
 	{
-	    text += "<li><b>Comment:</b> ";
+	    text += i18n("<li><b>Comment:</b> ");
 	    text += (*it).helpText();
-	    text += "<br><b>Type:</b> ";
+	    text += i18n("<br><b>Type:</b> ");
 	    text += toString( (*it).type(), (*it).hasRange() );
 	}
 	text += "</ul>";
@@ -184,7 +184,7 @@ QString KSpreadFunctionDescription::toQML() const
 
     if ( !m_examples.isEmpty() )
     {
-	text += "<h2>Example</h2><ul>";
+	text += i18n("<h2>Example</h2><ul>");
 	QStringList::ConstIterator it = m_examples.begin();
 	for( ; it != m_examples.end(); ++it )
 	{
@@ -221,14 +221,14 @@ void KSpreadFunctionRepository::loadFile( const QString& filename )
     QDomDocument doc;
     doc.setContent( &file );
     file.close();
-    
+
     QString group = "";
-    
+
     QDomNode n = doc.documentElement().firstChild();
     for( ; !n.isNull(); n = n.nextSibling() )
     {
 	if ( n.isElement() )
-	{ 
+	{
 	    QDomElement e = n.toElement();
 	    if ( e.tagName() == "Group" )
 	    {
@@ -239,7 +239,7 @@ void KSpreadFunctionRepository::loadFile( const QString& filename )
 		for( ; !n2.isNull(); n2 = n2.nextSibling() )
 		{
 		    if ( n2.isElement() )
-		    { 
+		    {
 			QDomElement e2 = n2.toElement();
 			if ( e2.tagName() == "Function" )
 			{
@@ -255,16 +255,16 @@ void KSpreadFunctionRepository::loadFile( const QString& filename )
 	}
     }
 }
-    
+
 KSpreadFunctionDescription* KSpreadFunctionRepository::function( const QString& name )
 {
     return m_funcs[ name ];
 }
-    
+
 QStringList KSpreadFunctionRepository::functionNames( const QString& group )
 {
     QStringList lst;
-    
+
     QDictIterator<KSpreadFunctionDescription> it( m_funcs );
     for( ; it.current(); ++it )
     {
@@ -273,21 +273,21 @@ QStringList KSpreadFunctionRepository::functionNames( const QString& group )
     }
 
     lst.sort();
-    
+
     return lst;
 }
 
 QStringList KSpreadFunctionRepository::functionNames()
 {
     QStringList lst;
-    
+
     QDictIterator<KSpreadFunctionDescription> it( m_funcs );
     for( ; it.current(); ++it )
     {
 	lst.append( it.current()->name() );
     }
-    
+
     lst.sort();
-    
+
     return lst;
 }
