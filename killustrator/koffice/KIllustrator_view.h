@@ -198,6 +198,7 @@ protected:
 
     KAction* m_copy;
     KAction* m_cut;
+    KAction *m_delete;
     KAction* m_undo;
     KAction* m_redo;
     KAction* m_properties;

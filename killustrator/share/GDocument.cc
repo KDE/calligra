@@ -756,6 +756,7 @@ void GDocument::setActiveLayer (GLayer *layer) {
   for (; i.current(); ++i) {
     if ((*i) == layer) {
       active_layer = layer;
+      unselectAllObjects();
       break;
     }
   }
@@ -783,6 +784,7 @@ void GDocument::raiseLayer (GLayer *layer) {
   if(pos!=-1) {
       GLayer *l=layers.take(pos);
       layers.insert(pos+1, l);
+      unselectAllObjects();
   }
   emit changed ();
 }
@@ -802,6 +804,7 @@ void GDocument::lowerLayer (GLayer *layer) {
   if(pos!=-1) {
       GLayer *l=layers.take(pos);
       layers.insert(pos-1, l);
+      unselectAllObjects();
   }
   emit changed ();
 }
@@ -813,6 +816,7 @@ GLayer* GDocument::addLayer () {
   GLayer* layer = new GLayer (this);
   connect (layer, SIGNAL(propertyChanged ()), this, SLOT(layerChanged ()));
   layers.append(layer);
+  unselectAllObjects();
   return layer;
 }
 
@@ -842,6 +846,7 @@ void GDocument::deleteLayer (GLayer *layer) {
           active_layer = layers.current();
           if(!active_layer)   // This one is needed for Qt 3.0 :)
               active_layer=layers.last();
+          unselectAllObjects();
       }
   }
   emit selectionChanged ();
@@ -853,7 +858,7 @@ GLayer *GDocument::layerForHelplines () {
 }
 
 bool GDocument::helplineLayerIsActive () {
-    return (active_layer->isInternal ()); // hmmm?? Is that save?
+    return (active_layer->isInternal ()); // hmmm?? Is that safe?
 }
 
 void GDocument::invalidateClipRegions () {

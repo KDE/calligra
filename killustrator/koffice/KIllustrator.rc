@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KIllustrator" version="3">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KIllustrator" version="4">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -92,9 +92,6 @@
  </Menu>
 </MenuBar>
 <ToolBar fullWidth="false" name="edit"><Text>Edit</Text>
-  <Action name="undo"/>
-  <Action name="redo"/>
-  <Separator/>
   <Action name="view_zoom"/>
   <Separator/>
   <Action name="cut"/>

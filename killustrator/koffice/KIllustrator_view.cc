@@ -134,7 +134,7 @@ void KIllustratorView::createMyGUI()
     m_undo = KStdAction::undo(this, SLOT( slotUndo() ), actionCollection(), "undo" );
     m_redo = KStdAction::redo(this, SLOT( slotRedo() ), actionCollection(), "redo" );
     new KAction( i18n("Dup&licate"), 0, this, SLOT( slotDuplicate() ), actionCollection(), "duplicate" );
-    new KAction( i18n("&Delete"), 0, this, SLOT( slotDelete() ), actionCollection(), "delete" );
+    m_delete=new KAction( i18n("&Delete"), 0, this, SLOT( slotDelete() ), actionCollection(), "delete" );
     new KAction( i18n("&Select All"), 0, this, SLOT( slotSelectAll() ), actionCollection(), "selectAll" );
     m_properties = new KAction( i18n("&Properties..."), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
 
@@ -291,6 +291,7 @@ void KIllustratorView::setupPopups()
     objMenu = new KPopupMenu();
     m_copy->plug( objMenu );
     m_cut->plug( objMenu );
+    m_delete->plug(objMenu);
     objMenu->insertSeparator ();
     m_properties->plug( objMenu );
     objMenu->insertSeparator ();

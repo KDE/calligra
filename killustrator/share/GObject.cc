@@ -161,8 +161,8 @@ void GObject::ref () {
 }
 
 void GObject::unref () {
-  if (--rcount == 0)
-    delete this;
+    if (--rcount == 0)
+        delete this;
 }
 
 void GObject::updateRegion (bool recalcBBox) {
