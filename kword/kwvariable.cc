@@ -210,7 +210,6 @@ QString KWFootNoteVariable::applyStyle(  )
 
     QString tmp;
     int val = m_numDisplay;
-    kdDebug()<<" int :"<<m_numDisplay<<endl;
     switch ( tmpCounter.style() )
     {
     case KoParagCounter::STYLE_NUM:
@@ -228,11 +227,13 @@ QString KWFootNoteVariable::applyStyle(  )
     case KoParagCounter::STYLE_ROM_NUM_U:
         tmp = KoParagCounter::makeRomanNumber( val ).upper();
         break;
+    default:
+        tmp.setNum( val );
+        break;
     }
 
     tmp.prepend( tmpCounter.prefix() );
     tmp.append( tmpCounter.suffix() );
-    kdDebug()<<" tmp :"<<tmp <<endl;
     return tmp;
 }
 
