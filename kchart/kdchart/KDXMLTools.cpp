@@ -781,4 +781,4 @@ namespace KDXML {
             return Qt::SolidPattern;
     }
 
-};
+}
