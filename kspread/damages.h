@@ -22,6 +22,7 @@
 
 #include <qvaluelist.h>
 
+class KSpreadCell;
 class KSpreadSheet;
 
 namespace KSpread
@@ -42,6 +43,23 @@ class Damage
     } Type;
 
     virtual Type type() const { return Nothing; }
+};
+
+class CellDamage : public Damage
+{
+  public:
+  
+    CellDamage( KSpreadCell* cell );
+    
+    virtual ~CellDamage();
+    
+    virtual Type type() const { return Cell; }
+    
+    KSpreadCell* cell();
+    
+  private:
+    class Private;
+    Private *d;
 };
 
 class SheetDamage : public Damage

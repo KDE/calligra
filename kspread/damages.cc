@@ -20,7 +20,7 @@
 
 #include "damages.h"
 
-
+#include "kspread_cell.h"
 #include "kspread_sheet.h"
 
 namespace KSpread
@@ -33,10 +33,32 @@ public:
   int action;
 };
 
+class CellDamage::Private
+{
+public:
+  KSpreadCell* cell;
+};
+
 }
 
-
 using namespace KSpread;
+
+
+CellDamage::CellDamage( KSpreadCell* cell )
+{
+  d = new Private;
+  d->cell = cell;
+}
+
+CellDamage::~CellDamage()
+{
+  delete d;
+}
+
+KSpreadCell* CellDamage::cell()
+{
+  return d->cell;
+}
 
 SheetDamage::SheetDamage( KSpreadSheet* sheet, int action )
 {
