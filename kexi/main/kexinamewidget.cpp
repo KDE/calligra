@@ -56,7 +56,7 @@ void KexiNameWidget::init(
 	lbl_message = new QLabel( this, "message" );
 	setMessageText( message );
 	lbl_message->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-	lbl_message->setAlignment( int( QLabel::AlignTop ) );
+	lbl_message->setAlignment( QLabel::AlignTop | QLabel::WordBreak );
 	lyr->addMultiCellWidget( lbl_message, 0, 0, 0, 1 );
 
 	lbl_caption = new QLabel( captionLabel.isEmpty() ? i18n( "Caption:" ) : captionLabel,
@@ -68,15 +68,13 @@ void KexiNameWidget::init(
 	lyr->addWidget( lbl_name, 2, 0 );
 
 	le_caption = new KLineEdit( nameText, this, "le_caption" );
-	le_caption->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred, 1, 0));
-//	le_caption->installEventFilter(this);
+	le_caption->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed, 1, 0));
 	lyr->addWidget( le_caption, 1, 1 );
 
 	le_name = new KLineEdit( nameText, this, "le_name" );
-	le_name->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred,1,0));
+	le_name->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed,1,0));
 	KexiValidator *idValidator = new Kexi::IdentifierValidator(0, "id_val");
 	le_name->setValidator( m_validator = new KexiMultiValidator(idValidator, this, "val") );
-//	le_name->installEventFilter(this);
 	lyr->addWidget( le_name, 2, 1 );
 
 	setFocusProxy(le_caption);
@@ -150,11 +148,13 @@ void KexiNameWidget::setNameText(const QString& name)
 
 void KexiNameWidget::setMessageText(const QString& msg)
 {
-	lbl_message->setText(msg.stripWhiteSpace());
-	if (lbl_message->text().isEmpty())
+	if (msg.stripWhiteSpace().isEmpty()) {
+		lbl_message->setText("");
 		lbl_message->hide();
-	else
+	} else {
+		lbl_message->setText(msg.stripWhiteSpace()+"<br>");
 		lbl_message->show();
+	}
 }
 
 QString KexiNameWidget::captionText() const
