@@ -561,6 +561,10 @@ in the &koffice; package which can be obtained from <ulink
 url="ftp://ftp.kde.org/pub/kde/">ftp://ftp.kde.org/pub/kde/</ulink>, the
 main ftp site of the &kde; project. </para>
 
+<para>Many distributions offer pre-compiled binaries on their ftp sites.  Please check your distributions web sites for more information.</para>
+
+<para>If you want to compile &kword; from source, then you should read through the next few sections for help on compilation.</para>
+
 </sect1>
 
 <sect1 id="requirements">
@@ -570,12 +574,12 @@ main ftp site of the &kde; project. </para>
 
 <itemizedlist>
 <listitem>
-<para>&Qt; Toolkit 2.2.3 or later.  This can be obtained from <ulink
+<para>&Qt; Toolkit 3.0.2 or later.  This can be obtained from <ulink
 url="http://www.trolltech.com">Trolltech</ulink>.</para>
 </listitem>
 
 <listitem>
-<para>&kde; 2.2 libraries (kdelibs) and the &kde; 2.2 base package
+<para>&kde; 3.0 libraries (kdelibs) and the &kde; 3.0 base package
 (kdebase).  These can be obtained from the <ulink
 url="http://www.kde.org">&kde; web page.</ulink></para>
 </listitem>
@@ -642,124 +646,6 @@ find more help on the other command line options.</para>
 </screen>
 
 <para>This will give you a few subjects to receive help on.</para>
-
-</appendix>
-
-<appendix id="predefined-styles">
-<title>Pre-defined Styles in &kword;</title>
-
-<para>&kword; comes with 11 pre-defined Styles.</para>
-
-<para>The table below provides you a quick glimpse of the formatting
-that is predefined for these styles.</para>
-
-<informaltable>
-<tgroup cols="2">
-<thead>
-<row>
-<entry>Style</entry>
-<entry>Characters</entry>
-<entry>Paragraph</entry>
-<entry>Borders</entry>
-</row>
-</thead>
-<tbody>
-<row>
-<entry>Standard</entry>
-<entry><para>Times</para><para>12 Point</para><para>Regular
-Style</para></entry>
-<entry>Left Justified</entry><entry>None</entry>
-</row>
-
-<row>
-<entry>Head 1</entry>
-<entry><para>Helvetica</para><para>24
-Point</para><para>Bold</para></entry>
-<entry><para>Left Justified</para><para>Arabic Numbering (Chapter
-Numbering, Depth 0, Start with 1)</para></entry>
-<entry>None</entry>
-</row>
-
-<row>
-<entry>Head 2</entry>
-<entry><para>Helvetica</para><para>16
-Point</para><para>Bold</para></entry>
-<entry><para>Left Justified</para><para>Arabic Numbering (Chapter
-Numbering, Depth 1, Start with 1)</para></entry>
-<entry>None</entry>
-</row>
-
-<row>
-<entry>Head 3</entry>
-<entry><para>Helvetica</para><para>12
-Point</para><para>Bold</para></entry>
-<entry><para>Left Justified</para><para>Arabic Numbering (Chapter
-Numbering, Depth 2, Start with 1)</para></entry>
-<entry>None</entry>
-</row>
-
-<row>
-<entry>Enumerated List</entry>
-<entry><para>Times</para><para>12 Point</para><para>Regular
-Style</para></entry>
-<entry><para>Left Justified</para><para>Arabic Numbering (List
-Numbering, Depth 0, Start with 1)</para></entry>
-<entry>None</entry>
-</row>
-
-<row>
-<entry>Alphabetical List</entry>
-<entry><para>Times</para><para>12 Point</para><para>Regular
-Style</para></entry>
-<entry><para>Left Justified</para><para>Lower Alphabetic Numbering (List
-Numbering, Depth 0, Start with a)</para></entry>
-<entry>None</entry>
-</row>
-
-<row>
-<entry>Bulleted List</entry>
-<entry><para>Times</para><para>12 Point</para><para>Regular
-Style</para></entry>
-<entry><para>Left Justified</para><para>Open Circle
-Bullets</para></entry>
-<entry>None</entry>
-</row>
-
-<row>
-<entry>Contents Title</entry>
-<entry><para>Helvetica</para><para>20
-Point</para><para>Bold</para></entry>
-<entry>Centered</entry>
-<entry><para>Solid Borders</para><para>1 pt width</para><para>Top and
-Bottom Only</para></entry>
-</row>
-
-<row>
-<entry>Contents Head 1</entry>
-<entry><para>Helvetica</para><para>16
-Point</para><para>Bold</para></entry>
-<entry>Left Justified</entry>
-<entry>None</entry>
-</row>
-
-<row>
-<entry>Contents Head 2</entry>
-<entry><para>Helvetica</para><para>12
-Point</para><para>Bold</para></entry>
-<entry>Left Justified</entry>
-<entry>None</entry>
-</row>
-
-<row>
-<entry>Contents Head 3</entry>
-<entry><para>Helvetica</para><para>12
-Point</para><para>Italics</para></entry>
-<entry>Left Justified</entry>
-<entry>None</entry>
-</row>
-</tbody>
-</tgroup>
-</informaltable>
 
 </appendix>
 

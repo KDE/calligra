@@ -6,7 +6,7 @@ typewriters.  They allow you to align text into columns quickly and
 easily.</para>
 
 <para>When a tab stop is in place, you can immediately jump to that
-horizontal position on the page by pressing the "Tab" key.  Tab stops
+horizontal position on the page by pressing the <keycap>Tab</keycap> key.  Tab stops
 are most commonly used to align columns in a table, or to automatically
 indent paragraphs.</para>
 
@@ -92,7 +92,7 @@ then back to <quote>Left Tab Stop</quote>. </para>
 </tip>
 
 <para>Once you have the correct type of tab stop, you can simply place
-the mouse cursor on the top ruler bar, and click once with the
+the mouse cursor on the top ruler bar at the desired position, and click once with the
 <mousebutton>left</mousebutton> mouse button.  This will place a tab
 stop at that position.</para>
 
@@ -103,9 +103,8 @@ stop at that position.</para>
 
 <para>The fastest way to get to the tab stop dialog panel, is to select
 <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
-from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
-
-<para>Click on the tab labeled <guilabel>Tabulators</guilabel></para>
+from the menubar.  This will bring up a dialog box with 6 tabs. Click on the tab 
+labeled <guilabel>Tabulators</guilabel>. </para>
 
 <screenshot>
 <mediaobject>
@@ -118,18 +117,23 @@ from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
 
 <orderedlist numeration="arabic">
 <listitem>
+<para>Click the <guibutton>New</guibutton> button at the bottom of the list of tab stops.</para>
+</listitem>
+<listitem>
 <para>Type the horizontal location of the tab stop in the space
-provided.  The units are listed above the text box.</para>
+labeled <guilabel>Position</guilabel>.  The units used and the current frame width 
+are listed below the text box.</para>
 </listitem>
 <listitem>
-<para>Select the type of tab stop from the list on the right.</para>
-</listitem>
+<para>Select the type of tab stop from the list of radio buttons labeled 
+<guilabel>Alignment</guilabel>.</para></listitem>
 <listitem>
-<para>Click <guibutton>Add</guibutton>.</para>
-</listitem>
+<para>Determine what you want to fill the white space of the tab stop.  
+In most cases this should be left as <guilabel>Blank</guilabel>.</para></listitem>
+
 </orderedlist>
 
-<para>When you are done adding tab stops, you can click
+<para>You can now add another tab stop.  When you are done adding tab stops, you can click
 <guibutton>OK</guibutton> to finish.</para>
 
 </sect3>
@@ -162,7 +166,7 @@ arrow.</para>
 </listitem>
 
 <listitem>
-<para>Click and hold down the right button on the mouse.  Drag the tab
+<para>Click and hold down the &LMB;.  Drag the tab
 stop to its new location</para>
 </listitem>
 
@@ -179,7 +183,7 @@ button.</para>
 
 <para>The fastest way to get to the tab stop dialog panel, is to select
 <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
-from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
+from the Menu bar.  This will bring up a dialog box with 6 tabs. </para>
 
 <para>Click on the tab labeled <guilabel>Tabulators</guilabel></para>
 
@@ -189,27 +193,23 @@ from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
 </mediaobject>
 </screenshot>
 
-<para>You can now move tab stops by: !!!!!!!!!This is assumed, not
-working when written!!!!!!!!!!!</para>
-
 <orderedlist numeration="arabic">
 <listitem>
 <para>Click on the tab stop you want moved.  The list of all tab stops
 is in the box on the left side of the dialog panel</para>
 </listitem>
 <listitem>
-<para>Click <guilabel>Modify</guilabel>.</para>
+<para>Type the horizontal location of the tab stop in the space
+labeled <guilabel>Position</guilabel>.  The units used and the current frame width 
+are listed below the text box.</para>
 </listitem>
-<listitem>
-<para>Edit the horizontal location of the tab stop in the space
-provided.  The units are listed above the text box.</para>
-</listitem>
+
 <listitem>
 <para>If you need to make changes, select the type of tab stop from the
-list on the right.</para>
+list labeled <guilabel>Alignment</guilabel> or change the white space character under <guilabel>Tab Leader</guilabel>.</para>
 </listitem>
 <listitem>
-<para>Click <quote>OK</quote>.</para>
+<para>Click <quote>OK</quote> when you are done moving all tab stops around.</para>
 </listitem>
 </orderedlist>
 </sect3>
@@ -244,10 +244,7 @@ arrow.</para>
 </listitem>
 <listitem>
 <para>Click and hold down the <mousebutton>right</mousebutton> button on
-the mouse. Drag the tab stop off the edge of the document.</para>
-</listitem>
-<listitem>
-<para>Release the mouse button.</para>
+the mouse. A submenu will appear.  Select <guimenuitem>Remove Tabulator</guimenuitem>.</para>
 </listitem>
 </orderedlist>
 </sect3>
@@ -257,7 +254,7 @@ the mouse. Drag the tab stop off the edge of the document.</para>
 
 <para>The fastest way to get to the tab stop dialog panel, is to select
 <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
-from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
+from the Menu bar.  This will bring up a dialog box with 6 tabs. </para>
 
 <para>Click on the tab labeled <guilabel>Tabulators</guilabel></para>
 
@@ -268,20 +265,17 @@ from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
 </mediaobject>
 </screenshot>
 
-<para>You can now delete tab stops by: !!!!!!!!!This is assumed, not
-working when written!!!!!!!!!!!</para>
-
 <orderedlist numeration="arabic">
 <listitem>
-<para>Click on the tab stop you want moved.  The list of all tab stops
+<para>Click on the tab stop you want removed.  The list of all tab stops
 is in the box on the left side of the dialog panel</para>
 </listitem>
 <listitem>
-<para>Click <guibutton>Delete</guibutton>.</para>
+<para>Click the <guibutton>Delete</guibutton> button.</para>
 </listitem>
 </orderedlist>
 
-<para>When you are done adding tab stops, you can click
+<para>When you are done deleting tab stops, you can click
 <guibutton>OK</guibutton> to finish.</para>
 
 </sect3>

@@ -51,7 +51,7 @@
 <row><entry></entry><entry>Working with Frames </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>Setting the Properties for a Frame/Formatting Frames </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>Formatting paragraph </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Using Tab Stops </entry><entry>Needs Updates</entry></row>
+<row><entry></entry><entry>Using Tab Stops </entry><entry>Done</entry></row>
 <row><entry></entry><entry>Formatting Characters </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>Styles </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>Columns </entry><entry>Needs Updates</entry></row>
@@ -111,15 +111,12 @@
 <row><entry></entry></row>
 
 <row><entry>Installation </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>How to obtain KWord </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Requirements </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Compilation and Installation </entry><entry>Needs Updates</entry></row>
+<row><entry></entry><entry>How to obtain KWord </entry><entry>Done</entry></row>
+<row><entry></entry><entry>Requirements </entry><entry>Done</entry></row>
+<row><entry></entry><entry>Compilation and Installation </entry><entry>Done</entry></row>
 <row><entry></entry></row>
 
-<row><entry>KWord Command Line Options </entry><entry></entry><entry>Needs Updates</entry></row>
-<row><entry></entry></row>
-
-<row><entry>Pre-defined Styles in KWord </entry><entry></entry><entry>Needs Updates</entry></row>
+<row><entry>KWord Command Line Options </entry><entry></entry><entry>Done</entry></row>
 <row><entry></entry></row>
 
 <row><entry>Import/Export Filters </entry><entry></entry><entry></entry></row>
@@ -146,6 +143,7 @@
 <row><entry>Sections to be added</entry><entry></entry><entry></entry></row>
 <row><entry></entry><entry>Thesaurus</entry><entry></entry></row>
 <row><entry></entry><entry>Document Info Dialog</entry><entry></entry></row>
+<row><entry></entry><entry>Mail Merge</entry><entry></entry></row>
 
 </tbody>
 </tgroup>

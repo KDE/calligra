@@ -47,9 +47,7 @@ the text labeled <quote>Section Title</quote> all at once.  </para>
 <para>This will ensure that all section titles appear consistent
 throughout your document.</para>
 
-<para>&kword; has 11 predefined Styles.  For a list of them, and the
-formatting options, <link linkend="predefined-styles">click
-here</link>.</para>
+<para>&kword; has 8 predefined Styles.</para>
 
 <sect2 id="style-select">
 <title>Changing the Style of Text</title>
