@@ -48,8 +48,8 @@ void KWAnchor::finalize()
         return;
 
     int paragy = paragraph()->rect().y();
-    kdDebug() << this << " KWAnchor::finalize " << x() << "," << y() << " paragy=" << paragy << endl;
-
+    kdDebug(32001) << this << " KWAnchor::finalize " << x() << "," << y() << " paragy=" << paragy << endl;
+    
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     KoPoint dPoint;
     if ( fs->internalToDocument( QPoint( x(), y()+paragy ), dPoint ) )
@@ -93,17 +93,6 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         crectLU = QRect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
 #ifdef DEBUG_DRAWING
     kdDebug() << "KWAnchor::draw crect in LU coordinates:                   " << DEBUGRECT( crectLU ) << endl;
-#endif
-
-    KWFrame* containingFrame = fs->currentDrawnFrame();
-    // Intersect with containing frame - in case the inline item is
-    // bigger, it shouldn't go out of it!
-    QRect frameRectLU( 0, zh->ptToLayoutUnitPixY( containingFrame->internalY() ),
-                       zh->ptToLayoutUnitPixX( containingFrame->width() ),
-                       zh->ptToLayoutUnitPixY( containingFrame->height() ) );
-    crectLU &= frameRectLU;
-#ifdef DEBUG_DRAWING
-    kdDebug() << "KWAnchor::draw crect LU, after intersect with framerect : " << DEBUGRECT( crectLU ) << endl;
 #endif
 
     QPoint topLeftLU = crectLU.topLeft();
