@@ -1,6 +1,7 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
+ * Copyright (C) 2000-2004 theKompany.com & Dave Marotti
+ *                         Peter Simonsson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -592,4 +593,41 @@ QFont KivioGroupStencil::textFont()
 int KivioGroupStencil::resizeHandlePositions()
 {
     return KIVIO_RESIZE_HANDLE_POSITION_ALL;
+}
+
+QString KivioGroupStencil::getTextBoxName(const KoPoint& p)
+{
+  KivioStencil *pStencil = m_pGroupList->first();
+  QString name;
+  int id = 0;
+  
+  while(pStencil)
+  {
+    name = pStencil->getTextBoxName(p);
+    
+    if(!name.isEmpty()) {
+      return QString::number(id) + "-" + name;
+    }
+    
+    pStencil = m_pGroupList->next();
+    id++;
+  }
+  
+  return QString::null;
+}
+
+void KivioGroupStencil::setText(const QString& text, const QString& name)
+{
+  int id = name.section("-", 0, 0).toInt();
+  QString n = name.section("-", 1);
+  
+  m_pGroupList->at(id)->setText(text, n);
+}
+
+QString KivioGroupStencil::text(const QString& name)
+{
+  int id = name.section("-", 0, 0).toInt();
+  QString n = name.section("-", 1);
+  
+  return m_pGroupList->at(id)->text(n);
 }
