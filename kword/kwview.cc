@@ -4477,8 +4477,8 @@ void KWView::slotFrameSetEditChanged()
 
     actionFormatDecreaseIndent->setEnabled(goodleftMargin && state);
 
-    actionFormatBullet->setEnabled(rw);
-    actionFormatNumber->setEnabled(rw);
+    actionFormatBullet->setEnabled((rw && edit && !edit->textFrameSet()->isFootEndNote())||(!edit&& rw));
+    actionFormatNumber->setEnabled((rw && edit && !edit->textFrameSet()->isFootEndNote())||(!edit && rw ));
     actionFormatSuper->setEnabled(rw);
     actionFormatSub->setEnabled(rw);
     actionFormatParag->setEnabled(state);
