@@ -40,15 +40,17 @@
 namespace KFormDesigner
 {
 
-FormManager::FormManager(QWorkspace *workspace, QObject *parent=0, const char *name=0)
+FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name=0)
    : QObject(parent, name)
 {
 	m_lib = new WidgetLibrary(this);
 	m_buffer = new ObjectPropertyBuffer(this, this, "buffer");
-	m_workspace = workspace;
+	m_parent = container;
 
 	m_editor = 0;
+	m_active = 0;
 	m_inserting = false;
+	m_count = 0;
 
 	m_domDoc.appendChild(m_domDoc.createElement("UI"));
 
@@ -68,7 +70,6 @@ FormManager::setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview)
 
 	connect(treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget *)));
 	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), this, SLOT(setSelWidget(QWidget*)));
-	connect(m_workspace, SIGNAL(windowActivated(QWidget*)), this, SLOT(updateTreeView(QWidget *)));
 }
 
 Actions
@@ -101,11 +102,44 @@ FormManager::stopInsert()
 	m_inserting = false;
 }
 
+void
+FormManager::windowChanged(QWidget *w)
+{
+	Form *form;
+	for(form = m_forms.first(); form; form = m_forms.next())
+	{
+		if(form->toplevelContainer()->widget() == w)
+		{
+			m_active = form;
+			m_treeview->setForm(form);
+			kdDebug() << "active form is " << form->objectTree()->name() << endl;
+			return;
+		}
+	}
+	//m_active = 0;
+}
+
 Form*
 FormManager::activeForm()
 {
-	QWidget *w = m_workspace->activeWindow();
+	return m_active;
+}
+
+/*
+Form*
+FormManager::activeForm()
+{
+	QWidget *wid = m_workspace->focusWidget();
 	Form *form;
+	for(form = m_forms.first(); form; form = m_forms.next())
+	{
+		if((form->toplevelContainer()->widget()->child(wid->name()))
+		 || wid == form->toplevelContainer()->widget())
+		 	kdDebug() << "active widget is " << form->objectTree()->name() << endl;
+	}
+
+	QWidget *w = m_workspace->activeWindow();
+
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
 		if(form->toplevelContainer()->widget() == w)
@@ -116,16 +150,22 @@ FormManager::activeForm()
 	}
 	m_active = m_forms.first();
 	return m_forms.first();
-}
+}*/
 
+void
+FormManager::deleteForm(Form *form)
+{
+	kdDebug() << "removing form " << form->objectTree()->name() << endl;
+	m_forms.remove(form);
+}
 
 void
 FormManager::setSelWidget(QWidget *w)
 {
 	if(activeForm())
-		m_active->setSelWidget(w);
+		activeForm()->setSelWidget(w);
 }
-
+/*
 void
 FormManager::updateTreeView(QWidget *w)
 {
@@ -141,7 +181,7 @@ FormManager::updateTreeView(QWidget *w)
 			return;
 		}
 	}
-}
+}*/
 
 void
 FormManager::createBlankForm()
@@ -158,8 +198,8 @@ FormManager::createBlankForm(const QString &classname, const char *name)
 	QString n;
 	if((classname.isNull()) || (classname == "QWidget"))
 	{
-		n = "Form" + QString::number(m_forms.count()+1);
-		w = new QWidget(m_workspace, n.latin1());
+		n = "Form" + QString::number(m_count + 1);
+		w = new QWidget(m_parent, n.latin1());
 	}
 
 	form->createToplevel(w);
@@ -167,10 +207,13 @@ FormManager::createBlankForm(const QString &classname, const char *name)
 	w->setIcon(SmallIcon("kexi"));
 	w->resize(350, 300);
 	w->show();
+	w->setFocus();
 
 	m_forms.append(form);
 	m_buffer->setObject(w);
 	m_treeview->setForm(form);
+	m_active = form;
+	m_count++;
 
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget*)));
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_treeview, SLOT(setSelWidget(QWidget*)));
@@ -183,9 +226,9 @@ FormManager::createBlankForm(const QString &classname, const char *name)
 void
 FormManager::loadForm()
 {
-	QString n = "Form" + QString::number(m_forms.count()+1);
-	Form *form = new Form(this, n.latin1());
-	if(!FormIO::loadForm(form, m_workspace))
+//	QString n = "Form" + QString::number(m_count + 1);
+	Form *form = new Form(this);//, n.latin1());
+	if(!FormIO::loadForm(form, m_parent))
 	{
 		delete form;
 		return;
@@ -194,6 +237,8 @@ FormManager::loadForm()
 	m_forms.append(form);
 	m_buffer->setObject(form->toplevelContainer()->widget());
 	m_treeview->setForm(form);
+	m_active = form;
+	m_count++;
 
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget*)));
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_treeview, SLOT(setSelWidget(QWidget*)));
@@ -213,7 +258,7 @@ FormManager::saveForm()
 bool
 FormManager::isTopLevel(QWidget *w)
 {
-	return (w && w->parentWidget() == m_workspace);
+	return (w && w->parentWidget() == m_parent);
 }
 
 void

@@ -34,6 +34,7 @@ KFMView::KFMView()
 	KFormDesigner::ObjectTreeView *view = new KFormDesigner::ObjectTreeView();
 	view->show();
 	manager->setEditors(editor, view);
+	connect(w, SIGNAL(windowActivated(QWidget*)), manager, SLOT(windowChanged(QWidget*)));
 
 	new KAction(i18n("Print object tree"), "view_tree", KShortcut(0), manager, SLOT(debugTree()), actionCollection(), "dtree");
 	KStdAction::save(manager, SLOT(saveForm()), actionCollection());

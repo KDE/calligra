@@ -52,7 +52,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 	Q_OBJECT
 
 	public:
-		FormManager(QWorkspace *workspace, QObject *parent, const char *name);
+		FormManager(QWidget *container, QObject *parent, const char *name);
 		~FormManager(){;}
 
 		/*! Creates all the KAction related to widget insertion, and plug them into the KActionCollection \a parent.
@@ -101,6 +101,11 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Creates a new blank Form, whose toplevel widget inherits \a classname. The Form is automatically shown. */
 		void createBlankForm(const QString &classname, const char *name);
 
+		/*! Deletes the Form \a form and removes it from our list. */
+		void deleteForm(Form *form);
+
+		
+
 	public slots:
 		/*! Creates a new blank Form with default class top widget (ie QWidget). The new Form is shown and becomes
 		   the active Form.
@@ -135,10 +140,13 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		/*! Print to the command line the ObjectTree of the active Form (ie a line for each widget, with parent and name). */
 		void debugTree();
-		/*! This slot is called when the selected Form changes. It updates the ObjectTreeView to show this Form. */
-		void updateTreeView(QWidget *);
 		/*! Sets \a w as the selected widget in the active Form. (called by ObjectTreeView) */
 		void setSelWidget(QWidget *w);
+
+		/*! Calls this slot when the window activated changes (eg connect to QWorkspace::windowActivated(QWidget*)). You <b>need</b> to connect
+		   to this slot, it will crash otherwise.
+		  */
+		void windowChanged(QWidget *w);
 
 	private:
 		ObjectPropertyBuffer	*m_buffer;
@@ -146,8 +154,9 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		KexiPropertyEditor	*m_editor;
 		ObjectTreeView		*m_treeview;
 		QPtrList<Form>		m_forms;
+		int			m_count;
 		Form			*m_active;
-		QWorkspace		*m_workspace;
+		QWidget			*m_parent;
 
 		QDomDocument		m_domDoc;
 		KPopupMenu		*m_popup;

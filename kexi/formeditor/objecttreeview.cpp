@@ -159,7 +159,7 @@ ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name)
 	connect(this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(emitSelChanged(QListViewItem*))); 
 
 	setFullWidth(true);
-	setShowSortIndicator(true);
+	setAllColumnsShowFocus(true);
 	setItemMargin(3);
 }
 

@@ -132,6 +132,12 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 */
 		void			setSelWidget(QWidget *w);
 
+	protected slots:
+		/*! This slot is called when the toplevel widget of this Form is deleted (ie the window closed) so that the Form gets deleted
+		  at the same time.
+		 */
+		void			formDeleted();
+
 	signals:
 		/*! This signal is emitted when user selects a new widget, to update both Property Editor and ObjectTreeView.
 		   \a w is the newly selected widget.

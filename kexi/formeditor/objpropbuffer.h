@@ -80,6 +80,8 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		   \return true if the property should be shown. False otherwise.
 		 */
 		bool    showProperty(QObject *obj, const QString &property);
+		void    createAlignProperty(const QMetaProperty *meta, QObject *obj);
+		void    saveAlignProperty();
 	
 	private:
 		QObject		*m_object;

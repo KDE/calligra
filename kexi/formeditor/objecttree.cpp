@@ -54,7 +54,6 @@ ObjectTreeItem::rename(const QString &name)
 ObjectTreeItem::~ObjectTreeItem()
 {
 	kdDebug() << "ObjectTreeItem deleted: " << this->name() << endl;
-	m_parent->remChild(this);
 }
 
 void
@@ -156,6 +155,7 @@ ObjectTree::removeChild(const QString &name)
 	ObjectTreeItem *c = lookup(name);
 	m_container->form()->emitChildRemoved(c);
 	m_treeDict.remove(name);
+	c->parent()->remChild(c);
 	delete c;
 }
 

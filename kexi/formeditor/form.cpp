@@ -60,6 +60,8 @@ Form::createToplevel(QWidget *container)
 	m_topTree->addModProperty("caption");
 	m_topTree->addModProperty("icon");
 
+	connect(container, SIGNAL(destroyed()), this, SLOT(formDeleted()));
+
 	kdDebug() << "Form::createToplevel(): m_toplevel=" << m_toplevel << endl;
 }
 /*
@@ -124,6 +126,13 @@ Form::setSelWidget(QWidget *w)
 		cont = item->parent()->container();
 
 	cont->setSelectedWidget(w);
+}
+
+void
+Form::formDeleted()
+{
+	m_manager->deleteForm(this);
+	delete this;
 }
 
 void
@@ -283,6 +292,8 @@ Form::fixPos(QDomElement el)
 
 Form::~Form()
 {
+	delete m_topTree;
+//	delete m_resizeHandles;
 }
 
 }
