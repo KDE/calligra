@@ -14,7 +14,7 @@
 <firstname>Mike</firstname>
 <surname>McBride</surname>
 <affiliation>
-<address><email>mmcbride@ematic.com</email></address>
+<address><email>mpmcbride7@yahoo.com</email></address>
 </affiliation>
 </author>
 </authorgroup> 
@@ -50,7 +50,7 @@
 <chapter ID="todo"><title>Current status of this manual</title>
 <warning><para>This manual is out of date in many areas.  Over the past two months, KOffice has continued to evolve into the start of a powerful office suite.  During that time, however, my time has been short for updating the documentation for KWord because of the tremendous need to document all of the new and updated applications in KDE 2.0.  Because of this, the KWord documentation has fallen behind.</para>
 <para>KWord has not changed drastically in how it operates, but you may find that many of the details of the interface have changed.  This will be corrected ASAP.</para>
-<para>If any of you out there are interested in helping the KDE documentation team, please feel free to send me a message at <email>mmcbride@ematic.com</email></para>
+<para>If any of you out there are interested in helping the KDE documentation team, please feel free to send me a message at <email>mpmcbride7@yahoo.com</email></para>
 <para>Sincerely Mike</para>
 </warning>
 <Sect1 id="todo1"><title>Whats done and what needs to be done</title>
@@ -84,7 +84,7 @@
 <para>I would be very interested in any part of KWord that people find particularly difficult or confusing.  You can either write me directly, or post your comments on the koffice mailing list (which I faithfully read).  These comments will help me focus the documentation better.</para>
 <para>You may also notice (if you are reading this closely at all), that sections of this guide will often end abruptly with "STUFF".  This is a marker to remind myself that more needs to be added, or the section needs to be worked on again.</para>
 <para>Thanks</para>
-<para>Mike <email>mmcbride@ematic.com</email> </para>
+<para>Mike <email>mpmcbride7@yahoo.com</email> </para>
 </sect2></sect1>
 </chapter>
 <!-- **************************************************************************************************** -->   
