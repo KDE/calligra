@@ -4,6 +4,7 @@
 #include "kscript_class.h"
 #include "kscript_ext_qwidget.h"
 
+class QPushButton;
 class KSContext;
 
 class KSClass_QPushButton : public KSClass_QWidget
@@ -28,7 +29,9 @@ public:
   bool setMember( KSContext& context, const QString& name, const KSValue::Ptr& v );
 
   bool inherits( const char* name ) { return ( strcmp( name, "KSObject_QPushButton" ) == 0 || KSObject_QWidget::inherits( name ) ); }
-    
+
+  static QPushButton* convert( KSValue* v ) { return (QPushButton*) ((KS_Qt_Object*)v->objectValue())->object(); }
+
   void setObject( QObject* obj );
 };
 

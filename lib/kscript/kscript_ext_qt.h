@@ -59,6 +59,8 @@ private slots:
    */
   void textChanged( const QString& );
   void clicked();
+  void activated( int );
+  void activated( const QString& );
 
 private:
   struct Connection

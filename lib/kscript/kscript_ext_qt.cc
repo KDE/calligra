@@ -6,6 +6,7 @@
 #include "kscript_ext_qcheckbox.h"
 #include "kscript_ext_qradiobutton.h"
 #include "kscript_ext_qpushbutton.h"
+#include "kscript_ext_qcombobox.h"
 #include "kscript_ext_qlabel.h"
 #include "kscript_ext_qvboxlayout.h"
 #include "kscript_value.h"
@@ -27,6 +28,7 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
   module->addObject( "QRadioButton", new KSValue( new KSClass_QRadioButton( module ) ) );
   module->addObject( "QPushButton", new KSValue( new KSClass_QPushButton( module ) ) );
   module->addObject( "QCheckBox", new KSValue( new KSClass_QCheckBox( module ) ) );
+  module->addObject( "QComboBox", new KSValue( new KSClass_QComboBox( module ) ) );
   module->addObject( "QLabel", new KSValue( new KSClass_QLabel( module ) ) );
   module->addObject( "QVBoxLayout", new KSValue( new KSClass_QVBoxLayout( module ) ) );
 	  
@@ -154,6 +156,21 @@ void KS_Qt_Callback::clicked()
     
     emitSignal( params, "clicked" );
 }
+
+void KS_Qt_Callback::activated( int param1 )
+{
+    QValueList<KSValue::Ptr> params;
+    params.append( new KSValue( param1 ) );
+    emitSignal( params, "activated");
+}
+
+void KS_Qt_Callback::activated( const QString& param1 )
+{
+    QValueList<KSValue::Ptr> params;
+    params.append( new KSValue( param1 ) );
+    emitSignal( params, "activated");
+}
+
 
 /**********************************************
  *
