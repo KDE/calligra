@@ -198,6 +198,25 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 						if( jtr.current()->ctrlPointFixing() == VSegment::none ||
 							jtr.current()->ctrlPointFixing() == VSegment::second )
 						{
+							if( jtr.current()->prev()  )
+							{
+								painter->moveTo( KoPoint(
+									jtr.current()->prev()->knot().x() - 2 / zoomFactor,
+									jtr.current()->prev()->knot().y() - 2 / zoomFactor ) );
+								painter->lineTo( KoPoint(
+									jtr.current()->prev()->knot().x() + 2 / zoomFactor,
+									jtr.current()->prev()->knot().y() - 2 / zoomFactor ) );
+								painter->lineTo( KoPoint(
+									jtr.current()->prev()->knot().x() + 2 / zoomFactor,
+									jtr.current()->prev()->knot().y() + 2 / zoomFactor ) );
+								painter->lineTo( KoPoint(
+									jtr.current()->prev()->knot().x() - 2 / zoomFactor,
+									jtr.current()->prev()->knot().y() + 2 / zoomFactor ) );
+								painter->fillPath();
+								painter->newPath();
+								painter->setRasterOp( Qt::NotROP );
+								painter->setBrush( Qt::blue.light() );
+							}
 							painter->moveTo( KoPoint(
 								jtr.current()->ctrlPoint1().x() - 2 / zoomFactor,
 								jtr.current()->ctrlPoint1().y() - 2 / zoomFactor ) );
@@ -237,8 +256,10 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 						painter->fillPath();
 					}
 
+					// draw knot always
 					painter->newPath();
 					painter->setRasterOp( Qt::NotROP );
+					painter->setBrush( Qt::blue.light() );
 
 					painter->moveTo( KoPoint(
 							jtr.current()->knot().x() - 2 / zoomFactor,
@@ -274,10 +295,10 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 									jtr.current()->ctrlPoint1().x(),
 									jtr.current()->ctrlPoint1().y() ) );
 							painter->strokePath();
-					VStroke stroke;
-					stroke.setLineWidth( 1.0 );
-					stroke.setColor( Qt::blue.light().rgb() );
-					painter->setPen( stroke );
+							VStroke stroke;
+							stroke.setLineWidth( 1.0 );
+							stroke.setColor( Qt::blue.light().rgb() );
+							painter->setPen( stroke );
 							painter->newPath();
 						}
 						painter->moveTo( KoPoint(
