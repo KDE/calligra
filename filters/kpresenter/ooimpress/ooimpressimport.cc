@@ -366,7 +366,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 storeObjectStyles( o );
                 e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 4 );
-                append2DGeometry( doc, e, o, offset );
+                append2DGeometry( doc, e, o, (int)offset );
                 appendPen( doc, e );
                 appendBrush( doc, e );
                 appendRounding( doc, e, o );
@@ -378,7 +378,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 storeObjectStyles( o );
                 e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 2 );
-                append2DGeometry( doc, e, o, offset );
+                append2DGeometry( doc, e, o, (int)offset );
                 appendPen( doc, e );
                 appendBrush( doc, e );
                 appendRounding( doc, e, o );
@@ -388,7 +388,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             {
                 storeObjectStyles( o );
                 e = doc.createElement( "OBJECT" );
-                append2DGeometry( doc, e, o, offset );
+                append2DGeometry( doc, e, o, (int)offset );
                 appendPen( doc, e );
                 appendShadow( doc, e );
 
@@ -427,7 +427,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 storeObjectStyles( o );
                 e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 1 );
-                appendLineGeometry( doc, e, o, offset );
+                appendLineGeometry( doc, e, o, (int)offset );
                 appendPen( doc, e );
                 appendBrush( doc, e );
                 appendShadow( doc, e );
@@ -438,7 +438,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 storeObjectStyles( o );
                 e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 0 );
-                append2DGeometry( doc, e, o, offset );
+                append2DGeometry( doc, e, o, (int)offset );
                 appendImage( doc, e, pictureElement, o );
             }
             else if ( name == "presentation:notes" ) // notes
