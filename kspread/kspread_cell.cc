@@ -53,7 +53,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
 {
   m_nextCell = 0;
   m_previousCell = 0;
-
+  m_ObscuringCells.clear();
   m_pCode = 0;
   m_pPrivate = 0L;
   m_pQML = NULL;
@@ -286,7 +286,9 @@ void KSpreadCell::setLayoutDirtyFlag()
     QValueList<KSpreadCell*>::iterator it = m_ObscuringCells.begin();
     QValueList<KSpreadCell*>::iterator end = m_ObscuringCells.end();
     for ( ; it != end; ++it )
+    {
 	(*it)->setLayoutDirtyFlag();
+    }
 }
 
 bool KSpreadCell::needsPrinting() const
@@ -340,10 +342,15 @@ bool KSpreadCell::isObscuringForced() const
   return false;
 }
 
+void KSpreadCell::clearObscuringCells()
+{
+    m_ObscuringCells.clear();
+}
+
 void KSpreadCell::obscure( KSpreadCell *cell, bool isForcing )
 {
   m_ObscuringCells.remove(cell); // removes *all* occurences
-
+  cell->clearObscuringCells();
   if (isForcing)
   {
     m_ObscuringCells.prepend(cell);
@@ -1829,7 +1836,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
 
   if ( !painter.device()->isExtDev() )
     painter.setClipping( true );
-  
+
   paintCellDiagonalLines( painter, corner, cellRef, width, height );
 
   /* paint all the cells that this one obscures */
@@ -2099,9 +2106,9 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( QMAX( rect.left(),   corner.x() ), 
+    painter.drawLine( QMAX( rect.left(),   corner.x() ),
                       QMAX( rect.top(),    corner.y() + dt ),
-                      QMIN( rect.right(), corner.x() ), 
+                      QMIN( rect.right(), corner.x() ),
                       QMIN( rect.bottom(),  corner.y() + height - db ) );
   }
 
@@ -2132,9 +2139,9 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( QMAX( rect.left(),   corner.x() + width ), 
+    painter.drawLine( QMAX( rect.left(),   corner.x() + width ),
                       QMAX( rect.top(),    corner.y() + dt ),
-                      QMIN( rect.right(), corner.x() + width ), 
+                      QMIN( rect.right(), corner.x() + width ),
                       QMIN( rect.bottom(),  corner.y() + height - db ) );
   }
 
@@ -2164,9 +2171,9 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( QMAX( rect.left(),   corner.x() + dl ), 
+    painter.drawLine( QMAX( rect.left(),   corner.x() + dl ),
                       QMAX( rect.top(),    corner.y() ),
-                      QMIN( rect.right(), corner.x() + width - dr ), 
+                      QMIN( rect.right(), corner.x() + width - dr ),
                       QMIN( rect.bottom(),  corner.y() ) );
   }
 
@@ -2196,9 +2203,9 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( QMAX( rect.left(),   corner.x() + dl ), 
+    painter.drawLine( QMAX( rect.left(),   corner.x() + dl ),
                       QMAX( rect.top(),    corner.y() + height ),
-                      QMIN( rect.right(), corner.x() + width - dr ), 
+                      QMIN( rect.right(), corner.x() + width - dr ),
                       QMIN( rect.bottom(),  corner.y() + height ) );
   }
 }
@@ -2575,9 +2582,9 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( left_pen );
-    painter.drawLine( QMAX( rect.left(),   corner.x() ), 
+    painter.drawLine( QMAX( rect.left(),   corner.x() ),
                       QMAX( rect.top(),    corner.y() - top ),
-                      QMIN( rect.right(), corner.x() ), 
+                      QMIN( rect.right(), corner.x() ),
                       QMIN( rect.bottom(),  corner.y() + height + bottom ) );
   }
 
@@ -2597,27 +2604,27 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( right_pen );
-    painter.drawLine( QMAX( rect.left(),   corner.x() + width ), 
+    painter.drawLine( QMAX( rect.left(),   corner.x() + width ),
                       QMAX( rect.top(),    corner.y() - top ),
-                      QMIN( rect.right(), corner.x() + width ), 
+                      QMIN( rect.right(), corner.x() + width ),
                       QMIN( rect.bottom(),  corner.y() + height + bottom ) );
   }
 
   if ( top_pen.style() != Qt::NoPen && paintTop)
   {
     painter.setPen( top_pen );
-    painter.drawLine( QMAX( rect.left(),   corner.x() ), 
+    painter.drawLine( QMAX( rect.left(),   corner.x() ),
                       QMAX( rect.top(),    corner.y() ),
-                      QMIN( rect.right(), corner.x() + width ), 
+                      QMIN( rect.right(), corner.x() + width ),
                       QMIN( rect.bottom(),  corner.y() ) );
   }
 
   if ( bottom_pen.style() != Qt::NoPen && paintBottom )
   {
     painter.setPen( bottom_pen );
-    painter.drawLine( QMAX( rect.left(),   corner.x() ), 
+    painter.drawLine( QMAX( rect.left(),   corner.x() ),
                       QMAX( rect.top(),    corner.y() + height ),
-                      QMIN( rect.right(), corner.x() + width ), 
+                      QMIN( rect.right(), corner.x() + width ),
                       QMIN( rect.bottom(),  corner.y() + height ) );
   }
 
@@ -2641,9 +2648,9 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
         bottom = 0;
 
     painter.setPen( vert_pen );
-    painter.drawLine( QMAX( rect.left(),   corner.x() ), 
+    painter.drawLine( QMAX( rect.left(),   corner.x() ),
                       QMAX( rect.top(),    corner.y() ),
-                      QMIN( rect.right(), corner.x() ), 
+                      QMIN( rect.right(), corner.x() ),
                       QMIN( rect.bottom(),  corner.y() + bottom ) );
   }
 
@@ -2660,9 +2667,9 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
         bottom = 0;
 
     painter.setPen( vert_pen );
-    painter.drawLine( QMAX( rect.left(),   corner.x() + width ), 
+    painter.drawLine( QMAX( rect.left(),   corner.x() + width ),
                       QMAX( rect.top(),    corner.y() ),
-                      QMIN( rect.right(), corner.x() + width ), 
+                      QMIN( rect.right(), corner.x() + width ),
                       QMIN( rect.bottom(),  corner.y() + bottom ) );
   }
 
@@ -2682,9 +2689,9 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
           bottom = 0;
 
       painter.setPen( vert_pen );
-      painter.drawLine( QMAX( rect.left(),   corner.x() ), 
+      painter.drawLine( QMAX( rect.left(),   corner.x() ),
                         QMAX( rect.top(),    corner.y() + height - bottom ),
-                        QMIN( rect.right(), corner.x() ), 
+                        QMIN( rect.right(), corner.x() ),
                         QMIN( rect.bottom(),  corner.y() + height ) );
     }
 
@@ -2701,9 +2708,9 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
           bottom = 0;
 
       painter.setPen( vert_pen );
-      painter.drawLine( QMAX( rect.left(),   corner.x() + width ), 
+      painter.drawLine( QMAX( rect.left(),   corner.x() + width ),
                         QMAX( rect.top(),    corner.y() + height - bottom ),
-                        QMIN( rect.right(), corner.x() + width ), 
+                        QMIN( rect.right(), corner.x() + width ),
                         QMIN( rect.bottom(),  corner.y() + height ) );
     }
   }
@@ -3278,15 +3285,13 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
 
 void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
 {
-  clearAllErrors();
+    clearAllErrors();
   m_strText = _text;
 
   // Free all content data
   delete m_pQML;
   m_pQML = 0L;
-
   clearFormula();
-
   /**
    * A real formula "=A1+A2*3" was entered.
    */
@@ -3295,7 +3300,6 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
     setFlag(Flag_LayoutDirty);
 
     m_content = Formula;
-
     if ( !m_pTable->isLoading() )
     {
       if ( !makeFormula() )
@@ -3358,10 +3362,8 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
     }
   }
   setCalcDirtyFlag();
-
   if ( updateDepends )
       update();
-
 }
 
 bool KSpreadCell::testValidity() const
@@ -3565,27 +3567,29 @@ void KSpreadCell::setValue( double _d )
 
 void KSpreadCell::update()
 {
-  if (m_pTable->isLoading())
-  {
-    return;
-  }
-  kdDebug(36001) << util_cellName( m_iColumn, m_iRow ) << " update" << endl;
-  QValueList<KSpreadCell*>::iterator it = m_ObscuringCells.begin();
-  QValueList<KSpreadCell*>::iterator end = m_ObscuringCells.end();
-  for ( ; it != end; ++it )
-  {
-    KSpreadCell* cell = *it;
-    cell->setLayoutDirtyFlag();
-    cell->setDisplayDirtyFlag();
-    m_pTable->updateCell( cell, cell->column(), cell->row() );
-  }
+    if (m_pTable->isLoading())
+    {
+        return;
+    }
+    kdDebug(36001) << util_cellName( m_iColumn, m_iRow ) << " update" << endl;
+    if ( !isObscured() )
+    {
+        QValueList<KSpreadCell*>::iterator it = m_ObscuringCells.begin();
+        QValueList<KSpreadCell*>::iterator end = m_ObscuringCells.end();
 
-  setFlag(Flag_DisplayDirty);
+        for ( ; it != end; ++it )
+        {
+            KSpreadCell* cell = *it;
+            cell->setLayoutDirtyFlag();
+            cell->setDisplayDirtyFlag();
+            m_pTable->updateCell( cell, cell->column(), cell->row() );
+        }
+    }
+    setFlag(Flag_DisplayDirty);
+    updateDepending();
 
-  updateDepending();
-
-  if ( testFlag(Flag_DisplayDirty) )
-    m_pTable->updateCell( this, m_iColumn, m_iRow );
+    if ( testFlag(Flag_DisplayDirty) )
+        m_pTable->updateCell( this, m_iColumn, m_iRow );
 }
 
 void KSpreadCell::updateDepending()

@@ -549,6 +549,9 @@ public:
     QValueList<KSpreadCell*> const obscuringCells() const
       { return m_ObscuringCells; }
 
+    void clearObscuringCells();
+
+
     /**
      * Force the cell to occupy other cells space.
      * If '_x' and '_y' are 0 then the forcing is disabled.
