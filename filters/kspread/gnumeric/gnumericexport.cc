@@ -233,7 +233,13 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,KSpreadCell
     return border_style;
 }
 
-QDomElement GNUMERICExport::GetFontStyle(QDomDocument gnumeric_doc,KSpreadCell * cell, int currentcolumn, int currentrow)
+QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, KSpreadCell * cell )
+{
+    //TODO
+    return QDomElement();
+}
+
+QDomElement GNUMERICExport::GetFontStyle( QDomDocument gnumeric_doc,KSpreadCell * cell, int currentcolumn, int currentrow)
 {
     QDomElement font_style;
 
@@ -445,6 +451,12 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
         cell_style.appendChild(GetLinkStyle(gnumeric_doc));
 
     cell_style.appendChild(GetFontStyle(gnumeric_doc, cell, currentcolumn, currentrow));
+
+    if ( cell->getValidity() )
+    {
+        //TODO
+        //cell_style.appendChild( GetValidity( gnumeric_doc, cell ) );
+    }
 
 	QString stringFormat;
 
