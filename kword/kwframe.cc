@@ -48,18 +48,18 @@ KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAr
       selected( false ),
       mostRight( false ),
       m_pageNum( 0 ),
+      brd_left( Qt::white, Border::SOLID, 0 ),
+      brd_right( Qt::white, Border::SOLID, 0 ),
+      brd_top( Qt::white, Border::SOLID, 0 ),
+      brd_bottom( Qt::white, Border::SOLID, 0 ),
       backgroundColor( QBrush( Qt::white ) ),
       bleft( 0 ),
       bright( 0 ),
       btop( 0 ),
       bbottom( 0 ),
-      brd_left( Qt::white, Border::SOLID, 0 ),
-      brd_right( Qt::white, Border::SOLID, 0 ),
-      brd_top( Qt::white, Border::SOLID, 0 ),
-      brd_bottom( Qt::white, Border::SOLID, 0 )
+      frameSet( fs )
 {
     //kdDebug() << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
-    frameSet = fs;
     m_pageNum = fs ? fs->kWordDocument()->getPageOfRect( *this ) : 0;
     handles.setAutoDelete(true);
     //intersections.setAutoDelete( true );
@@ -283,10 +283,10 @@ QRect KWFrame::outerRect() const
 {
     KWDocument *doc = getFrameSet()->kWordDocument();
     QRect outerRect( doc->zoomRect( *this ) );
-    outerRect.rLeft() -= QMAX( 1, doc->zoomItX( getLeftBorder().ptWidth ) + 0.5 );
-    outerRect.rTop() -= QMAX( 1, doc->zoomItY( getTopBorder().ptWidth ) + 0.5 );
-    outerRect.rRight() += QMAX( 1, doc->zoomItX( getRightBorder().ptWidth ) + 0.5 );
-    outerRect.rBottom() += QMAX( 1, doc->zoomItY( getBottomBorder().ptWidth ) + 0.5 );
+    outerRect.rLeft() -= (int)QMAX( 1, doc->zoomItX( getLeftBorder().ptWidth ) + 0.5 );
+    outerRect.rTop() -= (int)QMAX( 1, doc->zoomItY( getTopBorder().ptWidth ) + 0.5 );
+    outerRect.rRight() += (int)QMAX( 1, doc->zoomItX( getRightBorder().ptWidth ) + 0.5 );
+    outerRect.rBottom() += (int)QMAX( 1, doc->zoomItY( getBottomBorder().ptWidth ) + 0.5 );
     return outerRect;
 }
 
