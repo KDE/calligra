@@ -249,6 +249,10 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		inline ObjectTreeListIterator tabStopsIterator() const { return ObjectTreeListIterator(d->tabstops); }
 
+		/*! Called (e.g. by KexiDBForm) when certain widgets can have updated focusPolicy properties
+		 these having no TabFocus flags set are removed from tabStops() list. */
+		void updateTabStopsOrder();
+
 		/*! Adds the widget at the end of tabstops list. Called on widget creation. */
 		void addWidgetToTabStops(ObjectTreeItem *c);
 

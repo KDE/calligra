@@ -99,29 +99,28 @@ int TabStopDialog::exec(Form *form)
 		m_treeview->setSelected(m_treeview->firstChild(), true);
 	}
 
-	int r = KDialogBase::exec();
-	if( r == QDialog::Accepted)
+	if (QDialog::Rejected == KDialogBase::exec())
+		return QDialog::Rejected;
+
+	//accepted
+	form->setAutoTabStops(m_check->isChecked());
+	if(form->autoTabStops())
 	{
-		form->setAutoTabStops(m_check->isChecked());
-		if(form->autoTabStops())
-		{
-			form->autoAssignTabStops();
-			return r;
-		}
-
-		form->tabStops()->clear();
-
-		// we add items in the list order
-		ObjectTreeViewItem *item = (ObjectTreeViewItem*)m_treeview->firstChild();
-		while(item)
-		{
-			ObjectTreeItem *tree = item->objectTree();
-			if(tree)
-				form->tabStops()->append(tree);
-			item = (ObjectTreeViewItem*)item->nextSibling();
-		}
+		form->autoAssignTabStops();
+		return QDialog::Accepted;
 	}
-	return r;
+
+	//add items to the order list
+	form->tabStops()->clear();
+	ObjectTreeViewItem *item = (ObjectTreeViewItem*)m_treeview->firstChild();
+	while(item)
+	{
+		ObjectTreeItem *tree = item->objectTree();
+		if(tree)
+			form->tabStops()->append(tree);
+		item = (ObjectTreeViewItem*)item->nextSibling();
+	}
+	return QDialog::Accepted;
 }
 
 void

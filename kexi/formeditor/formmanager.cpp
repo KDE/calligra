@@ -923,11 +923,11 @@ FormManager::editTabOrder()
 	TabStopDialog dlg(topLevel);
 	const bool oldAutoTabStops = m_active->autoTabStops();
 	if (dlg.exec(m_active) == QDialog::Accepted) {
-		//inform about changing "autoTabStop" setting
+		//inform about changing "autoTabStop" property
 		// -- this will be received eg. by Kexi, so custom "autoTabStop" property can be updated
-		if (oldAutoTabStops!=dlg.autoTabStops()) {
-			emit autoTabStopsSet(m_active, dlg.autoTabStops());
-		}
+		emit autoTabStopsSet(m_active, dlg.autoTabStops());
+		//force set dirty
+		emit dirty(m_active, true);
 	}
 }
 

@@ -69,7 +69,7 @@ CustomWidget::paintEvent(QPaintEvent *)
 	p.drawText(10, height() / 2, m_className);
 }
 
-namespace KFormDesigner {
+using namespace KFormDesigner;
 
 QDict<QLabel>  *FormIO::m_buddies = 0;
 ObjectTreeItem   *FormIO::m_currentItem = 0;
@@ -304,7 +304,6 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 
 	int i = 0;
 	uint itemsNotFound = 0;
-//	ObjectTreeList newTabStops;
 	for(QDomNode n = tabStops.firstChild(); !n.isNull(); n = n.nextSibling(), i++)
 	{
 		QString name = n.toElement().text();
@@ -667,7 +666,7 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 	QString text = tag.text();
 	QString type = tag.tagName();
 
-	if(type == "string" | type == "cstring")
+	if(type == "string" || type == "cstring")
 		return text;
 	else if(type == "rect")
 	{
@@ -1455,7 +1454,5 @@ FormIO::loadImage(QDomDocument domDoc, QString name)
 }
 
 //////// End of Qt Designer code ////////////////////////////////////////////////////////
-
-}
 
 #include "formIO.moc"

@@ -395,7 +395,7 @@ Form::addWidgetToTabStops(ObjectTreeItem *c)
 	QWidget *w = c->widget();
 	if(!w)
 		return;
-	if(w->focusPolicy() == QWidget::NoFocus)
+	if(!(w->focusPolicy() & QWidget::TabFocus))
 	{
 		if(!w->children())
 		return;
@@ -404,7 +404,8 @@ Form::addWidgetToTabStops(ObjectTreeItem *c)
 		QObjectList list = *(w->children());
 		for(QObject *obj = list.first(); obj; obj = list.next())
 		{
-			if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() != QWidget::NoFocus)) {
+//			if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() != QWidget::NoFocus)) {
+			if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() & QWidget::TabFocus)) {
 				if(d->tabstops.findRef(c) == -1) {
 					d->tabstops.append(c);
 					return;
@@ -416,16 +417,28 @@ Form::addWidgetToTabStops(ObjectTreeItem *c)
 		d->tabstops.append(c);
 }
 
+void 
+Form::updateTabStopsOrder()
+{
+	for (ObjectTreeListIterator it(d->tabstops);it.current();) {
+		if(!(it.current()->widget()->focusPolicy() & QWidget::TabFocus)) {
+			kexidbg << "Form::updateTabStopsOrder(): widget removed because has no TabFocus: " << it.current()->widget()->name() << endl;
+			d->tabstops.remove( it.current() );
+		}
+		else
+			++it;
+	}
+}
+
 void
 Form::autoAssignTabStops()
 {
 	VerWidgetList list;
 	HorWidgetList hlist;
 
-	for(ObjectTreeItem *tree = d->tabstops.first(); tree; tree = d->tabstops.next())
-	{
-		if(tree->widget())
-			list.append(tree->widget());
+	foreach_list(ObjectTreeListIterator, it, d->tabstops) {
+		if(it.current()->widget())
+			list.append(it.current()->widget());
 	}
 
 	list.sort();
@@ -433,8 +446,8 @@ Form::autoAssignTabStops()
 
 	/// We automatically sort widget from the top-left to bottom-right corner
 	//! \todo Handle RTL layout (ie form top-right to bottom-left)
-	for(WidgetListIterator it(list); it.current() != 0; ++it)
-	{
+	foreach_list(WidgetListIterator, it, list) {
+//	for(WidgetListIterator it(list); it.current() != 0; ++it)
 		QWidget *w = it.current();
 		hlist.append(w);
 
