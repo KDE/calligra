@@ -9,6 +9,8 @@
 #include "kchart_part.h"
 #include "kchartWizard.h"
 #include "kchartDataEditor.h"
+#include "kchartparams.h"
+#include "kchartBarConfigDialog.h"
 
 #include <qpainter.h>
 #include <kaction.h>
@@ -108,6 +110,38 @@ void KChartView::wizard()
 
 void KChartView::config()
 {
+    // open a config dialog depending on the chart type
+    KChartParameters* params = ((KChartPart*)part())->params();
+
+    switch( params->type ) {
+    case KCHARTTYPE_BAR: {
+	KChartBarConfigDialog* d = new KChartBarConfigDialog( params, this );
+	d->exec();
+	delete d;
+	break;
+    }
+    case KCHARTTYPE_LINE:
+    case KCHARTTYPE_AREA:
+    case KCHARTTYPE_HILOCLOSE:
+    case KCHARTTYPE_COMBO_LINE_BAR:			/* aka: VOL[ume] */
+    case KCHARTTYPE_COMBO_HLC_BAR:
+    case KCHARTTYPE_COMBO_LINE_AREA:
+    case KCHARTTYPE_COMBO_HLC_AREA:
+    case KCHARTTYPE_3DHILOCLOSE:
+    case KCHARTTYPE_3DCOMBO_LINE_BAR:
+    case KCHARTTYPE_3DCOMBO_LINE_AREA:
+    case KCHARTTYPE_3DCOMBO_HLC_BAR:
+    case KCHARTTYPE_3DCOMBO_HLC_AREA:
+    case KCHARTTYPE_3DBAR:
+    case KCHARTTYPE_3DAREA:
+    case KCHARTTYPE_3DLINE:
+    case KCHARTTYPE_3DPIE:
+    case KCHARTTYPE_2DPIE:
+	qDebug( "Sorry, not implemented: no config dialog for this chart type" );
+	break;
+    default:
+	qDebug( "Unknown chart type" );
+    }
 }
 
 
