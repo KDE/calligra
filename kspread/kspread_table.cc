@@ -3729,18 +3729,6 @@ void KSpreadTable::copySelection( const QPoint &_marker )
     // No selection ? => copy active cell
     if ( m_rctSelection.left() == 0 )
 	rct.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-    // Complete rows
-    /*else if ( m_rctSelection.right() == 0x7fff )
-    {
-	//QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supported", i18n("OK"));
-	return;
-    }
-    // Complete columns
-    else if ( m_rctSelection.bottom() == 0x7fff )
-    {
-	//QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supported", i18n("OK"));
-	return;
-    }*/
     else
 	rct = selectionRect();
 	
@@ -4602,14 +4590,14 @@ void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
   {
     QString tmp;
     tmp.sprintf( i18n( "The server %s does not support the required interface" ), _e.name.data() );
-    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error" ), tmp, i18n("Ok" ) );
+    KMessageBox::error( (QWidget*)0L, tmp );
     return;
   }
   Chart::SimpleChart_var chart = Chart::SimpleChart::_narrow( obj );
   if ( CORBA::is_nil( chart ) )
   {
-    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error" ),
-			   i18n("The chart application seems to have an internal error" ), i18n("Ok" ) );
+    KMessageBox::error( (QWidget*)0L,
+			   i18n("The chart application seems to have an internal error" ) );
     return;
     } */
 
@@ -4849,9 +4837,7 @@ bool ChartChild::loadDocument( KoStore* _store )
   Chart::SimpleChart_var chart = Chart::SimpleChart::_narrow( obj );
   if ( CORBA::is_nil( chart ) )
   {
-    QMessageBox::critical( 0L, i18n("Internal Error"),
-			   i18n("Chart does not support the required interface"),
-			   i18n("OK") );
+    KMessageBox::error( 0L, i18n("Chart does not support the required interface"));
     return false;
     } */
 

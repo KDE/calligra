@@ -29,7 +29,7 @@
 #include <kbuttonbox.h>
 #include <kapp.h>
 #include <klocale.h>
-#include <qmessagebox.h>
+#include <kmessagebox.h>
 #include <qlayout.h>
 
 KSpreadTableName::KSpreadTableName( KSpreadView* _parent, const char* _name, QString& _tableName )
@@ -70,7 +70,7 @@ void KSpreadTableName::slotOk()
    if ( txt.isEmpty() )
    {
       QApplication::beep();
-      QMessageBox::information( this, i18n("Change table name"), i18n("Table name cannot be empty."), i18n("OK") );
+      KMessageBox::information( this, i18n("Table name cannot be empty."), i18n("Change table name"));
       return;
    }
    if ( KSpreadTable *tbl = m_pView->doc()->map()->findTable( txt ) )
@@ -78,7 +78,7 @@ void KSpreadTableName::slotOk()
       if ( tbl != m_pView->activeTable() )
       {
          QApplication::beep();
-         QMessageBox::information( this, i18n("Change table name"), i18n("A table with this name already exists."), i18n("OK") );
+         KMessageBox::information( this, i18n("A table with this name already exists."), i18n("Change table name") );
          return;
       }
    }

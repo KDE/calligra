@@ -215,12 +215,12 @@ void KSpreadTabBar::slotRemove( )
     if ( (m_pView->doc()->map()->count() <= 1 )||(tabsList.count()<=1) )
     {
         QApplication::beep();
-        QMessageBox::warning( this, i18n("Remove table"), i18n("You cannot delete the only table of the map."), i18n("OK") ); // FIXME bad english? no english!
+        KMessageBox::error( this,i18n("You cannot delete the only table of the map."), i18n("Remove table") ); // FIXME bad english? no english!
         return;
     }
     QApplication::beep();
-    int ret = QMessageBox::warning( this, i18n("Remove table"), i18n("You are going to remove the active table.\nDo you want to continue?"), i18n("Yes"), i18n("No"), QString::null, 1, 1);
-    if ( ret == 0 )
+    int ret = KMessageBox::warningYesNo( this, i18n("You are going to remove the active table.\nDo you want to continue?"), i18n("Remove table"));
+    if ( ret == 3 )
     {
         KSpreadTable *tbl = m_pView->activeTable();
         m_pView->doc()->map()->removeTable( tbl );

@@ -2450,8 +2450,9 @@ void KSpreadView::removeTable()
         return;
     }
     QApplication::beep();
-    int ret = QMessageBox::warning( this, i18n("Remove table"), i18n("You are going to remove the active table.\nDo you want to continue?"), i18n("Yes"), i18n("No"), QString::null, 1, 1);
-    if ( ret == 0 )
+    int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove the active table.\nDo you want to continue?"),i18n("Remove table"));
+                                
+    if ( ret == 3 )
     {
         KSpreadTable *tbl = activeTable();
         doc()->map()->removeTable( tbl );

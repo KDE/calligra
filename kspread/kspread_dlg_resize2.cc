@@ -29,7 +29,6 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
-//#include <iostream.h>
 #include <kdebug.h>
 
 KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resize re)
@@ -46,20 +45,16 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
   tmpCheck=i18n("Default");
-//  RowLayout *rl;
-//  ColumnLayout *cl;
   switch(type)
 	{
 	case resize_row:
 		setCaption( i18n("Resize row") );
-//		size=rl->height(m_pView->canvasWidget());
 		size=20;
 		label=i18n("Height");
 		tmpCheck+=" (20)";
 		break;
 	case resize_column:
 		setCaption( i18n("Resize column") );
-		//size=cl->width(m_pView->canvasWidget());
 		size=60;
 		label=i18n("Width");
 		tmpCheck+=" (60)";
@@ -102,14 +97,12 @@ if(m_pDefault->isChecked())
 switch(type)
 	{
 	case resize_row:
-		if(size!=20)
-			for(int i=selection.top();i<=selection.bottom();i++)
-				m_pView->vBorderWidget()->resizeRow(20,i );
+		for(int i=selection.top();i<=selection.bottom();i++)
+			m_pView->vBorderWidget()->resizeRow(20,i );
 		break;
 	case resize_column:
-		if(size!=60)
-			for(int i=selection.left();i<=selection.right();i++)
-				m_pView->hBorderWidget()->resizeColumn(60,i );
+		for(int i=selection.left();i<=selection.right();i++)
+			m_pView->hBorderWidget()->resizeColumn(60,i );
 		break;
 	default :
 	        kdDebug(36001) <<"Err in type_resize" << endl;
@@ -117,8 +110,6 @@ switch(type)
 	}
 }
 else
-{
-if(new_size!=size)
 {
 switch(type)
 	{
@@ -142,7 +133,6 @@ switch(type)
 	        kdDebug(36001) <<"Err in type_resize" << endl;
 		break;
 	}
-}
 }
 accept();
 }

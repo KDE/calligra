@@ -93,7 +93,7 @@ if(l_cell->text().isEmpty()||text->text().isEmpty())
 else if(!cell->isDefault())
 	{
 	int ret = KMessageBox::warningYesNo( this, i18n("Cell is not empty.\nDo you want to continue?"));
- 	if ( ret == 0 )
+ 	if ( ret == 3 )
  		{
  		QString tmp;
  		tmp=create_anchor();

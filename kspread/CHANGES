@@ -481,3 +481,4 @@ lo22-action-upper.png lo22-action-fontsizedown.png lo22-action-fontsizeup.png
 lo22-action-lower.png lo22-action-resizecol.png lo22-action-resizerow.png
 icons created by jp.martin <jpmartin@iroise.com> thanks
 bug fix
+Replace all QMessageBox by KMessageBox

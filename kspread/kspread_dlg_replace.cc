@@ -76,8 +76,7 @@ void KSpreadreplace::slotOk()
 {
 if(l_replace->text()==l_find->text())
 	{
-	QMessageBox::warning( this, i18n("Error"), i18n("Text find and text replace are same"),
-			   i18n("Ok") );
+	KMessageBox::error( this, i18n("Text find and text replace are same") );
 	l_find->setText("");
 	l_replace->setText("");
 	}

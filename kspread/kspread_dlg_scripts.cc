@@ -4,7 +4,7 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <unistd.h>
-#include <qmessagebox.h>
+#include <kmessagebox.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <kstddirs.h>
@@ -69,7 +69,7 @@ void KSpreadScripts::slotAdd()
     QString t = add2->text();
     if ( t.length() == 0 )
     {
-	QMessageBox::critical(this, i18n("KSpread Error"), i18n("You must enter a name"), i18n("OK"));
+	KMessageBox::error(this, i18n("You must enter a name"));
 	return;
     }
 
@@ -77,7 +77,7 @@ void KSpreadScripts::slotAdd()
     t2 += ".ks";
     if ( nameList.find( t2 ) != nameList.end() )
     {
-	QMessageBox::critical(this, i18n("KSpread Error"),i18n( "The file already exists"), i18n("OK"));
+	KMessageBox::error(this,i18n( "The file already exists"));
 	return;
     }
 
@@ -86,7 +86,7 @@ void KSpreadScripts::slotAdd()
     FILE *f = fopen( d.data(), "w" );
     if ( f == 0L )
     {
-	QMessageBox::critical(this, i18n("KSpread Error"), i18n("Could not open file.\nPerhaps access denied"), i18n("OK"));
+	KMessageBox::error(this, i18n("Could not open file.\nPerhaps access denied"));
 	return;
     }
     fclose( f );
@@ -105,7 +105,7 @@ void KSpreadScripts::slotDelete()
 
     QString t = i18n("Do you really want to delete the script\n%1").arg(list->text( list->currentItem() ) );
 
-    if ( QMessageBox::information(this, i18n("KSpread Question"), t, i18n("OK"), i18n("No")) )
+    if ( KMessageBox::questionYesNo(this, t,i18n("KSpread Question"))==4 )
 	return;
 
     QString t2( list->text( list->currentItem() ) );
@@ -134,7 +134,7 @@ void KSpreadScripts::slotRename()
     QString t = rename2->text();
     if ( t.length() == 0 )
     {
-	QMessageBox::critical(this, i18n("KSpread Error"), i18n("You must enter a name"), i18n("OK"));
+	KMessageBox::error(this, i18n("You must enter a name"));
 	return;
     }
 
@@ -142,7 +142,7 @@ void KSpreadScripts::slotRename()
     t2 += ".py";
     if ( nameList.find( t2 ) != nameList.end() )
     {
-	QMessageBox::critical(this, i18n("KSpread Error"), i18n("The file already exists"), i18n("OK"));
+	KMessageBox::error(this, i18n("The file already exists"));
 	return;
     }
 

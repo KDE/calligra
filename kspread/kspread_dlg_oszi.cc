@@ -1,5 +1,6 @@
 #include <kbuttonbox.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include "kspread_dlg_oszi.h"
 #include "kspread_view.h"
@@ -123,12 +124,12 @@ void KSpreadOsziDlg::slotCalc()
     KSpreadPoint data1( m_cell1->text(), m_view->doc()->map() );
     if ( !data1.isValid() )
     {
-	QMessageBox::critical( this, i18n("KSpread Error"), i18n("Invalid cell in DataX") );
+	KMessageBox::error( this, i18n("Invalid cell in DataX") );
 	return;
     }
     if ( data1.table == 0 )
     {
-	QMessageBox::critical( this, i18n("KSpread Error"), i18n("No table specified in DataX") );
+	KMessageBox::error( this, i18n("No table specified in DataX") );
 	return;
     }
 
@@ -136,24 +137,24 @@ void KSpreadOsziDlg::slotCalc()
     KSpreadPoint data2( m_cell2->text(), m_view->doc()->map() );
     if ( double_data && !data2.isValid() )
     {
-	QMessageBox::critical( this, i18n("KSpread Error"), i18n("Invalid cell in DataY") );
+	KMessageBox::error( this, i18n("Invalid cell in DataY") );
 	return;
     }
     if ( double_data && data2.table == 0 )
     {
-	QMessageBox::critical( this, i18n("KSpread Error"), i18n("No table specified in DataY") );
+	KMessageBox::error( this, i18n("No table specified in DataY") );
 	return;
     }
 	
     KSpreadPoint result1( m_resultCell1->text(), m_view->doc()->map() );
     if ( !result1.isValid() )
     {
-	QMessageBox::critical( this, i18n("KSpread Error"), i18n("Invalid cell in ResultX") );
+	KMessageBox::error( this, i18n("Invalid cell in ResultX") );
 	return;
     }
     if ( result1.table == 0 )
     {
-	QMessageBox::critical( this, i18n("KSpread Error"), i18n("No table specifiedin ResultX") );
+	KMessageBox::error( this, i18n("No table specifiedin ResultX") );
 	return;
     }
 
@@ -161,12 +162,12 @@ void KSpreadOsziDlg::slotCalc()
     KSpreadPoint result2( m_resultCell2->text(), m_view->doc()->map() );
     if ( double_result && !result2.isValid() )
     {
-	QMessageBox::critical( this, i18n("KSpread Error"), i18n("Invalid cell in ResultY") );
+	KMessageBox::error( this, i18n("Invalid cell in ResultY") );
 	return;
     }
     if ( double_result && result2.table == 0 )
     {
-	QMessageBox::critical( this, i18n("KSpread Error"), i18n("No table specifiedin ResultY") );
+	KMessageBox::error( this, i18n("No table specifiedin ResultY") );
 	return;
     }
 
@@ -179,22 +180,22 @@ void KSpreadOsziDlg::slotCalc()
 	
     if ( cell_data1->content() == KSpreadCell::Formula )
     {
-	QMessageBox::critical( this, i18n("KSpread Error"), i18n("The DataX cell mast not be a formula") );
+	KMessageBox::error( this, i18n("The DataX cell mast not be a formula") );
 	return;
     }
     if ( double_data && cell_data2->content() == KSpreadCell::Formula )
     {
-	QMessageBox::critical( this, i18n("KSpread Error"), i18n("The DataY cell mast not be a formula") );
+	KMessageBox::error( this, i18n("The DataY cell mast not be a formula") );
 	return;
     }
     if ( cell_result1->content() != KSpreadCell::Formula )
     {
-	QMessageBox::critical( this, i18n("KSpread Error"), i18n("The ResultX cell must be a formula") );
+	KMessageBox::error( this, i18n("The ResultX cell must be a formula") );
 	return;
     }
     if ( double_result && cell_result1->content() != KSpreadCell::Formula )
     {
-	QMessageBox::critical( this, i18n("KSpread Error"), i18n("The ResultY cell must be a formula") );
+	KMessageBox::error( this, i18n("The ResultY cell must be a formula") );
 	return;
     }
 
