@@ -2585,22 +2585,24 @@ void KWView::formatFont()
     KoFontDia *fontDia = new KoFontDia( this, "", lst.first()->textFont(),
                                         actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
                                         lst.first()->textColor(), col );
-    fontDia->exec();
-    int flags = fontDia->changedFlags();
-    if ( flags )
+    if (fontDia->exec() )
     {
-        KMacroCommand *globalCmd = new KMacroCommand(i18n("Change font of frame"));
-        for ( ; it.current() ; ++it )
+        int flags = fontDia->changedFlags();
+        if ( flags )
         {
-            KCommand *cmd = it.current()->setFontCommand(fontDia->getNewFont(),
-                                                         fontDia->getSubScript(), fontDia->getSuperScript(),
-                                                         fontDia->color(),fontDia->backGroundColor(),
-                                                         flags);
-            if (cmd)
-                globalCmd->addCommand(cmd);
+            KMacroCommand *globalCmd = new KMacroCommand(i18n("Change font of frame"));
+            for ( ; it.current() ; ++it )
+            {
+                KCommand *cmd = it.current()->setFontCommand(fontDia->getNewFont(),
+                                                             fontDia->getSubScript(), fontDia->getSuperScript(),
+                                                             fontDia->color(),fontDia->backGroundColor(),
+                                                             flags);
+                if (cmd)
+                    globalCmd->addCommand(cmd);
+            }
+            m_doc->addCommand(globalCmd);
+            m_gui->canvasWidget()->setFocus(); // the combo keeps focus...
         }
-        m_doc->addCommand(globalCmd);
-        m_gui->canvasWidget()->setFocus(); // the combo keeps focus...
     }
     delete fontDia;
 
