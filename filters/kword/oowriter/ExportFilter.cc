@@ -1,7 +1,7 @@
-// $Header$
+// 
 
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -65,30 +65,35 @@ QString OOWriterWorker::escapeOOText(const QString& strText) const
     return KWEFUtil::EscapeSgmlText(NULL,strText,true,true);
 }
 
-
 QString OOWriterWorker::escapeOOSpan(const QString& strText) const
-// We need not only to escape the classical XML stuff but also take care of spaces and tabs.
+// We need not only to escape the classical XML stuff but also to take care of spaces and tabs.
 {
     QString strReturn;
     QChar ch;
-    int spaceNumber=-1; // How many spaces are *still* to write (-1 == none; 0 == we had just one space, not any further needed)
-
+    int spaceNumber = 0; // How many spaces should be written
+    
     for (uint i=0; i<strText.length(); i++)
     {
-        ch=strText[i]; // ###TODO: would it be not better to define a QCharRef instead? (no need to copy anymore.)
+        ch=strText[i];
 
         if (ch!=' ')
         {
-            // The next character is not a space anymore
-            if (spaceNumber>1)
+            // The next character is not a space (anymore)
+            if ( spaceNumber > 0 )
             {
-                strReturn+="<text:s text:c=\"";
-                strReturn+=QString::number(spaceNumber);
-                strReturn+="\"/>";
+                strReturn += ' ';
+                --spaceNumber;
+                if ( spaceNumber > 0 )
+                {
+                    strReturn += "<text:s text:c=\"";
+                    strReturn += QString::number( spaceNumber );
+                    strReturn += "\"/>";
+                }
+                spaceNumber = 0;
             }
-            spaceNumber=-1;
         }
 
+        // ### TODO: would be switch/case or if/elseif the best?
         switch (ch.unicode())
         {
         case 9: // Tab
@@ -103,14 +108,13 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
             }
         case 32: // Space
             {
-                if (spaceNumber>=0)
+                if ( spaceNumber > 0 )
                 {
-                    spaceNumber++;
+                    ++spaceNumber;
                 }
                 else
                 {
-                    strReturn+=' '; // The first one has to be written
-                    spaceNumber=0;
+                    spaceNumber = 1;
                 }
                 break;
             }
@@ -139,6 +143,19 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
                 strReturn+="&apos;";
                 break;
             }
+        case 1: // (Non-XML-compatible) replacement character from KWord 0.8
+            {
+                strReturn += '#'; //use KWord 1.[123] replacement character instead
+                break;
+            }
+        // Following characters are not allowed in XML (but some files from KWord 0.8 have some of them.)
+        case  0: case  2 ... 8: case 11: case 12: case 14 ... 31:
+            {
+                kdWarning(30518) << "Not allowed XML character: " << ch.unicode() << endl;
+                strReturn += '?';
+                break;
+            }
+        case 13: // ### TODO: what to do with it?
         default:
             {
                 strReturn+=ch;
@@ -147,12 +164,18 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
         }
     }
 
-    if (spaceNumber>1)
+    if ( spaceNumber > 0 )
     {
         // The last characters were spaces
-        strReturn+="<text:s text:c=\"";
-        strReturn+=QString::number(spaceNumber);
-        strReturn+="\"/>";
+        strReturn += ' ';
+        --spaceNumber;
+        if ( spaceNumber > 0 )
+        {
+            strReturn += "<text:s text:c=\"";
+            strReturn += QString::number( spaceNumber );
+            strReturn += "\"/>";
+        }
+        spaceNumber = 0;
     }
 
     return strReturn;
