@@ -51,6 +51,8 @@ TODO:
 -	change flatness test in intersection code to a estimation used in gems code. otherwise
 	if the 2 input curves are the same our code runs forever.
 -	make VSelection a state pattern
+-	try to abstract rendering even more, preferably using kpainter abstraction.
+-	make layers tree robust, efficient and scalable.
 
 WISHLIST:
 -	krita export filter (with layers)
@@ -59,8 +61,9 @@ WISHLIST:
 
 OPTIMIZATION:
 -	in VShapeTool and all manipulation tools: store temporary objects so one doesnt
-	have to recalcuate/regenerate those for second draw() (erasing old shape)
--	make fill/stroke shared so copying for undo/redo is more efficient
+	have to recalculate/regenerate those for second draw() (erasing old shape)
+-	make fill/stroke shared so copying for undo/redo is more efficient. Also potentially
+	apply this to file format (like OOo does).
 -	transform() bbox too and dont recalculate it
 -	check places we use sqrt() if these are really necessary (lenny)
 
