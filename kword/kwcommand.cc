@@ -670,28 +670,34 @@ KWFrameSetFloatingCommand::KWFrameSetFloatingCommand( const QString &name, KWFra
 
 void KWFrameSetFloatingCommand::execute()
 {
-    if ( !m_bFloating )
-        unexecute();
-    else
+    kdDebug() << "KWFrameSetFloatingCommand::execute" << endl;
+    if ( m_bFloating )
     {
-        kdDebug() << "KWFrameSetFloatingCommand::execute" << endl;
         // Make frame(set) floating
         m_pFrameSet->setFloating();
-        m_pFrameSet->kWordDocument()->repaintAllViews();
     }
+    else
+    {
+        // Make frame(set) non-floating
+        m_pFrameSet->setFixed();
+    }
+    m_pFrameSet->kWordDocument()->repaintAllViews();
 }
 
 void KWFrameSetFloatingCommand::unexecute()
 {
+    kdDebug() << "KWFrameSetFloatingCommand::unexecute" << endl;
     if ( !m_bFloating )
-        execute();
+    {
+        // Make frame(set) floating again
+        m_pFrameSet->setFloating();
+    }
     else
     {
-        kdDebug() << "KWFrameSetFloatingCommand::unexecute" << endl;
-        // Make frame(set) non-floating
+        // Make frame(set) non-floating again
         m_pFrameSet->setFixed();
-        m_pFrameSet->kWordDocument()->repaintAllViews();
     }
+    m_pFrameSet->kWordDocument()->repaintAllViews();
 }
 
 KWPageLayoutCommand::KWPageLayoutCommand( const QString &name,KWDocument *_doc,pageLayout &_oldLayout, pageLayout &_newLayout  ) :
