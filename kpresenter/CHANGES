@@ -98,3 +98,4 @@ Reggie, 12.4.1999:
 - Added a menu entry to the screen presentation menu to be able to exit a screen presentation
   using this menu too
 - rmb presentation menu is initialized correctly for presentations now
+- Fixed a calculation bug in calculating the current page (happend in documents with lots of pages)

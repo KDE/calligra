@@ -2074,6 +2074,13 @@ void KPresenterView::spacingOk(int _lineSpacing,int _distBefore,int _distAfter)
     }
 }
 
+/*================================================================*/
+unsigned int KPresenterView::getCurrPgNum() 
+{
+  return static_cast<int>(vert->value() + page->height() / 2) / 
+    kPresenterDoc()->getPageSize(0,0,0,1.0,false).height() + 1;
+}
+
 /*================== scroll horizontal ===========================*/
 void KPresenterView::scrollH(int _value)
 {
@@ -3706,7 +3713,8 @@ void KPresenterView::setupScrollbars()
 {
   vert = new QScrollBar(QScrollBar::Vertical,this);
   horz = new QScrollBar(QScrollBar::Horizontal,this);
-  vert->show(); horz->show();
+  vert->show(); 
+  horz->show();
   QObject::connect(vert,SIGNAL(valueChanged(int)),this,SLOT(scrollV(int)));
   QObject::connect(horz,SIGNAL(valueChanged(int)),this,SLOT(scrollH(int)));
   vert->setValue(vert->maxValue());

@@ -269,7 +269,7 @@ public:
   void setDiffY(int _y) {yOffset = _y;}
 
   // get current pagenum
-  unsigned int getCurrPgNum() {return(static_cast<int>(vert->value()+this->height()/2) / vert->pageStep() + 1);}
+  unsigned int getCurrPgNum();
 
   // return pointer to document
   class KPresenterDoc *kPresenterDoc() {return m_pKPresenterDoc;}
