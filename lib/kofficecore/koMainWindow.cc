@@ -57,19 +57,19 @@ KoMainWindow::KoMainWindow( QWidget* parent, const char* name )
 	s_lstMainWindows = new QList<KoMainWindow>;
     s_lstMainWindows->append( this );
 
-    KAction* fnew = new KAction( i18n("New"), KofficeBarIcon( "filenew" ), CTRL + Key_N, this, SLOT( slotFileNew() ),
+    KAction* fnew = new KAction( i18n("New"), KofficeBarIcon( "filenew" ), KStdAccel::openNew(), this, SLOT( slotFileNew() ),
 			  actionCollection(), "filenew" );
-    KAction* open = new KAction( i18n("Open ..."), KofficeBarIcon( "fileopen" ), CTRL + Key_O, this, SLOT( slotFileOpen() ),
+    KAction* open = new KAction( i18n("Open ..."), KofficeBarIcon( "fileopen" ), KStdAccel::open(), this, SLOT( slotFileOpen() ),
 			  actionCollection(), "fileopen" );
-    KAction* save = new KAction( i18n("Save"), KofficeBarIcon( "filefloppy" ), CTRL + Key_S, this, SLOT( slotFileSave() ),
+    KAction* save = new KAction( i18n("Save"), KofficeBarIcon( "filefloppy" ), KStdAccel::save(), this, SLOT( slotFileSave() ),
 			  actionCollection(), "filesave" );
     /*KAction* saveAs =*/ new KAction( i18n("Save as..."), 0, this, SLOT( slotFileSaveAs() ),
 			    actionCollection(), "filesaveas" );
-    KAction* print = new KAction( i18n("Print..."), KofficeBarIcon( "fileprint" ), CTRL + Key_P, this, SLOT( slotFilePrint() ),
+    KAction* print = new KAction( i18n("Print..."), KofficeBarIcon( "fileprint" ), KStdAccel::print(), this, SLOT( slotFilePrint() ),
 			  actionCollection(), "fileprint" );
-    /*KAction* close =*/ new KAction( i18n("Close"), 0, this, SLOT( slotFileClose() ),
+    /*KAction* close =*/ new KAction( i18n("Close"), KofficeBarIcon( "close" ), KStdAccel::close(), this, SLOT( slotFileClose() ),
 			  actionCollection(), "fileclose" );
-    /*KAction* quit =*/ new KAction( i18n("Quit"), 0, this, SLOT( slotFileQuit() ),
+    /*KAction* quit =*/ new KAction( i18n("Quit"), KofficeBarIcon( "exit" ), KStdAccel::quit(), this, SLOT( slotFileQuit() ),
 			  actionCollection(), "quit" );
     /*KAction* helpAbout =*/ new KAction( i18n("About..."), 0, this, SLOT( slotHelpAbout() ),
 			  actionCollection(), "about" );
@@ -134,7 +134,7 @@ bool KoMainWindow::openDocument( const KURL & url )
     return TRUE;
 }
 
-bool KoMainWindow::saveDocument( const char* _native_format, const char* _native_pattern, 
+bool KoMainWindow::saveDocument( const char* _native_format, const char* _native_pattern,
 				 const char* _native_name, bool saveas )
 {
     KoDocument* pDoc = document();
@@ -145,7 +145,7 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
     if ( !url.hasPath() || saveas )
     {
 	QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
-								    _native_format, _native_pattern, 
+								    _native_format, _native_pattern,
 								    _native_name, TRUE );
 	QString file;
 
@@ -161,7 +161,7 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
 		QString extension = s.mid( s.find( "." ) );
 		file += extension;
 	    }
-	    
+	
 	    if ( QFile::exists( file ) ) { // this file exists => ask for confirmation
 		bOk = KMessageBox::questionYesNo( this,
 						  i18n("A document with this name already exists\n"\
