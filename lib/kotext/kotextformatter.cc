@@ -25,6 +25,7 @@
 #include "koparagcounter.h"
 
 #include <kdebug.h>
+#include <assert.h>
 
 //#define DEBUG_FORMATTER
 
@@ -106,7 +107,10 @@ QPair<int, int> KoTextFormatterCore::determineCharWidth()
         if ( nx < x )
             ww = availableWidth - x;
         else
-            ww = nx - x + 1;
+            ww = nx - x;
+#ifdef DEBUG_FORMATTER
+        kdDebug(32500) << "nextTab for x=" << x << " returned nx=" << nx << "  (=> ww=" << ww << ")" << endl;
+#endif
 #ifndef REF_IS_LU
         pixelww = zh->layoutUnitToPixelX( ww );
 #endif
@@ -335,6 +339,9 @@ bool KoTextFormatterCore::format()
                   ( i > 1 && lastBreak == i-1 && settings->isBreakable( string, i-2 ) ) ||
                   lastBreak == -2 ) // ... used to be a special case...
 
+             // No point in breaking just for the trailing space (testcase: page numbers in TOC)
+             && ( i < len-1 )
+
              // Ensure that there is at least one char per line, otherwise, on
              // a very narrow document and huge chars, we could loop forever.
              // checkVerticalBreak takes care of moving down the lines where no
@@ -474,7 +481,7 @@ bool KoTextFormatterCore::format()
                         if ( nx < x )
                             ww = availableWidth - x;
                         else
-                            ww = nx - x + 1;
+                            ww = nx - x;
                     }
                     if ( x != left || availableWidth != dw )
                         fullWidth = FALSE;
@@ -822,15 +829,16 @@ KoTextParagLineStart *KoTextFormatterCore::koFormatLine(
 {
     if( string->isBidi() )
         return koBidiReorderLine( zh, parag, string, line, startChar, lastChar, align, space );
-    space = QMAX( space, 0 ); // #### with nested tables this gets negative because of a bug I didn't find yet, so workaround for now. This also means non-left aligned nested tables do not work at the moment
     int start = (startChar - &string->at(0));
     int last = (lastChar - &string->at(0) );
 
+#if 0 // strange Qt code, breaks right-alignment
     KoTextStringChar *ch = lastChar;
     while ( ch > startChar && ch->whiteSpace ) {
-        space += ch->format()->width( ' ' );
+        space += ch->format()->width( ' ' ); // wrong unit, in any case
         --ch;
     }
+#endif
 
     if (space < 0)
         space = 0;
