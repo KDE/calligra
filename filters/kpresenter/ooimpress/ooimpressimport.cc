@@ -1201,7 +1201,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 if( marginLeft != 0 )
                     indent.setAttribute( "left", marginLeft );
                 if( marginRight != 0 )
-                    indent.setAttribute( "right", marginLeft );
+                    indent.setAttribute( "right", marginRight );
                 if( first != 0.0 )
                     indent.setAttribute( "first", first);
                 p.appendChild( indent );
@@ -1221,7 +1221,8 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
 
             p.appendChild(lineSpacing);
         }
-        else if (m_styleStack.hasAttribute("style:line-height-at-least"))
+
+        if (m_styleStack.hasAttribute("style:line-height-at-least"))
         {
             double value = toPoint(m_styleStack.attribute("style:line-height-at-least"));
             QDomElement lineSpacing = doc.createElement("LINESPACING");
