@@ -201,17 +201,23 @@ void KPTPertCanvas::mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *c
         if (chMapped)
         {
             m_rows.at(chRow)->at(chCol) = false;
+            //kdDebug()<<k_funcinfo<<" Moving "<<childItem->node().name()<<" from: "<<chRow<<","<<chCol<<endl;
             if (chRow <= row)
             {
                 chRow = row+1;
-                if (!(m_rows.count() <= chRow))
+                if (m_rows.count() <= chRow) {
                     m_rows.append(new QMemArray<bool>(1)); // make a new row
+                    chRow = m_rows.count()-1;  // to be safe
+                }
+                //kdDebug()<<k_funcinfo<<" Moving "<<childItem->node().name()<<" to row: "<<chRow<<endl;
             }
             if (chCol < col)
             {
                 chCol = col;
                 if (m_rows.at(chRow)->count() <= chCol)  // col does not exist
                     m_rows.at(chRow)->resize(chCol+1);
+                
+                //kdDebug()<<k_funcinfo<<" Moved "<<childItem->node().name()<<" to col: "<<chCol<<endl;
             }
 
         }
