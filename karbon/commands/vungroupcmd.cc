@@ -63,11 +63,14 @@ VUnGroupCmd::execute()
 		VObjectListIterator itr = m_group->objects();
 
 		for ( ; itr.current() ; ++itr )
+		{
+			itr.current()->invalidateBoundingBox();
 			parent->append( itr.current() );
+		}
 
 		m_group->clear();
 	}
-	
+
 	//delete m_group;
 	//m_group = 0L;
 	setSuccess( true );
