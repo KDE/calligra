@@ -40,6 +40,7 @@
 #include "kspread_map.h"
 #include "kspread_undo.h"
 #include "kspread_view.h"
+#include "kspread_canvas.h"
 
 #include "koDocumentInfo.h"
 
@@ -126,7 +127,6 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_bDontCheckTitleCase=false;
   m_unit = KoUnit::U_MM;
   m_activeTable= 0L;
-  m_iZoom = 100;
 }
 
 bool KSpreadDoc::initDoc()
@@ -189,7 +189,7 @@ void KSpreadDoc::saveConfig()
         return;
     KConfig *config = KSpreadFactory::global()->config();
     config->setGroup( "Parameters" );
-    config->writeEntry( "Zoom", m_iZoom );
+    config->writeEntry( "Zoom", m_zoom );
 
 }
 
@@ -219,12 +219,12 @@ void KSpreadDoc::initConfig()
     if( config->hasGroup("Parameters" ))
     {
         config->setGroup( "Parameters" );
-        m_iZoom = config->readNumEntry( "Zoom", 100 );
+        m_zoom = config->readNumEntry( "Zoom", 100 );
     }
     else
-      m_iZoom = 100;
+      m_zoom = 100;
 
-
+    setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
 }
 
 KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
@@ -565,14 +565,19 @@ void KSpreadDoc::addTable( KSpreadSheet *_table )
   emit sig_addTable( _table );
 }
 
-void KSpreadDoc::setZoom( int zoom )
+void KSpreadDoc::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
-  m_iZoom = zoom;
+    KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY );
 }
 
-void KSpreadDoc::newZoom()
+void KSpreadDoc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
 {
-  emit sig_refreshView();
+/*    layout();
+    updateAllFrames();*/
+    if ( updateViews )
+    {
+        emit sig_refreshView();
+    }
 }
 
 void KSpreadDoc::initInterpreter()
@@ -655,6 +660,16 @@ void KSpreadDoc::enableRedo( bool _b )
 void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
                                bool transparent, double zoomX, double zoomY )
 {
+    //kdDebug(36001) << "KSpreadDoc::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
+    int oldZoom = m_zoom;
+    setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    if ( m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY )
+    {
+        setResolution( zoomX, zoomY );
+        bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
+        newZoomAndResolution( false, forPrint );
+    }
+
     KSpreadSheet* table = 0L;
     if ( !m_activeTable )
         table = m_pMap->firstTable();
@@ -666,10 +681,12 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     kdDebug(36001)<<"paintContent-------------------------------------\n";
     painter.save();
 
-    painter.scale(zoomX, zoomY);
+//    painter.scale(zoomX, zoomY);
     paintContent( painter, rect, transparent, table, false );
 
     painter.restore();
+    m_zoom = oldZoom;
+    setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
 }
 
 void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, KSpreadSheet* table, bool drawCursor )
@@ -682,10 +699,10 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
 
     double xpos;
     double ypos;
-    int left_col = table->leftColumn( rect.x(), xpos );
-    int right_col = table->rightColumn( rect.right() );
-    int top_row = table->topRow( rect.y(), ypos );
-    int bottom_row = table->bottomRow( rect.bottom() );
+    int left_col = table->leftColumn( unzoomItX( rect.x() ), xpos );
+    int right_col = table->rightColumn( unzoomItX( rect.right() ) );
+    int top_row = table->topRow( unzoomItY( rect.y() ), ypos );
+    int bottom_row = table->bottomRow( unzoomItY( rect.bottom() ) );
 
     QPen pen;
     pen.setWidth( 1 );
@@ -693,8 +710,10 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
     /* update the entire visible area */
 
     QValueList<QRect> cellAreaList;
-    cellAreaList.append(QRect(left_col, top_row, right_col - left_col + 1,
-                              bottom_row - top_row + 1));
+    cellAreaList.append( QRect( left_col,
+                                top_row,
+                                right_col - left_col + 1, 
+                                bottom_row - top_row + 1) );
 
     paintCellRegions(painter, rect, NULL, cellAreaList, table, drawCursor);
 }
@@ -730,6 +749,7 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   QRegion rgn = painter.clipRegion();
   if ( rgn.isEmpty() )
     rgn = QRegion( QRect( 0, 0, viewRect.width(), viewRect.height() ) );
+
   QPtrListIterator<KoDocumentChild> it( children() );
   for( ; it.current(); ++it )
   {
@@ -745,30 +765,32 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   painter.setPen( pen );
 
   QRect cellRegion;
+  KoRect unzoomedViewRect = unzoomRect( viewRect );
+
   for (unsigned int i=0; i < cellRegions.size(); i++)
   {
     cellRegion = cellRegions[i];
 
-    PaintRegion(painter, viewRect, view, cellRegion, table);
+    PaintRegion(painter, unzoomedViewRect, view, cellRegion, table);
   }
 
   if ((view != NULL) && drawCursor && !(painter.device()->isExtDev()))
   {
     if (view->activeTable() == table)
     {
-      PaintNormalMarker(painter, viewRect, table, view->selection());
+      PaintNormalMarker(painter, unzoomedViewRect, view, table, view->selection());
     }
 
     if (view->selectionInfo()->getChooseTable() == table)
     {
-      PaintChooseRect(painter, viewRect, table, view->selectionInfo()->getChooseRect());
+      PaintChooseRect(painter, unzoomedViewRect, view, table, view->selectionInfo()->getChooseRect());
     }
   }
 }
 
-void KSpreadDoc::PaintRegion(QPainter &painter, const QRect &viewRegion,
+void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
                              KSpreadView* view, const QRect &paintRegion,
-			     const KSpreadSheet* table)
+                             const KSpreadSheet* table)
 {
   /* paint region has cell coordinates (col,row) while viewRegion has world
      coordinates.  paintRegion is the cells to update and viewRegion is the
@@ -779,21 +801,33 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const QRect &viewRegion,
   if (paintRegion.left() <= 0 || paintRegion.top() <= 0)
     return;
 
-  /* get the world coordinates of the upper left corner of the paintRegion */
-  QPair<double,double> dblCorner = qMakePair( table->dblColumnPos(paintRegion.left()),
-                                              table->dblRowPos(paintRegion.top()) );
-
-  QPair<double,double> dblCurrentCellPos = dblCorner;
+  /*
+    get the world coordinates of the upper left corner of the paintRegion
+    The view is NULL, when paintRegion is called from paintContent, which itself
+    is only called, when we should paint the output for INACTIVE embedded view.
+    If inactive embedded, then there is no view and we alwas start at top/left,
+    so the offset is 0.
+  */
+  KoPoint dblCorner;
+  if ( view == 0L ) //Most propably we are embedded and inactive, so no offset
+        dblCorner = KoPoint( table->dblColumnPos( paintRegion.left() ),
+                             table->dblRowPos( paintRegion.top() ) );
+  else
+        dblCorner = KoPoint( table->dblColumnPos( paintRegion.left() ) -
+                               view->canvasWidget()->xOffset(),
+                             table->dblRowPos( paintRegion.top() ) -
+                               view->canvasWidget()->yOffset() );
+  KoPoint dblCurrentCellPos = dblCorner;
 
   for ( int y = paintRegion.top();
-        y <= paintRegion.bottom() && (int)dblCurrentCellPos.second <= viewRegion.bottom();
+        y <= paintRegion.bottom() && dblCurrentCellPos.y() <= viewRegion.bottom();
         y++ )
   {
     const RowLayout* row_lay = table->rowLayout( y );
-    dblCurrentCellPos.first = dblCorner.first;
+    dblCurrentCellPos.setX( dblCorner.x() );
 
     for ( int x = paintRegion.left();
-          x <= paintRegion.right() && (int)dblCurrentCellPos.first <= viewRegion.right();
+          x <= paintRegion.right() && dblCurrentCellPos.x() <= viewRegion.right();
           x++ )
     {
       const ColumnLayout *col_lay = table->columnLayout( x );
@@ -802,85 +836,90 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const QRect &viewRegion,
       QPoint cellRef( x, y );
       cell->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef );
 
-      dblCurrentCellPos.first += col_lay->dblWidth();
+      dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );
     }
-    dblCurrentCellPos.second += row_lay->dblHeight();
+    dblCurrentCellPos.setY( dblCurrentCellPos.y() + row_lay->dblHeight() );
   }
 }
 
-void KSpreadDoc::PaintChooseRect(QPainter& painter, const QRect &viewRect,
-                                 const KSpreadSheet* table,
+void KSpreadDoc::PaintChooseRect(QPainter& painter, const KoRect &viewRect,
+                                 KSpreadView* view, const KSpreadSheet* table,
 				 const QRect &chooseRect)
 {
-  int positions[4];
+  double positions[4];
   bool paintSides[4];
 
   if ( chooseRect.left() != 0 )
   {
     QPen pen;
     pen.setWidth( 2 );
-    pen.setStyle(DashLine);
+    pen.setStyle( DashLine );
 
-    RetrieveMarkerInfo(chooseRect, table, viewRect, positions, paintSides);
+    retrieveMarkerInfo( chooseRect, table, view, viewRect, positions, paintSides );
 
-    int left = positions[0];
-    int top = positions[1];
-    int right = positions[2];
-    int bottom = positions[3];
-    bool paintLeft = paintSides[0];
-    bool paintTop = paintSides[1];
-    bool paintRight = paintSides[2];
+    double left =   positions[0];
+    double top =    positions[1];
+    double right =  positions[2];
+    double bottom = positions[3];
+
+    bool paintLeft =   paintSides[0];
+    bool paintTop =    paintSides[1];
+    bool paintRight =  paintSides[2];
     bool paintBottom = paintSides[3];
 
     RasterOp rop = painter.rasterOp();
     painter.setRasterOp( NotROP );
     painter.setPen( pen );
 
-    if (paintTop)
+    if ( paintTop )
     {
-      painter.drawLine( left, top, right, top );
+      painter.drawLine( zoomItX( left ),  zoomItY( top ), 
+                        zoomItX( right ), zoomItY( top ) );
     }
-    if (paintLeft)
+    if ( paintLeft )
     {
-      painter.drawLine( left, top, left, bottom );
+      painter.drawLine( zoomItX( left ), zoomItY( top ),
+                        zoomItX( left ), zoomItY( bottom ) );
     }
-    if (paintRight)
+    if ( paintRight )
     {
-      painter.drawLine( right, top, right, bottom );
+      painter.drawLine( zoomItX( right ), zoomItY( top ),
+                        zoomItX( right ), zoomItY( bottom ) );
     }
-    if (paintBottom)
+    if ( paintBottom )
     {
-      painter.drawLine( left, bottom, right, bottom );
+      painter.drawLine( zoomItX( left ),  zoomItY( bottom ),
+                        zoomItX( right ), zoomItY( bottom ) );
     }
 
     /* restore the old raster mode */
-    painter.setRasterOp(rop);
-
+    painter.setRasterOp( rop );
   }
   return;
 }
 
-void KSpreadDoc::PaintNormalMarker(QPainter& painter, const QRect &viewRect,
-                                   const KSpreadSheet* table,
-				   const QRect &marker)
+void KSpreadDoc::PaintNormalMarker(QPainter& painter, const KoRect &viewRect,
+                                   KSpreadView* view, const KSpreadSheet* table,
+                                   const QRect &marker)
 {
-  int positions[4];
+  double positions[4];
   bool paintSides[4];
 
-  QPen pen(Qt::black, 3);
+  QPen pen( Qt::black, 3 );
   painter.setPen( pen );
 
-  RetrieveMarkerInfo(marker, table, viewRect, positions, paintSides);
+  retrieveMarkerInfo( marker, table, view, viewRect, positions, paintSides );
 
   painter.setPen( pen );
 
-  int left = positions[0];
-  int top = positions[1];
-  int right = positions[2];
-  int bottom = positions[3];
-  bool paintLeft = paintSides[0];
-  bool paintTop = paintSides[1];
-  bool paintRight = paintSides[2];
+  double left =   positions[0];
+  double top =    positions[1];
+  double right =  positions[2];
+  double bottom = positions[3];
+
+  bool paintLeft =   paintSides[0];
+  bool paintTop =    paintSides[1];
+  bool paintRight =  paintSides[2];
   bool paintBottom = paintSides[3];
 
   /* the extra '-1's thrown in here account for the thickness of the pen.
@@ -890,66 +929,78 @@ void KSpreadDoc::PaintNormalMarker(QPainter& painter, const QRect &viewRect,
      .                      *         *                   *         *
   */
   int l = 1;
-  if (zoom() != 100)
-    l = 0;
 
-  if (paintTop)
+  if( paintTop )
   {
-    painter.drawLine( left - l, top, right + 2 * l, top);
+    painter.drawLine( zoomItX( left ) - l,      zoomItY( top ),
+                      zoomItX( right ) + 2 * l, zoomItY( top ) );
   }
-  if (paintLeft)
+  if( paintLeft )
   {
-    painter.drawLine( left, top, left, bottom );
+    painter.drawLine( zoomItX( left ), zoomItY( top ),
+                      zoomItX( left ), zoomItY( bottom ) );
   }
-  if (paintRight && paintBottom)
+  if( paintRight && paintBottom )
   {
     /* then the 'handle' in the bottom right corner is visible. */
-    painter.drawLine( right, top, right, bottom - 3 );
-    painter.drawLine( left - l, bottom, right - 3, bottom );
-    painter.fillRect( right - 2, bottom - 2, 5, 5, painter.pen().color() );
+    painter.drawLine( zoomItX( right ), zoomItY( top ),
+                      zoomItX( right ), zoomItY( bottom ) - 3 );
+    painter.drawLine( zoomItX( left ) - l,  zoomItY( bottom ),
+                      zoomItX( right ) - 3, zoomItY( bottom ) );
+    painter.fillRect( zoomItX( right ) - 2, zoomItY( bottom ) - 2, 5, 5,
+                      painter.pen().color() );
   }
   else
   {
-    if (paintRight)
+    if( paintRight )
     {
-      painter.drawLine( right, top, right, bottom );
+      painter.drawLine( zoomItX( right ), zoomItY( top ),
+                        zoomItX( right ), zoomItY( bottom ) );
     }
-    if (paintBottom)
+    if( paintBottom )
     {
-      painter.drawLine( left - l, bottom, right + l, bottom );
+      painter.drawLine( zoomItX( left ) - l,  zoomItY( bottom ),
+                        zoomItX( right ) + l, zoomItY( bottom ) );
     }
   }
 }
 
 
-void KSpreadDoc::RetrieveMarkerInfo(const QRect &marker,
-				    const KSpreadSheet* table,
-                                    const QRect &viewRect, int positions[],
-                                    bool paintSides[])
+void KSpreadDoc::retrieveMarkerInfo( const QRect &marker,
+                                     const KSpreadSheet* table,
+                                     KSpreadView* view, 
+                                     const KoRect &viewRect,
+                                     double positions[],
+                                     bool paintSides[] )
 {
-  double xpos = table->dblColumnPos( marker.left() );
-  double ypos = table->dblRowPos( marker.top() );
+  double xpos = table->dblColumnPos( marker.left() ) -
+                view->canvasWidget()->xOffset();
+  double ypos = table->dblRowPos( marker.top() ) -
+                view->canvasWidget()->yOffset();
 
-  double x = table->dblColumnPos( marker.right() );
+  double x = table->dblColumnPos( marker.right() ) -
+             view->canvasWidget()->xOffset();
   const ColumnLayout *columnLayout = table->columnLayout( marker.right() );
   double tw = columnLayout->dblWidth( );
   double w = ( x - xpos ) + tw;
+
+  double y = table->dblRowPos( marker.bottom() ) -
+             view->canvasWidget()->yOffset();
   const RowLayout* rowLayout = table->rowLayout( marker.bottom() );
-  double y = table->dblRowPos( marker.bottom() );
   double th = rowLayout->dblHeight( );
   double h = ( y - ypos ) + th;
 
   /* left, top, right, bottom */
-  positions[0] = int( xpos );
-  positions[1] = int( ypos );
-  positions[2] = int( xpos + w );
-  positions[3] = int( ypos + h );
+  positions[0] = xpos;
+  positions[1] = ypos;
+  positions[2] = xpos + w;
+  positions[3] = ypos + h;
 
   /* these vars are used for clarity, the array for simpler function arguments  */
-  int left = positions[0];
-  int top = positions[1];
-  int right = positions[2];
-  int bottom = positions[3];
+  double left = positions[0];
+  double top = positions[1];
+  double right = positions[2];
+  double bottom = positions[3];
 
   /* left, top, right, bottom */
   paintSides[0] = (viewRect.left() <= left) && (left <= viewRect.right()) &&
@@ -961,11 +1012,10 @@ void KSpreadDoc::RetrieveMarkerInfo(const QRect &marker,
   paintSides[3] = (viewRect.top() <= bottom) && (bottom <= viewRect.bottom()) &&
                   (right >= viewRect.left()) && (left <= viewRect.right());
 
-  positions[0] = QMAX(left, viewRect.left());
-  positions[1] = QMAX(top, viewRect.top());
-  positions[2] = QMIN(right, viewRect.right());
-  positions[3] = QMIN(bottom, viewRect.bottom());
-
+  positions[0] = QMAX( left,   viewRect.left() );
+  positions[1] = QMAX( top,    viewRect.top() );
+  positions[2] = QMIN( right,  viewRect.right() );
+  positions[3] = QMIN( bottom, viewRect.bottom() );
 }
 
 

@@ -91,7 +91,7 @@ bool KSpreadSelection::singleCellSelection() const
           (currentSelection.height() - 1 == cell->extraYCells()));
 }
 
-QRect KSpreadSelection::selectionHandleArea(KSpreadCanvas* canvas) const
+QRect KSpreadSelection::selectionHandleArea() const
 {
   int column, row;
 
@@ -109,13 +109,18 @@ QRect KSpreadSelection::selectionHandleArea(KSpreadCanvas* canvas) const
   }
   const KSpreadCell* cell = m_pView->activeTable()->cellAt(column, row);
 
-  int xpos = m_pView->activeTable()->columnPos( column, canvas );
-  int ypos = m_pView->activeTable()->rowPos( row, canvas );
-  int width = cell->width( column, canvas ) + 1;
-  int height = cell->height( row, canvas ) + 1; //+1, due to rounding issue at default height at 100% zoom
+  double xpos = m_pView->activeTable()->dblColumnPos( column );
+  double ypos = m_pView->activeTable()->dblRowPos( row );
+  double width = cell->dblWidth( column );
+  double height = cell->dblHeight( row );
 
-  QRect handle( (xpos + width - (int)(2.0 * canvas->zoom())), (ypos + height - (int)(2.0 * canvas->zoom())),
-                (int) (5.0 * canvas->zoom()), (int)(5.0 * canvas->zoom()) );
+  QPoint rightBottom( m_pView->doc()->zoomItX( xpos + width ), 
+                      m_pView->doc()->zoomItY( ypos + height ) );
+  
+  QRect handle( ( rightBottom.x() - 2 ),
+                ( rightBottom.y() - 2 ),
+                ( 5 ),
+                ( 5 ) );
   return handle;
 }
 

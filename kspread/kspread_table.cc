@@ -5729,10 +5729,10 @@ void KSpreadSheet::print( QPainter &painter, KPrinter *_printer )
     m_bShowGrid = m_bPrintGrid;
     if ( !m_bPrintGrid )
     {
-	gridPen = m_pDoc->defaultGridPen();
-	QPen nopen;
-	nopen.setStyle( NoPen );
-	m_pDoc->setDefaultGridPen( nopen );
+        gridPen = m_pDoc->defaultGridPen();
+        QPen nopen;
+        nopen.setStyle( NoPen );
+        m_pDoc->setDefaultGridPen( nopen );
     }
 
     //
@@ -5799,8 +5799,8 @@ void KSpreadSheet::print( QPainter &painter, KPrinter *_printer )
     // and which cells to print on which page.
     //
     QValueList<QRect> page_list;
-    QValueList<QRect> page_frame_list;
-    QValueList<QPoint> page_frame_list_offset;
+    QValueList<KoRect> page_frame_list;
+    QValueList<KoPoint> page_frame_list_offset;
 
     // How much space is on every page for table content ?
     QRect rect;
@@ -5886,15 +5886,23 @@ void KSpreadSheet::print( QPainter &painter, KPrinter *_printer )
                         empty = FALSE;
 
             // Look for children
-            QRect view = QRect( QPoint( columnPos( page_range.left() ),
-                                        rowPos( page_range.top() ) ),
-                                QPoint( int( dblColumnPos( col-1 ) + columnLayout( col-1 )->dblWidth() ),
-                                        int( dblRowPos( row-1 ) + rowLayout( row-1 )->dblHeight() ) ) );
+            KoRect view = KoRect( KoPoint( dblColumnPos( page_range.left() ),
+                                           dblRowPos( page_range.top() ) ),
+                                  KoPoint( dblColumnPos( col-1 ) +
+                                           columnLayout( col-1 )->dblWidth(),
+                                           dblRowPos( row-1 ) +
+                                           rowLayout( row-1 )->dblHeight() ) );
+            QRect intView = QRect( QPoint( doc()->zoomItX( dblColumnPos( page_range.left() ) ),
+                                           doc()->zoomItY( dblRowPos( page_range.top() ) ) ),
+                                   QPoint( doc()->zoomItX( dblColumnPos( col-1 ) +
+                                                           columnLayout( col-1 )->dblWidth() ),
+                                           doc()->zoomItY( dblRowPos( row-1 ) +
+                                                           rowLayout( row-1 )->dblHeight() ) ) );
             QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
             for( ; empty && it.current(); ++it )
             {
                 QRect bound = it.current()->boundingRect();
-                if ( bound.intersects( view ) )
+                if ( bound.intersects( intView ) )
                     empty = FALSE;
             }
 
@@ -5902,7 +5910,7 @@ void KSpreadSheet::print( QPainter &painter, KPrinter *_printer )
             {
                 page_list.append( page_range );
                 page_frame_list.append( view );
-                page_frame_list_offset.append( QPoint( int( currentOffsetX ), int( currentOffsetY ) ) );
+                page_frame_list_offset.append( KoPoint( currentOffsetX, currentOffsetY ) );
             }
         }
 
@@ -5935,8 +5943,8 @@ void KSpreadSheet::print( QPainter &painter, KPrinter *_printer )
     //
 
     QValueList<QRect>::Iterator it = page_list.begin();
-    QValueList<QRect>::Iterator fit = page_frame_list.begin();
-    QValueList<QPoint>::Iterator fito = page_frame_list_offset.begin();
+    QValueList<KoRect>::Iterator fit = page_frame_list.begin();
+    QValueList<KoPoint>::Iterator fito = page_frame_list_offset.begin();
     int w;
     for( ; it != page_list.end(); ++it, ++fit, ++fito, ++pagenr )
     {
@@ -5946,46 +5954,52 @@ void KSpreadSheet::print( QPainter &painter, KPrinter *_printer )
         QFontMetrics fm = painter.fontMetrics();
         w = fm.width( headLeft( pagenr, m_strName ) );
         if ( w > 0 )
-            painter.drawText( (int)( MM_TO_POINT ( leftBorder() )),
-                              (int)( MM_TO_POINT ( 10.0 )), headLeft( pagenr, m_strName ) );
+            painter.drawText( doc()->zoomItX( MM_TO_POINT ( leftBorder() ) ),
+                              doc()->zoomItY( MM_TO_POINT ( 10.0 ) ),
+                              headLeft( pagenr, m_strName ) );
         w = fm.width( headMid( pagenr, m_strName.latin1() ) );
         if ( w > 0 )
-            painter.drawText( (int)( MM_TO_POINT ( leftBorder()) +
-                                     ( MM_TO_POINT ( printableWidth()) - (float)w ) / 2.0 ),
-                              (int)( MM_TO_POINT ( 10.0 )), headMid( pagenr, m_strName ) );
+            painter.drawText( doc()->zoomItX( MM_TO_POINT ( leftBorder() ) +
+                                            ( MM_TO_POINT ( printableWidth() ) -
+                                              (float)w ) / 2.0 ),
+                              doc()->zoomItY( MM_TO_POINT ( 10.0 )),
+                              headMid( pagenr, m_strName ) );
         w = fm.width( headRight( pagenr, m_strName ) );
         if ( w > 0 )
-            painter.drawText( (int)( MM_TO_POINT ( leftBorder()) +
-                                     MM_TO_POINT ( printableWidth()) - (float)w ),
-                              (int)( MM_TO_POINT ( 10.0 )), headRight( pagenr, m_strName) );
+            painter.drawText( doc()->zoomItX( MM_TO_POINT ( leftBorder() ) +
+                                              MM_TO_POINT ( printableWidth()) - (float)w ),
+                              doc()->zoomItY( MM_TO_POINT ( 10.0 )),
+                              headRight( pagenr, m_strName) );
 
         // print foot line
         w = fm.width( footLeft( pagenr, m_strName ) );
         if ( w > 0 )
-            painter.drawText( (int)( MM_TO_POINT ( leftBorder() )),
-                              (int)( MM_TO_POINT ( paperHeight() - 10.0 )),
+            painter.drawText( doc()->zoomItX( MM_TO_POINT ( leftBorder() )),
+                              doc()->zoomItY( MM_TO_POINT ( paperHeight() - 10.0 )),
                               footLeft( pagenr, m_strName ) );
         w = fm.width( footMid( pagenr, m_strName ) );
         if ( w > 0 )
-            painter.drawText( (int)( MM_TO_POINT ( leftBorder() )+
-                                     ( MM_TO_POINT ( printableWidth()) - (float)w ) / 2.0 ),
-                              (int)( MM_TO_POINT  ( paperHeight() - 10.0 ) ),
+            painter.drawText( doc()->zoomItX( MM_TO_POINT ( leftBorder() )+
+                                              ( MM_TO_POINT ( printableWidth()) -
+                                              (float)w ) / 2.0 ),
+                              doc()->zoomItY( MM_TO_POINT  ( paperHeight() - 10.0 ) ),
                               footMid( pagenr, m_strName ) );
         w = fm.width( footRight( pagenr, m_strName ) );
         if ( w > 0 )
-            painter.drawText( (int)( MM_TO_POINT ( leftBorder()) +
-                                     MM_TO_POINT ( printableWidth()) - (float)w ),
-                              (int)( MM_TO_POINT ( paperHeight() - 10.0 ) ),
+            painter.drawText( doc()->zoomItX( MM_TO_POINT ( leftBorder() ) +
+                                              MM_TO_POINT ( printableWidth() ) -
+                                              (float)w ),
+                              doc()->zoomItY( MM_TO_POINT ( paperHeight() - 10.0 ) ),
                               footRight( pagenr, m_strName ) );
 
-        painter.translate( MM_TO_POINT ( leftBorder() ),
-                           MM_TO_POINT ( topBorder()  ));
+        painter.translate( doc()->zoomItX( MM_TO_POINT ( leftBorder() ) ),
+                           doc()->zoomItY( MM_TO_POINT ( topBorder()  ) ) );
 
         // Print the page
         printPage( painter, *it, *fit, *fito );
 
-        painter.translate( - MM_TO_POINT ( leftBorder() ),
-                           - MM_TO_POINT ( topBorder()  ));
+        painter.translate( - doc()->zoomItX( MM_TO_POINT ( leftBorder() ) ),
+                           - doc()->zoomItY( MM_TO_POINT ( topBorder()  ) ) );
 
         if ( pagenr < (int)page_list.count() )
             _printer->newPage();
@@ -5999,17 +6013,17 @@ void KSpreadSheet::print( QPainter &painter, KPrinter *_printer )
     m_bShowGrid = oldShowGrid;
 }
 
-void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const QRect& view, const QPoint _childOffset )
+void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const KoRect& view, const KoPoint _childOffset )
 {
 //      kdDebug(36001) << "Rect x=" << page_range.left() << " y=" << page_range.top() << ", w="
 //      << page_range.width() << " h="  << page_range.height() << "  offsetx: "<< _childOffset.x()
 //      << "  offsety: " << _childOffset.y() << endl;
 
     //Don't paint on the page borders
-    QRegion clipRegion( static_cast<int>MM_TO_POINT ( leftBorder() ),
-                        static_cast<int>MM_TO_POINT ( topBorder() ),
-                        static_cast<int>(_childOffset.x() + view.width()),
-                        static_cast<int>(_childOffset.y() + view.height()) );
+    QRegion clipRegion( 0/*doc()->zoomItX( MM_TO_POINT ( leftBorder() ) )*/,
+                        0/*doc()->zoomItY( MM_TO_POINT ( topBorder() ) )*/,
+                        doc()->zoomItX( _childOffset.x() + view.width() ),
+                        doc()->zoomItY( _childOffset.y() + view.height() ) );
     _painter.setClipRegion( clipRegion );
 
     //
@@ -6041,10 +6055,10 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
                 col_lay = columnLayout( x );
 
                 cell = cellAt( x, y );
-                QRect r( 0, 0, view.width(), view.height() );
+                KoRect r( 0.0, 0.0, view.width(), view.height() );
                 cell->paintCell( r, _painter, NULL,
-                                 qMakePair( xpos, ypos ),
-                                 QPoint(x,y) );
+                                 KoPoint( xpos, ypos ),
+                                 QPoint( x, y ) );
 
                 xpos += col_lay->dblWidth();
             }
@@ -6054,10 +6068,10 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
         ypos_Start = ypos;
         xpos_Start = xpos;
         //Don't let obscuring cells and children overpaint this area
-        clipRegion -= QRegion ( MM_TO_POINT ( leftBorder() ),
-                                MM_TO_POINT ( topBorder() ),
-                                int( xpos ),
-                                int( ypos ) );
+        clipRegion -= QRegion ( doc()->zoomItX( MM_TO_POINT ( leftBorder() ) ),
+                                doc()->zoomItY( MM_TO_POINT ( topBorder() ) ),
+                                doc()->zoomItX( xpos ),
+                                doc()->zoomItY( ypos ) );
         _painter.setClipRegion( clipRegion );
     }
 
@@ -6076,10 +6090,10 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
                 col_lay = columnLayout( x );
 
                 cell = cellAt( x, y );
-                QRect r( 0, 0, view.width() + xpos, view.height() );
+                KoRect r( 0.0, 0.0, view.width() + xpos, view.height() );
                 cell->paintCell( r, _painter, NULL,
-                                 qMakePair( xpos, ypos ),
-                                 QPoint(x,y));
+                                 KoPoint( xpos, ypos ),
+                                 QPoint( x, y ) );
 
                 xpos += col_lay->dblWidth();
             }
@@ -6088,10 +6102,10 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
         }
         ypos_Start = ypos;
         //Don't let obscuring cells and children overpaint this area
-        clipRegion -= QRegion( MM_TO_POINT ( leftBorder() + xpos_Start ),
-                               MM_TO_POINT ( topBorder() ),
-                               int( xpos - xpos_Start ),
-                               int( ypos ) );
+        clipRegion -= QRegion( doc()->zoomItX( MM_TO_POINT ( leftBorder() + xpos_Start ) ),
+                               doc()->zoomItY( MM_TO_POINT ( topBorder() ) ),
+                               doc()->zoomItX( xpos - xpos_Start ),
+                               doc()->zoomItY( ypos ) );
         _painter.setClipRegion( clipRegion );
     }
 
@@ -6110,10 +6124,10 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
                 col_lay = columnLayout( x );
 
                 cell = cellAt( x, y );
-                QRect r( 0, 0, view.width() + xpos, view.height() + ypos );
+                KoRect r( 0.0, 0.0, view.width() + xpos, view.height() + ypos );
                 cell->paintCell( r, _painter, NULL,
-                                 qMakePair( xpos, ypos ),
-                                 QPoint(x,y));
+                                 KoPoint( xpos, ypos ),
+                                 QPoint( x, y ) );
 
                 xpos += col_lay->dblWidth();
             }
@@ -6122,10 +6136,10 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
         }
         xpos_Start = xpos;
         //Don't let obscuring cells and children overpaint this area
-        clipRegion -= QRegion( MM_TO_POINT ( leftBorder() ),
-                               MM_TO_POINT ( topBorder() + ypos_Start ),
-                               int( xpos ),
-                               int( ypos - ypos_Start ) );
+        clipRegion -= QRegion( doc()->zoomItX( MM_TO_POINT ( leftBorder() ) ),
+                               doc()->zoomItY( MM_TO_POINT ( topBorder() + ypos_Start ) ),
+                               doc()->zoomItX( xpos ),
+                               doc()->zoomItY( ypos - ypos_Start ) );
         _painter.setClipRegion( clipRegion );
     }
 
@@ -6142,10 +6156,10 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
             col_lay = columnLayout( x );
 
             cell = cellAt( x, y );
-            QRect r( 0, 0, view.width() + xpos, view.height() + ypos );
+            KoRect r( 0.0, 0.0, view.width() + xpos, view.height() + ypos );
             cell->paintCell( r, _painter, NULL,
-                             qMakePair( xpos, ypos ),
-                             QPoint(x,y) );
+                             KoPoint( xpos, ypos ),
+                             QPoint( x, y ) );
 
             xpos += col_lay->dblWidth();
         }
@@ -6156,6 +6170,7 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
     //
     // Draw the children
     //
+    QRect zoomedView = doc()->zoomRect( view );
     QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
     QRect bound;
     for( ; it.current(); ++it )
@@ -6165,15 +6180,17 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
         .arg(it.current()->contentRect().top())
         .arg(it.current()->contentRect().right())
         .arg(it.current()->contentRect().bottom())
-        .arg(view.left()).arg(view.top()).arg(view.right()).arg(view.bottom());
+        .arg(view.left()).arg(view.top()).arg(zoomedView.right()).arg(zoomedView.bottom());
         kdDebug(36001)<<tmp<<" offset "<<_childOffset.x()<<"/"<<_childOffset.y()<<endl;
 
         bound = it.current()->boundingRect();
-        if ( ((KSpreadChild*)it.current())->table() == this && bound.intersects( view ) )
+        if ( ( ( KSpreadChild* )it.current() )->table() == this && 
+             bound.intersects( zoomedView ) )
         {
             _painter.save();
 
-            _painter.translate( -view.left()+_childOffset.x(), -view.top()+_childOffset.y() );
+            _painter.translate( -zoomedView.left() + doc()->zoomItX( _childOffset.x() ),
+                                -zoomedView.top()  + doc()->zoomItY( _childOffset.y() ) );
             bound.moveBy( -bound.x(), -bound.y() );
 
             it.current()->transform( _painter );

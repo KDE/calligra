@@ -433,7 +433,16 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QObject::connect( m_pDoc, SIGNAL( sig_refreshView(  ) ), this, SLOT( refreshView() ) );
 
     QObject::connect( m_pDoc, SIGNAL( sig_refreshLocale() ), this, SLOT( refreshLocale()));
-    viewZoom(QString::number(m_pDoc->zoom()) );
+
+    KoView::setZoom( m_pDoc->zoomedResolutionY() /* KoView only supports one zoom */ ); // initial value
+    //when kspread is embedded into konqueror apply a zoom=100
+    //in konqueror we can't change zoom -- ### TODO ?
+    if(!m_pDoc->isReadWrite())
+    {
+        setZoom( 100, true );
+    }
+
+    viewZoom( QString::number( m_pDoc->zoom() ) );
 
     QStringList list = m_viewZoom->items();
     QString zoomStr = QString::number(m_pDoc->zoom() ) + '%';
@@ -3443,7 +3452,6 @@ void KSpreadView::setupPrinter( KPrinter &prt )
 
     prt.setFullPage( TRUE );
     prt.setResolution ( 72 );
-
 }
 
 void KSpreadView::print( KPrinter &prt )
@@ -3452,6 +3460,31 @@ void KSpreadView::print( KPrinter &prt )
     {
       m_pCanvas->deleteEditor( true ); // save changes
     }
+
+    // ### HACK: disable zooming-when-printing if embedded parts are used.
+    // No koffice app supports zooming in paintContent currently.
+    // Disable in ALL cases now
+    bool doZoom = false;
+    /*QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    for ( ; fit.current() && doZoom ; ++fit )
+        if ( fit.current()->type() == FT_PART )
+            doZoom = false;*/
+
+    int oldZoom = m_pDoc->zoom();
+
+    // We don't get valid metrics from the printer - and we want a better resolution
+    // anyway (it's the PS driver that takes care of the printer resolution).
+    QPaintDeviceMetrics metrics( &prt );
+
+    //int dpiX = metrics.logicalDpiX();
+    //int dpiY = metrics.logicalDpiY();
+    int dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
+    int dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
+    ///////// Changing the dpiX/dpiY is very wrong nowadays. This has no effect on the font size
+    ///////// that we give Qt, anymore, so it leads to minuscule fonts in the printout => doZoom==false.
+
+    m_pDoc->setZoomAndResolution( 100, dpiX, dpiY );
+    m_pDoc->newZoomAndResolution( false, true /* for printing*/ );
 
     //store the current setting in a temporary variable
     KoOrientation _orient =  m_pTable->orientation();
@@ -3470,8 +3503,15 @@ void KSpreadView::print( KPrinter &prt )
         m_pTable->setPaperOrientation( PG_PORTRAIT );
     }
 
+    painter.scale( (double)metrics.logicalDpiX() / (double)dpiX,
+                   (double)metrics.logicalDpiY() / (double)dpiY );
+
     // Print the table and tell that m_pDoc is NOT embedded.
     m_pTable->print( painter, &prt );
+
+    m_pDoc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    m_pDoc->newZoomAndResolution( false, false );
+
     painter.end();
 
     //Restore original orientation
@@ -3594,9 +3634,14 @@ void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
 {
   // Set the zoom in KoView (for embedded views)
   m_pDoc->emitBeginOperation(false);
-  KoView::setZoom( (double) zoom / 100 );
-  m_pDoc->setZoom( zoom );
-  m_pDoc->newZoom();
+//   KoView::setZoom( (double) zoom / 100 );
+//   m_pDoc->setZoom( zoom );
+//   m_pDoc->newZoom();
+
+  KoView::setZoom( m_pDoc->zoomedResolutionY() /* KoView only supports one zoom */ );
+  m_pDoc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
+
+//  m_pDoc->newZoomAndResolution( updateViews, false )
 
   m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
   m_pCanvas->slotMaxRow( m_pTable->maxRow() );
@@ -3741,7 +3786,7 @@ KoDocument* KSpreadView::hitTest( const QPoint &pos )
     KoViewChild *viewChild;
 
     QWMatrix m = matrix();
-    m.translate( int( m_pCanvas->xOffset() ), int( m_pCanvas->yOffset() ) );
+//    m.translate( int( m_pCanvas->xOffset() ), int( m_pCanvas->yOffset() ) );
 
     KoDocumentChild *docChild = selectedChild();
     if ( docChild )
@@ -3768,8 +3813,9 @@ KoDocument* KSpreadView::hitTest( const QPoint &pos )
             if ( docChild->frameRegion( m ).contains( pos ) )
                 return 0;
     }
-
-    QPoint pos2( int(pos.x() / zoom()), int(pos.y() / zoom()) );
+//FIXME: Following is untested
+    QPoint pos2( int( m_pDoc->unzoomItX( pos.x() ) ),
+                 int( m_pDoc->unzoomItY( pos.y() ) ) );
 
     QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
     for (; it.current(); ++it )
@@ -3788,7 +3834,7 @@ KoDocument* KSpreadView::hitTest( const QPoint &pos )
 
 int KSpreadView::leftBorder() const
 {
-    return YBORDER_WIDTH;
+    return int( m_pCanvas->doc()->zoomItX( YBORDER_WIDTH ) );
 }
 
 int KSpreadView::rightBorder() const
@@ -3798,7 +3844,7 @@ int KSpreadView::rightBorder() const
 
 int KSpreadView::topBorder() const
 {
-    return m_pToolWidget->height() + XBORDER_HEIGHT;
+    return m_pToolWidget->height() + int( m_pCanvas->doc()->zoomItX( XBORDER_HEIGHT ) );
 }
 
 int KSpreadView::bottomBorder() const
@@ -3892,7 +3938,7 @@ void KSpreadView::refreshView()
       m_pVertScrollBar->hide();
     }
 
-    int widthRowHeader = YBORDER_WIDTH;
+    int widthRowHeader = int( m_pCanvas->doc()->zoomItX( YBORDER_WIDTH ) );
     if (m_pDoc->getShowRowHeader())
       m_pVBorderWidget->show();
     else
@@ -3901,7 +3947,7 @@ void KSpreadView::refreshView()
       m_pVBorderWidget->hide();
     }
 
-    int heightColHeader = XBORDER_HEIGHT;
+    int heightColHeader = int( m_pCanvas->doc()->zoomItY( XBORDER_HEIGHT ) );
     if(m_pDoc->getShowColHeader())
       m_pHBorderWidget->show();
     else
@@ -5210,8 +5256,8 @@ void KSpreadView::repaintPolygon( const QPointArray& polygon )
 QWMatrix KSpreadView::matrix() const
 {
     QWMatrix m;
-    m.translate( -int( m_pCanvas->xOffset() ), -int( m_pCanvas->yOffset() ) );
-    m.scale( zoom(), zoom() );
+//    m.translate( -int( m_pCanvas->xOffset() ), -int( m_pCanvas->yOffset() ) );
+//     m.scale( zoom(), zoom() );
     return m;
 }
 

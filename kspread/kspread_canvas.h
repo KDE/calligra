@@ -490,9 +490,9 @@ public:
     KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view  );
 
     int markerColumn() const { return  m_iSelectionAnchor; }
-    void resizeColumn( double resize, int nb = -1, bool makeUndo=true );
-    void adjustColumn( int _col = -1, bool makeUndo=true );
-    void equalizeColumn( int resize );
+    void resizeColumn( double resize, int nb = -1, bool makeUndo = true );
+    void adjustColumn( int _col = -1, bool makeUndo = true );
+    void equalizeColumn( double resize );
 
     void updateColumns( int from, int to );
 
@@ -560,9 +560,9 @@ public:
     KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view );
 
     int markerRow() const { return  m_iSelectionAnchor; }
-    void resizeRow( double resize, int nb = -1, bool makeUndo=true );
-    void adjustRow( int _row = -1, bool makeUndo=true );
-    void equalizeRow( int resize );
+    void resizeRow( double resize, int nb = -1, bool makeUndo = true );
+    void adjustRow( int _row = -1, bool makeUndo = true );
+    void equalizeRow( double resize );
     void updateRows( int from, int to );
 
 protected:

@@ -1,10 +1,11 @@
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) \
+INCLUDES  = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) -I$(interfacedir) \
 	$(KOSCRIPT_INCLUDES) -I$(top_srcdir)/interfaces \
 	 -I$(top_srcdir)/kchart/kdchart $(all_includes)
 
-## The part
 kde_module_LTLIBRARIES = libkspreadpart.la
+
+## The part
 libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_dlg_formula.cc \
 	kspread_functions.cc kspread_dlg_csv.cc \
@@ -44,7 +45,7 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 
 libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkspreadpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
-	$(LIB_KOSCRIPT) $(LIB_KOFFICEUI) -lkspell
+	$(LIB_KOSCRIPT) $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell
 libkspreadpart_la_METASOURCES = AUTO
 
 METASOURCES = AUTO

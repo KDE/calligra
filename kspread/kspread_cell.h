@@ -42,6 +42,8 @@ class KSParseNode;
 #include "kspread_depend.h"
 #include "kspread_condition.h"
 
+#include <kozoomhandler.h>
+
 struct KSpreadValidity
 {
  QString message;
@@ -189,6 +191,18 @@ public:
      */
     void copyAll( KSpreadCell *cell);
 
+    enum PaintCellBorder{
+    /* 
+      If we paint a cell, then the background erases even the border of the right and bottom cell,
+      if this border has a width > 1 pixel. To not redraw all borders all the time,
+      we can switch the drawing of the bottom/right border on and off.
+      Top and left border are always drawn.
+     */
+      Paint_NoBorder    = 0,
+      Paint_RightBorder = 1,
+      Paint_LeftBorder  = 2
+    };
+
     /**
      * Paints the cell.
      *
@@ -200,10 +214,13 @@ public:
      *                    of the cell should be painted plus width and height
      * @param cellRef the column/row coordinates of the cell.
      * @param drawCursor whether to draw the cursor and selection or not
+     * @param paintCellBorder whether to draw the right and/or bottom border.
+     *                    Top and left border are always drawn. Defaults to NoBorder.
      */
-    void paintCell( const QRect& rect, QPainter &painter,
-		    KSpreadView* view, const QPair<double, double> &coordinate,
-		    const QPoint &cellRef, bool drawCursor=true );
+    void paintCell( const KoRect& rect, QPainter &painter,
+                    KSpreadView* view, const KoPoint &coordinate,
+                    const QPoint &cellRef, bool drawCursor = true,
+                    PaintCellBorder paintCellBorder = Paint_NoBorder );
 
   /**
      * @return the column this cell is in. May return 0 if the cell is the default cell.
@@ -650,19 +667,19 @@ public:
      */
     void setConditionList(const QValueList<KSpreadConditional> &newList);
 
-    KSpreadValidity * getValidity(int newStruct=-1)
-    	{
-    	if((m_Validity==0)&&(newStruct==-1))
-    		m_Validity=new KSpreadValidity;
-    	return  m_Validity;
-    	}
+    KSpreadValidity * getValidity( int newStruct = -1 )
+    {
+        if( ( m_Validity == 0 ) && ( newStruct == -1 ) )
+            m_Validity = new KSpreadValidity;
+        return  m_Validity;
+    }
     void removeValidity()
-    	{
-            delete m_Validity;
-            m_Validity=0;
-    	}
+    {
+        delete m_Validity;
+        m_Validity = 0;
+    }
 
-     /**
+    /**
      * return true if value is good
      * else show a messagebox
      */
@@ -671,8 +688,8 @@ public:
     void conditionAlign(QPainter &painter,int _col,int _row);
 
     /**
-    * return align X when align is undefined
-    */
+     * return align X when align is undefined
+     */
     int defineAlignX();
 
 
@@ -886,8 +903,8 @@ private:
      */
     int m_fmAscent;
 
-  int m_iMergedXCells;
-  int m_iMergedYCells;
+    int m_iMergedXCells;
+    int m_iMergedYCells;
 
     /**
      * The amount of additional cells horizontal
@@ -1013,33 +1030,27 @@ private:
     static const char* s_dataTypeToString[];
 
   /* helper functions to the paintCell(...) function */
-    void paintCellBorders( QPainter& painter, KSpreadView* view,
-                           const QRect &rect, const QPoint &corner, const QPoint &cellRef,
-                           int width, int height );
-    void paintPageBorders( QPainter& painter,
-                           const QPoint &corner, const QPoint &cellRef,
-                           int width, int height );
-    void paintText( QPainter& painter,
-                    const QPoint &corner, const QPoint &cellRef,
-                    int width, int height );
-    void paintMoreTextIndicator( QPainter& painter,
-                                 const QPoint &corner,
-                                 int width, int height );
-    void paintCommentIndicator( QPainter& painter,
-                                const QPoint &corner, const QPoint &cellRef,
-                                int width, int height );
-    void paintFormulaIndicator( QPainter& painter, const QPoint &corner, int height );
-    void paintDefaultBorders( QPainter& painter, KSpreadView* view,
-                              const QRect &rect, const QPoint &corner, const QPoint &cellRef,
-                              int width, int height );
-    void paintBackground( QPainter& painter, KSpreadView* view,
-                          const QPoint &corner, const QPoint &cellRef,
-                          int width, int height, bool selected );
-    void paintObscuredCells( const QRect& rect, QPainter& painter,
-                             KSpreadView* view, const QPoint &corner, const QPoint &cellRef );
+    void paintCellBorders( QPainter& painter, const KoRect &rect,
+                           const KoRect &cellRect, const QPoint &cellRef,
+                           PaintCellBorder paintCellBorder = Paint_NoBorder );
+    void paintPageBorders( QPainter& painter, const KoRect &cellRect,
+                           const QPoint &cellRef );
+    void paintText( QPainter& painter, const KoRect &cellRect,
+                    const QPoint &cellRef );
+    void paintMoreTextIndicator( QPainter& painter, const KoRect &cellRect );
+    void paintCommentIndicator( QPainter& painter, const KoRect &cellRect,
+                                const QPoint &cellRef );
+    void paintFormulaIndicator( QPainter& painter, const KoRect &cellRect );
+    void paintDefaultBorders( QPainter& painter, const KoRect &rect,
+                              const KoRect &cellRect, const QPoint &cellRef );
+    void paintBackground( QPainter& painter, const KoRect &cellRect, 
+                          const QPoint &cellRef, bool selected );
+    void paintObscuredCells( const KoRect& rect, QPainter& painter,
+                             KSpreadView* view, const KoRect &cellRect,
+                             const QPoint &cellRef );
     void paintCellDiagonalLines( QPainter& painter,
-                                 const QPoint &corner, const QPoint &cellRef,
-                                 int width, int height );
+                                 const KoRect &cellRect,
+                                 const QPoint &cellRef );
 
 
 

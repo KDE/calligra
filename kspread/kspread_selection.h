@@ -62,7 +62,7 @@ public:
   /**
    * @return the area that the 'handle' of the selection is located in painting coordinates.
    */
-  QRect selectionHandleArea(KSpreadCanvas* canvas) const;
+  QRect selectionHandleArea() const;
 
   void setSelection( const QPoint &marker, const QPoint &anchor,
                      KSpreadSheet* table );

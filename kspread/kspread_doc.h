@@ -39,6 +39,7 @@ class KSpellConfig;
 
 
 #include <koDocument.h>
+#include <kozoomhandler.h>
 #include <koPageLayoutDia.h>
 
 #include <iostream.h>
@@ -65,7 +66,7 @@ struct Reference
 /**
  * This class holds the data that makes up a spreadsheet.
  */
-class KSpreadDoc : public KoDocument
+class KSpreadDoc : public KoDocument, public KoZoomHandler
 {
   Q_OBJECT
 public:
@@ -107,30 +108,31 @@ public:
   KLocale* locale() { return &m_locale; }
 
   /**
-   * updates all view after zoom changed
+   * Change the zoom factor to @p z (e.g. 150 for 150%)
+   * and/or change the resolution, given in DPI.
+   * This is done on startup and when printing.
+   * The same call combines both so that all the updating done behind
+   * the scenes is done only once, even if both zoom and DPI must be changed.
    */
-  void newZoom();
+  virtual void setZoomAndResolution( int zoom, int dpiX, int dpiY );
 
   /**
-   * set the zoom factor (in percent)
+   * updates all properties after zoom changed
    */
-  void setZoom( int zoom );
-
-  /**
-   * returns the zoom factor in percent.
-   */
-  int zoom() const { return m_iZoom; }
+  void newZoomAndResolution( bool updateViews, bool forPrint );
 
   /**
    * @return the KScript Interpreter used by this document.
    */
   KSpreadInterpreter* interpreter()const { return m_pInterpreter; }
+
   /**
    * Kills the interpreter and creates a new one and
    * reloads all scripts. This is useful if they have been
    * edited and the changes should take effect.
    */
   void resetInterpreter();
+
   /**
    * @return a context that can be used for evaluating formulas.
    *         This function does remove any exception from the context.
@@ -141,10 +143,12 @@ public:
    * Undo the last operation.
    */
   void undo();
+
   /**
    * Redo the last undo.
    */
   void redo();
+
   /**
    * @return the object that is respnsible for keeping track
    *         of the undo buffer.
@@ -189,10 +193,10 @@ public:
    * @param drawCursor whether or not to draw the selection rectangle and the choose
    *                   marker
    */
-  void paintCellRegions(QPainter& painter, const QRect &viewRect, KSpreadView* view,
+  void paintCellRegions(QPainter& painter, const QRect &viewRect,
+                        KSpreadView* view,
                         QValueList<QRect> cellRegions,
                         const KSpreadSheet* table, bool drawCursor);
-
 
   virtual DCOPObject* dcopObject();
 
@@ -416,11 +420,6 @@ protected:
   int m_iTableId;
 
   /**
-   * Stores the current zooom factor in percent
-   */
-  int m_iZoom;
-
-  /**
    * The URL of the this part. This variable is only set if the @ref #load function
    * had been called with an URL as argument.
    *
@@ -534,13 +533,15 @@ private:
    */
   void paintUpdates();
 
-  void PaintRegion(QPainter& painter, const QRect &viewRegion,
-		   KSpreadView* view, const QRect &paintRegion,
-		   const KSpreadSheet* table);
-  void PaintChooseRect(QPainter& painter, const QRect &viewRect,
-		       const KSpreadSheet* table, const QRect &chooseRect);
-  void PaintNormalMarker(QPainter& painter, const QRect &viewRect,
-			 const KSpreadSheet* table, const QRect &selection);
+  void PaintRegion(QPainter& painter, const KoRect &viewRegion,
+                   KSpreadView* view, const QRect &paintRegion,
+                   const KSpreadSheet* table);
+  void PaintChooseRect(QPainter& painter, const KoRect &viewRect,
+                       KSpreadView* view, const KSpreadSheet* table,
+                       const QRect &chooseRect);
+  void PaintNormalMarker(QPainter& painter, const KoRect &viewRect,
+                         KSpreadView* view, const KSpreadSheet* table,
+                         const QRect &selection);
 
   /**
    * helper function in drawing the marker and choose marker.
@@ -557,10 +558,9 @@ private:
    *                   Again, these are in the order left, top, right, bottom.
    *                   This should be preallocated with a size of at least 4.
    */
-  void RetrieveMarkerInfo(const QRect &marker, const KSpreadSheet* table,
-			  const QRect &viewRect,
-                          int positions[], bool paintSides[]);
+  void retrieveMarkerInfo( const QRect &marker, const KSpreadSheet* table,
+                           KSpreadView* view, const KoRect &viewRect,
+                           double positions[], bool paintSides[] );
 };
 
 #endif
-
