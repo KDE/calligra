@@ -5,6 +5,8 @@ REAL BUGS:
 -	change flatness test in intersection code to a estimation used in gems code. otherwise
 	if the 2 input curves are the same our code runs forever.
 -	shape creation: the last temporary shape looks slightly different than the final shape
+-	changing preview mode to wireframe doesn't refresh the canvas (shapes remain filled)
+-	canvas doesn't repaint correctly while scrolling with the scrollbar
 
 TODO:
 -	don't create tools while being a r/o part
