@@ -74,7 +74,7 @@ bool EPSExport::exportToFile (GDocument* doc) {
 	     << endl;
 
   // write prolog
-  if (! Canvas::writePSProlog (epsStream))
+  if (! GDocument::writePSProlog (epsStream))
     return false;
 
   epsStream << "/PaperWidth " << doc->getPaperWidth () << " def\n"

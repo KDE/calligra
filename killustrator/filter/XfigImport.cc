@@ -35,6 +35,33 @@
 
 #define RAD_FACTOR 180.0 / M_PI
 
+unsigned int colors[] = {
+    0x000090,
+    0x0000b0,
+    0x0000d0,
+    0x87ceff,
+    0x009000,
+    0x00b000,
+    0x00d000,
+    0x009090,
+    0x00b0b0,
+    0x00d0d0,
+    0x900000,
+    0xb00000,
+    0xd00000,
+    0x900090,
+    0xb000b0,
+    0xd000d0,
+    0x803000,
+    0xa04000,
+    0xc06000,
+    0xff8080,
+    0xffa0a0,
+    0xffc0c0,
+    0xffe0e0,
+    0xffd700
+};
+
 struct PSFont {
   const char* family;
   QFont::Weight weight;
@@ -115,9 +142,9 @@ bool XfigImport::setup (GDocument* doc, const char* format) {
   colorTable.insert (5, new QColor (magenta));
   colorTable.insert (6, new QColor (yellow));
   colorTable.insert (7, new QColor (white));
-  // TODO: up to 31 !!
-  for (int i = 8; i < 32; i++)
-      colorTable.insert (i, new QColor (black));
+
+  for (int i = 0; i <= 23; i++) 
+      colorTable.insert (i + 8, new QColor (colors[i]));
 
   objList.clear ();
 
