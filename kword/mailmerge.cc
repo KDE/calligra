@@ -141,12 +141,12 @@ KWMailMergeDataSource *KWMailMergeDataBase::loadPlugin(const QString& name)
       // try to load the library
 	QString libname=name;
 //      QString libname("lib%1");
-      KLibrary *lib = loader->library(QFile::encodeName(libname.arg(name)));
+      KLibrary *lib = loader->library(QFile::encodeName(libname));
       if (lib)
 	{
 	  // get the create_ function
-	  QString factory("create_%1");
-	  void *create = lib->symbol(QFile::encodeName(factory.arg(name)));
+	  QString factory=QString("create_%1").arg(name);
+	  void *create = lib->symbol(QFile::encodeName(factory));
 
 	  if (create)
 	    {
