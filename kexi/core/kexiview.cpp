@@ -51,7 +51,7 @@
 #include "kexicontexthelp.h"
 #include "kexi_factory.h"
 #include "kexi_global.h"
-//#include "kexi_utils.h"
+#include "kexi_utils.h"
 
 KexiView::KexiView(KexiWindowMode winmode, KexiProject *part, QWidget *parent, const char *name )
 : KoView(part,parent,name)
