@@ -33,7 +33,7 @@ typedef QPtrListIterator<VLayer> VLayerListIterator;
 
 class VDocument : public VObject
 {
-public: 
+public:
 	VDocument();
 	VDocument( const VDocument& document );
 
@@ -71,7 +71,7 @@ public:
 
 
 	// manipulate selection:
-	const VSelection* selection() const { return m_selection; }
+	VSelection* selection() const { return m_selection; }
 
 	void select() const;	// select all vobjects period.
 	void deselect() const;	// unselect all vobjects from all vlayers.
