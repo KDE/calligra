@@ -120,33 +120,35 @@ namespace Kivio {
     KoPoint point;
     double px = p->x();
     double py = p->y();
-    
-    while(i < m_points.count()) {
+    uint count = m_points.count();
+
+    while(i < count) {
       point = m_points[i];
-      
+
       if(px >= point.x() - threshold && px <= point.x() + threshold &&
         py >= point.y() - threshold && py <= point.y() + threshold)
       {
         return static_cast<KivioCollisionType>(i + kctCustom + 1);
       }
-      
+
       i++;
     }
-    
+
     i = 0;
-        
-    while(i < (m_points.count() - 1)) {
+    count--; // As we need current + 1;
+
+    while(i < count) {
       point = m_points[i];
-      
+
       if(collisionLine(point.x(), point.y(),
         m_points[i + 1].x(), m_points[i + 1].y(), px, py, threshold))
       {
         return kctBody;
       }
-      
+
       i++;
     }
-    
+
     return kctNone;
   }
 

@@ -108,6 +108,9 @@ inline bool collisionLine( double sx, double sy, double ex, double ey, double px
       minx = ex;
       maxx = sx;
    }
+   
+   minx -= threshold;
+   maxx += threshold;
 
    if( sy < ey ) {
       miny = sy;
@@ -117,7 +120,10 @@ inline bool collisionLine( double sx, double sy, double ex, double ey, double px
       miny = ey;
       maxy = sy;
    }
-   
+
+   miny -= threshold;
+   maxy += threshold;
+
    if( !(px >= minx &&
 	 px <= maxx &&
 	 py >= miny &&
