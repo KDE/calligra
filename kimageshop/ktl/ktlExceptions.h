@@ -33,6 +33,6 @@ namespace KTL
 
 DECLARE_EXCEPTION(NullPointerException)
 
-}
+};
 
 #endif // _EXCEPTIONS_H_INCLUDED

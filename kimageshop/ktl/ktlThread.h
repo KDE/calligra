@@ -7,10 +7,8 @@ extern "C"
 }
 
 #include <qobject.h>
-#include <ktlExceptions.h>
 
-extern void *__entry_threadproc(void *);
-extern void  __cleanup_handler(void *);
+#include <ktlExceptions.h>
 
 namespace KTL
 {
@@ -70,8 +68,8 @@ namespace KTL
     ThreadProc *threadProc;
     pthread_t   threadHandle;
     
-    friend void * __entry_threadproc(void *);
-    friend void __cleanup_handler(void *);
+    friend void * KTL::__entry_threadproc(void *);
+    friend void KTL::__cleanup_handler(void *);
   };
   
 };

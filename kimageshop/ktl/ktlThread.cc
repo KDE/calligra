@@ -11,12 +11,12 @@ extern "C"
 #include <unistd.h>	
 }
 
-void __cleanup_handler(void * arg)
+void KTL::__cleanup_handler(void * arg)
 {
   ((KTL::Thread *)arg)->__signalTerminated();
 }
 
-void *__entry_threadproc(void * arg)
+void *KTL::__entry_threadproc(void * arg)
 {
   KTL::Thread *thread = (KTL::Thread *)arg;
   
