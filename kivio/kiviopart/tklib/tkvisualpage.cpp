@@ -1,5 +1,6 @@
 #include "tkvisualpage.h"
 
+#include <kpixmap.h>
 #include <kpixmapeffect.h>
 #include <qpainter.h>
 
