@@ -63,7 +63,7 @@ public:
                             // paragraph.
         NUM_LIST = 0,       // Numbered as a list item.
         NUM_CHAPTER = 1,    // Numbered as a heading.
-        NUM_FIXEDTEXT = 3   // Fixed text counter, set by the code. This is used by e.g. footnotes.
+        NUM_FOOTNOTE = 3   // Fixed text counter, set by the code. This is used by e.g. footnotes.
     };
     enum Style // always add to the end, the numeric values are part of the DTD
     {
@@ -116,6 +116,11 @@ public:
     QString custom() const;
     void setCustom( QString c );
 
+    /**
+     * Return the format to use for the counter.
+     * This does no caching, it's merely to centralize code.
+     */
+    static KoTextFormat* counterFormat( const KoTextParag *paragraph );
 
     static QString makeRomanNumber( int n );
     static QString makeAlphaUpperNumber( int n );

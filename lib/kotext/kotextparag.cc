@@ -156,7 +156,7 @@ int KoTextParag::counterWidth() const
 
 // Draw the complete label (i.e. heading/list numbers/bullets) for this paragraph.
 // This is called by KoTextParag::paintDefault.
-void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int base, const QColorGroup& /*cg*/ )
+void KoTextParag::drawLabel( QPainter* p, int x, int _y, int /*w*/, int h, int base, const QColorGroup& /*cg*/ )
 {
     if ( !m_layout.counter ) // shouldn't happen
         return;
@@ -171,7 +171,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     int size = m_layout.counter->width( this );
 
     // We use the formatting of the first char as the formatting of the counter
-    KoTextFormat *format = at( 0 )->format(); // paragFormat();
+    KoTextFormat *format = KoParagCounter::counterFormat( this );
     p->save();
 
     //QColor textColor( format->color() );
@@ -183,17 +183,24 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     assert( zh );
     //bool forPrint = ( p->device()->devType() == QInternal::Printer );
-    p->setFont( format->screenFont( zh ) );
 
     x = zh->layoutUnitToPixelX( x );
-    y = zh->layoutUnitToPixelY( y );
-    h = zh->layoutUnitToPixelY( y, h );
-    base = zh->layoutUnitToPixelY( y, base );
+    int y = zh->layoutUnitToPixelY( _y );
+    h = zh->layoutUnitToPixelY( _y, h );
+    base = zh->layoutUnitToPixelY( _y, base );
     size = zh->layoutUnitToPixelX( size );
 
-    int height = format->height();
+    int height = zh->layoutUnitToPixelY( _y, format->height() );
 
-    height = zh->layoutUnitToPixelY( y, height );
+    QFont font( format->screenFont( zh ) );
+    // Footnote numbers are in superscript (in WP and Word, not in OO)
+    if ( m_layout.counter->numbering() == KoParagCounter::NUM_FOOTNOTE )
+    {
+        int pointSize = ( ( font.pointSize() * 2 ) / 3 );
+        font.setPointSize( pointSize );
+        y -= ( height - QFontMetrics(font).height() );
+    }
+    p->setFont( font );
 
     // Now draw any bullet that is required over the space left for it.
     if ( m_layout.counter->isBullet() )
@@ -674,7 +681,7 @@ void KoTextParag::copyParagData( KoTextParag *parag )
         parag->m_layout.pageBreaking &= ~KoParagLayout::HardFrameBreakBefore;
         parag->m_layout.pageBreaking &= ~KoParagLayout::HardFrameBreakAfter;
         // Remove footnote counter text from second parag
-        if ( m_layout.counter && m_layout.counter->numbering() == KoParagCounter::NUM_FIXEDTEXT )
+        if ( m_layout.counter && m_layout.counter->numbering() == KoParagCounter::NUM_FOOTNOTE )
             setNoCounter();
 
         // set parag format to the format of the trailing space of the previous parag

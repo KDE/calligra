@@ -138,7 +138,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
     {
     case NUM_NONE:
         // This should not occur!
-    case NUM_FIXEDTEXT:
+    case NUM_FOOTNOTE:
         m_cache.number = 0;
         break;
     case NUM_CHAPTER:
@@ -230,7 +230,7 @@ KoTextParag *KoParagCounter::parent( const KoTextParag *paragraph )
     {
     case NUM_NONE:
         // This should not occur!
-    case NUM_FIXEDTEXT:
+    case NUM_FOOTNOTE:
         otherParagraph = 0L;
         break;
     case NUM_CHAPTER:
@@ -295,9 +295,8 @@ void KoParagCounter::save( QDomElement & element )
         element.setAttribute( "righttext", m_suffix );
     if ( m_startNumber != 1 )
         element.setAttribute( "start", m_startNumber );
-    // At the moment we don't need to save NUM_FIXEDTEXT, it's updated right after loading (footnotes)
-    // Change this (and add to the DTD) if using NUM_FIXEDTEXT for something else
-    if ( m_numbering != NUM_NONE && m_numbering != NUM_FIXEDTEXT )
+    // Don't need to save NUM_FOOTNOTE, it's updated right after loading
+    if ( m_numbering != NUM_NONE && m_numbering != NUM_FOOTNOTE )
         element.setAttribute( "numberingtype", static_cast<int>( m_numbering ) );
     if ( !m_custom.isEmpty() )
         element.setAttribute( "customdef", m_custom );
@@ -471,7 +470,7 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
 int KoParagCounter::width( const KoTextParag *paragraph )
 {
     // Return cached value if possible.
-    if ( m_cache.width != -1 && paragraph->at( 0 )->format() == m_cache.counterFormat )
+    if ( m_cache.width != -1 && counterFormat( paragraph ) == m_cache.counterFormat )
         return m_cache.width;
 
     // Ensure paragraph text is valid.
@@ -481,7 +480,7 @@ int KoParagCounter::width( const KoTextParag *paragraph )
     // Now calculate width.
     if ( m_cache.counterFormat )
         m_cache.counterFormat->removeRef();
-    m_cache.counterFormat = paragraph->at( 0 )->format();/*paragraph->paragFormat()*/;
+    m_cache.counterFormat = counterFormat( paragraph );
     m_cache.counterFormat->addRef();
     m_cache.width = 0;
     QString text = m_cache.text;
@@ -496,6 +495,13 @@ int KoParagCounter::width( const KoTextParag *paragraph )
 
     //kdDebug() << "KoParagCounter::width recalculated parag=" << paragraph << " text='" << text << "' width=" << m_cache.width << endl;
     return m_cache.width;
+}
+
+// Only exists to centralize code. Does no caching.
+KoTextFormat* KoParagCounter::counterFormat( const KoTextParag *paragraph )
+{
+    return paragraph->at( 0 )->format();
+    /*paragraph->paragFormat()*/
 }
 
 ///
