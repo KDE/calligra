@@ -15,6 +15,7 @@
 
 #include "koTemplateChooseDia.h"
 #include <klocale.h>
+#include <qvbox.h>
 
 /******************************************************************/
 /* Class: KoTemplateChooseDia                                     */
@@ -119,10 +120,10 @@ void KoTemplateChooseDia::setupTabs()
     {
       for (grpPtr = groupList.first();grpPtr != 0;grpPtr = groupList.next())
 	{
-	  grpPtr->tab = new QWidget(this);
+	  grpPtr->tab = new QVBox(this);
  	  grpPtr->loadWid = new KIconLoaderCanvas(grpPtr->tab);
   	  grpPtr->loadWid->loadDir(grpPtr->dir.absFilePath(),"*.xpm");
- 	  grpPtr->loadWid->move(0,0);
+ 	  //grpPtr->loadWid->move(0,0);
 	  grpPtr->loadWid->setBackgroundColor(colorGroup().base());
  	  connect(grpPtr->loadWid,SIGNAL(nameChanged(const QString &)),
  		  this,SLOT(nameChanged(const QString &)));
@@ -131,7 +132,9 @@ void KoTemplateChooseDia::setupTabs()
 	  connect(grpPtr->loadWid,SIGNAL(doubleClicked()),
 		  this,SLOT(accept()));
 	  grpPtr->label = new QLabel(grpPtr->tab);
-	  grpPtr->tab->setMinimumSize(400,300);
+	  grpPtr->label->setText(" ");
+	  grpPtr->label->setMaximumHeight(grpPtr->label->sizeHint().height());
+	  //grpPtr->tab->setMinimumSize(400,300);
  	  addTab(grpPtr->tab,grpPtr->name);
 	}
     }
@@ -141,15 +144,15 @@ void KoTemplateChooseDia::setupTabs()
 void KoTemplateChooseDia::resizeEvent(QResizeEvent *e)
 {
   QTabDialog::resizeEvent(e);
-  if (!groupList.isEmpty())
-    {
-      for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
-	{
-	  grpPtr->loadWid->resize(grpPtr->tab->width(),grpPtr->tab->height()-30);
-	  grpPtr->label->setGeometry(10,grpPtr->tab->height()-30,
-				     grpPtr->tab->width()-10,30);
-	}
-    }
+//   if (!groupList.isEmpty())
+//     {
+//       for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
+// 	{
+// 	  grpPtr->loadWid->resize(grpPtr->tab->width(),grpPtr->tab->height()-30);
+// 	  grpPtr->label->setGeometry(10,grpPtr->tab->height()-30,
+// 				     grpPtr->tab->width()-10,30);
+// 	}
+//     }
 }
 
 /*====================== name changed ===========================*/
@@ -160,7 +163,11 @@ void KoTemplateChooseDia::nameChanged(const QString &name)
   if (!groupList.isEmpty())
     {
       for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
-	grpPtr->label->setText(fi.baseName());
+	{
+	  grpPtr->label->setText(fi.baseName());
+	  if (grpPtr->label->text().isEmpty())
+	    grpPtr->label->setText(" ");
+	}
     }
 }
 
