@@ -1,5 +1,5 @@
 /**
- * $Id:$
+ * $Id$
  */
 
 #ifndef __KRTFHEADERPARSER_H__
@@ -19,7 +19,6 @@ public:
     bool parse();
     
 private:
-    KRTFTokenizer* _tokenizer;
 };
 
 #endif

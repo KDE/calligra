@@ -1,5 +1,5 @@
 /**
- * $Id:$
+ * $Id$
  */
 
 #ifndef __KRTFTOKENIZER_H__
@@ -14,7 +14,7 @@ class KRTFTokenizer
 public:
     KRTFTokenizer( QFile* file );
     
-    KRTFToken* nextToken();
+    KRTFToken nextToken();
 
 private:
     QFile* _file;

@@ -1,5 +1,5 @@
 /**
- * $Id:$
+ * $Id$
  */
 
 #include "KRTFTokenizer.h"
@@ -13,11 +13,11 @@ KRTFTokenizer::KRTFTokenizer( QFile* file )
 }
 
 
-KRTFToken* KRTFTokenizer::nextToken()
+KRTFToken KRTFTokenizer::nextToken()
 {
     QString text;
     QString param;
-    KRTFToken* token = new KRTFToken();
+    KRTFToken token;
 
     int ch = _file->getch();
     
@@ -26,7 +26,7 @@ KRTFToken* KRTFTokenizer::nextToken()
 	ch=_file->getch();
 
     if( _file->atEnd() ) {
-	token->_type = TokenEOF;
+	token._type = TokenEOF;
 	return token;
     }
 
@@ -37,24 +37,24 @@ KRTFToken* KRTFTokenizer::nextToken()
 	ch = _file->getch();
 	if( !isalnum( ch ) ) {
 	    // control symbol
-	    token->_type = ControlSymbol;
-	    token->_text += (char)ch;
+	    token._type = ControlSymbol;
+	    token._text += (char)ch;
 	} else {
 	    // control word
-	    token->_type = ControlWord;
+	    token._type = ControlWord;
 	    _file->ungetch( ch );
 	}
     } else if( ch == '{' ) {
-	token->_type = OpenGroup;
+	token._type = OpenGroup;
     } else if( ch == '}' ) {
-	token->_type = CloseGroup;
+	token._type = CloseGroup;
     } else {
-	token->_type = PlainText;
+	token._type = PlainText;
 	_file->ungetch( ch );
     }
 
     // Lump together what might be needed additionally.
-    switch( token->_type ) {
+    switch( token._type ) {
     case ControlWord:
 	ch = _file->getch();
 	while( isalpha( ch ) ) {
@@ -75,8 +75,8 @@ KRTFToken* KRTFTokenizer::nextToken()
 	    }
 	}
 
-	token->_text = text;
-	token->_param = param;
+	token._text = text;
+	token._param = param;
 	break;
     case PlainText:
 	// everything until next backslash, opener or closer
@@ -85,7 +85,7 @@ KRTFToken* KRTFTokenizer::nextToken()
 	    text += (char)ch;
 	    ch = _file->getch();
 	}
-	token->_text = text;
+	token._text = text;
 	// give back last char
 	_file->ungetch( ch );
     }
