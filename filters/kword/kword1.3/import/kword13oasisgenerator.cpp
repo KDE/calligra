@@ -95,6 +95,33 @@ void KWord13OasisGenerator::preparePageLayout( void )
         style.addProperty("style:print-orientation", "portrait" );
     }
     // end of "inspiration"
+#if 0
+    // ### TODO: verify that it fits OASIS spec (as it is OO spec.)
+    bool ok = false;
+    const int firstPageNumber = m_kwordDocument->getProperty( "VARIABLESETTINGS:startingPageNumber" ).toInt( &ok );
+    style.addProperty("style:first-page-number", ( firstPageNumber > 1 && ok ) ? firstPageNumber : 1 ) );
+
+    const int columns = m_kwordDocument->getProperty( "PAPER:columns" ).toInt( &ok );
+    if ( columns > 1 )
+    {
+        style.addElement("style:columns");
+        style.addProperty( "fo:column-count", columns );
+        style.addPropertyPt( "fo:column-gap=" positiveNumberOrNull( m_kwordDocument->getProperty( "PAPER:columnspacing", "PAPER:ptColumnspc" ) ) );
+
+        for (int i=0; i < columns; ++i)
+        {
+            style.addElement( "style:column" );
+            style.addProperty( "style:rel-width", "1*" );
+            style.addPropertyPt( "fo:margin-left", 0.0 );
+            style.addPropertyPt( "fo:margin-right", 0.0 );
+            style.endElement();
+        }
+
+        style.endElement();
+    }
+#endif
+    const QString automaticPageStyle ( m_oasisGenStyles.lookup( style, "pm" ) );
+    kdDebug(30520) << "Automatic page style: " << automaticPageStyle << endl;
 }
 
 
