@@ -1132,6 +1132,8 @@ void KoTextParag::printRTDebug( int info )
 void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h, int startText, int len, KoTextParag *_parag)
 {
     //kdDebug()<<" bw :"<<bw<<endl;
+    if ( _parag->shadowY( zh ) < 0)
+        lastY -=_parag->shadowY( zh );
     if ( !format->wordByWord() )
     {
         KoTextParag::drawFontEffects( p, format, zh, font, color, startX, baseLine, bw , lastY, h);
@@ -1325,6 +1327,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
             y = lastY + baseLine + KoBorder::zoomWidthY( 2, zh, 0 );
         else
             y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
+
         int offset = 0;
         if (format->vAlign() == KoTextFormat::AlignSubScript )
             offset= p->fontMetrics().height() / 6;
