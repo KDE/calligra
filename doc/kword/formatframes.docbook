@@ -62,14 +62,14 @@ edit. (Or by holding down the &Ctrl; key and clicking inside the frame with the
 <itemizedlist>
 <listitem>
 <para>Select <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset...</guimenuitem></menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset Properties...</guimenuitem></menuchoice>
 from the menubar.</para>
 </listitem>
 
 <listitem>
 <para>Place the mouse pointer on the border of the frame, and click once
 with the &RMB;.  A small menu
-will appear.  Select <guimenuitem>Frame/Frameset...</guimenuitem>.</para>
+will appear.  Select <guimenuitem>Frame/Frameset Properties...</guimenuitem>.</para>
 </listitem>
 
 </itemizedlist>
@@ -210,7 +210,7 @@ when it displays the text in overlapping frames.</para>
 of other overlapping frames around this frame.</para>
 <para>If this option is selected, you can determine which side the text runs around in the section labeled
 <guilabel>Run Around Side</guilabel>.  Simply choose <guilabel>Left</guilabel>, <guilabel>Right</guilabel>,
-or <guilabel>Biggest side</guilabel>.</para>
+or <guilabel>Longest side</guilabel>.</para>
 </listitem>
 </varlistentry>
 
@@ -225,7 +225,9 @@ this frame before continuing to display text in overlapping frames.</para>
 </variablelist>
 
 <para>You can also determine how close your frames appear by setting the
-<guilabel>Distance between frame and text</guilabel> in the text box provided.</para>
+<guilabel>Distance between frame and text</guilabel> in the spin boxes provided. If you place a mark in the 
+checkbox labeled <guilabel>Synchronize changes</guilabel>
+&kword; will make all distances equal.</para>
 
 </sect3>
 <sect3 id="format-frame-connect"><title>Reconnect frames</title>
@@ -233,7 +235,7 @@ this frame before continuing to display text in overlapping frames.</para>
 <indexterm><primary>framesets</primary><secondary>edit</secondary></indexterm>
 
 <para>You can change which frameset the current frame belongs to by selecting 
-the <guilabel>Connect text frames</guilabel> tab.</para>
+the <guilabel>Connect Text Frames</guilabel> tab.</para>
 
 <screenshot>
 <mediaobject>
