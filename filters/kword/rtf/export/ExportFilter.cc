@@ -944,7 +944,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
         // Font style
         if ( formatData.italic )
         {
-            strElement+="\\i1";
+            strElement+="\\i";
         }
         else
         {
@@ -956,7 +956,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
     {
         if ( formatData.weight >= 75 )
         {
-            strElement+="\\b1";
+            strElement+="\\b";
         }
         else
         {
@@ -988,7 +988,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
             QString underlineValue = formatData.underlineValue;
             QString underlineStyle = formatData.underlineStyle;
             bool underlineWord = formatData.underlineWord;
-            QString ul = "\\ul1";  // fall-back: simple underline
+            QString ul ( "\\ul" );  // fall-back: simple underline
 
             if( underlineStyle.isEmpty() ) underlineStyle = "solid";
             if( underlineValue == "1" ) underlineValue = "single";
@@ -1026,13 +1026,13 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
         if ( formatData.strikeout )
         {
             if( formatData.strikeoutType == "double" )
-                strElement+="\\striked1";
+                strElement+="\\striked";
             else
-                strElement+="\\strike1";
+                strElement+="\\strike";
         }
         else
         {
-            strElement+="\\strike0";
+            strElement+="\\strike0"; // ### TODO: \striked0 too?
         }
     }
 
