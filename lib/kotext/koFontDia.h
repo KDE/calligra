@@ -23,7 +23,7 @@
 #include <kfontdialog.h>
 #include <qtabwidget.h>
 #include <kotextformat.h>
-#include <qradiobutton.h>
+#include <qcheckbox.h>
 class QComboBox;
 
 /**
@@ -133,8 +133,8 @@ protected slots:
     void slotHyphenationClicked();
 private:
     KFontChooser *m_chooseFont;
-    QRadioButton *m_superScript;
-    QRadioButton *m_subScript;
+    QCheckBox *m_superScript;
+    QCheckBox *m_subScript;
 
     QComboBox *m_underlining;
     QComboBox *m_underlineType;
