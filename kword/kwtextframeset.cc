@@ -1125,6 +1125,7 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) con
     int len = m_framesInPage.count();
     int n1 = 0;
     int n2 = len - 1;
+    int internalY = 0;
     int mid = 0;
     bool found = FALSE;
     while ( n1 <= n2 ) {
@@ -1139,10 +1140,11 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) con
         else
         {
             KWFrame * frame = m_framesInPage[mid]->first();
+            internalY = frame->internalY();
 #ifdef DEBUG_ITN
-            kdDebug() << "ITN: iPoint.y=" << iPoint.y() << " internalY=" << frame->internalY() << endl;
+            kdDebug() << "ITN: iPoint.y=" << iPoint.y() << " internalY=" << internalY << endl;
 #endif
-            res = iPoint.y() - frame->internalY();
+            res = iPoint.y() - internalY;
 #ifdef DEBUG_ITN
             kdDebug() << "ITN: res=" << res << endl;
 #endif
@@ -1154,7 +1156,7 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) con
 #ifdef DEBUG_ITN
                 kdDebug() << "ITN: height=" << height << endl;
 #endif
-                if ( iPoint.y() < frame->internalY() + height )
+                if ( iPoint.y() < internalY + height )
                 {
 #ifdef DEBUG_ITN
                     kdDebug() << "ITN: found a match " << mid << endl;
@@ -1193,12 +1195,26 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) con
         }
     }
     // search to first of equal items
-    // ## don't think this can happen here
-    //while ( (mid - 1 >= 0) && !((QGVector*)this)->compareItems(d, m_framesInPage[mid-1]) )
-    //    mid--;
+    // This happens with copied frames, which have the same internalY
+    int result = mid;
+    while ( mid - 1 >= 0 )
+    {
+        mid--;
+        if ( !m_framesInPage[mid]->isEmpty() )
+        {
+            KWFrame * frame = m_framesInPage[mid]->first();
+#ifdef DEBUG_ITN
+            kdDebug() << "KWTextFrameSet::internalToNormal going back to page " << mid << " - frame: " << frame->internalY() << endl;
+#endif
+            if ( frame->internalY() == internalY ) // same internalY as the frame we found before
+                result = mid;
+            else
+                break;
+        }
+    }
 
-    // Now iterate over the frames in page 'mid' and find the right one
-    QListIterator<KWFrame> frameIt( *m_framesInPage[mid] );
+    // Now iterate over the frames in page 'result' and find the right one
+    QListIterator<KWFrame> frameIt( *m_framesInPage[result] );
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
@@ -1214,7 +1230,7 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) con
     }
 #ifdef DEBUG_ITN
     kdDebug(32002) << "KWTextFrameSet::internalToNormal " << iPoint.x() << "," << iPoint.y()
-                   << " not in any frame of " << (void*)this << " (looked on page " << mid << ")" << endl;
+                   << " not in any frame of " << (void*)this << " (looked on page " << result << ")" << endl;
 #endif
     nPoint = iPoint; // bah again
     return 0L;
