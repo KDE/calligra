@@ -198,6 +198,8 @@ public:
     void insertEllipse( const QRect& );
     void insertPie( const QRect& );
     KPTextObject* insertTextObject( const QRect& );
+    void insertPicture( const QRect &_r );
+    void insertClipart( const QRect &_r );
 
 public slots:
     void exitEditMode();
@@ -307,8 +309,6 @@ protected:
     void insertPolyline( const KoPointArray &_pointArray );
     void insertCubicBezierCurve( const KoPointArray &_pointArray );
     void insertPolygon( const KoPointArray &_pointArray );
-    void insertPicture( const QRect &_r );
-    void insertClipart( const QRect &_r );
 
     void selectNext();
     void selectPrev();

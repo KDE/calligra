@@ -106,6 +106,8 @@ k_dcop:
     DCOPRef insertLineD1( int x,int y, int h, int w, bool rev );
     DCOPRef insertLineD2( int x,int y, int h, int w, bool rev );
     DCOPRef insertTextObject( int x,int y, int h, int w );
+    DCOPRef insertPicture( const QString & file,int x,int y, int h, int w );
+    DCOPRef insertClipart( const QString & file,int x,int y, int h, int w );
 
 
 

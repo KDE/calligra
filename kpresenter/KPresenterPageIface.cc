@@ -357,3 +357,19 @@ DCOPRef KPresenterPageIface::insertTextObject( int x,int y, int h, int w )
     return selectedObject();
 
 }
+
+DCOPRef KPresenterPageIface::insertPicture( const QString & file,int x,int y, int h, int w )
+{
+    m_page->setInsPictureFile(file);
+    KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+    view->getCanvas()->insertPicture( QRect(x,y,h,w));
+    return selectedObject();
+}
+
+DCOPRef KPresenterPageIface::insertClipart( const QString & file,int x,int y, int h, int w )
+{
+    m_page->setInsClipartFile(file);
+    KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+    view->getCanvas()->insertClipart( QRect(x,y,h,w));
+    return selectedObject();
+}
