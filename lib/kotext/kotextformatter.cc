@@ -391,7 +391,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #endif
 	x += ww;
         pixelx += pixelww;
-        wused = QMAX( wused, x );
+        if ( i < len - 1 )
+            wused = QMAX( wused, x );
 #ifdef DEBUG_FORMATTER
 	qDebug("LU: added %d -> now x=%d ; PIX: added %d -> now pixelx=%d",ww,x,pixelww,pixelx);
 #endif
