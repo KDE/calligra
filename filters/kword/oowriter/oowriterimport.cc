@@ -803,7 +803,6 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         if (shouldWriteFormat)
         {
             writeFormat( doc, outputFormats, 1 /* id for normal text */, pos, length );
-            //appendShadow( doc, outputParagraph ); // this is necessary to take care of shadowed paragraphs
         }
 
         pos += length;
@@ -1052,6 +1051,13 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         }
     }
 
+    if (m_styleStack.hasAttribute("fo:text-shadow")) // 3.10.21
+    {
+        QDomElement shadow = doc.createElement("SHADOW");
+        shadow.setAttribute("text-shadow", m_styleStack.attribute("fo:text-shadow"));
+        format.appendChild(shadow);
+    }
+
     /*
       Missing properties:
       style:use-window-font-color, 3.10.4 - what is it?
@@ -1063,7 +1069,6 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
       style:font-size-rel, 3.10.15 - TODO in StyleStack::fontSize()
       fo:letter-spacing, 3.10.16 - not implemented in kotext
       style:text-relief, 3.10.20 - not implemented in kotext
-      style:text-shadow, 3.10.21 - TODO
       style:letter-kerning, 3.10.20 - not implemented in kotext
       style:text-blinking, 3.10.27 - not implemented in kotext IIRC
       style:text-combine, 3.10.29/30 - what is it?
@@ -1142,7 +1147,6 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
 
     // TODO fo:background-color - not here; text property in kword/kpresenter.
     // TODO padding??? (space around the paragraph) => how is that different from margins
-    // TODO shadow
 
 /*
   Paragraph properties not implemented in KWord:
@@ -1307,7 +1311,7 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
     formatElementOut.appendChild(anchor);
 }
 
-void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
+void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& /*object*/, uint pos,
     const QString& key, int type, const QString& text, QDomElement& child)
 {
     QDomElement variableElement ( doc.createElement("VARIABLE") );
