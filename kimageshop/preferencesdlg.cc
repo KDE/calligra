@@ -1,7 +1,7 @@
 /*
  *  preferencesdlg.cc - part of KImageShop
  *
- *  Copyright (c) 1999 The KImageShop team (see file AUTHORS)
+ *  Copyright (c) 1999 Michael Koch <mkoch@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,12 +25,6 @@
 #include <qpushbutton.h>
 
 #include "preferencesdlg.h"
-
-/*****************************************************************************
- *
- * KImageShopPreferencesDialog
- *
- *****************************************************************************/
 
 KImageShopPreferencesDialog::KImageShopPreferencesDialog( QWidget* parent, const char* name, WFlags f )
 	: KDialog( parent, name, true, f )

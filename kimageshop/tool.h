@@ -1,7 +1,7 @@
 /*
  *  tool.h - part of KImageShop
  *
- *  Copyright (c) 1999 The KImageShop team (see file AUTHORS)
+ *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,8 +36,6 @@ class Tool : public KImageShop::Tool_skel
   virtual char* toolName();
   virtual void optionsDialog();
 
-  // Perhaps we should make these KOM slots and let KImageShopView emit 
-  // KOM signals but the mouse-move resolution might decrease?!
   virtual void mousePress(const KImageShop::MouseEvent& e) = 0; 
   virtual void mouseMove(const KImageShop::MouseEvent& e) = 0;
   virtual void mouseRelease(const KImageShop::MouseEvent& e) = 0;
