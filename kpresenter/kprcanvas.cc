@@ -1077,11 +1077,14 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 	    else
 		return;
 	} else if ( mousePressed ) {
-	    int mx = e->x();
-	    int my = e->y();
+	    int mx = e->x()+diffx();
+	    int my = e->y()+diffy();
+            kdDebug() << "KPrCanvas::mouseMoveEvent" <<mx<<" my " <<my<< endl;
+            kdDebug()<< "diffx :"<<diffx()<<" diffy() :"<<diffy()<<endl;
+            kdDebug()<<"oldMx :"<<oldMx<<" oldMy :"<<oldMy<<endl;
 	    mx = ( mx / rastX() ) * rastX();
 	    my = ( my / rastY() ) * rastY();
-
+            kdDebug() << "apres KPrCanvas::mouseMoveEvent" <<mx<<" my " <<my<< endl;
 	    switch ( toolEditMode ) {
 	    case TEM_MOUSE: {
 		oldMx = ( oldMx / rastX() ) * rastX();
@@ -1094,8 +1097,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 			p.setRasterOp( NotROP );
 			p.setPen( QPen( black, 0, DotLine ) );
 			p.drawRect( rubber );
-			rubber.setRight( e->x() );
-			rubber.setBottom( e->y() );
+			rubber.setRight( e->x()-diffx() );
+			rubber.setBottom( e->y()-diffy() );
 			p.drawRect( rubber );
 			p.end();
 		    }
@@ -1106,8 +1109,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     resizeObject( modType, mx - oldMx, my - oldMy );
 		}
 
-		oldMx = e->x();
-		oldMy = e->y();
+		oldMx = e->x()+diffx();
+		oldMy = e->y()+diffy();
 	    } break;
 	    case INS_TEXT: case INS_OBJECT: case INS_TABLE:
 	    case INS_DIAGRAMM: case INS_FORMULA: case INS_AUTOFORM: {

@@ -973,9 +973,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
 
     if ( _rastX == 0 ) _rastX = 10;
     if ( _rastY == 0 ) _rastY = 10;
-
+#if 0 //not necessary
     if ( _clean ) {
-#if 0 // not necessary
+
         // Fix the selectedslides list (for all docs)
         while ( m_selectedSlides.count() < getPageNums() )
             m_selectedSlides.append(true);
@@ -987,8 +987,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             for ( ; sit != m_selectedSlides.end(); ++sit )
                 (*sit) = true;
         }
-#endif
     }
+#endif
+
     if(activePage!=-1)
         m_initialActivePage=m_pageList.at(activePage);
     setModified(false);
