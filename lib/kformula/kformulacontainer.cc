@@ -31,6 +31,7 @@
 #include <klocale.h>
 #include <kprinter.h>
 
+#include "koGlobal.h"
 #include "bracketelement.h"
 #include "contextstyle.h"
 #include "formulacursor.h"
@@ -565,7 +566,7 @@ QImage Container::drawImage( int width, int height )
                      static_cast<double>( height )/static_cast<double>( realHeight ) );
 
     int oldZoom = context.zoom();
-    context.setZoomAndResolution( qRound( oldZoom*f ), QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    context.setZoomAndResolution( qRound( oldZoom*f ), KoGlobal::dpiX(), KoGlobal::dpiY() );
 
     kdDebug( DEBUGID ) << "Container::drawImage "
                        << "(" << width << " " << height << ")"
@@ -579,7 +580,7 @@ QImage Container::drawImage( int width, int height )
     QPainter paint(&pm);
     impl->rootElement->draw(paint, rect, context);
     paint.end();
-    context.setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    context.setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
     //return pm.convertToImage().smoothScale( width, height );
     return pm.convertToImage();
 }
