@@ -49,6 +49,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
 	lNum->resize( lNum->sizeHint() );
 	lNum->setAlignment( AlignVCenter );
 
+	/*
 	eNum =  new KRestrictedLine( this, "eNum", "0123456789" );
 	eNum->move( lNum->width()+15, 10 );
 	eNum->resize( eNum->sizeHint().width()/2, eNum->sizeHint().height() );
@@ -56,6 +57,13 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
 	sprintf( str, "%d", view->kPresenterDoc()->objectList()->at( _objNum )->getPresNum() );
 	eNum->setText( str );
 	lNum->resize( lNum->width(), eNum->height() );
+	*/
+	// Replaced by a spinbox by David. If this is ok, please remove the above.
+	eNum = new QSpinBox(0, 100, 1, this);
+	eNum->move(lNum->width()+15,10);
+	eNum->setValue( view->kPresenterDoc()->objectList()->at(_objNum)->getPresNum() );
+	eNum->resize(eNum->sizeHint().width(),eNum->sizeHint().height());
+	lNum->resize(lNum->width(),eNum->height());
 
 	lEffect = new QLabel( i18n( "Effect ( appearing ): " ), this );
 	lEffect->move( 10, eNum->y()+eNum->height()+20 );
