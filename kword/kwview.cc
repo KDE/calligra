@@ -2779,23 +2779,22 @@ void KWView::changeZoomMenu( int zoom )
         qHeapSort( list );
 
         for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
-            lst.append( (QString::number(*it)+'%') ); // ### TODO: I18N
+            lst.append( i18n("%1%").arg(*it) );
     }
     else
     {
-        // ### TODO: I18N
-        lst << "33%";
-        lst << "50%";
-        lst << "75%";
-        lst << "100%";
-        lst << "125%";
-        lst << "150%";
-        lst << "200%";
-        lst << "250%";
-        lst << "350%";
-        lst << "400%";
-        lst << "450%";
-        lst << "500%";
+        lst << i18n("%1%").arg("33");
+        lst << i18n("%1%").arg("50");
+        lst << i18n("%1%").arg("75");
+        lst << i18n("%1%").arg("100");
+        lst << i18n("%1%").arg("125");
+        lst << i18n("%1%").arg("150");
+        lst << i18n("%1%").arg("200");
+        lst << i18n("%1%").arg("250");
+        lst << i18n("%1%").arg("350");
+        lst << i18n("%1%").arg("400");
+        lst << i18n("%1%").arg("450");
+        lst << i18n("%1%").arg("500");
     }
     actionViewZoom->setItems( lst );
 }
@@ -2803,7 +2802,7 @@ void KWView::changeZoomMenu( int zoom )
 void KWView::showZoom( int zoom )
 {
     QStringList list = actionViewZoom->items();
-    QString zoomStr = QString::number( zoom ) + '%'; // ### TODO: I18N
+    QString zoomStr( i18n("%1%").arg( zoom ) );
     actionViewZoom->setCurrentItem( list.findIndex(zoomStr)  );
 }
 

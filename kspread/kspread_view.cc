@@ -481,7 +481,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     viewZoom( QString::number( m_pDoc->zoom() ) );
 
     QStringList list = m_viewZoom->items();
-    QString zoomStr = QString::number(m_pDoc->zoom() ) + '%'; // ### TODO: I18N
+    QString zoomStr( i18n("%1%").arg( m_pDoc->zoom()) );
     m_viewZoom->setCurrentItem( list.findIndex(zoomStr)  );
 
     m_selectStyle->setItems( m_pDoc->styleManager()->styleNames() );
@@ -798,27 +798,26 @@ void KSpreadView::initializeGlobalOperationActions()
 
   m_viewZoom->setEditable(true);
 
-  QStringList lst1; // ### TODO: I18N
-  lst1 << "33%";
-  lst1 << "50%";
-  lst1 << "60%";
-  lst1 << "75%";
-  lst1 << "100%";
-  lst1 << "125%";
-  lst1 << "150%";
-  lst1 << "200%";
-  lst1 << "250%";
-  lst1 << "350%";
-  lst1 << "400%";
-  lst1 << "450%";
-  lst1 << "500%";
+  QStringList lst;
+  lst << i18n("%1%").arg("33");
+  lst << i18n("%1%").arg("50");
+  lst << i18n("%1%").arg("75");
+  lst << i18n("%1%").arg("100");
+  lst << i18n("%1%").arg("125");
+  lst << i18n("%1%").arg("150");
+  lst << i18n("%1%").arg("200");
+  lst << i18n("%1%").arg("250");
+  lst << i18n("%1%").arg("350");
+  lst << i18n("%1%").arg("400");
+  lst << i18n("%1%").arg("450");
+  lst << i18n("%1%").arg("500");
 
-  m_viewZoom->setItems( lst1 );
+  m_viewZoom->setItems( lst );
 
   m_formulaSelection = new KSelectAction(i18n("Formula Selection"), 0,
                                          actionCollection(), "formulaSelection");
   m_formulaSelection->setToolTip(i18n("Insert a function."));
-  QStringList lst;
+  lst.clear();
   lst.append( "SUM");
   lst.append( "AVERAGE");
   lst.append( "IF");
