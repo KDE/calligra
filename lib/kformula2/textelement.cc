@@ -121,7 +121,9 @@ void TextElement::setSymbol(bool s)
     if (sequence != 0) {
         sequence->parse();
     }
-    formula()->changed();
+    if (getParent() != 0) {
+        formula()->changed();
+    }
 }
 
 

@@ -16,7 +16,7 @@ libkformula2_la_SOURCES	= basicelement.cc contextstyle.cc formulacursor.cc \
 	artwork.cc kformulacommand.cc kformulamimesource.cc \
 	MatrixDialog.cc sequenceparser.cc elementtype.cc kformuladocument.cc \
 	symboltable.cc kformulamathmlread.cc \
-	kformulainputfilter.cc
+	kformulainputfilter.cc kformulaview.cc
 
 include_HEADERS =
 

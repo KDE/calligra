@@ -504,6 +504,11 @@ QRect KFormulaContainer::boundingRect()
     return QRect(0, 0, rootElement->getWidth(), rootElement->getHeight());
 }
 
+void KFormulaContainer::moveTo(int x, int y)
+{
+    rootElement->setX(x);
+    rootElement->setY(y);
+}
 
 QDomDocument KFormulaContainer::domData()
 {

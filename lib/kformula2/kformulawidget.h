@@ -26,7 +26,7 @@
 #include <qwidget.h>
 
 #include "formuladefs.h"
-
+#include "kformulaview.h"
 
 class BasicElement;
 class FormulaCursor;
@@ -37,11 +37,6 @@ class KFormulaContainer;
 /**
  * The view. A widget that shows the formula. There are methods
  * to move the cursor around. To edit the formula use the document.
- *
- * One day this will be split into two classes. A view that handles
- * input and the cursor and a widget that shows the formula.
- * This is because there are applications that provide their own
- * widget but need to use the view.
  */
 class KFormulaWidget : public QWidget {
     Q_OBJECT
@@ -68,40 +63,12 @@ signals:
      */
     void cursorChanged(bool visible, bool selecting);
     
-public slots:
-    
-    void slotSelectAll();
-
-    void slotMoveLeft(MoveFlag flag);
-    void slotMoveRight(MoveFlag flag);
-    void slotMoveUp(MoveFlag flag);
-    void slotMoveDown(MoveFlag flag);
-    void slotMoveHome(MoveFlag flag);
-    void slotMoveEnd(MoveFlag flag);
-
 protected slots:
-
-    /**
-     * The cursor has been moved by the container.
-     * We need to repaint if it was ours.
-     */
-    void slotCursorMoved(FormulaCursor* cursor);
 
     /**
      * The formula has changed and needs to be redrawn.
      */
     void slotFormulaChanged(int width, int height);
-
-    /**
-     * A new formula has been loaded.
-     */
-    void slotFormulaLoaded(FormulaElement*);
-
-    /**
-     * There is an element that will disappear from the tree.
-     * our cursor must not be inside it.
-     */
-    void slotElementWillVanish(BasicElement*);
 
 protected:
 
@@ -117,52 +84,21 @@ protected:
     virtual void focusOutEvent(QFocusEvent* event);
 
     /**
-     * Convert Qt style key state modifiers to local
-     * movement flags.
-     */
-    MoveFlag movementFlag(int state);
-
-    void hideCursor();
-    void showCursor();
-
-    /**
      * The document we show.
      */
-    KFormulaContainer* getDocument() { return document; }
+    KFormulaContainer* getDocument();
 
     /**
      * Our cursor.
      */
-    FormulaCursor* getCursor() { return cursor; }
+    FormulaCursor* getCursor();
     
 private:
 
     /**
-     * Tell everybody that our cursor has changed if so.
+     * This widget is a wrapper around the actual view.
      */
-    void emitCursorChanged();
-
-    /**
-     * Whether you can see the cursor. This has to be kept
-     * in sync with reality.
-     */
-    bool cursorVisible;
-
-    /**
-     * Whether the cursor changed since the last time
-     * we emitted a cursorChanged signal.
-     */
-    bool cursorHasChanged;
-
-    /**
-     * The formula we show.
-     */
-    KFormulaContainer* document;
-
-    /**
-     * Out cursor.
-     */
-    FormulaCursor* cursor;
+    KFormulaView formulaView;
 };
 
 #endif // KFORMULAWIDGET_H

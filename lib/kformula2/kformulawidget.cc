@@ -36,229 +36,86 @@
 
 KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const char* name, WFlags f)
     : QWidget(parent, name, f | WRepaintNoErase | WResizeNoErase),
-      cursorVisible(false), cursorHasChanged(true), document(doc)
+      formulaView(doc, this)
 {
     
     // This is buggy. We do need more/other messages.
-    connect(document, SIGNAL(elementWillVanish(BasicElement*)),
-            this, SLOT(slotElementWillVanish(BasicElement*)));
-    connect(document, SIGNAL(formulaLoaded(FormulaElement*)),
-            this, SLOT(slotFormulaLoaded(FormulaElement*)));
-    connect(document, SIGNAL(formulaChanged(int, int)),
+    connect(doc, SIGNAL(formulaChanged(int, int)),
             this, SLOT(slotFormulaChanged(int, int)));
-    connect(document, SIGNAL(cursorMoved(FormulaCursor*)),
-            this, SLOT(slotCursorMoved(FormulaCursor*)));
-
-    cursor = document->createCursor();
+    connect(&formulaView, SIGNAL(cursorChanged(bool, bool)),
+            this, SIGNAL(cursorChanged(bool, bool)));
 
     setFocusPolicy(QWidget::StrongFocus);
     setBackgroundMode(QWidget::PaletteBase);
 
-    QRect rect = document->boundingRect();
+    QRect rect = doc->boundingRect();
     slotFormulaChanged(rect.width(), rect.height());
 }
 
 KFormulaWidget::~KFormulaWidget()
 {
-    delete cursor;
 }
 
 
 QPoint KFormulaWidget::getCursorPoint() const 
 {
-    return cursor->getCursorPoint();
+    return formulaView.getCursorPoint();
 }
 
 
 void KFormulaWidget::setReadOnly(bool ro)
 {
-    cursor->setReadOnly(ro);
+    formulaView.setReadOnly(ro);
 }
 
 
 void KFormulaWidget::paintEvent(QPaintEvent* event)
 {
-    //cerr << "void KFormulaWidget::paintEvent(QPaintEvent*): " << cursorVisible << " " << hasFocus() << endl;
-    hideCursor();
-    
     QPainter painter;
     painter.begin(this);
-    painter.fillRect(event->rect(), backgroundColor());
-    document->draw(painter);
+    formulaView.draw(painter, event->rect());
     painter.end();
-
-    showCursor();
-    emitCursorChanged();
 }
 
 void KFormulaWidget::keyPressEvent(QKeyEvent* event)
 {
-    if (cursor->isReadOnly()) {
-        return;
-    }
-    
-    QChar ch = event->text().at(0);
-    if (ch.isPrint()) {
-        int latin1 = ch.latin1();
-        switch (latin1) {
-        case '(':
-            document->getDocument()->addDefaultBracket();
-            break;
-        case '[':
-            document->addSquareBracket();
-            break;
-        case '{':
-            break;
-        case '|':
-            document->addLineBracket();
-            break;
-        case '^':
-            document->addUpperRightIndex();
-            break;
-        case '_':
-            document->addLowerRightIndex();
-            break;
-        case ' ':
-            document->compactExpression();
-            break;
-        case '}':
-        case ']':
-        case ')':
-            break;
-        default:
-            document->addText(ch);
-        }
-    }
-    else {
-        int action = event->key();
-        int state = event->state();
-	MoveFlag flag = movementFlag(state);
-
-	switch (action) {
-	case Qt::Key_Left:
-            slotMoveLeft(flag);
-            break;
-        case Qt::Key_Right:
-            slotMoveRight(flag);
-            break;
-        case Qt::Key_Up:
-            slotMoveUp(flag);
-            break;
-        case Qt::Key_Down:
-            slotMoveDown(flag);
-            break;
-        case Qt::Key_BackSpace:
-            document->remove(BasicElement::beforeCursor);
-            break;
-        case Qt::Key_Delete:
-            document->remove(BasicElement::afterCursor);
-            break;
-        case Qt::Key_Home:
-            slotMoveHome(flag);
-            break;
-        case Qt::Key_End:
-            slotMoveEnd(flag);
-            break;
-        case Qt::Key_Return:
-            document->addLineBreak();
-            break;
-        default:
-            if (state & Qt::ControlButton) {
-                switch (event->key()) {
-                case Qt::Key_AsciiCircum:
-                    document->addUpperLeftIndex();
-                    break;
-                case Qt::Key_Underscore:
-                    document->addLowerLeftIndex();
-                    break;
-                default:
-                    // cerr << "Key: " << event->key() << endl;
-                    break;
-                }
-            }
-        }
-    }
+    formulaView.keyPressEvent(event);
 }
 
 
-void KFormulaWidget::focusInEvent(QFocusEvent*)
+void KFormulaWidget::focusInEvent(QFocusEvent* event)
 {
-    //cerr << "void KFormulaWidget::focusInEvent(QFocusEvent*): " << cursorVisible << " " << hasFocus() << endl;
-    document->setActiveCursor(cursor);
-    showCursor();
-    cursorHasChanged = true;
-    emitCursorChanged();
+    formulaView.focusInEvent(event);
 }
 
-void KFormulaWidget::focusOutEvent(QFocusEvent*)
+void KFormulaWidget::focusOutEvent(QFocusEvent* event)
 {
-    //cerr << "void KFormulaWidget::focusOutEvent(QFocusEvent*): " << cursorVisible << " " << hasFocus() << endl;
-
-    // doesn't work with the matrix dialog
-    //document->setActiveCursor(0);
-    
-    hideCursor();
-    cursorHasChanged = true;
-    emitCursorChanged();
+    formulaView.focusOutEvent(event);
 }
 
 void KFormulaWidget::mousePressEvent(QMouseEvent* event)
 {
-    hideCursor();
-    
-    int flags = movementFlag(event->state());
-    cursor->mousePress(event->pos(), flags);
-
-    showCursor();
+    formulaView.mousePressEvent(event);
 }
 
 void KFormulaWidget::mouseReleaseEvent(QMouseEvent* event)
 {
-    hideCursor();
-    
-    int flags = movementFlag(event->state());
-    cursor->mouseRelease(event->pos(), flags);
-
-    showCursor();
-
-    emitCursorChanged();
+    formulaView.mouseReleaseEvent(event);
 }
 
-void KFormulaWidget::mouseDoubleClickEvent(QMouseEvent*)
+void KFormulaWidget::mouseDoubleClickEvent(QMouseEvent* event)
 {
+    formulaView.mouseDoubleClickEvent(event);
 }
 
 void KFormulaWidget::mouseMoveEvent(QMouseEvent* event)
 {
-    hideCursor();
-    
-    int flags = movementFlag(event->state());
-    cursor->mouseMove(event->pos(), flags);
-
-    showCursor();
+    formulaView.mouseMoveEvent(event);
 }
 
-void KFormulaWidget::wheelEvent(QWheelEvent*)
+void KFormulaWidget::wheelEvent(QWheelEvent* event)
 {
-}
-
-
-
-void KFormulaWidget::slotFormulaLoaded(FormulaElement* formula)
-{
-    cursor->formulaLoaded(formula);
-}
-
-void KFormulaWidget::slotCursorMoved(FormulaCursor* c)
-{
-    if (c == cursor) {
-        update();
-    }
-}
-
-void KFormulaWidget::slotElementWillVanish(BasicElement* element)
-{
-    cursor->elementWillVanish(element);
+    formulaView.wheelEvent(event);
 }
 
 void KFormulaWidget::slotFormulaChanged(int width, int height)
@@ -268,112 +125,20 @@ void KFormulaWidget::slotFormulaChanged(int width, int height)
     update();
 }
 
-
-void KFormulaWidget::slotSelectAll()
+/**
+ * The document we show.
+ */
+KFormulaContainer* KFormulaWidget::getDocument()
 {
-    hideCursor();
-    cursor->moveHome();
-    cursor->moveEnd(SelectMovement);
-    showCursor();
-    emitCursorChanged();
+    return formulaView.getDocument();
 }
 
-
-void KFormulaWidget::slotMoveLeft(MoveFlag flag)
+/**
+ * Our cursor.
+ */
+FormulaCursor* KFormulaWidget::getCursor()
 {
-    hideCursor();
-    cursor->moveLeft(flag);
-    showCursor();
-    emitCursorChanged();
+    return formulaView.getCursor();
 }
 
-void KFormulaWidget::slotMoveRight(MoveFlag flag)
-{
-    hideCursor();
-    cursor->moveRight(flag);
-    showCursor();
-    emitCursorChanged();
-}
-
-void KFormulaWidget::slotMoveUp(MoveFlag flag)
-{
-    hideCursor();
-    cursor->moveUp(flag);
-    showCursor();
-    emitCursorChanged();
-}
-
-void KFormulaWidget::slotMoveDown(MoveFlag flag)
-{
-    hideCursor();
-    cursor->moveDown(flag);
-    showCursor();
-    emitCursorChanged();
-}
-
-void KFormulaWidget::slotMoveHome(MoveFlag flag)
-{
-    hideCursor();
-    cursor->moveHome(flag);
-    showCursor();
-    emitCursorChanged();
-}
-
-void KFormulaWidget::slotMoveEnd(MoveFlag flag)
-{
-    hideCursor();
-    cursor->moveEnd(flag);
-    showCursor();
-    emitCursorChanged();
-}
-
-
-MoveFlag KFormulaWidget::movementFlag(int state)
-{
-    int flag = NormalMovement;
-
-    if (state & Qt::ControlButton)
-        flag |= WordMovement;
-
-    if (state & Qt::ShiftButton)
-        flag |= SelectMovement;
-
-    return static_cast<MoveFlag>(flag);
-}
-
-
-void KFormulaWidget::hideCursor()
-{
-    if (cursorVisible) {
-        //cerr << "void KFormulaWidget::hideCursor(): " << cursorVisible << " " << hasFocus() << endl;
-        cursorVisible = false;
-
-        QPainter painter;
-        painter.begin(this);
-        cursor->draw(painter);
-        painter.end();
-    }
-}
-
-void KFormulaWidget::showCursor()
-{
-    if ((!cursorVisible) && hasFocus()) {
-        //cerr << "void KFormulaWidget::showCursor(): " << cursorVisible << " " << hasFocus() << endl;
-        cursorVisible = true;
-
-        QPainter painter;
-        painter.begin(this);
-        cursor->draw(painter);
-        painter.end();
-    }
-}
-
-void KFormulaWidget::emitCursorChanged()
-{
-    if (cursor->hasChanged() || cursorHasChanged) {
-        cursor->clearChangedFlag();
-        cursorHasChanged = false;
-        emit cursorChanged(cursorVisible, cursor->isSelection());
-    }
-}
 #include "kformulawidget.moc"

@@ -155,6 +155,11 @@ public:
     QRect boundingRect();
 
     /**
+     * Moves the formula to a new location.
+     */
+    void moveTo(int x, int y);
+
+    /**
      * Emits a formulaChanged signal if we are dirty.
      */
     void testDirty();
