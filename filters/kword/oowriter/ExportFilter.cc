@@ -38,6 +38,7 @@
 #include <qdom.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 #include <kzip.h>
 
 #include <koGlobal.h>
@@ -940,20 +941,89 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
     }
 }
 
+void OOWriterWorker::processFootnote( const VariableData& variable )
+{
+    // Footnote
+    const QValueList<ParaData> *paraList = variable.getFootnotePara();
+    if( paraList )
+    {
+        const QString value ( variable.getFootnoteValue() );
+        //const bool automatic = formatData.variable.getFootnoteAuto();
+        const bool flag = variable.getFootnoteType();
+
+        if ( flag )
+        {
+            *m_streamOut << "<text:footnote text:id=\"ft";
+            *m_streamOut << (++m_footnoteNumber);
+            *m_streamOut << "\">";
+            *m_streamOut << "<text:footnote-citation>" << escapeOOText( value ) << "</text:footnote-citation>";
+            *m_streamOut << "<text:footnote-body>\n";
+
+            doFullAllParagraphs( *paraList );
+
+            *m_streamOut << "\n</text:footnote-body>";
+            *m_streamOut << "</text:footnote>";
+        }
+        else
+        {
+            *m_streamOut << "<text:endnote text:id=\"ft";
+            *m_streamOut << (++m_footnoteNumber);
+            *m_streamOut << "\">";
+            *m_streamOut << "<text:endnote-citation>" << escapeOOText( value ) << "</text:endnote-citation>";
+            *m_streamOut << "<text:endnote-body>\n";
+
+            doFullAllParagraphs( *paraList );
+
+            *m_streamOut << "\n</text:endnote-body>";
+            *m_streamOut << "</text:endnote>";
+        }
+    }
+}
+
+void OOWriterWorker::processNote( const VariableData& variable )
+{
+    // KWord 1.3's annotations are anonymous and undated,
+    //  however the OO specification tells that author and date are mandatory (even if OOWriter 1.1 consider them optional)
+
+    *m_streamOut << "<office:annotation office:create-date=\"";
+
+    // We use the document creation date as creation date for the annotation
+    // (OOWriter uses only the date part, there is no time part)
+    if ( m_varSet.creationTime.isValid() )
+        *m_streamOut << escapeOOText( m_varSet.creationTime.date().toString( Qt::ISODate ) );
+    else
+        *m_streamOut << "1970-01-01";
+
+    *m_streamOut << "\" office:author=\"";
+
+    // We try to use the document author's name as annotation author
+    if ( m_docInfo.fullName.isEmpty() )
+        *m_streamOut << escapeOOText( i18n( "Pseudo-author for annotations", "KWord 1.3" ) );
+    else
+        *m_streamOut << escapeOOText( m_docInfo.fullName );
+
+    *m_streamOut << "\">\n";
+    *m_streamOut << "<text:p>"
+        << escapeOOSpan( variable.getGenericData( "note" ) )
+        << "</text:p>\n"
+        << "</office:annotation>";
+}
+
 void OOWriterWorker::processVariable ( const QString&,
     const TextFormatting& formatLayout,
     const FormatData& formatData)
 {
     if (0==formatData.variable.m_type)
     {
-        *m_streamOut << "<text:date/>";
+        *m_streamOut << "<text:date/>"; // ### TODO: parameters
     }
     else if (2==formatData.variable.m_type)
     {
-        *m_streamOut << "<text:time/>";
+        *m_streamOut << "<text:time/>"; // ### TODO: parameters
     }
     else if (4==formatData.variable.m_type)
     {
+        // ### TODO: the other under-types, other parameters
         if (formatData.variable.isPageNumber())
         {
             *m_streamOut << "<text:page-number text:select-page=\"current\"/>";
@@ -977,26 +1047,14 @@ void OOWriterWorker::processVariable ( const QString&,
             << escapeOOText(formatData.variable.getLinkName())
             << "</text:a>";
     }
+    else if ( 10 == formatData.variable.m_type )
+    {   // Note (OOWriter: annotation)
+        processNote ( formatData.variable );
+    }
     else if (11==formatData.variable.m_type)
     {
         // Footnote
-        const QString value = formatData.variable.getFootnoteValue();
-        //const bool automatic = formatData.variable.getFootnoteAuto();
-        QValueList<ParaData> *paraList = formatData.variable.getFootnotePara();
-        if( paraList )
-        {
-            *m_streamOut << "<text:footnote text:id=\"ft";
-            *m_streamOut << (++m_footnoteNumber);
-            *m_streamOut << "\">";
-            *m_streamOut << "<text:footnote-citation>" << escapeOOText(value) << "</text:footnote-citation>";
-            *m_streamOut << "<text:footnote-body>\n";
-
-            doFullAllParagraphs(*paraList);
-
-            *m_streamOut << "\n</text:footnote-body>";
-            *m_streamOut << "</text:footnote>";
-
-        }
+        processFootnote ( formatData.variable );
     }
     else
     {
