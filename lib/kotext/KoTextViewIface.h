@@ -72,6 +72,25 @@ k_dcop:
     void moveCursorLineEnd(bool select);
     void moveCursorLineStart(bool select);
 
+    QColor paragraphShadowColor() const;
+    bool paragraphHasBorder() const;
+
+    //return line spacing in pt
+    double lineSpacing() const;
+
+    double rightMargin() const;
+    double leftMargin() const;
+    double marginFirstLine() const;
+    double spaceAfterParag() const;
+    double spaceBeforeParag() const;
+
+    void setMarginFirstLine(double pt);
+    void setLineSpacing(double pt);
+    void setLeftMargin(double pt);
+    void setRightMargin(double pt);
+    void setSpaceBeforeParag(double pt);
+    void setSpaceAfterParag(double pt);
+
 private:
     KoTextView *m_textView;
 
