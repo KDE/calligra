@@ -32,38 +32,11 @@ Boston, MA 02111-1307, USA.
 
 using namespace KexiDB;
 
-class KexiDB::MySqlCursorData : public MySqlConnectionInternal
-{
-	public:
-		MySqlCursorData()
-		: MySqlConnectionInternal()
-		, mysqlres(0)
-		, mysqlrow(0)
-		, lengths(0)
-		, numRows(0)
-		{
-		}
-		~MySqlCursorData()
-		{
-		}
-
-		MYSQL_RES *mysqlres;
-		MYSQL_ROW mysqlrow;
-		unsigned long *lengths;
-		unsigned long numRows;
-};
-
-
 MySqlCursor::MySqlCursor(KexiDB::Connection* conn, const QString& statement, uint cursor_options)
 	: Cursor(conn,statement,cursor_options)
 	, d( new MySqlCursorData() )
-//	, m_res(0)
-//	, m_row(0)
-//	, m_lengths(0)
-//	, m_numRows(0)
 {
 	m_options |= Buffered;
-//	my_conn = static_cast<MySqlConnection*>(conn)->m_mysql;
 	d->mysql = static_cast<MySqlConnection*>(conn)->d->mysql;
 	KexiDBDrvDbg << "MySqlCursor: constructor for query statement" << endl;
 }
@@ -71,13 +44,8 @@ MySqlCursor::MySqlCursor(KexiDB::Connection* conn, const QString& statement, uin
 MySqlCursor::MySqlCursor(Connection* conn, QuerySchema& query, uint options )
 	: Cursor( conn, query, options )
 	, d( new MySqlCursorData() )
-//	, m_res(0)
-//	, m_row(0)
-//	, m_lengths(0)
-//	, m_numRows(0)
 {
 	m_options |= Buffered;
-//	my_conn = static_cast<MySqlConnection*>(conn)->m_mysql;	
 	d->mysql = static_cast<MySqlConnection*>(conn)->d->mysql;
 	KexiDBDrvDbg << "MySqlCursor: constructor for query statement" << endl;
 }
@@ -88,11 +56,6 @@ MySqlCursor::~MySqlCursor() {
 
 bool MySqlCursor::drv_open(const QString& statement) {
 	KexiDBDrvDbg << "MySqlCursor::drv_open:" << statement << endl;
-/*js	if (!my_conn) {
-		//should never happen, but who knows
-		setError(ERR_NO_CONNECTION,i18n("No connection for cursor open operation specified"));
-		return false;
-	}*/
 	// This can't be right?  mysql_real_query takes a length in order that
 	// queries can have binary data - but strlen does not allow binary data.
 	if(mysql_real_query(d->mysql, statement.utf8(), strlen(statement.utf8())) == 0) {
@@ -191,12 +154,10 @@ void MySqlCursor::drv_bufferMovePointerTo(Q_LLONG to) {
 	d->lengths=mysql_fetch_lengths(d->mysqlres);
 }
 
-
 const char** MySqlCursor::rowData() const {
 	//! @todo
 	return 0;
 }
-
 
 int MySqlCursor::serverResult()
 {
@@ -219,13 +180,3 @@ QString MySqlCursor::serverErrorMsg()
 {
 	return d->errmsg;
 }
-
-
-
-/*bool MySqlCursor::save(RowData& data, RowEditBuffer& buf)
-{
-	KexiDBDrvDbg << "MySqlCursor::save.." << endl;
-	//! @todo
-	return true;
-}
-*/

@@ -28,11 +28,6 @@ Boston, MA 02111-1307, USA.
 #include "mysqlcursor.h"
 #include <qdict.h>
 
-//#define BOOL bool
-
-//class MySqlRecordSet;
-//class MySqlResult;
-
 namespace KexiDB {
 
 class MySqlConnectionInternal;
@@ -45,7 +40,6 @@ class MySqlConnectionInternal;
 class KEXIDB_MYSQL_DRIVER_EXPORT MySqlConnection : public Connection
 {
 	Q_OBJECT
-
 
 	public:
 		virtual ~MySqlConnection();
