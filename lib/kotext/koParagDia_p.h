@@ -20,7 +20,7 @@
 #ifndef koparagdia_p_h
 #define koparagdia_p_h
 
-// This file hides those definitions from "users" of paragdia.h
+// This file hides those definitions from "users" of koParagDia.h
 // to reduce compile-time dependencies.
 
 #include <qgroupbox.h>
@@ -135,28 +135,6 @@ protected:
 signals:
     void choosearea(QMouseEvent * _ev);
 
-};
-
-/******************************************************************/
-/* class KoNumPreview                                             */
-/******************************************************************/
-class KoTextDocument;
-class KoNumPreview : public QGroupBox
-{
-    Q_OBJECT
-
-public:
-    KoNumPreview( QWidget*, const char* = 0L );
-    ~KoNumPreview();
-
-    void setCounter( const KoParagCounter & counter );
-    void setStyle(KoStyle *style);
-
-protected:
-    void drawContents( QPainter* );
-
-    KoTextDocument *m_textdoc;
-    KoZoomHandler *m_zoomHandler;
 };
 
 #endif

@@ -1268,7 +1268,7 @@ QString KoNoteVariable::text()
 
 }
 
-void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
+void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int /*offset*/ )
 {
     if ( !m_varColl->variableSetting()->displayComment())
         return;

@@ -33,7 +33,7 @@
 class KButtonBox;
 class KColorButton;
 class KoBorderPreview;
-class KoNumPreview;
+class KoStylePreview;
 class KPagePreview2;
 class KPagePreview;
 class KoSpinBox;
@@ -206,19 +206,19 @@ public:
 
     class StyleRepresenter {
         public:
-            StyleRepresenter (const QString name, KoParagCounter::Style style, bool listStyle=false) {
+            StyleRepresenter (const QString name, KoParagCounter::Style style, bool bullet=false) {
                 m_name=name;
                 m_style=style;
-                m_listStyle=listStyle;
+                m_bullet=bullet;
             }
-            QString name() { return m_name; }
-            KoParagCounter::Style style() { return m_style; }
-            bool listStyle() { return m_listStyle; }
+            QString name() const { return m_name; }
+            KoParagCounter::Style style() const { return m_style; }
+            bool isBullet() const { return m_bullet; }
 
         private:
             QString m_name;
             KoParagCounter::Style m_style;
-            bool m_listStyle;
+            bool m_bullet;
     };
 
     KoParagCounterWidget( QWidget * parent, const char * name = 0 );
@@ -230,6 +230,8 @@ public:
     virtual QString tabName();
 
     const KoParagCounter & counter() const { return m_counter; }
+
+    static void makeCounterRepresenterList( QPtrList<StyleRepresenter>& stylesList );
 
 protected slots:
     void selectCustomBullet();
@@ -257,7 +259,7 @@ private:
     QSpinBox *spnDepth;
     QLabel *lStart;
     QLabel *lCustom;
-    KoNumPreview *preview;
+    KoStylePreview *preview;
 
     unsigned int styleBuffer;
     bool noSignals;
@@ -402,6 +404,33 @@ protected slots:
 };
 
 /**
+ * KoStylePreview. Previewing text with style :)
+ * Used in the parag bullet/number tab of the parag dia,
+ * and in the main tab of the stylist.
+ */
+class KoStylePreview : public QGroupBox
+{
+    Q_OBJECT
+
+public:
+    KoStylePreview( const QString &title, const QString &text, QWidget *parent, const char* name = 0 );
+    virtual ~KoStylePreview();
+
+    /** Apply the given @p style to the preview.
+     * Note that this overwrites anything done by setCounter. */
+    void setStyle( KoStyle *style );
+
+    /** Set the given @p counter to the preview. */
+    void setCounter( const KoParagCounter & counter );
+
+protected:
+    void drawContents( QPainter *painter );
+
+    KoTextDocument *m_textdoc;
+    KoZoomHandler *m_zoomHandler;
+};
+
+/**
  * The complete(*) dialog for changing attributes of a paragraph
  *
  * (*) the flags (to only show parts of it) have been kept just in case
@@ -475,8 +504,8 @@ public:
                                            oldLayout.bottomBorder!=bottomBorder() ); }
     bool listTabulatorChanged() const {return oldLayout.tabList()!=tabListTabulator();}
 
-    bool isShadowChanged() const { return (oldLayout.shadowDistance!=shadowDistance() || 
-					  oldLayout.shadowColor !=shadowColor() 
+    bool isShadowChanged() const { return (oldLayout.shadowDistance!=shadowDistance() ||
+					  oldLayout.shadowColor !=shadowColor()
 					  ||  oldLayout.shadowDirection!=shadowDirection());}
 
 private:

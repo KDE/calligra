@@ -57,20 +57,28 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_useAutoNumberStyle(false),
       m_autoCompletion(false),
       m_completionAppendSpace(false),
+      m_addCompletionWord(true),
+      m_includeTwoUpperLetterException(false),
+      m_includeAbbreviation(false),
+      m_ignoreUpperCase(false),
+      m_bAutoFormatActive(true),
       m_typographicSimpleQuotes(),
       m_typographicDoubleQuotes(),
       m_maxlen( 0 ),
+      m_maxFindLength( 0 ),
       m_minCompletionWordLength( 5 ),
-      m_nbMaxCompletionWord( 500 ),
-      m_addCompletionWord(true),
-      m_includeTwoUpperLetterException( false),
-      m_includeAbbreviation ( false ),
-      m_ignoreUpperCase(false)
+      m_nbMaxCompletionWord( 500 )
 {
     m_listCompletion=new KCompletion();
-    m_bAutoFormatActive=true;
+    kdDebug() << "KoAutoFormat::KoAutoFormat " << this << " m_listCompletion: " << m_listCompletion << endl;
     //load once this list not each time that we "readConfig"
     loadListOfWordCompletion();
+}
+
+KoAutoFormat::~KoAutoFormat()
+{
+    kdDebug() << "KoAutoFormat::~KoAutoFormat " << this << " deleting m_listCompletion: " << m_listCompletion << endl;
+    delete m_listCompletion;
 }
 
 void KoAutoFormat::loadListOfWordCompletion()
@@ -102,7 +110,7 @@ void KoAutoFormat::readConfig()
 
     m_useBulletStyle = config.readBoolEntry("UseBulletStyle",false);
     QString tmp = config.readEntry( "BulletStyle", "" );
-    bulletStyle = tmp[0];
+    m_bulletStyle = tmp.isEmpty() ? QChar() : tmp[0];
 
     m_autoChangeFormat = config.readBoolEntry( "AutoChangeFormat", false );
 
@@ -176,7 +184,7 @@ void KoAutoFormat::readConfig()
           QDomNodeList nl = upper.childNodes();
           for(uint i = 0; i < nl.count(); i++)
           {
-              upperCaseExceptions+= nl.item(i).toElement().attribute("exception");
+              m_upperCaseExceptions+= nl.item(i).toElement().attribute("exception");
           }
       }
 
@@ -186,7 +194,7 @@ void KoAutoFormat::readConfig()
           QDomNodeList nl = twoUpper.childNodes();
           for(uint i = 0; i < nl.count(); i++)
           {
-              twoUpperLetterException+= nl.item(i).toElement().attribute("exception");
+              m_twoUpperLetterException+= nl.item(i).toElement().attribute("exception");
           }
       }
     }
@@ -220,7 +228,7 @@ void KoAutoFormat::saveConfig()
     config.writeEntry( "RemoveSpaceBeginEndLine",m_removeSpaceBeginEndLine );
 
     config.writeEntry( "UseBulletStyle", m_useBulletStyle);
-    config.writeEntry( "BulletStyle", QString(bulletStyle));
+    config.writeEntry( "BulletStyle", QString(m_bulletStyle));
 
     config.writeEntry( "AutoChangeFormat", m_autoChangeFormat);
 
@@ -261,7 +269,7 @@ void KoAutoFormat::saveConfig()
 
     QDomElement upper;
     upper = doc.createElement("UpperCaseExceptions");
-    for ( QStringList::Iterator it = upperCaseExceptions.begin(); it != upperCaseExceptions.end();++it )
+    for ( QStringList::Iterator it = m_upperCaseExceptions.begin(); it != m_upperCaseExceptions.end();++it )
     {
 	data = doc.createElement("word");
 	data.setAttribute("exception",(*it) );
@@ -272,7 +280,7 @@ void KoAutoFormat::saveConfig()
     QDomElement twoUpper;
     twoUpper = doc.createElement("TwoUpperLetterExceptions");
 
-    for ( QStringList::Iterator it = twoUpperLetterException.begin(); it != twoUpperLetterException.end();++it )
+    for ( QStringList::Iterator it = m_twoUpperLetterException.begin(); it != m_twoUpperLetterException.end();++it )
     {
 	data = doc.createElement("word");
 	data.setAttribute("exception",(*it) );
@@ -402,13 +410,13 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
         if( m_removeSpaceBeginEndLine && index > 1)
             doRemoveSpaceBeginEndLine( textEditCursor, parag, txtObj );
         if( m_useBulletStyle  && index > 3)
-            doUseBulletStyle(textEditCursor, parag, txtObj );
+            doUseBulletStyle( textEditCursor, parag, txtObj, index );
         if( m_useAutoNumberStyle && index > 3 )
-            doUseNumberStyle(textEditCursor, parag, txtObj );
+            doUseNumberStyle( textEditCursor, parag, txtObj, index );
         if( m_convertUpperUpper && m_includeTwoUpperLetterException )
             doAutoIncludeUpperUpper(textEditCursor, parag, txtObj );
         if( m_convertUpperCase && m_includeAbbreviation )
-            doAutoIncludeAbreviation(textEditCursor, parag, txtObj );
+            doAutoIncludeAbbreviation(textEditCursor, parag, txtObj );
     }
 
     //kdDebug() << "KoAutoFormat::doAutoFormat ch=" << QString(ch) << endl;
@@ -569,7 +577,7 @@ void KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *parag,
             QString text = getLastWord( static_cast<KoTextParag*>( backCursor.parag() ), backCursor.index() )
                            + punct;
             // text has the word at the end of the 'sentence', including the termination. Example: "Mr."
-            beginningOfSentence = (upperCaseExceptions.findIndex(text)==-1); // Ok if we can't find it
+            beginningOfSentence = (m_upperCaseExceptions.findIndex(text)==-1); // Ok if we can't find it
         }
 
         if ( beginningOfSentence )
@@ -596,7 +604,7 @@ void KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *parag,
             // Check next letter - we still want to be able to write fully uppercase words...
             backCursor.setIndex( backCursor.index() + 1 );
             QChar thirdChar = backCursor.parag()->at( backCursor.index() )->c;
-            if ( isLower( thirdChar ) && (twoUpperLetterException.findIndex(word)==-1))
+            if ( isLower( thirdChar ) && (m_twoUpperLetterException.findIndex(word)==-1))
             {
                 // Ok, convert
                 QTextCursor cursor( parag->document() );
@@ -692,9 +700,8 @@ void KoAutoFormat::doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *pa
 
 }
 
-void KoAutoFormat::doAutoIncludeUpperUpper(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
+void KoAutoFormat::doAutoIncludeUpperUpper(QTextCursor* /*textEditCursor*/, KoTextParag *parag, KoTextObject* /*txtObj*/ )
 {
-    KoTextDocument * textdoc = parag->textDocument();
     KoTextString *s = parag->string();
 
     if( s->length() < 2 )
@@ -712,8 +719,8 @@ void KoAutoFormat::doAutoIncludeUpperUpper(QTextCursor *textEditCursor, KoTextPa
         }
         if( word.length() > 2 && word.left(2)==word.left(2).upper() && word.at(3)!=word.at(3).upper() )
         {
-            if ( twoUpperLetterException.findIndex(word )==-1)
-                twoUpperLetterException.append( word);
+            if ( m_twoUpperLetterException.findIndex(word )==-1)
+                m_twoUpperLetterException.append( word);
         }
         i+=word.length();
     }
@@ -721,9 +728,8 @@ void KoAutoFormat::doAutoIncludeUpperUpper(QTextCursor *textEditCursor, KoTextPa
 }
 
 
-void KoAutoFormat::doAutoIncludeAbreviation(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
+void KoAutoFormat::doAutoIncludeAbbreviation(QTextCursor* /*textEditCursor*/, KoTextParag *parag, KoTextObject* /*txtObj*/ )
 {
-    KoTextDocument * textdoc = parag->textDocument();
     KoTextString *s = parag->string();
 
     if( s->length() < 2 )
@@ -751,8 +757,8 @@ void KoAutoFormat::doAutoIncludeAbreviation(QTextCursor *textEditCursor, KoTextP
             }
             if( word.length()>1 && !wordAfter.isEmpty() && wordAfter.at(0)==wordAfter.at(0).lower())
             {
-                if ( upperCaseExceptions.findIndex(word )==-1)
-                    upperCaseExceptions.append( word );
+                if ( m_upperCaseExceptions.findIndex(word )==-1)
+                    m_upperCaseExceptions.append( word );
             }
         }
         i+=word.length();
@@ -810,7 +816,7 @@ void KoAutoFormat::doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag 
     }
 }
 
-void KoAutoFormat::doUseBulletStyle(QTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj )
+void KoAutoFormat::doUseBulletStyle(QTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index )
 {
     KoTextDocument * textdoc = parag->textDocument();
     QTextCursor cursor( parag->document() );
@@ -827,6 +833,8 @@ void KoAutoFormat::doUseBulletStyle(QTextCursor * /*textEditCursor*/, KoTextPara
         cursor.setIndex( 2 );
         textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
         KCommand *cmd=txtObj->removeSelectedTextCommand( &cursor, KoTextObject::HighlightSelection  );
+        // Adjust index
+        index -= 2;
         if(cmd)
             macroCmd->addCommand(cmd);
 
@@ -839,7 +847,7 @@ void KoAutoFormat::doUseBulletStyle(QTextCursor * /*textEditCursor*/, KoTextPara
 
 
         KoParagCounter c;
-        if( bulletStyle.isNull() && ch == '*' )
+        if( m_bulletStyle.isNull() && ch == '*' )
         {
             c.setNumbering( KoParagCounter::NUM_LIST );
             c.setStyle( KoParagCounter::STYLE_DISCBULLET );
@@ -849,13 +857,14 @@ void KoAutoFormat::doUseBulletStyle(QTextCursor * /*textEditCursor*/, KoTextPara
             c.setNumbering( KoParagCounter::NUM_LIST );
             c.setStyle( KoParagCounter::STYLE_CUSTOMBULLET );
             if( ch == '*')
-                c.setCustomBulletCharacter( bulletStyle );
+                c.setCustomBulletCharacter( m_bulletStyle );
             else if ( ch == '+')
                 c.setCustomBulletCharacter( '+' );
             else if ( ch == '-' )
                 c.setCustomBulletCharacter( '-' );
 
         }
+        c.setSuffix(QString::null);
         cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
         if( cmd)
             macroCmd->addCommand(cmd);
@@ -872,7 +881,7 @@ void KoAutoFormat::doUseBulletStyle(QTextCursor * /*textEditCursor*/, KoTextPara
 
 }
 
-void KoAutoFormat::doUseNumberStyle(QTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj )
+void KoAutoFormat::doUseNumberStyle(QTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index )
 {
     KoTextDocument * textdoc = parag->textDocument();
     QTextCursor cursor( parag->document() );
@@ -901,9 +910,12 @@ void KoAutoFormat::doUseNumberStyle(QTextCursor * /*textEditCursor*/, KoTextPara
             cursor.setIndex( word.length()+1 );
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
             KCommand *cmd=txtObj->removeSelectedTextCommand( &cursor, KoTextObject::HighlightSelection  );
+            // Adjust index
+            index -= 2;
             if(cmd)
                 macroCmd->addCommand(cmd);
 
+            // Apply counter to this paragraph
             cursor.setParag( parag );
             cursor.setIndex( 0 );
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
@@ -919,6 +931,7 @@ void KoAutoFormat::doUseNumberStyle(QTextCursor * /*textEditCursor*/, KoTextPara
             cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
             if( cmd)
                 macroCmd->addCommand(cmd);
+            // Apply counter to next paragraph too
             cursor.setParag( static_cast<KoTextParag*>(parag->next()) );
             cursor.setIndex( 0 );
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
@@ -1060,7 +1073,7 @@ void KoAutoFormat::configUseBulletStyle( bool _ubs)
 
 void KoAutoFormat::configBulletStyle( QChar b )
 {
-    bulletStyle = b;
+    m_bulletStyle = b;
 }
 
 void KoAutoFormat::configAutoChangeFormat( bool b)
@@ -1138,7 +1151,7 @@ void KoAutoFormat::buildMaxLen()
 	m_maxlen = QMAX( m_maxlen, it.key().length() );
 }
 
-QStringList KoAutoFormat::listCompletion()
+QStringList KoAutoFormat::listCompletion() const
 {
    return m_listCompletion->items();
 }

@@ -157,7 +157,7 @@ void KoStyleManager::addGeneralTab() {
     tabLayout->setSpacing( 6 );
     tabLayout->setMargin( 11 );
 
-    preview = new KoStylePreview( i18n( "Preview" ), tab );
+    preview = new KoStylePreview( i18n( "Preview" ), i18n( "KWord, KOffice's Word Processor" ), tab, "stylepreview" );
 
     tabLayout->addMultiCellWidget( preview, 2, 2, 0, 1 );
 
@@ -479,68 +479,6 @@ void KoStyleManager::renameStyle(const QString &theText) {
     enableButtonApply(state);
     m_deleteButton->setEnabled(state&&(m_stylesList->currentItem() != 0));
     m_newButton->setEnabled(state);
-}
-
-/******************************************************************/
-/* Class: KoStylePreview                                          */
-/******************************************************************/
-KoStylePreview::KoStylePreview( const QString &title, QWidget *parent )
-    : QGroupBox( title, parent, "" )
-{
-    m_zoomHandler = new KoZoomHandler;
-    //m_textdoc = new KoTextDocument( m_zoomHandler );
-    m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( KoGlobal::defaultFont() ));
-    KoTextParag * parag = static_cast<KoTextParag *>(m_textdoc->firstParag());
-    parag->insert( 0, i18n( "KWord, KOffice's Word Processor" ) );
-}
-
-KoStylePreview::~KoStylePreview()
-{
-    delete m_textdoc;
-    delete m_zoomHandler;
-}
-
-void KoStylePreview::setStyle( KoStyle *style )
-{
-    KoTextParag * parag = static_cast<KoTextParag *>(m_textdoc->firstParag());
-    parag->applyStyle( style );
-    repaint(true);
-}
-
-void KoStylePreview::drawContents( QPainter *painter )
-{
-    // see also KoNumPreview::drawContents
-    painter->save();
-    QRect r = contentsRect();
-    kdDebug() << "KoStylePreview::drawContents contentsRect=" << DEBUGRECT(r) << endl;
-
-    QRect whiteRect( r.x() + 10, r.y() + 10,
-                     r.width() - 20, r.height() - 20 );
-    QColorGroup cg = QApplication::palette().active();
-    painter->fillRect( whiteRect, cg.brush( QColorGroup::Base ) );
-
-    KoTextParag * parag = static_cast<KoTextParag *>(m_textdoc->firstParag());
-    int widthLU = m_zoomHandler->pixelToLayoutUnitX( whiteRect.width() );
-    if ( m_textdoc->width() != widthLU )
-    {
-        // For centering to work, and to even get word wrapping when the thing is too big :)
-        m_textdoc->setWidth( widthLU );
-        parag->invalidate(0);
-    }
-
-    parag->format();
-    QRect textRect = parag->pixelRect( m_zoomHandler );
-
-    // Center vertically, but not horizontally, to keep the parag alignment working,
-    textRect.moveTopLeft( QPoint( whiteRect.x() + 10,
-                                  whiteRect.y() + ( whiteRect.height() - textRect.height() ) / 2 ) );
-    //kdDebug() << "KoStylePreview::drawContents textRect=" << DEBUGRECT(textRect)
-    //          << " textSize=" << textSize.width() << "," << textSize.height() << endl;
-    painter->setClipRect( textRect.intersect( whiteRect ) );
-    painter->translate( textRect.x(), textRect.y() );
-
-    m_textdoc->drawWYSIWYG( painter, 0, 0, textRect.width(), textRect.height(), cg, m_zoomHandler );
-    painter->restore();
 }
 
 /////////////

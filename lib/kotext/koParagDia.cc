@@ -318,64 +318,75 @@ QPen KoBorderPreview::setBorderPen( KoBorder _brd )
 }
 
 /******************************************************************/
-/* class KoNumPreview                                             */
+/* Class: KoStylePreview. Previewing text with style ;)           */
 /******************************************************************/
-
-KoNumPreview::KoNumPreview( QWidget* parent, const char* name )
-    : QGroupBox( i18n( "Preview" ), parent, name ) {
+KoStylePreview::KoStylePreview( const QString& title, const QString& text, QWidget* parent, const char* name )
+    : QGroupBox( title, parent, name )
+{
     setMinimumHeight(80);
     m_zoomHandler = new KoZoomHandler;
-    //FIXME QFONT()
-    m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( KoGlobal::defaultFont() ));
-    m_textdoc->setWidth(1000);
+    QFont font = KoGlobal::defaultFont();
+    font.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( font.pointSize() ) );
+    m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( font ));
+    //m_textdoc->setWidth( KoTextZoomHandler::ptToLayoutUnitPt( 1000 ) );
     KoTextParag * parag = static_cast<KoTextParag *>(m_textdoc->firstParag());
-    parag->insert( 0, i18n("Normal paragraph text") );
+    parag->insert( 0, text );
 }
 
-KoNumPreview::~KoNumPreview()
+KoStylePreview::~KoStylePreview()
 {
     delete m_textdoc;
     delete m_zoomHandler;
 }
 
-void KoNumPreview::setCounter( const KoParagCounter & counter )
+void KoStylePreview::setCounter( const KoParagCounter & counter )
 {
     KoTextParag * parag = static_cast<KoTextParag *>(m_textdoc->firstParag());
     parag->setCounter( counter );
     repaint( true );
 }
 
-void KoNumPreview::setStyle( KoStyle * style )
+void KoStylePreview::setStyle( KoStyle * style )
 {
     KoTextParag * parag = static_cast<KoTextParag *>(m_textdoc->firstParag());
-    parag->setStyle( style );
+    parag->applyStyle( style );
     repaint(true);
 }
 
-void KoNumPreview::drawContents( QPainter* painter )
+void KoStylePreview::drawContents( QPainter *painter )
 {
-    // see also KoStylePreview::drawContents
     painter->save();
     QRect r = contentsRect();
-    QFontMetrics fm( font() );
+    //kdDebug() << "KoStylePreview::drawContents contentsRect=" << DEBUGRECT(r) << endl;
 
-    // (Hmm, why use width('W') etc. here ? +/- 10 would be fine too IMHO)
-    QRect textRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
-                    r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height() );
-    //kdDebug() << "KoNumPreview::drawContents textRect=" << DEBUGRECT(textRect) << endl;
-    painter->fillRect( textRect, white );
-    painter->setClipRect( textRect );
+    QRect whiteRect( r.x() + 10, r.y() + 10,
+                     r.width() - 20, r.height() - 20 );
+    QColorGroup cg = QApplication::palette().active();
+    painter->fillRect( whiteRect, cg.brush( QColorGroup::Base ) );
 
     KoTextParag * parag = static_cast<KoTextParag *>(m_textdoc->firstParag());
-    parag->format();
+    int widthLU = m_zoomHandler->pixelToLayoutUnitX( whiteRect.width() - 2 ); // keep one pixel border horizontally
+    if ( m_textdoc->width() != widthLU )
+    {
+        // For centering to work, and to even get word wrapping when the thing is too big :)
+        m_textdoc->setWidth( widthLU );
+        parag->invalidate(0);
+    }
 
+    parag->format();
+    QRect textRect = parag->pixelRect( m_zoomHandler );
+
+    // Center vertically, but not horizontally, to keep the parag alignment working,
+    textRect.moveTopLeft( QPoint( whiteRect.x(),
+                                  whiteRect.y() + ( whiteRect.height() - textRect.height() ) / 2 ) );
+    //kdDebug() << "KoStylePreview::drawContents textRect=" << DEBUGRECT(textRect)
+    //          << " textSize=" << textSize.width() << "," << textSize.height() << endl;
+    painter->setClipRect( textRect.intersect( whiteRect ) );
     painter->translate( textRect.x(), textRect.y() );
 
-    m_textdoc->drawWYSIWYG( painter, 0, 0, textRect.width(), textRect.height(),
-                            QApplication::palette().active(), m_zoomHandler );
+    m_textdoc->drawWYSIWYG( painter, 1, 0, textRect.width() - 1, textRect.height(), cg, m_zoomHandler );
     painter->restore();
 }
-
 
 KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine, double _frameWidth,QWidget * parent, const char * name )
         : KoParagLayoutWidget( KoParagDia::PD_SPACING, parent, name ), m_unit( unit )
@@ -1106,28 +1117,8 @@ KoParagCounterWidget::KoParagCounterWidget( QWidget * parent, const char * name 
     layout8->setSpacing( 6 );
     layout8->setMargin( 11 );
 
-    stylesList.append( new StyleRepresenter(i18n( "Arabic Numbers" )
-            ,  KoParagCounter::STYLE_NUM));
-    stylesList.append( new StyleRepresenter(i18n( "Lower Alphabetical" )
-            ,  KoParagCounter::STYLE_ALPHAB_L ));
-    stylesList.append( new StyleRepresenter(i18n( "Upper Alphabetical" )
-            ,  KoParagCounter::STYLE_ALPHAB_U ));
-    stylesList.append( new StyleRepresenter(i18n( "Lower Roman Numbers" )
-            ,  KoParagCounter::STYLE_ROM_NUM_L ));
-    stylesList.append( new StyleRepresenter(i18n( "Upper Roman Numbers" )
-            ,  KoParagCounter::STYLE_ROM_NUM_U ));
-    stylesList.append( new StyleRepresenter(i18n( "Disc Bullet" )
-            ,  KoParagCounter::STYLE_DISCBULLET , true));
-    stylesList.append( new StyleRepresenter(i18n( "Square Bullet" )
-            ,  KoParagCounter::STYLE_SQUAREBULLET , true));
-    stylesList.append( new StyleRepresenter(i18n( "Box Bullet" )
-            ,  KoParagCounter::STYLE_BOXBULLET , true));
-    stylesList.append( new StyleRepresenter(i18n( "Circle Bullet" )
-            ,  KoParagCounter::STYLE_CIRCLEBULLET , true));
-    stylesList.append( new StyleRepresenter(i18n( "Custom Bullet" )
-            ,  KoParagCounter::STYLE_CUSTOMBULLET , true));
+    makeCounterRepresenterList( stylesList );
 
-    stylesList.append( new StyleRepresenter(i18n( "None" ) , KoParagCounter::STYLE_NONE));
     lstStyle = new QListBox( gStyle, "styleListBox" );
     fillStyleCombo();
     layout8->addWidget( lstStyle );
@@ -1197,13 +1188,40 @@ KoParagCounterWidget::KoParagCounterWidget( QWidget * parent, const char * name 
     styleLayoutLayout->addItem(new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding ));
     Form1Layout->addWidget( gStyle );
 
-    preview = new KoNumPreview( this );
+    preview = new KoStylePreview( i18n( "Preview" ), i18n("Normal paragraph text"), this, "counter preview" );
     Form1Layout->addWidget( preview );
 
     connect( sSuffix, SIGNAL( textChanged (const QString &) ), this, SLOT( suffixChanged(const QString &) ) );
     connect( sPrefix, SIGNAL( textChanged (const QString &) ), this, SLOT( prefixChanged(const QString &) ) );
     connect( spnStart, SIGNAL( valueChanged (int) ), this, SLOT( startChanged(int) ) );
     connect( spnDepth, SIGNAL( valueChanged (int) ), this, SLOT( depthChanged(int) ) );
+}
+
+void KoParagCounterWidget::makeCounterRepresenterList( QPtrList<StyleRepresenter>& stylesList )
+{
+    stylesList.setAutoDelete( true );
+    stylesList.append( new StyleRepresenter(i18n( "Arabic Numbers" )
+            ,  KoParagCounter::STYLE_NUM));
+    stylesList.append( new StyleRepresenter(i18n( "Lower Alphabetical" )
+            ,  KoParagCounter::STYLE_ALPHAB_L ));
+    stylesList.append( new StyleRepresenter(i18n( "Upper Alphabetical" )
+            ,  KoParagCounter::STYLE_ALPHAB_U ));
+    stylesList.append( new StyleRepresenter(i18n( "Lower Roman Numbers" )
+            ,  KoParagCounter::STYLE_ROM_NUM_L ));
+    stylesList.append( new StyleRepresenter(i18n( "Upper Roman Numbers" )
+            ,  KoParagCounter::STYLE_ROM_NUM_U ));
+    stylesList.append( new StyleRepresenter(i18n( "Disc Bullet" )
+            ,  KoParagCounter::STYLE_DISCBULLET , true));
+    stylesList.append( new StyleRepresenter(i18n( "Square Bullet" )
+            ,  KoParagCounter::STYLE_SQUAREBULLET , true));
+    stylesList.append( new StyleRepresenter(i18n( "Box Bullet" )
+            ,  KoParagCounter::STYLE_BOXBULLET , true));
+    stylesList.append( new StyleRepresenter(i18n( "Circle Bullet" )
+            ,  KoParagCounter::STYLE_CIRCLEBULLET , true));
+    stylesList.append( new StyleRepresenter(i18n( "Custom Bullet" )
+            ,  KoParagCounter::STYLE_CUSTOMBULLET , true));
+
+    stylesList.append( new StyleRepresenter(i18n( "None" ), KoParagCounter::STYLE_NONE));
 }
 
 void KoParagCounterWidget::fillStyleCombo(KoParagCounter::Numbering type) {
@@ -1219,7 +1237,7 @@ void KoParagCounterWidget::fillStyleCombo(KoParagCounter::Numbering type) {
             if(type == KoParagCounter::NUM_NONE)
                 lstStyle->insertItem( style.current()->name() );
         }
-        else if(type == KoParagCounter::NUM_LIST || !style.current()->listStyle())
+        else if(type == KoParagCounter::NUM_LIST || !style.current()->isBullet())
             if(type != KoParagCounter::NUM_NONE)
                 lstStyle->insertItem( style.current()->name() );
         ++style;
@@ -1267,10 +1285,10 @@ void KoParagCounterWidget::numStyleChanged() {
     StyleRepresenter *sr = stylesList.at(lstStyle->currentItem());
     m_counter.setStyle(sr->style());
 
-    bool hasStart = !sr->listStyle() && !sr->style() == KoParagCounter::STYLE_NONE;
+    bool hasStart = !sr->isBullet() && !sr->style() == KoParagCounter::STYLE_NONE;
     lStart->setEnabled( hasStart );
     spnStart->setEnabled( hasStart );
-    if ( sr->listStyle() ) // we selected a bullet -> erase prefix/suffix.
+    if ( sr->isBullet() ) // we selected a bullet -> erase prefix/suffix.
                            // due to default value of suffix='.', it's too easy to end up
                            // with a bullet + a dot.
     {
@@ -1321,7 +1339,7 @@ void KoParagCounterWidget::numTypeChanged( int nType ) {
 }
 
 void KoParagCounterWidget::display( const KoParagLayout & lay ) {
-    KoParagCounter::Style style =KoParagCounter::STYLE_NONE;
+    KoParagCounter::Style style = KoParagCounter::STYLE_NONE;
     if ( lay.counter )
     {
         style=lay.counter->style();
@@ -1331,16 +1349,15 @@ void KoParagCounterWidget::display( const KoParagLayout & lay ) {
     {
         m_counter = KoParagCounter();
     }
+    preview->setStyle( lay.style );
     preview->setCounter( m_counter );
-    preview->setStyle(lay.style);
     styleBuffer = 999;
 
     gNumbering->setButton( m_counter.numbering() );
     numTypeChanged( m_counter.numbering() );
 
     unsigned int i;
-
-    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != style/*m_counter.style()*/; i++);
+    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != style; i++);
     lstStyle->setCurrentItem(i);
     bCustom->setText( m_counter.customBulletCharacter() );
     if ( !m_counter.customBulletFont().isEmpty() )

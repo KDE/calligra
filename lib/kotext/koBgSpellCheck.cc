@@ -28,6 +28,8 @@
 #include <kotextobject.h>
 #include <klocale.h>
 
+//#define DEBUG_BGSPELLCHECKING
+
 KoBgSpellCheck::KoBgSpellCheck()
 {
     m_pKSpellConfig=0L;

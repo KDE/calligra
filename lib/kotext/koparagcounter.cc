@@ -19,7 +19,6 @@
 
 #include "koparagcounter.h"
 #include "kotextparag.h"
-//#include "kwutils.h"
 #include <kdebug.h>
 #include <qdom.h>
 
@@ -475,7 +474,10 @@ int KoParagCounter::width( const KoTextParag *paragraph )
         text( paragraph );
 
     // Now calculate width.
+    if ( m_cache.counterFormat )
+        m_cache.counterFormat->removeRef();
     m_cache.counterFormat = paragraph->at( 0 )->format();/*paragraph->paragFormat()*/;
+    m_cache.counterFormat->addRef();
     m_cache.width = 0;
     QString text = m_cache.text;
     if ( !text.isEmpty() )

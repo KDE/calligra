@@ -31,7 +31,6 @@ class KoFontChooser;
 class KoStyle;
 class KoStyleEditor;
 class KoStyleManagerTab;
-class KoStylePreview;
 class QCheckBox;
 class QComboBox;
 class QGridLayout;
@@ -99,26 +98,6 @@ protected:
     void addTab( KoStyleManagerTab * tab );
 };
 
-/******************************************************************/
-/* Class: KoStylePreview                                         */
-/******************************************************************/
-class KoStylePreview : public QGroupBox
-{
-    Q_OBJECT
-
-public:
-    KoStylePreview( const QString &title, QWidget *parent );
-    virtual ~KoStylePreview();
-
-    void setStyle(KoStyle *_style);
-
-protected:
-    void drawContents( QPainter *painter );
-
-    KoTextDocument *m_textdoc;
-    KoZoomHandler *m_zoomHandler;
-};
-
 class KoStyleManagerTab : public QWidget {
     Q_OBJECT
 public:
@@ -178,9 +157,9 @@ private:
 Font            simple font dia
 Color           simple color dia
 Spacing and Indents     paragraph spacing dia (KWParagDia)
-alignments      KWParagDia alignment tab
-borders         KWParagDia  borders tab
-numbering       KWParagDia  tab numbering
-tabulators      KWParagDia  tab tabs */
+alignments      KoParagDia alignment tab
+borders         KoParagDia  borders tab
+numbering       KoParagDia  tab numbering
+tabulators      KoParagDia  tab tabs */
 
 #endif

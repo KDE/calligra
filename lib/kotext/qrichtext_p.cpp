@@ -219,8 +219,6 @@ QTextFormat::QTextFormat( const QTextFormat &f )
     missp = f.missp;
     ha = f.ha;
     k = f.k;
-    anchor_name = f.anchor_name;
-    anchor_href = f.anchor_href;
     linkColor = f.linkColor;
     style = f.style;
     different = f.different;
@@ -252,8 +250,6 @@ QTextFormat& QTextFormat::operator=( const QTextFormat &f )
     missp = f.missp;
     ha = f.ha;
     k = f.k;
-    anchor_name = f.anchor_name;
-    anchor_href = f.anchor_href;
     linkColor = f.linkColor;
     style = f.style;
     different = f.different;
@@ -318,41 +314,46 @@ int QTextFormat::descent() const
 
 void QTextFormat::generateKey()
 {
-    k = QString::null;
-    QTextOStream ts( &k );
-    ts << fn.pointSize() << "/"
-       << fn.weight() << "/"
-       << (int)fn.underline() << "/"
-       << (int)fn.strikeOut() << "/"
-       << (int)fn.italic() << "/";
+    k = QString::number( fn.pointSize() );
+    k += '/';
+    k += QString::number( fn.weight() );
+    k += '/';
+    k += QString::number( (int)fn.underline() );
+    k += '/';
+    k += QString::number( (int)fn.strikeOut() );
+    k += '/';
+    k += QString::number( (int)fn.italic() );
+    k += '/';
     if ( col.isValid() ) // just to shorten the key in the common case
-        ts << (uint)col.rgb();
-    ts << "/"
-       << fn.family() << "/"
-       << (int)isMisspelled() << "/"
-       << anchor_href << "/"
-       << anchor_name << "/"
-       << (int)vAlign();
+        k += QString::number( (uint)col.rgb() );
+    k += '/';
+    k += fn.family();
+    k += '/';
+    k += QString::number( (int)isMisspelled() );
+    k += '/';
+    k += QString::number( (int)vAlign() );
 }
 
-QString QTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelled,
-				    const QString &lhref, const QString &lnm, VerticalAlignment a )
+QString QTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelled, VerticalAlignment a )
 {
-    QString k;
-    QTextOStream ts( &k );
-    ts << fn.pointSize() << "/"
-       << fn.weight() << "/"
-       << (int)fn.underline() << "/"
-       << (int)fn.strikeOut() << "/"
-       << (int)fn.italic() << "/";
+    QString k = QString::number( fn.pointSize() );
+    k += '/';
+    k += QString::number( fn.weight() );
+    k += '/';
+    k += QString::number( (int)fn.underline() );
+    k += '/';
+    k += QString::number( (int)fn.strikeOut() );
+    k += '/';
+    k += QString::number( (int)fn.italic() );
+    k += '/';
     if ( col.isValid() ) // just to shorten the key in the common case
-        ts << (uint)col.rgb();
-    ts << "/"
-       << fn.family() << "/"
-       << (int)misspelled << "/"
-       << lhref << "/"
-       << lnm << "/"
-       << (int)a;
+        k += QString::number( (uint)col.rgb() );
+    k += '/';
+    k += fn.family();
+    k += '/';
+    k += QString::number( (int)misspelled );
+    k += '/';
+    k += QString::number( (int)a );
     return k;
 }
 

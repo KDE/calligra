@@ -54,7 +54,7 @@ QTextFormat * KoTextFormatCollection::format( const QFont &fn, const QColor &c )
         return d->m_cachedFormat;
     }
 
-    QString key = QTextFormat::getKey( fn, c, FALSE, QString::null, QString::null, QTextFormat::AlignNormal );
+    QString key = QTextFormat::getKey( fn, c, FALSE, QTextFormat::AlignNormal );
     kdDebug() << "format() textformat=" << this << " pointsizefloat=" << fn.pointSizeFloat() << endl;
     // SYNC any changes with generateKey below
     Q_ASSERT( !key.contains( '+' ) );

@@ -853,7 +853,7 @@ public:
     QString richText( QTextParag *p = 0 ) const;
     QString plainText( QTextParag *p = 0 ) const;
 
-    bool focusNextPrevChild( bool next );
+    //bool focusNextPrevChild( bool next );
 
     int alignment() const;
     void setAlignment( int a );
@@ -1509,9 +1509,6 @@ public:
     virtual int height() const;
     virtual int ascent() const;
     virtual int descent() const;
-    QString anchorHref() const;
-    QString anchorName() const;
-    bool isAnchor() const;
     bool useLinkColor() const;
 
     void setBold( bool b );
@@ -1523,22 +1520,19 @@ public:
     void setColor( const QColor &c );
     void setMisspelled( bool b );
     void setVAlign( VerticalAlignment a );
-    void setAnchorName(const QString &anchor);
-    void setAnchorHref(const QString &anchor);
-    void setUseLinkColor( bool b);
 
     bool operator==( const QTextFormat &f ) const;
     QTextFormatCollection *parent() const;
     void setCollection( QTextFormatCollection *parent ) { collection = parent; }
     QString key() const;
 
-    static QString getKey( const QFont &f, const QColor &c, bool misspelled, const QString &lhref, const QString &lnm, VerticalAlignment vAlign );
+    static QString getKey( const QFont &f, const QColor &c, bool misspelled, VerticalAlignment vAlign );
 
     void addRef();
     void removeRef();
 
-    QString makeFormatChangeTags( QTextFormat *f ) const;
-    QString makeFormatEndTags() const;
+    QString makeFormatChangeTags( QTextFormat *f, const QString& oldAnchorHref, const QString& anchorHref ) const;
+    QString makeFormatEndTags( const QString& anchorHref ) const;
 
     void setPainter( QPainter *p );
     void updateStyle();
@@ -1569,8 +1563,6 @@ private:
     QString k;
     int logicalFontSize;
     int stdPointSize;
-    QString anchor_href;
-    QString anchor_name;
     QPainter *painter;
     QString style;
     int different;
@@ -1908,21 +1900,6 @@ inline QString QTextFormat::key() const
     return k;
 }
 
-inline QString QTextFormat::anchorHref() const
-{
-    return anchor_href;
-}
-
-inline QString QTextFormat::anchorName() const
-{
-    return anchor_name;
-}
-
-inline bool QTextFormat::isAnchor() const
-{
-    return !anchor_href.isEmpty()  || !anchor_name.isEmpty();
-}
-
 inline bool QTextFormat::useLinkColor() const
 {
     return linkColor;
@@ -1932,25 +1909,6 @@ inline void QTextFormat::setStyle( const QString &s )
 {
     style = s;
     updateStyleFlags();
-}
-
-inline void QTextFormat::setAnchorName(const QString &anchor)
-{
-    if(!anchor.isEmpty())
-	anchor_name=anchor;
-    update();
-}
-
-inline void QTextFormat::setAnchorHref(const QString &anchor)
-{
-    if(!anchor.isEmpty())
-	anchor_href=anchor;
-    update();
-}
-
-inline void QTextFormat::setUseLinkColor( bool _b)
-{
-    linkColor=_b;
 }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

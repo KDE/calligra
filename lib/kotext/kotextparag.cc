@@ -250,6 +250,9 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
             case KoParagCounter::STYLE_SQUAREBULLET:
                 p->fillRect( er, QBrush(textColor) );
                 break;
+            case KoParagCounter::STYLE_BOXBULLET:
+                p->drawRect( er );
+                break;
             case KoParagCounter::STYLE_CIRCLEBULLET:
                 p->drawEllipse( er );
                 break;
@@ -509,6 +512,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     painter.setFont( font );
 
     Qt3::QTextDocument* doc = document();
+#if 0
     if ( doc && lastFormat->isAnchor() && !lastFormat->anchorHref().isEmpty() && lastFormat->useLinkColor() ) {
         if ( doc->linkColor.isValid() )
             painter.setPen( doc->linkColor );
@@ -519,6 +523,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	    painter.setFont( font );
 	}
     }
+#endif
 
     if ( drawSelections ) {
 	const int nSels = doc ? doc->numSelections() : 1;
@@ -599,7 +604,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	painter.drawLine( startX, lastY + baseLine + 1, startX + bw, lastY + baseLine + 1 );
 	painter.restore();
     }
-
+#if 0
     i -= len;
     if ( doc && lastFormat->isAnchor() && !lastFormat->anchorHref().isEmpty() &&
          doc->focusIndicator.parag == this &&
@@ -607,6 +612,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
          doc->focusIndicator.start + doc->focusIndicator.len <= i + len ) {
 	painter.drawWinFocusRect( QRect( startX, lastY, bw, h ) );
     }
+#endif
 }
 
 // Reimplemented from QTextParag
@@ -738,7 +744,7 @@ int KoTextParag::nextTab( int chnum, int x )
                         }
                         ++c;
                     }
-                    
+
                     m_tabCache[chnum] = i;
 
                     if ( type == T_RIGHT )
@@ -893,7 +899,7 @@ void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags )
     if ( flags & KoParagLayout::Shadow )
         setShadow( layout.shadowDistance, layout.shadowDirection,layout.shadowColor );
     if ( flags == KoParagLayout::All )
-        // Don't call setStyle from here, it would overwrite any paragraph-specific settings
+        // Don't call applyStyle from here, it would overwrite any paragraph-specific settings
         setStyle( layout.style );
 }
 

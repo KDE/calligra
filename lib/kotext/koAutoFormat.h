@@ -69,6 +69,8 @@ public:
      * (and a temporary one in the auto-format dialog).
      */
     KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollection, KoVariableFormatCollection *_varFormatCollection );
+
+    ~KoAutoFormat();
     /**
      * Called by edit widget when a character (@p ch) has been inserted
      * into @p parag, at the given @p index.
@@ -161,7 +163,7 @@ public:
     { return m_useBulletStyle;}
 
     QChar getConfigBulletStyle() const
-    { return bulletStyle; }
+    { return m_bulletStyle; }
 
     bool getConfigAutoChangeFormat() const
     { return m_autoChangeFormat;}
@@ -219,18 +221,18 @@ public:
     { m_entries = other.m_entries; }
 
     void copyListException( const QStringList & _list)
-	{ upperCaseExceptions=_list;}
+	{ m_upperCaseExceptions=_list;}
 
     void copyListTwoUpperCaseException( const QStringList &_list)
-	{ twoUpperLetterException=_list; }
+	{ m_twoUpperLetterException=_list; }
 
-    QStringList listException() {return upperCaseExceptions;}
+    QStringList listException() const {return m_upperCaseExceptions;}
 
-    QStringList listTwoUpperLetterException() {return twoUpperLetterException;}
+    QStringList listTwoUpperLetterException() const {return m_twoUpperLetterException;}
 
-    QStringList listCompletion();
+    QStringList listCompletion() const;
 
-    KCompletion *getCompletion() { return m_listCompletion; }
+    KCompletion *getCompletion() const { return m_listCompletion; }
 
 
     // Read/save config ( into kwordrc )
@@ -251,14 +253,14 @@ protected:
     void doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
     void doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
     void doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
-    void doUseBulletStyle(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
+    void doUseBulletStyle(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj, int& index );
 
     void doAutoReplaceNumber( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
 
-    void doUseNumberStyle(QTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj );
+    void doUseNumberStyle(QTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index );
 
     void doAutoIncludeUpperUpper(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
-    void doAutoIncludeAbreviation(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
+    void doAutoIncludeAbbreviation(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
 private:
     void detectStartOfLink(const QString &word);
     void autoFormatIsActive();
@@ -278,8 +280,10 @@ private:
     bool m_addCompletionWord;
     bool m_includeTwoUpperLetterException;
     bool m_includeAbbreviation;
+    bool m_ignoreUpperCase;
+    bool m_bAutoFormatActive;
 
-    QChar bulletStyle;
+    QChar m_bulletStyle;
 
     TypographicQuotes m_typographicSimpleQuotes;
 
@@ -288,17 +292,14 @@ private:
     KCompletion *m_listCompletion;
     typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;
     KoAutoFormatEntryMap m_entries;
-    QStringList upperCaseExceptions;
-    QStringList twoUpperLetterException;
+
+    QStringList m_upperCaseExceptions;
+    QStringList m_twoUpperLetterException;
+
     uint m_maxlen;
     uint m_maxFindLength;
-
     uint m_minCompletionWordLength;
-
     uint m_nbMaxCompletionWord;
-
-    bool m_ignoreUpperCase;
-    bool m_bAutoFormatActive;
 };
 
 #endif
