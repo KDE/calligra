@@ -1528,6 +1528,7 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
         kdWarning(32001) << "FT_BASE !?!?" << endl;
         break;
     }
+    return 0L;
 }
 
 bool KWDocument::completeLoading( KoStore *_store )
