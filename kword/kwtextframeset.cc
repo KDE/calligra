@@ -2842,7 +2842,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     y += parag->rect().y() + cursor()->offsetY();
     //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible y=" << y << endl;
     // make sure one char is visible before, and one after
-    KoTextStringChar *chrLeft = index > 0 ? chr-1 : chr;
+    KoTextStringChar *chrLeft = idx > 0 ? chr-1 : chr;
     // which char is on the left and which one is on the right depends on chr->rightToLeft
     int areaLeft = chr->rightToLeft ? chr->width : chrLeft->width;
     int areaRight = chr->rightToLeft ? chrLeft->width : chr->width;
