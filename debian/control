@@ -44,6 +44,19 @@ Description: KDE Office Suite - KFormula
  .
  A Graphical Formula program based on QT and KDE
 
+Package: kivio
+Architecture: any
+Section: x11
+Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
+Suggests: kdebase
+Description: KDE Office Suite - Kivio
+ KDE Office Suite - Kivio
+ .
+ Kivio on the surface is your everyday flowcharting program.  Underneath this
+ skin, however, lies much more. Kivio will offer basic  flowcharting abilities,
+ but with a twist. Objects are scriptable, and a backend plugin system will
+ offer the ability to make objects do just about anything.
+
 Package: kspread
 Architecture: any
 Section: x11
@@ -103,8 +116,8 @@ Description: KDE Office Workspace
 Package: task-koffice
 Architecture: all
 Section: x11
-Depends: koffice-libs, kformula, kchart, kword, kspread, killustrator, kpresenter, koshell, kdelibs3, kdebase-libs, libqt2.2
-Suggests: kdebase, kivio
+Depends: koffice-libs, kformula, kchart, kword, kspread, killustrator, kpresenter, koshell, kivio, kdelibs3, kdebase-libs, libqt2.2
+Suggests: kdebase
 Description: KDE Office Suite
  KDE Office Suite
  .
