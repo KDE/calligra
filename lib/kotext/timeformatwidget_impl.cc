@@ -23,11 +23,12 @@ TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, WFlags f
 
     QStringList listTimeFormat;
     listTimeFormat<<i18n("Locale");
-    listTimeFormat<<i18n("hh:mm");
-    listTimeFormat<<i18n("hh:mm:ss");
-    listTimeFormat<<i18n("hh:mm AP");
-    listTimeFormat<<i18n("hh:mm:ss AP");
-    listTimeFormat<<i18n("mm:ss.zzz");
+    //don't i18n(...) this string otherwise insertion doesn't work
+    listTimeFormat<<"hh:mm";
+    listTimeFormat<<"hh:mm:ss";
+    listTimeFormat<<"hh:mm AP";
+    listTimeFormat<<"hh:mm:ss AP";
+    listTimeFormat<<"mm:ss.zzz";
 
     combo2->insertItem( i18n( "Hour" ) );
     combo2->insertItem( i18n( "Hour (2 digits)" ) );

@@ -1084,7 +1084,6 @@ void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & 
                 cursor(), text, KoTextDocument::Standard, i18n("Replace Word") ));
         }
     }
-
     delete tool;
 }
 

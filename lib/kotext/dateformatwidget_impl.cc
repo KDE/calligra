@@ -23,18 +23,19 @@ DateFormatWidget::DateFormatWidget( QWidget* parent,  const char* name, WFlags f
 
     QStringList listDateFormat;
     listDateFormat<<i18n("Locale");
-    listDateFormat<<i18n("dd/MM/yy");
-    listDateFormat<<i18n("dd/MM/yyyy");
-    listDateFormat<<i18n("MMM dd,yy");
-    listDateFormat<<i18n("MMM dd,yyyy");
-    listDateFormat<<i18n("dd.MMM.yyyy");
-    listDateFormat<<i18n("MMMM dd, yyyy");
-    listDateFormat<<i18n("ddd, MMM dd,yy");
-    listDateFormat<<i18n("dddd, MMM dd,yy");
-    listDateFormat<<i18n("MM-dd");
-    listDateFormat<<i18n("yyyy-MM-dd");
-    listDateFormat<<i18n("dd/yy");
-    listDateFormat<<i18n("MMMM");
+    //don't i18n(...) this string otherwise insertion doesn't work
+    listDateFormat<<"dd/MM/yy";
+    listDateFormat<<"dd/MM/yyyy";
+    listDateFormat<<"MMM dd,yy";
+    listDateFormat<<"MMM dd,yyyy";
+    listDateFormat<<"dd.MMM.yyyy";
+    listDateFormat<<"MMMM dd, yyyy";
+    listDateFormat<<"ddd, MMM dd,yy";
+    listDateFormat<<"dddd, MMM dd,yy";
+    listDateFormat<<"MM-dd";
+    listDateFormat<<"yyyy-MM-dd";
+    listDateFormat<<"dd/yy";
+    listDateFormat<<"MMMM";
 
     combo2->insertItem( i18n( "Day"));
     combo2->insertItem( i18n( "Day (2 digits)"));
