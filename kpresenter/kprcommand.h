@@ -63,7 +63,7 @@ public:
         QColor shadowColor;
     };
 
-    ShadowCmd( QString _name, QPtrList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
+    ShadowCmd( const QString &_name, QPtrList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
                QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
     ~ShadowCmd();
 
@@ -85,9 +85,9 @@ protected:
 class SetOptionsCmd : public KCommand
 {
 public:
-    SetOptionsCmd( QString _name, QPtrList<QPoint> &_diffs, QPtrList<KPObject> &_objects,
+    SetOptionsCmd( const QString &_name, QPtrList<QPoint> &_diffs, QPtrList<KPObject> &_objects,
                    int _rastX, int _rastY, int _orastX, int _orastY,
-                   QColor _txtBackCol, QColor _otxtBackCol, KPresenterDoc *_doc );
+                   const QColor &_txtBackCol, const QColor &_otxtBackCol, KPresenterDoc *_doc );
     ~SetOptionsCmd();
 
     virtual void execute();
@@ -112,11 +112,11 @@ protected:
 class SetBackCmd : public KCommand
 {
 public:
-    SetBackCmd( QString _name, QColor _backColor1, QColor _backColor2, BCType _bcType,
+    SetBackCmd( const QString &_name, const QColor &_backColor1, const QColor &_backColor2, BCType _bcType,
 		bool _backUnbalanced, int _backXFactor, int _backYFactor,
 		const KPImageKey & _backPix, const KPClipartKey & _backClip,
                 BackView _backView, BackType _backType,
-		QColor _oldBackColor1, QColor _oldBackColor2, BCType _oldBcType,
+		const QColor &_oldBackColor1, const QColor &_oldBackColor2, BCType _oldBcType,
 		bool _oldBackUnbalanced, int _oldBackXFactor, int _oldBackYFactor,
 		const KPImageKey & _oldBackPix, const KPClipartKey & _oldBackClip,
                 BackView _oldBackView, BackType _oldBackType,
@@ -161,7 +161,7 @@ public:
         float angle;
     };
 
-    RotateCmd( QString _name, QPtrList<RotateValues> &_oldRotate, float _newAngle,
+    RotateCmd( const QString &_name, QPtrList<RotateValues> &_oldRotate, float _newAngle,
                QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
     ~RotateCmd();
 
@@ -206,7 +206,7 @@ protected:
 class ChgClipCmd : public KCommand
 {
 public:
-    ChgClipCmd( QString _name, KPClipartObject *_object, KPClipartCollection::Key _oldName,
+    ChgClipCmd( const QString &_name, KPClipartObject *_object, KPClipartCollection::Key _oldName,
                 KPClipartCollection::Key _newName, KPresenterDoc *_doc );
     ~ChgClipCmd();
 
@@ -227,7 +227,7 @@ protected:
 class ChgPixCmd : public KCommand
 {
 public:
-    ChgPixCmd( QString _name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
+    ChgPixCmd( const QString &_name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
                KPresenterDoc *_doc, KPrPage *_page );
     ~ChgPixCmd();
 
@@ -249,7 +249,7 @@ protected:
 class DeleteCmd : public KCommand
 {
 public:
-    DeleteCmd( QString _name, QPtrList<KPObject> &_objects, KPresenterDoc *_doc , KPrPage *_page);
+    DeleteCmd( const QString &_name, QPtrList<KPObject> &_objects, KPresenterDoc *_doc , KPrPage *_page);
     ~DeleteCmd();
 
     virtual void execute();
@@ -281,7 +281,7 @@ public:
         QString a_fileName, d_fileName;
     };
 
-    EffectCmd( QString _name, const QPtrList<KPObject> &_objs,
+    EffectCmd( const QString &_name, const QPtrList<KPObject> &_objs,
 	       const QValueList<EffectStruct> &_oldEffects, EffectStruct _newEffect );
     ~EffectCmd();
 
@@ -352,7 +352,7 @@ protected:
 class InsertCmd : public KCommand
 {
 public:
-    InsertCmd( QString _name, KPObject *_object, KPresenterDoc *_doc, KPrPage *_page );
+    InsertCmd( const QString &_name, KPObject *_object, KPresenterDoc *_doc, KPrPage *_page );
     ~InsertCmd();
 
     virtual void execute();
@@ -373,7 +373,7 @@ protected:
 class LowerRaiseCmd : public KCommand
 {
 public:
-    LowerRaiseCmd( QString _name, QPtrList<KPObject> _oldList, QPtrList<KPObject> _newList, KPresenterDoc *_doc, KPrPage *_page );
+    LowerRaiseCmd( const QString &_name, QPtrList<KPObject> _oldList, QPtrList<KPObject> _newList, KPresenterDoc *_doc, KPrPage *_page );
     ~LowerRaiseCmd();
 
     virtual void execute();
@@ -395,7 +395,7 @@ protected:
 class MoveByCmd : public KCommand
 {
 public:
-    MoveByCmd( QString _name, QPoint _diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page );
+    MoveByCmd( const QString &_name, const QPoint &_diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page );
     ~MoveByCmd();
 
     virtual void execute();
@@ -417,7 +417,7 @@ protected:
 class MoveByCmd2 : public KCommand
 {
 public:
-    MoveByCmd2( QString _name, QPtrList<QPoint> &_diffs, QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
+    MoveByCmd2( const QString &_name, QPtrList<QPoint> &_diffs, QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
     ~MoveByCmd2();
 
     virtual void execute();
@@ -477,7 +477,7 @@ public:
     static const int PEN_ONLY = 4;
     static const int BRUSH_ONLY = 8;
 
-    PenBrushCmd( QString _name, QPtrList<Pen> &_oldPen, QPtrList<Brush> &_oldBrush,
+    PenBrushCmd( const QString &_name, QPtrList<Pen> &_oldPen, QPtrList<Brush> &_oldBrush,
 		 Pen _newPen, Brush _newBrush, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = 0 );
     ~PenBrushCmd();
 
@@ -503,12 +503,12 @@ protected:
 class PgConfCmd : public KCommand
 {
 public:
-    PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
+    PgConfCmd( const QString &_name, bool _manualSwitch, bool _infinitLoop,
                PageEffect _pageEffect, PresSpeed _presSpeed, int _pageTimer,
-               bool _soundEffect, QString _fileName,
+               bool _soundEffect, const QString &_fileName,
                bool _oldManualSwitch, bool _oldInfinitLoop,
                PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, int _oldPageTimer,
-               bool _oldSoundEffect, QString _oldFileName,
+               bool _oldSoundEffect, const QString &_oldFileName,
                KPresenterDoc *_doc, KPrPage *_page );
 
     virtual void execute();
@@ -534,7 +534,7 @@ protected:
 class PgLayoutCmd : public KCommand
 {
 public:
-    PgLayoutCmd( QString _name, KoPageLayout _layout, KoPageLayout _oldLayout,
+    PgLayoutCmd( const QString &_name, KoPageLayout _layout, KoPageLayout _oldLayout,
                  KoUnit::Unit _oldUnit, KoUnit::Unit _unit,
                  KPresenterView *_view );
 
@@ -562,7 +562,7 @@ public:
         int pieAngle, pieLength;
     };
 
-    PieValueCmd( QString _name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
+    PieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
                  QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
     ~PieValueCmd();
 
@@ -620,7 +620,7 @@ public:
         int xRnd, yRnd;
     };
 
-    RectValueCmd( QString _name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
+    RectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
                   QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
     ~RectValueCmd();
 

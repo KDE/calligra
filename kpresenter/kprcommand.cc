@@ -55,7 +55,7 @@ using namespace Qt3;
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-ShadowCmd::ShadowCmd( QString _name, QPtrList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
+ShadowCmd::ShadowCmd( const QString &_name, QPtrList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
                       QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
     : KCommand( _name ), oldShadow( _oldShadow ), objects( _objects )
 {
@@ -102,9 +102,9 @@ void ShadowCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-SetOptionsCmd::SetOptionsCmd( QString _name, QPtrList<QPoint> &_diffs, QPtrList<KPObject> &_objects,
+SetOptionsCmd::SetOptionsCmd( const QString &_name, QPtrList<QPoint> &_diffs, QPtrList<KPObject> &_objects,
                               int _rastX, int _rastY, int _orastX, int _orastY,
-                              QColor _txtBackCol, QColor _otxtBackCol, KPresenterDoc *_doc )
+                              const QColor &_txtBackCol, const QColor &_otxtBackCol, KPresenterDoc *_doc )
     : KCommand( _name ), diffs( _diffs ), objects( _objects ), txtBackCol( _txtBackCol ), otxtBackCol( _otxtBackCol )
 {
     rastX = _rastX;
@@ -150,11 +150,11 @@ void SetOptionsCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-SetBackCmd::SetBackCmd( QString _name, QColor _backColor1, QColor _backColor2, BCType _bcType,
+SetBackCmd::SetBackCmd( const QString &_name, const QColor &_backColor1, const QColor &_backColor2, BCType _bcType,
 			bool _backUnbalanced, int _backXFactor, int _backYFactor,
 			const KoImageKey & _backPix, const KPClipartKey & _backClip,
                         BackView _backView, BackType _backType,
-			QColor _oldBackColor1, QColor _oldBackColor2, BCType _oldBcType,
+			const QColor &_oldBackColor1, const QColor &_oldBackColor2, BCType _oldBcType,
 			bool _oldBackUnbalanced, int _oldBackXFactor, int _oldBackYFactor,
 			const KPClipartKey & _oldBackPix, const KPClipartKey & _oldBackClip,
                         BackView _oldBackView, BackType _oldBackType,
@@ -236,7 +236,7 @@ void SetBackCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-RotateCmd::RotateCmd( QString _name, QPtrList<RotateValues> &_oldRotate, float _newAngle,
+RotateCmd::RotateCmd( const QString &_name, QPtrList<RotateValues> &_oldRotate, float _newAngle,
                       QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
     : KCommand( _name ), oldRotate( _oldRotate ), objects( _objects )
 {
@@ -281,7 +281,7 @@ void RotateCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-ChgClipCmd::ChgClipCmd( QString _name, KPClipartObject *_object, KPClipartCollection::Key _oldKey,
+ChgClipCmd::ChgClipCmd( const QString &_name, KPClipartObject *_object, KPClipartCollection::Key _oldKey,
                         KPClipartCollection::Key _newKey, KPresenterDoc *_doc )
     : KCommand( _name ), oldKey( _oldKey ), newKey( _newKey )
 {
@@ -315,7 +315,7 @@ void ChgClipCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-ChgPixCmd::ChgPixCmd( QString _name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
+ChgPixCmd::ChgPixCmd( const QString &_name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
                       KPresenterDoc *_doc, KPrPage *_page)
     : KCommand( _name )
 {
@@ -355,7 +355,7 @@ void ChgPixCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-DeleteCmd::DeleteCmd( QString _name, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page )
+DeleteCmd::DeleteCmd( const QString &_name, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page )
     : KCommand( _name ), objects( _objects )
 {
     objects.setAutoDelete( false );
@@ -408,7 +408,7 @@ void DeleteCmd::unexecute()
 /******************************************************************/
 
 /*================================================================*/
-EffectCmd::EffectCmd( QString _name, const QPtrList<KPObject> &_objs,
+EffectCmd::EffectCmd( const QString &_name, const QPtrList<KPObject> &_objs,
 		      const QValueList<EffectStruct> &_oldEffects, EffectStruct _newEffect )
     : KCommand( _name ), oldEffects( _oldEffects ),
       newEffect( _newEffect ), objs( _objs )
@@ -620,7 +620,7 @@ void UnGroupObjCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-InsertCmd::InsertCmd( QString _name, KPObject *_object, KPresenterDoc *_doc, KPrPage *_page )
+InsertCmd::InsertCmd( const QString &_name, KPObject *_object, KPresenterDoc *_doc, KPrPage *_page )
     : KCommand( _name )
 {
     object = _object;
@@ -664,7 +664,7 @@ void InsertCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-LowerRaiseCmd::LowerRaiseCmd( QString _name, QPtrList<KPObject> _oldList, QPtrList<KPObject> _newList, KPresenterDoc *_doc, KPrPage *_page )
+LowerRaiseCmd::LowerRaiseCmd( const QString &_name, QPtrList<KPObject> _oldList, QPtrList<KPObject> _newList, KPresenterDoc *_doc, KPrPage *_page )
     : KCommand( _name )
 {
     oldList = _oldList;
@@ -707,7 +707,7 @@ void LowerRaiseCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd::MoveByCmd( QString _name, QPoint _diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc,KPrPage *_page )
+MoveByCmd::MoveByCmd( const QString &_name, const QPoint &_diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc,KPrPage *_page )
     : KCommand( _name ), diff( _diff ), objects( _objects )
 {
     objects.setAutoDelete( false );
@@ -773,7 +773,7 @@ void MoveByCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd2::MoveByCmd2( QString _name, QPtrList<QPoint> &_diffs,
+MoveByCmd2::MoveByCmd2( const QString &_name, QPtrList<QPoint> &_diffs,
 			QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
     : KCommand( _name ), diffs( _diffs ), objects( _objects )
 {
@@ -845,7 +845,7 @@ void MoveByCmd2::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-PenBrushCmd::PenBrushCmd( QString _name, QPtrList<Pen> &_oldPen, QPtrList<Brush> &_oldBrush,
+PenBrushCmd::PenBrushCmd( const QString &_name, QPtrList<Pen> &_oldPen, QPtrList<Brush> &_oldBrush,
 			  Pen _newPen, Brush _newBrush, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags )
     : KCommand( _name ), oldPen( _oldPen ), oldBrush( _oldBrush ), objects( _objects )
 {
@@ -1268,12 +1268,12 @@ void PenBrushCmd::unexecute()
 /******************************************************************/
 
 /*================================================================*/
-PgConfCmd::PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
+PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infinitLoop,
                       PageEffect _pageEffect, PresSpeed _presSpeed, int _pageTimer,
-                      bool _soundEffect, QString _fileName,
+                      bool _soundEffect, const QString &_fileName,
                       bool _oldManualSwitch, bool _oldInfinitLoop,
                       PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, int _oldPageTimer,
-                      bool _oldSoundEffect, QString _oldFileName,
+                      bool _oldSoundEffect, const QString &_oldFileName,
                       KPresenterDoc *_doc, KPrPage *_page )
     : KCommand( _name )
 {
@@ -1324,7 +1324,7 @@ void PgConfCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-PgLayoutCmd::PgLayoutCmd( QString _name, KoPageLayout _layout, KoPageLayout _oldLayout,
+PgLayoutCmd::PgLayoutCmd( const QString &_name, KoPageLayout _layout, KoPageLayout _oldLayout,
                           KoUnit::Unit _oldUnit, KoUnit::Unit _unit,
                           KPresenterView *_view )
     : KCommand( _name )
@@ -1370,7 +1370,7 @@ void PgLayoutCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-PieValueCmd::PieValueCmd( QString _name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
+PieValueCmd::PieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
                           QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
     : KCommand( _name ), oldValues( _oldValues ), objects( _objects )
 {
@@ -1470,7 +1470,7 @@ void PolygonSettingCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-RectValueCmd::RectValueCmd( QString _name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
+RectValueCmd::RectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
                             QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
     : KCommand( _name ), oldValues( _oldValues ), objects( _objects )
 {
