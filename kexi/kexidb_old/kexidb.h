@@ -21,6 +21,7 @@ Boston, MA 02111-1307, USA.
 #define KEXIDB_H
 
 #include <qobject.h>
+#include <qptrlist.h>
 
 #include "kexidbresult.h"
 #include "kexidbfield.h"
@@ -28,6 +29,8 @@ Boston, MA 02111-1307, USA.
 class KexiDBInterfaceManager;
 class KexiDBDriver;
 class KexiDBRecord;
+
+typedef QPtrList<KexiDBField> KexiDBTableStruct;
 
 class KexiDB : public QObject
 {
@@ -60,15 +63,17 @@ class KexiDB : public QObject
 		virtual QStringList tables();
 
 		virtual bool query(QString statement);
-		virtual QString escape(QString &str);
+		virtual QString escape(const QString &str);
 		virtual bool alterField(const QString&, const QString&, const QString&, KexiDBField::ColumnType,
 			int, bool, const QString&, bool);
 		virtual bool createField(const QString&, const QString&, KexiDBField::ColumnType,
 			int, bool, const QString&, bool);
 
-		virtual KexiDBResult	*getResult();
+		virtual KexiDBResult		*getResult();
 
-		virtual unsigned long	affectedRows();
+		virtual KexiDBTableStruct	*getStructure(const QString table);
+
+		virtual unsigned long		affectedRows();
 
 		void appendManager(KexiDBInterfaceManager *m);
 

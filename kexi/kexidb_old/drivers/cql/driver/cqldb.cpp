@@ -17,5 +17,53 @@ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 */
 
+//#include <qstringlist.h>
+#include <kgenericfactory.h>
+#include <kdebug.h>
+
 #include "cqldb.h"
 
+K_EXPORT_COMPONENT_FACTORY(kexicqllinterface, KGenericFactory<CqlDB>( "cqlinterface" ));
+
+CqlDB::CqlDB(QObject *parent, const char *name, const QStringList &)
+ : KexiDB(parent, name)
+{
+	try
+	{
+		m_db = new SqlHandle;
+	}
+	catch(CqlException& ex)
+	{
+//		return false;
+	}
+}
+
+QString
+CqlDB::driverName()
+{
+	return QString("cql");
+}
+
+bool
+CqlDB::load(QString file)
+{
+	if(!m_db)
+		return false;
+
+	m_db->connect("PUBLIC");
+}
+
+QStringList
+CqlDB::tables()
+{
+	return QStringList();
+}
+
+bool
+CqlDB::query(QString)
+{
+}
+
+CqlDB::~CqlDB()
+{
+}

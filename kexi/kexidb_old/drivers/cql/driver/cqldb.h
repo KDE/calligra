@@ -20,6 +20,8 @@ Boston, MA 02111-1307, USA.
 #ifndef CQLDB_H
 #define CQLDB_H
 
+#include <CqlSqlInclude.h>
+
 #include <kexidb.h>
 #include <kexidbresult.h>
 
@@ -27,20 +29,23 @@ class CqlDB : public KexiDB
 {
 	Q_OBJECT
 
-	CqlDB(QObject *parent=0, const char *name="cql", const QStringList &args=QStringList());
-	~CqlDB();
+	public:
+		CqlDB(QObject *parent=0, const char *name="cql", const QStringList &args=QStringList());
+		~CqlDB();
 
-	QString		driverName();
+		QString		driverName();
 
-	bool		connect(QString file);
+		bool		load(QString file);
 
-	QStringList	tables();
+		QStringList	tables();
 
-	//we should drop that!!!
-	QString		error();
+		//we should drop that!!!
+		QString		error();
 
-	bool		query(QString statement);
-	
+		bool		query(QString statement);
+
+	private:
+		SqlHandle	*m_db;
 };
 
 #endif

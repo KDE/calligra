@@ -24,9 +24,9 @@
 
 #include "kexidberror.h"
 
-KexiDBError::KexiDBError(int errno, QString text)
+KexiDBError::KexiDBError(int kexiErrno, QString text)
 {
-	m_errno = errno;
+	m_errno = kexiErrno;
 	m_text = text;
 }
 
@@ -37,7 +37,7 @@ KexiDBError::toUser(QWidget *parent)
 }
 
 int
-KexiDBError::errno()
+KexiDBError::kexiErrnoFunction()
 {
 	return m_errno;
 }

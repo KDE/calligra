@@ -332,6 +332,12 @@ MySqlDB::createDefinition(KexiDBField::ColumnType dtype, int length, bool notNul
 	return qstr;
 }
 
+KexiDBTableStruct*
+MySqlDB::getStructure(const QString)
+{
+	return 0;
+}
+
 MySqlDB::~MySqlDB()
 {
 	if(m_connected)

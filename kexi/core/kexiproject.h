@@ -75,6 +75,8 @@ public:
 
 	bool initDbConnection(const Credentials& cred, const bool create = false);
 	bool initHostConnection(const Credentials &cred);
+	bool initFileConnection(const QString driver, const QString file);
+
 	void clear();
 
 	void registerProjectHandler(KexiProjectHandler *part);

@@ -61,6 +61,7 @@ KexiCreateProjectPageFile::KexiCreateProjectPageFile(KexiCreateProject *parent, 
 
 	setProperty("caption", QVariant(i18n("File")));
 	setProperty("section", QVariant("LocalDB"));
+	setProperty("finish", QVariant(true));
 }
 
 void

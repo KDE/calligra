@@ -81,17 +81,10 @@ KexiDB::manager()
 
 // it's not worth reading behind that line :)
 
-KexiDBRecord*
-KexiDB::queryRecord(QString, bool)
-{
-	return 0;
-}
-
 
 bool
 KexiDB::connect(QString, QString, QString, QString, QString)
 {
-	/*! implemented for linking reasons */
 	kdDebug() << "KexiDB::connect(host): sorry you are wrong here" << endl;
 	return false;
 }
@@ -99,27 +92,14 @@ KexiDB::connect(QString, QString, QString, QString, QString)
 bool
 KexiDB::connect(QString, QString, QString, QString, QString, QString, bool)
 {
-	/*! implemented for linking reasons */
 	kdDebug() << "KexiDB::connect(db): sorry you are wrong here" << endl;
 	return false;
 }
 
-QString
-KexiDB::driverName()
-{
-	return QString::fromLatin1("NONE");
-}
-
 bool
-KexiDB::load(QString file)
+KexiDB::load(QString)
 {
 	return false;
-}
-
-QStringList
-KexiDB::tables()
-{
-	return QStringList();
 }
 
 QStringList
@@ -128,6 +108,27 @@ KexiDB::databases()
 	return QStringList();
 }
 
+KexiDBRecord*
+KexiDB::queryRecord(QString, bool)
+{
+	return 0;
+}
+
+
+
+QString
+KexiDB::driverName()
+{
+	return QString::fromLatin1("NONE");
+}
+
+QStringList
+KexiDB::tables()
+{
+	return QStringList();
+}
+
+
 bool
 KexiDB::query(QString)
 {
@@ -135,7 +136,7 @@ KexiDB::query(QString)
 }
 
 QString
-KexiDB::escape(QString &)
+KexiDB::escape(const QString &)
 {
 	return QString::null;
 }
@@ -164,6 +165,12 @@ unsigned long
 KexiDB::affectedRows()
 {
 	return 0;
+}
+
+KexiDBTableStruct*
+KexiDB::getStructure(QString)
+{
+	return;
 }
 
 KexiDB::~KexiDB()

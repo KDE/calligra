@@ -98,8 +98,10 @@ class MySqlDB : public KexiDB
 		 
 		unsigned long	insertID();
 		unsigned long	affectedRows();
-		
+
 		unsigned long	lastAuto();
+
+		KexiDBTableStruct *getStructure(const QString table);
 
 	protected:
 		int		reconnect();

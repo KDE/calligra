@@ -90,7 +90,8 @@ KexiBrowser::addItem(KexiProjectHandlerItem *item)
 	{
 		KexiBrowserItem *parent = m_baseItems.find(item->mime());
 		kdDebug() << "KexiBrowser::addItem() found " << item->mime() << " @ " << parent << endl;	
-		(void*) new KexiBrowserItem(parent, item);
+		KexiBrowserItem *bitem = new KexiBrowserItem(parent, item);
+		bitem->setPixmap(0, parent->proxy()->part()->itemPixmap());
 	}
 	else if(m_mime == item->mime())
 	{

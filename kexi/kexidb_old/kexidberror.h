@@ -26,11 +26,11 @@ class QString;
 class KexiDBError
 {
 	public:
-		KexiDBError(int errno, QString text=QString::null);
+		KexiDBError(int kexiErrno, QString text=QString::null);
 		~KexiDBError();
 
 		void	toUser(QWidget *parent);
-		int	errno();
+		int	kexiErrnoFunction();
 		QString	message();
 
 	private:
