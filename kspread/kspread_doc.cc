@@ -576,7 +576,7 @@ QString KSpreadDoc::completeHeading( const QString &_data, int _page, const QStr
     QString organization;
     QString tmp;
     if ( !authorPage )
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kdWarning() << "Author information not found in document Info !" << endl;
     else
     {
         full_name = authorPage->fullName();
@@ -598,31 +598,31 @@ QString KSpreadDoc::completeHeading( const QString &_data, int _page, const QStr
 
     tmp = _data;
     int pos = 0;
-    while ( ( pos = tmp.find( "<page>", pos ) ) != -1 )
+    while ( ( pos = tmp.find( i18n("<page>"), pos ) ) != -1 )
         tmp.replace( pos, 6, page );
     pos = 0;
-    while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
+    while ( ( pos = tmp.find( i18n("<file>"), pos ) ) != -1 )
         tmp.replace( pos, 6, pathFileName );
     pos = 0;
-    while ( ( pos = tmp.find( "<name>", pos ) ) != -1 )
+    while ( ( pos = tmp.find( i18n("<name>"), pos ) ) != -1 )
         tmp.replace( pos, 6, fileName );
     pos = 0;
-    while ( ( pos = tmp.find( "<time>", pos ) ) != -1 )
+    while ( ( pos = tmp.find( i18n("<time>"), pos ) ) != -1 )
         tmp.replace( pos, 6, t );
     pos = 0;
-    while ( ( pos = tmp.find( "<date>", pos ) ) != -1 )
+    while ( ( pos = tmp.find( i18n("<date>"), pos ) ) != -1 )
         tmp.replace( pos, 6, d );
     pos = 0;
-    while ( ( pos = tmp.find( "<author>", pos ) ) != -1 )
+    while ( ( pos = tmp.find( i18n("<author>"), pos ) ) != -1 )
         tmp.replace( pos, 8, full_name );
     pos = 0;
-    while ( ( pos = tmp.find( "<email>", pos ) ) != -1 )
+    while ( ( pos = tmp.find( i18n("<email>"), pos ) ) != -1 )
         tmp.replace( pos, 7, email_addr );
     pos = 0;
-    while ( ( pos = tmp.find( "<org>", pos ) ) != -1 )
+    while ( ( pos = tmp.find( i18n("<org>"), pos ) ) != -1 )
         tmp.replace( pos, 5, organization );
     pos = 0;
-    while ( ( pos = tmp.find( "<table>", pos ) ) != -1 )
+    while ( ( pos = tmp.find( i18n("<table>"), pos ) ) != -1 )
         tmp.replace( pos, 7, ta );
 
     return tmp;
