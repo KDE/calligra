@@ -1,4 +1,4 @@
-// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
+// -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 #include <qspinbox.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
