@@ -102,11 +102,11 @@ void RectangleTool::mouseRelease(QMouseEvent *event)
 
 	QPoint topLeft = QPoint(minX, minY);
 	QPoint bottomRight = QPoint(maxX, maxY);
-	QRect rect = QRect(zoomed(topLeft), zoomed(bottomRight));
+	m_final_lines = QRect(zoomed(topLeft), zoomed(bottomRight));
 
 	// draw final lines onto layer
 	KisPainter *p = m_pView -> kisPainter();
-	p -> drawRectangle( rect );
+	p -> drawRectangle(m_final_lines);
 }
 
 void RectangleTool::drawRectangle(const QPoint& start, const QPoint& end )
@@ -115,7 +115,7 @@ void RectangleTool::drawRectangle(const QPoint& start, const QPoint& end )
     QPen pen;
     pen.setWidth(lineThickness);
     
-    p.begin( pCanvas );
+    p.begin(pCanvas);
     p.setPen(pen);
     p.setRasterOp( Qt::NotROP );
     float zF = m_pView->zoomFactor();
@@ -133,23 +133,22 @@ void RectangleTool::optionsDialog()
 	ToolOptsStruct ts;    
 
 	ts.usePattern = usePattern;
-	ts.useGradient      = useGradient;
-	ts.lineThickness    = lineThickness;
-	ts.opacity      = opacity;
-	ts.opacity          = opacity;
-	ts.fillShapes       = fillSolid;
+	ts.useGradient = useGradient;
+	ts.lineThickness = lineThickness;
+	ts.opacity = opacity;
+	ts.fillShapes = fillSolid;
 
-	bool old_usePattern       = usePattern;
-	bool old_useGradient      = useGradient;
-	int  old_lineThickness    = lineThickness;
-	int  old_opacity      = opacity;
-	bool old_fillSolid        = fillSolid;
+	bool old_usePattern = usePattern;
+	bool old_useGradient = useGradient;
+	int  old_lineThickness = lineThickness;
+	unsigned int  old_opacity = opacity;
+	bool old_fillSolid = fillSolid;
 
 	ToolOptionsDialog OptsDialog(tt_linetool, ts);
 
 	OptsDialog.exec();
     
-	if (OptsDialog.result() != QDialog::Accepted)
+	if (OptsDialog.result() == QDialog::Rejected)
 		return;
 
 	lineThickness = OptsDialog.lineToolTab()->thickness();
@@ -226,4 +225,8 @@ bool RectangleTool::loadSettings(QDomElement& elem)
 	return rc;
 }
 
+void RectangleTool::update(QPainter&)
+{
+	kdDebug() << "RectangleTool::update\n";
+}
 

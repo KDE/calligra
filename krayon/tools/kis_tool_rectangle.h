@@ -22,9 +22,11 @@
 #define __rectangletool_h__
 
 #include <qpoint.h>
+#include <qrect.h>
 
 #include "kis_tool.h"
 
+class QPainter;
 class KisDoc;
 class KisView;
 class KisCanvas;
@@ -35,6 +37,7 @@ public:
 	virtual ~RectangleTool();
 
 	virtual void optionsDialog();
+	virtual void update(QPainter& gc);
 	virtual QDomElement saveSettings(QDomDocument& doc) const;
 	virtual bool loadSettings(QDomElement& elem);
 
@@ -47,8 +50,7 @@ public slots:
 	virtual void mouseRelease( QMouseEvent* event );
     
 protected:
-
-    void drawRectangle( const QPoint&, const QPoint& );
+	void drawRectangle(const QPoint&, const QPoint&);
 
 protected:
 
@@ -56,6 +58,7 @@ protected:
 
     QPoint      m_dragStart;
     QPoint      m_dragEnd;
+    QRect	m_final_lines;
  
     bool        m_dragging;
 

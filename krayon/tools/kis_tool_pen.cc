@@ -277,7 +277,7 @@ void PenTool::optionsDialog()
 
 	opt_dlg.exec();
 
-	if(!opt_dlg.result() != QDialog::Accepted)
+	if (opt_dlg.result() == QDialog::Rejected)
 		return;
 
 	usePattern          = opt_dlg.penToolTab()->usePattern();

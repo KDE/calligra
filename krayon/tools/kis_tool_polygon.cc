@@ -182,29 +182,29 @@ void PolyGonTool::optionsDialog()
 	bool old_usePattern       = usePattern;
 	bool old_useGradient      = useGradient;
 	int  old_lineThickness    = lineThickness;
-	int  old_opacity      = opacity;
+	unsigned int  old_opacity      = opacity;
 	bool old_useRegions       = useRegions;
 	int old_cornersValue      = cornersValue;
 	int old_sharpnessValue    = sharpnessValue;
 	bool old_checkPolygon      = checkPolygon;
 	bool old_checkConcavePolygon = checkConcavePolygon;
     
-	ToolOptionsDialog *pOptsDialog = new ToolOptionsDialog(tt_polygontool, ts);
+	ToolOptionsDialog OptsDialog(tt_polygontool, ts);
 
-	pOptsDialog -> exec();
+	OptsDialog.exec();
     
-	if(!pOptsDialog->result() == QDialog::Accepted)
+	if(OptsDialog.result() == QDialog::Rejected)
 		return;
 
-	lineThickness = pOptsDialog->polygonToolTab()->thickness();
-	opacity   = pOptsDialog->polygonToolTab()->opacity();
-	cornersValue  = pOptsDialog->polygonToolTab()->corners();
-	sharpnessValue = pOptsDialog->polygonToolTab()->sharpness();
-	usePattern    = pOptsDialog->polygonToolTab()->usePattern();
-	useGradient   = pOptsDialog->polygonToolTab()->useGradient();
-	useRegions    = pOptsDialog->polygonToolTab()->solid();
-	checkPolygon  = pOptsDialog->polygonToolTab()->convexPolygon();
-	checkConcavePolygon = pOptsDialog->polygonToolTab()->concavePolygon();
+	lineThickness = OptsDialog.polygonToolTab()->thickness();
+	opacity   = OptsDialog.polygonToolTab()->opacity();
+	cornersValue  = OptsDialog.polygonToolTab()->corners();
+	sharpnessValue = OptsDialog.polygonToolTab()->sharpness();
+	usePattern    = OptsDialog.polygonToolTab()->usePattern();
+	useGradient   = OptsDialog.polygonToolTab()->useGradient();
+	useRegions    = OptsDialog.polygonToolTab()->solid();
+	checkPolygon  = OptsDialog.polygonToolTab()->convexPolygon();
+	checkConcavePolygon = OptsDialog.polygonToolTab()->concavePolygon();
 
 	// User change value ?
 	if (old_usePattern != usePattern || old_useGradient != useGradient 

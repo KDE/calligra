@@ -286,7 +286,7 @@ void FillTool::optionsDialog()
     
     OptsDialog.exec();
     
-    if (OptsDialog.result() != QDialog::Accepted)
+    if (OptsDialog.result() == QDialog::Rejected)
 	    return;
         
     fillOpacity     = OptsDialog.fillToolTab()->opacity();

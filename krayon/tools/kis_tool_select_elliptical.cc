@@ -264,12 +264,12 @@ void EllipticalSelectTool::mouseRelease( QMouseEvent* event )
 void EllipticalSelectTool::drawEllipse( const QPoint& start, const QPoint& end )
 {
 	QPainter p;
+	QPen pen(Qt::DotLine);
+	float zF = m_pView -> zoomFactor();
 
 	p.begin(m_canvas);
+	p.setPen(pen);
 	p.setRasterOp(Qt::NotROP);
-	p.setPen(QPen(Qt::DotLine));
-
-	float zF = m_pView -> zoomFactor();
     
 	/* adjust for scroll ofset as this draws on the canvas, not on
 	   the image itself QRect(left, top, width, height) */

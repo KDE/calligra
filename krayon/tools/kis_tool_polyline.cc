@@ -142,14 +142,14 @@ void PolyLineTool::optionsDialog()
     bool old_usePattern       = usePattern;
     bool old_useGradient      = useGradient;
     int  old_lineThickness    = lineThickness;
-    int  old_opacity      = opacity;
+    unsigned int  old_opacity      = opacity;
     bool old_useRegions       = useRegions;
     
     ToolOptionsDialog OptsDialog(tt_linetool, ts);
 
     OptsDialog.exec();
     
-    if(OptsDialog.result() != QDialog::Accepted)
+    if(OptsDialog.result() == QDialog::Rejected)
         return;
         
     lineThickness = OptsDialog.lineToolTab()->thickness();

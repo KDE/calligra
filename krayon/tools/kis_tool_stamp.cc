@@ -468,7 +468,7 @@ void StampTool::optionsDialog()
 
 	OptsDialog.exec();
 
-	if (OptsDialog.result() != QDialog::Accepted)
+	if (OptsDialog.result() == QDialog::Rejected)
 		return;
         
 	opacity = OptsDialog.stampToolTab() -> opacity();
