@@ -279,13 +279,6 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAbout *aboutInfo )
 class KoDocumentInfoPropsPage::KoDocumentInfoPropsPagePrivate
 {
 public:
-  KoDocumentInfoPropsPagePrivate()
-  {
-  }
-  ~KoDocumentInfoPropsPagePrivate()
-  {
-  }
-
   KoDocumentInfo *m_info;
   KoDocumentInfoDlg *m_dlg;
   KURL m_url;
@@ -295,7 +288,9 @@ public:
   const KTarFile *m_docInfoFile;
 };
 
-KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props )
+KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
+                                                  const char *,
+                                                  const QStringList & )
 : KPropsDlgPlugin( props )
 {
   d = new KoDocumentInfoPropsPagePrivate;

@@ -19,47 +19,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koDocInfoPropsFactory.h>
 #include <koDocumentInfoDlg.h>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <kgenericfactory.h>
 
-#include <assert.h>
+typedef KGenericFactory<KoDocumentInfoPropsPage, KPropertiesDialog> PropsDlgFactory;
+K_EXPORT_COMPONENT_FACTORY( libkodocinfopropspage, PropsDlgFactory( "koffice" ) );
 
-extern "C"
-{
-  void *init_libkodocinfopropspage()
-  {
-    return new KoDocInfoPropsFactory();
-  }
-};
-
-KoDocInfoPropsFactory::KoDocInfoPropsFactory( QObject *parent, const char *name )
-: KLibFactory( parent, name )
-{
-  // Install the libkoffice* translations
-  KGlobal::locale()->insertCatalogue("koffice");
-}
-
-KoDocInfoPropsFactory::~KoDocInfoPropsFactory()
-{
-}
-
-QObject* KoDocInfoPropsFactory::createObject( QObject* parent, const char*, const char *classname,
-			                const QStringList & )
-{
-  if ( strcmp( classname, "KPropsDlgPlugin" ) == 0 )
-  {
-    assert( parent );
-    if ( !parent->inherits( "KPropertiesDialog" ) )
-      return 0L;
-
-    QObject *obj = new KoDocumentInfoPropsPage( static_cast<KPropertiesDialog *>( parent ) );
-    return obj;
-  }
-
-  return 0L;
-}
-
-#include <koDocInfoPropsFactory.moc>

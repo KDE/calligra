@@ -61,7 +61,8 @@ class KoDocumentInfoPropsPage : public KPropsDlgPlugin
 {
   Q_OBJECT
 public:
-  KoDocumentInfoPropsPage( KPropertiesDialog *props );
+  KoDocumentInfoPropsPage( KPropertiesDialog *props, const char *name = 0,
+                           const QStringList & = QStringList() );
   virtual ~KoDocumentInfoPropsPage();
 
   virtual void applyChanges();
