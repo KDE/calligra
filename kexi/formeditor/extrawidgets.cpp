@@ -27,6 +27,7 @@
 #include <qmetaobject.h>
 #include <qstrlist.h>
 #include <qregexp.h>
+#include <qtooltip.h>
 
 #include <kstdguiitem.h>
 #include <klineedit.h>
@@ -809,36 +810,35 @@ ConnectionDialog::ConnectionDialog(QWidget *parent)
 	m_data = new KexiTableViewData();
 	m_table = new KexiTableView(0, frame, "connections_tableview");
 	m_table->setSpreadSheetMode();
+	m_table->setInsertingEnabled(true);
 	initTable();
 	m_table->setData(m_data, false);
+//	m_table->setColumnWidth(0, IconSize( KIcon::Small ) + 10);
+	m_table->adjustColumnWidthToContents(0);
 	layout->addWidget(m_table);
 
 	//// Setup the icon toolbar /////////////////
 	QVBoxLayout *vlayout = new QVBoxLayout(layout, 3);
-	QToolButton *newItem = new QToolButton(frame);
-	newItem->setIconSet(BarIconSet("edit_add"));
-	newItem->setTextLabel(i18n("&Add Connection"), true);
+	KPushButton *newItem = new KPushButton(SmallIconSet("filenew"), i18n("&New Connection"), frame);
 	vlayout->addWidget(newItem);
 	m_buttons.insert(BAdd, newItem);
 	connect(newItem, SIGNAL(clicked()), this, SLOT(newItem()));
 
-	QToolButton *newItemDrag = new QToolButton(frame);
-	newItemDrag->setIconSet(BarIconSet("edit_add"));
-	newItemDrag->setTextLabel(i18n("Create a Connection by &Drag and drop"), true);
-	vlayout->addWidget(newItemDrag);
-	m_buttons.insert(BAddDrag, newItemDrag);
-	connect(newItemDrag, SIGNAL(clicked()), this, SLOT(newItemByDragnDrop()));
-
-	QToolButton *delItem = new QToolButton(frame);
-	delItem->setIconSet(BarIconSet("edit_remove"));
-	delItem->setTextLabel(i18n("&Remove Connection"), true);
+	KPushButton *delItem = new KPushButton(SmallIconSet("editdelete"), i18n("&Remove Connection"), frame);
+//	delItem->setIconSet(BarIconSet("edit_remove"));
+//	delItem->setTextLabel(i18n("&Remove Connection"), true);
 	vlayout->addWidget(delItem);
 	m_buttons.insert(BRemove, delItem);
 	connect(delItem, SIGNAL(clicked()), this, SLOT(removeItem()));
+
 	vlayout->addStretch();
 
 	setInitialSize(QSize(600, 300));
 	setWFlags(WDestructiveClose);
+
+	connect(m_table,SIGNAL(cellSelected(int, int)), this, SLOT(slotCellSelected(int, int)));
+	connect(m_table->data(), SIGNAL(rowInserted(KexiTableItem*,bool)), this, SLOT(slotRowInserted(KexiTableItem*,bool)));
+	this->newItem();
 }
 
 void
@@ -846,9 +846,10 @@ ConnectionDialog::initTable()
 {
 	QValueList<QVariant> empty_list;
 
-	KexiTableViewColumn *col0 = new KexiTableViewColumn(QString::null, KexiDB::Field::Text);
+	KexiTableViewColumn *col0 = new KexiTableViewColumn(i18n("OK?"), KexiDB::Field::Text);
 	col0->field()->setSubType("KIcon");
 	col0->setReadOnly(true);
+	col0->field()->setDescription(i18n("Connection corectness"));
 	m_data->addColumn(col0);
 
 	KexiTableViewColumn *col1 = new KexiTableViewColumn(i18n("Sender"), KexiDB::Field::Enum);
@@ -877,7 +878,6 @@ ConnectionDialog::initTable()
 	c << 2 << 4;
 	m_table->maximizeColumnsWidth(c);
 	m_table->setColumnStretchEnabled( true, 4 );
-	m_table->setColumnWidth(0, IconSize( KIcon::Small ) + 10);
 
 	connect(m_data, SIGNAL(aboutToChangeCell(KexiTableItem*, int, QVariant, KexiDB::ResultInfo*)),
 	      this,SLOT(slotCellChanged(KexiTableItem*, int, QVariant, KexiDB::ResultInfo*)));
@@ -893,6 +893,17 @@ ConnectionDialog::exec(Form *form)
 
 	show();
 	return;
+}
+
+void ConnectionDialog::slotCellSelected(int /*col*/, int row)
+{
+	m_buttons[BRemove]->setEnabled( row < m_table->rows() );
+}
+
+void ConnectionDialog::slotRowInserted(KexiTableItem* item,bool)
+{
+	m_buffer->append(new Connection());
+	checkConnection( item );
 }
 
 void
@@ -946,23 +957,41 @@ ConnectionDialog::updateTableData()
 }
 
 void
-ConnectionDialog::setStatusOk()
+ConnectionDialog::setStatusOk(KexiTableItem *item)
 {
 	m_pixmapLabel->setPixmap( DesktopIcon("button_ok") );
 	m_textLabel->setText("<qt><h2>The connection is OK.</h2></qt>");
 
-	KexiTableItem *item = m_table->selectedItem();
-	(*item)[0] = "button_ok";
+	if (!item)
+		item = m_table->selectedItem();
+	if (m_table->currentRow() >= m_table->rows())
+		item = 0;
+
+	if (item)
+		(*item)[0] = "button_ok";
+	else {
+		m_pixmapLabel->setPixmap( QPixmap() );
+		m_textLabel->setText(QString::null);
+	}
 }
 
 void
-ConnectionDialog::setStatusError(const QString &msg)
+ConnectionDialog::setStatusError(const QString &msg, KexiTableItem *item)
 {
 	m_pixmapLabel->setPixmap( DesktopIcon("button_cancel") );
 	m_textLabel->setText("<qt><h2>The connection is invalid.</h2></qt>" + msg);
 
-	KexiTableItem *item = m_table->selectedItem();
-	(*item)[0] = "button_cancel";
+	if (!item)
+		item = m_table->selectedItem();
+	if (m_table->currentRow() >= m_table->rows())
+		item = 0;
+
+	if (item)
+		(*item)[0] = "button_cancel";
+	else {
+		m_pixmapLabel->setPixmap( QPixmap() );
+		m_textLabel->setText(QString::null);
+	}
 }
 
 void
@@ -1048,9 +1077,10 @@ ConnectionDialog::checkConnection(KexiTableItem *item)
 	// First we check if one column is empty
 	for(int i = 1; i < 5; i++)
 	{
-		if( (*item)[i].toString().isEmpty())
+		if( !item || (*item)[i].toString().isEmpty())
 		{
-			setStatusError( i18n("<qt>You have not selected a <b>%1</b>.</qt>").arg(m_data->column(i)->nameOrCaption()) );
+			setStatusError( i18n("<qt>You have not selected a <b>%1</b>.</qt>").arg(m_data->column(i)->nameOrCaption()),
+				item);
 			return;
 		}
 	}
@@ -1063,19 +1093,21 @@ ConnectionDialog::checkConnection(KexiTableItem *item)
 
 	if(!signal.startsWith(slot, true))
 	{
-		setStatusError( i18n("The signal/slot arguments are not compatible."));
+		setStatusError( i18n("The signal/slot arguments are not compatible."), item);
 		return;
 	}
 
-	setStatusOk();
+	setStatusOk(item);
 }
 
 void
 ConnectionDialog::newItem()
 {
-	int idx = m_table->rows() ? m_table->rows() : -1;
-	m_table->insertItem(new KexiTableItem(5), idx);
-	m_buffer->append(new Connection());
+	m_table->acceptRowEdit();
+	m_table->setCursor(m_table->rows(), 1);
+//	int idx = m_table->rows() ? m_table->rows() : -1;
+//	m_table->insertItem(new KexiTableItem(5), idx);
+//moved to slotRowInserted()	m_buffer->append(new Connection());
 }
 
 void
@@ -1119,7 +1151,7 @@ ConnectionDialog::slotConnectionAborted(Form *form)
 void
 ConnectionDialog::removeItem()
 {
-	if(m_table->currentRow() == -1)
+	if(m_table->currentRow() == -1 || m_table->currentRow()>=m_table->rows())
 		return;
 
 	int confirm = KMessageBox::questionYesNo(parentWidget(),

@@ -26,6 +26,7 @@
 
 #include <ktextedit.h>
 #include <kdialogbase.h>
+#include <kpushbutton.h>
 
 class QListView;
 class QListView;
@@ -121,7 +122,7 @@ class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 		QFrame   *m_contents, *m_column;
 		KListBox  *m_listbox;
 		KListView  *m_listview;
-		QIntDict<QToolButton>  m_buttons;
+		QIntDict<QButton>  m_buttons;
 };
 
 class KFORMEDITOR_EXPORT TabStopDialog : public KDialogBase
@@ -157,8 +158,8 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialogBase
 		void exec(Form *form);
 
 	protected:
-		void setStatusOk();
-		void setStatusError(const QString &msg);
+		void setStatusOk(KexiTableItem *item = 0);
+		void setStatusError(const QString &msg, KexiTableItem *item = 0);
 		void initTable();
 		void updateTableData();
 		void updateSlotList(KexiTableItem *item, const QString &signal, const QString &widget);
@@ -174,17 +175,20 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialogBase
 		void slotConnectionCreated(Form *form, Connection &connection);
 		void slotConnectionAborted(Form *form);
 
+		void slotCellSelected(int col, int row);
+		void slotRowInserted(KexiTableItem*,bool);
+
 		virtual void slotOk();
 
 	protected:
-		enum {BAdd = 10, BAddDrag, BRemove};
+		enum {BAdd = 10, BRemove};
 		Form    *m_form;
 		ConnectionBuffer *m_buffer;
 		KexiTableView  *m_table;
 		KexiTableViewData  *m_data;
 		KexiTableViewData *m_widgetsColumnData, *m_slotsColumnData, *m_signalsColumnData;
 		QLabel  *m_pixmapLabel, *m_textLabel;
-		QIntDict<QToolButton>  m_buttons;
+		QIntDict<QButton>  m_buttons;
 };
 
 }
