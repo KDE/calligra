@@ -31,6 +31,7 @@
 VDocument::VDocument()
 	: VObject( 0L ),
 	  m_selectionMode( VDocument::ActiveLayer ),
+	  m_unit( KoUnit::U_MM ),
 	  m_mime( "application/x-karbon" ),
 	  m_version( "0.1" ), m_editor( "karbon14 0.0.1" ),
 	  m_syntaxVersion( "0.1" )
