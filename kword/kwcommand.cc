@@ -461,28 +461,21 @@ KWFrameStyleCommand::KWFrameStyleCommand( const QString &name, KWFrame *_frame, 
 
 void KWFrameStyleCommand::execute()
 {
-    m_frame->setBackgroundColor( m_fs->backgroundColor() );
-    m_frame->setLeftBorder( m_fs->leftBorder() );
-    m_frame->setRightBorder( m_fs->rightBorder() );
-    m_frame->setTopBorder( m_fs->topBorder() );
-    m_frame->setBottomBorder( m_fs->bottomBorder() );
-
-    m_frame->frameBordersChanged();
-    if (m_frame->isSelected())
-        m_frame->updateResizeHandles();
-
-    if ( repaintViews )
-        m_frame->frameSet()->kWordDocument()->repaintAllViews();
-    m_frame->frameSet()->kWordDocument()->refreshFrameBorderButton();
+    applyFrameStyle( m_fs);
 }
 
 void KWFrameStyleCommand::unexecute()
 {
-    m_frame->setBackgroundColor( m_oldValues->backgroundColor() );
-    m_frame->setLeftBorder( m_oldValues->leftBorder() );
-    m_frame->setRightBorder( m_oldValues->rightBorder() );
-    m_frame->setTopBorder( m_oldValues->topBorder() );
-    m_frame->setBottomBorder( m_oldValues->bottomBorder() );
+    applyFrameStyle( m_oldValues);
+}
+
+void KWFrameStyleCommand::applyFrameStyle( KWFrameStyle * _sty )
+{
+    m_frame->setBackgroundColor( _sty->backgroundColor() );
+    m_frame->setLeftBorder( _sty->leftBorder() );
+    m_frame->setRightBorder( _sty->rightBorder() );
+    m_frame->setTopBorder( _sty->topBorder() );
+    m_frame->setBottomBorder( _sty->bottomBorder() );
 
     m_frame->frameBordersChanged();
     if (m_frame->isSelected())
@@ -492,6 +485,7 @@ void KWFrameStyleCommand::unexecute()
         m_frame->frameSet()->kWordDocument()->repaintAllViews();
     m_frame->frameSet()->kWordDocument()->refreshFrameBorderButton();
 }
+
 
 KWTableStyleCommand::KWTableStyleCommand( const QString &name, KWFrame *_frame, KWTableStyle *_ts, bool _repaintViews ) :
     KNamedCommand( name )

@@ -155,6 +155,7 @@ public:
     void unexecute();
 
 protected:
+    void applyFrameStyle( KWFrameStyle * _sty );
     KWFrame *m_frame ;
     KWFrameStyle * m_fs;
     KWFrameStyle * m_oldValues;
