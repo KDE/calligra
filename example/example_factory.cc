@@ -71,13 +71,8 @@ KParts::Part* ExampleFactory::createPart( QWidget *parentWidget, const char *wid
 KAboutData* ExampleFactory::aboutData()
 {
     if ( !s_aboutData )
-    {
-    	// Change this, of course
-    	s_aboutData = new KAboutData( "example", I18N_NOOP("Example"),
-            version, description, KAboutData::License_GPL,
-            "(c) 1998-2000, Torben Weis");
-    	    s_aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
-    }
+        // Change this, of course
+        s_aboutData = newExampleAboutData();
     return s_aboutData;
 }
 
