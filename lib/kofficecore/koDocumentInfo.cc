@@ -18,7 +18,7 @@
 */
 
 #include <koDocumentInfo.h>
-
+#include <koDocument.h>
 #include <qdom.h>
 #include <qobjectlist.h>
 #include <kconfig.h>
