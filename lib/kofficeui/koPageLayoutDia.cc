@@ -502,69 +502,74 @@ void KoPageLayoutDia::setValuesTab1Helper() {
 void KoPageLayoutDia::setupTab2()
 {
     QWidget *tab2 = addPage(i18n( "Header and Footer" ));
-    QGridLayout *grid2 = new QGridLayout( tab2, 7, 3, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid2 = new QGridLayout( tab2, 8, 6, KDialog::marginHint(), KDialog::spacingHint() );
 
     // ------------- header ---------------
     QLabel *lHead = new QLabel( i18n( "Head Line" ), tab2 );
-    grid2->addWidget( lHead, 0, 0 );
+    grid2->addMultiCellWidget( lHead, 0, 0, 0, 5 );
 
     QLabel *lHeadLeft = new QLabel( i18n( "Left:" ), tab2 );
-    grid2->addWidget( lHeadLeft, 1, 0 );
+    grid2->addMultiCellWidget( lHeadLeft, 1, 1, 0, 1 );
 
     eHeadLeft = new QLineEdit( tab2 );
-    grid2->addWidget( eHeadLeft, 2, 0 );
+    grid2->addMultiCellWidget( eHeadLeft, 2, 2, 0, 1 );
     eHeadLeft->setText( hf.headLeft );
 
     QLabel *lHeadMid = new QLabel( i18n( "Mid:" ), tab2 );
-    grid2->addWidget( lHeadMid, 1, 1 );
+    grid2->addMultiCellWidget( lHeadMid, 1, 1, 2, 3 );
 
     eHeadMid = new QLineEdit( tab2 );
-    grid2->addWidget( eHeadMid, 2, 1 );
+    grid2->addMultiCellWidget( eHeadMid, 2, 2, 2, 3 );
     eHeadMid->setText( hf.headMid );
 
     QLabel *lHeadRight = new QLabel( i18n( "Right:" ), tab2 );
-    grid2->addWidget( lHeadRight, 1, 2 );
+    grid2->addMultiCellWidget( lHeadRight, 1, 1, 4, 5 );
 
     eHeadRight = new QLineEdit( tab2 );
-    grid2->addWidget( eHeadRight, 2, 2 );
+    grid2->addMultiCellWidget( eHeadRight, 2, 2, 4, 5 );
     eHeadRight->setText( hf.headRight );
 
     // ------------- footer ---------------
     QLabel *lFoot = new QLabel( i18n( "Foot Line" ), tab2 );
-    grid2->addWidget( lFoot, 3, 0 );
+    grid2->addMultiCellWidget( lFoot, 3, 3, 0, 5 );
 
     QLabel *lFootLeft = new QLabel( i18n( "Left:" ), tab2 );
-    grid2->addWidget( lFootLeft, 4, 0 );
+    grid2->addMultiCellWidget( lFootLeft, 4, 4, 0, 1 );
 
     eFootLeft = new QLineEdit( tab2 );
-    grid2->addWidget( eFootLeft, 5, 0 );
+    grid2->addMultiCellWidget( eFootLeft, 5, 5, 0, 1 );
     eFootLeft->setText( hf.footLeft );
 
     QLabel *lFootMid = new QLabel( i18n( "Mid:" ), tab2 );
-    grid2->addWidget( lFootMid, 4, 1 );
+    grid2->addMultiCellWidget( lFootMid, 4, 4, 2, 3 );
 
     eFootMid = new QLineEdit( tab2 );
-    grid2->addWidget( eFootMid, 5, 1 );
+    grid2->addMultiCellWidget( eFootMid, 5, 5, 2, 3 );
     eFootMid->setText( hf.footMid );
 
     QLabel *lFootRight = new QLabel( i18n( "Right:" ), tab2 );
-    grid2->addWidget( lFootRight, 4, 2 );
+    grid2->addMultiCellWidget( lFootRight, 4, 4, 4, 5 );
 
     eFootRight = new QLineEdit( tab2 );
-    grid2->addWidget( eFootRight, 5, 2 );
+    grid2->addMultiCellWidget( eFootRight, 5, 5, 4, 5 );
     eFootRight->setText( hf.footRight );
 
-    QLabel *lMacros2 = new QLabel( i18n("<qt>You can insert several tags in the text:"
-                           "<ul><li>&lt;table&gt;: The table name</li>"
-                           "<li>&lt;page&gt;: The current page</li>"
-                           "<li>&lt;name&gt;: The filename or URL</li>"
-                           "<li>&lt;file&gt;: The filename with complete path or the URL</li>"
-                           "<li>&lt;time&gt;: The current time</li>"
-                           "<li>&lt;date&gt;: The current date</li>"
-                           "<li>&lt;author&gt;: Your full name</li>"
-                           "<li>&lt;org&gt;: Your organization</li>"
-                           "<li>&lt;email&gt;: Your email address</li></ul></qt>"), tab2 );
-    grid2->addMultiCellWidget( lMacros2, 6, 6, 0, 2 );
+    QLabel *lMacros2 = new QLabel( i18n( "You can insert several tags in the text:" ), tab2 );
+    grid2->addMultiCellWidget( lMacros2, 6, 6, 0, 5 );
+
+    QLabel *lMacros3 = new QLabel( i18n("<qt><ul><li>&lt;sheet&gt; The sheet name</li>"
+                           "<li>&lt;page&gt; The current page</li>"
+                           "<li>&lt;pages&gt; The total number of pages</li>"
+                           "<li>&lt;name&gt; The filename or URL</li>"
+                           "<li>&lt;file&gt; The filename with complete path or the URL</li></ul></qt>"), tab2 );
+    grid2->addMultiCellWidget( lMacros3, 7, 7, 0, 2, Qt::AlignTop );
+
+    QLabel *lMacros4 = new QLabel( i18n("<qt><ul><li>&lt;time&gt; The current time</li>"
+                           "<li>&lt;date&gt; The current date</li>"
+                           "<li>&lt;author&gt; Your full name</li>"
+                           "<li>&lt;org&gt; Your organization</li>"
+                           "<li>&lt;email&gt; Your email address</li></ul></qt>"), tab2 );
+    grid2->addMultiCellWidget( lMacros4, 7, 7, 3, 5, Qt::AlignTop );
 }
 
 /*================================================================*/
