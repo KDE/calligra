@@ -23,6 +23,7 @@
 #define koTemplateCreateDia_h
 
 #include <kdialogbase.h>
+#include <koffice_export.h>
 
 class QString;
 class QPixmap;
@@ -38,7 +39,7 @@ class KoTemplateCreateDiaPrivate;
  *
  ****************************************************************************/
 
-class KoTemplateCreateDia : public KDialogBase
+class KOFFICEUI_EXPORT KoTemplateCreateDia : public KDialogBase
 {
     Q_OBJECT
 

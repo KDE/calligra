@@ -23,6 +23,7 @@
 #include <qstring.h>
 
 #include "koscript_types.h"
+#include <koffice_export.h>
 
 #define MAX_NODE_SIZE 255
 
@@ -116,7 +117,7 @@ public:
   virtual ~KSParseNodeExtra() { }
 };
 
-class KSParseNode
+class KOSCRIPT_EXPORT KSParseNode
 {
 private:
   KSParseNode &operator=(const KSParseNode &rhs);

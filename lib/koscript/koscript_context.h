@@ -23,6 +23,8 @@
 #include "koscript_value.h"
 #include "koscript_ptr.h"
 
+#include <koffice_export.h>
+
 #include <qshared.h>
 #include <qstring.h>
 #include <qptrlist.h>
@@ -38,7 +40,7 @@ typedef QMap<QString,KSValue::Ptr> KSNamespace;
  * namespace with all symbols of the module and owns the parse tree.
  * A module itself may be inserted in other namespaces.
  */
-class KSModule : public QShared
+class KOSCRIPT_EXPORT KSModule : public QShared
 {
 public:
     typedef KSSharedPtr<KSModule> Ptr;
@@ -155,7 +157,7 @@ private:
 };
 
 
-class KSScope : public QShared
+class KOSCRIPT_EXPORT KSScope : public QShared
 {
 public:
   typedef KSSharedPtr<KSScope> Ptr;
@@ -201,7 +203,7 @@ private:
   KSSubScope* m_localScope;
 };
 
-class KSException : public QShared
+class KOSCRIPT_EXPORT KSException : public QShared
 {
 public:
   typedef KSSharedPtr<KSException> Ptr;
@@ -226,7 +228,7 @@ private:
   QValueList<int> m_lines;
 };
 
-class KSContext
+class KOSCRIPT_EXPORT KSContext
 {
 public:
   KSContext();

@@ -1,6 +1,6 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(all_includes)
+INCLUDES = $(KOFFICECORE_INCLUDES) $(all_includes)
 
 ####### Files
 

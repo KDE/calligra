@@ -21,6 +21,7 @@
 #define __KSCRIPT_UTIL_H__
 
 #include "koscript_value.h"
+#include <koffice_export.h>
 
 #include <qrect.h>
 
@@ -32,7 +33,7 @@ class KSStruct;
  *
  * @author Torben Weis <weis@kde.org>
  */
-class KSUtil
+class KOSCRIPT_EXPORT KSUtil
 {
 public:
     /**

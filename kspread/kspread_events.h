@@ -8,8 +8,9 @@
 #include <string.h>
 
 #include <kparts/event.h>
+#include <koffice_export.h>
 
-class KSpreadSelectionChanged : public KParts::Event
+class KSPREAD_EXPORT KSpreadSelectionChanged : public KParts::Event
 {
 public:
     KSpreadSelectionChanged( const QRect&, const QString& table );

@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <qstring.h>
+#include <koffice_export.h>
 
 class KSParser;
 class KSParseNode;
@@ -31,7 +32,7 @@ class KLocale;
 extern KSParser *theParser;  // Defined in koscript_parser.cc
 extern int yyparse();      // Defined through yacc.y
 
-class KSParser
+class KOSCRIPT_EXPORT KSParser
 {
 public:
   KSParser();

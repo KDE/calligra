@@ -25,6 +25,7 @@
 #include <qmap.h>
 #include <qshared.h>
 #include <qdatetime.h>
+#include <koffice_export.h>
 
 #include "koscript_ptr.h"
 #include "koscript_types.h"
@@ -44,7 +45,7 @@ typedef bool (KSStruct::*KSStructBuiltinMethod)( KSContext&, const QString& );
  * time and it can hold the most common types.
  * For CORBA people: It is a poor mans CORBA::Any.
  */
-class KSValue : public QShared
+class KOSCRIPT_EXPORT KSValue : public QShared
 {
 public:
     typedef KSSharedPtr<KSValue> Ptr;

@@ -23,6 +23,7 @@
 #include <qdatetime.h>
 #include <qstring.h>
 #include <qtextstream.h>
+#include <koffice_export.h>
 
 class KSpreadValueData;
 
@@ -35,7 +36,7 @@ class KSpreadValueData;
  * KSpreadValue uses implicit data sharing to reduce memory usage.
  */
 
-class KSpreadValue
+class KSPREAD_EXPORT KSpreadValue
 {
 
   public:
