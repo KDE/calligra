@@ -307,10 +307,10 @@ public:
     bool isLoading();
     inline bool isRightToLeft() const { return m_bRightToLeft; }
 
-    void password( QCString & passwd ) const { passwd = m_strPassword; }
-    bool isProtected() const { return !m_strPassword.isNull(); }
+    void password( QCString & passwd ) const ;
+    bool isProtected() const;
     void setProtected( QCString const & passwd );
-    bool checkPassword( QCString const & passwd ) const { return ( passwd == m_strPassword ); }
+    bool checkPassword( QCString const & passwd ) const;
 
     void setDefaultHeight( double height );
     void setDefaultWidth( double width );
@@ -796,13 +796,13 @@ public:
      * This function is useful while making formats where you
      * need some QPainter related functions.
      */
-    QPainter& painter() { return *m_pPainter; }
+    QPainter& painter();
     /**
      * @return a hidden widget.
      *
      * @see #painter
      */
-    QWidget* widget()const { return m_pWidget; }
+    QWidget* widget()const;
 
     /**
      * @return a flag that indicates whether the table should paint the page breaks.
@@ -942,7 +942,7 @@ public:
     void insertChart( const QRect& _geometry, KoDocumentEntry&, const QRect& _data );
     void changeChildGeometry( KSpreadChild *_child, const QRect& _geometry );
 
-    const QColorGroup& colorGroup() { return m_pWidget->colorGroup(); }
+    const QColorGroup& colorGroup() { return widget()->colorGroup(); }
 
     int id() const;
 
@@ -1223,21 +1223,7 @@ protected:
      * The label returned by @ref #columnLabel
      */
     char m_arrColumnLabel[20];
-
-    /**
-     * Password for protecting this sheet
-     */
-    QCString m_strPassword;
-
-    /**
-     * Needed to get infos about font metrics.
-     */
-    QPainter *m_pPainter;
-    /**
-     * Used for @ref #m_pPainter
-     */
-    QWidget *m_pWidget;
-
+    
     /**
      * List of all embedded objects.
      */

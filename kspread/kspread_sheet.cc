@@ -224,6 +224,9 @@ public:
   QString name;
   int id;
     
+  // password of protected sheet
+  QCString password;
+  
   // clusters to hold objects
   KSpreadCluster cells;
   KSpreadRowCluster rows;
@@ -241,6 +244,9 @@ public:
   // cells that need painting
   QValueList<QRect> paintDirtyList;
   
+  // to get font metrics
+  QPainter *painter;
+  QWidget *widget;
 };
  
 int KSpreadSheet::s_id = 0L;
@@ -293,9 +299,9 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &tableName, const cha
   d->defaultColumnFormat->setDefault();
 
 
-  m_pWidget = new QWidget();
-  m_pPainter = new QPainter;
-  m_pPainter->begin( m_pWidget );
+  d->widget = new QWidget();
+  d->painter = new QPainter;
+  d->painter->begin( d->widget );
 
   m_iMaxColumn = 256;
   m_iMaxRow = 256;
@@ -410,12 +416,41 @@ RowFormat* KSpreadSheet::rowFormat( int _row )
     return d->defaultRowFormat;
 }
 
+void KSpreadSheet::password( QCString & passwd ) const 
+{ 
+    passwd = d->password;
+}
+
+bool KSpreadSheet::isProtected() const 
+{ 
+    return !d->password.isNull(); 
+}
+
+void KSpreadSheet::setProtected( QCString const & passwd )
+{
+  d->password = passwd;
+}
+
+bool KSpreadSheet::checkPassword( QCString const & passwd ) const 
+{ 
+    return ( passwd == d->password ); 
+}
+
 KSpreadSheetPrint* KSpreadSheet::print() const 
 { 
     return d->print; 
 }
 
+QPainter& KSpreadSheet::painter()
+{ 
+    return *d->painter; 
+}
 
+QWidget* KSpreadSheet::widget()const
+{ 
+    return d->widget; 
+}
+    
 void KSpreadSheet::setDefaultHeight( double height )
 {
   if ( isProtected() )
@@ -6197,11 +6232,11 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     table.setAttribute( "showFormulaIndicator", (int)m_bShowFormulaIndicator);
     table.setAttribute( "lcmode", (int)m_bLcMode);
     table.setAttribute( "borders1.2", 1);
-    if ( !m_strPassword.isNull() )
+    if ( !d->password.isNull() )
     {
-      if ( m_strPassword.size() > 0 )
+      if ( d->password.size() > 0 )
       {
-        QCString str = KCodecs::base64Encode( m_strPassword );
+        QCString str = KCodecs::base64Encode( d->password );
         table.setAttribute( "protected", QString( str.data() ) );
       }
       else
@@ -6372,11 +6407,6 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
 bool KSpreadSheet::isLoading()
 {
     return d->doc->isLoading();
-}
-
-void KSpreadSheet::setProtected( QCString const & passwd )
-{
-  m_strPassword = passwd;
 }
 
 void KSpreadSheet::checkContentDirection( QString const & name )
@@ -6630,7 +6660,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
             passwd = KCodecs::base64Decode( str );
         }
         kdDebug(30518) << "Password hash: '" << passwd << "'" << endl;
-        m_strPassword = passwd;
+        d->password = passwd;
     }
     return true;
 }
@@ -7293,10 +7323,10 @@ bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, 
     xmlWriter.startElement( "table:table" );
     xmlWriter.addAttribute( "table:name", d->name );
     xmlWriter.addAttribute( "table:style-name", saveOasisTableStyleName(mainStyles )  );
-    if ( !m_strPassword.isEmpty() )
+    if ( !d->password.isEmpty() )
     {
         xmlWriter.addAttribute("table:protected", "true" );
-        QCString str = KCodecs::base64Encode( m_strPassword );
+        QCString str = KCodecs::base64Encode( d->password );
         xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );/* FIXME !!!!*/
     }
     QRect _printRange = d->print->printRange();
@@ -7702,10 +7732,10 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
       if ( passwd.length() > 0 )
       {
         QCString str( passwd.latin1() );
-        m_strPassword = KCodecs::base64Decode( str );
+        d->password = KCodecs::base64Decode( str );
       }
       else
-        m_strPassword = QCString( "" );
+        d->password = QCString( "" );
     }
 
     checkContentDirection( d->name );
@@ -7955,9 +7985,9 @@ KSpreadSheet::~KSpreadSheet()
 
     d->cells.clear(); // cells destructor needs table to still exist
 
-    m_pPainter->end();
-    delete m_pPainter;
-    delete m_pWidget;
+    d->painter->end();
+    delete d->painter;
+    delete d->widget;
 
     delete d->defaultFormat;
     delete d->defaultCell;
