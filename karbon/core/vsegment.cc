@@ -498,14 +498,14 @@ VSegment::nearestPointParam( const KoPoint& /*p*/ ) const
 	/* This function solves the "nearest point on curve" problem. That means, it
 	 * calculates the point q (to be precise: it's paramter t) on this segment, which
 	 * is located nearest to the input point p.
-	 * The basic idea is described e.g. in "The NURBS Book" by Les Piegl, Wayne Tiller
-	 * (Springer 1997) or "Solving the Nearest Point-on-Curve Problem" and "A Bezier
-	 * Curve-Based Root-Finder" by Philip J. Schneider (from "Graphics Gems",
-	 * Academic Press 1990).
+	 * The basic idea is best described (because it is freely available) in "Phoenix:
+	 * An Interactive Curve Design System Based on the Automatic Fitting of
+	 * Hand-Sketched Curves", Philip J. Schneider (master thesis, university of
+	 * washington).
 	 *
 	 * For the nearest point q = C(t) on this segment, the first derivative is
 	 * orthogonal to the distance vector "C(t) - p". In other words we are looking for
-	 * solutions of f(t) = C'(t) * ( C(t) - p ) = 0.
+	 * solutions of f(t) = ( C(t) - p ) * C'(t) = 0.
 	 * ( C(t) - p ) is a nth degree curve, C'(t) a n-1th degree curve => f(t) is a
 	 * (2n - 1)th degree curve and thus has up to 2n - 1 distinct solutions.
 	 * To solve it, we apply the newton iteration: a parameter approximation t_i leads
@@ -522,7 +522,27 @@ VSegment::nearestPointParam( const KoPoint& /*p*/ ) const
 	 * 2) Zero cosine: | C'(t_i) * ( C(t_i) - p ) |
 	 *                 ---------------------------- <= tolerance2
 	 *                 | C'(t_i) | * | C(t_i) - p |
+	 *
+	 * But first we need to find a first guess t_0 to start with. The solution for this
+	 * problem is called "Approximate Inversion Method". Let's write f(t) explicitely:
+	 *
+	 *         n                     n-1
+	 * f(t) = SUM c_i * B^n_i(t)  *  SUM d_j * B^{n-1}_j(t)
+	 *        i=0                    j=0
+	 *
+	 *         n  n-1
+	 *      = SUM SUM w_{ij} * B^{2n-1}_{i+j}(t)
+	 *        i=0 j=0
+	 *
+	 * with w_{ij} = c_i * d_j * z_{ij} and
+	 *
+	 *          BinomialCoeff( n, i ) * BinomialCoeff( n-i ,j )
+	 * z_{ij} = -----------------------------------------------
+	 *                   BinomialCoeff( 2n-1, i!=j )
+	 *
+	 * This Bernstein-Bezier polynom representation can now be solved for it's roots.
 	 */
+
 
 // TODO
 	return 0.0;

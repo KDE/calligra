@@ -205,7 +205,7 @@ public:
 
 
 	/**
-	 * Returns the point on this segment at parameter 0 <= t <= 1.
+	 * Calculates the point on this segment at parameter 0 <= t <= 1.
 	 * This is a convenience wrapper for pointDerivatives().
 	 */
 	KoPoint pointAt( double t ) const;
@@ -219,7 +219,7 @@ public:
 
 
 	/**
-	 * Returns the normalized tangent vector (length=1) at the point
+	 * Calculates the normalized tangent vector (length=1) at the point
 	 * parameterized by 0 <= t <= 1. This is a convenience wrapper
 	 * for pointTangentNormal(). Use the latter function directly if you
 	 * need to calculate the point and normal vector or tangent vector
@@ -237,37 +237,37 @@ public:
 
 
 	/**
-	 * Returns the arclength from p0 to the point parametrized
+	 * Calculates the arclength from p0 to the point parametrized
 	 * by 0 <= t <= 1. For beziers this function is a bit expensive.
 	 */
 	double length( double t = 1.0 ) const;
 
 	/**
-	 * Returns the chord length (the distance from the previous
+	 * Calculates the chord length (the distance from the previous
 	 * knot to the current knot).
 	 */
 	double chordLength() const;
 
 	/**
-	 * Returns the length of the control polygon.
+	 * Calculates the length of the control polygon.
 	 */
 	double polyLength() const;
 
 
 	/**
-	 * Returns the parameter of a point located at arclength len.
+	 * Calculates the parameter of a point located at arclength len.
 	 * This is the exact inverse operation of length( t ).
 	 */
 	double lengthParam( double len ) const;
 
 	/**
-	 * Returns the parameter of the nearest point to the point p on this segment.
+	 * Calculates the parameter of the nearest point to the point p on this segment.
 	 */
 	double nearestPointParam( const KoPoint& p ) const;
 
 
 	/**
-	 * Returns true if tangent at knot is exactly parallel to the tangent at
+	 * Calculates wether the tangent at knot is exactly parallel to the tangent at
 	 * p0 of the next segment. Returns false if the current segment is a "begin".
 	 */
 	bool isSmooth( const VSegment& next ) const;
@@ -281,7 +281,7 @@ public:
 
 
 	/**
-	 * Returns a reverted version of this segment. For example:
+	 * Creates a reverted version of this segment. For example:
 	 * if this segment is a line from A to B, the result is a line from
 	 * B to A.
 	 */
@@ -297,7 +297,7 @@ public:
 
 
 	/**
-	 * Returns true if lines A0A1 and B0B1 intersect.
+	 * Calculates wether lines A0A1 and B0B1 intersect.
 	 */
 	static bool linesIntersect(
 		const KoPoint& a0,

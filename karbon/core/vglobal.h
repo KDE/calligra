@@ -77,8 +77,26 @@ namespace VGlobal
 	 */
 	const double parallelTolerance = 0.99;
 
+
+// TODO: remove them, they are no constants but user defined values.
 	const short copyOffset = 10;        /// the amount at which copied objects get offset in x and y direction
 	const short maxRecentFiles = 10;    /// default max. number of files shown in open recent menu item
+
+
+	/**
+	 * Calculates the binomial coeeficient( n, k ).
+	 */
+	int binomialCoeff( unsigned n, unsigned k );
+
+	/**
+	 * Calculates the value ln( n! ).
+	 */
+	double factorialLn( unsigned n );
+
+	/**
+	 * Calculates the value ln| Gamma(x) | for x > 0.
+	 */
+	double gammaLn( double x );
 }
 
 #endif

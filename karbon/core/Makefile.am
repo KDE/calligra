@@ -36,6 +36,7 @@ libkarboncore_la_SOURCES = \
 	vdashpattern.cc \
 	vdocument.cc \
 	vfill.cc \
+	vglobal.cc \
 	vgradient.cc \
 	vgroup.cc \
 	vlayer.cc \
