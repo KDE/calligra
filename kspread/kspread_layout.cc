@@ -22,6 +22,7 @@
 #include "kspread_table.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include <qdom.h>
 #include <kdebug.h>
@@ -339,7 +340,7 @@ bool ColumnLayout::load( const QDomElement& col, int xshift )
 
   m_iColumn = col.attribute( "column" ).toInt( &ok ) + xshift;
   printf("INSERTING COL %i\n", m_iColumn );
-  
+
   if ( !ok ) return false;
 
   // Validation
