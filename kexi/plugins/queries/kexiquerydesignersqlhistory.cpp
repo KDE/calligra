@@ -95,13 +95,14 @@ KexiQueryDesignerSQLHistory::addEvent(QString q, bool s, const QString &error)
 			return;
 		}
 	}
-	addEntry(new HistoryEntry(s, QTime::currentTime(), q, 0, error));
+	addEntry(new HistoryEntry(s, QTime::currentTime(), q, error));
 }
 
 void
 KexiQueryDesignerSQLHistory::addEntry(HistoryEntry *e)
 {
-	m_history->append(e);
+//	m_history->append(e);
+	m_history->prepend(e);
 
 	int y = 0;
 	for(HistoryEntry *it = m_history->first(); it; it = m_history->next())
@@ -110,7 +111,13 @@ KexiQueryDesignerSQLHistory::addEntry(HistoryEntry *e)
 	}
 
 	resizeContents(visibleWidth() - 1, y);
-	ensureVisible(0, y);
+	ensureVisible(0, 0);
+	if (m_selected) {
+		m_selected->setSelected(false, colorGroup());
+	}
+	m_selected = e;
+	m_selected->setSelected(true, colorGroup());
+	updateContents();//m_selected->geometry(0, visibleWidth(), fontMetrics()));
 }
 
 void
@@ -157,7 +164,7 @@ KexiQueryDesignerSQLHistory::~KexiQueryDesignerSQLHistory()
    HISTORY ENTRY
  */
 
-HistoryEntry::HistoryEntry(bool succeed, const QTime &execTime, const QString &statement, int , const QString &err)
+HistoryEntry::HistoryEntry(bool succeed, const QTime &execTime, const QString &statement, /*int ,*/ const QString &err)
 {
 	m_succeed = succeed;
 	m_execTime = execTime;
@@ -285,7 +292,8 @@ HistoryEntry::highlight(const QColorGroup &cg)
 
 	if(!m_error.isEmpty())
 //		text += ("<br>"+i18n("Error: %1").arg(m_error));
-		text += QString("<br><font face=\"") + KGlobalSettings::generalFont().family() + QString("\" size=\"-1\">") + i18n("Error: %1").arg(m_error) + "</font>";
+//		text += QString("<br><font face=\"") + KGlobalSettings::generalFont().family() + QString("\" size=\"-1\">") + i18n("Error: %1").arg(m_error) + "</font>";
+		text += QString("<br><font face=\"") + KGlobalSettings::generalFont().family() + QString("\">") + i18n("Error: %1").arg(m_error) + "</font>";
 
 	kdDebug() << "HistoryEntry::highlight() text:" << text << endl;
 //	m_formated = new QSimpleRichText(text, QFont("courier", 8));

@@ -31,14 +31,14 @@ class QSimpleRichText;
 class KEXI_HAND_QUERY_EXPORT HistoryEntry
 {
 	public:
-		HistoryEntry(bool success, const QTime &time, const QString &statement, int y, const QString &error = QString::null);
+		HistoryEntry(bool success, const QTime &time, const QString &statement, /*int y,*/ const QString &error = QString::null);
 		~HistoryEntry();
 
 		QRect	geometry(int y, int width, QFontMetrics f);
 		void	drawItem(QPainter *p, int width, const QColorGroup &cg);
 
 		void	setSelected(bool selected, const QColorGroup &cg);
-		bool	isSelected() { return m_selected; }
+		bool	isSelected() const { return m_selected; }
 		void	highlight(const QColorGroup &selected);
 
 		QString	statement() { return m_statement; }
@@ -65,7 +65,6 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLHistory : public QScrollView
 		KexiQueryDesignerSQLHistory(QWidget *parent, const char *name=0);
 		~KexiQueryDesignerSQLHistory();
 
-		void		addEntry(HistoryEntry *e);
 		void		contextMenu(const QPoint &pos, HistoryEntry *e);
 
 		void		setHistory(History *h);
@@ -79,6 +78,7 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLHistory : public QScrollView
 //		HistoryItem	itemAt(int y);
 
 	protected:
+		void		addEntry(HistoryEntry *e);
 		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 		void		contentsMousePressEvent(QMouseEvent * e);
 

@@ -23,15 +23,13 @@
 
 #include <kexiviewbase.h>
 
-class KexiQueryDesigner;
 class KexiQueryDesignerSQLEditor;
-class KexiQueryDesignerSQLHistory;
-class KexiSectionHeader;
-class QSplitter;
+class KexiQueryDesignerSQLViewPrivate;
 
 /*! The KexiQueryDesignerSQLView class is a view containing SQL text editor 
- and SQL history widget splitted vertically. */
-
+ and SQL history/status widget splitted vertically. 
+ Depending on user's will, the widget can be in "sql history" 
+ mode or in "sql status" mode. */
 class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 {
 	Q_OBJECT
@@ -40,8 +38,10 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 		KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 		~KexiQueryDesignerSQLView();
 
-		QString sqlText();
-		KexiQueryDesignerSQLEditor *editor() { return m_editor; }
+		QString sqlText() const;
+		KexiQueryDesignerSQLEditor *editor() const;
+
+		virtual bool eventFilter ( QObject *o, QEvent *e );
 
 	protected:
 		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
@@ -51,20 +51,18 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 		void setStatusEmpty();
 		void setStatusText(const QString& text);
 
+		virtual void updateActions();
+
 	protected slots:
 		void slotCheckQuery();
+		void slotUpdateMode();
 		void slotTextChanged();
 
 	signals:
 		void queryShortcut();
 
 	private:
-		KexiQueryDesignerSQLEditor *m_editor;
-//		KexiQueryDesignerSQLHistory *m_history;
-		QLabel *m_pixmapStatus, *m_lblStatus;
-		KexiSectionHeader *m_head;
-		QPixmap m_statusPixmapOk, m_statusPixmapErr, m_statusPixmapInfo;
-		QSplitter *m_splitter;
+		KexiQueryDesignerSQLViewPrivate *d;
 };
 
 #endif

@@ -9,7 +9,7 @@ kde_module_LTLIBRARIES = kexihandler_query.la
 
 kexihandler_query_la_SOURCES = kexiquerypart.cpp kexiquerydesignersql.cpp \
 				kexiquerydesignersqlhistory.cpp kexiquerydesignerguieditor.cpp \
-				kexiqueryview.cpp kexiquerydocument.cpp
+				kexiqueryview.cpp
 kexihandler_query_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module -no-undefined
 kexihandler_query_la_LIBADD = ../../core/libkexicore.la \
 	../../kexidb/parser/libkexidbparser.la ../../tableview/libkexidatatable.la \
