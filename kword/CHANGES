@@ -1,3 +1,7 @@
+Changed between 1.3.1 and 1.3.2
+===============================
+- Fixed wrong printing of frame borders due to excessive clipping (#81222)
+
 Changes between 1.3 and 1.3.1
 =============================
 - Fixed "add bookmark" for the case where there's no selection
