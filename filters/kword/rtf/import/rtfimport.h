@@ -41,6 +41,15 @@ struct RTFProperty
     int value;		// default value
 };
 
+// RTF field description
+struct RTFField
+{
+    const char *id;
+    int		type;
+    int		subtype;
+    const char *value;
+};
+
 // RTF destination
 struct RTFDestination
 {
@@ -224,7 +233,9 @@ public:
     void insertSymbol( RTFProperty *property );
     void insertHexSymbol( RTFProperty * );
     void insertUnicodeSymbol( RTFProperty * );
+    void parseField( RTFProperty* );
     void parseFldinst( RTFProperty* );
+    void parseFldrslt( RTFProperty* );
     void parseFontTable( RTFProperty * );
     void parseFootNote( RTFProperty * );
     void parseStyleSheet( RTFProperty * );
@@ -279,6 +290,11 @@ public:
 
     //codepage for the document
     QCString codepage;
+
+    // Field support
+    QString fldinst, fldrslt;
+    RTFFormat fldfmt;
+    int flddst; // support for recursive fields
 };
 
 #endif

@@ -35,7 +35,7 @@ K_EXPORT_COMPONENT_FACTORY( librtfimport, RTFImportFactory( "rtfimport" ) );
 #define MEMBER(a,b,c,d,e)	PROP(a,b,c,offsetof(RTFImport,d),e)
 
 
-RTFProperty propertyTable[] =
+static RTFProperty propertyTable[] =
     {
 //		only-valid-in	control word	function		offset, value
 	PROP(	"Text",		"\n",		insertParagraph,	0L, 0 ),
@@ -46,7 +46,9 @@ RTFProperty propertyTable[] =
 	PROP(	"@rtf",		"@colortbl",	parseColorTable,	0L, true ),
 	MEMBER(	"@info",	"@company",	parsePlainText,		company, false ),
 	MEMBER(	"@info",	"@doccomm",	parsePlainText,		doccomm, false ),
-	PROP(	0L,		"@fldinst",	parseFldinst,		0L, true ),
+	PROP(	"Text",		"@field",	parseField,		0L, false ),
+	PROP(	"@field",	"@fldinst",	parseFldinst,		0L, false ),
+	PROP(	"@field",	"@fldrslt",	parseFldrslt,		0L, false ),
 	PROP(	"@rtf",		"@fonttbl",	parseFontTable,		0L, true ),
 	MEMBER(	"@rtf",		"@footer",	parseRichText,		evenPagesFooter, true ),
 	PROP(	"@rtf",		"@footnote",	parseFootNote,		0L, true ),
@@ -148,7 +150,7 @@ RTFProperty propertyTable[] =
 	MEMBER(	"@rtf",		"paperh",	setNumericProperty,	paperHeight, 0 ),
 	MEMBER(	"@rtf",		"paperw",	setNumericProperty,	paperWidth, 0 ),
 	PROP(	"Text",		"par",		insertParagraph,	0L, 0 ),
-	PROP(	"Text",		"pard",		setParagraphDefaults,	0L, 0 ),
+	PROP(	0L,		"pard",		setParagraphDefaults,	0L, 0 ),
 	MEMBER(	"@pict",	"piccropb",	setNumericProperty,	picture.cropBottom, 0 ),
 	MEMBER(	"@pict",	"piccropl",	setNumericProperty,	picture.cropLeft, 0 ),
 	MEMBER(	"@pict",	"piccropr",	setNumericProperty,	picture.cropRight, 0 ),
@@ -160,7 +162,7 @@ RTFProperty propertyTable[] =
 	MEMBER(	"@pict",	"picscaley",	setNumericProperty,	picture.scaley, 0 ),
 	MEMBER(	"@pict",	"picw",		setNumericProperty,	picture.width, 0 ),
 	MEMBER(	"@pict",	"picwgoal",	setNumericProperty,	picture.desiredWidth, 0 ),
-	PROP(	"Text",		"plain",	setPlainFormatting,	0L, 0 ),
+	PROP(	0L,		"plain",	setPlainFormatting,	0L, 0 ),
 	MEMBER(	"@pict",	"pmmetafile",	setEnumProperty,	picture.type, RTFPicture::WMF ),
 	MEMBER(	"@pict",	"pngblip",	setEnumProperty,	picture.type, RTFPicture::PNG ),
 	MEMBER(	0L,		"qc",		setEnumProperty,	state.layout.alignment, RTFLayout::Centered ),
@@ -213,7 +215,22 @@ RTFProperty propertyTable[] =
 	MEMBER(	"@pict",	"wbitmap",	setEnumProperty,	picture.type, RTFPicture::BMP ),
 	MEMBER(	"@pict",	"wmetafile",	setEnumProperty,	picture.type, RTFPicture::EMF ),
 	PROP(	0L,		"zwj",		insertSymbol,		0L, 0x200d ),
-	PROP(	0L,		"zwnj",		insertSymbol,		0L, 0x200c ) };
+	PROP(	0L,		"zwnj",		insertSymbol,		0L, 0x200c )
+};
+
+static RTFField fieldTable[] =
+    {
+//	  id		 type  subtype  default value
+	{ "AUTHOR",	 8,    2,	"NO AUTHOR" },
+	{ "FILENAME",	 8,    0,	"NO FILENAME" },
+	{ "TITLE",	 8,   10,	"NO TITLE" },
+	{ "NUMPAGES",	 4,    1,	0 },
+	{ "PAGE",	 4,    0,	0 },
+	{ "TIME",	-1,   -1,	0 },
+	{ "DATE",	-1,   -1,	0 },
+	{ "HYPERLINK",	 9,   -1,	0 },
+	{ "SYMBOL",	-1,   -1,	0 }
+};
 
 
 // KWord attributes
@@ -316,6 +333,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     stateStack.push( state );
     changeDestination( properties["@rtf"] );
 
+    flddst = -1;
     emptyCell = state.tableCell;
 
     // Parse RTF document
@@ -382,20 +400,18 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 		*(--token.text) = '@';
 		property = properties[token.text];
 
-		if (property == 0L)
-		{
-		    if (ignoreUnknown)
-		    {
-			// Skip unknown {\* ...} destination
-			changeDestination( properties["@*"] );
-		    }
-		}
-		else if (property->onlyValidIn == 0L ||
-		    property->onlyValidIn == destination.name ||
-		    property->onlyValidIn == destination.group)
+		if ((property != 0L) &&
+		    (property->onlyValidIn == 0L ||
+		     property->onlyValidIn == destination.name ||
+		     property->onlyValidIn == destination.group))
 		{
 		    // Change destination
 		    changeDestination( property );
+		}
+		else if (ignoreUnknown)
+		{
+		    // Skip unknown {\* ...} destination
+		    changeDestination( properties["@*"] );
 		}
 	    }
 	}
@@ -1224,182 +1240,261 @@ void RTFImport::parsePicture( RTFProperty * )
     }
 }
 
-void RTFImport::parseFldinst( RTFProperty * )
+/**
+ * Parse recursive fields. The {\fldrslt ...} group will be used for
+ * unsupported and embedded fields.
+ */
+void RTFImport::parseField( RTFProperty * )
 {
-    static QCString str;
-    static bool formatInserted;
-    static RTFFormat fmt;
     if (token.type == RTFTokenizer::OpenGroup)
     {
-	str="";
-	formatInserted=false;
-    }
-    else if (token.type == RTFTokenizer::PlainText)
-    {
-	str+=token.text;
-	fmt=state.format;
+	if (flddst == -1)
+	{
+	    // Destination for unsupported fields
+	    flddst = (destinationStack.count() - 1);
+	}
+	fldinst = "";
+	fldrslt = "";
+	destination.group = 0L;
     }
     else if (token.type == RTFTokenizer::CloseGroup)
     {
-	DomNode node;
-	node.clear(7);
-	QCString key;
-	int type=-1;
-	QStringList list;
-	list=QStringList::split('\\', str);
-	list[0]=list[0].upper().stripWhiteSpace();
-	if(list[0]=="AUTHOR")
+	if (fldinst != "")
 	{
-	    key="STRING";
-	    type=8;
-	    node.addNode("FIELD");
-	    node.setAttribute("subtype", 2);
-	    node.setAttribute("value", "NO AUTHOR");
-	    node.closeNode("FIELD");
-	}
-	if(list[0]=="FILENAME")
-	{
-	    key="STRING";
-	    type=8;
-	    node.addNode("FIELD");
-	    node.setAttribute("subtype", 0);
-	    node.setAttribute("value", "NO FILENAME");
-	    node.closeNode("FIELD");
-	}
-	if(list[0]=="TITLE")
-	{
-	    key="STRING";
-	    type=8;
-	    node.addNode("FIELD");
-	    node.setAttribute("subtype", 10);
-	    node.setAttribute("value", "NO TITLE");
-	    node.closeNode("FIELD");
-	}
-	if(list[0]=="NUMPAGES")
-	{
-	    key="NUMBER";
-	    type=4;
-	    node.addNode("PGNUM");
-	    node.setAttribute("subtype", 1);
-	    node.setAttribute("value", 0);
-	    node.closeNode("PGNUM");
-	}
-	if(list[0]=="PAGE")
-	{
-	    key="NUMBER";
-	    type=4;
-	    node.addNode("PGNUM");
-	    node.setAttribute("subtype", 0);
-	    node.setAttribute("value", 0);
-	    node.closeNode("PGNUM");
-	}
-	if((list[0]=="TIME")||(list[0]=="DATE"))
-	{
-	    unsigned int j;
-	    for(j=1;j<list.count();j++)
-	    {
-		if(list[j][0]=='@')
-			break;
-	    }
-	    int i=list[j].find('"')+1;
-	    QString format=list[j].mid(i, list[j].find('"', i)-i);
-	    format.replace(QRegExp("am/pm"), "ap");
-	    format.replace(QRegExp("AM/PM"), "AP");
-	    for(unsigned int k=0;k<format.length();k++)
-	    {
-		if((format[k]=='y')||(format[k]=='M')||(format[k]=='d'))
-		{
-		    if(type==0)//we have date already
-		    {
-			key+=format[k].latin1();
-		    }
-		    else if(type==2)//we had time and we want date
-		    {
-			//finish time
-			addVariable(node, type, key, &fmt);
-			type=-1;
-		    }
-		    if(type==-1) //start date
-		    {
-			node.clear(7);
-			node.addNode("DATE");
-			node.setAttribute("year", 0);
-			node.setAttribute("month", 0);
-			node.setAttribute("day", 0);
-			node.setAttribute("fix", 0);
-			node.closeNode("DATE");
-			key="DATE0";
-			key+=format[k].latin1();
-			type=0;
-		    }
-		}
-		else if((format[k]=='H')||(format[k]=='h')||(format[k]=='m')||(format[k]=='s'))
-		{
-		    format[k]=format[k].lower();
-		    if(type==2)//we have time already
-		    {
-			key+=format[k].latin1();
-		    }
-		    else if(type==0)//we had date and we want time
-		    {
-			//finish time
-			addVariable(node, type, key, &fmt);
-			type=-1;
-		    }
-		    if(type==-1) //start time
-		    {
-			node.clear(7);
-			node.addNode("TIME");
-			node.setAttribute("hour", 0);
-			node.setAttribute("minute", 0);
-			node.setAttribute("second", 0);
-			node.setAttribute("fix", 0);
-			node.closeNode("TIME");
-			type=2;
-			key="TIME";
-			key+=format[k].latin1();
-		    }
-		}
-		else
-		{
-		    if(type==-1)
-		    {
-			node.clear(7);
-			node.addNode("DATE");
-			node.setAttribute("year", 0);
-			node.setAttribute("month", 0);
-			node.setAttribute("day", 0);
-			node.setAttribute("fix", 0);
-			node.closeNode("DATE");
-			type=0;
-			key="DATE0";
-		    }
-		    key+=format[k].latin1();
-		}
-	    }
-	}
-	if(type!=-1)
-	{
-	    addVariable(node, type, key, &fmt);
-	    //Now add entry to properties table so that fldrslt group will be skipped    
-	    RTFProperty* fldrslt=new RTFProperty;//={0L, "@fldrslt", &RTFImport::skipGroup, 0L, true}; //uncommenting this causes internal compiler error  (but the code should be OK)
-		fldrslt->onlyValidIn=0L;
-		fldrslt->name="@fldrslt";
-		fldrslt->cwproc=&RTFImport::skipGroup;
-		fldrslt->offset=0L;
-		fldrslt->value=true;
-	    
-	    if(!properties.find("@fldrslt"))
-		properties.insert("@fldrslt", fldrslt);
-	}
-	else
-	{
-	    textState->formats.pop_back();
+	    DomNode node;
+	    QStringList list = QStringList::split( ' ', fldinst );
+	    uint i;
 
-	    //Now remove entry from properties table so that fldrslt will be ignored and its contents read
-	    if(properties.find("@fldrslt"))
-		properties.remove("@fldrslt");
+	    list[0] = list[0].upper();
+	    node.clear(7);
+
+	    for (i=0; i < sizeof(fieldTable) /sizeof(fieldTable[0]); i++)
+	    {
+		if (list[0] == fieldTable[i].id)
+		{
+		    break;
+		}
+	    }
+	    if (fieldTable[i].type == 4)
+	    {
+		node.addNode( "PGNUM" );
+		node.setAttribute( "subtype", fieldTable[i].subtype );
+		node.setAttribute( "value", 0 );
+		node.closeNode("PGNUM");
+		addVariable( node, 4, "NUMBER", &fldfmt);
+	    }
+	    else if (fieldTable[i].type == 8)
+	    {
+		node.addNode( "FIELD" );
+		node.setAttribute( "subtype", fieldTable[i].subtype );
+		node.setAttribute( "value", fieldTable[i].value );
+		node.closeNode("FIELD");
+		addVariable( node, 8, "STRING", &fldfmt);
+	    }
+	    else if (fieldTable[i].type == 9)
+	    {
+		QString hrefName = "";
+
+		for (uint i=1; i < list.count(); i++)
+		{
+		    if (list[i] == "\\l")
+		    {
+			hrefName += '#';
+		    }
+		    else if (list[i].startsWith( "\"" ) && list[i].endsWith( "\"" ))
+		    {
+			hrefName += list[i].mid( 1, (list[i].length() - 2) );
+		    }
+		}
+
+		node.addNode( "LINK" );
+		node.setAttribute( "linkName", fldrslt.latin1() );
+		node.setAttribute( "hrefName", hrefName.latin1() );
+		node.closeNode( "LINK" );
+		addVariable( node, 9, "STRING", &fldfmt);
+	    }
+	    else if (list[0] == "SYMBOL")
+	    {
+		if (list.count() >= 2)
+		{
+		    int ch = list[1].toInt();
+
+		    if (ch > 0)
+		    {
+			destination = destinationStack[flddst];
+			state.format = fldfmt;
+			insertUTF8( ch );
+		    }
+		}
+	    }
+	    else if (list[0] == "TIME" || list[0] == "DATE")
+	    {
+		QCString key;
+		int type=-1;
+		list = QStringList::split( '\\', fldinst );
+
+		list[0] = list[0].upper();
+
+		unsigned int j;
+
+		for(j=1;j<list.count();j++)
+		{
+		    if(list[j][0]=='@')
+			break;
+		}
+		int i=list[j].find('"')+1;
+		QString format=list[j].mid(i, list[j].find('"', i)-i);
+		format.replace(QRegExp("am/pm"), "ap");
+		format.replace(QRegExp("AM/PM"), "AP");
+		for(unsigned int k=0;k<format.length();k++)
+		{
+		    if((format[k]=='y')||(format[k]=='M')||(format[k]=='d'))
+		    {
+			if(type==0)//we have date already
+			{
+			    key+=format[k].latin1();
+			}
+			else if(type==2)//we had time and we want date
+			{
+			    //finish time
+			    addVariable(node, type, key, &fldfmt);
+			    type=-1;
+			}
+			if(type==-1) //start date
+			{
+			    node.clear(7);
+			    node.addNode("DATE");
+			    node.setAttribute("year", 0);
+			    node.setAttribute("month", 0);
+			    node.setAttribute("day", 0);
+			    node.setAttribute("fix", 0);
+			    node.closeNode("DATE");
+			    key="DATE0";
+			    key+=format[k].latin1();
+			    type=0;
+			}
+		    }
+		    else if((format[k]=='H')||(format[k]=='h')||(format[k]=='m')||(format[k]=='s'))
+		    {
+			format[k]=format[k].lower();
+			if(type==2)//we have time already
+			{
+			    key+=format[k].latin1();
+			}
+			else if(type==0)//we had date and we want time
+			{
+			    //finish time
+			    addVariable(node, type, key, &fldfmt);
+			    type=-1;
+			}
+			if(type==-1) //start time
+			{
+			    node.clear(7);
+			    node.addNode("TIME");
+			    node.setAttribute("hour", 0);
+			    node.setAttribute("minute", 0);
+			    node.setAttribute("second", 0);
+			    node.setAttribute("fix", 0);
+			    node.closeNode("TIME");
+			    type=2;
+			    key="TIME";
+			    key+=format[k].latin1();
+			}
+		    }
+		    else
+		    {
+			if(type==-1)
+			{
+			    node.clear(7);
+			    node.addNode("DATE");
+			    node.setAttribute("year", 0);
+			    node.setAttribute("month", 0);
+			    node.setAttribute("day", 0);
+			    node.setAttribute("fix", 0);
+			    node.closeNode("DATE");
+			    type=0;
+			    key="DATE0";
+			}
+			key+=format[k].latin1();
+		    }
+		}
+		if(type!=-1)
+		{
+		    addVariable( node, type, key, &fldfmt );
+		}
+	    }
+
+	    fldinst = "";
 	}
+
+	if (flddst == (int) (destinationStack.count() - 1))
+	{
+	    // Top-level field closed, clear field destination
+	    flddst = -1;
+	}
+    }
+}
+
+void RTFImport::parseFldinst( RTFProperty * )
+{
+    if (token.type == RTFTokenizer::OpenGroup)
+    {
+	fldinst = "";
+    }
+    else if (token.type == RTFTokenizer::PlainText)
+    {
+	fldinst += token.text;
+    }
+    else if (token.type == RTFTokenizer::CloseGroup)
+    {
+	QStringList list = QStringList::split( ' ', fldinst );
+	bool supported = false;
+
+	if (list.count() > 0)
+	{
+	    list[0] = list[0].upper();
+
+	    for (uint i=0; i < sizeof(fieldTable) /sizeof(fieldTable[0]); i++)
+	    {
+		if (list[0] == fieldTable[i].id)
+		{
+		    supported = true;
+		    break;
+		}
+	    }
+	}
+	if (!supported)
+	{
+	    fldinst = "";
+	}
+    }
+}
+
+void RTFImport::parseFldrslt( RTFProperty * )
+{
+    if (fldinst == "")
+    {
+	if (token.type == RTFTokenizer::OpenGroup)
+	{
+	    destination = destinationStack[flddst];
+	    destination.destproc = &RTFImport::parseFldrslt;
+	}
+	else if (token.type != RTFTokenizer::CloseGroup)
+	{
+	    (this->*destinationStack[flddst].destproc)();
+	}
+    }
+    else if (token.type == RTFTokenizer::OpenGroup)
+    {
+	fldrslt = "";
+    }
+    else if (token.type == RTFTokenizer::PlainText)
+    {
+	fldrslt += token.text;
+    }
+    else if (token.type == RTFTokenizer::CloseGroup)
+    {
+	fldfmt = state.format;
     }
 }
 
