@@ -216,7 +216,7 @@ void KivioCanvas::wheelEvent( QWheelEvent* ev )
   }
 */
   QPoint p = ev->pos();
-  if( (ev->delta()<0))
+  if( (ev->delta()>0))
   {
      m_pVertScrollBar->subtractPage();
   }
