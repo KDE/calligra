@@ -3294,12 +3294,12 @@ void KexiTableView::triggerUpdate()
 
 int KexiTableView::columnType(int col) const
 {
-	return (m_data && col>=0) ? m_data->column(col)->field->type() : KexiDB::Field::InvalidType;
+	return (m_data && col>=0 && col<columns()) ? m_data->column(col)->field->type() : KexiDB::Field::InvalidType;
 }
 
 bool KexiTableView::columnEditable(int col) const
 {
-	return (m_data && col>=0) ? !m_data->column(col)->readOnly() : false;
+	return (m_data && col>=0 && col<columns()) ? !m_data->column(col)->readOnly() : false;
 }
 
 QVariant KexiTableView::columnDefaultValue(int col) const
