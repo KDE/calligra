@@ -1845,10 +1845,17 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
 
     m_pPopupColumn = new QPopupMenu( this );
 
+    m_cellLayout->plug( m_pPopupColumn );
+    m_cut->plug( m_pPopupColumn );
+    m_copy->plug( m_pPopupColumn );
+    m_paste->plug( m_pPopupColumn );
+    m_default->plug( m_pPopupColumn );
+
     m_pPopupColumn->insertItem( KSBarIcon("insert_table_col"),i18n("Insert Column"), this, SLOT( slotPopupInsertColumn() ) );
     m_pPopupColumn->insertItem( KSBarIcon("delete_table_col"),i18n("Remove Column"), this, SLOT( slotPopupRemoveColumn() ) );
     m_pPopupColumn->insertItem( KSBarIcon("resizecol"),i18n("Resize..."), this, SLOT( slotPopupResizeColumn() ) );
     m_pPopupColumn->insertItem( i18n("Adjust Column"), this, SLOT(slotPopupAdjustColumn() ) );
+
     QObject::connect( m_pPopupColumn, SIGNAL(activated( int ) ), this, SLOT(slotActivateTool( int ) ) );
 
     m_pPopupColumn->popup( _point );
@@ -1894,6 +1901,12 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
         delete m_pPopupRow ;
 
     m_pPopupRow= new QPopupMenu();
+
+    m_cellLayout->plug( m_pPopupRow );
+    m_cut->plug( m_pPopupRow );
+    m_copy->plug( m_pPopupRow );
+    m_paste->plug( m_pPopupRow );
+    m_default->plug( m_pPopupRow );
 
     m_pPopupRow->insertItem( KSBarIcon("insert_table_row"),i18n("Insert Row"), this, SLOT( slotPopupInsertRow() ) );
     m_pPopupRow->insertItem( KSBarIcon("delete_table_row"),i18n("Remove Row"), this, SLOT( slotPopupRemoveRow() ) );

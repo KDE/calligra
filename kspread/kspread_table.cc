@@ -4509,7 +4509,11 @@ void KSpreadTable::defaultSelection( const QPoint &_marker )
           c->defaultStyle();
         }
       }
-
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        {
+        RowLayout *rw=nonDefaultRowLayout(i);
+        rw->defaultStyleLayout();
+        }
       emit sig_updateView( this, m_rctSelection );
       return;
     }
@@ -4525,6 +4529,11 @@ void KSpreadTable::defaultSelection( const QPoint &_marker )
           c->defaultStyle();
         }
       }
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        cl->defaultStyleLayout();
+        }
 
       emit sig_updateView( this, m_rctSelection );
       return;

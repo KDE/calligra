@@ -2066,7 +2066,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     grp = new QButtonGroup( i18n("Rotation"),this);
 
     grid2 = new QGridLayout(grp,1,1,15,7);
-    angleRotation=new KIntNumInput(dlg->textRotation, grp, 10);
+    angleRotation=new KIntNumInput((-dlg->textRotation), grp, 10);
     angleRotation->setLabel(i18n("Angle :"));
     angleRotation->setRange(-90, 90, 1);
     angleRotation->setSuffix(" °");
@@ -2225,7 +2225,7 @@ void CellLayoutPagePosition::apply( KSpreadCell *_obj )
   else
         _obj->setVerticalText(false);
 
-  _obj->setAngle(angleRotation->value());
+  _obj->setAngle((-angleRotation->value()));
   if(dlg->indent!=indent->value() && indent->isEnabled())
         _obj->setIndent(indent->value());
 }
