@@ -55,10 +55,15 @@ class KImageShopView : public ContainerView
  public:
   KImageShopView( KImageShopDoc* doc, QWidget* parent = 0, const char* name = 0 );
 
+  QColor fgColor() const { return fg; }
+  QColor bgColor() const { return bg; }
+
  public slots:
   void slotDocUpdated();
   void slotDocUpdated(const QRect&);
   void slotSetBrush(const Brush *);
+  void slotSetFGColor(const QColor&);
+  void slotSetBGColor(const QColor&);
 
  signals:
   void mousePressed(QMouseEvent *);
@@ -155,6 +160,7 @@ class KImageShopView : public ContainerView
 
   QScrollBar           *m_pHorz, *m_pVert;
   KRuler               *m_pHRuler, *m_pVRuler;
+  QColor               fg, bg;
 };
 
 #endif

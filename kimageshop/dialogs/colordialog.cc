@@ -46,11 +46,28 @@ ColorDialog::ColorDialog(QWidget *parent) : KFloatingDialog(parent)
   m_pBase->slotSetFGColor(QColor(0, 0, 0));
   m_pBase->slotSetBGColor(QColor(255, 255, 255));
   setBaseWidget(m_pBase);
+
+  connect(m_pBase, SIGNAL(fgColorChanged(const QColor &)), this,
+	  SLOT(slotFGColorChanged(const QColor &)));
+
+  connect(m_pBase, SIGNAL(bgColorChanged(const QColor &)), this,
+	  SLOT(slotBGColorChanged(const QColor &)));
 }
 
 ColorDialog::~ColorDialog()
 {
   delete m_pBase;
+}
+
+void ColorDialog::slotFGColorChanged(const QColor& c)
+{
+  emit fgColorChanged(c);
+}
+
+
+void ColorDialog::slotBGColorChanged(const QColor& c)
+{
+  emit bgColorChanged(c);
 }
 
 ColorChooserWidget::ColorChooserWidget(QWidget *parent) : QWidget(parent)
@@ -134,11 +151,13 @@ void ColorChooserWidget::slotRGBWidgetChanged(const QColor& c)
 	{
 	  m_pColorButton->slotSetForeground(c);
 	  m_pColorFrame->slotSetColor1(c);
+	  emit fgColorChanged(c);
 	}
   else if (current == KDualColorButton::Background)
 	{
 	  m_pColorButton->slotSetBackground(c);
 	  m_pColorFrame->slotSetColor2(c);
+	  emit bgColorChanged(c);
 	}
   m_pGreyWidget->slotSetColor(c);
 }
@@ -151,11 +170,13 @@ void ColorChooserWidget::slotGreyWidgetChanged(const QColor& c)
 	{
 	  m_pColorButton->slotSetForeground(c);
 	  m_pColorFrame->slotSetColor1(c);
+	  emit fgColorChanged(c);
 	}
   else if (current == KDualColorButton::Background)
 	{
 	  m_pColorButton->slotSetBackground(c);
 	  m_pColorFrame->slotSetColor2(c);
+	  emit bgColorChanged(c);
 	}
 
   m_pRGBWidget->slotSetColor(c);
@@ -166,9 +187,15 @@ void ColorChooserWidget::slotColorFrameChanged(const QColor& c)
   KDualColorButton::DualColor current = m_pColorButton->current();
   
   if (current == KDualColorButton::Foreground)
+    {
 	  m_pColorButton->slotSetForeground(c);
+	  emit fgColorChanged(c);
+    }
   else if (current == KDualColorButton::Background)
+    {
 	  m_pColorButton->slotSetBackground(c);
+	  emit bgColorChanged(c);
+    }
   
   m_pRGBWidget->slotSetColor(c);
 }
@@ -179,6 +206,7 @@ void ColorChooserWidget::slotColorButtonFGChanged(const QColor& c)
   
   m_pRGBWidget->slotSetColor(m_pColorButton->currentColor());
   m_pGreyWidget->slotSetColor(m_pColorButton->currentColor());
+  emit fgColorChanged(c);
 }
 
 void ColorChooserWidget::slotColorButtonBGChanged(const QColor& c)
@@ -187,6 +215,7 @@ void ColorChooserWidget::slotColorButtonBGChanged(const QColor& c)
 
   m_pRGBWidget->slotSetColor(m_pColorButton->currentColor());
   m_pGreyWidget->slotSetColor(m_pColorButton->currentColor());
+  emit bgColorChanged(c);
 }
 
 void ColorChooserWidget::slotColorButtonCurrentChanged(KDualColorButton::DualColor)
@@ -196,6 +225,9 @@ void ColorChooserWidget::slotColorButtonCurrentChanged(KDualColorButton::DualCol
 
   m_pRGBWidget->slotSetColor(m_pColorButton->currentColor());
   m_pGreyWidget->slotSetColor(m_pColorButton->currentColor());
+
+  emit fgColorChanged(m_pColorButton->foreground());
+  emit bgColorChanged(m_pColorButton->background());
 }
 
 void ColorChooserWidget::slotSetFGColor(const QColor& c)

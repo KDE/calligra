@@ -21,10 +21,11 @@
 #include "brushtool.h"
 #include "brush.h"
 #include "kimageshop_doc.h"
+#include "kimageshop_view.h"
 #include "vec.h"
 
-BrushTool::BrushTool(KImageShopDoc *doc, const Brush *_brush)
-  : Tool(doc)
+BrushTool::BrushTool(KImageShopDoc *doc, KImageShopView *view, const Brush *_brush)
+  : Tool(doc, view)
 {
   m_dragging = false;
   m_pBrush = _brush;
@@ -44,66 +45,106 @@ void BrushTool::mousePress(QMouseEvent *e)
   
   m_dragging = true;
   m_dragStart = e->pos();
+  
+  paintBrush(e->pos());
+  
+  QRect updateRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
+  m_pDoc->compositeImage(updateRect);
+}
 
+void BrushTool::paintBrush(QPoint pos)
+{
   if (!m_pBrush)
     return;
 
-  m_pDoc->paintBrush(e->pos(), m_pBrush);
+  // test color
+  int red = m_pView->fgColor().red();
+  int green = m_pView->fgColor().green();
+  int blue = m_pView->fgColor().blue();
 
-  QRect updateRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
-  m_pDoc->compositeImage(updateRect);
-  //m_pDoc->slotUpdateViews(updateRect);
+  Layer *lay = m_pDoc->getCurrentLayer();
+
+  QPoint start = pos - m_pBrush->hotSpot();
+  int startx = start.x();
+  int starty = start.y();
+
+  uint srcPix, dstPix;
+  uchar *sl, *ptr;
+  uchar bv, invbv, r, g, b;
+
+  for (int y = 0; y < m_pBrush->height(); y++)
+    {
+      sl = m_pBrush->scanline(y);
+
+      for (int x = 0; x < m_pBrush->width(); x++)
+	{
+	  srcPix = lay->getPixel(startx + x, starty + y);
+
+	  bv = *(sl + x);
+	  if (bv == 0) continue;
+
+	  invbv = 255 - bv;
+
+	  ptr = (uchar*)&srcPix;
+	  b = *ptr++;
+	  g = *ptr++;
+	  r = *ptr++;
+
+	  ptr = (uchar*)&dstPix;
+	  *ptr++ = ((blue * bv) + (b * invbv))/255;
+	  *ptr++ = ((green * bv) + (g * invbv))/255;
+	  *ptr++ = ((red * bv) + (r * invbv))/255;
+
+	  lay->setPixel(startx + x, starty + y, dstPix);
+	}
+    }
 }
 
 void BrushTool::mouseMove(QMouseEvent *e)
 {
-  /*
-   if(m_dragging)
+  if(m_dragging)
     {
       if (!m_pBrush)
-		return;
-
+	return;
+      
       KVector end(e->x(), e->y());
       KVector start(m_dragStart.x(), m_dragStart.y());
-	
+      
       KVector moveVec = end-start;
       float length = moveVec.length();
-	
+      
       QRect updateRect;
       
       if (length < 10)
-		{
-		  m_pDoc->paintBrush(e->pos(), m_pBrush);
-		  updateRect = QRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
-		}
+	{
+	  paintBrush(e->pos());
+	  updateRect = QRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
+	}
       else
+	{
+	  int steps = (int) (length / 10); // FIXME: configurable stepping
+	  moveVec.normalize();
+	  
+	  for (int i=0; i<=steps; i++)
+	    {
+	      if (i == steps)
 		{
-		  int steps = (int) (length / 10); // FIXME: configurable stepping
-		  moveVec.normalize();
-		
-		  for (int i=0; i<=steps; i++)
-			{
-			  if (i == steps)
-				{
-				  m_pDoc->paintBrush(e->pos(), m_pBrush);
-				}
-			  else
-				{
-				  KVector bpos = start + moveVec * i * 10;
-				  m_pDoc->paintBrush(QPoint(bpos.x(), bpos.y()), m_pBrush);
-				}
-			}
-		
-		  updateRect = QRect(QPoint(start.x(), start.y()) - m_pBrush->hotSpot(),
-							 QSize(e->x(), e->y()) + m_pBrush->size());
+		  paintBrush(e->pos());
 		}
-
+	      else
+		{
+		  KVector bpos = start + moveVec * i * 10;
+		  paintBrush(QPoint(bpos.x(), bpos.y()));
+		}
+	    }
+	  
+	  updateRect = QRect(QPoint(start.x(), start.y()) - m_pBrush->hotSpot(),
+			     QSize(e->x(), e->y()) + m_pBrush->size());
+	}
+      
       m_pDoc->compositeImage(updateRect);
-      //m_pDoc->slotUpdateViews(updateRect);
-	
       m_dragStart = e->pos();
     }
-  */
 }
 
 void BrushTool::mouseRelease(QMouseEvent *e)

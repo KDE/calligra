@@ -685,59 +685,6 @@ void KImageShopDoc::convertTileToPixmap(Layer *lay, int tileNo, QPixmap *pix)
   convertImageToPixmap(&img, pix);
 }
 
-// NB: painting is only allowed within the rectangle of the canvas
-// everything else is clipped. However, layers can extend outside the canvas
-
-void KImageShopDoc::paintBrush(QPoint /*pt*/, const Brush* /*brsh*/)
-{
-  /*
-  Layer *lay=layerPtr(0);
-
-	// find the brush rect in canvas coords and clip the brush to the canvas
-	QRect brushCanvasRect=QRect(pt-brsh->hotSpot(), brsh->imageExtents().size());
-	brushCanvasRect=brushCanvasRect.intersect(QRect(0,0, w,h));
-	
-	if (brushCanvasRect.isEmpty())
-		return;
-	
-	// allocate out tiles if required
-	lay->allocateRect(brushCanvasRect);	
-	
-	// move the brust to the correct part of the canvas
-  QPoint brushTL=pt-brsh->hotSpot();
-  brsh->moveTo(brushTL.x(), brushTL.y());
-
-	// layerRect is in layer coords (offset from tileExtents.topLeft())
-	QRect layerRect=brushCanvasRect;
-	layerRect.moveTopLeft(brushCanvasRect.topLeft()-
-												lay->tileExtents().topLeft());
-
- 	// workout which tiles in the layer need to be updated
-  int minYTile=layerRect.top()/TILE_SIZE;
-  int maxYTile=layerRect.bottom()/TILE_SIZE;
-  int minXTile=layerRect.left()/TILE_SIZE;
-  int maxXTile=layerRect.right()/TILE_SIZE;
-
-  printf("paintBrush:: pt(%d,%d)\n",pt.x(),pt.y());
-  printf("paintBrush:: brushTL(%d,%d)\n",brushTL.x(),brushTL.y());
-  printf("paintBrush:: tiles y->(%d,%d) x->(%d,%d)\n",minYTile,maxYTile,
-				 minXTile, maxXTile);
-	QRect tileBoundary;
-	
-	for(int y=minYTile; y<=maxYTile; y++)
-		for(int x=minXTile; x<=maxXTile; x++) {
-			printf("updating layer %d,%d\n",x,y);
-			int dstTile=y*lay->xTiles()+x;
-			tileBoundary=lay->tileRect(dstTile);
-			SHOW_RECT(tileBoundary);
-			renderLayerIntoTile(tileBoundary, brsh, lay, dstTile);
-		}
-
-	// should really just set a dirty flag on the canvas
-	compositeImage(brushCanvasRect);
-  */
-}
-
 void KImageShopDoc::mergeAllLayers()
 {
   QList<Layer> l;

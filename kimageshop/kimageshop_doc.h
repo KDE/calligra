@@ -80,7 +80,6 @@ public:
     void moveLayerTo( int x, int y, Layer *lay = 0 );
     void renderTileQuadrant( const Layer *srcLay, int srcTile, Layer *dstLay,
 			     int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
-    void paintBrush( QPoint pt, const Brush *brush );
     LayerList layerList() { return layers; };
     
     void rotateLayer180(Layer *_layer);

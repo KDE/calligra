@@ -30,12 +30,13 @@ class Brush;
 class BrushTool : public Tool
 {
  public:
-  BrushTool(KImageShopDoc *doc, const Brush *_brush);
+  BrushTool(KImageShopDoc *doc, KImageShopView *view, const Brush *_brush);
   ~BrushTool();
   
   QString toolName() { return QString("BrushTool"); }
 
   void setBrush(const Brush *_brush);
+  void paintBrush(QPoint pos);
 
  public slots:
   virtual void mousePress(QMouseEvent*); 

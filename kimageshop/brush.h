@@ -43,9 +43,12 @@ class Brush : public IconItem
   QSize     size()                    const { return QSize(m_w, m_h); } 
   int       width()                   const { return m_w; }
   int       height()                  const { return m_h; }
-  uchar     value(int x, int y);
-  uchar*    scanline(int);
-  uchar*    bits();
+  uchar     value(int x, int y) const;
+  uchar*    scanline(int) const;
+  uchar*    bits() const;
+
+  // debug
+  void      dump() const;
 
  private:
   void      loadViaQImage(QString file);

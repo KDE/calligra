@@ -145,6 +145,9 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
   m_pColorDialog->hide();
   //addDialog(m_pColorDialog);
 
+  connect(m_pColorDialog, SIGNAL(fgColorChanged(const QColor&)), this, SLOT(slotSetFGColor(const QColor&)));
+  connect(m_pColorDialog, SIGNAL(bgColorChanged(const QColor&)), this, SLOT(slotSetBGColor(const QColor&)));
+
   // brush dialog
   m_pBrushDialog = new BrushDialog(this);
   m_pBrushDialog->resize(205, 267);
@@ -184,7 +187,7 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
   m_pMoveTool = new MoveTool(m_pDoc);
   
   // create brush tool
-  m_pBrushTool = new BrushTool(m_pDoc, m_pBrush);
+  m_pBrushTool = new BrushTool(m_pDoc, this, m_pBrush);
   
   // create zoom tool
   m_pZoomTool = new ZoomTool(this);
@@ -484,6 +487,7 @@ void KImageShopView::dialog_gradient()
     m_pGradientDialog->hide();
 }
 
+
 void KImageShopView::dialog_gradienteditor()
 {
   if (m_dialog_gradienteditor->isChecked())
@@ -586,6 +590,18 @@ int KImageShopView::yPaintOffset()
 void KImageShopView::slotSetBrush(const Brush* b)
 {
   m_pBrush = b;
+  if (m_pBrushTool)
+    m_pBrushTool->setBrush(b);
+  m_pBrush->dump();
 }
 
+void KImageShopView::slotSetFGColor(const QColor& c)
+{
+  fg = c;
+}
+
+void KImageShopView::slotSetBGColor(const QColor& c)
+{
+  bg = c;
+}
 #include "kimageshop_view.moc"

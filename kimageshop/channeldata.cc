@@ -94,7 +94,7 @@ void ChannelData::setPixel(int x, int y, uint pixel)
 
 uint ChannelData::getPixel(int x, int y)
 {
-  int pixel;
+  uint pixel;
 
   // assumes imageRect.contains(QPoint(x,y)) for speed
   
@@ -110,7 +110,6 @@ uint ChannelData::getPixel(int x, int y)
   
   // get a pointer to the points tile data
   uchar *ptr = tileInfo[tileNo] + ((y % TILE_SIZE) * TILE_SIZE + x % TILE_SIZE) * channels;
-  // uchar *ptr = tileInfo[tileNo] + ((y & (TILE_SIZE - 1)) * TILE_SIZE + (x & (TILE_SIZE - 1))) * channels;
 
   switch (channels)
     {
@@ -123,9 +122,9 @@ uint ChannelData::getPixel(int x, int y)
     case 3:
       {
 	uchar *pptr = (uchar*)&pixel;
-	*pptr = *ptr++;
-	*pptr = *ptr++;
-	*pptr = *ptr++;
+	*pptr++ = *ptr++;
+	*pptr++ = *ptr++;
+	*pptr++ = *ptr++;
 	break;
       }
     case 4:

@@ -56,7 +56,7 @@ void Brush::loadViaQImage(QString file)
   m_pPixmap = new QPixmap;
   m_pPixmap->convertFromImage(img, QPixmap::AutoColor);
 
-  m_w = img.width();
+  m_w = img.width()-2; // ##### FIXME !!!!!
   m_h = img.height();
 
   m_pData = new uchar[m_h * m_w];
@@ -68,7 +68,7 @@ void Brush::loadViaQImage(QString file)
       p = img.scanLine(h);
       for (int w = 0; w < m_w; w++)
 	{
-	  m_pData[m_w * h + w] = qRed(*((QRgb*)(p+w)));
+	  m_pData[m_w * h + w] = 255 - qRed(*((QRgb*)(p+w)));
 	  //qDebug ("%d", static_cast<int>(value(w,h)));
 	}
     }
@@ -77,8 +77,7 @@ void Brush::loadViaQImage(QString file)
   qDebug("Brush: %s loaded.",file.latin1());
 }
 
-QPixmap& Brush::pixmap()
-{
+QPixmap& Brush::pixmap(){
   return *m_pPixmap;
 }
 
@@ -100,12 +99,12 @@ void Brush::setHotSpot(QPoint pt)
   m_hotSpot = QPoint(x,y);
 }
 
-uchar Brush::value(int x, int y)
+uchar Brush::value(int x, int y) const
 {
   return m_pData[m_w * y + x];
 }
 
-uchar* Brush::scanline(int i)
+uchar* Brush::scanline(int i) const
 {
   if (i < 0)
     i = 0;
@@ -114,8 +113,19 @@ uchar* Brush::scanline(int i)
   return (m_pData + m_w * i);
 }
 
-uchar* Brush::bits()
+uchar* Brush::bits() const
 {
   return m_pData;
+}
+
+void Brush::dump() const
+{
+  qDebug("Brush data:\n");
+
+  for (int h = 0; h < m_h; h++) {
+    for (int w = 0; w < m_w; w++) {
+	  qDebug("%d", m_pData[m_w * h + w]);
+	}
+    }
 }
 

@@ -52,6 +52,14 @@ class ColorDialog : public KFloatingDialog
   ColorDialog(QWidget *parent = 0L);
   ~ColorDialog();
 
+ signals:
+  void fgColorChanged(const QColor&);
+  void bgColorChanged(const QColor&);
+
+ public slots:
+  void slotFGColorChanged(const QColor&);
+  void slotBGColorChanged(const QColor&);
+
 private:
   ColorChooserWidget   *m_pBase;
 };
@@ -83,6 +91,10 @@ class ColorChooserWidget : public QWidget
 
  protected:
   virtual void resizeEvent(QResizeEvent *);
+
+ signals:
+  void fgColorChanged(const QColor&);
+  void bgColorChanged(const QColor&);
 
  protected:
   QPushButton      *m_pGreyButton, *m_pRGBButton, *m_pHSBButton, *m_pCMYKButton, *m_pLABButton;
