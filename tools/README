@@ -1,0 +1,6 @@
+Here you can find 
+- implementation of KoDataTools
+    spell/ is a spell-checking data tool
+
+- a command-line koffice document converter, "koconverter"
+
