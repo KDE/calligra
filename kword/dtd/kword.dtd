@@ -1,0 +1,184 @@
+<!--	$Id:$
+
+		This is an XML document type definition (DTD) for the KWord document format.
+		Written by Kalle Dalheimer <kalle@kde.org> with (obviously) input from 
+		KWord's author Reginald Stadlbauer <reggie@kde.org>.
+
+		Please report all bugs to Kalle and Reginald at the above addresses.
+-->
+		
+
+
+<!--	A KWord document consists of a paper description, a number of
+		attributes and the framesets which contain the actual data. It 
+		can also define a number of styles.
+
+		Attributes:
+
+		author:		The document's author
+		email:		The document's author's email address
+		editor:		The program this file was written with
+		mime:		The MIME type (must always have the value application/x-kword
+-->
+<!ELEMENT DOC (PAPER, ATTRIBUTES, FRAMESETS, STYLES)>
+<!ATTLIST DOC	author CDATA #IMPLIED
+				email CDATA #IMPLIED
+				editor CDATA #IMPLIED
+				mime CDATA "application/x-kword">
+
+<!--	Describes the page format. Can have no or one PAPERBORDERS child that 
+		describes the margins.
+
+		Attributes:
+
+		format:			integer value for the page format
+		width:			width in millimeters
+		height:			height in millimeters
+		orientation:	0 for landscape, 1 for portrait
+		columns:		the number of columns (only in wordprocessing mode)
+		columnspacing:	the gap between the columns (only in wordprocessing mode)
+-->
+<!ELEMENT PAPER (PAPERBORDERS?)>
+<!ATTLIST PAPER	format CDATA #REQUIRED
+				width CDATA #REQUIRED
+				height CDATA #REQUIRED
+				orientation CDATA #REQUIRED
+				columns CDATA #REQUIRED
+				columnspacing CDATA #REQUIRED>
+
+
+
+<!--	Describes the margins of the page.
+
+		Attributes:
+		
+		left:			left margin in pixels
+		right:			right margin in pixels
+		top:			top margin in pixels
+		bottom:			bottom margin in pixels
+-->
+<!ELEMENT PAPERBORDERS EMPTY>
+<!ATTLIST PAPERBORDERS	left CDATA #REQUIRED
+						right CDATA #REQUIRED
+						top	CDATA #REQUIRED
+						bottom CDATA #REQUIRED>
+
+
+<!--	Contains general attributes of the document. Has no children.
+
+		Attributes:
+
+		processing:		0 for word processing, 1 for DTP
+		standardpage:	currently ignored
+-->
+<!ELEMENT ATTRIBUTES EMPTY>
+<!ATTLIST ATTRIBUTES	processing CDATA #REQUIRED
+						standardpage CDATA #IMPLIED>
+
+
+<!--	Container that as a number of FRAMESET children.
+-->
+<!ELEMENT FRAMESETS (FRAMESET+)>
+
+
+<!--	One frameset that bundles a number of FRAME elements.
+
+		Attributes:
+
+		frametype:				1 for text, 2 for graphics
+		autocreatenewframe:		???
+-->
+<!ELEMENT FRAMESET (FRAME|PARAGRAPH)*>
+<!ATTLIST FRAMESET		frameType CDATA #REQUIRED
+						autoCreateNewFrame CDATA #REQUIRED>
+
+
+<!ELEMENT FRAME	EMPTY>
+<!ATTLIST FRAME	left CDATA #REQUIRED
+				right CDATA #REQUIRED
+				top CDATA #REQUIRED
+				bottom CDATA #REQUIRED
+				runaround CDATA #REQUIRED
+				runaroundGap CDATA #REQUIRED>
+<!ELEMENT PARAGRAPH (TEXT|FORMATS|LAYOUT)*>
+<!ELEMENT TEXT EMPTY>
+<!ATTLIST TEXT	value CDATA #IMPLIED>
+<!ELEMENT FORMATS (FORMAT*)>
+<!ELEMENT FORMAT (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|VERTALIGN)*>
+<!ATTLIST FORMAT		id CDATA #IMPLIED
+						pos CDATA #IMPLIED
+						len CDATA #IMPLIED>
+<!ELEMENT COLOR EMPTY>
+<!ATTLIST COLOR	red CDATA #REQUIRED
+				green CDATA #REQUIRED
+				blue CDATA #REQUIRED>
+<!ELEMENT FONT EMPTY>
+<!ATTLIST FONT	name CDATA #REQUIRED>
+<!ELEMENT SIZE EMPTY>
+<!ATTLIST SIZE	value CDATA #REQUIRED>
+<!ELEMENT WEIGHT EMPTY>
+<!ATTLIST WEIGHT	value CDATA #REQUIRED>
+<!ELEMENT ITALIC EMPTY>
+<!ATTLIST ITALIC	value CDATA #REQUIRED>
+<!ELEMENT UNDERLINE EMPTY>
+<!ATTLIST UNDERLINE	value CDATA #REQUIRED>
+<!ELEMENT VERTALIGN EMPTY>
+<!ATTLIST VERTALIGN	value CDATA #REQUIRED>
+<!ELEMENT LAYOUT	   (NAME|FOLLOWING|FLOW|OFFSETS|INDENTS|COUNTER|LINESPACING|LEFTBORDER|
+						RIGHTBORDER|TOPBORDER|BOTTOMBORDER|FORMAT|TABULATOR)*>
+<!ELEMENT NAME EMPTY>
+<!ATTLIST NAME	value CDATA #REQUIRED>
+<!ELEMENT FOLLOWING EMPTY>
+<!ATTLIST FOLLOWING	name CDATA #REQUIRED>
+<!ELEMENT FLOW EMPTY>
+<!ATTLIST FLOW	value CDATA #REQUIRED>
+<!ELEMENT OFFSETS EMPTY>
+<!ATTLIST OFFSETS		head CDATA #REQUIRED
+						foot CDATA #REQUIRED>
+<!ELEMENT INDENTS EMPTY>
+<!ATTLIST INDENTS		first CDATA #REQUIRED
+						left CDATA #REQUIRED>
+<!ELEMENT COUNTER EMPTY>
+<!ATTLIST COUNTER		type CDATA #REQUIRED
+						depth CDATA #REQUIRED
+						bullet CDATA #REQUIRED
+						start CDATA #REQUIRED
+						numberingtype CDATA #REQUIRED
+						lefttext CDATA #IMPLIED
+						righttext CDATA #IMPLIED
+						bulletfont CDATA #REQUIRED>
+<!ELEMENT LINESPACING EMPTY>
+<!ATTLIST LINESPACING	value CDATA #REQUIRED>
+<!ELEMENT LEFTBORDER EMPTY>
+<!ATTLIST LEFTBORDER	red CDATA #REQUIRED
+						green CDATA #REQUIRED
+						blue CDATA #REQUIRED
+						style CDATA #REQUIRED
+						width CDATA #REQUIRED>
+<!ELEMENT RIGHTBORDER EMPTY>
+<!ATTLIST RIGHTBORDER	red CDATA #REQUIRED
+						green CDATA #REQUIRED
+						blue CDATA #REQUIRED
+						style CDATA #REQUIRED
+						width CDATA #REQUIRED>
+<!ELEMENT TOPBORDER EMPTY>
+<!ATTLIST TOPBORDER	red CDATA #REQUIRED
+						green CDATA #REQUIRED
+						blue CDATA #REQUIRED
+						style CDATA #REQUIRED
+						width CDATA #REQUIRED>
+<!ELEMENT BOTTOMBORDER EMPTY>
+<!ATTLIST BOTTOMBORDER	red CDATA #REQUIRED
+						green CDATA #REQUIRED
+						blue CDATA #REQUIRED
+						style CDATA #REQUIRED
+						width CDATA #REQUIRED>
+<!ELEMENT TABULATOR EMPTY>
+<!ATTLIST TABULATOR		mmpos CDATA #REQUIRED
+						ptpos CDATA #REQUIRED
+						type CDATA #REQUIRED>
+<!ELEMENT STYLES (STYLE*)>
+<!ELEMENT STYLE (NAME|FOLLOWING|FLOW|OFFSETS|INDENTS|COUNTER|LINESPACING|LEFTBORDER|RIGHTBORDER|
+				 TOPBORDER|BOTTOMBORDER|FORMAT)*>
+
+						
