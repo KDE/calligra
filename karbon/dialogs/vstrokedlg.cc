@@ -220,7 +220,7 @@ void VStrokeDlg::slotApplyButtonPressed()
 	color.setOpacity( op );
 
 	if( m_part )
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), color ), true );
+		m_part->addCommand( new VStrokeCmd( &m_part->document(), VStroke( color ) ), true );
 }
 
 void VStrokeDlg::slotUpdate(QColor* color)

@@ -54,6 +54,8 @@ class VStroke
 public:
 	VStroke( VObject* parent = 0L, float width = 1.0, const VLineCap cap = cap_butt,
 			 const VLineJoin join = join_miter, float miterLimit = 10.0 );
+	VStroke( const VColor &c, VObject* parent = 0L, float width = 1.0, const VLineCap cap = cap_butt,
+			 const VLineJoin join = join_miter, float miterLimit = 10.0 );
 	VStroke( const VStroke& stroke );
 
 	void setParent( VObject* parent ) { m_parent = parent; }

@@ -22,7 +22,7 @@ class VSelection;
 class VStrokeCmd : public VCommand
 {
 public:
-	VStrokeCmd( VDocument *doc, const VColor& color, float opacity = -1 );
+	VStrokeCmd( VDocument *doc, const VStroke& );
 	virtual ~VStrokeCmd();
 
 	virtual void execute();
@@ -31,8 +31,7 @@ public:
 private:
 	VSelection* m_selection;
 
-	VColor m_color;
-	float m_opacity;
+	VStroke m_stroke;
 
 	QValueVector<VStroke> m_oldcolors;
 };

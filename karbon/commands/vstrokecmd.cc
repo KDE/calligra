@@ -10,8 +10,8 @@
 #include "vstrokecmd.h"
 
 
-VStrokeCmd::VStrokeCmd( VDocument *doc, const VColor& color, float opacity )
-	: VCommand( doc, i18n( "Stroke Objects" ) ), m_color( color ), m_opacity( opacity )
+VStrokeCmd::VStrokeCmd( VDocument *doc, const VStroke& stroke )
+	: VCommand( doc, i18n( "Stroke Objects" ) ), m_stroke( stroke )
 {
 	m_selection = m_doc->selection()->clone();
 
@@ -35,10 +35,7 @@ VStrokeCmd::execute()
 
 		m_oldcolors.push_back( *itr.current()->stroke() );
 
-		VStroke stroke = *itr.current()->stroke();
-		stroke.setColor( m_color );
-
-		itr.current()->setStroke( stroke );
+		itr.current()->setStroke( m_stroke );
 	}
 }
 

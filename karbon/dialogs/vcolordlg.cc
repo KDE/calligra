@@ -104,7 +104,7 @@ void VColorDlg::buttonClicked( int button_ID )
 		break;
 	case Outline:
 		if( m_part )
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), color ), true );
+		m_part->addCommand( new VStrokeCmd( &m_part->document(), VStroke( color ) ), true );
 		break;
 	}
 

@@ -20,6 +20,18 @@ VStroke::VStroke( VObject* parent, float width, const VLineCap cap, const VLineJ
 	m_miterLimit = miterLimit;
 }
 
+VStroke::VStroke( const VColor &c, VObject* parent, float width, const VLineCap cap, const VLineJoin join,
+			float miterLimit )
+{
+	m_parent = parent;
+	m_type = stroke_stroke;
+	m_lineWidth = width;
+	m_lineCap = cap;
+	m_lineJoin = join;
+	m_miterLimit = miterLimit;
+	m_color = c;
+}
+
 VStroke::VStroke( const VStroke& stroke )
 {
 	// doesnt copy parent:
