@@ -262,9 +262,9 @@ OoDrawImport::convert()
 				if( !kind.isEmpty() )
 				{
 					if( kind == "section" )
-						type = VEllipse::section;
-					else if( kind == "cut" )
 						type = VEllipse::cut;
+					else if( kind == "cut" )
+						type = VEllipse::section;
 					else if( kind == "arc" )
 						type = VEllipse::arc;
 				}
