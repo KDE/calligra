@@ -47,7 +47,7 @@ void KFormulaDoc::cleanUp()
 //    KoDocument::cleanUp();
 }
 
-bool KFormulaDoc::save( ostream& out, const char* /* format */ )
+bool KFormulaDoc::save( ostream& /*out*/, const char* /* format */ )
 {
 //#warning TODO if someone implements saving, do it right :)
 #if 0
@@ -55,16 +55,16 @@ bool KFormulaDoc::save( ostream& out, const char* /* format */ )
     out << otag << "<DOC author=\"" << "Andrea Rizzi" << "\" email=\""
 	<< "rizzi@kde.org" << "\" editor=\"" << "KFormula"
 	<< "\" mime=\"" << MIME_TYPE << "\" >" << endl;
-    
+
     out << "<FORMULA>" << endl;
 
     out << "<ELEM FIRST ";
     theFirstElement->save(out);
-    
-    out << "</FORMULA>" << endl;    
+
+    out << "</FORMULA>" << endl;
     out << etag << "</DOC>" << endl;
 #endif
- 
+
     return true;
 }
 /*
@@ -129,7 +129,7 @@ void KFormulaDoc::emitModified()
     m_bModified = true;
     m_bEmpty = false;
     eList.clear();
-    theFirstElement->makeList();  
+    theFirstElement->makeList();
     eList.at(thePosition);
     emit sig_changeType( currentElement() );
     emit sig_modified();
@@ -162,9 +162,9 @@ void KFormulaDoc::addRootElement()
     //RootElement need a child[0] i.e. root content
     //    newElement = new BasicElement(this,currentElement(),4);
     //    currentElement()->setChild(newElement,0);
-    
+
     setActiveElement(newElement->getChild(0)); //I prefere to AutoActivate RootContent
-    
+
     emitModified();
 }
 
@@ -430,7 +430,7 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 		    break;
 		case '_':
 		    addIndex(IN_BOTTOMRIGHT);
-		    break;	      
+		    break;	
 		default:
 		    {
 
@@ -449,7 +449,7 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 					warning("thePosition %d  int:%d",thePosition,eList.current()->pos);
 					eList.clear();
 					theFirstElement->makeList();
-					thePosition++;              
+					thePosition++;
 					eList.at(thePosition);		
 					warning("the New Position %d int:%d",thePosition,eList.current()->pos);
 				    }
@@ -467,7 +467,7 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 		    int po=eList.current()->pos;
 		    if (po>0)
 			{
-        
+
 
 			}
 		}
@@ -477,8 +477,8 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 		    if(eList.prev()->element!=0)
 			action=Qt::Key_Delete;
 		    else
-			eList.next(); 
-		}  
+			eList.next();
+		}
 
 	    if(action==Qt::Key_Delete)
 		{
@@ -495,23 +495,23 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 			    eList.at(thePosition);		
 			}
 
-    
+
 		    else {
 			if(eList.current()->pos==0)
 			    elReturn=FCOM_DELETEME;
-			else 
+			else
 			    if(eList.next()->element!=0)
-				elReturn=FCOM_DELETEME;       	    
+				elReturn=FCOM_DELETEME;       	
 			    else
 				eList.prev();
-		    } 
+		    }
 		}
 
 
 	    if(action==Qt::Key_Left)
 		{
 
-		    /*   if(eList.current()->pos==0) 
+		    /*   if(eList.current()->pos==0)
 			 {
 			 if(eList.prev()->pos==-1)
 			 eList.prev();
@@ -522,11 +522,11 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 		}
 	    if(action==Qt::Key_Right)
 		{/*
-		   if(eList.current()->pos==-1) 
+		   if(eList.current()->pos==-1)
 		   {
 		   if(eList.next()->pos==0)
 		   eList.next();
-  
+
 		   }
 		   else
 		 */   eList.next();
@@ -538,22 +538,22 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 	    warning("Not Ascii return %d",elReturn);
 	    thePosition=eList.at();
 	}	
-        
-    if (elReturn==FCOM_ADDTEXT) 
-	{ 
+
+    if (elReturn==FCOM_ADDTEXT)
+	{
 	    if(eList.current()->pos==0)
 		{
 		    BasicElement *newElement;
 		    currentElement()->insertElement(newElement=new TextElement(this));
-	          
-		    setActiveElement(newElement); 
+	
+		    setActiveElement(newElement);
 		} else  addTextElement();
-	     
+	
 	    if((k->ascii()>32)&&(k->ascii()<127))
 		{
 		    QString text;
 		    int po=0;
-	       
+	
 		    warning("Internal Text Position %d",po);
 		    text=currentElement()->getContent().copy();
 		    text.insert(po,k->ascii());
@@ -561,11 +561,11 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 		    thePosition=eList.at();
 	    	    warning("thePosition %d  int:%d",thePosition,eList.current()->pos);
 		    eList.clear();
-            	    theFirstElement->makeList();  
-            	    thePosition++;      
+            	    theFirstElement->makeList();
+            	    thePosition++;
 		    eList.at(thePosition);		
 	    	    warning("the New Position %d int:%d",thePosition,eList.current()->pos);
-	           
+	
 		}
 
 	}
@@ -589,7 +589,7 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 
 void KFormulaDoc::paintEvent( QPaintEvent *, QWidget *paintGround )
 {
-    /*		    //paintGround->size()    
+    /*		    //paintGround->size()
 		    QPixmap pm(100,100);  //double buffer
 		    pm.fill();
 		    QPainter q;
@@ -608,7 +608,7 @@ void KFormulaDoc::paintEvent( QPaintEvent *, QWidget *paintGround )
     thePainter->drawLine(theCursor.topLeft()+QPoint(0,1),theCursor.topRight()+QPoint(0,1));
     thePainter->drawLine(theCursor.bottomLeft()-QPoint(0,1),theCursor.bottomRight()-QPoint(0,1));
     thePainter->drawLine(theCursor.topLeft()+QPoint(theCursor.width()/2,1),
-			 theCursor.bottomLeft()+QPoint(theCursor.width()/2,-1));	 
+			 theCursor.bottomLeft()+QPoint(theCursor.width()/2,-1));	
     //	}
     thePainter->end();
     //    bitBlt(paintGround,0,0,&pm,0,0,-1,-1);
@@ -635,7 +635,7 @@ void KFormulaDoc::setActiveElement(BasicElement* c)
 	if(currentElement()==c)
 	    thePosition=eList.at();
     eList.at(thePosition);
-    
+
     /*    if(currentElement())
 	  currentElement()->setActive(false);
 	  if (c!=0)
@@ -643,7 +643,7 @@ void KFormulaDoc::setActiveElement(BasicElement* c)
 	  eList.clear();
 	  warning("clear list");
 	  thePosition=-1;
-	  theFirstElement->makeList(1); 
+	  theFirstElement->makeList(1);
 	  eList.at(thePosition);*/	
     warning("New Active Element  %p",c);
 }
@@ -654,7 +654,7 @@ void KFormulaDoc::setActiveElement(BasicElement* c)
 
 
 KFormulaDoc::KFormulaDoc( KoDocument* parent, const char* name )
-    : KoDocument( parent, name ) 
+    : KoDocument( parent, name )
 {
 
     //    setFocusPolicy( ClickFocus );
@@ -662,7 +662,7 @@ KFormulaDoc::KFormulaDoc( KoDocument* parent, const char* name )
     thePainter = new QPainter();
     warning("General Settings");
     theFont.setFamily( "utopia" );
-    theFont.setPointSize(DEFAULT_FONT_SIZE);  
+    theFont.setPointSize(DEFAULT_FONT_SIZE);
     theFont.setWeight( QFont::Normal );
     theFont.setItalic( false );
     theColor=black;
@@ -687,7 +687,7 @@ KFormulaDoc::KFormulaDoc( KoDocument* parent, const char* name )
 
 
 }
- 
+
 bool KFormulaDoc::initDoc()
 {
     // If nothing is loaded, do initialize here
@@ -715,10 +715,10 @@ KoMainWindow* KFormulaDoc::createShell()
 
     return shell;}
 
-void KFormulaDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/ )
+void KFormulaDoc::paintContent( QPainter& painter, const QRect& /*rect*/, bool /*transparent*/ )
 {
     // ####### handle transparency
-    
+
     // Need to draw only the document rectangle described in the parameter rect.
     QPainter *old=thePainter;
     thePainter=&painter;
@@ -738,6 +738,7 @@ QString KFormulaDoc::configFile() const
 //				   KFormulaFactory::global() ) );
 
 //    return readConfigFile( "kformula.rc" );
+    return QString::null;
 }
 
 #include "kformula_doc.moc"

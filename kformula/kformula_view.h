@@ -24,7 +24,7 @@ class BasicElement;
 
 //#include <container.h>
 
-class QAction;
+class KAction;
 class QPaintEvent;
 
 
@@ -33,7 +33,7 @@ class KFormulaView : public KoView
     Q_OBJECT
 //public:
 //    KFormulaView( KFormulaDoc* part, QWidget* parent = 0, const char* name = 0 );
-    
+
  public:
     // C++
     KFormulaView( KFormulaDoc * _doc,QWidget *_parent=0, const char *_name=0);
@@ -70,78 +70,78 @@ protected:
     void paintEvent( QPaintEvent *_ev );
     void resizeEvent( QResizeEvent *_ev );
     void keyPressEvent( QKeyEvent *k );
-    virtual void updateReadWrite( bool readwrite ) { };
+    virtual void updateReadWrite( bool /*readwrite*/ ) { };
     KFormulaDoc *m_pDoc;
 
     QPopupMenu *mn_indexList;
 
 
    //Actions!!
-   
-    QAction *actionEditUndo;
-    QAction *m_idButtonFormula_0;
-    QAction *actionView_NewView;
-    QAction *actionView_FontToolbar;
-    QAction *actionView_TypeToolbar;
-    QAction *actionView_TextToolbar;
 
-    QAction *actionElement_AddIndex_TL;
-    QAction *actionElement_AddIndex_BL;
-    QAction *actionElement_AddIndex_TR;
-    QAction *actionElement_AddIndex_BR;
-    QAction *actionElement_AddElement_T;  // text
-    QAction *actionElement_AddElement_R;  // root
-    QAction *actionElement_AddElement_F;  // fraction
-    QAction *actionElement_AddElement_V;  // vertSpace
-    QAction *actionElement_AddElement_B;  // bracket
-    QAction *actionElement_AddElement_I;  // integral
-    QAction *actionElement_AddElement_D;  // decoration
-    QAction *actionElement_AddElement_S;  // symbol
-    QAction *actionElement_AddElement_M;  // matrix
-    QAction *actionElement_AddElement_L;  // index list
+    KAction *actionEditUndo;
+    KAction *m_idButtonFormula_0;
+    KAction *actionView_NewView;
+    KAction *actionView_FontToolbar;
+    KAction *actionView_TypeToolbar;
+    KAction *actionView_TextToolbar;
 
-    QAction *actionElement_Text_Font;
-    QAction *actionElement_Text_Size;
-    QAction *actionElement_Text_Bold;
-    QAction *actionElement_Text_Italic;
-    QAction *actionElement_Text_Under;
-    QAction *actionElement_Font_Child;
-    QAction *actionElement_Font_Next;
-    QAction *actionElement_Font_Element;
-    QAction *actionElement_Font_Index;
-    
-    QAction *actionElement_Text_Split;
-    QAction *actionElement_Root_Pixmap;
-    QAction *actionElement_Root_Index;
-    QAction *actionElement_Integral_Pixmap;
-    QAction *actionElement_Integral_Lower;
-    QAction *actionElement_Integral_Higher;
-    QAction *actionElement_Bracket_Type_Left;
-    QAction *actionElement_Bracket_Type_Right;
-    QAction *actionElement_Matrix_Set;
-    QAction *actionElement_Matrix_Ins_Row;
-    QAction *actionElement_Matrix_Ins_Col;
-    QAction *actionElement_Matrix_Rem_Row;
-    QAction *actionElement_Matrix_Rem_Col;
-    QAction *actionElement_Fraction_VA;  //Vert Allign
-    QAction *actionElement_Fraction_VA_U;
-    QAction *actionElement_Fraction_VA_D;
-    QAction *actionElement_Fraction_VA_M;
-    QAction *actionElement_Fraction_HA;  //Horiz Allign
-    QAction *actionElement_Fraction_HA_C;
-    QAction *actionElement_Fraction_HA_L;
-    QAction *actionElement_Fraction_HA_R;
-    QAction *actionElement_Fraction_Near;
-    QAction *actionElement_Fraction_Far;
-    QAction *actionElement_Fraction_Dist;
-    QAction *actionElement_Fraction_MidLine;
-    QAction *actionElement_Decoration_Set;
-    QAction *actionElement_Symbol_Set;
-    QAction *actionElement_Color;
-    QAction *actionElement_Remove;
-    QAction *actionFormula_Color;
-    QAction *actionFormula_Font;
-//    QAction *actionHelp_Using;
+    KAction *actionElement_AddIndex_TL;
+    KAction *actionElement_AddIndex_BL;
+    KAction *actionElement_AddIndex_TR;
+    KAction *actionElement_AddIndex_BR;
+    KAction *actionElement_AddElement_T;  // text
+    KAction *actionElement_AddElement_R;  // root
+    KAction *actionElement_AddElement_F;  // fraction
+    KAction *actionElement_AddElement_V;  // vertSpace
+    KAction *actionElement_AddElement_B;  // bracket
+    KAction *actionElement_AddElement_I;  // integral
+    KAction *actionElement_AddElement_D;  // decoration
+    KAction *actionElement_AddElement_S;  // symbol
+    KAction *actionElement_AddElement_M;  // matrix
+    KAction *actionElement_AddElement_L;  // index list
+
+    KAction *actionElement_Text_Font;
+    KAction *actionElement_Text_Size;
+    KAction *actionElement_Text_Bold;
+    KAction *actionElement_Text_Italic;
+    KAction *actionElement_Text_Under;
+    KAction *actionElement_Font_Child;
+    KAction *actionElement_Font_Next;
+    KAction *actionElement_Font_Element;
+    KAction *actionElement_Font_Index;
+
+    KAction *actionElement_Text_Split;
+    KAction *actionElement_Root_Pixmap;
+    KAction *actionElement_Root_Index;
+    KAction *actionElement_Integral_Pixmap;
+    KAction *actionElement_Integral_Lower;
+    KAction *actionElement_Integral_Higher;
+    KAction *actionElement_Bracket_Type_Left;
+    KAction *actionElement_Bracket_Type_Right;
+    KAction *actionElement_Matrix_Set;
+    KAction *actionElement_Matrix_Ins_Row;
+    KAction *actionElement_Matrix_Ins_Col;
+    KAction *actionElement_Matrix_Rem_Row;
+    KAction *actionElement_Matrix_Rem_Col;
+    KAction *actionElement_Fraction_VA;  //Vert Allign
+    KAction *actionElement_Fraction_VA_U;
+    KAction *actionElement_Fraction_VA_D;
+    KAction *actionElement_Fraction_VA_M;
+    KAction *actionElement_Fraction_HA;  //Horiz Allign
+    KAction *actionElement_Fraction_HA_C;
+    KAction *actionElement_Fraction_HA_L;
+    KAction *actionElement_Fraction_HA_R;
+    KAction *actionElement_Fraction_Near;
+    KAction *actionElement_Fraction_Far;
+    KAction *actionElement_Fraction_Dist;
+    KAction *actionElement_Fraction_MidLine;
+    KAction *actionElement_Decoration_Set;
+    KAction *actionElement_Symbol_Set;
+    KAction *actionElement_Color;
+    KAction *actionElement_Remove;
+    KAction *actionFormula_Color;
+    KAction *actionFormula_Font;
+//    KAction *actionHelp_Using;
 
 /*    CORBA::Long m_idButtonFormula_0;
     CORBA::Long m_idButtonFormula_1;

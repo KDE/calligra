@@ -22,7 +22,7 @@
 #include <kstddirs.h>
 #include <kaboutdialog.h>
 
-KFormulaShell::KFormulaShell( QWidget* parent, const char* name )
+KFormulaShell::KFormulaShell( QWidget* /*parent*/, const char* name )
     : KoMainWindow( KFormulaFactory::global(), name )
 {
 }

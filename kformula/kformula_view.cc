@@ -25,11 +25,11 @@
  *
  **********************************************************/
 #include "kformula_view.h"
-#include "kformula_global.h"
+#include "kformula_factory.h"
 #include "kformula_doc.h"
 
 #include <qpainter.h>
-#include <qaction.h>
+#include <kaction.h>
 
 KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _name )
     : KoView( _doc, _parent, _name )
@@ -59,7 +59,7 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
 
 
     actionEditUndo = new KAction( i18n( "No Undo possible" ),
-				     "undo", 
+				     "undo",
 				     ALT + Key_Z,
 				     this, SLOT( addText() ),
 				     actionCollection(), "edit_undo" );
@@ -149,7 +149,7 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
 					 CTRL + ALT + Key_E ,
 					this,SLOT(fontSwitch()),
 					actionCollection(),"fontelement");
-    
+
     //actionElement_Font_Element->setEnabled(false);
 
     actionElement_Font_Child = new KToggleAction(i18n( "Resize children" ),
@@ -207,7 +207,7 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
     delimiter.append(QString("|"));
     //toolTip = Q2C( i18n("Left delimiter") );
     actionElement_Bracket_Type_Left = new KSelectAction(i18n("Left delimiter"),
-					   0,this, SLOT(delimiterLeft()),   
+					   0,this, SLOT(delimiterLeft()),
 					   actionCollection(),"typeleft");
     ((KSelectAction *)actionElement_Bracket_Type_Left)->setItems(delimiter);
 /*
@@ -226,7 +226,7 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
     delimiter.append(QString("<"));
     delimiter.append(QString("|"));
     actionElement_Bracket_Type_Right = new KSelectAction(i18n("Right delimiter"),
-					   0,this, SLOT(delimiterRight()),   
+					   0,this, SLOT(delimiterRight()),
 					   actionCollection(),"typeright");
     ((KSelectAction *)actionElement_Bracket_Type_Right)->setItems(delimiter);
 
@@ -1004,7 +1004,7 @@ bool KFormulaView::mappingCreateToolbar( OpenDocsUI::ToolBarFactory_ptr _factory
 
 void KFormulaView::slotTypeChanged( const BasicElement *elm)
 {
-    
+
 //    actionElement_Font_Element->setEnabled(false);
 
     bool isText, isBracket, isFraction, isPrefixed, isMatrix, isRoot;
@@ -1028,7 +1028,7 @@ void KFormulaView::slotTypeChanged( const BasicElement *elm)
     warning("Toggle");
     (actionElement_Bracket_Type_Left)->setEnabled(isBracket);
     (actionElement_Bracket_Type_Right)->setEnabled(isBracket);
-    
+
     (actionElement_Fraction_VA_U)->setEnabled(isFraction);
     (actionElement_Fraction_VA_D)->setEnabled(isFraction);
     (actionElement_Fraction_VA_M)->setEnabled(isFraction);
@@ -1039,7 +1039,7 @@ void KFormulaView::slotTypeChanged( const BasicElement *elm)
     (actionElement_Fraction_Near)->setEnabled(isFraction);
     (actionElement_Fraction_Far)->setEnabled(isFraction);
     (actionElement_Fraction_MidLine)->setEnabled(isFraction);
-    
+
     (actionElement_Integral_Lower)->setEnabled(isPrefixed);
     (actionElement_Integral_Higher)->setEnabled(isPrefixed);
     (actionElement_Matrix_Set)->setEnabled(isMatrix);
@@ -1236,12 +1236,12 @@ void KFormulaView::fractionAlignM()
     if( (((KToggleAction*)actionElement_Fraction_VA_D)->isChecked())
       || (((KToggleAction*)actionElement_Fraction_VA_U)->isChecked())
       ) return;
-      
+
     warning("M");
     QString content=m_pDoc->currentElement()->getContent();
     content[1]='M';
     m_pDoc->currentElement()->setContent(content);
-    
+
    ((KToggleAction *)actionElement_Fraction_VA_M)->setChecked(true);
    ((KToggleAction *)actionElement_Fraction_VA_D)->setChecked(false);
    ((KToggleAction *)actionElement_Fraction_VA_U)->setChecked(false);
