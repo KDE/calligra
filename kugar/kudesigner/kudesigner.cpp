@@ -73,20 +73,7 @@ KuDesignerApp::KuDesignerApp(QWidget* , const char* name):KMainWindow(0, name)
   editCopy->setEnabled(false);
   editPaste->setEnabled(false);
 
-    sectionsReportHeader->setEnabled(false);
-    sectionsReportFooter->setEnabled(false);
-    sectionsPageFooter->setEnabled(false);
-    sectionsPageHeader->setEnabled(false);
-    sectionsDetailHeader->setEnabled(false);
-    sectionsDetail->setEnabled(false);
-    sectionsDetailFooter->setEnabled(false);
-
-    itemsNothing->setEnabled(false);
-    itemsLabel->setEnabled(false);
-    itemsField->setEnabled(false);
-    itemsSpecial->setEnabled(false);
-    itemsCalculated->setEnabled(false);
-    itemsLine->setEnabled(false);
+  disableDocumentActions();
 
   resize(600, 440);
 }
@@ -107,6 +94,24 @@ void KuDesignerApp::enableDocumentActions()
     itemsSpecial->setEnabled(true);
     itemsCalculated->setEnabled(true);
     itemsLine->setEnabled(true);
+}
+
+void KuDesignerApp::disableDocumentActions()
+{
+    sectionsReportHeader->setEnabled(false);
+    sectionsReportFooter->setEnabled(false);
+    sectionsPageFooter->setEnabled(false);
+    sectionsPageHeader->setEnabled(false);
+    sectionsDetailHeader->setEnabled(false);
+    sectionsDetail->setEnabled(false);
+    sectionsDetailFooter->setEnabled(false);
+
+    itemsNothing->setEnabled(false);
+    itemsLabel->setEnabled(false);
+    itemsField->setEnabled(false);
+    itemsSpecial->setEnabled(false);
+    itemsCalculated->setEnabled(false);
+    itemsLine->setEnabled(false);
 }
 
 KuDesignerApp::~KuDesignerApp()
@@ -376,6 +381,10 @@ void KuDesignerApp::slotFileNew()
           setCaption(doc->URL().fileName(), false);
           enableDocumentActions();
       }
+      else
+      {
+	  disableDocumentActions();
+      }
       delete newReport;
 
   }
@@ -407,6 +416,10 @@ void KuDesignerApp::slotFileOpen()
       fileSave->setEnabled(true);
       fileSaveAs->setEnabled(true);
       enableDocumentActions();
+    }
+    else
+    {
+	disableDocumentActions();
     }
   }
   slotStatusMsg(i18n("Ready."));
