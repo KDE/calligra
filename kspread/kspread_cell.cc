@@ -915,7 +915,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	m_strOutText = s->text();
     }
     else if ( isBool() )
-    {
+    {   
 	if ( m_dValue == 0 )
 	    m_strOutText = "False";
 	else
@@ -1820,9 +1820,9 @@ bool KSpreadCell::calc( bool _makedepend )
 	int right = dep->m_iColumn > dep->m_iColumn2 ? dep->m_iColumn : dep->m_iColumn2;
 	int top = dep->m_iRow < dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
 	int bottom = dep->m_iRow > dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
-	for ( int x = left; x <= right; x++ )
+        for ( int x = left; x <= right; x++ )
 	  for ( int y = top; y <= bottom; y++ )
-	  {
+	  { 
 	    KSpreadCell *cell = dep->m_pTable->cellAt( x, y );
 	    if ( cell == 0L )
 	      return false;
@@ -1917,6 +1917,9 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bTime=false;
     // m_strFormularOut.sprintf( "%f", m_dValue );
     m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
+    if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
+        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate)
+        m_eFormatNumber=Number;
   }
   else if ( context.value()->type() == KSValue::IntType )
   {
@@ -1927,6 +1930,9 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bTime=false;
     // m_strFormularOut.sprintf( "%f", m_dValue );
     m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
+    if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
+        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate)
+        m_eFormatNumber=Number;
   }
   else if ( context.value()->type() == KSValue::BoolType )
   {
@@ -1937,6 +1943,45 @@ bool KSpreadCell::calc( bool _makedepend )
     m_dValue = context.value()->boolValue() ? 1.0 : 0.0;
     // (David): i18n'ed True and False - hope it's ok
     m_strFormularOut = context.value()->boolValue() ? i18n("True") : i18n("False");
+    if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
+        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate)
+        m_eFormatNumber=Number;
+  }
+  else if ( context.value()->type() == KSValue::TimeType )
+  {
+    m_bValue = false;
+    m_bBool = false;
+    m_bDate =false;
+    m_bTime=true;
+    m_Time=context.value()->timeValue();
+
+    //change format
+    if( m_eFormatNumber != SecondeTime)
+        {
+        m_strFormularOut = KGlobal::locale()->formatTime(m_Time,false);
+        m_eFormatNumber = Time;
+        }
+    else
+        {
+        m_strFormularOut = KGlobal::locale()->formatTime(m_Time,true);
+        }
+  }
+  else if ( context.value()->type() == KSValue::DateType)
+  {
+    m_bValue = false;
+    m_bBool = false;
+    m_bDate =true;
+    m_bTime=false;
+    m_Date=context.value()->dateValue();
+    if( m_eFormatNumber != TextDate)
+        {
+        m_eFormatNumber = ShortDate;
+        m_strFormularOut = KGlobal::locale()->formatDate(m_Date,true);
+        }
+    else
+        {
+        m_strFormularOut = KGlobal::locale()->formatDate(m_Date,false);
+        }
   }
   else
   {
@@ -1945,6 +1990,9 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bDate=false;
     m_bTime=false;
     m_strFormularOut = context.value()->toString( context );
+    if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
+        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate)
+        m_eFormatNumber=Number;
   }
 
   if ( m_style == ST_Select )
@@ -2128,7 +2176,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	// if ( m_pObscuringCell )
 	// bg = m_pObscuringCell->bgColor( m_pObscuringCell->column(),
 	// m_pObscuringCell->row() );
-        
+
 	if ( bg.isValid() )
 	    _painter.setBackgroundColor( bg );
 	else
@@ -3112,9 +3160,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
     m_bCalcDirtyFlag = true;
     m_bLayoutDirtyFlag= true;
     m_content = Formula;
-    if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
-        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate)
-        m_eFormatNumber=Number;
+
     checkFormat(true);
     if ( !m_pTable->isLoading() )
 	if ( !makeFormular() )
@@ -3346,8 +3392,47 @@ void KSpreadCell::checkValue()
         return;
         }
     QString tmp;
+    QString tmpCurrency=KGlobal::locale()->currencySymbol();
+    int pos=0;
+    bool ok=false;
+    double val=0;
+    if((pos=m_strText.find(tmpCurrency))!=-1)
+        {
+        if(pos==0) // example $ 154.545
+                {
+                tmp=m_strText.right(m_strText.length()-tmpCurrency.length());
+                tmp=tmp.simplifyWhiteSpace();
+                val=tmp.toDouble(&ok);
+                if(ok)
+                        {
+                        m_bValue=true;
+                        m_dValue=val;
+                        m_eFormatNumber=Money;
+                        m_strText=tmp.setNum(m_dValue);
+                        setFaktor(1.0);
+                        setPrecision(2);
+                        return;
+                        }
+                }
+        else if((unsigned int)pos==(m_strText.length()-tmpCurrency.length())) //example 125.55 F
+                {
+                tmp=m_strText.left(m_strText.length()-tmpCurrency.length());
+                tmp=tmp.simplifyWhiteSpace();
+                val=tmp.toDouble(&ok);
+                if(ok)
+                        {
+                        m_bValue=true;
+                        m_dValue=val;
+                        m_eFormatNumber=Money;
+                        m_strText=tmp.setNum(m_dValue);
+                        setFaktor(1.0);
+                        setPrecision(2);
+                        return;
+                        }
+                }
+        }
+
     QTime tmpTime;
-    int pos;
     QString stringPm=i18n("pm");
     QString stringAm=i18n("am");
     bool valid=false;
@@ -3446,45 +3531,6 @@ void KSpreadCell::checkFormat(bool _formular)
 
         }
 
-    if((pos=tmpText.find(KGlobal::locale()->currencySymbol()))!=-1)
-        {
-        if(pos==0) // example $ 154.545
-                {
-                tmp=tmpText.right(tmpText.length()-1);
-                tmp=tmp.simplifyWhiteSpace();
-                val=tmp.toDouble(&ok);
-                if(ok)
-                        {
-                        m_bValue=true;
-                        m_dValue=val;
-                        m_eFormatNumber=Money;
-                        m_strText=tmp.setNum(m_dValue);
-                        if(_formular)
-                                m_strText="="+m_strText;
-                        setFaktor(1.0);
-                        setPrecision(2);
-                        return;
-                        }
-                }
-        else if((unsigned int)pos==(tmpText.length()-1)) //example 125.55 F
-                {
-                tmp=tmpText.left(tmpText.length()-1);
-                tmp=tmp.simplifyWhiteSpace();
-                val=tmp.toDouble(&ok);
-                if(ok)
-                        {
-                        m_bValue=true;
-                        m_dValue=val;
-                        m_eFormatNumber=Money;
-                        m_strText=tmp.setNum(m_dValue);
-                        if(_formular)
-                                m_strText="="+m_strText;
-                        setFaktor(1.0);
-                        setPrecision(2);
-                        return;
-                        }
-                }
-        }
     val=tmpText.toDouble(&ok);
     if(ok)
         {

@@ -817,3 +817,12 @@ Torben corrected bug in save/load embedded component
 2000-07-22-Montel laurent <montell@club-internet.fr>
 ----------------------------------------------------
 -bug fix when I copy/paste cells (setPrecision)
+
+2000-07-24-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Now when a formula is a time or date, change format to time or date
+-Now kspread doesn't recognize money format into formula
+because in France for example when you write : =F6, kspread
+believes that is 6.00 F
+=>it's not a good idea.
+It's the same think for DM
