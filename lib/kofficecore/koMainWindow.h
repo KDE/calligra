@@ -177,7 +177,7 @@ public:
    * The view of @ref #document.
    */
   virtual KOffice::View_ptr view();
-  virtual CORBA::Boolean partClicked( OpenParts::Id _part_id, CORBA::Long _button );
+  virtual bool partClicked( OpenParts::Id _part_id, long int _button );
   
 protected:
   void unmarkPart();

@@ -32,7 +32,7 @@ public:
   KoPrintExt();
   
   // IDL
-  char* encodedMetaFile( CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale );
+  QByteArray encodedMetaFile( long int _width, long int _height, float _scale );
 
   // C++
   QPicture* picture();
@@ -62,9 +62,9 @@ protected:
    * }
    * </pre>
    */
-  virtual void draw( QPaintDevice*, CORBA::Long _width, CORBA::Long _height,
-		     CORBA::Float _scale ) = 0;
-  virtual void draw( CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale );
+  virtual void draw( QPaintDevice*, long int _width, long int _height,
+		     float _scale ) = 0;
+  virtual void draw( long int _width, long int _height, float _scale );
 
   QPicture* m_pPicture;
 };

@@ -38,18 +38,18 @@ QPicture* KoPrintExt::picture()
   return m_pPicture;
 }
 
-char* KoPrintExt::encodedMetaFile( CORBA::Long _width, CORBA::Long _height,
-				   CORBA::Float _scale )
+QByteArray KoPrintExt::encodedMetaFile( long int _width, long int _height,
+				   float _scale )
 {
   if ( m_pPicture == 0L )
     draw( _width, _height, _scale );
   
   int size = m_pPicture->size() * 4 / 3 + 10;
-  char *p = CORBA::string_alloc( size );
+  QByteArray p ( size );
 
   {
     // Create a 7bit ASCII string of the image
-    ostrstream str( p, size );
+    ostrstream str( p.data(), size );
     {      
       Base64OStream out( str );
       out.write( m_pPicture->data(), m_pPicture->size() );
@@ -64,7 +64,7 @@ char* KoPrintExt::encodedMetaFile( CORBA::Long _width, CORBA::Long _height,
   return p;
 }
 
-void KoPrintExt::draw( CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale )
+void KoPrintExt::draw( long int _width, long int _height, float _scale )
 {
   // Create picture
   QPicture *p = picture();

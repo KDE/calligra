@@ -49,14 +49,14 @@ void KoViewIf::setMainWindow( OpenParts::MainWindow_ptr _main )
   OPViewIf::setMainWindow( _main );
 }
 
-CORBA::Boolean KoViewIf::isMarked()
+bool KoViewIf::isMarked()
 {
   return m_bMarked;
 }
 
-void KoViewIf::setFocus( CORBA::Boolean mode )
+void KoViewIf::setFocus( bool mode )
 {
-  CORBA::Boolean old = m_bFocus;
+  bool old = m_bFocus;
   
   OPPartIf::setFocus( mode );
   
@@ -66,7 +66,7 @@ void KoViewIf::setFocus( CORBA::Boolean mode )
   SIGNAL_CALL2( "stateChanged", CORBA::Any::from_boolean( isMarked() ), CORBA::Any::from_boolean( hasFocus() ) );
 }
 
-void KoViewIf::setMarked( CORBA::Boolean _marked )
+void KoViewIf::setMarked( bool _marked )
 {
   if ( _marked == m_bMarked )
     return;
@@ -76,7 +76,7 @@ void KoViewIf::setMarked( CORBA::Boolean _marked )
   SIGNAL_CALL2( "stateChanged", CORBA::Any::from_boolean( isMarked() ), CORBA::Any::from_boolean( hasFocus() ) );
 }
 
-CORBA::Boolean KoViewIf::printDlg()
+bool KoViewIf::printDlg()
 {
   return false;
 }

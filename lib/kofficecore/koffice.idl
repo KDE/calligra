@@ -10,34 +10,34 @@ module KOffice
 
 	interface Document : OpenParts::Document
 	{
-		void setURL( in string url );
-		string url();
+		void setURL( in wstring url );
+		wstring url();
 
 		string mimeType();
                 
                 /**
                  * Load the document from a file
                  */
-		boolean loadFromURL( in string url );
+		boolean loadFromURL( in wstring url );
 
                 /**
                  * Save the document to a file
                  * @param format usually the native format, same as mimeType()
                  */
-		boolean saveToURL( in string url, in string format );
+		boolean saveToURL( in wstring url, in string format );
 
 		/**
 		 * This function must load all children
                  * @param id internal url, such as tar:/0
 		 */
-		boolean loadFromStore( in KOStore::Store store, in string id );
+		boolean loadFromStore( in KOStore::Store store, in wstring url );
 
 		/**
 		 * This function must save itself and all children
                  * @param format usually the native format, same as mimeType()
                  * @param path relative path in the store
 		 */
-		boolean saveToStore( in KOStore::Store store, in string format, in string path );
+		boolean saveToStore( in KOStore::Store store, in string format, in wstring path );
 		
 		/**
 		 * After creating a document you must either use one of the load functions
@@ -57,7 +57,8 @@ module KOffice
 	 */
 	interface Print
 	{
-		string encodedMetaFile( in long width, in long height, in float scale );
+                typedef sequence<char> bytearray; // maps to QByteArray
+		bytearray encodedMetaFile( in long width, in long height, in float scale );
 	};
 
 	interface View : OpenParts::View
@@ -110,7 +111,7 @@ module KOffice
 
 	interface Filter : KOM::Component
 	{
-		typedef sequence<octet> Data;
+		typedef sequence<char> Data;
 
 		exception FormatError
 		{

@@ -26,7 +26,6 @@
 
 #include <opApplication.h>
 #include <openparts_ui.h>
-#include <CORBA.h>
 #include <komBase.h>
 #include <komVar.h>
 

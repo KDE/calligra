@@ -38,6 +38,12 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef HAVE_PATHS_H
+#include <paths.h>
+#endif
+#ifndef _PATH_TMP
+#define _PATH_TMP "/tmp/"
+#endif
 
 KoFilterManager* KoFilterManager::s_pSelf = 0;
 
@@ -141,14 +147,14 @@ QString KoFilterManager::fileSelectorList( Direction direction, const char *_for
     return ret;
 }
 
-QString KoFilterManager::import( const char* _url, const char *_native_format )
+QString KoFilterManager::import( const QString & _url, const char *_native_format )
 {
     KURL url( _url );
 
     KMimeType *t = KMimeType::findByURL( url, 0, url.isLocalFile() );
-    QString mimeType;
+    QCString mimeType;
     if (t) {
-        kdebug( KDEBUG_INFO, 30003, "######### FOUND MimeType %s", t->mimeType().ascii() );
+        kdebug( KDEBUG_INFO, 30003, "######### FOUND MimeType %s", t->mimeType().data() );
         mimeType = t->mimeType();
     }
     else {
@@ -156,7 +162,7 @@ QString KoFilterManager::import( const char* _url, const char *_native_format )
         mimeType = "text/plain";
     }
 
-    if ( (strcmp( mimeType, _native_format ) == 0) )
+    if ( mimeType == _native_format )
     {
         kdebug( KDEBUG_INFO, 30003, "strcmp( mimeType, _native_format ) == 0 !! Returning without conversion. " );
         // TODO: fetch remote file!
@@ -196,14 +202,10 @@ QString KoFilterManager::import( const char* _url, const char *_native_format )
     }
 
     char *p = new char[ size ];
-    fread( p, 1, size, f );
+    int got = fread( p, 1, size, f );
     fclose( f );
 
-    data.length( size );
-    for( CORBA::ULong l = 0; l < size; l++ )
-        data[l] = (CORBA::Octet)p[l];
-
-    delete []p;
+    data.setRawData( p, got );
 
     KOffice::FilterFactory_var factory;
     factory = KOffice::FilterFactory::_narrow( vec[0].reference );
@@ -215,36 +217,32 @@ QString KoFilterManager::import( const char* _url, const char *_native_format )
 
     filter->destroy();
 
-    p = new char[ data.length() ];
-    for( CORBA::ULong l = 0; l < data.length(); l++ )
-        p[l] = (char)data[l];
-
-    // TODO: Better tmp name
-    f = fopen("/tmp/kofficefilter", "w" );
+    char tempfname[256];
+    int fildes; 
+    sprintf(tempfname, _PATH_TMP"/kofficefilterXXXXXX");
+    if ((fildes = mkstemp(tempfname)) == -1 )
+      return QString::null;
+    f = fdopen(fildes, "w" );
     if ( !f )
     {
-        delete []p;
-
         QString tmp;
         tmp.sprintf( i18n("Could not write file\n%s"), "/tmp/kofficefilter" );
         QMessageBox::critical( 0L, i18n("Error"), tmp, i18n("OK") );
         return QString();
     }
 
-    fwrite( p, 1, data.length(), f );
+    fwrite( data.data(), 1, data.size(), f );
     fclose( f );
 
-    delete []p;
-
-    return QString("/tmp/kofficefilter");
+    return tempfname;
 }
 
-void KoFilterManager::export_( const char *_tmpFile, const char* _url, const char *_native_format )
+void KoFilterManager::export_( const QString & _tmpFile, const QString & _url, const char *_native_format )
 {
     KURL url( _url );
 
     KMimeType *t = KMimeType::findByURL( url, 0, url.isLocalFile() );
-    QString mimeType;
+    QCString mimeType;
     if (t) {
         kdebug( KDEBUG_INFO, 30003, "######### FOUND MimeType %c", t->mimeType().ascii() );
         mimeType = t->mimeType();
@@ -288,16 +286,18 @@ void KoFilterManager::export_( const char *_tmpFile, const char* _url, const cha
     if ( !f )
     {
         QString tmp;
-        tmp.sprintf( i18n("Could not open file\n%s"), _tmpFile );
+        tmp.sprintf( i18n("Could not open file\n%s"), _tmpFile.ascii() );
         QMessageBox::critical( 0L, i18n("Error"), tmp, i18n("OK") );
         return;
     }
 
     char *p = new char[ size ];
-    fread( p, 1, size, f );
+    int got = fread( p, 1, size, f );
     fclose( f );
 
+    data.setRawData( p, got );
     
+    /*
     data.length( size );
     for( CORBA::ULong l = 0; l < size; l++ ) 
     {
@@ -307,8 +307,8 @@ void KoFilterManager::export_( const char *_tmpFile, const char* _url, const cha
         data[l] = (CORBA::Octet)p[ l ];
     }
 
-
     delete []p;
+    */
     
     KOffice::FilterFactory_var factory;
     factory = KOffice::FilterFactory::_narrow( vec[0].reference );
@@ -320,25 +320,22 @@ void KoFilterManager::export_( const char *_tmpFile, const char* _url, const cha
 
     filter->destroy();
 
-    p = new char[ data.length() ];
-    for( CORBA::ULong l = 0; l < data.length(); l++ )
-        p[l] = (char)data[l];
-
-    // TODO: Better tmp name
     f = fopen( _url, "w" );
     if ( !f )
     {
+        data.resetRawData( p, got );
         delete []p;
 
         QString tmp;
-        tmp.sprintf( i18n("Could not write file\n%s"), _url );
+        tmp.sprintf( i18n("Could not write file\n%s"), _url.ascii() );
         QMessageBox::critical( 0L, i18n("Error"), tmp, i18n("OK") );
         return;
     }
 
-    fwrite( p, 1, data.length(), f );
+    fwrite( data.data(), 1, data.size(), f );
     fclose( f );
 
+    data.resetRawData( p, got );
     delete []p;
 }
 

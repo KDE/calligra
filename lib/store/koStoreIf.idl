@@ -22,11 +22,11 @@
 
 module KOStore
 {
-	typedef sequence<octet> Data;
+	typedef sequence<char> Data;
 	enum Mode { Read, Write };
 	interface Store
 	{
-		boolean open( in string name, in string mimetype );
+		boolean open( in wstring name, in string mimetype );
 		void close();
 
 		Data read( in unsigned long max );

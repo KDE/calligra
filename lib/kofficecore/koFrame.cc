@@ -115,7 +115,7 @@ void KoFrame::detach()
   OPFrame::detach();
 }
 
-void KoFrame::viewChangedState( CORBA::Boolean is_marked, CORBA::Boolean has_focus )
+void KoFrame::viewChangedState( bool is_marked, bool has_focus )
 {
   assert( !CORBA::is_nil( m_vView ) );
   

@@ -71,8 +71,7 @@ KoDocumentChildPicture::~KoDocumentChildPicture()
 KoDocumentChild::KoDocumentChild( const QRect& _rect, KOffice::Document_ptr _doc )
 {
   m_rDoc = KOffice::Document::_duplicate( _doc );
-  CORBA::String_var m = m_rDoc->mimeType();
-  m_strMimeType = m.in();
+  m_strMimeType = m_rDoc->mimeType();
   m_geometry = _rect;
   m_pPicture = 0L;
   m_bHasPrintingExtension = false;
@@ -229,10 +228,10 @@ bool KoDocumentChild::loadDocument( KOStore::Store_ptr _store )
 
 bool KoDocumentChild::save( ostream& out )
 {
-  CORBA::String_var u = m_rDoc->url();
-  CORBA::String_var mime = m_rDoc->mimeType();
+  QString u = m_rDoc->url();
+  QString mime = m_rDoc->mimeType();
 
-  out << indent << "<OBJECT url=\"" << u << "\" mime=\"" << mime << "\">"
+  out << indent << "<OBJECT url=\"" << u.ascii() << "\" mime=\"" << mime.ascii() << "\">"
       << m_geometry << "</OBJECT>" << endl;
 
   return true;
@@ -240,11 +239,10 @@ bool KoDocumentChild::save( ostream& out )
 
 bool KoDocumentChild::isStoredExtern()
 {
-  CORBA::String_var url = m_rDoc->url();
-  QString s ( url.in() );
-  if ( s.isEmpty() )
+  QString url = m_rDoc->url();
+  if ( url.isEmpty() )
     return false;
-  if ( s.left( STORE_PROTOCOL_LENGTH ) == STORE_PROTOCOL )
+  if ( url.left( STORE_PROTOCOL_LENGTH ) == STORE_PROTOCOL )
     return false;
 
   return true;
@@ -298,7 +296,7 @@ QPicture* KoDocumentChild::draw( float _scale, bool _force_update )
   }
 
   kdebug( KDEBUG_INFO, 30003, "Fetching data" );
-  CORBA::String_var str( print->encodedMetaFile( m_geometry.width(), m_geometry.height(),
+  QString str( print->encodedMetaFile( m_geometry.width(), m_geometry.height(),
 						 _scale ) );
   kdebug( KDEBUG_INFO, 30003, "Fetched data" );
 
@@ -380,7 +378,7 @@ bool KoDocument::saveChildren( KOStore::Store_ptr /*_store*/, const char */*_pat
   return true;
 }
 
-CORBA::Boolean KoDocument::saveToURL( const char *_url, const char* _format )
+bool KoDocument::saveToURL( const QString &_url, const QCString &_format )
 {
   KURL u( _url );
   if ( u.isMalformed() )
@@ -446,7 +444,7 @@ CORBA::Boolean KoDocument::saveToURL( const char *_url, const char* _format )
   }
 }
 
-CORBA::Boolean KoDocument::saveToStore( KOStore::Store_ptr _store, const char *_format, const char *_path )
+bool KoDocument::saveToStore( KOStore::Store_ptr _store, const QCString & _format, const QString & _path )
 {
   kdebug( KDEBUG_INFO, 30003, "Saving document to store" );
 
@@ -457,7 +455,7 @@ CORBA::Boolean KoDocument::saveToStore( KOStore::Store_ptr _store, const char *_
   if ( !saveChildren( _store, _path ) )
     return false;
 
-  CORBA::String_var u = url();
+  QString u = url();
   if ( _store->open( u, _format ) )
   {
     ostorestream out( _store );
@@ -475,13 +473,13 @@ CORBA::Boolean KoDocument::saveToStore( KOStore::Store_ptr _store, const char *_
   return true;
 }
 
-CORBA::Boolean KoDocument::loadFromURL( const char *_url )
+bool KoDocument::loadFromURL( const QString & _url )
 {
-  kdebug( KDEBUG_INFO, 30003, "KoDocument::loadFromURL( %s )", _url );
+  kdebug( KDEBUG_INFO, 30003, "KoDocument::loadFromURL( %s )", _url.ascii() );
   KURL u( _url );
   if ( u.isMalformed() )
   {
-    kdebug( KDEBUG_INFO, 30003, "Malformed URL %s", _url );
+    kdebug( KDEBUG_INFO, 30003, "Malformed URL %s", _url.ascii() );
     return false;
   }
 
@@ -535,7 +533,7 @@ CORBA::Boolean KoDocument::loadFromURL( const char *_url )
       return false;
     }
 
-    if ( store->open( "root", 0L ) )
+    if ( store->open( "root", "" ) )
     {
       istorestream in( store );
       if ( !load( in, store ) )
@@ -556,9 +554,9 @@ CORBA::Boolean KoDocument::loadFromURL( const char *_url )
   }
 }
 
-CORBA::Boolean KoDocument::loadFromStore( KOStore::Store_ptr _store, const char *_url )
+bool KoDocument::loadFromStore( KOStore::Store_ptr _store, const QString & _url )
 {
-  if ( _store->open( _url, 0L ) )
+  if ( _store->open( _url, "" ) )
   {
     istorestream in( _store );
     if ( !load( in, _store ) )
@@ -603,19 +601,6 @@ bool KoDocument::load( istream& in, KOStore::Store_ptr _store )
   }
 
   return true;
-}
-
-void KoDocument::setURL( const char *_url )
-{
-  m_strURL = _url;
-}
-
-char* KoDocument::url()
-{
-  if ( m_strURL.isEmpty() )
-    return CORBA::string_dup( "" );
-
-  return CORBA::string_dup( m_strURL );
 }
 
 bool KoDocument::isStoredExtern()

@@ -21,21 +21,21 @@
 #define __koStore_impl_h__
 
 #include <fstream>
-#include <map>
-#include <string>
+#include <qstring.h>
+#include <qmap.h>
 
 #include "koStore.h"
 
 class KoBinaryStore : public KoStore
 {
 public:
-  KoBinaryStore( const char* _filename, KOStore::Mode _mode );
+  KoBinaryStore( const QString & _filename, KOStore::Mode _mode );
   virtual ~KoBinaryStore();
 
-  virtual CORBA::Boolean open( const char* name, const char *_mime_type );
+  virtual bool open( const QString & name, const QCString &_mime_type );
   virtual void close();
-  virtual KOStore::Data* read( CORBA::ULong max );
-  virtual CORBA::Boolean write( const KOStore::Data& _data );
+  virtual KOStore::Data read( unsigned long int max );
+  virtual bool write( const KOStore::Data& _data );
 
   bool write( const char* _data, unsigned long _len );
   long read( char *_buffer, unsigned long _len );
@@ -49,8 +49,8 @@ protected:
 
   struct Entry
   {
-    string mimetype;
-    string name;
+    QCString mimetype;
+    QCString name;
     unsigned int size;
     unsigned int pos;
     unsigned int data;
@@ -61,7 +61,7 @@ protected:
   void putULong( unsigned long x );
   unsigned long getULong();
 
-  map<string,Entry> m_map;
+  QMap<QString, Entry> m_map;
 
   ofstream m_out;
   ifstream m_in;

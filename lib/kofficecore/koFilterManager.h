@@ -31,7 +31,7 @@
  * @author Torben Weis <weis@kde.org>
  * @version $Id$
  */
-class KoFilterManager : public QObject
+class KoFilterManager // : public QObject
 {
 public:
     enum Direction { Import, Export };
@@ -60,8 +60,16 @@ public:
                               const char *_native_name,
                               bool allfiles ) const;
 
-    QString import( const char* _url, const char *_native_format );
-    void export_( const char *_tmpFile, const char* _url, const char *_native_format );
+    /**
+     * Load a file, applying a filter if necessary
+     * @return the file name, either _url or a /tmp file
+     */
+    QString import( const QString & _url, const char *_native_format );
+    /**
+     * Export a file using a filter - don't call this one it's automatically
+     * called by KoMainWindow::saveDocument()
+     */
+    void export_( const QString &_tmpFile, const QString &_url, const char *_native_format );
 
     /**
      * Returns a pointer to the only instance of the KoFilterManager.

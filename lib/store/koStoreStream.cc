@@ -34,16 +34,14 @@ int istorestreambuffer::underflow ()
     long anz = 8192;
     if ( !CORBA::is_nil( m_vStore ) )
     {
-        KOStore::Data* p;
+        KOStore::Data p; // QArray<unsigned char> 
         //kdebug( KDEBUG_INFO, 30002, "--->read" );
         p = m_vStore->read( pufferSize - 4 );
         //kdebug( KDEBUG_INFO, 30002, "<---" );
         if ( !p )
 	        return EOF;
-        anz = p->length();
-        for( int i = 0; i < anz; i++ )
-	        puffer[ 4 + i ] = (char)((*p)[i]);
-        delete p;
+        anz = p.size();
+        memcpy( puffer + 4 , p.data(), anz );
     }
     else
         anz = m_pStore->read( puffer + 4, pufferSize - 4 );
@@ -73,10 +71,9 @@ int ostorestreambuffer::emptybuffer()
     if ( !CORBA::is_nil( m_vStore ) )
     {
       KOStore::Data data;
-      data.length( anz );
-      for( int i = 0; i < anz; i++ )
-	    data[ i ] = m_buffer[ i ];
+      data.setRawData( m_buffer, anz ); // point to m_buffer
       m_vStore->write( data );
+      data.resetRawData( m_buffer, anz ); // forget about m_buffer
     }
     else
       m_pStore->write( m_buffer, anz );

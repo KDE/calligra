@@ -33,14 +33,14 @@ class KoTarStore : public KoStore
 {
 public:
   // C++
-  KoTarStore( const char* _filename, KOStore::Mode _mode );
+  KoTarStore( const QString & _filename, KOStore::Mode _mode );
   virtual ~KoTarStore();
 
   // IDL
-  virtual CORBA::Boolean open( const char* name, const char *_mime_type );
+  virtual bool open( const QString & name, const QCString &_mime_type );
   virtual void close();
-  virtual KOStore::Data* read( CORBA::ULong max );
-  virtual CORBA::Boolean write( const KOStore::Data& _data );
+  virtual KOStore::Data read( CORBA::ULong max );
+  virtual bool write( const KOStore::Data& _data );
 
   // C++
   virtual bool write( const char* _data, unsigned long _len );
@@ -54,7 +54,7 @@ protected:
    * @param _internalNaming name used internally : "root", "store:/0", ...
    * @return the name used in the file, more user-friendly ("maindoc.xml", "part0.xml", ...)
    */
-  static QString toExternalNaming( const QString _internalNaming );
+  static QString toExternalNaming( const QString & _internalNaming );
   
   KOStore::Mode m_mode;
 

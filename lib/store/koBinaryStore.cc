@@ -24,13 +24,13 @@
 
 #include "koBinaryStore.h"
 
-KoBinaryStore::KoBinaryStore( const char* _filename, KOStore::Mode _mode )
+KoBinaryStore::KoBinaryStore( const QString & _filename, KOStore::Mode _mode )
 {
   m_bIsOpen = false;
   m_mode = _mode;
   m_id = 0;
   
-  kdebug( KDEBUG_INFO, 30002, "KoBinaryStore Constructor filename = %s mode = %d", _filename, _mode);
+  kdebug( KDEBUG_INFO, 30002, "KoBinaryStore Constructor filename = %s mode = %d", _filename.data(), _mode);
 
   if ( _mode == KOStore::Write )
   {
@@ -49,7 +49,7 @@ KoBinaryStore::KoBinaryStore( const char* _filename, KOStore::Mode _mode )
       if ( readHeader( e ) )
       {  
 	m_in.seekg( e.size, ios::cur );
-	m_map[ e.name ] = e;
+	m_map.insert ( e.name, e );
       }
     }
   }
@@ -75,9 +75,9 @@ void KoBinaryStore::writeHeader( const KoBinaryStore::Entry& _entry )
   putULong( _entry.size );
   putULong( 0 ); // used to be "flags", unused.
   putULong( _entry.mimetype.size() );
-  m_out.write( _entry.mimetype.c_str(), _entry.mimetype.size() + 1 );
+  m_out.write( _entry.mimetype, _entry.mimetype.size() + 1 );
   putULong( _entry.name.size() );
-  m_out.write( _entry.name.c_str(), _entry.name.size() + 1 );
+  m_out.write( _entry.name, _entry.name.size() + 1 );
 }
 
 unsigned long KoBinaryStore::readHeader( KoBinaryStore::Entry& _entry )
@@ -146,32 +146,33 @@ void KoBinaryStore::list()
 }
 */
 
-CORBA::Boolean KoBinaryStore::open( const char* _name, const char *_mime_type )
+bool KoBinaryStore::open( const QString & _name, const QCString & _mime_type )
 {
-  kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: opening for %s, mimetype %s", _name, _mime_type);
+  kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: opening for %s, mimetype %s", _name.data(), _mime_type.data());
   if ( m_bIsOpen )
   {
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: File is already opened" );
     return false;
   }
     
-  if ( !_mime_type && m_mode != KOStore::Read )
+  if ( _mime_type.isNull() && m_mode != KOStore::Read )
   {
-    kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Mimetype omitted while opening entry %s for writing", _name );
+    kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Mimetype omitted while opening entry %s for writing", _name.data() );
     return false;
   }
   
-  if ( strlen( _name ) > 512 )
+  if ( _name.length() > 512 )
   {
-    kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Filename %s is too long", _name );
+    kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Filename %s is too long", _name.data() );
     return false;
   }
   
   if ( m_mode == KOStore::Write )
   {
-    if ( m_map.find( _name ) != m_map.end() )
+    QMapIterator<QString, Entry> it =  m_map.find( _name );
+    if ( it == m_map.end() )
     {
-      kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Duplicate filename %s", _name );
+      kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Duplicate filename %s", _name.data() );
       return false;
     }
     
@@ -185,23 +186,23 @@ CORBA::Boolean KoBinaryStore::open( const char* _name, const char *_mime_type )
   }
   else if ( m_mode == KOStore::Read )
   { 
-    kdebug( KDEBUG_INFO, 30002, "Opening for reading %s", _name );
+    kdebug( KDEBUG_INFO, 30002, "Opening for reading %s", _name.data() );
     
-    map<string,Entry>::iterator it = m_map.find( _name );
+    QMapIterator<QString, Entry> it =  m_map.find( _name );
     if ( it == m_map.end() )
     {
-      kdebug( KDEBUG_INFO, 30002, "Unknown filename %s", _name );
+      kdebug( KDEBUG_INFO, 30002, "Unknown filename %s", _name.data() );
       return false;
     }
-    if ( _mime_type && strlen( _mime_type ) != 0 && it->second.mimetype != _mime_type )
+    if ( !_mime_type.isEmpty()  && (*it).mimetype != _mime_type )
     {
-      kdebug( KDEBUG_INFO, 30002, "Wrong mime_type in file %s", _name );
-      kdebug( KDEBUG_INFO, 30002, "Expected %s but got %s", _mime_type, it->second.mimetype.c_str() );
+      kdebug( KDEBUG_INFO, 30002, "Wrong mime_type in file %s", _name.data() );
+      kdebug( KDEBUG_INFO, 30002, "Expected %s but got %s", _mime_type.data(), (*it).mimetype.data() );
       return false;
     }
-    m_in.seekg( it->second.data );
+    m_in.seekg( (*it).data );
     m_readBytes = 0;
-    m_current = it->second;
+    m_current = (*it);
     m_in.clear();
   }
   else
@@ -235,27 +236,27 @@ void KoBinaryStore::close()
   m_bIsOpen = false;
 }
 
-KOStore::Data* KoBinaryStore::read( CORBA::ULong max )
+KOStore::Data KoBinaryStore::read( unsigned long int max )
 {
-  KOStore::Data* data = new KOStore::Data;
+  KOStore::Data data;
 
   if ( !m_bIsOpen )
   {
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: You must open before reading" );
-    data->length( 0 );
+    data.resize( 0 );
     return data;
   }
   if ( m_mode != KOStore::Read )
   {
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Can not read from store that is opened for writing" );
-    data->length( 0 );
+    data.resize( 0 );
     return data;
   }
   
   if ( m_in.eof() )
   {
     kdebug( KDEBUG_INFO, 30002, "EOF" );
-    data->length( 0 );
+    data.resize( 0 );
     return data;
   }
   
@@ -264,25 +265,22 @@ KOStore::Data* KoBinaryStore::read( CORBA::ULong max )
   if ( max == 0 )
   {
     kdebug( KDEBUG_INFO, 30002, "EOF 2" );
-    data->length( 0 );
+    data.resize( 0 );
     return data;
   }
   
-  unsigned char *p = new unsigned char[ max ];
+  char *p = new char[ max ];
   m_in.read( p, max );
   unsigned int len = m_in.gcount();
   if ( len != max )
   {
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Error while reading" );
-    data->length( 0 );
+    data.resize( 0 );
     return data;
   }
   
   m_readBytes += max;
-  data->length( max );
-  for( unsigned int i = 0; i < max; i++ )
-    (*data)[i] = p[i];
-  delete [] p;
+  data.setRawData( p, max );
 
   return data;
 }
@@ -321,9 +319,9 @@ long KoBinaryStore::read( char *_buffer, unsigned long _len )
   return len;
 }
 
-CORBA::Boolean KoBinaryStore::write( const KOStore::Data& data )
+bool KoBinaryStore::write( const KOStore::Data& data )
 {
-  unsigned int len = data.length();
+  unsigned int len = data.size();
   if (len == 0)
     return true;
 
@@ -338,14 +336,8 @@ CORBA::Boolean KoBinaryStore::write( const KOStore::Data& data )
     return 0L;
   }
 
-  unsigned char *p = new unsigned char[ len ];
-  for( unsigned int i = 0; i < len; i++ )
-    p[i] = data[i];
-    
-  m_out.write( p, len );
+  m_out.write( data.data(), len );
   m_current.size += len;
-  
-  delete [] p;
 
   if ( bad() )
   {

@@ -29,8 +29,6 @@ class KoDocumentChildPicture;
 #include <komlParser.h>
 #include <koStoreIf.h>
 
-#include <vector>
-
 #include <qrect.h>
 #include <qpicture.h>
 #include <qstring.h>
@@ -47,19 +45,20 @@ public:
   virtual void cleanUp();
 
   // IDL
-  virtual CORBA::Boolean isModified() { return m_bModified; }
+  virtual bool isModified() { return m_bModified; }
   
   // IDL
-  virtual void setURL( const char *_url );
-  virtual char* url();
+  virtual void setURL( const QString & _url ) { m_strURL = _url; }
+
+  virtual QString url() { return m_strURL; }
   
   // IDL
-  virtual CORBA::Boolean loadFromURL( const char *_url );
-  virtual CORBA::Boolean loadFromStore( KOStore::Store_ptr _store, const char *_url );
+  virtual bool loadFromURL( const QString & _url );
+  virtual bool loadFromStore( KOStore::Store_ptr _store, const QString & _url );
 
   // IDL
-  virtual CORBA::Boolean saveToURL( const char *_url, const char *_format );
-  virtual CORBA::Boolean saveToStore( KOStore::Store_ptr _store, const char *_format, const char *_path );
+  virtual bool saveToURL( const QString & _url, const QCString & _format );
+  virtual bool saveToStore( KOStore::Store_ptr _store, const QCString & _format, const QString & _path );
 
   // C++
   virtual void setModified( bool _mod = true ) { m_bModified = _mod; }

@@ -26,13 +26,13 @@
 #include <kdebug.h>
 #include <ktar.h>
 
-KoTarStore::KoTarStore( const char* _filename, KOStore::Mode _mode )
+KoTarStore::KoTarStore( const QString & _filename, KOStore::Mode _mode )
 {
   m_bIsOpen = false;
   m_mode = _mode;
   m_stream = 0L;
   
-  kdebug( KDEBUG_INFO, 30002, "KoTarStore Constructor filename = %s mode = %d", _filename, _mode);
+  kdebug( KDEBUG_INFO, 30002, "KoTarStore Constructor filename = %s mode = %d", _filename.data(), _mode);
 
   m_pTar = new KTar( _filename );
 
@@ -48,7 +48,7 @@ KoTarStore::~KoTarStore()
     delete m_stream;
 }
 
-QString KoTarStore::toExternalNaming( const QString _internalNaming )
+QString KoTarStore::toExternalNaming( const QString & _internalNaming )
 {
   // "root" is the main document, let's save it as "maindoc.xml"
   if (_internalNaming == "root") 
@@ -65,13 +65,13 @@ QString KoTarStore::toExternalNaming( const QString _internalNaming )
     QString result( "" );
     int pos;
     while ( ( pos = intern.find( '/' ) ) != -1 ) {
-      if ( intern.at(0).isDigit() )
+      if ( QChar(intern.at(0)).isDigit() )
         result += "part";
       result += intern.left( pos + 1 ); // copy numbers (or "pictures") + "/"
       intern = intern.mid( pos + 1 ); // remove the dir we just processed
     }
     // now process the filename
-    if ( intern.at(0).isDigit() )
+    if ( QChar(intern.at(0)).isDigit() )
       result = result + "part" + intern + ".xml";
     else
       result += intern;
@@ -82,7 +82,7 @@ QString KoTarStore::toExternalNaming( const QString _internalNaming )
   return _internalNaming;
 }
 
-CORBA::Boolean KoTarStore::open( const char* _name, const char * /*_mime_type*/ )
+bool KoTarStore::open( const QString & _name, const QCString& /*_mime_type*/ )
 {
   m_sName = toExternalNaming( _name );
 
@@ -165,27 +165,27 @@ void KoTarStore::close()
   m_bIsOpen = false;
 }
 
-KOStore::Data* KoTarStore::read( CORBA::ULong max )
+KOStore::Data KoTarStore::read( unsigned long int max )
 {
-  KOStore::Data* data = new KOStore::Data;
+  KOStore::Data data; // Data is a QArray<char> 
 
   if ( !m_bIsOpen )
   {
     kdebug( KDEBUG_INFO, 30002, "KoTarStore: You must open before reading" );
-    data->length( 0 );
+    data.resize( 0 );
     return data;
   }
   if ( m_mode != KOStore::Read )
   {
     kdebug( KDEBUG_INFO, 30002, "KoTarStore: Can not read from store that is opened for writing" );
-    data->length( 0 );
+    data.resize( 0 );
     return data;
   }
   
   if ( m_stream->atEnd() )
   {
     kdebug( KDEBUG_INFO, 30002, "EOF" );
-    data->length( 0 );
+    data.resize( 0 );
     return data;
   }
   
@@ -194,7 +194,7 @@ KOStore::Data* KoTarStore::read( CORBA::ULong max )
   if ( max == 0 )
   {
     kdebug( KDEBUG_INFO, 30002, "EOF 2" );
-    data->length( 0 );
+    data.resize( 0 );
     return data;
   }
   
@@ -202,10 +202,13 @@ KOStore::Data* KoTarStore::read( CORBA::ULong max )
   m_stream->readRawBytes( p, max );
   
   m_readBytes += max;
+  data.setRawData( p, max );
+  /*
   data->length( max );
   for( unsigned int i = 0; i < max; i++ )
     (*data)[i] = p[i];
-  delete [] p;
+  */
+  //  delete [] p;  setRawData is a shallow copy
 
   return data;
 }
@@ -238,19 +241,11 @@ long KoTarStore::read( char *_buffer, unsigned long _len )
   return _len;
 }
 
-CORBA::Boolean KoTarStore::write( const KOStore::Data& data )
+bool KoTarStore::write( const KOStore::Data& data )
 {
-  unsigned int len = data.length();
-  if ( len == 0L ) return true;
-  unsigned char *p = new unsigned char[ len ];
-  for( unsigned int i = 0; i < len; i++ )
-    p[i] = data[i];
-    
-  bool ret = write( (const char*)p, len ); // see below
-  
-  delete [] p;
-
-  return ret;
+  unsigned int len = data.size();
+  if ( len == 0L ) return true; // nothing to do
+  return write( data.data(), len ); // see below
 }
 
 bool KoTarStore::write( const char* _data, unsigned long _len )

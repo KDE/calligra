@@ -37,15 +37,15 @@ public:
   virtual void setMode( KOffice::View::Mode _mode );
 
   // IDL
-  virtual CORBA::Boolean isMarked();
-  virtual void setMarked( CORBA::Boolean _marked );
+  virtual bool isMarked();
+  virtual void setMarked( bool _marked );
 
   // IDL
-  virtual CORBA::Boolean printDlg();
+  virtual bool printDlg();
   virtual void setMainWindow( OpenParts::MainWindow_ptr _main );
 
   // IDL
-  void setFocus( CORBA::Boolean _focus );
+  void setFocus( bool _focus );
 
   // IDL
   virtual CORBA::ULong leftGUISize() { return 0; }
@@ -54,7 +54,7 @@ public:
   virtual CORBA::ULong bottomGUISize() { return 0; }
 
 protected:
-  CORBA::Boolean m_bMarked;
+  bool m_bMarked;
 
   KOffice::View::Mode m_eMode;
   KOffice::MainWindow_var m_vKoMainWindow;

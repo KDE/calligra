@@ -24,7 +24,7 @@ module Chart
 	long left;
 	long bottom;
 	long right;
-	string table;
+	wstring table;
  };
 
  interface SimpleChart

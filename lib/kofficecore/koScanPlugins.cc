@@ -17,6 +17,14 @@
     Boston, MA 02111-1307, USA.
 */
 
+#include <kactivator.h> // needs to be first in order to include POA (HACK)
+#include <ksimpleconfig.h>
+#include <klocale.h>
+#include <kapp.h>
+#include <kded_instance.h>
+#include <ktrader.h>
+#include <kstddirs.h>
+
 #include "koScanPlugins.h"
 #include "koView.h"
 
@@ -30,13 +38,6 @@
 #include <sys/stat.h>
 #include <assert.h>
 
-#include <ksimpleconfig.h>
-#include <klocale.h>
-#include <kapp.h>
-#include <kded_instance.h>
-#include <ktrader.h>
-#include <kactivator.h>
-#include <kstddirs.h>
 
 /**
  * Port to KActivator/KTrader (kded) by Simon Hausmann
@@ -136,8 +137,7 @@ KOM::Plugin_ptr KoPluginProxy::ref()
   KOM::PluginFactory_var factory = KOM::PluginFactory::_narrow( obj );
   if ( CORBA::is_nil( factory ) )
   {
-    QString tmp;
-    tmp.sprintf( i18n("%s is not a plugin").ascii(), m_pEntry->name().ascii() );
+    QString tmp( i18n("%1 is not a plugin").arg( m_pEntry->name() ) );
     QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
     return 0L;
   }
@@ -148,8 +148,7 @@ KOM::Plugin_ptr KoPluginProxy::ref()
   m_vPlugin = factory->create( comp );
   if ( CORBA::is_nil( m_vPlugin ) )
   {
-    QString tmp;
-    tmp.sprintf( i18n("Could not create plugin of type %s").ascii(), m_pEntry->name().ascii() );
+    QString tmp ( i18n("Could not create plugin of type %1").arg( m_pEntry->name() ) );
     QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
     return 0L;
   }
@@ -187,7 +186,7 @@ KoPluginManager::KoPluginManager()
       repoId.truncate( tagPos );
     }
 
-    CORBA::Object_var obj = activator->activateService( (*it)->name(), repoId, tag );
+    CORBA::Object_var obj = activator->activateService( (*it)->name().ascii(), repoId.ascii(), tag.ascii() );
 
     KoPluginEntry *plugin = new KoPluginEntry( (*it)->name(), comment, icon,
                                                miniIcon, true, obj );
@@ -263,7 +262,7 @@ void KoPluginManager::fillToolBar( OpenPartsUI::ToolBarFactory_ptr _factory )
       {
 	QString tmp = locate("toolbar", it.current()->entry()->m_strMiniIcon);
 	OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
-	CORBA::WString_var toolTip = Q2C( it.current()->entry()->m_strName );
+	QString toolTip = it.current()->entry()->m_strName;
 	(void)m_vToolBar->insertButton2( pix, 1, SIGNAL( clicked() ), it.current(),
 					 "callback", true, toolTip, -1 );
 

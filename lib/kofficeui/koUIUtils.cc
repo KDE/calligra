@@ -132,7 +132,7 @@ OpenPartsUI::Pixmap* KOUIUtils::colorPixmap( QColor c, PType _type )
     }
  
   OpenPartsUI::Pixmap* p = new OpenPartsUI::Pixmap;
-  p->data = CORBA::string_dup( pix );
+  p->data = pix;
   p->onlyFilename = false;
   return p;
 }

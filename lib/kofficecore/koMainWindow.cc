@@ -240,14 +240,13 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
     KOffice::Document_ptr pDoc = document();
     assert( pDoc );
 
-    CORBA::String_var url = pDoc->url();
-    const char* _url = url.in();
-    QString file;
+    QString url = pDoc->url();
     QString outputMimeType ( _native_format );
 
-    if ( _url == 0L || *_url == 0 ) {
+    if ( url.isEmpty() ) {
 	QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
 	   _native_format, _native_pattern, _native_name, TRUE );
+        QString file;
 
         bool bOk = true;
         do { 
@@ -265,11 +264,11 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
 	KMimeType *t = KMimeType::findByURL( KURL( file ), 0, TRUE );
         outputMimeType = t->mimeType();
 
-        _url = file.latin1(); // careful, shallow copy
-        pDoc->setURL( _url );
+        url = file;
+        pDoc->setURL( url );
     }
 
-    KURL u( _url );
+    KURL u( url );
     if ( !u.isLocalFile() ) return false; // only local files
     if ( QFile::exists( u.path() ) ) { // this file exists => backup
         // TODO : make this configurable ?
@@ -288,7 +287,7 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
             return false;
         ::close( fildes );
         if ( pDoc->saveToURL( tempfname, _native_format ) ) {
-            KoFilterManager::self()->export_( tempfname, file, _native_format );
+            KoFilterManager::self()->export_( tempfname, url, _native_format );
             unlink( tempfname );
             return true;
         } else
@@ -297,9 +296,9 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
     }
 
     // Native format => normal save
-    if ( !pDoc->saveToURL( _url, _native_format ) ) {
+    if ( !pDoc->saveToURL( url, _native_format ) ) {
         QString tmp;
-        tmp.sprintf( i18n( "Could not save\n%s" ), _url );
+        tmp.sprintf( i18n( "Could not save\n%s" ), url.ascii() );
         KMessageBox::error( this, i18n( "IO Error" ) );
         return false;
     }
@@ -371,7 +370,7 @@ KOffice::View_ptr KoMainWindowIf::view()
   return m_pKoMainWindow->view();
 }
 
-CORBA::Boolean KoMainWindowIf::partClicked( OpenParts::Id _part_id, CORBA::Long /* _button */ )
+bool KoMainWindowIf::partClicked( OpenParts::Id _part_id, long int /* _button */ )
 {
   assert( _part_id != 0 );
 

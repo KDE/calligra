@@ -17,6 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <kactivator.h> // needs to be first in order to include POA (HACK)
+
 #include "koQueryTypes.h"
 #include "koffice.h"
 
@@ -30,7 +32,6 @@
 #include <kstddirs.h>
 #include <kded_instance.h>
 #include <ktrader.h>
-#include <kactivator.h>
 
 #include <kdebug.h>
 
@@ -209,7 +210,7 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( const char *_constr, int /*_
     }
 
     // We need a virtual object reference
-    d.reference = activator->activateService( (*it)->name(), repoId, tag );
+    d.reference = activator->activateService( (*it)->name().ascii(), repoId.ascii(), tag.ascii() );
 
     // Append converted offer
     lst.append( d );
@@ -284,7 +285,7 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_coun
     }
 
     // We need a virtual object reference
-    f.reference = activator->activateService( (*it)->name(), repoId, tag );
+    f.reference = activator->activateService( (*it)->name().ascii(), repoId.ascii(), tag.ascii() );
     kdebug(0, 30003, "Created %p\n",f.reference);
 
     // Append converted offer

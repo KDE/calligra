@@ -107,7 +107,7 @@ public:
   ~KoFrame();
 
   // IDL
-  virtual void viewChangedState( CORBA::Boolean is_marked, CORBA::Boolean has_focus );
+  virtual void viewChangedState( bool is_marked, bool has_focus );
 
   // IDL
   virtual KOffice::View_ptr view();

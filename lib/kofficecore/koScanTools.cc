@@ -17,6 +17,14 @@
     Boston, MA 02111-1307, USA.
 */
 
+
+#include <kactivator.h> // needs to be first in order to include POA (HACK)
+#include <ksimpleconfig.h>
+#include <klocale.h>
+#include <kapp.h>
+#include <ktrader.h>
+#include <kded_instance.h>
+
 #include "koScanTools.h"
 
 #include <stdlib.h>
@@ -25,19 +33,14 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-#include <ksimpleconfig.h>
-#include <klocale.h>
-#include <kapp.h>
-#include <ktrader.h>
-#include <kactivator.h>
-#include <kded_instance.h>
-
 /**
  * Port to KTrader/KActivator (kded) by Simon Hausmann
  * (c) 1999 Simon Hausmann <hausmann@kde.org>
  */
 
-//TODO: move all this stuff into koQueryTrader
+//TODO: move all this stuff into koQueryTrader (Simon)
+// What about ScanPlugins then ? We have tools and plugins, so 
+// I would say either both or none... (David)
 
 QList<KoToolEntry> KoToolEntry::findTools( const QString &_mime_type )
 {
@@ -59,9 +62,9 @@ QList<KoToolEntry> KoToolEntry::findTools( const QString &_mime_type )
   {
     cerr << "tool offer : " << (*it)->name().ascii() << endl;
 
-    QString name = (*it)->name();
+    QCString name = (*it)->name().ascii(); // should be QCString I think
     QString comment = (*it)->comment();
-    QStringList mimeTypes = (*it)->serviceTypes();
+    QStringList mimeTypes = (*it)->serviceTypes(); // should be QCString I think
     QStringList commands = (*it)->property( "Commands" )->stringListValue();
     QStringList commandsI18N = (*it)->property( "CommandsI18N" )->stringListValue();
 
@@ -69,8 +72,8 @@ QList<KoToolEntry> KoToolEntry::findTools( const QString &_mime_type )
       continue;
 
     //strip off tag
-    QString repoId = *( (*it)->repoIds().begin() );
-    QString tag = (*it)->name();
+    QCString repoId = (*( (*it)->repoIds().begin() )).ascii(); // should be QValueList<QCString> I think
+    QCString tag = (*it)->name().ascii();
     int tagPos = repoId.findRev( "#" );
     if ( tagPos != -1 )
     {
