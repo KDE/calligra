@@ -78,6 +78,10 @@ module KPresenter
   interface KPresenterDocument : OPParts::Document
     {
     };
+
+  interface Factory : OPParts::Factory
+    {
+    };
 };
 
 #endif
