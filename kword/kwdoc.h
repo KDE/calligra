@@ -299,8 +299,8 @@ public:
     void updateAllFrames();
 
     // The grid is in _pt_ now
-    double gridX() { return m_gridX; }
-    double gridY() { return m_gridY; }
+    double gridX()const { return m_gridX; }
+    double gridY()const { return m_gridY; }
     void setGridX(double _gridx);
     void setGridY(double _gridy) { m_gridY = _gridy; }
 
