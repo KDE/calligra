@@ -1,8 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
-#include "kpobject.h"
-
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -414,11 +412,6 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPrese
         ow = r.width();
         oh = r.height();
     }
-#if 0
-    kdDebug() << "KPObject::getCursor"<<DEBUGRECT(r) << endl;
-    kdDebug() << "KPObject::getCursor :"<<_point.x() <<" :"<<_point.y() << endl;
-    kdDebug() << "KPObject::getCursor r.contains( _point ) "<<r.contains( _point ) << endl;
-#endif
     if ( !r.contains( _point ) )
       return Qt::arrowCursor;
 
@@ -552,7 +545,7 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler )
 
     KoRect r = rotateRectObject(_zoomHandler );
     int x = _zoomHandler->zoomItX( r.left() - orig.x() );
-    int y = _zoomHandler->zoomItX( r.top() - orig.y() );
+    int y = _zoomHandler->zoomItY( r.top() - orig.y() );
 
     _painter->fillRect( x, y,  _zoomHandler->zoomItX(6),
 			_zoomHandler->zoomItY(6), Qt::black );

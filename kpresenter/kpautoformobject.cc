@@ -185,9 +185,15 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
 			      bool drawingShadow, bool drawContour )
 {
     unsigned int pw = 0, pwOrig = 0, px, py;
-    QPen pen2(pen);
-    pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
+    QPen pen2;
     QSize size( _zoomHandler->zoomSize( ext ) );
+
+    if ( drawContour )
+	pen2 = QPen( Qt::black, 1, Qt::DotLine );
+    else {
+	pen2 = pen;
+	pen2.setWidth(_zoomHandler->zoomItX(pen.width()));
+   }
 
     _painter->setPen( pen2 );
     pwOrig = pen2.width() + 3;
@@ -215,7 +221,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
     {
         if ( pntArray2.at( 0 ) == pntArray2.at( pntArray2.size() - 1 ) )
         {
-            if ( drawingShadow || fillType == FT_BRUSH || !gradient )
+            if ( drawContour || (drawingShadow || fillType == FT_BRUSH || !gradient) )
                 _painter->drawPolygon( pntArray2 );
             else
             {
