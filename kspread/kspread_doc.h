@@ -267,6 +267,9 @@ public:
 
   void changeAreaTableName(const QString & oldName,const QString &tableName);
 
+
+  QRect getRectArea(const QString &  _tableName);
+
   /**
   * hide/show scrollbar
   */

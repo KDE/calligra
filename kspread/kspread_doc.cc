@@ -934,6 +934,20 @@ void KSpreadDoc::changeAreaTableName(const QString & oldName,const QString & tab
         }
 }
 
+QRect KSpreadDoc::getRectArea(const QString  &_tableName)
+{
+  QValueList<Reference>::Iterator it2;
+  for ( it2 = m_refs.begin(); it2 != m_refs.end(); ++it2 )
+        {
+        if((*it2).ref_name==_tableName)
+                {
+                return (*it2).rect;
+                }
+        }
+  QRect tmp(-1,-1,-1,-1);
+  return tmp;
+}
+
 QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
 {
    QDomElement element = doc.createElement( "areaname" );
