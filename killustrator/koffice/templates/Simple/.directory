@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Simple
+Name[ca]=Senzill
 Name[cs]=Jednoduchý
 Name[de]=Einfach
 Name[eo]=Simpla
@@ -14,5 +15,6 @@ Name[no_NY]=Enkel
 Name[pt]=Simples
 Name[pt_BR]=Simples
 Name[sl]=Preprosto
+Name[sr]=Jednostavan
 Name[sv]=Enkel
 X-KDE-DefaultTab=true

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Screenpresentations
+Name[ca]=Presentacions de pantalla
 Name[cs]=Presentace na obrazovce
 Name[da]=Skærmpræsentationer
 Name[de]=Bildschirmpräsentationen
@@ -10,4 +11,5 @@ Name[ja]=スクリーンプレゼンテーション
 Name[nl]=Schermpresentaties
 Name[no_NY]=Skjermpresentasjonar
 Name[sl]=Zaslonska predstavitev
+Name[sr]=Prezentacije na ekranu
 Name[sv]=Skärmpresentationer
