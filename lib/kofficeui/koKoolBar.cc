@@ -233,18 +233,7 @@ bool KoKoolBarBox::needsScrolling() const
   if ( m_pGroup == 0L )
     return false;
 
-  int y = 0;
-
-  QIntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
-  for ( ; it.current(); ++it )
-    y += it.current()->height();
-
-  if ( y > height() )
-    return true;
-
-  /** TODO **/
-  // ??? What's TODO ? :-)  (David)
-  return false;
+  return ( maxHeight() > height() );
 }
 
 void KoKoolBarBox::resizeEvent( QResizeEvent * )
@@ -310,9 +299,7 @@ int KoKoolBarBox::maxHeight() const
 
 bool KoKoolBarBox::isAtTop() const
 {
-  if ( m_iYIcon == 0 )
-    return true;
-  return false;
+  return ( m_iYIcon == 0 );
 }
 
 bool KoKoolBarBox::isAtBottom() const
@@ -365,6 +352,9 @@ void KoKoolBarBox::scrollDown()
     y += it.current()->height();
     i++;
   }
+  int h = maxHeight();
+  if ( y + height() > h ) // Don't go after last item
+    y = h - height();
 
   int old = m_iYOffset;
   m_iYOffset = y;
@@ -395,29 +385,29 @@ void KoKoolBarBox::paintEvent( QPaintEvent * )
   QPainter painter;
   painter.begin( this );
 
-  static QColorGroup g2( black, white, white, darkGray, lightGray, white, black );
-  static QBrush fill2( darkGray );
-  qDrawShadePanel( &painter, 0, 0, width(), height(), g2, true, 1, &fill2 );
-
   if ( m_pGroup == 0L )
   {
+    qDrawShadePanel( &painter, 0, 0, width(), height(), colorGroup(), true );
     painter.end();
     return;
   }
+
+  qDrawShadePanel( &painter, 0, -m_iYOffset, width(), maxHeight(), colorGroup(),true );
 
   int y = -m_iYOffset;
 
   QIntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
   for ( ; it.current(); ++it )
   {
-    if ( y + it.current()->height() >= 0 && y <= height() )
-      painter.drawPixmap( ( width() - it.current()->pixmap().width() ) / 2, y, it.current()->pixmap() );
-    if ( it.current()->text() != 0L && it.current()->text()[0] != 0 )
+    if ( y + it.current()->height() >= 0 && y <= height() ) // visible ?
     {
-      int y2 = y;
-      y2 += it.current()->pixmap().height() + 2;
-      painter.drawText( ( width() - painter.fontMetrics().width( it.current()->text() ) ) / 2,
-			y2 + painter.fontMetrics().ascent(), it.current()->text() );
+      painter.drawPixmap( ( width() - it.current()->pixmap().width() ) / 2, y, it.current()->pixmap() );
+      if ( !it.current()->text().isEmpty() )
+      {
+        int y2 = y + it.current()->pixmap().height() + 2;
+        painter.drawText( ( width() - painter.fontMetrics().width( it.current()->text() ) ) / 2,
+			    y2 + painter.fontMetrics().ascent(), it.current()->text() );
+      }
     }
 
     y += it.current()->height();
