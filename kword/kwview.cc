@@ -141,14 +141,6 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     initConfig();
     gui->canvasWidget()->updateCurrentFormat();
     setFocusProxy( gui->canvasWidget() );
-
-    statusBar()->insertItem( QString(" ")+i18n("Page %1/%2").arg(1).arg(1)+' ', statusPage );
-    // Workaround for bug in KDE-2.1[.1]'s KStatusBar (show() not called in insertItem)
-    QObjectList *l = statusBar()->queryList( "QLabel" );
-    QObjectListIt it( *l );
-    for ( ; it.current() ; ++it )
-        static_cast<QLabel *>(it.current())->show();
-    delete l;
 }
 
 /*================================================================*/
@@ -208,12 +200,22 @@ void KWView::initGui()
 
     /*
       The XML file does this for us now
-    QWidget *tb = 0;
-    if ( factory() )
+      QWidget *tb = 0;
+      if ( factory() )
       tb = factory()->container( "frame_toolbar", this );
-    if ( tb )
+      if ( tb )
       tb->hide();
     */
+
+    statusBar()->removeItem(statusPage);
+    statusBar()->insertItem( QString(" ")+i18n("Page %1/%2").arg(1).arg(1)+' ', statusPage );
+    // Workaround for bug in KDE-2.1[.1]'s KStatusBar (show() not called in insertItem)
+    QObjectList *l = statusBar()->queryList( "QLabel" );
+    QObjectListIt it( *l );
+    for ( ; it.current() ; ++it )
+        static_cast<QLabel *>(it.current())->show();
+    delete l;
+    updatePageInfo();
 }
 
 /*================================================================*/
@@ -2487,7 +2489,9 @@ void KWView::dropEvent( QDropEvent *e )
 void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
     if ( ev->activated() )
+    {
         initGui();
+    }
 
     KoView::guiActivateEvent( ev );
 }
