@@ -655,7 +655,7 @@ void KPTPertRelationItem::printDebug( int /*info*/ )
 #endif
 
 ////////////////////   KPTItemBase   //////////////////////////
-int KPTItemBase::kdLinkType(int relationType) {
+KDGanttViewTaskLink::LinkType KPTItemBase::kdLinkType(int relationType) {
     switch (relationType) {
         case FINISH_START:
             return KDGanttViewTaskLink::FinishStart;
@@ -705,8 +705,7 @@ void KPTGanttViewSummaryItem::insertRelations(KPTGanttView *view)
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
-            link->setLinkType(kdLinkType(it.current()->timingRelation()));
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->timingRelation()));
             //TODO i18n
             QString t = QString("From: %1").arg(this->listViewText(0));
             t += QString("\nTo: %1").arg(child->listViewText(0));
@@ -787,8 +786,7 @@ void KPTGanttViewTaskItem::insertRelations(KPTGanttView *view)
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
-            link->setLinkType(kdLinkType(it.current()->timingRelation()));
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->timingRelation()));
             //TODO i18n
             QString t = QString("From: %1").arg(this->listViewText(0));
             t += QString("\nTo: %1").arg(child->listViewText(0));
@@ -870,8 +868,7 @@ void KPTGanttViewEventItem::insertRelations(KPTGanttView *view)
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
-            link->setLinkType(kdLinkType(it.current()->timingRelation()));
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->timingRelation()));
             //TODO i18n
             QString t = QString("From: %1").arg(this->listViewText(0));
             t += QString("\nTo: %1").arg(child->listViewText(0));

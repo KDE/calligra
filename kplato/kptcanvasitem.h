@@ -213,7 +213,7 @@ private:
 class KPTItemBase
 {
 protected:
-    int kdLinkType(int relationType);
+    KDGanttViewTaskLink::LinkType kdLinkType(int relationType);
 };
 
 
