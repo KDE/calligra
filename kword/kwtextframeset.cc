@@ -1984,7 +1984,7 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
 
         }
     }
-    return 0;
+    return tmp;
 }
 
 void KWTextFrameSet::frameResized( KWFrame *theFrame )
