@@ -123,6 +123,7 @@ void PComboBox::fillBox()
 QString PComboBox::value() const
 {
     std::map<QString, QString>::const_iterator it = corresp->find(currentText());
+    if (it==corresp->end()) return "";
     return (*it).second;
 }
 

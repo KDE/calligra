@@ -22,7 +22,7 @@
 
 class CanvasField: public CanvasLabel{
 public:
-    CanvasField(int x, int y, int width, int height, QCanvas * canvas);
+    CanvasField(int x, int y, int width, int height, QCanvas * canvas,bool reg=true);
     virtual int rtti() const { return KuDesignerRttiCanvasField; }
     virtual QString getXml();
     virtual void draw(QPainter &painter);

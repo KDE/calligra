@@ -19,7 +19,7 @@
 #include "property.h"
 
 CanvasCalculatedField::CanvasCalculatedField(int x, int y, int width, int height, QCanvas * canvas):
-    CanvasField(x, y, width, height, canvas)
+    CanvasField(x, y, width, height, canvas,false)
 {
     std::map<QString, QString> m;
 
@@ -29,6 +29,7 @@ CanvasCalculatedField::CanvasCalculatedField(int x, int y, int width, int height
     m["Variance"] = "3";
     m["StandardDeviation"] = "4";
     props["CalculationType"] = *(new PropPtr(new Property("CalculationType", m, i18n("Calculation type"), "1")));
+    registerAs(KuDesignerRttiCanvasCalculated);
 }
 
 void CanvasCalculatedField::draw(QPainter &painter)

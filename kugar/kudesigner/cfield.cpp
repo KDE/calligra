@@ -18,7 +18,7 @@
 #include "cfield.h"
 #include "property.h"
 
-CanvasField::CanvasField(int x, int y, int width, int height, QCanvas * canvas):
+CanvasField::CanvasField(int x, int y, int width, int height, QCanvas * canvas,bool reg):
     CanvasLabel(x, y, width, height, canvas)
 {
     std::map<QString, QString> m;
@@ -58,7 +58,7 @@ CanvasField::CanvasField(int x, int y, int width, int height, QCanvas * canvas):
 
     props["CommaSeparator"] = *(new PropPtr(new Property(Symbol, "CommaSeparator", i18n("Comma separator"), "44")));
 
-    registerAs(KuDesignerRttiCanvasField);
+    if (reg) registerAs(KuDesignerRttiCanvasField);
 }
 
 void CanvasField::draw(QPainter &painter)
