@@ -851,8 +851,9 @@ void KoFieldVariable::recalc()
         case VST_FILENAMEWITHOUTEXTENSION:
         {
             QString file=m_doc->url().filename();
-            if(file.findRev(".")==(file.length()-4))
-                m_value=file.left(file.length()-4);
+            int pos=file.findRev(".");
+            if(pos !=-1)
+                m_value=file.mid(0,file.length()-pos-1);
             else
                 m_value=file;
         }
