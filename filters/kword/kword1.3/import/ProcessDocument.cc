@@ -465,6 +465,7 @@ static void AppendTagProcessingFormatOne(QValueList<TagProcessing>& tagProcessin
         << TagProcessing ( "VARIABLE",            NULL,                   NULL                               )
         << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    &formatData.text.bgColor           )
         << TagProcessing ( "OFFSETFROMBASELINE",  NULL,                   NULL                               )
+        << TagProcessing ( "CHARSET",             0L,                     0L                                 )
         ;
 }
 
