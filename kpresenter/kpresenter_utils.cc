@@ -55,9 +55,9 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
     } break;
     case L_ARROW:
     {
-        QPoint p1( _zoomHandler->zoomItX(-5 - _w / 2), _zoomHandler->zoomItY(-3 - _w / 2) );
-        QPoint p2( _zoomHandler->zoomItX(5 + _w / 2), 0 );
-        QPoint p3( _zoomHandler->zoomItX(-5 - _w / 2), _zoomHandler->zoomItY(3 + _w / 2) );
+        QPoint p1( -5 - _w / 2, -3 - _w / 2 );
+        QPoint p2( 5 + _w / 2, 0 );
+        QPoint p3( -5 - _w / 2, 3 + _w / 2 );
         QPointArray pArray( 3 );
         pArray.setPoint( 0, _zoomHandler->zoomPoint(p1) );
         pArray.setPoint( 1, _zoomHandler->zoomPoint(p2) );
@@ -82,7 +82,7 @@ KoSize getBoundingSize( LineEnd figure, double _w, KoZoomHandler*_zoomHandler )
     {
     case L_SQUARE:
     {
-        int _h = _w;
+        int _h = (int)_w;
         if ( _h % 2 == 0 ) _h--;
         return KoSize( _zoomHandler->zoomItX( 10 + _w), _zoomHandler->zoomItY( 10 + _h) );
     } break;

@@ -335,7 +335,7 @@ private:
 
     void playSound( const QString &soundFileName );
 
-    void drawPolygon( const QPoint &startPoint, const QPoint &endPoint );
+    void drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint );
 
     void drawPieObject(QPainter *p);
     void limitSizeOfObject();

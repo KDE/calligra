@@ -259,31 +259,7 @@ void KPCubicBezierCurveObject::paint( QPainter* _painter, KoZoomHandler*_zoomHan
     int _w = pen.width();
     QPen pen2(pen);
     pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
-    QPointArray pointArray; // = allPoints.zoomPointArray( _zoomHandler );
-    double fx=1.0;
-    double fy=1.0;
-    if(_w>1.0)
-    {
-        fx = (double)( _zoomHandler->zoomItX( ext.width()) - _w ) / (double)_zoomHandler->zoomItX( ext.width());
-        fy = (double)( _zoomHandler->zoomItY( ext.height()) - _w ) / (double)_zoomHandler->zoomItY( ext.height());
-    }
-
-    unsigned int index = 0;
-    KoPointArray::ConstIterator it;
-    for ( it = allPoints.begin(); it != allPoints.end(); ++it ) {
-        //double tmpX = _zoomHandler->zoomItX( point.x()) * fx;
-        //double tmpY = _zoomHandler->zoomItY( point.y()) * fy;
-        int tmpX = qRound( (*it).x() * fx );
-        int tmpY = qRound( (*it).y() * fy );
-
-        if ( tmpX == 0 )
-            tmpX = _w;
-        if ( tmpY == 0 )
-            tmpY = _w;
-
-        pointArray.putPoints( index, 1, tmpX,tmpY );
-        ++index;
-    }
+    QPointArray pointArray = allPoints.zoomPointArray( _zoomHandler, _w );
 
     _painter->setPen( pen2 );
     _painter->drawPolyline( pointArray );
@@ -301,7 +277,7 @@ void KPCubicBezierCurveObject::paint( QPainter* _painter, KoZoomHandler*_zoomHan
             QPoint point = (*it1);
             if ( startPoint != point ) {
                 float angle = getAngle( startPoint, point );
-                drawFigure( lineBegin, _painter, startPoint, pen.color(), _w, angle,_zoomHandler );
+                drawFigure( lineBegin, _painter, _zoomHandler->unzoomPoint( startPoint ), pen.color(), _w, angle,_zoomHandler );
 
                 break;
             }
@@ -321,7 +297,7 @@ void KPCubicBezierCurveObject::paint( QPainter* _painter, KoZoomHandler*_zoomHan
             QPoint point = (*it2);
             if ( endPoint != point ) {
                 float angle = getAngle( endPoint, point );
-                drawFigure( lineEnd, _painter, endPoint, pen.color(), _w, angle ,_zoomHandler);
+                drawFigure( lineEnd, _painter, _zoomHandler->unzoomPoint( endPoint ), pen.color(), _w, angle ,_zoomHandler);
 
                 break;
             }
