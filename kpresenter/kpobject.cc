@@ -175,6 +175,8 @@ void KPObject::load(const QDomElement &element) {
             orig.setX(e.attribute(attrX).toInt());
         if(e.hasAttribute(attrY))
             orig.setY(e.attribute(attrY).toInt());
+
+        origTopLeftPointInGroup = orig;
     }
     e=element.namedItem(tagSIZE).toElement();
     if(!e.isNull()) {
@@ -182,6 +184,8 @@ void KPObject::load(const QDomElement &element) {
             ext.setWidth(e.attribute(attrWidth).toInt());
         if(e.hasAttribute(attrHeight))
             ext.setHeight(e.attribute(attrHeight).toInt());
+
+        origSizeInGroup = ext;
     }
     e=element.namedItem(tagSHADOW).toElement();
     if(!e.isNull()) {

@@ -315,9 +315,9 @@ void KPTextObject::zoom( float _fakt )
 {
     kdDebug()<<"KPTextObject::zoom( float _fakt ) :"<< _fakt<<endl;
     KPObject::zoom( _fakt );
-#if 0
-    ktextobject.zoom( _fakt );
-#endif
+    int _zoom = (int)( 100.0 * _fakt );
+    kPresenterDocument()->zoomHandler()->setZoomAndResolution( _zoom, QPaintDevice::x11AppDpiX(),
+                                                               QPaintDevice::x11AppDpiY(), false, false );
 }
 
 /*==================== zoom orig =================================*/
@@ -325,9 +325,9 @@ void KPTextObject::zoomOrig()
 {
     kdDebug()<<"KPTextObject::zoomOrig()\n";
     KPObject::zoomOrig();
-#if 0
-    ktextobject.unzoom();
-#endif
+
+    kPresenterDocument()->zoomHandler()->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(),
+                                                               QPaintDevice::x11AppDpiY(), false, false );
 }
 
 /*================================================================*/
