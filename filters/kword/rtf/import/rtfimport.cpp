@@ -282,7 +282,6 @@ static const char *alignN[4]	= { "left", "right", "justify", "center" };
 static const char *boolN[2]	= { "false", "true" };
 static const char *borderN[4]	= { "LEFTBORDER", "RIGHTBORDER", "TOPBORDER", "BOTTOMBORDER" };
 
-
 RTFImport::RTFImport( KoFilter *, const char *, const QStringList& )
     : KoFilter(), properties(181), destinationProperties(29), textCodec(0), utf8TextCodec(0)
 {
@@ -799,9 +798,9 @@ void RTFImport::setEnumProperty( RTFProperty *property )
 
 
 /**
- * Sets the enumaration value for \ul-type keywords
- * \ul switches on simple underline
- * \ul0 switches off all underlines
+ * Sets the enumaration value for \\ul-type keywords
+ * \\ul switches on simple underline
+ * \\ul0 switches off all underlines
  * @param property the property to set
  */
 void RTFImport::setUnderlineProperty( RTFProperty *property )
@@ -961,8 +960,6 @@ void RTFImport::selectLayoutBorderFromCell( RTFProperty * property )
     state.layout.border = & state.tableCell.borders [ property->value ];
 }
 
-/**
- */
 void RTFImport::insertParagraph( RTFProperty * )
 {
     if (state.layout.inTable)
@@ -984,8 +981,6 @@ void RTFImport::insertParagraph( RTFProperty * )
     }
 }
 
-/**
- */
 void RTFImport::insertPageBreak( RTFProperty * )
 {
     if (textState->length > 0)
@@ -995,8 +990,6 @@ void RTFImport::insertPageBreak( RTFProperty * )
     addParagraph( textState->node, true );
 }
 
-/**
- */
 void RTFImport::insertTableCell( RTFProperty * )
 {
     //{{
@@ -1041,7 +1034,7 @@ void RTFImport::insertTableRow( RTFProperty * )
 	// Number of cell definitions should equal the number of cells
 	while (row.cells.count() > row.frameSets.count())
 	{
-            // ### TODO: verify if it is the roght action and how we have come here at all.
+            // ### TODO: verify if it is the right action and how we have come here at all.
 	    row.cells.pop_back();
 	}
 	while (row.cells.count() < row.frameSets.count())
@@ -1796,7 +1789,8 @@ void RTFImport::addVariable (const DomNode& spec, int type, const QString& key, 
 }
 
 /**
- * This function parses footnotes TODO: endnotes
+ * This function parses footnotes
+ * \todo Endnotes
  */
 void RTFImport::parseFootNote( RTFProperty * property)
 {
