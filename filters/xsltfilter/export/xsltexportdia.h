@@ -20,43 +20,42 @@
 #ifndef __XSLTEXPORTDIA_H__
 #define __XSLTEXPORTDIA_H__
 
-#include "kapplication.h"
-#include <kfiledialog.h>
-#include <koStore.h>
-#include "xsltdialog.h"
+#include <xsltdialog.h>
+#include <qstringlist.h>
+#include <kurl.h>
+
+class KoStoreDevice;
+class KConfig;
 
 class XSLTExportDia : public XSLTDialog
 {
     Q_OBJECT
 
-	QString _fileIn;
-	QString _fileOut;
-	QByteArray _arrayIn;
-	KoStore* _in;
-	/** xslt file current */
-	KURL _currentFile;
-	QCString _format;
-	KConfig* _config;
-	/** List of the most recent xslt file used. */
-	QStringList _recentList;
-	
-	/** Lits use for common xslt files. */
-	QStringList _dirsList;
-	QStringList _filesList;
-	QStringList _namesList;
-	
+    QString _fileOut;
+    KoStoreDevice* _in;
+    /** xslt file current */
+    KURL _currentFile;
+    QCString _format;
+    KConfig* _config;
+    /** List of the most recent xslt file used. */
+    QStringList _recentList;
+
+    /** Lits use for common xslt files. */
+    QStringList _dirsList;
+    QStringList _filesList;
+    QStringList _namesList;
+
 public:
-    XSLTExportDia( KoStore*, const QCString &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    XSLTExportDia( KoStoreDevice*, const QCString &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~XSLTExportDia();
 
-	void setInputFile(QString file)  { _fileIn = file; }
-	void setOutputFile(QString file) { _fileOut = file; }
+    void setOutputFile(QString file) { _fileOut = file; }
 
 public slots:
     virtual void cancelSlot();
     virtual void chooseSlot();
-	virtual void chooseRecentSlot();
-	virtual void chooseCommonSlot();
+    virtual void chooseRecentSlot();
+    virtual void chooseCommonSlot();
     virtual void okSlot();
 };
 

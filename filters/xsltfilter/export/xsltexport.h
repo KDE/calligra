@@ -20,23 +20,17 @@
 #ifndef __XSLTEXPORT_H__
 #define __XSLTEXPORT_H__
 
-#include <qstring.h>
-#include <qtextstream.h>
-#include <qfile.h>
-#include <qobject.h>
-
 #include <koFilter.h>
-#include <koStore.h>
 
 class XSLTExport : public KoFilter
 {
 
     Q_OBJECT
 
-	public:
-	    XSLTExport(KoFilter *parent, const char *name, const QStringList&);
-    	virtual ~XSLTExport() {}
+public:
+    XSLTExport(KoFilter *parent, const char *name, const QStringList&);
+    virtual ~XSLTExport() {}
 
-	    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 };
 #endif /* __XSLTEXPORT_H__ */

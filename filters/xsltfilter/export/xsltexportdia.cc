@@ -18,23 +18,22 @@
    This file use code from koTemplateOpenDia for the method chooseSlot.
 */
 
-#include "xsltexportdia.h"
-#include "xsltexportdia.moc"
-
-#include <qcombobox.h>
-#include <qstringlist.h>
-#include <qdir.h>
-
-#include <kapplication.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
-#include <krecentdocument.h>
-#include <koFilterManager.h>
-#include <ktempfile.h>
-#include <kdebug.h>
-
+#include <xsltexportdia.h>
 #include <xsltproc.h>
+
+#include <qdir.h>
+#include <qcombobox.h>
+
+#include <kglobal.h>
+#include <klocale.h>
+#include <kconfig.h>
+#include <kstandarddirs.h>
+#include <krecentdocument.h>
+#include <ktempfile.h>
+#include <kfiledialog.h>
+#include <kdebug.h>
+#include <koFilterManager.h>
+#include <koStoreDevice.h>
 
 /*#ifdef __FreeBSD__
 #include <unistd.h>
@@ -47,7 +46,7 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-XSLTExportDia::XSLTExportDia(KoStore* in, const QCString &format, QWidget* parent,  const char* name_, bool modal, WFlags fl )
+XSLTExportDia::XSLTExportDia(KoStoreDevice* in, const QCString &format, QWidget* parent,  const char* name_, bool modal, WFlags fl )
     : XSLTDialog( parent, name_, modal, fl )
 {
 	int i = 0;
@@ -76,12 +75,12 @@ XSLTExportDia::XSLTExportDia(KoStore* in, const QCString &format, QWidget* paren
 	/* Common xslt files box */
 	QString appName = (const char*) KGlobal::instance()->instanceName();
 	kdDebug() << "app name = " << appName << endl;
-	
+
 	QString filenames = QString("xsltfilter") + QDir::separator() + QString("export") +
 			QDir::separator() + appName + QDir::separator() + "*/*.xsl";
 	QStringList commonFilesList = KGlobal::dirs()->findAllResources("data", filenames, true);
 	kdDebug() << "There are " << commonFilesList.size() << " entries like  " << filenames << endl;
-	
+
 	QStringList tempList;
 	QString name;
 	QString file;
@@ -102,7 +101,7 @@ XSLTExportDia::XSLTExportDia(KoStore* in, const QCString &format, QWidget* paren
 			kdDebug() << file << " get" << endl;
 		}
 	}
-	
+
 	xsltList->insertStringList(_namesList);
 }
 
@@ -111,8 +110,7 @@ XSLTExportDia::XSLTExportDia(KoStore* in, const QCString &format, QWidget* paren
  */
 XSLTExportDia::~XSLTExportDia()
 {
-    //delete _in;
-	delete _config;
+    delete _config;
 }
 
 /**
@@ -141,7 +139,7 @@ void XSLTExportDia::chooseSlot()
     KFileDialog *dialog = new KFileDialog(dir, QString::null, 0L, "file dialog", true);
     dialog->setCaption( i18n("Open Document") );
     dialog->setMimeFilter( KoFilterManager::mimeFilter( _format, KoFilterManager::Export ) );
-	KURL u;
+    KURL u;
 
     if(dialog->exec() == QDialog::Accepted)
     {
@@ -205,7 +203,6 @@ void XSLTExportDia::okSlot()
 	if(_currentFile.url().isEmpty())
 		return;
 	kdDebug() << "XSLT FILTER --> BEGIN" << endl;
-	_in->open("root");
 	QString stylesheet = _currentFile.directory() + QDir::separator() + _currentFile.fileName();
 
 	/* Add the current file in the recent list if is not and save the list. */
@@ -233,28 +230,30 @@ void XSLTExportDia::okSlot()
 		_config->sync();
 	}
 
-	/* Save the input file in a temp file */
-	QByteArray array = _in->read(_in->size());
-	
 	/* Temp file */
 	KTempFile temp("xsltexport-", "kwd");
 	temp.setAutoDelete(true);
-	
 	QFile* tempFile = temp.file();
-	tempFile->open(IO_WriteOnly);
-	tempFile->writeBlock(array);
+
+        const Q_LONG buflen = 4096;
+        char buffer[ buflen ];
+        Q_LONG readBytes = _in->readBlock( buffer, buflen );
+
+        while ( readBytes > 0 ) {
+            tempFile->writeBlock( buffer, readBytes );
+            readBytes = _in->readBlock( buffer, buflen );
+        }
+        temp.close();
+
 	kdDebug() << stylesheet << endl;
-	XSLTProc* xsltproc = new XSLTProc(temp.name(), _fileOut.latin1(),
-							 stylesheet.latin1());
+	XSLTProc* xsltproc = new XSLTProc(temp.name(), QFile::encodeName( _fileOut ),
+                                          stylesheet.latin1());
 	xsltproc->parse();
 
-	delete tempFile;
 	delete xsltproc;
 
-	_in->close();	
-	temp.close();
-
 	kdDebug() << "XSLT FILTER --> END" << endl;
-	reject();
+	reject(); // ###### accept() ? (Werner)
 }
 
+#include <xsltexportdia.moc>

@@ -18,17 +18,23 @@
 */
 
 #include <xsltexport.h>
-#include <xsltexport.moc>
+
 #include <kdebug.h>
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <qtextcodec.h>
-#include "xsltexportdia.h"
+
+#include <xsltexportdia.h>
 
 typedef KGenericFactory<XSLTExport, KoFilter> XSLTExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libxsltexport, XSLTExportFactory( "xsltexportfilter" ) );
+
+// Check for XSLT files
+extern "C" {
+    int check_libxsltexport() {
+        kdDebug() << "Now I'm here... now I'm there" << endl;
+        return 0;
+    }
+}
 
 
 XSLTExport::XSLTExport(KoFilter *, const char *, const QStringList&) :
@@ -37,28 +43,25 @@ XSLTExport::XSLTExport(KoFilter *, const char *, const QStringList&) :
 
 KoFilter::ConversionStatus XSLTExport::convert( const QCString& from, const QCString&)
 {
-    QString config;
     if(from != "application/x-kword" &&
-		from != "application/x-kontour" && from != "application/x-kspread" &&
-		from != "application/x-kivio" && from != "application/x-kchart" &&
-		from != "application/x-kpresenter")
+       from != "application/x-kontour" && from != "application/x-kspread" &&
+       from != "application/x-kivio" && from != "application/x-kchart" &&
+       from != "application/x-kpresenter")
         return KoFilter::NotImplemented;
-	kdDebug() << "In the xslt filter" << endl;
-    KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
-    if(!in || !in->open("root")) {
+    kdDebug() << "In the xslt filter" << endl;
+
+    KoStoreDevice* in = m_chain->storageFile("root", KoStore::Read);
+
+    if(!in) {
         kdError() << "Unable to open input file!" << endl;
-        delete in;
         return KoFilter::FileNotFound;
     }
-    /* input file Reading */
-    //QByteArray array=in.read(in.size());
-    in->close();
-
 
     XSLTExportDia* dialog = new XSLTExportDia(in, from, 0, "Exportation", true);
     dialog->setOutputFile(m_chain->outputFile());
     dialog->exec();
     delete dialog;
-    delete in;
     return KoFilter::OK;
 }
+
+#include <xsltexport.moc>
