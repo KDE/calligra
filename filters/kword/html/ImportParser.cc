@@ -340,11 +340,23 @@ bool HtmlParser::parseTag(bool tagClosing)
                 {
                     state=stateBeforeAttributeName;
                     attributes[attributeName]=attributeValue;
+                }                                                                     else if (ch=='&')
+                {
+                    // We may have the start of an entity.
+                    attributeValue+=parseEntity();
+                    // NOTE: parseEntity() will return before any quote!
                 }
+
                 else if (ch=='>')
                 {
                     state=stateNormal;
                     attributes[attributeName]=attributeValue;
+                }
+                else if (ch=='&')
+                {
+                    // We may have the start of an entity.
+                    attributeValue+=parseEntity();
+                    // NOTE: parseEntity() will return before any important character like > or a white space!
                 }
                 else
                 {
@@ -359,6 +371,12 @@ bool HtmlParser::parseTag(bool tagClosing)
                     state=stateBeforeAttributeName;
                     attributes[attributeName]=attributeValue;
                 }
+                else if (ch=='&')
+                {
+                    // We may have the start of an entity.
+                    attributeValue+=parseEntity();
+                    // NOTE: parseEntity() will return before any quote!
+                }
                 else
                 {
                     attributeValue+=ch;
@@ -371,6 +389,12 @@ bool HtmlParser::parseTag(bool tagClosing)
                 {
                     state=stateBeforeAttributeName;
                     attributes[attributeName]=attributeValue;
+                }
+                else if (ch=='&')
+                {
+                    // We may have the start of an entity.
+                    attributeValue+=parseEntity();
+                    // NOTE: parseEntity() will return before any single quote!
                 }
                 else
                 {
@@ -769,7 +793,9 @@ QString HtmlParser::parseEntity(void)
             valid=true; // Entity seems to be valid
             break; // End of Entity
         }
-        else if (ch.isLetterOrNumber())
+        else if (  ((ch>='a') && (ch<='z'))
+                || ((ch>='0') && (ch<='9'))
+                || ((ch>='A') && (ch<='Z')) )
         {
             entity+=ch;
         }
@@ -779,8 +805,7 @@ QString HtmlParser::parseEntity(void)
         }
         else
         { // Unknown character, so we are out of the entity
-            // We assume that the entiy is not valid!
-            entity+=ch;
+            valid=false; // We assume that the entiy is not valid!
             break;
         }
         firstCharater=false;
@@ -813,6 +838,7 @@ QString HtmlParser::parseEntity(void)
     }
     else
     {
+        unGetCharacter(ch); // Unget last character
         strResult+="&";
         strResult+=entity;
     }
