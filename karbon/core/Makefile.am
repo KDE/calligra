@@ -6,7 +6,6 @@ noinst_HEADERS = \
     vcanvas.h \
     vglobal.h \
     vobject.h \
-    vpainter.h \
     vpath.h \
     vpoint.h \
     vprimitive.h
