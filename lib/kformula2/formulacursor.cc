@@ -31,7 +31,6 @@
 FormulaCursor::FormulaCursor(FormulaElement* element)
 {
     selectionFlag = false;
-    mouseSelectionFlag = false;
     linearMovement = false;
     setTo(element, 0);
 }
@@ -542,17 +541,6 @@ bool FormulaCursor::buildElementsFromDom(QDomDocument doc, QList<BasicElement>& 
                 return true;
             }
         }
-    }
-    return false;
-}
-
-bool FormulaCursor::paste(QDomDocument doc)
-{
-    QList<BasicElement> list;
-    list.setAutoDelete(true);
-    if (buildElementsFromDom(doc, list)) {
-        insert(list);
-        return true;
     }
     return false;
 }

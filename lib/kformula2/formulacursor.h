@@ -21,9 +21,8 @@
 #ifndef __FORMULACURSOR_H
 #define __FORMULACURSOR_H
 
-#include <qobject.h>
-
 #include "basicelement.h"
+#include "formuladefs.h"
 
 class FormulaElement;
 class IndexElement;
@@ -32,19 +31,16 @@ class SymbolElement;
 
 
 /**
- * The selection. This might be a one position selection or
+ * The selection. This might be a position selection or
  * an area. Each view will need one FormulaCursor.
  *
- * The FormulaContainer always uses the cursor to operate on
+ * The @ref KFormulaContainer always uses the cursor to operate on
  * the element tree.
  *
  * Note that it is up to the elements to actually move the cursor.
  * (The cursor has no chance to know how.)
  */
-class FormulaCursor : public QObject {
-
-    Q_OBJECT
-    
+class FormulaCursor {
 public:
 	    
     /**
@@ -53,13 +49,6 @@ public:
      */
     FormulaCursor(FormulaElement* element);
 
-    /**
-     * Flag for movement functions.
-     * Select means move selecting the text (usually Shift key)
-     * Word means move by whole words  (usually Control key)
-     */
-    enum MoveFlag { NormalMovement = 0, SelectMovement = 1, WordMovement = 2 };
-    
     // where the cursor and the mark are
     int getPos() const { return cursorPos; }
     int getMark() const { return markPos; }
@@ -79,11 +68,6 @@ public:
      * Sets the selection mode.
      */
     void setSelection(bool selection) { selectionFlag = selection; }
-
-    /**
-     * To be done later...
-     */
-    bool isMouseMark() const { return mouseSelectionFlag; }
 
 
     /**
@@ -106,6 +90,11 @@ public:
     // how to travel
     
     bool getLinearMovement() const { return linearMovement; }
+
+    /**
+     * Sets the cursor in linear mode. This means you can visit every
+     * element just by moving left and right.
+     */
     void setLinearMovement(bool linear) { linearMovement = linear; }
     
     /**
@@ -243,8 +232,6 @@ public:
      * the list. Returns true on success.
      */
     bool buildElementsFromDom(QDomDocument doc, QList<BasicElement>& list);
-
-    bool paste(QDomDocument doc);
     
     // undo/redo support
     
@@ -277,8 +264,6 @@ public:
      */
     void setCursorData(CursorData* data);
     
-public slots:
-
     /**
      * The element is going to leave the formula with and all its children.
      */
@@ -357,12 +342,6 @@ private:
      * left and right movement.
      */
     bool linearMovement;
-    
-    /**
-     * Tells wether we are selecting with the mouse at the moment.
-     * (Do we really need this?)
-     */
-    bool mouseSelectionFlag;
 };
 
 

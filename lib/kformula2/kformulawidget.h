@@ -23,16 +23,23 @@
 
 #include <qdom.h>
 #include <qwidget.h>
-#include <qclipboard.h>
 
-#include <kaccel.h>
-#include <kaction.h>
+//#include <kaccel.h>
+//#include <kaction.h>
+
+#include "formuladefs.h"
 
 
+class BasicElement;
 class FormulaCursor;
+class FormulaElement;
 class KFormulaContainer;
 
 
+/**
+ * The view. A widget that shows the formula. There are methods
+ * to move the cursor around. To edit the formula use the document.
+ */
 class KFormulaWidget : public QWidget {
     Q_OBJECT
 
@@ -51,61 +58,68 @@ protected:
     virtual void paintEvent(QPaintEvent* event);
     virtual void keyPressEvent(QKeyEvent* event);
 
+public slots:
+    
+    void slotSelectAll();
+
+    void slotMoveLeft(MoveFlag flag);
+    void slotMoveRight(MoveFlag flag);
+    void slotMoveUp(MoveFlag flag);
+    void slotMoveDown(MoveFlag flag);
+    void slotMoveHome(MoveFlag flag);
+    void slotMoveEnd(MoveFlag flag);
+
 protected slots:
 
-    void formulaChanged();
+    void slotFormulaChanged();
+    void slotFormulaLoaded(FormulaElement*);
+    void slotElementWillVanish(BasicElement*);
 
-    void open();
-    void save();
-    void undo();
-    void redo();
+protected:
 
-    void cut();
-    void copy();
-    void paste();
-    void selectAll();
-    
-private:
-
-    int movementFlag(int state);
+    MoveFlag movementFlag(int state);
 
     void hideCursor();
     void showCursor();
 
+    KFormulaContainer* getDocument() { return document; }
+
+    FormulaCursor* getCursor() { return cursor; }
+    
+private:
+    
     bool cursorVisible;
 
-    KAccel* accel;
+//     KAccel* accel;
     
-    KAction* openFile;
-    KAction* saveFile;
-    KAction* quitAction;
-    KAction* undoAction;
-    KAction* redoAction;
+//     KAction* openFile;
+//     KAction* saveFile;
+//     KAction* quitAction;
+//     KAction* undoAction;
+//     KAction* redoAction;
 
-    KAction* cutAction;
-    KAction* copyAction;
-    KAction* pasteAction;
-    KAction* selectAllAction;
+//     KAction* cutAction;
+//     KAction* copyAction;
+//     KAction* pasteAction;
+//     KAction* selectAllAction;
 
-    KAction* integralElement;
-    KAction* productElement;
-    KAction* sumElement;
-    KAction* rootElement;
-    KAction* fractionElement;
-    KAction* matrixElement;
+//     KAction* integralElement;
+//     KAction* productElement;
+//     KAction* sumElement;
+//     KAction* rootElement;
+//     KAction* fractionElement;
+//     KAction* matrixElement;
 
-    KAction* generalUpperIndex;
-    KAction* generalLowerIndex;
+//     KAction* generalUpperIndex;
+//     KAction* generalLowerIndex;
 
-    KAction* upperLeftIndex;
-    KAction* lowerLeftIndex;
-    KAction* upperRightIndex;
-    KAction* lowerRightIndex;
+//     KAction* upperLeftIndex;
+//     KAction* lowerLeftIndex;
+//     KAction* upperRightIndex;
+//     KAction* lowerRightIndex;
     
     KFormulaContainer* document;
     FormulaCursor* cursor;
-
-    QClipboard* clipboard;
 };
 
 #endif // __KFORMULAWIDGET_H

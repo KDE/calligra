@@ -18,12 +18,13 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qtextstream.h>
-#include <qfile.h>
+#include <qapp.h>
 #include <qdom.h>
-#include <qpainter.h>
 #include <qevent.h>
+#include <qfile.h>
+#include <qpainter.h>
 #include <qstring.h>
+#include <qtextstream.h>
 
 #include <klocale.h>
 
@@ -33,7 +34,10 @@
 #include "formulaelement.h"
 #include "fractionelement.h"
 #include "indexelement.h"
+#include "kformulacommand.h"
 #include "kformulacontainer.h"
+#include "kformulamimesource.h"
+#include "kformulawidget.h"
 #include "matrixelement.h"
 #include "numberelement.h"
 #include "operatorelement.h"
@@ -41,7 +45,6 @@
 #include "sequenceelement.h"
 #include "symbolelement.h"
 #include "textelement.h"
-#include "kformulacommand.h"
 
 
 KFormulaContainer::KFormulaContainer()
@@ -59,17 +62,7 @@ KFormulaContainer::~KFormulaContainer()
 
 FormulaCursor* KFormulaContainer::createCursor()
 {
-    FormulaCursor* cursor = new FormulaCursor(rootElement);
-    connect(this, SIGNAL(elementWillVanish(BasicElement*)),
-            cursor, SLOT(elementWillVanish(BasicElement*)));
-    connect(this, SIGNAL(formulaLoaded(FormulaElement*)),
-            cursor, SLOT(formulaLoaded(FormulaElement*)));
-    return cursor;
-}
-
-void KFormulaContainer::destroyCursor(FormulaCursor* cursor)
-{
-    delete cursor;
+    return new FormulaCursor(rootElement);
 }
 
 
@@ -101,87 +94,78 @@ void KFormulaContainer::draw(QPainter& painter)
 }
 
 
-void KFormulaContainer::addText(FormulaCursor* cursor, QChar ch)
+void KFormulaContainer::addText(QChar ch)
 {
-    setActiveCursor(cursor);
-    removeSelection(cursor);
+    removeSelection();
     KFCAdd* command = new KFCAdd(i18n("_:Undo descr.\nAdd text"), this);
     command->addElement(new TextElement(ch));
     execute(command);
 }
 
-void KFormulaContainer::addNumber(FormulaCursor* cursor, QChar ch)
+void KFormulaContainer::addNumber(QChar ch)
 {
-    setActiveCursor(cursor);
-    removeSelection(cursor);
+    removeSelection();
     KFCAdd* command = new KFCAdd(i18n("_:Undo descr.\nAdd number"), this);
     command->addElement(new NumberElement(ch));
     execute(command);
 }
 
-void KFormulaContainer::addOperator(FormulaCursor* cursor, QChar ch)
+void KFormulaContainer::addOperator(QChar ch)
 {
-    setActiveCursor(cursor);
-    removeSelection(cursor);
+    removeSelection();
     KFCAdd* command = new KFCAdd(i18n("_:Undo descr.\nAdd operator"), this);
     command->addElement(new OperatorElement(ch));
     execute(command);
 }
 
-void KFormulaContainer::addBracket(FormulaCursor* cursor, char left, char right)
+void KFormulaContainer::addBracket(char left, char right)
 {
-    setActiveCursor(cursor);
     KFCAddReplacing* command = new KFCAddReplacing(i18n("_:Undo descr.\nAdd bracket"), this);
     command->setElement(new BracketElement(left, right));
     execute(command);
 }
 
-void KFormulaContainer::addFraction(FormulaCursor* cursor)
+void KFormulaContainer::addFraction()
 {
-    setActiveCursor(cursor);
     KFCAddReplacing* command = new KFCAddReplacing(i18n("_:Undo descr.\nAdd fraction"), this);
     command->setElement(new FractionElement());
     execute(command);
 }
 
 
-void KFormulaContainer::addRoot(FormulaCursor* cursor)
+void KFormulaContainer::addRoot()
 {
-    setActiveCursor(cursor);
     KFCAddReplacing* command = new KFCAddReplacing(i18n("_:Undo descr.\nAdd root"), this);
     command->setElement(new RootElement());
     execute(command);
 }
 
 
-void KFormulaContainer::addSymbol(FormulaCursor* cursor,
-                                  Artwork::SymbolType type)
+void KFormulaContainer::addSymbol(Artwork::SymbolType type)
 {
-    setActiveCursor(cursor);
     KFCAddReplacing* command = new KFCAddReplacing(i18n("_:Undo descr.\nAdd symbol"), this);
     command->setElement(new SymbolElement(type));
     execute(command);
 }
 
-void KFormulaContainer::addMatrix(FormulaCursor* cursor, int rows, int columns)
+void KFormulaContainer::addMatrix(int rows, int columns)
 {
-    setActiveCursor(cursor);
-    removeSelection(cursor);
+    removeSelection();
     KFCAddMatrix* command = new KFCAddMatrix(this, rows, columns);
     execute(command);
 }
 
 
-void KFormulaContainer::addLowerLeftIndex(FormulaCursor* cursor)
+void KFormulaContainer::addLowerLeftIndex()
 {
-    setActiveCursor(cursor);
+    FormulaCursor* cursor = getActiveCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
         element = new IndexElement;
 
         if (!cursor->isSelection()) {
             //cursor->moveLeft(FormulaCursor::SelectMovement | FormulaCursor::WordMovement);
-            cursor->moveLeft(FormulaCursor::SelectMovement);
+            cursor->moveLeft(SelectMovement);
         }
         KFCAddIndex* command = new KFCAddIndex(this, element, element->getLowerLeft());
         execute(command);
@@ -191,15 +175,15 @@ void KFormulaContainer::addLowerLeftIndex(FormulaCursor* cursor)
     }
 }
 
-void KFormulaContainer::addUpperLeftIndex(FormulaCursor* cursor)
+void KFormulaContainer::addUpperLeftIndex()
 {
-    setActiveCursor(cursor);
+    FormulaCursor* cursor = getActiveCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
         element = new IndexElement;
 
         if (!cursor->isSelection()) {
-            cursor->moveLeft(FormulaCursor::SelectMovement);
+            cursor->moveLeft(SelectMovement);
         }
         KFCAddIndex* command = new KFCAddIndex(this, element, element->getUpperLeft());
         execute(command);
@@ -209,15 +193,15 @@ void KFormulaContainer::addUpperLeftIndex(FormulaCursor* cursor)
     }
 }
 
-void KFormulaContainer::addLowerRightIndex(FormulaCursor* cursor)
+void KFormulaContainer::addLowerRightIndex()
 {
-    setActiveCursor(cursor);
+    FormulaCursor* cursor = getActiveCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
         element = new IndexElement;
 
         if (!cursor->isSelection()) {
-            cursor->moveLeft(FormulaCursor::SelectMovement);
+            cursor->moveLeft(SelectMovement);
         }
         KFCAddIndex* command = new KFCAddIndex(this, element, element->getLowerRight());
         execute(command);
@@ -227,15 +211,15 @@ void KFormulaContainer::addLowerRightIndex(FormulaCursor* cursor)
     }
 }
 
-void KFormulaContainer::addUpperRightIndex(FormulaCursor* cursor)
+void KFormulaContainer::addUpperRightIndex()
 {
-    setActiveCursor(cursor);
+    FormulaCursor* cursor = getActiveCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
         element = new IndexElement;
 
         if (!cursor->isSelection()) {
-            cursor->moveLeft(FormulaCursor::SelectMovement);
+            cursor->moveLeft(SelectMovement);
         }
         KFCAddIndex* command = new KFCAddIndex(this, element, element->getUpperRight());
         execute(command);
@@ -250,9 +234,9 @@ void KFormulaContainer::addUpperRightIndex(FormulaCursor* cursor)
  * Just search an element that gets an index. Don't create one
  * if there is non.
  */
-void KFormulaContainer::addGenericLowerIndex(FormulaCursor* cursor)
+void KFormulaContainer::addGenericLowerIndex()
 {
-    setActiveCursor(cursor);
+    FormulaCursor* cursor = getActiveCursor();
     SymbolElement* symbol = cursor->getActiveSymbolElement();
     if (symbol != 0) {
         addGenericIndex(cursor, symbol->getLowerIndex());
@@ -263,9 +247,9 @@ void KFormulaContainer::addGenericLowerIndex(FormulaCursor* cursor)
  * Just search an element that gets an index. Don't create one
  * if there is non.
  */
-void KFormulaContainer::addGenericUpperIndex(FormulaCursor* cursor)
+void KFormulaContainer::addGenericUpperIndex()
 {
-    setActiveCursor(cursor);
+    FormulaCursor* cursor = getActiveCursor();
     SymbolElement* symbol = cursor->getActiveSymbolElement();
     if (symbol != 0) {
         addGenericIndex(cursor, symbol->getUpperIndex());
@@ -283,7 +267,6 @@ void KFormulaContainer::addGenericUpperIndex(FormulaCursor* cursor)
  */
 void KFormulaContainer::addGenericIndex(FormulaCursor* cursor, ElementIndexPtr index)
 {
-    setActiveCursor(cursor);
     if (!index->hasIndex()) {
         index->setToIndex(cursor);
         KFCAddGenericIndex* command = new KFCAddGenericIndex(this);
@@ -296,19 +279,16 @@ void KFormulaContainer::addGenericIndex(FormulaCursor* cursor, ElementIndexPtr i
 }
 
 
-void KFormulaContainer::remove(FormulaCursor* cursor,
-                               BasicElement::Direction direction)
+void KFormulaContainer::remove(BasicElement::Direction direction)
 {
-    setActiveCursor(cursor);
     KFCRemove* command = new KFCRemove(this, direction);
     execute(command);
 }
 
 
-void KFormulaContainer::replaceElementWithMainChild(FormulaCursor* cursor,
-                                                    BasicElement::Direction direction)
+void KFormulaContainer::replaceElementWithMainChild(BasicElement::Direction direction)
 {
-    setActiveCursor(cursor);
+    FormulaCursor* cursor = getActiveCursor();
     if (!cursor->isSelection()) {
         KFCRemoveEnclosing* command = new KFCRemoveEnclosing(this, direction);
         execute(command);
@@ -316,9 +296,10 @@ void KFormulaContainer::replaceElementWithMainChild(FormulaCursor* cursor,
 }
 
 
-void KFormulaContainer::paste(FormulaCursor* cursor, QMimeSource* source)
+void KFormulaContainer::paste()
 {
-    setActiveCursor(cursor);
+    QClipboard* clipboard = QApplication::clipboard();
+    const QMimeSource* source = clipboard->data();
     if (source->provides("application/x-kformula")) {
         QByteArray data = source->encodedData("application/x-kformula");
         //cerr << data <<"aaa"<< endl;
@@ -327,8 +308,10 @@ void KFormulaContainer::paste(FormulaCursor* cursor, QMimeSource* source)
 
         QList<BasicElement> list;
         list.setAutoDelete(true);
+
+        FormulaCursor* cursor = getActiveCursor();
         if (cursor->buildElementsFromDom(formula, list)) {
-            removeSelection(cursor);
+            removeSelection();
             KFCAdd* command = new KFCAdd(i18n("_:Undo descr.\nPaste"), this);
             uint count = list.count();
             for (uint i = 0; i < count; i++) {
@@ -339,8 +322,25 @@ void KFormulaContainer::paste(FormulaCursor* cursor, QMimeSource* source)
     }
 }
 
+void KFormulaContainer::copy()
+{
+    FormulaCursor* cursor = getActiveCursor();
+    QDomDocument formula = cursor->copy();
+    QClipboard* clipboard = QApplication::clipboard();
+    clipboard->setData(new KFormulaMimeSource(formula));
+}
 
-void KFormulaContainer::execute(KFormulaCommand *command)
+void KFormulaContainer::cut()
+{
+    FormulaCursor* cursor = getActiveCursor();
+    if (cursor->isSelection()) {
+        copy();
+        remove();
+    }
+}
+
+
+void KFormulaContainer::execute(KFormulaCommand* command)
 {
     command->execute();
     if (!command->isSenseless()) {
@@ -353,8 +353,9 @@ void KFormulaContainer::execute(KFormulaCommand *command)
 }
 
 
-void KFormulaContainer::removeSelection(FormulaCursor* cursor)
+void KFormulaContainer::removeSelection()
 {
+    FormulaCursor* cursor = getActiveCursor();
     if (cursor->isSelection()) {
         KFCRemoveSelection* command = new KFCRemoveSelection(this, BasicElement::beforeCursor);
         history.addCommand(command);
@@ -369,22 +370,10 @@ void KFormulaContainer::undo()
 }
 
 
-void KFormulaContainer::undo(FormulaCursor *cursor)
-{
-    setActiveCursor(cursor);
-    undo();
-}
-
 void KFormulaContainer::redo()
 {
     history.redo();
     testDirty();
-}
-
-void KFormulaContainer::redo(FormulaCursor *cursor)
-{
-    setActiveCursor(cursor);
-    redo();
 }
 
 

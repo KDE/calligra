@@ -64,7 +64,10 @@ QByteArray KFormulaMimeSource::encodedData ( const char *format ) const
     if(QString(format)=="image/ppm") {
         KFormulaContainer tmpContainer;
 	FormulaCursor *c=tmpContainer.createCursor();
-	c->paste(document);
+        tmpContainer.setActiveCursor(c);
+        tmpContainer.paste();
+        delete c;
+        c = 0;
 	QRect rect=tmpContainer.boundingRect();
     	QPixmap pm(rect.width(),rect.height());
 	pm.fill();

@@ -18,6 +18,55 @@
 #include "kformulawidget.h"
 
 
+class TestWidget : public KFormulaWidget {
+public:
+    TestWidget(KFormulaContainer* doc, QWidget* parent=0, const char* name=0, WFlags f=0)
+            : KFormulaWidget(doc, parent, name, f) {}
+
+protected:
+    virtual void keyPressEvent(QKeyEvent* event);
+};
+
+
+void TestWidget::keyPressEvent(QKeyEvent* event)
+{
+    KFormulaContainer* document = getDocument();
+    document->setActiveCursor(getCursor());
+    
+    //int action = event->key();
+    int state = event->state();
+    //MoveFlag flag = movementFlag(state);
+
+    if (state & Qt::ControlButton) {
+        switch (event->key()) {
+            case Qt::Key_1: document->addSum(); return;
+            case Qt::Key_2: document->addProduct(); return;
+            case Qt::Key_3: document->addIntegral(); return;
+            case Qt::Key_4: document->addRoot(); return;
+            case Qt::Key_5: document->addFraction(); return;
+            case Qt::Key_6: document->addMatrix(4, 5); return;
+            case Qt::Key_A: slotSelectAll(); return;
+            case Qt::Key_C: document->copy(); return;
+            case Qt::Key_D: document->replaceElementWithMainChild(BasicElement::afterCursor); return;
+            case Qt::Key_L: document->addGenericLowerIndex(); return;
+            case Qt::Key_O: document->load("test.xml"); return;
+            case Qt::Key_Q: kapp->quit(); return;
+            case Qt::Key_R: document->replaceElementWithMainChild(BasicElement::beforeCursor); return;
+            case Qt::Key_S: document->save("test.xml"); return;
+            case Qt::Key_U: document->addGenericUpperIndex(); return;
+            case Qt::Key_V: document->paste(); return;
+            case Qt::Key_X: document->cut(); return;
+            case Qt::Key_Z: (state & Qt::ShiftButton) ? document->redo() : document->undo(); return;
+            default:
+                //cerr << "Key: " << event->key() << endl;
+                break;
+        }
+    }
+
+    KFormulaWidget::keyPressEvent(event);
+}
+
+
 static const KCmdLineOptions options[]= {
     {0,0,0}
 };
@@ -38,8 +87,8 @@ int main(int argc, char** argv)
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
     KFormulaContainer* container = new KFormulaContainer;
-    KFormulaWidget* mw1 = new KFormulaWidget(container, 0, "test1");
-    KFormulaWidget* mw2 = new KFormulaWidget(container, 0, "test2");
+    KFormulaWidget* mw1 = new TestWidget(container, 0, "test1");
+    KFormulaWidget* mw2 = new TestWidget(container, 0, "test2");
 
 //     QAccel ac1(mw1);
 //     ac1.insertItem(Qt::CTRL + Qt::Key_Q, 1);

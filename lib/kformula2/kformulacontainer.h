@@ -37,12 +37,17 @@
 class BasicElement;
 class FormulaCursor;
 class FormulaElement;
-class QKeyEvent;
-class QPainter;
 class KCommand;
 class KFormulaCommand;
+class KFormulaWidget;
+class QKeyEvent;
+class QPainter;
+class QWidget;
 
 
+/**
+ * The document. Provides everything to edit the formula.
+ */
 class KFormulaContainer : public QObject {
     Q_OBJECT
 
@@ -53,14 +58,10 @@ public:
 
     /**
      * Returns a new cursor. It points to the beginning of the
-     * formula.
+     * formula. The cursor gets no messages if the formula changes
+     * so use this with care!
      */
     FormulaCursor* createCursor();
-
-    /**
-     * Destroys the cursor. It must not be used afterwards.
-     */
-    void destroyCursor(FormulaCursor*);
 
     /**
      * Gets called just before the child is removed from
@@ -101,8 +102,21 @@ public:
     void load(QString file);
 
     FormulaCursor* getActiveCursor() { return activeCursor; }
+
+    /**
+     * Sets the cursor that is to be used for any editing.
+     * It's the views responsibility to set its cursor
+     * before it triggers an action.
+     * Normally a view sets the active cursor if it gets the focus.
+     */
     void setActiveCursor(FormulaCursor* cursor) { activeCursor = cursor; }
 
+    /**
+     * Emits a formulaChanged signal if we are dirty.
+     */
+    QRect boundingRect();
+
+    
 signals:
 
     /**
@@ -120,61 +134,69 @@ signals:
      */
     void formulaLoaded(FormulaElement*);
     
+
 public slots:    
 
     // There are a lot of thing we can do with the formula.
     
-    void addText(FormulaCursor* cursor, QChar ch);
-    void addNumber(FormulaCursor* cursor, QChar ch);
-    void addOperator(FormulaCursor* cursor, QChar ch);
-    void addBracket(FormulaCursor* cursor, char left, char right);
-    void addFraction(FormulaCursor* cursor);
-    void addRoot(FormulaCursor* cursor);
-    void addSymbol(FormulaCursor* cursor, Artwork::SymbolType type);
-    void addMatrix(FormulaCursor* cursor, int rows, int columns);
+    void addText(QChar ch);
+    void addNumber(QChar ch);
+    void addOperator(QChar ch);
 
-    void addLowerLeftIndex(FormulaCursor* cursor);
-    void addUpperLeftIndex(FormulaCursor* cursor);
-    void addLowerRightIndex(FormulaCursor* cursor);
-    void addUpperRightIndex(FormulaCursor* cursor);
-
-    void addGenericLowerIndex(FormulaCursor* cursor);
-    void addGenericUpperIndex(FormulaCursor* cursor);
+    void addBracket(char left, char right);
+    void addSquareBracket() { addBracket('[', ']'); }
+    void addCurlyBracket()  { addBracket('{', '}'); }
+    void addLineBracket()   { addBracket('|', '|'); }
+    void addCornerBracket() { addBracket('<', '>'); }
+    void addRoundBracket()  { addBracket('(', ')'); }
     
-    void remove(FormulaCursor* cursor, BasicElement::Direction);
-    void replaceElementWithMainChild(FormulaCursor* cursor, BasicElement::Direction);
+    void addFraction();
+    void addRoot();
+
+    void addSymbol(Artwork::SymbolType type);
+    void addIntegral() { addSymbol(Artwork::Integral); }
+    void addProduct()  { addSymbol(Artwork::Product); }
+    void addSum()      { addSymbol(Artwork::Sum); }
+
+    void addMatrix(int rows, int columns);
+
+    void addLowerLeftIndex();
+    void addUpperLeftIndex();
+    void addLowerRightIndex();
+    void addUpperRightIndex();
+
+    void addGenericLowerIndex();
+    void addGenericUpperIndex();
+    
+    void remove(BasicElement::Direction = BasicElement::beforeCursor);
+    void removeForward() { remove(BasicElement::afterCursor); }
+    
+    void replaceElementWithMainChild(BasicElement::Direction = BasicElement::beforeCursor);
 
     /**
      * Undo and move the undone command to the redo stack
      */
-    void undo(); 
+    void undo();
 
     /**
-     * Redo and move the reFdone command to the undo stack
+     * Redo and move the redone command to the undo stack
      */
-    void redo(); 
-
-    /**
-     * Undo and move the undone command to the redo stack
-     */
-    void undo(FormulaCursor *cursor); 
-
-    /**
-     * Redo and move the reFdone command to the undo stack
-     * the given cursor is used for redo and will be put
-     * in the right place after the redo
-     */
-    void redo(FormulaCursor *cursor); 
-        
-    /**
-     * Emits a formulaChanged signal if we are dirty.
-     */
-    QRect boundingRect();
+    void redo();
 
     /**
      * Insert data from the clipboard.
      */
-    void paste(FormulaCursor* cursor, QMimeSource* source);
+    void paste();
+
+    /**
+     * Copy the current selection to the clipboard.
+     */
+    void copy();
+
+    /**
+     * Copy and remove.
+     */
+    void cut();
 
 private:
 
@@ -193,7 +215,7 @@ private:
     /**
      * Remove the selection if any.
      */
-    void removeSelection(FormulaCursor* cursor);
+    void removeSelection();
 
     
     /**

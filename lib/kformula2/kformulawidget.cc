@@ -20,65 +20,72 @@
 
 #include <iostream>
 
-#include <kapp.h>
 #include <qpainter.h>
 
-#include <kstdaction.h>
+#include <kapp.h>
+//#include <klocale.h>
+//#include <kstdaction.h>
 
 #include "basicelement.h"
 #include "formulacursor.h"
+#include "formulaelement.h"
 #include "kformulacontainer.h"
 #include "kformulawidget.h"
-#include "kformulamimesource.h"
 
 
 KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const char* name, WFlags f)
     : QWidget(parent, name, f), cursorVisible(false), document(doc)
 {
+    // This is buggy. We do need more/other messages.
+    connect(document, SIGNAL(elementWillVanish(BasicElement*)),
+            this, SLOT(slotElementWillVanish(BasicElement*)));
+    connect(document, SIGNAL(formulaLoaded(FormulaElement*)),
+            this, SLOT(slotFormulaLoaded(FormulaElement*)));
+    connect(document, SIGNAL(formulaChanged()),
+            this, SLOT(slotFormulaChanged()));
+
     cursor = document->createCursor();
 
-    connect(document, SIGNAL(formulaChanged()), this, SLOT(formulaChanged()));
-    clipboard = QApplication::clipboard(); 
-
-    accel = new KAccel(this);
+//     accel = new KAccel(this);
     
-    (openFile = KStdAction::open(this, SLOT(open())))->plugAccel(accel);
-    (saveFile = KStdAction::save(this, SLOT(save())))->plugAccel(accel);
-    (quitAction = KStdAction::quit(kapp, SLOT(quit())))->plugAccel(accel);
-    (undoAction = KStdAction::undo(this, SLOT(undo())))->plugAccel(accel);
-    (redoAction = KStdAction::redo(this, SLOT(redo())))->plugAccel(accel);
+//     (openFile = KStdAction::open(this, SLOT(slotOpen())))->plugAccel(accel);
+//     (saveFile = KStdAction::save(this, SLOT(slotSave())))->plugAccel(accel);
+//     (quitAction = KStdAction::quit(kapp, SLOT(quit())))->plugAccel(accel);
+//     (undoAction = KStdAction::undo(this, SLOT(slotUndo())))->plugAccel(accel);
+//     (redoAction = KStdAction::redo(this, SLOT(slotRedo())))->plugAccel(accel);
 
-    (cutAction = KStdAction::cut(this, SLOT(cut())))->plugAccel(accel);
-    (copyAction = KStdAction::copy(this, SLOT(copy())))->plugAccel(accel);
-    (pasteAction = KStdAction::paste(this, SLOT(paste())))->plugAccel(accel);
-    (selectAllAction = KStdAction::selectAll(this, SLOT(selectAll())))->plugAccel(accel);
+//     (cutAction = KStdAction::cut(this, SLOT(slotCut())))->plugAccel(accel);
+//     (copyAction = KStdAction::copy(this, SLOT(slotCopy())))->plugAccel(accel);
+//     (pasteAction = KStdAction::paste(this, SLOT(slotPaste())))->plugAccel(accel);
+//     (selectAllAction = KStdAction::selectAll(this, SLOT(slotSelectAll())))->plugAccel(accel);
 
-    /*
-    integralElement;
-    productElement;
-    sumElement;
-    rootElement;
-    fractionElement;
-    matrixElement;
+//     (integralElement = new KAction(i18n("Integral"), CTRL+Key_3, this, SLOT(slotIntegral()), this))->plugAccel(accel);
+//     (productElement = new KAction(i18n("Product"), CTRL+Key_2, this, SLOT(slotProduct()), this))->plugAccel(accel);
+//     (sumElement = new KAction(i18n("Sum"), CTRL+Key_1, this, SLOT(slotSum()), this))->plugAccel(accel);
+//     (rootElement = new KAction(i18n("Root"), CTRL+Key_R, this, SLOT(slotRoot()), this))->plugAccel(accel);
+//     (fractionElement = new KAction(i18n("Fraction"), CTRL+Key_F, this, SLOT(slotFraction()), this))->plugAccel(accel);
+//     (matrixElement = new KAction(i18n("Matrix"), CTRL+Key_M, this, SLOT(slotMatrix()), this))->plugAccel(accel);
 
-    generalUpperIndex;
-    generalLowerIndex;
+//     (generalUpperIndex = new KAction(i18n("Upper Index"), CTRL+Key_U, this, SLOT(slotGeneralUpperIndex()), this))->plugAccel(accel);
+//     (generalLowerIndex = new KAction(i18n("Lower Index"), CTRL+Key_L, this, SLOT(slotGeneralLowerIndex()), this))->plugAccel(accel);
 
-    upperLeftIndex;
-    lowerLeftIndex;
-    upperRightIndex;
-    lowerRightIndex;
-    */
+    //upperLeftIndex = new KAction(i18n("Upper Left Index"), CTRL+Key_I, this, SLOT(openPageL), 0);
+    //lowerLeftIndex = new KAction(i18n("Lower Left Index"), CTRL+Key_I, this, SLOT(openPageL), 0);
+    //upperRightIndex = new KAction(i18n("Upper Right Index"), CTRL+Key_I, this, SLOT(openPageL), 0);
+    //lowerRightIndex = new KAction(i18n("Lower Right Index"), CTRL+Key_I, this, SLOT(openPageL), 0);
 }
 
 KFormulaWidget::~KFormulaWidget()
 {
-    document->destroyCursor(cursor);
+    delete cursor;
 }
 
 
 void KFormulaWidget::paintEvent(QPaintEvent*)
 {
+    // we need this if we optimize the painting one day.
+    //hideCursor();
+    
     QPainter painter;
     painter.begin(this);
     document->draw(painter);
@@ -90,32 +97,22 @@ void KFormulaWidget::paintEvent(QPaintEvent*)
 
 void KFormulaWidget::keyPressEvent(QKeyEvent* event)
 {
-    hideCursor();
+    document->setActiveCursor(cursor);
     
     QChar ch = event->text().at(0);
     if (ch.isPrint()) {
         int latin1 = ch.latin1();
         switch (latin1) {
         case '(':
-            document->addBracket(cursor, '(', ')');
+            document->addRoundBracket();
             break;
         case '[':
-            document->addBracket(cursor, '[', ']');
+            document->addSquareBracket();
             break;
         case '{':
             break;
         case '|':
-            document->addBracket(cursor, '|', '|');
-            break;
-        case '/':
-            document->addFraction(cursor);
-            break;
-        case '#':
-            // here we need a dialog!
-            document->addMatrix(cursor, 4, 5);
-            break;
-        case '\\':
-            document->addRoot(cursor);
+            document->addLineBracket();
             break;
         case '+':
         case '-':
@@ -123,13 +120,13 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
         case '=':
         case '<':
         case '>':
-            document->addOperator(cursor, ch);
+            document->addOperator(ch);
             break;
         case '^':
-            document->addUpperRightIndex(cursor);
+            document->addUpperRightIndex();
             break;
         case '_':
-            document->addLowerRightIndex(cursor);
+            document->addLowerRightIndex();
             break;
         case ' ':
             break;
@@ -143,72 +140,57 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
         case '7':
         case '8':
         case '9':
-            document->addNumber(cursor, ch);
+            document->addNumber(ch);
             break;
         default:
-            document->addText(cursor, ch);
+            document->addText(ch);
         }
     }
     else {
         int action = event->key();
         int state = event->state();
-	int flag = movementFlag(state);
+	MoveFlag flag = movementFlag(state);
 
 	switch (action) {
 	case Qt::Key_Left:
-            cursor->moveLeft(flag);
+            slotMoveLeft(flag);
             break;
         case Qt::Key_Right:
-            cursor->moveRight(flag);
+            slotMoveRight(flag);
             break;
         case Qt::Key_Up:
-            cursor->moveUp(flag);
+            slotMoveUp(flag);
             break;
         case Qt::Key_Down:
-            cursor->moveDown(flag);
+            slotMoveDown(flag);
             break;
         case Qt::Key_BackSpace:
-            document->remove(cursor, BasicElement::beforeCursor);
+            document->remove(BasicElement::beforeCursor);
             break;
         case Qt::Key_Delete:
-            document->remove(cursor, BasicElement::afterCursor);
+            document->remove(BasicElement::afterCursor);
             break;
         case Qt::Key_Home:
-            cursor->moveHome(flag);
+            slotMoveHome(flag);
             break;
         case Qt::Key_End:
-            cursor->moveEnd(flag);
-            break;
-        case Qt::Key_F1:
-            document->addSymbol(cursor, Artwork::Product);
-            break;
-        case Qt::Key_F2:
-            document->addSymbol(cursor, Artwork::Sum);
-            break;
-        case Qt::Key_F3:
-            document->addSymbol(cursor, Artwork::Integral);
+            slotMoveEnd(flag);
             break;
         default:
             if (state & Qt::ControlButton) {
                 switch (event->key()) {
                 case Qt::Key_AsciiCircum:
-                    document->addUpperLeftIndex(cursor);
+                    document->addUpperLeftIndex();
                     break;
                 case Qt::Key_Underscore:
-                    document->addLowerLeftIndex(cursor);
+                    document->addLowerLeftIndex();
                     break;
-                case Qt::Key_U:
-                    document->addGenericUpperIndex(cursor);
-                    break;
-                case Qt::Key_L:
-                    document->addGenericLowerIndex(cursor);
-                    break;
-                case Qt::Key_D:
-                    document->replaceElementWithMainChild(cursor, BasicElement::afterCursor);
-                    break;
-                case Qt::Key_R:
-                    document->replaceElementWithMainChild(cursor, BasicElement::beforeCursor);
-                    break;
+//                 case Qt::Key_D:
+//                     document->replaceElementWithMainChild(BasicElement::afterCursor);
+//                     break;
+//                 case Qt::Key_R:
+//                     document->replaceElementWithMainChild(BasicElement::beforeCursor);
+//                     break;
                 default:
                     //cerr << "Key: " << event->key() << endl;
                     break;
@@ -216,8 +198,6 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
             }
         }
     }
-
-    showCursor();
 }
 
 
@@ -260,73 +240,88 @@ void KFormulaWidget::wheelEvent(QWheelEvent* event)
 }
 
 
-void KFormulaWidget::formulaChanged()
+
+void KFormulaWidget::slotFormulaLoaded(FormulaElement* formula)
+{
+    cursor->formulaLoaded(formula);
+}
+
+void KFormulaWidget::slotElementWillVanish(BasicElement* element)
+{
+    cursor->elementWillVanish(element);
+}
+
+void KFormulaWidget::slotFormulaChanged()
 {
     update();
 }
 
 
-void KFormulaWidget::open()
-{
-    document->load("test.xml");
-}
-
-void KFormulaWidget::save()
-{
-    document->save("test.xml");
-}
-
-void KFormulaWidget::undo()
-{
-    document->undo(cursor);
-}
-
-void KFormulaWidget::redo()
-{
-    document->redo(cursor);
-}
-
-
-void KFormulaWidget::cut()
-{
-    if (cursor->isSelection()) {
-        copy();
-        document->remove(cursor, BasicElement::beforeCursor);
-    }
-}
-
-void KFormulaWidget::copy()
-{
-    QDomDocument formula = cursor->copy();
-    clipboard->setData(new KFormulaMimeSource(formula));
-}
-
-void KFormulaWidget::paste()
-{
-    document->paste(cursor, clipboard->data());
-}
-
-void KFormulaWidget::selectAll()
+void KFormulaWidget::slotSelectAll()
 {
     hideCursor();
     cursor->moveHome();
-    cursor->moveEnd(FormulaCursor::SelectMovement);
+    cursor->moveEnd(SelectMovement);
     showCursor();
 }
 
 
-int KFormulaWidget::movementFlag(int state)
+void KFormulaWidget::slotMoveLeft(MoveFlag flag)
 {
-    int flag = FormulaCursor::NormalMovement;
+    hideCursor();
+    cursor->moveLeft(flag);
+    showCursor();
+}
+
+void KFormulaWidget::slotMoveRight(MoveFlag flag)
+{
+    hideCursor();
+    cursor->moveRight(flag);
+    showCursor();
+}
+
+void KFormulaWidget::slotMoveUp(MoveFlag flag)
+{
+    hideCursor();
+    cursor->moveUp(flag);
+    showCursor();
+}
+
+void KFormulaWidget::slotMoveDown(MoveFlag flag)
+{
+    hideCursor();
+    cursor->moveDown(flag);
+    showCursor();
+}
+
+void KFormulaWidget::slotMoveHome(MoveFlag flag)
+{
+    hideCursor();
+    cursor->moveHome(flag);
+    showCursor();
+}
+
+void KFormulaWidget::slotMoveEnd(MoveFlag flag)
+{
+    hideCursor();
+    cursor->moveEnd(flag);
+    showCursor();
+}
+
+
+MoveFlag KFormulaWidget::movementFlag(int state)
+{
+    int flag = NormalMovement;
 
     if (state & Qt::ControlButton)
-        flag |= FormulaCursor::WordMovement;
+        flag |= WordMovement;
 
     if (state & Qt::ShiftButton)
-        flag |= FormulaCursor::SelectMovement;
+        flag |= SelectMovement;
 
-    return flag;
+    return static_cast<MoveFlag>(flag);
 }
+
 
 void KFormulaWidget::hideCursor()
 {

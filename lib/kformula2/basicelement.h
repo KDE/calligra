@@ -42,16 +42,37 @@ class SequenceElement;
 
 
 /**
- * Basis of every formula element.
+ * Basis of every formula element. An element is used basically by
+ * other elements and by the @ref FormulaCursor .
  *
- * Each element might contain children. Each child needs
- * its own unique number. It is not guaranteed, however,
- * that the number stays the same all the time.
- * (The SequenceElement's children are simply counted.)
+ * Each element knows its size (a rect that includes all children)
+ * and how to draw itself. See @ref calcSizes and @ref draw .
+ *
+ * An element might contain valid cursor position. If the cursor
+ * enters the element it must find the next valid position
+ * depending on the direction in that the cursor moves and the
+ * element it comes from. There might also be some flags inside the
+ * cursor that tell how it wants to move. See @ref moveLeft ,
+ * @ref moveRight , @ref moveUp , @ref moveDown .
+ *
+ * To build a tree an element must own children. If there are children
+ * there must be a main child. This is the child that might be used to
+ * replace the element. See @ref getMainChild and @ref setMainChild .
+ *
+ * If there can be children you might want to @ref insert and @ref remove
+ * them. After a removal the element might be senseless. (See @ref isSenseless )
+ * If it is it must be removed.
  */
 class BasicElement
 {
 public:  
+
+    /*
+     * Each element might contain children. Each child needs
+     * its own unique number. It is not guaranteed, however,
+     * that the number stays the same all the time.
+     * (The SequenceElement's children are simply counted.)
+     */
 
     BasicElement(BasicElement* parent = 0);
     virtual ~BasicElement();

@@ -273,9 +273,7 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         int fromPos = children.find(from);
         cursor->setTo(this, fromPos);
         if (cursor->isSelectionMode()) {
-            if (!cursor->isMouseMark()) {
-                cursor->setMark(fromPos+1);
-            }
+            cursor->setMark(fromPos+1);
         }
     }
 }
@@ -317,9 +315,7 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         int fromPos = children.find(from);
         cursor->setTo(this, fromPos+1);
         if (cursor->isSelectionMode()) {
-            if (!cursor->isMouseMark()) {
-                cursor->setMark(fromPos);
-            }
+            cursor->setMark(fromPos);
         }
     }
 }
