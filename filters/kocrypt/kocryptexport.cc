@@ -103,27 +103,30 @@ int rc;
     outf.writeBlock(p, 5);
 
     // write the data
-    int randlen = rand() % 0x10000;
+    int previous_rand = rand() % 0x10000;
 
-    for (char *t = p+2; t-p < (randlen % 5120)+2; t += sizeof(int)) {
+    while ((previous_rand % 5120) < blocksize)
+       previous_rand = rand() % 0x10000;
+
+    for (char *t = p+2; t-p < (previous_rand % 5120)+2; t += sizeof(int)) {
        ((int *)t) = rand();
     }
 
-    // NOTE: we _don't_ want to write randlen%5120 but randlen itself.  This
+    // NOTE: we _don't_ want to write previous_rand%5120 but previous_rand itself.  This
     // just makes the crypto that much stronger.
-    p[0] = randlen & 0x00ff;
-    p[1] = randlen & 0xff00;
+    p[0] = previous_rand & 0x00ff;
+    p[1] = previous_rand & 0xff00;
 
     unsigned int filelen = inf.size();
 
-    p[(randlen % 5120)+2] = filelen & 0x000000ff;
-    p[(randlen % 5120)+3] = filelen & 0x0000ff00;
-    p[(randlen % 5120)+4] = filelen & 0x00ff0000;
-    p[(randlen % 5120)+5] = filelen & 0xff000000;
+    p[(previous_rand % 5120)+2] = filelen & 0x000000ff;
+    p[(previous_rand % 5120)+3] = filelen & 0x0000ff00;
+    p[(previous_rand % 5120)+4] = filelen & 0x00ff0000;
+    p[(previous_rand % 5120)+5] = filelen & 0xff000000;
 
     // pad up to the nearest blocksize.
     bool done = false;
-    int cursize = (randlen % 5120) + 6;
+    int cursize = (previous_rand % 5120) + 6;
     int shortness = cursize % blocksize;
 
     if (shortness != 0) {

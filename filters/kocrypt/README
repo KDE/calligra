@@ -30,7 +30,9 @@ Header [1 pseudo-block]:
 
 Payload [exactly n blocks]:
     PreDataBlocks:
-       - A random 16 bit unsigned little-endian integer.
+       - previous_rand: A random 16 bit unsigned little-endian integer.
+		- Note that previous_rand%5120 should not be less than blocksize
+                  for security reasons.
        - Random data of length (previous_rand % 5*1024) bytes
        - 32 bit unsigned little endian - The length of the file in bytes
              - yes this makes it not compatible with largefiles.  This will
