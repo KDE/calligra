@@ -19,6 +19,7 @@ libkchartpart_la_SOURCES = kchart_shell.cc kchart_part.cc \
 	kchartParameterConfigPage.cc \
 	kchartParameter3dConfigPage.cc \
 	kchartAreaSubTypeChartPage.cc	\
+	kchartBackgroundPixmapConfigPage.cc	\
 	kchartBarSubTypeChartPage.cc \
 	kchartSubTypeChartPage.cc	\
 	kchartComboConfigPage.cc \
@@ -67,6 +68,7 @@ noinst_HEADERS =  kchart_shell.h kchart_part.h \
 		kchartParameterConfigPage.h \
 		kchartParameter3dConfigPage.h \
 		kchartAreaSubTypeChartPage.h	\
+		kchartBackgroundPixmapConfigPage.h	\
 		kchartBarSubTypeChartPage.h \
 		kchartSubTypeChartPage.h	\
 		kchartComboConfigPage.h \

@@ -101,11 +101,8 @@ int KChartEngine::out_graph() {
     if( params->annotation )
 		AnnoteColor = params->annotation->color;
     /* attempt to import optional background image */
-    // PENDING(kalle) Put back in
-    if( GDC_BGImage ) {
-      kdDebug(35001) << "before bgimage" << endl;
-      drawBackgroundImage();
-    }
+	kdDebug(35001) << "before bgimage" << endl;
+	drawBackgroundImage();
     kdDebug(35001) << "Color settings coming!" << endl;
     prepareColors();
     // PENDING(kalle) Do some sophisticated things that involve QPixmap::createHeuristicMask

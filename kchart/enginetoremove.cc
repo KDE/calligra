@@ -13,7 +13,6 @@ void				*GDC_image = (void*)NULL;	/* in/out */
 char GDC_yval_style		= TRUE;
 char *GDC_thumblabel;
 float GDC_thumbval		= -MAXFLOAT;
-char *GDC_BGImage;
 int	*GDCPIE_explode = 0;	/* [num_points] */
 unsigned char *GDCPIE_missing = 0;	/* TRUE/FALSE */
 

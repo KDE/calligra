@@ -11,9 +11,11 @@
 #include <qlist.h>
 #include <qstrlist.h>
 
-#include <kconfig.h>
+#include <kpixmap.h>
 
 #include "engine.h"
+
+class KConfig;
 
 enum KChartPercentType {
     KCHARTPCTTYPE_NONE,
@@ -197,6 +199,14 @@ struct KChartParameters
     int hard_graphwidth;
     int hard_xorig;
     int hard_yorig;
+
+  // background pixmap stuff
+  KPixmap backgroundPixmap;
+  QString backgroundPixmapName;
+  bool backgroundPixmapIsDirty;
+  bool backgroundPixmapScaled;
+  bool backgroundPixmapCentered;
+  float backgroundPixmapIntensity;
 
     void setTitleFont( QFont f ) {
 	titlefont = f;

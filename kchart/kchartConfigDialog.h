@@ -18,6 +18,7 @@ class KChartFontConfigPage;
 class KChartPieConfigPage;
 class KChartSubTypeChartPage;
 class KChartComboPage;
+class KChartBackgroundPixmapConfigPage;
 
 class KChartConfigDialog : public QTabDialog
 {
@@ -37,6 +38,7 @@ protected:
     KChartFontConfigPage*_parameterfontpage;
     KChartPieConfigPage*_piepage;
     KChartSubTypeChartPage *_subTypePage;
+	KChartBackgroundPixmapConfigPage* _backgroundpixpage;
     KChartComboPage *_hlcChart;
 protected slots:
     virtual void apply();

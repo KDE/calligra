@@ -9,12 +9,13 @@
 #include <qfont.h>
 #include <qcolor.h>
 #include <qpainter.h>
+#include <qimage.h>
 
 #include <stdlib.h>
 #include <stdarg.h>
 #include <math.h>
-#include <stdio.h> //PENDING(kalle) Remove?
 #include <kdebug.h>
+#include <kpixmapeffect.h>
 
 void KChartEngine::drawAnnotation() {
   int x1 = PX(params->annotation->point+(params->do_bar()?1:0));
@@ -180,39 +181,32 @@ void KChartEngine::drawThumbnails() {
 
 void KChartEngine::drawBackgroundImage()
 {
-  //		debug( "Sorry, not implemented: background images" );
-#ifdef SUPPORT_BACKGROUND_IMAGES
-		FILE *in = fopen(GDC_BGImage, "rb");
-		if( !in )
-                        {
-			; // Cant load background image, drop it
-		        }
-		else
-                        {
-			if( bg_img = gdImageCreateFromGif(in) )
-                                {					// =
-				int bgxpos = gdImageSX(bg_img)<imagewidth?  imageheight/2 - gdImageSX(bg_img)/2:  0,
-					bgypos = gdImageSY(bg_img)<imageheight? imageheight/2 - gdImageSY(bg_img)/2: 0;
+  static KPixmap backpix;
 
+  if( params->backgroundPixmap.isNull() )
+	return;
 
-				if( gdImageSX(bg_img) > imagewidth ||	// resize only if too big
-					gdImageSY(bg_img) > imageheight )
-                                        {				//  [and center]
-					gdImageCopyResized( im, bg_img,	// dst, src
-					        bgxpos, bgypos,	// dstX, dstY
-					        0, 0,	// srcX, srcY
-					        imagewidth, imageheight,	// dstW, dstH
-					        imagewidth, imageheight );	// srcW, srcH
-				        }
-                                else		// just center
-					gdImageCopy( im, bg_img,// dst, src
-					                bgxpos, bgypos,	// dstX, dstY
-					                0, 0,	// srcX, srcY
-					                imagewidth, imageheight );// W, H
-			        }
-			fclose(in);
-		        }
-#endif
+  if( params->backgroundPixmapIsDirty ) {
+	
+	// scale loaded pixmap if necessary
+	if( params->backgroundPixmapScaled ) {
+	  QImage img = backpix.convertToImage();
+	  img.smoothScale( imagewidth, imageheight );
+	  backpix.convertFromImage( img );
+	}
+	  
+	// tone lighter
+	KPixmapEffect::intensity( backpix, params->backgroundPixmapIntensity );
+  }
+
+  // Now draw, either NW or centered
+  int xpos = 0, ypos = 0;
+  if( params->backgroundPixmapCentered ) {
+	xpos = ( imagewidth - backpix.width() ) / 2;
+	ypos = ( imageheight - backpix.height() ) / 2;
+  }
+  
+  p->drawPixmap( xpos, ypos, backpix );
 }
 
 

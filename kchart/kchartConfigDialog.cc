@@ -9,6 +9,7 @@
 #include "kchartConfigDialog.moc"
 
 #include "kchartAreaSubTypeChartPage.h"
+#include "kchartBackgroundPixmapConfigPage.h"
 #include "kchartBarSubTypeChartPage.h"
 #include "kchartColorConfigPage.h"
 #include "kchartParameterPieConfigPage.h"
@@ -53,6 +54,9 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
 	
     _parameterfontpage = new KChartFontConfigPage(_params,this );
     addTab( _parameterfontpage, i18n( "&Font" ) );
+
+	_backgroundpixpage = new KChartBackgroundPixmapConfigPage( _params, this );
+	addTab( _backgroundpixpage, i18n( "&Background pixmap" ) );
 
     if(!_params->isPie()&&_params->threeD()) {
         _parameter3dpage = new KChartParameter3dConfigPage(_params,this );

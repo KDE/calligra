@@ -109,7 +109,6 @@ extern QColor *GDC_ExtVolColor;
 extern QColor *GDC_SetColor;
 /* supercedes SetColor	ulong_color[num_sets][num_points] */
 extern QColor *GDC_ExtColor;
-extern char	*GDC_BGImage;
 
 /* legends?  separate gif? */
 /* auto-size fonts, based on GIF size? */

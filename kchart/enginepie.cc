@@ -625,7 +625,7 @@ pie_gif( short imagewidth,
 				int lbl_wdth;
 				short num_nl = cnt_nl( params->legend[i], &lbl_wdth );
 				int lblx,  pctx;
-				int lbly,  pcty;
+				int lbly,  pcty = 0;
 				int linex, liney;
 
 				lbl_wdth *= params->labelFontWidth();

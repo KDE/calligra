@@ -8,14 +8,13 @@
 #define __KCHARTFONTCONFIGPAGE_H__
 
 #include <qwidget.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
-#include <qradiobutton.h>
-#include <qlistbox.h>
-#include <qpushbutton.h>
-#include <qfont.h>
-#include <kcolorbtn.h>
+
 #include "kchartparams.h"
+
+class QLineEdit;
+class QListBox;
+class QPushButton;
+class KColorButton;
 
 class KChartFontConfigPage : public QWidget
 {

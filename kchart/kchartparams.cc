@@ -6,6 +6,8 @@
 #include "kglobal.h"
 
 KChartParameters::KChartParameters() :
+	annotation( 0 ),
+	scatter( 0 ),
 	BGColor( 0, 0, 0 ),
 	GridColor( 160, 160, 160 ),
 	LineColor( 0, 0, 0 ),
@@ -20,64 +22,7 @@ KChartParameters::KChartParameters() :
 	YLabel2Color( 0, 0, 0 ),
 	EdgeColor() // default: no color
 {
-	ExtColor.setColor( 0, Qt::red );
-	ExtColor.setColor( 1, Qt::green );
-	ExtColor.setColor( 2, Qt::blue );
-	ExtColor.setColor( 3, Qt::cyan );
-	ExtColor.setColor( 4, Qt::magenta );
-	ExtColor.setColor( 5, Qt::yellow );
-	ExtColor.setColor( 6, Qt::darkRed );
-	ExtColor.setColor( 7, Qt::darkGreen );
-	ExtColor.setColor( 8, Qt::darkBlue );
-	ExtColor.setColor( 9, Qt::darkCyan );
-	ExtColor.setColor( 10, Qt::darkMagenta );
-	ExtColor.setColor( 11, Qt::darkYellow );
-
-	setTitleFont( QFont( "Helvetica", 12 ) );
-	setYTitleFont( QFont( "Helvetica", 12 ) );
-	setXTitleFont( QFont( "Helvetica", 12 ) );
-	setYAxisFont( QFont( "Helvetica", 10 ) );
-	setXAxisFont( QFont( "Helvetica", 10 ) );
-	setLabelFont( QFont( "Helvetica", 10 ) );
-	setAnnotationFont( QFont( "Helvetica", 10 ) );
-
-	label_dist = 1+8/2;
-	label_line = false;
-	xlabel_spacing = 5;
-	ylabel_density = 80;
-	requested_ymin = MAXDOUBLE;
-	requested_ymax = -MAXDOUBLE;
-	requested_yinterval = -MAXDOUBLE;
-	shelf = true;
-	grid = true;
-	xaxis = true;
-	yaxis = true;
-	yaxis2 = true;
-	yval_style = true;
-	hasxlabel=true;
-        cross=false;
-        stack_type = KCHARTSTACKTYPE_DEPTH;
-	_3d_depth = 5.0;
-	_3d_angle = 45;
-	bar_width = 75;
-	hlc_style = KCHARTHLCSTYLE_CLOSECONNECTED;
-	hlc_cap_width = 25;
-	annotation = 0;
-        num_scatter_pts = 0;
-	scatter = 0;
-        thumbnail = false;
-	thumbval = -MAXFLOAT;
-	border = true;
-	transparent_bg = false;
-	percent_labels = KCHARTPCTTYPE_NONE;
-	type = KCHARTTYPE_3DBAR;
-	hard_size = false;
-	hard_graphheight = 0;
-	hard_graphwidth = 0;
-	hard_xorig = 0;
-	hard_yorig = 0;
-	colPie=0; //first column select
-	offsetCol=0;
+  defaultConfig();
 }
 
 bool KChartParameters::do_vol() {
@@ -241,6 +186,13 @@ void KChartParameters::saveConfig(KConfig *conf) {
   conf->writeEntry("label_line", label_line);
   conf->writeEntry("type", (int)type );
   conf->writeEntry("other_threshold", other_threshold);
+
+  // background pixmap stuff
+  if( !backgroundPixmapName.isNull() )
+	conf->writeEntry( "backgroundPixmapName", backgroundPixmapName );
+  conf->writeEntry( "backgroundPixmapIsDirty", backgroundPixmapIsDirty );
+  conf->writeEntry( "backgroundPixmapScaled", backgroundPixmapScaled );
+  conf->writeEntry( "backgroundPixmapCentered", backgroundPixmapCentered );
 }
 
 void KChartParameters::loadConfig(KConfig *conf) {
@@ -262,8 +214,6 @@ void KChartParameters::loadConfig(KConfig *conf) {
   setLabelFont(tempfont);
   tempfont = conf->readFontEntry("annotationfont", &annotationfont);
   setAnnotationFont(tempfont);
-
-
 
   ylabel_fmt = conf->readEntry("ylabel_fmt", ylabel_fmt );
   ylabel2_fmt = conf->readEntry("ylabel2_fmt", ylabel2_fmt);
@@ -316,11 +266,19 @@ void KChartParameters::loadConfig(KConfig *conf) {
   label_line = conf->readBoolEntry("label_line", label_line);
   type = (KChartType)conf->readNumEntry("type", type);
   other_threshold = conf->readNumEntry("other_threshold", other_threshold);
+
+  backgroundPixmapName = conf->readEntry( "backgroundPixmapName", QString::null );
+  if( !backgroundPixmapName.isNull() ) {
+	backgroundPixmap.load( backgroundPixmapName );
+	backgroundPixmapIsDirty = true;
+  } else
+	backgroundPixmapIsDirty = false;
+  backgroundPixmapScaled = conf->readBoolEntry( "backgroundPixmapScaled", true );
+  backgroundPixmapCentered = conf->readBoolEntry( "backgroundPixmapCentered", true );
 }
 
 void KChartParameters::defaultConfig()
 {
-
 	ExtColor.setColor( 0, Qt::red );
 	ExtColor.setColor( 1, Qt::green );
 	ExtColor.setColor( 2, Qt::blue );
@@ -362,9 +320,9 @@ void KChartParameters::defaultConfig()
 	bar_width = 75;
 	hlc_style = KCHARTHLCSTYLE_CLOSECONNECTED;
 	hlc_cap_width = 25;
-        if(annotation)
-                delete annotation;
-        annotation = 0;
+	if(annotation)
+	  delete annotation;
+	annotation = 0;
 	num_scatter_pts = 0;
 	scatter = 0;
 	thumbnail = false;
@@ -376,4 +334,12 @@ void KChartParameters::defaultConfig()
 	hard_graphwidth = 0;
 	hard_xorig = 0;
 	hard_yorig = 0;
+
+	// background pixmap stuff
+	backgroundPixmapName = QString::null;
+	backgroundPixmapIsDirty = false; // not dirty until pixmap loaded
+	backgroundPixmapScaled = true;
+	backgroundPixmapCentered = false;
+	// PENDING(kalle) remove
+	backgroundPixmap.load( "/home/kalle/kde-cvs/kdebase-src/khelpcenter/kwelcome/welcome.png" );
 }
