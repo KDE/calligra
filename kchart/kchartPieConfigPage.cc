@@ -30,12 +30,11 @@ KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
     list = new QListView( this );
     list->resize( list->sizeHint() );
     grid->addMultiCellWidget(list,0,9,0,0);
-    list->addColumn( i18n("Hide piece") );
+    list->addColumn( i18n("Hide Piece") );
     list->setRootIsDecorated( TRUE );
 
-    QLabel* label = new QLabel( i18n( "Column active" ), this );
+    QLabel* label = new QLabel( i18n( "Column active:" ), this );
     label->resize( label->sizeHint() );
-    label->setAlignment(Qt::AlignCenter);
     grid->addWidget( label,0,1);
 
     // PENDING(kalle) Put back in
@@ -45,18 +44,16 @@ KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
 
     column->setValue(col+1);
 
-    label = new QLabel( i18n( "Move piece to" ), this );
+    label = new QLabel( i18n( "Move piece to:" ), this );
     label->resize( label->sizeHint() );
-    label->setAlignment(Qt::AlignCenter);
     grid->addWidget( label,2,1);
 
     dist = new QSpinBox(0, 400, 1, this);
     dist->resize(100, dist->sizeHint().height() );
     grid->addWidget( dist,3,1);
 
-    label = new QLabel( i18n( "Explode factor (%)" ), this );
+    label = new QLabel( i18n( "Explode factor (%):" ), this );
     label->resize( label->sizeHint() );
-    label->setAlignment(Qt::AlignCenter);
     grid->addWidget( label,4,1);
 
     explose = new QSpinBox(0, 100, 1, this);

@@ -32,25 +32,25 @@ KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* nam
 
     // Second page: select the major chart type
     _selectcharttypepage =  new KChartWizardSelectChartTypePage( this, _chart );
-    addPage( _selectcharttypepage, i18n( "Select chart type" ) );
+    addPage( _selectcharttypepage, i18n( "Select Chart Type" ) );
     finishButton()->setEnabled( TRUE );
     setFinishEnabled(_selectcharttypepage, true);
 
     // Third page: select the minor chart type
     _selectchartsubtypepage = new KChartWizardSelectChartSubTypePage( this, _chart );
-    addPage( _selectchartsubtypepage, i18n( "Select chart subtype" ) );
+    addPage( _selectchartsubtypepage, i18n( "Select Chart Subtype" ) );
 
     // Fourth page: data setup
     //_setupdatapage = new KChartWizardSetupDataPage( this, _chart );
-    //addPage( _setupdatapage, i18n( "Data setup" ) );
+    //addPage( _setupdatapage, i18n( "Data Setup" ) );
 
     // Fifth page: labels/legends setup
     _labelslegendpage = new KChartWizardLabelsLegendPage( this, _chart );
-    addPage( _labelslegendpage, i18n( "Labels and legend" ) );
+    addPage( _labelslegendpage, i18n( "Labels and Legend" ) );
 
     // Sixth page: axes setup
     _axespage = new KChartWizardSetupAxesPage( this, _chart );
-    addPage( _axespage, i18n( "Setup axes" ) );
+    addPage( _axespage, i18n( "Setup Axes" ) );
     setFinishEnabled(_axespage, true);
     setNextEnabled(_axespage, false);
     //  connect( this, SIGNAL( finished() ), _selectdatapage, SLOT( apply() ) );

@@ -38,14 +38,14 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     dcop = 0;
     dcopObject(); // build it
 
-    m_wizard = new KAction( i18n("Customize with &Wizard"),
+    m_wizard = new KAction( i18n("Customize with &Wizard..."),
                             "wizard", 0,
                             this, SLOT( wizard() ),
                             actionCollection(), "wizard");
-    m_edit = new KAction( i18n("&Edit Data"), "edit", 0,
+    m_edit = new KAction( i18n("&Edit Data..."), "edit", 0,
                           this, SLOT( edit() ),
                           actionCollection(), "edit");
-    m_config = new KAction( i18n( "&Config" ), "configure", 0,
+    m_config = new KAction( i18n( "&Configure..." ), "configure", 0,
                             this, SLOT( slotConfig() ),
                             actionCollection(), "config" );
     m_loadconfig = new KAction( i18n("&Load Config"),
@@ -93,25 +93,25 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     m_chartpolar->setExclusiveGroup( "charttypes" );
 
 
-    m_colorConfig = new KAction( i18n( "&Configure Colors" ), 0,
+    m_colorConfig = new KAction( i18n( "&Configure Colors..." ), 0,
                             this, SLOT( slotConfigColor() ),
                             actionCollection(), "color_config" );
 
-    m_fontConfig = new KAction( i18n( "&Configure Font" ), 0,
+    m_fontConfig = new KAction( i18n( "&Configure Font..." ), 0,
                             this, SLOT( slotConfigFont() ),
                             actionCollection(), "font_config" );
 
-    m_backConfig = new KAction( i18n( "&Configure Background" ), 0,
+    m_backConfig = new KAction( i18n( "&Configure Background..." ), 0,
                             this, SLOT( slotConfigBack() ),
                             actionCollection(), "back_config" );
 
-    m_legendConfig = new KAction( i18n( "&Configure Legend" ), 0,
+    m_legendConfig = new KAction( i18n( "&Configure Legend..." ), 0,
                             this, SLOT( slotConfigLegend() ),
                             actionCollection(), "legend_config" );
-    m_subTypeChartConfig= new KAction( i18n( "&Configure Sub Type Chart" ), 0,
+    m_subTypeChartConfig= new KAction( i18n( "&Configure Sub Type Chart..." ), 0,
                             this, SLOT( slotConfigSubTypeChart() ),
                             actionCollection(), "legend_subtype" );
-    m_headerFooterConfig= new KAction( i18n( "&Configure Header Footer" ), 0,
+    m_headerFooterConfig= new KAction( i18n( "&Configure Header Footer..." ), 0,
                             this, SLOT( slotConfigHeaderFooterChart() ),
                             actionCollection(), "headerfooter_subtype" );
 

@@ -36,7 +36,6 @@ KChartParameterPolarConfigPage::KChartParameterPolarConfigPage( KChartParams* pa
 
     QLabel *label = new QLabel( i18n( "Zero degree position:" ), gb3 );
     label->resize( label->sizeHint() );
-    label->setAlignment(Qt::AlignCenter);
     grid3->addWidget( label,4,0);
 
     angle = new QSpinBox(-359, 359, 1, gb3);
@@ -45,7 +44,6 @@ KChartParameterPolarConfigPage::KChartParameterPolarConfigPage( KChartParams* pa
 
     label=new QLabel(i18n("Line width:"),gb3);
     label->resize(label->sizeHint());
-    label->setAlignment(Qt::AlignCenter);
     grid3->addWidget(label,6,0);
 
     lineWidth=new QSpinBox(gb3);

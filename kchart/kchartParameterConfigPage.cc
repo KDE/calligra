@@ -42,7 +42,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     xlabel = new QCheckBox( i18n( "Has X-label" ), gb1 );
     grid1->addWidget(xlabel,3,0);
 
-    yaxis2 = new QCheckBox( i18n( "Y-axis2" ), gb1 );
+    yaxis2 = new QCheckBox( i18n( "Y-axis 2" ), gb1 );
     grid1->addWidget(yaxis2,4,0);
 
     lineMarker = new QCheckBox( i18n( "Line marker" ), gb1 );
@@ -54,8 +54,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     QButtonGroup* gb2 = new QButtonGroup( i18n("Title"), this );
     QGridLayout *grid2 = new QGridLayout(gb2,8,2,15,8);
 
-    QLabel *tmpLabel = new QLabel( i18n( "Y-Title:" ), gb2 );
-    tmpLabel->setAlignment(Qt::AlignCenter);
+    QLabel *tmpLabel = new QLabel( i18n( "Y-title:" ), gb2 );
     grid2->addWidget(tmpLabel,2,0);
 
     ytitle= new QLineEdit( gb2 );
@@ -63,8 +62,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid2->addWidget(ytitle,3,0);
     ytitle->setEnabled(false);
 
-    tmpLabel = new QLabel( i18n( "X-Title:" ), gb2 );
-    tmpLabel->setAlignment(Qt::AlignCenter);
+    tmpLabel = new QLabel( i18n( "X-title:" ), gb2 );
     grid2->addWidget(tmpLabel,4,0);
 
     xtitle= new QLineEdit( gb2 );
@@ -72,8 +70,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid2->addWidget(xtitle,5,0);
     xtitle->setEnabled(false);
 
-    tmpLabel = new QLabel( i18n( "Y-Label format:" ), gb2 );
-    tmpLabel->setAlignment(Qt::AlignCenter);
+    tmpLabel = new QLabel( i18n( "Y-label format:" ), gb2 );
     grid2->addWidget(tmpLabel,0,1);
 
     ylabel_fmt= new QLineEdit( gb2 );
@@ -81,16 +78,14 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid2->addWidget(ylabel_fmt,1,1);
     ylabel_fmt->setEnabled(false);
 
-    tmpLabel = new QLabel( i18n( "Y-Title 2:" ), gb2 );
-    tmpLabel->setAlignment(Qt::AlignCenter);
+    tmpLabel = new QLabel( i18n( "Y-title 2:" ), gb2 );
     grid2->addWidget(tmpLabel,2,1);
 
     ytitle2= new QLineEdit( gb2 );
     ytitle2->setMaximumWidth(130);
     grid2->addWidget(ytitle2,3,1);
 
-    tmpLabel = new QLabel( i18n( "Y-Label format 2:" ), gb2 );
-    tmpLabel->setAlignment(Qt::AlignCenter);
+    tmpLabel = new QLabel( i18n( "Y-label format 2:" ), gb2 );
     grid2->addWidget(tmpLabel,4,1);
 
     ylabel2_fmt= new QLineEdit( gb2 );

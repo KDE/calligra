@@ -29,18 +29,18 @@ SheetDlg::SheetDlg( QWidget *parent, const char *name )
   t = new Sheet(this,"Sheet",TABLE_SIZE);
   t->move(0,0);
 
-  cancel = new QPushButton(i18n("Cancel"),this);
+  cancel = new QPushButton(i18n("&Cancel"),this);
   cancel->resize(cancel->sizeHint());
 
-  ok = new QPushButton(i18n("OK"),this);
+  ok = new QPushButton(i18n("&OK"),this);
   ok->resize(cancel->sizeHint());
 
-  usedrowsLA = new QLabel( i18n("# Rows: " ), this );
+  usedrowsLA = new QLabel( i18n("# Rows:" ), this );
   usedrowsLA->resize( usedrowsLA->sizeHint() );
   usedrowsSB = new QSpinBox( this );
   usedrowsSB->resize( usedrowsSB->sizeHint() );
 
-  usedcolsLA = new QLabel( i18n("# Cols: " ), this );
+  usedcolsLA = new QLabel( i18n("# Cols:" ), this );
   usedcolsLA->resize( usedcolsLA->sizeHint() );
   usedcolsSB = new QSpinBox( this );
   usedcolsSB->resize( usedcolsSB->sizeHint() );

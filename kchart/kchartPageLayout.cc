@@ -33,7 +33,7 @@ KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent, cons
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
-    setButtonText( KDialogBase::User1, i18n("Reset") );
+    setButtonText( KDialogBase::User1, i18n("&Reset") );
 
     QGridLayout *grid = new QGridLayout(page, 4, 2, 15);
 

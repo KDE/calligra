@@ -52,7 +52,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
     titlecolor->setColor( title_color );
 
 
-    QLabel* xlabelLA = new QLabel( i18n( "X-Title:" ), tmpQGroupBox );
+    QLabel* xlabelLA = new QLabel( i18n( "X-title:" ), tmpQGroupBox );
     grid2->addWidget(xlabelLA,1,0);
 
     _xlabelED = new QLineEdit( tmpQGroupBox );
@@ -71,7 +71,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
     grid2->addWidget(xtitlecolor,1,3);
 
 
-    QLabel* ylabelLA = new QLabel( i18n( "Y-Title:" ), tmpQGroupBox );
+    QLabel* ylabelLA = new QLabel( i18n( "Y-title:" ), tmpQGroupBox );
     grid2->addWidget(ylabelLA,2,0);
 
     _ylabelED = new QLineEdit( tmpQGroupBox );
@@ -91,7 +91,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
     grid2->addWidget(ytitlecolor,2,3);
 
     //ytitle2 doesn't work
-    QLabel* ylabelLA2 = new QLabel( i18n( "Y-Title2:" ), tmpQGroupBox );
+    QLabel* ylabelLA2 = new QLabel( i18n( "Y-title 2:" ), tmpQGroupBox );
     grid2->addWidget(ylabelLA2,3,0);
 
     _ylabel2ED = new QLineEdit( tmpQGroupBox );

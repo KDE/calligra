@@ -41,7 +41,6 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
 
   tmpLabel = new QLabel( i18n( "Rotation around the X axis in degrees:" ), gb );
   tmpLabel->resize( tmpLabel->sizeHint() );
-  tmpLabel->setAlignment(Qt::AlignCenter);
   grid1->addWidget(tmpLabel,3,0);
 
   angle3dX=new KIntNumInput(0, gb, 10);
@@ -50,7 +49,6 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
 
   tmpLabel = new QLabel( i18n( "Rotation around the Y axis in degrees:" ), gb );
   tmpLabel->resize( tmpLabel->sizeHint() );
-  tmpLabel->setAlignment(Qt::AlignCenter);
   grid1->addWidget(tmpLabel,4,0);
 
   angle3dY=new KIntNumInput(0, gb, 10);
@@ -58,9 +56,8 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
   angle3dY->setRange(0, 90, 1);
 
 
-  tmpLabel = new QLabel( i18n( "Depth" ), gb );
+  tmpLabel = new QLabel( i18n( "Depth:" ), gb );
   tmpLabel->resize( tmpLabel->sizeHint() );
-  tmpLabel->setAlignment(Qt::AlignCenter);
   grid1->addWidget(tmpLabel,5,0);
 
   depth=new KDoubleNumInput(0, gb);

@@ -136,10 +136,10 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     defaults();
 
     // setup buttons
-    setOKButton( i18n( "OK" ) );
-    setApplyButton( i18n( "Apply" ) );
-    setDefaultButton( i18n( "Defaults" ) );
-    setCancelButton( i18n( "Cancel" ) );
+    setOKButton( i18n( "&OK" ) );
+    setApplyButton( i18n( "&Apply" ) );
+    setDefaultButton( i18n( "&Defaults" ) );
+    setCancelButton( i18n( "&Cancel" ) );
 
     connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( apply() ) );
     connect( this, SIGNAL( defaultButtonPressed() ), this, SLOT( defaults() ) );

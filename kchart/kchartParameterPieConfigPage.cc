@@ -34,18 +34,16 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params
     drawShadowColor=new QCheckBox(i18n("Draw shadow color"),gb3);
     grid3->addWidget(drawShadowColor,3,0);
 
-    QLabel *label = new QLabel( i18n( "Start" ), gb3 );
+    QLabel *label = new QLabel( i18n( "Start:" ), gb3 );
     label->resize( label->sizeHint() );
-    label->setAlignment(Qt::AlignCenter);
     grid3->addWidget( label,4,0);
 
     angle = new QSpinBox(0, 90, 1, gb3);
     angle->resize(100, angle->sizeHint().height() );
     grid3->addWidget( angle,5,0);
 
-    label = new QLabel( i18n( "3D-Depth" ), gb3 );
+    label = new QLabel( i18n( "3D-depth:" ), gb3 );
     label->resize( label->sizeHint() );
-    label->setAlignment(Qt::AlignCenter);
     grid3->addWidget( label,6,0);
 
     depth = new QSpinBox(0, 40, 1, gb3);

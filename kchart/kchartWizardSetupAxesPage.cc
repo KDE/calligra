@@ -102,7 +102,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     grid2 = new QGridLayout(tmpQGroupBox,3,2,15,7);
 
     tmpLabel=new QLabel(tmpQGroupBox);
-    tmpLabel->setText(i18n("Y interval:"));
+    tmpLabel->setText(i18n("Y-interval:"));
     grid2->addWidget(tmpLabel,0,0);
 
     QString tmp;
@@ -142,7 +142,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     grid2 = new QGridLayout(tmpQGroupBox,3,2,15,7);
 
     tmpLabel=new QLabel(tmpQGroupBox);
-    tmpLabel->setText(i18n("YLabel format:"));
+    tmpLabel->setText(i18n("Y-label format:"));
     grid2->addWidget(tmpLabel,0,0);
     ylabel_fmt=new QLineEdit(tmpQGroupBox);
     grid2->addWidget(ylabel_fmt,0,1);
@@ -166,7 +166,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 
 
     tmpLabel=new QLabel(tmpQGroupBox);
-    tmpLabel->setText(i18n("YLabel2 format:"));
+    tmpLabel->setText(i18n("Y-label 2 format:"));
     grid2->addWidget(tmpLabel,2,0);
 
     ylabel2_fmt=new QLineEdit(tmpQGroupBox);

@@ -61,8 +61,11 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     QWhatsThis::add( _backgroundCB, wtstr );
 
 
-
+    QLabel* wallpaperLA = new QLabel( i18n( "Background wallpaper:" ), this );
+    center->addWidget( wallpaperLA );
+    
     wallCB = new QComboBox( false, this, "wallCombo" );
+    wallpaperLA->setBuddy(wallCB);
     QWhatsThis::add( wallCB, i18n( "You can select a background image from "
                                    "this list. Initially, the installed KDE "
                                    "wallpapers will be offered. If you do not "
@@ -104,7 +107,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
 
     QHBox* intensityHB = new QHBox( right );
     intensityHB->setSpacing( 10 );
-    QLabel* intensityLA = new QLabel( i18n( "&Intensity in %" ), intensityHB );
+    QLabel* intensityLA = new QLabel( i18n( "&Intensity in %:" ), intensityHB );
     intensitySB = new QSpinBox( 1, 100, 1, intensityHB );
     intensityLA->setBuddy( intensitySB );
     QString ttstr = i18n( "Here you can select how much the image should be "
@@ -153,35 +156,35 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
 void KChartBackgroundPixmapConfigPage::init()
 {
     QStringList lst;
-    lst.append(i18n( "outermost region" ));
-    lst.append(i18n( "innermost region" ));
-    lst.append(i18n( "header+title+subtitle" ));
-    lst.append(i18n( "footers" ));
-    lst.append(i18n( "data+axes+legend" ));
-    lst.append(i18n( "data+axes" ));
-    lst.append(i18n( "data" ));
-    lst.append(i18n( "legend" ));
-    lst.append(i18n( "left axis" ));
-    lst.append(i18n( "bottom axis" ));
-    lst.append(i18n( "right axis" ));
-    lst.append(i18n( "header A" ));
-    lst.append(i18n( "header B" ));
-    lst.append(i18n( "header C" ));
-    lst.append(i18n( "title A" ));
-    lst.append(i18n( "title B" ));
-    lst.append(i18n( "title C" ));
-    lst.append(i18n( "subtitle A" ));
-    lst.append(i18n( "subtitle B" ));
-    lst.append(i18n( "subtitle C" ));
-    lst.append(i18n( "footer 1 A" ));
-    lst.append(i18n( "footer 1 B" ));
-    lst.append(i18n( "footer 1 C" ));
-    lst.append(i18n( "footer 2 A" ));
-    lst.append(i18n( "footer 2 B" ));
-    lst.append(i18n( "footer 2 C" ));
-    lst.append(i18n( "footer 3 A" ));
-    lst.append(i18n( "footer 3 B" ));
-    lst.append(i18n( "footer 3 C" ));
+    lst.append(i18n( "Outermost Region" ));
+    lst.append(i18n( "Innermost Region" ));
+    lst.append(i18n( "Header+Title+Subtitle" ));
+    lst.append(i18n( "Footers" ));
+    lst.append(i18n( "Data+Axes+Legend" ));
+    lst.append(i18n( "Data+Axes" ));
+    lst.append(i18n( "Data" ));
+    lst.append(i18n( "Legend" ));
+    lst.append(i18n( "Left Axis" ));
+    lst.append(i18n( "Bottom Axis" ));
+    lst.append(i18n( "Right Axis" ));
+    lst.append(i18n( "Header A" ));
+    lst.append(i18n( "Header B" ));
+    lst.append(i18n( "Header C" ));
+    lst.append(i18n( "Title A" ));
+    lst.append(i18n( "Title B" ));
+    lst.append(i18n( "Title C" ));
+    lst.append(i18n( "Subtitle A" ));
+    lst.append(i18n( "Subtitle B" ));
+    lst.append(i18n( "Subtitle C" ));
+    lst.append(i18n( "Footer 1 A" ));
+    lst.append(i18n( "Footer 1 B" ));
+    lst.append(i18n( "Footer 1 C" ));
+    lst.append(i18n( "Footer 2 A" ));
+    lst.append(i18n( "Footer 2 B" ));
+    lst.append(i18n( "Footer 2 C" ));
+    lst.append(i18n( "Footer 3 A" ));
+    lst.append(i18n( "Footer 3 B" ));
+    lst.append(i18n( "Footer 3 C" ));
     regionList->insertStringList(lst);
     // PENDING(kalle) Readapt
     //     showSettings( _params->backgroundPixmapName );

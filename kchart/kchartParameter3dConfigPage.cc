@@ -34,7 +34,6 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
 
   QLabel *tmpLabel = new QLabel( i18n( "Angle:" ), gb );
   tmpLabel->resize( tmpLabel->sizeHint() );
-  tmpLabel->setAlignment(Qt::AlignCenter);
   grid1->addWidget(tmpLabel,2,0);
 
   angle3d=new KIntNumInput(0, gb, 10);
@@ -45,7 +44,6 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
 
   tmpLabel = new QLabel( i18n( "Depth:" ), gb );
   tmpLabel->resize( tmpLabel->sizeHint() );
-  tmpLabel->setAlignment(Qt::AlignCenter);
   grid1->addWidget(tmpLabel,3,0);
 
   depth=new KDoubleNumInput(0, gb);

@@ -156,7 +156,7 @@ void KChartFontConfigPage::changeLabelFont()
   } else if(list->currentText()==i18n("Y-Axis")) {
     font  = &yAxis;
     state = &yAxisIsRelative;
-  } else if(list->currentText()==i18n("ALL Axes")) {
+  } else if(list->currentText()==i18n("All Axes")) {
     diffAxes = true;
   } else if(list->currentText()==i18n("Label")) {
     font  = &label;
