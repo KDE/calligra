@@ -64,6 +64,19 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
     else {
         kdDebug(35001)<<"Error in stack_type\n";
     }
+
+    if( _chart->params()->chartType() == KDChartParams::HiLo)
+    {
+        stacked->setText(i18n("HiLoClose"));
+        percent->setText(i18n("HiLoOpenClose"));
+        if( _chart->params()->hiLoChartSubType()==KDChartParams::HiLoNormal)
+            normal->setChecked( true );
+        else if(_chart->params()->hiLoChartSubType()==KDChartParams::HiLoClose)
+            stacked->setChecked(true);
+        else if(_chart->params()->hiLoChartSubType()==KDChartParams::HiLoOpenClose)
+            percent->setChecked(true);
+    }
+
     if(!chartSubType)
         grp->setEnabled(false);
 
@@ -86,6 +99,9 @@ void KChartWizardSelectChartSubTypePage::apply()
             case KDChartParams::Area:
                 _chart->params()->setAreaChartSubType( KDChartParams::AreaNormal );
                 break;
+            case KDChartParams::HiLo:
+                _chart->params()->setHiLoChartSubType(KDChartParams::HiLoNormal);
+                break;
             default:
                 kdDebug( 35001 ) << "Error in group button\n";
             }
@@ -100,6 +116,9 @@ void KChartWizardSelectChartSubTypePage::apply()
             case KDChartParams::Area:
                 _chart->params()->setAreaChartSubType( KDChartParams::AreaStacked );
                 break;
+            case KDChartParams::HiLo:
+                _chart->params()->setHiLoChartSubType( KDChartParams::HiLoClose);
+                break;
             default:
                 kdDebug( 35001 ) << "Error in group button\n";
             }
@@ -113,6 +132,9 @@ void KChartWizardSelectChartSubTypePage::apply()
                 break;
             case KDChartParams::Area:
                 _chart->params()->setAreaChartSubType( KDChartParams::AreaPercent );
+                break;
+            case KDChartParams::HiLo:
+                _chart->params()->setHiLoChartSubType( KDChartParams::HiLoOpenClose);
                 break;
             default:
                 kdDebug( 35001 ) << "Error in group button\n";
