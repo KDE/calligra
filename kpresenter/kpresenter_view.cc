@@ -4199,6 +4199,7 @@ void KPresenterView::updateReadWrite( bool readwrite )
 
         // Correctly enable or disable undo/redo actions again
         m_pKPresenterDoc->commandHistory()->updateActions();
+        updateSideBarMenu();
     }
 
 }

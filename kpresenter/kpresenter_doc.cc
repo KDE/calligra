@@ -2072,7 +2072,8 @@ void KPresenterDoc::deletePage( int _page )
 {
     kdDebug(33001) << "KPresenterDoc::deletePage " << _page << endl;
     //m_pageList.at(_page)->deletePage();
-
+    if ( m_pageList.count()==1 )
+        return;
     KPrDeletePageCmd *cmd=new KPrDeletePageCmd(i18n("Delete Page"),_page,m_pageList.at(_page),this);
     cmd->execute();
     addCommand(cmd);
