@@ -309,4 +309,9 @@ void GObject::setBrush(QPainter *p)
   p->setBrush(brush);
 }
 
+void GObject::changePaintStyle(const KoColor &c)
+{
+  st.fillColor(c);
+}
+
 #include "GObject.moc"

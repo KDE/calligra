@@ -37,7 +37,7 @@ class GLayer;
 class GObject;
 class QDomDocument;
 class QDomElement;
-
+class KoColor;
 class GPage : public QObject
 {
   Q_OBJECT
@@ -132,6 +132,11 @@ public:
   bool findObjectsContainedIn(const KoRect &r, QPtrList<GObject> &olist);
   
   void updateHandle();
+
+  /*
+   * Style management
+   */
+  void changePaintStyles(const KoColor &c);
 
 public slots:
 //  void objectChanged ();

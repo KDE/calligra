@@ -642,6 +642,14 @@ void GPage::updateHandle()
   }
 }
 
+void GPage::changePaintStyles(const KoColor &c)
+{
+  for(GObject *o = selection.first(); o != 0L; o = selection.next())
+    o->changePaintStyle(c);
+
+  updateHandle();
+}
+
 /*******************[OLD]*********************
 bool GPage::readFromXml (const QDomElement &page)
 {

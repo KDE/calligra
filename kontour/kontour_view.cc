@@ -318,6 +318,7 @@ void KontourView::setupPanels()
   QTabWidget *tab = new QTabWidget(win1, "Tab");
   tab->setTabShape(QTabWidget::Triangular);
   KoColorChooser *mColorPanel = new KoColorChooser(tab);
+  connect(mColorPanel, SIGNAL(colorChanged(const KoColor &)), this, SLOT(changePaintColor(const KoColor &)));
   tab->insertTab(mColorPanel, "Color");
   // TODO : add some content here :)
   tab->insertTab(new QWidget(tab), "Gradient");
@@ -326,6 +327,21 @@ void KontourView::setupPanels()
   win1->setResizeEnabled(false);
   //win1->setCaption(i18n("Paint properties"));
   mRightDock->moveDockWindow(win1);
+
+ /* Outline properties panel */
+  QDockWindow *win2 = new QDockWindow();
+  win2->setResizeEnabled(true);
+  QTabWidget *tab2 = new QTabWidget(win2, "Tab");
+  tab2->setTabShape(QTabWidget::Triangular);
+  KoColorChooser *mColorPanel2 = new KoColorChooser(tab2);
+  tab2->insertTab(mColorPanel2, "Outline");
+  // TODO : add some content here :)
+  tab2->insertTab(new QWidget(tab2), "Foo");
+  tab2->insertTab(new QWidget(tab2), "Fa");
+  win2->setWidget(tab2);
+  win2->setResizeEnabled(false);
+  //win1->setCaption(i18n("Paint properties"));
+  mRightDock->moveDockWindow(win2);
 }
 
 void KontourView::setupTools()
@@ -521,8 +537,15 @@ void KontourView::changePenColor(KoColor c)
 {
 }
 
-void KontourView::changeBrushColor(KoColor c)
+void KontourView::changePaintColor(const KoColor &c)
 {
+  //kdDebug(38000) << "Brush color changed!" << endl;
+  // if there is a selection, change its paint color
+  if(activeDocument() && activeDocument()->activePage() &&
+    !activeDocument()->activePage()->selectionIsEmpty())
+  {
+    activeDocument()->activePage()->changePaintStyles(c);
+  }
 }
 
 void KontourView::changeSelection()

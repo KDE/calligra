@@ -104,7 +104,7 @@ private slots:
   void popupForRulers();
 
   void changePenColor(KoColor c);
-  void changeBrushColor(KoColor c);
+  void changePaintColor(const KoColor &c);
   void changeSelection();
 
   void slotZoomFactorChanged();

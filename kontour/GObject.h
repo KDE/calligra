@@ -139,10 +139,14 @@ public:
    * @param pf previous zoom factor
    */
   virtual void setZoomFactor(double f, double pf);
-  
+ 
+  /*
+   * Style management
+   */
   const GStyle &style() const {return st; }
-  
   void style(GStyle s);
+
+  void changePaintStyle(const KoColor &c);
 
   /**
    * Control points.
