@@ -725,8 +725,8 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
   double xpos;
   double ypos;
-  int col  = table->leftColumn( ev_PosX, xpos );
-  int row  = table->topRow( ev_PosY, ypos );
+  int col  = table->leftColumn( ev_PosX + xOffset(), xpos );
+  int row  = table->topRow( ev_PosY + yOffset(), ypos );
 
   if( col > KS_colMax || row > KS_rowMax )
   {
@@ -738,8 +738,8 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   // Test whether the mouse is over some anchor
   {
     KSpreadCell *cell = table->visibleCellAt( col, row );
-    QString anchor = cell->testAnchor( doc()->zoomItX( ev_PosX - xpos - xOffset() ),
-                                       doc()->zoomItY( ev_PosY - ypos - yOffset() ) );
+    QString anchor = cell->testAnchor( doc()->zoomItX( ev_PosX - xpos + xOffset() ),
+                                       doc()->zoomItY( ev_PosY - ypos + yOffset() ) );
     if ( !anchor.isEmpty() && anchor != m_strAnchor )
       setCursor( KCursor::handCursor() );
     m_strAnchor = anchor;
@@ -1024,9 +1024,9 @@ void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
 
   double ev_PosX = doc()->unzoomItX( _ev->pos().x() );
   double ev_PosY = doc()->unzoomItY( _ev->pos().y() );
-  double ypos, xpos;
-  int col = table->leftColumn( ev_PosX - xOffset(), xpos );
-  int row = table->topRow( ev_PosY - yOffset(), ypos );
+  double tmp;
+  int col = table->leftColumn( ev_PosX + xOffset(), tmp );
+  int row = table->topRow( ev_PosY + yOffset(), tmp );
 
   if( col > KS_colMax || row > KS_rowMax )
   {
@@ -1061,8 +1061,8 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
   double ev_PosX = doc()->unzoomItX( _ev->pos().x() );
   double ev_PosY = doc()->unzoomItY( _ev->pos().y() );
   double ypos, xpos;
-  int col = table->leftColumn( ev_PosX - xOffset(), xpos );
-  int row = table->topRow( ev_PosY - yOffset(), ypos );
+  int col = table->leftColumn( ev_PosX + xOffset(), xpos );
+  int row = table->topRow( ev_PosY + yOffset(), ypos );
   
   if( col > KS_colMax || row > KS_rowMax )
   {
