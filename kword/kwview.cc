@@ -158,7 +158,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
              this, SLOT(slotFrameSetEditChanged()) );
 
     connect( m_gui->canvasWidget(), SIGNAL( currentMouseModeChanged(int) ),
-             this, SLOT( setTool(int) ) );
+             this, SLOT( showMouseMode(int) ) );
 
     // Cut and copy are directly connected to the selectionChanged signal
     if ( m_doc->isReadWrite() )
@@ -274,7 +274,7 @@ void KWView::initGui()
     clipboardDataChanged();
     if ( m_gui )
         m_gui->showGUI();
-    setTool( KWCanvas::MM_EDIT );
+    showMouseMode( KWCanvas::MM_EDIT );
     initGUIButton();
     actionFormatDecreaseIndent->setEnabled(false);
     //setNoteType(m_doc->getNoteType(), false);
@@ -1562,7 +1562,7 @@ void KWView::updateReadWrite( bool readwrite )
     }
 }
 
-void KWView::setTool( int _mouseMode )
+void KWView::showMouseMode( int _mouseMode )
 {
     switch ( _mouseMode ) {
     case KWCanvas::MM_EDIT:
@@ -2364,16 +2364,19 @@ void KWView::setZoom( int zoom, bool updateViews )
 
 void KWView::insertPicture()
 {
-    if ( !actionToolsCreatePix->isChecked() )
+    if ( actionToolsCreatePix->isChecked() )
     {
-        actionToolsCreatePix->setChecked( true ); // clicked on the already active tool!
-        return;
+        KWInsertPicDia dia( this );
+        if ( dia.exec() == QDialog::Accepted && !dia.filename().isEmpty() )
+            insertPicture( dia.filename(), dia.type() == KWInsertPicDia::IPD_CLIPART, dia.makeInline(), dia.pixmapSize(),dia.keepRatio() );
+        else
+            showMouseMode( KWCanvas::MM_EDIT );
     }
-    KWInsertPicDia dia( this );
-    if ( dia.exec() == QDialog::Accepted && !dia.filename().isEmpty() )
-        insertPicture( dia.filename(), dia.type() == KWInsertPicDia::IPD_CLIPART, dia.makeInline(), dia.pixmapSize(),dia.keepRatio() );
     else
-        setTool( KWCanvas::MM_EDIT );
+    {
+        // clicked on the already active tool -> abort
+        m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
+    }
 }
 
 void KWView::slotEmbedImage( const QString &filename )
@@ -2420,15 +2423,14 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
         KWFrame *frame = new KWFrame( fsInline, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );
         fsInline->addFrame( frame, false );
         m_gui->canvasWidget()->inlinePictureStarted();
-        setTool( KWCanvas::MM_EDIT );
+        showMouseMode( KWCanvas::MM_EDIT );
 
         displayFrameInlineInfo();
 
 #if 0
         edit->insertFloatingFrameSet( fs, i18n("Insert Picture Inline") );
         fs->finalize(); // done last since it triggers a redraw
-        // Reset the 'tool'
-        setTool( KWCanvas::MM_EDIT );
+        showMouseMode( KWCanvas::MM_EDIT );
         m_doc->refreshDocStructure(Pictures);
 #endif
     }
@@ -2450,8 +2452,7 @@ void KWView::insertInlinePicture()
 #endif
         edit->insertFloatingFrameSet( fsInline, i18n("Insert Picture Inline") );
         fsInline->finalize(); // done last since it triggers a redraw
-        // Reset the 'tool'
-        setTool( KWCanvas::MM_EDIT );
+        showMouseMode( KWCanvas::MM_EDIT );
         m_doc->refreshDocStructure(Pictures);
         fsInline=0L;
         updateFrameStatusBarItem();
@@ -2985,7 +2986,10 @@ void KWView::toolsCreateText()
     if ( actionToolsCreateText->isChecked() )
         m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_CREATE_TEXT );
     else
-        actionToolsCreateText->setChecked( true ); // always one has to be checked !
+    {
+        // clicked on the already active tool -> abort
+        m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
+    }
 }
 
 void KWView::insertTable()
@@ -3031,11 +3035,6 @@ void KWView::insertFormula( QMimeSource* source )
 
 void KWView::toolsPart()
 {
-    /*if ( !actionToolsCreatePart->isChecked() )
-    {
-        actionToolsCreatePart->setChecked( true ); // always one has to be checked !
-        return;
-        }*/
     m_gui->canvasWidget()->insertPart( actionToolsCreatePart->documentEntry() );
 }
 

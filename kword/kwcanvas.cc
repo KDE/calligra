@@ -2119,6 +2119,11 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     else // Key_PageDown
                         setContentsPos( contentsX(), contentsY() + visibleHeight() );
                 }
+                else if ( keyev->key() == Key_Escape && m_mouseMode != MM_EDIT )
+                {
+                    // Abort frame creation
+                    setMouseMode( MM_EDIT );
+                }
                 else // normal key processing
                     if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT && m_doc->isReadWrite() && !m_printing )
                 {
