@@ -214,6 +214,7 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
     buffer = buffer.stripWhiteSpace();
     QRegExp re("[.,;!?\"'()\\[\\]]");
     buffer.replace(re, "");
+    buffer = buffer.left(100);		// limit maximum length
     m_edit->insertItem(buffer, 0);
 
     m_wnproc_stdout = "";
