@@ -3348,8 +3348,10 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
         }
         }
     }
-    //Calculate position of tooltip for autocompletion
-    const QPoint pos = textFrameSet()->cursorPos( cursor(), m_canvas, m_currentFrame );
+    //Calculate position of tooltip for autocompletion if we are in a valid frame
+    QPoint pos;
+    if( m_currentFrame != 0 )
+      pos = textFrameSet()->cursorPos( cursor(), m_canvas, m_currentFrame );
     textView()->handleKeyPressEvent( e, m_canvas, pos );
 }
 
