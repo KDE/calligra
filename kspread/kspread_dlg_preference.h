@@ -70,6 +70,7 @@ protected:
   KSpreadView* m_pView;
   KIntNumInput  *nbPage;
   KIntNumInput* nbRecentFile;
+  KIntNumInput* autoSaveDelay;
   QCheckBox *showVScrollBar;
   QCheckBox *showHScrollBar;
   QCheckBox *showColHeader;
@@ -79,6 +80,7 @@ protected:
   QCheckBox *showStatusBar;
   KConfig* config;
   int oldRecent;
+  int oldAutoSaveValue;
 } ;
 
 

@@ -229,7 +229,10 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   lay1->setSpacing( 10 );
   config = KSpreadFactory::global()->config();
   int _page=1;
-  int _recent=10;
+
+  oldRecent=10;
+  oldAutoSaveValue=1;
+
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
@@ -241,18 +244,25 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
 	tabbar=config->readBoolEntry("Tabbar",true);
 	formulaBar=config->readBoolEntry("Formula bar",true);
         statusBar=config->readBoolEntry("Status bar",true);
-        _recent=config->readNumEntry( "NbRecentFile" ,10);
+        oldRecent=config->readNumEntry( "NbRecentFile" ,10);
+        oldAutoSaveValue=config->readNumEntry("AutoSave",1);
         }
-  oldRecent=_recent;
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
   nbPage->setRange(1, 10, 1);
   nbPage->setLabel(i18n("Number of pages open at the beginning:"));
   lay1->addWidget(nbPage);
 
-  nbRecentFile=new KIntNumInput(_recent, tmpQGroupBox , 10);
+  nbRecentFile=new KIntNumInput(oldRecent, tmpQGroupBox , 10);
   nbRecentFile->setRange(1, 20, 1);
   nbRecentFile->setLabel(i18n("Number of recent file:"));
   lay1->addWidget(nbRecentFile);
+
+  autoSaveDelay=new KIntNumInput(oldAutoSaveValue, tmpQGroupBox , 10);
+  autoSaveDelay->setRange(0, 60, 1);
+  autoSaveDelay->setLabel(i18n("Auto save (min):"));
+  autoSaveDelay->setSpecialValueText(i18n("No auto save"));
+  autoSaveDelay->setSuffix(i18n("min"));
+  lay1->addWidget(autoSaveDelay);
 
   showVScrollBar=new QCheckBox(i18n("Show vertical scrollbar"),tmpQGroupBox);
   lay1->addWidget(showVScrollBar);
@@ -281,7 +291,6 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   lay1->addWidget(showStatusBar);
   showStatusBar->setChecked(statusBar);
 
-
   box->addWidget( tmpQGroupBox);
 
 }
@@ -298,6 +307,7 @@ void configure::slotDefault()
   showStatusBar->setChecked(true);
   nbPage->setValue(1);
   nbRecentFile->setValue(10);
+  autoSaveDelay->setValue(1);
 }
 
 
@@ -386,6 +396,12 @@ void configure::apply()
     {
        config->writeEntry( "NbRecentFile",val);
        m_pView->changeNbOfRecentFiles(val);
+    }
+    val=autoSaveDelay->value();
+    if(val!=oldAutoSaveValue)
+    {
+        config->writeEntry( "AutoSave", val );
+        m_pView->doc()->setAutoSave(val*60);
     }
 }
 
