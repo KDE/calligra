@@ -28,6 +28,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <float.h>
 #include <koGlobal.h>
 
 #include <kdebug.h>
@@ -1738,6 +1739,9 @@ void RowLayout::setHeight( int _h, const KSpreadCanvas *_canvas )
 void RowLayout::setDblHeight( double _h, const KSpreadCanvas *_canvas )
 {
   KSpreadTable *_table = _canvas ? _canvas->activeTable() : m_pTable;
+  // avoid unnecessary updates
+  if ( kAbs( _h - dblHeight( _canvas ) ) < DBL_EPSILON )
+    return;
 
   UPDATE_BEGIN;
 
@@ -1970,6 +1974,9 @@ void ColumnLayout::setWidth( int _w, const KSpreadCanvas *_canvas )
 void ColumnLayout::setDblWidth( double _w, const KSpreadCanvas *_canvas )
 {
   KSpreadTable *_table = _canvas ? _canvas->activeTable() : m_pTable;
+  // avoid unnecessary updates
+  if ( kAbs( _w - dblWidth( _canvas ) ) < DBL_EPSILON )
+    return;
 
   UPDATE_BEGIN;
 
