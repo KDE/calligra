@@ -2080,4 +2080,9 @@ void KWCanvas::printRTDebug( int info )
 }
 #endif
 
+void KWCanvas::setXimPosition( int x, int y, int w, int h )
+{
+    QWidget::setMicroFocusHint( x - contentsX(), y - contentsY(), w, h );
+}
+
 #include "kwcanvas.moc"

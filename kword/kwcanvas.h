@@ -159,6 +159,8 @@ public:
 
     void emitFrameSelectedChanged();
 
+    void setXimPosition( int x, int y, int w, int h );
+
 protected:
     void applyGrid( KoPoint &p );
     void applyAspectRatio( double ratio, KoRect& insRect );

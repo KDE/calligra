@@ -472,6 +472,9 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
                                 pix, cg, cursorVisible, cursor );
             p->restore();
             cursor->parag()->setChanged( wasChanged );      // Maybe we have more changes to draw!
+
+            //XIM Position
+            canvas->setXimPosition( cPoint.x(), cPoint.y(), 0, h );
         }
     }
     m_currentDrawnCanvas = 0L;
@@ -2748,12 +2751,11 @@ KCommand * KWTextFrameSet::setPageBreakingCommand( QTextCursor * cursor, int pag
         undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
         KoParagLayout::PageBreaking );
     textdoc->addCommand( cmd );
-    // ## find a better name for the command
-    //m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Change Paragraph Attribute") ) );
     undoRedoInfo.clear();
     emit showCursor();
     emit updateUI( true );
     emit ensureCursorVisible();
+    // ## find a better name for the command
     return new KWTextCommand( this, /*cmd, */i18n("Change Paragraph Attribute") );
 }
 
