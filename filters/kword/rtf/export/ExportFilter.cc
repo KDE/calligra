@@ -1038,12 +1038,12 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
         if ( layout.lineSpacingType==10  )
            ;// do nothing, single linespace is default in RTF
         else if ( layout.lineSpacingType==15  )
-           strLayout += "\\sl360"; // one-and-half linespace
+           strLayout += "\\sl360\\slmult1"; // one-and-half linespace
         else if ( layout.lineSpacingType==20  )
-           strLayout += "\\sl480"; // double linespace
+           strLayout += "\\sl480\\slmult1"; // double linespace
         else if ( layout.lineSpacingType==0 )
            // custom line spacing (in points)
-           strLayout += "\\sl-" + QString::number(int(layout.lineSpacing)*20,10);
+           strLayout += QString("\\sl-%1\\slmult0").arg(int(layout.lineSpacing)*20);
         else 
         kdWarning(30503) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
