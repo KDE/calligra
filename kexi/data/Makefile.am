@@ -38,7 +38,7 @@ servicetypes_DATA=kexihandler.desktop kexitablefilter.desktop  kexiimportfilter.
 			kexifileimportfilter.desktop kexiserverimportfilter.desktop
 
 servicesdir=$(kde_servicesdir)/kexi
-services_DATA=kexitablehandler.desktop kexiqueryhandler.desktop kexirelationhandler.desktop kexiformhandler.desktop $(scripthandler)
+services_DATA=kexitablehandler.desktop kexiqueryhandler.desktop kexirelationhandler.desktop kexihtmlhandler.desktop kexiformhandler.desktop $(scripthandler)
 
 magicdir = $(kde_confdir)/magic
 magic_DATA = kexi.magic

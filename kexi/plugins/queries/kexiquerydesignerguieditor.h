@@ -27,18 +27,24 @@ class KexiTableViewData;
 class KexiTableView;
 class KexiRelationWidget;
 
+namespace KexiPart
+{
+	class Item;
+}
+
 namespace KexiDB
 {
 	class QuerySchema;
 	class Connection;
 };
+class KexiQueryDocument;
 
 class KexiQueryDesignerGuiEditor : public KexiViewBase
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+		KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name = 0);
 		~KexiQueryDesignerGuiEditor();
 
 		KexiDB::QuerySchema	*schema();
@@ -48,6 +54,9 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 	protected:
 		void			initTable();
 		void			addRow(const QString &tbl, const QString &field);
+		void			restore();
+		virtual bool		beforeSwitchTo(int mode);
+		virtual bool		afterSwitchFrom(int mode);
 
 	protected slots:
 		void			slotDropped(QDropEvent *ev);
@@ -57,6 +66,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		KexiTableView		*m_table;
 		KexiDB::Connection	*m_conn;
 		KexiRelationWidget *m_relations;
+		KexiQueryDocument	*m_doc;
 };
 
 #endif

@@ -262,8 +262,8 @@ HistoryEntry::highlight()
 	text = text.replace(keywords, "<b>\\1</b>");
 
 	if(!m_error.isEmpty())
-		text += ("<br>"+i18n("Error: %1").arg(m_error));
-//		text += i18n("<br><font face=\"arial\" size=\"-1\">Error: %1</font>").arg(m_error);
+//		text += ("<br>"+i18n("Error: %1").arg(m_error));
+		text += QString("<br><font face=\"") + KGlobalSettings::generalFont().family() + QString("\" size=\"-1\">") + i18n("Error: %1").arg(m_error) + "</font>";
 
 	kdDebug() << "HistoryEntry::highlight() text:" << text << endl;
 //	m_formated = new QSimpleRichText(text, QFont("courier", 8));

@@ -52,7 +52,7 @@ class KexiQueryDesigner : public KexiDialogBase
 		void	queryExecuted(QString statement, bool succeed, const QString &err);
 
 	protected slots:
-		void	viewChanged(QWidget *);
+		virtual bool	beforeSwitch(int mode);
 
 	private:
 		QTabWidget			*m_tab;

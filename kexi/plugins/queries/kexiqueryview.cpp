@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003   Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004   Lucijan Busch <lucijan@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,42 +17,31 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIQUERYPART_H
-#define KEXIQUERYPART_H
+#include <kexiproject.h>
+#include <kexidb/connection.h>
+#include <keximainwindow.h>
 
-#include <kexipart.h>
-#include <kexipartitem.h>
-#include <qmap.h>
+#include "kexiquerydocument.h"
+#include "kexiqueryview.h"
 
-class KexiMainWin;
-namespace KexiDB
+KexiQueryView::KexiQueryView(KexiMainWindow *win, QWidget *parent, KexiQueryDocument *doc, const char *name)
+ : KexiDataTable(win, parent, name)
 {
-	class QuerySchema;
-	class Connection;
+	m_doc = doc;
+	afterSwitchFrom(0);
 }
 
-class KexiQueryDocument;
-
-typedef QMap<int, KexiQueryDocument *> QueryData;
-
-class KexiQueryPart : public KexiPart::Part
+bool
+KexiQueryView::afterSwitchFrom(int)
 {
-	Q_OBJECT
+	KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*m_doc->schema());
+	setData(rec);
+	return true;
+}
 
-	public:
-		KexiQueryPart(QObject *parent, const char *name, const QStringList &);
-		~KexiQueryPart();
+KexiQueryView::~KexiQueryView()
+{
+}
 
-		virtual bool remove(KexiMainWindow *win, const KexiPart::Item &item);
-
-		virtual QWidget* createView(QWidget *parent, KexiDialogBase* dialog, 
-			const KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
-
-		KexiQueryDocument	*data(KexiDB::Connection *conn, const KexiPart::Item &item);
-
-	private:
-		QueryData		m_data;
-};
-
-#endif
+#include "kexiqueryview.moc"
 

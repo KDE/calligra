@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004   Lucijan Busch <lucijan@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,39 +17,34 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIQUERYDESIGNERSQL_H
-#define KEXIQUERYDESIGNERSQL_H
+#ifndef KEXIQUERYDOCUMENT_H
+#define KEXIQUERYDOCUMENT_H
 
-#include <kexiviewbase.h>
+#include <qobject.h>
 
-class KexiQueryDesigner;
-class KexiQueryDesignerSQLEditor;
-class KexiQueryDesignerSQLHistory;
-
-class KexiQueryDocument;
-
-class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQL : public KexiViewBase
+namespace KexiDB
 {
-	Q_OBJECT
+	class QuerySchema;
+}
 
+/**
+ * this class stores the current data for queries (to be shared between the different views)
+ * and can save/load queries
+ */
+class KexiQueryDocument
+{
 	public:
-		KexiQueryDesignerSQL(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name = 0);
-		~KexiQueryDesignerSQL();
+		KexiQueryDocument(KexiDB::QuerySchema *s);
+		~KexiQueryDocument();
 
-		QString				getQuery();
-		KexiQueryDesignerSQLEditor	*editor() { return m_editor; }
+		void			setSchema(KexiDB::QuerySchema *s) { m_schema = s; }
+		KexiDB::QuerySchema	*schema() { return m_schema; }
 
-	protected:
-		virtual bool			beforeSwitchTo(int);
-		virtual bool			afterSwitchFrom(int);
-
-	signals:
-		void				queryShortcut();
+		void			addHistoryItem(const QString &time, const QString &query, const QString &error);
 
 	private:
-		KexiQueryDesignerSQLEditor	*m_editor;
-		KexiQueryDesignerSQLHistory	*m_history;
-		KexiQueryDocument		*m_doc;
+		KexiDB::QuerySchema	*m_schema;
 };
 
 #endif
+

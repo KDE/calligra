@@ -20,15 +20,24 @@
 #include <qsplitter.h>
 #include <qlayout.h>
 
+#include <kdebug.h>
+
+#include <kexidb/connection.h>
+#include <kexidb/parser/parser.h>
+
+#include <kexiproject.h>
+#include <keximainwindow.h>
 
 #include "kexiquerydesigner.h"
 #include "kexiquerydesignersqleditor.h"
 #include "kexiquerydesignersqlhistory.h"
 #include "kexiquerydesignersql.h"
+#include "kexiquerydocument.h"
 
-KexiQueryDesignerSQL::KexiQueryDesignerSQL(KexiMainWindow *mainWin, QWidget *parent, const char *name)
+KexiQueryDesignerSQL::KexiQueryDesignerSQL(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name)
  : KexiViewBase(mainWin, parent, name)
 {
+	m_doc = doc;
 	QSplitter *l = new QSplitter(this);
 	l->setOrientation(Vertical);
 
@@ -40,7 +49,30 @@ KexiQueryDesignerSQL::KexiQueryDesignerSQL(KexiMainWindow *mainWin, QWidget *par
 
 	connect(parent, SIGNAL(queryExecuted(QString, bool, const QString &)), m_history, SLOT(addEvent(QString, bool, const QString &)));
 
-	connect(m_editor, SIGNAL(execQ()), parent, SLOT(fastQuery()));
+//	connect(m_editor, SIGNAL(execQ()), parent, SLOT(fastQuery()));
+}
+
+bool
+KexiQueryDesignerSQL::beforeSwitchTo(int)
+{
+
+	KexiDB::Parser *parser = new KexiDB::Parser(mainWin()->project()->dbConnection());
+	parser->parse(getQuery());
+	m_doc->setSchema(parser->select());
+
+	delete parser;
+
+	if(parser->operation() == KexiDB::Parser::OP_Error)
+		return false;
+
+	return true;
+}
+
+bool
+KexiQueryDesignerSQL::afterSwitchFrom(int)
+{
+	kdDebug() << "KexiQueryDesignerSQL::afterSwitchFrom()" << endl;
+	m_editor->setText(m_doc->schema()->connection()->selectStatement(*m_doc->schema()));
 }
 
 QString
@@ -54,3 +86,4 @@ KexiQueryDesignerSQL::~KexiQueryDesignerSQL()
 }
 
 #include "kexiquerydesignersql.moc"
+

@@ -163,6 +163,11 @@ QString KexiDialogBase::itemIcon()
 
 bool KexiDialogBase::switchToViewMode( int viewMode )
 {
+	kdDebug() << "KexiDialogBase::switchToViewMode()" << endl;
+	QWidget *current = m_stack->visibleWidget();
+	if(current)
+		static_cast<KexiViewBase*>(current)->beforeSwitchTo(viewMode);
+
 	if (m_currentViewMode == viewMode)
 		return true;
 	if (!supportsViewMode(viewMode))
@@ -181,10 +186,9 @@ bool KexiDialogBase::switchToViewMode( int viewMode )
 	if (!widget->inherits("KexiViewBase"))
 		return false;
 	KexiViewBase *view = static_cast<KexiViewBase*>(widget);
-	view->beforeSwitch();
 	m_stack->raiseWidget(view);
+	view->afterSwitchFrom(m_currentViewMode);
 	m_currentViewMode = viewMode;
-	view->afterSwitch();
 	return true;
 }
 

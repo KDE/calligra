@@ -37,12 +37,14 @@ bool KexiViewBase::dirty()
 	return false;
 }
 
-void KexiViewBase::beforeSwitch()
+bool KexiViewBase::beforeSwitchTo(int /* mode */)
 {
+	return true;
 }
 
-void KexiViewBase::afterSwitch()
+bool KexiViewBase::afterSwitchFrom(int /* mode */)
 {
+	return true;
 }
 
 #include "kexiviewbase.moc"

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
-             (C) 2003 by Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2003, 2004  by  Lucijan Busch <lucijan@kde.org>
+             (C) 2003            Joseph Wenninger <jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,6 +51,9 @@ KexiQueryDesigner::KexiQueryDesigner(KexiMainWindow *win, const KexiPart::Item &
 	: KexiDialogBase(win, it.name())
 {
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode | Kexi::TextViewMode;
+
+	//FIXME: this isn't true if the dialog is opened with another view...
+	m_currentView = Kexi::DataViewMode;
 
 //	setIcon(SmallIcon("query"));
 	QVBoxLayout *l = new QVBoxLayout(this);
@@ -108,7 +111,6 @@ void
 KexiQueryDesigner::sqlQuery()
 {
 	kdDebug() << "KexiQueryDesigner::query()" << endl;
-//	KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(m_statement);
 
 	KexiDB::Cursor *rec;
 	KexiDB::Parser *parser = new KexiDB::Parser(mainWin()->project()->dbConnection());
@@ -134,53 +136,34 @@ KexiQueryDesigner::sqlQuery()
 	}
 }
 
-void
-KexiQueryDesigner::viewChanged(QWidget *w)
+bool
+KexiQueryDesigner::beforeSwitch(int mode)
 {
-/*	int view = m_tab->indexOf(w);
-
-	if(view == 0)
+	if(mode == Kexi::DataViewMode)
 	{
-		m_currentView = 0;
-	}
-	else if(view == 1)
-	{
-		m_currentView = 1;
-	}
-	else
-	{
-		if(m_currentView == 0)
-		{
-			m_statement = m_editor->getQuery();
-			m_editor->getParameters(m_parameters);
-			query();
-		}
-		else
-		{
-			m_statement = m_sql->getQuery();
-			query();
-		}
-	}
-*/
-
-	kdDebug() << "KexiQueryDesigner::viewChanged(): index of W = " << m_tab->indexOf(w) << endl;
-
-	//this is really ugly, however we might switch back to toolbar stuff anyway...
-	if(m_tab->indexOf(w) == 2)
-	{
-		if(m_currentView == 0)
+		if(m_currentView == Kexi::DesignViewMode)
 		{
 			KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*m_editor->schema());
 			if(rec)
+			{
 				m_queryView->setData(rec);
+			}
+			else
+			{
+				m_currentView = mode;
+				return false;
+			}
 		}
-		if(m_currentView == 1)
+		if(m_currentView == Kexi::TextViewMode)
 		{
 			m_statement = m_sql->getQuery();
 			sqlQuery();
+
+			//TODO: stay in current view on errors
 		}
 	}
-	m_currentView = m_tab->indexOf(w);
+	m_currentView = mode;
+	return true;
 }
 
 void

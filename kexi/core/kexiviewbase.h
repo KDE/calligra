@@ -43,13 +43,17 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 	protected:
 		/*! called by KexiDialogBase::switchToViewMode() right before dialog is switched to new mode
 		 By default does nothing. Reimplement this if you need to do something 
-		 before switching to this view. */
-		virtual void beforeSwitch();
+		 before switching to this view.
+		 return true if you accept or false if a error occupied and view shouldn't change
+		 */
+		virtual bool beforeSwitchTo(int mode);
 
 		/*! called by KexiDialogBase::switchToViewMode() right after dialog is switched to new mode
 		 By default does nothing. Reimplement this if you need to do something 
-		 after switching to this view. */
-		virtual void afterSwitch();
+		 after switching to this view.
+		 return true if you accept or false if a error occupied and view shouldn't change
+		*/
+		virtual bool afterSwitchFrom(int mode);
 
 		/*! True if contents (data) of the view is dirty and need to be saved
 		 This may or not be used, depending if changes in the dialog 

@@ -462,6 +462,14 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Only use this method if you really need. */
 		virtual bool drv_executeSQL( const QString& statement ) = 0;
 
+		/*! returns "SELECT ..." statement's string needed for executing query 
+		 defined by \a querySchema.
+
+		 Note: The statement string can be specific for this connection's driver database, 
+		 and thus not reusable in general.
+		*/
+		QString selectStatement( KexiDB::QuerySchema& querySchema ) const;
+
 	protected:
 		/*! Used by Driver */
 		Connection( Driver *driver, ConnectionData &conn_data );
@@ -538,13 +546,6 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		QString createTableStatement( const KexiDB::TableSchema& tableSchema ) const;
 
-		/*! returns "SELECT ..." statement's string needed for executing query 
-		 defined by \a querySchema.
-
-		 Note: The statement string can be specific for this connection's driver database, 
-		 and thus not reusable in general.
-		*/
-		QString selectStatement( KexiDB::QuerySchema& querySchema ) const;
 
 		/*! returns "SELECT ..." statement's string needed for executing query 
 		 defined by "select * from <table_name>" where <table_name> is \a tableSchema's name.

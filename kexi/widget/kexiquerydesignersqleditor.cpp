@@ -87,6 +87,17 @@ KexiQueryDesignerSQLEditor::getText()
 #endif
 }
 
+void
+KexiQueryDesignerSQLEditor::setText(const QString &text)
+{
+#ifndef Q_WS_WIN
+	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(m_doc);
+	eIface->setText(text);
+#else
+	m_view->setText(text);
+#endif
+}
+
 bool
 KexiQueryDesignerSQLEditor::eventFilter(QObject *, QEvent *ev)
 {

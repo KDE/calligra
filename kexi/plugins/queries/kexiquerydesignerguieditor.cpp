@@ -35,14 +35,16 @@
 #include <kexitableview.h>
 #include <kexitableitem.h>
 #include <kexitableviewdata.h>
-#include "kexidragobjects.h"
+#include <kexidragobjects.h>
+#include "kexiquerydocument.h"
 
 #include "widget/relations/kexirelationwidget.h"
 
-KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
+KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name)
  : KexiViewBase(mainWin, parent, name)
 {
 	m_conn = mainWin->project()->dbConnection();
+	m_doc = doc;
 
 	QSplitter *s = new QSplitter(Vertical, this);
 //	KexiInternalPart::createWidgetInstance("relation", win, s, "relation");
@@ -62,6 +64,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, 
 
 	connect(m_table, SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
 	m_table->setNavigatorEnabled(false);
+	restore();
 }
 
 void
@@ -122,7 +125,11 @@ KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
 KexiDB::QuerySchema *
 KexiQueryDesignerGuiEditor::schema()
 {
-	KexiDB::QuerySchema *s = new KexiDB::QuerySchema();
+	if(m_doc->schema())
+		m_doc->schema()->clear();
+	else
+		m_doc->setSchema(new KexiDB::QuerySchema());
+
 	QDict<KexiDB::TableSchema> tables;
 	for(KexiTableItem *it = m_data->first(); it; it = m_data->next())
 	{
@@ -136,22 +143,53 @@ KexiQueryDesignerGuiEditor::schema()
 		{
 			t = m_conn->tableSchema(tableName);
 			tables.insert(tableName, t);
-			s->addTable(t);
+			m_doc->schema()->addTable(t);
 		}
 
 		KexiDB::Field *f = new KexiDB::Field();
 		f->setName(it->at(1).toString());
 		f->setTable(t);
 
-		s->addField(f);
+		m_doc->schema()->addField(f);
 	}
 
 //	containsRef
 
 	//this is temporary and will later be replaced by a intelligent master-table-finder in
 	//KexiDB::Connection::selectStatement()
-	s->setParentTable(s->tables()->first());
-	return s;
+	m_doc->schema()->setParentTable(m_doc->schema()->tables()->first());
+	m_doc->schema()->setStatement("");
+	return m_doc->schema();
+}
+
+void
+KexiQueryDesignerGuiEditor::restore()
+{
+	if(!m_doc->schema())
+		return;
+
+	m_table->clearData();
+	KexiDB::Field::Vector flist = m_doc->schema()->fieldsExpanded();
+	for(unsigned int i=0; i < flist.count(); i++)
+	{
+		addRow(flist.at(i)->table()->name(), flist.at(i)->name());
+	}
+}
+
+bool
+KexiQueryDesignerGuiEditor::beforeSwitchTo(int)
+{
+	kdDebug() << "KexiQueryDesignerGuiEditor::beforeSwitch()" << endl;
+	//update the pointer :)
+	schema();
+	return true;
+}
+
+bool
+KexiQueryDesignerGuiEditor::afterSwitchFrom(int)
+{
+	restore();
+	return true;
 }
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()

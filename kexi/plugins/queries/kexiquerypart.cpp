@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004   Lucijan Busch <lucijan@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,8 +25,13 @@
 #include <keximainwindow.h>
 #include <kexidialogbase.h>
 #include <kexiproject.h>
-#include <kexidatatable.h>
+#include <kexidb/queryschema.h>
+#include <kexidb/connection.h>
+#include <kexidb/cursor.h>
+#include <kexidb/parser/parser.h>
 
+#include "kexiquerydocument.h"
+#include "kexiqueryview.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexiquerydesignersql.h"
 
@@ -41,21 +46,20 @@ KexiQueryPart::~KexiQueryPart()
 {
 }
 
-//KexiDialogBase*
-//KexiQueryPart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode)
-QWidget* KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, 
-	const KexiPart::Item &item, int viewMode)
+QWidget*
+KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog,  const KexiPart::Item &item, int viewMode)
 {
+	kdDebug() << "KexiQueryPart::createView()" << endl;
 	if (viewMode == Kexi::DataViewMode) {
-		return new KexiDataTable(dialog->mainWin(), parent, "dataview");//todo
+		return new KexiQueryView(dialog->mainWin(), parent, data(dialog->mainWin()->project()->dbConnection(), item), "dataview");
 	}
 	else if (viewMode == Kexi::DesignViewMode) {
-		return new KexiQueryDesignerGuiEditor(dialog->mainWin(), parent, "guieditor");
+		return new KexiQueryDesignerGuiEditor(dialog->mainWin(), parent, data(dialog->mainWin()->project()->dbConnection(), item), "guieditor");
 	}
 	else if (viewMode == Kexi::TextViewMode) {
-		return new KexiQueryDesignerSQL(dialog->mainWin(), parent, "sqldesigner");
+		return new KexiQueryDesignerSQL(dialog->mainWin(), parent, data(dialog->mainWin()->project()->dbConnection(), item), "sqldesigner");
 	}
-//	KexiQueryDesigner *d = new KexiQueryDesigner(win, item);
+
 	return 0;
 }
 
@@ -65,10 +69,34 @@ KexiQueryPart::instanceName() const
 	return i18n("Query");
 }*/
 
-bool KexiQueryPart::remove(KexiMainWindow *, const KexiPart::Item &)
+bool
+KexiQueryPart::remove(KexiMainWindow *, const KexiPart::Item &)
 {
 	//TODO
 	return false;
+}
+
+KexiQueryDocument *
+KexiQueryPart::data(KexiDB::Connection *conn, const KexiPart::Item &i)
+{
+	KexiQueryDocument *doc = m_data[i.identifier()];
+	if(doc)
+		return doc;
+
+	KexiDB::Cursor *cursor = conn->executeQuery(QString("SELECT q_sql FROM kexi__querydata WHERE q_id = %1").arg(i.identifier()));
+	cursor->moveFirst();
+	if(cursor->eof())
+		return 0;
+
+	KexiDB::Parser *parser = new KexiDB::Parser(conn);
+	parser->parse(cursor->value(0).toString());
+
+	doc = new KexiQueryDocument(parser->select());
+	m_data.insert(i.identifier(), doc);
+
+	conn->deleteCursor(cursor);
+	delete parser;
+	return doc;
 }
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_query, KGenericFactory<KexiQueryPart> )
