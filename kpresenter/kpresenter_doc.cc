@@ -989,20 +989,46 @@ bool KPresenterDoc::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,Fill
 /*================================================================*/
 bool KPresenterDoc::setPieSettings(PieType pieType,int angle,int len)
 {
-  KPObject *kpobject = 0;
   bool ret = false;
+
+  KPObject *kpobject = 0;
+  QList<KPObject> _objects;
+  QList<PieValueCmd::PieValues> _oldValues;
+  PieValueCmd::PieValues _newValues,*tmp;
+  
+  _objects.setAutoDelete(false);
+  _oldValues.setAutoDelete(false);
+  
+  _newValues.pieType = pieType;
+  _newValues.pieAngle = angle;
+  _newValues.pieLength = len;
   
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
-      if (kpobject->isSelected() && kpobject->getType() == OT_PIE)
+      if (kpobject->getType() == OT_PIE)
 	{
-	  dynamic_cast<KPPieObject*>(kpobject)->setPieType(pieType);
-	  dynamic_cast<KPPieObject*>(kpobject)->setPieAngle(angle);
-	  dynamic_cast<KPPieObject*>(kpobject)->setPieLength(len);
+	  tmp = new PieValueCmd::PieValues;
+	  tmp->pieType = dynamic_cast<KPPieObject*>(kpobject)->getPieType();
+	  tmp->pieAngle = dynamic_cast<KPPieObject*>(kpobject)->getPieAngle();
+	  tmp->pieLength = dynamic_cast<KPPieObject*>(kpobject)->getPieLength();
+	  _oldValues.append(tmp);
+	  if (kpobject->isSelected())
+	    _objects.append(kpobject);
 	  ret = true;
-	  repaint(kpobject);
 	}
+    }
+  
+  if (!_objects.isEmpty())
+    {
+      PieValueCmd *pieValueCmd = new PieValueCmd(i18n("Change Pie/Arc/Chord Values"),_oldValues,_newValues,_objects,this);
+      commands()->addCommand(pieValueCmd);
+      pieValueCmd->execute();
+    }
+  else
+    {
+      _oldValues.setAutoDelete(true);
+      _oldValues.clear();
     }
 
   m_bModified = true;

@@ -147,24 +147,23 @@ KPresenterView::~KPresenterView()
 /*======================= clean up ==============================*/
 void KPresenterView::cleanUp()
 {
-  if ( m_bIsClean )
-    return;
+  if (m_bIsClean) return;
   
   cerr << "1a) Deactivate Frames" << endl;
   
-  QListIterator<KPresenterFrame> it( m_lstFrames );
-  for( ; it.current() != 0L; ++it )
-  {
-    it.current()->detach();
-  }
-
+  QListIterator<KPresenterFrame> it(m_lstFrames);
+  for(;it.current() != 0L;++it)
+    {
+      it.current()->detach();
+    }
+  
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
-  if ( !CORBA::is_nil( menu_bar_manager ) )
-    menu_bar_manager->unregisterClient( id() );
+  if (!CORBA::is_nil(menu_bar_manager))
+    menu_bar_manager->unregisterClient(id());
 
   OpenParts::ToolBarManager_var tool_bar_manager = m_vMainWindow->toolBarManager();
-  if ( !CORBA::is_nil( tool_bar_manager ) )
-    tool_bar_manager->unregisterClient( id() );
+  if (!CORBA::is_nil(tool_bar_manager))
+    tool_bar_manager->unregisterClient(id());
 
   m_pKPresenterDoc->removeView(this);
 
@@ -3085,7 +3084,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // circle or ellipse
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/edit_pie.xpm";
+  tmp += "/kpresenter/toolbar/pie.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonTools_Pie = m_vToolBarTools->insertButton2( pix, ID_TOOL_PIE, SIGNAL( clicked() ), this, "toolsPie", 
 							  true, i18n("Create Pie/Arc/Chord"), -1 );

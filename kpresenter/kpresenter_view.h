@@ -659,6 +659,7 @@ protected:
 
   int screensaver_pid;
 
+  // ids
   static const int ID_TOOL_MOUSE = 2;
   static const int ID_TOOL_LINE = 3;
   static const int ID_TOOL_RECT = 4;

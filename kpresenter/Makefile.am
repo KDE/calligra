@@ -29,7 +29,7 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	command.cc movecmd.cc resizecmd.cc insertcmd.cc deletecmd.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
 	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc \
-	rotatecmd.cc lowraicmd.cc \
+	rotatecmd.cc lowraicmd.cc pievaluecmd.cc \
 	commandhistory.cc
 
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
@@ -48,7 +48,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		command.h movecmd.h resizecmd.h insertcmd.h deletecmd.h \
 		setoptionscmd.h chgclipcmd.h chgpixcmd.h setbackcmd.h \
 		effectcmd.h pgconfcmd.h pglayoutcmd.h shadowcmd.h \
-		rotatecmd.h lowraicmd.h \
+		rotatecmd.h lowraicmd.h pievaluecmd.h \
 		commandhistory.h
 
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
@@ -66,7 +66,7 @@ SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		command.moc movecmd.moc resizecmd.moc insertcmd.moc deletecmd.moc \
 		setoptionscmd.moc chgclipcmd.moc chgpixcmd.moc setbackcmd.moc \
 		effectcmd.moc pgconfcmd.moc pglayoutcmd.moc shadowcmd.moc \
-		rotatecmd.moc lowraicmd.moc \
+		rotatecmd.moc lowraicmd.moc pievaluecmd.moc \
 		commandhistory.moc
 
 idl_DATA =	kpresenter.idl
@@ -153,4 +153,5 @@ pglayoutcmd.cc: pglayoutcmd.moc
 shadowcmd.cc: shadowcmd.moc
 rotatecmd.cc: rotatecmd.moc
 lowraicmd.cc: lowraicmd.moc
+pievaluecmd.cc: pievaluecmd.moc
 commandhistory.cc: commandhistory.moc

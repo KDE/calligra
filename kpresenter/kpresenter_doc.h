@@ -74,6 +74,7 @@ class KPresenterView;
 #include "chgclipcmd.h"
 #include "chgpixcmd.h"
 #include "lowraicmd.h"
+#include "pievaluecmd.h"
 #include "commandhistory.h"
 
 #include <komlParser.h>
