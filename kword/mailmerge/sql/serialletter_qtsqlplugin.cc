@@ -211,7 +211,7 @@ void KWQTSQLDataSourceEditor::editFilter()
 }
 
 extern "C" {
-        KWMailMergeDataSource *create_kwmailmerge_qtsqldb(KInstance *inst,QObject *parent)
+        KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_qtsqldb(KInstance *inst,QObject *parent)
         {
                 return new KWQTSQLSerialDataSource(inst,parent);
         }

@@ -537,7 +537,7 @@ QStringList KWMailMergeKABC::singleRecords() const
 
 extern "C"
 {
-    KWMailMergeDataSource *create_kwmailmerge_kabc( KInstance *inst, QObject *parent )
+    KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_kabc( KInstance *inst, QObject *parent )
     {
         return new KWMailMergeKABC( inst, parent );
     }

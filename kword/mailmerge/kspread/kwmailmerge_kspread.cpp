@@ -200,7 +200,7 @@ QString KWMailMergeKSpread::cellText( const KSpreadCell *cell ) const
 
 extern "C"
 {
-  KWMailMergeDataSource *create_kwmailmerge_kspread( KInstance *instance, QObject *parent )
+  KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_kspread( KInstance *instance, QObject *parent )
   {
     return new KWMailMergeKSpread( instance, parent );
   }

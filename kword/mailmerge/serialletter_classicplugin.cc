@@ -561,7 +561,7 @@ void KWClassicMailMergeEditor::removeRecord()
 }
 
 extern "C" {
-	KWMailMergeDataSource *create_kwmailmerge_classic(KInstance *inst,QObject *parent)
+	KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_classic(KInstance *inst,QObject *parent)
 	{
 		return new KWClassicSerialDataSource(inst,parent);
 	}

@@ -249,7 +249,7 @@ KWQTSQLPowerMailMergeEditor::~KWQTSQLPowerMailMergeEditor(){;}
 
 
 extern "C" {
-        KWMailMergeDataSource *create_kwmailmerge_qtsqldb_power(KInstance *inst,QObject *parent)
+        KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_qtsqldb_power(KInstance *inst,QObject *parent)
         {
                 return new KWQTSQLPowerSerialDataSource(inst,parent);
         }
