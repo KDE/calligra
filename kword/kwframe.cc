@@ -451,7 +451,8 @@ void KWFrameSet::updateFrames()
 bool KWFrameSet::contains( unsigned int mx, unsigned int my )
 {
     for ( unsigned int i = 0; i < frames.count(); i++ ) {
-        if ( frames.at( i )->contains( QPoint( mx, my ) ) ) return true;
+        if ( frames.at( i )->contains( QPoint( mx, my ) ) )
+            return true;
     }
 
     return false;
@@ -750,6 +751,7 @@ bool KWFrameSet::hasSelectedFrame()
 bool KWFrameSet::isVisible() const
 {
     return ( visible &&
+             !frames.isEmpty() &&
              (!isAHeader() || doc->isHeaderVisible()) &&
              (!isAFooter() || doc->isFooterVisible()) &&
              !isAWrongHeader( doc->getHeaderType() ) &&
