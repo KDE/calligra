@@ -871,7 +871,7 @@ void KWTextParag::printRTDebug( int info )
       kdDebug() << "        align=" << item->alignment() << " leftMargin=" << item->margin(QStyleSheetItem::MarginLeft) << " rightMargin=" << item->margin(QStyleSheetItem::MarginRight) << " topMargin=" << item->margin(QStyleSheetItem::MarginTop) << " bottomMargin=" << item->margin(QStyleSheetItem::MarginBottom) << endl;
       kdDebug() << "        displaymode=" << dm[item->displayMode()] << endl;
       }*/
-    kdDebug() << "  Style: " << ( style() ? style()->name().local8Bit().data() : "NO STYLE" ) << endl;
+    kdDebug() << "  Style: " << style() << " " << ( style() ? style()->name().local8Bit().data() : "NO STYLE" ) << endl;
     kdDebug() << "  Text: '" << string()->toString() << "'" << endl;
     if ( info == 0 ) // paragraph info
     {
@@ -970,6 +970,7 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
             style = doc->findStyle( styleName );
             if (style)
             {
+                //kdDebug() << "KWParagLayout::KWParagLayout setting style to " << style << " " << style->name() << endl;
                 *this = style->paragLayout();
             }
             else
@@ -1103,6 +1104,7 @@ void KWParagLayout::initialise()
     topBorder.ptWidth = 0;
     bottomBorder.ptWidth = 0;
     linesTogether = false;
+    style = 0L;
     m_tabList.clear();
 }
 

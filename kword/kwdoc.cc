@@ -1230,7 +1230,7 @@ void KWDocument::addStyleTemplate( KWStyle * sty )
     {
         if ( p->name() == sty->name() )
         {
-            kdDebug() << "KWDocument::addStyleTemplate replacing style " << p->name() << endl;
+            //kdDebug() << "KWDocument::addStyleTemplate replacing style " << p->name() << endl;
             // Replace existing style
             *p = *sty;
             //if ( p->name() == "Standard" ) defaultParagLayout = p;

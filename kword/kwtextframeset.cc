@@ -3240,13 +3240,12 @@ void KWTextFrameSetEdit::updateUI()
 	m_canvas->gui()->getView()->showParagBorders( m_paragLayout.leftBorder, m_paragLayout.rightBorder, m_paragLayout.topBorder, m_paragLayout.bottomBorder );
     }
 
-    if ( m_paragLayout.style != parag->style() )
+    if ( !parag->style() )
+        kdWarning() << "Paragraph " << parag->paragId() << " has no style" << endl;
+    else if ( m_paragLayout.style != parag->style() )
     {
         m_paragLayout.style = parag->style();
-        if ( m_paragLayout.style )
-            m_canvas->gui()->getView()->showStyle( m_paragLayout.style->name() );
-        else
-            kdWarning() << "Paragraph " << parag->paragId() << " has no style" << endl;
+        m_canvas->gui()->getView()->showStyle( m_paragLayout.style->name() );
     }
 
     if( m_paragLayout.margins[QStyleSheetItem::MarginLeft] != parag->margin(QStyleSheetItem::MarginLeft)

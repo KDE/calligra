@@ -35,6 +35,9 @@ public:
     // Create a style from a saved document
     KWStyle( QDomElement & styleElem, const QFont & defaultFont );
 
+    // Copy another style
+    void operator=( const KWStyle & );
+
     QString name() const { return m_name; }
     void setName( const QString & name ) { m_name = name; }
 

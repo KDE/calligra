@@ -38,7 +38,7 @@ KWStyle::KWStyle( QDomElement & styleElem, const QFont & defaultFont )
     if ( !nameElem.isNull() )
     {
         m_name = nameElem.attribute("value");
-        //kdDebug() << "KWStyle::KWStyle name=" << m_name << endl;
+        //kdDebug() << "KWStyle::KWStyle " << this << " name=" << m_name << endl;
     } else
         kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
 
@@ -52,6 +52,15 @@ KWStyle::KWStyle( QDomElement & styleElem, const QFont & defaultFont )
         kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 }
 
+void KWStyle::operator=( const KWStyle &rhs )
+{
+    m_paragLayout = rhs.m_paragLayout;
+    m_name = rhs.m_name;
+    m_format = rhs.m_format;
+    m_followingStyle = rhs.m_followingStyle;
+    m_paragLayout.style = this; // must always be "this"
+}
+
 void KWStyle::save( QDomElement parentElem )
 {
     QDomDocument doc = parentElem.ownerDocument();
@@ -60,9 +69,12 @@ void KWStyle::save( QDomElement parentElem )
 
     m_paragLayout.save( styleElem );
 
-    QDomElement element = doc.createElement( "FOLLOWING" );
-    styleElem.appendChild( element );
-    element.setAttribute( "name", m_followingStyle->name() );
+    if ( m_followingStyle )
+    {
+        QDomElement element = doc.createElement( "FOLLOWING" );
+        styleElem.appendChild( element );
+        element.setAttribute( "name", m_followingStyle->name() );
+    }
 
     QDomElement formatElem = KWTextParag::saveFormat( doc, &m_format, 0L, 0, 0 );
     styleElem.appendChild( formatElem );
