@@ -584,7 +584,7 @@ void KWView::setupActions()
     connect(actionBorderColor,SIGNAL(activated()),SLOT(borderColor()));
 
 
-    actionBackgroundColor = new TKSelectColorAction( i18n( "Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor",true);
+    actionBackgroundColor = new TKSelectColorAction( i18n( "Text Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor",true);
     connect(actionBackgroundColor,SIGNAL(activated()),SLOT(backgroundColor() ));
     actionBackgroundColor->setDefaultColor(QColor());
 
@@ -1194,6 +1194,7 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
     actionFormatStrikeOut->setChecked( currentFormat.font().strikeOut());
     QColor col=currentFormat.textBackgroundColor();
     actionBackgroundColor->setCurrentColor( col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
+    actionBackgroundColor->setText(i18n("Text Background Color"));
     actionFormatColor->setCurrentColor( currentFormat.color() );
 
     switch(currentFormat.vAlign())
@@ -3485,6 +3486,7 @@ void KWView::frameSelectedChanged()
         if ( frame )
         {
             QColor frameCol=frame->getBackgroundColor().color();
+            actionBackgroundColor->setText(i18n("Frame Background Color"));
             actionBackgroundColor->setCurrentColor( frameCol.isValid()? frame->getBackgroundColor().color() :  QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
         }
     }
