@@ -29,7 +29,7 @@
 
 KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
  : KMdiChildView(caption, parent, "KexiDialogBase"),m_isRegistered(false)
- , KexiActionProxy(parent, this)
+ , KexiActionProxy(this, parent)
 {
 	m_contextHelpInfo=new KexiContextHelpInfo();
 	m_parentWindow=parent;

@@ -24,7 +24,6 @@
 #include <qfile.h>
 #include <qtimer.h>
 #include <qobjectlist.h>
-#include <qsignalmapper.h>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -86,9 +85,9 @@ class KexiMainWindow::Private
 		KXMLGUIClient *curDialogGUIClient, *closedDialogGUIClient;
 		QGuardedPtr<KexiDialogBase> curDialog;
 
-		QPtrDict<KexiActionProxy> actionProxies;
-		KActionPtrList sharedActions;
-		QSignalMapper *actionMapper;
+//		QPtrDict<KexiActionProxy> actionProxies;
+//		KActionPtrList sharedActions;
+//		QSignalMapper *actionMapper;
 
 		QAsciiDict<QPopupMenu> popups; //list of menu popups
 
@@ -122,8 +121,9 @@ class KexiMainWindow::Private
 		bool block_KMdiMainFrm_eventFilter : 1;
 	Private()
 		: dialogs(401)
-		, actionProxies(401)
+//		, actionProxies(401)
 	{
+		nav=0;
 		navToolWindow=0;
 		prj = 0;
 		curDialogGUIClient=0;
@@ -139,9 +139,10 @@ class KexiMainWindow::Private
 
 KexiMainWindow::KexiMainWindow()
  : KMdiMainFrm(0L, "keximainwindow")
- 	,d(new KexiMainWindow::Private() )
+ , KexiSharedActionHost(this)
+ , d(new KexiMainWindow::Private() )
 {
-	d->nav = 0;
+	setAsDefaultHost(); //this is default host now.
 	KGlobal::iconLoader()->addAppDir("kexi");
 	setXMLFile("kexiui.rc");
 	setManagedDockPositionModeEnabled(true);//TODO(js): remove this if will be default in kmdi :)
@@ -214,8 +215,8 @@ QPopupMenu* KexiMainWindow::findPopupMenu(const char *popupName)
 void
 KexiMainWindow::initActions()
 {
-	d->actionMapper = new QSignalMapper(this, "act_map");
-	connect(d->actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));
+//	d->actionMapper = new QSignalMapper(this, "act_map");
+//	connect(d->actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));
 
 	// PROJECT MENU
 	KAction *action = new KAction(i18n("&New..."), "filenew", KStdAccel::shortcut(KStdAccel::New), 
@@ -293,6 +294,8 @@ KexiMainWindow::initActions()
 	invalidateActions();
 }
 
+/* moved to host:*/
+#if 0
 KAction* KexiMainWindow::createSharedActionInternal( KAction *action )
 {
 	connect(action,SIGNAL(activated()), d->actionMapper, SLOT(map()));
@@ -308,11 +311,6 @@ KAction* KexiMainWindow::createSharedAction(const QString &text, const QString &
 		new KAction(text, (pix_name.isEmpty() ? QIconSet() : SmallIconSet(pix_name)),
 		cut, 0/*receiver*/, 0/*slot*/, actionCollection(), name)
 	);
-/*
-	connect(a,SIGNAL(activated()), d->actionMapper, SLOT(map()));
-	d->actionMapper->setMapping(a, name);
-	d->sharedActions.append( a );
-	return a;*/
 }
 
 KAction* KexiMainWindow::createSharedAction( KStdAction::StdAction id, const char *name)
@@ -321,6 +319,7 @@ KAction* KexiMainWindow::createSharedAction( KStdAction::StdAction id, const cha
 		KStdAction::create( id, name, 0/*receiver*/, 0/*slot*/, actionCollection() )
 	);
 }
+#endif
 
 void KexiMainWindow::invalidateActions()
 {
@@ -340,13 +339,14 @@ void KexiMainWindow::invalidateSharedActions(QWidget *w)
 //js: THIS WILL BE SIMPLIFIED
 	if (!w)
 		w = focusWindow();
-	if (w) {
+	KexiSharedActionHost::invalidateSharedActions(w);
+/*	if (w) {
 		KexiActionProxy *p = d->actionProxies[ w ];
 		for (KActionPtrList::Iterator it=d->sharedActions.begin(); it!=d->sharedActions.end(); ++it) {
 //			setActionAvailable((*it)->name(),p && p->isAvailable((*it)->name()));
 			(*it)->setEnabled(p && p->isAvailable((*it)->name()));
 		}
-	}
+	}*/
 }
 
 void KexiMainWindow::invalidateProjectWideActions()
@@ -364,6 +364,7 @@ void KexiMainWindow::invalidateProjectWideActions()
 #endif
 }
 
+#if 0
 void KexiMainWindow::setActionAvailable(const char *name, bool avail)
 {
 	KAction *act = actionCollection()->action(name);
@@ -396,6 +397,7 @@ void KexiMainWindow::plugActionProxy(KexiActionProxy *proxy)//, const char *acti
 //	d->actionProxies[ QCString(action_name)+QCString().setNum((ulong)proxy->receiver()) ] = proxy;
 	d->actionProxies.insert( proxy->receiver(), proxy);
 }
+#endif
 
 void KexiMainWindow::startup(KexiProjectData *projectData)
 {
@@ -1087,6 +1089,7 @@ void KexiMainWindow::slotProjectRelations()
 	p->createWindow(this);
 }
 
+/*
 void KexiMainWindow::slotAction(const QString& act_id)
 {
 	QWidget *w = focusWindow(); //focusWidget();
@@ -1100,7 +1103,7 @@ void KexiMainWindow::slotAction(const QString& act_id)
 	if (!proxy)
 		return;
 	proxy->activateSharedAction(act_id.latin1());
-}
+}*/
 
 void KexiMainWindow::slotImportFile() {
 }
@@ -1217,25 +1220,32 @@ void KexiMainWindow::attachWindow(KMdiChildView *pWnd,bool bShow,bool bAutomatic
 //	pWnd->mdiParent()->setIcon( SmallIcon( static_cast<KexiDialogBase *>(pWnd)->part()->info()->itemIcon() ) );
 }
 
+/*
 bool KexiMainWindow::isWindow(QObject *o)
 {
 	return o->inherits("KexiDialogBase") || o->inherits("KexiDockBase");
-}
+}*/
 
-QWidget* KexiMainWindow::findWindow(QWidget *w) const
+QWidget* KexiMainWindow::findWindow(QWidget *w)
 {
-	while (w && !w->inherits("KexiDialogBase") && !w->inherits("KexiDockBase"))
+	while (w && !acceptsSharedActions(w))
 		w = w->parentWidget();
 	return w;
 }
 
+bool KexiMainWindow::acceptsSharedActions(QWidget *w)
+{
+	return w->inherits("KexiDialogBase") || w->inherits("KexiDockBase");
+}
+
+/*moved to host
 QWidget* KexiMainWindow::focusWindow() const
 {
 	QWidget* fw = focusWidget();
 	while (fw && !fw->inherits("KexiDialogBase") && !fw->inherits("KexiDockBase"))
 		fw = fw->parentWidget();
 	return fw;
-}
+}*/
 
 bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 {
@@ -1280,7 +1290,8 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 	if (e->type()==QEvent::FocusIn) {
 		if (focus_w) {
 //			if (d->actionProxies[ w ])
-			if (d->actionProxies[ focus_w ]) {
+//			if (d->actionProxies[ focus_w ]) {
+			if (actionProxyFor( focus_w )) {
 				invalidateSharedActions();
 			}
 			else {
@@ -1294,7 +1305,8 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 //		invalidateSharedActions();
 	}
 //	if ((e->type()==QEvent::FocusOut && focusWidget()==d->curDialog && !obj->inherits("KexiDialogBase")) && d->actionProxies[ obj ]) {
-	if (e->type()==QEvent::FocusOut && focus_w && focus_w==d->curDialog && d->actionProxies[ obj ]) {
+//	if (e->type()==QEvent::FocusOut && focus_w && focus_w==d->curDialog && d->actionProxies[ obj ]) {
+	if (e->type()==QEvent::FocusOut && focus_w && focus_w==d->curDialog && actionProxyFor( obj )) {
 		invalidateSharedActions(d->curDialog);
 	}
 

@@ -21,7 +21,10 @@
 #ifndef KEXIMAINWINDOW_H
 #define KEXIMAINWINDOW_H
 
+#include "kexisharedactionhost.h"
+
 #include <kmdimainfrm.h>
+
 #include <qintdict.h>
 
 class KexiProject;
@@ -46,7 +49,7 @@ namespace KexiPart {
 /**
  * @short Kexi's main window
  */
-class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
+class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActionHost
 {
 	Q_OBJECT
 
@@ -76,7 +79,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 
 		virtual bool eventFilter( QObject *obj, QEvent * e );
 
-		void plugActionProxy(KexiActionProxy *proxy); //, const char *action_name);
+		void plugActionProxy(KexiActionProxy *proxy);
 		void updateActionAvailable(const char *action_name, bool set, QObject *obj);
 
 		QPopupMenu* findPopupMenu(const char *popupName);
@@ -111,17 +114,6 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		 */
 		void		storeSettings();
 		
-		/*! Creates shared action. Action's data is owned by the main window. */
-		KAction* createSharedAction(const QString &text, const QString &pix_name,
-			const KShortcut &cut, const char *name);
-
-		/*! Like above - creates shared action, but from standard action identified by \a id. 
-		 Action's data is owned by the main window. */
-		KAction* createSharedAction( KStdAction::StdAction id, const char *name);
-
-		/*! Helper function for createSharedAction(). */
-		KAction* createSharedActionInternal( KAction *action );
-
 		/** Invalidates availability of all actions for current application state.
 		*/
 		void invalidateActions();
@@ -159,11 +151,16 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		void setWindowMenu(QPopupMenu *menu);
 
 		/*! \return focused kexi window (KexiDialogBase or KexiDockBase subclass) */
-		QWidget* focusWindow() const;
+//		QWidget* focusWindow() const;
 
-		static bool isWindow(QObject *o);
+		/*! Reimplemented from KexiSharedActionHost: 
+		 accepts only KexiDockBase and KexiDialogBase subclasses.  */
+		virtual bool acceptsSharedActions(QWidget *w);
 
-		QWidget* findWindow(QWidget *w) const;
+		/*! Performs lookup like in KexiSharedActionHost::focusWindow() 
+		 but starting from \a w instead of a widget returned by QWidget::focusWidget(). 
+		 \return NULL if no widget matches acceptsSharedActions() or if \a w is NULL. */
+		QWidget* findWindow(QWidget *w);
 
 		/*! Updates application's caption - also shows project's name. */
 		void updateAppCaption();
@@ -213,8 +210,9 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		//! internal - creates and initializes kexi project
 		void createKexiProject(KexiProjectData* new_data);
 
+		/*moved 
 		void setActionAvailable(const char *name, bool avail);
-		void slotAction(const QString& act_id);
+		void slotAction(const QString& act_id);*/
 
 		void slotViewNavigator();
 		void slotShowSettings();

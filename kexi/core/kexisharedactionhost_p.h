@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,23 +17,38 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIDOCKBASE_H
-#define KEXIDOCKBASE_H
+#ifndef KEXISHAREDACTIONHOST_P_H
+#define KEXISHAREDACTIONHOST_P_H
+
+#include <qobject.h>
+#include <qptrdict.h>
+#include <qsignalmapper.h>
+
+#include <kaction.h>
+#include <kmainwindow.h>
 
 #include "kexiactionproxy.h"
-#include "keximainwindow.h"
 
-#include <qwidget.h>
+class KexiSharedActionHost;
 
-class KexiDockBase : public QWidget, public KexiActionProxy
+//! internal class
+class KEXICORE_EXPORT KexiSharedActionHostPrivate : public QObject
 {
 	Q_OBJECT
 
 	public:
-		KexiDockBase(KexiMainWindow *parent, const char *name = 0);
+		KexiSharedActionHostPrivate(KexiSharedActionHost *h);
 
-	protected:
-		KexiMainWindow	*m_parent;
+	public slots:
+		void slotAction(const QString& act_id);
+
+	public:
+		QPtrDict<KexiActionProxy> actionProxies;
+		KMainWindow *mainWin;
+		KActionPtrList sharedActions;
+		QSignalMapper actionMapper;
+
+		KexiSharedActionHost *host;
 };
 
 #endif

@@ -24,7 +24,7 @@
 
 KexiDockBase::KexiDockBase(KexiMainWindow *parent, const char *name)
  : QWidget(parent,name)
- , KexiActionProxy(parent, this)
+ , KexiActionProxy(this, parent)
 {
 	m_parent = parent;
 }

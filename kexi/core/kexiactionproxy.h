@@ -25,7 +25,8 @@
 #include <qobject.h>
 #include <qpair.h>
 
-class KexiMainWindow;
+#include "kexisharedactionhost.h"
+
 class QSignal;
 class KAction;
 
@@ -37,13 +38,20 @@ class KAction;
  This class is mostly used by subclassing in KExiDialogBase or KexiDockBase
  - you can subclass in a similar way.
 */
+
 class KEXICORE_EXPORT KexiActionProxy
 {
 	public:
-		KexiActionProxy(KexiMainWindow *main, QObject *receiver);
+		/*! Constructs action proxy for object \a receiver, using \a host.
+		 If \a host is NULL, KexiSharedActionHost::defaultHost() is used.
+		 (you must be sure that it's true) -- it is casted to QObject and assigned as the receiver.*/
+		KexiActionProxy(QObject *receiver , KexiSharedActionHost *host = 0 );
 		~KexiActionProxy();
 
 		void activateSharedAction(const char *action_name);
+
+		/*! Sets host to \a host; rerely used. */
+		void setSharedActionHost(KexiSharedActionHost& host) { m_host = &host; }
 
 	protected:
 		/*! Plugs shared action named \a action_name to slot \a slot in \a receiver.
@@ -71,12 +79,12 @@ class KEXICORE_EXPORT KexiActionProxy
 		bool isAvailable(const char* action_name);
 		void setAvailable(const char* action_name, bool set);
 
-		QGuardedPtr<KexiMainWindow> m_main;
+		KexiSharedActionHost *m_host;
 		QGuardedPtr<QObject> m_receiver;
 		QAsciiDict< QPair<QSignal*,bool> > m_signals;
 
-		QObject *m_signal_parent; //!< it's just to have common parent for owned signals
-	friend class KexiMainWindow;
+		QObject m_signal_parent; //!< it's just to have common parent for owned signals
+	friend class KexiSharedActionHost;
 };
 
 #endif

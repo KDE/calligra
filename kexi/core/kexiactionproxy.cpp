@@ -18,31 +18,32 @@
 */
 
 #include "kexiactionproxy.h"
-#include "keximainwindow.h"
 
 #include <kdebug.h>
+#include <kaction.h>
+#include <kmainwindow.h>
 
 #include <qwidget.h>
 #include <qsignal.h>
 
-KexiActionProxy::KexiActionProxy(KexiMainWindow *main, QObject *receiver)
- : m_main(main)
+KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
+ : m_host( host ? host : &KexiSharedActionHost::defaultHost() )
  , m_receiver(receiver)
  , m_signals(47)
- , m_signal_parent( new QObject() )
+ , m_signal_parent( 0, "signal_parent" )
 {
 	m_signals.setAutoDelete(true);
-	m_main->plugActionProxy( this );
+	m_host->plugActionProxy( this );
 }
 
 KexiActionProxy::~KexiActionProxy()
 {
-	delete m_signal_parent; //this will delete all signals
+//	delete m_signal_parent; //this will delete all signals
 }
 
 void KexiActionProxy::plugSharedAction(const char *action_name, QObject* receiver, const char *slot)
 {
-	QPair<QSignal*,bool> *p = new QPair<QSignal*,bool>( new QSignal(m_signal_parent), true );
+	QPair<QSignal*,bool> *p = new QPair<QSignal*,bool>( new QSignal(&m_signal_parent), true );
 	p->first->connect( receiver, slot );
 	m_signals.insert(action_name, p);
 }
@@ -67,7 +68,7 @@ void KexiActionProxy::activateSharedAction(const char *action_name)
 
 KAction* KexiActionProxy::sharedAction(const char* name)
 {
-	return m_main->actionCollection()->action(name);
+	return m_host->mainWindow()->actionCollection()->action(name);
 }
 
 void KexiActionProxy::setAvailable(const char* action_name, bool set)
@@ -76,7 +77,7 @@ void KexiActionProxy::setAvailable(const char* action_name, bool set)
 	if (!p)
 		return;
 	p->second = set;
-	m_main->updateActionAvailable(action_name, set, m_receiver);
+	m_host->updateActionAvailable(action_name, set, m_receiver);
 }
 
 bool KexiActionProxy::isAvailable(const char* action_name)
