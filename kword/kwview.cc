@@ -37,7 +37,7 @@
 #include "footnotedia.h"
 #include "insdia.h"
 #include <koCharSelectDia.h>
-#include "kwchangecasedia.h"
+#include <koChangeCaseDia.h>
 #include "kwcommand.h"
 #include "kwconfig.h"
 #include "kwdoc.h"
@@ -2821,10 +2821,10 @@ void KWView::changeCaseOfText()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if(!edit)
         return;
-    KWChangeCaseDia *caseDia=new KWChangeCaseDia( this,"change case" );
+    KoChangeCaseDia *caseDia=new KoChangeCaseDia( this,"change case" );
     if(caseDia->exec())
     {
-        edit->changeCaseOfText((KWTextFrameSet::TypeOfCase)caseDia->getTypeOfCase());
+        edit->changeCaseOfText(caseDia->getTypeOfCase());
     }
     delete caseDia;
 }

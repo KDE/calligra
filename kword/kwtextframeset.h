@@ -24,6 +24,7 @@
 #include "kwframe.h"
 #include <kotextview.h>
 #include <koparaglayout.h>
+#include <koChangeCaseDia.h>
 class KWStyle;
 class KWTextDrag;
 class KWDocument;
@@ -138,9 +139,8 @@ public:
     void insertFrameBreak( QTextCursor * cursor );
     KCommand * setPageBreakingCommand( QTextCursor * cursor, int pageBreaking );
 
-    enum TypeOfCase { UpperCase =0, LowerCase=1, TitleCase=2, ToggleCase=3};
-    void changeCaseOfText(QTextCursor *cursor, TypeOfCase _type);
-    QString textChangedCase(const QString _text, TypeOfCase _type);
+    void changeCaseOfText(QTextCursor *cursor, KoChangeCaseDia::TypeOfCase _type);
+    QString textChangedCase(const QString _text, KoChangeCaseDia::TypeOfCase _type);
 
     QRect paragRect( Qt3::QTextParag * parag ) const; // in normal coords
 
@@ -297,7 +297,7 @@ public:
     KCommand * setPageBreakingCommand( int pageBreaking )
     { return textFrameSet()->setPageBreakingCommand( cursor(), pageBreaking ); }
 
-    void changeCaseOfText(KWTextFrameSet::TypeOfCase _type);
+    void changeCaseOfText(KoChangeCaseDia::TypeOfCase _type);
 
     const KoParagLayout & currentParagLayout() const { return m_paragLayout; }
 

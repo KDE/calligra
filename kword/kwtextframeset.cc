@@ -47,6 +47,7 @@
 #include <krun.h>
 #include <kmessagebox.h>
 #include "variable.h"
+#include <koChangeCaseDia.h>
 
 #include <kdebug.h>
 #include <assert.h>
@@ -1883,18 +1884,18 @@ KCommand * KWTextFrameSet::setPageBreakingCommand( QTextCursor * cursor, int pag
     return new KoTextCommand( m_textobj, /*cmd, */i18n("Change Paragraph Attribute") );
 }
 
-QString KWTextFrameSet::textChangedCase(const QString _text,TypeOfCase _type)
+QString KWTextFrameSet::textChangedCase(const QString _text,KoChangeCaseDia::TypeOfCase _type)
 {
     QString text(_text);
     switch(_type)
     {
-        case UpperCase:
+        case KoChangeCaseDia::UpperCase:
             text=text.upper();
             break;
-        case LowerCase:
+        case KoChangeCaseDia::LowerCase:
             text=text.lower();
             break;
-        case TitleCase:
+        case KoChangeCaseDia::TitleCase:
             for(uint i=0;i<text.length();i++)
             {
                 if(text.at(i)!=' ')
@@ -1907,7 +1908,7 @@ QString KWTextFrameSet::textChangedCase(const QString _text,TypeOfCase _type)
                 }
             }
             break;
-        case ToggleCase:
+        case KoChangeCaseDia::ToggleCase:
             for(uint i=0;i<text.length();i++)
             {
                 QString repl=QString(text.at(i));
@@ -1926,7 +1927,7 @@ QString KWTextFrameSet::textChangedCase(const QString _text,TypeOfCase _type)
     return text;
 }
 
-void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
+void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,KoChangeCaseDia::TypeOfCase _type)
 {
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Change case") );
 
@@ -2987,7 +2988,7 @@ void KWTextFrameSetEdit::showFormat( KoTextFormat *format )
     m_canvas->gui()->getView()->showFormat( *format );
 }
 
-void KWTextFrameSetEdit::changeCaseOfText(KWTextFrameSet::TypeOfCase _type)
+void KWTextFrameSetEdit::changeCaseOfText(KoChangeCaseDia::TypeOfCase _type)
 {
     QString text;
     if ( textObject()->hasSelection() )
