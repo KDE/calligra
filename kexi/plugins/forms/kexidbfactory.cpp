@@ -40,6 +40,7 @@
 #include "kexidbform.h"
 #include "kexiformview.h"
 #include "kexilabel.h"
+#include "kexidbinputwidget.h"
 
 #include "kexidbfactory.h"
 
@@ -179,6 +180,16 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wLabel->setDescription(i18n("A widget to display text"));
 	m_classes.append(wLabel);
 
+	KFormDesigner::WidgetInfo *wInput = new KFormDesigner::WidgetInfo(this);
+	wInput->setPixmap("edit");
+	wInput->setClassName("KexiDBInputWidget");
+	wInput->addAlternateClassName("QLabel", true/*override*/);
+	wInput->setIncludeFileName("qlabel.h");
+	wInput->setName(i18n("Input Widget"));
+	wInput->setNamePrefix(i18n("Widget name (see above)", "InputWidget"));
+	wInput->setDescription(i18n("A super-duper widget"));
+	m_classes.append(wInput);
+	
 	m_propDesc["dataSource"] = i18n("Data source");
 	m_propDesc["formName"] = i18n("Form name");
 }
@@ -214,6 +225,10 @@ KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigne
 	{
 		w = new KexiLabel(text, p, n);
 	}
+	else if(c == "KexiDBInputWidget")
+	{
+		w = new KexiDBInputWidget(p, n);
+	}
 
 	return w;
 }
@@ -232,6 +247,7 @@ void
 KexiDBFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
+	#warning Is there any reason to edit a lineedit in design-mode?
 	if(classname == "KexiDBLineEdit")
 	{
 //! @todo this code should not be copied here but

@@ -13,7 +13,8 @@ kexihandler_form_la_LIBADD = ../../core/libkexicore.la \
   ../../formeditor/libkformdesigner.la
 
 kexidbwidgets_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) -module
-kexidbwidgets_la_SOURCES = kexidbfactory.cpp kexilabel.cpp
+kexidbwidgets_la_SOURCES = kexidbfactory.cpp kexilabel.cpp \
+	kexidbinputwidget.cpp
 kexidbwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la
 
 servicesdir=$(kde_servicesdir)/kformdesigner
@@ -29,3 +30,4 @@ INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 METASOURCES = AUTO
 
 include ../Makefile.common
+noinst_HEADERS = kexidbinputwidget.h

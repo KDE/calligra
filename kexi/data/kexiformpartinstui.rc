@@ -36,6 +36,7 @@
    <Action name="library_widget_QGroupBox"/>
    <Action name="library_widget_MyTabWidget"/>
    <Separator/>
+   <Action name="library_widget_KexiDBInputWidget"/>
    <Action name="library_widget_KexiSubForm"/>
    <Action name="library_widget_KexiLabel"/>
    <Action name="library_widget_KexiPictureLabel"/>
