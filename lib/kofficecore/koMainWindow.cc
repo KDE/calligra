@@ -246,20 +246,20 @@ bool KoMainWindow::closeDocument()
 
     if ( document()->isModified() )
     {
-	int res = QMessageBox::warning( 0L, i18n( "Warning" ), i18n( "The document has been modified\nDo you want to save it ?" ),
-					i18n( "Yes" ), i18n( "No" ), i18n( "Cancel" ) );
+	int res = KMessageBox::warningYesNoCancel( 0L,
+           i18n( "The document has been modified\nDo you want to save it ?" ));
 
         switch(res) {
-        case 0 :
+        case KMessageBox::Yes :
 	    return saveDocument();
-        case 1 :
+        case KMessageBox::No :
           {
             KoDocument* doc = document();
     	    setRootPart( 0 );
             delete doc;
             return TRUE;
           }
-        default : // case 2 :
+        default : // case KMessageBox::Cancel :
             return FALSE;
         }
 
