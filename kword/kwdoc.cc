@@ -2614,6 +2614,7 @@ void KWDocument::deleteTable( KWTableFrameSet *table )
 {
     if ( !table )
         return;
+    table->deselectAll();
     if ( table->isFloating() )
     {
         emit sig_terminateEditing( table ); // to unselect its cells, especially
@@ -2631,6 +2632,7 @@ void KWDocument::deleteTable( KWTableFrameSet *table )
 void KWDocument::deleteFrame( KWFrame * frame )
 {
     KWFrameSet * fs = frame->getFrameSet();
+    frame->setSelected(false);
     QString cmdName;
     TypeStructDocItem docItem;
     switch (fs->getFrameType() ) {

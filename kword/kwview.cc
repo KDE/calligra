@@ -1223,6 +1223,7 @@ void KWView::editDeleteFrame()
         if (result != KMessageBox::Continue)
             return;
         m_doc->deleteTable( fs->getGroupManager() );
+        m_gui->canvasWidget()->emitFrameSelectedChanged();
         return;
     }
 
@@ -1246,7 +1247,10 @@ void KWView::editDeleteFrame()
                                                         i18n("Delete Frame"), i18n("&Delete"));
 
             if (result == KMessageBox::Continue)
+            {
                 m_doc->deleteFrame( theFrame );
+                m_gui->canvasWidget()->emitFrameSelectedChanged();
+            }
             return;
         }
 
@@ -1257,7 +1261,10 @@ void KWView::editDeleteFrame()
                                                     i18n("Delete Frame"),
                                                     i18n("&Delete"));
     if (result == KMessageBox::Continue)
+    {
         m_doc->deleteFrame( theFrame );
+        m_gui->canvasWidget()->emitFrameSelectedChanged();
+    }
 }
 
 void KWView::editCustomVars()
@@ -1973,6 +1980,7 @@ void KWView::tableDeleteRow()
         if (result == KMessageBox::Continue)
         {
             m_doc->deleteTable( table );
+            m_gui->canvasWidget()->emitFrameSelectedChanged();
         }
     }
     else
@@ -2002,6 +2010,7 @@ void KWView::tableDeleteCol()
         if (result == KMessageBox::Continue)
         {
             m_doc->deleteTable( table );
+            m_gui->canvasWidget()->emitFrameSelectedChanged();
         }
     }
     else
@@ -2099,6 +2108,7 @@ void KWView::tableDelete()
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
     m_doc->deleteTable( table );
+    m_gui->canvasWidget()->emitFrameSelectedChanged();
 }
 
 void KWView::textStyleSelected( int index )
