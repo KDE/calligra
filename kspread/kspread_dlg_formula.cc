@@ -46,7 +46,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     m_focus = 0;
     m_desc = 0;
 
-    setCaption( name );
+    setCaption( i18n("Formula Editor") );
 
     KSpreadCell* cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),
 							m_pView->canvasWidget()->markerRow() );

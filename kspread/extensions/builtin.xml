@@ -192,7 +192,7 @@
       </Parameter>
       <Help>
 	<Text>This function calculates the arc tangent of the two variables x and y. It is similar to calculating the arc tangent of y/x, except that the signs of both arguments are used to determine the quadrant of the result.</Text>
-	<Syntax>atan2( value )</Syntax>
+	<Syntax>atan2( value; value )</Syntax>
 	<Example>atan2(0.5;1.0) equals 1.107149</Example>
 	<Example>atan2(-0.5;2.0) equals 1.815775</Example>
       </Help>
