@@ -142,10 +142,8 @@ BasicElement* MatrixElement::goToPos(FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void MatrixElement::calcSizes(const ContextStyle& style, int parentSize)
+void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
-    int mySize = parentSize;
-
     QArray<int> toMidlines(getRows());
     QArray<int> fromMidlines(getRows());
     QArray<int> widths(getColumns());
@@ -161,7 +159,8 @@ void MatrixElement::calcSizes(const ContextStyle& style, int parentSize)
         QList<SequenceElement>* list = content.at(r);
         for (uint c = 0; c < columns; c++) {
             SequenceElement* element = list->at(c);
-            element->calcSizes(style, mySize);
+            element->calcSizes(style, style.convertTextStyleFraction(tstyle),
+			       style.convertIndexStyleUpper(istyle));
             toMidlines[r] = QMAX(toMidlines[r], element->getMidline());
             fromMidlines[r] = QMAX(fromMidlines[r],
                                    element->getHeight()-element->getMidline());
@@ -169,8 +168,8 @@ void MatrixElement::calcSizes(const ContextStyle& style, int parentSize)
         }
     }
 
-    int distX = style.getDistanceX(mySize);
-    int distY = style.getDistanceY(mySize);
+    int distX = style.getDistanceX(tstyle);
+    int distY = style.getDistanceY(tstyle);
 
     int yPos = 0;
     for (uint r = 0; r < rows; r++) {
@@ -215,10 +214,11 @@ void MatrixElement::calcSizes(const ContextStyle& style, int parentSize)
  */
 void MatrixElement::draw(QPainter& painter, const QRect& rect,
                          const ContextStyle& style,
-                         int parentSize, const QPoint& parentOrigin)
+			 ContextStyle::TextStyle tstyle,
+			 ContextStyle::IndexStyle istyle,		     
+                         const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = parentSize;
     if (!QRect(myPos, getSize()).intersects(rect))
         return;
 
@@ -227,7 +227,10 @@ void MatrixElement::draw(QPainter& painter, const QRect& rect,
 
     for (uint r = 0; r < rows; r++) {
         for (uint c = 0; c < columns; c++) {
-            getElement(r, c)->draw(painter, rect, style, mySize, myPos);
+            getElement(r, c)->draw(painter, rect, style, 
+				   style.convertTextStyleFraction(tstyle),
+				   style.convertIndexStyleUpper(istyle), 
+				   myPos);
         }
     }
 

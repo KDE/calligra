@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -65,7 +65,7 @@ void FormulaElement::changed()
  */
 void FormulaElement::calcSizes(const ContextStyle& context)
 {
-    inherited::calcSizes(context, context.getBaseSize());
+    inherited::calcSizes(context, context.getBaseTextStyle(), ContextStyle::normal);
 }
 
 /**
@@ -74,7 +74,7 @@ void FormulaElement::calcSizes(const ContextStyle& context)
 void FormulaElement::draw(QPainter& painter, const QRect& r,
                           const ContextStyle& context)
 {
-    inherited::draw(painter, r, context, context.getBaseSize(), QPoint());
+    inherited::draw(painter, r, context, context.getBaseTextStyle(), ContextStyle::normal, QPoint());
 }
 
 
@@ -91,7 +91,7 @@ void FormulaElement::writeDom(QDomElement& element)
 {
     inherited::writeDom(element);
 }
-    
+
 /**
  * Reads our attributes from the element.
  * Returns false if it failed.

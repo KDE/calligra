@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -24,7 +24,8 @@
 #include <qfont.h>
 #include <qstring.h>
 
-class ContextStyle;
+#include "contextstyle.h"
+
 class OperatorToken;
 class QPainter;
 class SequenceElement;
@@ -56,19 +57,19 @@ public:
      * @returns the position of the first character after the typed element
      */
     uint end() { return to; }
-    
+
     /**
      * @returns the space to be left before each char
      * for the given style and font size.
      */
-    virtual int getSpaceBefore(const ContextStyle& context, int size);
-    
+    virtual int getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+
     /**
      * @returns the space to be left after each char
      * for the given style and font size.
      */
-    virtual int getSpaceAfter(const ContextStyle& context, int size);
-    
+    virtual int getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+
     /**
      * @returns the font to be used for this kind of element
      */
@@ -78,7 +79,7 @@ public:
      * sets the painters pen to a appropiate value
      */
     virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
-    
+
     // debug
     virtual void output() = 0;
 
@@ -89,7 +90,7 @@ protected:
 
     void setStart(uint start) { from = start; }
     void setEnd(uint end) { to = end; }
-    
+
 private:
 
     /**
@@ -103,7 +104,7 @@ private:
      * to the name.
      */
     uint to;
-    
+
     // debug
     static int evilDestructionCount;
 };
@@ -140,7 +141,7 @@ public:
 class NameType : public MultiElementType {
 public:
     NameType(SequenceParser* parser, QString name);
-    
+
     /**
      * @returns the name of the type. Only name types are allowed
      * to have a name.
@@ -169,7 +170,7 @@ private:
 class TextSymbolType : public MultiElementType {
 public:
     TextSymbolType(SequenceParser* parser);
-    
+
     /**
      * @returns the font to be used for this kind of element
      */
@@ -229,14 +230,14 @@ public:
      * @returns the space to be left before each char
      * for the given style and font size.
      */
-    virtual int getSpaceBefore(const ContextStyle& context, int size);
-    
+    virtual int getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+
     /**
      * @returns the space to be left after each char
      * for the given style and font size.
      */
-    virtual int getSpaceAfter(const ContextStyle& context, int size);
-    
+    virtual int getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+
     /**
      * @returns the font to be used for this kind of element
      */
@@ -275,9 +276,9 @@ class Term : public OperatorType {
 public:
     Term(SequenceParser* parser);
 
-    virtual int getSpaceBefore(const ContextStyle& context, int size);
-    
-    virtual int getSpaceAfter(const ContextStyle& context, int size);
+    virtual int getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+
+    virtual int getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
 
     // debug
     virtual void output();
@@ -303,8 +304,8 @@ class AssignmentSep : public OperatorType {
 public:
     AssignmentSep(SequenceParser* parser);
 
-    virtual int getSpaceBefore(const ContextStyle& context, int size);
-    
+    virtual int getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+
     virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
 };
 

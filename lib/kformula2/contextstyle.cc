@@ -35,6 +35,9 @@ ContextStyle::ContextStyle()
     operatorSpace = 4;
     linearMovement = false;
     baseSize = 18;
+    m_baseTextStyle = displayStyle;
+    m_scriptStyleReduction = .7;
+    m_scriptScriptStyleReduction = .49;
     minimumSize = 8;
     sizeReduction = 2;
     lineWidth = 1;
@@ -49,19 +52,31 @@ void ContextStyle::setResolution(double zX, double zY)
     m_zoomedResolutionY = zY;
 }
 
-int ContextStyle::getDistanceX(int) const
+double ContextStyle::getReductionFactor(TextStyle tstyle) const
 {
-    return zoomItX( distance );
+    switch (tstyle){
+    case scriptStyle:
+	return m_scriptStyleReduction;
+    case scriptScriptStyle:
+	return m_scriptScriptStyleReduction;
+    default:
+	return 1.;
+    }
 }
 
-int ContextStyle::getDistanceY(int) const
+int ContextStyle::getDistanceX(TextStyle tstyle) const
 {
-    return zoomItY( distance );
+    return static_cast<int>(zoomItX( distance*getReductionFactor( tstyle ))+.5);
 }
 
-int ContextStyle::getOperatorSpace(int /*size*/) const
+int ContextStyle::getDistanceY(TextStyle tstyle) const
 {
-    return zoomItX( operatorSpace );
+    return static_cast<int>(zoomItY( distance*getReductionFactor( tstyle ))+.5);
+}
+
+int ContextStyle::getOperatorSpace(TextStyle tstyle) const
+{
+    return static_cast<int>(zoomItX( operatorSpace*getReductionFactor( tstyle ))+.5);
 }
 
 int ContextStyle::getBaseSize() const
@@ -73,6 +88,29 @@ int ContextStyle::getMinimumSize() const
 {
     return zoomItY( minimumSize );
 }
+
+int ContextStyle::getAdjustedSize( TextStyle tstyle ) const
+{
+    double unzoomed;
+
+    switch ( tstyle ){
+    case displayStyle:
+	unzoomed = baseSize;
+	break;
+    case textStyle:
+	unzoomed = baseSize;
+	break;
+    case scriptStyle:
+	unzoomed = m_scriptStyleReduction*baseSize;
+	break;
+    case scriptScriptStyle:
+	unzoomed = m_scriptScriptStyleReduction*baseSize;
+	break;
+    }
+	
+    return static_cast<int>( zoomItY( unzoomed ) );
+}
+
 
 int ContextStyle::getSizeReduction() const
 {
@@ -94,3 +132,44 @@ int ContextStyle::getEmptyRectHeight() const
 {
     return zoomItY( emptyRectHeight );
 }
+
+
+ContextStyle::TextStyle ContextStyle::convertTextStyleFraction( TextStyle tstyle ) const
+{
+    TextStyle result;
+
+    switch ( tstyle ){
+    case displayStyle:
+	result = textStyle;
+	break;
+    case textStyle:
+	result = scriptStyle;
+	break;
+    default:
+	result = scriptScriptStyle;
+	break;
+    }
+	
+    return result;
+}
+
+
+ContextStyle::TextStyle ContextStyle::convertTextStyleIndex( TextStyle tstyle ) const
+{
+    TextStyle result;
+
+    switch ( tstyle ){
+    case displayStyle:
+	result = scriptStyle;
+	break;
+    case textStyle:
+	result = scriptStyle;
+	break;
+    default:
+	result = scriptScriptStyle;
+	break;
+    }
+	
+    return result;
+}
+

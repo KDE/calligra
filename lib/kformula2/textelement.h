@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -35,7 +35,7 @@ public:
 
     TextElement(QChar ch = ' ', BasicElement* parent = 0);
 
-    
+
     /**
      * @returns the type of this element. Used for
      * parsing a sequence.
@@ -52,19 +52,19 @@ public:
      * @returns true if we don't want to see the element.
      */
     virtual bool isPhantom() const { return character == '\\'; }
-    
+
     // drawing
     //
     // Drawing depends on a context which knows the required properties like
     // fonts, spaces and such.
     // It is essential to calculate elements size with the same context
     // before you draw.
-    
+
     /**
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& context, int parentSize);
+    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
 
     /**
      * Draws the whole element including its children.
@@ -73,38 +73,40 @@ public:
      */
     virtual void draw(QPainter& painter, const QRect& r,
                       const ContextStyle& context,
-                      int parentSize, const QPoint& parentOrigin);
+		      ContextStyle::TextStyle tstyle,
+		      ContextStyle::IndexStyle istyle,
+                      const QPoint& parentOrigin);
 
     /**
      * @returns whether we are a symbol (greek letter).
      */
     bool isSymbol() const { return symbol; }
-    
+
     /**
      * Sets the element to be a symbol.
      */
     void setSymbol(bool s);
 
     /**
-     * @returns the latex representation of the element and 
+     * @returns the latex representation of the element and
      * of the element's children
      */
     virtual QString toLatex();
-    
+
 protected:
 
     //Save/load support
-    
+
     /**
      * @returns the tag name of this element type.
      */
     virtual QString getTagName() const { return "TEXT"; }
-    
+
     /**
      * Appends our attributes to the dom element.
      */
     virtual void writeDom(QDomElement& element);
-    
+
     /**
      * Reads our attributes from the element.
      * Returns false if it failed.
@@ -127,18 +129,18 @@ protected:
     /**
      * @returns the space to be left before the character.
      */
-    int getSpaceBefore(const ContextStyle& context, int size);
+    int getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
 
     /**
      * @returns the space to be left after the character.
      */
-    int getSpaceAfter(const ContextStyle& context, int size);
+    int getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
 
     /**
      * Sets up the painter to be used for drawing.
      */
     void setUpPainter(const ContextStyle& context, QPainter& painter);
-    
+
 private:
 
     /**

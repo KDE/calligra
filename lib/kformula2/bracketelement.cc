@@ -81,10 +81,9 @@ BasicElement* BracketElement::goToPos(FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void BracketElement::calcSizes(const ContextStyle& style, int parentSize)
+void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
-    int mySize = parentSize;
-    content->calcSizes(style, mySize);
+    content->calcSizes(style, tstyle, istyle);
     int contentHeight = 2 * QMAX(content->getMidline(),
                                  content->getHeight() - content->getMidline());
 
@@ -116,10 +115,11 @@ void BracketElement::calcSizes(const ContextStyle& style, int parentSize)
  */
 void BracketElement::draw(QPainter& painter, const QRect& r,
                           const ContextStyle& style,
-                          int parentSize, const QPoint& parentOrigin)
+			  ContextStyle::TextStyle tstyle,
+			  ContextStyle::IndexStyle istyle,
+			  const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = parentSize;
     if (!QRect(myPos, getSize()).intersects(r))
         return;
 
@@ -127,7 +127,7 @@ void BracketElement::draw(QPainter& painter, const QRect& r,
                                  content->getHeight() - content->getMidline());
 
     left->draw(painter, r, style, contentHeight + style.getSizeReduction(), myPos);
-    content->draw(painter, r, style, mySize, myPos);
+    content->draw(painter, r, style, tstyle, istyle, myPos);
     right->draw(painter, r, style, contentHeight + style.getSizeReduction(), myPos);
 }
 

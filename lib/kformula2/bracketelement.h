@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -54,7 +54,7 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& style, int parentSize);
+    virtual void calcSizes(const ContextStyle& style,  ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
 
     /**
      * Draws the whole element including its children.
@@ -63,7 +63,9 @@ public:
      */
     virtual void draw(QPainter& painter, const QRect& r,
                       const ContextStyle& style,
-                      int parentSize, const QPoint& parentOrigin);
+                      ContextStyle::TextStyle tstyle, 
+		      ContextStyle::IndexStyle istyle,
+		      const QPoint& parentOrigin);
 
     /**
      * Enters this element while moving to the left starting inside
@@ -93,7 +95,7 @@ public:
      */
     virtual void moveDown(FormulaCursor* cursor, BasicElement* from);
 
-    
+
     /**
      * Removes all selected children and returns them. Places the
      * cursor to where the children have been.
@@ -105,7 +107,7 @@ public:
     // main child
     //
     // If an element has children one has to become the main one.
-    
+
     virtual SequenceElement* getMainChild();
     //virtual void setMainChild(SequenceElement*);
 
@@ -114,7 +116,7 @@ public:
      * the position behind it.
      */
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
-   
+
     // Save&load
     //virtual QDomElement getElementDom(QDomDocument *doc);
     //virtual bool buildFromDom(QDomElement *elem);
@@ -122,17 +124,17 @@ public:
 protected:
 
     //Save/load support
-    
+
     /**
      * Returns the tag name of this element type.
      */
     virtual QString getTagName() const { return "BRACKET"; }
-    
+
     /**
      * Appends our attributes to the dom element.
      */
     virtual void writeDom(QDomElement& element);
-    
+
     /**
      * Reads our attributes from the element.
      * Returns false if it failed.
@@ -147,12 +149,12 @@ protected:
     virtual bool readContentFromDom(QDomNode& node);
 
     /**
-     * @returns the latex representation of the element and 
+     * @returns the latex representation of the element and
      * of the element's children
      */
     virtual QString toLatex();
 
-    
+
 private:
     /**
      * @return a LaTex string for the given symbol
@@ -164,7 +166,7 @@ private:
      */
     Artwork* createBracket(char bracket);
 
-    
+
     /**
      * The brackets we are showing.
      */

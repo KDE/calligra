@@ -96,22 +96,22 @@ BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
+void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle )
 {
-    int mySize = parentSize;
-    int distX = style.getDistanceX(mySize);
-    int distY = style.getDistanceY(mySize);
+    int mySize = style.getAdjustedSize(tstyle);
+    int distX = style.getDistanceX(tstyle);
+    int distY = style.getDistanceY(tstyle);
 
     symbol.calcSizes(style, mySize*2);
-    content->calcSizes(style, mySize);
+    content->calcSizes(style, tstyle, istyle);
 
     //symbol.scale(((double)parentSize)/symbol.getHeight()*2);
 
     int upperWidth = 0;
     int upperHeight = 0;
     if (hasUpper()) {
-        upper->setSizeReduction(style);
-        upper->calcSizes(style, mySize);
+        upper->calcSizes(style, style.convertTextStyleIndex( tstyle ),
+			 style.convertIndexStyleUpper( istyle ) );
         upperWidth = upper->getWidth();
         upperHeight = upper->getHeight() + distY;
     }
@@ -119,8 +119,8 @@ void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
     int lowerWidth = 0;
     int lowerHeight = 0;
     if (hasLower()) {
-        lower->setSizeReduction(style);
-        lower->calcSizes(style, mySize);
+        lower->calcSizes(style, style.convertTextStyleIndex( tstyle ),
+			 style.convertIndexStyleLower( istyle ) );
         lowerWidth = lower->getWidth();
         lowerHeight = lower->getHeight() + distY;
     }
@@ -190,20 +190,24 @@ void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
  */
 void SymbolElement::draw(QPainter& painter, const QRect& r,
                          const ContextStyle& style,
-                         int parentSize, const QPoint& parentOrigin)
+			 ContextStyle::TextStyle tstyle,
+			 ContextStyle::IndexStyle istyle,
+                         const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = parentSize;
+    int mySize = style.getAdjustedSize( tstyle );
     if (!QRect(myPos, getSize()).intersects(r))
         return;
 
     symbol.draw(painter, r, style, mySize, myPos);
-    content->draw(painter, r, style, mySize, myPos);
+    content->draw(painter, r, style, tstyle, istyle, myPos);
     if (hasUpper()) {
-        upper->draw(painter, r, style, mySize, myPos);
+        upper->draw(painter, r, style, style.convertTextStyleIndex( tstyle ),
+			 style.convertIndexStyleUpper( istyle ), myPos);
     }
     if (hasLower()) {
-        lower->draw(painter, r, style, mySize, myPos);
+        lower->draw(painter, r, style, style.convertTextStyleIndex( tstyle ),
+			 style.convertIndexStyleLower( istyle ), myPos);
     }
 
     // Debug

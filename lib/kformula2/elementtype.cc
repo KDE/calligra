@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -136,7 +136,7 @@ Term::Term(SequenceParser* parser)
         // A separator doesn't have a type
         parser->nextToken();
     }
-    
+
     switch (parser->getTokenType()) {
         case MUL:
         case DIV:
@@ -195,7 +195,7 @@ TextSymbolType::TextSymbolType(SequenceParser* parser)
         : MultiElementType(parser)
 {
 }
-    
+
 
 NumberType::NumberType(SequenceParser* parser)
         : MultiElementType(parser)
@@ -211,12 +211,12 @@ ComplexElementType::ComplexElementType(SequenceParser* parser)
 }
 
 
-int ElementType::getSpaceBefore(const ContextStyle&, int)
+int ElementType::getSpaceBefore(const ContextStyle&, ContextStyle::TextStyle /*tstyle */)
 {
     return 0;
 }
 
-int ElementType::getSpaceAfter(const ContextStyle&, int)
+int ElementType::getSpaceAfter(const ContextStyle&, ContextStyle::TextStyle /*tstyle */)
 {
     return 0;
 }
@@ -232,14 +232,14 @@ void ElementType::setUpPainter(const ContextStyle& context, QPainter& painter)
 }
 
 
-int OperatorType::getSpaceBefore(const ContextStyle& context, int size)
+int OperatorType::getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle)
 {
-    return context.getOperatorSpace(size);
+    return context.getOperatorSpace(tstyle);
 }
 
-int OperatorType::getSpaceAfter(const ContextStyle& context, int size)
+int OperatorType::getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle)
 {
-    return context.getOperatorSpace(size);
+    return context.getOperatorSpace(tstyle);
 }
 
 QFont OperatorType::getFont(const ContextStyle& context)
@@ -253,22 +253,22 @@ void OperatorType::setUpPainter(const ContextStyle& context, QPainter& painter)
 }
 
 
-int Term::getSpaceBefore(const ContextStyle& context, int size)
+int Term::getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle)
 {
-    return OperatorType::getSpaceBefore(context, size) / 2;
+    return OperatorType::getSpaceBefore(context, tstyle) / 2;
 }
-    
-int Term::getSpaceAfter(const ContextStyle& context, int size)
+
+int Term::getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle)
 {
-    return OperatorType::getSpaceAfter(context, size) / 2;
+    return OperatorType::getSpaceAfter(context, tstyle) / 2;
 }
 
 
-int AssignmentSep::getSpaceBefore(const ContextStyle&, int)
+int AssignmentSep::getSpaceBefore(const ContextStyle&, ContextStyle::TextStyle /*tstyle*/)
 {
     return 0;
 }
-    
+
 void AssignmentSep::setUpPainter(const ContextStyle& context, QPainter& painter)
 {
     painter.setPen(context.getDefaultColor());

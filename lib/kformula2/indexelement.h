@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -37,10 +37,10 @@ public:
     // each index has its own number.
     enum { upperLeftPos, lowerLeftPos, upperMiddlePos, contentPos,
            lowerMiddlePos, upperRightPos, lowerRightPos, parentPos };
-    
+
     IndexElement(BasicElement* parent = 0);
     ~IndexElement();
-    
+
     /**
      * Sets the cursor and returns the element the point is in.
      * The handled flag shows whether the cursor has been set.
@@ -56,12 +56,12 @@ public:
     // fonts, spaces and such.
     // It is essential to calculate elements size with the same context
     // before you draw.
-    
+
     /**
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& context, int parentSize);
+    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
 
     /**
      * Draws the whole element including its children.
@@ -70,17 +70,19 @@ public:
      */
     virtual void draw(QPainter& painter, const QRect& r,
                       const ContextStyle& context,
-                      int parentSize, const QPoint& parentOrigin);
+                      ContextStyle::TextStyle tstyle,
+		      ContextStyle::IndexStyle istyle,
+		      const QPoint& parentOrigin);
 
-    
+
     // navigation
-    // 
+    //
     // The elements are responsible to handle cursor movement themselves.
     // To do this they need to know the direction the cursor moves and
     // the element it comes from.
     //
     // The cursor might be in normal or in selection mode.
-    
+
     /**
      * Enters this element while moving to the left starting inside
      * the element `from'. Searches for a cursor position inside
@@ -159,7 +161,7 @@ public:
      * might be inserted.
      */
     virtual void normalize(FormulaCursor*, Direction);
-    
+
     /**
      * Returns the child at the cursor.
      */
@@ -177,17 +179,17 @@ public:
      * be replaced by its main child's content.
      */
     virtual bool isSenseless();
-    
-    
+
+
     bool hasUpperLeft()   const { return upperLeft   != 0; }
     bool hasUpperMiddle() const { return upperMiddle != 0; }
     bool hasUpperRight()  const { return upperRight  != 0; }
     bool hasLowerLeft()   const { return lowerLeft   != 0; }
     bool hasLowerMiddle() const { return lowerMiddle != 0; }
     bool hasLowerRight()  const { return lowerRight  != 0; }
-    
+
     // If we want to create an index we need a cursor that points there.
-    
+
     void setToUpperLeft(FormulaCursor* cursor);
     void setToUpperMiddle(FormulaCursor* cursor);
     void setToUpperRight(FormulaCursor* cursor);
@@ -205,7 +207,7 @@ public:
     void moveToLowerRight(FormulaCursor* cursor, Direction direction);
 
     // Generic access to each index.
-    
+
     ElementIndexPtr getUpperLeft() { return ElementIndexPtr(new UpperLeftIndex(this)); }
     ElementIndexPtr getLowerLeft() { return ElementIndexPtr(new LowerLeftIndex(this)); }
     ElementIndexPtr getUpperMiddle() { return ElementIndexPtr(new UpperMiddleIndex(this)); }
@@ -219,25 +221,25 @@ public:
     ElementIndexPtr getIndex(int position);
 
     /**
-     * @returns the latex representation of the element and 
+     * @returns the latex representation of the element and
      * of the element's children
      */
     virtual QString toLatex();
-    
+
 protected:
 
     //Save/load support
-    
+
     /**
      * Returns the tag name of this element type.
      */
     virtual QString getTagName() const { return "INDEX"; }
-    
+
     /**
      * Appends our attributes to the dom element.
      */
     virtual void writeDom(QDomElement& element);
-    
+
     /**
      * Reads our attributes from the element.
      * Returns false if it failed.
@@ -250,7 +252,7 @@ protected:
      * Returns false if it failed.
      */
     virtual bool readContentFromDom(QDomNode& node);
-    
+
 private:
 
     /**
@@ -265,7 +267,7 @@ private:
     };
 
     // We have a (very simple) type for every index.
-    
+
     class UpperLeftIndex : public IndexElementIndex {
     public:
         UpperLeftIndex(IndexElement* parent) : IndexElementIndex(parent) {}
@@ -287,7 +289,7 @@ private:
         virtual bool hasIndex() const
             { return parent->hasLowerLeft(); }
     };
-    
+
     class UpperMiddleIndex : public IndexElementIndex {
     public:
         UpperMiddleIndex(IndexElement* parent) : IndexElementIndex(parent) {}
@@ -298,7 +300,7 @@ private:
         virtual bool hasIndex() const
             { return parent->hasUpperMiddle(); }
     };
-    
+
     class LowerMiddleIndex : public IndexElementIndex {
     public:
         LowerMiddleIndex(IndexElement* parent) : IndexElementIndex(parent) {}
@@ -320,7 +322,7 @@ private:
         virtual bool hasIndex() const
             { return parent->hasUpperRight(); }
     };
-    
+
     class LowerRightIndex : public IndexElementIndex {
     public:
         LowerRightIndex(IndexElement* parent) : IndexElementIndex(parent) {}
@@ -342,7 +344,7 @@ private:
      * @returns the position describtion to the provided element.
      */
     int getFromPos(BasicElement* from);
-    
+
     /**
      * Sets the cursor to point to the place where the content is.
      * There always is a content so this is not a useful place.
@@ -350,7 +352,7 @@ private:
      * there.
      */
     void setToContent(FormulaCursor* cursor);
-    
+
     /**
      * Our main child. This is guaranteed not to be null.
      */

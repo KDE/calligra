@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -52,7 +52,7 @@ public:
     // fonts, spaces and such.
     // It is essential to calculate elements size with the same context
     // before you draw.
-    
+
     /**
      * Tells the sequence to have a smaller size than its parant.
      */
@@ -63,12 +63,12 @@ public:
      * Please note that there might be phantom elements.
      */
     bool isEmpty();
-    
+
     /**
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& context, int parentSize);
+    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
 
     /**
      * Draws the whole element including its children.
@@ -77,23 +77,25 @@ public:
      */
     virtual void draw(QPainter& painter, const QRect& r,
                       const ContextStyle& context,
-                      int parentSize, const QPoint& parentOrigin);
+		      ContextStyle::TextStyle tstyle,
+		      ContextStyle::IndexStyle istyle,
+		      const QPoint& parentOrigin);
 
     void calcCursorSize(FormulaCursor* cursor, bool smallCursor);
-    
+
     /**
      * If the cursor is inside a sequence it needs to be drawn.
      */
     void drawCursor(FormulaCursor* cursor, QPainter& painter, bool smallCursor);
-    
+
     // navigation
-    // 
+    //
     // The elements are responsible to handle cursor movement themselves.
     // To do this they need to know the direction the cursor moves and
     // the element it comes from.
     //
     // The cursor might be in normal or in selection mode.
-    
+
     /**
      * Enters this element while moving to the left starting inside
      * the element `from'. Searches for a cursor position inside
@@ -113,7 +115,7 @@ public:
      * to the beginning of the previous.
      */
     void moveWordLeft(FormulaCursor* cursor);
-    
+
     /**
      * Moves to the end of this word or if we are there already
      * to the end of the next.
@@ -152,7 +154,7 @@ public:
      */
     virtual void goInside(FormulaCursor* cursor);
 
-    
+
     // children
 
     /**
@@ -175,7 +177,7 @@ public:
      * might be inserted.
      */
     virtual void normalize(FormulaCursor*, Direction);
-    
+
     /**
      * Returns the child at the cursor.
      * Does not care about the selection.
@@ -196,7 +198,7 @@ public:
      * @returns the current name
      */
     QString getCurrentName(FormulaCursor* cursor);
-    
+
     /**
      * Returns the number of children we have.
      */
@@ -206,19 +208,19 @@ public:
      * Selects all children. The cursor is put behind, the mark before them.
      */
     void selectAllChildren(FormulaCursor* cursor);
-    
+
     /**
      * Stores the given childrens dom in the element.
      */
     void getChildrenDom(QDomDocument& doc, QDomElement& elem, uint from, uint to);
-    
+
     /**
      * Builds elements from the given node and its siblings and
      * puts them into the list.
      * Returns false if an error occures.
      */
     bool buildChildrenFromDom(QList<BasicElement>& list, QDomNode n);
-    
+
     /**
      * Parses the sequence and generates a new syntax tree.
      * Has to be called after each modification.
@@ -229,26 +231,26 @@ public:
     void parse();
 
     /**
-     * @returns the latex representation of the element and 
+     * @returns the latex representation of the element and
      * of the element's children
      */
     virtual QString toLatex();
-    
+
 
 protected:
 
     //Save/load support
-    
+
     /**
      * Returns the tag name of this element type.
      */
     virtual QString getTagName() const { return "SEQUENCE"; }
-    
+
     /**
      * Appends our attributes to the dom element.
      */
     virtual void writeDom(QDomElement& element);
-    
+
     /**
      * Reads our attributes from the element.
      * Returns false if it failed.
@@ -289,7 +291,7 @@ protected:
      */
     int getChildPosition(uint child);
 
-    
+
 private:
 
     /**
@@ -297,7 +299,7 @@ private:
      */
     void removeChild(QList<BasicElement>& removedChildren, int pos);
 
-    
+
     /**
      * Our children. Be sure to notify the rootElement before
      * you remove any.

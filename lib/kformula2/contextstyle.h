@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -39,8 +39,24 @@
  */
 class ContextStyle
 {
-public:  
+public:
     enum Alignment {left, center, right};
+
+    /**
+     * Textstyles like in TeX. In the remaining documentation, the
+     * styles are abbreviated like this:
+     *
+     * displayStyle: D
+     *
+     * textStyle: T
+     *
+     * scriptStyle: S
+     *
+     * scriptScriptStyle: SS
+     **/
+    enum TextStyle {displayStyle, textStyle, scriptStyle, scriptScriptStyle};
+
+    enum IndexStyle {normal, cramped};
 
     /**
      * Build a default context style
@@ -53,7 +69,7 @@ public:
     //ContextStyle(KConfig *config);
 
     void setResolution(double zX, double zY);
-    
+
     QColor getDefaultColor()  const { return defaultColor; }
     QColor getNumberColor()   const { return numberColor; }
     QColor getOperatorColor() const { return operatorColor; }
@@ -66,23 +82,75 @@ public:
     QFont getOperatorFont()   const { return operatorFont; }
     QFont getSymbolFont()     const { return symbolFont; }
 
-    int getDistanceX(int size) const;
-    int getDistanceY(int size) const;
-    int getOperatorSpace(int size) const;
+
+    double getReductionFactor(TextStyle tstyle) const;	
+    int getDistanceX(TextStyle tstyle) const;
+    int getDistanceY(TextStyle tstyle) const;
+    int getOperatorSpace(TextStyle tstyle) const;
     int getBaseSize() const;
+    TextStyle getBaseTextStyle() const { return m_baseTextStyle; }
     int getMinimumSize() const;
+
+    /**
+     * Calculates the font size corresponding to the given TextStyle.
+     *
+     * Takes into account the current zoom factor.
+     **/
+    int getAdjustedSize( TextStyle tstyle ) const;
     int getSizeReduction() const;
     int getLineWidth() const;
-    
+
     int getEmptyRectWidth() const;
     int getEmptyRectHeight() const;
 
     Alignment getMatrixAlignment() const { return center; }
 
     bool getCenterSymbol() const { return centerSymbol; }
-    
+
+    /**
+     * Font-conversions a la TeX.
+     *
+     * For fractions (and also matrices), we have the following conversions:
+     * D->T, T->S, S,SS->SS
+     */
+    TextStyle convertTextStyleFraction( TextStyle tstyle ) const;
+
+    /**
+     * Font-conversions a la TeX.
+     *
+     * For indices, we have the following conversions:
+     * D->S, T->S, S,SS->SS
+     */
+    TextStyle convertTextStyleIndex( TextStyle tstyle ) const;
+
+    /**
+     * Index-style-conversions a la TeX.
+     *
+     * The function convertIndexStyleUpper is responsible for everything
+     * that ends 'up', like nominators of fractions, or upper indices.
+     *
+     * We have the following rule:
+     * normal->normal, cramped->cramped
+     */
+    IndexStyle convertIndexStyleUpper( IndexStyle istyle ) const {
+	return istyle; }
+
+
+    /**
+     * Index-style-conversions a la TeX.
+     *
+     * The function convertIndexStyleLower is responsible for everything
+     * that ends 'down', like nominators of fractions, or upper indices.
+     *
+     * We have the following rule:
+     * normal->cramped, cramped->cramped
+     */
+    IndexStyle convertIndexStyleLower( IndexStyle /*istyle*/ ) const {
+	return cramped; }
+
+
     // Shamelessly stolen from kword. (See kwdoc.h)
-    
+
     // Input: pt. Output: pixels. Resolution and zoom are applied.
     int zoomItX( int z ) const {
         return static_cast<int>(m_zoomedResolutionX * z);
@@ -113,7 +181,7 @@ private:
     QFont numberFont;
     QFont operatorFont;
     QFont symbolFont;
-    
+
     QColor defaultColor;
     QColor numberColor;
     QColor operatorColor;
@@ -130,7 +198,7 @@ private:
      * The space to be left before and after a normal operator.
      */
     int operatorSpace;
-    
+
     /**
      * The cursors movement style. You need to notify each cursor
      * if you change this.
@@ -141,6 +209,22 @@ private:
      * The (font) size of the formula's main sequence.
      */
     int baseSize;
+
+    /**
+     * The base text style of the formula.
+     **/
+    TextStyle m_baseTextStyle;
+
+    /**
+     * The font size reduction for script style.
+     **/
+    double m_scriptStyleReduction;
+
+    /**
+     * The font size reduction for script script style.
+     **/
+    double m_scriptScriptStyleReduction;
+
 
     /**
      * The smallest font size we use. Sometimes things have to be readable...
@@ -169,7 +253,7 @@ private:
      * false means alignment to the right.
      */
     bool centerSymbol;
-    
+
     /**
      * All characters that are valid as exponent chars inside a number.
      * This used to be "Ee" but the symbol font has no "e" and some

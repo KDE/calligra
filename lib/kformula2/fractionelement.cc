@@ -85,14 +85,15 @@ BasicElement* FractionElement::goToPos(FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void FractionElement::calcSizes(const ContextStyle& style, int parentSize)
+void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
-    int mySize = parentSize;
-    numerator->calcSizes(style, mySize);
-    denominator->calcSizes(style, mySize);
+    numerator->calcSizes(style, style.convertTextStyleFraction( tstyle ),
+			 style.convertIndexStyleUpper( istyle ));
+    denominator->calcSizes(style, style.convertTextStyleFraction( tstyle ),
+			   style.convertIndexStyleLower( istyle ));
 
-    int distX = style.getDistanceX(mySize);
-    int distY = style.getDistanceY(mySize);
+    int distX = style.getDistanceX(tstyle);
+    int distY = style.getDistanceY(tstyle);
 
     setWidth(QMAX(numerator->getWidth(), denominator->getWidth()) + distX);
     setHeight(numerator->getHeight() + distY + denominator->getHeight());
@@ -114,17 +115,23 @@ void FractionElement::calcSizes(const ContextStyle& style, int parentSize)
  */
 void FractionElement::draw(QPainter& painter, const QRect& r,
                            const ContextStyle& style,
-                           int parentSize, const QPoint& parentOrigin)
+                           ContextStyle::TextStyle tstyle,
+			   ContextStyle::IndexStyle istyle,
+			   const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = parentSize;
+
     if (!QRect(myPos, getSize()).intersects(r))
         return;
 
-    numerator->draw(painter, r, style, mySize, myPos);
-    denominator->draw(painter, r, style, mySize, myPos);
+    numerator->draw(painter, r, style,
+		    style.convertTextStyleFraction( tstyle ),
+		    style.convertIndexStyleUpper( istyle ), myPos);
+    denominator->draw(painter, r, style,
+		      style.convertTextStyleFraction( tstyle ),
+		      style.convertIndexStyleLower( istyle ), myPos);
 
-    int distX = style.getDistanceX(mySize);
+    int distX = style.getDistanceX(tstyle);
     painter.setPen(QPen(style.getDefaultColor(), style.getLineWidth()));
     painter.drawLine(myPos.x() + distX/2, myPos.y() + getMidline(),
                      myPos.x() + getWidth() - (distX - distX/2), myPos.y() + getMidline());

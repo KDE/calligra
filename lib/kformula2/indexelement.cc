@@ -175,17 +175,17 @@ void IndexElement::setMiddleX(int xOffset, int middleWidth)
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
+void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
-    int mySize = parentSize;
-    //int distX = contextStyle.getDistanceX(mySize);
-    int distY = contextStyle.getDistanceY(mySize);
+    //int distX = contextStyle.getDistanceX(tstyle);
+    int distY = contextStyle.getDistanceY(tstyle);
 
     // get the indexes size
     int ulWidth = 0, ulHeight = 0, ulMidline = 0;
     if (hasUpperLeft()) {
-        upperLeft->setSizeReduction(contextStyle);
-        upperLeft->calcSizes(contextStyle, mySize);
+        upperLeft->calcSizes(contextStyle,
+			     contextStyle.convertTextStyleIndex(tstyle),
+			     contextStyle.convertIndexStyleUpper(istyle));
         ulWidth = upperLeft->getWidth();
         ulHeight = upperLeft->getHeight();
         ulMidline = upperLeft->getMidline();
@@ -193,8 +193,9 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
 
     int umWidth = 0, umHeight = 0, umMidline = 0;
     if (hasUpperMiddle()) {
-        upperMiddle->setSizeReduction(contextStyle);
-        upperMiddle->calcSizes(contextStyle, mySize);
+	upperMiddle->calcSizes(contextStyle,
+			       contextStyle.convertTextStyleIndex(tstyle),
+			       contextStyle.convertIndexStyleUpper(istyle));
         umWidth = upperMiddle->getWidth();
         umHeight = upperMiddle->getHeight() + distY;
         umMidline = upperMiddle->getMidline();
@@ -202,8 +203,9 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
 
     int urWidth = 0, urHeight = 0, urMidline = 0;
     if (hasUpperRight()) {
-        upperRight->setSizeReduction(contextStyle);
-        upperRight->calcSizes(contextStyle, mySize);
+        upperRight->calcSizes(contextStyle,
+			      contextStyle.convertTextStyleIndex(tstyle),
+			      contextStyle.convertIndexStyleUpper(istyle));
         urWidth = upperRight->getWidth();
         urHeight = upperRight->getHeight();
         urMidline = upperRight->getMidline();
@@ -211,8 +213,9 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
 
     int llWidth = 0, llHeight = 0, llMidline = 0;
     if (hasLowerLeft()) {
-        lowerLeft->setSizeReduction(contextStyle);
-        lowerLeft->calcSizes(contextStyle, mySize);
+        lowerLeft->calcSizes(contextStyle,
+			     contextStyle.convertTextStyleIndex(tstyle),
+			     contextStyle.convertIndexStyleLower(istyle));
         llWidth = lowerLeft->getWidth();
         llHeight = lowerLeft->getHeight();
         llMidline = lowerLeft->getMidline();
@@ -220,8 +223,9 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
 
     int lmWidth = 0, lmHeight = 0, lmMidline = 0;
     if (hasLowerMiddle()) {
-        lowerMiddle->setSizeReduction(contextStyle);
-        lowerMiddle->calcSizes(contextStyle, mySize);
+        lowerMiddle->calcSizes(contextStyle,
+			       contextStyle.convertTextStyleIndex(tstyle),
+			       contextStyle.convertIndexStyleLower(istyle));
         lmWidth = lowerMiddle->getWidth();
         lmHeight = lowerMiddle->getHeight() + distY;
         lmMidline = lowerMiddle->getMidline();
@@ -229,15 +233,16 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
 
     int lrWidth = 0, lrHeight = 0, lrMidline = 0;
     if (hasLowerRight()) {
-        lowerRight->setSizeReduction(contextStyle);
-        lowerRight->calcSizes(contextStyle, mySize);
+        lowerRight->calcSizes(contextStyle,
+			      contextStyle.convertTextStyleIndex(tstyle),
+			      contextStyle.convertIndexStyleLower(istyle));
         lrWidth = lowerRight->getWidth();
         lrHeight = lowerRight->getHeight();
         lrMidline = lowerRight->getMidline();
     }
 
     // get the contents size
-    content->calcSizes(contextStyle, mySize);
+    content->calcSizes(contextStyle, tstyle, istyle);
     int width = QMAX(content->getWidth(), QMAX(umWidth, lmWidth));
     int toMidline = content->getMidline();
     int fromMidline = content->getHeight() - toMidline;
@@ -315,31 +320,44 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
  */
 void IndexElement::draw(QPainter& painter, const QRect& r,
                         const ContextStyle& contextStyle,
-                        int parentSize, const QPoint& parentOrigin)
+			ContextStyle::TextStyle tstyle,
+			ContextStyle::IndexStyle istyle,
+                        const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = parentSize;
     if (!QRect(myPos, getSize()).intersects(r))
         return;
 
-    content->draw(painter, r, contextStyle, mySize, myPos);
+    content->draw(painter, r, contextStyle, tstyle, istyle, myPos);
     if (hasUpperLeft()) {
-        upperLeft->draw(painter, r, contextStyle, mySize, myPos);
+        upperLeft->draw(painter, r, contextStyle, 
+			contextStyle.convertTextStyleIndex(tstyle),
+			contextStyle.convertIndexStyleUpper(istyle), myPos);
     }
     if (hasUpperMiddle()) {
-        upperMiddle->draw(painter, r, contextStyle, mySize, myPos);
+        upperMiddle->draw(painter, r, contextStyle,
+			  contextStyle.convertTextStyleIndex(tstyle),
+			  contextStyle.convertIndexStyleUpper(istyle), myPos);
     }
     if (hasUpperRight()) {
-        upperRight->draw(painter, r, contextStyle, mySize, myPos);
+        upperRight->draw(painter, r, contextStyle,
+			 contextStyle.convertTextStyleIndex(tstyle),
+			 contextStyle.convertIndexStyleUpper(istyle), myPos);
     }
     if (hasLowerLeft()) {
-        lowerLeft->draw(painter, r, contextStyle, mySize, myPos);
+        lowerLeft->draw(painter, r, contextStyle,
+			contextStyle.convertTextStyleIndex(tstyle),
+			contextStyle.convertIndexStyleLower(istyle), myPos);
     }
     if (hasLowerMiddle()) {
-        lowerMiddle->draw(painter, r, contextStyle, mySize, myPos);
+        lowerMiddle->draw(painter, r, contextStyle,
+			  contextStyle.convertTextStyleIndex(tstyle),
+			  contextStyle.convertIndexStyleLower(istyle), myPos);
     }
     if (hasLowerRight()) {
-        lowerRight->draw(painter, r, contextStyle, mySize, myPos);
+        lowerRight->draw(painter, r, contextStyle, 
+			 contextStyle.convertTextStyleIndex(tstyle),
+			 contextStyle.convertIndexStyleLower(istyle), myPos);
     }
 
     // Debug
@@ -1094,9 +1112,9 @@ ElementIndexPtr IndexElement::getIndex(int position)
 QString IndexElement::toLatex()
 {
     QString index="";
-    
-    bool onlyRight=!hasUpperLeft() && !hasLowerLeft() 
-		    && !hasUpperMiddle() && !hasLowerMiddle();    
+
+    bool onlyRight=!hasUpperLeft() && !hasLowerLeft()
+		    && !hasUpperMiddle() && !hasLowerMiddle();
 
     if(onlyRight){
 

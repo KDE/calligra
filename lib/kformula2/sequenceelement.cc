@@ -123,10 +123,10 @@ bool SequenceElement::isEmpty()
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void SequenceElement::calcSizes(const ContextStyle& context, int parentSize)
+void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
     if (!isEmpty()) {
-        int mySize = parentSize - relativeSize;
+        int mySize = context.getAdjustedSize( tstyle );
         int width = 0;
         int toBaseline = 0;
         int fromBaseline = 0;
@@ -142,7 +142,7 @@ void SequenceElement::calcSizes(const ContextStyle& context, int parentSize)
         for (uint i = 0; i < count; i++) {
             BasicElement* child = children.at(i);
             if (!child->isPhantom()) {
-                child->calcSizes(context, mySize);
+                child->calcSizes(context, tstyle, istyle);
                 child->setX(width);
                 width += child->getWidth();
 
@@ -209,20 +209,20 @@ void SequenceElement::setChildrenPositions()
  */
 void SequenceElement::draw(QPainter& painter, const QRect& r,
                            const ContextStyle& context,
-                           int parentSize, const QPoint& parentOrigin)
+                           ContextStyle::TextStyle tstyle,
+			   ContextStyle::IndexStyle istyle,
+			   const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x() + getX(),
                  parentOrigin.y() + getY());
     if (!QRect(myPos, getSize()).intersects(r))
         return;
 
-    if (!isEmpty()) {
-        int mySize = parentSize - relativeSize;
-	
+    if (!isEmpty()) {	
 	BasicElement* child;
 	for ( child=children.first(); child!=0; child=children.next() ){
 	    if (!child->isPhantom()) {
-		child->draw(painter, r, context, mySize, myPos);
+		child->draw(painter, r, context, tstyle, istyle, myPos);
 	    }
 	    // Debug
             //painter.setPen(Qt::green);

@@ -84,23 +84,24 @@ BasicElement* RootElement::goToPos(FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void RootElement::calcSizes(const ContextStyle& style, int parentSize)
+void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
-    int mySize = parentSize;
-
-    content->calcSizes(style, mySize);
+    content->calcSizes(style, tstyle, 
+		       style.convertIndexStyleLower(istyle));
 
     int indexWidth = 0;
     int indexHeight = 0;
     if (hasIndex()) {
         index->setSizeReduction(style);
-        index->calcSizes(style, mySize);
+        index->calcSizes(style, 
+			 style.convertTextStyleIndex(tstyle),
+			 style.convertIndexStyleUpper(istyle));
         indexWidth = index->getWidth();
         indexHeight = index->getHeight();
     }
 
-    int distX = style.getDistanceX(mySize);
-    int distY = style.getDistanceY(mySize);
+    int distX = style.getDistanceX(tstyle);
+    int distY = style.getDistanceY(tstyle);
     int unit = (content->getHeight() + distY)/ 3;
 
     if (hasIndex()) {
@@ -142,22 +143,26 @@ void RootElement::calcSizes(const ContextStyle& style, int parentSize)
  */
 void RootElement::draw(QPainter& painter, const QRect& r,
                        const ContextStyle& style,
-                       int parentSize, const QPoint& parentOrigin)
+                       ContextStyle::TextStyle tstyle,
+		       ContextStyle::IndexStyle istyle,
+		       const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = parentSize;
     if (!QRect(myPos, getSize()).intersects(r))
         return;
 
-    content->draw(painter, r, style, mySize, myPos);
+    content->draw(painter, r, style, tstyle,
+		  style.convertIndexStyleLower(istyle), myPos);
     if (hasIndex()) {
-        index->draw(painter, r, style, mySize, myPos);
+        index->draw(painter, r, style, 
+		    style.convertTextStyleIndex(tstyle),
+		    style.convertIndexStyleUpper(istyle), myPos);
     }
 
     int x = myPos.x() + rootOffset.x();
     int y = myPos.y() + rootOffset.y();
-    //int distX = style.getDistanceX(mySize);
-    int distY = style.getDistanceY(mySize);
+    //int distX = style.getDistanceX(tstyle);
+    int distY = style.getDistanceY(tstyle);
     int unit = (content->getHeight() + distY)/ 3;
 
     painter.setPen(QPen(style.getDefaultColor(), 2*style.getLineWidth()));

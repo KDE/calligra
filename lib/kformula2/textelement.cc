@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -42,7 +42,7 @@ TokenType TextElement::getTokenType() const
 {
     if (isSymbol())
         return SYMBOL;
-    
+
     char latin1 = character.latin1();
     switch (latin1) {
         case '+':
@@ -74,14 +74,14 @@ TokenType TextElement::getTokenType() const
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void TextElement::calcSizes(const ContextStyle& context, int parentSize)
+void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle /*istyle*/)
 {
-    int mySize = QMAX(parentSize, context.getMinimumSize());
+    int mySize = context.getAdjustedSize( tstyle );
 
     QFont font = getFont(context);
     font.setPointSize(mySize);
-    int spaceBefore = getSpaceBefore(context, mySize);
-    int spaceAfter = getSpaceAfter(context, mySize);
+    int spaceBefore = getSpaceBefore(context, tstyle);
+    int spaceAfter = getSpaceAfter(context, tstyle);
 
     QFontMetrics fm(font);
     QRect bound = fm.boundingRect(character);
@@ -99,19 +99,21 @@ void TextElement::calcSizes(const ContextStyle& context, int parentSize)
  */
 void TextElement::draw(QPainter& painter, const QRect& r,
                        const ContextStyle& context,
-                       int parentSize, const QPoint& parentOrigin)
+		       ContextStyle::TextStyle tstyle,
+		       ContextStyle::IndexStyle /*istyle*/,
+		       const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = QMAX(parentSize, context.getMinimumSize());
+    int mySize = context.getAdjustedSize( tstyle );
     if (!QRect(myPos, getSize()).intersects(r))
         return;
 
     QFont font = getFont(context);
     font.setPointSize(mySize);
     setUpPainter(context, painter);
-    int spaceBefore = getSpaceBefore(context, mySize);
-    //int spaceAfter = getSpaceAfter(context, mySize);
-    
+    int spaceBefore = getSpaceBefore(context, tstyle);
+    //int spaceAfter = getSpaceAfter(context, tstyle);
+
     painter.setFont(font);
     painter.drawText(parentOrigin.x()+getX()+spaceBefore,
                      parentOrigin.y()+getY()+getBaseline(), character);
@@ -141,20 +143,20 @@ QFont TextElement::getFont(const ContextStyle& context)
     }
 }
 
-int TextElement::getSpaceBefore(const ContextStyle& context, int size)
+int TextElement::getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle)
 {
     if (getElementType() != 0) {
-        return getElementType()->getSpaceBefore(context, size);
+        return getElementType()->getSpaceBefore(context, tstyle);
     }
     else {
         return 0;
     }
 }
 
-int TextElement::getSpaceAfter(const ContextStyle& context, int size)
+int TextElement::getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle)
 {
     if (getElementType() != 0) {
-        return getElementType()->getSpaceAfter(context, size);
+        return getElementType()->getSpaceAfter(context, tstyle);
     }
     else {
         return 0;
@@ -181,7 +183,7 @@ void TextElement::writeDom(QDomElement& element)
     element.setAttribute("CHAR", QString(character));
     if (symbol) element.setAttribute("SYMBOL", "1");
 }
-    
+
 /**
  * Reads our attributes from the element.
  * Returns false if it failed.
@@ -232,12 +234,12 @@ QString TextElement::toLatex()
 	char latin1 = character.latin1();
 	switch (latin1) {
 	    case '\\': return "\\backslash";
-    
+
             default:
                 return QChar(latin1);
-            
+
 	}
-    
+
     }
 
 }

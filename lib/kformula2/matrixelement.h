@@ -54,7 +54,7 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& context, int parentSize);
+    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
 
     /**
      * Draws the whole element including its children.
@@ -62,8 +62,10 @@ public:
      * We can use our parentPosition to get our own origin then.
      */
     virtual void draw(QPainter& painter, const QRect& r,
-                      const ContextStyle& context,
-                      int parentSize, const QPoint& parentOrigin);
+                      const ContextStyle& context, 
+		      ContextStyle::TextStyle tstyle, 
+		      ContextStyle::IndexStyle istyle,
+                      const QPoint& parentOrigin);
 
 
     // navigation

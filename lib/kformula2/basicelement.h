@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -70,8 +70,8 @@ class BasicElement
 {
     friend class SequenceElement;
     friend class SequenceParser;
-    
-public:  
+
+public:
 
     /*
      * Each element might contain children. Each child needs
@@ -104,7 +104,7 @@ public:
      * @returns true if we don't want to see the element.
      */
     virtual bool isPhantom() const { return false; }
-    
+
     /**
      * Sets the cursor and returns the element the point is in.
      * The handled flag shows whether the cursor has been set.
@@ -119,19 +119,19 @@ public:
      */
     QPoint widgetPos();
 
-    
+
     // drawing
     //
     // Drawing depends on a context which knows the required properties like
     // fonts, spaces and such.
     // It is essential to calculate elements size with the same context
     // before you draw.
-    
+
     /**
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& context, int parentSize) = 0;
+    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle) = 0;
 
     /**
      * Draws the whole element including its children.
@@ -140,17 +140,19 @@ public:
      */
     virtual void draw(QPainter& painter, const QRect& r,
                       const ContextStyle& context,
-                      int parentSize, const QPoint& parentOrigin) = 0;
+		      ContextStyle::TextStyle tstyle,
+		      ContextStyle::IndexStyle istyle,
+		      const QPoint& parentOrigin) = 0;
 
-    
+
     // navigation
-    // 
+    //
     // The elements are responsible to handle cursor movement themselves.
     // To do this they need to know the direction the cursor moves and
     // the element it comes from.
     //
     // The cursor might be in normal or in selection mode.
-    
+
     /**
      * Enters this element while moving to the left starting inside
      * the element `from'. Searches for a cursor position inside
@@ -197,7 +199,7 @@ public:
      */
     virtual void goInside(FormulaCursor* cursor);
 
-    
+
     // children
 
     /**
@@ -249,7 +251,7 @@ public:
      */
     virtual void normalize(FormulaCursor*, Direction);
 
-    
+
     /**
      * Returns wether the element has no more useful
      * children (except its main child) and should therefore
@@ -269,12 +271,12 @@ public:
      */
     virtual void selectChild(FormulaCursor*, BasicElement*) {}
 
-    
+
     // basic support
-    
+
     BasicElement* getParent() { return parent; }
     void setParent(BasicElement* p) { parent = p; }
-    
+
     int getX() const { return position.x(); }
     int getY() const { return position.y(); }
 
@@ -296,28 +298,28 @@ public:
 
 
     /**
-     * @return a QDomElement that contain as DomChildren the 
+     * @return a QDomElement that contain as DomChildren the
      * children, and as attribute the attribute of this
      * element.
      */
     QDomElement getElementDom(QDomDocument& doc);
-    
+
     /**
-     * Set this element attribute, build children and 
+     * Set this element attribute, build children and
      * call their buildFromDom.
      */
     bool buildFromDom(QDomElement& element);
 
     // debug
     static int getEvilDestructionCount() { return evilDestructionCount; }
-    
+
 protected:
 
     QSize& getSize() { return size; }
-    
+
     void setWidth(int width)   { size.setWidth(width); }
     void setHeight(int height) { size.setHeight(height); }
-    
+
     void setBaseline(int line) { baseline = line; }
     void setMidline(int mline) { midline = mline; }
 
@@ -329,17 +331,17 @@ protected:
     void calcBaseline();
 
     //Save/load support
-    
+
     /**
      * Returns the tag name of this element type.
      */
     virtual QString getTagName() const { return "BASIC"; }
-    
+
     /**
      * Appends our attributes to the dom element.
      */
     virtual void writeDom(QDomElement& element);
-    
+
     /**
      * Reads our attributes from the element.
      * Returns false if it failed.
@@ -353,7 +355,7 @@ protected:
      */
     virtual bool readContentFromDom(QDomNode& node);
 
-    
+
     /**
      * Returns a SequenceElement constructed from the nodes first child
      * if the nodes name matches the given name.
@@ -367,22 +369,22 @@ protected:
      * or 0 if there was a very bad parsing error.
      */
     ElementType* getElementType() { return elementType; }
-    
-    
+
+
     /**
-     * @returns the latex representation of the element and 
+     * @returns the latex representation of the element and
      * of the element's children
      */
     virtual QString toLatex();
-    
-    
+
+
 private:
 
     /**
      * Sets a new type. This is done during parsing.
      */
     void setElementType(ElementType* t) { elementType = t; }
-    
+
     /**
      * Our parent.
      * The parent might not be null except for the FormulaElement
@@ -399,7 +401,7 @@ private:
      * Our position relative to our parent.
      */
     QPoint position;
-    
+
     /**
      * The position of our base line from
      * the upper border. A sequence aligns its elements
@@ -409,7 +411,7 @@ private:
      * -1 in this case. The alignment is done using the middle line.
      */
     int baseline;
-    
+
     /**
      * The position of our middle line from
      * the upper border. The strike out position.

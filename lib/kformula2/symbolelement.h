@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -46,19 +46,19 @@ public:
      */
     virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
                                   const QPoint& point, const QPoint& parentOrigin);
-    
+
     // drawing
     //
     // Drawing depends on a context which knows the required properties like
     // fonts, spaces and such.
     // It is essential to calculate elements size with the same context
     // before you draw.
-    
+
     /**
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& context, int parentSize);
+    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
 
     /**
      * Draws the whole element including its children.
@@ -67,17 +67,19 @@ public:
      */
     virtual void draw(QPainter& painter, const QRect& r,
                       const ContextStyle& context,
-                      int parentSize, const QPoint& parentOrigin);
+		      ContextStyle::TextStyle tstyle,
+		      ContextStyle::IndexStyle istyle,
+                      const QPoint& parentOrigin);
 
-    
+
     // navigation
-    // 
+    //
     // The elements are responsible to handle cursor movement themselves.
     // To do this they need to know the direction the cursor moves and
     // the element it comes from.
     //
     // The cursor might be in normal or in selection mode.
-    
+
     /**
      * Enters this element while moving to the left starting inside
      * the element `from'. Searches for a cursor position inside
@@ -156,7 +158,7 @@ public:
      * might be inserted.
      */
     virtual void normalize(FormulaCursor*, Direction);
-    
+
     /**
      * Returns the child at the cursor.
      */
@@ -167,21 +169,21 @@ public:
      * the position behind it.
      */
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
-    
+
     bool hasUpper() const { return upper != 0; }
     bool hasLower() const { return lower != 0; }
-    
+
     // If we want to create an index we need a cursor that points there.
-    
+
     void setToUpper(FormulaCursor* cursor);
     void setToLower(FormulaCursor* cursor);
 
     // Moves the cursor inside the index. The index has to exist.
     void moveToUpper(FormulaCursor*, Direction);
     void moveToLower(FormulaCursor*, Direction);
-    
+
     // Generic access to each index.
-    
+
     ElementIndexPtr getUpperIndex() { return ElementIndexPtr(new UpperIndex(this)); }
     ElementIndexPtr getLowerIndex() { return ElementIndexPtr(new LowerIndex(this)); }
 
@@ -190,7 +192,7 @@ public:
     //virtual bool buildFromDom(QDomElement *elem);
 
     /**
-     * @returns the latex representation of the element and 
+     * @returns the latex representation of the element and
      * of the element's children
      */
     virtual QString toLatex();
@@ -198,17 +200,17 @@ public:
 protected:
 
     //Save/load support
-    
+
     /**
      * Returns the tag name of this element type.
      */
     virtual QString getTagName() const { return "SYMBOL"; }
-    
+
     /**
      * Appends our attributes to the dom element.
      */
     virtual void writeDom(QDomElement& element);
-    
+
     /**
      * Reads our attributes from the element.
      * Returns false if it failed.
@@ -221,7 +223,7 @@ protected:
      * Returns false if it failed.
      */
     virtual bool readContentFromDom(QDomNode& node);
-    
+
 private:
 
     /**
@@ -236,7 +238,7 @@ private:
     };
 
     // We have a (very simple) type for every index.
-    
+
     class UpperIndex : public SymbolElementIndex {
     public:
         UpperIndex(SymbolElement* parent) : SymbolElementIndex(parent) {}
@@ -261,7 +263,7 @@ private:
 
 
     void setToContent(FormulaCursor* cursor);
-    
+
     SequenceElement* content;
     SequenceElement* upper;
     SequenceElement* lower;
