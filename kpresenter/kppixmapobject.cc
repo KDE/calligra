@@ -272,7 +272,7 @@ void KPPixmapObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandle
 
 QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
 {
-    const double penw = _zoomHandler->zoomItX( pen.width() ) / 2.0;
+    const double penw = _zoomHandler->zoomItX( ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0 );
 
     QSize size( _zoomHandler->zoomSize( ext ) );
     QPixmap pixmap(size);
@@ -323,7 +323,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     const double oy = orig.y();
     const double ow = ext.width();
     const double oh = ext.height();
-    const double penw = _zoomHandler->zoomItX( pen.width() ) / 2.0;
+    const double penw = _zoomHandler->zoomItX( ( ( pen.style() == Qt::NoPen ) ? 1.0 : pen.width() ) / 2.0 );
 
     _painter->save();
 
@@ -395,7 +395,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     }
     else {
         pen2 = pen;
-        pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
+        pen2.setWidth( _zoomHandler->zoomItX( ( pen.style() == Qt::NoPen ) ? 1.0 : (double)pen.width() ) );
     }
     _painter->setPen( pen2 );
     _painter->setBrush( Qt::NoBrush );

@@ -444,7 +444,7 @@ public:
     };
 
     PenCmd(const QString &_name, QPtrList<Pen> &_oldPen, Pen _newPen,
-           QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = All);
+           QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags = All);
     ~PenCmd();
     void applyPen(KPObject *kpobject, Pen *tmpPen);
 
@@ -453,6 +453,7 @@ public:
 
 protected:
     KPresenterDoc *doc;
+    KPrPage *m_page;
     QPtrList<Pen> oldPen;
     QPtrList<KPObject> objects;
     Pen newPen;

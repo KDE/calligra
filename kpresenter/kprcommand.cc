@@ -984,8 +984,8 @@ void MoveByCmd2::unexecute()
 /******************************************************************/
 
 PenCmd::PenCmd(const QString &_name, QPtrList<Pen> &_oldPen, Pen _newPen,
-               QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags)
-    : KNamedCommand(_name), doc(_doc), oldPen(_oldPen), objects(_objects),
+               QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags)
+    : KNamedCommand(_name), doc(_doc), m_page( _page ), oldPen(_oldPen), objects(_objects),
       newPen(_newPen), flags(_flags)
 {
     objects.setAutoDelete( false );
@@ -1039,6 +1039,11 @@ void PenCmd::execute()
         applyPen(objects.at( i ), &newPen);
     }
     newPen = tmpPen;
+
+    if ( doc->refreshSideBar() ) { //for redo
+        int pos = doc->pageList().findRef( m_page );
+        doc->updateSideBarItem( pos, ( m_page == doc->stickyPage() ) ? true : false );
+    }
 }
 
 void PenCmd::applyPen(KPObject *kpobject, Pen *tmpPen)
@@ -1172,11 +1177,14 @@ void PenCmd::applyPen(KPObject *kpobject, Pen *tmpPen)
 
 void PenCmd::unexecute()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ ) {
+    for ( unsigned int i = 0; i < objects.count(); ++i ) {
         if( oldPen.count() > i )
-        {
-            applyPen(objects.at( i ), oldPen.at( i ));
-        }
+            applyPen( objects.at( i ), oldPen.at( i ) );
+    }
+
+    if ( doc->refreshSideBar() ) { //for redo
+        int pos = doc->pageList().findRef( m_page );
+        doc->updateSideBarItem( pos, ( m_page == doc->stickyPage() ) ? true : false );
     }
 }
 

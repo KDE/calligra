@@ -1745,7 +1745,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
     }
 
     if ( !_objects.isEmpty() ) {
-        penCmd = new PenCmd(i18n("Apply Styles"), _oldPen, _newPen, _objects, m_doc, flags);
+        penCmd = new PenCmd( i18n( "Apply Styles" ), _oldPen, _newPen, _objects, m_doc, this, flags );
         penCmd->execute();
         cmd->addCommand(penCmd);
         cmdCreate=true;
