@@ -452,7 +452,8 @@ void KIllustratorView::writeConfig()
 
 void KIllustratorView::showCurrentMode (Tool::ToolID, const QString& msg)
 {
-   for (KoMainWindow * tmpKo=m_pDoc->firstShell();tmpKo!=0;tmpKo=m_pDoc->nextShell())
+   KoMainWindow * tmpKo = shell();
+   if (tmpKo)
       tmpKo->statusBarLabel()->setText(msg);
    //statusbar->changeItem (msg, 2);
 }
