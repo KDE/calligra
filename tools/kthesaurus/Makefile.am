@@ -1,5 +1,5 @@
 
-INCLUDES = $(all_includes)
+INCLUDES = $(KOFFICECORE_INCLUDES) $(all_includes)
 
 bin_PROGRAMS =
 lib_LTLIBRARIES =
