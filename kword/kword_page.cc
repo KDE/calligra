@@ -1105,33 +1105,81 @@ void KWPage::paintEvent(QPaintEvent* e)
 		(dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(i))->getFrameInfo() == FI_FOOTER && !doc->hasFooter()))
 	      break;
 
-	    KWParag *p = 0L;
-	    p = doc->findFirstParagOfRect(e->rect().y() + yOffset,firstVisiblePage,i);
-
-	    if (p)
+	    if (doc->getFrameSet(i)->getFrameInfo() == FI_BODY)
 	      {
-		paintfc->setFrameSet(i + 1);
-		paintfc->init(p,painter,true,recalcAll);
+		KWParag *p = 0L;
+		p = doc->findFirstParagOfRect(e->rect().y() + yOffset,firstVisiblePage,i);
 		
-		bool bend = false;
-		while (!bend)
+		if (p)
 		  {
-		    if (paintfc->getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
-			static_cast<int>(paintfc->getParag()->getPTYStart() - yOffset) > height() && doc->getColumns() == 1) break;
-		    if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->isMostRight() && 
-			doc->getFrameSet(i)->getNumFrames() > paintfc->getFrame() &&
-			doc->getFrameSet(i)->getFrame(paintfc->getFrame())->top() - 
-			static_cast<int>(yOffset) >
-			static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight()) &&
-			static_cast<int>(paintfc->getPTY() - yOffset) > height())
-		      break;
-		    if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->top() - static_cast<int>(yOffset) >
-			static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
-		      break;
-		    doc->printLine(*paintfc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars());
-		    bend = !paintfc->makeNextLineLayout(painter);
-		    if (paintfc->getPage() > lastVisiblePage)
-		      bend = true; 
+		    paintfc->setFrameSet(i + 1);
+		    paintfc->init(p,painter,true,recalcAll);
+		    
+		    bool bend = false;
+		    while (!bend)
+		      {
+			if (paintfc->getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
+			    static_cast<int>(paintfc->getParag()->getPTYStart() - yOffset) > height() && doc->getColumns() == 1) break;
+			if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->isMostRight() && 
+			    doc->getFrameSet(i)->getNumFrames() > paintfc->getFrame() &&
+			    doc->getFrameSet(i)->getFrame(paintfc->getFrame())->top() - 
+			    static_cast<int>(yOffset) >
+			    static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight()) &&
+			    static_cast<int>(paintfc->getPTY() - yOffset) > height())
+			  break;
+			if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->top() - static_cast<int>(yOffset) >
+			    static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
+			  break;
+			doc->printLine(*paintfc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars());
+			bend = !paintfc->makeNextLineLayout(painter);
+			if (paintfc->getPage() > lastVisiblePage)
+			  bend = true; 
+		      }
+		  }
+	      }
+	    else
+	      {
+		KWParag *p = 0L;
+
+		KWFrameSet *fs = doc->getFrameSet(i);
+		KRect r = KRect(e->rect().x() + xOffset,e->rect().y() + yOffset,
+				e->rect().width(),e->rect().height());
+		KRect v = KRect(e->rect().x() + xOffset,e->rect().y() + yOffset,
+				e->rect().width(),e->rect().height());
+
+		while (true)
+		  {
+		    int frm = fs->getNext(r);
+		    if (!v.intersects(r)) break;
+		    if (frm == -1) break;
+		    
+		    r.moveBy(0,fs->getFrame(frm)->height() + 1);
+
+		    p = dynamic_cast<KWTextFrameSet*>(fs)->getFirstParag(frm);
+
+		    paintfc->setFrameSet(i + 1);
+		    paintfc->init(p,painter,true,true,frm + 1,fs->getFrame(frm)->getPageNum() + 1);
+		    
+		    bool bend = false;
+		    while (!bend)
+		      {
+			if (paintfc->getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
+			    static_cast<int>(paintfc->getParag()->getPTYStart() - yOffset) > height() && doc->getColumns() == 1) break;
+			if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->isMostRight() && 
+			    doc->getFrameSet(i)->getNumFrames() > paintfc->getFrame() &&
+			    doc->getFrameSet(i)->getFrame(paintfc->getFrame())->top() - 
+			    static_cast<int>(yOffset) >
+			    static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight()) &&
+			    static_cast<int>(paintfc->getPTY() - yOffset) > height())
+			  break;
+			if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->top() - static_cast<int>(yOffset) >
+			    static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
+			  break;
+			doc->printLine(*paintfc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars());
+			bend = !paintfc->makeNextLineLayout(painter);
+			if (paintfc->getPage() > lastVisiblePage)
+			  bend = true; 
+		      }
 		  }
 	      }
 	  } break;

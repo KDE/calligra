@@ -341,6 +341,9 @@ public:
 
   void recalcFrames();
 
+  KoHFType getHeaderType() { return pageHeaderFooter.header; }
+  KoHFType getFooterType() { return pageHeaderFooter.footer; }
+
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child,KWPartFrameSet*);

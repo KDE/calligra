@@ -1016,6 +1016,9 @@ KWParag* KWordDocument::findFirstParagOfRect(unsigned int _ypos,unsigned int _pa
 {
   if (frames.at(_frameset)->getFrameType() != FT_TEXT) return 0L;
 
+  if (frames.at(_frameset)->getFrameInfo() != FI_BODY) 
+    return dynamic_cast<KWTextFrameSet*>(frames.at(_frameset))->getFirstParag();
+
   KWParag *p = dynamic_cast<KWTextFrameSet*>(frames.at(_frameset))->getFirstParag();
   while (p)
     {

@@ -290,6 +290,18 @@ void KWFrameSet::save(ostream &out)
     }
 }
 
+/*================================================================*/
+int KWFrameSet::getNext(KRect _rect)
+{
+  for (unsigned int i = 0;i < frames.count();i++)
+    {
+      if (frames.at(i)->intersects(_rect))
+	return i;
+    }
+
+  return -1;
+}
+
 /******************************************************************/
 /* Class: KWTextFrameSet                                          */
 /******************************************************************/
@@ -298,6 +310,9 @@ void KWFrameSet::save(ostream &out)
 void KWTextFrameSet::init()
 {
   parags = 0L;
+  even = 0L;
+  odd = 0L;
+  first = 0L;
 
   autoCreateNewFrame = true;
 
@@ -307,6 +322,7 @@ void KWTextFrameSet::init()
   format->setDefaults(doc);
   parags->setFormat(0,1,*format);
 
+//   KWParag *p = parags;
 //   for (int i = 0;i < 500;i++)
 //     {
 //       p = new KWParag( this,doc, p, 0L, doc->getDefaultParagLayout());
@@ -315,6 +331,9 @@ void KWTextFrameSet::init()
 //       format->setDefaults(doc);
 //       p->setFormat(0,strlen("Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen."),*format);
 //     }
+
+  first = even = odd = parags;
+
   updateCounters();
 }
 
@@ -337,7 +356,16 @@ void KWTextFrameSet::update()
       for (unsigned int j = 0;j < frames.count();j++)
 	{
 	  if (frames.at(j)->intersects(pageRect))
-	    l->append(frames.at(j));
+	    {
+	      if (i == 0)
+		frames.at(j)->setOnPage(OP_FIRST);
+	      else if ((i / 2) * 2 == i)
+		frames.at(j)->setOnPage(OP_EVEN);
+	      else
+		frames.at(j)->setOnPage(OP_ODD);
+	      frames.at(j)->setPageNum(i);
+	      l->append(frames.at(j));
+	    }
 	}  
       
       if (!l->isEmpty())
@@ -411,6 +439,117 @@ void KWTextFrameSet::update()
 }
 
 /*================================================================*/
+void KWTextFrameSet::setFirstParag(KWParag *_parag,int _frame = -1)
+{ 
+  parags = _parag;
+  if (_frame >= 0 && frameInfo == FI_HEADER)
+    {
+      if (doc->getHeaderType() == HF_SAME)
+	{
+	  even = _parag;
+	  odd = _parag;
+	  first = _parag;
+	}
+      else if (doc->getHeaderType() == HF_FIRST_DIFF)
+	{
+	  if (frames.at(_frame)->getOnPage() == OP_FIRST)
+	    first = _parag;
+	  else
+	    {
+	      even = _parag;
+	      odd = _parag;
+	    }
+	}
+      else if (doc->getHeaderType() == HF_EO_DIFF)
+	{
+	  if (frames.at(_frame)->getOnPage() == OP_EVEN)
+	    even = _parag;
+	  else
+	    {
+	      odd = _parag;
+	      first = _parag;
+	    }
+	}
+    }
+  else if (_frame >= 0 && frameInfo == FI_FOOTER)
+    {
+      if (doc->getFooterType() == HF_SAME)
+	{
+	  even = _parag;
+	  odd = _parag;
+	  first = _parag;
+	}
+      else if (doc->getFooterType() == HF_FIRST_DIFF)
+	{
+	  if (frames.at(_frame)->getOnPage() == OP_FIRST)
+	    first = _parag;
+	  else
+	    {
+	      even = _parag;
+	      odd = _parag;
+	    }
+	}
+      else if (doc->getFooterType() == HF_EO_DIFF)
+	{
+	  if (frames.at(_frame)->getOnPage() == OP_EVEN)
+	    even = _parag;
+	  else
+	    {
+	      odd = _parag;
+	      first = _parag;
+	    }
+	}
+    }
+}
+
+/*================================================================*/
+KWParag* KWTextFrameSet::getFirstParag(int _frame = -1) 
+{ 
+  if (_frame == -1 || frameInfo == FI_BODY)
+    return parags;
+  else if (_frame >= 0 && frameInfo == FI_HEADER)
+    {
+      if (doc->getHeaderType() == HF_SAME)
+	return even;
+      else if (doc->getHeaderType() == HF_FIRST_DIFF)
+	{
+	  if (frames.at(_frame)->getOnPage() == OP_FIRST)
+	    return first;
+	  else
+	    return even;
+	}
+      else if (doc->getHeaderType() == HF_EO_DIFF)
+	{
+	  if (frames.at(_frame)->getOnPage() == OP_EVEN)
+	    return even;
+	  else
+	    return odd;
+	}
+    }
+  else if (_frame >= 0 && frameInfo == FI_FOOTER)
+    {
+      if (doc->getFooterType() == HF_SAME)
+	return even;
+      else if (doc->getFooterType() == HF_FIRST_DIFF)
+	{
+	  if (frames.at(_frame)->getOnPage() == OP_FIRST)
+	    return first;
+	  else
+	    return even;
+	}
+      else if (doc->getFooterType() == HF_EO_DIFF)
+	{
+	  if (frames.at(_frame)->getOnPage() == OP_EVEN)
+	    return even;
+	  else
+	    return odd;
+	}
+    }
+
+  return parags;
+}
+
+/*================================================================*/
 bool KWTextFrameSet::isPTYInFrame(unsigned int _frame,unsigned int _ypos)
 {
   KWFrame *frame = getFrame(_frame);
@@ -422,7 +561,7 @@ void KWTextFrameSet::deleteParag(KWParag *_parag)
 {
   KWParag *p,*p2;
 
-  if (!parags->getPrev() && !parags->getNext()) return;
+  if (!getFirstParag()->getPrev() && !getFirstParag()->getNext()) return;
 
   if (!_parag->getPrev())
     {
@@ -603,13 +742,17 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  return;
 	}
     }
+
+  // Reggie: For now - this HAS to be replaced for working headers/footers!
+  first = even = odd = parags;
+
   updateCounters();
 }
 
 /*================================================================*/
 void KWTextFrameSet::updateCounters()
 {
-  KWParag *p = parags;
+  KWParag *p = getFirstParag();
 
   int counterData[16],listData[16];
   unsigned int i = 0;
@@ -708,7 +851,7 @@ void KWTextFrameSet::updateCounters()
 /*================================================================*/
 void KWTextFrameSet::updateAllStyles()
 {
-  KWParag *p = parags;
+  KWParag *p = getFirstParag();
 
   while (p)
     {

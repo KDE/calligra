@@ -527,3 +527,8 @@ Reggie, 18.12.1998:
 Reggie, 19.12.1998:
 -------------------
 - More work on headers and footers
+
+Reggie, 20.12.1998:
+-------------------
+- Internals of headers and footers are working now - tomorrow the visible (and useable :-) part
+  and saving/loading will follow

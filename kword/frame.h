@@ -42,6 +42,7 @@ class KWordFrame;
 enum FrameType {FT_BASE = 0,FT_TEXT = 1,FT_PICTURE = 2,FT_PART};
 enum FrameInfo {FI_BODY = 0,FI_HEADER = 1,FI_FOOTER = 2};
 enum RunAround {RA_NO = 0,RA_BOUNDINGRECT = 1,RA_CONTUR = 2};
+enum OnPage {OP_FIRST = 1,OP_EVEN = 0,OP_ODD = 1};
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -85,11 +86,20 @@ public:
   bool isMostRight() { return mostRight; }
   void setMostRight(bool _mr) { mostRight = _mr; }
 
+  void setOnPage(OnPage _onPage)
+    { onPage = _onPage; }
+  OnPage getOnPage() { return onPage; }
+
+  void setPageNum(int i) { pageNum = i; }
+  int getPageNum() { return pageNum; }
+
 protected:
   RunAround runAround;
   bool selected;
   int runAroundGap;
   bool mostRight;
+  OnPage onPage;
+  int pageNum;
 
   QList<KRect> intersections;
 
@@ -147,6 +157,9 @@ public:
 
   virtual void save(ostream &out);
 
+  int getNext(KRect _rect);
+  int getPageOfFrame(int i) { return frames.at(i)->getPageNum(); }
+
 protected:
   virtual void init()
     {;}
@@ -183,10 +196,8 @@ public:
    * If another parag becomes the first one it uses this function
    * to tell the document about it.
    */
-  void setFirstParag(KWParag *_parag)
-    { parags = _parag; }
-
-  KWParag* getFirstParag() { return parags; }
+  void setFirstParag(KWParag *_parag,int _frame = -1);
+  KWParag* getFirstParag(int _frame = -1);
 
   virtual bool isPTYInFrame(unsigned int _frame,unsigned int _ypos);
 
@@ -208,7 +219,7 @@ protected:
   virtual void init();
 
   // pointer to the first parag of the list of parags
-  KWParag *parags,*last_parag;
+  KWParag *parags,*even,*odd,*first;
   bool autoCreateNewFrame;
 
 };

@@ -41,7 +41,8 @@ KWFormatContext::~KWFormatContext()
 }
 
 
-void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true, bool _fromStart = true )
+void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true, bool _fromStart = true, 
+			    int _frame = -1, int _page = -1 )
 {
   outOfFrame = false;
   specialHeight = 0;
@@ -52,9 +53,18 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCou
     {
       // Offset from the top of the page
       ptY = document->getFrameSet(frameSet - 1)->getFrame(0)->top();
-      frame = 1;
-      page = 1;
-      
+      if (_frame != -1 && _page != -1)
+	{
+	  frame = _frame;
+	  page = _page;
+	  ptY = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->top();
+	}
+      else
+	{
+	  frame = 1;
+	  page = 1;
+	}
+
       // Enter the first paragraph
       parag = 0L;
       enterNextParag( _painter, _updateCounters );
