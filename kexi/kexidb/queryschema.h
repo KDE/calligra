@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
    Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
@@ -18,38 +17,43 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIDB_TABLE_H
-#define KEXIDB_TABLE_H
+#ifndef KEXIDB_QUERY_H
+#define KEXIDB_QUERY_H
 
 #include <qvaluelist.h>
 #include <qstring.h>
 
 #include <kexidb/fieldlist.h>
-#include <kexidb/index.h>
 
 namespace KexiDB {
 
 class Connection;
 
-/*! KexiDB::Table provides information about native database table 
-	that can be stored using SQL database engine. 
+/*! KexiDB::Query provides information about database query
+	that can be executed using SQL database engine. 
 	
-	In most cases this class is used internally, while KexiDB::TableDef 
-	is visible for the users. 
-	Use KexiDB::TableDef subclass to get more rich structure (meta data) 
-	that is extension of KexiDB::Table.
 */
 
-class KEXI_DB_EXPORT Table : public FieldList
+class KEXI_DB_EXPORT Query : public FieldList
 {
 	public:
-		Table(const QString & name);
-		Table();
-		virtual ~Table();
+		/*! Creates empty query object (without fields). */
+		Query(const QString & name);
+		/*! Creates query object that is equivalent to "SELECT * FROM table" 
+			sql command. Schema of \a table is used to contruct this query.
+			If \a name is omitted, query will have name equal to \a table name.
+
+			We consider that query's schema based on \a table is not (yet) stored 
+			in system table, so query connection is set to NULL, 
+			even if \a tables connection is not NULL, and query id is set to 0. */
+		Query(Table* table, const QString & name = QString::null);
+		/*! Creates empty query object (without fields and name). */
+		Query();
+		virtual ~Query();
 //		const QString& name() const;
 //		void setName(const QString& name);
-		QStringList primaryKeys() const;
-		bool hasPrimaryKeys() const;
+//		QStringList primaryKeys() const;
+//		bool hasPrimaryKeys() const;
 		virtual void addField(KexiDB::Field* field);
 
 		int id() { return m_id; }
@@ -61,49 +65,30 @@ class KEXI_DB_EXPORT Table : public FieldList
 		virtual void clear();
 
 		//! writes debug information to stderr
-		virtual void debug();
+		void debug();
 
-		/*! if table was created using a connection, 
+		/*! If query was created using a connection, 
 			returns this connection object, otherwise NULL. */
 		Connection* connection();
 	protected:
-		/*! Automatically retrieves table schema via connection. */
-		Table(const QString & name, Connection *conn);
+		/*! Automatically retrieves query schema via connection. */
+		Query(const QString & name, Connection *conn);
 
 	//js	QStringList m_primaryKeys;
-//		Field::List m_fields;
-		Index::List m_indices;
+//		Index::List m_indices;
+		QString m_name;
 
-		int m_id; //! unique identifier used in kexi__tables for this table
+		int m_id; //! unique identifier used in kexi__objects for this query
 
+		/*! Connection that was used to retrieve this query schema (may be NULL). */
 		Connection *m_conn;
+		/*! Parent table of the query. (may be NULL)
+			Any data modifications can be performed if we know parent table.
+			If null, query's records cannot be modified. */
+		Table *m_parent_table;
 
 	friend class Connection;
 };
-
-/*
-class KEXI_DB_EXPORT TableDef : protected Table
-{
-	public:
-		TableDef(const QString & name);
-		TableDef();
-		~TableDef();
-		KexiDB::FieldDef field(unsigned int id) const;
-	protected:
-};*/
-
-/*
-class KexiDBTableFields: public QValueList<KexiDBField> {
-public:
-	KexiDBTable(const QString & name);
-	~KexiDBTable();
-	void addField(KexiDBField);
-//	const QString& tableName() const;
-
-private:
-//	QString m_tableName;
-};
-*/
 
 } //namespace KexiDB
 

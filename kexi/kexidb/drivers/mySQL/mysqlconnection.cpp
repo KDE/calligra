@@ -107,8 +107,8 @@ bool MySqlConnection::drv_disconnect()
 }
 
 
-Cursor* MySqlConnection::prepareQuery( const QString& statement) {
-	return new MySqlCursor(this,statement);
+Cursor* MySqlConnection::prepareQuery( const QString& statement, uint cursor_options ) {
+	return new MySqlCursor(this,statement,cursor_options);
 }
 
 QString MySqlConnection::escapeString(const QString& str) const {

@@ -124,21 +124,48 @@ QStringList Connection::databaseNames()
 	return list;
 }
 
+bool Connection::drv_getDatabasesList( QStringList &list )
+{
+	list.clear();
+	return true;
+}
+
+bool Connection::drv_databaseExists( const QString &dbName )
+{
+	Q_UNUSED(dbName);
+	return false;
+}
+
 bool Connection::databaseExists( const QString &dbName )
 {
 	if (!checkConnected())
 		return false;
 	clearError();
-	if (m_driver->isFileDriver()) {
-		QFileInfo file(dbName);
-		return file.exists();
-	}
 	QStringList list = databaseNames();
 	if (error()) {
 		clearError();
 		return false;
 	}
-	return list.find( dbName )!=list.end();
+	if ( (list.find( dbName )==list.end()) || !drv_databaseExists(dbName) )
+		return false;
+	if (m_driver->isFileDriver()) {
+		//for file-based db: file must exists and be accessible
+//js: moved from useDatabase():
+		QFileInfo file(dbName);
+		if (!file.exists() || ( !file.isFile() && !file.isSymLink()) ) {
+			setError(ERR_OBJECT_NOT_EXISTING, i18n("Database file '%1' does not exist.").arg(m_data.fileName()) );
+			return false;
+		}
+		if (!file.isReadable()) {
+			setError(ERR_ACCESS_RIGHTS, i18n("Database file '%1' is not readable.").arg(m_data.fileName()) );
+			return false;
+		}
+		if (!file.isWritable()) {
+			setError(ERR_ACCESS_RIGHTS, i18n("Database file '%1' is not writable.").arg(m_data.fileName()) );
+			return false;
+		}
+	}
+	return true;
 }
 
 bool Connection::createDatabase( const QString &dbName )
@@ -163,7 +190,6 @@ bool Connection::createDatabase( const QString &dbName )
 	//low-level create
 	if (!drv_createDatabase( dbName ))
 		return false;
-	
 
 	Transaction trans(this);
 	if (error())
@@ -200,12 +226,19 @@ bool Connection::createDatabase( const QString &dbName )
 
 bool Connection::useDatabase( const QString &dbName )
 {
-	if (!checkConnected())
+	if (!checkConnected() || dbName.isEmpty())
 		return false;
 
 	if (m_usedDatabase == dbName)
 		return true; //already used
 
+	if (!databaseExists(dbName))
+		return false; //database must exist
+
+	if (!m_usedDatabase.isEmpty() && !closeDatabase()) //close db if already used
+		return false;
+
+/*js: moved to databaseExists(), now changing dbName is not allowed for single-db-engines
 	if (m_driver->isFileDriver()) {
 		//for file-based db: file must exists and be accessible
 		QFileInfo file(dbName);
@@ -222,8 +255,9 @@ bool Connection::useDatabase( const QString &dbName )
 			return false;
 		}
 		//update connection data if filename differs
-		m_data.setFileName( dbName );
+//REMOVED:		m_data.setFileName( dbName );
 	}
+	*/
 	bool ok = drv_useDatabase( dbName );
 	if (ok)
 		m_usedDatabase = dbName;
@@ -411,11 +445,11 @@ bool Connection::drv_duringTransaction()
 	return m_transaction;
 }
 
-Cursor* Connection::executeQuery( const QString& statement )
+Cursor* Connection::executeQuery( const QString& statement, uint cursor_options )
 {
 	if (statement.isEmpty())
 		return 0;
-	Cursor *c = prepareQuery( statement );
+	Cursor *c = prepareQuery( statement, cursor_options );
 	if (!c)
 		return 0;
 	if (!c->open()) {//err - kill that

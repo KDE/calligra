@@ -105,20 +105,22 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		
 		/*! Prepares query described by \a statement. 
 		 \return opened cursor created for results of this query 
-		 or NULL if there was any error.
+		 or NULL if there was any error. Cursor can have optionally applied \a cursor_options
+		 (one of more selected from KexiDB::Cursor::Options).
 		 Preparation means that returned cursor is created but not opened.
 		 Open this when you would like to do it with Cursor::open().
 		 Note that you can create "not configured" cursor when you omit 
 		 \a statement parameter. Then you will need a parameter for
 		 Cursor::open(). */
-		virtual Cursor* prepareQuery( const QString& statement = QString::null) = 0;
+		virtual Cursor* prepareQuery( const QString& statement = QString::null, uint cursor_options = 0) = 0;
 
 		/*! Executes query described by \a statement.
-		 \return opened cursor created for results of this query 
-		 or NULL if there was any error on the cursor creation or opening. */
-		Cursor* executeQuery( const QString& statement );
+		 \return opened cursor created for results of this query
+		 or NULL if there was any error on the cursor creation or opening.
+		 Cursor can have optionally applied \a cursor_options 
+		 (one of more selected from KexiDB::Cursor::Options).*/
+		Cursor* executeQuery( const QString& statement, uint cursor_options = 0);
 
-		
 		/*! Deletes cursor \a cursor previously created by functions like executeQuery() 
 		 for this connection.
 		 There is an attempt to close the cursor with Cursor::close() if it was opened. 
@@ -145,9 +147,26 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			\return true on success. */
 		virtual bool drv_disconnect() = 0;
 
-		/*! For reimplemenation: loads list of databases available for connection
-			and adds the names to \a list. */
-		virtual bool drv_getDatabasesList( QStringList &list ) = 0;
+		/*! For reimplemenation: loads list of databases' names available for this connection
+			and adds these names to \a list. If your server is not able to offer such a list,
+			consider reimplementing drv_databaseExists() instead. 
+			The mehod should return true only if there was no error on getting database names 
+			list from the server.
+			Default implementation puts empty liost into \a list and returns true. */
+		virtual bool drv_getDatabasesList( QStringList &list );
+
+		/*! For optional reimplemenation: asks server if database \a dbName exists.
+			This method is used internally in databaseExists() as "last-chance" 
+			method for checking if database exists (it is called if there is no given \a dbName
+			in the list created by drv_getDatabasesList()).
+
+			Default implementation just returns false, what mean that server just returns
+			full list of available databases. Reimplement this method for servers that 
+			do not offer databases list, but can be queried about given \a dbName.
+
+			Note: This method should also work if there is already database used (with useDatabase());
+			in this situation no changes should be made in current database selection. */
+		virtual bool drv_databaseExists( const QString &dbName );
 
 		/*! For reimplemenation: creates new database using connection */
 		virtual bool drv_createDatabase( const QString &dbName = QString::null ) = 0;

@@ -19,15 +19,24 @@
 
 #include <kexidb/fieldlist.h>
 
+#include <kdebug.h>
+
 using namespace KexiDB;
 
-FieldList::FieldList()
+FieldList::FieldList(const QString& name)
+	: m_name(name)
 {
 	m_fields.setAutoDelete( true );
 }
 
 FieldList::~FieldList()
 {
+}
+
+void FieldList::clear()
+{
+	m_name = QString::null;
+	m_fields.clear();
 }
 
 void FieldList::addField(KexiDB::Field *field)
@@ -52,6 +61,16 @@ bool Table::hasPrimaryKeys() const
 }
 */
 
+const QString& FieldList::name() const
+{
+	return m_name;
+}
+
+void FieldList::setName(const QString& name)
+{
+	m_name=name;
+}
+
 KexiDB::Field* FieldList::field(unsigned int id)
 {
 	if (id < m_fields.count())
@@ -64,3 +83,18 @@ unsigned int FieldList::fieldCount() const
 	return m_fields.count();
 }
 
+void FieldList::debug()
+{
+	QString dbg;
+	Field::ListIterator it( m_fields );
+	Field *field;
+	bool start = true;
+	for (; (field = it.current())!=0; ++it) {
+		if (!start)
+			dbg += ",\n";
+		else
+			start = false;
+		dbg += "  ";
+		dbg += field->debugString();
+	}
+}

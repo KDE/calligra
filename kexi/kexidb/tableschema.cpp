@@ -29,8 +29,7 @@
 using namespace KexiDB;
 
 Table::Table(const QString& name)
-	: FieldList()
-	, m_name(name)
+	: FieldList(name)
 	, m_id(0)
 	, m_conn(0)
 {
@@ -39,12 +38,18 @@ Table::Table(const QString& name)
 
 Table::Table()
 	: FieldList()
-	, m_name("")
 	, m_id(0)
 	, m_conn(0)
 {
 }
 
+// used by Conenction
+Table::Table(const QString & name, Connection *conn)
+	: FieldList(name)
+	, m_conn( conn )
+{
+	assert(conn);
+}
 
 Table::~Table()
 {
@@ -64,6 +69,12 @@ void Table::addField(KexiDB::Field* field)
 	}
 }
 
+void Table::clear()
+{
+	m_indices.clear();
+	FieldList::clear();
+	m_conn = 0;
+}
 
 /*
 void Table::addPrimaryKey(const QString& key)
@@ -82,14 +93,14 @@ bool Table::hasPrimaryKeys() const
 }
 */
 
-const QString& Table::name() const
-{
-	return m_name;
-}
+//const QString& Table::name() const
+//{
+//	return m_name;
+//}
 
-void Table::setName(const QString& name)
-{
-	m_name=name;
+//void Table::setName(const QString& name)
+//{
+//	m_name=name;
 /*	ListIterator it( m_fields );
 	Field *field;
 	for (; (field = it.current())!=0; ++it) {
@@ -98,7 +109,7 @@ void Table::setName(const QString& name)
 	for (int i=0;i<fcnt;i++) {
 		m_fields[i].setTable(name);
 	}*/
-}
+//}
 
 /*KexiDB::Field Table::field(unsigned int id) const
 {
@@ -111,14 +122,6 @@ unsigned int Table::fieldCount() const
 	return m_fields.count();
 }*/
 
-/*! Retrieves table schema via connection. */
-Table::Table(const QString & name, Connection *conn)
-	: m_name( name )
-	, m_conn( conn )
-{
-	assert(conn);
-}
-
 Connection* Table::connection()
 {
 	return m_conn;
@@ -126,7 +129,10 @@ Connection* Table::connection()
 
 void Table::debug()
 {
-	QString dbg = "TABLE " + m_name + "\n";
+	kdDebug() << "TABLE " << m_name << endl;
+	FieldList::debug();
+
+/*	QString dbg = "TABLE " + m_name + "\n";
 	Field::ListIterator it( m_fields );
 	Field *field;
 	bool start = true;
@@ -138,7 +144,7 @@ void Table::debug()
 		dbg += "  ";
 		dbg += field->debugString();
 	}
-	kdDebug() << dbg << endl;
+	kdDebug() << dbg << endl;*/
 }
 
 //----------------------------------------------------

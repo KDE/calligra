@@ -41,14 +41,23 @@ class KEXI_DB_EXPORT FieldList
 		/*! \return field #id or NULL if there is no such a field. */
 		KexiDB::Field* field(unsigned int id);
 
+		Field::ListIterator fieldsIterator() { return Field::ListIterator(m_fields); }
+
+		const QString& name() const;
+		void setName(const QString& name);
+
+		/*! Removes all fields from the list, clears name. */
+		virtual void clear();
 //		Field::List::iterator fields() { return m_fields.begin(); }
 //js		void addPrimaryKey(const QString& key);
-//		void debug();
+
+		virtual void debug();
 	protected:
-		FieldList();
+		FieldList(const QString& name = QString::null );
 		virtual ~FieldList();
 
 	//js	QStringList m_primaryKeys;
+		QString m_name;
 		Field::List m_fields;
 
 //	friend class Connection;

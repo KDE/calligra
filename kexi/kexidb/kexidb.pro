@@ -21,8 +21,9 @@ drivermanager.cpp \
 driver.cpp \
 connectiondata.cpp \
 connection.cpp \
-table.cpp \
 field.cpp \
+table.cpp \
+query.cpp \
 transaction.cpp \
 cursor.cpp \
 index.cpp \

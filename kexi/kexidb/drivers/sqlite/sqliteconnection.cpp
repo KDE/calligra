@@ -135,9 +135,9 @@ QCString SQLiteConnection::escapeString(const QCString& str) const
 }
 
 //CursorData* SQLiteConnection::drv_createCursor( const QString& statement )
-Cursor* SQLiteConnection::prepareQuery( const QString& statement )
+Cursor* SQLiteConnection::prepareQuery( const QString& statement, uint cursor_options )
 {
-	return new SQLiteCursor( this, statement );
+	return new SQLiteCursor( this, statement, cursor_options );
 }
 
 /*bool SQLiteConnection::drv_deleteCursor( CursorData *data )

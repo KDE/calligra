@@ -49,7 +49,7 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteConnection : public Connection
 		~SQLiteConnection();
 
 		virtual QStringList tableNames();
-		virtual Cursor* prepareQuery( const QString& statement = QString::null);
+		virtual Cursor* prepareQuery( const QString& statement = QString::null, uint cursor_options = 0 );
 		virtual QString escapeString(const QString& str) const;
 		virtual QCString escapeString(const QCString& str) const;
 

@@ -24,8 +24,10 @@ Boston, MA 02111-1307, USA.
 
 using namespace KexiDB;
 
-MySqlCursor::MySqlCursor(KexiDB::Connection* conn, const QString& statement):Cursor(conn,statement), m_res(0),m_row(0),
-	m_lengths(0),m_numFields(0),m_numRows(0) {
+MySqlCursor::MySqlCursor(KexiDB::Connection* conn, const QString& statement, uint cursor_options)
+	: Cursor(conn,statement,cursor_options), m_res(0),m_row(0),
+	m_lengths(0),m_numFields(0),m_numRows(0)
+{
 }
 
 MySqlCursor::~MySqlCursor() {

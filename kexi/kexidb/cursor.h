@@ -38,10 +38,23 @@ namespace KexiDB {
 	and can be positioned after the last record (if any) with moveNext() -- then eof() equals true,
 	For example, if you have four records 1, 2, 3, 4, then after calling moveNext(), 
 	moveNext(), moveNext(), movePrev() you are going through records: 1, 2, 3, 2.
+
+	Cursor can be buffered or unbuferred.
+	Buffering in this class is not related to any SQL engine capatibilities for server-side cursors 
+	(eg. like 'DECLARE CURSOR' statement) - buffered data is at client (application) side.
+	Any record retrieved in buffered cursor will be stored inside an internal buffer
+	and reused when needed. Unbuffered cursor always requires one record fetching from
+	db connection at every step done with moveNext(), movePrev(), etc.
+
 */
 class KEXI_DB_EXPORT Cursor: public Object
 {
 	public:
+		//! Cursor options that describes its behaviour
+		enum Options {
+			NoOptions = 0,
+			Buffered = 1
+		};
 		virtual ~Cursor();
 		/*! \return connection used for the cursor */
 		Connection* connection() { return m_conn; }
@@ -53,6 +66,17 @@ class KEXI_DB_EXPORT Cursor: public Object
 		/*! Closes previously opened cursor. 
 			If the cursor is closed, nothing happens. */
 		virtual bool close();
+		/*! \retutn logically or'd cursor's options, 
+			selected from Cursor::Options enum. */
+		uint options() { return m_options; }
+		/*! \returns true if cursor is buffered. */
+		bool isBuffered();
+		/*! Sets this cursor to buffered type or not. See description 
+			of buffered and nonbuffered cursors in class description.
+			This method only works if cursor is not opened (isOpened()==false).
+			You can close already opened cursor.
+		*/
+		void setBuffered(bool buffered);
 		/*! Moves current position to the first record and retrieves it. */
 		bool moveFirst();
 		/*! Moves current position to the last record and retrieves it. */
@@ -82,25 +106,38 @@ class KEXI_DB_EXPORT Cursor: public Object
 
 	protected:
 		/*! Cursor will operate on \a conn */
-		Cursor(Connection* conn, const QString& statement = QString::null );
+		Cursor(Connection* conn, const QString& statement = QString::null, uint options = NoOptions );
 		virtual bool drv_open() = 0;
 		virtual bool drv_close() = 0;
 //		virtual bool drv_moveFirst() = 0;
 		virtual bool drv_getNextRecord() = 0;
 		virtual bool drv_getPrevRecord() = 0;
+		/*DISABLED: ! This is called only once in open(), after successful drv_open().
+			Reimplement this if you need (or not) to do get the first record after drv_open(),
+			eg. to know if there are any records in table. Value returned by this method
+			will be assigned to m_readAhead.
+			Default implementation just calls drv_getNextRecord(). */
+		/*		virtual bool drv_getFirstRecord();*/
+
+		/*! Clears cursor's buffer if this was allocated (only for buffered cursor type).
+			Otherwise do nothing. For reimplementing. Default implementation does nothing. */
+		virtual void drv_clearBuffer() {}
+		//! Internal: clears buffer with reimplemented drv_clearBuffer(). */
+		void clearBuffer();
 
 		Connection *m_conn;
 //		CursorData *m_data;
 		QString m_statement;
-		bool m_opened;
-		bool m_beforeFirst;
-		bool m_atLast;
-		bool m_afterLast;
+		bool m_opened : 1;
+		bool m_beforeFirst : 1;
+		bool m_atLast : 1;
+		bool m_afterLast : 1;
 //		bool m_atLast;
-		bool m_validRecord; //! true if valid record is currently retrieved @ current position
-		bool m_readAhead;
+		bool m_validRecord : 1; //! true if valid record is currently retrieved @ current position
+		bool m_readAhead : 1;
 		Q_LLONG m_at;
-		uint m_fieldCount;
+		uint m_fieldCount; //! cached field count information
+		uint m_options; //! cursor options that describes its behaviour
 	private:
 		class Private;
 		Private *d;

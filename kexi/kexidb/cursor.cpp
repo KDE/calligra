@@ -25,7 +25,7 @@
 using namespace KexiDB;
 
 
-Cursor::Cursor(Connection* conn, const QString& statement)
+Cursor::Cursor(Connection* conn, const QString& statement, uint options)
 	: m_conn(conn)
 	, m_statement(statement)
 	, m_opened(false)
@@ -37,6 +37,7 @@ Cursor::Cursor(Connection* conn, const QString& statement)
 	, m_readAhead(false)
 	, m_at(0)
 	, m_fieldCount(0)//do not know
+	, m_options(options)
 {
 	assert(m_conn);
 	m_conn->m_cursors.insert(this,this);
@@ -74,17 +75,25 @@ bool Cursor::open( const QString& statement )
 	m_at = 0; //we are before 1st rec
 	if (!m_opened)
 		return false;
-        if (!m_readAhead) // jowenn: to ensure before first state, without cluttering implementation code
-  	    m_readAhead = drv_getNextRecord(); //true if any record in this query
+	if (!m_readAhead) // jowenn: to ensure before first state, without cluttering implementation code
+		m_readAhead = drv_getNextRecord(); //true if any record in this query
 //	m_validRecord = false; //no record retrieved
-	return true;
+	return !error();
 }
+
+//bool Cursor::drv_getFirstRecord()
+//{
+//	return drv_getNextRecord();
+//}
 
 bool Cursor::close()
 {
 	if (!m_opened)
 		return true;
 	bool ret = drv_close();
+
+	clearBuffer();
+
 	m_opened = false;
 //	m_beforeFirst = false;
 	m_afterLast = false;
@@ -238,4 +247,25 @@ Q_LLONG Cursor::at()
 	if (m_readAhead)
 		return 0;
 	return m_at - 1;
+}
+
+bool Cursor::isBuffered()
+{
+	return m_options & Buffered;
+}
+
+void Cursor::setBuffered(bool buffered)
+{
+	if (!m_opened)
+		return;
+	if (isBuffered()==buffered)
+		return;
+	m_options ^= Buffered;
+}
+
+void Cursor::clearBuffer()
+{
+	if ( !isBuffered() )
+		return;
+	drv_clearBuffer();
 }

@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 
 #endif
 
-#if 0
+#if 1
 	conn_data.setFileName( "mydb" );
 
 	KexiDB::Connection *conn = driver->createConnection(conn_data);
@@ -90,10 +90,9 @@ int main(int argc, char* argv[])
 		kdDebug() << conn->errorMsg() << endl;
 		return 1;
 	}
-	KexiDB::Cursor *cursor = conn->executeQuery( "select * from osoby, o where o.imie='1'" );
+	KexiDB::Cursor *cursor = conn->executeQuery( "select * from osoby", KexiDB::Cursor::Buffered );
 	debug("executeQuery() = %d",!!cursor);
 	if (cursor) {
-		debug("Cursor::open() == %d",cursor->open());
 		debug("Cursor::moveLast() == %d",cursor->moveLast());
 		debug("Cursor::moveFirst() == %d",cursor->moveFirst());
 
@@ -107,7 +106,7 @@ int main(int argc, char* argv[])
 	}
 #endif
 
-#if 1
+#if 0
 	conn_data.setFileName( "db" );
 
 	KexiDB::Connection *conn = driver->createConnection(conn_data);
