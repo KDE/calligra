@@ -1,15 +1,15 @@
 <chapter id="menuitems"><title>The Menu Items/Tool Bars</title>
 <sect1 id="menuintro"><title>Introduction to Menu Bars and Tool Bars</title>
-<para>The key to getting the most out of KWord, is found in the menu bars and the toolbars.</para>
-<para>The menu bar is organized into groups of functions (ex file functions, table functions, etc...).  Below each of these groups, is a submenu of actions.  Some of these submenues will have sub menues of their own.  All of the functions of KWord can be found inside the menu bar hierarchy.</para>
+<para>The key to getting the most out of &kword;, is found in the menu bars and the toolbars.</para>
+<para>The menu bar is organized into groups of functions (ex file functions, table functions, etc...).  Below each of these groups, is a submenu of actions.  Some of these submenues will have sub menues of their own.  All of the functions of &kword; can be found inside the menu bar hierarchy.</para>
 <para>The tool bars are also organized into groups.  Each toolbar consists of a set of buttons.  Each button performs a specific function.  The toolbars are designed to act as shortcuts for more commonly used functions.</para>
-<para>The first part of this section of the manual discusses the manipulation of Kword's toolbars to suit your needs.</para>
+<para>The first part of this section of the manual discusses the manipulation of &kword;'s toolbars to suit your needs.</para>
 <para>The second part of this section, takes a detailed look at each menu bar function, and each tool bar button, and provides you with a brief summary of its action.  Most of these menu bar functions and tool bar buttons also provide you with a link to more detailed information.</para>
 </sect1>
 <sect1 id="Toolbars"><title>Hiding, Changing, and Moving Tool Bars</title>
-<para>KWord offers the user great flexibility when it comes to toolbars.  This first section will show you some of the many options you have for relocating, reformatting and removing toolbars from your desktop.</para>
+<para>&kword; offers the user great flexibility when it comes to toolbars.  This first section will show you some of the many options you have for relocating, reformatting and removing toolbars from your desktop.</para>
 <sect2 id="HideToolbar"><title>Hiding ("Flatening") Tool Bars </title>
-<para>When you startup KWord, all the available toolbars are visible.  If you don't think you will need a toolbar, and want to reclaim that desktop space, 
+<para>When you startup &kword;, all the available toolbars are visible.  If you don't think you will need a toolbar, and want to reclaim that desktop space, 
 you "minimize" the toolbar.</para>
 <para>There are two ways to acomplish this task</para>
 <informaltable frame="none">
@@ -38,16 +38,16 @@ Option 2</entry></row><row><entry></entry><entry>
 <listitem><para><guilabel>Left</guilabel></para></listitem>
 <listitem><para><guilabel>Right</guilabel></para></listitem>
 </orderedlist>
-<para><guilabel>Top</guilabel>, <guilabel>Bottom</guilabel>, <guilabel>Left</guilabel> and <guilabel>Right</guilabel> refer to the edges of the KWord screen.</para>
-<para>By locating a tool bar in the <guilabel>Bottom</guilabel> position, for example, you move the toolbar into a horizontal position below the Document Area, and along the bottom of the Kword window. By locating a tool bar in the <guilabel>Left</guilabel> position,however, you move the toolbar into a verticle position to the left of the Document Area, and along the left edge of the Kword window.</para>
-<para>Multiple toolbars can be located at each of these points in the screen.  (You could, for instance, move all the toolbars to the top of the screen).  KWord will shuffle toolbars around, to fit in the most compact way at that location.</para>
+<para><guilabel>Top</guilabel>, <guilabel>Bottom</guilabel>, <guilabel>Left</guilabel> and <guilabel>Right</guilabel> refer to the edges of the &kword; screen.</para>
+<para>By locating a tool bar in the <guilabel>Bottom</guilabel> position, for example, you move the toolbar into a horizontal position below the Document Area, and along the bottom of the &kword; window. By locating a tool bar in the <guilabel>Left</guilabel> position,however, you move the toolbar into a verticle position to the left of the Document Area, and along the left edge of the &kword; window.</para>
+<para>Multiple toolbars can be located at each of these points in the screen.  (You could, for instance, move all the toolbars to the top of the screen).  &kword; will shuffle toolbars around, to fit in the most compact way at that location.</para>
 <para>There are two ways of moving your toolbars:</para>
 <informaltable frame="none">
 <tgroup cols="2" align="left">
 <tbody>
 <row><entry>
 Option 1</entry></row><row><entry></entry></row><row><entry></entry><entry>
-If you left-click on the stippled area of the toolbar (the same location you used to minimize the tool bar), and hold the button down, you can drag the toolbar around the KWord screen.  This allows you to move the
+If you left-click on the stippled area of the toolbar (the same location you used to minimize the tool bar), and hold the button down, you can drag the toolbar around the &kword; screen.  This allows you to move the
 toolbars around to suit your needs.
 </entry></row><row><entry></entry></row><row><entry>
 Option 2</entry></row><row><entry></entry><entry>
@@ -76,13 +76,13 @@ Option 2</entry></row><row><entry></entry><entry>
 </sect1>     
 <sect1 id="BasicMenubar"><title>Basic Menu Bar</title><para></para>
      
-<para>The Menubar contains all commands available to KWord.  It is divided into 10 general categories.</para>
+<para>The Menubar contains all commands available to &kword;.  It is divided into 10 general categories.</para>
      
 <screenshot><mediaobject><imageobject><imagedata fileref="basic.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
      
 <sect2 id="File"><title>File Menu</title>
 
-<para>By clicking on the <guimenuitem>File</guimenuitem> button, you can begin new documents, load previously edited documents, print your documents, close the current document (so you can load another document), or quit KWord entirely.<anchor id="MenuNew"/></para>
+<para>By clicking on the <guimenuitem>File</guimenuitem> button, you can begin new documents, load previously edited documents, print your documents, close the current document (so you can load another document), or quit &kword; entirely.<anchor id="MenuNew"/></para>
 <variablelist>
 
 <varlistentry><term><menuchoice>
@@ -97,7 +97,7 @@ or clicking
 <varlistentry><term><menuchoice>
 <guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice></term>
 <listitem><para><action>
-For opening previously created KWord files.  For Step by Step instructions see <link linkend="Loading">Retrieving a Saved Document</link>.
+For opening previously created &kword; files.  For Step by Step instructions see <link linkend="Loading">Retrieving a Saved Document</link>.
 </action></para> <para>Typing 
 <keycombo><keycap>Ctrl</keycap><keycap>O</keycap></keycombo>
 or clicking 
@@ -136,8 +136,26 @@ Allows you to save your file as a template, to use as a starting point for futur
 <varlistentry><term><menuchoice>
 <guimenu>File</guimenu><guimenuitem>Statistics</guimenuitem></menuchoice></term>
 <listitem><para><action>
-Opens a window that shows you how many sentences, words, and characters.  Click <guibutton>OK</guibutton> button to dismiss the window.<anchor id="MenuPrint"/>
-</action></para> </listitem></varlistentry>
+Opens a window that counts the sentences, words, characters and syllables in your document.</action></para>
+<para>The number of sentences is not always absolutely correct, as &kword; has
+to guess if a dot really starts a new sentence or not. The number of syllables
+is estimated, &kword; therefore assumes that the text is written in English.</para>
+
+<para>The <guilabel>Flesch reading ease</guilabel> score is a number between 0 and 100 which estimates how readable a
+text is. The higher the number, the easier the text can be read. Texts with a score of 70-80 have a
+fairly good readability.</para>
+
+<para>The Flesch formula uses the number of words per sentences and the number of syllables per
+word. It assumes that the use of short words and short sentences increases the readability of a
+text. It says nothing about grammar or meaning. As both the number of sentences and the number 
+of syllables is estimated, the result is not absolutely precise. The text should be at 
+least 200 words long, if it isn't the score will be marked as approximated.</para>
+
+<para>The Flesch score is defined for English text only, but the basic idea should work for many
+other languages, too.</para>
+
+<para>Click <guibutton>OK</guibutton> button to dismiss the window.<anchor id="MenuPrint"/>
+</para> </listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
 <guimenu>File</guimenu><guimenuitem>Print</guimenuitem></menuchoice></term>
@@ -174,7 +192,7 @@ is equivilent to using the menubar. <anchor id="MenuQuit"/></para></listitem></v
 <varlistentry><term><menuchoice>
 <guimenu>File</guimenu><guimenuitem>Quit</guimenuitem></menuchoice></term>
 <listitem><para><action>
-Quits <application>KWord</application>
+Quits &kword;
 </action></para> <para>Typing 
 <keycombo><keycap>Ctrl</keycap><keycap>Q</keycap></keycombo> 
 is equivilent to using the menubar. </para></listitem></varlistentry>
@@ -291,7 +309,7 @@ characters (spaces, character returns, and tab stops).  Selecting this option ag
 
 <varlistentry><term><menuchoice>
 <guimenu>View</guimenu><guimenuitem>Frame Borders</guimenuitem></menuchoice></term>
-<listitem><para><action>Clicking on this option toggles the display of the borders to frames.  Normally, <application>KWord</application> draws a grey line around each frame, so that  
+<listitem><para><action>Clicking on this option toggles the display of the borders to frames.  Normally, &kword; draws a grey line around each frame, so that  
 know the borders of the frames.  If you want this option turned off, you can select this option.  Selecting this option again will turn the borders back on.
 </action></para></listitem></varlistentry>
 
@@ -385,7 +403,7 @@ Working with Tables</link>.</action></para> <para>Clicking
 <listitem><para><action>
 To create a new text frame.  After selecting this option, your cursor will change to cross hairs.  chose the location of one corner of your new text 
 frame.  Click on the left mouse button and hold the button down.  Drag the mouse, until you have the desired text frame.  When you have the correct shape and size, release the mouse button.
-<application>KWord</application> will now bring up a dialog box with options to connect this text frame to other frames in your document.  For more information on this 
+&kword; will now bring up a dialog box with options to connect this text frame to other frames in your document.  For more information on this 
 subject, see <link linkend="Frames">Working with Frames</link>.</action></para> <para>Typing 
 <keycombo><keycap>F6</keycap></keycombo>
 or clicking 
@@ -397,7 +415,7 @@ or clicking
 <listitem><para><action>
 This option will let you create a new frame, and automatically insert a picture from a file into the new frame.  After selecting this menu item or toolbar button, 
 a dialog box will be opened, so you may select the picture file from your system. (For help with this dialog box, please see <link linkend="InsGraphics">Inserting a Picture</link>.)
-Once you have selected the file you want, click on the "OK" button.  KWord will close the dialog box, and your cursor will change to cross hairs.  Locate the cursor on
+Once you have selected the file you want, click on the "OK" button.  &kword; will close the dialog box, and your cursor will change to cross hairs.  Locate the cursor on
 the page where you would like to locate one corner of your picture.  Click and hold the right mouse button, then drag the mouse.  This will create a border which represents the 
 final size of the picture in your document.  When you are happy with the size of the picture, release the mouse button and the picture will be inserted in your new frame.
 </action></para> <para>Typing 
@@ -605,8 +623,8 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <listitem><para><action>Allows you to change the toolbars.For details, click <link linkend="optionstb">here</link></action></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure KWord</guimenuitem></menuchoice></term>
-<listitem><para><action>Allows you to change miscellaneous KWord options.For details, click <link linkend="optionskword">here</link></action></para></listitem></varlistentry>
+<guimenu>Settings</guimenu><guimenuitem>Configure &kword;</guimenuitem></menuchoice></term>
+<listitem><para><action>Allows you to change miscellaneous &kword; options.For details, click <link linkend="optionskword">here</link></action></para></listitem></varlistentry>
 
 
 </variablelist></sect2>
@@ -620,7 +638,7 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <guimenu><accel>H</accel>elp</guimenu>
 <guimenuitem><accel>C</accel>ontents</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Contents</action></para>
+<listitem><para><action>Shows the contents of the documentation.</action></para>
 <para>Typing 
 <keycombo><keycap>F1</keycap></keycombo>
 is equivilent to using the menubar. </para></listitem>
@@ -643,23 +661,23 @@ is equivilent to using the menubar. </para>
 <guimenu><accel>H</accel>elp</guimenu>
 <guimenuitem><accel>R</accel>eport Bug...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>If &kword; crashes, or you have an idea that you think the developers should here, select this option, and fill out the form on the internet.</action></para></listitem>
+<listitem><para><action>If &kword; crashes, or you have an idea that you think the developers should know about, select this option, and fill out the form on the internet.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu><accel>H</accel>elp</guimenu>
-<guimenuitem><accel>A</accel>bout konqueror...</guimenuitem>
+<guimenuitem><accel>A</accel>bout &kword;</guimenuitem>
 </menuchoice></term>
-<listitem><para>About &kword;</para></listitem>
+<listitem><para>Shows information on &kword;</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu><accel>H</accel>elp</guimenu>
-<guimenuitem>About <accel>K</accel>DE...</guimenuitem>
+<guimenuitem>About <accel>K</accel>DE</guimenuitem>
 </menuchoice></term>
-<listitem><para>Shows information on &kword;.</para></listitem>
+<listitem><para>Shows information on &kde;.</para></listitem>
 </varlistentry>
 </variablelist></sect2>
 </sect1>
