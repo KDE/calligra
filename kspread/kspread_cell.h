@@ -1,14 +1,19 @@
 /* This file is part of the KDE project
-   Copyright (C) 1999-2004 Laurent Montel <montel@kde.org>
-             (C) 2002-2004 Ariya Hidayat <ariya@kde.org>
-             (C) 2002-2003 Norbert Andres <nandres@web.de>
-             (C) 1999-2004 Laurent Montel <montel@kde.org>
-             (C) 2002 John Dailey <dailey@vt.edu>
-             (C) 2002 Phillip Mueller <philipp.mueller@gmx.de>
-             (C) 1999-2001 David Faure <faure@kde.org>
-             (C) 2001 Werner Trobin <trobin@kde.org>
-             (C) 1998-2000 Torben Weis <weis@kde.org>
-
+   
+   Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
+   Copyright 2002,2004 Ariya Hidayat <ariya@kde.org>
+   Copyright 2002-2003 Norbert Andres <nandres@web.de>
+   Copyright 2003 Stefan Hetzl <shetzl@chello.at>
+   Copyright 2001-2002 Philipp Mueller <philipp.mueller@gmx.de>
+   Copyright 2002 Harri Porten <porten@kde.org>
+   Copyright 2002 John Dailey <dailey@vt.edu>
+   Copyright 1999-2001 David Faure <faure@kde.org>
+   Copyright 2000-2001 Werner Trobin <trobin@kde.org>
+   Copyright 2000 Simon Hausmann <hausmann@kde.org
+   Copyright 1998-1999 Torben Weis <weis@kde.org>
+   Copyright 1999 Michael Reiher <michael.reiher.gmx.de>
+   Copyright 1999 Reginald Stadlbauer <reggie@kde.org>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
