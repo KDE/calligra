@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+X-KDE-Export=text/x-tex
+ExportDescription=LATEX
+Icon=
+X-KDE-Import=application/x-kformula
+X-KDE-Weight=1
+ImportDescription=KFormula
+Name=KFormula LaTeX Export Filter
+ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Library=libkfmlatexexport
