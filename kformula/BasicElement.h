@@ -132,6 +132,12 @@ class BasicElement
      * Return globalsize (see globalSize)
      */
     QRect getSize() const { return globalSize; }
+    
+    /*
+     * Return globalsize (see globalSize)
+     */
+    int getPosition() const { return position; }
+    
     /*
      * Return next
      */
@@ -165,7 +171,13 @@ class BasicElement
     void setChild(BasicElement *e,int i) {child[i]=e; }    
     void setColor(QColor *c) {defaultColor=c; }       
     void setRelation(int r) {relation=r; }       
-  
+    
+    /*
+     * This function sets the value of "position"
+     * & also set the Active element if necessary.
+     */
+    virtual void setPosition(int pos);    
+    virtual bool isValidPosition(int pos);
     /*
      * change type
      * clone MUST be a derived class of BasicElement 
@@ -290,6 +302,13 @@ class BasicElement
      * True if element is current (edited) element
      */
     bool beActive;
+   /*
+    * Cursor Internal position
+    * In TextElement it is the position of the cursor into the contentstring
+    * pos==0  Before element
+    * pos!=0  After.  
+    */
+    int position;   
   
 };
 

@@ -41,9 +41,15 @@ void RootElement::draw(QPoint drawPoint,int resolution)
     int x,y,unit; //unit is familySize.height/4,used to draw proportional roots
     x=drawPoint.x();
     y=drawPoint.y();
+    unit=familySize.height()/3;
+ if(beActive){    
+    if(position==0)
+    formula->setCursor(QRect(x+familySize.x()-2,y-7,5,14));
+    else
+    formula->setCursor(QRect(x+localSize.width()+5,y-7,5,14));	
+      }
     if( beActive )
 	pen->setPen(Qt::red);
-    unit=familySize.height()/3;
 
     /*
 	Draw root!!
@@ -166,10 +172,10 @@ int RootElement::takeAsciiFromKeyb(int)
     return 2;
 }
 */
-int RootElement::takeActionFromKeyb(int)
+/*int RootElement::takeActionFromKeyb(int)
 {
     return 0;
-}
+}*/
 
 void RootElement::setNumericFont(int value)
 {

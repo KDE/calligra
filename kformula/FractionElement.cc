@@ -48,6 +48,14 @@ void FractionElement::draw(QPoint drawPoint,int resolution)
     warning("Sapce %i",space);
     space+=numericFont/24;
 
+
+ if(beActive){    
+    if(position==0)
+    formula->setCursor(QRect(x+familySize.x()-2,y-7,5,14));
+    else
+    formula->setCursor(QRect(x+localSize.width()+5,y-7,5,14));	
+      }
+
     if( beActive )
 	pen->setPen(Qt::red);
 
@@ -146,10 +154,10 @@ void FractionElement::checkSize()
 }
 */
 
-int FractionElement::takeActionFromKeyb(int)
+/*int FractionElement::takeActionFromKeyb(int)
 {
     return -1;
-}
+}*/
 
 void FractionElement::setNumericFont(int value)
 {

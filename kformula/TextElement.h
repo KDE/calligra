@@ -74,6 +74,13 @@ class TextElement : public BasicElement
     */
    //    virtual void setContent(QString c) {content=c;position=c.length();}   
    
+   
+   /*
+    *
+    *
+    */
+    virtual void setPosition(int pos);    
+   
    /*  
     * Change "font"     
     * Rewrite This, it's better to pass a QFont not a QFont*
@@ -115,9 +122,9 @@ class TextElement : public BasicElement
    QFont *font;
 
    /*
-    * StringCursor Internal position
+    * Cursor Internal position
     */
-   uint position;
+//   uint position;   //MOved to Basic Element
    
  };
 #endif

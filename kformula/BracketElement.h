@@ -63,7 +63,7 @@ class BracketElement : public BasicElement
      * return cursor position (-1 if no cursor is need)
      */
     
-    virtual int takeActionFromKeyb(int action);
+//    virtual int takeActionFromKeyb(int action);
     /*
      * do nothing
      */

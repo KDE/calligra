@@ -387,6 +387,8 @@ void KFormulaDoc::mousePressEvent( QMouseEvent *a,QWidget *wid)
 {
 
     setActiveElement(theFirstElement->isInside(a->pos()));
+    if(theActiveElement!=0)
+     theActiveElement->setPosition(0);
     emitModified();
     if(a->button()==RightButton){
 	QPopupMenu *mousepopup = new QPopupMenu;
@@ -496,7 +498,13 @@ cerr << " key received , " << k->ascii() << endl;
         
 	if (elReturn==FCOM_ADDTEXT) 
  	    { 
-	     addTextElement();
+	     if(theActiveElement->getPosition()==0)
+	      {
+	          BasicElement *newElement;
+	         theActiveElement->insertElement(newElement=new TextElement(this));
+	          setActiveElement(newElement); 
+	      } else
+	      addTextElement();
 	     if((k->ascii()>32)&&(k->ascii()<127))
  		theActiveElement->takeAsciiFromKeyb(k->ascii());
 	    }
@@ -533,14 +541,14 @@ void KFormulaDoc::paintEvent( QPaintEvent *, QWidget *paintGround )
     thePainter->setPen( black );
     theFirstElement->checkSize();
     theFirstElement->draw(QPoint(0,0)-theFirstElement->getSize().topLeft());
-    if(theActiveElement && typeid(*theActiveElement) == typeid(TextElement))
-	{
+//    if(theActiveElement && typeid(*theActiveElement) == typeid(TextElement))
+//	{
 	 //thePainter->drawWinFocusRect(theCursor);
 	 thePainter->drawLine(theCursor.topLeft()+QPoint(0,1),theCursor.topRight()+QPoint(0,1));
 	 thePainter->drawLine(theCursor.bottomLeft()-QPoint(0,1),theCursor.bottomRight()-QPoint(0,1));
 	 thePainter->drawLine(theCursor.topLeft()+QPoint(theCursor.width()/2,1),
 	                     theCursor.bottomLeft()+QPoint(theCursor.width()/2,-1));	 
-	}
+//	}
     thePainter->end();
 //    bitBlt(paintGround,0,0,&pm,0,0,-1,-1);
 }
@@ -562,6 +570,7 @@ void KFormulaDoc::setActiveElement(BasicElement* c)
     theActiveElement = c;
     if (theActiveElement)
 	theActiveElement->setActive(true);
+warning("New Active Element  %p",c);
 }
 
 void KFormulaDoc::setFirstElement(BasicElement* c)

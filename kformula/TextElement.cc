@@ -218,3 +218,6 @@ void TextElement::split(int pos)
  position=content.length();
 
 }
+void TextElement::setPosition(int pos)
+{
+}

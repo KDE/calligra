@@ -29,7 +29,7 @@ BasicElement::BasicElement(KFormulaDoc *Formula,
 	//warning("Font OK");
     } else
 	numericFont=24;
-
+    position=0;
     childrenNumber=0;
     minChildren=0;
     index[0]=0L;
@@ -98,6 +98,13 @@ void BasicElement::draw(QPoint drawPoint,int resolution)
     if(beActive)
 	pen->setPen(Qt::black);
     if(next!=0L) next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
+
+ if(beActive){    
+    if(position==0)
+    formula->setCursor(QRect(x+familySize.x()-3,y-7,5,14));
+    else
+    formula->setCursor(QRect(x+familySize.x()+2,y-7,5,14));	
+      }
 }
 
 void BasicElement::drawIndexes(QPainter *,int resolution)
@@ -261,11 +268,23 @@ if(action==Qt::Key_BackSpace)
      return  FCOM_DELETEME;    
     }
 if(action==Qt::Key_Left)
-  if(prev!=0)
-     formula->setActiveElement(prev); 
+    {
+	int p=position-1;
+	while((!isValidPosition(p))&&(p>0))
+	            p--;
+	      
+       	setPosition(p);
+    }
+    
 if(action==Qt::Key_Right)
-  if(next!=0)
-     formula->setActiveElement(next); 
+    {
+	int p=position+1;
+	while((!isValidPosition(p)))
+		   p++;
+       	setPosition(p);
+    }
+
+
 
  return 0;
 }
@@ -419,4 +438,107 @@ out << "</ELEM>" << endl;
 
 void  BasicElement::load(int)
 {
+}
+
+bool BasicElement::isValidPosition(int pos) 
+{
+ 
+if((pos>0)&&(pos<=4))
+ return (index[pos-1]!=0);
+
+if((pos>4)&&(pos<=4+childrenNumber))
+ return (child[pos-5]!=0);
+
+if(pos<-3)
+return false;
+
+if(pos>6+childrenNumber)
+return false;
+
+return true;
+}
+
+void BasicElement::setPosition(int pos) 
+{    
+   position=pos; 
+   warning("setPosition %d of element %p",pos,this);
+
+   if(position==-2)
+     position=childrenNumber+5;   //Go to end
+   
+   if(position==-1)		 //Go to prev
+    {
+     if(prev!=0)
+        { 
+         formula->setActiveElement(prev);  
+         warning("Set active %p",prev);
+	 if(relation==-1)
+   	  prev->setPosition(-2);
+	 if(relation>=0)
+	 {
+	 int p=relation;	 
+	 while((!prev->isValidPosition(p))&&(p>0))
+	       p--;
+   	  prev->setPosition(p);
+         }
+	}
+	else
+	position=0;
+     }  
+
+  if((position>0) && (position<=4))
+    {
+      formula->setActiveElement(index[position-1]);  
+              warning("Set active %p",index[position-1]);
+      index[position-1]->setPosition(0);
+     }
+    
+   if((position>4) && (position<=4+childrenNumber))
+    {
+      formula->setActiveElement(child[position-5]);  
+        warning("Set active %p",child[position-5]);
+      child[position-5]->setPosition(0);
+    }
+  
+   if(position>childrenNumber+5)   //if childrenNumber+5 do nothing.
+      {
+       if(next!=0)
+        { 
+         formula->setActiveElement(next);  
+          warning("Set active %p",next);
+	 next->setPosition(0);
+        }
+  	 else
+	{
+	   warning("no next");
+	   if(prev!=0)
+    	    position=-3;
+	    
+	  else
+	    position=childrenNumber+5; 
+        }
+       }
+    // }
+
+     if(position==-3)
+        {
+	  if(prev!=0)
+	  {
+           formula->setActiveElement(prev);  
+  	 warning("Set active %p",prev);
+	    if(relation==-1)
+	      prev->setPosition(-3);
+	     else
+	      {
+	         int p=relation+2;	 
+	         while((!prev->isValidPosition(p)))
+	           p++;
+	      
+       	     prev->setPosition(p);
+	    }
+	   }
+	    else
+     	     position=0;
+	 }
+   warning("END OF setPosition %d of Element %p",position,this);
 }

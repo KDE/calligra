@@ -225,10 +225,10 @@ int PrefixedElement::takeAsciiFromKeyb(int)
     return 2;
 } */
 
-int PrefixedElement::takeActionFromKeyb(int)
+/*int PrefixedElement::takeActionFromKeyb(int)
 {
     return -1;
-}
+}*/
 
 void PrefixedElement::setNumericFont(int value)
 {
