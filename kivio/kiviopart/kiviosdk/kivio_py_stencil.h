@@ -26,8 +26,6 @@
 
 #include "kivio_stencil.h"
 
-#define HAVE_PYTHON
-
 #ifdef HAVE_PYTHON
 
 #include <qlist.h>

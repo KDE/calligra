@@ -25,8 +25,6 @@
 
 #include "kivio_stencil_spawner.h"
 
-#define HAVE_PYTHON
-
 #ifdef HAVE_PYTHON
 
 class KivioStencilSpawnerSet;
