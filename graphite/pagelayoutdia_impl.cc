@@ -172,14 +172,19 @@ PageLayoutDiaImpl::PageLayoutDiaImpl(Graphite::PageLayout &layout, const Graphit
     unit->setCurrentItem(static_cast<int>(doc->unit()));
     // initialize the default unit of the numinputs
     unitChanged(static_cast<int>(doc->unit()));
+    // This one is needed here, because of a werid bug
+    updateWH();
 
     if(m_layout.layout==Graphite::PageLayout::Custom) {
         format->setCurrentItem(0);
         width->setEnabled(true);
         height->setEnabled(true);
     }
-    else
+    else {
         format->setCurrentItem(static_cast<int>(m_layout.size)+1);
+        width->setEnabled(false);
+        height->setEnabled(false);
+    }
     connect(format, SIGNAL(activated(int)), this, SLOT(formatChanged(int)));
 
     orientation->setCurrentItem(static_cast<int>(m_layout.orientation));
@@ -212,7 +217,6 @@ PageLayoutDiaImpl::PageLayoutDiaImpl(Graphite::PageLayout &layout, const Graphit
     setTabOrder(bottom, restore);
 
     // initialize the boxes
-    updateWH();
     top->setValue(m_layout.borders.top);
     left->setValue(m_layout.borders.left);
     right->setValue(m_layout.borders.right);

@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>428</width>
+            <width>424</width>
             <height>412</height>
         </rect>
     </property>
@@ -544,10 +544,6 @@
                                         <name>name</name>
                                         <cstring>width</cstring>
                                     </property>
-                                    <property stdset="1">
-                                        <name>enabled</name>
-                                        <bool>false</bool>
-                                    </property>
                                     <property>
                                         <name>whatsThis</name>
                                         <string>This box contains the width of the page. As soon as you change the formatting to Custom you are able to change this value.</string>
@@ -558,10 +554,6 @@
                                     <property stdset="1">
                                         <name>name</name>
                                         <cstring>height</cstring>
-                                    </property>
-                                    <property stdset="1">
-                                        <name>enabled</name>
-                                        <bool>false</bool>
                                     </property>
                                     <property>
                                         <name>whatsThis</name>
