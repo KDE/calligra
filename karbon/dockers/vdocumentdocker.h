@@ -44,7 +44,7 @@ class VDocumentPreview : public QWidget
 	Q_OBJECT
 
 	public:
-		VDocumentPreview( VDocument* document, QWidget* parent = 0 );
+		VDocumentPreview( KarbonView* view, QWidget* parent = 0 );
 		~VDocumentPreview();
 		
 	protected:
@@ -52,6 +52,7 @@ class VDocumentPreview : public QWidget
 		
 	private:
 		VDocument* m_document;
+		KarbonView* m_view;
 }; // VDocumentPreview
 
 class VDocumentTab : public QWidget
@@ -59,12 +60,12 @@ class VDocumentTab : public QWidget
 	Q_OBJECT
 	
 	public:
-		VDocumentTab( KarbonPart* part, QWidget* parent );
+		VDocumentTab( KarbonView* view, QWidget* parent );
 		~VDocumentTab();
-		
+
 	public slots:
 		void updateDocumentInfo();
-		
+
 	private:
 		VDocumentPreview* m_documentPreview;
 		QLabel*           m_height;
@@ -72,7 +73,7 @@ class VDocumentTab : public QWidget
 		QLabel*           m_layers;
 		QLabel*           m_format;
 		
-		KarbonPart*        m_part;
+		KarbonView*        m_view;
 }; // VDocumentTab
 
 /*************************************************************************
