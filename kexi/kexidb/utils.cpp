@@ -48,7 +48,7 @@ QMap< uint, QStringList > slist;
 inline void initList()
 {
 	if (!tlist.isEmpty())
-		return
+		return;
 
 	for (uint t=0; t<=KexiDB::Field::LastType; t++) {
 		const uint tg = KexiDB::Field::typeGroup( t );
