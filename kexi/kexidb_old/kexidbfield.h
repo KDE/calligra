@@ -102,6 +102,22 @@ class KEXIDB_EXPORT KexiDBField
 		 */
 		virtual int		constraints() const;
 
+		/**
+		 * @returns true if column is used with aggregates like 'RAND()' or 'SUM()'
+		 */
+		bool		isAggregate() const { return m_aggregate; }
+
+		/**
+		 * @returns true if this column can be read only
+		 */
+		bool		isReadOnly() const { return m_readOnly; }
+
+		/**
+		 * @returns the 'hase' for 'SELECT foo.bar AS hase' or null if none
+		 */
+		QString		alias() const { return m_aliasName; }
+
+
 		/*!
 		 *	@returns the table.column that this field references or QString::null if !foreign_key()
 		 */
@@ -129,10 +145,14 @@ class KEXIDB_EXPORT KexiDBField
 		void setUniqueKey(bool u);
 		void setForeignKey(bool f);
 		void setNotNull(bool n);
+		void setAggregate(bool a) { m_aggregate = a; }
+		void setReadOnly(bool r) { m_readOnly = r; }
+		void setAlias(const QString &a) { m_aliasName = a; }
+
 
 	private:
 		QString m_table;
-		QString m_name;
+		QString m_name;			// resolved (if possible) in AS
 		QString m_reference;
 		ColumnType m_sqlType;
 		int m_constraints;
@@ -140,6 +160,9 @@ class KEXIDB_EXPORT KexiDBField
 		int m_precision;
 		bool m_unsigned;
 		bool m_binary;
+		bool m_readOnly;
+		QString m_aliasName;		// AS name
+		bool m_aggregate;		// stuff like 'RAND()', 'SUM()', ...
 		QVariant m_defaultValue;
 };
 
