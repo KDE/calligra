@@ -76,12 +76,14 @@ ScriptDialog::ScriptDialog (QWidget* parent, const char* name) :
 void ScriptDialog::setActiveDocument (GDocument* ) {
 }
 
+#include <kstddirs.h>
+
 void ScriptDialog::loadScripts () {
   listBox->clear ();
   lastSystemScript = -1;
 
   // load scripts from system directory
-  QString systemScripts = kapp->kde_datadir () + "/killustrator/scripts";
+  QString systemScripts = KGlobal::dirs()->kde_default( "data" ) + "killustrator/scripts";
   QDir systemDir (systemScripts.data (), "*.py", QDir::Name,
 		  QDir::Files);
   if (systemDir.exists ()) {
