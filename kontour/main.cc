@@ -19,6 +19,7 @@
 
 #include <koApplication.h>
 #include <kcmdlineargs.h>
+#include <kglobal.h>
 #include <klocale.h>
 #include <dcopclient.h>
 
