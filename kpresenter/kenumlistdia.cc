@@ -130,7 +130,7 @@ KEnumListDia::KEnumListDia(QWidget* parent,const char* name,int __type,QFont __f
   eStart->setText(chr);
   grid->addWidget(eStart,5,2);
   connect(eStart,SIGNAL(textChanged(const QString &)),this,SLOT(startChanged(const QString &)));
-  _start = eStart->text()[0];
+  _start = QChar(eStart->text()[0]);
 
   number = new QRadioButton("Numeric",this);
   number->resize(number->sizeHint());

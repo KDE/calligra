@@ -47,7 +47,7 @@ TxtCursor::TxtCursor()
 }
 
 /*====================== character ===============================*/
-char TxtCursor::character()
+QChar TxtCursor::character()
 {
   int obj,i,pos0 = 0;
 
@@ -3348,7 +3348,7 @@ void KTextObject::insertText(QString text,TxtCursor *_cursor,QFont font,QColor c
 	      il.append(o);
 	    }
 
-	  switch (text[_ind])
+	  switch (QChar(text[_ind]))
 	    {
 	    case ' ':
 	      {

@@ -81,7 +81,7 @@ public:
   /**
    * Get the current character (to the right of the caret).
    **/
-  char character();
+  QChar character();
 
   /**
    * Move the cursor a char forward.
