@@ -16,14 +16,6 @@
 
 <date>30/01/2000</date>
 <releaseinfo>0.01.00</releaseinfo>
-<revhistory>
-<revision>
-<revnumber>0.01.00</revnumber>
-<date>30/01/2000</date>
-<authorinitials>FSch</authorinitials>
-<revremark>First try to put a structure to doc based on MPM´s outline</revremark>
-</revision>
-</revhistory>
 
 <abstract>
 <para>

@@ -23,22 +23,6 @@
 <date>21/03/2000</date>
 <releaseinfo>0.01.01</releaseinfo>
 
-<revhistory>
-<revision>
-<revnumber>0.1.1</revnumber>
-<date>21/03/2000</date>
-<authorinitials>KT</authorinitials>
-<revremark>Proof-read version of 0.1.0. Also,
-some minor changes (couldn't stop myself :)</revremark>
-</revision>
-<revision>
-<revnumber>0.1.0</revnumber>
-<date>27/01/2000</date>
-<authorinitials>JS</authorinitials>
-<revremark>First made available to the CVS</revremark>
-</revision>
-</revhistory>
-
 <abstract>
 <para>
 &KOffice; is an integrated office suite for the K Desktop Environment (KDE).
@@ -774,7 +758,7 @@ The other KOffice manuals are copyrighted by their respective authors.
 embedding, XML, MORE! -->
 
 <glossdiv><title>?</title>
-<glossentry>
+<glossentry id="gloss-symbols">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -783,7 +767,7 @@ embedding, XML, MORE! -->
 </glossdiv>
 
 <glossdiv><title>A</title>
-<glossentry>
+<glossentry id="gloss-a">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -792,7 +776,7 @@ embedding, XML, MORE! -->
 </glossdiv>
 
 <glossdiv><title>B</title>
-<glossentry>
+<glossentry id="gloss-b">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -801,7 +785,7 @@ embedding, XML, MORE! -->
 </glossdiv>
 
 <glossdiv><title>C</title>
-<glossentry>
+<glossentry id="gloss-c">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -810,7 +794,7 @@ embedding, XML, MORE! -->
 </glossdiv>
 
 <glossdiv><title>D</title>
-<glossentry>
+<glossentry id="gloss-d">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -819,7 +803,7 @@ embedding, XML, MORE! -->
 </glossdiv>
 
 <glossdiv><title>E</title>
-<glossentry>
+<glossentry id="gloss-e">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -828,7 +812,7 @@ embedding, XML, MORE! -->
 </glossdiv>
 
 <glossdiv><title>F</title>
-<glossentry>
+<glossentry id="gloss-f">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -837,7 +821,7 @@ embedding, XML, MORE! -->
 </glossdiv>
 
 <glossdiv><title>G</title>
-<glossentry>
+<glossentry id="gloss-g">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -846,7 +830,7 @@ embedding, XML, MORE! -->
 </glossdiv>
 
 <glossdiv><title>H</title>
-<glossentry>
+<glossentry id="gloss-h">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -855,7 +839,7 @@ embedding, XML, MORE! -->
 </glossdiv>
 
 <glossdiv><title>I</title>
-<glossentry>
+<glossentry id="gloss-i">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -864,7 +848,7 @@ embedding, XML, MORE! -->
 </glossdiv>
 
 <glossdiv><title>J</title>
-<glossentry>
+<glossentry id="gloss-j">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -873,7 +857,7 @@ embedding, XML, MORE! -->
 </glossdiv>
 
 <glossdiv><title>K</title>
-<glossentry id="glosskde">
+<glossentry id="gloss-kde">
 <glossterm>KDE</glossterm>
 <glossdef><para>
 The K Desktop Environment (<acronym>KDE</acronym>) is a completely
@@ -887,7 +871,7 @@ for details.
 <glossterm>KParts</glossterm>
 <glossdef><para>
 KParts is a technology that allows the embedding of components
-("<link linkend="glosspart">parts</link>") in an application.
+("<link linkend="gloss-part">parts</link>") in an application.
 This way, you can create compound documents in &KOffice;,
 e.g. a &KWord; document containing a &KSpread; table.
 </para></glossdef>
@@ -895,7 +879,7 @@ e.g. a &KWord; document containing a &KSpread; table.
 </glossdiv>
 
 <glossdiv><title>L</title>
-<glossentry>
+<glossentry id="gloss-l">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -904,7 +888,7 @@ e.g. a &KWord; document containing a &KSpread; table.
 </glossdiv>
 
 <glossdiv><title>M</title>
-<glossentry>
+<glossentry id="gloss-m">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -913,7 +897,7 @@ e.g. a &KWord; document containing a &KSpread; table.
 </glossdiv>
 
 <glossdiv><title>N</title>
-<glossentry>
+<glossentry id="gloss-n">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -922,7 +906,7 @@ e.g. a &KWord; document containing a &KSpread; table.
 </glossdiv>
 
 <glossdiv><title>O</title>
-<glossentry>
+<glossentry id="gloss-o">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -931,7 +915,7 @@ e.g. a &KWord; document containing a &KSpread; table.
 </glossdiv>
 
 <glossdiv><title>P</title>
-<glossentry id="glosspart">
+<glossentry id="gloss-part">
 <glossterm>Part</glossterm>
 <glossdef><para>
 A part is an application which can be embedded into other
@@ -941,7 +925,7 @@ A part is an application which can be embedded into other
 </glossdiv>
 
 <glossdiv><title>Q</title>
-<glossentry id="glossqt">
+<glossentry id="gloss-qt">
 <glossterm>Qt</glossterm>
 <glossdef><para>
 Qt is the underlying toolkit that was used for KDE and &KOffice;.
@@ -952,7 +936,7 @@ for details.
 </glossdiv>
 
 <glossdiv><title>R</title>
-<glossentry>
+<glossentry id="gloss-r">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -961,7 +945,7 @@ for details.
 </glossdiv>
 
 <glossdiv><title>S</title>
-<glossentry>
+<glossentry id="gloss-s">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -970,7 +954,7 @@ for details.
 </glossdiv>
 
 <glossdiv><title>T</title>
-<glossentry>
+<glossentry id="gloss-t">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -979,7 +963,7 @@ for details.
 </glossdiv>
 
 <glossdiv><title>U</title>
-<glossentry>
+<glossentry id="gloss-u">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -988,7 +972,7 @@ for details.
 </glossdiv>
 
 <glossdiv><title>V</title>
-<glossentry>
+<glossentry id="gloss-v">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -997,7 +981,7 @@ for details.
 </glossdiv>
 
 <glossdiv><title>W</title>
-<glossentry>
+<glossentry id="gloss-w">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -1006,7 +990,7 @@ for details.
 </glossdiv>
 
 <glossdiv><title>X</title>
-<glossentry>
+<glossentry id="gloss-x">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -1015,7 +999,7 @@ for details.
 </glossdiv>
 
 <glossdiv><title>Y</title>
-<glossentry>
+<glossentry id="gloss-y">
 <glossterm>
 </glossterm>
 <glossdef><para>
@@ -1024,7 +1008,7 @@ for details.
 </glossdiv>
 
 <glossdiv><title>Z</title>
-<glossentry>
+<glossentry id="gloss-z">
 <glossterm>
 </glossterm>
 <glossdef><para>
