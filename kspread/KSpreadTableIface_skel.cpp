@@ -1,2 +1,0 @@
-#include <KSpreadTableIface.h>
-
