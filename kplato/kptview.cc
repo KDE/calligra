@@ -72,6 +72,7 @@
 #include <kxmlguifactory.h>
 #include <kprinter.h>
 #include <kstandarddirs.h>
+#include <kdesktopfile.h>
 
 KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     : KoView(part, parent, "Main View"),
@@ -282,12 +283,11 @@ void KPTView::slotReportDesign() {
 void KPTView::slotReportGenerate(int idx) {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_reportview);
-    if (idx != -1) {
-        QStringList::iterator it = m_reportTemplateFiles.at(idx);
-        if (it != m_reportTemplateFiles.end())
-            m_reportview->draw(*it);
-    }
-    actionReportGenerate->setCurrentItem(-1);
+    QString *file = m_reportTemplateFiles.at(idx);
+    if (file)
+        m_reportview->draw(*file);
+
+    actionReportGenerate->setCurrentItem(-1); //remove checkmark
 }
 
 void KPTView::slotAddSubTask() {
@@ -584,18 +584,31 @@ void KPTView::slotUpdate(bool calculate)
 	}
 }
 
-//FIXME: This is temporary. We need a solution that takes care of translation, project specific reports etc.
+//FIXME: We need a solution that takes care project specific reports.
 void KPTView::setReportGenerateMenu() {
     kdDebug()<<k_funcinfo<<endl;
     QStringList list;
     m_reportTemplateFiles.clear();
     KStandardDirs std;
-    m_reportTemplateFiles = std.findAllResources("data", "kplato/reports/*.kut", true, true);
-    for (QStringList::iterator it = m_reportTemplateFiles.begin(); it != m_reportTemplateFiles.end(); ++it) {
-        //kdDebug()<<" data: "<<*it<<endl;
-        QString s = (*it).section('/', -1);
-        s = s.remove(s.length()-4, 4); // remove extension
-        list.append(s);
+    QStringList reportDesktopFiles = std.findAllResources("data", "kplato/reports/*.desktop", true, true);
+    for (QStringList::iterator it = reportDesktopFiles.begin(); it != reportDesktopFiles.end(); ++it) {
+        KDesktopFile file((*it), true);
+        QString name = file.readName();
+        if (!name.isNull()) {
+            list.append(name);
+            kdDebug()<<" file: "<<*it<<" name="<<name<<endl;
+            QString *url = new QString(file.readURL());
+            if (url->isNull()) {
+                delete url;
+            } else {
+                if (url[0] != "/" || url->left(6) != "file:/") {
+                    QString path = (*it).left((*it).findRev('/', -1)+1); // include '/'
+                    *url = path + *url;
+                }
+
+                m_reportTemplateFiles.append(url);
+            }
+        }
     }
     actionReportGenerate->setItems(list);
 }

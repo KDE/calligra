@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Tasks (Test report)
+Name[da]=Opgaver (Test rapport)
+Type=Link
+URL= .source/Test_report_Tasks.kut
+X-KDE-Hidden=false

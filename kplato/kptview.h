@@ -109,7 +109,7 @@ private:
 	QWidgetStack *m_tab;
 	KPTResourceView *m_resourceview;
 	KPTReportView *m_reportview;
-    QStringList m_reportTemplateFiles;
+    QPtrList<QString> m_reportTemplateFiles;
 
     int m_viewGrp;
     int m_defaultFontSize;
