@@ -264,7 +264,7 @@ void StencilBarDockManager::slotMoving()
   dragPos = OnDesktop;
 }
 
-void StencilBarDockManager::slotDeleteStencilSet( DragBarButton* pBtn, QWidget *pPage, KivioStackBar *pBar )
+void StencilBarDockManager::slotDeleteStencilSet( DragBarButton* pBtn, QWidget */*pPage*/, KivioStackBar *pBar )
 {
   pBar->deletePageAndButton(pBtn);
 

@@ -3,9 +3,7 @@
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
 SUBDIRS = kiviopart plugins 
-EXTRA_DIST = admin/* Makefile.cvs kivio.studio \
-		configure.in.in\
-		res.cpp
+EXTRA_DIST = kivio.studio res.cpp
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$

@@ -62,7 +62,7 @@ ToolDockBaseBorder::ToolDockBaseBorder( Position position, ToolDockBase* parent,
   }
 }
 
-void ToolDockBaseBorder::paintEvent( QPaintEvent* ev )
+void ToolDockBaseBorder::paintEvent( QPaintEvent* /*ev*/ )
 {
   if (!parent()->parent())
     return;
@@ -108,13 +108,13 @@ void ToolDockBaseBorder::paintEvent( QPaintEvent* ev )
   p.end();
 }
 
-void ToolDockBaseBorder::mousePressEvent( QMouseEvent* ev )
+void ToolDockBaseBorder::mousePressEvent( QMouseEvent* /*ev*/ )
 {
   ((ToolDockBase*)parentWidget())->activate();
   emit resizeStart();
 }
 
-void ToolDockBaseBorder::mouseReleaseEvent( QMouseEvent* ev )
+void ToolDockBaseBorder::mouseReleaseEvent( QMouseEvent* /*ev*/ )
 {
   emit resizeStop();
 }
@@ -338,14 +338,14 @@ void ToolDockBaseCaption::paintEvent( QPaintEvent* )
 
   p.drawText(3,0,w-40,h,AlignLeft|AlignVCenter,t);
 
-	QPoint p1(w-lw-25, (h-5)/2+dl);
-	QPoint p2(p1);
-	p1 += QPoint(lw-5,0);
-	
-	qDrawShadeLine( &p, p1, p2, colorGroup(), f, 1, 0 );
-	p1 += QPoint(0,3);
-	p2 += QPoint(0,3);
-	qDrawShadeLine( &p, p1, p2, colorGroup(), f, 1, 0 );
+        QPoint p1(w-lw-25, (h-5)/2+dl);
+        QPoint p2(p1);
+        p1 += QPoint(lw-5,0);
+
+        qDrawShadeLine( &p, p1, p2, colorGroup(), f, 1, 0 );
+        p1 += QPoint(0,3);
+        p2 += QPoint(0,3);
+        qDrawShadeLine( &p, p1, p2, colorGroup(), f, 1, 0 );
 
   p.end();
 }

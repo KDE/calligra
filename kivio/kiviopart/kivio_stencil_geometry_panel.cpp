@@ -7,7 +7,7 @@
 #include "tkfloatspinbox.h"
 #include "tkunits.h"
 
-static char* width_xpm[] = {
+static const char* width_xpm[] = {
   "13 11 3 1",
   "  c Gray0",
   ". c #808080",
@@ -25,7 +25,7 @@ static char* width_xpm[] = {
   "XXXXXXXXXXXXX"
 };
 
-static char* height_xpm[] = {
+static const char* height_xpm[] = {
   "13 11 3 1",
   "  c Gray0",
   ". c #808080",
@@ -43,7 +43,7 @@ static char* height_xpm[] = {
   "XXX.......XXX"
 };
 
-static char* xpos_xpm[] = {
+static const char* xpos_xpm[] = {
   "13 11 2 1",
   "  c Gray0",
   ". c None",
@@ -60,7 +60,7 @@ static char* xpos_xpm[] = {
   ".......     ."
 };
 
-static char* ypos_xpm[] = {
+static const char* ypos_xpm[] = {
   "13 11 2 1",
   "  c Gray0",
   ". c None",

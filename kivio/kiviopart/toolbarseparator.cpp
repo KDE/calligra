@@ -47,7 +47,7 @@ int ToolBarSeparator::plug( QWidget* widget, int index )
   return -1;
 }
 
-void ToolBarSeparator::unplug( QWidget* widget )
+void ToolBarSeparator::unplug( QWidget*/*widget*/ )
 {
 }
 #include "toolbarseparator.moc"

@@ -10,18 +10,19 @@
 #include <kmessagebox.h>
 
 #include <qpixmap.h>
+#include <kdebug.h>
 
-static char * blank_xpm[] = {
+static const char * blank_xpm[] = {
 "1 1 1 1",
 "   c None",
 " "
 };
 
-static char * conn_xpm[] = {
+static const char * conn_xpm[] = {
 "16 16 3 1",
-" 	c None",
-".	c #000000",
-"+	c #48C641",
+"       c None",
+".      c #000000",
+"+      c #48C641",
 "                ",
 "           .... ",
 "           .++. ",
@@ -39,35 +40,35 @@ static char * conn_xpm[] = {
 " ....           ",
 "                "};
 
-static char * eye_xpm[] = {
+static const char * eye_xpm[] = {
 "16 16 27 1",
-" 	c None",
-".	c #313131",
-"+	c #000000",
-"@	c #454545",
-"#	c #070707",
-"$	c #242424",
-"%	c #0C0C0C",
-"&	c #171717",
-"*	c #050505",
-"=	c #353535",
-"-	c #626262",
-";	c #4B4B4B",
-">	c #929292",
-",	c #9E9E9E",
-"'	c #262626",
-")	c #131313",
-"!	c #6E6E6E",
-"~	c #9C9C9C",
-"{	c #080808",
-"]	c #818181",
-"^	c #1B1B1B",
-"/	c #2D2D2D",
-"(	c #555555",
-"_	c #2A2A2A",
-":	c #151515",
-"<	c #0E0E0E",
-"[	c #494949",
+"       c None",
+".      c #313131",
+"+      c #000000",
+"@      c #454545",
+"#      c #070707",
+"$      c #242424",
+"%      c #0C0C0C",
+"&      c #171717",
+"*      c #050505",
+"=      c #353535",
+"-      c #626262",
+";      c #4B4B4B",
+">      c #929292",
+",      c #9E9E9E",
+"'      c #262626",
+")      c #131313",
+"!      c #6E6E6E",
+"~      c #9C9C9C",
+"{      c #080808",
+"]      c #818181",
+"^      c #1B1B1B",
+"/      c #2D2D2D",
+"(      c #555555",
+"_      c #2A2A2A",
+":      c #151515",
+"<      c #0E0E0E",
+"[      c #494949",
 "                ",
 "                ",
 "                ",
@@ -85,27 +86,27 @@ static char * eye_xpm[] = {
 "                ",
 "                "};
 
-static char * plus_xpm[] = {
+static const char * plus_xpm[] = {
 "16 16 19 1",
-" 	c None",
-".	c #000000",
-"+	c #090909",
-"@	c #0D0D0D",
-"#	c #252525",
-"$	c #313131",
-"%	c #353535",
-"&	c #4A4A4A",
-"*	c #585858",
-"=	c #5D5D5D",
-"-	c #6D6D6D",
-";	c #7F7F7F",
-">	c #868686",
-",	c #8C8C8C",
-"'	c #A4A4A4",
-")	c #AEAEAE",
-"!	c #C5C5C5",
-"~	c #D6D6D6",
-"{	c #FFFFFF",
+"       c None",
+".      c #000000",
+"+      c #090909",
+"@      c #0D0D0D",
+"#      c #252525",
+"$      c #313131",
+"%      c #353535",
+"&      c #4A4A4A",
+"*      c #585858",
+"=      c #5D5D5D",
+"-      c #6D6D6D",
+";      c #7F7F7F",
+">      c #868686",
+",      c #8C8C8C",
+"'      c #A4A4A4",
+")      c #AEAEAE",
+"!      c #C5C5C5",
+"~      c #D6D6D6",
+"{      c #FFFFFF",
 "                ",
 "     ......     ",
 "     ..+@+.     ",
@@ -123,27 +124,27 @@ static char * plus_xpm[] = {
 "     ......     ",
 "                "};
 
-static char * minus_xpm[] = {
+static const char * minus_xpm[] = {
 "16 16 19 1",
-" 	c None",
-".	c #000000",
-"+	c #252525",
-"@	c #4A4A4A",
-"#	c #6D6D6D",
-"$	c #8C8C8C",
-"%	c #A4A4A4",
-"&	c #AEAEAE",
-"*	c #090909",
-"=	c #313131",
-"-	c #585858",
-";	c #7F7F7F",
-">	c #C5C5C5",
-",	c #D6D6D6",
-"'	c #0D0D0D",
-")	c #353535",
-"!	c #5D5D5D",
-"~	c #868686",
-"{	c #FFFFFF",
+"       c None",
+".      c #000000",
+"+      c #252525",
+"@      c #4A4A4A",
+"#      c #6D6D6D",
+"$      c #8C8C8C",
+"%      c #A4A4A4",
+"&      c #AEAEAE",
+"*      c #090909",
+"=      c #313131",
+"-      c #585858",
+";      c #7F7F7F",
+">      c #C5C5C5",
+",      c #D6D6D6",
+"'      c #0D0D0D",
+")      c #353535",
+"!      c #5D5D5D",
+"~      c #868686",
+"{      c #FFFFFF",
 "                ",
 "                ",
 "                ",
@@ -161,7 +162,7 @@ static char * minus_xpm[] = {
 "                ",
 "                "};
 
-static char *name_xpm[] = {
+static const char *name_xpm[] = {
 "16 16 3 1",
 "  c Black",
 ". c #808080",
@@ -296,7 +297,7 @@ void KivioLayerPanel::updateView()
         m_pCurItem = m_pListView->firstChild();
         if( !m_pCurItem )
         {
-            qDebug("KivioLayerPanel::updateView() - Very Bad Error.  There are no layers!");
+            kdDebug() << "KivioLayerPanel::updateView() - Very Bad Error.  There are no layers!" << endl;
         }
         else
         {
@@ -429,7 +430,7 @@ void KivioLayerPanel::layerUp()
     pLayer = pPage->layers()->take();
     if( !pLayer )
     {
-        qDebug("KivioLayerPanel::layerUp() - Error taking layer... bad");
+        kdDebug() << "KivioLayerPanel::layerUp() - Error taking layer... bad" << endl;
         return;
     }
 
@@ -459,7 +460,7 @@ void KivioLayerPanel::layerDown()
     pLayer = pPage->layers()->take();
     if( !pLayer )
     {
-        qDebug("KivioLayerPanel::layerDown() - Error taking layer... bad");
+        kdDebug() << "KivioLayerPanel::layerDown() - Error taking layer... bad" << endl;
         return;
     }
 

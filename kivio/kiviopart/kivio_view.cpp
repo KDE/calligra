@@ -306,8 +306,8 @@ void KivioView::setupActions()
   m_unitAct = new TKUnitsAction(actionCollection(),"units");
   connect( m_unitAct, SIGNAL(activated(int)), m_pDoc, SLOT(setUnits(int)) );
   connect( m_pDoc, SIGNAL(unitsChanged(int)), m_unitAct, SLOT(setCurrentItem(int)) );
-  
-  
+
+
   AddSpawnerSetAction* addSpSet =  new AddSpawnerSetAction( i18n("Add Stencil Set"), "open_stencilset", 0, actionCollection(), "addStencilSet" );
   connect(addSpSet,SIGNAL(activated(const QString&)),SLOT(addStencilSet(const QString&)));
 
@@ -503,7 +503,9 @@ void KivioView::setActivePage( KivioPage* page )
 
   updateToolBars();
 
+#ifdef __GNUC__
 #warning TODO: make it update as signal/slot
+#endif
   m_pLayersPanel->updateView();
 
   m_pDoc->updateView(m_pActivePage);
@@ -529,7 +531,7 @@ void KivioView::changePage( const QString& name )
 
   KivioPage *t = m_pDoc->map()->findPage(name);
   if (!t)
-  	return;
+        return;
 
   setActivePage( t );
 }
@@ -617,7 +619,7 @@ void KivioView::slotUpdateView( KivioPage* page )
   m_pCanvas->update();
 }
 
-void KivioView::paintContent( KivioPainter& painter, const QRect& rect, bool transparent )
+void KivioView::paintContent( KivioPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/ )
 {
 //  m_pDoc->paintContent( painter, rect, transparent, m_pActivePage );
 //  temporary
