@@ -41,12 +41,8 @@ void TranslateCmd::execute()
 {
   QWMatrix m;
   m.translate(dx, dy);
-
-//  kdDebug(38000) << "DX=" << dx << " DY=" << dy << endl;
-
   /* save the states */
   TransformationCmd::execute();
-
-//  for(unsigned int i = 0; i < objects.count(); i++)
-//    objects[i]->transform(m, true);
+  for(unsigned int i = 0; i < objects.count(); i++)
+    objects[i]->transform(m, true);
 }

@@ -28,6 +28,7 @@
 
 #include <kcommand.h>
 #include <qptrvector.h>
+#include <qmemarray.h>
 
 class GDocument;
 class GObject;
@@ -47,7 +48,6 @@ class TransformationCmd : public Command
 {
 protected:
   TransformationCmd(GDocument *aGDoc, const QString &name);
-  TransformationCmd(GObject *obj, const QString &name);
 
 public:
   ~TransformationCmd();
@@ -57,7 +57,7 @@ public:
 
 protected:
   QPtrVector<GObject> objects;
-  QPtrVector<QWMatrix> states;
+  QMemArray<QWMatrix> states;
 };
 
 #endif

@@ -25,6 +25,8 @@
 
 #include "Command.h"
 
+#include <kdebug.h>
+
 #include "GDocument.h"
 #include "GPage.h"
 #include "GObject.h"
@@ -40,50 +42,32 @@ Command(aGDoc, name)
 {
   objects.resize(document()->activePage()->selectionCount());
   states.resize(document()->activePage()->selectionCount());
-
-/*  QPtrListIterator<QWMatrix> it(document()->activePage()->getSelection());
+  QPtrListIterator<GObject> it(document()->activePage()->getSelection());
   for(unsigned int i = 0; it.current(); ++it, ++i)
   {
     (*it)->ref();
     objects.insert(i, (*it));
-    states.insert(i, (*it)->matrix());
-  }*/
-}
-
-TransformationCmd::TransformationCmd(GObject *obj, const QString &name):
-Command(0L, name)
-{
-  objects.resize(1);
-  states.resize(1);
-
-/*  obj->ref();
-  objects.insert(0, obj);
-  states.insert(0, obj->matrix());*/
+    states[i] = (*it)->matrix();
+  }
 }
 
 TransformationCmd::~TransformationCmd()
 {
-/*  for(unsigned int i = 0; i < objects.count(); i++)
-    objects[i]->unref();*/
+  for(unsigned int i = 0; i < objects.count(); i++)
+    objects[i]->unref();
 }
 
 void TransformationCmd::execute()
 {
-/*  for(unsigned int i = 0; i < objects.count(); i++)
-  {
-//    if(states[i])
-//      states[i]->unref();
-    states.insert(i, objects[i]->saveState());
-  }*/
 }
 
 void TransformationCmd::unexecute()
 {
-/*  if(document())
-    document()->activePage()->unselectAllObjects();
+  document()->activePage()->unselectAllObjects();
   for(unsigned int i = 0; i < objects.count(); i++)
   {
-//    objects[i]->restoreState(states[i]);
+    objects[i]->matrix(states[i]);
     document()->activePage()->selectObject(objects[i]);
-  }*/
+  }
+  document()->activePage()->updateSelection();
 }
