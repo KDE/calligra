@@ -74,3 +74,4 @@ PropertyEditorEditor::~PropertyEditorEditor()
 
 
 #include "propertyeditoreditor.h"
+#include "propertyeditoreditor.moc"
