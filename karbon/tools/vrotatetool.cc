@@ -38,9 +38,12 @@ VRotateTool::mouseReleased( QMouseEvent * )
 {
 	if( !m_isDragging ) return;
 
-	view()->part()->addCommand(
-		new VRotateCmd( &view()->part()->document(), m_sp, m_angle / VGlobal::pi_180 ),
-		true );
+	if( m_activeNode > 0 )
+		view()->part()->addCommand(
+			new VRotateCmd( &view()->part()->document(), m_sp, m_angle / VGlobal::pi_180 ),
+			true );
+	else
+		drawTemporaryObject();
 
 	m_isDragging = false;
 }
@@ -107,7 +110,8 @@ VRotateTool::drawTemporaryObject()
 	painter->setRasterOp( Qt::NotROP );
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	if( view()->part()->document().selection()->objects().count() > 0 && m_activeNode != node_mm )
+	if( view()->part()->document().selection()->objects().count() > 0 &&
+		m_activeNode != node_mm && m_activeNode != node_none  )
 	{
 		KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 		KoRect rect = view()->part()->document().selection()->boundingBox();
