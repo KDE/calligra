@@ -227,6 +227,7 @@ KPresenterDoc::~KPresenterDoc()
     _backgroundList.clear();
 
     delete fCollection;
+    delete dcop;
 }
 
 /*======================= make child list intern ================*/
