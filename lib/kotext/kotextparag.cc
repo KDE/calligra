@@ -774,8 +774,9 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	    }
 	}
     }
-
-    KoTextParag::drawFontEffectsHelper( &painter, format, zh, font, textColor, startX, baseLine, bw, lastY, h, start, len, this );
+    
+    if(start+len!=s.length())
+	KoTextParag::drawFontEffectsHelper( &painter, format, zh, font, textColor, startX, baseLine, bw, lastY, h, start, len, this );
 
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
 
