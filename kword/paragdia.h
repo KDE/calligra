@@ -237,19 +237,23 @@ public:
 
 protected slots:
     void selectCustomBullet();
-    void numStyleChanged( int ); // selected another style from the combobox
+    void numStyleChanged(); // selected another style from the combobox
     void numTypeChanged( int );  // selected another type radiobutton.
 
-protected slots:
     void changeKWSpinboxType();
+    void suffixChanged(const QString & txt) {m_counter.setSuffix(txt); }
+    void prefixChanged(const QString & txt) {m_counter.setPrefix(txt); }
+    void startChanged(int i) {m_counter.setStartNumber(i); }
+    void depthChanged(int i) {m_counter.setDepth(i); }
 
 private:
+    void updatePreview();
     QList <StyleRepresenter> stylesList;
     void fillStyleCombo(Counter::Numbering type = Counter::NUM_LIST);
 
     QGroupBox *gStyle;
     QButtonGroup *gNumbering; 
-    QComboBox *cStyle;
+    QListBox *lstStyle;
     Counter m_counter; 
     QLineEdit *sSuffix, *sPrefix;
     QPushButton *bCustom;
@@ -258,7 +262,8 @@ private:
     QLabel *lStart;
     KWNumPreview *preview;
 
-    int styleBuffer;
+    unsigned int styleBuffer;
+    bool noSignals;
 };
 
 /**

@@ -55,9 +55,8 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <knumvalidator.h>
-#include <koRuler.h>
 #include <kwutils.h>
+#include <kwstyle.h>
 
 KWSpinBox::KWSpinBox( QWidget * parent, const char * name )
     : QSpinBox(parent,name)
@@ -333,12 +332,73 @@ QPen KWBorderPreview::setBorderPen( Border _brd )
 /******************************************************************/
 
 KWNumPreview::KWNumPreview( QWidget* parent, const char* name )
-    : QGroupBox( i18n( "Preview" ), parent, name )
-{
+    : QGroupBox( i18n( "Preview" ), parent, name ) {
+    setMinimumHeight(80);
 }
 
-void KWNumPreview::drawContents( QPainter* )
-{
+void KWNumPreview::drawContents( QPainter* painter) {
+    if(!m_style) {
+        m_style=new KWStyle("tmp");
+    }
+
+    QRect r = contentsRect();
+    QFontMetrics fm( font() );
+ 
+    painter->fillRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
+                       r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height(), white );
+    painter->setClipRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
+                          r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height() );
+ 
+    QFont f( m_style->format().font() );
+    QColor c( m_style->format().color() );
+ 
+    painter->setPen( QPen( c ) );
+    painter->setFont( f );
+ 
+    fm = QFontMetrics( f );
+    int y = height() / 2 - fm.height() / 2;
+
+    // Make the numbering example in the QString theText.
+    QString theText = m_counter.prefix();
+    for(unsigned int i = 0; m_counter.depth() > i; theText.append("1."), i++);
+    switch(m_counter.style()) {
+        case Counter::STYLE_NUM:
+            theText.append(QString::number(m_counter.startNumber()));
+            break;
+        case Counter::STYLE_ALPHAB_L:
+            theText.append(makeAlphaLowerNumber(m_counter.startNumber()));
+            break;
+        case Counter::STYLE_ALPHAB_U:
+            theText.append(makeAlphaUpperNumber(m_counter.startNumber()));
+            break;
+        case Counter::STYLE_ROM_NUM_L:
+            theText.append(makeRomanNumber(m_counter.startNumber()));
+            break;
+        case Counter::STYLE_ROM_NUM_U:
+            theText.append(makeRomanNumber(m_counter.startNumber()).upper());
+        case Counter::STYLE_NONE:
+        case Counter::STYLE_CUSTOM:
+            break;
+        case Counter::STYLE_CUSTOMBULLET:
+            theText.append(m_counter.customBulletCharacter());
+            break;
+        case Counter::STYLE_CIRCLEBULLET:
+            theText.append("o");
+            break;
+        case Counter::STYLE_SQUAREBULLET:
+            theText.append("[]");
+            break;
+        case Counter::STYLE_DISCBULLET:
+            theText.append("O");
+            break;
+    }
+    theText.append(m_counter.suffix());
+ 
+    painter->drawText( 20 + (int)( m_style->paragLayout().margins[QStyleSheetItem::MarginFirstLine]
+                                   + m_style->paragLayout().margins[QStyleSheetItem::MarginLeft] ),
+                       y, fm.width( theText ),
+                       fm.height(), 0, theText );
+
 }
 
 
@@ -1021,22 +1081,21 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
     gStyle->setColumnLayout(0, Qt::Vertical );
     gStyle->layout()->setSpacing( 0 );
     gStyle->layout()->setMargin( 0 );
-    QVBoxLayout *styleLayoutLayout = new QVBoxLayout( gStyle->layout() );
-    styleLayoutLayout->setAlignment( Qt::AlignTop );
-    styleLayoutLayout->setSpacing( 6 );
-    styleLayoutLayout->setMargin( 11 );
 
-    stylesList.append( new StyleRepresenter(i18n( "None" )
-            , Counter::STYLE_NONE));
-    stylesList.append( new StyleRepresenter(i18n( "Arabic Numbers ( 1, 2, 3, 4, ... )" )
+    QHBoxLayout *layout8 = new QHBoxLayout( gStyle->layout() );; 
+    layout8->setSpacing( 6 );
+    layout8->setMargin( 11 );
+
+    stylesList.append( new StyleRepresenter(i18n( "None" ) , Counter::STYLE_NONE));
+    stylesList.append( new StyleRepresenter(i18n( "Arabic Numbers" )
             ,  Counter::STYLE_NUM));
-    stylesList.append( new StyleRepresenter(i18n( "Lower Alphabetical ( a, b, c, d, ... )" )
+    stylesList.append( new StyleRepresenter(i18n( "Lower Alphabetical" )
             ,  Counter::STYLE_ALPHAB_L ));
-    stylesList.append( new StyleRepresenter(i18n( "Upper Alphabetical ( A, B, C, D, ... )" )
+    stylesList.append( new StyleRepresenter(i18n( "Upper Alphabetical" )
             ,  Counter::STYLE_ALPHAB_U ));
-    stylesList.append( new StyleRepresenter(i18n( "Lower Roman Numbers ( i, ii, iii, iv, ... )" )
+    stylesList.append( new StyleRepresenter(i18n( "Lower Roman Numbers" )
             ,  Counter::STYLE_ROM_NUM_L ));
-    stylesList.append( new StyleRepresenter(i18n( "Upper Roman Numbers ( I, II, III, IV, ... )" )
+    stylesList.append( new StyleRepresenter(i18n( "Upper Roman Numbers" )
             ,  Counter::STYLE_ROM_NUM_U ));
     stylesList.append( new StyleRepresenter(i18n( "Disc Bullet" )
             ,  Counter::STYLE_DISCBULLET , true));
@@ -1047,10 +1106,16 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
     stylesList.append( new StyleRepresenter(i18n( "Custom Bullet" )
             ,  Counter::STYLE_CUSTOMBULLET , true));
 
-    cStyle = new QComboBox( FALSE, gStyle, "cStyle" );
+    lstStyle = new QListBox( gStyle, "styleListBox" );
     fillStyleCombo();
-    styleLayoutLayout->addWidget( cStyle );
-    connect( cStyle, SIGNAL( activated(int) ), this, SLOT( numStyleChanged( int ) ) );
+    layout8->addWidget( lstStyle );
+    layout8->activate();
+    connect( lstStyle, SIGNAL( selectionChanged() ), this, SLOT( numStyleChanged() ) );
+
+    QVBoxLayout *styleLayoutLayout = new QVBoxLayout(layout8 );
+    styleLayoutLayout->setAlignment( Qt::AlignTop );
+    styleLayoutLayout->setSpacing( 6 );
+    styleLayoutLayout->setMargin( 11 );
 
     QHBoxLayout *Layout2 = new QHBoxLayout; 
     Layout2->setSpacing( 6 );
@@ -1107,36 +1172,42 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
 
     Layout7->addWidget( lDepth, 1, 0 );
     styleLayoutLayout->addLayout( Layout7 );
+    styleLayoutLayout->addItem(new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding ));
     Form1Layout->addWidget( gStyle );
 
     preview = new KWNumPreview( this );
     Form1Layout->addWidget( preview );
-    QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    Form1Layout->addItem( spacer_2 );
+
+    connect( sSuffix, SIGNAL( textChanged (const QString &) ), this, SLOT( suffixChanged(const QString &) ) );
+    connect( sPrefix, SIGNAL( textChanged (const QString &) ), this, SLOT( prefixChanged(const QString &) ) );
+    connect( spnStart, SIGNAL( valueChanged (int) ), this, SLOT( startChanged(int) ) );
+    connect( spnDepth, SIGNAL( valueChanged (int) ), this, SLOT( depthChanged(int) ) );
 }
 
 void KWParagCounterWidget::fillStyleCombo(Counter::Numbering type) {
-    if(cStyle==NULL) return;
-    int cur = cStyle->currentItem();
+    if(lstStyle==NULL) return;
+    noSignals=true;
+    unsigned int cur = lstStyle->currentItem();
 
-    cStyle->clear();
+    lstStyle->clear();
 
     QListIterator<StyleRepresenter> style( stylesList );
     while ( style.current() ) {
         if(type == Counter::NUM_LIST || !style.current()->listStyle())
-            cStyle->insertItem( style.current()->name() );
+            lstStyle->insertItem( style.current()->name() );
         ++style;
     }
 
-    if(styleBuffer <= cStyle->count())
-        cStyle->setCurrentItem(styleBuffer);
+    if(styleBuffer <= lstStyle->count())
+        lstStyle->setCurrentItem(styleBuffer);
     else 
-        if(cur <= cStyle->count())
-            cStyle->setCurrentItem(cur);
+        if(cur <= lstStyle->count())
+            lstStyle->setCurrentItem(cur);
 
-    if(cur > cStyle->count()) {
+    if(cur > lstStyle->count()) {
         styleBuffer = cur;
     }
+    noSignals=false;
 }
 
 QString KWParagCounterWidget::tabName() {
@@ -1146,8 +1217,8 @@ QString KWParagCounterWidget::tabName() {
 void KWParagCounterWidget::selectCustomBullet() {
     unsigned int i;
     for (i=0; stylesList.count() > i && stylesList.at(i)->style() != Counter::STYLE_CUSTOMBULLET; i++);
-    cStyle->setCurrentItem(i);
-    numStyleChanged( i );
+    lstStyle->setCurrentItem(i);
+    //numStyleChanged( i );
 
     QString f = m_counter.customBulletFont();
     if ( f.isEmpty() )
@@ -1164,16 +1235,19 @@ void KWParagCounterWidget::selectCustomBullet() {
     }
 }
 
-void KWParagCounterWidget::numStyleChanged( int type ) {
+void KWParagCounterWidget::numStyleChanged() {
+    if(noSignals) return;
+
     // We selected another style from the combo box.
     styleBuffer = 999;
-    StyleRepresenter *sr = stylesList.at(type);
+    StyleRepresenter *sr = stylesList.at(lstStyle->currentItem());
     m_counter.setStyle(sr->style());
 
     bool hasStart = !sr->listStyle() && !sr->style() == Counter::STYLE_NONE;
     lStart->setEnabled( hasStart );
     spnStart->setEnabled( hasStart );
     changeKWSpinboxType();
+    updatePreview();
 }
 
 void KWParagCounterWidget::changeKWSpinboxType() {
@@ -1224,8 +1298,7 @@ void KWParagCounterWidget::display( const KWParagLayout & lay ) {
 
     unsigned int i;
     for (i=0; stylesList.count() > i && stylesList.at(i)->style() != m_counter.style(); i++);
-    cStyle->setCurrentItem(i);
-    numStyleChanged( i );
+    lstStyle->setCurrentItem(i);
 
     bCustom->setText( m_counter.customBulletCharacter() );
     if ( !m_counter.customBulletFont().isEmpty() )
@@ -1236,14 +1309,18 @@ void KWParagCounterWidget::display( const KWParagLayout & lay ) {
 
     spnDepth->setValue( m_counter.depth() );
     spnStart->setValue( m_counter.startNumber() );
+}
 
+void KWParagCounterWidget::updatePreview() {
+    preview->setCounter(m_counter);
+    preview->repaint(true);
 }
 
 void KWParagCounterWidget::save( KWParagLayout & lay ) {
-    m_counter.setDepth(spnDepth->value());
+/*    m_counter.setDepth(spnDepth->value());
     m_counter.setStartNumber(spnStart->value());
     m_counter.setPrefix(sPrefix->text());
-    m_counter.setSuffix(sSuffix->text());
+    m_counter.setSuffix(sSuffix->text()); */
     
     if ( lay.counter )
         *lay.counter = m_counter;

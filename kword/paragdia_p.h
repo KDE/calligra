@@ -148,12 +148,14 @@ public:
     KWNumPreview( QWidget*, const char* = 0L );
     ~KWNumPreview() {}
 
-    void setCounter( Counter _counter ) { counter = _counter; repaint( true ); }
+    void setCounter( Counter counter ) { m_counter = counter; repaint( true ); }
+    void setStyle(KWStyle *style) { m_style= style; repaint(true); }
 
 protected:
     void drawContents( QPainter* );
 
-    Counter counter;
+    Counter m_counter;
+    KWStyle *m_style;
 
 };
 
