@@ -23,9 +23,9 @@
 #ifndef __XML2LATEXPARSER_H__
 #define __XML2LATEXPARSER_H__
 
-#include <qfile.h>		/* for QFile classe */
-#include <qtextstream.h>	/* for QTextStream classe */
-#include <qstring.h>		/* for QString classe */
+#include <qfile.h>			/* for QFile class */
+#include <qtextstream.h>	/* for QTextStream class */
+#include <qstring.h>		/* for QString class */
 #include "fileheader.h"
 #include "document.h"
 

@@ -15,7 +15,7 @@ kde_module_LTLIBRARIES = liblatexexport.la
 # elementt.cc listetextzone.cc listefootnote.cc listepara.cc 
 
 liblatexexport_la_SOURCES = anchor.cc document.cc element.cc fileheader.cc footnote.cc \
-format.cc formula.cc latexexport.cc latexexportdia.cc \
+format.cc formula.cc latexexport.cc latexexportdia.cc latexexportdia.skel \
 layout.cc listtable.cc para.cc \
 pixmap.cc table.cc texte.cc textformat.cc textzone.cc variableformat.cc variablezone.cc \
 xml2latexparser.cc xmlparser.cc

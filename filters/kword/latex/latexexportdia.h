@@ -42,14 +42,17 @@
 #include <qvbuttongroup.h>
 
 #include <klocale.h>
+#include <dcopobject.h>
 
 #include <kdialogbase.h>
 #include "xml2latexparser.h"
 
-class LATEXExportDia : public KDialogBase
+class LATEXExportDia : public KDialogBase, public DCOPObject
 {
-
+	K_DCOP
+	
 	Q_OBJECT
+	
 	QString _fileIn;
 	QString _fileOut;
 	QByteArray _arrayIn;
@@ -69,8 +72,11 @@ class LATEXExportDia : public KDialogBase
 	private:
 		QVButtonGroup* styleBox,       *langBox,        *docBox;
 		QRadioButton*  latexStyleRBtn, *kwordStyleRBtn;	/* Document style */
-		QRadioButton*  unicodeRBtn,    *latin1RBtn;	/* Language       */
-		QRadioButton*  newDocRBtn,     *embededRBtn;	/* Language       */
+		QRadioButton*  unicodeRBtn,    *latin1RBtn;		/* Language       */
+		QRadioButton*  newDocRBtn,     *embededRBtn;	/* Latex file     */
+	
+	k_dcop:
+		void useDefaultConfig(){}
 
 	public slots:
 		virtual void slotOk();

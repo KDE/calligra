@@ -57,19 +57,19 @@ void Xml2LatexParser::analyse()
 	QDomNode balise;
 	balise = init();
 	//balise = getChild(balise, "DOC");
-	kdDebug() <<"ENTETE -> PAPER" << endl;
+	kdDebug() <<"HEADER -> PAPER" << endl;
 	_header.analysePaper(getChild(balise, "PAPER"));
-	kdDebug() <<"ENTETE -> ATTRIBUTES" << endl;
+	kdDebug() <<"HEADER -> ATTRIBUTES" << endl;
 	_header.analyseAttributs(getChild(balise, "ATTRIBUTES"));
-	kdDebug() <<"ENTETE -> FRAMESETS" << endl;
+	kdDebug() <<"HEADER -> FRAMESETS" << endl;
 	_document.analyse(getChild(balise, "FRAMESETS"));
-	kdDebug() <<"ENTETE -> FIN FRAMESETS" << endl;
-	//kdDebug() <<"ENTETE -> STYLES" << endl;
+	kdDebug() <<"HEADER -> END FRAMESETS" << endl;
+	//kdDebug() <<"HEADER -> STYLES" << endl;
 	//
-	kdDebug() <<"ENTETE -> PIXMAPS" << endl;
+	kdDebug() <<"HEADER -> PIXMAPS" << endl;
 	_document.analysePixmaps(getChild(balise, "PIXMAPS"));
-	//kdDebug() <<"ENTETE -> SERIALL" << endl;
-	kdDebug() << "FIN ANALYSE" << endl;
+	//kdDebug() <<"HEADER -> SERIALL" << endl;
+	kdDebug() << "END ANALYSE" << endl;
 }
 
 void Xml2LatexParser::generate()
@@ -82,8 +82,8 @@ void Xml2LatexParser::generate()
 			_header.generate(_out);
 		_document.generate(_out, !isEmbeded());
 		_out << getDocument();
+		_file.close();
 	}
 	else
 		kdDebug() << "Can't use the file ..." << endl;
-	_file.close();
 }
