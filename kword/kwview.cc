@@ -439,6 +439,11 @@ void KWView::setupActions()
     // TODO at the moment serial letters don't work correctly
     addVariableActions( VT_SERIALLETTER, KoSerialLetterVariable::actionTexts(), actionInsertVariable, QString::null );
 
+    actionInsertVariable->popupMenu()->insertSeparator();
+    actionRefreshAllVariable = new KAction( i18n( "&Refresh all variable" ), 0,
+                                    this, SLOT( refreshAllVariable() ),
+                                    actionCollection(), "refresh_all_variable" );
+    actionInsertVariable->insert(actionRefreshAllVariable);
 
     actionInsertExpression = new KActionMenu( i18n( "&Expression" ),
                                             actionCollection(), "insert_expression" );
@@ -3814,6 +3819,11 @@ void KWView::slotSoftHyphen()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->insertSoftHyphen();
+}
+
+void KWView::refreshAllVariable()
+{
+    m_doc->recalcVariables( VT_ALL );
 }
 
 /******************************************************************/

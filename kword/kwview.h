@@ -308,6 +308,8 @@ public slots:
 
     void slotSoftHyphen();
 
+    void refreshAllVariable();
+
     // end of slots
 
 protected:
@@ -461,6 +463,8 @@ private:
     KToggleAction *actionInlineFrame;
 
     KAction *actionOpenLink;
+
+    KAction *actionRefreshAllVariable;
 
     KoCharSelectDia *m_specialCharDlg;
     KWGUI *m_gui;
