@@ -214,12 +214,6 @@ static void ProcessStringValueTag ( QDomNode myNode, void *tagData, KWEFKWordLea
     ProcessOneAttrTag (myNode, "value", "QString", tagData, leader);
 }
 
-static void ProcessStringAlignTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
-{
-    ProcessOneAttrTag (myNode, "align", "QString", tagData, leader);
-}
-
-
 static void ProcessStringNameTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 {
     ProcessOneAttrTag (myNode, "name", "QString", tagData, leader);
@@ -911,6 +905,53 @@ static void ProcessLineSpaceTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     layout->lineSpacing     = spacingValue;
 }
 
+static void ProcessFlowTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
+{
+    LayoutData *layout = (LayoutData *) tagData;
+    
+    QString oldAlign, normalAlign;
+    
+    QValueList<AttrProcessing> attrProcessingList;
+    if ( leader->m_oldSyntax )
+    {
+        // KWord 0.8
+        attrProcessingList << AttrProcessing ( "align", oldAlign ); // KWord 0.8
+    }
+    // New syntax and some files from syntax 1
+    attrProcessingList << AttrProcessing ( "value", normalAlign );
+    attrProcessingList << AttrProcessing ( "dir" ); // ### TODO
+    ProcessAttributes (myNode, attrProcessingList);
+
+    if ( leader->m_oldSyntax && normalAlign.isEmpty() )
+    {
+        if ( oldAlign.isEmpty() )
+        {
+            layout->alignment = "left"; // KWord 0.8 did not support right-to-left
+        }
+        else
+        {
+            const int align = oldAlign.toInt();
+            if ( ( align < 0 ) || ( align > 3) )
+            {
+                kdWarning(30520) << "KWord 0.8 flow unknown: " << oldAlign << endl;
+                layout->alignment = "left"; // Unknown, so assume left
+            }
+            else
+            {
+                const char* flows[]={"left", "right", "center", "justify" };
+                layout->alignment = flows[ align ];
+            }
+        }
+        kdDebug(30520) << "KWord 0.8 flow: " << oldAlign << " corrected: " << layout->alignment << endl;
+    }
+    else
+    {
+        layout->alignment = normalAlign;
+    }
+
+}
+
+
 void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 // Processes <LAYOUT> and <STYLE>
 {
@@ -937,12 +978,12 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     tagProcessingList << TagProcessing ( "FORMAT",       ProcessFormatTag,            &formatDataList     );
     tagProcessingList << TagProcessing ( "TABULATOR",    ProcessLayoutTabulatorTag,   &layout->tabulatorList       );
     tagProcessingList << TagProcessing ( "SHADOW",       ProcessShadowTag,            layout                       );
+    tagProcessingList << TagProcessing ( "FLOW",         ProcessFlowTag,              layout );
 
     if ( leader->m_oldSyntax )
     {
         layout->indentLeft = 0.0; // ### TODO: needed or not?
         tagProcessingList
-            << TagProcessing ( "FLOW",   ProcessStringValueTag,    &layout->alignment )
             << TagProcessing ( "OHEAD",  ProcessOldLayoutChildTag, &layout->marginTop )
             << TagProcessing ( "OFOOT",  ProcessOldLayoutChildTag, &layout->marginBottom )
             << TagProcessing ( "ILEFT",  ProcessOldLayoutChildTag, &layout->indentLeft )
@@ -950,35 +991,8 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
             << TagProcessing ( "LINESPACE", ProcessLineSpaceTag,   layout )
             ;
     }
-    else
-    {
-        // ### TODO: <FLOW> can have a dir attribute
-        tagProcessingList << TagProcessing ( "FLOW", ProcessStringAlignTag, &layout->alignment );
-    }
 
     ProcessSubtags (myNode, tagProcessingList, leader);
-
-    if ( leader->m_oldSyntax )
-    {
-        if ( layout->alignment.isEmpty() )
-        {
-            layout->alignment = "left"; // KWord 0.8 did not support right-to-left
-        }
-        else
-        {
-            const char* flows[]={"left", "right", "center", "justify" };
-
-            int align = layout->alignment.toInt();
-            if ( ( align < 0 ) || ( align > 3) )
-                align = 0; // Unknown, so assume left
-
-            kdDebug(30520) << "KWord 0.8 flow: " << layout->alignment << " corrected: " << QString( flows[ align ] ) << endl;
-
-            layout->alignment = flows[ align ];
-        }
-    }
-
-
 
     if ( formatDataList.isEmpty () )
     {
