@@ -73,6 +73,9 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     m_addExpression->setEnabled(state);
     m_delExpression->setEnabled(state);
 
+    m_delGroup->setEnabled(state);
+    enableButtonOK( state );
+
     slotExpressionActivated(m_typeExpression->currentText() );
     resize(200,300);
 }
@@ -204,7 +207,7 @@ void KWEditPersonnalExpression::slotAddGroup()
         m_addExpression->setEnabled(true);
         m_delExpression->setEnabled(false);
         m_delGroup->setEnabled(true);
-
+        enableButtonOK( true );
     }
 }
 
