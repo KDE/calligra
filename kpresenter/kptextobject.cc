@@ -587,7 +587,7 @@ void KPTextObject::saveKTextObject( QTextStream& out )
 		    << "\" pointSize=\"" << lastFormat->font().pointSize()
 		    << "\" bold=\"" << (uint)lastFormat->font().bold()
 		    << "\" italic=\"" << (uint)lastFormat->font().italic()
-		    << "\" underline=\"" << (uint)lastFormat->font().italic()
+		    << "\" underline=\"" << (uint)lastFormat->font().underline()
 		    << "\" color=\"" << lastFormat->color().name()
 		    << "\">";
 	    }
@@ -630,7 +630,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
 		lastParag->setType( (KTextEditParag::Type)type );
 	    else
 		lastParag->setType( (KTextEditParag::Type)e.attribute( "type" ).toInt() );
-	    lastParag->setAlignment( e.attribute( "alignment" ).toInt() );
+	    lastParag->setAlignment( e.attribute( "align" ).toInt() );
 	    lastParag->setListDepth( e.attribute( "depth" ).toInt() );
 	    lineSpacing = QMAX( e.attribute( "lineSpacing" ).toInt(), lineSpacing );
 	    paragSpacing = QMAX( QMAX( e.attribute( "distBefore" ).toInt(), e.attribute( "distAfter" ).toInt() ), paragSpacing );

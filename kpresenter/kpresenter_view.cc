@@ -856,7 +856,7 @@ void KPresenterView::extraWebPres()
 #ifdef USE_QFD
         config = QFileDialog::getOpenFileName( QString::null, "KPresenter Web-Presentation (*.kpweb)" );
 #else
-        url = KFileDialog::getOpenURL( QString::null, "*.kpweb|KPresenter Web-Presentation" );
+        url = KFileDialog::getOpenURL( QString::null, "*.kpweb|KPresenter Web-Presentation (*.kpweb)" );
 
         if( url.isEmpty() )
           return;
@@ -1879,7 +1879,7 @@ void KPresenterView::setupActions()
                                       this, SLOT( extraOptions() ),
                                       actionCollection(), "extra_options" );
 
-    actionExtraWebPres = new KAction( i18n( "Create &Web-Presentation (HTML SLideshow)..." ),
+    actionExtraWebPres = new KAction( i18n( "Create &Web-Presentation (HTML Slideshow)..." ),
                                       "webpres", 0,
                                       this, SLOT( extraWebPres() ),
                                       actionCollection(), "extra_webpres" );

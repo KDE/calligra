@@ -51,7 +51,7 @@ OptionDia::OptionDia( QWidget *parent, const char *name )
     lRastX->resize( lRastX->sizeHint() );
 
     lRastY = new QLabel( general, "lRastY" );
-    lRastY->setText( i18n( "Vertikal Raster: " ) );
+    lRastY->setText( i18n( "Vertical Raster: " ) );
     lRastY->move( col1, lRastX->y()+lRastX->height()+15 );
     lRastY->resize( lRastY->sizeHint() );
 

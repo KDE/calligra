@@ -864,7 +864,7 @@ void KPWebPresentationCreateDialog::saveConfig()
 #ifdef USE_QFD
     filename = QFileDialog::getOpenFileName( filename, i18n("KPresenter Web-Presentation (*.kpweb)") );
 #else
-    KURL url = KFileDialog::getOpenURL( filename, i18n("*.kpweb|KPresenter Web-Presentation") );
+    KURL url = KFileDialog::getOpenURL( filename, i18n("*.kpweb|KPresenter Web-Presentation (*.kpweb)") );
 
     if( url.isEmpty() )
       return;
