@@ -21,7 +21,7 @@
 #define __koshell_window_h__
 
 #include <koMainWindow.h>
-#include <koQueryTypes.h>
+#include <koQueryTrader.h>
 #include <qlist.h>
 #include <qmap.h>
 #include <qvaluelist.h>

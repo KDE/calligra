@@ -30,7 +30,7 @@
 #include <klibloader.h>
 #include <kservice.h>
 
-#include <koQueryTypes.h>
+#include <koQueryTrader.h>
 #include <koKoolBar.h>
 #include <koDocumentInfo.h>
 #include <koDocument.h>
@@ -50,18 +50,16 @@ KoShellWindow::KoShellWindow()
   m_pFrame = new KoShellFrame( m_pLayout );
 
   m_grpFile = m_pKoolBar->insertGroup(i18n("Parts"));
-  m_lstComponents = KoDocumentEntry::query();
+  m_lstComponents = KoDocumentEntry::query( QString::null, 100 );
   QValueList<KoDocumentEntry>::Iterator it = m_lstComponents.begin();
   for( ; it != m_lstComponents.end(); ++it )
   {
-    //kdDebug() << "Inserting into koolbar : " << (*it).name << endl;
-    if ( !(*it).icon.isNull() )
-    {
-      int id = m_pKoolBar->insertItem( m_grpFile, DesktopIcon((*it).icon),
-                                       (*it).name,
+      //kdDebug() << "Inserting into koolbar : " << (*it).name << endl;
+      int id = m_pKoolBar->insertItem( m_grpFile,
+                                       DesktopIcon((*it).service()->icon()),
+                                       (*it).name(),
 				       this, SLOT( slotKoolBar( int, int ) ) );
       m_mapComponents[ id ] = &*it;
-    }
   }
 
   m_grpDocuments = m_pKoolBar->insertGroup(i18n("Documents"));
@@ -145,7 +143,8 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
     Page page;
     page.m_pDoc = doc;
     page.m_pView = v;
-    page.m_id = m_pKoolBar->insertItem( m_grpDocuments, DesktopIcon( m_documentEntry.icon ),
+    page.m_id = m_pKoolBar->insertItem( m_grpDocuments,
+                                        DesktopIcon( m_documentEntry.service()->icon() ),
                                         i18n("No name"),
                                         this, SLOT( slotKoolBar( int, int ) ) );
     kdDebug() << " New page has id " << page.m_id << " doc is " << doc << endl;
