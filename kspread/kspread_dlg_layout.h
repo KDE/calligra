@@ -214,6 +214,7 @@ public slots:
     void makeformat();
     void makeDateFormat();
     void makeTimeFormat();
+    QString makeFractionFormat();
     void init();
     void slotChangeValue(int);
     void formatChanged(int);
@@ -232,7 +233,7 @@ protected:
     QListBox *listFormat;
     QLabel *exampleLabel;
     CellLayoutDlg *dlg;
-
+    KSpreadCell::formatNumber cellFormatNumber;
     //test if value changed
     bool m_bFormatNumberChanged;
     bool m_bFormatColorChanged;

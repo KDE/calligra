@@ -29,11 +29,125 @@
 #include <dirent.h>
 #include <stdio.h>
 #include <string>
+#include <math.h>
 
 #include <klocale.h>
-
 #include <kapp.h>
+#include <kdebug.h>
 
+QString util_fractionFormat( double value , KSpreadCell::formatNumber _tmpFormat)
+{
+    double result = value-floor(value);
+    int index = 0;
+    QString tmp;
+    if(result == 0 )
+    {
+        tmp = tmp.setNum( value );
+    }
+    else
+    {
+        switch( _tmpFormat )
+        {
+            case KSpreadCell::fraction_half:
+                index=2;
+                break;
+            case KSpreadCell::fraction_quarter:
+                index=4;
+                break;
+            case KSpreadCell::fraction_eighth:
+                index=8;
+                break;
+            case KSpreadCell::fraction_sixteenth:
+                index=16;
+                break;
+            case KSpreadCell::fraction_tenth:
+                index=10;
+                break;
+            case KSpreadCell::fraction_hundredth:
+                index=100;
+                break;
+            case KSpreadCell::fraction_one_digit:
+                index=3;
+                break;
+            case KSpreadCell::fraction_two_digits:
+                index=4;
+                break;
+            case KSpreadCell::fraction_three_digits:
+                index=5;
+                break;
+            default:
+                kdDebug(36001)<<"Error in Fraction format\n";
+                break;
+        }
+
+        if( _tmpFormat !=KSpreadCell::fraction_three_digits
+            && _tmpFormat !=KSpreadCell::fraction_two_digits
+            && _tmpFormat !=KSpreadCell::fraction_one_digit)
+        {
+            double calc = 0;
+            int index1 = 1;
+            double diff = result;
+            for(int i=1;i<index;i++)
+            {
+                calc = i*1.0 / index;
+                if( fabs( result - calc ) < diff )
+                {
+                    index1=i;
+                    diff = fabs(result-calc);
+                }
+            }
+            tmp = tmp.setNum( floor(value) ) + " " + tmp.setNum( index1 ) + "/" + tmp.setNum( index );
+        }
+        else
+        {
+            int limit=0;
+
+            double precision=0;
+
+            if(_tmpFormat ==KSpreadCell::fraction_three_digits)
+                limit=999;
+            else if(_tmpFormat ==KSpreadCell::fraction_two_digits)
+                limit=99;
+            else if(_tmpFormat ==KSpreadCell::fraction_one_digit)
+                limit=9;
+            double denominator=0;
+            double numerator=0;
+            do
+            {
+                double val1=result;
+                double inter2=1;
+                double inter4=0;
+                double p=0;
+                double q=0;
+                double val2=rint(result);
+
+                precision=pow((float)10,(-1*index));
+                numerator=rint(result);
+                denominator=1;
+                while(fabs(numerator/denominator-result)>precision)
+                {
+                    val1=(1/(val1-val2));
+                    val2=rint(val1);
+                    p= val2*numerator + inter2;
+                    q= val2*denominator + inter4;
+                    inter2=numerator;
+                    inter4=denominator;
+                    numerator=p;
+                    denominator=q;
+                }
+                index--;
+            }
+            while (fabs(denominator)>limit) ;
+            if(fabs(denominator)==fabs(numerator))
+                tmp = tmp.setNum( floor(value+1) )+" ";
+            else
+                tmp = tmp.setNum( floor(value) ) + " " + tmp.setNum( fabs(numerator) ) + "/" + tmp.setNum( fabs(denominator) );
+        }
+
+    }
+
+    return tmp;
+}
 
 QString util_timeFormat( KLocale* locale, QTime m_Time, KSpreadCell::formatNumber tmpFormat)
 {

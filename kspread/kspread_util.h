@@ -116,5 +116,7 @@ QString util_dateFormat( KLocale* locale, QDate _date, KSpreadCell::formatNumber
 
 QString util_timeFormat( KLocale* locale, QTime _time, KSpreadCell::formatNumber _tmpFormat); 
 
+QString util_fractionFormat( double value , KSpreadCell::formatNumber _tmpFormat); 
+
 #endif
 

@@ -1315,7 +1315,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     case fraction_one_digit:
     case fraction_two_digits:
     case fraction_three_digits:
-        localizedNumber=createFractionFormat(value);
+        localizedNumber=util_fractionFormat( value , getFormatNumber(column(),row()));
         if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
             if(locale()->positiveSign().isEmpty())
@@ -1330,119 +1330,6 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     return localizedNumber;
 }
 
-QString KSpreadCell::createFractionFormat(double value)
-{
-    double result = value-floor(value);
-    int index = 0;
-    QString tmp;
-    if(result == 0 )
-    {
-        tmp = tmp.setNum( value );
-    }
-    else
-    {
-        switch( getFormatNumber(column(),row()))
-        {
-        case fraction_half:
-            index=2;
-            break;
-        case fraction_quarter:
-            index=4;
-            break;
-        case fraction_eighth:
-            index=8;
-            break;
-        case fraction_sixteenth:
-            index=16;
-            break;
-        case fraction_tenth:
-            index=10;
-            break;
-        case fraction_hundredth:
-            index=100;
-            break;
-        case fraction_one_digit:
-            index=3;
-            break;
-        case fraction_two_digits:
-            index=4;
-            break;
-        case fraction_three_digits:
-            index=5;
-            break;
-        default:
-            kdDebug(36001)<<"Error in Fraction format\n";
-            break;
-        }
-        formatNumber tmpFormat=getFormatNumber(column(),row());
-        if( tmpFormat !=fraction_three_digits
-        && tmpFormat !=fraction_two_digits
-        && tmpFormat !=fraction_one_digit)
-                {
-                double calc = 0;
-                int index1 = 1;
-                double diff = result;
-                for(int i=1;i<index;i++)
-                {
-                        calc = i*1.0 / index;
-                        if( fabs( result - calc ) < diff )
-                        {
-                        index1=i;
-                        diff = fabs(result-calc);
-                        }
-                }
-                tmp = tmp.setNum( floor(value) ) + " " + tmp.setNum( index1 ) + "/" + tmp.setNum( index );
-                }
-         else
-                {
-                int limit=0;
-
-                double precision=0;
-                formatNumber tmpFormat=getFormatNumber(column(),row());
-                if(tmpFormat ==fraction_three_digits)
-                        limit=999;
-                else if(tmpFormat ==fraction_two_digits)
-                        limit=99;
-                else if(tmpFormat ==fraction_one_digit)
-                        limit=9;
-                double denominator=0;
-                double numerator=0;
-                do
-                        {
-                        double val1=result;
-                        double inter2=1;
-                        double inter4=0;
-                        double p=0;
-                        double q=0;
-                        double val2=rint(result);
-
-                        precision=pow((float)10,(-1*index));
-                        numerator=rint(result);
-                        denominator=1;
-                        while(fabs(numerator/denominator-result)>precision)
-                                {
-                                val1=(1/(val1-val2));
-                                val2=rint(val1);
-                                p= val2*numerator + inter2;
-                                q= val2*denominator + inter4;
-                                inter2=numerator;
-                                inter4=denominator;
-                                numerator=p;
-                                denominator=q;
-                                }
-                        index--;
-                        }
-                while (fabs(denominator)>limit) ;
-                if(fabs(denominator)==fabs(numerator))
-                        tmp = tmp.setNum( floor(value+1) )+" ";
-                else
-                        tmp = tmp.setNum( floor(value) ) + " " + tmp.setNum( fabs(numerator) ) + "/" + tmp.setNum( fabs(denominator) );
-                }
-
-    }
-
-    return tmp;
-}
 
 
 void KSpreadCell::verifyCondition()
@@ -1559,107 +1446,107 @@ void KSpreadCell::offsetAlign( int _col,int _row )
         h = m_iExtraHeight;
     int tmpAngle=getAngle(_col,_row);
     switch( alignY(_col,_row) )
-    {
-    case KSpreadCell::Top:
-        if(tmpAngle!=0)
-            m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-        else
         {
-            if(tmpAngle<0)
-                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
-            else
-                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
-        }
-        break;
-    case KSpreadCell::Bottom:
-        if(!verticalText(_col,_row) && !multiRow(_col,_row) && !tmpAngle)
-            m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
-        else if(tmpAngle!=0)
-        {
-            if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
-                {
-                if( tmpAngle < 0 )
-                        m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
-                else
-                        m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row )+(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
-                }
+        case KSpreadCell::Top:
+            if(tmpAngle!=0)
+                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
             else
                 {
-                if( tmpAngle < 0 )
-                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
-                else
-                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
+                    if(tmpAngle<0)
+                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
+                    else
+                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
                 }
-        }
-        else if( multiRow(_col,_row) )
-        {
-            int tmpline=m_nbLines;
-            if(m_nbLines>1)
-                tmpline=m_nbLines-1;
-            if((h - BORDER_SPACE - m_iOutTextHeight*m_nbLines- bottomBorderWidth( _col, _row ))>0)
-                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight*tmpline- bottomBorderWidth( _col, _row );
-            else
-                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-        }
-        else
-            if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
-                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row )+m_fmAscent;
-            else
-                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-        break;
-    case KSpreadCell::Middle:
-        if(!verticalText(_col,_row) && !multiRow(_col,_row) && !tmpAngle)
-            m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
-        else if( tmpAngle != 0 )
-        {
-            if( ( h - m_iOutTextHeight ) > 0 )
-            {
-                if( tmpAngle < 0 )
-                        m_iTextY = ( h - m_iOutTextHeight ) / 2 ;
-                else
-                        m_iTextY = ( h - m_iOutTextHeight ) / 2 +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
-            }
-            else
+            break;
+        case KSpreadCell::Bottom:
+            if(!verticalText(_col,_row) && !multiRow(_col,_row) && !tmpAngle)
+                m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
+            else if(tmpAngle!=0)
                 {
-                if( tmpAngle < 0 )
-                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
-                else
-                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
+                    if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
+                        {
+                            if( tmpAngle < 0 )
+                                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
+                            else
+                                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row )+(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
+                        }
+                    else
+                        {
+                            if( tmpAngle < 0 )
+                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
+                            else
+                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
+                        }
                 }
-        }
-        else if( multiRow(_col,_row) )
-        {
-            int tmpline=m_nbLines;
-            if(m_nbLines==0)
-                tmpline=1;
-            if(( h - m_iOutTextHeight*tmpline )>0)
-                m_iTextY = ( h - m_iOutTextHeight*tmpline ) / 2 +m_fmAscent;
+            else if( multiRow(_col,_row) )
+                {
+                    int tmpline=m_nbLines;
+                    if(m_nbLines>1)
+                        tmpline=m_nbLines-1;
+                    if((h - BORDER_SPACE - m_iOutTextHeight*m_nbLines- bottomBorderWidth( _col, _row ))>0)
+                        m_iTextY = h - BORDER_SPACE - m_iOutTextHeight*tmpline- bottomBorderWidth( _col, _row );
+                    else
+                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+                }
             else
-                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-        }
-        else
-            if(( h - m_iOutTextHeight )>0)
+                if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
+                    m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row )+m_fmAscent;
+                else
+                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+            break;
+        case KSpreadCell::Middle:
+            if(!verticalText(_col,_row) && !multiRow(_col,_row) && !tmpAngle)
                 m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+            else if( tmpAngle != 0 )
+                {
+                    if( ( h - m_iOutTextHeight ) > 0 )
+                        {
+                            if( tmpAngle < 0 )
+                                m_iTextY = ( h - m_iOutTextHeight ) / 2 ;
+                            else
+                                m_iTextY = ( h - m_iOutTextHeight ) / 2 +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
+                        }
+                    else
+                        {
+                            if( tmpAngle < 0 )
+                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
+                            else
+                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
+                        }
+                }
+            else if( multiRow(_col,_row) )
+                {
+                    int tmpline=m_nbLines;
+                    if(m_nbLines==0)
+                        tmpline=1;
+                    if(( h - m_iOutTextHeight*tmpline )>0)
+                        m_iTextY = ( h - m_iOutTextHeight*tmpline ) / 2 +m_fmAscent;
+                    else
+                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+                }
             else
-                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-        break;
-    }
+                if(( h - m_iOutTextHeight )>0)
+                    m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+                else
+                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+            break;
+        }
     a=defineAlignX();
     if(m_pTable->getShowFormular())
         a = KSpreadCell::Left;
 
     switch( a )
-    {
-    case KSpreadCell::Left:
-        m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
-        break;
-    case KSpreadCell::Right:
-        m_iTextX = w - BORDER_SPACE - m_iOutTextWidth - rightBorderWidth( _col, _row );
-        break;
-    case KSpreadCell::Center:
-        m_iTextX = ( w - m_iOutTextWidth ) / 2;
-        break;
-    }
+        {
+        case KSpreadCell::Left:
+            m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
+            break;
+        case KSpreadCell::Right:
+            m_iTextX = w - BORDER_SPACE - m_iOutTextWidth - rightBorderWidth( _col, _row );
+            break;
+        case KSpreadCell::Center:
+            m_iTextX = ( w - m_iOutTextWidth ) / 2;
+            break;
+        }
 }
 
 void KSpreadCell::textSize( QPainter &_paint )

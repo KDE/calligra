@@ -693,7 +693,6 @@ protected:
     const KSpreadLayout* fallbackLayout( int col, int row ) const;
 
     QString createFormat( double value, int col, int row );
-    QString createFractionFormat( double value );
 
     /**
      * When you insert a cell at bottom or right
