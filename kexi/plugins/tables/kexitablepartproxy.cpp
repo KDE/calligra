@@ -34,6 +34,8 @@
 #include "kexiprojecthandleritem.h"
 #include "kexidatatable.h"
 #include "kexialtertable.h"
+#include "tables/kexitablefiltermanager.h"
+#include "tables/kexitableimportfilter.h"
 
 KexiTablePartProxy::KexiTablePartProxy(KexiTablePart *part,KexiView *view)
  : KexiProjectHandlerProxy(part,view),KXMLGUIClient()
@@ -55,6 +57,17 @@ KexiTablePartProxy::groupContext()
 	kdDebug() << "KexiTablePart::groupContext()" << endl;
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
 	m->insertAction(i18n("Create Table..."), SLOT(slotCreate()));
+	Filters f = m_tablePart->filters()->importFilters();
+	if(f.count() > 0)
+	{
+		QPopupMenu *menuImport = new QPopupMenu(m);
+		for(KexiTableFilterMeta *it = f.first(); it; it = f.next())
+		{
+			menuImport->insertItem(it->comment());
+		}
+		m->insertItem("Import...", menuImport);
+		connect(menuImport, SIGNAL(activated(int)), this, SLOT(slotImport(int)));
+	}
 
 	return m;
 }
@@ -147,6 +160,20 @@ void
 KexiTablePartProxy::executeItem(const QString& identifier)
 {
 	slotOpen(identifier);
+}
+
+void
+KexiTablePartProxy::slotImport(int filter)
+{
+	KexiTableFilterMeta *meta = m_tablePart->filters()->importFilters().at(0);
+	kdDebug() << "KexiTablePartProxy::slotImport(): f=" << filter << "meta: " << meta << endl;
+
+	if(!meta)
+		return;
+
+	KexiTableImportFilter *f = static_cast<KexiTableImportFilter*>(m_tablePart->filters()->getFilter(meta));
+	f->open(m_tablePart->kexiProject()->db());
+	m_tablePart->getTables();
 }
 
 #include "kexitablepartproxy.moc"

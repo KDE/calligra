@@ -10,6 +10,7 @@
 		<Action name="widget_url_requester"/>
 		<Action name="widget_frame"/>
 		<Action name="widget_tabwidget"/>
+		<Action name="widget_table"/>
 	</Menu>
 </MenuBar>
 
@@ -25,6 +26,7 @@
 	<Action name="widget_url_requester"/>
 	<Action name="widget_frame"/>
 	<Action name="widget_tabwidget"/>
+	<Action name="widget_table"/>
 </ToolBar>
 
 <ToolBar name="DBNavigation">

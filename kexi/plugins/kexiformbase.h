@@ -75,6 +75,7 @@ class KexiFormBase : public KexiDialogBase
 		void slotWidgetURLRequester();
 		void slotWidgetFrame();
 		void slotWidgetTabWidget();
+		void slotDataTable();
 
 		void slotToggleFormMode(bool state);
 

@@ -52,6 +52,7 @@
 #include "kexidataprovider.h"
 #include "kexirecordnavigator.h"
 #include "kexieventhandler.h"
+#include "kexidatatable.h"
 #include "formeditor/widgetcontainer.h"
 #include "formeditor/container_frame.h"
 #include "formeditor/container_tabwidget.h"
@@ -83,6 +84,9 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 		        m_urlreq = new KAction(i18n("URL Request"), "urlrequest",
 		                Key_F7, actionCollection(), "widget_url_requester");
 
+			m_table = new KAction(i18n("Data Table"), "table",
+				Key_F12, actionCollection(), "widget_table");
+
 		        m_frame = new KAction(i18n("Frame"), "frame",
 		                Key_F8, actionCollection(), "widget_frame");
 
@@ -101,6 +105,7 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 			m_dbLast = new KAction(i18n("Last"), "2rightarrow",
 				Key_F10, actionCollection(), "last");
 
+
 			setXMLFile("kexiformeditorui.rc");
 		}
 		virtual ~EditGUIClient(){;}
@@ -114,6 +119,7 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 			connect(m_frame,SIGNAL(activated()),o,SLOT(slotWidgetFrame()));
 			connect(m_tabWidget,SIGNAL(activated()),o,SLOT(slotWidgetTabWidget()));
 			connect(m_formMode, SIGNAL(toggled(bool)), o, SLOT(slotToggleFormMode(bool)));
+			connect(m_table, SIGNAL(activated()), o, SLOT(slotDataTable()));
 
 			connect(m_dbNext, SIGNAL(activated()), o, SLOT(slotDBNext()));
 			connect(m_dbPrev, SIGNAL(activated()), o, SLOT(slotDBPrev()));
@@ -145,6 +151,7 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 	KAction *m_urlreq;
 	KAction *m_frame;
 	KAction *m_tabWidget;
+	KAction *m_table;
 
 	KAction *m_dbFrist;
 	KAction *m_dbPrev;
@@ -346,6 +353,13 @@ void KexiFormBase::slotWidgetURLRequester()
 {
 	QWidget *w = new KURLRequester("urlrequest",topLevelEditor);
 	w->setName(m_item->widgetWatcher()->genName("urlrequest").latin1());
+	topLevelEditor->addInteractive(w);
+}
+
+void KexiFormBase::slotDataTable()
+{
+	QWidget *w = new KexiDataTable(0, this, "x", "user", true);
+	w->setName(m_item->widgetWatcher()->genName("datatabel").latin1());
 	topLevelEditor->addInteractive(w);
 }
 

@@ -24,10 +24,10 @@ endif
 
 rcdir = $(kde_datadir)/kexi
 rc_DATA = kexiui.rc kexiformeditorui.rc kexiquerydesignerui.rc kexiquerypartui.rc \
-	kexitablepartui.rc kexirelationhandlerui.rc kexiformpartui.rc
+	kexitablepartui.rc kexirelationhandlerui.rc kexiformpartui.rc 
 
 servicetypesdir = $(kde_servicetypesdir)
-servicetypes_DATA=kexihandler.desktop
+servicetypes_DATA=kexihandler.desktop kexitablefilter.desktop
 
 servicesdir=$(kde_servicesdir)/kexi
 services_DATA=kexitablehandler.desktop kexiqueryhandler.desktop kexirelationhandler.desktop kexiformhandler.desktop $(scripthandler)

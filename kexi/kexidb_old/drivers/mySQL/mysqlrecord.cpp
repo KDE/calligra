@@ -104,7 +104,7 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 				{
 					statement = forignUpdate((*it).field, value, key, false);
 				}
-//				kdDebug() << "MySqlRecord::commit(): query: " << statement << endl;
+				kdDebug() << "MySqlRecord::commit(): query: " << statement << endl;
 				m_db->query(statement);
 				(*it).done = true;
 			}
@@ -122,7 +122,7 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 				{
 					statement = forignUpdate((*it).field, value, "", true);
 				}
-//				kdDebug() << "MySqlRecord::commit(insert): " << statement << endl;
+				kdDebug() << "MySqlRecord::commit(insert): " << statement << endl;
 				m_db->query(statement);
 				m_insertList.remove(m_insertList.at(index));
 				(*it).done = true;

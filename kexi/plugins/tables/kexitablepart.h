@@ -25,6 +25,7 @@
 
 class QPixmap;
 class KexiTablePartProxy;
+class KexiTableFilterManager;
 
 class KexiTablePart : public KexiProjectHandler, public KexiDataProvider
 {
@@ -58,8 +59,11 @@ class KexiTablePart : public KexiProjectHandler, public KexiDataProvider
 			identifier,Parameters params);
         	virtual ParameterList parameters(QWidget*,const QString &identifier){}
 
+		KexiTableFilterManager *filters() { return m_filters; }
+
 	private:
 		QStringList m_tableNames;
+		KexiTableFilterManager *m_filters;
 };
 
 #endif

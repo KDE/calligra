@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2002   Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -18,37 +17,52 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXITABLEPARTPROXY_H
-#define KEXITABLEPARTPROXY_H
+#ifndef KEXICSVIMPORTFILTER_H
+#define KEXICSVIMPORTFILTER_H
 
+#include "kexitableimportfilter.h"
+#include <qmap.h>
 
-#include "kexiprojecthandlerproxy.h"
+class Preview;
+class KexiDB;
+//class KexiCSVImport;
+typedef QMap<int, int> DataTypes;
 
-class KexiTablePart;
-class KexiView;
-
-class KexiTablePartProxy : public KexiProjectHandlerProxy, public KXMLGUIClient
+class KexiCSVImport : public KexiTableImportFilter
 {
 	Q_OBJECT
 
-	public:
-		KexiTablePartProxy(KexiTablePart *part, KexiView *view);
-		virtual ~KexiTablePartProxy() {};
+	enum DataType
+	{
+		TypeVarchar = 0,
+		TypeInt = 1,
+		TypeDouble = 2
+	};
 
-		virtual KexiPartPopupMenu	*groupContext();
-		virtual KexiPartPopupMenu	*itemContext(const QString& identifier);
+	public:
+		KexiCSVImport(QObject *parent, const char *name, const QStringList &);
+		~KexiCSVImport();
+
+		virtual QString name();
+		virtual bool	open(KexiDB *);
+
+		bool		parseFile(const QString &file, ImportDlg *p);
 
 	public slots:
-		virtual void executeItem(const QString& identifier);	
-		void slotCreate();
-		void slotOpen(const QString& identifier);
-		void slotAlter(const QString& identifier);
-		void slotDrop(const QString& identifier);
+		void		reparse();
+		void		reparse(const QString &);
 
-		void slotImport(int filter);
+		void		colChanged(int, int);
+		void		headerChanged(const QString &);
+		void		typeChanged(int type);
+
+		void		import();
 
 	private:
-		KexiTablePart *m_tablePart;
+		ImportDlg	*m_dlg;
+		QString		m_file;
+		DataTypes	m_dataTypes;
+		KexiDB		*m_db;
 };
 
 #endif

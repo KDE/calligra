@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+ServiceTypes=Kexi/TableFilter
+
+Name=KexiCSVImport
+Comment=Import CSV File
+
+X-KDE-Library=kexicsvimport
+X-Kexi-Direction=import
