@@ -135,3 +135,29 @@ QString ShowSheetCommand::name() const
     if( n.length() > 64 ) n = i18n("Show Sheet");
     return n;
 }
+
+
+// ----- AddSheetCommand -----
+
+AddSheetCommand::AddSheetCommand( KSpreadSheet* s )
+{
+    sheet = s;
+    doc = sheet->doc();
+}
+
+void AddSheetCommand::execute()
+{
+    sheet->map()->insertTable( sheet );
+    doc->insertTable( sheet );
+}
+
+void AddSheetCommand::unexecute()
+{
+    sheet->map()->takeTable( sheet );
+    doc->takeTable( sheet );
+}
+
+QString AddSheetCommand::name() const
+{
+    return i18n("Add Table");
+}

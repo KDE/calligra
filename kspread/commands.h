@@ -37,11 +37,11 @@ class UndoWrapperCommand : public KCommand
 {
 public:
   UndoWrapperCommand( KSpreadUndoAction* undoAction );
-  
+
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
-  
+
 protected:
   KSpreadUndoAction* undoAction;
 };
@@ -56,11 +56,11 @@ class RenameSheetCommand : public KCommand
 {
 public:
   RenameSheetCommand( KSpreadSheet* sheet, QString name );
-  
+
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
-  
+
 protected:
   KSpreadSheet* sheet;
   QString oldName;
@@ -71,11 +71,11 @@ class HideSheetCommand : public KCommand
 {
 public:
   HideSheetCommand( KSpreadSheet* sheet );
-  
+
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
-  
+
 protected:
   KSpreadDoc* doc;
   QString sheetName;
@@ -85,15 +85,29 @@ class ShowSheetCommand : public KCommand
 {
 public:
   ShowSheetCommand( KSpreadSheet* sheet );
-  
+
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
-  
+
 protected:
   KSpreadDoc* doc;
   QString sheetName;
 };
 
+
+class AddSheetCommand : public KCommand
+{
+public:
+  AddSheetCommand( KSpreadSheet* sheet );
+
+  virtual void execute();
+  virtual void unexecute();
+  virtual QString name() const;
+
+protected:
+    KSpreadSheet* sheet;
+    KSpreadDoc* doc;
+};
 
 #endif /* KSPREAD_COMMANDS */

@@ -905,7 +905,7 @@ void ViewPrivate::initActions()
   actions->sheetProperties = new KAction( i18n("Sheet Properties..."),
       0, view, SLOT( sheetProperties() ), ac, "sheetProperties" );
   actions->sheetProperties->setToolTip(i18n("Modify current sheet's properties."));
-  
+
   actions->insertSheet = new KAction( i18n("Insert Sheet"),"inserttable",
       0, view, SLOT( insertTable() ), ac, "insertTable" );
   actions->insertSheet->setToolTip(i18n("Insert a new sheet."));
@@ -1508,8 +1508,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     // build the DCOP object
     dcopObject();
-    
-    connect( doc->commandHistory(), SIGNAL( commandExecuted() ), 
+
+    connect( doc->commandHistory(), SIGNAL( commandExecuted() ),
         this, SLOT( commandExecuted() ) );
 
     // GUI Initializations
@@ -3513,7 +3513,7 @@ void KSpreadView::sheetProperties()
     // sanity check, shouldn't happen
     if( d->workbook->isProtected() ) return;
     if( d->activeSheet->isProtected() ) return;
-    
+
     SheetPropertiesDialog* dlg = new SheetPropertiesDialog( this );
     dlg->setAutoCalc( d->activeSheet->getAutoCalc() );
     dlg->setShowGrid( d->activeSheet->getShowGrid() );
@@ -3524,7 +3524,7 @@ void KSpreadView::sheetProperties()
     dlg->setColumnAsNumber( d->activeSheet->getShowColumnNumber() );
     dlg->setLcMode( d->activeSheet->getLcMode() );
     dlg->setCapitalizeFirstLetter( d->activeSheet->getFirstLetterUpper() );
-    
+
     if( dlg->exec() )
     {
         d->activeSheet->setAutoCalc( dlg->autoCalc() );
@@ -3535,13 +3535,13 @@ void KSpreadView::sheetProperties()
         d->activeSheet->setShowFormulaIndicator( dlg->showFormulaIndicator() );
         d->activeSheet->setShowColumnNumber( dlg->columnAsNumber() );
         d->activeSheet->setLcMode( dlg->lcMode() );
-        d->activeSheet->setFirstLetterUpper( dlg->capitalizeFirstLetter() );    
-    
+        d->activeSheet->setFirstLetterUpper( dlg->capitalizeFirstLetter() );
+
         slotUpdateView( d->activeSheet );
-        
+
         // FIXME create command & undo object
     }
-    
+
     delete dlg;
 }
 
@@ -3558,8 +3558,10 @@ void KSpreadView::insertTable()
   KSpreadSheet * t = d->doc->createTable();
   d->doc->addTable( t );
   updateEditWidget();
-  KSpreadUndoAddTable *undo = new KSpreadUndoAddTable(d->doc, t);
-  d->doc->addCommand( undo );
+  KCommand* command = new AddSheetCommand( t );
+  d->doc->addCommand( command );
+  command->execute();
+
   setActiveTable( t );
 
   if ( d->workbook->visibleSheets().count() > 1 )
@@ -4838,7 +4840,7 @@ void KSpreadView::refreshView()
   int left = 0;
   if ( table->isRightToLeft() && d->doc->getShowVerticalScrollBar() )
     left = widthVScrollbar;
-    
+
   if (!d->doc->getShowHorizontalScrollBar())
     d->tabBar->setGeometry( left, height() - heightHScrollbar,
                             width(), heightHScrollbar );
@@ -6007,7 +6009,7 @@ void KSpreadView::slotRename()
 {
 
   KSpreadSheet * table = activeTable();
-  
+
   if( table->isProtected() )
   {
       KMessageBox::error( 0, i18n ( "You cannot change a protected sheet." ) );
@@ -6057,12 +6059,12 @@ void KSpreadView::slotRename()
       slotRename();
       return;
     }
-    
+
     KCommand* command = new RenameSheetCommand( table, newName );
     d->doc->addCommand( command );
     command->execute();
-    
-    //table->setTableName( newName );    
+
+    //table->setTableName( newName );
 
     d->doc->emitBeginOperation(false);
     updateEditWidget();
