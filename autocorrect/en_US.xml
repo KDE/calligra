@@ -3785,6 +3785,7 @@
     <item find="you;d" replace="you'd" />
     <item find="(R)" replace="®" />
     <item find="(c)" replace="©" />
+    <item find="--" replace="—" />
     <item find="Altanta" replace="Atlanta" />
     <item find="Amrica" replace="America" />
     <item find="Britian" replace="Britain" />

@@ -5,6 +5,7 @@
   <item find="(R)" replace="®" />
   <item find="(c)" replace="©" />
   <item find="(r)" replace="®" />
+  <item find="--" replace="—" />
  </items>
  <SuperScript>
   <superscript find="1st" super="st" />
