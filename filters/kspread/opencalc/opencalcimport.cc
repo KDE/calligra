@@ -508,18 +508,31 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
       else
         text = textP.text(); // our text, could contain formating for value or result of formula
     }
-
     QDomElement annotation = e.namedItem( "office:annotation" ).toElement();
     if ( !annotation.isNull() )
     {
-      QDomElement comment = annotation.namedItem( "text:p" ).toElement();
-      if ( !comment.isNull() )
-      {
-        if ( !cell )
-          cell = table->nonDefaultCell( columns, row );
+       QString comment;
+        QDomNode node = annotation.firstChild();
+        while( !node.isNull() )
+        {
+            QDomElement commentElement = node.toElement();
+            if( !commentElement.isNull() )
+                if( commentElement.tagName() == "text:p" )
+                {
+                    if( !comment.isEmpty() ) comment.append( '\n' );
+                    comment.append( commentElement.text() );
+                }
 
-        cell->setComment( comment.text() );
-      }
+            node = node.nextSibling();
+        }
+
+        if( !comment.isEmpty() )
+        {
+            if ( !cell )
+                cell = table->nonDefaultCell( columns, row );
+            kdDebug()<<" columns :"<<columns<<" row :"<<row<<endl;
+            cell->setComment( comment );
+        }
     }
 
     kdDebug(30518) << "Contains: " << text << endl;
