@@ -1,0 +1,17 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Form Designer KDevelop Plugin
+Name[cy]=Dylunydd Ffurflenni
+Name[es]=Diseñador de formularios
+Name[et]=Vormikujundaja
+Name[pt]=Desenho de Formulários
+Name[pt_BR]=Desenhista de Formulário
+Name[sr]=Дизајнер форми
+Name[sr@Latn]=Дизајнер форми
+Name[sv]=Formulärkonstruktion
+Name[ta]=படிவ வடிவமைப்பாளர்
+Name[tg]=Дизайнгари шакл
+MimeType=application/x-designer;
+ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-Library=libkformdesigner_kdev_part
+Type=Service
