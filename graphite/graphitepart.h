@@ -52,14 +52,14 @@ public:
     virtual void addShell(KoMainWindow *shell);
 
     // will return NPageSize if "Custom"!
-    QPrinter::PageSize pageSize() const;
+    KPrinter::PageSize pageSize() const;
     // returns(!) the height/width
     void pageSize(double &width, double &height) const;
-    void setPageSize(const QPrinter::PageSize &pageSize); // implies Norm
+    void setPageSize(const KPrinter::PageSize &pageSize); // implies Norm
     void setPageSize(const double &width, const double &height); // implies Custom
 
-    QPrinter::Orientation pageOrientation() const { return m_pageLayout.orientation; }
-    void setPageOrientation(const QPrinter::Orientation &orientation);
+    KPrinter::Orientation pageOrientation() const { return m_pageLayout.orientation; }
+    void setPageOrientation(const KPrinter::Orientation &orientation);
 
     Graphite::PageBorders pageBorders() const { return m_pageLayout.borders; }
     // note: only commands should use addCommand==false

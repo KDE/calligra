@@ -80,7 +80,7 @@ int main() {
     kdDebug() << "------> Page Size:" << endl;
     QString tmp=QString::number(Graphite::pageWidth[0]);
     tmp+=QChar(' ');
-    for(int i=1; i<=QPrinter::NPageSize; ++i) {
+    for(int i=1; i<=KPrinter::NPageSize; ++i) {
         tmp+=QString::number(Graphite::pageWidth[i]);
         tmp+=QChar(' ');
     }
@@ -88,7 +88,7 @@ int main() {
 
     tmp=QString::number(Graphite::pageHeight[0]);
     tmp+=QChar(' ');
-    for(int i=1; i<=QPrinter::NPageSize; ++i) {
+    for(int i=1; i<=KPrinter::NPageSize; ++i) {
         tmp+=QString::number(Graphite::pageHeight[i]);
         tmp+=QChar(' ');
     }
@@ -135,8 +135,8 @@ int main() {
     kdDebug() << "------> PageLayout (struct):" << endl;
     Graphite::PageLayout p1;
     pageOut("PageLayout p1", p1);
-    p1.size=QPrinter::B5;
-    p1.orientation=QPrinter::Landscape;
+    p1.size=KPrinter::B5;
+    p1.orientation=KPrinter::Landscape;
     p1.customWidth=100.0;
     p1.borders=b3;
     pageOut("PageLayout p1, changed", p1);
@@ -145,7 +145,7 @@ int main() {
     pageOut("PageLayout p2(p1))", p2);
     kdDebug() << "p1==p2: " << static_cast<int>(p1==p2) << endl;
     kdDebug() << "p1!=p2: " << static_cast<int>(p1!=p2) << endl;
-    p2.size=QPrinter::A0;
+    p2.size=KPrinter::A0;
     kdDebug() << "changing..." << endl;
     kdDebug() << "p1==p2: " << static_cast<int>(p1==p2) << endl;
     kdDebug() << "p1!=p2: " << static_cast<int>(p1!=p2) << endl << endl;

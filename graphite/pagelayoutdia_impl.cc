@@ -22,6 +22,7 @@
 #include <qcombobox.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
+#include <kprinter.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
@@ -247,14 +248,14 @@ void PageLayoutDiaImpl::formatChanged(int f) {
         m_layout.layout=Graphite::PageLayout::Norm;
         width->setEnabled(false);
         height->setEnabled(false);
-        m_layout.size=static_cast<QPrinter::PageSize>(f-1);
+        m_layout.size=static_cast<KPrinter::PageSize>(f-1);
         updateWH();
         emit updatePreview();
     }
 }
 
 void PageLayoutDiaImpl::orientationChanged(int o) {
-    m_layout.orientation=static_cast<QPrinter::Orientation>(o);
+    m_layout.orientation=static_cast<KPrinter::Orientation>(o);
     updateWH();
     emit updatePreview();
 }

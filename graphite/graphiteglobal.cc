@@ -204,7 +204,7 @@ PageLayout &PageLayout::operator=(const PageLayout &rhs) {
 }
 
 void PageLayout::setWidth(const double &width) {
-    if(orientation==QPrinter::Portrait)
+    if(orientation==KPrinter::Portrait)
         customWidth=width;
     else
         customHeight=width;
@@ -213,13 +213,13 @@ void PageLayout::setWidth(const double &width) {
 double PageLayout::width() const {
 
     if(layout==Graphite::PageLayout::Norm) {
-        if(orientation==QPrinter::Portrait)
+        if(orientation==KPrinter::Portrait)
             return Graphite::pageWidth[size];
         else
             return Graphite::pageHeight[size];
     }
     else {
-        if(orientation==QPrinter::Portrait)
+        if(orientation==KPrinter::Portrait)
             return customWidth;
         else
             return customHeight;
@@ -227,7 +227,7 @@ double PageLayout::width() const {
 }
 
 void PageLayout::setHeight(const double &height) {
-    if(orientation==QPrinter::Portrait)
+    if(orientation==KPrinter::Portrait)
         customHeight=height;
     else
         customWidth=height;
@@ -236,13 +236,13 @@ void PageLayout::setHeight(const double &height) {
 double PageLayout::height() const {
 
     if(layout==Graphite::PageLayout::Norm) {
-        if(orientation==QPrinter::Portrait)
+        if(orientation==KPrinter::Portrait)
             return Graphite::pageHeight[size];
         else
             return Graphite::pageWidth[size];
     }
     else {
-        if(orientation==QPrinter::Portrait)
+        if(orientation==KPrinter::Portrait)
             return customHeight;
         else
             return customWidth;
@@ -274,12 +274,12 @@ void PageLayout::loadDefaults() {
 
     KConfig *config=KGlobal::config();
     config->setGroup(QString::fromLatin1("PageLayout"));
-    orientation=static_cast<QPrinter::Orientation>(config->readNumEntry(QString::fromLatin1("Orientation"), 0));
+    orientation=static_cast<KPrinter::Orientation>(config->readNumEntry(QString::fromLatin1("Orientation"), 0));
     if(config->readNumEntry(QString::fromLatin1("Layout"), 0)==0)
         layout=Graphite::PageLayout::Norm;
     else
         layout=Graphite::PageLayout::Custom;
-    size=static_cast<QPrinter::PageSize>(config->readNumEntry(QString::fromLatin1("Size"), 0));
+    size=static_cast<KPrinter::PageSize>(config->readNumEntry(QString::fromLatin1("Size"), 0));
     customWidth=config->readDoubleNumEntry(QString::fromLatin1("CustomWidth"), 210.0);
     customHeight=config->readDoubleNumEntry(QString::fromLatin1("CustomHeight"), 297.0);
     borders.top=config->readDoubleNumEntry(QString::fromLatin1("TopBorder"), 10.0);

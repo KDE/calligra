@@ -103,14 +103,14 @@ void GraphitePart::addShell(KoMainWindow *shell) {
     KoDocument::addShell(shell);
 }
 
-QPrinter::PageSize GraphitePart::pageSize() const {
-    return m_pageLayout.layout==Graphite::PageLayout::Norm ? m_pageLayout.size : QPrinter::NPageSize;
+KPrinter::PageSize GraphitePart::pageSize() const {
+    return m_pageLayout.layout==Graphite::PageLayout::Norm ? m_pageLayout.size : KPrinter::NPageSize;
 }
 
 void GraphitePart::pageSize(double &width, double &height) const {
 
     if(m_pageLayout.layout==Graphite::PageLayout::Norm) {
-        if(m_pageLayout.orientation==QPrinter::Portrait) {
+        if(m_pageLayout.orientation==KPrinter::Portrait) {
             width=Graphite::pageWidth[m_pageLayout.size];
             height=Graphite::pageHeight[m_pageLayout.size];
         }
@@ -120,7 +120,7 @@ void GraphitePart::pageSize(double &width, double &height) const {
         }
     }
     else {
-        if(m_pageLayout.orientation==QPrinter::Portrait) {
+        if(m_pageLayout.orientation==KPrinter::Portrait) {
             width=m_pageLayout.customWidth;
             height=m_pageLayout.customHeight;
         }
@@ -131,7 +131,7 @@ void GraphitePart::pageSize(double &width, double &height) const {
     }
 }
 
-void GraphitePart::setPageSize(const QPrinter::PageSize &pageSize) {
+void GraphitePart::setPageSize(const KPrinter::PageSize &pageSize) {
     if(m_pageLayout.size!=pageSize) {
         m_pageLayout.size=pageSize;
         m_pageLayout.layout=Graphite::PageLayout::Norm;
@@ -141,7 +141,7 @@ void GraphitePart::setPageSize(const QPrinter::PageSize &pageSize) {
 
 void GraphitePart::setPageSize(const double &width, const double &height) {
 
-    if(m_pageLayout.orientation==QPrinter::Portrait) {
+    if(m_pageLayout.orientation==KPrinter::Portrait) {
         m_pageLayout.customWidth=width;
         m_pageLayout.customHeight=height;
     }
@@ -153,7 +153,7 @@ void GraphitePart::setPageSize(const double &width, const double &height) {
     updatePage();
 }
 
-void GraphitePart::setPageOrientation(const QPrinter::Orientation &orientation) {
+void GraphitePart::setPageOrientation(const KPrinter::Orientation &orientation) {
     if(m_pageLayout.orientation!=orientation) {
         m_pageLayout.orientation=orientation;
         updatePage();

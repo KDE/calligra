@@ -21,7 +21,7 @@
 #define GRAPHITE_GLOBAL_H
 
 #include <qvaluelist.h>
-#include <qprinter.h>  // QPrinter enums
+#include <kprinter.h>  // KPrinter enums
 #include <kimageeffect.h>   // KImageEffect enum
 
 class QPoint;
@@ -127,8 +127,8 @@ bool operator==(const PageBorders &lhs, const PageBorders &rhs);
 bool operator!=(const PageBorders &lhs, const PageBorders &rhs);
 
 struct PageLayout {
-    PageLayout() : orientation(QPrinter::Portrait), layout(Norm),
-        size(QPrinter::A4), customWidth(-1.0), customHeight(-1.0) {}
+    PageLayout() : orientation(KPrinter::Portrait), layout(Norm),
+        size(KPrinter::A4), customWidth(-1.0), customHeight(-1.0) {}
     PageLayout &operator=(const PageLayout &rhs);
     void setWidth(const double &width);
     double width() const;
@@ -140,9 +140,9 @@ struct PageLayout {
     void saveDefaults();
     void loadDefaults();
 
-    QPrinter::Orientation orientation;
+    KPrinter::Orientation orientation;
     enum { Norm, Custom } layout;
-    QPrinter::PageSize size;
+    KPrinter::PageSize size;
     double customWidth;
     double customHeight;
     PageBorders borders;
