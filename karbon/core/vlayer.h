@@ -70,12 +70,11 @@ public:
 
 	void setName( const QString& name ) { m_name = name; }
 	const QString& name() { return m_name; }
-	
-	void setSelected( bool state ) { m_selected = state; }
-	bool selected() { return m_selected; }
+
+	void setSelected( bool state ) { setState( state ? VObject::selected : VObject::normal ); }
+	bool selected() { return state() == VObject::selected; }
 
 private:
-	bool    m_selected; /// True if the layer is checked in the layer docker
 	QString m_name;     /// id for the layer
 	DCOPObject *dcop;
 };
