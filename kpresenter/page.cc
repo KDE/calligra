@@ -1099,6 +1099,12 @@ void Page::keyPressEvent( QKeyEvent *e )
 	    case Key_Left:
 		moveObject( -1, 0, true );
 		break;
+	    case Key_Delete: case Key_Backspace:
+		view->editDelete();
+		break;
+	    case Key_Escape:
+		setToolEditMode( TEM_MOUSE );
+		break;
 	    default: break;
 	    }
 	}
@@ -1133,12 +1139,6 @@ void Page::keyPressEvent( QKeyEvent *e )
 	    break;
 	case Key_End:
 	    view->getVScrollBar()->setValue( view->getVScrollBar()->maxValue());
-	    break;
-	case Key_Delete:
-	    view->editDelete();
-	    break;
-	case Key_Escape:
-	    setToolEditMode( TEM_MOUSE );
 	    break;
 	default: break;
 	}
