@@ -64,6 +64,7 @@
 
 #include <kapp.h>
 #include <kfiledialog.h>
+#include <kstdaction.h>
 #include <klocale.h>
 #include <qrect.h>
 #undef Bool
@@ -225,27 +226,18 @@ void KWordView::setupActions()
 {
     // -------------- Edit actions
 
-    actionEditUndo = new KAction( i18n( "No Undo possible" ), KWBarIcon("undo"), ALT + Key_Backspace,
-				  this, SLOT( editUndo() ),
-				  actionCollection(), "edit_undo" );
-    actionEditRedo = new KAction( i18n( "No Redo possible" ), KWBarIcon("redo"), 0,
-				  this, SLOT( editRedo() ),
-				  actionCollection(), "edit_redo" );
-    actionEditCut = new KAction( i18n( "&Cut" ), KWBarIcon("editcut"), CTRL + Key_X,
-				 this, SLOT( editCut() ),
-				 actionCollection(), "edit_cut" );
-    actionEditCopy = new KAction( i18n( "C&opy" ), KWBarIcon("editcopy"), CTRL + Key_C,
-				  this, SLOT( editCopy() ),
-				  actionCollection(), "edit_copy" );
-    actionEditPaste = new KAction( i18n( "&Paste" ), KWBarIcon("editpaste"), CTRL + Key_V,
-				   this, SLOT( editPaste() ),
-				   actionCollection(), "edit_paste" );
-    actionEditFind = new KAction( i18n( "&Find and Replace..." ), KWBarIcon("kwsearch"), CTRL + Key_F,
-				  this, SLOT( editFind() ),
-				  actionCollection(), "edit_find" );
-    actionEditSelectAll = new KAction( i18n( "&Select all" ), ALT + Key_A,
-				       this, SLOT( editSelectAll() ),
-				       actionCollection(), "edit_selectall" );
+    actionEditUndo = KStdAction::undo( this, SLOT( editUndo() ), actionCollection(), "edit_undo" );
+    actionEditUndo->setText( i18n( "No Undo possible" ) );
+    actionEditUndo->setEnabled(false);
+    actionEditRedo = KStdAction::redo( this, SLOT( editRedo() ), actionCollection(), "edit_redo" );
+    actionEditRedo->setText( i18n( "No Redo possible" ) );
+    actionEditRedo->setEnabled(false);
+    actionEditCut = KStdAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
+    actionEditCopy = KStdAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
+    actionEditPaste = KStdAction::paste( this, SLOT( editPaste() ), actionCollection(), "edit_paste" );
+    actionEditFind = KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
+    actionEditFind->setText( i18n( "&Find and Replace..." ) );
+    actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     actionEditDelFrame = new KAction( i18n( "&Delete Frame" ), 0,
 				      this, SLOT( editDeleteFrame() ),
 				      actionCollection(), "edit_delframe" );
@@ -609,9 +601,7 @@ void KWordView::setupActions()
 
     // ---------------------- Extra actions
 
-    actionExtraSpellCheck = new KAction( i18n( "&Spell Checking..." ), KWBarIcon("spellcheck"), 0,
-					 this, SLOT( extraSpelling() ),
-					 actionCollection(), "extra_spellcheck" );
+    actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
     actionExtraAutocorrection = new KAction( i18n( "&Autocorrection..." ), 0,
 					 this, SLOT( extraAutoFormat() ),
 					 actionCollection(), "extra_autocorrection" );

@@ -58,6 +58,7 @@
 
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+#include <kstdaction.h>
 
 #include "kpresenter_view.h"
 #include "kpresenter_view.moc"
@@ -1684,39 +1685,26 @@ void KPresenterView::setupActions()
 {
     // -------------- Edit actions
 
-    actionEditUndo = new KAction( i18n( "No Undo possible" ), "undo", ALT + Key_Z,
-				  this, SLOT( editUndo() ),
-				  actionCollection(), "edit_undo" );
-    actionEditRedo = new KAction( i18n( "No Redo possible" ), "redo", 0,
-				  this, SLOT( editRedo() ),
-				  actionCollection(), "edit_redo" );
-    actionEditCut = new KAction( i18n( "&Cut" ), "editcut", CTRL + Key_X,
-				 this, SLOT( editCut() ),
-				 actionCollection(), "edit_cut" );
-    actionEditCopy = new KAction( i18n( "C&opy" ), "editcopy", CTRL + Key_C,
-				  this, SLOT( editCopy() ),
-				  actionCollection(), "edit_copy" );
-    actionEditPaste = new KAction( i18n( "&Paste" ), "editpaste", CTRL + Key_V,
-				   this, SLOT( editPaste() ),
-				   actionCollection(), "edit_paste" );
+    actionEditUndo = KStdAction::undo( this, SLOT( editUndo() ), actionCollection(), "edit_undo" );
+    actionEditUndo->setText( i18n( "No Undo possible" ) );
+    actionEditRedo = KStdAction::redo( this, SLOT( editRedo() ), actionCollection(), "edit_redo" );
+    actionEditRedo->setText( i18n( "No Redo possible" ) );
+
+    actionEditCut = KStdAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
+    actionEditCopy = KStdAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
+    actionEditPaste = KStdAction::paste( this, SLOT( editPaste() ), actionCollection(), "edit_paste" );
     actionEditDelete = new KAction( i18n( "&Delete" ), KPBarIcon("delete"), CTRL + Key_Delete,
 				    this, SLOT( editDelete() ),
 				    actionCollection(), "edit_delete" );
-    actionEditSelectAll = new KAction( i18n( "&Select All" ), ALT + Key_A,
-				       this, SLOT( editSelectAll() ),
-				       actionCollection(), "edit_selectall" );
+    actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     actionEditCopyPage = new KAction( i18n( "Copy &Page to Clipboard" ), KPBarIcon("newslide"),
 				      0, this, SLOT( editCopyPage() ),
 				      actionCollection(), "edit_copypage" );
     actionEditDelPage = new KAction( i18n( "Delete &Page..." ), KPBarIcon("delslide"), 0,
 				     this, SLOT( editDelPage() ),
 				     actionCollection(), "edit_delpage" );
-    actionEditFind = new KAction( i18n( "&Find..." ), CTRL + Key_F,
-				  this, SLOT( editFind() ),
-				  actionCollection(), "edit_find" );
-    actionEditFindReplace = new KAction( i18n( "&Replace..." ), CTRL + Key_R,
-					 this, SLOT( editFindReplace() ),
-					 actionCollection(), "edit_findreplace" );
+    actionEditFind = KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
+    actionEditFindReplace = KStdAction::replace( this, SLOT( editFindReplace() ), actionCollection(), "edit_findreplace" );
     actionEditHeaderFooter = new KAction( i18n( "&Header/Footer..." ), 0,
 					  this, SLOT( editHeaderFooter() ),
 					  actionCollection(), "edit_headerfooter" );

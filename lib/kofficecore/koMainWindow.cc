@@ -124,11 +124,13 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 			this, SLOT( slotDocumentInfo() ),
 			actionCollection(), "file_documentinfo" );
 
-    (void) new KAction( i18n( "Configure &Keys..." ), 0, this,
-      SLOT( slotConfigureKeys() ), actionCollection(), "configurekeys" );
+    KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection(), "configurekeys" );
+    //(void) new KAction( i18n( "Configure &Keys..." ), 0, this,
+    //  SLOT( slotConfigureKeys() ), actionCollection(), "configurekeys" );
 
-    (void) new KAction( i18n( "Configure Tool&bars..." ), 0, this,
-      SLOT( slotConfigureToolbars() ), actionCollection(), "configuretoolbars" );
+    KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection(), "configuretoolbars" );
+    //(void) new KAction( i18n( "Configure Tool&bars..." ), 0, this,
+    //  SLOT( slotConfigureToolbars() ), actionCollection(), "configuretoolbars" );
 
     KHelpMenu * m_helpMenu = new KHelpMenu( this );
     KStdAction::helpContents( m_helpMenu, SLOT( appHelpActivated() ), actionCollection(), "contents" );
