@@ -18,7 +18,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-
 #include <qfile.h>
 #include <qapp.h>
 
@@ -36,7 +35,6 @@
 
 #include <unistd.h>
 #include <assert.h>
-
 
 class KoFilterManagerPrivate {
 
@@ -89,7 +87,7 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
 {
     QString service;
     service = "'";
-    service += _format;
+    service += QString::fromLatin1(_format);
     service += "' in ";
     if ( direction == Import )
         service += "Export";
@@ -180,7 +178,7 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
     QString service;
     service = "'";
-    service += _format;
+    service += QString::fromLatin1(_format);
     service += "' in ";
     if ( direction == Import )
         service += "Export";
@@ -286,7 +284,7 @@ QString KoFilterManager::import( const QString & _file, const char *_native_form
     }
     else {
         kdDebug(30003) << "No MimeType found. Setting " << _native_format << endl;
-        mimeType = _native_format;
+        mimeType = QString::fromLatin1(_native_format);
     }
 
     if ( mimeType == _native_format || mimeType == "application/x-gzip" || mimeType == "text/xml" )
@@ -328,10 +326,9 @@ QString KoFilterManager::import( const QString & _file, const char *_native_form
             //kdDebug(30003) << "XXXXXXXXXXX file XXXXXXXXXXXXXX" << endl;
             KTempFile tempFile; // create with default file prefix, extension and mode
             if (tempFile.status() != 0)
-                return "";
-            tempfname = QFile::encodeName(tempFile.name());
+                return QString::null;
+            tempfname=tempFile.name();
             ok=filter->filter( file, tempfname, mimeType, _native_format, d->config );
-            tempfname=tempFile.name(); // hack for -DQT_NO_BLAH stuff
         }
         else if(vec[i].implemented.lower()=="qdom") {
             //kdDebug(30003) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
@@ -359,14 +356,14 @@ QString KoFilterManager::import( const QString & _file, const char *_native_form
     }
     if(ok && vec[i-1].implemented.lower()=="file")
         return tempfname;
-    return "";
+    return QString::null;
 }
 
 QString KoFilterManager::prepareExport( const QString & file, const char *_native_format,
                                         const KoDocument *document )
 {
     d->exportFile=file;
-    d->native_format=_native_format;
+    d->native_format=QString::fromLatin1(_native_format);
     d->document=document;
     KURL url( d->exportFile );
 
