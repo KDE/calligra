@@ -33,6 +33,10 @@ More bugs:
 - Setting a paragraph to a new style should override ALL settings, including size of the characters.
 - RMB click on a table and asking for the properties should start the table dialog, not the
   frame dialog.
+- Tables can not expand to next page, the append page bugs..
+- Table cells can get to small, which causes kword to crash or end in an edless loop.
+- Don't call dialog to say last frame of frameset will be deleted, bla bla if there is no text in
+  frameset.
 
 Add functionality:
 - Even/odd pages
@@ -42,7 +46,7 @@ Add functionality:
 - split frame
 - Frame Run around is the wrong way around.. Framedia does it correct now. 
   still needs to be done correctly in kword_doc
-- 
+- split (table) cells needs to be implementated
 
 Find out if this is done correctly:
   CMYK images are read
