@@ -1,0 +1,7 @@
+This is old and NOT compiled.
+It's still there so that somebody can check that all it's features
+are in the kdelibs/kformula library before deleting this directory.
+
+Formulas are now handled by that library, not by a part anymore.
+
+David Faure <faure@kde.org>
