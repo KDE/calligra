@@ -68,15 +68,14 @@ public:
 
     static void scaleAllFonts();
 
-    KWUserFont* getUserFont() { return userFont; }
-    unsigned int getPTSize() { return ptSize; }
+    KWUserFont* getUserFont() const;
+    unsigned int getPTSize() const;
 
-    unsigned int getPTAscender() { return fm.ascent(); }
-    unsigned int getPTDescender() { return fm.descent() + 2; }
+    unsigned int getPTAscender() const;
+    unsigned int getPTDescender() const;
 
-    unsigned int getPTWidth( QString _text );
-    unsigned int getPTWidth( char &_c );
-    unsigned int getPTWidth( QChar &_c );
+    unsigned int getPTWidth( QString _text ) const;
+    unsigned int getPTWidth( const QChar &_c ) const;
 
     void setPTSize( int _size );
     void setWeight( int _weight );
@@ -85,19 +84,99 @@ public:
 
 protected:
     QFontMetrics fm;
-
     unsigned int ptSize;
-
-    /**
-     * Pointer to the user font family this font belongs to.
-     */
+    int widths[ 65536 ];
+    int asc, desc;
     KWUserFont *userFont;
-    /**
-     * Poiner to the document this font belongs to.
-     */
     KWordDocument *document;
 
 };
+
+inline void KWDisplayFont::setPTSize( int _size )
+{
+    ptSize = _size;
+    setPointSize( _size );
+    fm = QFontMetrics( *this );
+    for ( int i = 0; i < 65536; ++i )
+	widths[ i ] = 0;
+    asc = fm.ascent();
+    desc = fm.descent();
+}
+
+inline void KWDisplayFont::setWeight( int _weight )
+{
+    QFont::setWeight( _weight );
+    fm = QFontMetrics( *this );
+    for ( int i = 0; i < 65536; ++i )
+	widths[ i ] = 0;
+    asc = fm.ascent();
+    desc = fm.descent();
+}
+
+inline void KWDisplayFont::setItalic( bool _italic )
+{
+    QFont::setItalic( _italic );
+    fm = QFontMetrics( *this );
+    for ( int i = 0; i < 65536; ++i )
+	widths[ i ] = 0;
+    asc = fm.ascent();
+    desc = fm.descent();
+}
+
+inline void KWDisplayFont::setUnderline( bool _underline )
+{
+    QFont::setUnderline( _underline );
+    fm = QFontMetrics( *this );
+    for ( int i = 0; i < 65536; ++i )
+	widths[ i ] = 0;
+    asc = fm.ascent();
+    desc = fm.descent();
+}
+
+inline void KWDisplayFont::scaleFont()
+{
+    setPointSize( ZOOM( ptSize ) );
+    fm = QFontMetrics( *this );
+    for ( int i = 0; i < 65536; ++i )
+	widths[ i ] = 0;
+    asc = fm.ascent();
+    desc = fm.descent();
+}
+
+inline unsigned int KWDisplayFont::getPTWidth( QString _text ) const
+{
+    return fm.width( _text );
+}
+
+inline unsigned int KWDisplayFont::getPTWidth( const QChar &c ) const
+{
+    int w = widths[ c.unicode() ];
+    if ( w == 0 ) {
+	w = fm.width( c );
+	( (KWDisplayFont*)this )->widths[ c.unicode() ] = w;
+    }
+    return w;
+}
+
+inline KWUserFont* KWDisplayFont::getUserFont() const 
+{ 
+    return userFont; 
+}
+
+inline unsigned int KWDisplayFont::getPTSize() const 
+{ 
+    return ptSize; 
+}
+
+inline unsigned int KWDisplayFont::getPTAscender() const 
+{ 
+    return asc;
+}
+
+inline unsigned int KWDisplayFont::getPTDescender() const 
+{ 
+    return desc + 2; 
+}
 
 #endif
 

@@ -1659,3 +1659,10 @@ Reggie, 19.12.1999:
   footnotes/endnotes - but footnotes/endnotes are a really broken, I think
   I need to rewrite that part
 
+reggie, 27.12.1999:
+-----------------
+- Cache the important and often needed values of the font
+  metrics in KWDisplayFont (like width, ascent, descent), so
+  we don't need a call to the XServer (through QFontMetrcis)
+  to get the same information again and again => biiig speed 
+  improvement

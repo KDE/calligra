@@ -70,60 +70,11 @@ KWDisplayFont::KWDisplayFont( KWordDocument *_doc, KWUserFont *_font, unsigned i
 
     if ( ZOOM( 100 ) != 100 )
         scaleFont();
-}
-
-/*================================================================*/
-void KWDisplayFont::setPTSize( int _size )
-{
-    ptSize = _size;
-    setPointSize( _size );
-    fm = QFontMetrics( *this );
-}
-
-/*================================================================*/
-void KWDisplayFont::setWeight( int _weight )
-{
-    QFont::setWeight( _weight );
-    fm = QFontMetrics( *this );
-}
-
-/*================================================================*/
-void KWDisplayFont::setItalic( bool _italic )
-{
-    QFont::setItalic( _italic );
-    fm = QFontMetrics( *this );
-}
-
-/*================================================================*/
-void KWDisplayFont::setUnderline( bool _underline )
-{
-    QFont::setUnderline( _underline );
-    fm = QFontMetrics( *this );
-}
-
-/*================================================================*/
-void KWDisplayFont::scaleFont()
-{
-    setPointSize( ZOOM( ptSize ) );
-    fm = QFontMetrics( *this );
-}
-
-/*================================================================*/
-unsigned int KWDisplayFont::getPTWidth( QString _text )
-{
-    return fm.width( _text );
-}
-
-/*================================================================*/
-unsigned int KWDisplayFont::getPTWidth( char &_c )
-{
-    return fm.width( _c );
-}
-
-/*================================================================*/
-unsigned int KWDisplayFont::getPTWidth( QChar &_c )
-{
-    return fm.width( _c );
+    
+    for ( int i = 0; i < 65536; ++i )
+	widths[ i ] = 0;
+    asc = fm.ascent();
+    desc = fm.descent();
 }
 
 /*================================================================*/
