@@ -32,6 +32,7 @@
  <Menu name="Format"><text>Format</text>
   <Action name="bold"/>
   <Action name="italic"/>
+  <Action name="underline"/>
   <Action name="selectFont"/>
   <Action name="selectFontSize"/>
   <Separator/>
@@ -101,6 +102,7 @@
 <ToolBar>
  <Action name="bold"/>
  <Action name="italic"/>
+ <Action name="underline"/>
  <Action name="selectFont"/>
  <Action name="selectFontSize"/>
 </ToolBar>

@@ -349,7 +349,7 @@ public:
     void setSelection( const QRect &_rect, KSpreadCanvas *_canvas = 0L );
 
     void setSelectionFont( const QPoint &_marker, const char *_font = 0L, int _size = -1,
-			   signed char _bold = -1, signed char _italic = -1 );
+			   signed char _bold = -1, signed char _italic = -1, signed char _underline = -1 );
     void setSelectionMoneyFormat( const QPoint &_marker );
     void setSelectionAlign( const QPoint &_marker, KSpreadLayout::Align _align );
     void setSelectionPrecision( const QPoint &_marker, int _delta );

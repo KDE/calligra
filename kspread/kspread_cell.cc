@@ -2986,6 +2986,12 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 
   if ( m_textFont != m_pTable->defaultCell()->textFont() )
     format.appendChild( doc.createElement( "font", m_textFont ) );
+  if ( textFontUnderline())
+  	{
+  	QDomElement underline = doc.createElement( "underline" );
+  	underline.setAttribute( "val",(int)textFontUnderline());
+  	format.appendChild( underline );
+  	}
   if ( m_textPen != m_pTable->defaultCell()->textPen() )
     {
     if(conditionIsTrue)
@@ -3221,6 +3227,16 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	if ( !font.isNull() )
 	    setTextFont( font.toFont() );
 
+  	QDomElement underline = f.namedItem( "underline" ).toElement();
+	if ( !underline.isNull() )
+		{
+		if ( underline.hasAttribute( "val" ) )
+        		{
+	    		setTextFontUnderline((bool)underline.attribute("val").toInt( &ok ));
+	    		if ( !ok ) return false;
+	    		}
+ 
+		}
 	QDomElement left = f.namedItem( "left-border" ).toElement();
 	if ( !left.isNull() && pm != NoBorder )
         {

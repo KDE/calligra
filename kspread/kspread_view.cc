@@ -191,8 +191,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( m_bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
     m_italic = new KToggleAction( i18n("Italic"), KSBarIcon("italic"), 0, actionCollection(), "italic");
     connect( m_italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
-    /*m_percent = new KAction( i18n("Percent format"), KSBarIcon("percent"), 0, this, SLOT( percent() ),
-			    actionCollection(), "percent");*/
+    m_underline = new KToggleAction( i18n("Underline"), KSBarIcon("underline"), 0, actionCollection(), "underline");
+    connect( m_underline, SIGNAL( toggled( bool ) ), this, SLOT( underline( bool ) ) );
+
     m_percent = new KToggleAction( i18n("Percent format"), KSBarIcon("percent"), 0, actionCollection(), "percent");
     connect( m_percent, SIGNAL( toggled( bool ) ), this, SLOT( percent( bool ) ) );
     m_precplus = new KAction( i18n("Increase precision"), KSBarIcon("precplus"), 0, this,
@@ -626,6 +627,7 @@ void KSpreadView::updateEditWidget()
     m_selectFont->setFont( cell->textFontFamily() );
     m_bold->setChecked( cell->textFontBold() );
     m_italic->setChecked( cell->textFontItalic() );
+    m_underline->setChecked( cell->textFontUnderline() );
     m_textColor->setColor( cell->textColor() );
     m_bgColor->setColor( cell->bgColor() );
     		
@@ -1069,6 +1071,17 @@ void KSpreadView::bold( bool b )
 
     m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, -1, b );
 }
+
+void KSpreadView::underline( bool b )
+{
+    if ( m_toolbarLock )
+	return;
+    if ( m_pTable == 0 )
+	return;
+    m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, -1, -1, -1 ,b );
+}
+
+
 
 void KSpreadView::italic( bool b )
 {

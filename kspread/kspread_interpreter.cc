@@ -805,6 +805,18 @@ static bool kspreadfunc_or( KSContext& context )
   return b;
 }
 
+static bool kspreadfunc_nor( KSContext& context )
+{
+  bool first = false;
+  bool b = kspreadfunc_or_helper( context, context.value()->listValue(), first );
+
+  if ( b )
+    context.setValue( new KSValue( !first ) );
+
+  return b;
+}
+
+
 static bool kspreadfunc_and_helper( KSContext& context, QValueList<KSValue::Ptr>& args, bool& first )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
@@ -837,6 +849,16 @@ static bool kspreadfunc_and( KSContext& context )
   return b;
 }
 
+static bool kspreadfunc_nand( KSContext& context )
+{
+  bool first = true;
+  bool b = kspreadfunc_and_helper( context, context.value()->listValue(), first );
+
+  if ( b )
+    context.setValue( new KSValue( !first ) );
+
+  return b;
+}
 
 
 static bool kspreadfunc_if( KSContext& context )
@@ -1632,6 +1654,9 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "multiply", new KSValue( new KSBuiltinFunction( module, "multiply", kspreadfunc_mult) ) );
   module->addObject( "OR", new KSValue( new KSBuiltinFunction( module, "OR", kspreadfunc_or) ) );
     module->addObject( "AND", new KSValue( new KSBuiltinFunction( module, "AND", kspreadfunc_and) ) );
+  module->addObject( "NOR", new KSValue( new KSBuiltinFunction( module, "NOR", kspreadfunc_nor) ) );
+    module->addObject( "NAND", new KSValue( new KSBuiltinFunction( module, "NAND", kspreadfunc_nand) ) );
+
   module->addObject( "stddev", new KSValue( new KSBuiltinFunction( module, "stderr", kspreadfunc_stddev) ) );
   module->addObject( "join", new KSValue( new KSBuiltinFunction( module, "join", kspreadfunc_join) ) );
   module->addObject( "not", new KSValue( new KSBuiltinFunction( module, "not", kspreadfunc_not) ) );

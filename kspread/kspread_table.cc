@@ -554,7 +554,7 @@ void KSpreadTable::setSelection( const QRect &_sel, KSpreadCanvas *_canvas )
 }
 
 void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, int _size,
-				     signed char _bold, signed char _italic )
+				     signed char _bold, signed char _italic,signed char _underline )
 {
     m_pDoc->setModified( true );
 
@@ -579,6 +579,8 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	    	it.current()->setTextFontItalic( (bool)_italic );
 	  if ( _bold >= 0 )
 	    	it.current()->setTextFontBold( (bool)_bold );
+	  if ( _underline >= 0 )
+	    	it.current()->setTextFontUnderline( (bool)_underline );
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -605,6 +607,8 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	    	it.current()->setTextFontItalic( (bool)_italic );
 	  if ( _bold >= 0 )
 	    	it.current()->setTextFontBold( (bool)_bold );
+	  if ( _underline >= 0 )
+	    	it.current()->setTextFontUnderline( (bool)_underline );
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -647,6 +651,9 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 		  cell->setTextFontItalic( (bool)_italic );
 	      if ( _bold >= 0 )
 		  cell->setTextFontBold( (bool)_bold );
+	      if ( _underline >= 0 )
+	    	  cell->setTextFontUnderline( (bool)_underline );
+
 	      cell->clearDisplayDirtyFlag();
 	    }
 

@@ -505,7 +505,7 @@ void KSpreadcreate::init()
        edit[3]=type_logic;
        edit[4]=type_logic;
    }
-   else if(m_funcName=="AND"||m_funcName=="OR")
+   else if(m_funcName=="AND"||m_funcName=="OR"||m_funcName=="NAND"||m_funcName=="NOR")
    {
        nb_param=5;
        tmp_label = new QLabel( this);

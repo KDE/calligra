@@ -76,6 +76,7 @@ public:
     virtual void setTextFontFamily( const char *_f ) { m_textFont.setFamily( _f ); }
     virtual void setTextFontBold( bool _b ) { m_textFont.setBold( _b ); }
     virtual void setTextFontItalic( bool _i ) { m_textFont.setItalic( _i ); }
+    virtual void setTextFontUnderline( bool _i ) { m_textFont.setUnderline( _i ); }
     virtual void setTextFont( const QFont& _f ) { m_textFont = _f; }
     virtual void setTextColor( const QColor & _c ) { m_textPen.setColor( _c ); m_textColor = _c; }
     virtual void setBgColor( const QColor & _c ) { m_bgColor = _c; }
@@ -151,7 +152,8 @@ public:
     virtual const char* textFontFamily() { return m_textFont.family(); }
     virtual bool textFontBold() { return m_textFont.bold(); }
     virtual bool textFontItalic() { return m_textFont.italic(); }
-
+    virtual bool textFontUnderline() { return m_textFont.underline(); }
+    
     virtual Align align() { return m_eAlign; }
 
     virtual AlignY alignY() { return m_eAlignY; }

@@ -154,6 +154,8 @@ list_logic+="if";
 list_logic+="not";
 list_logic+="AND";
 list_logic+="OR";
+list_logic+="NAND";
+list_logic+="NOR";
 
 QStringList list_text;
 list_text+="join";

@@ -262,6 +262,8 @@ public:
     { m_textFont.setBold( _b ); m_bLayoutDirtyFlag = TRUE; }
     virtual void setTextFontItalic( bool _i )
     { m_textFont.setItalic( _i ); m_bLayoutDirtyFlag = TRUE; }
+    virtual void setTextFontUnderline( bool _i )
+    { m_textFont.setUnderline( _i ); m_bLayoutDirtyFlag = TRUE; }
     void setTextFont( const QFont& _f ) { m_textFont = _f; m_bLayoutDirtyFlag = TRUE; }
     void setTextColor( const QColor & _c ) { m_textColor = _c; m_bLayoutDirtyFlag = TRUE; }
     void setBgColor( const QColor & _c ) { m_bgColor = _c; m_bLayoutDirtyFlag = TRUE; }

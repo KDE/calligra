@@ -189,6 +189,7 @@ public slots:
     void fontSizeSelected( int size );
     void bold( bool b );
     void italic( bool b );
+    void underline( bool b );
     void deleteColumn();
     void deleteRow();
     void insertColumn();
@@ -340,6 +341,7 @@ private:
 
     KToggleAction* m_bold;
     KToggleAction* m_italic;
+    KToggleAction* m_underline;
     KToggleAction* m_percent;
     KAction* m_precplus;
     KAction* m_precminus;

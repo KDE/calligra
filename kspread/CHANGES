@@ -309,4 +309,8 @@ Reduce memory to store condition.
 2000-02-20 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
 -Add new fonctions : AND, OR, MOD, BINO, INVBINO
- 
+
+2000-02-21 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add new functions : NAND,NOR
+-Now you can "Underline"
