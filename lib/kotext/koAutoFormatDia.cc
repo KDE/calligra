@@ -561,7 +561,7 @@ void KoAutoFormatDia::setupTab3()
     grid->addMultiCellWidget( m_pListView, 6, 6, 0, 5 );
 
     connect(m_pListView, SIGNAL(doubleClicked ( QListViewItem * )),
-             SLOT(slotEditEntry()) );
+             SLOT(slotChangeTextFormatEntry()) );
     connect(m_pListView, SIGNAL(clicked ( QListViewItem * ) ),
              SLOT(slotEditEntry()) );
 
