@@ -38,7 +38,7 @@ class KEXICORE_EXPORT KexiRelationPart : public QObject
 		virtual ~KexiRelationPart();
 
 		virtual KexiDialogBase *createWindow(KexiMainWindow *parent)=0;
-		virtual QWidget *createWidget(QWidget *parent)=0;
+		virtual QWidget *createWidget(QWidget *parent, KexiMainWindow *win)=0;
 };
 
 #endif

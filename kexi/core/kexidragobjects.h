@@ -28,8 +28,7 @@ class QWidget;
 class KEXICORE_EXPORT KexiFieldDrag : public QStoredDrag
 {
         public:
-                KexiFieldDrag(const QString& sourceType, const QString& source,const QString& field, 
-		QWidget *parent=0, const char *name=0);
+                KexiFieldDrag(const QString& sourceType, const QString& source,const QString& field, QWidget *parent=0, const char *name=0);
                 ~KexiFieldDrag() { };
 
                 static bool canDecode( QDragMoveEvent* e);
