@@ -13,6 +13,8 @@ since 1.3
 - fix bug #81026: SUMIF() function added
 - sheet layout direction can be explicitly set (fix bug #46831)
 - new dependency manager
+- prevent a very wide Insert Link dialog
+- fix bug #59291: potential crash on loading new template
 
 changes for 1.3.4
 =================
