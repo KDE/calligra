@@ -73,12 +73,14 @@ const QDomElement XMLTree::getFont(Q_UINT16 xf)
   if (fontid > 3)
     fontid--;
   font.setAttribute("family", fonts[fontid]->rgch);
-  font.setAttribute("pt", fonts[fontid]->dyHeight / 20);
+  font.setAttribute("size", fonts[fontid]->dyHeight / 20);
   font.setAttribute("weight", fonts[fontid]->bls / 8);
+  if ((fonts[fontid]->bls / 8) != 50)
+    font.setAttribute("bold", "yes");
   if ((fonts[fontid]->grbit & 0x02) == 2) 
-    font.setAttribute("italic", "");
+    font.setAttribute("italic", "yes");
   if (fonts[fontid]->uls != 0) 
-    font.setAttribute("underline", "");
+    font.setAttribute("underlined", "yes");
 
   return font;
 }
@@ -89,7 +91,7 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
 
   QString s;
   QDomElement format = root->createElement("format");
-
+  
   align = (xfs[xf]->info2 & 0x07) == 0 ? 4 :  xfs[xf]->info2 & 0x07;
   format.setAttribute("align", align); // kspread doesn't support align=0
 
@@ -120,7 +122,9 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
     format.setAttribute("faktor", 1);
   }
   // need to add float and floatcolor
-
+  
+  format.appendChild(getFont(xf));
+  
   return format;
 }
 
@@ -583,7 +587,6 @@ bool XMLTree::_label(Q_UINT16 size, QDataStream& body)
   body >> row >> column >> xf >> length;
   QDomElement e = root->createElement("cell");
   e.appendChild(getFormat(xf));
-  e.appendChild(getFont(xf));
 
   char *name = new char[length];
   body.readRawBytes(name, length);
@@ -599,8 +602,22 @@ bool XMLTree::_label(Q_UINT16 size, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_labelsst(Q_UINT16, QDataStream&)
+bool XMLTree::_labelsst(Q_UINT16 size, QDataStream& body)
 {
+  Q_UINT16 row, column, xf;
+  Q_UINT32 isst;
+
+  body >> row >> column >> xf >> isst;
+  QDomElement e = root->createElement("cell");
+  e.appendChild(getFormat(xf));
+
+  e.setAttribute("row", (int) ++row);
+  e.setAttribute("column", (int) ++column);
+  QDomElement text = root->createElement("text");
+  text.appendChild(root->createTextNode(sst[isst]->latin1()));
+  e.appendChild(text);
+  table->appendChild(e);
+
   return true;
 }
 
@@ -687,7 +704,6 @@ bool XMLTree::_mulrk(Q_UINT16 size, QDataStream& body)
 
     QDomElement e = root->createElement("cell");
     e.appendChild(getFormat(xf));
-    e.appendChild(getFont(xf));
     s.sprintf("%f", value);
     e.setAttribute("row", row+1);
     e.setAttribute("column", first+i+1);
@@ -719,7 +735,6 @@ bool XMLTree::_number(Q_UINT16 size, QDataStream& body)
 
   QDomElement e = root->createElement("cell");
   e.appendChild(getFormat(xf));
-  e.appendChild(getFont(xf));
   s.sprintf("%f", value);
   e.setAttribute("row", (int) ++row);
   e.setAttribute("column", (int) ++column);
@@ -859,7 +874,6 @@ bool XMLTree::_rk(Q_UINT16 size, QDataStream& body)
 
   QDomElement e = root->createElement("cell");
   e.appendChild(getFormat(xf));
-  e.appendChild(getFont(xf));
   s.sprintf("%f", value);
   e.setAttribute("row", (int) ++row);
   e.setAttribute("column", (int) ++column);
@@ -931,8 +945,24 @@ bool XMLTree::_sound(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_sst(Q_UINT16, QDataStream&)
+bool XMLTree::_sst(Q_UINT16 size, QDataStream& body)
 {
+  char *name;
+  QString *s;
+  Q_UINT8 grbit;
+  Q_UINT16 cch;
+  Q_UINT32 count, skip;
+
+  body >> count >> skip;
+  for (int i=0; i < (int) count; ++i) {
+    body >> cch >> grbit;
+    name = new char[cch+1];
+    body.readRawBytes(name, cch);
+    name[cch]='\0';    s = new QString(name);
+    sst.insert(i, s);
+    delete[] name;
+  }
+
   return true;
 }
 

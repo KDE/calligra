@@ -106,7 +106,7 @@ public:
   bool _interfacehdr(Q_UINT16, QDataStream&);
   bool _iteration(Q_UINT16, QDataStream&);
   bool _label(Q_UINT16 size, QDataStream& body);
-  bool _labelsst(Q_UINT16, QDataStream&);
+  bool _labelsst(Q_UINT16 size, QDataStream& body);
   bool _leftmargin(Q_UINT16 size, QDataStream& body);
   bool _lhngraph(Q_UINT16, QDataStream&);
   bool _lhrecord(Q_UINT16, QDataStream&);
@@ -152,7 +152,7 @@ public:
   bool _shrfmla(Q_UINT16, QDataStream&);
   bool _sort(Q_UINT16, QDataStream&);
   bool _sound(Q_UINT16, QDataStream&);
-  bool _sst(Q_UINT16, QDataStream&);
+  bool _sst(Q_UINT16 size, QDataStream& body);
   bool _standardwidth(Q_UINT16, QDataStream&);
   bool _string(Q_UINT16, QDataStream&);
   bool _style(Q_UINT16, QDataStream&);
@@ -244,6 +244,7 @@ private:
   Q_UINT16 biff;
   QDomDocument *root;
   QIntDict<xf_rec> xfs;
+  QIntDict<QString> sst;
   QIntDict<font_rec> fonts;
   QIntDict<format_rec> formats;
   QQueue<QDomElement> tables;
