@@ -3,7 +3,7 @@
 /*
    This file is part of the KDE project
    Copuright 2001 Michael Johnson <mikej@xnet.com>
-   Copyright 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
    Copyright 2002 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -313,29 +313,33 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
 {
     QString str;
 
+    // open paragraph
+    str += "\\pard";
+    if (m_inTable)
+        str += "\\intbl";
+    str += "\\plain";
+
+    LayoutData styleLayout;
+    str += lookupStyle(layout.styleName, styleLayout);
+    str += layoutToRtf(styleLayout,layout,true);
+
+    if ( 1==layout.formatData.text.verticalAlignment )
+    {
+        str += "\\sub"; //Subscript
+    }
+    else if ( 2==layout.formatData.text.verticalAlignment )
+    {
+        str += "\\super"; //Superscript
+    }
+    
+    str += " {";
+
+    if (layout.pageBreakBefore)
+        str += "\\page";
+    
     if (!paraText.isEmpty())
     {
     
-        // open paragraph
-        str += "\\pard";
-        if (m_inTable)
-            str += "\\intbl";
-        str += "\\plain";
-
-        LayoutData styleLayout;
-        str += lookupStyle(layout.styleName, styleLayout);
-        str += layoutToRtf(styleLayout,layout,true);
-
-        if ( 1==layout.formatData.text.verticalAlignment )
-        {
-            str += "\\sub"; //Subscript
-        }
-        else if ( 2==layout.formatData.text.verticalAlignment )
-        {
-            str += "\\super"; //Superscript
-        }
-        str += " {";
-
         ValueListFormatData::ConstIterator  paraFormatDataIt;
 
         QString partialText;
@@ -472,10 +476,13 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                 str += " {";
             }
         }
-
-        // close paragraph
-        str += "}";
     }
+
+    if (layout.pageBreakAfter)
+        str += "\\page";
+    
+    // close paragraph
+    str += "}";
 
     return str;
 }
@@ -1093,6 +1100,11 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
        if(layout.keepLinesTogether) strLayout += "\\keep";
     }
 
+    // Note: there seems to be too much problem of using a page break in a layout
+    // - KWord's RTF import filter makes the page break immediately (also in styles)
+    // - AbiWord's RTF import does not like \*\pgbrk
+    // ### TODO: decide if we really remove this code
+#if 0
     if (force || (layoutOrigin.pageBreakBefore!=layout.pageBreakBefore))
     {
        if(layout.pageBreakBefore) strLayout += "\\pagebb";
@@ -1104,6 +1116,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
     {
        if(layout.pageBreakAfter) strLayout += "\\*\\pgbrk0";
     }
+#endif
 
     if (force
         || (layoutOrigin.lineSpacingType!=layoutOrigin.lineSpacingType)
