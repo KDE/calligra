@@ -128,7 +128,7 @@ public:
     // Margins
     KWUnit margin( QStyleSheetItem::Margin m ) { return m_margins[m]; }
     const KWUnit * margins() const { return m_margins; }
-    KWUnit lineSpacing() const { return m_lineSpacing; }
+    KWUnit kwLineSpacing() const { return m_lineSpacing; }
 
     void setMargin( QStyleSheetItem::Margin m, KWUnit _i );
     void setMargins( const KWUnit * _i );

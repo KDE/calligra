@@ -501,11 +501,11 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, QTextFormat * curFormat
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->font().underline()) );
     }
-    if( !refFormat || curFormat->hAlign() != refFormat->hAlign() )
+    if( !refFormat || curFormat->vAlign() != refFormat->vAlign() )
     {
         elem = doc.createElement( "VERTALIGN" );
         formatElem.appendChild( elem );
-        elem.setAttribute( "value", static_cast<int>(curFormat->hAlign()) );
+        elem.setAttribute( "value", static_cast<int>(curFormat->vAlign()) );
     }
 #if 0
     if( !refFormat ||  ... )
@@ -608,7 +608,7 @@ QTextFormat KWTextParag::loadFormat( QDomElement &formatElem, QTextFormat * refF
         font.setUnderline( elem.attribute("value").toInt() == 1 );
     elem = formatElem.namedItem( "VERTALIGN" ).toElement();
     if ( !elem.isNull() )
-        format.setHAlign( static_cast<QTextFormat::VerticalAlignment>( elem.attribute("value").toInt() ) );
+        format.setVAlign( static_cast<QTextFormat::VerticalAlignment>( elem.attribute("value").toInt() ) );
 
     format.setFont( font );
     return format;

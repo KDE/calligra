@@ -753,7 +753,7 @@ void KWView::showFormat( const QTextFormat &currentFormat )
     actionFormatUnderline->setChecked( currentFormat.font().underline());
     actionFormatColor->setColor( currentFormat.color() );
 
-    switch(currentFormat.hAlign())
+    switch(currentFormat.vAlign())
       {
       case QTextFormat::AlignSuperScript:
 	{

@@ -313,8 +313,37 @@ void KWCanvas::drawBorders( QPainter *painter, QRect v_area, bool drawBack, QReg
 
 void KWCanvas::keyPressEvent( QKeyEvent *e )
 {
-    if( !doc->isReadWrite())
+    if( !doc->isReadWrite()) {
+        switch( e->key() ) {
+            case Key_Down:
+                setContentsPos( contentsX(), contentsY() + 10 );
+                break;
+            case Key_Up:
+                setContentsPos( contentsX(), contentsY() - 10 );
+                break;
+            case Key_Left:
+                setContentsPos( contentsX() - 10, contentsY() );
+                break;
+            case Key_Right:
+                setContentsPos( contentsX() + 10, contentsY() );
+                break;
+            case Key_PageUp:
+                setContentsPos( contentsX(), contentsY() - visibleHeight() );
+                break;
+            case Key_PageDown:
+                setContentsPos( contentsX(), contentsY() + visibleHeight() );
+                break;
+            case Key_Home:
+                setContentsPos( contentsX(), 0 );
+                break;
+            case Key_End:
+                setContentsPos( contentsX(), contentsHeight() - visibleHeight() );
+                break;
+            default:
+                break;
+        }
         return;
+    }
     if ( m_currentFrameSetEdit && m_mouseMode==MM_EDIT )
         m_currentFrameSetEdit->keyPressEvent( e );
 }

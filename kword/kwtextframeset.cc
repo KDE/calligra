@@ -1234,11 +1234,11 @@ void KWTextFrameSet::setLineSpacing( QTextCursor * cursor, KWUnit spacing )
 {
     QTextDocument * textdoc = textDocument();
     //kdDebug() << "KWTextFrameSet::setLineSpacing to value " << spacing.pt() << endl;
-    //kdDebug() << "Current spacing is " << static_cast<KWTextParag *>(cursor->parag())->lineSpacing().pt() << endl;
-    //kdDebug() << "Comparison says " << ( static_cast<KWTextParag *>(cursor->parag())->lineSpacing().pt() == spacing.pt() ) << endl;
+    //kdDebug() << "Current spacing is " << static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing().pt() << endl;
+    //kdDebug() << "Comparison says " << ( static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing().pt() == spacing.pt() ) << endl;
     //kdDebug() << "hasSelection " << textdoc->hasSelection( QTextDocument::Standard ) << endl;
     if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
-         static_cast<KWTextParag *>(cursor->parag())->lineSpacing().pt() == spacing.pt() /*...*/ )
+         static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing().pt() == spacing.pt() /*...*/ )
         return; // No change needed.
 
     emit hideCursor();
@@ -1519,12 +1519,13 @@ KWTextFrameSetEdit::~KWTextFrameSetEdit()
 void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 {
 #if 0
-    // Move to KWTextFrameSet
+    // TODO Move to KWTextFrameSet
     changeIntervalTimer->stop();
     interval = 10;
 #endif
+
     bool selChanged = FALSE;
-    for ( int i = 1; i < textDocument()->numSelections; ++i ) // start with 1 as we don't want to remove the Standard-Selection
+    for ( int i = 1; i < textDocument()->numSelections(); ++i ) // start with 1 as we don't want to remove the Standard-Selection
 	selChanged = textDocument()->removeSelection( i ) || selChanged;
 
     if ( selChanged ) {
@@ -1598,7 +1599,8 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 	cut();
 	break;
     default: {
-	    if ( e->text().length() && !( e->state() & AltButton ) &&
+	    if ( e->text().length() &&
+//               !( e->state() & AltButton ) &&
 		 ( !e->ascii() || e->ascii() >= 32 ) ||
 		 ( e->text() == "\t" && !( e->state() & ControlButton ) ) ) {
 		clearUndoRedoInfo = FALSE;
@@ -1633,9 +1635,12 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 		    moveCursor( MoveHome, e->state() & ShiftButton, FALSE );
 		    break;
 		case Key_E:
-                    // configure to end of line?
+		    moveCursor( MoveEnd, e->state() & ShiftButton, FALSE );
 		    break;
-		case Key_Insert:
+		case Key_K:
+                    textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionKill );
+		    break;
+                case Key_Insert:
 		    copy();
 		    break;
 		}
@@ -1816,7 +1821,7 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent * e )
         }
     }
 
-    for ( int i = 1; i < text->numSelections; ++i ) // start with 1 as we don't want to remove the Standard-Selection
+    for ( int i = 1; i < text->numSelections(); ++i ) // start with 1 as we don't want to remove the Standard-Selection
         redraw = text->removeSelection( i ) || redraw;
 
     if ( !redraw ) {
@@ -2066,20 +2071,20 @@ void KWTextFrameSetEdit::setTextSubScript(bool on)
 {
     QTextFormat format( *currentFormat );
     if(!on)
-        format.setHAlign(QTextFormat::AlignNormal);
+        format.setVAlign(QTextFormat::AlignNormal);
     else
-        format.setHAlign(QTextFormat::AlignSubScript);
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::HAlign );
+        format.setVAlign(QTextFormat::AlignSubScript);
+    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::VAlign );
 }
 
 void KWTextFrameSetEdit::setTextSuperScript(bool on)
 {
     QTextFormat format( *currentFormat );
     if(!on)
-        format.setHAlign(QTextFormat::AlignNormal);
+        format.setVAlign(QTextFormat::AlignNormal);
     else
-        format.setHAlign(QTextFormat::AlignSuperScript);
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::HAlign );
+        format.setVAlign(QTextFormat::AlignSuperScript);
+    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::VAlign );
 }
 
 void KWTextFrameSetEdit::insertPicture( const QString & file )
