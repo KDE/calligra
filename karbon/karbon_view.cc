@@ -112,7 +112,6 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 		setXMLFile( QString::fromLatin1( "karbon.rc" ) );
 
 	m_strokeFillPreview = 0L;
-	initActions();
 	m_dcop = 0;
 	dcopObject(); // build it
 
@@ -177,6 +176,8 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	connect( _toolContainer, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
 	connect( _toolContainer, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
 	m_part->toolContainer()->show();
+
+	initActions();
 
 	m_objectDlg = new VObjectDlg( m_part, this );
 	m_objectDlg->disable(); //disabled @ startup because none of the objects are selected
@@ -932,66 +933,6 @@ KarbonView::initActions()
 		i18n( "S&hear" ), "14_shear", 0, this,
 		SLOT( objectTrafoShear() ), actionCollection(), "object_trafo_shear" );
 	// object <-----
-
-	// tools ----->
-	/*m_ellipseToolAction = new KToggleAction(
-		i18n( "&Ellipse" ), "14_ellipse", 0, this,
-		SLOT( ellipseTool() ), actionCollection(), "tool_ellipse" );
-	m_polygonToolAction = new KToggleAction(
-		i18n( "&Polygon" ), "14_polygon", 0, this,
-		SLOT( polygonTool() ), actionCollection(), "tool_polygon" );
-	m_rectangleToolAction = new KToggleAction(
-		i18n( "&Rectangle" ), "14_rectangle", 0, this,
-		SLOT( rectangleTool() ), actionCollection(), "tool_rectangle" );
-	m_roundRectToolAction = new KToggleAction(
-		i18n( "&Round Rectangle" ), "14_roundrect", 0, this,
-		SLOT( roundRectTool() ), actionCollection(), "tool_roundrect" );
-	m_sinusToolAction = new KToggleAction(
-		i18n( "S&inus" ), "14_sinus", 0, this,
-		SLOT( sinusTool() ), actionCollection(), "tool_sinus" );
-	m_selectNodesToolAction = new KToggleAction(
-		i18n( "&Manipulate nodes" ), "14_selectnodes", 0, this,
-		SLOT( selectNodesTool() ), actionCollection(), "tool_selectnodes" );
-	m_selectToolAction = new KToggleAction(
-		i18n( "&Select Objects" ), "14_select", 0, this,
-		SLOT( selectTool() ), actionCollection(), "tool_select" );
-	m_rotateToolAction = new KToggleAction(
-		i18n( "&Rotate Objects" ), "14_rotate", 0, this,
-		SLOT( rotateTool() ), actionCollection(), "tool_rotate" );
-	m_shearToolAction = new KToggleAction(
-		i18n( "&Shear Objects" ), "14_shear", 0, this,
-		SLOT( shearTool() ), actionCollection(), "tool_shear" );
-	m_spiralToolAction = new KToggleAction(
-		i18n( "S&piral" ), "14_spiral", 0, this,
-		SLOT( spiralTool() ), actionCollection(), "tool_spiral" );
-	m_starToolAction = new KToggleAction(
-		i18n( "S&tar" ), "14_star", 0, this,
-		SLOT( starTool() ), actionCollection(), "tool_star" );
-	m_gradToolAction = new KToggleAction(
-		i18n( "G&radient" ), "14_gradient", 0, this,
-		SLOT( gradTool() ), actionCollection(), "tool_grad" );
-	m_polylineToolAction = new KToggleAction(
-		i18n( "Poly&line" ), "14_polyline", 0, this,
-		SLOT( polylineTool() ), actionCollection(), "tool_polyline" );*/
-	/*m_textToolAction = new KToggleAction(
-		i18n( "Text" ), "14_text", 0, this,
-		SLOT( textTool() ), actionCollection(), "tool_text" );*/
-
-	/*m_ellipseToolAction->setExclusiveGroup( "Tools" );
-	m_polygonToolAction->setExclusiveGroup( "Tools" );
-	m_rectangleToolAction->setExclusiveGroup( "Tools" );
-	m_roundRectToolAction->setExclusiveGroup( "Tools" );
-	m_sinusToolAction->setExclusiveGroup( "Tools" );
-	m_selectToolAction->setExclusiveGroup( "Tools" );
-	m_selectNodesToolAction->setExclusiveGroup( "Tools" );
-	m_rotateToolAction->setExclusiveGroup( "Tools" );
-	m_shearToolAction->setExclusiveGroup( "Tools" );
-	m_spiralToolAction->setExclusiveGroup( "Tools" );
-	m_starToolAction->setExclusiveGroup( "Tools" );
-	m_gradToolAction->setExclusiveGroup( "Tools" );
-	m_polylineToolAction->setExclusiveGroup( "Tools" );*/
-	//m_textToolAction->setExclusiveGroup( "Tools" );
-	// tools <-----
 
 	// text ----->
 	// Disable the text, hopefully it will make a comback soon (Rob)
