@@ -67,27 +67,21 @@ namespace Qt3 { // can't be Qt, a class already exists with that name :(
 	ISODate,       // ISO 8601
 	LocalDate      // locale dependant
     };
-    // Called _blah in Qt 2 and Q_blah in Qt 3
+
+};
+
+// Called _blah in Qt 2 and Q_blah in Qt 3
 #if defined(_WS_X11)
 #define Q_WS_X11
 #endif
 
-#if 0
-    // "handle" type for system objects.
-#if defined(Q_WS_MAC)
-    typedef void * HANDLE;
-#endif
-#if defined(Q_WS_WIN)
-    typedef void *HANDLE;
-#endif
-#if defined(Q_WS_X11)
-    typedef unsigned long  HANDLE;
-#endif
-#if defined(Q_WS_QWS)
-    typedef void* HANDLE;
-#endif
-#endif
-};
+#define Q_ASSERT ASSERT
+
+// Classes renamed in Qt 3
+#define QPtrList QList
+#define QPtrListIterator QListIterator
+#define QPtrVector QVector
+#define QMemArray QArray
 
 #endif // QNAMESPACE_H
 
