@@ -99,12 +99,13 @@ void KoSearchContextUI::setCtxHistory( const QStringList & history )
     m_ctx->m_strings = history;
 }
 
-KoSearchDia::KoSearchDia( QWidget * parent,const char *name, KoSearchContext *find, bool hasSelection ):
-    KFindDialog( parent, name, find->m_options, find->m_strings )
+KoSearchDia::KoSearchDia( QWidget * parent,const char *name, KoSearchContext *find, bool hasSelection, bool hasCursor )
+    : KFindDialog( parent, name, find->m_options, find->m_strings )
 {
     // The dialog extension.
     m_findUI = new KoSearchContextUI( find, findExtension() );
     setHasSelection(hasSelection);
+    setHasCursor(hasCursor);
 }
 
 void KoSearchDia::slotOk()
@@ -117,14 +118,15 @@ void KoSearchDia::slotOk()
     m_findUI->setCtxHistory( findHistory() );
 }
 
-KoReplaceDia::KoReplaceDia( QWidget *parent, const char *name, KoSearchContext *find, KoSearchContext *replace, bool hasSelection ):
-    KReplaceDialog( parent, name, find->m_options, find->m_strings, replace->m_strings )
+KoReplaceDia::KoReplaceDia( QWidget *parent, const char *name, KoSearchContext *find, KoSearchContext *replace, bool hasSelection, bool hasCursor )
+    : KReplaceDialog( parent, name, find->m_options, find->m_strings, replace->m_strings )
 {
     // The dialog extension.
     m_findUI = new KoSearchContextUI( find, findExtension() );
     m_replaceUI = new KoSearchContextUI( replace, replaceExtension() );
-    // Look whether we have a selection
+    // Look whether we have a selection, and/or a cursor
     setHasSelection(hasSelection);
+    setHasCursor(hasCursor);
 }
 
 void KoReplaceDia::slotOk()
@@ -235,7 +237,7 @@ bool KoFindReplace::findNext()
 {
     KFind::Result res = KFind::NoMatch;
     while ( res == KFind::NoMatch && !m_textIterator.atEnd() ) {
-        kdDebug() << "findNext loop. m_bInit=" << m_bInit << " needData=" << needData() << endl;
+        //kdDebug(32500) << "findNext loop. m_bInit=" << m_bInit << " needData=" << needData() << endl;
         if ( needData() ) {
             if ( !m_bInit ) {
                 ++m_textIterator;
@@ -255,7 +257,7 @@ bool KoFindReplace::findNext()
             res = m_replace->replace();
     }
 
-    kdDebug() << k_funcinfo << "res=" << res << endl;
+    //kdDebug(32500) << k_funcinfo << "res=" << res << endl;
     if ( res == KFind::NoMatch ) // i.e. at end
     {
         emitUndoRedo();
@@ -323,7 +325,7 @@ void KoFindReplace::highlight( const QString &, int matchingIndex, int matchingL
     if ( m_lastTextObjectHighlighted )
         m_lastTextObjectHighlighted->removeHighlight(true);
     m_lastTextObjectHighlighted = m_textIterator.currentTextObject();
-    kdDebug(32500) << "KoFindReplace::highlight " << matchingIndex << "," << matchingLength << endl;
+    //kdDebug(32500) << "KoFindReplace::highlight " << matchingIndex << "," << matchingLength << endl;
     highlightPortion(m_textIterator.currentParag(), m_offset + matchingIndex, matchingLength, m_lastTextObjectHighlighted->textDocument() );
 }
 
@@ -873,11 +875,6 @@ bool KoFindReplace::shouldRestart()
         return m_find->shouldRestart( true /*since text is editable*/, m_doCounting );
     else
         return m_replace->shouldRestart( true /*since text is editable*/, m_doCounting );
-}
-
-void KoFindReplace::changeListObject(const QValueList<KoTextObject *> & lstObject)
-{
-    // todo - get rid of this and fix kpresenter
 }
 
 #include "koSearchDia.moc"

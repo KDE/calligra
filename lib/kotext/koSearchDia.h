@@ -124,7 +124,7 @@ class KoSearchDia:
     Q_OBJECT
 
 public:
-    KoSearchDia( QWidget *parent, const char *name, KoSearchContext *find, bool hasSelection );
+    KoSearchDia( QWidget *parent, const char *name, KoSearchContext *find, bool hasSelection, bool hasCursor );
     KoSearchContext * searchContext() {
         return m_findUI->context();
     }
@@ -147,7 +147,7 @@ class KoReplaceDia:
 
 public:
 
-    KoReplaceDia( QWidget *parent, const char *name, KoSearchContext *find, KoSearchContext *replace, bool hasSelection );
+    KoReplaceDia( QWidget *parent, const char *name, KoSearchContext *find, KoSearchContext *replace, bool hasSelection, bool hasCursor );
     KoSearchContext * searchContext() {
         return m_findUI->context();
     }
@@ -234,8 +234,6 @@ public:
      * Highlight a match.
      */
     virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdoc) = 0;
-
-    void changeListObject(const QValueList<KoTextObject *> & lstObject);
 
     /** For KoTextFind and KoTextReplace */
     bool validateMatch( const QString &text, int index, int matchedlength );
