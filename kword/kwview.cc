@@ -1735,6 +1735,7 @@ void KWView::toolsFormula()
         edit->getCursor()->parag()->invalidate( 0 ); // and that's done by KWTextParag::setCustomItem. Hmm.
         edit->getCursor()->parag()->setChanged( true );
         doc->slotRepaintChanged( edit->frameSet() );
+        doc->refreshDocStructure(FT_FORMULA);
     }
 }
 
