@@ -25,7 +25,7 @@ libkiviocommon_la_LIBADD = \
 
 libkiviocommon_la_METASOURCES = AUTO
 
-libkiviocommon_la_SOURCES = kivio_canvas.cpp kivio_doc.cpp kivio_factory.cpp kivio_view.cpp kivio_map.cpp kivio_page.cpp kivio_dlg_pageshow.cpp kivio_zoomaction.cpp kivio_icon_view.cpp kivio_spawner_drag.cpp kivio_intra_stencil_data.cpp kivio_stackbar.cpp stencilbarbutton.cpp stencilbardockmanager.cpp stencilbarmovemanager.cpp tooldockbase.cpp tooldockmanager.cpp stencil_text_dlg.cpp kivio_grid_data.cpp kivio_guidelines.cpp kivio_stencil_geometry_panel.cpp kivio_viewmanager_panel.cpp KIvioViewIface.skel KIvioViewIface.cc KIvioDocIface.skel KIvioDocIface.cc KIvioMapIface.skel KIvioMapIface.cc KIvioPageIface.skel KIvioPageIface.cc kivio_command.cc KIvioLayerIface.skel KIvioLayerIface.cc kivioglobal.cpp kiviostencilsetaction.cpp kivioarrowheadaction.cpp KIvioStencilIface.skel KIvioStencilIface.cc kiviodragobject.cpp kolinewidthaction.cpp kolinestyleaction.cpp koselectaction.cpp
+libkiviocommon_la_SOURCES = kivio_canvas.cpp kivio_doc.cpp kivio_factory.cpp kivio_view.cpp kivio_map.cpp kivio_page.cpp kivio_dlg_pageshow.cpp kivio_zoomaction.cpp kivio_icon_view.cpp kivio_spawner_drag.cpp kivio_intra_stencil_data.cpp kivio_stackbar.cpp stencilbarbutton.cpp stencilbardockmanager.cpp stencilbarmovemanager.cpp tooldockbase.cpp tooldockmanager.cpp stencil_text_dlg.cpp kivio_grid_data.cpp kivio_guidelines.cpp kivio_stencil_geometry_panel.cpp kivio_viewmanager_panel.cpp KIvioViewIface.skel KIvioViewIface.cc KIvioDocIface.skel KIvioDocIface.cc KIvioMapIface.skel KIvioMapIface.cc KIvioPageIface.skel KIvioPageIface.cc kivio_command.cc KIvioLayerIface.skel KIvioLayerIface.cc kivioglobal.cpp kiviostencilsetaction.cpp kivioarrowheadaction.cpp KIvioStencilIface.skel KIvioStencilIface.cc kiviodragobject.cpp
 
 kde_module_LTLIBRARIES = libkiviopart.la
 libkiviopart_la_LDFLAGS = -avoid-version $(all_libraries) -module
@@ -60,4 +60,3 @@ kivio_view.lo: ui/kivio_protection_panel_base.h \
 	ui/kivio_layer_panel_base.h ui/kivio_birdeye_panel_base.h \
 	ui/export_page_dialog_base.h  \
 	ui/aligndialog.h
-noinst_HEADERS =  koselectaction.h

@@ -35,7 +35,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-#include <kozoomhandler.h>
 #include <koUnitWidgets.h>
 #include <koGlobal.h>
 
@@ -82,8 +81,6 @@ KoLineWidthAction::~KoLineWidthAction()
 void KoLineWidthAction::createMenu()
 {
   KPopupMenu* popup = popupMenu();
-  KoZoomHandler zoom;
-  zoom.setZoomAndResolution(100, KoGlobal::dpiX(), KoGlobal::dpiY());
   QBitmap mask;
   QPixmap pix(70, 21);
   QPainter p(&pix, popup);
@@ -92,7 +89,7 @@ void KoLineWidthAction::createMenu()
 
   for(int i = 1; i <= 10; i++) {
     pix.fill(white);
-    pen.setWidth(zoom.zoomItY(i));
+    pen.setWidth(qRound(i * POINT_TO_INCH(static_cast<double>(KoGlobal::dpiY()))));
     p.setPen(pen);
     p.drawLine(0, 10, pix.width(), 10);
     mask = pix;
