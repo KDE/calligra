@@ -122,7 +122,7 @@ VToolContainer::VToolContainer( KarbonPart *part, KoView* parent, const char* /*
 	btngroup->insert( button, Text );
 
 	button = new QToolButton( btngroup );
-	pixmap = BarIcon( "gradientdlg", KarbonFactory::instance() );
+	pixmap = BarIcon( "14_gradtool", KarbonFactory::instance() );
 	button->setPixmap( pixmap );
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( gradToolActivated() ) );

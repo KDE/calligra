@@ -840,7 +840,7 @@ KarbonView::initActions()
 		i18n( "S&tar" ), "14_star", 0, this,
 		SLOT( starTool() ), actionCollection(), "tool_star" );
 	m_gradToolAction = new KToggleAction(
-		i18n( "G&radient" ), "14_star", 0, this,
+		i18n( "G&radient" ), "14_gradienttool", 0, this,
 		SLOT( gradTool() ), actionCollection(), "tool_grad" );
 	/*m_textToolAction = new KToggleAction(
 		i18n( "Text" ), "14_text", 0, this,
