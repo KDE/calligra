@@ -20,6 +20,7 @@
 #include <qwidget.h>
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qsplitter.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -662,8 +663,10 @@ CreateLayoutCommand::CreateLayoutCommand(int layoutType, WidgetList &list, Form 
 	{
 		case Container::HBox:
 		case Container::Grid:
+		case Container::HSplitter:
 			m_list = new HorWidgetList(); break;
 		case Container::VBox:
+		case Container::VSplitter:
 			m_list = new VerWidgetList(); break;
 	}
 	for(QWidget *w = list.first(); w; w = list.next())
@@ -696,13 +699,15 @@ CreateLayoutCommand::execute()
 			classname = "VBox"; break;
 		case Container::Grid:
 			classname = "Grid"; break;
+		case Container::HSplitter: case Container::VSplitter:
+			classname = "QSplitter"; break;
 		default: break;
 	}
 
 	if(m_name.isEmpty())// the name must be generated only once
 		m_name = m_form->objectTree()->genName(classname);
 	QWidget *w = lib->createWidget(classname, container->widget(), m_name.latin1(), container);
-	ObjectTreeItem *tree = m_form->objectTree()->lookup(w->name());
+	ObjectTreeItem *tree = w ? m_form->objectTree()->lookup(w->name()) : 0;
 	if(!tree)
 		return;
 
@@ -723,8 +728,15 @@ CreateLayoutCommand::execute()
 		}
 	}
 
-	tree->container()->setLayout((Container::LayoutType)m_type);
-	tree->widget()->resize(tree->container()->layout()->sizeHint()); // the layout doesn't have its own size
+	if(m_type == Container::HSplitter)
+		((QSplitter*)w)->setOrientation(QSplitter::Horizontal);
+	else if(m_type == Container::VSplitter)
+		((QSplitter*)w)->setOrientation(QSplitter::Vertical);
+	else if(tree->container()) {
+		tree->container()->setLayout((Container::LayoutType)m_type);
+		w->resize(tree->container()->layout()->sizeHint()); // the layout doesn't have its own size
+	}
+
 	container->setSelectedWidget(w, false);
 	m_form->manager()->windowChanged(m_form->widget()); // to reload the ObjectTreeView
 }
@@ -769,6 +781,10 @@ CreateLayoutCommand::name() const
 			return i18n("Lay out widgets vertically");
 		case Container::Grid:
 			return i18n("Lay out widgets in a grid");
+		case Container::HSplitter:
+			return i18n("Lay out widgets horizontally in a Splitter");
+		case Container::VSplitter:
+			return i18n("Lay out widgets vertically in a Splitter");
 		default:
 			return i18n("Create Layout");
 	}

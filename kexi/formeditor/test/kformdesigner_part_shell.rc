@@ -70,6 +70,8 @@
    <Action name="layout_hbox"/>
    <Action name="layout_vbox"/>
    <Action name="layout_grid"/>
+   <Action name="layout_hsplitter"/>
+   <Action name="layout_vsplitter"/>
    <Action name="break_layout"/>
    <Separator/>
    <Action name="align_menu"/>

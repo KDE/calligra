@@ -70,7 +70,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		virtual ~FormManager();
 
-		/*! Creates all the KAction related to widget insertion, and plug them 
+		/*! Creates all the KAction related to widget insertion, and plug them
 		  into the KActionCollection \a parent.
 		  These actions are automatically connected to \ref insertWidget() slot.
 		  \return a QPtrList of the created actions.
@@ -85,11 +85,11 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		//! \return A pointer to the ObjectPropertyBuffer owned by this Manager.
 		ObjectPropertyBuffer* buffer() const { return m_buffer; }
 
-		/*! \return true if one of the insert buttons was pressed and the forms 
+		/*! \return true if one of the insert buttons was pressed and the forms
 		 are ready to create a widget. */
 		bool isInserting() const { return m_inserting; }
 
-		/*! \return The name of the class being inserted, corresponding 
+		/*! \return The name of the class being inserted, corresponding
 		 to the menu item or the toolbar button clicked. */
 		QCString insertClass() const { return m_insertClass; }
 
@@ -114,18 +114,18 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void createSlotMenu(QWidget *w);
 
 		//! Emits the signal \ref createFormSlot(). Used by \ref ObjectPropertyBuffer.
-		void  emitCreateSlot(const QString &widget, const QString &value) 
+		void  emitCreateSlot(const QString &widget, const QString &value)
 			{ emit createFormSlot(m_active, widget, value); }
 
 		/*! \return The Form actually active and focused.
 		 */
 		Form* activeForm() const;
 
-		/*! \return the Form whose toplevel widget is \a w, or 0 
+		/*! \return the Form whose toplevel widget is \a w, or 0
 		 if there is not or the Form is in preview mode. */
 		Form* formForWidget(QWidget *w);
 
-		/*! \return true if \a w is a toplevel widget, 
+		/*! \return true if \a w is a toplevel widget,
 		 ie. it is the main widget of a Form (so it should have a caption ,
 		 an icon ...) */
 		bool isTopLevel(QWidget *w);
@@ -136,8 +136,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Shows a propertybuffer in PropertyBuffer */
 		virtual void showPropertyBuffer(ObjectPropertyBuffer *buff);
 
-		/*! Sets the external editors used by FormDesigner (as they may be docked). 
-		 This function also connects appropriate signals and slots to ensure 
+		/*! Sets the external editors used by FormDesigner (as they may be docked).
+		 This function also connects appropriate signals and slots to ensure
 		 sync with the current Form.
 		 */
 		void setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview);
@@ -206,6 +206,11 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		//! Lay out selected widgets using Grid layout.
 		void layoutGrid();
 
+		//! Lay out selected widgets in an horizontal splitter
+		void  layoutHSplitter();
+		//! Lay out selected widgets in a verticak splitter
+		void  layoutVSplitter();
+
 		//! Breaks selected layout(calls \ref BreakLayoutCommand).
 		void breakLayout();
 
@@ -232,7 +237,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void bringWidgetToFront();
 		void sendWidgetToBack();
 
-		/*! This slot is called when the user presses a "Widget" toolbar button 
+		/*! This slot is called when the user presses a "Widget" toolbar button
 		  or a "Widget" menu item. Prepares all Forms for
 		  creation of a new widget (ie changes cursor ...).
 		 */
@@ -259,7 +264,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		//! Used to delayed widgets' deletion (in Container::deleteItem())
 		void deleteWidgetLater( QWidget *w );
 
-		/*! For debugging purposes only: 
+		/*! For debugging purposes only:
 		 shows a text window containing contents of .ui XML definition of the current form. */
 		void showFormUICode();
 
@@ -267,32 +272,32 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! this signal is emmited as the property buffer switched */
 		void bufferSwitched(KexiPropertyBuffer *buff);
 
-		/*! This signal is emitted when any change is made to the Form \a form, 
+		/*! This signal is emitted when any change is made to the Form \a form,
 		 so it will need to be saved. */
 		void dirty(KFormDesigner::Form *form, bool isDirty=true);
 
-		/*! Signal emitted when a normal widget is selected inside \a form 
+		/*! Signal emitted when a normal widget is selected inside \a form
 		 (ie not form widget). If \a multiple is true,
 		 then more than one widget is selected. Use this to update actions state. */
 		void widgetSelected(KFormDesigner::Form *form, bool multiple);
 
-		/*! Signal emitted when the form widget is selected inside \a form. 
+		/*! Signal emitted when the form widget is selected inside \a form.
 		 Use this to update actions state. */
 		void formWidgetSelected(KFormDesigner::Form *form);
 
-		/*! Signal emitted when no form (or a preview form) is selected. 
+		/*! Signal emitted when no form (or a preview form) is selected.
 		 Use this to update actions state. */
 		void noFormSelected();
 
-		/*! Signal emitted when undo action activation changes. 
+		/*! Signal emitted when undo action activation changes.
 		 \a text is the full text of the action (including command name). */
 		void undoEnabled(bool enabled, const QString &text = QString::null);
 
-		/*! Signal emitted when redo action activation changes. 
+		/*! Signal emitted when redo action activation changes.
 		 \a text is the full text of the action (including command name). */
 		void redoEnabled(bool enabled, const QString &text = QString::null);
 
-		/*! Signal emitted when the user choose a signal in 'Events' menu 
+		/*! Signal emitted when the user choose a signal in 'Events' menu
 		 in context menu, or in 'Events' in property editor.
 		 The code editor should then create the slot connected to this signal. */
 		void createFormSlot(KFormDesigner::Form *form, const QString &widget, const QString &signal);
@@ -338,8 +343,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 	private:
 		//! Enum for menu items indexes
-		enum { MenuTitle = 200, MenuCopy, MenuCut, MenuPaste, MenuDelete, MenuHBox = 301, 
-			MenuVBox, MenuGrid, MenuNoBuddy = 501 };
+		enum { MenuTitle = 200, MenuCopy, MenuCut, MenuPaste, MenuDelete, MenuHBox = 301,
+			MenuVBox, MenuGrid, MenuHSplitter, MenuVSplitter, MenuNoBuddy = 501 };
 
 		ObjectPropertyBuffer	*m_buffer;
 		WidgetLibrary		*m_lib;

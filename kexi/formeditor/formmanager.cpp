@@ -101,7 +101,9 @@ FormManager::FormManager(QObject *parent,
 	m_popup->insertItem( i18n("Lay Out &Horizontally"), this, SLOT(layoutHBox()), 0, MenuHBox);
 	m_popup->insertItem( i18n("Lay Out &Vertically"), this, SLOT(layoutVBox()), 0, MenuVBox);
 	m_popup->insertItem( i18n("Lay Out in &Grid"), this, SLOT(layoutGrid()), 0, MenuGrid);
-	m_popup->insertSeparator(MenuGrid + 1);
+	m_popup->insertItem( i18n("Lay Out Horizontally in &Splitter"), this, SLOT(layoutHSplitter()), 0, MenuHSplitter);
+	m_popup->insertItem( i18n("Lay Out Verti&cally in Splitter"), this, SLOT(layoutVSplitter()), 0, MenuVSplitter);
+	m_popup->insertSeparator(MenuVSplitter + 1);
 
 	m_treeview = 0;
 	m_editor = 0;
@@ -852,6 +854,18 @@ FormManager::layoutGrid()
 }
 
 void
+FormManager::layoutHSplitter()
+{
+	createLayout(Container::HSplitter);
+}
+
+void
+FormManager::layoutVSplitter()
+{
+	createLayout(Container::VSplitter);
+}
+
+void
 FormManager::createLayout(int layoutType)
 {
 	WidgetList *list = m_active->selectedWidgets();
@@ -1138,7 +1152,7 @@ FormManager::deleteWidgetLaterTimeout()
 	m_deleteWidgetLater_list.clear();
 }
 
-void 
+void
 FormManager::showFormUICode()
 {
 #ifdef KEXI_SHOW_DEBUG_ACTIONS
@@ -1162,7 +1176,7 @@ FormManager::showFormUICode()
 		f.setFamily("courier");
 		m_currentUICodeDialogEditor->setFont(f);
 		m_currentUICodeDialogEditor->setTextFormat(Qt::PlainText);
-		
+
 		m_originalUICodeDialogEditor = new KTextEdit(QString::null, QString::null, tab);
 		tab->addTab( m_originalUICodeDialogEditor, i18n("Original"));
 		m_originalUICodeDialogEditor->setReadOnly(true);

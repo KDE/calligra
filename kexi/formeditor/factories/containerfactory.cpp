@@ -24,6 +24,7 @@
 #include <qfileinfo.h>
 #include <qscrollview.h>
 #include <qtabbar.h>
+#include <qsplitter.h>
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
@@ -333,6 +334,14 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wGrid->setDescription(i18n("A simple container to group widgets in a grid"));
 	m_classes.append(wGrid);
 
+	KFormDesigner::WidgetInfo *wSplitter = new KFormDesigner::WidgetInfo(this);
+	wSplitter->setPixmap("frame");
+	wSplitter->setClassName("QSplitter");
+	wSplitter->setName(i18n("Splitter"));
+	wSplitter->setNamePrefix(i18n("Splitter"));
+	wSplitter->setDescription(i18n("A container that enables user to resize its children"));
+	m_classes.append(wSplitter);
+
 	KFormDesigner::WidgetInfo *wSubForm = new KFormDesigner::WidgetInfo(this);
 	wSubForm->setPixmap("form");
 	wSubForm->setClassName("SubForm");
@@ -411,28 +420,29 @@ ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 		}
 		return stack;
 	}
-	else if(c == "HBox")
-	{
+	else if(c == "HBox") {
 		HBox *w = new HBox(p, n);
 		new KFormDesigner::Container(container, w, container);
 		return w;
 	}
-	else if(c == "VBox")
-	{
+	else if(c == "VBox") {
 		VBox *w = new VBox(p, n);
 		new KFormDesigner::Container(container, w, container);
 		return w;
 	}
-	else if(c == "Grid")
-	{
+	else if(c == "Grid") {
 		Grid *w = new Grid(p, n);
 		new KFormDesigner::Container(container, w, container);
 		return w;
 	}
-	else if(c == "SubForm")
-	{
+	else if(c == "SubForm") {
 		SubForm *subform = new SubForm(container->form()->manager(), p, n);
 		return subform;
+	}
+	else if(c == "QSplitter") {
+		QSplitter *split = new QSplitter(p, n);
+		new KFormDesigner::Container(container, split, container);
+		return split;
 	}
 
 	return 0;
@@ -574,6 +584,8 @@ ContainerFactory::autoSaveProperties(const QString &c)
 {
 	if(c == "SubForm")
 		return QStringList("formName");
+	else if(c == "QSplitter")
+		return QStringList("orientation");
 	return QStringList();
 }
 

@@ -175,6 +175,8 @@ KFormDesignerPart::setupActions()
 	new KAction(i18n("Lay Out Widgets &Horizontally"), QString::null, KShortcut(0), m_manager, SLOT(layoutHBox()), actionCollection(), "layout_hbox");
 	new KAction(i18n("Lay Out Widgets &Vertically"), QString::null, KShortcut(0), m_manager, SLOT(layoutVBox()), actionCollection(), "layout_vbox");
 	new KAction(i18n("Lay Out Widgets in &Grid"), QString::null, KShortcut(0), m_manager, SLOT(layoutGrid()), actionCollection(), "layout_grid");
+	new KAction(i18n("Lay Out Widgets H&orizontally in a Splitter"), QString::null, KShortcut(0), m_manager, SLOT(layoutHSplitter()), actionCollection(), "layout_hsplitter");
+	new KAction(i18n("Lay Out Widgets Verti&cally in a Splitter"), QString::null, KShortcut(0), m_manager, SLOT(layoutVSplitter()), actionCollection(), "layout_vsplitter");
 	new KAction(i18n("&Break Layout"), QString::null, KShortcut(0), m_manager, SLOT(breakLayout()), actionCollection(), "break_layout");
 
 	new KAction(i18n("Bring Widget to Front"), "raise", KShortcut(0), m_manager, SLOT(bringWidgetToFront()), actionCollection(), "format_raise");
@@ -365,6 +367,8 @@ KFormDesignerPart::slotWidgetSelected(Form *form, bool multiple)
 	ENABLE_ACTION("layout_hbox", multiple);
 	ENABLE_ACTION("layout_vbox", multiple);
 	ENABLE_ACTION("layout_grid", multiple);
+	ENABLE_ACTION("layout_hsplitter", multiple);
+	ENABLE_ACTION("layout_vsplitter", multiple);
 
 	KFormDesigner::Container *container = m_manager->activeForm()->activeContainer();
 	ENABLE_ACTION("break_layout", (container->layoutType() != KFormDesigner::Container::NoLayout));
@@ -380,6 +384,8 @@ KFormDesignerPart::slotFormWidgetSelected(Form *form)
 	ENABLE_ACTION("layout_hbox", true);
 	ENABLE_ACTION("layout_vbox", true);
 	ENABLE_ACTION("layout_grid", true);
+	ENABLE_ACTION("layout_hsplitter", true);
+	ENABLE_ACTION("layout_vsplitter", true);
 	ENABLE_ACTION("break_layout", (form->toplevelContainer()->layoutType() != KFormDesigner::Container::NoLayout));
 }
 
@@ -446,6 +452,8 @@ KFormDesignerPart::disableWidgetActions()
 	ENABLE_ACTION("layout_hbox", false);
 	ENABLE_ACTION("layout_vbox", false);
 	ENABLE_ACTION("layout_grid", false);
+	ENABLE_ACTION("layout_hsplitter", false);
+	ENABLE_ACTION("layout_vsplitter", false);
 	ENABLE_ACTION("break_layout", false);
 }
 
@@ -634,7 +642,7 @@ FormWidgetBase::closeEvent(QCloseEvent *ev)
 	}
 }
 
-K_EXPORT_COMPONENT_FACTORY(libkformdesigner_part, KFDFactory)
+K_EXPORT_COMPONENT_FACTORY(libkformdesigner_part, KFDFactory);
 
 #include "kfd_part.moc"
 

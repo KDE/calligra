@@ -71,7 +71,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 	Q_OBJECT
 
 	public:
-		enum LayoutType { NoLayout=0, HBox, VBox, Grid };
+		enum LayoutType { NoLayout=0, HBox, VBox, Grid, /* special types */ HSplitter, VSplitter };
 
 		/**
 		 * Creates a Container from the widget \a container, which have
