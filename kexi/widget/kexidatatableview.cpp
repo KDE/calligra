@@ -82,7 +82,10 @@ void KexiDataTableView::setDataSet(KexiDBRecordSet *rec)
 		 defaultval, 100, m_record->fieldInfo(i)->auto_increment());
 	}
 
-	m_records = m_record->numRows() + 1;
+	m_records = m_record->numRows();
+	if(!m_record->readOnly())
+		m_records++;
+
 	resizeContents(contentsWidth(), m_records * rowHeight());
 
 	m_first = false;
@@ -112,7 +115,7 @@ KexiDataTableView::readOnly()
 void
 KexiDataTableView::insertNext()
 {
-	if((m_maxRecord + 1) == m_records) {
+	if((m_maxRecord + 1) == m_records && !m_record->readOnly()) {
 		appendInsertItem();
 		return;
 	}else if(!m_record->next())
