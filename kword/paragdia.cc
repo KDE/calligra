@@ -359,40 +359,45 @@ void KWNumPreview::drawContents( QPainter* painter) {
     int y = height() / 2 - fm.height() / 2;
 
     // Make the numbering example in the QString theText.
-    QString theText = m_counter.prefix();
-    for(unsigned int i = 0; m_counter.depth() > i; theText.append("1."), i++);
-    switch(m_counter.style()) {
-        case Counter::STYLE_NUM:
-            theText.append(QString::number(m_counter.startNumber()));
-            break;
-        case Counter::STYLE_ALPHAB_L:
-            theText.append(makeAlphaLowerNumber(m_counter.startNumber()));
-            break;
-        case Counter::STYLE_ALPHAB_U:
-            theText.append(makeAlphaUpperNumber(m_counter.startNumber()));
-            break;
-        case Counter::STYLE_ROM_NUM_L:
-            theText.append(makeRomanNumber(m_counter.startNumber()));
-            break;
-        case Counter::STYLE_ROM_NUM_U:
-            theText.append(makeRomanNumber(m_counter.startNumber()).upper());
-        case Counter::STYLE_NONE:
-        case Counter::STYLE_CUSTOM:
-            break;
-        case Counter::STYLE_CUSTOMBULLET:
-            theText.append(m_counter.customBulletCharacter());
-            break;
-        case Counter::STYLE_CIRCLEBULLET:
-            theText.append("o");
-            break;
-        case Counter::STYLE_SQUAREBULLET:
-            theText.append("[]");
-            break;
-        case Counter::STYLE_DISCBULLET:
-            theText.append("O");
-            break;
+    QString theText = "";
+    if(m_counter.numbering() != Counter::NUM_NONE) {
+        theText.append(m_counter.prefix());
+        for(unsigned int i = 0; m_counter.depth() > i; theText.append("1."), i++);
+        switch(m_counter.style()) {
+            case Counter::STYLE_NUM:
+                theText.append(QString::number(m_counter.startNumber()));
+                break;
+            case Counter::STYLE_ALPHAB_L:
+                theText.append(makeAlphaLowerNumber(m_counter.startNumber()));
+                break;
+            case Counter::STYLE_ALPHAB_U:
+                theText.append(makeAlphaUpperNumber(m_counter.startNumber()));
+                break;
+            case Counter::STYLE_ROM_NUM_L:
+                theText.append(makeRomanNumber(m_counter.startNumber()));
+                break;
+            case Counter::STYLE_ROM_NUM_U:
+                theText.append(makeRomanNumber(m_counter.startNumber()).upper());
+            case Counter::STYLE_NONE:
+            case Counter::STYLE_CUSTOM:
+                break;
+            case Counter::STYLE_CUSTOMBULLET:
+                theText.append(m_counter.customBulletCharacter());
+                break;
+            case Counter::STYLE_CIRCLEBULLET:
+                theText.append("o");
+                break;
+            case Counter::STYLE_SQUAREBULLET:
+                theText.append("[]");
+                break;
+            case Counter::STYLE_DISCBULLET:
+                theText.append("O");
+                break;
+        }
+        theText.append(m_counter.suffix());
+        theText.append(" ");
     }
-    theText.append(m_counter.suffix());
+    theText.append(i18n("Normal paragraph text"));
  
     painter->drawText( 20 + (int)( m_style->paragLayout().margins[QStyleSheetItem::MarginFirstLine]
                                    + m_style->paragLayout().margins[QStyleSheetItem::MarginLeft] ),

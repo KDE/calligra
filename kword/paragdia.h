@@ -241,10 +241,10 @@ protected slots:
     void numTypeChanged( int );  // selected another type radiobutton.
 
     void changeKWSpinboxType();
-    void suffixChanged(const QString & txt) {m_counter.setSuffix(txt); }
-    void prefixChanged(const QString & txt) {m_counter.setPrefix(txt); }
-    void startChanged(int i) {m_counter.setStartNumber(i); }
-    void depthChanged(int i) {m_counter.setDepth(i); }
+    void suffixChanged(const QString & txt) {m_counter.setSuffix(txt); updatePreview(); }
+    void prefixChanged(const QString & txt) {m_counter.setPrefix(txt);  updatePreview();}
+    void startChanged(int i) {m_counter.setStartNumber(i);  updatePreview();}
+    void depthChanged(int i) {m_counter.setDepth(i);  updatePreview();}
 
 private:
     void updatePreview();
