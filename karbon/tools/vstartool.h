@@ -30,6 +30,7 @@
 
 class KoUnitDoubleSpinBox;
 class KIntSpinBox;
+class KComboBox;
 class KarbonPart;
 
 class VStarTool : public VShapeTool
@@ -59,6 +60,7 @@ private:
 		int edges() const;
 		double innerRadius() const;
 		double outerRadius() const;
+		uint type() const;
 		void setEdges( int );
 		void setInnerRadius( double );
 		void setOuterRadius( double );
@@ -67,6 +69,7 @@ private:
 		KoUnitDoubleSpinBox	*m_innerR;
 		KoUnitDoubleSpinBox	*m_outerR;
 		KIntSpinBox			*m_edges;
+		KComboBox			*m_type;
 		KarbonPart			*m_part;
 		QLabel				*m_innerRLabel;
 		QLabel				*m_outerRLabel;

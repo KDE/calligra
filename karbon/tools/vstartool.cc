@@ -22,6 +22,7 @@
 
 #include <klocale.h>
 #include <knuminput.h>
+#include <kcombobox.h>
 
 #include <karbon_view.h>
 #include <karbon_part.h>
@@ -33,6 +34,14 @@
 VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
 {
+	new QLabel( i18n( "Orientation:" ), this );
+	m_type = new KComboBox( false, this );
+	m_type->insertItem( i18n( "Star outline" ), 0 );
+	m_type->insertItem( i18n( "Spoke" ), 1 );
+	m_type->insertItem( i18n( "Wheel" ), 2 );
+	m_type->insertItem( i18n( "Polygon" ), 3 );
+	m_type->insertItem( i18n( "Framed Star" ), 4 );
+
 	// add width/height-input:
 	m_outerRLabel = new QLabel( i18n( "Outer radius:" ), this );
 	m_outerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
@@ -93,6 +102,12 @@ VStarTool::VStarOptionsWidget::outerRadius() const
 	return m_outerR->value();
 }
 
+uint
+VStarTool::VStarOptionsWidget::type() const
+{
+	return m_type->currentItem();
+}
+
 VStarTool::VStarTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Star" ), true )
 {
@@ -142,7 +157,7 @@ VStarTool::shape( bool interactive ) const
 				m_p,
 				KoUnit::ptFromUnit( m_optionsWidget->outerRadius(), view()->part()->unit() ),
 				KoUnit::ptFromUnit( m_optionsWidget->innerRadius(), view()->part()->unit() ),
-				m_optionsWidget->edges() );
+				m_optionsWidget->edges(), 0.0, (VStar::VStarType)m_optionsWidget->type() );
 	}
 	else
 		return
@@ -153,6 +168,6 @@ VStarTool::shape( bool interactive ) const
 				m_optionsWidget->innerRadius() * m_d1 /
 				m_optionsWidget->outerRadius(),
 				m_optionsWidget->edges(),
-				m_d2 );
+				m_d2, (VStar::VStarType)m_optionsWidget->type() );
 }
 

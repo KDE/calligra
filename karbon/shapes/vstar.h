@@ -26,11 +26,22 @@
 class VStar : public VComposite
 {
 public:
+	enum VStarType
+	{
+		star_outline,
+		spoke,
+		wheel,
+		polygon,
+		framed_star
+	};
 	VStar( VObject* parent,
 		const KoPoint& center, double outerRadius, double innerRadius,
-		uint edges, double angle = 0.0 );
+		uint edges, double angle = 0.0, VStarType type = star_outline );
 
 	virtual QString name() const;
+
+private:
+	VStarType m_type;
 };
 
 #endif

@@ -30,8 +30,8 @@
 
 VStar::VStar( VObject* parent,
 		const KoPoint& center, double outerRadius, double innerRadius,
-		uint edges, double angle )
-	: VComposite( parent )
+		uint edges, double angle, VStarType type )
+	: VComposite( parent ), m_type( type )
 {
 	// A star should have at least 3 edges:
 	if( edges < 3 )
@@ -51,13 +51,19 @@ VStar::VStar( VObject* parent,
 		outerRadius * sin( angle + VGlobal::pi_2 ) );
 	moveTo( p );
 
+	if( m_type == wheel || m_type == spoke )
+		innerRadius = 0.0;
+
 	for ( uint i = 0; i < edges; ++i )
 	{
-		p.setX( innerRadius *
-			cos( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) );
-		p.setY( innerRadius *
-			sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) );
-		lineTo( p );
+		if( m_type != polygon )
+		{
+			p.setX( innerRadius *
+				cos( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) );
+			p.setY( innerRadius *
+				sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) );
+			lineTo( p );
+		}
 
 		p.setX( outerRadius *
 			cos( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 ) ) );
@@ -65,6 +71,15 @@ VStar::VStar( VObject* parent,
 			sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 ) ) );
 		lineTo( p );
 	}
+	if( m_type == wheel || m_type == framed_star )
+		for ( int i = edges - 1; i >= 0; --i )
+		{
+			p.setX( outerRadius *
+				cos( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 ) ) );
+			p.setY( outerRadius *
+				sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 ) ) );
+			lineTo( p );
+		}
 	close();
 
 	// translate path to center:
