@@ -11,10 +11,9 @@
 #include <kdebug.h>
 
 
-// TODO: look in "perl cookbook" for better regexp:
 static inline bool isNumber( const QString& in )
 {
-	QRegExp reg( "^(?:\\d*\\.)?\\d+$" );	// TODO: fail safe?
+	QRegExp reg( "^-?\\d*\\.?\\d+$" );	// TODO: fail safe?
 	return in.find( reg, 0 ) != -1;
 }
 
@@ -23,6 +22,10 @@ AiDocument::AiDocument()
 	m_envStack.push( document );
 }
 
+
+// this function is written with performance in mind.
+// it's not very nice to look at.
+
 void
 AiDocument::parse( QTextStream& s, const QString& in )
 {
@@ -30,8 +33,7 @@ AiDocument::parse( QTextStream& s, const QString& in )
 		"<?xml version=\"0.1\" encoding=\"UTF-8\"?>\n"
 		"<!DOCTYPE DOC>\n"
 		"<DOC mime=\"application/x-karbon\" version=\"0.1\" "
-			"editor=\"Karbon AI Import Filter\" >\n"
-		"<LAYER visible=\"1\" >\n"
+			"editor=\"Karbon AI Import Filter\" >"
 	<< endl;
 
 	QStringList tokens = QStringList::split( QRegExp( "\\s+" ), in );
@@ -47,8 +49,6 @@ AiDocument::parse( QTextStream& s, const QString& in )
 			if( (*itr).startsWith( "%!PS-Adobe-" ) )
 			{
 				m_envStack.push( head );
-				--itr;
-				continue;
 			}
 		}
 		// <----- document
@@ -60,7 +60,6 @@ AiDocument::parse( QTextStream& s, const QString& in )
 			{
 				m_envStack.pop();
 				m_envStack.push( body );
-				continue;
 			}
 		}
 		// <----- head
@@ -68,6 +67,47 @@ AiDocument::parse( QTextStream& s, const QString& in )
 		// body ---->
 		else if( m_envStack.top() == body )
 		{
+			if( *itr == "%%BeginSetup" )
+			{
+				m_stringStack.clear();
+				m_numberStack.clear();
+				m_envStack.push( setup );
+			}
+			else if( *itr == "%%EOF" )
+			{
+				m_stringStack.clear();
+				m_numberStack.clear();
+				m_envStack.pop();
+			}
+			else if( *itr == "%AI5_BeginLayer" )
+			{
+				layerBegin( s );
+				m_stringStack.clear();
+				m_numberStack.clear();
+				m_envStack.push( layer );
+			}
+		}
+		// <----- body
+
+		// setup ----->
+		else if( m_envStack.top() == setup )
+		{
+			if( *itr == "%%EndSetup" )
+				m_envStack.pop();
+		}
+		// <----- setup
+
+		// layer ----->
+		else if( m_envStack.top() == layer )
+		{
+			if( (*itr).startsWith( "%AI5_EndLayer" ) )
+			{
+				layerEnd( s );
+				m_stringStack.clear();
+				m_numberStack.clear();
+				m_envStack.pop();
+			}
+
 			if( m_stringStack.count() == 1  )
 			{
 				if( m_numberStack.count() == 2 )
@@ -77,144 +117,234 @@ AiDocument::parse( QTextStream& s, const QString& in )
 						*( m_stringStack.top() ) == "m" ||
 						*( m_stringStack.top() ) == "M" )
 					{
+						pathBegin( s );
+						QString val[2];
+						val[1] = *( m_numberStack.pop() );
+						val[0] = *( m_numberStack.pop() );
+						moveTo( s, val[0], val[1] );
+						m_stringStack.clear();
+						m_numberStack.clear();
 						m_envStack.push( path );
-						--itr;
-						continue;
 					}
 				}
-
-				m_stringStack.clear();
-				m_numberStack.clear();
-			}
-
-			if( (*itr).startsWith( "%AI" ) )
-			{
-				m_envStack.push( definition );
-				--itr;
-				continue;
-			}
-			else if( *itr == "%%EOF" )
-			{
-				m_envStack.pop();
-				continue;
-			}
-			else if( isNumber( *itr ) )
-			{
-				m_stringStack.clear();
-				m_envStack.push( number );
-				--itr;
-				continue;
-			}
-			else
-			{
-				m_envStack.push( string );
-				--itr;
-				continue;
-			}
-		}
-		// <----- body
-
-		// path ----->
-		else if( m_envStack.top() == path )
-		{
-			if(
-				m_numberStack.count() == 0 &&
-				m_stringStack.count() == 1 )
-			{
-				m_stringStack.clear();
-				m_numberStack.clear();
-			}
-			else if(
-				m_numberStack.count() == 1 &&
-				m_stringStack.count() == 1 )
-			{
-				m_stringStack.clear();
-				m_numberStack.clear();
-			}
-			else if(
-				m_numberStack.count() == 2 &&
-				m_stringStack.count() == 1  )
-			{
-				if(
-					*( m_stringStack.top() ) == "m" ||
-					*( m_stringStack.top() ) == "M" )
-				{
-					QString val[2];
-					val[1] = *( m_numberStack.pop() );
-					val[0] = *( m_numberStack.pop() );
-					moveTo( s, val[0], val[1] );
-				}
-				else if(
-					*( m_stringStack.top() ) == "l" ||
-					*( m_stringStack.top() ) == "L" )
-				{
-					QString val[2];
-					val[1] = *( m_numberStack.pop() );
-					val[0] = *( m_numberStack.pop() );
-					lineTo( s, val[0], val[1] );
-				}
-
-				m_stringStack.clear();
-				m_numberStack.clear();
-			}
-			else if(
-				m_numberStack.count() == 4 &&
-				m_stringStack.count() == 1  )
-			{
-				m_stringStack.clear();
-				m_numberStack.clear();
-			}
-			else if(
-				m_numberStack.count() == 6 &&
-				m_stringStack.count() == 1  )
-			{
-				m_stringStack.clear();
-				m_numberStack.clear();
+// TODO: for now:
+m_stringStack.clear();
+m_numberStack.clear();
 			}
 
 			if( isNumber( *itr ) )
 			{
 				m_stringStack.clear();
 				m_envStack.push( number );
-				--itr;
-				continue;
 			}
 			else
-			{
 				m_envStack.push( string );
-				--itr;
+		}
+		// <----- layer
+
+		// path ----->
+		else if( m_envStack.top() == path )
+		{
+			if( (*itr).startsWith( "%AI5_EndLayer" ) )
+			{
+				pathEnd( s );
+				m_stringStack.clear();
+				m_numberStack.clear();
+				m_envStack.pop();
+				--itr;		// pass it through to layer.
 				continue;
 			}
+
+kdDebug() << *itr << "\t" << m_stringStack.count() << "\t" << m_numberStack.count() << endl;
+
+			if( m_stringStack.count() == 1 )
+			{
+				if( m_numberStack.count() == 0 )
+				{
+					if(
+						*( m_stringStack.top() ) == "N" ||
+						*( m_stringStack.top() ) == "n" ||
+						*( m_stringStack.top() ) == "F" ||
+						*( m_stringStack.top() ) == "f" ||
+						*( m_stringStack.top() ) == "S" ||
+						*( m_stringStack.top() ) == "s" ||
+						*( m_stringStack.top() ) == "B" ||
+						*( m_stringStack.top() ) == "b" ||
+						*( m_stringStack.top() ) == "N" ||
+						*( m_stringStack.top() ) == "n" )
+					{
+						m_stringStack.clear();
+						m_numberStack.clear();
+					}
+				}
+				else if( m_numberStack.count() == 1 )
+				{
+					if(
+						*( m_stringStack.top() ) == "d" ||
+						*( m_stringStack.top() ) == "i" ||
+						*( m_stringStack.top() ) == "D" ||
+						*( m_stringStack.top() ) == "j" ||
+						*( m_stringStack.top() ) == "J" ||
+						*( m_stringStack.top() ) == "M" ||
+						*( m_stringStack.top() ) == "w" )
+					{
+						m_stringStack.clear();
+						m_numberStack.clear();
+					}
+				}
+				else if( m_numberStack.count() == 2 )
+				{
+					if(
+						*( m_stringStack.top() ) == "m" ||
+						*( m_stringStack.top() ) == "M" )
+					{
+						// moveto of next path is end of this:
+						pathEnd( s );
+
+						pathBegin( s );
+						QString val[2];
+						val[1] = *( m_numberStack.pop() );
+						val[0] = *( m_numberStack.pop() );
+						moveTo( s, val[0], val[1] );
+						m_stringStack.clear();
+						m_numberStack.clear();
+					}
+					else if(
+						*( m_stringStack.top() ) == "l" ||
+						*( m_stringStack.top() ) == "L" )
+					{
+						QString val[2];
+						val[1] = *( m_numberStack.pop() );
+						val[0] = *( m_numberStack.pop() );
+						lineTo( s, val[0], val[1] );
+						m_stringStack.clear();
+						m_numberStack.clear();
+					}
+				}
+				else if( m_numberStack.count() == 4 )
+				{
+					if(
+						*( m_stringStack.top() ) == "v" ||
+						*( m_stringStack.top() ) == "V" )
+					{
+						QString val[4];
+						val[3] = *( m_numberStack.pop() );
+						val[2] = *( m_numberStack.pop() );
+						val[1] = *( m_numberStack.pop() );
+						val[0] = *( m_numberStack.pop() );
+						curve1To( s, val[0], val[1], val[2], val[3] );
+						m_stringStack.clear();
+						m_numberStack.clear();
+					}
+					else if(
+						*( m_stringStack.top() ) == "y" ||
+						*( m_stringStack.top() ) == "Y" )
+					{
+						QString val[4];
+						val[3] = *( m_numberStack.pop() );
+						val[2] = *( m_numberStack.pop() );
+						val[1] = *( m_numberStack.pop() );
+						val[0] = *( m_numberStack.pop() );
+						curve2To( s, val[0], val[1], val[2], val[3] );
+						m_stringStack.clear();
+						m_numberStack.clear();
+					}
+				}
+				else if( m_numberStack.count() == 6 )
+				{
+					if(
+						*( m_stringStack.top() ) == "c" ||
+						*( m_stringStack.top() ) == "C" )
+					{
+						QString val[6];
+						val[5] = *( m_numberStack.pop() );
+						val[4] = *( m_numberStack.pop() );
+						val[3] = *( m_numberStack.pop() );
+						val[2] = *( m_numberStack.pop() );
+						val[1] = *( m_numberStack.pop() );
+						val[0] = *( m_numberStack.pop() );
+						curveTo( s,
+							val[0], val[1],
+							val[2], val[3],
+							val[4], val[5] );
+						m_stringStack.clear();
+						m_numberStack.clear();
+					}
+				}
+			}
+
+			if( isNumber( *itr ) )
+			{
+				m_stringStack.clear();
+				m_envStack.push( number );
+			}
+			else
+				m_envStack.push( string );
 		}
+		// <----- path
+
+		// definition ----->
 		else if( m_envStack.top() == definition )
 		{
 			if( (*itr).startsWith( "%AI" ) )
-			{
 				m_envStack.pop();
-				continue;
-			}
 		}
-		else if( m_envStack.top() == number )
+		// <----- definition
+
+
+		// missing "else" is no mistake!
+		// number ----->
+		if( m_envStack.top() == number )
 		{
 			m_numberStack.push( &(*itr) );
 			m_envStack.pop();
-			continue;
 		}
+		// <----- number
+
+		// string ----->
 		else if( m_envStack.top() == string )
 		{
 			m_stringStack.push( &(*itr) );
 			m_envStack.pop();
-			continue;
 		}
-	}
-	// <----- path
+		// <----- string
 
+	}
 	s <<
-		"</LAYER>\n"
 		"</DOC>\n"
 	<< endl;
 }
 
+
+void
+AiDocument::layerBegin( QTextStream& s )
+{
+	s << "<LAYER visible=\"1\">" << endl;
+}
+
+void
+AiDocument::layerEnd( QTextStream& s )
+{
+	s << "</LAYER>" << endl;
+}
+
+void
+AiDocument::pathBegin( QTextStream& s )
+{
+	s <<
+		"<PATH>\n"
+		"<SEGMENTS>"
+	<< endl;
+}
+
+void
+AiDocument::pathEnd( QTextStream& s )
+{
+	s <<
+		"</SEGMENTS>\n"
+		"</PATH>"
+	<< endl;
+}
 
 void
 AiDocument::moveTo( QTextStream& s, const QString& x, const QString& y )

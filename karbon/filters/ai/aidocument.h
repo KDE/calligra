@@ -23,6 +23,11 @@ public:
 	void parse( QTextStream& s, const QString& in );
 
 protected:
+	void layerBegin( QTextStream& s );
+	void layerEnd( QTextStream& s );
+	void pathBegin( QTextStream& s );
+	void pathEnd( QTextStream& s );
+
 	void moveTo( QTextStream& s, const QString& x, const QString& y );
 	void curveTo( QTextStream& s,
 		const QString& x1, const QString& y1,
@@ -43,7 +48,9 @@ private:
 		head,
 		body,
 		path,
-		definition,	// currently e.g. %AI3_BeginPattern etc
+		setup,
+		layer,
+		definition,
 
 		number,
 		string
