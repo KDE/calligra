@@ -153,23 +153,6 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     addDocs();
 }
 
-void kchartDataEditor::column_clicked(int column)
-{
-    QString name = KInputDialog::getText(i18n("Column name"), i18n("Type a new column name:"), 
-                                      m_table->horizontalHeader()->label(column), 0, this);
-    //rename the column
-    if ( !name.isEmpty() )
-        m_table->horizontalHeader()->setLabel(column, name);
-}
-
-void kchartDataEditor::row_clicked(int row)
-{
-    QString name = KInputDialog::getText(i18n("Row name"), i18n("Type a new row name:"), 
-                                            m_table->verticalHeader()->label(row), 0, this);
-    //rename the row
-    if ( !name.isEmpty() )
-        m_table->verticalHeader()->setLabel(row, name);
-}
 
 // Add Tooltips and WhatsThis help to various parts of the Data Editor.
 //
@@ -191,16 +174,16 @@ void kchartDataEditor::addDocs()
 
     // The table.
     QToolTip::add(m_table, i18n("Chart data, each row is a data set. "
-			       "First row and column are headers."));
+			       "Headers can be changed by clicking on them."));
     QWhatsThis::add(m_table, i18n("<p>This table represents the complete data"
     " for the chart.<br><br> Each row is one data set of values."
-    " The name of such a data set can be changed in the first column (on the left)"
+    " The name of such a data set can be changed in the column header (on the left)"
     " of the table. In a line diagram each row is one line. In a ring diagram each row"
     " is one slice. <br><br> Each column represents one value of each data set."
     " Just like rows you can also change the name of each value in the"
-    " first row (at the top) of the table. In a bar diagram the number of columns"
-    " defines the number of value sets. In a ring diagram each column is one ring.</p>"));
-
+    " column headers (at the top) of the table.  In a bar diagram the number"
+    " of columns defines the number of value sets.  In a ring diagram each"
+    " column is one ring.</p>"));
 }
 
 
@@ -470,6 +453,36 @@ void kchartDataEditor::setCols(int cols)
 	// Do the actual shrinking.
 	m_table->setNumCols(cols);
     }
+}
+
+
+// Get the new name for a column header.
+//
+void kchartDataEditor::column_clicked(int column)
+{
+    QString name = KInputDialog::getText(i18n("Column name"), 
+					 i18n("Type a new column name:"), 
+					 m_table->horizontalHeader()->label(column),
+					 0, this);
+
+    // Rename the column.
+    if ( !name.isEmpty() )
+        m_table->horizontalHeader()->setLabel(column, name);
+}
+
+
+// Get the new name for a row header.
+//
+void kchartDataEditor::row_clicked(int row)
+{
+    QString name = KInputDialog::getText(i18n("Row name"),
+					 i18n("Type a new row name:"), 
+					 m_table->verticalHeader()->label(row),
+					 0, this);
+
+    // Rename the row.
+    if ( !name.isEmpty() )
+        m_table->verticalHeader()->setLabel(row, name);
 }
 
 

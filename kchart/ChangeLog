@@ -1,5 +1,10 @@
 2005-03-23  Inge Wallin  <inge@lysator.liu.se>
 
+	Code cleaning
+	* kchartDataEditor.{h,cc}: Move some methods, change What's This
+	strings, and add some comments.
+
+	Documentation.
 	* kchartDataEditor.{h,cc}: Document the reasons for the nice fix
 	of Fredrik below.
 
