@@ -988,8 +988,6 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     m_contentAutomaticStyles += delayedAutomaticStyles;
     delayedAutomaticStyles = QString::null; // Release memory
 
-    // ### TODO: automatic styles
-
     *m_streamOut << "<table:table-row>\n";
     int rowCurrent = 0;
 
@@ -1189,7 +1187,7 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
         const QString props ( textFormatToStyle( formatLayout,formatData.text, false, styleKey ) );
 
         QMap<QString,QString>::ConstIterator it ( m_mapTextStyleKeys.find(styleKey) );
-        kdDebug(30518) << "Searching text key: " << styleKey << endl;
+        //kdDebug(30518) << "Searching text key: " << styleKey << endl;
 
         QString automaticStyle;
         if (it==m_mapTextStyleKeys.end())
@@ -1429,7 +1427,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
 
     if (force || (layoutOrigin.alignment!=layout.alignment))
     {
-        // NOTE: OO 1.0.x uses start and left like left and right (section 3.11.4)
+        // NOTE: OO 1.0.x uses start and end like left and right (section 3.11.4)
         // Unfortunately in XSL-FO's text-align, they are really supposed to be the start and the end.
         if (layout.alignment == "left")
         {
@@ -1453,7 +1451,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
         }
         else if (layout.alignment == "auto")
         {
-            props += "fo:text-align=\"left\" ";
+            props += "fo:text-align=\"start\" ";
 #ifndef STRICT_OOWRITER_VERSION_1
             props += "style:text-auto-align=\"true\" "; // rejected draft OASIS extension
 #endif
@@ -1678,7 +1676,7 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
     if (!props.isEmpty())
     {
         QMap<QString,QString>::ConstIterator it ( m_mapParaStyleKeys.find(styleKey) );
-        kdDebug(30518) << "Searching paragraph key: " << styleKey << endl;
+        //kdDebug(30518) << "Searching paragraph key: " << styleKey << endl;
 
         QString automaticStyle;
 
@@ -1686,7 +1684,7 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
         {
             // We have additional properties, so we need an automatic style for the paragraph
             automaticStyle = makeAutomaticStyleName("P", m_automaticParagraphStyleNumber);
-            kdDebug(30518) << "Creating automatic paragraph style: " << automaticStyle << endl;
+            kdDebug(30518) << "Creating automatic paragraph style: " << automaticStyle << " key: " << styleKey << endl;
             m_mapParaStyleKeys[styleKey]=automaticStyle;
 
             m_contentAutomaticStyles += "  <style:style";
