@@ -398,12 +398,14 @@ void KSpreadCell::setValue( const KSpreadValue& v )
     d->extra()->QML = 0;
   }
 
+  setFlag(Flag_LayoutDirty);
+  setFlag(Flag_TextFormatDirty);
+  
+  setOutputText();
+  
   //set the displayed text, if we hold an error value
   if (d->value.type() == KSpreadValue::Error)
     d->strOutText = d->value.errorMessage ();
-
-  setFlag(Flag_LayoutDirty);
-  setFlag(Flag_TextFormatDirty);
 
   //value of the cell has changed - trigger necessary actions
   valueChanged ();
