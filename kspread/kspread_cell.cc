@@ -3551,10 +3551,10 @@ void KSpreadCell::checkValue()
     {
         str=str.left(str.length()-1);
         // First try to understand the number using the locale
-        double value = KGlobal::locale()->readNumber(p, &m_bValue);
+        double value = KGlobal::locale()->readNumber(str, &m_bValue);
         // If not, try with the '.' as decimal separator
         if (!m_bValue)
-            value = p.toDouble(&m_bValue);
+            value = str.toDouble(&m_bValue);
 
         if (m_bValue)
         {
