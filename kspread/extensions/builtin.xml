@@ -453,7 +453,7 @@
 	<Type>Double</Type>
       </Parameter>
       <Help>
-	<Text>The POLA() function returns the angle (in radians) corresponding to the position of a point in a cartisien landmark.</Text>
+	<Text>The POLA() function returns the angle (in radians) corresponding to the position of a point in a cartesian landmark.</Text>
 	<Syntax>POLA( X;Y )</Syntax>
 	<Example>POLA(12;12) returns 16.9705</Example>
 	<Example>POLA(12;0) returns 0.7853</Example>
