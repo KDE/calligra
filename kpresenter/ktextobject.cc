@@ -1250,6 +1250,8 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
   setShowCursor(true);
 
   setObjType(ot);
+
+  createRBMenu();
 }
 
 /*===================== set objecttype ===========================*/
@@ -2175,7 +2177,7 @@ QString KTextObject::getPartOfText(TxtCursor *_from,TxtCursor *_to)
 }
 
 /*====================== copy region =============================*/
-void KTextObject::copyRegion()
+void KTextObject::copyRegion(bool hideSelection=false)
 {
   if (drawSelection && stopCursor.positionAbs() != startCursor.positionAbs())
     {
@@ -2183,6 +2185,14 @@ void KTextObject::copyRegion()
 
       QClipboard *cb = QApplication::clipboard();
       cb->setText((const char*)buffer);
+
+      if (hideSelection)
+	{
+	  drawSelection = false;
+	  redrawSelection(startCursor,stopCursor);
+	  startCursor.setPositionAbs(0);
+	  stopCursor.setPositionAbs(0);
+	}
     }
 }
 
@@ -2197,12 +2207,22 @@ void KTextObject::cutRegion()
       cb->setText((const char*)buffer);
 
       deleteRegion(&startCursor,&stopCursor);
+
+      drawSelection = false;
+      redrawSelection(startCursor,stopCursor);
+      startCursor.setPositionAbs(0);
+      stopCursor.setPositionAbs(0);
     }
 }
 
 /*======================= paste from clipboard ===================*/
 void KTextObject::paste()
 {
+  drawSelection = false;
+  redrawSelection(startCursor,stopCursor);
+  startCursor.setPositionAbs(0);
+  stopCursor.setPositionAbs(0);
+
   QClipboard *cb = QApplication::clipboard();
   if (cb->text())
     insertText(cb->text(),txtCursor,currFont,currColor);
@@ -3834,11 +3854,14 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 /*====================== mouse press event ========================*/
 void KTextObject::mousePressEvent(QMouseEvent *e)
 {
-  drawSelection = false;
-
-  redrawSelection(startCursor,stopCursor);
-  startCursor.setPositionAbs(0);
-  stopCursor.setPositionAbs(0);
+  if (e->button() != RightButton)
+    {
+      drawSelection = false;
+      
+      redrawSelection(startCursor,stopCursor);
+      startCursor.setPositionAbs(0);
+      stopCursor.setPositionAbs(0);
+    }
 
   switch (e->button())
     {
@@ -3853,6 +3876,31 @@ void KTextObject::mousePressEvent(QMouseEvent *e)
 	getCursorPos(e->x(),e->y(),true,true);
 	mousePressed = false;
 	paste();
+      } break;
+    case RightButton:
+      {
+	mousePressed = false;
+
+	if (drawSelection && startCursor.positionAbs() != stopCursor.positionAbs())
+	  {
+	    rbMenu->setItemEnabled(CB_CUT,true);
+	    rbMenu->setItemEnabled(CB_COPY,true);
+	  }
+	else
+	  {
+	    rbMenu->setItemEnabled(CB_CUT,false);
+	    rbMenu->setItemEnabled(CB_COPY,false);
+	  }
+
+	QClipboard *cb = QApplication::clipboard();
+	if (cb->text())
+	  rbMenu->setItemEnabled(CB_PASTE,true);
+	else
+	  rbMenu->setItemEnabled(CB_PASTE,false);
+
+	QPoint pnt;
+	pnt.operator=(QCursor::pos());
+	rbMenu->popup(pnt);
       } break;
     }
 }
@@ -4877,4 +4925,22 @@ void KTextObject::_setHorzAlign(TxtParagraph::HorzAlign ha,int p = -1)
 
   paragraphAt(p)->setHorzAlign(ha);
   updateCell(p,0,false);
+}
+
+/*====================== create rb-menu ==========================*/
+void KTextObject::createRBMenu()
+{
+  QString pixdir;
+  QPixmap pixmap;
+  pixdir = KApplication::kde_toolbardir();
+
+  rbMenu = new QPopupMenu();
+  CHECK_PTR(rbMenu);
+  pixmap.load(pixdir+"/editcut.xpm");
+  CB_CUT = rbMenu->insertItem(pixmap,i18n("&Cut"),this,SLOT(clipCut()));
+  pixmap.load(pixdir+"/editcopy.xpm");
+  CB_COPY = rbMenu->insertItem(pixmap,i18n("C&opy"),this,SLOT(clipCopy()));
+  pixmap.load(pixdir+"/editpaste.xpm");
+  CB_PASTE = rbMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
+  rbMenu->setMouseTracking(true);
 }

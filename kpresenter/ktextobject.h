@@ -37,6 +37,7 @@
 #include <qregexp.h>
 #include <qpixmap.h>
 #include <qclipbrd.h>
+#include <qpopmenu.h>
 
 #include <kapp.h>
 
@@ -1166,7 +1167,7 @@ public:
   /**
    * Copy selection to clipboard.
    */
-  void copyRegion();
+  void copyRegion(bool hideSelection=false);
 
   /**
    * Copy selection to clipboard and delete selection (=cut).
@@ -1627,6 +1628,15 @@ protected:
   void changeAttribs();
   void changeHorzAlign(TxtParagraph::HorzAlign,int);
   void _setHorzAlign(TxtParagraph::HorzAlign,int);
+
+  void createRBMenu();
+
+protected slots:
+  void clipCut() {cutRegion();}
+  void clipCopy() {copyRegion(true);}
+  void clipPaste() {paste();}
+
+protected:
   //*********** variables ***********
 
   TxtCursor *txtCursor;
@@ -1684,6 +1694,10 @@ protected:
   bool composerMode;
   QColor _quoted_color,_normal_color;
   QFont _quoted_font,_normal_font;
+
+  QPopupMenu *rbMenu;
+
+  int CB_CUT,CB_COPY,CB_PASTE;
 
   //**************** constants ******************
   // HTML stuff

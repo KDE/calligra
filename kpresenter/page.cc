@@ -1136,6 +1136,24 @@ void Page::setTextAlign(TxtParagraph::HorzAlign align)
 /*====================== start screenpresentation ================*/
 void Page::startScreenPresentation(bool zoom)
 {
+  if (editNum > 0)
+    {
+      objPtr = getObject(editNum);
+      editNum = 0;
+      if (objPtr->objType == OT_TEXT)
+	{
+	  objPtr->textObj->recreate(0,0,QPoint(objPtr->ox - diffx(),objPtr->oy - diffy()),false);
+	  objPtr->textObj->clearFocus();
+	  objPtr->textObj->hide();
+	  disconnect(objPtr->textObj,SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
+	  disconnect(objPtr->textObj,SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
+	  disconnect(objPtr->textObj,SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
+	  objPtr->textObj->setShowCursor(false);
+	  setFocusProxy(0);
+	  setFocusPolicy(QWidget::NoFocus);
+	}
+    }
+
   unsigned int i,pgNum;
 
   if (zoom)
