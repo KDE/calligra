@@ -52,24 +52,11 @@ KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QC
 
     inpdoc.setContent( inpdev );
     outdoc.appendChild( outdoc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDomElement karbondoc = outdoc.createElement( "DOC" );
-    karbondoc.setAttribute( "editor", "karbon converter" );
-    karbondoc.setAttribute( "mime", "application/x-karbon" );
-    karbondoc.setAttribute( "syntaxVersion", 0.1 );
-    outdoc.appendChild( karbondoc );
-
-    QDomElement layer = outdoc.createElement( "LAYER" );
-    karbondoc.appendChild( layer );
-    layer.setAttribute( "name", "Layer" );
-    layer.setAttribute( "visible", "1" );
-
-
-
-// Do the conversion stuff here. For notes how to get the input/output
-    // locations please refer to koffice/lib/kofficecore/koFilterChain.h
+            
+	// Do the conversion!
 
 	convert();
-
+	kdDebug() << outdoc.toString() << endl;
     //return KoFilter::NotImplemented; // Change to KoFilter::OK if the conversion
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
     if(!out) {
@@ -85,16 +72,76 @@ KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QC
 
 void KontourImport::convert()
 {
-    QDomElement docElem = inpdoc.documentElement();
-    QDomElement paper = docElem.namedItem( "layout" ).toElement();
-    int ptPageHeight = paper.attribute( "width" ).toInt();
-    int ptPageWidth = paper.attribute( "height" ).toInt();
+	QDomElement karbondoc = outdoc.createElement( "DOC" );
+	karbondoc.setAttribute( "editor", "karbon converter" );
+    karbondoc.setAttribute( "mime", "application/x-karbon" );
+    karbondoc.setAttribute( "syntaxVersion", 0.1 );
+    outdoc.appendChild( karbondoc );
+	
+	QDomElement docElem = inpdoc.documentElement();
+	QDomElement page = docElem.namedItem( "page" ).toElement();
+	QDomElement paper = page.namedItem( "layout" ).toElement();
+    int ptPageHeight = paper.attribute( "height" ).toInt();
+    int ptPageWidth = paper.attribute( "width" ).toInt();
 
-    QDomElement outPaper = outdoc.createElement( "PAPER" );
-    docElem.appendChild( outPaper );
+	QDomElement outPaper = outdoc.createElement( "PAPER" );
+    karbondoc.appendChild( outPaper );
     outPaper.setAttribute( "width", ptPageWidth );
     outPaper.setAttribute( "height", ptPageHeight );
     outPaper.setAttribute( "unit", KoUnit::unitName(KoUnit::U_PT) );
+	
+	QDomElement layer = outdoc.createElement( "LAYER" );
+    karbondoc.appendChild( layer );
+    layer.setAttribute( "name", "Layer" );
+    layer.setAttribute( "visible", "1" );
+	    
+	QDomElement path = outdoc.createElement( "PATH" );
+	layer.appendChild( path );
+	
+	QDomElement stroke = outdoc.createElement( "STROKE" );
+	path.appendChild( stroke );
+	QDomElement lay = page.namedItem( "layer" ).toElement();
+	QDomElement rect = lay.namedItem( "rectangle" ).toElement();
+	QDomElement poly = rect.namedItem( "polyline" ).toElement();
+	QDomElement gobject = poly.namedItem( "gobject" ).toElement();
+	int lineWidth = gobject.attribute( "linewidth" ).toInt();
+	stroke.setAttribute( "lineWidth", lineWidth );
+	stroke.setAttribute( "lineJoin", "1" );
+	stroke.setAttribute( "lineCap", "0" );
+	stroke.setAttribute( "miterLimit", "10" );
+	
+	QDomElement color = outdoc.createElement( "COLOR" );
+	stroke.appendChild( color );
+	stroke.setAttribute( "v1", "0" );
+	stroke.setAttribute( "v2", "0" );
+	stroke.setAttribute( "v3", "0" );
+	
+	QDomElement segment = outdoc.createElement( "SEGMENTS");
+	QDomElement seg = docElem.namedItem( "seg" ).toElement();
+	int kind = seg.attribute( "kind" ).toInt();
+	path.appendChild( segment );
+	segment.setAttribute( "isClosed", kind );
+		
+	QDomElement move = outdoc.createElement( "MOVE" );
+	int x = rect.attribute( "x" ).toInt();
+	int y = rect.attribute( "y" ).toInt();
+	segment.appendChild( move );
+	move.setAttribute( "x", x );
+	move.setAttribute( "y", y );
+	
+	QDomElement c = poly.firstChild().toElement();
+	for( ; !c.isNull(); c = c.nextSibling().toElement() )
+	{	
+		if ( c.tagName() == "point" )
+		{
+			QDomElement line = outdoc.createElement( "LINE" );
+			int lineX = c.attribute( "x" ).toInt();
+			int lineY = c.attribute( "y" ).toInt();
+			segment.appendChild( line );
+			line.setAttribute( "x", lineX );
+			line.setAttribute( "y", lineY );
+		}
+	}	
 }
 
 #include <kontourimport.moc>
