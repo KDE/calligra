@@ -269,7 +269,6 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
         width = KoUnit::parseValue(properties.attribute("fo:page-width"));
         height = KoUnit::parseValue(properties.attribute("fo:page-height"));
         // guessFormat takes millimeters
-        // ### TODO use style:num-format instead of guessing
         if ( orientation == PG_LANDSCAPE )
             paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(height), MM_TO_POINT(width) );
         else
@@ -901,7 +900,11 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         // Hmm, the remove "'" could break it's in the middle of the fontname...
         QString fontName = m_styleStack.attribute( "fo:font-family" ).remove( "'" );
         if (fontName.isEmpty())
+        {
+            // ##### TODO. This is wrong. style:font-name refers to a font-decl entry.
+            // We have to look it up there, and retrieve _all_ font attributes from it, not just the name.
             fontName = m_styleStack.attribute( "style:font-name" ).remove( "'" );
+        }
         // 'Thorndale' is not known outside OpenOffice so we substitute it
         // with 'Times New Roman' that looks nearly the same.
         if ( fontName == "Thorndale" )
@@ -1060,7 +1063,8 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
 
     /*
       Missing properties:
-      style:use-window-font-color, 3.10.4 - what is it?
+      style:use-window-font-color, 3.10.4 - this is an automatic fg color depending on the bg color
+                    We need the exact algorithm to determine the fg color, I have asked for it (DF)
       style:text-outline, 3.10.5 - not implemented in kotext
       style:font-family-generic, 3.10.10 - roman, swiss, modern -> map to a font?
       style:font-style-name, 3.10.11 - ?
@@ -1071,14 +1075,12 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
       style:text-relief, 3.10.20 - not implemented in kotext
       style:letter-kerning, 3.10.20 - not implemented in kotext
       style:text-blinking, 3.10.27 - not implemented in kotext IIRC
-      style:text-combine, 3.10.29/30 - what is it?
+      style:text-combine, 3.10.29/30 - not implemented, see http://www.w3.org/TR/WD-i18n-format/
       style:text-emphasis, 3.10.31 - not implemented in kotext
-      style:text-autospace, 3.10.32 - not implemented in kotext
       style:text-scale, 3.10.33 - not implemented in kotext
       style:text-rotation-angle, 3.10.34 - not implemented in kotext (kpr rotates whole objects)
       style:text-rotation-scale, 3.10.35 - not implemented in kotext (kpr rotates whole objects)
       style:punctuation-wrap, 3.10.36 - not implemented in kotext
-      style:line-break, 3.10.37 - what's strict linebreaking?
     */
 
     if ( format.hasChildNodes() )
@@ -1136,22 +1138,29 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
             bool breakInside = m_styleStack.attribute( "style:break-inside" ) == "true";
             pageBreak.setAttribute("linesTogether", breakInside ? "false" : "true"); // opposite meaning
         }
-        if ( m_styleStack.hasAttribute( "style:keep-with-next" ) ) // 3.11.31
-            // Copy the boolean value
-            pageBreak.setAttribute("keepWithNext", m_styleStack.attribute( "style:keep-with-next" ));
-        else if ( m_styleStack.hasAttribute( "fo:keep-with-next" ) ) // 3.11.31 (they say StarOffice, but OOo 1.0.1 uses that too)
+        if ( m_styleStack.hasAttribute( "fo:keep-with-next" ) ) // 3.11.31 (the doc said style:keep-with-next but DV said it's wrong)
             // Copy the boolean value
             pageBreak.setAttribute("keepWithNext", m_styleStack.attribute( "fo:keep-with-next" ));
         layoutElement.appendChild( pageBreak );
     }
 
-    // TODO fo:background-color - not here; text property in kword/kpresenter.
-    // TODO padding??? (space around the paragraph) => how is that different from margins
+    // TODO in KWord: padding
+    /* padding works together with the borders. The margins are around a
+     * paragraph, and the padding is the space between the border and the
+     * paragraph. In the OOo UI, you can only select padding when you have
+     * selected a border.
+     *
+     * There's some difference in conjunction with other features, in that the
+     * margin area is outside the paragraph, and the padding area is inside the
+     * paragraph. So if you set a paragraph background color, the padding area
+     * will be colored, but the margin area won't.
+     */
 
 /*
   Paragraph properties not implemented in KWord:
     style:text-align-last
     style:justify-single-word
+    fo:background-color (bg color for a paragraph, unlike style:text-background-color)
     fo:widows
     fo:orphans
     fo:hyphenate
@@ -1167,6 +1176,9 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
     line numbering
     text autospace, punctuation wrap
     vertical alignment - a bit like offsetfrombaseline...
+  Michael said those are in fact parag properties:
+    style:text-autospace, 3.10.32 - not implemented in kotext
+    style:line-break, 3.10.37 - what's strict linebreaking?
 */
 
 }
@@ -1433,3 +1445,6 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& p
 }
 
 #include "oowriterimport.moc"
+
+// TODO style:num-format, default number format for page styles,
+// used for page numbers (2.3.1)
