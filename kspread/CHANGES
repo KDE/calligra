@@ -5,7 +5,12 @@ since 1.2 relase ( 'til 1.3 beta 1 :-)
 - new date and time formats
 - enhanced the "Text to Columns", "Insert from file" 
   and "Insert from clipboard" dialog to support "ignore double delimiters"
-- enhanced the CSV import dlg to support "ignore double delimiters"
+- "Insert from file" now also adjusts the column width depending on imported 
+  cell content
+- enhanced the CSV import dlg
+    - to support "ignore double delimiters"
+    - to adjust cell width to imported cell content
+    - you can specify the column and row range for import
 - enhanced the CSV export dialog so that you can choose
    - table to export
    - delimiters between tables

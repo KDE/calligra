@@ -638,10 +638,16 @@ void KSpreadCSVDialog::accept()
       cell = table->nonDefaultCell( left + col, top + row );
       cell->setCellText( getText( row, col ) );
 
-      cell->calculateTextParameters( table->painter(), left + col, top + row );
-      kdDebug() << "Text width: " << cell->textWidth() << endl;
-      if ( cell->textWidth() > widths[col] )
-        widths[col] = cell->textWidth();
+      QFontMetrics fm = table->painter().fontMetrics();
+      double w = fm.width( cell->strOutText() );
+      if ( w == 0.0 )
+      {
+        QFontMetrics fm( cell->textFont( left + col, top + row ) );
+        w = fm.width('x') * (double) getText( row, col ).length();
+      }
+
+      if ( w > widths[col] )
+        widths[col] = w;
 
       switch (getHeader(col))
       {
