@@ -35,6 +35,7 @@
 
 #include <koStore.h>
 #include <kio/netaccess.h>
+#include <kparts/browserextension.h>
 
 #include <klocale.h>
 #include <kmimetype.h>
@@ -60,6 +61,7 @@
 QList<KoDocument> *KoDocument::s_documentList=0L;
 
 using namespace std;
+class KoViewWrapperWidget;
 
 /**********************************************************
  *
@@ -84,7 +86,7 @@ public:
     bool m_bSingleViewMode;
     mutable bool m_changed;
 
-    QWidget *m_wrapperWidget;
+    KoViewWrapperWidget *m_wrapperWidget;
 
     QValueList<QDomDocument> m_viewBuildDocuments;
     KoDocumentIface * m_dcopObject;
@@ -106,6 +108,7 @@ public:
     KGlobal::locale()->insertCatalogue("koffice");
     // Tell the iconloader about share/apps/koffice/icons
     KGlobal::iconLoader()->addAppDir("koffice");
+    m_view = 0L;
   }
 
   virtual ~KoViewWrapperWidget() {}
@@ -122,6 +125,35 @@ public:
     if ( ev->type() == QEvent::ChildInserted )
       resizeEvent( 0L );
   }
+
+  void setKoView( KoView * view ) { m_view = view; }
+  KoView * koView() const { return m_view; }
+private:
+  KoView* m_view;
+};
+
+// Used in singleViewMode, when embedded into a browser
+class KoBrowserExtension : public KParts::BrowserExtension
+{
+public:
+    KoBrowserExtension( KoDocument * doc, const char * name = 0 )
+        : KParts::BrowserExtension( doc, name ) {
+            emit enableAction( "print", true );
+    }
+
+public slots:
+    // Automatically detected by konqueror
+    void print() {
+        KoDocument * doc = static_cast<KoDocument *>( parent() );
+        KoViewWrapperWidget * wrapper = static_cast<KoViewWrapperWidget *>( doc->widget() );
+        KoView * view = wrapper->koView();
+        // TODO remove code duplication (KoMainWindow), by moving this to KoView
+        KPrinter printer;
+        // ### TODO: apply global koffice settings here
+        view->setupPrinter( printer );
+        if ( printer.setup( view ) )
+            view->print( printer );
+    }
 };
 
 KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
@@ -152,7 +184,9 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
   {
       d->m_wrapperWidget = new KoViewWrapperWidget( parentWidget, widgetName );
       setWidget( d->m_wrapperWidget );
-  }
+      kdDebug(30003) << "creating KoBrowserExtension" << endl;
+      //(void) new KoBrowserExtension( this ); // ## only if embedded into a browser?
+    }
 
   d->m_docInfo = new KoDocumentInfo( this, "document info" );
 }
@@ -297,6 +331,7 @@ KAction *KoDocument::action( const QDomElement &element ) const
 
 QDomDocument KoDocument::domDocument() const
 {
+  assert(!d->m_views.isEmpty());
   return d->m_views.getFirst()->domDocument();
 }
 
@@ -765,7 +800,8 @@ bool KoDocument::openFile()
 
   if ( ok && d->m_bSingleViewMode )
   {
-    QWidget *view = createView( d->m_wrapperWidget );
+    KoView *view = createView( d->m_wrapperWidget );
+    d->m_wrapperWidget->setKoView( view );
     view->show();
   }
 
