@@ -59,6 +59,9 @@ class KoFilterManager : public QObject
 {
     Q_OBJECT
 public:
+    KoFilterManager();
+    virtual ~KoFilterManager();
+
     /**
      * Are we importing (loading) or exporting (saving) a file?
      */
@@ -167,20 +170,22 @@ public:
      */
     bool export_();
 
-    static void incRef();
-    static void decRef();
-    static unsigned long refCnt();
+    /** @deprecated, will be removed later */
+    static void incRef() {}
+    /** @deprecated, will be removed later */
+    static void decRef() {}
+    /** @deprecated, will be removed later */
+    static unsigned long refCnt() {return 1;}
 
     /**
      * Returns a pointer to the only instance of the KoFilterManager.
      * @return The pointer to the KoFilterManager instance
+     * @deprecated Create an instance of KoFilterManager for each conversion to be done
      */
     static KoFilterManager* self();
 
 protected:
-    KoFilterManager();
     KoFilterManager &operator=(const KoFilterManager &);
-    virtual ~KoFilterManager();
 
 private slots:
     void processExited(KProcess *p);
@@ -199,13 +204,13 @@ private:
 
     static KoFilterManager* s_pSelf;
     KoFilterManagerPrivate *d;
-    static unsigned long s_refCnt;
+    //static unsigned long s_refCnt;
 };
 
 
 /**
  * This class is used internally by KoFilterManager to stack all the
- * available dialgos. (internal)
+ * available dialogs. (@internal)
  */
 class PreviewStack : public QWidgetStack {
 

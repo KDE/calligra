@@ -60,27 +60,30 @@ public:
 
 
 KoFilterManager* KoFilterManager::s_pSelf = 0;
-unsigned long KoFilterManager::s_refCnt = 0;
+//unsigned long KoFilterManager::s_refCnt = 0;
 
+// This method is deprecated. It still works ( returns a KoFilterManager )
+// but creates a memory leak since it'll never get deleted.
 KoFilterManager* KoFilterManager::self()
 {
     if( s_pSelf == 0 )
     {
-      if ( s_refCnt == 0 ) // someone forgot to call incRef
+      /*if ( s_refCnt == 0 ) // someone forgot to call incRef
           s_refCnt++;
-
+      */
         s_pSelf = new KoFilterManager;
     }
     return s_pSelf;
 }
 
-KoFilterManager::KoFilterManager() {
-    d=new KoFilterManagerPrivate;
+KoFilterManager::KoFilterManager()
+{
+    d = new KoFilterManagerPrivate;
 }
 
 KoFilterManager::~KoFilterManager()
 {
-  delete d;
+    delete d;
 }
 
 QString KoFilterManager::fileSelectorList( const Direction &direction,
@@ -571,6 +574,7 @@ bool KoFilterManager::export_() {
     return ok;
 }
 
+#if 0
 void KoFilterManager::incRef()
 {
   s_refCnt++;
@@ -590,6 +594,7 @@ unsigned long KoFilterManager::refCnt()
 {
   return s_refCnt;
 }
+#endif
 
 void KoFilterManager::processExited(KProcess *p) {
 
