@@ -557,6 +557,22 @@ void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpre
                     incre+=60;
                     cell->setCellText(doc()->locale()->formatTime(tmpTime,true),true);
                 }
+	    else if(AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != AutoFillSequenceItem::month->end() && _srcList.count()==1)
+	      {
+		QString strMonth=_srcList.at( s )->text();
+		int i = AutoFillSequenceItem::month->findIndex( strMonth );
+		int k = (i+incre) % AutoFillSequenceItem::month->count();
+		cell->setCellText((*AutoFillSequenceItem::month->at( k )));
+		incre++;
+	      }
+	    else if(AutoFillSequenceItem::day->find( _srcList.at( s )->text()) != AutoFillSequenceItem::day->end() && _srcList.count()==1)
+	      {
+		QString strDay=_srcList.at( s )->text();
+		int i = AutoFillSequenceItem::day->findIndex( strDay );
+		int k = (i+incre) % AutoFillSequenceItem::day->count();
+		cell->setCellText((*AutoFillSequenceItem::day->at( k )));
+		incre++;
+	      }
             else
                 cell->setCellText( _srcList.at( s )->text(), true );
         }

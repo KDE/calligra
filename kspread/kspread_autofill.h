@@ -51,7 +51,8 @@ public:
     int getIOtherEnd() {return otherEnd; }
     int getIOtherBegin() {return otherBegin; }
     static QStringList *other;
-
+    static QStringList *month;
+    static QStringList *day;
 protected:
     int ivalue;
     double dvalue;
@@ -61,10 +62,6 @@ protected:
     QString string;
 
     Type type;
-
-    static QStringList *month;
-    static QStringList *day;
-    //static QStringList *other;
 };
 
 class AutoFillSequence
