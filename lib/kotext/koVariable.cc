@@ -775,9 +775,9 @@ QString KoDateVariable::fieldCode()
     else if ( m_subtype == VST_DATE_LAST_PRINTING)
         return i18n("Last Printing");
     else if ( m_subtype == VST_DATE_CREATE_FILE )
-        return i18n( "Created File");
+        return i18n( "File Creation");
     else if ( m_subtype == VST_DATE_MODIFY_FILE )
-        return i18n( "Created File");
+        return i18n( "File Modification");
     else
         return i18n("Date");
 }

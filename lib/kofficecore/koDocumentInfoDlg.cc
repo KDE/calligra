@@ -151,7 +151,7 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
       d->m_leFullName->setText( name );
   }
 
-  (void) new QLabel( i18n( "Initial:" ), grid );
+  (void) new QLabel( i18n( "Initials:" ), grid );
   d->m_leInitial = new QLineEdit( authorInfo->initial(), grid );
 
   (void) new QLabel( i18n( "Title:" ), grid );
