@@ -123,6 +123,7 @@ public:
     QDomElement save( QDomDocument &doc, const bool saveAsKOffice1Dot1 );
     void load( const QDomElement &element );
     void loadOasis( KoOasisContext & context );
+    void loadStandardBackgroundOasis( KoOasisContext & context, QDomElement * style );
 
 protected:
     void drawBackColor( QPainter *_painter, const QSize& ext, const QRect& crect );

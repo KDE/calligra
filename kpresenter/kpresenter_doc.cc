@@ -951,6 +951,8 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     QDomElement *master = oasisStyles.masterPages()[ masterPageName];
     Q_ASSERT( master );
     QDomElement *style =master ? oasisStyles.styles()[master->attribute( "style:page-master-name" )] : 0;
+    QDomElement *backgroundStyle = oasisStyles.styles()[ "Standard-background"];
+    kdDebug()<<"Standard background "<<backgroundStyle<<endl;
     // parse all pages
     Q_ASSERT( style );
     if ( style )
@@ -1012,7 +1014,11 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             kdDebug()<<" fill or presentation-style found \n";
             m_pageList.at(pos)->background()->loadOasis( context );
         }
-
+        else if ( !context.styleStack().hasAttribute( "draw:fill" ) && backgroundStyle)
+        {
+            kdDebug()<<" load standard bacground \n";
+            m_pageList.at( pos )->background()->loadStandardBackgroundOasis( context, backgroundStyle );
+        }
 
 	//All animation object for current page is store into this element
 	createPresentationAnimation(drawPage.namedItem("presentation:animations").toElement());
