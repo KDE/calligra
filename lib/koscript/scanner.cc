@@ -1500,12 +1500,12 @@ return T_EQUAL;
 case 25:
 YY_RULE_SETUP
 #line 318 "scanner.ll"
-return T_NOTEQUAL1;
+return T_NOTEQUAL;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 319 "scanner.ll"
-return T_NOTEQUAL2;
+return T_NOTEQUAL;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
@@ -2489,7 +2489,7 @@ YY_BUFFER_STATE b;
 
 #ifndef YY_ALWAYS_INTERACTIVE
 #ifndef YY_NEVER_INTERACTIVE
-extern int isatty YY_PROTO(( int ));
+#include<unistd.h>
 #endif
 #endif
 
