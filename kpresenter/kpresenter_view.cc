@@ -3045,7 +3045,8 @@ void KPresenterView::setupActions()
 
     // ----------------- slideshow actions
 
-    actionScreenConfigPages = new KAction( i18n( "&Configure Slide Show..." ), 0,
+    actionScreenConfigPages = new KAction( i18n( "&Configure Slide Show..." ),
+                                           "configure", 0,
                                            this, SLOT( screenConfigPages() ),
                                            actionCollection(), "screen_configpages" );
 
@@ -3065,7 +3066,7 @@ void KPresenterView::setupActions()
 
 
     actionScreenStart = new KAction( i18n( "&Start" ),
-                                     "1rightarrow", 0,
+                                     "2rightarrow", 0,
                                      this, SLOT( screenStart() ),
                                      actionCollection(), "screen_start" );
 
