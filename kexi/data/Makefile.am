@@ -30,7 +30,8 @@ rc_DATA = kexiui.rc kexiformeditorui.rc kexiquerydesignerui.rc kexiquerypartui.r
 	kexitablepartui.rc kexirelationpartui.rc kexitablepartinstui.rc \
 	kexirelationhandlerui.rc kexiformpartui.rc kexitableview.rc \
 	kexirelationsview.rc kexikugarhandlerui.rc kexidatatableui.rc \
-	tips $(scriptrc)
+	$(scriptrc) \
+	readme_en
 
 kde_conf_DATA = kexirc
 
