@@ -475,12 +475,33 @@ static void ProcessPaperBordersTag (QDomNode myNode, void*, KWEFKWordLeader* lea
     double bottom = 0.0;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList
-        << AttrProcessing ( "left",   "double", &left )
-        << AttrProcessing ( "right",  "double", &right )
-        << AttrProcessing ( "top",    "double", &top )
-        << AttrProcessing ( "bottom", "double", &bottom )
-        ;
+    
+    if ( leader->m_oldSyntax )
+    {
+        attrProcessingList
+            << AttrProcessing ( "ptLeft",   left )
+            << AttrProcessing ( "ptRight",  right )
+            << AttrProcessing ( "ptTop",    top )
+            << AttrProcessing ( "ptBottom", bottom )
+            << AttrProcessing ( "mmLeft" )
+            << AttrProcessing ( "mmRight" )
+            << AttrProcessing ( "mmTop" )
+            << AttrProcessing ( "mmBottom" )
+            << AttrProcessing ( "inchLeft" )
+            << AttrProcessing ( "inchRight" )
+            << AttrProcessing ( "inchTop" )
+            << AttrProcessing ( "inchBottom" )
+            ;
+    }
+    else    
+    {
+        attrProcessingList
+            << AttrProcessing ( "left",   left )
+            << AttrProcessing ( "right",  right )
+            << AttrProcessing ( "top",    top )
+            << AttrProcessing ( "bottom", bottom )
+            ;
+    }
     ProcessAttributes (myNode, attrProcessingList);
 
     leader->doFullPaperBorders(top, left, bottom, right);
@@ -515,6 +536,20 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
                        << AttrProcessing ( "slFootNoteLength",    "",       NULL                  )
                        << AttrProcessing ( "slFootNoteWidth",     "",       NULL                  )
                        << AttrProcessing ( "slFootNoteType",      "",       NULL                  );
+    
+    if ( leader->m_oldSyntax )
+    {
+        // ### TODO: in syntax 1 hType and fType have other values!
+        attrProcessingList
+            << AttrProcessing ( "ptWidth", width )
+            << AttrProcessing ( "ptHeight", height )
+            << AttrProcessing ( "mmWidth" )
+            << AttrProcessing ( "mmHeight" )
+            << AttrProcessing ( "inchWidth" )
+            << AttrProcessing ( "inchHeight" )
+            ;
+    }
+    
     ProcessAttributes (myNode, attrProcessingList);
 
     leader->setHeaderType( hType );
