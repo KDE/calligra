@@ -43,7 +43,7 @@
 #include "kppieobject.h"
 #include "kprectobject.h"
 #include "kpresenter_view.h"
-#include <kotextobject.h>
+#include "kotextobject.h"
 #include "kprtextdocument.h"
 #include <kdebug.h>
 #include "kprvariable.h"
@@ -1795,7 +1795,7 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
     oasisStyles.createStyleMap( domDoc );
     KPresenterDoc *doc = textdoc->textObject()->kPresenterDocument();
     KoOasisContext context( doc, *doc->getVariableCollection(), oasisStyles, 0 /*TODO store*/ );
-    *c = textdoc->textObject()->pasteOasisText( body, context, cursor, doc->styleCollection() );
+    *c = textdoc->textObject()->textObject()->pasteOasisText( body, context, cursor, doc->styleCollection() );
     textdoc->textObject()->textObject()->setNeedSpellCheck( true );
     // In case loadFormatting queued any image request
 
