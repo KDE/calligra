@@ -17,9 +17,9 @@
 #include "insertcmd.h"
 #include "kpobject.h"
 
-#include <kpoint.h>
-#include <krect.h>
-#include <ksize.h>
+#include <qpoint.h>
+#include <qrect.h>
+#include <qsize.h>
 
 /******************************************************************/
 /* Class: InsertCmd                                               */
@@ -51,7 +51,7 @@ void InsertCmd::execute()
 /*====================== unexecute ===============================*/
 void InsertCmd::unexecute()
 {
-    KRect oldRect = object->getBoundingRect( 0, 0 );
+    QRect oldRect = object->getBoundingRect( 0, 0 );
     if ( doc->objectList()->findRef( object ) != -1 )
     {
         doc->objectList()->take( doc->objectList()->findRef( object ) );

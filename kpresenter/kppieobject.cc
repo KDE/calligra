@@ -54,7 +54,7 @@ KPPieObject::KPPieObject( QPen _pen, QBrush _brush, FillType _fillType,
 
     if ( fillType == FT_GRADIENT )
     {
-        gradient = new KPGradient( gColor1, gColor2, gType, KSize( 1, 1 ) );
+        gradient = new KPGradient( gColor1, gColor2, gType, QSize( 1, 1 ) );
         redrawPix = true;
         pix.resize( getSize() );
     }
@@ -423,7 +423,7 @@ void KPPieObject::draw( QPainter *_painter, int _diffx, int _diffy )
     int oy = orig.y() - _diffy;
     int ow = ext.width();
     int oh = ext.height();
-    KRect r;
+    QRect r;
 
     _painter->save();
 
@@ -449,13 +449,13 @@ void KPPieObject::draw( QPainter *_painter, int _diffx, int _diffy )
         {
             _painter->setViewport( ox, oy, r.width(), r.height() );
 
-            KRect br = KRect( 0, 0, ow, oh );
+            QRect br = QRect( 0, 0, ow, oh );
             int pw = br.width();
             int ph = br.height();
-            KRect rr = br;
+            QRect rr = br;
             int yPos = -rr.y();
             int xPos = -rr.x();
-            rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
+            rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
             int sx = 0;
             int sy = 0;
@@ -488,13 +488,13 @@ void KPPieObject::draw( QPainter *_painter, int _diffx, int _diffy )
         paint( _painter );
     else
     {
-        KRect br = KRect( 0, 0, ow, oh );
+        QRect br = QRect( 0, 0, ow, oh );
         int pw = br.width();
         int ph = br.height();
-        KRect rr = br;
+        QRect rr = br;
         int yPos = -rr.y();
         int xPos = -rr.x();
-        rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
+        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m, mtx, m2;
         mtx.rotate( angle );

@@ -115,7 +115,7 @@ public:
             : dataKey(), size( orig_size )
         {}
 
-        Key( const KPPixmapDataCollection::Key &dk, const KSize &sz )
+        Key( const KPPixmapDataCollection::Key &dk, const QSize &sz )
             : dataKey( dk ), size( sz )
         {}
 
@@ -146,7 +146,7 @@ public:
         }
 
         KPPixmapDataCollection::Key dataKey;
-        KSize size;
+        QSize size;
     };
 
     KPPixmapCollection()

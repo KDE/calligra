@@ -352,9 +352,9 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
     int oy = orig.y() - _diffy;
     int ow = ext.width();
     int oh = ext.height();
-    KRect r;
+    QRect r;
 
-    KRect cr = getBoundingRect( _diffx, _diffy );
+    QRect cr = getBoundingRect( _diffx, _diffy );
     int _x = cr.x(), _y = cr.y(), _w = cr.width(), _h = cr.height();
 
     _painter->save();
@@ -398,14 +398,14 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         {
             _painter->setViewport( ox, oy, r.width(), r.height() );
 
-            KRect br = KRect( 0, 0, ow, oh );
+            QRect br = QRect( 0, 0, ow, oh );
             int pw = br.width();
             int ph = br.height();
-            KRect rr = br;
+            QRect rr = br;
             int yPos = -rr.y();
             int xPos = -rr.x();
-            br.moveTopLeft( KPoint( -br.width() / 2, -br.height() / 2 ) );
-            rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
+            br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
+            rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
             QWMatrix m, mtx;
             mtx.rotate( angle );
@@ -470,14 +470,14 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
     }
     else
     {
-        KRect br = KRect( 0, 0, ow, oh );
+        QRect br = QRect( 0, 0, ow, oh );
         int pw = br.width();
         int ph = br.height();
-        KRect rr = br;
+        QRect rr = br;
         int yPos = -rr.y();
         int xPos = -rr.x();
-        br.moveTopLeft( KPoint( -br.width() / 2, -br.height() / 2 ) );
-        rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
+        br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
+        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m, mtx;
         mtx.rotate( angle );
@@ -524,7 +524,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
 /*========================== activate ============================*/
 void KPTextObject::activate( QWidget *_widget, int diffx, int diffy )
 {
-    ktextobject.recreate( _widget, 0, KPoint( orig.x() - diffx, orig.y() - diffy ), false );
+    ktextobject.recreate( _widget, 0, QPoint( orig.x() - diffx, orig.y() - diffy ), false );
     ktextobject.resize( ext.width(), ext.height() );
     ktextobject.show();
     ktextobject.setCursor( Qt::ibeamCursor );
@@ -534,7 +534,7 @@ void KPTextObject::activate( QWidget *_widget, int diffx, int diffy )
 /*========================== deactivate ==========================*/
 void KPTextObject::deactivate()
 {
-    ktextobject.recreate( 0, 0, KPoint( 0, 0 ), false );
+    ktextobject.recreate( 0, 0, QPoint( 0, 0 ), false );
     ktextobject.hide();
 }
 
@@ -557,11 +557,11 @@ void KPTextObject::zoomOrig()
 /*================================================================*/
 void KPTextObject::extendObject2Contents( KPresenterView *view )
 {
-    KSize s( ktextobject.neededSize() );
+    QSize s( ktextobject.neededSize() );
 
     setSize( s.width(), s.height() );
     
-//     ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object" ), KPoint( 0, 0 ), KSize( s.width() - ext.width(), 
+//     ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object" ), QPoint( 0, 0 ), QSize( s.width() - ext.width(), 
 //                                                                                           s.height() - ext.height() ),
 //                                           this, view->kPresenterDoc() );
 //     resizeCmd->execute();

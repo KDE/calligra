@@ -63,16 +63,16 @@ KPObject::KPObject()
 }
 
 /*======================= get bounding rect ======================*/
-KRect KPObject::getBoundingRect( int _diffx, int _diffy )
+QRect KPObject::getBoundingRect( int _diffx, int _diffy )
 {
-    KRect r( orig.x() - _diffx, orig.y() - _diffy,
+    QRect r( orig.x() - _diffx, orig.y() - _diffy,
              ext.width(), ext.height() );
 
     if ( shadowDistance > 0 )
     {
         int sx = r.x(), sy = r.y();
         getShadowCoords( sx, sy, shadowDirection, shadowDistance );
-        KRect r2( sx, sy, r.width(), r.height() );
+        QRect r2( sx, sy, r.width(), r.height() );
         r = r.unite( r2 );
     }
 
@@ -82,34 +82,34 @@ KRect KPObject::getBoundingRect( int _diffx, int _diffy )
     {
         QWMatrix mtx;
         mtx.rotate( angle );
-        KRect rr = mtx.map( r );
+        QRect rr = mtx.map( r );
 
         int diffw = abs( rr.width() - r.width() );
         int diffh = abs( rr.height() - r.height() );
 
-        return KRect( r.x() - diffw, r.y() - diffh,
+        return QRect( r.x() - diffw, r.y() - diffh,
                       r.width() + diffw * 2, r.height() + diffh * 2 );
     }
 }
 
 /*======================== contain point ? =======================*/
-bool KPObject::contains( KPoint _point, int _diffx, int _diffy )
+bool KPObject::contains( QPoint _point, int _diffx, int _diffy )
 {
     if ( angle == 0.0 )
     {
-        KRect r( orig.x() - _diffx, orig.y() - _diffy,
+        QRect r( orig.x() - _diffx, orig.y() - _diffy,
                  ext.width(), ext.height() );
         return r.contains( _point );
     }
     else
     {
-        KRect br = KRect( 0, 0, ext.width(), ext.height() );
+        QRect br = QRect( 0, 0, ext.width(), ext.height() );
         int pw = br.width();
         int ph = br.height();
-        KRect rr = br;
+        QRect rr = br;
         int yPos = -rr.y();
         int xPos = -rr.x();
-        rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
+        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m, mtx, m2;
         mtx.rotate( angle );
@@ -117,7 +117,7 @@ bool KPObject::contains( KPoint _point, int _diffx, int _diffy )
         m2.translate( rr.left() + xPos, rr.top() + yPos );
         m = m2 * mtx * m;
 
-        KRect r = m.map( br );
+        QRect r = m.map( br );
         r.moveBy( orig.x() - _diffx, orig.y() - _diffy );
 
         return r.contains( _point );
@@ -125,23 +125,23 @@ bool KPObject::contains( KPoint _point, int _diffx, int _diffy )
 }
 
 /*================================================================*/
-bool KPObject::intersects( KRect _rect, int _diffx, int _diffy )
+bool KPObject::intersects( QRect _rect, int _diffx, int _diffy )
 {
     if ( angle == 0.0 )
     {
-        KRect r( orig.x() - _diffx, orig.y() - _diffy,
+        QRect r( orig.x() - _diffx, orig.y() - _diffy,
                  ext.width(), ext.height() );
         return r.intersects( _rect );
     }
     else
     {
-        KRect br = KRect( 0, 0, ext.width(), ext.height() );
+        QRect br = QRect( 0, 0, ext.width(), ext.height() );
         int pw = br.width();
         int ph = br.height();
-        KRect rr = br;
+        QRect rr = br;
         int yPos = -rr.y();
         int xPos = -rr.x();
-        rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
+        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m, mtx, m2;
         mtx.rotate( angle );
@@ -149,7 +149,7 @@ bool KPObject::intersects( KRect _rect, int _diffx, int _diffy )
         m2.translate( rr.left() + xPos, rr.top() + yPos );
         m = m2 * mtx * m;
 
-        KRect r = m.map( br );
+        QRect r = m.map( br );
         r.moveBy( orig.x() - _diffx, orig.y() - _diffy );
 
         return r.intersects( _rect );
@@ -157,7 +157,7 @@ bool KPObject::intersects( KRect _rect, int _diffx, int _diffy )
 }
 
 /*======================== get cursor ============================*/
-QCursor KPObject::getCursor( KPoint _point, int _diffx, int _diffy, ModifyType &_modType )
+QCursor KPObject::getCursor( QPoint _point, int _diffx, int _diffy, ModifyType &_modType )
 {
     int px = _point.x();
     int py = _point.y();
@@ -167,7 +167,7 @@ QCursor KPObject::getCursor( KPoint _point, int _diffx, int _diffy, ModifyType &
     int ow = ext.width();
     int oh = ext.height();
 
-    KRect r( ox, oy, ow, oh );
+    QRect r( ox, oy, ow, oh );
 
     if ( !r.contains( _point ) )
         return Qt::arrowCursor;
@@ -261,7 +261,7 @@ void KPObject::draw( QPainter *_painter, int _diffx, int _diffy )
     if ( dSelection )
     {
         _painter->save();
-        KRect r = _painter->viewport();
+        QRect r = _painter->viewport();
 
         _painter->setViewport( orig.x() - _diffx, orig.y() - _diffy, r.width(), r.height() );
         paintSelection( _painter );
@@ -337,13 +337,13 @@ void KPObject::paintSelection( QPainter *_painter )
 
         if ( angle != 0 )
         {
-            KRect br = KRect( 0, 0, ext.width(), ext.height() );
+            QRect br = QRect( 0, 0, ext.width(), ext.height() );
             int pw = br.width();
             int ph = br.height();
-            KRect rr = br;
+            QRect rr = br;
             int yPos = -rr.y();
             int xPos = -rr.x();
-            rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
+            rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
             QWMatrix m, mtx, m2;
             mtx.rotate( angle );

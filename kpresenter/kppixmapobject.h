@@ -37,7 +37,7 @@ public:
     {}
     
     virtual void setSize( int _width, int _height );
-    virtual void setSize( KSize _size )
+    virtual void setSize( QSize _size )
     { setSize( _size.width(), _size.height() ); }
     virtual void resizeBy( int _dx, int _dy );
 
@@ -57,7 +57,7 @@ public:
     
     void setPixmap( const QString &_filename, QDateTime _lastModified )
     { setPixmap( _filename, _lastModified, orig_size ); }
-    void setPixmap( const QString &_filename, QDateTime _lastModified, const KSize &_size );
+    void setPixmap( const QString &_filename, QDateTime _lastModified, const QSize &_size );
     void reload()
     { setPixmap( key.dataKey.filename, key.dataKey.lastModified, key.size ); }
     

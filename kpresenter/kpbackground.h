@@ -18,8 +18,8 @@
 
 #include <qcolor.h>
 #include <qstring.h>
-#include <krect.h>
-#include <ksize.h>
+#include <qrect.h>
+#include <qsize.h>
 
 #include "global.h"
 #include "kppixmapcollection.h"
@@ -61,10 +61,10 @@ public:
     virtual void setPageEffect( PageEffect _pageEffect )
     { pageEffect = _pageEffect; }
 
-    virtual void setSize( KSize _size )
+    virtual void setSize( QSize _size )
     { removeGradient(); ext = _size; footerHeight = 0; }
     virtual void setSize( int _width, int _height )
-    { removeGradient(); ext = KSize( _width, _height ); footerHeight = 0; }
+    { removeGradient(); ext = QSize( _width, _height ); footerHeight = 0; }
 
     virtual BackType getBackType()
     { return backType; }
@@ -83,10 +83,10 @@ public:
     virtual PageEffect getPageEffect()
     { return pageEffect; }
 
-    virtual KSize getSize()
+    virtual QSize getSize()
     { return ext; }
 
-    virtual void draw( QPainter *_painter, KPoint _offset, bool _drawBorders );
+    virtual void draw( QPainter *_painter, QPoint _offset, bool _drawBorders );
 
     virtual void restore();
 
@@ -98,7 +98,7 @@ protected:
     virtual void drawBackPix( QPainter *_painter );
     virtual void drawBackClip( QPainter *_painter );
     virtual void drawBorders( QPainter *_painter );
-    virtual void drawHeaderFooter( QPainter *_painter, const KPoint &_offset );
+    virtual void drawHeaderFooter( QPainter *_painter, const QPoint &_offset );
     virtual void removeGradient();
 
     BackType backType;
@@ -117,7 +117,7 @@ protected:
     QPicture *picture;
     KPClipartCollection::Key clipKey;
 
-    KSize ext;
+    QSize ext;
     KPresenterDoc *doc;
     int footerHeight;
 

@@ -997,7 +997,7 @@ unsigned int TxtParagraph::height()
 }
 
 /*======================= break lines ============================*/
-KRect TxtParagraph::breakLines( unsigned int wid, bool regExpMode , bool composerMode )
+QRect TxtParagraph::breakLines( unsigned int wid, bool regExpMode , bool composerMode )
 {
     //debug( "break lines begin" );
     //debug( " concat lines begin" );
@@ -1064,7 +1064,7 @@ KRect TxtParagraph::breakLines( unsigned int wid, bool regExpMode , bool compose
     }
     //debug( "break lines end" );
 
-    return KRect();
+    return QRect();
 }
 
 /*===================== break lines ==============================*/
@@ -4378,7 +4378,7 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
     int w = cellWidth( 0 ); //, h = cellHeight( row );
     unsigned int i = 0, j = 0, chars = 0, len = 0;
     bool drawCursor = false, cursorDrawn = false;
-    KPoint c1, c2;
+    QPoint c1, c2;
     unsigned int scrBar = 0, wid = 0;
     char chr[ 11 ];
     int ry;
@@ -4944,7 +4944,7 @@ void KTextObject::mousePressEvent( QMouseEvent *e )
         else
             rbMenu->setItemEnabled( CB_PASTE, false );
 
-        KPoint pnt;
+        QPoint pnt;
         pnt = QCursor::pos();
         rbMenu->popup( pnt );
     } break;
@@ -6395,7 +6395,7 @@ void KTextObject::extendContents2Height()
 }
 
 /*================================================================*/
-KSize KTextObject::neededSize()
+QSize KTextObject::neededSize()
 {
     int y;
     rowYPos( numRows() - 1, &y );
@@ -6404,5 +6404,5 @@ KSize KTextObject::neededSize()
     for ( unsigned int i = 0; i < paragraphList.count(); i++ )
         w = QMAX( w, paragraphList.at( i )->width() );
         
-    return KSize( w, y + cellHeight( numRows() - 1 ) ); 
+    return QSize( w, y + cellHeight( numRows() - 1 ) ); 
 }

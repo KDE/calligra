@@ -20,8 +20,8 @@
 #include <qpixmap.h>
 #include <qlist.h>
 
-#include <ksize.h>
-#include <krect.h>
+#include <qsize.h>
+#include <qrect.h>
 
 #include "global.h"
 
@@ -41,7 +41,7 @@ class QPainter;
 class KPGradient
 {
 public:
-    KPGradient( QColor _color1, QColor _color2, BCType _bcType, KSize _size );
+    KPGradient( QColor _color1, QColor _color2, BCType _bcType, QSize _size );
     virtual ~KPGradient()
     {}
 
@@ -61,10 +61,10 @@ public:
 
     virtual QPixmap* getGradient()
     { return &pixmap; }
-    virtual KSize getSize()
+    virtual QSize getSize()
     { return pixmap.size(); }
 
-    virtual void setSize( KSize _size )
+    virtual void setSize( QSize _size )
     { pixmap.resize( _size ); paint(); }
 
     virtual void addRef();

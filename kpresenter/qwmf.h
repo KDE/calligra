@@ -25,7 +25,7 @@
 #include <qpen.h>
 #include <qcolor.h>
 #include <qpicture.h>
-#include <krect.h>
+#include <qrect.h>
 
 class QPainter;
 class WmfCmd;
@@ -59,7 +59,7 @@ public:
 
     /** Returns bounding rectangle if isPlaceable()==TRUE,
         otherwise unspecified result. */
-    KRect bbox( void ) const { return mBBox; }
+    QRect bbox( void ) const { return mBBox; }
 
 public: // should be protected but cannot
     /** Metafile painter methods */
@@ -131,7 +131,7 @@ protected:
     bool mWinding;
     QBrush mBrush;
     QPen mPen;
-    KRect mBBox;
+    QRect mBBox;
     bool mSingleStep;
     WinObjHandle** mObjHandleTab;
 };

@@ -25,9 +25,9 @@
 #include <qpicture.h>
 #include <qvaluelist.h>
 
-#include <krect.h>
-#include <ksize.h>
-#include <kpoint.h>
+#include <qrect.h>
+#include <qsize.h>
+#include <qpoint.h>
 
 #include <koQueryTypes.h>
 
@@ -76,7 +76,7 @@ public:
     ~Page();
 
     // public functions
-    void draw( KRect, QPainter* );
+    void draw( QRect, QPainter* );
     void selectAllObj();
     void deSelectAllObj();
     void selectObj( int num );
@@ -138,9 +138,9 @@ protected:
 
     // functions for displaying
     void paintEvent( QPaintEvent* );
-    void paintBackground( QPainter*, KRect );
-    void drawBackground( QPainter*, KRect );
-    void drawObjects( QPainter*, KRect );
+    void paintBackground( QPainter*, QRect );
+    void drawBackground( QPainter*, QRect );
+    void drawObjects( QPainter*, QRect );
     void mousePressEvent( QMouseEvent *e );
     void mouseReleaseEvent( QMouseEvent *e );
     void mouseMoveEvent( QMouseEvent *e );
@@ -171,34 +171,34 @@ protected:
     QColor txtBackCol();
     bool spInfinitLoop();
     bool spManualSwitch();
-    KRect getPageSize( unsigned int p, float fakt=1.0, bool decBorders = true );
+    QRect getPageSize( unsigned int p, float fakt=1.0, bool decBorders = true );
     unsigned int pageNums();
     int getPageOfObj( int i, float fakt = 1.0 );
     float objSpeedFakt();
     float pageSpeedFakt();
 
     void _repaint( bool erase=true );
-    void _repaint( KRect r );
+    void _repaint( QRect r );
     void _repaint( KPObject *o );
 
-    void drawPageInPainter( QPainter*, int, KRect );
+    void drawPageInPainter( QPainter*, int, QRect );
     void changePages( QPixmap, QPixmap, PageEffect );
     void doObjEffects();
     void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );
 
-    void insertText( KRect );
-    void insertLineH( KRect, bool );
-    void insertLineV( KRect, bool );
-    void insertLineD1( KRect, bool );
-    void insertLineD2( KRect, bool );
-    void insertRect( KRect );
-    void insertEllipse( KRect );
-    void insertPie( KRect );
-    void insertObject( KRect );
-    void insertTable( KRect );
-    void insertDiagramm( KRect );
-    void insertFormula( KRect );
-    void insertAutoform( KRect, bool );
+    void insertText( QRect );
+    void insertLineH( QRect, bool );
+    void insertLineV( QRect, bool );
+    void insertLineD1( QRect, bool );
+    void insertLineD2( QRect, bool );
+    void insertRect( QRect );
+    void insertEllipse( QRect );
+    void insertPie( QRect );
+    void insertObject( QRect );
+    void insertTable( QRect );
+    void insertDiagramm( QRect );
+    void insertFormula( QRect );
+    void insertAutoform( QRect, bool );
 
     void selectNext();
     void selectPrev();
@@ -221,9 +221,9 @@ protected:
     int PM_DM, PM_SM;
     int firstX, firstY;
     bool drawRubber;
-    KRect rubber, oldBoundingRect;
+    QRect rubber, oldBoundingRect;
     ToolEditMode toolEditMode;
-    KRect insRect;
+    QRect insRect;
     KoDocumentEntry partEntry;
     QList <KPObject> tmpObjs;
     QString autoform;

@@ -21,8 +21,8 @@
 #include <qregexp.h>
 #include <qpicture.h>
 
-#include <krect.h>
-#include <kpoint.h>
+#include <qrect.h>
+#include <qpoint.h>
 
 #ifndef min
 #define min(a,b) ((a)<(b)?(a):(b))
@@ -736,7 +736,7 @@ public:
     /**
      * Breaks lines in a certain width ( pixels ). Returns the needed rect.<br>
      */
-    KRect breakLines( unsigned int, bool regexpMode=false, bool composerMode=false );
+    QRect breakLines( unsigned int, bool regexpMode=false, bool composerMode=false );
 
     /**
      * Breaks lines in a certain width ( chars ).<br>
@@ -1146,7 +1146,7 @@ public:
     /**
      * Resize the KTextObject.
      */
-    void resize( KSize s )
+    void resize( QSize s )
     {resize( s.width(), s.height() ); }
 
     /**
@@ -1878,7 +1878,7 @@ public:
 
     void extendContents2Height();
 
-    KSize neededSize();
+    QSize neededSize();
     
 signals:
 

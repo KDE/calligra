@@ -22,7 +22,7 @@
 /******************************************************************/
 
 /*======================= get Gradient ===========================*/
-QPixmap* KPGradientCollection::getGradient( QColor _color1, QColor _color2, BCType _bcType, KSize _size, bool addref )
+QPixmap* KPGradientCollection::getGradient( QColor _color1, QColor _color2, BCType _bcType, QSize _size, bool addref )
 {
     int num = inGradientList( _color1, _color2, _bcType, _size );
 
@@ -67,7 +67,7 @@ QPixmap* KPGradientCollection::getGradient( QColor _color1, QColor _color2, BCTy
 }
 
 /*====================== remove ref =============================*/
-void KPGradientCollection::removeRef( QColor _color1, QColor _color2, BCType _bcType, KSize _size )
+void KPGradientCollection::removeRef( QColor _color1, QColor _color2, BCType _bcType, QSize _size )
 {
     int num = inGradientList( _color1, _color2, _bcType, _size );
 
@@ -87,7 +87,7 @@ void KPGradientCollection::removeRef( QColor _color1, QColor _color2, BCType _bc
 }
 
 /*========================== in gradient list? ====================*/
-int KPGradientCollection::inGradientList( QColor _color1, QColor _color2, BCType _bcType, KSize _size )
+int KPGradientCollection::inGradientList( QColor _color1, QColor _color2, BCType _bcType, QSize _size )
 {
     if ( !gradientList.isEmpty() )
     {

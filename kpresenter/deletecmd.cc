@@ -16,9 +16,9 @@
 #include "kpresenter_doc.h"
 #include "deletecmd.h"
 
-#include <krect.h>
-#include <kpoint.h>
-#include <ksize.h>
+#include <qrect.h>
+#include <qpoint.h>
+#include <qsize.h>
 
 /******************************************************************/
 /* Class: DeleteCmd                                               */
@@ -44,7 +44,7 @@ DeleteCmd::~DeleteCmd()
 /*======================== execute ===============================*/
 void DeleteCmd::execute()
 {
-    KRect oldRect;
+    QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
     {

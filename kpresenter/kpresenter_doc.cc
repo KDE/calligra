@@ -41,7 +41,7 @@
 #include "commandhistory.h"
 #include "styledia.h"
 
-#include <krect.h>
+#include <qrect.h>
 #include <qpainter.h>
 #include <qcolor.h>
 #include <qevent.h>
@@ -80,13 +80,13 @@
 /******************************************************************/
 
 /*====================== constructor =============================*/
-KPresenterChild::KPresenterChild( KPresenterDoc *_kpr, const KRect& _rect, KOffice::Document_ptr _doc,
+KPresenterChild::KPresenterChild( KPresenterDoc *_kpr, const QRect& _rect, KOffice::Document_ptr _doc,
                                   int _diffx, int _diffy )
     : KoDocumentChild( _rect, _doc )
 {
     m_pKPresenterDoc = _kpr;
     m_rDoc = KOffice::Document::_duplicate( _doc );
-    setGeometry( KRect( _rect.left() + _diffx, _rect.top() + _diffy, _rect.width(), _rect.height() ) );
+    setGeometry( QRect( _rect.left() + _diffx, _rect.top() + _diffy, _rect.width(), _rect.height() ) );
 }
 
 /*====================== constructor =============================*/
@@ -205,7 +205,7 @@ void KPresenterDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _h
         if ( _scale != 1.0 )
             painter.scale( _scale, _scale );
 
-        m_lstViews.at( 0 )->getPage()->draw( KRect( 0, 0, _width, _height ), &painter );
+        m_lstViews.at( 0 )->getPage()->draw( QRect( 0, 0, _width, _height ), &painter );
 
         painter.end();
     }
@@ -497,7 +497,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 
     pixmapCollectionKeys.clear();
     clipartCollectionKeys.clear();
-    
+
     //KoPageLayout __pgLayout;
     __pgLayout.unit = PG_MM;
 
@@ -1266,7 +1266,7 @@ void KPresenterDoc::removeView( KPresenterView *_view )
 }
 
 /*========================= insert an object =====================*/
-void KPresenterDoc::insertObject( const KRect& _rect, KoDocumentEntry& _e, int _diffx, int _diffy )
+void KPresenterDoc::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _diffx, int _diffy )
 {
     KOffice::Document_var doc = imr_createDoc( _e );
     if ( CORBA::is_nil( doc ) )
@@ -1305,7 +1305,7 @@ void KPresenterDoc::insertChild( KPresenterChild *_child )
 }
 
 /*======================= change child geometry ==================*/
-void KPresenterDoc::changeChildGeometry( KPresenterChild *_child, const KRect& _rect, int /*_diffx*/, int /*_diffy*/ )
+void KPresenterDoc::changeChildGeometry( KPresenterChild *_child, const QRect& _rect, int /*_diffx*/, int /*_diffy*/ )
 {
     _child->setGeometry( _rect );
 
@@ -1324,7 +1324,7 @@ QListIterator<KPresenterChild> KPresenterDoc::childIterator()
 void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
 {
     _pageLayout = pgLayout;
-    KRect r = getPageSize( 0, diffx, diffy );
+    QRect r = getPageSize( 0, diffx, diffy );
 
     for ( int i = 0; i < static_cast<int>( _backgroundList.count() ); i++ )
     {
@@ -1358,7 +1358,7 @@ unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore  
 
     if ( _restore )
     {
-        KRect r = getPageSize( 0, diffx, diffy );
+        QRect r = getPageSize( 0, diffx, diffy );
         _backgroundList.last()->setSize( r.width(), r.height() );
         _backgroundList.last()->restore();
         repaint( false );
@@ -2862,7 +2862,7 @@ void KPresenterDoc::changeClipart( QString filename, int /*diffx*/, int /*diffy*
 }
 
 /*===================== insert a line ===========================*/
-void KPresenterDoc::insertLine( KRect r, QPen pen, LineEnd lb, LineEnd le, LineType lt, int diffx, int diffy )
+void KPresenterDoc::insertLine( QRect r, QPen pen, LineEnd lb, LineEnd le, LineType lt, int diffx, int diffy )
 {
     KPLineObject *kplineobject = new KPLineObject( pen, lb, le, lt );
     kplineobject->setOrig( r.x() + diffx, r.y() + diffy );
@@ -2877,7 +2877,7 @@ void KPresenterDoc::insertLine( KRect r, QPen pen, LineEnd lb, LineEnd le, LineT
 }
 
 /*===================== insert a rectangle =======================*/
-void KPresenterDoc::insertRectangle( KRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
+void KPresenterDoc::insertRectangle( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
                                      BCType gt, int rndX, int rndY, int diffx, int diffy )
 {
     KPRectObject *kprectobject = new KPRectObject( pen, brush, ft, g1, g2, gt, rndX, rndY );
@@ -2893,7 +2893,7 @@ void KPresenterDoc::insertRectangle( KRect r, QPen pen, QBrush brush, FillType f
 }
 
 /*===================== insert a circle or ellipse ===============*/
-void KPresenterDoc::insertCircleOrEllipse( KRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
+void KPresenterDoc::insertCircleOrEllipse( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
                                            BCType gt, int diffx, int diffy )
 {
     KPEllipseObject *kpellipseobject = new KPEllipseObject( pen, brush, ft, g1, g2, gt );
@@ -2909,7 +2909,7 @@ void KPresenterDoc::insertCircleOrEllipse( KRect r, QPen pen, QBrush brush, Fill
 }
 
 /*================================================================*/
-void KPresenterDoc::insertPie( KRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
+void KPresenterDoc::insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
                                BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le, int diffx, int diffy )
 {
     KPPieObject *kppieobject = new KPPieObject( pen, brush, ft, g1, g2, gt, pt, _angle, _len, lb, le );
@@ -2925,7 +2925,7 @@ void KPresenterDoc::insertPie( KRect r, QPen pen, QBrush brush, FillType ft, QCo
 }
 
 /*===================== insert a textobject =====================*/
-void KPresenterDoc::insertText( KRect r, int diffx, int diffy, QString text, KPresenterView *_view )
+void KPresenterDoc::insertText( QRect r, int diffx, int diffy, QString text, KPresenterView *_view )
 {
     KPTextObject *kptextobject = new KPTextObject();
     kptextobject->setOrig( r.x() + diffx, r.y() + diffy );
@@ -2945,7 +2945,7 @@ void KPresenterDoc::insertText( KRect r, int diffx, int diffy, QString text, KPr
 }
 
 /*======================= insert an autoform ====================*/
-void KPresenterDoc::insertAutoform( KRect r, QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft, QColor g1, QColor g2,
+void KPresenterDoc::insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft, QColor g1, QColor g2,
                                     BCType gt, QString fileName, int diffx, int diffy )
 {
     KPAutoformObject *kpautoformobject = new KPAutoformObject( pen, brush, fileName, lb, le, ft, g1, g2, gt );
@@ -3006,16 +3006,16 @@ void KPresenterDoc::hideAllFrames()
 }
 
 /*===================== repaint =================================*/
-void KPresenterDoc::repaint( KRect rect )
+void KPresenterDoc::repaint( QRect rect )
 {
     if ( !m_lstViews.isEmpty() )
     {
-        KRect r;
+        QRect r;
 
         for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
         {
             r = rect;
-            r.moveTopLeft( KPoint( r.x() - viewPtr->getDiffX(), r.y() - viewPtr->getDiffY() ) );
+            r.moveTopLeft( QPoint( r.x() - viewPtr->getDiffX(), r.y() - viewPtr->getDiffY() ) );
 
             viewPtr->repaint( r, false );
         }
@@ -3027,12 +3027,12 @@ void KPresenterDoc::repaint( KPObject *kpobject )
 {
     if ( !m_lstViews.isEmpty() )
     {
-        KRect r;
+        QRect r;
 
         for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
         {
             r = kpobject->getBoundingRect( 0, 0 );
-            r.moveTopLeft( KPoint( r.x() - viewPtr->getDiffX(), r.y() - viewPtr->getDiffY() ) );
+            r.moveTopLeft( QPoint( r.x() - viewPtr->getDiffX(), r.y() - viewPtr->getDiffY() ) );
 
             viewPtr->repaint( r, false );
         }
@@ -3085,7 +3085,7 @@ QValueList<int> KPresenterDoc::reorderPage( unsigned int num, int diffx, int dif
 /*====================== get page of object ======================*/
 int KPresenterDoc::getPageOfObj( int objNum, int diffx, int diffy, float fakt )
 {
-    KRect rect;
+    QRect rect;
 
     KPObject *kpobject = 0;
 
@@ -3107,7 +3107,7 @@ int KPresenterDoc::getPageOfObj( int objNum, int diffx, int diffy, float fakt )
 }
 
 /*================== get size of page ===========================*/
-KRect KPresenterDoc::getPageSize( unsigned int num, int diffx, int diffy, float fakt , bool decBorders )
+QRect KPresenterDoc::getPageSize( unsigned int num, int diffx, int diffy, float fakt , bool decBorders )
 {
 //   double fact = 1;
 //   if ( _pageLayout.unit == PG_CM ) fact = 10;
@@ -3134,7 +3134,7 @@ KRect KPresenterDoc::getPageSize( unsigned int num, int diffx, int diffy, float 
     pw = static_cast<int>( static_cast<float>( pw ) * fakt );
     ph = static_cast<int>( static_cast<float>( ph ) * fakt );
 
-    return KRect( -diffx + bl, -diffy + bt + num * bt + num * bb + num * ph, pw, ph );
+    return QRect( -diffx + bl, -diffy + bt + num * bt + num * bb + num * ph, pw, ph );
 }
 
 /*================================================================*/
@@ -3338,7 +3338,7 @@ void KPresenterDoc::replaceObjs()
     KPObject *kpobject = 0;
     int ox, oy;
     QList<KPObject> _objects;
-    QList<KPoint> _diffs;
+    QList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
 
@@ -3351,7 +3351,7 @@ void KPresenterDoc::replaceObjs()
         ox = ( ox / _rastX ) * _rastX;
         oy = ( oy / _rastY ) * _rastY;
 
-        _diffs.append( new KPoint( ox - kpobject->getOrig().x(), oy - kpobject->getOrig().y() ) );
+        _diffs.append( new QPoint( ox - kpobject->getOrig().x(), oy - kpobject->getOrig().y() ) );
         _objects.append( kpobject );
     }
 
@@ -3422,7 +3422,7 @@ void KPresenterDoc::alignObjsLeft()
 {
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
-    QList<KPoint> _diffs;
+    QList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     int _x = getPageSize( 1, 0, 0 ).x();
@@ -3433,7 +3433,7 @@ void KPresenterDoc::alignObjsLeft()
         if ( kpobject->isSelected() )
         {
             _objects.append( kpobject );
-            _diffs.append( new KPoint( _x - kpobject->getOrig().x(), 0 ) );
+            _diffs.append( new QPoint( _x - kpobject->getOrig().x(), 0 ) );
         }
     }
 
@@ -3447,7 +3447,7 @@ void KPresenterDoc::alignObjsCenterH()
 {
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
-    QList<KPoint> _diffs;
+    QList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     int _x = getPageSize( 1, 0, 0 ).x();
@@ -3459,7 +3459,7 @@ void KPresenterDoc::alignObjsCenterH()
         if ( kpobject->isSelected() )
         {
             _objects.append( kpobject );
-            _diffs.append( new KPoint( ( _w - kpobject->getSize().width() ) / 2 - kpobject->getOrig().x() + _x, 0 ) );
+            _diffs.append( new QPoint( ( _w - kpobject->getSize().width() ) / 2 - kpobject->getOrig().x() + _x, 0 ) );
         }
     }
 
@@ -3473,7 +3473,7 @@ void KPresenterDoc::alignObjsRight()
 {
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
-    QList<KPoint> _diffs;
+    QList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     int _w = getPageSize( 1, 0, 0 ).x() + getPageSize( 1, 0, 0 ).width();
@@ -3484,7 +3484,7 @@ void KPresenterDoc::alignObjsRight()
         if ( kpobject->isSelected() )
         {
             _objects.append( kpobject );
-            _diffs.append( new KPoint( ( _w - kpobject->getSize().width() ) - kpobject->getOrig().x(), 0 ) );
+            _diffs.append( new QPoint( ( _w - kpobject->getSize().width() ) - kpobject->getOrig().x(), 0 ) );
         }
     }
 
@@ -3498,7 +3498,7 @@ void KPresenterDoc::alignObjsTop()
 {
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
-    QList<KPoint> _diffs;
+    QList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     int pgnum, _y;
@@ -3513,7 +3513,7 @@ void KPresenterDoc::alignObjsTop()
             {
                 _y = getPageSize( pgnum - 1, 0, 0 ).y();
                 _objects.append( kpobject );
-                _diffs.append( new KPoint( 0, _y - kpobject->getOrig().y() ) );
+                _diffs.append( new QPoint( 0, _y - kpobject->getOrig().y() ) );
             }
         }
     }
@@ -3528,7 +3528,7 @@ void KPresenterDoc::alignObjsCenterV()
 {
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
-    QList<KPoint> _diffs;
+    QList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     int pgnum, _y, _h;
@@ -3544,7 +3544,7 @@ void KPresenterDoc::alignObjsCenterV()
                 _y = getPageSize( pgnum - 1, 0, 0 ).y();
                 _h = getPageSize( pgnum - 1, 0, 0 ).height();
                 _objects.append( kpobject );
-                _diffs.append( new KPoint( 0, ( _h - kpobject->getSize().height() ) / 2 - kpobject->getOrig().y() + _y ) );
+                _diffs.append( new QPoint( 0, ( _h - kpobject->getSize().height() ) / 2 - kpobject->getOrig().y() + _y ) );
             }
         }
     }
@@ -3559,7 +3559,7 @@ void KPresenterDoc::alignObjsBottom()
 {
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
-    QList<KPoint> _diffs;
+    QList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     int pgnum, _h;
@@ -3574,7 +3574,7 @@ void KPresenterDoc::alignObjsBottom()
             {
                 _h = getPageSize( pgnum - 1, 0, 0 ).y() + getPageSize( pgnum - 1, 0, 0 ).height();
                 _objects.append( kpobject );
-                _diffs.append( new KPoint( 0, _h - kpobject->getSize().height() - kpobject->getOrig().y() ) );
+                _diffs.append( new QPoint( 0, _h - kpobject->getSize().height() - kpobject->getOrig().y() ) );
             }
         }
     }
@@ -3639,7 +3639,7 @@ QString KPresenterDoc::getPageTitle( unsigned int pgNum, const QString &_title )
     QList<KPObject> objs;
     objs.setAutoDelete( false );
 
-    KRect rect = getPageSize( pgNum, 0, 0 );
+    QRect rect = getPageSize( pgNum, 0, 0 );
 
     KPObject *kpobject = 0L, *obj = 0L;
     for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() )

@@ -104,7 +104,7 @@ void KPPixmapObject::resizeBy( int _dx, int _dy )
 }
 
 /*================================================================*/
-void KPPixmapObject::setPixmap( const QString &_filename, QDateTime _lastModified, const KSize &_size )
+void KPPixmapObject::setPixmap( const QString &_filename, QDateTime _lastModified, const QSize &_size )
 {
     if ( !_lastModified.isValid() )
     {
@@ -464,7 +464,7 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
     int oy = orig.y() - _diffy;
     int ow = ext.width();
     int oh = ext.height();
-    KRect r;
+    QRect r;
 
     _painter->save();
     r = _painter->viewport();
@@ -485,7 +485,7 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
             _painter->setPen( QPen( shadowColor ) );
             _painter->setBrush( shadowColor );
 
-            KSize bs = pixmap->size();
+            QSize bs = pixmap->size();
 
             _painter->drawRect( sx, sy, bs.width(), bs.height() );
         }
@@ -494,14 +494,14 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
             r = _painter->viewport();
             _painter->setViewport( ox, oy, r.width(), r.height() );
 
-            KRect br = pixmap->rect();
+            QRect br = pixmap->rect();
             int pw = br.width();
             int ph = br.height();
-            KRect rr = br;
+            QRect rr = br;
             int pixYPos = -rr.y();
             int pixXPos = -rr.x();
-            br.moveTopLeft( KPoint( -br.width() / 2, -br.height() / 2 ) );
-            rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
+            br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
+            rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
             QWMatrix m, mtx;
             mtx.rotate( angle );
@@ -513,7 +513,7 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
             _painter->setPen( QPen( shadowColor ) );
             _painter->setBrush( shadowColor );
 
-            KSize bs = pixmap->size();
+            QSize bs = pixmap->size();
             int dx = 0, dy = 0;
             getShadowCoords( dx, dy, shadowDirection, shadowDistance );
             _painter->drawRect( rr.left() + pixXPos + dx, rr.top() + pixYPos + dy,
@@ -545,14 +545,14 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
         r = _painter->viewport();
         _painter->setViewport( ox, oy, r.width(), r.height() );
 
-        KRect br = pixmap->rect();
+        QRect br = pixmap->rect();
         int pw = br.width();
         int ph = br.height();
-        KRect rr = br;
+        QRect rr = br;
         int pixYPos = -rr.y();
         int pixXPos = -rr.x();
-        br.moveTopLeft( KPoint( -br.width() / 2, -br.height() / 2 ) );
-        rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
+        br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
+        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m, mtx;
         mtx.rotate( angle );

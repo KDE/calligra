@@ -277,6 +277,11 @@ Reggie, 1.6.1999:
 
 Reggie, 2.6.1999:
 -----------------
-- Implemented for Textobjects: Resize object to fit contents  
+- Implemented for Textobjects: Resize object to fit contents
   (How is this called in real english? :-)
 - Started implementing "Copy page" - doesn't do anything yet...
+
+Reggie, 5.6.1999:
+-----------------
+- KRect/KPoint/KSize -> QRect/QPoint/QSize
+- Some source cleanups

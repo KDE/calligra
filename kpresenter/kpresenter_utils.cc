@@ -17,10 +17,10 @@
 #include <qpainter.h>
 #include <qpntarry.h>
 
-#include <ksize.h>
+#include <qsize.h>
 
 /*========================== draw a figure =======================*/
-void drawFigure( LineEnd figure, QPainter* painter, KPoint coord, QColor color, int _w, float angle )
+void drawFigure( LineEnd figure, QPainter* painter, QPoint coord, QColor color, int _w, float angle )
 {
     painter->setPen( Qt::NoPen );
     painter->setBrush( Qt::NoBrush );
@@ -48,9 +48,9 @@ void drawFigure( LineEnd figure, QPainter* painter, KPoint coord, QColor color, 
     } break;
     case L_ARROW:
     {
-        KPoint p1( -5 - _w / 2, -3 - _w / 2 );
-        KPoint p2( 5 + _w / 2, 0 );
-        KPoint p3( -5 - _w / 2, 3 + _w / 2 );
+        QPoint p1( -5 - _w / 2, -3 - _w / 2 );
+        QPoint p2( 5 + _w / 2, 0 );
+        QPoint p3( -5 - _w / 2, 3 + _w / 2 );
         QPointArray pArray( 3 );
         pArray.setPoint( 0, p1 );
         pArray.setPoint( 1, p2 );
@@ -69,7 +69,7 @@ void drawFigure( LineEnd figure, QPainter* painter, KPoint coord, QColor color, 
 }
 
 /*================== get bounding with of figure =================*/
-KSize getBoundingSize( LineEnd figure, int _w )
+QSize getBoundingSize( LineEnd figure, int _w )
 {
     switch ( figure )
     {
@@ -77,16 +77,16 @@ KSize getBoundingSize( LineEnd figure, int _w )
     {
         int _h = _w;
         if ( _h % 2 == 0 ) _h--;
-        return KSize( 6 + _w + 4, 6 + _h + 4 );
+        return QSize( 6 + _w + 4, 6 + _h + 4 );
     } break;
     case L_CIRCLE:
-        return KSize( 6 + _w + 4, 6 + _w + 4 );
+        return QSize( 6 + _w + 4, 6 + _w + 4 );
         break;
     case L_ARROW:
-        return KSize( 10 + _w + 4, 6 + _w + 4 );
+        return QSize( 10 + _w + 4, 6 + _w + 4 );
         break;
     default: break;
     }
 
-    return KSize( 0, 0 );
+    return QSize( 0, 0 );
 }

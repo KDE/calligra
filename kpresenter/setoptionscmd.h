@@ -16,7 +16,7 @@
 #ifndef setoptionscmd_h
 #define setoptionscmd_h
 
-#include <kpoint.h>
+#include <qpoint.h>
 #include <qcolor.h>
 
 #include "command.h"
@@ -31,7 +31,7 @@ class KPresenterDoc;
 class SetOptionsCmd : public Command
 {
 public:
-    SetOptionsCmd( QString _name, QList<KPoint> &_diffs, QList<KPObject> &_objects,
+    SetOptionsCmd( QString _name, QList<QPoint> &_diffs, QList<KPObject> &_objects,
                    int _rastX, int _rastY, int _orastX, int _orastY,
                    QColor _txtBackCol, QColor _otxtBackCol, KPresenterDoc *_doc );
     ~SetOptionsCmd();
@@ -43,7 +43,7 @@ protected:
     SetOptionsCmd()
     {; }
 
-    QList<KPoint> diffs;
+    QList<QPoint> diffs;
     QList<KPObject> objects;
     int rastX, rastY;
     int orastX, orastY;

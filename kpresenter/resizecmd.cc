@@ -17,14 +17,14 @@
 #include "resizecmd.h"
 #include "kpobject.h"
 
-#include <krect.h>
+#include <qrect.h>
 
 /******************************************************************/
 /* Class: ResizeCmd                                               */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-ResizeCmd::ResizeCmd( QString _name, KPoint _m_diff, KSize _r_diff, KPObject *_object, KPresenterDoc *_doc )
+ResizeCmd::ResizeCmd( QString _name, QPoint _m_diff, QSize _r_diff, KPObject *_object, KPresenterDoc *_doc )
     : Command( _name ), m_diff( _m_diff ), r_diff( _r_diff )
 {
     object = _object;
@@ -41,7 +41,7 @@ ResizeCmd::~ResizeCmd()
 /*====================== execute =================================*/
 void ResizeCmd::execute()
 {
-    KRect oldRect;
+    QRect oldRect;
 
     oldRect = object->getBoundingRect( 0, 0 );
     object->moveBy( m_diff );
@@ -53,7 +53,7 @@ void ResizeCmd::execute()
 /*====================== unexecute ===============================*/
 void ResizeCmd::unexecute()
 {
-    KRect oldRect;
+    QRect oldRect;
 
     oldRect = object->getBoundingRect( 0, 0 );
     object->moveBy( -m_diff.x(), -m_diff.y() );
@@ -65,7 +65,7 @@ void ResizeCmd::unexecute()
 /*====================== unexecute ===============================*/
 void ResizeCmd::unexecute( bool _repaint )
 {
-    KRect oldRect;
+    QRect oldRect;
 
     oldRect = object->getBoundingRect( 0, 0 );
     object->moveBy( -m_diff.x(), -m_diff.y() );

@@ -884,7 +884,7 @@ void KPresenterView::extraAlignObj()
 {
     page->setToolEditMode( TEM_MOUSE );
 
-    KPoint pnt( QCursor::pos() );
+    QPoint pnt( QCursor::pos() );
 
     rb_oalign->popup( pnt );
 
@@ -987,7 +987,7 @@ void KPresenterView::extraLineBegin()
 {
     page->setToolEditMode( TEM_MOUSE );
 
-    KPoint pnt( QCursor::pos() );
+    QPoint pnt( QCursor::pos() );
 
     rb_lbegin->popup( pnt );
 
@@ -1005,7 +1005,7 @@ void KPresenterView::extraLineEnd()
 {
     page->setToolEditMode( TEM_MOUSE );
 
-    KPoint pnt( QCursor::pos() );
+    QPoint pnt( QCursor::pos() );
 
     rb_lend->popup( pnt );
 
@@ -1152,7 +1152,7 @@ void KPresenterView::screenStart()
 
         if ( fullScreen )
         {
-            page->recreate( ( QWidget* )0L, WStyle_Customize | WStyle_NoBorder | WType_Popup, KPoint( 0, 0 ), true );
+            page->recreate( ( QWidget* )0L, WStyle_Customize | WStyle_NoBorder | WType_Popup, QPoint( 0, 0 ), true );
             page->topLevelWidget()->move( 0, 0 );
             page->topLevelWidget()->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
             page->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
@@ -1168,7 +1168,7 @@ void KPresenterView::screenStart()
         }
         QPainter p;
         p.begin( page );
-        presentParts( page->presFakt(), &p, KRect( 0, 0, 0, 0 ), xOffset, yOffset );
+        presentParts( page->presFakt(), &p, QRect( 0, 0, 0, 0 ), xOffset, yOffset );
         p.end();
 
         if ( !kPresenterDoc()->spManualSwitch() )
@@ -1190,7 +1190,7 @@ void KPresenterView::screenStop()
         if ( true ) //m_rToolBarScreen->isButtonOn( m_idButtonScreen_Full ) )
         {
             page->close( false );
-            page->recreate( ( QWidget* )this, 0, KPoint( 0, 0 ), true );
+            page->recreate( ( QWidget* )this, 0, QPoint( 0, 0 ), true );
             page->lower();
         }
         xOffset = _xOffset;
@@ -1257,7 +1257,7 @@ void KPresenterView::screenPrev()
             page->setFocus();
         }
         QPainter p( page );
-        presentParts( page->presFakt(), &p, KRect( 0, 0, 0, 0 ), xOffset, yOffset );
+        presentParts( page->presFakt(), &p, QRect( 0, 0, 0, 0 ), xOffset, yOffset );
         p.end();
     }
     else
@@ -1285,7 +1285,7 @@ void KPresenterView::screenNext()
             page->setFocus();
         }
         QPainter p( page );
-        presentParts( page->presFakt(), &p, KRect( 0, 0, 0, 0 ), xOffset, yOffset );
+        presentParts( page->presFakt(), &p, QRect( 0, 0, 0, 0 ), xOffset, yOffset );
         p.end();
     }
     else
@@ -1322,7 +1322,7 @@ void KPresenterView::screenFullScreen()
 /*========================== screen pen/marker =================*/
 void KPresenterView::screenPen()
 {
-    KPoint pnt( QCursor::pos() );
+    QPoint pnt( QCursor::pos() );
 
     rb_pen->popup( pnt );
 
@@ -1901,14 +1901,14 @@ void KPresenterView::slotInsertObject( KPresenterChild *_child, KPPartObject *_k
     catch ( OpenParts::Document::MultipleViewsNotSupported &_ex )
     {
         // HACK
-        printf( "void KPresenterView::slotInsertObject( const KRect& _rect, OPParts::Document_ptr _doc )\n" );
+        printf( "void KPresenterView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )\n" );
         printf( "Could not create view\n" );
         exit( 1 );
     }
 
     if ( CORBA::is_nil( v ) )
     {
-        printf( "void KPresenterView::slotInsertObject( const KRect& _rect, OPParts::Document_ptr _doc )\n" );
+        printf( "void KPresenterView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )\n" );
         printf( "return value is 0L\n" );
         exit( 1 );
     }
@@ -2803,7 +2803,7 @@ void KPresenterView::repaint( unsigned int x, unsigned int y, unsigned int w,
 }
 
 /*====================== paint event ============================*/
-void KPresenterView::repaint( KRect r, bool erase )
+void KPresenterView::repaint( QRect r, bool erase )
 {
     QWidget::repaint( r, erase );
     page->repaint( r, erase );
@@ -2931,10 +2931,10 @@ void KPresenterView::hideParts()
 }
 
 /*====================== present parts ==========================*/
-void KPresenterView::presentParts( float /*_presFakt*/, QPainter* /*_painter*/, KRect /*_rect*/, int /*_diffx*/, int /*_diffy*/ )
+void KPresenterView::presentParts( float /*_presFakt*/, QPainter* /*_painter*/, QRect /*_rect*/, int /*_diffx*/, int /*_diffy*/ )
 {
 //   QListIterator<KPresenterChild> chl = m_pKPresenterDoc->childIterator();
-//   KRect child_geometry;
+//   QRect child_geometry;
 //   float scale_w, scale_h;
 
 //   for( ; chl.current(); ++chl )
@@ -4162,7 +4162,7 @@ void KPresenterView::skipToPage( int _num )
 }
 
 /*==============================================================*/
-void KPresenterView::makeRectVisible( KRect _rect )
+void KPresenterView::makeRectVisible( QRect _rect )
 {
     horz->setValue( _rect.x() );
     vert->setValue( _rect.y() );

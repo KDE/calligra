@@ -32,7 +32,7 @@
 #include <qpainter.h>
 #include <qcombo.h>
 
-#include <ksize.h>
+#include <qsize.h>
 #include <kcolorbtn.h>
 #include <klocale.h>
 #include <kfiledialog.h>

@@ -40,7 +40,7 @@ void PBPreview::paintEvent( QPaintEvent* )
     painter.begin( this );
     if ( paintType == 0 )
     {
-        KSize diff1( 0, 0 ), diff2( 0, 0 );
+        QSize diff1( 0, 0 ), diff2( 0, 0 );
         int _w = pen.width();
 
         if ( lineBegin != L_NORMAL )
@@ -50,10 +50,10 @@ void PBPreview::paintEvent( QPaintEvent* )
             diff2 = getBoundingSize( lineEnd, _w );
 
         if ( lineBegin != L_NORMAL )
-            drawFigure( lineBegin, &painter, KPoint( diff1.width() / 2, height() / 2 ), pen.color(), _w, 180.0 );
+            drawFigure( lineBegin, &painter, QPoint( diff1.width() / 2, height() / 2 ), pen.color(), _w, 180.0 );
 
         if ( lineEnd != L_NORMAL )
-            drawFigure( lineEnd, &painter, KPoint( width() - diff2.width() / 2, height() / 2 ), pen.color(), _w, 0.0 );
+            drawFigure( lineEnd, &painter, QPoint( width() - diff2.width() / 2, height() / 2 ), pen.color(), _w, 0.0 );
 
         painter.setPen( pen );
         painter.drawLine( diff1.width() / 2, height()/2, width() - diff2.width() / 2, height()/2 );
@@ -245,7 +245,7 @@ StyleDia::StyleDia( QWidget* parent, const char* name, int flags )
     gradients->resize( chooseBStyle->size() );
     connect( gradients, SIGNAL( activated( int ) ), this, SLOT( gcStyle( int ) ) );
 
-    gradient = new KPGradient( red, green, BCT_GHORZ, KSize( chooseBCol->width(), 25 ) );
+    gradient = new KPGradient( red, green, BCT_GHORZ, QSize( chooseBCol->width(), 25 ) );
 
     gPrev = new PBPreview( brushFrame, "", 2 );
     gPrev->move( gradients->x(), gradients->y() + gradients->height() + 20 );

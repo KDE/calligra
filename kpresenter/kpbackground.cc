@@ -78,10 +78,10 @@ void KPBackGround::setBackPixmap( const QString &_filename, QDateTime _lastModif
     if ( backPix )
         pixmapCollection->removeRef( key );
 
-    KSize pixSize;
+    QSize pixSize;
     switch ( backView )
     {
-    case BV_ZOOM: pixSize = KSize( ext.width(), ext.height() );
+    case BV_ZOOM: pixSize = QSize( ext.width(), ext.height() );
         break;
     case BV_TILED: case BV_CENTER: pixSize = orig_size;
         break;
@@ -111,10 +111,10 @@ void KPBackGround::setBackClipFilename( const QString &_filename, QDateTime _las
 }
 
 /*================================================================*/
-void KPBackGround::draw( QPainter *_painter, KPoint _offset, bool _drawBorders )
+void KPBackGround::draw( QPainter *_painter, QPoint _offset, bool _drawBorders )
 {
     _painter->save();
-    KRect r = _painter->viewport();
+    QRect r = _painter->viewport();
 
     switch ( backType )
     {
@@ -507,7 +507,7 @@ void KPBackGround::drawBackPix( QPainter *_painter )
 }
 
 /*================================================================*/
-void KPBackGround::drawHeaderFooter( QPainter *_painter, const KPoint &_offset )
+void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 {
     if ( doc->hasHeader() )
     {

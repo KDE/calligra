@@ -16,9 +16,9 @@
 #ifndef movecmd_h
 #define movecmd_h
 
-#include <kpoint.h>
+#include <qpoint.h>
 #include <qlist.h>
-#include <kpoint.h>
+#include <qpoint.h>
 
 #include "command.h"
 #include "kpobject.h"
@@ -32,7 +32,7 @@ class KPresenterDoc;
 class MoveByCmd : public Command
 {
 public:
-    MoveByCmd( QString _name, KPoint _diff, QList<KPObject> &_objects, KPresenterDoc *_doc );
+    MoveByCmd( QString _name, QPoint _diff, QList<KPObject> &_objects, KPresenterDoc *_doc );
     ~MoveByCmd();
 
     virtual void execute();
@@ -42,7 +42,7 @@ protected:
     MoveByCmd()
     {; }
 
-    KPoint diff;
+    QPoint diff;
     QList<KPObject> objects;
     KPresenterDoc *doc;
 
@@ -55,7 +55,7 @@ protected:
 class MoveByCmd2 : public Command
 {
 public:
-    MoveByCmd2( QString _name, QList<KPoint> &_diffs, QList<KPObject> &_objects, KPresenterDoc *_doc );
+    MoveByCmd2( QString _name, QList<QPoint> &_diffs, QList<KPObject> &_objects, KPresenterDoc *_doc );
     ~MoveByCmd2();
 
     virtual void execute();
@@ -65,7 +65,7 @@ protected:
     MoveByCmd2()
     {; }
 
-    QList<KPoint> diffs;
+    QList<QPoint> diffs;
     QList<KPObject> objects;
     KPresenterDoc *doc;
 

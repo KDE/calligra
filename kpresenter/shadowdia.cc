@@ -22,7 +22,7 @@
 #include <qspinbox.h>
 #include <kapp.h>
 #include <kcolorbtn.h>
-#include <krect.h>
+#include <qrect.h>
 #include <kglobal.h>
 
 #include <qlabel.h>
@@ -56,7 +56,7 @@ void ShadowPreview::drawContents( QPainter* painter )
     font.setBold( true );
     QFontMetrics fm( font );
 
-    KRect br = fm.boundingRect( "KOffice" );
+    QRect br = fm.boundingRect( "KOffice" );
     int x = ( width() - br.width() ) / 2;
     int y = ( height() - br.height() ) / 2 + br.height();
     int sx = 0, sy = 0;

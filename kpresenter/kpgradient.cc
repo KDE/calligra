@@ -26,7 +26,7 @@
 /******************************************************************/
 
 /*======================= constructor ============================*/
-KPGradient::KPGradient( QColor _color1, QColor _color2, BCType _bcType, KSize _size )
+KPGradient::KPGradient( QColor _color1, QColor _color2, BCType _bcType, QSize _size )
     : color1( _color1 ), color2( _color2 ), pixmap( _size ), refCount( 0 )
 {
     bcType = _bcType;
@@ -69,7 +69,7 @@ void KPGradient::paint()
 
         painter.setPen( Qt::NoPen );
         painter.setBrush( color1 );
-        painter.drawRect( KRect( 0, 0, pixmap.size().width(), pixmap.size().height() ) );
+        painter.drawRect( QRect( 0, 0, pixmap.size().width(), pixmap.size().height() ) );
 
         painter.end();
     } break;
@@ -81,7 +81,7 @@ void KPGradient::paint()
         {
             painter.setPen( Qt::NoPen );
             painter.setBrush( color2 );
-            painter.drawRect( KRect( 0, 0, pixmap.size().width(), pixmap.size().height() ) );
+            painter.drawRect( QRect( 0, 0, pixmap.size().width(), pixmap.size().height() ) );
             break;
         }
 
@@ -101,7 +101,7 @@ void KPGradient::paint()
         {
             painter.setPen( Qt::NoPen );
             painter.setBrush( color2 );
-            painter.drawRect( KRect( 0, 0, pixmap.size().width(), pixmap.size().height() ) );
+            painter.drawRect( QRect( 0, 0, pixmap.size().width(), pixmap.size().height() ) );
             break;
         }
 
@@ -126,7 +126,7 @@ void KPGradient::paint()
         {
             painter.setPen( Qt::NoPen );
             painter.setBrush( color2 );
-            painter.drawRect( KRect( 0, 0, pixmap.size().width(), pixmap.size().height() ) );
+            painter.drawRect( QRect( 0, 0, pixmap.size().width(), pixmap.size().height() ) );
             break;
         }
 
@@ -163,7 +163,7 @@ void KPGradient::paint()
         {
             painter.setPen( Qt::NoPen );
             painter.setBrush( color2 );
-            painter.drawRect( KRect( 0, 0, pixmap.size().width(), pixmap.size().height() ) );
+            painter.drawRect( QRect( 0, 0, pixmap.size().width(), pixmap.size().height() ) );
             break;
         }
     

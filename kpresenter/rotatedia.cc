@@ -27,8 +27,8 @@
 #include <qfontmet.h>
 #include <qwmatrix.h>
 
-#include <kpoint.h>
-#include <krect.h>
+#include <qpoint.h>
+#include <qrect.h>
 #include <krestrictedline.h>
 #include <kapp.h>
 #include <klocale.h>
@@ -54,14 +54,14 @@ void RotatePreview::drawContents( QPainter* painter )
     font.setBold( true );
     QFontMetrics fm( font );
 
-    KRect br = fm.boundingRect( "KOffice" );
+    QRect br = fm.boundingRect( "KOffice" );
     int pw = br.width();
     int ph = br.height();
-    KRect r = br;
+    QRect r = br;
     int textYPos = -r.y();
     int textXPos = -r.x();
-    br.moveTopLeft( KPoint( -br.width() / 2, -br.height() / 2 ) );
-    r.moveTopLeft( KPoint( -r.width() / 2, -r.height() / 2 ) );
+    br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
+    r.moveTopLeft( QPoint( -r.width() / 2, -r.height() / 2 ) );
 
     painter->save();
     painter->setViewport( ( width() - pw ) / 2, ( height() - ph ) / 2, width(), height() );

@@ -28,7 +28,7 @@
 #include <qbrush.h>
 #include <qpainter.h>
 #include <qcolor.h>
-#include <ksize.h>
+#include <qsize.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
 

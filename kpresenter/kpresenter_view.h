@@ -26,8 +26,8 @@
 #include <qcolor.h>
 #include <qfont.h>
 
-#include <krect.h>
-#include <kpoint.h>
+#include <qrect.h>
+#include <qpoint.h>
 
 #include <koMainWindow.h>
 
@@ -257,13 +257,13 @@ public:
     // repaint page
     void repaint( bool );
     void repaint( unsigned int, unsigned int, unsigned int, unsigned int, bool );
-    void repaint( KRect, bool );
+    void repaint( QRect, bool );
 
     // properties
     void changePicture( unsigned int, const QString & );
     void changeClipart( unsigned int, QString );
 
-    void presentParts( float, QPainter*, KRect, int, int );
+    void presentParts( float, QPainter*, QRect, int, int );
     void hideParts();
     void showParts();
 
@@ -286,7 +286,7 @@ public:
     QScrollBar *getVScrollBar() { return vert; }
 
     void skipToPage( int _num );
-    void makeRectVisible( KRect _rect );
+    void makeRectVisible( QRect _rect );
 
     void restartPresStructView();
 
@@ -691,13 +691,13 @@ protected:
     QStringList fontList;
 
     bool m_bRectSelection;
-    KRect m_rctRectSelection;
+    QRect m_rctRectSelection;
     QString m_strNewPart;
     bool m_bShowGUI;
     bool presStarted;
     bool allowWebPres;
 
-    KSize oldSize;
+    QSize oldSize;
 
     int screensaver_pid;
 

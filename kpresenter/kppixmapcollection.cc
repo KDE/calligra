@@ -245,7 +245,7 @@ QPixmap *KPPixmapCollection::loadPixmap( const QImage &image, const Key &key, bo
     QPixmap *pixmap = new QPixmap;
     pixmap->convertFromImage( image );
 
-    KSize size = key.size;
+    QSize size = key.size;
     if ( size != pixmap->size() && size != orig_size && pixmap->width() != 0 && pixmap->height() != 0 )
     {
         QWMatrix m;

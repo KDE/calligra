@@ -421,7 +421,7 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
     int oy = orig.y() - _diffy;
     int ow = ext.width();
     int oh = ext.height();
-    KRect r;
+    QRect r;
 
     _painter->save();
     r = _painter->viewport();
@@ -467,12 +467,12 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
         _painter->drawPicture( *picture );
     else
     {
-        KRect br = KRect( 0, 0, ow, oh );
+        QRect br = QRect( 0, 0, ow, oh );
         int pw = br.width();
         int ph = br.height();
         int yPos = -br.y();
         int xPos = -br.x();
-        br.moveTopLeft( KPoint( -br.width() / 2, -br.height() / 2 ) );
+        br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
 
         QWMatrix m, mtx;
         mtx.rotate( angle );
