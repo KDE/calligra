@@ -624,6 +624,56 @@ static void ProcessFollowingTag ( QDomNode myNode, void *tagData, KWEFKWordLeade
     ProcessOneAttrTag (myNode, "name", "QString", tagData, leader);
 }
 
+static void ProcessLinespacingTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
+{
+    LayoutData *layout = (LayoutData *) tagData;
+    QString oldValue, spacingType;
+    double spacingValue;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ("value" , "QString", (void *) &oldValue );
+    attrProcessingList << AttrProcessing ("type" , "QString", (void *) &spacingType );
+    attrProcessingList << AttrProcessing ("spacingvalue"  , "double", (void *) &spacingValue  );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    // KWord pre-1.2 uses "value" attribute (stored in oldValue)
+    // while 1.2 uses "type" and "spacingvalue"
+
+    if( !oldValue.isEmpty() )
+    {
+        // for old format
+        if( oldValue == "oneandhalf" )
+            layout->lineSpacingType = 15;
+        else if ( oldValue == "double" )
+            layout->lineSpacingType = 20;
+        else
+        {
+            const double size = oldValue.toDouble ();
+            if ( size >= 1.0 )
+            {
+                // We have a valid size
+                layout->lineSpacingType = 0; // set to custom
+                layout->lineSpacing     = size;
+            }
+            else
+               layout->lineSpacingType = 10; // assume single linespace
+         }
+    }
+    else
+    {
+        // for new format
+        if( spacingType == "oneandhalf" )
+            layout->lineSpacingType = 15;
+        else if ( spacingType == "double" )
+            layout->lineSpacingType = 20;
+        else if ( spacingType == "custom" )
+            layout->lineSpacingType = 0;
+        else
+               layout->lineSpacingType = 10; // assume single linespace
+        layout->lineSpacing = spacingValue;
+    }
+}
+
 void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 // Processes <LAYOUT> and <STYLE>
 {
@@ -640,7 +690,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     tagProcessingList << TagProcessing ( "FLOW",         ProcessStringAlignTag,       &layout->alignment           );
     tagProcessingList << TagProcessing ( "INDENTS",      ProcessIndentsTag,           (void *) layout              );
     tagProcessingList << TagProcessing ( "OFFSETS",      ProcessLayoutOffsetTag,      (void *) layout              );
-    tagProcessingList << TagProcessing ( "LINESPACING",  ProcessStringValueTag,       &lineSpacing                 );
+    tagProcessingList << TagProcessing ( "LINESPACING",  ProcessLinespacingTag,       (void *) layout              );
     tagProcessingList << TagProcessing ( "PAGEBREAKING", ProcessLineBreakingTag,      (void *) layout              );
     tagProcessingList << TagProcessing ( "LEFTBORDER",   ProcessAnyBorderTag,         &layout->leftBorder          );
     tagProcessingList << TagProcessing ( "RIGHTBORDER",  ProcessAnyBorderTag,         &layout->rightBorder         );
@@ -673,29 +723,6 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
         kdWarning (30508) << "Empty layout name!" << endl;
     }
 
-    if ( lineSpacing == "oneandhalf" )
-    {
-        layout->lineSpacingType = 15;
-    }
-    else if ( lineSpacing == "double" )
-    {
-        layout->lineSpacingType = 20;
-    }
-    else
-    {
-        const double size = lineSpacing.toDouble ();
-
-        if ( size >= 1.0 )
-        {
-            // We have a valid size
-            layout->lineSpacingType = 0; // set to custom
-            layout->lineSpacing     = size;
-        }
-        else
-        {
-            layout->lineSpacingType = 10; // set to 1 line
-        }
-    }
 }
 
 
