@@ -1175,7 +1175,7 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
 bool KoDocument::saveOasisPreview( KoStore* store )
 {
     const QPixmap pix = generatePreview( QSize( 128, 128 ) );
-    // ### TODO: test if this really works!
+    // ### TODO: test if this really works! (No, it does not work. Still no alpha channel!)
     const QImage preview ( pix.convertToImage().convertDepth( 32, Qt::ColorOnly | Qt::ThresholdAlphaDither ) );
     // ### TODO: freedesktop.org Thumbnail specification (date...)
     KoStoreDevice io ( store );
