@@ -23,6 +23,8 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <koRuler.h>
+#include <koPageLayoutDia.h>
 
 #include <graphitepart.h>
 #include <graphitefactory.h>
@@ -32,7 +34,7 @@
 
 GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
 			   const char *name) : KoView(doc, parent, name),
-					       m_zoom(1.0) {
+					       m_oldX(1), m_oldY(1) {
     setInstance(GraphiteFactory::global());
     setXMLFile(QString::fromLatin1("graphite.rc"));
 
@@ -52,6 +54,21 @@ GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
     zoom->setItems(lst);
 
     m_canvas=new GCanvas(this, doc);
+    m_canvas->setGeometry(20, 20, m_canvas->viewport()->width()-20,
+			  m_canvas->viewport()->height()-20);
+
+    KoPageLayout layout=KoPageLayoutDia::standardLayout();
+
+    m_vert=new KoRuler(this, m_canvas->viewport(), KoRuler::VERTICAL, layout, 0);
+    m_vert->showMousePos(true);
+
+    m_horiz=new KoRuler(this, m_canvas->viewport(), KoRuler::HORIZONTAL, layout, 0);
+    m_horiz->showMousePos(true);
+
+    m_canvas->setRulers(m_vert, m_horiz);
+    connect(m_canvas, SIGNAL(contentsMoving(int, int)), this,
+	    SLOT(recalcRulers(int, int)));
+    recalcRulers(0, 0);
 }
 
 GraphiteView::~GraphiteView() {
@@ -90,8 +107,23 @@ void GraphiteView::slotViewZoom(int item) {
     kdDebug(37001) << "GraphiteView::slotViewZoom(): item=" << item << endl;
 }
 
-void GraphiteView::resizeEvent(QResizeEvent *ev) {
-    m_canvas->resize(ev->size());
+void GraphiteView::recalcRulers(int x, int y) {
+
+    // TODO: respect the zoom factor
+    if(x!=m_oldX)
+	m_horiz->setOffset(x, y);
+    if(y!=m_oldY)
+	m_vert->setOffset(x, y);
+    m_oldX=x;
+    m_oldY=y;
+}
+
+void GraphiteView::resizeEvent(QResizeEvent *e) {
+
+    m_canvas->resize(e->size().width()-20, e->size().height()-20);
+    m_horiz->setGeometry(20, 0, m_canvas->viewport()->width()+20, 20);
+    m_vert->setGeometry(0, 20, 20, m_canvas->viewport()->height()+20);
+    recalcRulers(m_canvas->contentsX(), m_canvas->contentsY());
 }
 
 void GraphiteView::updateReadWrite(bool /*readwrite*/) {

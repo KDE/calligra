@@ -1170,7 +1170,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-	fs->setAutoCreateNewFrame( FALSE );
+        fs->setFrameBehaviour(AutoExtendFrame); 
     }
 
     if ( !_even_header ) {
@@ -1180,7 +1180,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-	fs->setAutoCreateNewFrame( FALSE );
+        fs->setFrameBehaviour(AutoExtendFrame); 
     }
 
     if ( !_odd_header ) {
@@ -1190,7 +1190,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-	fs->setAutoCreateNewFrame( FALSE );
+        fs->setFrameBehaviour(AutoExtendFrame); 
     }
 
     if ( !_first_footer ) {
@@ -1200,7 +1200,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-	fs->setAutoCreateNewFrame( FALSE );
+        fs->setFrameBehaviour(AutoExtendFrame); 
     }
 
     if ( !_even_footer ) {
@@ -1210,7 +1210,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-	fs->setAutoCreateNewFrame( FALSE );
+        fs->setFrameBehaviour(AutoExtendFrame); 
     }
 
     if ( !_odd_footer ) {
@@ -1220,7 +1220,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-	fs->setAutoCreateNewFrame( FALSE );
+        fs->setFrameBehaviour(AutoExtendFrame); 
     }
 
     if ( !_footnotes ) {
@@ -1235,7 +1235,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	    fs->addFrame( frame );
 	}
 	frames.append( fs );
-	fs->setAutoCreateNewFrame( TRUE );
+    fs->setFrameBehaviour(AutoCreateNewFrame); 
 	fs->setVisible( FALSE );
     }
 
@@ -1327,7 +1327,7 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
     string tag;
     string name;
 
-    bool autoCreateNewFrame = TRUE;
+    FrameBehaviour frameBehaviour=AutoCreateNewFrame;
     FrameInfo frameInfo = FI_BODY;
     QString _name = "";
     int _row = 0, _col = 0, _rows = 1, _cols = 1;
@@ -1351,7 +1351,7 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
 		if ( ( *it ).m_strName == "frameType" )
 		    frameType = static_cast<FrameType>( atoi( ( *it ).m_strValue.c_str() ) );
 		if ( ( *it ).m_strName == "autoCreateNewFrame" )
-		    autoCreateNewFrame = atoi( ( *it ).m_strValue.c_str() );
+		    frameBehaviour = static_cast<FrameBehaviour>(atoi( ( *it ).m_strValue.c_str() ) );
 		if ( ( *it ).m_strName == "frameInfo" )
 		    frameInfo = static_cast<FrameInfo>( atoi( ( *it ).m_strValue.c_str() ) );
 		if ( ( *it ).m_strName == "grpMgr" )
@@ -1381,7 +1381,7 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
 		frame->setVisible( _visible );
 		frame->setName( fsname );
 		frame->load( parser, lst );
-		frame->setAutoCreateNewFrame( autoCreateNewFrame );
+                frame->setFrameBehaviour( frameBehaviour );
 		frame->setFrameInfo( frameInfo );
 		frame->setIsRemoveableHeader( removeable );
 
@@ -3145,7 +3145,8 @@ void KWordDocument::appendPage( unsigned int _page, bool /*redrawBackgroundWhenA
 	if ( getFrameSet( i )->getFrameType() != FT_TEXT || getFrameSet( i )->getFrameInfo() != FI_BODY ) continue;
 
 	// don't add tables! A table cell ( frameset ) _must_ not have more than one frame!
-	if ( getFrameSet( i )->getGroupManager() || !dynamic_cast<KWTextFrameSet*>( getFrameSet( i ) )->getAutoCreateNewFrame() ) continue;
+        if ( getFrameSet( i )->getGroupManager() || !dynamic_cast<KWTextFrameSet*>(
+getFrameSet( i ) )->getFrameBehaviour() == AutoCreateNewFrame ) continue;
 
 	frameSet = getFrameSet( i );
 
@@ -3701,15 +3702,26 @@ bool KWordDocument::canResize( KWFrameSet *frameset, KWFrame *frame, int page, i
     return FALSE;
 }
 
-/*================================================================*/
-bool KWordDocument::getAutoCreateNewFrame()
+/*============== FrameBehaviour      =============================*/
+/* Sets and gets this frames behaviour. This is used when the text
+   gets to long to fit in this frame. The possible behaviours are
+   defined in kword_frame.h with enum FrameBehaviour.
+   Writen by zander@earhtling.net
+*/
+FrameBehaviour KWordDocument::getFrameBehaviour() {
+    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
+        if ( getFrameSet( i )->hasSelectedFrame() && getFrameSet( i )->getFrameType() == FT_TEXT )
+            return dynamic_cast<KWTextFrameSet*>( getFrameSet( i ) )->getFrameBehaviour();
+    }
+    return AutoCreateNewFrame;                                                      
+}
+
+void KWordDocument::setFrameBehaviour( FrameBehaviour behaviour )
 {
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
-	if ( getFrameSet( i )->hasSelectedFrame() && getFrameSet( i )->getFrameType() == FT_TEXT )
-	    return dynamic_cast<KWTextFrameSet*>( getFrameSet( i ) )->getAutoCreateNewFrame();
+        if ( getFrameSet( i )->hasSelectedFrame() && getFrameSet( i )->getFrameType() == FT_TEXT )
+            dynamic_cast<KWTextFrameSet*>( getFrameSet( i ) )->setFrameBehaviour(behaviour);
     }
-
-    return FALSE;
 }
 
 /*================================================================*/
@@ -3730,15 +3742,6 @@ KWUnit KWordDocument::getRunAroundGap()
     if ( frame ) return frame->getRunAroundGap();
 
     return FALSE;
-}
-
-/*================================================================*/
-void KWordDocument::setAutoCreateNewFrame( bool _auto )
-{
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
-	if ( getFrameSet( i )->hasSelectedFrame() && getFrameSet( i )->getFrameType() == FT_TEXT )
-	    dynamic_cast<KWTextFrameSet*>( getFrameSet( i ) )->setAutoCreateNewFrame( _auto );
-    }
 }
 
 /*================================================================*/

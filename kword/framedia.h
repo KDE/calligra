@@ -65,7 +65,7 @@ protected:
     QWidget *tab1, *tab2, *tab3, *tab4;
     QGridLayout *grid1, *grid2, *grid3, *grid4, *runGrid, *pGrid, *mGrid;
     QGroupBox *runGroup, *grp1, *grp2;
-    QRadioButton *rRunNo, *rRunBounding, *rRunContur, *rResizeFrame, *rAppendFrame;
+    QRadioButton *rRunNo, *rRunBounding, *rRunContur, *rResizeFrame, *rAppendFrame, *rNoShow;
     QCheckBox *cAutoCreateFrame;
     QLabel *lRunNo, *lRunBounding, *lRunContur, *lRGap, *lFrameSet, *lNewFrame;
     QLabel *lx, *ly, *lw, *lh, *lml, *lmr, *lmt, *lmb;

@@ -24,6 +24,8 @@
 #include <gcanvas.h>
 
 class QResizeEvent;
+class QMouseEvent;
+class KoRuler;
 class GraphitePart;
 
 
@@ -36,22 +38,22 @@ public:
 		 const char *name=0);
     virtual ~GraphiteView();
 
-    virtual QWidget *canvas() { return m_canvas->viewport(); }
-
-    void setZoom(const double &zoom=1.0) { m_zoom=zoom; }
-    const double &zoom() const { return m_zoom; }
+    virtual QWidget *canvas() { return m_canvas; }
 
 protected slots:
     void slotViewNew();
     void slotViewZoom(int item);
 
+    void recalcRulers(int x, int y);
+
 protected:
-    void resizeEvent(QResizeEvent *ev);
+    void resizeEvent(QResizeEvent *e);
 
     virtual void updateReadWrite(bool readwrite);
 
 private:
     GCanvas *m_canvas;
-    double m_zoom;
+    KoRuler *m_vert, *m_horiz;
+    int m_oldX, m_oldY;
 };
 #endif

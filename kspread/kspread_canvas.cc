@@ -152,7 +152,6 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
 
   m_iXOffset = 0;
   m_iYOffset = 0;
-  m_fZoom = 1.0; // TODO replace with setScaling/xScaling/yScaling
   m_pView = _view;
   m_pDoc = _doc;
   // m_eAction = DefaultAction;
@@ -1444,11 +1443,11 @@ void KSpreadCanvas::updateCellRect( const QRect &_rect )
   if ( param.right() < 0x7fff )
     right = table->columnPos( param.right() + 1 );
   else
-    right = int( (double)width() / m_pView->xScaling() );
+    right = int( (double)width() / m_pView->zoom() );
   if ( param.bottom() < 0x7fff )
     bottom = table->rowPos( param.bottom() + 1 );
   else
-    bottom = int( (double)height() / m_pView->yScaling() );
+    bottom = int( (double)height() / m_pView->zoom() );
 
   QPoint tl( left, top );
   QPoint br( right, bottom );

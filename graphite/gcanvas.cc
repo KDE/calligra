@@ -17,26 +17,61 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <koRuler.h>
+
 #include <gcanvas.h>
 #include <graphiteview.h>
 
 
 GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     : QScrollView(view, "GCanvas", WNorthWestGravity),
-      m_view(view), m_doc(doc) {
+      m_vertical(0L), m_horizontal(0L) {
 
-    // Note: Not sure about WNWGravity! Check if properly repainted!
-    setFocusPolicy(QWidget::StrongFocus);
-    viewport()->setFocusProxy(this);
-    setMouseTracking(true);
-    viewport()->setMouseTracking(true);
-    setFocus();
-    // uncomment that as soon as we paint the whole area!
-    // viewport()->setBackgroundMode(NoBackground);
-    //resizeContents(2000, 2000); // <- for testing :P
+    m_widget=new GCanvasWidget(this, view, doc);
+    addChild(m_widget);
+    resizeContents(2000, 2000); // <- for testing :P
 }
 
-void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
+void GCanvas::setRulers(KoRuler *vertical, KoRuler *horizontal) {
+    m_vertical=vertical;
+    m_horizontal=horizontal;
+}
+
+void GCanvas::updateMousePos(QMouseEvent *e) {
+    m_vertical->setMousePos(e->x()-contentsX(), e->y()-contentsY());
+    m_horizontal->setMousePos(e->x()-contentsX(), e->y()-contentsY());
+}
+
+void GCanvas::showMousePos(const bool &pos) {
+    m_vertical->showMousePos(pos);
+    m_horizontal->showMousePos(pos);
+}
+
+void GCanvas::resizeEvent(QResizeEvent *e) {
+    // for now
+    m_widget->resize(e->size().width()-4, e->size().height()-4);
+}
+
+
+GCanvasWidget::GCanvasWidget(GCanvas *canvas, GraphiteView *view,
+			     GraphitePart *doc) :
+    QWidget(canvas->viewport(), 0L, WNorthWestGravity), m_view(view),
+    m_doc(doc), m_canvas(canvas), m_updateRulers(false) {
+
+    setFocusPolicy(QWidget::StrongFocus);
+    setMouseTracking(true);
+    setFocus();
+    setBackgroundMode(NoBackground);
+}
+
+void GCanvasWidget::mouseMoveEvent(QMouseEvent *e) {
+
+    if(m_updateRulers)
+	m_canvas->updateMousePos(e);
+    m_doc->mouseMoveEvent(e, m_view);
+}
+
+void GCanvasWidget::paintEvent(QPaintEvent */*e*/) {
 
     // TODO: 1 - define the region which has to be
     //           repainted. (Don't forget to add the offset!)
@@ -70,5 +105,15 @@ void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
 		   << " height=" << visibleHeight()
 		   << " | x-offset=" << contentsX()
 		   << " y-offet=" << contentsY() << endl;*/
+}
+
+void GCanvasWidget::leaveEvent(QEvent *) {
+    m_updateRulers=false;
+    m_canvas->showMousePos(false);
+}
+
+void GCanvasWidget::enterEvent(QEvent *) {
+    m_updateRulers=true;
+    m_canvas->showMousePos(true);
 }
 #include <gcanvas.moc>

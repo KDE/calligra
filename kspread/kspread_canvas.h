@@ -9,8 +9,8 @@
 #include <qpen.h>
 
 #include <koQueryTrader.h>
+#include <kspread_view.h>
 
-class KSpreadView;
 class KSpreadEditWidget;
 class KSpreadCanvas;
 class KSpreadHBorder;
@@ -193,7 +193,7 @@ public:
 
     const QPen& defaultGridPen() { return m_defaultGridPen; }
 
-    float zoom() { return m_fZoom; }
+    double zoom() { return m_pView->zoom(); }
 
     int xOffset() { return m_iXOffset; }
     int yOffset() { return m_iYOffset; }

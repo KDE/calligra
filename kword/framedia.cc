@@ -86,43 +86,64 @@ KWFrameDia::KWFrameDia( QWidget* parent, const char* name, KWFrame *_frame, KWor
 void KWFrameDia::setupTab1TextFrameSet()
 {
     tab1 = addPage( i18n("Frameset") );
-    grid1 = new QGridLayout( tab1, 4, 1, 15, 7 );
+    grid1 = new QGridLayout( tab1, 5, 1, 15, 7 );
 
-    lNewFrame = new QLabel( i18n( "If the text of the frameset doesn't fit into the the frames of the frameset anymore:" ), tab1 );
+    lNewFrame = new QLabel( i18n( "If text is to long for frame:" ), tab1 );
     lNewFrame->resize( lNewFrame->sizeHint() );
     grid1->addWidget( lNewFrame, 0, 0 );
 
-    rAppendFrame = new QRadioButton( i18n( "Create automatically a new frame" ), tab1 );
+    rAppendFrame = new QRadioButton( i18n( "Create a new frame" ), tab1 );
+// HELPTEXT: A frameset which can span many pages.
     rAppendFrame->resize( rAppendFrame->sizeHint() );
     grid1->addWidget( rAppendFrame, 1, 0 );
 
-    rResizeFrame = new QRadioButton( i18n( "Resize automatically last frame" ), tab1 );
+    rResizeFrame = new QRadioButton( i18n( "Resize last frame" ), tab1 );
+// HELPTEXT: The last frame will grow in size, but will not extend to extra pages.
     rResizeFrame->resize( rResizeFrame->sizeHint() );
     grid1->addWidget( rResizeFrame, 2, 0 );
+
+    rNoShow = new QRadioButton( i18n( "Don't show the extra text" ), tab1 );
+// HELPTEXT: A seperate frame per page. Text will not be threaded. 
+    rNoShow->resize( rNoShow->sizeHint() );
+    grid1->addWidget( rNoShow, 3, 0 );
 
     QButtonGroup *grp = new QButtonGroup( tab1 );
     grp->hide();
     grp->setExclusive( true );
     grp->insert( rAppendFrame );
     grp->insert( rResizeFrame );
+    grp->insert( rNoShow );
 
     grid1->addRowSpacing( 0, lNewFrame->height() );
     grid1->addRowSpacing( 1, rAppendFrame->height() );
     grid1->addRowSpacing( 2, rResizeFrame->height() );
+    grid1->addRowSpacing( 3, rNoShow->height() );
+
     grid1->setRowStretch( 0, 0 );
     grid1->setRowStretch( 1, 0 );
     grid1->setRowStretch( 2, 0 );
-    grid1->setRowStretch( 3, 1 );
+    grid1->setRowStretch( 3, 0 );
+    grid1->setRowStretch( 4, 1 );
 
     grid1->addColSpacing( 0, lNewFrame->width() );
     grid1->addColSpacing( 0, rAppendFrame->width() );
     grid1->addColSpacing( 0, rResizeFrame->width() );
+    grid1->addColSpacing( 0, rNoShow->width() );
     grid1->setColStretch( 0, 1 );
 
-    grid1->activate();
+    rAppendFrame->setChecked(false);
+    rResizeFrame->setChecked(false);
+    rNoShow->setChecked(false);
 
-    rAppendFrame->setChecked( doc->getAutoCreateNewFrame() );
-    rResizeFrame->setChecked( !doc->getAutoCreateNewFrame() );
+    if(doc->getFrameBehaviour() == AutoExtendFrame) {
+        rResizeFrame->setChecked(true);
+    } else if (doc->getFrameBehaviour() == AutoCreateNewFrame) {
+        rAppendFrame->setChecked(true);
+    } else {
+        rNoShow->setChecked(true);
+    }
+
+    grid1->activate();
 }
 
 /*================================================================*/
@@ -620,8 +641,15 @@ void KWFrameDia::runConturClicked()
 /*================================================================*/
 bool KWFrameDia::applyChanges()
 {
-    if ( ( flags & FD_FRAME_SET ) && doc )
-	doc->setAutoCreateNewFrame( rAppendFrame->isChecked() );
+    if ( ( flags & FD_FRAME_SET ) && doc ){
+        if(rResizeFrame->isChecked()) {
+            doc->setFrameBehaviour(AutoExtendFrame);
+        } else if ( rAppendFrame->isChecked()) {
+            doc->setFrameBehaviour(AutoCreateNewFrame);
+        } else {
+            doc->setFrameBehaviour(Ignore);
+        }
+    }
 
     if ( ( flags & FD_FRAME ) && doc ) {
 	if ( frame ) {
@@ -707,10 +735,10 @@ bool KWFrameDia::applyChanges()
 	    KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
 	    _frameSet->setName( name );
 	    _frameSet->addFrame( frame );
-	    _frameSet->setAutoCreateNewFrame( false );
+        _frameSet->setFrameBehaviour(AutoExtendFrame); // so an extra page will not be created
 	    doc->addFrameSet( _frameSet );
 	    page->repaintScreen( _num, true );
-	    _frameSet->setAutoCreateNewFrame( true );
+        _frameSet->setFrameBehaviour(AutoCreateNewFrame);
 	    emit changed();
 	    return true;
 	}
