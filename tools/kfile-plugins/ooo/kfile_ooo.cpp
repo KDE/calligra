@@ -36,7 +36,7 @@ typedef KGenericFactory<KOfficePlugin> KOfficeFactory;
 
 K_EXPORT_COMPONENT_FACTORY(kfile_ooo, KOfficeFactory( "kfile_ooo" ));
 
-static const char * mimetypes[] =
+static const char * const mimetypes[] =
 { "application/vnd.sun.xml.calc",   "application/vnd.sun.xml.calc.template",
   "application/vnd.sun.xml.draw",   "application/vnd.sun.xml.draw.template",
   "application/vnd.sun.xml.impress","application/vnd.sun.xml.impress.template",
@@ -45,13 +45,13 @@ static const char * mimetypes[] =
   "application/vnd.sun.xml.writer.template",
   0};
 
-static const char * Advanced[] =
+static const char * const Advanced[] =
  {"meta:print-date"     , I18N_NOOP("Print Date"),
   "meta:printed-by"     , I18N_NOOP("Printed By"),
   "meta:initial-creator", I18N_NOOP("Creator"),
   0};
 
-static const char * Information[] =
+static const char * const Information[] =
  {"dc:title",       I18N_NOOP("Title")      , 
   "dc:subject",     I18N_NOOP("Subject")    , 
   "dc:creator",     I18N_NOOP("Author")     ,
@@ -59,7 +59,7 @@ static const char * Information[] =
   "dc:language"   , I18N_NOOP("Language"),
   0};
 
-static const char * Statistics[] =
+static const char * const Statistics[] =
  {"meta:table-count"    , I18N_NOOP("Tables"),
   "meta:image-count"    , I18N_NOOP("Images"),
   "meta:object-count"   , I18N_NOOP("Objects"),
