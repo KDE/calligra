@@ -142,3 +142,18 @@ e.g.:
 - default page size
 - default unit
 - ...
+
+9) Make it possible for components to provide their own about dialog.
+   What's currently needed to acomplish this is an awful addShell()
+   hack, like in kivio_doc.cpp .
+    
+   Possible solution:
+   Make a slot in KoMainWindow call a virtual method in KoDocument which
+   calls back the real show-about method. That would give components the
+   ability to re-implement that very method and be done.
+
+   Disadvantage: breaks binary compatibility.
+   Possible workaround for the BC breakage: Don't call a virtual method
+   but call/connect-to a slot in the document only if it exists and
+   call the default show-about method otherwise.
+
