@@ -1,3 +1,4 @@
+# $Id$
 
 all: 
 	@echo "This Makefile is only for the CVS repository"
@@ -11,3 +12,5 @@ all:
 	   exit 1 ;\
 	fi
 	$(MAKE) -f admin/Makefile.common cvs
+
+.SILENT:
