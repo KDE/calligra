@@ -21,7 +21,7 @@
 #ifndef KEXIKWMAILMERGEBASE_H
 #define KEXIKWMAILMERGEBASE_H
 
-#include <kword/mailmerge_interface.h>
+#include "kword/mailmerge_interface.h"
 
 class KexiKWMailMergeBase : public KWMailMergeDataSource
 {
