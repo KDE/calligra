@@ -21,6 +21,7 @@
 #include <qpointarray.h>
 #include <qstring.h>
 #include <qpopupmenu.h>
+#include <qtimer.h>
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -3,6 +3,7 @@
 
 #include <qlineedit.h>
 #include <qtooltip.h>
+#include <qpen.h>
 
 #include <koQueryTrader.h>
 #include <kspread_view.h>

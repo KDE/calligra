@@ -2841,10 +2841,10 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
 void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
 {
     QRect r( selectionRect() );
-    ASSERT( mode == Increase || mode == Decrease );
+    Q_ASSERT( mode == Increase || mode == Decrease );
 
     // It may not happen that entire columns are selected.
-    ASSERT( r.right() != 0x7fff );
+    Q_ASSERT( r.right() != 0x7fff );
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -2936,7 +2936,7 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
 
 void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
 {
-    ASSERT( mode == Increase || mode == Decrease );
+    Q_ASSERT( mode == Increase || mode == Decrease );
 
     QRect r( selectionRect() );
     if ( !m_pDoc->undoBuffer()->isLocked() )
@@ -2945,7 +2945,7 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
     // It may not happen that entire rows are selected.
-    ASSERT( r.right() != 0x7fff );
+    Q_ASSERT( r.right() != 0x7fff );
 
     // Are entire columns selected ?
     if ( r.bottom() == 0x7FFF )

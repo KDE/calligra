@@ -140,7 +140,7 @@ void KSpreadConsolidate::slotOk()
   {
     KSpreadRange r( *s, map );
     // TODO: Check for valid
-    ASSERT( r.isValid() );
+    Q_ASSERT( r.isValid() );
 
     if ( r.table == 0 )
     {
@@ -161,7 +161,7 @@ void KSpreadConsolidate::slotOk()
     desc = D_NONE;
 
   // Check whether all ranges have same size
-  ASSERT( ranges.count() > 0 );
+  Q_ASSERT( ranges.count() > 0 );
   QValueList<KSpreadRange>::Iterator it = ranges.begin();
   int w = (*it).range.right() - (*it).range.left() + 1;
   int h = (*it).range.bottom() - (*it).range.top() + 1;

@@ -25,6 +25,7 @@
 #include <qlineedit.h>
 #include <qlistbox.h>
 #include <qlabel.h>
+#include <qvaluelist.h>
 
 class KSpreadView;
 

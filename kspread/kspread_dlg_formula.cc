@@ -64,7 +64,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
                         m_pView->canvasWidget()->editor()->setText( cell->text()+"+" );
     }
 
-    ASSERT( m_pView->canvasWidget()->editor() );
+    Q_ASSERT( m_pView->canvasWidget()->editor() );
 
     QGridLayout *grid1 = new QGridLayout(this,11,2,15,7);
 
@@ -297,7 +297,7 @@ void KSpreadDlgFormula::slotOk()
     // Usually the editor is always in place.
     if( m_pView->canvasWidget()->editor() != 0 )
     {
-        ASSERT( m_pView->canvasWidget()->editor() );
+        Q_ASSERT( m_pView->canvasWidget()->editor() );
         QString tmp = result->text();
         if( tmp.at(0) != '=')
 	    tmp = "=" + tmp;
@@ -331,7 +331,7 @@ void KSpreadDlgFormula::slotClose()
     // Usually the editor is always in place.
     if( m_pView->canvasWidget()->editor() != 0 )
     {
-        ASSERT( m_pView->canvasWidget()->editor() );
+        Q_ASSERT( m_pView->canvasWidget()->editor() );
         m_pView->canvasWidget()->editor()->setText( m_oldText );
         m_pView->canvasWidget()->editor()->setFocus();
     }

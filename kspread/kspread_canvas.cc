@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <qlabel.h>
 #include <qpainter.h>
+#include <qdrawutil.h>
 
 KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent, KSpreadView * _view )
   : QLineEdit( _parent, "KSpreadLocationEditWidget" )
@@ -2923,7 +2924,7 @@ void KSpreadVBorder::adjustRow(int _row,bool makeUndo)
 void KSpreadVBorder::equalizeRow(int resize )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
-  ASSERT( table );
+  Q_ASSERT( table );
   QRect selection( table->selectionRect() );
   if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
   {
@@ -2941,7 +2942,7 @@ void KSpreadVBorder::equalizeRow(int resize )
 void KSpreadVBorder::resizeRow(int resize,int nb,bool makeUndo  )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
-  ASSERT( table );
+  Q_ASSERT( table );
   if(nb==-1)
   {
     if(makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
@@ -3411,7 +3412,7 @@ void KSpreadHBorder::adjustColumn(int _col, bool makeUndo)
 void KSpreadHBorder::equalizeColumn( int resize)
 {
   KSpreadTable *table = m_pCanvas->activeTable();
-  ASSERT( table );
+  Q_ASSERT( table );
   QRect selection( table->selectionRect() );
   if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
   {
@@ -3431,7 +3432,7 @@ void KSpreadHBorder::equalizeColumn( int resize)
 void KSpreadHBorder::resizeColumn(int resize,int nb,bool makeUndo  )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
-  ASSERT( table );
+  Q_ASSERT( table );
 
   if( nb == -1 )
   {

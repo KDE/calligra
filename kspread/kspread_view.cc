@@ -452,7 +452,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_findOptions = 0;
 
     KStatusBar * sb = statusBar();
-    ASSERT(sb);
+    Q_ASSERT(sb);
     m_sbCalcLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
     addStatusBarItem( m_sbCalcLabel, 0 );
     if(m_sbCalcLabel)
@@ -2347,7 +2347,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
 
 void KSpreadView::slotActivateTool( int _id )
 {
-  ASSERT( m_pTable );
+  Q_ASSERT( m_pTable );
 
   // Is it the id of a tool in the latest popupmenu ?
   if( _id < m_popupMenuFirstToolId )
@@ -2376,7 +2376,7 @@ void KSpreadView::slotActivateTool( int _id )
 
 void KSpreadView::deleteSelection()
 {
-    ASSERT( m_pTable );
+    Q_ASSERT( m_pTable );
 
     m_pTable->deleteSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
     resultOfCalc();
@@ -2398,7 +2398,7 @@ void KSpreadView::adjust()
 
 void KSpreadView::clearTextSelection()
 {
-    ASSERT( m_pTable );
+    Q_ASSERT( m_pTable );
     m_pTable->clearTextSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 
     updateEditWidget();
@@ -2406,7 +2406,7 @@ void KSpreadView::clearTextSelection()
 
 void KSpreadView::clearCommentSelection()
 {
-    ASSERT( m_pTable );
+    Q_ASSERT( m_pTable );
     m_pTable->setSelectionRemoveComment( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 
     updateEditWidget();
@@ -2414,7 +2414,7 @@ void KSpreadView::clearCommentSelection()
 
 void KSpreadView::clearValiditySelection()
 {
-    ASSERT( m_pTable );
+    Q_ASSERT( m_pTable );
     m_pTable->clearValiditySelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 
     updateEditWidget();
@@ -2422,7 +2422,7 @@ void KSpreadView::clearValiditySelection()
 
 void KSpreadView::clearConditionalSelection()
 {
-    ASSERT( m_pTable );
+    Q_ASSERT( m_pTable );
     m_pTable->clearConditionalSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 
     updateEditWidget();
@@ -2431,7 +2431,7 @@ void KSpreadView::clearConditionalSelection()
 
 void KSpreadView::defaultSelection()
 {
-  ASSERT( m_pTable );
+  Q_ASSERT( m_pTable );
   m_pTable->defaultSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 
   updateEditWidget();
@@ -3141,7 +3141,7 @@ QWMatrix KSpreadView::matrix() const
 
 void KSpreadView::transformPart()
 {
-    ASSERT( selectedChild() );
+    Q_ASSERT( selectedChild() );
 
     if ( m_transformToolBox.isNull() )
     {

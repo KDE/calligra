@@ -44,8 +44,6 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
   m_pEdit->setCompletionMode((KGlobalSettings::Completion)canvas()->view()->doc()->completionMode()  );
   m_pEdit->setCompletionObject( &canvas()->view()->doc()->completion(),true );
   setFocusProxy( m_pEdit );
-  setFontPropagation( AllChildren );
-  setPalettePropagation( AllChildren );
 
   connect( m_pEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotTextChanged( const QString& ) ) );
   connect( m_pEdit, SIGNAL(completionModeChanged( KGlobalSettings::Completion )),this,SLOT (slotCompletionModeChanged(KGlobalSettings::Completion)));

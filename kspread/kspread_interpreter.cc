@@ -4530,7 +4530,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
     return true;
   }
   else
-    ASSERT( 0 );
+    Q_ASSERT( 0 );
 
   // Never reached
   return false;

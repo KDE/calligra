@@ -114,7 +114,7 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
   connect(calc_display,SIGNAL(clicked()),this,SLOT(display_selected()));
 
   statusINVLabel = new QLabel( this, "INV" );
-  CHECK_PTR( statusINVLabel );
+  Q_CHECK_PTR( statusINVLabel );
   statusINVLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
   statusINVLabel->setAlignment( AlignCenter );
   statusINVLabel->setGeometry(8,218,50 -1 , 20);
@@ -122,14 +122,14 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
   statusINVLabel->setFont(buttonfont);
 
   statusHYPLabel = new QLabel( this, "HYP" );
-  CHECK_PTR( statusHYPLabel );
+  Q_CHECK_PTR( statusHYPLabel );
   statusHYPLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
   statusHYPLabel->setAlignment( AlignCenter );
   statusHYPLabel->setGeometry(58 ,218,50 -1, 20);
   statusHYPLabel->setFont(buttonfont);
 
   statusERRORLabel = new QLabel( this, "ERROR" );
-  CHECK_PTR( statusERRORLabel );
+  Q_CHECK_PTR( statusERRORLabel );
   statusERRORLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
   statusERRORLabel->setAlignment( AlignLeft|AlignVCenter );
   statusERRORLabel->setGeometry(108 ,218,9 + 100 + 9 + 233 + 9 - 100 - 16, 20);

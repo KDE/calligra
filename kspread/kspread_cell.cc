@@ -175,14 +175,14 @@ void KSpreadCell::copyLayout( int _column, int _row )
 
 void KSpreadCell::copyAll( KSpreadCell *cell )
 {
-    ASSERT( !isDefault() ); // trouble ahead...
+    Q_ASSERT( !isDefault() ); // trouble ahead...
     copyLayout( cell );
     copyContent( cell );
 }
 
 void KSpreadCell::copyContent( KSpreadCell* cell )
 {
-    ASSERT( !isDefault() ); // trouble ahead...
+    Q_ASSERT( !isDefault() ); // trouble ahead...
 
     setCellText( cell->text() );
     setAction(cell->action() );
@@ -2278,20 +2278,29 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
      */
     if ( m_style == KSpreadCell::ST_Button )
     {
+#ifdef __GNUC__
+#warning "Disabled for now :} (Werner)"
+#endif
+#if 0
         QBrush fill( Qt::lightGray );
-        QApplication::style().drawButton( &_painter, _tx + 1, _ty + 1,
-                                          w2 - 1, h2 - 1,
-                                          defaultColorGroup, selected, &fill );
+        QApplication::style().drawControl( QStyle::CE_PushButton, &_painter, this,
+                                           QRect( _tx + 1, _ty + 1, w2 - 1, h2 - 1 ),
+                                           defaultColorGroup ); //, selected, &fill );
+#endif
     }
     /**
      * Modification for drawing the combo box
      */
     else if ( m_style == KSpreadCell::ST_Select )
     {
+#ifdef __GNUC__
+#warning "Disabled for now :} (Werner)"
+#endif
+#if 0
       QApplication::style().drawComboButton(  &_painter, _tx + 1, _ty + 1,
                                                 w2 - 1, h2 - 1,
 						defaultColorGroup, selected );
-
+#endif
     }
 
     if(_painter.device()->isExtDev()&&!textColorPrint.isValid())
@@ -4590,7 +4599,7 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
             tmp_op = "="+inter.setNum(old.toDouble()/tmp.toDouble());
             break;
         default:
-            ASSERT( 0 );
+            Q_ASSERT( 0 );
         }
         return tmp_op;
     }
@@ -4612,7 +4621,7 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
             tmp_op="=("+old+")/"+"("+tmp+")";
             break;
         default :
-            ASSERT( 0 );
+            Q_ASSERT( 0 );
         }
         return tmp_op;
     }

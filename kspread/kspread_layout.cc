@@ -73,7 +73,8 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_bDontPrintText=false;
 
     QFont font = KGlobalSettings::generalFont();
-    KGlobal::charsets()->setQFont(font, KGlobal::locale()->charset());
+    // ######## Not needed anymore in 3.0?
+    //KGlobal::charsets()->setQFont(font, KGlobal::locale()->charset());
     m_textFont = font;
 }
 
@@ -251,7 +252,8 @@ QFont KSpreadLayout::toFont(QDomElement &element) const
     if ( element.hasAttribute( "charset" ) )
 	KGlobal::charsets()->setQFont( f, element.attribute("charset") );
     else */
-	KGlobal::charsets()->setQFont( f, KGlobal::locale()->charset() );
+    // ######## Not needed anymore in 3.0?
+    //KGlobal::charsets()->setQFont( f, KGlobal::locale()->charset() );
 
     return f;
 }
