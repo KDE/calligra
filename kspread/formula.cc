@@ -689,8 +689,9 @@ Tokens Formula::scan( const QString& expr )
        // skip thousand separator
        else if( !thousand.isEmpty() && ( ch ==thousand[0] ) ) i++;
 
-       // convert decimal separator to '.'
-       else if( !decimal.isEmpty() && ( ch == decimal[0] ) )
+       // convert decimal separator to '.', also support '.' directly
+       // we always support '.' because of bug #98455
+       else if(( !decimal.isEmpty() && ( ch == decimal[0] ) ) || (ch == '.'))
        {
          tokenText.append( '.' );
          i++;
