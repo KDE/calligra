@@ -39,7 +39,7 @@
 #include <pgconfdia.h>
 #include <effectdia.h>
 #include <rotatedia.h>
-#include <shadowdia.h>
+#include "shadowdialogimpl.h"
 #include <presstructview.h>
 
 
@@ -1022,25 +1022,23 @@ void KPresenterView::extraRotate()
 /*===============================================================*/
 void KPresenterView::extraShadow()
 {
-    if ( shadowDia ) {
+    if ( !shadowDia ) {
 	delete shadowDia;
 	shadowDia = 0;
     }
 
     if ( m_canvas->activePage()->numSelected() > 0 ) {
-	shadowDia = new ShadowDia( this, "Shadow" );
-	shadowDia->setMaximumSize( shadowDia->width(), shadowDia->height() );
-	shadowDia->setMinimumSize( shadowDia->width(), shadowDia->height() );
-	shadowDia->setCaption( i18n( "KPresenter - Shadow" ) );
-	QObject::connect( shadowDia, SIGNAL( shadowDiaOk() ), this, SLOT( shadowOk() ) );
+	shadowDia = new ShadowDialogImpl( this );
+	QObject::connect( shadowDia, SIGNAL( apply() ), this, SLOT( shadowOk() ) );
         KPObject *object=m_canvas->activePage()->getSelectedObj();
 	shadowDia->setShadowDirection( object->getShadowDirection() );
 	shadowDia->setShadowDistance( object->getShadowDistance() );
+	shadowDia->resize( shadowDia->minimumSize() );
 	shadowDia->setShadowColor( object->getShadowColor() );
 	m_canvas->setToolEditMode( TEM_MOUSE );
 	shadowDia->exec();
 
-        QObject::disconnect( shadowDia, SIGNAL( shadowDiaOk() ), this, SLOT( shadowOk() ) );
+        QObject::disconnect( shadowDia, SIGNAL( apply() ), this, SLOT( shadowOk() ) );
         delete shadowDia;
 	shadowDia = 0;
     }
@@ -3264,13 +3262,13 @@ void KPresenterView::shadowOk()
     bool createMacro=false;
     KMacroCommand *macro=new KMacroCommand(i18n( "Change Shadow" ));
 
-    KCommand *cmd=m_canvas->activePage()->shadowObj(shadowDia->getShadowDirection(),shadowDia->getShadowDistance(),shadowDia->getShadowColor());
+    KCommand *cmd=m_canvas->activePage()->shadowObj(shadowDia->shadowDirection(),shadowDia->shadowDistance(),shadowDia->shadowColor());
     if( cmd)
     {
         macro->addCommand(cmd);
         createMacro=true;
     }
-    cmd=stickyPage()->shadowObj(shadowDia->getShadowDirection(),shadowDia->getShadowDistance(),shadowDia->getShadowColor());
+    cmd=stickyPage()->shadowObj(shadowDia->shadowDirection(),shadowDia->shadowDistance(),shadowDia->shadowColor());
     if( cmd)
     {
         macro->addCommand(cmd);

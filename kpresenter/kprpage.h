@@ -25,7 +25,7 @@
 #include <global.h>
 #include "kpbackground.h"
 #include <koPoint.h>
-#include <shadowdia.h>
+
 class KPTextView;
 class KPObject;
 class KPresenterDoc;

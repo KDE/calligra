@@ -38,7 +38,7 @@ class AFChoose;
 class StyleDia;
 class PgConfDia;
 class RotateDia;
-class ShadowDia;
+class ShadowDialogImpl;
 class KPPresStructView;
 class ConfPieDia;
 class ConfRectDia;
@@ -592,7 +592,7 @@ private:
     StyleDia *styleDia;
     PgConfDia *pgConfDia;
     RotateDia *rotateDia;
-    ShadowDia *shadowDia;
+    ShadowDialogImpl *shadowDia;
     KPPresStructView *presStructView;
     ConfPieDia *confPieDia;
     ConfRectDia *confRectDia;
