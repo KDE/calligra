@@ -667,6 +667,7 @@ class ClassExportFilterBase
         virtual bool isXML(void) const {return false;}
         virtual QString getDocType(void) const = 0;
         virtual QString getBodyOpeningTagExtraAttributes(void) const = 0;
+        virtual QString getParagraphOpeningTagExtraAttributes(const QString& strAlign) const = 0;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText) = 0;
         virtual QString getStyleElement(void) {return QString::null;} //Default is no style
     protected:
@@ -735,26 +736,20 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         strParaText="&nbsp;";
     }
 
-    QString align;
-#if 0
-    // FIXME/TODO: Sorry, David! But "align" is not STRICT HTML, so you cannot use it for all three modes!
-    // FIXME/TODO:  So for now, no "align"!
-    if ( !paraLayout.alignment.isEmpty() && paraLayout.alignment != "left" )
-        // left doesn't need to be set explicitely
-    {
-        align = QString(" align=\"%1\"").arg( paraLayout.alignment );
-        // center, right, or justify
-    }
-#endif
+    QString align=exportFilter->getParagraphOpeningTagExtraAttributes(paraLayout.alignment);
 
     if ( paraLayout.counter.numbering == CounterData::NUM_CHAPTER )
     {
-        int depth = paraLayout.counter.depth + 1;
-        outputText += QString("<h%1%2>%3</h%4>\n").arg(depth).arg(align).arg(strParaText).arg(depth);
+        const int depth = paraLayout.counter.depth + 1;
+        // Note: .arg(strParaText) must remain last,
+        //  as strParaText may contain an unwanted % + number sequence
+        outputText += QString("<h%1%2>%4</h%3>\n").arg(depth).arg(align).arg(depth).arg(strParaText);
     }
     // TODO NUM_LIST
     else
     {
+        // Note: .arg(strParaText) must remain last,
+        //  as strParaText may contain an unwanted % + number sequence
         outputText += QString("<p%1>%2</p>\n").arg(align).arg(strParaText);
     }
 }
@@ -911,7 +906,7 @@ bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &f
     {
         strTitle=strTitle.mid(result+1);
     }
-    streamOut << "<title>"<< escapeText(strTitle) <<"</title>\n";  // <TITLE> is mandatory in HTML 4.01 !
+    streamOut << "<title>"<< escapeText(strTitle) <<"</title>" << endl;  // <TITLE> is mandatory in HTML 4.01 !
 
     //TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 
@@ -944,6 +939,7 @@ class ClassExportFilterHtmlTransitional : public ClassExportFilterBase
     public: //virtual
         virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
+        virtual QString getParagraphOpeningTagExtraAttributes(const QString& strAlign) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
 };
 
@@ -957,6 +953,23 @@ QString ClassExportFilterHtmlTransitional::getBodyOpeningTagExtraAttributes(void
 {
     // Define the background colour as white!
     return " bgcolor=\"#FFFFFF\""; // Leading space is important!
+}
+
+QString ClassExportFilterHtmlTransitional::getParagraphOpeningTagExtraAttributes(const QString& strAlign) const
+{
+    if ( strAlign.isEmpty() || strAlign == "left" )
+        // We do not set "left" explicitly, since KWord cannot do bi-di
+    {
+        return QString::null;
+    }
+    else if ((strAlign == "right") || (strAlign=="center") || (strAlign=="justify"))
+    {
+        return QString(" align=\"%1\"").arg( strAlign );
+    }
+    else
+    {
+        return QString::null;
+    }
 }
 
 void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)
@@ -995,14 +1008,16 @@ void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText
             // TODO: replace multiple spaces in non-breaking spaces!
             // Opening elements
 
-            // <font> is always set - not anymore (DF)
             QString fontName = (*paraFormatDataIt).fontName;
-            outputText+="<font";
+
+            // Will a potential <font> tag have attributes?
+            QString fontAttributes;
+
             if ( !fontName.isEmpty() )
             {
-                outputText+=" face=\"";
-                outputText+=fontName; // TODO: add alternative font names
-                outputText+="\"";
+                fontAttributes+=" face=\"";
+                fontAttributes+=fontName; // TODO: add alternative font names
+                fontAttributes+="\"";
             }
             // Give the font size relatively (be kind with people with impered vision)
             // TODO: option to give absolute font sizes
@@ -1016,25 +1031,32 @@ void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText
                 if (size>4) size=4;
                 if (size)
                 {
-                    outputText+=" size=\""; // in XML numbers must be quoted!
+                    fontAttributes+=" size=\""; // in XML numbers must be quoted!
                     if (size>0)
                     {
-                        outputText+="+";
+                        fontAttributes+="+";
                     }
-                    outputText+=QString::number(size,10);
-                    outputText+="\"";
+                    fontAttributes+=QString::number(size,10);
+                    fontAttributes+="\"";
                 }
             }
             if ( (*paraFormatDataIt).colour.isValid() )
             {
                 // Give colour
-                outputText+=" color=\"";
+                fontAttributes+=" color=\"";
                 // QColor::name() does all the job :)
-                outputText+=(*paraFormatDataIt).colour.name();
-                outputText+="\"";
+                fontAttributes+=(*paraFormatDataIt).colour.name();
+                fontAttributes+="\"";
             }
-            // end of <font> tag
-            outputText+=">";
+
+            if (!fontAttributes.isEmpty())
+            {
+                // We have font attributes, so we must have a <font> element
+                outputText+="<font";
+                outputText+=fontAttributes;
+                outputText+=">";
+            }
+
             if ( (*paraFormatDataIt).weight >= 75 )
             {
                 outputText+="<b>";
@@ -1096,8 +1118,11 @@ void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText
             {
                 outputText+="</b>";
             }
-            // <font> is always set, so close it unconditionaly
-            outputText+="</font>";
+
+            if (!fontAttributes.isEmpty())
+            {
+                outputText+="</font>";
+            }
         }
     }
 }
@@ -1131,6 +1156,7 @@ class ClassExportFilterHtmlSpartan : public ClassExportFilterBase
     public: //virtual
         virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
+        virtual QString getParagraphOpeningTagExtraAttributes(const QString& strAlign) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
 };
 
@@ -1141,6 +1167,11 @@ QString ClassExportFilterHtmlSpartan::getDocType(void) const
 }
 
 QString ClassExportFilterHtmlSpartan::getBodyOpeningTagExtraAttributes(void) const
+{
+    return QString::null;
+}
+
+QString ClassExportFilterHtmlSpartan::getParagraphOpeningTagExtraAttributes(const QString&) const
 {
     return QString::null;
 }
@@ -1242,6 +1273,7 @@ class ClassExportFilterHtmlStyle : public ClassExportFilterBase
     public: //virtual
         virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
+        virtual QString getParagraphOpeningTagExtraAttributes(const QString& strAlign) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
         virtual QString getStyleElement(void);
 };
@@ -1406,6 +1438,23 @@ QString ClassExportFilterHtmlStyle::getStyleElement(void)
 QString ClassExportFilterHtmlStyle::getBodyOpeningTagExtraAttributes(void) const
 {
     return QString::null;
+}
+
+QString ClassExportFilterHtmlStyle::getParagraphOpeningTagExtraAttributes(const QString& strAlign) const
+{
+    if ( strAlign.isEmpty() || strAlign == "left" )
+        // We do not set "left" explicitly, since KWord cannot do bi-di
+    {
+        return QString::null;
+    }
+    else if ((strAlign == "right") || (strAlign=="center") || (strAlign=="justify"))
+    {
+        return QString(" style=\"text-align:%1\"").arg( strAlign );
+    }
+    else
+    {
+        return QString::null;
+    }
 }
 
 // ClassExportFilterXHtmlStyle (HTML 4.01 Strict, style using CSS2, no style sheets)
