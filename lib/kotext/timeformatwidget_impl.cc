@@ -9,6 +9,7 @@
 #include <qradiobutton.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kdebug.h>
 #include <qlineedit.h>
 #include <knuminput.h>
 #include <kovariable.h>
@@ -39,6 +40,7 @@ TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, WFlags f
     label_correction->setText(i18n("Correct in Minutes"));
     connect( CheckBox1, SIGNAL(toggled ( bool )),this,SLOT(slotPersonalizeChanged(bool)));
     connect( combo1, SIGNAL(activated ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
+    connect( combo1, SIGNAL(textChanged ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
     connect( KIntNumInput1, SIGNAL(valueChanged(int)), this, SLOT( slotOffsetChanged(int)));
     slotPersonalizeChanged(false);
 }
@@ -106,20 +108,29 @@ void TimeFormatWidget::updateLabel()
     KoVariableTimeFormat format;
     format.setFormatProperties( resultString() );
 
-    QTime ct = QTime::currentTime().addSecs(correctValue());
+    QTime ct = QTime::currentTime().addSecs(correctValue()); // ### TODO: dialog says correct in *minutes*
     label->setText( format.convert( ct ) );
 }
 
 QString TimeFormatWidget::resultString()
 {
-    // Lookup untranslated format
-    QStringList listTimeFormat = KoVariableTimeFormat::staticFormatPropsList();
+    const QString lookup(combo1->currentText());
+    const QStringList listTranslated( KoVariableTimeFormat::staticTranslatedFormatPropsList() );
+    const int index = listTranslated.findIndex(lookup);
+    if (index==-1)
+        return (lookup); // Either costum or non-locale
 
-    QStringList::Iterator it = listTimeFormat.at(combo1->currentItem());
-    Q_ASSERT( it != listTimeFormat.end() );
-    if ( it != listTimeFormat.end() )
+    // We have now a locale format, so we must "translate" it back;
+
+    // Lookup untranslated format
+    const QStringList listRaw( KoVariableTimeFormat::staticFormatPropsList() );
+
+    QStringList::ConstIterator it( listRaw.at(index) );
+    Q_ASSERT( it != listRaw.end() );
+    if ( it != listRaw.end() )
         return *it;
-    return QString::null;
+    kdError(32500) << "Internal error: could not find correcponding time format: " << lookup << endl;
+    return QString::null; // Something is wrong, give back a default
 }
 
 int TimeFormatWidget::correctValue()
