@@ -354,8 +354,8 @@ static bool StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
     QDomElement key=mainDocument.createElement("KEY");
     // No name attribute!
     key.setAttribute("filename",strDataId); // AbiWord's data id
-    //As we have no date to set, set to the unix epoch
-    key.setAttribute("year",1980);
+    //As we have no date to set, set to the *nix epoch
+    key.setAttribute("year",1970);
     key.setAttribute("month",1);
     key.setAttribute("day",1);
     key.setAttribute("hour",0);
@@ -457,8 +457,8 @@ static bool EndElementD (StackItem* stackItem, KoFilterChain* chain,
     QDomElement key=mainDocument.createElement("KEY");
     key.setAttribute("name",strStoreName);
     key.setAttribute("filename",stackItem->fontName); // AbiWord's data id
-    //As we have no date to set, set to the unix epoch
-    key.setAttribute("year",1980);
+    //As we have no date to set, set to the *nix epoch
+    key.setAttribute("year",1970);
     key.setAttribute("month",1);
     key.setAttribute("day",1);
     key.setAttribute("hour",0);
