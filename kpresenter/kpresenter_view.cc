@@ -1615,11 +1615,22 @@ void KPresenterView::createGUI()
 {
     splitter = new QSplitter( this );
 
-    sidebar = new SideBar( splitter, m_pKPresenterDoc, this );
-    connect( sidebar, SIGNAL( movePage( int, int ) ),
-	     m_pKPresenterDoc, SLOT( movePage( int, int ) ) );
-    connect( sidebar, SIGNAL( selectPage( int, bool ) ),
-	     m_pKPresenterDoc, SLOT( selectPage( int, bool ) ) );
+    if ( !m_pKPresenterDoc->isEmbedded() ) // No sidebar if the document is embedded
+    {
+        sidebar = new SideBar( splitter, m_pKPresenterDoc, this );
+        connect( sidebar, SIGNAL( movePage( int, int ) ),
+	         m_pKPresenterDoc, SLOT( movePage( int, int ) ) );
+        connect( sidebar, SIGNAL( selectPage( int, bool ) ),
+	         m_pKPresenterDoc, SLOT( selectPage( int, bool ) ) );
+        connect( sidebar, SIGNAL( showPage( int ) ),
+                 this, SLOT( skipToPage( int ) ) );
+        // This sucks when resizing the window
+        //splitter->setResizeMode( sidebar, QSplitter::FollowSizeHint );
+        //splitter->setResizeMode( pageBase, QSplitter::Stretch );
+        splitter->setResizeMode( sidebar, QSplitter::KeepSize );
+        sidebar->setCurrentItem( sidebar->firstChild() );
+        sidebar->setSelected( sidebar->firstChild(), TRUE );
+    }
 
     // setup page
     pageBase = new PageBase( splitter, this );
@@ -1634,14 +1645,6 @@ void KPresenterView::createGUI()
     QObject::connect( page, SIGNAL( updateSideBarItem( int ) ),
                       this, SLOT( updateSideBarItem( int ) ) );
 
-    // This sucks when resizing the window
-    //splitter->setResizeMode( sidebar, QSplitter::FollowSizeHint );
-    //splitter->setResizeMode( pageBase, QSplitter::Stretch );
-
-    splitter->setResizeMode( sidebar, QSplitter::KeepSize );
-
-    connect( sidebar, SIGNAL( showPage( int ) ), this, SLOT( skipToPage( int ) ) );
-
     // setup GUI
     setupActions();
     setupPopupMenus();
@@ -1654,9 +1657,6 @@ void KPresenterView::createGUI()
 
     pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
     pgPrev->setEnabled( currPg > 0 );
-    //sidebar->rebuildItems(); the constructor does it already !
-    sidebar->setCurrentItem( sidebar->firstChild() );
-    sidebar->setSelected( sidebar->firstChild(), TRUE );
 }
 
 /*=============================================================*/
@@ -1710,10 +1710,13 @@ void KPresenterView::setupActions()
 
     // ---------------- View actions
 
-    actionViewShowSideBar = new KToggleAction( i18n("Show Sidebar"), 0,
-                                               this, SLOT( viewShowSideBar() ),
-                                               actionCollection(), "view_showsidebar" );
-    actionViewShowSideBar->setChecked(true);
+    if ( !m_pKPresenterDoc->isEmbedded() )
+    {
+        actionViewShowSideBar = new KToggleAction( i18n("Show Sidebar"), 0,
+                                                   this, SLOT( viewShowSideBar() ),
+                                                   actionCollection(), "view_showsidebar" );
+        actionViewShowSideBar->setChecked(true);
+    }
 
     // ---------------- insert actions
 
@@ -2732,7 +2735,7 @@ void KPresenterView::setRanges()
 /*==============================================================*/
 void KPresenterView::skipToPage( int num )
 {
-    if ( num < 0 || num > static_cast<int>( m_pKPresenterDoc->getPageNums() ) - 1 )
+    if ( num < 0 || num > static_cast<int>( m_pKPresenterDoc->getPageNums() ) - 1 || m_pKPresenterDoc->isEmbedded() )
 	return;
 
     page->exitEditMode();
@@ -2936,15 +2939,19 @@ void KPresenterView::prevPage()
 
 void KPresenterView::updateSideBar()
 {
-    sidebar->blockSignals( TRUE );
-    sidebar->rebuildItems();
-    sidebar->blockSignals( FALSE );
+    if ( sidebar )
+    {
+        sidebar->blockSignals( TRUE );
+        sidebar->rebuildItems();
+        sidebar->blockSignals( FALSE );
+    }
 }
 
 void KPresenterView::updateSideBarItem( int pagenr )
 {
     //kdDebug() << "KPresenterView::updateSideBarItem " << pagenr << endl;
-    sidebar->updateItem( pagenr );
+    if (sidebar)
+        sidebar->updateItem( pagenr );
 }
 
 void KPresenterView::viewShowSideBar()
