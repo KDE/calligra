@@ -1016,8 +1016,8 @@ void KWPartFrameSet::updateFrames()
     {
         m_lock = true; // setGeometry emits changed() !
         QRect frect = *frames.first();
-        kdDebug() << "KWPartFrameSet::updateFrames frames.first()=" << DEBUGRECT(frect)
-                  << " child set to " << DEBUGRECT( kWordDocument()->zoomRect( frect ) ) << endl;
+        //kdDebug() << "KWPartFrameSet::updateFrames frames.first()=" << DEBUGRECT(frect)
+        //          << " child set to " << DEBUGRECT( kWordDocument()->zoomRect( frect ) ) << endl;
         child->setGeometry( kWordDocument()->zoomRect( frect ) );
         m_lock = false;
     }
