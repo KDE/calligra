@@ -920,7 +920,7 @@ void KPTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVis
     iPoint.rx() += xadj;
     vPoint.rx() += xadj;
     // very small clipping around the cursor
-    QRect clip( vPoint.x() - 5, vPoint.y() - canvas->diffy(), 10, cursorHeight );
+    QRect clip( vPoint.x() - 5, vPoint.y() , 10, cursorHeight );
     setupClipRegion( p, clip );
 
     // for debug only!
@@ -1322,6 +1322,7 @@ void KPTextView::selectAll()
 
 void KPTextView::drawCursor( bool b )
 {
+    kdDebug()<<" KPTextView::drawCursor( bool b ) :"<<endl;
     KoTextView::drawCursor( b );
     if ( !cursor()->parag() )
         return;
