@@ -844,6 +844,11 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QVBox *box , char *
   listType+=KoUnit::unitDescription( KoUnit::U_PT );
   listType+=KoUnit::unitDescription( KoUnit::U_INCH );
   listType+=KoUnit::unitDescription( KoUnit::U_CM );
+  listType+=KoUnit::unitDescription( KoUnit::U_PI );
+  listType+=KoUnit::unitDescription( KoUnit::U_CC );
+  listType+=KoUnit::unitDescription( KoUnit::U_DD );
+  listType+=KoUnit::unitDescription( KoUnit::U_DM );
+
   defaultUnit->insertStringList(listType);
   defaultUnit->setCurrentItem(0);
   grid1->addWidget(defaultUnit,5,0);
@@ -860,40 +865,52 @@ void configureLayoutPage::slotDefault()
 
 void configureLayoutPage::initCombo()
 {
-  paper=1;
-  orientation=0;
-  unit=0;
-  if( config->hasGroup("KSpread Page Layout" ))
+    paper=1;
+    orientation=0;
+    unit=0;
+    if( config->hasGroup("KSpread Page Layout" ))
     {
-      config->setGroup( "KSpread Page Layout" );
-      paper=config->readNumEntry( "Default size page" ,1);
-      orientation=config->readNumEntry( "Default orientation page" ,0);
-      unit=config->readNumEntry( "Default unit page" ,0);
+        config->setGroup( "KSpread Page Layout" );
+        paper=config->readNumEntry( "Default size page" ,1);
+        orientation=config->readNumEntry( "Default orientation page" ,0);
+        unit=config->readNumEntry( "Default unit page" ,0);
     }
 
     switch (m_pView->doc()->getUnit() )
     {
-        case KoUnit::U_MM:
-            unit=0;
-            break;
-        case KoUnit::U_PT:
-            unit=1;
-            break;
-        case KoUnit::U_INCH:
-            unit=2;
-            break;
-        case KoUnit::U_CM:
-            unit=3;
-            break;
-        default:
-            unit=3;
+    case KoUnit::U_MM:
+        unit=0;
+        break;
+    case KoUnit::U_PT:
+        unit=1;
+        break;
+    case KoUnit::U_INCH:
+        unit=2;
+        break;
+    case KoUnit::U_CM:
+        unit=3;
+        break;
+    case KoUnit::U_DM:
+        unit = 4;
+        break;
+    case KoUnit::U_PI:
+        unit = 5;
+        break;
+    case KoUnit::U_DD:
+        unit = 6;
+        break;
+    case KoUnit::U_CC:
+        unit = 7;
+        break;
+    default:
+        unit=3;
     }
-  defaultUnit->setCurrentItem(unit);
+    defaultUnit->setCurrentItem(unit);
 
 
-  defaultSizePage->setCurrentItem(paper);
-  defaultOrientationPage->setCurrentItem(orientation);
-  defaultUnit->setCurrentItem(unit);
+    defaultSizePage->setCurrentItem(paper);
+    defaultOrientationPage->setCurrentItem(orientation);
+    defaultUnit->setCurrentItem(unit);
 }
 
 
