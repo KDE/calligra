@@ -83,10 +83,10 @@ VGradient& VGradient::operator=( const VGradient& gradient )
 
 const QPtrVector<VColorStop> VGradient::colorStops() const
 { 
-	QPtrVector<VColorStop>* v = new QPtrVector<VColorStop>();
-	m_colorStops.toVector( v );
-	v->setAutoDelete( false );
-	return *v; 
+	QPtrVector<VColorStop> v;
+	m_colorStops.toVector( &v );
+	v.setAutoDelete( false );
+	return v; 
 } // VGradient::colorStops()
 
 void
