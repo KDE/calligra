@@ -60,7 +60,7 @@ namespace KoDom {
      */
     QDomElement namedItemNS( const QDomNode& node, const char* nsURI, const char* localName );
 
-};
+}
 
 #define forEachElement( elem, parent ) \
       for ( QDomNode _node = parent.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
