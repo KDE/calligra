@@ -241,10 +241,14 @@ void KivioCanvas::zoomOut(const QPoint &p)
 {
   setUpdatesEnabled(false);
   KoPoint p0 = mapFromScreen(p);
-  setZoom(m_pView->zoomHandler()->zoom() - 25);
-  QPoint p1 = mapToScreen(p0);
-  scrollDx(-p1.x()+p.x());
-  scrollDy(-p1.y()+p.y());
+  int newZoom = m_pView->zoomHandler()->zoom() - 25;
+
+  if(newZoom > 0) {
+    setZoom(newZoom);
+    QPoint p1 = mapToScreen(p0);
+    scrollDx(-p1.x()+p.x());
+    scrollDy(-p1.y()+p.y());
+  }
   setUpdatesEnabled(true);
 }
 

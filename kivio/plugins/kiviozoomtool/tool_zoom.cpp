@@ -241,7 +241,7 @@ void ZoomTool::zoomMinus()
 {
    setOverride();
    m_pCanvas->zoomOut(QPoint(m_pCanvas->width()/2, m_pCanvas->height()/2));
-   if(m_pView->zoomHandler()->zoom() <= 10)
+   if(m_pView->zoomHandler()->zoom() <= 25)
    {
       m_pMinus->setEnabled(false);
       m_pPlus->setEnabled(true);
