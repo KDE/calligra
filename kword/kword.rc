@@ -1,5 +1,8 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="6">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="7">
 <MenuBar>
+ <Menu name="File"><text>&amp;File</text>
+  <Action name="extra_template"/>
+ </Menu>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
@@ -64,6 +67,9 @@
   </Menu>
  </Menu>
  <Menu name="Tools"><text>&amp;Tools</text>
+  <Action name="extra_spellcheck"/>
+  <Action name="extra_autocorrection"/>
+  <Separator/>
   <Action name="tools_edit"/>
   <Action name="tools_editframes"/>
   <Separator/>
@@ -96,12 +102,6 @@
   <Separator/>
   <Action name="table_delete"/>
  </Menu>
- <Menu name="Extra"><text>E&amp;xtra</text>
-  <Action name="extra_spellcheck"/>
-  <Action name="extra_autocorrection"/>
-  <Separator/>
-  <Action name="extra_template"/>
- </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
   <Action name="configure" group="settings_configure"/>
  </Menu>	
@@ -119,7 +119,7 @@
   <Separator/>
   <Action name="view_zoom"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="insert_toolbar" position="top" ><Text>Insert</Text>
+<ToolBar hidden="true" fullWidth="false" name="insert_toolbar" position="top" ><Text>Insert</Text>
   <Action name="insert_picture"/>
   <!-- Action name="insert_clipart"/>
   <Separator/>
@@ -136,14 +136,26 @@
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
  </ToolBar>
-<ToolBar fullWidth="false" name="table_toolbar" position="top"><Text>Table</Text>
+<ToolBar hidden="true" fullWidth="false" name="table_toolbar" position="top"><Text>Table</Text>
   <Action name="table_insrow"/>
   <Action name="table_inscol"/>
   <Action name="table_delrow"/>
   <Action name="table_delcol"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="format_toolbar" position="top"><Text>Format</Text>
+<ToolBar fullWidth="false" name="paragraph_toolbar" position="top"><Text>Paragraph</Text>
   <Action name="format_style"/>
+  <Separator/>
+  <Action name="format_alignleft"/>
+  <Action name="format_aligncenter"/>
+  <Action name="format_alignright"/>
+  <Action name="format_alignblock"/>
+  <Separator/>
+  <Action name="format_list"/>
+  <Separator/>
+  <Action name="format_decreaseindent"/>
+  <Action name="format_increaseindent"/>
+</ToolBar>
+<ToolBar fullWidth="false" name="format_toolbar" position="top"><Text>Format</Text>
   <Action name="format_fontsize"/>
   <Action name="format_fontfamily"/>
   <Separator/>
@@ -154,18 +166,8 @@
   <Separator/>
   <Action name="format_color"/>
   <Separator/>
-  <Action name="format_alignleft"/>
-  <Action name="format_aligncenter"/>
-  <Action name="format_alignright"/>
-  <Action name="format_alignblock"/>
-  <Separator/>
-  <Action name="format_list"/>
-  <Separator/>
   <Action name="format_super"/>
   <Action name="format_sub"/>
-  <Separator/>
-  <Action name="format_decreaseindent"/>
-  <Action name="format_increaseindent"/>
 </ToolBar>
 <ToolBar hidden="true" fullWidth="false" name="border_toolbar" position="top"><Text>Borders</Text>
   <Action name="border_outline"/>
