@@ -146,7 +146,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QCString& from, cons
           printf ("Start styles\n");
           t_mycolor *col = new t_mycolor; // delete is in place
           QString    coltxt ;
-          int zaehler = 0;
+          int zaehler = 0; // Note: "zaehler" means "counter" in English
           do
 	  {
             mystr = readTagLine (stream, in);
@@ -417,7 +417,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QCString& from, cons
     str += "  </FRAMESET>\n";
     str += " </FRAMESETS>\n";
     str += "</DOC>\n";
-    kdDebug(30517)<<"Text "<<str.utf8()<<endl;
+    kdDebug(30517)<<"Text "<< str <<endl;
 
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
     if (!out)
