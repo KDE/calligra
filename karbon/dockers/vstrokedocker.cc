@@ -117,26 +117,28 @@ void VStrokeDocker::updateCanvas()
 
 void VStrokeDocker::slotCapChanged( int ID )
 {
-	switch ( ID ) {
+	switch( ID )
+	{
 		case 1:
-			m_stroke.setLineCap ( VStroke::capRound ); break;
+			m_stroke.setLineCap( VStroke::capRound ); break;
 		case 2:
-			m_stroke.setLineCap ( VStroke::capSquare ); break;
+			m_stroke.setLineCap( VStroke::capSquare ); break;
 		default:
-			m_stroke.setLineCap ( VStroke::capButt );
+			m_stroke.setLineCap( VStroke::capButt );
 	}
 	updateCanvas();
 }
 
 void VStrokeDocker::slotJoinChanged( int ID )
 {
-	switch ( ID ) {
+	switch( ID )
+	{
 		case 1:
-			m_stroke.setLineJoin ( VStroke::joinRound ); break;
+			m_stroke.setLineJoin( VStroke::joinRound ); break;
 		case 2:
-			m_stroke.setLineJoin ( VStroke::joinBevel ); break;
+			m_stroke.setLineJoin( VStroke::joinBevel ); break;
 		default:
-			m_stroke.setLineJoin ( VStroke::joinMiter );
+			m_stroke.setLineJoin( VStroke::joinMiter );
 	}
 	updateCanvas();
 }
