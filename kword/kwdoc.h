@@ -358,8 +358,9 @@ public:
      * The same call combines both so that all the updating done behind
      * the scenes is done only once, even if both zoom and DPI must be changed.
      */
-    virtual void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint );
+    virtual void setZoomAndResolution( int zoom, int dpiX, int dpiY );
 
+    void newZoomAndResolution( bool updateViews, bool forPrint );
     // useless method
     static QString getAttribute(QDomElement &element, const char *attributeName, const QString &defaultValue)
       {
@@ -532,8 +533,6 @@ protected:
     void loadFrameSets( QDomElement framesets );
     void loadStyleTemplates( QDomElement styles );
     void saveStyle( KWStyle *sty, QDomElement parentElem );
-
-    void newZoomAndResolution( bool updateViews, bool forPrint );
 
     void initConfig();
     void saveConfig();

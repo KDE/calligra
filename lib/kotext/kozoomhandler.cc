@@ -30,10 +30,10 @@ int KoTextZoomHandler::m_layoutUnitFactor = 20;
 KoZoomHandler::KoZoomHandler()
 {
     // Note that this calls the method below, not the derived one
-    setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
+    setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
 }
 
-void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool, bool )
+void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
     m_zoom = zoom;
     // m_resolution[XY] is in pixel per pt
@@ -46,6 +46,12 @@ void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool, bo
                    << " m_zoomedResolutionX=" << m_zoomedResolutionX
                    << " m_resolutionY=" << m_resolutionY
                    << " m_zoomedResolutionY=" << m_zoomedResolutionY << endl;
+}
+
+void KoZoomHandler::setResolution( double resolutionX, double resolutionY )
+{
+    m_zoomedResolutionX = resolutionX;
+    m_zoomedResolutionY = resolutionY;
 }
 
 #if 0

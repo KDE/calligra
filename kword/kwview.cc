@@ -1064,8 +1064,8 @@ void KWView::print( KPrinter &prt )
     int dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
     ///////// Changing the dpiX/dpiY is very wrong nowadays. This has no effect on the font size
     ///////// that we give Qt, anymore, so it leads to minuscule fonts in the printout => doZoom==false.
-    m_doc->setZoomAndResolution( 100, dpiX, dpiY, false, true /* for printing */ );
-
+    m_doc->setZoomAndResolution( 100, dpiX, dpiY );
+    m_doc->newZoomAndResolution( false, true /* for printing*/ );
     //kdDebug() << "KWView::print metrics: " << metrics.logicalDpiX() << "," << metrics.logicalDpiY() << endl;
     //kdDebug() << "x11AppDPI: " << QPaintDevice::x11AppDpiX() << "," << QPaintDevice::x11AppDpiY() << endl;
 
@@ -1173,7 +1173,8 @@ void KWView::print( KPrinter &prt )
             fit.current()->preparePrinting( 0L, 0L, processedParags );
 #endif
 
-    m_doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
+    m_doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    m_doc->newZoomAndResolution( false, false );
     kdDebug() << "KWView::print zoom&res reset" << endl;
 
     m_gui->canvasWidget()->setUpdatesEnabled(true);
@@ -1928,7 +1929,8 @@ void KWView::viewZoom( const QString &s )
 
 void KWView::setZoom( int zoom, bool updateViews )
 {
-    m_doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), updateViews, false );
+    m_doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
+    m_doc->newZoomAndResolution( updateViews, false );
     m_doc->updateZoomRuler();
 
     // Also set the zoom in KoView (for embedded views)

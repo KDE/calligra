@@ -289,7 +289,8 @@ void KWDocument::initConfig()
           setUndoRedoLimit(undo);
   }
 
-  setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
+  setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+  newZoomAndResolution( false, false );
 }
 
 void KWDocument::saveConfig()
@@ -305,17 +306,17 @@ void KWDocument::saveConfig()
     config->writeEntry( "viewmode",m_lastModeView);
 }
 
-void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint )
+void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
-    KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY, updateViews, forPrint );
+    KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY );
     if ( m_formulaDocument )
-        m_formulaDocument->setZoomAndResolution( zoom, dpiX, dpiY, false, forPrint );
-
-    newZoomAndResolution( updateViews, forPrint );
+        m_formulaDocument->setZoomAndResolution( zoom, dpiX, dpiY );
 }
 
 void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
 {
+    if ( m_formulaDocument )
+        m_formulaDocument->newZoomAndResolution( updateViews,forPrint );
     // Update all fonts
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -2054,8 +2055,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
     m_zoom = 100;
     if ( m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY )
     {
-        m_zoomedResolutionX = zoomX;
-        m_zoomedResolutionY = zoomY;
+        setResolution( zoomX, zoomY );
         bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
         newZoomAndResolution( false, forPrint );
         if ( m_formulaDocument )
@@ -2771,8 +2771,8 @@ KFormula::Document* KWDocument::getFormulaDocument()
         m_formulaDocument = new KFormula::Document( kapp->config(), actionCollection(), m_commandHistory );
         m_formulaDocument->setZoomAndResolution( m_zoom,
                                                  qRound(INCH_TO_POINT( m_resolutionX )), // re-calculate dpiX and dpiY
-                                                 qRound(INCH_TO_POINT( m_resolutionY )),
-                                                 false, false );
+                                                 qRound(INCH_TO_POINT( m_resolutionY )) );
+        m_formulaDocument->newZoomAndResolution(false,false);
     }
     return m_formulaDocument;
 }

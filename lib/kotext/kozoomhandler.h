@@ -82,10 +82,8 @@ public:
      * This is done on startup, when zooming, and when printing.
      * The same call combines both so that all the updating done behind
      * the scenes is done only once, even if both zoom and DPI must be changed.
-     * @param updateViews whether to repaint all views accordingly [to be changed to updateView]
-     * @param forPrint whether this is for printing [might be removed in the future]
      */
-    virtual void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint );
+    virtual void setZoomAndResolution( int zoom, int dpiX, int dpiY );
 
     /**
      * @return the conversion factor between pt and pixel, that
@@ -97,6 +95,15 @@ public:
 
     double resolutionX() const { return m_resolutionX; }
     double resolutionY() const { return m_resolutionY; }
+
+
+    /**
+     * Set a resolution for X and Y, when no zoom applies (e.g. when painting an
+     * embedded document. This will set the zoom to 100, and it will set
+     * zoomedResolution[XY] to the resolution[XY] parameters
+     */
+    virtual void setResolution( double resolutionX, double resolutionY );
+ 
 
     int zoom() const { return m_zoom; }
 

@@ -73,7 +73,9 @@ public:
      * and/or change the resolution, given in DPI.
      * Uses the KoZoomHandler.
      */
-    void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint );
+    void setZoomAndResolution( int zoom, int dpiX, int dpiY );
+
+    void newZoomAndResolution( bool updateViews, bool forPrint );
 
     /**
      * Sets the zoom by hand. This is to be used in <code>paintContent</code>.

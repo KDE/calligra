@@ -229,9 +229,13 @@ ContextStyle& Document::getContextStyle( bool forPrinting )
     return impl->contextStyle;
 }
 
-void Document::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint )
+void Document::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
-    impl->contextStyle.setZoomAndResolution( zoom, dpiX, dpiY, updateViews, forPrint );
+    impl->contextStyle.setZoomAndResolution( zoom, dpiX, dpiY );
+}
+
+void Document::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
+{
     if ( updateViews ) {
         recalc();
     }

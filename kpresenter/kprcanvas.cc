@@ -2046,7 +2046,8 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
     KPresenterDoc * doc = m_view->kPresenterDoc();
 
     // ## TODO get rid of presFakt
-    doc->zoomHandler()->setZoomAndResolution( qRound(_presFakt*100), QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
+    doc->zoomHandler()->setZoomAndResolution( qRound(_presFakt*100), QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    doc->newZoomAndResolution(false,false);
 
     if ( m_showOnlyPage == -1 )
     {
@@ -2179,7 +2180,8 @@ void KPrCanvas::stopScreenPresentation()
 #endif
     _presFakt = 1.0;
     // Zoom backgrounds back
-    doc->zoomHandler()->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
+    doc->zoomHandler()->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    doc->newZoomAndResolution(false,false);
     if ( m_showOnlyPage == -1 )
     {
         QPtrListIterator<KPrPage> it(doc->pageList());

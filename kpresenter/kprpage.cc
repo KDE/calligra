@@ -1323,21 +1323,20 @@ void KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
     if ( !doc || !doc->initDoc() ) {
 	return;
     }
-#if 0 //FIXME
-    KPresenterChild* ch = new KPresenterChild( m_doc, doc, _rect );
+    QRect r=_rect.toQRect();
+    KPresenterChild* ch = new KPresenterChild( m_doc, doc, r );
 
     m_doc->insertObject( ch );
 
     KPPartObject *kppartobject = new KPPartObject( ch );
-    kppartobject->setOrig( _rect.x(), _rect.y() );
-    kppartobject->setSize( _rect.width(), _rect.height() );
+    kppartobject->setOrig( r.x(), r.y() );
+    kppartobject->setSize( r.width(), r.height() );
     kppartobject->setSelected( true );
     QWidget::connect(ch, SIGNAL(changed(KoChild *)), kppartobject, SLOT(slot_changed(KoChild *)) );
     InsertCmd *insertCmd = new InsertCmd( i18n( "Embed Object" ), kppartobject, m_doc,this );
     insertCmd->execute();
     m_doc->addCommand( insertCmd );
     //emit sig_insertObject( ch, kppartobject );
-#endif
     m_doc->repaint( false );
 }
 

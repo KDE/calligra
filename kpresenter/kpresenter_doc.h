@@ -295,7 +295,6 @@ public:
     KPrPage * initialActivePage();
 
     void updateZoomRuler();
-    void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint );
     void newZoomAndResolution( bool updateViews, bool forPrint );
 
     void AddRemovePage();

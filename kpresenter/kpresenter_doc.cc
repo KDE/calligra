@@ -158,7 +158,8 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bDontCheckTitleCase=false;
     m_bShowRuler=true;
     //todo add zoom
-    m_zoomHandler->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
+    m_zoomHandler->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    newZoomAndResolution(false,false);
 
     //   _pageLayout.format = PG_SCREEN;
     //   _pageLayout.orientation = PG_PORTRAIT;
@@ -301,7 +302,8 @@ void KPresenterDoc::initConfig()
 
     // Apply configuration, without creating an undo/redo command
     replaceObjs( false );
-    setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
+    zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    newZoomAndResolution(false,false);
 
 }
 
@@ -1709,8 +1711,15 @@ KoView* KPresenterDoc::createViewInstance( QWidget* parent, const char* name )
 }
 
 /*================================================================*/
-void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
+void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, double zoomX, double zoomY )
 {
+    m_zoomHandler->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    if ( zoomHandler()->zoomedResolutionX() != zoomX || zoomHandler()->zoomedResolutionY() != zoomY )
+    {
+        zoomHandler()->setResolution( zoomX, zoomY );
+        bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
+        newZoomAndResolution( false, forPrint );
+    }
     unsigned int i = 0;
 #if 0
     QPtrListIterator<KPBackGround> bIt( _backgroundList );
@@ -1978,13 +1987,6 @@ void KPresenterDoc::updateZoomRuler()
         ((KPresenterView*)it.current())->getVRuler()->setZoom( m_zoomHandler->zoomedResolutionY() );
         ((KPresenterView*)it.current())->slotUpdateRuler();
     }
-}
-
-void KPresenterDoc::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint )
-{
-    m_zoomHandler->setZoomAndResolution( zoom, dpiX, dpiY, updateViews, forPrint );
-
-    newZoomAndResolution( updateViews, forPrint );
 }
 
 void KPresenterDoc::newZoomAndResolution( bool updateViews, bool forPrint )

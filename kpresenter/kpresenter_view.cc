@@ -4828,7 +4828,8 @@ void KPresenterView::viewZoom( const QString &s )
 
 void KPresenterView::setZoom( int zoom, bool updateViews )
 {
-    m_pKPresenterDoc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), updateViews, false );
+    m_pKPresenterDoc->zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
+    m_pKPresenterDoc->newZoomAndResolution(updateViews,false);
     m_pKPresenterDoc->updateZoomRuler();
 
     // Also set the zoom in KoView (for embedded views)
