@@ -50,6 +50,9 @@ k_dcop:
     void addStringCompletion(const QString & stringCompletion);
     int zoom() const;
 
+    void setMoveToValue(const QString & move);
+    QString moveToValue()const;
+
 private:
     KSpreadDoc* doc;
 };

@@ -160,3 +160,36 @@ int KSpreadDocIface::zoom() const
 {
     return doc->zoom();
 }
+
+
+QString KSpreadDocIface::moveToValue()const
+{
+    switch(doc->getMoveToValue())
+    {
+    case KSpread::Bottom:
+        return QString("bottom");
+        break;
+    case KSpread::Left:
+        return QString("left");
+        break;
+    case KSpread::Top:
+        return QString("top");
+        break;
+    case KSpread::Right:
+        return QString("right");
+        break;
+    }
+    return QString::null;
+}
+
+void KSpreadDocIface::setMoveToValue(const QString & move)
+{
+    if ( move.lower()=="bottom")
+        doc->setMoveToValue(KSpread::Bottom);
+    else if ( move.lower()=="top")
+        doc->setMoveToValue(KSpread::Top);
+    else if ( move.lower()=="left")
+        doc->setMoveToValue(KSpread::Left);
+    else if ( move.lower()=="right")
+        doc->setMoveToValue(KSpread::Right);
+}
