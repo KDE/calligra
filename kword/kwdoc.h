@@ -835,6 +835,8 @@ protected:
 
     QValueList<KoPictureKey> savePictureList();
 
+    void saveOasisSettings( KoXmlWriter &settingsWriter );
+
 private:
     void endOfLoading();
     //private helper functions for frameUnderMouse
