@@ -937,21 +937,26 @@ bool KoMainWindow::saveDocument( bool saveas )
 
 void KoMainWindow::closeEvent(QCloseEvent *e) {
     if(queryClose()) {
-        if (d->m_windowSizeDirty && rootDocument())
-        {
-            // Save window size into the config file of our instance
-            instance()->config()->setGroup( "MainWindow" );
-            //kdDebug(30003) << "KoMainWindow::closeEvent -> saveWindowSize" << endl;
-            saveWindowSize( instance()->config() );
-            d->m_windowSizeDirty = false;
-            // Save toolbar position into the config file of the app, under the doc's instance name
-            //kdDebug(30003) << "KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's instance=" << rootDocument()->instance()->instanceName() << endl;
-            saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
-            KGlobal::config()->sync();
-            resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
-        }
+        saveWindowSettings();
         setRootDocument(0L);
         KParts::MainWindow::closeEvent(e);
+    }
+}
+
+void KoMainWindow::saveWindowSettings()
+{
+    if (d->m_windowSizeDirty && rootDocument())
+    {
+        // Save window size into the config file of our instance
+        instance()->config()->setGroup( "MainWindow" );
+        kdDebug(30003) << "KoMainWindow::saveWindowSettings" << endl;
+        saveWindowSize( instance()->config() );
+        d->m_windowSizeDirty = false;
+        // Save toolbar position into the config file of the app, under the doc's instance name
+        //kdDebug(30003) << "KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's instance=" << rootDocument()->instance()->instanceName() << endl;
+        saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
+        KGlobal::config()->sync();
+        resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
     }
 }
 
@@ -1120,17 +1125,19 @@ void KoMainWindow::slotFileClose()
 {
     if (queryClose())
     {
-        setRootDocument( 0L ); // don't delete this shell when deleting the document
+        saveWindowSettings();
+        setRootDocument( 0 ); // don't delete this shell when deleting the document
         delete d->m_rootDoc;
-        d->m_rootDoc = 0L;
+        d->m_rootDoc = 0;
         chooseNewDocument( KoDocument::InitDocFileClose );
     }
 }
 
 void KoMainWindow::slotFileQuit()
 {
-    if (queryClose())
+    if (queryClose()) {
         close(); // queryClose will also be called in this method but won't do anything because isModified==false.
+    }
 }
 
 void KoMainWindow::print(bool quick) {

@@ -345,6 +345,10 @@ protected:
      */
     bool isImporting() const;
 
+private:
+
+    void saveWindowSettings();
+
     KRecentFilesAction *m_recent;
 
 protected slots:
