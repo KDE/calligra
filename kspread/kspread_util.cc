@@ -588,8 +588,8 @@ QString util_encodeColumnLabelText( int column )
 QString util_rangeColumnName( const QRect &_area)
 {
     return QString("%1:%2")
-        .arg(util_encodeColumnLabelText( _area.left()))
-        .arg(util_encodeColumnLabelText(_area.right()));
+        .arg( KSpreadCell::columnName( _area.left()))
+        .arg( KSpreadCell::columnName(_area.right()));
 }
 
 QString util_rangeRowName( const QRect &_area)
