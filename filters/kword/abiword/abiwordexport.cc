@@ -788,32 +788,45 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
 
     if ( paraLayout.indentLeft!=0.0 )
     {
-        props += QString("margin-left:%1pt;").arg(paraLayout.indentLeft);
+        props += QString("margin-left:%1pt; ").arg(paraLayout.indentLeft);
     }
 
     if ( paraLayout.indentRight!=0.0 )
     {
-        props += QString("margin-right:%1pt;").arg(paraLayout.indentRight);
+        props += QString("margin-right:%1pt; ").arg(paraLayout.indentRight);
     }
 
     if ( paraLayout.indentFirst!=0.0 )
     {
-        props += QString("text-indent:%1pt;").arg(paraLayout.indentFirst);
+        props += QString("text-indent:%1pt; ").arg(paraLayout.indentFirst);
     }
 
     if( paraLayout.marginBottom!=0.0)
     {
-       props += QString("margin-bottom:%1pt;").arg(paraLayout.marginBottom);
+       props += QString("margin-bottom:%1pt; ").arg(paraLayout.marginBottom);
     }
     if( paraLayout.marginTop!=0.0  )
     {
-       props += QString("margin-top:%1pt;").arg(paraLayout.marginTop);
-    }
-    if( paraLayout.lineSpacing!=0.0  )
-    {
-       props += QString("line-height:%1pt;").arg(paraLayout.lineSpacing);
+       props += QString("margin-top:%1pt; ").arg(paraLayout.marginTop);
     }
 
+    if ( !paraLayout.lineSpacingType )
+    {
+        // We have a custom line spacing (in points)
+        props += QString("line-height:%1pt; ").arg(paraLayout.lineSpacing);
+    }
+    else if ( 15==paraLayout.lineSpacingType  )
+    {
+        props += "line-height:1.5; "; // One-and-half
+    }
+    else if ( 20==paraLayout.lineSpacingType  )
+    {
+        props += "line-height:2.0; "; // Two
+    }
+    else if ( paraLayout.lineSpacingType!=10  )
+    {
+        kdWarning(30506) << "Curious lineSpacingType: " << paraLayout.lineSpacingType << " (Ignoring!)" << endl;
+    }
 
     // Add all AbiWord properties collected in the <FORMAT> element
     props += FormatDataToAbiProps(paraLayout.formatData);

@@ -144,7 +144,6 @@ public:
 	textIndent=0;
 	margin_bottom=0;
         margin_top=0;
-	line_height=0;
     }
     ~StackItem()
     {
@@ -173,7 +172,6 @@ public:
     double      textIndent;
     double      margin_bottom;
     double      margin_top;
-    double      line_height;
 };
 
 class StackItemStack : public QPtrStack<StackItem>
@@ -342,7 +340,7 @@ void PopulateProperties(StackItem* stackItem,
     QString strBackgroundTextColor=abiPropsMap["bgcolor"].getValue();
     if(!strBackgroundTextColor.isEmpty())
     {
-      QColor col(strBackgroundTextColor);      
+      QColor col(strBackgroundTextColor);
       stackItem->textBgRed  =col.red();
       stackItem->textBgGreen=col.green();
       stackItem->textBgBlue =col.blue();
@@ -404,11 +402,6 @@ void PopulateProperties(StackItem* stackItem,
 	stackItem->margin_top=IndentPos(strTopMargin);
       }
 
-    QString strLineHeight=abiPropsMap["line-height"].getValue();
-    if(!strLineHeight.isEmpty())
-      {
-	stackItem->line_height=IndentPos(strLineHeight);
-      }
 }
 
 // Element <c>
@@ -601,27 +594,41 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& 
 	 layoutElement.appendChild(element);
     }
 
-    if ( stackItem->line_height)
+    QString strLineHeight=abiPropsMap["line-height"].getValue();
+    if(!strLineHeight.isEmpty())
     {
-         element=mainDocument.createElement("LINESPACING");
-	 if(stackItem->line_height==1.0)
-	   {
-	     //nothing
-	   }
-	 else if(stackItem->line_height==1.5)
-	   {
-	      element.setAttribute("value","oneandhalf");
-	   }
-	 else if(stackItem->line_height==2.0)
-	   {
-	     element.setAttribute("value","double");
-	   }
-	 else
-	   {
-	     element.setAttribute("value",stackItem->line_height);
-	   }
-	 if(stackItem->line_height!=1.0)
-	   layoutElement.appendChild(element);
+        element=mainDocument.createElement("LINESPACING");
+        double lineHeight;
+        // Do we have a unit symbol or not?
+        bool flag=false;
+        lineHeight=strLineHeight.toDouble(&flag);
+
+        if (flag)
+        {
+            if (lineHeight==1.5)
+            {
+                element.setAttribute("value","oneandhalf");
+            }
+            else if (lineHeight==2.0)
+            {
+                element.setAttribute("value","double");
+            }
+            else if (lineHeight!=1.0)
+            {
+                kdWarning(30506) << "Unsupported line height " << lineHeight << " (Ignoring !)" << endl;
+            }
+        }
+        else
+        {
+            // Soemthing went wrong, so we assume that an unit is specified
+            lineHeight=IndentPos(strLineHeight);
+            if (lineHeight>1.0)
+            {
+                // We have a meaningful value, so use it!
+                element.setAttribute("value",lineHeight);
+            }
+        }
+        layoutElement.appendChild(element);
     }
 
     QDomElement formatElementOut=mainDocument.createElement("FORMAT");

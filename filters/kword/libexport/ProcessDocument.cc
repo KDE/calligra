@@ -159,12 +159,24 @@ static void ProcessLayoutLineSpacingTag( QDomNode myNode, void *tagData, QString
     attrProcessingList.append ( AttrProcessing ("value" , "QString", (void *)&line ) );
     ProcessAttributes (myNode, attrProcessingList);
 
-    if( line=="oneandhalf")
-      layout->lineSpacing=1.5;
-    else if( line=="double")
-      layout->lineSpacing=2.0;
+    if (line=="oneandhalf")
+        layout->lineSpacingType=15;
+    else if (line=="double")
+        layout->lineSpacingType=20;
     else
-      layout->lineSpacing=line.toDouble();
+    {
+        const double size=line.toDouble();
+        if (size>=1.0)
+        {
+            // We have a valid size
+            layout->lineSpacingType=0; // set to custom
+            layout->lineSpacing=size;
+        }
+        else
+        {
+            layout->lineSpacingType=10; // set to 1 line
+        }
+    }
     AllowNoSubtags (myNode);
 }
 

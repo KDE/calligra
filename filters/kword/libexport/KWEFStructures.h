@@ -123,14 +123,19 @@ public:
 class LayoutData
 {
 public:
-  LayoutData():indentFirst(0.0), indentLeft(0.0), indentRight(0.0), marginBottom(0.0), marginTop(0.0), lineSpacing(0.0)
-      { }
+    LayoutData():indentFirst(0.0), indentLeft(0.0), indentRight(0.0), marginBottom(0.0), marginTop(0.0),
+        lineSpacingType(10), lineSpacing(0.0)
+        { }
 
     QString styleName;
     QString alignment;
     CounterData counter;
     FormatData formatData;
-    double indentFirst, indentLeft, indentRight, marginBottom, marginTop,lineSpacing;
+    double indentFirst, indentLeft, indentRight, marginBottom, marginTop;
+
+    int lineSpacingType; // 0=custom, 10=one line, 15=one and half lines, 20= 2 lines
+    double lineSpacing; // Space between lines in pt, if lineSpacingType==0
+
     bool pageBreakBefore, pageBreakAfter;
     QString tabulator;
 };
