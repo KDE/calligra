@@ -50,7 +50,7 @@ public:
 	VSelection( VObject* parent = 0L );
 	VSelection( const VSelection& selection );
 
-	~VSelection();
+	virtual ~VSelection();
 
 	void draw( QPainter* painter, double zoomFactor ) const;
 

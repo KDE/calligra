@@ -659,6 +659,7 @@ KarbonView::setLineWidth( double val)
 	for ( ; itr.current() ; ++itr )
 	{
 		VStroke stroke( *( itr.current()->stroke() ) );
+		stroke.setParent( itr.current() );
 		stroke.setLineWidth( val );
 		itr.current()->setStroke( stroke );
 	}

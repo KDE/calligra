@@ -23,9 +23,6 @@
 VPath::VPath( VObject* parent, VState state )
 	: VObject( parent, state )
 {
-	m_stroke = new VStroke( this );
-	m_fill = new VFill();
-
 	m_segmentLists.setAutoDelete( true );
 
 	// add an initial segmentlist:
@@ -33,15 +30,12 @@ VPath::VPath( VObject* parent, VState state )
 
 	// we need a stroke for boundingBox() at anytime:
 	m_stroke = new VStroke( this );
+	m_fill = new VFill();
 }
 
 VPath::VPath( const VPath& path )
 	: VObject( path )
 {
-	m_stroke = new VStroke( *path.m_stroke );
-	m_stroke->setParent( this );
-	m_fill = new VFill( *path.m_fill );
-
 	m_segmentLists.setAutoDelete( true );
 
 	QPtrListIterator<VSegmentList> itr( path.m_segmentLists );
@@ -49,10 +43,6 @@ VPath::VPath( const VPath& path )
 	{
 		m_segmentLists.append( new VSegmentList( *( itr.current() ) ) );
 	}
-
-	// we need a stroke for boundingBox() at anytime:
-	if( !m_stroke )
-		m_stroke = new VStroke( this );
 }
 
 VPath::~VPath()
