@@ -200,6 +200,87 @@ private:
 };
 
 /**
+ * The widget for editing counters (bullets & numbering) (tab 4)
+ */
+class KWParagCounterWidget : public KWParagLayoutWidget
+{
+    Q_OBJECT
+public:
+    KWParagCounterWidget( QWidget * parent, const char * name = 0 );
+    virtual ~KWParagCounterWidget() {}
+
+    virtual void display( const KWParagLayout & lay );
+    virtual void save( KWParagLayout & lay );
+    //virtual bool isModified();
+    virtual QString tabName();
+
+    const Counter & counter() const { return m_counter; }
+
+protected slots:
+    void numChangeBullet();
+    void numStyleChanged( int );
+    void numCounterDefChanged( const QString& );
+    void numTypeChanged( int );
+    void numLeftTextChanged( const QString & );
+    void numRightTextChanged( const QString & );
+    void numStartChanged( const QString & );
+    void numDepthChanged( int );
+
+protected slots:
+    void changeKWSpinboxType();
+
+private:
+    QButtonGroup *gNumbering, *gStyle;
+    QGroupBox *gOther;
+    //QLineEdit *eCustomNum;
+    QLineEdit *ecLeft, *ecRight;
+    KWSpinBox* eStart;
+    QLabel *lStart;
+    QRadioButton *rDisc, *rSquare, *rCircle, *rCustom;
+    QPushButton *bBullets;
+    QSpinBox *sDepth;
+    KWNumPreview *prev4;
+    Counter m_counter;
+};
+
+/**
+ * The widget for editing tabulators (tab 5)
+ */
+class KWParagTabulatorsWidget : public KWParagLayoutWidget
+{
+    Q_OBJECT
+public:
+    KWParagTabulatorsWidget( KWUnit::Unit unit, QWidget * parent, const char * name = 0 );
+    virtual ~KWParagTabulatorsWidget() {}
+
+    virtual void display( const KWParagLayout & lay );
+    virtual void save( KWParagLayout & lay );
+    //virtual bool isModified();
+    virtual QString tabName();
+
+    KoTabulatorList tabList() const { return m_tabList; }
+
+protected slots:
+    void addClicked();
+    void modifyClicked();
+    void delClicked();
+    void slotDoubleClicked( QListBoxItem * );
+
+protected:
+    void setActiveItem(double value);
+    bool findExistingValue(double val);
+
+private:
+    QLineEdit *eTabPos;
+    QPushButton *bFont, *bAdd, *bDel, *bModify;
+    QListBox *lTabs;
+    QLabel *lTab;
+    QRadioButton *rtLeft, *rtCenter, *rtRight, *rtDecimal;
+    KoTabulatorList m_tabList;
+    KWUnit::Unit m_unit;
+};
+
+/**
  * The complete(*) dialog for changing attributes of a paragraph
  *
  * (*) the flags (to only show parts of it) have been kept just in case
@@ -216,12 +297,15 @@ public:
     static const int PD_NUMBERING = 8;
     static const int PD_TABS = 16;
 
-    KWParagDia( QWidget*, const char*, int _flags, KWDocument *_doc );
+    KWParagDia( QWidget*, const char*, int flags, KWDocument *_doc );
     ~KWParagDia();
 
-    int getFlags() { return flags; }
+    int getFlags() { return m_flags; }
 
-    // Get values (in pt)
+    // Set the values to be displayed
+    void setParagLayout( const KWParagLayout & lay );
+
+    // Get values (in pt) - tab 1
     double leftIndent() const { return m_indentSpacingWidget->leftIndent(); }
     double rightIndent() const { return m_indentSpacingWidget->rightIndent(); }
     double firstLineIndent() const { return m_indentSpacingWidget->firstLineIndent(); }
@@ -230,24 +314,23 @@ public:
     double lineSpacing() const { return m_indentSpacingWidget->lineSpacing(); }
     bool linesTogether() const { return m_indentSpacingWidget->linesTogether(); }
 
+    // tab 2
     int align() const { return m_alignWidget->align(); }
 
+    // tab 3
     Border leftBorder() const { return m_borderWidget->leftBorder(); }
     Border rightBorder() const { return m_borderWidget->rightBorder(); }
     Border topBorder() const { return m_borderWidget->topBorder(); }
     Border bottomBorder() const { return m_borderWidget->bottomBorder(); }
 
-    void setCounter( Counter _counter );
-    Counter counter() const { return m_counter; }
+    // tab 4
+    const Counter & counter() const { return m_counterWidget->counter(); }
 
-    void setParagLayout( const KWParagLayout & lay );
+    // tab 5
+    KoTabulatorList tabListTabulator() const { return m_tabulatorsWidget->tabList(); }
 
-    KoTabulatorList tabListTabulator() const { return _tabList; }
-    void setTabList( const KoTabulatorList & tabList );
-
+    // Support for "what has changed?"
     bool isAlignChanged() const {return oldLayout.alignment!=align();}
-    bool listTabulatorChanged() const {return oldLayout.tabList()!=tabListTabulator();}
-
     bool isLineSpacingChanged() const {return oldLayout.lineSpacing!=lineSpacing();}
     bool isLeftMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginLeft]!=leftIndent(); }
     bool isRightMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginRight]!=rightIndent();}
@@ -255,66 +338,24 @@ public:
     bool isSpaceBeforeChanged() const { return oldLayout.margins[QStyleSheetItem::MarginTop]!=spaceBeforeParag();}
     bool isSpaceAfterChanged() const {return oldLayout.margins[QStyleSheetItem::MarginBottom]!=spaceAfterParag();}
     bool isPageBreakingChanged() const { return oldLayout.linesTogether!=linesTogether(); }
-    bool isBulletChanged() const;
+    bool isCounterChanged() const;
 
     bool isBorderChanged() const { return (oldLayout.leftBorder!=leftBorder() ||
-					 oldLayout.rightBorder!=rightBorder() ||
-					 oldLayout.topBorder!=topBorder() ||
-					 oldLayout.bottomBorder!=bottomBorder() ); }
-    void changeKWSpinboxType();
-protected:
-    void setupTab4();
-    void setupTab5();
-    void setActiveItem(double value);
-    bool findExistingValue(double val);
-//    void enableUIForCounterType();
+                                           oldLayout.rightBorder!=rightBorder() ||
+                                           oldLayout.topBorder!=topBorder() ||
+                                           oldLayout.bottomBorder!=bottomBorder() ); }
+    bool listTabulatorChanged() const {return oldLayout.tabList()!=tabListTabulator();}
 
 private:
     KWIndentSpacingWidget * m_indentSpacingWidget;
     KWParagAlignWidget * m_alignWidget;
     KWParagBorderWidget * m_borderWidget;
+    KWParagCounterWidget * m_counterWidget;
+    KWParagTabulatorsWidget * m_tabulatorsWidget;
 
-    // Tab4 data.
-    QButtonGroup *gNumbering;
-    QButtonGroup *gStyle;
-    QLineEdit *eCustomNum;
-    QLineEdit *ecLeft, *ecRight/*, *eStart*/;
-    KWSpinBox* eStart;
-    QLabel *lStart;
-    QRadioButton *rDisc, *rSquare, *rCircle, *rCustom;
-    QPushButton *bBullets;
-    QSpinBox *sDepth;
-
-    QLineEdit *eTabPos;
-    QGroupBox *gText;
-
-    QPushButton *bFont, *bAdd, *bDel, *bModify;
-    KWNumPreview *prev4;
-    QListBox *lTabs;
-    QLabel *lTab;
-    QRadioButton *rtLeft, *rtCenter, *rtRight, *rtDecimal;
-
-    int flags;
-    Counter m_counter;
-    KWDocument *doc;
-    KoTabulatorList _tabList;
+    int m_flags;
+    KWDocument *m_doc;
     KWParagLayout oldLayout;
-
-protected slots:
-    // Tab 4 slots.
-    void numChangeBullet();
-    void numStyleChanged( int );
-    void numCounterDefChanged( const QString& );
-    void numTypeChanged( int );
-    void numLeftTextChanged( const QString & );
-    void numRightTextChanged( const QString & );
-    void numStartChanged( const QString & );
-    void numDepthChanged( int );
-
-    void addClicked();
-    void modifyClicked();
-    void delClicked();
-    void slotDoubleClicked( QListBoxItem * );
 };
 
 #endif

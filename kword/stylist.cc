@@ -62,8 +62,11 @@
 
 /*================================================================*/
 KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc )
-    : QDialog(_parent, "Stylist", true) {
-    setWFlags(getWFlags() || WDestructiveClose);
+    : KDialogBase( _parent, "Stylist", true,
+                   i18n("Stylist"),
+                   KDialogBase::Ok | KDialogBase::Cancel /* TODO apply */ )
+{
+    //setWFlags(getWFlags() || WDestructiveClose);
     m_doc = _doc;
     m_currentStyle =0L;
     noSignals=true;
@@ -78,9 +81,27 @@ KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc )
     newTab->setWidget( new KWIndentSpacingWidget( unit, newTab ) );
     addTab( newTab );
 
+    newTab = new KWStyleParagTab( m_tabs );
+    newTab->setWidget( new KWParagAlignWidget( newTab ) );
+    addTab( newTab );
+
+    newTab = new KWStyleParagTab( m_tabs );
+    newTab->setWidget( new KWParagBorderWidget( newTab ) );
+    addTab( newTab );
+
+    newTab = new KWStyleParagTab( m_tabs );
+    newTab->setWidget( new KWParagCounterWidget( newTab ) );
+    addTab( newTab );
+
+    newTab = new KWStyleParagTab( m_tabs );
+    newTab->setWidget( new KWParagTabulatorsWidget( unit, newTab ) );
+    addTab( newTab );
+
     m_stylesList->setCurrentItem( 0 );
     noSignals=false;
     switchStyle();
+
+    setInitialSize( QSize( 600, 540 ) );
 }
 
 void KWStyleManager::addTab( KWStyleManagerTab * tab )
@@ -89,22 +110,21 @@ void KWStyleManager::addTab( KWStyleManagerTab * tab )
     m_tabs->insertTab( tab, tab->tabName() );
 }
 
-void KWStyleManager::setupWidget() {
-    resize( 625, 495 );
-    QVBoxLayout *Form1Layout = new QVBoxLayout( this );
-    Form1Layout->setSpacing( 6 );
-    Form1Layout->setMargin( 11 );
+void KWStyleManager::setupWidget()
+{
+    // This takes space, and no other dialog has a frame around it -> removed (DF)
+    //QVBoxLayout *form1Layout = new QVBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+    //QFrame *frame1 = new QFrame( this );
+    //frame1->setFrameShape( QFrame::StyledPanel );
+    //frame1->setFrameShadow( QFrame::Raised );
 
-    QFrame *Frame1 = new QFrame( this);
-    Frame1->setFrameShape( QFrame::StyledPanel );
-    Frame1->setFrameShadow( QFrame::Raised );
-    QGridLayout *Frame1Layout = new QGridLayout( Frame1 );
-    Frame1Layout->setSpacing( 6 );
-    Frame1Layout->setMargin( 11 );
+    QFrame * frame1 = makeMainWidget();
+    QGridLayout *frame1Layout = new QGridLayout( frame1, 0, 0, // auto
+                                                 KDialog::marginHint(), KDialog::spacingHint() );
 
-    QList<KWStyle> styles = const_cast<QList<KWStyle> & >(m_doc->styleList());
+    QList<KWStyle> styles( m_doc->styleList() );
     numStyles = styles.count();
-    m_stylesList = new QListBox( Frame1, "stylesList" );
+    m_stylesList = new QListBox( frame1, "stylesList" );
     for ( unsigned int i = 0; i < styles.count(); i++ ) {
         m_stylesList->insertItem( styles.at( i )->name() );
         m_origStyles.append(styles.at(i));
@@ -113,42 +133,41 @@ void KWStyleManager::setupWidget() {
 kdDebug() << " style " << i << ": " << styles.at(i)->name() << " (" << styles.at(i) << ") with following: " << styles.at(i)->followingStyle()->name() << " (" << styles.at(i)->followingStyle() << ")" << endl;
     }
 
-    Frame1Layout->addMultiCellWidget( m_stylesList, 0, 0, 0, 1 );
+    frame1Layout->addMultiCellWidget( m_stylesList, 0, 0, 0, 1 );
 
-    m_deleteButton = new QPushButton( Frame1, "deleteButton" );
+    m_deleteButton = new QPushButton( frame1, "deleteButton" );
     m_deleteButton->setText( i18n( "&Delete" ) );
     connect( m_deleteButton, SIGNAL( clicked() ), this, SLOT( deleteStyle() ) );
 
-    Frame1Layout->addWidget( m_deleteButton, 1, 1 );
+    frame1Layout->addWidget( m_deleteButton, 1, 1 );
 
-    m_newButton = new QPushButton( Frame1, "newButton" );
+    m_newButton = new QPushButton( frame1, "newButton" );
     m_newButton->setText( i18n( "New" ) );
     connect( m_newButton, SIGNAL( clicked() ), this, SLOT( addStyle() ) );
 
-    Frame1Layout->addWidget( m_newButton, 1, 0 );
+    frame1Layout->addWidget( m_newButton, 1, 0 );
 
-    m_tabs = new QTabWidget( Frame1);
-    Frame1Layout->addMultiCellWidget( m_tabs, 0, 1, 2, 2 );
-    Form1Layout->addWidget( Frame1 );
+    m_tabs = new QTabWidget( frame1 );
+    frame1Layout->addMultiCellWidget( m_tabs, 0, 1, 2, 2 );
 
-    QHBoxLayout *Layout2 = new QHBoxLayout;
-    Layout2->setSpacing( 6 );
-    Layout2->setMargin( 0 );
+#if 0 // we're using KDialogBase now
+    form1Layout->addWidget( frame1 );
+    QHBoxLayout *layout2 = new QHBoxLayout( 0L, KDialog::marginHint(), 0 /*KDialog::spacingHint()*/ );
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    Layout2->addItem( spacer );
+    layout2->addItem( spacer );
 
     m_okButton = new QPushButton( this );
     m_okButton->setText( i18n( "&OK" ) );
     m_okButton->setDefault(true);
     connect( m_okButton, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-    Layout2->addWidget( m_okButton );
+    layout2->addWidget( m_okButton );
 
     m_cancelButton = new QPushButton( this);
     m_cancelButton->setText( i18n( "&Cancel" ) );
     connect( m_cancelButton, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
-    Layout2->addWidget( m_cancelButton );
-    Form1Layout->addLayout( Layout2 );
-
+    layout2->addWidget( m_cancelButton );
+    form1Layout->addLayout( layout2 );
+#endif
     connect( m_stylesList, SIGNAL( selectionChanged() ), this, SLOT( switchStyle() ) );
 }
 
@@ -212,7 +231,7 @@ void KWStyleManager::switchStyle() {
     noSignals=false;
 }
 
-int KWStyleManager::getStyleByName(const QString name) {
+int KWStyleManager::getStyleByName(const QString & name) {
     for(unsigned int i=0; i < m_changedStyles.count(); i++) {
 
 kdDebug() << " style " << i << ": " << m_changedStyles.at(i)->name() << " (" << m_changedStyles.at(i) << ") with following: " << m_changedStyles.at(i)->followingStyle()->name() << " (" << m_changedStyles.at(i)->followingStyle() << ")" << endl;
@@ -304,14 +323,16 @@ void KWStyleManager::deleteStyle() {
     updateGUI();
 }
 
+#if 0
 void KWStyleManager::slotCancel() {
     done(0);
 }
+#endif
 
 void KWStyleManager::slotOk() {
     save();
     apply();
-    done(1);
+    //done(1);
 }
 
 void KWStyleManager::apply() {

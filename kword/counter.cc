@@ -104,7 +104,9 @@ void Counter::load( QDomElement & element )
     m_prefix = correctQString( element.attribute("lefttext") );
     m_suffix = correctQString( element.attribute("righttext") );
     QString s = element.attribute("start");
-    if ( s[0].isDigit() )
+    if ( s.isEmpty() )
+        m_startNumber = 1;
+    else if ( s[0].isDigit() )
         m_startNumber = s.toInt();
     else // support for very-old files
         m_startNumber = s.lower()[0].latin1() - 'a' + 1;
@@ -270,16 +272,20 @@ void Counter::save( QDomElement & element )
 {
     element.setAttribute( "type", static_cast<int>( m_style ) );
     element.setAttribute( "depth", m_depth );
-    element.setAttribute( "bullet", m_customBullet.character.unicode() );
+    if ( m_style == STYLE_CUSTOMBULLET )
+    {
+        element.setAttribute( "bullet", m_customBullet.character.unicode() );
+        if ( !m_customBullet.font.isEmpty() )
+            element.setAttribute( "bulletfont", m_customBullet.font );
+    }
     if ( !m_prefix.isEmpty() )
         element.setAttribute( "lefttext", m_prefix );
     if ( !m_suffix.isEmpty() )
         element.setAttribute( "righttext", m_suffix );
-    element.setAttribute( "start", m_startNumber );
+    if ( !m_startNumber == 1 )
+        element.setAttribute( "start", m_startNumber );
     if ( m_numbering != NUM_NONE )
         element.setAttribute( "numberingtype", static_cast<int>( m_numbering ) );
-    if ( !m_customBullet.font.isEmpty() )
-        element.setAttribute( "bulletfont", m_customBullet.font );
     if ( !m_custom.isEmpty() )
         element.setAttribute( "customdef", m_custom );
 }

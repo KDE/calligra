@@ -985,51 +985,15 @@ QString KWParagBorderWidget::tabName()
     return i18n( "Borders" );
 }
 
-/******************************************************************/
-/* Class: KWParagDia                                              */
-/******************************************************************/
-KWParagDia::KWParagDia( QWidget* parent, const char* name,
-                        int _flags, KWDocument *_doc )
-    : KDialogBase(Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true )
-{
-    flags = _flags;
-    doc = _doc;
-    if ( _flags & PD_SPACING )
-    {
-        QVBox * page = addVBoxPage( i18n( "Indent and Spacing" ) );
-        m_indentSpacingWidget = new KWIndentSpacingWidget( doc->getUnit(), page, "indent-spacing" );
-    }
-    if ( _flags & PD_ALIGN )
-    {
-        QVBox * page = addVBoxPage( i18n( "Aligns" ) );
-        m_alignWidget = new KWParagAlignWidget( page, "align" );
-    }
-    if ( _flags & PD_BORDERS )
-    {
-        QVBox * page = addVBoxPage( i18n( "Borders" ) );
-        m_borderWidget = new KWParagBorderWidget( page, "border" );
-    }
-    if ( _flags & PD_NUMBERING )
-        setupTab4();
-    if ( _flags & PD_TABS )
-        setupTab5();
-    setInitialSize( QSize(600, 500) );
-}
-
 /*================================================================*/
-KWParagDia::~KWParagDia()
-{
-}
 
-
-/*================================================================*/
-void KWParagDia::setupTab4()
+KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name )
+    : KWParagLayoutWidget( KWParagDia::PD_NUMBERING, parent, name )
 {
-    QWidget *tab = addPage( i18n( "Bullets/Numbers" ) );
-    QGridLayout *grid = new QGridLayout( tab, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( this, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     // What type of numbering is required?
-    gNumbering = new QButtonGroup( i18n("Numbering"), tab );
+    gNumbering = new QButtonGroup( i18n("Numbering"), this );
     QGridLayout *ngrid = new QGridLayout( gNumbering, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
     ngrid->addRowSpacing( 0, 12 );
     ngrid->setRowStretch( 0, 0 );
@@ -1054,7 +1018,7 @@ void KWParagDia::setupTab4()
     grid->addWidget( gNumbering, 0, 0 );
 
     // How should the numbers be displayed?
-    gStyle = new QButtonGroup( i18n("Style"), tab );
+    gStyle = new QButtonGroup( i18n("Style"), this );
     QGridLayout *tgrid = new QGridLayout( gStyle, 0 /*auto*/, 2,
                                           KDialog::marginHint(), KDialog::spacingHint() );
     tgrid->addRowSpacing( 0, 12 );
@@ -1147,258 +1111,61 @@ void KWParagDia::setupTab4()
     connect( gStyle, SIGNAL( clicked( int ) ), this, SLOT( numStyleChanged( int ) ) );
 
     // Miscellaneous stuff.
-    gText = new QGroupBox( i18n("Other Settings"), tab );
-    QGridLayout *othergrid = new QGridLayout( gText, 4, 4,
+    gOther = new QGroupBox( i18n("Other Settings"), this );
+    QGridLayout *othergrid = new QGridLayout( gOther, 4, 4,
                                               KDialog::marginHint(), KDialog::spacingHint() );
     othergrid->addRowSpacing( 0, 12 );
     othergrid->setRowStretch( 0, 0 );
     row = 1;
-    QLabel *lcLeft = new QLabel( i18n( "Prefix Text" ), gText );
+    QLabel *lcLeft = new QLabel( i18n( "Prefix Text" ), gOther );
     othergrid->addMultiCellWidget( lcLeft, row, row, 0, 1 );
 
-    QLabel *lcRight = new QLabel( i18n( "Suffix Text" ), gText );
+    QLabel *lcRight = new QLabel( i18n( "Suffix Text" ), gOther );
     othergrid->addMultiCellWidget( lcRight, row, row, 2, 3 );
 
     ++row;
-    ecLeft = new QLineEdit( gText );
+    ecLeft = new QLineEdit( gOther );
     othergrid->addMultiCellWidget( ecLeft, row, row, 0, 1 );
     connect( ecLeft, SIGNAL( textChanged( const QString & ) ),
              this, SLOT( numLeftTextChanged( const QString & ) ) );
 
-    ecRight = new QLineEdit( gText );
+    ecRight = new QLineEdit( gOther );
     othergrid->addMultiCellWidget( ecRight, row, row, 2, 3 );
     connect( ecRight, SIGNAL( textChanged( const QString & ) ),
              this, SLOT( numRightTextChanged( const QString & ) ) );
 
     ++row;
-    lStart = new QLabel( i18n( "Start at ( 1, 2, ... ) :" ), gText );
+    lStart = new QLabel( i18n( "Start at ( 1, 2, ... ) :" ), gOther );
     lStart->setAlignment( AlignRight | AlignVCenter );
     othergrid->addWidget( lStart, row, 0 );
 
-    eStart = new KWSpinBox(gText);
+    eStart = new KWSpinBox(gOther);
     eStart->setMinValue ( 1);
     othergrid->addWidget( eStart, row, 1 );
     connect( eStart, SIGNAL( valueChanged ( const QString &  )  ),
              this, SLOT( numStartChanged( const QString & ) ) );
 
-    QLabel *lDepth = new QLabel( i18n( "Depth:" ), gText );
+    QLabel *lDepth = new QLabel( i18n( "Depth:" ), gOther );
     lDepth->setAlignment( AlignRight | AlignVCenter );
     othergrid->addWidget( lDepth, row, 2 );
 
-    sDepth = new QSpinBox( 0, 15, 1, gText );
+    sDepth = new QSpinBox( 0, 15, 1, gOther );
     othergrid->addWidget( sDepth, row, 3 );
     connect( sDepth, SIGNAL( valueChanged( int ) ),
              this, SLOT( numDepthChanged( int ) ) );
-    grid->addWidget( gText, 2, 0 );
+    grid->addWidget( gOther, 2, 0 );
 
     // Add the preview.
-    prev4 = new KWNumPreview( tab );
+    prev4 = new KWNumPreview( this );
     grid->addMultiCellWidget( prev4, 0, 2, 1, 1 );
 }
 
-/*================================================================*/
-void KWParagDia::setupTab5()
+QString KWParagCounterWidget::tabName()
 {
-    QWidget *tab = addPage( i18n( "Tabulators" ) );
-    QGridLayout *grid = new QGridLayout( tab, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
-
-    lTab = new QLabel(  tab );
-    grid->addWidget( lTab, 0, 0 );
-
-    eTabPos = new QLineEdit( tab );
-
-    eTabPos->setValidator( new QDoubleValidator( eTabPos ) );
-    grid->addWidget( eTabPos, 1, 0 );
-
-    // ## move to KWUnit
-    QString unitText;
-    switch ( doc->getUnit() )
-    {
-      case KWUnit::U_MM:
-	unitText=i18n("Millimeters (mm)");
-	break;
-      case KWUnit::U_INCH:
-	unitText=i18n("Inches (inch)");
-	break;
-      case KWUnit::U_PT:
-      default:
-	unitText=i18n("Points (pt)" );
-    }
-    lTab->setText(i18n( "1 is a unit name", "Tabulator positions are given in %1" ).arg(unitText));
-
-    KButtonBox * bbTabs = new KButtonBox( tab );
-    bAdd = bbTabs->addButton( i18n( "Add" ), false );
-    bDel = bbTabs->addButton( i18n( "Delete" ), false );
-    bModify = bbTabs->addButton( i18n( "Modify" ), false );
-    grid->addWidget( bbTabs, 2, 0 );
-
-    lTabs = new QListBox( tab );
-    grid->addWidget( lTabs, 3, 0 );
-
-    QButtonGroup * g3 = new QButtonGroup( "", tab );
-    QGridLayout * tabGrid = new QGridLayout( g3, 5, 1, KDialog::marginHint(), KDialog::spacingHint() );
-    g3->setExclusive( true );
-
-    rtLeft = new QRadioButton( i18n( "Left" ), g3 );
-    rtLeft->setChecked(true);
-    tabGrid->addWidget( rtLeft, 0, 0 );
-    g3->insert( rtLeft );
-
-    rtCenter = new QRadioButton( i18n( "Center" ), g3 );
-    tabGrid->addWidget( rtCenter, 1, 0 );
-    g3->insert( rtCenter );
-
-    rtRight = new QRadioButton( i18n( "Right" ), g3 );
-    tabGrid->addWidget( rtRight, 2, 0 );
-    g3->insert( rtRight );
-
-    rtDecimal = new QRadioButton( i18n( "Decimal" ), g3 );
-    tabGrid->addWidget( rtDecimal, 3, 0 );
-    g3->insert( rtDecimal );
-
-    tabGrid->setRowStretch( 4, 1 );
-    tabGrid->setColStretch( 0, 1 );
-    grid->addWidget( g3, 3, 1 );
-    grid->setRowStretch( 3, 1 );
-    if(lTabs->count()==0)
-      {
-	bDel->setEnabled(false);
-	bModify->setEnabled(false);
-      }
-
-    connect(bAdd,SIGNAL(clicked ()),this,SLOT(addClicked()));
-    connect(bModify,SIGNAL(clicked ()),this,SLOT(modifyClicked()));
-    connect(bDel,SIGNAL(clicked ()),this,SLOT(delClicked()));
-    connect(lTabs,SIGNAL(doubleClicked( QListBoxItem * ) ),this,SLOT(slotDoubleClicked( QListBoxItem * ) ));
-    connect(lTabs,SIGNAL(clicked( QListBoxItem * ) ),this,SLOT(slotDoubleClicked( QListBoxItem * ) ));
+    return i18n( "Bullets/Numbers" );
 }
 
-
-/*================================================================*/
-void KWParagDia::addClicked()
-{
-  if(!eTabPos->text().isEmpty())
-    {
-      if(findExistingValue(eTabPos->text().toDouble()))
-	{
-	  QString tmp=i18n("There is a tabulator at this position");
-	  KMessageBox::error( this, tmp);
-	  eTabPos->setText("");
-	  return;
-	}
-
-      lTabs->insertItem(eTabPos->text());
-      bDel->setEnabled(true);
-      bModify->setEnabled(true);
-
-      KoTabulator tab;
-      if(rtLeft->isChecked())
-	tab.type=T_LEFT;
-      else if(rtCenter->isChecked())
-	tab.type=T_CENTER;
-      else if(rtRight->isChecked())
-	tab.type=T_RIGHT;
-      else if(rtDecimal->isChecked())
-	tab.type=T_DEC_PNT;
-      else
-	tab.type=T_LEFT;
-      tab.ptPos = KWUnit::fromUserValue( eTabPos->text().toDouble(), doc->getUnit() );
-      _tabList.append(tab);
-      eTabPos->setText("");
-    }
-}
-
-bool KWParagDia::findExistingValue(double val /* user value */)
-{
-    KWUnit::Unit unit = doc->getUnit();
-    KoTabulatorList::Iterator it = _tabList.begin();
-    for ( ; it != _tabList.end(); ++it )
-    {
-        if ( KWUnit::userValue( ( *it ).ptPos, unit ) == val )
-            return true;
-    }
-    return false;
-}
-
-/*================================================================*/
-void KWParagDia::modifyClicked()
-{
-  if(!eTabPos->text().isEmpty() && lTabs->currentItem()!=-1)
-    {
-       _tabList.remove( _tabList.at( lTabs->currentItem() ) );
-      lTabs->removeItem(lTabs->currentItem());
-      addClicked();
-      eTabPos->setText("");
-    }
-
-}
-
-/*================================================================*/
-void KWParagDia::delClicked()
-{
-    if(lTabs->currentItem()!=-1)
-    {
-        _tabList.remove( _tabList.at( lTabs->currentItem() ) );
-        eTabPos->setText("");
-        lTabs->removeItem(lTabs->currentItem());
-        if(lTabs->count()==0)
-	{
-            bDel->setEnabled(false);
-            bModify->setEnabled(false);
-
-	}
-        else
-	{
-            lTabs->setCurrentItem(0);
-            setActiveItem(lTabs->currentText().toDouble());
-	}
-    }
-}
-
-void KWParagDia::setActiveItem(double value /* user value */)
-{
-    KoTabulatorList::Iterator it = _tabList.begin();
-    for ( ; it != _tabList.end(); ++it )
-    {
-       if ( KWUnit::userValue( ( *it ).ptPos, doc->getUnit() ) == value )
-       {
-            switch(( *it ).type)
-            {
-            case T_CENTER:
-                rtCenter->setChecked(true);
-                break;
-            case  T_RIGHT:
-                rtRight->setChecked(true);
-                break;
-            case T_DEC_PNT:
-                rtDecimal->setChecked(true);
-                break;
-            case T_LEFT:
-            default:
-                rtLeft->setChecked(true);
-                break;
-            }
-       }
-       break;
-    }
-}
-
-/*================================================================*/
-void KWParagDia::slotDoubleClicked( QListBoxItem * )
-{
-  if(lTabs->currentItem()!=-1)
-    {
-      eTabPos->setText(lTabs->currentText());
-      double value=lTabs->currentText().toDouble();
-      bDel->setEnabled(true);
-      bModify->setEnabled(true);
-      setActiveItem(value);
-    }
-}
-
-
-/*================================================================*/
-void KWParagDia::numChangeBullet()
+void KWParagCounterWidget::numChangeBullet()
 {
     gStyle->setButton( Counter::STYLE_CUSTOMBULLET );
     numStyleChanged( Counter::STYLE_CUSTOMBULLET );
@@ -1418,8 +1185,7 @@ void KWParagDia::numChangeBullet()
     }
 }
 
-/*================================================================*/
-void KWParagDia::numStyleChanged( int _type )
+void KWParagCounterWidget::numStyleChanged( int _type )
 {
     m_counter.setStyle( static_cast<Counter::Style>( _type ) );
 
@@ -1430,13 +1196,12 @@ void KWParagDia::numStyleChanged( int _type )
     changeKWSpinboxType();
 }
 
-/*================================================================*/
-void KWParagDia::numCounterDefChanged( const QString& _cd )
+void KWParagCounterWidget::numCounterDefChanged( const QString& _cd )
 {
     m_counter.setCustom( _cd );
 }
 
-void KWParagDia::changeKWSpinboxType()
+void KWParagCounterWidget::changeKWSpinboxType()
 {
     switch(m_counter.style())
     {
@@ -1463,13 +1228,12 @@ void KWParagDia::changeKWSpinboxType()
     }
 }
 
-/*================================================================*/
-void KWParagDia::numTypeChanged( int _ntype )
+void KWParagCounterWidget::numTypeChanged( int _ntype )
 {
     m_counter.setNumbering( static_cast<Counter::Numbering>( _ntype ) );
 
     // Disable all options for NUM_NONE.
-    gText->setEnabled( m_counter.numbering() != Counter::NUM_NONE );
+    gOther->setEnabled( m_counter.numbering() != Counter::NUM_NONE );
     gStyle->setEnabled( m_counter.numbering() != Counter::NUM_NONE );
 
     // Disable bullet styles for NUM_CHAPTER.
@@ -1486,38 +1250,36 @@ void KWParagDia::numTypeChanged( int _ntype )
         numStyleChanged( m_counter.style() );
     }
     changeKWSpinboxType();
-
 }
 
-/*================================================================*/
-void KWParagDia::numLeftTextChanged( const QString & _c )
+void KWParagCounterWidget::numLeftTextChanged( const QString & _c )
 {
     m_counter.setPrefix( _c );
 }
 
-/*================================================================*/
-void KWParagDia::numRightTextChanged( const QString & _c )
+void KWParagCounterWidget::numRightTextChanged( const QString & _c )
 {
     m_counter.setSuffix( _c );
 }
 
-/*================================================================*/
-void KWParagDia::numStartChanged( const QString & /*_c*/ )
+void KWParagCounterWidget::numStartChanged( const QString & /*_c*/ )
 {
-    m_counter.setStartNumber( QMAX(eStart->value(),1) ); // HACK
+    m_counter.setStartNumber( QMAX( eStart->value(), 0 ) );
 }
 
-/*================================================================*/
-void KWParagDia::numDepthChanged( int _val )
+void KWParagCounterWidget::numDepthChanged( int _val )
 {
     m_counter.setDepth( QMAX(_val,0) );
 }
 
-/*================================================================*/
-void KWParagDia::setCounter( Counter _counter )
+void KWParagCounterWidget::display( const KWParagLayout & lay )
 {
-    prev4->setCounter( _counter );
-    m_counter = _counter;
+    if ( lay.counter )
+        m_counter = *lay.counter;
+    else
+        m_counter = Counter();
+
+    prev4->setCounter( m_counter );
 
     gNumbering->setButton( m_counter.numbering() );
     numTypeChanged( m_counter.numbering() );
@@ -1525,7 +1287,7 @@ void KWParagDia::setCounter( Counter _counter )
     gStyle->setButton( m_counter.style() );
     numStyleChanged( m_counter.style() );
 
-    eCustomNum->setText( m_counter.custom() );
+    //eCustomNum->setText( m_counter.custom() );
 
     bBullets->setText( m_counter.customBulletCharacter() );
     if ( !m_counter.customBulletFont().isEmpty() )
@@ -1535,31 +1297,269 @@ void KWParagDia::setCounter( Counter _counter )
     ecRight->setText( m_counter.suffix() );
 
     sDepth->setValue( m_counter.depth() );
-    // What we really need is a combobox filled with values depending on
-    // the type of numbering - or a spinbox. (DF)
-    //eStart->editor()->setText( QString::number( m_counter.startNumber() ) ); // HACK
-    eStart->setValue(  QMAX(m_counter.startNumber(),1)  ); // HACK
+    eStart->setValue( m_counter.startNumber() );
+}
+
+void KWParagCounterWidget::save( KWParagLayout & lay )
+{
+    if ( lay.counter )
+        *lay.counter = m_counter;
+    else
+        lay.counter = new Counter( m_counter );
 }
 
 /*================================================================*/
-void KWParagDia::setTabList( const KoTabulatorList & tabList )
+KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, QWidget * parent, const char * name = 0 )
+    : KWParagLayoutWidget( KWParagDia::PD_TABS, parent, name ), m_unit(unit)
 {
-    _tabList = tabList;
-    KoTabulatorList::ConstIterator it = tabList.begin();
-    KWUnit::Unit unit = doc->getUnit();
-    for ( ; it != tabList.end(); ++it )
-        lTabs->insertItem( QString::number( KWUnit::userValue( (*it).ptPos, unit ) ) );
+    QGridLayout *grid = new QGridLayout( this, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
+
+    lTab = new QLabel(  this );
+    grid->addWidget( lTab, 0, 0 );
+
+    eTabPos = new QLineEdit( this );
+
+    eTabPos->setValidator( new QDoubleValidator( eTabPos ) );
+    grid->addWidget( eTabPos, 1, 0 );
+
+    // ## move to KWUnit
+    QString unitText;
+    switch ( m_unit )
+    {
+        case KWUnit::U_MM:
+            unitText=i18n("Millimeters (mm)");
+            break;
+        case KWUnit::U_INCH:
+            unitText=i18n("Inches (inch)");
+            break;
+        case KWUnit::U_PT:
+        default:
+            unitText=i18n("Points (pt)" );
+    }
+    lTab->setText(i18n( "1 is a unit name", "Tabulator positions are given in %1" ).arg(unitText));
+
+    KButtonBox * bbTabs = new KButtonBox( this );
+    bAdd = bbTabs->addButton( i18n( "Add" ), false );
+    bDel = bbTabs->addButton( i18n( "Delete" ), false );
+    bModify = bbTabs->addButton( i18n( "Modify" ), false );
+    grid->addWidget( bbTabs, 2, 0 );
+
+    lTabs = new QListBox( this );
+    grid->addWidget( lTabs, 3, 0 );
+
+    QButtonGroup * g3 = new QButtonGroup( this );
+    QGridLayout * tabGrid = new QGridLayout( g3, 5, 1, KDialog::marginHint(), KDialog::spacingHint() );
+    g3->setExclusive( true );
+
+    rtLeft = new QRadioButton( i18n( "Left" ), g3 );
+    rtLeft->setChecked(true);
+    tabGrid->addWidget( rtLeft, 0, 0 );
+    g3->insert( rtLeft );
+
+    rtCenter = new QRadioButton( i18n( "Center" ), g3 );
+    tabGrid->addWidget( rtCenter, 1, 0 );
+    g3->insert( rtCenter );
+
+    rtRight = new QRadioButton( i18n( "Right" ), g3 );
+    tabGrid->addWidget( rtRight, 2, 0 );
+    g3->insert( rtRight );
+
+    rtDecimal = new QRadioButton( i18n( "Decimal" ), g3 );
+    tabGrid->addWidget( rtDecimal, 3, 0 );
+    g3->insert( rtDecimal );
+
+    tabGrid->setRowStretch( 4, 1 );
+    tabGrid->setColStretch( 0, 1 );
+    grid->addWidget( g3, 3, 1 );
+    grid->setRowStretch( 3, 1 );
+    if(lTabs->count()==0)
+    {
+	bDel->setEnabled(false);
+	bModify->setEnabled(false);
+    }
+
+    connect(bAdd,SIGNAL(clicked ()),this,SLOT(addClicked()));
+    connect(bModify,SIGNAL(clicked ()),this,SLOT(modifyClicked()));
+    connect(bDel,SIGNAL(clicked ()),this,SLOT(delClicked()));
+    connect(lTabs,SIGNAL(doubleClicked( QListBoxItem * ) ),
+            this,SLOT(slotDoubleClicked( QListBoxItem * ) ));
+    connect(lTabs,SIGNAL(clicked( QListBoxItem * ) ),
+            this,SLOT(slotDoubleClicked( QListBoxItem * ) ));
 }
 
-bool KWParagDia::isBulletChanged() const
+void KWParagTabulatorsWidget::addClicked()
 {
-#if 0 // doesn't compile
-    if ( oldLayout.counter )
-        return ( *oldLayout.counter != counter() );
-    else
-        return counter().numbering() != Counter::NUM_NONE;
-#endif
-    return true; // unused anyway
+    if(!eTabPos->text().isEmpty())
+    {
+        if(findExistingValue(eTabPos->text().toDouble()))
+	{
+            QString tmp=i18n("There is a tabulator at this position");
+            KMessageBox::error( this, tmp );
+            eTabPos->setText("");
+            return;
+	}
+
+        lTabs->insertItem(eTabPos->text());
+        bDel->setEnabled(true);
+        bModify->setEnabled(true);
+
+        KoTabulator tab;
+        if(rtLeft->isChecked())
+            tab.type=T_LEFT;
+        else if(rtCenter->isChecked())
+            tab.type=T_CENTER;
+        else if(rtRight->isChecked())
+            tab.type=T_RIGHT;
+        else if(rtDecimal->isChecked())
+            tab.type=T_DEC_PNT;
+        else
+            tab.type=T_LEFT;
+        tab.ptPos = KWUnit::fromUserValue( eTabPos->text().toDouble(), m_unit );
+        m_tabList.append(tab);
+        eTabPos->setText("");
+    }
+}
+
+bool KWParagTabulatorsWidget::findExistingValue(double val /* user value */)
+{
+    KoTabulatorList::Iterator it = m_tabList.begin();
+    for ( ; it != m_tabList.end(); ++it )
+    {
+        if ( KWUnit::userValue( ( *it ).ptPos, m_unit ) == val )
+            return true;
+    }
+    return false;
+}
+
+void KWParagTabulatorsWidget::modifyClicked()
+{
+    if(!eTabPos->text().isEmpty() && lTabs->currentItem()!=-1)
+    {
+        m_tabList.remove( m_tabList.at( lTabs->currentItem() ) );
+        lTabs->removeItem(lTabs->currentItem());
+        addClicked();
+        eTabPos->setText("");
+    }
+}
+
+void KWParagTabulatorsWidget::delClicked()
+{
+    if(lTabs->currentItem()!=-1)
+    {
+        m_tabList.remove( m_tabList.at( lTabs->currentItem() ) );
+        eTabPos->setText("");
+        lTabs->removeItem(lTabs->currentItem());
+        if(lTabs->count()==0)
+	{
+            bDel->setEnabled(false);
+            bModify->setEnabled(false);
+
+	}
+        else
+	{
+            lTabs->setCurrentItem(0);
+            setActiveItem(lTabs->currentText().toDouble());
+	}
+    }
+}
+
+void KWParagTabulatorsWidget::setActiveItem(double value /* user value */)
+{
+    KoTabulatorList::Iterator it = m_tabList.begin();
+    for ( ; it != m_tabList.end(); ++it )
+    {
+       if ( KWUnit::userValue( ( *it ).ptPos, m_unit ) == value )
+       {
+            switch(( *it ).type)
+            {
+            case T_CENTER:
+                rtCenter->setChecked(true);
+                break;
+            case  T_RIGHT:
+                rtRight->setChecked(true);
+                break;
+            case T_DEC_PNT:
+                rtDecimal->setChecked(true);
+                break;
+            case T_LEFT:
+            default:
+                rtLeft->setChecked(true);
+                break;
+            }
+       }
+       break;
+    }
+}
+
+void KWParagTabulatorsWidget::slotDoubleClicked( QListBoxItem * )
+{
+    if(lTabs->currentItem()!=-1)
+    {
+        eTabPos->setText(lTabs->currentText());
+        double value = lTabs->currentText().toDouble();
+        bDel->setEnabled(true);
+        bModify->setEnabled(true);
+        setActiveItem(value);
+    }
+}
+
+void KWParagTabulatorsWidget::display( const KWParagLayout & lay )
+{
+    m_tabList = lay.tabList();
+    KoTabulatorList::ConstIterator it = m_tabList.begin();
+    for ( ; it != m_tabList.end(); ++it )
+        lTabs->insertItem( QString::number( KWUnit::userValue( (*it).ptPos, m_unit ) ) );
+}
+
+void KWParagTabulatorsWidget::save( KWParagLayout & lay )
+{
+    lay.setTabList( m_tabList );
+}
+
+QString KWParagTabulatorsWidget::tabName()
+{
+    return i18n( "Tabulators" );
+}
+
+/******************************************************************/
+/* Class: KWParagDia                                              */
+/******************************************************************/
+KWParagDia::KWParagDia( QWidget* parent, const char* name,
+                        int flags, KWDocument *doc )
+    : KDialogBase(Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true )
+{
+    m_flags = flags;
+    m_doc = doc;
+    if ( m_flags & PD_SPACING )
+    {
+        QVBox * page = addVBoxPage( i18n( "Indent and Spacing" ) );
+        m_indentSpacingWidget = new KWIndentSpacingWidget( m_doc->getUnit(), page, "indent-spacing" );
+    }
+    if ( m_flags & PD_ALIGN )
+    {
+        QVBox * page = addVBoxPage( i18n( "Aligns" ) );
+        m_alignWidget = new KWParagAlignWidget( page, "align" );
+    }
+    if ( m_flags & PD_BORDERS )
+    {
+        QVBox * page = addVBoxPage( i18n( "Borders" ) );
+        m_borderWidget = new KWParagBorderWidget( page, "border" );
+    }
+    if ( m_flags & PD_NUMBERING )
+    {
+        QVBox * page = addVBoxPage( i18n( "Bullets/Numbers" ) );
+        m_counterWidget = new KWParagCounterWidget( page, "numbers" );
+    }
+    if ( m_flags & PD_TABS )
+    {
+        QVBox * page = addVBoxPage( i18n( "Tabulators" ) );
+        m_tabulatorsWidget = new KWParagTabulatorsWidget( m_doc->getUnit(), page, "tabs" );
+    }
+    setInitialSize( QSize(600, 500) );
+}
+
+KWParagDia::~KWParagDia()
+{
 }
 
 void KWParagDia::setParagLayout( const KWParagLayout & lay )
@@ -1567,17 +1567,17 @@ void KWParagDia::setParagLayout( const KWParagLayout & lay )
     m_indentSpacingWidget->display( lay );
     m_alignWidget->display( lay );
     m_borderWidget->display( lay );
+    m_counterWidget->display( lay );
+    m_tabulatorsWidget->display( lay );
+    oldLayout = lay;
+}
 
-    if ( lay.counter )
-        setCounter( *lay.counter );
-    else
-    {
-        numTypeChanged( Counter::NUM_NONE );
-        gNumbering->setButton(Counter::NUM_NONE );
-    }
-
-    setTabList( lay.tabList() );
-    oldLayout=lay;
+bool KWParagDia::isCounterChanged() const
+{
+    if ( oldLayout.counter ) // We had a counter
+        return ! ( *oldLayout.counter == counter() );
+    else // We had no counter -> changed if we have one now
+        return counter().numbering() != Counter::NUM_NONE;
 }
 
 #include "paragdia.moc"

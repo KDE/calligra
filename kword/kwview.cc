@@ -1512,7 +1512,7 @@ void KWView::formatParagraph()
         if(paragDia->isAlignChanged())
             edit->setAlign( paragDia->align() );
 
-        if(paragDia->isBulletChanged())
+        if(paragDia->isCounterChanged())
             edit->setCounter( paragDia->counter() );
 
         if(paragDia->listTabulatorChanged())
@@ -1612,7 +1612,6 @@ void KWView::extraAutoFormat()
 void KWView::extraStylist()
 {
     KWStyleManager * styleManager = new KWStyleManager( this, doc );
-    styleManager->setCaption( i18n( "Stylist" ) );
     styleManager->show();
     delete styleManager;
 }

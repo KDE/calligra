@@ -44,8 +44,7 @@ class KWStylePreview;
 /******************************************************************/
 /* Class: KWStyleManager                                          */
 /******************************************************************/
-
-class KWStyleManager : public QDialog
+class KWStyleManager : public KDialogBase
 {
     Q_OBJECT
 
@@ -60,7 +59,7 @@ protected:
     void apply();
     void updateGUI();
     void save();
-    int getStyleByName(const QString name);
+    int getStyleByName(const QString & name);
 
     QTabWidget *m_tabs;
     QListBox *m_stylesList;
@@ -81,7 +80,7 @@ protected:
 
 protected slots:
     virtual void slotOk();
-    virtual void slotCancel();
+    //virtual void slotCancel();
     void switchStyle();
     void addStyle();
     void deleteStyle();
