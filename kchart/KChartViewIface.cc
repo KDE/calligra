@@ -44,5 +44,16 @@ void KChartViewIface::configureChart()
     view->slotConfig();
 }
 
+void KChartViewIface::configureBackground()
+{
+    view->slotConfigBack();
+}
 
-
+void KChartViewIface::configureFont()
+{
+    view->slotConfigFont();
+}
+void KChartViewIface::configureColor()
+{
+    view->slotConfigColor();
+}

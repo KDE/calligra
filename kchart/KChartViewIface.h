@@ -36,6 +36,12 @@ k_dcop:
     virtual void wizard();
     virtual void editData();
     virtual void configureChart();
+
+    virtual void configureBackground();
+
+    virtual void configureFont();
+    virtual void configureColor();
+
 private:
     KChartView *view;
 
