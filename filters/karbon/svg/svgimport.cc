@@ -215,6 +215,15 @@ SvgImport::parseGradient( const QDomElement &e )
 									 e.attribute( "cy" ).toDouble() ) );
 		gradient.setType( VGradient::radial );
 	}
+	// handle spread method
+	QString spreadMethod = e.attribute( "spreadMethod" );
+	if( !spreadMethod.isEmpty() )
+	{
+		if( spreadMethod == "reflect" )	
+			gradient.setRepeatMethod( VGradient::reflect );
+		else if( spreadMethod == "repeat" )	
+			gradient.setRepeatMethod( VGradient::repeat );
+	}
 	parseColorStops( &gradient, e );
 	m_gradients.insert( e.attribute( "id" ), gradient );
 }
