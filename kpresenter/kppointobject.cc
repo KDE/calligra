@@ -124,7 +124,7 @@ bool KPPointObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context 
 void KPPointObject::loadOasisMarker( KoOasisContext & context )
 {
     loadOasisMarkerElement( context, "draw:marker-start", lineBegin );
-    loadOasisMarkerElement( context, "draw:marker-end", lineBegin );
+    loadOasisMarkerElement( context, "draw:marker-end", lineEnd );
 }
 
 void KPPointObject::loadOasis( const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo *info )
