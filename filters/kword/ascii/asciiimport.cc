@@ -46,8 +46,19 @@
 #include <asciiimport.h>
 #include <asciiimport.moc>
 
-typedef KGenericFactory<ASCIIImport, KoFilter> ASCIIImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libasciiimport, ASCIIImportFactory( "asciiimport" ) );
+class ASCIIImportFactory : KGenericFactory<ASCIIImport, KoFilter>
+{
+public:
+    ASCIIImportFactory(void) : KGenericFactory<ASCIIImport, KoFilter> ("kwordasciiimport")
+    {}
+protected:
+    virtual void setupTranslations( void )
+    {
+        KGlobal::locale()->insertCatalogue( "kwordasciifilter" );
+    }
+};
+
+K_EXPORT_COMPONENT_FACTORY( libasciiimport, ASCIIImportFactory() );
 
 ASCIIImport::ASCIIImport(KoFilter *parent, const char *name, const QStringList &) :
                      KoFilter(parent, name) {

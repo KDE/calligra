@@ -37,8 +37,19 @@
 #include <asciiexport.h>
 #include <asciiexport.moc>
 
-typedef KGenericFactory<ASCIIExport, KoFilter> ASCIIExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libasciiexport, ASCIIExportFactory( "kwordasciifilter" ) );
+class ASCIIExportFactory : KGenericFactory<ASCIIExport, KoFilter>
+{
+public:
+    ASCIIExportFactory(void) : KGenericFactory<ASCIIExport, KoFilter> ("kwordasciiexport")
+    {}
+protected:
+    virtual void setupTranslations( void )
+    {
+        KGlobal::locale()->insertCatalogue( "kwordasciifilter" );
+    }
+};
+
+K_EXPORT_COMPONENT_FACTORY( libasciiexport, ASCIIExportFactory() );
 
 class ASCIIWorker : public KWEFBaseWorker
 {
