@@ -74,7 +74,7 @@ public:
 		QValueList<QCString> actions;
 		actions << "edit_cut" << "edit_copy" << "edit_paste" << "edit_clear"
 			<< "edit_undo" << "edit_redo";
-		plugSharedActionsToExternalGUI(actions, d->view);
+		plugSharedActionsToExternalGUI(actions, obj);
 	}
 };
 
