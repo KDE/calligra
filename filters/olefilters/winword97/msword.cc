@@ -80,7 +80,7 @@ unsigned short MsWord::char2unicode(unsigned lid, unsigned char c)
         unsigned char output[2];
         size_t ibuflen = 1;
         size_t obuflen = 2;
-        const char *ibuf;
+        char *ibuf;
         char *obuf;
 
         input[0] = c;
