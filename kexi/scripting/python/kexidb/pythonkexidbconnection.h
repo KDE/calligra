@@ -26,6 +26,7 @@
 //#include <iostream>
 #include <kexidb/drivermanager.h>
 #include <kexidb/cursor.h>
+#include <kexidb/transaction.h>
 
 namespace Kross
 {
@@ -84,6 +85,14 @@ namespace Kross
 
             Py::Object tableSchema(const Py::Tuple&);
             Py::Object isEmptyTable(const Py::Tuple&);
+
+            Py::Object autoCommit(const Py::Tuple&);
+            Py::Object setAutoCommit(const Py::Tuple&);
+            Py::Object beginTransaction(const Py::Tuple&);
+            Py::Object commitTransaction(const Py::Tuple&);
+            Py::Object rollbackTransaction(const Py::Tuple&);
+            Py::Object defaultTransaction(const Py::Tuple&);
+            Py::Object setDefaultTransaction(const Py::Tuple&);
     };
 
 }

@@ -25,6 +25,7 @@
 #include "pythonkexidbfield.h"
 #include "pythonkexidbfieldlist.h"
 #include "pythonkexidbschema.h"
+#include "pythonkexidbtransaction.h"
 
 #include <string>
 
@@ -42,6 +43,7 @@ PythonKexiDB::PythonKexiDB()
     PythonKexiDBIndexSchema::init_type();
     PythonKexiDBTableSchema::init_type();
     PythonKexiDBQuerySchema::init_type();
+    PythonKexiDBTransaction::init_type();
 
     add_varargs_method("driverNames", &PythonKexiDB::driverNames,
         "list KexiDB.driverNames()\n"

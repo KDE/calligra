@@ -24,6 +24,7 @@
 #include "pythonkexidbcursor.h"
 #include "pythonkexidbfieldlist.h"
 #include "pythonkexidbschema.h"
+#include "pythonkexidbtransaction.h"
 
 using namespace Kross;
 
@@ -145,6 +146,28 @@ void PythonKexiDBConnection::init_type(void)
     );
     add_varargs_method("isEmptyTable", &PythonKexiDBConnection::isEmptyTable,
         "boolean KexiDBConnection.isEmptyTable(KexiDBTableSchema)\n"
+    );
+
+    add_varargs_method("autoCommit", &PythonKexiDBConnection::autoCommit,
+        "boolean KexiDBConnection.autoCommit()\n"
+    );
+    add_varargs_method("setAutoCommit", &PythonKexiDBConnection::setAutoCommit,
+        "boolean KexiDBConnection.setAutoCommit(boolean)\n"
+    );
+    add_varargs_method("beginTransaction", &PythonKexiDBConnection::beginTransaction,
+        "KexiDBTransaction KexiDBConnection.beginTransaction()\n"
+    );
+    add_varargs_method("commitTransaction", &PythonKexiDBConnection::commitTransaction,
+        "boolean KexiDBConnection.commitTransaction(KexiDBTransaction)\n"
+    );
+    add_varargs_method("rollbackTransaction", &PythonKexiDBConnection::rollbackTransaction,
+        "boolean KexiDBConnection.rollbackTransaction(KexiDBTransaction)\n"
+    );
+    add_varargs_method("defaultTransaction", &PythonKexiDBConnection::defaultTransaction,
+        "KexiDBTransaction KexiDBConnection.defaultTransaction()\n"
+    );
+    add_varargs_method("setDefaultTransaction", &PythonKexiDBConnection::setDefaultTransaction,
+        "None KexiDBConnection.setDefaultTransaction(KexiDBTransaction)\n"
     );
 }
 
@@ -450,6 +473,76 @@ Py::Object PythonKexiDBConnection::isEmptyTable(const Py::Tuple& args)
     bool success;
     bool notempty = d->connection->isEmpty(*(KexiDB::TableSchema*)tableschema->getSchema(), success);
     return Py::Int(! (success && notempty));
+}
+
+Py::Object PythonKexiDBConnection::autoCommit(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 0, 0);
+    PythonKexiDB::checkObject(d->connection);
+    return Py::Int( d->connection->autoCommit() );
+}
+
+Py::Object PythonKexiDBConnection::setAutoCommit(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 1, 1);
+    PythonKexiDB::checkObject(d->connection);
+    return Py::Int( d->connection->setAutoCommit(args[0].isTrue()) );
+}
+
+Py::Object PythonKexiDBConnection::beginTransaction(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 0, 0);
+    PythonKexiDB::checkObject(d->connection);
+    KexiDB::Transaction transaction = d->connection->beginTransaction();
+    PythonKexiDBTransaction* t = new PythonKexiDBTransaction(transaction);
+    return Py::asObject(t);
+}
+
+Py::Object PythonKexiDBConnection::commitTransaction(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 0, 1);
+    PythonKexiDB::checkObject(d->connection);
+    PythonKexiDBTransaction* transaction = 0;
+    if(args.size() > 0) {
+        Py::ExtensionObject<PythonKexiDBTransaction> obj(args[0]);
+        transaction = obj.extensionObject();
+        if(! transaction)
+            throw Py::TypeError("boolean KexiDBConnection.commitTransaction(KexiDBTransaction) Invalid argument.");
+    }
+    return Py::Int( d->connection->commitTransaction(transaction->getTransaction()) );
+}
+
+Py::Object PythonKexiDBConnection::rollbackTransaction(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 0, 1);
+    PythonKexiDB::checkObject(d->connection);
+    PythonKexiDBTransaction* transaction = 0;
+    if(args.size() > 0) {
+        Py::ExtensionObject<PythonKexiDBTransaction> obj(args[0]);
+        transaction = obj.extensionObject();
+        if(! transaction)
+            throw Py::TypeError("boolean KexiDBConnection.rollbackTransaction(KexiDBTransaction) Invalid argument.");
+    }
+    return Py::Int( d->connection->rollbackTransaction(transaction->getTransaction()) );
+}
+
+Py::Object PythonKexiDBConnection::defaultTransaction(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 0, 0);
+    PythonKexiDB::checkObject(d->connection);
+    return Py::asObject(new PythonKexiDBTransaction(d->connection->defaultTransaction()));
+}
+
+Py::Object PythonKexiDBConnection::setDefaultTransaction(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 1, 1);
+    PythonKexiDB::checkObject(d->connection);
+    Py::ExtensionObject<PythonKexiDBTransaction> obj(args[0]);
+    PythonKexiDBTransaction* transaction = obj.extensionObject();
+    if(! transaction)
+        throw Py::TypeError("None KexiDBConnection.setDefaultTransaction(KexiDBTransaction) Invalid argument.");
+    d->connection->setDefaultTransaction(transaction->getTransaction());
+    return Py::None();
 }
 
 
