@@ -1,7 +1,7 @@
 koffice (1:1.2.91-1) unstable; urgency=low
 
   * New upstream release (1.3-beta1).
-  * New binary packages kexi and krita.
+  * New binary package krita.
   * Binary package kontour no longer exists (closes: #140345, #191517).
   * Split koffice-libs into koffice-libs and koffice-data.
   * Moved import/export filters into app-specific packages where possible.
