@@ -30,7 +30,12 @@ struct lstAnimation
 class KPRLoadingInfo
 {
 public:
-    KPRLoadingInfo( bool oldFormat = false) { m_oldFormat = oldFormat; presSpeed = -1; }
+    KPRLoadingInfo( bool oldFormat = false) { 
+	m_oldFormat = oldFormat; 
+	presSpeed = -1; 
+	m_header = false;
+	m_footer = false;
+    }
     ~KPRLoadingInfo() {}
 
     lstAnimation* animationShowById( const QString& id ) const {
