@@ -87,7 +87,7 @@ VSelectTool::draw()
 			itr.current()->draw( painter, &itr.current()->boundingBox() );
 		}
 
-		painter->setZoomFactor( 1.0 );
+		//painter->setZoomFactor( 1.0 );
 	}
 	else if( m_state == normal )
 	{

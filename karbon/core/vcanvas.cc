@@ -73,9 +73,9 @@ VCanvas::toContents( const QPoint &p ) const
 {
 	QPoint p2 = p;
 	//kdDebug() << p.y() << endl;
-	p2.setX( p.x() + contentsX() );
+	p2.setX( ( p.x() + contentsX() ) / m_view->zoom() );
 	//p2.setY( ( contentsHeight() / m_view->zoom() - ( p.y() + contentsY() / m_view->zoom() ) ) );
-	p2.setY( ( contentsHeight() - ( p.y() + contentsY() ) ) );
+	p2.setY( ( contentsHeight() - ( p.y() + contentsY() ) ) / m_view->zoom() );
 	//kdDebug() << "contentsHeight() : " << contentsHeight() << endl;
 	//kdDebug() << "p.y() : " << p.y() << endl;
 	//kdDebug() << "contentsY() : " << contentsY() << endl;
@@ -89,15 +89,18 @@ VCanvas::setYMirroring( bool edit )
 {
 	VPainter *p;
 	QWMatrix mat;
-	mat.scale( 1, -1 );
 	kdDebug() << "viewport()->height() : " << contentsHeight() << endl;
-	mat.translate( -contentsX(), contentsY() - contentsHeight() );
 	if( edit )
 	{
 		p = m_view->painterFactory()->editpainter();
+		mat.scale( m_view->zoom(), -m_view->zoom() );
 	}
 	else
+	{
 		p = m_view->painterFactory()->painter();
+		mat.scale( 1, -1 );
+	}
+	mat.translate( -contentsX(), contentsY() - contentsHeight() );
 	p->setWorldMatrix( mat );
 }
 
