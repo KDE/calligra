@@ -129,6 +129,7 @@ public:
     statusBarLabel = 0L;
     m_dcopObject = 0;
     m_sendfile = 0;
+    m_paCloseFile = 0L;
   }
   ~KoMainWindowPrivate()
   {
@@ -167,6 +168,7 @@ public:
   KAction *m_paPrint;
   KAction *m_paPrintPreview;
   KAction *m_sendfile;
+  KAction *m_paCloseFile;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
@@ -203,7 +205,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_paSaveAs = KStdAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
     d->m_paPrint = KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
     d->m_paPrintPreview = KStdAction::printPreview( this, SLOT( slotFilePrintPreview() ), actionCollection(), "file_print_preview" );
-    KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
+    d->m_paCloseFile = KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
     KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(), "file_quit" );
 
     d->m_sendfile = new KAction( i18n( "Send File..."), "mail_send", 0,
@@ -222,6 +224,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_paPrint->setEnabled( false );
     d->m_paPrintPreview->setEnabled( false );
     d->m_sendfile->setEnabled( false);
+    d->m_paCloseFile->setEnabled( false);
 
     d->m_splitter=new QSplitter(Qt::Vertical, this, "funky-splitter");
     setCentralWidget( d->m_splitter );
@@ -341,6 +344,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   d->m_paPrint->setEnabled( enable );
   d->m_paPrintPreview->setEnabled( enable );
   d->m_sendfile->setEnabled( enable);
+  d->m_paCloseFile->setEnabled( enable);
   updateCaption();
 
   d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.current() );
@@ -366,6 +370,7 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QPtrList<KoView
   d->m_paPrint->setEnabled( enable );
   d->m_paPrintPreview->setEnabled( enable );
   d->m_sendfile->setEnabled( enable);
+  d->m_paCloseFile->setEnabled( enable );
 }
 
 void KoMainWindow::addRecentURL( const KURL& url )
