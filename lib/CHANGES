@@ -22,6 +22,8 @@ KoText:
 - Background spellchecking works again
 - Fixed crash during background spellchecking (refcounting of formats)
 - Fixed hyphenation checkbox not correctly set in font dialog
+- Font dialog usability: turn radiobuttons superscript/subscript into
+  checkboxes to make it possible to deactivate both.
 
 KoSpell:
 - Improved configure check for libaspell

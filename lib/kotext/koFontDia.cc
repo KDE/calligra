@@ -384,10 +384,12 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
     QGridLayout *grid = new QGridLayout( grpBox, 2, 3, 0, KDialog::spacingHint() );
     grid->setColStretch( 1, 1 ); // better stretch labels than spinboxes.
 
-    m_superScript = new QRadioButton(i18n("Su&perscript"),grpBox);
+    // superscript/subscript need to be checkboxes, not radiobuttons.
+    // otherwise it's not possible to disable both, and there's no room for a 3rd one like 'none'
+    m_superScript = new QCheckBox(i18n("Su&perscript"),grpBox);
     grid->addWidget(m_superScript,0,0);
 
-    m_subScript = new QRadioButton(i18n("Su&bscript"),grpBox);
+    m_subScript = new QCheckBox(i18n("Su&bscript"),grpBox);
     grid->addWidget(m_subScript,1,0);
 
     d->m_lRelativeSize = new QLabel ( i18n("Relative &size:"), grpBox);
