@@ -38,6 +38,13 @@ cell, we contain the cells in their own KWTextFrameset.
 is defined by m_zOrder in KWFrame. This number is relative to the other
 frames *on the same page*.
 
+Frame layout
+============
+Generally, the user is free to position frames where he/she wants to.
+However, some frames are special: main text frameset (which might include
+columns), headers, footers, and footnotes. All of those are laid out by
+the KWFrameLayout class, which is triggered by KWDocument::recalcFrames.
+
 Editing
 =======
 To edit the contents of a text frameset (including table cells), the user clicks on it.
@@ -45,6 +52,8 @@ This creates an edit object for the frameset, which will be destroyed as soon as
 edit another frameset. This means, in a given view (canvas), there is only one edit
 object at a given moment (for text objects, it's the one with the cursor).
 There is one type of edit object per type of frameset. For instance: KWTextFrameSetEdit.
+
+The kotext library provides a base class for the 'text editing' object, it's KoTextView.
 
 Custom items
 ============
