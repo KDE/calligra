@@ -885,7 +885,7 @@
       <Help>
 	<Text>The trim() function returns text with only single spaces between words.</Text>
 	<Syntax>trim(text)</Syntax>
-	<Example>len(" hello    kspread   ") returns hello kspread</Example>
+	<Example>len(" hello    KSpread   ") returns hello KSpread</Example>
       </Help>
     </Function>
 
