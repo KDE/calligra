@@ -1,7 +1,8 @@
 usr/bin/kchart
 usr/lib/kchart.*
-usr/lib/kde3/libkchartpart.*
 usr/lib/libkdchart.*
+usr/lib/kde3/libkchartpart.la
+usr/lib/kde3/libkchartpart.so
 usr/share/applnk/Office/kchart.desktop
 usr/share/apps/kchart
 usr/share/doc/kde/HTML/en/kchart/*.bz2
