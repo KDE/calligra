@@ -89,6 +89,8 @@
     <!ATTLIST contact href CDATA #REQUIRED>
 ]>
 
+<!-- How to generate something out of it? See: http://lists.kde.org/?l=kde-www&m=109078298917910&w=3 -->
+
 <filters>
 
     <status id="fivestars" symbol="*****">
