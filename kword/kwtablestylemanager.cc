@@ -413,7 +413,7 @@ void KWTableStyleManager::importFromFile()
         lst << m_stylesList->text(i );
     }
 
-    KWImportStyleDia dia( m_doc, lst, KWImportStyleDia::TableStyle, this, 0 );
+    KWImportFrameTableStyleDia dia( m_doc, lst, KWImportFrameTableStyleDia::TableStyle, this, 0 );
     if ( dia.exec() ) {
         QPtrList<KWTableStyle> list = dia.listOfTableStyleImported();
         addStyle( list);

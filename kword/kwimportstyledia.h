@@ -29,13 +29,13 @@ class QListBox;
 class KWDocument;
 class QPushButton;
 
-class KWImportStyleDia : public KDialogBase
+class KWImportFrameTableStyleDia : public KDialogBase
 {
     Q_OBJECT
 public:
     enum StyleType { frameStyle, TableStyle};
-    KWImportStyleDia( KWDocument *_doc, const QStringList & _list, StyleType _type , QWidget *parent, const char *name );
-    ~KWImportStyleDia();
+    KWImportFrameTableStyleDia( KWDocument *_doc, const QStringList & _list, StyleType _type , QWidget *parent, const char *name );
+    ~KWImportFrameTableStyleDia();
     QPtrList<KWFrameStyle> listOfFrameStyleImported()const { return m_frameStyleList;}
     QPtrList<KWTableStyle> listOfTableStyleImported()const { return m_tableStyleList;}
 

@@ -32,7 +32,7 @@
 #include <kdebug.h>
 #include <qlabel.h>
 
-KWImportStyleDia::KWImportStyleDia( KWDocument *_doc, const QStringList &_list, StyleType _type, QWidget *parent, const char *name )
+KWImportFrameTableStyleDia::KWImportFrameTableStyleDia( KWDocument *_doc, const QStringList &_list, StyleType _type, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
     setCaption( i18n("Import Style") );
@@ -48,13 +48,13 @@ KWImportStyleDia::KWImportStyleDia( KWDocument *_doc, const QStringList &_list, 
     resize (300, 400);
 }
 
-KWImportStyleDia::~KWImportStyleDia()
+KWImportFrameTableStyleDia::~KWImportFrameTableStyleDia()
 {
     m_frameStyleList.clear();
     m_tableStyleList.clear();
 }
 
-QString KWImportStyleDia::generateStyleName( const QString & templateName )
+QString KWImportFrameTableStyleDia::generateStyleName( const QString & templateName )
 {
     QString name;
     int num = 1;
@@ -68,7 +68,7 @@ QString KWImportStyleDia::generateStyleName( const QString & templateName )
 }
 
 
-void KWImportStyleDia::loadFile()
+void KWImportFrameTableStyleDia::loadFile()
 {
     KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
     fd.setMimeFilter( "application/x-kword" );
@@ -132,7 +132,7 @@ void KWImportStyleDia::loadFile()
     delete store;
 }
 
-void KWImportStyleDia::initList()
+void KWImportFrameTableStyleDia::initList()
 {
     QStringList lst;
     if ( m_typeStyle ==frameStyle )
@@ -153,7 +153,7 @@ void KWImportStyleDia::initList()
     m_listStyleName->insertStringList(lst);
 }
 
-void KWImportStyleDia::slotOk()
+void KWImportFrameTableStyleDia::slotOk()
 {
     for (uint i = 0; i< m_listStyleName->count();i++)
     {
