@@ -25,7 +25,6 @@
 #include <qprogressdialog.h>
 #include <qlabel.h>
 #include <qgroupbox.h>
-#include <qcursor.h>
 
 #include <koAutoFormat.h>
 #include <koAutoFormatDia.h>
@@ -78,7 +77,6 @@
 #include "configfootnotedia.h"
 #include <qrichtext_p.h>
 #include <kaccel.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstatusbar.h>
 #include <kstdaccel.h>
@@ -785,6 +783,7 @@ void KWView::setupActions()
                             0,  actionCollection(), "border_style" );
     connect( actionBorderStyle, SIGNAL( activated( const QString & ) ),
              this, SLOT( borderStyle( const QString & ) ) );
+
     QStringList lst;
     lst << KoBorder::getStyle( KoBorder::SOLID );
     lst << KoBorder::getStyle( KoBorder::DASH );
@@ -793,24 +792,14 @@ void KWView::setupActions()
     lst << KoBorder::getStyle( KoBorder::DASH_DOT_DOT );
     lst << KoBorder::getStyle( KoBorder::DOUBLE_LINE );
     actionBorderStyle->setItems( lst );
-
-    actionBorderWidth = new KAction( i18n("Border Width"), "border_width", 0,
-                this, SLOT( borderWidth() ),
-                actionCollection(), "border_width" );
-    rb_borderWidthPopup = new QPopupMenu();
-    rb_borderWidthPopup->insertItem( KWBarIcon( "pen_width1" ), this, SLOT( borderWidth1() ) );
-    rb_borderWidthPopup->insertSeparator( -1 );
-    rb_borderWidthPopup->insertItem( KWBarIcon( "pen_width2" ), this, SLOT( borderWidth2() ) );
-    rb_borderWidthPopup->insertSeparator( -1 );
-    rb_borderWidthPopup->insertItem( KWBarIcon( "pen_width3" ), this, SLOT( borderWidth3() ) );
-    rb_borderWidthPopup->insertSeparator( -1 );
-    rb_borderWidthPopup->insertItem( KWBarIcon( "pen_width4" ), this, SLOT( borderWidth4() ) );
-    rb_borderWidthPopup->insertSeparator( -1 );
-    rb_borderWidthPopup->insertItem( KWBarIcon( "pen_width5" ), this, SLOT( borderWidth5() ) );
-    rb_borderWidthPopup->insertSeparator( -1 );
-    rb_borderWidthPopup->insertItem( KWBarIcon( "pen_width6" ), this, SLOT( borderWidth6() ) );
-    rb_borderWidthPopup->setMouseTracking( true );
-    rb_borderWidthPopup->setCheckable( false );
+    actionBorderWidth = new KSelectAction( i18n( "Border Width" ), 0,
+                                                 actionCollection(), "border_width" );
+    connect( actionBorderWidth, SIGNAL( activated( const QString & ) ),
+             this, SLOT( borderWidth( const QString & ) ) );
+    lst.clear();
+    for ( unsigned int i = 1; i < 10; i++ )
+        lst << QString::number( i );
+    actionBorderWidth->setItems( lst );
 
     actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color",true );
     actionBorderColor->setDefaultColor(QColor());
@@ -2089,7 +2078,7 @@ void KWView::doFindReplace()
     delete findReplace;
 }
 
-void KWView::raiseFrame()
+void KWView::bringToFront()
 {
     KMacroCommand* macroCmd = 0L;
     // For each selected frame...
@@ -2113,7 +2102,7 @@ void KWView::raiseFrame()
 
         KWFramePropertiesCommand* cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frame );
         if(!macroCmd)
-            macroCmd = new KMacroCommand( i18n("Raise Frame") );
+            macroCmd = new KMacroCommand( i18n("Bring to Front") );
         macroCmd->addCommand(cmd);
     }
     if ( macroCmd )
@@ -2127,7 +2116,7 @@ void KWView::raiseFrame()
     }
 }
 
-void KWView::lowerFrame()
+void KWView::sendToBack()
 {
     KMacroCommand* macroCmd = 0L;
     // For each selected frame...
@@ -2160,7 +2149,7 @@ void KWView::lowerFrame()
 
             KWFramePropertiesCommand* cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frame );
             if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Lower Frame") );
+                macroCmd = new KMacroCommand( i18n("Send to Back") );
             macroCmd->addCommand(cmd);
 
             // Can't lower under the main frame in a WP document.
@@ -2180,7 +2169,7 @@ void KWView::lowerFrame()
     }
 }
 
-void KWView::bringToFront()
+void KWView::lowerFrame()
 {
     KMacroCommand* macroCmd = 0L;
     // For each selected frame...
@@ -2210,7 +2199,7 @@ void KWView::bringToFront()
             frameOfFirstFrameSet->setZOrder( newZOrder );
             KWFramePropertiesCommand* cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frameOfFirstFrameSet);
             if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Bring to Front") );
+                macroCmd = new KMacroCommand( i18n("Lower Frame") );
             macroCmd->addCommand(cmd);
 
             frameCopy = frameChangeLevel->getCopy();
@@ -2218,7 +2207,7 @@ void KWView::bringToFront()
 
             cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frameChangeLevel );
             if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Bring to Front") );
+                macroCmd = new KMacroCommand( i18n("Lower Frame") );
             macroCmd->addCommand(cmd);
         }
         // Can't lower under the main frame in a WP document.
@@ -2236,7 +2225,7 @@ void KWView::bringToFront()
     }
 }
 
-void KWView::sendToBack()
+void KWView::raiseFrame()
 {
     KMacroCommand* macroCmd = 0L;
     // For each selected frame...
@@ -2267,7 +2256,7 @@ void KWView::sendToBack()
 
             KWFramePropertiesCommand* cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frameOfFirstFrameSet);
             if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Send to Back") );
+                macroCmd = new KMacroCommand( i18n("Raise frame") );
             macroCmd->addCommand(cmd);
 
             frameCopy = frameChangeLevel->getCopy();
@@ -2275,7 +2264,7 @@ void KWView::sendToBack()
 
             cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frameChangeLevel );
             if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Send to Back") );
+                macroCmd = new KMacroCommand( i18n("Raise frame") );
             macroCmd->addCommand(cmd);
         }
         // Can't lower under the main frame in a WP document.
@@ -4455,19 +4444,13 @@ void KWView::borderColor()
     borderSet();
 }
 
-void KWView::borderWidth( ) {
-    //m_canvas->setToolEditMode( TEM_MOUSE );
-    QPoint pnt( QCursor::pos() );
-    rb_borderWidthPopup->popup( pnt );
-}
-
-void KWView::borderWidth( int width )
+void KWView::borderWidth( const QString &width )
 {
-    m_border.common.setPenWidth( width );
-    m_border.left.setPenWidth( width );
-    m_border.right.setPenWidth( width );
-    m_border.top.setPenWidth( width );
-    m_border.bottom.setPenWidth( width );
+    m_border.common.setPenWidth( width.toInt());
+    m_border.left.setPenWidth(m_border.common.penWidth());
+    m_border.right.setPenWidth(m_border.common.penWidth());
+    m_border.top.setPenWidth(m_border.common.penWidth());
+    m_border.bottom.setPenWidth(m_border.common.penWidth());
     borderSet();
     m_gui->canvasWidget()->setFocus();
 }
@@ -4587,6 +4570,7 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
 void KWView::borderShowValues()
 {
+    actionBorderWidth->setCurrentItem( (int)m_border.common.penWidth() - 1 );
     actionBorderStyle->setCurrentItem( (int)m_border.common.getStyle() );
 }
 
