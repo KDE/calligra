@@ -85,6 +85,14 @@ public:
         addAttribute( attrName, str.data() );
     }
     /**
+     * Add an attribute whose value is an unsigned integer
+     */
+    inline void addAttribute( const char* attrName, uint value ) {
+        QCString str;
+        str.setNum( value );
+        addAttribute( attrName, str.data() );
+    }
+    /**
      * Add an attribute whose value is a floating point number
      * The number is written out with the highest possible precision
      * (unlike QString::number and setNum, which default to 6 digits)
