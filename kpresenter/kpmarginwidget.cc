@@ -24,6 +24,7 @@
 
 #include <qgroupbox.h>
 #include <qcheckbox.h>
+#include <qlayout.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -37,7 +38,13 @@ KPMarginWidget::KPMarginWidget( QWidget *parent, const char *name, const KoUnit:
 , m_changed( false )
 , m_noSignal( false )
 {
+    QVBoxLayout *layout = new QVBoxLayout( this );
+
     m_ui = new MarginUI( this );
+    layout->addWidget( m_ui );
+
+    QSpacerItem *spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Expanding );
+    layout->addItem( spacer );
 
     m_ui->margins->setTitle( i18n( "Margins (%1)" ).arg( KoUnit::unitName( m_unit ) ) );
 

@@ -62,7 +62,7 @@
                 <cstring>angleLabel</cstring>
             </property>
             <property name="text">
-                <string>A&amp;ngle:</string>
+                <string>Angl&amp;e:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>angleInput</cstring>
@@ -95,7 +95,7 @@
 <customwidgets>
     <customwidget>
         <class>PiePreview</class>
-        <header location="local">piepreview.h</header>
+        <header location="global">piepreview.h</header>
         <sizehint>
             <width>200</width>
             <height>200</height>

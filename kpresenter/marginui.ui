@@ -73,7 +73,7 @@
                                         <cstring>rightLabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>&amp;Right</string>
+                                        <string>Rig&amp;ht</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>rightInput</cstring>

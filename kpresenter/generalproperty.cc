@@ -39,6 +39,9 @@ GeneralProperty::GeneralProperty( QWidget *parent, const char *name, GeneralValu
     QVBoxLayout *layout = new QVBoxLayout( this );
     layout->addWidget( m_ui = new GeneralPropertyUI( this ) );
 
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    layout->addItem( spacer );
+
     if ( m_generalValue.m_name.isNull() )
     {
         m_ui->nameLabel->setEnabled( false );

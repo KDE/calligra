@@ -352,7 +352,7 @@ void PropertyEditor::setupTabPen( bool configureLineEnds )
                          m_page->getLineEnd( L_NORMAL ) );
 
         m_penProperty = new PenStyleWidget( this, 0, pen, configureLineEnds );
-        addTab( m_penProperty, i18n( "Out&line" ) );
+        addTab( m_penProperty, i18n( "Outl&ine" ) );
     }
 }
 
@@ -398,7 +398,7 @@ void PropertyEditor::setupTabPolygon()
         polygonSettings.cornersValue = m_page->getCornersValue( 3 );
         polygonSettings.sharpnessValue = m_page->getSharpnessValue( 0 );
         m_polygonProperty = new PolygonProperty( this, 0, polygonSettings );
-        addTab( m_polygonProperty, i18n("&Polygon" ) );
+        addTab( m_polygonProperty, i18n("Polygo&n" ) );
     }
 }
 
@@ -408,7 +408,7 @@ void PropertyEditor::setupTabPie()
     if ( m_pieProperty == 0 )
     {
         m_pieProperty = new PieProperty( this, 0, m_objectProperties->getPieValues() );
-        addTab( m_pieProperty, i18n("P&ie" ) );
+        addTab( m_pieProperty, i18n("&Pie" ) );
     }
 }
 
@@ -429,7 +429,7 @@ void PropertyEditor::setupTabText()
     {
         m_textProperty = new TextProperty( this, 0, m_objectProperties->getMarginsStruct(),
                                            m_doc->getUnit(), m_objectProperties->getProtectContent() );
-        addTab( m_textProperty, i18n("T&ext" ) );
+        addTab( m_textProperty, i18n("Te&xt" ) );
     }
 }
 

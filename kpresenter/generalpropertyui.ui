@@ -40,7 +40,7 @@
                                 <cstring>nameLabel</cstring>
                             </property>
                             <property name="text">
-                                <string>&amp;Name:</string>
+                                <string>Na&amp;me:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>nameInput</cstring>
@@ -58,10 +58,10 @@
                         <cstring>protect</cstring>
                     </property>
                     <property name="text">
-                        <string>Pro&amp;tect size and position</string>
+                        <string>Prot&amp;ect size and position</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+T</string>
+                        <string>Alt+E</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
