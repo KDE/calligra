@@ -1094,13 +1094,15 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     }
 
     if ( !frame || frame->frameSet() && ( frame->frameSet()->isHeaderOrFooter() ||
-            isMainFrame || frame->frameSet()->isFootEndNote()) ) {
+            isMainFrame || frame->frameSet()->isFootEndNote())) {
         // is multi frame, positions don't work for that..
         // also not for default frames.
         sx->setEnabled( false );
         sy->setEnabled( false );
         sw->setEnabled( false );
         sh->setEnabled( false );
+        floating->setEnabled( false );
+        protectSize->setEnabled( false );
     }
 
     if ( isMainFrame )
