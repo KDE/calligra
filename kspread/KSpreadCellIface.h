@@ -7,7 +7,7 @@ class KSpreadCell;
 #include <qcolor.h>
 #include <dcopobject.h>
 
-class KSpreadCellIface
+class KSpreadCellIface : virtual public DCOPObject
 {
     K_DCOP
 public:
