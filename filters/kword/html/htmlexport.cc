@@ -355,7 +355,9 @@ public:
 class CounterData
 {
 public:
-    CounterData() {}
+    CounterData()
+        : numbering (NUM_NONE), style (STYLE_NONE), depth(0), start(0), customCharacter(0)
+        {}
 
     enum Numbering
     {
@@ -625,8 +627,8 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "NAME",        ProcessLayoutNameTag,     (void*) layout  ) );
     tagProcessingList.append ( TagProcessing ( "FOLLOWING",   NULL,                     NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "COUNTER",     ProcessCounterTag,        (void*) & layout->counter ) );
-    tagProcessingList.append ( TagProcessing ( "FORMAT",      ProcessSingleFormatTag,   (void*) & layout->formatData ) );
+    tagProcessingList.append ( TagProcessing ( "COUNTER",     ProcessCounterTag,        (void*) &layout->counter ) );
+    tagProcessingList.append ( TagProcessing ( "FORMAT",      ProcessSingleFormatTag,   (void*) &layout->formatData ) );
     tagProcessingList.append ( TagProcessing ( "TABULATOR",   NULL,                     NULL            ) );
     tagProcessingList.append ( TagProcessing ( "FLOW",        ProcessLayoutFlowTag,     (void*) layout  ) );
     tagProcessingList.append ( TagProcessing ( "INDENTS",     ProcessIndentsTag,        (void*) layout  ) );
