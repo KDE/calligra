@@ -15,7 +15,6 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
   QWidget( parent ),
   _chart( chart )
 {
-
   QFrame* tmpQFrame;
   tmpQFrame = new QFrame( this, "Frame_2" );
   tmpQFrame->setGeometry( 10, 10, 240, 220 );

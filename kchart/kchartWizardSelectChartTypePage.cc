@@ -13,6 +13,36 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
+kchartWizardSelectChartTypePage::addButton(QString name,
+					   QString icon_name,
+					   int type) {  
+
+  QFrame* buttonframe = new QFrame( this );
+  buttonframe->setGeometry( 10+pos1*xstep, 
+			    10+pos2*ystep, 
+			    xsize, 
+			    ysize );
+  buttonframe->setLineWidth( 2 );
+  QPushButton *pushbutton = new QPushButton( buttonframe );
+  pushbutton->setToggleButton( true );
+  pushbutton->resize( buttonframe->contentsRect().width(),
+		      buttonframe->contentsRect().height() );
+  _typeBG->insert( pushbutton, type );
+  pushbutton->setPixmap( KGlobal::iconLoader()->loadIcon( icon_name ) );
+
+  QLabel* label = new QLabel( i18n( name ), this );
+  label->setGeometry( 10+pos1*xstep, 
+		      10+ysize+pos2*ystep, 
+		      xsize, 
+		      ylabelsize );
+  label->setAlignment( AlignCenter );
+  // next position
+  if (pos1 == 4) {
+      pos1=0;
+      pos2++;
+  } else pos1++;
+}
+
 kchartWizardSelectChartTypePage::kchartWizardSelectChartTypePage( QWidget* parent, KChartPart* chart ) :
   QWidget( parent ),
   _chart( chart )
@@ -20,115 +50,65 @@ kchartWizardSelectChartTypePage::kchartWizardSelectChartTypePage( QWidget* paren
   _typeBG = new QButtonGroup( this );
   _typeBG->setExclusive( true );
   _typeBG->hide();
+  //  _typeBG->resize
 
-  QFrame* barsFR = new QFrame( this );
-  barsFR->setGeometry( 10, 10, 94, 94 );
-  barsFR->setLineWidth( 2 );
-  _barsPB = new QPushButton( barsFR );
-  _barsPB->setToggleButton( true );
-  _barsPB->resize( barsFR->contentsRect().width(),
-				  barsFR->contentsRect().height() );
-  _typeBG->insert( _barsPB, KCHARTTYPE_BAR );
-  _barsPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_bars" ) );
-  QLabel* barsLA = new QLabel( i18n( "Bars" ), this );
-  barsLA->setGeometry( 10, 104, 94, 20 );
-  barsLA->setAlignment( AlignCenter );
+  pos1=0;
+  pos2=0;
+  xsize = 94;
+  ysize = 94;
+  ylabelsize = 20;
+  xstep = xsize + 10;
+  ystep = ysize + ylabelsize + 10;
 
-  QFrame* linesFR = new QFrame( this );
-  linesFR->setGeometry( 104, 10, 94, 94 );
-  linesFR->setLineWidth( 2 );
-  linesFR->setFrameStyle( QFrame::Sunken | QFrame::Panel );
-  _linesPB = new QPushButton( linesFR );
-  _linesPB->setToggleButton( true );
-  _linesPB->resize( linesFR->contentsRect().width(),
-				  linesFR->contentsRect().height() );
-  _typeBG->insert( _linesPB, KCHARTTYPE_LINE );
-  _linesPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_lines") );
-  QLabel* linesLA = new QLabel( i18n( "Lines" ), this );
-  linesLA->setGeometry( 104, 104, 94, 20 );
-  linesLA->setAlignment( AlignCenter );
+  addButton("Lines", "chart_lines", KCHARTTYPE_LINE);
+  addButton("Area",  "chart_area", KCHARTTYPE_AREA);
+  addButton("Bar", "chart_bar", KCHARTTYPE_BAR);
 
-  QFrame* pointsFR = new QFrame( this );
-  pointsFR->setGeometry( 198, 10, 94, 94 );
-  pointsFR->setLineWidth( 2 );
-  pointsFR->setFrameStyle( QFrame::Sunken | QFrame::Panel );
-  _pointsPB = new QPushButton( pointsFR );
-  _pointsPB->setToggleButton( true );
-  _pointsPB->resize( pointsFR->contentsRect().width(),
-				  pointsFR->contentsRect().height() );
-  _typeBG->insert( _pointsPB, KCHARTTYPE_LINE ); // no points
-  _pointsPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_points") );
-  QLabel* pointsLA = new QLabel( i18n( "Points" ), this );
-  pointsLA->setGeometry( 198, 104, 94, 20 );
-  pointsLA->setAlignment( AlignCenter );
+  addButton("Hi-lo-close", "chart_hiloclose", KCHARTTYPE_LINE);
+  addButton("Combo line bar", "chart_combo_line_bar", 
+	    KCHARTTYPE_COMBO_LINE_BAR);
+  addButton("Combo HLC bar", "chart_combo_hlc_bar", 
+	    KCHARTTYPE_COMBO_HLC_BAR);
 
-  QFrame* linespointsFR = new QFrame( this );
-  linespointsFR->setGeometry( 292, 10, 94, 94 );
-  linespointsFR->setLineWidth( 2 );
-  linespointsFR->setFrameStyle( QFrame::Sunken | QFrame::Panel );
-  _linespointsPB = new QPushButton( linespointsFR );
-  _linespointsPB->setToggleButton( true );
-  _linespointsPB->resize( linespointsFR->contentsRect().width(),
-				  linespointsFR->contentsRect().height() );
-  _typeBG->insert( _linespointsPB, KCHARTTYPE_LINE ); // no linespoints
-  _linespointsPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_linespoints") );
-  QLabel* linespointsLA = new QLabel( i18n( "Lines and Points" ), this );
-  linespointsLA->setGeometry( 292, 104, 94, 20 );
-  linespointsLA->setAlignment( AlignCenter );
+  addButton("Combo line area","chart_combo_line_area", 
+	    KCHARTTYPE_COMBO_LINE_AREA);
+  addButton("Combo hlc area","chart_combo_hlc_area", 
+	    KCHARTTYPE_COMBO_HLC_AREA);
+  addButton("3D Combo HiLo Close", "chart_3dhiloclose",
+	    KCHARTTYPE_3DHILOCLOSE);
 
-  QFrame* areaFR = new QFrame( this );
-  areaFR->setGeometry( 10, 124, 94, 94 );
-  areaFR->setLineWidth( 2 );
-  areaFR->setFrameStyle( QFrame::Sunken | QFrame::Panel );
-  _areaPB = new QPushButton( areaFR );
-  _areaPB->setToggleButton( true );
-  _areaPB->resize( areaFR->contentsRect().width(),
-				  areaFR->contentsRect().height() );
-  _typeBG->insert( _areaPB , KCHARTTYPE_AREA);
-  _areaPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_area") );
-  QLabel* areaLA = new QLabel( i18n( "Areas" ), this );
-  areaLA->setGeometry( 10, 218, 94, 20 );
-  areaLA->setAlignment( AlignCenter );
+  addButton("3DCOMBO_LINE_BAR", "3DCOMBO_LINE_BAR",
+	    KCHARTTYPE_3DCOMBO_LINE_BAR);
+  addButton("3DCOMBO_LINE_AREA", "3DCOMBO_LINE_AREA",
+	    KCHARTTYPE_3DCOMBO_LINE_AREA);
+  addButton("3DCOMBO_HLC_BAR","3DCOMBO_HLC_BAR",
+	    KCHARTTYPE_3DCOMBO_HLC_BAR);
 
-  QFrame* pieFR = new QFrame( this );
-  pieFR->setGeometry( 104, 124, 94, 94 );
-  pieFR->setLineWidth( 2 );
-  pieFR->setFrameStyle( QFrame::Sunken | QFrame::Panel );
-  _piePB = new QPushButton( pieFR );
-  _piePB->setToggleButton( true );
-  _piePB->resize( pieFR->contentsRect().width(),
-				  pieFR->contentsRect().height() );
-  _typeBG->insert( _piePB, KCHARTTYPE_2DPIE );
-  _piePB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_pie") );
-  QLabel* pieLA = new QLabel( i18n( "Pie" ), this );
-  pieLA->setGeometry( 104, 218, 94, 20 );
-  pieLA->setAlignment( AlignCenter );
-
-  QFrame* pie3DFR = new QFrame( this );
-  pie3DFR->setGeometry( 198, 124, 94, 94 );
-  pie3DFR->setLineWidth( 2 );
-  pie3DFR->setFrameStyle( QFrame::Sunken | QFrame::Panel );
-  _pie3DPB = new QPushButton( pie3DFR );
-  _pie3DPB->setToggleButton( true );
-  _pie3DPB->resize( pie3DFR->contentsRect().width(),
-				  pie3DFR->contentsRect().height() );
-  _typeBG->insert( _pie3DPB, KCHARTTYPE_3DPIE );
-  _pie3DPB->setPixmap( KGlobal::iconLoader()->loadIcon( "chart_pie3D") );
-  QLabel* pie3DLA = new QLabel( i18n( "3D Pie" ), this );
-  pie3DLA->setGeometry( 198, 218, 94, 20 );
-  pie3DLA->setAlignment( AlignCenter );
-  // switch the correct button on
-  //  ((QPushButton*)_typeBG->find( _chart->chartType() ))->setOn( true );
+  addButton("3DCOMBO_HLC_AREA","3DCOMBO_HLC_AREA",
+	    KCHARTTYPE_3DCOMBO_HLC_AREA);
+  addButton("3DBAR","3DBAR", KCHARTTYPE_3DBAR);
+  addButton("3DAREA","3DAREA", KCHARTTYPE_3DAREA);
+  
+  addButton("3DLINE","3DLINE", KCHARTTYPE_3DLINE);
+  addButton("3DPIE","3DPIE", KCHARTTYPE_3DPIE);
+  addButton("2DPIE","2DPIE", KCHARTTYPE_2DPIE);
+  
+  QPushButton *current = ((QPushButton*)_typeBG->find( _chart->params()->type ));
+  if (current != NULL) {
+    current->setOn( true ); 
+  }
 
   connect( _typeBG, SIGNAL( clicked( int ) ),
 		   this, SLOT( chartTypeSelected( int ) ) );
 	
-  parent->resize( 425, 256 );
+  //  parent->resize( 425, 256 );
+  parent->resize(xstep*5+50, ystep*4 + 100);
 }
 
 
 void kchartWizardSelectChartTypePage::chartTypeSelected( int type )
 {
+  cerr << "Type selected: " << type << "\n";
     _chart->params()->type = (KChartType)type;
 }
 

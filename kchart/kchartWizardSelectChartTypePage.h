@@ -21,13 +21,15 @@ private slots:
 private:
   KChartPart* _chart;
   QButtonGroup* _typeBG;
-  QPushButton* _barsPB;
-  QPushButton* _linesPB;
-  QPushButton* _linespointsPB;
-  QPushButton* _areaPB;
-  QPushButton* _pointsPB;
-  QPushButton* _piePB;
-  QPushButton* _pie3DPB;
+  int pos1, pos2;
+  int xsize;
+  int ysize;
+  int ylabelsize;
+  int xstep;
+  int ystep;
+
+
+  addButton(QString name, QString icon_name, int type);
 };
 
 

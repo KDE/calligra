@@ -129,12 +129,14 @@ int kchartEngine::out_graph() {
     }
     /* x ticks and xlables */
     if( params->grid || params->xaxis )	{
-      qDebug("drawing  x ticks and xlabels");
-      drawXTicks();
+      // qDebug("drawing  x ticks and xlabels");
+      // Commented out because it is prone to math error
+      //      drawXTicks();
     }
     /* ----- solid poly region (volume) ----- */
     /*  so that grid lines appear under solid */
     if( params->do_vol() ) {
+      qDebug("Doing volume grids");
       drawVolumeGrids();
     }		// volume polys done
     if( params->annotation && params->threeD() ) {		/* back half of annotation line */
