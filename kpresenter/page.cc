@@ -1836,7 +1836,11 @@ void Page::setTextDepthPlus()
     QPtrListIterator<KoTextFormatInterface> it( lst );
     for ( ; it.current() ; ++it )
         it.current()->setMargin(QStyleSheetItem::MarginLeft, newVal);
-
+    if(!lst.isEmpty())
+    {
+        const KoParagLayout *layout=lst.first()->currentParagLayoutFormat();
+        view->showRulerIndent( layout->margins[QStyleSheetItem::MarginLeft], layout->margins[QStyleSheetItem::MarginFirstLine], layout->margins[QStyleSheetItem::MarginRight]);
+    }
 }
 
 void Page::setTextDepthMinus()
@@ -1850,6 +1854,11 @@ void Page::setTextDepthMinus()
     double newVal = leftMargin - indent;
     for ( ; it.current() ; ++it )
         it.current()->setMargin(QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ));
+    if(!lst.isEmpty())
+    {
+        const KoParagLayout *layout=lst.first()->currentParagLayoutFormat();
+        view->showRulerIndent( layout->margins[QStyleSheetItem::MarginLeft], layout->margins[QStyleSheetItem::MarginFirstLine], layout->margins[QStyleSheetItem::MarginRight]);
+    }
 }
 
 void Page::setNewFirstIndent(double _firstIndent)
