@@ -213,14 +213,17 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
         moveCursor( e->state() & ControlButton ? MovePgDown : MoveViewportDown, e->state() & ShiftButton );
         break;
     case Key_Return: case Key_Enter:
-        if ( textObject()->hasSelection() )
-            textObject()->removeSelectedText( m_cursor );
-        clearUndoRedoInfo = FALSE;
-        textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionReturn );
-        Q_ASSERT( m_cursor->parag()->prev() );
-        if ( m_cursor->parag()->prev() )
-            doAutoFormat( m_cursor, m_cursor->parag()->prev(),
-                          m_cursor->parag()->prev()->length() - 1, '\n' );
+        if ( e->state() & (ShiftButton|ControlButton) == 0 )
+        {
+            if ( textObject()->hasSelection() )
+                textObject()->removeSelectedText( m_cursor );
+            clearUndoRedoInfo = FALSE;
+            textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionReturn );
+            Q_ASSERT( m_cursor->parag()->prev() );
+            if ( m_cursor->parag()->prev() )
+                doAutoFormat( m_cursor, m_cursor->parag()->prev(),
+                              m_cursor->parag()->prev()->length() - 1, '\n' );
+        }
         break;
     case Key_Delete:
         if ( textObject()->hasSelection() ) {
