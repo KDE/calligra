@@ -98,7 +98,16 @@ DCOPObject* KPPixmapObject::dcopObject()
 
 bool KPPixmapObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
 {
-    //FIXME !!!!!!!!!!
+    xmlWriter.startElement( "draw:image" );
+    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(),indexObj ) );
+    if( !objectName.isEmpty())
+        xmlWriter.addAttribute( "draw:name", objectName );
+
+//xlink:href="#Pictures/100000000000030E00000203A35860EF.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad
+
+    //we don't have a simple object
+    //modify imageCollection to save oasis format
+    xmlWriter.endElement();
     return true;
 }
 
@@ -166,20 +175,6 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
 
     return fragment;
 }
-
-bool KPPixmapObject::saveOasisImage( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
-{
-    xmlWriter.startElement( "draw:image" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles,indexObj ) );
-    if( !objectName.isEmpty())
-        xmlWriter.addAttribute( "draw:name", objectName );
-
-    //we don't have a simple object
-    //modify imageCollection to save oasis format
-    xmlWriter.endElement();
-    return true;
-}
-
 
 void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
