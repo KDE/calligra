@@ -69,7 +69,10 @@ VCanvas::eventFilter( QObject* object, QEvent* event )
 {
 	QScrollView::eventFilter( object, event );
 
-	if( event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease  )
+	if( event->type() == QEvent::AccelOverride || event->type() == QEvent::Accel )
+		return QScrollView::eventFilter( object, event );
+
+	if( event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease )
 		return m_view->keyEvent( event );
 
 	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
