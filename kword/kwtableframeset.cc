@@ -81,7 +81,9 @@ void KWTableFrameSet::updateFrames()
     for (unsigned int i =0; i < m_cells.count(); i++)
     {
         m_cells.at(i)->updateFrames();
-        m_cells.at(i)->invalidate();
+        //This is wrong (reason for famous infinite loop bug)
+        //Do this in KWTableFrameSet::invalidate
+        //m_cells.at(i)->invalidate();
     }
     KWFrameSet::updateFrames();
 }

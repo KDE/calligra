@@ -237,7 +237,7 @@ protected slots:
 protected:
     void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakBegin, int* breakEnd, int paragLeftMargin = 0 );
     bool checkVerticalBreak( int & yp, int & h, KoTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
-    void frameResized( KWFrame *theFrame );
+    void frameResized( KWFrame *theFrame, bool invalidateLayout );
     double footerHeaderSizeMax( KWFrame *theFrame );
     QDomElement saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets );
 

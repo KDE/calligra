@@ -1558,7 +1558,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                     if ( wantedPosition != theFrame->top() && QMAX(theFrame->bottom()-maxFooterSize,wantedPosition)==wantedPosition )
                     {
                         theFrame->setTop( wantedPosition);
-                        frameResized( theFrame );
+                        frameResized( theFrame, true );
                     }
                     break;
                 }
@@ -1594,7 +1594,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
 
                 if(newPosition < wantedPosition && (theFrame->newFrameBehavior() == KWFrame::NoFollowup)) {
                     if ( resized )
-                        frameResized( theFrame );
+                        frameResized( theFrame, false );
                     m_textobj->setLastFormattedParag( 0 );
                     break;
                 }
@@ -1603,7 +1603,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                     // fall through to AutoCreateNewFrame
                 } else {
                     if ( resized )
-                        frameResized( theFrame );
+                        frameResized( theFrame, false );
                     break;
                 }
             }
@@ -1704,7 +1704,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
             {
                 kdDebug() << "top= " << theFrame->top() << " setTop " << wantedPosition << endl;
                 theFrame->setTop( wantedPosition );
-                frameResized( theFrame );
+                frameResized( theFrame, true );
             }
         }
         else
@@ -1725,12 +1725,12 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                         kdDebug(32002) << "is table cell; only setting new minFrameHeight, recalcrows will do the rest" << endl;
 #endif
                         theFrame->setMinFrameHeight(wantedPosition - theFrame->top());
-                        frameResized( theFrame );
+                        frameResized( theFrame, false );
                     }
                 } else {
                     kdDebug() << "setBottom " << wantedPosition << endl;
                     theFrame->setBottom( wantedPosition );
-                    frameResized( theFrame );
+                    frameResized( theFrame, false );
                 }
             }
         }
@@ -1759,7 +1759,7 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
     return tmp;
 }
 
-void KWTextFrameSet::frameResized( KWFrame *theFrame )
+void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
 {
     //kdDebug() << "KWTextFrameSet::frameResized " << theFrame << endl;
     if ( theFrame->frameSet()->frameSetInfo() != KWFrameSet::FI_BODY )
@@ -1777,7 +1777,8 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame )
     // Warning, can't call layout() (frameChanged calls it)
     // from here, since it calls formatMore() !
     m_doc->updateAllFrames();
-    m_doc->invalidate();
+    if ( invalidateLayout )
+        m_doc->invalidate();
     theFrame->updateRulerHandles();
 
     // Can't call this directly, we might be in a paint event already
