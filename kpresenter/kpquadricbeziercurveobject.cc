@@ -111,7 +111,7 @@ double KPQuadricBezierCurveObject::load(const QDomElement &element)
         unsigned int index = 0;
         while ( !elemPoint.isNull() ) {
             if ( elemPoint.tagName() == "Point" ) {
-                double  tmpX = 0;
+                double tmpX = 0;
                 double tmpY = 0;
                 if( elemPoint.hasAttribute( "point_x" ) )
                     tmpX = elemPoint.attribute( "point_x" ).toDouble();
@@ -212,8 +212,8 @@ void KPQuadricBezierCurveObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
 
-    double fx = (double)( (double)ext.width() / (double)origSize.width() );
-    double fy = (double)( (double)ext.height() / (double)origSize.height() );
+    double fx = ext.width() / origSize.width();
+    double fy = ext.height() / origSize.height();
 
     updatePoints( fx, fy );
 }
@@ -227,8 +227,8 @@ void KPQuadricBezierCurveObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
 
-    double fx = (double)( (double)ext.width() / (double)origSize.width() );
-    double fy = (double)( (double)ext.height() / (double)origSize.height() );
+    double fx = ext.width() / origSize.width();
+    double fy = ext.height() / origSize.height();
 
     updatePoints( fx, fy );
 }
@@ -240,8 +240,8 @@ void KPQuadricBezierCurveObject::updatePoints( double _fx, double _fy )
     KoPointArray::ConstIterator it;
     for ( it = origAllPoints.begin(); it != origAllPoints.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = ( (double)point.x() * _fx );
-        double tmpY = ( (double)point.y() * _fy );
+        double tmpX = point.x() * _fx;
+        double tmpY = point.y() * _fy;
 
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
@@ -252,8 +252,8 @@ void KPQuadricBezierCurveObject::updatePoints( double _fx, double _fy )
     tmpPoints = KoPointArray();
     for ( it = origControlPoints.begin(); it != origControlPoints.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = ( (double)point.x() * _fx );
-        double tmpY = ( (double)point.y() * _fy );
+        double tmpX = point.x() * _fx;
+        double tmpY = point.y() * _fy;
 
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;

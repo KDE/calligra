@@ -206,8 +206,8 @@ void KPFreehandObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
 
-    double fx = (double)( (double)ext.width() / (double)origSize.width() );
-    double fy = (double)( (double)ext.height() / (double)origSize.height() );
+    double fx = ext.width() / origSize.width();
+    double fy = ext.height() / origSize.height();
 
     updatePoints( fx, fy );
 }
@@ -221,8 +221,8 @@ void KPFreehandObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
 
-    double fx = (double)( (double)ext.width() / (double)origSize.width() );
-    double fy = (double)( (double)ext.height() / (double)origSize.height() );
+    double fx = ext.width() / origSize.width();
+    double fy = ext.height() / origSize.height();
 
     updatePoints( fx, fy );
 }
@@ -234,8 +234,8 @@ void KPFreehandObject::updatePoints( double _fx, double _fy )
     KoPointArray::ConstIterator it;
     for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = ( (double)point.x() * _fx );
-        double tmpY = ( (double)point.y() * _fy );
+        double tmpX = point.x() * _fx;
+        double tmpY = point.y() * _fy;
 
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;

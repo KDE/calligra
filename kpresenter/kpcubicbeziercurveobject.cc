@@ -212,8 +212,8 @@ void KPCubicBezierCurveObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
 
-    double fx = (double)ext.width() / (double)origSize.width();
-    double fy = (double)ext.height() / (double)origSize.height();
+    double fx = ext.width() / origSize.width();
+    double fy = ext.height() / origSize.height();
 
     updatePoints( fx, fy );
 }
@@ -227,8 +227,8 @@ void KPCubicBezierCurveObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
 
-    double fx = (double)ext.width() / (double)origSize.width();
-    double fy = (double)ext.height() / (double)origSize.height();
+    double fx = ext.width() / origSize.width();
+    double fy = ext.height() / origSize.height();
 
     updatePoints( fx, fy );
 }

@@ -164,8 +164,8 @@ void KPPolygonObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
 
-    double fx = (double)ext.width() / (double)origSize.width();
-    double fy = (double)ext.height() / (double)origSize.height();
+    double fx = ext.width() / origSize.width();
+    double fy = ext.height() / origSize.height();
 
     updatePoints( fx, fy );
 }
@@ -180,8 +180,8 @@ void KPPolygonObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
 
-    double fx = (double)ext.width() / (double)origSize.width();
-    double fy = (double)ext.height() / (double)origSize.height();
+    double fx = ext.width() / origSize.width();
+    double fy = ext.height() / origSize.height();
 
     updatePoints( fx, fy );
 }
@@ -193,8 +193,8 @@ void KPPolygonObject::updatePoints( double _fx, double _fy )
     KoPointArray::ConstIterator it;
     for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = ( (double)point.x() * _fx );
-        double tmpY = ( (double)point.y() * _fy );
+        double tmpX = point.x() * _fx;
+        double tmpY = point.y() * _fy;
 
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
@@ -338,16 +338,16 @@ void KPPolygonObject::drawPolygon()
 
     // calculate the points as offsets to 0,0
     KoRect _changRect = _points.boundingRect();
-    double fx = (double)_rect.width() / (double)_changRect.width();
-    double fy = (double)_rect.height() / (double)_changRect.height();
+    double fx = _rect.width() / _changRect.width();
+    double fy = _rect.height() / _changRect.height();
 
     int _index = 0;
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
     for ( it = _points.begin(); it != _points.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = ( ( point.x() - xmin) * fx );
-        double tmpY = ( ( point.y() - ymin) * fy );
+        double tmpX = ( point.x() - xmin) * fx;
+        double tmpY = ( point.y() - ymin) * fy;
 
         tmpPoints.putPoints( _index, 1, tmpX,tmpY );
         ++_index;
