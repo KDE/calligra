@@ -37,6 +37,13 @@ KWord13OasisGenerator::~KWord13OasisGenerator( void )
 {
 }
 
+bool KWord13OasisGenerator::prepare( KWord13Document& kwordDocument )
+{
+    // ### TODO
+    return true;
+}
+
+
 QString KWord13OasisGenerator::escapeOOText(const QString& strText) const
 {
     // Escape quotes (needed in attributes)

@@ -104,7 +104,16 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
     }
 
     // ### TODO: do post-parsing data processing (table groups, load pictures...)
+    
+    
+    KWord13OasisGenerator generator;
         
+    if ( ! generator.prepare( kwordDocument ) )
+    {
+        kdError(30520) << "Could not prepare the OASIS document! Aborting!" << endl;
+        return KoFilter::StupidError;
+    }
+    
     const QString filenameOut ( m_chain->outputFile() );
     
     if ( filenameOut.isEmpty() )
@@ -113,15 +122,12 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
         return KoFilter::StupidError;
     }
     
-    KWord13OasisGenerator generator;
-    
     if ( ! generator.generate( filenameOut, kwordDocument ) )
     {
         kdError(30520) << "Could not save as OASIS! Aborting!" << endl;
         return KoFilter::StupidError;
     }
     
-   
     kdDebug(30520) << "Filter has finished!" << endl;
     
     return KoFilter::OK;
