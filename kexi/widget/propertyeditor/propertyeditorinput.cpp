@@ -233,7 +233,7 @@ PropertyEditorBool::setState(bool state)
 	}
 	else
 	{
-		m_toggle->setIconSet(QIconSet(SmallIcon("button_cancel")));
+		m_toggle->setIconSet(QIconSet(SmallIcon("button_no")));
 		m_toggle->setTextLabel(i18n("No"));
 	}
 

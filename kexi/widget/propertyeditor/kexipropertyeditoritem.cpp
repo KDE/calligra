@@ -181,7 +181,7 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 				}
 				else
 				{
-					p->drawPixmap(margin, height()/2 -8, SmallIcon("button_cancel"));
+					p->drawPixmap(margin, height()/2 -8, SmallIcon("button_no"));
 					p->drawText(QRect(margin+20,0,width,height()-1), Qt::AlignVCenter, i18n("No"));
 				}
 				break;
