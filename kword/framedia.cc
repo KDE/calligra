@@ -511,10 +511,10 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     while (found) {
         numTxtFrameSets++;
 
-        bool same = FALSE;
+        bool same = false;
         for ( unsigned int i = 0;!same && i < doc->getNumFrameSets(); ++i ) {
             if ( doc->getFrameSet( i )->getName() == i18n("Frameset %1" ).arg(numTxtFrameSets)){
-                same = TRUE;
+                same = true;
                 break;
             }
         }
