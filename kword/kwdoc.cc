@@ -205,7 +205,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_defaultFont = KGlobalSettings::generalFont();
     // ####### Not needed in 3.0?
     //KGlobal::charsets()->setQFont(m_defaultFont, KGlobal::locale()->charset());
-
     m_defaultFont.setPointSize( ptToLayoutUnit( m_defaultFont.pointSize() ) );
 
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;

@@ -1193,6 +1193,7 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
     actionFormatUnderline->setChecked( currentFormat.font().underline());
     actionFormatStrikeOut->setChecked( currentFormat.font().strikeOut());
     QColor col=currentFormat.textBackgroundColor();
+    actionBackgroundColor->setEnabled(true);
     actionBackgroundColor->setCurrentColor( col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
     actionBackgroundColor->setText(i18n("Text Background Color"));
     actionFormatColor->setCurrentColor( currentFormat.color() );
@@ -3480,6 +3481,9 @@ void KWView::frameSelectedChanged()
             }
         }
     }
+
+    actionBackgroundColor->setEnabled( frameDifferentOfPart);
+
     if ( frameDifferentOfPart ) {
         KWFrame *frame = m_doc->getFirstSelectedFrame();
 
