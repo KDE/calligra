@@ -35,10 +35,6 @@ module KPresenter
       slot void toolsText();
       slot void toolsObject();
 
-      slot void toolsLineHidl();
-      slot void toolsLineVidl();
-      slot void toolsLineD1idl();
-      slot void toolsLineD2idl();
       slot void toolsNormRectidl();
       slot void toolsRoundRectidl();
 

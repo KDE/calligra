@@ -98,6 +98,7 @@ KPresenterDoc::KPresenterDoc()
   _presPen = QPen(red,3,SolidLine);
   presSpeed = PS_NORMAL;
   pasting = false;
+  pasteXOffset = pasteYOffset = 0;
 
   QObject::connect(&_commands,SIGNAL(undoRedoChanged(QString,QString)),this,SLOT(slotUndoRedoChanged(QString,QString)));
 }
@@ -677,7 +678,7 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  if (objStartY > 0) _objectList.last()->moveBy(0,objStartY);
 	  if (pasting) 
 	    {
-	      _objectList.last()->moveBy(20,20);
+	      _objectList.last()->moveBy(pasteXOffset,pasteYOffset);
 	      _objectList.last()->setSelected(true);
 	    }
 	}
@@ -1913,7 +1914,9 @@ void KPresenterDoc::copyObjs(int diffx,int diffy)
       if (kpobject->isSelected())
 	{
 	  out << otag << "<OBJECT type=\"" << static_cast<int>(kpobject->getType()) << "\">" << endl;
+	  kpobject->moveBy(-diffx,-diffy);
 	  kpobject->save(out);
+	  kpobject->moveBy(diffx,diffy);
 	  out << etag << "</OBJECT>" << endl;
 	}
     }
@@ -1928,6 +1931,8 @@ void KPresenterDoc::pasteObjs(int diffx,int diffy)
   deSelectAllObj();
 
   pasting = true;
+  pasteXOffset = diffx + 20;
+  pasteYOffset = diffy + 20;
   string clip_str = QApplication::clipboard()->text();
 
   if (clip_str.empty()) return;

@@ -260,9 +260,32 @@ void KPObject::paintSelection(QPainter *_painter)
   
   if (getType() == OT_TEXT)
     {
+      _painter->save();
+
+      if (angle != 0)
+	{
+	  KRect br = KRect(0,0,ext.width(),ext.height());
+	  int pw = br.width();
+	  int ph = br.height();
+	  KRect rr = br;
+	  int yPos = -rr.y();
+	  int xPos = -rr.x();
+	  rr.moveTopLeft(KPoint(-rr.width() / 2,-rr.height() / 2));
+      
+	  QWMatrix m,mtx,m2;
+	  mtx.rotate(angle);
+	  m.translate(pw / 2,ph / 2);
+	  m2.translate(rr.left() + xPos,rr.top() + yPos);
+	  m = m2 * mtx * m;
+      
+	  _painter->setWorldMatrix(m);
+	}
+
       _painter->setPen(QPen(black,1,DotLine));
       _painter->setBrush(NoBrush);
       _painter->drawRect(0,0,ext.width(),ext.height());
+
+      _painter->restore();
     }
 
   _painter->setPen(QPen(black,1,SolidLine));

@@ -52,8 +52,7 @@ enum DelPageMode {DPM_LET_OBJS = 0,DPM_MOVE_OBJS = 1,DPM_DEL_OBJS = 2,DPM_DEL_MO
 enum InsPageMode {IPM_LET_OBJS = 0,IPM_MOVE_OBJS = 1};
 enum InsertPos {IP_BEFORE = 0,IP_AFTER = 1};
 enum PieType {PT_PIE = 0,PT_ARC = 1,PT_CHORD = 2};
-enum ToolEditMode {TEM_MOUSE = 0,INS_LINE_H = 1,INS_LINE_V = 2,INS_LINE_D1 = 3,INS_LINE_D2 = 4,INS_NRECT = 5,INS_RRECT = 6,\
-		   INS_ELLIPSE = 7,INS_TEXT = 8,INS_PIE = 9,INS_OBJECT = 10};
+enum ToolEditMode {TEM_MOUSE = 0,INS_NRECT = 1,INS_RRECT = 2,INS_ELLIPSE = 3,INS_TEXT = 4,INS_PIE = 5,INS_OBJECT = 6,INS_LINE = 7};
 
 static const float ObjSpeed[] = {70.0,50.0,30.0};
 static const float PageSpeed[] = {8.0,16.0,32.0};

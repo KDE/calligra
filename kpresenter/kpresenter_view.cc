@@ -448,18 +448,8 @@ void KPresenterView::insertClipart()
 /*=========================== insert line =======================*/
 void KPresenterView::toolsLine()
 {
-  page->setToolEditMode(TEM_MOUSE);
+  page->setToolEditMode(INS_LINE);
   page->deSelectAllObj();
-
-  KPoint pnt(QCursor::pos());
-
-  rb_line->popup(pnt);
-
-//   QEvent ev(Event_Leave);
-//   QMouseEvent mev(Event_MouseButtonRelease,
-// 		  QCursor::pos(),LeftButton,LeftButton);
-//   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Line),&ev);
-//   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Line),&mev);
 }
 
 /*===================== insert rectangle ========================*/
@@ -1697,38 +1687,6 @@ void KPresenterView::alignChanged(TxtParagraph::HorzAlign align)
     }
 }
 
-/*======================= insert line (-) =======================*/
-void KPresenterView::toolsLineH()
-{
-  page->deSelectAllObj();
-  page->setToolEditMode(INS_LINE_H);
-  //m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_HORZ,xOffset,yOffset);
-}
-
-/*======================= insert line (|) =======================*/
-void KPresenterView::toolsLineV()
-{
-  page->deSelectAllObj();
-  page->setToolEditMode(INS_LINE_V);
-  //m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_VERT,xOffset,yOffset);
-}
-
-/*======================= insert line (\) =======================*/
-void KPresenterView::toolsLineD1()
-{
-  page->deSelectAllObj();
-  page->setToolEditMode(INS_LINE_D1);
-  //m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_LU_RD,xOffset,yOffset);
-}
-
-/*======================= insert line (/) =======================*/
-void KPresenterView::toolsLineD2()
-{
-  page->deSelectAllObj();
-  page->setToolEditMode(INS_LINE_D2);
-  //m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_LD_RU,xOffset,yOffset);
-}
-
 /*===================== insert normal rect  =====================*/
 void KPresenterView::toolsNormRect()
 {
@@ -2105,38 +2063,6 @@ void KPresenterView::presPen10idl()
 void KPresenterView::presPenColoridl()
 {
   presPenColor();
-}
-
-/*======================= insert line (-) =======================*/
-void KPresenterView::toolsLineHidl()
-{
-  page->deSelectAllObj();
-  page->setToolEditMode(INS_LINE_H);
-  //m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_HORZ,xOffset,yOffset);
-}
-
-/*======================= insert line (|) =======================*/
-void KPresenterView::toolsLineVidl()
-{
-  page->deSelectAllObj();
-  page->setToolEditMode(INS_LINE_V);
-  //m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_VERT,xOffset,yOffset);
-}
-
-/*======================= insert line (\) =======================*/
-void KPresenterView::toolsLineD1idl()
-{
-  page->deSelectAllObj();
-  page->setToolEditMode(INS_LINE_D1);
-  //m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_LU_RD,xOffset,yOffset);
-}
-
-/*======================= insert line (/) =======================*/
-void KPresenterView::toolsLineD2idl()
-{
-  page->deSelectAllObj();
-  page->setToolEditMode(INS_LINE_D2);
-  //m_pKPresenterDoc->insertLine(pen,lineBegin,lineEnd,LT_LD_RU,xOffset,yOffset);
 }
 
 /*===================== insert normal rect  =====================*/
@@ -2592,27 +2518,7 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/line.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_vMenuTools->insertItem12(pix,i18n( "&Line" ), m_vMenuTools_Line, -1, -1 );
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/lineh.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuTools_LineHorz = m_vMenuTools_Line->insertItem2(pix,this,"toolsLineHidl", 0 );
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/linev.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuTools_LineVert = m_vMenuTools_Line->insertItem2(pix, this,"toolsLineVidl", 0);
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/lined1.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuTools_LineD1 = m_vMenuTools_Line->insertItem2(pix, this,"toolsLineD1idl", 0);
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/lined2.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuTools_LineD2 = m_vMenuTools_Line->insertItem2(pix, this,"toolsLineD2idl", 0);
+  m_idMenuTools_Line = m_vMenuTools->insertItem6(pix, i18n("&Line"), this,"toolsLine", 0, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/rectangle.xpm";
@@ -2650,7 +2556,6 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuTools_Part = m_vMenuTools->insertItem6(pix, i18n("&Object..."), this,"toolsObject", 0, -1, -1 );
 
   m_vMenuTools->setCheckable( true );
-  m_vMenuTools_Line->setCheckable( true );
   m_vMenuTools_Rectangle->setCheckable( true );
 
   // MENU Extra
@@ -2893,23 +2798,6 @@ void KPresenterView::setupPopupMenus()
   QString pixdir;
   QPixmap pixmap;
   pixdir = KApplication::kde_datadir() + QString("/kpresenter/toolbar/");  
-
-  // create right button line menu
-  rb_line = new QPopupMenu();
-  CHECK_PTR(rb_line);
-  pixmap.load(pixdir+"lineh.xpm");
-  rb_line->insertItem(pixmap,this,SLOT(toolsLineH()));
-  rb_line->insertSeparator( -1 );
-  pixmap.load(pixdir+"linev.xpm");
-  rb_line->insertItem(pixmap,this,SLOT(toolsLineV()));
-  rb_line->insertSeparator( -1 );
-  pixmap.load(pixdir+"lined1.xpm");
-  rb_line->insertItem(pixmap,this,SLOT(toolsLineD1()));
-  rb_line->insertSeparator( -1 );
-  pixmap.load(pixdir+"lined2.xpm");
-  rb_line->insertItem(pixmap,this,SLOT(toolsLineD2()));
-  rb_line->setMouseTracking(true);
-  rb_line->setCheckable(false);
 
   // create right button rectangle menu
   rb_rect = new QPopupMenu();
@@ -3398,48 +3286,48 @@ void KPresenterView::setupScrollbars()
 /*======================= setup accellerators ==================*/
 void KPresenterView::setupAccelerators()
 {
-  // edit menu
-  m_vMenuEdit->setAccel(CTRL + Key_Z,m_idMenuEdit_Undo);
-  m_vMenuEdit->setAccel(CTRL + Key_X,m_idMenuEdit_Cut);
-  m_vMenuEdit->setAccel(CTRL + Key_C,m_idMenuEdit_Copy);
-  m_vMenuEdit->setAccel(CTRL + Key_V,m_idMenuEdit_Paste);
-  m_vMenuEdit->setAccel(CTRL + Key_F,m_idMenuEdit_Find);
-  m_vMenuEdit->setAccel(CTRL + Key_R,m_idMenuEdit_FindReplace);
+//   // edit menu
+//   m_vMenuEdit->setAccel(CTRL + Key_Z,m_idMenuEdit_Undo);
+//   m_vMenuEdit->setAccel(CTRL + Key_X,m_idMenuEdit_Cut);
+//   m_vMenuEdit->setAccel(CTRL + Key_C,m_idMenuEdit_Copy);
+//   m_vMenuEdit->setAccel(CTRL + Key_V,m_idMenuEdit_Paste);
+//   m_vMenuEdit->setAccel(CTRL + Key_F,m_idMenuEdit_Find);
+//   m_vMenuEdit->setAccel(CTRL + Key_R,m_idMenuEdit_FindReplace);
 
-  // insert menu
-  m_vMenuInsert->setAccel(ALT + Key_N,m_idMenuInsert_Page);
-  m_vMenuInsert->setAccel(Key_F1,m_idMenuInsert_Picture);
-  m_vMenuInsert->setAccel(Key_F2,m_idMenuInsert_Clipart);
-  m_vMenuInsert->setAccel(Key_F11,m_idMenuInsert_Autoform);
+//   // insert menu
+//   m_vMenuInsert->setAccel(ALT + Key_N,m_idMenuInsert_Page);
+//   m_vMenuInsert->setAccel(Key_F1,m_idMenuInsert_Picture);
+//   m_vMenuInsert->setAccel(Key_F2,m_idMenuInsert_Clipart);
+//   m_vMenuInsert->setAccel(Key_F11,m_idMenuInsert_Autoform);
 
-  // tools menu
-  m_vMenuInsert->setAccel(Key_F3,m_idMenuTools_LineHorz);
-  m_vMenuInsert->setAccel(Key_F4,m_idMenuTools_LineVert);
-  m_vMenuInsert->setAccel(Key_F5,m_idMenuTools_LineD1);
-  m_vMenuInsert->setAccel(Key_F6,m_idMenuTools_LineD2);
-  m_vMenuInsert->setAccel(Key_F7,m_idMenuTools_RectangleNormal);
-  m_vMenuInsert->setAccel(Key_F8,m_idMenuTools_RectangleRound);
-  m_vMenuInsert->setAccel(Key_F9,m_idMenuTools_Circle);
-  m_vMenuInsert->setAccel(Key_F10,m_idMenuTools_Text);
-  m_vMenuInsert->setAccel(Key_F12,m_idMenuTools_Part);
+//   // tools menu
+//   m_vMenuInsert->setAccel(Key_F3,m_idMenuTools_Line);
+//   m_vMenuInsert->setAccel(Key_F4,m_idMenuTools_LineVert);
+//   m_vMenuInsert->setAccel(Key_F5,m_idMenuTools_LineD1);
+//   m_vMenuInsert->setAccel(Key_F6,m_idMenuTools_LineD2);
+//   m_vMenuInsert->setAccel(Key_F7,m_idMenuTools_RectangleNormal);
+//   m_vMenuInsert->setAccel(Key_F8,m_idMenuTools_RectangleRound);
+//   m_vMenuInsert->setAccel(Key_F9,m_idMenuTools_Circle);
+//   m_vMenuInsert->setAccel(Key_F10,m_idMenuTools_Text);
+//   m_vMenuInsert->setAccel(Key_F12,m_idMenuTools_Part);
 
-  // extra menu
-  m_vMenuExtra->setAccel(CTRL + Key_P,m_idMenuExtra_PenBrush);
-  m_vMenuExtra->setAccel(CTRL + Key_Minus,m_idMenuExtra_Lower);
-  m_vMenuExtra->setAccel(CTRL + Key_Plus,m_idMenuExtra_Raise);
-  m_vMenuExtra->setAccel(ALT + Key_R,m_idMenuExtra_Rotate);
-  m_vMenuExtra->setAccel(ALT + Key_S,m_idMenuExtra_Shadow);
+//   // extra menu
+//   m_vMenuExtra->setAccel(CTRL + Key_P,m_idMenuExtra_PenBrush);
+//   m_vMenuExtra->setAccel(CTRL + Key_Minus,m_idMenuExtra_Lower);
+//   m_vMenuExtra->setAccel(CTRL + Key_Plus,m_idMenuExtra_Raise);
+//   m_vMenuExtra->setAccel(ALT + Key_R,m_idMenuExtra_Rotate);
+//   m_vMenuExtra->setAccel(ALT + Key_S,m_idMenuExtra_Shadow);
  
-  // screen menu
-  m_vMenuScreen->setAccel(ALT + Key_A,m_idMenuScreen_AssignEffect);
-  m_vMenuScreen->setAccel(CTRL + Key_G,m_idMenuScreen_Start);
-  m_vMenuScreen->setAccel(Key_Home,m_idMenuScreen_First);
-  m_vMenuScreen->setAccel(Key_End,m_idMenuScreen_Last);
-  m_vMenuScreen->setAccel(Key_Prior,m_idMenuScreen_Prev);
-  m_vMenuScreen->setAccel(Key_Next,m_idMenuScreen_Next);
+//   // screen menu
+//   m_vMenuScreen->setAccel(ALT + Key_A,m_idMenuScreen_AssignEffect);
+//   m_vMenuScreen->setAccel(CTRL + Key_G,m_idMenuScreen_Start);
+//   m_vMenuScreen->setAccel(Key_Home,m_idMenuScreen_First);
+//   m_vMenuScreen->setAccel(Key_End,m_idMenuScreen_Last);
+//   m_vMenuScreen->setAccel(Key_Prior,m_idMenuScreen_Prev);
+//   m_vMenuScreen->setAccel(Key_Next,m_idMenuScreen_Next);
 
-  // help menu
-  m_vMenuHelp->setAccel(CTRL + Key_H,m_idMenuHelp_Contents);
+//   // help menu
+//   m_vMenuHelp->setAccel(CTRL + Key_H,m_idMenuHelp_Contents);
 }
 
 /*==============================================================*/
@@ -3519,15 +3407,11 @@ void KPresenterView::setTool(ToolEditMode toolEditMode)
   m_vToolBarTools->setButton(ID_TOOL_OBJECT,false);
 
   m_vMenuTools->setItemChecked(m_idMenuTools_Mouse,false);
+  m_vMenuTools->setItemChecked(m_idMenuTools_Line,false);
   m_vMenuTools->setItemChecked(m_idMenuTools_Circle,false);
   m_vMenuTools->setItemChecked(m_idMenuTools_Pie,false);
   m_vMenuTools->setItemChecked(m_idMenuTools_Text,false);
   m_vMenuTools->setItemChecked(m_idMenuTools_Part,false);
-
-  m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineHorz,false);
-  m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineVert,false);
-  m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineD1,false);
-  m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineD2,false);
 
   m_vMenuTools_Rectangle->setItemChecked(m_idMenuTools_RectangleNormal,false);
   m_vMenuTools_Rectangle->setItemChecked(m_idMenuTools_RectangleRound,false);
@@ -3539,24 +3423,9 @@ void KPresenterView::setTool(ToolEditMode toolEditMode)
 	m_vMenuTools->setItemChecked(m_idMenuTools_Mouse,true);
 	m_vToolBarTools->setButton(ID_TOOL_MOUSE,true);
       } break;
-    case INS_LINE_H: 
+    case INS_LINE: 
       {
-	m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineHorz,true);
-	m_vToolBarTools->setButton(ID_TOOL_LINE,true);
-      } break;
-    case INS_LINE_V:
-      {
-	m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineVert,true);
-	m_vToolBarTools->setButton(ID_TOOL_LINE,true);
-      } break;
-    case INS_LINE_D1: 
-      {
-	m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineD1,true);
-	m_vToolBarTools->setButton(ID_TOOL_LINE,true);
-      } break;
-    case INS_LINE_D2:
-      {
-	m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineD2,true);
+	m_vMenuTools->setItemChecked(m_idMenuTools_Line,true);
 	m_vToolBarTools->setButton(ID_TOOL_LINE,true);
       } break;
     case INS_NRECT: 

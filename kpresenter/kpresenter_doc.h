@@ -420,6 +420,7 @@ protected:
 
   CommandHistory _commands;
   bool pasting;
+  int pasteXOffset,pasteYOffset;
 
 };
 

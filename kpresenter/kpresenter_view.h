@@ -167,10 +167,6 @@ public:
   virtual void toolsText();
   virtual void toolsObject();
 
-  virtual void toolsLineHidl();
-  virtual void toolsLineVidl();
-  virtual void toolsLineD1idl();
-  virtual void toolsLineD2idl();
   virtual void toolsNormRectidl();
   virtual void toolsRoundRectidl();
 
@@ -344,11 +340,7 @@ protected slots:
   void colorChanged(QColor*);
   void alignChanged(TxtParagraph::HorzAlign);
 
-  // graphic objects
-  void toolsLineH();
-  void toolsLineV();
-  void toolsLineD1();
-  void toolsLineD2();
+
   void toolsNormRect();
   void toolsRoundRect();
 
@@ -458,11 +450,7 @@ protected:
   // tools menu
   OpenPartsUI::Menu_var m_vMenuTools;
   CORBA::Long m_idMenuTools_Mouse;
-  OpenPartsUI::Menu_var m_vMenuTools_Line;
-  CORBA::Long m_idMenuTools_LineHorz;
-  CORBA::Long m_idMenuTools_LineVert;
-  CORBA::Long m_idMenuTools_LineD1;
-  CORBA::Long m_idMenuTools_LineD2;
+  CORBA::Long m_idMenuTools_Line;
   OpenPartsUI::Menu_var m_vMenuTools_Rectangle;
   CORBA::Long m_idMenuTools_RectangleNormal;
   CORBA::Long m_idMenuTools_RectangleRound;
@@ -533,7 +521,7 @@ protected:
   CORBA::Long m_idMenuHelp_Contents;
 
   // right button popup menus
-  QPopupMenu *rb_line,*rb_rect,*rb_pen,*rb_pen_width,*rb_oalign;
+  QPopupMenu *rb_rect,*rb_pen,*rb_pen_width,*rb_oalign;
 
   int W1,W2,W3,W4,W5,W6,W7,W8,W9,W10,P_COL;
 

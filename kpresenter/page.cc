@@ -361,7 +361,8 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
   _objects.setAutoDelete(false);
   KPObject *kpobject = 0;
 
-  insRect = insRect.normalize();
+  if (toolEditMode != INS_LINE)
+    insRect = insRect.normalize();
 
   switch (toolEditMode)
     {
@@ -580,20 +581,38 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	  }
       } break;
     case INS_TEXT:
-      if (insRect.width() > 0 && insRect.height() > 0) insertText(insRect);
-      break;
-    case INS_LINE_H:
-      if (insRect.width() > 0 && insRect.height() > 0) insertLineH(insRect);
-      break;
-    case INS_LINE_V:
-      if (insRect.width() > 0 && insRect.height() > 0) insertLineV(insRect);
-      break;
-    case INS_LINE_D1:
-      if (insRect.width() > 0 && insRect.height() > 0) insertLineD1(insRect);
-      break;
-    case INS_LINE_D2:
-      if (insRect.width() > 0 && insRect.height() > 0) insertLineD2(insRect);
-      break;
+      {
+	if (insRect.width() > 0 && insRect.height() > 0) 
+	  {
+	    insertText(insRect);
+	    setToolEditMode(TEM_MOUSE);
+	  }
+      } break;
+    case INS_LINE:
+      {
+	if (insRect.width() != 0 && insRect.height() != 0) 
+	  {
+	    if (insRect.top() == insRect.bottom())
+	      {
+		insRect = insRect.normalize();
+		insRect.setRect(insRect.left(),insRect.top() - rastY() / 2,
+				insRect.width(),rastY());
+		insertLineH(insRect);
+	      }
+	    else if (insRect.left() == insRect.right())
+	      {
+		insRect = insRect.normalize();
+		insRect.setRect(insRect.left() - rastX() / 2,insRect.top(),
+				rastX(),insRect.height());
+		insertLineV(insRect);
+	      }
+	    else if (insRect.left() < insRect.right() && insRect.top() < insRect.bottom() ||
+		     insRect.left() > insRect.right() && insRect.top() > insRect.bottom())
+	      insertLineD1(insRect.normalize());
+	    else
+	      insertLineD2(insRect.normalize());
+	  }
+      } break;
     case INS_NRECT:
       if (insRect.width() > 0 && insRect.height() > 0) insertNRect(insRect);
       break;
@@ -791,56 +810,17 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		p.drawRoundRect(insRect,view->kPresenterDoc()->getRndX(),view->kPresenterDoc()->getRndY());
 		p.end();
 	      } break;
-	    case INS_LINE_D1:
+	    case INS_LINE:
 	      {
 		QPainter p(this);
 		p.setPen(QPen(black,1,SolidLine));
 		p.setBrush(NoBrush);
 		p.setRasterOp(NotROP);
 		if (insRect.width() != 0 && insRect.height() != 0)
-		  p.drawLine(insRect.normalize().topLeft(),insRect.normalize().bottomRight());
+		  p.drawLine(insRect.topLeft(),insRect.bottomRight());
 		insRect.setRight(((e->x() + diffx()) / rastX()) * rastX() - diffx());
 		insRect.setBottom(((e->y() + diffy()) / rastY()) * rastY() - diffy());
-		p.drawLine(insRect.normalize().topLeft(),insRect.normalize().bottomRight());
-		p.end();
-	      } break;
-	    case INS_LINE_D2:
-	      {
-		QPainter p(this);
-		p.setPen(QPen(black,1,SolidLine));
-		p.setBrush(NoBrush);
-		p.setRasterOp(NotROP);
-		if (insRect.width() != 0 && insRect.height() != 0)
-		  p.drawLine(insRect.normalize().bottomLeft(),insRect.normalize().topRight());
-		insRect.setRight(((e->x() + diffx()) / rastX()) * rastX() - diffx());
-		insRect.setBottom(((e->y() + diffy()) / rastY()) * rastY() - diffy());
-		p.drawLine(insRect.normalize().bottomLeft(),insRect.normalize().topRight());
-		p.end();
-	      } break;
-	    case INS_LINE_H:
-	      {
-		QPainter p(this);
-		p.setPen(QPen(black,1,SolidLine));
-		p.setBrush(NoBrush);
-		p.setRasterOp(NotROP);
-		if (insRect.width() != 0 && insRect.height() != 0)
-		  p.drawLine(insRect.x() + 1,insRect.y() + insRect.height() / 2,insRect.right() - 1,insRect.y() + insRect.height() / 2);
-		insRect.setRight(((e->x() + diffx()) / rastX()) * rastX() - diffx());
-		insRect.setBottom(((e->y() + diffy()) / rastY()) * rastY() - diffy());
-		p.drawLine(insRect.x() + 1,insRect.y() + insRect.height() / 2,insRect.right() - 1,insRect.y() + insRect.height() / 2);
-		p.end();
-	      } break;
-	    case INS_LINE_V:
-	      {
-		QPainter p(this);
-		p.setPen(QPen(black,1,SolidLine));
-		p.setBrush(NoBrush);
-		p.setRasterOp(NotROP);
-		if (insRect.width() != 0 && insRect.height() != 0)
-		  p.drawLine(insRect.x() + insRect.width() / 2,insRect.y() + 1,insRect.x() + insRect.width() / 2,insRect.bottom() - 1);
-		insRect.setRight(((e->x() + diffx()) / rastX()) * rastX() - diffx());
-		insRect.setBottom(((e->y() + diffy()) / rastY()) * rastY() - diffy());
-		p.drawLine(insRect.x() + insRect.width() / 2,insRect.y() + 1,insRect.x() + insRect.width() / 2,insRect.bottom() - 1);
+		p.drawLine(insRect.topLeft(),insRect.bottomRight());
 		p.end();
 	      } break;
 	    case INS_PIE:
@@ -902,7 +882,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 /*==================== mouse double click ========================*/
 void Page::mouseDoubleClickEvent(QMouseEvent *e)
 {
-  if (toolEditMode != TEM_MOUSE) return;
+  if (toolEditMode != TEM_MOUSE || !editMode) return;
 
   deSelectAllObj();
   KPObject *kpobject = 0;
