@@ -252,6 +252,12 @@ lucijan	js^: yes simply add a new kexi__object but o_caption as NULL
 
 TODO: Put Conenction::dropTable() and Conenction::dropQuery() INSIDE TRANSACTION!!!!!!!
 
+===================== Kexi 0.1 Beta 2 =====================
+
+2004-01-20
+- kmdi captions fix backported to kexi_compat
+- kexistartupfiledialog: we're using paths unstead urls now for better compat.
+
 2004-01-19
 RESIZING HELL RESOLVED
 - KexiDialogBase resizing fixed for maximize state: only resize a dialog if it is in normal state
@@ -270,6 +276,7 @@ RESIZING HELL RESOLVED
 
 - table view, kexidb: after row inserting, autoincremented fields have displayed values
 - query removing works
+- KexiMainWindow: shared actions are disabled when no proxy is available
 
 2004-01-17
 - KexiDialogBase: minimum height fixed: added height of its caption
