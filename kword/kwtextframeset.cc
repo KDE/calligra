@@ -803,7 +803,14 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
             if ( cursor->remove() )
 		undoRedoInfo.text += "\n";
 	} else {
+            int oldLen = undoRedoInfo.text.length();
 	    undoRedoInfo.text += cursor->parag()->string()->toString().mid( cursor->index() );
+              for ( int i = cursor->index(); i < cursor->parag()->length(); ++i ) {
+		if ( cursor->parag()->at( i )->format() ) {
+		    cursor->parag()->at( i )->format()->addRef();
+		    undoRedoInfo.text.at( oldLen + i - cursor->index() ).setFormat( cursor->parag()->at( i )->format() );
+		}
+	    }
 	    cursor->killLine();
 	}
 	break;
