@@ -215,9 +215,8 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
     const KoStyleStack &styleStack = context.styleStack();
     if( element.hasAttribute( "draw:transform" ))
         {
-            kdDebug()<<" object transform \n";
-            //todo parse it
             QString transform = element.attribute( "draw:transform" );
+            kdDebug()<<" transform action :"<<transform<<endl;
             if( transform.contains("rotate ("))
                 {
                     kdDebug()<<" rotate object \n";

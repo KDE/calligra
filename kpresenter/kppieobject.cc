@@ -83,6 +83,40 @@ QDomDocumentFragment KPPieObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
+bool KPPieObject::saveOasis( KoXmlWriter &xmlWriter )
+{
+    xmlWriter.startElement( ( ext.width() == ext.height() ) ? "draw:circle" : "draw:ellipse" );
+    saveOasisPosObject(xmlWriter );
+
+    if( !objectName.isEmpty())
+        xmlWriter.addAttribute( "draw:name", objectName );
+    switch( pieType )
+    {
+    case PT_PIE:
+        xmlWriter.addAttribute( "draw:kind", "section" );
+        break;
+    case PT_CHORD:
+        xmlWriter.addAttribute( "draw:kind", "cut" );
+        break;
+    case PT_ARC:
+        xmlWriter.addAttribute( "draw:kind", "arc" );
+        break;
+    default:
+        kdDebug()<<" type of pie not supported\n";
+    }
+    int startangle = 45;
+    if ( p_angle != 0.0 )
+        startangle = ( ( int )p_angle )/16;
+    xmlWriter.addAttribute( "draw:start-angle", startangle );
+    int endangle = endangle = ( ( int ) p_len/16 )+startangle;
+    xmlWriter.addAttribute( "draw:end-angle", endangle );
+
+    //we don't have a simple object
+    xmlWriter.endElement();
+    return true;
+}
+
+
 void KPPieObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {
     kdDebug()<<"void KPPieObject::loadOasis(const QDomElement &element) ***************\n";
