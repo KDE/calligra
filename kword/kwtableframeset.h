@@ -62,7 +62,10 @@ class KWTableFrameSet : public KWFrameSet
     Q_OBJECT
 public:
 
-    // A cell can be any type of FrameSet, but for now, we only support text!
+    /**
+     * Table cell
+     * @note A cell can be any type of FrameSet, but for now, we only support text!
+     */
     class Cell : public KWTextFrameSet
     {
         unsigned int m_row, m_col;
@@ -144,7 +147,7 @@ public:
     };
     friend class Cell;
 
-    // Represents a row, for direct access to cells with m_rowArray[row][column]
+    /// Represents a row, for direct access to cells with m_rowArray[row][column]
     class Row {
     public:
         Cell* operator[] ( uint i ) const { return i < size() ? m_cellArray[i] : 0; }
@@ -154,14 +157,36 @@ public:
         void addCell( Cell *cell );
         void removeCell( Cell* cell );
 
-        // Array of cells in the row. If a cell has m_cols = N, the N-1 following entries are 0.
-        // (Same thing is a cell from a row above has m_rows > 1)
+        /** 
+         * @brief Array of cells in the row.
+         *
+         * If a cell has m_cols = N, the N-1 following entries are 0.
+         * (Same thing is a cell from a row above has m_rows > 1)
+         */
         QPtrVector< Cell > m_cellArray;
 
     };
 
     /** The three different types of TableIterators */
-    enum {VISIT_GRID = 1, VISIT_CELL = 2, CHECKED = 3};
+    enum {
+        /**
+         * This iterator visits each grid position once, ie every
+         * location in the m_rowArray rows. When some cells are joined, this
+         * iterator will visit those cells more than once.
+         */
+        VISIT_GRID = 1,
+        
+        /**
+         * This iterator visits each cell in the table once, whether
+         * or not some of the cells are joined. If you want to visit all the cells
+         * fast and perform some read-only operation, this is the one to use.
+         */
+        VISIT_CELL = 2,
+        /**
+         * Like VISIT_CELL it also visits each cell once, but has some other benefits. Slower.
+         */
+        CHECKED = 3
+    };
 
     /**
       All the TableIterator templates are the same, except for the pre-increment
@@ -183,11 +208,13 @@ public:
       This includes m_rowArray, the Rows and Cells but not m_colPositions and
       m_rowPositions, as they are not used during the traversal.
       The conditions include:
-      ( A ) All positions in m_rowArray must be occupied by a valid cell, ie must
+      <ul>
+      <li>( A ) All positions in m_rowArray must be occupied by a valid cell, ie must
       not be null.
-      ( B ) The Cell instance variables (m_row, m_rows, etc) must correctly
+      <li>( B ) The Cell instance variables (m_row, m_rows, etc) must correctly
       correspond to where the cells are in m_rowArray.
-      ( C ) The m_rows and m_cols instance variables of the table are also correct.
+      <li>( C ) The m_rows and m_cols instance variables of the table are also correct.
+      </ul>
       Taken together, these conditions are pretty much equivalent to the
       validate() function passing. These conditions may not hold in the middle
       of a method when table data structures are being manipulated.
@@ -278,9 +305,9 @@ public:
 
     virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & lst, bool onlyReadWrite =false  );
 
-    // constructor
+    /// constructor
     KWTableFrameSet( KWDocument *_doc, const QString & name );
-    // destructor
+    /// destructor
     virtual ~KWTableFrameSet();
 
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * canvas );
@@ -294,7 +321,7 @@ public:
     virtual void drawContents( QPainter * painter, const QRect & crect,
                                const QColorGroup & cg, bool onlyChanged, bool resetChanged,
                                KWFrameSetEdit *edit, KWViewMode *viewMode );
-    // Dummy since we reimplement drawContents
+    /// Dummy since we reimplement drawContents
     virtual void drawFrame(KWFrame *, QPainter *, const QRect &, const QRect&,
                            const QPoint&,
                            KWFrame *, const QColorGroup &, bool, bool,
@@ -380,7 +407,8 @@ public:
 
     /** move the whole of the table, this is mainly for anchored frames. */
     void moveBy( double dx, double dy );
-    /** point the outlines of all the cells */
+    
+    // /** point the outlines of all the cells */
     //void drawAllRects( QPainter &p, int xOffset, int yOffset );
 
     /** select all frames from the first selected to the argument frameset. */
@@ -546,7 +574,9 @@ public:
     static const uint m_sDefaultColWidth = 60;
 protected:
     /* Overloaded methods, look for docu in kwframe.h */
+    /// \overload KWFrame::deleteAnchors
     virtual void deleteAnchors();
+    /// \overload KWFrame::createAnchors
     virtual void createAnchors( KoTextParag * parag, int index, bool placeHolderExists = false, bool repaint = true );
     void addCellToArray( Cell* cell );
 
@@ -651,7 +681,7 @@ KWTableFrameSet::TableIterator<VisitStyle>::current() const {
 class RemovedRow {
 
     KWTableFrameSet::Row *m_row;
-    // The row index that this row used to occupy
+    /// The row index that this row used to occupy
     uint m_index;
     double m_rowHeight;
 
@@ -722,11 +752,12 @@ public:
     virtual void copy() { if ( m_currentCell ) m_currentCell->copy(); }
     virtual void cut() { if ( m_currentCell ) m_currentCell->cut(); }
     virtual void paste() { if ( m_currentCell ) m_currentCell->paste(); }
-    // should selectAll select all cells ? etc.
+    /// \note should selectAll select all cells ? etc.
     virtual void selectAll() { if ( m_currentCell ) m_currentCell->selectAll(); }
 
-    // Set the cell which is currently being edited
+    /// Set the cell which is currently being edited
     void setCurrentCell( KWFrameSet * fs, bool eraseSelection=true );
+    /// Set the cell which is currently being edited
     void setCurrentCell( const KoPoint & dPoint );
 
     void showPopup( KWFrame* frame, KWView* view, const QPoint & _point );
