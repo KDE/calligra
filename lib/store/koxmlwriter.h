@@ -23,7 +23,7 @@
 #include <qstring.h>
 #include <qvaluestack.h>
 #include <qmap.h>
-#include <../kofficecore/kofficemacros.h>
+#include <../kofficecore/koffice_export.h>
 
 class QIODevice;
 
@@ -33,7 +33,7 @@ class QIODevice;
  * document in memory (like QDom does), and avoids using QTextStream at all
  * (which in Qt3 has major performance issues when converting to utf8).
  */
-class KDE_EXPORT KoXmlWriter
+class KOSTORE_EXPORT KoXmlWriter
 {
 public:
     /**

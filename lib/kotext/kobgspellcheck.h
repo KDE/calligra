@@ -28,13 +28,13 @@
 #include <kspell2/broker.h>
 #include <qobject.h>
 #include <qstringlist.h>
-
+#include <koffice_export.h>
 class KoTextObject;
 class KoDocument;
 class KoTextParag;
 class KoTextIterator;
 
-class KDE_EXPORT KoBgSpellCheck : public QObject
+class KOTEXT_EXPORT KoBgSpellCheck : public QObject
 {
     Q_OBJECT
 public:

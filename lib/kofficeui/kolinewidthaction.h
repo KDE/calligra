@@ -24,10 +24,10 @@
 
 #include <koUnit.h>
 #include <koselectaction.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 
 /** A line width selection action */
-class KDE_EXPORT KoLineWidthAction : public KoSelectAction
+class KOFFICEUI_EXPORT KoLineWidthAction : public KoSelectAction
 {
   Q_OBJECT
   public:

@@ -23,7 +23,7 @@
 #include <kservice.h>
 #include <ksharedptr.h>
 #include <qvaluelist.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 
 class QObject;
 class QStringList;
@@ -35,7 +35,7 @@ class KoFilterChain;
  *  Represents an available KOffice component
  *  that supports the document interface.
  */
-class KDE_EXPORT KoDocumentEntry
+class KOFFICECORE_EXPORT KoDocumentEntry
 {
 
 public:

@@ -22,13 +22,13 @@
 #include "koPoint.h"
 #include "koSize.h"
 #include <qrect.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 
 /**
  * A rect whose coordinates are floating-point values ( "double"s ).
  * The API isn't documented, it's a perfect mirror of QRect.
  */
-class KDE_EXPORT KoRect {
+class KOFFICEUI_EXPORT KoRect {
 
 public:
     KoRect()

@@ -29,7 +29,7 @@
 #include <kaction.h>
 #include "korichtext.h"
 #include <qvariant.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 
 class QDomElement;
 // Always add new types at the _end_ of this list (but before VT_ALL of course).
@@ -47,7 +47,7 @@ enum VariableFormat { VF_DATE = 0, VF_TIME = 1, VF_STRING = 2, VF_NUM = 3 };
 class KoVariable;
 class KoOasisSettings;
 
-class KDE_EXPORT KoVariableSettings
+class KOTEXT_EXPORT KoVariableSettings
 {
  public:
     KoVariableSettings();
@@ -106,7 +106,7 @@ class KDE_EXPORT KoVariableSettings
  * The reason for formats to be separated is that it allows to
  * customize the formats, to implement subformats (various date formats, etc.).
  */
-class KDE_EXPORT KoVariableFormat
+class KOTEXT_EXPORT KoVariableFormat
 {
 public:
     KoVariableFormat() {}
@@ -154,7 +154,7 @@ public:
  * Implementation of the "date" formats
  * TODO: merge with KoVariableTimeFormat, for a single QDateTime-based class.
  */
-class KDE_EXPORT KoVariableDateFormat : public KoVariableFormat
+class KOTEXT_EXPORT KoVariableDateFormat : public KoVariableFormat
 {
 public:
     KoVariableDateFormat();
@@ -186,7 +186,7 @@ private:
 /**
  * Implementation of the "time" formats
  */
-class KDE_EXPORT KoVariableTimeFormat : public KoVariableFormat
+class KOTEXT_EXPORT KoVariableTimeFormat : public KoVariableFormat
 {
 public:
     KoVariableTimeFormat();
@@ -228,7 +228,7 @@ public:
     virtual void load( const QCString & /*key*/ ) {}
 };
 
-class KDE_EXPORT KoVariableNumberFormat : public KoVariableFormat
+class KOTEXT_EXPORT KoVariableNumberFormat : public KoVariableFormat
 {
 public:
     KoVariableNumberFormat() : KoVariableFormat() {}
@@ -244,7 +244,7 @@ public:
  * Implements the flyweight pattern to share formats and create them on demand.
  * Each KoDocument holds a KoVariableFormatCollection.
  */
-class KDE_EXPORT KoVariableFormatCollection
+class KOTEXT_EXPORT KoVariableFormatCollection
 {
 public:
     KoVariableFormatCollection();
@@ -274,7 +274,7 @@ class KoDocument;
 class KoVariableFormatCollection;
 class KoTextDocument;
 class KoVariableCollection;
-class KDE_EXPORT KoVariableCollection : public QObject
+class KOTEXT_EXPORT KoVariableCollection : public QObject
 {
     Q_OBJECT
 public:
@@ -345,7 +345,7 @@ class KoTextFormat;
  * A KoVariable is a custom item, i.e. considered as a single character.
  * KoVariable is the abstract base class.
  */
-class KDE_EXPORT KoVariable : public KoTextCustomItem
+class KOTEXT_EXPORT KoVariable : public KoTextCustomItem
 {
 public:
     KoVariable( KoTextDocument *fs, KoVariableFormat *varFormat,KoVariableCollection *varColl );
@@ -438,7 +438,7 @@ protected:
 /**
  * Date-related variables
  */
-class KDE_EXPORT KoDateVariable : public KoVariable
+class KOTEXT_EXPORT KoDateVariable : public KoVariable
 {
 public:
     KoDateVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *_varFormat,KoVariableCollection *_varColl , int _correctDate = 0);
@@ -482,7 +482,7 @@ protected:
 /**
  * Time-related variables
  */
-class KDE_EXPORT KoTimeVariable : public KoVariable
+class KOTEXT_EXPORT KoTimeVariable : public KoVariable
 {
 public:
     KoTimeVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl,  int _correct);
@@ -528,7 +528,7 @@ protected:
  * A custom variable is a variable whose value is entered
  * by the user.
  */
-class KDE_EXPORT KoCustomVariable : public KoVariable
+class KOTEXT_EXPORT KoCustomVariable : public KoVariable
 {
 public:
     KoCustomVariable(KoTextDocument *textdoc , const QString &name, KoVariableFormat *varFormat,KoVariableCollection *_varcoll );
@@ -560,7 +560,7 @@ protected:
  * determined - as opposed to custom variables whose value is
  * entered by the user
  */
-class KDE_EXPORT KoFieldVariable : public KoVariable
+class KOTEXT_EXPORT KoFieldVariable : public KoVariable
 {
 public:
     KoFieldVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KoDocument *_doc );
@@ -609,7 +609,7 @@ protected:
     KoDocument *m_doc;
 };
 
-class KDE_EXPORT KoMailMergeVariable : public KoVariable
+class KOTEXT_EXPORT KoMailMergeVariable : public KoVariable
 {
 public:
     KoMailMergeVariable( KoTextDocument *textdoc, const QString &name, KoVariableFormat *varFormat, KoVariableCollection *_varColl );
@@ -636,7 +636,7 @@ protected:
  * This is a base class, it must be inherited by applications,
  * to provide recalc().
  */
-class KDE_EXPORT KoPageVariable : public KoVariable
+class KOTEXT_EXPORT KoPageVariable : public KoVariable
 {
 public:
     KoPageVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl);
@@ -670,7 +670,7 @@ protected:
     short int m_subtype;
 };
 
-class KDE_EXPORT KoLinkVariable : public KoVariable
+class KOTEXT_EXPORT KoLinkVariable : public KoVariable
 {
 public:
     KoLinkVariable( KoTextDocument *textdoc, const QString & _linkName, const QString & _ulr,KoVariableFormat *varFormat, KoVariableCollection *_varColl );
@@ -704,7 +704,7 @@ protected:
 };
 
 // A custom item that display a small yellow rect. Right-clicking on it shows the comment.
-class KDE_EXPORT KoNoteVariable : public KoVariable
+class KOTEXT_EXPORT KoNoteVariable : public KoVariable
 {
 public:
     KoNoteVariable( KoTextDocument *textdoc, const QString & _note,KoVariableFormat *varFormat, KoVariableCollection *_varColl );
@@ -731,7 +731,7 @@ protected:
     QDate m_createdNoteDate;
 };
 
-class KDE_EXPORT KoStatisticVariable : public KoVariable
+class KOTEXT_EXPORT KoStatisticVariable : public KoVariable
 {
 public:
     KoStatisticVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl);

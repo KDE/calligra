@@ -47,7 +47,7 @@ class KoOasisSettings;
   A map is a simple container for all tables. Usually a complete map
   is saved in one file.
  */
-class KDE_EXPORT KSpreadMap : public QObject
+class KSPREAD_EXPORT KSpreadMap : public QObject
 {
 public:
   /**

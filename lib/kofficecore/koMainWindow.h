@@ -23,7 +23,7 @@
 
 #include <kparts/mainwindow.h>
 #include <kfiledialog.h>
-
+#include <koffice_export.h>
 class QLabel;
 class KoDocument;
 class KoView;
@@ -47,7 +47,7 @@ namespace KParts
  *
  * @note This class does NOT need to be subclassed in your application.
  */
-class KDE_EXPORT KoMainWindow : public KParts::MainWindow
+class KOFFICECORE_EXPORT KoMainWindow : public KParts::MainWindow
 {
     Q_OBJECT
 public:

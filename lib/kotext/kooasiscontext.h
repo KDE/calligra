@@ -33,7 +33,7 @@ class KoVariableCollection;
 #include <koStyleStack.h>
 #include "koliststylestack.h"
 #include <qmap.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 
 /**
  * Used during loading of Oasis format (and discarded at the end of the loading).
@@ -44,7 +44,7 @@ class KoVariableCollection;
  *
  * @author David Faure <faure@kde.org>
  */
-class KDE_EXPORT KoOasisContext
+class KOTEXT_EXPORT KoOasisContext
 {
 public:
     /**

@@ -28,7 +28,7 @@
 
 #include <kdemacros.h>
 
-#include "kofficemacros.h"
+#include "koffice_export.h"
 
 /**
  *  @brief This class implements a stack for the different styles of an object.
@@ -52,7 +52,7 @@
  *  So this is some sort of inheritance where the styles on top of the stack overwrite
  *  the same attribute of a lower style on the stack.
  */
-class KDE_EXPORT KoStyleStack
+class KOFFICECORE_EXPORT  KoStyleStack
 {
 public:
     KoStyleStack();

@@ -31,7 +31,7 @@ using namespace std;
 #include <kservice.h>
 #include <koGlobal.h>
 #include <koPageLayout.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 
 class QDomElement;
 class QDomDocument;
@@ -55,7 +55,7 @@ class KoXmlWriter;
  *
  *  @short The %KOffice document class
  */
-class KDE_EXPORT KoDocument : public KParts::ReadWritePart
+class KOFFICECORE_EXPORT KoDocument : public KParts::ReadWritePart
 {
     Q_OBJECT
     Q_PROPERTY( QCString dcopObjectId READ dcopObjectId)

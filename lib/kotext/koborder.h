@@ -22,7 +22,7 @@
 
 #include <qcolor.h>
 #include <qpen.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 class QDomElement;
 class KoZoomHandler;
 class QPainter;
@@ -30,7 +30,7 @@ class QPainter;
 /**
  * This class represents a border - for anything, like paragraph, or frame
  */
-class KDE_EXPORT KoBorder : public Qt
+class KOTEXT_EXPORT KoBorder : public Qt
 {
 public:
     // Update the DTDs if you add something here!

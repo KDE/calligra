@@ -77,7 +77,7 @@ class Damage;
  *  \li tab bar to select active worksheet
  *
  */
-class KDE_EXPORT KSpreadView : public KoView
+class KSPREAD_EXPORT KSpreadView : public KoView
 {
     friend class KSpreadCanvas;
 

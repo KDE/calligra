@@ -31,7 +31,7 @@ static const KCmdLineOptions options[]=
         KCmdLineLastOption
 };
 
-extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
+extern "C" KFORMULA_EXPORT int kdemain( int argc, char **argv )
 {
     KCmdLineArgs::init( argc, argv, newKFormulaAboutData() );
     KCmdLineArgs::addCmdLineOptions( options );

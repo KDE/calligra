@@ -27,7 +27,7 @@ class QLineEdit;
 class QListBox;
 class QPushButton;
 
-class KDE_EXPORT KoImportStyleDia : public KDialogBase
+class KOTEXT_EXPORT KoImportStyleDia : public KDialogBase
 {
     Q_OBJECT
 public:

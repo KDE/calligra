@@ -22,7 +22,7 @@
 
 #include <qframe.h>
 #include <qpoint.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 class QVBoxLayout;
 class QSpinBox;
 
@@ -51,7 +51,7 @@ private:
     KoToolBoxPrivate *d;
 };
 
-class KDE_EXPORT KoTransformToolBox : public KoToolBox
+class KOFFICEUI_EXPORT KoTransformToolBox : public KoToolBox
 {
     Q_OBJECT
 public:

@@ -20,7 +20,7 @@
 #define kozoomaction_h
 
 #include <kaction.h>
-
+#include <koffice_export.h>
 /**
  * Class KoZoomAction implements an action to provide zoom values.
  * In a toolbar, KoZoomAction will show a dropdown list, also with 
@@ -28,7 +28,7 @@
  * (must be an integer). The values shown on the list are alwalys
  * sorted.
  */
-class KoZoomAction : public KSelectAction
+class KOFFICEUI_EXPORT KoZoomAction : public KSelectAction
 {
 Q_OBJECT
 

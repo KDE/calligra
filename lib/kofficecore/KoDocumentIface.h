@@ -23,7 +23,7 @@
 #include <dcopobject.h>
 #include <qvaluelist.h>
 #include <dcopref.h>
-
+#include <koffice_export.h>
 class KoDocument;
 class KDCOPActionProxy;
 
@@ -36,7 +36,7 @@ class KDCOPActionProxy;
  * In this case, don't look here... (unless the DCOP interface for the document
  * inherits KoDocumentIface, which is a good thing to do)
  */
-class KDE_EXPORT KoDocumentIface : public DCOPObject
+class KOFFICECORE_EXPORT KoDocumentIface : public DCOPObject
 {
     K_DCOP
 public:

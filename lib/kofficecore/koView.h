@@ -25,7 +25,7 @@
 #include <kparts/part.h>
 
 #include <koChild.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 
 class KAction;
 class KActionCollection;
@@ -54,7 +54,7 @@ namespace KParts
  *
  * Multiple views can be attached to one document at a time.
  */
-class KDE_EXPORT KoView : public QWidget, public KParts::PartBase
+class KOFFICECORE_EXPORT KoView : public QWidget, public KParts::PartBase
 {
   Q_OBJECT
 public:

@@ -27,7 +27,7 @@
  * In a toolbar it presents itself as a button that opens the part-select dialog,
  * but in a popupmenu it presents itself as a submenu with all available parts.
  */
-class KDE_EXPORT KoPartSelectAction : public KActionMenu
+class KOFFICEUI_EXPORT KoPartSelectAction : public KActionMenu
 {
     Q_OBJECT
 

@@ -37,7 +37,7 @@ class KoXmlWriter;
  * A collection of pictures (a key and the picture itself).
  *
  */
-class KDE_EXPORT KoPictureCollection : public QMap<KoPictureKey, KoPicture>
+class KOFFICECORE_EXPORT KoPictureCollection : public QMap<KoPictureKey, KoPicture>
 {
 public:
     enum Type {

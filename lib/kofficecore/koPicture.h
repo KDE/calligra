@@ -23,7 +23,7 @@
 #include <qstring.h>
 #include <qiodevice.h>
 #include <qpixmap.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 
 #include "koPictureKey.h"
 
@@ -40,7 +40,7 @@ class KoPictureShared;
  *
  * @short A picture container class
  */
-class KDE_EXPORT KoPicture
+class KOFFICECORE_EXPORT KoPicture
 {
 public:
     /**

@@ -47,7 +47,7 @@ private:
     static KInstance* s_global;
 };
 
-class KDE_EXPORT Calculator : public KParts::Plugin
+class KSPREAD_EXPORT Calculator : public KParts::Plugin
 {
     Q_OBJECT
 public:

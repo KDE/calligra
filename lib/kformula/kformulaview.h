@@ -47,7 +47,7 @@ class Container;
  * to be used alone if there is a bigger widget the formula
  * is to be drawn into.
  */
-class KDE_EXPORT View : public QObject {
+class KOFORMULA_EXPORT View : public QObject {
     Q_OBJECT
 
 public:

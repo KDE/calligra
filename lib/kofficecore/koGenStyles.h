@@ -23,7 +23,7 @@
 #include <qmap.h>
 #include <qvaluevector.h>
 
-#include <kofficemacros.h>
+#include <koffice_export.h>
 
 class KoXmlWriter;
 class KoGenStyle;
@@ -51,7 +51,7 @@ class KoGenStyle;
  *
  * @author David Faure <faure@kde.org>
  */
-class KDE_EXPORT KoGenStyles
+class KOFFICECORE_EXPORT KoGenStyles
 {
 public:
     KoGenStyles();
@@ -132,7 +132,7 @@ private:
  *
  * @author David Faure <faure@kde.org>
  */
-class KDE_EXPORT KoGenStyle
+class KOFFICECORE_EXPORT KoGenStyle
 {
 public:
     /**

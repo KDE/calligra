@@ -28,7 +28,7 @@
 #include <qptrvector.h>
 #include <qdom.h>
 #include <qdict.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 class KoDocument;
 class KoTextParag;
 class KoTextObject;
@@ -69,7 +69,7 @@ typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;
 /******************************************************************/
 /* Class: KoAutoFormat						  */
 /******************************************************************/
-class KDE_EXPORT KoAutoFormat
+class KOTEXT_EXPORT KoAutoFormat
 {
 public:
     /**

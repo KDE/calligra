@@ -23,7 +23,7 @@
 #define KOOASISSETTINGS_H
 
 #include <qdom.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 
 /**
  * @brief Parse settings.xml file.
@@ -67,7 +67,7 @@
  * or item-map once, and then lookup multiple items inside it.
  * It also allows "drilling down" inside the tree in case of nesting.
  */
-class KDE_EXPORT KoOasisSettings
+class KOFFICECORE_EXPORT KoOasisSettings
 {
 public:
     KoOasisSettings( const QDomDocument& doc );
@@ -83,7 +83,7 @@ public:
     class IndexedMap;
     class NamedMap;
     /// Represents a collection of items (config-item or maps).
-    class KDE_EXPORT Items
+    class KOFFICECORE_EXPORT Items
     {
         friend class KoOasisSettings;
         friend class IndexedMap;
@@ -133,7 +133,7 @@ public:
         const QDomElement m_element;
     };
 
-    class KDE_EXPORT IndexedMap : public Map
+    class KOFFICECORE_EXPORT IndexedMap : public Map
     {
         friend class Items;
         IndexedMap( const QDomElement& elem ) : Map( elem ) {}
@@ -142,7 +142,7 @@ public:
         Items entry( int entryIndex ) const;
     };
 
-    class KDE_EXPORT NamedMap : public Map
+    class KOFFICECORE_EXPORT NamedMap : public Map
     {
         friend class Items;
         NamedMap( const QDomElement& elem ) : Map( elem ) {}

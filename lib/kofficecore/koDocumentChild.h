@@ -20,7 +20,7 @@
 #define __koDocumentChild_h__
 
 #include <koChild.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 class QDomDocument;
 class QDomElement;
 class KURL;
@@ -40,7 +40,7 @@ class KoXmlWriter;
  * If you need a representation for embedded documents in your KOffice
  * component then you should inherit from this class.
  */
-class KDE_EXPORT KoDocumentChild : public KoChild
+class KOFFICECORE_EXPORT KoDocumentChild : public KoChild
 {
   Q_OBJECT
 public:

@@ -27,7 +27,7 @@
 
 #include <qwidget.h>
 #include <qstringlist.h>
-
+#include <koffice_export.h>
 class KoTabBarPrivate;
 
 /**
@@ -58,7 +58,7 @@ class KoTabBarPrivate;
  *
  * @short A bar with tabs and scroll buttons.
  */
-class KoTabBar : public QWidget
+class KOFFICEUI_EXPORT KoTabBar : public QWidget
 {
     Q_OBJECT
     

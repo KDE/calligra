@@ -21,7 +21,7 @@
 
 #include <qobject.h>
 #include <qwmatrix.h>
-
+#include <koffice_export.h>
 /**
  * KoChild is an abstract base class that represents the geometry
  * associated with an embedded document. In general it handles its position
@@ -33,7 +33,7 @@
  *
  * @see KoDocumentChild
  */
-class KoChild : public QObject
+class KOFFICECORE_EXPORT KoChild : public QObject
 {
   Q_OBJECT
 public:

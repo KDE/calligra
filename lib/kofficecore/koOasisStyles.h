@@ -23,7 +23,7 @@
 #include <qdict.h>
 #include <qvaluevector.h>
 #include <qmap.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 
 class KoGenStyles;
 class KoXmlWriter;
@@ -31,7 +31,7 @@ class KoXmlWriter;
 /**
  * Repository of styles used during loading of OASIS/OOo file
  */
-class KDE_EXPORT KoOasisStyles
+class KOFFICECORE_EXPORT KoOasisStyles
 {
 public:
     KoOasisStyles();

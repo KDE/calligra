@@ -24,7 +24,7 @@
 #include <qgridview.h>
 #include <qptrlist.h>
 #include <qpixmap.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 
 class KoIconItem
 {
@@ -58,7 +58,7 @@ private:
   QPixmap mPixmap;
 };
 
-class KDE_EXPORT KoIconChooser: public QGridView
+class KOPAINTER_EXPORT KoIconChooser: public QGridView
 {
   Q_OBJECT
 public:

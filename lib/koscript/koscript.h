@@ -27,7 +27,7 @@
 
 #include <kregexp.h>
 
-#include <../kofficecore/kofficemacros.h>
+#include <../kofficecore/koffice_export.h>
 
 #include "koscript_context.h"
 #include "koscript_parsenode.h"
@@ -44,7 +44,7 @@ class QIODevice;
  *
  * @author Torben Weis <weis@kde.org>
  */
-class KDE_EXPORT KSInterpreter : public QShared
+class KOSCRIPT_EXPORT KSInterpreter : public QShared
 {
 public:
   typedef KSSharedPtr<KSInterpreter> Ptr;

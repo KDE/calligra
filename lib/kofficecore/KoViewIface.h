@@ -24,12 +24,12 @@
 #include <dcopobject.h>
 #include <dcopref.h>
 
-#include "kofficemacros.h"
+#include "koffice_export.h"
 
 class KDCOPActionProxy;
 class KoView;
 
-class KDE_EXPORT KoViewIface : public DCOPObject
+class KOFFICECORE_EXPORT KoViewIface : public DCOPObject
 {
     K_DCOP
 public:

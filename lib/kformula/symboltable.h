@@ -98,7 +98,7 @@ private:
  *
  * It contains all names that are know to the system.
  */
-class KDE_EXPORT SymbolTable {
+class KOFORMULA_EXPORT SymbolTable {
 public:
 
     SymbolTable();

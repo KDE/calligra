@@ -51,7 +51,7 @@ KFORMULA_NAMESPACE_BEGIN
 
 class Document;
 
-class KDE_EXPORT ConfigurePage : public QObject
+class KOFORMULA_EXPORT ConfigurePage : public QObject
 {
     Q_OBJECT
 public:

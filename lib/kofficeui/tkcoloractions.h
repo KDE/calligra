@@ -2,7 +2,7 @@
 #define TKCOLORACTION_H
 
 #include "tkaction.h"
-
+#include <koffice_export.h>
 #include <kpopupmenu.h>
 #include <qdict.h>
 
@@ -20,7 +20,7 @@ public slots:
   void updateItemSize();
 };
 /****************************************************************************************/
-class TKSelectColorAction : public TKAction
+class KOFFICEUI_EXPORT TKSelectColorAction : public TKAction
 { Q_OBJECT
 public:
   enum Type {

@@ -33,7 +33,7 @@ class QPushButton;
  *  and mini icon. The user may select one and
  *  the corresponding KoDocumentEntry is returned.
  */
-class KDE_EXPORT KoPartSelectDia : public KDialogBase
+class KOFFICEUI_EXPORT KoPartSelectDia : public KDialogBase
 {
     Q_OBJECT
 

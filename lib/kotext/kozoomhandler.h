@@ -21,7 +21,7 @@
 #define kozoomhandler_h
 
 #include <koRect.h>
-#include <kofficemacros.h>
+#include <koffice_export.h>
 /**
  * A KoTextZoomHandler converts between an internal text layout resolution of
  * ~1440 DPI (by default) and the point-size for the fonts (those known by the user).
@@ -29,7 +29,7 @@
  * is handled by KoZoomHandler.
  * Not a real class, it only has static methods, since it has no data.
  */
-class KDE_EXPORT KoTextZoomHandler
+class KOTEXT_EXPORT KoTextZoomHandler
 {
 public:
     KoTextZoomHandler() {}
@@ -70,7 +70,7 @@ protected:
  * An instance of KoZoomHandler operates at a given zoom (see setZoomAndResolution() and setZoom())
  * so there is usually one instance of KoZoomHandler per view.
  */
-class KDE_EXPORT KoZoomHandler : public KoTextZoomHandler
+class KOTEXT_EXPORT KoZoomHandler : public KoTextZoomHandler
 {
 public:
     KoZoomHandler();
