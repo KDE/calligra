@@ -2866,6 +2866,7 @@ void QTextDocument::updateFontAttributes( const QFont &f, const QFont &old )
 
 void QTextStringChar::setFormat( QTextFormat *f )
 {
+    qDebug("QTextStringChar::setFormat %p %s",f,f?f->key().latin1():"");
     if ( type == Regular ) {
 	d.format = f;
     } else {
@@ -4917,23 +4918,8 @@ QTextFormat *QTextFormatCollection::format( QTextFormat *of, QTextFormat *nf, in
     kof = of->key();
     knf = nf->key();
     cflags = flags;
-    if ( flags & QTextFormat::Bold )
-	cres->fn.setBold( nf->fn.bold() );
-    if ( flags & QTextFormat::Italic )
-	cres->fn.setItalic( nf->fn.italic() );
-    if ( flags & QTextFormat::Underline )
-	cres->fn.setUnderline( nf->fn.underline() );
-    if ( flags & QTextFormat::Family )
-	cres->fn.setFamily( nf->fn.family() );
-    if ( flags & QTextFormat::Size )
-	cres->fn.setPointSize( nf->fn.pointSize() );
-    if ( flags & QTextFormat::Color )
-	cres->col = nf->col;
-    if ( flags & QTextFormat::Misspelled )
-	cres->missp = nf->missp;
-    if ( flags & QTextFormat::VAlign )
-	cres->ha = nf->ha;
-    cres->update();
+
+    cres->copyFormat( *nf, flags );
 
     QTextFormat *fm = cKey.find( cres->key() );
     if ( !fm ) {
@@ -5079,6 +5065,27 @@ void QTextFormatCollection::updateFontAttributes( const QFont &f, const QFont &o
 }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void QTextFormat::copyFormat( const QTextFormat & nf, int flags )
+{
+    if ( flags & QTextFormat::Bold )
+	fn.setBold( nf.fn.bold() );
+    if ( flags & QTextFormat::Italic )
+	fn.setItalic( nf.fn.italic() );
+    if ( flags & QTextFormat::Underline )
+	fn.setUnderline( nf.fn.underline() );
+    if ( flags & QTextFormat::Family )
+	fn.setFamily( nf.fn.family() );
+    if ( flags & QTextFormat::Size )
+	fn.setPointSize( nf.fn.pointSize() );
+    if ( flags & QTextFormat::Color )
+	col = nf.col;
+    if ( flags & QTextFormat::Misspelled )
+	missp = nf.missp;
+    if ( flags & QTextFormat::VAlign )
+	ha = nf.ha;
+    update();
+}
 
 void QTextFormat::setBold( bool b )
 {

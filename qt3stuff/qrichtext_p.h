@@ -1355,6 +1355,7 @@ public:
     QTextFormat( const QTextFormat &fm );
     QTextFormat makeTextFormat( const QStyleSheetItem *style, const QMap<QString,QString>& attr ) const;
     QTextFormat& operator=( const QTextFormat &fm );
+    virtual void copyFormat( const QTextFormat &fm, int flags );
     QColor color() const;
     QFont font() const;
     bool isMisspelled() const;
@@ -1383,6 +1384,7 @@ public:
 
     bool operator==( const QTextFormat &f ) const;
     QTextFormatCollection *parent() const;
+    void setCollection( QTextFormatCollection *parent ) { collection = parent; }
     QString key() const;
 
     static QString getKey( const QFont &f, const QColor &c, bool misspelled, const QString &lhref, const QString &lnm, VerticalAlignment vAlign );
@@ -1448,9 +1450,9 @@ public:
     void setDefaultFormat( QTextFormat *f );
     QTextFormat *defaultFormat() const;
     QTextFormat *format( QTextFormat *f );
-    QTextFormat *format( QTextFormat *of, QTextFormat *nf, int flags );
+    virtual QTextFormat *format( QTextFormat *of, QTextFormat *nf, int flags );
     virtual QTextFormat *format( const QFont &f, const QColor &c );
-    void remove( QTextFormat *f );
+    virtual void remove( QTextFormat *f );
 
     virtual QTextFormat *createFormat( const QTextFormat &f ) { return new QTextFormat( f ); }
     virtual QTextFormat *createFormat( const QFont &f, const QColor &c ) { return new QTextFormat( f, c, this ); }
