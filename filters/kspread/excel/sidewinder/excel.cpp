@@ -2944,6 +2944,7 @@ void ExcelReader::handleRecord( Record* record )
   handleFont( dynamic_cast<FontRecord*>( record ) );
   handleLabel( dynamic_cast<LabelRecord*>( record ) );
   handleLabelSST( dynamic_cast<LabelSSTRecord*>( record ) );
+  handleMergedCells( dynamic_cast<MergedCellsRecord*>( record ) );
   handleMulBlank( dynamic_cast<MulBlankRecord*>( record ) );
   handleMulRK( dynamic_cast<MulRKRecord*>( record ) );
   handleNumber( dynamic_cast<NumberRecord*>( record ) );
@@ -3148,7 +3149,22 @@ void ExcelReader::handleMergedCells( MergedCellsRecord* record )
 {
   if( !record ) return;
   
-  // TODO merged cells ?
+  if( !d->activeSheet ) return;
+  
+  for( unsigned i = 0; i < record->count(); i++ )
+  {
+    unsigned firstRow = record->firstRow( i );
+    unsigned lastRow = record->lastRow( i );
+    unsigned firstColumn = record->firstColumn( i );
+    unsigned lastColumn = record->lastColumn( i );
+    
+    Cell* cell = d->activeSheet->cell( firstColumn, firstRow, true );
+    if( cell )
+    {
+      cell->setColumnSpan( lastColumn - firstColumn + 1 );
+      cell->setRowSpan( lastRow - firstRow + 1 );
+    }
+  }
 }
 
 
