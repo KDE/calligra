@@ -93,8 +93,7 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *doc, const char* name,
     slidesCurrent = new QRadioButton( i18n( "&Current slide" ), slides );
     slidesSelected = new QRadioButton( i18n( "&Selected slides" ), slides );
 
-    switch ( presSlides )
-    {
+    switch ( presSlides ) {
     case PS_ALL:
         slidesAll->setChecked( true );
         break;
@@ -110,9 +109,9 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *doc, const char* name,
     lSlides->addColumn( i18n( "Slide Nr." ) );
     lSlides->addColumn( i18n( "Slide Title" ) );
     lSlides->header()->setMovingEnabled( false );
-
-    for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
-    {
+    lSlides->setSorting( -1 );
+    
+    for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
         QCheckListItem *item = new QCheckListItem( lSlides, "", QCheckListItem::CheckBox );
         item->setText( 0, QString( "%1" ).arg( i + 1 ) );
         item->setText( 1, doc->getPageTitle( i, i18n( "Slide %1" ).arg( i +1 ) ) );

@@ -404,4 +404,5 @@ Reggie, 22.8.1999:
 - Fixed some flicker
 - When zooming for a screenpresentation zoom spacing-values of
   the textobject too
-
+- A bit more work on the presentation structure viewer/editor
+- Some fixes

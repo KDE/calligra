@@ -57,8 +57,40 @@ void KPPresStructObjectItem::setPage( KPBackGround *p )
 void KPPresStructObjectItem::setObject( KPObject *o )
 {
     object = o;
-    if ( object && parent() )
-	;
+    if ( object && parent() ) {
+	switch ( object->getType() ) {
+	case OT_PICTURE:
+	    setText( 0, i18n( "Picture" ) );
+	    break;
+	case OT_LINE:
+	    setText( 0, i18n( "Line" ) );
+	    break;
+	case OT_RECT:
+	    setText( 0, i18n( "Rectangle" ) );
+	    break;
+	case OT_ELLIPSE:
+	    setText( 0, i18n( "Circle/Ellipse" ) );
+	    break;
+	case OT_TEXT:
+	    setText( 0, i18n( "Text" ) );
+	    break;
+	case OT_AUTOFORM:
+	    setText( 0, i18n( "Autoform" ) );
+	    break;
+	case OT_CLIPART:
+	    setText( 0, i18n( "Clipart" ) );
+	    break;
+	case OT_UNDEFINED:
+	    setText( 0, i18n( "Undefined" ) );
+	    break;
+	case OT_PIE:
+	    setText( 0, i18n( "Pie/Arc/Chord" ) );
+	    break;
+	case OT_PART:
+	    setText( 0, i18n( "Embedded Part" ) );
+	    break;
+	}
+    }
 }
 
 /*================================================================*/

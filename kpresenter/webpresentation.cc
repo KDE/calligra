@@ -47,6 +47,7 @@
 #include <qdatetime.h>
 #include <qmessagebox.h>
 #include <qdir.h>
+#include <qheader.h>
 
 #include <klocale.h>
 #include <kcolorbtn.h>
@@ -417,13 +418,13 @@ void KPWebPresentationWizard::setupPage1()
     page1 = new QHBox( this );
 
     QLabel *helptext = new QLabel( page1 );
-    helptext->setBackgroundColor( QColor( 57, 63, 180 ) );
-    helptext->setText( i18n( "	Enter here your Name, your Email  \n"
-			     "	Address and the Title of the Web-  \n"
-			     "	Presentation. Also enter the Path  \n"
-			     "	into which the Web-Presentation	 \n"
-			     "	should be created. This must be a  \n"
-			     "	directory." ) );
+    helptext->setBackgroundMode( PaletteLight );
+    helptext->setText( i18n( " Enter here your Name, your Email  \n"
+			     " Address and the Title of the Web-  \n"
+			     " Presentation. Also enter the Path  \n"
+			     " into which the Web-Presentation	 \n"
+			     " should be created. This must be a  \n"
+			     " directory." ) );
     helptext->setMaximumWidth( helptext->sizeHint().width() );
 
     QVBox *canvas = new QVBox( page1 );
@@ -570,12 +571,13 @@ void KPWebPresentationWizard::setupPage3()
     slideTitles->addColumn( i18n( "Slide Nr." ) );
     slideTitles->addColumn( i18n( "Slide Title" ) );
     connect( slideTitles, SIGNAL( selectionChanged( QListViewItem * ) ), this, SLOT( slideTitleChanged( QListViewItem * ) ) );
-
-    for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
-    {
+    slideTitles->setSorting( -1 );
+    slideTitles->header()->setMovingEnabled( FALSE );
+    
+    for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
 	QListViewItem *item = new QListViewItem( slideTitles );
 	item->setText( 0, QString( "%1" ).arg( i + 1 ) );
-	item->setText( 1, webPres.getSlideTitles().count() > i ?
+	item->setText( 1, (int)webPres.getSlideTitles().count() > i ?
 		       QString( webPres.getSlideTitles()[ i ] ) : QString( "No Title" ) );
     }
 
