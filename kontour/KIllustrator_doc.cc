@@ -147,8 +147,7 @@ void KIllustratorDocument::insertPart (const QRect& rect, KoDocumentEntry& e)
 
     if ( !doc || ! doc->initDoc() )
     {
-        KMessageBox::error((QWidget *) 0L, i18n ("KIllustrator Error"),
-                               i18n ("Could not insert document"));
+        KMessageBox::error((QWidget *) 0L, i18n ("Could not insert document"));
         return;
     }
 

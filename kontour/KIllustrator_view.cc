@@ -769,12 +769,10 @@ void KIllustratorView::slotExport()
                 lastExport = fname;
             }
             else
-                KMessageBox::error(this, i18n ("Cannot export to file"),
-                                    i18n ("KIllustrator Error"));
+                KMessageBox::error(this, i18n ("Cannot export to file"));
         }
         else
-            KMessageBox::error(this, i18n ("Unknown export format"),
-                               i18n ("KIllustrator Error"));
+            KMessageBox::error(this, i18n ("Unknown export format"));
     }
     resetTools ();
 }
