@@ -837,6 +837,9 @@ void KoMainWindow::print(bool quick) {
         title = fileName;
     printer.setDocName( title );
     printer.setDocFileName( fileName );
+#if KDE_VERSION > 307
+    printer.setDocDirectory( rootView()->koDocument()->url().directory() );
+#endif
 
     // ### TODO: apply global koffice settings here
 
