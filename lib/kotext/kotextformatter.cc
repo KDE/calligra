@@ -59,6 +59,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     if ( doc && rtl )
         currentRightMargin += parag->firstLineMargin();
     int initialRMargin = doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h + c->height(), currentRightMargin, 4, parag ) : 0;
+    int w = dw - initialRMargin;
+
     int availableWidth = dw - initialRMargin; // 'w' in QRT
 #ifdef DEBUG_FORMATTER
     qDebug( "KoTextFormatterBaseBreakWords::format left=%d initialHeight=%d initialLMargin=%d initialRMargin=%d availableWidth=%d", left, initialHeight, initialLMargin, initialRMargin, availableWidth );
@@ -140,11 +142,27 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	}
         c->width = ww;
 
+        //code from qt-3.1beta2
+	if ( c->isCustom() && c->customItem()->ownLine() ) {
+	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), left, 4,parag ) : left;
+	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), parag->rect().height(), rm, 4,parag ) : 0 );
+	    //c->customItem()->resize( w - x );
+            c->customItem()->resize( parag->painter(), w - x );
+	    w = dw;
+	    y += h;
+	    h = c->height();
+	    lineStart = new KoTextParagLineStart( y, h, h );
+	    insertLineStart( parag, i, lineStart );
+	    c->lineStart = 1;
+	    firstChar = c;
+	    x = 0xffffff;
+	    continue;
+	}
         //Currently unused in KWord
 #if 0
 	// Custom item that forces a new line
 	if ( c->isCustom() && c->customItem()->ownLine() ) {
-            QTextCustomItem* ci = c->customItem();
+            KoTextCustomItem* ci = c->customItem();
 	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), c->height(), left, 4, parag ) : left;
 	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), c->height(), rm, 4, parag ) : 0 );
 	    KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, availableWidth - x );
