@@ -25,8 +25,6 @@
 
 #include "GObject.h"
 
-#include <kdebug.h>
-
 #include <qdom.h>
 
 GObject::GObject()
@@ -165,29 +163,25 @@ void GObject::updateBoundingBox(const KoPoint &p1, const KoPoint &p2)
 void GObject::calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint &tright, const KoPoint &bright, const KoPoint &bleft)
 {
   KoPoint p[4];
-  KoRect r(tleft, bright);
+  KoRect r;
 
-  kdDebug(38000) << "tl: x=" << tleft.x() << " y=" << tleft.y() << endl;
-  kdDebug(38000) << "br: x=" << bright.x() << " y=" << bright.y() << endl;
-
-  // TODO implement transform()
-/*  p[0] = tleft.transform(tmpMatrix);
+  p[0] = tleft.transform(tmpMatrix);
   p[1] = tright.transform(tmpMatrix);
   p[2] = bleft.transform(tmpMatrix);
   p[3] = bright.transform(tmpMatrix);
 
-  r.left(p[0].x());
-  r.top(p[0].y());
-  r.right(p[0].x());
-  r.bottom(p[0].y());
+  r.setLeft(p[0].x());
+  r.setTop(p[0].y());
+  r.setRight(p[0].x());
+  r.setBottom(p[0].y());
 
   for(unsigned int i = 1; i < 4; i++)
   {
-    r.left(QMIN(p[i].x(), r.left()));
-    r.top(QMIN(p[i].y(), r.top()));
-    r.right(QMAX(p[i].x(), r.right()));
-    r.bottom(QMAX(p[i].y(), r.bottom()));
-  }*/
+    r.setLeft(QMIN(p[i].x(), r.left()));
+    r.setTop(QMIN(p[i].y(), r.top()));
+    r.setRight(QMAX(p[i].x(), r.right()));
+    r.setBottom(QMAX(p[i].y(), r.bottom()));
+  }
   updateBoundingBox(r);
 }
 

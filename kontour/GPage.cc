@@ -278,7 +278,6 @@ void GPage::insertObject(GObject *obj)
 {
 //  obj->ref ();
   active_layer->insertObject(obj);
-  selectObject(obj);
 //  connect(obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
 //  connect (obj, SIGNAL(changed(const KoRect&)), this, SLOT(objectChanged(const KoRect&)));
 //  setModified();
@@ -616,18 +615,20 @@ bool GPage::findNearestObject (const QString &otype, int x, int y,
   return obj != 0L;
 }
 
-GObject* GPage::findContainingObject (int x, int y)
+GObject *GPage::findContainingObject(int x, int y)
 {
-  GObject* result = 0L;
-  // We are looking for the most relevant object, that means the object
-  // in front of all others. So, we have to start at the upper layer
+  GObject *result = 0L;
+  /*
+     We are looking for the most relevant object, that means the object
+     in front of all others. So, we have to start at the upper layer
+  */
   QPtrListIterator<GLayer> i(layers);
-  for (i.toLast(); i.current(); --i)
+  for(i.toLast(); i.current(); --i)
   {
-    if ((*i)->isEditable ())
+    if((*i)->isEditable())
     {
-      result = (*i)->findContainingObject (x, y);
-      if (result)
+      result = (*i)->findContainingObject(x, y);
+      if(result)
         break;
     }
   }

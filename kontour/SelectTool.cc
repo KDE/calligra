@@ -25,9 +25,18 @@
 
 #include "SelectTool.h"
 
+#include <qpainter.h>
+
 #include <kaction.h>
 #include <klocale.h>
+#include <kdebug.h>
 
+#include "kontour_view.h"
+#include "kontour_doc.h"
+#include "GDocument.h"
+#include "GPage.h"
+#include "GObject.h"
+#include "Canvas.h"
 #include "ToolController.h"
 
 SelectTool::SelectTool(QString aId, ToolController *tc):
@@ -48,6 +57,145 @@ void SelectTool::deactivate()
 
 void SelectTool::processEvent(QEvent *e)
 {
+  KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
+  GPage *page = toolController()->view()->activeDocument()->activePage();
+  Canvas *canvas = toolController()->view()->canvas();
+  
+  if(!doc->isReadWrite())
+    return;
+  if(e->type() == QEvent::MouseButtonPress)
+    processButtonPressEvent((QMouseEvent *)e, page, canvas);
+  else if(e->type() == QEvent::MouseMove)
+    processMouseMoveEvent((QMouseEvent *)e, page, canvas);
+  else if(e->type() == QEvent::MouseButtonRelease)
+    processButtonReleaseEvent((QMouseEvent *)e, page, canvas);
+  else if(e->type() == QEvent::KeyPress)
+    processKeyPressEvent((QKeyEvent *)e, page, canvas);
+}
+
+void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *canvas)
+{
+  bool shiftFlag = e->state() & Qt::ShiftButton;
+  if(state == S_Init)
+  {
+    GObject *obj = page->findContainingObject(e->x() - canvas->xOffset(), e->y() - canvas->yOffset());
+    if(obj)
+    {
+      /* an object will be selected */
+      state = S_Pick;
+      if(!shiftFlag)
+        page->unselectAllObjects();
+      /* add the object to the selection */
+      page->selectObject(obj);
+//      origbox = page->boundingBoxForSelection();
+    }
+    else
+    {
+      /* no object */
+      state = S_Rubberband;
+      p1.setX(e->x());
+      p1.setY(e->y());
+      page->unselectAllObjects();
+    }
+  }
+}
+
+void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canvas)
+{
+  if(state == S_Rubberband)
+  {
+    canvas->repaint(r);
+    if(p1.x() <= e->x())
+    {
+      r.setLeft(p1.x());
+      r.setRight(e->x());
+    }
+    else
+    {
+      r.setLeft(e->x());
+      r.setRight(p1.x());
+    }
+    if(p1.y() <= e->y())
+    {
+      r.setTop(p1.y());
+      r.setBottom(e->y());
+    }
+    else
+    {
+      r.setTop(e->y());
+      r.setBottom(p1.y());
+    }
+    QPainter p(canvas);
+    p.setPen(QPen(blue, 1, Qt::DotLine));
+    p.drawRect(r);
+  }
+}
+
+void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *canvas)
+{
+  if(state == S_Rubberband)
+  {
+    QPtrList<GObject> olist;
+    KoRect selRect(KoPoint(r.left() - canvas->xOffset(), r.top() - canvas->yOffset()), KoPoint(r.right() - canvas->xOffset(), r.bottom() - canvas->yOffset()));
+    if(page->findObjectsContainedIn(selRect.normalize(), olist))
+    {
+      QPtrListIterator<GObject> it(olist);
+      for(; it.current(); ++it)
+        page->selectObject(it.current());
+//      state = S_Pick;
+        state = S_Init;
+    }
+    else
+    {
+      /* no object found - repaint canvas to remove the rubberband */
+      canvas->repaint(r);
+      state = S_Init;
+    }
+  }
+  else if(state == S_Pick)
+  {
+    state = S_Init;
+  }
+}
+
+void SelectTool::processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas *canvas)
+{
+  kdDebug(38000) << "SelectTool::processKeyPressEvent()" << endl;
+  if(page->selectionIsEmpty())
+    return;
+
+  if(e->key() == Qt::Key_Escape)
+  {
+    /* clear selection */
+    page->unselectAllObjects ();
+    return;
+  }
+
+  double big_step = 10.0;
+  double small_step = 2.0;
+/*  float dx = 0, dy = 0;
+  bool shift = ke->state () & Qt::ShiftButton;
+
+  switch (ke->key ()) {
+  case Qt::Key_Left:
+    dx = (shift ? -small_step : -big_step);
+    break;
+  case Qt::Key_Right:
+    dx = (shift ? small_step : big_step);
+    break;
+  case Qt::Key_Up:
+    dy = (shift ? -small_step : -big_step);
+    break;
+  case Qt::Key_Down:
+    dy = (shift ? small_step : big_step);
+    break;
+  case Qt::Key_Tab:
+      kdDebug(38000) << "<tab>" << endl;
+  default:
+    break;
+  }
+  if (dx != 0 || dy != 0)
+    translate (doc, canvas, dx, dy, false, true); */
 }
 
 #include "SelectTool.moc"

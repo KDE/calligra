@@ -28,6 +28,9 @@
 
 #include "Tool.h"
 
+class GPage;
+class Canvas;
+
 class SelectTool : public Tool
 {
   Q_OBJECT
@@ -37,6 +40,18 @@ public:
   void activate();
   void deactivate();
   void processEvent(QEvent *e);
+
+private:
+  void processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *canvas);
+  void processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canvas);
+  void processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *canvas);
+  void processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas *canvas);
+
+private:
+  enum State{ S_Init, S_Rubberband, S_Pick};
+  State state;
+  QPoint p1;
+  QRect r;
 };
 
 #endif

@@ -63,10 +63,10 @@ public:
   GPath *convertToPath() const;
 
 private:
-  Type mType;            // Oval type
+  Type mType;            // Rectangle type
   KoPoint sPoint;        // Start point
   KoPoint ePoint;        // End point
-  bool squareFlag:1;     // Circle flag
+  bool squareFlag:1;     // Square flag
   KoPoint segPoint[2];   //
 };
 

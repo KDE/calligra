@@ -184,14 +184,15 @@ void GLayer::deleteObject(GObject *obj)
 
 GObject *GLayer::findContainingObject(int x, int y)
 {
-  // We are looking for the most relevant object, that means the object
-  // in front of all others. So, we have to start at the end of the
-  // list ...
+  /*
+    We are looking for the most relevant object, that means the object
+    in front of all others. So, we have to start at the end of the list ...
+  */
   GObject *o = contents.last();
   for(; o != 0L; o = contents.prev())
     if(o->contains(KoPoint(x, y)))
       return o;
-  // nothing found
+  /* nothing found */
   return 0L;
 }
 
