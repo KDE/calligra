@@ -20,9 +20,7 @@
 #ifndef footnotedia_h
 #define footnotedia_h
 
-#include <stdlib.h>
-
-#include <qtabdialog.h>
+#include <kdialogbase.h>
 
 class KWordDocument;
 class KWPage;
@@ -32,26 +30,27 @@ class QWidget;
 /* Class: KWFootNoteDia                                           */
 /******************************************************************/
 
-class KWFootNoteDia : public QTabDialog
+class KWFootNoteDia : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    KWFootNoteDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page, int _start );
+    KWFootNoteDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page, int _start, 
+    	bool _footnote );
 
 protected:
     void setupTab1();
-    void closeEvent( QCloseEvent * ) { emit cancelButtonPressed(); }
+    bool insertFootNote();
 
     QWidget *tab1;
 
     KWordDocument *doc;
     KWPage *page;
     int start;
+    bool footnote;
 
 protected slots:
-    void insertFootNote();
-
+    virtual void slotOk();
 };
 
 #endif

@@ -1401,8 +1401,8 @@ void KWordView::insertFootNoteEndNote()
                                   "endnotes into the first frameset."),
         		    i18n("Insert Footnote/Endnote"));
     } else {
-	KWFootNoteDia dia( 0L, "", m_pKWordDoc, gui->getPaperWidget(), start );
-	dia.setCaption( i18n( "Insert Footnote/Endnote" ) );
+	KWFootNoteDia dia( 0L, "", m_pKWordDoc, gui->getPaperWidget(), start,
+		 m_pKWordDoc->getNoteType() == KWFootNoteManager::FootNotes );
 	dia.show();
     }
 }

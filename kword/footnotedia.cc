@@ -33,39 +33,46 @@
 /******************************************************************/
 
 /*================================================================*/
-KWFootNoteDia::KWFootNoteDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page, int _start )
-    : QTabDialog( parent, name, true ), start( _start )
+KWFootNoteDia::KWFootNoteDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page, int _start, bool _footnote )
+    : KDialogBase(Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true),
+    start( _start ), footnote( _footnote)
 {
     doc = _doc;
     page = _page;
 
     setupTab1();
+    
+    setButtonOKText(i18n("&Insert"), 
+                    footnote ? i18n("Insert a footnote") :
+                    i18n("Insert an endnote"));
 
-    setCancelButton( i18n( "Cancel" ) );
-    setOkButton( i18n( "OK" ) );
-
-    resize( 300, 250 );
+    setCaption( footnote ?
+                i18n("Insert Footnote") :
+                i18n("Insert Endnote"));
+    
+    setInitialSize( QSize(300, 250) );
 }
 
 /*================================================================*/
 void KWFootNoteDia::setupTab1()
 {
-    tab1 = new QWidget( this );
+    tab1 = addPage( footnote ? i18n( "Configure Footnote" ) :
+    			i18n("Configure Endnote"));
 
-    addTab( tab1, i18n( "Configure Footnote/Endnote" ) );
-
-    QLabel *l = new QLabel( i18n( "Currently there is nothing to configure for\n"
-                                  "footnotes/endnotes. Click ok to insert one!" ), tab1 );
+    QLabel *l;
+    if (footnote)
+       l = new QLabel( i18n( "Currently there is nothing to configure for\n"
+                             "footnotes." ), tab1 );
+    else
+       l = new QLabel( i18n( "Currently there is nothing to configure for\n"
+                             "endnotes." ), tab1 );
+    
     l->resize( l->sizeHint() );
     l->move( 5, 5 );
-
-    connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( insertFootNote() ) );
-
-    resize(minimumSize());
 }
 
 /*================================================================*/
-void KWFootNoteDia::insertFootNote()
+bool KWFootNoteDia::insertFootNote()
 {
     KWFootNote::KWFootNoteInternal *fi = new KWFootNote::KWFootNoteInternal;
     fi->from = start;
@@ -81,4 +88,13 @@ void KWFootNoteDia::insertFootNote()
     fn->setAfter( " ]" );
 
     page->insertFootNote( fn );
+    return true;
+}
+
+void KWFootNoteDia::slotOk()
+{
+   if (insertFootNote())
+   {
+      KDialogBase::slotOk();
+   }
 }
