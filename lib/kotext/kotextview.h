@@ -109,9 +109,12 @@ public:
     void handleMouseMoveEvent( QMouseEvent* e, const QPoint& iPoint );
     void handleMouseReleaseEvent();
     void handleMouseDoubleClickEvent( QMouseEvent* e, const QPoint& /* Currently unused */ );
+    void handleMouseTripleClickEvent( QMouseEvent* e, const QPoint& /* Currently unused */ );
     bool maybeStartDrag( QMouseEvent* e );
 
     QTextCursor selectWordUnderCursor();
+    QTextCursor selectLineUnderCursor();
+
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.
         Needs to be implemented in the application. @see showFormat */
@@ -170,7 +173,7 @@ protected:
 private slots:
     void blinkCursor();
     void setCursor( QTextCursor * _cursor ) { *m_cursor = *_cursor; }
-
+    void tripleClickTimeout();
 private:
     enum CursorAction { // keep in sync with QTextEdit
         MoveBackward,
@@ -205,6 +208,7 @@ private:
     bool inDoubleClick;
     bool mightStartDrag;
     bool m_bReadWrite;
+    bool possibleTripleClick;
 };
 
 #endif

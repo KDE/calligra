@@ -24,6 +24,7 @@
 #include "kotextobject.h"
 #include <klocale.h>
 #include <kstdaccel.h>
+#include <kdebug.h>
 
 KoTextView::KoTextView( KoTextObject *textobj )
 {
@@ -56,7 +57,7 @@ KoTextView::KoTextView( KoTextObject *textobj )
     blinkCursorVisible = FALSE;
     inDoubleClick = FALSE;
     mightStartDrag = FALSE;
-
+    possibleTripleClick = FALSE;
     m_currentFormat = 0;
     //updateUI( true, true );
 }
@@ -380,10 +381,27 @@ QTextCursor KoTextView::selectWordUnderCursor()
     return c2;
 }
 
+QTextCursor KoTextView::selectLineUnderCursor()
+{
+    QTextCursor c1 = *m_cursor;
+    QTextCursor c2 = *m_cursor;
+    c1.gotoLineStart();
+    c2.gotoLineEnd();
+    textDocument()->setSelectionStart( QTextDocument::Standard, &c1 );
+    textDocument()->setSelectionEnd( QTextDocument::Standard, &c2 );
+    return c2;
+}
+
 void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint )
 {
     mightStartDrag = FALSE;
     hideCursor();
+
+    if (possibleTripleClick)
+    {
+        handleMouseTripleClickEvent( e, iPoint );
+        return;
+    }
 
     QTextCursor oldCursor = *m_cursor;
     placeCursor( iPoint );
@@ -508,7 +526,36 @@ void KoTextView::handleMouseDoubleClickEvent( QMouseEvent*, const QPoint& /* Cur
     // But auto-copy in readonly mode, since there is no action available in that case.
     if ( !m_bReadWrite )
         emit copy();
+
+    possibleTripleClick=true;
+
+    QTimer::singleShot(QApplication::doubleClickInterval(),this,SLOT(tripleClickTimeout()));
+
 }
+
+void KoTextView::tripleClickTimeout()
+{
+   possibleTripleClick=false;
+}
+
+void KoTextView::handleMouseTripleClickEvent( QMouseEvent*ev, const QPoint& /* Currently unused */ )
+{
+    if ( ev->button() != LeftButton)
+    {
+        showCursor();
+        return;
+    }
+
+    inDoubleClick = FALSE;
+    *m_cursor = selectLineUnderCursor();
+    textObject()->selectionChangedNotify();
+    // No auto-copy, will readd with Qt 3 using setSelectionMode(true/false)
+    // But auto-copy in readonly mode, since there is no action available in that case.
+    if ( !m_bReadWrite )
+        emit copy();
+
+}
+
 
 bool KoTextView::maybeStartDrag( QMouseEvent* e )
 {
