@@ -5885,13 +5885,27 @@ void KWView::importStyle()
     }
     KWImportStyleDia dia( m_doc, lst, this, 0L );
     if ( dia.exec() ) {
+        QMap<QString, QString>*followStyle = new QMap<QString, QString>();
         QPtrList<KWStyle>list(dia.listOfStyleImported());
         QPtrListIterator<KWStyle> style(  list );
         for ( ; style.current() ; ++style )
         {
+            followStyle->insert( style.current()->translatedName(), style.current()->followingStyle()->translatedName());
             m_doc->styleCollection()->addStyleTemplate(new KWStyle(*style.current()));
+            m_doc->setModified( true );
         }
         m_doc->updateAllStyleLists();
+
+        QMapIterator<QString, QString> itFollow = followStyle->begin();
+        for ( ; itFollow != followStyle->end(); ++itFollow )
+        {
+            KWStyle * style = m_doc->styleCollection()->findStyle(itFollow.key());
+            QString newName =(*followStyle)[ itFollow.key() ];
+            KWStyle * styleFollow = m_doc->styleCollection()->findStyle(newName);
+            if (styleFollow )
+                style->setFollowingStyle( styleFollow );
+        }
+        delete followStyle;
     }
 }
 
