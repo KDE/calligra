@@ -1347,6 +1347,10 @@ KCommand * KPrPage::alignObjsLeft()
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        //don't move a header/footer
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+
         if(it.current()->isSelected())
         {
 	    _objects.append( it.current() );
@@ -1386,6 +1390,10 @@ KCommand * KPrPage::alignObjsCenterH()
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        //don't move a header/footer
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+
         if(it.current()->isSelected())
         {
 	    _objects.append( it.current() );
@@ -1422,6 +1430,10 @@ KCommand * KPrPage::alignObjsRight()
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        //don't move a header/footer
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+
         if(it.current()->isSelected())
         {
 	    _objects.append( it.current() );
@@ -1458,6 +1470,10 @@ KCommand *KPrPage::alignObjsTop()
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        //don't move a header/footer
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+
         if(it.current()->isSelected())
         {
             _y = getPageRect( ).y();
@@ -1497,6 +1513,10 @@ KCommand * KPrPage::alignObjsCenterV()
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        //don't move a header/footer
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+
         if(it.current()->isSelected())
         {
             _y = getPageRect( ).y();
@@ -1535,6 +1555,10 @@ KCommand * KPrPage::alignObjsBottom()
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        //don't move a header/footer
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+
         if(it.current()->isSelected())
         {
             _h = getPageRect( ).y() + getPageRect().height();
@@ -3314,6 +3338,9 @@ KCommand *KPrPage::moveObject(KPresenterView *m_view,const KoPoint &_move,bool k
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        //don't move a header/footer
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
         if ( it.current()->isSelected() ) {
 
             KoRect oldKoBoundingRect = it.current()->getBoundingRect(m_view->zoomHandler());
