@@ -24,6 +24,8 @@ public:
 	virtual void drawTemporaryObject(
 		KarbonView* view, const QPoint& p, double d1, double d2 );
 
+	virtual void showDialog() const;
+
 protected:
 	VCToolSinus( KarbonPart* part );
 

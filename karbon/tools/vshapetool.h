@@ -21,6 +21,8 @@ public:
 
 	virtual bool eventFilter( KarbonView* view, QEvent* event );
 
+	virtual void showDialog() const {}
+
 protected:
 	// derived tools implement specialised commands. d1, d2 are either
 	// width, height or radius, angle.

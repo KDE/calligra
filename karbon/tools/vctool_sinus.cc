@@ -83,3 +83,9 @@ VCToolSinus::createCmd( double x, double y, double d1, double d2 )
 				m_dialog->valuePeriods() );
 }
 
+void
+VCToolSinus::showDialog() const
+{
+	m_dialog->exec();
+}
+

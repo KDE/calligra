@@ -92,3 +92,10 @@ VCToolSpiral::createCmd( double x, double y, double d1, double d2 )
 				m_dialog->valueClockwise(),
 				d2 );
 }
+
+void
+VCToolSpiral::showDialog() const
+{
+	m_dialog->exec();
+}
+

@@ -88,3 +88,9 @@ VCToolStar::createCmd( double x, double y, double d1, double d2 )
 				d2 );
 }
 
+void
+VCToolStar::showDialog() const
+{
+	m_dialog->exec();
+}
+

@@ -82,3 +82,10 @@ VCToolRoundRect::createCmd( double x, double y, double d1, double d2 )
 				y + d2,
 				m_dialog->valueRound() );
 }
+
+void
+VCToolRoundRect::showDialog() const
+{
+	m_dialog->exec();
+}
+

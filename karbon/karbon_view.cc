@@ -227,8 +227,13 @@ KarbonView::ellipseTool()
 void
 KarbonView::polygonTool()
 {
-	s_currentTool = VCToolPolygon::instance( m_part );
-	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+	if( s_currentTool == VCToolPolygon::instance( m_part ) )
+		( (VShapeTool *) s_currentTool )->showDialog();
+	else
+	{
+		s_currentTool = VCToolPolygon::instance( m_part );
+		m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+	}
 }
 
 void
@@ -241,8 +246,13 @@ KarbonView::rectangleTool()
 void
 KarbonView::roundRectTool()
 {
-	s_currentTool = VCToolRoundRect::instance( m_part );
-	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+	if( s_currentTool == VCToolRoundRect::instance( m_part ) )
+		( (VShapeTool *) s_currentTool )->showDialog();
+	else
+	{
+		s_currentTool = VCToolRoundRect::instance( m_part );
+		m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+	}
 }
 
 void
@@ -298,22 +308,37 @@ KarbonView::shearTool()
 void
 KarbonView::sinusTool()
 {
-	s_currentTool = VCToolSinus::instance( m_part );
-	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+	if( s_currentTool == VCToolSinus::instance( m_part ) )
+		( (VShapeTool *) s_currentTool )->showDialog();
+	else
+	{
+		s_currentTool = VCToolSinus::instance( m_part );
+		m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+	}
 }
 
 void
 KarbonView::spiralTool()
 {
-	s_currentTool = VCToolSpiral::instance( m_part );
-	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+	if( s_currentTool == VCToolSpiral::instance( m_part ) )
+		( (VShapeTool *) s_currentTool )->showDialog();
+	else
+	{
+		s_currentTool = VCToolSpiral::instance( m_part );
+		m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+	}
 }
 
 void
 KarbonView::starTool()
 {
-	s_currentTool = VCToolStar::instance( m_part );
-	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+	if( s_currentTool == VCToolStar::instance( m_part ) )
+		( (VShapeTool *) s_currentTool )->showDialog();
+	else
+	{
+		s_currentTool = VCToolStar::instance( m_part );
+		m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+	}
 }
 
 
