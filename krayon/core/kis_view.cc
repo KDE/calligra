@@ -745,19 +745,19 @@ void KisView::slotTabSelected(const QString& name)
 */
 void KisView::slotRefreshPainter()
 {
-    KisImage *img = m_pDoc->current();
-    if(img)
-    {
-        KisLayer *lay = img->getCurrentLayer();
-        if(lay)
-        {
-            QRect extents(lay->imageExtents());
+	KisImage *img = m_pDoc -> current();
 
-            m_pPainter->resize(extents.left() + extents.width(),
-                extents.top() + extents.height());
-        }
-        m_pPainter->clearAll();
-    }
+	if(img) {
+		KisLayer *lay = img->getCurrentLayer();
+
+		if(lay) {
+			QRect extents(lay -> imageExtents());
+
+			m_pPainter -> resize(extents.left() + extents.width(), extents.top() + extents.height());
+		}
+
+		m_pPainter -> clearAll();
+	}
 }
 
 
@@ -1040,43 +1040,52 @@ void KisView::slotUpdateImage()
 */
 void KisView::slotDocUpdated()
 {
-    // kdDebug() << "slotDocUpdated()" << endl;
+	kdDebug() << "slotDocUpdated()" << endl;
 
-    /* clear the entire canvas area - especially needed when
-    the new current image is smaller than the former to remove
-    artifacts of the former image from the canvas.  This is very
-    fast, even if the image is quite large, because only the
-    canvas pixmap, which is no bigger than the visible viewport,
-    is cleared. */
+	/* 
+	 * clear the entire canvas area - especially needed when
+	 * the new current image is smaller than the former to remove
+	 * artifacts of the former image from the canvas.  This is very
+	 * fast, even if the image is quite large, because only the
+	 * canvas pixmap, which is no bigger than the visible viewport,
+	 * is cleared. 
+	 */ 
 
-    QPainter p;
-    p.begin( m_pCanvas);
-    QRect ur(0, 0, m_pCanvas->width(), m_pCanvas->height());
-    p.eraseRect(ur);
-    p.end();
+	QPainter p;
+	QRect ur(0, 0, m_pCanvas -> width(), m_pCanvas -> height());
 
-    /* repaint contents of view. There is already a new or
-    different current Image.  It is not changed, but the contents
-    of the image are displayed on the fresh canvas */
+	p.begin(m_pCanvas);
+	p.eraseRect(ur);
+	p.end();
 
-    m_pCanvas->repaint();
+	/* 
+	 * repaint contents of view. There is already a new or
+	 * different current Image.  It is not changed, but the contents
+	 * of the image are displayed on the fresh canvas 
+	 */
 
-    /* reset shells to show scrollbars. This is always necessary
-    to get the scrollbars to show correctly when the new current image
-    has a different size from the former one.  Loading a different
-    or new image does not cause either the canvas, the view, or the
-    shell to resize of its own initative. The view is a viewport in
-    the shell window and size is absorbed by scrolling unless the
-    shell window size is explicitly changed by the user with the
-    mouse, etc., or in this manner with code */
+	m_pCanvas -> repaint();
 
-    m_pDoc->resetShells();
+	/* 
+	 * reset shells to show scrollbars. This is always necessary
+	 * to get the scrollbars to show correctly when the new current image
+	 * has a different size from the former one.  Loading a different
+	 * or new image does not cause either the canvas, the view, or the
+	 * shell to resize of its own initative. The view is a viewport in
+	 * the shell window and size is absorbed by scrolling unless the
+	 * shell window size is explicitly changed by the user with the
+	 * mouse, etc., or in this manner with code 
+	 */ 
 
-    /* reset and resize the KisPainter pixmap (paint device).
-    The pixmap could be too small for the new image, causing
-    a crash,  or too large, causing inefficent use of memory */
+	m_pDoc -> resetShells();
 
-    slotRefreshPainter();
+	/* 
+	 * reset and resize the KisPainter pixmap (paint device).
+	 * The pixmap could be too small for the new image, causing
+	 * a crash,  or too large, causing inefficent use of memory 
+	 */
+
+	slotRefreshPainter();
 }
 
 /*
@@ -1087,30 +1096,39 @@ void KisView::slotDocUpdated()
 */
 void KisView::slotDocUpdated(const QRect& rect)
 {
-    //kdDebug() << "slotDocUpdated(const QRect& rect)" << endl;
-    KisImage* img = m_pDoc->current();
-    if (!img) return;
+	QRect test(0, 0, m_pCanvas -> width(), m_pCanvas -> height());
 
-    QRect ur = rect;
+	kdDebug() << "slotDocUpdated(const QRect& rect)" << endl;
 
-    ur = ur.intersect(img->imageExtents());
-    ur.setBottom(ur.bottom()+1);
-    ur.setRight(ur.right()+1);
+	KisImage *img;
+	QPainter p;
+	int xt;
+	int yt;
+       
+	if (!(img = m_pDoc -> current()))
+		return;
 
-    int xt = xPaintOffset() + ur.x() - m_pHorz->value();
-    int yt = yPaintOffset() + ur.y() - m_pVert->value();
+	QRect ur = rect;
 
-    QPainter p;
-    p.begin( m_pCanvas );
-    p.scale( zoomFactor(), zoomFactor() );
-    p.translate(xt, yt);
+	
+	ur = ur.intersect(img->imageExtents());
+	ur.setBottom(ur.bottom() + 1);
+	ur.setRight(ur.right() + 1);
+	xt = xPaintOffset() + ur.x() - m_pHorz -> value();
+	yt = yPaintOffset() + ur.y() - m_pVert -> value();
 
-    // This is the place where image is drawn on the canvas
-    // p is the paint device, ur is the update rectangle,
-    // bool transparency, ptr to the particular view to update
+	p.begin(m_pCanvas);
+	p.setClipRect(ur);
+	assert(p.hasClipping());
+	p.scale(zoomFactor(), zoomFactor());
+	p.translate(xt, yt);
 
-    koDocument()->paintEverything( p, ur, FALSE, this );
-    p.end();
+	// This is the place where image is drawn on the canvas
+	// p is the paint device, ur is the update rectangle,
+	// bool transparency, ptr to the particular view to update
+
+	koDocument() -> paintEverything(p, ur, false, this);
+	p.end();
 }
 
 /*
