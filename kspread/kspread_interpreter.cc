@@ -264,7 +264,8 @@ private:
 class KSParseNodeExtraRange : public KSParseNodeExtra
 {
 public:
-  KSParseNodeExtraRange( const QString& s, KSpreadMap* m, KSpreadTable* t ) : m_range( s, m, t ) { }
+  KSParseNodeExtraRange( const QString& s, KSpreadMap* m, KSpreadTable* t ) 
+    : m_range( s, m, t ) { }
 
   KSpreadRange* range() { return &m_range; }
 
@@ -757,6 +758,40 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       tmp = tmp.arg( node->getStringLiteral() );
       context.setException( new KSException( "InvalidRangeExpression", tmp ) );
       return false;
+    }
+
+    if ( r->range.left() == r->range.right() 
+         && r->range.top() == r->range.bottom() )
+    {
+      KSpreadCell * cell = r->table->cellAt( r->range.x(), r->range.y() );
+
+      if ( cell->hasError() )
+      {
+        QString tmp( i18n("The cell %1 has an error:\n\n%2") );
+        tmp = tmp.arg( util_cellName( cell->table(), cell->column(), cell->row() ) );
+        tmp = tmp.arg( node->getStringLiteral() );
+        context.setException( new KSException( "ErrorInCell", tmp ) );
+        return false;
+      }
+      
+      if ( cell->isDefault())
+        context.setValue( new KSValue(  /*KSValue::Empty*/ 0.0 ) );
+      else if(cell->isObscured() && cell->isObscuringForced())
+        context.setValue( new KSValue( 0.0 ) );
+      else if ( cell->isNumeric() )
+        context.setValue( new KSValue( cell->valueDouble() ) );
+      else if ( cell->isBool() )
+      context.setValue( new KSValue( cell->valueBool() ) );
+      else if ( cell->isTime() )
+        context.setValue( new KSValue( cell->valueTime() ) );
+      else if ( cell->isDate() )
+        context.setValue( new KSValue( cell->valueDate() ) );
+      else if ( cell->valueString().isEmpty() )
+        context.setValue( new KSValue( 0.0  /*KSValue::Empty*/ ) );
+      else
+        context.setValue( new KSValue( cell->valueString() ) );
+
+      return true;
     }
 
     // The range is translated in a list or lists of integers
