@@ -53,12 +53,12 @@ KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
     setInstance(KPTFactory::global());
     m_config.setReadWrite(isReadWrite()|| !isEmbedded());
     m_config.load();
-    
+
     m_project = new KPTProject(m_config.behavior().dateTimeUsage == KPTBehavior::Date); // after config is loaded
-    
+
     connect(m_commandHistory, SIGNAL(commandExecuted()), SLOT(slotCommandExecuted()));
     connect(m_commandHistory, SIGNAL(documentRestored()), SLOT(slotDocumentRestored()));
-    
+
 }
 
 
@@ -66,12 +66,13 @@ KPTPart::~KPTPart() {
     m_config.save();
     delete m_project;
     delete m_projectDialog;
+    delete m_commandHistory;
 }
 
 
 bool KPTPart::initDoc(InitDocFlags flags, QWidget* parentWidget) {
     bool result = true;
-    
+
     if (flags==KoDocument::InitDocEmpty)
     {
         m_project = new KPTProject(m_config.behavior().dateTimeUsage == KPTBehavior::Date);
@@ -79,7 +80,7 @@ bool KPTPart::initDoc(InitDocFlags flags, QWidget* parentWidget) {
         setModified(false);
         return true;
     }
-    
+
     QString templateDoc;
     KoTemplateChooseDia::ReturnType ret;
     KoTemplateChooseDia::DialogType dlgtype;
@@ -189,20 +190,22 @@ bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
     for (unsigned int i = 0; i < list.count(); ++i) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
-    
+
             if (e.tagName() == "project") {
                 KPTProject *newProject = new KPTProject(m_config.behavior().dateTimeUsage == KPTBehavior::Date);
                 if (newProject->load(e)) {
                     // The load went fine. Throw out the old project
                     delete m_project;
-                    delete m_projectDialog;
                     m_project = newProject;
+                    delete m_projectDialog;
                     m_projectDialog = 0;
                 }
+                else
+                    delete newProject;
             }
         }
     }
-    
+
     emit sigProgress(100); // the rest is only processing, not loading
 
     kdDebug() << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
@@ -277,7 +280,7 @@ void KPTPart::slotCommandExecuted() {
             m_view->slotUpdate(true);
         else if (m_update)
             m_view->slotUpdate(false);
-    }        
+    }
     m_update = m_calculate = false;
 }
 
