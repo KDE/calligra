@@ -44,26 +44,27 @@ namespace {
     const char* const unableToRead = "Couldn't read stream back!";
 }
 
-int cleanUp( KoStore* store, const char* error )
+int cleanUp( KoStore* store, const QString& testFile, const char* error )
 {
+    QFile::remove( testFile );
     delete store;
     kdDebug() << error << endl;
     return 1;
 }
 
-int test( const char* testName, KoStore::Backend backend, const char* testFile )
+int test( const char* testName, KoStore::Backend backend, const QString& testFile )
 {
     if ( QFile::exists( testFile ) )
         QFile::remove( testFile );
     QDir dirTest( testFile );
     if ( dirTest.exists() ) {
-        system( QCString( "rm -rf " ) + testFile ); // QDir::rmdir isn't recursive!
+        system( QCString( "rm -rf " ) + QFile::encodeName( testFile ) ); // QDir::rmdir isn't recursive!
     }
 
     kdDebug() << "======================="<<testName<<"====================================" << endl;
     KoStore* store = KoStore::createStore( testFile, KoStore::Write, "", backend );
     if ( store->bad() )
-        return cleanUp( store, badStorage );
+        return cleanUp( store, testFile, badStorage );
 
     if ( store->open( "test1/with/a/relative/dir.txt" ) ) {
         for ( int i = 0; i < 100; ++i )
@@ -71,11 +72,11 @@ int test( const char* testName, KoStore::Backend backend, const char* testFile )
         store->close();
     }
     else
-        return cleanUp( store, unableToOpen );
+        return cleanUp( store, testFile, unableToOpen );
 
     store->enterDirectory( testDir );
     if ( store->currentPath() != QString( testDirResult ) )
-        return cleanUp( store, brokenPath );
+        return cleanUp( store, testFile, brokenPath );
 
     if ( store->open( "test2/with/a/relative/dir.txt" ) ) {
         for ( int i = 0; i < 100; ++i )
@@ -83,25 +84,25 @@ int test( const char* testName, KoStore::Backend backend, const char* testFile )
         store->close();
     }
     else
-        return cleanUp( store, unableToOpen );
+        return cleanUp( store, testFile, unableToOpen );
 
     if ( store->open( "root" ) ) {
         store->write( test3, strlen( test3 ) );
         store->close();
     }
     else
-        return cleanUp( store, unableToOpen );
+        return cleanUp( store, testFile, unableToOpen );
 
     store->enterDirectory( testDir2 );
     if ( store->currentPath() != QString( testDir2Result ) )
-        return cleanUp( store, brokenPath );
+        return cleanUp( store, testFile, brokenPath );
 
     if ( store->open( "root" ) ) {
         store->write( test4, strlen( test4 ) );
         store->close();
     }
     else
-        return cleanUp( store, unableToOpen );
+        return cleanUp( store, testFile, unableToOpen );
 
     if ( store->isOpen() )
         store->close();
@@ -111,7 +112,7 @@ int test( const char* testName, KoStore::Backend backend, const char* testFile )
 
     store = KoStore::createStore( testFile, KoStore::Read, "", backend );
     if ( store->bad() )
-        return cleanUp( store, badStorage );
+        return cleanUp( store, testFile, badStorage );
 
     if ( store->open( "test1/with/a/relative/dir.txt" ) ) {
         QIODevice* dev = store->device();
@@ -124,14 +125,14 @@ int test( const char* testName, KoStore::Backend backend, const char* testFile )
         }
         store->close();
         if ( count != 100 )
-            return cleanUp( store, unableToRead );
+            return cleanUp( store, testFile, unableToRead );
     }
     else
-        return cleanUp( store, unableToOpen );
+        return cleanUp( store, testFile, unableToOpen );
 
     store->enterDirectory( testDir );
     if ( store->currentPath() != QString( testDirResult ) )
-        return cleanUp( store, brokenPath );
+        return cleanUp( store, testFile, brokenPath );
 
     if ( store->open( "test2/with/a/relative/dir.txt" ) ) {
         QIODevice* dev = store->device();
@@ -144,10 +145,10 @@ int test( const char* testName, KoStore::Backend backend, const char* testFile )
         }
         store->close();
         if ( count != 100 )
-            return cleanUp( store, unableToRead );
+            return cleanUp( store, testFile, unableToRead );
     }
     else
-        return cleanUp( store, unableToOpen );
+        return cleanUp( store, testFile, unableToOpen );
 
     store->enterDirectory( testDir2 );
     store->pushDirectory();
@@ -155,7 +156,7 @@ int test( const char* testName, KoStore::Backend backend, const char* testFile )
     while ( store->leaveDirectory() );
     store->enterDirectory( testDir );
     if ( store->currentPath() != QString( testDirResult ) )
-        return cleanUp( store, brokenPath );
+        return cleanUp( store, testFile, brokenPath );
 
     if ( store->open( "root" ) ) {
         if ( store->size() == 22 ) {
@@ -164,7 +165,7 @@ int test( const char* testName, KoStore::Backend backend, const char* testFile )
             while ( static_cast<char>( dev->getch() ) == test3[i++] );
             store->close();
             if ( ( i - 1 ) != strlen( test3 ) )
-                return cleanUp( store, unableToRead );
+                return cleanUp( store, testFile, unableToRead );
         }
         else {
             kdError() << "Wrong size! maindoc.xml is " << store->size() << " should be 22." << endl;
@@ -180,7 +181,7 @@ int test( const char* testName, KoStore::Backend backend, const char* testFile )
 
     store->popDirectory();
     if ( store->currentPath() != QString( testDir2Result ) )
-        return cleanUp( store, brokenPath );
+        return cleanUp( store, testFile, brokenPath );
 
     if ( store->open( "root" ) ) {
         char buf[29];
@@ -188,14 +189,15 @@ int test( const char* testName, KoStore::Backend backend, const char* testFile )
         buf[28] = '\0';
         store->close();
         if ( strncmp( buf, test4, 28 ) != 0 )
-            return cleanUp( store, unableToRead );
+            return cleanUp( store, testFile, unableToRead );
     }
     else
-        return cleanUp( store, unableToOpen );
+        return cleanUp( store, testFile, unableToOpen );
 
     if ( store->isOpen() )
         store->close();
     delete store;
+    QFile::remove( testFile );
 
     kdDebug() << "===========================================================" << endl;
     return 0;
@@ -206,10 +208,13 @@ int main( int argc, char **argv )
     KCmdLineArgs::init( argc, argv, "storage_test", "A test for the KoStore classes", "1" );
     KApplication app( argc, argv );
 
-    if ( test( "Tar", KoStore::Tar, "test.tgz" ) != 0 )
+    // KZip (due to KSaveFile) doesn't support relative filenames
+    // So use $PWD as base for the paths explicitely.
+    const QString testDir = QDir::currentDirPath();
+    if ( test( "Tar", KoStore::Tar, testDir+"test.tgz" ) != 0 )
       return 1;
-    if ( test( "Directory", KoStore::Directory, "testdir/maindoc.xml" ) != 0 )
+    if ( test( "Directory", KoStore::Directory, testDir+"testdir/maindoc.xml" ) != 0 )
       return 1;
-    if ( test( "Zip", KoStore::Zip, "test.zip" ) != 0 )
+    if ( test( "Zip", KoStore::Zip, testDir+"test.zip" ) != 0 )
       return 1;
 }
