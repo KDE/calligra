@@ -80,7 +80,11 @@
 #include <klocale.h>
 #include <kapp.h>
 #include <kurl.h>
+#ifdef USE_QFD
+#include <qfiledialog.h>
+#else
 #include <kfiledialog.h>
+#endif
 #include <kglobal.h>
 #include <qmessagebox.h>
 #include <qlayout.h>
@@ -645,8 +649,11 @@ QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
     }
     QString filter = filterMgr->exportFilters (defaultExt);
 
-    KFileDialog *dlg = new KFileDialog ((const char *) lastExportDir,
-					(const char *) filter, this,
+#ifdef USE_QFD
+    QString filename = QFileDialog::getSaveFileName( QString::null, filter, this );
+#else
+    KFileDialog *dlg = new KFileDialog (lastExportDir,
+					filter, this,
 					0L, true, false);
     dlg->setCaption (i18n ("Save As"));
     if (! lastExport.isEmpty ()) {
@@ -661,6 +668,7 @@ QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
     }
 
     delete dlg;
+#endif
 
     return filename;
 }
@@ -672,8 +680,11 @@ void KIllustratorView::slotImport()
     FilterManager* filterMgr = FilterManager::instance ();
     QString filter = filterMgr->importFilters ();
 
-    QString fname = KFilePreviewDialog::getOpenFileName ((const char *) lastImportDir,
-							 (const char *) filter, this);
+#ifdef USE_QFD
+    QString fname = QFileDialog::getOpenFileName (lastImportDir, filter, this);
+#else 
+    QString fname = KFilePreviewDialog::getOpenFileName (lastImportDir, filter, this);
+#endif
     if (! fname.isEmpty ())
     {
 	QFileInfo finfo ((const char *) fname);
@@ -737,6 +748,15 @@ void KIllustratorView::slotExport()
 
 void KIllustratorView::slotInsertBitmap()
 {
+#ifdef USE_QFD
+     QString fname = QFileDialog::getOpenFileName
+             ((const char *) lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
+                 "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
+                 "*.png | PNG Images\n"
+                 "*.xbm | X11 Bitmaps\n"
+                 "*.xpm | X11 Pixmaps"),
+             this);
+#else
     QString fname = KFilePreviewDialog::getOpenFileName
 		    ((const char *) lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
 							"*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
@@ -744,6 +764,7 @@ void KIllustratorView::slotInsertBitmap()
 							"*.xbm | X11 Bitmaps\n"
 							"*.xpm | X11 Pixmaps"),
 		     this);
+#endif
     if (! fname.isEmpty ()) {
 	QFileInfo finfo (fname);
 	lastBitmapDir = finfo.dirPath ();
@@ -755,9 +776,15 @@ void KIllustratorView::slotInsertBitmap()
 
 void KIllustratorView::slotInsertClipart()
 {
+#ifdef USE_QFD
+      QString fname = QFileDialog::getOpenFileName
+              (lastClipartDir,
+               i18n("*.wmf *.WMF | Windows Metafiles"), this);
+#else
     QString fname = KFilePreviewDialog::getOpenFileName
-		    ((const char *) lastClipartDir,
+		    (lastClipartDir,
 		     i18n("*.wmf *.WMF | Windows Metafiles"), this);
+#endif
     if ( !fname.isEmpty ())
     {
         QFileInfo finfo (fname);
