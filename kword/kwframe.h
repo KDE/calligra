@@ -201,14 +201,14 @@ private:
     RunAround runAround;
     FrameBehaviour frameBehaviour;
     NewFrameBehaviour newFrameBehaviour;
-    bool selected;
     double runAroundGap;
-    bool mostRight;
+    bool selected:1;
+    bool mostRight:1;
     int m_pageNum;
 
-    QList<QRect> intersections;
-    QRegion emptyRegion;
-    bool emptyRegionDirty;
+    //QList<QRect> intersections;
+    //QRegion emptyRegion;
+    //bool emptyRegionDirty;
 
     Border brd_left, brd_right, brd_top, brd_bottom;
     QBrush backgroundColor;
@@ -216,9 +216,10 @@ private:
     double bleft, bright, btop, bbottom; // margins
 
     QList<KWResizeHandle> handles;
+    KWFrameSet *frameSet;
+
     KWFrame &operator=( const KWFrame &_frame );
     KWFrame ( const KWFrame &_frame );
-    KWFrameSet *frameSet;
 };
 
 /**

@@ -37,36 +37,33 @@
 
 /*================================================================*/
 KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAround _ra, double _gap )
-    : QRect( left, top, width, height )
+    : QRect( left, top, width, height ),
+      // Initialize member vars here. This ensures they are all initialized, since it's
+      // easier to compare this list with the member vars list (compiler ensures order).
+      sheetSide( AnySide ),
+      runAround( _ra ),
+      frameBehaviour( AutoCreateNewFrame ),
+      newFrameBehaviour( Reconnect ),
+      runAroundGap( _gap ),
+      selected( false ),
+      mostRight( false ),
+      m_pageNum( 0 ),
+      backgroundColor( QBrush( Qt::white ) ),
+      bleft( 0 ),
+      bright( 0 ),
+      btop( 0 ),
+      bbottom( 0 ),
+      brd_left( Qt::white, Border::SOLID, 0 ),
+      brd_right( Qt::white, Border::SOLID, 0 ),
+      brd_top( Qt::white, Border::SOLID, 0 ),
+      brd_bottom( Qt::white, Border::SOLID, 0 )
 {
     //kdDebug() << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
     frameSet = fs;
-    runAround = _ra;
-    runAroundGap = _gap;
     m_pageNum = fs ? fs->kWordDocument()->getPageOfRect( *this ) : 0;
     handles.setAutoDelete(true);
-    intersections.setAutoDelete( true );
-    selected = false;
-    mostRight = false;
-    emptyRegionDirty = TRUE;
-
-    backgroundColor = QBrush( Qt::white );
-    brd_left.color = getBackgroundColor().color();
-    brd_left.style = Border::SOLID;
-    brd_left.ptWidth = 0;
-    brd_right.color = getBackgroundColor().color();
-    brd_right.style = Border::SOLID;
-    brd_right.ptWidth = 0;
-    brd_top.color = getBackgroundColor().color();
-    brd_top.style = Border::SOLID;
-    brd_top.ptWidth = 0;
-    brd_bottom.color = getBackgroundColor().color();
-    brd_bottom.style = Border::SOLID;
-    brd_bottom.ptWidth = 0;
-
-    frameBehaviour = AutoCreateNewFrame;
-    newFrameBehaviour = Reconnect;
-    sheetSide = AnySide;
+    //intersections.setAutoDelete( true );
+    //emptyRegionDirty = TRUE;
 }
 
 /*================================================================*/
