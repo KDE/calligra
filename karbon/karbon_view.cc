@@ -598,10 +598,12 @@ KarbonView::viewModeChanged()
 void
 KarbonView::zoomChanged()
 {
+	double centerX = double( m_canvas->contentsX() + m_canvas->visibleWidth() / 2 ) / double( m_canvas->contentsWidth() );
+	double centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
 	bool bOK;
 	double zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
-	// above 2000% probably doesnt make sense... (Rob)
 
+	// above 2000% probably doesnt make sense... (Rob)
 	if( zoomFactor > 20 )
 	{
 		zoomFactor = 20;
@@ -623,6 +625,8 @@ KarbonView::zoomChanged()
 	VPainter *painter = painterFactory()->editpainter();
 	painter->setZoomFactor( zoomFactor );
 
+	m_canvas->setContentsPos( centerX * m_canvas->contentsWidth() - m_canvas->visibleWidth() / 2,
+							  centerY * m_canvas->contentsHeight() - m_canvas->visibleHeight() / 2 );
 	m_canvas->repaintAll();
 
 	m_canvas->setFocus();
