@@ -76,6 +76,13 @@ void KoChild::setGeometry( const QRect &rect, bool noEmit )
 
   d->m_geometry = rect;
 
+  //Childs should have a minimum size of 3, so they can be selected
+  if( d->m_geometry.width() < 3 )
+    d->m_geometry.setWidth( 3 );
+
+  if( d->m_geometry.height() < 3 )
+    d->m_geometry.setHeight( 3 );
+
   updateMatrix();
 
   if ( !d->m_lock && !noEmit )
