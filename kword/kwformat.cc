@@ -125,12 +125,6 @@ void KWTextFormat::setCharset( QFont::CharSet charset )
 
 void KWTextFormat::generateKey()
 {
-#if 0 // doesn't seem to help...
-    // Small hack: we ask for the user's charset here, so that we do
-    // it in all cases.
-    fn.setCharSet( KGlobal::charsets()->charsetForLocale() );
-#endif
-
     QTextFormat::generateKey();
     QString k = key();
     ASSERT( !k.contains( '+' ) );
