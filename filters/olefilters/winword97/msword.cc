@@ -151,8 +151,8 @@ void MsWord::getParagraphs()
     //
     // There is also the implication that without the complex structures, the
     // text cannot be in unicode form.
-kDebugError(area, "pause for debug");
-sleep(5);
+//kDebugError(area, "pause for debug");
+//sleep(5);
     if (m_fib.lcbClx)
     {
         U32 startFc;
