@@ -38,6 +38,8 @@ extern "C"
 KoDocInfoPropsFactory::KoDocInfoPropsFactory( QObject *parent, const char *name )
 : KLibFactory( parent, name )
 {
+  // Install the libkoffice* translations
+  KGlobal::locale()->insertCatalogue("koffice");
 }
 
 KoDocInfoPropsFactory::~KoDocInfoPropsFactory()
