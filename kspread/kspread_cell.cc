@@ -3896,6 +3896,19 @@ bool KSpreadCell::tryParseDate( const QString& str )
     }
     if (valid)
     {
+        // Note: if shortdate format only specifies 2 digits year, then 3/4/1955 will
+	// be treated as in year 3055, while 3/4/55 as year 2055 (because 55 < 69,
+	// see KLocale) and thus there's no way to enter for year 1995
+
+	// The following fixes the problem, 3/4/1955 will always be 1955
+
+	QString fmt = locale()->dateFormatShort();
+	if( ( fmt.contains( "%y" ) == 1 ) && ( tmpDate.year() > 2999 ) )
+		tmpDate.addYears( -2000 );
+		
+    }
+    if (valid)
+    {
         Q_ASSERT( tmpDate.isValid() );
 
         //KLocale::readDate( QString ) doesn't support long dates...
