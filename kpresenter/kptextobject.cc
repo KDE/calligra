@@ -1383,7 +1383,7 @@ void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, 
                 *abort = false;
             }
         }
-        else
+        else if ( isProtect() )
             m_textobj->setLastFormattedParag( 0 );
     }
 }
