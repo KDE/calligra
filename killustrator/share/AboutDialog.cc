@@ -35,9 +35,10 @@
 #define ABOUT_INFO "Version "APP_VERSION"\n\nCopyright (C) 1998-99\n\
 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)\n\n\
 Contributions by\n\
-Steffen Thorhauer, Stefan Taferner\n\
-Stephan Kulow, Jost Schenck, Ben Skelton\n\
-Reginald Stadlbauer, Hagen Höpfner"
+Steffen Thorhauer, Stefan Taferner,\n\
+Stephan Kulow, Jost Schenck, Ben Skelton,\n\
+Reginald Stadlbauer, Hagen Höpfner,\n\
+Stefan Eickeler, Tobias Burnus, Wilco Greven"
 
 AboutDialog::AboutDialog (QWidget* parent) :
     QDialog (parent, "About", true) {
@@ -59,7 +60,7 @@ AboutDialog::AboutDialog (QWidget* parent) :
 
     label = new QLabel ("KIllustrator", this);
     label->setFont (QFont ("helvetica", 18, QFont::Bold));
-    label->setGeometry (100, 30, 100, 25);
+    label->setGeometry (100, 30, 170, 25);
 
     label = new QLabel (info.data (), this);
     label->setAlignment (AlignLeft|WordBreak);

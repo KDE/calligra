@@ -50,7 +50,9 @@ StartupScreen::StartupScreen (const char* pname, int seconds) :
   timer = new QTimer (this);
   connect (timer, SIGNAL (timeout ()), this, SLOT (destroy ()));
   timer->start (seconds * 1000, true);
+  setActiveWindow ();
   show ();
+  raise ();
 }
 
 

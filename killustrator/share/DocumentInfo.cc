@@ -34,6 +34,7 @@
 #include <qlabel.h>
 #include <qmlined.h>
 #include <qlayout.h>
+#include <qregexp.h>
 
 #include "GDocument.h"
 
@@ -52,15 +53,19 @@ DocumentInfo::DocumentInfo (GDocument* doc, QWidget* parent,
   vl->addWidget (textfield, 1);
   
   QLabel *lbKeyWd   = new QLabel(i18n("Keywords:"),this);
+  lbKeyWd->setFixedHeight (lbKeyWd->sizeHint ().height ());
   vl->addWidget(lbKeyWd);
   edKeyWd= new QLineEdit(this);
+  edKeyWd->setFixedHeight (edKeyWd->sizeHint ().height ());
   vl->addWidget(edKeyWd);
   
   QLabel *lbComment = new QLabel(i18n("Comment:"),this);
+  lbComment->setFixedHeight (lbComment->sizeHint ().height ());
   vl->addWidget(lbComment);
   edComnt= new QLineEdit(this);
+  edComnt->setFixedHeight (edComnt->sizeHint ().height ());
   // copy comments from GDocument
-  edComnt->setText("Comment text dummy");
+  // edComnt->setText("Comment text dummy");
   vl->addWidget(edComnt);
     
   // a separator

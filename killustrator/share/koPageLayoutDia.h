@@ -267,6 +267,7 @@ private slots:
   void topChanged();
   void bottomChanged();
   void rPressed() {retPressed = true;}
+  int dimChecking();
 
   // spinboxes
   void nColChanged(int);

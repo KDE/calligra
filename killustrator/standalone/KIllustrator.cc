@@ -801,7 +801,7 @@ void KIllustrator::menuCallback (int item) {
       if (askForSave ()) {
 	QString fname =
 	  KFilePreviewDialog::getOpenFileURL((const char *) lastOpenDir,
-					     "*.kil | KIllustrator File",
+					     i18n("*.kil | KIllustrator File"),
 					     this);
 	if (! fname.isEmpty ()) {
           KURL u (fname);
@@ -882,11 +882,11 @@ void KIllustrator::menuCallback (int item) {
   case ID_INSERT_BITMAP:
     {
       QString fname = KFilePreviewDialog::getOpenFileName
-	     ((const char *) lastBitmapDir, "*.gif *.GIF | GIF Images\n"
+	     ((const char *) lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
 	         "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
 	         "*.png | PNG Images\n"
 	         "*.xbm | X11 Bitmaps\n"
-	         "*.xpm | X11 Pixmaps",
+	         "*.xpm | X11 Pixmaps"),
 	     this);
        if (! fname.isEmpty ()) {
          QFileInfo finfo (fname);
@@ -901,7 +901,7 @@ void KIllustrator::menuCallback (int item) {
     {
       QString fname = KFilePreviewDialog::getOpenFileName
 	      ((const char *) lastClipartDir,
-	       "*.wmf *.WMF | Windows Metafiles", this);
+	       i18n("*.wmf *.WMF | Windows Metafiles"), this);
       if (! fname.isEmpty ()) {
         QFileInfo finfo (fname);
         lastClipartDir = finfo.dirPath ();
@@ -917,7 +917,7 @@ void KIllustrator::menuCallback (int item) {
 
       if (document->selectionIsEmpty ()) {
 	result =
-	  QMessageBox::information (this, "Warning",
+	  QMessageBox::information (this, i18n("Warning"),
 			  i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
 			 i18n ("Yes"), i18n ("No"));
       }
@@ -1204,7 +1204,7 @@ void KIllustrator::quit () {
 bool KIllustrator::askForSave () {
   if (document->isModified ()) {
     int result =
-      QMessageBox::information (this, "Message",
+      QMessageBox::information (this, i18n ("Message"),
 				i18n ("This Document has been modified.\nWould you like to save it ?"),
 				i18n ("Yes"), i18n ("No"), i18n ("Cancel"));
     if (result == 0)
@@ -1247,7 +1247,7 @@ void KIllustrator::saveAsFile () {
     if (access ((const char *) fname, W_OK) == 0) {
       // there is already a file with the same name
       int result =
-	QMessageBox::information (this, "Message",
+	QMessageBox::information (this, i18n ("Message"),
 			      i18n ("This Document already exists.\nWould you like to override it ?"),
 			      i18n ("Yes"),
 			      i18n ("No"),
@@ -1321,7 +1321,7 @@ void KIllustrator::setPenColor (const QBrush& b) {
   }
   else {
     int result =
-      QMessageBox::information (this, "Warning",
+      QMessageBox::information (this, i18n ("Warning"),
 		      i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
 				i18n ("Yes"), i18n ("No"));
     if (result == 0)
@@ -1347,7 +1347,7 @@ void KIllustrator::setFillColor (const QBrush& b) {
   }
   else {
     int result =
-      QMessageBox::information (this, "Warning",
+      QMessageBox::information (this, i18n("Warning"),
 		      i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
 		      i18n ("Yes"), i18n ("No"));
     if (result == 0)

@@ -31,7 +31,8 @@ MeasurementUnit UnitBox::defaultUnit = UnitPoint;
 
 UnitBox::UnitBox (QWidget* parent, const char* name) : QWidget (parent, name) {
   valueBox = new FloatSpinBox (this, "valueBox");
-  valueBox->setGeometry (0, 0, 80, valueBox->height ());
+//  valueBox->setGeometry (0, 0, 80, valueBox->height ());
+  valueBox->setGeometry (0, 0, 80, 24);
 
   unitCombo = new QComboBox (this, "unitCombo");
   unitCombo->insertItem (unitToString (UnitPoint));

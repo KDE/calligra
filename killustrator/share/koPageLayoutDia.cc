@@ -46,6 +46,15 @@ void KoPagePreview::setPageLayout(KoPageLayout _layout)
 //   if (_layout.unit == PG_CM) fact = 10;
 //   if (_layout.unit == PG_INCH) fact = 25.4;
 
+  //CC17.10.1999: if the page is large than 500mm we scale page preview
+  // for a good look for about 2100x2100mm sheets (anybody want more?).
+  if (_layout.width >  500 || _layout.height  >  500) fact = 0.500;
+  if (_layout.width > 1000 || _layout.height  > 1000) fact = 0.333;
+  if (_layout.width > 1500 || _layout.height  > 1500) fact = 0.250;
+  //CC: Q:what if user make crazy mistake, like a width of 999999 inches!?!?
+  //    A: I'll give up, because page preview size override canvas!
+  if (_layout.width > 2100 || _layout.height  > 2100) return;
+    
   int bl = (int)(_layout.left * fact * 100)/100,br = (int)(_layout.right * fact * 100)/100;
   int bt = (int)(_layout.top * fact * 100)/100,bb = (int)(_layout.bottom * fact * 100)/100;
   int wid = (int)(_layout.width * fact * 100)/100,hei = (int)(_layout.height * fact * 100)/100;
@@ -74,21 +83,28 @@ void KoPagePreview::drawContents(QPainter *painter)
   int cw = 0;
   cw = pgW / columns;
 
-  painter->setBrush(white);
   painter->setPen(QPen(black));
 
-  painter->drawRect((int)((width() - pgWidth) / 2) + 1,
-		    (int)((height() - pgHeight) / 2) + 1,
+  //CC-17.10.1999: shadow of page is more visible now
+  painter->setBrush(black);
+  painter->drawRect((int)((width() - pgWidth) / 2) + 3,
+		    (int)((height() - pgHeight) / 2) + 3,
 		    pgWidth,pgHeight);
+
+  painter->setBrush(white);
   painter->drawRect((int)((width() - pgWidth) / 2),
 		    (int)((height() - pgHeight) / 2),
 		    pgWidth,pgHeight);
 
   painter->setBrush(QBrush(black,HorPattern));
-  if (pgW == pgWidth || pgH == pgHeight)
-    painter->setPen(NoPen);
-  else
-    painter->setPen(lightGray);
+  //CC17.10.1999: now, the page look more comfortable 
+  // and it's easy to observe all bounds of printable area
+  painter->setPen(blue); 
+
+//  if (pgW == pgWidth || pgH == pgHeight)
+//    painter->setPen(NoPen);
+//  else
+//    painter->setPen(black);
       
   for (int i = 0;i < columns;i++)
     painter->drawRect((int)((width() - pgWidth) / 2) + pgX + i * cw,
@@ -208,27 +224,27 @@ KoPageLayout KoPageLayoutDia::standardLayout()
 {
   KoPageLayout  _layout;
 
-  _layout.format = PG_DIN_A4;
-  _layout.orientation = PG_PORTRAIT;
-  _layout.width = _layout.mmWidth = PG_A4_WIDTH;
-  _layout.height = _layout.mmHeight = PG_A4_HEIGHT;
-  _layout.left = _layout.mmLeft = 20;
-  _layout.right = _layout.mmRight = 20;
-  _layout.top = _layout.mmTop = 20;
-  _layout.bottom = _layout.mmBottom = 20;
-  _layout.unit = PG_MM;
-  _layout.ptWidth = MM_TO_POINT(PG_A4_WIDTH);
-  _layout.ptHeight = MM_TO_POINT(PG_A4_HEIGHT);
-  _layout.ptLeft = MM_TO_POINT(20);
-  _layout.ptRight = MM_TO_POINT(20);
-  _layout.ptTop = MM_TO_POINT(20);
-  _layout.ptBottom = MM_TO_POINT(20);
-  _layout.inchWidth = PG_A4_WIDTH_I;
-  _layout.inchHeight = PG_A4_HEIGHT_I;
-  _layout.inchLeft = MM_TO_INCH(20);
-  _layout.inchRight = MM_TO_INCH(20);
-  _layout.inchTop = MM_TO_INCH(20);
-  _layout.inchBottom = MM_TO_INCH(20);
+  _layout.format       = PG_DIN_A4;
+  _layout.orientation  = PG_PORTRAIT;
+  _layout.width        = _layout.mmWidth  = PG_A4_WIDTH;
+  _layout.height       = _layout.mmHeight = PG_A4_HEIGHT;
+  _layout.left         = _layout.mmLeft   = 20;
+  _layout.right        = _layout.mmRight  = 20;
+  _layout.top          = _layout.mmTop    = 20;
+  _layout.bottom       = _layout.mmBottom = 20;
+  _layout.unit         = PG_MM;
+  _layout.ptWidth      = MM_TO_POINT(PG_A4_WIDTH);
+  _layout.ptHeight     = MM_TO_POINT(PG_A4_HEIGHT);
+  _layout.ptLeft       = MM_TO_POINT(20);
+  _layout.ptRight      = MM_TO_POINT(20);
+  _layout.ptTop        = MM_TO_POINT(20);
+  _layout.ptBottom     = MM_TO_POINT(20);
+  _layout.inchWidth    = PG_A4_WIDTH_I;
+  _layout.inchHeight   = PG_A4_HEIGHT_I;
+  _layout.inchLeft     = MM_TO_INCH(20);
+  _layout.inchRight    = MM_TO_INCH(20);
+  _layout.inchTop      = MM_TO_INCH(20);
+  _layout.inchBottom   = MM_TO_INCH(20);
 
   return  _layout;
 }
@@ -1277,46 +1293,100 @@ void KoPageLayoutDia::orientationChanged(int _orientation)
   if ((KoOrientation)_orientation != layout.orientation)
     {
       double tmp;
+      double tmp_width, tmp_height, tmp_left, tmp_right, tmp_top, tmp_bottom;
 
-      layout.width = atof(epgWidth->text());
-      layout.height = atof(epgHeight->text());
-      layout.left = atof(ebrLeft->text());
-      layout.right = atof(ebrRight->text());
-      layout.top = atof(ebrTop->text());
-      layout.bottom = atof(ebrBottom->text());
-	
-      tmp = layout.width;
-      layout.width = layout.height;
-      layout.height = tmp;
+     // check validity of page format dimensions
+     if (!dimChecking()) 
+       {
+        retPressed = false;
+        return;
+       }
+      
+      //CC: get enties values
+      tmp_width  = atof(epgWidth->text());
+      tmp_height = atof(epgHeight->text());
+      tmp_left   = atof(ebrLeft->text());
+      tmp_right  = atof(ebrRight->text());
+      tmp_top    = atof(ebrTop->text());
+      tmp_bottom = atof(ebrBottom->text());
 
-      layout.ptWidth = MM_TO_POINT(layout.width);
-      layout.ptHeight = MM_TO_POINT(layout.height);
-      layout.ptLeft = MM_TO_POINT(layout.left);
-      layout.ptRight = MM_TO_POINT(layout.right);
-      layout.ptTop = MM_TO_POINT(layout.top);
-      layout.ptBottom = MM_TO_POINT(layout.bottom);
+      //CC17.10.1999: check which measure unit is used and make tranlations
+      switch (layout.unit)
+        {
+	case PG_MM:
+          {
+           layout.width  = tmp_width;
+           layout.height = tmp_height;
+           layout.left   = tmp_left;
+           layout.right  = tmp_right;
+           layout.top    = tmp_top;
+           layout.bottom = tmp_bottom;
+          } break;
+	case PG_PT:
+          {
+           layout.width  = POINT_TO_MM(tmp_width);
+           layout.height = POINT_TO_MM(tmp_height);
+           layout.left   = POINT_TO_MM(tmp_left);
+           layout.right  = POINT_TO_MM(tmp_right);
+           layout.top    = POINT_TO_MM(tmp_top);
+           layout.bottom = POINT_TO_MM(tmp_bottom);
+          } break;
+        case PG_INCH:
+          {
+           layout.width  = INCH_TO_MM(tmp_width);
+           layout.height = INCH_TO_MM(tmp_height);
+           layout.left   = INCH_TO_MM(tmp_left);
+           layout.right  = INCH_TO_MM(tmp_right);
+           layout.top    = INCH_TO_MM(tmp_top);
+           layout.bottom = INCH_TO_MM(tmp_bottom);
+	  } break;
+      }
+      //CC: swap width with height
+      tmp             = layout.width;
+      layout.width    = layout.height;
+      layout.height   = tmp;
 
+      //CC: we make now what looking so far, page rotation
+      // reverse clockwise for Potrait   -> Landscape
+      // counter clockwise for Landscape -> Portrait
       if ((KoOrientation)_orientation == PG_LANDSCAPE)
-	{
-	  tmp = layout.left;
-	  layout.left = layout.bottom;
-	  layout.bottom = layout.right;
-	  layout.right = layout.top;
-	  layout.top = tmp;
+	{ // portrait -> landscape
+	  tmp           = layout.left;
+	  layout.left   = layout.top;
+	  layout.top    = layout.right;
+	  layout.right  = layout.bottom;
+	  layout.bottom = tmp;
 	}
       else
-	{
-	  tmp = layout.top;
-	  layout.top = layout.right;
-	  layout.right = layout.bottom;
-	  layout.bottom = layout.left;
-	  layout.left = tmp;
+	{ // landscape -> portrait
+	  tmp           = layout.top;
+	  layout.top    = layout.left;
+	  layout.left   = layout.bottom;
+	  layout.bottom = layout.right;
+	  layout.right  = tmp;
 	}
 
-      layout.ptLeft = MM_TO_POINT(layout.left);
-      layout.ptRight = MM_TO_POINT(layout.right);
-      layout.ptTop = MM_TO_POINT(layout.top);
-      layout.ptBottom = MM_TO_POINT(layout.bottom);
+      //CC: make MM to MM translation of new values
+      layout.mmWidth    = layout.width;
+      layout.mmHeight   = layout.height;
+      layout.mmLeft     = layout.left;
+      layout.mmRight    = layout.right;
+      layout.mmTop      = layout.top;
+      layout.mmBottom   = layout.bottom;
+      //CC: make MM to POINTS translation of new values
+      layout.ptWidth    = MM_TO_POINT(layout.width);
+      layout.ptHeight   = MM_TO_POINT(layout.height);
+      layout.ptLeft     = MM_TO_POINT(layout.left);
+      layout.ptRight    = MM_TO_POINT(layout.right);
+      layout.ptTop      = MM_TO_POINT(layout.top);
+      layout.ptBottom   = MM_TO_POINT(layout.bottom);
+      //CC: make MM to INCHES translation of new values
+      layout.inchWidth  = MM_TO_INCH(layout.width);
+      layout.inchHeight = MM_TO_INCH(layout.height);
+      layout.inchLeft   = MM_TO_INCH(layout.left);
+      layout.inchRight  = MM_TO_INCH(layout.right);
+      layout.inchTop    = MM_TO_INCH(layout.top);
+      layout.inchBottom = MM_TO_INCH(layout.bottom);
 
       layout.orientation = (KoOrientation)_orientation;
       setValuesTab1();
@@ -1329,6 +1399,13 @@ void KoPageLayoutDia::widthChanged()
 {
   if (strlen(epgWidth->text()) == 0 && retPressed)
     epgWidth->setText("0.00");
+
+  // check validity of page format dimensions
+  if (!dimChecking()) 
+    {
+     retPressed = false;
+     return;
+    }
 
   switch (layout.unit)
     {
@@ -1365,6 +1442,13 @@ void KoPageLayoutDia::heightChanged()
   if (strlen(epgHeight->text()) == 0 && retPressed)
     epgHeight->setText("0.00");
 
+  // check validity of page format dimensions
+  if (!dimChecking()) 
+    {
+     retPressed = false;
+     return;
+    }
+
   switch (layout.unit)
     {
     case PG_MM:
@@ -1397,9 +1481,17 @@ void KoPageLayoutDia::heightChanged()
 /*===================== left border changed =======================*/
 void KoPageLayoutDia::leftChanged()
 {
+
   if (strlen(ebrLeft->text()) == 0 && retPressed)
     ebrLeft->setText("0.00");
-
+  
+  // check validity of page format dimensions
+  if (!dimChecking()) 
+    {
+     retPressed = false;
+     return;
+    }
+    
   switch (layout.unit)
     {
     case PG_MM:
@@ -1434,6 +1526,13 @@ void KoPageLayoutDia::rightChanged()
 {
   if (strlen(ebrRight->text()) == 0 && retPressed)
     ebrRight->setText("0.00");
+
+  // check validity of page format dimensions
+  if (!dimChecking()) 
+    {
+     retPressed = false;
+     return;
+    }
 
   switch (layout.unit)
     {
@@ -1470,6 +1569,13 @@ void KoPageLayoutDia::topChanged()
   if (strlen(ebrTop->text()) == 0 && retPressed)
     ebrTop->setText("0.00");
 
+  // check validity of page format dimensions
+  if (!dimChecking()) 
+    {
+     retPressed = false;
+     return;
+    }
+
   switch (layout.unit)
     {
     case PG_MM:
@@ -1504,6 +1610,13 @@ void KoPageLayoutDia::bottomChanged()
 {
   if (strlen(ebrBottom->text()) == 0 && retPressed)
     ebrBottom->setText("0.00");
+
+  // check validity of page format dimensions
+  if (!dimChecking()) 
+    {
+     retPressed = false;
+     return;
+    }
 
   switch (layout.unit)
     {
@@ -1568,5 +1681,30 @@ void KoPageLayoutDia::nSpaceChanged(const char *_val)
 
   updatePreview(layout);
 }
+
+
+/*==============   Page Format dim's checking   ====================*/
+int KoPageLayoutDia::dimChecking()
+{
+  // Claudiu Costin: temporary variabiles. 
+  // Old layout values must rest unchanged before checking...
+  double tmp_width, tmp_height, tmp_right, tmp_left, tmp_top, tmp_bottom;
+
+  tmp_width  = atof(epgWidth->text());
+  tmp_height = atof(epgHeight->text());
+  tmp_left   = atof(ebrLeft->text());
+  tmp_right  = atof(ebrRight->text());
+  tmp_top    = atof(ebrTop->text());
+  tmp_bottom = atof(ebrBottom->text());
+
+  // (some very useful checkings, if our user make mistakes)
+  // right + left <= page_width
+  if (tmp_right + tmp_left > tmp_width) return false;
+  // top +bottom <= page_height
+  if (tmp_top + tmp_bottom > tmp_height) return false;
+ 
+  return true;
+}
+
 
 #include "koPageLayoutDia.moc"

@@ -15,15 +15,15 @@ for file in ../kde-i18n/*/messages/koffice/killustrator.po; do
    msgfmt $file -o killustrator.dist/po/$lang.gmo
    list="$list $lang.gmo"
 done
-#dlist=""
-#for file in ../kde-i18n/*/docs/koffice/killustrator; do
-#   lang=`echo $file | awk -F '/' '{ print $3 }'`
-#   echo $lang
-#   mkdir killustrator.dist/doc/$lang
-#   cp $file/* killustrator.dist/doc/$lang
-#   dlist="$dlist $lang"
-#done
-#echo "append SUBDIRS = $dlist"
+dlist=""
+for file in ../kde-i18n/*/docs/koffice/killustrator; do
+   lang=`echo $file | awk -F '/' '{ print $3 }'`
+   echo $lang
+   mkdir killustrator.dist/doc/$lang
+   cp $file/* killustrator.dist/doc/$lang
+   dlist="$dlist $lang"
+done
+echo "append SUBDIRS = $dlist"
 echo "SUBDIRS = de en" >> killustrator.dist/doc/Makefile.am
 
 # remove killustrator from SUBDIRS. Every other instance doesn't hurt :)
@@ -52,7 +52,7 @@ sed -e "s#@GMOFILES@#$list#" po/Makefile.am > po/Makefile.am.new && mv po/Makefi
 echo 'dist-hook:' >> Makefile.am
 echo -e "\tcd \$(top_distdir) && perl \$(top_srcdir)/am_edit" >> Makefile.am
 echo "" >> Makefile.am
-sed 's#^myown_dist = #myown_dist = am_edit#' Makefile.am > Makefile.am.2
+sed 's#^myown_dist = #myown_dist = am_edit#' Makefile.am | sed 's#SUBDIRS = share filter xmlutils standalone po pics#SUBDIRS = share filter xmlutils standalone po pics doc#' > Makefile.am.2
 mv Makefile.am.2 Makefile.am
 sed -e "s/\$(LIB_KIMGIO)/\$(LIB_KIMGIO) \$(LIBJPEG) \$(LIBTIFF)/" standalone/Makefile.am > standalone/Makefile.am.new && mv standalone/Makefile.am.new standalone/Makefile.am
 aclocal

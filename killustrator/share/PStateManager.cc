@@ -77,7 +77,7 @@ void PStateManager::readDefaultSettings () {
   dupXOff = config->readDoubleNumEntry ("DuplicateXOffset", 10.0);
   dupYOff = config->readDoubleNumEntry ("DuplicateYOffset", 10.0);
 
-  showSplash = config->readBoolEntry ("ShowSplash", true);
+  showSplash = config->readBoolEntry ("ShowSplash", false);
 
   config->setGroup ("DefaultObjectProperties");
 

@@ -398,7 +398,7 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
   const char *msg[] = { "Solid", "Pattern", "Gradient", "No Fill" };
   for (int i = 0; i < 4; i++) {
     fillStyleBttn[i] = new QRadioButton (group);
-    fillStyleBttn[i]->setText (msg[i]);
+    fillStyleBttn[i]->setText (i18n (msg[i]));
     fillStyleBttn[i]->move (10, i * 30);
     connect (fillStyleBttn[i], SIGNAL(clicked()),
 	     this, SLOT(fillStyleChanged()));

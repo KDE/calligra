@@ -54,6 +54,8 @@ public:
   
   virtual bool consumesRMBEvents () { return false; }
 
+  void setPickMode () { state = S_Pick; }
+
 signals:
   void partSelected (GObject *);
 
