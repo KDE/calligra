@@ -293,8 +293,8 @@ static void ProcessTypeTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
 
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList.append ( AttrProcessing ("key",  "QString", &typeData->m_key ) );
-    attrProcessingList.append ( AttrProcessing ("type", "int",     &typeData->m_text) );
-    attrProcessingList.append ( AttrProcessing ("text", "QString", &typeData->m_type) );
+    attrProcessingList.append ( AttrProcessing ("text", "QString", &typeData->m_text) );
+    attrProcessingList.append ( AttrProcessing ("type", "int",     &typeData->m_type) );
     ProcessAttributes (myNode, attrProcessingList);
 }
 
@@ -359,11 +359,18 @@ static void SubProcessFormatFourTag(QDomNode myNode,
     LinkData linkData;
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList
-        << TagProcessing ( "TYPE",    ProcessTypeTag,         &typeData)
+        << TagProcessing ( "TYPE",    ProcessTypeTag,         &typeData )
         << TagProcessing ( "DATE",    NULL,                   NULL      )
         << TagProcessing ( "LINK",    ProcessLinkTag,         &linkData )
         ;
     ProcessSubtags (myNode, tagProcessingList, leader);
+
+    formatData.variable.m_key=typeData.m_key;
+    formatData.variable.m_text=typeData.m_text;
+    formatData.variable.m_type=typeData.m_type;
+    formatData.variable.m_linkName=linkData.name;
+    formatData.variable.m_hrefName=linkData.href;
+    
     (*formatDataList) << formatData;
 }
 

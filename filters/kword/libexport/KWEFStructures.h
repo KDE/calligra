@@ -60,7 +60,7 @@ class TextFormatting
                          int     sz,
                          QColor  fg,
                          QColor  bg,
-                         int     v   
+                         int     v
                                      ) : fontName (f), italic (i), underline (u), strikeout (s),
                                          weight (w), fontSize (sz), fgColor (fg), bgColor (bg),
                                          verticalAlignment (v), missing (false) {}
@@ -76,9 +76,6 @@ class TextFormatting
         QColor  fgColor;
         QColor  bgColor;
         int     verticalAlignment;
-
-        QString linkName;        // Name of link (attribute "linkName" of <LINK>)  // DELETE!
-        QString linkReference;   // Reference of link (attribute "hrefName" of <LINK>) // DELETE!
 
         bool    missing;   // true if the FormatData does not correspond to a real <FORMAT> element
 };
@@ -148,7 +145,11 @@ public:
     VariableData () {}
     VariableData ( const QString& text ) : m_text(text) {}
 public:
+    QString m_key;
     QString m_text;
+    int m_type;
+    QString m_linkName; // Name of link (attribute "linkName" of <LINK>)
+    QString m_hrefName; // Reference of link (attribute "hrefName" of <LINK>)
 };
 
 class FormatData
