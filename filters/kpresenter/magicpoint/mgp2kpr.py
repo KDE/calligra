@@ -10,6 +10,8 @@ This is free software, released under GPL v2.
 Author: Lukas Tinkl <lukas@kde.org>, 2002
 
 TODO (in order of priority):
+DONE: support linespacing
+DONE: support bullets
 - support parsing the document defaults (%default and %tab)
 - support horizontal bars (hard to position them properly)
 - make it use the ZIP store instead of a plain XML file (needed for images below)
@@ -74,6 +76,10 @@ class MgpImporter:
     tokens=string.split(command,' ')
     self.fontSize=int(Y_OFFSET/self.ydpi*72*float(tokens[1].strip())/100)
     #print self.fontSize
+
+  def __setLineSpacing(self, command):
+    tokens=string.split(command,' ')
+    self.vgap=int(tokens[1].strip())
 
   def __setupDefaultFonts(self,command):
     tokens=string.split(command,' ')
@@ -223,15 +229,49 @@ class MgpImporter:
     self.__reset()
 
   def __handleText(self,line):
-    pElem=self.document.createElement("P") #paragraph
+    indent=-1
+    
+    pElem=self.document.createElement("P")          #paragraph
     pElem.setAttribute("align", self.alignment) 
 
-    elem=self.document.createElement("NAME") #style name
-    elem.setAttribute("value", "Standard")   ###is this needed at all?
+    elem=self.document.createElement("NAME")        #style name
+    elem.setAttribute("value", "Standard")          ###is this needed at all?
     pElem.appendChild(elem)
 
-    elem=self.document.createElement("TEXT") #paragraph text
-    elem.setAttribute("VERTALIGN", "0")
+    if (self.useDefaults==0):
+      elem=self.document.createElement("LINESPACING") #linespacing
+      elem.setAttribute("type", "custom")
+      elem.setAttribute("spacingvalue", str(self.fontSize * self.vgap / 100.0))
+      pElem.appendChild(elem)
+
+    if (line.startswith('\t\t\t\t')):               #bullets
+      indent=85
+      type=8
+    elif (line.startswith('\t\t\t')):
+      indent=56.6
+      type=11
+    elif (line.startswith('\t\t')):
+      indent=28.3
+      type=9
+    elif (line.startswith('\t')):
+      indent=0
+      type=10
+
+    if not indent==-1:
+      line=string.lstrip(line)
+      
+      elem=self.document.createElement("INDENTS")   #indentation (for bullet)
+      elem.setAttribute("left", str(indent))
+      pElem.appendChild(elem)
+
+      elem=self.document.createElement("COUNTER")   #counter (for bullet)
+      elem.setAttribute("numberingtype", "0")       #bullet numbering
+      elem.setAttribute("type", str(type))          #bullet type
+      #elem.setAttribute("depth", "0")               #???
+      pElem.appendChild(elem)
+      
+    elem=self.document.createElement("TEXT")        #paragraph text
+    #elem.setAttribute("VERTALIGN", "0")
     elem.setAttribute("family", self.fontName)
     elem.setAttribute("pointSize", str(self.fontSize))
     elem.setAttribute("color", self.textColor)
@@ -339,8 +379,10 @@ class MgpImporter:
             self.__setBgColor(command)
           elif (command.startswith('bar')):               #horizontal line
             self.__handleBar(command)
+          elif (command.startswith('vgap')):              #line spacing
+            self.__setLineSpacing(command)
           elif (command.startswith('nodefault')):         #use default page values?
-            self.useDefault=0
+            self.useDefaults=0
           else:
             continue
       else:
