@@ -87,4 +87,28 @@
 				<Text>Ladies and Gentlemen:</Text>
             </Expression>
 	</Type>
+        <Type>
+    		<TypeName>Attention:</TypeName>	
+			<Expression>
+				<Text>Attention:</Text>
+            </Expression>
+            <Expression>
+				<Text>ATTN:</Text>
+            </Expression>
+	</Type>
+        <Type>
+    		<TypeName>Instructions:</TypeName>	
+			<Expression>
+				<Text>CERTIFIED</Text>
+            </Expression>
+            <Expression>
+				<Text>CONFIDENTIAL</Text>
+            </Expression>
+            <Expression>
+				<Text>PERSONAL</Text>
+            </Expression>
+            <Expression>
+				<Text>FACSIMILE</Text>
+            </Expression>
+	</Type>
 </KWordExpression>
