@@ -248,11 +248,10 @@ MySqlDB::driverName()
 QString
 MySqlDB::escape(const QString &str)
 {
-	char* escaped = malloc(str.length() * 2 + 2);
-	mysql_real_escape_string(m_mysql, escaped, str.local8Bit(), str.length() + 1);
+	char* escaped = (char*) malloc(str.length() * 2 + 2);
+	mysql_real_escape_string(m_mysql, escaped, str.local8Bit(), str.length());
 	
-	QString rval;
-	rval.fromLocal8Bit(escaped);
+	QString rval = escaped;
 	free(escaped);
 	return rval;
 }
