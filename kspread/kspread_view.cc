@@ -4903,5 +4903,12 @@ void KSpreadView::closeEditor()
     m_pCanvas->closeEditor();
 }
 
+
+void KSpreadView::paintUpdates()
+{
+  /* paint any visible cell that has the paintDirty flag */
+}
+
+
 #include "kspread_view.moc"
 

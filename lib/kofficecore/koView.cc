@@ -581,7 +581,6 @@ bool KoView::isInOperation() const
 
 void KoView::beginOperation()
 {
-   QApplication::setOverrideCursor(waitCursor);
    d->m_inOperation = true;
    canvas()->setUpdatesEnabled(FALSE);
 }
@@ -590,7 +589,6 @@ void KoView::endOperation()
 {
    canvas()->setUpdatesEnabled(TRUE);
    d->m_inOperation = false;
-   QApplication::restoreOverrideCursor();
 
    canvas()->update();
 }

@@ -302,7 +302,7 @@ public:
     void saveConfig();
   void refreshLocale();
 
-  void emitBeginOperation();
+  void emitBeginOperation(bool waitCursor = true);
   void emitEndOperation();
 
   bool delayCalculation();
@@ -524,6 +524,13 @@ protected:
 private:
 
   /* helper functions for painting */
+
+  /**
+   * This function is called at the end of an operation and is responsible
+   * for painting any changes that have occurred in the meantime
+   */
+  void paintUpdates();
+
   void PaintRegion(QPainter& painter, const QRect &viewRegion,
 		   KSpreadView* view, const QRect &paintRegion,
 		   const KSpreadTable* table);

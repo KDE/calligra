@@ -1,4 +1,3 @@
-// -*- c-basic-offset: 4 -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2000, 2001 David Faure <david@mandrakesoft.com>
@@ -52,6 +51,7 @@
 #include <kiconloader.h>
 #include <qdir.h>
 #include <qfileinfo.h>
+#include <qcursor.h>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but KURL didn't like it,
@@ -1244,8 +1244,18 @@ bool KoDocument::isInOperation()
     return d->m_numOperations > 0;
 }
 
-void KoDocument::emitBeginOperation()
+void KoDocument::emitBeginOperation(bool waitCursor)
 {
+    if (waitCursor)
+    {
+        QApplication::setOverrideCursor(Qt::waitCursor);
+    }
+    /* just duplicate the current cursor on the stack, then */
+    else if (QApplication::overrideCursor() != NULL)
+    {
+        QApplication::setOverrideCursor(QApplication::overrideCursor()->shape());
+    }
+
     /* if we're already in an operation, don't send the signal again */
     if (!isInOperation())
         emit sigBeginOperation();
@@ -1262,6 +1272,7 @@ void KoDocument::emitEndOperation()
     else if (d->m_numOperations < 0)
         /* ignore 'end' calls with no matching 'begin' call */
         d->m_numOperations = 0;
+    QApplication::restoreOverrideCursor();
 }
 
 

@@ -55,7 +55,7 @@ class KoDocument : public KParts::ReadWritePart
 {
     Q_OBJECT
     Q_PROPERTY( QCString dcopObjectId READ dcopObjectId)
-    
+
 public:
 
     /**
@@ -467,7 +467,7 @@ public:
      * so that their dcop interface provides more functionality than the basic KoDocumentIface
      */
     virtual DCOPObject * dcopObject();
-    
+
     /**
      * return the ID of the dcop interface for this document.
      **/
@@ -476,7 +476,7 @@ public:
     void emitProgress( int value ) { emit sigProgress( value ); }
 
     bool isInOperation();
-    virtual void emitBeginOperation();
+    virtual void emitBeginOperation(bool waitCursor = true);
     virtual void emitEndOperation();
 
     /**
@@ -486,9 +486,9 @@ public:
     virtual bool isStoredExtern();
 
     KoPageLayout pageLayout() const { return m_pageLayout; }
-    
+
     void removeAutoSaveFiles();
-    
+
 signals:
     /**
      * This signal is emitted, if a direct or indirect child document changes

@@ -189,7 +189,12 @@ public:
   KSpreadSelection* selectionInfo()const { return m_selectionInfo; }
   QRect selection() const { return selectionInfo()->selection(); }
   QPoint marker() const { return selectionInfo()->marker(); }
-    void updateShowTableMenu();
+  void updateShowTableMenu();
+
+  /**
+   * Repaint any cell with the paintDirty flag that is visible in this view
+   */
+  void paintUpdates();
 public slots:
     void initialPosition();
     /**

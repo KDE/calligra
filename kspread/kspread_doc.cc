@@ -699,6 +699,19 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
     paintCellRegions(painter, rect, NULL, cellAreaList, table, drawCursor);
 }
 
+void KSpreadDoc::paintUpdates()
+{
+  QPtrListIterator<KoView> it( views() );
+  KSpreadView* view = NULL;
+
+  /* don't pull focus away from the editor if this is just a background
+     autosave */
+  for (; it.current(); ++it )
+  {
+    view = static_cast<KSpreadView *>( it.current() );
+    view->paintUpdates();
+  }
+}
 
 void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
                                   KSpreadView* view,
@@ -1118,9 +1131,9 @@ void KSpreadDoc::refreshLocale()
 }
 
 
-void KSpreadDoc::emitBeginOperation()
+void KSpreadDoc::emitBeginOperation(bool waitCursor)
 {
-   KoDocument::emitBeginOperation();
+   KoDocument::emitBeginOperation(waitCursor);
    m_bDelayCalculation = true;
 }
 
@@ -1139,6 +1152,8 @@ void KSpreadDoc::emitEndOperation()
 	b->cellChanged(NULL);
       }
    }
+
+   paintUpdates();
    KoDocument::emitEndOperation();
 }
 
