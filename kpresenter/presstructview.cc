@@ -216,7 +216,7 @@ void KPPresStructView::setupSlideList()
         KPPresStructObjectItem *item = new KPPresStructObjectItem( slides );
         item->setPage( doc->pageList().at( i )->background(), i );
         item->setText( 0, QString( "%1" ).arg( i + 1 ) );
-        item->setText( 1, doc->pageTitle( i, i18n( "Slide %1" ).arg( i + 1 ) ) );
+        item->setText( 1, doc->pageList().at( i )->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) ) );
         for ( int j = doc->pageList().at( i )->objNums() - 1; j >= 0; --j ) {
             KPPresStructObjectItem *item_ = new KPPresStructObjectItem( item );
             item_->setPage( doc->pageList().at( i )->background(), i );

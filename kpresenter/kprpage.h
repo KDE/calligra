@@ -46,6 +46,10 @@ public:
 
     void setPageLayout(KoPageLayout pgLayout);
 
+    QString getManualTitle();
+    void insertManualTitle(const QString & title);
+    QString pageTitle( const QString &_title ) const;
+
     const QPtrList<KPObject> & objectList() const { return m_objectList;}
     void appendObject(KPObject *);
     void insertObject(KPObject *_oldObj, KPObject *_newObject);
@@ -53,6 +57,7 @@ public:
     void removeObject( int pos);
     void insertObject(KPObject *_obj,int pos);
     void completeLoading( bool _clean, int lastObj );
+
 
 
     KoRect getPageRect() const;
@@ -183,5 +188,6 @@ private:
     QPtrList<KPObject> m_objectList;
     KPresenterDoc *m_doc;
     KPBackGround *kpbackground;
+    QString manualTitle;
 };
 #endif //KPRPAGE_H

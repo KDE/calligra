@@ -47,6 +47,7 @@
 #include <qclipboard.h>
 #include <kozoomhandler.h>
 #include <kprcommand.h>
+#include "kprtextdocument.h"
 
 #include <koRect.h>
 #include <qapplication.h>
@@ -63,6 +64,7 @@ KPRPage::KPRPage(KPresenterDoc *_doc )
                                     (m_doc->getClipartCollection()), this );
     //create object list for each page.
     m_objectList.setAutoDelete( false );
+    manualTitle="";
 }
 
 KPRPage::~KPRPage()
@@ -2522,4 +2524,58 @@ KCommand * KPRPage::replaceObjs( bool createUndoRedo, unsigned int _orastX,unsig
        delete setOptionsCmd;
        return 0L;
     }
+}
+
+
+QString KPRPage::getManualTitle()
+{
+    return manualTitle;
+}
+
+void KPRPage::insertManualTitle(const QString & title)
+{
+    manualTitle=title;
+}
+
+QString KPRPage::pageTitle( const QString &_title ) const
+{
+    // If a user sets a title with manual, return it.
+    if ( !manualTitle.isEmpty() )
+        return manualTitle;
+
+    QPtrList<KPTextObject> objs;
+
+    // Create list of text objects in page pgNum
+
+   QPtrListIterator<KPObject> it( m_objectList );
+   for ( ; it.current() ; ++it )
+   {
+       if(it.current()->getType()==OT_TEXT)
+            objs.append( static_cast<KPTextObject*>( it.current() ) );
+   }
+
+    if ( objs.isEmpty() )
+        return QString( _title );
+
+    // Find object most on top
+    KPTextObject *tmp = objs.first();
+    KPTextObject *textobject=tmp;
+    for ( tmp = objs.next(); tmp; tmp = objs.next() )
+        if ( tmp->getOrig().y() < textobject->getOrig().y() )
+            textobject = tmp;
+
+    // this can't happen, but you never know :- )
+    if ( !textobject )
+        return QString( _title );
+
+    QString txt = textobject->textDocument()->text().stripWhiteSpace();
+    if ( txt.isEmpty() )
+        return _title;
+    unsigned int i=0;
+    while( i<txt.length() && txt[i]=='\n' )
+        ++i;
+    int j=txt.find('\n', i);
+    if(i==0 && j==-1)
+        return txt;
+    return txt.mid(i, j);
 }

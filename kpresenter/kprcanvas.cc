@@ -76,7 +76,6 @@
 KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     : QWidget( parent, name ), buffer( size() )
 {
-    kdDebug()<<"KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )\n";
     setWFlags( WResizeNoErase );
     presMenu = 0;
     m_currentTextObjectView=0L;
@@ -135,7 +134,6 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
 /*======================== destructor ============================*/
 KPrCanvas::~KPrCanvas()
 {
-    kdDebug()<<"KPrCanvas::~KPrCanvas()\n";
     // deactivate possible opened textobject to avoid double deletion, KPTextObject deletes this already
     exitEditMode();
 

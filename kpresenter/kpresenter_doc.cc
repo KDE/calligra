@@ -563,19 +563,24 @@ QDomElement KPresenterDoc::saveTitle( QDomDocument &doc )
 {
     QDomElement titles=doc.createElement("PAGETITLES");
 
-    if ( saveOnlyPage == -1 ) { // All page titles.
-        for ( QStringList::ConstIterator it = manualTitleList.begin(); it != manualTitleList.end(); ++it ) {
-            QDomElement title=doc.createElement("Title");
-            title.setAttribute("title", (*it));
-            titles.appendChild(title);
+    if ( saveOnlyPage == -1 )
+    { // All page titles.
+        {
+            KPRPage *page=0L;
+            for(page=m_pageList.first(); page; page=m_pageList.next())
+            {
+                QDomElement title=doc.createElement("Title");
+                title.setAttribute("title", page->getManualTitle());
+                titles.appendChild(title);
+            }
         }
     }
-    else { // Only current page title.
+    else
+    { // Only current page title.
         QDomElement title=doc.createElement("Title");
-        title.setAttribute("title", manualTitleList[saveOnlyPage]);
+        title.setAttribute("title", m_pageList.at(saveOnlyPage)->getManualTitle());
         titles.appendChild(title);
     }
-
     return titles;
 }
 
@@ -960,12 +965,13 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
 
     // Initialization of manualTitleList
     // for version before adding this new feature (save/load page title to file)
+#if 0 //FIXME
     if ( manualTitleList.isEmpty() ) {
         kdDebug() << "KPresenterDoc::loadXML no manual titles -> filling with Null" << endl;
         for ( unsigned int i = 0; i <= getPageNums() - 1; ++i )
             manualTitleList.append(QString::null);
     }
-
+#endif
     // Initialization of noteTextList
     // for version before adding this new feature ( notebar )
     if ( noteTextList.isEmpty() ) {
@@ -1193,9 +1199,17 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPRPag
 void KPresenterDoc::loadTitle( const QDomElement &element )
 {
     QDomElement title=element.firstChild().toElement();
+    int i=0;
     while ( !title.isNull() ) {
         if ( title.tagName()=="Title" )
-            manualTitleList.append(title.attribute("title"));
+        {
+            //test if there is a page at this index
+            //=> don't add new page if there is again a page
+            if(i>(m_pageList.count()-1))
+                m_pageList.append(new KPRPage(this));
+            m_pageList.at(i)->insertManualTitle(title.attribute("title"));
+            i++;
+        }
         title=title.nextSibling().toElement();
     }
 }
@@ -1528,9 +1542,6 @@ void KPresenterDoc::deletePage( int _page )
     Q_ASSERT( _page < (int)m_selectedSlides.count() );
     m_selectedSlides.remove( m_selectedSlides.at( _page ) );
 
-    // Delete page title.
-    pageTitleDelete( _page );
-
     // Delete page note.
     pageNoteDelete( _page );
 
@@ -1596,8 +1607,6 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
     else
         m_selectedSlides.append( true );
 
-    // Insert page title.
-    pageTitleInsert( _page );
 
     // Insert page note.
     pageNoteInsert( _page );
@@ -1688,52 +1697,6 @@ void KPresenterDoc::deSelectAllObj()
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
 	((KPresenterView*)it.current())->getCanvas()->deSelectAllObj();
-}
-
-
-/*================================================================*/
-QString KPresenterDoc::pageTitle( unsigned int pgNum, const QString &_title,
-				  float fakt ) const
-{
-    // If a user sets a title with manual, return it.
-    if ( !manualTitleList[pgNum].isEmpty() )
-        return manualTitleList[pgNum];
-
-    QPtrList<KPTextObject> objs;
-    QRect rect = getPageRect( pgNum, 0, 0, fakt );
-
-    // Create list of text objects in page pgNum
-    KPObject *kpobject = 0L;
-#if 0
-    for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() )
-        if ( kpobject->getType() == OT_TEXT && rect.contains( kpobject->getBoundingRect( 0, 0 ) ) ) {
-            objs.append( static_cast<KPTextObject*>( kpobject ) );
-        }
-#endif
-    if ( objs.isEmpty() )
-        return QString( _title );
-
-    // Find object most on top
-    KPTextObject *tmp = objs.first();
-    KPTextObject *textobject=tmp;
-    for ( tmp = objs.next(); tmp; tmp = objs.next() )
-        if ( tmp->getOrig().y() < textobject->getOrig().y() )
-            textobject = tmp;
-
-    // this can't happen, but you never know :- )
-    if ( !textobject )
-        return QString( _title );
-
-    QString txt = textobject->textDocument()->text().stripWhiteSpace();
-    if ( txt.isEmpty() )
-        return _title;
-    unsigned int i=0;
-    while( i<txt.length() && txt[i]=='\n' )
-        ++i;
-    int j=txt.find('\n', i);
-    if(i==0 && j==-1)
-        return txt;
-    return txt.mid(i, j);
 }
 
 /*================================================================*/
@@ -1954,25 +1917,6 @@ QString KPresenterDoc::selectedForPrinting() const {
     if(','==ret[ret.length()-1])
         ret.truncate(ret.length()-1);
     return ret;
-}
-
-void KPresenterDoc::pageTitleInsert( unsigned int pageNumber )
-{
-    // Usual page insert.
-    if ( getPageNums() == manualTitleList.count()+1 )
-        manualTitleList.insert( manualTitleList.at(pageNumber), QString::null );
-    else {
-        // For "Move Page", "Copy Page and paste" and "Duplicate Page".
-        // If a user sets a title with manual, use it.
-        QString title = (*manualTitleList.fromLast());
-        manualTitleList.remove( manualTitleList.fromLast() );
-        manualTitleList.insert( manualTitleList.at(pageNumber), title );
-    }
-}
-
-void KPresenterDoc::pageTitleDelete( unsigned int pageNumber )
-{
-    manualTitleList.remove( manualTitleList.at(pageNumber) );
 }
 
 void KPresenterDoc::slotRepaintChanged( KPTextObject *kptextobj )

@@ -156,8 +156,8 @@ public:
 
     void savePage( const QString &file, int pgnum );
     void pastePage( const QMimeSource * data, int pgnum );
-    void deletePage( int _page );
     int insertPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile );
+    void deletePage( int _page );
     void copyPageToClipboard( int pgnum );
 
     // repaint all views
@@ -204,9 +204,6 @@ public:
 
     void enableEmbeddedParts( bool f );
 
-    QString pageTitle( unsigned int pgNum, const QString &_title,
-		       float fakt = 1.0 ) const;
-
     KPTextObject *header() { return _header; }
     KPTextObject *footer() { return _footer; }
     bool hasHeader() { return _hasHeader; }
@@ -222,8 +219,6 @@ public:
     QString selectedForPrinting() const;
 
     virtual DCOPObject* dcopObject();
-
-    QStringList manualTitleList;
 
     void initConfig();
 
@@ -421,9 +416,6 @@ protected:
 
 
 private:
-    void pageTitleInsert( unsigned int pageNumber);
-    void pageTitleDelete( unsigned int pageNumber );
-
     // For NoteBar
     void pageNoteInsert( unsigned int _pageNum );
     void pageNoteDelete( unsigned int _pageNum );

@@ -197,7 +197,7 @@ void Outline::rebuildItems()
     // Rebuild all the items
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
         QCheckListItem *item = new OutlineItem( this );
-        QString title = doc->pageTitle( i, i18n( "Slide %1" ).arg( i + 1 ) );
+        QString title = doc->pageList().at(i)->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) );
         //kdDebug(33001) << "Outline::rebuildItems slide " << i+1 << " selected:" << doc->isSlideSelected( i ) << endl;
         item->setOn( doc->isSlideSelected( i ) ); // calls itemStateChange !
         item->setText( 1, QString::number( i + 1 ) ); // page number
@@ -213,7 +213,7 @@ void Outline::updateItem( int pagenr /* 0-based */)
     {
         if ( it.current()->text(1).toInt() == pagenr+1 )
         {
-            QString title = doc->pageTitle( pagenr, i18n( "Slide %1" ).arg( pagenr + 1 ) );
+            QString title = doc->pageList().at(pagenr)->pageTitle( i18n( "Slide %1" ).arg( pagenr + 1 ) );
             it.current()->setText( 0, title );
             it.current()->setText( 1, QString::null ); // hack, to make itemStateChange do nothing
             static_cast<OutlineItem*>(it.current())->setOn( doc->isSlideSelected( pagenr ) );
@@ -318,7 +318,8 @@ void Outline::renamePageTitle()
             renamePageTitle();
         }
         else if ( newTitle != activeTitle ) { // Title changed.
-            (*doc->manualTitleList.at(pageNumber)) = newTitle;
+            //(*doc->manualTitleList.at(pageNumber)) = newTitle;
+            doc->pageList().at(pageNumber)->insertManualTitle(newTitle);
             updateItem(pageNumber);
             view->kPresenterDoc()->setModified( true );
         }

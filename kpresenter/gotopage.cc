@@ -56,8 +56,7 @@ KPGotoPage::KPGotoPage( const KPresenterDoc *doc, float fakt,
 
     QValueList<int>::ConstIterator it = slides.begin();
     for ( ; it != slides.end(); ++it ) {
-        QString t(doc->pageTitle( *it - 1,
-				  i18n( "Slide %1" ).arg( *it ), fakt ));
+        QString t(doc->pageList().at(*it)->pageTitle( i18n( "Slide %1" ).arg( *it ) ));
         // cut ultra long titles...
         if(t.length() > 30) {
             t.truncate(30);
