@@ -284,6 +284,7 @@ protected slots:
     void doAutoScroll();
     void formatMore();
     void noInput();
+    void verticalSliderMoved( int value );
 
 protected:
     unsigned int ptLeftBorder();
@@ -446,7 +447,8 @@ protected:
     QByteArray pasteLaterData;
     QString pasteLaterMimeType;
     QRect scrollClipRect;
-
+    int scrollDummy;
+    
 };
 
 #endif

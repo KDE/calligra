@@ -1636,7 +1636,10 @@ Reggie, 21.11.1999:
 
 Reggie, 27.11.1999
 -----------------
-- Fixed getting initial foxus
+- Fixed getting initial focus
 - Got rid of the hack which inserts a space if you open an empty documen
   (not needed anymore)
 
+Reggie, 28.11.1999
+-----------------
+- Small fix for scrolling (new selection stuff is not comitted yet...)
