@@ -3831,11 +3831,13 @@ bool KSpreadTable::loadXML( const QDomElement& table )
       insertColumnLayout( cl );
     }
     else if ( !e.isNull() && e.tagName() == "object" )
-    {
+    { 
       KSpreadChild *ch = new KSpreadChild( m_pDoc, this );
       if ( !ch->load( e ) )
-	return false;
-      insertChild( ch );
+	return false;   
+     insertChild( ch );
+      
+   
     }
     else if ( !e.isNull() && e.tagName() == "chart" )
     {
