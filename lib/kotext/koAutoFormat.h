@@ -27,7 +27,7 @@
 #include <qvaluelist.h>
 #include <qstringlist.h>
 #include <qptrvector.h>
-
+#include <qdom.h>
 class KoDocument;
 class KoTextParag;
 class KoTextObject;
@@ -52,6 +52,7 @@ public:
 
     QString replace() const { return m_replace; }
     KoSearchContext *formatEntryContext()const;
+    void createNewEntryContext();
 protected:
     QString m_replace;
     // For formatting in the replacement - not implemented yet
@@ -287,7 +288,8 @@ protected:
     KCommand *scanParag( KoTextParag * parag, KoTextObject * obj );
 
     static void changeTextFormat(KoSearchContext *m_formatOptions, KoTextFormat * format, int & flags );
-
+    void loadEntry( QDomElement nl);
+    QDomElement saveEntry( QMapIterator<QString, KoAutoFormatEntry>_entry, QDomDocument doc);
 private:
     void detectStartOfLink(const QString &word);
     void autoFormatIsActive();

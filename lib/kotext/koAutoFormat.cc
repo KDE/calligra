@@ -50,6 +50,7 @@ KoAutoFormatEntry::KoAutoFormatEntry(const QString& replace)
 KoAutoFormatEntry::~KoAutoFormatEntry()
 {
     delete m_formatOptions;
+    m_formatOptions=0L;
 }
 
 KoSearchContext *KoAutoFormatEntry::formatEntryContext()const
@@ -57,6 +58,15 @@ KoSearchContext *KoAutoFormatEntry::formatEntryContext()const
     return m_formatOptions;
 }
 
+void KoAutoFormatEntry::createNewEntryContext()
+{
+    if ( !m_formatOptions )
+    {
+        m_formatOptions = new KoSearchContext();
+        m_formatOptions->m_optionsMask = 0;
+        m_formatOptions->m_options = 0;
+    }
+}
 
 /******************************************************************/
 /* Class: KoAutoFormat						  */
@@ -235,7 +245,7 @@ void KoAutoFormat::readConfig()
           QDomNodeList nl = item.childNodes();
           m_maxFindLength=nl.count();
           for(uint i = 0; i < m_maxFindLength; i++) {
-              m_entries.insert( nl.item(i).toElement().attribute("find"), KoAutoFormatEntry(nl.item(i).toElement().attribute("replace")) );
+              loadEntry( nl.item(i).toElement());
           }
       }
 
@@ -342,6 +352,81 @@ void KoAutoFormat::readConfig()
     m_configRead = true;
 }
 
+void KoAutoFormat::loadEntry( QDomElement nl)
+{
+    KoAutoFormatEntry tmp = KoAutoFormatEntry(nl.attribute("replace"));
+    if ( nl.hasAttribute("FONT"))
+    {
+        tmp.createNewEntryContext();
+        tmp.formatEntryContext()->m_family=nl.attribute("FONT");
+        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::Family;
+    }
+    if ( nl.hasAttribute("SIZE" ))
+    {
+        tmp.createNewEntryContext();
+        tmp.formatEntryContext()->m_size = nl.attribute("SIZE" ).toInt();
+        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::Size;
+    }
+    if (nl.hasAttribute("ITALIC" ))
+    {
+        tmp.createNewEntryContext();
+        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::Italic;
+        QString value = nl.attribute("ITALIC");
+        if ( value.toInt() == 1 )
+            tmp.formatEntryContext()->m_options |= KoSearchContext::Italic;
+    }
+    if (nl.hasAttribute("UNDERLINE" ))
+    {
+        tmp.createNewEntryContext();
+        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::Underline;
+        QString value = nl.attribute("UNDERLINE");
+        if ( value =="single" )
+            tmp.formatEntryContext()->m_underline = KoTextFormat::U_SIMPLE;
+        else if ( value =="double" )
+            tmp.formatEntryContext()->m_underline = KoTextFormat::U_DOUBLE;
+        else
+            tmp.formatEntryContext()->m_underline = KoTextFormat::U_NONE;
+    }
+    if (nl.hasAttribute("STRIKEOUT" ))
+    {
+        tmp.createNewEntryContext();
+        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::StrikeOut;
+        QString value = nl.attribute("STRIKEOUT");
+        if ( value =="single" )
+            tmp.formatEntryContext()->m_strikeOut = KoTextFormat::S_SIMPLE;
+        else if ( value =="double" )
+            tmp.formatEntryContext()->m_strikeOut = KoTextFormat::S_DOUBLE;
+        else
+            tmp.formatEntryContext()->m_strikeOut = KoTextFormat::S_NONE;
+    }
+    if (nl.hasAttribute("VERTALIGN" ))
+    {
+        tmp.createNewEntryContext();
+        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::VertAlign;
+        QString value = nl.attribute("VERTALIGN");
+        tmp.formatEntryContext()->m_vertAlign=static_cast<KoTextFormat::VerticalAlignment>( nl.attribute("value").toInt() );
+    }
+    m_entries.insert( nl.attribute("find"), tmp );
+#if 0 //todo
+    elem = formatElem.namedItem( "COLOR" ).toElement();
+    if ( !elem.isNull() )
+    {
+        QColor col( elem.attribute("red").toInt(),
+                    elem.attribute("green").toInt(),
+                    elem.attribute("blue").toInt() );
+        format.setColor( col );
+    }
+    elem = formatElem.namedItem( "TEXTBACKGROUNDCOLOR" ).toElement();
+    if ( !elem.isNull() )
+    {
+        QColor col( elem.attribute("red").toInt(),
+                    elem.attribute("green").toInt(),
+                    elem.attribute("blue").toInt() );
+        format.setTextBackgroundColor( col );
+    }
+#endif
+}
+
 void KoAutoFormat::saveConfig()
 {
     KConfig config("kofficerc");
@@ -399,11 +484,7 @@ void KoAutoFormat::saveConfig()
     QDomElement data;
     for ( ; it != m_entries.end() ; ++it )
     {
-	data = doc.createElement("item");
-	data.setAttribute("find", it.key());
-	data.setAttribute("replace", it.data().replace());
-	items.appendChild(data);
-
+	items.appendChild(saveEntry( it, doc));
         m_maxFindLength=QMAX(m_maxFindLength,it.key().length());
     }
     begin.appendChild(items);
@@ -469,6 +550,85 @@ void KoAutoFormat::saveConfig()
     f.close();
     autoFormatIsActive();
     config.sync();
+}
+
+QDomElement KoAutoFormat::saveEntry( QMapIterator<QString, KoAutoFormatEntry> _entry, QDomDocument doc)
+{
+    QDomElement data;
+    data = doc.createElement("item");
+    data.setAttribute("find", _entry.key());
+    data.setAttribute("replace", _entry.data().replace());
+    if ( _entry.data().formatEntryContext() )
+    {
+        KoSearchContext *tmp = _entry.data().formatEntryContext();
+        if ( tmp->m_optionsMask & KoSearchContext::Family )
+        {
+            data.setAttribute("FONT", tmp->m_family);
+        }
+        if ( tmp->m_optionsMask &  KoSearchContext::Size )
+        {
+            data.setAttribute("SIZE", tmp->m_size);
+        }
+        if ( tmp->m_optionsMask & KoSearchContext::Italic )
+        {
+            data.setAttribute("ITALIC", static_cast<int>(tmp->m_options & KoSearchContext::Italic));
+        }
+        if ( tmp->m_optionsMask & KoSearchContext::Underline )
+        {
+            switch( tmp->m_underline )
+            {
+            case KoTextFormat::U_SIMPLE:
+                data.setAttribute("UNDERLINE", "single");
+                break;
+            case KoTextFormat::U_DOUBLE:
+                data.setAttribute("UNDERLINE", "double");
+                break;
+            case KoTextFormat::U_NONE:
+                data.setAttribute("UNDERLINE", "none");
+                break;
+
+            }
+        }
+        if ( tmp->m_optionsMask & KoSearchContext::StrikeOut )
+        {
+            switch( tmp->m_strikeOut )
+            {
+            case KoTextFormat::S_SIMPLE:
+                data.setAttribute("STRIKEOUT", "single");
+                break;
+            case KoTextFormat::S_DOUBLE:
+                data.setAttribute("STRIKEOUT", "double");
+                break;
+            case KoTextFormat::S_NONE:
+                data.setAttribute("STRIKEOUT", "none");
+                break;
+
+            }
+        }
+        if ( tmp->m_optionsMask & KoSearchContext::VertAlign)
+        {
+            data.setAttribute( "VERTALIGN", static_cast<int>(tmp->m_vertAlign) );
+        }
+#if 0 //todo
+        elem = formatElem.namedItem( "COLOR" ).toElement();
+        if ( !elem.isNull() )
+        {
+            QColor col( elem.attribute("red").toInt(),
+                        elem.attribute("green").toInt(),
+                        elem.attribute("blue").toInt() );
+            format.setColor( col );
+        }
+        elem = formatElem.namedItem( "TEXTBACKGROUNDCOLOR" ).toElement();
+        if ( !elem.isNull() )
+        {
+            QColor col( elem.attribute("red").toInt(),
+                        elem.attribute("green").toInt(),
+                        elem.attribute("blue").toInt() );
+            format.setTextBackgroundColor( col );
+        }
+#endif
+    }
+    return data;
 }
 
 QString KoAutoFormat::getLastWord(KoTextParag *parag, int index)
@@ -738,7 +898,10 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
                 int flags = 0;
                 KoTextFormat * lastFormat = parag->at( start )->format();
                 KoTextFormat * newFormat = new KoTextFormat(*lastFormat);
+                kdDebug()<<"it.data().formatEntryContext()->m_optionsMask :"<<it.data().formatEntryContext()->m_optionsMask<<endl;
+                kdDebug()<<" it.data().formatEntryContext() :;"<<it.data().formatEntryContext()<<endl;
                 changeTextFormat(it.data().formatEntryContext(), newFormat, flags );
+                kdDebug()<<" flags :"<<flags<<endl;
                 KMacroCommand *macro = new KMacroCommand( i18n("Autocorrect word with format"));
                 KCommand *cmd2=txtObj->replaceSelectionCommand( textEditCursor, it.data().replace(),
                                                                KoTextObject::HighlightSelection,
@@ -747,16 +910,15 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
                     macro->addCommand(cmd2);
                 KoTextCursor cursor( parag->document() );
                 cursor.setParag( parag );
-                cursor.setIndex( index );
+                cursor.setIndex( start );
                 textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
-                cursor.setIndex( index + length );
+                cursor.setIndex( start + length + 1 );
                 textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
 
 
                 cmd2 =txtObj->setFormatCommand( textEditCursor, &lastFormat, newFormat, flags, false, KoTextObject::HighlightSelection );
                 macro->addCommand( cmd2);
                 cmd = macro;
-
             }
             // The space/tab/CR that we inserted is still there but delete/insert moved the cursor
             // -> go right
