@@ -1,0 +1,9 @@
+?package(kexi):\
+	needs=x11\
+	section=Apps/Databases\
+	hints="KDE"\
+	kderemove="1"\
+	title="Kexi (Database Management)"\
+	icon="/usr/share/pixmaps/kexi.xpm"\
+	command=kexi
+

@@ -3,6 +3,6 @@
 	section=Apps/Tools\
 	hints="KDE"\
 	kderemove="1"\
-	title="KThesaurus"\
+	title="KThesaurus (Related Words)"\
 	command=kthesaurus
 

@@ -1,9 +1,9 @@
 ?package(kpresenter):\
 	needs=x11\
 	section=Apps/Tools\
-	hints="KDE"\
+	hints="KDE,Presentation"\
 	kderemove="1"\
-	title="KPresenter"\
+	title="KPresenter (Slide Presentations)"\
 	icon="/usr/share/pixmaps/kpresenter.xpm"\
 	command=kpresenter
 

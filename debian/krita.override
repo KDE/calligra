@@ -2,3 +2,5 @@
 krita: non-dev-pkg-with-shlib-symlink usr/lib/krita.so.0.0.0 usr/lib/krita.so
 # These are modules in /usr/lib/kde3/.
 krita: binary-or-shlib-defines-rpath ./usr/lib/kde3/libmagickimport.so /usr/lib/kde3
+# Menu item.
+krita: menu-item-contains-unknown-tag kderemove /usr/lib/menu/krita:7

@@ -1,9 +1,9 @@
 ?package(kformula):\
 	needs=x11\
-	section=Apps/Tools\
+	section=Apps/Math\
 	hints="KDE"\
 	kderemove="1"\
-	title="KFormula"\
+	title="KFormula (Formula Editor)"\
 	icon="/usr/share/pixmaps/kformula.xpm"\
 	command=kformula
 
