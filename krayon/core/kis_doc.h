@@ -26,13 +26,12 @@
 #include <qptrlist.h>
 #include <qstringlist.h>
 
-#include <koDocument.h>
-#include "koUndo.h"
-
-#include <iostream.h>
-#include "kis_global.h"
-
+#include <kcommand.h>
 #include <klocale.h>
+
+#include <koDocument.h>
+
+#include "kis_global.h"
 #include "kis_view.h"
 #include "kis_selection.h"
 #include "kis_framebuffer.h"
@@ -93,7 +92,7 @@ public:
 	/*
 	 * KOffice undo/redo.
 	 */
-    KoCommandHistory* commandHistory() { return &m_commands; };
+    KCommandHistory* commandHistory() { return &m_commands; };
 
 	/*
 	 * Use QPainter p to paint a rectangular are of the current image.
@@ -574,7 +573,7 @@ protected:
 
 
     /* undo/redo */
-    KoCommandHistory m_commands;
+    KCommandHistory m_commands;
 
     /* list of images for the document - each document can have multiple
     images and each image must have at least one layer. however, a document
