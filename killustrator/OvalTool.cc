@@ -42,6 +42,8 @@
 #include <PStateManager.h>
 #include "GOval.h"
 #include "ToolController.h"
+#include <KIllustrator_factory.h>
+
 
 #include <math.h>
 #include <stdio.h>
@@ -164,7 +166,7 @@ void OvalTool::activate (GDocument* , Canvas* canvas)
    canvas->setCursor(Qt::crossCursor);
    if (!m_configRead)
    {
-      KConfig* config = kapp->config ();
+      KConfig* config = KIllustratorFactory::global()->config();
 
       config->setGroup("EllipseTool");
       useFixedCenter = config->readBoolEntry("FixedCenter", false);
@@ -178,7 +180,7 @@ void OvalTool::aroundFixedCenter (bool flag) {
     useFixedCenter = flag;
 
     kdDebug()<<"OvalTool::aroundFixedCenter()"<<endl;
-    KConfig* config = kapp->config ();
+    KConfig* config = KIllustratorFactory::global()->config ();
 
     config->setGroup ("EllipseTool");
     config->writeEntry ("FixedCenter", useFixedCenter);

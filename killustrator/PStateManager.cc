@@ -33,6 +33,7 @@
 #include <GObject.h>
 #include <GText.h>
 #include <UnitBox.h>
+#include <KIllustrator_factory.h>
 
 PStateManager* PStateManager::managerInstance = 0L;
 
@@ -53,7 +54,7 @@ void PStateManager::readDefaultSettings ()
 {
 
    kdDebug()<<"PStateManager::readDefaultSettings()"<<endl;
-   KConfig* config = kapp->config ();
+   KConfig* config = KIllustratorFactory::global()->config ();
 
    config->setGroup ("General");
    QString value = config->readEntry ("DefaultUnit", "pt");
@@ -137,7 +138,7 @@ void PStateManager::saveDefaultSettings ()
 {
 
    kdDebug()<<"PStateManager::saveDefaultSettings()"<<endl;
-   KConfig* config = kapp->config ();
+   KConfig* config = KIllustratorFactory::global()->config ();
 
    config->setGroup ("General");
    switch (defaultUnit)

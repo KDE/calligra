@@ -42,6 +42,7 @@
 #include <PolygonConfigDialog.h>
 #include <CreatePolygonCmd.h>
 #include "ToolController.h"
+#include "KIllustrator_factory.h"
 
 PolygonTool::PolygonTool (CommandHistory* history)
    : Tool (history)
@@ -143,7 +144,7 @@ void PolygonTool::setConcavePolygon (bool flag) {
 
 void PolygonTool::writeOutConfig()
 {
-    KConfig* config = kapp->config ();
+    KConfig* config = KIllustratorFactory::global()->config ();
     config->setGroup("PolygonTool");
     config->writeEntry("Corners", nCorners);
     config->writeEntry("SharpValue", sharpValue);
@@ -155,7 +156,7 @@ void PolygonTool::activate (GDocument* /*doc*/, Canvas* canvas)
    canvas->setCursor(Qt::crossCursor);
    if (!m_configRead)
    {
-      KConfig* config = kapp->config ();
+      KConfig* config = KIllustratorFactory::global()->config ();
       config->setGroup("PolygonTool");
       nCorners = config->readNumEntry("Corners", 3);
       sharpValue = config->readNumEntry("SharpValue", 0);
