@@ -1083,31 +1083,14 @@ void KWView::setupActions()
 
 
     // ------------------- Actions with a key binding and no GUI item
-    KAction* actNbsp = new KAction( i18n( "Insert Non-Breaking Space" ), CTRL+Key_Space,
-                        this, SLOT( slotNonbreakingSpace() ), actionCollection(), "nonbreaking_space" );
-    KAction* actSoftHyphen = new KAction( i18n( "Insert Soft Hyphen" ), CTRL+Key_Minus,
-                        this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
-    KAction* actLineBreak = new KAction( i18n( "Line Break" ), SHIFT+Key_Return,
-                        this, SLOT( slotLineBreak() ), actionCollection(), "line_break" );
+    new KAction( i18n( "Insert Non-Breaking Space" ), CTRL+Key_Space,
+                 this, SLOT( slotNonbreakingSpace() ), actionCollection(), "nonbreaking_space" );
+    new KAction( i18n( "Insert Soft Hyphen" ), CTRL+Key_Minus,
+                 this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
+    new KAction( i18n( "Line Break" ), SHIFT+Key_Return,
+                 this, SLOT( slotLineBreak() ), actionCollection(), "line_break" );
 
-    KAction* actComplete = new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),this, SLOT( slotCompletion() ), actionCollection(), "completition" );
-
-    // Necessary for the actions that are not plugged anywhere
-    // Deprecated with KDE-3.1.
-    // Note entirely sure it's necessary for 3.0, please test and report.
-#if KDE_VERSION < 305
-    KAccel * accel = new KAccel( this );
-    actNbsp->plugAccel( accel );
-    actSoftHyphen->plugAccel( accel );
-    actLineBreak->plugAccel( accel );
-    actComplete->plugAccel( accel );
-#else
-    // Stupid compilers ;)
-    Q_UNUSED( actNbsp );
-    Q_UNUSED( actSoftHyphen );
-    Q_UNUSED( actLineBreak );
-    Q_UNUSED( actComplete );
-#endif
+    new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),this, SLOT( slotCompletion() ), actionCollection(), "completition" );
 
     actionEditCustomVars = new KAction( i18n( "Edit Variable..." ), 0,
                                         this, SLOT( editCustomVariable() ),

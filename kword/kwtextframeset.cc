@@ -651,10 +651,11 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
     else
         normalFrameRect = QRect( QPoint(0, 0), viewMode->contentsSize() );
 
-    QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
+    KoTextParag* parag = cursor->parag();
+    QPoint topLeft = parag->rect().topLeft();         // in QRT coords
     int lineY;
     // Cursor height, in pixels
-    int cursorHeight = m_doc->layoutUnitToPixelY( topLeft.y(), cursor->parag()->lineHeightOfChar( cursor->index(), 0, &lineY ) );
+    int cursorHeight = m_doc->layoutUnitToPixelY( topLeft.y(), parag->lineHeightOfChar( cursor->index(), 0, &lineY ) );
     QPoint iPoint( topLeft.x() - cursor->totalOffsetX() + cursor->x(),
                    topLeft.y() - cursor->totalOffsetY() + lineY );
 
@@ -679,7 +680,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
 #endif
         // from now on, iPoint will be in pixels
         iPoint = m_doc->layoutUnitToPixel( iPoint );
-        //int xadj = cursor->parag()->at( cursor->index() )->pixelxadj;
+        //int xadj = parag->at( cursor->index() )->pixelxadj;
 #ifdef DEBUG_CURSOR
         //kdDebug() << "     iPoint in pixels : " << iPoint.x() << "," << iPoint.y() << "     will add xadj=" << xadj << endl;
 #endif
@@ -745,31 +746,31 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
                 drawingFlags |= KoTextDocument::DrawFormattingChars;
 
             // To force the drawing to happen:
-            bool wasChanged = cursor->parag()->hasChanged();
-            int oldLineChanged = cursor->parag()->lineChanged();
+            bool wasChanged = parag->hasChanged();
+            int oldLineChanged = parag->lineChanged();
             int line; // line number
-            cursor->parag()->lineStartOfChar( cursor->index(), 0, &line );
-            cursor->parag()->setChanged( false ); // not all changed, only from a given line
-            cursor->parag()->setLineChanged( line );
+            parag->lineStartOfChar( cursor->index(), 0, &line );
+            parag->setChanged( false ); // not all changed, only from a given line
+            parag->setLineChanged( line );
 
             textDocument()->drawParagWYSIWYG(
-                p, static_cast<KoTextParag *>(cursor->parag()),
+                p, parag,
                 QMAX(0, iPoint.x() - 5), // negative values create problems
                 iPoint.y(), clip.width(), clip.height(),
                 pix, cg, m_doc, // TODO view's zoom handler
                 cursorVisible, cursor, FALSE /*resetChanged*/, drawingFlags );
 
             if ( wasChanged )      // Maybe we have more changes to draw, than those in the small cliprect
-                cursor->parag()->setLineChanged( oldLineChanged ); // -1 = all
+                parag->setLineChanged( oldLineChanged ); // -1 = all
             else
-                cursor->parag()->setChanged( false );
+                parag->setChanged( false );
 
             p->restore();
 
             //XIM Position
             QPoint ximPoint = vPoint;
             canvas->setXimPosition( ximPoint.x(), ximPoint.y(),
-                                    0, cursorHeight - cursor->parag()->lineSpacing( line ) );
+                                    0, cursorHeight - parag->lineSpacing( line ) );
         }
     }
     m_currentDrawnFrame = 0L;
@@ -1490,7 +1491,7 @@ void KWTextFrameSet::updateFrames( int flags )
     if ( width != textDocument()->width() )
     {
         //kdDebug(32002) << "KWTextFrameSet::updateFrames setWidth " << width << " LU pixels." << endl;
-        textDocument()->setMinimumWidth( -1, 0 );
+        //textDocument()->setMinimumWidth( -1, 0 );
         textDocument()->setWidth( width + 1 ); // QRect semantics problem (#32866)
     } //else kdDebug(32002) << "KWTextFrameSet::updateFrames width already " << width << " LU pixels." << endl;
 
