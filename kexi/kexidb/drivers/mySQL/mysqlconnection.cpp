@@ -54,33 +54,34 @@ bool MySqlConnection::drv_connect()
 	if (!(m_mysql = mysql_init(m_mysql)))
 		return false;
 
-        KexiDBDrvDbg << "MySqlConnection::connect()" << endl;
+	KexiDBDrvDbg << "MySqlConnection::connect()" << endl;
 	QString socket;
 	if (m_data->hostName.isEmpty() || (m_data->hostName=="localhost")) {
 		if (m_data->localSocketFileName.isEmpty()) {
-	                QStringList sockets;
-	                sockets.append("/var/lib/mysql/mysql.sock");
-	                sockets.append("/var/run/mysqld/mysqld.sock");
-        	        sockets.append("/tmp/mysql.sock");
+			QStringList sockets;
+#ifndef Q_WS_WIN
+			sockets.append("/var/lib/mysql/mysql.sock");
+			sockets.append("/var/run/mysqld/mysqld.sock");
+			sockets.append("/tmp/mysql.sock");
 	
-	                for(QStringList::Iterator it = sockets.begin(); it != sockets.end(); it++)
-        	        {
-                	        if(QFile(*it).exists()) {
-                        	        socket = (*it);
+			for(QStringList::Iterator it = sockets.begin(); it != sockets.end(); it++)
+			{
+				if(QFile(*it).exists()) {
+					socket = (*it);
 					break;
 				}
-	                }
-        	} else socket=m_data->localSocketFileName;
+			}
+#endif
+		}
+		else
+			socket=m_data->localSocketFileName;
 	}
 
-
-        mysql_real_connect(m_mysql, m_data->hostName.local8Bit(), m_data->userName.local8Bit(), 
-		m_data->password.local8Bit(), 0,
-                m_data->port, socket.local8Bit(), 0);
-        if(mysql_errno(m_mysql) == 0)
-        {
-                return true;
-        }
+	mysql_real_connect(m_mysql, m_data->hostName.local8Bit(), 
+		m_data->userName.local8Bit(), m_data->password.local8Bit(), 0,
+		m_data->port, socket.local8Bit(), 0);
+	if(mysql_errno(m_mysql) == 0)
+		return true;
 	
 	QString err = mysql_error(m_mysql); //store error msg, if any - can be destroyed after disconenct()
 	drv_disconnect();
@@ -91,13 +92,12 @@ bool MySqlConnection::drv_connect()
 bool MySqlConnection::drv_disconnect()
 {
 	m_mysql = 0;
-
-        KexiDBDrvDbg << "MySqlConnection::disconnect()" << endl;
-        return true;
+	KexiDBDrvDbg << "MySqlConnection::disconnect()" << endl;
+	return true;
 }
 
 
-Cursor* MySqlConnection::prepareQuery( const QString& statement, uint cursor_options ) {
+Cursor* MySqlConnection::prepareQuery(const QString& statement, uint cursor_options) {
 	return new MySqlCursor(this,statement,cursor_options);
 }
 
@@ -112,36 +112,31 @@ QString MySqlConnection::escapeString(const QString& str) const {
 QCString MySqlConnection::escapeString(const QCString& str) const {
 	return QCString();//TODO
 }
-                
+
 bool MySqlConnection::drv_getDatabasesList( QStringList &list ) {
-        KexiDBDrvDbg << "MySqlConnection::drv_getDatabasesList()" << endl;
-
+	KexiDBDrvDbg << "MySqlConnection::drv_getDatabasesList()" << endl;
 	list.clear();
-
 	MYSQL_RES *res;
 
-        if((res=mysql_list_dbs(m_mysql,0)) != 0)
-        {
+	if((res=mysql_list_dbs(m_mysql,0)) != 0) {
 		MYSQL_ROW  row;
 		while ( (row = mysql_fetch_row(res))!=0) {
 			list<<QString(row[0]);
 		}
-              	mysql_free_result(res);
-                return true;
-        }
+		mysql_free_result(res);
+		return true;
+	}
 
 	setError(ERR_DB_SPECIFIC,mysql_error(m_mysql));
 	return false;
 }
-	
 
 bool MySqlConnection::drv_createDatabase( const QString &dbName) {
-     KexiDBDrvDbg << "MySqlConnection::drv_createDatabase: " << dbName << endl;
-        
-	if (executeSQL("CREATE DATABASE " + (dbName)))
-        return true;
-
-    return false;
+	KexiDBDrvDbg << "MySqlConnection::drv_createDatabase: " << dbName << endl;
+	// mysql_create_db deprecated, use SQL here. 
+	if (drv_executeSQL("CREATE DATABASE " + (dbName)))
+		return true;
+	return false;
 }
 
 bool MySqlConnection::drv_useDatabase( const QString &dbName) {
@@ -168,16 +163,16 @@ bool MySqlConnection::drv_executeSQL( const QString& statement ) {
 //add errormsg ?
 		return false;
 	}*/
-	
+	KexiDBDrvDbg << "MySqlConnection::drv_executeSQL: " << statement << endl;
 	QCString queryStr=statement.utf8();
 	const char *query=queryStr;
-        if(mysql_real_query(m_mysql, query, strlen(query)) == 0)
-        {
+	if(mysql_real_query(m_mysql, query, strlen(query)) == 0)
+	{
 		return true;
-        }
-        
-        setError(ERR_DB_SPECIFIC,mysql_error(m_mysql));
-        return false;
+	}
+
+	setError(ERR_DB_SPECIFIC,mysql_error(m_mysql));
+	return false;
 }
 
 Q_ULLONG MySqlConnection::drv_lastInsertRowID()

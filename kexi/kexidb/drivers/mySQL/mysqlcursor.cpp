@@ -33,6 +33,8 @@ MySqlCursor::MySqlCursor(KexiDB::Connection* conn, const QString& statement, uin
 	, m_numRows(0)
 {
 	m_options |= Buffered;
+	my_conn = static_cast<MySqlConnection*>(conn)->m_mysql;
+	KexiDBDrvDbg << "MySqlCursor: constructor for query statement" << endl;
 }
 
 MySqlCursor::MySqlCursor(Connection* conn, QuerySchema& query, uint options )
@@ -43,6 +45,8 @@ MySqlCursor::MySqlCursor(Connection* conn, QuerySchema& query, uint options )
 	, m_numRows(0)
 {
 	m_options |= Buffered;
+	my_conn = static_cast<MySqlConnection*>(conn)->m_mysql;	
+	KexiDBDrvDbg << "MySqlCursor: constructor for query statement" << endl;
 }
 
 MySqlCursor::~MySqlCursor() {
@@ -50,27 +54,30 @@ MySqlCursor::~MySqlCursor() {
 }
 
 bool MySqlCursor::drv_open(const QString& statement) {
-	
-	MySqlConnection *conn=static_cast<MySqlConnection*>( static_cast<Connection*>(m_conn) );
-	if ( (!conn)  || (!conn->m_mysql)) {
+	KexiDBDrvDbg << "MySqlCursor::drv_open:" << statement << endl;
+	if (!my_conn) {
 		//should never happen, but who knows
 		setError(ERR_NO_CONNECTION,i18n("No connection for cursor open operation specified"));
 		return false;
 	}
-        if(mysql_real_query(conn->m_mysql, statement.utf8(), strlen(statement.utf8())) == 0)
-        {
-                if(mysql_errno(conn->m_mysql) == 0) {
-			m_res= mysql_store_result(conn->m_mysql);
+	// This can't be right?  mysql_real_query takes a length in order that
+	// queries can have binary data - but strlen does not allow binary data.
+	if(mysql_real_query(my_conn, statement.utf8(), strlen(statement.utf8())) == 0) {
+		if(mysql_errno(my_conn) == 0) {
+			m_res= mysql_store_result(my_conn);
 			m_fieldCount=mysql_num_fields(m_res);
 			m_numRows=mysql_num_rows(m_res);
 			m_at=0;
-
+			
 			m_opened=true;
+			m_records_in_buf = m_numRows;
+			m_buffering_completed = true;
 			m_afterLast=false;
-                        return true;
-                }
-        }
-	setError(ERR_DB_SPECIFIC,QString::fromUtf8(mysql_error(conn->m_mysql)));
+			return true;
+			}
+	}
+	
+	setError(ERR_DB_SPECIFIC,QString::fromUtf8(mysql_error(my_conn)));
 	return false;
 }
 
@@ -84,26 +91,26 @@ bool MySqlCursor::drv_close() {
 	m_numRows=0;
 	return true;
 }
-        
-bool MySqlCursor::drv_moveFirst() {
-	return false; //TODO
-}
-       
+
+/*bool MySqlCursor::drv_moveFirst() {
+	return true; //TODO
+}*/
+
 void MySqlCursor::drv_getNextRecord() {
-	m_row=mysql_fetch_row(m_res);
-	if (m_row) {
+	KexiDBDrvDbg << "MySqlCursor::drv_getNextRecord" << endl;
+	if (at() < m_numRows && at() >=0) {
 		m_lengths=mysql_fetch_lengths(m_res);
 		m_result=FetchOK;
-		/*return true;*/
-	} else {
-		m_result=FetchEnd;
-		/*return false;	*/
 	}
-	/*return true;*/
+	else if (at() >= m_numRows) {
+		m_result = FetchEnd;
+	}
+	else {
+		m_result = FetchError;
+	}
 }
 
-
-
+// This isn't going to work right now as it uses m_row
 QVariant MySqlCursor::value(uint pos) {
 	if (!m_row) return QVariant();
 	if (pos>=m_fieldCount) return QVariant();
@@ -113,6 +120,19 @@ QVariant MySqlCursor::value(uint pos) {
 }
 
 
+/* As with sqlite, the DB library returns all values (including numbers) as
+   strings. So just put that string in a QVariant and let KexiDB deal with it.
+ */
+void MySqlCursor::storeCurrentRow(RowData &data) const {
+	KexiDBDrvDbg << "MySqlCursor::storeCurrentRow: Position is " << (long)m_at<< endl;
+	if (m_numRows<=0)
+		return;
+
+	data.reserve(m_fieldCount);
+	for( uint i=0; i<m_fieldCount; i++) {
+		data[i] = QVariant(m_row[i]);
+	}
+}
 
 void MySqlCursor::drv_clearServerResult() {
 }
@@ -147,9 +167,7 @@ const char** MySqlCursor::rowData() const {
 	return 0;
 }
 
-void MySqlCursor::storeCurrentRow(RowData &data) const {
-	//! @todo
-}
+
 
 /*bool MySqlCursor::save(RowData& data, RowEditBuffer& buf)
 {

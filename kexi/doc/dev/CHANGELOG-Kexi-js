@@ -309,6 +309,9 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 
 
 2004-08-04
+MySQL Driver
+- introduced again! thanks to Martin Ellis
+CC_MAIL: m.a.ellis@ncl.ac.uk
 KexiDB
 - alterTable() added (now only drops and recreates table)
 - createTable() 'zombie' rows from 'kexi__fields' table is removed for safety 

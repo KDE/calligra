@@ -45,27 +45,41 @@ using namespace KexiDB;
 
 KEXIDB_DRIVER_INFO( MySqlDriver, mysql, "mysql" );
 
+/* TODO: Implement buffered/unbuffered, rather than buffer everything.
+   Each MYSQL connection can only handle at most one unbuffered cursor,
+   so MySqlConnection should keep count?
+ */
+
+/*! 
+ * Constructor sets database features and
+ * maps the types in KexiDB::Field::Type to the MySQL types.
+ *
+ * See: http://dev.mysql.com/doc/mysql/en/Column_types.html
+ */
 MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &args) : Driver(parent, name,args)
 {
 	KexiDBDrvDbg << "MySqlDriver::MySqlDriver()" << endl;
 
 	m_isFileDriver=false;
-	m_features=CursorForward;
+	m_features=IgnoreTransactions | CursorForward;
 
-	beh->ROW_ID_FIELD_NAME="_ROWID";//(js): ok??
+	beh->ROW_ID_FIELD_NAME="LAST_INSERT_ID()";
+	beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE=true;
 	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
 	beh->USING_DATABASE_REQUIRED_TO_CONNECT=false;
+	
 	m_typeNames[Field::Byte]="TINYINT";
 	m_typeNames[Field::ShortInteger]="SMALLINT";
 	m_typeNames[Field::Integer]="INT";
 	m_typeNames[Field::BigInteger]="BIGINT";
-	m_typeNames[Field::Boolean]="BOOLEAN";
+	// Can use BOOLEAN here, but BOOL has been in MySQL longer
+	m_typeNames[Field::Boolean]="BOOL";
 	m_typeNames[Field::Date]="DATE";
 	m_typeNames[Field::DateTime]="DATETIME";
 	m_typeNames[Field::Time]="TIME";
 	m_typeNames[Field::Float]="FLOAT";
 	m_typeNames[Field::Double]="DOUBLE";
-	m_typeNames[Field::Text]="TEXT";
+	m_typeNames[Field::Text]="VARCHAR";
 	m_typeNames[Field::LongText]="LONGTEXT";
 	m_typeNames[Field::BLOB]="BLOB"; 
 }

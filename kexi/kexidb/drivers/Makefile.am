@@ -7,7 +7,5 @@ if compile_pgsql_plugin
 pgsql_dir=pqxx
 endif
 
-SUBDIRS =  sqlite  $(pgsql_dir) 
-
-#will be reenabled: $(mysql_dir)
+SUBDIRS =  sqlite $(pgsql_dir) $(mysql_dir)
 

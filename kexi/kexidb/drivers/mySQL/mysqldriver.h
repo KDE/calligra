@@ -34,7 +34,7 @@ class KEXIDB_MYSQL_DRIVER_EXPORT MySqlDriver : public Driver
 
 	public:
 		MySqlDriver(QObject *parent, const char *name, const QStringList &args=QStringList());
-		~MySqlDriver();
+		virtual ~MySqlDriver();
 		
 		virtual bool isSystemDatabaseName( const QString &n ) const;
 		virtual bool isSystemFieldName( const QString& n ) const;

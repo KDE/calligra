@@ -35,28 +35,29 @@ class KEXIDB_MYSQL_DRIVER_EXPORT MySqlCursor: public Cursor {
 public:
 	MySqlCursor(Connection* conn, const QString& statement = QString::null, uint cursor_options = NoOptions );
 	MySqlCursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
-	~MySqlCursor();
-        virtual bool drv_open(const QString& statement);
-        virtual bool drv_close();
-        virtual bool drv_moveFirst();
-        virtual void drv_getNextRecord();
+	virtual ~MySqlCursor();
+	virtual bool drv_open(const QString& statement);
+	virtual bool drv_close();
+//        virtual bool drv_moveFirst();
+	virtual void drv_getNextRecord();
         //virtual bool drv_getPrevRecord();
 	virtual QVariant value(uint);
 
-
-        virtual void drv_clearServerResult();
-        virtual void drv_appendCurrentRecordToBuffer();
-        virtual void drv_bufferMovePointerNext();
-        virtual void drv_bufferMovePointerPrev();
-        virtual void drv_bufferMovePointerTo(Q_LLONG to);
-        virtual const char** rowData() const;
-        virtual void storeCurrentRow(RowData &data) const;
+	virtual void drv_clearServerResult();
+	virtual void drv_appendCurrentRecordToBuffer();
+	virtual void drv_bufferMovePointerNext();
+	virtual void drv_bufferMovePointerPrev();
+	virtual void drv_bufferMovePointerTo(Q_LLONG to);
+	virtual const char** rowData() const;
+	virtual void storeCurrentRow(RowData &data) const;
 //        virtual bool save(RowData& data, RowEditBuffer& buf);
 
 
 private:
+	QVariant pValue(uint pos) const;
 	MYSQL_RES *m_res;	
 	MYSQL_ROW m_row;
+	MYSQL *my_conn;
 	unsigned long *m_lengths;
 //js: int m_numFields;
 	unsigned long m_numRows;
