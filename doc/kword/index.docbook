@@ -1478,8 +1478,8 @@ interchange</emphasis>. This is what many people mean when they say
 <glossdef>
 <para>This is the ratio of the measurement of a screen or document
 horizontally compared to the vertical measurement.  All standard
-computer monitors have the same aspect ratio, regardless of their
-vertical resolution. Any &kword; document that conforms to the standard
+computer monitors have the same aspect ratio, regardless of their 
+resolution. Any &kword; document that conforms to the standard
 screen will look good on any monitor.</para>
 </glossdef>
 </glossentry>
@@ -1502,7 +1502,8 @@ linkend="defsourcecode">Source Code</link>.</para>
 file is very good for photographs and complex drawings. The downside of
 using bitmap images, is that when you change the size of the image on
 the page, there is a loss of detail. The file names of such pictures
-often end in jpeg, png or gif. Compare to <link
+often end in <emphasis>jpeg</emphasis>, <emphasis>png</emphasis> or 
+<emphasis>gif</emphasis>. Compare to <link
 linkend="defclipart">Clipart</link>.</para>
 </glossdef>
 </glossentry>
@@ -1523,7 +1524,7 @@ describe the picture as a collection of lines, curves and dots.  These
 file formats are preferable to bit-mapped images, because their size can
 be made larger or smaller, without any loss in quality. The downside of
 vector formats, is that it can be quite difficult to describe certain
-types of photographs using only lines and curves.  This results
+types of photographs using only lines and curves.  These images result in
 difficult, complicated files and most of the benefits of vector formats
 are lost.  Compare to <link linkend="defbitmap">Bitmap
 images</link>.</para>
@@ -1550,7 +1551,7 @@ section on <link linkend="clipboard">Cut/Copy/Paste</link>.</para>
 a source file (which is easily edited by a programmer) into a binary
 file (which the computer uses). If you are planning on compiling &kword;,
 please try to find a binary version of &koffice; first. Compiling programs
-is not for the beginner. For more information on versioning &kword;, see
+is not for the beginner. For more information on compiling &kword;, see
 the section entitled <link
 linkend="installation">Installation</link></para></glossdef>
 </glossentry>
@@ -1571,7 +1572,7 @@ linkend="variables">Inserting Variables</link>.</para>
 <para>This is a binary file format that is used by Debian and Debian
 based distributions.  This will be the suffix of a file specifically for
 these distributions.  An example would be
-<filename>koffice-1.1.deb</filename>. For more information on installing
+<filename>koffice-1.2.deb</filename>. For more information on installing
 these files, refer to the <ulink url="http://www.debian.org">Debian Web
 Site</ulink>.</para>
 </glossdef>
@@ -1592,7 +1593,7 @@ document).</para>
 <glossentry id="defdtp">
 <glossterm><acronym>DTP</acronym></glossterm>
 <glossdef>
-<para>Stands for <emphasis>Desktop Publishing</emphasis>.</para>
+<para>Stands for <emphasis>DeskTop Publishing</emphasis>.</para>
 </glossdef>
 </glossentry>
 
@@ -1600,11 +1601,11 @@ document).</para>
 <glossterm><acronym>FAQ</acronym></glossterm>
 <glossdef>
 <para>Stands for <emphasis>Frequently Asked Questions</emphasis> and
-normally means a document, where those questions are answered. If you
+normally means a document, where questions that arise many times are answered. If you
 have a question to the developers of &koffice;, you should always have a
 look at the <acronym>FAQ</acronym> first. You'll find the latest version
 <ulink
-url="http://koffice.kde.org/faq/koffice-faq.html">here</ulink>.</para>
+url="http://koffice.kde.org/faq">here</ulink>.</para>
 </glossdef>
 </glossentry>
 
@@ -1652,7 +1653,7 @@ as well. See <link linkend="defheader">Header</link>.</para>
 <glossentry id="defframe">
 <glossterm>Frame</glossterm>
 <glossdef>
-<para>Well, about everything in &kword; is in a frame. Text is always in
+<para>Nearly everything in &kword; is in a frame. Text is always in
 a text frame. Pictures are in picture frames. Parts are in part
 frames. A frame is basically just a rectangle that can contain some part
 of your document. Frames can be moved, resized, deleted etc.</para>
@@ -1713,8 +1714,8 @@ Web.</para>
 <glossentry id="defkde2">
 <glossterm>&kde;</glossterm>
 <glossdef>
-<para>Stands for the <emphasis>K Desktop Environment</emphasis> which is
-required for &kword; to operate.  The KDesktop Environment is user
+<para>Stands for the <emphasis>K Desktop Environment</emphasis>.  Part of &kde; is
+required for &kword; to operate.  The KDesktop Environment is a user
 interface which allows users to manipulate files and operate programs
 graphically.  For more information, please visit <ulink
 url="http://www.kde.org">www.kde.org</ulink>.</para>
@@ -1758,17 +1759,6 @@ use it to access all features of &kword;.</para>
 <para>Menubar: <inlinemediaobject><imageobject> <imagedata
 fileref="basic.png" format="PNG"
 align="center"/></imageobject></inlinemediaobject></para>
-</glossdef>
-</glossentry>
-
-<glossentry id="defpicture">
-<glossterm>Picture</glossterm>
-<glossdef>
-<para>Yes, I know what your thinking--Who doesn't know what a picture
-is?  When we speak of pictures with &kword;, however, the term has a
-very specific meaning and should not be confused with clip-art.
-Pictures are <link linkend="defbitmap">bit-mapped</link> images. See
-<link linkend="defclipart">Clipart</link> for more information.</para>
 </glossdef>
 </glossentry>
 
@@ -1869,7 +1859,7 @@ align="center"/></imageobject></inlinemediaobject></para>
 <glossdef>
 <para>A vector based graphic is described in terms of lines and shapes,
 not in terms of dots.  These files are often referred to as <link
-linkend="defclipart">clip-art</link>.Because of this, Clipart usually
+linkend="defclipart">clip-art</link>. Because of this, clipart usually
 scales better than bit-mapped images. </para>
 </glossdef>
 </glossentry>
