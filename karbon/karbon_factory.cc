@@ -67,8 +67,8 @@ KarbonFactory::aboutData()
     {
 	s_aboutData = new KAboutData(
 	    "karbon",I18N_NOOP("Karbon"),
-	    "0.0.1", I18N_NOOP("Vector Graphics Program"), KAboutData::License_GPL,
-	    "(c) 2001, Lennart Kudling" );
+	    "0.0.1", I18N_NOOP("A Vector Graphics Program"), KAboutData::License_GPL,
+	    "(c) 2001, The Karbon Developers" );
 	s_aboutData->addAuthor( "Lennart Kudling", 0, "kudling@kde.org" );
     }
     return s_aboutData;

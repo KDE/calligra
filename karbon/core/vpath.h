@@ -29,11 +29,17 @@ public:
     void rlineTo( double& x, double& y );
     void curveTo( double& x1, double& y1, double& x2, double& y2, double& x3, double& y3 );
     void rcurveTo();    
+
+    virtual void translate( double& dx, double& dy );
+
     void close();
+    bool isClosed() { return m_isClosed; }
 
 private:
     QList<VPoint> m_points;		// list of used points
     QList<VPrimitive> m_primitives;	// list of used primitives
+    
+    bool m_isClosed;	// can we fill this path ?
 };
 
 #endif

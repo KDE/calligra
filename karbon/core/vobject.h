@@ -8,6 +8,8 @@ public:
     VObject();
 
     virtual void draw( QPainter& p ) = 0;
+    
+    virtual void translate( double& dx, double& dy ) = 0;
 
 private:
 

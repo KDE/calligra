@@ -5,7 +5,7 @@
 #include "vpoint.h"
 
 VPath::VPath()
-    : VObject()
+    : VObject(), m_isClosed( false )
 {
     // let's see if using autodelete brings us into hell:
     m_primitives.setAutoDelete(true);
@@ -24,6 +24,27 @@ VPath::~VPath()
     {
 	delete( point );
     }
+}
+
+void
+VPath::draw( QPainter& painter )
+{
+    QPointArray qpa;
+    // walk down all VPrimitives and store their QPoints into a QPointArray:
+    for ( VPrimitive* primitive=m_primitives.first(); primitive!=0L; primitive=m_primitives.next() ) 
+    {
+	primitive->getQPoints( qpa );	// note: vbeziers give more than 2 qpoints
+    }
+    
+    painter.save();
+    painter.setPen( Qt::black );
+    painter.setBrush( Qt::blue );
+    // draw open or closed path ?
+    if ( m_isClosed )
+	painter.drawPolygon( qpa );
+    else
+	painter.drawPolyline( qpa );
+    painter.restore();
 }
 
 void
@@ -59,17 +80,22 @@ VPath::curveTo( double& x1, double& y1, double& x2, double& y2, double& x3, doub
 }
 
 void
-VPath::draw( QPainter& painter )
+VPath::translate( double& dx, double& dy )
 {
-    QPointArray qpa;
-    // walk down all VPrimitives and store their QPoints into a QPointArray:
-    for ( VPrimitive* primitive=m_primitives.first(); primitive!=0L; primitive=m_primitives.next() ) 
+    for ( VPoint* point=m_points.first(); point!=0L; point=m_points.next() ) 
     {
-	primitive->getQPoints( qpa );	// note: vbeziers give more than 2 qpoints
+	point->rmoveTo( dx, dy );
     }
-    
-    painter.save();
-    painter.setPen( Qt::black );
-    painter.drawPolyline( qpa );
-    painter.restore();
+}
+
+void
+VPath::close()
+{
+    if ( !(m_primitives.getLast()->lastPoint()==m_primitives.getFirst()->firstPoint()) ) 
+    {
+	m_primitives.append( new VLine(
+	    m_primitives.getLast()->lastPoint(),
+	    m_primitives.getFirst()->firstPoint() ) );
+    }    
+    m_isClosed = true;
 }
