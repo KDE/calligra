@@ -151,7 +151,7 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
             if (mystr == "<end_styles>")
 	    {
              ok = false;
-             printf ("End styles\n\n");
+             kdDebug()<<"End styles\n\n";
 	    }
 	    else
 	    {
@@ -164,9 +164,7 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
                 rueck = sscanf ((const char *) mystr.latin1() ,
                                 ":%d:%d:%d:%d>",
 	                         &col->c, &col->m, &col->y, &col->k);
-		printf ("  Color %3d: %3d %3d %3d %3d %s\n",
-	                zaehler, col->c, col->m, col->y, col->k,
-	                (const char *)  coltxt.latin1());
+		kdDebug()<<"  Color " <<  zaehler<<"  : "<<col->c << "  " << col->m<< " "<< col->y<<" "<< col->k<<" "<<coltxt<<" "<<endl;
                 zaehler ++;
 
                 // Color transformation cmyk -> rgb
@@ -192,18 +190,18 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
          ***********************************************************************/
         else if (mystr == "<start_data Applix>")
 	{
-          printf ("\nEmbedded Applix object starts:\n");
+          kdDebug()<<"\nEmbedded Applix object starts:\n";
           do
 	  {
             mystr = readTagLine (stream, in);
             if (mystr == "<end_data>") ok = false;
 	    else
 	    {
-              printf ("   %s\n", (const char *)  mystr.latin1());
+              kdDebug()<<"   "<<mystr<<endl;
 	    }
 	  }
           while (ok == true);
-          printf ("Embedded Applix object ends\n\n");
+          kdDebug()<<"Embedded Applix object ends\n\n";
 
         }
         /**********************************************************************
@@ -211,18 +209,18 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
          **********************************************************************/
         else if (mystr.startsWith ("<start_hdrftr "))
 	{
-          printf ("\nHeader/Footer starts:\n");
+          kdDebug()<<"\nHeader/Footer starts:\n";
           do
 	  {
             mystr = readTagLine (stream, in);
             if (mystr == "<end_hdrftr>") ok = false;
 	    else
 	    {
-              printf ("    %s\n", (const char *)  mystr.latin1());
+              kdDebug()<<"    "<<mystr<<endl;
 	    }
 	  }
           while (ok == true);
-          printf ("\nHeader/Footer ends\n");
+          kdDebug()<<"\nHeader/Footer ends\n";
         }
         /**********************************************************************
          * found a paragraph string                                           *
@@ -231,8 +229,8 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
 	{
 	   sscanf ( (const char *) mystr.latin1(), "<P \"%s\"", stylename);
            mystr.remove (0, 5+strlen(stylename));
-           printf (" Para  Name: %s\n", stylename);
-           printf ("       Rest: %s\n", (const char *) mystr.latin1());
+           kdDebug()<<" Para  Name: "<< stylename<<endl;
+           kdDebug()<<"       Rest: "<<mystr<<endl;
 	}
         /**********************************************************************
          * found a textstring                                                 *
@@ -253,16 +251,17 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
           do
 	  {
              pos = mystr.find ("\"", y);
-             printf ("POS:%d  length:%d y:%d\n", pos, mystr.length(), y);
-             printf ("<%s>", (const char *) mystr.latin1() );
+	     kdDebug()<<"POS:"<<pos<<" length:"<< mystr.length()<<" y:"<<y <<endl;
+	 
+             kdDebug()<<"< "<<mystr<<" >\n";
              if(  (pos-1 > -1) && (mystr[pos-1] == '\\'))
              {
-               printf (" No string end - but Gänsefüsschen\n");
+               kdDebug()<<" No string end - but Gänsefüsschen\n";
                y=pos+1;
              }
              else
              {
-               printf (" String end //\n");
+               kdDebug()<<" String end //\n";
                ok = false;
              }
 	  }
@@ -271,10 +270,8 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
           textstr = mystr.left (pos);
           mystr.remove (0, pos+1);
           mystr.stripWhiteSpace();
-          printf ("Text:<%s> %d  Rest:<%s> \n",
-                  (const char *) textstr.latin1(), pos,
-                  (const char *) mystr.latin1() );
-
+	  kdDebug() <<"Text:<" <<textstr <<" > "<< pos<<"  Rest:<"<< mystr<<"> \n";
+     
           // split format
           QStringList typeList;
           typeList = QStringList::split (' ', mystr);
@@ -284,53 +281,51 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
           int nn=0;
           for (QStringList::Iterator it = typeList.begin(); it != typeList.end(); ++it )
           {
-            printf ("   No: %2d   >%s< = ",
-                    nn, (*it).latin1() );
-            nn++;
+            kdDebug() <<"   No: "<< nn<< "   > "<< (*it)<< "< = \n";
 
             // Looking for bold
             if      ((*it) == "bold")
             {
               bold = 1;
-              printf ("bold\n");
+              kdDebug()<<"bold\n";
 	    }
             else if ((*it) == "no-bold")
             {
               bold = 0;
-              printf ("no bold\n");
+              kdDebug()<<"no bold\n";
 	    }
             else if ((*it) == "italic")
             {
               italic = 1;
-              printf ("italic\n");
+              kdDebug()<<"italic\n";
 	    }
             else if ((*it) == "no-italic")
             {
               italic = 0;
-              printf ("no italic\n");
+              kdDebug() <<"no italic\n";
 	    }
             else if ((*it) == "underline")
             {
               underline = 1;
-              printf ("underline\n");
+              kdDebug()<<"underline\n";
 	    }
             else if ((*it) == "no-underline")
             {
               underline = 0;
-              printf ("no underline\n");
+              kdDebug() <<"no underline\n";
 	    }
             else if ((*it).startsWith ("size"))
             {
               (*it).remove (0, 5);
 	      sscanf ( (const char *) (*it).latin1(), "%d", &fontsize);
-              printf ("fontsize: %d\n", fontsize);
+              kdDebug()<<"fontsize: "<< fontsize<<endl;
 	    }
             else if ((*it).startsWith ("face"))
             {
               (*it).remove (0, 6);
 	      (*it).remove ((*it).length()-1, 1);
   	      fontname = *it;
-              printf ("fontname: %s\n", (const char *) fontname.latin1());
+              kdDebug()<<"fontname: "<<fontname<<endl;
 	    }
             else if ((*it).startsWith ("color:"))
             {
@@ -338,17 +333,16 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
 	      (*it).remove ((*it).length()-1, 1);
               colname = *it;
               colpos = mcoltxt.findIndex (colname);
-              printf ("  Color: %s %d \n", (const char *) colname.latin1(),
-                                           colpos );
+	      kdDebug() <<"  Color: "<< colname<<" "<< colpos <<" \n";
 	    }
             else
             {
-	      printf  ("%s\n", (const char *) (*it).latin1());
+	      kdDebug()<<" "<< (*it)<<endl;
             }
 
 
 	  }
-          printf ("\n");
+          kdDebug() <<"\n";
 
           // Replaces Part for & <>, applixwear special characters and qouts
           replaceSpecial (textstr);
@@ -421,7 +415,7 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
     str += "  </FRAMESET>\n";
     str += " </FRAMESETS>\n";
     str += "</DOC>\n";
-    printf ("Text %s\n", (const char *) str.utf8());
+    kdDebug()<<"Text "<<str.utf8()<<endl;
 
     KoStore out = KoStore (QString(fileOut), KoStore::Write);
     if (!out.open ("root"))
