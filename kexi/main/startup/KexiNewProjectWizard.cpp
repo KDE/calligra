@@ -167,7 +167,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 	d->lv_types->setMaximumWidth(width()/2);
 	d->lv_types->setSelected(d->lvi_file, true);
 
-#if KEXI_SERVER_SUPPORT
+#ifdef KEXI_SERVER_SUPPORT
 	//get settings
 	KGlobal::config()->setGroup("Startup");
 	//"" means goto 1st page
