@@ -78,6 +78,7 @@ struct PageObjects
   unsigned int presNum;
   Effect effect;
   Effect2 effect2;
+  double angle;
 };
 
 #endif //GLOBAL_H

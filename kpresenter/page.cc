@@ -263,31 +263,25 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 	      {
 		if (objPtr->objType != OT_CLIPART)
 		  painter->translate((float)objPtr->ox - (float)diffx(),(float)objPtr->oy - (float)diffy());
+
 		if (objPtr->objType == OT_CLIPART)
 		  {
 		    r = painter->viewport();
 		    painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
 					 objPtr->ow,objPtr->oh);
 		  }
-		if (objPtr->objType != OT_CLIPART || 
-		    objPtr->objType == OT_CLIPART && !mousePressed ||
-		    mousePressed && !objPtr->isSelected)
-		  {
-		    objPtr->objPic = objPtr->graphObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),objPtr->ow,objPtr->oh);
-		    objPtr->objPic->play(painter);
-		  }
-		painter->translate((float)objPtr->ox - (float)diffx(),(float)objPtr->oy - (float)diffy());
+
+		objPtr->objPic = objPtr->graphObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),objPtr->ow,objPtr->oh);
+
+		objPtr->objPic->play(painter);
+	      
 		if (objPtr->objType == OT_CLIPART)
-		  {
-		    painter->setViewport(r);
-		    painter->resetXForm();
-		  }
+		  painter->setViewport(r);
+
 		painter->resetXForm();
-		painter->setClipping(false);
-		painter->setClipping(true);
-		painter->setClipRect(rect);
 	      } break;
 	    }
+
 	  /* draw selection, if selected */
 	  if (objPtr->isSelected)
 	    {
@@ -434,7 +428,10 @@ void Page::mousePressEvent(QMouseEvent *e)
       if (e->button() == LeftButton)
 	{	
 	  if (presMenu->isVisible())
-	    presMenu->hide();
+	    {
+	      presMenu->hide();
+	      setCursor(blankCursor);
+	    }
 	  else
 	    {
 	      if (drawMode)
@@ -447,6 +444,7 @@ void Page::mousePressEvent(QMouseEvent *e)
 	view->screenPrev();
       else if (e->button() == RightButton)
 	{
+	  setCursor(arrowCursor);
 	  pnt.operator=(QCursor::pos());
 	  presMenu->popup(pnt);
 	} 
@@ -634,6 +632,8 @@ void Page::mouseMoveEvent(QMouseEvent *e)
       oldMy = e->y();
       p.end();
     }
+  if (!editMode && !drawMode && !presMenu->isVisible())
+    setCursor(blankCursor);
 }
 
 /*==================== mouse double click ========================*/
@@ -1024,7 +1024,7 @@ void Page::setupMenus()
   presMenu->insertItem(pixmap,i18n("&Choose Pen..."),this,SLOT(choosePen()));
   presMenu->setItemChecked(PM_SM,true);
   presMenu->setItemChecked(PM_DM,false);
-  presMenu->setCursor(arrowCursor);
+  presMenu->setMouseTracking(true);
 }
 
 /*======================== clipboard cut =========================*/

@@ -318,6 +318,7 @@ void KPresenterDocument_impl::saveObjects(ostream& out)
       out << indent << "<PRESNUM value=\"" << objPtr->presNum << "\"/>" << endl; 
       out << indent << "<EFFECT value=\"" << objPtr->effect << "\"/>" << endl; 
       out << indent << "<EFFECT2 value=\"" << objPtr->effect2 << "\"/>" << endl; 
+      out << indent << "<ANGLE value=\"" << objPtr->angle << "\"/>" << endl; 
       
       if (objPtr->objType == OT_TEXT)
 	saveTxtObj(out,objPtr->textObj);
@@ -983,6 +984,7 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 			  objPtr->effect = (Effect)atoi((*it).m_strValue.c_str());
 			  // just to avoid problems with older files
 			  objPtr->effect2 = EF2_NONE;
+			  objPtr->angle = 0.0;
 			}
 		    }
 		}
@@ -996,6 +998,18 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 		    {
 		      if ((*it).m_strName == "value")
 			objPtr->effect2 = (Effect2)atoi((*it).m_strValue.c_str());
+		    }
+		}
+
+	      // angle
+	      else if (name == "ANGLE")
+		{
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "value")
+			objPtr->angle = (Effect2)atof((*it).m_strValue.c_str());
 		    }
 		}
 
@@ -1791,6 +1805,7 @@ void KPresenterDocument_impl::insertPicture(const char *filename,int diffx,int d
 	  objPtr->presNum = 0;
 	  objPtr->effect = EF_NONE;
 	  objPtr->effect2 = EF2_NONE;
+	  objPtr->angle = 0.0;
 	  _objList.append(objPtr);
 	  repaint(objPtr->ox,objPtr->oy,
 		  objPtr->ow,objPtr->oh,false);
@@ -1821,6 +1836,7 @@ void KPresenterDocument_impl::insertClipart(const char *filename,int diffx,int d
       objPtr->presNum = 0;
       objPtr->effect = EF_NONE;
       objPtr->effect2 = EF2_NONE;
+      objPtr->angle = 0.0;
       _objList.append(objPtr);
       repaint(objPtr->ox,objPtr->oy,
 	      objPtr->ow,objPtr->oh,false);
@@ -1921,6 +1937,7 @@ void KPresenterDocument_impl::insertLine(QPen pen,LineType lt,int diffx,int diff
   objPtr->presNum = 0;
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
+  objPtr->angle = 0.0;
   _objList.append(objPtr);
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
@@ -1947,6 +1964,7 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
   objPtr->presNum = 0;
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
+  objPtr->angle = 0.0;
   _objList.append(objPtr);
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
@@ -1971,6 +1989,7 @@ void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,int di
   objPtr->presNum = 0;
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
+  objPtr->angle = 0.0;
   _objList.append(objPtr);
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
@@ -1996,6 +2015,7 @@ void KPresenterDocument_impl::insertText(int diffx,int diffy)
   objPtr->presNum = 0;
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
+  objPtr->angle = 0.0;
   _objList.append(objPtr);
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
@@ -2019,6 +2039,7 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,const char *f
   objPtr->presNum = 0;
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
+  objPtr->angle = 0.0;
   _objList.append(objPtr);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   repaint(objPtr->ox,objPtr->oy,
