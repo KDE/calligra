@@ -708,7 +708,6 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     {
         format.setTextUnderlineColor(QColor(n.attribute("underlinecolor")));
     }
-    bool strikeOut=false;
     if(n.hasAttribute(attrStrikeOut))
     {
         QString value = n.attribute( attrStrikeOut );
@@ -729,7 +728,6 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     fn.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( size ) );
     fn.setBold( bold );
     fn.setItalic( italic );
-    fn.setStrikeOut( strikeOut );
     //kdDebug() << "KPTextObject::loadFormat: family=" << fn.family() << " size=" << fn.pointSize() << endl;
     QColor col( color );
 
