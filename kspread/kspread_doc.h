@@ -52,7 +52,6 @@ class QDomDocument;
 
 class KSpellConfig;
 
-
 #include <koDocument.h>
 #include <koPageLayoutDia.h>
 #include <kozoomhandler.h>
@@ -64,6 +63,7 @@ class KSpellConfig;
 #include <qpainter.h>
 #include <qrect.h>
 #include <qstring.h>
+#include "ksprsavinginfo.h"
 
 #include "kspread_interpreter.h"
 #include "kspread_locale.h"
@@ -449,6 +449,7 @@ public:
   virtual bool loadChildren( KoStore* _store );
   QDomElement saveAreaName( QDomDocument& doc ) ;
     bool saveOasisAreaName( KoXmlWriter & xmlWriter );
+    void saveOasisHeaderFooter( const KSPRSavingInfo::tableDef & defTable, KoXmlWriter & xmlWriter) const;
 
   void loadAreaName( const QDomElement& element );
   void loadOasisAreaName( const QDomElement& element );

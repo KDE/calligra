@@ -6970,6 +6970,78 @@ void KSpreadSheet::maxRowCols( int & maxCols, int & maxRows )
 }
 
 
+void KSpreadSheet::saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const
+{
+    QString headerLeft = print()->headLeft();
+    QString headerCenter= print()->headMid();
+    QString headerRight = print()->headRight();
+
+    QString footerLeft = print()->footLeft();
+    QString footerCenter= print()->footMid();
+    QString footerRight = print()->footRight();
+
+
+    xmlWriter.startElement( "style:header");
+    if ( ( !headerLeft.isEmpty() )
+         || ( !headerCenter.isEmpty() )
+         || ( !headerRight.isEmpty() ) )
+    {
+        xmlWriter.startElement( "style:region-left" );
+        //convertpart
+        xmlWriter.endElement();
+
+        xmlWriter.startElement( "style:region-center" );
+        //convertpart
+        xmlWriter.endElement();
+
+        xmlWriter.startElement( "style:region-right" );
+        //convertpart
+        xmlWriter.endElement();
+    }
+    else
+    {
+#if 0
+        QDomElement header = doc.createElement( "style:header" );
+    QDomElement text   = doc.createElement( "text:p" );
+    QDomElement name   = doc.createElement( "text:sheet-name" );
+    name.appendChild( doc.createTextNode( "???" ) );
+#endif
+    }
+    xmlWriter.endElement();
+
+
+    xmlWriter.startElement( "style:footer");
+    if ( ( !footerLeft.isEmpty() )
+         || ( !footerCenter.isEmpty() )
+         || ( !footerRight.isEmpty() ) )
+    {
+        xmlWriter.startElement( "style:region-left" );
+        //convertpart
+        xmlWriter.endElement();
+
+        xmlWriter.startElement( "style:region-center" );
+        //convertpart
+        xmlWriter.endElement();
+
+        xmlWriter.startElement( "style:region-right" );
+        //convertpart
+        xmlWriter.endElement();
+    }
+    else
+    {
+#if 0
+            QDomElement footer = doc.createElement( "style:footer" );
+    QDomElement text   = doc.createElement( "text:p" );
+    text.appendChild( doc.createTextNode( i18n( "Page " ) ) );
+    QDomElement number = doc.createElement( "text:page-number" );
+    number.appendChild( doc.createTextNode( "1" ) );
+#endif
+    }
+    xmlWriter.endElement();
+
+
+}
+
 bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, KSpreadGenValidationStyles &valStyle )
 {
     int maxCols= 1;
@@ -7014,7 +7086,10 @@ QString KSpreadSheet::saveOasisTableStyleName( KoGenStyles &mainStyles )
             newName = QString("Standard-%1" ).arg( m_pDoc->savingInfo()->styleNumber );
         ++m_pDoc->savingInfo()->styleNumber;
         pageStyle.addAttribute( "style:master-page-name",  newName );
-        m_pDoc->savingInfo()->appendMasterPage( nameStyle, newName );
+        KSPRSavingInfo::tableDef def;
+        def.tableName = newName;
+        def.tableIndex = this;
+        m_pDoc->savingInfo()->appendMasterPage( nameStyle, def );
     }
     pageStyle.addProperty( "table:display", !m_bTableHide );
     return mainStyles.lookup( pageStyle, "ta" );

@@ -710,8 +710,12 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     KSPRSavingInfo::StylePageMap::const_iterator it2 = d->m_savingInfo->stylePageMap().begin();
     for ( ; it2 != map.end(); ++it2 ) {
         stylesWriter.startElement( "style:master-page" );
-        stylesWriter.addAttribute( "style:name", it2.data() );
+        KSPRSavingInfo::tableDef def = it2.data();
+        stylesWriter.addAttribute( "style:name", def.tableName );
         stylesWriter.addAttribute( "style:page-layout-name", it2.key() );
+
+        saveOasisHeaderFooter( def, stylesWriter);
+
         stylesWriter.endElement();
     }
 
@@ -720,6 +724,11 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
 
     stylesWriter.endElement(); // root element (office:document-styles)
     stylesWriter.endDocument();
+}
+
+void KSpreadDoc::saveOasisHeaderFooter( const KSPRSavingInfo::tableDef & defTable, KoXmlWriter & xmlWriter) const
+{
+    defTable.tableIndex->saveOasisHeaderFooter( xmlWriter );
 }
 
 bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* )

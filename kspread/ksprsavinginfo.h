@@ -20,18 +20,35 @@
 #ifndef KSPRSAVINGINFO_H
 #define KSPRSAVINGINFO_H
 
+class KSpreadSheet;
+
 /// Temporary information used only during saving
 class KSPRSavingInfo
 {
 public:
     KSPRSavingInfo() {styleNumber = 0;}
     ~KSPRSavingInfo() {}
-    typedef QMap<QString, QString> StylePageMap;
-    void appendMasterPage( const QString &styleName, const QString &displayName ){ m_masterPageStyle.insert( styleName,displayName );}
-    QString masterPageName( const QString &name) { return m_masterPageStyle[name];}
+    struct tableDef {
+        QString tableName;
+        KSpreadSheet *tableIndex;
+    };
+
+    typedef QMap<QString, tableDef> StylePageMap;
+
+    void appendMasterPage( const QString &styleName, const tableDef &_def ){ m_masterPageStyle.insert( styleName,_def );}
+
+    QString masterPageName( const QString &name) {
+        tableDef _def = m_masterPageStyle[name];
+        return _def.tableName;}
+
+    tableDef pageDef( const QString &name) { return m_masterPageStyle[name]; }
+
     bool findStyleName(const QString & name) const { return (m_masterPageStyle.find( name ) != m_masterPageStyle.end());}
+
     StylePageMap stylePageMap() const { return m_masterPageStyle;}
+
     int styleNumber;
+
 private:
     StylePageMap m_masterPageStyle;
 };
