@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="2">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="3">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
@@ -34,7 +34,6 @@
   <Action name="view_endnotes"/>
   <Separator/>
   <Action name="view_zoom"/>
-  <Separator/>
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
   <Action name="insert_picture"/>
@@ -84,7 +83,6 @@
   <Action name="table_delcol"/>
   <Separator/>
   <Action name="table_joincells"/>
-  <Action name="table_splitcells"/>
   <Action name="table_ungroup"/>
   <Separator/>
   <Action name="table_delete"/>
@@ -95,8 +93,6 @@
   <Action name="extra_stylist"/>
   <Separator/>
   <Action name="extra_template"/>
-  <Separator/>
-  <Action name="extra_options"/>
  </Menu>
 </MenuBar>
 <ToolBar fullWidth="false" name="edit_toolbar" position="top"><Text>Edit</Text>

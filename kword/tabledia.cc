@@ -81,7 +81,7 @@ KWTableDia::KWTableDia( QWidget* parent, const char* name, KWPage *_page, KWordD
     doc = _doc;
 
     setupTab1( rows, cols, wid, hei );
-    setupTab2();
+    //setupTab2();
 
     setInitialSize( QSize(500, 400) );
 }

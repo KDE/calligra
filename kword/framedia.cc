@@ -119,6 +119,7 @@ void KWFrameDia::init() {
             setupTab1();
             setupTab2();
             setupTab4();
+            showPage(1); // while options are not implemented..
         } else if(frameType == FT_PART) {
             setupTab2();
             setupTab4();
@@ -126,6 +127,7 @@ void KWFrameDia::init() {
             setupTab1();
             setupTab2();
             setupTab4();
+            showPage(1); // while options are not implemented..
         }
     } else
         kdDebug() << "ERROR: KWFrameDia::init  no frame.."<<endl;
@@ -181,11 +183,13 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     // formula frame
     if(frameType==FT_FORMULA) {
         autofit = new QCheckBox (i18n("Autofit framesize"),tab1);
+        autofit->setEnabled(false);
         grid1->addWidget(autofit,1,0);
 
         // Picture frame
     } else if(frameType==FT_PICTURE) {
         aspectRatio = new QCheckBox (i18n("Retain original aspect-ratio"),tab1);
+        aspectRatio->setEnabled(false);
         grid1->addWidget(aspectRatio,1,0);
 
         // Text frame
