@@ -640,6 +640,8 @@ namespace MSWrite
 				device.writeInternal (padding, (scanLineBMPLength - scanLineWRILength) * sizeof (Byte));
 			}
 
+			delete [] padding;
+
 			device.setCache (NULL);
 
 			delete [] colourIndex;

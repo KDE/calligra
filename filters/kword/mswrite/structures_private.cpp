@@ -352,11 +352,10 @@ namespace MSWrite
 		// write numFonts
 		if (!FontTableGenerated::writeToDevice ()) return false;
 
-		bool dontRead = false;
 		int i = 0;
 		for (List <Font>::Iterator it = m_fontList.begin ();
 				it != m_fontList.end ();
-				(dontRead ? (dontRead = false) : (it++)), i++)
+				/* don't iterate here since we might "continue" with the same font */)
 		{
 		#ifdef DEBUG_FONT
 			m_device->debug ("\twriting font #", i);
@@ -387,10 +386,12 @@ namespace MSWrite
 					return false;
 
 				// still writing the same font
-				dontRead = true;
-				--i;
 				continue;
 			}
+
+			// get next font to write
+			it++;
+			i++;
 		}
 
 		return true;

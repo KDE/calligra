@@ -71,7 +71,6 @@ namespace MSWrite
 		List <FormatInfoPage>::Iterator m_formatInfoPageIterator;
 		DWord m_nextChar;
 
-		Header *m_header;
 		enum FormatInfoPageTypes m_type;
 
 		friend class InternalParser;
@@ -89,7 +88,6 @@ namespace MSWrite
 		FormatInfo ();
 		~FormatInfo ();
 
-		void setHeader (Header *header)	{	m_header = header;	}	// overrides NeedsHeader impl.
 		void setType (const enum FormatInfoPageTypes t)	{	m_type = t;	}
 
 		bool readFromDevice (void);

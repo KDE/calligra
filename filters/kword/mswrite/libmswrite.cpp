@@ -28,7 +28,7 @@
 
 namespace MSWrite
 {
-	FormatInfo::FormatInfo () : m_nextChar (0), m_header (NULL),
+	FormatInfo::FormatInfo () : m_nextChar (0),
 											m_leftMargin (0xFFFF), m_rightMargin (0xFFFF),
 											m_fontTable (NULL)
 	{
@@ -1092,7 +1092,6 @@ namespace MSWrite
 
 		if (ole)
 		{
-			delete m_ole;
 			m_ole = new OLE;
 			if (!m_ole)
 				ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for OLE\n");
@@ -1101,12 +1100,9 @@ namespace MSWrite
 			m_ole->setDevice (m_device);
 			m_ole->setExternalObjectSize (ole->getExternalObjectSize ());
 		}
-		else
-			m_ole = NULL;
 
 		if (image)
 		{
-			delete m_image;
 			m_image = new Image;
 			if (!m_image)
 				ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for image\n");
@@ -1115,8 +1111,6 @@ namespace MSWrite
 			m_image->setDevice (m_device);
 			m_image->setExternalImageSize (image->getExternalImageSize ());
 		}
-		else
-			m_image = NULL;
 
 		return true;
 	}
@@ -1133,11 +1127,17 @@ namespace MSWrite
 		{
 			if (!m_ole->writeToDevice ())
 				return false;
+
+			delete m_ole;
+			m_ole = NULL;
 		}
 		else if (m_image)
 		{
 			if (!m_image->writeToDevice ())
 				return false;
+
+			delete m_image;
+			m_image = NULL;
 		}
 
 		m_paragraphInfo->setMargins (m_pageLayout->getLeftMargin (), m_pageLayout->getRightMargin ());

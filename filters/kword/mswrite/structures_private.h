@@ -69,9 +69,10 @@ namespace MSWrite
 
 	class NeedsHeader
 	{
-	public:
+	protected:
 		Header *m_header;
 
+	public:
 		NeedsHeader (Header *header = NULL)
 		{
 			setHeader (header);
