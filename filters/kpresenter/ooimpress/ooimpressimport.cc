@@ -1305,6 +1305,32 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 text.setAttribute("underlinestyleline","solid");
                 text.setAttribute("underlinecolor", underLineColor);
             }
+            else if( underType =="dotted")
+            {
+                text.setAttribute("underline", 1 );
+                text.setAttribute("underlinestyleline","dot");
+                text.setAttribute("underlinecolor", underLineColor);
+
+            }
+            else if( underType =="dash")
+            {
+                text.setAttribute("underline", 1 );
+                text.setAttribute("underlinestyleline","dash");
+                text.setAttribute("underlinecolor", underLineColor);
+            }
+            else if( underType=="dot-dash")
+            {
+                text.setAttribute("underline", 1 );
+                text.setAttribute("underlinestyleline","dash");
+                text.setAttribute("underlinecolor", underLineColor);
+            }
+            else if( underType=="bold-dotted")
+            {
+                text.setAttribute("underline", "single-bold" );
+                text.setAttribute("underlinestyleline","dot");
+                text.setAttribute("underlinecolor", underLineColor);
+            }
+
         }
 
         appendShadow( doc, p ); // this is necessary to take care of shadowed paragraphs
