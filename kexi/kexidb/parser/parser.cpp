@@ -73,6 +73,8 @@ Parser::clear()
 
 Parser::~Parser()
 {
+	delete m_select;
+	delete m_table;
 }
 
 ParserError::ParserError()

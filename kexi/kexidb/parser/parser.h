@@ -93,28 +93,36 @@ class KEXI_DB_EXPORT Parser
 		void		clear();
 
 		/**
-		 * @returns the resulting operation or OP_Error if failed
+		 * \return the resulting operation or OP_Error if failed
 		 */
 		OPCode		operation() { return m_operation; }
 
 		/**
-		 * @returns a pointer to a KexiDBTable on CREATE TABLE or 0 on any other operation or error
+		 * \return a pointer to a KexiDBTable on CREATE TABLE 
+		 * or 0 on any other operation or error. Returned object is owned by you.
+		 * You can call this method only once every time after doing parse().
+		 * Next time, the call will return 0.
 		 */
-		TableSchema	*table() { return m_table; }
+		TableSchema	*table() { TableSchema *t = m_table; m_table=0; return t; }
 
 		/**
-		 * @returns a pointer to KexiDBSelect if 'SELECT ...' was called or 0 on any other operation or error
+		 * \return a pointer to KexiDBSelect if 'SELECT ...' was called 
+		 * or 0 on any other operation or error. Returned object is owned by you.
+		 * You can call this method only once every time after doing parse().
+		 * Next time, the call will return 0.
 		 */
-		QuerySchema	*select() { return m_select; }
+		QuerySchema	*select() { QuerySchema *s = m_select; m_select=0; return s; }
 
 		/**
-		 * @returns a pointer to the used database connection or 0 if not set
+		 * \return a pointer to the used database connection or 0 if not set
+		 * You can call this method only once every time after doing parse().
+		 * Next time, the call will return 0.
 		 */
 		Connection	*db() { return m_db; }
 
 		/**
-		 * returns detailed information about a error.
-		 * if no error occured ParserError isNull()
+		 * returns detailed information about last error.
+		 * If no error occured ParserError isNull()
 		 */
 		ParserError	error() const { return m_error; }
 
