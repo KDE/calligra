@@ -40,6 +40,12 @@ KAboutData * newKWordAboutData()
     aboutData->addAuthor("David Faure", 0, "david@mandrakesoft.com");
     aboutData->addAuthor("Laurent Montel", 0, "lmontel@mandrakesoft.com");
     aboutData->addAuthor("Sven Lüppken", 0, "sven@kde.org");
+    aboutData->addAuthor("Frank Dekervel", 0, "Frank.dekervel@student.kuleuven.ac.Be");
+    aboutData->addAuthor("Krister Wicksell Eriksson", 0, "krister.wicksell@spray.se");
+    aboutData->addAuthor("Dag Andersen", 0, "danders@get2net.dk");
+    aboutData->addAuthor("Nash Hoogwater", 0, "nrhoogwater@wanadoo.nl");
+    aboutData->addAuthor("Ulrich Kuettler", i18n("KFormula"), "ulrich.kuettler@mailbox.tu-dresden.de");
+    // TODO: add filter developers
     return aboutData;
 }
 
