@@ -443,6 +443,9 @@ void KWDocument::initConfig()
 
   setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
   newZoomAndResolution( false, false );
+  //text mode view doesn't work in not WP paper.
+  if (processingType()!=KWDocument::WP && m_lastViewMode =="ModeText"  )
+      m_lastViewMode= "ModeNormal";
 
   m_viewMode = KWViewMode::create( m_lastViewMode, this );
 }
@@ -1873,6 +1876,11 @@ bool KWDocument::completeLoading( KoStore *_store )
     reactivateBgSpellChecking();
     connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
 
+    if (processingType()!=KWDocument::WP && m_lastViewMode =="ModeText"  )
+    {
+      m_lastViewMode= "ModeNormal";
+      m_viewMode = KWViewMode::create( m_lastViewMode, this );
+    }
     return TRUE;
 }
 

@@ -5712,6 +5712,7 @@ void KWView::switchModeView()
     actionEditFootEndNote->setEnabled( state );
     actionViewFooter->setEnabled( state && m_doc->processingType() == KWDocument::WP );
     actionViewHeader->setEnabled( state && m_doc->processingType() == KWDocument::WP );
+    actionViewTextMode->setEnabled(m_doc->processingType()==KWDocument::WP);
     actionShowDocStruct->setEnabled(state);
     actionFormatPage->setEnabled(state);
     actionInsertContents->setEnabled( state );
