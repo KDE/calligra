@@ -58,7 +58,6 @@ private slots:
     void slotCustom();
     void slotSelect();
     void slotNameChanged(const QString &name);
-    void slotItemClicked( QListViewItem * item );
 
     void slotAddGroup();
     void slotRemove();

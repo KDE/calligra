@@ -116,9 +116,6 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     fillGroupTree();
     d->m_groups->sort();
 
-    connect( d->m_groups, SIGNAL( clicked( QListViewItem * ) ),
-             SLOT( slotItemClicked( QListViewItem * ) ) );
-
     QHBoxLayout *bbox=new QHBoxLayout(leftbox);
     d->m_add=new QPushButton(i18n("Add Group..."), mainwidget);
     connect(d->m_add, SIGNAL(clicked()), this, SLOT(slotAddGroup()));
@@ -214,6 +211,8 @@ void KoTemplateCreateDia::slotOk() {
     QString iconDir=dir+"/.icon/";
 
     QString file=KoTemplates::stripWhiteSpace(d->m_name->text());
+    QString tmpIcon=".icon/"+file;
+    tmpIcon+=".png";
     QString icon=iconDir+file;
     icon+=".png";
 
@@ -226,7 +225,7 @@ void KoTemplateCreateDia::slotOk() {
     if(k<foo)
         file+=m_file.right(k);
 
-    KoTemplate *t=new KoTemplate(d->m_name->text(), templateDir+file, icon, false, true);
+    KoTemplate *t=new KoTemplate(d->m_name->text(), ".source/"+file, tmpIcon, false, true);
     if(!group->add(t)) {
         KoTemplate *existingTemplate=group->find(t->name());
         // if the original template is hidden, we simply force the update >:->
@@ -246,7 +245,6 @@ void KoTemplateCreateDia::slotOk() {
         }
     }
 
-
     if(!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
         d->m_tree->writeTemplateTree();
         KDialogBase::slotCancel();
@@ -263,10 +261,10 @@ void KoTemplateCreateDia::slotOk() {
     QStringList tmp=group->dirs();
     for(QStringList::ConstIterator it=tmp.begin(); it!=tmp.end() && !ready; ++it) {
         if((*it).contains(dir)==0) {
-            QString file=(*it)+".directory";
-            QFileInfo info(file);
+            QString f=(*it)+".directory";
+            QFileInfo info(f);
             if(info.exists()) {
-                KIO::NetAccess::copy(file, dir);
+                KIO::NetAccess::copy(f, dir+"/.directory");
                 ready=true;
             }
         }
@@ -326,14 +324,6 @@ void KoTemplateCreateDia::slotSelect() {
     d->m_customFile=url.path();
     d->m_customPixmap=QPixmap();
     updatePixmap();
-}
-
-void KoTemplateCreateDia::slotItemClicked( QListViewItem * item ) {
-    if ( item )
-    {
-        QString name = item->text( 0 );
-        d->m_name->setText( name ); // calls slotNameChanged
-    }
 }
 
 void KoTemplateCreateDia::slotNameChanged(const QString &name) {
