@@ -1538,16 +1538,21 @@ bool KoDocument::openFile()
 
     if ( ok )
     {
-        d->mimeType = typeName.latin1 ();
-
-        d->outputMimeType = d->mimeType;
-
-        const bool needConfirm = !isNativeFormat( d->mimeType );
-        setConfirmNonNativeSave ( false, needConfirm  );
-        setConfirmNonNativeSave ( true, needConfirm );
+        setMimeTypeAfterLoading( typeName );
     }
-
     return ok;
+}
+
+// shared between openFile and komainwindow's "create new empty document" code
+void KoDocument::setMimeTypeAfterLoading( const QString& mimeType )
+{
+    d->mimeType = mimeType.latin1();
+
+    d->outputMimeType = d->mimeType;
+
+    const bool needConfirm = !isNativeFormat( d->mimeType );
+    setConfirmNonNativeSave( false, needConfirm  );
+    setConfirmNonNativeSave( true, needConfirm );
 }
 
 // The caller must call store->close() if loadAndParse returns true.

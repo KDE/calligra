@@ -592,9 +592,11 @@ bool KoMainWindow::openDocument( KoDocument *newdoc, const KURL & url )
         {
                 setRootDocument( newdoc );
                 newdoc->setURL(url);
-                QString const mime = KMimeType::findByURL(url)->name();
-                if ( mime != KMimeType::defaultMimeType() )
-                        newdoc->setMimeType( mime.utf8() );
+                QString mime = KMimeType::findByURL(url)->name();
+                if ( mime.isEmpty() || mime == KMimeType::defaultMimeType() )
+                    mime = newdoc->nativeFormatMimeType();
+                newdoc->setMimeTypeAfterLoading( mime );
+                updateCaption();
                 return true;
         }
         return false;
@@ -734,13 +736,13 @@ bool KoMainWindow::exportConfirmation( const QCString &outputFormat )
 }
 
 bool KoMainWindow::saveDocument( bool saveas )
-{    
+{
     KoDocument* pDoc = rootDocument();
     if(!pDoc)
         return true;
 
     bool reset_url;
-    if (pDoc->url().isEmpty() )
+    if ( pDoc->url().isEmpty() )
     {
         emit saveDialogShown(false);
         reset_url = true;
@@ -764,7 +766,7 @@ bool KoMainWindow::saveDocument( bool saveas )
     mimeFilter += pDoc->extraNativeMimeTypes();
     if (mimeFilter.findIndex (oldOutputFormat) < 0 && !isExporting())
     {
-        kdDebug(30003) << "KoMainWindow::saveDocument no export filter for " << oldOutputFormat << endl;
+        kdDebug(30003) << "KoMainWindow::saveDocument no export filter for '" << oldOutputFormat << "'" << endl;
 
         // --- don't setOutputMimeType in case the user cancels the Save As
         // dialog and then tries to just plain Save ---
@@ -799,7 +801,7 @@ bool KoMainWindow::saveDocument( bool saveas )
         // force the user to choose outputMimeType
         saveas = true;
     }
-    
+
     bool ret = false;
 
     if ( pDoc->url().isEmpty() || saveas )

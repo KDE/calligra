@@ -376,14 +376,14 @@ public:
 
     // Who calls initDoc?
     enum InitDocFlags { InitDocAppStarting, InitDocFileNew, InitDocFileClose, InitDocEmbedded, InitDocEmpty };
-    
+
     /**
      *  Initializes an empty document (display the template dialog!).
      *  You have to overload this method to initialize all your document variables.
      */
 
     virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0) = 0; // BCI: pass a QWidget* parentWidget, to pass to KoTemplateChooseDia
-    
+
     /**
      * Return some flags for initDoc (BCI: this should be merged with initDoc)
      * Usually the app will want to
@@ -736,6 +736,11 @@ public:
      * @internal
      */
     void setFile( const QString &file ) { m_file = file; }
+
+    /**
+     * @internal (public for KoMainWindow)
+     */
+    void setMimeTypeAfterLoading( const QString& mimeType );
 
 signals:
     /**
