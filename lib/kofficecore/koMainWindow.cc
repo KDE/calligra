@@ -1197,11 +1197,11 @@ void KoMainWindow::slotFilePrintPreview()
     // This line has to be before setupPrinter to let the apps decide what to
     // print and what not (if they want to :)
     printer.setFromTo( printer.minPage(), printer.maxPage() );
+    printer.setPreviewOnly( true );
     rootView()->setupPrinter( printer );
 
     QString oldFileName = printer.outputFileName();
     printer.setOutputFileName( tmpFile.name() );
-    printer.setPreviewOnly( true );
     int oldNumCopies = printer.numCopies();
     printer.setNumCopies( 1 );
     // Disable kdeprint's own preview, we'd get two. This shows that KPrinter needs
