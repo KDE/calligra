@@ -8,9 +8,9 @@ libwpimport_la_LIBADD = $(KOFFICE_LIBS)
 
 kde_module_LTLIBRARIES = libwpimport.la
 
-libwpimport_la_SOURCES = wpimport.cpp kwordfilter.cpp parser.cpp
+libwpimport_la_SOURCES = wpimport.cpp kwordfilter.cpp parser.cpp wpimport_factory.cpp
 
-noinst_HEADERS = wpimport.h kwordfilter.h parser.h
+noinst_HEADERS = wpimport.h kwordfilter.h parser.h wpimport_factory.h
 
 METASOURCES = AUTO
 
