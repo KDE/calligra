@@ -33,7 +33,7 @@
  - data+time of last opening
 */
 
-class KEXICORE_EXPORT KexiProjectData : public KexiDB::SchemaData
+class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaData
 {
 	public:
 		typedef QPtrList<KexiProjectData> List;
@@ -64,7 +64,10 @@ class KEXICORE_EXPORT KexiProjectData : public KexiDB::SchemaData
 		QString databaseName() const;
 		void setDatabaseName(const QString& dbName);
 
-		QDateTime lastOpened;
+		inline QDateTime lastOpened() const { return m_lastOpened; }
+		void setLastOpened(const QDateTime& lastOpened) { m_lastOpened=lastOpened; }
+		inline QString description() const { return m_desc; }
+		void setDescription(const QString& desc) { m_desc=desc; }
 
 		//! objects to open on startup (come from command line "-open" option)
 		QValueList< QPair<QString,QString> > autoopenObjects;
@@ -85,6 +88,8 @@ class KEXICORE_EXPORT KexiProjectData : public KexiDB::SchemaData
 		KexiDB::ConnectionData m_connData;
 //		QString  m_driverName;
 		
+		QDateTime m_lastOpened;
+		QString m_desc;
 };
 
 #endif

@@ -73,10 +73,10 @@ using namespace KexiDB;
 //! static: list of internal KexiDB system table names 
 QStringList KexiDB_kexiDBSystemTableNames;
 		
-Connection::Connection( Driver *driver, const ConnectionData &conn_data )
+Connection::Connection( Driver *driver, ConnectionData &conn_data )
 	: QObject()
 	,KexiDB::Object()
-	,m_data(conn_data)
+	,m_data(&conn_data)
 	,d(new ConnectionPrivate())
 	,m_driver(driver)
 	,m_is_connected(false)
@@ -247,17 +247,17 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 		QFileInfo file(dbName);
 		if (!file.exists() || ( !file.isFile() && !file.isSymLink()) ) {
 			if (!ignoreErrors)
-				setError(ERR_OBJECT_NOT_EXISTING, i18n("Database file \"%1\" does not exist.").arg(m_data.fileName()) );
+				setError(ERR_OBJECT_NOT_EXISTING, i18n("Database file \"%1\" does not exist.").arg(m_data->fileName()) );
 			return false;
 		}
 		if (!file.isReadable()) {
 			if (!ignoreErrors)
-				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not readable.").arg(m_data.fileName()) );
+				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not readable.").arg(m_data->fileName()) );
 			return false;
 		}
 		if (!file.isWritable()) {
 			if (!ignoreErrors)
-				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not writable.").arg(m_data.fileName()) );
+				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not writable.").arg(m_data->fileName()) );
 			return false;
 		}
 		return true;
@@ -308,7 +308,7 @@ bool Connection::createDatabase( const QString &dbName )
 	}
 	if (m_driver->isFileDriver()) {
 		//update connection data if filename differs
-		m_data.setFileName( dbName );
+		m_data->setFileName( dbName );
 	}
 
 	QString tmpdbName;
@@ -489,12 +489,12 @@ bool Connection::dropDatabase( const QString &dbName )
 	QString dbToDrop;
 	if (dbName.isEmpty() && m_usedDatabase.isEmpty()) {
 		if (!m_driver->isFileDriver() 
-		 || (m_driver->isFileDriver() && m_data.fileName().isEmpty()) ) {
+		 || (m_driver->isFileDriver() && m_data->fileName().isEmpty()) ) {
 			setError(ERR_NO_NAME_SPECIFIED, i18n("Cannot drop database - name not specified.") );
 			return false;
 		}
 		//this is a file driver so reuse previously passed filename
-		dbToDrop = m_data.fileName();
+		dbToDrop = m_data->fileName();
 	}
 	else {
 		if (dbName.isEmpty()) {

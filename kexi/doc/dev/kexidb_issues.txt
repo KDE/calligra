@@ -135,7 +135,10 @@ property="kexidb_major_ver", value=<major_version>
 	and (at least in some cases) -- forward compatibility.
 property="kexidb_minor_ver", value=<minor_version>
 	like above -- minor KexiDB version
+property="project_caption", value=<string>
+property="project_desc", value=<string>
 
+TODO: put more props. todo - creator, created date, etc. (also to KexiProjectData)
 		
 -----------------------------------------------------------------
 

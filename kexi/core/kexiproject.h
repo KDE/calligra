@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +23,7 @@
 
 #include <qobject.h>
 #include <qintdict.h>
+#include <qguardedptr.h>
 
 #include "kexiprojectdata.h"
 #include "kexipartitem.h"
@@ -108,6 +110,8 @@ class KexiProject : public QObject, public KexiDB::Object
 		 */
 		KexiDB::Connection	*dbConnection() const { return m_connection; }
 
+		KexiProjectData *data() const { return m_data; }
+
 
 	protected:
 //		bool			openConnection(KexiProjectConnectionData *connection);
@@ -118,7 +122,7 @@ class KexiProject : public QObject, public KexiDB::Object
 		
 		void closeConnection();
 
-		void initProject();
+		bool initProject();
 
 		//! reimplementation
 		virtual void setError(int code = ERR_OTHER, const QString &msg = QString::null );
@@ -138,7 +142,7 @@ class KexiProject : public QObject, public KexiDB::Object
 	private:
 //		KexiDB::DriverManager		*m_drvManager;
 		KexiDB::Connection		*m_connection;
-		KexiProjectData* m_data;
+		QGuardedPtr<KexiProjectData> m_data;
 //		KexiDB::ConnectionData *m_conn_data_to_use; //!< 
 		
 		QString m_error_title;

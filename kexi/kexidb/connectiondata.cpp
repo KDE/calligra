@@ -33,30 +33,33 @@ public:
 	Private() { 
 		dummy=false;
 	}
-	bool dummy : 1;
+	~Private() {}
+	bool dummy;
 };
 
 /*================================================================*/
 
 ConnectionData::ConnectionData()
-: id(-1)
+: QObject()
+, id(-1)
 , port(0)
-, d(new ConnectionData::Private())
+, priv(new ConnectionData::Private())
 {
 }
 
 ConnectionData::ConnectionData(const ConnectionData& cd)
+: QObject()
 {
 	if (&cd != this) {
 		*this = cd;//copy data members
 	}
-	d = new ConnectionData::Private();
-//todo: copy d contents if not empty	*d = *cd.d;
+	priv = new ConnectionData::Private();
+//todo: copy priv contents if not empty	*d = *cd.d;
 }
 
 ConnectionData::~ConnectionData()
 {
-	delete d;
+	delete priv;
 }
 
 void ConnectionData::setFileName( const QString& fn )

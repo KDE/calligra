@@ -77,7 +77,7 @@ MySqlDriver::~MySqlDriver()
 KexiDB::Connection*
 MySqlDriver::drv_createConnection( ConnectionData &conn_data )
 {
-        return new MySqlConnection( this, conn_data );
+	return new MySqlConnection( this, conn_data );
 }
 
 bool MySqlDriver::isSystemDatabaseName(const QString &n) const
@@ -88,3 +88,14 @@ bool MySqlDriver::isSystemDatabaseName(const QString &n) const
 bool MySqlDriver::isSystemFieldName( const QString&) const {
 	return false;
 }
+
+QString MySqlDriver::escapeString(const QString& str) const
+{
+	return QString("'")+QString(str).replace( '\'', "''" ) + "'";
+}
+
+QCString MySqlDriver::escapeString(const QCString& str) const
+{
+	return QCString("'")+QCString(str).replace( '\'', "''" )+"'";
+}
+

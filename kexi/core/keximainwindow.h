@@ -151,6 +151,9 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 
 		QWidget* findWindow(QWidget *w) const;
 
+		/*! Updates application's caption - also shows project's name. */
+		void updateAppCaption();
+
 	protected slots:
 
 		/**

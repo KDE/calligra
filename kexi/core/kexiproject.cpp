@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +30,7 @@
 #include <kexidb/driver.h>
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
+#include <kexidb/utils.h>
 
 #include "kexipartmanager.h"
 #include "kexipartitem.h"
@@ -79,9 +81,7 @@ KexiProject::open()
 		return false;
 	}
 
-	initProject();
-
-	return true;
+	return initProject();
 }
 
 bool 
@@ -113,10 +113,23 @@ KexiProject::create()
 		return false;
 	}
 	kdDebug() << "--- DB '" << m_data->databaseName() << "' used ---"<< endl;
-	
-	initProject();
-	
-	return true;
+
+	//add some metadata
+	KexiDB::Transaction trans = m_connection->beginTransaction();
+	KexiDB::TableSchema *t_db = m_connection->tableSchema("kexi__db");
+//TODO: put more props. todo - creator, created date, etc. (also to KexiProjectData)
+	//caption:
+	if (!t_db)
+		return false;
+
+	if (!KexiDB::replaceRow(*m_connection, *t_db, "db_property", "project_caption", "db_value", QVariant( m_data->caption() ), KexiDB::Field::Text)
+	 || !KexiDB::replaceRow(*m_connection, *t_db, "db_property", "project_desc", "db_value", QVariant( m_data->description() ), KexiDB::Field::Text) )
+		return false;
+
+	if (trans.active() && !m_connection->commitTransaction(trans))
+		return false;
+
+	return initProject();
 }
 
 bool
@@ -161,13 +174,23 @@ KexiProject::closeConnection()
 	m_connection = 0;
 }
 
-void
+bool
 KexiProject::initProject()
 {
 //	emit dbAvailable();
 	kdDebug() << "KexiProject::open(): checking project parts..." << endl;
 	
 	Kexi::partManager().checkProject(m_connection);
+
+	//TODO: put more props. todo - creator, created date, etc. (also to KexiProjectData)
+	KexiDB::RowData data;
+	QString sql = "select db_value from kexi__db where db_property='%1'";
+	if (m_connection->querySingleRecord( sql.arg("project_caption"), data) && !data[0].toString().isEmpty())
+		m_data->setCaption(data[0].toString());
+	if (m_connection->querySingleRecord( sql.arg("project_desc"), data) && !data[0].toString().isEmpty())
+		m_data->setDescription(data[0].toString());
+
+	return true;
 }
 
 bool

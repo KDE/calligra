@@ -9,6 +9,7 @@ SUBDIRS = . parser drivers
 libkexidb_la_METASOURCES = AUTO
 
 libkexidb_la_SOURCES = drivermanager.cpp object.cpp field.cpp driver.cpp connection.cpp \
+ utils.cpp \
  connectiondata.cpp fieldlist.cpp tableschema.cpp cursor.cpp transaction.cpp  \
  indexschema.cpp queryschema.cpp schemadata.cpp global.cpp expression.cpp reference.cpp \
  roweditbuffer.cpp

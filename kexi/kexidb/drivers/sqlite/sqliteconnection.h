@@ -48,7 +48,7 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteConnection : public Connection
 
 	protected:
 		/*! Used by driver */
-		SQLiteConnection( Driver *driver, const ConnectionData &conn_data );
+		SQLiteConnection( Driver *driver, ConnectionData &conn_data );
 
 		virtual bool drv_connect();
 		virtual bool drv_disconnect();

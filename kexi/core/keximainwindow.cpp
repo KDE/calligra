@@ -87,7 +87,8 @@ class KexiMainWindow::Private
 
 		QAsciiDict<QPopupMenu> popups; //list of menu popups
 
-		QString appCaption; //<! original application's caption
+		QString origAppCaption; //<! original application's caption (without project name)
+		QString appCaptionPrefix; //<! application's caption prefix - prj name (if opened), else: null
 
 		//! project menu
 		KAction *action_save, *action_save_as, *action_close,
@@ -149,7 +150,7 @@ KexiMainWindow::KexiMainWindow()
 	createShellGUI(true);
 	(void) new KexiStatusBar(this, "status_bar");
 
-	d->appCaption = caption();
+	d->origAppCaption = caption();
 	initContextHelp();
 	
 
@@ -489,6 +490,7 @@ bool KexiMainWindow::openProject(KexiProjectData *projectData)
 		showErrorMessage(i18n("You have requested selected objects to be opened automatically on startup. Several objects cannot be opened."),
 			not_found_msg );
 
+	updateAppCaption();
 	return true;
 }
 
@@ -604,13 +606,14 @@ void KexiMainWindow::slotPartLoaded(KexiPart::Part* p)
 void KexiMainWindow::slotCaptionForCurrentMDIChild(bool childrenMaximized)
 {
 	//js todo: allow to set custom "static" app caption
+
 	KMdiChildView *view;
 	if (!d->curDialog)
 		view = 0;
-	else if (d->curDialog->isAttached())
+	else if (d->curDialog->isAttached()) {
 		view = d->curDialog;
-	else {
-		//currend dialog isn't attached! - find top level child
+	} else {
+		//current dialog isn't attached! - find top level child
 		if (m_pMdi->topChild()) {
 			view = m_pMdi->topChild()->m_pClient;
 			childrenMaximized = view->mdiParent()->state()==KMdiChildFrm::Maximized;
@@ -620,11 +623,53 @@ void KexiMainWindow::slotCaptionForCurrentMDIChild(bool childrenMaximized)
 	}
 
 	if (childrenMaximized && view) {
+		setCaption( view->caption() + (d->appCaptionPrefix.isEmpty() ? "" : " - " + d->appCaptionPrefix) );
+	}
+	else {
+		setCaption( (d->appCaptionPrefix.isEmpty() ? "" : d->appCaptionPrefix + " - ") + d->origAppCaption );
+	}
+}
+
+void KexiMainWindow::updateAppCaption()
+{
+	//js todo: allow to set custom "static" app caption
+
+	d->appCaptionPrefix = "";
+	if (d->prj && d->prj->data()) {//add project name
+		d->appCaptionPrefix = d->prj->data()->caption();
+		if (d->appCaptionPrefix.isEmpty())
+			d->appCaptionPrefix = d->prj->data()->databaseName();
+	}
+	if (!d->appCaptionPrefix.isEmpty())
+		d->appCaptionPrefix = d->appCaptionPrefix;
+
+	bool max = false;
+	if (d->curDialog && d->curDialog->mdiParent())
+		max = d->curDialog->mdiParent()->state()==KMdiChildFrm::Maximized;
+
+	slotCaptionForCurrentMDIChild(max);
+/*
+	KMdiChildView *view;
+	if (!d->curDialog)
+		view = 0;
+	else if (d->curDialog->isAttached()) {
+		view = d->curDialog;
+	} else {
+		//current dialog isn't attached! - find top level child
+		if (m_pMdi->topChild()) {
+			view = m_pMdi->topChild()->m_pClient;
+		}
+		else
+			view = 0;
+	}
+
+	kApp->setCaption( d->appCaption );
+	if (view && view->mdiParent()->state()==KMdiChildFrm::Maximized) {
 		setCaption( view->caption() );
 	}
 	else {
 		setCaption( d->appCaption );
-	}
+	}*/
 }
 
 void KexiMainWindow::slotNoMaximizedChildFrmLeft(KMdiChildFrm*)
@@ -899,6 +944,7 @@ KexiMainWindow::createBlankDatabase()
 	Kexi::recentProjects().addProjectData( new_data );
 
 	invalidateActions();
+	updateAppCaption();
 	return true;
 }
 

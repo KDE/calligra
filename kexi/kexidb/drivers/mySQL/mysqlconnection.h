@@ -57,7 +57,7 @@ class KEXIDB_MYSQL_DRIVER_EXPORT MySqlConnection : public Connection
         protected:
 		friend class MySqlDriver;
                 /*! Used by driver */
-                MySqlConnection( Driver *driver, const ConnectionData &conn_data );
+                MySqlConnection( Driver *driver, ConnectionData &conn_data );
 
                 virtual bool drv_connect();
                 virtual bool drv_disconnect();

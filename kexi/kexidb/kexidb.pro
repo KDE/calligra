@@ -23,6 +23,7 @@ drivermanager.cpp \
 driver.cpp \
 connectiondata.cpp \
 connection.cpp \
+utils.cpp \
 field.cpp \
 schemadata.cpp \
 tableschema.cpp \

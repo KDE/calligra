@@ -214,10 +214,20 @@ TODO: win32: Fix saving config files via KConfig (now are ugly overwritten)
 - table view:
 	-in key event - we give up with executing actions that are shared with main window, because
 	these actions are executed at main window's level. These actions are declared using plugSharedAction().
-  -row deleting works
+	-row deleting works
+	-rows number is updated in tv navigator after row deletion
 - actions: MSA-like "Delete Record" substituted by "Delete Row"
 
 TODO: show posible errors (as well as for INSERTs and UPDATEs)!!!
+
+- KexiDB, core:
+	-ConnectionData and KexiProjectData now inherit QObject 
+	 (useful for QGuardedPtr, sharing and for notifications about changes)
+	-project_caption, project_desc properties are now created and stored in projects
+	-some utility functions added in kexidb/utils.cpp
+- KexiMainWindow: application's caption now also contain current project's caption (or name)
+  (this also works ok for maximized windows)
+- mysql driver reenabled (may not work correctly)
 
 2003-12-30
 ** Many cleanups and behavioral fixes

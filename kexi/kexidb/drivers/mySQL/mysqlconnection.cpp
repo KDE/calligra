@@ -38,7 +38,7 @@ Boston, MA 02111-1307, USA.
 #include <kexidb/error.h>
 using namespace KexiDB;
 
-MySqlConnection::MySqlConnection( Driver *driver, const ConnectionData &conn_data )
+MySqlConnection::MySqlConnection( Driver *driver, ConnectionData &conn_data )
 	:Connection(driver,conn_data)
 	,m_mysql(0) {
 
@@ -56,8 +56,8 @@ bool MySqlConnection::drv_connect()
 
         KexiDBDrvDbg << "MySqlConnection::connect()" << endl;
 	QString socket;
-	if (m_data.hostName.isEmpty() || (m_data.hostName=="localhost")) {
-		if (m_data.fileName().isEmpty()) {
+	if (m_data->hostName.isEmpty() || (m_data->hostName=="localhost")) {
+		if (m_data->fileName().isEmpty()) {
 	                QStringList sockets;
 	                sockets.append("/var/lib/mysql/mysql.sock");
 	                sockets.append("/var/run/mysqld/mysqld.sock");
@@ -70,13 +70,13 @@ bool MySqlConnection::drv_connect()
 					break;
 				}
 	                }
-        	} else socket=m_data.fileName();
+        	} else socket=m_data->fileName();
 	}
 
 
-        mysql_real_connect(m_mysql, m_data.hostName.local8Bit(), m_data.userName.local8Bit(), 
-		m_data.password.local8Bit(), 0,
-                m_data.port, socket.local8Bit(), 0);
+        mysql_real_connect(m_mysql, m_data->hostName.local8Bit(), m_data->userName.local8Bit(), 
+		m_data->password.local8Bit(), 0,
+                m_data->port, socket.local8Bit(), 0);
         if(mysql_errno(m_mysql) == 0)
         {
                 return true;

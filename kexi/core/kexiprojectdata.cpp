@@ -48,7 +48,7 @@ KexiProjectData::KexiProjectData()
 
 KexiProjectData::KexiProjectData( 
 	const KexiDB::ConnectionData &cdata, const QString& dbname, const QString& caption )
- : KexiDB::SchemaData()
+ : QObject(0, "KexiProjectData"), KexiDB::SchemaData()
  , m_connData(cdata)
 {
 	setDatabaseName(dbname);
@@ -56,7 +56,7 @@ KexiProjectData::KexiProjectData(
 }
 
 KexiProjectData::KexiProjectData( KexiProjectData& pdata )
- : KexiDB::SchemaData()
+ : QObject(0, "KexiProjectData"), KexiDB::SchemaData()
  , m_connData(*pdata.connectionData())
 {
 	setDatabaseName(pdata.databaseName());
@@ -79,12 +79,12 @@ const KexiDB::ConnectionData* KexiProjectData::constConnectionData() const
 
 QString KexiProjectData::databaseName() const
 {
-	return name();
+	return static_cast<const KexiDB::SchemaData*>(this)->name();
 }
 
 void KexiProjectData::setDatabaseName(const QString& dbName)
 {
-	setName(dbName);
+	static_cast<KexiDB::SchemaData*>(this)->setName(dbName);
 }
 
 /*

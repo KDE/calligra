@@ -28,9 +28,9 @@
 #include <qvaluevector.h>
 #include <qvaluelist.h>
 #include <qvariant.h>
+#include <qguardedptr.h>
 
 #include <kexidb/object.h>
-
 #include <kexidb/connectiondata.h>
 #include <kexidb/tableschema.h>
 #include <kexidb/queryschema.h>
@@ -61,7 +61,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		virtual ~Connection();
 
 		/*! \return parameters that had been used for create this connection. */
-		ConnectionData& data() { return m_data; }
+		ConnectionData* data() { return m_data; }
 
 		/*! return driver that is source for this connection. */
 		Driver* driver() const { return m_driver; }
@@ -446,10 +446,15 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! \overload int lastInsertedAutoIncValue(const QString&, const QString&)
 		*/
 		int lastInsertedAutoIncValue(const QString& aiFieldName, const KexiDB::TableSchema& table);
-		
+
+		/*! Executes query \a statement, but without returning resulting 
+		 rows (used mostly for functional queries). 
+		 Only use this method if you really need. */
+		virtual bool drv_executeSQL( const QString& statement ) = 0;
+
 	protected:
 		/*! Used by Driver */
-		Connection( Driver *driver, const ConnectionData &conn_data );
+		Connection( Driver *driver, ConnectionData &conn_data );
 
 		/*! Method to be called form Connection's subclass destructor.
 		 \sa ~Connection() */
@@ -560,10 +565,6 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 //		/*! Executes query \a statement and returns resulting rows 
 //			(used mostly for SELECT query). */
 //		virtual bool drv_executeQuery( const QString& statement ) = 0;
-		
-		/*! Executes query \a statement, but without returning resulting 
-		 rows (used mostly for functional queries). */
-		virtual bool drv_executeSQL( const QString& statement ) = 0;
 
 		/*! Returns unique identifier of last inserted row. 
 		 Typically this is just primary key value. 
@@ -694,7 +695,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 To avoid having deleted table object on its list. */
 		void removeMe(TableSchema *ts);
 				
-		ConnectionData m_data;
+		QGuardedPtr<ConnectionData> m_data;
 		QString m_name;
 		QString m_usedDatabase; //!< database name that is opened now
 

@@ -20,6 +20,7 @@
 #ifndef KEXIDB_CONNECTION_DATA_H
 #define KEXIDB_CONNECTION_DATA_H
 
+#include <qobject.h>
 #include <qstring.h>
 #include <qptrlist.h>
 
@@ -27,7 +28,7 @@ namespace KexiDB {
 
 /*! Connection data, once configured, can be later stored for reuse.
 */
-class KEXI_DB_EXPORT ConnectionData
+class KEXI_DB_EXPORT ConnectionData : public QObject
 {
 	public:
 		typedef QPtrList<ConnectionData> List;
@@ -109,7 +110,7 @@ class KEXI_DB_EXPORT ConnectionData
 		QString m_dbFileName;
 
 		class Private;
-		Private *d;
+		Private *priv;
 
 	friend class Connection;
 };

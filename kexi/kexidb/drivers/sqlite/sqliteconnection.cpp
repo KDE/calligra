@@ -70,7 +70,7 @@ void SQLiteConnectionInternal::storeResult()
 }
 
 /*! Used by driver */
-SQLiteConnection::SQLiteConnection( Driver *driver, const ConnectionData &conn_data )
+SQLiteConnection::SQLiteConnection( Driver *driver, ConnectionData &conn_data )
 	: Connection( driver, conn_data )
 	,d(new SQLiteConnectionInternal())
 {
@@ -101,13 +101,13 @@ bool SQLiteConnection::drv_disconnect()
 bool SQLiteConnection::drv_getDatabasesList( QStringList &list )
 {
 	//this is one-db-per-file database
-	list.append( m_data.dbFileName() );
+	list.append( m_data->dbFileName() );
 	return true;
 }
 
 bool SQLiteConnection::drv_createDatabase( const QString &/*dbName*/ )
 {
-	d->data = sqlite_open( QFile::encodeName( m_data.fileName() ), 0/*mode: unused*/, 
+	d->data = sqlite_open( QFile::encodeName( m_data->fileName() ), 0/*mode: unused*/, 
 		&d->errmsg_p );
 	d->storeResult();
 	return d->data != 0;
@@ -115,7 +115,7 @@ bool SQLiteConnection::drv_createDatabase( const QString &/*dbName*/ )
 
 bool SQLiteConnection::drv_useDatabase( const QString &/*dbName*/ )
 {
-	d->data = sqlite_open( QFile::encodeName( m_data.fileName() ), 0/*mode: unused*/, 
+	d->data = sqlite_open( QFile::encodeName( m_data->fileName() ), 0/*mode: unused*/, 
 		&d->errmsg_p );
 	d->storeResult();
 	return d->data != 0;
