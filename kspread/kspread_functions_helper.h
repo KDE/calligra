@@ -17,7 +17,8 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
+#ifndef kspread_functions_helper_h_
+#define kspread_functions_helper_h_
 // helper functions for other functions
 
 #include <koscript_parser.h>
@@ -84,4 +85,4 @@ bool kspreadfunc_variance_helper( KSContext & context, QValueList<KSValue::Ptr> 
                                   double & result, double avera, bool aMode );
 
 
-
+#endif
