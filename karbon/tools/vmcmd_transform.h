@@ -21,9 +21,23 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
-private:
+protected:
+	VMCmdTransform( KarbonPart* part, QPtrList<VObject> objects, const QString &name );
+
 	QPtrList<VObject> m_objects;
 	QWMatrix m_mat;
+};
+
+class VMCmdTranslate : public VMCmdTransform
+{
+public:
+	VMCmdTranslate( KarbonPart* part, QPtrList<VObject> objects, double d1, double d2 );
+};
+
+class VMCmdScale : public VMCmdTransform
+{
+public:
+	VMCmdScale( KarbonPart* part, QPtrList<VObject> objects, const QPoint &p, double s1, double s2 );
 };
 
 #endif

@@ -86,10 +86,11 @@ VMToolSelect::createCmd( double x, double y, double d1, double d2 )
 // TODO: swap coords to optimize normalize() away
 	if( m_TransformState == Moving )
 	{
-		QWMatrix mat;
-		mat.translate( d1, d2 );
+		m_TransformState = NoTransform;
+		//QWMatrix mat;
+		//mat.translate( d1, d2 );
 		return
-			new VMCmdTransform( part(), part()->selection(), mat );
+			new VMCmdTranslate( part(), part()->selection(), d1, d2 );
 
 	}
 	else

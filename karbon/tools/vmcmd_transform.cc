@@ -12,6 +12,10 @@ VMCmdTransform::VMCmdTransform( KarbonPart* part, QPtrList<VObject> objects, con
 {
 }
 
+VMCmdTransform::VMCmdTransform( KarbonPart* part, QPtrList<VObject> objects, const QString &name )
+	: VCommand( part, name ), m_objects( objects )
+{
+}
 void
 VMCmdTransform::execute()
 {
@@ -27,5 +31,19 @@ VMCmdTransform::unexecute()
 	QPtrListIterator<VObject> itr( m_objects );
 	for ( ; itr.current() ; ++itr )
 		itr.current()->transform( m_mat.invert() );
+}
+
+VMCmdTranslate::VMCmdTranslate( KarbonPart* part, QPtrList<VObject> objects, double d1, double d2 )
+	: VMCmdTransform( part, objects, i18n("Translate Object") )
+{
+	m_mat.translate( d1, d2 );
+}
+
+VMCmdScale::VMCmdScale( KarbonPart* part, QPtrList<VObject> objects, const QPoint &p, double s1, double s2 )
+	: VMCmdTransform( part, objects, i18n("Translate Object") )
+{
+	m_mat.translate( p.x(), p.y() );
+	m_mat.scale( s1, s2 );
+	m_mat.translate( -p.x(), -p.y() );
 }
 
