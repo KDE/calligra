@@ -580,7 +580,7 @@ protected:
     can only have one current image, which is what is loaded and saved -
     the permanent data associated with it. This coresponds to an
     image, but that image is interchangeable */
-    QList <KisImage> m_Images;
+    QPtrList <KisImage> m_Images;
 
     KisImage  * m_pCurrent;
     NewDialog * m_pNewDialog;

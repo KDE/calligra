@@ -54,19 +54,19 @@ KisBrushChooser::KisBrushChooser( QWidget *parent, const char *name )
     // only serves as beautifier for the iconchooser
     frame = new QHBox( this );
     frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    chooser = new IconChooser( frame, QSize(30,30), "icon chooser" );  
+    chooser = new IconChooser( frame, QSize(30,30), "icon chooser" );
 
-    QList<KisBrush> bList = KisFactory::rServer()->brushes();
-  
+    QPtrList<KisBrush> bList = KisFactory::rServer()->brushes();
+
     for (KisBrush *brush = bList.first(); brush != 0; brush = bList.next())
     {
         if ( brush->isValid() )
 	        chooser->addItem( (IconItem *) brush );
     }
-  
+
     QObject::connect( chooser, SIGNAL( selected( IconItem * ) ),
 		    this, SLOT( slotItemSelected( IconItem * )));
-  
+
     initGUI();
 
     KisBrush *brush = currentBrush();
@@ -107,7 +107,7 @@ void KisBrushChooser::setCurrentBrush( KisBrush *brush )
 
 
 // return the active brush
-KisBrush * KisBrushChooser::currentBrush() 
+KisBrush * KisBrushChooser::currentBrush()
 {
     return (KisBrush *) chooser->currentItem();
 }

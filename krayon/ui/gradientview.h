@@ -1,7 +1,7 @@
 #ifndef __GRADIENTVIEW_H__
 #define __GRADIENTVIEW_H__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qwidget.h>
 #include <qcolor.h>
 #include <qpixmap.h>
@@ -40,7 +40,7 @@ private:
   void updatePixmap();
   void readGIMPGradientFile( const QString& _file );
 
-  QList<GradientItem> m_lstGradientItems;
+  QPtrList<GradientItem> m_lstGradientItems;
 
   QPixmap m_pixmap;
 };

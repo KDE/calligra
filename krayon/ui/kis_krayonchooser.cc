@@ -30,6 +30,7 @@
 #include <kinstance.h>
 #include <klocale.h>
 #include <kstddirs.h>
+#include <qptrlist.h>
 
 #include "kis_factory.h"
 #include "kis_resourceserver.h"
@@ -39,11 +40,12 @@
 #include "kis_brush.h"
 #include "kis_krayonchooser.h"
 
+
 // X11 headers
 #undef Below
 #undef Above
 
-KisKrayonChooser::KisKrayonChooser( QWidget *parent, const char *name ) 
+KisKrayonChooser::KisKrayonChooser( QWidget *parent, const char *name )
  : QWidget( parent, name )
 {
     lbSpacing = new QLabel( i18n("Spacing:"), this );
@@ -57,21 +59,21 @@ KisKrayonChooser::KisKrayonChooser( QWidget *parent, const char *name )
     // only serves as beautifier for the iconchooser
     frame = new QHBox( this );
     frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    chooser = new IconChooser( frame, QSize(30,30), "krayon chooser" );  
+    chooser = new IconChooser( frame, QSize(30,30), "krayon chooser" );
 
-    //container = new QWidget(frame);  
+    //container = new QWidget(frame);
     //chooser = new IconChooser( container, QSize(30,30), "icon chooser" );
 
-    QList<KisBrush> bList = KisFactory::rServer()->brushes();
-  
+    QPtrList<KisBrush> bList = KisFactory::rServer()->brushes();
+
     for (KisBrush *brush = bList.first(); brush != 0; brush = bList.next())
     {
         if ( brush->isValid() && (KisKrayon *)brush->isValidKrayon() )
 	        chooser->addItem( (IconItem *) brush );
     }
-  
-    QList<KisPattern> pList = KisFactory::rServer()->patterns();
-  
+
+    QPtrList<KisPattern> pList = KisFactory::rServer()->patterns();
+
     for (KisPattern *pattern = pList.first(); pattern != 0; pattern = pList.next())
     {
         if ( pattern->isValid() && (KisKrayon *)pattern->isValidKrayon() )
@@ -80,11 +82,11 @@ KisKrayonChooser::KisKrayonChooser( QWidget *parent, const char *name )
 
     QObject::connect( chooser, SIGNAL( selected( IconItem * ) ),
 		    this, SLOT( slotItemSelected( IconItem * )));
-  
+
     initGUI();
 
     KisKrayon * krayon = currentKrayon();
-  
+
     if ( krayon )
         slSpacing->setValue( /* pattern->spacing()*/ 5 );
 }

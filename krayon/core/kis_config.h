@@ -25,7 +25,7 @@
 #define __kis_config_h__
 
 #include <qobject.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class QFont;
 
@@ -164,7 +164,7 @@ private:
   // KImageShopDoc objects
   static KConfig 	*kc;
   static bool		doInit;
-  static QList<KisConfig> 	instanceList;
+  static QPtrList<KisConfig> 	instanceList;
 
   static QFont 		m_smallFont;
   static QFont		m_tinyFont;

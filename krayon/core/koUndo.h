@@ -20,14 +20,14 @@
 #ifndef __koffice_undo_h__
 #define __koffice_undo_h__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qobject.h>
 
 class KoCommand;
 class QString;
 class QStringList;
 
-typedef QList<KoCommand> KoCommandList;
+typedef QPtrList<KoCommand> KoCommandList;
 
 /**
  *  The KoCommand class is an abstract command.

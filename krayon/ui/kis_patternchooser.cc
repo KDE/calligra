@@ -29,6 +29,7 @@
 #include <kinstance.h>
 #include <klocale.h>
 #include <kstddirs.h>
+#include <qptrlist.h>
 
 #include "kis_factory.h"
 #include "kis_resourceserver.h"
@@ -41,7 +42,7 @@
 #undef Below
 #undef Above
 
-KisPatternChooser::KisPatternChooser( QWidget *parent, const char *name ) 
+KisPatternChooser::KisPatternChooser( QWidget *parent, const char *name )
  : QWidget( parent, name )
 {
     lbSpacing = new QLabel( i18n("Spacing:"), this );
@@ -55,23 +56,23 @@ KisPatternChooser::KisPatternChooser( QWidget *parent, const char *name )
     // only serves as beautifier for the iconchooser
     frame = new QHBox( this );
     frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    chooser = new IconChooser( frame, QSize(30,30), "pattern chooser" );  
+    chooser = new IconChooser( frame, QSize(30,30), "pattern chooser" );
 
-    QList<KisPattern> bList = KisFactory::rServer()->patterns();
-  
+    QPtrList<KisPattern> bList = KisFactory::rServer()->patterns();
+
     for (KisPattern *pattern = bList.first(); pattern != 0; pattern = bList.next())
     {
         if ( pattern->isValid() )
 	        chooser->addItem( (IconItem *) pattern );
     }
-  
+
     QObject::connect( chooser, SIGNAL( selected( IconItem * ) ),
 		    this, SLOT( slotItemSelected( IconItem * )));
-  
+
     initGUI();
 
     KisPattern *pattern = currentPattern();
-  
+
     if ( pattern )
         slSpacing->setValue(pattern->spacing());
 }
@@ -96,7 +97,7 @@ void KisPatternChooser::setCurrentPattern( KisPattern *pattern )
 
 
 // return the active pattern
-KisPattern * KisPatternChooser::currentPattern() 
+KisPattern * KisPatternChooser::currentPattern()
 {
     return (KisPattern *) chooser->currentItem();
 }

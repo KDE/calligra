@@ -24,7 +24,7 @@
 
 #include <qarray.h>
 #include <qimage.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qobject.h>
 #include <qtimer.h>
 
@@ -80,14 +80,14 @@ class KisImage : public QObject
     void removeLayer( unsigned int _layer );
 
     KisLayer* layerPtr( KisLayer *_layer );
-    QList<KisLayer> layerList() { return m_layers; };
+    QPtrList<KisLayer> layerList() { return m_layers; };
  
     void markDirty( QRect rect );
      
     void mergeAllLayers();
     void mergeVisibleLayers();
     void mergeLinkedLayers();
-    void mergeLayers(QList<KisLayer>);
+    void mergeLayers(QPtrList<KisLayer>);
 
     bool bigEndian() { return mBigEndian; }
     bool bigEndianBitOrder() { return mBigEndianBitOrder; }        
@@ -123,7 +123,7 @@ class KisImage : public QObject
     int               m_yTiles;
 
     QImage            m_img;
-    QList<KisLayer>   m_layers;
+    QPtrList<KisLayer>   m_layers;
     KisLayer         *m_pCurrentLay, *m_pComposeLay, *m_pBGLay;
 
     QPixmap    **m_ptiles;

@@ -25,7 +25,6 @@
 #ifndef __kis_brushchooser_h__
 #define __kis_brushchooser_h__
 
-#include <qlist.h>
 #include <qwidget.h>
 #include <qframe.h>
 #include "kfloatingdialog.h"

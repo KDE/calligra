@@ -22,7 +22,7 @@
 #define __kis_sidebar_h__
 
 #include <qframe.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include <kdualcolorbtn.h>
 
@@ -186,8 +186,8 @@ class DockFrame : public QFrame
     virtual void resizeEvent ( QResizeEvent * );
 
  private:
-    QList<QWidget>         m_wlst;
-    QList<KisFrameButton>  m_blst;
+    QPtrList<QWidget>         m_wlst;
+    QPtrList<KisFrameButton>  m_blst;
 };
 
 //class KisSideBar : public QWidget

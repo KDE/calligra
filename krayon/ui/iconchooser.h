@@ -24,7 +24,7 @@
 #define ICONCHOOSER_H
 
 #include <qevent.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qpixmap.h>
 #include <qttableview.h>
 
@@ -75,7 +75,7 @@ protected:
   int 		itemHeight;
   int 		margin;
   QColor 	bgColor;
-  QList<IconItem> iconList;
+  QPtrList<IconItem> iconList;
   PixmapWidget 	*pw;
 
 private:

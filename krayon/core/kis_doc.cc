@@ -231,7 +231,7 @@ QDomElement KisDoc::saveImages( QDomDocument &doc )
     return images;
 }
 
-// save layers 
+// save layers
 QDomElement KisDoc::saveLayers( QDomDocument &doc, KisImage *img )
 {
     // layers element - variable
@@ -240,7 +240,7 @@ QDomElement KisDoc::saveLayers( QDomDocument &doc, KisImage *img )
     // layer elements
     kdDebug(0) << "layer elements" << endl;
 
-    QList<KisLayer> l_lst = img->layerList();
+    QPtrList<KisLayer> l_lst = img->layerList();
     for ( KisLayer *lay = l_lst.first(); lay != 0; lay = l_lst.next() )
     {
         QDomElement layer = doc.createElement( "layer" );
@@ -362,7 +362,7 @@ QDomElement KisDoc::saveToolSettings( QDomDocument &doc )
 QDomElement KisDoc::savePenToolSettings( QDomDocument &doc )
 {
     // pen tool element
-    QDomElement penTool = doc.createElement( "penTool" ); 
+    QDomElement penTool = doc.createElement( "penTool" );
 
     penTool.setAttribute( "opacity", penToolSettings.opacity );
     penTool.setAttribute( "paintThreshold", penToolSettings.paintThreshold );
@@ -376,7 +376,7 @@ QDomElement KisDoc::savePenToolSettings( QDomDocument &doc )
 QDomElement KisDoc::saveBrushToolSettings( QDomDocument &doc )
 {
     // brush tool element
-    QDomElement brushTool = doc.createElement( "brushTool" ); 
+    QDomElement brushTool = doc.createElement( "brushTool" );
 
     brushTool.setAttribute( "opacity", brushToolSettings.opacity );
     brushTool.setAttribute( "blendWithCurrentGradient", static_cast<int>( brushToolSettings.blendWithCurrentGradient ) );
@@ -389,7 +389,7 @@ QDomElement KisDoc::saveBrushToolSettings( QDomDocument &doc )
 QDomElement KisDoc::saveAirbrushToolSettings( QDomDocument &doc )
 {
     // airbrush tool element
-    QDomElement airbrushTool = doc.createElement( "airbrushTool" ); 
+    QDomElement airbrushTool = doc.createElement( "airbrushTool" );
 
     airbrushTool.setAttribute( "opacity", airbrushToolSettings.opacity );
     airbrushTool.setAttribute( "useCurrentGradient", static_cast<int>( airbrushToolSettings.useCurrentGradient ) );
@@ -402,7 +402,7 @@ QDomElement KisDoc::saveAirbrushToolSettings( QDomDocument &doc )
 QDomElement KisDoc::saveEraserToolSettings( QDomDocument &doc )
 {
     // eraser tool element
-    QDomElement eraserTool = doc.createElement( "eraserTool" ); 
+    QDomElement eraserTool = doc.createElement( "eraserTool" );
 
     eraserTool.setAttribute( "opacity", eraserToolSettings.opacity );
     eraserTool.setAttribute( "blendWithCurrentGradient", static_cast<int>( eraserToolSettings.blendWithCurrentGradient ) );
@@ -415,7 +415,7 @@ QDomElement KisDoc::saveEraserToolSettings( QDomDocument &doc )
 QDomElement KisDoc::saveLineToolSettings( QDomDocument &doc )
 {
     // line tool element
-    QDomElement lineTool = doc.createElement( "lineTool" ); 
+    QDomElement lineTool = doc.createElement( "lineTool" );
 
     lineTool.setAttribute( "thickness", lineToolSettings.thickness );
     lineTool.setAttribute( "opacity", lineToolSettings.opacity );
@@ -430,7 +430,7 @@ QDomElement KisDoc::saveLineToolSettings( QDomDocument &doc )
 QDomElement KisDoc::savePolylineToolSettings( QDomDocument &doc )
 {
     // polyline tool element
-    QDomElement polylineTool = doc.createElement( "polylineTool" ); 
+    QDomElement polylineTool = doc.createElement( "polylineTool" );
 
     polylineTool.setAttribute( "thickness", polylineToolSettings.thickness );
     polylineTool.setAttribute( "opacity", polylineToolSettings.opacity );
@@ -445,7 +445,7 @@ QDomElement KisDoc::savePolylineToolSettings( QDomDocument &doc )
 QDomElement KisDoc::savePolygonToolSettings( QDomDocument &doc )
 {
     // polygon tool element
-    QDomElement polygonTool = doc.createElement( "polygonTool" ); 
+    QDomElement polygonTool = doc.createElement( "polygonTool" );
 
     polygonTool.setAttribute( "thickness", polygonToolSettings.thickness );
     polygonTool.setAttribute( "opacity", polygonToolSettings.opacity );
@@ -464,7 +464,7 @@ QDomElement KisDoc::savePolygonToolSettings( QDomDocument &doc )
 QDomElement KisDoc::saveRectangleToolSettings( QDomDocument &doc )
 {
     // rectangle tool element
-    QDomElement rectangleTool = doc.createElement( "rectangleTool" ); 
+    QDomElement rectangleTool = doc.createElement( "rectangleTool" );
 
     rectangleTool.setAttribute( "thickness", rectangleToolSettings.thickness );
     rectangleTool.setAttribute( "opacity", rectangleToolSettings.opacity );
@@ -479,7 +479,7 @@ QDomElement KisDoc::saveRectangleToolSettings( QDomDocument &doc )
 QDomElement KisDoc::saveEllipseToolSettings( QDomDocument &doc )
 {
     // ellipse tool element
-    QDomElement ellipseTool = doc.createElement( "ellipseTool" ); 
+    QDomElement ellipseTool = doc.createElement( "ellipseTool" );
 
     ellipseTool.setAttribute( "thickness", ellipseToolSettings.thickness );
     ellipseTool.setAttribute( "opacity", ellipseToolSettings.opacity );
@@ -494,7 +494,7 @@ QDomElement KisDoc::saveEllipseToolSettings( QDomDocument &doc )
 QDomElement KisDoc::saveFillerToolSettings( QDomDocument &doc )
 {
     // filler tool element
-    QDomElement fillerTool = doc.createElement( "fillerTool" ); 
+    QDomElement fillerTool = doc.createElement( "fillerTool" );
 
     fillerTool.setAttribute( "opacity", fillerToolSettings.opacity );
     fillerTool.setAttribute( "fillWithPattern", static_cast<int>( fillerToolSettings.fillWithPattern ) );
@@ -507,7 +507,7 @@ QDomElement KisDoc::saveFillerToolSettings( QDomDocument &doc )
 QDomElement KisDoc::saveColorChangerSettings( QDomDocument &doc )
 {
     // Color changer element
-    QDomElement colorChanger = doc.createElement( "colorChanger" ); 
+    QDomElement colorChanger = doc.createElement( "colorChanger" );
 
     colorChanger.setAttribute( "opacity", colorChangerSettings.opacity );
     colorChanger.setAttribute( "fillWithPattern", static_cast<int>( colorChangerSettings.fillWithPattern ) );
@@ -520,7 +520,7 @@ QDomElement KisDoc::saveColorChangerSettings( QDomDocument &doc )
 QDomElement KisDoc::saveStampToolSettings( QDomDocument &doc )
 {
     // Stamp (Pattern) tool element
-    QDomElement stampTool = doc.createElement( "stampTool" ); 
+    QDomElement stampTool = doc.createElement( "stampTool" );
 
     stampTool.setAttribute( "opacity", stampToolSettings.opacity );
     stampTool.setAttribute( "blendWithCurrentGradient", static_cast<int>( stampToolSettings.blendWithCurrentGradient ) );
@@ -532,7 +532,7 @@ QDomElement KisDoc::saveStampToolSettings( QDomDocument &doc )
 QDomElement KisDoc::saveGradientsSettings( QDomDocument &doc )
 {
     // gradients element
-    QDomElement gradients = doc.createElement( "gradients" ); 
+    QDomElement gradients = doc.createElement( "gradients" );
 
     gradients.setAttribute( "opacity", gradientsSettings.opacity );
     gradients.setAttribute( "offset", gradientsSettings.offset );
@@ -572,7 +572,7 @@ bool KisDoc::completeSaving( KoStore* store )
     for ( QStringList::Iterator it = imageNames.begin(); it != imageNames.end(); ++it )
     {
         setImage( *it );
-        QList<KisLayer> layers = m_pCurrent->layerList();
+        QPtrList<KisLayer> layers = m_pCurrent->layerList();
         uint layerNumbers = 0;
 
         for ( KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
@@ -977,7 +977,7 @@ bool KisDoc::completeLoading( KoStore* store )
         for ( QStringList::Iterator it = imageNames.begin(); it != imageNames.end(); ++it )
         {
             setImage( *it );
-            QList<KisLayer> layers = m_pCurrent->layerList();
+            QPtrList<KisLayer> layers = m_pCurrent->layerList();
             uint layerNumbers = 0;
 
             for ( KisLayer *lay = layers.first(); lay != 0; lay = layers.next() )
@@ -1141,7 +1141,7 @@ bool KisDoc::loadXMLOldFileFormat( QDomElement &image )
 
 void KisDoc::completeLoadingOldFileFormat( KoStore *store )
 {
-    QList<KisLayer> layers = m_pCurrent->layerList();
+    QPtrList<KisLayer> layers = m_pCurrent->layerList();
 
     for ( KisLayer *lay = layers.first(); lay != 0; lay = layers.next() )
     {
@@ -1326,7 +1326,7 @@ KisImage* KisDoc::current()
 void KisDoc::resetShells()
 {
     int shellCount = 0;
-    QListIterator<KoMainWindow> it( shells() );
+    QPtrListIterator<KoMainWindow> it( shells() );
 
     for ( ; it.current(); ++it )
     {

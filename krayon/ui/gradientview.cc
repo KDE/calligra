@@ -1,6 +1,4 @@
-// only for debug
-#include <iostream.h>
-
+#include <kdebug.h>
 #include <qpainter.h>
 
 #include <kpixmap.h>
@@ -46,12 +44,12 @@ QSize GradientView::sizeHint() const
 
 void GradientView::paintEvent( QPaintEvent */*_event*/ )
 {
-    cout << "GradientView::paintEvent" << endl;
+    kdDebug() << "GradientView::paintEvent\n";
 
     //int w;
     int pos = 0;
     //float index = 0.0;
-    
+
     QPainter p;
     p.begin( this );
 
@@ -64,7 +62,7 @@ void GradientView::paintEvent( QPaintEvent */*_event*/ )
     {
         w = (int) (( item->right - index ) * (float) width());
 
-//  cout << "Michael : processing gradient item, width : " << w << endl;
+//  kdDebug() << "Michael : processing gradient item, width : " << w << endl;
 
         p.fillRect( pos, 0, w, height(), item->leftColor );
         pos += w;
@@ -79,7 +77,7 @@ void GradientView::paintEvent( QPaintEvent */*_event*/ )
 
 void GradientView::updatePixmap()
 {
-    cout << "GradientView::updatePixmap()" << endl;
+    kdDebug() << "GradientView::updatePixmap()\n";
 
     int w, pos = 0;
     float index = 0.0;
@@ -98,11 +96,11 @@ void GradientView::updatePixmap()
             w = size().width() - pos;
 
         grad.resize( w, height() );
-        
-        KPixmapEffect::gradient( grad, item->leftColor, item->rightColor, 
+
+        KPixmapEffect::gradient( grad, item->leftColor, item->rightColor,
             KPixmapEffect::HorizontalGradient );
         bitBlt( &m_pixmap, pos, 0, &grad );
-        
+
         pos += w;
         index = item->right;
         item = m_lstGradientItems.next();

@@ -25,7 +25,6 @@
 #ifndef __kis_patternchooser_h__
 #define __kis_patternchooser_h__
 
-#include <qlist.h>
 #include <qwidget.h>
 
 #include "kis_pattern.h"

@@ -33,7 +33,7 @@
 
 bool KisConfig::doInit 	= true;
 KConfig * KisConfig::kc	= 0L;
-QList<KisConfig> KisConfig::instanceList;
+QPtrList<KisConfig> KisConfig::instanceList;
 QFont KisConfig::m_smallFont;
 QFont KisConfig::m_tinyFont;
 QStringList KisConfig::m_blendList;
@@ -41,13 +41,13 @@ QStringList KisConfig::m_blendList;
 
 KisConfig * KisConfig::getNewConfig()
 {
-    if ( doInit ) 
+    if ( doInit )
     {
         return ( new KisConfig() );
     }
-    else 
+    else
     {
-        if ( instanceList.count() == 0 ) 
+        if ( instanceList.count() == 0 )
         {
             return ( new KisConfig() );
         }
@@ -60,7 +60,7 @@ KisConfig * KisConfig::getNewConfig()
 KisConfig::KisConfig() : QObject( 0L, "krayon config" )
 {
     // load and init global settings only once
-    if ( doInit ) 
+    if ( doInit )
     {
         initStatic();
     }
@@ -101,7 +101,7 @@ void KisConfig::initStatic()
     instanceList.setAutoDelete( false );
 
     loadGlobalSettings();
-  
+
     (void) m_blendList.append( i18n("Normal") );
     (void) m_blendList.append( i18n("Dissolve") );
     (void) m_blendList.append( i18n("Behind") );
@@ -141,7 +141,7 @@ void KisConfig::saveConfig()
 void KisConfig::saveAll()
 {
     KisConfig *config = 0L;
-    for ( config = instanceList.first(); config; config = instanceList.next() ) 
+    for ( config = instanceList.first(); config; config = instanceList.next() )
     {
         config->saveConfig();
     }
@@ -193,7 +193,7 @@ void KisConfig::saveDialogSettings()
 const QStringList& KisConfig::blendings()
 {
     if ( doInit ) KisConfig::initStatic();
-        
+
     return KisConfig::m_blendList;
 }
 

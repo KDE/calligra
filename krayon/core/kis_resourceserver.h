@@ -21,7 +21,7 @@
 #ifndef __kis_resourceserver_h__
 #define __kis_resourceserver_h__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 #include "kis_brush.h"
@@ -38,16 +38,16 @@ public:
   int brushCount() { return m_brushes.count(); }
   int patternCount() { return m_patterns.count(); }
 
-  QList<KisBrush> brushes() { return m_brushes; }
-  QList<KisPattern> patterns() { return m_patterns; }
+  QPtrList<KisBrush> brushes() { return m_brushes; }
+  QPtrList<KisPattern> patterns() { return m_patterns; }
 
  protected:
   const KisBrush* loadBrush( const QString& filename );
   const KisPattern* loadPattern( const QString& filename );
  
  private:
-  QList<KisBrush>  m_brushes;
-  QList<KisPattern>  m_patterns;
+  QPtrList<KisBrush>  m_brushes;
+  QPtrList<KisPattern>  m_patterns;
 };
 
 #endif // __kis_resourceserver_h__

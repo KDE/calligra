@@ -21,7 +21,7 @@
 #ifndef __kis_pluginserver_h__
 #define __kis_pluginserver_h__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class QPopupMenu;
@@ -56,7 +56,7 @@ class PluginInfo
     PluginType m_type;
 };
 
-typedef QList<PluginInfo> PluginInfoList ;
+typedef QPtrList<PluginInfo> PluginInfoList ;
 
 class KisPluginServer
 {

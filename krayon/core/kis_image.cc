@@ -1005,7 +1005,7 @@ void KisImage::convertTileToPixmap(KisLayer *lay, int tileNo, QPixmap *pix)
 */
 void KisImage::mergeAllLayers()
 {
-    QList<KisLayer> l;
+    QPtrList<KisLayer> l;
     KisLayer *lay = m_layers.first();
 
     while(lay)
@@ -1023,7 +1023,7 @@ void KisImage::mergeAllLayers()
 */
 void KisImage::mergeVisibleLayers()
 {
-    QList<KisLayer> l;
+    QPtrList<KisLayer> l;
 
     KisLayer *lay = m_layers.first();
 
@@ -1043,7 +1043,7 @@ void KisImage::mergeVisibleLayers()
 */
 void KisImage::mergeLinkedLayers()
 {
-    QList<KisLayer> l;
+    QPtrList<KisLayer> l;
 
     KisLayer *lay = m_layers.first();
 
@@ -1064,7 +1064,7 @@ void KisImage::mergeLinkedLayers()
     needs to be a paramater and option for not deleting layers
     merged into others but keeping them instead.
 */
-void KisImage::mergeLayers(QList<KisLayer> list)
+void KisImage::mergeLayers(QPtrList<KisLayer> list)
 {
     list.setAutoDelete(false);
 
