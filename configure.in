@@ -30,7 +30,7 @@ KDE_CHECK_MINI_STL
 idldir="\$(includedir)/idl"
 AC_SUBST(idldir)
 
-KDE_CHECK_PYTHON
+KDE_CHECK_PYTHON(1.5)
 
 dnl add here all your Makefiles. These are created by configure
 AC_OUTPUT(Makefile \

@@ -1882,7 +1882,13 @@ fi
 
 AC_DEFUN(KDE_CHECK_PYTHON,
 [
-AC_MSG_CHECKING([for Python1.5])
+if test -z "$1"; then 
+  version="1.5"
+else
+  version="$1"
+fi
+
+AC_MSG_CHECKING([for Python$version])
 
 AC_ARG_WITH(pythondir, 
 [  --with-pythondir=pythondir   use python installed in pythondir ],
@@ -1891,7 +1897,7 @@ AC_ARG_WITH(pythondir,
 ], ac_python_dir=/usr/local
 )
 
-python_incdirs="$ac_python_dir/include/python1.5 /usr/include/python1.5 /usr/local/include/python1.5 /usr/local/include"
+python_incdirs="$ac_python_dir/include/python$version /usr/include/python$version /usr/local/include/python$version /usr/local/include"
 AC_FIND_FILE(Python.h, $python_incdirs, python_incdir)
 if test ! -r $python_incdir/Python.h; then
   AC_MSG_ERROR(Python.h not found.)
@@ -1899,20 +1905,43 @@ fi
 
 PYTHONINC=-I$python_incdir
 
-python_libdirs="$ac_python_dir/lib/python1.5/config /usr/lib/python1.5/config /usr/local/python1.5/config"
-AC_FIND_FILE(libpython1.5.a, $python_libdirs, python_libdir)
-if test ! -r $python_libdir/libpython1.5.a; then
-  AC_MSG_ERROR(libpython1.5.a not found.)
+python_libdirs="$ac_python_dir/lib/python$version/config /usr/lib/python$version/config /usr/local/python$version/config"
+AC_FIND_FILE(libpython$version.a, $python_libdirs, python_libdir)
+if test ! -r $python_libdir/libpython$version.a; then
+  AC_MSG_ERROR(libpython$version.a not found.)
 fi
 
 PYTHONLIB=-L$python_libdir
-LIBPYTHON=-lpython1.5
+LIBPYTHON=-lpython$version
+
+AC_MSG_RESULT(header $python_incdir library $python_libdir)
+
+AC_MSG_CHECKING(if Python needs thread lib to compile)
+AC_CACHE_VAL(kde_cv_python_pthread,
+[
+	AC_TRY_COMPILE([#include <Python.h>],
+[
+int main(int argc, char **argv) {
+	PySys_SetArgv(argc, argv);
+	return 0;
+}
+],
+	kde_cv_python_pthread=no,
+	[kde_cv_python_pthread=yes]
+)
+])
+
+AC_MSG_RESULT($kde_cv_python_pthread)
+
+if test "$kde_cv_python_pthread" = "yes"; then
+  LIBPYTHON="$LIBPYTHON -lpthread $LIBDL"
+fi
 
 AC_SUBST(PYTHONINC)
 AC_SUBST(PYTHONLIB)
 AC_SUBST(LIBPYTHON)
 
-AC_MSG_RESULT(header $python_incdir library $python_libdir)
+
 
 ])
 
@@ -1922,10 +1951,15 @@ AC_DEFUN(KDE_CHECK_STL_SGI,
     AC_MSG_CHECKING([if STL implementation is SGI like])
     AC_CACHE_VAL(kde_cv_stl_type_sgi,
     [
-      AC_TRY_COMPILE([#include <list.h>],[
-#ifndef __SGI_STL_LIST_H
-#error SGI
-#endif
+      AC_TRY_COMPILE([
+#include <string>
+],[
+int main()
+{
+  string astring="Hallo Welt.";
+  astring.erase(, 6); // now astring is "Welt"
+  return 0;
+};
 ], kde_cv_stl_type_sgi=yes,
    kde_cv_stl_type_sgi=no)
 ])
@@ -1943,11 +1977,14 @@ AC_DEFUN(KDE_CHECK_STL_HP,
     AC_CACHE_VAL(kde_cv_stl_type_hp,
     [
       AC_TRY_COMPILE([
-#include <list.h>
+#include <string>
 ],[
-#ifndef __HP_STL_LIST_H
-#error HP
-#endif
+int main()
+{
+  string astring="Hello World";
+  astring.remove(0, 6); // now astring is "World"
+  return 0;
+};
 ], kde_cv_stl_type_hp=yes,
    kde_cv_stl_type_hp=no)
 ])
