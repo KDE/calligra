@@ -129,7 +129,6 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
 
     dcop = 0;
     dcopObject(); // build it
-    m_personalShortCut=0L;
     fsInline=0L;
     m_spell.kospell = 0;
     m_spell.macroCmdSpellCheck=0L;
@@ -289,7 +288,6 @@ KWView::~KWView()
     deselectAllFrames(); // don't let resizehandles hang around
     // Delete gui while we still exist ( it needs documentDeleted() )
     delete m_gui;
-    delete m_personalShortCut;
     delete m_sbPageLabel;
     delete fsInline;
     delete dcop;
@@ -1226,19 +1224,19 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
     QValueList<KAction *> actions = lst;
     QValueList<KAction *>::ConstIterator it = lst.begin();
     QValueList<KAction *>::ConstIterator end = lst.end();
-    delete m_personalShortCut;
-    m_personalShortCut = new QMap<QString, KShortcut>();
+    // Delete all actions but keep their shortcuts in mind
+    QMap<QString, KShortcut> personalShortCut;
     for (; it != end; ++it )
     {
-        if ( !(*it)->shortcut().toString().isEmpty())
+        if ( !(*it)->shortcut().isNull() )
         {
-            m_personalShortCut->insert((*it)->text(), KShortcut( (*it)->shortcut()));
+            personalShortCut.insert( (*it)->text(), (*it)->shortcut() );
         }
         delete *it;
     }
 
     parentMenu->popupMenu()->clear();
-    QStringList path =  m_doc->personalExpressionPath();
+    QStringList path = m_doc->personalExpressionPath();
     QStringList files;
     for ( QStringList::Iterator it = path.begin(); it != path.end(); ++it )
     {
@@ -1255,13 +1253,10 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
     int i = 0;
     int nbFile = 0;
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it,nbFile++ )
-        createExpressionActions( parentMenu,*it, i,(nbFile<(int)files.count()-1) );
-    delete m_personalShortCut;
-    m_personalShortCut=0L;
-
+        createExpressionActions( parentMenu,*it, i,(nbFile<(int)files.count()-1), personalShortCut );
 }
 
-void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i, bool insertSepar )
+void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i, bool insertSepar, const QMap<QString, KShortcut>& personalShortCut )
 {
     QFile file( filename );
     if ( !file.exists() || !file.open( IO_ReadOnly ) )
@@ -1271,7 +1266,6 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
     doc.setContent( &file );
     file.close();
 
-    QString group = "";
     bool expressionExist =false;
     QDomNode n = doc.documentElement().firstChild();
     for( ; !n.isNull(); n = n.nextSibling() )
@@ -1282,7 +1276,7 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
             if ( e.tagName() == "Type" )
             {
                 expressionExist =true;
-                group = i18n( e.namedItem( "TypeName" ).toElement().text().utf8() );
+                QString group = i18n( e.namedItem( "TypeName" ).toElement().text().utf8() );
                 KActionMenu * subMenu = new KActionMenu( group, actionCollection() );
                 parentMenu->insert( subMenu );
 
@@ -1296,24 +1290,17 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
                         if ( e2.tagName() == "Expression" )
                         {
                             QString text = i18n( e2.namedItem( "Text" ).toElement().text().utf8() );
-                            KAction * act = 0L;
-                            if ( m_personalShortCut && m_personalShortCut->contains(text))
-                            {
-                                act = new KAction( text, (*m_personalShortCut)[text], this, SLOT( insertExpression() ),
-                                                         actionCollection(),QString("expression-action_%1").arg(i).latin1() );
-
-                            }
-                            else
-                                act = new KAction( text, 0, this, SLOT( insertExpression() ),
-                                                   actionCollection(), QString("expression-action_%1").arg(i).latin1() );
+                            KAction * act = new KAction( text, 0, this, SLOT( insertExpression() ),
+                                                         actionCollection(),
+                                                         QString("expression-action_%1").arg(i).latin1() );
+                            if ( personalShortCut.contains(text) )
+                                act->setShortcut( personalShortCut[text] );
                             i++;
                             act->setGroup("expression-action");
                             subMenu->insert( act );
                         }
                     }
                 }
-
-                group = "";
             }
         }
     }
@@ -2753,7 +2740,7 @@ void KWView::changeZoomMenu( int zoom )
 {
     QString mode;
     if ( m_gui && m_gui->canvasWidget() && m_gui->canvasWidget()->viewMode())
-        mode =  m_gui->canvasWidget()->viewMode()->type();
+        mode = m_gui->canvasWidget()->viewMode()->type();
 
     QStringList lst;
     lst << i18n( "Zoom to Width" );
@@ -4319,7 +4306,7 @@ void KWView::tableStyleSelected( KWTableStyle *_sty )
         KWFrame * single = m_gui->canvasWidget()->currentFrameSetEdit()->currentFrame();
         if ( (single) && ( single->frameSet()->type() == FT_TEXT ) )
         {
-            KCommand *cmd =  new KWTableStyleCommand( i18n("Apply Tablestyle to Frame"), single, _sty );
+            KCommand *cmd = new KWTableStyleCommand( i18n("Apply Tablestyle to Frame"), single, _sty );
             if (cmd) {
                 m_doc->addCommand( cmd );
                 cmd->execute();

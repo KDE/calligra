@@ -458,7 +458,7 @@ protected:
 
     void loadexpressionActions( KActionMenu * parentMenu);
 
-    void createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i , bool insertSepar );
+    void createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i , bool insertSepar, const QMap<QString, KShortcut>& personalShortCut );
 
     void insertPicture( const KoPicture& picture, const bool makeInline, const bool _keepRatio );
 
@@ -749,7 +749,6 @@ private:
      } m_spell;
 
     KWFrameSet *fsInline;
-    QMap<QString, KShortcut> *m_personalShortCut;
 
 };
 
