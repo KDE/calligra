@@ -364,6 +364,7 @@ bool KoDocument::saveFile()
     if ( backupFile() ) {
         KIO::UDSEntry entry;
         if ( KIO::NetAccess::stat( url(), entry ) ) { // this file exists => backup
+            emit sigStatusBarMessage( i18n("Making backup...") );
             KFileItem item( entry, url() );
             Q_ASSERT( item.name() == url().fileName() );
             KURL backup;
@@ -372,15 +373,19 @@ bool KoDocument::saveFile()
             else
                 backup = d->m_backupPath +"/"+url().fileName();
             backup.setPath( backup.path() + QString::fromLatin1("~") );
+#if KDE_IS_VERSION(3,1,90)
+            KIO::NetAccess::file_copy( url(), backup, -1, true /*overwrite*/ );
+#else
             KIO::NetAccess::del( backup ); // Copy does not remove existing destination file
             KIO::NetAccess::copy( url(), backup );
-            // Not network transparent. TODO: use NetAccess::file_copy once KDE-3.2 is required,
-            // or implement KIO::NetAccess::chmod (or fire an async ChmodJob?).
+            // Not network transparent.
             if ( backup.isLocalFile() )
                 ::chmod( QFile::encodeName( backup.path() ), item.permissions() );
+#endif
         }
     }
 
+    emit sigStatusBarMessage( i18n("Saving...") );
     bool ret = false;
     bool suppressErrorDialog = false;
     if ( outputMimeType != _native_format ) {
@@ -430,6 +435,7 @@ bool KoDocument::saveFile()
         d->mimeType = outputMimeType;
         setConfirmNonNativeSave ( isExporting (), false );
     }
+    emit sigClearStatusBarMessage();
 
     return ret;
 }
@@ -493,11 +499,13 @@ void KoDocument::slotAutoSave()
     if ( isModified() && d->modifiedAfterAutosave )
     {
         connect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
+        emit sigStatusBarMessage( i18n("Autosaving...") );
         d->m_autosaving = true;
         /*bool ret =*/ saveNativeFormat( autoSaveFile( m_file ) );
         setModified( true );
         d->modifiedAfterAutosave=false;
         d->m_autosaving = false;
+        emit sigClearStatusBarMessage();
         disconnect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
     }
 }

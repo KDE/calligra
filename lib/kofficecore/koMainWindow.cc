@@ -1389,6 +1389,7 @@ void KoMainWindow::slotProgress(int value) {
     kapp->processEvents();
 }
 
+
 void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 {
 

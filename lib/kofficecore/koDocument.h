@@ -690,7 +690,24 @@ signals:
      */
     void childChanged( KoDocumentChild *child );
 
-    void sigProgress(int value);
+    /**
+     * Progress info while loading or saving. The value is in percents (i.e. a number between 0 and 100)
+     * Your KoDocument-derived class should emit the signal now and then during load/save.
+     * KoMainWindow will take care of displaying a progress bar automatically.
+     */
+    void sigProgress( int value );
+
+    /**
+     * Emitted e.g. at the beginning of a save operation
+     * This is emitted by KoDocument and used by KoView to display a statusbar message
+     */
+    void sigStatusBarMessage( const QString& text );
+
+    /**
+     * Emitted e.g. at the end of a save operation
+     * This is emitted by KoDocument and used by KoView to clear the statusbar message
+     */
+    void sigClearStatusBarMessage();
 
     void sigBeginOperation();
     void sigEndOperation();

@@ -148,6 +148,11 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
                this, SLOT( slotActionStatusText( const QString & ) ) );
       connect( coll, SIGNAL( clearStatusText() ),
                this, SLOT( slotClearStatusText() ) );
+
+      connect( d->m_doc, SIGNAL( sigStatusBarMessage( const QString& ) ),
+               this, SLOT( slotActionStatusText( const QString& ) ) );
+      connect( d->m_doc, SIGNAL( sigClearStatusBarMessage() ),
+               this, SLOT( slotClearStatusText() ) );
   }
   d->m_doc->setCurrent();
 }
@@ -390,23 +395,20 @@ void KoView::partSelectEvent( KParts::PartSelectEvent *event )
 
 void KoView::guiActivateEvent( KParts::GUIActivateEvent * ev )
 {
+    showAllStatusBarItems( ev->activated() );
+}
+
+void KoView::showAllStatusBarItems( bool show )
+{
     KStatusBar * sb = statusBar();
-    //kdDebug() << "KoView::guiActivateEvent activated=" << ev->activated()
-    //          << " sb=" << (void*)sb << endl;
     if ( !sb )
         return;
-    if ( ev->activated() )
-    {
-        QValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.begin();
-        for ( ; it != d->m_statusBarItems.end() ; ++it )
+    QValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.begin();
+    for ( ; it != d->m_statusBarItems.end() ; ++it )
+        if ( show )
             (*it).ensureItemShown( sb );
-    }
-    else
-    {
-        QValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.begin();
-        for ( ; it != d->m_statusBarItems.end() ; ++it )
+        else
             (*it).ensureItemHidden( sb );
-    }
 }
 
 void KoView::addStatusBarItem( QWidget * widget, int stretch, bool permanent )

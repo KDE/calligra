@@ -310,6 +310,11 @@ public:
   void removeStatusBarItem( QWidget * widget );
 
   /**
+   * Show or hide all statusbar items. Used by KoMainWindow during saving.
+   */
+  void showAllStatusBarItems( bool show );
+
+  /**
    * You have to implement this method and disable/enable certain functionality (actions for example) in
    * your view to allow/disallow editing of the document.
    */
@@ -344,7 +349,16 @@ public slots:
      */
     virtual void endOperation();
 
+    /**
+     * Display a message in the status bar (calls QStatusBar::message())
+     * TODO: rename to something more generic
+     */
     void slotActionStatusText( const QString &text );
+
+    /**
+     * End of the message in the status bar (calls QStatusBar::clear())
+     * TODO: rename to something more generic
+     */
     void slotClearStatusText();
 
 protected:
