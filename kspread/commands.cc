@@ -70,7 +70,10 @@ MergeCellCommand::MergeCellCommand( KSpreadCell* c, int cs, int rs )
 
 QString MergeCellCommand::name() const
 {
-  return i18n("Merge Cells");
+  if( rangeName.isEmpty() )
+    return i18n("Merge Cells");
+  else
+    return i18n("Merge Cells %1").arg( rangeName );
 }
 
 void MergeCellCommand::execute()
