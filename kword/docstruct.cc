@@ -147,7 +147,7 @@ void KWDocStructTableItem::slotRightButtonClicked( QListViewItem *_item, const Q
 void KWDocStructTableItem::slotDoubleClicked( QListViewItem *_item )
 {
     if ( _item == this )
-        editFrameSet();
+        selectFrameSet();
 }
 
 void KWDocStructTableItem::selectFrameSet()
@@ -158,7 +158,7 @@ void KWDocStructTableItem::selectFrameSet()
 
 void KWDocStructTableItem::editFrameSet()
 {
-//todo
+    gui->canvasWidget()->editTextFrameSet( table, 0L, 0 );
 }
 
 /******************************************************************/
