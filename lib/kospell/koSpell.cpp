@@ -254,6 +254,8 @@ KOSpell::setUpDialog (bool reallyuseprogressbar)
 
 bool KOSpell::addPersonal (const QString & word)
 {
+    int ret = aspell_speller_add_to_personal(speller, word.latin1(), word.length());
+    kdDebug()<<" ret :"<<ret<<endl;
     return true;
 }
 
