@@ -191,10 +191,25 @@ public:
 	//! db-aware version
 	KexiTableViewData(KexiDB::Cursor *c);
 
+//TODO: make this more generic: allow to add more columns!
+	/*! Defines two-column table usually used with comboboxes.
+	 First column is invisible and contains key values.
+	 Second column and contains user-visible value.
+	 @param keys a list of keys
+	 @param values a list of text values (must be of the same length as keys list)
+	 @param keyType a type for keys
+	 @param valueType a type for values
+	*/
 	KexiTableViewData(
 		const QValueList<QVariant> &keys, const QValueList<QVariant> &values,
 		KexiDB::Field::Type keyType = KexiDB::Field::Text, 
 		KexiDB::Field::Type valueType = KexiDB::Field::Text);
+
+	/*! Like above constructor, but keys and values are not provided.
+	 You can do this later by calling append(KexiTableItem*) method.
+	 (KexiTableItem object must have exactly two columns)
+	*/
+	KexiTableViewData(KexiDB::Field::Type keyType, KexiDB::Field::Type valueType);
 
 	~KexiTableViewData();
 //js	void setSorting(int key, bool order=true, short type=1);
@@ -339,6 +354,9 @@ signals:
 
 protected:
 	void init();
+	void init(
+		const QValueList<QVariant> &keys, const QValueList<QVariant> &values,
+		KexiDB::Field::Type keyType, KexiDB::Field::Type valueType);
 
 	virtual int compareItems(Item item1, Item item2);
 	int cmpStr(Item item1, Item item2);

@@ -219,6 +219,22 @@ KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
 KexiTableViewData::KexiTableViewData(
 	const QValueList<QVariant> &keys, const QValueList<QVariant> &values,
 	KexiDB::Field::Type keyType, KexiDB::Field::Type valueType)
+	: QObject()
+	, KexiTableViewDataBase()
+{
+	init(keys, values, keyType, valueType);
+}
+
+KexiTableViewData::KexiTableViewData(
+	KexiDB::Field::Type keyType, KexiDB::Field::Type valueType)
+{
+	const QValueList<QVariant> empty;
+	init(empty, empty, keyType, valueType);
+}
+
+void KexiTableViewData::init(
+	const QValueList<QVariant> &keys, const QValueList<QVariant> &values,
+	KexiDB::Field::Type keyType, KexiDB::Field::Type valueType)
 {
 	init();
 	KexiDB::Field *keyField = new KexiDB::Field("key", keyType);
