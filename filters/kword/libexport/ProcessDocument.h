@@ -36,3 +36,4 @@ void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, KW
 void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*);
 
 #endif /* PROCESS_DOCUMENT_H */
+
