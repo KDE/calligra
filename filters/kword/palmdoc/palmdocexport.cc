@@ -97,6 +97,7 @@ bool PalmDocWorker::doCloseDocument(void)
 bool PalmDocWorker::doFullDocumentInfo( const KWEFDocumentInfo& docInfo )
 {
   title = docInfo.title;
+  return TRUE;
 }
 
 bool PalmDocWorker::doFullParagraph(const QString& paraText, 
