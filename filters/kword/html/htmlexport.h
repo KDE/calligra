@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,8 +29,6 @@
 #include <koFilter.h>
 #include <koStore.h>
 
-#include <kword_xml2html.h>
-
 
 class HTMLExport : public KoFilter {
 
@@ -43,4 +42,4 @@ public:
                               const QString &from, const QString &to,
                               const QString &config=QString::null);
 };
-#endif // HTMLExport_H
+#endif // HTMLEXPORT_H

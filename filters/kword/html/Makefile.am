@@ -11,11 +11,10 @@ libhtmlexport_la_LIBADD = $(KOFFICE_LIBS)
 lib_LTLIBRARIES = libhtmlimport.la libhtmlexport.la
 
 libhtmlimport_la_SOURCES = htmlimport.cc htmlimport_factory.cc
-libhtmlexport_la_SOURCES = htmlexport.cc htmlexport_factory.cc \
-kword_xml2html.cc xmlparse.cc
+libhtmlexport_la_SOURCES = htmlexport.cc htmlexport_factory.cc
 
 noinst_HEADERS = htmlimport.h htmlimport_factory.h htmlexport.h \
-htmlexport_factory.h kword_xml2html.h
+htmlexport_factory.h
 
 METASOURCES = AUTO
 

@@ -1,5 +1,8 @@
-/* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+// $Header$
+
+/*
+   This file is part of the KDE project
+   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,90 +20,804 @@
    Boston, MA 02111-1307, USA.
 */
 
+/*
+   This file is based on the old file:
+    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
+
+   The old file was copyrighted by
+    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+    Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
+                       Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
+
+   The old file was licensed under the terms of the GNU Library General Public
+   License version 2.
+*/
+
+/*
+    Important changes
+
+    04 Feb 2001  Nicolas GOUTTE <nicog@snafu.de>
+        Re-write of HTML export
+        (Replaces the old HTML export code completely)
+
+*/
+
+
 #include <htmlexport.h>
 #include <htmlexport.moc>
 #include <kdebug.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <qtextcodec.h>
+#include <qdom.h>
 
-void mainFunc(const char*,const char*);
+
+// Start processor's header
+
+// The class TagProcessing and the two functions ProcessSubtags () and
+// AllowNoSubtags () allow for easing parsing of subtags in the
+// current tag. If don't expect any subtags you call AllowNoSubtags ().
+// Otherwise you create a list of TagProcessing elements and pass that
+// to ProcessSubtags () which will go through all subtags it can find,
+// call the corresponding processing function, and do all the
+// necessary error handling.
+
+class TagProcessing
+{
+    public:
+        TagProcessing ()
+        {}
+
+        TagProcessing (QString  n,
+                       void     (*p)(QDomNode, void *, QString &),
+                       void    *d) : name (n), processor (p), data (d)
+        {}
+
+        QString  name;
+        void     (*processor)(QDomNode, void *, QString &);
+        void    *data;
+};
+
+void ProcessSubtags     ( QDomNode                   parentNode,
+                          QValueList<TagProcessing>  &tagProcessingList,
+                          QString                    &outputText         );
+
+void AllowNoSubtags ( QDomNode  myNode );
+
+
+// The class AttrProcessing and the two functions ProcessAttributes ()
+// and AllowNoSubtags () allow for easing parsing of the current tag's
+// attributes. If don't expect any attributes you call AllowNoAttributes ().
+// Otherwise you create a list of AttrProcessing elements and pass
+// that to ProcessAttributes () which will go through all attributes
+// it can find, retreive the value in the datatype defined, and do all
+// the necessary error handling.
+
+
+class AttrProcessing
+{
+    public:
+        AttrProcessing ()
+        {}
+
+        AttrProcessing ( QString   n,
+                         QString   t,
+                         void     *d  ) : name (n), type (t), data (d)
+        {}
+
+        QString   name;
+        QString   type;
+        void     *data;
+};
+
+void ProcessAttributes ( QDomNode                     myNode,
+                         QValueList<AttrProcessing>  &attrProcessingList );
+
+void AllowNoAttributes ( QDomNode  myNode );
+
+// End processor's header
+
+// Start processor's functions
+
+// The class TagProcessing and the two functions ProcessSubtags () and
+// AllowNoSubtags () allow for easing parsing of subtags in the
+// current tag. If don't expect any subtags you call AllowNoSubtags ().
+// Otherwise you create a list of TagProcessing elements and pass that
+// to ProcessSubtags () which will go through all subtags it can find,
+// call the corresponding processing function, and do all the
+// necessary error handling.
+
+void ProcessSubtags ( QDomNode                    parentNode,
+                      QValueList<TagProcessing>  &tagProcessingList,
+                      QString                    &outputText         )
+{
+    QDomNode childNode;
+
+    for ( childNode = parentNode.firstChild (); !childNode.isNull (); childNode = childNode.nextSibling () )
+    {
+//      if ( childNode.isElement () )   // doesn't work!!!
+        if ( childNode.nodeType () == QDomNode::ElementNode )
+        {
+            bool found = false;
+
+            QValueList<TagProcessing>::Iterator  tagProcessingIt;
+
+            for ( tagProcessingIt = tagProcessingList.begin ();
+                  !found && tagProcessingIt != tagProcessingList.end ();
+                  tagProcessingIt++ )
+            {
+                if ( childNode.nodeName () == (*tagProcessingIt).name )
+                {
+                    found = true;
+
+                    if ( (*tagProcessingIt).processor != NULL )
+                    {
+                        ((*tagProcessingIt).processor) ( childNode, (*tagProcessingIt).data, outputText );
+                    }
+                    else
+                    {
+//                      kdError () << "<para>ignoring " << childNode.nodeName ()
+//                                      << " tag in " << parentNode.nodeName () << "!</para>" << endl;
+                    }
+                }
+            }
+
+            if ( !found )
+            {
+                kdError(30503) << "Unexpected tag " << childNode.nodeName ()
+                               << " in " << parentNode.nodeName () << "!" << endl;
+            }
+        }
+    }
+}
+
+void AllowNoSubtags ( QDomNode  myNode )
+{
+    QString outputText;
+    QValueList<TagProcessing> tagProcessingList;
+    ProcessSubtags (myNode, tagProcessingList, outputText);
+}
+
+
+// The class AttrProcessing and the two functions ProcessAttributes ()
+// and AllowNoSubtags () allow for easing parsing of the current tag's
+// attributes. If don't expect any attributes you call AllowNoAttributes ().
+// Otherwise you create a list of AttrProcessing elements and pass
+// that to ProcessAttributes () which will go through all attributes
+// it can find, retreive the value in the datatype defined, and do all
+// the necessary error handling.
+
+void ProcessAttributes ( QDomNode                     myNode,
+                         QValueList<AttrProcessing>  &attrProcessingList )
+{
+    QDomNamedNodeMap myAttribs ( myNode.toElement ().attributes () );
+
+    int i, n;
+    n = myAttribs.length ();
+
+    for ( i = 0; i < n; i++ )
+    {
+        QDomAttr myAttrib ( myAttribs.item (i).toAttr () );
+
+        if ( !myAttrib.isNull () )
+        {
+            bool found = false;
+
+            QValueList<AttrProcessing>::Iterator attrProcessingIt;
+
+            for ( attrProcessingIt = attrProcessingList.begin ();
+                  !found && attrProcessingIt != attrProcessingList.end ();
+                  attrProcessingIt++ )
+            {
+                if ( myAttrib.name () == (*attrProcessingIt).name )
+                {
+                    found = true;
+
+                    if ( (*attrProcessingIt).data != NULL )
+                    {
+                        if ( (*attrProcessingIt).type == "QString" )
+                        {
+                            *((QString *) (*attrProcessingIt).data) = myAttrib.value ();
+                        }
+                        else if ( (*attrProcessingIt).type == "int" )
+                        {
+                            *((int *) (*attrProcessingIt).data) = myAttrib.value ().toInt ();
+                        }
+                        else
+                        {
+                            kdError(30503) << "Unexpected data type " << (*attrProcessingIt).type << " in " <<
+                                           myNode.nodeName () << " attribute " << (*attrProcessingIt).name
+                                           << "!" << endl;
+                        }
+                    }
+                    else
+                    {
+//                      kdError(30503) << "<para>ignoring " << myNode.tagName << " attribute "
+//                                     << (*attrProcessingIt).name << "!</para>" << endl;
+                    }
+                }
+            }
+
+            if ( !found )
+            {
+                kdError(30503) << "Unexpected attribute " << myAttrib.name () << " in " <<
+                                  myNode.nodeName () << "!" << endl;
+            }
+        }
+    }
+}
+
+
+void AllowNoAttributes ( QDomNode  myNode )
+{
+    QValueList<AttrProcessing> attrProcessingList;
+    ProcessAttributes (myNode, attrProcessingList);
+}
+// End processor's functions
 
 HTMLExport::HTMLExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
 }
 
-const bool HTMLExport::filter(const QString &fileIn, const QString &fileOut,
-                              const QString& from, const QString& to,
-                              const QString &) {
+// Every tag has its own processing function. All of those functions
+// have the same parameters since the functions are passed to
+// ProcessSubtags throuch the TagProcessing class.  The top level
+// function is ProcessDocTag and can be called with the node returned
+// by QDomDocument::documentElement (). The tagData argument can be
+// used to either pass variables down to the subtags or to allow
+// subtags to return values. As a bare minimum the tag processing
+// functions must handle the tag's attributes and the tag's subtags
+// (which it can choose to ignore). Currently implemented is
+// processing for the following tags and attributes:
+//
+// DOC
+//   FRAMESETS
+//     FRAMESET
+//       PARAGRAPH
+//          TEXT - Text Element
+//          FORMATS
+//            FORMAT id=1 pos= len=
+//          LAYOUT
+//            NAME value=
 
-    if(to!="text/html" || from!="application/x-kword")
-        return false;
 
-    KoStore in=KoStore(QString(fileIn), KoStore::Read);
-    if(!in.open("root")) {
-        kdError(30503) << "Unable to open input file!" << endl;
-        in.close();
-        return false;
-    }
-    // read the whole file
-    QCString buf( in.size() );
-    int count = in.read( buf.data(), in.size() );
-    if ( count != in.size() ) {
-      kdError(30503) << "Error reading input file!" << endl;
-      in.close();
-      return false;
-    }
-    in.close();
+// FormatData is a container for data retreived from the FORMAT tag
+// and its subtags to be used in the PARAGRAPH tag.
 
-    // Here comes the difficult part: choosing the charset to use for the
-    // HTML file.
-    // * Using the user's locale is stupid (someone can send me a czech document)
-    // * UTF 8 is the logical choice, but unicode fonts are still very much missing
-    // * TODO: ask the charset to use with a combobox in a filter dialog
-    QCString charset( "utf-8" );
+static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString & )
+{
+    QString *layout = (QString *) tagData;
 
-    int begin = buf.find( "<DOC" ); // skip <?...?>
+    *layout = "";
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ( "value", "QString", (void *) layout ) );
+    ProcessAttributes (myNode, attrProcessingList);
 
-    // Let's convert !
-    mainFunc( (const char*)buf + begin, charset );
-
-    // It would certainly be more efficient if the filter was writing
-    // into a QString (using fromUtf8 for the stuff coming from the xml file)
-    // instead of using a temporary file !
-    QFile f( "/tmp/kword2html" );
-    if ( !f.open( IO_ReadOnly ) ) {
-        return false;
-    }
-
-    QTextStream s( &f );
-    s.setEncoding( QTextStream::UnicodeUTF8 ); // The contents comes from XML, it will always be utf 8
-    // Yes, your eyes are working well: we put everything we just wrote
-    // into a file back into a QString !
-    QString str = s.read();
-    f.close();
-
-    QFile out(fileOut);
-    if(!out.open(IO_WriteOnly)) {
-        kdError(30503) << "Unable to open output file!" << endl;
-        out.close();
-        return false;
-    }
-    QTextStream sout( &out );
-    QTextCodec * codec = QTextCodec::codecForName( charset );
-    if ( !codec )
+    if ( *layout == "" )
     {
-        kdError(30503) << "Unable to find codec for " << charset << " !" << endl;
-        out.close();
+        *layout = "Standard";
+
+        kdError(30503) << "Bad layout name value!" << endl;
+    }
+
+    AllowNoSubtags (myNode);
+}
+
+
+static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText )
+{
+    QString *layout = (QString *) tagData;
+
+    AllowNoAttributes (myNode);
+
+    *layout = "";
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList.append ( TagProcessing ( "NAME",      ProcessLayoutNameTag, (void *) layout ) );
+    tagProcessingList.append ( TagProcessing ( "FOLLOWING", NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "COUNTER",   NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "FORMAT",    NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "TABULATOR", NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "FLOW",      NULL,                 NULL            ) );
+    ProcessSubtags (myNode, tagProcessingList, outputText);
+}
+
+class FormatData
+{
+    public:
+        FormatData ()
+        { init(); }
+        FormatData ( int p,
+                     int l  ) : pos (p), len (l)
+        { init(); }
+
+        QString fontName;
+
+        int  pos; // Start of text to which this format applies
+        int  len; // Len of text to which this format applies
+        int  weight;
+        int  fontSize;
+        int  colourRed;
+        int  colourGreen;
+        int  colourBlue;
+        int  verticalAlignment;
+
+        bool italic;
+        bool underline;
+    private:
+        void init()
+        {
+            //Initiate member variables
+            // (initiate all variables, even those to 0!)
+            weight=0;
+            fontSize=-1;
+            colourRed=0;
+            colourGreen=0;
+            colourBlue=0;
+            verticalAlignment=0;
+            italic=false;
+            underline=false;
+        }
+};
+
+// FORMAT's subtags
+
+static void ProcessItalicTag (QDomNode myNode, void* formatDataPtr , QString&)
+{
+    FormatData* formatData = (FormatData*) formatDataPtr;
+
+    int value=0;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("value", "int", (void *)&value) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    formatData->italic=(value!=0);
+}
+
+static void ProcessUnderlineTag (QDomNode myNode, void* formatDataPtr , QString&)
+{
+    FormatData* formatData = (FormatData*) formatDataPtr;
+
+    int value=0;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("value", "int", (void *)&value) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    formatData->underline=(value!=0);
+}
+
+static void ProcessWeightTag (QDomNode myNode, void* formatDataPtr , QString&)
+{
+    FormatData* formatData = (FormatData*) formatDataPtr;
+
+    int weight=50;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("value", "int", (void *)&weight) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    formatData->weight=weight;
+}
+
+static void ProcessSizeTag (QDomNode myNode, void* formatDataPtr , QString&)
+{
+    FormatData* formatData = (FormatData*) formatDataPtr;
+
+    int size=-1;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("value", "int", (void *)&size) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    formatData->fontSize=size;
+}
+
+static void ProcessFontTag (QDomNode myNode, void* formatDataPtr , QString& )
+{
+    FormatData* formatData = (FormatData*) formatDataPtr;
+
+    QString fontName;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("name", "QString", (void *)&fontName) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    formatData->fontName=fontName;
+}
+
+static void ProcessColorTag (QDomNode myNode, void* formatDataPtr , QString&)
+{
+    FormatData* formatData = (FormatData*) formatDataPtr;
+
+    int red,green,blue;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("red"   , "int", (void *)&red   ) );
+    attrProcessingList.append ( AttrProcessing ("green" , "int", (void *)&green ) );
+    attrProcessingList.append ( AttrProcessing ("blue"  , "int", (void *)&blue  ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    formatData->colourRed=red;
+    formatData->colourGreen=green;
+    formatData->colourBlue=blue;
+}
+
+static void ProcessVertAlignTag (QDomNode myNode, void* formatDataPtr , QString&)
+{
+    FormatData* formatData = (FormatData*) formatDataPtr;
+
+    int value=-1;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("value", "int", (void *)&value) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    formatData->verticalAlignment=value;
+}
+
+
+static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &)
+{
+    QValueList<FormatData> *formatDataList = (QValueList<FormatData> *) tagData;
+
+    int formatId (-1);
+    FormatData formatData (-1,-1);
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ( "id",  "int", (void *) &formatId       ) );
+    attrProcessingList.append ( AttrProcessing ( "pos", "int", (void *) &formatData.pos ) );
+    attrProcessingList.append ( AttrProcessing ( "len", "int", (void *) &formatData.len ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    if ( formatId != 1 )
+    {
+        kdError(30503) << "Unexpected FORMAT attribute id value " << formatId << "!" << endl;
+    }
+
+    if ( formatData.pos == -1 || formatData.len == -1 )
+    {
+        formatData.pos = 0;
+        formatData.len = 0;
+
+        kdError(30503) << "Missing formatting!" << endl;
+    }
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList.append ( TagProcessing ( "ITALIC",    ProcessItalicTag,   (void*) &formatData ) );
+    tagProcessingList.append ( TagProcessing ( "UNDERLINE", ProcessUnderlineTag,(void*) &formatData ) );
+    tagProcessingList.append ( TagProcessing ( "WEIGHT",    ProcessWeightTag,   (void*) &formatData ) );
+    tagProcessingList.append ( TagProcessing ( "SIZE",      ProcessSizeTag,     (void*) &formatData ) );
+    tagProcessingList.append ( TagProcessing ( "FONT",      ProcessFontTag,     (void*) &formatData ) );
+    tagProcessingList.append ( TagProcessing ( "COLOR",     ProcessColorTag,    (void*) &formatData ) );
+    tagProcessingList.append ( TagProcessing ( "VERTALIGN", ProcessVertAlignTag,(void*) &formatData ) );
+
+    QString strDummy;
+
+    ProcessSubtags (myNode, tagProcessingList, strDummy);
+
+    formatDataList->append (formatData);
+}
+
+
+static void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText )
+{
+    QValueList<FormatData> *formatDataList = (QValueList<FormatData> *) tagData;
+
+    AllowNoAttributes (myNode);
+
+    (*formatDataList).clear ();
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList.append ( TagProcessing ( "FORMAT", ProcessFormatTag, (void *) formatDataList ) );
+    ProcessSubtags (myNode, tagProcessingList, outputText);
+}
+
+
+static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &)
+{
+    QString *tagText = (QString *) tagData;
+
+    QDomText myText ( myNode.firstChild ().toText () );
+
+    if ( !myText.isNull () )
+    {
+        *tagText = myText.data ();
+    }
+    else
+    {
+        *tagText = "";
+    }
+
+    AllowNoAttributes (myNode);
+
+    AllowNoSubtags (myNode);
+}
+
+// ProcessParagraphData () mangles the pure text through the
+// formatting information stored in the FormatData list and prints it
+// out to the export file.
+
+static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText )
+{
+    if ( paraText.length () > 0 )
+    {
+        const QString strAmp ("&amp;");
+        const QString strLt  ("&lt;");
+        const QString strGt  ("&gt;");
+        //const QString strApos("&apos;");  //Only predefined in XHTML
+        const QString strQuot("&quot;");
+
+        const QRegExp regExpAmp ("&");
+        const QRegExp regExpLt  ("<");
+        const QRegExp regExpGt  (">");
+        //const QRegExp regExpApos("'");    //Only predefined in XHTML
+        const QRegExp regExpQuot("\"");
+
+        QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
+
+        QString partialText;
+
+        for ( paraFormatDataIt = paraFormatDataList.begin ();
+              paraFormatDataIt != paraFormatDataList.end ();
+              paraFormatDataIt++ )
+        {
+            //Retrieve text
+            partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
+            //Code all possible predefined HTML entities
+            partialText.replace (regExpAmp , strAmp); //Must be the first!!
+            partialText.replace (regExpLt  , strLt);
+            partialText.replace (regExpGt  , strGt);
+            //partialText.replace (regExpApos, strApos);    // Only predefined in XHTML
+            partialText.replace (regExpQuot, strQuot);
+
+            // Opening elements
+            if ( (*paraFormatDataIt).weight > 50 )
+            {
+                outputText+="<b>";
+            }
+            if ( (*paraFormatDataIt).italic )
+            {
+                outputText+="<i>";
+            }
+            if ( (*paraFormatDataIt).underline )
+            {
+                outputText+="<u>";
+            }
+
+            // The text
+            outputText += partialText;
+
+            // Closing elements
+            if ( (*paraFormatDataIt).underline )
+            {
+                outputText+="</u>";
+            }
+            if ( (*paraFormatDataIt).italic )
+            {
+                outputText+="</i>";
+            }
+            if ( (*paraFormatDataIt).weight > 50 )
+            {
+                outputText+="</b>";
+            }
+       }
+
+    }
+/*
+    //We must have two hex digits for each colour channel!
+     += QString::number((red&0xf0)>>4,16);
+     += QString::number(red&0x0f,16);
+
+     += QString::number((green&0xf0)>>4,16);
+     += QString::number(green&0x0f,16);
+
+     += QString::number((blue&0xf0)>>4,16);
+     += QString::number(blue&0x0f,16);
+*/
+}
+
+
+static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText )
+{
+    AllowNoAttributes (myNode);
+
+    QString paraText;
+    QValueList<FormatData> paraFormatDataList;
+    QString paraLayout;
+    QValueList<TagProcessing> tagProcessingList;
+
+    tagProcessingList.append ( TagProcessing ( "TEXT",    ProcessTextTag,       (void *) &paraText           ) );
+    tagProcessingList.append ( TagProcessing ( "FORMATS", ProcessFormatsTag,    (void *) &paraFormatDataList ) );
+    tagProcessingList.append ( TagProcessing ( "LAYOUT",  ProcessLayoutTag,     (void *) &paraLayout         ) );
+    tagProcessingList.append ( TagProcessing ( "HARDBRK", NULL,                 NULL) ); // Not documented!
+    ProcessSubtags (myNode, tagProcessingList, outputText);
+
+    if ( paraLayout == "Head 1" )
+    {
+        outputText += "<h1>";
+        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        outputText += "</h1>\n";
+    }
+    else if ( paraLayout == "Head 2" )
+    {
+        outputText += "<h2>";
+        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        outputText += "</h2>\n";
+    }
+    else if ( paraLayout == "Head 3" )
+    {
+        outputText += "<h3>";  //Warning: No trailing white space or else it's in the text!!!
+        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        outputText += "</h3>\n";
+    }
+    /*
+    else if ( paraLayout == "Bullet List" )
+    {
+        outputText += "<p>"; //TODO
+        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        outputText += "</p>\n";
+    }
+    else if ( paraLayout == "Enumerated List" )
+    {
+        outputText += "<p>"; //TODO
+        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        outputText += "</p>\n";
+    }
+    else if ( paraLayout == "Alphabetical List" )
+    {
+        outputText += "<p>"; //TODO
+        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        outputText += "</p>\n";
+    }
+    */
+    else
+    {// We don't know the layout, so assume it's "Standard". It's better than to abort with an error!
+        outputText += "<p>";
+        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        outputText += "</p>\n";
+    }
+}
+
+
+static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText )
+{
+    int frameType=-1;
+    int frameInfo=-1;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ( "frameType", "int", (void*) &frameType ) );
+    attrProcessingList.append ( AttrProcessing ( "frameInfo", "int", (void*) &frameInfo) );
+    attrProcessingList.append ( AttrProcessing ( "removable", "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "visible",   "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "name",      "", NULL ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    if ((1==frameType) && (0==frameInfo))
+    {   //Main text
+
+        QValueList<TagProcessing> tagProcessingList;
+        tagProcessingList.append ( TagProcessing ( "FRAME",     NULL,                NULL ) );
+        tagProcessingList.append ( TagProcessing ( "PARAGRAPH", ProcessParagraphTag, NULL ) );
+        ProcessSubtags (myNode, tagProcessingList, outputText);
+
+    }
+    //TODO: Treat the other types of frames (frameType)
+}
+
+
+static void ProcessFramesetsTag (QDomNode myNode, void *, QString   &outputText )
+{
+    AllowNoAttributes (myNode);
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList.append ( TagProcessing ( "FRAMESET", ProcessFramesetTag, NULL ) );
+    ProcessSubtags (myNode, tagProcessingList, outputText);
+}
+
+static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText)
+{
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ( "editor",        "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "mime",          "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "syntaxVersion", "", NULL ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList.append ( TagProcessing ( "PAPER",       NULL,                NULL ) );
+    tagProcessingList.append ( TagProcessing ( "ATTRIBUTES",  NULL,                NULL ) );
+    tagProcessingList.append ( TagProcessing ( "FOOTNOTEMGR", NULL,                NULL ) );
+    tagProcessingList.append ( TagProcessing ( "STYLES",      NULL,                NULL ) );
+    tagProcessingList.append ( TagProcessing ( "PIXMAPS",     NULL,                NULL ) );
+    tagProcessingList.append ( TagProcessing ( "SERIALL",     NULL,                NULL ) );
+    tagProcessingList.append ( TagProcessing ( "FRAMESETS",   ProcessFramesetsTag, NULL ) );
+    ProcessSubtags (myNode, tagProcessingList, outputText);
+}
+
+const bool HTMLExport::filter(const QString  &filenameIn,
+                               const QString  &filenameOut,
+                               const QString  &from,
+                               const QString  &to,
+                               const QString  &         )
+{
+    if ((from != "application/x-kword") || (to != "text/html"))
+    {
         return false;
     }
-    sout.setCodec( codec );
-    sout << str;
 
-    //QCString cstr(str.utf8());
-    //QCString cstr(str.latin1());
-    //out.writeBlock((const char*)cstr, cstr.length());
+    KoStore koStoreIn (filenameIn, KoStore::Read);
 
-    out.close();
+    if ( !koStoreIn.open ( "root" ) )
+    {
+        koStoreIn.close ();
+
+        kdError(30503) << "Unable to open input file!" << endl;
+        return false;
+    }
+
+    QByteArray byteArrayIn = koStoreIn.read ( koStoreIn.size () );
+    koStoreIn.close ();
+
+    QDomDocument qDomDocumentIn;
+
+    // let parse the buffer just read from the file
+    qDomDocumentIn.setContent(byteArrayIn);
+
+    QDomNode docNodeIn = qDomDocumentIn.documentElement ();
+
+    QString stringBufOut;
+
+    // Make the file header
+    // We are TRANSITIONAL, as we want to use tags like <FONT>, <U> and explicit colours.
+
+    stringBufOut += "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n";
+
+    // No "lang" attribute for <HTML>, as we do not know in which language the document is!
+    stringBufOut += "<html>\n";
+
+    stringBufOut += "<head>\n";
+
+    // Declare that we are using UTF-8
+    stringBufOut += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n";
+
+    // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
+    stringBufOut += "<meta name=\"generator\" content=\"KWord HTML Export Filter Version ";
+    QString strVersion("$Revision$");
+    // Eliminate the dollar signs
+    //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
+    stringBufOut += strVersion.mid(10).replace(QRegExp("\\$"),""); // Note: double escape character (one for C++, one for QRegExp!)
+    stringBufOut += "\">\n";
+
+    stringBufOut += "<title>No name</title>\n"; // Just temporary, some user agents *do* choke without <TITLE> if there is a <HEAD> element
+
+#if 1
+    // Some "security" to see if I have forgotten to run "make install"
+    // (Can be deleted when the filter will be stable.)
+    kdDebug(30503) << "htmlexport.cc " << __DATE__ " " __TIME__ << " " << strVersion << endl;
+#endif
+
+    stringBufOut += "</head>\n<body>\n";
+
+    // Now that we have the header, we can do the real work!
+    ProcessDocTag (docNodeIn, NULL, stringBufOut);
+
+    // Add the tail of the file
+    stringBufOut += "</body>\n</html>\n";
+
+    QCString strOut=stringBufOut.utf8(); //Retrieve UTF8 info into a byte array
+
+    //Now all is ready to write to a file
+    QFile fileOut (filenameOut);
+
+    if ( !fileOut.open (IO_WriteOnly) )
+    {
+        fileOut.close ();
+
+        kdError(30503) << "Unable to open output file!" << endl;
+        return false;
+    }
+
+    //Warning: do not use QString::length() (as in asciiexport.cc) but QCString::length()
+    // "QString::length()" gives the number of characters, not the number of bytes needed to represent them in UTF8!
+    fileOut.writeBlock ( (const char *) strOut, strOut.length() ); //Write the file
+
+    fileOut.close (); //Really close the file
     return true;
+
 }
+
