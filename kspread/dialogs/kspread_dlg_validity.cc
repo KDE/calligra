@@ -464,6 +464,13 @@ void KSpreadDlgValidity::clearAllPressed()
   val_max->setText("");
   message->setText("");
   title->setText("");
+  displayMessage->setChecked( true );
+  allowEmptyCell->setChecked( false );
+  choose->setCurrentItem(0);
+  chooseType->setCurrentItem(0);
+  chooseAction->setCurrentItem(0);
+  changeIndexType(0);
+  changeIndexCond(0);
 }
 
 void KSpreadDlgValidity::OkPressed()

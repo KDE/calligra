@@ -5387,6 +5387,8 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             if ( !ok )
             {
                 d->extra()->validity->valMin = listVal[0].toInt(&ok);
+                if ( !ok )
+                    kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
 #if 0
                 if ( !ok )
                     d->extra()->validity->valMin = listVal[0];
@@ -5397,6 +5399,9 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             if ( !ok )
             {
                 d->extra()->validity->valMax = listVal[1].toInt(&ok);
+                if ( !ok )
+                    kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
+
 #if 0
 
                 if ( !ok )
@@ -5419,6 +5424,9 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             if ( !ok )
             {
                 d->extra()->validity->valMin = listVal[0].toInt(&ok);
+                if ( !ok )
+                    kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
+
 #if 0
                 if ( !ok )
                    bool ok = false;
@@ -5430,6 +5438,9 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             if ( !ok )
             {
                 d->extra()->validity->valMax = listVal[1].toInt(&ok);
+                if ( !ok )
+                    kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
+
 #if 0
 
                 if ( !ok )
@@ -5484,6 +5495,9 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
                 if ( !ok )
                 {
                     d->extra()->validity->valMin = listVal[0].toInt(&ok);
+                if ( !ok )
+                    kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
+
 #if 0
                     if ( !ok )
                         d->extra()->validity->valMin = listVal[0];
@@ -5494,6 +5508,9 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
                 if ( !ok )
                 {
                     d->extra()->validity->valMax = listVal[1].toInt(&ok);
+                    if ( !ok )
+                        kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
+
 #if 0
 
                     if ( !ok )
@@ -5513,6 +5530,9 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
                 if ( !ok )
                 {
                     d->extra()->validity->valMin = listVal[0].toInt(&ok);
+                    if ( !ok )
+                        kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
+
 #if 0
                     if ( !ok )
                         d->extra()->validity->valMin = listVal[0];
@@ -5523,6 +5543,9 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
                 if ( !ok )
                 {
                     d->extra()->validity->valMax = listVal[1].toInt(&ok);
+                    if ( !ok )
+                        kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
+
 #if 0
                     if ( !ok )
                         d->extra()->validity->valMax = listVal[1];
@@ -5628,6 +5651,9 @@ void KSpreadCell::loadOasisValidationCondition( QString &valExpression )
     if ( !ok )
     {
         d->extra()->validity->valMin = value.toInt(&ok);
+        if ( !ok )
+            kdDebug()<<" Try to parse this value :"<<value<<endl;
+
 #if 0
         if ( !ok )
             d->extra()->validity->valMin = value;
