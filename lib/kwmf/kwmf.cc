@@ -275,7 +275,32 @@ void KWmf::invokeHandler(
     {
         kdDebug(s_area) << "invokeHandler: opcode: " << funcTab[i].name <<
             " operands: " << words << endl;
-        (this->*result)(words, operands);
+
+        // We don't invoke the handler directly on the incoming operands, but
+        // via a temporary datastream. This adds overhead, but eliminates the
+        // need for the individual handlers to read *exactly* the right amount
+        // of data (thus speeding development, and possibly adding some
+        // future-proofing).
+
+        if (words)
+        {
+            QByteArray *record = new QByteArray(words * 2);
+            QDataStream *body;
+
+            operands.readRawBytes(record->data(), words * 2);
+            body = new QDataStream(*record, IO_ReadOnly);
+            body->setByteOrder(QDataStream::LittleEndian);
+            (this->*result)(words, *body);
+            delete body;
+            delete record;
+        }
+        else
+        {
+            QDataStream *body = new QDataStream();
+
+            (this->*result)(words, *body);
+            delete body;
+        }
     }
 }
 
