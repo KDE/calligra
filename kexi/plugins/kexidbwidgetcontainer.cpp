@@ -17,16 +17,28 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef PROPERTYBUFFER_H
-#define PROPERTYBUFFER_H
+#include "kexidbwidgetcontainer.h"
 
-#include <qmap.h>
-#include <qptrlist.h>
-#include <qwidget.h>
+KexiDBWidgetContainer::KexiDBWidgetContainer(QWidget *parent, const char *name, QString identifier)
+ : KFormEditor::WidgetContainer(parent, name, identifier)
+{
+}
 
-#include "propertybufferitem.h"
+QString
+KexiDBWidgetContainer::dataSource() const
+{
+	return m_dataSource;
+}
 
-typedef QMap<QObject *, PropertyBufferItem *> PropertyBuffer;
-typedef QPtrList<QWidget> WidgetList;
+void
+KexiDBWidgetContainer::setDataSource(QString source)
+{
+	m_dataSource = source;
+}
 
-#endif
+KexiDBWidgetContainer::~KexiDBWidgetContainer()
+{
+}
+
+#include "kexidbwidgetcontainer.moc"
+

@@ -4,8 +4,8 @@
 #include <qstring.h>
 #include <qmap.h>
 #include <klocale.h>
+#include <qstringlist.h>
 
-class QStringList;
 class KexiDBRecord;
 
 
@@ -30,11 +30,11 @@ public:
 
 	KexiDataProvider();
 	virtual ~KexiDataProvider();
-	virtual QStringList datasets()=0;
-	virtual QStringList datasetNames()=0;
-	virtual QStringList fields(const QString& identifier)=0;
-	virtual KexiDBRecord *records(const QString& identifier,Parameters params)=0;
-	virtual ParameterList parameters(const QString &identifier)=0;
+	virtual QStringList datasets() {return QStringList();}
+	virtual QStringList datasetNames() { return QStringList();}
+	virtual QStringList fields(const QString& identifier) {return QStringList();}
+	virtual KexiDBRecord *records(const QString& identifier,Parameters params) {return 0;}
+	virtual ParameterList parameters(const QString &identifier) { return ParameterList();}
 };
 
 #endif

@@ -17,16 +17,37 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef PROPERTYBUFFER_H
-#define PROPERTYBUFFER_H
+#ifndef KEXIDBWIDGETCONTAINER_H
+#define KEXIDBWIDGETCONTAINER_H
 
-#include <qmap.h>
-#include <qptrlist.h>
-#include <qwidget.h>
+#include "formeditor/widgetcontainer.h"
+#include "formeditor/container_frame.h"
 
-#include "propertybufferitem.h"
+/**
+ * this class aims to be a replacement for KFormEditor's default widget container
+ * which handles db-records with a specified db-source and give some nice scripting ;) options.
+ */
 
-typedef QMap<QObject *, PropertyBufferItem *> PropertyBuffer;
-typedef QPtrList<QWidget> WidgetList;
+class KexiDBWidgetContainer : public KFormEditor::WidgetContainer
+{
+	Q_OBJECT
+
+	//db-properties
+	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true SCRIPTABLE true)
+
+	public:
+		KexiDBWidgetContainer(QWidget *parent, const char *name=0, QString identifier=QString::null);
+		~KexiDBWidgetContainer();
+
+		/*
+		 * db binding
+		 */
+		QString		dataSource() const;
+		void		setDataSource(QString source);
+
+	protected:
+		QString		m_dataSource;
+};
 
 #endif
+

@@ -32,6 +32,7 @@ template <class type> class QPtrList;
 class KAction;
 class KexiProject;
 class KexiFormHandlerItem;
+class KexiDBWidgetContainer;
 
 namespace KFormEditor {
 	class WidgetContainer;
@@ -43,7 +44,7 @@ class KexiFormBase : public KexiDialogBase
 	Q_OBJECT
    
 	public: 
-		KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent=0, const char *name=0, QString identifier=QString::null);
+		KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent=0, const QString &data=QString::null, const char *name=0, QString identifier=QString::null);
 		~KexiFormBase();
 		
                 virtual KXMLGUIClient *guiClient();
@@ -58,14 +59,16 @@ class KexiFormBase : public KexiDialogBase
 		class ViewGUIClient;
 		friend class ViewGUIClient;
 		static ViewGUIClient *m_viewGUIClient;
-		KFormEditor::WidgetContainer *topLevelEditor;
+		KexiDBWidgetContainer *topLevelEditor;
 	protected slots:
+		void slotWidgetLabel();
 		void slotWidgetLineEdit();
 		void slotWidgetPushButton();
 		void slotWidgetURLRequester();
 		void slotWidgetFrame();
 		void slotWidgetTabWidget();
-		
+
+		void slotToggleFormMode(bool state);
 };
 
 #endif

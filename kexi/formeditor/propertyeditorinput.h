@@ -35,6 +35,9 @@ class PropertyEditorInput : public PropertyEditorEditor
 
 		virtual QVariant	getValue();
 
+	protected slots:
+		void			slotTextChanged(const QString &text);
+
 	protected:
 		QLineEdit		*m_lineedit;
 };

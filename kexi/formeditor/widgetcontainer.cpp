@@ -66,6 +66,7 @@ namespace KFormEditor {
 		m_widgetList = 0;
 		m_propertyBuffer = 0;
 
+		m_editing = true;
 	}
 
         void WidgetContainer::setTopLevelContainer(WidgetContainer *tpc)
@@ -98,6 +99,11 @@ namespace KFormEditor {
 		{
 			m_pendingWidget=widget;
 			m_widgetRectRequested=true;
+
+			if(m_widgetList)
+			{
+				m_widgetList->append(widget);
+			}
 		}
 	}
 
@@ -108,6 +114,9 @@ namespace KFormEditor {
 
 	void WidgetContainer::mousePressEvent(QMouseEvent *ev)
 	{
+		if(!m_editing)
+			return;
+
 		if(m_widgetRectRequested)
 		{
 			kdDebug()<<"Starting placement operation:"<<((m_topLevelContainer==this)?"toplevel":"subcontainer")<<endl;
@@ -139,6 +148,9 @@ namespace KFormEditor {
 
 	void WidgetContainer::mouseMoveEvent(QMouseEvent *ev)
 	{
+		if(!m_editing)
+			return;
+
 		if(m_widgetRect)
 		{
         	        m_widgetRectEX = (((float)ev->x())/((float)m_dotSpacing)+0.5);
@@ -152,6 +164,9 @@ namespace KFormEditor {
 
 	void WidgetContainer::resizeEvent(QResizeEvent *ev)
 	{
+		if(!m_editing)
+			return;
+
 		QPainter *p = new QPainter();
 		m_dotBg = QPixmap(size());
 		p->begin(&m_dotBg, this);
@@ -193,6 +208,9 @@ namespace KFormEditor {
 
 	void WidgetContainer::installEventFilterRecursive(QObject *obj)
 	{
+		if(!m_editing)
+			return;
+
 		obj->installEventFilter(this);
 		static_cast<QWidget*>(obj)->setCursor(QCursor(SizeAllCursor));
 		if ( obj->children() )
@@ -212,8 +230,32 @@ namespace KFormEditor {
 
 	}
 
+	void WidgetContainer::removeEventFilterRecursive(QObject *obj)
+	{
+		obj->removeEventFilter(this);
+		static_cast<QWidget*>(obj)->unsetCursor();
+		if ( obj->children() )
+		{
+			QObjectListIt it( *obj->children() );
+			QObject *obj1;
+	        	while( (obj1=it.current()) != 0 )
+			{
+				++it;
+				if (obj1->isWidgetType())
+				{
+					if (obj1->qt_cast("KFormEditor::WidgetContainer")) continue;
+				    	removeEventFilterRecursive(obj1);
+				}
+	            	}
+	        }
+
+	}
+
 	void WidgetContainer::mouseReleaseEvent(QMouseEvent *ev)
 	{
+		if(!m_editing)
+			QApplication::sendEvent(parent(),ev);
+
 		if(m_widgetRect) {
 
 			int widgetwidth=m_widgetRectEX-m_widgetRectBX;
@@ -255,6 +297,15 @@ namespace KFormEditor {
 		} else
 		  if (m_topLevelContainer) QApplication::sendEvent(parent(),ev);
 
+	}
+
+	void WidgetContainer::keyPressEvent(QKeyEvent *ev)
+	{
+		if(!m_editing)
+		{
+			focusNextPrevChild(true);
+			return;
+		}
 	}
 
 	void WidgetContainer::insertWidget(QWidget *widget, const QRect &r)
@@ -307,8 +358,9 @@ namespace KFormEditor {
 	}
 	bool WidgetContainer::eventFilter(QObject *obj, QEvent *ev)
 	{
-		if (m_pendingWidget) return false;
 		kdDebug() << "event!" << endl;
+
+		if (m_pendingWidget) return false;
 		QWidget *sh;
 
 		QWidget *tmp=static_cast<QWidget*>(obj->qt_cast("QWidget"));;
@@ -319,6 +371,12 @@ namespace KFormEditor {
 		switch (ev->type())
 		{
 			case QEvent::MouseButtonPress:
+				if(!m_editing)
+				{
+					static_cast<QWidget*>(obj)->setFocus();
+					return false;
+				}
+
 				if (cif) a=cif->allowMousePress(obj,ev);
 				if (a==containerIface::None) return false;
 				if (a & containerIface::Activate)
@@ -329,9 +387,14 @@ namespace KFormEditor {
 					m_moveBX=static_cast<QMouseEvent*>(ev)->x();
 					m_moveBY=static_cast<QMouseEvent*>(ev)->y();
 				}
+
+				
 				return (a & containerIface::EatEvent);
 				break;
 			case QEvent::MouseButtonRelease:
+				if(!m_editing)
+					return false;
+	
 				if (m_activeMoveWidget)
 				{
 					m_activeMoveWidget=0;
@@ -340,6 +403,9 @@ namespace KFormEditor {
 				return false;
 				break;
 			case QEvent::MouseMove:
+				if(!m_editing)
+					return false;
+
 				if (m_activeMoveWidget)
 				{
 					int tmpx,tmpy;
@@ -370,7 +436,7 @@ namespace KFormEditor {
 			case QEvent::Leave:
 			case QEvent::Wheel:
 			case QEvent::ContextMenu:
-				return true; // ignore
+				return false; // ignore
 			default:
 				break;
 		}
@@ -395,6 +461,46 @@ namespace KFormEditor {
 		for(c = m_subWidgets.first(); c; c = m_subWidgets.next())
 		{
 			c->setPropertyBuffer(pb);
+		}
+	}
+
+	void WidgetContainer::setEditMode(bool e)
+	{
+		if(!e)
+		{
+			m_editing = false;
+			setBackgroundMode(PaletteBackground);
+			update();
+			setFocusPolicy(QWidget::StrongFocus);
+
+			if(m_resizeHandleSet)
+			{
+				delete m_resizeHandleSet;
+				m_resizeHandleSet = 0;
+			}
+			
+			if(m_widgetList)
+			{
+				kdDebug() << "WidgetContainer::setEditMode(): rm" << endl;
+				for(QWidget *it = m_widgetList->first(); it; it = m_widgetList->next())
+				{
+//					it->removeEventFilter(this);
+//					removeEventFilterRecursive(it);
+					kdDebug() << "WidgetContainer::setEditMode(): removing " << it->className() << endl;
+				}
+			}
+		}
+		else
+		{
+			m_editing = true;
+			setBackgroundPixmap(m_dotBg);
+			update();
+			setFocus();
+			for(QWidget *it = m_widgetList->first(); it; it = m_widgetList->next())
+			{
+				installEventFilterRecursive(it);
+				kdDebug() << "WidgetContainer::setEditMode(): adding " << it->className() << endl;
+			}
 		}
 	}
 

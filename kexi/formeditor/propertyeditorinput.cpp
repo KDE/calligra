@@ -32,6 +32,14 @@ PropertyEditorInput::PropertyEditorInput(QWidget *parent, QVariant::Type type, Q
 	m_lineedit->show();
 
 	setWidget(m_lineedit);
+
+	connect(m_lineedit, SIGNAL(textChanged(const QString &)), this, SLOT(slotTextChanged(const QString &)));
+}
+
+void
+PropertyEditorInput::slotTextChanged(const QString &text)
+{
+	emit changed(this);
 }
 
 QVariant

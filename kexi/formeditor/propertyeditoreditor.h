@@ -39,6 +39,7 @@ class PropertyEditorEditor : public QWidget
 	signals:
 		void			accept(PropertyEditorEditor *);
 		void			reject(PropertyEditorEditor *);
+		void			changed(PropertyEditorEditor *);
 
 	protected:
 		virtual void		resizeEvent(QResizeEvent *ev);

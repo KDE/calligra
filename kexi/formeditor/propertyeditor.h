@@ -43,6 +43,7 @@ class PropertyEditor : public KListView
 	protected slots:
 		void	slotEditorAccept(PropertyEditorEditor *editor);
 		void	slotEditorReject(PropertyEditorEditor *editor);
+		void	slotValueChanged(PropertyEditorEditor *editor);
 
 	protected:
 		void	createEditor(PropertyEditorItem *i, const QRect &geometry);

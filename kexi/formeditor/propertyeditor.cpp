@@ -46,6 +46,11 @@ void
 PropertyEditor::setObject(QObject *object)
 {
 	clear();
+	if(m_currentEditor)
+	{
+		delete m_currentEditor;
+		m_currentEditor = 0;
+	}
 
 	QStrList pList = object->metaObject()->propertyNames(true);
 
@@ -111,6 +116,8 @@ PropertyEditor::createEditor(PropertyEditorItem *i, const QRect &geometry)
 	
 	connect(editor, SIGNAL(reject(PropertyEditorEditor *)), this,
 	 SLOT(slotEditorReject(PropertyEditorEditor *)));
+	connect(editor, SIGNAL(changed(PropertyEditorEditor *)), this,
+	 SLOT(slotValueChanged(PropertyEditorEditor *)));
 	editor->setGeometry(geometry);
 	editor->resize(geometry.width(), geometry.height());
 	editor->show();
@@ -119,6 +126,13 @@ PropertyEditor::createEditor(PropertyEditorItem *i, const QRect &geometry)
 
 	m_currentEditor = editor;
 	m_editItem = i;
+}
+
+void
+PropertyEditor::slotValueChanged(PropertyEditorEditor *editor)
+{
+	if(m_currentEditor)
+		m_editItem->setValue(m_currentEditor->getValue(), true);
 }
 
 void

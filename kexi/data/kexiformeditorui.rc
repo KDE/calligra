@@ -4,6 +4,7 @@
 <MenuBar>
 	<Menu name="widgets">
 		<text>&amp;Widgets</text>
+		<Action name="widget_label"/>
 		<Action name="widget_line_edit"/>
 		<Action name="widget_push_button"/>
 		<Action name="widget_url_requester"/>
@@ -18,6 +19,7 @@
 
 <ToolBar name="widgetsToolBar">
 	<Text>Widgets</Text>
+	<Action name="widget_label"/>
 	<Action name="widget_line_edit"/>
 	<Action name="widget_push_button"/>
 	<Action name="widget_url_requester"/>

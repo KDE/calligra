@@ -17,16 +17,30 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef PROPERTYBUFFER_H
-#define PROPERTYBUFFER_H
+#ifndef KEXIDATASOURCEDLG_H
+#define KEXIDATASOURCEDLG_H
 
-#include <qmap.h>
-#include <qptrlist.h>
-#include <qwidget.h>
+#include <qdialog.h>
 
-#include "propertybufferitem.h"
+class KexiProject;
+class QComboBox;
+class QLineEdit;
 
-typedef QMap<QObject *, PropertyBufferItem *> PropertyBuffer;
-typedef QPtrList<QWidget> WidgetList;
+class KexiDataSourceDlg : public QDialog
+{
+	Q_OBJECT
+
+	public:
+		KexiDataSourceDlg(KexiProject *p, QWidget *parent=0, const char *name=0);
+		~KexiDataSourceDlg();
+
+		QString		source() const;
+		QString		name() const;
+
+	private:
+		QComboBox	*m_ds;
+		QLineEdit	*m_name;
+};
 
 #endif
+

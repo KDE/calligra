@@ -48,6 +48,9 @@
 #include "formeditor/container_tabwidget.h"
 #include "formeditor/propertyeditor.h"
 
+#include "kexidbwidgetcontainer.h"
+#include "kexidbwidgets.h"
+
 class KexiFormBase::EditGUIClient: public KXMLGUIClient
 {
 	public:
@@ -56,6 +59,9 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 			m_formMode = new KToggleAction(i18n("Edit Form"),"form_edit",
 				0,actionCollection(),"form_edit");
 
+			m_label = new KAction(i18n("Text Label"), "label",
+				Key_F4, actionCollection(), "widget_label");
+			
 		        m_lineedit = new KAction(i18n("Line Edit"), "lineedit",
                 		Key_F5, actionCollection(), "widget_line_edit");
 
@@ -76,14 +82,17 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 		void activate(QObject* o)
 		{
 			m_formMode->setChecked(true);
+			connect(m_label,SIGNAL(activated()),o,SLOT(slotWidgetLabel()));
 			connect(m_lineedit,SIGNAL(activated()),o,SLOT(slotWidgetLineEdit()));
 			connect(m_button,SIGNAL(activated()),o,SLOT(slotWidgetPushButton()));
 			connect(m_urlreq,SIGNAL(activated()),o,SLOT(slotWidgetURLRequester()));
 			connect(m_frame,SIGNAL(activated()),o,SLOT(slotWidgetFrame()));
 			connect(m_tabWidget,SIGNAL(activated()),o,SLOT(slotWidgetTabWidget()));
+			connect(m_formMode, SIGNAL(toggled(bool)), o, SLOT(slotToggleFormMode(bool)));
 		}
 		void deactivate(QObject* o)
 		{
+			m_label->disconnect(o);
 			m_lineedit->disconnect(o);
 			m_button->disconnect(o);
 			m_urlreq->disconnect(o);
@@ -93,6 +102,7 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 	private:
 	KToggleAction *m_formMode;
 
+	KAction *m_label;
 	KAction *m_lineedit;
 	KAction *m_button;
 	KAction *m_urlreq;
@@ -131,7 +141,7 @@ KexiFormBase::EditGUIClient *KexiFormBase::m_editGUIClient=0;
 KexiFormBase::ViewGUIClient *KexiFormBase::m_viewGUIClient=0;
 
 
-KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent, const char *name, QString identifier)
+KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent, const QString &s, const char *name, QString identifier)
 	: KexiDialogBase(view,parent,name)
 {
 	setMinimumWidth(50);
@@ -148,9 +158,10 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 
 	QVBoxLayout *l=new QVBoxLayout(this);
 	l->setAutoAdd(true);
-	topLevelEditor=new KFormEditor::WidgetContainer(this,"foo","bar");
+	topLevelEditor=new KexiDBWidgetContainer(this,"foo","bar");
 	topLevelEditor->setWidgetList(item->widgetList());
 	topLevelEditor->setPropertyBuffer(item->propertyBuffer());
+	topLevelEditor->setDataSource(s);
 
 	QDockWindow *editorWindow = new QDockWindow(view->mainWindow(), "edoc");
 	editorWindow->setCaption(i18n("Properties"));
@@ -187,10 +198,15 @@ void KexiFormBase::deactivateActions()
 }
 
 
+void KexiFormBase::slotWidgetLabel()
+{
+	topLevelEditor->addInteractive(new KexiDBLabel(topLevelEditor, "label"));
+}
+
 void KexiFormBase::slotWidgetLineEdit()
 {
 	kdDebug() << "add line edit widget at " << this << endl;
-	topLevelEditor->addInteractive(new KLineEdit(topLevelEditor));
+	topLevelEditor->addInteractive(new KexiDBLineEdit(topLevelEditor));
 }
 
 void KexiFormBase::slotWidgetPushButton()
@@ -208,11 +224,15 @@ void KexiFormBase::slotWidgetTabWidget()
 	topLevelEditor->addInteractive(new KFormEditor::container_TabWidget(topLevelEditor,"tabwidget"));
 }
 
-
-
 void KexiFormBase::slotWidgetURLRequester()
 {
 	topLevelEditor->addInteractive(new KURLRequester("urlrequest",topLevelEditor));
+}
+
+void KexiFormBase::slotToggleFormMode(bool state)
+{
+	kdDebug() << "KexiFormBase::slotToggleFormMode()" << endl;
+	topLevelEditor->setEditMode(state);
 }
 
 KexiFormBase::~KexiFormBase(){

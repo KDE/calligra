@@ -53,6 +53,8 @@ namespace KFormEditor
 			void setWidgetList(WidgetList *wl);
 			void setPropertyBuffer(PropertyBuffer *pb);
 
+			void setEditMode(bool e);
+
 		protected:
 			void setTopLevelContainer(WidgetContainer *tpc);
 			WidgetContainer *topLevelContainer()const;
@@ -61,9 +63,11 @@ namespace KFormEditor
 			void mousePressEvent(QMouseEvent *ev);
 			void mouseReleaseEvent(QMouseEvent *ev);
 			void resizeEvent(QResizeEvent *ev);
+			void keyPressEvent(QKeyEvent *ev);
 
 			void insertWidget(QWidget *widget, const QRect &r);
 			void installEventFilterRecursive(QObject *obj);
+			void removeEventFilterRecursive(QObject *obj);
 
 			void setResizeHandles(QWidget *m_activeWidget);
 			void activateWidget(QWidget *widget);
@@ -94,6 +98,7 @@ namespace KFormEditor
 			QWidget		*m_pendingWidget;
 			WidgetList	*m_widgetList;
 			PropertyBuffer	*m_propertyBuffer;
+			bool		m_editing;
 
 		protected slots:
 			bool eventFilter(QObject *obj, QEvent *ev);

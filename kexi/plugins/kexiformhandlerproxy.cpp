@@ -29,6 +29,7 @@
 #include "kexiformhandleritem.h"
 #include "kexiprojecthandleritem.h"
 #include "kexiformbase.h"
+#include "kexidatasourcedlg.h"
 
 KexiFormHandlerProxy::KexiFormHandlerProxy(KexiFormHandler *handler, KexiView *view)
  : KexiProjectHandlerProxy(handler, view), KXMLGUIClient()
@@ -63,14 +64,15 @@ void
 KexiFormHandlerProxy::slotCreate()
 {
 	bool ok = false;
-	QString name = KLineEditDlg::getText(i18n("New Form"), i18n("Form name:"), "", &ok, 0);
-
-	if(ok && name.length() > 0)
+//	QString name = KLineEditDlg::getText(i18n("New Form"), i18n("Form name:"), "", &ok, 0);
+	KexiDataSourceDlg *d = new KexiDataSourceDlg(m_view->project(), kexiView());
+	if(d->exec() == QDialog::Accepted)
 	{
+		QString name = d->name();
 		KexiFormHandlerItem *i = new KexiFormHandlerItem(part(), name, name);
 		part()->items()->insert(name, i);
                 emit m_formHandler->itemListChanged(part());
-		KexiFormBase *nform = new KexiFormBase(kexiView(), i, 0, "nform", name);
+		KexiFormBase *nform = new KexiFormBase(kexiView(), i, 0, d->source(), "nform", name);
 		nform->show();
 	}
 }

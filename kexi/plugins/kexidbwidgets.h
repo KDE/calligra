@@ -17,16 +17,44 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef PROPERTYBUFFER_H
-#define PROPERTYBUFFER_H
+#ifndef KEXIDBWIDGETS_H
+#define KEXIDBWIDGETS_H
 
-#include <qmap.h>
-#include <qptrlist.h>
-#include <qwidget.h>
+#include <qlineedit.h>
+#include <qlabel.h>
 
-#include "propertybufferitem.h"
+class KexiDBLineEdit : public QLineEdit
+{
+	Q_OBJECT
+	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 
-typedef QMap<QObject *, PropertyBufferItem *> PropertyBuffer;
-typedef QPtrList<QWidget> WidgetList;
+	public:
+		KexiDBLineEdit(QWidget *parent=0, const char *name=0);
+		~KexiDBLineEdit();
+
+		QString	dataSource() const;
+		void	setDataSource(const QString &source);
+
+	protected:
+		QString	m_source;
+};
+
+
+class KexiDBLabel : public QLabel
+{
+	Q_OBJECT
+	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+
+	public:
+		KexiDBLabel(QWidget *parent=0, const char *name=0);
+		~KexiDBLabel();
+
+		QString dataSource() const;
+		void	setDataSource(const QString &source);
+
+	protected:
+		QString	m_source;
+};
 
 #endif
+

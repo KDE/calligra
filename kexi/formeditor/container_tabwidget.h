@@ -18,6 +18,8 @@ namespace KFormEditor {
 		virtual ~container_TabWidget();
 		virtual void registerContainers(WidgetContainer *par);
 		virtual containerIface::Action allowMousePress(QObject*,QEvent*);
+
+		
 	private:
 		WidgetContainer *m_container1;
 		WidgetContainer *m_container2;
