@@ -149,8 +149,7 @@ class KexiMainWindowImpl::Private
 		KMdiToolViewAccessor* navToolWindow;
 		KMdiToolViewAccessor* propEditorToolWindow;
 
-		QWidget *focus_before_popup;
-		QObject *last_focusout_w;
+		QGuardedPtr<QWidget> focus_before_popup;
 //		KexiRelationPart *relationPart;
 
 		int privateIDCounter; //!< counter: ID for private "document" like Relations window
@@ -177,7 +176,6 @@ class KexiMainWindowImpl::Private
 		curDialog=0;
 		block_KMdiMainFrm_eventFilter=false;
 		focus_before_popup=0;
-		last_focusout_w=0;
 //		relationPart=0;
 		privateIDCounter=0;
 		action_view_nav=0;
@@ -227,6 +225,9 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 	connect( m_pMdi, SIGNAL(noMaximizedChildFrmLeft(KMdiChildFrm*)), this, SLOT(slotNoMaximizedChildFrmLeft(KMdiChildFrm*)));
 	connect( m_pMdi, SIGNAL(lastChildFrmClosed()), this, SLOT(slotLastChildFrmClosed()));
 	connect( this, SIGNAL(childViewIsDetachedNow(QWidget*)), this, SLOT(slotChildViewIsDetachedNow(QWidget*)));
+	connect( this, SIGNAL(mdiModeHasBeenChangedTo(KMdi::MdiMode)), 
+		this, SLOT(slotMdiModeHasBeenChangedTo(KMdi::MdiMode)));
+
 
 	initActions();
 	createShellGUI(true);
@@ -1787,7 +1788,7 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 		if (e->type()==QEvent::Hide || e->type()==QEvent::Show) {
 			KexiVDebug << e->type() << endl;
 			focus_w = focusWindow();
-			if (d->focus_before_popup) {
+			if (!d->focus_before_popup.isNull()) {
 				d->focus_before_popup->setFocus();
 				d->focus_before_popup=0;
 			} else {
@@ -1842,7 +1843,7 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 	}
 #endif
 
-	if (d->focus_before_popup && e->type()==QEvent::FocusOut && obj->inherits("KMenuBar")) {
+	if (!d->focus_before_popup.isNull() && e->type()==QEvent::FocusOut && obj->inherits("KMenuBar")) {
 		//d->nav->setFocus();
 		d->focus_before_popup->setFocus();
 		d->focus_before_popup=0;
@@ -2056,6 +2057,12 @@ void KexiMainWindowImpl::slotDirtyFlagChanged(KexiDialogBase* dlg)
 	d->nav->updateItemName( item, dlg->dirty() );
 	updateAppCaption();
 	invalidateActions();
+}
+
+void KexiMainWindowImpl::slotMdiModeHasBeenChangedTo(KMdi::MdiMode)
+{
+	activateFirstWin();
+	activeWindowChanged(activeWindow());
 }
 
 #include "keximainwindowimpl.moc"

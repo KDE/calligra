@@ -288,6 +288,8 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		/*! Handles changes in 'dirty' flag for dialogs. */
 		void slotDirtyFlagChanged(KexiDialogBase*);
 
+		void slotMdiModeHasBeenChangedTo(KMdi::MdiMode);
+
 	private:
 
 		class Private;
