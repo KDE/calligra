@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,9 +33,12 @@
    License version 2.
 */
 
+#include <qtextcodec.h>
+
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <koFilterChain.h>
+#include <koFilterManager.h>
 
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
@@ -67,31 +70,44 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
         return KoFilter::NotImplemented;
     }
 
-    HtmlExportDialog dialog;
-
-    if (!dialog.exec())
-    {
-        kdDebug(30503) << "Dialog was aborted! Aborting filter!" << endl;
-        return KoFilter::UserCancelled;
-    }
+    bool batch=false;
+    if ( m_chain->manager() )
+        batch = m_chain->manager()->getBatchMode();
 
     HtmlWorker* worker;
 
-    const HtmlExportDialog::Mode mode = dialog.getMode();
-    switch (mode)
+    if (batch)
     {
-    case HtmlExportDialog::Light:
-      worker=new HtmlDocStructWorker();
-      break;
-    case HtmlExportDialog::Basic:
-      worker=new HtmlBasicWorker();
-      break;
-    default: // CSS
-      worker=new HtmlCssWorker();
+        worker=new HtmlCssWorker();
+        worker->setXML(true);
+        worker->setCodec(QTextCodec::codecForName("UTF-8"));
     }
+    else
+    {
+        HtmlExportDialog dialog;
 
-    worker->setXML(dialog.isXHtml());
-    worker->setCodec(dialog.getCodec());
+        if (!dialog.exec())
+        {
+            kdDebug(30503) << "Dialog was aborted! Aborting filter!" << endl;
+            return KoFilter::UserCancelled;
+        }
+
+        const HtmlExportDialog::Mode mode = dialog.getMode();
+        switch (mode)
+        {
+        case HtmlExportDialog::Light:
+        worker=new HtmlDocStructWorker();
+        break;
+        case HtmlExportDialog::Basic:
+        worker=new HtmlBasicWorker();
+        break;
+        default: // CSS
+        worker=new HtmlCssWorker();
+        }
+
+        worker->setXML(dialog.isXHtml());
+        worker->setCodec(dialog.getCodec());
+    }
 
     KWEFKWordLeader* leader=new KWEFKWordLeader(worker);
 
