@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 INCLUDES = $(all_includes)
 lib_LTLIBRARIES =  libkformeditor.la
 libkformeditor_la_LDFLAGS = -no-undefined $(all_libraries)
@@ -11,4 +13,3 @@ servicetypes_DATA=widgetfactory.desktop
 
 SUBDIRS = . factories test
 
-include $(top_srcdir)/kexi/Makefile.global

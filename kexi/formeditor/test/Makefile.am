@@ -1,5 +1,7 @@
 ## Makefile.am for kformdesigner
 
+include $(top_srcdir)/kexi/Makefile.global
+
 # this is the program that gets installed.  it's name is used for all
 # of the other Makefile.am variables
 bin_PROGRAMS = kformdesigner
@@ -28,4 +30,3 @@ kdelnk_DATA = kformdesigner.desktop
 rcdir = $(kde_datadir)/kformdesigner
 rc_DATA = kfmui.rc
 
-include $(top_srcdir)/kexi/Makefile.global

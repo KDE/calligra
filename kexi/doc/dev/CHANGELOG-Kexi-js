@@ -177,6 +177,56 @@ TODO: Change "File" menu entry to "Database"
 TODO: add sorting projects information using KexiProjectData::lastOpened
 TODO: also add this info as "Database>Open Recent" menu subentry
 
+MAYBE TODO: REUSE QSignalMapper for actions with arguments
+
+
+TODO: add permissions information to connection : and - for sqlite - check if file is RO
+   and then set RO flag
+
+
+2003-11-12
+2003-11-13
+- Kexi startup procedure for both files and db connections introduced
+- startup dialog integrated
+- projectdata redesigned
+- menu items improoved, polished
+- ConnectionData:
+  -added id for connectiondata
+  -some const added
+
+2003-11-10
+- added global kexi version info, like in koffice
+- configure.in.in: added checking for qextmdi if required
+
+
+2003-11-07
+2003-11-06
+2003-11-05
+- KexiTableView: 
+ - Navigation bar added
+ - cell's focus indicator frame is now also visible after focusout
+ - before entering to  edit mode, we ensure that current cell is visible
+ - vscrollbar tooltip added
+
+- Cursor: some members made private or protected
+- Cursor: m_beforeFirst is probably not needed anymore; m_at==0 is enough
+- Field: isNumericType(), isTextType() added, etc.;  
+   type names are now i18n'd in an array;
+   some methods inlined
+
+
+TODO: void KexiTableView::cancelRowEdit() still dont repaint properly!!
+TODO: update on lostfocus
+
+- SQLiteConnection:: sqlite_freemem() used to free error message when needed;
+	do the same for SQLiteCursor
+- serverResult(), etc. methods aded also to Cursor class, so finer grained error 
+  info is available
+
+  
+2003-11-04
+- Documentation added for few newer and older methods.
+
 2003-10-31
 - KexiDB::Cursor: many code like drv_getNextRecord() moved from SQLiteCursor down 
   to Cursor class

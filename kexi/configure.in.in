@@ -34,6 +34,7 @@ AC_TRY_COMPILE([
 	dnl looking for $kexi_compat_qextmdi_lib
 	kexi_compat_qextmdi_errmsg="For kde3.1 qextmdi library is needed from http://kexi-project.org/resources"
 	AC_FIND_FILE($kexi_compat_qextmdi_lib, $kde_libraries, kexi_compat_qextmdi_dir)
+#	AC_FIND_FILE($kexi_compat_qextmdi_lib, $kde_libdirs, kexi_compat_qextmdi_dir)
 	if test ! -r "$kexi_compat_qextmdi_dir/$kexi_compat_qextmdi_lib"; then
 		AC_MSG_ERROR([No $kexi_compat_qextmdi_lib found in $kde_libraries !
 		$kexi_compat_qextmdi_errmsg])

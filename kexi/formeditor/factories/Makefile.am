@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 INCLUDES = -I$(top_srcdir)/kexi/formeditor $(all_includes)
 kde_module_LTLIBRARIES = containers.la
 containers_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) -module
@@ -13,4 +15,3 @@ METASOURCES = AUTO
 #libstdwidgets_la_SOURCES =  stdwidgets.h stdwidgets.cpp
 #libstdwidgets_la_LIBADD = $(top_builddir)kexi/formeditor/libkformeditor.la
 
-include $(top_srcdir)/kexi/Makefile.global
