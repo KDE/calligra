@@ -1809,6 +1809,8 @@ void KWProtectContentCommand::execute()
     m_pFrameSet->textObject()->setProtectContent(m_bProtect);
     m_pFrameSet->kWordDocument()->updateTextFrameSetEdit();
     m_pFrameSet->kWordDocument()->testAndCloseAllFrameSetProtectedContent();
+    m_pFrameSet->kWordDocument()->testAndCloseAllFrameSetProtectedContent();
+    m_pFrameSet->kWordDocument()->updateRulerInProtectContentMode();
 
 }
 
@@ -1817,6 +1819,8 @@ void KWProtectContentCommand::unexecute()
     m_pFrameSet->textObject()->setProtectContent(!m_bProtect);
     m_pFrameSet->kWordDocument()->updateTextFrameSetEdit();
     m_pFrameSet->kWordDocument()->testAndCloseAllFrameSetProtectedContent();
+    m_pFrameSet->kWordDocument()->updateRulerInProtectContentMode();
+
 }
 
 

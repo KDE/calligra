@@ -713,6 +713,7 @@ public:
 
     void configureSpellChecker();
     void testAndCloseAllFrameSetProtectedContent();
+    void updateRulerInProtectContentMode();
 
     KoPageLayout pageLayout() const;
 

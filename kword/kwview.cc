@@ -6319,6 +6319,22 @@ void KWView::testAndCloseAllFrameSetProtectedContent()
     }
 }
 
+void KWView::updateRulerInProtectContentMode()
+{
+    KWTextFrameSetEdit* edit = currentTextEdit();
+    KoRuler * hRuler = m_gui ? m_gui->getHorzRuler() : 0;
+
+    if ( edit && hRuler) {
+        kdDebug()<<" void KWView::updateRulerInProtectContentMode() :"<<edit->textFrameSet()->protectContent()<<endl;
+        if ( !edit->textFrameSet()->protectContent() )
+            hRuler->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
+        else
+            hRuler->changeFlags(0);
+        hRuler->repaint();
+    }
+}
+
+
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */
 /******************************************************************/

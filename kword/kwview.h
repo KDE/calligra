@@ -176,6 +176,7 @@ public:
     void configureSpellChecker();
     void testAndCloseAllFrameSetProtectedContent();
     void updateBgSpellCheckingState();
+    void updateRulerInProtectContentMode();
 
 public slots:
     void fileStatistics();
