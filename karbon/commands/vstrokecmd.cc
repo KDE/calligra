@@ -25,8 +25,47 @@
 #include "vgradient.h"
 #include "vstrokecmd.h"
 
+VStrokeColorCmd::VStrokeColorCmd( VDocument *doc, VColor *color )
+    : VCommand( doc, i18n( "Stroke Color" ) ), m_color( color )
+{
+	m_selection = m_doc->selection()->clone();
+}
+
+VStrokeColorCmd::~VStrokeColorCmd()
+{
+	delete( m_selection );
+}
+
+void
+VStrokeColorCmd::execute()
+{
+	VObjectListIterator itr( m_selection->objects() );
+	for ( ; itr.current() ; ++itr )
+	{
+		VStroke stroke = *itr.current()->stroke();
+		stroke.setParent( itr.current() );
+		stroke.setColor( *m_color );
+		itr.current()->setStroke( stroke );
+		m_oldcolors.push_back( itr.current()->stroke()->color() );
+	}
+}
+
+void
+VStrokeColorCmd::unexecute()
+{
+	VObjectListIterator itr( m_selection->objects() );
+	int i = 0;
+	for ( ; itr.current() ; ++itr )
+	{
+		VStroke stroke = *itr.current()->stroke();
+		stroke.setParent( itr.current() );
+		stroke.setColor( m_oldcolors[ i++ ] );
+		itr.current()->setStroke( stroke );
+	}
+}
+
 VStrokeLineWidthCmd::VStrokeLineWidthCmd( VDocument *doc, double width )
-    : VCommand( doc, i18n( "Stroke Objects" ) ), m_width( width )
+    : VCommand( doc, i18n( "Stroke Width" ) ), m_width( width )
 {
 	m_selection = m_doc->selection()->clone();
 }

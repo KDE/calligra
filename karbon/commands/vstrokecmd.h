@@ -34,6 +34,21 @@ class VSelection;
 class VStroke;
 class VGradient;
 
+class VStrokeColorCmd : public VCommand
+{
+public:
+	VStrokeColorCmd( VDocument *doc, VColor *color );
+	virtual ~VStrokeColorCmd();
+
+	virtual void execute();
+	virtual void unexecute();
+
+private:
+	VSelection* m_selection;
+	VColor* m_color;
+	QValueVector<VColor> m_oldcolors;
+};
+
 class VStrokeLineWidthCmd : public VCommand
 {
 public:
