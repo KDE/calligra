@@ -49,14 +49,8 @@ AboutDialog::AboutDialog (QWidget* parent) :
     resize (400, 300);
     setFixedSize (size ());
 
-#if NEWKDE
-  KIconLoader* loader = KGlobal::iconLoader ();
-#else
-  KIconLoader* loader = kapp->getIconLoader ();
-#endif
-
     QLabel *label = new QLabel (this);
-    label->setPixmap (loader->loadIcon ("killustrator", 
+    label->setPixmap (KGlobal::iconLoader()->loadIcon ("killustrator", 
 	    KIcon::NoGroup, KIcon::SizeLarge));
     label->setGeometry (50, 30, 33, 33);
 

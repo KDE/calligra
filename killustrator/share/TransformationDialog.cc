@@ -299,11 +299,6 @@ QWidget* TransformationDialog::createRotationWidget (QWidget* parent) {
 QWidget* TransformationDialog::createMirrorWidget (QWidget* parent) {
   QWidget* w;
   QButtonGroup* group;
-#if NEWKDE
-  KIconLoader* loader = KGlobal::iconLoader ();
-#else
-  KIconLoader* loader = kapp->getIconLoader ();
-#endif
   w = new QWidget (parent);
 
   group = new QButtonGroup (w);

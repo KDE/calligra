@@ -45,11 +45,6 @@ LayerView::LayerView (QWidget *parent, const char *name)
   setBackgroundColor (white);
 
   document = 0L;
-#if NEWKDE
-  KIconLoader* loader = KGlobal::iconLoader ();
-#else
-  KIconLoader* loader = kapp->getIconLoader ();
-#endif
 
   pixmaps[0] = UserIcon ("eye");
   pixmaps[1] = UserIcon ("freehandtool");

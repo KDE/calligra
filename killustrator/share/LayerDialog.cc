@@ -49,11 +49,6 @@ LayerDialog::LayerDialog (QWidget* parent, const char* name) :
   document = 0L;
   setCaption (i18n ("Layers"));
 
-#if NEWKDE
-  KIconLoader* loader = KGlobal::iconLoader ();
-#else
-  KIconLoader* loader = kapp->getIconLoader ();
-#endif
   QVBoxLayout *vl = new QVBoxLayout (this, 10);
 
   layerView = new LayerView (this);
