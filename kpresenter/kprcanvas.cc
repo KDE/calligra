@@ -7898,7 +7898,7 @@ int KPrCanvas::applyGridOnPosY( int pos )
 
 void KPrCanvas::alignVertical( VerticalAlignmentType _type )
 {
-    KMacroCommand *macro = new KMacroCommand( i18n("Change Vertical Aligment"));
+    KMacroCommand *macro = new KMacroCommand( i18n("Change Vertical Alignment"));
     bool createMacro = false;
     KCommand *cmd = m_activePage->alignVertical( _type );
     if ( cmd )

@@ -3515,7 +3515,7 @@ bool KPrPage::canMoveOneObject()
 
 KCommand *KPrPage::alignVertical( VerticalAlignmentType _type )
 {
-    KMacroCommand *macro = new KMacroCommand( i18n("Change Vertical Aligment"));
+    KMacroCommand *macro = new KMacroCommand( i18n("Change Vertical Alignment"));
     bool createMacro = false;
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -3525,7 +3525,7 @@ KCommand *KPrPage::alignVertical( VerticalAlignmentType _type )
             KPTextObject *obj = dynamic_cast<KPTextObject *>(it.current());
             if ( obj  && !obj->isProtectContent())
             {
-                KPrChangeVerticalAlignmentCommand * cmd = new KPrChangeVerticalAlignmentCommand( i18n("Change Vertical Aligment"), obj, obj->verticalAlignment(),_type);
+                KPrChangeVerticalAlignmentCommand * cmd = new KPrChangeVerticalAlignmentCommand( i18n("Change Vertical Alignment"), obj, obj->verticalAlignment(),_type);
                 macro->addCommand( cmd );
                 cmd->execute();
                 createMacro =true;
