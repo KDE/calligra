@@ -4376,12 +4376,14 @@ QColor KWTextFrameSetEdit::textColor() const {
 }
 
 QFont KWTextFrameSetEdit::textFont() const {
-    return m_currentFormat->font();
+    QFont fn( m_currentFormat->font() );
+    fn.setPointSize( textFrameSet()->docFontSize( m_currentFormat ) ); // "unzoom" the font size
+    return fn;
 }
 
-int KWTextFrameSetEdit::textFontSize()const{
-    return m_currentFormat->font().pointSize ();
-}
+/*int KWTextFrameSetEdit::textFontSize()const{
+    return textFrameSet()->docFontSize( m_currentFormat );
+}*/
 
 QString KWTextFrameSetEdit::textFontFamily()const {
     return m_currentFormat->font().family();

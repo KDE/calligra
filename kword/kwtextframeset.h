@@ -407,7 +407,7 @@ public:
 
     QColor textColor() const;
     QFont textFont() const;
-    int textFontSize()const;
+    //int textFontSize()const;
     QString textFontFamily()const;
 
     // -- Paragraph settings --
