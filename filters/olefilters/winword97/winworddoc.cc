@@ -752,7 +752,7 @@ void WinWordDoc::gotTableEnd(
             unsigned right;
             unsigned cellEdge;
 
-            cell.append("<FRAMESET frameType=\"1\" frameInfo=\"0\" grpMgr=\"grpmgr_");
+            cell.append("<FRAMESET frameType=\"1\" frameInfo=\"0\" grpMgr=\"floattable_");
             cell.append(QString::number(tableNumber));
             cell.append("\" name=\"Table");
             cell.append(QString::number(tableNumber));
