@@ -102,14 +102,28 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! driver-specific string escaping */
 		virtual QString escapeString(const QString& str) const = 0;
 		virtual QCString escapeString(const QCString& str) const = 0;
+		
+		/*! Prepares query described by \a statement. 
+		 \return opened cursor created for results of this query 
+		 or NULL if there was any error.
+		 Preparation means that returned cursor is created but not opened.
+		 Open this when you would like to do it with Cursor::open().
+		 Note that you can create "not configured" cursor when you omit 
+		 \a statement parameter. Then you will need a parameter for
+		 Cursor::open(). */
+		virtual Cursor* prepareQuery( const QString& statement = QString::null) = 0;
 
-		virtual Cursor* executeQuery( const QString& statement = QString::null) = 0;
+		/*! Executes query described by \a statement.
+		 \return opened cursor created for results of this query 
+		 or NULL if there was any error on the cursor creation or opening. */
+		Cursor* executeQuery( const QString& statement );
 
+		
 		/*! Deletes cursor \a cursor previously created by functions like executeQuery() 
-			for this connection.
-			There is an attempt to close the cursor with Cursor::close() if it was opened. 
-			Anyway, at last cursor is deleted. 
-			\returns true if cursor is properly closed before deletion. */
+		 for this connection.
+		 There is an attempt to close the cursor with Cursor::close() if it was opened. 
+		 Anyway, at last cursor is deleted. 
+		 \returns true if cursor is properly closed before deletion. */
 		bool deleteCursor(Cursor *cursor);
 
 		/*! \return schema of \a tablename table retrieved using connection. */
@@ -120,6 +134,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 	protected:
 		/*! Used by Driver */
 		Connection( Driver *driver, const ConnectionData &conn_data );
+
+		void destroy();
 
 		/*! For reimplemenation: connects to database
 			\return true on success. */

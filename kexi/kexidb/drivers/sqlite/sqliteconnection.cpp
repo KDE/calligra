@@ -59,9 +59,12 @@ SQLiteConnection::SQLiteConnection( Driver *driver, const ConnectionData &conn_d
 
 SQLiteConnection::~SQLiteConnection()
 {
+	kdDebug() << "SQLiteConnection::~SQLiteConnection()" << endl;
 	//disconnect if was connected
-	disconnect();
+//	disconnect();
+	destroy();
 	delete d;
+	kdDebug() << "SQLiteConnection::~SQLiteConnection() ok" << endl;
 }
 
 bool SQLiteConnection::drv_connect()
@@ -83,7 +86,7 @@ bool SQLiteConnection::drv_getDatabasesList( QStringList &list )
 	return true;
 }
 
-bool SQLiteConnection::drv_createDatabase( const QString &dbName )
+bool SQLiteConnection::drv_createDatabase( const QString &/*dbName*/ )
 {
 //	QFileInfo file( conn.data().fileName() );
 //	if (file.exists()) {
@@ -95,7 +98,7 @@ bool SQLiteConnection::drv_createDatabase( const QString &dbName )
 	return d->data != 0;
 }
 
-bool SQLiteConnection::drv_useDatabase( const QString &dbName )
+bool SQLiteConnection::drv_useDatabase( const QString &/*dbName*/ )
 {
 	d->data = sqlite_open( QFile::encodeName( m_data.fileName() ), 0/*mode: unused*/, 
 		&d->errmsg );
@@ -132,7 +135,7 @@ QCString SQLiteConnection::escapeString(const QCString& str) const
 }
 
 //CursorData* SQLiteConnection::drv_createCursor( const QString& statement )
-Cursor* SQLiteConnection::executeQuery( const QString& statement )
+Cursor* SQLiteConnection::prepareQuery( const QString& statement )
 {
 	return new SQLiteCursor( this, statement );
 }

@@ -7,12 +7,14 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 
-int main(int argc, char *argv[])
+int main(int /*argc*/, char */*argv[]*/)
 {
 	KInstance instance("newapi");
 	KexiDB::DriverManager* manager = KexiDB::DriverManager::self();
 	QStringList names = manager->driverNames();
-	kdDebug() << "DRIVERS: " << names << endl;
+	kdDebug() << "DRIVERS: " << endl;
+	for (QStringList::iterator it = names.begin(); it != names.end() ; ++it)
+		kdDebug() << *it << endl;
 	if (manager->error()) {
 		kdDebug() << manager->errorMsg() << endl;
 		return 1;
@@ -124,6 +126,8 @@ int main(int argc, char *argv[])
 		kdDebug() << conn->errorMsg() << endl;
 		return 1;
 	}
+	debug("before del");
 	delete conn;
+	debug("after del");
 	return 0;
 }

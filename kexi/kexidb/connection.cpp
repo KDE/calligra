@@ -49,20 +49,26 @@ Connection::Connection( Driver *driver, const ConnectionData &conn_data )
 	m_cursors.resize(101);
 }
 
+void Connection::destroy()
+{
+	disconnect();
+	//do not allow the driver to touch me: I will kill myself.
+	m_driver->m_connections.take( this );
+}
+
 Connection::~Connection()
 {
 	qDebug("Connection::~Connection()");
-	if (m_driver) {
+/*	if (m_driver) {
 		if (m_is_connected) {
 			//delete own table schemas
 			m_tables.clear();
 			//delete own cursors:
 			m_cursors.clear();
 		}
-
 		//do not allow the driver to touch me: I will kill myself.
 		m_driver->m_connections.take( this );
-	}
+	}*/
 }
 
 bool Connection::connect()
@@ -82,6 +88,11 @@ bool Connection::disconnect()
 	clearError();
 	if (!m_is_connected)
 		return true;
+	
+	//delete own cursors:
+	m_cursors.clear();
+	//delete own table schemas
+	m_tables.clear();
 
 	if (!closeDatabase())
 		return false;
@@ -398,6 +409,20 @@ bool Connection::drv_rollbackTransaction()
 bool Connection::drv_duringTransaction()
 {
 	return m_transaction;
+}
+
+Cursor* Connection::executeQuery( const QString& statement )
+{
+	if (statement.isEmpty())
+		return 0;
+	Cursor *c = prepareQuery( statement );
+	if (!c)
+		return 0;
+	if (!c->open()) {//err - kill that
+		delete c;
+		return 0;
+	}
+	return c;
 }
 
 bool Connection::deleteCursor(Cursor *cursor)

@@ -171,3 +171,4 @@ void TableDef::addField(KexiDB::FieldDef field)
 	m_fields.append(field);
 }
 */
+

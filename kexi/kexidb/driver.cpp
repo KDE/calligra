@@ -48,6 +48,7 @@ Driver::Driver( QObject *parent, const char *name, const QStringList & )
 
 Driver::~Driver()
 {
+	qDebug("Driver::~Driver()");
 //	Connection *conn;
 	m_connections.clear();
 /*	for ( conn = m_connections.first(); conn ; conn = m_connections.next() ) {
@@ -56,6 +57,7 @@ Driver::~Driver()
 		m_connections.remove();
 		delete conn;
 	}*/
+	qDebug("Driver::~Driver() ok");
 }
 
 const QPtrList<Connection> Driver::connectionsList() 
