@@ -416,7 +416,8 @@ bool pqxxMigrate::drv_copyTable(const QString& srcTable,
         m_kexiDB->insertRecord(*dstTable, vals);
     }
 
-    stream.complete();
+    //This doesnt work in <libpqxx 2.2
+    //stream.complete();
 
     return true;
 
