@@ -525,6 +525,7 @@ KarbonView::initActions()
 	//connect( m_setFontFamily, SIGNAL(activated(const QString&)), SLOT(setFontFamily(const QString&)) );
 
 	m_setFontSize = new KFontSizeAction( i18n( "Set Font Size" ), 0, actionCollection(), "setFontSize" );
+	m_setFontSize->setCurrentItem( 0 );
 	//connect( m_setFontSize, SIGNAL(activated(const QString&)), SLOT(setFontSize(const QString&)) );
 
 	m_setFontItalic = new KToggleAction( i18n( "&Italic" ), "text_italic", 0, actionCollection(), "setFontItalic" );
