@@ -33,7 +33,7 @@ class HTMLImport : public KoFilter {
     Q_OBJECT
 
 public:
-    HTMLImport(KoFilter *parent, const char *name);
+    HTMLImport(KoFilter *parent, const char *name, const QStringList &);
     virtual ~HTMLImport() {}
     /** filtering :) */
     virtual bool filter(const QString &fileIn, const QString &fileOut,

@@ -34,6 +34,7 @@
 */
 
 #include <kdebug.h>
+#include <kgenericfactory.h>
 
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
@@ -44,11 +45,14 @@
 #include <htmlexport.h>
 #include <htmlexport.moc>
 
+typedef KGenericFactory<HTMLExport, KoFilter> HTMLExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libhtmlexport, HTMLExportFactory( "kwordhtmlexportfilter" ) );
+
 //
 // HTMLExport
 //
 
-HTMLExport::HTMLExport(KoFilter *parent, const char *name) :
+HTMLExport::HTMLExport(KoFilter *parent, const char *name, const QStringList &) :
                      KoFilter(parent, name) {
 }
 

@@ -30,6 +30,7 @@
 
 #include <kdebug.h>
 #include <kfilterdev.h>
+#include <kgenericfactory.h>
 
 #include <koGlobal.h>
 
@@ -39,6 +40,9 @@
 
 #include "abiwordimport.h"
 #include "abiwordimport.moc"
+
+typedef KGenericFactory<ABIWORDImport, KoFilter> ABIWORDImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libabiwordimport, ABIWORDImportFactory( "kwordabiwordimport" ) );
 
 // *Note for the reader of this code*
 // Tags in lower case (e.g. <c>) are AbiWord's ones.
@@ -749,7 +753,7 @@ bool StructureParser::endDocument(void)
 
     kdDebug(30506) << "###### Start Style List ######" << endl;
     StyleDataMap::ConstIterator it;
-    
+
 #if 0
     // At first, we must get "Standard", as it is the base for <FOLLOWING>
 
@@ -842,7 +846,7 @@ bool StructureParser::clearStackUntilParagraph(StackItemStack& auxilaryStack)
     }
 }
 
-ABIWORDImport::ABIWORDImport(KoFilter *parent, const char *name) :
+ABIWORDImport::ABIWORDImport(KoFilter *parent, const char *name, const QStringList &) :
                      KoFilter(parent, name) {
 }
 

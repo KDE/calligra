@@ -47,7 +47,7 @@ class ABIWORDExport : public KoFilter {
     Q_OBJECT
 
 public:
-    ABIWORDExport(KoFilter *parent, const char *name);
+    ABIWORDExport(KoFilter *parent, const char *name, const QStringList &);
     virtual ~ABIWORDExport() {}
     /** filtering :) */
     virtual bool filter(const QString &fileIn, const QString &fileOut,

@@ -22,13 +22,18 @@
 #include <htmlimport.moc>
 
 #include <kdebug.h>
+#include <kgenericfactory.h>
+
 #include <koStore.h>
 
 #include <khtmlreader.h>
 #include <kwdwriter.h>
 
+typedef KGenericFactory<HTMLImport, KoFilter> HTMLImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libhtmlimport, HTMLImportFactory( "kwordhtmlimportfilter" ) );
 
-HTMLImport::HTMLImport(KoFilter *parent, const char*name) :
+
+HTMLImport::HTMLImport(KoFilter *parent, const char*name, const QStringList &) :
                      KoFilter(parent, name) {
 // 123
 }

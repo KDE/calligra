@@ -40,6 +40,7 @@
 #include <kdebug.h>
 #include <kmdcodec.h>
 #include <kfilterdev.h>
+#include <kgenericfactory.h>
 
 #include <koGlobal.h>
 
@@ -50,6 +51,9 @@
 
 #include <abiwordexport.h>
 #include <abiwordexport.moc>
+
+typedef KGenericFactory<ABIWORDExport, KoFilter> ABIWORDExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libabiwordexport, ABIWORDExportFactory( "kwordabiwordexport" ) );
 
 class AbiWordWorker : public KWEFBaseWorker
 {
@@ -774,7 +778,7 @@ bool AbiWordWorker::doCloseHead(void)
     return true;
 }
 
-ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name) :
+ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name, const QStringList &) :
                      KoFilter(parent, name) {
 }
 

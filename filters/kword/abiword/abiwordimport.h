@@ -46,7 +46,7 @@ class ABIWORDImport : public KoFilter {
     Q_OBJECT
 
 public:
-    ABIWORDImport(KoFilter *parent, const char *name);
+    ABIWORDImport(KoFilter *parent, const char *name, const QStringList &);
     ABIWORDImport();
     virtual ~ABIWORDImport() {}
     /** filtering :) */
