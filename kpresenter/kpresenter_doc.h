@@ -634,7 +634,6 @@ private:
     bool  m_bInsertDirectCursor;
     QString m_globalLanguage;
     bool m_bGlobalHyphenation;
-    KoStyleStack m_styleStack;
     KPRLoadingInfo *m_loadingInfo;
 };
 

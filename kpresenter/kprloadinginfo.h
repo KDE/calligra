@@ -36,8 +36,27 @@ public:
     void clearAnimationDict() {
       m_animationsDict.clear();
     }
+    void clearStyleStack() {
+      m_styleStack.clear();
+    }
+    void saveStyleStack() {
+      m_styleStack.save();
+    }
+    void restoreStyleStack() {
+      m_styleStack.restore();
+    }
+    bool styleStackHasAttribute( const QString & attr ) const {
+      return m_styleStack.hasAttribute( attr );
+    }
+    void styleStackPush(const QDomElement & style) {
+      m_styleStack.push(style);
+    }
+    KoStyleStack styleStack() const {
+      return m_styleStack;
+    }
 private:
     QDict<QDomElement> m_animationsDict; 
+    KoStyleStack m_styleStack;
 };
 
 #endif /* KPRLOADINGINFO_H */
