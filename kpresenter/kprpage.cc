@@ -616,76 +616,9 @@ FillType KPrPage::getFillType( FillType ft )
     {
         if(it.current()->isSelected())
         {
-    	    switch ( it.current()->getType() ) {
-	    case OT_RECT:
-            {
-                KPRectObject*obj=dynamic_cast<KPRectObject*>( it.current() );
-                if(obj)
-                    return obj->getFillType();
-            }
-            break;
-	    case OT_ELLIPSE:
-            {
-                KPEllipseObject*obj=dynamic_cast<KPEllipseObject*>( it.current() );
-                if(obj)
-                    return obj->getFillType();
-            }
-            break;
-	    case OT_AUTOFORM:
-            {
-                KPAutoformObject*obj=dynamic_cast<KPAutoformObject*>( it.current() );
-                if(obj)
-                    return obj->getFillType();
-            }
-            break;
-	    case OT_PIE:
-            {
-                KPPieObject*obj=dynamic_cast<KPPieObject*>( it.current() );
-                if(obj)
-                    return obj->getFillType();
-            }
-            break;
-	    case OT_PART:
-            {
-                KPPartObject*obj=dynamic_cast<KPPartObject*>( it.current() );
-                if(obj)
-                    return obj->getFillType();
-            }
-
-            break;
-	    case OT_PICTURE:
-            {
-                KPPixmapObject*obj=dynamic_cast<KPPixmapObject*>( it.current() );
-                if(obj)
-                    return obj->getFillType();
-            }
-
-            break;
-	    case OT_CLIPART:
-            {
-                KPClipartObject*obj=dynamic_cast<KPClipartObject*>( it.current() );
-                if(obj)
-                    return obj->getFillType();
-            }
-            break;
-	    case OT_TEXT:
-            {
-                KPTextObject*obj=dynamic_cast<KPTextObject*>( it.current() );
-                if(obj)
-                    return obj->getFillType();
-            }
-
-            break;
-            case OT_POLYGON:
-            {
-                KPPolygonObject*obj=dynamic_cast<KPPolygonObject*>( it.current() );
-                if(obj)
-                    return obj->getFillType();
-            }
-
-            break;
-	    default: break;
-	    }
+            KP2DObject *obj=dynamic_cast<KP2DObject*>(it.current() );
+            if(obj)
+                return obj->getFillType();
 	}
     }
 

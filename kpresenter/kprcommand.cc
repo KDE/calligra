@@ -734,20 +734,23 @@ MoveByCmd::MoveByCmd( const QString &_name, const KoPoint &_diff, QPtrList<KPObj
     objects.setAutoDelete( false );
     doc = _doc;
     m_page=_page;
-    for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	if ( objects.at( i )->getType() == OT_TEXT ) {
-	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc,m_page );
-	    doc->repaint( objects.at( i ) );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+	if ( it.current()->getType() == OT_TEXT ) {
+	    ( (KPTextObject*)it.current() )->recalcPageNum( doc,m_page );
+	    doc->repaint( it.current() );
 	}
-	objects.at( i )->incCmdRef();
+	it.current()->incCmdRef();
     }
 }
 
 /*======================== destructor ============================*/
 MoveByCmd::~MoveByCmd()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+	it.current()->decCmdRef();
 }
 
 /*====================== execute =================================*/
@@ -801,21 +804,25 @@ MoveByCmd2::MoveByCmd2( const QString &_name, QPtrList<KoPoint> &_diffs,
     objects.setAutoDelete( false );
     diffs.setAutoDelete( true );
     doc = _doc;
-    for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	if ( objects.at( i )->getType() == OT_TEXT ) {
-            if(objects.at(i)->isSelected())
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+	if ( it.current()->getType() == OT_TEXT )
+        {
+            if(it.current()->isSelected())
                 doc->updateRuler();
-	    doc->repaint( objects.at( i ) );
+	    doc->repaint( it.current() );
 	}
-	objects.at( i )->incCmdRef();
+	it.current()->incCmdRef();
     }
 }
 
 /*======================== destructor ============================*/
 MoveByCmd2::~MoveByCmd2()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+	it.current()->decCmdRef();
 
     diffs.clear();
 }
