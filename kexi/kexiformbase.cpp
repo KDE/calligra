@@ -28,13 +28,11 @@
 KexiFormBase::KexiFormBase(QWidget *parent, const char *name )
 	: QWidget(parent,name)
 {
-	setMouseTracking(true);
+//	setMouseTracking(true);
 	
-	xmove = false;
-	ymove = false;
-	
-	m_arrowCursor = true;
 	m_dotSpacing = 10;
+
+	resize( 250, 250 );
 }
 
 void KexiFormBase::addWidgetLineEdit()
@@ -42,76 +40,9 @@ void KexiFormBase::addWidgetLineEdit()
 	kdDebug() << "add line edit widget at " << this << endl;
 }
 
-void KexiFormBase::mouseMoveEvent(QMouseEvent *ev)
-{
-
-	if(ev->x() > width() - 5 && ev->y() > height() - 5)
-	{
-		setCursor(QCursor(SizeFDiagCursor));
-		m_arrowCursor = false;
-	}
-	else if(ev->x() > width() - 5)
-	{
-		setCursor(QCursor(SizeHorCursor));
-		m_arrowCursor = false;
-	}
-	else if(ev->y() > height() - 5)
-	{
-		setCursor(QCursor(SizeVerCursor));
-		m_arrowCursor = false;
-	}
-	else
-	{
-		if(!m_arrowCursor)
-		{
-			setCursor(QCursor(ArrowCursor));
-		}
-		m_arrowCursor = true;
-	}
-	
-	if(xmove)
-	{
-		setFixedSize(QSize(ev->x(), height()));
-	}
-	if(ymove)
-	{
-		setFixedSize(QSize(width(), ev->y()));
-	}
-		
-}
-
-void KexiFormBase::mousePressEvent(QMouseEvent *ev)
-{
-	if(ev->x() > width() - 5)
-	{
-		xmove = true;
-	}
-	if(ev->y() > height() - 5)
-	{
-		ymove = true;
-	}
-}
-
-void KexiFormBase::mouseReleaseEvent(QMouseEvent *ev)
-{
-	xmove = false;
-	ymove = false;
-	
-}
-
 void KexiFormBase::paintEvent(QPaintEvent *ev)
 {
 	QPainter *p = new QPainter(this);
-	QPen high(white, 2);
-	QPen low(gray, 2);
-	p->setPen(high);
-	
-	// painting the 3d-frame-decoration
-	p->drawLine(0, 0, width(), 0);
-	p->drawLine(0, 0, 0, height());
-	p->setPen(low);
-	p->drawLine(width(), 0, width(), height());
-	p->drawLine(0, height(), width(), height());
 	
 	// drawing the dots -- got the dot?
 	QPen dots(black, 1);
@@ -134,5 +65,4 @@ void KexiFormBase::paintEvent(QPaintEvent *ev)
 KexiFormBase::~KexiFormBase(){
 }
 
-//#include "kexiformbase.moc"
 #include "kexiformbase.moc"

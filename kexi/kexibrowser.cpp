@@ -51,6 +51,7 @@ KexiBrowser::KexiBrowser(Kexi *mainWin, QWidget *parent, const char *name ) : QW
 	m_list->setRootIsDecorated(true);
 	
 	m_list->addColumn(i18n("Database content"));
+	m_list->setResizeMode(QListView::LastColumn);
 	
 	m_database = new KListViewItem(m_list, i18n("Database"));
 	m_tables = new KListViewItem(m_database, i18n("Tables"));

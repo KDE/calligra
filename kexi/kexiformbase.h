@@ -41,17 +41,7 @@ public:
 	void addWidgetLineEdit();
 
 protected:
-	void mousePressEvent(QMouseEvent *ev);
-	void mouseReleaseEvent(QMouseEvent *ev);
-	void mouseMoveEvent(QMouseEvent *ev);
-	
 	void paintEvent(QPaintEvent *ev);
-
-	bool xmove;
-	bool ymove;
-
-	bool		m_arrowCursor;
-	CursorType	m_cursorType;
 
 	int	m_dotSpacing;
 };
