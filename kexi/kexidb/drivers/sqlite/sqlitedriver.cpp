@@ -107,7 +107,7 @@ QString SQLiteDriver::escapeString(const QString& str) const
 
 QCString SQLiteDriver::escapeString(const QCString& str) const
 {
-	return QString("'")+QString(str).replace( '\'', "''" ).latin1() + "'";
+	return QCString("'")+QString(str).replace( '\'', "''" ).latin1() + "'";
 }
 
 #include "sqlitedriver.moc"
