@@ -1439,6 +1439,8 @@ bool XMLTree::_number(Q_UINT16, QDataStream& body)
     case 0x2D:  
     case 0x2E:  
     case 0x2F: 
+    case 0xB5:
+    case 0xB6:
     case 0xB9:  
       int hour, min, second;
       getTime( value, hour, min, second);
