@@ -17,6 +17,7 @@ libkofficeui_la_SOURCES = koFind.cc koReplace.cc \
 	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
 	koKoolBar.cc koTemplateCreateDia.cc \
 	kcoloractions.cpp koToolBox.cpp koTemplates.cc \
+	koRect.cpp \
 	tkaction.cpp tkcoloractions.cpp tkcombobox.cpp tktoolbarbutton.cpp
 
 include_HEADERS = koFind.h koReplace.h \
