@@ -53,6 +53,5 @@ Name[zu]=KWord Ascii I Ascii Export Filter
 X-KDE-Export=text/plain
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
-X-KDE-Available=check
 X-KDE-Library=libasciiexport
 ServiceTypes=KOfficeFilter
