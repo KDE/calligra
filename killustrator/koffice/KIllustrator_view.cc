@@ -21,12 +21,15 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
-
+#include <iostream.h>
 #include <kdebug.h>
+#include <qwidget.h>
+#include <kapp.h>
 #include <KIllustrator_view.h>
 #include <KIllustrator_doc.h>
 #include <KIllustrator_factory.h>
 
+#include "CanvasView.h"
 #include <GDocument.h>
 #include <Canvas.h>
 #include <Tool.h>
@@ -97,6 +100,10 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     scrollview = 0L;
     layerDialog = 0L;
     objMenu = 0L;
+    mParent = parent;
+    
+    readConfig();
+    
     // restore default settings
     PStateManager::instance ();
 
@@ -115,7 +122,8 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 
 KIllustratorView::~KIllustratorView()
 {
-    delete objMenu;
+ writeConfig();
+ delete objMenu;
 }
 
 void KIllustratorView::createMyGUI()
@@ -317,7 +325,7 @@ void KIllustratorView::setupCanvas()
     vRuler->setGeometry(0, 20, 20, height()-20);
     vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
 
-    scrollview = new QScrollView(this);
+    scrollview = new CanvasView(this);
     scrollview->setGeometry(20, 20, width()-20, height()-20);
 
     canvas = new Canvas (m_pDoc->gdoc(), 72.0, scrollview, scrollview->viewport());
@@ -430,6 +438,27 @@ void KIllustratorView::setupCanvas()
 
     canvas->setToolController(tcontroller);
 }
+
+void KIllustratorView::readConfig()
+ {
+/*  KConfig *config = kapp->config();
+
+  config->setGroup("MainWin");
+  int w = config->readNumEntry( "Width", 700 );
+  int h = config->readNumEntry( "Height", 500 );
+  mParent->resize(w,h);
+  cout << "WIDTH=" <<  w << "\n";
+  cout << "HEIGHT=" << h << "\n";*/
+ }
+ 
+void KIllustratorView::writeConfig()
+ {
+/*  KConfig *config = kapp->config();
+
+  config->setGroup("MainWin");
+  config->writeEntry( "Width", mParent->width() );
+  config->writeEntry( "Height", mParent->height() );*/
+ }
 
 // FIXME (Werner)
 void KIllustratorView::showCurrentMode (const QString& ) {

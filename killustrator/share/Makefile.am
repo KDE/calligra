@@ -39,7 +39,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 BrushCells.h PathTextTool.h \
 		 EllipseConfigDialog.h HelplineDialog.h \
 		 GCurve.h ToCurveCmd.h BlendDialog.h BlendCmd.h \
-		 filter_utils.h
+		 filter_utils.h CanvasView.h
 
 libkillu_la_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  PathTextTool.cc GOval.cc GClipart.cc GBezier.cc GPixmap.cc \
@@ -80,6 +80,6 @@ libkillu_la_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  EllipseConfigDialog.cc \
 			  HelplineDialog.cc GCurve.cc ToCurveCmd.cc \
 			  BlendDialog.cc BlendCmd.cc \
-			  filter_utils.cc
+			  filter_utils.cc CanvasView.cc
 
 METASOURCES =	AUTO

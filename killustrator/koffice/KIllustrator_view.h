@@ -55,7 +55,8 @@ class EditPointTool;
 class InsertPartTool;
 class GPart;
 class FilterManager;
-class QScrollView;
+class CanvasView;
+class QWidget;
 
 class KAction;
 class KToggleAction;
@@ -95,6 +96,9 @@ public:
 */
 
 protected:
+    void readConfig();
+    void writeConfig();
+
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
     void showTransformationDialog (int id);
 
@@ -193,12 +197,13 @@ protected:
     EditPointTool *editPointTool;
     InsertPartTool *insertPartTool;
     QPopupMenu *objMenu;
+    QWidget *mParent;
 
     bool m_bShowGUI;
     bool m_bShowRulers;
 
     ToolController *tcontroller;
-    QScrollView *scrollview;
+    CanvasView *scrollview;
     Canvas *canvas;
     Ruler *hRuler, *vRuler;
     LayerDialog *layerDialog;
