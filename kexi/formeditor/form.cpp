@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <kcommand.h>
 #include <kaction.h>
+#include <kmessagebox.h>
 
 #include "container.h"
 #include "objecttree.h"
@@ -153,7 +154,14 @@ Form::formDeleted()
 void
 Form::changeName(const QString &oldname, const QString &newname)
 {
-	m_topTree->rename(oldname, newname);
+	if(!m_topTree->rename(oldname, newname))
+	{
+		KMessageBox::sorry(m_toplevel->widget()->topLevelWidget(), i18n("A widget with this name already exists."
+		   " Please choose another name or rename this widget before."));
+		kdDebug() << "Form::changeName() : ERROR : A widget named " << newname << " already exists" << endl;
+		(*(m_manager->buffer()))["name"]->setValue(oldname);
+	}
+
 }
 
 void

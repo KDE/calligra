@@ -58,7 +58,7 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 };
 
 //! A graphical view of the ObjectTree of a Form.
-/*! This is a KListView which represents an item for each widget in the form. The actually selected widget is written bold 
+/*! This is a KListView which represents an item for each widget in the form. The actually selected widget is written bold
     and selected. Clicking on a list item selects the corresponding widget in the Form.
  */
 class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
@@ -72,7 +72,7 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		virtual QSize sizeHint() const;
 
 		/*! Sets \a form as the current Form in the list. The list will automatically be filled with an item for each widget
-		    in the Form, and selection will be synced. Nothing happens if \a form is already the current Form. 
+		    in the Form, and selection will be synced. Nothing happens if \a form is already the current Form.
 		 */
 		void setForm(Form *form);
 
@@ -86,17 +86,19 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		void removeItem(ObjectTreeItem *item);
 		/*! The selected list item has changed, so we emit a signal to update the Form. */
 		void emitSelChanged(QListViewItem *item);
+		/*! Just renames the list item from \a oldname to \a newname. */
+		void renameItem(const QString &oldname, const QString &newname);
 
 	signals:
-		/*! This signal is emitted when the user changes the list item selected, so that the Form and the Property 
+		/*! This signal is emitted when the user changes the list item selected, so that the Form and the Property
 		  Editor gets updated.
 		 */
 		void selectionChanged(QWidget *w);
-	
+
 	protected:
 		//! Internal function to fill the list.
 		ObjectTreeViewItem* loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent);
-		//! \return The item whose name is \a name. 
+		//! \return The item whose name is \a name.
 		ObjectTreeViewItem* findItem(const QString &name);
 
 	private:

@@ -89,6 +89,8 @@ ObjectTreeItem::debug(int ident)
 void
 ObjectTreeItem::addModProperty(const QString &property, const QVariant &oldValue)
 {
+	if(property == "name")
+		return;
 	kdDebug() << "ObjectTree::adModProperty()   wanting to add the property" << property << endl;
 	if(!m_props.contains(property))
 	{
@@ -121,6 +123,9 @@ ObjectTree::ObjectTree(const QString &classn, const QString &name, QWidget *widg
 bool
 ObjectTree::rename(const QString &oldname, const QString &newname)
 {
+	if(lookup(newname))
+		return false;
+
 	if(oldname == m_name)
 	{
 		ObjectTreeItem::rename(newname);

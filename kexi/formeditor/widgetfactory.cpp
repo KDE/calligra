@@ -148,8 +148,12 @@ WidgetFactory::resetEditor()
 	else
 	{
 		changeText(m_editor->text());
+		disconnect(m_editor, 0, this, 0);
 		m_editor->deleteLater();
 	}
+
+	if(m_widget)
+		disconnect(m_widget, 0, this, 0);
 	delete m_handles;
 	m_editor = 0;
 	m_widget = 0;

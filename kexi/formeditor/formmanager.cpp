@@ -84,7 +84,8 @@ FormManager::setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview)
 		editor->setBuffer(m_buffer);
 
 	connect(treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget *)));
-	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), this, SLOT(setSelWidget(QWidget*)));
+	connect(treeview, SIGNAL(selectionChanged(QWidget*)), this, SLOT(setSelWidget(QWidget*)));
+	connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), treeview, SLOT(renameItem(const QString&, const QString&)));
 }
 
 Actions
