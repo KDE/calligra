@@ -188,7 +188,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         {
             _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
 
-            QSize bs = image.getSize();
+            QSize bs = QSize( (int)_zoomHandler->zoomItX( ow ), (int)_zoomHandler->zoomItY( oh ) );
             QRect br = QRect( 0, 0, bs.width(), bs.height() );
             int pw = br.width();
             int ph = br.height();
@@ -239,11 +239,13 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
 	// Draw pixmap
         if ( !drawContour ) {
-	    image.draw( *_painter,
-			(int)( _zoomHandler->zoomItX( ox ) + penw ),
-			(int)( _zoomHandler->zoomItY( oy ) + penw ),
-			(int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
-			(int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
+            QSize _pixSize =  QSize( (int)_zoomHandler->zoomItX( ow ), (int)_zoomHandler->zoomItY( oh ) );
+            QPixmap _pixmap = image.generatePixmap( _pixSize );
+            _painter->drawPixmap( QRect( (int)( _zoomHandler->zoomItX( ox ) + penw ),
+                                         (int)( _zoomHandler->zoomItY( oy ) + penw ),
+                                         (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
+                                         (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) ),
+                                  _pixmap );
 	}
 
         // Draw border - TODO port to KoBorder::drawBorders() (after writing a simplified version of it, that takes the same border on each size)
@@ -254,7 +256,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     } else {
         _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
 
-        QSize bs = image.getSize();
+        QSize bs = QSize( (int)_zoomHandler->zoomItX( ow ), (int)_zoomHandler->zoomItY( oh ) );
         QRect br = QRect( 0, 0, bs.width(), bs.height() );
         int pw = br.width();
         int ph = br.height();
@@ -288,10 +290,12 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
         // Draw pixmap
         if ( !drawContour ) {
-	    image.draw( *_painter,
-			(int)penw, (int)penw,
-			(int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
-			(int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
+            QSize _pixSize =  QSize( (int)_zoomHandler->zoomItX( ow ), (int)_zoomHandler->zoomItY( oh ) );
+            QPixmap _pixmap = image.generatePixmap( _pixSize );
+            _painter->drawPixmap( QRect( (int)penw, (int)penw,
+                                         (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
+                                         (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) ),
+                                  _pixmap );
 	}
 
         _painter->setPen( pen2 );
