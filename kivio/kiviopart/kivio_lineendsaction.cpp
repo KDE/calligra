@@ -24,6 +24,8 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 
+#include <klocale.h>
+
 LineEndsAction::LineEndsAction( bool isRightEnds, QObject* parent, const char* name )
 : TKBaseSelectAction(parent,name)
 {
@@ -59,7 +61,7 @@ void LineEndsAction::initComboBox(TKComboBox* combo)
   // insert item "0: None"
   pix.fill(white);
   p.drawText(0,0,tw,pix.height(),AlignRight|AlignVCenter,QString("%1:").arg(cindex));
-  p.drawText(tw+3,0,pix.width()-tw-3,pix.height(),AlignLeft|AlignVCenter,"None");
+  p.drawText(tw+3,0,pix.width()-tw-3,pix.height(),AlignLeft|AlignVCenter,i18n("no line end", "None"));
   mask = pix;
   pix.setMask(mask);
   combo->insertItem(pix,cindex++);
