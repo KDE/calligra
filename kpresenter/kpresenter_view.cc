@@ -6708,7 +6708,10 @@ void KPresenterView::slotObjectEditChanged()
         KoParagCounter counter;
         if(paragLayout->counter)
             counter = *(paragLayout->counter);
-        alignChanged(  paragLayout->alignment );
+        int align = paragLayout->alignment;
+        if ( align == Qt::AlignAuto )
+            align = Qt::AlignLeft; // ## seems hard to detect RTL here
+        alignChanged(  align );
     }
 
     KPTextView *edit=m_canvas->currentTextObjectView();

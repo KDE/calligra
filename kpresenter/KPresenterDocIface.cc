@@ -808,3 +808,14 @@ void KPresenterDocIface::setPtTabStopValue ( double _tabStop )
 {
     doc->setTabStopValue (_tabStop );
 }
+
+bool KPresenterDocIface::cursorInProtectedArea()const
+{
+    return doc->cursorInProtectedArea();
+}
+
+void KPresenterDocIface::setCursorInProtectedArea( bool b )
+{
+    doc->setCursorInProtectedArea(b);
+}
+

@@ -56,3 +56,5 @@ KPresenter 1.2beta1 -> 1.2 beta 2
 - Add New Cursor for rotate tool and freehand tool
 - Merged actions for lines, shapes and arrangement of objects into
   an appropriate drop-down menu
+- Add support for autocorrect with format
+- Add option "Allow cursor in text object protected content"

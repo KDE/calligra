@@ -2047,7 +2047,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
         if ( kpobject->getType() == OT_TEXT )
 	{
             KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-            if(kptextobject)
+            if(kptextobject && (!kptextobject->isProtectContent() || kptextobject->isProtectContent() && m_view->kPresenterDoc()->cursorInProtectedArea()))
             {
                 if(m_currentTextObjectView)
                 {

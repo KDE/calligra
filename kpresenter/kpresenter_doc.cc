@@ -202,6 +202,8 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     m_bSnapToGrid= false;
 
+    m_cursorInProtectectedArea=true;
+
     usedSoundFile = QStringList();
     haveNotOwnDiskSoundFile = QStringList();
 
@@ -319,6 +321,8 @@ void KPresenterDoc::initConfig()
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
         setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave()/60 ) * 60 );
+        setCursorInProtectedArea( config->readBoolEntry( "cursorInProtectArea", true ));
+
         // Config-file value in mm, default 10 pt
         double indent =  config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0) ) ;
         setIndentValue(indent);
@@ -3141,5 +3145,15 @@ void KPresenterDoc::changeBgSpellCheckingState( bool b )
     config->writeEntry( "SpellCheck", (int)b );
 }
 
+
+bool KPresenterDoc::cursorInProtectedArea()const
+{
+    return m_cursorInProtectectedArea;
+}
+
+void KPresenterDoc::setCursorInProtectedArea( bool b )
+{
+    m_cursorInProtectectedArea=b;
+}
 
 #include <kpresenter_doc.moc>

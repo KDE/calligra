@@ -588,6 +588,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
             if ( paragLayout.margins[ QStyleSheetItem::MarginBottom ] == 0 )
                 paragLayout.margins[ QStyleSheetItem::MarginBottom ] = bottomBorder;
             lastParag->setParagLayout( paragLayout );
+            //lastParag->setAlignment(Qt::AlignAuto);
 
             if(e.hasAttribute(attrAlign))
             {

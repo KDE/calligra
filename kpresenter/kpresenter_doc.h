@@ -399,6 +399,9 @@ public:
     void layout();
     void changeBgSpellCheckingState( bool b );
 
+    bool cursorInProtectedArea()const;
+    void setCursorInProtectedArea( bool b );
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -533,7 +536,7 @@ protected:
     double m_tabStop;
     KoUnit::Unit m_unit;
     int m_maxRecentFiles;
-
+    bool m_cursorInProtectectedArea;
     KoVariableFormatCollection *m_varFormatCollection;
     KPrVariableCollection *m_varColl;
     QColor m_gridColor;

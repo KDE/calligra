@@ -124,6 +124,7 @@ private:
     KIntNumInput* autoSave;
     KIntNumInput* m_variableNumberOffset;
     KDoubleNumInput *m_tabStopWidth;
+    QCheckBox *m_cursorInProtectedArea;
 };
 
 class ConfigureToolsPage : public QObject
