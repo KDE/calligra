@@ -83,6 +83,8 @@ VCanvas::VCanvas( QWidget *parent, KarbonViewBase* view, KarbonPartBase* part )
 VCanvas::~VCanvas()
 {
 	delete m_pixmap;
+	m_view = 0L;
+	m_part = 0L;
 }
 
 void

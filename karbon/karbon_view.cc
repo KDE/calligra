@@ -161,6 +161,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 KarbonView::~KarbonView()
 {
+	kdDebug() << "Handling KarbonView dtor" << endl;
 	if( shell() )
 	{
 		delete( m_ColorManager );
@@ -943,6 +944,7 @@ KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 		m_vertRuler->setMousePos( mouseEvent->pos().x(), mouseEvent->pos().y() );
 		m_cursorCoords->setText( QString( "%1, %2" ).arg( p.x(), 0, 'f', 2 ).arg( p.y(), 0, 'f', 2 ) );
 	}
+	part()->toolController()->setActiveView( this );
 	if( part()->toolController() )
 		return part()->toolController()->mouseEvent( event, p );
 	else

@@ -90,8 +90,6 @@ VToolController::registerTool( VTool *tool )
 bool
 VToolController::mouseEvent( QMouseEvent* event, const KoPoint &p )
 {
-	//kdDebug()  << "Count : " << m_tools.count() << endl;
-	kdDebug() << "CAlling : " << m_activeTool->name() << endl;
 	return m_activeTool->mouseEvent( event, p );
 }
 
