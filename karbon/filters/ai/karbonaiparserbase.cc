@@ -21,7 +21,7 @@
 #define eps 0.00000001
 
 // generic
-KarbonAIParserBase::KarbonAIParserBase() : m_strokeColor(), m_fillColor() {
+KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_strokeColor(), m_fillColor() {
   m_curPath.setAutoDelete( TRUE );
 
   // A4, 70 dpi
@@ -114,14 +114,29 @@ void KarbonAIParserBase::gotPathElement (PathElement &element){
 // generic
 void KarbonAIParserBase::gotFillPath (bool closed, bool reset, FillMode fm){
   qDebug ("found fill path");
-  doOutputCurrentPath (POT_Filled, closed);
+  if (!reset) qDebug ("retain filled path");
+
+  if (!reset)
+    m_pot = POT_Filled;
+  else
+  {
+    doOutputCurrentPath (POT_Filled, closed);
+    m_pot = POT_Other;
+  }
   if (reset) m_curPath.clear();
 }
 
 // generic
 void KarbonAIParserBase::gotIgnorePath (bool closed, bool reset){
   qDebug ("found ignore path");
-  doOutputCurrentPath (POT_Ignore, closed);
+
+  if (! reset)
+    m_pot = POT_Other;
+  else
+  {
+    doOutputCurrentPath (POT_Ignore, closed);
+    m_pot = POT_Other;
+  }
   if (reset) m_curPath.clear();
 }
 
@@ -129,8 +144,16 @@ void KarbonAIParserBase::gotIgnorePath (bool closed, bool reset){
 // generic
 void KarbonAIParserBase::gotStrokePath (bool closed) {
   qDebug ("found stroke path");
-  doOutputCurrentPath (POT_Stroked, closed);
+
+  PathOutputType pot = POT_Stroked;
+  if (m_pot != POT_Other)
+  {
+    pot = POT_FilledStroked;
+  }
+
+  doOutputCurrentPath (pot, closed);
   m_curPath.clear();
+  m_pot = POT_Other;
 }
 
 // specific
@@ -154,7 +177,6 @@ void KarbonAIParserBase::doOutputCurrentPath(PathOutputType type, bool closed){
   params.setAutoDelete( TRUE );
 
   params.append (new Parameter ("fillrule", QString::number(m_windingOrder)));
-  params.append (new Parameter ("closed", closed ? "1" : "0"));
   gotStartTag ("PATH", params);
 
   if ((type == POT_FilledStroked) || (type == POT_Stroked))
@@ -188,6 +210,7 @@ void KarbonAIParserBase::doOutputCurrentPath(PathOutputType type, bool closed){
   // segment data
 
   params.clear();
+  params.append (new Parameter ("isClosed", closed ? "1" : "0"));
   gotStartTag ("SEGMENTS", params);
 
   bool breakPath = FALSE;
@@ -211,7 +234,10 @@ void KarbonAIParserBase::doOutputCurrentPath(PathOutputType type, bool closed){
           if (breakPath)
           {
             gotEndTag ("SEGMENTS");
+
+            params.append (new Parameter ("isClosed", "1"));
             gotStartTag ("SEGMENTS", params);
+            params.clear();
           }
 
           params.append (new Parameter ("x", QString::number(elem->pevalue.pointdata.x)));
@@ -298,11 +324,17 @@ void KarbonAIParserBase::gotClipPath (bool closed){
 
 // generic
 void KarbonAIParserBase::gotFillColor (AIColor &color){
+  double r, g, b;
+  color.toRGB (r,g,b);
+  qDebug ("set fillcolor to %f %f %f",r,g,b);
   m_fillColor = color;
 }
 
 // generic
 void KarbonAIParserBase::gotStrokeColor (AIColor &color){
+  double r, g, b;
+  color.toRGB (r,g,b);
+  qDebug ("set strokecolor to %f %f %f",r,g,b);
   m_strokeColor = color;
 }
 

@@ -49,7 +49,7 @@ typedef enum {
   AIO_SetFillColorCMYK, AIO_SetStrokeColorCMYK,
   AIO_SetFillColorGray, AIO_SetStrokeColorGray,
   AIO_SetFillColorCustom, AIO_SetStrokeColorCustom,
-/**/  AIO_SetFillPattern, AIO_SetStrokePattern,
+  AIO_SetFillPattern, AIO_SetStrokePattern,
   AIO_SetFillOverprinting, AIO_SetStrokeOverprinting,
   AIO_SetFlatness, AIO_SetLineCap, AIO_SetLineJoin,
   AIO_SetLineWidth, AIO_SetMiterLimit, AIO_SetDash,
@@ -72,7 +72,7 @@ typedef enum {
   AIO_PathFillNoReset, AIO_PathFillNoResetClose,
 
 /**/ AIO_FontEncoding,
-/**/ AIO_PatternDefinition,
+  AIO_PatternDefinition,
 
 /**/ AIO_SetCurrentText,
 /**/ AIO_TextBlockFillStroke,
@@ -111,9 +111,9 @@ typedef enum {
   CO_BeginProlog, CO_EndProlog,
   CO_BeginProcSet, CO_EndProcSet,
   CO_BeginEncoding, CO_EndEncoding,
-/**/  CO_BeginPattern, CO_EndPattern,
+  CO_BeginPattern, CO_EndPattern,
 /**/  CO_IncludeFile,
-/**/  CO_BeginDocument, CO_EndDocument,
+  CO_BeginDocument, CO_EndDocument,
 
   CO_Trailer,
   CO_BoundingBox,
@@ -191,6 +191,7 @@ typedef struct {
 class AIParserBase : protected AILexer  {
 private:
   bool m_ignoring;
+  bool m_debug;
   QValueStack<AIElement> m_stack;
   QValueStack<QValueVector<AIElement> > m_arrayStack;
   DataSink m_sink;
@@ -210,6 +211,10 @@ private:
   void _handleSetFillColorGray();
   void _handleSetStrokeColorCustom();
   void _handleSetFillColorCustom();
+  void _handleSetFillPattern();
+  void _handleSetStrokePattern();
+
+  void _handlePatternDefinition();
 
   void _handlePSGet();
   void _handlePSExec();
@@ -239,9 +244,13 @@ protected:
   void gotBlockEnd ();
   void gotArrayStart ();
   void gotArrayEnd ();
+  void gotByte (uchar value);
+  void gotByteArray (const QByteArray &data);
 
   virtual void gotFillColor (AIColor &color);
   virtual void gotStrokeColor (AIColor &color);
+  virtual void gotFillPattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QValueVector<AIElement>& transformData);
+  virtual void gotStrokePattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QValueVector<AIElement>& transformData);
   virtual void gotFlatness (double val);
   virtual void gotLineWidth (double val);
   virtual void gotLineCaps (int val);
@@ -268,6 +277,7 @@ protected:
   virtual void gotTemplate (const char *data);
   virtual void gotTitle (const char *data);
   virtual void gotCreator (const char *data);
+  virtual void gotPatternDefinition (const char *name, const QValueVector<AIElement>& layerData, double llx, double lly, double urx, double ury);
 
 private:
   void handleElement (AIElement &element);

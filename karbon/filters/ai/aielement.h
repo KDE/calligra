@@ -41,7 +41,9 @@ public:
   // Custom Types
   Operator,
   Reference,
-  Vector
+  Vector,
+  ByteArray,
+  Byte
     };
 
     AIElement();
@@ -55,6 +57,8 @@ public:
     AIElement( int );
     AIElement( uint );
     AIElement( double );
+    AIElement( const QByteArray& );
+    AIElement( uchar );
 
     AIElement& operator= ( const AIElement& );
     bool operator==( const AIElement& ) const;
@@ -81,6 +85,8 @@ public:
     // Custom types
     const QString toReference() const;
     const QString toOperator() const;
+    const QByteArray toByteArray() const;
+    uchar toByte( bool * ok=0 ) const;
 
 //    QValueListConstIterator<AIElement> listBegin() const;
 //    QValueListConstIterator<AIElement> listEnd() const;
@@ -95,6 +101,8 @@ public:
     // Custom types
     QString& asReference();
     QString& asToken();
+    QByteArray& asByteArray();
+    uchar& asByte();
 
     static const char* typeToName( Type typ );
     static Type nameToType( const char* name );
@@ -117,6 +125,7 @@ private:
 	    uint u;
 	    int i;
 	    double d;
+      uchar b;
 	    void *ptr;
         } value;
     };

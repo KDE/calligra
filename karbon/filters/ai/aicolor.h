@@ -39,8 +39,6 @@ class AIColor {
       } cmykdata;
       double graydata;
     } cdata;
-    char *_freedata;
-
 public:
 	AIColor();
 	~AIColor();

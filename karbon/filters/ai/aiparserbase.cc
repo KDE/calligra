@@ -108,6 +108,7 @@ static CommentOperationMapping commentMappings[] = {
   { "BeginResource", CO_BeginResource },
   { "BeginEncoding", CO_BeginEncoding },
   { "BeginPattern", CO_BeginPattern },
+  { "BeginDocument", CO_BeginPattern },
   { "Trailer", CO_Trailer },
   { "EndProlog", CO_EndProlog },
   { "EndSetup", CO_EndSetup },
@@ -115,13 +116,13 @@ static CommentOperationMapping commentMappings[] = {
   { "EndResource", CO_EndResource },
   { "EndEncoding", CO_EndEncoding },
   { "EndPattern", CO_EndPattern },
+  { "EndDocument", CO_EndDocument },
 
   { "Title", CO_Title },
   { "Creator", CO_Creator },
 
   { "EOF", CO_Ignore },
   { "Note", CO_Ignore },
-  { "EndDocument", CO_Ignore },
   { "EndComments", CO_Ignore },
   { "PS-Adobe", CO_Ignore },
 
@@ -160,7 +161,7 @@ static CommentOperationMapping commentMappings[] = {
   { NULL, CO_Other }
 };
 
-AIParserBase::AIParserBase() : m_ignoring(false), m_sink (DS_Other), m_continuationMode(CM_None) {
+AIParserBase::AIParserBase() : m_ignoring(false), m_debug(false), m_sink (DS_Other), m_continuationMode(CM_None) {
 }
 AIParserBase::~AIParserBase(){
 }
@@ -175,6 +176,14 @@ void AIParserBase::gotComment (const char *value) {
   switch (cop) {
     case CO_BeginSetup :
     case CO_EndSetup :
+    case CO_BeginDocument :
+    case CO_EndDocument :
+      break;
+    case CO_BeginPattern :
+//      m_debug = true;
+      break;
+    case CO_EndPattern :
+//      m_debug = false;
       break;
     case CO_BeginProlog :
     case CO_BeginProcSet :
@@ -183,9 +192,9 @@ void AIParserBase::gotComment (const char *value) {
     case CO_IncludeFont :
     case CO_BeginBrushPattern :
     case CO_BeginGradient :
-    case CO_BeginPalette :
     case CO_Trailer :
-      qDebug ("start ignoring");
+    case CO_BeginPalette :
+      if (m_debug) qDebug ("start ignoring");
       m_ignoring = true;
       break;
     case CO_EndProlog :
@@ -195,7 +204,7 @@ void AIParserBase::gotComment (const char *value) {
     case CO_EndBrushPattern :
     case CO_EndGradient :
     case CO_EndPalette :
-      qDebug ("stop ignoring");
+      if (m_debug) qDebug ("stop ignoring");
       m_ignoring = false;
       break;
     case CO_Ignore :
@@ -256,11 +265,15 @@ void AIParserBase::handleElement (AIElement &element)
 
   if (m_sink == DS_Array)
   {
+    if (m_debug) qDebug ("in mode array");
     QValueVector<AIElement> &elementArray = m_arrayStack.top();
     elementArray.push_back(element);
   }
   else
+  {
+    if (m_debug) qDebug ("in mode stack");
     m_stack.push (element);
+  }
 }
 
 void AIParserBase::gotIntValue (int value) {
@@ -278,6 +291,7 @@ void AIParserBase::gotDoubleValue (double value) {
 void AIParserBase::gotStringValue (const char *value) {
   if (m_ignoring) return;
   if (value == NULL) value = "";
+  if (m_debug) qDebug ("string: %s", value);
   AIElement element (value);
   handleElement (element);
 }
@@ -285,14 +299,30 @@ void AIParserBase::gotStringValue (const char *value) {
 void AIParserBase::gotReference (const char *value) {
   if (m_ignoring) return;
   if (value == NULL) value = "";
+  if (m_debug) qDebug ("reference: %s", value);
   QString string(value);
   AIElement element (string, AIElement::Reference);
   handleElement (element);
 }
 
+void AIParserBase::gotByte (uchar value) {
+  if (m_ignoring) return;
+  AIElement element (value);
+  handleElement (element);
+}
+
+void AIParserBase::gotByteArray (const QByteArray &data) {
+  if (m_ignoring) return;
+  AIElement element (data);
+  handleElement (element);
+}
+
+
 void AIParserBase::gotArrayStart () {
   if (m_ignoring) return;
-  qDebug ("got array start");
+  if (m_debug) qDebug ("got array start");
+
+//  m_debug = true;
 
   QValueVector<AIElement> array;
   m_arrayStack.push (array);
@@ -302,22 +332,32 @@ void AIParserBase::gotArrayStart () {
 
 void AIParserBase::gotArrayEnd () {
   if (m_ignoring) return;
-  qDebug ("got array end");
+  if (m_debug) qDebug ("got array end");
 
   QValueVector<AIElement> stackArray = m_arrayStack.pop();
 
   if (m_arrayStack.empty())
   {
+    if (m_debug) qDebug ("put elements to stack");
     AIElement realElement (stackArray);
+
+    if (m_debug) {
+      qDebug ("going to stack");
+      elementtoa (realElement);
+      qDebug ("done");
+    }
     m_stack.push (realElement);
 
     m_sink = DS_Other;
   }
   else
   {
+    if (m_debug) qDebug ("put elements to nest stack level");
     QValueVector<AIElement> currentTOS = m_arrayStack.top();
     currentTOS.push_back (stackArray);
   }
+
+//  m_debug = false;
 }
 
 void AIParserBase::_handleSetDash()
@@ -340,10 +380,59 @@ void AIParserBase::_handleSetFillColorCMYK()
   double m = getDoubleValue();
   double c = getDoubleValue();
 
+  if (m_debug) qDebug ("values 1 are %f %f %f %f",c,m,y,k);
   AIColor color (c,m,y,k);
 
   gotFillColor (color);
 }
+
+void AIParserBase::_handleSetFillPattern()
+{
+  AIElement elem (m_stack.top());
+  m_stack.pop();
+
+  const QValueVector<AIElement> aval = elem.toVector();
+
+  double ka = getDoubleValue();
+  double k = getDoubleValue();
+  double r = getDoubleValue();
+  double rf = getDoubleValue();
+  double angle = getDoubleValue();
+  double sy = getDoubleValue();
+  double sx = getDoubleValue();
+  double py = getDoubleValue();
+  double px = getDoubleValue();
+
+  AIElement elem2 (m_stack.top());
+  m_stack.pop();
+
+  const QString &name = elem2.toString();
+  gotFillPattern (name.latin1(), px, py, sx, sy, angle, rf, r, k, ka, aval);
+}
+void AIParserBase::_handleSetStrokePattern()
+{
+  AIElement elem (m_stack.top());
+  m_stack.pop();
+
+  const QValueVector<AIElement> aval = elem.toVector();
+
+  double ka = getDoubleValue();
+  double k = getDoubleValue();
+  double r = getDoubleValue();
+  double rf = getDoubleValue();
+  double angle = getDoubleValue();
+  double sy = getDoubleValue();
+  double sx = getDoubleValue();
+  double py = getDoubleValue();
+  double px = getDoubleValue();
+
+  AIElement elem2 (m_stack.top());
+  m_stack.pop();
+
+  const QString &name = elem2.toString();
+  gotStrokePattern (name.latin1(), px, py, sx, sy, angle, rf, r, k, ka, aval);
+}
+
 
 void AIParserBase::_handleSetStrokeColorCMYK()
 {
@@ -351,6 +440,7 @@ void AIParserBase::_handleSetStrokeColorCMYK()
   double y = getDoubleValue();
   double m = getDoubleValue();
   double c = getDoubleValue();
+  if (m_debug) qDebug ("values 2 are %f %f %f %f",c,m,y,k);
 
   AIColor color (c,m,y,k);
 
@@ -360,6 +450,7 @@ void AIParserBase::_handleSetStrokeColorCMYK()
 void AIParserBase::_handleSetFillColorGray()
 {
   double g = getDoubleValue();
+  if (m_debug) qDebug ("values 3 are %f",g);
 
   AIColor color (g);
 
@@ -369,6 +460,7 @@ void AIParserBase::_handleSetFillColorGray()
 void AIParserBase::_handleSetStrokeColorGray()
 {
   double g = getDoubleValue();
+  if (m_debug) qDebug ("values 4 are %f",g);
 
   AIColor color (g);
 
@@ -383,6 +475,7 @@ void AIParserBase::_handleSetFillColorCustom()
   double y = getDoubleValue();
   double m = getDoubleValue();
   double c = getDoubleValue();
+  if (m_debug) qDebug ("values 5 are %f %f %f %f",c,m,y,k);
 
   AIColor color (c,m,y,k,name.latin1(),g);
 
@@ -403,6 +496,27 @@ void AIParserBase::_handlePSExec() {
   m_stack.pop();
 }
 
+void AIParserBase::_handlePatternDefinition()
+{
+  AIElement elem (m_stack.top());
+  m_stack.pop();
+
+  const QValueVector<AIElement> aval = elem.toVector();
+
+  double ury = getDoubleValue();
+  double urx = getDoubleValue();
+  double lly = getDoubleValue();
+  double llx = getDoubleValue();
+
+  AIElement elem2 (m_stack.top());
+  m_stack.pop();
+
+  const QString &name = elem2.toString();
+
+  gotPatternDefinition (name.latin1(), aval, llx, lly, urx, ury);
+
+}
+
 
 void AIParserBase::_handleSetStrokeColorCustom()
 {
@@ -412,6 +526,7 @@ void AIParserBase::_handleSetStrokeColorCustom()
   double y = getDoubleValue();
   double m = getDoubleValue();
   double c = getDoubleValue();
+  if (m_debug) qDebug ("values 6 are %f %f %f %f",c,m,y,k);
 
   AIColor color (c,m,y,k,name.latin1(),g);
 
@@ -436,13 +551,14 @@ void AIParserBase::_handleCMYKCustomColor(const char *data) {
 
 void AIParserBase::gotToken (const char *value) {
   if (m_ignoring) return;
+  if (m_debug) qDebug ("token: %s", value);
 
   if (m_sink == DS_Array)
   {
-    qDebug ("token in array");
+    if (m_debug) qDebug ("token in array");
     QString op (value);
     AIElement realElement (op, AIElement::Operator);
-    m_stack.push (realElement);
+    handleElement (realElement);
 
     return;
   }
@@ -473,6 +589,12 @@ void AIParserBase::gotToken (const char *value) {
       break;
     case AIO_SetStrokeColorCustom :
       _handleSetStrokeColorCustom();
+      break;
+    case AIO_SetFillPattern :
+      _handleSetFillPattern();
+      break;
+    case AIO_SetStrokePattern :
+      _handleSetStrokePattern();
       break;
     case AIO_SetFillOverprinting :
       gotFillOverprinting (getBoolValue());
@@ -629,6 +751,9 @@ void AIParserBase::gotToken (const char *value) {
     case AIO_PathStrokeClose :
       gotStrokePath(true);
       break;
+    case AIO_PatternDefinition :
+      _handlePatternDefinition();
+      break;
 
     default :
 //      qWarning ( "unknown operator: %s", value );
@@ -745,8 +870,6 @@ CommentOperation AIParserBase::getCommentOperation (const char *command) {
 
 }
 
-
-
 void AIParserBase::gotFillColor (AIColor &color) {
 /*  double r, g, b;
   color.toRGB (r, g, b);
@@ -758,6 +881,19 @@ void AIParserBase::gotStrokeColor (AIColor &color) {
   color.toRGB (r, g, b);
   qDebug ( "got stroke color: %f %f %f ", r, g, b ); */
 }
+
+void AIParserBase::gotFillPattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QValueVector<AIElement>& transformData) {
+  qDebug ( "got fill pattern %s %f %f %f %f %f %f %f %f %f", pname, px, py, sx, sy, angle, rf, r, k, ka);
+  arraytoa (transformData);
+  qDebug ("/got fill pattern");
+}
+
+void AIParserBase::gotStrokePattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QValueVector<AIElement>& transformData) {
+  qDebug ( "got stroke pattern %s %f %f %f %f %f %f %f %f %f", pname, px, py, sx, sy, angle, rf, r, k, ka);
+  arraytoa (transformData);
+  qDebug ("/got stroke pattern");
+}
+
 
 void AIParserBase::gotFlatness (double val) {
 //  qDebug ( "got flatness: %f ", val );
@@ -851,6 +987,13 @@ void AIParserBase::gotDash (const QValueVector<AIElement>& dashData, double phas
 //  arraytoa (dashData);
 //  qDebug ("/got dash" );
 }
+
+void AIParserBase::gotPatternDefinition (const char*name, const QValueVector<AIElement>& patternData, double llx, double lly, double urx, double ury) {
+//  qDebug ("got pattern definition: %s <data> %f %f %f %f", name, lly, lly, urx, ury );
+//  arraytoa (patternData);
+//  qDebug ("/got pattern definition" );
+}
+
 
 void AIParserBase::gotBoundingBox (int llx, int lly, int urx, int ury) {
 //  qDebug ("got binding box: %d %d %d %d", llx, lly, urx, ury );

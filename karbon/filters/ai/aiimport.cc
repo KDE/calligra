@@ -34,7 +34,7 @@ protected:
 K_EXPORT_COMPONENT_FACTORY( libkarbonaiimport, AiImportFactory() );
 
 AiImport::AiImport( KoFilter*, const char*, const QStringList& )
-	: KoFilter()
+	: KoFilter(), m_result ()
 {
 }
 
@@ -61,9 +61,9 @@ AiImport::convert( const QCString& from, const QCString& to )
 		fileIn.close();
 		return KoFilter::CreationError;
         }
-	m_buffer = getHeader() + m_buffer + getFooter();
+	m_result = getHeader() + m_result + getFooter();
 
-        kdDebug() << m_buffer << endl;
+        kdDebug() << m_result << endl;
 	KoStoreDevice* storeOut = m_chain->storageFile( "root", KoStore::Write );
 	if( !storeOut )
 	{
@@ -71,7 +71,7 @@ AiImport::convert( const QCString& from, const QCString& to )
 		return KoFilter::StorageCreationError;
 	}
 
-	QCString cStr = m_buffer.latin1();
+	QCString cStr = m_result.latin1();
 	storeOut->writeBlock( cStr, cStr.length() );
 
 	return KoFilter::OK;
@@ -86,7 +86,7 @@ void AiImport::gotStartTag (const char *tagName, Parameters& params) {
   data += getParamList (params);
   data += ">\n";
 
-  m_buffer += data;
+  m_result += data;
 }
 
 void AiImport::gotEndTag (const char *tagName){
@@ -95,8 +95,20 @@ void AiImport::gotEndTag (const char *tagName){
   data += tagName;
   data += ">\n";
 
-  m_buffer += data;
+  m_result += data;
 }
+
+void AiImport::gotSimpleTag (const char *tagName, Parameters& params) {
+  QString data;
+  data += "<";
+  data += tagName;
+  data += " ";
+  data += getParamList (params);
+  data += "/>\n";
+
+  m_result += data;
+}
+
 
 void AiImport::parsingStarted(){
 //  QString str = getHeader();
@@ -111,7 +123,7 @@ void AiImport::parsingFinished(){
 
 void AiImport::parsingAborted(){
 //  qDebug ("parsing aborted called");
-  m_buffer = "";
+  m_result = "";
 }
 
 #include "aiimport.moc"

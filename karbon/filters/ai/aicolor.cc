@@ -24,21 +24,18 @@ AIColor::AIColor(){
   cdata.cmykdata.mvalue = 0;
   cdata.cmykdata.yvalue = 0;
   cdata.cmykdata.kvalue = 0;
-  _freedata = NULL;
 }
 
 AIColor::AIColor( const AIColor& value ){
   ctype = value.ctype;
   memcpy (&cdata, &value.cdata, sizeof (cdata));
-  _freedata = NULL;
 }
 AIColor::AIColor( double c, double m, double y, double k ){
   ctype = AIColor::CT_CMYK;
-  cdata.cmykdata.cvalue = 0;
-  cdata.cmykdata.mvalue = 0;
-  cdata.cmykdata.yvalue = 0;
-  cdata.cmykdata.kvalue = 1;
-  _freedata = NULL;
+  cdata.cmykdata.cvalue = c;
+  cdata.cmykdata.mvalue = m;
+  cdata.cmykdata.yvalue = y;
+  cdata.cmykdata.kvalue = k;
 }
 AIColor::AIColor( double c, double m, double y, double k, const char* colorname, double gray ){
   ctype = AIColor::CT_CMYK_Key;
@@ -47,16 +44,13 @@ AIColor::AIColor( double c, double m, double y, double k, const char* colorname,
   cdata.cmykdata.yvalue = y;
   cdata.cmykdata.kvalue = k;
   cdata.cmykdata.colorname = strdup (colorname);
-  _freedata = cdata.cmykdata.colorname;
 }
 AIColor::AIColor( double gray ){
   ctype = AIColor::CT_Gray;
   cdata.graydata = gray;
-  _freedata = NULL;
 }
 
 AIColor::~AIColor(){
-//  if (_freedata) free (_freedata);
 }
 
 void AIColor::toRGB (double &r, double &g, double &b)

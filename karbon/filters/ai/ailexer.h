@@ -38,6 +38,8 @@ typedef enum {
   State_ArrayEnd,
   State_Byte,
   State_ByteArray,
+  State_StringEncodedChar,
+  State_CommentEncodedChar,
 } State;
 
 typedef enum {
@@ -46,7 +48,11 @@ typedef enum {
   Action_Output,
   Action_Ignore,
   Action_Abort,
-  Action_OutputUnget } Action;
+  Action_OutputUnget,
+  Action_InitTemp,
+  Action_CopyTemp,
+  Action_DecodeUnget
+} Action;
 
 class AILexer {
 public: 
@@ -57,6 +63,7 @@ public:
 private:
   State m_curState;
   QString m_buffer;
+  QString m_temp;
 
 /*  State nextState (char c);
   Action nextAction (char c);  */
@@ -64,6 +71,9 @@ private:
   void nextStep (char c, State* newState, Action* newAction);
 
   void doOutput ();
+  void doHandleByteArray ();
+  uchar getByte();
+  uchar decode();
 
 protected:
   virtual void parsingStarted();
@@ -80,6 +90,8 @@ protected:
   virtual void gotBlockEnd ();
   virtual void gotArrayStart ();
   virtual void gotArrayEnd ();
+  virtual void gotByte (uchar value);
+  virtual void gotByteArray (const QByteArray &data);
 
 };
 

@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qstringlist.h>
 #include "ailexer.h"
 
 #define CATEGORY_WHITESPACE -1
@@ -50,6 +51,8 @@ const char*statetoa (State state){
     case State_ArrayEnd : return "array end";
     case State_Byte : return "byte";
     case State_ByteArray : return "byte array";
+    case State_StringEncodedChar : return "encoded char (string)";
+    case State_CommentEncodedChar : return "encoded char (comment)";
     default : return "unknown";
   }
 }
@@ -82,6 +85,7 @@ static Transition transitions[] = {
 //  { State_Array, CATEGORY_DIGIT, State_Array, Action_Copy},
 //  { State_Array, ' ', State_Array, Action_Copy},
   { State_Comment, '\n', State_Start, Action_Output},
+  { State_Comment, '\\', State_CommentEncodedChar, Action_InitTemp},
   { State_Comment, CATEGORY_ANY, State_Comment, Action_Copy},
   { State_Integer, CATEGORY_DIGIT, State_Integer, Action_Copy},
   { State_Integer, CATEGORY_WHITESPACE, State_Start, Action_Output},
@@ -97,6 +101,7 @@ static Transition transitions[] = {
   { State_Float, '}', State_Start, Action_OutputUnget},
   { State_Float, CATEGORY_ANY, State_Start, Action_Abort},
   { State_String, ')', State_Start, Action_Output},
+  { State_String, '\\', State_StringEncodedChar, Action_InitTemp},
   { State_String, CATEGORY_ANY, State_String, Action_Copy},
   { State_Token, CATEGORY_DIGIT, State_Token, Action_Copy},
   { State_Token, CATEGORY_ALPHA, State_Token, Action_Copy},
@@ -125,6 +130,12 @@ static Transition transitions[] = {
   { State_ByteArray, CATEGORY_WHITESPACE, State_ByteArray, Action_Ignore },
   { State_ByteArray, '>', State_Start, Action_Output },
   { State_ByteArray, CATEGORY_ANY, State_Start, Action_Abort },
+  { State_StringEncodedChar, CATEGORY_DIGIT, State_StringEncodedChar, Action_CopyTemp},
+  { State_StringEncodedChar, '\\', State_String, Action_Copy},
+  { State_StringEncodedChar, CATEGORY_ANY, State_String, Action_DecodeUnget},
+  { State_CommentEncodedChar, CATEGORY_DIGIT, State_CommentEncodedChar, Action_CopyTemp},
+  { State_CommentEncodedChar, '\\', State_String, Action_Copy},
+  { State_CommentEncodedChar, CATEGORY_ANY, State_Comment, Action_DecodeUnget},
   { State_Start, STOP, State_Start, Action_Abort}
 };
 
@@ -174,6 +185,16 @@ bool AILexer::parse (QIODevice& fin){
         parsingAborted();
         return false;
         break;
+      case Action_InitTemp :
+        m_temp = "";
+        break;
+      case Action_CopyTemp :
+        m_temp += c;
+        break;
+      case Action_DecodeUnget :
+        m_buffer += decode();
+        fin.ungetch(c);
+        break;
       default :
         qWarning ( "unknown action: %d ", action);
     }
@@ -222,12 +243,10 @@ void AILexer::doOutput ()
       gotArrayEnd ();
       break;
     case State_Byte :
-      qDebug ("TODO: handle byte: %s", m_buffer.latin1());
-      gotIntValue (0);
+      gotByte (getByte());
       break;
     case State_ByteArray :
-      qDebug ("TODO: handle byte array: %s", m_buffer.latin1());
-      gotStringValue ("");
+      doHandleByteArray ();
       break;
     default:
       qWarning ( "unknown state: %d", m_curState );
@@ -288,6 +307,22 @@ void AILexer::parsingAborted() {
   qDebug ( "parsing aborted" );
 }
 
+void AILexer::gotByte (uchar value) {
+  qDebug ( "got byte %d" , value );
+}
+
+void AILexer::gotByteArray (const QByteArray &data) {
+  qDebug ( "got byte array" );
+/*  for ( uint i = 0; i < data.size(); i++ )
+  {
+    uchar value = data[i];
+    qDebug( "%d: %x", i, value );
+  }
+  qDebug ( "/byte array" ); */
+
+}
+
+
 void AILexer::nextStep (char c, State *newState, Action *newAction) {
   int i=0;
 
@@ -326,4 +361,43 @@ void AILexer::nextStep (char c, State *newState, Action *newAction) {
   }
 }
 
+void AILexer::doHandleByteArray ()
+{
+//  qDebug ("convert string to byte array (%s)", m_buffer.latin1());
+
+  uint strIdx = 0;
+  uint arrayIdx = 0;
+
+  QByteArray data (m_buffer.length() >> 1);
+
+  while (strIdx < m_buffer.length())
+  {
+    const QString &item = m_buffer.mid (strIdx, 2);
+    uchar val = item.toShort(NULL, 16);
+    data[arrayIdx] = val;
+    strIdx += 2;
+    arrayIdx++;
+  }
+
+  gotByteArray (data);
+}
+
+uchar AILexer::getByte()
+{
+//  qDebug ("convert string to byte (%s)", m_buffer.latin1());
+
+  QStringList list = QStringList::split ("#", m_buffer);
+  int radix = list[0].toShort();
+  uchar value = list[1].toShort (NULL, radix);
+
+  return value;
+}
+
+uchar AILexer::decode()
+{
+  QString str (m_temp);
+  uchar value = str.toShort(NULL, 8);
+//  qDebug ("got encoded char %c",value);
+  return value;
+}
 

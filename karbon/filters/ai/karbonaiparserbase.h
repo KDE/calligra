@@ -22,7 +22,6 @@
 #include <qptrlist.h>
 #include <qstring.h>
 #include <qpair.h>
-#include <qptrlist.h>
 
 #include "aicolor.h"
 
@@ -33,7 +32,7 @@ typedef QPair<QString,QString> Parameter;
 typedef QPtrList<Parameter> Parameters;
 typedef QPtrList<PathElement> PathElements;
 
-typedef enum { POT_Filled, POT_Stroked, POT_FilledStroked, POT_Clip, POT_Ignore, POT_Other } PathOutputType;
+typedef enum { POT_Filled = 1, POT_Stroked = 2, POT_FilledStroked = 3, POT_Clip = 4, POT_Ignore = 8, POT_Other = 0 } PathOutputType;
 
 typedef struct { int llx, lly, urx, ury; } BoundingBox;
 
@@ -45,6 +44,7 @@ public:
 private:
   PathElements m_curPath;
   FillMode m_fm;
+  PathOutputType m_pot;
 
   BoundingBox  m_bbox;
   AIColor m_strokeColor;

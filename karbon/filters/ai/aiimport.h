@@ -23,11 +23,12 @@ public:
 
 	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 private:
-   QString m_buffer;
+   QString m_result;
 
 protected:
   void gotStartTag (const char *tagName, Parameters& params);
   void gotEndTag (const char *tagName);
+  void gotSimpleTag (const char *tagName, Parameters& params);
 
   void parsingStarted();
   void parsingFinished();
