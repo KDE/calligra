@@ -27,7 +27,7 @@
 #include <kdeversion.h>
 
 static const char *description =
-	I18N_NOOP("Easy database creation for everyone");
+	I18N_NOOP("Database creation for everyone");
 
 KAboutData *newKexiAboutData()
 {
@@ -48,7 +48,7 @@ KAboutData *newKexiAboutData()
 	aboutData->addAuthor("Seth Kurzenberg",I18N_NOOP("CQL++, SQL assistance"),  "seth@cql.com");
 	aboutData->addAuthor("Laurent Montel", I18N_NOOP("Code cleanings"), "montell@club-internet.fr");
 	aboutData->addAuthor("Till Busch", I18N_NOOP("Bugfixes, Original Table Widget"), "till@bux.at");
-	aboutData->addAuthor("Jaroslaw Staniek / OpenOffice Polska", I18N_NOOP("Developer, Designer, commercially supported version, win32 port"), "js@iidea.pl");
+	aboutData->addAuthor("Jaroslaw Staniek / OpenOffice Polska", I18N_NOOP("Developer, Designer, KexiDB, commercially supported version, win32 port"), "js@iidea.pl");
 	aboutData->addCredit("Daniel Molkentin",I18N_NOOP("Initial design improvements"),  "molkentin@kde.org");
 	aboutData->addCredit("Kristof Borrey", I18N_NOOP("Icons and UI-Research"), "kristof.borrey@skynet.be");
 	aboutData->setTranslator(I18N_NOOP("_:NAME OF TRANSLATORS\nNames"), I18N_NOOP("_:EMAIL OF TRANSLATORS\nemail"));

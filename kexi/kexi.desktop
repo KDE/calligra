@@ -1,17 +1,16 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Kexi
+Name[lo]=ສອຍຄີວ - K
+Name[xx]=xxKexixx
 Type=Application
 Exec=kexi
 Icon=kexi
 DocPath=kexi/index.html
 MimeType=application/x-kexiproject-sqlite;application/x-kexiproject-shortcut
-#^^^^ TODO
 Terminal=0
-Name[lo]=ສອຍຄີວ - K
-Name[xx]=xxKexixx
-GenericName=Database Management
-GenericName[bg]=Програма за управление на база данни
+GenericName=Database creation for everyone
+GenericName[bg]=Управление на бази от данни
 GenericName[ca]=Gestió de bases de dades
 GenericName[cs]=Správce databází
 GenericName[cy]=Rheoli Cronfa Data
@@ -44,7 +43,7 @@ GenericName[wa]=Manaedjaedje di båzes di dnêyes
 GenericName[xx]=xxDatabase Managementxx
 GenericName[zh_CN]=数据库管理
 Comment=A Database Management Application
-Comment[bg]=Приложение за управление на база данни
+Comment[bg]=Приложение за управление на база от данни
 Comment[ca]=Una aplicació per gestionar bases de dades
 Comment[cs]=Aplikace pro správu databází
 Comment[cy]=Cymhwysiad Rheoli Cronfa Data
