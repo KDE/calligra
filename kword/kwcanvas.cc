@@ -518,12 +518,6 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 KWFrame * frame = m_doc->frameUnderMouse( normalPoint, &border );
                 if ( ( frame && border ) || e->state() & ControlButton )
                 {
-                    KWFrame *frame = m_doc->getFirstSelectedFrame();
-                    if ( frame->getFrameSet()->isHeaderOrFooter() )
-                    {
-                        // ####### TODO add "Configure Headers/Footers" to the popup,
-                        // which opens KoPageLayoutDia on the 3rd page ######
-                    }
                     m_gui->getView()->openPopupMenuEditFrame( QCursor::pos() );
                 }
                 else

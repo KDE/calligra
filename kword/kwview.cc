@@ -638,6 +638,9 @@ void KWView::setupActions()
     actionChangeClipart=new KAction( i18n( "Change clipart..." ), 0,
                                      this, SLOT( changeClipart() ),
                                      actionCollection(), "change_clipart" );
+    actionConfigureHeaderFooter=new KAction( i18n( "Configure header/footer..." ), 0,
+                                     this, SLOT( configureHeaderFooter() ),
+                                     actionCollection(), "configure_headerfooter" );
 }
 
 
@@ -3081,26 +3084,34 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     if(!table)
     {
-        unplugActionList( "picture_action" );
+        //unplugActionList( "picture_action" );
         QList<KAction> actionList= QList<KAction>();
 
         int nbFrame=m_doc->getSelectedFrames().count();
+        KActionSeparator *separator=new KActionSeparator();
         if(nbFrame ==1)
         {
             KWFrame *frame=m_doc->getFirstSelectedFrame();
             if(frame->getFrameSet()->type()==FT_PICTURE)
             {
-                actionList.append(new KActionSeparator());
+                actionList.append(separator);
                 actionList.append(actionChangePicture);
             }
             else if(frame->getFrameSet()->type()==FT_CLIPART)
             {
-                actionList.append(new KActionSeparator());
+                actionList.append(separator);
                 actionList.append(actionChangeClipart);
+            }
+            else if(frame->getFrameSet()->isHeaderOrFooter())
+            {
+                actionList.append(separator);
+                actionList.append(actionConfigureHeaderFooter);
             }
         }
         plugActionList( "picture_action", actionList );
-        ((QPopupMenu*)factory()->container("frame_popup",this))->popup(_point);
+        ((QPopupMenu*)factory()->container("frame_popup",this))->exec(_point);
+        unplugActionList( "picture_action" );
+        delete separator;
     }
     else
         ((QPopupMenu*)factory()->container("frame_popup_table",this))->popup(_point);
@@ -3504,6 +3515,47 @@ void KWView::changeClipart()
         m_doc->frameChanged( frame );
         m_doc->addCommand(cmd);
     }
+}
+
+void KWView::configureHeaderFooter()
+{
+    KoPageLayout pgLayout;
+    KoColumns cl;
+    KoKWHeaderFooter kwhf;
+    m_doc->getPageLayout( pgLayout, cl, kwhf );
+
+    pageLayout tmpOldLayout;
+    tmpOldLayout._pgLayout=pgLayout;
+    tmpOldLayout._cl=cl;
+    tmpOldLayout._hf=kwhf;
+
+    KoHeadFoot hf;
+    int flags = KW_HEADER_AND_FOOTER;
+
+    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags ) ) {
+        if( !(tmpOldLayout._pgLayout==pgLayout)||
+            tmpOldLayout._cl.columns!=cl.columns ||
+            tmpOldLayout._cl.ptColumnSpacing!=cl.ptColumnSpacing||
+            tmpOldLayout._hf.header!=kwhf.header||
+            tmpOldLayout._hf.footer!=kwhf.footer||
+            tmpOldLayout._hf.ptHeaderBodySpacing != kwhf.ptHeaderBodySpacing ||
+            tmpOldLayout._hf.ptFooterBodySpacing != kwhf.ptFooterBodySpacing)
+        {
+            pageLayout tmpNewLayout;
+            tmpNewLayout._pgLayout=pgLayout;
+            tmpNewLayout._cl=cl;
+            tmpNewLayout._hf=kwhf;
+
+            KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),m_doc,tmpOldLayout,tmpNewLayout ) ;
+            m_doc->addCommand(cmd);
+
+            m_doc->setPageLayout( pgLayout, cl, kwhf );
+            m_doc->updateRuler();
+
+            m_doc->updateResizeHandles();
+        }
+    }
+
 }
 
 /******************************************************************/

@@ -284,6 +284,8 @@ public slots:
     void changePicture();
     void changeClipart();
 
+    void configureHeaderFooter();
+
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
@@ -420,6 +422,8 @@ private:
 
     KAction *actionChangePicture;
     KAction *actionChangeClipart;
+    KAction *actionConfigureHeaderFooter;
+
 
     KCharSelectDia *m_specialCharDlg;
     KWGUI *m_gui;
