@@ -1012,6 +1012,12 @@ void KoTextParag::printRTDebug( int info )
         kdDebug() << "  Paragraph format=" << paragFormat() << " " << paragFormat()->key()
                   << " fontsize:" << dynamic_cast<KoTextFormat *>(paragFormat())->font().pointSize() << endl;
 
+        for ( uint line = 0 ; line < lines(); ++ line ) {
+            int y, h, baseLine;
+            lineInfo( line, y, h, baseLine );
+            kdDebug() << "  Line " << line << " y=" << y << " height=" << h << " baseLine=" << baseLine << endl;
+        }
+        kdDebug() << endl;
         KoTextString * s = string();
         int lastX = 0; // pixels
         int lastW = 0; // pixels
