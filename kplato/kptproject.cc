@@ -92,15 +92,7 @@ void KPTProject::calculate() {
         nit.current()->setStartEndTime();
     }
 
-    QPtrListIterator<KPTNode> it(m_nodes);
-    for ( ; it.current(); ++it ) {
-        it.current()->requestResources();
-    }
-
-    QPtrListIterator<KPTResourceGroup> rit(m_resourceGroups);
-    for ( ; rit.current(); ++rit ) {
-        rit.current()->makeAppointments();
-    }
+    makeAppointments();
 }
 
 KPTDuration *KPTProject::getExpectedDuration() {
@@ -170,7 +162,7 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
         KPTDateTime startTime = currentNode.earliestStart;
         /* *** expected should be more general than this *** */
         /* *** we could use (say) a member function pointer *** */
-        startTime += currentNode.expectedDuration(startTime);
+        startTime += currentNode.expectedDurationForwards(startTime);
         /* Go through arcs from currentNode, propagating values */
         for( std::vector<KPTNode*>::iterator i = currentNode.successors.list.begin(); i != currentNode.successors.list.end(); ++i ) {
             /* add new nodes if necessary */
@@ -236,7 +228,7 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
 #endif
         /* *** expected should be more general than this *** */
         /* *** we could use (say) a member function pointer *** */
-        t -= currentNode.expectedDuration(t);
+        t -= currentNode.expectedDurationBackwards(t);
 #ifdef DEBUGPERT
         kdDebug() << "  New calculated latest finish=" << t.toString() << endl;
 #endif
@@ -283,12 +275,11 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
 bool KPTProject::load(QDomElement &element) {
     // Maybe TODO: Delete old stuff here
 
-    // Load attributes (TODO: Finish with the rest of them)
     m_name = element.attribute("name");
     m_leader = element.attribute("leader");
     m_description = element.attribute("description");
-   // Allow for both numeric and text
-   bool ok = false;
+    // Allow for both numeric and text
+    bool ok = false;
     QString constraint = element.attribute("scheduling","0");
     m_constraint = (KPTNode::ConstraintType)constraint.toInt(&ok);
     if (!ok)
@@ -404,7 +395,6 @@ void KPTProject::save(QDomElement &element)  {
     QDomElement me = element.ownerDocument().createElement("project");
     element.appendChild(me);
 
-    // TODO: Save some more info
     me.setAttribute("name", m_name);
     me.setAttribute("leader", m_leader);
     me.setAttribute("description", m_description);
@@ -430,7 +420,7 @@ void KPTProject::save(QDomElement &element)  {
         calit.current()->save(me);
     }
     
-    // save project resources
+    // save project resources, must be after calendars
     m_maxGroupId = 0; m_maxResourceId = 0;  // we'll generate fresh ones
     QPtrListIterator<KPTResourceGroup> git(m_resourceGroups);
     for ( ; git.current(); ++git ) {
@@ -778,6 +768,16 @@ QPtrList<KPTAppointment> KPTProject::appointments(const KPTNode *node) {
 void KPTProject::addCalendar(KPTCalendar *calendar) {
     m_calendars.append(calendar);
 }
+
+KPTCalendar *KPTProject::calendar(int id) const {
+    QPtrListIterator<KPTCalendar> it = m_calendars;
+    for(; it.current(); ++it) {
+        if (it.current()->id() == id)
+            return it.current();
+    }
+    return 0;
+}
+
 
 #ifndef NDEBUG
 void KPTProject::printDebug(bool children, QCString indent) {

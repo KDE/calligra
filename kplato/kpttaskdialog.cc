@@ -46,7 +46,7 @@
 #include <qpushbutton.h>
 #include <kdebug.h>
 
-KPTTaskDialog::KPTTaskDialog(KPTTask &task, QPtrList<KPTResourceGroup> &resourceGroups, QWidget *p, const char *n)
+KPTTaskDialog::KPTTaskDialog(KPTTask &task, QWidget *p, const char *n)
     : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p, n, true, true),
       m_task(task)
 {
@@ -61,7 +61,7 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, QPtrList<KPTResourceGroup> &resource
     
     page = addPage(i18n("&Notes"));
     topLayout = new QVBoxLayout(page, 0, spacingHint());
-    m_resourcesTab = new KPTRequestResourcesPanel(page, task, resourceGroups);
+    m_resourcesTab = new KPTRequestResourcesPanel(page, task);
     topLayout->addWidget(m_resourcesTab);
     
     page = addPage(i18n("&Notes"));

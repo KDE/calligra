@@ -31,16 +31,17 @@ class KPTDateTime : public QDateTime {
 
 public:
     KPTDateTime();
-    KPTDateTime(QDateTime dt);
+    KPTDateTime(const QDateTime &dt);
+    KPTDateTime(const QDate &date, const QTime &time);
 
     /**
-     * Adds the duration @duration to the datetime
+     * Adds the duration @param duration to the datetime
      */
-    KPTDateTime operator+(const KPTDuration &duration);
+    KPTDateTime operator+(const KPTDuration &duration) const;
     /**
-     * Subtracts the duration @duration from the datetime
+     * Subtracts the duration @param duration from the datetime
      */
-    KPTDateTime operator-(const KPTDuration &duration);
+    KPTDateTime operator-(const KPTDuration &duration) const ;
     /**
      * Returns the absolute duration between the two datetimes
      */

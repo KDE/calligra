@@ -143,6 +143,7 @@ public:
     KPTCalendar *defaultCalendar() { return m_defaultCalendar; }
     const QPtrList<KPTCalendar> &calendars() const { return m_calendars; }
     void addCalendar(KPTCalendar *calendar);
+    KPTCalendar *calendar(int id) const;
 
 protected:
     /**

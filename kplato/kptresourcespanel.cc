@@ -257,8 +257,9 @@ void KPTResourcesPanel::slotEditResource() {
     KPTResourceLBItem *item = dynamic_cast<KPTResourceLBItem*> (listOfResources->selectedItem());
     if(item == NULL) return;
     KPTResource *r = item->m_resourceItem->m_resource;
-    KPTResourceDialog *dia = new KPTResourceDialog(*r);
+    KPTResourceDialog *dia = new KPTResourceDialog(*project, *r);
     if (dia->exec()) {
+        r->setCalendar(dia->calendar());
         resourceName->setText(r->name());
         item->m_resourceItem->setState(KPTResourceItem::Modified);
         item->setName(r->name()); // refresh list
@@ -356,7 +357,7 @@ void KPTResourcesPanel::ok() {
         KPTResourceItem *ditem;
         for (; (ditem = dit.current()) != 0; ++dit) {
             //kdDebug()<<k_funcinfo<<" Deleting resource: '"<<ditem->m_name<<"'"<<endl;
-            gitem->m_group->removeResource(ditem->m_resource); // remove resource from project
+            gitem->m_group->removeResource(ditem->m_originalResource); // remove resource from project
         }
         // Now add/modify group/resources
         if (gitem->m_state == KPTGroupItem::New) {

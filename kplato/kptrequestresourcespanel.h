@@ -74,7 +74,7 @@ public:
 class KPTRequestResourcesPanel : public KPTTaskResourcesPanelBase {
     Q_OBJECT
 public:
-    KPTRequestResourcesPanel (QWidget *parent, KPTTask &task, QPtrList<KPTResourceGroup> &resourceGroups);
+    KPTRequestResourcesPanel (QWidget *parent, KPTTask &task);
 
     KMacroCommand *buildCommand();
     
@@ -87,13 +87,12 @@ private slots:
     void groupChanged(QListViewItem *item);
     void resourceChanged(int, int);
     void unitsChanged(int);
-
+    
 signals:
     void changed();
 
 private:
     KPTTask &m_task;
-    QPtrList<KPTResourceGroup> &m_resourceGroups;
 
     KPTGroupLVItem *selectedGroup;
     bool m_blockChanged;

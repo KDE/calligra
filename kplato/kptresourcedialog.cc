@@ -20,6 +20,7 @@
 #include "kptresourcedialog.h"
 #include "kptproject.h"
 #include "kptresource.h"
+#include "kptcalendar.h"
 
 #include <qpushbutton.h>
 #include <qlabel.h>
@@ -30,6 +31,7 @@
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
+#include <qptrlist.h>
 
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
@@ -48,14 +50,15 @@ KPTResourceDialogImpl::KPTResourceDialogImpl (QWidget *parent)
     connect(units, SIGNAL(valueChanged(int)), SLOT(slotChanged(int)));
     connect(nameEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged(const QString&)));
 
-    connect(fromEdit, SIGNAL(valueChanged(const QTime&)), SLOT(slotChanged(const QTime&)));
-    connect(untilEdit, SIGNAL(valueChanged(const QTime&)), SLOT(slotChanged(const QTime&)));
+    connect(calendarList, SIGNAL(activated(int)), SLOT(slotChanged(int)));
 
     connect(rateEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged(const QString&)));
     connect(overtimeEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged(const QString&)));
     connect(fixedCostEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged(const QString&)));
 
-    connect (chooseBtn, SIGNAL(pressed()), SLOT(slotChooseResource()));
+    connect(chooseBtn, SIGNAL(clicked()), SLOT(slotChooseResource()));
+    
+    connect(editCalendarBtn, SIGNAL(clicked()), SLOT(slotEditCalendarClicked()));
 }
 
 
@@ -84,9 +87,13 @@ void KPTResourceDialogImpl::slotChooseResource()
   }
 }
 
+void KPTResourceDialogImpl::slotEditCalendarClicked()
+{
+}
+
 //////////////////  KPTResourceDialog  ////////////////////////
 
-KPTResourceDialog::KPTResourceDialog(KPTResource &resource, QWidget *parent, const char *name)
+KPTResourceDialog::KPTResourceDialog(KPTProject &project, KPTResource &resource, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Resource Settings"), Ok|Cancel, Ok, parent, name, true, true),
       m_resource(resource),
       m_calculationNeeded(false)
@@ -101,11 +108,21 @@ KPTResourceDialog::KPTResourceDialog(KPTResource &resource, QWidget *parent, con
     dia->overtimeEdit->setText(KGlobal::locale()->formatMoney(resource.overtimeRate()));
     dia->fixedCostEdit->setText(KGlobal::locale()->formatMoney(resource.fixedCost()));
 
-    dia->fromEdit->setTime(resource.availableFrom());
-    dia->untilEdit->setTime(resource.availableUntil());
+    int cal = 0;
+    dia->calendarList->insertItem("None");
+    m_calendars.insert(0, 0);      
+    QPtrListIterator<KPTCalendar> cit(project.calendars());
+    for(int i=1; cit.current(); ++cit, ++i) {
+        dia->calendarList->insertItem(cit.current()->name(), i);
+        m_calendars.insert(i, cit.current());
+        if (cit.current() == resource.calendar())
+            cal = i;
+    }
+    dia->calendarList->setCurrentItem(cal);
 
     connect(dia, SIGNAL(changed()), SLOT(enableButtonOk()));
     connect(dia, SIGNAL(calculate()), SLOT(slotCalculationNeeded()));
+    connect(dia->calendarList, SIGNAL(activated(int)), SLOT(slotCalendarChanged(int)));
 }
 
 
@@ -118,22 +135,19 @@ void KPTResourceDialog::slotCalculationNeeded() {
 }
 
 void KPTResourceDialog::slotOk() {
-    if (dia->fromEdit->time() >= dia->untilEdit->time()) {
-        KMessageBox::sorry(this, i18n("The specified 'from' time must be before 'until' time."));
-        return;
-    }
-
     m_resource.setName(dia->nameEdit->text());
     m_resource.setType((KPTResource::Type)(dia->type->currentItem()));
     m_resource.setUnits(dia->units->value());
-    // TODO: check money format
     m_resource.setNormalRate(KGlobal::locale()->readMoney(dia->rateEdit->text()));
     m_resource.setOvertimeRate(KGlobal::locale()->readMoney(dia->overtimeEdit->text()));
     m_resource.setFixedCost(KGlobal::locale()->readMoney(dia->fixedCostEdit->text()));
 
-    m_resource.setAvailableFrom(dia->fromEdit->time());
-    m_resource.setAvailableUntil(dia->untilEdit->time());
     accept();
 }
+
+void KPTResourceDialog::slotCalendarChanged(int cal) {
+    
+}
+
 
 #include "kptresourcedialog.moc"

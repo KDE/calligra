@@ -19,6 +19,8 @@
 
 #include "defs.h"
 #include "kptcalendar.h"
+#include "kptduration.h"
+#include "kptdatetime.h"
 
 #include <qdom.h>
 #include <qptrlist.h>
@@ -108,6 +110,33 @@ bool KPTCalendarDay::operator!=(const KPTCalendarDay *day) const {
     return m_state != day->state() || m_workingIntervals != day->workingIntervals();
 }
 
+KPTDuration KPTCalendarDay::effort(const QTime &start, const QTime &end) {
+    //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
+    KPTDuration eff;
+    if (m_state != KPTMap::Working) {
+        kdDebug()<<k_funcinfo<<"Non working day"<<endl;
+        return eff;
+    }
+    QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
+    for (; it.current(); ++it) {
+        //kdDebug()<<k_funcinfo<<"Interval: "<<it.current()->first.toString()<<" - "<<it.current()->second.toString()<<endl;
+        if (end > it.current()->first && start < it.current()->second) {
+            KPTDateTime dtStart(QDate::currentDate(), start);
+            if (start < it.current()->first) {
+                dtStart.setTime(it.current()->first);
+            }
+            KPTDateTime dtEnd(QDate::currentDate(), end);
+            if (end > it.current()->second) {
+                dtEnd.setTime(it.current()->second);
+            }
+            eff += dtEnd - dtStart;
+            kdDebug()<<k_funcinfo<<dtStart.time().toString()<<" - "<<dtEnd.time().toString()<<"="<<eff.toString(KPTDuration::Format_Day)<<endl;
+        }
+    }
+    //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<": total="<<eff.toString(KPTDuration::Format_Day)<<endl;
+    return eff;
+}
+
 /////   KPTCalendarWeekdays   ////
 KPTCalendarWeekdays::KPTCalendarWeekdays()
     : m_workHours(40) {
@@ -190,7 +219,24 @@ bool KPTCalendarWeekdays::operator!=(const KPTCalendarWeekdays *wd) const {
     return false;
 }
 
+KPTDuration KPTCalendarWeekdays::effort(const QDate &date, const QTime &start, const QTime &end) {
+    //kdDebug()<<k_funcinfo<<"Day of week="<<date.dayOfWeek()-1<<endl;
+    KPTDuration eff;
+    KPTCalendarDay *day = weekday(date.dayOfWeek()-1);
+    if (day) {
+        eff = day->effort(start, end);
+    }
+    return eff;
+}
 
+KPTCalendarDay *KPTCalendarWeekdays::weekday(int day) const {
+    QPtrListIterator<KPTCalendarDay> it = m_weekdays;
+    for (int i=0; it.current(); ++it, ++i) {
+        if (i == day)
+            return it.current();
+    }
+    return 0;
+}
 /////   KPTCalendarWeek  ////
 KPTCalendarWeeks::KPTCalendarWeeks() {
 }
@@ -229,6 +275,14 @@ void KPTCalendarWeeks::save(QDomElement &element) {
 
 void KPTCalendarWeeks::setWeek(int week, int year, int type) {
     m_weeks.insert(week, year, type);
+}
+
+int KPTCalendarWeeks::state(const QDate &date) {
+    int year;
+    int week = date.weekNumber(&year);
+    int st = m_weeks.state(week, year);
+    //kdDebug()<<k_funcinfo<<week<<", "<<year<<"="<<st<<endl;
+    return st;
 }
 
 
@@ -332,12 +386,13 @@ void KPTCalendar::save(QDomElement &element) {
 }
 
 KPTCalendarDay *KPTCalendar::findDay(const QDate &date) {
-    //kdDebug()<<k_funcinfo<<endl;
-    KPTCalendarDay *day;
-    for (day = m_days.first(); day != 0; day = m_days.next()) {
-        if (day->date() == date)
-            return day;
+    //kdDebug()<<k_funcinfo<<date.toString()<<endl;
+    QPtrListIterator<KPTCalendarDay> it = m_days;
+    for (; it.current(); ++it) {
+        if (it.current()->date() == date)
+            return it.current();
     }
+    //kdDebug()<<k_funcinfo<<date.toString()<<" not found"<<endl;
     return 0;
 }
 
@@ -348,6 +403,57 @@ bool KPTCalendar::hasParent(KPTCalendar *cal) {
     if (m_parent == cal)
         return true;
     return m_parent->hasParent(cal);
+}
+
+KPTDuration KPTCalendar::effort(const QDate &date, const QTime &start, const QTime &end) {
+    kdDebug()<<k_funcinfo<<endl;
+    KPTDuration eff;
+    if (start == end)
+        return eff;
+    QTime _start = start;
+    QTime _end = end;
+    if (start > end) {
+        _start = end;
+        _end = start;
+    }
+    // first, check day
+    KPTCalendarDay *day = findDay(date);
+    if (day) {
+        eff = day->effort(_start, _end);
+    } else if (m_weeks && m_weeks->state(date) == KPTMap::NonWorking) {
+        // nonworking week, no effort
+        //kdDebug()<<k_funcinfo<<"Non working week"<<endl;
+    } else if (m_weekdays) {
+        eff = m_weekdays->effort(date, _start, _end);
+    }
+    //kdDebug()<<k_funcinfo<<date.toString()<<"="<<eff.toString(KPTDuration::Format_Day)<<endl;
+    return eff;
+}
+
+KPTDuration KPTCalendar::effort(const KPTDateTime &start, const KPTDuration &duration) {
+    //kdDebug()<<k_funcinfo<<endl;
+    KPTDuration eff;
+    if (duration == KPTDuration::zeroDuration)
+        return eff;
+    QDate date = start.date();
+    QTime startTime = start.time();
+    KPTDateTime end = start + duration;
+    QTime endTime = end.time();
+    if (end.date() > date) {
+        endTime.setHMS(23, 59, 59);
+    }
+    eff = effort(date, startTime, endTime); // first day
+    // Now get all the rest of the days
+    int i=0;
+    for (date = date.addDays(1); i < 20 && date <= end.date(); date = date.addDays(1), i++) {
+        if (date < end.date())
+             eff += effort(date, QTime(), QTime(23, 59, 59)); // whole day
+        else
+             eff += effort(date, QTime(), end.time());
+        //kdDebug()<<k_funcinfo<<": eff now="<<eff.toString(KPTDuration::Format_Day)<<endl;
+    }
+    kdDebug()<<k_funcinfo<<start.date().toString()<<"- "<<end.date().toString()<<": total="<<eff.toString(KPTDuration::Format_Day)<<endl;
+    return eff;
 }
 
 #ifndef NDEBUG

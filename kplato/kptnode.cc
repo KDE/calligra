@@ -51,6 +51,7 @@ void KPTNode::init() {
     m_resourceOverbooked = false;
     m_resourceError = false;
     m_deleted = false;
+    m_calculated = 0;
 }
 
 KPTNode *KPTNode::projectNode() {
@@ -399,6 +400,29 @@ const KPTDuration& KPTNode::pessimisticDuration(const KPTDateTime &start)
     return m_duration;
 }
 
+const KPTDuration& KPTNode::expectedDurationForwards(const KPTDateTime &start)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (m_calculated == 2) {
+        m_calculated = 0;
+        return m_duration; //already calculated backwards
+    }
+    m_calculated = 1;
+    return expectedDuration(start);
+}
+
+const KPTDuration& KPTNode::expectedDurationBackwards(const KPTDateTime &start)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (m_calculated == 1) {
+        m_calculated = 0;
+        return m_duration; //already calculated forwards
+    }
+    //TODO
+    m_calculated = 2;
+    return m_duration;
+}
+
 const KPTDuration& KPTNode::expectedDuration(const KPTDateTime &start)
 {
     //kdDebug()<<k_funcinfo<<endl;
@@ -415,7 +439,7 @@ const KPTDuration& KPTNode::expectedDuration() const
 }
 
 
-void KPTNode::calcDuration( const KPTDateTime &start, const KPTDuration &effort )
+void KPTNode::calcDuration( const KPTDateTime &time, const KPTDuration &effort, bool forward)
 {
     //kdDebug()<<k_funcinfo<<endl;
     m_duration.add(effort);
@@ -427,6 +451,15 @@ QPtrList<KPTAppointment> KPTNode::appointments(const KPTNode *node) {
         a = m_parent->appointments(node);
     }
     return a;
+}
+
+void KPTNode::makeAppointments() {
+    if (m_deleted)
+        return;
+    QPtrListIterator<KPTNode> nit(m_nodes);
+    for ( ; nit.current(); ++nit ) {
+        nit.current()->makeAppointments();
+    }
 }
 
 void KPTNode::saveRelations(QDomElement &element) {

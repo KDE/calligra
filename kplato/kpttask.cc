@@ -32,8 +32,7 @@
 
 KPTTask::KPTTask(KPTNode *parent) : KPTNode(parent), m_resource() {
     m_resource.setAutoDelete(true);
-    m_requests.setAutoDelete(true);
-    
+    m_requests = 0;
     KPTDuration d(24, 0);
     m_effort = new KPTEffort(d) ;
 
@@ -192,124 +191,97 @@ const KPTDuration& KPTTask::expectedDuration(const KPTDateTime &start) {
  }
 
 void KPTTask::calculateDuration(const KPTDateTime &start) {
-    //kdDebug()<<k_funcinfo<<endl;
-
-    int duration = m_effort->expected().duration();
-
+    kdDebug()<<k_funcinfo<<m_name<<"  --------->>>>"<<endl;
+    m_resourceError = false;
+    m_duration = KPTDuration::zeroDuration;
     if (m_effort->type() == KPTEffort::Type_WorkBased) {
-        // Here we assume that all requested resources are present
-        // which means that the plan will be an ideal one.
-        // The ideal plan must later be matched against available resources (elswhere)
-        // and conflicts reported to user which must take action to resolve them.
-        int num = numWorkResources(); // We assume duration is only dependent on resources that do work
-        if (num == 0) {
-            if ((num = numResources()) == 0) {
-                // This must be reported as an error to user, but we assign a resource to get a decent plan
-                m_resourceError = true;
-                num = 1;
-            } else {
-                // Hmm, no work resource, but we have some other type so we use that. Is this sensible at all?
-                m_resourceError = false;
-            }
+        if (m_requests){
+            m_duration = m_requests->duration(start, m_effort->expected());
         } else {
-            m_resourceError = false;
+            m_duration = m_effort->expected();
+            m_resourceError = true;        
         }
-        duration = duration/num;
     } else if (m_effort->type() == KPTEffort::Type_FixedDuration) {
         // The amount of resource doesn't matter
-        m_resourceError = false;
+        m_duration = m_effort->expected(); //hmmm, non-working days?
     } else {
         // error
         kdError()<<k_funcinfo<<"Unsupported effort type"<<endl;
     }
-    KPTDuration d = KPTDuration(duration); //TODO: handle workdays/holidays
-    m_duration.set(d);
 
     // TODO: handle risc
 
+    kdDebug()<<k_funcinfo<<m_name<<"="<<m_duration.toString(KPTDuration::Format_Day)<<"  <<<----"<<endl;
 }
 
 KPTResourceGroupRequest *KPTTask::resourceGroupRequest(KPTResourceGroup *group) const {
-    QPtrListIterator<KPTResourceGroupRequest> it(m_requests);
-    for (; it.current(); ++it) {
-        if (it.current()->group() == group)
-            return it.current(); // we assume only one request to the same group
-    }
+    if (m_requests)
+        return m_requests->find(group);
     return 0;
 }
 
 void KPTTask::clearResourceRequests() {
-    m_requests.clear();
+    if (m_requests)
+        m_requests->clear();
 }
 
-void KPTTask::addResourceRequest(KPTResourceGroup *group, int numResources) {
-    m_requests.append(new KPTResourceGroupRequest(group, numResources));
+void KPTTask::addRequest(KPTResourceGroup *group, int numResources) {
+    addRequest(new KPTResourceGroupRequest(group, numResources));
 }
 
-void KPTTask::addResourceRequest(KPTResourceGroupRequest *request) {
-    m_requests.append(request);
+void KPTTask::addRequest(KPTResourceGroupRequest *request) {
+    if (!m_requests)
+        m_requests = new KPTResourceRequestCollection();
+    m_requests->addRequest(request);
 }
 
-int KPTTask::numResources() const {
-    QPtrListIterator<KPTResourceGroupRequest> it(m_requests);
-    int num = 0;
-    for (; it.current(); ++it) {
-        //if (it.current()->isWork())
-            num += it.current()->numResources();
-    }
-    //kdDebug()<<k_funcinfo<<" num="<<num<<endl;
-    return num;
+int KPTTask::units() const {
+    if (!m_requests)
+        return 0;
+    return m_requests->units();
 }
 
-int KPTTask::numWorkResources() const {
-    QPtrListIterator<KPTResourceGroupRequest> it(m_requests);
-    int num = 0;
-    for (; it.current(); ++it) {
-        //if (it.current()->isWork())
-            num += it.current()->numResources();
-    }
-    //kdDebug()<<k_funcinfo<<m_name<<": num="<<num<<endl;
-    return num;
+int KPTTask::workUnits() const {
+    if (!m_requests)
+        return 0;
+    return m_requests->workUnits();
 }
 
-void KPTTask::requestResources() const {
-    //kdDebug()<<k_funcinfo<<name()<<endl;
+void KPTTask::makeAppointments() {
+    if (m_deleted)
+        return;
     if (type() == KPTNode::Type_Task) {
-        QPtrListIterator<KPTResourceGroupRequest> it(m_requests);
-        for (; it.current(); ++it) {
-            // Tell the resource group I want resource(s)
-            it.current()->group()->addNode(this);
-            //kdDebug()<<k_funcinfo<<name()<<" made request to: "<<it.current()->group()->name()<<endl;
-        }
+        if (m_requests) 
+            m_requests->makeAppointments(this);
     } else if (type() == KPTNode::Type_Summarytask) {
         QPtrListIterator<KPTNode> nit(m_nodes);
         for ( ; nit.current(); ++nit ) {
-            nit.current()->requestResources();
+            nit.current()->makeAppointments();
         }
     } else {
         kdDebug()<<k_funcinfo<<"Not yet implemented"<<endl;
     }
 }
 
-
+/*
 void KPTTask::addResource(KPTResourceGroup * resource) {
 }
 
 
-void KPTTask::removeResource(KPTResourceGroup * /* resource */){
+void KPTTask::removeResource(KPTResourceGroup * resource){
    // always auto remove
 }
 
 
-void KPTTask::removeResource(int /* number */){
+void KPTTask::removeResource(int number){
    // always auto remove
 }
 
 
-void KPTTask::insertResource( unsigned int /* index */,
-			      KPTResourceGroup * /* resource */) {
+void KPTTask::insertResource( unsigned int index,
+			      KPTResourceGroup *resource) {
 }
-
+*/
 // A new constraint means start/end times must be recalculated
 void KPTTask::setConstraint(KPTNode::ConstraintType type) {
     if (m_constraint == type)
@@ -336,7 +308,7 @@ void KPTTask::calculateStartEndTime(const KPTDateTime &start) {
 
     QPtrListIterator<KPTRelation> it(m_dependChildNodes);
     for (; it.current(); ++it) {
-        it.current()->child()->calculateStartEndTime(m_endTime); // adjust for all dependant children
+        it.current()->child()->calculateStartEndTime(m_endTime); // adjust for all dependent children
     }
 }
 
@@ -395,7 +367,7 @@ bool KPTTask::load(QDomElement &element) {
             } else {
                 KPTResourceGroupRequest *r = new KPTResourceGroupRequest();
                 if (r->load(e, p))
-                    addResourceRequest(r);
+                    addRequest(r);
                 else {
                     kdError()<<k_funcinfo<<"Failed to load resource request"<<endl;
                     delete r;
@@ -434,9 +406,8 @@ void KPTTask::save(QDomElement &element)  {
     m_effort->save(me);
 
 
-    QPtrListIterator<KPTResourceGroupRequest> it(m_requests);
-    for ( ; it.current(); ++it ) {
-        it.current()->save(me);
+    if (m_requests) {
+        m_requests->save(me);
     }
 
     for (int i=0; i<numChildren(); i++)
@@ -540,13 +511,12 @@ int KPTTask::actualWork() {
 void KPTTask::printDebug(bool children, QCString indent) {
     kdDebug()<<indent<<"+ Task node: "<<name()<<" type="<<type()<<endl;
     indent += "!  ";
-    kdDebug()<<indent<<"Requested work resources (total): "<<numWorkResources()<<endl;
+    kdDebug()<<indent<<"Requested resources (total): "<<units()<<"%"<<endl;
+    kdDebug()<<indent<<"Requested resources (work): "<<workUnits()<<"%"<<endl;
     kdDebug()<<indent<<"Resource overbooked="<<resourceOverbooked()<<endl;
     kdDebug()<<indent<<"resourceError="<<resourceError()<<endl;
-    QPtrListIterator<KPTResourceGroupRequest> it(m_requests);
-    for (; it.current(); ++it) {
-        it.current()->printDebug(indent);
-    }
+    if (m_requests)
+        m_requests->printDebug(indent);
     kdDebug()<<indent<<endl;
     KPTNode::printDebug(children, indent);
 

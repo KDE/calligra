@@ -98,6 +98,7 @@ protected slots:
 
 #ifndef NDEBUG
     void slotPrintDebug();
+    void slotPrintCalendarDebug();
 #endif
 
 protected:

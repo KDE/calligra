@@ -24,8 +24,12 @@
 
 #include <kdialogbase.h>
 
+#include <qmap.h>
+#include <qcombobox.h>
+
 class KPTProject;
 class KPTResource;
+class KPTCalendar;
 class QTime;
 class QString;
 
@@ -40,7 +44,8 @@ public slots:
     void slotChanged(int);
     void slotCalculationNeeded(const QString&);
     void slotChooseResource();
-
+    void slotEditCalendarClicked();
+    
 signals:
     void changed();
     void calculate();
@@ -49,19 +54,24 @@ signals:
 class KPTResourceDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTResourceDialog(KPTResource &resource, QWidget *parent=0, const char *name=0);
+    KPTResourceDialog(KPTProject &project, KPTResource &resource, QWidget *parent=0, const char *name=0);
 
     bool calculationNeeded() {  return m_calculationNeeded; }
 
+    KPTCalendar *calendar() { return m_calendars[dia->calendarList->currentItem()]; }
+    
 protected slots:
     void enableButtonOk();
     void slotCalculationNeeded();
     void slotOk();
+    void slotCalendarChanged(int);
 
 private:
     KPTResource &m_resource;
     KPTResourceDialogImpl *dia;
     bool m_calculationNeeded;
+    
+    QMap<int, KPTCalendar*> m_calendars;
 };
 
 #endif

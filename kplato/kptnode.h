@@ -86,7 +86,7 @@ public:
     virtual int type() const = 0;
 
     virtual KPTNode *projectNode();
-
+    
     // The load and save methods
     virtual bool load(QDomElement &element) = 0;
     virtual void save(QDomElement &element)  = 0;
@@ -255,6 +255,9 @@ public:
 
     const KPTDuration& optimisticDuration(const KPTDateTime &start);
     const KPTDuration& pessimisticDuration(const KPTDateTime &start);
+
+    virtual const KPTDuration& expectedDurationForwards(const KPTDateTime &start);
+    virtual const KPTDuration& expectedDurationBackwards(const KPTDateTime &start);
     /**
      * Calculates and returns the duration.
      */
@@ -276,8 +279,7 @@ public:
     virtual void calculateStartEndTime(const KPTDateTime &start) {}
 
     virtual KPTResourceGroupRequest *resourceRequest(KPTResourceGroup *group) const { return 0; }
-    virtual void makeAppointments() {}
-    virtual void requestResources() const {}
+    virtual void makeAppointments();
 
     bool resourceError() { return m_resourceError; }
 
@@ -422,7 +424,7 @@ protected:
 
     ConstraintType m_constraint;
 
-    void calcDuration(const KPTDateTime &start, const KPTDuration &effort);
+    void calcDuration(const KPTDateTime &time, const KPTDuration &effort, bool forward=true);
 
     /**
       * @m_constraintTime is used if any of the constraints
@@ -449,14 +451,15 @@ protected:
     bool m_resourceError;
 
     int m_id; // unique id
-
-
+    
+    bool m_deleted;
+ 
  private:
     void init();
 
     bool m_resourceOverbooked;
 
-    bool m_deleted;
+    int m_calculated; //HACK: 1=forward, 2 =backward
 
 #ifndef NDEBUG
 public:

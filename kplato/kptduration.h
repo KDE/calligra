@@ -48,10 +48,14 @@ class KPTDuration {
         void addDays(int days) { m_theTime = m_theTime.addDays(days); }
         void addMonths(int months) { m_theTime = m_theTime.addMonths(months); }
         void addYears(int years) { m_theTime = m_theTime.addYears(years); }
-        void subtract(KPTDuration time);
-        void subtract(KPTDuration *time);
-        void const set(KPTDuration newTime);
-        void const set(QDateTime newTime);
+        /**
+         * Subtracts @param duration from *this.
+         * If @param duration > *this, *this is set to zeroDuration.
+         */
+        void subtract(const KPTDuration &duration);
+        void subtract(const KPTDuration *duration);
+        void const set(const KPTDuration newTime);
+        void const set(const QDateTime newTime);
 
         int duration() const { return zero.secsTo(m_theTime); } // Note: this defies the use of QDateTime. We could just have used an int!
 
@@ -61,7 +65,17 @@ class KPTDuration {
         bool   operator<=( const KPTDuration &d ) const { return m_theTime <= d.m_theTime; }
         bool   operator>( const KPTDuration &d ) const { return m_theTime > d.m_theTime; }
         bool   operator>=( const KPTDuration &d ) const { return m_theTime >= d.m_theTime; }
-        KPTDuration &operator = ( const KPTDuration &d ) { set(d); return *this;}
+        KPTDuration &operator=(const KPTDuration &d ) { set(d); return *this;}
+        KPTDuration operator*(int unit) const; 
+        KPTDuration operator/(int unit) const;
+        
+        KPTDuration operator+(KPTDuration &d) const
+            {KPTDuration dur; dur.add(d); return dur; }
+        KPTDuration &operator+=(const KPTDuration &d) {add(d); return *this; }
+        
+        KPTDuration operator-(const KPTDuration &d) const
+            {KPTDuration dur; dur.subtract(d); return dur; }
+        KPTDuration &operator-=(const KPTDuration &d) {subtract(d); return *this; }
 
         QString toString(Format format = Format_DateTime) const;
         static KPTDuration fromString(const QString &s) { return KPTDuration(QDateTime::fromString(s)); }
@@ -79,6 +93,7 @@ class KPTDuration {
         int hours() const { return zero.secsTo(m_theTime) / 3600; }
         int hoursTo(const QDateTime &dt) const { return m_theTime.secsTo(dt) / 3600; }
 
+        bool isCloseTo(const KPTDuration &d) const;
 
     /**
      * This is useful for occasions where we need a zero duration.

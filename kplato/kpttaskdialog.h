@@ -41,7 +41,7 @@ class QDateTime;
 class KPTTaskDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTTaskDialog(KPTTask &task, QPtrList<KPTResourceGroup> &resourceGroups, QWidget *parent=0, const char *name=0);
+    KPTTaskDialog(KPTTask &task, QWidget *parent=0, const char *name=0);
 
     KMacroCommand *buildCommand();
     

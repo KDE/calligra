@@ -26,6 +26,9 @@
 #include <qpair.h>
 
 class QDomElement;
+class QTime;
+class KPTDuration;
+class KPTDateTime;
 
 class KPTCalendarDay {
 
@@ -55,11 +58,17 @@ public:
     bool operator==(const KPTCalendarDay *day) const;
     bool operator!=(const KPTCalendarDay *day) const;
 
+    /**
+     * Returns the amount of 'worktime' that can be done on
+     * this day between the times @parem start and @param end.
+     */
+    KPTDuration effort(const QTime &start, const QTime &end);
+
 protected:
     const KPTCalendarDay &copy(const KPTCalendarDay &day);
 
 private:
-    QDate m_date;
+    QDate m_date; //NOTE: inValid if used for weekdays
     int m_state;
     QPtrList<QPair<QTime, QTime> > m_workingIntervals;
 
@@ -85,7 +94,7 @@ public:
      * Returns the pointer to KPTCalendarDay for @day or 0 if not defined. 
      * day is 0..6.
      */
-    KPTCalendarDay *weekday(int day) { return m_weekdays.at(day); }
+    KPTCalendarDay *weekday(int day) const;
 
     KPTIntMap map();
     
@@ -94,6 +103,8 @@ public:
     bool operator==(const KPTCalendarWeekdays *weekdays) const;
     bool operator!=(const KPTCalendarWeekdays *weekdays) const;
 
+    KPTDuration effort(const QDate &date, const QTime &start, const QTime &end);
+    
 protected:
     const KPTCalendarWeekdays &copy(const KPTCalendarWeekdays &weekdays);
 
@@ -129,6 +140,8 @@ public:
     bool operator!=(const KPTCalendarWeeks *w) const { 
         return weeks() != w->weeks(); 
     }
+    
+    int state(const QDate &date);
 
 protected:
     KPTCalendarWeeks &copy(KPTCalendarWeeks &weeks);
@@ -178,13 +191,33 @@ public:
     KPTIntMap weekdaysMap() { return m_weekdays->map(); }
     void setWeekday(KPTIntMap::iterator it, int state) { m_weekdays->setWeekday(it, state); }
     KPTCalendarWeekdays *weekdays() { return m_weekdays; }
-    KPTCalendarDay *weekday(int day) { return m_weekdays->weekday(day); }
+    KPTCalendarDay *weekday(int day) const { return m_weekdays->weekday(day); }
 
     int parentId() const { return m_parentId; }
     void setParentId(int id) { m_parentId == id; }
 
     bool hasParent(KPTCalendar *cal);
 
+    /**
+     * Returns the amount of 'worktime' that can be done on
+     * the date @param date between the times @parem start and @param end.
+     */
+    KPTDuration effort(const QDate &date, const QTime &start, const QTime &end);
+    /**
+     * Returns the amount of 'worktime' that can be done in the
+     * interval from @param start with the duration @param duration
+     */
+    KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration);
+
+    /**
+     * Used for estimation and calculation of effort.
+     */
+    // FIXME
+    double standardDay() { return 8; } // hours
+    double standardWeek() { return 5*standardDay(); }  // hours
+    double standardMonth() { return 22*standardDay(); } // hours
+    double standardYear() { return 220*standardDay(); } // hours
+    
 protected:
     const KPTCalendar &copy(KPTCalendar &calendar);
     void init();
@@ -199,6 +232,7 @@ private:
     QPtrList<KPTCalendarDay> m_days;
     KPTCalendarWeeks *m_weeks;
     KPTCalendarWeekdays *m_weekdays;
+
 
 #ifndef NDEBUG
 public:

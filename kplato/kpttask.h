@@ -90,7 +90,7 @@ public:
      * The resources are provided as a list, each having an associated risk.
      * we return the resource here which has a pointer to the risk
      */
-    const QPtrList<KPTResourceGroup> &resourceIterator() const
+/*    const QPtrList<KPTResourceGroup> &resourceIterator() const
 	{ return m_resource; }
     virtual void addResource(KPTResourceGroup *resource);
     virtual void insertResource(unsigned int index,
@@ -98,19 +98,18 @@ public:
     void removeResource(KPTResourceGroup *resource);
     void removeResource(int number);
 
-    const QPtrList<KPTResourceGroupRequest> &resourceGroupRequests() const { return m_requests; }
+    const QPtrList<KPTResourceGroupRequest> &resourceGroupRequests() const { return m_requests; }*/
     /**
      * Return the resource request made to @group
      * (There should be only one)
      */
     KPTResourceGroupRequest *resourceGroupRequest(KPTResourceGroup *group) const;
     void clearResourceRequests();
-    void addResourceRequest(KPTResourceGroup *group, int numResources);
-    void addResourceRequest(KPTResourceGroupRequest *request);
-    int numResources() const;
-    int numWorkResources() const;
-    void requestResources() const;
-
+    void addRequest(KPTResourceGroup *group, int numResources);
+    void addRequest(KPTResourceGroupRequest *request);
+    int units() const;
+    int workUnits() const;
+    void makeAppointments();
 
     void setConstraint(KPTNode::ConstraintType type);
 
@@ -146,7 +145,7 @@ private:
 
     QPtrList<KPTResourceGroup> m_resource;
 
-    QPtrList<KPTResourceGroupRequest> m_requests;
+    KPTResourceRequestCollection *m_requests;
 
 #ifndef NDEBUG
 public:

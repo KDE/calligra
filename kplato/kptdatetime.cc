@@ -24,7 +24,10 @@
 KPTDateTime::KPTDateTime() : QDateTime() {
 }
 
-KPTDateTime::KPTDateTime(QDateTime dt) : QDateTime(dt.date(), dt.time()) {
+KPTDateTime::KPTDateTime(const QDateTime &dt) : QDateTime(dt.date(), dt.time()) {
+}
+
+KPTDateTime::KPTDateTime(const QDate &date, const QTime &time) : QDateTime(date, time) {
 }
 
 void KPTDateTime::add(const KPTDuration &duration) {
@@ -58,7 +61,7 @@ KPTDuration KPTDateTime::duration(const KPTDateTime &dt) const {
     return dur;
 }
 
-KPTDateTime KPTDateTime::operator+(const KPTDuration &duration) {
+KPTDateTime KPTDateTime::operator+(const KPTDuration &duration) const {
     KPTDateTime d(*this);
     d.add(duration);
     return d;
@@ -69,7 +72,7 @@ KPTDateTime& KPTDateTime::operator+=(const KPTDuration &duration) {
     return *this;
 }
 
-KPTDateTime KPTDateTime::operator-(const KPTDuration &duration) {
+KPTDateTime KPTDateTime::operator-(const KPTDuration &duration) const {
     KPTDateTime d(*this);
     d.subtract(duration);
     return d;

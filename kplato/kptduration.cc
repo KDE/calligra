@@ -18,6 +18,7 @@
 */
 
 #include "kptduration.h"
+#include "kptdatetime.h"
 
 #include <kdebug.h>
 
@@ -63,37 +64,58 @@ KPTDuration::~KPTDuration() {
 }
 
 void KPTDuration::add(KPTDuration time) {
-    int days = zero.daysTo(time.m_theTime);
-    set(m_theTime.addDays(days));
-    time.m_theTime = time.m_theTime.addDays(-days);
-    set(m_theTime.addSecs(zero.secsTo(time.m_theTime)));
+    int secs = zero.time().secsTo(time.time());
+    m_theTime = m_theTime.addDays(time.days());
+    m_theTime = m_theTime.addSecs(secs);
 }
 
 void KPTDuration::add(KPTDuration *time) {
     add(*time);
 }
 
-void KPTDuration::subtract(KPTDuration time) {
-    int days = time.m_theTime.daysTo(zero);
-    set(m_theTime.addDays(days));
-    time.set(time.m_theTime.addDays(days));
-    set(m_theTime.addSecs(time.m_theTime.secsTo(zero)));
+void KPTDuration::subtract(const KPTDuration &duration) {
+    kdDebug()<<"subtract "<<duration.toString()<<" from "<<m_theTime.toString()<<endl;
+    if (duration > *this) {
+        kdDebug()<<k_funcinfo<<"Underflow"<<endl;
+        m_theTime = zero;
+        return;
+    }
+    m_theTime = m_theTime.addDays(-zero.date().daysTo(duration.date()));
+    m_theTime = m_theTime.addSecs(-zero.time().secsTo(duration.time()));
 }
 
-void KPTDuration::subtract(KPTDuration *time) {
-    subtract(*time);
+void KPTDuration::subtract(const KPTDuration *duration) {
+    subtract(*duration);
 }
 
-void const KPTDuration::set(KPTDuration newTime) {
+void const KPTDuration::set(const KPTDuration newTime) {
     set(newTime.m_theTime);
 }
 
-void const KPTDuration::set(QDateTime newTime) {
+void const KPTDuration::set(const QDateTime newTime) {
     m_theTime.setDate(newTime.date());
     m_theTime.setTime(newTime.time());
 }
 
-//FIXME: is duration in work time??
+KPTDuration KPTDuration::operator*(int unit) const {
+    KPTDuration dur;
+    if (unit > 0)
+        dur.addSecs(unit*duration()); //FIXME
+    return dur;
+}
+
+KPTDuration KPTDuration::operator/(int unit) const {
+    KPTDuration dur;
+    if (unit > 0)
+        dur.set(KPTDuration(duration()/unit)); //FIXME
+    return dur;
+}
+
+bool KPTDuration::isCloseTo(const KPTDuration &d) const {
+    KPTDuration limit(0,0,30);
+    return (KPTDateTime(m_theTime) - KPTDateTime(d.dateTime())) < limit;
+}
+
 QString KPTDuration::toString(Format format) const {
     int days = zero.daysTo(m_theTime);
     int secs = zero.time().secsTo(m_theTime.time());
@@ -102,10 +124,12 @@ QString KPTDuration::toString(Format format) const {
             return m_theTime.toString();
         case Format_Hour:
             return QString("%1h%2m").arg(days*24 + secs/3600).arg((secs%3600)/60);
-        case Format_Day:
-            return QString("%1.%2").arg(days).arg(secs*10/3600);
-        case Format_Week:
-            return QString("%1w%2.%3").arg(days/7).arg(days%7).arg(secs*10/3600);
+        case Format_Day: {
+            return QString("%1.%2d").arg(days).arg(secs/8640);
+        }
+        case Format_Week: {
+            return QString("%1w%2.%3d").arg(days/7).arg(days%7).arg(secs/8640);
+        }
         default: // avoid warning
             break;
     }

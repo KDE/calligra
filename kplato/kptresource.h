@@ -34,6 +34,8 @@ class KPTAppointment;
 class KPTTask;
 class KPTNode;
 class KPTResource;
+class KPTResourceRequest;
+class KPTResourceGroupRequest;
 class KPTProject;
 class KPTCalendar;
 class QTime;
@@ -54,9 +56,14 @@ class KPTResourceGroup {
 	      KPTResourceGroup(KPTProject *project);
 	      ~KPTResourceGroup();
 
+          enum Type { Type_Work, Type_Material };
+          
           int id() { return m_id; }
 	      void setName(QString n) {m_name=n;}
 	      const QString &name() const {return m_name;}
+          void setType(Type type) { m_type = type; }
+          //void setType(const QString &type);
+          Type type() const { return m_type; }
 
 	      /** Manage the resources in this list
 	        * <p>At some point we will have to look at not mixing types of resources
@@ -95,19 +102,17 @@ class KPTResourceGroup {
             * <p>see also @ref getRequiredResource, @ref addRequiredResource
 	        */
 	      void removeRequiredResource(int);
-
           int numResources() const { return m_resources.count(); }
           QPtrList<KPTResource> &resources() { return m_resources; }
 
           bool load(QDomElement &element);
           void save(QDomElement &element);
 
-        /**
-         * Return a list of appointments made for the @task
+         /**
+         * Return a list of appointments made for the @param task
          */
           QPtrList<KPTAppointment> appointments(const KPTNode *node) const;
           void clearAppointments();
-          void makeAppointments();
           void saveAppointments(QDomElement &element) const;
 
 
@@ -116,6 +121,8 @@ class KPTResourceGroup {
 
           KPTCalendar *defaultCalendar() { return m_defaultCalendar; }
 
+          int units();
+        
 #ifndef NDEBUG
         void printDebug(QString ident);
 #endif
@@ -131,6 +138,7 @@ class KPTResourceGroup {
         QPtrList<KPTNode> m_nodes; //The nodes that want resources from us
 
         KPTCalendar *m_defaultCalendar;
+        Type m_type;
 };
 
 /**
@@ -142,6 +150,7 @@ class KPTResourceGroup {
   * code (partly implemented here) schedules the actual usage.
   * See also @ref KPTResourceGroup
   */
+
 class KPTResource {
     public:
 
@@ -187,7 +196,7 @@ class KPTResource {
         bool isAvailable(KPTTask *task);
         void addAppointment(KPTAppointment *a);
         void clearAppointments();
-        void makeAppointment(KPTTask *task);
+        void makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task);
         void saveAppointments(QDomElement &element) const;
 
         void setOverbooked(bool on) { m_overbooked = on; }
@@ -205,11 +214,25 @@ class KPTResource {
          */
         int units() const { return m_units; }
         /**
-         * Set availbale units in percent
+         * Set available units in percent
          */
         void setUnits(int units) { m_units = units; }
 
         KPTProject *project() { return m_project; }
+
+        KPTCalendar *calendar() const;
+        KPTCalendar *calendar(int id) const;
+        void setCalendar(KPTCalendar *calendar) { m_calendar = calendar; }
+    
+        /**
+         * Used to clean up requests when the resource is deleted.
+         */
+        void registerRequest(const KPTResourceRequest *request)
+            { m_requests.append(request); }
+        void unregisterRequest(const KPTResourceRequest *request)
+            { m_requests.removeRef(request); }
+        
+        KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration) const;
 
     private:
         KPTProject *m_project;
@@ -231,6 +254,8 @@ class KPTResource {
             double fixed;
         } cost;
 
+        KPTCalendar *m_calendar;
+        QPtrList<KPTResourceRequest> m_requests;
 public:
 #ifndef NDEBUG
         void printDebug(QString ident);
@@ -279,7 +304,7 @@ class KPTAppointment {
          */
         double cost();
         /**
-         * Calculates the planned cost up to date @dt
+         * Calculates the planned cost up to date @param dt
          */
         double cost(const KPTDateTime &dt);
 
@@ -337,15 +362,34 @@ class KPTResourceRequest {
 
         ~KPTResourceRequest();
 
-        KPTResource *resource() { return m_resource; }
-        int units() const { return m_units; }
-
+        KPTResourceGroupRequest *parent() const { return m_parent; }
+        void setParent(KPTResourceGroupRequest *parent) { m_parent = parent; }
+        
+        KPTResource *resource() const { return m_resource; }
+        void setResource(KPTResource* resource) { m_resource = resource; }
+        
         bool load(QDomElement &element, KPTProject *project);
         void save(QDomElement &element);
 
+        /**
+        * Get amount of requested resource units in percent
+        */
+        int units() const;
+        
+        /**
+        * Get amount of requested work units in percent
+        */
+        int workUnits() const;
+                
+        void registerRequest() { if (m_resource) m_resource->registerRequest(this); }
+ 
+        void makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task) 
+            { if (m_resource) m_resource->makeAppointment(start, duration, task); }
+        
     private:
         KPTResource *m_resource;
         int m_units;
+        KPTResourceGroupRequest *m_parent;
 
 #ifndef NDEBUG
 public:
@@ -355,26 +399,106 @@ public:
 
 class KPTResourceGroupRequest {
     public:
-        KPTResourceGroupRequest(KPTResourceGroup *group=0, int numResources=0);
+        KPTResourceGroupRequest(KPTResourceGroup *group=0, int units=0);
         ~KPTResourceGroupRequest();
 
         KPTResourceGroup *group() { return m_group; }
         QPtrList<KPTResourceRequest> &resourceRequests() { return m_resourceRequests; }
-        int units() { return m_units; }
-        int numResources() { return m_units + m_resourceRequests.count(); }
-        void addResourceRequest(KPTResourceRequest *request) { m_resourceRequests.append(request); }
-        void removeResourceRequest(KPTResourceRequest *request) { m_resourceRequests.remove(request); }
+        void addResourceRequest(KPTResourceRequest *request) {
+            request->setParent(this);
+            m_resourceRequests.append(request);
+            request->registerRequest();
+        }
+        void removeResourceRequest(KPTResourceRequest *request) { m_resourceRequests.removeRef(request); }
         KPTResourceRequest *find(KPTResource *resource) const;
 
         bool load(QDomElement &element, KPTProject *project);
         void save(QDomElement &element);
 
+        /**
+        * Get total amount of resource units in percent
+        */
+        int units() const;
+    
+        /**
+        * Get amount of work units in percent
+        */
+        int workUnits() const;
+    
+        /**
+         * Returns the duration needed to do the effort @param effort
+         * starting at @param start.
+         */
+        KPTDuration duration(const KPTDateTime &start, const KPTDuration &effort);
+        
+        /**
+         * Makes appointments for task @param task to the 
+         * requested resources for the duration found in @ref duration().
+         */
+        void makeAppointments(KPTTask *task);
+            
     private:
         KPTResourceGroup *m_group;
         int m_units;
 
         QPtrList<KPTResourceRequest> m_resourceRequests;
+        KPTDateTime m_start;
+        KPTDuration m_duration;
 
+#ifndef NDEBUG
+public:
+        void printDebug(QString ident);
+#endif
+};
+
+class KPTResourceRequestCollection {
+public:
+    KPTResourceRequestCollection();
+    ~KPTResourceRequestCollection();
+
+    const QPtrList<KPTResourceGroupRequest> &requests() const { return m_requests; }
+    void addRequest(KPTResourceGroupRequest *request) { m_requests.append(request); }
+    void removeRequest(KPTResourceGroupRequest *request) { m_requests.removeRef(request); }
+    KPTResourceGroupRequest *find(KPTResourceGroup *resource) const;
+    KPTResourceRequest *find(KPTResource *resource) const;
+
+    bool load(QDomElement &element, KPTProject *project);
+    void save(QDomElement &element);
+
+    void clear() { m_requests.clear(); }
+    
+    /**
+    * Returns the total amount of resource units in percent
+    */
+    int units() const;
+    
+    /**
+    * Returns the amount of work units in percent
+    */
+    int workUnits() const;
+    
+    /**
+    * Returns the duration needed to do the effort @param effort
+    * starting at @param start.
+    */
+    KPTDuration duration(const KPTDateTime &start, const KPTDuration &effort);
+        
+    /**
+    * Makes appointments for the task @param task to the requested resources.
+    * Assumes that @ref duration() has been run.
+    */
+    void makeAppointments(KPTTask *task);
+    
+protected:
+    struct Interval {
+        KPTDateTime start;
+        KPTDateTime end;
+        KPTDuration effort;
+    };
+    
+
+private:
+    QPtrList<KPTResourceGroupRequest> m_requests;
 
 #ifndef NDEBUG
 public:

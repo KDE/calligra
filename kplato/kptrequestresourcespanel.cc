@@ -44,7 +44,7 @@ KPTResourceTableItem::KPTResourceTableItem(KPTResource *resource, bool check) {
     m_resource = resource;
     m_checked = check;
     m_checkitem = 0;
-    m_units = 0;
+    m_units = 100;
     //kdDebug()<<k_funcinfo<<"Added: '"<<resource->name()<<"' checked="<<m_checked<<endl;
 }
 
@@ -61,7 +61,7 @@ void KPTResourceTableItem::clear() {
 void KPTResourceTableItem::ok(KPTResourceGroupRequest *group) {
     // assume old request is cleared, so we just create new one
     if (m_checked) {
-        group->addResourceRequest(new KPTResourceRequest(m_resource, /*m_units*/ 1)); //FIXME
+        group->addResourceRequest(new KPTResourceRequest(m_resource, m_units)); 
         //kdDebug()<<k_funcinfo<<"Resource request to "<<m_resource->name()<<" added"<<endl;
     }
 }
@@ -76,7 +76,7 @@ void KPTResourceTableItem::insert(QTable *table, int row) {
 }
 
 KPTGroupLVItem::KPTGroupLVItem(QListView *parent, KPTResourceGroup *group, KPTTask &task)
-    : QListViewItem(parent, group->name(), QString("%1").arg(group->numResources())),
+    : QListViewItem(parent, group->name(), QString("%1").arg(group->units())),
       m_group(group),
       m_units(0)
 {
@@ -133,7 +133,7 @@ void KPTGroupLVItem::ok(KPTTask &task) {
         for (; it.current(); ++it) {
             it.current()->ok(g);
         }
-        task.addResourceRequest(g);
+        task.addRequest(g);
     }
 }
 
@@ -147,22 +147,22 @@ int KPTGroupLVItem::numRequests() {
     return value;
 }
 
-KPTRequestResourcesPanel::KPTRequestResourcesPanel
-                                        (QWidget *parent, KPTTask &task, QPtrList<KPTResourceGroup> &resourceGroups)
+KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &task)
     : KPTTaskResourcesPanelBase(parent),
       m_task(task),
-      m_resourceGroups(resourceGroups),
       selectedGroup(0),
       m_blockChanged(false) {
 
-    QPtrListIterator<KPTResourceGroup> git(resourceGroups);
-	for(int i=0; git.current(); ++git, ++i) {
-		KPTResourceGroup *grp = git.current();
-        KPTGroupLVItem *grpitem = new KPTGroupLVItem(groupList, grp, task);
-        groupList->insertItem(grpitem);
-        //kdDebug()<<k_funcinfo<<" Added group: "<<grp->name()<<endl;
-	}
-
+    KPTProject *p = dynamic_cast<KPTProject*>(task.projectNode());
+    if (p) {
+        QPtrListIterator<KPTResourceGroup> git(p->resourceGroups());
+        for(int i=0; git.current(); ++git, ++i) {
+            KPTResourceGroup *grp = git.current();
+            KPTGroupLVItem *grpitem = new KPTGroupLVItem(groupList, grp, task);
+            groupList->insertItem(grpitem);
+            //kdDebug()<<k_funcinfo<<" Added group: "<<grp->name()<<endl;
+        }
+    }
     QListViewItem *item = groupList->firstChild();
     if (item) {
         groupList->setSelected(item, true);
@@ -177,16 +177,17 @@ KPTRequestResourcesPanel::KPTRequestResourcesPanel
 
     effortType->setCurrentItem(task.effort()->type());
 
-    connect(groupList, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(groupChanged(QListViewItem*)));
-    connect(resourceTable, SIGNAL(valueChanged(int, int)), this, SLOT(resourceChanged(int, int)));
-    connect(numUnits, SIGNAL(valueChanged(int)), this, SLOT(unitsChanged(int)));
+    connect(groupList, SIGNAL(selectionChanged(QListViewItem*)),  SLOT(groupChanged(QListViewItem*)));
+    connect(resourceTable, SIGNAL(valueChanged(int, int)), SLOT(resourceChanged(int, int)));
+    connect(numUnits, SIGNAL(valueChanged(int)), SLOT(unitsChanged(int)));
 
 
-    connect(effort, SIGNAL(valueChanged()), this, SLOT(sendChanged()));
-    connect(effortType, SIGNAL(activated(int)), this, SLOT(sendChanged()));
-    connect(optimisticValue, SIGNAL(valueChanged(int)), this, SLOT(sendChanged()));
-    connect(pessimisticValue, SIGNAL(valueChanged(int)), this, SLOT(sendChanged()));
-    connect(risk, SIGNAL(activated(int)), this, SLOT(sendChanged()));
+    connect(effort, SIGNAL(valueChanged()), SLOT(sendChanged()));
+    connect(effortType, SIGNAL(activated(int)), SLOT(sendChanged()));
+    connect(optimisticValue, SIGNAL(valueChanged(int)), SLOT(sendChanged()));
+    connect(pessimisticValue, SIGNAL(valueChanged(int)), SLOT(sendChanged()));
+    connect(risk, SIGNAL(activated(int)), SLOT(sendChanged()));
+    
 }
 
 void KPTRequestResourcesPanel::groupChanged(QListViewItem *item) {
@@ -201,7 +202,7 @@ void KPTRequestResourcesPanel::groupChanged(QListViewItem *item) {
     selectedGroup = grp;
 
     m_blockChanged = true;
-    numUnits->setMaxValue(grp->m_group->numResources());
+    numUnits->setMaxValue(grp->m_group->units());
     numUnits->setValue(grp->m_units);
     m_blockChanged = false;
     grp->insert(resourceTable);
@@ -256,7 +257,5 @@ void KPTRequestResourcesPanel::slotOk() {
 void KPTRequestResourcesPanel::sendChanged() {
     if (!m_blockChanged) emit changed();
 }
-
-
 
 #include "kptrequestresourcespanel.moc"

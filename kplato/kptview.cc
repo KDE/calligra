@@ -182,6 +182,8 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 #ifndef NDEBUG
     KAction* actPrintDebug = new KAction( i18n( "Print Debug" ), CTRL+SHIFT+Key_P,
                         this, SLOT( slotPrintDebug() ), actionCollection(), "print_debug" );
+    KAction* actPrintCalendarDebug = new KAction( i18n( "Print Calendar Debug" ), CTRL+SHIFT+Key_C,
+                        this, SLOT( slotPrintCalendarDebug() ), actionCollection(), "print_calendar_debug" );
 #endif
     // Necessary for the actions that are not plugged anywhere
     // Deprecated with KDE-3.1.
@@ -190,11 +192,13 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     KAccel * accel = new KAccel( this );
 #ifndef NDEBUG
     actPrintDebug->plugAccel( accel );
+    actPrintCalendarDebug->plugAccel( accel );
 #endif
 #else
     // Stupid compilers ;)
 #ifndef NDEBUG
     Q_UNUSED( actPrintDebug );
+    Q_UNUSED( actPrintCalendarDebug );
 #endif
 #endif
 
@@ -312,7 +316,7 @@ void KPTView::slotAddSubTask() {
 	// do is to add a first project. We will silently accept the challenge
 	// and will not complain.
     KPTTask* node = new KPTTask(currentTask());
-    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().resourceGroups());
+    KPTTaskDialog *dia = new KPTTaskDialog(*node);
     if (dia->exec()) {
 		KPTNode *currNode = currentTask();
 		if (currNode)
@@ -335,7 +339,7 @@ void KPTView::slotAddSubTask() {
 
 void KPTView::slotAddTask() {
     KPTTask *node = new KPTTask(currentTask());
-    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().resourceGroups());
+    KPTTaskDialog *dia = new KPTTaskDialog(*node);
     if (dia->exec()) {
 		KPTNode* currNode = currentTask();
 		if (currNode)
@@ -363,7 +367,7 @@ void KPTView::slotAddMilestone() {
     //KPTMilestone *node = new KPTMilestone(currentTask());
     node->setName(i18n("Milestone"));
 
-    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().resourceGroups());
+    KPTTaskDialog *dia = new KPTTaskDialog(*node);
     if (dia->exec()) {
 		KPTNode *currNode = currentTask();
 		if (currNode)
@@ -427,7 +431,7 @@ void KPTView::slotOpenNode() {
             break;
         case KPTNode::Type_Task: {
             KPTTask *task = dynamic_cast<KPTTask *>(node);
-            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().resourceGroups());
+            KPTTaskDialog *dia = new KPTTaskDialog(*task);
             if (dia->exec()) {
                 KMacroCommand *m = dia->buildCommand();
                 if (m) {
@@ -444,7 +448,7 @@ void KPTView::slotOpenNode() {
             // enter a duration in case we accidentally set a tasks duration to zero
             // and hence, create a milestone
             KPTTask *task = dynamic_cast<KPTTask *>(node);
-            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().resourceGroups());
+            KPTTaskDialog *dia = new KPTTaskDialog(*task);
             if (dia->exec())
                 slotUpdate(true);
             delete dia;
@@ -547,7 +551,7 @@ void KPTView::slotEditResource() {
     KPTResource *r = m_resourceview->currentResource();
     if (!r)
         return;
-    KPTResourceDialog *dia = new KPTResourceDialog(*r);
+    KPTResourceDialog *dia = new KPTResourceDialog(getProject(), *r);
     if (dia->exec())
         slotUpdate(true); //FIXME: just refresh the view
     delete dia;
@@ -680,6 +684,14 @@ void KPTView::slotPrintDebug() {
         curr->printDebug(true,"");
     } else*/
         getPart()->getProject().printDebug(true, "");
+}
+void KPTView::slotPrintCalendarDebug() {
+    kdDebug()<<"-------- Debug printout: Node list" <<endl;
+/*    KPTNode *curr = m_ganttview->currentNode();
+    if (curr) {
+        curr->printDebug(true,"");
+    } else*/
+        getPart()->getProject().printCalendarDebug("");
 }
 #endif
 #include "kptview.moc"
