@@ -2445,7 +2445,9 @@ void KPresenterView::setupActions()
     actionViewShowGrid = new KToggleAction( i18n( "Grid" ), 0,
                                           this, SLOT( viewGrid() ),
                                           actionCollection(), "view_grid" );
-
+    actionViewGridToFront= new KToggleAction( i18n( "Grid to Front" ), 0,
+                                          this, SLOT( viewGridToFront() ),
+                                          actionCollection(), "view_gridtofront" );
 
     // ---------------- insert actions
 
@@ -5794,6 +5796,12 @@ void KPresenterView::viewGrid()
     m_canvas->repaint(false);
 }
 
+void KPresenterView::viewGridToFront()
+{
+    m_pKPresenterDoc->setGridToFront( actionViewGridToFront->isChecked() );
+    m_pKPresenterDoc->setModified( true );
+    m_canvas->repaint(false);
+}
 
 void KPresenterView::drawTmpHelpLine( const QPoint & pos, bool _horizontal)
 {
@@ -5823,6 +5831,7 @@ void KPresenterView::updateHelpLineButton()
 void KPresenterView::updateGridButton()
 {
     actionViewShowGrid->setChecked( m_pKPresenterDoc->showGrid() );
+    actionViewGridToFront->setChecked ( m_pKPresenterDoc->gridToFront() );
 }
 
 void KPresenterView::refreshRuler( bool state )

@@ -190,6 +190,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bShowHelplines = false;
 
     m_bShowGrid = false;
+    m_bGridToFont = false;
 
     usedSoundFile = QStringList();
     haveNotOwnDiskSoundFile = QStringList();
@@ -288,7 +289,7 @@ void KPresenterDoc::saveConfig()
     config->writeEntry( "Zoom", m_zoomHandler->zoom() );
     config->writeEntry( "AllowAutoFormat" , m_bAllowAutoFormat );
     config->writeEntry( "ShowGrid" , m_bShowGrid );
-
+    config->writeEntry( "GridToFront" , m_bGridToFont );
 }
 
 void KPresenterDoc::initConfig()
@@ -309,6 +310,7 @@ void KPresenterDoc::initConfig()
         setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ));
         setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ));
         setShowGrid( config->readBoolEntry( "ShowGrid" , false ));
+        setGridToFront(  config->readBoolEntry( "GridToFront" , false ));
 
     }
     else

@@ -377,6 +377,10 @@ public:
     double getGridY() { return m_gridY; }
     void setGridY(double _y) { m_gridY=_y; }
 
+
+    bool gridToFront() const { return m_bGridToFont; }
+    void setGridToFront( bool _front ) { m_bGridToFont = _front; }
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -502,6 +506,8 @@ protected:
     bool m_bShowHelplines;
 
     bool m_bShowGrid;
+
+    bool m_bGridToFont;
 
     double m_indent; // in pt
 

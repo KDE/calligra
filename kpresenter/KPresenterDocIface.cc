@@ -661,3 +661,15 @@ void KPresenterDocIface::setGridY(double _y)
     if( showGrid() )
         doc->repaint( false );
 }
+
+bool KPresenterDocIface::gridToFront() const
+{
+    return doc->gridToFront();
+}
+
+void KPresenterDocIface::setGridToFront( bool _front )
+{
+    doc->setGridToFront( _front);
+    if( showGrid() )
+        doc->repaint( false );
+}
