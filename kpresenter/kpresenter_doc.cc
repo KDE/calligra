@@ -1113,6 +1113,11 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 else if(borders.hasAttribute("mmBottom"))    //compatibility
                     __pgLayout.ptBottom = MM_TO_POINT( borders.attribute("inchBottom").toDouble() );
             }
+            // PAPER found and parsed -> apply page layout
+            // e.g. the text objects need it
+            if ( _clean )
+                setPageLayout( __pgLayout );
+
         } else if(elem.tagName()=="VARIABLESETTINGS"){
             getVariableCollection()->variableSetting()->load(document);
         }
@@ -1798,10 +1803,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
             loadUsedSoundFileFromStore( _store, usedSoundFile );
 
 	if ( _clean )
-        {
-	    setPageLayout( __pgLayout );
             createHeaderFooter();
-        }
 	//else {
             //m_pageList.last()->updateBackgroundSize();
 	//}
@@ -1815,6 +1817,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
     } else {
         if ( _clean )
         {
+            /// ### this has already been done, no?
 	    setPageLayout( __pgLayout );
         }
 	else
@@ -2668,6 +2671,7 @@ void KPresenterDoc::recalcPageNum()
 
 void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
 {
+    /// Why does this use __pgLayout instead of m_pageLayout ?
     int page = (int)(offset/__pgLayout.ptHeight)+m_insertFilePage;
     int newPos=(int)((offset+m_insertFilePage*__pgLayout.ptHeight)-page*__pgLayout.ptHeight);
     if ( page > ( (int)m_pageList.count()-1 ) )

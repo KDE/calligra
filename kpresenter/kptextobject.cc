@@ -1341,18 +1341,20 @@ void KPTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
 void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, bool* abort)
 {
     int availHeight = availableHeight();
-    if ( ( bottom > availHeight ) /*||   // this parag is already off page
-                                    ( lastFormatted && (bottom + lastFormatted->rect().height() > availHeight) )*/ ) // or next parag will be off page
+    if ( ( bottom > availHeight ) ||   // this parag is already below the avail height
+         ( lastFormatted && (bottom + lastFormatted->rect().height() > availHeight) ) ) // or next parag will be below it
     {
         int difference = ( bottom + 2 ) - availHeight; // in layout unit pixels
         if( lastFormatted && bottom + lastFormatted->rect().height() > availHeight )
         {
             difference += lastFormatted->rect().height();
         }
+        // We only auto-grow. We don't auto-shrink.
         if(difference > 0)
         {
             double wantedPosition = m_doc->zoomHandler()->layoutUnitPtToPt( m_doc->zoomHandler()->pixelYToPt( difference ) ) + getRect().bottom();
-            double pageBottom = (double) m_doc->stickyPage()->getPageRect().bottom();
+            const KoPageLayout& p = m_doc->pageLayout();
+            double pageBottom = p.ptHeight - p.ptBottom;
             double newBottom = QMIN( wantedPosition, pageBottom ); // don't grow bigger than the page
             newBottom = QMAX( newBottom, getRect().top() ); // avoid negative heights
             if ( getRect().bottom() != newBottom )
