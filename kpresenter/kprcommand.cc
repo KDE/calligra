@@ -1797,9 +1797,10 @@ void KPrChangeStartingPageCommand::unexecute()
     m_doc->recalcVariables( VT_PGNUM );
 }
 
-KPrChangeDisplayLinkCommand::KPrChangeDisplayLinkCommand( const QString &name, KPresenterDoc *_doc, bool _oldDisplay,bool _newDisplay):
+KPrChangeDisplayLinkCommand::KPrChangeDisplayLinkCommand( const QString &name, KPresenterDoc *_doc, bool _oldDisplay,bool _newDisplay, PropertiesLink _type):
     KNamedCommand(name),
     m_doc(_doc),
+    type(_type),
     m_bOldDisplay(_oldDisplay),
     m_bNewDisplay(_newDisplay)
 {
@@ -1807,13 +1808,29 @@ KPrChangeDisplayLinkCommand::KPrChangeDisplayLinkCommand( const QString &name, K
 
 void KPrChangeDisplayLinkCommand::execute()
 {
-    m_doc->getVariableCollection()->variableSetting()->setDisplayLink(m_bNewDisplay);
+    switch(type)
+    {
+    case PL_DISPLAY:
+        m_doc->getVariableCollection()->variableSetting()->setDisplayLink(m_bNewDisplay);
+        break;
+    case  PL_UNDERLINE:
+        m_doc->getVariableCollection()->variableSetting()->setUnderlineLink(m_bNewDisplay);
+        break;
+    }
     m_doc->recalcVariables( VT_LINK );
 }
 
 void KPrChangeDisplayLinkCommand::unexecute()
 {
-    m_doc->getVariableCollection()->variableSetting()->setDisplayLink(m_bOldDisplay);
+    switch(type)
+    {
+    case PL_DISPLAY:
+        m_doc->getVariableCollection()->variableSetting()->setDisplayLink(m_bOldDisplay);
+        break;
+    case  PL_UNDERLINE:
+        m_doc->getVariableCollection()->variableSetting()->setUnderlineLink(m_bOldDisplay);
+        break;
+    }
     m_doc->recalcVariables( VT_LINK );
 }
 

@@ -765,13 +765,15 @@ protected:
 class KPrChangeDisplayLinkCommand : public KNamedCommand
 {
 public:
-    KPrChangeDisplayLinkCommand( const QString &name, KPresenterDoc *_doc, bool _oldDisplay, bool _newDisplay);
+    enum PropertiesLink { PL_DISPLAY, PL_UNDERLINE};
+    KPrChangeDisplayLinkCommand( const QString &name, KPresenterDoc *_doc, bool _oldDisplay, bool _newDisplay, PropertiesLink _type);
     ~KPrChangeDisplayLinkCommand(){}
 
     void execute();
     void unexecute();
 protected:
     KPresenterDoc *m_doc;
+    PropertiesLink type;
     bool m_bOldDisplay;
     bool m_bNewDisplay;
 };

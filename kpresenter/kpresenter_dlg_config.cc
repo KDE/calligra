@@ -444,9 +444,15 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     m_displayLink=new QCheckBox(i18n("Display links"),tmpQGroupBox);
     grid->addWidget(m_displayLink,3,0);
     m_displayLink->setChecked(doc->getVariableCollection()->variableSetting()->displayLink());
+
+    m_underlineLink=new QCheckBox(i18n("Underline link by default"),tmpQGroupBox);
+    m_underlineLink->setChecked(doc->getVariableCollection()->variableSetting()->underlineLink());
+    grid->addWidget(m_underlineLink,4,0);
+
+
     m_displayComment=new QCheckBox(i18n("Display comments"),tmpQGroupBox);
     m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
-    grid->addWidget(m_displayComment,4,0);
+    grid->addWidget(m_displayComment,5,0);
 
     tmpQGroupBox = new QGroupBox( box, "GroupBox" );
     tmpQGroupBox->setTitle(i18n("Grid"));
@@ -487,17 +493,30 @@ void ConfigureMiscPage::apply()
     KMacroCommand * macroCmd=0L;
     bool b=m_displayLink->isChecked();
     bool b_new=doc->getVariableCollection()->variableSetting()->displayLink();
-    if(doc->getVariableCollection()->variableSetting()->displayLink()!=b)
+    if(b_new!=b)
     {
         if(!macroCmd)
         {
             macroCmd=new KMacroCommand(i18n("Change display link command"));
         }
 
-        KPrChangeDisplayLinkCommand *cmd=new KPrChangeDisplayLinkCommand( i18n("Change display link command"), doc, b_new ,b);
+        KPrChangeDisplayLinkCommand *cmd=new KPrChangeDisplayLinkCommand( i18n("Change display link command"), doc, b_new ,b, KPrChangeDisplayLinkCommand::PL_DISPLAY);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
+
+    b=m_underlineLink->isChecked();
+    if(doc->getVariableCollection()->variableSetting()->underlineLink()!=b)
+    {
+        if(!macroCmd)
+        {
+            macroCmd=new KMacroCommand(i18n("Change display link command"));
+        }
+        KPrChangeDisplayLinkCommand *cmd=new KPrChangeDisplayLinkCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->displayLink() ,b, KPrChangeDisplayLinkCommand::PL_UNDERLINE);
+        cmd->execute();
+        macroCmd->addCommand(cmd);
+    }
+
     if(macroCmd)
         doc->addCommand(macroCmd);
 
@@ -518,6 +537,7 @@ void ConfigureMiscPage::slotDefault()
    m_undoRedoLimit->setValue(30);
    m_displayLink->setChecked(true);
    m_displayComment->setChecked(true);
+   m_underlineLink->setChecked(true);
    KPresenterDoc* doc = m_pView->kPresenterDoc();
 
    resolutionY->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0), doc->getUnit() ) );
