@@ -2545,8 +2545,22 @@ QPtrList<KWFrame> KWDocument::getSelectedFrames() const {
     return frames;
 }
 
+
+class KWFrameList: public QPtrList<KWFrame>
+{
+public:
+    virtual int compareItems(Item a, Item b)
+    {
+            int za = ((KWFrame *)a)->zOrder();
+           int zb = ((KWFrame *)b)->zOrder();
+           if (za == zb) return 0;
+           if (za <= zb) return -1;
+           return 1;
+    }
+};
+
 QPtrList<KWFrame> KWDocument::framesInPage( int pageNum ) const {
-    QPtrList<KWFrame> frames;
+    KWFrameList frames;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -2558,6 +2572,7 @@ QPtrList<KWFrame> KWDocument::framesInPage( int pageNum ) const {
         for ( ; it.current() ; ++it )
             frames.append( it.current() );
     }
+    frames.sort();
     return frames;
 }
 
