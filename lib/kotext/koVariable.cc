@@ -539,7 +539,6 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
 {
     QCString string;
     QStringList stringList;
-    int count=1, noe=5;
     if ( varFormat == 0L )
     {
         // Get the default format for this variable (this method is only called in the interactive case, not when loading)
@@ -554,9 +553,9 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             bool selectLast=false;
             if( config.hasGroup("Date format history") )
             {
-                count=0;
+                int count=0;
                 config.setGroup("Date format history");
-                noe=config.readNumEntry("Number Of Entries", 5);
+                int noe=config.readNumEntry("Number Of Entries", 5);
                 for(int i=0;i<noe;i++)
                 {
                     QString num, tmpString;
@@ -625,9 +624,9 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             bool selectLast=false;
             if( config.hasGroup("Time format history") )
             {
-                count=0;
+                int count=0;
                 config.setGroup("Time format history");
-                noe=config.readNumEntry("Number Of Entries", 5);
+                int noe=config.readNumEntry("Number Of Entries", 5);
                 for(int i=0;i<noe;i++)
                 {
                     QString num, tmpString;
