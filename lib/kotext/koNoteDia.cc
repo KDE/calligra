@@ -21,7 +21,10 @@
 #include <qvbox.h>
 #include <qmultilineedit.h>
 #include "koNoteDia.h"
-
+#include <qlayout.h>
+#include <qpushbutton.h>
+#include <kglobal.h>
+#include <qdatetime.h>
 
 KoNoteDia::KoNoteDia( QWidget *parent, const QString &_note, const QString & _authorName, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
@@ -29,9 +32,12 @@ KoNoteDia::KoNoteDia( QWidget *parent, const QString &_note, const QString & _au
     setCaption( i18n("Edit Note") );
     authorName = _authorName;
     QVBox *page = makeVBoxMainWidget();
+
     m_multiLine = new QMultiLineEdit( page );
     m_multiLine->setText( _note );
     m_multiLine->setFocus();
+    pbAddAuthorName = new QPushButton(i18n("Add author name"),page);
+    connect (pbAddAuthorName, SIGNAL(clicked ()), this , SLOT(slotAddAuthorName()));
     resize( 300,100 );
 }
 
@@ -42,7 +48,11 @@ QString KoNoteDia::noteText()
 
 void KoNoteDia::slotAddAuthorName()
 {
-    //todo
+    QString date = KGlobal::locale()->formatDate( QDate::currentDate() );
+    QString time = KGlobal::locale()->formatTime( QTime::currentTime() );
+    QString result = QString("--------%1 ,%2, %3------\n").arg(authorName).arg(date).arg(time);
+    m_multiLine->insertLine( result, m_multiLine->numLines() );
+
 }
 
 #include "koNoteDia.moc"
