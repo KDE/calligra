@@ -2359,7 +2359,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	// TODO: No better method to set new font ?
 	if ( old_layoutflag )
 	    m_pVisualFormula->parse( m_strText.mid(1) );
-	m_pVisualFormula->setPos( _tx + w/2, _ty + h/2 );
+	m_pVisualFormula->setPos( _tx + w2/2, _ty + h2/2 );
 	m_pVisualFormula->redraw( _painter );
 	_painter.restore();
     }
