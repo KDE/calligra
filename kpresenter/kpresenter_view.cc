@@ -1763,6 +1763,15 @@ void KPresenterView::slotCounterStyleSelected()
             // else the suffix remains the default, '.'
             // TODO save this setting, to use the last one selected in the dialog?
             // (same for custom bullet char etc.)
+
+            // 68927: restart numbering, by default, if last parag wasn't numbered
+            // (and if we're not applying this to a selection)
+            KPTextView *edit = m_canvas->currentTextObjectView();
+            if ( edit && !edit->textObject()->hasSelection() ) {
+                KoTextParag* parag = edit->cursor()->parag();
+                if ( parag->prev() && !parag->prev()->counter() )
+                    c.setRestartCounter(true);
+            }
         }
 
         QPtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
@@ -4479,6 +4488,7 @@ void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
     switch( m_canvas->activePage()->getBackType())
     {
     case BT_COLOR:
+    case BT_BRUSH:
         break;
     case BT_PICTURE:
     case BT_CLIPART:
@@ -6656,6 +6666,7 @@ void KPresenterView::backgroundPicture()
     switch( m_canvas->activePage()->getBackType())
     {
     case BT_COLOR:
+    case BT_BRUSH:
         break;
     case BT_CLIPART:
     case BT_PICTURE:
