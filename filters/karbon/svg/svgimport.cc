@@ -84,6 +84,8 @@ SvgImport::convert()
 {
 	QDomElement docElem = inpdoc.documentElement();
 	parseGroup( 0L, docElem );
+
+	outdoc = m_document.saveXML();
 }
 
 void
@@ -206,13 +208,13 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 	{
 		if( b.tagName() == "g" )
 		{
-			VGroup *group = new VGroup( grp );
+			VGroup *group = new VGroup( grp ? grp : &m_document );
 			parseStyle( group, b );
-			parseGroup( group, b );
 			if( grp )
 				grp->append( group );
 			else
 				m_document.append( group );
+			parseGroup( group, b );
 			m_gc.pop();
 		}
 		else if( b.tagName() == "rect" )
@@ -303,8 +305,6 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			m_gc.pop();
 		}
 	}
-	
-	outdoc = m_document.saveXML();
 }
 
 #include <svgimport.moc>
