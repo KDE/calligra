@@ -57,7 +57,7 @@
 //#define DEBUG_MARGINS
 //#define DEBUG_FLOW
 //#define DEBUG_FORMATS
-#define DEBUG_FORMAT_MORE
+//#define DEBUG_FORMAT_MORE
 //#define DEBUG_VIEWAREA
 //#define DEBUG_CURSOR
 
@@ -414,7 +414,8 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
     if ( lastFormatted == textDocument()->lastParag() /* && !onlyChanged BUG!*/ )
     {
         // This is drawing code, so we convert everything to pixels
-        int docHeight = m_doc->layoutUnitToPixelY( textDocument()->height() );
+        //int docHeight = m_doc->layoutUnitToPixelY( textDocument()->height() );
+        int docHeight = textDocument()->lastParag()->pixelRect(m_doc).bottom() + 1;
         QRect frameRect = m_doc->zoomRect( *theFrame );
 
         int totalHeight = m_doc->zoomItY( frames.last()->internalY() + frames.last()->height() );
@@ -1357,7 +1358,7 @@ void KWTextFrameSet::printDebug()
     KWFrameSet::printDebug();
     if ( !isDeleted() )
     {
-        kdDebug() << "KoTextDocument width = " << textDocument()->width() << endl;
+        kdDebug() << "KoTextDocument width = " << textDocument()->width() << " height = " << textDocument()->height() << endl;
         kdDebug() << " -- Frames in page array -- " << endl;
         for ( uint i = 0 ; i < m_framesInPage.size() ; ++i )
         {

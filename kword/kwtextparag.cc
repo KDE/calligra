@@ -717,14 +717,18 @@ KoParagLayout KWTextParag::loadParagLayout( QDomElement & parentElem, KWDocument
     element = parentElem.namedItem( "FLOW" ).toElement(); // Flow is what is now called alignment internally
     if ( !element.isNull() )
     {
-        QString flow = element.attribute( "value" ); // KWord-0.8
+        QString flow = element.attribute( "align" ); // KWord-1.0 DTD
         if ( !flow.isEmpty() )
         {
-            static const int flow2align[] = { Qt::AlignLeft, Qt::AlignRight, Qt::AlignCenter, Qt::AlignJustify };
-            layout.alignment = flow2align[flow.toInt()];
+            // 'left' is the default and maps to Qt::AlignAuto
+            // We don't have support for forcing left-aligned RTL text, this would have
+            // to be called something else, e.g. forceLeft. This is the least damaging
+            // way. Saving AlignAuto as 'auto' would break the file format.
+            layout.alignment = flow=="right" ? (int)Qt::AlignRight : flow=="center" ? (int)Qt::AlignCenter : flow=="justify" ? (int)Qt::AlignJustify : (int)Qt::AlignAuto;
         } else {
-            flow = element.attribute( "align" ); // KWord-1.0 DTD
-            layout.alignment = flow=="right" ? (int)Qt::AlignRight : flow=="center" ? (int)Qt::AlignCenter : flow=="justify" ? (int)Qt::AlignJustify : (int)Qt::AlignLeft;
+            flow = element.attribute( "value" ); // KWord-0.8
+            static const int flow2align[] = { Qt::AlignAuto, Qt::AlignRight, Qt::AlignCenter, Qt::AlignJustify };
+            layout.alignment = flow2align[flow.toInt()];
         }
     }
 
