@@ -23,6 +23,9 @@
 class KoDocumentChild;
 class KoDocumentChildPicture;
 
+class QDomElement;
+class QDomDocument;
+
 #include <container.h>
 #include <part.h>
 
@@ -205,11 +208,28 @@ public:
    */
   virtual bool save( ostream& out );
   /**
+   *  Writes the OBJECT tag, but does NOT write the content of the
+   *  embedded documents. Saving the embedded documents themselves
+   *  is done in @ref Document_impl. This function just stores information
+   *  about the position and id of the embedded document.
+   *
+   *  Use this function if your application uses the DOM.
+   */
+  virtual QDomElement save( QDomDocument& doc );
+  /**
    *  Parses the OBJECT tag. This does NOT mean creating the child documents.
    *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
    *  to actually load the embedded documents.
    */
   virtual bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
+  /**
+   *  Parses the OBJECT tag. This does NOT mean creating the child documents.
+   *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
+   *  to actually load the embedded documents.
+   *
+   *  Use this function if your application uses the DOM.
+   */
+  virtual bool load( const QDomElement& element );
   /**
    *  Actually loads the document from the disk/net or from the store,
    *  depending on @ref #url

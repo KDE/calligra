@@ -39,6 +39,7 @@
 #include <qpainter.h>
 #include <qcolor.h>
 #include <qpicture.h>
+#include <qdom.h>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store:" but KURL didn't like it,
@@ -127,6 +128,44 @@ bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
   return true;
 }
 
+bool KoDocumentChild::load( const QDomElement& element )
+{
+    if ( element.hasAttribute( "url" ) )
+	m_tmpURL = element.attribute("url");
+    else if ( element.hasAttribute("mime") )
+	m_tmpMimeType = element.attribute("mime");
+
+    if ( m_tmpURL.isEmpty() )
+    {	
+	kdebug( KDEBUG_INFO, 30003, "Empty 'url' attribute in OBJECT" );
+	return false;
+    }
+    else if ( m_tmpMimeType.isEmpty() )
+    {
+	kdebug( KDEBUG_INFO, 30003, "Empty 'mime' attribute in OBJECT" );
+	return false;
+    }
+
+    bool brect = FALSE;
+    QDomElement e = element.firstChild().toElement();
+    for( ; !e.isNull(); e = e.nextSibling().toElement() )
+    {
+	if ( e.tagName() == "rect" )
+        {
+	    brect = true;
+	    m_tmpGeometry = e.toRect();
+	}
+    }
+
+    if ( !brect )
+    {
+	kdebug( KDEBUG_INFO, 30003, "Missing RECT in OBJECT" );
+	return false;
+    }
+
+    return true;
+}
+
 bool KoDocumentChild::loadTag( KOMLParser&, const string&, vector<KOMLAttrib>& )
 {
     return FALSE;
@@ -157,6 +196,15 @@ bool KoDocumentChild::loadDocument( KoStore* _store )
   m_tmpURL = QString::null;
 
   return res;
+}
+
+QDomElement KoDocumentChild::save( QDomDocument& doc )
+{
+    QDomElement e = doc.createElement( "object" );
+    e.setAttribute( "url", document()->url() );
+    e.setAttribute( "mime", document()->mimeType() );
+    
+    return e;
 }
 
 bool KoDocumentChild::save( ostream& out )

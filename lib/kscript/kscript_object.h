@@ -23,9 +23,9 @@ public:
   enum Status { Dead, Alive };
 
   KSObject( KSClass* c );
-  virtual ~KSObject() { destructor(); }
+  virtual ~KSObject();
 
-  bool kill() { bool b = destructor(); m_status = Dead; return b; }
+  virtual bool kill();
 
   KSModule* module() { return m_class->module(); }
   KSSubScope* scope() { return &m_scope; }
@@ -166,7 +166,8 @@ public:
   KSProperty( const KSObject::Ptr& obj, const QString& name ) { m_obj = obj; m_name = name; }
   KSProperty( const KSStruct::Ptr& struc, const QString& name ) { m_struct = struc; m_name = name; }
   KSProperty( const KSProxy::Ptr& proxy, const QString& name ) { m_proxy = proxy; m_name = name; }
-
+  KSProperty( const KSModule::Ptr& m, const QString& name ) { m_module = m; m_name = name; }
+    
   virtual ~KSProperty() { }
 
   QString name() { return m_name; }
@@ -177,6 +178,7 @@ private:
   KSObject::Ptr m_obj;
   KSStruct::Ptr m_struct;
   KSProxy::Ptr m_proxy;
+  KSModule::Ptr m_module;
   QString m_name;
 };
 

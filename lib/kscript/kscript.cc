@@ -62,6 +62,16 @@ QString KSInterpreter::runScript( const QString& filename )
 
 bool KSInterpreter::runModule( KSContext& context, const QString& name )
 {
+  // Did we load this module already ? Dont load it twice
+  if ( m_modules.contains( name ) )
+  {
+    KSModule* m = m_modules[name];
+    m->ref();
+    context.setValue( new KSValue( m ) );
+
+    return true;
+  }
+
   QStringList::Iterator it = m_searchPaths.begin();
   for( ; it != m_searchPaths.end(); ++it )
   {

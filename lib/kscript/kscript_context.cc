@@ -1,5 +1,6 @@
 #include "kscript_context.h"
 #include "kscript_parsenode.h"
+#include "kscript_object.h"
 
 #include <stdio.h>
 
@@ -198,9 +199,13 @@ KSValue::Ptr KSModule::member( KSContext& context, const QString& name )
   {
     if ( context.leftExpr() )
     {
-      KSValue::Ptr ptr( new KSValue );
-      ptr->setMode( KSValue::LeftExpr );
-      return ptr;
+	this->ref();
+	KSValue::Ptr ptr( new KSValue( new KSProperty( this, name ) ) );
+	ptr->setMode( KSValue::LeftExpr );
+	return ptr;
+	// KSValue::Ptr ptr( new KSValue );
+	// ptr->setMode( KSValue::LeftExpr );
+	// return ptr;
     }
 
     QString tmp( "Unknown symbol '%1' in object of module '%2'" );
@@ -254,11 +259,11 @@ KSValue* KSSubScope::object( const QString& name, bool insert )
 
   if ( !insert )
     return 0;
-  
+
   KSValue* v = new KSValue();
   v->setMode( KSValue::LeftExpr );
   addObject( name, v );
-  return v;   
+  return v;
 }
 
 void KSSubScope::addObject( const QString& name, const KSValue::Ptr& value )

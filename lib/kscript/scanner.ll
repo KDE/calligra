@@ -224,6 +224,8 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 const			return T_CONST;
 FALSE			return T_FALSE;
 TRUE			return T_TRUE;
+falsce			return T_FALSE;
+true			return T_TRUE;
 struct			return T_STRUCT;
 switch			return T_SWITCH;
 case			return T_CASE;
@@ -231,14 +233,17 @@ default			return T_DEFAULT;
 enum			return T_ENUM;
 in			return T_IN;
 out			return T_OUT;
-interface		return T_INTERFACE;
 class			return T_CLASS;
-immortal		return T_NEW;
 delete			return T_DELETE;
 while			return T_WHILE;
 do			return T_DO;
 for			return T_FOR;
-if			return T_IF;
+if			{
+				if ( !s_kspread )
+					return T_IF;
+			  	yylval.ident = new QString( yytext );
+			  	return T_IDENTIFIER;
+			}
 else			return T_ELSE;
 main			return T_MAIN;
 foreach			return T_FOREACH;
@@ -247,13 +252,11 @@ signal			return T_SIGNAL;
 emit			return T_EMIT;
 import			return T_IMPORT;
 var			return T_VAR;
-readonly		return T_READONLY;
-attribute		return T_ATTRIBUTE;
 inout			return T_INOUT;
-raises			return T_RAISES;
 try			return T_TRY;
 catch			return T_CATCH;
 raise			return T_RAISE;
+from			return T_FROM;
 
 "++"			return T_INCR;
 "--"			return T_DECR;

@@ -18,7 +18,7 @@ KSClass_QWidget::KSClass_QWidget( KSModule* m, const char* name ) : KSClass_QObj
 {
   nameSpace()->insert( "QWidget", new KSValue( (KSBuiltinMethod)&KSObject_QWidget::ksQWidget ) );
   nameSpace()->insert( "show", new KSValue( (KSBuiltinMethod)&KSObject_QWidget::ksQWidget_show ) );
-  nameSpace()->insert( "destroy", new KSValue( (KSBuiltinMethod)&KSObject_QWidget::ksQWidget_delete ) );
+  // nameSpace()->insert( "destroy", new KSValue( (KSBuiltinMethod)&KSObject_QWidget::ksQWidget_delete ) );
 }
 
 KSScriptObject* KSClass_QWidget::createObject( KSClass* c )
@@ -32,7 +32,7 @@ KSObject_QWidget::KSObject_QWidget( KSClass* c ) : KS_Qt_Object( c )
 
 bool KSObject_QWidget::ksQWidget( KSContext& context )
 {
-  qDebug("QWidget\n");
+  qDebug("QWidget count=%i\n", count);
 
   if ( !checkDoubleConstructor( context, "QWidget" ) )
     return false;
@@ -62,7 +62,7 @@ bool KSObject_QWidget::ksQWidget( KSContext& context )
 
   setObject( new QWidget( parent, name ) );
 
-  qDebug("QWidget 2\n");
+  qDebug("QWidget end count=%i\n", count);
 
   return true;
 }
@@ -83,6 +83,7 @@ bool KSObject_QWidget::ksQWidget_show( KSContext& context )
   return true;
 }
 
+/*
 bool KSObject_QWidget::ksQWidget_delete( KSContext& context )
 {
   qDebug("QWidget::delete\n");
@@ -98,7 +99,7 @@ bool KSObject_QWidget::ksQWidget_delete( KSContext& context )
 
   return true;
 }
-
+*/
 KSValue::Ptr KSObject_QWidget::member( KSContext& context, const QString& name )
 {
   RETURN_RIGHTEXPR( "width", new KSValue( WIDGET->width() ) );

@@ -718,13 +718,15 @@ QString KSValue::toString() const
 }
 
 void KSValue::suck( KSValue* v )
-{
+{ 
   if ( v->mode() != Temp )
   {
     *this = *v;
     return;
   }
 
+  clear();
+  
   typ = v->type();
   val = v->val;
 

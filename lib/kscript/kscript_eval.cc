@@ -142,192 +142,8 @@ bool KSEval_exports( KSParseNode* node, KSContext& context )
 	return false;
     }
   }
-#if 0
-  else if ( context.value()->type() == KSValue::InterfaceType )
-  {
-    if ( node->branch1() )
-    {
-      if ( node->branch1()->getType() == func_dcl )
-	context.value()->interfaceValue()->nameSpace()->insert( node->branch1()->getIdent(), new KSValue( new KSScriptFunction( context.scope()->module(), node->branch1() ) ) );
-      else if ( !node->branch1()->eval( context ) )
-	return false;
-    }
-    if ( node->branch2() )
-    {
-      if ( node->branch2()->getType() == func_dcl )
-	context.value()->interfaceValue()->nameSpace()->insert( node->branch2()->getIdent(), new KSValue( new KSScriptFunction( context.scope()->module(), node->branch2() ) ) );
-      else if ( !node->branch2()->eval( context ) )
-	return false;
-    }
-  }
-#endif
   else
     ASSERT( 0 );
-
-  return true;
-}
-
-bool KSEval_interface_dcl( KSParseNode* node, KSContext& context )
-{
-#if 0
-  KSParseNode *left = node->branch1();
-  ASSERT( left );
-
-  // All child nodes should know about the KSInterface
-  context.setValue( new KSValue( new KSInterface( context.scope()->module(), left->getIdent() ) ) );
-
-  if ( !left->eval( context ) )
-    return false;
-
-  KSParseNode *right = node->branch2();
-  if ( right )
-    if ( !right->eval( context ) )
-      return false;
-
-  // Tell the interpreter that we are responsible for a certain repoid
-  const KSNamespace* n = context.value()->interfaceValue()->nameSpace();
-  QMap<QString,KSValue::Ptr>::ConstIterator it = n->find( "repoid" );
-  if ( it != n->end() )
-    context.interpreter()->addRepoidImplementation( it.data()->stringValue(), context.shareValue() );
-  else
-    printf("Interface %s has no repoid\n",node->getIdent().ascii());
-
-  context.setValue( 0 );
-
-#endif
-  return true;
-}
-
-bool KSEval_interface_header( KSParseNode* node, KSContext& context )
-{
-#if 0
-    ASSERT( context.value() && context.value()->type() == KSValue::InterfaceType );
-
-  // TODO: Avoid circles in super classes
-
-  // Is the symbol already used ?
-  KSValue* v = context.scope()->object( node->getIdent() );
-  if ( v )
-  {
-    QString tmp( "The symbol %1 is defined twice" );
-    context.setException( new KSException( "SymbolDefinedTwice", tmp.arg( node->getIdent() ), node->getLineNo() ) );
-    return false;
-  }
-
-  // Add the interface to the scope
-  context.scope()->addObject( node->getIdent(), context.shareValue() );
-
-  // Search super classes
-  KSContext l( context );
-  KSParseNode *left = node->branch1();
-  if ( !left )
-    // No super classes
-    return true;
-
-  l.setValue( new KSValue( KSValue::ListType ) );
-
-  if ( !left->eval( l ) )
-  {
-    context.setException( l );
-    return false;
-  }
-
-  context.value()->interfaceValue()->setSuperInterfaces( l.value()->listValue() );
-#endif
-  return true;
-}
-
-bool KSEval_corba_func_dcl( KSParseNode* node, KSContext& context )
-{
-#if 0
-  ASSERT( context.value() && context.value()->type() == KSValue::InterfaceType );
-
-  KSCorbaFunc* func = new KSCorbaFunc( context.scope()->module(), node );
-  context.value()->interfaceValue()->nameSpace()->insert( node->getIdent(), new KSValue( func ) );
-
-  // Dont evaluate the other branches here. They may refere to ScopedNames
-  // which are yet not known. Instead we process the branches if the function is called
-  // first. In addition this allows for a better startup time.
-#endif
-  return true;
-}
-
-bool KSEval_t_in_param_dcl( KSParseNode* node, KSContext& context )
-{
-#if 0
-    ASSERT( context.value() && context.value()->type() == KSValue::FunctionType );
-
-  KSContext d( context );
-  if ( node->branch1() )
-    if ( !node->branch1()->eval( d ) )
-    {
-      context.setException( d );
-      return false;
-    }
-
-  KSTypeCode::Ptr tc = KSTypeCode::typeCode( context, d.value() );
-  if ( !tc )
-    return false;
-
-  ((KSCorbaFunc*)context.value()->functionValue())->addParameter( KSCorbaFunc::T_IN, node->getIdent(), tc );
-#endif
-  return true;
-}
-
-bool KSEval_t_out_param_dcl( KSParseNode* node, KSContext& context )
-{
-#if 0
-  ASSERT( context.value() && context.value()->type() == KSValue::FunctionType );
-
-  KSContext d( context );
-  if ( node->branch1() )
-    if ( !node->branch1()->eval( d ) )
-    {
-      context.setException( d );
-      return false;
-    }
-
-  KSTypeCode::Ptr tc = KSTypeCode::typeCode( context, d.value() );
-  if ( !tc )
-    return false;
-
-  ((KSCorbaFunc*)context.value()->functionValue())->addParameter( KSCorbaFunc::T_OUT, node->getIdent(), tc );
-#endif
-  return true;
-}
-
-bool KSEval_t_inout_param_dcl( KSParseNode* node, KSContext& context )
-{
-#if 0
-  ASSERT( context.value() && context.value()->type() == KSValue::FunctionType );
-
-  KSContext d( context );
-  if ( node->branch1() )
-    if ( !node->branch1()->eval( d ) )
-    {
-      context.setException( d );
-      return false;
-    }
-
-  KSTypeCode::Ptr tc = KSTypeCode::typeCode( context, d.value() );
-  if ( !tc )
-    return false;
-
-  ((KSCorbaFunc*)context.value()->functionValue())->addParameter( KSCorbaFunc::T_INOUT, node->getIdent(), tc );
-#endif
-  return true;
-}
-
-
-bool KSEval_param_dcls( KSParseNode* node, KSContext& context )
-{
-  if ( node->branch1() )
-    if ( !node->branch1()->eval( context ) )
-      return false;
-
-  if ( node->branch2() )
-    if ( !node->branch2()->eval( context ) )
-      return false;
 
   return true;
 }
@@ -688,70 +504,6 @@ bool KSEval_scoped_name( KSParseNode* node, KSContext& context )
   return true;
 }
 
-bool KSEval_t_attribute( KSParseNode* node, KSContext& context )
-{
-#if 0
-  ASSERT( context.value() && context.value()->type() == KSValue::InterfaceType );
-
-  ASSERT( node->branch1() );
-  KSContext d( context );
-  if ( !node->branch1()->eval( d ) )
-  {
-    context.setException( d );
-    return false;
-  }
-
-  KSTypeCode::Ptr tc = KSTypeCode::typeCode( context, d.value() );
-  if ( !tc )
-    return false;
-
-  KSAttribute::Access attr = KSAttribute::Normal;
-  if ( node->getType() == t_readonly_attribute )
-    attr = KSAttribute::ReadOnly;
-
-  KSValue::Ptr v = new KSValue( new KSAttribute( context.scope()->module(), node->getIdent(), attr, tc ) );
-  context.value()->interfaceValue()->nameSpace()->insert( node->getIdent(), v );
-#endif
-  return true;
-}
-
-bool KSEval_t_readonly_attribute( KSParseNode* node, KSContext& context )
-{
-  return KSEval_t_attribute( node, context );
-}
-
-bool KSEval_raises_expr( KSParseNode* node, KSContext& context )
-{
-#if 0
-  ASSERT( context.value() && context.value()->type() == KSValue::FunctionType );
-
-  // Get the list of exceptions
-  KSContext d( context );
-  d.setValue( new KSValue( KSValue::ListType ) );
-  if ( node->branch1() )
-  {
-    if ( !node->branch1()->eval( d ) )
-    {
-      context.setException( d );
-      return false;
-    }
-  }
-
-  // Add all exceptions
-  QValueList<KSValue::Ptr>::Iterator it = d.value()->listValue().begin();
-  QValueList<KSValue::Ptr>::Iterator end = d.value()->listValue().end();
-  for( ; it != end; ++it )
-  {
-    if ( (*it)->type() != KSValue::StructClassType )
-    {
-      context.setException( new KSException( "InvalidException", "", node->getLineNo() ) );
-      return false;
-    }
-    ((KSCorbaFunc*)context.value()->functionValue())->addException( *it );
-  }
-#endif
-  return true;
-}
 
 bool KSEval_const_dcl( KSParseNode* node, KSContext& context )
 {
@@ -770,10 +522,6 @@ bool KSEval_const_dcl( KSParseNode* node, KSContext& context )
     context.value()->classValue()->nameSpace()->insert( node->getIdent(), l.shareValue() );
   else if ( context.value()->type() == KSValue::StructClassType )
     context.value()->structClassValue()->nameSpace()->insert( node->getIdent(), l.shareValue() );
-#if 0
-  else if ( context.value()->type() == KSValue::InterfaceType )
-    context.value()->interfaceValue()->nameSpace()->insert( node->getIdent(), l.shareValue() );
-#endif
   else
     ASSERT( 0 );
 
@@ -1393,15 +1141,6 @@ bool KSEval_t_func_call( KSParseNode* node, KSContext& context )
     b = l.value()->structClassValue()->constructor( context );
     context.scope()->popModule();
   }
-#if 0
-  else if ( l.value()->cast( KSValue::InterfaceType ) )
-  {
-    context.scope()->pushModule( l.value()->interfaceValue()->module() );
-    // Call struct constructor
-    b = l.value()->interfaceValue()->constructor( context );
-    context.scope()->popModule();
-  }
-#endif
   else if ( l.value()->cast( KSValue::MethodType ) )
   {
     context.scope()->pushModule( l.value()->methodValue()->module() );
@@ -1492,7 +1231,7 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
 	    l.setValue( KSValue::null() );
   }
   /** End of Syntax trick ;-) **/
-  
+
   // Special handling for modules
   if ( l.value()->cast( KSValue::ModuleType ) )
   {
@@ -1535,22 +1274,7 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
 
     return true;
   }
-#if 0
-  // Special handling for interfaces
-  else if ( l.value()->cast( KSValue::InterfaceType ) )
-  {
-    KSValue::Ptr v = l.value()->interfaceValue()->member( context, node->getIdent() );
-    if ( !v )
-    {
-      context.exception()->addLine( node->getLineNo() );
-      return false;
-    }
 
-    context.setValue( v );
-
-    return true;
-  }
-#endif
   KSValue::Ptr v;
   KSModule* module;
   if ( l.value()->cast( KSValue::ObjectType ) )
@@ -2266,7 +1990,7 @@ bool KSEval_t_emit( KSParseNode* node, KSContext& context )
 
 bool KSEval_import( KSParseNode* node, KSContext& context )
 {
-  KSNamespace space;
+    // KSNamespace space;
   // TODO: Find module in searchpath
 
   KSContext d( context );
@@ -2287,19 +2011,13 @@ bool KSEval_t_struct( KSParseNode* node, KSContext& context )
 {
   KSStructClass* p;
 
-  // A struct in an interface or class ?
-  if ( context.value() && ( context.value()->type() == KSValue::InterfaceType ||
-			    context.value()->type() == KSValue::ClassType ) )
+  // A struct in a class ?
+  if ( context.value() && context.value()->type() == KSValue::ClassType )
   {
     p = new KSStructClass( context.scope()->module(), node->getIdent() );
     KSValue::Ptr v = new KSValue( p );
 
-    if ( context.value()->type() == KSValue::ClassType )
-      context.value()->classValue()->nameSpace()->insert( node->getIdent(), v );
-#if 0
-    else
-      context.value()->interfaceValue()->nameSpace()->insert( node->getIdent(), v );
-#endif
+    context.value()->classValue()->nameSpace()->insert( node->getIdent(), v );
 
     KSParseNode *left = node->branch1();
     if ( !left )
@@ -2512,4 +2230,58 @@ extern bool KSEval_t_cell( KSParseNode* node, KSContext& context )
 extern bool KSEval_t_range( KSParseNode* node, KSContext& context )
 {
   return context.interpreter()->processExtension( context, node );
+}
+
+extern bool KSEval_from( KSParseNode* node, KSContext& context )
+{
+    // Get the list of symbols which have to be imported.
+    QStringList lst = QStringList::split( "/", node->getStringLiteral() );
+
+    KSContext d( context );
+    // This function puts a KSModule in d.value()
+    if ( !context.interpreter()->runModule( d, node->getIdent(), node->getIdent() + ".ks" ) )
+    {
+	context.setException( d );
+	return false;
+    }
+
+    // Register the imported module in the scope
+    context.scope()->addObject( node->getIdent(), d.shareValue() );
+
+    // Import all symbols ?
+    // Syntax: "from mymodule import *;"
+    if ( lst.isEmpty() )
+    {
+	// Iterate over all symbols of the module
+	KSNamespace::Iterator it = d.value()->moduleValue()->nameSpace()->begin();
+	KSNamespace::Iterator end = d.value()->moduleValue()->nameSpace()->end();
+	for(; it != end; ++it )
+	    context.scope()->module()->addObject( it.key(), it.data() );
+    }
+    // Syntax: "from mymodule import sym1, sym2;"
+    else
+    {
+	// Import from this module
+	KSModule* m = d.value()->moduleValue();
+	
+	// Iterate over all symbols that we should import
+	QStringList::ConstIterator sit = lst.begin();
+	for( ; sit != lst.end(); ++sit )
+        {
+	    // Symbol known ?
+	    KSValue* v = m->object( *sit );
+	    if ( !v )
+	    {
+		QString tmp( "The module %1 does not contain a symbol named %2" );
+		context.setException( new KSException( "SymbolUnknown",
+						       tmp.arg( node->getIdent() ).arg( *sit ),
+						       node->getLineNo() ) );
+		return false;
+	    }
+	
+	    // Add the symbol to the current namespace
+	    v->ref();
+	    context.scope()->module()->addObject( *sit, v );
+	}
+    }
 }

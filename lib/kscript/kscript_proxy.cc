@@ -97,10 +97,56 @@ QString KSProxy::pack( KSContext& context, QDataStream& str, KSValue::Ptr& v )
 	str << v->stringValue();
 	return "QString";
     case KSValue::ListType:
-	// TODO
+      {
+	  QString ret = "QValueList<";
+	  uint count = v->listValue().count();
+	  str << count;
+	  if ( count )
+          {
+	      QValueList<KSValue::Ptr>::Iterator begin = v->listValue().begin();
+	      QValueList<KSValue::Ptr>::Iterator end = v->listValue().end();
+	      
+	      QString ret2 = pack( context, str, *begin );
+	      if ( ret2.isEmpty() )
+		  return QString::null;
+	      ret += ret2;
+	      ++begin;
+	      for( ; begin != end; ++begin )
+		  pack( context, str, *begin );
+	      ret += ">";
+	  }
+	  else
+	      ret += "*>";
+	  return ret;
+      }
       break;
     case KSValue::MapType:
-	// TODO
+      {
+	  QString ret = "QMap<QString,";
+	  uint count = v->mapValue().count();
+	  str << count;
+	  if ( count )
+          {
+	      QMap<QString,KSValue::Ptr>::Iterator begin = v->mapValue().begin();
+	      QMap<QString,KSValue::Ptr>::Iterator end = v->mapValue().end();
+	      
+	      str << begin.key();
+	      QString ret2 = pack( context, str, begin.data() );
+	      if ( ret2.isEmpty() )
+		  return QString::null;
+	      ret += ret2;
+	      ++begin;
+	      for( ; begin != end; ++begin )
+	      {
+		  str << begin.key();
+		  pack( context, str, begin.data() );
+	      }
+	      ret += ">";
+	  }
+	  else
+	      ret += "*>";
+	  return ret;
+      }
       break;
     case KSValue::CharRefType:
     case KSValue::CharType:
@@ -152,7 +198,7 @@ QString KSProxy::pack( KSContext& context, QDataStream& str, KSValue::Ptr& v )
     return QString::null;
 }
 
-KSValue::Ptr KSProxy::unpack( KSContext&, QDataStream& str, const QCString& type )
+KSValue::Ptr KSProxy::unpack( KSContext& context, QDataStream& str, const QCString& type )
 {
     if ( type == "QString" )
     {
@@ -212,7 +258,30 @@ KSValue::Ptr KSProxy::unpack( KSContext&, QDataStream& str, const QCString& type
 	    v->listValue().append( new KSValue( *it ) );
 	return v;
     }
-
+    if ( type.left( 11 ) == "QValueList<" )
+    {
+	KSValue* v = new KSValue( KSValue::ListType );
+	uint count;
+	str >> count;
+	QCString t = type.mid( 11, type.length() - 12 );
+	for( uint i = 0; i < count; ++i )
+	    v->listValue().append( unpack( context, str, t ) );
+	return v;
+    }
+    if ( type.left( 13 ) == "QMap<QString," )
+    {
+	KSValue* v = new KSValue( KSValue::MapType );
+	uint count;
+	str >> count;
+	QCString t = type.mid( 13, type.length() - 14 );
+	for( uint i = 0; i < count; ++i )
+        {
+	    QString key;
+	    str >> key;
+	    v->mapValue().insert( key, unpack( context, str, t ) );
+	}
+	return v;
+    }
     return KSValue::Ptr( 0 );
 }
 

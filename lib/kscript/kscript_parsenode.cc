@@ -8,7 +8,7 @@ extern QString idl_lexFile;
 extern QString toplevelFile;
 extern int idl_line_no;
 
-typedef struct 
+typedef struct
 {
   const char *str;
   int   data;     // 0 = no further information
@@ -100,7 +100,8 @@ static ParseNodeDoc parseNodeDoc[] = {
   { "t_catch_default", 0 },
   { "t_raise", 0 },
   { "t_cell", 0 },
-  { "t_range", 0 }
+  { "t_range", 0 },
+  { "from", 0 }
 };
 
 typedef bool (*KSEval)( KSParseNode*, KSContext& );
@@ -108,13 +109,13 @@ typedef bool (*KSEval)( KSParseNode*, KSContext& );
 static KSEval KSEvalJump[] = {
   KSEval_definitions,
   KSEval_exports,
-  KSEval_interface_dcl,
-  KSEval_interface_header,
-  KSEval_corba_func_dcl,
-  KSEval_t_in_param_dcl,
-  KSEval_t_out_param_dcl,
-  KSEval_t_inout_param_dcl,
-  KSEval_param_dcls,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
   KSEval_t_vertical_line,
   KSEval_t_circumflex,
   KSEval_t_ampersand,
@@ -132,9 +133,9 @@ static KSEval KSEvalJump[] = {
   KSEval_t_floating_pt_literal,
   KSEval_t_boolean_literal,
   KSEval_scoped_name,
-  KSEval_t_attribute,
-  KSEval_t_readonly_attribute,
-  KSEval_raises_expr,
+  0,
+  0,
+  0,
   KSEval_const_dcl,
   KSEval_t_pragma,
   KSEval_class_dcl,
@@ -189,7 +190,8 @@ static KSEval KSEvalJump[] = {
   KSEval_t_catch_default,
   KSEval_t_raise,
   KSEval_t_cell,
-  KSEval_t_range
+  KSEval_t_range,
+  KSEval_from
 };
 
 KSParseNode::KSParseNode( KSParseNodeType aType, KSParseNode *one,

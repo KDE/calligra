@@ -28,7 +28,7 @@ public:
    *        the exception in case of an error. Once the value ( read: the module )
    *        of "context" is deleted, you may no longer use the exception contained
    *        in "context". That means you may not extract the exception and destroy
-   *        the KSContext object.
+   *        the KSContext object and then still use the exception object.
    */
   bool runModule( KSContext& context, const QString& name, const QString& filename );
 

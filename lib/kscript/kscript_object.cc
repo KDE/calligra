@@ -2,7 +2,6 @@
 #include "kscript_struct.h"
 #include "kscript_util.h"
 #include "kscript.h"
-#include <stdio.h>
 
 KSObject::KSObject( KSClass* c ) : QShared(), m_class( c )
 {
@@ -25,16 +24,35 @@ KSObject::KSObject( KSClass* c ) : QShared(), m_class( c )
   m_space.insert( "inherits", new KSValue( &KSObject::inherits ) );
 }
 
+KSObject::~KSObject()
+{
+    qDebug("KSObject::~KSObject");
+    destructor();
+}
+
+bool KSObject::kill()
+{
+    bool b = destructor();
+    
+    return b;
+}
+
 bool KSObject::destructor()
 {
-  QListIterator<KSObject> it( m_sender );
-  for( ; it.current(); ++it )
-    it.current()->disconnect( this );
-  m_sender.clear();
+    if ( m_status == Dead )
+	return TRUE;
+    
+    qDebug("KSObject::destructor");
+    QListIterator<KSObject> it( m_sender );
+    for( ; it.current(); ++it )
+	it.current()->disconnect( this );
+    m_sender.clear();
 
-  disconnect();
+    disconnect();
 
-  return true;
+    m_status = Dead;
+	
+    return true;
 }
 
 bool KSObject::connect( const QString& sig, KSObject* r, KSValue* s )
@@ -358,6 +376,11 @@ bool KSObject::inherits( KSContext& context )
 
 bool KSScriptObject::destructor()
 {
+  if ( status() == Dead )
+      return TRUE;
+
+  qDebug("KSScriptObject::destructor");
+    
   if ( !KSObject::destructor() )
     return false;
 
@@ -387,7 +410,7 @@ bool KSScriptObject::destructor()
       KSContext l( context );
       l.setValue( v );
 
-      printf("Calling destructor %s\n",(*it)->classValue()->name().ascii() );
+      qDebug("Calling destructor %s\n",(*it)->classValue()->name().ascii() );
       if ( (*it2)->type() == KSValue::FunctionType )
       {
 	if ( !(*it2)->functionValue()->call( l ) )
@@ -419,7 +442,7 @@ KSScriptObject::~KSScriptObject()
 {
   if ( !getClass()->module()->interpreter()->context().exception() && status() == Alive )
     destructor();
-  printf("KSScriptObject destructor\n");
+  qDebug("KSScriptObject::~KSScriptObject");
 }
 
 /*******************************************************
@@ -471,15 +494,17 @@ bool KSMethod::call( KSContext& context )
 
 bool KSProperty::set( KSContext& context, const KSValue::Ptr& v )
 {
-  if ( m_obj )
-    return m_obj->setMember( context, m_name, v );
-  else if ( m_struct )
-    return m_struct->setMember( context, m_name, v );
-  else if ( m_proxy )
-    return m_proxy->setMember( context, m_name, v );
-  else
-    ASSERT( 0 );
+    if ( m_obj )
+	return m_obj->setMember( context, m_name, v );
+    else if ( m_struct )
+	return m_struct->setMember( context, m_name, v );
+    else if ( m_proxy )
+	return m_proxy->setMember( context, m_name, v );
+    else if ( m_module )
+	return m_module->setMember( context, m_name, v );
+    else
+	ASSERT( 0 );
 
-  // Never reached
-  return false;
+    // Never reached
+    return false;
 }

@@ -7,7 +7,7 @@
 
 #define MAX_NODE_SIZE 255
 
-typedef enum 
+typedef enum
 {
   definitions = 0,
   exports,
@@ -92,7 +92,8 @@ typedef enum
   t_catch_default,
   t_raise,
   t_cell,
-  t_range
+  t_range,
+  from
 } KSParseNodeType;
 
 class KSContext;
@@ -124,7 +125,7 @@ private:
     ushort           _char;
   } _u;
   QString* str;
-  
+
   KSParseNodeExtra* m_extra;
   KSParseNode *b1;
   KSParseNode *b2;
@@ -151,7 +152,7 @@ public:
   QString getFname();
   long getLineNo();
   bool isToplevel();
-  
+
   void setIntegerLiteral( KScript::Long l );
   KScript::Long getIntegerLiteral();
   void setStringLiteral( const char *s );

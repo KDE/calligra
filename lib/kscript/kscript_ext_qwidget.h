@@ -24,7 +24,7 @@ public:
 
   bool ksQWidget( KSContext& );
   bool ksQWidget_show( KSContext& );
-  bool ksQWidget_delete( KSContext& );
+    // bool ksQWidget_delete( KSContext& );
 
   KSValue::Ptr member( KSContext& context, const QString& name );
   bool setMember( KSContext& context, const QString& name, const KSValue::Ptr& v );

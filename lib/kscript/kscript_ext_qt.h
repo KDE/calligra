@@ -48,7 +48,7 @@ protected:
     ~KS_Qt_Callback() { }
 
     void emitSignal( const QValueList<KSValue::Ptr>& params, const char* name );
-    
+
 private slots:
   void slotDestroyed();
 
@@ -86,12 +86,12 @@ class KSClass_QObject : public KSScriptClass
 {
 public:
     KSClass_QObject( KSModule*, const char* name = "QObject" );
-    
+
     virtual bool isBuiltin() { return true; }
     virtual bool hasSignal( const QString& name );
-    
+
     void addQtSignal( const QString& str );
-    
+
 private:
     QStringList m_signals;
 };
@@ -112,7 +112,7 @@ public:
 	      WidgetType,
               NoType };
 
-  KS_Qt_Object( KSClass* c ) : KSScriptObject( c ) { m_object = 0; }
+  KS_Qt_Object( KSClass* c );
   ~KS_Qt_Object();
 
   /**
@@ -138,6 +138,11 @@ public:
    */
   bool inherits( const char* name ) { return ( strcmp( name, "KS_Qt_Object" ) == 0 || KSScriptObject::inherits( name ) ); }
 
+  /**
+   * Implements the method "destroy"
+   */
+  bool KSQObject_destroy( KSContext& context );
+    
   static bool checkArguments( KSContext& context, KSValue* v, const QString& name, Type t1 = NoType, Type t2 = NoType,
 			      Type t3 = NoType, Type t4 = NoType, Type t5 = NoType, Type t6 = NoType );
   static bool tryArguments( KSContext& context, KSValue* v, Type t1 = NoType, Type t2 = NoType,

@@ -34,7 +34,6 @@ void yyerror( const char *s )
 
 %token T_AMPERSAND
 %token T_ASTERISK
-%token T_ATTRIBUTE
 %token T_CASE
 %token <_char> T_CHARACTER_LITERAL
 %token T_CIRCUMFLEX
@@ -51,7 +50,6 @@ void yyerror( const char *s )
 %token T_IN
 %token T_INOUT
 %token <_int> T_INTEGER_LITERAL
-%token T_INTERFACE
 %token T_LEFT_CURLY_BRACKET
 %token T_LEFT_PARANTHESIS
 %token T_LEFT_SQUARE_BRACKET
@@ -60,8 +58,6 @@ void yyerror( const char *s )
 %token T_OUT
 %token T_PERCENT_SIGN
 %token T_PLUS_SIGN
-%token T_RAISES
-%token T_READONLY
 %token T_RIGHT_CURLY_BRACKET
 %token T_RIGHT_PARANTHESIS
 %token T_RIGHT_SQUARE_BRACKET
@@ -83,7 +79,6 @@ void yyerror( const char *s )
 %token T_ASSIGN
 %token T_NOTEQUAL
 %token T_MEMBER
-%token T_NEW
 %token T_DELETE
 %token T_WHILE
 %token T_IF
@@ -92,8 +87,6 @@ void yyerror( const char *s )
 %token T_DO
 %token T_INCR
 %token T_DECR
-%token T_SPEC_OPEN
-%token T_SPEC_CLOSE
 %token T_MAIN
 %token T_FOREACH
 %token <ident> T_SUBST
@@ -110,18 +103,10 @@ void yyerror( const char *s )
 %token T_RAISE
 %token <_str> T_RANGE
 %token <_str> T_CELL
+%token T_FROM
 
 %type <node>   definitions
 %type <node>   definition
-%type <node>   interface_dcl
-%type <node>   interface_header
-%type <node>   interface_body
-%type <node>   interface_exports
-%type <node>   interface_export
-%type <node>   raises_expr
-%type <node>   parameter_dcls
-%type <node>   param_dcl
-%type <node>   param_dcls
 %type <node>   const_dcl
 %type <node>   or_expr
 %type <node>   xor_expr
@@ -133,7 +118,6 @@ void yyerror( const char *s )
 %type <node>   primary_expr
 %type <node>   literal
 %type <node>   scoped_name
-%type <node>   attr_dcl
 %type <node>   inheritance_spec
 %type <node>   class_dcl
 %type <node>   class_header
@@ -153,7 +137,6 @@ void yyerror( const char *s )
 %type <node>   array_elements
 %type <node>   dict_elements
 %type <node>   func_call_params
-%type <node>   new_expr
 %type <node>   loops
 %type <node>   incr_expr
 %type <node>   while
@@ -166,12 +149,12 @@ void yyerror( const char *s )
 %type <node>   struct_export
 %type <node>   struct_exports
 %type <node>   struct_members
-%type <node>   corba_func_dcl
 %type <node>   qualified_names
 %type <node>   qualified_name
 %type <node>   catches
 %type <node>   single_catch
 %type <node>   loop_body
+%type <_str>   import_list
 
 %%
 
@@ -209,10 +192,6 @@ definition
           {
 	    $$ = $1;
 	  }
-	| interface_dcl T_SEMICOLON
-          {
-	    $$ = $1;
-	  }
 	| struct_dcl T_SEMICOLON
 	  {
 	    $$ = $1;
@@ -230,6 +209,18 @@ definition
 	    $$ = new KSParseNode( import );
 	    $$->setIdent( $2 );
 	  }
+	| T_FROM T_IDENTIFIER T_IMPORT T_ASTERISK T_SEMICOLON
+	  {
+	    $$ = new KSParseNode( from );
+	    $$->setIdent( $2 );
+	    $$->setStringLiteral( QString( "" ) );
+	  }
+	| T_FROM T_IDENTIFIER T_IMPORT import_list T_SEMICOLON
+	  {
+	    $$ = new KSParseNode( from );
+	    $$->setIdent( $2 );
+	    $$->setStringLiteral( $4 );
+	  }
         | T_PRAGMA      /*New*/
           {
 	    $$ = new KSParseNode( t_pragma );
@@ -241,6 +232,19 @@ definition
 	  }
 	;
 
+import_list
+	: T_IDENTIFIER
+	  {
+		$$ = $1;
+	  }
+	| T_IDENTIFIER T_COMMA import_list
+	  {
+		(*$1) += "/";
+		(*$1) += (*$3);
+		$$ = $1;
+	  }
+	;
+
 main
 	: T_MAIN T_LEFT_CURLY_BRACKET func_body T_RIGHT_CURLY_BRACKET
 	  {
@@ -249,83 +253,6 @@ main
 	    $$->setIdent( "main" );
 	  }
 
-/* The definition of an interface */
-interface_dcl
-	: interface_header T_LEFT_CURLY_BRACKET interface_body
-                                         T_RIGHT_CURLY_BRACKET
-          {
-	    $$ = new KSParseNode( interface_dcl, $1, $3 );
-	  }
-	;
-
-/* The name and inheritance list of an interface */
-interface_header
-	: T_INTERFACE T_IDENTIFIER
-          {
-	    $$ = new KSParseNode( interface_header );
-	    $$->setIdent( $2 );
-	  }
-	| T_INTERFACE T_IDENTIFIER inheritance_spec
-          {
-	    $$ = new KSParseNode( interface_header );
-	    $$->setIdent( $2 );
-	    $$->setBranch( 1, $3 );
-	  }
-	;
-
-/* The body of an interface. May be empty. */
-interface_body
-	: /*empty*/
-          {
-	    $$ = NULL;
-	  }
-	| interface_exports
-          {
-	    $$ = $1;
-	  }
-	;
-
-/* The body of an interface. This rule can not be empty */
-interface_exports
-	: interface_export
-          {
-	    $$ = new KSParseNode( exports, $1 );
-	  }
-	| interface_export interface_exports
-          {
-	    $$ = new KSParseNode( exports, $1 );
-	    $$->setBranch( 2, $2 );
-	  }
-	;
-
-/* This rule allows all the stuff an interface can contain */
-interface_export
-	: const_dcl T_SEMICOLON
-          {
-	    $$ = $1;
-	  }
-	| func_dcl T_RIGHT_CURLY_BRACKET
-	  {
-	    $$ = $1;
-	  }
-	| corba_func_dcl T_SEMICOLON
-	  {
-	    $$ = $1;
-	  }
-	| attr_dcl T_SEMICOLON
-          {
-	    $$ = $1;
-	  }
-	| struct_dcl T_SEMICOLON
-	  {
-	    $$ = $1;
-	  }
-        | T_PRAGMA      /*New*/
-          {
-	    $$ = new KSParseNode( t_pragma );
-	    $$->setIdent( $1 );
-	  }
-	;
 
 /*10*/
 inheritance_spec
@@ -374,29 +301,6 @@ scoped_name
 	    name += *($2);
 	    delete $2;
 	    $$->setIdent( name );
-	  }
-	;
-
-/* This rule matches a CORBA function in an interface declaration. */
-corba_func_dcl
-	: qualified_name T_IDENTIFIER parameter_dcls raises_expr
-          {
-	    $$ = new KSParseNode( corba_func_dcl, $1, $3, $4 );
-	    $$->setIdent( $2 );
-	  }
-	;
-
-/*86*/
-attr_dcl
-	: T_ATTRIBUTE qualified_name T_IDENTIFIER
-          {
-	    $$ = new KSParseNode( t_attribute, $2 );
-	    $$->setIdent( $3 );
-	  }
-	| T_READONLY T_ATTRIBUTE qualified_name T_IDENTIFIER
-          {
-	    $$ = new KSParseNode( t_readonly_attribute, $3 );
-	    $$->setIdent( $4 );
 	  }
 	;
 
@@ -513,36 +417,24 @@ add_expr
 
 /*20*/
 mult_expr
-	: new_expr
+	: unary_expr
           {
 	    $$ = $1;
 	  }
-	| mult_expr T_ASTERISK new_expr
+	| mult_expr T_ASTERISK unary_expr
           {
 	    $$ = new KSParseNode( t_asterik, $1, $3 );
 	  }
-	| mult_expr T_SOLIDUS new_expr
+	| mult_expr T_SOLIDUS unary_expr
           {
 	    $$ = new KSParseNode( t_solidus, $1, $3 );
 	  }
-	| mult_expr T_PERCENT_SIGN new_expr
+	| mult_expr T_PERCENT_SIGN unary_expr
           {
 	    $$ = new KSParseNode( t_percent_sign, $1, $3 );
 	  }
 	;
 
-new_expr
-	: unary_expr
-	  {
-	    $$ = $1;
-	  }
-	| T_NEW unary_expr
-	  {
-	    $$ = new KSParseNode( t_new, $2 );
-	  }
-	;
-
-/*21*/
 /*22*/
 unary_expr
 	: T_MINUS_SIGN index_expr
@@ -755,62 +647,6 @@ dict_elements
 	  }
 	;
 
-
-/*75*/
-parameter_dcls
-	: T_LEFT_PARANTHESIS param_dcls T_RIGHT_PARANTHESIS
-          {
-	    $$ = $2;
-	  }
-	| T_LEFT_PARANTHESIS T_RIGHT_PARANTHESIS
-          {
-	    $$ = NULL;
-	  }
-	;
-
-/* The parameters of a corba function */
-param_dcls
-	: param_dcl
-          {
-	    $$ = new KSParseNode( param_dcls, $1 );
-	  }
-	| param_dcl T_COMMA param_dcls
-          {
-	    $$ = new KSParseNode( param_dcls, $1 );
-	    $$->setBranch( 2, $3 );
-	  }
-	;
-
-/* The parameter of a corba function. */
-param_dcl
-	: T_IN qualified_name T_IDENTIFIER
-          {
-	    $$ = new KSParseNode( t_in_param_dcl, $2 );
-	    $$->setIdent( $3 );
-	  }
-	| T_OUT qualified_name T_IDENTIFIER
-          {
-	    $$ = new KSParseNode( t_out_param_dcl, $2 );
-	    $$->setIdent( $3 );
-	  }
-	| T_INOUT qualified_name T_IDENTIFIER
-          {
-	    $$ = new KSParseNode( t_inout_param_dcl, $2 );
-	    $$->setIdent( $3 );
-	  }
-	;
-
-/*78*/
-raises_expr
-	: /*empty*/
-          {
-	    $$ = NULL;
-	  }
-	| T_RAISES T_LEFT_PARANTHESIS qualified_names T_RIGHT_PARANTHESIS
-          {
-	    $$ = new KSParseNode( raises_expr, $3 );
-	  }
-	;
 
 /*79*/
 
@@ -1046,10 +882,6 @@ func_line
 	| T_RAISE assign_expr T_COMMA assign_expr T_SEMICOLON
 	  {
 	    $$ = new KSParseNode( t_raise, $2, $4 );
-	  }
-	| T_DELETE assign_expr T_SEMICOLON
-	  {
-	    $$ = new KSParseNode( t_delete, $2 );
 	  }
 	| T_EMIT assign_expr T_SEMICOLON
 	  {

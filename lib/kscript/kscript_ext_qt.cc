@@ -37,7 +37,7 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
   module->addObject( "QLabel", new KSValue( new KSClass_QLabel( module ) ) );
   module->addObject( "QVBoxLayout", new KSValue( new KSClass_QVBoxLayout( module ) ) );
   module->addObject( "QButtonGroup", new KSValue( new KSClass_QButtonGroup( module ) ) );
-	  
+	
   return module;
 }
 
@@ -114,8 +114,9 @@ void KS_Qt_Callback::slotDestroyed()
 	  (*it).m_receiver->setObject( 0 );
 	  (*it).m_receiver->kill();
 	  // Try again. The problem is that ->kill() causes our list
-	  // to be modified somewhere. So we trust noone and start again
+	  // to be modified somewhere. So we trust no one (tm) and start again
 	  // from the very beginning.
+	  // PS: If you dont know what (tm) means, you have to watch TV :-)
 	  it = m_callbacks.begin();
       }
       else
@@ -152,14 +153,14 @@ void KS_Qt_Callback::textChanged( const QString& param1 )
 {
     QValueList<KSValue::Ptr> params;
     params.append( new KSValue( param1 ) );
-    
+
     emitSignal( params, "textChanged" );
 }
 
 void KS_Qt_Callback::clicked()
 {
     QValueList<KSValue::Ptr> params;
-    
+
     emitSignal( params, "clicked" );
 }
 
@@ -184,8 +185,17 @@ void KS_Qt_Callback::activated( const QString& param1 )
  *
  **********************************************/
 
+KS_Qt_Object::KS_Qt_Object( KSClass* c )
+    : KSScriptObject( c )
+{
+    m_object = 0;
+    // QObject objects hold a reference on
+    ref();
+}
+
 KS_Qt_Object::~KS_Qt_Object()
 {
+    qDebug("KS_Qt_Object::~KS_Qt_Object");
   if ( status() == Alive )
     destructor();
 }
@@ -204,21 +214,30 @@ void KS_Qt_Object::setObject( QObject* o, bool ownership )
 
 bool KS_Qt_Object::destructor()
 {
-  bool b = KSScriptObject::destructor();
+    if ( status() == Dead )
+	return TRUE;
+    
+    qDebug("KS_Qt_Object::destructor");
+    bool b = KSScriptObject::destructor();
 
-  KS_Qt_Callback::self()->disconnect( this );
+    KS_Qt_Callback::self()->disconnect( this );
 
-  if ( m_object )
-  {
-    if ( m_ownership )
+    if ( m_object )
     {
-	qDebug("Deleting %x and widget %x %s",(int)this,(int)m_object,m_object->className());
-	delete m_object;
+	if ( m_ownership )
+        {
+	    qDebug("Deleting %x and widget %x %s",(int)this,(int)m_object,m_object->className());
+	    delete m_object;
+	}
+	m_object = 0;
     }
-    m_object = 0;
-  }
 
-  return b;
+    // In the constructor there is an extra reference count.
+    // That is dropped upon calling "destroy".
+    if ( deref() )
+	delete this;
+
+    return b;
 }
 
 KSValue::Ptr KS_Qt_Object::member( KSContext& context, const QString& name )
@@ -246,6 +265,31 @@ bool KS_Qt_Object::setMember( KSContext& context, const QString& name, const KSV
   }
 
   return KSObject::setMember( context, name, v );
+}
+
+bool KS_Qt_Object::KSQObject_destroy( KSContext& context )
+{
+  qDebug("QObject::delete\n");
+
+  if ( !KSUtil::checkArgumentsCount( context, 0, "QObject::delete" ) )
+  {
+      if ( deref() ) delete this;
+      return false;
+  }
+
+  KS_Qt_Callback::self()->disconnect( this );
+    
+  if ( object() )
+  {
+      delete object();
+      setObject( 0 );
+  }
+  
+  // In the constructor there is an extra reference count.
+  // That is dropped upon calling "destroy".
+  if ( deref() ) delete this;
+	
+  return true;
 }
 
 /***********************************************
@@ -474,13 +518,14 @@ bool KS_Qt_Object::checkLive( KSContext& context, const QString& name )
 
 KSClass_QObject::KSClass_QObject( KSModule* m, const char* name ) : KSScriptClass( m, name, 0 )
 {
-};
-    
+    nameSpace()->insert( "destroy", new KSValue( (KSBuiltinMethod)&KS_Qt_Object::KSQObject_destroy ) );
+}
+
 bool KSClass_QObject::hasSignal( const QString& name )
 {
     if ( m_signals.contains( name ) )
 	return TRUE;
-    
+
     return KSScriptClass::hasSignal( name );
 }
 

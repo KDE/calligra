@@ -47,9 +47,17 @@ public:
 
   KSNamespace* nameSpace() { return &m_space; }
 
+  /**
+   * Find a symbol in the modules namespace.
+   */
   KSValue* object( const QString& name );
+  /**
+   * Insert a symbol in the modules namespace.
+   */
   void addObject( const QString& name, const KSValue::Ptr& v );
-
+  /**
+   * @return the interpreter that started the interpreter.
+   */
   KSInterpreter* interpreter() { return m_interpreter; }
 
 private:

@@ -89,5 +89,6 @@ extern bool KSEval_t_catch_default( KSParseNode* node, KSContext& context );
 extern bool KSEval_t_raise( KSParseNode* node, KSContext& context );
 extern bool KSEval_t_cell( KSParseNode* node, KSContext& context );
 extern bool KSEval_t_range( KSParseNode* node, KSContext& context );
+extern bool KSEval_from( KSParseNode* node, KSContext& context );
 
 #endif
