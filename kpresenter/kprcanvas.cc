@@ -3177,7 +3177,8 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         //kdDebug(33001) << "\n-------\nKPrCanvas::pNext m_step =" << m_step.m_step << " m_subStep =" << m_step.m_subStep << endl;
 
         // First try to go one sub-step further, if any object requires it
-        QPtrListIterator<KPObject> oit(getObjectList());
+        // ### should we also objects on the sticky page be checked for sub steps?
+        QPtrListIterator<KPObject> oit( doc->pageList().at( m_step.m_pageNumber )->objectList() );
         for ( int i = 0 ; oit.current(); ++oit, ++i )
         {
             KPObject *kpobject = oit.current();
