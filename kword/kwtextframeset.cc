@@ -216,8 +216,8 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *theFrame = frameIt.current();
-        KoRect openLeftRect( *theFrame );
-        openLeftRect.setLeft( 0 );
+        KoRect openLeftRect( theFrame->innerRect() );
+        openLeftRect.setLeft( theFrame->bLeft() );
 #ifdef DEBUG_DTI
         kdDebug() << "documentToInternal: openLeftRect=" << DEBUGRECT( openLeftRect ) << endl;
 #endif
@@ -234,7 +234,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
             relPos = LeftOfFrame;
             return theFrame;
         }
-        KoRect openTopRect( KoPoint( 0, 0 ), theFrame->bottomRight() );
+        KoRect openTopRect( KoPoint( 0, 0 ), theFrame->innerRect().bottomRight() );
 #ifdef DEBUG_DTI
         kdDebug() << "documentToInternal: openTopRect=" << DEBUGRECT( openTopRect ) << endl;
 #endif
@@ -258,8 +258,8 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
     {
         // Under last frame of last page!
         KWFrame *theFrame = frames.getLast();
-        iPoint.setX( m_doc->ptToLayoutUnitPixX( theFrame->width() ) );
-        iPoint.setY( m_doc->ptToLayoutUnitPixY( theFrame->height() ) );
+        iPoint.setX( m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() ) );
+        iPoint.setY( m_doc->ptToLayoutUnitPixY( theFrame->innerHeight() ) );
 #ifdef DEBUG_DTI
         kdDebug() << "documentToInternal: returning AtEnd " << iPoint.x() << "," << iPoint.y()
                   << " because we are under all frames of the last page" << endl;
@@ -274,7 +274,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
         {
             // There is a frame on the next page
             KWFrame *theFrame = frameIt.current();
-            KoRect openTopRect( *theFrame );
+            KoRect openTopRect( theFrame->innerRect() );
             openTopRect.setTop( 0 );
             if ( openTopRect.contains( dPoint ) ) // We are at the top of this frame
                 iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->left() ) );
@@ -308,7 +308,7 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *theFrame = frameIt.current();
-        QRect r( 0, m_doc->ptToLayoutUnitPixY( theFrame->internalY() ), m_doc->ptToLayoutUnitPixX( theFrame->width() ), m_doc->ptToLayoutUnitPixY( theFrame->height() ) );
+        QRect r( 0, m_doc->ptToLayoutUnitPixY( theFrame->internalY() ), m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() ), m_doc->ptToLayoutUnitPixY( theFrame->innerHeight() ) );
 #ifdef DEBUG_ITD
         kdDebug() << "ITD: r=" << DEBUGRECT(r) << " iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
 #endif
@@ -367,7 +367,7 @@ QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
     else
     {
         KWFrame * theFrame = frames.getLast();
-        return QPoint( 0, m_doc->ptToLayoutUnitPixY( theFrame->internalY() + theFrame->height() ) );
+        return QPoint( 0, m_doc->ptToLayoutUnitPixY( theFrame->internalY() + theFrame->innerHeight() ) );
     }
 }
 
@@ -792,9 +792,9 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     // Note: it is very important that this method works in internal coordinates.
     // Otherwise, parags broken at the line-level (e.g. between two columns) are seen
     // as still in one piece, and we miss the frames in the 2nd column.
-    int left = 0;
+    int left = m_doc->ptToLayoutUnitPixX( theFrame->bLeft());
     int from = left;
-    int to = m_doc->ptToLayoutUnitPixX( theFrame->width() );
+    int to = m_doc->ptToLayoutUnitPixX( theFrame->innerWidth());
     bool init = false;
 
 #ifdef DEBUG_MARGINS
@@ -873,8 +873,8 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     kdDebugBody(32002) << "   getMargins done. from=" << from << " to=" << to << endl;
 #endif
     if ( from == to ) {
-        from = 0;
-        to = m_doc->ptToLayoutUnitPixX( theFrame->width() );
+        from = m_doc->ptToLayoutUnitPixX( theFrame->bLeft());
+        to = m_doc->ptToLayoutUnitPixX( theFrame->innerWidth());
     }
 
     if ( marginLeft )
@@ -1207,8 +1207,7 @@ void KWTextFrameSet::updateFrames()
     for ( ; frameIt.current(); ++frameIt )
     {
         // Calculate max width while we're at it
-        width = QMAX( width, m_doc->ptToLayoutUnitPixX( frameIt.current()->width() ) );
-
+        width = QMAX( width, m_doc->ptToLayoutUnitPixX( frameIt.current()->innerWidth()));
         FrameStruct str;
         str.frame = frameIt.current();
         sortedFrames.append( str );
@@ -1242,7 +1241,7 @@ void KWTextFrameSet::updateFrames()
         // Update availHeight with the internal height of this frame - unless it's a copy
         if ( ! ( theFrame->isCopy() && it != sortedFrames.begin() ) )
         {
-            lastRealFrameHeight = theFrame->height();
+            lastRealFrameHeight = theFrame->innerHeight();
             availHeight += lastRealFrameHeight;
         }
     }
@@ -1297,7 +1296,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
             // (Using the next page's first frame's internalY only works if there is a frame on the next page)
             if ( res >= 0 )
             {
-                int height = m_doc->ptToLayoutUnitPixY( theFrame->height() );
+                int height = m_doc->ptToLayoutUnitPixY( theFrame->innerHeight() );
 #ifdef DEBUG_ITD
                 kdDebug() << "ITD: height=" << height << endl;
 #endif
@@ -1365,8 +1364,8 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
         KWFrame *theFrame = frameIt.current();
         // Calculate frame's rect in LU. The +1 gives some tolerance for QRect's semantics.
         QRect r( 0, m_doc->ptToLayoutUnitPixY( theFrame->internalY() ),
-                 m_doc->ptToLayoutUnitPixX( theFrame->width() ) +1,
-                 m_doc->ptToLayoutUnitPixY( theFrame->height() )+1 );
+                 m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() ) +1,
+                 m_doc->ptToLayoutUnitPixY( theFrame->innerHeight() )+1 );
 #ifdef DEBUG_ITD
         kdDebug() << "KWTextFrameSet::internalToDocument frame's LU-rect:" << DEBUGRECT(r) << endl;
 #endif

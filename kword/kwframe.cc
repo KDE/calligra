@@ -447,13 +447,6 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
     btop = frameElem.attribute( "btoppt" ).toDouble();
     bbottom = frameElem.attribute( "bbottompt" ).toDouble();
     m_bCopy = KWDocument::getAttribute( frameElem, "copy", headerOrFooter /* default to true for h/f */ );
-    //for test
-#if 0
-    bleft = 100.0;
-    bright = 100.0;
-    btop = 100.0;
-    bbottom = 100.0;
-#endif
 }
 
 
@@ -466,12 +459,21 @@ KoRect KWFrame::innerRect() const
 {
     //kdDebug()<<" this->normalize() :"<<DEBUGRECT(this->normalize())<<endl;
     KoRect inner( this->normalize());
-    inner.setX( inner.x() + bLeft() );
-    inner.setY( inner.y() + bTop() );
+    inner.moveBy( bLeft(), bTop());
     inner.setWidth( inner.width() - bLeft() - bRight() );
     inner.setHeight( inner.height() - bTop() - bBottom() );
     //kdDebug()<<" DEBUGRECT inner :"<<DEBUGRECT(inner)<<endl;
     return inner;
+}
+
+double KWFrame::innerWidth() const
+{
+    return width() - bLeft() - bRight();
+}
+
+double KWFrame::innerHeight() const
+{
+    return height() - bTop() - bBottom();
 }
 
 /******************************************************************/
@@ -1077,7 +1079,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             lastRealFrame = frame;
             lastRealFrameTop = totalHeight;
         }
-        totalHeight += frame->height();
+        totalHeight += frame->innerHeight();
     }
     m_currentDrawnCanvas = 0L;
 }
@@ -1508,7 +1510,7 @@ void KWPictureFrameSet::setSize( const QSize & _imgSize )
 void KWPictureFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize )
 {
     KWFrameSet::resizeFrame( frame, newWidth, newHeight, finalSize );
-    QSize newSize = kWordDocument()->zoomSize( frame->size() );
+    QSize newSize = kWordDocument()->zoomSize( frame->innerRect().size() );
     m_image.setSize( newSize );
     // TODO: !finalSize /* finalSize==false -> fast mode=true */ );
 }
@@ -1574,7 +1576,7 @@ void KWPictureFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRec
                                    QColorGroup &, bool, bool, KWFrameSetEdit * )
 {
     //kdDebug() << "KWPictureFrameSet::drawFrame crect=" << DEBUGRECT(crect) << endl;
-    m_image.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->width() ), kWordDocument()->zoomItY( frame->height() ),
+    m_image.draw( *painter, kWordDocument()->zoomItX(frame->bLeft()), kWordDocument()->zoomItY(frame->bTop()), kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
                   crect.x(), crect.y(), crect.width(), crect.height() );
 }
 
@@ -1672,7 +1674,7 @@ void KWClipartFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRec
     {
         kdDebug() << "Trying to draw Clipart " << &m_clipart << endl;
     }
-    m_clipart.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->width() ), kWordDocument()->zoomItY( frame->height() ),
+    m_clipart.draw( *painter, kWordDocument()->zoomItX(frame->bLeft()), kWordDocument()->zoomItY(frame->bTop()), kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
                     crect.x(), crect.y(), crect.width(), crect.height() );
 }
 
@@ -1723,8 +1725,8 @@ void KWPartFrameSet::drawFrame( KWFrame* frame, QPainter * painter, const QRect 
 
         // We have to define better what the rect that we pass, means. Does it include zooming ? (yes I think)
         // Does it define the area to be repainted only ? (here it doesn't, really, but it should)
-        QRect rframe( 0, 0, kWordDocument()->zoomItX( frame->width() ),
-                      kWordDocument()->zoomItY( frame->height() ) );
+        QRect rframe( kWordDocument()->zoomItX(frame->bLeft()), kWordDocument()->zoomItY(frame->bTop()), kWordDocument()->zoomItX( frame->innerWidth() ),
+                      kWordDocument()->zoomItY( frame->innerHeight() ) );
         //kdDebug() << "rframe=" << DEBUGRECT( rframe ) << endl;
 
         m_child->document()->paintEverything( *painter, rframe, true, 0L,

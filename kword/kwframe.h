@@ -184,6 +184,9 @@ public:
 
     KoRect innerRect() const;
 
+    double innerWidth() const;
+    double innerHeight() const;
+
 
     // The "internal Y" is the offset (in pt) of the real frame showed in this one
     // ("real" means "the last that isn't a copy")

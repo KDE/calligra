@@ -118,7 +118,7 @@ protected:
     QGridLayout *grid4, *pGrid, *mGrid;
     QLabel *lx, *lml, *lmr, *lmt, *lmb, *ly, *lw, *lh;
     KDoubleNumInput *sx, *sy, *sw, *sh;
-    QLineEdit*sml, *smr, *smt, *smb;
+    KDoubleNumInput *sml, *smr, *smt, *smb;
     QCheckBox *floating;
 
     // TAB 5:

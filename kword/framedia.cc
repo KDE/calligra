@@ -789,12 +789,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     lml->resize( lml->sizeHint() );
     mGrid->addWidget( lml, 1, 0 );
 
-    sml = new QLineEdit( grp2 );
+    sml = new KDoubleNumInput( grp2 );
 
-    sml->setText( "0.00" );
-    sml->setMaxLength( 5 );
-    sml->setEchoMode( QLineEdit::Normal );
-    sml->setFrame( true );
+    sml->setValue( 0.0 );
     sml->resize( sml->sizeHint() );
     mGrid->addWidget( sml, 2, 0 );
 
@@ -802,12 +799,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     lmr->resize( lmr->sizeHint() );
     mGrid->addWidget( lmr, 1, 1 );
 
-    smr = new QLineEdit( grp2 );
+    smr = new KDoubleNumInput( grp2 );
 
-    smr->setText( "0.00" );
-    smr->setMaxLength( 5 );
-    smr->setEchoMode( QLineEdit::Normal );
-    smr->setFrame( true );
+    smr->setValue( 0.0 );
     smr->resize( smr->sizeHint() );
     mGrid->addWidget( smr, 2, 1 );
 
@@ -815,12 +809,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     lmt->resize( lmt->sizeHint() );
     mGrid->addWidget( lmt, 3, 0 );
 
-    smt = new QLineEdit( grp2 );
+    smt = new KDoubleNumInput( grp2 );
 
-    smt->setText( "0.00" );
-    smt->setMaxLength( 5 );
-    smt->setEchoMode( QLineEdit::Normal );
-    smt->setFrame( true );
+    smt->setValue( 0.0 );
     smt->resize( smt->sizeHint() );
     mGrid->addWidget( smt, 4, 0 );
 
@@ -828,42 +819,23 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     lmb->resize( lmb->sizeHint() );
     mGrid->addWidget( lmb, 3, 1 );
 
-    smb = new QLineEdit( grp2 );
+    smb = new KDoubleNumInput( grp2 );
 
-    smb->setText( "0.00" );
-    smb->setMaxLength( 5 );
-    smb->setEchoMode( QLineEdit::Normal );
-    smb->setFrame( true );
+    smb->setValue( 0.0 );
     smb->resize( smb->sizeHint() );
     mGrid->addWidget( smb, 4, 1 );
 
-    //// ### frame margins are currently not implemented
-    sml->setEnabled( false );
-    smr->setEnabled( false );
-    smt->setEnabled( false );
-    smb->setEnabled( false );
-    // margins are not implemented yet
-    grp2->hide();
-
     mGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
 
-    /// ##### grid4->addWidget( grp2, ++row, 0 );
+    grid4->addMultiCellWidget( grp2, row, (++row), 0,1 );
 
     if ( frame )
     {
-        sml->setText( KoUnit::userValue( QMAX(0.00, frame->bLeft()), doc->getUnit() ) );
-        smr->setText( KoUnit::userValue( QMAX(0.00, frame->bRight()), doc->getUnit() ) );
-        smt->setText( KoUnit::userValue( QMAX(0.00, frame->bTop()), doc->getUnit() ) );
-        smb->setText( KoUnit::userValue( QMAX(0.00, frame->bBottom()), doc->getUnit() ) );
+        sml->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bLeft()), doc->getUnit() ) );
+        smr->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bRight()), doc->getUnit() ) );
+        smt->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bTop()), doc->getUnit() ) );
+        smb->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bBottom()), doc->getUnit() ) );
     }
-    //sx->setValidator( new KFloatValidator( 0,9999,true,sx ) );
-    //sy->setValidator( new KFloatValidator( 0,9999,true,sy ) );
-    smb->setValidator( new KFloatValidator( 0,9999,true,smb ) );
-    sml->setValidator( new KFloatValidator( 0,9999,true,sml ) );
-    smr->setValidator( new KFloatValidator( 0,9999,true,smr ) );
-    smt->setValidator( new KFloatValidator( 0,9999,true,smt ) );
-    //sh->setValidator( new KFloatValidator( 0,9999,true,sh ) );
-    //sw->setValidator( new KFloatValidator( 0,9999,true,sw ) );
 
     bool disable = false;
     // Only one frame selected, or when creating a frame -> enable coordinates
@@ -899,6 +871,12 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     }
     else
         disable = true;
+//#if 0
+    sml->setEnabled(false);
+    smr->setEnabled(false);
+    smt->setEnabled(false);
+    smb->setEnabled(false);
+//#endif
 
     if ( disable )
     {
@@ -1598,10 +1576,10 @@ bool KWFrameDia::applyChanges()
         }
 
         double u1, u2, u3, u4;
-        u1=QMAX(0, KoUnit::fromUserValue( sml->text(), doc->getUnit() ));
-        u2=QMAX(0, KoUnit::fromUserValue( smr->text(), doc->getUnit() ));
-        u3=QMAX(0, KoUnit::fromUserValue( smt->text(), doc->getUnit() ));
-        u4=QMAX(0, KoUnit::fromUserValue( smb->text(), doc->getUnit() ));
+        u1=QMAX(0, KoUnit::ptFromUnit( sml->value(), doc->getUnit() ));
+        u2=QMAX(0, KoUnit::ptFromUnit( smr->value(), doc->getUnit() ));
+        u3=QMAX(0, KoUnit::ptFromUnit( smt->value(), doc->getUnit() ));
+        u4=QMAX(0, KoUnit::ptFromUnit( smb->value(), doc->getUnit() ));
         doc->setFrameMargins( u1, u2, u3, u4 );
     }
 
