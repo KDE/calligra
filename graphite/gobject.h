@@ -276,7 +276,7 @@ public:
     virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
 				  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) = 0;
 
-    const QString &name() const { return m_name; }       // name of the object (e.g. "Line001")
+    QString name() const { return m_name; }       // name of the object (e.g. "Line001")
     void setName(const QString &name) { m_name=name; }   // set the name
 
     virtual const QPoint origin() const = 0;             // the origin coordinate of the obj

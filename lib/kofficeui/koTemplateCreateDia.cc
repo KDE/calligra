@@ -227,7 +227,10 @@ void KoTemplateCreateDia::slotPopup(QListViewItem *item, const QPoint &p, int) {
 
 void KoTemplateCreateDia::slotNewGroup() {
 
-    //...
+    QString name=KoNewGroupDia::newGroupName(this);
+    if(name.isNull() || name.isEmpty())
+	return;
+
     d->m_groups->clear();
     fillGroupTree();
 }
@@ -262,4 +265,48 @@ void KoTemplateCreateDia::fillGroupTree() {
 	    (void)new QListViewItem(groupItem, t->name());
     }
 }
+
+
+KoNewGroupDia::KoNewGroupDia(QWidget *parent) :
+    KDialogBase(parent, "KoNewGroupDia", true, i18n("Enter a name"),
+		KDialogBase::Ok | KDialogBase::Cancel) {
+
+    QFrame *mainwidget=makeMainWidget();
+    QGridLayout *grid=new QGridLayout(mainwidget, 4, 2, KDialogBase::marginHint(),
+				      KDialogBase::spacingHint());
+    QLabel *label=new QLabel(i18n("Please enter the name of the new group."), mainwidget);
+    grid->addMultiCellWidget(label, 1, 1, 0, 1);
+    label=new QLabel(i18n("Name:"), mainwidget);
+    grid->addWidget(label, 2, 0);
+    m_name=new KLineEdit(mainwidget);
+    connect(m_name, SIGNAL(textChanged(const QString&)),
+	    this, SLOT(slotTextChanged(const QString&)));
+    grid->addWidget(m_name, 2, 1);
+    grid->setRowStretch(0, 1);
+    grid->setRowStretch(3, 1);
+    enableButtonOK(false);
+}
+
+QString KoNewGroupDia::newGroupName(QWidget *parent) {
+
+    KoNewGroupDia *dia=new KoNewGroupDia(parent);
+    QString name;
+    if(dia->exec()==QDialog::Accepted)
+	name=dia->name();
+    delete dia;
+    return name;
+}
+
+QString KoNewGroupDia::name() const {
+    return m_name->text();
+}
+
+void KoNewGroupDia::slotTextChanged(const QString &name) {
+
+    if(name.isNull() || name.isEmpty())
+	enableButtonOK(false);
+    else
+	enableButtonOK(true);
+}
+
 #include <koTemplateCreateDia.moc>

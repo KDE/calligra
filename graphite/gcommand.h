@@ -37,7 +37,7 @@ public:
     virtual void execute() = 0;
     virtual void unexecute() = 0;
 
-    const QString &name() const { return m_name; }
+    QString name() const { return m_name; }
     void setName(const QString &name) { m_name=name; }
 
 protected:

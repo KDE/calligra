@@ -50,6 +50,6 @@ class KoFilterDialog : public QWidget {
 public:
     KoFilterDialog(QWidget *parent=0L, QString name=QString::null);
     virtual ~KoFilterDialog() {}
-    virtual const QString state() = 0;
+    virtual QString state() = 0;
 };
 #endif

@@ -80,11 +80,11 @@ KoFilterManager::~KoFilterManager()
   delete d;
 }
 
-const QString KoFilterManager::fileSelectorList( const Direction &direction,
-                                                 const char *_format,
-                                                 const QString & _native_pattern,
-                                                 const QString & _native_name,
-                                                 const bool allfiles ) const
+QString KoFilterManager::fileSelectorList( const Direction &direction,
+					   const char *_format,
+					   const QString & _native_pattern,
+					   const QString & _native_name,
+					   const bool allfiles ) const
 {
     QString service;
     if ( direction == Import )
@@ -250,8 +250,8 @@ const int KoFilterManager::findWidget(const QString &ext) const {
 	return 0;  // default Widget
 }
 
-const QString KoFilterManager::import( const QString & _file, const char *_native_format,
-				       KoDocument *document )
+QString KoFilterManager::import( const QString & _file, const char *_native_format,
+				 KoDocument *document )
 {
     KURL url;
     url.setPath( _file );
@@ -333,8 +333,8 @@ const QString KoFilterManager::import( const QString & _file, const char *_nativ
     return "";
 }
 
-const QString KoFilterManager::prepareExport( const QString & file, const char *_native_format,
-					      const KoDocument *document )
+QString KoFilterManager::prepareExport( const QString & file, const char *_native_format,
+					const KoDocument *document )
 {
     d->exportFile=file;
     d->native_format=_native_format;

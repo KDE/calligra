@@ -38,13 +38,13 @@ public:
 	       const bool &hidden=false);
     ~KoTemplate() {}
 
-    const QString &name() const { return m_name; }
+    QString name() const { return m_name; }
     void setName(const QString &name) { m_name=name; m_touched=true; }
 
-    const QString &file() const { return m_file; }
+    QString file() const { return m_file; }
     void setFile(const QString &file) { m_file=file; m_touched=true; }
 
-    const QString &picture() const { return m_picture; }
+    QString picture() const { return m_picture; }
     void setPicture(const QString &picture) { m_picture=picture; m_touched=true; m_cached=false; }
     const QPixmap &loadPicture();
 
@@ -69,10 +69,10 @@ public:
 		    const QString &dir=QString::null);
     ~KoTemplateGroup() {}
 
-    const QString &name() const { return m_name; }
+    QString name() const { return m_name; }
     void setName(const QString &name) { m_name=name; m_touched=true; }
 
-    const QStringList &dirs() const { return m_dirs; }
+    QStringList dirs() const { return m_dirs; }
     void addDir(const QString &dir) { m_dirs.append(dir); m_touched=true; }
 
     // If all children are hidden, we are hidden too

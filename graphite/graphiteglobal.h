@@ -70,7 +70,7 @@ public:
 
     const Unit &unit() const { return m_unit; }
     void setUnit(const Unit &unit);
-    const QString &unitString() const { return m_unitString; }
+    QString unitString() const { return m_unitString; }
 
     const double &zoom() const { return m_zoom; }
     void setZoom(const double &zoom);

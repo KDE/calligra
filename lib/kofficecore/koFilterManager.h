@@ -79,7 +79,7 @@ public:
      *                        is added.
      * @param allfiles Whether a wildcard that matches all files should be added to the list.
      */
-    const QString fileSelectorList( const Direction &direction,
+    QString fileSelectorList( const Direction &direction,
                                     const char *_format,
                                     const QString & _native_pattern=QString::null,
                                     const QString & _native_name=QString::null,
@@ -126,7 +126,7 @@ public:
      * @return the file name to load, either QString::null (error, QDomDocument, or KoDocument),
      * _url (no conversion) or a /tmp file (conversion)
      */
-    const QString import( const QString & url, const char * native_format, KoDocument * document );
+    QString import( const QString & url, const char * native_format, KoDocument * document );
 
     /**
      * Export a file using a filter - don't call this one it's automatically
@@ -135,7 +135,7 @@ public:
      * be saved. The export_() function fetches this file and saves it to the _url
      * @param _url the location where the converted file will be stored
      */
-    const QString prepareExport( const QString &_url, const char *_native_format,
+    QString prepareExport( const QString &_url, const char *_native_format,
 				 const KoDocument *document );
     /**
      * Performs the "real" exporting - don't call this function directly! It will

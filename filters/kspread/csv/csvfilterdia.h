@@ -39,7 +39,7 @@ public:
     CSVFilterDia(QWidget *parent=0L, QString name=QString::null);
     virtual ~CSVFilterDia() {}
 
-    virtual const QString state();
+    virtual QString state();
 
 private:
     QVButtonGroup *box;

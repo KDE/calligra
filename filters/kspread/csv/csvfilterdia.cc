@@ -46,7 +46,7 @@ CSVFilterDia::CSVFilterDia(QWidget *parent, QString name) :
     ml->activate();
 }
 
-const QString CSVFilterDia::state() {
+QString CSVFilterDia::state() {
 
     if(r1==box->selected())
         return QString(QChar(';'));

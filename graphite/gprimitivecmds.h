@@ -177,9 +177,9 @@ public:
     virtual void unexecute();
 
     void setOldName(const QString &oldName) { m_old=oldName; }
-    const QString &oldName() const { return m_old; }
+    QString oldName() const { return m_old; }
     void setNewName(const QString &newName) { m_new=newName; }
-    const QString &newName() const { return m_new; }
+    QString newName() const { return m_new; }
 
 private:
     GObject *m_object;
