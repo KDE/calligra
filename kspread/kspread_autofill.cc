@@ -567,10 +567,10 @@ void KSpreadSheet::autofill( QRect &src, QRect &dest )
 
     doc()->emitBeginOperation();
 
-    if ( !m_pDoc->undoBuffer()->isLocked() )
+    if ( !m_pDoc->undoLocked() )
     {
       KSpreadUndoAutofill *undo = new KSpreadUndoAutofill( m_pDoc, this, dest );
-      m_pDoc->undoBuffer()->appendUndo( undo );
+      m_pDoc->addCommand( undo );
     }
 
     // Fill from left to right

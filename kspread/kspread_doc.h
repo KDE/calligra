@@ -28,16 +28,18 @@
 #ifndef KSPREAD_DOC
 #define KSPREAD_DOC
 
+class KCommand;
+
 class KSpreadDoc;
 class KSpreadInterpreter;
-class KSpreadUndo;
 class KSpreadView;
 class KSpreadMap;
 class KSpreadSheet;
 class KSpreadStyleManager;
+class KSpreadUndoAction;
 
 class KoStore;
-class KCommand;
+class KoCommandHistory;
 
 class View;
 
@@ -139,9 +141,17 @@ public:
   virtual QCString mimeType() const { return MIME_TYPE; }
   
   /**
-   * Adds a command to the command history.
+   * Adds a command to the command history. The command itself
+   * would not be executed.
    */
-  void addCommand( KCommand* command );  
+  void addCommand( KCommand* command );
+  
+  /*
+   * Adds an undo object. This is the same as addCommand, except 
+   * that it accepts KSpreadUndo instance. Once every undo object
+   * is converted to KCommand, this function will be obsoleted.
+   */
+  void addCommand( KSpreadUndoAction* command );
 
   /**
    * Undoes the last operation.
@@ -152,7 +162,29 @@ public:
    * Redoes the last undo.
    */
   void redo();
+  
+  /**
+   * Locks the undo buffer.
+   */
+  void undoLock();
+  
+  /**
+   * Releases lock of undo buffer.
+   */
+  void undoUnlock();
+  
+  /**
+   * Returns true if undo buffer is locked.
+   */
+  bool undoLocked() const;
 
+  /**
+   * Returns the command history for the document. This is used
+   * in KSpreadView for updating the actions (i.e through
+   * signal KoCommandHistory::commandExecuted)
+   */
+  KoCommandHistory* commandHistory();
+  
   /**
    * Returns the style manager for this document.
    */  
@@ -466,12 +498,6 @@ public:
    *         This function does remove any exception from the context.
    */
   KSContext & context();
-
-  /**
-   * @return the object that is respnsible for keeping track
-   *         of the undo buffer.
-   */
-  KSpreadUndo * undoBuffer()const;
 
   // virtual void printMap( QPainter & _painter );
 

@@ -65,6 +65,7 @@
 #include <koCharSelectDia.h>
 #include <koMainWindow.h>
 #include <koPartSelectAction.h>
+#include <kocommandhistory.h>
 #include <koTemplateCreateDia.h>
 
 #include <kparts/partmanager.h>
@@ -521,8 +522,6 @@ public:
     KAction* paste;
     KAction* specialPaste;
     KAction* insertCellCopy;
-    KAction* undo;
-    KAction* redo;
     KAction* find;
     KAction* replace;
 
@@ -1055,14 +1054,6 @@ void ViewPrivate::initActions()
       0, view, SLOT( slotInsertCellCopy() ), ac, "insertCellCopy" );
   actions->insertCellCopy->setToolTip(i18n("Inserts a cell from the clipboard into the spreadsheet."));
 
-  actions->undo = KStdAction::undo( view, SLOT( undo() ), ac, "undo" );
-  actions->undo->setEnabled( FALSE );
-  actions->undo->setToolTip(i18n("Undo the previous action."));
-
-  actions->redo = KStdAction::redo( view, SLOT( redo() ), ac, "redo" );
-  actions->redo->setEnabled( FALSE );
-  actions->redo->setToolTip(i18n("Redo the action that has been undone."));
-
   actions->find = KStdAction::find( view, SLOT(find()), ac );
   /*actions->findNext =*/ KStdAction::findNext( view, SLOT( findNext() ), ac );
   /*actions->findPrevious =*/ KStdAction::findPrev( view, SLOT( findPrevious() ), ac );
@@ -1246,17 +1237,6 @@ void ViewPrivate::adjustActions( bool mode )
   actions->recalcWorksheet->setEnabled( mode );
   actions->adjust->setEnabled( mode );
   actions->editCell->setEnabled( mode );
-  if( !mode )
-  {
-      actions->undo->setEnabled( false );
-      actions->redo->setEnabled( false );
-  }
-  else
-  {
-      actions->undo->setEnabled( doc->undoBuffer()->hasUndoActions() );
-      actions->redo->setEnabled( doc->undoBuffer()->hasRedoActions() );
-  }
-
   actions->paperLayout->setEnabled( mode );
   actions->styleDialog->setEnabled( mode );
   actions->definePrintRange->setEnabled( mode );
@@ -1527,6 +1507,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     // build the DCOP object
     dcopObject();
+    
+    connect( doc->commandHistory(), SIGNAL( commandExecuted() ), 
+        this, SLOT( commandExecuted() ) );
 
     // GUI Initializations
 
@@ -2132,7 +2115,7 @@ void KSpreadView::spellCleanup()
   KMessageBox::information( this, i18n( "Spell checking is complete." ) );
 
   if ( d->spell.macroCmdSpellCheck )
-    d->doc->undoBuffer()->appendUndo( d->spell.macroCmdSpellCheck );
+    d->doc->addCommand( d->spell.macroCmdSpellCheck );
   d->spell.macroCmdSpellCheck=0L;
 }
 
@@ -2275,7 +2258,7 @@ void KSpreadView::spellCheckerDone( const QString & )
 
     if ( d->spell.macroCmdSpellCheck )
     {
-        d->doc->undoBuffer()->appendUndo( d->spell.macroCmdSpellCheck );
+        d->doc->addCommand( d->spell.macroCmdSpellCheck );
     }
     d->spell.macroCmdSpellCheck=0L;
 }
@@ -2306,7 +2289,7 @@ void KSpreadView::spellCheckerFinished()
 
   if (d->spell.macroCmdSpellCheck)
   {
-      d->doc->undoBuffer()->appendUndo( d->spell.macroCmdSpellCheck );
+      d->doc->addCommand( d->spell.macroCmdSpellCheck );
   }
   d->spell.macroCmdSpellCheck=0L;
 
@@ -2458,8 +2441,6 @@ void KSpreadView::updateReadWrite( bool readwrite )
     (*aIt)->setEnabled( readwrite );
 
   d->actions->transform->setEnabled( false );
-  d->actions->redo->setEnabled( false );
-  d->actions->undo->setEnabled( false );
   if ( !d->doc || !d->workbook || d->workbook->isProtected() )
   {
     d->actions->showSheet->setEnabled( false );
@@ -2629,16 +2610,14 @@ void KSpreadView::helpUsing()
 
 void KSpreadView::enableUndo( bool _b )
 {
-  if ( d->activeSheet && !d->activeSheet->isProtected() )
-    d->actions->undo->setEnabled( _b );
-  d->actions->undo->setText(i18n("Undo: %1").arg(d->doc->undoBuffer()->getUndoName()));
+  KAction* action = actionCollection()->action( "office_undo" );
+  if( action ) action->setEnabled( _b );
 }
 
 void KSpreadView::enableRedo( bool _b )
 {
-  if ( d->activeSheet && !d->activeSheet->isProtected() )
-    d->actions->redo->setEnabled( _b );
-  d->actions->redo->setText(i18n("Redo: %1").arg(d->doc->undoBuffer()->getRedoName()));
+  KAction* action = actionCollection()->action( "office_redo" );
+  if( action ) action->setEnabled( _b );
 }
 
 void KSpreadView::enableInsertColumn( bool _b )
@@ -2651,27 +2630,6 @@ void KSpreadView::enableInsertRow( bool _b )
 {
   if ( d->activeSheet && !d->activeSheet->isProtected() )
     d->actions->insertRow->setEnabled( _b );
-}
-
-void KSpreadView::undo()
-{
-  d->doc->emitBeginOperation( false );
-  d->doc->undo();
-
-  updateEditWidget();
-
-  resultOfCalc();
-  d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
-}
-
-void KSpreadView::redo()
-{
-  d->doc->emitBeginOperation( false );
-  d->doc->redo();
-
-  updateEditWidget();
-  resultOfCalc();
-  d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
 void KSpreadView::deleteColumn()
@@ -3600,7 +3558,7 @@ void KSpreadView::insertTable()
   d->doc->addTable( t );
   updateEditWidget();
   KSpreadUndoAddTable *undo = new KSpreadUndoAddTable(d->doc, t);
-  d->doc->undoBuffer()->appendUndo( undo );
+  d->doc->addCommand( undo );
   setActiveTable( t );
 
   if ( d->workbook->visibleSheets().count() > 1 )
@@ -3629,10 +3587,10 @@ void KSpreadView::hideTable()
   QString sn = vs[i];
 
   d->doc->emitBeginOperation(false);
-  if ( !d->doc->undoBuffer()->isLocked() )
+  if ( !d->doc->undoLocked() )
   {
     KSpreadUndoHideTable* undo = new KSpreadUndoHideTable( d->doc, activeTable() );
-    d->doc->undoBuffer()->appendUndo( undo );
+    d->doc->addCommand( undo );
   }
   d->activeSheet->hideTable(true);
   d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
@@ -4120,11 +4078,11 @@ void KSpreadView::replace()
         d->replace, SIGNAL( replace( const QString &, int, int, int ) ),
         this, SLOT( slotReplace( const QString &, int, int, int ) ) );
 
-    if ( !d->doc->undoBuffer()->isLocked() )
+    if ( !d->doc->undoLocked() )
     {
         QRect region( d->findPos, d->findEnd );
         KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( d->doc, activeTable(), region );
-        d->doc->undoBuffer()->appendUndo( undo );
+        d->doc->addCommand( undo );
     }
 
     findNext();
@@ -5291,11 +5249,11 @@ void KSpreadView::slotItemSelected( int id )
 
   d->doc->emitBeginOperation( false );
 
-  if ( !d->doc->undoBuffer()->isLocked() )
+  if ( !d->doc->undoLocked() )
   {
     KSpreadUndoSetText* undo = new KSpreadUndoSetText( d->doc, d->activeSheet, cell->text(),
                                                        x, y, cell->formatType() );
-    d->doc->undoBuffer()->appendUndo( undo );
+    d->doc->addCommand( undo );
   }
 
   cell->setCellText( tmp, true );
@@ -6036,7 +5994,7 @@ void KSpreadView::removeTable()
     d->doc->setModified( true );
     KSpreadSheet * tbl = activeTable();
     KSpreadUndoRemoveTable * undo = new KSpreadUndoRemoveTable( d->doc, tbl );
-    d->doc->undoBuffer()->appendUndo( undo );
+    d->doc->addCommand( undo );
     tbl->map()->takeTable( tbl );
     doc()->takeTable( tbl );
     d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
@@ -6676,6 +6634,12 @@ void KSpreadView::paintUpdates()
      endOperation
   */
   d->canvas->paintUpdates();
+}
+
+void KSpreadView::commandExecuted()
+{
+  updateEditWidget();
+  resultOfCalc();
 }
 
 #include "kspread_view.moc"

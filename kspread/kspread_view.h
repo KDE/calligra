@@ -273,8 +273,6 @@ public slots:
     void editCell();
     void setAreaName();
     void showAreaName();
-    void undo();
-    void redo();
     void adjust();
     void defaultSelection();
     void paperLayoutDlg();
@@ -526,6 +524,12 @@ public slots:
     void spellCheckerIgnoreAll( const QString & word);
     void spellCheckerReplaceAll( const QString &,  const QString &);
     void startKSpell();
+
+    /**
+     * Updates the view and the action. This is typically connected
+     * to KoCommandHistory::commandExecuted() signal.
+     */    
+    void commandExecuted();
 
     virtual int leftBorder() const;
     virtual int rightBorder() const;

@@ -22,6 +22,31 @@
 #include <kspread_doc.h>
 #include <kspread_map.h>
 #include <kspread_sheet.h>
+#include <kspread_undo.h>
+
+// ----- UndoWrapperCommand -----
+
+UndoWrapperCommand::UndoWrapperCommand( KSpreadUndoAction* ua )
+{
+  undoAction = ua;
+}
+
+void UndoWrapperCommand::execute()
+{
+  // This is not really safe and functional, but UndoWrapperCommand
+  // is a workaround anyway. So leave it as it it (Ariya)
+  undoAction->redo();
+}
+
+void UndoWrapperCommand::unexecute()
+{
+  undoAction->undo();
+}
+
+QString UndoWrapperCommand::name() const
+{
+  return undoAction->getName();
+}
 
 // ----- HideSheetCommand -----
 

@@ -26,6 +26,25 @@
 
 class KSpreadDoc;
 class KSpreadSheet;
+class KSpreadUndoAction;
+
+/**
+ * Class UndoWrapperCommand is used to help migration from custom
+ * KSpreadUndoAction to KCommand-based system.
+ * See KSpreadDoc::addCommand for more information.
+ */
+class UndoWrapperCommand : public KCommand
+{
+public:
+  UndoWrapperCommand( KSpreadUndoAction* undoAction );
+  
+  virtual void execute();
+  virtual void unexecute();
+  virtual QString name() const;
+  
+protected:
+  KSpreadUndoAction* undoAction;
+};
 
 class HideSheetCommand : public KCommand
 {

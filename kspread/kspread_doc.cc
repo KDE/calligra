@@ -55,6 +55,7 @@
 #include "kspread_undo.h"
 #include "kspread_util.h"
 #include "kspread_view.h"
+#include "commands.h"
 #include "KSpreadDocIface.h"
 
 #include "koApplication.h"
@@ -78,7 +79,6 @@ public:
 
   DCOPObject* dcop;
   
-  KoCommandHistory* commandHistory;
 
   // used to give every KSpreadSheet a unique default name.
   int tableId;
@@ -101,7 +101,8 @@ public:
   QStringList kscriptModules;
   
   // for undo/redo 
-  KSpreadUndo *undoBuffer;
+  bool undoLocked;
+  KoCommandHistory* commandHistory;
 
   // TRUE if loading is in process, otherwise FALSE.
   // This flag is used to avoid updates etc. during loading.
@@ -192,8 +193,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   initInterpreter();
 
-  d->undoBuffer = new KSpreadUndo( this );
-  
+  d->undoLocked = false;
   d->commandHistory = new KoCommandHistory( actionCollection() );
 
   // Make us scriptable if the document has a name
@@ -227,8 +227,6 @@ KSpreadDoc::~KSpreadDoc()
   if(isReadWrite())
     saveConfig();
   destroyInterpreter();
-
-  delete d->undoBuffer;
 
   delete d->dcop;
   d->s_docs.remove( this );
@@ -375,11 +373,6 @@ int KSpreadDoc::syntaxVersion() const
 KSpreadInterpreter* KSpreadDoc::interpreter() const
 {
   return d->interpreter;
-}
-
-KSpreadUndo* KSpreadDoc::undoBuffer() const
-{
-  return d->undoBuffer;
 }
 
 bool KSpreadDoc::isLoading() const
@@ -1142,17 +1135,43 @@ void KSpreadDoc::destroyInterpreter()
 
 void KSpreadDoc::addCommand( KCommand* command )
 {
-    d->commandHistory->addCommand( command, true );
+    d->commandHistory->addCommand( command, false );
+}
+
+void KSpreadDoc::addCommand( KSpreadUndoAction* undo )
+{
+    UndoWrapperCommand* command = new UndoWrapperCommand( undo );
+    addCommand( command );
 }
 
 void KSpreadDoc::undo()
 {
-  d->undoBuffer->undo();
+  d->commandHistory->undo();
 }
 
 void KSpreadDoc::redo()
 {
-  d->undoBuffer->redo();
+  d->commandHistory->redo();
+}
+
+void KSpreadDoc::undoLock()
+{
+  d->undoLocked = true;
+}
+
+void KSpreadDoc::undoUnlock()
+{
+  d->undoLocked = false;
+}
+
+bool KSpreadDoc::undoLocked() const
+{
+  return d->undoLocked;
+}
+
+KoCommandHistory* KSpreadDoc::commandHistory()
+{
+  return d->commandHistory;
 }
 
 void KSpreadDoc::enableUndo( bool _b )

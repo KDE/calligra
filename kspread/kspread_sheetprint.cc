@@ -877,10 +877,10 @@ void KSpreadSheetPrint::definePrintRange( KSpreadSelection* selectionInfo )
 {
     if ( !selectionInfo->singleCellSelection() )
     {
-        if ( !m_pDoc->undoBuffer()->isLocked() )
+        if ( !m_pDoc->undoLocked() )
         {
              KSpreadUndoAction* undo = new KSpreadUndoDefinePrintRange( m_pSheet->doc(), m_pSheet );
-             m_pDoc->undoBuffer()->appendUndo( undo );
+             m_pDoc->addCommand( undo );
         }
 
         setPrintRange( selectionInfo->selection() );
@@ -889,10 +889,10 @@ void KSpreadSheetPrint::definePrintRange( KSpreadSelection* selectionInfo )
 
 void KSpreadSheetPrint::resetPrintRange ()
 {
-    if ( !m_pDoc->undoBuffer()->isLocked() )
+    if ( !m_pDoc->undoLocked() )
     {
          KSpreadUndoAction* undo = new KSpreadUndoDefinePrintRange( m_pSheet->doc(), m_pSheet );
-         m_pDoc->undoBuffer()->appendUndo( undo );
+         m_pDoc->addCommand( undo );
     }
 
     setPrintRange( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) );
