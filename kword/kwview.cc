@@ -5464,6 +5464,7 @@ void KWView::slotFrameSetEditChanged()
 
     //actionFormatIncreaseIndent->setEnabled(state);
     actionInsertLink->setEnabled(state);
+    actionInsertHorizontalLine->setEnabled( state);
     actionCreateStyleFromSelection->setEnabled( state && hasSelection);
     actionConvertToTextBox->setEnabled( state && hasSelection);
     actionAddPersonalExpression->setEnabled( state && hasSelection);
