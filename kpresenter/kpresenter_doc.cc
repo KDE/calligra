@@ -286,8 +286,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
     connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
-    if ( name )
-        dcopObject();
+    dcopObject();
 }
 
 void KPresenterDoc::refreshMenuCustomVariable()
