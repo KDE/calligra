@@ -37,6 +37,7 @@ class KoDocumentChild;
 class KoDocumentChildPicture;
 class KoView;
 class KoDocumentPrivate;
+class KoDocumentInfo;
 
 using std::istream;
 using std::ostream;
@@ -364,6 +365,8 @@ public:
    * by traversing the list returned by @ref #children.
    */
   KoDocumentChild *child( KoDocument *doc );
+
+  KoDocumentInfo *documentInfo() const;
 
   void setViewContainerStates( KoView *view, const QMap<QString,QByteArray> &states );
   QMap<QString,QByteArray> viewContainerStates( KoView *view );

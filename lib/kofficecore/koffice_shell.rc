@@ -11,6 +11,8 @@
   <Separator />
   <Action name="file_print" />
   <Separator />
+  <Action name="file_documentinfo" />
+  <Separator />
   <Action name="file_close" />
   <Action name="file_quit" />
  </Menu>

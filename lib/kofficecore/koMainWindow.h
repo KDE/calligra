@@ -136,6 +136,8 @@ public slots:
      */
     virtual void slotFilePrint();
 
+    virtual void slotDocumentInfo();
+
     /**
      *  Closes the actual shell.
      */

@@ -25,6 +25,7 @@
 #include "koView.h"
 #include "koFilterManager.h"
 #include "koIcons.h"
+#include "koDocumentInfoDlg.h"
 
 #include <qkeycode.h>
 #include <qfile.h>
@@ -117,6 +118,10 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
     KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(), "file_quit" );
 
+    (void) new KAction( i18n( "Document Information..." ), 0,
+			this, SLOT( slotDocumentInfo() ),
+			actionCollection(), "file_documentinfo" );
+    
     (void) new KAction( i18n( "Configure &Keys..." ), 0, this,
       SLOT( slotConfigureKeys() ), actionCollection(), "configurekeys" );
 
@@ -447,6 +452,26 @@ void KoMainWindow::slotFileSaveAs()
 {
     saveDocument( TRUE );
 }
+
+void KoMainWindow::slotDocumentInfo()
+{
+  if ( !d->m_rootDoc )
+    return;
+  
+  KoDocumentInfo *docInfo = d->m_rootDoc->documentInfo();
+  
+  if ( !docInfo )
+    return;
+  
+  KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg( docInfo, this, "documentInfoDlg" );
+  if ( dlg->exec() )
+  {
+    dlg->save();
+    d->m_rootDoc->setModified( true );
+  }
+
+  delete dlg;
+} 
 
 void KoMainWindow::slotFileClose()
 {

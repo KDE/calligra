@@ -27,7 +27,7 @@ bool KoDocumentInfo::load( const QDomDocument& doc )
 	if ( !p->load( doc.documentElement() ) )
 	    return FALSE;
     }
-    
+
     return TRUE;
 }
 
@@ -37,7 +37,7 @@ QDomDocument KoDocumentInfo::save()
     doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
     QDomElement e = doc.createElement( "document-info" );
     doc.appendChild( e );
-    
+
     QStringList lst = pages();
     QStringList::ConstIterator it = lst.begin();
     for( ; it != lst.end(); ++it )
@@ -52,18 +52,18 @@ QDomDocument KoDocumentInfo::save()
 
     return doc;
 }
-    
+
 KoDocumentInfoPage* KoDocumentInfo::page( const QString& name )
 {
     QObject* obj = child( name );
-    
+
     return (KoDocumentInfoPage*)obj;
 }
 
 QStringList KoDocumentInfo::pages()
 {
     QStringList ret;
-    
+
     const QObjectList *list = children();
     if ( list )
     {
@@ -85,8 +85,8 @@ QStringList KoDocumentInfo::pages()
  *
  *****************************************/
 
-KoDocumentInfoPage::KoDocumentInfoPage( KoDocumentInfo* info, const char* name )
-    : QObject( info, name )
+KoDocumentInfoPage::KoDocumentInfoPage( QObject* parent, const char* name )
+    : QObject( parent, name )
 {
 }
 
@@ -97,21 +97,21 @@ KoDocumentInfoPage::KoDocumentInfoPage( KoDocumentInfo* info, const char* name )
  *****************************************/
 
 KoDocumentInfoLog::KoDocumentInfoLog( KoDocumentInfo* info )
-    : KoDocumentInfo( info, "log" )
+    : KoDocumentInfoPage( info, "log" )
 {
 }
-    
+
 bool KoDocumentInfoLog::load( const QDomElement& e )
 {
     m_newLog = QString::null;
-    
-    QDomElement n = e.firstChild().toElement();
+
+    QDomElement n = e.namedItem( "log" ).firstChild().toElement();
     for( ; !n.isNull(); n = n.nextSibling().toElement() )
     {
 	if ( n.tagName() == "text" )
 	    m_oldLog = n.text();
     }
-    
+
     return TRUE;
 }
 
@@ -123,12 +123,12 @@ QDomElement KoDocumentInfoLog::save( QDomDocument& doc )
 	text += "\n";
 	text += m_newLog;
     }
-    
+
     QDomElement e = doc.createElement( "log" );
     QDomElement t = doc.createElement( "text" );
     e.appendChild( t );
     t.appendChild( doc.createTextNode( m_newLog ) );
-    
+
     return e;
 }
 
@@ -141,7 +141,7 @@ void KoDocumentInfoLog::setOldLog( const QString& log )
 {
     m_oldLog = log;
 }
-    
+
 QString KoDocumentInfoLog::oldLog() const
 {
     return m_oldLog;
@@ -159,13 +159,13 @@ QString KoDocumentInfoLog::newLog() const
  *****************************************/
 
 KoDocumentInfoAuthor::KoDocumentInfoAuthor( KoDocumentInfo* info )
-    : KoDocumentInfo( info, "author" )
+    : KoDocumentInfoPage( info, "author" )
 {
 }
 
 bool KoDocumentInfoAuthor::load( const QDomElement& e )
 {
-    QDomElement n = e.firstChild().toElement();
+    QDomElement n = e.namedItem( "author" ).firstChild().toElement();
     for( ; !n.isNull(); n = n.nextSibling().toElement() )
     {
 	if ( n.tagName() == "full-name" )
@@ -189,7 +189,7 @@ bool KoDocumentInfoAuthor::load( const QDomElement& e )
 	else if ( n.tagName() == "street" )
 	    m_street = n.text();
     }
-    
+
     return TRUE;
 }
 
@@ -200,7 +200,7 @@ QDomElement KoDocumentInfoAuthor::save( QDomDocument& doc )
     QDomElement t = doc.createElement( "full-name" );
     e.appendChild( t );
     t.appendChild( doc.createTextNode( m_fullName ) );
-    
+
     t = doc.createElement( "title" );
     e.appendChild( t );
     t.appendChild( doc.createTextNode( m_title ) );
@@ -208,7 +208,7 @@ QDomElement KoDocumentInfoAuthor::save( QDomDocument& doc )
     t = doc.createElement( "company" );
     e.appendChild( t );
     t.appendChild( doc.createTextNode( m_company ) );
-    
+
     t = doc.createElement( "email" );
     e.appendChild( t );
     t.appendChild( doc.createTextNode( m_email ) );
@@ -220,7 +220,7 @@ QDomElement KoDocumentInfoAuthor::save( QDomDocument& doc )
     t = doc.createElement( "fax" );
     e.appendChild( t );
     t.appendChild( doc.createTextNode( m_fax ) );
-    
+
     t = doc.createElement( "country" );
     e.appendChild( t );
     t.appendChild( doc.createTextNode( m_country ) );
@@ -276,7 +276,7 @@ QString KoDocumentInfoAuthor::country() const
 }
 
 QString KoDocumentInfoAuthor::postalCode() const
-{    
+{
     return m_postalCode;
 }
 
@@ -347,13 +347,13 @@ void KoDocumentInfoAuthor::setStreet( const QString& n )
  *****************************************/
 
 KoDocumentInfoAbout::KoDocumentInfoAbout( KoDocumentInfo* info )
-    : KoDocumentInfo( info, "about" )
+    : KoDocumentInfoPage( info, "about" )
 {
 }
 
 bool KoDocumentInfoAbout::load( const QDomElement& e )
 {
-    QDomElement n = e.firstChild().toElement();
+    QDomElement n = e.namedItem( "about" ).firstChild().toElement();
     for( ; !n.isNull(); n = n.nextSibling().toElement() )
     {
 	if ( n.tagName() == "abstract" )
@@ -361,7 +361,7 @@ bool KoDocumentInfoAbout::load( const QDomElement& e )
 	else if ( n.tagName() == "title" )
 	    m_title = n.text();
     }
-    
+
     return TRUE;
 }
 
@@ -371,15 +371,15 @@ QDomElement KoDocumentInfoAbout::save( QDomDocument& doc )
 
     QDomElement t = doc.createElement( "abstract" );
     e.appendChild( t );
-    t.appendChild( doc.createTextNode( m_abstract ) );
-    
+    t.appendChild( doc.createCDATASection( m_abstract ) );
+
     t = doc.createElement( "title" );
     e.appendChild( t );
     t.appendChild( doc.createTextNode( m_title ) );
 
     return e;
 }
-    
+
 QString KoDocumentInfoAbout::title() const
 {
     return m_title;
@@ -389,7 +389,7 @@ QString KoDocumentInfoAbout::abstract() const
 {
     return m_abstract;
 }
-    
+
 void KoDocumentInfoAbout::setTitle( const QString& n )
 {
     m_title = n;

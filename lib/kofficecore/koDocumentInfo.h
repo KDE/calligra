@@ -16,7 +16,7 @@ public:
 
     bool load( const QDomDocument& doc );
     QDomDocument save();
-    
+
     KoDocumentInfoPage* page( const QString& name );
     QStringList pages();
 };
@@ -24,38 +24,40 @@ public:
 class KoDocumentInfoPage : public QObject
 {
 public:
-    KoDocumentInfoPage( KoDocumentInfo* info, const char* name );
+    KoDocumentInfoPage( QObject *parent, const char* name );
 
     virtual bool load( const QDomElement& e ) = 0;
     virtual QDomElement save( QDomDocument& doc ) = 0;
 };
 
-class KoDocumentInfoLog : public KoDocumentInfo
+class KoDocumentInfoLog : public KoDocumentInfoPage
 {
+    Q_OBJECT
 public:
     KoDocumentInfoLog( KoDocumentInfo* info );
-    
-    bool load( const QDomElement& e );
-    QDomElement save( QDomDocument& doc );
+
+    virtual bool load( const QDomElement& e );
+    virtual QDomElement save( QDomDocument& doc );
 
     void setNewLog( const QString& log );
     void setOldLog( const QString& log );
-    
+
     QString oldLog() const;
     QString newLog() const;
-    
+
 private:
     QString m_oldLog;
     QString m_newLog;
 };
 
-class KoDocumentInfoAuthor : public KoDocumentInfo
+class KoDocumentInfoAuthor : public KoDocumentInfoPage
 {
+    Q_OBJECT
 public:
     KoDocumentInfoAuthor( KoDocumentInfo* info );
 
-    bool load( const QDomElement& e );
-    QDomElement save( QDomDocument& doc );
+    virtual bool load( const QDomElement& e );
+    virtual QDomElement save( QDomDocument& doc );
 
     QString fullName() const;
     QString title() const;
@@ -92,20 +94,21 @@ private:
     QString m_street;
 };
 
-class KoDocumentInfoAbout : public KoDocumentInfo
+class KoDocumentInfoAbout : public KoDocumentInfoPage
 {
+    Q_OBJECT
 public:
     KoDocumentInfoAbout( KoDocumentInfo* info );
 
-    bool load( const QDomElement& e );
-    QDomElement save( QDomDocument& doc );
-    
+    virtual bool load( const QDomElement& e );
+    virtual QDomElement save( QDomDocument& doc );
+
     QString title() const;
     QString abstract() const;
-    
+
     void setTitle( const QString& n );
     void setAbstract( const QString& n );
-    
+
 private:
     QString m_title;
     QString m_abstract;

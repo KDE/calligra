@@ -27,6 +27,7 @@
 #include "koStream.h"
 #include "koQueryTypes.h"
 #include "koFilterManager.h"
+#include "koDocumentInfo.h"
 
 #include <koStore.h>
 #include <koBinaryStore.h>
@@ -47,6 +48,7 @@
 #include <qcolor.h>
 #include <qpicture.h>
 #include <qdom.h>
+#include <qtextstream.h>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store:" but KURL didn't like it,
@@ -84,6 +86,8 @@ public:
   QWidget *m_wrapperWidget;
 
   QValueList<QMap<QString,QByteArray> > m_viewContainerStates;
+
+  KoDocumentInfo *m_docInfo;
 };
 
 class KoViewWrapperWidget : public QWidget
@@ -129,6 +133,8 @@ KoDocument::KoDocument( QObject* parent, const char* name, bool singleViewMode )
       d->m_wrapperWidget = new KoViewWrapperWidget( (QWidget *)parent );
       setWidget( d->m_wrapperWidget );
   }
+  
+  d->m_docInfo = new KoDocumentInfo( this, "document info" );
 }
 
 KoDocument::~KoDocument()
@@ -321,6 +327,11 @@ KoDocumentChild *KoDocument::child( KoDocument *doc )
   return 0L;
 }
 
+KoDocumentInfo *KoDocument::documentInfo() const
+{
+  return d->m_docInfo; 
+} 
+
 void KoDocument::setViewContainerStates( KoView *view, const QMap<QString,QByteArray> &states )
 {
   if ( d->m_views.find( view ) == -1 )
@@ -476,6 +487,23 @@ bool KoDocument::saveNativeFormat( const QString & file )
     else
       return false;
 
+    if ( store->open( "/documentinfo.xml" ) )
+    {
+      QBuffer buffer;
+      buffer.open( IO_WriteOnly );
+      QTextStream str( &buffer );
+      str << d->m_docInfo->save();
+      buffer.close();
+      
+      ostorestream out( store );
+      
+      out.write( buffer.buffer().data(), buffer.buffer().size() );
+      
+      out.flush();
+    
+      store->close();
+    }
+    
     bool ret = completeSaving( store );
     kdDebug(30003) << "Saving done" << endl;
     delete store;
@@ -647,6 +675,39 @@ bool KoDocument::loadNativeFormat( const QString & file )
       return false;
     }
 
+    if ( store->open( "/documentinfo.xml", "" ) )
+    {
+      istorestream in( store );
+      
+      QBuffer buffer;
+      buffer.open( IO_WriteOnly );
+
+      char buf[ 4096 ];
+      int cnt;
+      do
+      {
+	in.read( buf, 4096 );
+	cnt = in.gcount();
+	buffer.writeBlock( buf, cnt );
+      } while( cnt > 0 );
+
+      buffer.close();
+      buffer.open( IO_ReadOnly );
+      
+      QDomDocument doc( &buffer );
+      d->m_docInfo->load( doc );
+      
+      buffer.close();
+      
+      store->close();
+    }
+    else
+    {
+      kdDebug( 30003 ) << "cannot open document info" << endl;
+      delete d->m_docInfo;
+      d->m_docInfo = new KoDocumentInfo( this, "document info" );
+    }
+    
     bool res = completeLoading( store );
     delete store;
     QApplication::restoreOverrideCursor();
