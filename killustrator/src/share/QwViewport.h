@@ -28,6 +28,9 @@ public:
 	QScrollBar& horizontalScrollBar();
 	QScrollBar& verticalScrollBar();
 
+	void showScrollBars ();
+	void hideScrollBars ();
+
 	// Overrides (for implementation purposes)
 	virtual void show();
 
@@ -69,6 +72,7 @@ private:
 	QScrollBar vbar;
 	QWidget porthole;
 	static bool signal_choke;
+	bool visibleScrollBars;
 
 private slots:
 	void hslide(int);

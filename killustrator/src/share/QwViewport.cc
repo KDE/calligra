@@ -42,6 +42,7 @@ QwViewport::QwViewport(QWidget *parent, const char *name, WFlags f) :
 		this, SLOT(hslide(int)));
 	connect(&vbar, SIGNAL(valueChanged(int)),
 		this, SLOT(vslide(int)));
+	visibleScrollBars = true;
 }
 
 /*!
@@ -88,82 +89,98 @@ the scrollbar.
 */
 void QwViewport::resizeScrollBars()
 {
-	int w=width();
-	int h=height();
+  int w=width();
+  int h=height();
 
-	if (viewedWidget()) {
-		int portw,porth;
+  if (viewedWidget()) {
+    int portw,porth;
 
-		bool needh = w<viewedWidget()->width();
-		bool needv = h<viewedWidget()->height();
+    bool needh, needv;
 
-		if (needh && h-scrollBarWidth()<viewedWidget()->height())
-			needv=true;
-		if (needv && w-scrollBarWidth()<viewedWidget()->width())
-			needh=true;
+    if (visibleScrollBars) {
+      needh = w<viewedWidget()->width();
+      needv = h<viewedWidget()->height();
+      
+      if (needh && h-scrollBarWidth()<viewedWidget()->height())
+	needv=true;
+      if (needv && w-scrollBarWidth()<viewedWidget()->width())
+	needh=true;
+    }
+    else
+      needh = needv = false;
 
-		if (needh) {
-			hbar.show();
-			porth=h-scrollBarWidth();
-		} else {
-			hslide(0);
-			hbar.hide();
-			porth=h;
-		}
+    if (needh) {
+      hbar.show();
+      porth=h-scrollBarWidth();
+    } else {
+      hslide(0);
+      hbar.hide();
+      porth=h;
+    }
+    
+    if (needv) {
+      vbar.show();
+      portw=w-scrollBarWidth();
+    } else {
+      vslide(0);
+      vbar.hide();
+      portw=w;
+    }
+    
+    if (needv) {
+      vbar.setRange(0,viewedWidget()->height()-porth);
+      vbar.setSteps(1,porth);
+    }
+    if (needh) {
+      hbar.setRange(0,viewedWidget()->width()-portw);
+      hbar.setSteps(1,portw);
+    }
+    
+    int top,bottom;
+    
+    if (needh) {
+      int right=((needv && emptyCorner())
+		 || alwaysEmptyCorner())
+	? w-scrollBarWidth() : w;
+      if (scrollBarOnTop()) {
+	hbar.setGeometry(0,h-scrollBarWidth(),right,scrollBarWidth());
+	top=scrollBarWidth();
+	bottom=h;
+      } else {
+	hbar.setGeometry(0,h-scrollBarWidth(),right,scrollBarWidth());
+	top=0;
+	bottom=h-scrollBarWidth();
+      }
+    } else {
+      top=0;
+      bottom=h;
+    }
+    if (needv) {
+      if (scrollBarOnLeft()) {
+	vbar.setGeometry(0,top,scrollBarWidth(),bottom);
+	porthole.setGeometry(scrollBarWidth(),top,w-scrollBarWidth(),bottom);
+      } else {
+	vbar.setGeometry(w-scrollBarWidth(),top,scrollBarWidth(),bottom);
+	porthole.setGeometry(0,top,w-scrollBarWidth(),bottom);
+      }
+    } else {
+      porthole.setGeometry(0,top,w,bottom);
+    }
+  } else {
+    hbar.hide();
+    vbar.hide();
+    porthole.setGeometry(0,0,w,h);
+  }
+}
 
-		if (needv) {
-			vbar.show();
-			portw=w-scrollBarWidth();
-		} else {
-			vslide(0);
-			vbar.hide();
-			portw=w;
-		}
+void QwViewport::showScrollBars () {
+  visibleScrollBars = true;
+  resizeScrollBars ();
+}
 
-		if (needv) {
-			vbar.setRange(0,viewedWidget()->height()-porth);
-			vbar.setSteps(1,porth);
-		}
-		if (needh) {
-			hbar.setRange(0,viewedWidget()->width()-portw);
-			hbar.setSteps(1,portw);
-		}
-
-		int top,bottom;
-
-		if (needh) {
-			int right=((needv && emptyCorner())
-					 || alwaysEmptyCorner())
-				? w-scrollBarWidth() : w;
-			if (scrollBarOnTop()) {
-				hbar.setGeometry(0,h-scrollBarWidth(),right,scrollBarWidth());
-				top=scrollBarWidth();
-				bottom=h;
-			} else {
-				hbar.setGeometry(0,h-scrollBarWidth(),right,scrollBarWidth());
-				top=0;
-				bottom=h-scrollBarWidth();
-			}
-		} else {
-			top=0;
-			bottom=h;
-		}
-		if (needv) {
-			if (scrollBarOnLeft()) {
-				vbar.setGeometry(0,top,scrollBarWidth(),bottom);
-				porthole.setGeometry(scrollBarWidth(),top,w-scrollBarWidth(),bottom);
-			} else {
-				vbar.setGeometry(w-scrollBarWidth(),top,scrollBarWidth(),bottom);
-				porthole.setGeometry(0,top,w-scrollBarWidth(),bottom);
-			}
-		} else {
-			porthole.setGeometry(0,top,w,bottom);
-		}
-	} else {
-		hbar.hide();
-		vbar.hide();
-		porthole.setGeometry(0,0,w,h);
-	}
+void QwViewport::hideScrollBars () {
+  visibleScrollBars = false;
+  resizeScrollBars ();
 }
 
 /*!
