@@ -149,6 +149,9 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 	//Create Dockers
 	m_ColorManager = new VColorDocker( m_part, this );
+	connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
+	connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
+	
 	m_objectDlg = new VObjectDlg( m_part, this );
 	m_objectDlg->disable(); //disabled @ startup because none of the objects are selected
 	m_TransformDlg = new VTransformDlg( m_part, this );
