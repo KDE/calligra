@@ -1,4 +1,4 @@
-<!DOCTYPE QConfig ><QConfig name="KIllustrator">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KIllustrator">
 <MenuBar>
  <Menu name="file"><text>File</text>
   <Action name="import"/>
@@ -69,7 +69,7 @@
   <Action name="options"/>
  </Menu>
 </MenuBar>
-<ToolBar>
+<ToolBar name="edit">
   <Action name="undo"/>
   <Action name="redo"/>
   <Separator/>
@@ -78,10 +78,10 @@
   <Action name="cut"/>
   <Action name="copy"/>
 </ToolBar>
-<ToolBar position="right">
+<ToolBar name="colorbar" position="right">
   <Action name="colorbar"/>
 </ToolBar>
-<ToolBar position="left">
+<ToolBar name="tools" position="left">
   <Action name="selectTool"/>
   <Action name="pointTool"/>
   <Action name="freehandTool"/>
@@ -93,7 +93,7 @@
   <Action name="textTool"/>
   <Action name="zoomTool"/>
 </ToolBar>
-<ToolBar position="left">
+<ToolBar name="nodes" position="left">
   <Action name="moveNode"/>
   <Action name="newNode"/>
   <Action name="deleteNode"/>
@@ -115,4 +115,4 @@
   </ToolBar>
  </ToolBars>
 </InPlaceEditing> -->
-</QConfig>
+</kpartgui>
