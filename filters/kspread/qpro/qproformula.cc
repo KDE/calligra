@@ -41,6 +41,7 @@ static QpFormulaConv gOverride[] =
    {81,  QpFormula::funcV,         "average("}, // @avg    => average
    {87,  QpFormula::funcV,         "variance("},// @var    => variance
    {88,  QpFormula::funcV,         "stddev("},  // @std    => stddev
+   {101, QpFormula::func2,         "REPT("},    // @repeat => REPT
    {0,   0,                        0}
 };
 
