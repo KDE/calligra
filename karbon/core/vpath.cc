@@ -303,15 +303,19 @@ VPath::transform( const QWMatrix& m )
 QRect
 VPath::boundingBox( const double zoomFactor ) const
 {
-	QRect rect;
-	VPathBounding bb;
+	KoRect rect;
 
 	QPtrListIterator<VSegmentList> itr( m_segmentLists );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
-		bb.calculate( rect, zoomFactor, *( itr.current() ) );
+		rect |= itr.current()->boundingBox();
 	}
-	return rect;
+
+	return QRect(
+		qRound( rect.left() * zoomFactor ),
+		qRound( rect.top() * zoomFactor ),
+		qRound( rect.right() * zoomFactor ),
+		qRound( rect.bottom() * zoomFactor ) );
 }
 
 bool

@@ -19,9 +19,6 @@ class VPathBounding : public VSegmentListTraverser
 public:
 	VPathBounding();
 
-	// do the "simple" bounding box calculus:
-	void calculate( QRect& rect, const double zoomFactor, const VSegmentList& list );
-	// check for intersection with zoomFactor-dependent polyline approximation:
 	bool intersects( const QRect& rect, const double zoomFactor, const VSegmentList& list );
 
 	virtual bool begin( const KoPoint& p );
@@ -38,7 +35,6 @@ private:
 	double m_zoomFactor;
 	QRect* m_rect;
 	QPointArray m_pa;
-	bool m_quick;		// do the simple calculus
 };
 
 #endif

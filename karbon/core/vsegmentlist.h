@@ -45,6 +45,9 @@ public:
 
 	void transform( const QWMatrix& m );
 
+	/// Calculate bounding box.
+	KoRect boundingBox() const;
+
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 

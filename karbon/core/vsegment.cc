@@ -138,6 +138,54 @@ VSegment::isFlat() const
 	return false;
 }
 
+KoRect
+VSegment::boundingBox() const
+{
+	KoRect rect( m_point[2], m_point[2] );
+
+	if( m_prev )
+	{
+		if( m_prev->m_point[2].x() < rect.left() )
+			rect.setLeft( m_prev->m_point[2].x() );
+		if( m_prev->m_point[2].x() > rect.right() )
+			rect.setRight( m_prev->m_point[2].x() );
+		if( m_prev->m_point[2].y() < rect.top() )
+			rect.setTop( m_prev->m_point[2].y() );
+		if( m_prev->m_point[2].y() > rect.bottom() )
+			rect.setBottom( m_prev->m_point[2].y() );
+	}
+
+	if(
+		type() == segment_curve1 ||
+		type() == segment_curve )
+	{
+		if( m_point[1].x() < rect.left() )
+			rect.setLeft( m_point[1].x() );
+		if( m_point[1].x() > rect.right() )
+			rect.setRight( m_point[1].x() );
+		if( m_point[1].y() < rect.top() )
+			rect.setTop( m_point[1].y() );
+		if( m_point[1].y() > rect.bottom() )
+			rect.setBottom( m_point[1].y() );
+	}
+
+	if(
+		type() == segment_curve2 ||
+		type() == segment_curve )
+	{
+		if( m_point[0].x() < rect.left() )
+			rect.setLeft( m_point[0].x() );
+		if( m_point[0].x() > rect.right() )
+			rect.setRight( m_point[0].x() );
+		if( m_point[0].y() < rect.top() )
+			rect.setTop( m_point[0].y() );
+		if( m_point[0].y() > rect.bottom() )
+			rect.setBottom( m_point[0].y() );
+	}
+
+	return rect;
+}
+
 void
 VSegment::save( QDomElement& element ) const
 {

@@ -322,6 +322,21 @@ VSegmentList::transform( const QWMatrix& m )
 	}
 }
 
+KoRect
+VSegmentList::boundingBox() const
+{
+	KoRect rect;
+
+	VSegment* segment = m_first;
+	while( segment )
+	{
+		rect |= segment->boundingBox();
+		segment = segment->m_next;
+	}
+
+	return rect;
+}
+
 void
 VSegmentList::save( QDomElement& element ) const
 {
@@ -395,7 +410,7 @@ VSegmentList::append( const VSegment* segment )
 
 	s->m_next = 0L;
 
-	if( s->m_prev = m_last )
+	if( ( s->m_prev = m_last ) )
 		m_last->m_next = s;
 	else
 		m_first = s;

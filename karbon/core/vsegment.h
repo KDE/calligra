@@ -8,6 +8,7 @@
 
 #include <qptrlist.h>
 #include <koPoint.h>
+#include <koRect.h>
 
 class QDomElement;
 
@@ -81,6 +82,9 @@ public:
 
 	/// Returns true if segment is flat (see VGlobal for tolerance value).
 	bool isFlat() const;
+
+	/// Calculate bounding box.
+	KoRect boundingBox() const;
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
