@@ -64,7 +64,7 @@ protected:
 	void parseColorStops( VGradient *, const QDomElement & );
 	double parseUnit( const QString & );
 	QWMatrix parseTransform( const QString & );
-	VColor parseColor( const QString & );
+	void parseColor( VColor &, const QString & );
 	QDomDocument inpdoc;
 	QDomDocument outdoc;
 	void convert();

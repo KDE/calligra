@@ -169,10 +169,9 @@ SvgImport::parseUnit( const QString &unit )
 	return value;
 }
 
-VColor
-SvgImport::parseColor( const QString &s )
+void
+SvgImport::parseColor( VColor &color, const QString &s )
 {
-	VColor color;
 	if( s.startsWith( "rgb(" ) )
 	{
 		QString parse = s.stripWhiteSpace();
@@ -208,7 +207,6 @@ SvgImport::parseColor( const QString &s )
 		c.setNamedColor( s );
 		color.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
 	}
-	return color;
 }
 
 void
@@ -230,7 +228,7 @@ SvgImport::parseColorStops( VGradient *gradient, const QDomElement &e )
 			else
 				offset = temp.toFloat();
 			if( !stop.attribute( "stop-color" ).isEmpty() )
-				c = parseColor( stop.attribute( "stop-color" ) );
+				parseColor( c, stop.attribute( "stop-color" ) );
 			else
 			{
 				// try style attr
@@ -242,7 +240,7 @@ SvgImport::parseColorStops( VGradient *gradient, const QDomElement &e )
 					QString command	= substyle[0].stripWhiteSpace();
 					QString params	= substyle[1].stripWhiteSpace();
 					if( command == "stop-color" )
-						c = parseColor( params );
+						parseColor( c, params );
 				}
 
 			}
@@ -304,7 +302,7 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 		}
 		else
 		{
-			fillcolor = parseColor( params );
+			parseColor( fillcolor,  params );
 			gc->fill.setType( VFill::solid );
 		}
 	}
@@ -329,7 +327,7 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 		}
 		else
 		{
-			strokecolor = parseColor( params );
+			parseColor( strokecolor, params );
 			gc->stroke.setType( VStroke::solid );
 		}
 	}
@@ -385,9 +383,9 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 	else if( command == "font-size" )
 		gc->font.setPointSize( parseUnit( params ) );
 
-	if( gc->fill.type() == VFill::solid )
-		gc->fill.setColor( fillcolor );
-	if( gc->stroke.type() == VStroke::solid )
+	if( gc->fill.type() != VFill::none )
+		gc->fill.setColor( fillcolor, false );
+	//if( gc->stroke.type() == VStroke::solid )
 		gc->stroke.setColor( strokecolor );
 }
 
