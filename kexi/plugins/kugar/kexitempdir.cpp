@@ -3,7 +3,7 @@
  *  This file is part of the KDE libraries
  *  Copyright (c) 2003 Joseph Wenninger <jowenn@kde.org>
  *
- * $Id: $
+ * $Id$
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -58,6 +58,7 @@ KexiTempDir::KexiTempDir(QString directoryPrefix, int mode)
 {
    bAutoDelete = false;
    bExisting = false;
+   mError=0;
    if (directoryPrefix.isEmpty())
    {
       directoryPrefix = locateLocal("tmp", KGlobal::instance()->instanceName());
