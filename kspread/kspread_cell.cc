@@ -564,11 +564,12 @@ QString KSpreadCell::encodeFormular( int _col, int _row )
                             else if( buffer[1]>= 'a' && buffer[1] <= 'z' )
                                  col +=  buffer[1] - 'A' + 1 -offset ;
                         }
-                        else
+                        else {
                             if(buffer[0] >= 'A' && buffer[0] <= 'Z')
                                 col += buffer[0] - 'A' + 1;
                             else if( buffer[0]>= 'a' && buffer[0] <= 'z' )
                                 col += buffer[0] - 'A' + 1 -offset ;
+                        }
                         if ( fix1 )
                             sprintf( buffer, "$%i", col );
                         else
@@ -2767,7 +2768,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     // The marker is exactly this cell ?
     if ( marker.left() == _col && marker.right() == _col &&
          marker.top() == _row && marker.bottom() == _row )
-    {   
+    {
         paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
         paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
         paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
@@ -2777,7 +2778,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     {
         // int w = cl->width();
         // int h = rl->height();
-        
+
         // Upper border ?
         if ( _row == marker.top() )
             paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
@@ -2796,7 +2797,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     {
         // int w = cl->width();
         // int h = rl->height();
-        
+
         // Upper border ?
         if ( _col >= marker.left() && _col <= marker.right() && _row - 1 == marker.bottom() )
             paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
