@@ -20,25 +20,24 @@
 #ifndef __kspread_dlg_preference__
 #define __kspread_dlg_preference__
 
-#include <qdialog.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qrect.h>
 #include <kdialogbase.h>
-#include <knuminput.h>
-#include <kconfig.h>
 #include <kcolorbutton.h>
-#include <kspell.h>
 
 class KSpreadView;
 class KSpreadTable;
+class KConfig;
+class KIntNumInput;
+class KDoubleNumInput;
+class KSpellConfig;
+class QCheckBox;
+class QComboBox;
 
-class preference : public QWidget
+
+class preference : public QObject
 {
   Q_OBJECT
 public:
-  preference( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  preference( KSpreadView* _view,QVBox *box, char *name = 0 );
   void apply();
   void slotDefault();
 
@@ -53,17 +52,17 @@ protected:
   KSpreadView* m_pView;
 } ;
 
-class parameterLocale : public QWidget
+class parameterLocale :  public QObject
 {
 public:
-   parameterLocale( KSpreadView* _view,QWidget *parent = 0, char *name = 0);
+   parameterLocale( KSpreadView* _view,QVBox *box, char *name = 0);
 };
 
-class configure : public QWidget
+class configure : public QObject
 {
   Q_OBJECT
 public:
-  configure( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  configure( KSpreadView* _view,QVBox *box, char *name = 0 );
   void apply();
   void slotDefault();
 protected:
@@ -84,11 +83,11 @@ protected:
 } ;
 
 
-class miscParameters : public QWidget
+class miscParameters : public QObject
 {
   Q_OBJECT
 public:
-  miscParameters( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  miscParameters( KSpreadView* _view, QVBox *box, char *name = 0 );
   void apply();
   void slotDefault();
 
@@ -109,11 +108,11 @@ protected:
   bool comboChanged;
 } ;
 
-class colorParameters : public QWidget
+class colorParameters : public QObject
 {
   Q_OBJECT
 public:
-  colorParameters( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  colorParameters( KSpreadView* _view, QVBox *box, char *name = 0 );
   void apply();
   void slotDefault();
 protected:
@@ -122,11 +121,11 @@ protected:
   KConfig* config;
 } ;
 
-class configureLayoutPage : public QWidget
+class configureLayoutPage : public QObject
 {
   Q_OBJECT
 public:
-  configureLayoutPage( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  configureLayoutPage( KSpreadView* _view,QVBox *box, char *name = 0 );
   void apply();
   void slotDefault();
   void initCombo();
@@ -143,11 +142,11 @@ protected:
   KConfig* config;
 } ;
 
-class configureSpellPage : public QWidget
+class configureSpellPage : public QObject
 {
   Q_OBJECT
 public:
-  configureSpellPage( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  configureSpellPage( KSpreadView* _view, QVBox *box, char *name = 0 );
   void apply();
   void slotDefault();
 protected:

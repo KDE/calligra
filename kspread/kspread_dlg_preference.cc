@@ -23,6 +23,8 @@
 #include <qvbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qcheckbox.h>
+#include <qcombobox.h>
 
 #include "kspread_dlg_preference.h"
 #include "kspread_view.h"
@@ -38,6 +40,8 @@
 #include <kconfig.h>
 #include <kcolorbutton.h>
 #include <kstatusbar.h>
+#include <knuminput.h>
+#include <kspell.h>
 
 KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   : KDialogBase(KDialogBase::IconList,i18n("Configure KSpread") ,
@@ -51,21 +55,24 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   _preferenceConfig = new  preference(parent,page );
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
-  page=addVBoxPage(i18n("Local Parameters"), QString::null,BarIcon("gohome",KIcon::SizeMedium));
-  parameterLocale *_ParamLocal=new parameterLocale(parent,page );
-  page=addVBoxPage(i18n("Interface"), QString::null,BarIcon("signature", KIcon::SizeMedium) );
-  _configure = new  configure(parent,page );
-  page=addVBoxPage(i18n("Misc"), QString::null,BarIcon("misc",KIcon::SizeMedium) );
-  _miscParameter = new  miscParameters(parent,page );
+  QVBox *page2=addVBoxPage(i18n("Local Parameters"), QString::null,BarIcon("gohome",KIcon::SizeMedium));
+  parameterLocale *_ParamLocal=new parameterLocale(parent,page2 );
 
-  page=addVBoxPage(i18n("Color"), QString::null,BarIcon("colorize",KIcon::SizeMedium) );
-  _colorParameter=new colorParameters(parent,page );
-  page=addVBoxPage(i18n("Page layout"), QString::null,BarIcon("edit",KIcon::SizeMedium) );
-  _layoutPage=new configureLayoutPage(parent,page );
+  QVBox *page3=addVBoxPage(i18n("Interface"), QString::null,BarIcon("signature", KIcon::SizeMedium) );
+  _configure = new  configure(parent,page3 );
 
-  page = addVBoxPage( i18n("Spelling"), i18n("Spell checker behavior"),
+  QVBox * page4=addVBoxPage(i18n("Misc"), QString::null,BarIcon("misc",KIcon::SizeMedium) );
+  _miscParameter = new  miscParameters(parent,page4 );
+
+  QVBox *page5=addVBoxPage(i18n("Color"), QString::null,BarIcon("colorize",KIcon::SizeMedium) );
+  _colorParameter=new colorParameters(parent,page5 );
+
+  QVBox *page6=addVBoxPage(i18n("Page layout"), QString::null,BarIcon("edit",KIcon::SizeMedium) );
+  _layoutPage=new configureLayoutPage(parent,page6 );
+
+  QVBox *page7 = addVBoxPage( i18n("Spelling"), i18n("Spell checker behavior"),
                           BarIcon("spellcheck", KIcon::SizeMedium) );
-  _spellPage=new configureSpellPage(parent,page);
+  _spellPage=new configureSpellPage(parent,page7);
 
 }
 
@@ -109,20 +116,18 @@ void KSpreadpreference::slotDefault()
     }
 }
 
-preference::preference( KSpreadView* _view,QWidget *parent , char *name )
- :QWidget ( parent,name)
+preference::preference( KSpreadView* _view, QVBox *box, char *name )
+ :QObject ( box->parent(),name)
  {
 
   m_pView = _view;
-  QVBoxLayout *box = new QVBoxLayout( this );
-  box->setMargin( 5 );
-  box->setSpacing( 10 );
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Table"));
   QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
-  lay1->setMargin( 20 );
-  lay1->setSpacing( 10 );
+  lay1->addSpacing( 10 );
+  lay1->setMargin( KDialog::marginHint() );
+  lay1->setSpacing( KDialog::spacingHint() );
 
   m_pFormula= new QCheckBox(i18n("Show formula"),tmpQGroupBox);
   lay1->addWidget(m_pFormula);
@@ -152,7 +157,6 @@ preference::preference( KSpreadView* _view,QWidget *parent , char *name )
   lay1->addWidget(m_pFirstLetterUpper);
   m_pFirstLetterUpper->setChecked(m_pView->activeTable()->getFirstLetterUpper());
 
-  box->addWidget( tmpQGroupBox);
 }
 
 
@@ -191,18 +195,17 @@ void preference::apply()
   }
 }
 
-parameterLocale::parameterLocale( KSpreadView* _view,QWidget *parent , char *name )
- :QWidget ( parent,name)
+parameterLocale::parameterLocale( KSpreadView* _view, QVBox *box , char *name )
+ :QObject ( box->parent(),name)
 {
-  QVBoxLayout *box = new QVBoxLayout( this );
-  box->setMargin( 5 );
-  box->setSpacing( 10 );
-
-  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Parameters"));
+
   QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
-  lay1->setMargin( 20 );
-  lay1->setSpacing( 10 );
+  lay1->addSpacing( 10 );
+  lay1->setMargin( KDialog::marginHint() );
+  lay1->setSpacing( KDialog::spacingHint() );
+
   QLabel *label=new QLabel( tmpQGroupBox,"label");
   label->setText( i18n("Language: %1").arg( _view->doc()->locale()->language() ));
   lay1->addWidget(label);
@@ -221,12 +224,11 @@ parameterLocale::parameterLocale( KSpreadView* _view,QWidget *parent , char *nam
   label=new QLabel( tmpQGroupBox,"label3");
   label->setText( i18n("Money: %1").arg( _view->doc()->locale()->formatMoney(12.55) ));
   lay1->addWidget(label);
-  box->addWidget( tmpQGroupBox);
 }
 
 
-configure::configure( KSpreadView* _view,QWidget *parent , char *name )
- :QWidget ( parent,name)
+configure::configure( KSpreadView* _view, QVBox *box , char *name )
+ :QObject ( box->parent(),name)
  {
   m_pView = _view;
 
@@ -238,15 +240,13 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   bool formulaBar=true;
   bool statusBar=true;
 
-  QVBoxLayout *box = new QVBoxLayout( this );
-  box->setMargin( 5 );
-  box->setSpacing( 10 );
-
-  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Configuration"));
   QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
-  lay1->setMargin( 20 );
-  lay1->setSpacing( 10 );
+  lay1->addSpacing( 10 );
+  lay1->setMargin( KDialog::marginHint() );
+  lay1->setSpacing( KDialog::spacingHint() );
+
   config = KSpreadFactory::global()->config();
   int _page=1;
 
@@ -310,8 +310,6 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   showStatusBar =new QCheckBox(i18n("Show statusbar"),tmpQGroupBox);
   lay1->addWidget(showStatusBar);
   showStatusBar->setChecked(statusBar);
-
-  box->addWidget( tmpQGroupBox);
 
 }
 
@@ -426,20 +424,19 @@ void configure::apply()
 }
 
 
-miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name )
- :QWidget ( parent,name)
+miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
+ :QObject ( box->parent(),name)
  {
   m_pView = _view;
 
-  QVBoxLayout *box = new QVBoxLayout( this );
-  box->setMargin( 5 );
-  box->setSpacing( 10 );
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Misc"));
   QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
-  lay1->setMargin( 20 );
-  lay1->setSpacing( 10 );
+  lay1->addSpacing( 10 );
+  lay1->setMargin( KDialog::marginHint() );
+  lay1->setSpacing( KDialog::spacingHint() );
+
   config = KSpreadFactory::global()->config();
   int _indent=10;
   bool m_bMsgError=false;
@@ -509,8 +506,6 @@ miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name 
   lay1->addWidget(commentIndicator);
 
   initComboBox();
-  box->addWidget( tmpQGroupBox);
-
 }
 
 void miscParameters::slotTextComboChanged(const QString &)
@@ -706,8 +701,8 @@ void miscParameters::apply()
 
 
 
-colorParameters::colorParameters( KSpreadView* _view,QWidget *parent , char *name )
- :QWidget ( parent,name)
+colorParameters::colorParameters( KSpreadView* _view,QVBox *box , char *name )
+ :QObject ( box->parent(),name)
 {
   m_pView = _view;
   config = KSpreadFactory::global()->config();
@@ -720,11 +715,7 @@ if(  config->hasGroup("KSpread Color" ) )
      _gridColor= config->readColorEntry("GridColor",&_gridColor);
    }
 
-  QVBoxLayout *box = new QVBoxLayout( this );
-  box->setMargin( 5 );
-  box->setSpacing( 10 );
-
-  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Color"));
   QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,5,1,15,7);
   QLabel *lab=new QLabel( tmpQGroupBox,"label20");
@@ -735,7 +726,6 @@ if(  config->hasGroup("KSpread Color" ) )
   gridColor->setColor(_gridColor);
   grid1->addWidget(gridColor,1,0);
 
-  box->addWidget( tmpQGroupBox);
 }
 
 void colorParameters::apply()
@@ -756,18 +746,19 @@ void colorParameters::slotDefault()
 
 
 
-configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , char *name )
- :QWidget ( parent,name)
+configureLayoutPage::configureLayoutPage( KSpreadView* _view,QVBox *box , char *name )
+ :QObject ( box->parent(),name)
 {
   m_pView = _view;
 
-  QVBoxLayout *box = new QVBoxLayout( this );
-  box->setMargin( 5 );
-  box->setSpacing( 10 );
-
-  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Default parameters"));
-  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1,15,7);
+
+
+  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1, KDialog::marginHint()+10, KDialog::spacingHint());
+  grid1->addRowSpacing( 0, KDialog::marginHint()  );
+  grid1->setRowStretch( 7, 10 );
+
   config = KSpreadFactory::global()->config();
 
   QLabel *label=new QLabel(tmpQGroupBox);
@@ -804,7 +795,6 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , c
   defaultUnit->setCurrentItem(0);
   grid1->addWidget(defaultUnit,5,0);
   initCombo();
-  box->addWidget( tmpQGroupBox);
 
 }
 
@@ -857,21 +847,20 @@ void configureLayoutPage::apply()
    }
 }
 
-configureSpellPage::configureSpellPage( KSpreadView* _view,QWidget *parent , char *name )
- :QWidget ( parent,name)
+configureSpellPage::configureSpellPage( KSpreadView* _view,QVBox *box , char *name )
+ :QObject ( box->parent(),name)
 {
   m_pView = _view;
 
-  QVBoxLayout *box = new QVBoxLayout( this );
-  box->setMargin( 5 );
-  box->setSpacing( 10 );
   config = KSpreadFactory::global()->config();
-  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Spelling"));
-  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1,15,7);
+  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1, KDialog::marginHint()+10, KDialog::spacingHint());
+  grid1->addRowSpacing( 0, KDialog::marginHint() + 5 );
+  grid1->setRowStretch( 7, 10 );
+
   _spellConfig  = new KSpellConfig(tmpQGroupBox, 0L ,m_pView->doc()->getKSpellConfig(), false );
   grid1->addWidget(_spellConfig,0,0);
-  box->addWidget( tmpQGroupBox);
 }
 
 void configureSpellPage::apply()

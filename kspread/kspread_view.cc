@@ -48,7 +48,7 @@
 #include <tkcoloractions.h>
 #include <kaction.h>
 #include <kstatusbar.h>
-
+#include <ksconfig.h>
 #include <kprocess.h>
 
 #include <dcopclient.h>
