@@ -28,8 +28,7 @@
 
 QTextStream& operator<< ( QTextStream& outs, const QRect &_rect )
 {
-  outs << "<RECT x=" << _rect.left() << " y=" << _rect.top() << " w=" << _rect.width() << " h=" << _rect.height() << " />";
-
+  outs << "<RECT x=\"" << _rect.left() << "\" y=\"" << _rect.top() << "\" w=\"" << _rect.width() << "\" h=\"" << _rect.height() << "\" />";
   return outs;
 }
 
