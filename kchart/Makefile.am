@@ -33,7 +33,7 @@ kdelnkdir = $(kde_datadir)/koffice/partlnk
 ####### Build rules
 
 install-exec-local:
-	$(INSTALL_SCRIPT) kchart $(bindir)/kchart
+	$(INSTALL_SCRIPT) $(srcdir)/kchart $(bindir)/kchart
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc */*.cpp && mv messages.po ../po/kchart.pot

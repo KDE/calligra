@@ -11,10 +11,4 @@ libkoml_la_SOURCES = komlParser.cc komlFeed.cc komlFileFeed.cc \
 include_HEADERS = komlParser.h komlFeed.h komlFileFeed.h \
 	komlWriter.h torben.h komlStreamFeed.h komlMime.h
 
-SUFFIXES = .h .moc
-
-.h.moc:
-	$(MOC) $< -o $@      
-
-idl:
 

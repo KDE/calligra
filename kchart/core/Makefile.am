@@ -14,27 +14,18 @@ libkchartcore_la_SOURCES = \
 	KChartLinesPainter.cpp KChartLinesPointsPainter.cpp KChartPiePainter.cpp \
 	KChartColorArray.cpp KChartData.cpp KChartPie3DPainter.cpp 
 
-libkchartcore_la_LIBADD =    $(LIB_KDECORE)
+libkchartcore_la_LIBADD =  $(LIB_KDECORE)
 libkchartcore_la_LDFLAGS = $(all_libraries) -version-info 1:0:0
 include_HEADERS = KChart.h KChartTypes.h KChartColorArray.h KChartData.h KChartWidget.h
 
-SUFFIXES = .h .moc
-
-.h.moc:
-	$(MOC) $< -o $@
-
-DISTCLEANFILES = $(BUILT_SOURCES)
+DISTCLEANFILES = $(METASOURCES)
 
 noinst_PROGRAMS = test test2 test3 test4 test5 test6 test7 test10 test11 test14
 noinst_HEADERS = KChartAreaPainter.h KChartAxesPainter.h KChartBarsPainter.h \
 	KChartLinesPainter.h KChartLinesPointsPainter.h KChartPointsPainter.h \
 	KChartPiePainter.h KChartPie3DPainter.h 
 
-BUILT_SOURCES = KChart.moc KChartData.moc KChartWidget.moc
-
-KChart.cpp: KChart.moc
-KChartData.cpp: KChartData.moc
-KChartWidget.cpp: KChartWidget.moc
+METASOURCES = KChart.moc KChartData.moc KChartWidget.moc
 
 test_SOURCES = main.cpp
 test2_SOURCES = main2.cpp
@@ -48,5 +39,5 @@ test11_SOURCES = main11.cpp
 test14_SOURCES = main14.cpp
 
 LDFLAGS = $(all_libraries)
-LDADD = libkchartcore.la     $(LIB_KDECORE)
+LDADD = libkchartcore.la $(LIB_KDECORE)
 

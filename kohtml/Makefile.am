@@ -42,7 +42,7 @@ picsdir = $(kde_icondir)/kohtml.xpm
 ####### Build rules
 
 install-exec-local:
-	$(INSTALL_SCRIPT) kohtml $(bindir)/kohtml
+	$(INSTALL_SCRIPT) $(srcdir)/kohtml $(bindir)/kohtml
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../po/kohtml.pot

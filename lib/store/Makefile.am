@@ -11,13 +11,6 @@ include_HEADERS = koStore.h
 idl_DATA = koStore.idl
 idl_HEADERS =  koStore_idl.h
 
-SUFFIXES = .h .moc
-
-.h.moc:
-	$(MOC) $< -o $@      
-
-idl:
-
 ####### Build rules
 
 koStore_idl.cc: koStore_idl.h

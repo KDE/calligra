@@ -33,10 +33,10 @@ parser:
 	flex -Pdep lex.dep.l
 	bison -p dep -b dep -d yacc.dep.y 
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths -I./ -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(top_srcdir)/lib/interfaces -I$(idldir)
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I./ -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(idldir)
 
 install-exec-local:
-	$(INSTALL_SCRIPT) kotrader $(bindir)/kotrader
+	$(INSTALL_SCRIPT) $(srcdir)/kotrader $(bindir)/kotrader
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kotrader.pot

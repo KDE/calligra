@@ -29,7 +29,7 @@ DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(top_srcdir)/lib/interfaces -I$(idldir)
 
 install-exec-local:
-	$(INSTALL_SCRIPT) koshell $(bindir)/koshell
+	$(INSTALL_SCRIPT) $(srcdir)/koshell $(bindir)/koshell
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/koshell.pot
