@@ -1,6 +1,4 @@
 usr/include/kde
-usr/lib/libkdgantt.so
-usr/lib/libkdgantt.la
 usr/lib/libkformula.so
 usr/lib/libkformula.la
 usr/lib/libkochart.so

@@ -10,6 +10,10 @@ usr/lib/kde3/straight_connector.*
 usr/lib/kivio.*
 usr/share/applnk/Office/kivio.desktop
 usr/share/apps/kivio
+usr/share/doc/kde/HTML/en/kivio/*.bz2
+usr/share/doc/kde/HTML/en/kivio/*.docbook
+usr/share/doc/kde/HTML/en/kivio/*.png
+usr/share/doc/kde/HTML/en/kivio/common
 usr/share/icons/crystalsvg/16x16/apps/kivio.png
 usr/share/icons/crystalsvg/22x22/apps/kivio.png
 usr/share/icons/crystalsvg/32x32/apps/kivio.png

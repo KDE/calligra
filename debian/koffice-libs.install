@@ -1,7 +1,6 @@
 usr/bin/koconverter
 usr/bin/koscript
 usr/bin/kthesaurus
-usr/lib/libkdgantt.so.*
 usr/lib/libkformula.so.*
 usr/lib/libkochart.so.*
 usr/lib/libkofficecore.so.*

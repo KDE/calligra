@@ -1,4 +1,3 @@
-libkdgantt 0 koffice-libs (>= 1:1.2.90-0)
 libkformula 3 koffice-libs (>= 1:1.2.90-0)
 libkochart 1 koffice-libs (>= 1:1.2.90-0)
 libkofficecore 2 koffice-libs (>= 1:1.2.90-0)
