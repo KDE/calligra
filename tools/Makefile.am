@@ -1,3 +1,3 @@
-SUBDIRS = converter spell
+SUBDIRS = converter spell thumbnail
 
 
