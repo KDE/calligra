@@ -2172,7 +2172,6 @@ void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef)
   QColorGroup defaultColorGroup = QApplication::palette().active();
 
   QColor textColorPrint = textColor( cellRef.x(), cellRef.y() );
-  QPen tmpPen( textColorPrint );
 
   // Resolve the text color if invalid (=default)
   if(!textColorPrint.isValid())
@@ -2182,6 +2181,8 @@ void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef)
     else
       textColorPrint = QApplication::palette().active().text();
   }
+
+  QPen tmpPen( textColorPrint );
 
   KSpreadConditional condition;
 
