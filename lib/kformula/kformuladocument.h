@@ -80,16 +80,10 @@ public:
     /**
      * Sets the zoom by hand. This is to be used in <code>paintContent</code>.
      */
-    void setZoom( double zoomX, double zoomY, bool updateViews, bool forPrint );
+    void setZoomAndResolution( int zoom, double zoomX, double zoomY, bool updateViews=false, bool forPrint=false );
 
     double getXResolution() const;
     double getYResolution() const;
-
-    /**
-     * Sets the resolution (factor) to be used to draw the formula.
-     * Make sure to recalc all formulas after you called this.
-     */
-    //void setResolution(double zX, double zY);
 
     /**
      * Registers a new formula to be part of this document. Each formula

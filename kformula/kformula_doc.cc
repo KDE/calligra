@@ -135,8 +135,8 @@ void KFormulaDoc::paintContent(QPainter& painter, const QRect& rect, bool transp
     // ####### handle transparency and zoom
     // Need to draw only the document rectangle described in the parameter rect.
 
-    document->setZoom( zoomX, zoomY, true,
-                       painter.device() && painter.device()->devType() == QInternal::Printer );
+    bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
+    document->setZoomAndResolution( 100, zoomX, zoomY, true, forPrint );
     if ( !transparent ) {
         painter.fillRect( rect, Qt::white );
     }

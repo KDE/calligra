@@ -88,11 +88,13 @@ public:
      */
     const SymbolTable& symbolTable() const { return table; }
 
+    void setZoomAndResolution( int zoom, int dpiX, int dpiY );
+
     /**
      * Sets the zoom by hand. This is to be used in <code>paintContent</code>.
      * @returns whether there was any change.
      */
-    bool setZoom( double zoomX, double zoomY, bool updateViews, bool forPrint );
+    bool setZoomAndResolution( int zoom, double zoomX, double zoomY, bool updateViews, bool forPrint );
 
     bool syntaxHighlighting() const { return m_syntaxHighlighting; }
     void setSyntaxHighlighting( bool highlight ) { m_syntaxHighlighting = highlight; }

@@ -144,8 +144,6 @@ struct Document::Document_Impl {
 double Document::getXResolution() const { return impl->contextStyle.zoomedResolutionX(); }
 double Document::getYResolution() const { return impl->contextStyle.zoomedResolutionY(); }
 
-//void Document::setResolution(double zX, double zY) { impl->contextStyle.setResolution(zX, zY); }
-
 KCommandHistory* Document::getHistory() const { return impl->history; }
 const SymbolTable& Document::getSymbolTable() const { return impl->contextStyle.symbolTable(); }
 
@@ -287,9 +285,9 @@ void Document::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
     }
 }
 
-void Document::setZoom( double zoomX, double zoomY, bool updateViews, bool forPrint )
+void Document::setZoomAndResolution( int zoom, double zoomX, double zoomY, bool updateViews, bool forPrint )
 {
-    if ( getContextStyle( !forPrint ).setZoom( zoomX, zoomY, updateViews, forPrint ) && updateViews ) {
+    if ( getContextStyle( !forPrint ).setZoomAndResolution( zoom, zoomX, zoomY, updateViews, forPrint ) && updateViews ) {
         recalc();
     }
 }

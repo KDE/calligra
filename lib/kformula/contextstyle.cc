@@ -111,10 +111,15 @@ void ContextStyle::readConfig( KConfig* config )
     m_syntaxHighlighting = config->readBoolEntry( "syntaxHighlighting", true );
 }
 
-bool ContextStyle::setZoom( double zoomX, double zoomY, bool, bool )
+void ContextStyle::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
-    bool changes = m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY;
-    m_zoom = 100;
+    KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY );
+}
+
+bool ContextStyle::setZoomAndResolution( int zoom, double zoomX, double zoomY, bool, bool )
+{
+    bool changes = m_zoom != zoom || m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY;
+    m_zoom = zoom;
     m_zoomedResolutionX = zoomX;
     m_zoomedResolutionY = zoomY;
     return changes;
