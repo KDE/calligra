@@ -39,7 +39,7 @@ struct PaperSizeDef {
   int unit;
 };
 
-void Kivio::savePageLayout(QDomElement& e, KoPageLayout layout)
+void Kivio::savePageLayout(QDomElement& e, const KoPageLayout& layout)
 {
   XmlWriteFloat(e, "width", layout.ptWidth);
   XmlWriteFloat(e, "height", layout.ptHeight);
@@ -50,19 +50,11 @@ void Kivio::savePageLayout(QDomElement& e, KoPageLayout layout)
   XmlWriteString(e, "format", KoPageFormat::formatString(layout.format));
   XmlWriteString(e, "orientation", Kivio::orientationString(layout.orientation));
 }
-  
-KoGenStyle Kivio::savePageLayout(KoPageLayout layout)
+
+// ## TODO: remove this method, now that layout.saveOasis() does it all
+KoGenStyle Kivio::savePageLayout(const KoPageLayout& layout)
 {
-  KoGenStyle style(KoGenStyle::STYLE_PAGELAYOUT);
-  style.addPropertyPt("fo:page-width", layout.ptWidth);
-  style.addPropertyPt("fo:page-height", layout.ptHeight);
-  style.addPropertyPt("fo:margin-left", layout.ptLeft);
-  style.addPropertyPt("fo:margin-right", layout.ptRight);
-  style.addPropertyPt("fo:margin-top", layout.ptTop);
-  style.addPropertyPt("fo:margin-bottom", layout.ptBottom);
-  style.addProperty("style:print-orientation", (layout.orientation == PG_LANDSCAPE ? "landscape" : "portrait"));
-  
-  return style;
+  return layout.saveOasis();
 }
 
 KoPageLayout Kivio::loadPageLayout(const QDomElement& e)

@@ -30,7 +30,9 @@
 #include <kdemacros.h>
 #include <koGlobal.h>
 #include <koTabChooser.h>
+#include <koUnit.h>
 
+class KoPageLayout;
 class QPainter;
 
 enum KoTabulators { T_LEFT = 0, T_CENTER = 1, T_RIGHT = 2, T_DEC_PNT = 3, T_INVALID = -1 };
@@ -139,8 +141,7 @@ public:
      * This defines the size of the page and the margins,
      * from which the size of the ruler is deducted.
      */
-    void setPageLayout( KoPageLayout _layout )
-    { layout = _layout; update(); }
+    void setPageLayout( const KoPageLayout& _layout );
 
     /**
      * Call showMousePos(true) if the ruler should indicate the position
@@ -239,12 +240,12 @@ public:
      * Enable or disable the "Page Layout" menu item.
      */
     void setPageLayoutMenuItemEnabled(bool b);
-    
+
     /**
      * Reimplemented from QWidget
      */
     virtual QSize minimumSizeHint() const;
-    
+
     /**
      * Reimplemented from QWidget
      */
@@ -310,17 +311,15 @@ private:
     Qt::Orientation orientation;
     int diffx, diffy;
     double i_left, i_first;
-    KoPageLayout layout;
     QPixmap buffer;
     double m_zoom, m_1_zoom;
     KoUnit::Unit m_unit;
     bool hasToDelete;
     bool showMPos;
+    bool m_bFrameStartSet;
+    bool m_bReadWrite;
     int mposX, mposY;
     int frameStart;
-    bool m_bFrameStartSet;
-
-    bool m_bReadWrite;
 
     double gridSize;
 

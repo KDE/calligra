@@ -20,6 +20,7 @@
 #include "kozoomhandler.h"
 #include <kdebug.h>
 #include <qpaintdevice.h>
+#include <koUnit.h>
 #include <koGlobal.h>
 
 // Layout text at 1440 DPI

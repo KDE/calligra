@@ -17,19 +17,21 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kparts/partmanager.h>
-
-#include <koDocumentChild.h>
+#include "koDocumentChild.h"
 #include <koDocument.h>
 #include <koQueryTrader.h>
+#include <koxmlwriter.h>
+#include <koUnit.h>
+
+#include <kparts/partmanager.h>
+
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <koxmlwriter.h>
+#include <kdebug.h>
 
 #include <qapplication.h>
 
-#include <kdebug.h>
 #include <assert.h>
 
 // Define the protocol used here for embedded documents' URL

@@ -68,6 +68,13 @@ QDomDocument KoUnavailPart::saveXML()
     return m_doc;
 }
 
+
+bool KoUnavailPart::saveOasis(KoStore*, KoXmlWriter*)
+{
+    // TODO
+    return false;
+}
+
 void KoUnavailPart::setMimeType( const QCString& mime )
 {
     kdDebug() << "KoUnavailPart::setMimeType " << mime << endl;

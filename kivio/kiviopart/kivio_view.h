@@ -75,6 +75,7 @@ class KoLineStyleAction;
 
 #include <koView.h>
 #include <koDocument.h>
+#include <koUnit.h>
 
 using namespace Kivio;
 
@@ -272,7 +273,7 @@ class KivioView : public KoView
     void arrowHeadFormat();
 
     void clipboardDataChanged();
-    
+
     void installStencilSet();
 
   protected:

@@ -21,11 +21,12 @@
 #ifndef KSPREAD_COMMANDS
 #define KSPREAD_COMMANDS
 
-#include <qstring.h>
+#include <koPageLayout.h>
+#include <koUnit.h>
 
 #include <kcommand.h>
-#include "koGlobal.h"
 
+#include <qstring.h>
 #include <qptrstack.h>
 #include <qrect.h>
 #include <qptrlist.h>

@@ -44,7 +44,7 @@
 #include <klocale.h>
 #include <kzip.h>
 
-#include <koGlobal.h>
+#include <koPageLayout.h>
 #include <koPictureKey.h>
 #include <koPicture.h>
 
@@ -616,7 +616,7 @@ bool OOWriterWorker::doOpenDocument(void)
     kdDebug(30518)<< "OOWriterWorker::doOpenDocument" << endl;
 
     *m_streamOut << " <office:body>\n";
-    
+
     return true;
 }
 
@@ -629,7 +629,7 @@ bool OOWriterWorker::doCloseDocument(void)
 bool OOWriterWorker::doOpenBody(void)
 {
     QValueList<FrameAnchor>::Iterator it;
-    
+
     // We have to process all non-inline pictures
     kdDebug(30520) << "=== Processing non-inlined pictures ===" << endl;
     for ( it = m_nonInlinedPictureAnchors.begin(); it != m_nonInlinedPictureAnchors.end(); ++it )
@@ -649,7 +649,7 @@ bool OOWriterWorker::doOpenBody(void)
         *m_streamOut << "\n";
     }
     kdDebug(30520) << "=== Non-inlined tables processed ===" << endl;
-    
+
     return true;
 }
 
@@ -1065,7 +1065,7 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
     // ### TODO:  be careful that covered-cell can be due vertical spanning.
     // ### TODO:  One way to find is the difference between the row variables (or against the last known column)
     // ### TODO:  be careful that fully-covered rows might exist.
-    
+
     *m_streamOut << "<table:table-row>\n";
     int rowCurrent = firstRowNumber;
 
@@ -1300,7 +1300,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     *m_streamOut << " svg:width=\"" << tableWidth << "pt\""; // ### TODO: any supplement to the width?
     //*m_streamOut << " fo:min-height=\"1pt\"";// ### TODO: a better height (can be calulated from the KWord table frames)
     *m_streamOut << ">\n";
-    
+
     *m_streamOut << "<table:table table:name=\""
         << escapeOOText( translatedName )
         << "\" table:style-name=\""
@@ -1309,7 +1309,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
 
 
     // Now we have enough information to generate the style for the table and its frame
-    
+
     kdDebug(30520) << "Creating automatic frame style: " << automaticFrameStyle /* << " key: " << styleKey */ << endl;
     m_contentAutomaticStyles += "  <style:style"; // for frame
     m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticFrameStyle ) + "\"";
@@ -1325,7 +1325,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     m_contentAutomaticStyles += " fo:margin-right=\"0pt\"";
     m_contentAutomaticStyles += "/>\n";
     m_contentAutomaticStyles += "  </style:style>\n";
-    
+
     kdDebug(30520) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
     m_contentAutomaticStyles += "  <style:style"; // for table
     m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticTableStyle ) + "\"";
@@ -1365,9 +1365,9 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     makeTableRows( tableName, anchor.table, firstRowNumber );
 
     *m_streamOut << "</table:table>\n";
-    
+
     *m_streamOut << "</draw:text-box>"; // End of inline
-    
+
 #endif
     return true;
 }
@@ -1482,7 +1482,7 @@ bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType an
     // TODO:  (bad if there are two images of the same name, but of a different key)
     *m_streamOut << "<draw:image draw:name=\"" << anchor.picture.key.filename() << "\"";
     *m_streamOut << " draw:style-name=\"Graphics\""; // ### TODO: should be an automatic "graphic" style name instead
-    if ( anchorType == AnchorNonInlined ) 
+    if ( anchorType == AnchorNonInlined )
     {
         // ### TODO: correctly set a OOWriter frame positioned on the page
         *m_streamOut << " text:anchor-type=\"paragraph\"";

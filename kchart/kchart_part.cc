@@ -485,6 +485,12 @@ bool KChartPart::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     return false;
 }
 
+bool KChartPart::saveOasis(KoStore*, KoXmlWriter*)
+{
+    //todo
+    return false;
+}
+
 bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 {
     kdDebug(35001) << "kchart loadXML called" << endl;

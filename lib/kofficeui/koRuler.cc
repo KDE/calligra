@@ -28,7 +28,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qpopupmenu.h>
-#include <koUnit.h>
+#include <koPageLayout.h>
 
 class KoRulerPrivate {
 public:
@@ -42,6 +42,7 @@ public:
     bool whileMovingBorderLeft, whileMovingBorderRight;
     bool whileMovingBorderTop, whileMovingBorderBottom;
     QPixmap pmFirst, pmLeft;
+    KoPageLayout layout;
     KoTabChooser *tabChooser;
     KoTabulatorList tabList;
     // Do we have to remove a certain tab in the DC Event?
@@ -90,7 +91,7 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
 
     d->canvas = _canvas;
     orientation = _orientation;
-    layout = _layout;
+    d->layout = _layout;
     d->flags = _flags;
 
     d->m_bReadWrite=true;
@@ -122,11 +123,11 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
 
     d->removeTab.type = T_INVALID;
     if ( orientation == Qt::Horizontal ) {
-        frameStart = qRound( zoomIt(layout.ptLeft) );
-        d->frameEnd = qRound( zoomIt(layout.ptWidth - layout.ptRight) );
+        frameStart = qRound( zoomIt(d->layout.ptLeft) );
+        d->frameEnd = qRound( zoomIt(d->layout.ptWidth - d->layout.ptRight) );
     } else {
-        frameStart = qRound( zoomIt(layout.ptTop) );
-        d->frameEnd = qRound( zoomIt(layout.ptHeight - layout.ptBottom) );
+        frameStart = qRound( zoomIt(d->layout.ptTop) );
+        d->frameEnd = qRound( zoomIt(d->layout.ptHeight - d->layout.ptBottom) );
     }
     m_bFrameStartSet = false;
 
@@ -204,7 +205,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     QPainter p( &buffer );
     p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
 
-    int totalw = qRound( zoomIt(layout.ptWidth) );
+    int totalw = qRound( zoomIt(d->layout.ptWidth) );
     QString str;
     QFont font; // Use the global KDE font. Let's hope it's appropriate.
     font.setPointSize( 8 );
@@ -365,7 +366,7 @@ void KoRuler::drawVertical( QPainter *_painter )
     QPainter p( &buffer );
     p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
 
-    int totalh = qRound( zoomIt(layout.ptHeight) );
+    int totalh = qRound( zoomIt(d->layout.ptHeight) );
     // Clip rect - this gives basically always a rect like (2,2,width-2,height-2)
     QRect paintRect = _painter->clipRegion( QPainter::CoordPainter ).boundingRect();
     // Ruler rect
@@ -586,7 +587,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
         if ( d->canvas )
             drawLine(d->oldMx, -1);
         update();
-        emit newPageLayout( layout );
+        emit newPageLayout( d->layout );
     } else if ( d->action == A_BR_TOP || d->action == A_BR_BOTTOM ) {
         d->whileMovingBorderTop = false;
         d->whileMovingBorderBottom = false;
@@ -598,7 +599,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
             p.end();
         }
         update();
-        emit newPageLayout( layout );
+        emit newPageLayout( d->layout );
     } else if ( d->action == A_FIRST_INDENT ) {
         if ( d->canvas )
             drawLine(d->oldMx, -1);
@@ -654,12 +655,12 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
     hasToDelete = false;
 
     int pw = d->frameEnd - frameStart;
-    int ph = qRound(zoomIt(layout.ptHeight));
+    int ph = qRound(zoomIt(d->layout.ptHeight));
     int left = frameStart - diffx;
-    int top = qRound(zoomIt(layout.ptTop));
+    int top = qRound(zoomIt(d->layout.ptTop));
     top -= diffy;
     int right = d->frameEnd - diffx;
-    int bottom = qRound(zoomIt(layout.ptBottom));
+    int bottom = qRound(zoomIt(d->layout.ptBottom));
     bottom = ph - bottom - diffy;
     // Cumulate first-line-indent
     int ip_first = qRound( zoomIt( i_first + ( d->rtl ? d->i_right : i_left) ) );
@@ -730,7 +731,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     case A_BR_LEFT: {
                         if ( d->canvas && mx < right-10 && mx+diffx-2 > 0) {
                             drawLine( d->oldMx, mx );
-                            layout.ptLeft = unZoomIt(static_cast<double>(mx + diffx));
+                            d->layout.ptLeft = unZoomIt(static_cast<double>(mx + diffx));
                             if( ip_left > right-left-15 ) {
                                 ip_left=right-left-15;
                                 ip_left=ip_left<0 ? 0 : ip_left;
@@ -753,7 +754,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     case A_BR_RIGHT: {
                         if ( d->canvas && mx > left+10 && mx+diffx <= pw-2) {
                             drawLine( d->oldMx, mx );
-                            layout.ptRight = unZoomIt(static_cast<double>(pw - ( mx + diffx )));
+                            d->layout.ptRight = unZoomIt(static_cast<double>(pw - ( mx + diffx )));
                             if( ip_left > right-left-15 ) {
                                 ip_left=right-left-15;
                                 ip_left=ip_left<0 ? 0 : ip_left;
@@ -875,7 +876,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
                             p.drawLine( 0, my, d->canvas->width(), my );
                             p.end();
-                            layout.ptTop = unZoomIt(static_cast<double>(my + diffy));
+                            d->layout.ptTop = unZoomIt(static_cast<double>(my + diffy));
                             d->oldMx = mx;
                             d->oldMy = my;
                             update();
@@ -890,7 +891,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
                             p.drawLine( 0, my, d->canvas->width(), my );
                             p.end();
-                            layout.ptBottom = unZoomIt(static_cast<double>(ph - ( my + diffy )));
+                            d->layout.ptBottom = unZoomIt(static_cast<double>(ph - ( my + diffy )));
                             d->oldMx = mx;
                             d->oldMy = my;
                             update();
@@ -1170,6 +1171,12 @@ QSize KoRuler::minimumSizeHint() const
 QSize KoRuler::sizeHint() const
 {
     return minimumSizeHint();
+}
+
+void KoRuler::setPageLayout( const KoPageLayout& _layout )
+{
+    d->layout = _layout;
+    update();
 }
 
 #include "koRuler.moc"

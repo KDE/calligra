@@ -21,7 +21,7 @@
 #define KIVIOGLOBAL_H
 
 #include <koUnit.h>
-#include <koGlobal.h>
+#include <koPageLayout.h>
 #include <koSize.h>
 
 class QDomElement;
@@ -34,12 +34,12 @@ namespace Kivio
   enum {
     STYLE_PAGE = 20
   };
-  
+
   /**
    * Save a page layout to a QDomElement
    */
-  void savePageLayout(QDomElement& e, KoPageLayout layout);
-  KoGenStyle savePageLayout(KoPageLayout layout);
+  void savePageLayout(QDomElement& e, const KoPageLayout& layout);
+  KoGenStyle savePageLayout(const KoPageLayout& layout);
   /**
    * Load a page layout from a QDomElement
    */
@@ -66,7 +66,7 @@ namespace Kivio
    * Save a KoSize to a QDomElement
    */
   void saveSize(QDomElement& e, const QString& name, const KoSize& size);
-  
+
   /**
    * Get the pagesize string from a QPrinter::PageSize value
    */
@@ -76,7 +76,7 @@ namespace Kivio
    * Returns a pixmap with all arrowheads
    */
   QPixmap arrowHeadPixmap();
-  
+
   /**
    * Returns the connector target pixmap
    */
@@ -86,7 +86,7 @@ namespace Kivio
    * Returns the lock pixmap
    */
   QPixmap lockPixmap();
-  
+
   /**
    * Get system default unit
    */

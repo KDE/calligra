@@ -26,6 +26,7 @@ class KSpreadPrintNewPageEntry;
 class KoGenStyles;
 
 #include <qobject.h>
+#include <koUnit.h>
 
 #include "kspread_sheet.h"
 

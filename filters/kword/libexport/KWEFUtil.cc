@@ -23,7 +23,7 @@
 #include <qstring.h>
 #include <qtextcodec.h>
 
-#include <koGlobal.h>
+#include <koPageLayout.h>
 
 #include "KWEFUtil.h"
 

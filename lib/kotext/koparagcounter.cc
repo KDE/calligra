@@ -23,6 +23,7 @@
 #include "kotextdocument.h"
 #include "kooasiscontext.h"
 #include <koxmlwriter.h>
+#include <koGenStyles.h>
 #include <kdebug.h>
 #include <qdom.h>
 #include <qbuffer.h>

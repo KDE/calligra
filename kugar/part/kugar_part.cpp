@@ -53,6 +53,10 @@ bool KugarPart::loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocume
 	return false;
 }
 
+bool KugarPart::saveOasis(KoStore*, KoXmlWriter*)
+{
+	return false;
+}
 
 bool KugarPart::loadXML( QIODevice *file, const QDomDocument & doc)
 {

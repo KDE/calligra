@@ -55,10 +55,11 @@ KSpreadSheetPrint::KSpreadSheetPrint( KSpreadSheet* sheet )
     m_rightBorder = 20.0;
     m_topBorder = 20.0;
     m_bottomBorder = 20.0;
-    m_paperFormat = PG_DIN_A4;
-    m_paperWidth = PG_A4_WIDTH;
-    m_paperHeight = PG_A4_HEIGHT;
+
+    m_paperFormat = KoPageFormat::defaultFormat();
     m_orientation = PG_PORTRAIT;
+    m_paperWidth = MM_TO_POINT( KoPageFormat::width( m_paperFormat, m_orientation ) );
+    m_paperHeight = MM_TO_POINT( KoPageFormat::height( m_paperFormat, m_orientation ) );
     m_printRange = QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) );
     m_lnewPageListX.append( 1 );
     m_lnewPageListY.append( 1 );
@@ -1091,9 +1092,9 @@ void KSpreadSheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
             m_paperWidth  = paper.left(i).toFloat();
             m_paperHeight = paper.mid(i+1).toFloat();
             if ( m_paperWidth < 10.0 )
-                m_paperWidth = PG_A4_WIDTH;
+                m_paperWidth = KoPageFormat::width( PG_DIN_A4, PG_PORTRAIT );
             if ( m_paperHeight < 10.0 )
-                m_paperWidth = PG_A4_HEIGHT;
+                m_paperWidth = KoPageFormat::height( PG_DIN_A4, PG_PORTRAIT );
         }
     }
     else

@@ -1,4 +1,4 @@
-// 
+//
 
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -41,6 +41,7 @@
 #include <kgenericfactory.h>
 
 #include <koGlobal.h>
+#include <koPageLayout.h>
 #include <koStore.h>
 #include <koFilterChain.h>
 

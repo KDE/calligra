@@ -3,8 +3,8 @@
 
 #include <qwidget.h>
 #include <koUnit.h>
-#include <koGlobal.h>
 
+class KoPageLayout;
 class KoUnitDoubleSpinBox;
 class KIntSpinBox;
 

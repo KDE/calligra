@@ -29,7 +29,8 @@ class ColumnFormat;
 class RowFormat;
 
 #include "kspread_cell.h"
-#include "koGlobal.h"
+#include <koUnit.h>
+#include <koPageLayout.h>
 
 #include <qptrstack.h>
 #include <qstring.h>

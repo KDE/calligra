@@ -43,7 +43,7 @@
 #include <kgenericfactory.h>
 #include <kimageio.h>
 
-#include <koGlobal.h>
+#include <koPageLayout.h>
 #include <koFilterChain.h>
 #include <koPictureKey.h>
 
@@ -846,7 +846,7 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
                 break;
             }
         case LayoutData::LS_DOUBLE:
-            {        
+            {
                 props += "line-height:2.0; "; // Two
                 break;
             }

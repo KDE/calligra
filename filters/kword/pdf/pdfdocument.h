@@ -23,7 +23,7 @@
 #include <qdom.h>
 
 #include <koFilter.h>
-#include <koGlobal.h>
+#include <koPageLayout.h>
 
 class Object;
 class BaseStream;

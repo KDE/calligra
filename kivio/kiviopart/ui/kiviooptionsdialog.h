@@ -21,7 +21,8 @@
 #define KIVIOOPTIONSDIALOG_H
 
 #include <kdialogbase.h>
-#include <koGlobal.h>
+#include <koPageLayout.h>
+#include <koUnit.h>
 #include <klistview.h>
 
 class KivioView;

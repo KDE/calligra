@@ -30,6 +30,7 @@ using namespace std;
 #include <kurl.h>
 #include <kservice.h>
 #include <koGlobal.h>
+#include <koPageLayout.h>
 
 class QDomElement;
 class QDomDocument;
@@ -450,7 +451,7 @@ public:
      *  Reimplement this method to save the contents of your KOffice document,
      *  using the OASIS format.
      */
-    virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter ) /*= 0 TODO */;
+    virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter ) = 0;
 
     /**
      *  Reimplement this to save the contents of the KOffice document into

@@ -27,6 +27,7 @@
 #include <koGlobal.h>
 #include <koUnit.h>
 #include <kdialogbase.h>
+#include <koPageLayout.h>
 
 class QButtonGroup;
 class QWidget;

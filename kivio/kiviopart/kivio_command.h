@@ -24,6 +24,7 @@
 #include <qfont.h>
 #include <qcolor.h>
 #include <koRect.h>
+#include <koPageLayout.h>
 
 class KivioPage;
 class KivioLayer;

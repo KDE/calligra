@@ -22,7 +22,7 @@
 #include <kcommand.h>
 #include <kurl.h>
 #include <kocommandhistory.h>
-#include <koGlobal.h>
+#include <koPageLayout.h>
 #include <koRect.h>
 #include <koborder.h>
 #include <koparaglayout.h>

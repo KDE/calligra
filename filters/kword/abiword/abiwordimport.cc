@@ -1,4 +1,4 @@
-// 
+//
 
 /* This file is part of the KDE project
    Copyright 2001, 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
@@ -38,7 +38,7 @@
 #include <kgenericfactory.h>
 #include <kmessagebox.h>
 
-#include <koGlobal.h>
+#include <koPageLayout.h>
 #include <koStore.h>
 #include <koFilterChain.h>
 
@@ -350,7 +350,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
     QDomElement elementText=stackCurrent->stackElementText;
     QDomElement paragraphElementOut=mainDocument.createElement("PARAGRAPH");
     stackCurrent->m_frameset.appendChild(paragraphElementOut);
-    
+
     QDomElement textElementOut=mainDocument.createElement("TEXT");
     paragraphElementOut.appendChild(textElementOut);
     QDomElement formatsPluralElementOut=mainDocument.createElement("FORMATS");
@@ -732,7 +732,7 @@ static bool StartElementM(StackItem* stackItem, StackItem* /*stackCurrent*/,
         stackItem->elementType=ElementTypeIgnore;
         return true;
     }
-    
+
     stackItem->strTemp1=strKey;        // Key
     stackItem->strTemp2=QString::null;  // Meta data
 
@@ -753,17 +753,17 @@ bool StructureParser::EndElementM (StackItem* stackItem)
         kdError(30506) << "Wrong element type!! Aborting! (in endElementM)" << endl;
         return false;
     }
-    
+
     if (stackItem->strTemp1.isEmpty())
     {
         // Probably an internal error!
         kdError(30506) << "Key name was erased! Aborting! (in endElementM)" << endl;
         return false;
     }
-    
+
     // Just add it to the metadata map, we do not do something special with the values.
     m_metadataMap[stackItem->strTemp1]=stackItem->strTemp2;
-    
+
     return true;
 }
 
@@ -1237,7 +1237,7 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
     frameElementOut.setAttribute("autoCreateNewFrame",0); // Very important for cell growing!
     // ### TODO: a few attributes are missing
     framesetElement.appendChild(frameElementOut);
-    
+
     stackItem->m_frameset=framesetElement;
     QDomElement nullDummy;
     stackItem->stackElementParagraph=nullDummy; // <PARAGRAPH>
@@ -1561,11 +1561,11 @@ void StructureParser::createDocInfo(void)
 
     QDomElement about(mainDocument.createElement("about"));
     elementDoc.appendChild(about);
-    
+
     QDomElement abstract(mainDocument.createElement("abstract"));
     about.appendChild(abstract);
     abstract.appendChild(mainDocument.createTextNode(m_metadataMap["dc.description"]));
-    
+
     QDomElement title(mainDocument.createElement("title"));
     about.appendChild(title);
     title.appendChild(mainDocument.createTextNode(m_metadataMap["dc.title"]));
@@ -1579,7 +1579,7 @@ bool StructureParser::endDocument(void)
 
     kdDebug(30506) << "###### Start Style List ######" << endl;
     StyleDataMap::ConstIterator it;
-    
+
     // At first, we put the Normal style
     it=styleDataMap.find("Normal");
     if (it!=styleDataMap.end())
@@ -1607,7 +1607,7 @@ bool StructureParser::endDocument(void)
     kdDebug(30506) << "######  End Style List  ######" << endl;
 
     createDocInfo();
-    
+
     return true;
 }
 
@@ -1800,7 +1800,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
         kdError(30506) << "Cannot create device for uncompressing! Aborting!" << endl;
         return KoFilter::FileNotFound; // ### TODO: better error?
     }
-    
+
     if (!in->open(IO_ReadOnly))
     {
         kdError(30506) << "Cannot open file for uncompressing! Aborting!" << endl;
@@ -1828,7 +1828,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
 
     QCString strOut;
     KoStoreDevice* out;
-    
+
     kdDebug(30506) << "Creating documentinfo.xml" << endl;
     out=m_chain->storageFile( "documentinfo.xml", KoStore::Write );
     if(!out)
@@ -1842,7 +1842,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     strOut=handler.getDocInfo().toCString(); // UTF-8
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
     out->writeBlock(strOut,strOut.length());
-    
+
     kdDebug(30506) << "Creating maindoc.xml" << endl;
     out=m_chain->storageFile( "root", KoStore::Write );
     if(!out)

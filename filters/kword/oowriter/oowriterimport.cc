@@ -38,7 +38,8 @@
 #include <kgenericfactory.h>
 #include <kmessagebox.h>
 #include <koFilterChain.h>
-#include <koGlobal.h>
+#include <koUnit.h>
+#include <koPageLayout.h>
 #include <koPicture.h>
 #include "conversion.h"
 #include <koRect.h>
@@ -1583,14 +1584,12 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
     frameElementOut.setAttribute("runaround", attribs.first );
     if ( !attribs.second.isEmpty() )
         frameElementOut.setAttribute("runaroundSide", attribs.second );
-    // ## runaroundGap is a problem. KWord has one value, OO has 4 (margins on all sides, see p98).
-    // => TODO, implement 4 values in KWord.
+    // ## runaroundGap is a problem. KWord-1.3 had one value, OO has 4 (margins on all sides, see p98).
+    // Fixed in KWord-post-1.3, it has 4 values now.
 
     // Not implemented in KWord: contour wrapping
     if ( isText )
         frameElementOut.setAttribute("autoCreateNewFrame", overflowBehavior);
-    // TODO newFrameBehavior (i.e. behavior on new page). Not in OO/OASIS, let's have our own attrib.
-    // TODO copy: ditto
     // TODO sheetSide (not implemented in KWord, but in its DTD)
 
     importCommonFrameProperties( frameElementOut );

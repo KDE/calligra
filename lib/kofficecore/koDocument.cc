@@ -2261,13 +2261,5 @@ void KoDocument::slotStarted( KIO::Job* job )
     }
 }
 
-//// FOR TESTING ONLY, remove when making saveOasis pure virtual
-bool KoDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
-{
-    kdError(30003) << "KoDocument::saveOasis not implemented" << endl;
-    d->lastErrorMessage = i18n( "Internal error: saveOasis not implemented" );
-    return false;
-}
-
 #include "koDocument_p.moc"
 #include "koDocument.moc"

@@ -222,17 +222,17 @@ bool KoPageLayoutDia::pageLayout( KoPageLayout& _layout, KoHeadFoot& _hf, KoColu
 /*===================== get a standard page layout ===============*/
 KoPageLayout KoPageLayoutDia::standardLayout()
 {
-    KoPageLayout        _layout;
-    _layout.format = PG_DIN_A4;
-    _layout.orientation = PG_PORTRAIT;
-    _layout.ptWidth = MM_TO_POINT( PG_A4_WIDTH );
-    _layout.ptHeight = MM_TO_POINT( PG_A4_HEIGHT );
-    _layout.ptLeft = MM_TO_POINT( 20.0 );
-    _layout.ptRight = MM_TO_POINT( 20.0 );
-    _layout.ptTop = MM_TO_POINT( 20.0 );
-    _layout.ptBottom = MM_TO_POINT( 20.0 );
+    KoPageLayout        layout;
+    layout.format = KoPageFormat::defaultFormat();
+    layout.orientation = PG_PORTRAIT;
+    layout.ptWidth = MM_TO_POINT( KoPageFormat::width( layout.format, layout.orientation ) );
+    layout.ptHeight = MM_TO_POINT( KoPageFormat::height( layout.format, layout.orientation ) );
+    layout.ptLeft = MM_TO_POINT( 20.0 );
+    layout.ptRight = MM_TO_POINT( 20.0 );
+    layout.ptTop = MM_TO_POINT( 20.0 );
+    layout.ptBottom = MM_TO_POINT( 20.0 );
 
-    return  _layout;
+    return  layout;
 }
 
 /*====================== get header - footer =====================*/

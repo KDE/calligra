@@ -120,6 +120,10 @@ bool KudesignerDoc::loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDo
     return false;
 }
 
+bool KudesignerDoc::saveOasis(KoStore*, KoXmlWriter*)
+{
+    return false;
+}
 
 bool KudesignerDoc::loadXML( QIODevice *, const QDomDocument & rt)
 {
@@ -462,6 +466,5 @@ void KudesignerDoc::setForcedPropertyEditorPosition(Dock d)
 {
 	m_propPos=d;
 }
-
 
 #include "kudesigner_doc.moc"

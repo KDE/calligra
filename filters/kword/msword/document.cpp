@@ -24,7 +24,8 @@
 #include "versionmagic.h"
 
 #include <koRect.h>
-#include <koGlobal.h>
+#include <koUnit.h>
+#include <koPageLayout.h>
 #include <kdebug.h>
 
 #include <wv2/styles.h>

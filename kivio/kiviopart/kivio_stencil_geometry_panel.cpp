@@ -6,6 +6,7 @@
 
 #include <knuminput.h>
 
+#include <koPageLayout.h>
 #include <koUnitWidgets.h>
 
 static const char* width_xpm[] = {

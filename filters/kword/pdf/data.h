@@ -24,7 +24,7 @@
 #include <qdom.h>
 #include <qvaluevector.h>
 
-#include <koGlobal.h>
+#include <koPageLayout.h>
 
 #include "misc.h"
 

@@ -20,10 +20,11 @@
 #ifndef KIVIOKIVIO_CONFIG_H
 #define KIVIOKIVIO_CONFIG_H
 
-#include <koGlobal.h>
+#include <koPageLayout.h>
 
 #include "kivio_settings.h"
 #include "kivio_grid_data.h"
+
 
 namespace Kivio {
   /**
@@ -36,22 +37,22 @@ namespace Kivio {
       * Set the default page layout
       */
       static void setDefaultPageLayout(const KoPageLayout& layout);
-      
+
       /**
       * Get the default page layout
       */
       static KoPageLayout defaultPageLayout();
-      
+
       /**
        * Returns the grid settings
        */
       static void setGrid(const KivioGridData& grid);
-      
+
       /**
        * Returns the grid settings
        */
       static KivioGridData grid();
-    
+
     protected:
       Config();
   };
