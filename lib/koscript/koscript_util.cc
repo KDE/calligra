@@ -77,7 +77,7 @@ void KSUtil::tooFewArgumentsError( KSContext& context, const QString& methodname
 
 void KSUtil::tooManyArgumentsError( KSContext& context, const QString& methodname )
 {
-  QString tmp( i18n("Too many arguments  for method %1") );
+  QString tmp( i18n("Too many arguments for method %1") );
   context.setException( new KSException( "TooManyArguments", tmp.arg( methodname ), -1 ) );
 }
 

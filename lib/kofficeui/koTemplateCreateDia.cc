@@ -369,10 +369,10 @@ void KoTemplateCreateDia::slotRemove() {
     QString what;
         QString removed;
         if (item->depth()==0) {
-                what =  i18n("Do you really want to remove that group");
+                what =  i18n("Do you really want to remove that group?");
                 removed = i18n("Remove group");
         } else {
-                what =  i18n("Do you really want to remove that template");
+                what =  i18n("Do you really want to remove that template?");
         removed = i18n("Remove template");
         }
 

@@ -743,7 +743,7 @@ bool KoDocument::openFile()
   if ( ! QFile::exists(m_file) )
   {
     // Maybe offer to create a new document with that name ?
-    KMessageBox::error(0L, i18n("The file %1 doesn't exist").arg(m_file) );
+    KMessageBox::error(0L, i18n("The file %1 doesn't exist.").arg(m_file) );
     return false;
   }
 

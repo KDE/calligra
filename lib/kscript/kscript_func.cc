@@ -204,7 +204,7 @@ static bool ksfunc_toInt( KSContext& context )
     }
   }
 
-  QString tmp( i18n("Can not calulcate a numerical value from a %1 value") );
+  QString tmp( i18n("Can not calculate a numerical value from a %1 value") );
   context.setException( new KSException( "CastingError", tmp.arg( args[0]->typeName() ), -1 ) );
   return false;
 }
@@ -235,7 +235,7 @@ static bool ksfunc_toFloat( KSContext& context )
     }
   }
 
-  QString tmp( i18n("Can not calulcate a floating point value from a %1 value") );
+  QString tmp( i18n("Can not calculate a floating point value from a %1 value") );
   context.setException( new KSException( "CastingError", tmp.arg( args[0]->typeName() ), -1 ) );
   return false;
 }

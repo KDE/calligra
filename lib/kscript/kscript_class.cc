@@ -42,7 +42,7 @@ bool KSScriptClass::constructor( KSParseNode* node, KSContext& context )
     {
       if ( cl )
       {
-	QString tmp( i18n("Multiple inheritcance of builtin classes is not allowed\nThe classes are %1 and %2.\n"));
+	QString tmp( i18n("Multiple inheritance of builtin classes is not allowed.\nThe classes are %1 and %2.\n"));
 	context.setException( new KSException( "CastingError", tmp.arg( cl->name() ).arg( (*sit)->classValue()->name() ), node->getLineNo() ) );
 	return false;
       }
