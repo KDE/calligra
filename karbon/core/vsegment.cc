@@ -78,28 +78,33 @@ VSegment::setDegree( unsigned short deg )
 	if( degree() == deg )
 		return;
 
+	// TODO : this code is fishy, please make it sane
 
 	// Remember old nodes.
 	VNodeData* oldNodes = m_nodes;
+	KoPoint oldKnot = knot();
 
 	// Allocate new node data.
 	m_nodes = new VNodeData[ deg ];
 
-
-	// Copy old node data (from the knot "backwards".
-	unsigned short offset = kMax( 0, deg - m_degree );
-
-	for( unsigned short i = offset; i < deg; ++i )
+	if( deg == 1 )
+		m_nodes[ 0 ].m_vector = oldKnot;
+	else
 	{
-		m_nodes[ i ].m_vector = oldNodes[ i - offset ].m_vector;
-	}
+		// Copy old node data (from the knot "backwards".
+		unsigned short offset = kMax( 0, deg - m_degree );
 
-	// Fill with "zeros" if necessary.
-	for( unsigned short i = 0; i < offset; ++i )
-	{
-		m_nodes[ i ].m_vector = KoPoint( 0.0, 0.0 );
-	}
+		for( unsigned short i = offset; i < deg; ++i )
+		{
+			m_nodes[ i ].m_vector = oldNodes[ i - offset ].m_vector;
+		}
 
+		// Fill with "zeros" if necessary.
+		for( unsigned short i = 0; i < offset; ++i )
+		{
+			m_nodes[ i ].m_vector = KoPoint( 0.0, 0.0 );
+		}
+	}
 
 	// Set new degree.
 	m_degree = deg;
