@@ -241,7 +241,7 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
       QLineEdit::keyPressEvent( _ev );
 
       setFocus();
-      cellEditor->blockCheckChoose( TRUE );      
+      cellEditor->blockCheckChoose( TRUE );
       cellEditor->setText( text() );
       cellEditor->blockCheckChoose( FALSE );
       cellEditor->setCursorPosition( cursorPosition() );
@@ -3891,7 +3891,6 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     KSpreadCell* cell = table->visibleCellAt( col, row );
     if ( !cell )
         return;
-
     // Get the comment
     QString comment= cell->comment(col,row);
 
@@ -3914,7 +3913,8 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
 
     // Is the cursor over the comment marker (if there is any) then
     // show the comment.
-    QRect marker( xpos + u - 6, ypos -1, 7, 7 );
+    double zoom = m_canvas->zoom();
+    QRect marker( xpos + u - (int)(6*zoom), ypos -(int)(1*zoom), (int)(7*zoom),(int)( 7*zoom) );
     if ( marker.contains( p ) )
     {
         tip( marker, comment );
