@@ -248,6 +248,17 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             elem.setAttribute( "green", curFormat->color().green() );
             elem.setAttribute( "blue", curFormat->color().blue() );
         }
+        else
+        {
+            if ( refFormat )
+            {
+                elem = doc.createElement( "COLOR" );
+                formatElem.appendChild( elem );
+                elem.setAttribute( "red", -1 );
+                elem.setAttribute( "green", -1 );
+                elem.setAttribute( "blue", -1 );
+            }
+        }
     }
     if( !refFormat || curFormat->font().family() != refFormat->font().family() )
     {
@@ -334,6 +345,17 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             elem.setAttribute( "red", curFormat->textBackgroundColor().red() );
             elem.setAttribute( "green", curFormat->textBackgroundColor().green() );
             elem.setAttribute( "blue", curFormat->textBackgroundColor().blue() );
+        }
+        else
+        {
+            if ( refFormat )
+            {
+                elem = doc.createElement( "TEXTBACKGROUNDCOLOR" );
+                formatElem.appendChild( elem );
+                elem.setAttribute( "red", -1 );
+                elem.setAttribute( "green", -1 );
+                elem.setAttribute( "blue", -1 );
+            }
         }
     }
     if( !refFormat || curFormat->shadowText() != refFormat->shadowText())
