@@ -2892,11 +2892,8 @@ QString KWTextFrameSet::textChangedCase(const QString _text,TypeOfCase _type)
         case TitleCase:
             for(uint i=0;i<text.length();i++)
             {
-                if(text.at(i)!=' ')
-                {
+                if((i==0 &&text.at(i)!=' ') ||(text.at(i)!=' '&& text.at(QMAX(i-1,0))==' ')||(text.at(i)!=' '&& text.at(QMAX(i-1,0))=='\n'))
                     text=text.replace(i, 1, text.at(i).upper() );
-                    break;
-                }
             }
             break;
         case ToggleCase:
