@@ -141,7 +141,7 @@ public:
 
     void insertFile(const QString &path);
     void configureSpellChecker();
-
+    void testAndCloseAllTextObjectProtectedContent();
 signals:
     void currentPageChanged( int );
 

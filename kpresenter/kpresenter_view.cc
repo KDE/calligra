@@ -7153,4 +7153,15 @@ void KPresenterView::backgroundPicture()
     }
 }
 
+void KPresenterView::testAndCloseAllTextObjectProtectedContent()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit && edit->kpTextObject()->isProtectContent())
+    {
+        kdDebug()<<" KPresenterView::testAndCloseAllTextObjectProtectedContent()\n";
+        m_pKPresenterDoc->terminateEditing( edit->kpTextObject());
+    }
+
+}
+
 #include <kpresenter_view.moc>

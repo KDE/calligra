@@ -3182,7 +3182,21 @@ bool KPresenterDoc::cursorInProtectedArea()const
 void KPresenterDoc::setCursorInProtectedArea( bool b )
 {
     m_cursorInProtectectedArea=b;
+    testAndCloseAllTextObjectProtectedContent();
 }
+
+
+void KPresenterDoc::testAndCloseAllTextObjectProtectedContent()
+{
+    if ( !m_cursorInProtectectedArea )
+    {
+        QPtrListIterator<KoView> it( views() );
+        for (; it.current(); ++it )
+            static_cast<KPresenterView*>(it.current())->testAndCloseAllTextObjectProtectedContent();
+    }
+
+}
+
 
 void KPresenterDoc::insertFile(const QString & file )
 {

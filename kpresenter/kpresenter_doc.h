@@ -440,7 +440,7 @@ protected slots:
 
 protected:
     KoView* createViewInstance( QWidget* parent, const char* name );
-
+    void testAndCloseAllTextObjectProtectedContent();
     // ************ functions ************
     /**
      * Overloaded function from @ref Document_impl. Saves all children.
