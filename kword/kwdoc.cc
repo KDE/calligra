@@ -515,7 +515,7 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
         setModified( FALSE );
         return ok;
     }
-    
+
     KoTemplateChooseDia::DialogType dlgtype;
 
     if (flags != KoDocument::InitDocFileNew)
@@ -2935,8 +2935,8 @@ QDomDocument KWDocument::saveXML()
 
     QDomElement styles = doc.createElement( "STYLES" );
     kwdoc.appendChild( styles );
-    QPtrList<KoParagStyle> m_styleList(m_styleColl->styleList());
-    for ( KoParagStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+    QPtrList<KoParagStyle> styleList(m_styleColl->styleList());
+    for ( KoParagStyle * p = styleList.first(); p != 0L; p = styleList.next() )
         saveStyle( p, styles );
 
     QDomElement frameStyles = doc.createElement( "FRAMESTYLES" );
@@ -4427,8 +4427,8 @@ void KWDocument::slotCommandExecuted()
 void KWDocument::printStyleDebug()
 {
     kdDebug() << "----------------------------------------"<<endl;
-    QPtrList<KoParagStyle> m_styleList(m_styleColl->styleList());
-    for ( KoParagStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+    QPtrList<KoParagStyle> styleList(m_styleColl->styleList());
+    for ( KoParagStyle * p = styleList.first(); p != 0L; p = styleList.next() )
     {
         kdDebug() << "Style " << p << "  " << p->name() <<endl;
         kdDebug() << "   format: " << p->format().key() <<endl;
