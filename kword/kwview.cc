@@ -5313,7 +5313,8 @@ void KWView::startKSpell()
     m_spell.kospell->check( m_spell.textIterator, true );
     delete m_spell.dlg;
     m_spell.dlg = new KSpell2::Dialog( m_spell.kospell, this );
-    m_spell.dlg->activeAutoCorrect( true );
+    //uncomment when I will can commit kspell2
+    //m_spell.dlg->activeAutoCorrect( true );
 
     QObject::connect( m_spell.dlg, SIGNAL(misspelling(const QString&, int)),
                       this, SLOT(spellCheckerMisspelling(const QString&, int)) );
