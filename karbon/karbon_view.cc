@@ -715,13 +715,19 @@ KarbonView::zoomChanged( const KoPoint &p )
 	}
 	else
 	{
-		centerX = double( m_canvas->contentsX() + m_canvas->visibleWidth() / 2 ) / double( m_canvas->contentsWidth() );
-		centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
+		if( m_canvas->contentsWidth() > m_canvas->visibleWidth() )
+			centerX = double( m_canvas->contentsX() + m_canvas->visibleWidth() / 2 ) / double( m_canvas->contentsWidth() );
+		else
+			centerX = 0.5;
+		if( m_canvas->contentsHeight() > m_canvas->visibleHeight() )
+			centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
+		else
+			centerY = 0.5;
 		zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
 	}
-	//kdDebug() << "centerX : " << centerX << endl;
-	//kdDebug() << "centerY : " << centerY << endl;
-	//kdDebug() << "zoomFactor : " << zoomFactor << endl;
+	kdDebug() << "centerX : " << centerX << endl;
+	kdDebug() << "centerY : " << centerY << endl;
+	kdDebug() << "zoomFactor : " << zoomFactor << endl;
 
 
 	// above 2000% probably doesnt make sense... (Rob)
