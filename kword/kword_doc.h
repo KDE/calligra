@@ -410,6 +410,8 @@ protected:
    *
    * @see KWFrame
    */
+  KWFormatCollection formatCollection;
+  KWImageCollection imageCollection;
   QList<KWFrameSet> frames;
   QList<KWGroupManager> grpMgrs;
 
@@ -427,9 +429,6 @@ protected:
   KWParagLayout *defaultParagLayout;
   
   int pages;
-
-  KWFormatCollection formatCollection;
-  KWImageCollection imageCollection;
 
   KWFormatContext selStart,selEnd;
   bool hasSelection;

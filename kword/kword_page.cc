@@ -2617,28 +2617,32 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
  	      QPen p(doc->setBorderPen(tmp->getLeftBorder()));
  	      _painter.setPen(p);
  	      _painter.drawLine(frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.y(),
- 				frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.bottom() + 1); 
+ 				frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.bottom() + 
+				((tmp->getLeftBorder().ptWidth / 2) * 2 == tmp->getLeftBorder().ptWidth ? 0 : 1)); 
 	    }
 	  if (tmp->getRightBorder().ptWidth > 0 && tmp->getRightBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(doc->setBorderPen(tmp->getRightBorder()));
  	      _painter.setPen(p);
 	      _painter.drawLine(frame.right() - tmp->getRightBorder().ptWidth / 2,frame.y(),
-				frame.right() - tmp->getRightBorder().ptWidth / 2,frame.bottom() + 1); 
+				frame.right() - tmp->getRightBorder().ptWidth / 2,frame.bottom() + 
+				((tmp->getRightBorder().ptWidth / 2) * 2 == tmp->getRightBorder().ptWidth ? 0 : 1)); 
 	    }
 	  if (tmp->getTopBorder().ptWidth > 0 && tmp->getTopBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(doc->setBorderPen(tmp->getTopBorder()));
  	      _painter.setPen(p);
 	      _painter.drawLine(frame.x(),frame.y() + tmp->getTopBorder().ptWidth / 2,
-				frame.right() + 1,frame.y() + tmp->getTopBorder().ptWidth / 2);
+				frame.right() + ((tmp->getTopBorder().ptWidth / 2) * 2 == tmp->getTopBorder().ptWidth ? 0 : 1),
+				frame.y() + tmp->getTopBorder().ptWidth / 2);
 	    }
 	  if (tmp->getBottomBorder().ptWidth > 0 && tmp->getBottomBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(doc->setBorderPen(tmp->getBottomBorder()));
  	      _painter.setPen(p);
 	      _painter.drawLine(frame.x(),frame.bottom() - tmp->getBottomBorder().ptWidth / 2,
-				frame.right() + 1,frame.bottom() - tmp->getBottomBorder().ptWidth / 2);
+				frame.right() + ((tmp->getBottomBorder().ptWidth / 2) * 2 == tmp->getBottomBorder().ptWidth ? 0 : 1),
+				frame.bottom() - tmp->getBottomBorder().ptWidth / 2);
 	    }
 	}
     }

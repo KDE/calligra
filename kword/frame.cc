@@ -526,7 +526,17 @@ void KWTextFrameSet::init()
 /*================================================================*/
 KWTextFrameSet::~KWTextFrameSet() 
 { 
-  //delete parags; 
+  KWParag *p = getLastParag();
+
+  while (p != parags)
+    {
+      p = p->getPrev();
+      delete p->getNext();
+      p->setNext(0L);
+    }
+
+  delete parags;
+  parags = 0L;
 }
 
 /*================================================================*/
@@ -638,7 +648,8 @@ KWParag* KWTextFrameSet::getFirstParag()
 bool KWTextFrameSet::isPTYInFrame(unsigned int _frame,unsigned int _ypos)
 {
   KWFrame *frame = getFrame(_frame);
-  return (static_cast<int>(_ypos) >= frame->top() && static_cast<int>(_ypos) <= frame->bottom());
+  return (static_cast<int>(_ypos) >= static_cast<int>(frame->top() + frame->getBTop()) && 
+	  static_cast<int>(_ypos) <= static_cast<int>(frame->bottom() - frame->getBBottom()));
 }
 
 /*================================================================*/
@@ -1348,6 +1359,8 @@ void KWGroupManager::init(unsigned int x,unsigned int y,unsigned int width,unsig
     hei = doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10;
   if (wid < 60) wid = 60;
 
+  unsigned int _wid,_hei;
+
   KWFrame *frame;
 
   for (unsigned int i = 0;i < rows;i++)
@@ -1355,7 +1368,11 @@ void KWGroupManager::init(unsigned int x,unsigned int y,unsigned int width,unsig
       for (unsigned int j = 0;j < cols;j++)
 	{
 	  frame = getFrameSet(i,j)->getFrame(0);
-	  frame->setRect(x + j * wid + 2 * j,y + i * hei + 2 * i,wid,hei);
+ 	  _wid = wid;
+ 	  _wid += frame->getBLeft() + frame->getBRight();
+ 	  _hei = hei;
+ 	  _hei += frame->getBTop() + frame->getBBottom();
+	  frame->setRect(x + j * _wid + 2 * j,y + i * _hei + 2 * i,_wid,_hei);
 	}
     }
 
@@ -1390,7 +1407,13 @@ void KWGroupManager::recalcCols()
 	      static_cast<int>(doc->getPTPaperWidth()))
 	    wid = _wid;
 	  for (j = 0;j < rows;j++)
-	    getFrameSet(j,i)->getFrame(0)->setWidth(wid);
+	    {
+	      KWFrame *frame = getFrameSet(j,i)->getFrame(0);
+	      if (wid < static_cast<int>(doc->getRastX() + frame->getBLeft() + frame->getBRight()))
+		frame->setWidth(doc->getRastX() + frame->getBLeft() + frame->getBRight());
+	      else
+		frame->setWidth(wid);
+	    }
 	}
     }
 

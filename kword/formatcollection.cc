@@ -66,7 +66,7 @@ QString KWFormatCollection::generateKey(const KWFormat &_format)
   QString key;
 
   // Key: BIU-Fontname-Fontsize-red-gree-blue
-  // e.g. B**-Times-12-256-40-32
+  // e.g. B**-Times-12-255-40-32
   key.sprintf("%c%c%c-%s-%d-%d-%d-%d-%d",
 	      (_format.getWeight() == QFont::Bold ? 'B' : '*'),
 	      (_format.getItalic() == 1 ? 'I' : '*'),

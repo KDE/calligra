@@ -8,23 +8,22 @@ char s_FONT_CCId[]="$Id$";
 
 KWUserFont::KWUserFont(KWordDocument *_doc,QString _name)
 {
-    fontName = _name;
-    fontName.detach();
-    
-    document = _doc;
-    document->userFontList.append( this );
+  fontName = qstrdup(_name);
+  
+  document = _doc;
+  document->userFontList.append( this );
 }
 
 KWUserFont::~KWUserFont()
 {
-    document->userFontList.setAutoDelete(true);
-    document->userFontList.removeRef( this );
-    document->userFontList.setAutoDelete(false);
+  document->userFontList.setAutoDelete(true);
+  document->userFontList.removeRef( this );
+  document->userFontList.setAutoDelete(false);
 }
 
 KWDisplayFont::KWDisplayFont( KWordDocument *_doc, KWUserFont *_font, unsigned int _size,
-			      int _weight, bool _italic, bool _underline ) :
-    QFont( _font->getFontName(), ZOOM(_size), _weight, _italic ), fm(*this)
+			      int _weight, bool _italic, bool _underline ) 
+  : QFont( _font->getFontName(), ZOOM(_size), _weight, _italic ), fm(*this)
 {
   setUnderline(_underline);
 

@@ -733,3 +733,6 @@ Reggie, 25.1.1999:
 Reggie, 26.1.1999:
 ------------------
 - Added saving/loading hard frame breaks (seems that I forgot that...)
+- Frame-Margins work now (only the dialog for setting them is missing :-)
+- Fixed some memory leak producing code (I haaaaaate destructors)
+- Some fixes with drawing borders of frames, but this is still not correct
