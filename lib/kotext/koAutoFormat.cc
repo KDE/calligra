@@ -553,7 +553,7 @@ void KoAutoFormat::doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag 
         QString replacement=word.mid(1,word.length()-2);
         int start = index - word.length();
         KoTextDocument * textdoc = parag->textDocument();
-        KMacroCommand *macro=new KMacroCommand(i18n("Autocorrection : change format."));
+        KMacroCommand *macro=new KMacroCommand(i18n("Autocorrection: change format."));
         QTextCursor cursor( parag->document() );
 
         cursor.setParag( parag );
