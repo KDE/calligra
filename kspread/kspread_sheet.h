@@ -494,6 +494,10 @@ public:
      * sure that no invalid values in other tables make you trouble.
      */
     void recalc();
+    
+    /** handles the fact that a cell has been changed - updates
+    things that need to be updated */
+    void valueChanged (KSpreadCell *cell);
 
     /**
      * Sets the contents of the cell at row,column to text

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 
+   Copyright 2004 Tomas Mecir <mecirt@gmail.com>
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 2002,2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2002-2003 Norbert Andres <nandres@web.de>
@@ -521,17 +522,6 @@ public:
     bool calcDirtyFlag();
 
     /**
-     * Test to see if this cell depends on the given cell
-     *
-     * @param table table of the cell we're curious about
-     * @param col column of the cell we're curious about
-     * @param row row of the cell we're curious about
-     *
-     * @return TRUE if this cell depends on the given cell
-     */
-    bool cellDependsOn(KSpreadSheet *table, int col, int row);
-
-    /**
      * Notify this cell that another cell is depending, or no longer depending on this cell's value
      *
      * @param col the column of the cell
@@ -917,6 +907,10 @@ private:
 
 
 
+  /** handle the fact that a cell has been updated - calls cellUpdated()
+  in the parent Sheet object */
+  void valueChanged ();
+  
   /* helper functions to the makeLayout(...) function */
   /* (more to come) */
   void setOutputText();

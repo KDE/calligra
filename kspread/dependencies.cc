@@ -27,8 +27,8 @@
 
 //rows x cols in one cell-chunk; bigger values lead to slower updating
 //of range-dependencies, lower values will increase memory usage
-#define CELLCHUNK_ROWS 100
-#define CELLCHUNK_COLS 10
+#define CELLCHUNK_ROWS 128
+#define CELLCHUNK_COLS 16
 
 namespace KSpread {
 

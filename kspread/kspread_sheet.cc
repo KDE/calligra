@@ -49,6 +49,8 @@
 #include <koStyleStack.h>
 #include <koOasisSettings.h>
 
+#include "dependencies.h"
+
 #include "ksprsavinginfo.h"
 #include "kspread_cluster.h"
 #include "kspread_sheet.h"
@@ -297,6 +299,8 @@ public:
 
   int scrollPosX;
   int scrollPosY;
+  
+  KSpread::DependencyManager *dependencies;
 };
 
 int KSpreadSheet::s_id = 0L;
@@ -379,6 +383,9 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &tableName, const cha
       QObject::setName( s.data() );
   }
   d->print = new KSpreadSheetPrint( this );
+  
+  //initialize dependencies
+  d->dependencies = new KSpread::DependencyManager (this);
 }
 
 QString KSpreadSheet::sheetName() const
@@ -1062,6 +1069,22 @@ void KSpreadSheet::recalc()
   setCalcDirtyFlag();
   //  d->doc->emitEndOperation();
   emit sig_updateView( this );
+}
+
+void KSpreadSheet::valueChanged (KSpreadCell *cell)
+{
+  //TODO: call cell updating, when cell damaging implemented
+  //TODO: do nothing is updates are disabled
+  
+  return;  //DELETE THIS LINE WHEN THE DEPENDENCY MANAGER IS READY !!!
+  
+  //prepare the CellInfo object
+  KSpread::CellInfo ci;
+  ci.row = cell->row();
+  ci.column = cell->column();
+  
+  //update dependencies
+  d->dependencies->cellChanged (ci);
 }
 
 /*
@@ -8251,6 +8274,8 @@ KSpreadSheet::~KSpreadSheet()
     delete d->print;
     delete d->dcop;
 
+    delete d->dependencies;
+    
     delete d;
 }
 

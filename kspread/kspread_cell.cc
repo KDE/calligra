@@ -264,7 +264,6 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
   d = new CellPrivate;
   d->row = _row;
   d->column = _column;
-
   clearAllErrors();
 }
 
@@ -275,7 +274,6 @@ KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _dep
   d->row = _row;
   d->column = _column;
   d->lstDependingOnMe = _deponme ;
-
   clearAllErrors();
 }
 
@@ -390,8 +388,8 @@ void KSpreadCell::setValue( const KSpreadValue& v )
     clearAllErrors();
     d->value = v;
 
-    if( d->value.isBoolean() )
-        d->strOutText = d->strText  = ( d->value.asBoolean() ? i18n("True") : i18n("False") );
+    if( value().isBoolean() )
+        d->strOutText = d->strText  = ( value().asBoolean() ? i18n("True") : i18n("False") );
 
     // Free all content data
     if (d->hasExtra())
@@ -402,8 +400,10 @@ void KSpreadCell::setValue( const KSpreadValue& v )
 
     setFlag(Flag_LayoutDirty);
     setFlag(Flag_TextFormatDirty);
-    d->content = Text;
 
+    //value of the cell has changed - trigger necessary actions
+    valueChanged ();
+        
     m_pTable->setRegionPaintDirty(cellRect());
 }
 
@@ -641,6 +641,9 @@ void KSpreadCell::move( int col, int row )
       d->extra()->mergedYCells = 0;
     }
 
+    //cell value has been changed (because we're another cell now)
+    valueChanged ();
+    
     // Reobscure cells if we are forced to do so.
     //if ( m_bForceExtraCells )
       //  forceExtraCells( col, row, ex, ey );
@@ -1447,6 +1450,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     return;
 }
 
+void KSpreadCell::valueChanged ()
+{
+  update();
+  
+  m_pTable->valueChanged (this);
+}
+
 void KSpreadCell::setOutputText()
 {
   if ( isDefault() )
@@ -1500,9 +1510,9 @@ void KSpreadCell::setOutputText()
   {
     d->strOutText = d->strText;
   }
-  else if ( d->value.isBoolean() )
+  else if ( value().isBoolean() )
   {
-    d->strOutText = ( d->value.asBoolean()) ? i18n("True") : i18n("False");
+    d->strOutText = ( value().asBoolean()) ? i18n("True") : i18n("False");
   }
   else if( isDate() )
   {
@@ -1510,9 +1520,9 @@ void KSpreadCell::setOutputText()
   }
   else if( isTime() )
   {
-    d->strOutText = util_timeFormat( locale(), d->value.asDateTime(), formatType() );
+    d->strOutText = util_timeFormat( locale(), value().asDateTime(), formatType() );
   }
-  else if ( d->value.isNumber() )
+  else if ( value().isNumber() )
   {
     // First get some locale information
     if (!decimal_point)
@@ -1525,7 +1535,7 @@ void KSpreadCell::setOutputText()
     }
 
     // Scale the value as desired by the user.
-    double v = d->value.asFloat() * factor(column(),row());
+    double v = value().asFloat() * factor(column(),row());
 
     // Always unsigned ?
     if ( floatFormat( column(), row() ) == KSpreadCell::AlwaysUnsigned &&
@@ -1584,17 +1594,17 @@ void KSpreadCell::setOutputText()
   {
     d->strOutText = d->strFormulaOut;
   }
-  else if( d->value.isString() )
+  else if( value().isString() )
   {
-    if (!d->value.asString().isEmpty() && d->value.asString()[0]=='\'' )
-      d->strOutText = d->value.asString().mid(1);
+    if (!value().asString().isEmpty() && value().asString()[0]=='\'' )
+      d->strOutText = value().asString().mid(1);
     else
-      d->strOutText = d->value.asString();
+      d->strOutText = value().asString();
   }
   else // When does this happen ?
   {
 //    kdDebug(36001) << "Please report: final case of makeLayout ...  d->strText=" << d->strText << endl;
-    d->strOutText = d->value.asString();
+    d->strOutText = value().asString();
   }
   if ( d->hasExtra() && d->extra()->conditions )
     d->extra()->conditions->checkMatches();
@@ -2068,9 +2078,9 @@ bool KSpreadCell::makeFormula()
 
     setFlag(Flag_ParseError);
     d->strFormulaOut = "####";
-    d->value.setError ( "####" );
-    setFlag(Flag_LayoutDirty);
-    setFlag(Flag_TextFormatDirty);
+    KSpreadValue v;
+    v.setError ( "####" );
+    setValue (v);
     if (m_pTable->doc()->getShowMessageError())
     {
       QString tmp(i18n("Error in cell %1\n\n"));
@@ -2081,6 +2091,10 @@ bool KSpreadCell::makeFormula()
     return false;
   }
 
+  //our value has been changed
+  //TODO: is this necessary?
+  valueChanged ();
+  
   /* notify the new dependancy list that we are depending on them now */
   NotifyDependancyList(d->lstDepends, true);
 
@@ -2107,9 +2121,9 @@ bool KSpreadCell::calc(bool delay)
     kdError(36001) << "ERROR: Circle" << endl;
     setFlag(Flag_CircularCalculation);
     d->strFormulaOut = "####";
-    d->value.setError ( "####" );
-
-    setFlag(Flag_LayoutDirty);
+    KSpreadValue v;
+    v.setError ( "####" );
+    setValue (v);
     return false;
   }
 
@@ -2147,25 +2161,22 @@ bool KSpreadCell::calc(bool delay)
   /* calculate any dependancies */
   KSpreadDependency *dep;
   for ( dep = d->lstDepends.first(); dep != 0L; dep = d->lstDepends.next() )
-  {
     for ( int x = dep->Left(); x <= dep->Right(); x++ )
-    {
       for ( int y = dep->Top(); y <= dep->Bottom(); y++ )
       {
-	KSpreadCell *cell = dep->Table()->cellAt( x, y );
-	if ( !cell->calc( delay ) )
+        KSpreadCell *cell = dep->Table()->cellAt( x, y );
+        if ( !cell->calc( delay ) )
         {
-	  d->strFormulaOut = "####";
-	  setFlag(Flag_DependancyError);
-	  d->value.setError( "####" );
+          d->strFormulaOut = "####";
+          setFlag(Flag_DependancyError);
+          KSpreadValue v;
+          v.setError( "####" );
+          setValue (v);
           clearFlag(Flag_Progress);
-	  setFlag(Flag_LayoutDirty);
           clearFlag(Flag_CalcDirty);
-	  return false;
-	}
+          return false;
+        }
       }
-    }
-  }
 
   KSContext& context = m_pTable->doc()->context();
   if ( !m_pTable->doc()->interpreter()->evaluate( context, d->code, m_pTable, this ) )
@@ -2174,7 +2185,9 @@ bool KSpreadCell::calc(bool delay)
     setFlag(Flag_ParseError);
     d->strFormulaOut = "####";
     setFlag(Flag_LayoutDirty);
-    d->value.setError( "####" );
+    KSpreadValue v;
+    v.setError( "####" );
+    setValue (v);
     // Print out exception if any
     if ( context.exception() && m_pTable->doc()->getShowMessageError())
     {
@@ -2192,80 +2205,67 @@ bool KSpreadCell::calc(bool delay)
   }
   else if ( context.value()->type() == KSValue::DoubleType )
   {
-    d->value.setValue ( KSpreadValue( context.value()->doubleValue() ) );
-    clearAllErrors();
+    setValue ( KSpreadValue( context.value()->doubleValue() ) );
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
-    d->strFormulaOut = createFormat( d->value.asFloat(), d->column, d->row );
+    d->strFormulaOut = createFormat( value().asFloat(), d->column, d->row );
   }
   else if ( context.value()->type() == KSValue::IntType )
   {
-    d->value.setValue ( KSpreadValue( (int)context.value()->intValue() ) );
-    clearAllErrors();
+    setValue ( KSpreadValue( (int)context.value()->intValue() ) );
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
-    d->strFormulaOut = createFormat( d->value.asFloat(), d->column, d->row );
+    d->strFormulaOut = createFormat( value().asFloat(), d->column, d->row );
   }
   else if ( context.value()->type() == KSValue::BoolType )
   {
-    d->value.setValue ( KSpreadValue( context.value()->boolValue() ) );
-    clearAllErrors();
+    setValue ( KSpreadValue( context.value()->boolValue() ) );
     d->strFormulaOut = context.value()->boolValue() ? i18n("True") : i18n("False");
     setFormatType(Number);
   }
   else if ( context.value()->type() == KSValue::TimeType )
   {
-    clearAllErrors();
-    d->value.setValue( KSpreadValue( context.value()->timeValue() ) );
+    setValue( KSpreadValue( context.value()->timeValue() ) );
 
     //change format
     FormatType tmpFormat = formatType();
     if( tmpFormat != SecondeTime &&  tmpFormat != Time_format1 &&  tmpFormat != Time_format2
         && tmpFormat != Time_format3)
     {
-      d->strFormulaOut = locale()->formatTime( d->value.asDateTime().time(), false);
+      d->strFormulaOut = locale()->formatTime( value().asDateTime().time(), false);
       setFormatType( Time );
     }
     else
     {
-      d->strFormulaOut = util_timeFormat(locale(), d->value.asDateTime(), tmpFormat);
+      d->strFormulaOut = util_timeFormat(locale(), value().asDateTime(), tmpFormat);
     }
   }
   else if ( context.value()->type() == KSValue::DateType)
   {
-    clearAllErrors();
-    d->value.setValue ( KSpreadValue( context.value()->dateValue() ) );
+    setValue ( KSpreadValue( context.value()->dateValue() ) );
     FormatType tmpFormat = formatType();
     if( tmpFormat != TextDate
         && !(tmpFormat>=200 &&tmpFormat<=216))
     {
         setFormatType(ShortDate);
-        d->strFormulaOut = locale()->formatDate( d->value.asDateTime().date(), true);
+        d->strFormulaOut = locale()->formatDate( value().asDateTime().date(), true);
     }
     else
     {
-        d->strFormulaOut = util_dateFormat( locale(), d->value.asDateTime().date(), tmpFormat);
+        d->strFormulaOut = util_dateFormat( locale(), value().asDateTime().date(), tmpFormat);
     }
   }
   else if ( context.value()->type() == KSValue::Empty )
   {
-    clearAllErrors();
-    d->value = KSpreadValue::empty();
+    setValue (KSpreadValue::empty());
     // Format the result appropriately
     setFormatType(Number);
     d->strFormulaOut = createFormat( 0.0, d->column, d->row );
   }
   else
   {
-    if (d->hasExtra())
-    {
-      delete d->extra()->QML;
-
-      d->extra()->QML = 0;
-    }
-    clearAllErrors();
 //FIXME    m_dataType = StringData;
-    d->value.setValue( KSpreadValue( context.value()->toString( context ) ) );
+    setValue( KSpreadValue( context.value()->toString( context ) ) );
     d->strFormulaOut = context.value()->toString( context );
     if ( !d->strFormulaOut.isEmpty() && d->strFormulaOut[0] == '!' )
     {
@@ -2975,11 +2975,11 @@ void KSpreadCell::paintText( QPainter& painter,
   if ( !d->hasExtra() || !d->extra()->conditions
       || !d->extra()->conditions->matchedStyle() )
   {
-    if ( d->value.isNumber()
+    if ( value().isNumber()
          && !( m_pTable->getShowFormula()
                && !( m_pTable->isProtected() && isHideFormula( d->column, d->row ) ) ) )
     {
-      double v = d->value.asFloat() * factor( column(),row() );
+      double v = value().asFloat() * factor( column(),row() );
       if ( floatColor( cellRef.x(), cellRef.y()) == KSpreadCell::NegRed && v < 0.0 )
         tmpPen.setColor( Qt::red );
     }
@@ -3022,8 +3022,8 @@ void KSpreadCell::paintText( QPainter& painter,
   }
 
   //hide zero
-  if ( m_pTable->getHideZero() && d->value.isNumber() &&
-       d->value.asFloat() * factor( column(), row() ) == 0 )
+  if ( m_pTable->getHideZero() && value().isNumber() &&
+       value().asFloat() * factor( column(), row() ) == 0 )
   {
     d->strOutText = QString::null;
   }
@@ -3201,8 +3201,8 @@ void KSpreadCell::paintText( QPainter& painter,
     d->textWidth = tmpWidth;
   }
 
-  if ( m_pTable->getHideZero() && d->value.isNumber()
-       && d->value.asFloat() * factor( column(), row() ) == 0 )
+  if ( m_pTable->getHideZero() && value().isNumber()
+       && value().asFloat() * factor( column(), row() ) == 0 )
   {
     d->strOutText = tmpText;
   }
@@ -3629,7 +3629,7 @@ int KSpreadCell::defineAlignX()
   int a = align( column(), row() );
   if ( a == KSpreadCell::Undefined )
   {
-    if ( d->value.isBoolean() || d->value.isNumber() || (d->value.isString() && d->value.asString()[0].direction() == QChar::DirR ))
+    if ( value().isBoolean() || value().isNumber() || (value().isString() && value().asString()[0].direction() == QChar::DirR ))
       a = KSpreadCell::Right;
     else
       a = KSpreadCell::Left;
@@ -3651,7 +3651,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
 {
   QFontMetrics fm = _painter.fontMetrics();
   int a = align( column(), row() );
-  if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined) && !d->value.isNumber()
+  if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined) && !value().isNumber()
     && !verticalText( column(),row() ))
   {
     //not enough space but align to left
@@ -3730,21 +3730,21 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
  if ( d->hasExtra() && (d->extra()->extraWidth != 0.0) )
    w = d->extra()->extraWidth;
 
- if( d->value.isNumber())
+ if( value().isNumber())
  {
    if( formatType() != Scientific )
    {
      int p = (precision(column(),row())  == -1) ? 8 :
        precision(column(),row());
-     double value =d->value.asFloat() * factor(column(),row());
+     double val =value().asFloat() * factor(column(),row());
      int pos=0;
-     QString localizedNumber= QString::number( (value), 'E', p);
+     QString localizedNumber= QString::number( (val), 'E', p);
      if((pos=localizedNumber.find('.'))!=-1)
      {
        localizedNumber = localizedNumber.replace( pos, 1, decimal_point );
      }
      if( floatFormat( column(), row() ) ==
-            KSpreadCell::AlwaysSigned && value >= 0 )
+            KSpreadCell::AlwaysSigned && val >= 0 )
      {
        if( locale()->positiveSign().isEmpty() )
        {
@@ -4163,7 +4163,7 @@ uint KSpreadCell::effTopBorderValue( int col, int row ) const
 
 void KSpreadCell::incPrecision()
 {
-  if ( !d->value.isNumber() )
+  if ( !value().isNumber() )
     return;
   int tmpPreci = precision( column(), row() );
   kdDebug(36001) << "incPrecision: tmpPreci = " << tmpPreci << endl;
@@ -4197,7 +4197,7 @@ void KSpreadCell::incPrecision()
 
 void KSpreadCell::decPrecision()
 {
-  if ( !d->value.isNumber() )
+  if ( !value().isNumber() )
     return;
   int preciTmp = precision( column(), row() );
 //  kdDebug(36001) << "decPrecision: tmpPreci = " << tmpPreci << endl;
@@ -4230,25 +4230,18 @@ void KSpreadCell::decPrecision()
 
 void KSpreadCell::setDate( QString const & dateString )
 {
-  clearAllErrors();
-  clearFormula();
-
-  if (d->hasExtra())
-  {
-    delete d->extra()->QML;
-    d->extra()->QML = 0L;
-  }
-  d->content = Text;
   QString str( dateString );
 
   if ( tryParseDate( dateString ) )
   {
+    //tryParseDate has already called setValue(), so we needn't worry about that
+    
     FormatType tmpFormat = formatType();
     if ( tmpFormat != TextDate &&
          !(tmpFormat >= 200 && tmpFormat <= 216)) // ###
     {
       //test if it's a short date or text date.
-      if ((locale()->formatDate( d->value.asDateTime().date(), false) == dateString))
+      if ((locale()->formatDate( value().asDateTime().date(), false) == dateString))
         setFormatType(TextDate);
       else
         setFormatType(ShortDate);
@@ -4256,64 +4249,41 @@ void KSpreadCell::setDate( QString const & dateString )
   }
   else
   {
-    d->value.setValue( KSpreadValue( dateString ) );
+    setValue( KSpreadValue( dateString ) );
 
     // convert first letter to uppercase ?
     if (m_pTable->getFirstLetterUpper() && !d->strText.isEmpty())
     {
-        str = d->value.asString();
-        d->value.setValue( KSpreadValue( str[0].upper()
-                                        + str.right( str.length() - 1 ) ) );
+        str = value().asString();
+        setValue( KSpreadValue( str[0].upper()
+                                + str.right( str.length() - 1 ) ) );
     }
   }
   d->strText = str;
+  d->content = Text;
 
-  setFlag( Flag_LayoutDirty );
-  setFlag( Flag_TextFormatDirty );
   setCalcDirtyFlag();
 }
 
 void KSpreadCell::setDate( QDate const & date )
 {
-  clearAllErrors();
-  clearFormula();
-
-  if (d->hasExtra())
-  {
-    delete d->extra()->QML;
-    d->extra()->QML = 0L;
-    d->content = Text;
-  }
-
-  d->value.setValue( KSpreadValue( date ) );
+  setValue( KSpreadValue( date ) );
+  
   d->strText = locale()->formatDate( date, true );
-  setFlag( Flag_LayoutDirty );
-  setFlag( Flag_TextFormatDirty );
-  checkNumberFormat();
-  update();
+    checkNumberFormat();
 }
 
 void KSpreadCell::setNumber( double number )
 {
-  clearAllErrors();
-  clearFormula();
-
-  if (d->hasExtra())
-  {
-    delete d->extra()->QML;
-    d->extra()->QML = 0L;
-  }
+  setValue( KSpreadValue( number ) );
+  
   d->content = Text;
-
-  d->value.setValue( KSpreadValue( number ) );
   d->strText.setNum( number );
-  setFlag( Flag_LayoutDirty );
-  setFlag( Flag_TextFormatDirty );
   checkNumberFormat();
-  update();
 }
 
-void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool asText )
+void KSpreadCell::setCellText( const QString& _text, bool /*updateDepends*/, bool asText )
+//the only place where this is called with updateDepends==false in KSpreadSheet::changeNameCellRef
 {
     QString ctext = _text;
     if( ctext.length() > 5000 )
@@ -4321,53 +4291,32 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool as
 
     if ( asText )
     {
-      d->content = Text;
-
-      clearAllErrors();
-      clearFormula();
-
-      if (d->hasExtra())
-      {
-        delete d->extra()->QML;
-        d->extra()->QML = 0L;
-      }
-
       d->strOutText = ctext;
       d->strText    = ctext;
-      d->value.setValue( KSpreadValue( ctext ) );
-
-      setFlag(Flag_LayoutDirty);
-      setFlag(Flag_TextFormatDirty);
-      if ( updateDepends )
-        update();
+      d->content = Text;
+      setValue( KSpreadValue( ctext ) );
 
       return;
     }
 
     QString oldText = d->strText;
-    setDisplayText( ctext, updateDepends );
+    setDisplayText( ctext );
     if(!m_pTable->isLoading() && !testValidity() )
     {
       //reapply old value if action == stop
-      setDisplayText( oldText, updateDepends );
+      setDisplayText( oldText );
     }
 }
 
 
 
 void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
+//the only place where this is called with updateDepends==false in KSpreadSheet::updateLocale,
+//and when setCellText (our only other caller) is called with fupdateDepends==false
 {
   m_pTable->doc()->emitBeginOperation( false );
-  clearAllErrors();
   d->strText = _text;
 
-  // Free all content data
-  if (d->hasExtra())
-  {
-    delete d->extra()->QML;
-    d->extra()->QML = 0L;
-  }
-  clearFormula();
   /**
    * A real formula "=A1+A2*3" was entered.
    */
@@ -4409,8 +4358,6 @@ void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
     setFlag(Flag_TextFormatDirty);
   }
 
-  update();
-
   m_pTable->doc()->emitEndOperation( QRect( d->column, d->row, 1, 1 ) );
 }
 
@@ -4446,42 +4393,42 @@ bool KSpreadCell::testValidity() const
         if ( d->extra()->validity->allowEmptyCell && d->strText.isEmpty() )
             return true;
 
-      if( d->value.isNumber() &&
+      if( value().isNumber() &&
 	  (d->extra()->validity->m_allow == Allow_Number ||
 	   (d->extra()->validity->m_allow == Allow_Integer &&
-	    d->value.asFloat() == ceil(d->value.asFloat()))))
+	    value().asFloat() == ceil(value().asFloat()))))
       {
 	switch( d->extra()->validity->m_cond)
 	{
 	  case Equal:
-	    valid = ( d->value.asFloat() - d->extra()->validity->valMin < DBL_EPSILON
-		      && d->value.asFloat() - d->extra()->validity->valMin >
+	    valid = ( value().asFloat() - d->extra()->validity->valMin < DBL_EPSILON
+		      && value().asFloat() - d->extra()->validity->valMin >
 		      (0.0 - DBL_EPSILON));
 	    break;
 	  case DifferentTo:
-	    valid = !(  ( d->value.asFloat() - d->extra()->validity->valMin < DBL_EPSILON
-		      && d->value.asFloat() - d->extra()->validity->valMin >
+	    valid = !(  ( value().asFloat() - d->extra()->validity->valMin < DBL_EPSILON
+		      && value().asFloat() - d->extra()->validity->valMin >
 		      (0.0 - DBL_EPSILON)) );
 	    break;
           case Superior:
-	    valid = ( d->value.asFloat() > d->extra()->validity->valMin);
+	    valid = ( value().asFloat() > d->extra()->validity->valMin);
 	    break;
           case Inferior:
-	    valid = ( d->value.asFloat()  <d->extra()->validity->valMin);
+	    valid = ( value().asFloat()  <d->extra()->validity->valMin);
 	    break;
           case SuperiorEqual:
-	    valid = ( d->value.asFloat() >= d->extra()->validity->valMin);
+	    valid = ( value().asFloat() >= d->extra()->validity->valMin);
             break;
           case InferiorEqual:
-	    valid = (d->value.asFloat() <= d->extra()->validity->valMin);
+	    valid = (value().asFloat() <= d->extra()->validity->valMin);
 	    break;
 	  case Between:
-	    valid = ( d->value.asFloat() >= d->extra()->validity->valMin &&
-		      d->value.asFloat() <= d->extra()->validity->valMax);
+	    valid = ( value().asFloat() >= d->extra()->validity->valMin &&
+		      value().asFloat() <= d->extra()->validity->valMax);
 	    break;
 	  case Different:
-	    valid = (d->value.asFloat() < d->extra()->validity->valMin ||
-		     d->value.asFloat() > d->extra()->validity->valMax);
+	    valid = (value().asFloat() < d->extra()->validity->valMin ||
+		     value().asFloat() > d->extra()->validity->valMax);
 	    break;
 	  default :
 	    break;
@@ -4489,11 +4436,11 @@ bool KSpreadCell::testValidity() const
       }
       else if(d->extra()->validity->m_allow==Allow_Text)
       {
-	valid = d->value.isString();
+	valid = value().isString();
       }
       else if(d->extra()->validity->m_allow==Allow_TextLength)
       {
-	if( d->value.isString() )
+	if( value().isString() )
         {
 	  int len = d->strOutText.length();
 	  switch( d->extra()->validity->m_cond)
@@ -4684,7 +4631,7 @@ bool KSpreadCell::isDate() const
 {
   FormatType ft = formatType();
   // workaround, since date/time is stored as floating-point
-  return d->value.isNumber()
+  return value().isNumber()
     &&  ( ft == ShortDate || ft == TextDate || ( (ft >= date_format1) && (ft <= date_format26) ) );
 }
 
@@ -4693,7 +4640,7 @@ bool KSpreadCell::isTime() const
   FormatType ft = formatType();
 
   // workaround, since date/time is stored as floating-point
-  return d->value.isNumber()
+  return value().isNumber()
     && ( ( (ft >= Time) && (ft <= Time_format8) ) );
 }
 
@@ -4777,7 +4724,7 @@ void KSpreadCell::checkTextInput()
         if(m_pTable->getFirstLetterUpper() && !d->strText.isEmpty())
             d->strText=d->strText[0].upper()+d->strText.right(d->strText.length()-1);
 
-        d->value.setValue(d->strText);
+        setValue(d->strText);
         //setFormatType(Text_format); // shouldn't be necessary. Won't apply with StringData anyway.
         return;
     }
@@ -4807,7 +4754,7 @@ void KSpreadCell::checkTextInput()
         QString strTrimmed = str.left(str.length()-1);
         if ( tryParseNumber( strTrimmed ) )
         {
-            d->value.setValue( KSpreadValue( d->value.asFloat()/ 100.0 ) );
+            setValue( KSpreadValue( value().asFloat()/ 100.0 ) );
             if ( formatType() != Percentage )
             {
                 setFormatType(Percentage);
@@ -4823,10 +4770,10 @@ void KSpreadCell::checkTextInput()
     double money = locale()->readMoney(str, &ok);
     if ( ok )
     {
-        d->value.setValue( KSpreadValue( money ) );
         setFormatType(Money);
         setFactor(1.0);
         setPrecision(2);
+        setValue( KSpreadValue( money ) );
         return;
     }
 
@@ -4837,7 +4784,7 @@ void KSpreadCell::checkTextInput()
            !(tmpFormat >= 200 && tmpFormat <= 216)) // ###
         {
             //test if it's a short date or text date.
-            if ((locale()->formatDate( d->value.asDateTime().date(), false) == str))
+            if ((locale()->formatDate( value().asDateTime().date(), false) == str))
                 setFormatType(TextDate);
             else
                 setFormatType(ShortDate);
@@ -4860,18 +4807,18 @@ void KSpreadCell::checkTextInput()
 
         // Parsing as time acts like an autoformat: we even change d->strText
         if ( tmpFormat != Time_format7 ) // [h]:mm:ss -> might get set by tryParseTime(str)
-          d->strText = locale()->formatTime( d->value.asDateTime().time(), true);
+          d->strText = locale()->formatTime( value().asDateTime().time(), true);
         return;
     }
 
     // Nothing particular found, then this is simply a string
-    d->value.setValue( KSpreadValue( d->strText ) );
+    setValue( KSpreadValue( d->strText ) );
 
     // convert first letter to uppercase ?
     if (m_pTable->getFirstLetterUpper() && !d->strText.isEmpty())
     {
-        QString str = d->value.asString();
-        d->value.setValue( KSpreadValue( str[0].upper() + str.right( str.length()-1 ) ) );
+        QString str = value().asString();
+        setValue( KSpreadValue( str[0].upper() + str.right( str.length()-1 ) ) );
     }
 }
 
@@ -4879,12 +4826,12 @@ bool KSpreadCell::tryParseBool( const QString& str )
 {
     if ( str.lower() == "true" || str.lower() == i18n("True").lower() )
     {
-        d->value.setValue( KSpreadValue( true ) );
+        setValue( KSpreadValue( true ) );
         return true;
     }
     if ( str.lower() == "false" || str.lower() == i18n("false").lower() )
     {
-        d->value.setValue( KSpreadValue( false ) );
+        setValue( KSpreadValue( false ) );
         return true;
     }
     return false;
@@ -4902,7 +4849,7 @@ bool KSpreadCell::tryParseNumber( const QString& str )
     if ( ok )
     {
         kdDebug(36001) << "KSpreadCell::tryParseNumber '" << str << "' successfully parsed as number: " << value << endl;
-        d->value.setValue( KSpreadValue( value ) );
+        setValue( KSpreadValue( value ) );
         return true;
     }
 
@@ -4978,7 +4925,7 @@ bool KSpreadCell::tryParseDate( const QString& str )
         // Deactivating for now. If you reactivate, please explain better (David).
         //if ( str.contains( ' ' ) == 0 )  //No spaces " " in short dates...
         {
-            d->value.setValue( KSpreadValue( tmpDate ) );
+            setValue( KSpreadValue( tmpDate ) );
             return true;
         }
     }
@@ -5020,46 +4967,29 @@ bool KSpreadCell::tryParseTime( const QString& str )
             }
         }
         if ( valid )
-          d->value.setValue( KSpreadValue( tm ) );
+          setValue( KSpreadValue( tm ) );
         return valid;
     }
     if (valid)
     {
       if ( duration )
       {
-        d->value.setValue( KSpreadValue( tmpTime ) );
+        setValue( KSpreadValue( tmpTime ) );
         setFormatType( Time_format7 );
       }
       else
-        d->value.setValue( KSpreadValue( tmpTime.time() ) );
+        setValue( KSpreadValue( tmpTime.time() ) );
     }
     return valid;
 }
 
 void KSpreadCell::checkNumberFormat()
 {
-    if ( formatType() == Number && d->value.isNumber() )
+    if ( formatType() == Number && value().isNumber() )
     {
-        if ( d->value.asFloat() > 1e+10 )
+        if ( value().asFloat() > 1e+10 )
             setFormatType( Scientific );
     }
-}
-
-bool KSpreadCell::cellDependsOn(KSpreadSheet *table, int col, int row)
-{
-  bool isdep = FALSE;
-
-  KSpreadDependency *dep;
-  for ( dep = d->lstDepends.first(); dep != 0L && !isdep; dep = d->lstDepends.next() )
-  {
-    if (dep->Table() == table &&
-	dep->Left() <= col && dep->Right() >= col &&
-	dep->Top() <= row && dep->Bottom() >= row)
-    {
-      isdep = TRUE;
-    }
-  }
-  return isdep;
 }
 
 QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, bool force, bool copy, bool era )
@@ -5202,12 +5132,12 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
 {
   QString dataType = "Other"; // fallback
 
-  if ( d->value.isNumber() )
+  if ( value().isNumber() )
   {
       if ( isDate() )
       {
           // serial number of date
-          QDate dd = d->value.asDateTime().date();
+          QDate dd = value().asDateTime().date();
           dataType = "Date";
           str = "%1/%2/%3";
           str = str.arg(dd.year()).arg(dd.month()).arg(dd.day());
@@ -5216,26 +5146,26 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
       {
           // serial number of time
           dataType = "Time";
-          str = d->value.asDateTime().time().toString();
+          str = value().asDateTime().time().toString();
       }
       else
       {
           // real number
           dataType = "Num";
-          str = QString::number(d->value.asFloat(), 'g', DBL_DIG);
+          str = QString::number(value().asFloat(), 'g', DBL_DIG);
       }
   }
 
-  if ( d->value.isBoolean() )
+  if ( value().isBoolean() )
   {
       dataType = "Bool";
-      str = d->value.asBoolean() ? "true" : "false";
+      str = value().asBoolean() ? "true" : "false";
   }
 
-  if ( d->value.isString() )
+  if ( value().isString() )
   {
       dataType = "Str";
-      str = d->value.asString();
+      str = value().asString();
   }
 
   result.setAttribute( "dataType", dataType );
@@ -5315,51 +5245,51 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
     }
 
     saveOasisAnnotation( xmlwriter );
-    if ( d->value.isBoolean() )
+    if ( value().isBoolean() )
     {
         xmlwriter.addAttribute( "office:value-type", "boolean" );
-        xmlwriter.addAttribute( "office:boolean-value", ( d->value.asBoolean() ? "true" : "false" ) );
+        xmlwriter.addAttribute( "office:boolean-value", ( value().asBoolean() ? "true" : "false" ) );
     }
-    else if ( d->value.isNumber() )
+    else if ( value().isNumber() )
     {
       KSpreadFormat::FormatType type = formatType();
 
       if ( type == KSpreadFormat::Percentage )
         {
         xmlwriter.addAttribute( "office:value-type", "percentage" );
-        xmlwriter.addAttribute( "office:value", QString::number( d->value.asFloat() ) );
+        xmlwriter.addAttribute( "office:value", QString::number( value().asFloat() ) );
         }
       else if ( type == KSpreadFormat::Money )
         {
         xmlwriter.addAttribute( "office:value-type", "currency" );
         // TODO: add code of currency
         //xmlwriter.addAttribute( "tableoffice:currency", locale()->currencySymbol() );
-        xmlwriter.addAttribute( "office:value", QString::number( d->value.asFloat() ) );
+        xmlwriter.addAttribute( "office:value", QString::number( value().asFloat() ) );
         }
       else if ( isDate() )
         {
           xmlwriter.addAttribute( "office:value-type", "date" );
-          xmlwriter.addAttribute( "office:date-value", d->value.asDate().toString( Qt::ISODate ) );
+          xmlwriter.addAttribute( "office:date-value", value().asDate().toString( Qt::ISODate ) );
         }
       else if ( isTime() )
         {
           xmlwriter.addAttribute( "office:value-type", "time" );
-          xmlwriter.addAttribute( "office:time-value", d->value.asTime().toString( "PThhHmmMssS" ) );
+          xmlwriter.addAttribute( "office:time-value", value().asTime().toString( "PThhHmmMssS" ) );
         }
       else
         {
         xmlwriter.addAttribute( "office:value-type", "float" );
-        xmlwriter.addAttribute( "office:value", QString::number( d->value.asFloat() ) );
+        xmlwriter.addAttribute( "office:value", QString::number( value().asFloat() ) );
         }
     }
-    else if ( d->value.isString() )
+    else if ( value().isString() )
       {
         xmlwriter.addAttribute( "office:value-type", "string" );
-        xmlwriter.addAttribute( "office:string-value", d->value.asString() );
+        xmlwriter.addAttribute( "office:string-value", value().asString() );
       }
     else
     {
-      kdDebug() << "Type: " << d->value.type() << endl;
+      kdDebug() << "Type: " << value().type() << endl;
     }
     if (d->hasExtra() && d->extra()->validity)
     {
@@ -6239,9 +6169,9 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
         if( dataType == "Bool" )
         {
           if ( t == "false" )
-            d->value.setValue( true );
+            setValue( true );
           else if ( t == "true" )
-            d->value.setValue( false );
+            setValue( false );
           else
             clear = false;
         }
@@ -6250,7 +6180,7 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
           bool ok = false;
           double dd = t.toDouble( &ok );
           if ( ok )
-            d->value.setValue ( dd );
+            setValue ( dd );
           else
             clear = false;
         }
@@ -6259,7 +6189,7 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
           bool ok = false;
           double dd = t.toDouble( &ok );
           if ( ok )
-            d->value.setValue ( dd );
+            setValue ( dd );
           else
           {
             int pos   = t.find( '/' );
@@ -6269,7 +6199,7 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
             int day   = t.right( t.length() - pos1 - 1 ).toInt();
             QDate date( year, month, day );
             if ( date.isValid() )
-              d->value.setValue( date );
+              setValue( date );
             else
               clear = false;
           }
@@ -6279,7 +6209,7 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
           bool ok = false;
           double dd = t.toDouble( &ok );
           if ( ok )
-            d->value.setValue( dd );
+            setValue( dd );
           else
           {
             int hours   = -1;
@@ -6293,14 +6223,14 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
             second  = t.right( t.length() - pos1 - 1 ).toInt();
             QTime time( hours, minutes, second );
             if ( time.isValid() )
-              d->value.setValue( time );
+              setValue( time );
             else
               clear = false;
           }
         }
         else
         {
-          d->value.setValue( t );
+          setValue( t );
         }
 
         if ( clear )
@@ -6383,9 +6313,9 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
       if( dataType == "Bool" )
       {
         if ( t == "false" )
-          d->value.setValue( true );
+          setValue( true );
         else if ( t == "true" )
-          d->value.setValue( false );
+          setValue( false );
         else
           kdWarning() << "Cell with BoolData, should be true or false: " << t << endl;
       }
@@ -6394,7 +6324,7 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
       else if( dataType == "Num" )
       {
         bool ok = false;
-        d->value.setValue ( KSpreadValue( t.toDouble(&ok) ) ); // We save in non-localized format
+        setValue ( KSpreadValue( t.toDouble(&ok) ) ); // We save in non-localized format
         if ( !ok )
 	{
           kdWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
@@ -6409,13 +6339,13 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
 	if ( formatType() == Percentage )
         {
           setFactor( 100.0 ); // should have been already done by loadFormat
-          t = locale->formatNumber( d->value.asFloat() * 100.0, precision );
+          t = locale->formatNumber( value().asFloat() * 100.0, precision );
 	  d->strText = pasteOperation( t, d->strText, op );
           d->strText += '%';
         }
         else
 	{
-          t = locale->formatNumber(d->value.asFloat(), precision);
+          t = locale->formatNumber(value().asFloat(), precision);
 	  d->strText = pasteOperation( t, d->strText, op );
 	}
       }
@@ -6428,7 +6358,7 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
         int pos1 = t.find('/',pos+1);
         int month = t.mid(pos+1,((pos1-1)-pos)).toInt();
         int day = t.right(t.length()-pos1-1).toInt();
-        d->value.setValue( QDate(year,month,day) );
+        setValue( QDate(year,month,day) );
         if ( value().asDate().isValid() ) // Should always be the case for new docs
           d->strText = locale()->formatDate( value().asDate(), true );
         else // This happens with old docs, when format is set wrongly to date
@@ -6450,7 +6380,7 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
         pos1 = t.find(':',pos+1);
         minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
         second = t.right(t.length()-pos1-1).toInt();
-        d->value.setValue( QTime(hours,minutes,second) );
+        setValue( QTime(hours,minutes,second) );
         if ( value().asTime().isValid() ) // Should always be the case for new docs
           d->strText = locale()->formatTime( value().asTime(), true );
         else  // This happens with old docs, when format is set wrongly to time
@@ -6464,7 +6394,7 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
       {
         // Set the cell's text
         d->strText = pasteOperation( t, d->strText, op );
-        d->value.setValue( d->strText );
+        setValue( d->strText );
       }
     }
   }
@@ -6498,7 +6428,7 @@ QTime KSpreadCell::toTime(const QDomElement &element)
     pos1 = t.find(':',pos+1);
     minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
     second = t.right(t.length()-pos1-1).toInt();
-    d->value.setValue( KSpreadValue( QTime(hours,minutes,second)) );
+    setValue( KSpreadValue( QTime(hours,minutes,second)) );
     return value().asTime();
 }
 
@@ -6515,7 +6445,7 @@ QDate KSpreadCell::toDate(const QDomElement &element)
     pos1 = t.find('/',pos+1);
     month = t.mid(pos+1,((pos1-1)-pos)).toInt();
     day = t.right(t.length()-pos1-1).toInt();
-    d->value.setValue( KSpreadValue( QDate(year,month,day) ) );
+    setValue( KSpreadValue( QDate(year,month,day) ) );
     return value().asDate();
 }
 
@@ -6672,16 +6602,19 @@ KSpreadCell::~KSpreadCell()
         if ( cell )
             cell->unobscure(this);
     }
+    
+    d->value = KSpreadValue::empty();
+    valueChanged ();
 
     delete d;
 }
 
 bool KSpreadCell::operator > ( const KSpreadCell & cell ) const
 {
-  if ( d->value.isNumber() ) // ### what about bools ?
+  if ( value().isNumber() ) // ### what about bools ?
   {
     if ( cell.value().isNumber() )
-      return d->value.asFloat() > cell.d->value.asFloat();
+      return value().asFloat() > cell.value().asFloat();
     else
       return false; // numbers are always < than texts
   }
@@ -6708,25 +6641,25 @@ bool KSpreadCell::operator > ( const KSpreadCell & cell ) const
   else
   {
       if ( KSpreadMap::respectCase )
-          return d->value.asString().compare(cell.value().asString()) > 0;
+          return value().asString().compare(cell.value().asString()) > 0;
       else
-          return ( d->value.asString() ).lower().compare(cell.value().asString().lower()) > 0;
+          return ( value().asString() ).lower().compare(cell.value().asString().lower()) > 0;
   }
 }
 
 bool KSpreadCell::operator < ( const KSpreadCell & cell ) const
 {
-  if ( d->value.isNumber() )
+  if ( value().isNumber() )
   {
     if ( cell.value().isNumber() )
-      return d->value.asFloat() < cell.value().asFloat();
+      return value().asFloat() < cell.value().asFloat();
     else
       return true; // numbers are always < than texts
   }
   else if(isDate())
   {
      if( cell.isDate() )
-        return d->value.asDateTime().date() < cell.value().asDateTime().date();
+        return value().asDateTime().date() < cell.value().asDateTime().date();
      else if( cell.value().isNumber())
         return false;
      else
@@ -6735,7 +6668,7 @@ bool KSpreadCell::operator < ( const KSpreadCell & cell ) const
   else if(isTime())
   {
      if( cell.isTime() )
-        return d->value.asDateTime().time() < cell.value().asDateTime().time();
+        return value().asDateTime().time() < cell.value().asDateTime().time();
      else if(cell.isDate())
         return false; //time are always > than date
      else if( cell.value().isNumber())
@@ -6746,9 +6679,9 @@ bool KSpreadCell::operator < ( const KSpreadCell & cell ) const
   else
   {
       if ( KSpreadMap::respectCase )
-          return d->value.asString().compare(cell.value().asString()) < 0;
+          return value().asString().compare(cell.value().asString()) < 0;
       else
-          return ( d->value.asString() ).lower().compare(cell.value().asString().lower()) < 0;
+          return ( value().asString() ).lower().compare(cell.value().asString().lower()) < 0;
   }
 }
 
