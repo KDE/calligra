@@ -1737,6 +1737,7 @@ void KWCanvas::ungroupTable(KWTableFrameSet *table)
     // create items in text item in docstruct
     emit docStructChanged(TextFrames);
     emit docStructChanged(Tables);
+    emit currentFrameSetEditChanged();
     repaintAll();
 }
 
