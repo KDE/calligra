@@ -17,17 +17,23 @@ since 1.3 RC1
 - better adjustment of cell references on cut&paste
 - fix crash on csv import (#66047)
 - fix problem for cells copy/cut to clipboard (#58712)
+- show frame when embedded object is selected (#37152)
+- better handling of "nothing to print" warning (#60147)
+- when embedded, use real zoom instead of scaling (#45503)
+- fix data sorting (#63317)
 
 since 1.3 beta4
 ===============
 - #64794: kspread problem with calculating dates
 - #61570: cell border does not work with merged cells
+- fix unsorted zoom values (#64154)
 
 since 1.3 beta3
 ===============
 - KSpread is slow during text to column conversion (#59999)
 - fix problem cycling absolute cell reference with F4 key (#46959)
 - the calculator plugin saves its configuration now (#49954)
+- fix detection of sheet direction (for rtl support)
 
 since 1.3 beta2
 ===============
