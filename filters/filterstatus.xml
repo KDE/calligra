@@ -121,7 +121,7 @@
         <title xml:lang="en_us">None</title>
         <description xml:lang="en_us">The filter does not currently exist, and nobody is working on it.</description>
     </status>
-    <status id="abandoned" symbol="?">
+    <status id="" symbol="?">
         <title xml:lang="en_us">Abandoned</title>
         <description xml:lang="en_us">The status of this filter is unknown, as its development has been abandoned.</description>
     </status>
@@ -161,7 +161,7 @@
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/docbook"/>
                 <title xml:lang="en_us">DocBook</title>
                 <note xml:lang="en_us">SGML DocBook only</note>
-                <stat import="none" export="twostars"/>
+                <stat import="none" export="abandoned"/>
             </filter>
             <filter id="kword_hancomword">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/hancomword"/>
