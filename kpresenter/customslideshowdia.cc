@@ -396,7 +396,7 @@ QString DefineCustomSlideShow::customSlideShowName() const
 void DefineCustomSlideShow::slotOk()
 {
     if ( listSlideShow->count() == 0  )
-        KMessageBox::error(this, i18n("You didn't select slide. Please select slides."), i18n("Define Custom Slide Show"));
+        KMessageBox::error(this, i18n("You did not select any slides. Please select some slides."), i18n("Define Custom Slide Show"));
     else
         accept();
 }
