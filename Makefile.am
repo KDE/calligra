@@ -1,8 +1,10 @@
 
 SUBDIRS = lib kspread kpresenter kword kformula kdiagramm killustrator kimage kohtml tools plugins trader koshell po pics
 
+AUTOMAKE_OPTIONS = foreign 1.4
+
 acinclude.m4: admin/acinclude.m4.in admin/libtool.m4.in
-	@cat admin/acinclude.m4.in admin/libtool.m4.in   > acinclude.m4 
+	@cat $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in   > $(top_srcdir)/acinclude.m4 
 
 messages:
 	rm -rf po.backup

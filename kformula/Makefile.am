@@ -2,13 +2,10 @@
 
 SUBDIRS = pics
 
-INCLUDES = -I../lib/store -I../lib/kofficecore -I../lib/kofficeui \
-	-I../lib/koml $(all_includes) $(MICO_INCLUDES) -I$(idldir)
+INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = ../lib/kofficeui/libkofficeui.la \
-	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
-	../lib/store/libkstore.la -lkparts -lkpartsui -lkom $(LIB_KFILE) \
-	 $(LIB_KIMGIO) -lkio -lkdeutil $(LIBMICO) 
+LDADD = $(KOFFICE_LIBS) -lkparts -lkpartsui -lkom $(LIB_KIO) $(LIB_KFILE) \
+	 $(LIB_KIMGIO) $(LIBMICO) 
 
 ####### Files
 
@@ -54,7 +51,7 @@ install-exec-local:
 
 kformula.h: kformula.idl
 	rm -f kformula.h
-	$(IDL) --query-server-for-narrow --relative-paths -I../lib/kofficecore -I../lib/store -I$(idldir) kformula.idl
+	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) kformula.idl
 
 messages:
 	$(XGETTEXT) -C -ki18n -kklocale -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kformula.pot

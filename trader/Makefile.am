@@ -1,10 +1,8 @@
 
-INCLUDES  = -I../lib/kofficecore $(MICO_INCLUDES) $(all_includes) -I$(idldir)
+INCLUDES  = $(KOFFICECORE_INCLUDES) $(MICO_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD     = ../lib/kofficecore/libkofficecore.la \
-	    ../lib/koml/libkoml.la ../lib/store/libkstore.la \
-	    -lkparts -lkpartsui -lkom \
-	    -lkio -lkdeutil $(LIBMICO) $(LIB_KDEUI)
+LDADD     = $(LIB_KOFFICECORE) $(LIB_KOML) $(LIB_KSTORE) \
+	    -lkparts -lkpartsui -lkom $(LIB_KIO) $(LIBMICO)
 
 ####### Files
 
@@ -40,7 +38,7 @@ parser:
 	flex -Pdep lex.dep.l
 	bison -p dep -b dep -d yacc.dep.y 
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths -I./ -I../lib/kofficecore -I../lib/store -I../lib/interfaces -I$(idldir)
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I./ -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(top_srcdir)/lib/interfaces -I$(idldir)
 
 install-exec-local:
 	$(INSTALL_SCRIPT) kotrader $(bindir)/kotrader

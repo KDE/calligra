@@ -2,13 +2,9 @@
 
 SUBDIRS = pics
 
-INCLUDES  =  -I../lib/koml -I../lib/kofficecore \
-	-I../lib/kofficeui $(MICO_INCLUDES) $(all_includes) -I$(idldir)
+INCLUDES  =  $(KOFFICE_INCLUDES) $(MICO_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS =   $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD =  ../lib/kofficeui/libkofficeui.la \
-	../lib/kofficecore/libkofficecore.la \
-	../lib/koml/libkoml.la -lkom -lop    $(LIB_KFILE) \
-	 $(LIBMICO) 
+LDADD =  $(KOFFICE_LIBS) -lkom -lop $(LIB_KFILE) $(LIBMICO) 
 
 ####### Files
 

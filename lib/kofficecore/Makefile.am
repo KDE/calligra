@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES= -I../koml -I../store -I$(idldir) $(all_includes) $(MICO_INCLUDES)
+INCLUDES= $(KOML_INCLUDES) $(KSTORE_INCLUDES) -I$(idldir) $(all_includes) $(MICO_INCLUDES)
 LDFLAGS	= $(all_libraries)  -version-info 1:0:0
 LIBADD  = -lkom $(LIB_KFILE) $(LIBMICO) 
 
@@ -34,7 +34,7 @@ SUFFIXES = .h .moc
 
 ####### Build rules
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths -I./ -I../store -I../interfaces -I$(idldir)
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(srcdir) -I$(srcdir)/../store -I$(srcdir)/../interfaces -I$(idldir)
 
 koFrame.moc: koFrame.h
 koFrame.cc: koFrame.moc koffice.h
@@ -44,14 +44,15 @@ koApplication.moc: koApplication.h
 koApplication.cc: koApplication.moc koffice.h
 koDocument.cc: koDocument.h
 koDocument.h: koffice.h
+koIMR.cc: trader.h
 koQueryTrader.h: typerepo.h
 koffice.cc: koffice.h
 koffice.h: koffice.idl $(idldir)/openparts.idl $(idldir)/openparts_ui.idl $(idldir)/kom.idl
-	$(IDL) $(IDL_FLAGS) koffice.idl
+	$(IDL) $(IDL_FLAGS) $(srcdir)/koffice.idl
 trader.cc: trader.h
 trader.h: trader.idl
-	$(IDL) $(IDL_FLAGS) trader.idl
+	$(IDL) $(IDL_FLAGS) $(srcdir)/trader.idl
 typerepo.cc: typerepo.h
 typerepo.h: typerepo.idl trader.idl
-	$(IDL) $(IDL_FLAGS) typerepo.idl
+	$(IDL) $(IDL_FLAGS) $(srcdir)/typerepo.idl
 

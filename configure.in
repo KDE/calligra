@@ -1,4 +1,6 @@
 
+AC_PREREQ([2.13])
+
 dnl without this order in this file, autoconf will not work!
 dnl the argument is a source file out of your sources. But
 dnl acinclude.m4 makes the job for all programs ;-)
@@ -43,11 +45,36 @@ KDE_CHECK_KIMGIO
 AC_FIND_QIMGIO
 AC_C_BIGENDIAN
 
-topdir=`pwd`
-KOFFICE_LIBS="$topdir/lib/kofficeui/libkofficeui.la $topdir/lib/kofficecore/libkofficecore.la $topdir/lib/koml/libkoml.la $topdir/lib/store/libkstore.la"
+KDE_CHECK_NEWLIBS
+
+KOML_INCLUDES='-I$(top_srcdir)/lib/koml -I$(top_builddir)/lib/koml'
+AC_SUBST(KOML_INCLUDES)
+
+KSTORE_INCLUDES='-I$(top_srcdir)/lib/store -I$(top_builddir)/lib/store'
+AC_SUBST(KSTORE_INCLUDES)
+
+KOFFICECORE_INCLUDES='-I$(top_srcdir)/lib/kofficecore -I$(top_builddir)/lib/kofficecore'
+AC_SUBST(KOFFICECORE_INCLUDES)
+
+KOFFICEUI_INCLUDES='-I$(top_srcdir)/lib/kofficeui -I$(top_builddir)/lib/kofficeui'
+AC_SUBST(KOFFICEUI_INCLUDES)
+
+LIB_KOFFICEUI='$(top_builddir)/lib/kofficeui/libkofficeui.la'
+LIB_KOFFICECORE='$(top_builddir)/lib/kofficecore/libkofficecore.la'
+LIB_KSTORE='$(top_builddir)/lib/store/libkstore.la'
+LIB_KOML='$(top_builddir)/lib/koml/libkoml.la'
+AC_SUBST(LIB_KOFFICEUI)
+AC_SUBST(LIB_KOFFICECORE)
+AC_SUBST(LIB_KSTORE)
+AC_SUBST(LIB_KOML)
+
+interfacedir='$(top_srcdir)/lib/interfaces'
+AC_SUBST(interfacedir)
+
+KOFFICE_LIBS='$(LIB_KOFFICEUI) $(LIB_KOFFICECORE) $(LIB_KSTORE) $(LIB_KOML)'
 AC_SUBST(KOFFICE_LIBS)
 
-KOFFICE_INCLUDES="-I $topdir/lib/kofficeui -I $topdir/lib/kofficecore -I $topdir/lib/koml -I $topdir/lib/store"
+KOFFICE_INCLUDES='$(KOFFICEUI_INCLUDES) $(KOFFICECORE_INCLUDES) $(KOML_INCLUDES) $(KSTORE_INCLUDES)'
 AC_SUBST(KOFFICE_INCLUDES)
 
 dnl add here all your Makefiles. These are created by configure
@@ -71,9 +98,9 @@ AC_OUTPUT( \
 	kimage/Makefile \
 	kpresenter/Makefile \
 	kpresenter/autoformEdit/Makefile \
+	kpresenter/autoforms/Makefile \
 	kpresenter/autoforms/Arrows/Makefile \
 	kpresenter/autoforms/Connections/Makefile \
-	kpresenter/autoforms/Makefile \
 	kpresenter/pics/Makefile \
 	kpresenter/templates/Makefile \
 	kpresenter/templates/Screenpresentations/Makefile \

@@ -1,12 +1,10 @@
 
-SUBDIRS = pics
+SUBDIRS = . pics
 
-INCLUDES  = $(PYTHONINC) $(MICO_INCLUDES) -I../lib/store -I../lib/koml -I../lib/kofficecore -I../lib/kofficeui -I../lib/interface $(all_includes) -I$(idldir)
+INCLUDES  = $(PYTHONINC) $(MICO_INCLUDES) $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(PYTHONLIB) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = ../lib/kofficeui/libkofficeui.la \
-	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
-	../lib/store/libkstore.la -lkparts -lkpartsui \
-	-lkom -lkio -lkdeutil $(LIBMICO) $(LIBPYTHON) $(LIB_KFILE) 
+LDADD = $(KOFFICE_LIBS) -lkparts -lkpartsui \
+	-lkom $(LIB_KIO) $(LIBMICO) $(LIBPYTHON) $(LIB_KFILE) 
 
 ####### Files
 
@@ -40,7 +38,7 @@ SUFFIXES = .h .moc
 
 ####### Build rules
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths -I../lib/kofficecore -I../lib/store -I../lib/interfaces -I$(idldir)
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(top_srcdir)/lib/interfaces -I$(idldir)
 
 install-exec-local:
 	$(INSTALL_SCRIPT) kdiagramm $(bindir)/kdiagramm

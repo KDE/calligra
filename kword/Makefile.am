@@ -1,11 +1,8 @@
 
-INCLUDES = -I../lib/store -I../lib/kofficecore -I../lib/kofficeui \
-	-I../lib/koml $(all_includes) $(MICO_INCLUDES) -I$(idldir)
+INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = ../lib/kofficeui/libkofficeui.la \
-	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
-	../lib/store/libkstore.la -lkspell -lkparts -lkpartsui -lkom \
-	$(LIB_KFILE) $(LIB_KIMGIO) -lkio -lkdeutil $(LIBMICO) 
+LDADD = $(KOFFICE_LIBS) -lkspell -lkparts -lkpartsui -lkom $(LIB_KIO) \
+	$(LIB_KFILE) $(LIB_KIMGIO)  $(LIBMICO) 
 
 ####### Files
 
@@ -35,7 +32,7 @@ idl_HEADERS =  kword.h
 kdelnk_DATA = kword_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
-SUBDIRS = toolbar templates
+SUBDIRS = . toolbar templates
 
 ####### Implicit rules
 
@@ -54,7 +51,7 @@ messages:
 
 kword.h: kword.idl
 	rm -f kword.h
-	$(IDL) --query-server-for-narrow --relative-paths -I../lib/kofficecore -I../lib/store -I$(idldir) kword.idl
+	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kword.idl
 
 kword.cc: kword.h
 kword_view.h: kword.h

@@ -1,8 +1,8 @@
-INCLUDES  = $(PYTHONINC) $(MICO_INCLUDES) -I../lib/store -I../lib/koml -I../lib/kofficecore -I../lib/kofficeui -I../lib/interface -I../tools $(all_includes) -I$(idldir)
+INCLUDES  = $(PYTHONINC) $(MICO_INCLUDES) $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(PYTHONLIB) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = ../lib/kofficeui/libkofficeui.la ../lib/kofficecore/libkofficecore.la \
-	../lib/koml/libkoml.la ../lib/store/libkstore.la -lkparts -lkpartsui \
-	-lkom -lkio -lkdeutil $(LIBMICO) $(LIBPYTHON) -lpykde -lpymico $(LIB_KFILE) 
+LDADD = $(KOFFICE_LIBS) -lkparts -lkpartsui \
+	-lkom $(LIB_KIO) $(LIBMICO) $(LIBPYTHON) \
+	-lpykde -lpymico $(LIB_KFILE) 
 
 ####### Files
 
@@ -45,7 +45,7 @@ kdemimedir = $(kde_mimedir)/application
 py_DATA = KSpread.py KOffice.py KOStore.py OpenPartsUI.py OpenParts.py KOM.py
 pydir = $(kde_includes)/python
 
-SUBDIRS = pics scripts dtd filters
+SUBDIRS = . pics scripts dtd filters
 
 ####### Implicit rules
 
@@ -62,7 +62,7 @@ parser:
 	flex -Pdep lex.dep.l
 	bison -p dep -b dep -d yacc.dep.y 
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths -I../lib/kofficecore -I../lib/store -I../lib/interfaces -I$(idldir)
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(top_srcdir)/lib/interfaces -I$(idldir)
 
 install-exec-local:
 	$(INSTALL_SCRIPT) kspread $(bindir)/kspread
@@ -71,10 +71,10 @@ messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kspread.pot
 
 kspread.h: kspread.idl ../lib/kofficecore/koffice.idl
-	$(IDL) $(IDL_FLAGS) kspread.idl
+	$(IDL) $(IDL_FLAGS) $(srcdir)/kspread.idl
 
 chart.h: ../lib/interfaces/chart.idl
-	$(IDL) $(IDL_FLAGS) ../lib/interfaces/chart.idl
+	$(IDL) $(IDL_FLAGS) $(interfacedir)/chart.idl
 
 datatools.h: $(idldir)/datatools.idl
 	$(IDL) $(IDL_FLAGS) $(idldir)/datatools.idl
@@ -102,5 +102,5 @@ KOStore.py: KSpread.py
 KOffice.py: KSpread.py
 OpenParts.py: KSpread.py
 OpenPartsUI.py: KSpread.py
-KSpread.py: kspread.idl $(kde_bindir)/pyidl ../lib/kofficecore/koffice.idl
-	$(kde_bindir)/pyidl "-I$(idldir) koffice.idl"
+KSpread.py: kspread.idl $(kde_bindir)/pyidl $(top_srcdir)/lib/kofficecore/koffice.idl
+	$(kde_bindir)/pyidl "-I$(idldir) -I$(top_srcdir)/lib/store $(top_srcdir)/lib/kofficecore/koffice.idl"

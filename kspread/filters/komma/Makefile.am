@@ -1,10 +1,10 @@
 
-INCLUDES = $(PYTHONINC) $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I$(idldir)
+INCLUDES = $(PYTHONINC) $(KOFFICE_INCLUDES) $(KOFFICECORE_INCLUDES) \
+	$(all_includes) $(MICO_INCLUDES) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(PYTHONLIB) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = $(LIBPYTHON) ../../../lib/kofficecore/libkofficecore.la \
-	../../../lib/koml/libkoml.la ../../../lib/store/libkstore.la -lkparts \
-	-lkpartsui -lkom $(LIB_KIMGIO) \
-	-lkio -lkdeutil $(LIBMICO) $(LIB_KFILE) 
+LDADD = $(LIB_KOFFICECORE) $(LIB_KOML) $(LIB_KSTORE) $(LIBPYTHON) 
+	-lkparts -lkpartsui -lkom $(LIB_KIMGIO) \
+	$(LIB_KIO) $(LIBMICO) $(LIB_KFILE)
 
 ####### Files
 
@@ -14,7 +14,7 @@ kspread_filter_bin_SOURCES = main.cc
 
 noinst_HEADERS = main.h
 
-SRCMETA =	main.moc
+SRCMETA = main.moc
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
 

@@ -1,10 +1,11 @@
-INCLUDES  = $(KOFFICE_INCLUDES) -I.. -I../share -I../filter $(MICO_INCLUDES) $(all_includes) -I$(idldir)
+
+INCLUDES  = $(KOFFICE_INCLUDES) -I$(srcdir)/.. -I$(srcdir)/../share -I$(srcdir)/../filter $(MICO_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-FILTER_LIBS = ../filter/libfilter.a
-XML_LIBS = ../xmlutils/libxml.a
-KSHARE_LIBS = ../share/libkillu.a
+FILTER_LIBS = $(build_dir)/../filter/libfilter.a
+XML_LIBS = $(build_dir)/../xmlutils/libxml.a
+KSHARE_LIBS = $(build_dir)/../share/libkillu.a
 LDADD = $(FILTER_LIBS) $(KSHARE_LIBS) $(XML_LIBS) $(KOFFICE_LIBS) \
-	-lkparts -lkpartsui -lkom $(LIBMICO) -lkio -lkdeutil $(LIBQIMGIO) $(LIB_KFILE) 
+	-lkparts -lkpartsui -lkom $(LIBMICO) $(LIB_KIO) $(LIBQIMGIO) $(LIB_KFILE) 
 
 ####### Files
 
@@ -54,7 +55,7 @@ install-exec-local:
 	$(INSTALL_SCRIPT) killustrator $(bindir)/killustrator
 
 KIllustrator.h: KIllustrator.idl
-	$(IDL) --query-server-for-narrow -I../../lib/kofficecore -I../../lib/store -I$(idldir) KIllustrator.idl
+	$(IDL) --query-server-for-narrow -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) KIllustrator.idl
 
 
 KIllustrator.cc: KIllustrator.h

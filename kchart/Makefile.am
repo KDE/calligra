@@ -2,14 +2,10 @@
 
 SUBDIRS = core ui pics
 
-INCLUDES  = $(MICO_INCLUDES)  -I./ui -I./core  -I../lib/koml \
-	-I../lib/kofficecore -I../lib/kofficeui $(all_includes) -I$(idldir)
+INCLUDES  = $(MICO_INCLUDES)  -I$(srcdir)/ui -I$(srcdir)/core \
+	$(KOFFICE_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS =   $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD =  ../lib/kofficeui/libkofficeui.la \
-	../lib/kofficecore/libkofficecore.la \
-	./ui/libkchartui.la ./core/libkchartcore.la \
-	../lib/koml/libkoml.la -lkom -lop    $(LIB_KFILE) \
-	 $(LIBMICO) 
+LDADD =  $(KOFFICE_LIBS) -lkom -lop $(LIB_KFILE) $(LIBMICO) 
 
 ####### Files
 
@@ -24,7 +20,6 @@ SRCMETA =	kchart_main.moc kchart_view.moc kchart_doc.moc kchart_shell.moc \
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA) chart.h chart.cc
 
-interfacedir = ../lib/interfaces
 IDL_INCLUDES = -I$(idldir) -I$(interfacedir)
 
 idl_DATA = kchart.idl

@@ -1,11 +1,8 @@
 
-INCLUDES = -I../lib/store -I../lib/kofficecore -I../lib/kofficeui \
-	-I../lib/koml $(all_includes) $(MICO_INCLUDES) -I$(idldir)
+INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = ../lib/kofficeui/libkofficeui.la \
-	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
-	../lib/store/libkstore.la -lkparts -lkpartsui -lkom -lkio -lkfm\
-	$(LIB_KHTML) $(LIB_KFILE) -lkdeutil $(LIBMICO) 
+LDADD = $(KOFFICE_LIBS) -lkparts -lkpartsui -lkom $(LIB_KIO)  \
+	$(LIB_KHTML) $(LIB_KFILE) $(LIBMICO)
 
 ####### Files
 
@@ -57,7 +54,7 @@ messages:
 
 kohtml.h: kohtml.idl
 	rm -f kohtml.h
-	$(IDL) --query-server-for-narrow --relative-paths -I../lib/kofficecore -I../lib/store -I$(idldir) kohtml.idl
+	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kohtml.idl
 
 kkohtml.cc: kohtml.h
 kohtml_view.cc: kohtml.h kohtml_view.moc settingsdlg.h

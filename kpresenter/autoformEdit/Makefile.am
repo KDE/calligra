@@ -1,19 +1,19 @@
 ####### General stuff
 
-INCLUDES = $(MICO_INCLUDES) -I../../lib/kofficecore -I../../lib/store -I../../lib/kofficeui \
-	-I../../lib/koml $(all_includes) -I$(idldir)
+INCLUDES = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS =  $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD =  ../../lib/kofficeui/libkofficeui.la ../../lib/store/libkstore.la \
-	../../lib/kofficecore/libkofficecore.la ../../lib/koml/libkoml.la \
-	-lkpartsui -lkparts -lkom -lkio -lkdeutil    $(LIBMICO) $(LIB_KFILE) -lm
+LDADD =  libaf.a $(KOFFICE_LIBS) -lkpartsui -lkparts -lkom $(LIB_KIO) $(LIBMICO) $(LIB_KFILE) -lm
 
 bin_PROGRAMS = kautoformEdit
 
 ####### Files
 
+noinst_LIBRARIES = libaf.a
+
+libaf_a_SOURCES = atfinterpreter.cc afchoose.cc
+
 kautoformEdit_SOURCES = main.cc autoformEdit.cc editWidget.cc \
-	drawWidget.cc atfinterpreter.cc pntInsDia.cc afchoose.cc \
-	saveAsDia.cc
+	drawWidget.cc pntInsDia.cc saveAsDia.cc
 
 noinst_HEADERS	= autoformEdit.h editWidget.h drawWidget.h atfinterpreter.h \
 		pntInsDia.h afchoose.h saveAsDia.h 

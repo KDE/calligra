@@ -1,11 +1,8 @@
 
-INCLUDES = $(MICO_INCLUDES) -I../lib/kofficecore -I../lib/store -I../lib/kofficeui \
-	-I../lib/koml $(all_includes) -I$(idldir)
+INCLUDES = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = autoformEdit/atfinterpreter.o autoformEdit/afchoose.o \
-	../lib/kofficeui/libkofficeui.la \
-	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la ../lib/store/libkstore.la \
-	-lkparts -lkpartsui -lkom   $(LIB_KIMGIO) -lkio -lkdeutil  $(LIBMICO)   $(LIB_KFILE) 
+LDADD = autoformEdit/libaf.a $(KOFFICE_LIBS) \
+	-lkparts -lkpartsui -lkom $(LIB_KIMGIO) $(LIB_KIO) $(LIBMICO) $(LIB_KFILE)
 
 ####### Files
 
@@ -76,7 +73,7 @@ DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
 kdelnk_DATA = kpresenter.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
-SUBDIRS = autoformEdit autoforms pics toolbar templates dtd
+SUBDIRS = autoformEdit . autoforms pics toolbar templates dtd
 
 ####### Implicit rules
 
@@ -95,7 +92,7 @@ messages:
 
 kpresenter.h: kpresenter.idl
 	rm -f kpresenter.h
-	$(IDL) --query-server-for-narrow --relative-paths -I../lib/kofficecore -I../lib/store -I$(idldir) kpresenter.idl
+	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kpresenter.idl
 
 kpresenter.cc: kpresenter.h
 kpresenter_doc.cc: kpresenter_doc.moc
