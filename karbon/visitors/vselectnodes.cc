@@ -85,6 +85,9 @@ VSelectNodes::visitVPath( VPath& path )
 		}
 		path.next();
 	}
+	// select first node as well
+	if( path.isClosed() && path.getLast()->knotIsSelected() )
+		path.getFirst()->selectKnot();
 }
 
 void
