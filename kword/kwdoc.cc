@@ -288,7 +288,8 @@ void KWDocument::initConfig()
       double indent = MM_TO_POINT( config->readDoubleNumEntry("Indent", POINT_TO_MM(10.0) ) );
       setIndentValue(indent);
       setShowRuler(config->readBoolEntry("Rulers",true));
-      setAutoSave((config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()))*60);
+      int defaultAutoSave = KoDocument::defaultAutoSave()/60; // in minutes
+      setAutoSave(config->readNumEntry("AutoSave",defaultAutoSave)*60); // read key in minutes, call setAutoSave(seconds)
       setNbPagePerRow(config->readNumEntry("nbPagePerRow",4));
       m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
 
