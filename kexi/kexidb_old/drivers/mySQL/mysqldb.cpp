@@ -36,6 +36,12 @@ MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &args) : K
 	
 }
 
+int
+MySqlDB::connect(QString host, QString user, QString password)
+{
+	m_mysql = mysql_connect(m_mysql, host.latin1(), user.latin1(), password.latin1());
+}
+
 MySqlDB::~MySqlDB()
 {
 	if(m_connected)

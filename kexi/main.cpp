@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
 	aboutData.addAuthor("Lucijan Busch","Developer & Maintainer", "lucijan@gmx.at");
 	aboutData.addAuthor("Daniel Molkentin","Developer",  "molkentin@kde.org");
 	aboutData.addAuthor("Till Busch", "Buxfixes and Improvements", "till@bux.at");
+	aboutData.addAuthor("Joseph Wenninger", "A lot of work for formeditor, and a lot other stuff", "jowenn@kde.org");
 	KCmdLineArgs::init( argc, argv, &aboutData );
 	KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 

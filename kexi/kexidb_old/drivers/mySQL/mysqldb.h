@@ -45,8 +45,10 @@ class MySqlDB : public KexiDB
 		 *  connect to mysql-database
 		 */
 		 
-		int		connect(const char *host, const char *user, const char *passwd,
-					const char *db, unsigned int port = 0, const char *unix_socket = 0, unsigned int client_flag = 0);
+//		int		connect(const char *host, const char *user, const char *passwd,
+//					const char *db, unsigned int port = 0, const char *unix_socket = 0, unsigned int client_flag = 0);
+
+		int		connect(QString host, QString user, QString password);
 
 		/*!
 		 *  get the last error
@@ -73,10 +75,6 @@ class MySqlDB : public KexiDB
 		 
 		unsigned long	insertID();
 		unsigned long	affectedRows();
-		QString		updateString(const QString &field, const QString &val, const bool nullable=true);
-		QString		updateString(const QString &field, const int val);
-		QString		updateString(const QString &field, const QDate &dat);
-		void		tableUpdate(const QString &table, unsigned long id, char op);
 
 	protected:
 		int		reconnect();

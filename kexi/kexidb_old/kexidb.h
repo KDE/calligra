@@ -23,6 +23,8 @@ Boston, MA 02111-1307, USA.
 
 #include <qobject.h>
 
+#include "kexidbresult.h"
+
 class KexiDBInterfaceManager;
 
 class KexiDB : public QObject
@@ -36,6 +38,25 @@ class KexiDB : public QObject
 		KexiDB *add(QString driver);
 
 		QStringList getDrivers() const;
+
+		//now driver related functions
+
+		/*! connect to database hope that is ansi-compatible */
+		int connect(QString host, QString user, QString password);
+		/*! connect method for file-based databases*/
+		int load(QString file);
+
+		/*! hope thats ansi-compatilbe too */
+		QStringList getDatabases() const;
+		QStringList getTables() const;
+
+		int query(QString statement);
+		QString escape(QString &str);
+		
+		KexiDBResult	*storeResult();
+		KexiDBResult	*useResult();
+
+		unsigned long	affectedRows();
 
 
 	protected:
