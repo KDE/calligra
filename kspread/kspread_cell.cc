@@ -4534,7 +4534,8 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
   }
 
   result.setAttribute( "dataType", dataType );
-  result.setAttribute( "outStr", m_strOutText );
+  if ( !m_strOutText.isEmpty() )
+    result.setAttribute( "outStr", m_strOutText );
   result.appendChild( doc.createTextNode( str ) );
 
   return true; /* really isn't much of a way for this function to fail */
@@ -4743,7 +4744,8 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
         if ( result.hasAttribute( "outStr" ) ) 
         {
           m_strOutText = result.attribute( "outStr" );
-          clearFlag( Flag_TextFormatDirty );
+          if ( !m_strOutText.isEmpty() )
+            clearFlag( Flag_TextFormatDirty );
         }
 
         bool clear = true;
@@ -4995,7 +4997,8 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
   if ( text.hasAttribute( "outStr" ) ) // very new docs
   {
     m_strOutText = text.attribute( "outStr" );
-    clearFlag( Flag_TextFormatDirty );
+    if ( !m_strOutText.isEmpty() )
+      clearFlag( Flag_TextFormatDirty );
   }
 
   if ( !m_pTable->isLoading() )

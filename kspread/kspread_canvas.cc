@@ -342,7 +342,7 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
 
 KSpreadCanvas::~KSpreadCanvas()
 {
-    delete m_scrollTimer;
+  delete m_scrollTimer;
 }
 
 
@@ -719,7 +719,7 @@ void KSpreadCanvas::slotScrollHorz( int _value )
 
   sheet->enableScrollBarUpdates( true );
 
-  doc()->emitEndOperation( area );
+  doc()->emitEndOperation( sheet->visibleRect( this ) );
 }
 
 void KSpreadCanvas::slotScrollVert( int _value )
@@ -764,7 +764,6 @@ void KSpreadCanvas::slotScrollVert( int _value )
 
   activeTable()->setRegionPaintDirty( area );
 
-
   // New absolute position
   m_dYOffset = unzoomedValue;
   scroll( 0, dy );
@@ -772,7 +771,7 @@ void KSpreadCanvas::slotScrollVert( int _value )
 
   activeTable()->enableScrollBarUpdates( true );
 
-  doc()->emitEndOperation( area );
+  doc()->emitEndOperation( activeTable()->visibleRect( this ) );
 }
 
 void KSpreadCanvas::slotMaxColumn( int _max_column )
