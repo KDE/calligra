@@ -845,7 +845,7 @@ void KexiTableView::insertItem(KexiTableItem *newItem, int row)
 void KexiTableView::clearData(bool repaint)
 {
 	CHECK_DATA_;
-	//	cancelRowEdit();
+	cancelRowEdit();
 //	acceptRowEdit();
 //	d->pVerticalHeader->clear();
 	m_data->clear();
@@ -1046,20 +1046,20 @@ void KexiTableView::setSorting(int col, bool ascending/*=true*/)
 {
 	if (!m_data || !d->isSortingEnabled)
 		return;
-//	d->sortOrder = ascending;
-//	d->sortedColumn = col;
-	d->pTopHeader->setSortIndicator(col, ascending ? Ascending : Descending);//d->sortOrder);
-	m_data->setSorting(col, ascending); //d->sortOrder);
-//	sort();
-//	columnSort(col);
+	d->pTopHeader->setSortIndicator(col, ascending ? Ascending : Descending);
+	m_data->setSorting(col, ascending);
 }
 
-void KexiTableView::sort()
+bool KexiTableView::sort()
 {
-	if (!m_data || !d->isSortingEnabled || rows() < 2)
-		return;
+	if (!m_data || !d->isSortingEnabled)
+		return false;
 
-	cancelRowEdit();
+	if (rows() < 2)
+		return true;
+
+	if (!acceptRowEdit())
+		return false;
 			
 	if (m_data->sortedColumn()!=-1)
 		m_data->sort();
@@ -1069,7 +1069,7 @@ void KexiTableView::sort()
 		d->pCurrentItem = m_data->first();
 		d->curRow = 0;
 		if (!d->pCurrentItem)
-			return;
+			return true;
 	}
 	if (d->pCurrentItem != d->pInsertItem) {
 		d->curRow = m_data->findRef(d->pCurrentItem);
@@ -1089,74 +1089,45 @@ void KexiTableView::sort()
 
 	updateContents();
 //	d->pUpdateTimer->start(1,true);
+	return true;
 }
 
 void KexiTableView::sortAscending()
 {
 	if (currentColumn()<0)
 		return;
-	setSorting(currentColumn(), true);
-	sort();
+	sortColumnInternal( currentColumn(), 1 );
 }
 
 void KexiTableView::sortDescending()
 {
 	if (currentColumn()<0)
 		return;
-	setSorting(currentColumn(), false);
-	sort();
+	sortColumnInternal( currentColumn(), -1 );
 }
 
-void KexiTableView::sortColumnInternal(int col)
+void KexiTableView::sortColumnInternal(int col, int order)
 {
-//	bool i = false;
-//js	QVariant hint;
 	//-select sorting 
 	bool asc;
-	if (col==sortedColumn())
-		asc = !sortingAscending(); //inverse sorting for this column
+	if (order == 0) {// invert
+		if (col==sortedColumn())
+			asc = !sortingAscending(); //inverse sorting for this column
+		else
+			asc = true;
+	}
 	else
-		asc = true;
+		asc = (order==1);
 	
+	const QHeader::SortOrder prevSortOrder = d->pTopHeader->sortIndicatorOrder();
+	const int prevSortColumn = d->pTopHeader->sortIndicatorSection();
 	setSorting( col, asc );
-	
 	//-perform sorting 
-	sort();
+	if (!sort())
+		d->pTopHeader->setSortIndicator(prevSortColumn, prevSortOrder);
 	
-#if 0//todo
-	if(d->pInsertItem)
-	{
-		i = true;
-//js		hint = d->pInsertItem->getHint();
-//		delete d->pInsertItem;
-		remove(d->pInsertItem);
-		d->pInsertItem = 0;
-//		d->pVerticalHeader->removeLabel(rows());
-	}
-
-	if(m_data->sortedColumn() == col) {
-		m_data->setSorting(col, !m_data->sortingAscending());
-	}
-	else {
-		m_data->setSorting(col);
-	}
-//js	else
-//js		d->sortOrder = true;
-//	d->sortedColumn = col;
-	d->pTopHeader->setSortIndicator(col, m_data->sortingAscending());
-	sort();
-
-	if(i)
-	{
-		KexiTableItem *insert = new KexiTableItem(columns());
-//js		insert->setHint(hint);
-//js		insert->setInsertItem(true);
-		d->pInsertItem = insert;
-
-	}
-//	updateContents( 0, 0, viewport()->width(), viewport()->height());
-#endif
-	emit sortedColumnChanged(col);
+	if (col != prevSortColumn)
+		emit sortedColumnChanged(col);
 }
 
 QSizePolicy KexiTableView::sizePolicy() const

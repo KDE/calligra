@@ -364,8 +364,11 @@ public slots:
 	*/
 	void setSortingEnabled(bool set);
 
-	//! Sorts all rows by column selected with setSorting()
-	void sort();
+	/*! Sorts all rows by column selected with setSorting().
+	 If there is currently row edited, it is accepted. 
+	 If acception failed, sort() will return false.
+	 \return true on success. */
+	bool sort();
 
 	/*! Sorts currently selected column in ascending order. 
 	 This slot is used typically for "data_sort_az" action. */
@@ -555,7 +558,7 @@ protected slots:
 	void startEditOrToggleValue();
 	virtual void boolToggled();
 	void slotUpdate();
-	void sortColumnInternal(int col);
+	void sortColumnInternal(int col, int order = 0);
 
 	void slotAutoScroll();
 

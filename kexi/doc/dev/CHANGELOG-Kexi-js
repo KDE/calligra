@@ -322,6 +322,10 @@ Table View
 - autoincremented field can be omitted (left as null or empty)
   if we're inserting a new row
 - fixed displaying "autonumber" cell on row inserting
+- row editing is accepted on sorting
+- on failed sorting, sort indicator is reverted
+Table Designer
+- before switching to design view, row editing is accepted 
 
 2004-08-19
 KexiDB
