@@ -155,7 +155,7 @@ private:
     void appendShadow( QDomDocument& doc, QDomElement& e );
     void appendLineEnds( QDomDocument& doc, QDomElement& e );
     void appendTextObjectMargin( QDomDocument& doc, QDomElement& e );
-    void appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object);
+    void appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos);
 
     double toPoint( QString value, double defaultVal = 0.0 );
     bool parseBorder(const QString & tag, double * width, int * style, QColor * color);

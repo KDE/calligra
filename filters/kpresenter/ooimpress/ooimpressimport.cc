@@ -1256,6 +1256,8 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
     else
         p.setAttribute( "align", 0 ); // use left aligned as default
 
+    uint pos = 0;
+
     // parse every childnode of the paragraph
     for( QDomNode n = paragraph.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
@@ -1265,10 +1267,11 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         if (n.toElement().tagName() == "text:s")
             textData = expandWhitespace(n.toElement());
         else if (n.toElement().tagName() == "text:date" // fields
-                 || n.toElement().tagName() == "text:time")
+                 || n.toElement().tagName() == "text:time"
+                 || n.toElement().tagName() == "text:page-number")
         {
             textData = "#";     // field placeholder
-            appendField(doc, p, n.toElement());
+            appendField(doc, p, n.toElement(), pos);
         }
         else if ( t.isNull() ) // no textnode, so maybe it's a text:span
         {
@@ -1299,6 +1302,8 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         }
         else
             textData = t.data();
+
+        pos+=textData.length();
 
         // offset before and after paragraph
         if( m_styleStack.hasAttribute("fo:margin-top") ||
@@ -1645,8 +1650,8 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         }
 
         appendShadow( doc, p ); // this is necessary to take care of shadowed paragraphs
-        m_styleStack.clearObjectMark(); // remove possible test:span styles from the stack
         p.appendChild( text );
+        m_styleStack.clearObjectMark(); // remove possible test:span styles from the stack
     }
 
     return p;
@@ -1996,14 +2001,12 @@ void OoImpressImport::appendPoints(QDomDocument& doc, QDomElement& e, const QDom
     e.appendChild(ptsElem);
 }
 
-void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object)
+void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos)
 {
     const QString tag = object.tagName();
 
-    //kdDebug() << "We got a field: " << tag << endl;
-
     QDomElement custom = doc.createElement("CUSTOM");
-    custom.setAttribute("pos", 0);
+    custom.setAttribute("pos", pos);
     QDomElement variable = doc.createElement("VARIABLE");
 
     if (tag == "text:date")
@@ -2063,6 +2066,36 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
           timeElem.setAttribute("correct", object.attribute("text:time-adjust"));*/ // ### TODO
 
         variable.appendChild(timeElem);
+    }
+    else if (tag == "text:page-number")
+    {
+        QDomElement typeElem = doc.createElement("TYPE");
+        typeElem.setAttribute("key", "NUMBER");
+        typeElem.setAttribute("type", 4); // VT_PGNUM
+        typeElem.setAttribute("text", object.text());
+
+        variable.appendChild(typeElem);
+
+        QDomElement pgNumElem = doc.createElement("PGNUM");
+
+        int subtype = 0;        // VST_PGNUM_CURRENT
+
+        if (object.hasAttribute("text:select-page"))
+        {
+            const QString select = object.attribute("text:select-page");
+
+            if (select == "previous")
+                subtype = 3;    // VST_PGNUM_PREVIOUS
+            else if (select == "next")
+                subtype = 4;    // VST_PGNUM_NEXT
+            else
+                subtype = 0;    // VST_PGNUM_CURRENT
+        }
+
+        pgNumElem.setAttribute("subtype", subtype);
+        pgNumElem.setAttribute("value", object.text());
+
+        variable.appendChild(pgNumElem);
     }
 
     custom.appendChild(variable);
