@@ -50,15 +50,12 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
   ColumnLayout *cl;
   bool equals=true;
   int i;
-  QRect selection( m_pView->activeTable()->selectionRect() );
+  QRect selection( m_pView->activeTable()->selection() );
   switch(type)
 	{
 	case resize_row:
 		setCaption( i18n("Resize Row") );
-		if(selection.top()==0)
-			rl = m_pView->activeTable()->rowLayout( m_pView->canvasWidget()->markerRow());
-		else
-			rl = m_pView->activeTable()->rowLayout(selection.top());
+                rl = m_pView->activeTable()->rowLayout(selection.top());
 		size=rl->height(m_pView->canvasWidget());
 		for(i=selection.top()+1;i<=selection.bottom();i++)
 			if(size!=m_pView->activeTable()->rowLayout(i)->height(m_pView->canvasWidget()))
@@ -68,14 +65,11 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 		break;
 	case resize_column:
 		setCaption( i18n("Resize Column") );
-		if(selection.left()==0)
-			cl = m_pView->activeTable()->columnLayout( m_pView->canvasWidget()->markerColumn());
-		else
-			cl = m_pView->activeTable()->columnLayout(selection.left());
+                cl = m_pView->activeTable()->columnLayout(selection.left());
 		size=cl->width(m_pView->canvasWidget());
 		for(i=selection.left()+1;i<=selection.right();i++)
-			if(size!=m_pView->activeTable()->columnLayout(i)->width(m_pView->canvasWidget()))
-			equals=false;
+                  if(size!=m_pView->activeTable()->columnLayout(i)->width(m_pView->canvasWidget()))
+                    equals=false;
 
 		label=i18n("Width (%1)").arg(m_pView->doc()->getUnitName());
                 tmpCheck+=QString(" %1 %2").arg(KoUnit::ptToUnit(  60 , m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
@@ -90,11 +84,11 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
   	switch(type)
 	{
 	case resize_row:
-			size=(int)KoUnit::ptToUnit(  20 , m_pView->doc()->getUnit() );
-			break;
+          size=(int)KoUnit::ptToUnit(  20 , m_pView->doc()->getUnit() );
+          break;
 	case resize_column:
-			size=(int)KoUnit::ptToUnit(  60 , m_pView->doc()->getUnit() );
-			break;
+          size=(int)KoUnit::ptToUnit(  60 , m_pView->doc()->getUnit() );
+          break;
 	}
 
   m_pSize2=new KIntNumInput((int)KoUnit::ptToUnit( size, m_pView->doc()->getUnit() ), page, 10);
@@ -123,43 +117,30 @@ void KSpreadresize2::slotChangeState()
 
 void KSpreadresize2::slotOk()
 {
-    QRect selection( m_pView->activeTable()->selectionRect() );
-    QRect rect=selection;
-    if(selection.bottom()<=0 ||selection.top()<=0 || selection.left()<=0
-       || selection.right()<=0)
-      {
-	switch(type)
-	  {
-	  case resize_row:
-	    rect.setCoords( 1, m_pView->canvasWidget()->markerRow(), KS_colMax, m_pView->canvasWidget()->markerRow() );
-	    break;
-	  case resize_column:
-	    rect.setCoords( m_pView->canvasWidget()->markerColumn(), 1, m_pView->canvasWidget()->markerColumn(), KS_rowMax );
-	    break;
-	  }
-      }
+    QRect selection( m_pView->activeTable()->selection() );
+
     int new_size=KoUnit::ptFromUnit( m_pSize2->value(), m_pView->doc()->getUnit() );
     if ( !m_pView->doc()->undoBuffer()->isLocked() )
       {
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(),m_pView->activeTable() , rect );
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(),m_pView->activeTable() , selection );
         m_pView->doc()->undoBuffer()->appendUndo( undo );
       }
     switch(type)
       {
       case resize_row:
 	if(m_pDefault->isChecked())
-	  for(int i=rect.top();i<=rect.bottom();i++) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
+	  for(int i=selection.top();i<=selection.bottom();i++) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
 	    m_pView->vBorderWidget()->resizeRow( 20, i, false );
 	else
-	  for(int i=rect.top();i<=rect.bottom();i++) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
+	  for(int i=selection.top();i<=selection.bottom();i++) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
 	    m_pView->vBorderWidget()->resizeRow(new_size,i,false );
 	break;
       case resize_column:
 	if(m_pDefault->isChecked())
-	  for(int i=rect.left();i<=rect.right();i++) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
+	  for(int i=selection.left();i<=selection.right();i++) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
 	    m_pView->hBorderWidget()->resizeColumn( 60, i, false );
 	else
-	  for(int i=rect.left();i<=rect.right();i++) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
+	  for(int i=selection.left();i<=selection.right();i++) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
 	    m_pView->hBorderWidget()->resizeColumn(new_size,i,false );
 	break;
       default :

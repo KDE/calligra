@@ -1710,9 +1710,9 @@ QString KSpreadCell::valueString() const
  *            top left = 11, top_right = 12, bottom_right = 13, bottom_left = 14.
  */
 static void paintCellHelper( QPainter& _painter, int _tx, int _ty, int col, int row,
-                             int w, int h, int pos, const QRect& marker )
+                             int w, int h, int pos, const QRect& selection )
 {
-    QPoint p = marker.bottomRight();
+    QPoint p = selection.bottomRight();
 
     switch( pos )
     {
@@ -1866,7 +1866,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
 
   if (drawCursor)
   {
-    paintMarker(painter, corner, cellRef);
+    paintSelectionBox(painter, corner, cellRef);
   }
   paintPageBorders( painter,corner, cellRef);
 
@@ -1965,14 +1965,14 @@ void KSpreadCell::paintBackground(QPainter& painter, QPoint corner,
                                   QPoint cellRef, bool selected)
 {
   QColorGroup defaultColorGroup = QApplication::palette().active();
-  QRect m = m_pTable->marker();
+  QPoint marker = m_pTable->marker();
   ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int width = (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
   int height =  (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
 
   // Determine the correct background color
-  if ( selected && ( cellRef.x() != m.left() || cellRef.y() != m.top() ))
+  if ( selected && ( cellRef.x() != marker.x() || cellRef.y() != marker.y() ))
   {
     painter.setBackgroundColor( defaultColorGroup.highlight() );
   }
@@ -2137,7 +2137,7 @@ void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef,
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
 
   int width =  (m_iExtraYCells ? m_iExtraHeight : colLayout->width());
-  QRect m = m_pTable->marker();
+  QPoint marker = m_pTable->marker();
   QColorGroup defaultColorGroup = QApplication::palette().active();
 
   QColor textColorPrint = textColor( cellRef.x(), cellRef.y() );
@@ -2151,18 +2151,7 @@ void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef,
     else
       textColorPrint = QApplication::palette().active().text();
   }
-  /*
-    if ( selected && ( _col != m.left() || _row != m.top() )  )
-    {
-    QPen p( textPen(_col,_row) );
-    p.setColor( defaultColorGroup.highlightedText() );
-    _painter.setPen( p );
-    }
-    else*/
 
-  //_painter.setPen( textPen(_col,_row) );
-
-  // #### Torben: This looks like duplication to me
   KSpreadConditional condition;
 
   if(conditions.GetCurrentCondition(condition) &&
@@ -2182,7 +2171,7 @@ void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef,
     }
   }
 
-  if ( selected && ( cellRef.x() != m.left() || cellRef.y() != m.top() )  )
+  if ( selected && ( cellRef.x() != marker.x() || cellRef.y() != marker.y() )  )
   {
     QPen p( tmpPen );
     p.setColor( defaultColorGroup.highlightedText() );
@@ -2379,7 +2368,8 @@ void KSpreadCell::paintPageBorders(QPainter& painter, QPoint corner,
   }
 }
 
-void KSpreadCell::paintMarker(QPainter& painter, QPoint corner, QPoint cellRef)
+void KSpreadCell::paintSelectionBox(QPainter& painter, QPoint corner,
+                                    QPoint cellRef)
 {
   if ( painter.device()->isExtDev() )
     return;
@@ -2393,89 +2383,80 @@ void KSpreadCell::paintMarker(QPainter& painter, QPoint corner, QPoint cellRef)
   int width =  colLayout->width();
 
   //
-  // Draw the marker
+  // Draw the selection box
   //
   // Some of this code is duplicated in KSpreadCanvas::updateSelection
   //
-  QRect marker = m_pTable->markerRect();
+  QRect selection = m_pTable->selection();
   QRect larger;
-  larger.setCoords( marker.left() - 1, marker.top() - 1, marker.right() + 1,
-                    marker.bottom() + 1 );
+  larger.setCoords( selection.left() - 1, selection.top() - 1,
+                    selection.right() + 1, selection.bottom() + 1 );
 
   QPen pen(Qt::black,3);
   painter.setPen( pen );
 
-  // The marker is exactly this cell ?
-  if ( marker.left() == cellRef.x() && marker.right() == cellRef.x() &&
-       marker.top() == cellRef.y() && marker.bottom() == cellRef.y())
-  {
-    paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                     width, height, 1, marker );
-    paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                     width, height, 2, marker );
-    paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                     width, height, 3, marker );
-    paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                     width, height, 4, marker );
-  }
-  else if ( marker.contains( cellRef ) )
+  if ( selection.contains( cellRef ) )
   {
     // Upper border ?
-    if ( cellRef.y() == marker.top() )
+    if ( cellRef.y() == selection.top() )
       paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 1, marker );
+                       width, height, 1, selection );
     // Left border ?
-    if ( cellRef.x() == marker.left() )
+    if ( cellRef.x() == selection.left() )
       paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 4, marker );
+                       width, height, 4, selection );
     // Lower border ?
-    if ( cellRef.y() == marker.bottom() )
+    if ( cellRef.y() == selection.bottom() )
       paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 3, marker );
+                       width, height, 3, selection );
     // Right border ?
-    if ( cellRef.x() == marker.right() )
+    if ( cellRef.x() == selection.right() )
       paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(),
-                       cellRef.y(), width, height, 2, marker );
+                       cellRef.y(), width, height, 2, selection );
   }
   // Dont obey extra cells
   else if ( larger.contains( QPoint(cellRef.x(), cellRef.y()) ) )
   {
     // Upper border ?
-    if ( cellRef.x() >= marker.left() && cellRef.x() <= marker.right() &&
-         cellRef.y() - 1 == marker.bottom() )
+    if ( cellRef.x() >= selection.left() && cellRef.x() <= selection.right() &&
+         cellRef.y() - 1 == selection.bottom() )
       paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 1, marker );
+                       width, height, 1, selection );
     // Left border ?
-    if ( cellRef.y() >= marker.top() && cellRef.y() <= marker.bottom() &&
-         cellRef.x() - 1 == marker.right() )
+    if ( cellRef.y() >= selection.top() && cellRef.y() <= selection.bottom() &&
+         cellRef.x() - 1 == selection.right() )
       paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 4, marker );
+                       width, height, 4, selection );
     // Lower border ?
-    if ( cellRef.x() >= marker.left() && cellRef.x() <= marker.right() &&
-         cellRef.y() + 1 == marker.top() )
+    if ( cellRef.x() >= selection.left() && cellRef.x() <= selection.right() &&
+         cellRef.y() + 1 == selection.top() )
       paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 3, marker );
+                       width, height, 3, selection );
     // Right border ?
-    if ( cellRef.y() >= marker.top() && cellRef.y() <= marker.bottom() &&
-         cellRef.x() + 1 == marker.left() )
+    if ( cellRef.y() >= selection.top() && cellRef.y() <= selection.bottom() &&
+         cellRef.x() + 1 == selection.left() )
       paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 2, marker );
+                       width, height, 2, selection );
     // Top left corner ?
-    if ( cellRef.y() == marker.bottom() + 1 && cellRef.x() == marker.right() + 1 )
+    if ( cellRef.y() == selection.bottom() + 1 &&
+         cellRef.x() == selection.right() + 1 )
       paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 11, marker );
+                       width, height, 11, selection );
     // Top right corner ?
-    if ( cellRef.y() == marker.bottom() + 1 && cellRef.x() == marker.left() - 1 )
+    if ( cellRef.y() == selection.bottom() + 1 &&
+         cellRef.x() == selection.left() - 1 )
       paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 12, marker );
+                       width, height, 12, selection );
     // Bottom right corner ?
-    if ( cellRef.y() == marker.top() - 1 && cellRef.x() == marker.left() - 1 )
+    if ( cellRef.y() == selection.top() - 1 &&
+         cellRef.x() == selection.left() - 1 )
       paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 13, marker );
+                       width, height, 13, selection );
     // Bottom left corner ?
-    if ( cellRef.y() == marker.top() - 1 && cellRef.x() == marker.right() + 1 )
+    if ( cellRef.y() == selection.top() - 1 &&
+         cellRef.x() == selection.right() + 1 )
       paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 14, marker );
+                       width, height, 14, selection );
   }
 }
 

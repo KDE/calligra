@@ -962,7 +962,7 @@ private:
 
   /* helper functions to the paintCell(...) function */
     void paintCellBorders(QPainter& painter, QPoint corner, QPoint cellRef);
-    void paintMarker(QPainter& painter, QPoint corner, QPoint cellRef);
+    void paintSelectionBox(QPainter& painter, QPoint corner, QPoint cellRef);
     void paintPageBorders(QPainter& painter, QPoint corner, QPoint cellRef);
     void paintText(QPainter& painter, QPoint corner, QPoint cellRef,
                    bool selected);

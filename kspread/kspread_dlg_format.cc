@@ -130,7 +130,7 @@ void KSpreadFormatDlg::slotOk()
 	return;
     }
 
-    QRect r = m_view->activeTable()->selectionRect();
+    QRect r = m_view->activeTable()->selection();
 
     if ( !m_view->doc()->undoBuffer()->isLocked() )
     {

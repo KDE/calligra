@@ -60,12 +60,7 @@ void KSpreadarea::slotOk()
   {
     tmp = tmp.lower();
 
-    QRect rect( m_pView->activeTable()->selectionRect() );
-    if ( rect.left() == 0 || rect.top() == 0 
-         || rect.right() == 0 || rect.bottom() == 0 )
-    {
-      rect.setCoords( m_marker.x(), m_marker.y(), m_marker.x(), m_marker.y() );
-    }
+    QRect rect( m_pView->activeTable()->selection() );
     bool newName = true;
     QValueList<Reference>::Iterator it;
     QValueList<Reference> area = m_pView->doc()->listArea();

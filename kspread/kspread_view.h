@@ -375,7 +375,8 @@ public slots:
     void slotUpdateView( KSpreadTable *_table, const QRect& );
     void slotUpdateHBorder( KSpreadTable *_table );
     void slotUpdateVBorder( KSpreadTable *_table );
-    void slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_old_marker );
+    void slotChangeSelection( KSpreadTable *_table, const QRect &oldSelection,
+                              const QPoint &_oldMarker );
     void slotChangeChooseSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
     void slotAddTable( KSpreadTable *_table );
     void slotRemoveChild( KSpreadChild *_child );

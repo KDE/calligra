@@ -298,7 +298,7 @@ void KSpreadSortDlg::init()
   }
   m_outputTable->setCurrentText( m_pView->activeTable()->tableName() );
 
-  QRect r = m_pView->activeTable()-> selectionRect();
+  QRect r = m_pView->activeTable()-> selection();
   QString cellArea;
   cellArea += util_encodeColumnLabelText(r.left());
   cellArea += QString::number( r.top() );
@@ -431,7 +431,7 @@ void KSpreadSortDlg::slotOk()
   }
   outputPoint.table = table;
 
-  QRect r = m_pView->activeTable()-> selectionRect();
+  QRect r = m_pView->activeTable()-> selection();
   if ( r.topLeft() != outputPoint.pos )
   {
     int h = outputPoint.pos.y() + r.height();

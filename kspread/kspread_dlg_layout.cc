@@ -119,7 +119,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table,
     isRowSelected = table->isRowSelected();
     isColumnSelected = table->isColumnSelected();
 
-    //following values are the same as from table->selectionRect()
+    //following values are the same as from table->selection()
     //Do we really need them as arguments?
     left = _left;
     top = _top;

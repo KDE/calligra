@@ -1313,7 +1313,7 @@ void KSpreadView::extraSpelling()
   m_spell.firstSpellTable    = m_pTable;
   m_spell.currentSpellTable  = m_spell.firstSpellTable;
 
-  QRect selection = m_pTable->selectionRect();
+  QRect selection = m_pTable->selection();
 
   // if nothing is selected, check every cell
   if (selection.left() == 0)
@@ -1982,39 +1982,31 @@ void KSpreadView::deleteColumn()
     if ( !m_pTable )
         return;
 
-    QRect r( activeTable()-> selectionRect() );
-    if( r.left()==0 || activeTable()->isRowSelected() )
-        m_pTable->removeColumn( m_pCanvas->markerColumn() );
-    else
-        m_pTable->removeColumn( r.left(),(r.right()-r.left()) );
+    QRect r( activeTable()-> selection() );
+
+    m_pTable->removeColumn( r.left(),(r.right()-r.left()) );
 
     updateEditWidget();
-    m_pTable->setSelection(m_pTable->marker());
+    m_pTable->setSelection(QRect(m_pTable->marker(), m_pTable->marker()));
 }
 
 void KSpreadView::deleteRow()
 {
     if ( !m_pTable )
         return;
-    QRect r( activeTable()-> selectionRect() );
-    if( r.left()==0 || activeTable()->isColumnSelected() )
-        m_pTable->removeRow( m_pCanvas->markerRow() );
-    else
-        m_pTable->removeRow( r.top(),(r.bottom()-r.top()) );
+    QRect r( activeTable()-> selection() );
+    m_pTable->removeRow( r.top(),(r.bottom()-r.top()) );
 
     updateEditWidget();
-    m_pTable->setSelection(m_pTable->marker());
+    m_pTable->setSelection(QRect(m_pTable->marker(), m_pTable->marker()));
 }
 
 void KSpreadView::insertColumn()
 {
     if ( !m_pTable )
         return;
-    QRect r( activeTable()-> selectionRect() );
-    if( r.left()==0 || activeTable()->isRowSelected() )
-        m_pTable->insertColumn( m_pCanvas->markerColumn() );
-    else
-        m_pTable->insertColumn( r.left(),(r.right()-r.left()) );
+    QRect r( activeTable()-> selection() );
+    m_pTable->insertColumn( r.left(),(r.right()-r.left()) );
 
 
     updateEditWidget();
@@ -2024,11 +2016,8 @@ void KSpreadView::hideColumn()
 {
     if ( !m_pTable )
         return;
-    QRect r( activeTable()-> selectionRect() );
-    if( r.left()==0 || activeTable()->isRowSelected() )
-        m_pTable->hideColumn( m_pCanvas->markerColumn() );
-    else
-        m_pTable->hideColumn( r.left(),(r.right()-r.left()) );
+    QRect r( activeTable()-> selection() );
+    m_pTable->hideColumn( r.left(),(r.right()-r.left()) );
 }
 
 void KSpreadView::showColumn()
@@ -2045,7 +2034,7 @@ void KSpreadView::showSelColumns()
         return;
 
     int i;
-    QRect rect = activeTable()->selectionRect();
+    QRect rect = activeTable()->selection();
     ColumnLayout * col;
     QValueList<int>hiddenCols;
 
@@ -2075,11 +2064,8 @@ void KSpreadView::insertRow()
 {
     if ( !m_pTable )
         return;
-    QRect r( activeTable()-> selectionRect() );
-    if( r.left()==0 || activeTable()->isColumnSelected() )
-        m_pTable->insertRow( m_pCanvas->markerRow() );
-    else
-        m_pTable->insertRow( r.top(),(r.bottom()-r.top()) );
+    QRect r( activeTable()-> selection() );
+    m_pTable->insertRow( r.top(),(r.bottom()-r.top()) );
 
     updateEditWidget();
 }
@@ -2088,11 +2074,8 @@ void KSpreadView::hideRow()
 {
     if ( !m_pTable )
         return;
-    QRect r( activeTable()-> selectionRect() );
-    if( r.left()==0 || activeTable()->isColumnSelected() )
-        m_pTable->hideRow( m_pCanvas->markerRow() );
-    else
-        m_pTable->hideRow( r.top(),(r.bottom()-r.top()) );
+    QRect r( activeTable()-> selection() );
+    m_pTable->hideRow( r.top(),(r.bottom()-r.top()) );
 }
 
 void KSpreadView::showRow()
@@ -2109,7 +2092,7 @@ void KSpreadView::showSelRows()
         return;
 
     int i;
-    QRect rect = activeTable()->selectionRect();
+    QRect rect = activeTable()->selection();
     RowLayout * row;
     QValueList<int>hiddenRows;
 
@@ -2322,9 +2305,8 @@ void KSpreadView::italic( bool b )
 
 void KSpreadView::sortInc()
 {
-    QRect r( activeTable()-> selectionRect() );
-    if ( r.left() == 0 || r.top() == 0 ||
-         r.right() == 0 || r.bottom() == 0 )
+    QRect r( activeTable()-> selection() );
+    if ( activeTable()->singleCellSelection() )
     {
         KMessageBox::error( this, i18n("You must select multiple cells.") );
         return;
@@ -2340,9 +2322,8 @@ void KSpreadView::sortInc()
 
 void KSpreadView::sortDec()
 {
-    QRect r( activeTable()-> selectionRect() );
-    if ( r.left() == 0 || r.top() == 0 ||
-         r.right() == 0 || r.bottom() == 0 )
+    QRect r( activeTable()-> selection() );
+    if ( activeTable()->singleCellSelection() )
     {
         KMessageBox::error( this, i18n("You must select multiple cells.") );
         return;
@@ -2440,8 +2421,8 @@ void KSpreadView::addTable( KSpreadTable *_t )
                       SLOT( slotUpdateHBorder( KSpreadTable * ) ) );
     QObject::connect( _t, SIGNAL( sig_updateVBorder( KSpreadTable * ) ),
                       SLOT( slotUpdateVBorder( KSpreadTable * ) ) );
-    QObject::connect( _t, SIGNAL( sig_changeSelection( KSpreadTable *, const QRect &, const QRect & ) ),
-                      SLOT( slotChangeSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
+    QObject::connect( _t, SIGNAL( sig_changeSelection( KSpreadTable *, const QRect &, const QPoint & ) ),
+                      SLOT( slotChangeSelection( KSpreadTable *, const QRect &, const QPoint & ) ) );
     QObject::connect( _t, SIGNAL( sig_changeChooseSelection( KSpreadTable *, const QRect &, const QRect & ) ),
                       SLOT( slotChangeChooseSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
     QObject::connect( _t, SIGNAL( sig_nameChanged( KSpreadTable*, const QString& ) ),
@@ -2668,10 +2649,7 @@ void KSpreadView::paste()
         return;
     if( !m_pCanvas->editor() )
     {
-        QRect r( activeTable()-> selectionRect() );
-        if( r.left()==0 )
-            r.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ,
-                         m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+        QRect r( activeTable()-> selection() );
         m_pTable->paste( QPoint( r.left(), r.top() ) );
         if( m_pTable->getAutoCalc() )
             m_pTable->recalc();
@@ -2841,43 +2819,32 @@ void KSpreadView::replace()
 
 void KSpreadView::conditional()
 {
-  QRect rect( activeTable()-> selectionRect() );
+  QRect rect( activeTable()-> selection() );
 
   if( (activeTable()->isRowSelected()) || (activeTable()->isColumnSelected()) )
-        {
-        KMessageBox::error( this, i18n("Area too large!"));
-        }
+  {
+    KMessageBox::error( this, i18n("Area too large!"));
+  }
   else
-        {
-        if ( rect.left() == 0 || rect.top() == 0 ||
-         rect.right() == 0 || rect.bottom() == 0 )
-           {
-                rect.setCoords(  m_pCanvas->markerColumn(), m_pCanvas->markerRow(),m_pCanvas->markerColumn(), m_pCanvas->markerRow());
-           }
-         KSpreadconditional dlg(this,"conditional",rect);
-         dlg.exec();
-         }
-
+  {
+    KSpreadconditional dlg(this,"conditional",rect);
+    dlg.exec();
+  }
 }
 
 void KSpreadView::validity()
 {
-  QRect rect( activeTable()-> selectionRect() );
+  QRect rect( activeTable()-> selection() );
 
   if( (activeTable()->isRowSelected()) || (activeTable()->isColumnSelected()) )
-        {
-        KMessageBox::error( this, i18n("Area too large!"));
-        }
+  {
+    KMessageBox::error( this, i18n("Area too large!"));
+  }
   else
-        {
-        if ( rect.left() == 0 || rect.top() == 0 ||
-         rect.right() == 0 || rect.bottom() == 0 )
-           {
-                rect.setCoords(  m_pCanvas->markerColumn(), m_pCanvas->markerRow(),m_pCanvas->markerColumn(), m_pCanvas->markerRow());
-           }
-         KSpreadDlgValidity dlg( this,"validity",rect);
-         dlg.exec();
-         }
+  {
+    KSpreadDlgValidity dlg( this,"validity",rect);
+    dlg.exec();
+  }
 }
 
 
@@ -2889,8 +2856,7 @@ void KSpreadView::insertSeries()
 
 void KSpreadView::sort()
 {
-    QRect selection( m_pTable->selectionRect() );
-    if(selection.left()==0)
+    if( m_pTable->singleCellSelection() )
     {
         KMessageBox::error( this, i18n("You must select multiple cells") );
         return;
@@ -2913,15 +2879,7 @@ void KSpreadView::insertFromDatabase()
     m_pCanvas->deleteEditor( true ); // save changes
   }
 
-  QRect rect = activeTable()->selectionRect();
-
-  if (rect.left() <= 0)
-  {
-    rect.setLeft( m_pCanvas->markerColumn() );
-    rect.setRight( m_pCanvas->markerColumn() );
-    rect.setTop( m_pCanvas->markerRow() );
-    rect.setBottom( m_pCanvas->markerRow() );
-  }
+  QRect rect = activeTable()->selection();
 
   KSpreadDatabaseDlg dlg(this, rect, "KSpreadDatabaseDlg");
   dlg.exec();
@@ -2934,15 +2892,7 @@ void KSpreadView::insertFromTextfile()
     m_pCanvas->deleteEditor( true ); // save changes
   }
 
-  QRect rect = activeTable()->selectionRect();
-
-  if (rect.left() <= 0)
-  {
-    rect.setLeft( m_pCanvas->markerColumn() );
-    rect.setRight( m_pCanvas->markerColumn() );
-    rect.setTop( m_pCanvas->markerRow() );
-    rect.setBottom( m_pCanvas->markerRow() );
-  }
+//  QRect rect = activeTable()->selection();
 
   KMessageBox::information( this, "Not implemented yet, work in progress...");
 
@@ -2957,15 +2907,7 @@ void KSpreadView::insertFromClipboard()
     m_pCanvas->deleteEditor( true ); // save changes
   }
 
-  QRect rect = activeTable()->selectionRect();
-
-  if (rect.left() <= 0)
-  {
-    rect.setLeft( m_pCanvas->markerColumn() );
-    rect.setRight( m_pCanvas->markerColumn() );
-    rect.setTop( m_pCanvas->markerRow() );
-    rect.setBottom( m_pCanvas->markerRow() );
-  }
+//  QRect rect = activeTable()->selection();
 
   KMessageBox::information( this, "Not implemented yet, work in progress...");
 
@@ -3036,7 +2978,7 @@ void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
     else
     {
       // Insert the new child in the active table.
-      m_pTable->insertChart( QRect( tl, br ), _e, m_pTable->selectionRect() );
+      m_pTable->insertChart( QRect( tl, br ), _e, m_pTable->selection() );
     }
 }
 
@@ -3483,7 +3425,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
 
     int i;
     ColumnLayout * col;
-    QRect rect = activeTable()->selectionRect();
+    QRect rect = activeTable()->selection();
     kdDebug(36001) << "Column: L: " << rect.left() << endl;
     for ( i = rect.left(); i <= rect.right(); ++i )
     {
@@ -3558,7 +3500,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
 
     int i;
     RowLayout * row;
-    QRect rect = activeTable()->selectionRect();
+    QRect rect = activeTable()->selection();
     for ( i = rect.top(); i <= rect.bottom(); ++i )
     {
       kdDebug(36001) << "popupRow: " << rect.top() << endl;
@@ -3605,10 +3547,7 @@ void KSpreadView::slotListChoosePopupMenu( )
 
  m_popupListChoose = new QPopupMenu();
  int id = 0;
- QRect selection( m_pTable->selectionRect() );
- if ( selection.left() == 0 )
-   selection.setCoords(m_pCanvas->markerColumn(),m_pCanvas->markerRow(),
-		       m_pCanvas->markerColumn(),m_pCanvas->markerRow());
+ QRect selection( m_pTable->selection() );
  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
  QString tmp=cell->text();
  QStringList itemList;
@@ -3875,45 +3814,34 @@ void KSpreadView::defaultSelection()
 
 void KSpreadView::slotInsert()
 {
-    QRect r( activeTable()-> selectionRect() );
-    if(r.left()==0)
-        r.setCoords(m_pCanvas->markerColumn(), m_pCanvas->markerRow()
-                ,m_pCanvas->markerColumn(), m_pCanvas->markerRow());
+    QRect r( activeTable()-> selection() );
     KSpreadinsert dlg( this, "Insert", r,KSpreadinsert::Insert );
     dlg.exec();
 }
 
 void KSpreadView::slotRemove()
 {
-    QRect r( activeTable()-> selectionRect() );
-    if(r.left()==0)
-        r.setCoords(m_pCanvas->markerColumn(), m_pCanvas->markerRow()
-                ,m_pCanvas->markerColumn(), m_pCanvas->markerRow());
-
+    QRect r( activeTable()-> selection() );
     KSpreadinsert dlg( this, "Remove", r,KSpreadinsert::Remove );
     dlg.exec();
 }
 
 void KSpreadView::slotInsertCellCopy()
 {
-     if ( !m_pTable )
-        return;
-    QRect r( activeTable()->selectionRect() );
-    if(r.left()==0 )
-        r.setCoords(m_pCanvas->markerColumn(), m_pCanvas->markerRow() ,
-                m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+  if ( !m_pTable )
+    return;
 
-    if( !m_pTable->testAreaPasteInsert())
-        m_pTable->paste( QPoint( r.left(), r.top() ) ,true, Normal,OverWrite,true);
-    else
-        {
-        QRect r( activeTable()-> selectionRect() );
-        KSpreadpasteinsert dlg( this, "Remove", r );
-        dlg.exec();
-        }
-    if(m_pTable->getAutoCalc())
-        m_pTable->recalc();
-    updateEditWidget();
+  QRect r(activeTable()->selection());
+  if( !m_pTable->testAreaPasteInsert())
+    m_pTable->paste( QPoint( r.topLeft() ) ,true, Normal,OverWrite,true);
+  else
+  {
+    KSpreadpasteinsert dlg( this, "Remove", r );
+    dlg.exec();
+  }
+  if(m_pTable->getAutoCalc())
+    m_pTable->recalc();
+  updateEditWidget();
 }
 
 void KSpreadView::setAreaName()
@@ -3969,12 +3897,15 @@ void KSpreadView::equalizeColumn()
 
 void KSpreadView::layoutDlg()
 {
-  QRect selection( m_pTable->selectionRect() );
+  QRect selection( m_pTable->selection() );
   if ( selection.contains( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ) )
-        CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
+    CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
                        selection.right(), selection.bottom() );
   else
-        CellLayoutDlg dlg( this, m_pTable, m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+  {
+    kdDebug(36001) << "error: selection doesn't contain marker." << endl;
+    // CellLayoutDlg dlg( this, m_pTable, m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+  }
 }
 
 void KSpreadView::paperLayoutDlg()
@@ -4213,7 +4144,6 @@ void KSpreadView::slotAddTable( KSpreadTable *_table )
 
 void KSpreadView::slotUpdateView( KSpreadTable *_table )
 {
-    // kdDebug(36001)<<"void KSpreadView::slotUdateView( KSpreadTable *_table )\n";
 
     // Do we display this table ?
     if ( _table != m_pTable )
@@ -4267,28 +4197,26 @@ void KSpreadView::slotChangeChooseSelection( KSpreadTable *_table, const QRect &
     emit sig_chooseSelectionChanged( _table, _new );
 }
 
-void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QRect& _old_marker )
+void KSpreadView::slotChangeSelection( KSpreadTable *_table,
+                                       const QRect &oldSelection,
+                                       const QPoint& oldMarker )
 {
-    QRect n = _table->selectionRect();
-    // QRect m = _table->marker();
-
-    // printf ("void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old %i %i|%i %i, const QPoint &m %i %i )\n",_old.left(),_old.top(),_old.right(),_old.bottom(),_old_marker.x(),_old_marker.y() );
-    // printf ("      const QRect &_new %i %i|%i %i, const QPoint &m %i %i )\n",n.left(),n.top(),n.right(),n.bottom(),m.x(),m.y() );
+    QRect newSelection = _table->selection();
 
     // Emit a signal for internal use
-    emit sig_selectionChanged( _table, n );
+    emit sig_selectionChanged( _table, newSelection );
 
     // Empty selection ?
     // Activate or deactivate some actions. This code is duplicated
     // in KSpreadView::slotUnselect
-    if ( ( n.left() == 0 && n.top() == 0 )
-         || _table->isRowSelected() || _table->isColumnSelected() )
+    if ( _table->singleCellSelection() ||
+         _table->isRowSelected() || _table->isColumnSelected() )
     {
         m_tableFormat->setEnabled( FALSE );
         m_mergeCell->setEnabled(false);
         m_insertChartFrame->setEnabled(false);
     }
-    else if ( (n.left() != n.right()) || (n.top() != n.bottom()) )
+    else
     {
         m_tableFormat->setEnabled( TRUE );
         m_mergeCell->setEnabled(true);
@@ -4321,14 +4249,14 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
     resultOfCalc();
     // Send some event around. This is read for example
     // by the calculator plugin.
-    KSpreadSelectionChanged ev( n, activeTable()->name() );
+    KSpreadSelectionChanged ev( newSelection, activeTable()->name() );
     QApplication::sendEvent( this, &ev );
 
     // Do we display this table ?
     if ( _table != m_pTable )
         return;
 
-    m_pCanvas->updateSelection( _old, _old_marker );
+    m_pCanvas->updateSelection( oldSelection, oldMarker );
     m_pVBorderWidget->update();
     m_pHBorderWidget->update();
 }
@@ -4338,11 +4266,7 @@ void KSpreadView::resultOfCalc()
     KSpreadTable * table = activeTable();
     double result = 0.0;
     int nbCell = 0;
-    QRect n = table->selectionRect();
-    QRect tmpRect(n);
-    if (n.left() == 0)
-        tmpRect.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow(),
-                           m_pCanvas->markerColumn(), m_pCanvas->markerRow());
+    QRect tmpRect(table->selection());
     MethodOfCalc tmpMethod = m_pDoc->getTypeOfCalc() ;
     if ( tmpMethod != NoneCalc )
     {
