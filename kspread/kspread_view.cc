@@ -2333,7 +2333,8 @@ void KSpreadView::initialPosition()
       }
       setActiveTable( tbl );
     }
-    kdDebug() << "active table: " << tbl->tableName() << endl;
+
+    refreshView();
 
     // Set the initial position for the marker as store in the XML file,
     // (1,1) otherwise
@@ -2376,8 +2377,6 @@ void KSpreadView::initialPosition()
 
     d->adjustActions( !d->activeSheet->isProtected() );
     d->adjustWorkbookActions( !d->workbook->isProtected() );
-
-    refreshView();
 }
 
 
