@@ -230,79 +230,100 @@ void KoAutoFormat::readConfig()
     bool fileNotFound = false;
     QFile xmlFile;
     KLocale klocale(m_doc->instance()->instanceName());
+    kdDebug()<<" m_autoFormatLanguage.isEmpty() :"<<m_autoFormatLanguage.isEmpty()<<endl;
 
-    xmlFile.setName(locate( "data", "koffice/autocorrect/" + klocale.languageList().front() + ".xml", m_doc->instance() ));
-
-    if(!xmlFile.open(IO_ReadOnly)) {
-        xmlFile.setName(locate( "data", "koffice/autocorrect/autocorrect.xml", m_doc->instance() ));
-    if(!xmlFile.open(IO_ReadOnly)) {
-	fileNotFound = true;
-      }
+    if ( m_autoFormatLanguage.isEmpty() )
+    {
+        xmlFile.setName(locate( "data", "koffice/autocorrect/" + klocale.languageList().front() + ".xml", m_doc->instance() ));
+        if(!xmlFile.open(IO_ReadOnly)) {
+            xmlFile.setName(locate( "data", "koffice/autocorrect/autocorrect.xml", m_doc->instance() ));
+            if(!xmlFile.open(IO_ReadOnly)) {
+                fileNotFound = true;
+            }
+        }
     }
+    else
+    {
+        kdDebug()<<" m_autoFormatLanguage :"<<m_autoFormatLanguage<<endl;
+        xmlFile.setName(locate( "data", "koffice/autocorrect/" + m_autoFormatLanguage + ".xml", m_doc->instance() ));
+        if(!xmlFile.open(IO_ReadOnly))
+        {
+            kdDebug()<<" is not readwrite !!!!!!!!!!!!!!!\n";
+            xmlFile.setName(locate( "data", "koffice/autocorrect/" + klocale.languageList().front() + ".xml", m_doc->instance() ));
+            if(!xmlFile.open(IO_ReadOnly)) {
+                xmlFile.setName(locate( "data", "koffice/autocorrect/autocorrect.xml", m_doc->instance() ));
+                if(!xmlFile.open(IO_ReadOnly)) {
+                    fileNotFound = true;
+                }
+            }
+
+        }
+    }
+
     if(!fileNotFound) {
-      QDomDocument doc;
-      if(!doc.setContent(&xmlFile)) {
-        //return;
-      }
-      if(doc.doctype().name() != "autocorrection") {
-        //return;
-      }
-      QDomElement de=doc.documentElement();
-      QDomElement item = de.namedItem( "items" ).toElement();
-      if(!item.isNull())
-      {
-          QDomNodeList nl = item.childNodes();
-          m_maxFindLength=nl.count();
-          for(uint i = 0; i < m_maxFindLength; i++) {
-              loadEntry( nl.item(i).toElement());
-          }
-      }
+        QDomDocument doc;
+        if(!doc.setContent(&xmlFile)) {
+            //return;
+        }
+        if(doc.doctype().name() != "autocorrection") {
+            //return;
+        }
+        QDomElement de=doc.documentElement();
+        QDomElement item = de.namedItem( "items" ).toElement();
+        if(!item.isNull())
+        {
+            QDomNodeList nl = item.childNodes();
+            m_maxFindLength=nl.count();
+            for(uint i = 0; i < m_maxFindLength; i++) {
+                loadEntry( nl.item(i).toElement());
+            }
+        }
 
-      QDomElement upper = de.namedItem( "UpperCaseExceptions" ).toElement();
-      if(!upper.isNull())
-      {
-          QDomNodeList nl = upper.childNodes();
-          for(uint i = 0; i < nl.count(); i++)
-          {
-              m_upperCaseExceptions+= nl.item(i).toElement().attribute("exception");
-          }
-      }
+        QDomElement upper = de.namedItem( "UpperCaseExceptions" ).toElement();
+        if(!upper.isNull())
+        {
+            QDomNodeList nl = upper.childNodes();
+            for(uint i = 0; i < nl.count(); i++)
+            {
+                m_upperCaseExceptions+= nl.item(i).toElement().attribute("exception");
+            }
+        }
 
-      QDomElement twoUpper = de.namedItem( "TwoUpperLetterExceptions" ).toElement();
-      if(!twoUpper.isNull())
-      {
-          QDomNodeList nl = twoUpper.childNodes();
-          for(uint i = 0; i < nl.count(); i++)
-          {
-              m_twoUpperLetterException+= nl.item(i).toElement().attribute("exception");
-          }
-      }
+        QDomElement twoUpper = de.namedItem( "TwoUpperLetterExceptions" ).toElement();
+        if(!twoUpper.isNull())
+        {
+            QDomNodeList nl = twoUpper.childNodes();
+            for(uint i = 0; i < nl.count(); i++)
+            {
+                m_twoUpperLetterException+= nl.item(i).toElement().attribute("exception");
+            }
+        }
 
-      QDomElement superScript = de.namedItem( "SuperScript" ).toElement();
-      if(!superScript.isNull())
-      {
-          QDomNodeList nl = superScript.childNodes();
-          for(uint i = 0; i < nl.count() ; i++) {
-              //bug in qmap we overwrite = false doesn't work
-              //so we can't add multiple "othernb"
-              m_superScriptEntries.insert( nl.item(i).toElement().attribute("find"), KoAutoFormatEntry(nl.item(i).toElement().attribute("super")),FALSE );
-          }
-      }
+        QDomElement superScript = de.namedItem( "SuperScript" ).toElement();
+        if(!superScript.isNull())
+        {
+            QDomNodeList nl = superScript.childNodes();
+            for(uint i = 0; i < nl.count() ; i++) {
+                //bug in qmap we overwrite = false doesn't work
+                //so we can't add multiple "othernb"
+                m_superScriptEntries.insert( nl.item(i).toElement().attribute("find"), KoAutoFormatEntry(nl.item(i).toElement().attribute("super")),FALSE );
+            }
+        }
 
-      QDomElement doubleQuote = de.namedItem( "DoubleQuote" ).toElement();
-      if(!doubleQuote.isNull())
-      {
-          QDomNodeList nl = doubleQuote.childNodes();
-          m_typographicDefaultDoubleQuotes.begin =  nl.item(0).toElement().attribute("begin")[0];
-          m_typographicDefaultDoubleQuotes.end = nl.item(0).toElement().attribute("end")[0];
-      }
-      QDomElement simpleQuote = de.namedItem( "SimpleQuote" ).toElement();
-      if(!simpleQuote.isNull())
-      {
-          QDomNodeList nl = simpleQuote.childNodes();
-          m_typographicDefaultSimpleQuotes.begin =  nl.item(0).toElement().attribute("begin")[0];
-          m_typographicDefaultSimpleQuotes.end = nl.item(0).toElement().attribute("end")[0];
-      }
+        QDomElement doubleQuote = de.namedItem( "DoubleQuote" ).toElement();
+        if(!doubleQuote.isNull())
+        {
+            QDomNodeList nl = doubleQuote.childNodes();
+            m_typographicDefaultDoubleQuotes.begin =  nl.item(0).toElement().attribute("begin")[0];
+            m_typographicDefaultDoubleQuotes.end = nl.item(0).toElement().attribute("end")[0];
+        }
+        QDomElement simpleQuote = de.namedItem( "SimpleQuote" ).toElement();
+        if(!simpleQuote.isNull())
+        {
+            QDomNodeList nl = simpleQuote.childNodes();
+            m_typographicDefaultSimpleQuotes.begin =  nl.item(0).toElement().attribute("begin")[0];
+            m_typographicDefaultSimpleQuotes.end = nl.item(0).toElement().attribute("end")[0];
+        }
     }
 
     if( beginDoubleQuote.isEmpty())
@@ -326,8 +347,8 @@ void KoAutoFormat::readConfig()
         m_typographicDoubleQuotes.end = endDoubleQuote[0];
 
     m_typographicDoubleQuotes.replace = m_typographicDoubleQuotes.replace
-                                  && !m_typographicDoubleQuotes.begin.isNull()
-                                  && !m_typographicDoubleQuotes.end.isNull();
+                                        && !m_typographicDoubleQuotes.begin.isNull()
+                                        && !m_typographicDoubleQuotes.end.isNull();
 
 
     if( begin.isEmpty())
@@ -351,8 +372,8 @@ void KoAutoFormat::readConfig()
         m_typographicSimpleQuotes.end = end[0];
 
     m_typographicSimpleQuotes.replace = m_typographicSimpleQuotes.replace
-                                  && !m_typographicSimpleQuotes.end.isNull()
-                                  && !m_typographicSimpleQuotes.begin.isNull();
+                                        && !m_typographicSimpleQuotes.end.isNull()
+                                        && !m_typographicSimpleQuotes.begin.isNull();
 
 
     xmlFile.close();
