@@ -1,8 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
 
-#include "koDocument.h"
-
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -314,7 +312,7 @@ void KoDocument::removeView( KoView *view )
     d->m_views.removeRef( view );
 }
 
-QList<KoView> KoDocument::views() const
+const QList<KoView>& KoDocument::views() const
 {
     return d->m_views;
 }
@@ -361,7 +359,7 @@ void KoDocument::slotChildDestroyed()
     d->m_children.removeRef( child );
 }
 
-QList<KoDocumentChild> KoDocument::children() const
+const QList<KoDocumentChild>& KoDocument::children() const
 {
   return d->m_children;
 }
@@ -449,33 +447,34 @@ QDomDocument KoDocument::viewBuildDocument( KoView *view )
   return res;
 }
 
-void KoDocument::paintEverything( QPainter &painter, const QRect &rect, bool transparent, KoView *view )
+void KoDocument::paintEverything( QPainter &painter, const QRect &rect, bool transparent, KoView *view, double zoomX, double zoomY )
 {
-  paintContent( painter, rect, transparent );
-  paintChildren( painter, rect, view );
+  paintContent( painter, rect, transparent, zoomX, zoomY );
+  paintChildren( painter, rect, view, zoomX, zoomY );
 }
 
-void KoDocument::paintChildren( QPainter &painter, const QRect &/*rect*/, KoView *view )
+void KoDocument::paintChildren( QPainter &painter, const QRect &/*rect*/, KoView *view, double zoomX, double zoomY )
 {
   QListIterator<KoDocumentChild> it( d->m_children );
   for (; it.current(); ++it )
   {
     // #### todo: paint only if child is visible inside rect
     painter.save();
-    paintChild( it.current(), painter, view );
+    paintChild( it.current(), painter, view, zoomX, zoomY );
     painter.restore();
   }
 }
 
-void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *view )
+void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *view, double zoomX, double zoomY )
 {
     // QRegion rgn = painter.clipRegion();
 
   child->transform( painter );
-  child->document()->paintEverything( painter, child->contentRect(), child->isTransparent(), view );
+  child->document()->paintEverything( painter, child->contentRect(), child->isTransparent(), view, zoomX, zoomY );
 
   if ( view && view->partManager() )
   {
+      // ### do we need to apply zoomX and zoomY here ?
     KParts::PartManager *manager = view->partManager();
 
     painter.scale( 1.0 / child->xScaling(), 1.0 / child->yScaling() );

@@ -179,7 +179,7 @@ public:
 
   virtual void removeView( KoView *view );
 
-  QList<KoView> views() const;
+  const QList<KoView> & views() const;
 
   int viewCount() const;
 
@@ -213,31 +213,53 @@ public:
    *  @param painter     The painter object into that should be drawn.
    *  @param rect        The rect that should be used in the painter object.
    *  @param transparent If true then the entire rectangle is erased before painting.
-   *  @param view        The KoView is needed to fid about about the active widget.
+   *  @param view        The KoView is needed to fiddle about with the active widget, when painting children.
+   *  @param zoomX       The zoom value to be applied to X coordinates when painting.
+   *  @param zoomY       The zoom value to be applied to Y coordinates when painting.
    */
-  virtual void paintEverything( QPainter &painter, const QRect &rect, bool transparent = false, KoView *view = 0L );
+  virtual void paintEverything( QPainter &painter, const QRect &rect, bool transparent = false,
+                                KoView *view = 0L, double zoomX = 1.0, double zoomY = 1.0 );
 
   /**
    *  Paints all of the documents children into the given painter object.
    *
+   *  @param painter     The painter object into that should be drawn.
+   *  @param rect        The rect that should be used in the painter object.
+   *  @param view        The KoView is needed to fiddle about with the active widget.
+   *  @param zoomX       The zoom value to be applied to X coordinates when painting.
+   *  @param zoomY       The zoom value to be applied to Y coordinates when painting.
+   *
    *  @see #paintChild #paintEverything #paintContent
    */
-  virtual void paintChildren( QPainter &painter, const QRect &rect, KoView *view );
+  virtual void paintChildren( QPainter &painter, const QRect &rect, KoView *view, double zoomX = 1.0, double zoomY = 1.0 );
 
   /**
-   *  Paint a special child. Normally called by @ref paintChildren.
+   *  Paint a given child. Normally called by @ref paintChildren.
+   *
+   *  @param child       The child to be painted.
+   *  @param painter     The painter object into that should be drawn.
+   *  @param view        The KoView is needed to fiddle about with the active widget.
+   *  @param zoomX       The zoom value to be applied to X coordinates when painting.
+   *  @param zoomY       The zoom value to be applied to Y coordinates when painting.
    *
    *  @see #paintEverything #paintChildren #paintContent
    */
-  virtual void paintChild( KoDocumentChild *child, QPainter &painter, KoView *view );
+  virtual void paintChild( KoDocumentChild *child, QPainter &painter, KoView *view, double zoomX = 1.0, double zoomY = 1.0 );
 
   /**
    *  Paints the data itself. Normally called by @ref paintEverthing. It does not
    *  paint the children.
+   *  It's this method that KOffice Parts have to implement.
+   *
+   *  @param painter     The painter object into that should be drawn.
+   *  @param rect        The rect that should be used in the painter object.
+   *  @param transparent If true then the entire rectangle is erased before painting.
+   *  @param zoomX       The zoom value to be applied to X coordinates when painting.
+   *  @param zoomY       The zoom value to be applied to Y coordinates when painting.
    *
    *  @see #paintEverything
    */
-  virtual void paintContent( QPainter &painter, const QRect &rect, bool transparent = false ) = 0;
+  virtual void paintContent( QPainter &painter, const QRect &rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 ) = 0;
 
   /**
    *  Initializes an empty document (display the template dialog!).
@@ -332,7 +354,7 @@ public:
    * @return the list of all children. Do not modify the
    *         returned list.
    */
-  QList<KoDocumentChild> children() const;
+  const QList<KoDocumentChild>& children() const;
 
   /**
    * @return the KoDocumentChild associated with the given Document, but only if
@@ -496,7 +518,7 @@ protected:
    * @see #isModified
    */
   virtual void insertChild( KoDocumentChild *child );
- 
+
   /// @internal
   virtual void setModified() { KParts::ReadWritePart::setModified(); }
 
