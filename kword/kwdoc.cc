@@ -1205,7 +1205,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
         if(m_styleList.count() > followingStyles.count() )
             followingStyles.append(styleElem.namedItem("FOLLOWING").toElement().attribute("name"));
         else 
-            kdWarning () << "Found duplicate style decleration, overwriting former";
+            kdWarning () << "Found duplicate style decleration, overwriting former" << endl;
     }
 
     ASSERT( followingStyles.count() == m_styleList.count() );
