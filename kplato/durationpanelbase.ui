@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Adjust duration</string>
+        <string>Adjust Duration</string>
     </property>
     <vbox>
         <property name="name">
@@ -141,7 +141,7 @@
                 <cstring>groupBox2</cstring>
             </property>
             <property name="title">
-                <string>Adjust time</string>
+                <string>Adjust Time</string>
             </property>
             <vbox>
                 <property name="name">
@@ -264,7 +264,7 @@
                                 <cstring>bAdd</cstring>
                             </property>
                             <property name="text">
-                                <string>Ok</string>
+                                <string>&amp;OK</string>
                             </property>
                         </widget>
                     </hbox>

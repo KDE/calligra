@@ -122,9 +122,9 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
     // ------------------- Actions with a key binding and no GUI item
 #ifndef NDEBUG
-    KAction* actDebugLayout = new KAction( i18n( "Debug layout" ), CTRL+SHIFT+Key_L,
+    KAction* actDebugLayout = new KAction( i18n( "Debug Layout" ), CTRL+SHIFT+Key_L,
                         this, SLOT( debugLayout() ), actionCollection(), "debug_layout" );
-    KAction* actPrintDebug = new KAction( i18n( "Print debug" ), CTRL+SHIFT+Key_P,
+    KAction* actPrintDebug = new KAction( i18n( "Print Debug" ), CTRL+SHIFT+Key_P,
                         this, SLOT( slotPrintDebug() ), actionCollection(), "print_debug" );
 #endif
     // Necessary for the actions that are not plugged anywhere

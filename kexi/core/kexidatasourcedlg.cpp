@@ -34,7 +34,7 @@
 KexiDataSourceDlg::KexiDataSourceDlg(KexiProject *p, QWidget *parent, const char *name)
  : QDialog(parent, name)
 {
-	QLabel *lDs = new QLabel(i18n("Data Source:"), this);
+	QLabel *lDs = new QLabel(i18n("Data source:"), this);
 	QLabel *lName = new QLabel(i18n("Name:"), this);
 
 	m_ds = new KexiDataSourceComboBox(this,"kdscb",p);

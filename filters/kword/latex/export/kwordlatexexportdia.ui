@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>MyDialog2</class>
 <widget class="QDialog">
     <property name="name">
@@ -39,76 +39,6 @@
                 <attribute name="title">
                     <string>Document</string>
                 </attribute>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel1_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>18</x>
-                            <y>171</y>
-                            <width>130</width>
-                            <height>18</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Document class :</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>19</x>
-                            <y>219</y>
-                            <width>85</width>
-                            <height>18</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Quality :</string>
-                    </property>
-                </widget>
-                <widget class="QComboBox">
-                    <item>
-                        <property name="text">
-                            <string>article</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>book</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>letter</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>report</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>slides</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>classComboBox</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>155</x>
-                            <y>168</y>
-                            <width>112</width>
-                            <height>27</height>
-                        </rect>
-                    </property>
-                </widget>
                 <widget class="QButtonGroup">
                     <property name="name">
                         <cstring>typeGroup</cstring>
@@ -223,15 +153,47 @@
                         </property>
                     </widget>
                 </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>19</x>
+                            <y>219</y>
+                            <width>85</width>
+                            <height>18</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Quality:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>18</x>
+                            <y>171</y>
+                            <width>130</width>
+                            <height>18</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Document class:</string>
+                    </property>
+                </widget>
                 <widget class="KComboBox">
                     <item>
                         <property name="text">
-                            <string>final</string>
+                            <string>Final</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>draft</string>
+                            <string>Draft</string>
                         </property>
                     </item>
                     <property name="name">
@@ -246,6 +208,44 @@
                         </rect>
                     </property>
                 </widget>
+                <widget class="QComboBox">
+                    <item>
+                        <property name="text">
+                            <string>Article</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Book</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Letter</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Report</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Slides</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>classComboBox</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>155</x>
+                            <y>168</y>
+                            <width>112</width>
+                            <height>27</height>
+                        </rect>
+                    </property>
+                </widget>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -254,22 +254,6 @@
                 <attribute name="title">
                     <string>Pictures</string>
                 </attribute>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel1</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>24</x>
-                            <y>58</y>
-                            <width>155</width>
-                            <height>18</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Pictures directory :</string>
-                    </property>
-                </widget>
                 <widget class="KURLRequester">
                     <property name="name">
                         <cstring>pathPictures</cstring>
@@ -303,6 +287,22 @@
                     </property>
                     <property name="checked">
                         <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>24</x>
+                            <y>58</y>
+                            <width>155</width>
+                            <height>18</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Pictures directory:</string>
                     </property>
                 </widget>
             </widget>
@@ -682,10 +682,10 @@
                         <cstring>buttonHelp</cstring>
                     </property>
                     <property name="text">
-                        <string>Help</string>
+                        <string>&amp;Help</string>
                     </property>
                     <property name="accel">
-                        <number>4144</number>
+                        <string>F1</string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
@@ -713,10 +713,10 @@
                         <cstring>buttonOk</cstring>
                     </property>
                     <property name="text">
-                        <string>OK</string>
+                        <string>&amp;OK</string>
                     </property>
                     <property name="accel">
-                        <number>0</number>
+                        <string>Alt+O</string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
@@ -730,10 +730,10 @@
                         <cstring>buttonCancel</cstring>
                     </property>
                     <property name="text">
-                        <string>Cancel</string>
+                        <string>&amp;Cancel</string>
                     </property>
                     <property name="accel">
-                        <number>0</number>
+                        <string>Alt+C</string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
@@ -758,4 +758,13 @@
     </connection>
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>klistbox.h</includehint>
+    <includehint>klistbox.h</includehint>
+    <includehint>kcombobox.h</includehint>
+</includehints>
 </UI>

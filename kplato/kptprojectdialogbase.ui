@@ -314,7 +314,7 @@
                             <cstring>textLabel5</cstring>
                         </property>
                         <property name="text">
-                            <string>Project notes and summery:</string>
+                            <string>Project notes and summary:</string>
                         </property>
                     </widget>
                     <widget class="QTextEdit">

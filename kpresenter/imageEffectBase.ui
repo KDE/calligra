@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>609</width>
+            <width>636</width>
             <height>314</height>
         </rect>
     </property>
@@ -1418,7 +1418,7 @@
                                     <cstring>TextLabel10_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Wave Length:</string>
+                                    <string>Wave length:</string>
                                 </property>
                             </widget>
                             <widget class="KDoubleNumInput">
@@ -1464,6 +1464,20 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcolorbutton.h</includehint>
-    <includehint>knuminput.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
+    <includehint>kcolorbutton.h</includehint>
+    <includehint>kcolorbutton.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
 </includehints>
 </UI>

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>460</width>
-            <height>285</height>
+            <width>467</width>
+            <height>289</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -21,7 +21,7 @@
         </sizepolicy>
     </property>
     <property name="caption">
-        <string>Align and Distribute</string>
+        <string>Align &amp; Distribute</string>
     </property>
     <property name="layoutMargin" stdset="0">
     </property>
