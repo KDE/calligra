@@ -2826,8 +2826,33 @@
           must be between 0 and 1 (non-inclusive), stddev must be positive and
           size must be greater or equal to 1.
         </Text>
-        <Syntax>CONFIDENCE(alphaa;stddev;size)</Syntax>
+        <Syntax>CONFIDENCE(alpha;stddev;size)</Syntax>
         <Example>CONFIDENCE(0.05;1.5;100) equals 0.294059</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>degrees of freedom for the t-distribution</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>mode (1 or 2)</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the t-distribution. 
+          Mode = 1 returns the one-tailed test, Mode = 2 returns the two-tailed test.
+        </Text>
+        <Syntax>TDIST(number;degrees_freedom;mode)</Syntax>
+        <Example>TDIST(12;5;1) returns 0.000035</Example>
       </Help>
     </Function>
 
