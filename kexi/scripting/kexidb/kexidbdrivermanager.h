@@ -75,7 +75,7 @@ namespace Kross { namespace KexiDB {
             /**
              * Return a stringlist with avaible drivernames.
              *
-             * See \a ::KexiDB::DriverManager::driverNames()
+             * See \see ::KexiDB::DriverManager::driverNames()
              */
             Kross::Api::Object* driverNames(Kross::Api::List*);
 
@@ -83,7 +83,7 @@ namespace Kross { namespace KexiDB {
              * Return the to the defined drivername matching
              * \a KexiDBDriver object.
              *
-             * See \a ::KexiDB::DriverManager::driver()
+             * See \see ::KexiDB::DriverManager::driver()
              */
             Kross::Api::Object* driver(Kross::Api::List*);
 
@@ -91,9 +91,14 @@ namespace Kross { namespace KexiDB {
              * Return the to the defined mimetype-string
              * matching drivername.
              *
-             * See \a ::KexiDB::DriverManager::lookupByMime()
+             * See \see ::KexiDB::DriverManager::lookupByMime()
              */
             Kross::Api::Object* lookupByMime(Kross::Api::List*);
+
+            /**
+             * Return a new \a KexiDBConnectionData object.
+             */
+            Kross::Api::Object* createConnectionData(Kross::Api::List*);
     };
 
 }}

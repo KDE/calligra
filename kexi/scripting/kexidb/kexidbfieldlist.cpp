@@ -34,41 +34,43 @@ KexiDBFieldList::KexiDBFieldList(::KexiDB::FieldList* fieldlist)
 {
     addFunction("fieldCount", &KexiDBFieldList::fieldCount,
         Kross::Api::ArgumentList(),
-        ""
+        i18n("Return the number of fields.")
     );
     addFunction("field", &KexiDBFieldList::field,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant"),
-        ""
+        i18n("Return the field with the as argument passed number.")
     );
     addFunction("fields", &KexiDBFieldList::fields,
         Kross::Api::ArgumentList(),
-        ""
+        i18n("Return a list of fields.")
     );
     addFunction("hasField", &KexiDBFieldList::hasField,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBField"),
-        ""
+        i18n("Return true if the as argument passed KexiDBField object is in the fieldlist.")
     );
     addFunction("names", &KexiDBFieldList::names,
         Kross::Api::ArgumentList(),
-        ""
+        i18n("Return a stringlist of fieldnames.")
     );
     addFunction("addField", &KexiDBFieldList::addField,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBField"),
-        ""
+        i18n("Add the as argument passed KexiDBField object to the fieldlist.")
     );
     addFunction("insertField", &KexiDBFieldList::insertField,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::UInt")
             << Kross::Api::Argument("Kross::KexiDB::KexiDBField"),
-        ""
+        i18n("Insert the as second argument passed KexiDBField object "
+             "into the fieldlist at the position defined by the as second "
+             "argument passed number.")
     );
     addFunction("removeField", &KexiDBFieldList::removeField,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBField"),
-        ""
+        i18n("Remove the as argument passed KexiDBField object from the fieldlist.")
     );
     addFunction("clear", &KexiDBFieldList::clear,
         Kross::Api::ArgumentList(),
-        ""
+        i18n("Remove all KexiDBField objects from the fieldlist.")
     );
 }
 
@@ -83,7 +85,7 @@ const QString KexiDBFieldList::getClassName() const
 
 const QString KexiDBFieldList::getDescription() const
 {
-    return "";
+    return i18n("KexiDB::FieldList wrapper to handle a list of KexiDBField objects.");
 }
 
 Kross::Api::Object* KexiDBFieldList::fieldCount(Kross::Api::List*)

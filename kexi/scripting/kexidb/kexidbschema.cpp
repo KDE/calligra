@@ -43,31 +43,31 @@ KexiDBSchema<T>::KexiDBSchema<T>(const QString& name, ::KexiDB::SchemaData* sche
 {
     addFunction("name", &KexiDBSchema<T>::name,
         Kross::Api::ArgumentList(),
-        ""
+        i18n("Return the name of the Schema.")
     );
     addFunction("setName", &KexiDBSchema<T>::setName,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        ""
+        i18n("Set the name of the Schema.")
     );
     addFunction("caption", &KexiDBSchema<T>::caption,
         Kross::Api::ArgumentList(),
-        ""
+        i18n("Return the caption of the Schema.")
     );
     addFunction("setCaption", &KexiDBSchema<T>::setCaption,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        ""
+        i18n("Set the caption of the Schema.")
     );
     addFunction("description", &KexiDBSchema<T>::description,
         Kross::Api::ArgumentList(),
-        ""
+        i18n("Return a description of the Schema.")
     );
     addFunction("setDescription", &KexiDBSchema<T>::setDescription,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        ""
+        i18n("Set a description of the Schema.")
     );
     addFunction("fieldlist", &KexiDBSchema<T>::fieldlist,
         Kross::Api::ArgumentList(),
-        ""
+        i18n("Return the KexiDBFieldList object this Schema holds.")
     );
 }
 
@@ -145,7 +145,9 @@ const QString KexiDBTableSchema::getClassName() const
 
 const QString KexiDBTableSchema::getDescription() const
 {
-    return "";
+    return i18n("KexiDB::TableSchema wrapper to provide information "
+                "about native database table that can be stored using "
+                "SQL database engine.");
 }
 
 ::KexiDB::TableSchema* KexiDBTableSchema::tableschema()
@@ -162,11 +164,11 @@ KexiDBQuerySchema::KexiDBQuerySchema(::KexiDB::QuerySchema* queryschema)
 {
     addFunction("statement", &KexiDBQuerySchema::statement,
         Kross::Api::ArgumentList(),
-        ""
+        i18n("Return the SQL statement of this Queryschema.")
     );
     addFunction("setStatement", &KexiDBQuerySchema::setStatement,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        ""
+        i18n("Set the SQL statement of this Queryschema.")
     );
 }
 
@@ -181,7 +183,7 @@ const QString KexiDBQuerySchema::getClassName() const
 
 const QString KexiDBQuerySchema::getDescription() const
 {
-    return "";
+    return i18n("KexiDB::QuerySchema wrapper to spend abstraction of queries.");
 }
 
 ::KexiDB::QuerySchema* KexiDBQuerySchema::queryschema()

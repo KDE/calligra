@@ -32,36 +32,6 @@
 
 namespace Kross { namespace KexiDB {
 
-    // Forward declaration.
-    class KexiDBConnectionData;
-
-    class KexiDBConnectionDataManager : public Kross::Api::Class<KexiDBConnectionDataManager>
-    {
-        public:
-
-            /// Constructor.
-            KexiDBConnectionDataManager();
-
-            /// Destructor.
-            ~KexiDBConnectionDataManager();
-
-            /// See \see Kross::Api::Object::getClassName
-            virtual const QString getClassName() const;
-
-            /// See \see Kross::Api::Object::getDescription
-            virtual const QString getDescription() const;
-
-            //TODO
-            //KexiDB::ConnectionData::List list() const;
-            //KexiDB::ConnectionData::List list;
-            //list.setAutoDelete(true);
-
-        private:
-            QValueList<KexiDBConnectionData*> m_datas;
-
-            Kross::Api::Object* createConnectionData(Kross::Api::List*);
-    };
-
     /**
      * The KexiDBConnection class handles \a ::KexiDB::Connection
      * instances and wraps parts of the functionality.

@@ -18,6 +18,7 @@
 
 #include "kexidbdrivermanager.h"
 #include "kexidbdriver.h"
+#include "kexidbconnectiondata.h"
 #include "../api/exception.h"
 
 #include <qguardedptr.h>
@@ -25,6 +26,7 @@
 #include <kdebug.h>
 
 #include <kexidb/driver.h>
+#include <kexidb/connectiondata.h>
 
 using namespace Kross::KexiDB;
 
@@ -44,6 +46,11 @@ KexiDBDriverManager::KexiDBDriverManager()
         i18n("Looks up a drivers list by MIME type of database file. "
              "Only file-based database drivers are checked. "
              "The lookup is case insensitive.")
+    );
+
+    addFunction("createConnectionData", &KexiDBDriverManager::createConnectionData,
+        Kross::Api::ArgumentList(),
+        i18n("Return a new KexiDBConnectionData object.")
     );
 }
 
@@ -82,7 +89,7 @@ Kross::Api::Object* KexiDBDriverManager::driver(Kross::Api::List* args)
         throw Kross::Api::AttributeException(i18n("No such KexiDB::Driver object for the defined drivername '%1'.").arg(drivername));
     if(driver->error())
         throw Kross::Api::RuntimeException(i18n("KexiDB::Driver error for drivername '%1': %2").arg(drivername).arg(driver->errorMsg()));
-    return new KexiDBDriver(this, driver); //FIXME auto-remove new KexiDBDriver instance.
+    return new KexiDBDriver(this, driver);
 }
 
 Kross::Api::Object* KexiDBDriverManager::lookupByMime(Kross::Api::List* args)
@@ -90,5 +97,10 @@ Kross::Api::Object* KexiDBDriverManager::lookupByMime(Kross::Api::List* args)
     return Kross::Api::Variant::create(
         driverManager().lookupByMime( Kross::Api::Variant::toString(args->item(0)) ),
         "Kross::KexiDB::DriverManager::lookupByMime::String");
+}
+
+Kross::Api::Object* KexiDBDriverManager::createConnectionData(Kross::Api::List*)
+{
+    return new KexiDBConnectionData( new ::KexiDB::ConnectionData() );
 }
 

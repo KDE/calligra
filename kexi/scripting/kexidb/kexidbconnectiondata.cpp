@@ -27,46 +27,6 @@
 
 using namespace Kross::KexiDB;
 
-/* KexiDBConnectionDataManager */
-
-KexiDBConnectionDataManager::KexiDBConnectionDataManager()
-    : Kross::Api::Class<KexiDBConnectionDataManager>("KexiDBConnectionDataManager")
-{
-    addFunction("createConnectionData",
-        &KexiDBConnectionDataManager::createConnectionData,
-        Kross::Api::ArgumentList(),
-        i18n("Create a new KexiDBConnectionData object and return it.")
-    );
-}
-
-KexiDBConnectionDataManager::~KexiDBConnectionDataManager()
-{
-    for(QValueList<KexiDBConnectionData*>::Iterator it = m_datas.begin(); it != m_datas.end(); ++it)
-        delete *it;
-    //m_datas.clear();
-}
-
-const QString KexiDBConnectionDataManager::getClassName() const
-{
-    return "Kross::KexiDB::KexiDBConnectionDataManager";
-}
-
-const QString KexiDBConnectionDataManager::getDescription() const
-{
-    return i18n("KexiDB::ConnectionData wrapper for database specific "
-                "connection data, e.g. host, port.");
-}
-
-Kross::Api::Object* KexiDBConnectionDataManager::createConnectionData(Kross::Api::List*)
-{
-    ::KexiDB::ConnectionData* c = new ::KexiDB::ConnectionData();
-    KexiDBConnectionData* data = new KexiDBConnectionData(c);
-    m_datas.append(data);
-    return data;
-}
-
-/* KexiDBConnectionData */
-
 KexiDBConnectionData::KexiDBConnectionData(::KexiDB::ConnectionData* data)
     : Kross::Api::Class<KexiDBConnectionData>("KexiDBConnectionData")
     , m_data(data)

@@ -14,9 +14,8 @@ class KexiDBClass:
 
     # Constructor.
     def __init__(self):
-        # Create and remember some global needed classes.
+        # Create and remember the drivermanager.
         self.drivermanager = KexiDB.get("DriverManager")
-        self.connectiondatamanager = KexiDB.get("ConnectionDataManager")
 
     # Print informations about the KexiDB module.
     def printKexiDB(self):
@@ -57,7 +56,7 @@ class KexiDBClass:
     # Open a connection to a filebased driver.
     def connectWithFile(self, driver, filename):
         # First we need a new connectiondata object.
-        connectiondata = self.connectiondatamanager.createConnectionData()
+        connectiondata = self.drivermanager.createConnectionData()
         # Fill the new connectiondata object with what we need to connect.
         connectiondata.setConnName("myFileConnection")
         connectiondata.setFileName(filename)

@@ -25,10 +25,6 @@
 #include <qobject.h>
 #include <klocale.h>
 
-#include <kdebug.h>
-#include <qvariant.h>
-#include "variant.h"
-
 #include "object.h"
 #include "list.h"
 #include "exception.h"

@@ -18,7 +18,6 @@
 
 #include "kexidbmodule.h"
 #include "kexidbdrivermanager.h"
-#include "kexidbconnectiondata.h"
 
 using namespace Kross::KexiDB;
 
@@ -27,9 +26,6 @@ KexiDBModule::KexiDBModule()
 {
     KexiDBDriverManager* drivermanager = new KexiDBDriverManager();
     addChild("DriverManager", drivermanager);
-
-    KexiDBConnectionDataManager* condatamanager = new KexiDBConnectionDataManager();
-    addChild("ConnectionDataManager", condatamanager);
 }
 
 KexiDBModule::~KexiDBModule()
@@ -44,8 +40,8 @@ const QString KexiDBModule::getClassName() const
 
 const QString KexiDBModule::getDescription() const
 {
-    return "The KexiDB object provides a wrapper for the Kexi::KexiDB "
-           "library and allows using the functionality from within "
-           "scripting languages.";
+    return i18n("The KexiDB object provides a wrapper for the Kexi::KexiDB "
+                "library and allows using the functionality from within "
+                "scripting languages.");
 }
 
