@@ -218,9 +218,9 @@ void ConfigurePage::apply()
 void ConfigurePage::slotDefault()
 {
     defaultFont = QFont( "Times", 12, QFont::Normal, true );
-    nameFont = defaultFont;
-    numberFont = defaultFont;
-    operatorFont = defaultFont;
+    nameFont = QFont( "Times" );
+    numberFont = nameFont;
+    operatorFont = nameFont;
 
     sizeSpin->setValue( 20 );
 
