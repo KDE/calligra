@@ -1,1 +1,1 @@
-SUBDIRS=koffice
+SUBDIRS=koffice ooo
