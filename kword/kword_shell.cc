@@ -91,7 +91,7 @@ void KWordShell_impl::fileNew()
   m_rDoc = OPParts::Document::_duplicate(new KWordDocument_impl);
   if (!m_rDoc->init())
     {
-      QMessageBox::critical(this,i18n("KPresenter Error"),i18n("Could not init"),i18n("OK"));
+      QMessageBox::critical(this,i18n("KWord Error"),i18n("Could not init"),i18n("OK"));
       return;
     }
 

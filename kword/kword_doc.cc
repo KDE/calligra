@@ -280,7 +280,7 @@ void KWordDocument_impl::insertObject(const QRect& _rect,const char *_server_nam
 
   if (!doc->init())
     {
-      QMessageBox::critical((QWidget*)0L,i18n("KWord Error"),i18n("Could not init"),i18n("Ok"));
+      QMessageBox::critical((QWidget*)0L,i18n("KWord Error"),i18n("Could not init"),i18n("OK"));
       return;
     }
 

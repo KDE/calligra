@@ -37,7 +37,7 @@ void KFormulaShell::fileNew()
     m_rDoc = OPParts::Document::_duplicate( new KFormulaDocument );
     if ( !m_rDoc->init() )
 	{
-	    QMessageBox::critical( this, i18n("KFormula Error"), i18n("Could not init"), i18n("Ok") );
+	    QMessageBox::critical( this, i18n("KFormula Error"), i18n("Could not init"), i18n("OK") );
 	    return;
 	}
   

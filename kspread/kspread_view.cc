@@ -1666,7 +1666,7 @@ void KSpreadCanvas::setAction( Actions _act )
     {
       QMessageBox::critical( this, i18n("KSpread Error" ), i18n("You must first select the cells\n"
 								"which contain the data." ),
-			     i18n( "Ok" ) );
+			     i18n( OK ) );
       return;
     }
   }

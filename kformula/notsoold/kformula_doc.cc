@@ -444,7 +444,7 @@ void KFormulaDocument::deleteIt(FormulaBlock *bl)
 	    emit sig_modified();
 	}
     else
-	QMessageBox::critical( 0L, i18n("Error"), i18n("Can not delete First Block !!"), i18n( "Ok" ) );
+	QMessageBox::critical( 0L, i18n("Error"), i18n("Can not delete First Block !!"), i18n( OK ) );
 }
 
 void KFormulaDocument::mousePressEvent( QMouseEvent *a,QWidget *wid)

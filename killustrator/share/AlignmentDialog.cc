@@ -71,7 +71,7 @@ AlignmentDialog::AlignmentDialog (QWidget* parent, const char* name) :
 
   // the standard buttons
   KButtonBox *bbox = new KButtonBox (this);
-  button = bbox->addButton (i18n ("Ok"));
+  button = bbox->addButton (i18n (OK));
   connect (button, SIGNAL (clicked ()), SLOT (accept ()));
   button = bbox->addButton (i18n ("Cancel"));
   connect (button, SIGNAL (clicked ()), SLOT (reject ()));

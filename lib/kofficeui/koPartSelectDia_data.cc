@@ -39,7 +39,7 @@ DlgPartSelectData::DlgPartSelectData( QWidget* parent, const char* name ) : QDia
 
   ok = new QPushButton( this, "PushButton_1" );
   ok->setGeometry( 10, 260, 100, 30 );
-  ok->setText( i18n( "Ok" ) );
+  ok->setText( i18n( OK ) );
   ok->setAutoRepeat( FALSE );
   ok->setAutoResize( FALSE );
   

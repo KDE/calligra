@@ -93,7 +93,7 @@ KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _
   if (tabs & HEADER_AND_FOOTER) setupTab2();
 
   setCancelButton( i18n( "Cancel" ) );
-  setOkButton( i18n( "Ok" ) );
+  setOkButton( i18n( OK ) );
 
   retPressed = false;
 

@@ -89,7 +89,7 @@ KWParagDia::KWParagDia(QWidget* parent,const char* name)
   setupTab2();
 
   setCancelButton(i18n("Cancel"));
-  setOkButton(i18n("Ok"));
+  setOkButton(i18n("OK"));
 }
 
 /*================================================================*/

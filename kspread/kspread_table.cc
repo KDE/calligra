@@ -1152,7 +1152,7 @@ void KSpreadTable::paste( const QPoint &_marker )
   string data = QApplication::clipboard()->text();
   if ( data.empty() )
   {
-    QMessageBox::critical( (QWidget*)0L, i18n( "KSpread Error" ), i18n( "Clipboard is empty" ), i18n( "Ok" ) );
+    QMessageBox::critical( (QWidget*)0L, i18n( "KSpread Error" ), i18n( "Clipboard is empty" ), i18n( OK ) );
     return;
   }
   
@@ -2302,14 +2302,14 @@ void KSpreadTable::insertChart( const QRect& _rect, const char *_arg, const QRec
   {
     QString tmp;
     tmp.sprintf( i18n( "The server %s does not support the required interface" ), _arg );
-    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error" ), tmp, i18n("Ok" ) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error" ), tmp, i18n(OK ) );
     return;
   }
   Chart::SimpleChart_var chart = Chart::SimpleChart::_narrow( obj );
   if ( CORBA::is_nil( chart ) )
   {
     QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error" ),
-			   i18n("The chart application seems to have an internal error" ), i18n("Ok" ) );
+			   i18n("The chart application seems to have an internal error" ), i18n(OK ) );
     return;
   }
   
