@@ -736,12 +736,16 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     }
 
     QString align;
+#if 0
+    // FIXME/TODO: Sorry, David! But "align" is not STRICT HTML, so you cannot use it for all three modes!
+    // FIXME/TODO:  So for now, no "align"!
     if ( !paraLayout.alignment.isEmpty() && paraLayout.alignment != "left" )
         // left doesn't need to be set explicitely
     {
         align = QString(" align=\"%1\"").arg( paraLayout.alignment );
-        // center, right, or justify - is 'justify' correct in HTML ?
+        // center, right, or justify
     }
+#endif
 
     if ( paraLayout.counter.numbering == CounterData::NUM_CHAPTER )
     {
