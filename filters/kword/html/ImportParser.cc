@@ -34,13 +34,6 @@ typedef enum
 {
     stateNormal,                        // Normal character
     stateLesser,                        // Character '<' found
-    stateProcessingInstruction,         // Processing instruction: <?
-    stateSGML,                          // We are in <!
-    stateMayBeHTMLComment,              // We have already <!
-    stateMayBeHTMLCommentOneDash,       // We have already <!-
-    stateHTMLComment,                   // We are inside a HTML comment
-    stateHTMLCommentOneDash,            // We are inside a HTML comment and have found a dash ( - )
-    stateHTMLCommentTwoDashes,          // We are inside a HTML comment and have found two dashes ( -- )
     stateTagName,                       // We are reading the name of the tag
     stateBeforeAttributeName,           // We are before the name of next attribute
     stateXMLEmptyElement,               // We have found an / , we suppose that the tag will be closed now
@@ -467,7 +460,7 @@ bool HtmlParser::parseXmlProcessingInstruction(const QString& tagName)
         }
         ch=getCharacter();
 
-        // TODO/FIXME: charachter ? (for now, just an additional attribute)
+        // TODO/FIXME: character ? (for now, just an additional attribute)
 
         switch (state)
         {
@@ -730,7 +723,7 @@ bool HtmlParser::parseProcessingInstruction(void)
     }
     else
     {
-        // We have a normal SGML processing instruction
+        // We have a standard SGML processing instruction
         result=parseSgmlProcessingInstruction(tagName);
     }
 
@@ -739,7 +732,7 @@ bool HtmlParser::parseProcessingInstruction(void)
 
 QChar HtmlParser::resolveEntity(const QString& strEntity)
 {
-    // strEntity must not contain the '&'
+    // NOTE: strEntity must not contain the '&'
     if (strEntity[0]=='#')
         // It is a numerical character reference
     {
@@ -804,8 +797,9 @@ QString HtmlParser::parseEntity(void)
             entity+=ch;
         }
         else
-        { // Unknown character, so we are out of the entity
-            valid=false; // We assume that the entiy is not valid!
+        {   // Unknown character, so we are out of the entity
+            // Therefore we assume that the entity is not valid!
+            valid=false;
             break;
         }
         firstCharater=false;
@@ -846,6 +840,157 @@ QString HtmlParser::parseEntity(void)
     return strResult;
 }
 
+bool HtmlParser::parseHtmlComment(void)
+{
+    QString strComment;
+    QString strDashes; // Help buffer for creating dash sequences
+    QChar ch;
+    
+    int numDash=0; // Number of dashes in sequence
+    //NOTE: we use "int" and not "uint", as QString::fill awaits an unsigned value!
+    
+    for (;;)
+    {
+        if (atEnd())
+        {
+            kdError(30503) << "Unexpected end of file! Aborting! (HtmlParse::parseHtmlComment)"
+                    << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                    << endl;
+            return false;
+        }
+
+        ch=getCharacter();
+        
+        if (ch=='-')
+        {
+            numDash++;
+            if (numDash>2)
+            {
+                    kdWarning(30503) << "More than two dashes found in HTML comment (File might be not SGML compatible!)"
+                        << endl
+                        << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                        << endl;
+            }
+        }
+        else if (ch=='>')
+        {
+            // NOTE: we do not use "switch" as we want to "break" out of the "for" loop
+
+            if (numDash==2)
+            {
+                // --> sequence (i.e. normal end of a HTML comment)
+                break;
+            }
+            else if (numDash==1)
+            {
+                kdDebug(30503) << "Sequence -> found!"
+                    << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                    << endl;
+                strComment+="->";
+                numDash=0;
+            }
+            else if (!numDash)
+            {
+                strComment+=">";
+            }
+            else // i.e. (numDash>2)
+            {
+                // This is a non-SGML-compatible end of comment (too many dashes)
+                strDashes.fill('-',numDash-2);
+                strComment+=strDashes;
+                kdWarning(30503) << "More than two dashes in sequence found in HTML comment (file is not SGML compatible!)"
+                    << endl
+                    << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                    << endl;
+                break;
+            }
+        }
+        else
+        {
+            if (numDash>0)
+            {
+                strDashes.fill('-',numDash);
+                strComment+=strDashes;
+                numDash=0;
+            }
+            strComment+=ch;
+        }
+    }
+    return doHtmlComment(strComment);    
+}
+
+bool HtmlParser::parseExclamationPoint(const bool oneDash)
+{
+    QString strSgml;
+    QChar ch;
+    uint numDash=0; // Number of dashes in sequence
+    uint depth=0;
+    bool isComment=false;
+    
+    strSgml+="<!";
+    
+    if (oneDash)
+    {
+        strSgml+="-";
+        numDash++;
+    }
+    
+    for (;;)
+    {
+        if (atEnd())
+        {
+            kdError(30503) << "Unexpected end of file! Aborting! (HtmlParse::parseExclamationPoint)"
+                    << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                    << endl;
+            return false;
+        }
+
+        ch=getCharacter();
+        strSgml+=ch;
+        
+        if (ch=='-')
+        {
+            numDash++;
+            if (numDash>=2)
+            {
+                isComment=(!isComment);
+                numDash=0;
+            }
+        }
+        else if (ch=='<')
+        {
+            numDash=0;
+            if (!isComment)
+            {
+                depth++;
+            }
+        }
+        else if (ch=='>')
+        {
+            numDash=0;
+            if (!isComment)
+            {
+                if (!depth)
+                {
+                    // end
+                    break;
+                }
+                else
+                {
+                    depth--;
+                }
+            }
+        }
+        else
+        {
+            numDash=0;
+        }
+    }
+    
+    return doOtherSgml(strSgml);    
+}
+
+
 bool HtmlParser::parse(void)
 {
 
@@ -856,12 +1001,13 @@ bool HtmlParser::parse(void)
         return false;
     }
 
+    //
     //TODO: CDATA sections
+    //
+
     States state=stateNormal;
 
     QChar ch;
-
-    int depth=0; // Depth of tags in <! elements
 
     QString strBuffer; // Help buffer for collecting characters
 
@@ -910,10 +1056,48 @@ bool HtmlParser::parse(void)
                 }
                 else if (ch=='!')
                 {
-                    state=stateSGML;
-                    WriteOut("<!");
-                    kdDebug(30503) << "Sequence <! found!" << endl;
-                    depth=1; // set depth counter
+                    // Now test if we have a HTML comment
+                    ch=getCharacter();
+                    if (ch=='-')
+                    {   
+                        // We have already one dash, see if we have another
+                        ch=getCharacter();
+                    
+                        if (ch=='-')
+                        {
+                            // We have a second dash, so this is a HTML comment
+                            kdDebug(30503) << "Start of HTML comment found!" 
+                                << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                                << endl;
+                            if (!parseHtmlComment())
+                            {
+                                return false;
+                            }
+                            state=stateNormal;
+                        }
+                        else
+                        {
+                            kdDebug(30503) << "Sequence <!- found!" 
+                                << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                                << endl;
+                            if (!parseExclamationPoint(true))
+                            {
+                                return false;
+                            }
+                            state=stateNormal;
+                        }
+                    }
+                    else
+                    {
+                            kdDebug(30503) << "Sequence <! found!" 
+                                << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                                << endl;
+                            if (!parseExclamationPoint(false))
+                            {
+                                return false;
+                            }
+                            state=stateNormal;
+                    }
                 }
                 else if (ch=='/')
                 {
@@ -934,106 +1118,6 @@ bool HtmlParser::parse(void)
                 // Note: we ignore any white space before the element name
                 break;
             }
-        case stateProcessingInstruction:
-            { // TODO: catch <?xml
-                if (ch=='>')
-                {
-                    state=stateNormal;
-                }
-                WriteOut(ch);
-                break;
-            }
-        case stateHTMLComment:
-            {
-                if (ch=='-')
-                {
-                    state=stateHTMLCommentOneDash;
-                }
-                WriteOut(ch);
-                break;
-            }
-        case stateHTMLCommentOneDash:
-            {
-                if (ch=='-')
-                {
-                    state=stateHTMLCommentTwoDashes;
-                }
-                else
-                { // The dash was isolated, so we are in the HTML comment again!
-                    state=stateHTMLComment;
-                }
-                WriteOut(ch);
-                break;
-            }
-        case stateHTMLCommentTwoDashes:
-            {
-                if (ch=='>')
-                {// End of HTML comment
-                    state=stateNormal;
-                }
-                else if (ch=='-')
-                {
-                    kdWarning(30503) << "More than two dashes found in HTML comment (File might be not SGML compatible!)"
-                        << endl
-                        << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
-                        << endl;
-                }
-                else
-                { // We are in the HTML comment again but give a warning that this HTML file is not SGML compatible!
-                    kdWarning(30503) << "Two dashes found in HTML comment (File might be not SGML compatible!)"
-                        << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
-                        << endl;
-                    state=stateHTMLComment;
-                }
-                WriteOut(ch);
-                break;
-            }
-        case stateMayBeHTMLComment:
-            {
-                // FIXME: we are not tracking < and > as in stateSGML
-                if (ch=='-')
-                {
-                    state=stateMayBeHTMLCommentOneDash;
-                }
-                else
-                {
-                    state=stateSGML;
-                }
-                WriteOut(ch);
-                break;
-            }
-        case stateMayBeHTMLCommentOneDash:
-            {
-                // FIXME: we are not tracking < and > as in stateSGML
-                if (ch=='-')
-                {// we have now: <!--
-                    state=stateHTMLComment;
-                }
-                else
-                {
-                    state=stateSGML;
-                }
-                WriteOut(ch);
-                break;
-            }
-        case stateSGML:
-            {
-                // TODO: do a more robust version (the characters < and > may be included in SGML comments.)
-                if (ch=='>')
-                {
-                    depth--;
-                    if (depth<=0)
-                    {
-                        state=stateNormal;
-                    }
-                }
-                else if (ch=='<')
-                {
-                    depth++;
-                }
-                WriteOut(ch);
-                break;
-            }
         } // end of switch
     } // end of while
 
@@ -1048,8 +1132,7 @@ bool HtmlParser::parse(void)
     return true;
 }
 
-
-bool HtmlParser :: doEmptyElement(const QString& name, const HtmlAttributes& attributes)
+bool HtmlParser::doEmptyElement(const QString& name, const HtmlAttributes& attributes)
 {
     if (!doStartElement(name,attributes))
     {
@@ -1058,6 +1141,40 @@ bool HtmlParser :: doEmptyElement(const QString& name, const HtmlAttributes& att
     return doEndElement(name);
 }
 
+bool HtmlParser::doXmlProcessingInstruction(const QString&, const HtmlAttributes&)
+{
+    return true;
+}
+
+bool HtmlParser::doSgmlProcessingInstruction(const QString&,const QString&)
+{
+    return true;
+}
+
+bool HtmlParser::doStartElement(const QString&, const HtmlAttributes&)
+{
+    return true;
+}
+
+bool HtmlParser::doEndElement(const QString&)
+{
+    return true;
+}
+
+bool HtmlParser::doCharacters(const QString&)
+{
+    return true;
+}
+
+bool HtmlParser::doHtmlComment(const QString&)
+{
+    return true;
+}
+
+bool HtmlParser::doOtherSgml(const QString&)
+{
+    return true;
+}
 
 //
 // CharsetParser
@@ -1066,8 +1183,6 @@ bool HtmlParser :: doEmptyElement(const QString& name, const HtmlAttributes& att
 // We simply search the <meta> tag defining it.
 // If we find the <body> tag, we consider that we are already too far.
 //
-// In future, we could also use the XML declaration ( <?xml )
-// that available in XHTML files. It has the advantage to be near than any <meta> tag
 
 bool CharsetParser::doStartElement(const QString& tagName, const HtmlAttributes& attributes)
 {
@@ -1205,16 +1320,6 @@ bool CharsetParser::doXmlProcessingInstruction(const QString& tagName, const Htm
     }
 
     return false; // We have a charset definition, so stop parsing!
-}
-
-bool CharsetParser::doEndElement(const QString&)
-{
-    return true;
-}
-
-bool CharsetParser::doCharacters(const QString&)
-{
-    return true;
 }
 
 QString CharsetParser::findCharset(void)

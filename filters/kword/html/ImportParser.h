@@ -44,11 +44,13 @@ public:
     bool parse(void);
 public:
     virtual bool doEmptyElement(const QString& tagName, const HtmlAttributes& attributes);
-    virtual bool doStartElement(const QString& tagName, const HtmlAttributes& attributes)=0;
-    virtual bool doEndElement(const QString& tagName)=0;
-    virtual bool doCharacters(const QString& strChars)=0;
-    virtual bool doSgmlProcessingInstruction(const QString& tagName,const QString&  strInstruction)=0;
-    virtual bool doXmlProcessingInstruction(const QString& tagName, const HtmlAttributes& attributes)=0;
+    virtual bool doStartElement(const QString& tagName, const HtmlAttributes& attributes);
+    virtual bool doEndElement(const QString& tagName);
+    virtual bool doCharacters(const QString& strChars);
+    virtual bool doSgmlProcessingInstruction(const QString& tagName,const QString&  strInstruction);
+    virtual bool doXmlProcessingInstruction(const QString& tagName, const HtmlAttributes& attributes);
+    virtual bool doHtmlComment(const QString& strChars);
+    virtual bool doOtherSgml(const QString& strChars);
 protected:
     inline bool IsWhiteSpace(const QChar& ch)
     {
@@ -58,13 +60,13 @@ protected:
     inline ulong getLine(void) { return m_line; }
     inline ulong getColumn(void) { return m_column; }
     QChar getCharacter(void);
-    virtual void WriteOut(const QChar& ch)=0;
-    virtual void WriteOut(const QString& str)=0;
     void unGetCharacter(const QChar& ch);
     bool parseTag(bool tagClosing);
     bool parseXmlProcessingInstruction(const QString& tagName);
     bool parseSgmlProcessingInstruction(const QString& tagName);
     bool parseProcessingInstruction(void);
+    bool parseHtmlComment(void);
+    bool parseExclamationPoint(const bool oneDash);
     QString parseEntity(void);
     QChar resolveEntity(const QString& strEntity);
 private:
@@ -94,15 +96,10 @@ public:
     virtual ~CharsetParser(void) { }
 public: // virtual
     virtual bool doStartElement(const QString& tagName, const HtmlAttributes& attributes);
-    virtual bool doEndElement(const QString& tagName);
-    virtual bool doCharacters(const QString& strChars);
 public:
     QString findCharset(void);
 protected:
     bool treatMetaTag(const QString& tagName, const HtmlAttributes& attributes);
-    virtual void WriteOut(const QChar& /*ch*/) { };
-    virtual void WriteOut(const QString& /*str*/) { };
-    virtual bool doSgmlProcessingInstruction(const QString& /*tagName*/,const QString& /*strInstruction*/) { return true;}
     virtual bool doXmlProcessingInstruction(const QString& tagName, const HtmlAttributes& attributes);
 private:
     QString m_strCharset;
