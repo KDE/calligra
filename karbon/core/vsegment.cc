@@ -430,14 +430,32 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	}
 
 	/* This function solves the "nearest point on curve" problem. That means, it
-	 * calculates the point (to be precise: it's paramter t) on this segment, which
+	 * calculates the point q (to be precise: it's paramter t) on this segment, which
 	 * is located nearest to the input point p.
 	 * The basic idea is described e.g. in "The NURBS Book" by Les Piegl, Wayne Tiller
-	 * (Springer 1997) or "Solving the Nearest Point-on-Curve Problem and A Bezier
+	 * (Springer 1997) or "Solving the Nearest Point-on-Curve Problem" and "A Bezier
 	 * Curve-Based Root-Finder" by Philip J. Schneider (from "Graphics Gems",
 	 * Academic Press 1990).
 	 *
-	 * 
+	 * For the nearest point q = C(t) on this segment, the first derivative is
+	 * orthogonal to the distance vector "C(t) - p". In other words we are looking for
+	 * solutions of f(t) = C'(t) * ( C(t) - p ) = 0.
+	 * ( C(t) - p ) is a cubic polynom, C'(t) is quadratic => f(t) is a 5th degree
+	 * polynom and thus has up to 5 distinct solutions.
+	 * To solve it, we apply the newton iteration: a parameter approximation t_i leads
+	 * to the next approximation t_{i+1}
+	 *
+	 *                  f(t_i)
+	 * t_{i+1} = t_i - -------
+	 *                 f'(t_i)
+	 *
+	 * Convergence criteria are then
+	 *
+	 * 1) Point coincidence: | C(t_i) - p | <= tolerance1
+	 *
+	 * 2) Zero cosine: | C'(t_i) * ( C(t_i) - p ) |
+	 *                 ---------------------------- <= tolerance2
+	 *                 | C'(t_i) | * | C(t_i) - p |
 	 */
 
 // TODO
