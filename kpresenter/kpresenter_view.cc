@@ -6243,18 +6243,15 @@ void KPresenterView::zoomPageHeight()
 
 void KPresenterView::zoomAllObject()
 {
-    if(  m_canvas->isOneObjectSelected())
-    {
-        KoRect rect=m_canvas->zoomAllObject();
-        double height = zoomHandler()->resolutionY() * rect.height();
-        double width = zoomHandler()->resolutionX() * rect.width();
-        int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
-                         qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
-        viewZoom( QString::number(zoom ) );
+    KoRect rect=m_canvas->zoomAllObject();
+    double height = zoomHandler()->resolutionY() * rect.height();
+    double width = zoomHandler()->resolutionX() * rect.width();
+    int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
+                     qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
+    viewZoom( QString::number(zoom ) );
 
-        m_canvas->setToolEditMode( TEM_MOUSE );
-        m_canvas->scrollTopLeftPoint( zoomHandler()->zoomPoint( rect.topLeft()) );
-    }
+    m_canvas->setToolEditMode( TEM_MOUSE );
+    m_canvas->scrollTopLeftPoint( zoomHandler()->zoomPoint( rect.topLeft()) );
 }
 
 
