@@ -6,7 +6,7 @@
 #include "kscript.h"
 
 #include <kpopupmenu.h>
-#include <qmessagebox.h>
+#include <kmessagebox.h>
 
 KScriptMenu::KScriptMenu( const DCOPRef& ref, KInstance* instance, const QString& text, QObject* parent, const char* name )
     : KActionMenu( text, parent, name ), m_ref( ref ), m_instance( instance ), m_interpreter( 0 )
@@ -59,7 +59,7 @@ void KScriptMenu::slotActivated()
     QString ex = m_interpreter->runScript( *str, args );
     if ( !ex.isEmpty() )
     {
-	QMessageBox::critical( 0, i18n("KScript Error"), ex );
+	KMessageBox::error( 0, ex, i18n("KScript Error"));
     }
 }
 
