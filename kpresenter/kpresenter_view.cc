@@ -1137,10 +1137,8 @@ void KPresenterView::toolsClosedCubicBezierCurve()
 /*===============================================================*/
 void KPresenterView::extraPenBrush()
 {
-    if ( styleDia ) {
-        delete styleDia;
-        styleDia = 0;
-    }
+    delete styleDia;
+    styleDia =0L;
 
     bool canHaveStickyObj = true;
     bool state = (m_canvas->numberOfObjectSelected()==1);
@@ -1274,10 +1272,9 @@ void KPresenterView::extraAlignObjs()
 /*===============================================================*/
 void KPresenterView::extraBackground()
 {
-    if ( backDia ) {
-	delete backDia;
-	backDia = 0;
-    }
+    delete backDia;
+    backDia =0L;
+
     KPrPage *page=m_canvas->activePage();
     backDia = new BackDia( this, "InfoDia", page->getBackType(  ),
 			  page->getBackColor1(  ),
@@ -1434,10 +1431,8 @@ void KPresenterView::extraPenWidth()
 /*========================== screen config pages ================*/
 void KPresenterView::screenConfigPages()
 {
-    if ( pgConfDia ) {
-        delete pgConfDia;
-        pgConfDia = 0;
-    }
+    delete pgConfDia;
+    pgConfDia = 0;
     KPrPage *page=m_canvas->activePage();
     pgConfDia = new PgConfDia( this, "PageConfig",
                                kPresenterDoc()->spInfiniteLoop(),
@@ -1461,10 +1456,9 @@ void KPresenterView::screenConfigPages()
 /*========================== screen presStructView  =============*/
 void KPresenterView::screenPresStructView()
 {
-    if ( presStructView ) {
-        delete presStructView;
-        presStructView = 0;
-    }
+    delete presStructView;
+    presStructView = 0;
+
     m_canvas->setToolEditMode( TEM_MOUSE );
     m_canvas->deSelectAllObj();
 
@@ -4520,10 +4514,9 @@ void KPresenterView::makeRectVisible( QRect _rect )
 /*==============================================================*/
 void KPresenterView::restartPresStructView()
 {
-    if ( presStructView ) {
-        delete presStructView;
-        presStructView = 0;
-    }
+    delete presStructView;
+    presStructView = 0;
+
     m_canvas->deSelectAllObj();
 
     presStructView = new KPPresStructView( this, "", kPresenterDoc(), this );
@@ -5413,11 +5406,8 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
     KPTextView *edit=m_canvas->currentTextObjectView();
     if (edit)
     {
-        if( m_paragDlg )
-        {
-            delete m_paragDlg;
-            m_paragDlg=0L;
-        }
+        delete m_paragDlg;
+        m_paragDlg=0L;
         m_paragDlg = new KoParagDia( this, "",
                                      KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                      KoParagDia::PD_BORDERS | KoParagDia::PD_NUMBERING |
@@ -6187,10 +6177,8 @@ void KPresenterView::openThePresentationDurationDialog()
 
     QString presentationTotalDurationString = presentationDurationDataFormatChange( totalTime );
 
-    if ( presDurationDia ) {
-        delete presDurationDia;
-        presDurationDia = 0;
-    }
+    delete presDurationDia;
+    presDurationDia = 0;
 
     presDurationDia = new KPPresDurationDia( this, "presDurationDia", kPresenterDoc(),
                                              presentationDurationStringList, presentationTotalDurationString );

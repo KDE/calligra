@@ -422,7 +422,6 @@ KPresenterDoc::~KPresenterDoc()
     delete m_pKSpellConfig;
     m_pageList.setAutoDelete( true );
     m_pageList.clear();
-    kdDebug(33001)<<" delete m_deletedPageList \n";
     m_deletedPageList.setAutoDelete( true );
     m_deletedPageList.clear();
     tmpSoundFileList.setAutoDelete( true );
