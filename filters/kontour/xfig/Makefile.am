@@ -1,8 +1,8 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) -I$(top_srcdir)/killustrator $(all_includes)
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) -I$(top_srcdir)/kontour $(all_includes)
 libxfigimport_la_LDFLAGS	= -module -avoid-version -no-undefined
-libxfigimport_la_LIBADD = $(KOFFICE_LIBS) ../../../killustrator/libkillustratorpart.la
+libxfigimport_la_LIBADD = $(KOFFICE_LIBS) ../../../kontour/libkontourpart.la
 
 ####### Files
 
