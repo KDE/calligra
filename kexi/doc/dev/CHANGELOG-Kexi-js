@@ -206,6 +206,14 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 === i18n ===
 - plugins/forms/kexiformpart.cpp "Best Fit" instead of "To Fit" (pl=Najlepsze dopasowanie)
 - KexiQueryDesignerGuiEditor::initTableColumns(): i18n("Visible") --> i18n("Column visible", "Visible")
+- fix pl tr. for:
+--"Could not remove project.\n"
+"The file \"%1\" does not exist."
+--"Could not load project.\n"
+"The file \"%1\" does not exist."
+- add comment for translators: i18n("'empty' is an adjective here", "Empty database")
+
+
 === Import/Export Framework TODO ===
 -KEXIDB: add lower level functions like: "getting table names list", "getting table schema",
   "getting index schema"
@@ -308,6 +316,22 @@ CCPASTEUR:
 	-perhaps we'd reuse KDE Menu editor GUI?
 
 === KexiDB TODO ===
+- PGSQL: use setval(sequence) to allow setting autonumber values by hand
+   http://www.postgresql.org/docs/7.4/interactive/functions-sequence.html
+- optioanlly, introduce EDITABLE_AUTONUMBER_FIELDS driver flag
+PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyway at db creation time as sequence = 0
+	js	PiggZ_: but users ofter want to enter it anyway
+	js	eg. sqlite increments its autonumber to 1001 if you enter 1000
+	js	we want nothing more that that
+	js	s/than that
+	PiggZ_	personally, i never want to enter a value into autonumber.....autonumber usually = pkey, so its best to let the db handle it
+	js	If use want strict sequences to be used, he can:
+	js	1) hide autonumber column at all
+	js	2) set it not-editable
+	js	3) or just do not touch this column
+	PiggZ_	well then, its probably best to set the value of the sequence if a value is manually entered...if possible
+
+- add an QAsciiDict of (reserved) SQL keywords and use it in Driver::escapeIdentifier()
 - add FieldType and move things like typeGroupString() there
 - CRASH: removing tables when a query still uses it. 
   HOW TO FIX: Add TableSchema::Ptr, QuerySchema::Ptr, etc.
@@ -363,17 +387,48 @@ CCPASTEUR:
 -improve sql gui designer
 --criteria
 --totals (sum, avg)
---disable non-sqlite drivers (on compile-time)
 -simple docs
 -add newly created table to tables list in query designer
--installer: add checking for existing kexi version
 
 
 CCMAIL: dkite@shaw.ca
 
+2004-11-03
+KexiSQLite 2, 3
+- crashes fixed for architectures where sizeof(char*) != 4
+Core
+- Property, PropertyBuffer: some methods made explicity inline
+- warnings added when trying to set a value to a null property 
+  or when property not found. Setting value to null property disabled)
+TableView
+- in KexiTableView::acceptEditor():
+	there might be called cancelEditor() in updateRowEditBuffer() handler,
+	if this is true, d->pEditor is NULL. So we're checking
+	d->pEditor and calling startEditCurrentCell() only if it's present
+- Empty row is appended on row deletion when 'spreadsheet mode' is on.
+- fixed setting row numbers in record navigator for empty data sets
+SQL Parser
+- added Date/DateTime/Time types support to ConstExpr 
+  (parser does not operate on these constants yet)
+
+2004-11-02
+Main
+- fixes for kexi__parts
+Query Designer
+- fixed adding fields by entering column names by hand
+- entering (simple) criteria now is working
+KexiDB
+- DriverBehaviour: SELECT_1_SUBQUERY_SUPPORTED added, 
+  used in Connection::resultExists()
+Forms
+- on failed saving new form's data, all saving is rolled back
+- fixed saving form data for mysql (and probably pgsql)
+
 2004-10-29
 Query Designer
 - fixed focusing
+Table View
+- fixes for combo box
 
 ===================== Kexi 0.1 Beta 5 "Halloween" =====================
 

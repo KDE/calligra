@@ -29,6 +29,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <qdatetime.h>
+
 KEXI_DB_EXPORT QString KexiDB::exprClassName(int c)
 {
 	if (c==KexiDBExpr_Unary)
@@ -170,8 +172,8 @@ bool NArgExpr::validate(ParseInfo& parseInfo)
 }
 
 //=========================================
-UnaryExpr::UnaryExpr(int typ, BaseExpr *n)
- : NArgExpr(KexiDBExpr_Unary, typ)
+UnaryExpr::UnaryExpr(int token, BaseExpr *n)
+ : NArgExpr(KexiDBExpr_Unary, token)
 {
 	list.append(n);
 	//ustaw ojca
@@ -255,8 +257,8 @@ bool UnaryExpr::validate(ParseInfo& parseInfo)
 }
 	
 //=========================================
-BinaryExpr::BinaryExpr(int aClass, BaseExpr *l_n, int typ, BaseExpr *r_n)
- : NArgExpr(aClass, typ)
+BinaryExpr::BinaryExpr(int aClass, BaseExpr *l_n, int token, BaseExpr *r_n)
+ : NArgExpr(aClass, token)
 {
 	list.append(l_n);
 	list.append(r_n);
@@ -381,7 +383,7 @@ Field::Type ConstExpr::type()
 {
 	if (m_token==SQL_NULL)
 		return Field::Null;
-	if (m_token==INTEGER_CONST) {
+	else if (m_token==INTEGER_CONST) {
 //TODO ok?
 //TODO: add sign info?
 		if (value.type() == QVariant::Int || value.type() == QVariant::UInt) {
@@ -394,15 +396,22 @@ Field::Type ConstExpr::type()
 		}
 		return Field::BigInteger;
 	}
-	if (m_token==REAL_CONST)
-		return Field::Double;
-	if (m_token==CHARACTER_STRING_LITERAL) {
+	else if (m_token==CHARACTER_STRING_LITERAL) {
 //TODO: Field::defaultTextLength() is hardcoded now!
 		if (value.toString().length() > Field::defaultTextLength())
 			return Field::LongText;
 		else
 			return Field::Text;
 	}
+	else if (m_token==REAL_CONST)
+		return Field::Double;
+	else if (m_token==DATE_CONST)
+		return Field::Date;
+	else if (m_token==DATETIME_CONST)
+		return Field::DateTime;
+	else if (m_token==TIME_CONST)
+		return Field::Time;
+
 	return Field::InvalidType;
 }
 
@@ -416,8 +425,18 @@ QString ConstExpr::toString()
 {
 	if (m_token==SQL_NULL)
 		return "NULL";
-	if (m_token==REAL_CONST)
+	else if (m_token==CHARACTER_STRING_LITERAL)
+//TODO: better escaping!
+		return "'" + value.toString() + "'";
+	else if (m_token==REAL_CONST)
 		return QString::number(value.toPoint().x())+"."+QString::number(value.toPoint().y());
+	else if (m_token==DATE_CONST)
+		return "'" + value.toDate().toString(Qt::ISODate) + "'";
+	else if (m_token==DATETIME_CONST)
+		return "'" + value.toDateTime().date().toString(Qt::ISODate) + " " + value.toDateTime().time().toString(Qt::ISODate) + "'";
+	else if (m_token==TIME_CONST)
+		return "'" + value.toTime().toString(Qt::ISODate) + "'";
+
 	return value.toString();
 }
 

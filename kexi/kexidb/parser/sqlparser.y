@@ -296,6 +296,9 @@
 %token NOT_SIMILAR_TO /* helper */
 %token INTEGER_CONST
 %token REAL_CONST
+%token DATE_CONST
+%token DATETIME_CONST
+%token TIME_CONST
 %token SIN
 %token SQL_SIZE
 %token SMALLINT
