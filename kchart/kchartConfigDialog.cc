@@ -19,6 +19,7 @@
 #include "kchartParameterConfigPage.h"
 #include "kchartPieConfigPage.h"
 #include "kchartParameter3dConfigPage.h"
+#include "kchartPolarSubTypeChartPage.h"
 
 #include <kapp.h>
 #include <klocale.h>
@@ -78,6 +79,10 @@ KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
         break;
     case KDChartParams::Line:
         _subTypePage = new KChartLineSubTypeChartPage( _params, this );
+        addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+        break;
+    case KDChartParams::Polar:
+        _subTypePage = new KChartPolarSubTypeChartPage( _params, this );
         addTab( _subTypePage, i18n( "Chart &Subtype" ) );
         break;
     default:
