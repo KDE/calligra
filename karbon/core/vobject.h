@@ -60,7 +60,7 @@ public:
 
 	virtual ~VObject();
 
-	DCOPObject* dcopObject();
+	virtual DCOPObject* dcopObject();
 
 	/**
 	 * Draw the object to a painting device.
