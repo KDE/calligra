@@ -261,7 +261,7 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarTools->enable( OpenPartsUI::Show );
   m_vToolBarTools->setFullWidth( false );
   m_vToolBarTools->setBarPos( OpenPartsUI::Left );
-  
+
   // move tool
   pix = OPICON( "move" );
   m_vToolBarTools->insertButton2( pix, TBTOOLS_MOVETOOL, SIGNAL( clicked() ), this, "slotActivateMoveTool", true, i18n( "Move layers and selections." ), -1 );
@@ -431,7 +431,7 @@ void KImageShopView::createGUI()
   m_pGradientEditorDialog->hide();
 
   // color dialog
-  m_pColorDialog = new ColorDialog(m_pCanvasView);
+  m_pColorDialog = new ColorDialog( this );
   m_pColorDialog->move(100, 20);
   m_pColorDialog->hide();
   addDialog(m_pColorDialog);
@@ -649,7 +649,7 @@ void KImageShopView::activateTool( int toolID )
 {
     // implement RadioButton behaviour for the Tool toolbar
     vector<int>::iterator it;
-    for( it = m_toolButtons.begin(); it != m_toolButtons.end(); it++ ) 
+    for( it = m_toolButtons.begin(); it != m_toolButtons.end(); it++ )
         if( m_vToolBarTools->isButtonOn( *it ) != ( *it == toolID ) )
             m_vToolBarTools->setButton( *it, *it == toolID );
 }
