@@ -232,7 +232,7 @@ public:
     void updateRulerHandles();
 
     QBrush backgroundColor() const { return m_backgroundColor; }
-    void setBackgroundColor( QBrush _color ) { m_backgroundColor = _color; }
+    void setBackgroundColor( const QBrush &_color ) { m_backgroundColor = _color; }
 
     KoRect innerRect() const;
 

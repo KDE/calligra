@@ -38,6 +38,8 @@ k_dcop:
     virtual bool isAHeader() const;
     virtual bool isAFooter() const;
     virtual bool isHeaderOrFooter() const;
+    virtual bool isFootEndNote() const;
+
     virtual bool isMainFrameset() const;
     virtual bool isMoveable() const;
     virtual bool isVisible() const;
@@ -68,6 +70,26 @@ k_dcop:
     virtual bool isCopy()const;
     virtual bool isProtectSize()const;
     virtual void setProtectSize( bool _b );
+    //it's for frame 0
+    QString bottomBorderStyle()const;
+    QString topBorderStyle()const;
+    QString leftBorderStyle()const;
+    QString rightBorderStyle()const;
+
+    double rightBorderWidth() const;
+    double topBorderWidth() const;
+    double bottomBorderWidth() const;
+    double leftBorderWidth() const;
+
+    void setBottomBorderWitdh( double _width );
+    void setTopBorderWitdh( double _width );
+    void setLeftBorderWitdh( double _width );
+    void setRightBorderWitdh( double _width );
+
+    void setBottomBorderStyle(const QString & _style);
+    void setTopBorderStyle(const QString & _style);
+    void setLeftBorderStyle(const QString & _style);
+    void setRightBorderStyle(const QString & _style);
 
 private:
     KWFrameSet *m_frame;

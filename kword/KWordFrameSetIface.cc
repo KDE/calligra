@@ -179,3 +179,257 @@ void KWordFrameSetIface::setProtectSize( bool _b )
 {
     m_frame->setProtectSize( _b );
 }
+
+QString KWordFrameSetIface::bottomBorderStyle() const
+{
+    switch( m_frame->frame( 0 )->bottomBorder().getStyle())
+    {
+    case KoBorder::SOLID:
+        return QString("SOLID");
+        break;
+    case KoBorder::DASH:
+        return QString("DASH");
+        break;
+    case KoBorder::DOT:
+        return QString("DOT");
+        break;
+    case KoBorder::DASH_DOT:
+        return QString("DASH DOT");
+        break;
+    case KoBorder::DASH_DOT_DOT:
+        return QString("DASH DOT DOT");
+
+        break;
+    case KoBorder::DOUBLE_LINE:
+        return QString("DOUBLE LINE");
+        break;
+    }
+    return QString::null;
+}
+
+QString KWordFrameSetIface::topBorderStyle() const
+{
+    switch( m_frame->frame( 0 )->topBorder().getStyle())
+    {
+    case KoBorder::SOLID:
+        return QString("SOLID");
+        break;
+    case KoBorder::DASH:
+        return QString("DASH");
+        break;
+    case KoBorder::DOT:
+        return QString("DOT");
+        break;
+    case KoBorder::DASH_DOT:
+        return QString("DASH DOT");
+        break;
+    case KoBorder::DASH_DOT_DOT:
+        return QString("DASH DOT DOT");
+
+        break;
+    case KoBorder::DOUBLE_LINE:
+        return QString("DOUBLE LINE");
+        break;
+    }
+    return QString::null;
+}
+
+QString KWordFrameSetIface::leftBorderStyle() const
+{
+    switch( m_frame->frame( 0 )->leftBorder().getStyle())
+    {
+    case KoBorder::SOLID:
+        return QString("SOLID");
+        break;
+    case KoBorder::DASH:
+        return QString("DASH");
+        break;
+    case KoBorder::DOT:
+        return QString("DOT");
+        break;
+    case KoBorder::DASH_DOT:
+        return QString("DASH DOT");
+        break;
+    case KoBorder::DASH_DOT_DOT:
+        return QString("DASH DOT DOT");
+
+        break;
+    case KoBorder::DOUBLE_LINE:
+        return QString("DOUBLE LINE");
+        break;
+    }
+    return QString::null;
+}
+
+QString KWordFrameSetIface::rightBorderStyle() const
+{
+    switch( m_frame->frame( 0 )->rightBorder().getStyle())
+    {
+    case KoBorder::SOLID:
+        return QString("SOLID");
+        break;
+    case KoBorder::DASH:
+        return QString("DASH");
+        break;
+    case KoBorder::DOT:
+        return QString("DOT");
+        break;
+    case KoBorder::DASH_DOT:
+        return QString("DASH DOT");
+        break;
+    case KoBorder::DASH_DOT_DOT:
+        return QString("DASH DOT DOT");
+
+        break;
+    case KoBorder::DOUBLE_LINE:
+        return QString("DOUBLE LINE");
+        break;
+    }
+    return QString::null;
+}
+
+double KWordFrameSetIface::rightBorderWidth() const
+{
+    return m_frame->frame( 0 )->rightBorder().penWidth();
+}
+
+double KWordFrameSetIface::topBorderWidth() const
+{
+    return m_frame->frame( 0 )->topBorder().penWidth();
+}
+
+double KWordFrameSetIface::bottomBorderWidth() const
+{
+    return m_frame->frame( 0 )->bottomBorder().penWidth();
+}
+double KWordFrameSetIface::leftBorderWidth() const
+{
+    return m_frame->frame( 0 )->leftBorder().penWidth();
+}
+
+void KWordFrameSetIface::setRightBorderWitdh( double _width )
+{
+    KoBorder tmp = m_frame->frame( 0 )->rightBorder();
+    tmp.setPenWidth(_width);
+    m_frame->frame( 0 )->setRightBorder(tmp);
+}
+
+void KWordFrameSetIface::setLeftBorderWitdh( double _width )
+{
+    KoBorder tmp = m_frame->frame( 0 )->leftBorder();
+    tmp.setPenWidth(_width);
+    m_frame->frame( 0 )->setLeftBorder(tmp);
+}
+
+void KWordFrameSetIface::setTopBorderWitdh( double _width )
+{
+    KoBorder tmp = m_frame->frame( 0 )->topBorder();
+    tmp.setPenWidth(_width);
+    m_frame->frame( 0 )->setTopBorder(tmp);
+}
+
+void KWordFrameSetIface::setBottomBorderWitdh( double _width )
+{
+    KoBorder tmp = m_frame->frame( 0 )->bottomBorder();
+    tmp.setPenWidth(_width);
+    m_frame->frame( 0 )->setBottomBorder(tmp);
+}
+
+void KWordFrameSetIface::setRightBorderStyle(const QString & _style)
+{
+    KoBorder tmp = m_frame->frame( 0 )->rightBorder();
+    if ( _style.lower()=="solid")
+        tmp.setStyle(KoBorder::SOLID);
+    else if ( _style.lower()=="dash")
+        tmp.setStyle(KoBorder::DASH);
+    else if ( _style.lower()=="dot")
+        tmp.setStyle(KoBorder::DOT);
+    else if ( _style.lower()=="dash dot")
+        tmp.setStyle(KoBorder::DASH_DOT);
+    else if ( _style.lower()=="dash dot dot")
+        tmp.setStyle(KoBorder::DASH_DOT_DOT);
+    else if ( _style.lower()=="double line")
+        tmp.setStyle(KoBorder::DOUBLE_LINE);
+    else
+    {
+        kdDebug()<<" style :"<<_style<<" do not exist!\n";
+        return;
+    }
+    m_frame->frame( 0 )->setRightBorder(tmp);
+}
+
+void KWordFrameSetIface::setLeftBorderStyle(const QString & _style)
+{
+    KoBorder tmp = m_frame->frame( 0 )->leftBorder();
+    if ( _style.lower()=="solid")
+        tmp.setStyle(KoBorder::SOLID);
+    else if ( _style.lower()=="dash")
+        tmp.setStyle(KoBorder::DASH);
+    else if ( _style.lower()=="dot")
+        tmp.setStyle(KoBorder::DOT);
+    else if ( _style.lower()=="dash dot")
+        tmp.setStyle(KoBorder::DASH_DOT);
+    else if ( _style.lower()=="dash dot dot")
+        tmp.setStyle(KoBorder::DASH_DOT_DOT);
+    else if ( _style.lower()=="double line")
+        tmp.setStyle(KoBorder::DOUBLE_LINE);
+    else
+    {
+        kdDebug()<<" style :"<<_style<<" do not exist!\n";
+        return;
+    }
+    m_frame->frame( 0 )->setLeftBorder(tmp);
+
+}
+
+void KWordFrameSetIface::setTopBorderStyle(const QString & _style)
+{
+    KoBorder tmp = m_frame->frame( 0 )->topBorder();
+
+    if ( _style.lower()=="solid")
+        tmp.setStyle(KoBorder::SOLID);
+    else if ( _style.lower()=="dash")
+        tmp.setStyle(KoBorder::DASH);
+    else if ( _style.lower()=="dot")
+        tmp.setStyle(KoBorder::DOT);
+    else if ( _style.lower()=="dash dot")
+        tmp.setStyle(KoBorder::DASH_DOT);
+    else if ( _style.lower()=="dash dot dot")
+        tmp.setStyle(KoBorder::DASH_DOT_DOT);
+    else if ( _style.lower()=="double line")
+        tmp.setStyle(KoBorder::DOUBLE_LINE);
+    else
+    {
+        kdDebug()<<" style :"<<_style<<" do not exist!\n";
+        return;
+    }
+    m_frame->frame( 0 )->setTopBorder(tmp);
+}
+
+void KWordFrameSetIface::setBottomBorderStyle(const QString & _style)
+{
+    KoBorder tmp = m_frame->frame( 0 )->bottomBorder();
+    if ( _style.lower()=="solid")
+        tmp.setStyle(KoBorder::SOLID);
+    else if ( _style.lower()=="dash")
+        tmp.setStyle(KoBorder::DASH);
+    else if ( _style.lower()=="dot")
+        tmp.setStyle(KoBorder::DOT);
+    else if ( _style.lower()=="dash dot")
+        tmp.setStyle(KoBorder::DASH_DOT);
+    else if ( _style.lower()=="dash dot dot")
+        tmp.setStyle(KoBorder::DASH_DOT_DOT);
+    else if ( _style.lower()=="double line")
+        tmp.setStyle(KoBorder::DOUBLE_LINE);
+    else
+    {
+        kdDebug()<<" style :"<<_style<<" do not exist!\n";
+        return;
+    }
+    m_frame->frame( 0 )->setBottomBorder(tmp);
+}
+
+bool KWordFrameSetIface::isFootEndNote() const
+{
+    return m_frame->isFootEndNote();
+}
