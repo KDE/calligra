@@ -36,6 +36,7 @@ class QGridLayout;
 
 /**
  * Our reimplementation of KIconCanvas used within the template-chooser dialog.
+ * @internal
  */
 class KoTCDIconCanvas : public KIconCanvas
 {
@@ -45,7 +46,7 @@ class KoTCDIconCanvas : public KIconCanvas
 	    : KIconCanvas( parent, name ) {}
 
 	bool isCurrentValid() { return currentItem(); }
-	QIconViewItem * load(KoTemplateGroup *group, QString name);
+	QIconViewItem * load(KoTemplateGroup *group, const QString& name);
 
     protected:
 	virtual void keyPressEvent( QKeyEvent *e ) {
@@ -56,7 +57,7 @@ class KoTCDIconCanvas : public KIconCanvas
 	}
 };
 
-
+/// @internal
 class KoTCDIconViewItem : public KIconViewItem
 {
     public:
@@ -184,7 +185,7 @@ class KoTemplateChooseDia : public KDialogBase
     private:
 
 	KoTemplateChooseDiaPrivate *d;
-	
+
 	QString descriptionText(const QString &name, const QString &description);
 	void setupDialog();
 	void setupTemplateDialog(QWidget * widgetbase, QGridLayout * layout);

@@ -253,10 +253,11 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * 
 {
 
         d->m_recent = new KFileIconView(widgetbase, "recent files");
+        // I prefer the icons to be in "most recent first" order (DF)
+        d->m_recent->setSorting( static_cast<QDir::SortSpec>( QDir::Time | QDir::Reversed ) );
         layout->addWidget(d->m_recent,0,0);
 
-        QString oldGroup;
-        oldGroup=d->m_global->config()->group();
+        QString oldGroup = d->m_global->config()->group();
         d->m_global->config()->setGroup( "RecentFiles" );
 
         int i = 0;
@@ -268,7 +269,7 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * 
                         KURL url(value);
                         KFileItem *item = new KFileItem( KFileItem::Unknown, KFileItem::Unknown, url );
                         d->m_recent->insertItem(item);
-                        kdDebug()<<value<<endl;
+                        //kdDebug()<<value<<endl;
                 }
                 i++;
         } while ( !value.isEmpty() || i<=10 );
@@ -363,7 +364,6 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
 	canvas->setWordWrapIconText( true );
 	canvas->show();
 
-	// what item to select initially
 	QIconViewItem * tempitem = canvas->load(group, templateName);
 	if (tempitem)
 	    itemtoselect = tempitem;
@@ -642,7 +642,7 @@ QString KoTemplateChooseDia::descriptionText(const QString &name, const QString 
 /*================================================================*/
 /*================================================================*/
 
-QIconViewItem * KoTCDIconCanvas::load( KoTemplateGroup *group , QString name)
+QIconViewItem * KoTCDIconCanvas::load( KoTemplateGroup *group, const QString& name)
 {
     QIconViewItem * itemtoreturn = 0;
 
