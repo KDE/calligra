@@ -1604,7 +1604,8 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 	/* CELL handling START */
 	QDomNode cells = sheet.namedItem( "gmr:Cells" );
 	QDomNode cell  = cells.namedItem( "gmr:Cell" );
-
+        QDomNode mergedCells = sheet.namedItem( "gmr:MergedRegions" );
+        QDomNode mergedRegion = mergedCells.namedItem( "gmr:Merge" );
         if ( cell.isNull() )
         {
           kdWarning(30521) << "No cells" << endl;
@@ -1723,6 +1724,20 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 
         kdDebug(30521) << "Reading in cells done" << endl;
 
+        if ( mergedRegion.isNull() )
+        {
+          kdWarning(30521) << "No cells merged !" << endl;
+        }
+	while ( !mergedRegion.isNull() )
+        {
+            QDomElement e = mergedRegion.toElement(); // try to convert the node to an element.
+            QString cell_merge_area( e.text() );
+            KSpreadRange range(cell_merge_area);
+            //kdDebug()<<"text !!! :"<<cell_merge_area<< "range :start row : "<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ()<<endl;
+            KSpreadCell * cell = table->nonDefaultCell( range.startCol (), range.startRow () );
+            cell->forceExtraCells( range.startCol (), range.startRow (), range.endCol ()-range.startCol (),  range.endRow ()-range.startRow ());
+            mergedRegion = mergedRegion.nextSibling();
+        }
 	/* There is a memory leak here...
 	 * The strings in the exprID_dict have been allocated, but they have not been freed.
 	 */
