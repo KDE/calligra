@@ -58,9 +58,18 @@ const bool HTMLImport::filter(const QCString &fileIn, const QCString &fileOut,
     char * buffer = new char[buflen];
     in.readBlock(buffer, buflen);
     bool add = true;
+    int step=buflen/50;
+    int value=0;
+    int j=0;
 
     for ( int i = 0 ;i < buflen ; ++i )
     {
+	++j;
+	if(j>step) {
+	    j=0;
+	    value+=2;
+	    emit sigProgress(value);
+	}
         QChar c = buffer[ i ];
         if ( c == QChar( '\n' ) )
         {
