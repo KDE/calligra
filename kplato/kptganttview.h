@@ -78,10 +78,9 @@ private:
     KPTNode *getNode(KDGanttViewItem *item);
     void removeDeleted(KDGanttViewItem *item);
     void deleteItem(KDGanttViewItem *item);
-    void reparent(KDGanttViewItem *item, KDGanttViewItem *newparent, KDGanttViewItem *oldparent);
     KDGanttViewItem *correctType(KDGanttViewItem *item, KPTNode *node);
     void correctPosition(KDGanttViewItem *item, KPTNode *node);
-    void correctParent(KDGanttViewItem *item, KPTNode *node);
+    KDGanttViewItem *correctParent(KDGanttViewItem *item, KPTNode *node);
 
     void updateChildren(KPTNode *node);
     void updateNode(KPTNode *node);

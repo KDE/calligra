@@ -225,25 +225,16 @@ void KPTGanttView::correctPosition(KDGanttViewItem *item, KPTNode *node)
     }
 }
 
-void KPTGanttView::reparent(KDGanttViewItem *item, KDGanttViewItem *newparent, KDGanttViewItem *oldparent)
-{
-//    kdDebug()<<k_funcinfo<<item->listViewText()<<" new: "<<(newparent ? newparent->listViewText() : "top")<<" old: "<<(oldparent ? oldparent->listViewText() : "top")<<endl;
-    if (newparent == oldparent)
-        return;
-        
-    QListView *lv = item->listView();
-    
-    if (oldparent) oldparent->takeItem(item);
-    else lv->takeItem(item);
-    
-    if (newparent) newparent->insertItem(item);
-    else lv->insertItem(item);
-}
-
-void KPTGanttView::correctParent(KDGanttViewItem *item, KPTNode *node)
+KDGanttViewItem *KPTGanttView::correctParent(KDGanttViewItem *item, KPTNode *node)
 {
     KDGanttViewItem *p = findItem(node->getParent());
-    reparent(item, p, item->parent());
+    if (p == item->parent()) {
+        return item;
+    }
+    KDGanttViewItem *newItem = addNode(p, node);
+    newItem->setOpen(item->isOpen());
+    deleteItem(item);
+    return newItem;
 }
 
 void KPTGanttView::updateChildren(KPTNode *parentNode)
@@ -261,13 +252,17 @@ void KPTGanttView::updateChildren(KPTNode *parentNode)
 void KPTGanttView::updateNode(KPTNode *node)
 {
     //kdDebug()<<k_funcinfo<<node->name()<<endl;
+    if (node->isDeleted())
+        return;
     KDGanttViewItem *item = findItem(node);
     if (!item) {
         item = addNode(findItem(node->getParent()), node, findItem(node->siblingBefore()));
+        if (item && node->type() == KPTNode::Type_Summarytask)
+            updateChildren(node);
         return;
     }
     item = correctType(item, node);
-    correctParent(item, node);
+    item = correctParent(item, node);
     correctPosition(item, node);
         
     modifyNode(node);
