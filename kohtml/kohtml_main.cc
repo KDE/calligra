@@ -91,14 +91,10 @@ int main( int argc, char **argv )
 
   KoHTMLApp app(argc, argv);
 
-#warning "Reggie: I had to comment out KIOJob::initStatic(), because this is protected now. How should this be fixed?"
-  //KIOJob::initStatic();
   KIOCache::initStatic();
   KRegistry * registry = new KRegistry;
   registry->addFactory( new KMimeTypeFactory );
   registry->load();
-  KMimeType::check();
-  KMimeMagic::initStatic();
 
   int i = 1;
   if ( strcmp( argv[i], "-s" ) == 0 || strcmp( argv[i], "--server" ) == 0 )
