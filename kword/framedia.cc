@@ -417,21 +417,22 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     lFrameSList->setAllColumnsShowFocus( true );
     lFrameSList->header()->setMovingEnabled( false );
 
-    int numTxtFrameSets=0;
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
+        KWFrameSet * fs = doc->getFrameSet( i );
         if ( i == 0 && doc->processingType() == KWDocument::WP )
             continue;
-        if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT ||
-             dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( i ) )->getFrameInfo() != FI_BODY )
+        if ( fs->getFrameType() != FT_TEXT ||
+             static_cast<KWTextFrameSet*>( fs )->getFrameInfo() != FI_BODY )
             continue;
-        if ( doc->getFrameSet( i )->getGroupManager() )
+        if ( fs->getGroupManager() )
+            continue;
+        if ( fs->getNumFrames() == 0 ) // deleted frameset
             continue;
         QListViewItem *item = new QListViewItem( lFrameSList );
         item->setText( 0, QString( "%1" ).arg( i + 1 ) );
-        item->setText( 1, doc->getFrameSet( i )->getName() );
-        if(frame->getFrameSet() && frame->getFrameSet()==doc->getFrameSet(i))
+        item->setText( 1, fs->getName() );
+        if( frame->getFrameSet() == fs )
             lFrameSList->setSelected(item, TRUE );
-        numTxtFrameSets++;
     }
 
     if (! frame->getFrameSet()) {
