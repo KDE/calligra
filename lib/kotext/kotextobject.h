@@ -206,7 +206,7 @@ public:
 
     /** Set format changes on selection or current cursor.
         Returns a command if the format was applied to a selection */
-    KCommand *setFormatCommand( QTextCursor * cursor, KoTextFormat * & currentFormat, KoTextFormat *format, int flags, bool zoomFont = false, int selectionId = KoTextDocument::Standard );
+    KCommand *setFormatCommand( QTextCursor * cursor, KoTextFormat ** currentFormat, KoTextFormat *format, int flags, bool zoomFont = false, int selectionId = KoTextDocument::Standard );
 
     /** Selections ids */
     enum SelectionIds {
@@ -245,7 +245,7 @@ public:
     void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
     /** Set format changes on selection or current cursor.
         Creates a command if the format was applied to a selection */
-    void setFormat( QTextCursor * cursor, KoTextFormat * & currentFormat, KoTextFormat *format, int flags, bool zoomFont = false );
+    void setFormat( QTextCursor * cursor, KoTextFormat ** currentFormat, KoTextFormat *format, int flags, bool zoomFont = false );
 
 
     /**

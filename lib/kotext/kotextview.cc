@@ -690,7 +690,7 @@ void KoTextView::focusOutEvent()
 
 KCommand* KoTextView::setFormatCommand( KoTextFormat * newFormat, int flags, bool zoomFont)
 {
-    return textObject()->setFormatCommand( m_cursor, m_currentFormat, newFormat, flags, zoomFont );
+    return textObject()->setFormatCommand( m_cursor, &m_currentFormat, newFormat, flags, zoomFont );
 }
 
 void KoTextView::dragStarted()

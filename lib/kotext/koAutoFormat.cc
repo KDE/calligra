@@ -586,12 +586,12 @@ void KoAutoFormat::doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag 
         if( bold)
         {
             newFormat->setBold(true);
-            macro->addCommand(txtObj->setFormatCommand( textEditCursor, lastFormat, newFormat, QTextFormat::Bold , false,KoTextObject::HighlightSelection  ));
+            macro->addCommand(txtObj->setFormatCommand( textEditCursor, 0L, newFormat, QTextFormat::Bold , false,KoTextObject::HighlightSelection  ));
         }
         else if( underline )
         {
             newFormat->setUnderline(true);
-            macro->addCommand(txtObj->setFormatCommand( textEditCursor, lastFormat, newFormat, QTextFormat::Underline , false,KoTextObject::HighlightSelection  ));
+            macro->addCommand(txtObj->setFormatCommand( textEditCursor, 0L, newFormat, QTextFormat::Underline , false,KoTextObject::HighlightSelection  ));
         }
         txtObj->emitNewCommand(macro);
         txtObj->emitHideCursor();
@@ -600,7 +600,7 @@ void KoAutoFormat::doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag 
     }
 }
 
-void KoAutoFormat::doUseBulletStyle(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
+void KoAutoFormat::doUseBulletStyle(QTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj )
 {
     KoTextDocument * textdoc = parag->textDocument();
     QTextCursor cursor( parag->document() );
@@ -666,7 +666,6 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTex
 {
     KoTextString *s = parag->string();
     bool refreshCursor=false;
-    QChar ch = s->at( 0 ).c;
     KoTextDocument * textdoc = parag->textDocument();
     QTextCursor cursor( parag->document() );
 

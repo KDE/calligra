@@ -778,22 +778,25 @@ void KoTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
     emit updateUI( true );
 }
 
+/** Implementation of setFormatCommand from KoTextFormatInterface - apply change to the whole document */
 KCommand *KoTextObject::setFormatCommand( KoTextFormat *format, int flags, bool zoomFont )
 {
     textDocument()->selectAll( KoTextDocument::Temp );
-    KoTextFormat* current = currentFormat();
-    KCommand *cmd = setFormatCommand( 0L, current, format, flags, zoomFont, KoTextDocument::Temp );
+    KCommand *cmd = setFormatCommand( 0L, 0L, format, flags, zoomFont, KoTextDocument::Temp );
     textDocument()->removeSelection( KoTextDocument::Temp );
     return cmd;
 }
 
-KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat * & currentFormat, KoTextFormat *format, int flags, bool zoomFont, int selectionId )
+KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat ** pCurrentFormat, KoTextFormat *format, int flags, bool zoomFont, int selectionId )
 {
     KCommand *ret = 0;
     KoTextDocument * textdoc = textDocument();
-    Q_ASSERT( currentFormat );
-    bool newFormat = ( currentFormat && currentFormat->key() != format->key() );
-    if ( newFormat )
+    KoTextFormat* newFormat = 0;
+    // Get new format from collection if
+    // - caller has notion of a "current format" and new format is different
+    // - caller has no notion of "current format", e.g. whole textobjects
+    bool isNewFormat = ( pCurrentFormat && *pCurrentFormat && (*pCurrentFormat)->key() != format->key() );
+    if ( isNewFormat || !pCurrentFormat )
     {
         int origFontSize = 0;
         if ( zoomFont ) // The format has a user-specified font (e.g. setting a style, or a new font size)
@@ -802,14 +805,17 @@ KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat * 
             format->setPointSize( zoomedFontSize( origFontSize ) );
             kdDebug(32001) << "KoTextObject::setFormatCommand format " << format->key() << " zoomed from " << origFontSize << " to " << format->font().pointSizeFloat() << endl;
         }
+        // Remove ref to current format, if caller wanted that
+        if ( pCurrentFormat )
+            (*pCurrentFormat)->removeRef();
         // Find format in collection
-        currentFormat->removeRef();
-        currentFormat = static_cast<KoTextFormat *>( textdoc->formatCollection()->format( format ) );
-        if ( currentFormat->isMisspelled() ) {
-            currentFormat->removeRef();
-            currentFormat = static_cast<KoTextFormat *>( textdoc->formatCollection()->format( currentFormat->font(), currentFormat->color() ) );
+        newFormat = static_cast<KoTextFormat *>( textdoc->formatCollection()->format( format ) );
+        if ( newFormat->isMisspelled() ) {
+            newFormat->removeRef();
+            newFormat = static_cast<KoTextFormat *>( textdoc->formatCollection()->format( newFormat->font(), newFormat->color() ) );
         }
-
+        if ( pCurrentFormat )
+            (*pCurrentFormat) = newFormat;
     }
 
     if ( textdoc->hasSelection( selectionId ) ) {
@@ -842,16 +848,15 @@ KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat * 
         emit repaintChanged( this );
         emit showCursor();
     }
-    //kdDebug(32001) << "KoTextObject::setFormatCommand currentFormat:" << currentFormat->key() << " new format:" << format->key() << endl;
-    if ( newFormat ) {
+    if ( isNewFormat ) {
         emit showCurrentFormat();
         //kdDebug(32001) << "KoTextObject::setFormatCommand index=" << cursor->index() << " length-1=" << cursor->parag()->length() - 1 << endl;
         if ( cursor && cursor->index() == cursor->parag()->length() - 1 ) {
-            currentFormat->addRef();
-            cursor->parag()->string()->setFormat( cursor->index(), currentFormat, TRUE );
+            newFormat->addRef();
+            cursor->parag()->string()->setFormat( cursor->index(), newFormat, TRUE );
             if ( cursor->parag()->length() == 1 ) {
-                currentFormat->addRef();
-                cursor->parag()->setFormat( currentFormat );
+                newFormat->addRef();
+                cursor->parag()->setFormat( newFormat );
                 cursor->parag()->invalidate(0);
                 cursor->parag()->format();
                 emit repaintChanged( this );
@@ -861,7 +866,7 @@ KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat * 
     return ret;
 }
 
-void KoTextObject::setFormat( QTextCursor * cursor, KoTextFormat * & currentFormat, KoTextFormat *format, int flags, bool zoomFont )
+void KoTextObject::setFormat( QTextCursor * cursor, KoTextFormat ** currentFormat, KoTextFormat *format, int flags, bool zoomFont )
 {
     KCommand *cmd = setFormatCommand( cursor, currentFormat, format, flags, zoomFont );
     if (cmd)
@@ -1628,6 +1633,7 @@ QString KoTextObject::textChangedCase(const QString& _text,KoChangeCaseDia::Type
     return text;
 }
 
+// Warning, this doesn't ref the format!
 KoTextFormat * KoTextObject::currentFormat() const
 {
     // We use the formatting of the very first character
@@ -1681,13 +1687,10 @@ KCommand *KoTextObject::setParagLayoutFormatCommand( QTextCursor* cursor, int se
 
 void KoTextObject::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont )
 {
-    // This pointer will be modified by setFormatCommand, so we need a holder,
-    // but in fact we don't care about the modifications here.
-    KoTextFormat* curFormat = currentFormat();
     // This version of setFormat works on the whole textobject - we use the Temp selection for that
     KoTextDocument *textdoc = textDocument();
     textdoc->selectAll( KoTextDocument::Temp );
-    KCommand *cmd = setFormatCommand( 0L, curFormat, newFormat,
+    KCommand *cmd = setFormatCommand( 0L, 0L, newFormat,
                                       flags, zoomFont, KoTextDocument::Temp );
     textdoc->removeSelection( KoTextDocument::Temp );
     if (cmd)
