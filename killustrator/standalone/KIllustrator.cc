@@ -71,6 +71,7 @@
 #include "Preview.h"
 #include "units.h"
 #include "ScriptDialog.h"
+#include "HelplineDialog.h"
 #include "DocumentInfo.h"
 #include <kiconloader.h>
 #include <klocale.h>
@@ -146,8 +147,13 @@ KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
   	   this, SLOT (updateRecentFiles ()));
   connect (PStateManager::instance (), SIGNAL (settingsChanged ()),
   	   this, SLOT (updateSettings ()));
+  connect (canvas, SIGNAL(gridStatusChanged ()), this,
+	   SLOT(updateGridSettings ()));
 
   view->setItemChecked (ID_VIEW_GRID, canvas->showGrid ());
+  layout->setItemChecked (ID_LAYOUT_ALIGN_GRID, canvas->snapToGrid ());
+  view->setItemChecked (ID_VIEW_HELPLINES, canvas->showHelplines ());
+  layout->setItemChecked (ID_LAYOUT_ALIGN_HLINES, canvas->alignToHelplines ());
 
   if (! previewHandlerRegistered) {
     KFilePreviewDialog::registerPreviewModule ("kil", kilPreviewHandler,
@@ -578,11 +584,19 @@ void KIllustrator::initMenu () {
   view->setItemChecked (ID_VIEW_RULER, true);
   view->insertItem (i18n ("Show Grid"), ID_VIEW_GRID);
   view->setItemChecked (ID_VIEW_GRID, false);
+  view->insertItem (i18n ("Show Helplines"), ID_VIEW_HELPLINES);
+  view->setItemChecked (ID_VIEW_HELPLINES, false);
   connect (view, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
   layout->insertItem (i18n ("&Page"), ID_LAYOUT_PAGE);
-  layout->insertSeparator ();
   layout->insertItem (i18n ("&Grid"), ID_LAYOUT_GRID);
+  layout->insertItem (i18n ("&Helplines"), ID_LAYOUT_HELPLINES);
+  layout->insertSeparator ();
+  layout->insertItem (i18n ("Align to Grid"), ID_LAYOUT_ALIGN_GRID);
+  layout->setItemChecked (ID_LAYOUT_ALIGN_GRID, false);
+  layout->setAccel (CTRL + Key_Y, ID_LAYOUT_ALIGN_GRID);
+  layout->insertItem (i18n ("Align to Helplines"), ID_LAYOUT_ALIGN_HLINES);
+  layout->setItemChecked (ID_LAYOUT_ALIGN_HLINES, false);
   connect (layout, SIGNAL (activated (int)), SLOT (menuCallback (int)));
   
   QPopupMenu* transformations = new QPopupMenu ();
@@ -868,6 +882,13 @@ void KIllustrator::menuCallback (int item) {
       view->setItemChecked (ID_VIEW_GRID, show_it);
     }
     break;
+  case ID_VIEW_HELPLINES:
+    {
+      bool show_it = !view->isItemChecked (ID_VIEW_HELPLINES);
+      canvas->showHelplines (show_it);
+      view->setItemChecked (ID_VIEW_HELPLINES, show_it);
+    }
+    break;
   case ID_LAYOUT_PAGE:
     {
       KoPageLayout pLayout = document->pageLayout ();
@@ -881,6 +902,23 @@ void KIllustrator::menuCallback (int item) {
     }
   case ID_LAYOUT_GRID:
     GridDialog::setupGrid (canvas);
+    break;
+  case ID_LAYOUT_HELPLINES:
+    HelplineDialog::setup (canvas);
+    break;
+  case ID_LAYOUT_ALIGN_GRID:
+    {
+      bool align_it = !layout->isItemChecked (ID_LAYOUT_ALIGN_GRID);
+      canvas->snapToGrid (align_it);
+      layout->setItemChecked (ID_LAYOUT_ALIGN_GRID, align_it);
+    }
+    break;
+  case ID_LAYOUT_ALIGN_HLINES:
+    {
+      bool align_it = !layout->isItemChecked (ID_LAYOUT_ALIGN_HLINES);
+      canvas->alignToHelplines (align_it);
+      layout->setItemChecked (ID_LAYOUT_ALIGN_HLINES, align_it);
+    }
     break;
   case ID_ARRANGE_ALIGN:
     AlignmentDialog::alignSelection (document, &cmdHistory);
@@ -1470,3 +1508,13 @@ void KIllustrator::updatePalette () {
     }
   }
 }
+
+void KIllustrator::updateGridSettings () {
+  if (canvas->snapToGrid () != layout->isItemChecked (ID_LAYOUT_ALIGN_GRID))
+    layout->setItemChecked (ID_LAYOUT_ALIGN_GRID, canvas->snapToGrid ());
+  if (canvas->alignToHelplines () != 
+      layout->isItemChecked (ID_LAYOUT_ALIGN_HLINES))
+    layout->setItemChecked (ID_LAYOUT_ALIGN_HLINES, 
+			    canvas->alignToHelplines ());
+}
+

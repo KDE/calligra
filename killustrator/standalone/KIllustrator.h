@@ -83,9 +83,13 @@ class FilterManager;
 #define ID_VIEW_LAYERS         305
 #define ID_VIEW_RULER          310
 #define ID_VIEW_GRID           311
+#define ID_VIEW_HELPLINES      312
 
 #define ID_LAYOUT_PAGE         400
 #define ID_LAYOUT_GRID         401
+#define ID_LAYOUT_HELPLINES    402
+#define ID_LAYOUT_ALIGN_GRID   403
+#define ID_LAYOUT_ALIGN_HLINES 404
 
 #define ID_ARRANGE_ALIGN       500
 #define ID_ARRANGE_FRONT       501
@@ -164,6 +168,8 @@ public slots:
 
   void updateRecentFiles ();
   void updateSettings ();
+
+  void updateGridSettings ();
 
 protected slots:
   void toolSelected (int id);

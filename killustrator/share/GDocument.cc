@@ -94,6 +94,9 @@ void GDocument::setAutoUpdate (bool flag) {
 }
 
 void GDocument::initialize () {
+  gridx = gridy = 20.0;
+  snapToGrid = snapToHelplines = false;
+
   pLayout.format = PG_DIN_A4;
   pLayout.orientation = PG_PORTRAIT;
   pLayout.width = PG_A4_WIDTH; pLayout.height = PG_A4_HEIGHT;
@@ -505,6 +508,28 @@ bool GDocument::saveToXml (ostream& os) {
   xml.addAttribute ("bmargin", pLayout.bottom);
   xml.closeTag (true);
 
+  xml.startTag ("grid", false);
+  xml.addAttribute ("dx", gridx);
+  xml.addAttribute ("dy", gridy);
+  xml.addAttribute ("align", snapToGrid);
+  xml.closeTag (true);
+
+  xml.startTag ("helplines", false);
+  xml.addAttribute ("align", snapToHelplines);
+  xml.closeTag ();
+  vector<float>::iterator hi;
+  for (hi = hHelplines.begin (); hi != hHelplines.end (); hi++) {
+    xml.startTag ("hl", false);
+    xml.addAttribute ("pos", *hi);
+    xml.closeTag (true);
+  }
+  for (hi = vHelplines.begin (); hi != vHelplines.end (); hi++) {
+    xml.startTag ("vl", false);
+    xml.addAttribute ("pos", *hi);
+    xml.closeTag (true);
+  }
+  xml.endTag ();
+
   xml.endTag (); // </head>
 
   bool save_layer_info = (layers.size () > 1);
@@ -829,7 +854,58 @@ bool GDocument::readFromXml (istream& is) {
       }
     }
     else if (elem.tag () == "author")
-      ; 
+       ; 
+    else if (elem.tag () == "grid") {
+      list<XmlAttribute>::const_iterator first = 
+	elem.attributes ().begin ();
+       while (first != elem.attributes ().end ()) {
+        if ((*first).name () == "dx")
+	  gridx = (*first).floatValue ();
+        else if ((*first).name () == "dy")
+	  gridy = (*first).floatValue ();
+        else if ((*first).name () == "align")
+	  snapToGrid = ((*first).intValue () == 1);
+        first++;
+      }
+    }
+    else if (elem.tag () == "helplines") {
+      bool endOfHelplines = false;
+      list<XmlAttribute>::const_iterator first = 
+	elem.attributes ().begin ();
+       while (first != elem.attributes ().end ()) {
+	 if ((*first).name () == "align")
+	  snapToHelplines = ((*first).intValue () == 1);
+        first++;
+      }
+
+      while (!endOfHelplines) {
+	if (! xml.readElement (elem))
+	  return false;
+	
+	if (elem.tag () == "helplines" && elem.isEndTag ()) {
+	  endOfHelplines = true;
+	  continue;
+	}
+	else if (elem.tag () == "hl") {
+	  list<XmlAttribute>::const_iterator first = 
+	    elem.attributes ().begin ();
+	  while (first != elem.attributes ().end ()) {
+	    if ((*first).name () == "pos")
+	      hHelplines.push_back ((*first).floatValue ());
+	    first++;
+	  }
+	}
+	else if (elem.tag () == "vl") {
+	  list<XmlAttribute>::const_iterator first = 
+	    elem.attributes ().begin ();
+	  while (first != elem.attributes ().end ()) {
+	    if ((*first).name () == "pos")
+	      vHelplines.push_back ((*first).floatValue ());
+	    first++;
+	  }
+	}
+      }
+    }
     else if (elem.tag () == "head" && elem.isEndTag ())
       endOfHeader = true;
     else
@@ -843,6 +919,7 @@ bool GDocument::readFromXml (istream& is) {
   bool result = parseBody (xml, dummy, false);
 
   setModified (false);
+  emit gridChanged ();
   return result;
 }
 
@@ -1031,4 +1108,31 @@ void GDocument::invalidateClipRegions () {
 	(*oi)->invalidateClipRegion ();
     }
   }
+}
+
+void GDocument::setGrid (float dx, float dy, bool snap) {
+  gridx = dx;
+  gridy = dy;
+  snapToHelplines = snap;
+}
+
+void GDocument::getGrid (float& dx, float& dy, bool& snap) {
+  dx = gridx;
+  dy = gridy;
+  snap = snapToHelplines;
+}
+
+void GDocument::setHelplines (const vector<float>& hlines, 
+			      const vector<float>& vlines,
+			      bool snap) {
+  hHelplines = hlines;
+  vHelplines = vlines;
+  snapToHelplines = snap;
+}
+
+void GDocument::getHelplines (vector<float>& hlines, vector<float>& vlines,
+			      bool& snap) {
+  hlines = hHelplines;
+  vlines = vHelplines;
+  snap = snapToHelplines;
 }

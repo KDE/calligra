@@ -25,6 +25,8 @@
 #ifndef Canvas_h_
 #define Canvas_h_
 
+#include <vector>
+
 #include <iostream.h>
 #include <qwidget.h>
 #include <qpixmap.h>
@@ -48,6 +50,15 @@ public:
 
   void setZoomFactor (float factor);
   float getZoomFactor () const;
+
+  void setHorizHelplines (const vector<float>& lines);
+  void setVertHelplines (const vector<float>& lines);
+  const vector<float>& getHorizHelplines () const;
+  const vector<float>& getVertHelplines () const;
+  void alignToHelplines (bool flag);
+  bool alignToHelplines ();
+  void showHelplines (bool flag);
+  bool showHelplines ();
 
   void showGrid (bool flag);
   bool showGrid () const { return gridIsOn; }
@@ -91,7 +102,7 @@ protected:
 
 signals:
   void sizeChanged ();
-
+  void gridStatusChanged ();
   void rightButtonAtObjectClicked (int x, int y, GObject* obj);
   void rightButtonAtSelectionClicked (int x, int y);
   void rightButtonClicked (int x, int y);
@@ -106,6 +117,7 @@ public slots:
   void updateRegion (const Rect& r);
   void ensureVisibility (bool flag);
   void calculateSize ();
+  void updateGridInfos ();
 
 private slots:
   void retryUpdateRegion ();
@@ -114,6 +126,7 @@ private:
   void propagateMouseEvent (QMouseEvent *e);
   void propagateKeyEvent (QKeyEvent *e);
   void drawGrid (Painter& p);
+  void drawHelplines (Painter& p);
   void redrawView (bool repaintFlag = true);
 
   QwViewport* viewport;
@@ -131,6 +144,8 @@ private:
   bool outlineMode;
   int pendingRedraws;
   Rect regionForUpdate, region;
+  vector<float> horizHelplines, vertHelplines;
+  bool helplinesAreOn, helplinesSnapIsOn;
 
   static QArray<float> zoomFactors;
 };

@@ -140,7 +140,15 @@ public:
   void setPageLayout (const KoPageLayout& layout);
 
   void printInfo (QString& s);
-  
+
+  void setGrid (float dx, float dy, bool snap);
+  void getGrid (float& dx, float& dy, bool& snap);
+
+  void setHelplines (const vector<float>& hlines, const vector<float>& vlines,
+		     bool snap);
+  void getHelplines (vector<float>& hlines, vector<float>& vlines,
+		     bool& snap);
+
 protected:
   void updateHandle ();
   bool parseBody (XmlReader& xml, list<GObject*>& newObjs, bool markNew);
@@ -155,6 +163,7 @@ signals:
   void changed (const Rect& r);
   void selectionChanged ();
   void sizeChanged ();
+  void gridChanged ();
 
   void wasModified (bool flag);
 
@@ -171,6 +180,9 @@ protected:
   Rect selBox;
   bool selBoxIsValid;
   KoPageLayout pLayout;
+  bool snapToGrid, snapToHelplines;
+  float gridx, gridy;
+  vector<float> hHelplines, vHelplines;
 };
 
 #endif 

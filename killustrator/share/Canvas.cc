@@ -61,10 +61,14 @@ Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
   connect (document, SIGNAL (sizeChanged ()), this, SLOT (calculateSize ()));
   connect (&(document->handle ()), SIGNAL (handleChanged ()),
 	   this, SLOT (updateView ()));
+  connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
 
   pixmap = 0L;
 
+  helplinesAreOn = helplinesSnapIsOn = false;
+
   readGridProperties ();
+  updateGridInfos ();
 
   calculateSize ();
   setFocusPolicy (ClickFocus);
@@ -110,6 +114,8 @@ void Canvas::initZoomFactors (QArray<float>& factors) {
 void Canvas::setZoomFactor (float factor) {
   zoomFactor = factor;
   calculateSize ();
+  // recompute pixmaps of fill areas
+  document->invalidateClipRegions ();
   updateView ();
   emit sizeChanged ();
   emit zoomFactorChanged (zoomFactor);
@@ -131,6 +137,8 @@ void Canvas::snapToGrid (bool flag) {
   if (gridSnapIsOn != flag) {
     gridSnapIsOn = flag;
     saveGridProperties ();
+    emit gridStatusChanged ();
+    document->setGrid (hGridDistance, vGridDistance, gridSnapIsOn);
   }    
 }
 
@@ -138,29 +146,31 @@ void Canvas::setGridDistance (float hdist, float vdist) {
   hGridDistance = hdist;
   vGridDistance = vdist;
   saveGridProperties ();
+  document->setGrid (hGridDistance, vGridDistance, gridSnapIsOn);
 }
 
 void Canvas::snapPositionToGrid (int& x, int& y) {
-  if (gridSnapIsOn) {
-#if 0
-    int p, m, n;
-    int h = qRound (hGridDistance);
-    int v = qRound (vGridDistance);
+  bool snap = false;
 
-    p = x / h;
-    m = x % h;
-    n = p * h;
-    if (m > h / 2)
-      n += h;
-    x = n;
-
-    p = y / v;
-    m = y % v;
-    n = p * v;
-    if (m > v / 2)
-      n += v;
-    y = n;
-#else
+  if (helplinesSnapIsOn) {
+    // try to snap to help lines
+    vector<float>::iterator i;
+    for (i = horizHelplines.begin (); i != horizHelplines.end (); i++) {
+      if (fabs (*i - y) <= 10.0) {
+	y = qRound (*i);
+	snap = true;
+	break;
+      }
+    }
+    for (i = vertHelplines.begin (); i != vertHelplines.end (); i++) {
+      if (fabs (*i - x) <= 10.0) {
+	x = qRound (*i);
+	snap = true;
+	break;
+      }
+    }
+  }
+  if (gridSnapIsOn && ! snap) {
     int n = (int) ((float) x / hGridDistance);
     float r = fmod ((float) x, hGridDistance);
     if (r > (hGridDistance / 2.0))
@@ -172,7 +182,6 @@ void Canvas::snapPositionToGrid (int& x, int& y) {
     if (r > (vGridDistance / 2.0))
       n++;
     y = qRound (vGridDistance * (float) n);
-#endif
   }
 }
 
@@ -267,7 +276,9 @@ void Canvas::moveEvent (QMoveEvent *e) {
 
 void Canvas::setDocument (GDocument* doc) {
   document = doc;
+  updateGridInfos ();
   connect (document, SIGNAL (changed ()), this, SLOT (updateView ()));
+  connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
 }
 
 GDocument* Canvas::getDocument () {
@@ -326,6 +337,10 @@ void Canvas::redrawView (bool repaintFlag) {
   // draw the grid
   if (gridIsOn)
     drawGrid (p);
+
+  // draw the help lines
+  if (helplinesAreOn)
+    drawHelplines (p);
 
   // next the document contents
   document->drawContents (p, drawBasePoints, outlineMode);
@@ -413,6 +428,10 @@ void Canvas::updateRegion (const Rect& reg) {
   if (gridIsOn)
     drawGrid (p);
 
+  // draw the help lines
+  if (helplinesAreOn)
+    drawHelplines (p);
+
   // next the document contents
   document->drawContentsInRegion (p, r, drawBasePoints, outlineMode);
 
@@ -422,6 +441,27 @@ void Canvas::updateRegion (const Rect& reg) {
 
   p.end ();
   repaint (clip, false);
+}
+
+void Canvas::drawHelplines (Painter& p) {
+  int pw = document->getPaperWidth ();
+  int ph = document->getPaperHeight ();
+  unsigned int i;
+
+  QPen pen (blue, 0, DashLine);
+
+  p.save ();
+  p.setPen (pen);
+  for (i = 0; i < horizHelplines.size (); i++) {
+    int hi = qRound (horizHelplines[i]);
+    p.drawLine (0, hi, pw, hi);
+  }
+  for (i = 0; i < vertHelplines.size (); i++) {
+    int vi = qRound (vertHelplines[i]);
+    p.drawLine (vi, 0, vi, ph);
+  }
+
+  p.restore ();
 }
 
 void Canvas::drawGrid (Painter& p) {
@@ -503,6 +543,10 @@ void Canvas::readGridProperties () {
   gridIsOn = config->readBoolEntry ("showGrid", false);
   gridSnapIsOn = config->readBoolEntry ("snapTopGrid", false);
 
+  config->setGroup ("Helplines");
+  helplinesAreOn = config->readBoolEntry ("showHelplines");
+  helplinesSnapIsOn = config->readBoolEntry ("snapTopHelplines");
+
   config->setGroup (oldgroup);
 }
 
@@ -517,6 +561,60 @@ void Canvas::saveGridProperties () {
   config->writeEntry ("showGrid", gridIsOn);
   config->writeEntry ("snapTopGrid", gridSnapIsOn);
 
+  config->setGroup ("Helplines");
+  config->writeEntry ("showHelplines", helplinesAreOn);
+  config->writeEntry ("snapTopHelplines", helplinesSnapIsOn);
+
   config->setGroup (oldgroup);
   config->sync ();
+}
+
+void Canvas::setHorizHelplines (const vector<float>& lines) {
+  horizHelplines = lines;
+  if (helplinesAreOn)
+    updateView ();
+  document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
+}
+
+void Canvas::setVertHelplines (const vector<float>& lines) {
+  vertHelplines = lines;
+  if (helplinesAreOn)
+    updateView ();
+  document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
+}
+
+const vector<float>& Canvas::getHorizHelplines () const {
+  return horizHelplines;
+}
+
+const vector<float>& Canvas::getVertHelplines () const {
+  return vertHelplines;
+}
+
+void Canvas::alignToHelplines (bool flag) {
+  helplinesSnapIsOn = flag;
+  document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
+}
+
+bool Canvas::alignToHelplines () {
+  return helplinesSnapIsOn;
+}
+
+void Canvas::showHelplines (bool flag) {
+  if (helplinesAreOn != flag) {
+    helplinesAreOn = flag;
+    updateView ();
+    saveGridProperties ();
+  }
+}
+
+bool Canvas::showHelplines () {
+  return helplinesAreOn;
+}
+
+void Canvas::updateGridInfos () {
+  document->getGrid (hGridDistance, vGridDistance, gridSnapIsOn);
+  document->getHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
+  saveGridProperties ();
+  emit gridStatusChanged ();
 }
