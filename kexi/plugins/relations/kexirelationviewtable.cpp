@@ -174,8 +174,11 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *obj, QEvent *ev)
 				else
 				if (m_offsetX<0) {
 					m_offsetX+=newPos.x();
-					newPos.setX(m_offsetX);
-					m_offsetX=0;	
+					if (m_offsetX>0) {
+						newPos.setX(m_offsetX);
+						m_offsetX=0;	
+					}
+					else newPos.setX(0);
 				}
 //correct the y position
 				if (newPos.y()<0) {
@@ -185,8 +188,11 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *obj, QEvent *ev)
 				else
 				if (m_offsetY<0) {
 					m_offsetY+=newPos.y();
-					newPos.setY(m_offsetY);
-					m_offsetY=0;	
+					if (m_offsetY>0) {
+						newPos.setY(m_offsetY);
+						m_offsetY=0;	
+					}
+					else newPos.setY(0);
 				}
 //move and update helpers
 
