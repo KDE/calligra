@@ -27,6 +27,7 @@ Description: KDE Office Suite (Common libraries and binaries)
 Package: kchart
 Architecture: any
 Section: x11
+Replaces: koffice-common (<< 2.0-final-7)
 Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KChart
@@ -37,6 +38,7 @@ Description: KDE Office Suite - KChart
 Package: kspread
 Architecture: any
 Section: x11
+Replaces: koffice-common (<< 2.0-final-7)
 Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KSpread
@@ -47,6 +49,7 @@ Description: KDE Office Suite - KSpread
 Package: killustrator
 Architecture: any
 Section: x11
+Replaces: koffice-common (<< 2.0-final-7)
 Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KIllustrator
@@ -57,6 +60,7 @@ Description: KDE Office Suite - KIllustrator
 Package: kpresenter
 Architecture: any
 Section: x11
+Replaces: koffice-common (<< 2.0-final-7)
 Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KPresenter
@@ -67,6 +71,7 @@ Description: KDE Office Suite - KPresenter
 Package: kword
 Architecture: any
 Section: x11
+Replaces: koffice-common (<< 2.0-final-7)
 Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KWord
