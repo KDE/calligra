@@ -82,7 +82,7 @@ QString kFileToString(const char* aFileName, bool aEnsureNL, bool aVerbose)
   }
 
   //result.resize(len + (int)aEnsureNL + 1);
-  readLen = file.readBlock(result.data(), len);
+  readLen = file.readBlock((char*)result.data(), len);
   if (aEnsureNL && result[len-1]!='\n')
   {
     result[len++] = '\n';
