@@ -17,7 +17,7 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	koApplication.cc koQueryTrader.cc \
 	koFilter.cc koFilterChain.cpp \
 	koPictureKey.cc koPictureBase.cc koPicture.cc koPictureShared.cc \
-	koPictureImage.cc koPictureClipart.cc koPictureCollection.cc \
+	koPictureImage.cc koPictureClipart.cc koPictureCollection.cc  koPictureEps.cc\
 	koDocumentInfo.cc \
 	koView.cc koFrame.cc handler.cpp koDocumentChild.cc \
 	koDocumentInfoDlg.cc koFactory.cc koChild.cc \
@@ -39,7 +39,7 @@ include_HEADERS = handler.h \
 	koPictureKey.h koPicture.h koPictureCollection.h
 
 noinst_HEADERS = koDocument_p.h \
-	koPictureShared.h koPictureBase.h koPictureImage.h koPictureClipart.h
+	koPictureShared.h koPictureBase.h koPictureImage.h koPictureClipart.h koPictureEps.h
 
 kodocinfopropspage_la_SOURCES = koDocInfoPropsFactory.cc
 kodocinfopropspage_la_LIBADD = ./libkofficecore.la
