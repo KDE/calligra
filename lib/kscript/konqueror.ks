@@ -1,4 +1,3 @@
-#!/opt/kde/bin/kscript
 main
 {
   konq = findApplication( "konqueror", "KonquerorIface" );
