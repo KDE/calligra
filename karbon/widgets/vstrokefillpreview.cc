@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -167,6 +167,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 				else if( s.gradient().type() == VGradient::radial )
 				{
 					fill.gradient().setOrigin( KoPoint( FILL_TOPX, 25 ) );
+					fill.gradient().setFocalPoint( KoPoint( FILL_TOPX, 25 ) );
 					fill.gradient().setVector( KoPoint( FILL_TOPX, 40 ) );
 				}
 
@@ -295,6 +296,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 				else if( f.gradient().type() == VGradient::radial )
 				{
 					fill.gradient().setOrigin( KoPoint( 30, 35 ) );
+					fill.gradient().setFocalPoint( KoPoint( 30, 35 ) );
 					fill.gradient().setVector( KoPoint( 30, 50 ) );
 				}
 			}
