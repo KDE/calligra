@@ -91,6 +91,7 @@ protected:
   KConfig* config;
   QComboBox *typeCompletion;
   QComboBox *typeOfMove;
+  QCheckBox *msgError;
 } ;
 
 class KSpreadpreference : public KDialogBase

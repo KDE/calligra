@@ -309,10 +309,12 @@ miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name 
   lay1->setSpacing( 10 );
   config = KSpreadFactory::global()->config();
   int _indent=10;
+  bool m_bMsgError=true;
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
         _indent=config->readNumEntry( "Indent" ,10) ;
+        m_bMsgError=config->readBoolEntry( "Msg error" ,true) ;
         }
 
   QLabel *label=new QLabel(tmpQGroupBox);
@@ -348,6 +350,9 @@ miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name 
   typeOfMove->insertStringList(listType);
   typeOfMove->setCurrentItem(0);
   lay1->addWidget(typeOfMove);
+  msgError= new QCheckBox(i18n("Show message of error"),tmpQGroupBox);
+  msgError->setChecked(m_bMsgError);
+  lay1->addWidget(msgError);
 
   initComboBox();
   box->addWidget( tmpQGroupBox);
@@ -464,6 +469,12 @@ if(valIndent->value()!=m_pView->doc()->getIndentValue())
         {
         m_pView->doc()->setIndentValue( valIndent->value());
         config->writeEntry( "Indent", valIndent->value());
+        }
+
+if(msgError->isChecked()!=m_pView->doc()->getShowMessageError())
+        {
+        m_pView->doc()->setShowMessageError( msgError->isChecked());
+        config->writeEntry( "Msg error" ,(int)msgError->isChecked()) ;
         }
 }
 
