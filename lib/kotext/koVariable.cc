@@ -463,6 +463,12 @@ void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
         p->drawRect( x, y, zh->layoutUnitToPixelX( width ), h );
     }
 
+    if ( textDocument()->drawingShadow() ) // Use shadow color if drawing a shadow
+    {
+        textColor = parag->shadowColor();
+        p->setPen( textColor );
+    }
+
     KoTextParag::drawUnderlineDoubleUnderline( p , f , zh, font, textColor, x , bl, zh->layoutUnitToPixelX( width ), y);
 
     //p->setFont( customItemFont ); // already done by the caller
@@ -1235,6 +1241,9 @@ void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int 
     QFont font( f->screenFont( zh ) );
     p->save();
     QColor textColor=linkColor ? Qt::blue :  f->color();
+    if ( textDocument()->drawingShadow() ) // Use shadow color if drawing a shadow
+        textColor = parag->shadowColor();
+
     p->setPen( QPen( textColor ) );
     if ( f->textBackgroundColor().isValid() )
         p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h, f->textBackgroundColor() );
