@@ -823,20 +823,18 @@ void KoMainWindow::slotFilePrintPreview()
 
 void KoMainWindow::slotConfigureKeys()
 {
-    // We need to merge the shell, the doc, and the view's action collections
-    KActionPtrList coll( *actionCollection() );
-    KoDocument *doc = rootDocument();
-    if ( doc )
-        coll += *doc->actionCollection();
     KoView *view = rootView();
     // We _need_ a view. We use the view's xmlFile() (e.g. kword.rc)
     Q_ASSERT( view );
     if ( !view )
         return;
-    coll += *view->actionCollection();
-    QString relXmlFile = view->xmlFile();
-    // the global instance name will automatically be prepended, e.g. kword/kword.rc
-    KKeyDialog::configureKeys(&coll, relXmlFile);
+
+    KKeyDialog dlg;
+    dlg.insert( actionCollection() );
+    dlg.insert( view->actionCollection() );
+    if ( rootDocument() )
+        dlg.insert( rootDocument()->actionCollection() );
+    dlg.configure();
 }
 
 void KoMainWindow::slotConfigureToolbars()
