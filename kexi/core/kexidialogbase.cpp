@@ -45,6 +45,7 @@ QPtrList<KexiDialogBase> *KexiDialogBase::s_ToolWindows=0;
 
 KexiDialogBase::KexiDialogBase(KexiView* view, QString identifier, QWidget *parent, const char *name) 
 	: QWidget(parent, 
+//jowenn: why?	: QWidget(parent ? parent : view->workspaceWidget(), 
 		name ? name : identifier.latin1(), WDestructiveClose)
 	,KXMLGUIClient()
 	,m_view(view)
@@ -68,6 +69,7 @@ KexiDialogBase::KexiDialogBase(KexiView* view, QString identifier, QWidget *pare
 
 KexiDialogBase::KexiDialogBase(KexiView *view, KexiProjectHandlerItem *item, QWidget *parent, const char *name )
 	: QWidget(parent, 
+//jowenn: why?		: QWidget(parent ? parent : view->workspaceWidget(), 
 		name ? name : item->fullIdentifier().latin1(), WDestructiveClose)
 	,KXMLGUIClient()
  //	: KexiDialogBase(view,parent, item->fullIdentifier().latin1())
@@ -98,9 +100,9 @@ void KexiDialogBase::init()
 	QWidget * wid = m_view->workspaceWidget();
 
 //	reparent(m_view->workspaceWidget(),QPoint(0,0),true);
-  m_registering=false;
+	m_registering=false;
 
-//	m_view->workspace()->activateView(this);
+//js	m_view->workspace()->activateView(this);
 	if(!m_identifier.isEmpty())
 	{
 		m_view->registerDialog(this, m_identifier);
@@ -263,7 +265,6 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt, const QString &id
 //	showMaximized();
 	return;
 }
-
 
 void KexiDialogBase::focusInEvent ( QFocusEvent *)
 {
