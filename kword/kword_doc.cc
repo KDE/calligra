@@ -3437,8 +3437,9 @@ QList<KWFrame> KWordDocument::getSelectedFrames() {
 /*================================================================*/
 KWFrame *KWordDocument::getFirstSelectedFrame()
 {
+    int foo=0; // This variable is not needed, but we mustn't pass i (loops quite nicely)!!!
     for (int i = 0; i < getNumFrameSets(); i++ ) {
-        KWFrame *frame = getFirstSelectedFrame(i);
+        KWFrame *frame = getFirstSelectedFrame(foo);
         if(frame)
             return frame;
     }
