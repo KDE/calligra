@@ -54,9 +54,15 @@ layer
 channel
  - a layer channel
 
+LayerDialog
+- a non-modal dialog for editing layers
+
+LayerList
+- a view for all layers in a canvas
+- provides context menu when clicking RMB for each layer
 
 Ideas:
 ------
 
 - Use KScript to implement a scripting server later.
-- 
+ 
