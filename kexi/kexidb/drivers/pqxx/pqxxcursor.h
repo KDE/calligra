@@ -25,12 +25,17 @@ public:
 	~pqxxSqlCursor();
         virtual bool drv_open(const QString& statement);
         virtual bool drv_close();
-        virtual bool drv_getNextRecord();
-        virtual bool drv_getPrevRecord();
+        virtual void drv_getNextRecord();
+        virtual void drv_getPrevRecord();
 	virtual QVariant value(int) const;
 	virtual const char** recordData() const;
 	virtual void storeCurrentRecord(RecordData &data) const;
-
+	virtual void drv_clearServerResult();
+	virtual void drv_appendCurrentRecordToBuffer();
+	virtual void drv_bufferMovePointerNext();
+	virtual void drv_bufferMovePointerPrev();
+	virtual void drv_bufferMovePointerTo(Q_LLONG to);
+	
 private:
 	pqxx::result* m_res;
 	pqxx::nontransaction* m_tran;

@@ -25,6 +25,7 @@ pqxxSqlCursor::pqxxSqlCursor(KexiDB::Connection* conn, const QString& statement,
 my_conn = static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql;
 m_fieldCount = 0;
 m_at = 0;
+m_options = Buffered;
 }
 
 //==================================================================================
@@ -60,7 +61,9 @@ bool pqxxSqlCursor::drv_open(const QString& statement)
 		m_fieldCount = m_res->columns();
 		m_opened=true;
 		m_afterLast=false;
-		return true;
+		m_records_in_buf = m_res->size();
+		m_buffering_completed = true;
+		return true;m_buffering_completed = true;
 	}
 	catch (const std::exception &e)
     	{
@@ -89,9 +92,18 @@ bool pqxxSqlCursor::drv_close()
 
 //==================================================================================
 //
-bool pqxxSqlCursor::drv_getNextRecord()
+void pqxxSqlCursor::drv_getNextRecord()
 {
-kdDebug() << "pqxxSqlCursor::drv_getNextRecord, size is " <<m_res->size() << " Current Position is " << (long)m_at << endl;
+kdDebug() << "pqxxSqlCursor::drv_getNextRecord, size is " <<m_res->size() << " Current Position is " << (long)at() << endl;
+if(at() < m_res->size())
+{	
+	m_result = FetchOK;
+}
+else
+{
+	m_result = FetchEnd;
+}	
+#if 0
 m_at++;
 if (m_at <= m_res->size())
 {
@@ -108,15 +120,24 @@ else
 	m_afterLast = true;
 	return false;
 }
+#endif
 }
 
 
 //==================================================================================
 //Move pointer to the previous record
-bool pqxxSqlCursor::drv_getPrevRecord()
+void pqxxSqlCursor::drv_getPrevRecord()
 {
 kdDebug() << "pqxxSqlCursor::drv_getPrevRecord" << endl;
 
+if(at() > 0 && at() <= m_res->size())
+{	
+	m_result = FetchOK;
+}
+
+
+m_result = FetchOK;
+#if 0
 if (m_at > 0)
 {
 	m_beforeFirst=false;
@@ -128,6 +149,7 @@ else
 {
 	return false;
 }
+#endif
 #if 0
 	try
 	{
@@ -201,3 +223,39 @@ for( int i=0; i<m_fieldCount; i++)
 	data[i] = QVariant(value(i));
 }
 }
+
+//==================================================================================
+//
+void pqxxSqlCursor::drv_clearServerResult()
+{
+
+}
+
+//==================================================================================
+//
+void pqxxSqlCursor::drv_appendCurrentRecordToBuffer()
+{
+
+}
+
+//==================================================================================
+//
+void pqxxSqlCursor::drv_bufferMovePointerNext()
+{
+
+}
+
+//==================================================================================
+//
+void pqxxSqlCursor::drv_bufferMovePointerPrev()
+{
+
+}
+
+//==================================================================================
+//
+void pqxxSqlCursor::drv_bufferMovePointerTo(Q_LLONG to)
+{
+
+}
+	
