@@ -123,7 +123,7 @@ SvgExport::visitVDocument( VDocument& document )
 		rect.right() << "\" height=\"" << rect.bottom() << "\">" << endl;
 	*m_defs << "<defs>" << endl;
 
-	*m_body << "<g transform=\"scale(1, -1) translate(0, -" << rect.bottom() << "\">" << endl;
+	*m_body << "<g transform=\"scale(1, -1) translate(0, -" << rect.bottom() << ")\">" << endl;
 
 	// we dont need the selection anymore:
 	document.selection()->clear();
