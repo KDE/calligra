@@ -1616,7 +1616,7 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
     const QCString overflowBehavior = context.styleStack().attribute( "style:overflow-behavior" ).latin1();
     if ( overflowBehavior == "clip" )
         frame->setFrameBehavior( KWFrame::Ignore );
-    else if ( overflowBehavior.isEmpty() || overflowBehavior == "auto-create-new-frame" )
+    else if ( overflowBehavior == "auto-create-new-frame" )
     {
         if ( hasMinHeight )
             frame->setFrameBehavior( KWFrame::AutoExtendFrame );
@@ -1624,6 +1624,10 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
             frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
             frame->setNewFrameBehavior( KWFrame::Reconnect ); // anything else doesn't make sense
         }
+    }
+    else if ( overflowBehavior.isEmpty() ) // OO-1.1 documents
+    {
+        frame->setFrameBehavior( hasMinHeight ? KWFrame::AutoExtendFrame : KWFrame::Ignore );
     }
     else
         kdWarning(32001) << "Unknown value for style:overflow-behavior: " << overflowBehavior << endl;

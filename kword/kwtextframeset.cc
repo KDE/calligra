@@ -1940,13 +1940,13 @@ KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasi
                 QString frameName = tag.attribute( "draw:name" );
                 QString chainNextName = tag.attribute( "draw:chain-next-name" );
                 if ( !chainNextName.isEmpty() ) { // 'B' in the above example
-                    //kdDebug(32001) << "Loading " << frameName << " : next-in-chain=" << chainNextName << endl;
+                    kdDebug(32001) << "Loading " << frameName << " : next-in-chain=" << chainNextName << endl;
                     // Check if we already loaded that frame (then we need to go 'before' it)
                     KWFrame* nextFrame = m_doc->loadingInfo()->frameByName( chainNextName );
                     if ( nextFrame ) {
                         fs = dynamic_cast<KWTextFrameSet *>( nextFrame->frameSet() );
                         chainNextName = QString::null; // already found, no need to store it
-                        //kdDebug(32001) << "  found " << nextFrame << " -> frameset " << ( fs ? fs->getName() : QString::null ) << endl;
+                        kdDebug(32001) << "  found " << nextFrame << " -> frameset " << ( fs ? fs->getName() : QString::null ) << endl;
                     }
                 }
                 KWFrame* prevFrame = m_doc->loadingInfo()->chainPrevFrame( frameName );
@@ -1965,7 +1965,7 @@ KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasi
                 } else { // Adding frame to existing frameset
                     context.styleStack().save();
                     context.fillStyleStack( tag, "draw:style-name" ); // get the style for the graphics element
-                    frame = loadOasisFrame( tag, context );
+                    frame = fs->loadOasisFrame( tag, context );
                     context.styleStack().restore();
                 }
 

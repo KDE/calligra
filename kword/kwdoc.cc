@@ -1200,7 +1200,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         // Create main frameset
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Main Text Frameset" ) );
         m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
-        fs->loadOasis( body, context );
+        fs->loadOasisContent( body, context );
         KWFrame* frame = new KWFrame( fs, 29, 798, 42, 566 );
         frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
         frame->setNewFrameBehavior( KWFrame::Reconnect );
@@ -1212,6 +1212,8 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
 
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
     endOfLoading();
+
+    //printDebug();
 
     return true;
 }
@@ -2810,13 +2812,12 @@ bool KWDocument::completeSaving( KoStore *_store )
     }
     if (specialOutputFlag()==SaveAsKOffice1dot1)
     {
-        m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, savePictures );
+        return m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, savePictures );
     }
     else
     {
-        m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, savePictures );
+        return m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, savePictures );
     }
-    return TRUE;
 }
 
 void KWDocument::addView( KoView *_view )
