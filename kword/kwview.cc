@@ -1022,6 +1022,10 @@ void KWView::setupActions()
                                             this, SLOT( selectFrameSet() ),
                                             actionCollection(), "select_frameset" );
 
+    actionInsertFile= new KAction( i18n( "Insert File..." ), 0,
+                                   this, SLOT( insertFile() ),
+                                   actionCollection(), "insert_file" );
+
 
 }
 
@@ -5351,6 +5355,29 @@ void KWView::editFrameSet()
         m_gui->getDocStruct()->editFrameSet();
     }
 }
+
+void KWView::insertFile()
+{
+    KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
+    fd.setMimeFilter( "application/x-kword" );
+    fd.setCaption(i18n("Insert File"));
+    KURL url;
+    if ( fd.exec() == QDialog::Accepted )
+    {
+        url = fd.selectedURL();
+        if( url.isEmpty() )
+        {
+            KMessageBox::sorry( this,
+                                i18n("File name is empty"),
+                                i18n("Insert File"));
+            return;
+        }
+        m_doc->insertFile(url.path());
+    }
+    else
+        return;
+}
+
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */

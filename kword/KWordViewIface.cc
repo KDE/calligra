@@ -286,3 +286,8 @@ void KWordViewIface::saveClipart()
 {
     view->saveClipart();
 }
+
+void KWordViewIface::insertFile()
+{
+    view->insertFile();
+}

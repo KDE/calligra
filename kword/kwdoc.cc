@@ -3624,4 +3624,10 @@ void KWDocument::setCursorInProtectedArea( bool b )
 }
 
 
+void KWDocument::insertFile(const QString & file )
+{
+    //todo
+}
+
+
 #include "kwdoc.moc"

@@ -169,7 +169,6 @@ public:
     void updateHeader();
     void switchModeView();
     void changeFootNoteMenuItem( bool b);
-
 public slots:
     void fileStatistics();
     void editCut();
@@ -349,6 +348,8 @@ public slots:
     void selectFrameSet();
     void editFrameSet();
     void openDocStructurePopupMenu( const QPoint &p, KWFrameSet *frameset);
+
+    void insertFile();
 
 protected slots:
     void spellCheckerReady();
@@ -559,7 +560,7 @@ private:
 
     KAction *actionEditFrameSet;
     KAction *actionSelectedFrameSet;
-
+    KAction *actionInsertFile;
 
     KoCharSelectDia *m_specialCharDlg;
     KoFontDia *m_fontDlg;

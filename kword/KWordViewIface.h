@@ -93,6 +93,8 @@ k_dcop:
     void savePicture();
     void saveClipart();
 
+    void insertFile();
+
 private:
     KWView *view;
 

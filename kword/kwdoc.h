@@ -589,7 +589,7 @@ public:
 
     bool cursorInProtectedArea()const;
     void setCursorInProtectedArea( bool b );
-
+    void insertFile(const QString & file );
 
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
