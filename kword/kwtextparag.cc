@@ -31,6 +31,7 @@
 #include <koxmlns.h>
 #include <koOasisStyles.h>
 
+#include <kglobalsettings.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <assert.h>
@@ -69,7 +70,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, int start, int len,
     if ( start + len == length() && (whichFormattingChars & FormattingBreak) && hardFrameBreakAfter() )
     {
         painter.save();
-        QPen pen( cg.color( QColorGroup::Highlight ) );
+        QPen pen( KGlobalSettings::linkColor() ); // #101820
         painter.setPen( pen );
         //kdDebug() << "KWTextParag::drawFormattingChars start=" << start << " len=" << len << " length=" << length() << endl;
             // keep in sync with KWTextFrameSet::formatVertically
