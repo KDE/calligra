@@ -757,7 +757,20 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
             int bottom = totalHeight + frameHeight;
             // Only skip bottom of frame if there is a next one or if there'll be another one created.
             // ( Not for header/footer, for instance. )
-            if ( !frameIt.atLast() || frameIt.current()->getFrameBehaviour() == KWFrame::AutoCreateNewFrame )
+            bool check = frameIt.atLast() && frameIt.current()->getFrameBehaviour() == KWFrame::AutoCreateNewFrame;
+            if ( !check )
+            {
+                // ## TODO optimize this [maybe we should simply start from the end in the main loop?]
+                QListIterator<KWFrame> nextFrame( frameIt );
+                while ( !check && !nextFrame.atLast() )
+                {
+                    nextFrame++;
+                    if ( !nextFrame.current()->isCopy() )
+                        check = true; // Found a frame after us that isn't a copy => we have somewhere for our overflow
+                }
+            }
+
+            if ( check )
             {
                 //kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
 
@@ -1158,7 +1171,7 @@ void KWTextFrameSet::zoom( bool forPrint )
     // If you change this, fix zoomedFontSize too.
     double factor = kWordDocument()->zoomedResolutionY() *
                     ( forPrint ? 1.0 : 72.0 / QPaintDevice::x11AppDpiY() );
-    kdDebug() << "KWTextFrameSet::zoom factor=" << factor << endl;
+    kdDebugBody(32002) << "KWTextFrameSet::zoom factor=" << factor << endl;
 
 #ifdef DEBUG_FORMATS
     kdDebug(32002) << this << " KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
@@ -1559,19 +1572,18 @@ void KWTextFrameSet::formatMore()
     for ( ; mapIt != m_mapViewAreas.end() ; ++mapIt )
         viewsBottom = QMAX( viewsBottom, mapIt.data() );
 
-    QTextParag *lastFormatted = m_lastFormatted;
 #ifdef DEBUG_FORMAT_MORE
-    kdDebug(32002) << "KWTextFrameSet::formatMore " << getName()
-                   << " lastFormatted id=" << lastFormatted->paragId()
-                   << " lastFormatted's top=" << lastFormatted->rect().top()
-                   << " lastFormatted's height=" << lastFormatted->rect().height()
+    kdDebug(32002) << "formatMore " << getName()
+                   << " lastFormatted id=" << m_lastFormatted->paragId()
+                   << " lastFormatted's top=" << m_lastFormatted->rect().top()
+                   << " lastFormatted's height=" << m_lastFormatted->rect().height()
                    << " to=" << to << " viewsBottom=" << viewsBottom
                    << " availableHeight=" << m_availableHeight << endl;
 #endif
 #ifdef TIMING_FORMAT
-    if ( lastFormatted->prev() == 0 && frameSetInfo() == FI_BODY )
+    if ( m_lastFormatted->prev() == 0 && frameSetInfo() == FI_BODY )
     {
-        kdDebug(32002) << "KWTextFrameSet::formatMore " << getName() << ". First parag -> starting timer" << endl;
+        kdDebug(32002) << "formatMore " << getName() << ". First parag -> starting timer" << endl;
         m_time.start();
     }
 #endif
@@ -1579,49 +1591,48 @@ void KWTextFrameSet::formatMore()
     // Stop if we have formatted everything or if we need more space
     // Otherwise, stop formatting after "to" paragraphs,
     // but make sure we format everything the views need
-    // ###### lastFormatted->rect().height() is dangerous. It's 0 initially, and it can
+    // ###### m_lastFormatted->rect().height() is dangerous. It's 0 initially, and it can
     // be too big after zooming out !!!
     int i;
     for ( i = 0;
-          lastFormatted && bottom + lastFormatted->rect().height() <= m_availableHeight &&
+          m_lastFormatted && bottom + m_lastFormatted->rect().height() <= m_availableHeight &&
  ( i < to || bottom <= viewsBottom ) ; ++i )
     {
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32002) << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
+        kdDebug(32002) << "formatMore formatting id=" << m_lastFormatted->paragId() << endl;
 #endif
-        lastFormatted->format();
-        bottom = lastFormatted->rect().top() + lastFormatted->rect().height();
+        m_lastFormatted->format();
+        bottom = m_lastFormatted->rect().top() + m_lastFormatted->rect().height();
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug() << "KWTextFrameSet::formatMore(inside) top=" << lastFormatted->rect().top()
-                  << " height=" << lastFormatted->rect().height()
-                  << " bottom=" << bottom << " lastFormatted(next parag) = " << lastFormatted->next() << endl;
+        kdDebug() << "formatMore(inside) top=" << m_lastFormatted->rect().top()
+                  << " height=" << m_lastFormatted->rect().height()
+                  << " bottom=" << bottom << " m_lastFormatted(next parag) = " << m_lastFormatted->next() << endl;
 #endif
-        lastFormatted = lastFormatted->next();
+        m_lastFormatted = m_lastFormatted->next();
     }
 #ifdef DEBUG_FORMAT_MORE
-    kdDebug(32002) << "KWTextFrameSet::formatMore finished formatting. "
+    kdDebug(32002) << "formatMore finished formatting. "
                    << " bottom=" << bottom
-                   << " Setting m_lastFormatted to " << lastFormatted
+                   << " m_lastFormatted=" << m_lastFormatted
                    << endl;
 #endif
-    m_lastFormatted = lastFormatted;
 
     if ( ( bottom > m_availableHeight ) ||   // this parag is already off page
-         ( lastFormatted && bottom + lastFormatted->rect().height() > m_availableHeight ) ) // or next parag will be off page
+         ( m_lastFormatted && bottom + m_lastFormatted->rect().height() > m_availableHeight ) ) // or next parag will be off page
     {
 #ifdef DEBUG_FORMAT_MORE
-        if(lastFormatted)
-            kdDebug(32002) << "KWTextFrameSet::formatMore We need more space in " << getName()
-                           << " bottom=" << bottom + lastFormatted->rect().height()
+        if(m_lastFormatted)
+            kdDebug(32002) << "formatMore We need more space in " << getName()
+                           << " bottom=" << bottom + m_lastFormatted->rect().height()
                            << " m_availableHeight=" << m_availableHeight << endl;
         else
-            kdDebug(32002) << "KWTextFrameSet::formatMore We need more space in " << getName()
+            kdDebug(32002) << "formatMore We need more space in " << getName()
                            << " bottom2=" << bottom << " m_availableHeight=" << m_availableHeight << endl;
 #endif
 
         if ( frames.isEmpty() )
         {
-            kdWarning(32002) << "KWTextFrameSet::formatMore no more space, but no frame !" << endl;
+            kdWarning(32002) << "formatMore no more space, but no frame !" << endl;
             return;
         }
 
@@ -1629,16 +1640,16 @@ void KWTextFrameSet::formatMore()
         switch ( frames.last()->getFrameBehaviour() ) {
         case KWFrame::AutoExtendFrame:
         {
-            int difference = bottom - m_availableHeight;
+            int difference = ( bottom + 2 ) - m_availableHeight;
 #ifdef DEBUG_FORMAT_MORE
             kdDebug(32002) << "AutoExtendFrame bottom=" << bottom << " m_availableHeight=" << m_availableHeight
                            << " => difference = " << difference << endl;
 #endif
-            if( lastFormatted && bottom + lastFormatted->rect().height() > m_availableHeight ) {
+            if( m_lastFormatted && bottom + m_lastFormatted->rect().height() > m_availableHeight ) {
 #ifdef DEBUG_FORMAT_MORE
-                kdDebug(32002) << " next will be off -> adding " << lastFormatted->rect().height() << endl;
+                kdDebug(32002) << " next will be off -> adding " << m_lastFormatted->rect().height() << endl;
 #endif
-                difference += lastFormatted->rect().height();
+                difference += m_lastFormatted->rect().height();
             }
 
             if(difference > 0) {
@@ -1647,8 +1658,12 @@ void KWTextFrameSet::formatMore()
 
                 if ( theFrame->getFrameSet()->isAFooter() )
                 {
-                    theFrame->setTop( theFrame->top() - m_doc->unzoomItY( difference ) );
-                    frameResized( theFrame );
+                    wantedPosition = theFrame->top() - m_doc->unzoomItY( difference );
+                    if ( wantedPosition != theFrame->top() )
+                    {
+                        theFrame->setTop( wantedPosition );
+                        frameResized( theFrame );
+                    }
                     break;
                 }
 
@@ -1657,14 +1672,16 @@ void KWTextFrameSet::formatMore()
                 pageBottom -= m_doc->ptBottomBorder();
                 double newPosition = QMIN( wantedPosition, pageBottom );
 #ifdef DEBUG_FORMAT_MORE
-                kdDebug(32002) << "KWTextFrameSet::formatMore setting bottom to " << newPosition << endl;
+                kdDebug(32002) << "formatMore setting bottom to " << newPosition << endl;
 #endif
 
-                theFrame->setBottom(newPosition);
+                bool resized = theFrame->bottom() != newPosition;
+                if ( resized )
+                    theFrame->setBottom(newPosition);
 
                 if(newPosition < wantedPosition && (theFrame->getNewFrameBehaviour() == KWFrame::NoFollowup)) {
-                    frameResized( theFrame );
-                    lastFormatted = 0;
+                    if ( resized )
+                        frameResized( theFrame );
                     m_lastFormatted = 0;
                     break;
                 }
@@ -1672,7 +1689,8 @@ void KWTextFrameSet::formatMore()
                     wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
                     // fall through to AutoCreateNewFrame
                 } else {
-                    frameResized( theFrame );
+                    if ( resized )
+                        frameResized( theFrame );
                     break;
                 }
             }
@@ -1681,7 +1699,7 @@ void KWTextFrameSet::formatMore()
         {
             // We need a new frame in this frameset.
 #ifdef DEBUG_FORMAT_MORE
-            kdDebug(32002) << "KWTextFrameSet::formatMore creating new frame in frameset " << getName() << endl;
+            kdDebug(32002) << "formatMore creating new frame in frameset " << getName() << endl;
 #endif
             uint oldCount = frames.count();
             // First create a new page for it if necessary
@@ -1705,7 +1723,7 @@ void KWTextFrameSet::formatMore()
             m_doc->updateAllFrames();
             m_doc->invalidate();
 
-            if ( lastFormatted )
+            if ( m_lastFormatted )
             {
                 //interval = 0;
                 // not good enough, we need to keep formatting right now
@@ -1716,19 +1734,19 @@ void KWTextFrameSet::formatMore()
         } break;
         case KWFrame::Ignore:
 #ifdef DEBUG_FORMAT_MORE
-            kdDebug(32002) << "KWTextFrameSet::formatMore frame behaviour is Ignore" << endl;
+            kdDebug(32002) << "formatMore frame behaviour is Ignore" << endl;
 #endif
-            lastFormatted = 0;
+            m_lastFormatted = 0;
             break;
         }
     }
     // Handle the case where the last frame is empty, so we may want to
     // remove the last page.
-    else if ( frames.count() > 1 && !lastFormatted && !isAHeader() && !isAFooter()
+    else if ( frames.count() > 1 && !m_lastFormatted && !isAHeader() && !isAFooter()
               && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
     {
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32002) << "KWTextFrameSet::formatMore too much space (" << bottom << ", " << m_availableHeight << ") , trying to remove last frame" << endl;
+        kdDebug(32002) << "formatMore too much space (" << bottom << ", " << m_availableHeight << ") , trying to remove last frame" << endl;
 #endif
         int lastPage = m_doc->getPages() - 1;
         // Last frame is empty -> try removing last page, and more if necessary
@@ -1745,11 +1763,13 @@ void KWTextFrameSet::formatMore()
     }
     // Handle the case where the last frame is in AutoExtendFrame mode
     // and there is less text than space
-    else if ( !lastFormatted && bottom < m_availableHeight &&
+    else if ( !m_lastFormatted && bottom + 2 < m_availableHeight &&
               frames.last()->getFrameBehaviour() == KWFrame::AutoExtendFrame )
     {
-        int difference = m_availableHeight - bottom;
-        kdDebug(32002) << "KWTextFrameSet::formatMore less text than space (AutoExtendFrame) difference=" << difference << endl;
+        // The + 2 here leaves 2 pixels below the last line. Without it we hit
+        // the "break at end of frame" case in adjustFlow (!!).
+        int difference = m_availableHeight - ( bottom + 2 );
+        kdDebug(32002) << "formatMore less text than space (AutoExtendFrame) difference=" << difference << endl;
         // There's no point in resizing a copy, so go back to the last non-copy frame
         KWFrame *theFrame = settingsFrame( frames.last() );
         if ( theFrame->getFrameSet()->isAFooter() )
@@ -1757,7 +1777,7 @@ void KWTextFrameSet::formatMore()
             double wantedPosition = theFrame->top() + m_doc->unzoomItY( difference );
             if ( wantedPosition != theFrame->top() )
             {
-                kdDebug() << "setTop " << wantedPosition << endl;
+                kdDebug() << "top= " << theFrame->top() << " setTop " << wantedPosition << endl;
                 theFrame->setTop( wantedPosition );
                 frameResized( theFrame );
             }
@@ -1765,7 +1785,7 @@ void KWTextFrameSet::formatMore()
         else
         {
             double wantedPosition = theFrame->bottom() - m_doc->unzoomItY( difference );
-            kdDebug() << "KWTextFrameSet::formatMore wantedPosition=" << wantedPosition << " top+minheight=" << theFrame->top() + minFrameHeight << endl;
+            kdDebug() << "formatMore wantedPosition=" << wantedPosition << " top+minheight=" << theFrame->top() + minFrameHeight << endl;
             wantedPosition = QMAX( wantedPosition, theFrame->top() + minFrameHeight );
             if ( wantedPosition != theFrame->bottom() )
             {
@@ -1777,18 +1797,18 @@ void KWTextFrameSet::formatMore()
     }
 
     // Now let's see when we'll need to get back here.
-    if ( lastFormatted )
+    if ( m_lastFormatted )
         formatTimer->start( interval, TRUE );
     else
     {
         interval = QMAX( 0, interval );
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32002) << "KWTextFrameSet::formatMore all formatted" << endl;
+        kdDebug(32002) << "formatMore: all formatted" << endl;
 #endif
 #ifdef TIMING_FORMAT
         if ( frameSetInfo() == FI_BODY )
         {
-            kdDebug(32002) << "KWTextFrameSet::formatMore " << getName() << " all formatted. Took "
+            kdDebug(32002) << "formatMore: " << getName() << " all formatted. Took "
                            << (double)(m_time.elapsed()) / 1000 << " seconds." << endl;
         }
 #endif
