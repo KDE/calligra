@@ -5221,24 +5221,23 @@ void KPrCanvas::moveObject( int x, int y, bool key )
     scrollCanvas(boundingRect);
 
     KoPoint _move=m_boundingRect.topLeft()-boundingRect.topLeft();
-    KMacroCommand *macro=new KMacroCommand(i18n( "Move Object(s)" ));
-    bool macroCreate=false;
+    KMacroCommand *macro=0L;
     KCommand *cmd=m_activePage->moveObject(m_view,_move,key);
     if( cmd && key)
     {
+        if ( !macro)
+            macro=new KMacroCommand(i18n( "Move Object(s)" ));
         macro->addCommand(cmd);
-        macroCreate=true;
     }
     cmd=stickyPage()->moveObject(m_view,_move,key);
     if( cmd && key)
     {
+        if ( !macro)
+            macro=new KMacroCommand(i18n( "Move Object(s)" ));
         macro->addCommand(cmd);
-        macroCreate=true;
     }
-    if(macroCreate)
+    if(macro)
         m_view->kPresenterDoc()->addCommand(macro);
-    else
-        delete macro;
 }
 
 void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )

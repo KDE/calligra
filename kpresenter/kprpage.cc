@@ -175,16 +175,16 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
     int num = m_objectList.count();
     QString clip_str = QString::fromUtf8( data );
     if ( clip_str.isEmpty() ) return;
-    KMacroCommand *macro = new KMacroCommand( i18n("Paste Objects" ));
-    bool createMacro = false;
+    KMacroCommand *macro = 0L;
     int nbNewObject = -1 ;
     for ( int i = 0 ; i < nbCopy ; i++ )
     {
         KCommand *cmd = m_doc->loadPastedObjs( clip_str,this );
         if (cmd )
         {
+            if ( !macro )
+                macro = new KMacroCommand( i18n("Paste Objects" ));
             macro->addCommand( cmd );
-            createMacro = true ;
         }
         if ( nbNewObject == -1 )
             nbNewObject = m_objectList.count() - num;
@@ -214,7 +214,11 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
     {
         KCommand *cmd = rotateObj(angle, true);
         if (cmd )
+        {
+            if ( !macro )
+                macro = new KMacroCommand( i18n("Paste Objects" ));
             macro->addCommand( cmd );
+        }
     }
     if ( increaseX != 0.0 || increaseY != 0.0 )
     {
@@ -227,16 +231,16 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
                 if ( cmd )
                 {
                     cmd->execute();
+                    if ( !macro )
+                        macro = new KMacroCommand( i18n("Paste Objects" ));
                     macro->addCommand( cmd );
                 }
             }
         }
     }
 
-    if (createMacro)
+    if (macro)
         m_doc->addCommand(macro);
-    else
-        delete macro;
 
     m_doc->setModified(true);
 }
@@ -3648,8 +3652,7 @@ bool KPrPage::canMoveOneObject() const
 
 KCommand *KPrPage::alignVertical( VerticalAlignmentType _type )
 {
-    KMacroCommand *macro = new KMacroCommand( i18n("Change Vertical Alignment"));
-    bool createMacro = false;
+    KMacroCommand *macro = 0L;
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
@@ -3659,16 +3662,14 @@ KCommand *KPrPage::alignVertical( VerticalAlignmentType _type )
             if ( obj  && !obj->isProtectContent())
             {
                 KPrChangeVerticalAlignmentCommand * cmd = new KPrChangeVerticalAlignmentCommand( i18n("Change Vertical Alignment"), obj, obj->verticalAlignment(),_type);
+                if ( !macro )
+                    macro = new KMacroCommand( i18n("Change Vertical Alignment"));
                 macro->addCommand( cmd );
                 cmd->execute();
-                createMacro =true;
             }
 	}
     }
-    if (createMacro )
-        return macro;
-    delete macro;
-    return 0L;
+    return macro;
 }
 
 void KPrPage::changeTabStopValue ( double _tabStop )
