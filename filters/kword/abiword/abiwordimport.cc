@@ -61,7 +61,7 @@ class StructureParser : public QXmlDefaultHandler
 {
 public:
     StructureParser(KoFilterChain* chain)
-        : m_pictureNumber(0), m_pictureFrameNumber(0),
+        :  m_chain(chain), m_pictureNumber(0), m_pictureFrameNumber(0),
         m_timepoint(QDateTime::currentDateTime(Qt::UTC))
     {
         createDocument();
@@ -669,7 +669,7 @@ bool StructureParser::EndElementD (StackItem* stackItem)
     KoStoreDevice* out=m_chain->storageFile(strStoreName, KoStore::Write);
     if(!out)
     {
-        kdError(30506) << "Unable to open output file for: " << stackItem->fontName << endl;
+        kdError(30506) << "Unable to open output file for: " << stackItem->fontName << " Storage: " << strStoreName << endl;
         return false;
     }
 
@@ -1255,6 +1255,10 @@ bool StructureParser :: characters ( const QString & ch )
     {
         kdDebug(30506) << indent << " (LINEFEED)" << endl;
     }
+    else if (ch.length()> 40)
+    {   // 40 characters are enough (especially for image data)
+        kdDebug(30506) << indent << " :" << ch.left(40) << "..." << endl;
+    }
     else
     {
         kdDebug(30506) << indent << " :" << ch << ":" << endl;
@@ -1568,6 +1572,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     QCString strOut;
     KoStoreDevice* out;
     
+    kdDebug(30506) << "Creating documentinfo.xml" << endl;
     out=m_chain->storageFile( "documentinfo.xml", KoStore::Write );
     if(!out)
     {
@@ -1580,6 +1585,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
     out->writeBlock(strOut,strOut.length());
     
+    kdDebug(30506) << "Creating maindoc.xml" << endl;
     out=m_chain->storageFile( "root", KoStore::Write );
     if(!out)
     {
