@@ -622,6 +622,8 @@ KCommand *KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newSt
                                int selectionId,
                                int paragLayoutFlags, int formatFlags, bool createUndoRedo, bool interactive, bool emitCommand )
 {
+    if ( protectContent())
+        return 0L;
     KoTextDocument * textdoc = textDocument();
     if ( interactive )
         emit hideCursor();
