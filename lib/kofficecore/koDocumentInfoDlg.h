@@ -59,7 +59,7 @@ private:
   KoDocumentInfoDlgPrivate *d;
 };
 
-class KoDocumentInfoPropsPage : public KPropsPage
+class KoDocumentInfoPropsPage : public KPropsDlgPlugin
 {
   Q_OBJECT
 public:

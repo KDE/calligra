@@ -49,7 +49,7 @@ KoDocInfoPropsFactory::~KoDocInfoPropsFactory()
 QObject* KoDocInfoPropsFactory::create( QObject* parent, const char*, const char *classname,
 			                const QStringList & )
 {
-  if ( strcmp( classname, "KPropsPage" ) == 0 )
+  if ( strcmp( classname, "KPropsDlgPlugin" ) == 0 )
   {
     assert( parent );
     if ( !parent->inherits( "KPropertiesDialog" ) )

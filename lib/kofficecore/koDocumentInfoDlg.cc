@@ -274,7 +274,7 @@ public:
 };
 
 KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props )
-: KPropsPage( props )
+: KPropsDlgPlugin( props )
 {
   d = new KoDocumentInfoPropsPagePrivate;
   d->m_info = new KoDocumentInfo( this, "docinfo" );
@@ -310,7 +310,7 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props )
     d->m_info->load( doc );
   }
 
-  d->m_dlg = new KoDocumentInfoDlg( d->m_info, 0, 0, props->dialog() );
+  d->m_dlg = new KoDocumentInfoDlg( d->m_info, 0, 0, props );
   connect( d->m_dlg, SIGNAL( changed() ),
 	   this, SIGNAL( changed() ) );
 }
