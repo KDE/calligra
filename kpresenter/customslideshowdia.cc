@@ -264,7 +264,8 @@ void DefineCustomSlideShow::init()
   connect( m_moveDownSlide, SIGNAL(clicked()), this, SLOT(slotMoveDownSlide()) );
   connect(  m_name, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slideNameChanged( const QString & ) ) );
   connect( listSlideShow, SIGNAL( clicked ( QListBoxItem * ) ), this, SLOT( updateButton() ) );
-
+  connect( listSlide, SIGNAL( doubleClicked ( QListBoxItem * ) ), this, SLOT( slotMoveInsertSlide() ) );
+  connect( listSlideShow, SIGNAL( doubleClicked( QListBoxItem * ) ), this, SLOT( slotMoveRemoveSlide() ) );
   m_insertSlide->setIconSet( SmallIconSet( ( QApplication::reverseLayout() ? "back" : "forward" ) ) );
   m_removeSlide->setIconSet( SmallIconSet( ( QApplication::reverseLayout() ? "forward" : "back") ) );
   m_moveUpSlide->setIconSet( SmallIconSet( "up" ) );
