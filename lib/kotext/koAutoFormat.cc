@@ -784,7 +784,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
     {
         QString lastWord = getLastWord(parag, index);
         //kdDebug()<<" m_listCompletion->items() :"<<m_listCompletion->items()<<endl;
-        if( m_addCompletionWord && m_listCompletion->items().count() < m_nbMaxCompletionWord
+        if( m_completion && m_addCompletionWord && m_listCompletion->items().count() < m_nbMaxCompletionWord
             && lastWord.length()>= m_minCompletionWordLength )
             m_listCompletion->addItem( lastWord.lower() );
 
