@@ -19,17 +19,17 @@
 #include <qstring.h>
 
 #include <kaboutdata.h>
+#include <kapp.h>
 #include <kcmdlineargs.h>
 #include <kdatatool.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 
-// fixme?:
 static KCmdLineOptions options[] =
 {
-  { "+[term]",   I18N_NOOP("Term to search for when starting up"), 0 },
-  { 0, 0, 0 }
+	{ "+[term]",   I18N_NOOP("Term to search for when starting up"), 0 },
+	{ 0, 0, 0 }
 };
 
 int main(int argc, char **argv)
@@ -41,6 +41,8 @@ int main(int argc, char **argv)
 
 	KCmdLineArgs::init(argc, argv, &aboutData);
 	KCmdLineArgs::addCmdLineOptions(options);
+	// "unused var" warning, but we need it because kdatatool needs an instance:
+	KApplication *a = new KApplication();
 
 	// TODO: take term from command line!
 
@@ -66,6 +68,10 @@ int main(int argc, char **argv)
 	}
 */
 	QString text = "";
+	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+	if ( args->count() > 0 ) {
+		text = args->arg(0);
+	}
 
 	QString command = "thesaurus_standalone";	// 'standalone' will give us different buttons
 	QString mimetype = "text/plain";
