@@ -314,7 +314,22 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
     bool success=false;
 
     // Order of element names: probability in a document
-    if ( name == "TEXT" )
+    if ( name == "COLOR" || name == "FONT" || name =="SIZE" 
+        || name == "WEIGHT" || name == "ITALIC" || name == "UNDERLINE" 
+        || name == "STRIKEOUT" || name == "VERTALIGN" || name == "SHADOW"
+        || name == "FONTATTRIBUTE" || name == "LANGUAGE"
+        || name == "TEXTBACKGROUNDCOLOR" || name == "OFFSETFROMBASELINE" )
+    {
+        success = startElementFormatOneProperty( name, attributes, stackItem );
+    }
+    else if ( name == "FLOW" || name == "INDENTS" || name == "OFFSETS"
+        || name == "LINESPACING" || name == "PAGEBREAKING" 
+        || name == "LEFTBORDER" || name == "RIGHTBORDER" || name == "FOLLOWING"
+        || name == "TOPBORDER" || name == "BOTTOMBORDER" || name == "COUNTER" )
+    {
+        success = startElementLayoutProperty( name, attributes, stackItem );
+    }
+    else if ( name == "TEXT" )
     {
         if ( stackItem->elementType == ElementTypeParagraph && m_currentParagraph )
         {
