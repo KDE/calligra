@@ -1,1 +1,1 @@
-SUBDIRS = ascii html
+SUBDIRS = html
