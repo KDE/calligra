@@ -276,8 +276,8 @@ int KWTextParag::leftMargin() const
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
     return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItX(
         m_layout.margins[ QStyleSheetItem::MarginLeft ].pt()
-        + m_layout.leftBorder.ptWidth
-        + counterWidth() ) );
+        + m_layout.leftBorder.ptWidth )
+        + counterWidth() /* shouldn't be zoomed, it depends on the font sizes */);
 }
 
 int KWTextParag::rightMargin() const
