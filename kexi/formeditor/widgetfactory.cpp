@@ -378,9 +378,11 @@ void
 WidgetFactory::changeText(const QString&)
 {}
 
-void
+bool
 WidgetFactory::readSpecialProperty(const QString &, QDomElement &, QWidget *, ObjectTreeItem *)
-{}
+{
+	return false;
+}
 
 void
 WidgetFactory::saveSpecialProperty(const QString &, const QString &, const QVariant&, QWidget *, QDomElement &,  QDomDocument &)

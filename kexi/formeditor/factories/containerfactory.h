@@ -155,7 +155,7 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		virtual bool		showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple);
 		virtual void    	saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		                        QDomElement &parentNode, QDomDocument &parent);
-		virtual void            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item);
+		virtual bool            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item);
 		virtual QStringList     autoSaveProperties(const QString &classname);
 
 	protected:

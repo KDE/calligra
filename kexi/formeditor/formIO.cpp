@@ -1210,8 +1210,11 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 			{
 				if(w->className() == QString("CustomWidget"))
 					tree->storeUnknownProperty(node);
-				else
-					lib->readSpecialProperty(w->className(), node, w, tree);
+				else {
+					bool read = lib->readSpecialProperty(w->className(), node, w, tree);
+					if(!read) // the factory doesn't suuport this property neither
+						tree->storeUnknownProperty(node);
+				}
 			}
 			else // we have a normal property, let's load it
 			{
@@ -1244,8 +1247,11 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 		else {// unknown tag, we let the Factory handle it
 			if(w->className() == QString("CustomWidget"))
 				tree->storeUnknownProperty(node);
-			else
-				lib->readSpecialProperty(w->className(), node, w, tree);
+			else {
+				bool read = lib->readSpecialProperty(w->className(), node, w, tree);
+				if(!read) // the factory doesn't suuport this property neither
+					tree->storeUnknownProperty(node);
+			}
 		}
 	}
 

@@ -105,7 +105,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 
 		void saveSpecialProperty(const QString &classname, const QString &name, 
 			const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
-		void readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, 
+		bool readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, 
 			ObjectTreeItem *item);
 		bool showProperty(const QString &classname, QWidget *w, 
 			const QString &property, bool multiple);

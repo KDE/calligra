@@ -550,7 +550,7 @@ ContainerFactory::saveSpecialProperty(const QString &, const QString &name, cons
 	}
 }
 
-void
+bool
 ContainerFactory::readSpecialProperty(const QString &, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item)
 {
 	QString name = node.attribute("name");
@@ -559,15 +559,20 @@ ContainerFactory::readSpecialProperty(const QString &, QDomElement &node, QWidge
 		QTabWidget *tab = (QTabWidget*)w->parentWidget();
 		tab->addTab(w, node.firstChild().toElement().text());
 		item->addModifiedProperty("title", node.firstChild().toElement().text());
+		return true;
 	}
-	else if((name == "id") && (w->parentWidget()->isA("QWidgetStack")))
+
+	if((name == "id") && (w->parentWidget()->isA("QWidgetStack")))
 	{
 		QWidgetStack *stack = (QWidgetStack*)w->parentWidget();
 		int id = KFormDesigner::FormIO::readProp(node.firstChild(), w, name).toInt();
 		stack->addWidget(w, id);
 		stack->raiseWidget(w);
 		item->addModifiedProperty("id", id);
+		return true;
 	}
+
+	return false;
 }
 
 QStringList

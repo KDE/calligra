@@ -108,7 +108,7 @@ WidgetLibrary::lookupFactories()
 	for(; it != tlist.end(); ++it)
 	{
 		KService::Ptr ptr = (*it);
-		KService::Ptr* existingService = d->services[ptr->library()];
+		KService::Ptr* existingService = (d->services)[ptr->library().local8Bit()];
 		if (existingService) {
 			kdWarning() << "WidgetLibrary::scan(): factory '" << ptr->name() 
 				<< "' already found (library="<< (*existingService)->library() 
@@ -124,7 +124,7 @@ WidgetLibrary::lookupFactories()
 			continue;
 		}
 		//FIXME: check if this name matches the filter...
-		d->services.insert(ptr->library(), new KService::Ptr( ptr ));
+		d->services.insert(ptr->library().local8Bit(), new KService::Ptr( ptr ));
 	}
 }
 
@@ -365,15 +365,15 @@ WidgetLibrary::saveSpecialProperty(const QString &classname, const QString &name
 		return;
 }
 
-void
+bool
 WidgetLibrary::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, ObjectTreeItem *item)
 {
 	loadFactories();
 	WidgetInfo *wi = d->widgets.find(classname);
 	if(wi)
-		wi->factory()->readSpecialProperty(classname, node, w, item);
+		return wi->factory()->readSpecialProperty(classname, node, w, item);
 	else
-		return;
+		return false;
 }
 
 bool

@@ -648,7 +648,7 @@ StdWidgetFactory::saveListItem(QListViewItem *item, QDomNode &parentNode, QDomDo
 	}
 }
 
-void
+bool
 StdWidgetFactory::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *)
 {
 	QString tag = node.tagName();
@@ -662,9 +662,10 @@ StdWidgetFactory::readSpecialProperty(const QString &classname, QDomElement &nod
 			combo->insertItem(val.toPixmap());
 		else
 			combo->insertItem(val.toString());
+		return true;
 	}
 
-	else if((tag == "item") && (classname == "KListBox"))
+	if((tag == "item") && (classname == "KListBox"))
 	{
 		KListBox *listbox = (KListBox*)w;
 		QVariant val = KFormDesigner::FormIO::readProp(node.firstChild().firstChild(), w, name);
@@ -672,9 +673,10 @@ StdWidgetFactory::readSpecialProperty(const QString &classname, QDomElement &nod
 			listbox->insertItem(val.toPixmap());
 		else
 			listbox->insertItem(val.toString());
+		return true;
 	}
 
-	else if((tag == "column") && (classname == "KListView"))
+	if((tag == "column") && (classname == "KListView"))
 	{
 		KListView *listview = (KListView*)w;
 		int id=0;
@@ -693,12 +695,16 @@ StdWidgetFactory::readSpecialProperty(const QString &classname, QDomElement &nod
 			else if(prop == "fullwidth")
 				listview->header()->setStretchEnabled(val.toBool(), id);
 		}
+		return true;
 	}
 	else if((tag == "item") && (classname == "KListView"))
 	{
 		KListView *listview = (KListView*)w;
 		readListItem(node, 0, listview);
+		return true;
 	}
+
+	return false;
 }
 
 void

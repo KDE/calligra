@@ -228,7 +228,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		  example the contents of a listbox.
 		   \sa saveSpecialProperty()
 		*/
-		virtual void            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, ObjectTreeItem *item);
+		virtual bool            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, ObjectTreeItem *item);
 		/*! This function is used to know whether the \a property for the widget \a w
 		should be shown or not in the PropertyEditor. If \a multiple is true,
 		then multiple widgets of the same class are selected, and you should
