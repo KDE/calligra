@@ -104,6 +104,10 @@ public:
 
     QPtrList<KAction> dataToolActionList(KInstance * instance);
 
+    void insertSoftHyphen();
+    void insertSpecialChar(QChar _c);
+    void insertLink(const QString &_linkName, const QString & hrefName);
+
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.
      * The default implementation handles m_currentFormat and calls showCurrentFormat().

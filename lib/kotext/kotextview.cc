@@ -856,4 +856,27 @@ void KoTextView::openLink()
 }
 
 
+void KoTextView::insertSoftHyphen()
+{
+    textObject()->insert( cursor(), currentFormat(), QChar(0xad) /* see QRichText */,
+                          false /* no newline */, true, i18n("Insert Soft Hyphen") );
+}
+
+void KoTextView::insertSpecialChar(QChar _c)
+{
+    if(textObject()->hasSelection() )
+        textObject()->emitNewCommand(textObject()->replaceSelectionCommand(
+            cursor(), _c, QTextDocument::Standard, i18n("Insert Special Char")));
+    else
+        textObject()->insert( cursor(), currentFormat(), _c, false /* no newline */, true, i18n("Insert Special Char") );
+}
+
+void KoTextView::insertLink(const QString &_linkName, const QString & hrefName)
+{
+    KoTextFormat format=*currentFormat();
+    format.setAnchorName(_linkName);
+    format.setAnchorHref( hrefName);
+    textObject()->insert( cursor(), &format, _linkName+" " , false , true, i18n("Insert Link") );
+}
+
 #include "kotextview.moc"
