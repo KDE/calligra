@@ -397,7 +397,7 @@ void KPresenterView::insertPage()
 }
 
 /*==============================================================*/
-void KPresenterView::insertMouse()
+void KPresenterView::toolsMouse()
 {
   page->setToolEditMode(TEM_MOUSE);
   page->deSelectAllObj();
@@ -446,7 +446,7 @@ void KPresenterView::insertClipart()
 }
 
 /*=========================== insert line =======================*/
-void KPresenterView::insertLine()
+void KPresenterView::toolsLine()
 {
   page->setToolEditMode(TEM_MOUSE);
   page->deSelectAllObj();
@@ -463,7 +463,7 @@ void KPresenterView::insertLine()
 }
 
 /*===================== insert rectangle ========================*/
-void KPresenterView::insertRectangle()
+void KPresenterView::toolsRectangle()
 {
   page->setToolEditMode(TEM_MOUSE);
   page->deSelectAllObj();
@@ -480,7 +480,7 @@ void KPresenterView::insertRectangle()
 }
 
 /*===================== insert circle or ellipse ================*/
-void KPresenterView::insertCircleOrEllipse()
+void KPresenterView::toolsCircleOrEllipse()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_ELLIPSE);
@@ -488,7 +488,7 @@ void KPresenterView::insertCircleOrEllipse()
 }
 
 /*==============================================================*/
-void KPresenterView::insertPie()
+void KPresenterView::toolsPie()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_PIE);
@@ -496,7 +496,7 @@ void KPresenterView::insertPie()
 }
 
 /*===================== insert a textobject =====================*/
-void KPresenterView::insertText()
+void KPresenterView::toolsText()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_TEXT);
@@ -524,8 +524,9 @@ void KPresenterView::insertAutoform()
 }
 
 /*======================== insert object ========================*/
-void KPresenterView::insertObject()
+void KPresenterView::toolsObject()
 {
+  page->deSelectAllObj();
   KoPartEntry* pe = KoPartSelectDia::selectPart();
   if (!pe) return;
   
@@ -1652,7 +1653,7 @@ void KPresenterView::alignChanged(TxtParagraph::HorzAlign align)
 }
 
 /*======================= insert line (-) =======================*/
-void KPresenterView::insertLineH()
+void KPresenterView::toolsLineH()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_LINE_H);
@@ -1660,7 +1661,7 @@ void KPresenterView::insertLineH()
 }
 
 /*======================= insert line (|) =======================*/
-void KPresenterView::insertLineV()
+void KPresenterView::toolsLineV()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_LINE_V);
@@ -1668,7 +1669,7 @@ void KPresenterView::insertLineV()
 }
 
 /*======================= insert line (\) =======================*/
-void KPresenterView::insertLineD1()
+void KPresenterView::toolsLineD1()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_LINE_D1);
@@ -1676,7 +1677,7 @@ void KPresenterView::insertLineD1()
 }
 
 /*======================= insert line (/) =======================*/
-void KPresenterView::insertLineD2()
+void KPresenterView::toolsLineD2()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_LINE_D2);
@@ -1684,7 +1685,7 @@ void KPresenterView::insertLineD2()
 }
 
 /*===================== insert normal rect  =====================*/
-void KPresenterView::insertNormRect()
+void KPresenterView::toolsNormRect()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_NRECT);
@@ -1692,7 +1693,7 @@ void KPresenterView::insertNormRect()
 }
 
 /*===================== insert round rect =======================*/
-void KPresenterView::insertRoundRect()
+void KPresenterView::toolsRoundRect()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_RRECT);
@@ -2062,7 +2063,7 @@ void KPresenterView::presPenColoridl()
 }
 
 /*======================= insert line (-) =======================*/
-void KPresenterView::insertLineHidl()
+void KPresenterView::toolsLineHidl()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_LINE_H);
@@ -2070,7 +2071,7 @@ void KPresenterView::insertLineHidl()
 }
 
 /*======================= insert line (|) =======================*/
-void KPresenterView::insertLineVidl()
+void KPresenterView::toolsLineVidl()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_LINE_V);
@@ -2078,7 +2079,7 @@ void KPresenterView::insertLineVidl()
 }
 
 /*======================= insert line (\) =======================*/
-void KPresenterView::insertLineD1idl()
+void KPresenterView::toolsLineD1idl()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_LINE_D1);
@@ -2086,7 +2087,7 @@ void KPresenterView::insertLineD1idl()
 }
 
 /*======================= insert line (/) =======================*/
-void KPresenterView::insertLineD2idl()
+void KPresenterView::toolsLineD2idl()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_LINE_D2);
@@ -2094,7 +2095,7 @@ void KPresenterView::insertLineD2idl()
 }
 
 /*===================== insert normal rect  =====================*/
-void KPresenterView::insertNormRectidl()
+void KPresenterView::toolsNormRectidl()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_NRECT);
@@ -2102,7 +2103,7 @@ void KPresenterView::insertNormRectidl()
 }
 
 /*===================== insert round rect =======================*/
-void KPresenterView::insertRoundRectidl()
+void KPresenterView::toolsRoundRectidl()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_RRECT);
@@ -2388,13 +2389,13 @@ void KPresenterView::changeUndo(QString _text,bool _enable)
       QString str;
       str.sprintf(i18n("Undo: %s"),_text.data());
       m_vMenuEdit->changeItemText(str,m_idMenuEdit_Undo);
-      m_vToolBarEdit->setItemEnabled(m_idButtonEdit_Undo,true);
+      m_vToolBarEdit->setItemEnabled(ID_UNDO,true);
     }
   else
     {    
       m_vMenuEdit->changeItemText(i18n("No Undo possible"),m_idMenuEdit_Undo);
       m_vMenuEdit->setItemEnabled(m_idMenuEdit_Undo,false);
-      m_vToolBarEdit->setItemEnabled(m_idButtonEdit_Undo,false);
+      m_vToolBarEdit->setItemEnabled(ID_UNDO,false);
     }
 }
 
@@ -2407,13 +2408,13 @@ void KPresenterView::changeRedo(QString _text,bool _enable)
       QString str;
       str.sprintf(i18n("Redo: %s"),_text.data());
       m_vMenuEdit->changeItemText(str,m_idMenuEdit_Redo);
-      m_vToolBarEdit->setItemEnabled(m_idButtonEdit_Redo,true);
+      m_vToolBarEdit->setItemEnabled(ID_REDO,true);
     }
   else
     {
       m_vMenuEdit->changeItemText(i18n("No Redo possible"),m_idMenuEdit_Redo);
       m_vMenuEdit->setItemEnabled(m_idMenuEdit_Redo,false);
-      m_vToolBarEdit->setItemEnabled(m_idButtonEdit_Redo,false);
+      m_vToolBarEdit->setItemEnabled(ID_REDO,false);
     }
 }
 
@@ -2454,7 +2455,7 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     return true;
   }
 
-  // Edit  
+  // MENU Edit  
   _menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
 
   QString tmp = kapp->kde_datadir().copy();
@@ -2504,12 +2505,12 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_idMenuEdit_FindReplace = m_vMenuEdit->insertItem( i18n("&Replace..."), this,"editFindReplace", 0 );
 
-  // view menu
+  // MENU View
   _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
 
   m_idMenuView_NewView = m_vMenuView->insertItem(i18n("&New View"), this,"newView", 0 );
 
-  // insert menu
+  // MENU Insert
   _menubar->insertMenu( i18n( "&Insert" ), m_vMenuInsert, -1, -1 );
 
   tmp = kapp->kde_toolbardir().copy();
@@ -2529,73 +2530,85 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuInsert_Clipart = m_vMenuInsert->insertItem6(pix, i18n("&Clipart..."), this,"insertClipart", 0, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/line.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_vMenuInsert->insertItem12( pix, i18n( "&Line" ), m_vMenuInsert_Line, -1, -1 );
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/lineh.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuInsert_LineHorz = m_vMenuInsert_Line->insertItem2( pix, this,"insertLineHidl", 0 );
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/linev.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuInsert_LineVert = m_vMenuInsert_Line->insertItem2(pix, this,"insertLineVidl", 0);
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/lined1.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuInsert_LineD1 = m_vMenuInsert_Line->insertItem2(pix, this,"insertLineD1idl", 0);
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/lined2.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuInsert_LineD2 = m_vMenuInsert_Line->insertItem2(pix, this,"insertLineD2idl", 0);
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/rectangle.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_vMenuInsert->insertItem12( pix, i18n("&Rectangle"), m_vMenuInsert_Rectangle, -1, -1 );
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/rectangle2.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuInsert_RectangleNormal = m_vMenuInsert_Rectangle->insertItem2(pix, this,"insertNormRectidl", 0);
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/rectangleRound.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuInsert_RectangleRound = m_vMenuInsert_Rectangle->insertItem2(pix, this,"insertRoundRectidl", 0);
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/circle.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuInsert_Circle = m_vMenuInsert->insertItem6(pix, i18n("C&ircle or Ellipse"), this,"insertCircleOrEllipse", 0, -1, -1 );
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/pie.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuInsert_Pie = m_vMenuInsert->insertItem6(pix, i18n("Pie/&Arc/Chord"), this,"insertPie", 0, -1, -1 );
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/text.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuInsert_Text = m_vMenuInsert->insertItem6(pix, i18n("&Text"), this,"insertText", 0, -1, -1 );
-
-  tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/autoform.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuInsert_Autoform = m_vMenuInsert->insertItem6(pix, i18n("&Autoform..."), this,"insertAutoform", 0, -1, -1 );
 
+  m_vMenuInsert->setCheckable(true);
+
+  // MENU Tools
+  _menubar->insertMenu( i18n( "&Tools" ), m_vMenuTools, -1, -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/mouse.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuTools_Mouse = m_vMenuTools->insertItem6(pix, i18n("&Mouse"), this,"toolsMouse", 0, -1, -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/line.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_vMenuTools->insertItem12(pix,i18n( "&Line" ), m_vMenuTools_Line, -1, -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/lineh.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuTools_LineHorz = m_vMenuTools_Line->insertItem2(pix,this,"toolsLineHidl", 0 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/linev.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuTools_LineVert = m_vMenuTools_Line->insertItem2(pix, this,"toolsLineVidl", 0);
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/lined1.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuTools_LineD1 = m_vMenuTools_Line->insertItem2(pix, this,"toolsLineD1idl", 0);
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/lined2.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuTools_LineD2 = m_vMenuTools_Line->insertItem2(pix, this,"toolsLineD2idl", 0);
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/rectangle.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_vMenuTools->insertItem12( pix, i18n("&Rectangle"), m_vMenuTools_Rectangle, -1, -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/rectangle2.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuTools_RectangleNormal = m_vMenuTools_Rectangle->insertItem2(pix, this,"toolsNormRectidl", 0);
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/rectangleRound.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuTools_RectangleRound = m_vMenuTools_Rectangle->insertItem2(pix, this,"toolsRoundRectidl", 0);
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/circle.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuTools_Circle = m_vMenuTools->insertItem6(pix, i18n("C&ircle or Ellipse"), this,"toolsCircleOrEllipse", 0, -1, -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/pie.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuTools_Pie = m_vMenuTools->insertItem6(pix, i18n("Pie/&Arc/Chord"), this,"toolsPie", 0, -1, -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/text.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuTools_Text = m_vMenuTools->insertItem6(pix, i18n("&Text"), this,"toolsText", 0, -1, -1 );
+
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/parts.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuInsert_Part = m_vMenuInsert->insertItem6(pix, i18n("&Object..."), this,"insertObject", 0, -1, -1 );
+  m_idMenuTools_Part = m_vMenuTools->insertItem6(pix, i18n("&Object..."), this,"toolsObject", 0, -1, -1 );
 
-  m_vMenuInsert->setCheckable(true);
+  m_vMenuTools->setCheckable( true );
+  m_vMenuTools_Line->setCheckable( true );
+  m_vMenuTools_Rectangle->setCheckable( true );
 
-  // extra menu
+  // MENU Extra
   _menubar->insertMenu( i18n( "&Extra" ), m_vMenuExtra, -1, -1 );
 
   m_idMenuExtra_TFont = m_vMenuExtra->insertItem(i18n("&Font..."), this, "mtextFont", 0 );
@@ -2723,7 +2736,7 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   
   m_idMenuExtra_Options = m_vMenuExtra->insertItem(i18n("&Options..."), this,"extraOptions", 0 );
       
-  // screenpresentation menu
+  // MENU Screenpresentation
   _menubar->insertMenu( i18n( "&Screen Presentations" ), m_vMenuScreen, -1, -1 );
 
   m_idMenuScreen_ConfigPage = m_vMenuScreen->insertItem(i18n("&Configure pages..."), this,"screenConfigPages", 0 );
@@ -2774,7 +2787,7 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuScreen_Last = m_vMenuScreen->insertItem6(pix, i18n("&Go to end"), this,"screenLast", 0, -1, -1 );
 
-//       m_idMenuScreen_Skip = m_vMenuScreen->insertItem(i18n("Goto &page"),m_idMenuScreen,
+//   m_idMenuScreen_Skip = m_vMenuScreen->insertItem(i18n("Goto &page"),m_idMenuScreen,
 // 						   this,"screenSkip");
 
   m_vMenuScreen->insertSeparator( -1 );
@@ -2810,7 +2823,7 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_idMenuScreen_PenW10 = m_vMenuScreen_PenWidth->insertItem(i18n("10"), this,"presPen10idl", 0 );
 
-  // help menu
+  // MENU Help
   m_vMenuHelp = _menubar->helpMenu();
   if ( CORBA::is_nil( m_vMenuHelp ) )
   {
@@ -2824,7 +2837,7 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Left,true);
   m_vMenuScreen_PenWidth->setItemChecked(m_idMenuScreen_PenW3,true);
 
-  setupAccelerators();
+//   setupAccelerators();
 
   return true;
 }
@@ -2840,16 +2853,16 @@ void KPresenterView::setupPopupMenus()
   rb_line = new QPopupMenu();
   CHECK_PTR(rb_line);
   pixmap.load(pixdir+"lineh.xpm");
-  rb_line->insertItem(pixmap,this,SLOT(insertLineH()));
+  rb_line->insertItem(pixmap,this,SLOT(toolsLineH()));
   rb_line->insertSeparator( -1 );
   pixmap.load(pixdir+"linev.xpm");
-  rb_line->insertItem(pixmap,this,SLOT(insertLineV()));
+  rb_line->insertItem(pixmap,this,SLOT(toolsLineV()));
   rb_line->insertSeparator( -1 );
   pixmap.load(pixdir+"lined1.xpm");
-  rb_line->insertItem(pixmap,this,SLOT(insertLineD1()));
+  rb_line->insertItem(pixmap,this,SLOT(toolsLineD1()));
   rb_line->insertSeparator( -1 );
   pixmap.load(pixdir+"lined2.xpm");
-  rb_line->insertItem(pixmap,this,SLOT(insertLineD2()));
+  rb_line->insertItem(pixmap,this,SLOT(toolsLineD2()));
   rb_line->setMouseTracking(true);
   rb_line->setCheckable(false);
 
@@ -2857,10 +2870,10 @@ void KPresenterView::setupPopupMenus()
   rb_rect = new QPopupMenu();
   CHECK_PTR(rb_rect);
   pixmap.load(pixdir+"rectangle2.xpm");
-  rb_rect->insertItem(pixmap,this,SLOT(insertNormRect()));
+  rb_rect->insertItem(pixmap,this,SLOT(toolsNormRect()));
   rb_rect->insertSeparator( -1 );
   pixmap.load(pixdir+"rectangleRound.xpm");
-  rb_rect->insertItem(pixmap,this,SLOT(insertRoundRect()));
+  rb_rect->insertItem(pixmap,this,SLOT(toolsRoundRect()));
   rb_rect->setMouseTracking(true);
   rb_rect->setCheckable(false);
 
@@ -2939,15 +2952,15 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   QString tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/undo.xpm";
   OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editUndo", true, i18n("Undo"), -1 );
-  m_vToolBarEdit->setItemEnabled(m_idButtonEdit_Undo,false);
+  m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2( pix, ID_UNDO, SIGNAL( clicked() ), this, "editUndo", true, i18n("Undo"), -1 );
+  m_vToolBarEdit->setItemEnabled(ID_UNDO,false);
   
   // redo
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/redo.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editRedo", true, i18n("Redo"), -1 );
-  m_vToolBarEdit->setItemEnabled(m_idButtonEdit_Redo,false);
+  m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2( pix, ID_REDO, SIGNAL( clicked() ), this, "editRedo", true, i18n("Redo"), -1 );
+  m_vToolBarEdit->setItemEnabled(ID_REDO,false);
 
   m_vToolBarEdit->insertSeparator( -1 );
 
@@ -2985,15 +2998,12 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarInsert = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarInsert->setFullWidth(false);
  
-  // mouse
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/mouse.xpm";
+  // page
+  tmp = kapp->kde_toolbardir().copy();
+  tmp += "/filenew.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonInsert_Mouse = m_vToolBarInsert->insertButton2( pix, ID_TOOL_MOUSE, SIGNAL( clicked() ), this, "insertMouse", 
-							   true, i18n("Mouse Tool"), -1 );
-
-  m_vToolBarInsert->setToggle(ID_TOOL_MOUSE,true);
-  m_vToolBarInsert->setButton(ID_TOOL_MOUSE,true);
+  m_idButtonInsert_Page = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPage", true, i18n("Insert Page"), -1 );
+  m_vToolBarInsert->insertSeparator( -1 );
 
   // picture
   tmp = kapp->kde_datadir().copy();
@@ -3007,68 +3017,86 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertClipart", true, i18n("Insert Clipart"), -1 );
   
-  // line
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/line.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonInsert_Line = m_vToolBarInsert->insertButton2( pix, ID_TOOL_LINE, SIGNAL( clicked() ), this, "insertLine", 
-							   true, i18n("Insert Line"), -1 );
-
-  m_vToolBarInsert->setToggle(ID_TOOL_LINE,true);
-  m_vToolBarInsert->setButton(ID_TOOL_LINE,false);
-
-  // rectangle
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/rectangle.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonInsert_Rectangle = m_vToolBarInsert->insertButton2( pix, ID_TOOL_RECT, SIGNAL( clicked() ), this, "insertRectangle", 
-								true, i18n("Insert Rectangle"), -1 );
-  m_vToolBarInsert->setToggle(ID_TOOL_RECT,true);
-  m_vToolBarInsert->setButton(ID_TOOL_RECT,false);
-
-  // circle or ellipse
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/circle.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonInsert_Circle = m_vToolBarInsert->insertButton2( pix, ID_TOOL_ELLIPSE, SIGNAL( clicked() ), this, "insertCircleOrEllipse", 
-							     true, i18n("Insert Circle or Ellipse"), -1 );
-  m_vToolBarInsert->setToggle(ID_TOOL_ELLIPSE,true);
-  m_vToolBarInsert->setButton(ID_TOOL_ELLIPSE,false);
-
-  // circle or ellipse
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/edit_pie.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonInsert_Pie = m_vToolBarInsert->insertButton2( pix, ID_TOOL_PIE, SIGNAL( clicked() ), this, "insertPie", 
-							  true, i18n("Insert Pie/Arc/Chord"), -1 );
-  m_vToolBarInsert->setToggle(ID_TOOL_PIE,true);
-  m_vToolBarInsert->setButton(ID_TOOL_PIE,false);
-
-  // text
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/text.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonInsert_Text = m_vToolBarInsert->insertButton2( pix, ID_TOOL_TEXT, SIGNAL( clicked() ), this, "insertText", 
-							   true, i18n("Insert Text"), -1 );
-  m_vToolBarInsert->setToggle(ID_TOOL_TEXT,true);
-  m_vToolBarInsert->setButton(ID_TOOL_TEXT,false);
-
   // autoform
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/autoform.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonInsert_Autoform = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertAutoform", true, i18n("Insert Autoform"), -1 );
   
+  m_vToolBarInsert->enable( OpenPartsUI::Show );
+
+  ///////
+  // Tools
+  //////
+  m_vToolBarTools = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+  m_vToolBarTools->setFullWidth(false);
+
+  // mouse
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/mouse.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonTools_Mouse = m_vToolBarTools->insertButton2( pix, ID_TOOL_MOUSE, SIGNAL( clicked() ), this, "toolsMouse", 
+							   true, i18n("Mouse Tool"), -1 );
+
+  m_vToolBarTools->setToggle(ID_TOOL_MOUSE,true);
+  m_vToolBarTools->setButton(ID_TOOL_MOUSE,true);
+
+  // line
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/line.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonTools_Line = m_vToolBarTools->insertButton2( pix, ID_TOOL_LINE, SIGNAL( clicked() ), this, "toolsLine", 
+							   true, i18n("Create Line"), -1 );
+
+  m_vToolBarTools->setToggle(ID_TOOL_LINE,true);
+  m_vToolBarTools->setButton(ID_TOOL_LINE,false);
+
+  // rectangle
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/rectangle.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonTools_Rectangle = m_vToolBarTools->insertButton2( pix, ID_TOOL_RECT, SIGNAL( clicked() ), this, "toolsRectangle", 
+								true, i18n("Create Rectangle"), -1 );
+  m_vToolBarTools->setToggle(ID_TOOL_RECT,true);
+  m_vToolBarTools->setButton(ID_TOOL_RECT,false);
+
+  // circle or ellipse
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/circle.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonTools_Circle = m_vToolBarTools->insertButton2( pix, ID_TOOL_ELLIPSE, SIGNAL( clicked() ), this, "toolsCircleOrEllipse", 
+							     true, i18n("Create Circle or Ellipse"), -1 );
+  m_vToolBarTools->setToggle(ID_TOOL_ELLIPSE,true);
+  m_vToolBarTools->setButton(ID_TOOL_ELLIPSE,false);
+
+  // circle or ellipse
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/edit_pie.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonTools_Pie = m_vToolBarTools->insertButton2( pix, ID_TOOL_PIE, SIGNAL( clicked() ), this, "toolsPie", 
+							  true, i18n("Create Pie/Arc/Chord"), -1 );
+  m_vToolBarTools->setToggle(ID_TOOL_PIE,true);
+  m_vToolBarTools->setButton(ID_TOOL_PIE,false);
+
+  // text
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/text.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonTools_Text = m_vToolBarTools->insertButton2( pix, ID_TOOL_TEXT, SIGNAL( clicked() ), this, "toolsText", 
+							   true, i18n("Create Text"), -1 );
+  m_vToolBarTools->setToggle(ID_TOOL_TEXT,true);
+  m_vToolBarTools->setButton(ID_TOOL_TEXT,false);
+
   // parts
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/parts.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonInsert_Part = m_vToolBarInsert->insertButton2( pix, ID_TOOL_OBJECT, SIGNAL( clicked() ), this, "insertObject", 
-							   true, i18n("Insert Object"), -1 );
-  m_vToolBarInsert->setToggle(ID_TOOL_OBJECT,true);
-  m_vToolBarInsert->setButton(ID_TOOL_OBJECT,false);
+  m_idButtonTools_Part = m_vToolBarTools->insertButton2( pix, ID_TOOL_OBJECT, SIGNAL( clicked() ), this, "toolsObject", 
+							   true, i18n("Create Object"), -1 );
+  m_vToolBarTools->setToggle(ID_TOOL_OBJECT,true);
+  m_vToolBarTools->setButton(ID_TOOL_OBJECT,false);
 
-  m_vToolBarInsert->enable( OpenPartsUI::Show );
+  m_vToolBarTools->enable( OpenPartsUI::Show );
 
   /////////
   // Text
@@ -3300,6 +3328,8 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   m_vToolBarScreen->enable( OpenPartsUI::Show );
 
+  setTool(TEM_MOUSE);
+
   return true;
 }
 
@@ -3335,16 +3365,18 @@ void KPresenterView::setupAccelerators()
   m_vMenuInsert->setAccel(ALT + Key_N,m_idMenuInsert_Page);
   m_vMenuInsert->setAccel(Key_F1,m_idMenuInsert_Picture);
   m_vMenuInsert->setAccel(Key_F2,m_idMenuInsert_Clipart);
-  m_vMenuInsert->setAccel(Key_F3,m_idMenuInsert_LineHorz);
-  m_vMenuInsert->setAccel(Key_F4,m_idMenuInsert_LineVert);
-  m_vMenuInsert->setAccel(Key_F5,m_idMenuInsert_LineD1);
-  m_vMenuInsert->setAccel(Key_F6,m_idMenuInsert_LineD2);
-  m_vMenuInsert->setAccel(Key_F7,m_idMenuInsert_RectangleNormal);
-  m_vMenuInsert->setAccel(Key_F8,m_idMenuInsert_RectangleRound);
-  m_vMenuInsert->setAccel(Key_F9,m_idMenuInsert_Circle);
-  m_vMenuInsert->setAccel(Key_F10,m_idMenuInsert_Text);
   m_vMenuInsert->setAccel(Key_F11,m_idMenuInsert_Autoform);
-  m_vMenuInsert->setAccel(Key_F12,m_idMenuInsert_Part);
+
+  // tools menu
+  m_vMenuInsert->setAccel(Key_F3,m_idMenuTools_LineHorz);
+  m_vMenuInsert->setAccel(Key_F4,m_idMenuTools_LineVert);
+  m_vMenuInsert->setAccel(Key_F5,m_idMenuTools_LineD1);
+  m_vMenuInsert->setAccel(Key_F6,m_idMenuTools_LineD2);
+  m_vMenuInsert->setAccel(Key_F7,m_idMenuTools_RectangleNormal);
+  m_vMenuInsert->setAccel(Key_F8,m_idMenuTools_RectangleRound);
+  m_vMenuInsert->setAccel(Key_F9,m_idMenuTools_Circle);
+  m_vMenuInsert->setAccel(Key_F10,m_idMenuTools_Text);
+  m_vMenuInsert->setAccel(Key_F12,m_idMenuTools_Part);
 
   // extra menu
   m_vMenuExtra->setAccel(CTRL + Key_P,m_idMenuExtra_PenBrush);
@@ -3433,38 +3465,85 @@ void KPresenterView::restartPresStructView()
 /*==============================================================*/
 void KPresenterView::setTool(ToolEditMode toolEditMode)
 {
-  m_vToolBarInsert->setButton(ID_TOOL_MOUSE,false);
-  m_vToolBarInsert->setButton(ID_TOOL_LINE,false);
-  m_vToolBarInsert->setButton(ID_TOOL_RECT,false);
-  m_vToolBarInsert->setButton(ID_TOOL_ELLIPSE,false);
-  m_vToolBarInsert->setButton(ID_TOOL_PIE,false);
-  m_vToolBarInsert->setButton(ID_TOOL_TEXT,false);
-  m_vToolBarInsert->setButton(ID_TOOL_OBJECT,false);
+  m_vToolBarTools->setButton(ID_TOOL_MOUSE,false);
+  m_vToolBarTools->setButton(ID_TOOL_LINE,false);
+  m_vToolBarTools->setButton(ID_TOOL_RECT,false);
+  m_vToolBarTools->setButton(ID_TOOL_ELLIPSE,false);
+  m_vToolBarTools->setButton(ID_TOOL_PIE,false);
+  m_vToolBarTools->setButton(ID_TOOL_TEXT,false);
+  m_vToolBarTools->setButton(ID_TOOL_OBJECT,false);
+
+  m_vMenuTools->setItemChecked(m_idMenuTools_Mouse,false);
+  m_vMenuTools->setItemChecked(m_idMenuTools_Circle,false);
+  m_vMenuTools->setItemChecked(m_idMenuTools_Pie,false);
+  m_vMenuTools->setItemChecked(m_idMenuTools_Text,false);
+  m_vMenuTools->setItemChecked(m_idMenuTools_Part,false);
+
+  m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineHorz,false);
+  m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineVert,false);
+  m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineD1,false);
+  m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineD2,false);
+
+  m_vMenuTools_Rectangle->setItemChecked(m_idMenuTools_RectangleNormal,false);
+  m_vMenuTools_Rectangle->setItemChecked(m_idMenuTools_RectangleRound,false);
 
   switch (toolEditMode)
     {
     case TEM_MOUSE:
-      m_vToolBarInsert->setButton(ID_TOOL_MOUSE,true);
-      break;
-    case INS_LINE_H: case INS_LINE_V:
-    case INS_LINE_D1: case INS_LINE_D2:
-      m_vToolBarInsert->setButton(ID_TOOL_LINE,true);
-      break;
-   case INS_NRECT: case INS_RRECT:
-      m_vToolBarInsert->setButton(ID_TOOL_RECT,true);
-      break;
+      {
+	m_vMenuTools->setItemChecked(m_idMenuTools_Mouse,true);
+	m_vToolBarTools->setButton(ID_TOOL_MOUSE,true);
+      } break;
+    case INS_LINE_H: 
+      {
+	m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineHorz,true);
+	m_vToolBarTools->setButton(ID_TOOL_LINE,true);
+      } break;
+    case INS_LINE_V:
+      {
+	m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineVert,true);
+	m_vToolBarTools->setButton(ID_TOOL_LINE,true);
+      } break;
+    case INS_LINE_D1: 
+      {
+	m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineD1,true);
+	m_vToolBarTools->setButton(ID_TOOL_LINE,true);
+      } break;
+    case INS_LINE_D2:
+      {
+	m_vMenuTools_Line->setItemChecked(m_idMenuTools_LineD2,true);
+	m_vToolBarTools->setButton(ID_TOOL_LINE,true);
+      } break;
+    case INS_NRECT: 
+      {
+	m_vMenuTools_Rectangle->setItemChecked(m_idMenuTools_RectangleNormal,true);
+	m_vToolBarTools->setButton(ID_TOOL_RECT,true);
+      } break;
+    case INS_RRECT:
+      {
+	m_vMenuTools_Rectangle->setItemChecked(m_idMenuTools_RectangleRound,true);
+	m_vToolBarTools->setButton(ID_TOOL_RECT,true);
+      } break;
     case INS_ELLIPSE:
-      m_vToolBarInsert->setButton(ID_TOOL_ELLIPSE,true);
-      break;
+      {
+	m_vMenuTools->setItemChecked(m_idMenuTools_Circle,true);
+	m_vToolBarTools->setButton(ID_TOOL_ELLIPSE,true);
+      } break;
     case INS_PIE:
-      m_vToolBarInsert->setButton(ID_TOOL_PIE,true);
-      break;
+      {      
+	m_vMenuTools->setItemChecked(m_idMenuTools_Pie,true);
+	m_vToolBarTools->setButton(ID_TOOL_PIE,true);
+      } break;
     case INS_OBJECT:
-      m_vToolBarInsert->setButton(ID_TOOL_OBJECT,true);
-      break;
+      {
+	m_vMenuTools->setItemChecked(m_idMenuTools_Part,true);
+	m_vToolBarTools->setButton(ID_TOOL_OBJECT,true);
+      } break;
     case INS_TEXT:
-      m_vToolBarInsert->setButton(ID_TOOL_TEXT,true);
-      break;
+      {
+	m_vMenuTools->setItemChecked(m_idMenuTools_Text,true);
+	m_vToolBarTools->setButton(ID_TOOL_TEXT,true);
+      } break;
     }
 }
 

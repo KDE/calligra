@@ -174,6 +174,7 @@ void KPObject::zoom(float _fakt)
 /*==================== zoom orig =================================*/
 void KPObject::zoomOrig()
 {
+  zoomed = false;
   orig = oldOrig;
   ext = oldExt;
 

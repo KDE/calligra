@@ -249,7 +249,7 @@ void Page::mousePressEvent(QMouseEvent *e)
 	      } break;
 	    }
 	}
-      if (e->button() == RightButton)
+      if (e->button() == RightButton && toolEditMode == TEM_MOUSE)
 	{
 	  int num = getObjectAt(e->x(),e->y());
 	  if (num != -1)
@@ -348,6 +348,8 @@ void Page::mousePressEvent(QMouseEvent *e)
 /*=================== handle mouse released ======================*/
 void Page::mouseReleaseEvent(QMouseEvent *e)
 {
+  if (e->button() != LeftButton) return;
+  
   int mx = e->x();
   int my = e->y();
   mx = (mx / rastX()) * rastX();
@@ -1365,6 +1367,9 @@ void Page::setupMenus()
   pageMenu->insertSeparator();
   pageMenu->insertItem(pixmap,i18n("&Insert Page..."),this,SLOT(pageInsert()));
   pageMenu->insertItem(i18n("&Delete Page..."),this,SLOT(pageDelete()));
+  pageMenu->insertSeparator();
+  pixmap.load(pixdir + "/editpaste.xpm");
+  pageMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(pagePaste()));
   pageMenu->setMouseTracking(true);
 }
 

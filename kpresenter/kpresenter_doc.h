@@ -419,6 +419,8 @@ protected:
   KPGradientCollection _gradientCollection;
 
   CommandHistory _commands;
+  bool pasting;
+
 };
 
 #endif

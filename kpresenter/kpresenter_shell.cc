@@ -148,7 +148,7 @@ bool KPresenterShell::newDocument()
 bool KPresenterShell::openDocument( const char *_url, const char *_format )
 {
   if ( _format == 0L || *_format == 0 )
-    _format = "application/x-kPresenter";
+    _format = "application/x-kpresenter";
 
   if ( m_pDoc && m_pDoc->isEmpty() )
     releaseDocument();

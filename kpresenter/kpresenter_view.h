@@ -152,23 +152,25 @@ public:
 
   // insert menu
   virtual void insertPage();
-  virtual void insertMouse();
   virtual void insertPicture();
   virtual void insertClipart();
-  virtual void insertLine();
-  virtual void insertRectangle();
-  virtual void insertCircleOrEllipse();
-  virtual void insertPie();
-  virtual void insertText();
   virtual void insertAutoform();
 
-  void insertLineHidl();
-  void insertLineVidl();
-  void insertLineD1idl();
-  void insertLineD2idl();
-  void insertNormRectidl();
-  void insertRoundRectidl();
-  void insertObject();
+  // tools menu
+  virtual void toolsMouse();
+  virtual void toolsLine();
+  virtual void toolsRectangle();
+  virtual void toolsCircleOrEllipse();
+  virtual void toolsPie();
+  virtual void toolsText();
+  virtual void toolsObject();
+
+  virtual void toolsLineHidl();
+  virtual void toolsLineVidl();
+  virtual void toolsLineD1idl();
+  virtual void toolsLineD2idl();
+  virtual void toolsNormRectidl();
+  virtual void toolsRoundRectidl();
 
   // extra menu
   virtual void extraPenBrush();
@@ -341,12 +343,12 @@ protected slots:
   void alignChanged(TxtParagraph::HorzAlign);
 
   // graphic objects
-  void insertLineH();
-  void insertLineV();
-  void insertLineD1();
-  void insertLineD2();
-  void insertNormRect();
-  void insertRoundRect();
+  void toolsLineH();
+  void toolsLineV();
+  void toolsLineD1();
+  void toolsLineD2();
+  void toolsNormRect();
+  void toolsRoundRect();
 
   // screen presentation
   void presPen1();
@@ -449,19 +451,23 @@ protected:
   CORBA::Long m_idMenuInsert_Page;
   CORBA::Long m_idMenuInsert_Picture;
   CORBA::Long m_idMenuInsert_Clipart;
-  OpenPartsUI::Menu_var m_vMenuInsert_Line;
-  CORBA::Long m_idMenuInsert_LineHorz;
-  CORBA::Long m_idMenuInsert_LineVert;
-  CORBA::Long m_idMenuInsert_LineD1;
-  CORBA::Long m_idMenuInsert_LineD2;
-  OpenPartsUI::Menu_var m_vMenuInsert_Rectangle;
-  CORBA::Long m_idMenuInsert_RectangleNormal;
-  CORBA::Long m_idMenuInsert_RectangleRound;
-  CORBA::Long m_idMenuInsert_Circle;
-  CORBA::Long m_idMenuInsert_Pie;
-  CORBA::Long m_idMenuInsert_Text;
   CORBA::Long m_idMenuInsert_Autoform;
-  CORBA::Long m_idMenuInsert_Part;
+
+  // tools menu
+  OpenPartsUI::Menu_var m_vMenuTools;
+  CORBA::Long m_idMenuTools_Mouse;
+  OpenPartsUI::Menu_var m_vMenuTools_Line;
+  CORBA::Long m_idMenuTools_LineHorz;
+  CORBA::Long m_idMenuTools_LineVert;
+  CORBA::Long m_idMenuTools_LineD1;
+  CORBA::Long m_idMenuTools_LineD2;
+  OpenPartsUI::Menu_var m_vMenuTools_Rectangle;
+  CORBA::Long m_idMenuTools_RectangleNormal;
+  CORBA::Long m_idMenuTools_RectangleRound;
+  CORBA::Long m_idMenuTools_Circle;
+  CORBA::Long m_idMenuTools_Pie;
+  CORBA::Long m_idMenuTools_Text;
+  CORBA::Long m_idMenuTools_Part;
  
   // extra menu
   OpenPartsUI::Menu_var m_vMenuExtra;
@@ -540,16 +546,20 @@ protected:
 
   // insert toolbar
   OpenPartsUI::ToolBar_var m_vToolBarInsert;
-  CORBA::Long m_idButtonInsert_Mouse;
+  CORBA::Long m_idButtonInsert_Page;
   CORBA::Long m_idButtonInsert_Picture;
   CORBA::Long m_idButtonInsert_Clipart;
-  CORBA::Long m_idButtonInsert_Line;
-  CORBA::Long m_idButtonInsert_Rectangle;
-  CORBA::Long m_idButtonInsert_Circle;
-  CORBA::Long m_idButtonInsert_Pie;
-  CORBA::Long m_idButtonInsert_Text;
   CORBA::Long m_idButtonInsert_Autoform;
-  CORBA::Long m_idButtonInsert_Part;
+
+  // tools toolbar
+  OpenPartsUI::ToolBar_var m_vToolBarTools;
+  CORBA::Long m_idButtonTools_Mouse;
+  CORBA::Long m_idButtonTools_Line;
+  CORBA::Long m_idButtonTools_Rectangle;
+  CORBA::Long m_idButtonTools_Circle;
+  CORBA::Long m_idButtonTools_Pie;
+  CORBA::Long m_idButtonTools_Text;
+  CORBA::Long m_idButtonTools_Part;
 
   // text toolbar
   OpenPartsUI::ToolBar_var m_vToolBarText;
@@ -660,6 +670,9 @@ protected:
   static const int ID_UNDERLINE = 15;
   static const int ID_FONT_LIST = 16;
   static const int ID_FONT_SIZE = 17;
+  static const int ID_UNDO = 18;
+  static const int ID_REDO = 19;
+
 };
 
 #endif

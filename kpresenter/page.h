@@ -250,6 +250,8 @@ private slots:
     {view->insertPage();}
   void pageDelete()
     {view->editDelPage();}
+  void pagePaste()
+    {view->editPaste();}
   void configPages()
     {view->screenConfigPages();}
   void presStructView()

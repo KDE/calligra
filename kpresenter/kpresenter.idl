@@ -23,23 +23,24 @@ module KPresenter
       slot void newView();
       
       slot void insertPage();
-      slot void insertMouse();
       slot void insertPicture();
       slot void insertClipart();
-      slot void insertLine();
-      slot void insertRectangle();
-      slot void insertCircleOrEllipse();
-      slot void insertPie();
-      slot void insertText();
       slot void insertAutoform();
-      slot void insertObject();
 
-      slot void insertLineHidl();
-      slot void insertLineVidl();
-      slot void insertLineD1idl();
-      slot void insertLineD2idl();
-      slot void insertNormRectidl();
-      slot void insertRoundRectidl();
+      slot void toolsMouse();
+      slot void toolsLine();
+      slot void toolsRectangle();
+      slot void toolsCircleOrEllipse();
+      slot void toolsPie();
+      slot void toolsText();
+      slot void toolsObject();
+
+      slot void toolsLineHidl();
+      slot void toolsLineVidl();
+      slot void toolsLineD1idl();
+      slot void toolsLineD2idl();
+      slot void toolsNormRectidl();
+      slot void toolsRoundRectidl();
 
       slot void extraPenBrush();
       slot void extraConfigPie();

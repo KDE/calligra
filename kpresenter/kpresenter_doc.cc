@@ -97,6 +97,7 @@ KPresenterDoc::KPresenterDoc()
   setPageLayout(_pageLayout,0,0);
   _presPen = QPen(red,3,SolidLine);
   presSpeed = PS_NORMAL;
+  pasting = false;
 
   QObject::connect(&_commands,SIGNAL(undoRedoChanged(QString,QString)),this,SLOT(slotUndoRedoChanged(QString,QString)));
 }
@@ -228,6 +229,7 @@ void KPresenterDoc::makeChildListIntern(KOffice::Document_ptr _doc,const char *_
 /*========================== save ===============================*/
 bool KPresenterDoc::save( ostream& out, const char* /* format */ )
 {
+  out << "<?xml version=\"1.0\"?>" << endl;
   out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
       << "\" mime=\"" << "application/x-kpresenter" << "\">" << endl;
   
@@ -673,6 +675,11 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	    }
 	  
 	  if (objStartY > 0) _objectList.last()->moveBy(0,objStartY);
+	  if (pasting) 
+	    {
+	      _objectList.last()->moveBy(20,20);
+	      _objectList.last()->setSelected(true);
+	    }
 	}
       else
 	cerr << "Unknown tag '" << tag << "' in OBJECTS" << endl;    
@@ -1920,6 +1927,7 @@ void KPresenterDoc::pasteObjs(int diffx,int diffy)
 {
   deSelectAllObj();
 
+  pasting = true;
   string clip_str = QApplication::clipboard()->text();
 
   if (clip_str.empty()) return;
@@ -1927,6 +1935,7 @@ void KPresenterDoc::pasteObjs(int diffx,int diffy)
   istrstream in(clip_str.c_str());
   loadStream(in);
 
+  pasting = false;
   m_bModified = true;
 }
 
