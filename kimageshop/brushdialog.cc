@@ -30,7 +30,8 @@
 BrushDialog::BrushDialog( QWidget* parent, const char* name,WFlags flags )
   : KFloatingTabDialog( parent, name )
 {
-  setCaption("Brushes");
+  setCaption( i18n( "Brushes" ) );
+
   brushesTab = new BrushesWidget( this, "brushes widget" );
   // more tabs to come in the future
 

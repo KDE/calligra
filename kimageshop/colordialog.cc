@@ -28,7 +28,8 @@
 
 ColorDialog::ColorDialog(QWidget *parent) : KFloatingDialog(parent)
 {
-  setCaption("Color chooser");
+  setCaption( i18n( "Color chooser" ) );
+
   m_pBase = new QWidget(this);
   resize(280, 190);
   setFixedWidth(280);
