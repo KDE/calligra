@@ -13,175 +13,174 @@
 #include "TextElement.h" 
 #include "formuladef.h"
 
-TextElement::TextElement(FormulaClass *Formula,BasicElement *Prev=0L,int Relation=-1,BasicElement *Next=0L,
-			    QString Content="") : BasicElement(Formula,Prev,Relation,Next,Content)
+TextElement::TextElement(FormulaClass *Formula,
+			 BasicElement *Prev,
+			 int Relation,
+			 BasicElement *Next,
+			 QString Content) : 
+    BasicElement(Formula,Prev,Relation,Next,Content)
 {
- // warning("A new text is born.. ");
-  font=0L;  
-  position=content.length();
-  warning("creation %i",position);
-  if(position<0) position = 0;
-
+    // warning("A new text is born.. ");
+    font=0L;  
+    position=content.length();
+    warning("creation %i",position);
+    
 }
 
 TextElement::~TextElement()
 {
 }
  
-void TextElement::draw(QPoint drawPoint,int resolution=72)
+void TextElement::draw(QPoint drawPoint,int resolution)
 {
-  
-  QPainter *pen;
-  pen=formula->painter();
-  int x,y;
-  x=drawPoint.x();
-  y=drawPoint.y();
+    QPainter *pen = formula->painter();
 
-  if( beActive )
-    pen->setPen(red);
-  if ( content == "" )
-    pen->drawRect(x+familySize.x(),y-5,5,10);
-  else {
+    int x=drawPoint.x();
+    int y=drawPoint.y();
 
-//warning("Font for text");
-QFont formulaFont;
-  if(font!=0L)     
-    formulaFont=(*font);
-   else
-    {
-    formulaFont=formula->generalFont();
-    formulaFont.setPointSize(numericFont);
+    if( beActive )
+	pen->setPen(red);
+    if ( content.isEmpty() )
+	pen->drawRect(x+familySize.x(),y-5,5,10);
+    else {
+
+	//warning("Font for text");
+	QFont formulaFont;
+	if(font!=0L)     
+	    formulaFont=(*font);
+	else
+	    {
+		formulaFont=formula->generalFont();
+		formulaFont.setPointSize(numericFont);
+	    }
+	pen->setFont(formulaFont);
+	pen->drawText(x+familySize.x(),y+offsetY,content); 
+	if( beActive ) {
+	    QFontMetrics fm(formulaFont);
+	    formula->setCursor(QRect(x+fm.width(content,position),
+				     y+familySize.top()-1,
+				     3,familySize.height()+2));
+	}
+	
     }
-  pen->setFont(formulaFont);
-  pen->drawText(x+familySize.x(),y+offsetY,content); 
-     if( beActive )
-     {
-      QFontMetrics fm(formulaFont);
-      formula->setCursor(QRect(x+fm.width(content,position),y+familySize.top()-1,
-	                         3,familySize.height()+2));
-     }
-
-  }
-if(beActive)
-  pen->setPen(blue);
-  myArea=globalSize;
-  myArea.moveBy(x,y);
+    if(beActive)
+	pen->setPen(blue);
+    myArea=globalSize;
+    myArea.moveBy(x,y);
 #ifdef RECT
-  /*QRect  localArea;
-  localArea=localSize;
-  localArea.moveBy(x,y);  
-  pen->drawRect(localArea); 
-  localArea=familySize;
-  localArea.moveBy(x,y);  
-  pen->drawRect(localArea); 
-*/  pen->setBrush(green);
-  pen->setBrush(NoBrush);
-  pen->drawRect(myArea);   
-  QRect area(localSize);
-  area.moveBy(x,y);
-  pen->drawRect(area); 
-  pen->setBrush(SolidPattern);
+    /*QRect  localArea;
+      localArea=localSize;
+      localArea.moveBy(x,y);  
+      pen->drawRect(localArea); 
+      localArea=familySize;
+      localArea.moveBy(x,y);  
+      pen->drawRect(localArea); 
+    */  
+    pen->setBrush(green);
+    pen->setBrush(NoBrush);
+    pen->drawRect(myArea);   
+    QRect area(localSize);
+    area.moveBy(x,y);
+    pen->drawRect(area); 
+    pen->setBrush(SolidPattern);
 #endif
-  drawIndexes(pen,resolution);
+    drawIndexes(pen,resolution);
 
-if(beActive)
-  pen->setPen(black);
-  if(next!=0L) next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
+    if(beActive)
+	pen->setPen(black);
+    if(next!=0L) next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
 }
 
 void TextElement::checkSize()
 { 
-//  warning("T %p",this);
-  QFont formulaFont;
-  if(font!=0L)     
-    formulaFont=(*font);
-   else
-    {
-    formulaFont=formula->generalFont();
-    formulaFont.setPointSize(numericFont);
+    //  warning("T %p",this);
+    QFont formulaFont;
+    if(font!=0L)     
+	formulaFont=(*font);
+    else {
+	formulaFont=formula->generalFont();
+	formulaFont.setPointSize(numericFont);
     }
 
-  QFontMetrics fm(formulaFont);
-  QRect nextDimension; 
+    QFontMetrics fm(formulaFont);
+    QRect nextDimension; 
 
-  if (next!=0L)
-    {
-      next->checkSize();
-      nextDimension=next->getSize();
+    if (next!=0L) {
+	next->checkSize();
+	nextDimension=next->getSize();
     }
+    
+    offsetY=fm.strikeOutPos();
+    familySize=fm.boundingRect(content);
+    familySize.moveBy(0,offsetY);
+    if(content.isEmpty()) 
+	familySize.setRect(0,-5,10,10);
+    
+    int offsetX;  // Need To adjust X value
+    offsetX=familySize.left();
   
-  offsetY=fm.strikeOutPos();
-  familySize=fm.boundingRect(content);
-  familySize.moveBy(0,offsetY);
-  if(content == "") 
-   {
-     familySize.setRect(0,-5,10,10);
-   }
-  
-  int offsetX;  // Need To adjust X value
-  offsetX=familySize.left();
-  
-   if( offsetX<0) 
-    familySize.moveBy(-offsetX,0);
-      else {
-       familySize.setLeft(0); 
-       offsetX=0;
-      }
-  localSize=familySize;
-  checkIndexesSize();  //This will change localSize adding Indexes Size
-  familySize.moveBy(-localSize.left()-offsetX,0);
-  localSize.moveBy(-localSize.left(),0);
-  globalSize=localSize;
-  nextDimension.moveBy(localSize.width(),0);
-  globalSize=globalSize.unite(nextDimension);
-//warning("End");
+    if( offsetX<0) 
+	familySize.moveBy(-offsetX,0);
+    else {
+	familySize.setLeft(0); 
+	offsetX=0;
+    }
+    localSize=familySize;
+    checkIndexesSize();  //This will change localSize adding Indexes Size
+    familySize.moveBy(-localSize.left()-offsetX,0);
+    localSize.moveBy(-localSize.left(),0);
+    globalSize=localSize;
+    nextDimension.moveBy(localSize.width(),0);
+    globalSize=globalSize.unite(nextDimension);
+    //warning("End");
 }
 
 int TextElement::takeAsciiFromKeyb(char ch) 
 {
-  warning("...pos:%i",position);
-content.insert(position,ch);
-position++;
-  warning("ins %i",position);
-return 1;
+    warning("...pos:%i",position);
+    content.insert(position,ch);
+    position++;
+    warning("ins %i",position);
+    return 1;
 }     
 
 int TextElement::takeActionFromKeyb(int action)
 {
+    if(action==Key_Backspace) 
+	{
+	    if(position > 0) { 
+		position--;
+		content.remove(position,1);
+	    }
+	}
+    else 
+	if(action==Key_Delete) 
+	    content.remove(position,1);   //Change this....
+    
+    if(position > content.length()) 
+	position = content.length();
 
-if(action==Key_Backspace) 
-    {
-         if(position>0) { 
-	     position--;
-             content.remove(position,1);
-		   }
-    }
- else 
- if(action==Key_Delete) 
-     content.remove(position,1);   //Change this....
-if(position>content.length()) position=content.length();
-if(position<0)position=0;
-return position;
+    return position;
 }
 
 void TextElement::changeFontFamily(QString family)
 {
   
-   if (family=="")
-    {
-    if (font!=0L) delete font;	   
-     font=0L;  
-    }
-     else 
-    {
-     if (font==0L) font = new QFont;
-       font->setFamily(family);
-       font->setPointSize(numericFont);
-    } 
+    if (family=="")
+	{
+	    if (font!=0L) delete font;	   
+	    font=0L;  
+	}
+    else 
+	{
+	    if (font==0L) font = new QFont;
+	    font->setFamily(family);
+	    font->setPointSize(numericFont);
+	} 
 }
 
 void TextElement::setNumericFont(int value)
 {
- numericFont=value;
-if(font!=0L) font->setPointSize( numericFont );
+    numericFont=value;
+    if(font!=0L) font->setPointSize( numericFont );
 }

@@ -68,7 +68,7 @@ class KFormulaDocument : public QObject,
     /**
      * We dont load any children.
      */
-    virtual bool loadChildren( OPParts::MimeMultipartDict_ptr _dict ) { return true; }
+    virtual bool loadChildren( OPParts::MimeMultipartDict_ptr ) { return true; }
     virtual bool save( ostream& out );
 
     // IDL

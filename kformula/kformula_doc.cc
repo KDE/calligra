@@ -35,7 +35,7 @@ KFormulaDocument::KFormulaDocument()
     theFirstElement= new BasicElement(this,0L,-1,0L,"");
     setActiveElement(0L);
     warning("SIZE OF:  basic:%i,text:%i,root:%i",sizeof(BasicElement),
-		    sizeof(TextElement),sizeof(RootElement));
+	    sizeof(TextElement),sizeof(RootElement));
 }
 
 CORBA::Boolean KFormulaDocument::init()
@@ -58,7 +58,7 @@ void KFormulaDocument::cleanUp()
     Document_impl::cleanUp();
 }
 
-bool KFormulaDocument::load( KOMLParser& parser )
+bool KFormulaDocument::load( KOMLParser&  )
 {
     // HACK
     return false;
@@ -109,36 +109,36 @@ OPParts::View_ptr KFormulaDocument::createView()
 
 void KFormulaDocument::emitModified()
 {
-if(theActiveElement!=0)
-    emit sig_changeType(theActiveElement->type());
-     else 
-    emit sig_changeType(0);
+    if(theActiveElement!=0)
+	emit sig_changeType(theActiveElement->type());
+    else 
+	emit sig_changeType(0);
      
     emit sig_modified();
 }
 
 void KFormulaDocument::addRootElement()
 {   
-  BasicElement *nextElement;
-  BasicElement *newElement;
-   if(theActiveElement==0L)
-     setActiveElement(theFirstElement);
+    BasicElement *nextElement;
+    BasicElement *newElement;
+    if(theActiveElement==0L)
+	setActiveElement(theFirstElement);
   
-        if(theActiveElement->type()==EL_BASIC)  //If current Element is a Basic
-         {					//It change it into a Root
-	  theActiveElement->substituteElement(newElement = new RootElement(this));
-	  delete theActiveElement;
-          theActiveElement = 0;
-	 }         
-        else 
-	 {
-	 nextElement=theActiveElement->getNext();
-	 if(nextElement!=0L){       //If there's a next insert root before next
-	  nextElement->insertElement(newElement=new RootElement(this));
-	  }
-	  else              //If there isn't a next append only.
- 	   activeElement()->setNext(newElement=new RootElement(this,theActiveElement));
-	 }
+    if(theActiveElement->type()==EL_BASIC)  //If current Element is a Basic
+	{					//It change it into a Root
+	    theActiveElement->substituteElement(newElement = new RootElement(this));
+	    delete theActiveElement;
+	    theActiveElement = 0;
+	}         
+    else 
+	{
+	    nextElement=theActiveElement->getNext();
+	    if(nextElement!=0L){       //If there's a next insert root before next
+		nextElement->insertElement(newElement=new RootElement(this));
+	    }
+	    else              //If there isn't a next append only.
+		activeElement()->setNext(newElement=new RootElement(this,theActiveElement));
+	}
     setActiveElement(newElement);  
     //RootElement need a child[0] i.e. root content
     theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,4),0);	 
@@ -148,26 +148,26 @@ void KFormulaDocument::addRootElement()
 
 void KFormulaDocument::addFractionElement(QString cont)
 {   
-  BasicElement *nextElement;
-  BasicElement *newElement;
-   if(theActiveElement==0L)
-     setActiveElement(theFirstElement);
+    BasicElement *nextElement;
+    BasicElement *newElement;
+    if(theActiveElement==0L)
+	setActiveElement(theFirstElement);
   
-        if(theActiveElement->type()==EL_BASIC)  //If current Element is a Basic
-         {					//It change it into a Root
-	  theActiveElement->substituteElement(newElement = new FractionElement(this));
-	  delete theActiveElement;
-          theActiveElement = 0;
-	 }         
-        else 
-	 {
-	 nextElement=theActiveElement->getNext();
-	 if(nextElement!=0L){       //If there's a next insert root before next
-	  nextElement->insertElement(newElement=new FractionElement(this));
-	  }
-	  else              //If there isn't a next append only.
- 	   activeElement()->setNext(newElement=new FractionElement(this,theActiveElement));
-	 }
+    if(theActiveElement->type()==EL_BASIC)  //If current Element is a Basic
+	{					//It change it into a Root
+	    theActiveElement->substituteElement(newElement = new FractionElement(this));
+	    delete theActiveElement;
+	    theActiveElement = 0;
+	}         
+    else 
+	{
+	    nextElement=theActiveElement->getNext();
+	    if(nextElement!=0L){       //If there's a next insert root before next
+		nextElement->insertElement(newElement=new FractionElement(this));
+	    }
+	    else              //If there isn't a next append only.
+		activeElement()->setNext(newElement=new FractionElement(this,theActiveElement));
+	}
     newElement->setContent(cont);	 
     setActiveElement(newElement);  
     //RootElement need a child[0] i.e. numer
@@ -180,35 +180,35 @@ void KFormulaDocument::addFractionElement(QString cont)
 
 void KFormulaDocument::addMatrixElement(QString cont)
 {   
-  int rows=atoi(cont.mid(3,3));
-  int cols=atoi(cont.mid(6,3));
+    int rows=atoi(cont.mid(3,3));
+    int cols=atoi(cont.mid(6,3));
 
-  BasicElement *nextElement;
-  BasicElement *newElement;
-   if(theActiveElement==0L)
-     setActiveElement(theFirstElement);
+    BasicElement *nextElement;
+    BasicElement *newElement;
+    if(theActiveElement==0L)
+	setActiveElement(theFirstElement);
   
-        if(theActiveElement->type()==EL_BASIC)  //If current Element is a Basic
-         {					//It change it into a Root
-	  theActiveElement->substituteElement(newElement = new MatrixElement(this));
-	  delete theActiveElement;
-          theActiveElement = 0;
-	 }         
-        else 
-	 {
-	 nextElement=theActiveElement->getNext();
-	 if(nextElement!=0L){       //If there's a next insert root before next
-	  nextElement->insertElement(newElement=new MatrixElement(this));
-	  }
-	  else              //If there isn't a next append only.
- 	   activeElement()->setNext(newElement=new MatrixElement(this,theActiveElement));
-	 }
+    if(theActiveElement->type()==EL_BASIC)  //If current Element is a Basic
+	{					//It change it into a Root
+	    theActiveElement->substituteElement(newElement = new MatrixElement(this));
+	    delete theActiveElement;
+	    theActiveElement = 0;
+	}         
+    else 
+	{
+	    nextElement=theActiveElement->getNext();
+	    if(nextElement!=0L){       //If there's a next insert root before next
+		nextElement->insertElement(newElement=new MatrixElement(this));
+	    }
+	    else              //If there isn't a next append only.
+		activeElement()->setNext(newElement=new MatrixElement(this,theActiveElement));
+	}
     newElement->setContent(cont);	 
     setActiveElement(newElement);  
     //RootElement need a child[0] i.e. numer
     ((MatrixElement *)(theActiveElement))->setChildrenNumber(rows*cols);
     for (int i=rows*cols-1;i>=0;i--)
-     theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,i+4),i);	 
+	theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,i+4),i);	 
     setActiveElement(newElement); //I prefere to AutoActivate numerator 
     emitModified();
     
@@ -216,25 +216,25 @@ void KFormulaDocument::addMatrixElement(QString cont)
 
 void KFormulaDocument::addBracketElement(QString cont)
 {   
-  BasicElement *nextElement;
-  BasicElement *newElement;
-   if(theActiveElement==0L)
-     setActiveElement(theFirstElement);
+    BasicElement *nextElement;
+    BasicElement *newElement;
+    if(theActiveElement==0L)
+	setActiveElement(theFirstElement);
   
-        if(theActiveElement->type()==EL_BASIC)  //If current Element is a Basic
-         {					//It change it into a Bracket
-	  theActiveElement->substituteElement(newElement = new BracketElement(this));
-	  delete theActiveElement;
-	 }         
-        else 
-	 {
-	 nextElement=theActiveElement->getNext();
-	 if(nextElement!=0L){       //If there's a next insert  Brackets before next
-	  nextElement->insertElement(newElement=new BracketElement(this));
-	  }
-	  else              //If there isn't a next append only.
- 	   activeElement()->setNext(newElement=new BracketElement(this,theActiveElement));
-	 } 
+    if(theActiveElement->type()==EL_BASIC)  //If current Element is a Basic
+	{					//It change it into a Bracket
+	    theActiveElement->substituteElement(newElement = new BracketElement(this));
+	    delete theActiveElement;
+	}         
+    else 
+	{
+	    nextElement=theActiveElement->getNext();
+	    if(nextElement!=0L){       //If there's a next insert  Brackets before next
+		nextElement->insertElement(newElement=new BracketElement(this));
+	    }
+	    else              //If there isn't a next append only.
+		activeElement()->setNext(newElement=new BracketElement(this,theActiveElement));
+	} 
     newElement->setContent(cont);	 
     setActiveElement(newElement);  
     //RootElement need a child[0] i.e. parenthesis content
@@ -251,43 +251,43 @@ void KFormulaDocument::addBracketElement(QString cont)
  */
 void KFormulaDocument::addIndex(int index)
 {
-  BasicElement *oldIndexElement;
-  BasicElement *newElement;
-   if(theActiveElement==0L)
-     setActiveElement(theFirstElement);
+    BasicElement *oldIndexElement;
+    BasicElement *newElement;
+    if(theActiveElement==0L)
+	setActiveElement(theFirstElement);
   
-  oldIndexElement=theActiveElement->getIndex(index);
-  if(oldIndexElement==0L)        
-    theActiveElement->setIndex(newElement = 
-		new BasicElement(this,theActiveElement,index),index);
-  else
-   {
-    oldIndexElement->insertElement(newElement = new BasicElement(this));
-   }
+    oldIndexElement=theActiveElement->getIndex(index);
+    if(oldIndexElement==0L)        
+	theActiveElement->setIndex(newElement = 
+				   new BasicElement(this,theActiveElement,index),index);
+    else
+	{
+	    oldIndexElement->insertElement(newElement = new BasicElement(this));
+	}
     setActiveElement(newElement);
     emitModified();
 } 
 
 void KFormulaDocument::addTextElement()
 {   
-BasicElement *nextElement;
-BasicElement *newElement;
-  if(theActiveElement==0L)
-   setActiveElement(theFirstElement); 
+    BasicElement *nextElement;
+    BasicElement *newElement;
+    if(theActiveElement==0L)
+	setActiveElement(theFirstElement); 
 
-        if(theActiveElement->type()==EL_BASIC)  //see addRootElement()
-         {
-	  theActiveElement->substituteElement(newElement = new TextElement(this));
-	  delete theActiveElement;
-	 }         
-        else 
-	 {
-	 nextElement=theActiveElement->getNext();
-	 if(nextElement!=0L){
-	  nextElement->insertElement(newElement=new TextElement(this));
-	  }else
-	   activeElement()->setNext(newElement=new TextElement(this,theActiveElement));
-	 }
+    if(theActiveElement->type()==EL_BASIC)  //see addRootElement()
+	{
+	    theActiveElement->substituteElement(newElement = new TextElement(this));
+	    delete theActiveElement;
+	}         
+    else 
+	{
+	    nextElement=theActiveElement->getNext();
+	    if(nextElement!=0L){
+		nextElement->insertElement(newElement=new TextElement(this));
+	    }else
+		activeElement()->setNext(newElement=new TextElement(this,theActiveElement));
+	}
     setActiveElement(newElement);
     emitModified();
 }
@@ -295,104 +295,104 @@ BasicElement *newElement;
 void KFormulaDocument::mousePressEvent( QMouseEvent *a,QWidget *wid)
 {
  
-   setActiveElement(theFirstElement->isInside(a->pos()));  
-   emitModified();
-if(a->button()==RightButton){
-   QPopupMenu *mousepopup = new QPopupMenu;
-   QPopupMenu *convert = new QPopupMenu;
-   QPopupMenu *fontpopup = new QPopupMenu;    
-       fontpopup->insertItem(i18n("Font +"), this, SLOT(enlarge()), ALT+Key_K);
-    fontpopup->insertItem(i18n("Font -"), this, SLOT(reduce()), ALT+Key_K);
-    fontpopup->insertItem(i18n("Font + (also Children)"), this, SLOT(enlargeRecur()), ALT+Key_K);
-    fontpopup->insertItem(i18n("Font - (also Children)"), this, SLOT(reduceRecur()), ALT+Key_K);
-    fontpopup->insertItem(i18n("All Font +"), this, SLOT(enlargeAll()), ALT+Key_K);
-    fontpopup->insertItem(i18n("All Font -"), this, SLOT(reduceAll()), ALT+Key_K);
-//    convert->insertItem(klocale("Simple Text"), parent->_part, SLOT(slotQuit()), ALT+Key_E);
-//    convert->insertItem("AAAARGGHHH", _part, SLOT(slotQuit()), ALT+Key_E);
-    mousepopup->insertItem(i18n("Properties"), this,SLOT(pro()), ALT+Key_E);
-    mousepopup->insertItem(i18n("Delete"), this,SLOT(dele()), ALT+Key_E);
-    mousepopup->insertSeparator();
-    mousepopup->insertItem(i18n("Change font"),fontpopup);    
-    mousepopup->insertItem(i18n("Export as"),convert);
-//    mousepopup->insertSeparator();
-//    mousepopup->insertItem(i18n("Quit"), _part, SLOT(slotQuit()), ALT+Key_Q);
-    mousepopup->popup(wid->mapToGlobal(a->pos()));
- }
+    setActiveElement(theFirstElement->isInside(a->pos()));  
+    emitModified();
+    if(a->button()==RightButton){
+	QPopupMenu *mousepopup = new QPopupMenu;
+	QPopupMenu *convert = new QPopupMenu;
+	QPopupMenu *fontpopup = new QPopupMenu;    
+	fontpopup->insertItem(i18n("Font +"), this, SLOT(enlarge()), ALT+Key_K);
+	fontpopup->insertItem(i18n("Font -"), this, SLOT(reduce()), ALT+Key_K);
+	fontpopup->insertItem(i18n("Font + (also Children)"), this, SLOT(enlargeRecur()), ALT+Key_K);
+	fontpopup->insertItem(i18n("Font - (also Children)"), this, SLOT(reduceRecur()), ALT+Key_K);
+	fontpopup->insertItem(i18n("All Font +"), this, SLOT(enlargeAll()), ALT+Key_K);
+	fontpopup->insertItem(i18n("All Font -"), this, SLOT(reduceAll()), ALT+Key_K);
+	//    convert->insertItem(klocale("Simple Text"), parent->_part, SLOT(slotQuit()), ALT+Key_E);
+	//    convert->insertItem("AAAARGGHHH", _part, SLOT(slotQuit()), ALT+Key_E);
+	mousepopup->insertItem(i18n("Properties"), this,SLOT(pro()), ALT+Key_E);
+	mousepopup->insertItem(i18n("Delete"), this,SLOT(dele()), ALT+Key_E);
+	mousepopup->insertSeparator();
+	mousepopup->insertItem(i18n("Change font"),fontpopup);    
+	mousepopup->insertItem(i18n("Export as"),convert);
+	//    mousepopup->insertSeparator();
+	//    mousepopup->insertItem(i18n("Quit"), _part, SLOT(slotQuit()), ALT+Key_Q);
+	mousepopup->popup(wid->mapToGlobal(a->pos()));
+    }
 }
 
 void KFormulaDocument::keyPressEvent( QKeyEvent *k )
 {
 
-/*
- if(k->key()==Key_Left) {
-		       if((type==0)&&(pos>0)) pos--;
-		    else  
-                       if(prev!=-1)setCurrent(prev);
-				     }
- if(k->key()==Key_Right) { 
-                        if((type==0)&&(pos<len)) pos++;
-			else
-			 if(next!=-1)  setCurrent(next);
-			else
-			 if(c1!=-1)    setCurrent(c1);
-			else
-			 if(c2!=-1)    setCurrent(c2);
-			  }			
-if(k->key()==Key_Up) {
-		      if(c1!=-1)    setCurrent(c1);                        
-	   	    else
-		      if(prev!=-1)  setCurrent(prev);						 
-    		     }  
+    /*
+      if(k->key()==Key_Left) {
+      if((type==0)&&(pos>0)) pos--;
+      else  
+      if(prev!=-1)setCurrent(prev);
+      }
+      if(k->key()==Key_Right) { 
+      if((type==0)&&(pos<len)) pos++;
+      else
+      if(next!=-1)  setCurrent(next);
+      else
+      if(c1!=-1)    setCurrent(c1);
+      else
+      if(c2!=-1)    setCurrent(c2);
+      }			
+      if(k->key()==Key_Up) {
+      if(c1!=-1)    setCurrent(c1);                        
+      else
+      if(prev!=-1)  setCurrent(prev);						 
+      }  
 
-if(k->key()==Key_Down) {
-		      if(c2!=-1)    setCurrent(c2);                        
-	   	    else
-		      if(prev!=-1)  setCurrent(prev);						 
-    		     }  
+      if(k->key()==Key_Down) {
+      if(c2!=-1)    setCurrent(c2);                        
+      else
+      if(prev!=-1)  setCurrent(prev);						 
+      }  
 
-if(k->key()==Key_Backspace) {
-	                 if(pos>0) { pos--;
-		                     Blocks[c]->getcont().remove(pos,1);
-				   }
-			    }
- else 
- if(k->key()==Key_Delete) {
-    if(type==0) Blocks[c]->getcont().remove(pos,1); else deleteIt(Blocks[c]);  
-    }    else 
- */
- int elReturn=0;
- if((k->ascii()>32)&&(k->ascii()<127))
-  { 
-   if (theActiveElement!=0L) 
-     elReturn=theActiveElement->takeAsciiFromKeyb(k->ascii());
-  }
+      if(k->key()==Key_Backspace) {
+      if(pos>0) { pos--;
+      Blocks[c]->getcont().remove(pos,1);
+      }
+      }
+      else 
+      if(k->key()==Key_Delete) {
+      if(type==0) Blocks[c]->getcont().remove(pos,1); else deleteIt(Blocks[c]);  
+      }    else 
+    */
+    int elReturn=0;
+    if((k->ascii()>32)&&(k->ascii()<127))
+	{ 
+	    if (theActiveElement!=0L) 
+		elReturn=theActiveElement->takeAsciiFromKeyb(k->ascii());
+	}
     else   //Not ascii
-  {
-   if (theActiveElement!=0L) 
-     elReturn=theActiveElement->takeActionFromKeyb(k->key());  
-  }	
+	{
+	    if (theActiveElement!=0L) 
+		elReturn=theActiveElement->takeActionFromKeyb(k->key());  
+	}	
 
     if (elReturn==FCOM_TEXTCLONE)
-      {
-          BasicElement *newElement;
-	  theActiveElement->substituteElement(newElement = new TextElement(this));
-	  BasicElement *b;
-	  b=theActiveElement;
-	  setActiveElement(newElement);
-	 if((k->ascii()>32)&&(k->ascii()<127))
-              theActiveElement->takeAsciiFromKeyb(k->ascii());
-	  warning("delete %p",b);
-	  delete b;
-      }
+	{
+	    BasicElement *newElement;
+	    theActiveElement->substituteElement(newElement = new TextElement(this));
+	    BasicElement *b;
+	    b=theActiveElement;
+	    setActiveElement(newElement);
+	    if((k->ascii()>32)&&(k->ascii()<127))
+		theActiveElement->takeAsciiFromKeyb(k->ascii());
+	    warning("delete %p",b);
+	    delete b;
+	}
 
-//ChText(Blocks[getCurrent()]->getcont());
-//ChType(Blocks[getCurrent()]->gettype());
-//update();
- emitModified();
+    //ChText(Blocks[getCurrent()]->getcont());
+    //ChType(Blocks[getCurrent()]->gettype());
+    //update();
+    emitModified();
 }
 
 
-void KFormulaDocument::paintEvent( QPaintEvent *_ev, QWidget *paintGround )
+void KFormulaDocument::paintEvent( QPaintEvent *, QWidget *paintGround )
 {
     
     thePainter->begin(paintGround);    
@@ -400,8 +400,8 @@ void KFormulaDocument::paintEvent( QPaintEvent *_ev, QWidget *paintGround )
     theFirstElement->checkSize();
     theFirstElement->draw(QPoint(0,0)-theFirstElement->getSize().topLeft());
     if(theActiveElement!=0L)
-     if(theActiveElement->type()==EL_TEXT)
-      thePainter->drawWinFocusRect(theCursor);
+	if(theActiveElement->type()==EL_TEXT)
+	    thePainter->drawWinFocusRect(theCursor);
     thePainter->end();
 }
 

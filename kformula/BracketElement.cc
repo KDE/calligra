@@ -12,8 +12,11 @@
 #include "BracketElement.h" 
 #include "formuladef.h"
 
-BracketElement::BracketElement(FormulaClass *Formula,BasicElement *Prev=0L,int Relation=-1,BasicElement *Next=0L,
-			 QString Content="") : BasicElement(Formula,Prev,Relation,Next,Content)
+BracketElement::BracketElement(FormulaClass *Formula,
+			       BasicElement *Prev,
+			       int Relation,
+			       BasicElement *Next,
+			       QString Content) : BasicElement(Formula,Prev,Relation,Next,Content)
 {
   /*
     Stuff to load pixmap (if need)
@@ -27,7 +30,7 @@ BracketElement::~BracketElement()
 {
 }
 
-void BracketElement::draw(QPoint drawPoint,int resolution=72)
+void BracketElement::draw(QPoint drawPoint,int resolution)
 {
   
   QPainter *pen=formula->painter();
@@ -214,11 +217,11 @@ void BracketElement::checkSize()
   //warning("end");
 }
 
-int BracketElement::takeAsciiFromKeyb(int action)
+int BracketElement::takeAsciiFromKeyb(int)
 {
   return 2;
 }
-int BracketElement::takeActionFromKeyb(int action)
+int BracketElement::takeActionFromKeyb(int)
 {
   return -1;
 }

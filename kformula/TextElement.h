@@ -16,20 +16,25 @@
 
 #ifndef  _TEXT_ELEMENT_H_
 #define  _TEXT_ELEMENT_H_
+
 class TextElement : public BasicElement
  {
  public:
    /*
     * Normal constructor, Get font from prev element
     */
-   TextElement(FormulaClass *Formula,BasicElement *Prev=NULL,int Relation=-1,BasicElement *Next=NULL,
-                QString Content="");
+     TextElement(FormulaClass *Formula,
+		 BasicElement *Prev=0,
+		 int Relation=-1,
+		 BasicElement *Next=0,
+		 QString Content="");
        
    /*
     * Link Next & Prev removing itself
     */
    virtual   ~TextElement();
-    /*
+   
+   /*
     * This is very useful for TextElement.
     * thanks to this function we can store in only 1 element
     * long( >1) string and add element in it in a very simple
@@ -44,14 +49,14 @@ class TextElement : public BasicElement
     * 
     * if pos=-1 it splits to the current cursor position
     */
-    void split(int pos=-1) {};
+   void split(int) {};
      
    /*
     * each derived class must implement its own Draw()
     * "prev" is responsable for x,y
     * 
     */
-   virtual void draw(QPoint drawPoint,int resolution=72);
+   virtual void draw(QPoint drawPoint, int resolution=72);
 
    /*
     * each derived class must implement its own CheckSize()
@@ -67,7 +72,7 @@ class TextElement : public BasicElement
    /*
     * Need when cloning.
     */
-//    virtual void setContent(QString c) {content=c;position=c.length();}   
+   //    virtual void setContent(QString c) {content=c;position=c.length();}   
    
    /*  
     * Change "font"     
@@ -87,17 +92,17 @@ class TextElement : public BasicElement
     * if input is delete,backspace,arrows,home,end....
     * return cursor position (-1 if no cursor is need)
     */
-    
+   
    virtual int takeActionFromKeyb(int action);
  
    virtual int type() {return EL_TEXT; }   
    /*
     * Again, in  the future....
     */
-/*   virtual void save(int file);
-   virtual void load(int file);
-*/
-protected:
+   /*   virtual void save(int file);
+	virtual void load(int file);
+   */
+ protected:
    
    /*
     * Normal text need it
@@ -110,10 +115,10 @@ protected:
     */
    QFont *font;
 
-  /*
-   * StringCursor Internal position
-   */
-   int position;
+   /*
+    * StringCursor Internal position
+    */
+   uint position;
    
  };
 #endif
