@@ -214,13 +214,19 @@ void OoImpressImport::createDocumentInfo( QDomDocument &docinfo )
         title.appendChild( doc.createTextNode( e.text() ) );
         elementDocInfo.appendChild( about );
     }
-#if 0
+
     e = office.namedItem( "dc:description" ).toElement();
     if ( !e.isNull() && !e.text().isEmpty() )
     {
-
+        QDomElement about = elementDocInfo.namedItem( "about" ).toElement();
+        if ( about.isNull() ) {
+            about = docinfo.createElement( "about" );
+            elementDocInfo.appendChild( about );
+        }
+        QDomElement title = docinfo.createElement( "abstract" );
+        about.appendChild( title );
+        title.appendChild( docinfo.createTextNode( e.text() ) );
     }
-#endif
     docinfo.appendChild(doc);
 
     //kdDebug(30518) << " meta-info :" << m_meta.toCString() << endl;
