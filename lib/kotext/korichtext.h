@@ -181,7 +181,7 @@ template class QMemArray<KoTextStringChar>;
 // MOC_SKIP_END
 #endif
 
-class KoTextString
+class KOTEXT_EXPORT KoTextString
 {
 public:
 
@@ -392,7 +392,7 @@ private:
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class KoTextCustomItem
+class KOTEXT_EXPORT KoTextCustomItem
 {
 public:
     KoTextCustomItem( KoTextDocument *p );

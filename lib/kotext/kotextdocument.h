@@ -22,7 +22,7 @@
 #define KOTEXTDOCUMENT_H
 
 #include "korichtext.h"
-
+#include <koffice_export.h>
 #if defined(Q_TEMPLATEDLL)
 // MOC_SKIP_BEGIN
 template class Q_EXPORT QMap<int, QColor>;
@@ -41,7 +41,7 @@ class KoTextFormatter;
 class KoTextParag;
 class CustomItemsMap;
 
-class Q_EXPORT KoTextDocument : public QObject
+class KOTEXT_EXPORT KoTextDocument : public QObject
 {
     Q_OBJECT
 

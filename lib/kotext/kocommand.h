@@ -27,7 +27,7 @@ class KoTextDocument;
 class KoVariable;
 #include <koparaglayout.h>
 #include <kotextdocument.h>
-
+#include <koffice_export.h>
 /**
  * Wraps a KoTextDocCommand into a KCommand, for the UI
  * In fact the KoTextDocCommand isn't even known from here.
@@ -35,7 +35,7 @@ class KoVariable;
  * on the KoTextObject. Since one KCommand is created for each
  * command there, the two simply map.
  */
-class KoTextCommand : public KNamedCommand
+class KOTEXT_EXPORT KoTextCommand : public KNamedCommand
 {
 public:
     KoTextCommand( KoTextObject * textobj, const QString & name ) :

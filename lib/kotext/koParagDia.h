@@ -33,7 +33,7 @@
 #include <knuminput.h>
 #include <qgroupbox.h>
 #include <qvgroupbox.h>
-
+#include <koffice_export.h>
 class KButtonBox;
 class KColorButton;
 class KoTextDocument;
@@ -206,7 +206,7 @@ private:
     KoBorderPreview *prev3;
 };
 
-class KoCounterStyleWidget : public QWidget
+class KOTEXT_EXPORT KoCounterStyleWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -346,7 +346,7 @@ protected:
 /**
  * The widget for editing tabulators (tab 5)
  */
-class KoParagTabulatorsWidget : public KoParagLayoutWidget
+class KOTEXT_EXPORT KoParagTabulatorsWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
@@ -434,7 +434,7 @@ protected:
  * (*) the flags (to only show parts of it) have been kept just in case
  * but are not currently used.
  */
-class KoParagDia : public KDialogBase
+class KOTEXT_EXPORT KoParagDia : public KDialogBase
 {
     Q_OBJECT
 

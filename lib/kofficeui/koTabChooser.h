@@ -21,7 +21,7 @@
 #define koTabChooser_h
 
 #include <qframe.h>
-
+#include <koffice_export.h>
 class QMouseEvent;
 class QPainter;
 class QPopupMenu;
@@ -32,7 +32,7 @@ class QPopupMenu;
 
 class KoTabChooserPrivate;
 
-class KoTabChooser : public QFrame
+class KOFFICEUI_EXPORT KoTabChooser : public QFrame
 {
     Q_OBJECT
 

@@ -30,7 +30,7 @@
 #include <qstring.h>
 
 #include <kspell2/backgroundchecker.h>
-
+#include <koffice_export.h>
 class KoTextIterator;
 class KoTextParag;
 class KoTextObject;
@@ -42,7 +42,7 @@ class KoTextDocument;
  * @author Zack Rusin <zack@kde.org>, David Sweet <dsweet@kde.org>
  * @see KSpell2::Broker
  */
-class KoSpell : public KSpell2::BackgroundChecker
+class KOTEXT_EXPORT KoSpell : public KSpell2::BackgroundChecker
 {
     Q_OBJECT
 

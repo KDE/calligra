@@ -32,6 +32,7 @@
 #include <qcolor.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <koffice_export.h>
 
 class QPushButton;
 class QRadioButton;
@@ -52,7 +53,7 @@ class KoTextCursor;
 // This class represents the KWord-specific search extension items, and also the
 // corresponding replace items.
 //
-class KoSearchContext
+class KOTEXT_EXPORT KoSearchContext
 {
 public:
 
@@ -119,7 +120,7 @@ private:
 //
 // This class is the KWord search dialog.
 //
-class KoSearchDia:
+class KOTEXT_EXPORT KoSearchDia:
     public KFindDialog
 {
     Q_OBJECT
@@ -141,7 +142,7 @@ private:
 //
 // This class is the kotext replace dialog.
 //
-class KoReplaceDia:
+class KOTEXT_EXPORT KoReplaceDia:
     public KReplaceDialog
 {
     Q_OBJECT
@@ -198,7 +199,7 @@ private:
  * This class implements the 'find' functionality ( the "search next, prompt" loop )
  * and the 'replace' functionality. Same class, to allow centralizing the findNext() code.
  */
-class KoFindReplace : public QObject
+class KOTEXT_EXPORT KoFindReplace : public QObject
 {
     Q_OBJECT
 public:

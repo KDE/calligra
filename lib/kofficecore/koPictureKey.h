@@ -22,7 +22,7 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
-
+#include <koffice_export.h>
 /**
  * \file koPictureKey.h
  * \todo correct documentation (for example: sed "s/image/picture/g")
@@ -72,7 +72,7 @@ namespace KoPictureType
  * @note In case of a remote path, the "original path" is the name of the temporary file that was
  *  used to download the file.
  */
-class KoPictureKey
+class KOFFICEUI_EXPORT KoPictureKey
 {
 public:
     /**

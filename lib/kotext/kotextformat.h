@@ -398,7 +398,7 @@ template class Q_EXPORT QDict<KoTextFormat>;
 // MOC_SKIP_END
 #endif
 
-class KoTextFormatCollection
+class KOTEXT_EXPORT KoTextFormatCollection
 {
     friend class KoTextDocument;
     friend class KoTextFormat;

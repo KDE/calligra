@@ -115,7 +115,7 @@ private:
  *
  * @author David Faure <faure@kde.org>
  */
-class KoSavingContext
+class KOTEXT_EXPORT KoSavingContext
 {
 public:
     enum SavingMode { Store, Flat };

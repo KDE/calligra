@@ -21,7 +21,7 @@
 #define __KoInsertLink__
 
 #include <kdialogbase.h>
-
+#include <koffice_export.h>
 class QLineEdit;
 class KURLRequester;
 
@@ -120,7 +120,7 @@ signals:
 /**
  * Dialog to insert links to various sources (file, Internet, mail and bookmarks).
  */
-class KoInsertLinkDia : public KDialogBase
+class KOFFICEUI_EXPORT KoInsertLinkDia : public KDialogBase
 {
     Q_OBJECT
 public:

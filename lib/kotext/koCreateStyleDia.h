@@ -22,8 +22,10 @@
 
 #include <kdialogbase.h>
 #include <qstringlist.h>
+#include <koffice_export.h>
+
 class QLineEdit;
-class KoCreateStyleDia : public KDialogBase
+class KOTEXT_EXPORT KoCreateStyleDia : public KDialogBase
 {
     Q_OBJECT
 public:

@@ -23,6 +23,7 @@
 #include <koRuler.h> // for KoTabulatorList
 #include <qdom.h>
 #include "koborder.h"
+#include <koffice_export.h>
 class KoGenStyle;
 class KoParagCounter;
 class KoParagStyle;
@@ -33,7 +34,7 @@ class KoOasisContext;
  * It's separated from KoTextParag so that it can be copied in
  * the undo/redo history, and in KoParagStyle.
  */
-class KoParagLayout
+class KOTEXT_EXPORT KoParagLayout
 {
 public:
     KoParagLayout();

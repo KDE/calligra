@@ -24,7 +24,7 @@
 #include <qtabwidget.h>
 #include <kotextformat.h>
 #include <qcheckbox.h>
-
+#include <koffice_export.h>
 /// OK including config.h in public headers is bad practice - to be removed once kspell2 is required
 #include <config.h>
 #ifdef HAVE_LIBKSPELL2
@@ -35,7 +35,7 @@ class QComboBox;
 /**
  * The embeddable font chooser widget
  */
-class KoFontChooser : public QTabWidget
+class KOTEXT_EXPORT KoFontChooser : public QTabWidget
 {
     Q_OBJECT
 public:
@@ -168,7 +168,7 @@ private:
     int m_changedFlags;
 };
 
-class KoFontDia : public KDialogBase
+class KOTEXT_EXPORT KoFontDia : public KDialogBase
 {
     Q_OBJECT
 public:

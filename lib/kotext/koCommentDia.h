@@ -21,11 +21,11 @@
 #define __KoCommentDia__
 
 #include <kdialogbase.h>
-
+#include <koffice_export.h>
 class QPushButton;
 class QMultiLineEdit;
 
-class KoCommentDia : public KDialogBase
+class KOTEXT_EXPORT KoCommentDia : public KDialogBase
 {
     Q_OBJECT
 public:

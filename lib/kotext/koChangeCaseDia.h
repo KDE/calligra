@@ -21,11 +21,12 @@
 #define __KoChangeCaseDia__
 
 #include <kdialogbase.h>
+#include <koffice_export.h>
 
 class QRadioButton;
 class QPushButton;
 
-class KoChangeCaseDia : public KDialogBase
+class KOTEXT_EXPORT KoChangeCaseDia : public KDialogBase
 {
     Q_OBJECT
 public:

@@ -23,6 +23,7 @@
 #include <qstring.h>
 #include <qpair.h>
 #include <qobject.h>
+#include <koffice_export.h>
 class KoTextParag;
 class KoTextObject;
 class KoTextView;
@@ -32,7 +33,7 @@ class KoTextView;
  * with many options (from cursor, backwards, in selection).
  * @short General purpose paragraph iterator
  */
-class KoTextIterator : public QObject
+class KOTEXT_EXPORT KoTextIterator : public QObject
 {
     Q_OBJECT
 public:

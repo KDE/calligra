@@ -26,7 +26,7 @@
 #include <qptrlist.h>
 #include <qstring.h>
 #include <klistview.h>
-
+#include <koffice_export.h>
 class QComboBox;
 class QVBox;
 class QResizeEvent;
@@ -112,7 +112,7 @@ private:
  * Class: KoCustomVariablesDia
  * This dialog allows to set the value of the custom variables.
  */
-class KoCustomVariablesDia : public KDialogBase
+class KOTEXT_EXPORT KoCustomVariablesDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -132,7 +132,7 @@ protected:
  * This dialog allows to add a new custom variable or
  * to edit an existing one.
  */
-class KoCustomVarDialog : public KDialogBase
+class KOTEXT_EXPORT KoCustomVarDialog : public KDialogBase
 {
     Q_OBJECT
 

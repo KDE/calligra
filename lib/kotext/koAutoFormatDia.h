@@ -24,7 +24,7 @@
 #include <kdialogbase.h>
 #include <qlineedit.h>
 #include <koAutoFormat.h>
-
+#include <koffice_export.h>
 class QPushButton;
 class QCheckBox;
 class QVBox;
@@ -83,7 +83,7 @@ protected slots:
 /* Class: KoAutoFormatDia                                         */
 /******************************************************************/
 
-class KoAutoFormatDia : public KDialogBase
+class KOTEXT_EXPORT KoAutoFormatDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -177,7 +177,7 @@ protected slots:
     void slotChangeAdvancedAutoCorrection();
 };
 
-class KoCompletionDia : public KDialogBase
+class KOTEXT_EXPORT KoCompletionDia : public KDialogBase
 {
     Q_OBJECT
 

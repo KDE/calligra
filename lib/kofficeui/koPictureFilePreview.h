@@ -21,7 +21,7 @@
 #define kopicturefilepreview_h
 
 #include <kpreviewwidgetbase.h>
-
+#include <koffice_export.h>
 class KoPictureFilePreviewWidget;
 
 /**
@@ -30,7 +30,7 @@ class KoPictureFilePreviewWidget;
  * If fd is a KFileDialog *,
  *     fd->setPreviewWidget( new KoPictureFilePreview( fd ) );
  */
-class KoPictureFilePreview : public KPreviewWidgetBase
+class KOFFICEUI_EXPORT KoPictureFilePreview : public KPreviewWidgetBase
 {
     Q_OBJECT
 
