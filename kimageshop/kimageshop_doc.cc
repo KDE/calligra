@@ -58,8 +58,24 @@ KImageShopDoc::KImageShopDoc( KoDocument* parent, const char* name )
 
 bool KImageShopDoc::initDoc()
 {
-  KImageShopImage *img = new KImageShopImage( 512, 512 );
-  m_Images.append(img);
+  newImage();
+  
+  return true;
+}
+
+void KImageShopDoc::setCurrentImage(KImageShopImage *img)
+{
+  if (m_pCurrent)
+    {
+      // disconnect old current image
+      QObject::disconnect( m_pCurrent, SIGNAL( updated() ),
+			   this, SLOT( slotImageUpdated() ) );
+      QObject::disconnect( m_pCurrent, SIGNAL( updated( const QRect& ) ),
+			   this, SLOT( slotImageUpdated( const QRect& ) ) );
+      QObject::disconnect( m_pCurrent, SIGNAL( layersUpdated() ),
+			this, SLOT( slotLayersUpdated() ) );
+    }
+
   m_pCurrent = img;
   
   QObject::connect( m_pCurrent, SIGNAL( updated() ),
@@ -68,12 +84,32 @@ bool KImageShopDoc::initDoc()
 		    this, SLOT( slotImageUpdated( const QRect& ) ) );
   QObject::connect( m_pCurrent, SIGNAL( layersUpdated() ),
 		    this, SLOT( slotLayersUpdated() ) );
-  return true;
+  emit docUpdated();
+}
+
+void KImageShopDoc::setCurrentImage(const QString& _name)
+{
+  KImageShopImage *img = m_Images.first();
+  
+  while (img)
+    {
+      if (img->name() == _name)
+	{
+	  setCurrentImage(img);
+	  return;
+	}
+    }
 }
 
 KImageShopDoc::~KImageShopDoc()
 {
-  // FIXME: delete images
+  KImageShopImage *img = m_Images.first();
+  
+  while (img)
+    {
+      delete img;
+      img = m_Images.next();
+    }
 }
 
 int KImageShopDoc::height()
@@ -106,7 +142,10 @@ QSize KImageShopDoc::size()
 
 KImageShopImage* KImageShopDoc::newImage()
 {
-  
+  KImageShopImage *img = new KImageShopImage( QString("image ") + m_Images.count(), 512, 512 );
+  m_Images.append(img);
+  setCurrentImage(img);
+  emit imageAdded(img->name());
 }
 
 void KImageShopDoc::saveImage( const QString& file, KImageShopImage *img )

@@ -43,8 +43,11 @@ class KImageShopImage : public QObject
     Q_OBJECT
 
  public:
-    KImageShopImage( int w = 512, int h = 512 );
+    KImageShopImage( const QString& _name, int w = 512, int h = 512 );
     ~KImageShopImage();
+
+    QString name()                { return m_name; }
+    void setName(const QString& _name) { m_name = _name; }
     
     void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
     void paintPixmap( QPainter *painter, QRect area );
@@ -119,6 +122,7 @@ class KImageShopImage : public QObject
     uchar       *background;
     char        *imageData;
     XImage      *xi;
+    QString     m_name;
 };
 
 #endif

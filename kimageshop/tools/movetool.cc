@@ -64,14 +64,11 @@ void MoveCommand::moveTo( QPoint _pos )
     updateRect = oldRect.unite( newRect );
 
     m_pDoc->compositeImage( updateRect );
-    //m_pDoc->slotUpdateViews( updateRect );
   }
   else
   {
     m_pDoc->compositeImage( oldRect );
-    //m_pDoc->slotUpdateViews( oldRect );
     m_pDoc->compositeImage( newRect );
-    //m_pDoc->slotUpdateViews( newRect );
   }
 }
 

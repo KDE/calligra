@@ -51,6 +51,26 @@ KoDocument* KImageShopShell::createDoc()
     return new KImageShopDoc;
 }
 
+void KImageShopShell::slotFileNew()
+{
+  KImageShopDoc* doc = (KImageShopDoc*)document();
+
+  if ( !doc )
+    {
+      doc = (KImageShopDoc*)createDoc();
+      if ( !doc->initDoc() )
+	{
+	  delete doc;
+	  return;
+	}
+      setRootPart( doc );
+    }
+    else
+    {
+      doc->slotNewImage();
+    }
+}
+
 void KImageShopShell::slotFileOpen()
 {
   QString filter = "*.kis|KImageShop picture\n" + KImageIO::pattern( KImageIO::Reading );

@@ -43,8 +43,9 @@
 
 #define KIS_DEBUG(AREA, CMD)
 
-KImageShopImage::KImageShopImage( int width, int height )
-  : w (width)
+KImageShopImage::KImageShopImage( const QString& _name, int width, int height )
+  : m_name (_name)
+  , w (width)
   , h (height)
 {
   viewportRect = QRect(0,0,w,h);

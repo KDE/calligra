@@ -95,6 +95,9 @@ public:
     KImageShopImage* newImage();
     void saveImage( const QString& file, KImageShopImage *img );
     void loadImage( const QString& file );
+
+    void setCurrentImage(KImageShopImage *img);
+    void setCurrentImage(const QString& _name);
     
 public slots:
   void slotUndoRedoChanged( QString _undo, QString _redo );
@@ -113,6 +116,7 @@ signals:
   void docUpdated();
   void docUpdated( const QRect& rect );
   void layersUpdated();
+  void imageAdded(const QString& name);
     
 protected:
   virtual QString configFile() const;

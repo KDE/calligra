@@ -37,7 +37,8 @@ public:
     QString nativeFormatName() const { return "KImageShop"; }
 
 public slots:
-  virtual void slotFileOpen();
+   virtual void slotFileNew();
+   virtual void slotFileOpen();
 
 protected:
     virtual QString configFile() const;
