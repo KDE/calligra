@@ -20,7 +20,7 @@
 #ifndef KEXIDB_SQLITECONN_P_H
 #define KEXIDB_SQLITECONN_P_H
 
-#include "driver/sqlite.h"
+#include "sqlite.h"
 
 namespace KexiDB
 {

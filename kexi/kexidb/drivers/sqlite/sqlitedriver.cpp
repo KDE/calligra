@@ -24,8 +24,6 @@
 #include "sqlitedriver.h"
 #include "sqliteconnection.h"
 
-/* #include "driver/sqlite.h" */
-
 #include <qfile.h>
 #include <qdir.h>
 
