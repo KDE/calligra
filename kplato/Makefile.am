@@ -16,6 +16,7 @@ libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
     kpttaskdialogbase.ui resourcedialogbase.ui kptresourcedialog.cc \
     kptdatetime.cc kptreportview.cc
 
+# (this is not used)
 noinst_HEADERS = defs.h kptaboutdata.h kptduration.h kptfactory.h \
     kptnode.h kptpart.h kptproject.h kptrelation.h \
     kptresource.h kpttask.h kptterminalnode.h kptview.h \
@@ -32,20 +33,12 @@ libkplatopart_la_LDFLAGS = $(KDE_PLUGIN)
 libkplatopart_la_LIBADD = $(top_srcdir)/kdgantt/libkdgantt.la $(LIB_KOFFICEUI) $(LIB_KABC) $(top_srcdir)/kugar/lib/libkugar.la
 libkplatopart_la_METASOURCES = AUTO
 
-## The kdeinit loadable module
-lib_LTLIBRARIES = kplato.la
+## The kdeinit loadable module and executable
+kdeinit_LTLIBRARIES = kplato.la
+bin_PROGRAMS =
 kplato_la_SOURCES = main.cc
-kplato_la_LDFLAGS = $(all_libraries) -avoid-version -module
+kplato_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kplato_la_LIBADD = $(LIB_KOFFICECORE)
-
-## The executable
-bin_PROGRAMS = kplato
-kplato_SOURCES = dummy.cc
-kplato_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kplato_LDADD = kplato.la
-
-dummy.cc:
-	echo > dummy.cc
 
 kdelnk_DATA = kplato.desktop
 kdelnkdir = $(kde_appsdir)/Office

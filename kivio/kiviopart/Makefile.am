@@ -37,26 +37,14 @@ libkiviopart_la_SOURCES = kivio_canvas.cpp kivio_doc.cpp kivio_factory.cpp \
 	KIvioStencilIface.cc kiviodragobject.cpp
 
 
-lib_LTLIBRARIES = kivio.la
+kdeinit_LTLIBRARIES = kivio.la
+bin_PROGRAMS =
 
 kivio_la_SOURCES = main.cpp
 
-kivio_la_LDFLAGS = $(all_libraries) -module -avoid-version
+kivio_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 
-kivio_la_LIBADD = ../../lib/kofficecore/libkofficecore.la
-
-
-bin_PROGRAMS = kivio
-
-kivio_SOURCES = dummy.cpp
-
-kivio_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-
-kivio_LDADD = kivio.la
-
-
-dummy.cpp:
-	echo > dummy.cpp
+kivio_la_LIBADD = $(LIB_KOFFICECORE)
 
 
 kdelnk_DATA = kivio.desktop

@@ -53,20 +53,12 @@ libkpresenterpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell $(LIBKOSPELL) -lartskde -lkdefx
 libkpresenterpart_la_METASOURCES = AUTO
 
-## The kdeinit loadable module
-lib_LTLIBRARIES = kpresenter.la
+## The kdeinit loadable module and the executable
+kdeinit_LTLIBRARIES = kpresenter.la
+bin_PROGRAMS =
 kpresenter_la_SOURCES = main.cc
-kpresenter_la_LDFLAGS = $(all_libraries) -avoid-version -module
+kpresenter_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kpresenter_la_LIBADD = $(LIB_KOFFICECORE)
-
-## The executable
-bin_PROGRAMS = kpresenter
-kpresenter_SOURCES = dummy.cc
-kpresenter_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kpresenter_LDADD = kpresenter.la
-
-dummy.cc:
-	echo > dummy.cc
 
 noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresenter_view.h \
 		backdia.h styledia.h \

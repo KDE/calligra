@@ -24,11 +24,11 @@
 static KCmdLineOptions options[] =
 {
   { "+[File]", I18N_NOOP("File to open"), 0 },
-  KCmdLineLastOption
   // INSERT YOUR COMMANDLINE OPTIONS HERE
+  KCmdLineLastOption
 };
 
-int main(int argc, char *argv[])
+extern "C" int kdemain(int argc, char *argv[])
 {
 
 	KCmdLineArgs::init( argc, argv, newKugarAboutData() );
@@ -41,4 +41,5 @@ int main(int argc, char *argv[])
 	if (!app.start()) return 1;
 
 	app.exec();
+	return 0;
 }

@@ -8,32 +8,22 @@ libexamplepart_la_SOURCES = example_part.cc \
 libexamplepart_la_LDFLAGS = $(KDE_PLUGIN)
 libexamplepart_la_LIBADD = $(LIB_KOFFICEUI)
 
-## The kdeinit loadable module
-lib_LTLIBRARIES = example.la
+## The kdeinit loadable module and executable
+kdeinit_LTLIBRARIES = example.la
+bin_PROGRAMS =
 example_la_SOURCES = main.cc
-example_la_LDFLAGS = $(all_libraries) -module -avoid-version
+example_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 example_la_LIBADD = $(LIB_KOFFICEUI)
 
-## The executable
-bin_PROGRAMS = example
-example_SOURCES = dummy.cc
-example_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-example_LDADD = example.la
-
-dummy.cc:
-	echo > dummy.cc
-
 METASOURCES = AUTO
-noinst_HEADERS =  example_part.h \
-	example_view.h example_factory.h example_aboutdata.h
 
 kdelnk_DATA = example.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
 # Note: for your application, the mime type should be defined in
-#       kdelibs CVS HEAD and a compactibility entry should be added in
-#       the directory koffice/mimetypes/kde?? 
-#       where ?? is the latest version number
+#       kdelibs CVS HEAD and a compatibility entry should be added in
+#       the directory koffice/mimetypes/kde??
+#       where ?? is the version number of the last stable kde(libs) release.
 kdemime_DATA = x-vnd.kde.example.desktop
 kdemimedir = $(kde_mimedir)/application
 

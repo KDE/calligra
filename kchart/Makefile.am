@@ -38,20 +38,12 @@ libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
                           $(LIB_KOFFICEUI) \
 			  kdchart/libkdchart.la			
 
-## The kdeinit loadable module
-lib_LTLIBRARIES = kchart.la
+## The kdeinit loadable module and executable
+kdeinit_LTLIBRARIES = kchart.la
+bin_PROGRAMS =
 kchart_la_SOURCES = main.cc
-kchart_la_LDFLAGS = $(all_libraries) -avoid-version -module
+kchart_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kchart_la_LIBADD = $(LIB_KOFFICECORE)
-
-## The executable
-bin_PROGRAMS = kchart
-kchart_SOURCES = dummy.cc
-kchart_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kchart_LDADD = kchart.la
-
-dummy.cc:
-	echo > dummy.cc
 
 noinst_HEADERS =  kchart_part.h \
 		kchart_view.h kchart_factory.h \

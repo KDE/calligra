@@ -29,7 +29,7 @@ static const KCmdLineOptions options[]=
 	KCmdLineLastOption
 };
 
-int main( int argc, char **argv ) {
+extern "C" int kdemain( int argc, char **argv ) {
     KCmdLineArgs::init( argc, argv, newKPTAboutData());
     KCmdLineArgs::addCmdLineOptions( options );
 

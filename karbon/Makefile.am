@@ -12,10 +12,9 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(KOPAINTER_INCLUDES) \
 
 SUBDIRS = commands visitors core shapes widgets dialogs dockers render tools . plugins data pics
 
-bin_PROGRAMS = karbon
-
-lib_LTLIBRARIES = karbon.la
-kde_module_LTLIBRARIES = libkarbonbase.la libkarbonpart.la
+# Filters should link to libkarbonbase, NOT to libkarbonpart
+lib_LTLIBRARIES = libkarbonbase.la
+kde_module_LTLIBRARIES = libkarbonpart.la
 
 libkarbonpart_la_SOURCES = karbon_factory.cc 	karbon_resourceserver.cc 	karbon_part.cc 	karbon_part_iface.cc 	karbon_part_iface.skel 	karbon_view.cc 	karbon_view_iface.cc 	karbon_view_iface.skel karbon_drag.cpp karbon_grid_data.cpp
 
@@ -23,7 +22,7 @@ libkarbonbase_la_SOURCES = \
 	karbon_view_base.cc \
 	karbon_part_base.cc
 
-libkarbonbase_la_LDFLAGS = $(KDE_PLUGIN)
+libkarbonbase_la_LDFLAGS = -version-info 2:0:0 -no-undefined
 libkarbonbase_la_LIBADD = $(LIB_KOFFICEUI)
 
 libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN) $(LIBFREETYPE_RPATH)
@@ -43,18 +42,13 @@ libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOPAINTER) \
 	$(LIBFONTCONFIG_LIBS) \
 	$(LIBFREETYPE_LIBS)
 
-libkarbonpart_la_METASOURCES = AUTO
+METASOURCES = AUTO
 
+bin_PROGRAMS =
+kdeinit_LTLIBRARIES = karbon.la
 karbon_la_SOURCES = main.cc
-karbon_la_LDFLAGS = $(all_libraries) -module -avoid-version
-karbon_la_LIBADD = libkarbonpart.la
-
-karbon_SOURCES = dummy.cc
-karbon_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-karbon_LDADD = karbon.la
-
-dummy.cc:
-	echo > dummy.cc
+karbon_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+karbon_la_LIBADD = $(LIB_KOFFICECORE)
 
 noinst_HEADERS = \
 	karbon_factory.h \

@@ -25,7 +25,7 @@
 #include <klocale.h>
 #include <koApplication.h>
 
-#include "karbon_factory.h"
+#include "karbon_aboutdata.h"
 
 
 static const KCmdLineOptions options[] =
@@ -34,9 +34,9 @@ static const KCmdLineOptions options[] =
 		KCmdLineLastOption
 	};
 
-int main( int argc, char* argv[] )
+extern "C" int kdemain( int argc, char* argv[] )
 {
-	KCmdLineArgs::init( argc, argv, KarbonFactory::aboutData() );
+	KCmdLineArgs::init( argc, argv, newKarbonAboutData() );
 	KCmdLineArgs::addCmdLineOptions( options );
 	KoApplication app;
 

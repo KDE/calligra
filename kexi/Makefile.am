@@ -1,9 +1,10 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-bin_PROGRAMS = kexi
-kexi_SOURCES = main.cpp
-kexi_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -no-undefined
-kexi_LDADD = $(LIB_KDEUI) core/libkexicore.la
+kdeinit_LTLIBRARIES = kexi.la
+bin_PROGRAMS =
+kexi_la_SOURCES = main.cpp
+kexi_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+kexi_la_LIBADD = core/libkexicore.la
 
 #SUBDIRS= 3rdparty kexidb core tableview . data widget plugins tests
 SUBDIRS= 3rdparty kexidb core tableview widget plugins data . 

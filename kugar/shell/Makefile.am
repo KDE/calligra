@@ -1,3 +1,7 @@
+
+################# THIS DIRECTORY IS NOT COMPILED ANYMORE ####################
+################# THE koshell EXECUTABLE IS CREATED BY ../part ##############
+
 INCLUDES = -I$(srcdir)/../lib $(KOFFICE_INCLUDES) $(all_includes)
 
 bin_PROGRAMS = kugar

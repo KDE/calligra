@@ -51,20 +51,12 @@ libkspreadpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
 
 METASOURCES = AUTO
 
-## The kdeinit loadable module
-lib_LTLIBRARIES =  kspread.la
+## The kdeinit loadable module and the executable
+kdeinit_LTLIBRARIES = kspread.la
+bin_PROGRAMS =
 kspread_la_SOURCES = main.cc
-kspread_la_LDFLAGS = $(all_libraries) -avoid-version -module
+kspread_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kspread_la_LIBADD = $(LIB_KOFFICECORE)
-
-## The executable
-bin_PROGRAMS = kspread
-kspread_SOURCES = dummy.cc
-kspread_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kspread_LDADD = kspread.la
-
-dummy.cc:
-	echo > dummy.cc
 
 noinst_HEADERS = kspread_doc.h kspread_functions.h kspread_functions_helper.h \
 	kspread_undo.h kspread_view.h kspread_tabbar.h \

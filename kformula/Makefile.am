@@ -12,19 +12,20 @@ libkformulapart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KFORMULA) $(LIB_KOTEXT)
 libkformulapart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
-lib_LTLIBRARIES = kformulamain.la
-kformulamain_la_SOURCES = main.cc
-kformulamain_la_LDFLAGS = $(all_libraries) -module -avoid-version
-kformulamain_la_LIBADD = $(LIB_KOFFICECORE)
+###### Problem: we can't have one, since "kformula" is the name of the lib already.
+###### The only solution is to rename either the lib, or the binary.
+###### I suggest "libkformulalib" once we break BC.
+###### Meanwhile, having a kdeinit module with the wrong name is useless -> disabled.
+#kdeinit_LTLIBRARIES = kformula.la
+#kformula_la_SOURCES = main.cc
+#kformula_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+#kformula_la_LIBADD = $(LIB_KOFFICECORE)
 
-## The executable
+## The executable (remove this when enabling the kdeinit module above, leave only bin_PROGRAMS=<nothing>)
 bin_PROGRAMS = kformula
-kformula_SOURCES = dummy.cc
+kformula_SOURCES = main.cc
 kformula_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kformula_LDADD = kformulamain.la
-
-dummy.cc:
-	echo > dummy.cc
+kformula_LDADD = $(LIB_KOFFICECORE)
 
 noinst_HEADERS =  kformula_doc.h \
 		  kformula_view.h kformula_factory.h \

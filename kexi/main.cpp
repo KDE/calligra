@@ -43,8 +43,8 @@ static KCmdLineOptions options[] =
 {
   { "open [<object_type>:]<object_name>", I18N_NOOP("Open object of type <object_type>\nand name <object_name> from specified project\non application start.\n<object_type>: is optional, if omitted - table\ntype is assumed.\nOther object types can be query, report, form,\nscript (may be more or less, depending on your\nplugins installed).\nUse \"\" chars to specify names containing spaces.\nExamples: --open MyTable,\n --open query:\"My very big query\""), 0 },
   { "+[file]", I18N_NOOP("Database project file (or shortcut file) to open"), 0 },
-  KCmdLineLastOption
   // INSERT YOUR COMMANDLINE OPTIONS HERE
+  KCmdLineLastOption
 };
 
 bool startupActions(KexiProjectData * &projectData)
@@ -115,7 +115,7 @@ bool startupActions(KexiProjectData * &projectData)
 	return true;
 }
 
-int main(int argc, char *argv[])
+extern "C" int kdemain(int argc, char *argv[])
 {
 	KCmdLineArgs::init( argc, argv, newKexiAboutData() );
 	KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.

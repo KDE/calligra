@@ -49,7 +49,7 @@ libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell $(LIBKOSPELL) ./libkwmailmerge_interface.la
 METASOURCES = AUTO
 
-lib_LTLIBRARIES = kword.la libkwmailmerge_interface.la
+lib_LTLIBRARIES = libkwmailmerge_interface.la
 
 ## The mailmerge interface library
 libkwmailmerge_interface_la_SOURCES = mailmerge_interface.cc mailmerge_interface.skel
@@ -61,19 +61,12 @@ kwinclude_HEADERS = mailmerge_interface.h
 kwmailmerge_servicetype_DATA=kwmailmerge.desktop
 kwmailmerge_servicetypedir=$(kde_servicetypesdir)
 
-## The kdeinit loadable module
+## The kdeinit loadable module and the kword binary
+kdeinit_LTLIBRARIES = kword.la
+bin_PROGRAMS =
 kword_la_SOURCES = main.cc
-kword_la_LDFLAGS = $(all_libraries) -avoid-version -module
-kword_la_LIBADD = ../lib/kofficecore/libkofficecore.la
-
-## The executable
-bin_PROGRAMS = kword
-kword_SOURCES = dummy.cc
-kword_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kword_LDADD = kword.la
-
-dummy.cc:
-	echo > dummy.cc
+kword_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+kword_la_LIBADD = $(LIB_KOFFICECORE)
 
 kdelnk_DATA = kword.desktop
 kdelnkdir = $(kde_appsdir)/Office

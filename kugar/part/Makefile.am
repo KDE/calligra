@@ -25,17 +25,10 @@ EXTRA_DIST = \
 CLEANFILES = kugarpart_meta_unload.cpp
 
 
-## The kdeinit loadable module
-lib_LTLIBRARIES = kugar.la
+## The kdeinit loadable module and executable
+kdeinit_LTLIBRARIES = kugar.la
+bin_PROGRAMS =
 kugar_la_SOURCES = main.cpp
-kugar_la_LDFLAGS = $(all_libraries) -module -avoid-version
+kugar_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kugar_la_LIBADD = $(LIB_KOFFICECORE)
 
-## The executable
-bin_PROGRAMS = kugar
-kugar_SOURCES = dummy.cc
-kugar_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kugar_LDADD = kugar.la
-
-dummy.cc:
-	echo > dummy.cc

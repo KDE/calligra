@@ -28,6 +28,7 @@
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "karbon_resourceserver.h"
+#include "karbon_aboutdata.h"
 
 #include <kdebug.h>
 
@@ -86,34 +87,7 @@ KAboutData*
 KarbonFactory::aboutData()
 {
 	if( !s_aboutData )
-	{
-		s_aboutData = new KAboutData(
-						  "karbon",
-						  I18N_NOOP( "Karbon14" ),
-						  "0.1",
-						  I18N_NOOP( "Yet another vector graphics application." ),
-						  KAboutData::License_GPL,
-						  I18N_NOOP( "(c) 2001, 2002 The Karbon Developers" ),
-						  I18N_NOOP( "You are invited to participate in any way." ),
-						  "http://www.xs4all.nl/~rwlbuis/karbon/");
-		s_aboutData->addAuthor(
-			"Rob Buis",
-			0,
-			"buis@kde.org",
-			0 );
-		s_aboutData->addAuthor(
-			"Tomislav Lukman",
-			0,
-			"tomislav.lukman@ck.hinet.hr",
-			0 );
-		s_aboutData->addAuthor(
-			"Benoît Vautrin",
-			0,
-			"benoit.vautrin@free.fr",
-			0 );
-		// TODO: add the names of some helpfull souls
-	}
-
+            s_aboutData = newKarbonAboutData();
 	return s_aboutData;
 }
 
@@ -124,9 +98,6 @@ KarbonFactory::instance()
 	{
 		s_instance = new KInstance( aboutData() );
 		// Add any application-specific resource directories here
-
-		// Tell the iconloader about share/apps/koffice/icons
-		s_instance->iconLoader()->addAppDir( "koffice" );
 
 		s_instance->dirs()->addResourceType( "kis_brushes",
 											  KStandardDirs::kde_default( "data" ) + "krita/brushes/" );
