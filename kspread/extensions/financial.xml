@@ -49,6 +49,49 @@
     </Function>
 
     <Function>
+      <Name>PPMT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Period</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>NPer</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>PV</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>FV</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Type</Comment>
+	<Type>IntType</Type>
+      </Parameter>
+      <Help>
+	<Text>
+Calculates the periodic amortizement for an investment with regular payments and a constant interest rate.
+
+Rate is the periodic interest rate.
+Period is the amortizement period. 1 for the first and NPER for the last period.  
+NPER is the total number of periods during which annuity is paid.  
+PV is the present value in the sequence of payments.  
+FV (optional) is the desired (future) value.  default: 0. 
+Type (optional) defines the due date. 1 for payment at the beginning of a period and 0 (default) for payment at the end of a period.
+</Text>
+	<Syntax>PPMT(Rate; Period; NPER; PV; FV; Type)</Syntax>
+	<Example>PPMT(0.0875;1;36;5000;8000;1) equals -18,48</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>PV_annuity</Name>
       <Type>Float</Type>
       <Parameter>
@@ -278,6 +321,36 @@
       </Help>
     </Function>
 
+
+    <Function>
+      <Name>DDB</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cost</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Salvage</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Life</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Period</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Factor</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The DDB() function calculates the depreciation of an asset for a given period using the arithmetic-declining method. The factor is optional, if omitted it is assumed to be 2. All the parameter must be greater than zero.</Text>
+	<Syntax>DDB(cost; salvage value; life; period [;factor])</Syntax>
+	<Example>DDB(75000;1;60;12;2) returns 1721.81</Example>
+      </Help>
+    </Function>
 
     <Function>
       <Name>DB</Name>

@@ -45,9 +45,11 @@ bool kspreadfunc_effective( KSContext& context );
 bool kspreadfunc_zero_coupon( KSContext& context );
 bool kspreadfunc_level_coupon( KSContext& context );
 bool kspreadfunc_nominal( KSContext& context );
+bool kspreadfunc_ppmt( KSContext& context );
 bool kspreadfunc_sln( KSContext& context );
 bool kspreadfunc_syd( KSContext& context );
 bool kspreadfunc_db( KSContext& context );
+bool kspreadfunc_ddb( KSContext& context );
 bool kspreadfunc_euro( KSContext& context );
 
 // registers all financial functions
@@ -61,6 +63,7 @@ void KSpreadRegisterFinancialFunctions()
   repo->registerFunction( "NOMINAL", kspreadfunc_nominal );
   repo->registerFunction( "FV", kspreadfunc_fv );
   repo->registerFunction( "FV_ANNUITY", kspreadfunc_fv_annuity );
+  repo->registerFunction( "PPMT", kspreadfunc_ppmt );
   repo->registerFunction( "PV", kspreadfunc_pv );
   repo->registerFunction( "PV_ANNUITY", kspreadfunc_pv_annuity );
   repo->registerFunction( "ZERO_COUPON", kspreadfunc_zero_coupon );
@@ -68,6 +71,7 @@ void KSpreadRegisterFinancialFunctions()
   repo->registerFunction( "SLN", kspreadfunc_sln );
   repo->registerFunction( "SYD", kspreadfunc_syd );
   repo->registerFunction( "DB", kspreadfunc_db );
+  repo->registerFunction( "DDB", kspreadfunc_ddb );
   repo->registerFunction( "EURO", kspreadfunc_euro );  // KSpread-specific, Gnumeric-compatible
 }
 
@@ -459,6 +463,144 @@ bool kspreadfunc_db( KSContext& context )
     else total += rate * (cost-total);
 
   context.setValue( new KSValue( (cost-total) * rate * (12-month)/12 ) );
+
+  return true;
+}
+
+// Function: DDB
+/* depreciation per period */
+bool kspreadfunc_ddb( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  double factor = 2;
+
+  if( KSUtil::checkArgumentsCount( context, 5, "DB", false ) )
+  {
+    if( !KSUtil::checkType( context, args[4], KSValue::DoubleType, true ) )
+      return false;
+
+    factor = args[4]->doubleValue();
+  }
+  else
+  {
+    if ( !KSUtil::checkArgumentsCount( context, 4, "DB", true ) )
+      return false;
+  }
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
+    return false;
+
+  double cost    = args[0]->doubleValue();
+  double salvage = args[1]->doubleValue();
+  double life    = args[2]->doubleValue();
+  double period  = args[3]->doubleValue();
+  double total   = 0.0;
+
+  if ( cost < 0.0 || salvage < 0.0 || life <= 0.0 || period < 0.0 || factor < 0.0 )
+    return false;
+
+  for( int i = 0; i < life; ++i )
+  {
+    double periodDep = ( cost - total ) * ( factor / life );
+    if ( i == period - 1 )
+    {
+      context.setValue( new KSValue( periodDep ) );
+      return true;
+    }
+    else 
+    {
+      total += periodDep;
+    }
+  }
+  
+  context.setValue( new KSValue( cost - total - salvage ) );
+
+  return true;
+}
+
+static double getPay( double rate, double nper, double pv, double fv, int type )
+{
+  double pvif, fvifa;
+
+  pvif  = ( pow ( 1 + rate, nper ) );
+  fvifa = ( pow( 1 + rate, nper ) - 1 ) / rate;
+
+  return ( ( -pv * pvif - fv ) / ( ( 1.0 + rate * type ) * fvifa ) );
+}
+
+static double getPrinc( double start, double pay,
+                        double rate, double period )
+{
+  return ( start * pow( 1.0 + rate, period) + pay 
+           * ( ( pow( 1 + rate, period ) - 1 ) / rate ) );
+}
+
+bool kspreadfunc_ppmt( KSContext & context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  /*
+Docs partly copied from OO.
+Syntax
+PPMT(Rate;Period;NPER;PV;FV;Type)
+
+Rate is the periodic interest rate.
+Period is the amortizement period. P=1 for the first and P=NPER for the last period.
+NPER is the total number of periods during which annuity is paid.
+PV is the present value in the sequence of payments.
+FV (optional) is the desired (future) value.
+Type (optional) defines the due date. F=1 for payment at the beginning of a period and F=0 for payment at the end of a period.
+  */
+
+  double fv = -1.0;
+  int type = -1;
+
+  if ( !KSUtil::checkArgumentsCount( context, 6, "PPMT", false ) )
+  {
+    type = 0;
+
+    if ( !KSUtil::checkArgumentsCount( context, 5, "PPMT", false ) )
+    {
+      fv = 0.0;
+
+      if ( !KSUtil::checkArgumentsCount( context, 4, "PPMT", true ) )
+        return false;
+    }
+  }
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[4], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[5], KSValue::IntType, true ) )
+    return false;
+
+  double rate   = args[0]->doubleValue();
+  double period = args[1]->doubleValue();
+  double nper   = args[2]->doubleValue();
+  double pv     = args[3]->doubleValue();
+
+  if ( fv == -1 )
+    fv = args[4]->doubleValue();
+  if ( type == -1 )
+    type = args[5]->intValue();
+
+  double pay  = getPay( rate, nper, pv, fv, type );
+  double ipmt = -getPrinc( pv, pay, rate, period - 1 ) * rate;
+
+  context.setValue( new KSValue( pay - ipmt ) );
 
   return true;
 }

@@ -20,8 +20,19 @@ since 1.2 relase ( 'til 1.3 beta 1 :-)
 - Added subtotal dialog and formula
 
 
-New formulas:
-- varp, stdevp, var, stdev, subtotal
+New functions:
+
+Math:
+- SUBTOTAL
+
+Statistical:
+- VARP, STDEV, VAR, STDEVP
+
+Financial:
+- PPMT, DDB
+
+Database:
+- DSUM
 
 Obsolete formulas:
 - variance, stddev (was stddevp in fact)
