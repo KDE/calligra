@@ -655,12 +655,12 @@ void Document::writeCounter( QDomElement& parentElement, const wvWare::Paragraph
         int depth = pap.ilvl; /*both are 0 based*/
         // Heading styles don't set the ilvl, but must have a depth coming
         // from their heading level (the style's STI)
-        if ( depth == 0 && m_currentStyle->sti() >= 1 && m_currentStyle->sti() <= 9 )
+        bool isHeading = m_currentStyle->sti() >= 1 && m_currentStyle->sti() <= 9;
+        if ( depth == 0 && isHeading )
         {
             depth = m_currentStyle->sti() - 1;
-            numberingType = 1;
         }
-        kdDebug() << "  ilvl=" << pap.ilvl << " sti=" << m_currentStyle->sti() << " depth=" << depth << " numberingType=" << numberingType << endl;
+        kdDebug() << "  ilfo=" << pap.ilfo << " ilvl=" << pap.ilvl << " sti=" << m_currentStyle->sti() << " depth=" << depth << " numberingType=" << numberingType << endl;
         counterElement.setAttribute( "depth", depth );
 
         // Now we need to parse the text, to try and convert msword's powerful list template
@@ -694,12 +694,14 @@ void Document::writeCounter( QDomElement& parentElement, const wvWare::Paragraph
         }
         if ( otherDepthFound )
         {
-            // This is the kind of hierarchical list numbering we can't support, e.g. <1>.<0>.
+            // This is a hierarchical list numbering e.g. <1>.<0>.
             // (unless this is about a heading, in which case we've set numberingtype to 1 already
             // so it will indeed look like that).
             // Instead of importing this as ".<0>.", we drop the prefix,
             // we assume it's part of the upper level's counter text
             prefix = QString::null;
+            if ( isHeading )
+                numberingType = 1;
         }
         if ( depthFound )
         {
