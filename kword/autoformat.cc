@@ -18,7 +18,6 @@
 */
 
 #include "autoformat.h"
-#include "parag.h"
 #include "kword_doc.h"
 #include "fc.h"
 #include "char.h"

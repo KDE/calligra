@@ -20,7 +20,6 @@
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qstring.h>
-#include <qmessagebox.h>
 #include <qkeycode.h>
 #include <qpixmap.h>
 #include <qevent.h>
@@ -53,7 +52,6 @@
 #include "variabledlgs.h"
 #include "serialletter.h"
 
-#include <koPartSelectDia.h>
 #include <koMainWindow.h>
 #include <koDocument.h>
 #include <koRuler.h>
