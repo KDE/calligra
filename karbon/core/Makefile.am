@@ -23,7 +23,6 @@ noinst_HEADERS = \
 	vpath_intersect.h \
 	vsegment.h \
 	vsegmentlist.h \
-	vsegmenttools.h \
 	vstroke.h
 #	vtext.h
 
@@ -42,7 +41,6 @@ libkarboncore_la_SOURCES = \
 	vpath_intersect.cc \
 	vsegment.cc \
 	vsegmentlist.cc \
-	vsegmenttools.cc \
 	vstroke.cc
 #	vtext.cc
 

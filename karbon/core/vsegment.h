@@ -97,10 +97,17 @@ public:
 	VSegment* splitAt( double t );
 
 	/**
-	 * Makes the segment a bezier curve. Lines obtain control points at
+	 * Makes the segment a bezier curve. Lines will have control points at
 	 * t = 1/3 and t = 2/3.
 	 */
 	void convertToCurve();
+
+	/// Returns true if lines A0A1 and B0B1 intersect.
+	static bool linesIntersect(
+		const KoPoint& a0,
+		const KoPoint& a1,
+		const KoPoint& b0,
+		const KoPoint& b1 );
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );

@@ -65,7 +65,7 @@ VLayer::moveObjectDown( const VObject* object )
 {
 	if( m_objects.getFirst() == object ) return;
 
-	int index = m_objects.find( object );
+//	int index = m_objects.find( object );
 	bool bLast = m_objects.getLast() == object;
 	m_objects.remove();
 	if( !bLast ) m_objects.prev();
@@ -77,7 +77,7 @@ VLayer::moveObjectUp( const VObject* object )
 {
 	if( m_objects.getLast() == object ) return;
 
-	int index = m_objects.find( object );
+//	int index = m_objects.find( object );
 	//kdDebug() << "Index : " << index << endl;
 	m_objects.remove();
 	if( m_objects.current() != m_objects.getLast() )

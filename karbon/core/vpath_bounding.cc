@@ -4,7 +4,6 @@
 */
 
 #include "vpath_bounding.h"
-#include "vsegmenttools.h"
 
 #include <kdebug.h>
 
@@ -25,25 +24,25 @@ VPathBounding::intersects( const KoRect& rect, const double zoomFactor, const VS
 	// check for line intersections:
 	for( uint i = 1; i < m_pa.count(); ++i )
 	{
-		if( VSegmentTools::linesIntersect(
+		if( VSegment::linesIntersect(
 			KoPoint( m_pa.point( i - 1 ).x(), m_pa.point( i - 1 ).y() ),
 			KoPoint( m_pa.point( i ).x(), m_pa.point( i ).y() ),
 			KoPoint( rect.left(), rect.top() ),
 			KoPoint( rect.right(), rect.top() ) ) )
 				return true;
-		if( VSegmentTools::linesIntersect(
+		if( VSegment::linesIntersect(
 			KoPoint( m_pa.point( i - 1 ).x(), m_pa.point( i - 1 ).y() ),
 			KoPoint( m_pa.point( i ).x(), m_pa.point( i ).y() ),
 			KoPoint( rect.right(), rect.top() ),
 			KoPoint( rect.right(), rect.bottom() ) ) )
 				return true;
-		if( VSegmentTools::linesIntersect(
+		if( VSegment::linesIntersect(
 			KoPoint( m_pa.point( i - 1 ).x(), m_pa.point( i - 1 ).y() ),
 			KoPoint( m_pa.point( i ).x(), m_pa.point( i ).y() ),
 			KoPoint( rect.right(), rect.bottom() ),
 			KoPoint( rect.left(), rect.bottom() ) ) )
 				return true;
-		if( VSegmentTools::linesIntersect(
+		if( VSegment::linesIntersect(
 			KoPoint( m_pa.point( i - 1 ).x(), m_pa.point( i - 1 ).y() ),
 			KoPoint( m_pa.point( i ).x(), m_pa.point( i ).y() ),
 			KoPoint( rect.left(), rect.bottom() ),
