@@ -2797,7 +2797,9 @@ KCommand * KWTextFrameSet::setPageBreakingCommand( QTextCursor * cursor, int pag
     storeParagUndoRedoInfo( cursor );
 
     if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
-        static_cast<KWTextParag *>(cursor->parag())->setPageBreaking( pageBreaking );
+        KWTextParag *parag = static_cast<KWTextParag *>( cursor->parag() );
+        if(parag->prev()) parag=static_cast<KWTextParag *> (parag->prev());
+        parag->setPageBreaking( pageBreaking );
         setLastFormattedParag( cursor->parag() );
     }
     else
@@ -3372,16 +3374,9 @@ void KWTextFrameSet::insertFrameBreak( QTextCursor *cursor )
 {
     clearUndoRedoInfo();
     KMacroCommand* macroCmd = new KMacroCommand( i18n( "Insert Break After Paragraph" ) );
-    // Ensure "Frame break" is at beginning of paragraph -> create new parag if necessary
-    if ( cursor->index() > 0 )
-        macroCmd->addCommand( insertParagraphCommand( cursor ) );
-
+    macroCmd->addCommand( insertParagraphCommand( cursor ) );
     KWTextParag *parag = static_cast<KWTextParag *>( cursor->parag() );
     macroCmd->addCommand( setPageBreakingCommand( cursor, parag->pageBreaking() | KoParagLayout::HardFrameBreakAfter ) );
-
-    if ( parag->next() == 0 )
-        macroCmd->addCommand( insertParagraphCommand( cursor ) );
-
     m_doc->addCommand( macroCmd );
 
     setLastFormattedParag( parag );
