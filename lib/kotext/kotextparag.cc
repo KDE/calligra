@@ -360,30 +360,36 @@ int KoTextParag::lineSpacing( int line ) const
         while ( line-- > 0 )
             ++it;
         int height = ( *it )->h;
-        //kdDebug(32500) << " line height=" << height << " valid=" << isValid() << endl;
+        // Tricky. During formatting height doesn't include the linespacing,
+        // but afterwards (e.g. when drawing the cursor), it does !
+        // This explains the tests for isValid() below, and the different calculation depending on it.
 
-        if ( m_layout.lineSpacingType == KoParagLayout::LS_ONEANDHALF )
+        //kdDebug(32500) << " line height=" << height << " valid=" << isValid() << endl;
+        switch ( m_layout.lineSpacingType )
         {
-            // Tricky. During formatting height doesn't include the linespacing,
-            // but afterwards (e.g. when drawing the cursor), it does !
+        case KoParagLayout::LS_MULTIPLE:
+        {
+            int n = QMAX( (int)m_layout.lineSpacingValue() - 1, 1 );
+            return shadow + (isValid() ? n*height/(n+1) : n);
+        }
+        case KoParagLayout::LS_ONEANDHALF:
+        {
+            // Special case of LS_MULTIPLE, with n=0.5
             return shadow + (isValid() ? height / 3 : height / 2);
         }
-        else if ( m_layout.lineSpacingType == KoParagLayout::LS_DOUBLE )
+        case KoParagLayout::LS_DOUBLE:
         {
+            // Special case of LS_MULTIPLE, with n=1
             return shadow + (isValid() ? height / 2 : height);
         }
-        else if ( m_layout.lineSpacingType == KoParagLayout::LS_AT_LEAST )
+        case KoParagLayout::LS_AT_LEAST:
         {
             return shadow + (height > zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() )) ? 0 : (zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() )-height);
         }
-        else if ( m_layout.lineSpacingType == KoParagLayout::LS_EXACTLY )
+        case KoParagLayout::LS_EXACTLY: // To be removed
         {
             return zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue()) -height +shadow ;
         }
-        else if ( m_layout.lineSpacingType == KoParagLayout::LS_MULTIPLE )
-        {
-            int multi = (int)(QMAX(zh->ptToLayoutUnitPixY(m_layout.lineSpacingValue()-1), 1));
-            return shadow + isValid() ? height / multi : height;
         }
     }
     kdWarning() << "Unhandled linespacing value : " << m_layout.lineSpacingValue() << endl;
