@@ -51,9 +51,6 @@ void KPresenterApp::start()
 {
     if ( g_bWithGUI )
     {
-        imr_init();
-        koInitTrader();
-
         if ( g_openFiles.size() == 0 )
         {
             KPresenterShell* shell = new KPresenterShell;

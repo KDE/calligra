@@ -59,9 +59,6 @@ void KWordApp::start()
     // Are we going to create a GUI ?
     if ( g_bWithGUI )
     {
-        imr_init();
-        koInitTrader();
-
         if ( g_openFiles.size() == 0 )
         {
             KWordShell* m_pShell = new KWordShell;

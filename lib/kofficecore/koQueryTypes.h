@@ -27,8 +27,6 @@
 
 #include <CORBA.h>
 
-void koInitTrader();
-
 class KoComponentEntry
 {
 public:

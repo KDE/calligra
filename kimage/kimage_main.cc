@@ -85,8 +85,6 @@ void KImageApp::start()
         openFiles.append( m_params.getParam( i ) );
       }
     }
-    imr_init();
-    koInitTrader();
     if( openFiles.isEmpty() )
     {
       pShell = createNewShell();

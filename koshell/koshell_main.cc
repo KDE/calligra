@@ -23,9 +23,6 @@ KoShellApp::~KoShellApp()
 
 void KoShellApp::start()
 {
-  imr_init();
-  koInitTrader();
-
   if ( g_openFiles.size() == 0 )
   {
     m_pShell = new KoShellWindow;

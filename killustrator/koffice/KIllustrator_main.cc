@@ -53,8 +53,6 @@ KIllustratorApp::~KIllustratorApp () {
 
 void KIllustratorApp::start () {
   if (withGUI) {
-    imr_init ();
-    koInitTrader ();
     koScanTools ();
     koScanPlugins ();
     if (openFiles.size () == 0) {

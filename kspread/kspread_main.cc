@@ -55,9 +55,6 @@ void KSpreadApp::start()
 {
   if ( g_bWithGUI )
   {
-    imr_init();
-    koInitTrader();
-   
     koScanTools();
     koScanPlugins();
  

@@ -33,9 +33,6 @@ void KFormulaApp::start()
 {
   if ( g_bWithGUI )
   {
-    imr_init();
-    koInitTrader();
-    
     if ( g_openFiles.size() == 0 )
     {
       m_pShell = new KFormulaShell;
