@@ -21,7 +21,7 @@
 #define kwviewmode_h
 
 #include <qrect.h>
-class KWCanvas;
+class KWDocument;
 class QPainter;
 class QRegion;
 class KWTextFrameSet;
@@ -42,7 +42,7 @@ class KWTextFrameSet;
 class KWViewMode
 {
 protected:
-    KWViewMode( KWCanvas * canvas ) : m_canvas( canvas ) {}
+    KWViewMode( KWDocument * doc ) : m_doc( doc ) {}
 public:
     virtual ~KWViewMode() {}
 
@@ -74,14 +74,14 @@ protected:
     QRect drawBottomShadow( QPainter * painter, const QRect & crect, const QRect & pageRect, int leftOffset );
     static const unsigned short s_shadowOffset = 3;
 
-    KWCanvas * m_canvas;
+    KWDocument * m_doc;
 };
 
 // The 'normal' view mode (pages below one another)
 class KWViewModeNormal : public KWViewMode
 {
 public:
-    KWViewModeNormal( KWCanvas * canvas ) : KWViewMode( canvas ) {}
+    KWViewModeNormal( KWDocument * doc ) : KWViewMode( doc ) {}
     virtual ~KWViewModeNormal() {}
 
     // This view mode is very easy to implement ;-P
@@ -92,11 +92,20 @@ public:
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
 };
 
+// The view mode used when printing (pages under one another, no selections)
+class KWViewModePrint : public KWViewModeNormal // we inherit the "normal" viewmode
+{
+public:
+    KWViewModePrint( KWDocument * doc ) : KWViewModeNormal( doc ) {}
+    virtual ~KWViewModePrint() {}
+    virtual bool drawSelections() { return false; }
+};
+
 // The 'embedded' view mode (usually a single page, no selections)
 class KWViewModeEmbedded : public KWViewMode
 {
 public:
-     KWViewModeEmbedded ( ) : KWViewMode( 0L ) {}
+    KWViewModeEmbedded ( KWDocument * doc ) : KWViewMode( doc ) {}
     virtual ~ KWViewModeEmbedded() {}
 
     // This view mode is very easy to implement ;-P
@@ -109,13 +118,12 @@ public:
 };
 
 
-
 // A mode for previewing the overall document
 // Pages are organized in a grid (mostly useful when zooming out a lot)
 class KWViewModePreview : public KWViewMode
 {
 public:
-    KWViewModePreview( KWCanvas * canvas, int _nbPagePerRow=4 ) : KWViewMode( canvas ),
+    KWViewModePreview( KWDocument * doc, int _nbPagePerRow=4 ) : KWViewMode( doc ),
         m_pagesPerRow(_nbPagePerRow), // TODO make configurable somehow
         m_spacing(10)
     {}
@@ -138,7 +146,7 @@ private:
 class KWViewModeText : public KWViewMode
 {
 public:
-    KWViewModeText( KWCanvas * canvas ) : KWViewMode( canvas ) {}
+    KWViewModeText( KWDocument * doc ) : KWViewMode( doc ) {}
     virtual ~KWViewModeText() {}
 
     KWTextFrameSet *textFrameSet() const;

@@ -110,8 +110,8 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
 
     connect( m_textobj, SIGNAL( availableHeightNeeded() ),
              SLOT( slotAvailableHeightNeeded() ) );
-    connect( m_textobj, SIGNAL( afterFormatting( int, QTextParag*, bool* ) ),
-             SLOT( slotAfterFormatting( int, QTextParag*, bool* ) ) );
+    connect( m_textobj, SIGNAL( afterFormatting( int, Qt3::QTextParag*, bool* ) ),
+             SLOT( slotAfterFormatting( int, Qt3::QTextParag*, bool* ) ) );
     connect( m_textobj, SIGNAL( newCommand( KCommand * ) ),
              SLOT( slotNewCommand( KCommand * ) ) );
     connect( m_textobj, SIGNAL( repaintChanged( KoTextObject* ) ),

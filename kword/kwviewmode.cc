@@ -19,7 +19,6 @@
 
 #include "kwviewmode.h"
 #include <kotextdocument.h>
-#include "kwcanvas.h"
 #include "kwdoc.h"
 #include <kdebug.h>
 #include <qpainter.h>
@@ -27,8 +26,7 @@
 
 QSize KWViewModeNormal::contentsSize()
 {
-    KWDocument * doc = m_canvas->kWordDocument();
-    return QSize( doc->paperWidth(), doc->pageTop( doc->getPages() ) /*i.e. bottom of last one*/ );
+    return QSize( m_doc->paperWidth(), m_doc->pageTop( m_doc->getPages() ) /*i.e. bottom of last one*/ );
 }
 
 void KWViewMode::drawOnePageBorder( QPainter * painter, const QRect & crect, const QRect & _pageRect,
@@ -55,7 +53,7 @@ void KWViewMode::drawOnePageBorder( QPainter * painter, const QRect & crect, con
         QRegion pageEmptyRegion = emptySpaceRegion.intersect( pagecrect );
         //kdDebug() << "RESULT: pageEmptyRegion: " << endl; DEBUGREGION( pageEmptyRegion );
         if ( !pageEmptyRegion.isEmpty() )
-            m_canvas->kWordDocument()->eraseEmptySpace( painter, pageEmptyRegion, QApplication::palette().active().brush( QColorGroup::Base ) );
+            m_doc->eraseEmptySpace( painter, pageEmptyRegion, QApplication::palette().active().brush( QColorGroup::Base ) );
     }
 }
 
@@ -83,17 +81,16 @@ QRect KWViewMode::drawBottomShadow( QPainter * painter, const QRect & crect, con
 
 void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion )
 {
-    KWDocument * doc = m_canvas->kWordDocument();
     painter->save();
     painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     painter->setBrush( Qt::NoBrush );
     QRect pageRect;
-    for ( int page = 0; page < doc->getPages(); page++ )
+    for ( int page = 0; page < m_doc->getPages(); page++ )
     {
         // using paperHeight() leads to rounding problems ( one pixel between two pages, belonging to none of them )
-        int pagetop = doc->pageTop( page );
-        int pagewidth = doc->paperWidth();
-        int pageheight = doc->pageTop( page+1 ) - pagetop;
+        int pagetop = m_doc->pageTop( page );
+        int pagewidth = m_doc->paperWidth();
+        int pageheight = m_doc->pageTop( page+1 ) - pagetop;
         pageRect = QRect( 0, pagetop, pagewidth, pageheight );
 
         drawOnePageBorder( painter, crect, pageRect, emptySpaceRegion );
@@ -117,7 +114,7 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
         }
     }
     // Take care of the area at the bottom of the last page
-    int lastBottom = doc->pageTop( doc->getPages() );
+    int lastBottom = m_doc->pageTop( m_doc->getPages() );
     if ( crect.bottom() > lastBottom )
     {
         QRect bottomArea( 0, lastBottom, crect.right() + 1, crect.bottom() - lastBottom + 1 );
@@ -138,61 +135,57 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
 
 QSize KWViewModePreview::contentsSize()
 {
-    KWDocument * doc = m_canvas->kWordDocument();
-    int pages = doc->getPages();
+    int pages = m_doc->getPages();
     int rows = (pages-1) / m_pagesPerRow + 1;
     int hPages = rows > 1 ? m_pagesPerRow : pages;
-    return QSize( m_spacing + hPages * ( doc->paperWidth() + m_spacing ),
-                  m_spacing + rows * ( doc->paperHeight() + m_spacing ) /* bottom of last row */ );
+    return QSize( m_spacing + hPages * ( m_doc->paperWidth() + m_spacing ),
+                  m_spacing + rows * ( m_doc->paperHeight() + m_spacing ) /* bottom of last row */ );
 }
 
 QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
 {
-    KWDocument * doc = m_canvas->kWordDocument();
-    // Can't use nPoint.y() / doc->paperHeight() since this would be a rounding problem
-    double unzoomedY = doc->unzoomItY( nPoint.y() );
-    int page = static_cast<int>( unzoomedY / doc->ptPaperHeight() ); // quotient
-    double yInPagePt = unzoomedY - page * doc->ptPaperHeight();      // and rest
+    // Can't use nPoint.y() / m_doc->paperHeight() since this would be a rounding problem
+    double unzoomedY = m_doc->unzoomItY( nPoint.y() );
+    int page = static_cast<int>( unzoomedY / m_doc->ptPaperHeight() ); // quotient
+    double yInPagePt = unzoomedY - page * m_doc->ptPaperHeight();      // and rest
     int row = page / m_pagesPerRow;
     int col = page % m_pagesPerRow;
     /*kdDebug() << "KWViewModePreview::normalToView nPoint=" << nPoint.x() << "," << nPoint.y()
                 << " unzoomedY=" << unzoomedY
-                << " ptPaperHeight=" << doc->ptPaperHeight()
+                << " ptPaperHeight=" << m_doc->ptPaperHeight()
                 << " page=" << page << " row=" << row << " col=" << col
                 << " yInPagePt=" << yInPagePt << endl;*/
-    return QPoint( m_spacing + col * ( doc->paperWidth() + m_spacing ) + nPoint.x(),
-                   m_spacing + row * ( doc->paperHeight() + m_spacing ) + doc->zoomItY( yInPagePt ) );
+    return QPoint( m_spacing + col * ( m_doc->paperWidth() + m_spacing ) + nPoint.x(),
+                   m_spacing + row * ( m_doc->paperHeight() + m_spacing ) + m_doc->zoomItY( yInPagePt ) );
 }
 
 QPoint KWViewModePreview::viewToNormal( const QPoint & vPoint )
 {
     // Well, just the opposite of the above.... hmm.... headache....
-    KWDocument * doc = m_canvas->kWordDocument();
-    int paperWidth = doc->paperWidth();
-    int paperHeight = doc->paperHeight();
+    int paperWidth = m_doc->paperWidth();
+    int paperHeight = m_doc->paperHeight();
     QPoint p( vPoint.x() - m_spacing, vPoint.y() - m_spacing );
     int col = static_cast<int>( p.x() / ( paperWidth + m_spacing ) );
     int xInPage = p.x() - col * ( paperWidth + m_spacing );
     int row = static_cast<int>( p.y() / ( paperHeight + m_spacing ) );
     int yInPage = p.y() - row * ( paperHeight + m_spacing );
     int page = row * m_pagesPerRow + col;
-    if ( page > doc->getPages() - 1 ) // [this happens when moving frames around and going out of the pages]
-        return QPoint( paperWidth, doc->pageTop( doc->getPages() ) );
+    if ( page > m_doc->getPages() - 1 ) // [this happens when moving frames around and going out of the pages]
+        return QPoint( paperWidth, m_doc->pageTop( m_doc->getPages() ) );
     else // normal case
-        return QPoint( xInPage, yInPage + doc->pageTop( page ) );
+        return QPoint( xInPage, yInPage + m_doc->pageTop( page ) );
 }
 
 void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion )
 {
-    KWDocument * doc = m_canvas->kWordDocument();
     painter->save();
     painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     painter->setBrush( Qt::NoBrush );
-    int paperWidth = doc->paperWidth();
-    int paperHeight = doc->paperHeight();
+    int paperWidth = m_doc->paperWidth();
+    int paperHeight = m_doc->paperHeight();
     //kdDebug() << "KWViewModePreview::drawPageBorders crect=" << DEBUGRECT( crect ) << endl;
     QRegion grayRegion( crect );
-    for ( int page = 0; page < doc->getPages(); page++ )
+    for ( int page = 0; page < m_doc->getPages(); page++ )
     {
         int row = page / m_pagesPerRow;
         int col = page % m_pagesPerRow;
@@ -215,7 +208,7 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
     if ( !grayRegion.isEmpty() )
     {
         //kdDebug() << "KWViewModePreview::drawPageBorders grayRegion's bounding Rect = " << DEBUGRECT( grayRegion.boundingRect() ) << endl;
-        m_canvas->kWordDocument()->eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
+        m_doc->eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
     }
     painter->restore();
 }
@@ -224,8 +217,7 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
 
 KWTextFrameSet * KWViewModeText::textFrameSet() const
 {
-    KWDocument * doc = m_canvas->kWordDocument();
-    KWFrameSet * fs = doc->getFrameSet( 0 );
+    KWFrameSet * fs = m_doc->getFrameSet( 0 );
     if ( !fs || fs->type() != FT_TEXT )
         return 0L;
     return static_cast<KWTextFrameSet *>(fs);
@@ -288,14 +280,13 @@ void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
     if (!textfs)
         return;
     painter->save();
-    KWDocument * doc = m_canvas->kWordDocument();
     QRegion grayRegion( crect );
     QPtrListIterator<KWFrame> it( textfs->frameIterator() );
     painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     // Draw a line on the right of every frame
     for ( ; it.current() ; ++it )
     {
-        QRect frameRect( doc->zoomRect( *it.current() ) );
+        QRect frameRect( m_doc->zoomRect( *it.current() ) );
         painter->drawLine( frameRect.topRight(), frameRect.bottomRight() );
         if ( frameRect.intersects( crect ) )
             grayRegion -= frameRect;
@@ -309,6 +300,6 @@ void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
                            textfs->textDocument()->width(), textfs->availableHeight() );
     }
     if ( !grayRegion.isEmpty() )
-        doc->eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
+        m_doc->eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
     painter->restore();
 }
