@@ -359,13 +359,13 @@ void KIllustratorView::setupCanvas()
     canvas->center();
     canvas->setCursor(Qt::crossCursor);
 
-    m_pTabBarFirst = newIconButton("arrow_first", false, this);
+    m_pTabBarFirst = newIconButton("tab_first", false, this);
     connect( m_pTabBarFirst,SIGNAL(clicked()), tabBar, SLOT(scrollFirst()));
-    m_pTabBarLeft = newIconButton("arrow_back", false, this);
+    m_pTabBarLeft = newIconButton("tab_left", false, this);
     connect( m_pTabBarLeft, SIGNAL(clicked()), tabBar, SLOT(scrollLeft()));
-    m_pTabBarRight = newIconButton("arrow_forward", false, this);
+    m_pTabBarRight = newIconButton("tab_right", false, this);
     connect( m_pTabBarRight, SIGNAL(clicked()), tabBar, SLOT(scrollRight()));
-    m_pTabBarLast = newIconButton("arrow_last", false, this);
+    m_pTabBarLast = newIconButton("tab_last", false, this);
     connect( m_pTabBarLast, SIGNAL(clicked()), tabBar, SLOT(scrollLast()));
 
     QHBoxLayout* tabLayout = new QHBoxLayout();
