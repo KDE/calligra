@@ -16,7 +16,6 @@
 
 #include "autoformEdit.h"
 #include <kglobal.h>
-#include <kstddirs.h>
 #include "autoformEdit.moc"
 
 /*================================================================*/
@@ -53,50 +52,50 @@ void AEditWin::setupMenu()
     /* file menu */
     file = new QPopupMenu( this );
     CHECK_PTR(file);
-    M_FNEW = file->insertItem(ICON("filenew.xpm"),i18n("&New"),this,SLOT(fileNew()),CTRL+Key_N);
-    M_FOPEN = file->insertItem(ICON("fileopen.xpm"),i18n("&Open..."),this,SLOT(fileOpen()),CTRL+Key_O);
+    M_FNEW = file->insertItem(ICON("filenew.xpm"),"&New",this,SLOT(fileNew()),CTRL+Key_N);
+    M_FOPEN = file->insertItem(ICON("fileopen.xpm"),"&Open...",this,SLOT(fileOpen()),CTRL+Key_O);
     file->insertSeparator();
-    M_FSAVE = file->insertItem(ICON("filefloppy.xpm"),i18n("&Save"),this,SLOT(fileSave()),CTRL+Key_S);
+    M_FSAVE = file->insertItem(ICON("filefloppy.xpm"),"&Save",this,SLOT(fileSave()),CTRL+Key_S);
     M_FSAS = file->insertItem("S&ave as...",this,SLOT(fileSaveAs()),ALT+Key_S);
     file->insertSeparator();
     M_FWIN = file->insertItem("New &Window",this,SLOT(fileNewWin()),ALT+Key_N);
     file->insertSeparator();
-    M_FCLOSE = file->insertItem(i18n("&Close"),this,SLOT(fileClose()),ALT+Key_C);
-    M_FEXIT = file->insertItem(i18n("&Quit"),this,SLOT(fileQuit()),CTRL+Key_Q);
+    M_FCLOSE = file->insertItem("&Close",this,SLOT(fileClose()),ALT+Key_C);
+    M_FEXIT = file->insertItem("&Quit",this,SLOT(fileQuit()),CTRL+Key_Q);
     file->setMouseTracking(true);
     /* edit menu */
     edit = new QPopupMenu( this );
     CHECK_PTR(edit);
-    M_ECUT = edit->insertItem(ICON("editcut.xpm"),i18n("&Cut"),this,SLOT(editCut()),CTRL+Key_X);
-    M_ECOPY = edit->insertItem(ICON("editcopy.xpm"),i18n("C&opy"),this,SLOT(editCopy()),CTRL+Key_C);
-    M_EPASTE = edit->insertItem(ICON("editpaste.xpm"),i18n("&Paste"),this,SLOT(editPaste()),CTRL+Key_V);
-    M_EDELETE = edit->insertItem(ICON("delete.xpm"),i18n("&Delete"),this,SLOT(editDelete()),CTRL+Key_Delete);
+    M_ECUT = edit->insertItem(ICON("editcut.xpm"),"&Cut",this,SLOT(editCut()),CTRL+Key_X);
+    M_ECOPY = edit->insertItem(ICON("editcopy.xpm"),"C&opy",this,SLOT(editCopy()),CTRL+Key_C);
+    M_EPASTE = edit->insertItem(ICON("editpaste.xpm"),"&Paste",this,SLOT(editPaste()),CTRL+Key_V);
+    M_EDELETE = edit->insertItem(ICON("delete.xpm"),"&Delete",this,SLOT(editDelete()),CTRL+Key_Delete);
     edit->setMouseTracking(true);
     /* extra menu */
     extra = new QPopupMenu( this );
     CHECK_PTR(extra);
-    M_EINSPNT = extra->insertItem(ICON("newPoint.xpm"),i18n("&Insert Point..."),this,SLOT(extraInsertPoint()),ALT+Key_I);
+    M_EINSPNT = extra->insertItem(ICON("newPoint.xpm"),"&Insert Point...",this,SLOT(extraInsertPoint()),ALT+Key_I);
     extra->insertSeparator();
-    M_E121 = extra->insertItem(ICON("121.xpm"),i18n("&View autoform in 1:1"),this,SLOT(extraOne2One()),CTRL+Key_R);
+    M_E121 = extra->insertItem(ICON("121.xpm"),"&View autoform in 1:1",this,SLOT(extraOne2One()),CTRL+Key_R);
     extra->setItemChecked(M_E121,true);
     extra->setMouseTracking(true);
     extra->setCheckable(true);
     /* help menu */
     help = new QPopupMenu( this );
     CHECK_PTR(help);
-    M_HHELP = help->insertItem(i18n("&Contents..."),this,SLOT(helpHelp()),Key_F1);
+    M_HHELP = help->insertItem("&Contents...",this,SLOT(helpHelp()),Key_F1);
     help->insertSeparator();
-    M_HABOUTKPA = help->insertItem(i18n("&About KAutoformEdit..."),this,SLOT(helpAbout()));
-    M_HABOUTKOFFICE = help->insertItem(i18n("About &KOffice..."),this,SLOT(helpAboutKOffice()));
-    M_HABOUTKDE = help->insertItem(i18n("About &KDE..."),this,SLOT(helpAboutKDE()));
+    M_HABOUTKPA = help->insertItem("&About KAutoformEdit...",this,SLOT(helpAbout()));
+    M_HABOUTKOFFICE = help->insertItem("About &KOffice...",this,SLOT(helpAboutKOffice()));
+    M_HABOUTKDE = help->insertItem("About &KDE...",this,SLOT(helpAboutKDE()));
     help->setMouseTracking(true);
     /* menuber */
     menu = new KMenuBar( this );
-    M_FILE = menu->insertItem(i18n("&File"),file);
-    M_EDIT = menu->insertItem(i18n("&Edit"),edit);
-    M_EXTRA = menu->insertItem(i18n("E&xtra"),extra);
+    M_FILE = menu->insertItem("&File",file);
+    M_EDIT = menu->insertItem("&Edit",edit);
+    M_EXTRA = menu->insertItem("E&xtra",extra);
     menu->insertSeparator();
-    M_HELP = menu->insertItem(i18n("&Help"),help);
+    M_HELP = menu->insertItem("&Help",help);
     menu->setMouseTracking(true);
     setMenu(menu);
     /* connect events */
@@ -121,33 +120,33 @@ void AEditWin::setupToolbar1()
     /* insert buttons */
     toolbar1->insertButton(ICON("filenew.xpm"),0,
                            SIGNAL(clicked()),this,
-                           SLOT(fileNew()),true,i18n("Create a new autoform in that window"));
+                           SLOT(fileNew()),true,"Create a new autoform in that window");
     toolbar1->insertButton(ICON("fileopen.xpm"),0,
                            SIGNAL(clicked()),this,
-                           SLOT(fileOpen()),true,i18n("Open an autoform in that window"));
+                           SLOT(fileOpen()),true,"Open an autoform in that window");
     toolbar1->insertButton(ICON("filefloppy.xpm"),0,
                            SIGNAL(clicked()),this,
-                           SLOT(fileSave()),true,i18n("Save current autoform"));
+                           SLOT(fileSave()),true,"Save current autoform");
     toolbar1->insertSeparator();
     toolbar1->insertButton(ICON("editcut.xpm"),0,
                            SIGNAL(clicked()),this,
-                           SLOT(editCut()),true,i18n("Cut to the clipboard"));
+                           SLOT(editCut()),true,"Cut to the clipboard");
     toolbar1->insertButton(ICON("editcopy.xpm"),0,
                            SIGNAL(clicked()),this,
-                           SLOT(editCopy()),true,i18n("Copy to the clipboard"));
+                           SLOT(editCopy()),true,"Copy to the clipboard");
     toolbar1->insertButton(ICON("editpaste.xpm"),0,
                            SIGNAL(clicked()),this,
-                           SLOT(editPaste()),true,i18n("Paste from the clipboard"));
+                           SLOT(editPaste()),true,"Paste from the clipboard");
     toolbar1->insertButton(ICON("delete.xpm"),0,
                            SIGNAL(clicked()),this,
-                           SLOT(editDelete()),true,i18n("Delete selected point"));
+                           SLOT(editDelete()),true,"Delete selected point");
     toolbar1->insertSeparator();
     toolbar1->insertButton(ICON("newPoint.xpm"),0,
                            SIGNAL(clicked()),this,
-                           SLOT(extraInsertPoint()),true,i18n("Insert a new point"));
+                           SLOT(extraInsertPoint()),true,"Insert a new point");
     toolbar1->insertButton(ICON("121.xpm"),T_RELATION,
                            SIGNAL(clicked()),this,
-                           SLOT(extraOne2One()),true,i18n("Switch relation of the autoform viewer"));
+                           SLOT(extraOne2One()),true,"Switch relation of the autoform viewer");
     toolbar1->setToggle(T_RELATION,true);
     toolbar1->setButton(T_RELATION,true);
     toolbar1->insertSeparator();
@@ -155,7 +154,7 @@ void AEditWin::setupToolbar1()
         comboList.append(tmp.setNum(i));
     toolbar1->insertCombo(&comboList,99,false,
                           SIGNAL(activated(int)),this,
-                          SLOT(setPenWidth(int)),true,i18n("Set pen width for the autoform viewer"),70);
+                          SLOT(setPenWidth(int)),true,"Set pen width for the autoform viewer",70);
     toolbar1->setBarPos(KToolBar::Top);
     toolbar1->setFullWidth(true);
     addToolBar(toolbar1);
@@ -193,11 +192,11 @@ void AEditWin::fileNew()
 {
     if (editWid->isChanged())
     {
-        switch(QMessageBox::warning(this,i18n("KPresenter Autoformedit"),
-                                    i18n("The current autoform has been changed but\n"
+        switch(QMessageBox::warning(this,"KPresenter Autoformedit",
+                                    "The current autoform has been changed but\n"
                                     "not saved. Do you really want to reject the\n"
-                                    "changes and open a new autoform?\n\n"),
-                                    i18n("Yes"), i18n("No"),
+                                    "changes and open a new autoform?\n\n",
+                                    "Yes", "No",
                                     QString::null,1))
         {
         case 0: break;
@@ -216,11 +215,11 @@ void AEditWin::fileOpen()
 {
     if (editWid->isChanged())
     {
-        switch(QMessageBox::warning(this,i18n("KPresenter Autoformedit"),
-                                    i18n("The current autoform has been changed but\n"
+        switch(QMessageBox::warning(this,"KPresenter Autoformedit",
+                                    "The current autoform has been changed but\n"
                                     "not saved. Do you really want to reject the\n"
-                                    "changes and open another autoform?\n\n"),
-                                    i18n("Yes"), i18n("No"),
+                                    "changes and open another autoform?\n\n",
+                                    "Yes", "No",
                                     QString::null,1))
         {
         case 0: break;
@@ -236,7 +235,7 @@ void AEditWin::fileOpen()
     }
     afChoose = new AFChoose( this ,"Autoform-Choose");
     afChoose->resize(400,300);
-    afChoose->setCaption(i18n("Open an Autoform"));
+    afChoose->setCaption("Open an Autoform");
 //   afChoose->setMaximumSize(afChoose->width(),afChoose->height());
 //   afChoose->setMinimumSize(afChoose->width(),afChoose->height());
     connect(afChoose,SIGNAL(formChosen(const QString &)),this,SLOT(afChooseOk(const QString &)));
@@ -248,13 +247,14 @@ void AEditWin::fileSave()
 {
     if (!groupName.isEmpty() && !fileName.isEmpty())
     {
-        QString atfName = locateLocal("autoforms", groupName + "/" + fileName);
-        if (atfInterpret)
-	  atfInterpret->save(atfName);
+        QString afDir = qstrdup(KApplication::kde_datadir());
+        afDir += "/kpresenter/autoforms/";
+        QString atfName(afDir + groupName + "/" + fileName);
+        if (atfInterpret) atfInterpret->save(atfName);
         editWid->saved();
-	QString pixName = atfName.left(atfName.findRev('.')) + ".xpm";
-        if (drawWid)
-	  drawWid->createPixmap(pixName);
+        QFileInfo fi(atfName);
+        QString pixName(afDir + groupName + "/" + fi.baseName() + ".xpm");
+        if (drawWid) drawWid->createPixmap(pixName);
     }
     else fileSaveAs();
 }
@@ -273,7 +273,7 @@ void AEditWin::fileSaveAs()
     saveAsDia = new SaveAsDia( this,"Save-As");
     connect(saveAsDia,SIGNAL(saveATFAs(const QString &,const QString &)),
             this,SLOT(saveAsDiaOk(const QString &,const QString &)));
-    saveAsDia->setCaption(i18n("Save autoform as"));
+    saveAsDia->setCaption("Save autoform as");
     saveAsDia->setMaximumSize(saveAsDia->width(),saveAsDia->height());
     saveAsDia->setMinimumSize(saveAsDia->width(),saveAsDia->height());
     saveAsDia->show();
@@ -334,8 +334,8 @@ void AEditWin::extraInsertPoint()
             delete pntInsDia;
             pntInsDia = 0;
         }
-        pntInsDia = new PntInsDia(this,i18n("Insert Point"),atfInterpret->getNumOfPoints());
-        pntInsDia->setCaption(i18n("Insert a point"));
+        pntInsDia = new PntInsDia(this,"Insert Point",atfInterpret->getNumOfPoints());
+        pntInsDia->setCaption("Insert a point");
         pntInsDia->setMaximumSize(pntInsDia->width(),pntInsDia->height());
         pntInsDia->setMinimumSize(pntInsDia->width(),pntInsDia->height());
         connect(pntInsDia,SIGNAL(insPoint(int,bool)),this,SLOT(insPntOk(int,bool)));
@@ -388,31 +388,31 @@ void AEditWin::helpAboutKDE()
 void AEditWin::setInfoText(int id)
 {
     if (!timer->isActive()) timer->start(100,false);
-    if (id == M_FILE) statBar->changeItem(i18n("File operations"),ST_INFO);
-    if (id == M_EDIT) statBar->changeItem(i18n("Editing operations"),ST_INFO);
-    if (id == M_EXTRA) statBar->changeItem(i18n("Extra operations"),ST_INFO);
-    if (id == M_HELP) statBar->changeItem(i18n("Calling help and about dialog"),ST_INFO);
+    if (id == M_FILE) statBar->changeItem("File operations",ST_INFO);
+    if (id == M_EDIT) statBar->changeItem("Editing operations",ST_INFO);
+    if (id == M_EXTRA) statBar->changeItem("Extra operations",ST_INFO);
+    if (id == M_HELP) statBar->changeItem("Calling help and about dialog",ST_INFO);
 
-    if (id == M_FNEW) statBar->changeItem(i18n("Create a new autoform in that window"),ST_INFO);
-    if (id == M_FOPEN) statBar->changeItem(i18n("Open an autoform in that window"),ST_INFO);
-    if (id == M_FSAVE) statBar->changeItem(i18n("Save current autoform"),ST_INFO);
-    if (id == M_FSAS) statBar->changeItem(i18n("Save current autoform as"),ST_INFO);
-    if (id == M_FWIN) statBar->changeItem(i18n("Open a new KPresenter Autoform Editor window"),ST_INFO);
-    if (id == M_FCLOSE) statBar->changeItem(i18n("Close this window"),ST_INFO);
-    if (id == M_FEXIT) statBar->changeItem(i18n("Exit KPresenter Autoform Editor"),ST_INFO);
+    if (id == M_FNEW) statBar->changeItem("Create a new autoform in that window",ST_INFO);
+    if (id == M_FOPEN) statBar->changeItem("Open an autoform in that window",ST_INFO);
+    if (id == M_FSAVE) statBar->changeItem("Save current autoform",ST_INFO);
+    if (id == M_FSAS) statBar->changeItem("Save current autoform as",ST_INFO);
+    if (id == M_FWIN) statBar->changeItem("Open a new KPresenter Autoform Editor window",ST_INFO);
+    if (id == M_FCLOSE) statBar->changeItem("Close this window",ST_INFO);
+    if (id == M_FEXIT) statBar->changeItem("Exit KPresenter Autoform Editor",ST_INFO);
 
-    if (id == M_ECUT) statBar->changeItem(i18n("Cut to the clipboard"),ST_INFO);
-    if (id == M_ECOPY) statBar->changeItem(i18n("Copy to the clipboard"),ST_INFO);
-    if (id == M_EPASTE) statBar->changeItem(i18n("Paste from the clipboard"),ST_INFO);
-    if (id == M_EDELETE) statBar->changeItem(i18n("Delete selected point"),ST_INFO);
+    if (id == M_ECUT) statBar->changeItem("Cut to the clipboard",ST_INFO);
+    if (id == M_ECOPY) statBar->changeItem("Copy to the clipboard",ST_INFO);
+    if (id == M_EPASTE) statBar->changeItem("Paste from the clipboard",ST_INFO);
+    if (id == M_EDELETE) statBar->changeItem("Delete selected point",ST_INFO);
 
-    if (id == M_EINSPNT) statBar->changeItem(i18n("Insert a new point"),ST_INFO);
-    if (id == M_E121) statBar->changeItem(i18n("Switch relation of the autoform viewer"),ST_INFO);
+    if (id == M_EINSPNT) statBar->changeItem("Insert a new point",ST_INFO);
+    if (id == M_E121) statBar->changeItem("Switch relation of the autoform viewer",ST_INFO);
 
-    if (id == M_HABOUTKPA) statBar->changeItem(i18n("Show about dialog of the KAutoform Editor"),ST_INFO);
-    if (id == M_HABOUTKPA) statBar->changeItem(i18n("Show about dialog of the KOffice"),ST_INFO);
-    if (id == M_HABOUTKDE) statBar->changeItem(i18n("Show information about KDE"),ST_INFO);
-    if (id == M_HHELP) statBar->changeItem(i18n("Show contents of help"),ST_INFO);
+    if (id == M_HABOUTKPA) statBar->changeItem("Show about dialog of the KAutoform Editor",ST_INFO);
+    if (id == M_HABOUTKPA) statBar->changeItem("Show about dialog of the KOffice",ST_INFO);
+    if (id == M_HABOUTKDE) statBar->changeItem("Show information about KDE",ST_INFO);
+    if (id == M_HHELP) statBar->changeItem("Show contents of help",ST_INFO);
 }
 
 /*==================== clear info text ===========================*/
@@ -481,13 +481,13 @@ void AEditWin::delPoint(int pnt)
 /*================== autoform chosen =============================*/
 void AEditWin::afChooseOk(const QString & c)
 {
-
+    QString afDir = qstrdup(KApplication::kde_datadir());
+    afDir += "/kpresenter/autoforms/";
     QFileInfo fileInfo(c);
+    QString atfName(afDir + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".atf");
+
     fileName = fileInfo.baseName() + ".atf";
     groupName = fileInfo.dirPath(false);
-
-    QString atfName = locate("autoforms", groupName + "/" + fileName);
-
     if (atfInterpret) atfInterpret->load(atfName);
     sendSource();
     sendPntArry(drawWid->aW(),drawWid->aH());
@@ -496,8 +496,8 @@ void AEditWin::afChooseOk(const QString & c)
 /*======================== save as ==============================*/
 void AEditWin::saveAsDiaOk(const QString & grp,const QString & nam)
 {
-    groupName = grp;
-    fileName = nam;
+    groupName = qstrdup(grp);
+    fileName = qstrdup(nam);
     fileName += ".atf";
     fileSave();
 }

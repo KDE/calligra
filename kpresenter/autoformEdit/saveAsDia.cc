@@ -16,8 +16,6 @@
 
 #include "saveAsDia.h"
 #include "saveAsDia.moc"
-#include <kglobal.h>
-#include <kstddirs.h>
 
 /******************************************************************/
 /* class SaveAsDia                                                */
@@ -86,29 +84,28 @@ SaveAsDia::~SaveAsDia()
 /*======================= get Groups =============================*/
 void SaveAsDia::getGroups()
 {
-  char c[256];
+  // global autoforms
+  QString afDir = qstrdup(KApplication::kde_datadir());
+  afDir += "/kpresenter/autoforms/";
+
+  char* c = new char[256];
   QString str;
 
-  QStringList autoformDirs = KGlobal::dirs()->getResourceDirs("autoforms");
-  for (QStringList::ConstIterator it = autoformDirs.begin();
-       it != autoformDirs.end(); it++) {
+  QFile afInf(afDir + ".autoforms");
+  afInf.open(IO_ReadOnly);
 
-    QFile afInf(*it + ".autoforms");
+  while (!afInf.atEnd())
+    {
+      afInf.readLine(c,256);
+      str = c;
+      str = str.stripWhiteSpace();
+      if (!str.isEmpty())
+	groupList.append(qstrdup(str));
+      strcpy(c,"");
+    }
 
-    afInf.open(IO_ReadOnly);
-
-    while (!afInf.atEnd())
-      {
-	afInf.readLine(c,256);
-	str = c;
-	str = str.stripWhiteSpace();
-	if (!str.isEmpty())
-	  groupList.append(str);
-	strcpy(c,"");
-      }
-
-    afInf.close();
-  }
+  afInf.close();
+  delete c;
 }
 
 /*============================= ok clicked ========================*/
@@ -131,16 +128,17 @@ void SaveAsDia::addGroup()
   QString s = grpEdit->text();
   QString str(s);
   QString str2;
-  QString afDir = locateLocal("autoforms", ".autoforms");
+  QString afDir = qstrdup(KApplication::kde_datadir());
+  afDir += "/kpresenter/autoforms/";
 
-  QFile afInf(afDir);
+  QFile afInf(afDir + ".autoforms");
 
   str = str.stripWhiteSpace();
 
   if (!str.isEmpty() && groupList.find(str) == -1)
     {
-      groups->insertItem(str);
-      groupList.append(str);
+      groups->insertItem(qstrdup(str));
+      groupList.append(qstrdup(str));
       afInf.open(IO_WriteOnly);
       for (unsigned int i=0;i < groupList.count();i++)
 	{
@@ -150,7 +148,9 @@ void SaveAsDia::addGroup()
 	  afInf.writeBlock(str2.data(),str2.length());
 	}
       afInf.close();
-      locateLocal("autoforms", str);
+      afDir += str;
+      QString cmd = "mkdir -p " + afDir;
+      system(cmd.data());
       grpEdit->setText("");
     }
 }
