@@ -8,6 +8,7 @@
 
 #include <qmessagebox.h>
 #include <kmessagebox.h>
+#include <klocale.h>
 
 #include <qpixmap.h>
 #include <kdebug.h>
@@ -227,7 +228,7 @@ KivioLayerPanel::KivioLayerPanel( QWidget *parent, KivioView *pView, KivioCanvas
     m_pListView->setAllColumnsShowFocus(true);
     m_pListView->addColumn("", 22);
     m_pListView->addColumn("", 22);
-    m_pListView->addColumn("Layer Name", 110);
+    m_pListView->addColumn(i18n("Layer Name"), 110);
     QObject::connect( m_pListView, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(selectLayer(QListViewItem*)));
     QObject::connect( m_pListView, SIGNAL(doubleClicked(QListViewItem*)), this, SLOT(dblClicked(QListViewItem*)));
     QObject::connect( m_pListView, SIGNAL(rightButtonClicked(QListViewItem *, const QPoint &, int )), this, SLOT(rightClick(QListViewItem *, const QPoint &, int )));
@@ -344,7 +345,7 @@ void KivioLayerPanel::insertLayer()
 
     // Set the layer name to something a bit different. This isn't
     // guaranteed to be unique, but it's better than "Untitled"
-    pLayer->setName("Layer " + QString::number(i));
+    pLayer->setName(i18n("Layer ") + QString::number(i));
     m_pView->activePage()->addLayer( pLayer );
     m_pView->activePage()->setCurLayer( pLayer );
 
