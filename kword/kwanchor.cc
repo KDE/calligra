@@ -90,16 +90,26 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     (void) fs->internalToNormal( crect.topLeft(), cnPoint );
     //kdDebug() << "KWAnchor::draw cnPoint " << cnPoint.x() << "," << cnPoint.y() << endl;
     crect.moveTopLeft( fs->currentViewMode()->normalToView( cnPoint ) );
+    QPoint brnPoint; // bottom right in normal coords
+    if ( fs->internalToNormal( crect.bottomRight(), brnPoint ) )
+    {
+        brnPoint = fs->currentViewMode()->normalToView( brnPoint );
+        crect.setRight( brnPoint.x() );
+        crect.setBottom( brnPoint.y() );
+    }
     //kdDebug() << "KWAnchor::draw crect ( in view coords ) = " << DEBUGRECT( crect ) << endl;
 
     // and make painter go back to view coord system
-    QPoint iPoint( 0, paragy );
-    if ( fs->internalToNormal( iPoint, cnPoint ) )
+    // (this is exactly the opposite of the code in KWFrameSet::drawContents)
+    QPoint frameTopLeft = fs->kWordDocument()->zoomPoint( fs->currentDrawnFrame()->topLeft() );
+    QPoint iPoint;
+    if ( fs->normalToInternal( frameTopLeft, iPoint ) )
     {
-        QPoint cPoint = fs->currentViewMode()->normalToView( cnPoint );
-        //kdDebug(32002) << "translate " << -cPoint.x() << "," << -cPoint.y() << endl;
-        p->translate( -cPoint.x(), -cPoint.y() );
-    }
+        QPoint vPoint = fs->currentViewMode()->normalToView( frameTopLeft );
+        p->translate( iPoint.x() - vPoint.x(), iPoint.y() - vPoint.y() );
+    } else
+        kdWarning() << "normalToInternal returned 0L in KWAnchor::draw - shouldn't happen. "
+                    << frameTopLeft.x() << "," << frameTopLeft.y() << endl;
     // Draw the frame
     QColorGroup cg2( cg );
     m_frameset->drawContents( p, crect, cg2, false, true, 0L, fs->currentViewMode(), fs->currentDrawnCanvas() );

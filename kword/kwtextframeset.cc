@@ -68,7 +68,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
         m_name = name;
     m_availableHeight = -1;
     m_currentViewMode = 0L;
-    //m_currentDrawnFrame = 0L;
+    m_currentDrawnFrame = 0L;
     m_origFontSizes.setAutoDelete( true );
     m_framesInPage.setAutoDelete( true );
     m_firstPage = 0;
@@ -320,8 +320,8 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
                                 QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                 KWFrameSetEdit *edit )
 {
-    //kdDebug() << "KWTextFrameSet::drawFrame crect(r)=" << DEBUGRECT( r ) << endl;
-    //m_currentDrawnFrame = frame;
+    //kdDebug() << "KWTextFrameSet::drawFrame " << getName() << "(frame " << getFrameFromPtr( frame ) << ") crect(r)=" << DEBUGRECT( r ) << endl;
+    m_currentDrawnFrame = frame;
     // Update variables for each frame (e.g. for page-number)
     // If more than KWPgNumVariable need this functionality, create an intermediary base class
     QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
@@ -398,7 +398,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
         // for debugging :)
         //painter->setPen( QPen(Qt::blue, 1, DashLine) );  painter->drawRect( blank );
     }
-    //m_currentDrawnFrame = 0L;
+    m_currentDrawnFrame = 0L;
 }
 
 void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *frame )
@@ -407,7 +407,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
     m_currentDrawnCanvas = canvas;
     KWViewMode *viewMode = canvas->viewMode();
     m_currentViewMode = viewMode;
-    //m_currentDrawnFrame = frame;
+    m_currentDrawnFrame = frame;
 
     //QRect normalFrameRect( m_doc->zoomRect( *frame ) );
     QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
@@ -457,6 +457,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         }
     }
     m_currentDrawnCanvas = 0L;
+    m_currentDrawnFrame = 0L;
 }
 
 void KWTextFrameSet::layout()

@@ -230,8 +230,8 @@ public:
     // The viewmode that was passed to drawContents. Special hook for KWAnchor. Don't use.
     KWViewMode * currentViewMode() const { return m_currentViewMode; }
     // The frame that we are currently drawing in drawFrame. Stored here since we can't pass it
-    // through QRT's drawing methods. Used by e.g. KWPgNumVariable.
-    //KWFrame * currentDrawnFrame() const { return m_currentDrawnFrame; }
+    // through QRT's drawing methods. Used by e.g. KWAnchor.
+    KWFrame * currentDrawnFrame() const { return m_currentDrawnFrame; }
 
     static QChar customItemChar() { return QChar( s_customItemChar ); }
 
@@ -321,7 +321,7 @@ private:
     QMap<QWidget *, int> m_mapViewAreas;       // Store the "needs" of each view
     QPtrDict<int> m_origFontSizes; // Format -> doc font size.    Maybe a key->fontsize dict would be better.
     KWViewMode * m_currentViewMode;            // The one while drawing. For KWAnchor. Don't use.
-    //KWFrame * m_currentDrawnFrame;           // The frame currently being drawn.
+    KWFrame * m_currentDrawnFrame;           // The frame currently being drawn.
 
     // Cached info for optimization
     QVector< QList<KWFrame> > m_framesInPage; // provides a direct access to the frames on page N
