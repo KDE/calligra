@@ -6122,7 +6122,7 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
         if ( i > cell_range.bottom() )
             cell_range.setBottom( i );
     }
-
+    
     // Adjust to the print range
     if ( cell_range.top() < m_printRange.top() ) cell_range.setTop( m_printRange.top() );
     if ( cell_range.left() < m_printRange.left() ) cell_range.setLeft( m_printRange.left() );
@@ -6269,7 +6269,20 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
     }
 
     kdDebug(36001) << "PRINTING " << page_list.count() << " pages" << endl;
+    m_uprintPages = page_list.count();
 
+    if ( page_list.count() == 0 )
+    {
+        KMessageBox::information( 0, i18n("Nothing to print.") );
+        if ( !m_bPrintGrid )
+        {
+            // Restore the grid pen
+            m_pDoc->setDefaultGridPen( gridPen );
+        }
+        m_bShowGrid = oldShowGrid;
+        return;
+    }
+    
     int pagenr = 1;
 
     //
@@ -6903,6 +6916,16 @@ bool KSpreadTable::loadXML( const QDomElement& table )
         if ( !right.isNull() )
           fright = right.text();
       }
+
+      if ( m_pDoc->syntaxVersion() < 1.0 ) //compatibility with old format - exchange <table> with <sheet>
+      {
+        hleft   = hleft.replace(   QRegExp("<table>"), "<sheet>" );
+        hcenter = hcenter.replace( QRegExp("<table>"), "<sheet>" );
+        hright  = hright.replace(  QRegExp("<table>"), "<sheet>" );
+        fleft   = fleft.replace(   QRegExp("<table>"), "<sheet>" );
+        fcenter = fcenter.replace( QRegExp("<table>"), "<sheet>" );
+        fright  = fright.replace(  QRegExp("<table>"), "<sheet>" );
+      }
       setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
     }
 
@@ -7126,6 +7149,7 @@ bool KSpreadTable::isOnNewPageY( int _row )
 
     return FALSE;
 }
+
 
 void KSpreadTable::updateNewPageListX( int _col )
 {
@@ -7878,6 +7902,7 @@ QString KSpreadTable::localizeHeadFootLine ( const QString &_text )
       KoPageLayoutDia.cc function setupTab2(), without the brakets "<" and ">"
     */
     replaceHeadFootLineMacro ( tmp, "page",   i18n("page") );
+    replaceHeadFootLineMacro ( tmp, "pages",  i18n("pages") );
     replaceHeadFootLineMacro ( tmp, "file",   i18n("file") );
     replaceHeadFootLineMacro ( tmp, "name",   i18n("name") );
     replaceHeadFootLineMacro ( tmp, "time",   i18n("time") );
@@ -7885,7 +7910,7 @@ QString KSpreadTable::localizeHeadFootLine ( const QString &_text )
     replaceHeadFootLineMacro ( tmp, "author", i18n("author") );
     replaceHeadFootLineMacro ( tmp, "email",  i18n("email") );
     replaceHeadFootLineMacro ( tmp, "org",    i18n("org") );
-    replaceHeadFootLineMacro ( tmp, "table",  i18n("table") );
+    replaceHeadFootLineMacro ( tmp, "sheet",  i18n("sheet") );
 
     return tmp;
 }
@@ -7901,6 +7926,7 @@ QString KSpreadTable::delocalizeHeadFootLine ( const QString &_text )
       KoPageLayoutDia.cc function setupTab2(), without the brakets "<" and ">"
     */
     replaceHeadFootLineMacro ( tmp, i18n("page"),   "page" );
+    replaceHeadFootLineMacro ( tmp, i18n("pages"),  "pages" );
     replaceHeadFootLineMacro ( tmp, i18n("file"),   "file" );
     replaceHeadFootLineMacro ( tmp, i18n("name"),   "name" );
     replaceHeadFootLineMacro ( tmp, i18n("time"),   "time" );
@@ -7908,7 +7934,7 @@ QString KSpreadTable::delocalizeHeadFootLine ( const QString &_text )
     replaceHeadFootLineMacro ( tmp, i18n("author"), "author" );
     replaceHeadFootLineMacro ( tmp, i18n("email"),  "email" );
     replaceHeadFootLineMacro ( tmp, i18n("org"),    "org" );
-    replaceHeadFootLineMacro ( tmp, i18n("table"),  "table" );
+    replaceHeadFootLineMacro ( tmp, i18n("sheet"),  "sheet" );
 
     return tmp;
 }
@@ -8069,7 +8095,8 @@ const char* KSpreadTable::orientationString()
 
 QString KSpreadTable::completeHeading( const QString &_data, int _page, const QString &_table ) const
 {
-    QString page(QString::number(_page));
+    QString page( QString::number( _page) );
+    QString pages( QString::number( m_uprintPages ) );
 
     QString pathFileName(m_pDoc->url().path());
     if ( pathFileName.isNull() )
@@ -8116,6 +8143,9 @@ QString KSpreadTable::completeHeading( const QString &_data, int _page, const QS
     int pos = 0;
     while ( ( pos = tmp.find( "<page>", pos ) ) != -1 )
         tmp.replace( pos, 6, page );
+    pos = 0;
+    while ( ( pos = tmp.find( "<pages>", pos ) ) != -1 )
+        tmp.replace( pos, 7, pages );
     pos = 0;
     while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
         tmp.replace( pos, 6, pathFileName );

@@ -10,6 +10,7 @@ Until beta2:
     - added option for print grid, comment indicator and formula indicator
     - added print range definiton
     - added repeat columns & rows on printout
+    - added "<pages>" macro in header/footer
 - paper layout now a property of sheet (not the whole workbook)
 - header/footer now a property of sheet (not the whole workbook)
 - Settings in paper layout are now undoable

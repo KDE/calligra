@@ -1635,6 +1635,11 @@ protected:
     QString m_footMid;
 
     /**
+     * Number of total pages, only calculated during printing
+     */
+    uint m_uprintPages;
+
+    /**
      * Defined printable area
      */
     QRect m_printRange;
