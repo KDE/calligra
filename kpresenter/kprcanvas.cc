@@ -6365,6 +6365,8 @@ void KPrCanvas::removeHelpLine()
         m_view->kPresenterDoc()->removeHorizHelpline( m_tmpHorizHelpline );
     m_tmpHorizHelpline = -1;
     m_tmpVertHelpline = -1;
+    tmpHelpLinePosX = -1;
+    tmpHelpLinePosY = -1;
     m_view->kPresenterDoc()->setModified(true);
     repaint(false);
 }
@@ -6377,6 +6379,8 @@ void KPrCanvas::changeHelpLinePosition( double newPos )
         m_view->kPresenterDoc()->updateHorizHelpline( m_tmpHorizHelpline, newPos );
     m_tmpHorizHelpline = -1;
     m_tmpVertHelpline = -1;
+    tmpHelpLinePosX = -1;
+    tmpHelpLinePosY = -1;
     m_view->kPresenterDoc()->setModified(true);
     repaint(false);
 }
