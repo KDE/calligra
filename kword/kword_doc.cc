@@ -34,13 +34,14 @@
 #include <komlWriter.h>
 #include <koFilterManager.h>
 #include <koTemplateChooseDia.h>
-#include <kstddirs.h>
 #include <koStore.h>
 #include <koStoreStream.h>
 #include <koMainWindow.h>
 
 #include <kurl.h>
 #include <klocale.h>
+#include <kstddirs.h>
+#include <kiconloader.h>
 #include <kglobal.h>
 
 #include <strstream>
