@@ -140,6 +140,13 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 		}
 		else
 		{
+
+			if ( (fabs(lp.x()-fp.x()) + fabs(lp.y()-fp.y())) < 3.0 ) {
+				// AK - should take the middle point here
+				fp = lp - KoPoint(8.0, 8.0);
+				lp = lp + KoPoint(8.0, 8.0);
+			}
+
 			// erase old object:
 			drawTemporaryObject( view );
 
