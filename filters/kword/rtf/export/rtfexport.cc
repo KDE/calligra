@@ -406,7 +406,7 @@ bool RTFExport::filter ( const QString  &filenameIn,
                          const QString  &filenameOut,
                          const QString  &from,
                          const QString  &to,
-                         const QString  & )
+                         const QString  &             )
 {
 
     if ( to != "text/rtf" || from != "application/x-kword" )
@@ -855,7 +855,7 @@ QString ProcessDocumentData ( BookInfo bookInfo )
       }
    if( bookInfo.abstract != "" ) bookMarkup +=("{\\subject " +
                                              bookInfo.abstract + "}");
-   if( bookInfo.company != "" ) bookMarkup += ("\\company " +
+   if( bookInfo.company != "" ) bookMarkup += ("{\\company " +
                                              bookInfo.company + "}");
    bookMarkup += "}";
 
@@ -917,6 +917,84 @@ void paperSize( PaperAttributes &paper, PaperBorders &paperBorders  )
 
 
 /***************************************************************************/
+QValueList < FormatData > combineFormatData(  QValueList<FormatData> &paraFormatData,
+                   QValueList<FormatData> &paraFormatDataFormats )
+{
+
+   QValueList<FormatData>:: Iterator paraFormatDataIt;
+   QValueList<FormatData>:: Iterator  formatIt;
+   QValueList<FormatData>   List;
+   QValueList<FormatData>   defaultFormat;
+   QValueList<FormatData>:: Iterator dfIt;
+
+   List.clear();
+   paraFormatDataIt = paraFormatData.begin();  // first iteration of layout format
+   defaultFormat << (*paraFormatDataIt);  // general format for entire paragraph
+   dfIt = defaultFormat.begin();
+
+   if( paraFormatDataFormats.isEmpty() ) // if no specific formats return general
+      {
+      return paraFormatData;
+      }
+
+   int refPos = 0;  // keeps track of format position
+
+   for( formatIt = paraFormatDataFormats.begin();
+        formatIt != paraFormatDataFormats.end();
+        formatIt++ )
+      {
+
+         // use layout format data (firts occurance) if FORMATS tag attribute was not set
+         if( (*formatIt).text.fontSize == -1 )
+            {
+            (*formatIt).text.fontSize  = (*paraFormatDataIt).text.fontSize ;
+            }
+
+         if( (*formatIt).text.fontWeight == -1 )
+            {
+            (*formatIt).text.fontWeight  = (*paraFormatDataIt).text.fontWeight ;
+            }
+         if( (*formatIt).text.italic == false )
+            {
+            (*formatIt).text.italic  = (*paraFormatDataIt).text.italic ;
+            }
+         if( (*formatIt).text.underline == false )
+            {
+            (*formatIt).text.underline  = (*paraFormatDataIt).text.underline ;
+            }
+         if( (*formatIt).text.fontName == "" )
+            {
+            (*formatIt).text.fontName  = (*paraFormatDataIt).text.fontName ;
+            }
+         if( (*formatIt).text.vertalign == -1 )
+            {
+            (*formatIt).text.vertalign  = (*paraFormatDataIt).text.vertalign ;
+            }
+
+         if( (*formatIt).text.pos > refPos )  // indicates default format applies
+            {
+            (*dfIt).text.pos = refPos;
+            (*dfIt).text.len = (*formatIt).text.pos - refPos;
+            List << (*dfIt); // add default to format list
+            }
+         List << (*formatIt); // add specific format to list
+         refPos = (*formatIt).text.pos + (*formatIt).text.len; // reset position
+
+      }  // end for
+      if( (*paraFormatDataIt).text.len > refPos )
+         {
+         (*dfIt).text.pos = refPos;
+         (*dfIt).text.len = (*paraFormatDataIt).text.len - refPos;
+         List << (*dfIt); // add default to format list
+         }
+
+      return List;
+
+}  // end combineFormatData()
+
+
+
+/***************************************************************************/
 // This is a virtual function called once for each paragraph
 // by the PARAGRAPH tag processor in the kwExport class
 
@@ -938,7 +1016,10 @@ void ProcessParagraph ( QString &paraText,
     int leftIndent;  // indentation of the feft side of the paragraph
     double indent;  // used to calculate indents
     bool listIndicator;  // used to process list numbering
+    QValueList<FormatData>   formatList; // combined format lists
 
+    // combine format data in layout and formats
+    formatList = combineFormatData( paraFormatDataList, paraFormatDataFormats );
 
 
     // calculate indentations
@@ -957,7 +1038,7 @@ void ProcessParagraph ( QString &paraText,
 
 
     // get the font name and size for list numbering
-    it = paraFormatDataFormats.begin();
+    it = formatList.begin();
     fontName = (*it).text.fontName;
     fontSize = (*it).text.fontSize;
     if( !(*docData).grpMgr )  // check not table
@@ -990,15 +1071,8 @@ void ProcessParagraph ( QString &paraText,
            (*docData).head1 = true;
            }
         // extract heading text
-        if( paraFormatDataFormats.isEmpty() )
-           {
-           ProcessParagraphData ( paraText, paraFormatDataList, docData->anchoredInsertList, outputText );
-           }
-        else
-           {
-           ProcessParagraphData ( paraText, paraFormatDataFormats, docData->anchoredInsertList, outputText );
-           }
-          outputText += "\n\\par";   // end paragraph
+        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList, outputText );
+        outputText += "\n\\par";   // end paragraph
     }
     else if ( paraLayout == "Head 2" )
     {
@@ -1026,14 +1100,7 @@ void ProcessParagraph ( QString &paraText,
 
 
         // extract heading text
-        if( paraFormatDataFormats.isEmpty() )
-           {
-           ProcessParagraphData ( paraText, paraFormatDataList, docData->anchoredInsertList, outputText );
-           }
-        else
-           {
-           ProcessParagraphData ( paraText, paraFormatDataFormats, docData->anchoredInsertList, outputText );
-           }
+        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList, outputText );
         outputText += "\n\\par";  // end paragraph
     }
     else if ( paraLayout == "Head 3" )
@@ -1060,14 +1127,7 @@ void ProcessParagraph ( QString &paraText,
 
 
         // extract heading text
-        if( paraFormatDataFormats.isEmpty() )
-           {
-           ProcessParagraphData ( paraText, paraFormatDataList, docData->anchoredInsertList, outputText );
-           }
-        else
-           {
-           ProcessParagraphData ( paraText, paraFormatDataFormats, docData->anchoredInsertList, outputText );
-           }
+        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList, outputText );
         outputText += "\n\\par";  // end paragraph
     }
     else if ( layout.type == 6 )  // Bullet list
@@ -1092,14 +1152,7 @@ void ProcessParagraph ( QString &paraText,
 
         (*docData).bulletList = true;
         // output list item text
-        if( paraFormatDataFormats.isEmpty() )
-           {
-           ProcessParagraphData ( paraText, paraFormatDataList, docData->anchoredInsertList, outputText );
-           }
-        else
-           {
-           ProcessParagraphData ( paraText, paraFormatDataFormats, docData->anchoredInsertList, outputText );
-           }
+        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList, outputText );
         outputText += "\n\\par";  // end paragraph
     }
     else if ( layout.type == 1 || layout.type == 4 || layout.type == 5 ) // numeric/roman
@@ -1150,14 +1203,7 @@ void ProcessParagraph ( QString &paraText,
 
 
         // output text
-        if( paraFormatDataFormats.isEmpty() )
-           {
-           ProcessParagraphData ( paraText, paraFormatDataList, docData->anchoredInsertList, outputText );
-           }
-        else
-           {
-           ProcessParagraphData ( paraText, paraFormatDataFormats, docData->anchoredInsertList, outputText );
-           }
+        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList, outputText );
         outputText += "\n\\par";  // end paragraph
     }
     else if ( layout.type == 2 || layout.type == 3 )  // Alphabetical lists
@@ -1197,14 +1243,7 @@ void ProcessParagraph ( QString &paraText,
 
            }
 
-        if( paraFormatDataFormats.isEmpty() )
-           {
-           ProcessParagraphData ( paraText, paraFormatDataList, docData->anchoredInsertList, outputText );
-           }
-        else
-           {
-           ProcessParagraphData ( paraText, paraFormatDataFormats, docData->anchoredInsertList, outputText );
-           }
+        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList, outputText );
         outputText += "\n\\par";  // end paragraph
     }
 
@@ -1240,15 +1279,8 @@ void ProcessParagraph ( QString &paraText,
           outputText += "\\qj\n";
           }
 
-        if( paraFormatDataFormats.isEmpty() )
-           {
-           ProcessParagraphData ( paraText, paraFormatDataList, docData->anchoredInsertList, outputText );
-           }
-        else
-           {
-           ProcessParagraphData ( paraText, paraFormatDataFormats, docData->anchoredInsertList, outputText );
-           }
-        if( !(*docData).grpMgr )  // check not table
+        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList, outputText );
+//        if( !(*docData).grpMgr )  // check not table
            outputText += "\n\\par"; // delimit paragraph if not table cell
     }
 

@@ -95,4 +95,8 @@ void ProcessParagraphData ( QString                     &paraText,
 
 QString encodeSevenBit( QString text);
 
+QValueList<FormatData>  combineFormatData(  QValueList<FormatData> &paraFormatData,
+                   QValueList<FormatData> &paraFormatDataFormats );
+
+
 #endif // RTFEXPORT_H
