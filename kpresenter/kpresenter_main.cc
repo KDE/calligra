@@ -77,7 +77,7 @@ void KPresenterApp::start()
 /*======================== main ==================================*/
 int main(int argc,char **argv)
 {
-  KPresenterAutoLoader loader("IDL:KOffice/DocumentFactory:1.0");
+  KPresenterAutoLoader loader("IDL:KOffice/DocumentFactory:1.0", "KPresenter" );
 
   KPresenterApp app(argc,argv);
 
