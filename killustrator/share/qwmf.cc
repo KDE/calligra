@@ -50,6 +50,7 @@ public:
 class WinObjHandle
 {
 public:
+  virtual ~WinObjHandle () {}
   virtual void apply(QPainter& p) = 0;
 };
 
@@ -121,9 +122,8 @@ bool QWinMetaFile::load(const QString aFileName)
   WmfEnhMetaHeader eheader;
   WmfMetaHeader header;
   WmfPlaceableHeader pheader;
-  WmfMetaRecord rec;
   WORD checksum;
-  int filePos, idx, i, readLen, len;
+  int filePos, idx, i;
   WmfCmd *cmd, *last;
   DWORD rdSize;
   WORD rdFunc;
@@ -146,7 +146,7 @@ bool QWinMetaFile::load(const QString aFileName)
 
   //----- Read placeable metafile header
   st >> pheader.key;
-  mIsPlaceable = (pheader.key==APMHEADER_KEY);
+  mIsPlaceable = (pheader.key==(DWORD) APMHEADER_KEY);
   if (mIsPlaceable)
   {
     st >> pheader.hmf;
@@ -214,6 +214,7 @@ bool QWinMetaFile::load(const QString aFileName)
     st >> eheader.szlDevice;
     st >> eheader.szlMillimeters;
 
+    /*
     debug("WMF Extended Header");
     if (mSingleStep)
     {
@@ -230,6 +231,7 @@ bool QWinMetaFile::load(const QString aFileName)
       debug("  nBytes=%d", eheader.nBytes);
     }
     debug("NOT YET IMPLEMENTED, SORRY.");
+    */
     return FALSE;
   }
   else // no, not enhanced
@@ -244,6 +246,7 @@ bool QWinMetaFile::load(const QString aFileName)
     st >> header.mtNoObjects;
     st >> header.mtMaxRecord;
     st >> header.mtNoParameters;
+    /*
     if (mSingleStep)
     {
       debug("  mtType=%u", header.mtType);
@@ -251,6 +254,7 @@ bool QWinMetaFile::load(const QString aFileName)
       debug("  mtVersion=%u", header.mtVersion);
       debug("  mtSize=%ld", header.mtSize);
     }
+    */
   }
 
   //----- Read bits
@@ -320,9 +324,9 @@ int QWinMetaFile::findFunc(unsigned short aFunc) const
 //-----------------------------------------------------------------------------
 bool QWinMetaFile::paint(const QPaintDevice* aTarget)
 {
-  int idx, size, i;
+  int idx, i/*, size*/;
   WmfCmd* cmd;
-  char dummy[16];
+  //  char dummy[16];
 
   assert(aTarget!=NULL);
   if (mPainter.isActive()) return FALSE;
@@ -556,10 +560,9 @@ void QWinMetaFile::ellipse(short num, short* parm)
 void QWinMetaFile::polypolygon(short num, short* parm)
 {
   QPointArray* pa;
-  int i, j, count;
+  int i;
   int polyCount = parm[0];
   int vertices[polyCount];
-  char dummy[8];
   bool bgMode = FALSE;
   RasterOp rop = mPainter.rasterOp();
   QBrush fgBrush(mPainter.brush());
@@ -691,7 +694,7 @@ void QWinMetaFile::createBrushIndirect(short num, short* parm)
     Dense3Pattern   /* should be device-independend BS_DIBPATTERN8x8 */
   };
   BrushStyle style;
-  short arg, idx;
+  short arg;
   WinObjBrushHandle* handle = createBrush();
   
   arg = parm[0];
@@ -726,7 +729,6 @@ void QWinMetaFile::createPenIndirect(short num, short* parm)
   { SolidLine, DashLine, DotLine, DashDotLine, DashDotDotLine,
     NoPen, SolidLine };
   PenStyle style;
-  short arg, idx;
   WinObjPenHandle* handle = createPen();
 
   if (parm[0]>=0 && parm[0]<6) style=styleTab[parm[0]];

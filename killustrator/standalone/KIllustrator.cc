@@ -419,13 +419,14 @@ void KIllustrator::initToolBars () {
 
   parseColorPalette ((const char *) palFile, palette);
 
+  selectedColorIdx = -1;
   GObject::OutlineInfo oinfo = GObject::getDefaultOutlineInfo ();
   for (int i = 0; i < (int) palette.size (); i++) {
     QBrush brush (palette[i], i == 0 ? NoBrush : SolidPattern);
     ColorField* cfield = new ColorField (i, brush, colorPalette);
     connect (cfield, SIGNAL(colorSelected (int, int, const QBrush&)),
 	     this, SLOT(selectColor (int, int, const QBrush&)));
-    if (oinfo.color == palette[i]) {
+    if (oinfo.color == palette[i] && selectedColorIdx == -1) {
       cfield->highlight (true);
       selectedColorIdx = i;
     }
@@ -1080,9 +1081,11 @@ void KIllustrator::selectColor (int flag, int idx, const QBrush& b) {
     setPenColor (b);
     ColorField* cfield = 
       (ColorField *) colorPalette->getWidget (selectedColorIdx);
+    assert (cfield);
     cfield->highlight (false);
     
     cfield = (ColorField *) colorPalette->getWidget (idx);
+    assert (cfield);
     cfield->highlight (true);
     selectedColorIdx = idx;
   }
