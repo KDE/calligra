@@ -683,6 +683,8 @@ void KoMainWindow::slotFilePrintPreview()
     rootView()->setupPrinter( printer );
 
     printer.setOutputFileName(tmpFile.name());
+    printer.setFromTo( printer.minPage(), printer.maxPage() );
+    printer.setNumCopies( 1 );
     rootView()->print(printer);
     KoPrintPreview::preview(this, "KoPrintPreviewDialog", tmpFile.name());
 }
