@@ -23,6 +23,7 @@
 #include <qpushbutton.h>
 #include <qcursor.h>
 #include <qpoint.h>
+#include <qapp.h>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -36,6 +37,14 @@
 
 #include <stdlib.h>
 
+#if defined(Q_WS_WIN)
+#include "qt_windows.h"
+QRgb qt_colorref2qrgb(COLORREF col)
+{
+    return qRgb(GetRValue(col),GetGValue(col),GetBValue(col));
+}
+#endif
+
 KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView *parent, QString table, const KexiDBTable *t)
  : QFrame(parent,"tv", QFrame::Panel | QFrame::Raised)
 {
@@ -48,7 +57,7 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 	g->setMargin(3);
 
 	QLabel *l = new KexiRelationViewTableContainerHeader(table, this);
-	l->setPaletteBackgroundColor(colorGroup().highlight());
+//	l->setPaletteBackgroundColor(colorGroup().highlight());
 
 //	QPushButton *btnClose = new QPushButton("x", this, "x");
 //	btnClose->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
@@ -157,6 +166,39 @@ KexiRelationViewTableContainer::~KexiRelationViewTableContainer()
 
 KexiRelationViewTableContainerHeader::KexiRelationViewTableContainerHeader(const QString& text,QWidget *parent)
 	:QLabel(text,parent),m_dragging(false) {
+
+	QPalette pal = palette();
+
+	bool colorsInitialized = FALSE;
+
+#ifdef Q_WS_WIN // ask system properties on windows
+#ifndef SPI_GETGRADIENTCAPTIONS
+#define SPI_GETGRADIENTCAPTIONS 0x1008
+#endif
+#ifndef COLOR_GRADIENTACTIVECAPTION
+#define COLOR_GRADIENTACTIVECAPTION 27
+#endif
+#ifndef COLOR_GRADIENTINACTIVECAPTION
+#define COLOR_GRADIENTINACTIVECAPTION 28
+#endif
+	if ( QApplication::desktopSettingsAware() ) {
+		//TODO: some day gradient can be added for w98/nt5
+		pal.setColor( QPalette::Active, QColorGroup::Background, qt_colorref2qrgb(GetSysColor(COLOR_ACTIVECAPTION)) );
+		pal.setColor( QPalette::Inactive, QColorGroup::Background, qt_colorref2qrgb(GetSysColor(COLOR_INACTIVECAPTION)) );
+		pal.setColor( QPalette::Active, QColorGroup::Foreground, qt_colorref2qrgb(GetSysColor(COLOR_CAPTIONTEXT)) );
+		pal.setColor( QPalette::Inactive, QColorGroup::Foreground, qt_colorref2qrgb(GetSysColor(COLOR_INACTIVECAPTIONTEXT)) );
+	}
+	else
+#endif //Q_WS_WIN
+	{
+		//TODO: check if this is ok under linux:
+		pal.setColor( QPalette::Active, QColorGroup::Background, palette().active().highlight() );
+		pal.setColor( QPalette::Active, QColorGroup::Foreground, palette().active().highlightedText() );
+		pal.setColor( QPalette::Inactive, QColorGroup::Background, palette().inactive().highlight() );
+		pal.setColor( QPalette::Inactive, QColorGroup::Foreground, palette().inactive().highlightedText() );
+	}
+	setPalette( pal );
+
 	installEventFilter(this);
 }
 
