@@ -19,7 +19,7 @@ libkofficeui_la_SOURCES = koGlobal.cc koFind.cc koReplace.cc \
 	kcoloractions.cpp koToolBox.cpp koTemplates.cc \
 	koRect.cpp koPictureFilePreview.cc \
 	tkaction.cpp tkcoloractions.cpp tkcombobox.cpp tktoolbarbutton.cpp \
-	koFontDia.cc koCharSelectDia.cc
+	koFontDia.cc koCharSelectDia.cc koInsertLink.cc
 
 include_HEADERS = koGlobal.h koFind.h koReplace.h \
 	koPageLayoutDia.h \
@@ -29,7 +29,7 @@ include_HEADERS = koGlobal.h koFind.h koReplace.h \
 	kcoloractions.h koToolBox.h \
 	koRect.h koPoint.h koSize.h koPictureFilePreview.h \
 	tkaction.h tkcoloractions.h tktoolbarbutton.h tkcombobox.h \
-	koFontDia.h koCharSelectDia.h
+	koFontDia.h koCharSelectDia.h koInsertLink.h
 
 METASOURCES = AUTO
 
