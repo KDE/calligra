@@ -198,8 +198,10 @@ void GDocument::selectObject (GObject* obj) {
     selection.push_back (obj);
     selBoxIsValid = false;
     updateHandle ();
-    emit changed ();
-    emit selectionChanged ();
+    if (autoUpdate) {
+      emit changed ();
+      emit selectionChanged ();
+    }
   }
 }
 
@@ -212,8 +214,10 @@ void GDocument::unselectObject (GObject* obj) {
     selection.erase (i);
     selBoxIsValid = false;
     updateHandle ();
-    emit changed ();
-    emit selectionChanged ();
+    if (autoUpdate) {
+      emit changed ();
+      emit selectionChanged ();
+    }
   }
 }
 
@@ -224,8 +228,10 @@ void GDocument::unselectAllObjects () {
   for_each (selection.begin (), selection.end (), unselect_obj ());
   selection.clear ();
   selBoxIsValid = false;
-  emit changed ();
-  emit selectionChanged ();
+  if (autoUpdate) {
+    emit changed ();
+    emit selectionChanged ();
+  }
 }
 
 void GDocument::selectAllObjects () {
@@ -245,8 +251,10 @@ void GDocument::selectAllObjects () {
   }
   selBoxIsValid = false;
   updateHandle ();
-  emit changed ();
-  emit selectionChanged ();
+  if (autoUpdate) {
+    emit changed ();
+    emit selectionChanged ();
+  }
 }
 
 void GDocument::setLastObject (GObject* obj) {
@@ -475,8 +483,8 @@ bool GDocument::saveToXml (ostream& os) {
   XmlWriter xml (os);
 
   xml.startTag ("doc", false);
-  xml.addAttribute ("author", "Kai-Uwe Sattler");
-  xml.addAttribute ("email", "kus@iti.cs.uni-magdeburg.de");
+  //  xml.addAttribute ("author", "Kai-Uwe Sattler");
+  //  xml.addAttribute ("email", "kus@iti.cs.uni-magdeburg.de");
   xml.addAttribute ("editor", "KIllustrator");
   xml.addAttribute ("mime", KILLUSTRATOR_MIMETYPE);
   xml.closeTag ();
@@ -972,8 +980,10 @@ void GDocument::insertObjectAtIndex (GObject* obj, unsigned int idx) {
   connect (obj, SIGNAL(changed(const Rect&)), 
 	   this, SLOT(objectChanged (const Rect&)));
   setModified ();
-  emit changed ();
-  emit selectionChanged ();
+  if (autoUpdate) {
+    emit changed ();
+    emit selectionChanged ();
+  }
 }
 
 void GDocument::moveObjectToIndex (GObject* obj, unsigned int idx) {
@@ -983,8 +993,10 @@ void GDocument::moveObjectToIndex (GObject* obj, unsigned int idx) {
   layer->moveObjectToIndex (obj, idx);
 
   setModified ();
-  emit changed ();
-  emit selectionChanged ();
+  if (autoUpdate) {
+    emit changed ();
+    emit selectionChanged ();
+  }
 }
 
 KoPageLayout GDocument::pageLayout () {

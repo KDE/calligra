@@ -33,21 +33,21 @@ UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup ???")) {
     if (o->isA ("GGroup")) {
       GGroup* gobj = (GGroup *) o;
       gobj->ref ();
-      groups.append (gobj);
+      groups.push_back (gobj);
     }
   }
 }
 
 UngroupCmd::~UngroupCmd () {
-  QListIterator<GGroup> it (groups);
-  for (; it.current (); ++it) 
-    it.current ()->unref ();
+    for (list<GGroup*>::iterator it = groups.begin ();
+	 it != groups.end (); it++)
+    (*it)->unref ();
 }
 
 void UngroupCmd::execute () {
-  QListIterator<GGroup> it (groups);
-  for (; it.current (); ++it) {
-    GGroup *group = it.current ();
+  for (list<GGroup*>::iterator it = groups.begin ();
+       it != groups.end (); it++) {
+    GGroup *group = *it;
 
     int pos = document->findIndexOfObject (group);
     if (pos != -1) {

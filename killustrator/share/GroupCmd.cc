@@ -27,15 +27,10 @@
 GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {
   document = doc;
   group = 0L;
-#ifdef NO_LAYERS
-  QListIterator<GObject> it (doc->getSelection ());
-  for (; it.current (); ++it) 
-    objects.append (it.current ());
-#else
+
   for (list<GObject*>::iterator it = doc->getSelection ().begin ();
        it != doc->getSelection ().end (); it++)
-    objects.append (*it);
-#endif
+    objects.push_back (*it);
 }
 
 GroupCmd::~GroupCmd () {
@@ -44,13 +39,15 @@ GroupCmd::~GroupCmd () {
 }
 
 void GroupCmd::execute () {
-  if (objects.count () > 0) {
+  if (! objects.empty ()) {
     group = new GGroup ();
     group->ref ();
 
-    QListIterator<GObject> it (objects);
-    for (; it.current (); ++it) {
-      GObject* obj = it.current ();
+    document->setAutoUpdate (false);
+
+    for (list<GObject*>::iterator it = objects.begin ();
+	 it != objects.end (); it++) {
+      GObject* obj = *it;
       group->addObject (obj);
     }
     // now insert the new group into the document
@@ -59,6 +56,7 @@ void GroupCmd::execute () {
     // and select it (but only it !)
     document->deleteSelectedObjects ();
     document->selectObject (group);
+    document->setAutoUpdate (true);
   }
 }
 

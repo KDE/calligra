@@ -28,7 +28,6 @@
 #include "GDocument.h"
 #include "Command.h"
 #include "GGroup.h"
-#include <qlist.h>
 
 class GroupCmd : public Command {
 public:
@@ -41,7 +40,7 @@ public:
 private:
   GDocument* document;
   GGroup* group;
-  QList<GObject> objects;
+  list<GObject*> objects;
 };
 
 #endif

@@ -25,7 +25,6 @@
 #ifndef UngroupCmd_h_
 #define UngroupCmd_h_
 
-#include <qlist.h>
 #include "GDocument.h"
 #include "GGroup.h"
 #include "Command.h"
@@ -40,7 +39,7 @@ public:
 
 private:
   GDocument* document;
-  QList<GGroup> groups;
+  list<GGroup*> groups;
 };
 
 #endif
