@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KSpread Microsoft Excel Import Filter
+X-KDE-Export=application/x-kspread
+X-KDE-Import=application/msexcel
+X-KDE-Weight=1
+X-KDE-Library=libexcelimport
+ServiceTypes=KOfficeFilter
