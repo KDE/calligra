@@ -82,11 +82,11 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     //KGuiItem back = KStdGuiItem::back();
     //KGuiItem forward = KStdGuiItem::forward();
     // fixme: button's too wide
-    //m_back = new QPushButton(back.iconSet(), QString::null, m_page);
+    //m_back = new QPushButton(back.iconSet(KIcon::MainToolbar), QString::null, m_page);
     m_back = new QPushButton("<", m_page);
     QToolTip::add(m_back, i18n("Back"));
     row1->addWidget(m_back, 0);
-    //m_forward = new QPushButton(forward.iconSet(), QString::null, m_page);
+    //m_forward = new QPushButton(forward.iconSet(KIcon::MainToolbar), QString::null, m_page);
     m_forward = new QPushButton(">", m_page);
     QToolTip::add(m_forward, i18n("Forward"));
     row1->addWidget(m_forward, 0);
