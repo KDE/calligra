@@ -222,10 +222,10 @@ void KexiQueryDesignerGuiEditor::initTableRows()
 	}
 	d->dataTable->tableView()->setData(d->data);
 
-	updateColumsData();
+	updateColumnsData();
 }
 
-void KexiQueryDesignerGuiEditor::updateColumsData()
+void KexiQueryDesignerGuiEditor::updateColumnsData()
 {
 	d->dataTable->tableView()->acceptRowEdit();
 
@@ -573,7 +573,7 @@ void KexiQueryDesignerGuiEditor::showTablesAndConnectionsForQuery(KexiDB::QueryS
 	}
 
 	d->slotTableAdded_enabled = true;
-	updateColumsData();
+	updateColumnsData();
 }
 
 void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
@@ -680,7 +680,10 @@ bool KexiQueryDesignerGuiEditor::loadLayout()
 bool KexiQueryDesignerGuiEditor::storeLayout()
 {
 	KexiQueryPart::TempData * temp = tempData();
-	QString sqlText = mainWin()->project()->dbConnection()->selectStatement( *temp->query );
+
+	// Save SQL without driver-escaped keywords.
+	QString sqlText = 
+	  mainWin()->project()->dbConnection()->selectStatement( *temp->query, false );
 	if (!storeDataBlock( sqlText, "sql" )) {
 		return false;
 	}
@@ -793,13 +796,13 @@ void KexiQueryDesignerGuiEditor::slotTableAdded(KexiDB::TableSchema & /*t*/)
 {
 	if (!d->slotTableAdded_enabled)
 		return;
-	updateColumsData();
+	updateColumnsData();
 	setDirty();
 }
 
 void KexiQueryDesignerGuiEditor::slotTableHidden(KexiDB::TableSchema & /*t*/)
 {
-	updateColumsData();
+	updateColumnsData();
 	setDirty();
 }
 

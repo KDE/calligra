@@ -29,6 +29,7 @@
 #include <kiconloader.h>
 
 #include <kexi_utils.h>
+#include <kexidb/driver.h>
 #include <kexidb/connection.h>
 #include <kexidb/parser/parser.h>
 
@@ -282,7 +283,10 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 			return false;
 	}
 	else {
-		d->origStatement = mainWin()->project()->dbConnection()->selectStatement( *query ).stripWhiteSpace();
+	// Use query with Kexi keywords (but not driver-specific keywords) escaped.
+		KexiDB::Connection* conn = mainWin()->project()->dbConnection();
+		int flags = KexiDB::Driver::EscapeKexi;
+		d->origStatement = conn->selectStatement(*query, flags).stripWhiteSpace();
 	}
 
 	d->editor->setText( d->origStatement );

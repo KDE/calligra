@@ -83,7 +83,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 
 		/*! Updates data in columns depending on tables that are currently inserted.
 		 Tabular Data in combo box popups is updated as well. */
-		void updateColumsData();
+		void updateColumnsData();
 
 		/*! \return property buffer associated with currently selected row (i.e. field)
 		 or 0 if current row is empty. */
