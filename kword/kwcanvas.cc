@@ -1970,9 +1970,9 @@ QPoint KWCanvas::pageCorner()
         pageNum = frame->pageNum();
     QPoint nPoint( 0, m_doc->pageTop(pageNum) + 1 );
     QPoint cPoint( m_viewMode->normalToView( nPoint ) );
-    kdDebug() << "KWCanvas::rulerPos frame=" << frame << " pagenum=" << pageNum
+    /*kdDebug() << "KWCanvas::rulerPos frame=" << frame << " pagenum=" << pageNum
               << " nPoint=" << nPoint.x() << "," << nPoint.y()
-              << " cPoint=" << cPoint.x() << "," << cPoint.y() << endl;
+              << " cPoint=" << cPoint.x() << "," << cPoint.y() << endl;*/
     return cPoint;
 }
 
