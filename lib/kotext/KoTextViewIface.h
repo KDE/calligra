@@ -36,6 +36,15 @@ public:
 k_dcop:
     void insertSoftHyphen();
     void insertText( const QString &text );
+    void setBold(bool b);
+    void setItalic(bool on);
+    void setUnderline(bool on);
+    void setStrikeOut(bool on);
+    void setPointSize( int s );
+    void setTextSubScript(bool on);
+    void setTextSuperScript(bool on);
+
+    void setDefaultFormat();
 
 private:
     KoTextView *m_textView;

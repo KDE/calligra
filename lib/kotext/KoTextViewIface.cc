@@ -38,3 +38,44 @@ void KoTextViewIface::insertText( const QString &text )
     m_textView->insertText(text);
 }
 
+
+void KoTextViewIface::setBold(bool b)
+{
+    m_textView->setBold(b);
+}
+
+void KoTextViewIface::setItalic(bool on)
+{
+    m_textView->setItalic(on);
+}
+
+void KoTextViewIface::setUnderline(bool on)
+{
+    m_textView->setUnderline(on);
+}
+
+void KoTextViewIface::setStrikeOut(bool on)
+{
+    m_textView->setStrikeOut(on);
+}
+
+void KoTextViewIface::setPointSize( int s )
+{
+    m_textView->setPointSize(s);
+}
+
+void KoTextViewIface::setTextSubScript(bool on)
+{
+    m_textView->setTextSubScript(on);
+}
+
+void KoTextViewIface::setTextSuperScript(bool on)
+{
+    m_textView->setTextSuperScript(on);
+}
+
+void KoTextViewIface::setDefaultFormat()
+{
+    m_textView->setDefaultFormat();
+}
+
