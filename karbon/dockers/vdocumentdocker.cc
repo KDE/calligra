@@ -114,7 +114,7 @@ VDocumentTab::VDocumentTab( KarbonPart* part, QWidget* parent )
 	layout->addWidget( new QLabel( i18n( "Format:" ), this ), 4, 0 );
 	layout->addMultiCellWidget( frame = new QFrame( this ), 5, 5, 0, 1 );
 	frame->setFrameShape( QFrame::HLine );
-	layout->addMultiCellWidget( new QLabel( i18n( "Zoom factor:" ), this ), 6, 6, 0, 1 );
+	//layout->addMultiCellWidget( new QLabel( i18n( "Zoom factor:" ), this ), 6, 6, 0, 1 );
 	layout->addWidget( m_width = new QLabel( this ), 0, 1 );
 	layout->addWidget( m_height = new QLabel( this ), 1, 1 );
 	layout->addWidget( m_layers = new QLabel( this ), 3, 1 );
