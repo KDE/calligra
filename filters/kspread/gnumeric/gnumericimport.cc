@@ -1143,7 +1143,8 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             else if (shade == "1")
             {
               /* 1 Solid */
-              kspread_cell->setBackGroundBrushStyle(Qt::SolidPattern);
+              //kspread_cell->setBackGroundBrushStyle(Qt::SolidPattern);
+                //This is as empty
               /* What should this be? */
 
             }
