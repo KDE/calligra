@@ -16,7 +16,6 @@ libsupport_la_SOURCES = \
 	art_bpath.c \
 	art_rgb_affine.c \
 	art_rgb_affine_private.c \
-	art_rgb_affine_private.h \
 	art_rgb_bitmap_affine.c \
 	art_rgb_rgba_affine.c \
 	art_rgb_a_affine.c \
@@ -33,4 +32,4 @@ libsupport_la_SOURCES = \
 
 
 INCLUDES = -I$(top_srcdir) -I$(top_builddir)
-CFLAGS = -DLIBART_COMPILATION
+AM_CPPFLAGS = -DLIBART_COMPILATION
