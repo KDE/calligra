@@ -506,7 +506,7 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTex
             KoTextDocument * textdoc = parag->textDocument();
             QTextCursor cursor( parag->document() );
             cursor.setParag( parag );
-            cursor.setIndex( i );
+            cursor.setIndex( i+1 );
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setIndex( parag->string()->length() );
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
