@@ -141,7 +141,7 @@ void OLEFilter::slotSavePart(
     }
     else
     {
-        KoFilterManager *mgr = KoFilterManager::self();
+        KoFilterManager *mgr = new KoFilterManager();
         KTempFile tempFile(QString::null, "." + extension);
 
         // It's not here, so let's generate one.
@@ -164,9 +164,9 @@ void OLEFilter::slotSavePart(
         if (!store->embed(id, storedPart))
             kdError(s_area) << "Could not embed in KoStore!" << endl;
         unlink(result.local8Bit());
+        delete mgr;
     }
-    //storageId = QFile::encodeName(id);
-    storageId = (id);
+    storageId = id;
 }
 
 void OLEFilter::slotSaveDocumentInformation(
@@ -209,7 +209,7 @@ void OLEFilter::slotSaveDocumentInformation(
 
     QString data = info->save().toString();
     int length = data.utf8().length();
-    
+
     if(!store->write(data.utf8(), length))
 	kdError(s_area) << "OLEFilter::slotSaveDocumentInformation(): Could not write to KoStore!" << endl;
     store->close();
