@@ -1361,7 +1361,7 @@ void KivioCanvas::paintGuides(bool show)
     bitBlt(this,0,0,m_buffer);
 }
 
-void KivioCanvas::setViewCenterPoint(KivioPoint p)
+void KivioCanvas::setViewCenterPoint(const KoPoint &p)
 {
   setUpdatesEnabled(false);
 
@@ -1402,7 +1402,7 @@ void KivioCanvas::setVisibleArea(KivioRect r, int margin)
 
   KivioPoint c = r.center();
 
-  setViewCenterPoint(c);
+  setViewCenterPoint(KoPoint(c.x(), c.y()));
   setUpdatesEnabled(true);
 }
 
@@ -1420,7 +1420,7 @@ void KivioCanvas::setVisibleAreaByWidth(KivioRect r, int margin)
 
   KivioPoint c = r.center();
 
-  setViewCenterPoint(c);
+  setViewCenterPoint(KoPoint(c.x(), c.y()));
   setUpdatesEnabled(true);
 }
 
@@ -1438,7 +1438,7 @@ void KivioCanvas::setVisibleAreaByHeight(KivioRect r, int margin)
 
   KivioPoint c = r.center();
 
-  setViewCenterPoint(c);
+  setViewCenterPoint(KoPoint(c.x(), c.y()));
   setUpdatesEnabled(true);
 }
 

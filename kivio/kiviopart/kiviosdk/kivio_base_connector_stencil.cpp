@@ -249,7 +249,7 @@ void KivioBaseConnectorStencil::paintSelectionHandles( KivioIntraStencilData *pD
 ///////////////////////////////
 // Collision detection
 ///////////////////////////////
-KivioCollisionType KivioBaseConnectorStencil::checkForCollision( KivioPoint *, double )
+KivioCollisionType KivioBaseConnectorStencil::checkForCollision( KoPoint *, double )
 {
     /* Derived class must implement this */
     return kctNone;

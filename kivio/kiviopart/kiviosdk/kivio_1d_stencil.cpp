@@ -344,7 +344,7 @@ void Kivio1DStencil::paintSelectionHandles( KivioIntraStencilData *pData )
 ///////////////////////////////
 // Collision detection
 ///////////////////////////////
-KivioCollisionType Kivio1DStencil::checkForCollision( KivioPoint *, double )
+KivioCollisionType Kivio1DStencil::checkForCollision( KoPoint *, double )
 {
     /* Derived class must implement this */
 

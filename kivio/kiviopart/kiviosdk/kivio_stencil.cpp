@@ -21,7 +21,7 @@
 #include "kivio_fill_style.h"
 #include "kivio_intra_stencil_data.h"
 #include "kivio_painter.h"
-#include "kivio_point.h"
+//#include "kivio_point.h"
 #include "kivio_rect.h"
 #include "kivio_stencil.h"
 
@@ -172,7 +172,7 @@ void KivioStencil::paintSelectionHandles( KivioIntraStencilData *pData )
   }
 }
 
-KivioCollisionType KivioStencil::checkForCollision( KivioPoint *, double )
+KivioCollisionType KivioStencil::checkForCollision( KoPoint *, double )
 {
     return kctNone;
 }

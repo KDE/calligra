@@ -31,7 +31,6 @@
 #include <koQueryTrader.h>
 #include <koPoint.h>
 
-#include "kivio_point.h"
 #include "kivio_rect.h"
 #include "kivio_intra_stencil_data.h"
 
@@ -109,7 +108,7 @@ class KivioCanvas : public QWidget
     void eraseGuides();
     void paintGuides(bool=true);
 
-    void setViewCenterPoint(KivioPoint);
+    void setViewCenterPoint(const KoPoint &);
 
     KivioRect visibleArea();
     void setVisibleArea(KivioRect, int margin = 0);

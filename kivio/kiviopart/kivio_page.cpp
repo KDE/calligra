@@ -44,6 +44,7 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <koUnit.h>
+#include <koPoint.h>
 #include <kozoomhandler.h>
 #include <kapplication.h>
 
@@ -61,7 +62,6 @@
 #include "kivio_intra_stencil_data.h"
 #include "kivio_layer.h"
 #include "kivio_painter.h"
-#include "kivio_point.h"
 #include "kivio_ps_printer.h"
 #include "kivio_stencil.h"
 #include "kivio_1d_stencil.h"
@@ -573,7 +573,7 @@ bool KivioPage::isStencilSelected( KivioStencil *pStencil )
  * for stencils.  The first one it finds will be returned.
  * If none are found, it will return NULL.
  */
-KivioStencil *KivioPage::checkForStencil( KivioPoint *pPoint, int *collisionType, double threshold, bool selectedOnly )
+KivioStencil *KivioPage::checkForStencil( KoPoint *pPoint, int *collisionType, double threshold, bool selectedOnly )
 {
     KivioStencil *pStencil;
     int colType;

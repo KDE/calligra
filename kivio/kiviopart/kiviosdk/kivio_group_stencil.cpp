@@ -117,7 +117,7 @@ void KivioGroupStencil::setLineWidth( double f )
     }
 }
 
-KivioCollisionType KivioGroupStencil::checkForCollision( KivioPoint *p, double threshold )
+KivioCollisionType KivioGroupStencil::checkForCollision( KoPoint *p, double threshold )
 {
     KivioCollisionType colType;
 

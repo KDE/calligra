@@ -581,7 +581,7 @@ QString KivioPyStencil::getStringFromDict( PyObject *dict, const char *key )
 }
 
 
-KivioCollisionType KivioPyStencil::checkForCollision( KivioPoint *pPoint, double )
+KivioCollisionType KivioPyStencil::checkForCollision( KoPoint *pPoint, double )
 {
     double px = pPoint->x();
     double py = pPoint->y();

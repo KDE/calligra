@@ -353,6 +353,6 @@ void KivioBirdEyePanel::handleMousePress(QPoint p)
   double x = m_zoomHandler->unzoomItX(p.x() - px0);
   double y = m_zoomHandler->unzoomItY(p.y() - py0);
 
-  m_pCanvas->setViewCenterPoint(KivioPoint(x,y));
+  m_pCanvas->setViewCenterPoint(KoPoint(x,y));
 }
 #include "kivio_birdeye_panel.moc"

@@ -58,7 +58,7 @@ public:
 
     virtual void updateGeometry();
     virtual KivioStencil *duplicate();
-    virtual KivioCollisionType checkForCollision( KivioPoint *pPoint, double );
+    virtual KivioCollisionType checkForCollision( KoPoint *pPoint, double );
     virtual int resizeHandlePositions();
 
     virtual void paint( KivioIntraStencilData * );

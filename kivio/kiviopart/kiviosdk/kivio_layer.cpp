@@ -23,7 +23,6 @@
 #include "kivio_intra_stencil_data.h"
 #include "kivio_layer.h"
 #include "kivio_painter.h"
-#include "kivio_point.h"
 #include "kivio_stencil.h"
 #include "kivio_stencil_spawner.h"
 #include "kivio_stencil_spawner_info.h"
@@ -37,6 +36,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kozoomhandler.h>
+#include "koPoint.h"
 
 KivioLayer::KivioLayer( KivioPage *pPage )
     :m_pStencilList(NULL)
@@ -368,7 +368,7 @@ void KivioLayer::paintSelectionHandles( KivioPainter& painter, const QRect&, boo
     }
 }
 
-KivioStencil *KivioLayer::checkForStencil( KivioPoint *pPoint, int *collisionType, float threshold, bool selectedOnly )
+KivioStencil *KivioLayer::checkForStencil( KoPoint *pPoint, int *collisionType, float threshold, bool selectedOnly )
 {
     KivioStencil *pStencil;
     int colType;

@@ -27,7 +27,7 @@ class KivioConnectorPoint;
 class KivioConnectorTarget;
 class KivioPage;
 class KivioPainter;
-class KivioPoint;
+class KoPoint;
 class DCOPObject;
 class KoZoomHandler;
 class QDomElement;
@@ -79,7 +79,7 @@ public:
     bool loadXML( const QDomElement & );
     QDomElement saveXML( QDomDocument & );
 
-    KivioStencil *checkForStencil( KivioPoint *, int *, float, bool );
+    KivioStencil *checkForStencil( KoPoint *, int *, float, bool );
 
     void printContent( KivioPainter& painter, int xdpi = 0, int ydpi = 0 );
     void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint p0,

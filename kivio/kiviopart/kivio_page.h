@@ -31,7 +31,7 @@ class QPainter;
 class QDomElement;
 
 class KivioLayer;
-class KivioPoint;
+class KoPoint;
 class KivioGuideLines;
 class DCOPObject;
 
@@ -128,7 +128,7 @@ class KivioPage : public QObject
 
     int generateStencilIds( int );
 
-    KivioStencil *checkForStencil( KivioPoint *, int *, double, bool);
+    KivioStencil *checkForStencil( KoPoint *, int *, double, bool);
 
 
     KivioLayer *curLayer()const { return m_pCurLayer; }

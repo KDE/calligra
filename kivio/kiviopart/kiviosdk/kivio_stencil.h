@@ -36,7 +36,7 @@ class KivioConnectorTarget;
 class KivioFillStyle;
 class KivioIntraStencilData;
 class KivioPage;
-class KivioPoint;
+class KoPoint;
 class KivioRect;
 class KivioStencilSpawner;
 class KivioStencil;
@@ -213,7 +213,7 @@ class KivioStencil
     virtual void paintConnectorTargets( KivioIntraStencilData * );
     virtual void paintSelectionHandles( KivioIntraStencilData * );
 
-    virtual KivioCollisionType checkForCollision( KivioPoint *, double );
+    virtual KivioCollisionType checkForCollision( KoPoint *, double );
     virtual void customDrag( KivioCustomDragData * );
 
 

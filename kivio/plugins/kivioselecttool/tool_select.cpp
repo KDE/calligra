@@ -32,7 +32,6 @@
 
 #include "kivio_custom_drag_data.h"
 #include "kivio_layer.h"
-#include "kivio_point.h"
 #include "kivio_stencil.h"
 #include <X11/Xlib.h>
 
@@ -40,6 +39,7 @@
 #include <kpopupmenu.h>
 #include <kdebug.h>
 #include <kozoomhandler.h>
+#include <koPoint.h>
 #include <klocale.h>
 #include "kivio_command.h"
 
@@ -246,7 +246,6 @@ bool SelectTool::startDragging(const QPoint &pos, bool onlySelected)
 {
   KivioCanvas* canvas = view()->canvasWidget();
   KivioPage *pPage = canvas->activePage();
-  KivioPoint kPoint;
   KivioStencil *pStencil;
   int colType;
 
@@ -255,9 +254,7 @@ bool SelectTool::startDragging(const QPoint &pos, bool onlySelected)
 
   KoPoint pagePoint = canvas->mapFromScreen( pos );
 
-  kPoint.set( pagePoint.x(), pagePoint.y() );
-
-  pStencil = pPage->checkForStencil( &kPoint, &colType, threshold, onlySelected );
+  pStencil = pPage->checkForStencil( &pagePoint, &colType, threshold, onlySelected );
 
   if( !pStencil )
     return false;
@@ -319,15 +316,12 @@ bool SelectTool::startCustomDragging(const QPoint &pos, bool selectedOnly )
 {
   KivioCanvas* canvas = view()->canvasWidget();
   KivioPage *pPage = canvas->activePage();
-  KivioPoint kPoint;
   KivioStencil *pStencil;
   int colType;
 
   KoPoint pagePoint = canvas->mapFromScreen( pos );
 
-  kPoint.set( pagePoint.x(), pagePoint.y() );
-
-  pStencil = pPage->checkForStencil( &kPoint, &colType, 0.0, selectedOnly );
+  pStencil = pPage->checkForStencil( &pagePoint, &colType, 0.0, selectedOnly );
 
   if( !pStencil || colType < kctCustom )
     return false;
@@ -761,20 +755,14 @@ void SelectTool::changeMouseCursor(const QPoint &pos)
   KivioCanvas* canvas = view()->canvasWidget();
   KoPoint pagePoint = canvas->mapFromScreen(pos);
   KivioStencil *pStencil;
-  KivioPoint col;
   double threshold = view()->zoomHandler()->unzoomItY(4);
   int cursorType;
-
-  double x = pagePoint.x();
-  double y = pagePoint.y();
-
-  col.set(x, y);
 
   // Iterate through all the selected stencils
   pStencil = canvas->activePage()->selectedStencils()->first();
   while( pStencil )
   {
-    cursorType = isOverResizeHandle(pStencil, x, y);
+    cursorType = isOverResizeHandle(pStencil, pagePoint.x(), pagePoint.y());
     switch( cursorType )
     {
       case 1: // top left
@@ -810,7 +798,7 @@ void SelectTool::changeMouseCursor(const QPoint &pos)
         return;
 
       default:
-        if( pStencil->checkForCollision( &col, threshold )!= kctNone )
+        if( pStencil->checkForCollision( &pagePoint, threshold )!= kctNone )
         {
           canvas->setCursor( sizeAllCursor );
           return;

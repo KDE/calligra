@@ -84,7 +84,7 @@ public:
 
 
     // Collision detection
-    virtual KivioCollisionType checkForCollision( KivioPoint *, double );
+    virtual KivioCollisionType checkForCollision( KoPoint *, double );
 
 
     // Group operations

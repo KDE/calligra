@@ -93,7 +93,7 @@ public:
 
 
     // collision detection
-    virtual KivioCollisionType checkForCollision( KivioPoint *, double );
+    virtual KivioCollisionType checkForCollision( KoPoint *, double );
 
 
     // custom dragging
