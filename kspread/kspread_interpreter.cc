@@ -567,8 +567,6 @@ static const functionEntry funcTab[] = {
   // conversion
   { "DEGREE", kspreadfunc_degree },
   { "RADIAN", kspreadfunc_radian },
-  { "CHARTOASCII", kspreadfunc_CharToAscii },
-  { "ASCIITOCHAR", kspreadfunc_AsciiToChar },
   { "BOOL2STRING", kspreadfunc_BoolToString },
   { "NUM2STRING", kspreadfunc_NumberToString },
   { "BOOL2INT", kspreadfunc_booltoint },
@@ -667,7 +665,6 @@ static const functionEntry funcTab[] = {
   { "EXACT", kspreadfunc_exact },
   { "FIND", kspreadfunc_find },
   { "FIXED", kspreadfunc_fixed },
-  { "JOIN", kspreadfunc_join }, // obsolete, use CONCATENATE
   { "LEFT", kspreadfunc_left },
   { "LEN", kspreadfunc_len },
   { "LOWER", kspreadfunc_lower },
@@ -691,15 +688,17 @@ static const functionEntry funcTab[] = {
   { "CELL", kspreadfunc_cell },
   { "SELECT", kspreadfunc_select },
 
-  // compatibility with KSpread < 1.2
+  // compatibility with KSpread < 1.2, remove in KSpread 1.3
   // somehow should marked "obsolete" in the manual
-  { "not", kspreadfunc_not },
-  { "ENT", kspreadfunc_int },
-  { "DECHEX", kspreadfunc_dec2hex },
-  { "DECBIN", kspreadfunc_dec2bin },
-  { "DECOCT", kspreadfunc_dec2oct },
+  { "ENT", kspreadfunc_int }, // obsolete, use INT instead
+  { "DECHEX", kspreadfunc_dec2hex }, // obsolete, use DEC2HEX instead
+  { "DECBIN", kspreadfunc_dec2bin }, // obsolete, use DEC2BIN instead
+  { "DECOCT", kspreadfunc_dec2oct }, // obsolete, use DEC2OCT instead
   { "ISLOGIC", kspreadfunc_islogical }, // obsolete, use ISLOGICAL
   { "FABS", kspreadfunc_abs }, // obsolete, use ABS
+  { "JOIN", kspreadfunc_join }, // obsolete, use CONCATENATE
+  { "CHARTOASCII", kspreadfunc_CharToAscii }, // obsolete, use CHAR instead
+  { "ASCIITOCHAR", kspreadfunc_AsciiToChar }, // obsolete, use CODE instead
 
   // end  marker
   { NULL, NULL }
