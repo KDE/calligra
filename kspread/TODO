@@ -16,12 +16,12 @@ RAPH	Raphael is working on this task
 raph	Raphael is working on this subtask
 TOMA	Tomas is working on this task
 toma	Tomas is working on this subtask
-LAUR  Laurent is working on this task
-laur  Laurent is working on this subtask
-ARYI  Aryia is working on this task
-aryi  Aryia is working on this subtask
-JOHN  John is working on this task
-john  John is working on this subtask
+LAUR	Laurent is working on this task
+laur	Laurent is working on this subtask
+ARYI	Aryia is working on this task
+aryi	Aryia is working on this subtask
+JOHN	John is working on this task
+john	John is working on this subtask
 
 ...fill in your signatures here.
 
@@ -53,15 +53,15 @@ General bugs
   + 66859: Decimals are in the next horizontal cell		      1 ----
 
 * Printing
-  + 68190: Empty document generates 2 printed pages (testcase)	      1 ----
+  + 68190: Empty document generates 2 printed pages (testcase)	      1 INGE
   + 70073: printing with kspread gives big black areas		      1 ----
   + 72798: selective print comes up with "nothing to print"	      1 ----
   + 77962: print range doesn't work into kspread		      1 DONE
   + 85155: RIGHT ALIGN TEXT CUT WHEN PRINTING			      1 ----
   + 87367: Ugly postscript rendering of cell borders.		      1 ----
   + 88252: content larger than column are not print as PDF	      1 ----
-  + 95159: Many blank pages when printing spreadsheet to PDF file.    1 ----
-  + 100643: KSpread prints a completely empty page at the end of      1 ----
+  + 95159: Many blank pages when printing spreadsheet to PDF file.    1 INGE
+  + 100643: KSpread prints a completely empty page at the end of      1 INGE
 	    the document.
   + 101074: Charts are really small when printed from KSpread	      1 ----
 
@@ -92,10 +92,10 @@ General bugs
   + 87471: format of whole column does not change.		      1 ----
 
 * Investigate further if these are important.
-  + 48037: 1. Insert special doesn't work			      1 ----
+  + 48037: 1. Insert special doesn't work			      1 DONE
 	   2. Search and replace doesn't work on formulas.
 	   3. Whishlist for special paste
-	Split this bug up into several.
+	This one is split up into wishes 102025 and 102026.
   + 52575: Insert data from text file error and other remarks	      1 DONE
 	This bug should be split up into a number of wishes.
   + 59757: Insert rows does not work				      1 ----
