@@ -616,8 +616,8 @@ QDomDocument KPresenterDoc::saveXML()
     {
         QDomElement styles = doc.createElement( "STYLES" );
         presenter.appendChild( styles );
-        QPtrList<KoStyle> m_styleList(m_styleColl->styleList());
-        for ( KoStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+        QPtrList<KoStyle> styleList(m_styleColl->styleList());
+        for ( KoStyle * p = styleList.first(); p != 0L; p = styleList.next() )
             saveStyle( p, styles );
 
         emit sigProgress( 60 );
@@ -2823,9 +2823,14 @@ void KPresenterDoc::refreshAllNoteBar(int page, const QString &text, KPresenterV
 void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
 {
     QValueList<QString> followingStyles;
-    QPtrList<KoStyle>m_styleList(m_styleColl->styleList());
 
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
+    if( listStyles.count() > 0) { // we are going to import at least one style.
+        KoStyle *s = m_styleColl->findStyle("Standard");
+        kdDebug(32001) << "KPresenterDoc::loadStyleTemplates looking for Standard, to delete it. Found " << s << endl;
+        if(s) // delete the standard style.
+            m_styleColl->removeStyleTemplate(s);
+    }
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
 
@@ -2841,7 +2846,7 @@ void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
 
         // Style created, now let's try to add it
         sty = m_styleColl->addStyleTemplate( sty );
-        if(m_styleList.count() > followingStyles.count() )
+        if(m_styleColl->styleList().count() > followingStyles.count() )
         {
             QString following = styleElem.namedItem("FOLLOWING").toElement().attribute("name");
             followingStyles.append( following );
@@ -2850,7 +2855,7 @@ void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
             kdWarning (33001) << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
     }
 
-    Q_ASSERT( followingStyles.count() == m_styleList.count() );
+    Q_ASSERT( followingStyles.count() == m_styleColl->styleList().count() );
     unsigned int i=0;
     for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
         KoStyle * style = m_styleColl->findStyle(*it);
