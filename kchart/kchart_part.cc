@@ -180,7 +180,7 @@ void KChartPart::loadConfig( KConfig *conf )
     //   llabel = conf->readBoolEntry("llabel", llabel);
     //   yval_style = conf->readNumEntry("yval_style", yval_style);
     //   stack_type = (KChartStackType)conf->readNumEntry("stack_type", stack_type);
-
+    _params->setLineMarker(conf->readBoolEntry("lineMarker",_params->lineMarker()));
     _params->setThreeDBarDepth( conf->readDoubleNumEntry("_3d_depth",
                                                          _params->threeDBarDepth() ) );
     _params->setThreeDBarAngle( conf->readDoubleNumEntry( "_3d_angle",
@@ -324,6 +324,7 @@ void KChartPart::saveConfig( KConfig *conf )
     //   conf->writeEntry( "backgroundPixmapScaled", backgroundPixmapScaled );
     //   conf->writeEntry( "backgroundPixmapCentered", backgroundPixmapCentered );
     //   conf->writeEntry( "backgroundPixmapIntensity", backgroundPixmapIntensity );
+    conf->writeEntry( "lineMarker",(int)_params->lineMarker());
 }
 
 QDomDocument KChartPart::saveXML()
