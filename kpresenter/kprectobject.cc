@@ -105,22 +105,21 @@ void KPRectObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
     }
     else
     {
-        kdDebug() << "KPRectObject::paint"<< _zoomHandler->zoomItX(ow - 2 * pw)<< endl;
-          if ( angle == 0 || angle==360 )
-                _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), *gradient->getGradient(), 0, 0, _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw) );
-          else  //rotated
-          {
-                QPixmap pix( _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw ));
-                QPainter p;
-                p.begin( &pix );
-                p.drawPixmap( 0, 0, *gradient->getGradient() );
-                p.end();
+        if ( angle == 0 || angle==360 )
+            _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), *gradient->getGradient(), 0, 0, _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw) );
+        else  //rotated
+        {
+            QPixmap pix( _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw ));
+            QPainter p;
+            p.begin( &pix );
+            p.drawPixmap( 0, 0, *gradient->getGradient() );
+            p.end();
 
-                _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), pix );
-          }
+            _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), pix );
+        }
 
-          _painter->setPen( pen2 );
-          _painter->setBrush( Qt::NoBrush );
-          _painter->drawRoundRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw), _zoomHandler->zoomItX(xRnd), _zoomHandler->zoomItY(yRnd) );
+        _painter->setPen( pen2 );
+        _painter->setBrush( Qt::NoBrush );
+        _painter->drawRoundRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw), _zoomHandler->zoomItX(xRnd), _zoomHandler->zoomItY(yRnd) );
     }
 }

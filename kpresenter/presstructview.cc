@@ -195,8 +195,11 @@ KPPresStructView::KPPresStructView( QWidget *parent, const char *name,
                                     KPresenterDoc *_doc, KPresenterView *_view )
     : KDialogBase( parent, name, false, "", KDialogBase::Close ), doc( _doc ), view( _view )
 {
-    QVBox *page = makeVBoxMainWidget();
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, spacingHint() );
     hsplit = new QSplitter( page );
+    topLayout->addWidget(hsplit);
     setupSlideList();
     setupPagePreview();
 
