@@ -104,6 +104,8 @@ public:
 
     QString getExtension(void) const;
 
+    QString getExtensionAsKOffice1Dot1(void) const;
+
     QSize getOriginalSize(void) const;
 
     /**
@@ -143,6 +145,8 @@ public:
      * @return true if it is a clipart in KOffice 1.1, false if not
      */
     bool isClipartAsKOffice1Dot1(void) const;
+
+    QString getMimeType(void) const;
 
 protected:
     /**

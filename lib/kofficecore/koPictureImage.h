@@ -87,6 +87,8 @@ public:
 
     virtual QPixmap generatePixmap(const QSize& size, bool smoothScale = false);
 
+    virtual QString getMimeType(const QString& extension) const;
+
 protected:
     QPixmap getPixmap(QImage& image);
     void scaleAndCreatePixmap(const QSize& size, bool fastMode=false);

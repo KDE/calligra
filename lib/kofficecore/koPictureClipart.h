@@ -115,6 +115,8 @@ public:
      */
     virtual bool isClipartAsKOffice1Dot1(void) const;
 
+    virtual QString getMimeType(const QString& extension) const;
+
 protected:
     QPixmap getPixmap(QImage& image);
     /**

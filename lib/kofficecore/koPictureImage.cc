@@ -26,6 +26,7 @@
 
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kmimetype.h>
 
 #include "koPictureKey.h"
 #include "koPictureBase.h"
@@ -196,4 +197,13 @@ QPixmap KoPictureImage::generatePixmap(const QSize& size, bool smoothScale)
 {
     scaleAndCreatePixmap(size,!smoothScale);
     return m_cachedPixmap;
+}
+
+QString KoPictureImage::getMimeType(const QString& extension) const
+{
+    QString fileName("/tmp/temp.");
+    fileName+=extension;
+    QString mimetype=KMimeType::findByURL(fileName,0,true,true)->name();
+    kdDebug(30003) << "Image is mime type: " << mimetype << endl;
+    return mimetype;
 }

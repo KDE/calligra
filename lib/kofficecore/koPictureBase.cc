@@ -93,3 +93,9 @@ bool KoPictureBase::isClipartAsKOffice1Dot1(void) const
 {
     return false;
 }
+
+QString KoPictureBase::getMimeType(const QString&) const
+{
+    return QString(NULL_MIME_TYPE);
+}
+

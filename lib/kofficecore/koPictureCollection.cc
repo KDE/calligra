@@ -83,6 +83,7 @@ KoPicture KoPictureCollection::loadPicture(const QString& fileName)
 QString KoPictureCollection::getFileName(const Type pictureType, KoPicture& picture, int& counter)
 {
     QString storeURL;
+    // ### TODO: remove "cliparts" when KPresenter is ready for it
     if (pictureType==CollectionClipart)
         storeURL="cliparts/clipart";
     else
@@ -90,6 +91,19 @@ QString KoPictureCollection::getFileName(const Type pictureType, KoPicture& pict
     storeURL+=QString::number(++counter);
     storeURL+='.';
     storeURL+=picture.getExtension();
+    return storeURL;
+}
+
+QString KoPictureCollection::getFileNameAsKOffice1Dot1(const Type pictureType, KoPicture& picture, int& counter)
+{
+    QString storeURL;
+    if (pictureType==CollectionClipart)
+        storeURL="cliparts/clipart";
+    else
+        storeURL="pictures/picture";
+    storeURL+=QString::number(++counter);
+    storeURL+='.';
+    storeURL+=picture.getExtensionAsKOffice1Dot1();
     return storeURL;
 }
 
@@ -105,7 +119,11 @@ void KoPictureCollection::saveToStoreInternal(const Type pictureType, KoStore *s
             kdWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
         else
         {
-            QString storeURL=getFileName(pictureType, c, counter);
+            QString storeURL;
+            if (koffice11)
+                storeURL=getFileNameAsKOffice1Dot1(pictureType, c, counter);
+            else
+                storeURL=getFileName(pictureType, c, counter);
 
             if (store->open(storeURL))
             {
@@ -148,7 +166,6 @@ QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &d
         else
         {
             QString pictureName=getFileName(pictureType, picture, counter);
-
             QDomElement keyElem = doc.createElement( "KEY" );
             cliparts.appendChild(keyElem);
             (*it).saveAttributes(keyElem);
@@ -178,12 +195,12 @@ void KoPictureCollection::saveXMLAsKOffice1Dot1(QDomDocument &doc, QDomElement& 
 
             if (picture.isClipartAsKOffice1Dot1())
             {
-                pictureName=getFileName(CollectionClipart, picture, counter);
+                pictureName=getFileNameAsKOffice1Dot1(CollectionClipart, picture, counter);
                 cliparts.appendChild(keyElem);
             }
             else
             {
-                pictureName=getFileName(CollectionImage, picture, counter);
+                pictureName=getFileNameAsKOffice1Dot1(CollectionImage, picture, counter);
                 pixmaps.appendChild(keyElem);
             }
 

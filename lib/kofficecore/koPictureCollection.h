@@ -143,6 +143,11 @@ private:
     /**
      * @internal
      */
+    QString getFileNameAsKOffice1Dot1(const Type pictureType, KoPicture& picture, int& counter);
+
+    /**
+     * @internal
+     */
     void saveToStoreInternal(const Type pictureType, KoStore *store, QValueList<KoPictureKey>& keys, const bool koffice11);
 
     class Private;

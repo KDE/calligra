@@ -105,6 +105,10 @@ public:
 
     QString getExtension(void) const;
 
+    QString getMimeType(void) const;
+
+    QString getExtensionAsKOffice1Dot1(void) const;
+
     QSize getOriginalSize(void) const;
 
     /**

@@ -26,6 +26,9 @@ class QPainter;
 class QSize;
 class QIODevice;
 
+const char NULL_MIME_TYPE[]="application/x-zerosize";
+const char UNKNOWN_MIME_TYPE[]="application/octet-stream";
+
 // TODO: fix documentation
 
 /**
@@ -92,6 +95,8 @@ public:
      * @return true if it is a clipart in KOffice 1.1, false if not
      */
     virtual bool isClipartAsKOffice1Dot1(void) const;
+
+    virtual QString getMimeType(const QString& extension) const;
 
 };
 

@@ -25,6 +25,7 @@
 
 #include <qwmf.h>
 #include "koPictureKey.h"
+#include "koPictureBase.h"
 #include "koPictureShared.h"
 #include "koPicture.h"
 
@@ -164,6 +165,20 @@ QString KoPicture::getExtension(void) const
     if (m_sharedData)
         return m_sharedData->getExtension();
     return "null"; // Just a dummy
+}
+
+QString KoPicture::getExtensionAsKOffice1Dot1(void) const
+{
+    if (m_sharedData)
+        return m_sharedData->getExtensionAsKOffice1Dot1();
+    return "null"; // Just a dummy
+}
+
+QString KoPicture::getMimeType(void) const
+{
+    if (m_sharedData)
+        return m_sharedData->getMimeType();
+    return QString(NULL_MIME_TYPE);
 }
 
 bool KoPicture::load(QIODevice* io, const QString& extension)
