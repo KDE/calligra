@@ -22,10 +22,13 @@ VPath::VPath()
 	: VObject(), m_closed( false )
 {
 	m_segments.setAutoDelete( true );
-	m_holes.setAutoDelete( true );
 
-	// add a initial segment at (0,0):
-	m_segments.append( new VSegment() );
+	// add an initial segment at (0,0):
+	VSegmentList* list = new VSegmentList();
+	list->setAutoDelete( true );
+	list->append( new VSegment() );
+
+	m_segments.append( list );
 
 	m_stroke.setLineWidth( 3.0 );
 }
@@ -33,35 +36,23 @@ VPath::VPath()
 VPath::VPath( const VPath& path )
 	: VObject()
 {
-	// outline:
 	m_segments.setAutoDelete( true );
-	m_segments.clear();
 
-	VSegmentListIterator itr( path.m_segments );
-	for( ; itr.current() ; ++itr )
+	VSegmentList* list;
+
+	QPtrListIterator<VSegmentList> itr( path.m_segments );
+	for( itr.toFirst(); itr.current(); ++itr )
 	{
-		m_segments.append( new VSegment( *( itr.current() ) ) );
-	}
+		list = new VSegmentList();
+		list->setAutoDelete( true );
 
-	// holes:
-	m_holes.setAutoDelete( true );
-	m_holes.clear();
-
-	VSegmentList* hole;
-
-	QPtrListIterator<VSegmentList> holeItr( path.m_holes );
-	for( holeItr.toFirst(); holeItr.current(); ++holeItr )
-	{
-		hole = new VSegmentList();
-		hole->setAutoDelete( true );
-
-		VSegmentListIterator itr2( *( holeItr.current() ) );
+		VSegmentListIterator itr2( *( itr.current() ) );
 		for( ; itr2.current() ; ++itr2 )
 		{
-			hole->append( new VSegment( *( itr2.current() ) ) );
+			list->append( new VSegment( *( itr2.current() ) ) );
 		}
 
-		m_holes.append( hole );
+		m_segments.append( list );
 	}
 }
 
@@ -80,45 +71,36 @@ VPath::draw( QPainter& painter, const QRect& rect,
 		return;
 
 	painter.save();
-	QPtrListIterator<VSegmentList> holeItr( m_holes );
+	QPtrListIterator<VSegmentList> itr( m_segments );
 
 	if( state() != edit )
 	{
 		// paint fill:
 		m_fill.begin_draw( painter, zoomFactor );
-		m_fill.draw( m_segments );		// contour.
-		// holes:
-		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
+		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			m_fill.draw( *( holeItr.current() ), true );
+			m_fill.draw( *( itr.current() ) );
 		}
 		m_fill.end_draw();
 
 		// draw stroke:
-		// contour:
-		m_stroke.draw( painter, zoomFactor, m_segments );
-		// holes:
-		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
+		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			m_stroke.draw( painter, zoomFactor, *( holeItr.current() ) );
+			m_stroke.draw( painter, zoomFactor, *( itr.current() ) );
 		}
 	}
 
 	// draw simplistic contour:
 	if( state() == edit || state() == selected )
 	{
-		// contour:
-		m_stroke.draw( painter, zoomFactor, m_segments, true );
-
-		// holes:
-		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
+		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			m_stroke.draw( painter, zoomFactor, *( holeItr.current() ), true );
+			m_stroke.draw( painter, zoomFactor, *( itr.current() ), true );
 		}
 	}
 
 
-
+/*
 // TODO: convert the following to Traversers:
 	VSegmentListIterator itr( m_segments );
 
@@ -155,6 +137,7 @@ VPath::draw( QPainter& painter, const QRect& rect,
 		}
 
 	}
+*/
 
 	painter.restore();
 }
@@ -169,7 +152,7 @@ VPath::drawBox( QPainter& painter, double x, double y, uint handleSize )
 const KoPoint&
 VPath::currentPoint() const
 {
-	return m_segments.getLast()->point( 3 );
+	return m_segments.getLast()->getLast()->point( 3 );
 }
 
 VPath&
@@ -177,9 +160,9 @@ VPath::moveTo( const double& x, const double& y )
 {
 	if( closed() ) return *this;
 
-	if( m_segments.getLast()->type() == VSegment::begin )
+	if( m_segments.getLast()->getLast()->type() == VSegment::begin )
 	{
-		m_segments.getLast()->setPoint( 3, KoPoint( x, y ) );
+		m_segments.getLast()->getLast()->setPoint( 3, KoPoint( x, y ) );
 	}
 
 	return *this;
@@ -193,7 +176,7 @@ VPath::lineTo( const double& x, const double& y )
 	VSegment* s = new VSegment();
 	s->setType( VSegment::line );
 	s->setPoint( 3, KoPoint( x, y ) );
-	m_segments.append( s );
+	m_segments.getLast()->append( s );
 
 	return *this;
 }
@@ -212,7 +195,7 @@ VPath::curveTo(
 	s->setPoint( 2, KoPoint( x2, y2 ) );
 	s->setPoint( 3, KoPoint( x3, y3 ) );
 
-	m_segments.append( s );
+	m_segments.getLast()->append( s );
 
 	return *this;
 }
@@ -229,7 +212,7 @@ VPath::curve1To(
 	s->setPoint( 2, KoPoint( x2, y2 ) );
 	s->setPoint( 3, KoPoint( x3, y3 ) );
 
-	m_segments.append( s );
+	m_segments.getLast()->append( s );
 
 	return *this;
 }
@@ -246,7 +229,7 @@ VPath::curve2To(
 	s->setPoint( 1, KoPoint( x1, y1 ) );
 	s->setPoint( 3, KoPoint( x3, y3 ) );
 
-	m_segments.append( s );
+	m_segments.getLast()->append( s );
 
 	return *this;
 }
@@ -262,8 +245,8 @@ VPath::arcTo(
 
 	// we need to calculate the tangent points. therefore calculate tangents
 	// D10=P1P0 and D12=P1P2 first:
-	double dx10 = m_segments.getLast()->point( 3 ).x() - x1;
-	double dy10 = m_segments.getLast()->point( 3 ).y() - y1;
+	double dx10 = currentPoint().x() - x1;
+	double dy10 = currentPoint().y() - y1;
 	double dx12 = x2 - x1;
 	double dy12 = y2 - y1;
 
@@ -294,8 +277,8 @@ VPath::arcTo(
 		// if(bx0,by0) deviates from current point, add a line to it:
 // TODO: decide via radius<XXX or sthg?
 		if(
-			bx0 != m_segments.getLast()->point( 3 ).x() ||
-			by0 != m_segments.getLast()->point( 3 ).y() )
+			bx0 != currentPoint().x() ||
+			by0 != currentPoint().y() )
 		{
 			lineTo( bx0, by0 );
 		}
@@ -334,12 +317,12 @@ VPath::close()
 	if( closed() ) return *this;
 
 // TODO: add tolerance
-	if( currentPoint() != m_segments.getFirst()->point( 3 ) )
+	if( currentPoint() != m_segments.getLast()->getFirst()->point( 3 ) )
 	{
 		VSegment* s = new VSegment();
 		s->setType( VSegment::end );
-		s->setPoint( 3, m_segments.getFirst()->point( 3 ) );
-		m_segments.append( s );
+		s->setPoint( 3, m_segments.getLast()->getFirst()->point( 3 ) );
+		m_segments.getLast()->append( s );
 	}
 
 	m_closed = true;
@@ -363,36 +346,32 @@ void
 VPath::combine( const VPath& path )
 {
 // TODO: inside/intersection checks needed
-	VSegmentList* hole = new VSegmentList();
-	VSegmentListIterator itr( path.m_segments );
+	VSegmentList* list = new VSegmentList();
+	list->setAutoDelete( true );
 
-	hole->setAutoDelete( true );
-
-	for( ; itr.current(); ++itr )
+	QPtrListIterator<VSegmentList> itr( path.m_segments );
+	for( itr.toFirst(); itr.current(); ++itr )
 	{
-		hole->append( new VSegment( *( itr.current() ) ) );
-	}
+		list = new VSegmentList();
+		list->setAutoDelete( true );
 
-	m_holes.append( hole );
+		VSegmentListIterator itr2( *( itr.current() ) );
+		for( ; itr2.current() ; ++itr2 )
+		{
+			list->append( new VSegment( *( itr2.current() ) ) );
+		}
+
+		m_segments.append( list );
+	}
 }
 
 VObject&
 VPath::transform( const QWMatrix& m )
 {
-	// outline:
-	VSegmentListIterator itr( m_segments );
-	for( ; itr.current() ; ++itr )
+	QPtrListIterator<VSegmentList> itr( m_segments );
+	for( itr.toFirst(); itr.current(); ++itr )
 	{
-		itr.current()->setPoint( 1, itr.current()->point( 1 ).transform( m ) );
-		itr.current()->setPoint( 2, itr.current()->point( 2 ).transform( m ) );
-		itr.current()->setPoint( 3, itr.current()->point( 3 ).transform( m ) );
-	}
-
-	// holes:
-	QPtrListIterator<VSegmentList> holeItr( m_holes );
-	for( holeItr.toFirst(); holeItr.current(); ++holeItr )
-	{
-		VSegmentListIterator itr2( *( holeItr.current() ) );
+		VSegmentListIterator itr2( *( itr.current() ) );
 		for( ; itr2.current() ; ++itr2 )
 		{
 			itr2.current()->setPoint( 1, itr2.current()->point( 1 ).transform( m ) );
@@ -409,8 +388,12 @@ VPath::boundingBox( const double zoomFactor ) const
 {
 	QRect rect;
 	VPathBounding bb;
-	bb.calculate( rect, zoomFactor, m_segments );
 
+	QPtrListIterator<VSegmentList> itr( m_segments );
+	for( itr.toFirst(); itr.current(); ++itr )
+	{
+		bb.calculate( rect, zoomFactor, *( itr.current() ) );
+	}
 	return rect;
 }
 
@@ -418,7 +401,14 @@ bool
 VPath::intersects( const QRect& rect, const double zoomFactor ) const
 {
 	VPathBounding bb;
-	return bb.intersects( rect, zoomFactor, m_segments );
+	QPtrListIterator<VSegmentList> itr( m_segments );
+	for( itr.toFirst(); itr.current(); ++itr )
+	{
+		if( bb.intersects( rect, zoomFactor, *( itr.current() ) ) )
+			return true;
+	}
+
+	return false;
 }
 
 VObject*
@@ -436,27 +426,16 @@ VPath::save( QDomElement& element ) const
 		element.appendChild( me );
 		me.setAttribute( "closed", m_closed );
 
-		// outline:
-		QDomElement outline = element.ownerDocument().createElement( "SEGMENTS" );
-		me.appendChild( outline );
-
-		VSegmentListIterator itr( m_segments );
-		for( ; itr.current() ; ++itr )
+		QPtrListIterator<VSegmentList> itr( m_segments );
+		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			itr.current()->save( outline );
-		}
+			QDomElement segment = element.ownerDocument().createElement( "SEGMENTS" );
+			me.appendChild( segment );
 
-		// holes:
-		QPtrListIterator<VSegmentList> holeItr( m_holes );
-		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
-		{
-			QDomElement hole = element.ownerDocument().createElement( "SEGMENTS" );
-			me.appendChild( hole );
-
-			VSegmentListIterator itr2( *( holeItr.current() ) );
+			VSegmentListIterator itr2( *( itr.current() ) );
 			for( ; itr2.current() ; ++itr2 )
 			{
-				itr2.current()->save( hole );
+				itr2.current()->save( segment );
 			}
 		}
 	}

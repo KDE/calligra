@@ -17,7 +17,7 @@ public:
 	VPathFill();
 
 	void begin_draw( QPainter& painter, const double zoomFactor );
-	void draw( const VSegmentList& list, bool hole = false );
+	void draw( const VSegmentList& list );
 	void end_draw();
 
 	virtual bool begin( const KoPoint& p,

@@ -120,7 +120,8 @@ public:
 	virtual void draw( QPainter& painter, const QRect& rect,
 		const double zoomFactor = 1.0 );
 
-	const VSegment* lastSegment() const { return m_segments.getLast(); }
+	const VSegment* lastSegment() const
+		{ return m_segments.getLast()->getLast(); }
 
 	// apply an affine map:
 	virtual VObject& transform( const QWMatrix& m );
@@ -138,8 +139,7 @@ private:
 	void drawBox( QPainter &painter, double x, double y, uint handleSize = 3 ); // helper function for draw()
 
 private:
-	VSegmentList m_segments;			// "outline" segments.
-	QPtrList<VSegmentList> m_holes;		// "holes" inside the outline
+	QPtrList<VSegmentList> m_segments;		// list of segments
 
 	VPathStroke m_stroke;		// stroke.
 	VPathFill m_fill;			// fill.
