@@ -3,7 +3,7 @@
 Name=KImage
 Name[da]=KBillede
 Name[fi]=Kimage
-Name[is]=Myndrınir
+Name[is]=Myndsjá
 Name[pt]=Imagens
 Name[ro]=Image
 Name[ru]=éÚÏÂÒÁÖÅÎÉÅ
@@ -20,7 +20,7 @@ Comment[fi]=Torbenin kuvannäyttäjä
 Comment[fr]=Visualiseur d'images de Torben
 Comment[hr]=Torbenov preglednik slika
 Comment[hu]=Torben kép nézõje
-Comment[is]=Myndbirtir K vöndulsins
+Comment[is]=Myndsjá K vöndulsins
 Comment[no]=Torbens bildefremviser
 Comment[pl]=Przegl±darka plików graficznych, element KOffice
 Comment[pt]=Visualizador de imagens

@@ -2,6 +2,7 @@
 [KDE Desktop Entry]
 Name=KChart
 Name[da]=Graf
+Name[is]=Línurit
 Name[no]=Graf
 Name[pt]=Gráficos
 Name[ro]=Chart
@@ -15,6 +16,7 @@ Comment[de]=Kalles Chart
 Comment[es]=El Renderizador de Tablas de Kalle
 Comment[fi]=Kallen kuvaajaohjelma
 Comment[fr]=Grapheur de Kalle
+Comment[is]=kchart:  Vinna með línurit
 Comment[no]=Kalles graf
 Comment[pl]=Wykresy Kallego Dalheimera
 Comment[pt]=Ferramenta para fazer gráficos
