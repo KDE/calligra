@@ -61,9 +61,10 @@ class KoAutoFormatExceptionWidget : public QWidget
 public:
     KoAutoFormatExceptionWidget(QWidget *_parent, const QString &name,const QStringList &_list, bool _autoInclude, bool _abbreviation=false);
 
-
+    void setListException( const QStringList &list);
     QStringList getListException(){return m_listException;}
     bool autoInclude();
+    void setAutoInclude( bool b );
 protected slots:
     void slotAddException();
     void slotRemoveException();
@@ -98,6 +99,12 @@ protected:
     void setupTab5();
 
     void refreshEntryList();
+
+    void initTab1();
+    void initTab2();
+    void initTab3();
+    void initTab4();
+    void initTab5();
 
     QWidget *tab1;
     QWidget *tab2;
@@ -158,6 +165,8 @@ protected slots:
     void slotRemoveCompletionEntry();
     void slotCompletionWordSelected( const QString & );
     void slotSaveCompletionEntry();
+    void slotResetConf();
+
 };
 #endif
 

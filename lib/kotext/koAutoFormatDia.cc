@@ -116,7 +116,6 @@ void KoAutoFormatExceptionWidget::slotAddException()
             pbAddException->setEnabled(false);
         }
         exceptionLine->clear();
-
     }
 }
 
@@ -137,12 +136,24 @@ bool KoAutoFormatExceptionWidget::autoInclude()
     return cbAutoInclude->isChecked();
 }
 
+void KoAutoFormatExceptionWidget::setListException( const QStringList &list)
+{
+    exceptionList->clear();
+    exceptionList->insertStringList(list);
+}
+
+void KoAutoFormatExceptionWidget::setAutoInclude(bool b)
+{
+    cbAutoInclude->setChecked( b );
+}
+
+
 /******************************************************************/
 /* Class: KoAutoFormatDia                                         */
 /******************************************************************/
 
 KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name, KoAutoFormat * autoFormat )
-    : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel, Ok, parent, name, true),
+    : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel | User1, Ok, parent, name, true),
       oSimpleBegin( autoFormat->getConfigTypographicSimpleQuotes().begin ),
       oSimpleEnd( autoFormat->getConfigTypographicSimpleQuotes().end ),
       oDoubleBegin( autoFormat->getConfigTypographicDoubleQuotes().begin ),
@@ -151,12 +162,39 @@ KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name, KoAutoForma
       m_autoFormat( *autoFormat ),
       m_docAutoFormat( autoFormat )
 {
+    setButtonText( KDialogBase::User1, i18n("Reset") );
+
     setupTab1();
     setupTab2();
     setupTab3();
     setupTab4();
     setupTab5();
     setInitialSize( QSize(500, 300) );
+    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotResetConf()));
+
+}
+
+void KoAutoFormatDia::slotResetConf()
+{
+    switch( activePageIndex() ) {
+    case 0:
+        initTab1();
+        break;
+    case 1:
+        initTab2();
+        break;
+    case 2:
+        initTab3();
+        break;
+    case 3:
+        initTab4();
+        break;
+    case 4:
+        initTab5();
+        break;
+    default:
+        break;
+    }
 }
 
 void KoAutoFormatDia::setupTab1()
@@ -171,7 +209,6 @@ void KoAutoFormatDia::setupTab1()
     QWhatsThis::add( cbUpperCase, i18n("Detect when a new sentence is started and always ensure that the first character is an uppercase character."));
     cbUpperCase->resize( cbUpperCase->sizeHint() );
 
-    cbUpperCase->setChecked( m_autoFormat.getConfigUpperCase() );
 
     ( void )new QWidget( tab1 );
 
@@ -180,64 +217,54 @@ void KoAutoFormatDia::setupTab1()
                                  "(e.g. PErfect to Perfect)" ) );
     QWhatsThis::add( cbUpperUpper, i18n("All words are checked for the common mistake of holding the shift key down a bit too long. If some words must have two uppercase characters, then those exceptions should be added in the %1 tab.").arg(i18n("Exceptions")));
     cbUpperUpper->resize( cbUpperUpper->sizeHint() );
-    cbUpperUpper->setChecked( m_autoFormat.getConfigUpperUpper() );
     ( void )new QWidget( tab1 );
 
     cbDetectUrl=new QCheckBox( tab1 );
     cbDetectUrl->setText( i18n( "Auto format &URLs" ) );
     QWhatsThis::add( cbDetectUrl, i18n("Detect when a URL (Universal Remote Location) is typed and provide formatting that matches the way an Internet browser would show a URL."));
     cbDetectUrl->resize( cbDetectUrl->sizeHint() );
-    cbDetectUrl->setChecked( m_autoFormat.getConfigAutoDetectUrl());
     ( void )new QWidget( tab1 );
 
     cbIgnoreDoubleSpace=new QCheckBox( tab1 );
     cbIgnoreDoubleSpace->setText( i18n( "&Suppress double &spaces" ) );
     QWhatsThis::add( cbIgnoreDoubleSpace, i18n("Make sure that more than one space cannot be typed, as this is a common mistake which is quite hard to find in formatted text."));
     cbIgnoreDoubleSpace->resize( cbIgnoreDoubleSpace->sizeHint() );
-    cbIgnoreDoubleSpace->setChecked( m_autoFormat.getConfigIgnoreDoubleSpace());
     ( void )new QWidget( tab1 );
 
     cbRemoveSpaceBeginEndLine=new QCheckBox( tab1 );
     cbRemoveSpaceBeginEndLine->setText( i18n( "&Remove spaces at the beginning and end of paragraphs" ) );
     QWhatsThis::add( cbRemoveSpaceBeginEndLine, i18n("Keep correct formatting and indenting of sentences by automatically removing spaces typed at the beginning and end of a paragraph."));
     cbRemoveSpaceBeginEndLine->resize( cbRemoveSpaceBeginEndLine->sizeHint() );
-    cbRemoveSpaceBeginEndLine->setChecked( m_autoFormat.getConfigRemoveSpaceBeginEndLine());
     ( void )new QWidget( tab1 );
 
     cbAutoChangeFormat=new QCheckBox( tab1 );
     cbAutoChangeFormat->setText( i18n( "Automatically do &bold and underline formatting") );
     QWhatsThis::add( cbAutoChangeFormat, i18n("When you use _underline_ or *bold*, the text between the underscores or asterisks will be converted to underlined or bold text.") );
     cbAutoChangeFormat->resize( cbAutoChangeFormat->sizeHint() );
-    cbAutoChangeFormat->setChecked( m_autoFormat.getConfigAutoChangeFormat());
     ( void )new QWidget( tab1 );
 
     cbAutoReplaceNumber=new QCheckBox( tab1 );
     cbAutoReplaceNumber->setText( i18n( "We add the 1/2 char at the %1", "Replace 1/2... with %1..." ).arg(QString("½")) );
     QWhatsThis::add( cbAutoReplaceNumber, i18n("Most standard fraction notations will be converted when available") );
     cbAutoReplaceNumber->resize( cbAutoReplaceNumber->sizeHint() );
-    cbAutoReplaceNumber->setChecked( m_autoFormat.getConfigAutoReplaceNumber());
     ( void )new QWidget( tab1 );
 
     cbUseNumberStyle=new QCheckBox( tab1 );
     cbUseNumberStyle->setText( i18n( "Use auto-numbering for numbered paragraphs" ) );
     QWhatsThis::add( cbUseNumberStyle, i18n("When typing '1)' or similar in front of a paragraph, automatically convert the paragraph to use that numbering style. This has the advantage that further paragraphs will also be numbered and the spacing is done correctly.") );
     cbUseNumberStyle->resize( cbUseNumberStyle->sizeHint() );
-    cbUseNumberStyle->setChecked( m_autoFormat.getConfigAutoNumberStyle());
     ( void )new QWidget( tab1 );
 
     cbUseBulletStyle=new QCheckBox( tab1 );
     cbUseBulletStyle->setText( i18n( "Use lists-formatting for bulletted paragraphs" ) );
     QWhatsThis::add( cbUseBulletStyle, i18n("When typing '*' or '-' in front of a paragraph, automatically convert the paragraph to use that list-style. Using a list-style formatting means that a correct bullet is used to draw the list.") );
     cbUseBulletStyle->resize( cbUseBulletStyle->sizeHint() );
-    cbUseBulletStyle->setChecked( m_autoFormat.getConfigUseBulletSyle());
     ( void )new QWidget( tab1 );
 
 
     QHBox *quotes = new QHBox( tab1 );
     quotes->setSpacing( 5 );
     pbBulletStyle = new QPushButton( quotes );
-
-    pbBulletStyle->setText( bulletStyle );
 
     pbBulletStyle->resize( pbBulletStyle->sizeHint() );
 
@@ -248,8 +275,24 @@ void KoAutoFormatDia::setupTab1()
     pbDefaultBulletStyle->resize( pbDefaultBulletStyle->sizeHint() );
     ( void )new QWidget( quotes );
 
+    initTab1();
+
     connect( pbBulletStyle, SIGNAL( clicked() ), this, SLOT( chooseBulletStyle() ) );
     connect( pbDefaultBulletStyle, SIGNAL( clicked()), this, SLOT( defaultBulletStyle() ) );
+}
+
+void KoAutoFormatDia::initTab1()
+{
+    cbUpperCase->setChecked( m_autoFormat.getConfigUpperCase() );
+    cbUpperUpper->setChecked( m_autoFormat.getConfigUpperUpper() );
+    cbDetectUrl->setChecked( m_autoFormat.getConfigAutoDetectUrl());
+    cbIgnoreDoubleSpace->setChecked( m_autoFormat.getConfigIgnoreDoubleSpace());
+    cbRemoveSpaceBeginEndLine->setChecked( m_autoFormat.getConfigRemoveSpaceBeginEndLine());
+    cbAutoChangeFormat->setChecked( m_autoFormat.getConfigAutoChangeFormat());
+    cbAutoReplaceNumber->setChecked( m_autoFormat.getConfigAutoReplaceNumber());
+    cbUseNumberStyle->setChecked( m_autoFormat.getConfigAutoNumberStyle());
+    cbUseBulletStyle->setChecked( m_autoFormat.getConfigUseBulletSyle());
+    pbBulletStyle->setText( bulletStyle );
 }
 
 void KoAutoFormatDia::setupTab2()
@@ -262,8 +305,6 @@ void KoAutoFormatDia::setupTab2()
     cbTypographicDoubleQuotes->setText( i18n( "Replace Double &Quotes with Typographical Quotes:" ) );
     cbTypographicDoubleQuotes->resize( cbTypographicDoubleQuotes->sizeHint() );
 
-    bool state=m_autoFormat.getConfigTypographicDoubleQuotes().replace;
-    cbTypographicDoubleQuotes->setChecked( state );
 
     connect( cbTypographicDoubleQuotes,SIGNAL(toggled ( bool)),this,SLOT(slotChangeStateDouble(bool)));
 
@@ -271,12 +312,10 @@ void KoAutoFormatDia::setupTab2()
     doubleQuotes->setSpacing( 5 );
     pbDoubleQuote1 = new QPushButton( doubleQuotes );
 
-    pbDoubleQuote1->setText( oDoubleBegin );
 
     pbDoubleQuote1->resize( pbDoubleQuote1->sizeHint() );
     pbDoubleQuote2 = new QPushButton( doubleQuotes );
 
-    pbDoubleQuote2->setText(oDoubleEnd );
 
     pbDoubleQuote2->resize( pbDoubleQuote2->sizeHint() );
     ( void )new QWidget( doubleQuotes );
@@ -297,15 +336,12 @@ void KoAutoFormatDia::setupTab2()
 
     ( void )new QWidget( tab2 );
 
-    slotChangeStateDouble(state);
 
 
     cbTypographicSimpleQuotes = new QCheckBox( tab2 );
     cbTypographicSimpleQuotes->setText( i18n( "Replace Simple &Quotes with Typographical Quotes:" ) );
     cbTypographicSimpleQuotes->resize( cbTypographicSimpleQuotes->sizeHint() );
 
-    state=m_autoFormat.getConfigTypographicSimpleQuotes().replace;
-    cbTypographicSimpleQuotes->setChecked( state );
 
     connect( cbTypographicSimpleQuotes,SIGNAL(toggled ( bool)),this,SLOT(slotChangeStateSimple(bool)));
 
@@ -313,12 +349,10 @@ void KoAutoFormatDia::setupTab2()
     simpleQuotes->setSpacing( 5 );
     pbSimpleQuote1 = new QPushButton( simpleQuotes );
 
-    pbSimpleQuote1->setText( oSimpleBegin );
 
     pbSimpleQuote1->resize( pbSimpleQuote1->sizeHint() );
     pbSimpleQuote2 = new QPushButton( simpleQuotes );
 
-    pbSimpleQuote2->setText(oSimpleEnd );
 
     pbSimpleQuote2->resize( pbSimpleQuote2->sizeHint() );
     ( void )new QWidget( simpleQuotes );
@@ -338,10 +372,25 @@ void KoAutoFormatDia::setupTab2()
     connect( pbSimpleDefault, SIGNAL( clicked()), this, SLOT( defaultSimpleQuote() ) );
 
     ( void )new QWidget( tab2 );
+
+    initTab2();
+}
+
+void KoAutoFormatDia::initTab2()
+{
+    bool state=m_autoFormat.getConfigTypographicDoubleQuotes().replace;
+    cbTypographicDoubleQuotes->setChecked( state );
+    pbDoubleQuote1->setText( oDoubleBegin );
+    pbDoubleQuote2->setText(oDoubleEnd );
+    slotChangeStateDouble(state);
+
+    state=m_autoFormat.getConfigTypographicSimpleQuotes().replace;
+    cbTypographicSimpleQuotes->setChecked( state );
+    pbSimpleQuote1->setText( oSimpleBegin );
+    pbSimpleQuote2->setText(oSimpleEnd );
     slotChangeStateSimple(state);
 
 }
-
 
 void KoAutoFormatDia::setupTab3()
 {
@@ -351,7 +400,6 @@ void KoAutoFormatDia::setupTab3()
 
     QVBox *left = new QVBox( tab3 );
     cbAdvancedAutoCorrection=new QCheckBox(i18n("Active autocorrection"),left);
-    cbAdvancedAutoCorrection->setChecked(m_autoFormat.getConfigAdvancedAutoCorrect());
     QHBox *text = new QHBox( left );
     text->setSpacing( 3 );
     text->setMargin( 3 );
@@ -386,9 +434,6 @@ void KoAutoFormatDia::setupTab3()
     connect(m_pListView, SIGNAL(clicked ( QListViewItem * ) ),
              SLOT(slotEditEntry()) );
 
-    QMap< QString, KoAutoFormatEntry >::Iterator it = m_autoFormat.firstAutoFormatEntry();
-    for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
-        ( void )new QListViewItem( m_pListView, it.key(), it.data().replace() );
 
     QVBox *buttons = new QVBox( tab3 );
     buttons->setSpacing( 5 );
@@ -402,8 +447,18 @@ void KoAutoFormatDia::setupTab3()
     ( void )new QWidget( buttons );
     pbRemove->setEnabled(false);
     pbAdd->setEnabled(false);
+    initTab3();
 }
 
+void KoAutoFormatDia::initTab3()
+{
+    cbAdvancedAutoCorrection->setChecked(m_autoFormat.getConfigAdvancedAutoCorrect());
+    m_pListView->clear();
+    QMap< QString, KoAutoFormatEntry >::Iterator it = m_autoFormat.firstAutoFormatEntry();
+    for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
+        ( void )new QListViewItem( m_pListView, it.key(), it.data().replace() );
+
+}
 
 void KoAutoFormatDia::setupTab4()
 {
@@ -411,10 +466,19 @@ void KoAutoFormatDia::setupTab4()
     QVBoxLayout *grid = new QVBoxLayout(tab4, 5, 5);
     grid->setAutoAdd( true );
 
-    abbreviation=new KoAutoFormatExceptionWidget(tab4,i18n("Do not treat as the end of a sentence:"),m_autoFormat.listException(),m_autoFormat.getConfigIncludeAbbreviation() , true);
+    abbreviation=new KoAutoFormatExceptionWidget(tab4,i18n("Do not treat as the end of a sentence:"), m_autoFormat.listException(),m_autoFormat.getConfigIncludeAbbreviation() , true);
     ( void )new QWidget( tab4 );
     twoUpperLetter=new KoAutoFormatExceptionWidget(tab4,i18n("Accept two uppercase letters in:"),m_autoFormat.listTwoUpperLetterException(),m_autoFormat.getConfigIncludeTwoUpperUpperLetterException());
     ( void )new QWidget( tab4 );
+}
+
+void KoAutoFormatDia::initTab4()
+{
+    abbreviation->setListException( m_autoFormat.listException() );
+    abbreviation->setAutoInclude( m_autoFormat.getConfigIncludeAbbreviation() );
+
+    twoUpperLetter->setListException( m_autoFormat.listTwoUpperLetterException());
+    twoUpperLetter->setAutoInclude( m_autoFormat.getConfigIncludeTwoUpperUpperLetterException());
 }
 
 void KoAutoFormatDia::setupTab5()
@@ -426,24 +490,18 @@ void KoAutoFormatDia::setupTab5()
     cbAllowAutoCompletion = new QCheckBox( tab5 );
     cbAllowAutoCompletion->setText( i18n( "Auto Completion" ) );
     cbAllowAutoCompletion->resize( cbAllowAutoCompletion->sizeHint() );
-    cbAllowAutoCompletion->setChecked( m_autoFormat.getConfigAutoCompletion());
 
     cbAddCompletionWord = new QCheckBox( tab5 );
     cbAddCompletionWord->setText( i18n( "Add Completion word" ) );
     cbAddCompletionWord->resize( cbAddCompletionWord->sizeHint() );
-    cbAddCompletionWord->setChecked( m_autoFormat.getConfigAddCompletionWord());
 
     m_listCompletion = new QListBox( tab5 );
-    QStringList list=m_autoFormat.listCompletion();
-    m_listCompletion->insertStringList(list);
     connect( m_listCompletion, SIGNAL( selected ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
     connect( m_listCompletion, SIGNAL( highlighted ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
 
 
     pbRemoveCompletionEntry = new QPushButton(i18n( "Remove Completion Entry"), tab5  );
     connect( pbRemoveCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotRemoveCompletionEntry()));
-    if( list.count()==0 || m_listCompletion->currentText().isEmpty())
-        pbRemoveCompletionEntry->setEnabled( false );
 
     pbSaveCompletionEntry= new QPushButton(i18n( "Save Completion List"), tab5  );
     connect( pbSaveCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotSaveCompletionEntry()));
@@ -453,7 +511,6 @@ void KoAutoFormatDia::setupTab5()
     lab->resize( lab->sizeHint() );
 
     m_minWordLength = new KIntNumInput( tab5);
-    m_minWordLength->setValue ( m_docAutoFormat->getConfigMinWordLength() );
     m_minWordLength->setRange ( 5, 800,1,false );
     m_minWordLength->resize( m_minWordLength->sizeHint() );
 
@@ -462,14 +519,28 @@ void KoAutoFormatDia::setupTab5()
     lab->resize( lab->sizeHint() );
 
     m_maxNbWordCompletion = new KIntNumInput( tab5);
-    m_maxNbWordCompletion->setValue ( m_docAutoFormat->getConfigNbMaxCompletionWord() );
     m_maxNbWordCompletion->setRange( 1, 500, 1, false);
     m_maxNbWordCompletion->resize( m_maxNbWordCompletion->sizeHint() );
 
     cbAppendSpace = new QCheckBox( tab5 );
     cbAppendSpace->setText( i18n( "Append Space" ) );
     cbAppendSpace->resize( cbAppendSpace->sizeHint() );
+    initTab5();
+}
+
+void KoAutoFormatDia::initTab5()
+{
+    cbAllowAutoCompletion->setChecked( m_autoFormat.getConfigAutoCompletion());
+    cbAddCompletionWord->setChecked( m_autoFormat.getConfigAddCompletionWord());
+    QStringList list=m_autoFormat.listCompletion();
+    m_listCompletion->clear();
+    m_listCompletion->insertStringList(list);
+    if( list.count()==0 || m_listCompletion->currentText().isEmpty())
+        pbRemoveCompletionEntry->setEnabled( false );
+    m_minWordLength->setValue ( m_docAutoFormat->getConfigMinWordLength() );
+    m_maxNbWordCompletion->setValue ( m_docAutoFormat->getConfigNbMaxCompletionWord() );
     cbAppendSpace->setChecked( m_autoFormat.getConfigAppendSpace() );
+
 }
 
 void KoAutoFormatDia::slotCompletionWordSelected( const QString & word)
