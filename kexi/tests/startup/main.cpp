@@ -83,6 +83,7 @@ int main(int argc, char* argv[])
 		if (r==KexiStartupDialog::TemplateResult) {
 			kdDebug() << "Template key == " << startup.selectedTemplateKey() << endl;
 			if (startup.selectedTemplateKey()=="blank") {
+#if 0				
 				KexiConnSelectorDialog sel(connset, 0,"sel");
 				e = sel.exec();
 				kdDebug() << (e==QDialog::Accepted ? "Accepted" : "Rejected") << endl;
@@ -92,7 +93,7 @@ int main(int argc, char* argv[])
 						kdDebug() << "SERVER: " << sel.selectedConnectionData()->serverInfoString() << endl;
 					}
 				}
-				
+#endif				
 			}
 		}
 		else if (r==KexiStartupDialog::OpenExistingResult) {
@@ -111,7 +112,7 @@ int main(int argc, char* argv[])
 			const KexiProjectData *data = startup.selectedProjectData();
 			if (data) {
 				kdDebug() << "Selected project: database=" << data->databaseName()
-					<< " connection=" << data->connectionData()->serverInfoString() << endl;
+					<< " connection=" << data->constConnectionData()->serverInfoString() << endl;
 			}
 		}
 	}
