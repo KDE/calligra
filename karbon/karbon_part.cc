@@ -6,15 +6,17 @@
 #include <qdom.h>
 #include <qpainter.h>
 
+#include <kconfig.h>
+#include <kdebug.h>
+
 #include "karbon_part.h"
 #include "karbon_factory.h"
+#include "karbon_part_iface.h"
 #include "karbon_view.h"
 #include "vcommand.h"
 #include "vpainterfactory.h"
 #include "vpainter.h"
-#include <kconfig.h>
-#include <kdebug.h>
-#include "karbon_part_iface.h"
+
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -406,7 +408,7 @@ void
 KarbonPart::repaintAllViews( bool /*erase*/ )
 {
 	QPtrListIterator<KoView> itr( views() );
-	for ( ; itr.current() ; ++itr )
+	for( ; itr.current() ; ++itr )
 	{
  		static_cast<KarbonView*>( itr.current() )->
 			canvasWidget()->repaintAll( true );
@@ -424,9 +426,10 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	VPainter *p = painterFactory->painter();
 	//VPainter *p = new VKoPainter( painter.device() );
 	p->begin();
+
 	QPtrListIterator<VLayer> itr( m_layers );
-	for ( ; itr.current(); ++itr )
-		if ( itr.current()->visible() )
+	for( ; itr.current(); ++itr )
+		if( itr.current()->visible() )
 			itr.current()->draw( p, KoRect::fromQRect( rect ), 1 );
 
 	p->end();
@@ -435,40 +438,43 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 
 void KarbonPart::setShowStatusBar (bool b)
 {
-    m_bShowStatusBar = b;
+	m_bShowStatusBar = b;
 }
 
 void KarbonPart::reorganizeGUI ()
 {
-    QPtrListIterator<KoView> itr( views() );
-    for ( ; itr.current() ; ++itr )
-    {
-        static_cast<KarbonView*>( itr.current() )->reorganizeGUI ();
-    }
+	QPtrListIterator<KoView> itr( views() );
+	for( ; itr.current(); ++itr )
+	{
+		static_cast<KarbonView*>( itr.current() )->reorganizeGUI();
+	}
 }
 
 void KarbonPart::setUndoRedoLimit(int val)
 {
-    m_commandHistory->setUndoLimit(val);
-    m_commandHistory->setRedoLimit(val);
+	m_commandHistory->setUndoLimit(val);
+	m_commandHistory->setRedoLimit(val);
 }
 
 void KarbonPart::initConfig()
 {
-    KConfig* config = KarbonPart::instance()->config();
-    if( config->hasGroup("Interface") ) {
-        config->setGroup( "Interface" );
-        setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave()/60 ) * 60 );
-        m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
-        setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ));
-    }
-    if(config->hasGroup("Misc" ) )
-    {
-        config->setGroup( "Misc" );
-        int undo=config->readNumEntry("UndoRedo",-1);
-        if(undo!=-1)
-            setUndoRedoLimit(undo);
-    }
+	KConfig* config = KarbonPart::instance()->config();
+
+	if( config->hasGroup( "Interface" ) )
+	{
+		config->setGroup( "Interface" );
+		setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave() / 60 ) * 60 );
+		m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
+		setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
+	}
+
+	if( config->hasGroup( "Misc" ) )
+	{
+		config->setGroup( "Misc" );
+		int undo=config->readNumEntry( "UndoRedo", -1 );
+		if( undo != -1 )
+			setUndoRedoLimit( undo );
+	}
 }
 
 #include "karbon_part.moc"

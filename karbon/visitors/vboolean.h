@@ -5,8 +5,6 @@
 #ifndef __VBOOLEAN_H__
 #define __VBOOLEAN_H__
 
-#include <qvaluelist.h>
-
 #include "vpath.h"
 #include "vvisitor.h"
 
@@ -28,9 +26,7 @@ public:
 	VBooleanType type() const { return m_type; }
 	void setType( VBooleanType type ) { m_type = type; }
 
-	// declare but don't define, since a boolean operation with only one object
-	// doesn't make much sense:
-	virtual void visit( VObject& object );
+	virtual void visit( VObject& /*object*/ ) {}
 	void visit( VObject& object1, VObject& object2 );
 
 	virtual void visitVPath(
@@ -38,10 +34,12 @@ public:
 
 private:
 	void doIt();
-	void recursiveSubdivision();
 
-	// intersection parameters (t):
-	QValueList<double> m_params;
+	typedef QValueList<double> VParamList;
+	void recursiveSubdivision(
+		const VSegment& segment1, double t0_1, double t1_1,
+		const VSegment& segment2, double t0_2, double t1_2,
+		VParamList& params1, VParamList& params2 );
 
 	VBooleanType m_type;
 	QPtrList<VSegmentList>* m_lists1;

@@ -50,7 +50,7 @@
 #include <kdebug.h>
 
 // TODO: only for testing:
-#include "vpolygonize.h"
+#include "vboolean.h"
 
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
@@ -259,14 +259,16 @@ KarbonView::dummyForTesting()
 {
 kdDebug() << "KarbonView::dummyForTesting()" << endl;
 
-	VPolygonize op;
-	op.setFlatness( 5.0 );
+	VBoolean op;
 
 	VObjectListIterator itr( m_part->selection() );
-	for ( ; itr.current(); ++itr )
-	{
-		itr.current()->accept( op );
-	}
+	VObject* one = itr.current();
+	VObject* two = 0L;
+	if( ++itr )
+		two = itr.current();
+
+	if( one && two )
+		op.visit( *one, *two );
 
 	m_part->repaintAllViews();
 }
