@@ -90,21 +90,14 @@
   <Separator lineSeparator="true" />
   <Action name="sendStencilToBack"/>
   <Action name="bringStencilToFront"/>
+  <Separator lineSeparator="true" />
+  <Action name="arrowHeads"/>
 </ToolBar>
 <ToolBar name="ColorBar" fullWidth="false"><text>Colors</text>
   <Action name="setFGColor"/>
   <Action name="setBGColor"/>
   <Separator lineSeparator="true" />
   <Action name="setLineWidth"/>
-</ToolBar>
-<ToolBar name="ArrowBar" fullWidth="false"><text>Arrows</text>
-  <Action name="endArrowSize"/>
-  <Separator/>
-  <Action name="endArrowHead"/>
-  <Separator/>
-  <Action name="startArrowHead"/>
-  <Separator/>
-  <Action name="startArrowSize"/>
 </ToolBar>
 <ToolBar name="TextBar" fullWidth="false"><text>Format</text>
   <Action name="setFontFamily"/>

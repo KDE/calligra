@@ -33,6 +33,7 @@ class KivioStencilSpawnerSet;
 class KivioTabBar;
 class TKSelectColorAction;
 class StencilBarDockManager;
+class KivioArrowHeadAction;
 namespace Kivio {
 class ToolController;
 class ToolDockBase;
@@ -62,7 +63,6 @@ class DCOPObject;
 class KoRuler;
 class KoZoomHandler;
 class KoUnitDoubleSpinBox;
-class KComboBox;
 
 #include <qdom.h>
 #include <qptrlist.h>
@@ -241,7 +241,6 @@ class KivioView : public KoView
   protected:
     void setupActions();
     void initActions();
-    void loadArrowHeads(KComboBox* combo, bool inverted);
 
     virtual void updateReadWrite( bool readwrite );
 
@@ -278,8 +277,7 @@ class KivioView : public KoView
     KivioParagraphAction *m_setHTextAlignment;
     KivioParagraphAction *m_setVTextAlignment;
 
-    KComboBox *m_setStartArrow;
-    KComboBox *m_setEndArrow;
+    KivioArrowHeadAction* m_setArrowHeads;
 
     KoUnitDoubleSpinBox *m_setLineWidth;
 
