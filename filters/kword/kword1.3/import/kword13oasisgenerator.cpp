@@ -64,6 +64,8 @@ void KWord13OasisGenerator::fillGenStyleWithLayout( KoGenStyle& gs, const bool s
 {
     // ### TODO syntaxVersion < 3
 
+    // ### FIXME: of course layout properties are *not* document properties
+    
     QString str; // Help string to store each KWord 1.3 layout property
    
     str = m_kwordDocument->getProperty( "FLOW:align" );
