@@ -1415,7 +1415,7 @@ KCommand * KPTextObject::textContentsToHeight()
 
     if ( KABS( innerHeight() - textHeight ) < 1e-5 ) // floating-point equality test
         return 0L; // nothing to do
-    if ( lineSpacing < 0 ) // text object is too small
+    if ( lineSpacing < 0  || (m_textobj->textDocument()->firstParag() == m_textobj->textDocument()->lastParag() && numLines == 1)) // text object is too small
         lineSpacing = 0; // we can't do smaller linespacing than that, but we do need to apply it
                          // (in case there's some bigger linespacing in use)
 
@@ -1488,7 +1488,7 @@ void KPTextObject::setVerticalAligment( VerticalAlignmentType _type)
 
 void KPTextObject::recalcVerticalAlignment()
 {
-    KoTextParag * parag = m_textobj->textDocument()->lastParag();
+    //KoTextParag * parag = m_textobj->textDocument()->lastParag();
     double txtHeight = m_doc->zoomHandler()->layoutUnitPtToPt( m_textobj->textDocument()->height() )+btop+bbottom;
     double diffy = getRect().height() - txtHeight;
     if ( diffy <= 0.0 )
