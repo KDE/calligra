@@ -37,7 +37,7 @@ VGradient::save( QDomElement& element ) const
 	me.setAttribute( "vectorX", m_vector.x() );
 	me.setAttribute( "vectorY", m_vector.y() );
 	me.setAttribute( "type", m_type );
-	me.setAttribute( "spreadMethod", m_spreadMethod );
+	me.setAttribute( "repeatMethod", m_repeatMethod );
 
 	// save stops
 	QValueListConstIterator<VColorStop> itr;
@@ -61,7 +61,7 @@ VGradient::load( const QDomElement& element )
 	m_vector.setX( element.attribute( "vectorX", "0.0" ).toDouble() );
 	m_vector.setY( element.attribute( "vectorY", "0.0" ).toDouble() );
 	m_type = (VGradientType)element.attribute( "type", 0 ).toInt();
-	m_spreadMethod = (VGradientSpreadMethod)element.attribute( "spreadMethod", 0 ).toInt();
+	m_repeatMethod = (VGradientRepeatMethod)element.attribute( "repeatMethod", 0 ).toInt();
 
 	m_colorStops.clear();
 

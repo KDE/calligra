@@ -9,7 +9,6 @@ REAL BUGS:
 -	examine the problem with non closed paths (polygonize combined.karbon for example
 	to make the inner circles rectangles)
 -	implement gradients after libart code reorganisations (Rob)
--	rename "spread method" to "repeat"
 
 OPTIMIZATION:
 -	make fill/stroke shared so copying for undo/redo is more efficient

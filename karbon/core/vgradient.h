@@ -17,11 +17,11 @@ enum VGradientType
 	gradient_conic  = 2
 };
 
-enum VGradientSpreadMethod
+enum VGradientRepeatMethod
 {
-	gradient_spread_pad = 0,
-	gradient_spread_reflect = 1,
-	gradient_spread_repeat = 2
+	gradient_repeat_none = 0,
+	gradient_repeat_reflect = 1,
+	gradient_repeat = 2
 };
 
 
@@ -48,8 +48,8 @@ public:
 	VGradientType type() const { return m_type; }
 	void setType( VGradientType type ) { m_type = type; }
 
-	VGradientSpreadMethod spreadMethod() const { return m_spreadMethod; }
-	void setSpreadMethod( VGradientSpreadMethod spreadMethod ) { m_spreadMethod = spreadMethod; }
+	VGradientRepeatMethod repeatMethod() const { return m_repeatMethod; }
+	void setRepeatMethod( VGradientRepeatMethod repeatMethod ) { m_repeatMethod = repeatMethod; }
 
 	QValueList<VColorStop>& colorStops() { return m_colorStops; }
 	void addStop( const VColor &color, float rampPoint, float midPoint );
@@ -67,7 +67,7 @@ public:
 
 private:
 	VGradientType m_type;
-	VGradientSpreadMethod m_spreadMethod;
+	VGradientRepeatMethod m_repeatMethod;
 
 	QValueList<VColorStop> m_colorStops;
 

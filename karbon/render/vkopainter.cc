@@ -492,11 +492,11 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		ArtGradientLinear *linear = new ArtGradientLinear();
 
 		// TODO : make variable
-		if( gradient.spreadMethod() == gradient_spread_pad )
+		if( gradient.repeatMethod() == gradient_repeat_none )
 			linear->spread = ART_GRADIENT_PAD;
-		else if( gradient.spreadMethod() == gradient_spread_repeat )
+		else if( gradient.repeatMethod() == gradient_repeat )
 			linear->spread = ART_GRADIENT_REPEAT;
-		else if( gradient.spreadMethod() == gradient_spread_reflect )
+		else if( gradient.repeatMethod() == gradient_repeat_reflect )
 			linear->spread = ART_GRADIENT_REFLECT;
 
 		//kdDebug() << "x1 : " << x1 << ", x0 " << x0 << endl;
