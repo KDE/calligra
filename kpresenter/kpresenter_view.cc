@@ -137,7 +137,7 @@
 #include <koDocumentInfo.h>
 #include <kaccelgen.h>
 #include "kprimportstyledia.h"
-
+#include <kurldrag.h>
 #define DEBUG
 
 static const char * const pageup_xpm[] = {
@@ -3165,6 +3165,9 @@ void KPresenterView::setupActions()
                                   this,SLOT(changeLink()),
                                   actionCollection(), "change_link");
 
+    actionCopyLink = new KAction( i18n( "Copy Link" ), 0,
+                                     this, SLOT( copyLink() ),
+                                     actionCollection(), "copy_link" );
 
     actionEditCustomVarsEdit = new KAction( i18n( "&Custom Variables..." ), 0,
                                         this, SLOT( editCustomVars() ),
@@ -7327,5 +7330,24 @@ void KPresenterView::deSelectAllObject()
 {
     m_canvas->deSelectAllObj();
 }
+
+void KPresenterView::copyLink()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+    {
+        KoLinkVariable * var=edit->linkVariable();
+        if(var)
+        {
+            KURL::List lst;
+            lst.append( var->url() );
+            QApplication::clipboard()->setSelectionMode(true);
+            QApplication::clipboard()->setData(KURLDrag::newDrag(lst) );
+            QApplication::clipboard()->setSelectionMode(false);
+            QApplication::clipboard()->setData( KURLDrag::newDrag(lst) );
+        }
+    }
+}
+
 
 #include <kpresenter_view.moc>

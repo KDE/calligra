@@ -106,6 +106,7 @@
 
 #include <stdlib.h>
 #include <qtimer.h>
+#include <kurldrag.h>
 
 KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
@@ -1006,6 +1007,11 @@ void KWView::setupActions()
                                   actionCollection(), "change_link");
     actionChangeLink->setToolTip( i18n( "Change the content of the currently selected link." ) );
     actionChangeLink->setWhatsThis( i18n( "Change the details of the currently selected link." ) );
+
+    actionCopyLink = new KAction( i18n( "Copy Link" ), 0,
+                                     this, SLOT( copyLink() ),
+                                     actionCollection(), "copy_link" );
+
 
 
     actionShowDocStruct = new KToggleAction( i18n( "Show Doc Structure" ), 0,
@@ -5742,6 +5748,24 @@ void KWView::changeLink()
                     }
                 }
             }
+        }
+    }
+}
+
+void KWView::copyLink()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+    {
+        KoLinkVariable * var=edit->linkVariable();
+        if(var)
+        {
+            KURL::List lst;
+            lst.append( var->url() );
+            QApplication::clipboard()->setSelectionMode(true);
+            QApplication::clipboard()->setData(KURLDrag::newDrag(lst) );
+            QApplication::clipboard()->setSelectionMode(false);
+            QApplication::clipboard()->setData( KURLDrag::newDrag(lst) );
         }
     }
 }

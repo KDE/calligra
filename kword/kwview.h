@@ -340,6 +340,7 @@ public slots:
 
     void openLink();
     void changeLink();
+    void copyLink();
     void editComment();
     void showDocStructure();
     void showRuler();
@@ -597,6 +598,7 @@ private:
 
     KAction *actionOpenLink;
     KAction * actionChangeLink;
+    KAction *actionCopyLink;
 
     KAction *actionRefreshAllVariable;
     KAction *actionCreateStyleFromSelection;

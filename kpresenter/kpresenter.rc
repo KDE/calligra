@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="86">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="87">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -582,6 +582,7 @@
  <Separator/>
  <Action name="open_link"/>
  <Action name="change_link"/>
+ <Action name="copy_link"/>
  <ActionList name="datatools_link"/>
 </Menu>
 <Menu name="note_popup">

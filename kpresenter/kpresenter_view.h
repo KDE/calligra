@@ -328,7 +328,7 @@ public slots:
 
     void insertLink();
     void changeLink();
-
+    void copyLink();
     void slotSoftHyphen();
 
     void extraAutoFormat();
@@ -970,7 +970,7 @@ private:
     KAction *actionInsertLink;
 
     KAction * actionChangeLink;
-
+    KAction *actionCopyLink;
     KAction *actionFormatParag;
     KAction *actionOpenLink;
     KAction *actionIncreaseFontSize;
