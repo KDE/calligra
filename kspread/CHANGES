@@ -1180,4 +1180,8 @@ These functions returns hour,second or minutes in a time expression.
 ----------------------------------------------------
 Now you can configure spell checking in local.
 You don't change global "spell checking" config.
- 
+
+2001-02-15-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Now you can paste a text plain ( you can copy a text between for example
+a text which is in kwrite and kspread)

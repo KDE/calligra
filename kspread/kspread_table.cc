@@ -5895,10 +5895,40 @@ void KSpreadTable::paste( const QPoint &_marker,bool makeUndo, PasteMode sp, Ope
 
     if ( mime->provides( "application/x-kspread-snippet" ) )
         b = mime->encodedData( "application/x-kspread-snippet" );
+    else if( mime->provides( "text/plain" ) )
+      {
+	pasteTextPlain( mime, _marker);
+	return;
+      }
     else
         return;
 
     paste( b, _marker,makeUndo, sp, op,insert, insertTo );
+}
+
+void KSpreadTable::pasteTextPlain( QMimeSource * _mime, const QPoint &_marker)
+{
+  KSpreadCell* cell = cellAt( _marker.x(), _marker.y() );
+  if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+      KSpreadUndoSetText *undo =new KSpreadUndoSetText( m_pDoc, this , cell->text(), _marker.x(), _marker.y(),cell->getFormatNumber( _marker.x(), _marker.y() ) );
+      m_pDoc->undoBuffer()->appendUndo( undo );
+    }
+  if ( cell->isDefault() )
+    {
+      cell = new KSpreadCell( this, _marker.x(), _marker.y() );
+      insertCell( cell ); 
+    }
+  cell->setCellText( QString::fromLocal8Bit(_mime->encodedData( "text/plain" )));
+  cell->updateChart();
+  m_pDoc->setModified( true );
+  
+  if(!isLoading())
+    refreshMergedCell();
+
+  emit sig_updateView( this );
+  emit sig_updateHBorder( this );
+  emit sig_updateVBorder( this );
 }
 
 void KSpreadTable::paste( const QByteArray& b, const QPoint &_marker,bool makeUndo, PasteMode sp, Operation op,bool insert, int insertTo )

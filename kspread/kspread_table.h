@@ -438,6 +438,11 @@ public:
     void defaultSelection( const QPoint &_marker );
 
     /**
+     * A function which allows to paste a text plain from the clipboard
+     */
+    void pasteTextPlain( QMimeSource * _mime, const QPoint &_marker);
+
+    /**
      * Find support.
      */
     void find( const QPoint &_marker, QString _find, long options );
