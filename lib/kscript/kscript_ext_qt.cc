@@ -1,5 +1,6 @@
 #include "kscript_ext_qt.h"
 #include "kscript_ext_qwidget.h"
+#include "kscript_ext_qdialog.h"
 #include "kscript_ext_qapplication.h"
 #include "kscript_ext_qrect.h"
 #include "kscript_ext_qlineedit.h"
@@ -24,6 +25,7 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
 
   // Add all Qt classes to the module
   module->addObject( "QWidget", new KSValue( new KSClass_QWidget( module ) ) );
+  module->addObject( "QDialog", new KSValue( new KSClass_QDialog( module ) ) );
   module->addObject( "QApplication", new KSValue( new KSClass_QApplication( module ) ) );
   module->addObject( "QRect", new KSValue( new KSClass_QRect( module ) ) );
   module->addObject( "QLineEdit", new KSValue( new KSClass_QLineEdit( module ) ) );

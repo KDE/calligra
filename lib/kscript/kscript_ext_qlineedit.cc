@@ -25,7 +25,7 @@ KSClass_QLineEdit::KSClass_QLineEdit( KSModule* m, const char* name ) : KSClass_
   nameSpace()->insert( "QLineEdit", new KSValue( (KSBuiltinMethod)&KSObject_QLineEdit::ksQLineEdit ) );
   nameSpace()->insert( "setText", new KSValue( (KSBuiltinMethod)&KSObject_QLineEdit::ksQLineEdit_setText ) );
   nameSpace()->insert( "textChanged", new KSValue( (KSBuiltinMethod)&KSObject_QLineEdit::ksQLineEdit_textChanged ) );
-  
+  nameSpace()->insert( "returnPressed", new KSValue( (KSBuiltinMethod)&KSObject_QLineEdit::ksQLineEdit_returnPressed ) );
   addQtSignal( "textChanged" );
 }
 
@@ -123,6 +123,21 @@ bool KSObject_QLineEdit::ksQLineEdit_textChanged( KSContext& context )
 
   return true;
 }
+
+bool KSObject_QLineEdit::ksQLineEdit_returnPressed( KSContext& context )
+{
+  if ( !checkLive( context, "QLineEdit::returnPressed" ) )
+    return false;
+
+  if ( !KSUtil::checkArgumentsCount( context, 0, "QLineEdit::returnPressed" ) )
+    return false;
+
+  QLineEdit* w = (QLineEdit*)object();
+  w->returnPressed();
+
+  return true;
+}
+
 
 KSValue::Ptr KSObject_QLineEdit::member( KSContext& context, const QString& name )
 {

@@ -25,6 +25,7 @@ public:
   bool ksQLineEdit( KSContext& );
   bool ksQLineEdit_setText( KSContext& );
   bool ksQLineEdit_textChanged( KSContext& );
+  bool ksQLineEdit_returnPressed( KSContext& );
 
   KSValue::Ptr member( KSContext& context, const QString& name );
   bool setMember( KSContext& context, const QString& name, const KSValue::Ptr& v );

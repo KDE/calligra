@@ -6,10 +6,12 @@ Tasks for KScript:
 
 ------------------------------------------------
     Add more classes to the Qt extension:
+[s] QButton
 [s] QPushButton
 [s] QRadioButton
-[ ] QButtonGroup
+[s] QButtonGroup
 [s] QCheckBox
+[s] QDialog
 [ ] QListBox*
 [s] QComboBox
 [ ] QListView*
