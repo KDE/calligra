@@ -74,10 +74,8 @@ public:
 
 	virtual void changeValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
-    /// @deprecated 
-    KDE_DEPRECATED double value() const { return KDoubleSpinBox::value(); }
-    /// Get the value, converted in points
-    double valueInPoints( void ) const;
+    /// @return the current value, converted in points
+    double value( void ) const;
 
 private:
     double m_lowerInPoints; //< lowest value in points
@@ -93,10 +91,8 @@ public:
 	virtual void changeValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
-    /// @deprecated 
-    double value() const { return m_value; }
-    /// Get the value, converted in points
-    double valueInPoints( void ) const;
+    /// @return the current value, converted in points
+    double value( void ) const;
 
 protected:
 	 bool eventFilter( QObject* obj, QEvent* ev );
@@ -119,10 +115,8 @@ public:
 	void updateValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
-    /// @deprecated 
-     KDE_DEPRECATED double value() const { return m_value; }
-    /// Get the value, converted in points
-    double valueInPoints( void ) const;
+    /// @return the current value, converted in points
+    double value( void ) const;
 	void insertItem( double, int index = -1 );
 
 protected:
@@ -150,10 +144,8 @@ public:
 
 	void insertItem( double, int index = -1 );
 	void updateValue( double );
-    /// @deprecated 
-    double value() const KDE_DEPRECATED ;
-    /// Get the value, converted in points
-    double valueInPoints( void ) const;
+    /// @return the current value, converted in points
+    double value( void ) const;
 
 signals:
 	 void valueChanged(double);

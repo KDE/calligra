@@ -156,9 +156,9 @@ KoUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
     setSuffix( KoUnit::unitName( unit ).prepend( ' ' ) );
 }
 
-double KoUnitDoubleSpinBox::valueInPoints( void ) const
+double KoUnitDoubleSpinBox::value( void ) const
 {
-    return KoUnit::ptFromUnit( value(), m_unit );
+    return KoUnit::ptFromUnit( KDoubleSpinBox::value(), m_unit );
 }
 
 
@@ -194,6 +194,7 @@ KoUnitDoubleLineEdit::setUnit( KoUnit::Unit unit )
 bool
 KoUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
 {
+#if 0
 	if( ev->type() == QEvent::FocusOut || ev->type() == QEvent::Leave || ev->type() == QEvent::Hide )
 	{
 		bool ok;
@@ -202,14 +203,14 @@ KoUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
 		return false;
 	}
 	else
+#endif
 		return QLineEdit::eventFilter( o, ev );
 }
 
-double KoUnitDoubleLineEdit::valueInPoints( void ) const
+double KoUnitDoubleLineEdit::value( void ) const
 {
     return KoUnit::ptFromUnit( m_value, m_unit );
 }
-
 
 
 KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value, KoUnit::Unit unit,
@@ -271,6 +272,7 @@ KoUnitDoubleComboBox::setUnit( KoUnit::Unit unit )
 bool
 KoUnitDoubleComboBox::eventFilter( QObject* o, QEvent* ev )
 {
+#if 0
 	if( ev->type() == QEvent::FocusOut || ev->type() == QEvent::Leave || ev->type() == QEvent::Hide )
 	{
 		bool ok;
@@ -279,10 +281,11 @@ KoUnitDoubleComboBox::eventFilter( QObject* o, QEvent* ev )
 		return false;
 	}
 	else
+#endif
 		return QComboBox::eventFilter( o, ev );
 }
 
-double KoUnitDoubleComboBox::valueInPoints( void ) const
+double KoUnitDoubleComboBox::value( void ) const
 {
     return KoUnit::ptFromUnit( m_value, m_unit );
 }
@@ -339,11 +342,6 @@ KoUnitDoubleSpinComboBox::updateValue( double value )
 double
 KoUnitDoubleSpinComboBox::value() const
 {
-	return m_combo->value();
-}
-
-double KoUnitDoubleSpinComboBox::valueInPoints( void ) const
-{
-    return m_combo->valueInPoints();
+    return m_combo->value();
 }
 
