@@ -111,6 +111,10 @@ Done    Plain
                   http://proj.chbs.dk/specifications/
 
 -           Use KPlato namespace for all KPlato classes
+            Remove KPT prefix from all KPlato classes
+            Remove kpt prefix from all KPlato source code files
+
+-           Write good doxygen compatible API docs in the source code!
 
               
 You can search the source code for FIXME and TODO entries with:
