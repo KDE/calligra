@@ -12,39 +12,41 @@
 #include "vcanvas.h"
 
 class DCOPObject;
+class QDockArea;
+class QLabel;
+class QPaintEvent;
+
 class KAction;
 class KarbonPart;
 class KFontAction;
 class KFontSizeAction;
-class VPainterFactory;
 class KSelectAction;
 class KSelectColorAction;
 class KToggleAction;
-class QPaintEvent;
-class QLabel;
+
 class TKUFloatSpinBoxAction;
 class VColorDlg;
 class VEllipseTool;
+class VFill;
 class VFlattenDlg;
 class VGradientTool;
 class VInsertKnotsDlg;
+class VPainterFactory;
 class VPolygonTool;
 class VRectangleTool;
+class VRotateTool;
 class VRoundCornersDlg;
 class VRoundRectTool;
-class VRotateTool;
 class VScaleTool;
 class VSelectTool;
 class VShearTool;
 class VSinusTool;
 class VSpiralTool;
 class VStarTool;
+class VStroke;
 class VTool;
 class VToolContainer;
 class VWhirlPinchDlg;
-class VStroke;
-class VFill;
-
 
 class KarbonView : public KoView
 {

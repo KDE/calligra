@@ -4,6 +4,7 @@
 */
 
 #include <qbuttongroup.h>
+#include <qdockarea.h>
 #include <qdragobject.h>
 #include <qiconset.h>
 #include <qpainter.h>
@@ -127,7 +128,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 	//Create Color Manager
 	m_ColorManager = new VColorDlg( m_part, this );
-
+	
 	if( shell() )
 	{
 		setNumberOfRecentFiles( m_part->maxRecentFiles() );
@@ -711,7 +712,11 @@ KarbonView::setLineWidth( double val)
 void
 KarbonView::viewColorManager()
 {
-	m_ColorManager->show();
+	if (m_ColorManager->isVisible() == false )
+	{
+		shell()->addDockWindow(m_ColorManager, DockRight);
+		m_ColorManager->show();
+	}
 }
 
 void
