@@ -40,27 +40,27 @@ typedef QIntDict<QWidget> WidgetIndex;
 class KexiQueryDesigner : public KexiDialogBase
 {
 	Q_OBJECT
-	
+
 	public:
-	
-	
+
+
 		KexiQueryDesigner(KexiView *view,QWidget *parent, QString indentifier, const char *name=0);
 		~KexiQueryDesigner();
-		
+
 		virtual KXMLGUIClient	*guiClient();
 		virtual void		deactivateActions();
 		virtual void		activateActions();
 
-		void			setCurrentQuery(QString query);
+		void			setCurrentQuery(const QString &query);
 
 	protected:
-		void			addTab(QPixmap pixmap, QString caption, QWidget *assosiated,int ID);
+		void			addTab(QPixmap pixmap, const QString &caption, QWidget *assosiated,int ID);
 
 	private:
 		class			EditGUIClient;
 		friend class		EditGUIClient;
 		static EditGUIClient	*m_editGUIClient;
-		
+
 		KexiQueryDesignerGuiEditor *m_editor;
 		KTextEditor::Document	*m_sqlDoc;
 		KTextEditor::View	*m_sqlView;
@@ -70,7 +70,7 @@ class KexiQueryDesigner : public KexiDialogBase
 		QString			m_query;
 
 		QString			m_identifier;
-		
+
 		KMultiTabBar		*m_tb;
 		int			m_partCount;
 		int			m_activeTab;

@@ -23,7 +23,7 @@ public:
 	QStringList forms() const;
 	bool rename(const QString& oldName, const QString& newName);
 	bool deleteForm(const QString& name);
-	QString newForm();
+	QString newForm() ;
 	void clear();
 	void showForm(const QString& name, Mode, QWidget *parent);
 

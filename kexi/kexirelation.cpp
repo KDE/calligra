@@ -44,7 +44,7 @@ KexiRelation::KexiRelation(KexiView *view,QWidget *parent, const char *name, boo
 	m_db = kexiProject()->db();
 
 	QHBox *hbox = new QHBox(this);
-	
+
 	m_tableCombo = new QComboBox(hbox);
 	m_tableCombo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
 	m_tableCombo->insertStringList(kexiProject()->db()->tables());
@@ -93,33 +93,33 @@ KexiRelation::slotAddTable()
 			fields.append(r->fieldInfo(i)->name());
 		}
 		m_view->addTable(m_tableCombo->currentText(), fields);
-	
+
 		delete r;
 		m_tableCombo->removeItem(m_tableCombo->currentItem());
 	}
 }
 
-static RelationList*
+RelationList*
 KexiRelation::projectRelations()
 {
 #if 0
 	KoStore* store = KoStore::createStore(project()->url(), KoStore::Read, "application/x-kexi");
-	
+
 	if(!store)
 	{
 		return 0;
 	}
-	
+
 	if(!store->open("/relations.xml"))
 		return 0;
 
 	QDomDocument inBuf;
-	
+
 	//error reporting
 	QString errorMsg;
 	int errorLine;
 	int errorCol;
-	
+
 	bool parsed = inBuf.setContent(store->device(), false, &errorMsg, &errorLine, &errorCol);
 	store->close();
 	delete store;
@@ -127,7 +127,7 @@ KexiRelation::projectRelations()
 	if(!parsed)
 	{
 		kdDebug() << "coudn't parse:" << endl;
-		kdDebug() << "error: " << errorMsg << " line: " << errorLine << " col: " << errorCol << endl; 
+		kdDebug() << "error: " << errorMsg << " line: " << errorLine << " col: " << errorCol << endl;
 		return 0;
 	}
 
@@ -141,19 +141,19 @@ KexiRelation::projectRelations()
 		QDomElement sourceField = n.namedItem("sourcefield").toElement();
 		QDomElement targetTable = n.namedItem("targettable").toElement();
 		QDomElement targetField = n.namedItem("targetfield").toElement();
-		
+
 		con.srcTable = sourceTable.text();
 		con.srcField = sourceField.text();
 		con.rcvTable = targetTable.text();
 		con.rcvField = targetField.text();
 		list->append(con);
 	}
-	
+
 	return list;
 #endif
 }
 
-static bool
+bool
 KexiRelation::storeRelations(RelationList relations, KoStore *store)
 {
 	QDomDocument domDoc("Relations");
@@ -187,7 +187,7 @@ KexiRelation::storeRelations(RelationList relations, KoStore *store)
 		relationElement.appendChild(targetField);
 		QDomText tTargetField = domDoc.createTextNode((*it).rcvField);
 		targetField.appendChild(tTargetField);
-		
+
 		kdDebug() << "KexiRelationView::storeRelatoins() srcTable: " << (*it).srcTable << endl;
 		kdDebug() << "KexiRelationView::storeRelatoins() srcField: " << (*it).srcField << endl;
 		kdDebug() << "KexiRelationView::storeRelatoins() rcvTable: " << (*it).rcvTable << endl;
@@ -203,7 +203,7 @@ KexiRelation::storeRelations(RelationList relations, KoStore *store)
 		store->write(data);
 		store->close();
 	}
-	
+
 	return false;
 }
 

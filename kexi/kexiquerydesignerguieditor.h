@@ -63,13 +63,13 @@ typedef QValueList<Condition> ConditionList;
 class KexiQueryDesignerGuiEditor : public QWidget
 {
 	Q_OBJECT
-	
+
 	public:
 		KexiQueryDesignerGuiEditor(KexiView *view,QWidget *parent, KexiQueryDesigner *myparent, const char *name=0);
 		~KexiQueryDesignerGuiEditor();
 
 		QString			getQuery();
-		KexiTableView		*table() { return m_designTable; };
+		KexiTableView		*table()const { return m_designTable; };
 
 		QStringList		sourceList() { return m_sourceList; };
 

@@ -16,7 +16,7 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
- 
+
    Original Author:  Till Busch <till@bux.at>
    Original Project: buX (www.bux.at)
 */
@@ -40,20 +40,20 @@ public:
 
 	void paintEvent(QPaintEvent *e);
 
-public slots:	
+public slots:
 	void setOffset(int offset);
 	void setCellHeight(int cellHeight);
 	void setCurrentRow(int row);
 
 	void setInsertRow(int row);
-	void setColor(QColor color);
-	
+	void setColor(const QColor &color);
+
 protected:
 	int	m_rowHeight;
 	int	m_offset;
 	int	m_currentRow;
 	int	m_insertRow;
-	
+
 	QColor	m_pointerColor;
 
 	static const char *arrow[];

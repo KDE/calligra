@@ -51,7 +51,10 @@ KexiCreateProject::KexiCreateProject(KexiProject *project,const char* name) : KW
 	m_pageFile->hide();
 }
 
-KexiProject *KexiCreateProject::project(){return m_project;}
+KexiProject *KexiCreateProject::project()const
+{
+    return m_project;
+}
 
 void
 KexiCreateProject::registerPage(KexiCreateProjectPage *page)
@@ -126,7 +129,7 @@ KexiCreateProject::accept()
 }
 
 void
-KexiCreateProject::requireSection(QString section)
+KexiCreateProject::requireSection(const QString &section)
 {
 	if(section == m_currentSection)
 	{

@@ -31,17 +31,17 @@ class QLineEdit;
 
 class KexiDBRecord;
 class KExiView;
- 
+
 class KexiDataTable : public KexiDialogBase
 {
 	Q_OBJECT
-	
+
 	public:
 		KexiDataTable(KexiView *View,QWidget *parent, QString content, const char *name=0, bool embedd=false);
 		~KexiDataTable();
-		
-		bool executeQuery(QString query);
-		
+
+		bool executeQuery(const QString &query);
+
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 
 	protected:
@@ -58,5 +58,5 @@ class KexiDataTable : public KexiDialogBase
 
 		void slotSearchChanged(const QString &);
 };
- 
+
 #endif

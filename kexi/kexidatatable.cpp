@@ -75,7 +75,7 @@ KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, QString caption, co
 }
 
 bool
-KexiDataTable::executeQuery(QString queryStatement)
+KexiDataTable::executeQuery(const QString &queryStatement)
 {
 
 	if(!m_first)

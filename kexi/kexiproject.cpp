@@ -434,21 +434,13 @@ KexiProject::boolToString(bool b)
 	}
 }
 
-bool
-KexiProject::stringToBool(const QString s)
+bool KexiProject::stringToBool(const QString &s)
 {
-	if(s == "TRUE")
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+    return s == "TRUE" ? true : false ;
 }
 
 References
-KexiProject::fileReferences(QString group)
+KexiProject::fileReferences(const QString &group)
 {
 	kdDebug() << "KexiProject::fileReferences(" << group << ")" << endl;
 	References refs;

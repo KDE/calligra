@@ -65,7 +65,7 @@ public:
 
 
         void addFileReference(FileReference);
-        References fileReferences(QString group);
+        References fileReferences(const QString &group);
 
         bool initDbConnection(const Credentials& cred, const bool create = false);
         bool initHostConnection(const Credentials &cred);
@@ -77,7 +77,7 @@ public:
         QString url()const { return m_url; }
         bool dbIsAvaible()const { return m_dbAvaible; }
         QString boolToString(bool b);
-        bool stringToBool(const QString s);
+        bool stringToBool(const QString &s);
 
 signals:
         void dbAvaible();

@@ -44,7 +44,7 @@ typedef QPtrList<KexiCreateProjectPage> PageList;
 class KexiCreateProject : public KWizard  {
    Q_OBJECT
 
-	public: 
+	public:
 		KexiCreateProject(KexiProject *project, const char *name=0);
 		~KexiCreateProject();
 
@@ -53,15 +53,15 @@ class KexiCreateProject : public KWizard  {
 		*/
 		void			registerPage(KexiCreateProjectPage *page);
 
-		KexiProject *project();
-		
+		KexiProject *project()const ;
+
 	protected:
 		void			addItem(KexiCreateProjectPage *page, QString title, int index=-1);
 		/*! adds pages, needed for a section
 		 *  and removes pages, which are'n needed as well,
 		 *  note: it requeries that the pages are added in the right order)
 		 */
-		void			requireSection(QString section);
+		void			requireSection(const QString &section);
 
 		//always the same pixmap at the left
 		QPixmap			*m_wpic;
@@ -77,7 +77,7 @@ class KexiCreateProject : public KWizard  {
 
 		QString			m_currentSection;
 
-	private: 
+	private:
 		KexiProject *m_project;
 	protected slots:
 		void			slotValueChanged(KexiCreateProjectPage *, QString &);

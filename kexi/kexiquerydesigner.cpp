@@ -55,7 +55,7 @@ class KexiQueryDesigner::EditGUIClient: public KXMLGUIClient
 			setXMLFile("kexiquerydesignerui.rc");
 		}
 		virtual ~EditGUIClient(){;}
-		
+
 		void activate(QObject* o)
 		{
 			connect(m_actionEdit, SIGNAL(activated()), o, SLOT(slotEditState()));
@@ -80,7 +80,7 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, QString ide
  : KexiDialogBase(view,parent, name)
 {
 	m_identifier = identifier;
-	m_partCount = 0; 
+	m_partCount = 0;
 	m_activeTab = -1;
 
 	setCaption(i18n("Query"));
@@ -92,7 +92,7 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, QString ide
 
 	l->addWidget(m_widgetStack);
 	m_widgetStack->addWidget(m_editor = new KexiQueryDesignerGuiEditor(view,m_widgetStack,this));
-	
+
 	m_sqlDoc = KTextEditor::EditorChooser::createDocument(this, "sqlDoc");
 	m_widgetStack->addWidget(m_sqlView = m_sqlDoc->createView(this, 0L));
 
@@ -146,7 +146,7 @@ void KexiQueryDesigner::deactivateActions()
 }
 
 void
-KexiQueryDesigner::setCurrentQuery(QString query)
+KexiQueryDesigner::setCurrentQuery(const QString &query)
 {
 	if(query != m_query)
 	{
@@ -171,7 +171,7 @@ KexiQueryDesigner::slotSQLState()
 	m_editGUIClient->m_actionView->setChecked(false);
 
 	m_widgetStack->raiseWidget(m_sqlView);
-	
+
 }
 
 void
@@ -181,16 +181,16 @@ KexiQueryDesigner::slotViewState()
 	m_editGUIClient->m_actionSQL->setChecked(false);
 
 	kdDebug()<<"Raising view"<<endl;
-	
+
 	QObject *viswid=m_widgetStack->visibleWidget();
 	m_widgetStack->raiseWidget(m_view);
 
 	if (viswid==m_editor) {
 			if(m_editor->getQuery() == "")
-			
+
 			m_view->executeQuery(m_editor->getQuery());
 	} else
-	if (viswid==m_sqlView) {			
+	if (viswid==m_sqlView) {
 			KTextEditor::EditInterface *eIface = KTextEditor::editInterface(m_sqlDoc);
 			kdDebug() << "KexiQueryDesigner::slotViewState() sql-edit: " << eIface->text() << endl;
 
@@ -248,7 +248,7 @@ KexiQueryDesigner::slotSave(KoStore *store)
 				itemsElement.appendChild(field);
 				QDomText tField = domDoc.createTextNode(it->getValue(1).toString());
 				field.appendChild(tField);
-				
+
 				QDomElement shown = domDoc.createElement("shown");
 				itemsElement.appendChild(shown);
 				QDomText tShown = domDoc.createTextNode(it->getValue(2).toString());
@@ -263,7 +263,7 @@ KexiQueryDesigner::slotSave(KoStore *store)
 				itemsElement.appendChild(orC);
 				QDomText torC = domDoc.createTextNode(it->getValue(4).toString());
 				orC.appendChild(torC);
-				
+
 			}
 		}
 
@@ -292,7 +292,7 @@ KexiQueryDesigner::slotSave(KoStore *store)
 }
 
 void
-KexiQueryDesigner::addTab(QPixmap pixmap, QString caption, QWidget *assosiated,int ID)
+KexiQueryDesigner::addTab(QPixmap pixmap, const QString &caption, QWidget *assosiated,int ID)
 {
 	m_partCount++;
 	kdDebug() << "KexiQueryDesigner::addTab(): adding tab: " << m_partCount << endl;
@@ -313,13 +313,13 @@ KexiQueryDesigner::slotTabActivated(int tab)
 	if(tab != m_activeTab)
 	{
 		m_tb->setTab(m_activeTab, false);
-		
-		//please close your eyes and go some lines down (blind) 
+
+		//please close your eyes and go some lines down (blind)
 		if(m_widgetStack->widget(tab) == m_view && m_widgetStack->widget(m_activeTab) == m_editor)
 		{
 			m_view->executeQuery(m_editor->getQuery());
 		}
-		
+
 		m_activeTab = tab;
 		m_widgetStack->raiseWidget(m_activeTab);
 	}

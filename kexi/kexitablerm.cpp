@@ -16,7 +16,7 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
- 
+
    Original Author:  Till Busch <till@bux.at>
    Original Project: buX (www.bux.at)
 */
@@ -94,9 +94,9 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 		{
 			p.drawLine(i + 2, pos - m_rowHeight + 2 + i, i + 2, pos - 2 - i);
 		}
-		
+
 	}
-	
+
 	p.setPen(QColor(0,0,99));
 /*	if(m_insertRow >= first && m_insertRow <= last)
 	{
@@ -105,7 +105,7 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 		{
 			p.drawLine(i + 2, pos - m_rowHeight + 2 + i, i + 2, pos - 2 - i);
 		}
-		
+
 	}
 */
 
@@ -149,7 +149,7 @@ void KexiTableRM::setInsertRow(int row)
 	m_insertRow = row;
 }
 
-void KexiTableRM::setColor(QColor newcolor)
+void KexiTableRM::setColor(const QColor &newcolor)
 {
 	m_pointerColor = newcolor;
 }

@@ -31,23 +31,23 @@ class KexiProject;
 class KexiDialogBase : public QWidget
 {
 	Q_OBJECT
-	
+
 	public:
 
 		KexiDialogBase(KexiView *view,QWidget *parent, const char *name);
 		~KexiDialogBase();
-	
+
 		virtual KXMLGUIClient *guiClient()=0;
 		virtual void activateActions();
 		virtual void deactivateActions();
-		KexiView *mainWindow(){return m_mainWindow;};
-		
+		KexiView *mainWindow()const{return m_mainWindow;};
+
 		static KexiDialogBase *activeDocumentView() { return s_activeDocumentWindow;};
-		KexiProject *kexiProject();
-		KexiView *kexiView();
+		KexiProject *kexiProject()const;
+		KexiView *kexiView()const;
 	signals:
 		void closing(KexiDialogBase *);
-	
+
 	protected:
 		virtual void focusInEvent ( QFocusEvent *);
 		enum WindowType {ToolWindow, DocumentWindow};

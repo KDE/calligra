@@ -48,8 +48,15 @@ KexiDialogBase::KexiDialogBase(KexiView* view,QWidget *parent, const char *name)
 #endif
 }
 
-KexiProject *KexiDialogBase::kexiProject(){return m_project;}
-KexiView *KexiDialogBase::kexiView(){return m_view;}
+KexiProject *KexiDialogBase::kexiProject()const
+{
+    return m_project;
+}
+
+KexiView *KexiDialogBase::kexiView()const
+{
+    return m_view;
+}
 
 
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
