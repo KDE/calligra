@@ -1191,7 +1191,7 @@ void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
     parentElem.setAttribute( "frameInfo", static_cast<int>( m_info ) );
     parentElem.setAttribute( "name", m_name );
     parentElem.setAttribute( "visible", static_cast<int>( m_visible ) );
-
+    parentElem.setAttribute( "protectSize", static_cast<int>( m_protectSize ) );
     if ( saveFrames )
     {
         QPtrListIterator<KWFrame> frameIt = frameIterator();
@@ -1230,7 +1230,7 @@ void KWFrameSet::load( QDomElement &framesetElem, bool loadFrames )
         m_removeableHeader = static_cast<bool>( KWDocument::getAttribute( framesetElem, "removeable", false ) );
     else
         m_removeableHeader = static_cast<bool>( KWDocument::getAttribute( framesetElem, "removable", false ) );
-
+    m_protectSize=static_cast<bool>( KWDocument::getAttribute( framesetElem, "protectSize", false ) );
     if ( loadFrames )
     {
         // <FRAME>

@@ -321,6 +321,13 @@ don't put a </?xml...> at the end of the file!).
            
             protectcontent: Protect content of text object
 
+            protectSize:    Don't allow user to change size and position 
+                            of frameset
+
+                                0...no (default )
+                                1...yes
+
+
 -->
 <!ELEMENT FRAMESET
     (FRAME|PARAGRAPH|IMAGE|CLIPART|FORMULA)*>  <!-- missing: defining FORMULA -->
