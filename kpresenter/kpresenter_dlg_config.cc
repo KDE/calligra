@@ -386,7 +386,7 @@ void configureSpellPage::apply()
     m_spellConfigWidget->save();
 
 
-    m_pView->kPresenterDoc()->addIgnoreWordAllList(
+    m_pView->kPresenterDoc()->setSpellCheckIgnoreList(
         m_pView->broker()->settings()->currentIgnoreList() );
     //FIXME reactivate just if there are changes.
     doc->enableBackgroundSpellCheck( m_pView->broker()->settings()->backgroundCheckerEnabled() );

@@ -6843,7 +6843,7 @@ void KPresenterView::slotAddIgnoreAllWord()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
-        m_pKPresenterDoc->addIgnoreWordAll( edit->currentWordOrSelection() );
+        m_pKPresenterDoc->addSpellCheckIgnoreWord( edit->currentWordOrSelection() );
 }
 
 void KPresenterView::addWordToDictionary()
