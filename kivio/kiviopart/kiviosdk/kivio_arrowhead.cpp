@@ -72,6 +72,9 @@ void KivioArrowHead::setType(int t)
             break;
 
         case kahtArrowLine:
+        case kahtForwardSlash:
+        case kahtBackSlash:
+        case kahtPipe:
             m_cut = 0.0f;
             break;
 
@@ -149,6 +152,18 @@ void KivioArrowHead::paint( KivioPainter *painter, float x, float y, float vecX,
 
         case kahtDoubleTriangleHollow:
             paintDoubleTriangle( &d, false );
+            break;
+
+        case kahtForwardSlash:
+            paintForwardSlash( &d );
+            break;
+
+        case kahtBackSlash:
+            paintBackSlash( &d );
+            break;
+
+        case kahtPipe:
+            paintPipe( &d );
             break;
 
         default:
@@ -329,4 +344,88 @@ void KivioArrowHead::paintDoubleTriangle( KivioArrowHeadData *d, bool solid )
     painter->drawPolygon( &l1 );
     painter->drawPolygon( &l2 );
     painter->setBGColor(cbg);
+}
+
+void KivioArrowHead::paintForwardSlash( KivioArrowHeadData *d )
+{
+    KivioPainter *painter = d->painter;
+
+    float vecX = d->vecX;
+    float vecY = d->vecY;
+
+    KoZoomHandler* zoomHandler = d->zoomHandler;
+
+    float nvecX, nvecY; // normalized vectors
+    float pvecX, pvecY; // normal perpendicular vector
+
+    float length = sqrt( vecX*vecX + vecY*vecY );
+
+    nvecX = - vecX / length;
+    nvecY = - vecY / length;
+
+    pvecX = nvecY;
+    pvecY = -nvecX;
+
+    int x1 = zoomHandler->zoomItX((d->x + nvecX * (m_l/2.0f)) + pvecX*(m_w/2.0f));
+    int y1 = zoomHandler->zoomItY((d->y + nvecY * (m_l/2.0f)) + pvecY*(m_w/2.0f));
+    int x2 = zoomHandler->zoomItX((d->x - nvecX * (m_l/2.0f)) - pvecX*(m_w/2.0f));
+    int y2 = zoomHandler->zoomItY((d->y - nvecY * (m_l/2.0f)) - pvecY*(m_w/2.0f));
+
+    painter->drawLine(x1, y1, x2, y2);
+}
+
+void KivioArrowHead::paintBackSlash( KivioArrowHeadData *d )
+{
+    KivioPainter *painter = d->painter;
+
+    float vecX = d->vecX;
+    float vecY = d->vecY;
+
+    KoZoomHandler* zoomHandler = d->zoomHandler;
+
+    float nvecX, nvecY; // normalized vectors
+    float pvecX, pvecY; // normal perpendicular vector
+
+    float length = sqrt( vecX*vecX + vecY*vecY );
+
+    nvecX = - vecX / length;
+    nvecY = - vecY / length;
+
+    pvecX = nvecY;
+    pvecY = -nvecX;
+
+    int x1 = zoomHandler->zoomItX((d->x - nvecX * (m_l/2.0f)) + pvecX*(m_w/2.0f));
+    int y1 = zoomHandler->zoomItY((d->y - nvecY * (m_l/2.0f)) + pvecY*(m_w/2.0f));
+    int x2 = zoomHandler->zoomItX((d->x + nvecX * (m_l/2.0f)) - pvecX*(m_w/2.0f));
+    int y2 = zoomHandler->zoomItY((d->y + nvecY * (m_l/2.0f)) - pvecY*(m_w/2.0f));
+
+    painter->drawLine(x1, y1, x2, y2);
+}
+
+void KivioArrowHead::paintPipe( KivioArrowHeadData *d )
+{
+    KivioPainter *painter = d->painter;
+
+    float vecX = d->vecX;
+    float vecY = d->vecY;
+
+    KoZoomHandler* zoomHandler = d->zoomHandler;
+
+    float nvecX, nvecY; // normalized vectors
+    float pvecX, pvecY; // normal perpendicular vector
+
+    float length = sqrt( vecX*vecX + vecY*vecY );
+
+    nvecX = - vecX / length;
+    nvecY = - vecY / length;
+
+    pvecX = nvecY;
+    pvecY = -nvecX;
+
+    int x1 = zoomHandler->zoomItX(d->x + pvecX*(m_w/2.0f));
+    int y1 = zoomHandler->zoomItY(d->y + pvecY*(m_w/2.0f));
+    int x2 = zoomHandler->zoomItX(d->x - pvecX*(m_w/2.0f));
+    int y2 = zoomHandler->zoomItY(d->y - pvecY*(m_w/2.0f));
+
+    painter->drawLine(x1, y1, x2, y2);
 }
