@@ -24,6 +24,7 @@
 #include <kiconloader.h>
 #include <netwm_def.h>
 #include <kdebug.h>
+#include <kstatusbar.h>
 
 #include "kexicontexthelp.h"
 
@@ -97,9 +98,20 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt, const QString &id
 		return;
 	}
 	m_registering=true;
+
+  //resize to fit the inside the workspace
+  QSize new_size = frameSize();
+  QSize max_size = m_view->workspaceWidget()->size()-QSize(10,10+m_view->statusBar()->height());
+  if (new_size.width() > max_size.width())
+    new_size.setWidth( max_size.width() );
+  if (new_size.height() > max_size.height())
+    new_size.setHeight( max_size.height() );
+  if (new_size!=frameSize())
+    resize(new_size);
 	reparent(m_view->workspaceWidget(),QPoint(0,0),true);
-	m_registering=false;
-	m_view->workspace()->activateView(this);
+  m_registering=false;
+
+  m_view->workspace()->activateView(this);
 	if(!identifier.isNull())
 	{
 		m_view->registerDialog(this, identifier);

@@ -81,7 +81,11 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *c
 	menu_id_addRecord = m_pContextMenu->insertItem(i18n("Add Record"), this, SLOT(addRecord()), CTRL+Key_Insert);
 	menu_id_removeRecord = m_pContextMenu->insertItem(kapp->iconLoader()->loadIcon("button_cancel", KIcon::Small), i18n("Remove Record"), this, SLOT(removeRecord()), CTRL+Key_Delete);
 
-	m_rowHeight = fontMetrics().lineSpacing();
+#ifdef Q_WS_WIN
+  m_rowHeight = fontMetrics().lineSpacing() + 4;
+#else
+  m_rowHeight = fontMetrics().lineSpacing();
+#endif
 	if(m_rowHeight < 17)
 		m_rowHeight = 17;
 	m_pBufferPm = 0;
@@ -195,7 +199,11 @@ void KexiTableView::addColumn(QString name, QVariant::Type type, bool editable, 
 void KexiTableView::setFont(const QFont &f)
 {
 	QWidget::setFont(f);
-	m_rowHeight = fontMetrics().lineSpacing()+2;
+#ifdef Q_WS_WIN
+  m_rowHeight = fontMetrics().lineSpacing() + 4;
+#else
+  m_rowHeight = fontMetrics().lineSpacing() + 2;
+#endif
 	if(m_rowHeight < 22)
 		m_rowHeight = 22;
 	setMargins(14, m_rowHeight, 0, 0);
@@ -596,7 +604,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	}
 */
 
-	int x = 2;
+	int x = 1;
 
 //	int iOffset = 0;
 	QPen fg(colorGroup().text());
@@ -622,11 +630,11 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 //			qDebug("KexiTableView::paintCell(): mode: %i", m_pColumnModes->at(col));
 			if(item->isInsertItem() && m_pColumnModes->at(col) == 3)  //yes that isn't beautiful
 			{
-				p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, "[Auto]");
+				p->drawText(x, 1, w - (x+x) -4 - 2, h, AlignRight, "[Auto]");
 			}
 			else
 			{
-				p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, QString::number(num));
+				p->drawText(x, 1, w - (x+x) -4 - 2, h, AlignRight, QString::number(num));
 			}
 //			p->drawRect(x - 1, 1, w - (x+x) - 1, h + 1);
 			break;
@@ -636,11 +644,11 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			QString f = KGlobal::locale()->formatNumber(item->getValue(col).toDouble());
 			if(item->isInsertItem() && m_pColumnModes->at(col) == 3)  //yes that isn't beautiful
 			{
-				p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, "[Auto]");
+				p->drawText(x, 1, w - (x+x) -4 - 2, h, AlignRight, "[Auto]");
 			}
 			else
 			{
-				p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, f);
+				p->drawText(x, 1, w - (x+x) -4 - 2, h, AlignRight, f);
 			}
 			break;
 		}
@@ -673,7 +681,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 				#else
 				s = item->getDate(col).toString(Qt::LocalDate);
 				#endif
-				p->drawText(x, 0, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, s);
+				p->drawText(x, -1, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, s);
 				break;
 			}
 			break;
@@ -688,7 +696,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		case QVariant::String:
 		default:
 		{
-			p->drawText(x, 0, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, item->getText(col));
+			p->drawText(x, -1, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, item->getText(col));
 		}
 	}
 	p->setPen(fg);
@@ -1124,8 +1132,8 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 			break;
 	}
 
-	moveChild(m_pEditor, columnPos(m_curCol), rowPos(m_curRow));
-	m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight(m_curRow)-1);
+	moveChild(m_pEditor, columnPos(m_curCol), rowPos(m_curRow)-1);
+	m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight(m_curRow));
 //	moveChild(m_pEditor, columnPos(m_curCol), rowPos(m_curRow));
 	m_pEditor->show();
 	m_pEditor->setFocus();

@@ -56,6 +56,15 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 	 m_cview->completionBox()->setTabHandling(true);
 
 
+   switch(m_type) {
+     case QVariant::Double:
+     case QVariant::Int:
+     case QVariant::UInt:
+      m_cview->setAlignment(AlignRight);
+      break;
+     default:;
+   }
+
 	if(!ov.isEmpty())
 	{
 		switch(m_type)
@@ -63,16 +72,16 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 			case QVariant::Double:
 				if(ov == KGlobal::locale()->decimalSymbol() || ov == KGlobal::locale()->monetaryDecimalSymbol())
 					m_cview->setText(ov);
-
+				break;
 			case QVariant::Int:
 				if(ov == KGlobal::locale()->negativeSign())
 					m_cview->setText(ov);
-
+				break;
 			case QVariant::UInt:
+				m_cview->setAlignment(AlignRight);
 				if(ov == "1" || ov == "2" || ov == "3" || ov == "4" || ov == "5" || ov == "6" || ov == "7" || ov == "8" || ov == "9" || ov == "0")
 					m_cview->setText(ov);
 //					break;
-
 				if(ov == "=")
 				{
 					kdDebug() << "KexiInputTableEdit::KexiInputTableEdit(): calculated!" << endl;

@@ -105,7 +105,7 @@ KexiTablePart::getTables()
 }
 
 QWidget *
-KexiTablePart::embeddReadOnly(QWidget */*w*/, KexiView */*v*/)
+KexiTablePart::embeddReadOnly(QWidget * /*w*/, KexiView * /*v*/)
 {
 	return 0;
 }

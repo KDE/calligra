@@ -214,7 +214,7 @@ HistoryEntry::highlight()
 	statement.replace(QRegExp("\t"), "&nbsp;&nbsp;&nbsp;");
 #endif
 	// getting quoting...
-	for(int i=0; i < statement.length(); i++)
+	for(int i=0; i < (int)statement.length(); i++)
 	{
 		QString beginTag;
 		QString endTag;
