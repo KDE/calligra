@@ -22,6 +22,7 @@
 #define KEXIDB_UTILS_H
 
 #include <qvaluelist.h>
+#include <qvariant.h>
 
 #include <kexidb/connection.h>
 
@@ -42,6 +43,15 @@ namespace KexiDB
 
 	/*! \return list of (not-i18n'd) type names for a given \a typeGroup. */
 	KEXI_DB_EXPORT QStringList typeStringsForGroup(KexiDB::Field::TypeGroup typeGroup);
+
+	/*! \return true if \a v represents an empty (but not null) value.
+	 Values of some types (as for strings) can be both empty and not null. */
+	inline bool isEmptyValue(KexiDB::Field *f, const QVariant &v) {
+		if (f->isTextType() && v.toString().isEmpty() && !v.toString().isNull())
+			return true;
+		return v.isNull();
+	}
+
 }
 
 #endif
