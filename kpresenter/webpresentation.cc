@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -66,6 +67,73 @@
 #include <kio/netaccess.h>
 
 #include "koDocumentInfo.h"
+
+
+// Comes from koffice/filters/libexport/KWEFUtils.cc
+static QString EscapeSgmlText(const QTextCodec* codec,
+    const QString& strIn, const bool quot = false , const bool apos = false )
+{
+    QString strReturn;
+    QChar ch;
+
+    for (uint i=0; i<strIn.length(); i++)
+    {
+        ch=strIn[i];
+        switch (ch.unicode())
+        {
+        case 38: // &
+            {
+                strReturn+="&amp;";
+                break;
+            }
+        case 60: // <
+            {
+                strReturn+="&lt;";
+                break;
+            }
+        case 62: // >
+            {
+                strReturn+="&gt;";
+                break;
+            }
+        case 34: // "
+            {
+                if (quot)
+                    strReturn+="&quot;";
+                else
+                    strReturn+=ch;
+                break;
+            }
+        case 39: // '
+            {
+                // NOTE:  HTML does not define &apos; by default (only XML/XHTML does)
+                if (apos)
+                    strReturn+="&apos;";
+                else
+                    strReturn+=ch;
+                break;
+            }
+        default:
+            {
+                // verify that the character ch can be expressed in the
+                //   encoding in which we will write the HTML file.
+                if (codec)
+                {
+                    if (!codec->canEncode(ch))
+                    {
+                        strReturn+=QString("&#%1;").arg(ch.unicode());
+                        break;
+                    }
+                }
+                strReturn+=ch;
+                break;
+            }
+        }
+    }
+
+    return strReturn;
+}
+
 
 /******************************************************************/
 /* Class: KPWebPresentation                                       */
@@ -221,130 +289,174 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
 }
 
 /*================================================================*/
+QString KPWebPresentation::escapeHtmlText( QTextCodec *codec, const QString& strText ) const
+{
+    // Escape quotes (needed in attributes)
+    // Do not escape apostrophs (only allowed in XHTML!)
+    return EscapeSgmlText( codec, strText, true, false );
+}
+
+/*================================================================*/
 void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 {
-    unsigned int pgNum;
-    int p;
-    QString format = imageFormat( imgFormat );
-
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
-    QString chsetName = codec->mimeName();
+    QString format ( imageFormat( imgFormat ) );
+    QString mimeName ( codec->mimeName() );
+    
+    bool xhtml=false; // ### TODO: XHTML 1.0 support in dialog
+    
+    const QString brtag ( "<br" + QString(xhtml?" /":"") + ">" );
 
-    QString html;
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
-        pgNum = i + 1;
-        html = QString( "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" );
-        html += QString( "<HTML><HEAD><TITLE>%1 - %2</TITLE>\n" ).arg( title ).arg( slideInfos[ i ].slideTitle );
-
-        html += QString( "<META HTTP-Equiv=\"Content-Type\" CONTENT=\"text/html; charset=%1\">\n" )
-            .arg( chsetName );
-
-	if ( i > 0 ) {
-		html += QString( "<LINK rel=\"first\" href=\"slide_1.html\">\n" );
-		html += QString( "<LINK rel=\"prev\" href=\"slide_%1.html\">\n" ).arg( pgNum - 1 );
-	}
-	if ( i < slideInfos.count() - 1 ) {
-		html += QString( "<LINK rel=\"next\" href=\"slide_%1.html\">\n" ).arg( pgNum + 1 );
-		html += QString( "<LINK rel=\"last\" href=\"slide_%1.html\">\n" ).arg( slideInfos.count() );
-	}
-	html += QString( "<LINK rel=\"contents\" href=\"../index.html\">\n" );
-
-        html += QString( "</HEAD>\n" );
-        html += QString( "<BODY bgcolor=\"%1\" text=\"%2\">\n" ).arg( backColor.name() ).arg( textColor.name() );
-
-        html += QString( "  <CENTER>\n" );
-        if ( i > 0 )
-            html += QString( "    <A HREF=\"slide_1.html\">" );
-        html += QString( "<IMG src=\"../pics/first.%1\" border=\"0\" alt=\"First\" title=\"First\">" ).arg( format );
-        if ( i > 0 )
-            html += "</A>\n";
-        else
-            html += "\n";
-
-        if ( i > 0 )
-            html += QString( "    <A HREF=\"slide_%1.html\">" ).arg( pgNum - 1 );
-        html += QString( "<IMG src=\"../pics/prev.%1\" border=\"0\" alt=\"Previous\" title=\"Previous\">" ).arg( format );
-        if ( i > 0 )
-            html += "</A>\n";
-        else
-            html += "\n";
-
-        if ( i < slideInfos.count() - 1 )
-            html += QString( "    <A HREF=\"slide_%1.html\">" ).arg( pgNum + 1 );
-        html += QString( "<IMG src=\"../pics/next.%1\" border=\"0\" alt=\"Next\" title=\"Next\">" ).arg( format );
-        if ( i < slideInfos.count() - 1 )
-            html += "</A>\n";
-        else
-            html += "\n";
-
-        if ( i < slideInfos.count() - 1 )
-            html += QString( "    <A HREF=\"slide_%1.html\">" ).arg( slideInfos.count() );
-        html += QString( "<IMG src=\"../pics/last.%1\" border=\"0\" alt=\"Last\" title=\"Last\">" ).arg( format );
-        if ( i < slideInfos.count() - 1 )
-            html += "</A>\n";
-        else
-            html += "\n";
-
-        html += "    &nbsp; &nbsp; &nbsp; &nbsp; \n";
-
-        html += "    <A HREF=\"../index.html\">";
-        html += QString( "<IMG src=\"../pics/home.%1\" border=\"0\" alt=\"Home\" title=\"Home\">" ).arg( format );
-        html += "</A>\n";
-
-        html += "  </CENTER><BR><HR noshade>\n";
-
-        html += QString( "  <CENTER><FONT color=\"%1\">\n" ).arg( titleColor.name() );
-        html += QString( "  <B>%1</B> - <I>%2</I>\n" ).arg( title ).arg( slideInfos[ i ].slideTitle );
-
-        html += "  </FONT></CENTER><HR noshade><BR>\n";
-
-        html += "  <CENTER>\n";
-
-        html += "    ";
-        if ( i < slideInfos.count() - 1 )
-            html += QString( "<A HREF=\"slide_%1.html\">" ).arg( pgNum + 1 );
-        html += QString( "<IMG src=\"../pics/slide_%1.%2\" border=\"0\" alt=\"Slide %3\">" ).arg( pgNum ).arg( format ).arg( i );
-        if ( i < slideInfos.count() - 1 )
-            html += "</A>\n";
-        else
-            html += "\n";
-
-        html += "  </CENTER><BR><HR noshade>\n";
-
-        QPtrList<KPrPage> _tmpList( doc->getPageList() );
-        QString note = _tmpList.at(i)->noteText();
-        if ( !note.isEmpty() ) {
-            html += QString( "  <B>%1</B>\n" ).arg( i18n( "Note" ) );
-            html += "  <BLOCKQUOTE>\n";
-            html += "  <P>\n";
-
-            note.replace( QRegExp( "\n" ), QString::fromLatin1( "<BR>\n" ) );
-            html += note;
-
-            html += "  </P>\n";
-            html += "  </BLOCKQUOTE><HR NOSHADE>\n";
-        }
-
-        html += "  <CENTER>\n";
-        html += "    <B>"+ i18n("Author:") + " </B>";
-        if ( !email.isEmpty() )
-            html += QString( "<A HREF=\"mailto:%1\">" ).arg( email );
-        html += QString( "<I>%1</I>" ).arg( author );
-        if ( !email.isEmpty() )
-            html += "</A>";
-
-        html += i18n(" - created with %1").arg("<A HREF=\"http://www.koffice.org/kpresenter/\">KPresenter</A>");
-        html += "  </CENTER><HR noshade>\n";
-        html += "</BODY></HTML>\n";
-
+        
+        unsigned int pgNum = i + 1;
+        
         QFile file( QString( "%1/html/slide_%2.html" ).arg( path ).arg( pgNum ) );
         file.open( IO_WriteOnly );
-        QTextStream t( &file );
-        t.setCodec( codec );
-        t << html;
+        QTextStream streamOut( &file );
+        streamOut.setCodec( codec );
+
+        
+        if (xhtml)
+        {   //Write out the XML declaration
+            streamOut << "<?xml version=\"1.0\" encoding=\""
+                << mimeName << "\"?>\n";
+        }
+        // write <!DOCTYPE
+        streamOut << "<!DOCTYPE ";
+        if (xhtml)
+        {
+            streamOut << "html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"";
+            streamOut << " \"DTD/xhtml1-transitional.dtd\">\n";
+
+        }
+        else
+        {
+            streamOut << "HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"";
+            streamOut << " \"http://www.w3.org/TR/html4/loose.dtd\">\n";
+        }
+        streamOut << "<html";
+        if (xhtml)
+        {
+            // XHTML has an extra attribute defining its namespace (in the <html> opening tag)
+            streamOut << " xmlns=\"http://www.w3.org/1999/xhtml\"";
+        }
+        streamOut << ">\n" << "<head>\n";
+
+        // Declare what charset we are using
+        streamOut << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=";
+        streamOut << mimeName << '"' << (xhtml?" /":"") << ">\n" ;
+
+        // Tell who we are (with the CVS revision number) in case we have a bug in our output!
+        QString strVersion("$Revision$");
+        // Eliminate the dollar signs
+        //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
+        streamOut << "<meta name=\"Generator\" content=\"KPresenter's Web Presentation "
+            << strVersion.mid(10).replace("$","")
+            << "\""<< (xhtml?" /":"") // X(HT)ML closes empty elements, HTML not!
+            << ">\n";
+
+        streamOut << "<title>"<< escapeHtmlText( codec, title ) << " - " << escapeHtmlText( codec, slideInfos[ i ].slideTitle ) << "</title>\n";
+
+        // ### TODO: transform documentinfo.xml into many <META> elements (at least the author!)
+
+        if ( i > 0 ) {
+            streamOut <<  "<link rel=\"first\" href=\"slide_1.html\"" << (xhtml?" /":"") << ">\n";
+            streamOut <<  "<link rel=\"prev\" href=\"slide_" << pgNum - 1 << ".html\"" << (xhtml?" /":"") << ">\n";
+        }
+        if ( i < slideInfos.count() - 1 ) {
+            streamOut <<  "<link rel=\"next\" href=\"slide_" << pgNum + 1 << ".html\"" << (xhtml?" /":"") << ">\n";
+            streamOut <<  "<link rel=\"last\" href=\"slide_" << slideInfos.count() << ".html\"" << (xhtml?" /":"") << ">\n";
+        }
+        streamOut <<  "<link rel=\"contents\" href=\"../index.html\"" << (xhtml?" /":"") << ">\n";
+
+        streamOut << "</head>\n";
+        streamOut << "<body bgcolor=\"" << backColor.name() << "\" text=\"" << textColor.name() << "\">\n";
+        
+        streamOut << "  <center>\n";
+        
+        if ( i > 0 )
+            streamOut << "    <a href=\"slide_1.html\">";
+        streamOut << "<img src=\"../pics/first." << format << "\" border=\"0\" alt=\"First\" title=\"First\"" << (xhtml?" /":"") << ">";
+        if ( i > 0 )
+            streamOut << "</a>";
+
+        streamOut << "\n";
+            
+        if ( i > 0 )
+            streamOut << "    <a href=\"slide_" << pgNum - 1 << ".html\">";
+        streamOut << "<img src=\"../pics/prev." << format << "\" border=\"0\" alt=\"Previous\" title=\"Previous\"" << (xhtml?" /":"") << ">";
+        if ( i > 0 )
+            streamOut << "</a>";
+
+        streamOut << "\n";
+        
+        if ( i < slideInfos.count() - 1 )
+            streamOut << "    <a href=\"slide_" << pgNum + 1 << ".html\">";
+        streamOut << "<img src=\"../pics/next." << format << "\" border=\"0\" alt=\"Next\" title=\"Next\"" << (xhtml?" /":"") << ">";;
+        if ( i < slideInfos.count() - 1 )
+            streamOut << "</a>";
+
+        streamOut << "\n";
+        
+        if ( i < slideInfos.count() - 1 )
+            streamOut << "    <a href=\"slide_" << slideInfos.count() << ".html\">";
+        streamOut << "<img src=\"../pics/last." << format << "\" border=\"0\" alt=\"Last\" title=\"Last\"" << (xhtml?" /":"") << ">";;
+        if ( i < slideInfos.count() - 1 )
+            streamOut << "</a>";
+
+        streamOut << "\n" << "    &nbsp; &nbsp; &nbsp; &nbsp;\n";
+
+        streamOut << "    <a href=\"../index.html\">";
+        streamOut << "<img src=\"../pics/home." << format << "\" border=\"0\" alt=\"Home\" title=\"Home\"" << (xhtml?" /":"") << ">";;
+        streamOut << "</a>\n";
+
+        streamOut << " </center>" << brtag << "<HR noshade=\"noshade\"" << (xhtml?" /":"") << ">\n"; // ### TODO: is noshade W3C?
+
+        streamOut << "  <center><font color=\"" << escapeHtmlText( codec, titleColor.name() ) << "\">\n";
+        streamOut << "    <b>" << escapeHtmlText( codec, title ) << "</b> - <i>" << escapeHtmlText( codec, slideInfos[ i ].slideTitle ) << "</i>\n";
+
+        streamOut << "    </font></center><hr noshade=\"noshade\"" << (xhtml?" /":"") << ">" << brtag << "\n";
+
+        streamOut << "  <center>\n    ";
+
+        if ( i < slideInfos.count() - 1 )
+            streamOut << "<a href=\"slide_" << pgNum + 1 << ".html\">";
+        streamOut << "<img src=\"../pics/slide_" << pgNum << "." << format << "\" border=\"0\" alt=\"Slide " << pgNum << "\">";
+        if ( i < slideInfos.count() - 1 )
+            streamOut << "</a>";
+
+        streamOut << "\n";
+        
+        streamOut << "    </center>" << brtag << "<hr noshade=\"noshade\"" << (xhtml?" /":"") << ">\n";
+
+        QPtrList<KPrPage> _tmpList( doc->getPageList() );
+        QString note ( escapeHtmlText( codec, _tmpList.at(i)->noteText() ) );
+        if ( !note.isEmpty() ) {
+            streamOut << "  <b>" << escapeHtmlText( codec, i18n( "Note" ) ) << "</b>\n";
+            streamOut << " blockquote>\n";
+            
+            streamOut << note.replace( "\n", brtag );
+
+            streamOut << "  </blockquote><hr noshade=\"noshade\"" << (xhtml?" /":"") << ">\n";
+        }
+
+        streamOut << "  <center>\n";
+        streamOut << "    <b>" << escapeHtmlText( codec, i18n("Author:") ) << " </b>";
+        if ( !email.isEmpty() )
+            streamOut << "<a href=\"mailto:" << escapeHtmlText( codec, email ) << "\">";
+        streamOut << "<i>" << escapeHtmlText( codec, author ) << "</i>";
+        if ( !email.isEmpty() )
+            streamOut << "</a>";
+
+        streamOut << brtag << "<a href=\"http://www.koffice.org/kpresenter/\">"
+            << escapeHtmlText( codec, i18n("Created with KPresenter" ) ) << "</a>";
+        streamOut << "    </center><hr noshade=\"noshade\"" << (xhtml?" /":"") << ">\n";
+        streamOut << "</body>\n</html>\n";
+
         file.close();
 
-        p = progressBar->progress();
+        int p = progressBar->progress();
         progressBar->setProgress( ++p );
         kapp->processEvents();
     }
@@ -437,6 +549,7 @@ void KPWebPresentation::init()
     backColor = Qt::white;
     textColor = Qt::black;
     titleColor = Qt::red;
+    // ### TODO: make PNG the default. All modern user agents should know PNG nowadays.
     if (KImageIO::canWrite("JPEG"))
         imgFormat = JPEG;
     else
@@ -930,6 +1043,7 @@ void KPWebPresentationCreateDialog::saveConfig()
     if( url.isEmpty() )
       return;
 
+    // ### TODO: use KIO::NetAccess for remote files (floppy: is remote!)
     if( !url.isLocalFile() )
     {
       KMessageBox::sorry( 0L, i18n( "Only local files are currently supported." ) );

@@ -124,7 +124,8 @@ public:
 
 protected:
     void init();
-
+    QString escapeHtmlText( QTextCodec *codec, const QString& strText ) const;
+ 
     KPresenterDoc *doc;
     KPresenterView *view;
     QString config;
