@@ -2086,7 +2086,7 @@ void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
                       page->getGColor1( gColor1 ),
                       page->getGColor2( gColor2 ), page->getGType( gType ),
                       page->getGUnbalanced( gUnbalanced ),
-                      page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ) );
+                      page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ) ,m_canvas->activePage()->objectList());
     if( cmd)
     {
         macro->addCommand(cmd);
@@ -2098,7 +2098,7 @@ void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
                       page->getGColor1( gColor1 ),
                       page->getGColor2( gColor2 ), page->getGType( gType ),
                       page->getGUnbalanced( gUnbalanced ),
-                      page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ) );
+                                   page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ),stickyPage()->objectList() );
     if( cmd)
     {
         macro->addCommand(cmd);
@@ -2189,7 +2189,7 @@ void KPresenterView::setExtraPenWidth( unsigned int width )
                                                       page->getGColor1( gColor1 ),
                                                       page->getGColor2( gColor2 ), page->getGType( gType ),
                                                       page->getGUnbalanced( gUnbalanced ),
-                                                      page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ) );
+                                                      page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ),m_canvas->activePage()->objectList() );
     if( cmd)
     {
         macro->addCommand(cmd);
@@ -2201,7 +2201,7 @@ void KPresenterView::setExtraPenWidth( unsigned int width )
                                    page->getGColor1( gColor1 ),
                                    page->getGColor2( gColor2 ), page->getGType( gType ),
                                    page->getGUnbalanced( gUnbalanced ),
-                                   page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ) );
+                                   page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ),stickyPage()->objectList() );
     if( cmd)
     {
         macro->addCommand(cmd);
@@ -3123,7 +3123,7 @@ void KPresenterView::styleOk()
         styleDia->getGColor1(),
         styleDia->getGColor2(), styleDia->getGType(),
         styleDia->getGUnbalanced(),
-        styleDia->getGXFactor(), styleDia->getGYFactor() );
+        styleDia->getGXFactor(), styleDia->getGYFactor(),m_canvas->activePage()->objectList() );
     if( cmd)
     {
         macro->addCommand(cmd);
@@ -3146,7 +3146,7 @@ void KPresenterView::styleOk()
         styleDia->getGColor1(),
         styleDia->getGColor2(), styleDia->getGType(),
         styleDia->getGUnbalanced(),
-        styleDia->getGXFactor(), styleDia->getGYFactor() );
+        styleDia->getGXFactor(), styleDia->getGYFactor(),stickyPage()->objectList() );
     if( cmd)
     {
         macro->addCommand(cmd);

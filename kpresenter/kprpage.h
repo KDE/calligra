@@ -118,7 +118,7 @@ public:
     bool setLineBegin( LineEnd lb );
 
     KCommand *setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,const  QColor& g1, const QColor &g2,
-			   BCType gt, bool unbalanced, int xfactor, int yfactor);
+			   BCType gt, bool unbalanced, int xfactor, int yfactor,QPtrList<KPObject> list);
 
     QPen getPen( const QPen & pen );
 

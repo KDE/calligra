@@ -1871,10 +1871,13 @@ bool KPrPage::setLineBegin( LineEnd lb )
 
 /*===================== set pen and brush ========================*/
 KCommand * KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft, const QColor &g1, const QColor &g2,
-                                    BCType gt, bool unbalanced, int xfactor, int yfactor )
+                                    BCType gt, bool unbalanced, int xfactor, int yfactor,QPtrList<KPObject>list )
 {
+    kdDebug() << "KPrPage::setPenBrush" << endl;
     KPObject *kpobject = 0;
     PenBrushCmd *penBrushCmd=0L;
+    bool cmdCreate=false;
+    KMacroCommand *cmd=new KMacroCommand(i18n("Apply Style"));
 
     QPtrList<KPObject> _objects;
     QPtrList<PenBrushCmd::Pen> _oldPen;
@@ -1899,11 +1902,12 @@ KCommand * KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd l
     _oldPen.setAutoDelete( false );
     _oldBrush.setAutoDelete( false );
 
-    QPtrListIterator<KPObject> it( m_objectList );
+    QPtrListIterator<KPObject> it( list );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected())
         {
+            kdDebug() << "KPrPage::setPenBrush entre !!!!!!!!!!!!!" << endl;
             kpobject=it.current();
             ptmp = new PenBrushCmd::Pen;
             btmp = new PenBrushCmd::Brush;
@@ -2106,6 +2110,25 @@ KCommand * KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd l
                 }
             }
             break;
+            case OT_GROUP:
+            {
+                KPGroupObject *obj=dynamic_cast<KPGroupObject*>( kpobject );
+                if(obj)
+                {
+                    kdDebug() << "KPrPage::setPenBrush" << endl;
+                    obj->selectAllObj();
+                    KCommand *cmd2=setPenBrush(pen, brush, lb, le, ft, g1, g2,
+                                               gt,unbalanced, xfactor,yfactor, obj->objectList() );
+                    obj->deSelectAllObj();
+                    kdDebug()<<"cmd2 :"<<cmd<<endl;
+                    if(cmd2)
+                    {
+                        cmd->addCommand(cmd2);
+                        cmdCreate=true;
+                    }
+                }
+            }
+            break;
             default: break;
             }
             _oldPen.append( ptmp );
@@ -2118,14 +2141,22 @@ KCommand * KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd l
         penBrushCmd = new PenBrushCmd( i18n( "Apply Styles" ), _oldPen, _oldBrush,
                                                     _newPen, _newBrush, _objects, m_doc );
         penBrushCmd->execute();
+        cmd->addCommand(penBrushCmd);
+        cmdCreate=true;
     } else {
         _oldPen.setAutoDelete( true );
         _oldPen.clear();
         _oldBrush.setAutoDelete( true );
         _oldBrush.clear();
     }
-    m_doc->setModified(true);
-    return penBrushCmd;
+    if(cmdCreate)
+        return cmd;
+    else
+    {
+        delete cmd;
+        cmd=0L;
+    }
+    return cmd;
 }
 
 int KPrPage::getPenBrushFlags() const

@@ -82,6 +82,12 @@ public:
     QPtrList<KPObject> getObjects() {
         return objects;
     }
+    const QPtrList<KPObject> &objectList() {
+        return objects;
+    }
+
+    void selectAllObj();
+    void deSelectAllObj();
 
     virtual void setOwnClipping( bool _ownClipping );
     virtual void setSubPresStep( int _subPresStep );

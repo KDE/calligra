@@ -63,6 +63,25 @@ KPGroupObject &KPGroupObject::operator=( const KPGroupObject & )
     return *this;
 }
 
+void KPGroupObject::selectAllObj()
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->setSelected(true);
+    }
+}
+
+void KPGroupObject::deSelectAllObj()
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->setSelected(false);
+    }
+
+}
+
 /*================================================================*/
 void KPGroupObject::setSize( double _width, double _height )
 {
