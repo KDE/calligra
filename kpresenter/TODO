@@ -91,6 +91,7 @@ Done:
 -> Save/load masterpage
 
 Todo:
+-> save/load backgroud of master page
 -> save/load cubic/quadric/freehand object (define as svg object)
 -> save/load picture effect
 	-> picture effect (extend oasis format)
