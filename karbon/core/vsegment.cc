@@ -64,6 +64,8 @@ VSegment::VSegment( int degree )
 	m_degree = degree;
 
 	m_nodes = new VNodeData[ m_degree ];
+	for( int i = 0; i < m_degree; ++i )
+		selectPoint( i );
 
 	m_type = begin;
 	m_state = normal;
