@@ -37,6 +37,7 @@
 #include <koPoint.h>
 #include <koSize.h>
 #include <qvariant.h>
+#include <qvaluevector.h>
 
 class KPresenterDoc;
 class KPTextObject;
@@ -483,30 +484,35 @@ protected:
     KPresenterDoc *doc;
 };
 
-class TransEffectCmd : public KNamedCommand
+class TransEffectCmd : public KCommand
 {
 public:
-    TransEffectCmd( const QString &_name, PageEffect _pageEffect, PresSpeed _transSpeed,
-                    bool _soundEffect, const QString& _soundFileName,
-                    bool _autoAdvance, int _slideTime,
-                    PageEffect _oldPageEffect, PresSpeed _oldTransSpeed,
-                    bool _oldSoundEffect, const QString& _oldSoundFileName,
-                    bool _oldAutoAdvance, int _oldSlideTime,
-                    KPrPage *_page );
+    struct PageEffectSettings {
+        PageEffect pageEffect;
+        PresSpeed transSpeed;
+        bool soundEffect;
+        QString soundFileName;
+        bool autoAdvance;
+        int slideTime;
+        void applyTo( KPrPage * );
+    };
+    // TODO also pass a flag to know which settings need to be applied (especially for "all pages")
+    TransEffectCmd( QValueVector<PageEffectSettings> oldSettings,
+                    PageEffectSettings newSettings,
+                    KPrPage* page, KPresenterDoc* doc );
 
     virtual void execute();
     virtual void unexecute();
+    virtual QString name() const;
 
-protected:
-    PageEffect pageEffect, oldPageEffect;
-    PresSpeed transSpeed, oldTransSpeed;
-    bool soundEffect, oldSoundEffect;
-    QString soundFileName, oldSoundFileName;
-    bool autoAdvance, oldAutoAdvance;
-    int slideTime, oldSlideTime;
+private:
+    void exec( KPrPage* page );
+    void unexec( KPrPage* page );
 
+    QValueVector<PageEffectSettings> m_oldSettings;
+    PageEffectSettings m_newSettings;
     KPrPage *m_page;
-    KPresenterDoc *doc;
+    KPresenterDoc *m_doc;
 };
 
 class PgLayoutCmd : public KNamedCommand

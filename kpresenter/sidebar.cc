@@ -375,7 +375,7 @@ void ThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
         pagecnt++;
         it = it->nextItem();
     } while ( it );
-    
+
     if ( ! sticky )
         kdWarning(33001) << "Item for page " << pagenr << " not found" << endl;
 }
@@ -559,6 +559,8 @@ void OutlineSlideItem::update()
     if( !m_page ) return;
     int index = m_page->kPresenterDoc()->pageList().findRef( m_page );
     QString title = m_page->pageTitle( i18n( "Slide %1" ).arg( index + 1 ) );
+    if ( !m_page->kPresenterDoc()->isSlideSelected( index ) )
+        title = i18n( "(%1)" ).arg( title );
     setText( 0, title );
 
     // add all objects
@@ -572,7 +574,7 @@ void OutlineSlideItem::update()
     QPtrListIterator<KPObject> it( m_page->objectList() );
 
     for ( ; it.current(); ++it ) {
-        OutlineObjectItem *item = new OutlineObjectItem( this, it.current(), 
+        OutlineObjectItem *item = new OutlineObjectItem( this, it.current(),
                                                          it.current()->isSticky() );
         item->setDragEnabled( false );
         if ( it.current()->isSelected() )

@@ -124,7 +124,6 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         m_step.m_pageNumber = 0;
         m_step.m_step = 0;
         m_step.m_subStep = 0;
-        _presFakt = 1.0;
         goingBack = false;
         m_drawMode = false;
         fillBlack = true;
@@ -2098,7 +2097,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 {
     if ( !editMode ) {
         switch ( e->key() ) {
-        case Key_Space: case Key_Right: case Key_Down: 
+        case Key_Space: case Key_Right: case Key_Down:
             setSwitchingMode( false );
             m_view->screenNext();
             break;
@@ -3076,11 +3075,9 @@ QPtrList<KPTextObject> KPrCanvas::selectedTextObjs() const
     return lst;
 }
 
-void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based */)
+void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNum /* 1-based */)
 {
-    _presFakt = presFakt;
     //kdDebug(33001) << "KPrCanvas::startScreenPresentation curPgNum=" << curPgNum << endl;
-    //kdDebug(33001) << "                              _presFakt=" << _presFakt << endl;
 
     //setup presentation menu
     m_presMenu->setItemChecked( PM_DM, false );
@@ -3089,17 +3086,14 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
 
     exitEditMode();
 
-    //kdDebug(33001) << "Page::startScreenPresentation Zooming backgrounds" << endl;
-    // Zoom backgrounds to the correct size for full screen
     KPresenterDoc * doc = m_view->kPresenterDoc();
     m_activePageBeforePresentation = doc->activePage();
     doc->displayActivePage( doc->pageList().at( curPgNum-1 ) );
 
-    m_zoomBeforePresentation=doc->zoomHandler()->zoom();
-    // ## TODO get rid of presFakt
-    doc->zoomHandler()->setZoomAndResolution( qRound(_presFakt*m_zoomBeforePresentation),
-                                              KoGlobal::dpiX(), KoGlobal::dpiY() );
-    doc->newZoomAndResolution(false,false);
+    m_zoomBeforePresentation = doc->zoomHandler()->zoom();
+    doc->zoomHandler()->setZoomedResolution( zoomX, zoomY );
+    doc->newZoomAndResolution( false, false );
+
 
     // add all selected slides
     m_presentationSlides.clear();
@@ -3143,7 +3137,6 @@ void KPrCanvas::stopScreenPresentation()
 
     KPresenterDoc * doc = m_view->kPresenterDoc();
     doc->displayActivePage( m_activePageBeforePresentation );
-    _presFakt = 1.0;
     doc->zoomHandler()->setZoomAndResolution( m_zoomBeforePresentation,
                                               KoGlobal::dpiX(), KoGlobal::dpiY() );
     doc->newZoomAndResolution(false,false);
@@ -3495,7 +3488,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
     //the numbers for the sticky page have to be recalculated
     KPrPage* saveActivePage = m_activePage;
     doc->displayActivePage( doc->pageList().at( pgnum ) );
-    setActivePage( doc->pageList().at( pgnum - 1 ) );
+    setActivePage( doc->pageList().at( pgnum ) );
     drawAllObjectsInPage( &p, stickyPage()->objectList() );
     setActivePage( saveActivePage );
 
@@ -3693,7 +3686,6 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
 
     editMode = false;
     fillBlack = false;
-    _presFakt = 1.0;
 
     //int _xOffset = diffx();
     //int _yOffset = diffy();
@@ -3759,7 +3751,6 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
 
     progress.setProgress( printer->pageList().count() + 2 );
 
-    _presFakt = 1.0;
     fillBlack = true;
     editMode = true;
     repaint( false );

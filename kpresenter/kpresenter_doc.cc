@@ -3482,6 +3482,14 @@ void KPresenterDoc::updateZoomRuler()
 
 void KPresenterDoc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
 {
+    QPtrListIterator<KPrPage> it( m_pageList );
+    for ( ; it.current(); ++it ) {
+        QPtrListIterator<KPObject> oit(it.current()->objectList());
+        for ( ; oit.current(); ++oit ) {
+            if ( oit.current()->getType() == OT_TEXT )
+                static_cast<KPTextObject *>( oit.current() )->textDocument()->formatCollection()->zoomChanged();
+        }
+    }
     if ( updateViews )
     {
         QPtrListIterator<KoView> it( views() );

@@ -1555,7 +1555,8 @@ void KPTextObject::setShadowParameter(int _distance,ShadowDirection _direction,c
     KoTextFormat tmpFormat;
     tmpFormat.setShadow( sx, sy, _color );
     KCommand* cmd = m_textobj->setFormatCommand( &tmpFormat, KoTextFormat::ShadowText );
-    m_doc->addCommand(cmd);
+    if ( cmd )
+        m_doc->addCommand(cmd);
 }
 
 void KPTextObject::slotFormatChanged(const KoTextFormat &_format)

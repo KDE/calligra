@@ -100,7 +100,7 @@ void KPEffectPreview::run( PageEffect effect, PresSpeed speed )
     {
         m_pageEffectTimer.stop();
         QObject::disconnect( &m_pageEffectTimer, SIGNAL( timeout() ), this, SLOT( slotDoPageEffect() ) );
-        
+
         m_pageEffect->finish();
 
         delete m_pageEffect;
@@ -144,7 +144,7 @@ void KPEffectPreview::slotDoPageEffect()
 
 KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
                                     KPresenterDoc *_doc, KPresenterView *_view )
-    : KDialogBase( parent, name, true, "", Ok|Cancel ),
+    : KDialogBase( parent, name, true, "", KDialogBase::User1|Ok|Cancel ),
       doc( _doc ), view( _view ), soundPlayer( 0 )
 {
     enableButtonSeparator( true );
@@ -307,8 +307,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     connect( buttonTestStopSoundEffect, SIGNAL( clicked() ), this, SLOT( stopSound() ) );
 
     soundEffect = pg->getPageSoundEffect();
-    connect( this, SIGNAL( okClicked() ), this, SLOT( slotTransEffectDiaOK() ) );
-    //connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
+    setButtonText(KDialogBase::User1,i18n( "Apply &Global" ));
 
     slideTime = pg->getPageTimer();
 
@@ -459,6 +458,18 @@ void KPTransEffectDia::stopSound()
         buttonTestPlaySoundEffect->setEnabled( true );
         buttonTestStopSoundEffect->setEnabled( false );
     }
+}
+
+void KPTransEffectDia::slotOk()
+{
+    // TODO: only if changed. And pass flags for which settings changed
+    emit apply( false );
+}
+
+void KPTransEffectDia::slotUser1()
+{
+    // TODO: only if changed. And pass flags for which settings changed
+    emit apply( true );
 }
 
 #include "transeffectdia.moc"

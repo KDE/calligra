@@ -157,8 +157,6 @@ using namespace KSpell2;
 #endif
 
 
-#define DEBUG
-
 static const char * const pageup_xpm[] = {
     "    14    14        2            1",
     ". c #000000",
@@ -1379,20 +1377,15 @@ void KPresenterView::screenConfigPages()
 
 void KPresenterView::screenTransEffect()
 {
-    if( transEffectDia ) {
-        delete transEffectDia;
-        transEffectDia = 0;
-    }
-
+    delete transEffectDia;
     transEffectDia = new KPTransEffectDia( this, "slideTransitionDialog",
                                            kPresenterDoc(), this );
 
     transEffectDia->setCaption( i18n("Slide Transition") );
 
-    QObject::connect( transEffectDia, SIGNAL( transEffectDiaOk() ), this, SLOT( transEffectOk() ) );
+    QObject::connect( transEffectDia, SIGNAL( apply( bool ) ), this, SLOT( transEffectOk(bool) ) );
     transEffectDia->exec();
 
-    QObject::disconnect( transEffectDia, SIGNAL( transEffectDiaOk() ), this, SLOT( transEffectOk() ) );
     delete transEffectDia;
     transEffectDia = 0;
 }
@@ -1458,38 +1451,26 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         deSelectAllObjects();
         presStarted = true;
         m_autoPresRestart = false;
-#if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
-#else
-        QRect desk = QApplication::desktop()->screenGeometry(this);
-#endif
-        QRect pgRect = kPresenterDoc()->pageList().at(0)->getZoomPageRect();
+        kdDebug(33001) << "KPresenterView::startScreenPres desk=" << desk << endl;
+        KoRect pgRect = kPresenterDoc()->pageList().at(0)->getPageRect();
+        kdDebug(33001) << "KPresenterView::startScreenPres pgRect=" << pgRect << endl;
 
-        float _presFaktW = static_cast<float>( desk.width() ) / static_cast<float>( pgRect.width() );
-        float _presFaktH = static_cast<float>( desk.height() ) / static_cast<float>( pgRect.height() );
-        float _presFakt = QMIN(_presFaktW,_presFaktH);
-        kdDebug(33001) << "KPresenterView::startScreenPres page->setPresFakt " << _presFakt << endl;
+        double zoomX = static_cast<double>( desk.width() ) / pgRect.width();
+        double zoomY = static_cast<double>( desk.height() ) / pgRect.height();
+        kdDebug(33001) << "KPresenterView::startScreenPres zoomX=" << zoomX << " zoomY=" << zoomY << endl;
 
         xOffsetSaved = canvasXOffset();
         yOffsetSaved = canvasYOffset();
+        setCanvasXOffset( 0 );
+        setCanvasYOffset( 0 );
+
         m_bDisplayFieldCode = m_pKPresenterDoc->getVariableCollection()->variableSetting()->displayFieldCode();
         if ( m_bDisplayFieldCode )
         {
             m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
             m_pKPresenterDoc->recalcVariables( VT_ALL );
         }
-
-        setCanvasXOffset( 0 );
-        setCanvasYOffset( 0 );
-
-        // Center the slide in the screen, if it's smaller...
-        pgRect = kPresenterDoc()->pageList().at(0)->getZoomPageRect();
-        kdDebug(33001) << "                                pgRect: " << pgRect.x() << "," << pgRect.y()
-                       << " " << pgRect.width() << "x" << pgRect.height() << endl;
-        /*if ( deskw > pgRect.width() )
-          xOffset -= ( deskw - pgRect.width() ) / 2;
-          if ( deskh > pgRect.height() )
-          yOffset -= ( deskh - pgRect.height() ) / 2;*/
 
         vert->setEnabled( false );
         horz->setEnabled( false );
@@ -1499,7 +1480,6 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         m_canvas->showFullScreen();
         m_canvas->setFocusPolicy( QWidget::StrongFocus );
 
-        //tz
         if ( !kPresenterDoc()->spManualSwitch() )
         {
              m_autoPresStop = false;
@@ -1511,14 +1491,14 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
              }
         }
 
-        m_canvas->startScreenPresentation( _presFakt, pgNum );
+        m_canvas->startScreenPresentation( zoomX, zoomY, pgNum );
 
         actionScreenStart->setEnabled( false );
 
         if ( kPresenterDoc()->presentationDuration() ) {
             m_duration.start();
 
-            // ### make m_duration a QMemArray
+            // ### make m_presentationDurationList a QMemArray or QValueVector
             for ( unsigned int i = 0; i < kPresenterDoc()->pageList().count(); ++i )
                 m_presentationDurationList.append( 0 ); // initialization
         }
@@ -2964,7 +2944,7 @@ void KPresenterView::setupActions()
                                            actionCollection(), "format_style" );
     connect( actionFormatStyle, SIGNAL( activated( int ) ),
              this, SLOT( textStyleSelected( int ) ) );
-    actionFormatStyle->setRemoveAmpersandsInCombo( true );
+    actionFormatStyle->setMenuAccelsEnabled( true );
     updateStyleList();
 
     actionAllowAutoFormat = new KToggleAction( i18n( "Enable Autocorrection" ), 0,
@@ -3558,8 +3538,9 @@ void KPresenterView::styleOk()
 void KPresenterView::pgConfOk()
 {
     QValueList<bool> selectedSlides;
-    for( unsigned i = 0; i < kPresenterDoc()->pageList().count(); i++ )
+    for( unsigned i = 0; i < kPresenterDoc()->pageList().count(); i++ ) {
         selectedSlides.append( kPresenterDoc()->pageList().at( i )->isSlideSelected() );
+    }
 
     PgConfCmd *pgConfCmd = new PgConfCmd( i18n( "Configure Slide Show" ),
                                           pgConfDia->getManualSwitch(), pgConfDia->getInfiniteLoop(),
@@ -3573,21 +3554,54 @@ void KPresenterView::pgConfOk()
                                           kPresenterDoc() );
     pgConfCmd->execute();
     kPresenterDoc()->addCommand( pgConfCmd );
+
+    for( unsigned i = 0; i < kPresenterDoc()->pageList().count(); i++ ) {
+        // Title of slide may have changed
+        updateSideBarItem( i );
+    }
 }
 
-void KPresenterView::transEffectOk()
+void KPresenterView::transEffectOk( bool global )
 {
-    //kdDebug(33001) << "======= KPresenterView::transEffectOK\n";
+    kdDebug(33001) << "======= KPresenterView::transEffectOK global=" << global << endl;
 
-    KPrPage *page=m_canvas->activePage();
-    TransEffectCmd *transEffectCmd = new TransEffectCmd( i18n( "Slide Transition" ),
-                                                         transEffectDia->getPageEffect(), transEffectDia->getPresSpeed(),
-                                                         transEffectDia->getSoundEffect(), transEffectDia->getSoundFileName(),
-                                                         transEffectDia->getAutoAdvance(), transEffectDia->getSlideTime(),
-                                                         page->getPageEffect(), page->background()->getPresSpeed(),
-                                                         page->getPageSoundEffect(), page->getPageSoundFileName(),
-                                                         /* TODO page->getAutoAdvance() */ false, page->getPageTimer(),
-                                                         page );
+    // Collect info about current settings
+    QValueVector<TransEffectCmd::PageEffectSettings> oldSettings;
+    if ( global )
+    {
+        oldSettings.resize( m_pKPresenterDoc->getPageList().count() );
+        int i = 0;
+        for( QPtrListIterator<KPrPage> it( m_pKPresenterDoc->getPageList() ); *it; ++it, ++i )
+        {
+            oldSettings[i].pageEffect = it.current()->getPageEffect();
+            oldSettings[i].transSpeed = it.current()->background()->getPresSpeed();
+            oldSettings[i].soundEffect = it.current()->getPageSoundEffect();
+            oldSettings[i].soundFileName = it.current()->getPageSoundFileName();
+            oldSettings[i].autoAdvance = /*TODO it.current()->getAutoAdvance() */ false;
+            oldSettings[i].slideTime = it.current()->getPageTimer();
+        }
+    }
+    else
+    {
+        oldSettings.resize( 1 );
+        KPrPage *page = m_canvas->activePage();
+        oldSettings[0].pageEffect = page->getPageEffect();
+        oldSettings[0].transSpeed = page->background()->getPresSpeed();
+        oldSettings[0].soundEffect = page->getPageSoundEffect();
+        oldSettings[0].soundFileName = page->getPageSoundFileName();
+        oldSettings[0].autoAdvance = /*TODO page->getAutoAdvance() */ false;
+        oldSettings[0].slideTime = page->getPageTimer();
+    }
+    TransEffectCmd::PageEffectSettings newSettings;
+    newSettings.pageEffect = transEffectDia->getPageEffect();
+    newSettings.transSpeed = transEffectDia->getPresSpeed();
+    newSettings.soundEffect = transEffectDia->getSoundEffect();
+    newSettings.soundFileName = transEffectDia->getSoundFileName();
+    newSettings.autoAdvance = transEffectDia->getAutoAdvance();
+    newSettings.slideTime = transEffectDia->getSlideTime();
+
+    TransEffectCmd *transEffectCmd = new TransEffectCmd( oldSettings, newSettings,
+                                                         global ? 0 : m_canvas->activePage(), kPresenterDoc() );
     transEffectCmd->execute();
     kPresenterDoc()->addCommand( transEffectCmd );
 }
@@ -4344,14 +4358,6 @@ int KPresenterView::getNumPresPages() const
     return m_canvas->numPresPages();
 }
 
-float KPresenterView::getCurrentFaktor() const
-{
-    if ( !presStarted )
-        return 1.0;
-
-    return m_canvas->presFakt();
-}
-
 bool KPresenterView::gotoPresPage( int pg )
 {
     if ( !presStarted )
@@ -5055,151 +5061,69 @@ void KPresenterView::formatParagraph()
 
 void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
 {
-    KPTextView *edit=m_canvas->currentTextObjectView();
-    if (edit)
+    QPtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
+    if ( lst.isEmpty() )
+        return;
+    QPtrList<KPTextObject> lstObjects = m_canvas->applicableTextObjects();
+    if ( lstObjects.isEmpty() )
+        return;
+
+    delete m_paragDlg;
+    m_paragDlg = new KoParagDia( this, "",
+                                 KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
+                                 KoParagDia::PD_BORDERS | KoParagDia::PD_NUMBERING |
+                                 KoParagDia::PD_TABS,
+                                 m_pKPresenterDoc->getUnit(),
+                                 lstObjects.first()->getSize().width(),false );
+    m_paragDlg->setCaption( i18n( "Paragraph Settings" ) );
+
+    // Initialize the dialog from the current paragraph's settings
+    m_paragDlg->setParagLayout( * lst.first()->currentParagLayoutFormat() );
+    // Set initial page and initial tabpos if necessary
+    if ( initialPage != -1 )
     {
-        delete m_paragDlg;
-        m_paragDlg=0L;
-        m_paragDlg = new KoParagDia( this, "",
-                                     KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
-                                     KoParagDia::PD_BORDERS | KoParagDia::PD_NUMBERING |
-                                     KoParagDia::PD_TABS,
-                                     m_pKPresenterDoc->getUnit(),
-                                     edit->kpTextObject()->getSize().width(),false );
-        m_paragDlg->setCaption( i18n( "Paragraph Settings" ) );
-
-        // Initialize the dialog from the current paragraph's settings
-        m_paragDlg->setParagLayout( edit->cursor()->parag()->paragLayout() );
-        // Set initial page and initial tabpos if necessary
-        if ( initialPage != -1 )
-        {
-            m_paragDlg->setCurrentPage( initialPage );
-            if ( initialPage == KoParagDia::PD_TABS )
-                m_paragDlg->tabulatorsWidget()->setCurrentTab( initialTabPos );
-        }
-        connect( m_paragDlg, SIGNAL( applyParagStyle() ), this, SLOT( slotApplyParag()));
-
-        m_paragDlg->exec();
-        delete m_paragDlg;
-        m_paragDlg=0L;
+        m_paragDlg->setCurrentPage( initialPage );
+        if ( initialPage == KoParagDia::PD_TABS )
+            m_paragDlg->tabulatorsWidget()->setCurrentTab( initialTabPos );
     }
+    connect( m_paragDlg, SIGNAL( applyParagStyle() ), this, SLOT( slotApplyParag() ) );
+
+    m_paragDlg->exec();
+    delete m_paragDlg;
+    m_paragDlg = 0;
+
 }
 
 void KPresenterView::slotApplyParag()
 {
-    KPTextView *edit=m_canvas->currentTextObjectView();
-    if( !edit )
-        return;
+    QPtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
+    Q_ASSERT( !lst.isEmpty() );
+    if ( lst.isEmpty() ) return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
-    KCommand *cmd=0L;
-    bool changed=false;
-    if(m_paragDlg->isLeftMarginChanged())
+    KoParagLayout newLayout = m_paragDlg->paragLayout();
+    int flags = m_paragDlg->changedFlags();
+    kdDebug() << k_funcinfo << "flags=" << flags << endl;
+    if ( !flags )
+        return;
+    for ( ; it.current() ; ++it )
     {
-        cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, m_paragDlg->leftIndent() );
+        KCommand* cmd = it.current()->setParagLayoutFormatCommand( &newLayout, flags );
+        Q_ASSERT( cmd );
         if(cmd)
         {
             macroCommand->addCommand(cmd);
-            changed=true;
-        }
-
-        h_ruler->setLeftIndent( KoUnit::toUserValue( m_paragDlg->leftIndent(), m_pKPresenterDoc->getUnit() ) );
-    }
-
-    if(m_paragDlg->isRightMarginChanged())
-    {
-        cmd=edit->setMarginCommand( QStyleSheetItem::MarginRight, m_paragDlg->rightIndent() );
-        if(cmd)
-        {
-            macroCommand->addCommand(cmd);
-            changed=true;
-        }
-        h_ruler->setRightIndent( KoUnit::toUserValue( m_paragDlg->rightIndent(), m_pKPresenterDoc->getUnit() ) );
-    }
-    if(m_paragDlg->isSpaceBeforeChanged())
-    {
-        cmd=edit->setMarginCommand( QStyleSheetItem::MarginTop, m_paragDlg->spaceBeforeParag() );
-        if(cmd)
-        {
-            macroCommand->addCommand(cmd);
-            changed=true;
-        }
-    }
-    if(m_paragDlg->isSpaceAfterChanged())
-    {
-        cmd=edit->setMarginCommand( QStyleSheetItem::MarginBottom, m_paragDlg->spaceAfterParag() );
-        if(cmd)
-        {
-            macroCommand->addCommand(cmd);
-            changed=true;
-        }
-    }
-    if(m_paragDlg->isFirstLineChanged())
-    {
-        cmd=edit->setMarginCommand( QStyleSheetItem::MarginFirstLine, m_paragDlg->firstLineIndent());
-        if(cmd)
-        {
-            macroCommand->addCommand(cmd);
-            changed=true;
-        }
-        h_ruler->setFirstIndent(KoUnit::toUserValue( m_paragDlg->firstLineIndent(), m_pKPresenterDoc->getUnit() ) );
-    }
-
-    if(m_paragDlg->isAlignChanged())
-    {
-        cmd=edit->setAlignCommand( m_paragDlg->align() );
-        if(cmd)
-        {
-            macroCommand->addCommand(cmd);
-            changed=true;
-        }
-    }
-    if(m_paragDlg->isCounterChanged())
-    {
-        cmd=edit->setCounterCommand( m_paragDlg->counter() );
-        if(cmd)
-        {
-            macroCommand->addCommand(cmd);
-            changed=true;
-        }
-    }
-    if(m_paragDlg->listTabulatorChanged())
-    {
-        cmd=edit->setTabListCommand( m_paragDlg->tabListTabulator() );
-        if(cmd)
-        {
-            macroCommand->addCommand(cmd);
-            changed=true;
         }
     }
 
-    if(m_paragDlg->isLineSpacingChanged())
-    {
-        cmd=edit->setLineSpacingCommand( m_paragDlg->lineSpacing(),m_paragDlg->lineSpacingType() );
-        if(cmd)
-        {
-            macroCommand->addCommand(cmd);
-            changed=true;
-        }
-    }
-    if(m_paragDlg->isBorderChanged())
-    {
-        cmd=edit->setBordersCommand( m_paragDlg->leftBorder(), m_paragDlg->rightBorder(),
-                                     m_paragDlg->topBorder(), m_paragDlg->bottomBorder() );
-        if(cmd)
-        {
-            macroCommand->addCommand(cmd);
-            changed=true;
-        }
-    }
-
-    if(changed)
+    if(flags)
         m_pKPresenterDoc->addCommand(macroCommand);
     else
         delete macroCommand;
 
     // Set "oldLayout" in KoParagDia from the current paragraph's settings
     // Otherwise "isBlahChanged" will return wrong things when doing A -> B -> A
-    m_paragDlg->setParagLayout( edit->cursor()->parag()->paragLayout() );
+    m_paragDlg->setParagLayout( *lst.first()->currentParagLayoutFormat() );
 }
 
 void KPresenterView::textDefaultFormat()
@@ -6472,7 +6396,7 @@ void KPresenterView::slotObjectEditChanged()
     actionInsertComment->setEnabled( val );
 
     actionInsertLink->setEnabled(val);
-    actionFormatParag->setEnabled(val);
+    actionFormatParag->setEnabled(isText);
     actionInsertVariable->setEnabled(val);
     actionTextInsertPageNum->setEnabled(val);
     if ( edit )

@@ -127,7 +127,6 @@ public:
     int getPresStepsOfPage() const;
     int getNumPresPages() const;
     bool gotoPresPage( int pg );
-    float getCurrentFaktor() const;
 
     virtual void setupPrinter( KPrinter &printer );
     virtual void print( KPrinter &printer );
@@ -652,7 +651,7 @@ protected slots:
     void slotAfchooseCanceled();
     void styleOk();
     void pgConfOk();
-    void transEffectOk();
+    void transEffectOk( bool );
     void rotateOk();
     void shadowOk();
     void pddClosed();

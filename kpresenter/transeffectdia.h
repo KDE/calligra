@@ -86,11 +86,12 @@ public:
     bool getAutoAdvance() const { return false; } // FIXME !
     int getSlideTime() const { return slideTime; }
 
-public slots:
-
-    void slotTransEffectDiaOK(){ emit transEffectDiaOk(); }
+signals:
+    void apply( bool global );
 
 protected:
+    virtual void slotOk();
+    virtual void slotUser1();
 
     KPresenterDoc *doc;
     KPresenterView *view;
@@ -118,7 +119,6 @@ protected:
 
     KPresenterSoundPlayer *soundPlayer;
 
-
 protected slots:
 
     void preview();
@@ -133,11 +133,6 @@ protected slots:
     void slotSoundFileChanged( const QString& );
     void playSound();
     void stopSound();
-
-signals:
-
-    void transEffectDiaOk();
-
 };
 
 #endif // __TRANSEFFECTDIA_H

@@ -331,7 +331,6 @@ protected:
     bool protect:1;
     bool keepRatio:1;
 
-    float presFakt;
     int subPresStep;
     int cmds;
 

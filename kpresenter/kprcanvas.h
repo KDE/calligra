@@ -135,7 +135,7 @@ public:
      * Start a screen presentation
      * All pages if @p curPgNum is -1, otherwise just @p curPgNum (1-based)
      */
-    void startScreenPresentation( float presFakt, int curPgNum = -1);
+    void startScreenPresentation( double zoomX, double zoomY, int curPgNum = -1);
     void stopScreenPresentation();
 
     /**
@@ -156,7 +156,6 @@ public:
     unsigned int presPage() const { return m_step.m_pageNumber + 1; }
     /// returns the current step of the presentation
     int presStep() const { return m_step.m_step; }
-    float presFakt() const { return _presFakt; }
     int numPresSteps() const { return m_pageEffectSteps.count(); }
     int numPresPages() const { return m_presentationSlides.count(); }
 

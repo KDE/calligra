@@ -2085,25 +2085,9 @@ QString KPrPage::pageTitle( const QString &_title ) const
     if ( !textobject )
         return QString( _title );
 
-    QString txt/* = textobject->textDocument()->text().stripWhiteSpace()*/;
-
-    //search custom variable.
+    QString txt;
     if ( textobject->textDocument()->firstParag() )
-    {
-        QString tmp = textobject->textDocument()->firstParag()->string()->toString();
-        for ( int i = 0 ; i < (int)tmp.length() ; ++i )
-        {
-            KoTextStringChar * ch = textobject->textDocument()->firstParag()->at( i );
-            if ( ch->isCustom() )
-            {
-                KoVariable * var = dynamic_cast<KoVariable *>(ch->customItem());
-                if ( var )
-                    txt += var->text(true);
-            }
-            else
-                txt += ch->c;
-        }
-    }
+        txt = textobject->textDocument()->firstParag()->toString();
     if ( txt.stripWhiteSpace().isEmpty() || txt=="\n" )
         return _title;
     return txt;

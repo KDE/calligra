@@ -1207,52 +1207,55 @@ void PgConfCmd::unexecute()
 }
 
 
-TransEffectCmd::TransEffectCmd( const QString &_name, PageEffect _pageEffect, PresSpeed _transSpeed,
-                                bool _soundEffect, const QString& _soundFileName,
-                                bool _autoAdvance, int _slideTime,
-                                PageEffect _oldPageEffect, PresSpeed _oldTransSpeed,
-                                bool _oldSoundEffect, const QString& _oldSoundFileName,
-                                bool _oldAutoAdvance, int _oldSlideTime,
-                                KPrPage *_page )
-    : KNamedCommand( _name )
+TransEffectCmd::TransEffectCmd( QValueVector<PageEffectSettings> oldSettings,
+                                PageEffectSettings newSettings,
+                                KPrPage* page, KPresenterDoc* doc )
 {
-    pageEffect = _pageEffect;
-    transSpeed = _transSpeed;
-    soundEffect = _soundEffect;
-    soundFileName = _soundFileName;
-    autoAdvance = _autoAdvance;
-    slideTime = _slideTime;
-    oldPageEffect = _oldPageEffect;
-    oldTransSpeed = _oldTransSpeed;
-    oldSoundEffect = _oldSoundEffect;
-    oldSoundFileName = _oldSoundFileName;
-    oldAutoAdvance = _oldAutoAdvance;
-    oldSlideTime = _oldSlideTime;
-    m_page=_page;
+    m_newSettings = newSettings;
+    m_oldSettings = oldSettings;
+    Q_ASSERT( !m_oldSettings.isEmpty() );
+    m_page = page;
+    m_doc = doc;
+}
+
+void TransEffectCmd::PageEffectSettings::applyTo( KPrPage *page )
+{
+    page->setPageEffect( pageEffect );
+    /////// TODO page->setTransSpeed( transSpeed );
+    page->setPageSoundEffect( soundEffect );
+    page->setPageSoundFileName( soundFileName );
+    // TODO page->setAutoAdvance( autoAdvance );
+    page->setPageTimer( slideTime );
+    page->background()->setPresSpeed( transSpeed );
 }
 
 void TransEffectCmd::execute()
 {
-    m_page->setPageEffect( pageEffect );
-    /////// TODO m_page->setTransSpeed( transSpeed );
-    m_page->setPageSoundEffect( soundEffect );
-    m_page->setPageSoundFileName( soundFileName );
-    // TODO m_page->setAutoAdvance( autoAdvance );
-    m_page->setPageTimer(  slideTime );
-    m_page->background()->setPresSpeed( transSpeed );
+    if ( m_page )
+        m_newSettings.applyTo( m_page );
+    else
+        for( QPtrListIterator<KPrPage> it( m_doc->getPageList() ); *it; ++it )
+            m_newSettings.applyTo( it.current() );
 }
 
 void TransEffectCmd::unexecute()
 {
-    m_page->setPageEffect( oldPageEffect );
-    /////// TODO m_page->setTransSpeed( oldTransSpeed );
-    m_page->setPageSoundEffect( oldSoundEffect );
-    m_page->setPageSoundFileName( oldSoundFileName );
-    // TODO m_page->setAutoAdvance( oldAutoAdvance );
-    m_page->setPageTimer(  oldSlideTime );
-    m_page->background()->setPresSpeed( oldTransSpeed );
+    if ( m_page )
+        m_oldSettings[0].applyTo( m_page );
+    else {
+        int i = 0;
+        for( QPtrListIterator<KPrPage> it( m_doc->getPageList() ); *it; ++it, ++i )
+            m_oldSettings[i].applyTo( it.current() );
+    }
 }
 
+QString TransEffectCmd::name() const
+{
+    if ( m_page )
+        return i18n( "Modify Slide Transition" );
+    else
+        return i18n( "Modify Slide Transition For All Pages" );
+}
 
 PgLayoutCmd::PgLayoutCmd( const QString &_name, KoPageLayout _layout, KoPageLayout _oldLayout,
                           KoUnit::Unit _oldUnit, KoUnit::Unit _unit,KPresenterDoc *_doc )

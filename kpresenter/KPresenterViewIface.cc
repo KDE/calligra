@@ -460,11 +460,6 @@ int KPresenterViewIface::getCurrentPageNum() const
     return view->getCurrPgNum();
 }
 
-double KPresenterViewIface::getCurrentFaktor() const
-{
-    return (double)view->getCurrentFaktor();
-}
-
 void KPresenterViewIface::insertSpecialChar()
 {
     view->insertSpecialChar();
