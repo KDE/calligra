@@ -226,10 +226,22 @@ KHTMLReader::~KHTMLReader(){
 //                          tag parsing
 //==============================================================
 
+
+bool KHTMLReader::parse_CommonAttributes(DOM::Element e) {
+        QString s=e.getAttribute("align").string();
+        if (s != "") {
+              _writer->formatAttribute(state()->paragraph,"FLOW","align",s);
+        }
+
+}
+
+
+
 bool KHTMLReader::parse_P(DOM::Element e) {
 
 	startNewParagraph();
-	
+	parse_CommonAttributes(e);
+
 	return true;
 }
 
@@ -271,15 +283,19 @@ bool KHTMLReader::parse_TABLE(DOM::Element e) {
 	int tableno=_writer->createTable();
  	int nrow=0;
  	int ncol=0;
- 	QColor bgcolor=parsecolor("#FFFFFF");
+ 	int has_borders=false;
+	QColor bgcolor=parsecolor("#FFFFFF");
  	DOM::Element table_body=e.firstChild();
  	if (table_body.getAttribute("BGCOLOR").string() != "")
  	       bgcolor=parsecolor(table_body.getAttribute("BGCOLOR").string());
+ 	if ((e.getAttribute("BORDER").string().toInt() > 0))
+ 		has_borders=true;
+
  	// fixme rewrite this proper
  	//(maybe using computed sizes from khtml if thats once exported)
  	for (DOM::Element rows=table_body.firstChild();!rows.isNull();rows=rows.nextSibling()) {
  	if (rows.tagName().string() == "TR") {
- 	
+
  	    QColor obgcolor=bgcolor;
  	    if (rows.getAttribute("BGCOLOR").string() != "")
  	       	bgcolor=parsecolor(rows.getAttribute("BGCOLOR").string());
@@ -290,7 +306,7 @@ bool KHTMLReader::parse_TABLE(DOM::Element e) {
  		             QColor bbgcolor=bgcolor;
 		 	    if (cols.getAttribute("BGCOLOR").string() != "")
  	       			bgcolor=parsecolor(cols.getAttribute("BGCOLOR").string());
- 		
+
 			    	pushNewState();
 	 	    	    	QRect colrect=cols.getRect();
 	 	    	    	state()->frameset=_writer->createTableCell(tableno,nrow,ncol,1,0,0,
@@ -298,7 +314,14 @@ bool KHTMLReader::parse_TABLE(DOM::Element e) {
 	 	    	     	state()->frameset.firstChild().toElement().setAttribute("bkRed",bgcolor.red());
 	 	    	     	state()->frameset.firstChild().toElement().setAttribute("bkGreen",bgcolor.green());
 	 	    	     	state()->frameset.firstChild().toElement().setAttribute("bkBlue",bgcolor.blue());
- 	    	     		// fixme don't guess. get it right.
+	 	    	     	if (has_borders) {
+	 	    	     	    state()->frameset.firstChild().toElement().setAttribute("lWidth",1);
+	 	    	     	    state()->frameset.firstChild().toElement().setAttribute("rWidth",1);
+	 	    	     	    state()->frameset.firstChild().toElement().setAttribute("bWidth",1);
+	 	    	     	    state()->frameset.firstChild().toElement().setAttribute("tWidth",1);
+	 	    	     	}
+
+				// fixme don't guess. get it right.
 	 	    	    	state()->paragraph=_writer->addParagraph(state()->frameset);
 	 	    	    	parseNode(cols);
  			    	popState();
@@ -342,7 +365,8 @@ bool KHTMLReader::parse_OL(DOM::Element e) {
 }
 
 bool KHTMLReader::parse_FONT(DOM::Element e) {
-        QString face=e.getAttribute("face").string();
+	// fixme don't hardcode 12 font size ...
+	QString face=e.getAttribute("face").string();
         QColor color=parsecolor("#000000");
         if (e.getAttribute("color").string() != "")
         	color=parsecolor(e.getAttribute("color").string());
@@ -352,12 +376,13 @@ bool KHTMLReader::parse_FONT(DOM::Element e) {
         	isize=12+size.right(size.length()-1).toInt();
         else if (size.startsWith("-"))
         	isize=12-size.right(size.length()-1).toInt();
-        else	
-	        isize=size.toInt();
-	
+        else
+	        isize=12+size.toInt();
+
         _writer->formatAttribute(state()->paragraph,"FONT","name",face);
-        if (isize>=0)
-        _writer->formatAttribute(state()->paragraph,"SIZE","value",QString("%1").arg(isize));
+        if ((isize>=0) && (isize != 12))
+        	_writer->formatAttribute(state()->paragraph,"SIZE","value",QString("%1").arg(isize));
+
         _writer->formatAttribute(state()->paragraph,"COLOR","red",QString("%1").arg(color.red()));
         _writer->formatAttribute(state()->paragraph,"COLOR","green",QString("%1").arg(color.green()));
         _writer->formatAttribute(state()->paragraph,"COLOR","blue",QString("%1").arg(color.blue()));
