@@ -3389,7 +3389,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
         m_paragDlg->setCaption( i18n( "Paragraph Settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
-        m_paragDlg->setParagLayout( edit->cursor()->parag())->paragLayout() );
+        m_paragDlg->setParagLayout( edit->cursor()->parag()->paragLayout() );
 
         // Set initial page and initial tabpos if necessary
         if ( initialPage != -1 )
