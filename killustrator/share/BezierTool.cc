@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -28,6 +28,8 @@
 #else
 #include <values.h>
 #endif
+
+#include <float.h>
 
 #include "BezierTool.h"
 #include "BezierTool.moc"
@@ -51,7 +53,7 @@ BezierTool::BezierTool (CommandHistory* history) : Tool (history) {
 }
 
 void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () == 
+  if (e->type () ==
 #if QT_VERSION >= 199
       QEvent::KeyPress
 #else
@@ -95,7 +97,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
 	  if (points.count () > 0) {
 	    last = last - points.count () + 1;
-	    AddLineSegmentCmd *cmd =  
+	    AddLineSegmentCmd *cmd =
 	      new AddLineSegmentCmd (doc, curve, last_valid - 2, points);
 	    history->addCommand (cmd);
 	  }
@@ -112,9 +114,9 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	    }
 	    if (diff > 0) {
 	      // line segment was complete
-	      for (int i = 0; i < diff; i++) 
+	      for (int i = 0; i < diff; i++)
 		points.append (new Coord (curve->getPoint (i)));
-	      AddLineSegmentCmd *cmd =  
+	      AddLineSegmentCmd *cmd =
 		new AddLineSegmentCmd (doc, curve, 0, points);
 	      history->addCommand (cmd);
 	    }
@@ -127,7 +129,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       emit operationDone ();
     }
   }
-  else if (e->type () == 
+  else if (e->type () ==
 #if QT_VERSION >= 199
 	   QEvent::MouseButtonPress
 #else
@@ -146,12 +148,12 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       addAtEnd = true;
 
       GBezier* obj = 0L;
- 
+
       if (me->state () & ShiftButton) {
 	// magnetic mode
 	GObject *o = 0L;
 	int idx = -1;
-	if (doc->findNearestObject ("GBezier", xpos, ypos, 
+	if (doc->findNearestObject ("GBezier", xpos, ypos,
 				    80, o, idx)) {
 	  curve = (GBezier *) o;
 	  last = idx;
@@ -175,7 +177,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	  }
 	}
 	if (obj && ((last = obj->getNeighbourPoint (Coord (xpos, ypos))) != -1)
-	    && obj->isEndPoint (last) 
+	    && obj->isEndPoint (last)
 	    && (last == 1 || last == (int) obj->numOfPoints () - 2)) {
 	  curve = obj;
 	  addAtEnd = (last != 1);
@@ -183,11 +185,11 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	  oldNumOfPoints = obj->numOfPoints ();
 	}
       }
-      
+
       if (curve == 0L) {
 	curve = new GBezier ();
 	// base point #1
-	curve->addPoint (0, Coord (MAXFLOAT, MAXFLOAT));
+	curve->addPoint (0, Coord (FLT_MAX, FLT_MAX));
 	// first end point
 	curve->addPoint (1, Coord (xpos, ypos));
 	last = 2;
@@ -212,24 +214,24 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       if (! addAtEnd) {
 	if (last == 0) {
 	  // add at beginning of curve
-	  curve->addPoint (0, Coord (MAXFLOAT, MAXFLOAT), false);
+	  curve->addPoint (0, Coord (FLT_MAX, FLT_MAX), false);
 	  curve->addPoint (0, Coord (xpos, ypos), false);
-	  curve->addPoint (0, Coord (MAXFLOAT, MAXFLOAT));
+	  curve->addPoint (0, Coord (FLT_MAX, FLT_MAX));
 	  last = 1;
 	}
-	else if (last == 1) 
+	else if (last == 1)
 	  last = 0;
 	curve->setWorkingSegment (0);
       }
       else {
 	// add at end of curve
 	last = curve->numOfPoints ();
-	if (! curve->isEndPoint (last - 1)) 
+	if (! curve->isEndPoint (last - 1))
 	  curve->initBasePoint (last - 3);
 	
 	if (last >= 3 && (last % 3 == 0))
 	  // base point #2
-	  curve->addPoint (last++, Coord (MAXFLOAT, MAXFLOAT), false);
+	  curve->addPoint (last++, Coord (FLT_MAX, FLT_MAX), false);
 	
 	// next end point
 	curve->addPoint (last, Coord (xpos, ypos));
@@ -237,7 +239,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       }
     }
   }
-  else if (e->type () == 
+  else if (e->type () ==
 #if QT_VERSION >= 199
 	   QEvent::MouseMove
 #else
@@ -253,7 +255,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
     curve->setPoint (last, Coord (xpos, ypos));
   }
-  else if (e->type () == 
+  else if (e->type () ==
 #if QT_VERSION >= 199
 	   QEvent::MouseButtonRelease
 #else
@@ -265,7 +267,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
-    
+
     curve->setPoint (last, Coord (xpos, ypos));
     if (me->button () == RightButton) {
       if ((addAtEnd && last >= 5 && (last % 3 == 2)) ||
@@ -281,7 +283,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	  points.setAutoDelete (true);
 
 	  if (last == 0) {
-	    for (int i = curve->numOfPoints () - oldNumOfPoints - 1; 
+	    for (int i = curve->numOfPoints () - oldNumOfPoints - 1;
 		 i >= 0; i--)
 	      points.append (new Coord (curve->getPoint (i)));
 	  }
@@ -290,14 +292,14 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	      points.append (new Coord (curve->getPoint (i)));
 	    last = last - points.count () + 1;
 	  }
-	  AddLineSegmentCmd *cmd =  
+	  AddLineSegmentCmd *cmd =
 	    new AddLineSegmentCmd (doc, curve, last, points);
 	  history->addCommand (cmd);
 	}
 	curve = 0L; last = 0;
       }
       else if (last >= 7 && last % 3 == 1 &&
-	       curve->getPoint (1).isNear (Coord (xpos, ypos), 
+	       curve->getPoint (1).isNear (Coord (xpos, ypos),
 					   NEAR_DISTANCE)) {
 	  curve->addPoint (last, Coord (xpos, ypos));
 	  curve->setClosed (true);

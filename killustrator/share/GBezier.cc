@@ -25,11 +25,8 @@
 //#include <iostream.h>
 //#include <math.h>
 //#include <assert.h>
-//#ifdef __FreeBSD__
-//#include <float.h>
-//#else
-//#include <values.h>
-//#endif
+#include <float.h>
+#include <values.h>
 #include <GBezier.h>
 #include <GCurve.h>
 
@@ -238,8 +235,8 @@ void GBezier::draw (QPainter& p, bool withBasePoints, bool outline) {
 
 #if 0
   for (unsigned int i = 1; i + 3 < num; i += 3) {
-    if (points.at (i + 1)->x () == MAXFLOAT ||
-	points.at (i + 2)->x () == MAXFLOAT) {
+    if (points.at (i + 1)->x () == FLT_MAX ||
+	points.at (i + 2)->x () == FLT_MAX) {
       p.drawLine (points.at (i)->x (), points.at (i)->y (),
 		  points.at (i + 3)->x (), points.at (i + 3)->y ());
     }
@@ -265,8 +262,8 @@ void GBezier::draw (QPainter& p, bool withBasePoints, bool outline) {
     else {
       //      p.drawPolyline (ppoints);
       for (unsigned int i = 1; i + 3 < num; i += 3) {
-      	if (points.at (i + 1)->x () == MAXFLOAT ||
-	          points.at (i + 2)->x () == MAXFLOAT) {
+      	if (points.at (i + 1)->x () == FLT_MAX ||
+	          points.at (i + 2)->x () == FLT_MAX) {
 	        p.drawLine (points.at (i)->x () + ((i==1) ? sdx : 0),
 	                    points.at (i)->y () + ((i==1) ? sdy : 0), 		
 	                    points.at (i + 3)->x () + ((i==num-2) ? edx : 0),
@@ -322,8 +319,8 @@ void GBezier::drawHelpLines (QPainter& p) {
   QPen pen (blue, 1, DotLine);
   p.setPen (pen);
   for (i = 0; i + 2 < num; i += 3) {
-    if (points.at (i)->x () == MAXFLOAT ||
-	points.at (i + 2)->x () == MAXFLOAT)
+    if (points.at (i)->x () == FLT_MAX ||
+	points.at (i + 2)->x () == FLT_MAX)
       continue;
 
     Coord c1 = points.at (i)->transform (tmpMatrix);
@@ -341,8 +338,8 @@ void GBezier::drawHelpLinesForWorkingSegment (QPainter& p) {
 
   for (int i = wSegment * 3; i <= (wSegment + 1) * 3; i += 3) {
     if (i + 2 >= (int) points.count () ||
-	points.at (i)->x () == MAXFLOAT ||
-	points.at (i + 2)->x () == MAXFLOAT) {
+	points.at (i)->x () == FLT_MAX ||
+	points.at (i + 2)->x () == FLT_MAX) {
       return;
     }
 
@@ -411,7 +408,7 @@ void GBezier::updateBasePoint (int idx) {
     return;
 
   Coord epoint = *(points.at (eidx));
-  if (points.at (cPoint (idx))->x () == MAXFLOAT)
+  if (points.at (cPoint (idx))->x () == FLT_MAX)
     return;
 
   float dx = epoint.x ();
@@ -441,7 +438,7 @@ void GBezier::calcBoundingBox () {
   for (unsigned int i = 1; i < num; i++) {
     Coord p = points.at (i)->transform (tmpMatrix);
 
-    if (p.x () != MAXFLOAT && p.y () != MAXFLOAT) {
+    if (p.x () != FLT_MAX && p.y () != FLT_MAX) {
       r.left (QMIN(p.x (), r.left ()));
       r.top (QMIN(p.y (), r.top ()));
       r.right (QMAX(p.x (), r.right ()));
@@ -574,8 +571,8 @@ void GBezier::computePPoints () {
 
   ppoints.resize (num);
   for (i = 1; i + 3 < num; i += 3) {
-    if (points.at (i + 1)->x () == MAXFLOAT ||
-	points.at (i + 2)->x () == MAXFLOAT) {
+    if (points.at (i + 1)->x () == FLT_MAX ||
+	points.at (i + 2)->x () == FLT_MAX) {
       if (ppoints.size () < idx + 2)
 	ppoints.resize (ppoints.size () + 2);
       ppoints.setPoint (idx++, points.at (i)->x (), points.at (i)->y ());

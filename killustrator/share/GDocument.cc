@@ -49,6 +49,8 @@
 #include <values.h>
 #endif
 
+#include <float.h>
+
 #include <stack>
 #include <vector>
 #include <algorithm>
@@ -394,7 +396,7 @@ void GDocument::deleteObject (GObject* obj) {
 bool GDocument::findNearestObject (const char* otype, int x, int y,
 				   float max_dist, GObject*& obj,
 				   int& pidx, bool all) {
-  float d, distance = MAXFLOAT;
+  float d, distance = FLT_MAX;
   obj = 0L;
   Coord p (x, y);
 
