@@ -96,7 +96,7 @@ void KWAutoFormatDia::setupTab1()
     ( void )new QWidget( tab1 );
 
     cbUpperUpper = new QCheckBox( tab1 );
-    cbUpperUpper->setText( i18n( "Concert two Upper &Case letters to one Upper Case and one Lower Case letter.\n"
+    cbUpperUpper->setText( i18n( "Convert two Upper &Case letters to one Upper Case and one Lower Case letter.\n"
                                  "( e.g. HAllo to Hallo )" ) );
     cbUpperUpper->resize( cbUpperUpper->sizeHint() );
     cbUpperUpper->setChecked( doc->getAutoFormat().getConfigUpperUpper() );
