@@ -27,85 +27,31 @@
   28 and/or database.  Title to copyright in this software, database and  
   29 any associated documentation shall at all times remain with  
   30 Princeton University and LICENSEE agrees to preserve same.  
-;able;#
 ;unable;not able;#
-;last;#
 ;cut;shortened;#
-;comprehensive;#
-;absolute;#
-;direct;#
 ;implicit;unquestioning;#
-;independent;#
-;living;#
 ;pure;unmixed;undiluted;#
-;relative;#
-;comparative;#
-;abstract;#
-;conceptual;#
-;ideal;#
-;concrete;#
-;objective;#
 ;real;tangible;#
 ;ample;copious;plenteous;plentiful;rich;#
 ;copious;extensive;#
-;easy;#
-;thick;#
-;long;#
-;rank;#
-;rare;#
-;tight;#
-;acceptable;#
-;unacceptable;#
-;accessible;#
 ;convenient;handy;ready to hand(p);#
 ;backwoods(a);outback(a);remote;#
-;accurate;#
 ;close;faithful;#
-;straight;#
 ;true;dead on target;#
 ;away;outside;#
 ;wide;wide of the mark;#
 ;new;new to(p);#
-;acid;#
-;basic;#
 ;accepted;recognized;recognised;#
 ;given;granted;#
 ;unavowed;secret;#
-;active;#
 ;agile;nimble;quick;spry;#
-;dancing;#
-;hot;#
-;lively;#
-;active;#
-;retired;#
-;active;#
-;busy;#
-;open;#
-;closed;#
-;dark;#
-;dead;#
 ;dull;slow;sluggish;#
-;active;#
-;progressive;#
-;active;#
 ;activist;activistic;#
 ;passive;inactive;#
-;active;#
 ;ant;anti;#
-;active;#
-;dead;#
 ;active;dynamic;#
-;active;#
-;passive;#
-;active;#
-;active;#
-;quiet;#
 ;actual;existent;#
-;effective;#
 ;potential;possible;#
-;acute;#
-;chronic;#
-;added;#
 ;additional;further(a);more(a);#
 ;another(a);additional;#
 ;else(ip);additional;#
@@ -113,11 +59,7 @@
 ;supplementary;supplemental;additional;#
 ;chronic;confirmed;habitual;inveterate(a);#
 ;dependent;dependant;drug-addicted;hooked;strung-out;#
-;clean;#
-;adequate;#
 ;adequate to(p);capable;equal to(p);up to(p);#
-;competent;#
-;inadequate;#
 ;coherent;tenacious;#
 ;adjective;procedural;#
 ;substantive;essential;#
@@ -128,96 +70,52 @@
 ;forward;onward;#
 ;beneficial;good;#
 ;plus;positive;#
-;profitable;#
 ;minus;negative;#
-;sporting;#
-;cautious;#
-;safe;#
 ;judicious;sensible;#
 ;considered;wise;#
 ;aesthetic;esthetic;aesthetical;esthetical;#
-;artistic;#
-;beautiful;#
-;ugly;#
 ;artificial;contrived;stilted;#
 ;lifelike;natural;#
 ;favorable;positive;#
-;negative;#
 ;aghast(p);appalled;dismayed;shocked;#
 ;frightened;scared;#
 ;panicky;panicked;panic-stricken;panic-struck;terrified;frightened;#
-;aggressive;#
 ;competitive;militant;#
-;hostile;#
 ;pugnacious;rough;#
 ;aroused;emotional;excited;worked up;#
-;calm;#
 ;harsh;abrasive;#
-;alert;#
-;fly;#
 ;absolute;infrangible;inviolable;#
 ;live;living;#
-;vital;#
-;dead;#
-;cold;#
-;live;#
-;dead;#
-;uncertain;#
-;ambitious;#
 ;aggressive;enterprising;pushful;pushing;pushy;#
 ;compulsive;determined;driven;#
 ;full;good;#
-;generous;#
 ;wide;wide-cut;full;#
 ;bare(a);scanty;spare;#
 ;hardscrabble;marginal;#
 ;measly;miserable;paltry;#
-;animal;#
-;vegetable;#
-;mineral;#
-;oral;#
 ;analogue;analog;linear;#
-;digital;#
-;angry;#
 ;angered;enraged;furious;infuriated;maddened;#
-;black;#
 ;huffy;mad;sore;#
 ;acrimonious;bitter;#
 ;inanimate;nonliving;dead;#
 ;animated;alive;#
 ;full of life;lively;vital;#
 ;dead;lifeless;#
-;anonymous;#
 ;nameless;unidentified;unknown;unnamed;#
-;subsequent;#
 ;marine;saltwater;#
-;above;#
-;precedent;#
 ;previous(a);old;#
 ;following;next;#
-;post;#
 ;new;unexampled;#
 ;ante meridiem;am;#
 ;post meridiem;pm;#
-;accessible;#
-;appropriate;#
-;due;#
-;pat;#
 ;proper;right;suitable;#
-;inappropriate;#
 ;unsuitable;improper;wrong;#
 ;due;owed;#
 ;collect;cod;#
 ;collectible;collectable;payable;#
-;due;#
 ;apposite;appropriate;apt;pertinent;#
-;armed;#
-;clean;#
-;armed;#
-;armed;#
 ;adroit;clever;ingenious;#
 ;cute;precious;#
-;deep;#
 ;guileless;honest;#
 ;eloquent;facile;fluent;silver;silver-tongued;smooth-spoken;#
 ;dumb;mute;silent;#
@@ -226,18 +124,12 @@
 ;involved;involved with(p);#
 ;unaffixed;loose;#
 ;freestanding;separate;#
-;stuck;#
-;shy;#
 ;absorbed;engrossed;enwrapped;intent;rapt;wrapped;#
 ;absent;absentminded;abstracted;scatty;#
-;attractive;#
 ;bewitching;captivating;enchanting;enthralling;entrancing;fascinating;#
 ;charismatic;magnetic;#
 ;homely;plain;#
 ;attractive(a);magnetic;#
-;attractive;#
-;pregnant;#
-;silent;#
 ;silent;unsounded;#
 ;advantageous;favorable;golden;#
 ;bright;promising;#
@@ -245,17 +137,7 @@
 ;inauspicious;unfortunate;#
 ;auspicious;encouraging;favorable;favourable;lucky;prosperous;#
 ;ill;inauspicious;ominous;#
-;constitutional;#
-;automatic;#
-;manual;#
-;available;#
-;accessible;#
-;easy;#
-;forthcoming;#
-;open;#
 ;alert;alive(p);awake(p);#
-;sensible;#
-;unaware;#
 ;incognizant;unaware;#
 ;witting;aware;#
 ;unwitting;unaware;#
@@ -265,153 +147,77 @@
 ;baleful;forbidding;menacing;minacious;minatory;ominous;sinister;threatening;ugly;#
 ;formidable;redoubtable;unnerving;#
 ;ghastly;grim;grisly;gruesome;macabre;#
-;forward;#
-;leading;#
 ;directing;directional;directive;guiding;#
-;following;#
 ;inverse;reverse;#
-;negative;#
 ;rearward;reverse;#
-;forward;#
-;forward;#
 ;first;low;#
-;second;#
-;reverse;#
-;forward;#
 ;fresh;impertinent;impudent;overbold;smart;saucy;sassy;#
-;bare;#
-;beautiful;#
 ;bonny;bonnie;comely;fair;#
 ;fair;sightly;#
 ;fine-looking;good-looking;better-looking;handsome;well-favored;well-favoured;#
 ;glorious;resplendent;splendid;splendiferous;#
-;lovely;#
-;pretty;#
-;ugly;#
 ;malefic;malevolent;malign;evil;#
 ;benevolent;good;#
 ;good-hearted;kind;kindly;openhearted;#
 ;genial;kind;#
 ;evil;harmful;injurious;#
-;best;#
 ;champion;prizewinning;#
 ;first;foremost;top(a);#
 ;good;go-to-meeting(a);Sunday;Sunday-go-to-meeting(a);#
 ;bottom;poorest;#
 ;last;last-place;lowest;#
-;better;#
-;improved;#
-;better;#
 ;big(a);elder;older;#
-;anonymous;#
-;joint;#
-;black;#
 ;colored;coloured;dark;dark-skinned;#
-;white;#
 ;fair;fairish;#
-;dark;#
-;clean;#
-;clear;#
-;bloody;#
 ;crimson;red;violent;#
-;red;#
-;bold;#
 ;audacious;brave;dauntless;fearless;intrepid;unfearing;#
-;shy;#
-;bound;#
-;bound;#
-;loose;#
 ;propertyless;wage-earning;working-class;blue-collar;#
-;middle-class;#
-;quality;#
 ;brave;courageous;fearless;#
 ;desperate;heroic;#
 ;game;gamy;gamey;gritty;mettlesome;spirited;spunky;#
 ;chicken;chickenhearted;lily-livered;white-livered;yellow;yellow-bellied;#
 ;faint;fainthearted;timid;#
-;light;#
-;bright;#
-;white;#
-;dark;#
 ;black;pitch-black;pitch-dark;#
-;flat;#
-;bright;#
-;brilliant;#
 ;silver;silvern;silvery;#
-;dull;#
 ;flat;mat;matt;matte;matted;#
 ;undimmed;bright;#
-;open;#
 ;broad;liberal;tolerant;#
-;catholic;#
 ;narrow-minded;narrow;#
-;broken;#
 ;crushed;ground;#
-;split;#
 ;broken;unkept;#
-;broken;#
-;solid;#
 ;identical;monovular;#
-;busy;#
 ;capitalistic;capitalist;#
 ;competitive;free-enterprise(a);private-enterprise(a);#
 ;socialistic;socialist;#
-;collective;#
 ;grating;gravel;gravelly;rasping;raspy;rough;#
-;golden;#
-;estimated;#
-;calm;#
 ;placid;quiet;still;tranquil;unruffled;#
 ;angry;furious;raging;tempestuous;wild;#
 ;boisterous;fierce;rough;#
-;dirty;#
-;capable;#
-;able;#
 ;confident;surefooted;#
-;capable;#
-;careful;#
-;cautious;#
 ;certain;sure;#
-;close;#
 ;detailed;elaborate;elaborated;#
 ;minute;narrow;#
-;thorough;#
 ;casual;cursory;passing(a);perfunctory;#
 ;radical;basal;#
-;causal;#
 ;motive(a);motor;#
 ;responsible;responsible for(p);#
-;cautious;#
 ;celsius;centigrade;c;#
 ;fahrenheit;Fahr;f;#
-;central;#
-;nuclear;#
 ;edge(a);fringe(a);fringy;marginal;#
-;definite;#
 ;indisputable;sure;#
-;uncertain;#
 ;certain(p);sure;#
 ;uncertain;unsure;incertain;#
 ;doubtful;dubious;#
-;convinced;#
-;confident;#
 ;cocksure;overconfident;positive;#
 ;diffident;shy;timid;unsure;#
 ;certain;sure;#
-;uncertain;#
-;inevitable;#
 ;fatal;fateful;#
-;necessary;#
 ;fluid;unstable;#
 ;fluid;mobile;#
-;mobile;#
 ;fixed;frozen;#
 ;static;stable;unchanging;#
 ;final;last;#
 ;unaltered;unchanged;#
-;varied;#
-;unchanged;#
-;characteristic;#
 ;distinctive;typical;#
 ;distinguishing;distinctive;identifying(a);#
 ;hot;live;#
@@ -419,7 +225,6 @@
 ;celibate;continent;#
 ;pure;vestal;virgin;virginal;virtuous;#
 ;easy;light;loose;promiscuous;sluttish;wanton;#
-;cheerful;#
 ;beaming;glad;#
 ;cheery;gay;sunny;#
 ;blue;dark;depressing;disconsolate;dismal;dispiriting;gloomy;grim;#
@@ -428,37 +233,27 @@
 ;blue;bluish;blueish;light-blue;dark-blue;#
 ;bronze;bronzy;#
 ;brown;brownish;dark-brown;#
-;coral;#
 ;green;greenish;light-green;dark-green;#
-;honey;#
 ;orange;orangish;#
 ;pink;pinkish;#
 ;purple;violet;purplish;#
 ;red;reddish;ruddy;blood-red;carmine;cerise;cherry;cherry-red;crimson;ruby;ruby-red;scarlet;#
 ;rose;roseate;rosaceous;#
-;stone;#
-;straw;#
 ;yellow;yellowish;xanthous;#
 ;argent;silver;silvery;silverish;#
 ;coal-black;jet;jet-black;pitchy;sooty;#
 ;gray;grey;grayish;greyish;#
-;neutral;#
 ;black;achromatic;#
 ;white;achromatic;#
 ;saturated;pure;#
 ;intense;vivid;#
-;dull;#
 ;color;colour;#
 ;colored;coloured;in color(p);colorful;#
 ;aflame(p);crimson;red;reddened;red-faced;flushed;#
-;bay;#
 ;black;blackened;#
-;blue;#
 ;blue;bluish;blueish;#
 ;empurpled;purple;#
 ;red;reddish;#
-;white;#
-;red;#
 ;fast;colorfast;#
 ;colorful;colourful;#
 ;bright;brilliant;vivid;#
@@ -468,190 +263,90 @@
 ;pale;pallid;wan;#
 ;white;whitened;#
 ;brave;braw;gay;#
-;neutral;#
 ;pale;pallid;#
 ;light;light-colored;#
-;pale;#
-;dark;#
-;christian;#
-;advanced;#
-;civil;#
 ;barbarian;barbaric;savage;uncivilized;uncivilised;wild;#
-;primitive;#
-;classical;#
-;classic;#
-;modern;#
 ;popular;pop;#
-;confidential;#
-;secret;#
-;sensitive;#
 ;crude;raw;#
-;clean;#
 ;fresh;unused;#
 ;dirty;soiled;unclean;#
-;black;#
 ;filthy;foul;nasty;#
 ;clean;unobjectionable;#
-;dirty;#
 ;blasphemous;blue;profane;#
 ;filthy;foul;nasty;smutty;#
 ;clean;uncontaminating;#
 ;dirty;contaminating;#
-;hot;#
-;clean;#
-;clear;#
 ;broad;unsubtle;#
 ;clear-cut;distinct;trenchant;#
-;vivid;#
 ;indeterminate;obscure;vague;#
-;clear;#
 ;liquid;limpid;#
-;solid;#
-;clear;#
-;confused;#
 ;punch-drunk;silly;slaphappy;#
 ;balmy;mild;#
 ;filthy;foul;nasty;vile;#
-;smart;#
 ;astute;sharp;shrewd;#
 ;cagey;cagy;canny;clever;#
-;stupid;#
 ;anserine;dopy;dopey;fool(a);foolish;goosey;goosy;gooselike;#
 ;blockheaded;boneheaded;fatheaded;loggerheaded;thick;thickheaded;thick-skulled;wooden-headed;#
 ;dense;dim;dull;dumb;obtuse;slow;#
-;far;#
-;cold;#
 ;distant;remote;removed;#
 ;distant;remote;removed;#
 ;further;farther;#
 ;near;close;#
-;adjacent;#
-;nearby;#
 ;neighbor;neighbour;neighboring(a);neighbouring(a);#
 ;warm;hot;#
-;distant;#
-;deep;#
-;extreme;#
-;close;#
 ;adjacent;next;side by side(p);#
 ;closer;near;#
 ;contiguous;immediate;#
-;distant;#
 ;remote;removed(p);#
-;close;#
 ;approximate;near;#
 ;bosom(a);intimate;#
-;confidential;#
 ;dear;good;near;#
 ;familiar;intimate;#
-;black;#
-;white;#
 ;bare;au naturel(p);naked;nude;#
 ;bare-assed;bare-ass;in the altogether;in the buff;in the raw;raw;peeled;naked as a jaybird;stark naked;#
-;clear;#
 ;bright;shining;shiny;sunshiny;sunny;#
-;fair;#
 ;dull;gray;grey;leaden;#
 ;heavy;lowering;sullen;threatening;#
-;coastal;#
-;inland;#
 ;interior;midland;upcountry;#
-;coherent;#
 ;consistent;logical;ordered;orderly;#
 ;confused;disconnected;disjointed;disordered;garbled;illogical;scattered;unconnected;#
 ;uncrannied;smooth;#
-;collective;#
 ;aggregate;aggregative;mass;#
 ;broadcast;aired;#
 ;ablaze(p);afire(p);aflame(p);aflare(p);alight(p);blazing;burning;flaming;on fire(p);#
 ;commodious;convenient;#
 ;comfortable;comfy;#
-;easy;#
-;uncomfortable;#
 ;bad;tough;#
 ;irritating;painful;#
 ;miserable;wretched;#
-;warm;#
-;comfortable;#
-;uncomfortable;#
 ;awkward;ill at ease(p);uneasy;#
 ;discomfited;embarrassed;#
 ;corresponding;proportionate;in proportion to;#
 ;proportional;relative;#
-;commercial;#
-;technical;#
-;technical;#
-;residential;#
-;common;#
 ;average;ordinary;#
 ;democratic;popular;#
-;frequent;#
-;general;#
-;standard;#
 ;especial(a);exceptional;particular(a);special;#
-;rare;#
-;unusual;#
-;usual;#
-;regular;#
-;unusual;#
-;different;#
-;odd;#
-;peculiar;#
-;unique;#
-;common;#
 ;community(a);public;#
-;individual;#
 ;separate;single(a);#
-;narrative;#
-;verbal;#
-;blank;#
 ;close;closelipped;closemouthed;secretive;tightlipped;#
 ;mum;silent;#
-;compact;#
 ;clayey;cloggy;heavy;#
-;tight;#
-;loose;#
 ;friable;light;sandy;#
-;comparable;#
 ;alone(p);unique;unequaled;unequalled;unparalleled;#
 ;pitying;sorry;sorry for(p);#
-;compatible;#
-;compatible;#
-;compatible;#
-;competent;#
 ;able;capable;#
 ;effective;efficient;#
-;qualified;#
 ;competitive;competitory;#
 ;protesting(a);protestant;#
-;patient;#
-;whole;#
 ;entire;full;total;#
 ;integral;entire;intact;#
 ;undivided;full;#
-;down;#
-;whole;#
-;half;#
-;devoted;#
-;sacred;#
-;complete;#
 ;absolute;downright;out-and-out(a);rank(a);right-down;sheer(a);#
-;all;#
-;clean;#
 ;exhaustive;thorough;thoroughgoing;#
 ;full;total;#
-;good;#
-;sound;#
-;broken;#
-;partial;#
-;complete;#
-;comprehensive;#
 ;across-the-board;all-embracing;all-encompassing;all-inclusive;blanket(a);broad;encompassing;panoptic;wide;#
 ;cosmopolitan;ecumenical;oecumenical;general;universal;worldwide;#
 ;extensive;far-reaching;sweeping;#
-;large;#
-;super;#
-;limited;#
 ;calm;unagitated;#
 ;cool;coolheaded;nerveless;#
 ;abashed;chagrined;embarrassed;#
@@ -662,27 +357,17 @@
 ;compact;dense;thick;#
 ;fixed;intent;#
 ;single(a);undivided;exclusive;#
-;broadcast;#
-;broken;#
 ;dispersed;spread;#
 ;divided;divided up;shared;shared out;#
 ;far-flung;widespread;#
 ;sparse;thin;#
-;concerned;#
-;afraid;#
-;afraid;#
 ;casual;insouciant;nonchalant;#
-;brief;#
 ;compendious;compact;succinct;summary;#
-;verbal;#
 ;pleonastic;redundant;tautologic;tautological;#
 ;redundant;wordy;#
-;convincing;#
 ;expanded;extended;#
-;flat;#
 ;dependent;dependant;qualified;#
 ;absolute;total;unconditioned;#
-;independent;#
 ;close;confining;#
 ;compatible;sympathetic;#
 ;identical;superposable;#
@@ -690,219 +375,112 @@
 ;inappropriate;incompatible;out or keeping(p);unfitting;#
 ;alternative;mutually exclusive;#
 ;abutting;adjacent;adjoining;bordering(a);conterminous;contiguous;#
-;intimate;#
 ;apart(p);isolated;obscure;#
 ;disjoined;separate;#
-;conscious;#
 ;alert;awake(p);#
-;unconscious;#
-;cold;#
 ;ignorant;innocent;#
 ;progressive;reformist;#
-;consistent;#
 ;conspicuous;obvious;#
 ;big;large;prominent;#
-;bold;#
 ;crying(a);egregious;flagrant;glaring;gross;rank;#
-;marked;#
 ;outstanding;prominent;salient;spectacular;striking;#
-;visible;#
 ;inconspicuous;invisible;#
 ;obscure;unnoticeable;#
-;constant;#
 ;false;untrue;#
-;creative;#
-;structural;#
 ;damaging;negative;#
 ;content(p);happy;#
-;satisfied;#
-;continent;#
-;constant;#
 ;incessant;perpetual;endless;#
 ;persistent;relentless;unrelenting;#
 ;isolated;scattered;stray;#
 ;continuous;uninterrupted;#
 ;ceaseless;constant;incessant;never-ending;perpetual;unceasing;unremitting;#
-;endless;#
 ;straight;consecutive;#
-;continuous;#
-;continued;#
-;continuing;#
-;controlled;#
-;loose;#
-;wild;#
-;wild;#
-;controversial;#
 ;accepted;undisputed;#
-;convenient;#
 ;favorable;favourable;opportune;#
-;awkward;#
-;conventional;#
 ;accepted;received;#
-;conventional;#
 ;square;straight;#
-;alternative;#
 ;bizarre;eccentric;freakish;freaky;flaky;outlandish;outre;#
 ;nuclear;atomic;#
-;conventional;#
-;traditional;#
-;conventional;#
-;convincing;#
-;medium;#
-;raw;#
-;rare;#
-;helpful;#
 ;dirty;sordid;#
-;considerable;#
 ;extended;extensive;wide;#
 ;goodly;goodish;hefty;respectable;sizable;sizeable;tidy;#
 ;significant;substantial;#
 ;substantial;real;material;#
-;material;#
 ;physical;tangible;touchable;#
-;physical;#
 ;corporeal;material;#
 ;bodied;corporal;corporate;embodied;incarnate;#
-;spiritual;#
 ;correct;right;#
 ;accurate;exact;precise;#
-;straight;#
 ;incorrect;wrong;#
 ;false;mistaken;#
 ;right;correct;#
-;wrong;#
 ;sophisticated;urbane;#
-;provincial;#
 ;binding;constipating;#
 ;unconstipated;regular;#
 ;lax;loose;#
 ;kind;thoughtful;#
-;polite;#
 ;courteous;gracious;nice;#
 ;ill-mannered;rude;unmannered;unmannerly;#
 ;civil;polite;#
 ;uncivil;rude;#
-;civil;#
 ;creative;originative;#
 ;imaginative;ingenious;inventive;#
 ;likely;plausible;#
 ;incredible;unbelievable;#
 ;improbable;marvelous;marvellous;tall(a);#
-;critical;#
-;critical;#
 ;discriminative;judicial;#
-;critical;#
-;acute;#
 ;dangerous;grave;grievous;serious;severe;#
 ;desperate;dire;#
-;critical;#
 ;crossed;across;#
-;royal;#
 ;crucial;important;#
 ;critical;decisive;#
-;solid;#
 ;linear;one-dimensional;#
-;flat;#
 ;two-dimensional;flat;#
-;cut;#
-;split;#
-;cut;#
-;cut;#
 ;uncut;rough;#
-;curious;#
-;current;#
-;actual;#
 ;contemporary;present-day(a);#
-;live;#
-;live;#
-;dead;#
 ;blasted;blame;blamed;blessed;damn;damned;darned;deuced;everlasting;goddam;goddamn;goddamned;infernal;#
 ;favored;fortunate;golden;#
-;glorious;#
 ;bespoke;bespoken;custom;made-to-order;tailored;tailor-made;#
 ;boughten;store;store-bought;#
-;circular;#
 ;annual;one-year;#
 ;blasted;rent;ripped;torn;#
 ;broken;busted;#
 ;burst;ruptured;busted;#
 ;hurt;weakened;#
-;intact;#
-;deaf;#
-;decent;#
 ;coarse;crude;earthy;gross;vulgar;#
-;decisive;#
 ;crucial;deciding(a);determinant;determinative;determining(a);#
 ;fateful;fatal;#
-;decisive;#
-;alleged;#
-;deep;#
 ;profound;unfathomed;unplumbed;unsounded;#
-;shallow;#
-;deep;#
 ;heavy;profound;sound;wakeless;#
-;profound;#
-;shallow;#
 ;light;wakeful;#
 ;de facto;actual;factual;#
 ;beaten;conquered;overcome;overthrown;overwhelmed;routed;vanquished;#
 ;amenable;willing;#
 ;undefined;vague;#
 ;well-defined;clear;#
-;original;#
-;primary;#
-;definite;#
-;decisive;#
 ;distinct;decided;#
 ;blue;depressed;dispirited;down(p);downcast;downhearted;down in the mouth;low;low-spirited;#
 ;lonely;lonesome;#
 ;high;in high spirits;#
-;delicate;#
-;subtle;#
-;tender;#
 ;sturdy;tough;#
 ;delicate;fragile;frail;#
 ;rigorous;stringent;tight;#
 ;stern;strict;exacting;#
 ;easy;lenient;#
-;light;#
 ;clamant;crying;exigent;insistent;instant;#
-;desperate;#
 ;pressing;urgent;#
-;democratic;#
-;direct;#
-;parliamentary;#
-;parliamentary;#
-;popular;#
-;representative;#
-;republican;#
-;arbitrary;#
-;absolute;#
 ;effusive;emotional;gushing(a);gushy;#
 ;incontrovertible;irrefutable;positive;#
 ;reliable;dependable;#
 ;certain;sure;#
-;straight;#
-;true;#
-;uncertain;#
-;dependent;#
-;independent;#
 ;autonomous;self-directed;self-reliant;#
-;autonomous;#
 ;individual;case-by-case;item-by-item;#
 ;independent;main(a);#
 ;dependent;subordinate;#
 ;guerrilla(a);guerilla(a);underground;irregular;#
-;independent;#
-;allied;#
-;neutral;#
-;desirable;#
 ;preferable;preferred;#
 ;broken;wiped out(p);impoverished;#
-;fixed;#
-;developed;#
 ;mature;matured;#
-;distinguished;#
 ;undifferentiated;uniform;#
 ;difficult;hard;#
 ;ambitious;challenging;#
@@ -911,341 +489,167 @@
 ;nasty;tight;#
 ;rocky;rough;#
 ;rugged;tough;#
-;serious;#
-;easy;#
 ;casual;effortless;#
 ;cushy;soft;#
 ;elementary;simple;uncomplicated;unproblematic;#
-;smooth;#
 ;courtly;elegant;formal;stately;#
 ;distinguished;imposing;magisterial;#
 ;pathetic;ridiculous;silly;#
 ;diplomatic;wise;#
-;presidential;#
 ;cut;thinned;weakened;#
 ;watery;washy;weak;#
-;white;#
-;black;#
 ;neat;straight;full-strength;#
 ;diplomatic;diplomatical;#
 ;politic;smooth;suave;#
-;direct;#
 ;short;shortest;#
-;straightforward;#
-;indirect;#
-;direct;#
-;direct;#
 ;blunt;candid;forthright;frank;free-spoken;outspoken;plainspoken;point-blank;#
 ;plain;unvarnished;#
 ;square(a);straightforward;#
-;indirect;#
-;direct;#
-;direct;#
-;immediate;#
-;direct;#
-;indirect;#
 ;clear;percipient;#
 ;modest;restrained;unostentatious;#
 ;discriminate;nice;#
-;good;#
-;selective;#
 ;available;usable;useable;#
 ;fluid;liquid;#
-;frozen;#
-;distinct;#
 ;clear;clean-cut;clear-cut;#
 ;crisp;sharp;#
 ;dim;faint;shadowy;vague;wispy;#
-;faint;#
 ;varied;wide-ranging;#
-;general;#
 ;solid;unanimous;#
-;registered;#
-;dominant;#
-;governing;#
 ;sovereign;supreme;#
-;superior;#
 ;adjunct;assistant;#
-;secondary;#
-;dominant;#
-;dramatic;#
-;spectacular;#
 ;intoxicated;drunk;inebriated;#
 ;besotted;blind drunk;blotto;crocked;fuddled;loaded;pie-eyed;pissed;pixilated;plastered;potty;slopped;sloshed;smashed;soaked;soused;sozzled;squiffy;stiff;tiddly;tiddley;tight;tipsy;wet;#
 ;high;mellow;#
 ;dry;teetotal;#
-;dull;#
-;sharp;#
-;cutting;#
-;keen;#
-;sharp;#
 ;acute;intense;#
 ;cutting;keen;knifelike;piercing;stabbing;lancinate;lancinating;#
-;salt;#
-;dull;#
-;lively;#
 ;placid;quiet;#
-;lively;#
-;live;#
-;warm;#
-;dull;#
 ;heavy;leaden;#
 ;dynamic;dynamical;#
-;active;#
 ;changing;ever-changing;#
 ;driving;impulsive;#
 ;static;unchanging;#
-;eager;#
-;hot;#
-;reluctant;#
-;early;#
 ;earlier;earliest;#
-;wee;#
-;middle;#
-;late;#
 ;advanced;ripe;#
-;early;#
 ;archaic;primitive;#
 ;baby;new;young;#
 ;crude;primitive;rude;#
 ;late;later(a);#
-;early;#
-;Old;#
-;middle;#
-;late;#
 ;Modern;New;#
-;New;#
 ;easy;at ease;#
 ;anxious;apprehensive;#
-;strange;#
-;east;#
 ;easterly;eastern;#
 ;easterly;eastern;#
-;eastern;#
-;west;#
-;western;#
 ;westerly;western;#
 ;westerly;western;#
-;western;#
-;eastern;#
 ;Asian;oriental;#
-;western;#
-;eastern;#
 ;fat;rounded;#
 ;effective;good;in effect(p);in force(p);#
 ;operational;in operation(p);operating(a);#
-;working;#
-;down;#
 ;dead;defunct;#
 ;effective;effectual;efficacious;#
 ;impressive;telling;#
 ;arduous;backbreaking;grueling;gruelling;hard;heavy;laborious;labourious;punishing;toilsome;#
-;difficult;#
 ;heavy;labored;laboured;#
 ;easy;facile;#
-;effective;#
-;efficient;#
 ;economic;economical;#
 ;expeditious;prompt;timesaving;#
 ;firm;strong;#
 ;forcible;physical;strong-arm;#
-;sharp;#
 ;forceless;unforceful;weak;#
 ;bouncy;live;lively;resilient;springy;whippy;#
 ;fictile;moldable;plastic;#
-;flexible;#
-;stretch;#
-;dead;#
-;electoral;#
 ;compulsory;mandatory;required;#
-;elegant;#
-;fine;#
 ;neat;refined;tasteful;#
-;eligible;#
 ;desirable;suitable;worthy;#
-;entitled;#
-;legal;#
-;emotional;#
-;Latin;#
-;little;#
-;dry;#
 ;philosophical;philosophic;#
-;empirical;#
 ;experimental;data-based;observational;#
 ;experimental;model(a);pilot(a);test(a);trial(a);#
 ;theoretical;theoretic;#
 ;conjectural;supposed;suppositional;suppositious;supposititious;#
-;theoretical;#
-;abstract;#
-;academic;#
-;pure;#
-;practical;#
-;unemployed;#
 ;beguiled;captivated;charmed;delighted;enthralled;entranced;#
-;encouraging;#
 ;involved;mired;#
 ;clear;unmortgaged;#
-;external;#
 ;active;physical;#
 ;brisk;lively;merry;rattling;snappy;spanking;zippy;#
-;driving;#
-;preliminary;#
-;increased;#
 ;decreased;reduced;#
 ;belittled;diminished;small;#
 ;cut;slashed;#
 ;benighted;dark;#
-;enthusiastic;#
 ;ardent;warm;#
 ;avid;great;eager;zealous;#
-;crazy;#
-;cold;#
 ;covetous;envious;jealous;green;#
-;equal;#
-;balanced;#
 ;close;tight;#
-;equivalent;#
 ;even;fifty-fifty;#
 ;tied(p);even;#
-;balanced;#
-;stable;#
 ;double;forked;#
 ;absolute;conclusive;#
-;straightforward;#
 ;abstruse;deep;recondite;#
 ;mysterious;mystic;mystical;occult;secret;orphic;#
-;essential;#
 ;basal;basic;primary;#
 ;constituent(a);constitutional;constitutive(a);organic;#
 ;substantial;substantive;in essence;#
 ;vital;life-sustaining;#
 ;critical;vital;#
 ;abject;low;low-down;miserable;scummy;scurvy;#
-;ethical;#
 ;euphoric;happy;#
 ;dysphoric;distressed;unhappy;#
-;even;#
 ;flat;level;plane;#
-;level;#
 ;true;straight;#
-;even;#
-;odd;#
-;exact;#
 ;direct;verbatim;#
-;mathematical;#
-;perfect;#
 ;rigorous;strict;#
 ;approximate;approximative;rough;ballpark;#
 ;free;loose;liberal;#
-;odd;#
-;round;#
 ;quick;warm;#
 ;skittish;spooky;nervous;#
-;steady;#
-;excited;#
 ;aflutter;nervous;#
-;crazy;#
 ;intoxicated;drunk;#
-;exciting;#
 ;electric;galvanic;galvanizing;galvanising;#
 ;leftover;left over(p);left(p);odd;remaining;unexpended;#
 ;existent;existing;#
 ;active;alive(p);#
-;living;#
 ;surviving;living;#
-;dead;#
-;expected;#
-;unexpected;#
 ;advantageous;appropriate;#
-;essential;#
-;expensive;#
 ;costly;dear(p);high-priced;pricey;pricy;#
 ;dearly-won;costly;#
 ;cheap;inexpensive;#
 ;bargain;cut-rate(a);cut-price(a);#
-;experienced;#
 ;initiate;initiated;#
 ;intimate;intimate with(p);knowledgeable;knowledgeable about(p);#
 ;old;older;#
 ;raw;new;wet behind the ears(p);#
-;valid;#
 ;cryptic;cryptical;deep;inscrutable;mysterious;mystifying;#
 ;explicit;expressed;#
-;express;#
 ;implicit;inexplicit;#
 ;implicit in(p);inherent;underlying;#
 ;implied;silent;tacit;understood;#
-;external;#
-;outer;#
-;outside;#
-;internal;#
-;in;#
-;inner;#
-;inside;#
-;interior;#
-;out;#
-;outside;#
-;satellite;#
-;central;#
-;inside;#
-;external;#
-;outer;#
 ;inner;interior;internal;#
 ;secret;private;#
-;interior;#
-;fair;#
 ;fair;just;#
 ;clean;sporting;sportsmanlike;#
 ;unfair;unjust;#
 ;cheating(a);dirty;foul;unsporting;unsportsmanlike;#
-;raw;#
 ;equitable;just;#
-;faithful;#
 ;firm;loyal;truehearted;fast(a);#
-;true;#
-;faithful;#
-;loyal;#
-;familiar;#
 ;strange;unknown;#
 ;strange;unusual;#
 ;antic;fantastic;fantastical;grotesque;#
-;crazy;#
 ;curious;funny;odd;peculiar;queer;rum;rummy;singular;#
-;exotic;#
-;gothic;#
-;other;#
-;weird;#
-;familiar;#
 ;common;usual;#
-;everyday;#
 ;fashionable;stylish;#
-;cool;#
 ;dapper;dashing;jaunty;natty;raffish;rakish;smart;snappy;spruce;#
-;in;#
 ;latest;last;newest;up-to-date;#
 ;mod;modern;modernistic;#
-;smart;#
 ;antique;demode;old-fashioned;old-hat(p);outmoded;passe;passee;#
-;out;#
 ;stylish;fashionable;#
 ;chic;smart;voguish;#
-;fast;#
 ;blistering;hot;red-hot;#
-;express;#
 ;fleet;swift;#
-;hot;#
 ;immediate;prompt;quick;straightaway;#
 ;quick;speedy;#
-;rapid;#
 ;rapid;speedy;#
-;slow;#
-;fast;#
-;slow;#
-;fast;#
-;slow;#
 ;dainty;nice;overnice;prissy;squeamish;#
 ;finical;finicky;fussy;particular;#
-;fat;#
 ;compact;heavyset;stocky;thick;thickset;#
 ;fleshy;heavy;overweight;#
 ;gross;porcine;#
@@ -1254,239 +658,118 @@
 ;spare;trim;#
 ;fatty;fat;#
 ;diet(a);light;lite;low-cal;#
-;fatal;#
-;terminal;#
 ;favorable;favourable;#
 ;adverse;contrary;#
 ;favorable;favourable;#
 ;adverse;harmful;inauspicious;untoward;#
-;hostile;#
 ;happy;well-chosen;#
 ;awkward;clumsy;cumbersome;inapt;inept;ill-chosen;#
-;unfortunate;#
 ;cut;cut down;down;#
 ;standing;uncut;#
-;rank;#
 ;complete;concluded;ended;over(p);all over;terminated;#
 ;done;through;through with(p);#
-;limited;#
 ;dateless;endless;sempiternal;#
-;endless;#
-;opening;#
 ;beginning(a);first;#
 ;inaugural;initiative;initiatory;first;maiden;#
-;starting;#
 ;concluding;final;last;terminal;#
-;first;#
 ;basic;introductory;#
-;initial;#
 ;firstborn;eldest;#
-;original;#
 ;premier;premiere;#
-;last;#
 ;endmost;terminal;#
-;ultimate;#
-;intermediate;#
 ;gray;grey;#
 ;in-between;mediate;middle;#
-;second;#
-;first;#
-;second;#
 ;fit;healthy;#
 ;able;able-bodied;#
 ;crippled;halt;halting;lame;#
 ;disabled;handicapped;incapacitated;#
 ;fit;fit to(a);fir for(a);#
-;acceptable;#
 ;appropriate;suitable;suited;#
-;flat;#
 ;flexible;flexile;#
 ;rigid;stiff;#
 ;stand-up;stiff;#
-;stiff;#
-;flexible;#
 ;compromising;conciliatory;flexible;#
-;rigid;#
 ;elastic;flexible;pliable;pliant;#
-;variable;#
 ;inflexible;rigid;unbending;#
-;straight;#
-;closed;#
 ;flat;unpleated;#
-;open;#
 ;toed;toe;#
-;forward;#
-;native;#
-;foreign;#
 ;alien;exotic;strange;#
 ;established;naturalized;#
-;native;#
-;domestic;#
 ;native;aboriginal;#
-;foreign;#
 ;abroad;overseas;#
 ;external;international;outside(a);#
-;domestic;#
 ;home(a);interior(a);internal;national;#
-;domestic;#
-;household;#
 ;haunting;persistent;#
 ;kind;tolerant;#
-;formal;#
 ;ceremonious;conventional;#
 ;dress;full-dress;#
 ;full-dress;dress;#
 ;positive;prescribed;#
 ;starchy;stiff;buckram;#
-;informal;#
 ;casual;everyday;#
 ;free-and-easy;casual;#
-;formal;#
-;literary;#
-;informal;#
 ;common;vernacular;vulgar;#
-;fortunate;#
 ;felicitous;happy;#
 ;good;well(p);#
-;lucky;#
-;unfortunate;#
 ;black;calamitous;disastrous;fatal;fateful;#
 ;dispossessed;homeless;roofless;#
 ;hapless;miserable;misfortunate;pathetic;piteous;pitiable;pitiful;poor;wretched;#
 ;infelicitous;unhappy;#
 ;odoriferous;odorous;perfumed;scented;sweet;sweet-scented;sweet-smelling;#
 ;gamey;gamy;high;#
-;free;#
-;bound;#
-;fixed;#
 ;fast;firm;immobile;#
 ;detached;free;#
-;free;#
 ;at large(p);at liberty(p);escaped;loose;on the loose(p);#
 ;autonomous;independent;self-governing;sovereign;#
 ;available;uncommitted;#
-;loose;#
 ;apprenticed;articled;bound;indentured;#
-;free;#
 ;bond;enslaved;enthralled;in bondage;#
-;frequent;#
 ;regular;steady;#
-;rare;#
-;fresh;#
 ;crisp;firm;crunchy;#
 ;good;unspoiled;unspoilt;#
-;hot;#
 ;strong;warm;#
 ;bad;spoiled;spoilt;#
-;cold;#
-;hard;#
-;fresh;#
 ;aged;cured;#
 ;flash-frozen;quick-frozen;frozen;#
-;fresh;#
 ;sweet;unsalty;#
-;salt;#
-;friendly;#
 ;cozy;intimate;informal;#
-;social;#
-;hostile;#
-;friendly;#
-;hostile;#
-;friendly;#
-;frozen;#
-;solid;#
-;breeding;#
 ;fat;fertile;productive;rich;#
 ;hardscrabble;poor;#
-;full;#
 ;fraught(p);pregnant;#
 ;heavy;weighed down;#
-;empty;#
 ;bare;stripped;#
 ;blank;clean;white;#
-;open;#
-;empty;#
-;full-time;#
-;regular;#
-;part-time;#
 ;irregular;temporary;#
-;functional;#
-;structural;#
 ;utilitarian;useful;#
 ;running(a);operative;functional;working(a);#
 ;bad;defective;#
-;dead;#
-;functional;#
-;organic;#
-;prepared;#
 ;fledged;mature;#
-;burning;#
-;specified;#
 ;fixed;given(a);#
-;specific;#
-;general;#
 ;broad;unspecific;#
-;gross;#
 ;mass;large-scale;#
-;overall;#
 ;plain;popular;#
-;widespread;#
-;specific;#
 ;limited;special;#
-;specific;#
-;national;#
-;federal;#
-;general;#
-;local;#
-;community;#
-;district;#
-;federal;#
-;technical;#
 ;abstract;theoretical;#
 ;copyright;copyrighted;#
-;generous;#
 ;big;bighearted;bounteous;bountiful;freehanded;handsome;giving;liberal;openhanded;#
 ;beggarly;mean;#
 ;cheap;chinchy;chintzy;#
 ;cheeseparing;close;near;penny-pinching;#
 ;mean;mingy;miserly;tight;#
-;generous;#
 ;big;large;magnanimous;#
-;kind;#
 ;genuine;echt;#
-;good;#
 ;real;true;#
 ;assumed;false;fictitious;fictive;pretended;put on;sham;#
 ;bad;forged;#
-;base;#
 ;bogus;fake;phony;phoney;bastard;#
-;given;#
-;glorious;#
-;bright;#
 ;divine;elysian;inspired;#
 ;obscure;unknown;unsung;#
-;go;#
-;good;#
 ;bang-up;bully;corking;cracking;dandy;great;groovy;keen;neat;nifty;not bad(p);peachy;slap-up;swell;smashing;#
-;hot;#
 ;satisfactory;acceptable;#
-;solid;#
-;suitable;#
-;superb;#
-;bad;#
 ;atrocious;abominable;awful;dreadful;painful;terrible;unspeakable;#
 ;deplorable;distressing;lamentable;pitiful;sad;sorry;#
 ;fearful;frightful;terrible;#
 ;hard;tough;#
-;ill;#
-;negative;#
-;poor;#
-;pretty;#
 ;rubber;no-good;#
-;severe;#
-;good;#
-;white;#
-;worthy;#
 ;evil;wicked;#
 ;bad;immoral;#
 ;black;dark;sinister;#
@@ -1495,185 +778,88 @@
 ;crabbed;crabby;cross;fussy;grouchy;grumpy;bad-tempered;ill-tempered;#
 ;dark;dour;glowering;glum;moody;morose;saturnine;sour;sullen;#
 ;surly;ugly;#
-;elegant;#
 ;flowing;fluent;fluid;liquid;smooth;#
-;awkward;#
-;wooden;#
 ;elegant;graceful;refined;#
-;gradual;#
-;sudden;#
-;sharp;#
 ;unexpected;unforeseen;#
-;gradual;#
 ;easy;gentle;#
-;steep;#
 ;abrupt;precipitous;sharp;#
 ;bluff;bold;sheer;#
-;heavy;#
 ;grateful;thankful;#
-;glad;#
-;happy;#
-;bright;#
 ;golden;halcyon;prosperous;#
-;unhappy;#
 ;bad;sorry;#
 ;miserable;suffering;wretched;#
 ;regretful;sorry;#
-;hard;#
 ;erect;tumid;#
 ;firm;solid;#
 ;hardened;set;#
-;soft;#
-;hard;#
 ;brutal;cruel;harsh;rigorous;unkind;#
 ;stiff;uphill;#
-;soft;#
-;easy;#
 ;effeminate;weak;#
-;liquid;#
-;hard;#
-;soft;#
 ;cruel;unkind;#
-;dry;#
 ;hard;strong;#
-;wet;#
 ;nonalcoholic;soft;#
 ;innocent;innocuous;#
-;bad;#
-;ill;#
 ;insidious;pernicious;subtle;#
 ;harmonic;sympathetic;#
 ;on-key;true;#
-;pure;#
 ;false;off-key;sour;#
 ;beneficial;good;salutary;#
-;medical;#
-;healthy;#
-;firm;#
 ;flourishing;growing;thriving;#
 ;good;sound;#
 ;hale;whole;#
-;angry;#
 ;bad;unfit;unsound;#
 ;jaundiced;yellow;#
-;mental;#
 ;raw;sore;#
-;dry;#
-;loose;#
 ;divine;godly;#
 ;divine;godlike;#
 ;providential;divine;#
-;light;#
-;heavy;#
-;heavy;#
-;massive;#
-;light;#
-;light;#
-;heavy;#
-;industrial;#
-;heavy;#
 ;distressing;distressful;disturbing;perturbing;troubling;worrisome;worrying;#
-;light;#
 ;fooling;casual;#
-;heavy;#
-;harsh;#
-;thick;#
-;light;#
-;easy;#
-;heavy;#
-;light;#
-;heavy;#
-;big;#
-;light;#
 ;easy;gentle;soft;#
 ;light;lightsome;tripping;#
 ;heavy;lumbering;ponderous;#
-;light;#
-;heavy;#
 ;careless(p);thoughtless(p);regardless;#
-;helpful;#
-;kind;#
-;useless;#
 ;assorted;miscellaneous;mixed;motley;sundry(a);#
 ;consistent;uniform;#
-;solid;#
-;straight;#
 ;gay;queer;homophile(a);#
-;high;#
-;steep;#
-;upper;#
-;low;#
-;deep;#
 ;nether;under;#
-;up;#
-;down;#
 ;advanced;sophisticated;#
-;high;#
-;advanced;#
-;great;#
 ;last;utmost;#
-;low;#
 ;depressed;down(p);#
 ;reduced;rock-bottom;#
-;poor;#
 ;high;high-pitched;#
 ;piercing;shrill;sharp;#
 ;low;low-pitched;#
 ;bass;deep;#
-;away;#
 ;honest;honorable;#
-;open;#
 ;square;straight;#
 ;deceptive;misleading;#
-;false;#
 ;truthful;true;#
-;honest;#
 ;veracious;honest;#
 ;august;revered;venerable;#
 ;noble;solid;upstanding;worthy;#
 ;black;disgraceful;ignominious;inglorious;opprobrious;shameful;#
-;yellow;#
 ;black;bleak;dim;#
 ;despairing;desperate;#
 ;gloomy;grim;#
 ;helpless;lost;#
-;institutional;#
-;horizontal;#
-;flat;#
-;level;#
 ;naiant;swimming;#
 ;vertical;perpendicular;#
-;inclined;#
 ;erect;vertical;upright;#
 ;straight;unbent;unbowed;upright;#
 ;bent;bowed;inclined;#
 ;flat;prostrate;#
-;standing;#
-;flying;#
-;still;#
-;kind;#
 ;bare;barren;bleak;desolate;stark;#
 ;desert;godforsaken;waste;wild;#
 ;hostile;uncongenial;unfriendly;#
-;hostile;#
 ;aggressive;belligerent;#
-;bitter;#
-;dirty;#
-;ill;#
 ;opponent;opposing;#
-;friendly;#
-;hot;#
 ;calefactory;calefactive;heating;#
 ;tropical;tropic;#
 ;white;white-hot;#
-;cold;#
 ;bleak;cutting;raw;#
-;hot;#
-;cold;#
 ;frigid;frosty;frozen;glacial;icy;wintry;#
-;human;#
 ;fallible;frail;imperfect;weak;#
-;mechanical;#
 ;divine;godlike;#
 ;herculean;powerful;#
 ;kind;merciful;#
@@ -1684,54 +870,33 @@
 ;dry;ironic;ironical;wry;#
 ;farcical;ludicrous;ridiculous;#
 ;killing;sidesplitting;#
-;hungry;#
 ;empty;empty-bellied;#
-;dry;#
 ;flying;quick;fast;#
 ;careful;deliberate;measured;#
 ;easy;easygoing;leisurely;#
 ;classifiable;distinctive;#
 ;immanent;subjective;#
-;broken;#
-;intact;#
 ;important;of import;#
 ;all-important(a);all important(p);crucial;essential;of the essence(p);#
-;alpha;#
-;big;#
 ;cardinal;central;fundamental;key;primal;#
 ;distinguished;eminent;great;#
 ;grave;grievous;heavy;weighty;#
-;historic;#
-;serious;#
-;strategic;#
 ;useful;valuable;of value;#
 ;fiddling;footling;lilliputian;little;Mickey Mouse;niggling;piddling;piffling;petty;picayune;trivial;#
-;impressive;#
 ;amazing;awe-inspiring;awesome;awful;awing;#
 ;baronial;imposing;noble;stately;#
 ;dramatic;spectacular;striking;#
 ;expansive;grand;#
-;formidable;#
 ;gallant;lofty;majestic;proud;#
 ;brilliant;glorious;magnificent;splendid;#
 ;heroic;grand;#
-;signal;#
-;broad;#
 ;discernible;evident;observable;#
 ;marked;pronounced;#
-;improved;#
-;developed;#
-;grade;#
 ;dirt;ungraded;#
-;improved;#
-;afraid;#
-;reluctant;#
 ;future(a);next;succeeding(a);#
 ;dissipated;betting;card-playing;gambling;sporting;#
-;gay;#
 ;corrective;disciplinary;disciplinal;#
 ;severe;spartan;strict;#
-;industrial;#
 ;developed;highly-developed;#
 ;developing;underdeveloped;#
 ;chthonian;chthonic;lower;nether;#
@@ -1740,35 +905,19 @@
 ;candid;open;#
 ;familial;genetic;hereditary;inherited;transmitted;transmissible;#
 ;congenital;inborn;innate;inherent;#
-;injured;#
 ;bruised;hurt;wounded;#
 ;cut;gashed;slashed;#
 ;cut;split;#
 ;disabled;hors de combat;out of action;#
 ;hurt;wounded;#
-;raw;#
 ;intact;inviolate;#
 ;innocent;guiltless;clean-handed;#
 ;absolved;clear;cleared;exculpated;exonerated;vindicated;#
-;guilty;#
-;criminal;#
-;educational;#
-;integrated;#
 ;interracial;mixed;#
 ;isolated;quarantined;#
-;separate;#
 ;white;lily-white;#
-;integrated;#
 ;amalgamated;intermingled;mixed;integrated;#
-;combined;#
-;one;#
-;plastic;#
-;intellectual;#
-;rational;#
 ;good;serious;#
-;sophisticated;#
-;intelligent;#
-;alert;#
 ;apt;clever;#
 ;brainy;brilliant;smart as a whip;#
 ;bright;smart;#
@@ -1779,89 +928,51 @@
 ;slurred;thick;#
 ;conscious;witting;#
 ;deliberate;intentional;knowing;willful;wilful;#
-;interested;#
-;curious;#
 ;blase;bored;#
-;interesting;#
 ;absorbing;engrossing;fascinating;gripping;riveting;#
 ;boring;deadening;dull;ho-hum;irksome;slow;tedious;tiresome;wearisome;#
 ;internal;intragroup;#
-;outside;#
 ;built-in;constitutional;inbuilt;inherent;integral;#
 ;inner;internal;intimate;#
 ;alien;foreign;#
 ;external;extraneous;outside;#
 ;interfering;meddlesome;meddling;officious;busy;busybodied;#
-;starting;#
 ;aggressive;fast-growing(a);#
 ;bracing;brisk;energizing;energising;fresh;refreshing;refreshful;tonic;#
 ;draining;exhausting;killing;#
-;identical;#
-;glad;#
 ;happy;pleased;#
-;sad;#
 ;tragic;tragical;#
-;bitter;#
-;sad;#
 ;gala(a);gay;festal;festive;merry;#
 ;gay;jocund;jolly;jovial;merry;mirthful;#
-;just;#
 ;fitting;meet;#
 ;deserved;due;#
-;kind;#
 ;charitable;kindly;sympathetic;#
-;gentle;#
 ;cutting;edged;stinging;#
-;harsh;#
-;known;#
 ;celebrated;famed;far-famed;famous;illustrious;notable;noted;renowned;#
-;unknown;#
 ;oversea;overseas;#
-;flying;#
 ;large;big;#
 ;broad;spacious;wide;#
-;deep;#
-;double;#
 ;enormous;tremendous;#
 ;elephantine;gargantuan;giant;jumbo;#
 ;extensive;extended;#
-;great;#
 ;huge;immense;vast;#
-;large-scale;#
-;large-scale;#
 ;massive;monolithic;monumental;#
-;massive;#
-;super;#
 ;small;little;#
 ;bantam;diminutive;lilliputian;midget;petite;tiny;#
 ;bitty;bittie;teensy;teentsy;teeny;wee;weeny;weensy;teensy-weensy;teeny-weeny;itty-bitty;itsy-bitsy;#
 ;infinitesimal;minute;microscopic;#
 ;least;littlest;smallest;#
-;lesser;#
 ;slender;slim;#
-;greater;#
-;lesser;#
 ;open;wide-open;lawless;#
-;tight;#
-;light;#
 ;flat;unraised;#
-;legal;#
-;eligible;#
-;judicial;#
 ;lawful;legitimate;licit;#
-;statutory;#
-;illegal;#
 ;bootleg;black;black-market;contraband;smuggled;#
 ;criminal;felonious;#
 ;dirty;ill-gotten;#
-;hot;#
 ;clean;fair;#
 ;clear;decipherable;readable;#
 ;dirty;foul;marked-up;#
-;biological;#
-;natural;#
 ;foster;surrogate;#
-;legitimate;#
 ;base;baseborn;#
 ;bastard;bastardly;misbegot;misbegotten;spurious;#
 ;like;similar;#
@@ -1869,78 +980,36 @@
 ;alike(p);similar;like;#
 ;like;equal;equivalent;same;#
 ;unlike;unequal;#
-;likely;#
-;probable;#
-;promising;#
-;unlikely;#
-;last;#
 ;outside;remote;#
 ;probable;likely;plausible;#
 ;improbable;unlikely;#
-;limited;#
 ;controlled;restricted;#
 ;minor;modest;small;small-scale;pocket-size;pocket-sized;#
-;narrow;#
 ;lineal;direct;#
 ;collateral;indirect;#
 ;linear;additive;#
 ;denotative;explicit;#
-;extended;#
-;tropical;#
 ;literary;well-written;#
 ;live;unrecorded;#
-;live;#
-;blank;#
-;local;#
-;general;#
-;logical;#
-;formal;#
-;extended;#
 ;outspread;spread;#
-;long;#
 ;elongated;extended;lengthened;prolonged;#
-;far;#
 ;longer;longest;#
-;short;#
 ;abbreviated;brief;#
-;close;#
-;long;#
 ;drawn-out;extended;lengthy;prolonged;protracted;#
 ;endless;eternal;interminable;#
 ;long-run;long-term;semipermanent;#
 ;nightlong;overnight;#
-;short;#
 ;brief;little;#
 ;short-run;short-term;#
-;long;#
-;short;#
-;long;#
-;short;#
 ;linear;running(a);#
-;loose;#
-;tight;#
 ;binding;constricting;#
 ;close;snug;close-fitting;#
-;open;#
-;lost;#
-;missing;#
-;found;#
-;lost;#
-;lost;#
-;loud;#
-;big;#
-;soft;#
 ;dull;muffled;muted;softened;#
-;gentle;#
 ;hushed;muted;subdued;quiet;#
 ;little;small;#
 ;low;low-toned;#
-;full;#
-;rich;#
 ;orotund;rotund;round;pear-shaped;#
 ;heavy;sonorous;#
-;thin;#
-;pale;#
 ;piano;soft;#
 ;forte;loud;#
 ;adorable;endearing;lovely;#
@@ -1955,659 +1024,320 @@
 ;cold;frigid;#
 ;little;minuscule;small;#
 ;capital;great;majuscule;#
-;lucky;#
-;hot;#
-;dramatic;#
 ;macroscopic;macroscopical;large;#
 ;megascopic;gross;#
 ;microscopic;microscopical;small;#
 ;atomic;atomlike;minute;#
 ;magnetic;magnetized;magnetised;#
-;magnetic;#
 ;geographic;geographical;#
-;magnetic;#
-;major;#
-;better;#
-;minor;#
-;major;#
-;minor;#
-;major;#
 ;minor;nonaged;underage;#
-;major;#
-;minor;#
-;major;#
-;minor;#
-;major;#
 ;great;outstanding;#
-;minor;#
-;secondary;#
-;major;#
-;minor;#
-;male;#
-;female;#
-;marked;#
-;married;#
 ;joined;united;#
 ;unmarried;single;#
-;male;#
 ;male;manful;manlike;manly;virile;#
-;female;#
 ;female;distaff;#
 ;compatible;well-matched;#
 ;odd;unmatched;unmated;unpaired;#
-;material;#
 ;crucial;relevant;#
-;mature;#
 ;adult;big;full-grown;fully grown;grown;grownup;#
-;prime;#
-;mature;#
 ;ripe;mature;#
 ;aged;ripened;#
 ;green;unripe;unripened;immature;#
 ;maximal;maximum;#
 ;greatest;top;#
 ;largest;outside;#
-;supreme;#
 ;minimal;minimum;#
 ;borderline;marginal;#
 ;bottom;lowest;#
 ;least;lowest;smallest;#
-;peak;#
-;meaningful;#
 ;meaning(a);pregnant;significant;#
 ;empty;hollow;vacuous;#
-;mechanical;#
 ;automatic;automatonlike;machinelike;robotlike;#
-;mechanic;#
 ;melodious;melodic;musical;#
 ;dulcet;honeyed;mellifluous;mellisonant;sweet;#
-;musical;#
-;liquid;#
-;musical;#
 ;melted;liquid;liquified;#
-;frozen;#
 ;cutthroat;fierce;bowelless;#
-;mild;#
-;gentle;#
 ;moderate;temperate;#
-;intense;#
 ;bad;big;#
-;cold;#
 ;consuming;overwhelming;#
-;deep;#
 ;exquisite;keen;#
 ;extreme;utmost(a);uttermost(a);#
 ;fierce;tearing;vehement;violent;trigger-happy;#
-;intensive;#
-;profound;#
 ;severe;terrible;wicked;#
-;strong;#
 ;thick;deep;#
 ;violent;wild;#
-;intensive;#
-;extensive;#
-;involved;#
 ;active;participating;#
 ;concerned;interested;#
 ;concerned;implicated;#
-;military;#
-;civilian;#
-;civil;#
-;military;#
 ;alleviated;eased;relieved;#
 ;quenched;satisfied;slaked;#
 ;moderated;qualified;#
-;mobile;#
-;flying;#
-;stiff;#
-;bronze;#
 ;gold;golden;gilded;#
-;silver;#
-;moderate;#
 ;average;intermediate;medium;#
 ;cautious;conservative;#
 ;fair;fairish;reasonable;#
-;limited;#
 ;modest;small;#
 ;excessive;inordinate;undue;unreasonable;#
 ;exorbitant;extortionate;outrageous;steep;unconscionable;usurious;#
-;extraordinary;#
-;extreme;#
-;extreme;#
 ;extremist;radical;ultra;#
-;far;#
-;over;#
-;modern;#
 ;contemporary;modern-day;#
-;recent;#
 ;medieval;mediaeval;gothic;#
-;Victorian;#
-;modest;#
-;decent;#
-;decent;#
-;modest;#
-;important;#
 ;restricted;qualified;#
 ;bivalent;double;#
-;moral;#
 ;clean;clean-living;#
 ;debauched;degenerate;degraded;dissipated;dissolute;libertine;profligate;riotous;fast;#
-;neutral;#
-;many;#
-;numerous;#
-;few;#
-;slight;#
-;fewer;#
-;less;#
 ;active;on the move(p);#
 ;billowing;rolling;tumbling;#
 ;fast-flying;flying;#
 ;aflare;flaring;fluttering;flying;waving;#
 ;itinerant;road;touring;traveling;#
-;mobile;#
 ;at rest;inactive;motionless;static;still;#
 ;fixed;set;rigid;#
-;still;#
 ;mown;cut;#
-;continental;#
-;worldwide;#
-;national;#
 ;nationalist;nationalistic;#
-;international;#
 ;global;planetary;world(a);worldwide;#
-;natural;#
-;violent;#
-;natural;#
 ;artificial;unreal;#
 ;bleached;colored;coloured;dyed;#
 ;fake;false;faux;imitation;simulated;#
-;near;#
-;natural;#
-;physical;#
 ;apparitional;ghostlike;ghostly;phantasmal;spectral;spiritual;#
 ;eldritch;weird;uncanny;unearthly;#
 ;charming;magic;magical;sorcerous;witching(a);wizard(a);wizardly;#
 ;marvelous;marvellous;miraculous;#
-;natural;#
-;sharp;#
-;flat;#
-;ultimate;#
 ;final;last;net;#
-;supreme;#
-;immediate;#
-;necessary;#
 ;essential;indispensable;#
 ;needed;needful;required;requisite;#
 ;unnecessary;unneeded;#
 ;excess;extra;redundant;spare;supererogatory;superfluous;supernumerary;surplus;#
 ;reserve(a);spare;#
 ;net;nett;#
-;clear;#
-;gross;#
 ;overall;total;#
-;together;#
-;nice;#
-;good;#
-;pleasant;#
 ;nasty;awful;#
 ;dirty;filthy;lousy;#
 ;hateful;mean;#
-;unpleasant;#
-;noble;#
 ;base;mean;meanspirited;#
-;noble;#
 ;aristocratic;aristocratical;blue;blue-blooded;gentle;patrician;#
 ;august;grand;lordly;#
 ;imperial;majestic;purple;regal;royal;#
-;royal;#
 ;base;baseborn;humble;lowly;#
 ;common;plebeian;vulgar;unwashed;#
-;normal;#
 ;average;mean(a);#
 ;connatural;inborn;inbred;native;#
 ;median(a);average;#
 ;modal(a);average;#
-;natural;#
-;regular;#
-;typical;#
-;normal;#
-;normal;#
-;north;#
 ;northerly;northern;#
 ;northerly;northern;#
-;south;#
 ;southerly;southern;#
 ;southerly;southern;#
-;northern;#
-;southern;#
-;northern;#
-;blue;#
 ;Union;Federal;#
-;southern;#
 ;gray;grey;#
-;rebel;#
-;determined;#
 ;contrary;obstinate;perverse;wayward;#
 ;objective;nonsubjective;#
-;clinical;#
 ;impersonal;neutral;#
-;subjective;#
-;personal;#
 ;bound;compelled(p);constrained(p);obligate;#
-;obvious;#
 ;apparent;evident;manifest;patent;plain;#
-;frank;#
 ;clear;open;#
-;patent;#
 ;busy;engaged;in use(p);#
-;free;#
 ;spare;free;#
 ;disgusting;disgustful;distasteful;foul;loathly;loathsome;repellent;repellant;repelling;revolting;wicked;yucky;#
 ;objectionable;obnoxious;unpleasant;#
-;rank;#
-;defensive;#
 ;defensive;excusatory;justificative;justificatory;#
-;official;#
-;formal;#
 ;drumhead;summary;#
 ;informal;loose;#
-;official;#
 ;established;constituted;#
-;accepted;#
-;legitimate;#
-;official;#
-;old;#
 ;cold;stale;#
 ;secondhand;used;#
 ;yellow;yellowed;#
-;new;#
-;fresh;#
 ;hot;red-hot;#
 ;novel;refreshing;#
-;recent;#
 ;revolutionary;radical;#
-;rising;#
-;virgin;#
-;old;#
 ;aged;elderly;older;senior;#
-;ancient;#
 ;emeritus;retired;#
 ;gray;grey;gray-haired;grey-haired;gray-headed;grey-headed;hoar;hoary;white-haired;#
 ;retired;superannuated;#
 ;young;immature;#
 ;adolescent;teen;teenage;teenaged;#
-;early;#
-;junior;#
 ;little;small;#
 ;tender;vulnerable;#
-;on;#
-;off;#
-;on;#
 ;off;cancelled;#
 ;open;unfastened;#
 ;shut;unopen;closed;#
-;open;#
-;closed;#
 ;open;opened;#
 ;round-eyed;wide-eyed;wide;#
 ;closed;shut;#
 ;compressed;tight;#
 ;closed;closed in(p);#
-;involved;#
-;open;#
 ;unstopped;open;#
-;open;#
-;closed;#
-;operational;#
 ;active;combat-ready;fighting(a);#
-;effective;#
 ;good;right;ripe;#
 ;ill-timed(a);ill timed(p);unseasonable;untimely;wrong;#
 ;opposite;paired;#
-;optimistic;#
 ;cheerful;pollyannaish;upbeat;#
-;oral;#
 ;law-abiding;peaceful;#
 ;brawling;fighting;#
 ;consecutive;sequent;sequential;serial;successive;#
 ;broken;confused;disordered;upset;#
 ;corporate;incorporated;#
-;ordinary;#
 ;average;fair;mediocre;middling;#
-;common;#
 ;everyday;mundane;quotidian;routine;unremarkable;workaday;#
-;extraordinary;#
 ;exceeding;exceptional;olympian;prodigious;surpassing;#
 ;fantastic;howling(a);marvelous;marvellous;rattling(a);terrific;tremendous;wonderful;wondrous;#
 ;fantastic;phenomenal;#
-;great;#
 ;rare;uncommon;#
 ;remarkable;singular;#
-;some;#
-;special;#
-;organic;#
-;organic;#
 ;integrated;structured;#
-;artificial;#
-;mineral;#
 ;laid;set;#
 ;bound;destined;#
 ;confused;disoriented;lost;#
-;original;#
 ;fresh;new;novel;#
 ;innovative;innovational;#
 ;newfangled;new;#
 ;banal;commonplace;hackneyed;shopworn;stock(a);threadbare;timeworn;tired;trite;well-worn;#
 ;old;stale;moth-eaten;#
-;orthodox;#
 ;conventional;established;#
-;traditional;#
 ;outdoor(a);out-of-door;outside;#
 ;indoor(a);inside;#
-;outside;#
-;extra;#
-;inside;#
-;wrong;#
 ;white;snowy;#
 ;bald;bare;denuded;denudate;#
-;bare;#
 ;overt;open;#
 ;naked;raw;#
 ;obvious;visible;#
-;black;#
 ;clandestine;cloak-and-dagger;hole-and-corner(a);hugger-mugger;hush-hush;on the quiet(p);secret;surreptitious;undercover;underground;#
 ;closet(a);secret;#
-;secret;#
 ;complimentary;costless;free;gratis(p);gratuitous;#
 ;outstanding;owed;owing(p);undischarged;#
-;painful;#
 ;biting;bitter;#
-;burning;#
 ;sensitive;sore;tender;#
 ;bare;unfinished;#
 ;obvious;perceptible;#
 ;elusive;subtle;#
-;parallel;#
-;bias;#
-;normal;#
-;right;#
 ;minor;venial;#
 ;parental;maternal;paternal;#
 ;partial;unfair;#
 ;biased;colored;coloured;one-sided;slanted;#
 ;impartial;fair;#
-;wild;#
-;past;#
 ;ago;agone;#
-;ancient;#
 ;chivalric;knightly;medieval;#
-;earlier;#
 ;historic;historical;#
 ;late(a);recent;#
-;old;#
-;existing;#
-;immediate;#
 ;instant;inst;#
-;future;#
 ;approaching;coming(a);forthcoming;upcoming;#
-;early;#
 ;emerging;rising;#
-;born;#
-;patient;#
 ;short;unforbearing;#
-;loose;#
-;brick;#
 ;dirt;gravel;graveled;#
 ;patriotic;loyal;#
-;peaceful;#
 ;calm;serene;tranquil;#
-;pacific;#
 ;pacific;peaceable;#
 ;belligerent;fighting;militant;war-ridden;warring;#
 ;contrite;remorseful;rueful;ruthful;sorry;#
 ;acute;discriminating;incisive;keen;knifelike;penetrating;penetrative;piercing;sharp;#
-;subtle;#
-;understanding;#
-;blind;#
-;faint;#
-;sensible;#
-;perfect;#
-;clean;#
-;clear;#
-;cold;#
 ;complete;consummate;#
 ;down;down pat(p);mastered;#
-;ideal;#
-;broken;#
 ;permanent;lasting;#
 ;impermanent;temporary;#
 ;ephemeral;passing;short-lived;transient;transitory;fugacious;#
-;interim;#
 ;visiting;guest(a);#
 ;persistent;lasting;#
 ;caducous;shed;#
-;permanent;#
 ;indulgent;lax;lenient;soft;#
 ;nonindulgent;strict;#
 ;at a loss(p);nonplused;nonplussed;puzzled;#
 ;baffled;befuddled;bemused;bewildered;confounded;confused;lost;mazed;mixed-up;at sea;#
-;stuck;#
-;personal;#
 ;individual(a);private;#
-;intimate;#
-;private;#
 ;dense;thick;#
 ;rubber;rubberized;rubberised;#
-;physical;#
-;material;#
-;personal;#
-;mental;#
 ;intellectual;rational;noetic;#
-;moral;#
-;psychological;#
-;religious;#
 ;grim;inexorable;relentless;stern;unappeasable;unforgiving;unrelenting;#
 ;plain;unpatterned;#
 ;solid;self-colored;self-coloured;#
-;plain;#
 ;austere;severe;stark;#
-;dry;#
-;dry;#
-;simple;#
-;fancy;#
 ;busy;fussy;#
 ;elaborate;luxuriant;#
-;rich;#
-;planned;#
 ;projected;proposed;#
 ;accidental;casual;chance(a);#
-;casual;#
-;unexpected;#
 ;studied;deliberate;#
 ;glib;pat;slick;#
 ;improbable;unbelievable;unconvincing;unlikely;#
-;pleasant;#
-;beautiful;#
-;fine;#
-;grateful;#
-;unpleasant;#
 ;acerb;acerbic;acid;acrid;bitter;blistering;caustic;sulfurous;sulphurous;venomous;virulent;vitriolic;#
 ;dour;forbidding;grim;#
-;dreadful;#
 ;embarrassing;mortifying;#
 ;harsh;rough;#
-;harsh;#
-;hot;#
 ;afflictive;painful;sore;#
 ;sharp;sharp-worded;tart;#
-;unhappy;#
-;pleased;#
-;delighted;#
-;charming;#
 ;delightful;delicious;#
-;easy;#
-;good;#
 ;gratifying;sweet;#
-;sweet;#
 ;acuate;acute;sharp;#
-;acute;#
 ;bright;burnished;lustrous;shining;shiny;#
-;raw;#
-;rough;#
-;political;#
-;popular;#
 ;fashionable;popular with(p);#
 ;favorite;favourite;#
-;hot;#
 ;port;larboard;left;#
 ;starboard;right;#
-;positive;#
 ;affirmative;optimistic;#
-;negative;#
 ;antagonistic;counter;#
-;neutral;#
-;plus;#
-;positive;#
-;minus;#
-;negative;#
 ;positive;confirming;#
 ;negative;disconfirming;#
 ;positive;electropositive;#
 ;negative;electronegative;#
 ;neutral;electroneutral;#
-;possible;#
-;mathematical;#
-;impossible;#
 ;potent;strong;#
 ;ineffective;ineffectual;unable;#
-;weak;#
-;powerful;#
-;mighty;#
 ;potent;strong;#
 ;regnant;reigning;ruling;#
 ;powerless;weak;#
 ;flooded;inundated;overcome;overpowered;overwhelmed;swamped;engulfed;#
-;influential;#
 ;authoritative;important;#
 ;cogent;potent;powerful;#
 ;wild;spontaneous;#
-;practical;#
 ;applicable;applicative;applicatory;#
-;functional;#
-;useful;#
-;working;#
 ;crazy;half-baked;screwball;softheaded;meshuga;meshugge;#
 ;quixotic;romantic;wild-eyed;#
-;precise;#
-;dead;#
-;fine;#
 ;nice;skillful;#
-;general;#
-;advanced;#
 ;dim-witted;half-witted;simple;simple-minded;#
-;inevitable;#
 ;episodic;occasional;#
 ;aforethought(ip);planned;plotted;#
 ;calculated;deliberate;measured;#
-;prepared;#
-;ready;#
-;spread;#
-;present;#
-;existing;#
-;absent;#
 ;lacking(p);missing;nonexistent;wanting(a);#
 ;quiet;restrained;#
-;honest;#
-;modest;#
-;penny;#
-;penny;#
-;primary;#
-;capital;#
-;direct;#
-;original;#
 ;particular;special;#
-;secondary;#
 ;alternate;alternative;#
 ;auxiliary;subsidiary;supplemental;supplementary;#
-;indirect;#
-;basic;#
 ;basal;base;#
 ;elementary;primary;#
 ;fundamental;rudimentary;underlying;#
 ;radical;root;#
 ;incidental;incident;#
-;secondary;#
-;private;#
-;close;#
 ;closet(a);confidential;secret;#
-;confidential;#
 ;privy;secluded;secret;#
-;public;#
-;national;#
-;open;#
-;state;#
 ;state;state-supported;#
-;exclusive;#
 ;alone(p);only;#
-;inner;#
 ;inside;inner;privileged;#
-;selective;#
-;comprehensive;#
-;productive;#
-;bearing;#
 ;fruitful;profitable;#
-;rich;#
-;dry;#
 ;generative;productive;#
 ;creative;originative;#
 ;reproducible;consistent;#
-;professional;#
 ;amateur;recreational;unpaid;#
-;lay;#
-;professional;#
-;expert;#
 ;amateurish;amateur;inexpert;unskilled;#
-;profitable;#
 ;fat;juicy;#
-;economic;#
 ;dead;idle;#
-;lean;#
-;marginal;#
-;profound;#
-;deep;#
-;intimate;#
-;shallow;#
-;progressive;#
 ;advanced;forward-looking;innovative;modern;#
 ;advancing;forward;forward-moving;#
-;progressive;#
 ;flat;fixed;#
 ;rolled;rolling;trilled;#
-;proper;#
 ;becoming;comely;comme il faut;decent;decorous;seemly;#
 ;correct;right;#
 ;correct;right;#
-;fitting;#
 ;priggish;prim;prissy;prudish;puritanical;square-toed;straitlaced;straightlaced;tight-laced;victorian;#
 ;inappropriate;incorrect;wrong;#
-;wrong;#
-;prospective;#
 ;expected;likely;potential;#
-;future;#
 ;protected;secure;#
 ;exposed;open;#
 ;naked;defenseless;#
-;protective;#
 ;custodial;guardian;tutelary;tutelar;#
-;defensive;#
-;proud;#
 ;big;swelled;vainglorious;#
 ;boastful;braggart(a);bragging(a);braggy;big;cock-a-hoop;crowing;self-aggrandizing;self-aggrandising;#
 ;glorious;illustrious;redoubtable;respected;#
 ;pleased;proud of(p);#
 ;broken;crushed;humbled;humiliated;low;#
 ;meek;mild;modest;#
-;established;#
 ;careful;thrifty;#
 ;farseeing;farsighted;foresighted;foresightful;long;longsighted;#
 ;short;shortsighted;unforesightful;#
@@ -2616,353 +1346,188 @@
 ;belated;late;tardy;#
 ;gingery;hot;peppery;spicy;#
 ;cur(a);mixed;mongrel(a);scrub(a);underbred;#
-;pure;#
-;white;#
-;pure;#
 ;clean;fresh;#
 ;clean;clear;light;unclouded;#
 ;fine;f.;#
-;native;#
 ;plain;sheer;unmingled;unmixed;#
 ;dirty;dingy;muddied;muddy;#
-;leading;#
-;qualified;#
-;primitive;#
-;qualified;#
 ;limited;modified;#
 ;categoric;categorical;flat;unconditional;#
 ;clean;clear;#
-;cool;#
 ;alleged(a);so-called;supposed;#
 ;doubtful;dubious;dubitable;in question(p);#
 ;fishy;funny;queer;shady;suspect;suspicious;#
-;mathematical;#
-;silent;#
-;quiet;#
 ;silent;soundless;still;#
-;noisy;#
-;quiet;#
-;random;#
 ;orderly;systematic;#
-;rational;#
 ;coherent;logical;lucid;#
 ;intelligent;reasoning(a);thinking(a);#
 ;reasonable;sane;#
 ;blind;unreasoning;#
 ;jaundiced;yellow;#
-;emotional;#
 ;cerebral;intellectual;#
-;racial;#
 ;activated;excited;#
 ;inert;indifferent;neutral;#
-;noble;#
-;stable;#
-;read;#
-;ready;#
-;prompt;#
 ;waiting;ready and waiting(p);#
 ;real;existent;#
-;actual;#
 ;actual;factual;#
-;historical;#
 ;fantastic;fantastical;#
 ;make-believe;play(a);pretend;#
-;real;#
-;realistic;#
 ;hardheaded;hard-nosed;practical;pragmatic;#
 ;graphic;lifelike;pictorial;vivid;#
-;living;#
-;real;#
 ;veridical;real;#
 ;delusive;false;#
-;fantastic;#
 ;reasonable;sensible;#
 ;healthy;intelligent;levelheaded;sound;#
-;logical;#
-;mutual;#
 ;civilized;civilised;cultivated;cultured;genteel;polite;#
 ;finespun;delicate;#
 ;coarse;common;uncouth;vulgar;#
 ;ill-bred;bounderish;lowbred;rude;underbred;yokelish;#
-;low;#
-;rough;#
 ;natural;raw(a);rude(a);#
 ;unrefined;unprocessed;crude;#
-;raw;#
 ;bandaged;bound;#
 ;forgotten;lost;#
-;lost;#
-;registered;#
 ;certified;qualified;#
-;registered;#
-;regular;#
 ;daily;day-to-day;day-after-day;every day;#
 ;official;prescribed;#
-;routine;#
 ;standard;stock;#
-;uniform;#
-;weak;#
 ;casual;occasional;#
-;strong;#
-;regular;#
 ;uniform;unvarying;#
-;regular;#
-;standing;#
-;related;#
-;allied;#
 ;related;related to;#
 ;associated;connected;#
-;concerned;#
 ;as to;concerning;in relation to;regarding;vis-a-vis;with reference to;in regard to;with regard to;with respect to;#
-;corresponding;#
-;relevant;#
-;applicable;#
 ;germane(p);related;#
-;irrelevant;#
 ;mindful;aware;#
 ;careful;heedful;#
 ;exchangeable;interchangeable;similar;standardized;standardised;#
 ;naturalistic;realistic;#
-;objective;#
 ;abstract;abstractionist;nonfigurative;nonobjective;#
 ;conventional;formal;schematic;#
-;representative;#
 ;emblematic;emblematical;symbolic;symbolical;#
 ;estimable;good;honorable;respectable;#
 ;closed;unsympathetic;#
-;hostile;#
 ;aloof;distant;#
 ;first-come-first-serve(p);rush;#
 ;overpowering;overwhelming;#
-;determined;#
 ;desperate;do-or-die(a);#
 ;firm;steadfast;steady;unbendable;unfaltering;unshakable;unwavering;#
-;respectable;#
 ;decent;nice;#
-;fair;#
-;worthy;#
-;responsible;#
-;liable;#
 ;idle;loose;#
 ;answering;respondent;#
 ;reconditioned;repaired;fixed;#
-;close;#
 ;excessive;extravagant;exuberant;overweening;#
 ;circumscribed;limited;#
-;closed;#
-;open;#
 ;regulating;regulative;regulatory;#
-;retail;#
 ;holding;retaining;#
 ;long;tenacious;#
-;short;#
 ;bright;brilliant;#
 ;resonant;resonating;resounding;reverberating;reverberative;rolling;#
-;dead;#
 ;dull;thudding;thumping;#
 ;awed;awful;#
-;renewed;#
-;revolutionary;#
-;profitable;#
 ;bombastic;declamatory;large;orotund;tumid;turgid;#
 ;embellished;empurpled;over-embellished;purple;#
 ;grandiloquent;magniloquent;tall;#
 ;literal;plain;unembellished;#
-;rich;#
 ;affluent;flush;loaded;moneyed;wealthy;#
 ;comfortable;easy;prosperous;well-fixed;well-heeled;well-off;well-situated;well-to-do;#
-;poor;#
-;rich;#
-;poor;#
-;rich;#
-;poor;#
 ;beggarly;mean;#
-;rich;#
-;lean;#
-;right;#
-;left;#
-;right;#
-;far;#
-;left;#
-;right;#
 ;ethical;honorable;honourable;moral;#
-;wrong;#
 ;condemnable;criminal;deplorable;reprehensible;#
 ;base;dishonorable;dishonourable;immoral;unethical;#
 ;good;just;upright;virtuous;#
-;sound;#
 ;sinful;unholy;wicked;#
 ;cast-iron;iron;#
 ;decrepit;feeble;infirm;sapless;weak;weakly;#
 ;round;circular;#
 ;ball-shaped;global;globose;globular;orbicular;spheric;spherical;#
-;square;#
 ;annular;annulate;annulated;circinate;circular;ringed;ring-shaped;#
-;rural;#
 ;agrarian;agricultural;farming(a);#
-;urban;#
-;holy;#
 ;consecrated;sacred;sanctified;#
 ;hallowed;sacred;#
-;sacred;#
-;divine;#
 ;religious;spiritual;#
 ;laic;lay;secular;#
-;safe;#
 ;out of danger(p);secure;#
 ;dangerous;unsafe;#
-;desperate;#
 ;out(p);retired;#
-;same;#
 ;comparable;corresponding;like;#
 ;identical;indistinguishable;#
-;different;#
 ;assorted;various;#
-;contrary;#
 ;diametric;diametrical;opposite;polar;#
 ;distinct;distinguishable;#
 ;diverse;various;#
 ;divers(a);diverse;#
-;opposite;#
-;variant;#
-;same;#
 ;identical;one and the same(p);selfsame(a);very(a);#
-;self;#
-;other;#
 ;another(a);different;#
-;different;#
-;else;#
-;opposite;#
-;opposite;#
-;opposite;#
-;remaining;#
-;similar;#
 ;akin(p);kindred;related;#
 ;analogous;correspondent;#
-;corresponding;#
 ;siamese;twin;#
 ;brainsick;crazy;demented;distracted;disturbed;mad;sick;unbalanced;unhinged;#
 ;raving;raving mad;wild;#
 ;black;grim;mordant;#
-;satisfactory;#
 ;adequate;passable;fair to middling;#
 ;all right(p);all-right(a);fine;ok;o.k.;okay;hunky-dory;#
-;right;#
-;off;#
-;unacceptable;#
 ;academic;donnish;pedantic;#
-;scientific;#
-;technological;#
-;religious;#
-;moral;#
 ;open;opened;#
 ;sealed;certain;#
 ;unsealed;uncertain;#
 ;buried;hidden;#
-;dark;#
 ;hidden;obscure;#
 ;hidden;secret;#
-;secret;#
 ;blatant;blazing;conspicuous;open;#
-;open;#
 ;secure;unafraid;untroubled;#
-;secure;#
 ;established;firm;#
-;safe;#
-;sure;#
 ;uncertain;unsure;#
-;secure;#
-;steady;#
-;tight;#
-;loose;#
-;uncertain;#
 ;barred;bolted;fast;latched;locked;secured;#
-;senior;#
 ;elder;older;sr.;#
 ;ranking(a);superior;higher-ranking;#
-;junior;#
 ;junior-grade;inferior;lower;lower-ranking;lowly;petty(a);secondary;subaltern;subordinate;#
 ;sensible;sensitive;#
-;sensitive;#
-;delicate;#
 ;dead;deadened;#
-;sensitive;#
-;dull;#
-;separate;#
 ;detached;isolated;separated;set-apart;#
 ;discrete;distinct;#
 ;disjunct;isolated;#
-;joint;#
-;associated;#
 ;combined;concerted;conjunct;conjunctive;cooperative;united;#
 ;corporate;collective;#
 ;contaminated;dirty;infected;#
 ;uninfected;clean;#
 ;extraneous;foreign;#
-;serious;#
-;capital;#
 ;grave;sedate;sober;solemn;#
-;real;#
 ;sensible;thoughtful;#
 ;airheaded;dizzy;empty-headed;featherbrained;giddy;light-headed;lightheaded;silly;#
 ;idle;light;#
-;light;#
 ;unplayful;serious;sober;#
-;selected;#
-;chosen;#
 ;elect;elite;#
-;random;#
 ;functional;usable;useable;in working order(p);operable;operational;#
 ;retired;out of service;#
-;resident;#
-;sport;#
 ;located;placed;set;situated;#
 ;homeless;stateless;#
 ;mobile;nomadic;peregrine;roving;wandering;#
 ;nonmigratory;resident;#
 ;accomplished;effected;established;#
 ;determined;dictated;set;#
-;firm;#
 ;doubtful;tentative;#
 ;open;undecided;undetermined;unresolved;#
 ;blue;gamy;gamey;juicy;naughty;racy;risque;spicy;#
-;hot;#
 ;intimate;sexual;#
-;sexual;#
 ;cut;emasculated;gelded;#
 ;entire;intact;#
-;cast;#
-;shared;#
 ;common;mutual;#
-;joint;#
 ;exclusive;sole(a);#
 ;individual;separate;single(a);#
 ;unsheathed;bare;#
-;shell;#
 ;blind;unsighted;#
 ;significant;important;#
 ;big;momentous;#
 ;fundamental;profound;#
-;large;#
 ;noteworthy;remarkable;#
 ;operative;key;#
-;light;#
-;significant;#
 ;simple;unsubdivided;#
 ;linear;elongate;#
-;compound;#
-;simple;#
 ;elemental;ultimate;#
-;complex;#
 ;Byzantine;convoluted;intricate;involved;knotty;labyrinthine;tangled;tortuous;#
 ;colonial;compound;#
-;complicated;#
-;compound;#
 ;dear;devout;earnest;heartfelt;#
-;honest;#
 ;genuine;true(a);unfeigned;#
 ;false;hollow;#
-;dual;#
 ;zero;#
 ;one;1;i;ane;#
 ;two;2;ii;#
@@ -3032,7 +1597,6 @@
 ;thousand;a thousand;one thousand;1000;m;k;#
 ;million;a million;#
 ;billion;a billion;#
-;zero;#
 ;first;1st;#
 ;second;2nd;2d;#
 ;third;3rd;tertiary;#
@@ -3049,291 +1613,141 @@
 ;scripted;written;#
 ;ad-lib;spontaneous;unwritten;#
 ;singular;unique;#
-;multiple;#
-;aggregate;#
 ;double;doubled;twofold;#
 ;double;dual;duple;#
 ;double;dual;twofold;treble;threefold;#
-;fold;#
-;double;#
-;single;#
-;size;#
-;skilled;#
 ;accomplished;complete;#
 ;adept;expert;good;practiced;proficient;skillful;skilful;#
-;delicate;#
-;hot;#
-;mean;#
 ;crude;rough;#
-;verbal;#
 ;numerical;mathematical;#
 ;loose;open;#
-;fine;#
 ;close;tight;#
-;small;#
-;smoking;#
-;smooth;#
-;fast;#
 ;rough;unsmooth;#
 ;broken;rugged;#
 ;unwrinkled;smooth;#
-;smooth;#
-;entire;#
-;rough;#
-;social;#
 ;cultural;ethnic;#
 ;isolated;marooned;stranded;#
-;solo;#
 ;herding(a);swarming(a);social;#
-;closed;#
 ;extroverted;forthcoming;outgoing;#
-;social;#
-;solid;#
-;concrete;#
-;dry;#
-;liquid;#
 ;fluid;runny;#
-;solid;#
-;massive;#
-;empty;#
 ;any(a);whatever;whatsoever;#
-;sophisticated;#
 ;intelligent;well-informed;#
 ;childlike;wide-eyed;dewey-eyed;simple;#
 ;fleeceable;green;gullible;#
 ;innocent;ingenuous;#
-;sound;#
 ;dependable;good;safe;secure;#
-;healthy;#
-;stable;#
 ;bad;insecure;risky;high-risk;speculative;#
-;long;#
-;sound;#
 ;solid;strong;substantial;#
-;flat;#
 ;still;noneffervescent;#
-;special;#
 ;lively;racy;#
-;thin;#
 ;spontaneous;self-generated;#
 ;natural;instinctive;#
 ;oral;unwritten;#
-;verbal;#
-;written;#
 ;print;printed;#
-;written;#
-;stable;#
 ;firm;steady;unfluctuating;#
 ;crank;cranky;tender;tippy;#
 ;legato;smooth;#
-;standard;#
-;accepted;#
 ;authoritative;classical;definitive;#
 ;basic;canonic;canonical;#
-;classic;#
-;standard;#
-;regular;#
-;regulation;#
-;stock;#
 ;standard;received;#
 ;acceptable;accepted;#
-;bad;#
 ;unacceptable;unaccepted;#
 ;full;replete(p);#
-;steady;#
 ;even;regular;#
-;firm;#
 ;fastened;fixed;#
 ;level;unwavering;#
-;sure;#
-;exciting;#
 ;bland;flat;#
 ;dry;juiceless;#
-;straight;#
-;straight;#
-;wound;#
 ;uncoiled;straight;#
-;straight;#
 ;aboveboard;straightforward;#
 ;accented;heavy;strong;#
-;long;#
-;short;#
 ;unaccented;light;weak;#
-;strong;#
 ;brawny;hefty;muscular;powerful;sinewy;#
 ;hard;knockout;severe;#
 ;knock-down(a);powerful;#
-;stiff;#
-;weak;#
 ;faint;feeble;#
 ;flimsy;slight;tenuous;thin;#
 ;pale;pallid;wan;#
-;vulnerable;#
-;determined;#
 ;subject;dependent;#
-;successful;#
-;productive;#
 ;defeated;disappointed;discomfited;foiled;frustrated;thwarted;#
-;sufficient;#
 ;adequate;decent;enough;#
-;spare;#
-;comfortable;#
 ;insufficient;deficient;#
 ;depleted;low;#
 ;inadequate;poor;short;#
-;lean;#
 ;lean;skimpy;#
 ;light;scant(p);short;#
 ;sugared;sweetened;sweet;#
-;superior;#
 ;arch;condescending;patronizing;patronising;#
 ;eminent;high;#
-;upper;#
 ;humble;low;lowly;modest;small;#
 ;less;lower;#
-;superior;#
 ;ace;A-one;crack;first-rate;super;tiptop;topnotch;tops(p);#
 ;blue-ribbon(a);select;#
 ;boss;brag;#
 ;brilliant;superb;#
-;capital;#
-;champion;#
 ;choice;prime(a);prize;quality;select;#
 ;excellent;first-class;fantabulous;#
 ;fine;good;#
-;outstanding;#
-;premium;#
-;supreme;#
-;bad;#
-;base;#
 ;bum;cheap;cheesy;chintzy;crummy;punk;sleazy;tinny;#
 ;coarse;common;#
-;commercial;#
 ;deplorable;execrable;miserable;woeful;wretched;#
-;less;#
 ;mediocre;poor;second-rate;#
-;superior;#
-;underlying;#
 ;superscript;superior;#
 ;naked;unaided;#
 ;accessory;adjunct;ancillary;adjuvant;appurtenant;auxiliary;subsidiary;#
 ;encouraging;supporting;#
-;surprised;#
-;surprising;#
 ;amazing;astonishing;#
-;unexpected;#
-;expected;#
 ;capable;open to(p);subject to(p);#
-;vulnerable;#
 ;plastic;pliant;#
-;regular;#
-;emergency;#
 ;extra;special;#
 ;forced;unexpected;#
-;sweet;#
-;dry;#
-;sweet;#
 ;acerb;acerbic;astringent;sharp;#
 ;fermented;hard;#
 ;off;sour;turned;#
 ;fresh;sweet;#
 ;unfermented;sweet;#
-;unexpected;#
-;unknown;#
-;bound;#
 ;even;regular;#
-;sympathetic;#
-;kind;#
 ;sympathetic;appealing;likeable;likable;#
 ;diachronic;historical;#
 ;contemporaneous;contemporary;#
 ;parallel;in parallel(p);#
-;similar;#
-;contrary;#
-;systematic;#
-;tall;#
-;long;#
-;short;#
 ;broken;broken in;#
 ;docile;gentle;#
 ;domestic;domesticated;#
 ;wild;untamed;#
-;wild;#
 ;delirious;excited;frantic;mad;unrestrained;#
-;real;#
 ;aesthetic;esthetic;artistic;pleasing;#
 ;brassy;cheap;flash;flashy;garish;gaudy;gimcrack;loud;meretricious;tacky;tatty;tawdry;trashy;#
 ;camp;campy;#
-;bitter;#
-;choice;#
 ;delectable;delicious;luscious;pleasant-tasting;scrumptious;toothsome;yummy;#
 ;full-bodied;rich;robust;#
 ;salty;salt;#
-;sweet;#
 ;bland;flat;flavorless;flavourless;insipid;savorless;savourless;vapid;#
 ;moderate;restrained;#
 ;hard(a);heavy;#
 ;taut;tight;#
 ;loose;slack;#
-;relaxed;#
-;electric;#
-;nervous;#
 ;relaxed;at ease;#
-;territorial;#
-;regional;#
-;territorial;#
-;thick;#
-;deep;#
-;fat;#
-;heavy;#
-;thin;#
 ;compressed;flat;#
-;depressed;#
 ;diaphanous;filmy;gauzy;gossamer;see-through;sheer;transparent;vaporous;cobwebby;#
-;fine;#
 ;flimsy;light;#
-;thick;#
 ;dense;heavy;impenetrable;#
-;heavy;#
-;thin;#
 ;rare;rarefied;rarified;#
 ;conceivable;imaginable;possible;#
 ;impossible;inconceivable;out of the question;unimaginable;#
-;deliberate;#
-;saving;#
-;neat;#
-;neat;#
-;straight;#
-;entitled;#
-;tired;#
 ;bored;world-weary;#
 ;fresh;invigorated;refreshed;reinvigorated;#
-;bitter;#
 ;impossible;insufferable;unacceptable;unsufferable;#
 ;rigid;strict;#
-;upper;#
-;lower;#
 ;tropical;tropic;#
-;tough;#
-;tender;#
-;short;#
 ;tough;toughened;#
 ;tender;untoughened;#
 ;delicate;soft;#
-;tough;#
-;tender;#
 ;caring;protective;#
-;toxic;#
 ;trimmed;cut;#
 ;anxious;nervous;uneasy;unquiet;#
-;careful;#
 ;disquieted;distressed;disturbed;upset;worried;#
-;suffering;#
-;clear;#
-;true;#
 ;actual;genuine;literal;real;#
-;sure;#
-;false;#
 ;untrue;wrong;#
 ;leery;mistrustful;suspicious;untrusting;wary;#
 ;authentic;reliable;#
@@ -3341,536 +1755,182 @@
 ;dependable;honest;reliable;true(p);#
 ;sure;trusted;#
 ;overturned;upset;upturned;#
-;typical;#
-;representative;#
-;sample;#
-;true;#
-;surface;#
 ;grade;ground-level;#
 ;belowground;underground;#
 ;liquid;swimming;watery;#
-;dry;#
-;union;#
-;united;#
 ;agreed;in agreement(p);#
 ;allied;confederate;confederative;#
 ;incorporate;incorporated;integrated;merged;unified;#
 ;apart(p);separate;separated;#
 ;disconnected;disunited;fragmented;split;#
-;split;#
 ;acclivitous;rising;uphill;#
 ;standing;upright;#
-;rising;#
-;setting;#
-;rising;#
 ;improving;up;#
-;rising;#
-;up;#
 ;ahead(p);in the lead;leading;#
-;down;#
 ;upstairs;upstair;#
 ;downstairs;downstair;#
-;used;#
 ;exploited;ill-used;put-upon;used;victimized;victimised;#
 ;useful;utile;#
-;helpful;#
-;useless;#
 ;cast-off(a);discarded;junked;scrap(a);waste;#
 ;ideal;idealistic;#
-;valid;#
-;binding;#
 ;legal;sound;#
 ;legitimate;logical;#
 ;reasoned;sound;well-grounded;#
 ;bad;uncollectible;#
-;false;#
-;valuable;#
-;precious;#
-;rich;#
 ;good-for-nothing;good-for-naught;meritless;no-account;no-count;no-good;sorry;#
-;variable;#
 ;changeable;uncertain;unsettled;#
 ;changeless;constant;invariant;steady;unvarying;#
 ;hard-and-fast;strict;#
-;varied;#
 ;varying;variable;#
 ;versatile;various;#
 ;airless;close;stuffy;unaired;#
-;violent;#
 ;ferocious;fierce;furious;savage;#
 ;hot;raging;#
 ;ruffianly;tough;#
-;terrorist;#
 ;passive;peaceful;#
 ;impeccant;innocent;sinless;#
-;wicked;#
 ;depraved;evil;vicious;#
-;heavy;#
 ;visible;seeable;#
-;apparent;#
 ;ocular;visual;#
 ;invisible;unseeable;#
 ;concealed;hidden;out of sight;#
-;voluntary;#
 ;uncoerced;unforced;willing;#
-;unconscious;#
-;unwilling;#
-;voluntary;#
 ;automatic;reflex(a);reflexive;#
-;vulnerable;#
 ;assailable;undefendable;undefended;open;#
 ;impregnable;inviolable;secure;strong;unassailable;unattackable;#
-;tight;#
-;hot;#
-;warm;#
-;cool;#
-;warm;#
-;cool;#
-;warm;#
-;hot;#
-;cool;#
-;cold;#
-;increasing;#
 ;augmenting;augmentative;building;#
-;growing;#
-;progressive;#
-;rising;#
-;increasing;#
-;welcome;#
-;well;#
 ;all right;fine;#
 ;ill;sick;#
 ;faint;light;swooning;light-headed;lightheaded;#
-;funny;#
-;green;#
 ;nauseated;queasy;sick;sickish;#
-;upset;#
-;wet;#
 ;damp;dampish;moist;#
-;dry;#
 ;wet;lactating;#
-;fresh;#
-;dry;#
-;wet;#
-;dry;#
-;professional;#
-;industrial;#
 ;wage-earning;working-class;#
 ;healthy;salubrious;good for you(p);#
 ;hearty;satisfying;solid;substantial;#
 ;wide;broad;#
-;deep;#
 ;heavy;thick;#
-;narrow;#
 ;slender;thin;#
-;wide;#
-;comfortable;#
-;narrow;#
 ;bare(a);marginal;#
 ;awkward;bunglesome;clumsy;ungainly;#
-;willing;#
 ;disposed(p);fain;inclined(p);prepared;#
 ;glad;lief(p);#
-;ready;#
-;unwilling;#
 ;loath;loth;reluctant;#
-;flying;#
-;wise;#
-;foolish;#
 ;absurd;derisory;laughable;ludicrous;nonsensical;preposterous;ridiculous;#
 ;cockamamie;cockamamy;fool(a);goofy;sappy;silly;wacky;zany;unreasonable;#
-;fond;#
 ;harebrained;insane;mad;#
-;deal;#
 ;oak;oaken;#
 ;wooden;wood(a);#
-;economic;#
-;material;#
 ;spiritual;unearthly;#
 ;philosophical;philosophic;#
 ;ideological;ideologic;#
-;aged;#
-;new;#
-;worthy;#
 ;noteworthy;notable;#
-;sacred;#
 ;valuable;worthful;#
-;worthwhile;#
 ;aggrieved;injured;#
-;academic;#
 ;aesculapian;medical;#
 ;annual;yearly;#
-;monthly;#
-;weekly;#
-;daily;#
 ;biological;biologic;#
-;blue;#
-;cabinet;#
-;cabinet;#
 ;Caroline;Carolean;#
-;cathedral;#
-;cathedral;#
-;home;#
 ;chemical;chemic;#
-;chemical;#
-;chocolate;#
 ;civil;civic;#
-;civil;#
-;civic;#
-;coastal;#
-;colonial;#
-;colonial;#
-;constitutional;#
-;constitutional;#
-;costume;#
-;county;#
-;criminal;#
-;democratic;#
-;desktop;#
-;digital;#
-;digital;#
-;diplomatic;#
-;dramatic;#
-;economic;#
 ;economic;economical;#
-;electoral;#
-;electronic;#
-;electronic;#
-;essential;#
-;ethical;#
 ;ethnic;ethnical;#
-;federal;#
-;fossil;#
 ;gastric;stomachic;stomachal;#
 ;genetic;genetical;#
 ;genic;genetic;#
 ;genial;mental;#
-;mental;#
-;gray;#
-;home;#
-;human;#
-;human;#
 ;ideal;idealistic;#
-;imperial;#
-;imperial;#
-;industrial;#
-;industrial;#
-;institutional;#
 ;judicial;juridical;juridic;#
-;judicial;#
-;legal;#
-;legal;#
-;living;#
-;local;#
-;manual;#
-;medical;#
-;military;#
-;ministerial;#
-;ministerial;#
-;naval;#
-;oral;#
-;parliamentary;#
 ;monetary;pecuniary;#
-;physical;#
 ;positivist;positivistic;positive;#
-;provincial;#
-;realistic;#
-;republican;#
 ;romantic;romanticist;romanticistic;#
-;royal;#
-;royal;#
-;agricultural;#
-;rural;#
-;scientific;#
-;self;#
 ;social;societal;#
-;social;#
-;solar;#
-;sporting;#
-;statutory;#
-;stone;#
 ;symbolic;symbolical;#
-;symbolic;#
-;technical;#
-;technical;#
 ;technical;technological;#
-;terminal;#
-;terminal;#
-;territorial;#
-;urban;#
-;verbal;#
-;verbal;#
-;electrical;#
 ;electric;electrical;#
-;legislative;#
-;legislative;#
-;literary;#
-;critical;#
-;revolutionary;#
-;radical;#
-;feminist;#
-;professional;#
-;professional;#
-;vocational;#
 ;spatial;spacial;#
-;semantic;#
 ;linguistic;lingual;#
-;linguistic;#
 ;fiscal;financial;#
 ;marital;matrimonial;married;#
-;political;#
-;political;#
 ;philosophic;philosophical;#
-;personal;#
-;personal;#
-;intensive;#
 ;objective;accusative;#
-;nuclear;#
-;nuclear;#
-;moral;#
-;metropolitan;#
-;musical;#
 ;ocular;optic;optical;visual;#
-;regional;#
-;cultural;#
-;cultural;#
 ;communist;communistic;#
-;Marxist;#
-;motor;#
-;parental;#
-;atomic;#
-;clinical;#
-;continental;#
-;continental;#
-;continental;#
-;lexical;#
-;lexical;#
-;sexual;#
-;marine;#
-;marine;#
 ;nautical;maritime;marine;#
-;mechanical;#
 ;mechanical;mechanically skillful;#
-;ritual;#
-;ritual;#
-;occupational;#
-;structural;#
-;structural;#
-;architectural;#
-;cognitive;#
-;mental;#
-;intellectual;#
-;cultural;#
-;molecular;#
-;administrative;#
-;managerial;#
 ;nervous;neural;#
-;psychological;#
-;statistical;#
 ;psychiatric;psychiatrical;#
-;domestic;#
-;historical;#
-;Catholic;#
-;Roman;#
-;Roman;#
 ;Roman;r.c.;Romanist;romish;Roman Catholic;popish;papist;papistic;papistical;#
-;Roman;#
 ;Jewish;Judaic;#
 ;Muslim;Moslem;Islamic;#
-;magnetic;#
 ;American;american;#
-;American;#
 ;Indian;Amerind;Amerindic;native American;#
-;Indian;#
-;rational;#
 ;adjectival;adjective;#
-;mathematical;#
-;central;#
-;experimental;#
-;African;#
-;environmental;#
-;environmental;#
-;educational;#
-;Atlantic;#
-;Pacific;#
 ;morphologic;morphological;structural;#
 ;geomorphologic;geomorphological;morphologic;morphological;structural;#
 ;historic;historical;#
 ;strategic;strategical;#
 ;religious;spiritual;#
-;Christian;#
-;Protestant;#
 ;Orthodox;Jewish-Orthodox;#
 ;Orthodox;Eastern Orthodox;Russian Orthodox;Greek Orthodox;#
-;radio;#
-;Italian;#
-;Russian;#
-;German;#
 ;German;Germanic;Teutonic;#
 ;French;Gallic;#
-;Spanish;#
-;Soviet;#
-;Dutch;#
-;Swiss;#
-;Polish;#
-;Chinese;#
 ;Japanese;Nipponese;#
-;Korean;#
-;European;#
 ;Asian;Asiatic;#
-;Israeli;#
-;tragic;#
-;Palestinian;#
-;functional;#
-;dynamic;#
-;Canadian;#
-;emotional;#
-;presidential;#
-;corporate;#
-;organic;#
-;incident;#
-;national;#
-;national;#
-;national;#
-;specific;#
 ;medieval;mediaeval;#
-;comparative;#
-;artistic;#
 ;aesthetic;esthetic;#
-;official;#
-;future;#
 ;locomotive;locomotor;#
 ;socialist;socialistic;#
 ;capitalist;capitalistic;#
-;evolutionary;#
-;English;#
-;Irish;#
-;sympathetic;#
-;prime;#
-;operational;#
 ;Greek;Grecian;Hellenic;#
-;executive;#
 ;geographic;geographical;#
-;British;#
-;Turkish;#
 ;Scots;Scottish;Scotch;#
-;Victorian;#
-;Mosaic;#
-;Australian;#
-;disciplinary;#
-;disciplinary;#
-;Gothic;#
-;Gothic;#
-;Gothic;#
-;green;#
-;Green;#
-;growing;#
 ;Iraqi;Iraki;#
-;Latin;#
-;Latin;#
 ;Romance;Latin;#
-;Latin;#
-;mineral;#
-;Norman;#
-;Norman;#
-;Olympic;#
 ;Olympian;Olympic;#
-;outdoor;#
-;past;#
-;present;#
-;residential;#
 ;Taiwanese;Chinese;Formosan;#
-;textile;#
 ;Welsh;Cambrian;#
 ;wood;woods;#
-;commercial;#
-;racial;#
-;zero;#
-;developing;#
-;developing;#
-;living;#
-;operating;#
 ;barely;hardly;just;scarcely;scarce;#
 ;hardly;scarcely;#
 ;basically;fundamentally;essentially;in essence;au fond;#
 ;merely;simply;just;only;but;#
-;simply;#
 ;plainly;simply;#
-;automatically;#
 ;largely;mostly;for the most part;#
-;significantly;#
 ;approximately;about;close to;just about;some;roughly;more or less;around;or so;#
-;absolutely;#
 ;partly;partially;part;#
-;half;#
 ;wholly;entirely;completely;totally;all;altogether;whole;#
 ;entirely;exclusively;solely;alone;only;#
 ;absolutely;perfectly;utterly;dead;#
 ;clean;plumb;plum;#
-;perfectly;#
-;pat;#
-;flat;#
 ;fully;to the full;full;#
-;only;#
-;only;#
-;only;#
 ;well;good;#
 ;ill;badly;poorly;#
-;ill;#
-;well;#
-;badly;#
 ;well;easily;#
-;well;#
-;well;#
 ;ill;badly;#
-;well;#
 ;well;comfortably;#
 ;well;advantageously;#
 ;badly;disadvantageously;#
 ;well;considerably;substantially;#
-;well;#
-;badly;#
-;well;#
 ;well;intimately;#
-;well;#
 ;badly;severely;gravely;seriously;#
 ;badly;bad;#
 ;badly;bad;#
 ;badly;mischievously;naughtily;#
-;badly;#
-;even;#
 ;even;yet;still;#
-;even;#
-;even;#
 ;rather;kind of;kinda;sort of;#
 ;pretty;jolly;#
-;quite;#
 ;quite;rather;#
 ;quite;quite a;quite an;#
-;quite;#
 ;always;ever;e'er;#
-;always;#
-;always;#
 ;always;forever;#
-;constantly;#
 ;constantly;perpetually;#
-;constantly;#
 ;never;ne'er;#
-;never;#
 ;occasionally;on occasion;once in a while;now and then;now and again;at times;from time to time;#
-;sometimes;#
 ;equally;as;every bit;#
 ;much;practically;#
-;not;#
-;no;#
-;any;#
-;no;#
-;none;#
-;neither;#
-;either;#
 ;bloody;damn;all-fired;#
 ;anywhere;anyplace;#
-;nowhere;#
 ;somewhere;someplace;#
 ;everywhere;everyplace;all over;#
 ;somehow;someway;someways;in some way;in some manner;#
@@ -3878,25 +1938,14 @@
 ;anyhow;anyway;in any case;at any rate;in any event;#
 ;anyhow;anyway;#
 ;however;nevertheless;withal;still;yet;all the same;even so;nonetheless;notwithstanding;#
-;yet;#
 ;so far;thus far;up to now;hitherto;heretofore;as yet;yet;til now;until now;#
 ;so far;yet;#
-;only;#
-;however;#
-;however;#
-;however;#
-;lightly;#
 ;besides;in any case;#
 ;furthermore;moreover;what is more;#
 ;farther;further;#
 ;further;farther;#
-;further;#
-;still;#
-;already;#
 ;very;really;real;rattling;#
 ;mighty;powerful;right;#
-;fucking;#
-;much;#
 ;just;just now;#
 ;instantaneously;outright;instantly;in a flash;#
 ;soon;shortly;presently;before long;#
@@ -3904,36 +1953,23 @@
 ;shortly;not far;#
 ;frequently;often;oftentimes;oft;ofttimes;#
 ;rarely;seldom;#
-;strangely;#
 ;reasonably;moderately;within reason;somewhat;fairly;middling;passably;#
 ;slightly;somewhat;#
 ;decidedly;unquestionably;emphatically;definitely;by all odds;#
 ;truly;genuinely;really;#
-;indeed;#
 ;indeed;so;#
 ;in truth;really;truly;forsooth;#
 ;naturally;of course;course;#
-;clearly;#
 ;obviously;evidently;manifestly;patently;apparently;plainly;plain;#
 ;apparently;seemingly;ostensibly;on the face of it;#
 ;again;once again;once more;over again;#
-;specifically;#
 ;generally;in general;in the main;#
 ;fortunately;fortuitously;luckily;as luck would have it;#
-;happily;#
 ;sadly;unhappily;#
 ;unfortunately;unluckily;regrettably;alas;#
 ;therefore;hence;thence;thus;#
-;hence;#
-;hence;#
 ;face-to-face;opposite;#
-;else;#
-;else;#
-;beyond;#
-;beyond;#
 ;beyond;on the far side;#
-;otherwise;#
-;extremely;#
 ;excessively;overly;too;#
 ;besides;too;also;likewise;as well;#
 ;eventually;yet;sooner or later;in time;one of these days;#
@@ -3942,13 +1978,8 @@
 ;presently;currently;#
 ;nowadays;now;today;#
 ;immediately;instantly;straightaway;straight off;directly;now;right away;at once;forthwith;in real time;#
-;now;#
 ;now;at present;#
-;now;#
-;now;#
-;now;#
 ;aggressively;sharply;#
-;steadily;#
 ;happily;merrily;mirthfully;gayly;blithely;jubilantly;with happiness;#
 ;no;no more;#
 ;firm;firmly;steadfastly;unwaveringly;#
@@ -3957,30 +1988,20 @@
 ;squarely;square;#
 ;directly;straight;direct;#
 ;squarely;square;#
-;due;#
 ;bitterly;with bitterness;#
-;bitterly;#
 ;very well;fine;alright;all right;OK;#
 ;swiftly;fleetly;#
-;openly;#
-;practically;#
 ;presumably;presumptively;#
-;next;#
-;easily;#
 ;terribly;awfully;awful;frightfully;#
 ;terribly;atrociously;awfully;abominably;abysmally;rottenly;#
-;greatly;#
 ;thoroughly;exhaustively;#
 ;thoroughly;soundly;good;#
 ;through;through and through;#
 ;soundly;sound;#
 ;right;flop;#
 ;directly;flat;straight;#
-;indirectly;#
-;much;#
 ;a lot;a good deal;a great deal;much;very much;#
 ;much;a great deal;often;#
-;better;#
 ;increasingly;progressively;more and more;#
 ;effectively;in effect;#
 ;previously;antecedently;#
@@ -3990,52 +2011,31 @@
 ;suddenly;all of a sudden;of a sudden;#
 ;intentionally;deliberately;designedly;on purpose;purposely;advisedly;by choice;by design;#
 ;consequently;accordingly;#
-;accordingly;#
 ;alternatively;as an alternative;instead;or else;#
 ;altogether;all told;in all;#
 ;meanwhile;meantime;in the meantime;#
-;meanwhile;#
-;twice;#
 ;last;most recently;#
 ;last;lastly;in conclusion;finally;#
 ;ahead;in front;before;#
 ;ahead;in advance;beforehand;#
 ;ahead;onward;onwards;forward;forwards;forrader;#
 ;ahead;out front;in the lead;#
-;ahead;#
-;ahead;#
 ;along;on;#
-;along;#
-;along;#
-;along;#
-;along;#
-;on;#
-;on;#
-;alike;#
 ;alike;likewise;#
 ;loudly;loud;aloud;#
 ;softly;quietly;#
-;around;#
 ;about;around;#
-;nearby;#
 ;round;around;#
-;around;#
-;around;#
 ;about;around;#
-;around;#
 ;about;around;#
 ;about;around;#
 ;urgently;desperately;#
 ;about;just about;almost;most;all but;nearly;near;nigh;virtually;well-nigh;#
 ;scantily;barely;#
 ;chiefly;principally;primarily;mainly;in the main;#
-;ago;#
 ;back;backward;#
 ;back;backward;backwards;rearward;rearwards;#
 ;forward;forwards;frontward;frontwards;forrad;forrard;#
-;back;#
-;back;#
-;back;#
 ;back;in reply;#
 ;ahead;forward;#
 ;backward;backwards;#
@@ -4044,8 +2044,6 @@
 ;dearly;affectionately;dear;#
 ;undoubtedly;doubtless;beyond question;without doubt;beyond any doubt;#
 ;tonight;this evening;this night;#
-;actively;#
-;below;#
 ;above;supra;#
 ;below;at a lower place;to a lower place;beneath;#
 ;above;higher up;in a higher place;to a higher place;#
@@ -4055,82 +2053,40 @@
 ;monthly;every month;each month;#
 ;annually;yearly;every year;each year;#
 ;doubly;double;twice;#
-;multiply;#
 ;particularly;peculiarly;especially;specially;#
-;extra;#
-;elsewhere;#
 ;expressly;explicitly;#
 ;quickly;rapidly;speedily;chop-chop;apace;#
-;fast;#
 ;fast;tight;#
 ;quicker;faster;#
-;flush;#
-;flush;#
 ;everlastingly;eternally;forever;evermore;#
 ;permanently;for good;#
-;temporarily;#
-;continually;#
 ;forever;forever and a day;#
-;highly;#
 ;highly;extremely;#
-;highly;#
-;hard;#
-;hard;#
-;hard;#
 ;hard;severely;#
 ;hard;firmly;#
-;hard;#
-;hard;#
-;hard;#
-;hard;#
-;tightly;#
-;briefly;#
 ;deplorably;lamentably;sadly;woefully;#
 ;downstairs;down the stairs;on a lower floor;below;#
 ;upstairs;up the stairs;on a higher floor;#
 ;upstairs;in the head;in the mind;#
 ;down;downwards;downward;downwardly;#
-;down;#
-;down;#
-;down;#
-;down;#
-;down;#
 ;up;upwards;upward;upwardly;#
 ;up;upwards;upward;#
-;up;#
-;up;#
-;up;#
-;home;#
-;home;#
-;home;#
 ;rather;instead;#
 ;more;to a greater extent;#
 ;less;to a lesser extent;#
-;more;#
-;less;#
-;little;#
 ;early;ahead of time;too soon;#
 ;late;belatedly;tardily;#
 ;early;betimes;#
 ;early on;early;#
-;far;#
-;far;#
-;far;#
-;far;#
-;far;#
 ;way;right smart;#
 ;finely;fine;delicately;exquisitely;#
 ;first;firstly;foremost;first of all;first off;#
 ;second;secondly;#
 ;third;thirdly;#
-;throughout;#
 ;initially;ab initio;at first;at the start;#
 ;first;for the first time;#
-;forth;#
 ;forth;forward;onward;#
-;abroad;#
 ;at heart;at bottom;deep down;inside;in spite of appearance;#
-;right;#
 ;promptly;readily;pronto;without delay;#
 ;promptly;quickly;quick;#
 ;fairly;fair;without favoring one party;evenhandedly;#
@@ -4138,229 +2094,121 @@
 ;unusually;remarkably;outstandingly;unco;#
 ;recently;late;lately;of late;latterly;#
 ;gradually;bit by bit;step by step;#
-;here;#
 ;here;hither;#
-;here;#
-;here;#
 ;there;at that place;in that location;#
 ;there;thither;#
 ;there;in that respect;on that point;#
-;how;#
 ;how;however;#
 ;why;how come;#
 ;inside;indoors;#
 ;outside;outdoors;out of doors;alfresco;#
 ;inside;within;#
-;outside;#
 ;literally;virtually;#
-;virtually;#
 ;most;to the highest degree;#
 ;least;to the lowest degree;#
-;most;#
 ;mutely;wordlessly;silently;taciturnly;#
 ;inevitably;necessarily;of necessity;needs;#
 ;recently;newly;freshly;fresh;new;#
 ;differently;otherwise;#
-;invariably;#
 ;mechanically;automatically;#
-;officially;#
-;physically;#
 ;preferably;sooner;rather;#
-;politically;#
-;politically;#
-;together;#
 ;together;in collaboration;unitedly;#
 ;in concert;in agreement;together;#
-;together;#
-;together;#
 ;jointly;collectively;conjointly;together;put together;#
 ;then;so;and so;and then;#
-;then;#
-;then;#
-;so;#
 ;regardless;irrespective;disregardless;irregardless;no matter;disregarding;#
 ;once;one time;in one case;#
 ;once;formerly;at one time;erstwhile;erst;#
 ;although;though;tho';#
-;though;#
 ;successfully;with success;#
 ;simultaneously;at the same time;#
 ;systematically;consistently;#
-;thereby;#
 ;thus;thusly;so;#
-;economically;#
-;economically;#
-;legally;#
-;socially;#
-;socially;#
-;technically;#
-;technically;#
-;typically;#
-;personally;#
 ;personally;in person;#
-;personally;#
-;locally;#
 ;locally;topically;#
-;sexually;#
-;sexually;#
 ;respectively;severally;#
 ;similarly;likewise;#
 ;primarily;in the first place;#
 ;probably;likely;in all likelihood;in all probability;belike;#
-;dramatically;#
-;notably;#
-;naturally;#
 ;surely;certainly;sure;for sure;for certain;sure enough;sure as shooting;#
-;surprisingly;#
-;sufficiently;#
-;adequately;#
 ;enough;plenty;#
 ;thereafter;thenceforth;#
 ;ever;of all time;#
-;so;#
-;so;#
-;so;#
-;so;#
-;so;#
-;such;#
 ;easily;easy;#
 ;easy;soft;#
 ;actually;in reality;#
 ;actually;really;#
-;actually;#
-;actually;#
 ;right;right on;#
 ;all in all;on the whole;altogether;tout ensemble;#
-;carefully;#
-;safely;#
-;allegedly;#
-;originally;#
 ;by and by;later;#
 ;by and large;generally;more often than not;mostly;#
 ;by the way;by the bye;incidentally;#
-;completely;#
 ;alone;solo;unaccompanied;#
 ;precisely;exactly;just;#
 ;sincerely;sincerely yours;#
-;closely;#
 ;closely;intimately;nearly;#
 ;relatively;comparatively;#
 ;predominantly;preponderantly;#
-;readily;#
 ;slowly;slow;easy;tardily;#
 ;publicly;publically;in public;#
 ;privately;in private;in camera;#
-;privately;#
-;publicly;#
 ;seriously;earnestly;in earnest;#
-;long;#
-;long;#
 ;in the first place;earlier;in the beginning;to begin with;originally;#
 ;on the spur of the moment;suddenly;#
 ;profoundly;deeply;#
 ;steadily;steady;#
-;wild;#
 ;heavily;to a great extent;#
 ;heavily;intemperately;hard;#
-;lightly;#
-;repeatedly;#
-;strongly;#
 ;day by day;daily;#
 ;amply;fully;#
 ;strictly;purely;#
 ;neatly;showing neatness;#
-;lightly;#
 ;lightly;softly;gently;#
-;independently;#
 ;apart;aside;#
 ;apart;asunder;#
-;apart;#
-;apart;#
 ;once;when;#
-;gently;#
 ;overseas;beyond the sea;over the sea;abroad;#
 ;distinctly;clearly;#
-;positively;#
 ;true;admittedly;avowedly;confessedly;#
 ;stiffly;stiff;#
 ;formally;with formality;#
 ;formally;officially;#
-;best;#
-;best;#
-;out;#
-;out;#
-;in;#
-;dramatically;#
 ;namely;viz.;that is to say;videlicet;#
 ;cf.;cf;confer;see;see also;#
 ;i.e.;ie;id est;that is;#
-;off;#
 ;rigidly;stiffly;bolt;#
 ;regularly;on a regular basis;#
-;ideally;#
 ;properly;decently;decent;in good order;right;the right way;#
-;o'clock;#
-;jointly;#
 ;exceedingly;passing;extremely;#
-;hopefully;#
-;hopefully;#
-;reportedly;#
 ;intelligibly;clearly;understandably;#
 ;correctly;right;aright;#
 ;incorrectly;wrongly;wrong;#
-;accurately;#
-;accurately;#
-;right;#
-;right;#
 ;justly;right;#
 ;rightly;justly;justifiedly;#
-;today;#
 ;individually;separately;singly;severally;one by one;on an individual basis;#
 ;inescapably;ineluctably;inevitably;unavoidably;#
-;freely;#
 ;sharply;crisply;#
 ;incidentally;accidentally;by chance;#
 ;ever;ever so;#
 ;amazingly;surprisingly;astonishingly;#
 ;sanely;sensibly;reasonably;#
 ;broadly;loosely;broadly speaking;generally;#
-;broadly;#
-;behind;#
-;behind;#
 ;behind;behindhand;in arrears;#
-;behind;#
 ;behind;slow;#
 ;rightfully;truly;#
 ;securely;firmly;#
 ;rigorously;strictly;#
 ;boastfully;vauntingly;big;large;#
-;big;#
-;big;#
-;small;#
-;big;#
 ;over;o'er;#
-;over;#
-;over;#
-;angrily;#
-;mentally;#
-;quietly;#
 ;quietly;quiet;#
 ;inwardly;inside;#
-;out;#
 ;away;off;forth;#
 ;away;out;#
 ;aside;by;away;#
-;aside;#
 ;aside;away;#
 ;aside;apart;#
-;apart;#
-;away;#
-;away;#
 ;away;aside;#
-;away;#
 ;off;away;#
-;away;#
-;away;#
 ;efficiently;expeditiously;with efficiency;#
 ;each;to each one;for each one;from each one;apiece;#
 ;in the last analysis;in the final analysis;ultimately;#
@@ -4368,72 +2216,43 @@
 ;beautifully;attractively;#
 ;south;South;to the south;in the south;#
 ;north;North;to the north;in the north;northerly;northwards;northward;#
-;overnight;#
 ;just;simply;#
-;dramatically;#
 ;peculiarly;particularly;#
 ;particularly;in particular;#
 ;aboard;alongside;#
 ;per annum;p.a.;per year;each year;annually;#
 ;between;'tween;#
 ;legally;lawfully;wrongfully;de jure;#
-;full-time;#
 ;half-time;part-time;#
-;collect;#
 ;foremost;first;#
-;item;#
 ;passim;throughout;#
 ;below;infra;#
-;inland;#
-;live;#
 ;sooner;earlier;#
 ;afield;abroad;#
 ;authentically;genuinely;#
 ;across;crosswise;crossways;#
-;across;#
 ;across;over;#
 ;apropos;incidentally;#
-;asleep;#
-;asleep;#
 ;fore;forward;#
 ;bang;slap;slapdash;smack;bolt;#
-;broadcast;#
 ;cautiously;carefully;#
 ;fairly;fair;clean;#
 ;clearly;clear;#
 ;clear;all the way;#
 ;concisely;briefly;shortly;in brief;in short;#
 ;cursorily;quickly;#
-;counter;#
 ;consequently;therefore;#
 ;credibly;believably;plausibly;probably;#
 ;curtly;short;shortly;#
-;tightly;#
 ;possibly;perchance;perhaps;maybe;peradventure;#
-;possibly;#
-;possibly;#
 ;possibly;potentially;#
 ;deeply;deep;#
-;deep;#
 ;deep;late;#
-;late;#
 ;honestly;aboveboard;#
 ;honestly;candidly;frankly;#
-;double;#
-;double;#
-;east;#
-;west;#
 ;efficaciously;effectively;#
-;regularly;#
-;regularly;#
 ;evenly;equally;#
-;express;#
 ;faithlessly;traitorously;treacherously;treasonably;false;#
-;literally;#
-;flat;#
-;flat;#
-;flat;#
-;flat;#
 ;piano;softly;#
 ;forte;loudly;#
 ;fourthly;fourth;#
@@ -4441,39 +2260,21 @@
 ;roughly;rough;#
 ;heavy;heavily;#
 ;high;high up;#
-;high;#
-;high;#
 ;high;richly;luxuriously;#
 ;loose;free;#
-;about;#
-;personally;#
-;personally;#
-;explicitly;#
-;importantly;#
 ;importantly;significantly;#
 ;precisely;incisively;exactly;#
 ;precisely;exactly;on the nose;on the dot;on the button;#
-;adequately;#
 ;sincerely;unfeignedly;truly;#
-;substantially;#
-;large;#
-;large;#
-;left;#
-;right;#
 ;lento;slowly;#
 ;lightly;light;#
-;longer;#
-;low;#
-;sadly;#
 ;nearer;nigher;closer;#
 ;necessarily;needfully;#
-;necessarily;#
 ;near;nigh;close;#
 ;obstreperously;loudly;clamorously;#
 ;oversea;overseas;#
 ;by;past;#
 ;piercingly;bitterly;bitingly;bitter;#
-;pop;#
 ;powerfully;strongly;#
 ;precious;preciously;#
 ;precipitously;sharply;#
@@ -4481,94 +2282,38 @@
 ;queerly;strangely;oddly;funnily;funny;#
 ;restfully;quietly;#
 ;rampantly;wild;#
-;retail;#
-;same;#
 ;independently;severally;#
-;sheer;#
 ;sheer;perpendicularly;#
-;short;#
 ;short;unawares;#
-;short;#
-;short;#
-;short;#
-;short;#
 ;signally;unmistakably;remarkably;#
 ;slenderly;slimly;slightly;#
 ;smash;smashingly;#
-;stiff;#
 ;still;stock-still;#
 ;strictly;stringently;#
 ;sublimely;utterly;#
 ;sweetly;sweet;#
-;traditionally;#
 ;thick;thickly;#
 ;thinly;lightly;#
 ;thinly;thin;#
 ;thickly;thick;#
-;through;#
-;through;#
-;through;#
-;through;#
-;through;#
-;tomorrow;#
 ;under;below;#
-;under;#
-;under;#
-;under;#
-;under;#
-;under;#
-;under;#
-;under;#
-;underground;#
-;underground;#
-;underneath;#
-;underneath;#
-;underneath;#
-;underneath;#
-;naturally;#
-;whereby;#
-;whereby;#
 ;wide;widely;#
-;widely;#
-;wide;#
 ;wide;astray;#
-;wide;#
 ;yea;yeah;#
 ;between;betwixt;#
 ;in;inwards;inward;#
-;heavily;#
 ;specially;especially;#
 ;gently;mildly;#
 ;sharply;sharp;#
-;softly;#
-;immediately;#
-;immediately;#
-;directly;#
 ;in full;fully;#
 ;only;only if;only when;#
 ;close;closely;tight;#
 ;naturally;by nature;#
 ;by rights;properly;#
-;widely;#
 ;super;extremely;#
-;desperately;#
-;first;#
 ;measuredly;deliberately;#
-;heavily;#
-;yesterday;#
-;yesterday;#
-;together;#
-;after;#
-;later;#
-;heavily;#
-;lightly;#
-;straight;#
 ;better;best;#
-;significantly;#
 ;finely;fine;#
-;very;#
-;positively;#
-;entity;#
 ;thing;#;breathe;take a breath;respire;
 ;anything;#;thing;
 ;something;#;thing;
@@ -4591,16 +2336,12 @@
 ;shape;form;#;attribute;
 ;time;#;abstraction;
 ;space;#;abstraction;
-;state;#
-;event;#
 ;act;human action;human activity;#
 ;group;grouping;#
-;possession;#
 ;attribute;#;abstraction;
 ;relation;#;abstraction;
 ;communication;#;social relation;
 ;measure;quantity;amount;quantum;#;abstraction;
-;phenomenon;#
 ;thing;#;action;
 ;accomplishment;achievement;#;action;
 ;deed;feat;effort;exploit;#;accomplishment;achievement;
@@ -15594,7 +13335,6 @@
 ;period;historic period;historical period;#;time period;period;period of time;
 ;breathe;take a breath;respire;#
 ;sigh;#;breathe;take a breath;respire;
-;hold;#
 ;pant;puff;gasp;heave;#;blow;
 ;blow;#;exhale;expire;breathe out;
 ;sniff;sniffle;#;inhale;breathe in;
@@ -15611,7 +13351,6 @@
 ;be active;move;#
 ;sleep;kip;slumber;log Z's;catch some Z's;#;rest;repose;
 ;nod;#;drowse;
-;nod;#
 ;doss;doss down;crash;#;bed down;bunk down;
 ;go to bed;turn in;crawl in;kip down;hit the hay;hit the sack;get into bed;sack out;go to sleep;retire;#
 ;get up;turn out;arise;uprise;rise;#
@@ -15619,7 +13358,6 @@
 ;awaken;wake;waken;rouse;wake up;arouse;#;change;alter;
 ;affect;#;change;alter;
 ;attack;#;affect;
-;wake;#
 ;entrance;spellbind;#;hypnotize;hypnotise;mesmerize;mesmerise;
 ;freeze;#;anesthetize;anaesthetize;anesthetise;anaesthetise;put to sleep;put under;put out;
 ;sedate;calm;tranquilize;tranquillize;tranquillise;#
@@ -15642,7 +13380,6 @@
 ;frown;glower;lower;#;grimace;make a face;pull a face;
 ;glower;glare;#;stare;
 ;stare;#;look;
-;look;#
 ;shrug;#;gesticulate;gesture;motion;
 ;blow;#;discharge;expel;eject;release;
 ;shower;#;bathe;
@@ -15789,7 +13526,6 @@
 ;give;#;offer;proffer;
 ;give;#;accept;consent;go for;
 ;pack;#;treat;care for;
-;change;#
 ;convert;#;change;
 ;convert;#;change;alter;
 ;receive;#;convert;
@@ -15889,7 +13625,6 @@
 ;bus;#;take away;take out;
 ;scavenge;clean;#;remove;take;take away;withdraw;
 ;unclutter;clear;#;change;alter;
-;add;#
 ;include;#;add;
 ;mix;mix in;#;add;
 ;tank;#;process;treat;
@@ -15961,7 +13696,6 @@
 ;dry;dry out;#;change;
 ;lock;#;engage;
 ;engage;#;touch;
-;strengthen;#
 ;strengthen;beef up;fortify;#;change;alter;
 ;confirm;#;strengthen;beef up;fortify;
 ;spike;lace;fortify;#;change;alter;
@@ -15969,8 +13703,6 @@
 ;line;#;reinforce;reenforce;
 ;substantiate;back;back up;#;reinforce;reenforce;
 ;support;bolster;bolster up;#;reinforce;reenforce;
-;weaken;#
-;die;#
 ;collapse;#;weaken;
 ;fade;melt;fade out;#;weaken;
 ;weaken;#;change;alter;
@@ -16013,7 +13745,6 @@
 ;unite;unify;merge;#;change;alter;
 ;abridge;foreshorten;abbreviate;shorten;cut;contract;reduce;#;decrease;lessen;minify;
 ;condense;concentrate;#;abridge;foreshorten;abbreviate;shorten;cut;contract;reduce;
-;grow;#
 ;twin;#;grow;
 ;double;duplicate;#;multiply;manifold;
 ;multiply;manifold;#;increase;
@@ -16225,13 +13956,11 @@
 ;stamp out;kill;#;end;terminate;
 ;kill;#;destroy;destruct;
 ;kill;#;switch off;cut;turn off;turn out;
-;kill;#
 ;snap;#;close;shut;
 ;dissolve;break up;#;end;terminate;
 ;level;level off;#;change surface;
 ;lift;#;heave;buckle;warp;
 ;shoot;spud;germinate;pullulate;bourgeon;burgeon forth;sprout;#;grow;
-;root;#
 ;root;#;grow;
 ;die;decease;perish;go;exit;pass away;expire;pass;#;change state;turn;
 ;go;#;disappear;vanish;go away;
@@ -16313,7 +14042,6 @@
 ;civilize;civilise;modernize;modernise;develop;#;change;alter;
 ;adopt;take in;#;take;
 ;settle;locate;relocate;#
-;settle;#
 ;settle;root;take root;steady down;settle down;#;stabilize;stabilise;
 ;steady;calm;becalm;#;stabilize;stabilise;
 ;even;even out;#;regularize;regularise;
@@ -16331,7 +14059,6 @@
 ;absent;remove;#;disappear;vanish;go away;
 ;evanesce;fade;blow over;pass off;fleet;pass;#;disappear;vanish;go away;
 ;fade;wither;#;disappear;vanish;go away;
-;appear;#
 ;come on;come out;turn up;surface;show up;#;appear;
 ;emerge;#;appear;
 ;burst;#;emerge;
@@ -16399,7 +14126,6 @@
 ;heap;#;fill;fill up;make full;
 ;prime;#;fill;fill up;make full;
 ;line;#;fill;fill up;make full;
-;flush;#
 ;flush;#;run;flow;course;
 ;sluice;flush;#;drench;douse;dowse;soak;sop;souse;
 ;flush;scour;#;rinse;rinse off;
@@ -16499,7 +14225,6 @@
 ;dose;#;process;treat;
 ;run;#;process;treat;
 ;charge;#;supply;provide;render;furnish;
-;charge;#
 ;facilitate;ease;alleviate;#;help;assist;aid;
 ;interrupt;disturb;#;act;move;
 ;interrupt;disrupt;#;chime in;cut in;put in;butt in;chisel in;barge in;break in;
@@ -16601,7 +14326,6 @@
 ;drift;#;change;
 ;damp;#;control;hold in;hold;contain;check;curb;moderate;
 ;get the picture;comprehend;savvy;dig;grasp;compass;apprehend;#;understand;
-;understand;#
 ;follow;#;understand;
 ;catch;get;#;understand;
 ;figure;#;get the picture;comprehend;savvy;dig;grasp;compass;apprehend;
@@ -16615,12 +14339,7 @@
 ;understand;gather;infer;#;believe;
 ;understand;read;interpret;translate;#;understand;
 ;sympathize;sympathise;empathize;empathise;understand;#
-;know;#
 ;know;cognize;#
-;ignore;#
-;know;#
-;know;#
-;know;#
 ;know;experience;live;#;experience;undergo;see;go through;
 ;master;control;#
 ;master;get the hang;#
@@ -16649,13 +14368,11 @@
 ;hold;#;think;believe;consider;conceive;
 ;study;hit the books;#;learn;larn;
 ;review;#;study;hit the books;
-;study;#
 ;major;#;study;
 ;remember;retrieve;recall;call back;call up;recollect;remind;think;#
 ;know;#;remember;retrieve;recall;call back;call up;recollect;remind;think;
 ;know;#;distinguish;separate;differentiate;secern;secernate;severalize;tell;tell apart;
 ;know;#;recognize;recognise;realize;realise;agnize;agnise;
-;think;#
 ;slip;slip one's mind;#
 ;forget;block;blank out;draw a blank;#
 ;mind;bear in mind;#;remember;think of;
@@ -16663,7 +14380,6 @@
 ;retain;#;remember;think of;
 ;forget;bury;#
 ;recognize;recognise;#;remember;retrieve;recall;call back;call up;recollect;remind;think;
-;remind;#
 ;remember;think back;#
 ;commemorate;remember;#
 ;remember;#;associate;tie in;relate;link;link up;connect;
@@ -16672,13 +14388,11 @@
 ;suppress;repress;#;forget;bury;
 ;forget;leave;#;lose;
 ;abandon;give up;#
-;leave;#
 ;abandon;forsake;desolate;desert;#;leave;
 ;expose;#;abandon;forsake;desolate;desert;
 ;forget;#;neglect;pretermit;omit;drop;miss;leave out;overlook;overleap;
 ;neglect;pretermit;omit;drop;miss;leave out;overlook;overleap;#
 ;exclude;except;leave out;leave off;omit;take out;#;eliminate;get rid of;do away with;
-;neglect;#
 ;jump;pass over;skip;skip over;#;neglect;pretermit;omit;drop;miss;leave out;overlook;overleap;
 ;neglect;ignore;disregard;#
 ;slight;cold-shoulder;#;dismiss;disregard;brush aside;brush off;discount;push aside;ignore;
@@ -16728,7 +14442,6 @@
 ;calculate;cipher;cypher;compute;work out;reckon;figure;#;reason;
 ;extract;#;calculate;cipher;cypher;compute;work out;reckon;figure;
 ;process;#;calculate;cipher;cypher;compute;work out;reckon;figure;
-;get;#
 ;average;average out;#;calculate;cipher;cypher;compute;work out;reckon;figure;
 ;square;#;multiply;
 ;factor;factor in;factor out;#;calculate;cipher;cypher;compute;work out;reckon;figure;
@@ -16800,7 +14513,6 @@
 ;accept;live with;swallow;#;endure;stomach;bear;stand;tolerate;support;brook;abide;suffer;put up;
 ;take;undergo;submit;#;endure;stomach;bear;stand;tolerate;support;brook;abide;suffer;put up;
 ;test;#;take;undergo;submit;
-;judge;#
 ;stand;#;judge;
 ;judge;#;decide;settle;resolve;
 ;estimate;gauge;approximate;guess;judge;#;calculate;cipher;cypher;compute;work out;reckon;figure;
@@ -16958,7 +14670,6 @@
 ;allow;appropriate;earmark;set aside;reserve;#;assign;allot;portion;
 ;mind;worry;#;think about;
 ;beware;mind;#;watch;look out;watch out;
-;surprise;#
 ;catch;#;surprise;
 ;catch;#;witness;find;see;
 ;impute;ascribe;assign;attribute;#;judge;
@@ -17079,7 +14790,6 @@
 ;quarrel;dispute;scrap;argufy;altercate;#;argue;contend;debate;fence;
 ;oppose;#;argue;contend;debate;fence;
 ;oppose;controvert;contradict;#;refute;rebut;
-;assure;#
 ;charm;influence;tempt;#;persuade;
 ;prevail;#;persuade;
 ;importune;insist;#;beg;implore;pray;
@@ -17087,7 +14797,6 @@
 ;break;#;interrupt;disrupt;break up;cut off;
 ;pause;intermit;break;#;interrupt;disrupt;break up;cut off;
 ;rest;breathe;catch one's breath;take a breather;#;pause;intermit;break;
-;rest;#
 ;blow;#;rest;
 ;digress;stray;divagate;wander;#;tell;
 ;continue;go on;carry on;proceed;#;talk;speak;
@@ -17158,7 +14867,6 @@
 ;hedge;fudge;evade;put off;circumvent;parry;elude;skirt;dodge;duck;sidestep;#;avoid;
 ;miss;escape;#;avoid;
 ;get off;get away;get by;get out;escape;#;avoid;
-;avoid;#
 ;confront;face up;face;#;set about;go about;approach;
 ;debate;deliberate;#;discuss;talk over;
 ;consider;debate;moot;turn over;deliberate;#;discuss;talk over;
@@ -17253,7 +14961,6 @@
 ;rip;#;attack;round;assail;lash out;snipe;assault;
 ;condemn;decry;objurgate;excoriate;#;denounce;
 ;curse;cuss;blaspheme;swear;imprecate;#;express;utter;give tongue to;
-;bless;#
 ;consecrate;bless;hallow;sanctify;#;declare;
 ;bless;sign;#;gesticulate;gesture;motion;
 ;question;oppugn;call into question;#;challenge;
@@ -17508,7 +15215,6 @@
 ;rule;find;#;pronounce;label;judge;
 ;qualify;#;pronounce;label;judge;
 ;air;send;broadcast;beam;transmit;#;publicize;publicise;air;bare;
-;air;#
 ;announce;annunciate;harbinger;foretell;herald;#;tell;
 ;announce;denote;#;inform;
 ;cry;blazon out;#;announce;denote;
@@ -17570,7 +15276,6 @@
 ;underline;underscore;#;mark;
 ;type;typewrite;#;write;
 ;sketch;outline;adumbrate;#;describe;depict;draw;
-;correspond;#
 ;write;drop a line;#;correspond;
 ;cable;telegraph;wire;#;telecommunicate;
 ;radio;#;communicate;intercommunicate;
@@ -17578,7 +15283,6 @@
 ;sum up;summarize;summarise;resume;#;repeat;reiterate;ingeminate;iterate;restate;retell;
 ;abstract;#;sum up;summarize;summarise;resume;
 ;state;say;tell;#;express;utter;give tongue to;
-;say;#
 ;declare;#;state;say;tell;
 ;declare;#;state;say;tell;
 ;affirm;assert;avow;aver;swan;swear;#;declare;
@@ -17639,7 +15343,6 @@
 ;cover;treat;handle;plow;deal;address;#;broach;initiate;
 ;discourse;talk about;discuss;#;cover;treat;handle;plow;deal;address;
 ;compromise;#;settle;square off;square up;determine;
-;agree;#
 ;compromise;#;agree;
 ;queer;expose;scupper;endanger;peril;#;affect;impact;bear upon;bear on;touch on;touch;
 ;compromise;#;queer;expose;scupper;endanger;peril;
@@ -17712,7 +15415,6 @@
 ;request;#;wonder;inquire;enquire;
 ;seek;#;request;
 ;communicate;#;interact;
-;begin;#
 ;compete;vie;contend;#
 ;put in;submit;#;apply;
 ;play;#;compete;vie;contend;
@@ -17777,9 +15479,7 @@
 ;discharge;muster out;#;let go of;let go;release;
 ;call up;mobilize;mobilise;rally;#;call;send for;
 ;recruit;levy;raise;#;enlist;draft;muster in;
-;lose;#
 ;drop;#;lose;
-;win;#
 ;carry;#;win;
 ;take;#;win;
 ;sweep;#;win;
@@ -17818,11 +15518,9 @@
 ;surrender;give up;#;yield;
 ;resist;stand;fend;#;fight;oppose;fight back;fight down;defend;
 ;surrender;relinquish;#;yield;
-;yield;#
 ;resist;hold out;withstand;stand firm;#;fight;oppose;fight back;fight down;defend;
 ;complete;nail;#;play;
 ;concede;#;surrender;give up;
-;submit;#
 ;subject;#;submit;
 ;attack;aggress;#;act;move;
 ;fork;#;attack;aggress;
@@ -17864,7 +15562,6 @@
 ;fire;discharge;go off;#
 ;explode;#;fire;discharge;go off;
 ;shoot;#;fire;discharge;
-;trigger;#
 ;open fire;fire;#;shoot;
 ;blast;strafe;shell;#;bombard;bomb;
 ;gun;#;shoot;
@@ -17996,7 +15693,6 @@
 ;crave;hunger;thirst;starve;lust;#;desire;want;
 ;want;need;require;#;be;
 ;cry;#;want;need;require;
-;need;#
 ;diet;#;fast;
 ;fast;#;abstain;refrain;desist;
 ;fast;#;abstain;refrain;desist;
@@ -18009,7 +15705,6 @@
 ;enjoy;#;use;utilize;utilise;apply;employ;
 ;afford;#;spend;expend;drop;
 ;run low;run short;go;#;end;finish;terminate;cease;
-;go;#
 ;gorge;ingurgitate;overindulge;glut;englut;stuff;engorge;overgorge;overeat;gormandize;gormandise;gourmandize;binge;pig out;satiate;scarf out;#;eat;
 ;avail;help;#;exploit;work;
 ;satiate;sate;replete;fill;#;consume;ingest;take in;take;have;
@@ -18047,7 +15742,6 @@
 ;burn off;burn;burn up;#;consume;eat up;use up;eat;deplete;exhaust;run through;wipe out;
 ;carry;hold;#;drink;booze;fuddle;
 ;touch;adjoin;meet;contact;#
-;touch;#
 ;touch;#;touch;
 ;toe;#;touch;
 ;trap;pin;immobilize;immobilise;#
@@ -18065,7 +15759,6 @@
 ;mouse;#;manipulate;
 ;guide;run;draw;pass;#
 ;seize;prehend;clutch;#;take;get hold of;
-;snatch;#
 ;seize;#;take;get hold of;
 ;take;get hold of;#
 ;collar;nail;apprehend;arrest;pick up;nab;cop;#;seize;prehend;clutch;
@@ -18100,7 +15793,6 @@
 ;penetrate;#;enter;come in;get into;get in;go into;go in;move into;
 ;strike;#;penetrate;
 ;break;#;penetrate;
-;break;#
 ;break;#;pierce;
 ;jab;prod;stab;poke;dig;#;thrust;
 ;stab;jab;#;thrust;
@@ -18116,7 +15808,6 @@
 ;hit;strike;impinge on;run into;collide with;#;touch;
 ;spang;bang;#;hit;strike;impinge on;run into;collide with;
 ;connect;#;hit;strike;impinge on;run into;collide with;
-;miss;#
 ;bottom;#;hit;strike;impinge on;run into;collide with;
 ;knock;strike hard;#;strike;
 ;shoulder;#;thrust;
@@ -18289,21 +15980,16 @@
 ;poison;#;kill;
 ;stone;lapidate;#;kill;
 ;poison;#;kill;
-;kill;#
-;kill;#
-;kill;#
 ;sacrifice;#;kill;
 ;destroy;#;kill;
 ;brain;#;kill;
 ;liquidate;waste;knock off;do in;#;kill;
 ;hitch;catch;#;attach;
-;catch;#
 ;append;add on;supplement;affix;#;attach;
 ;sew;run up;sew together;stitch;#;fasten;fix;secure;
 ;gather;pucker;tuck;#;sew;run up;sew together;stitch;
 ;needle;#;prick;
 ;tape;#;attach;
-;cover;#
 ;hold;#;cover;
 ;jacket;#;cover;
 ;flash;#;cover;
@@ -18516,7 +16202,6 @@
 ;return;#;transport;carry;
 ;bring;get;convey;fetch;#;transmit;transfer;transport;channel;channelize;
 ;fetch;#;bring;convey;take;
-;bring;#
 ;pile;#;put;set;place;pose;position;lay;
 ;transmit;transfer;transport;channel;channelize;#;move;displace;
 ;project;#;transmit;transfer;transport;channel;channelize;
@@ -18612,9 +16297,6 @@
 ;suspend;#;hang;hang up;
 ;hang;hang up;#;fasten;fix;secure;
 ;hang;#;fasten;fix;secure;
-;hang;#
-;hang;#
-;hang;#
 ;pack;#;encase;case;
 ;pack;load down;#;load;
 ;pack;bundle;wad;compact;#;arrange;set up;
@@ -18769,7 +16451,6 @@
 ;rest;#;be;
 ;stand;stand up;#;rest;
 ;stand;stand up;place upright;#;put;set;place;pose;position;lay;
-;lie;#
 ;delete;cancel;#;remove;take;take away;withdraw;
 ;strike;expunge;excise;#;delete;cancel;
 ;scar;mark;pock;pit;#;deface;disfigure;blemish;
@@ -18893,10 +16574,8 @@
 ;size;#;coat;surface;
 ;break;break up;#;change;alter;
 ;break;#;change;exchange;commute;convert;
-;cut;#
 ;cut;#;be;
 ;cut;#;function;work;operate;go;run;
-;spread;#
 ;spread;#;cover;
 ;load;#;put;set;place;pose;position;lay;
 ;dust;#;cover;
@@ -18990,7 +16669,6 @@
 ;seed;#;bear;turn out;
 ;crop;#;bear;turn out;
 ;fruit;#;bear;turn out;
-;fruit;#
 ;manufacture;fabricate;construct;#;make;
 ;make;#;create from raw material;create from raw stuff;
 ;construct;build;make;#;make;create;
@@ -19111,7 +16789,6 @@
 ;give;#;perform;
 ;give;#;show;
 ;play;#;perform;
-;play;#
 ;play;run;#
 ;play;#;sound;
 ;debut;#;play;
@@ -19122,7 +16799,6 @@
 ;read;#;audition;try out;
 ;act;play;represent;#;re-create;
 ;act;play;roleplay;playact;#;perform;
-;enter;#
 ;support;#;act;play;represent;
 ;star;#;perform;execute;do;
 ;appear;#;perform;execute;do;
@@ -19188,7 +16864,6 @@
 ;produce;bring forth;#;make;create;
 ;produce;bring about;give rise;#;make;create;
 ;design;#;create;make;
-;create;#
 ;press;#;make;create;
 ;prepare;#;make;create;
 ;rough in;rough;rough out;#;prepare;
@@ -19223,7 +16898,6 @@
 ;reassure;assure;#;calm;calm down;quiet;tranquilize;tranquillize;tranquillise;quieten;lull;still;
 ;worry;care;#;mind;worry;
 ;retire;withdraw;#;tire;pall;weary;fatigue;jade;
-;worry;#
 ;seethe;boil;#;feel;experience;
 ;affect;impress;move;strike;#
 ;jar;#;affect;impress;move;strike;
@@ -19238,17 +16912,12 @@
 ;pride;plume;congratulate;#;feel;experience;
 ;harbor;harbour;hold;entertain;nurse;#;feel;experience;
 ;hate;detest;#;dislike;
-;love;#
 ;love;#;love;
 ;romance;#;love;
-;cling;#
 ;care for;cherish;hold dear;treasure;#;love;
 ;enshrine;saint;#;reverence;fear;revere;venerate;
 ;fancy;go for;take to;#;desire;want;
-;dislike;#
-;like;#
 ;cotton;#;like;
-;like;#
 ;idolize;idolise;worship;hero-worship;revere;#;adore;
 ;reverence;fear;revere;venerate;#;respect;esteem;value;prize;prise;
 ;worship;#;reverence;fear;revere;venerate;
@@ -19256,7 +16925,6 @@
 ;overawe;cow;#;awe;
 ;frighten;#;chase away;drive out;turn back;drive away;dispel;drive off;run off;
 ;fear;dread;#
-;fear;#
 ;fear;#;regret;
 ;fear;#;worry;
 ;panic;#;terrify;terrorize;terrorise;
@@ -19285,7 +16953,6 @@
 ;hurt;wound;injure;bruise;offend;spite;#;arouse;elicit;enkindle;kindle;evoke;fire;raise;provoke;
 ;suffer;#;feel;experience;
 ;lose;#;suffer;
-;rage;#
 ;repent;regret;rue;#;feel;experience;
 ;regret;#;miss;
 ;distress;#;disturb;upset;trouble;
@@ -19313,7 +16980,6 @@
 ;kill;#;overwhelm;overpower;sweep over;whelm;overcome;overtake;
 ;lock;#;overwhelm;overpower;sweep over;whelm;overcome;overtake;
 ;shock;offend;scandalize;scandalise;appal;appall;outrage;#;disgust;revolt;nauseate;sicken;churn up;
-;despair;#
 ;hope;#;desire;want;
 ;inspire;animate;invigorate;enliven;exalt;#;stimulate;shake;shake up;excite;stir;
 ;gladden;joy;#
@@ -19326,10 +16992,8 @@
 ;enchant;enrapture;transport;enthrall;ravish;enthral;delight;#;please;delight;
 ;work;#;capture;enamour;trance;catch;becharm;enamor;captivate;beguile;charm;fascinate;bewitch;entrance;enchant;
 ;cheer;hearten;recreate;embolden;#;encourage;
-;rise;#
 ;encourage;#;inspire;animate;invigorate;enliven;exalt;
 ;spur;goad;#;encourage;
-;discourage;#
 ;enjoy;bask;relish;savor;savour;#
 ;fascinate;transfix;grip;spellbind;#;interest;
 ;interest;#;arouse;elicit;enkindle;kindle;evoke;fire;raise;provoke;
@@ -19353,7 +17017,6 @@
 ;burn;#;feel;experience;
 ;die;#;feel;experience;
 ;glow;beam;radiate;shine;#;feel;experience;
-;move;#
 ;plunge;#;dart;dash;scoot;scud;flash;shoot;
 ;ease;#;travel;go;move;locomote;
 ;freeze;stop dead;#;stand still;
@@ -19382,7 +17045,6 @@
 ;ship;#;travel;journey;
 ;ride;#;travel;journey;
 ;fly;#;travel;journey;
-;fly;#
 ;move over;give way;give;ease up;yield;#;move;
 ;go;go away;depart;#;exit;go out;get out;leave;
 ;shove off;shove along;blow;#;go;go away;depart;
@@ -19399,13 +17061,11 @@
 ;suck;#;draw;take out;
 ;transplant;transfer;#;displace;force out;
 ;scan;#;move;displace;
-;move;#
 ;stay;stick;stick around;stay put;#;stay in place;
 ;start;start up;#
 ;pull;#;rein;rein in;
 ;round;#;travel;go;move;locomote;
 ;jumpstart;jump;#;start;start up;
-;stop;#
 ;halt;hold;arrest;#;stop;
 ;cut;#;stop;
 ;cut;#;switch;shift;change;
@@ -19452,7 +17112,6 @@
 ;pulsate;throb;pulse;#;beat;pound;thump;
 ;pulse;#;move;displace;
 ;beat;pound;thump;#;move;
-;beat;#
 ;wander;swan;stray;tramp;roam;cast;ramble;rove;range;drift;vagabond;#;travel;go;move;locomote;
 ;walk;take the air;#;travel;go;move;locomote;
 ;weave;wind;thread;meander;wander;#;travel;go;move;locomote;
@@ -19712,7 +17371,6 @@
 ;roar;#;proceed;go forward;continue;
 ;march;process;#;walk;
 ;back;#;travel;go;move;locomote;
-;back;#
 ;pan;#;travel;go;move;locomote;
 ;follow;#;travel;go;move;locomote;
 ;scale;surmount;#;reach;attain;make;hit;arrive at;gain;
@@ -19738,7 +17396,6 @@
 ;access;get at;#;reach;attain;make;hit;arrive at;gain;
 ;peak;reach a peak;#;reach;attain;make;hit;arrive at;gain;
 ;depart;take leave;quit;#;leave;go forth;go away;
-;stay;#
 ;leave;go forth;go away;#
 ;scram;buzz off;fuck off;get;bugger off;#;leave;go forth;go away;
 ;run off;run out;bolt;bolt out;#;leave;go forth;go away;
@@ -19868,7 +17525,6 @@
 ;stray;sidetrack;depart;digress;straggle;#;deviate;divert;
 ;flow;flux;#;move;
 ;run;flow;course;#;move;
-;flow;#
 ;waste;run off;#;run;flow;course;
 ;spin;#;stream;well out;
 ;pump;#;spurt;spirt;gush;spout;
@@ -19915,7 +17571,6 @@
 ;remove;transfer;#;transfer;shift;
 ;pack;#;fill;fill up;make full;
 ;land;#;bring;convey;take;
-;port;#
 ;swing;#;move;displace;
 ;draw;#;travel;go;move;locomote;
 ;transfer;change;#;travel;go;move;locomote;
@@ -19992,7 +17647,6 @@
 ;dream;#;perceive;comprehend;
 ;notice;mark;note;#
 ;note;take note;observe;#
-;ignore;#
 ;glimpse;#;see;
 ;chafe;gall;fret;#;irritate;
 ;rub;scratch;itch;#;irritate;
@@ -20010,18 +17664,14 @@
 ;odorize;scent;#;cause to be perceived;
 ;touch;#;perceive;comprehend;
 ;feel;#;search;seek;look for;
-;handle;#
 ;miss;lose;#
-;discover;#
 ;witness;#;watch;
 ;watch;look on;#
 ;witness;find;see;#;experience;undergo;see;go through;
 ;see;#;perceive;comprehend;
 ;see;#;see;
 ;view;consider;look at;#;analyze;analyse;study;examine;canvass;
-;look;#
 ;examine;see;#
-;watch;#
 ;gaze;stare;#;look;
 ;regard;#;look;
 ;look;appear;seem;#;be;
@@ -20030,13 +17680,10 @@
 ;feel;#;look;appear;seem;
 ;appear;seem;#;be;
 ;sound;#;look;appear;seem;
-;sound;#
 ;speak;#;sound;
 ;blow;#;sound;
 ;blow;#;sound;go;
-;reflect;#
 ;reflect;#;indicate;point;show;
-;show;#
 ;disclose;expose;#;uncover;bring out;unveil;reveal;
 ;face;#;disclose;expose;
 ;project;#;show;
@@ -20063,7 +17710,6 @@
 ;hide;hide out;#
 ;conceal;hold back;hold in;#
 ;earth;#;hide;
-;hide;#
 ;cover;#;hide;conceal;
 ;bury;#;hide;conceal;
 ;dissemble;cloak;mask;#;disguise;
@@ -20074,7 +17720,6 @@
 ;demonstrate;show;#
 ;candle;#;examine;see;
 ;survey;#;examine;see;
-;watch;#
 ;watch;view;see;catch;take in;#;watch;
 ;watch;look out;watch out;#
 ;scan;skim;rake;glance over;run down;#;examine;see;
@@ -20114,7 +17759,6 @@
 ;study;consider;#
 ;eye;eyeball;#;look;
 ;blind;#;change;alter;
-;blind;#
 ;peer;#;look;
 ;pry;nose;poke;#;search;look;
 ;observe;#;watch;
@@ -20130,7 +17774,6 @@
 ;sound;go;#;cause to be perceived;
 ;blow;#;sound;go;
 ;ping;knock;#;sound;go;
-;sound;#
 ;sound;#;announce;denote;
 ;project;#;cause to be perceived;
 ;ring;peal;#;sound;go;
@@ -20162,9 +17805,7 @@
 ;sugar;saccharify;#;sweeten;dulcify;edulcorate;dulcorate;
 ;pepper;#;spice;spice up;
 ;salt;#;season;flavor;flavour;
-;lose;#
 ;come;#;experience;undergo;see;go through;
-;greet;#
 ;track;#;observe;
 ;find;#;perceive;comprehend;
 ;roll;#;sound;go;
@@ -20175,7 +17816,6 @@
 ;give;#;transfer;
 ;give;#;pass;hand;reach;pass on;turn over;give;
 ;give;gift;present;#
-;take;#
 ;give away;distribute;give out;hand out;#;give;gift;present;
 ;tip;bung;#;give;gift;present;
 ;keep;hold on;#;have;have got;hold;
@@ -20186,9 +17826,7 @@
 ;keep;#;store;
 ;wield;exert;maintain;#;have;have got;hold;
 ;own;have;possess;#
-;take;#
 ;stumble;hit;#;come by;
-;take;#
 ;rescue;#;take;
 ;scale;#;take;
 ;buy;purchase;#;get;acquire;
@@ -20228,7 +17866,6 @@
 ;support;#;give;
 ;sponsor;patronize;patronise;#;support;
 ;sponsor;#;support;back up;
-;transfer;#
 ;convey;#;transfer;
 ;pass;#;change;
 ;discard;fling;toss;toss out;toss away;chuck out;cast aside;dispose;throw out;cast out;throw away;cast away;put away;#;get rid of;remove;
@@ -20306,7 +17943,6 @@
 ;pay;pay off;make up;compensate;#;settle;
 ;default;default on;#;fail;neglect;
 ;owe;#;be;
-;owe;#
 ;settle;#;arrange;fix up;
 ;bounce;#;refuse;reject;pass up;turn down;decline;
 ;bounce;#;return;go back;get back;come back;
@@ -20347,7 +17983,6 @@
 ;compound;#;account;calculate;
 ;save;lay aside;save up;#
 ;squander;blow;#;spend;expend;drop;
-;save;#
 ;spend;expend;drop;#;pay;
 ;spend;#;consume;eat up;use up;eat;deplete;exhaust;run through;wipe out;
 ;take;occupy;use up;#;use;expend;
@@ -20392,12 +18027,8 @@
 ;fall upon;strike;come upon;light upon;chance upon;come across;chance on;happen upon;attain;discover;#;find;regain;
 ;foot;pick;#;pay;
 ;pinpoint;nail;#;locate;turn up;
-;lose;#
-;lose;#
-;lose;#
 ;win;gain;#;get;acquire;
 ;lose;turn a loss;#
-;clear;#
 ;gain;take in;clear;make;earn;realize;realise;pull in;bring in;#;get;acquire;
 ;earn;garner;#;get;acquire;
 ;letter;#;earn;garner;
@@ -20468,15 +18099,12 @@
 ;deprive;strip;divest;#;take;
 ;inherit;come into;#;get;acquire;
 ;inherit;#;receive;have;
-;inherit;#
 ;release;relinquish;free;give up;#;pass;hand;reach;pass on;turn over;give;
 ;concede;yield;cede;grant;#;give;
-;give;#
 ;grant;give;#
 ;charge;#;pay;
 ;reduce;#;impoverish;
 ;bankrupt;ruin;break;#;impoverish;
-;fail;#
 ;overcharge;soak;surcharge;gazump;fleece;plume;pluck;rob;hook;#;cheat;beat;rip off;chisel;
 ;discount;#;mark down;
 ;allow;#;discount;
@@ -20578,8 +18206,6 @@
 ;grab;#;obtain;
 ;deliver;drive home;#;give;
 ;land;#;deliver;drive home;
-;fall;#
-;fall;#
 ;call;call in;#;demand;exact;
 ;carry;#;bear;
 ;get;#;get;acquire;
@@ -20619,7 +18245,6 @@
 ;resume;#;assume;adopt;take on;take over;
 ;leave office;quit;step down;#;leave;depart;pull up stakes;
 ;leave;depart;pull up stakes;#;change;
-;install;#
 ;induct;invest;seat;#;install;
 ;invite;ask over;ask round;#;request;bespeak;call for;quest;
 ;invite;pay for;#;interact;
@@ -20672,7 +18297,6 @@
 ;nominate;propose;#;choose;take;select;pick out;
 ;fire;give notice;can;dismiss;give the axe;send away;sack;force out;terminate;#;remove;
 ;drop;#;remove;
-;remove;#
 ;take out;move out;remove;#
 ;supplant;replace;supersede;supervene upon;#;succeed;come after;follow;
 ;succeed;come after;follow;#
@@ -20697,14 +18321,12 @@
 ;scab;rat;blackleg;#;work;do work;
 ;rat;#;hire;engage;employ;
 ;wait;#;work;
-;work;#
 ;assist;#;work;
 ;busy;occupy;#;work;
 ;moon;moon around;moon on;#;idle;laze;slug;stagnate;
 ;daydream;moon;#;idle;laze;slug;stagnate;
 ;play;recreate;#
 ;play;#;act;
-;act;#
 ;labor;labour;toil;fag;travail;grind;drudge;dig;moil;#;work;do work;
 ;farm;#;work;do work;
 ;job;#;work;do work;
@@ -20818,7 +18440,6 @@
 ;vote;#;express;state;
 ;ballot;#;vote;
 ;poll;#;vote;
-;avoid;#
 ;spare;save;#;refrain;forbear;
 ;favor;favour;#;spare;save;
 ;sign;ratify;#;validate;formalize;formalise;
@@ -20841,7 +18462,6 @@
 ;post;#;list;
 ;veto;blackball;negative;#;oppose;controvert;contradict;
 ;kill;defeat;vote down;vote out;#;veto;blackball;negative;
-;vote;#
 ;endow;indue;gift;empower;invest;endue;#;enable;
 ;cover;#;endow;indue;gift;empower;invest;endue;
 ;confirm;#;covenant;
@@ -20908,7 +18528,6 @@
 ;ticket;fine;#;book;
 ;expatriate;deport;exile;#;expel;throw out;kick out;
 ;punish;penalize;penalise;#
-;reward;#
 ;hear;try;#;probe;examine;
 ;judge;adjudicate;try;#;decide;make up one's mind;determine;
 ;suspend;debar;#;expel;throw out;kick out;
@@ -20932,7 +18551,6 @@
 ;train;#;control;hold in;hold;contain;check;curb;moderate;
 ;control;hold in;hold;contain;check;curb;moderate;#;restrain;suppress;keep;keep back;hold back;
 ;catch;#;control;hold in;hold;contain;check;curb;moderate;
-;indulge;#
 ;regulate;regularize;order;govern;#;decide;make up one's mind;determine;
 ;zone;district;#;regulate;regularize;order;govern;
 ;discriminate;separate;single out;#;distinguish;separate;differentiate;secern;secernate;severalize;tell;tell apart;
@@ -20952,7 +18570,6 @@
 ;control;verify;#;test;prove;try;try out;examine;essay;
 ;protest;resist;dissent;#;oppose;controvert;contradict;
 ;demonstrate;march;#;protest;resist;dissent;
-;fail;#
 ;breeze through;ace;pass with flying colors;sweep through;sail through;nail;#;pass;make it;
 ;pull off;bring off;carry off;manage;#;succeed;come through;
 ;do;manage;#
@@ -21069,7 +18686,6 @@
 ;anticipate;foresee;forestall;counter;#;act;move;
 ;sin;#;transgress;offend;infract;violate;go against;breach;break;
 ;fall;#;fall;sin;
-;fall;#
 ;sin;blunder;boob;goof;#;transgress;offend;infract;violate;go against;breach;break;
 ;transgress;offend;infract;violate;go against;breach;break;#;disrespect;
 ;conflict;run afoul;infringe;contravene;#;transgress;offend;infract;violate;go against;breach;break;
@@ -21093,7 +18709,6 @@
 ;observe;keep;#
 ;poison;#;corrupt;pervert;demoralize;demoralise;debauch;debase;profane;vitiate;deprave;misdirect;
 ;blackmail;blackjack;pressure;#;influence;act upon;work;
-;prosecute;#
 ;defend;represent;#
 ;prosecute;#;act;move;
 ;sue;litigate;process;#;challenge;
@@ -21117,7 +18732,6 @@
 ;consort;associate;affiliate;assort;#;interact;
 ;crusade;fight;press;campaign;push;agitate;#;advertise;advertize;promote;push;
 ;fall back;resort;recur;#;use;utilize;utilise;apply;employ;
-;take;#
 ;condescend;deign;descend;#;act;move;
 ;club;#;meet;gather;assemble;forgather;foregather;
 ;club;#;unite;unify;
@@ -21131,19 +18745,14 @@
 ;attend;#;apply;
 ;apply;#;give;dedicate;commit;devote;
 ;repeat;take over;#;act;move;
-;rest;#
-;meet;#
 ;surprise;#;act;move;
 ;swell;puff up;#;act;behave;do;
 ;play;#;act;move;
-;appear;#
 ;assemble;gather;get together;#
 ;make;#;assemble;gather;get together;
-;join;#
 ;move;#;live;
 ;escape;get away;#;escape;get away;break loose;
 ;touch;#;manage;deal;care;handle;
-;fail;#
 ;take;#;act;move;
 ;book;#;register;
 ;guard;#;act;move;
@@ -21174,15 +18783,12 @@
 ;miss;#;fail;neglect;
 ;cut;skip;#;miss;
 ;be;live;#
-;live;#
-;live;#
 ;swing;#;live;
 ;pig;pig it;#;live;
 ;exist;survive;live;subsist;#
 ;breathe;#;exist;survive;live;subsist;
 ;freewheel;drift;#;exist;survive;live;subsist;
 ;do;fare;make out;come;get along;#;proceed;go;
-;go;#
 ;go;#;be;
 ;survive;last;live;live on;go;endure;hold up;hold out;#
 ;last;#;continue;
@@ -21198,7 +18804,6 @@
 ;separate;divide;#
 ;connect;link;link up;join;unite;#
 ;bridge;bridge over;#;connect;link;tie;link up;
-;become;#
 ;root;#;become;
 ;form;take form;take shape;spring;#;become;
 ;originate;arise;rise;develop;uprise;spring up;grow;#;become;
@@ -21228,8 +18833,6 @@
 ;possess;#;have;feature;
 ;miss;lack;#
 ;want;lack;#;miss;lack;
-;miss;#
-;include;#
 ;involve;#;include;
 ;consist;#;include;
 ;consist;comprise;#;be;
@@ -21247,7 +18850,6 @@
 ;incriminate;imply;inculpate;#;suggest;evoke;paint a picture;
 ;bide;abide;stay;#;stay;stay on;continue;remain;
 ;remain;#;be;
-;wait;#
 ;loiter;lounge;footle;lollygag;loaf;lallygag;hang around;mess about;tarry;linger;lurk;mill about;mill around;#;be;
 ;hesitate;waver;waffle;#
 ;hesitate;pause;#;delay;
@@ -21282,7 +18884,6 @@
 ;lodge;#;dwell;shack;reside;live;inhabit;people;populate;
 ;quarter;billet;canton;#;lodge;accommodate;
 ;dwell;consist;lie;belong;lie in;#;exist;be;
-;go;#
 ;camp;encamp;camp out;bivouac;tent;#;dwell;shack;reside;live;inhabit;people;populate;
 ;inhabit;occupy;#;be;
 ;invade;overrun;infest;#;inhabit;occupy;
@@ -21311,15 +18912,12 @@
 ;deviate;vary;diverge;depart;#;differ;
 ;vary;#;differ;
 ;drift;#;vary;
-;conform;#
 ;corroborate;underpin;bear out;support;#;match;fit;correspond;check;jibe;gibe;tally;agree;
 ;depend;#;be;
 ;rest;reside;repose;#;inhere in;attach to;
 ;equal;be;#
-;amount;#
 ;make;#;amount;
 ;resemble;#;match;fit;correspond;check;jibe;gibe;tally;agree;
-;differ;#
 ;oppose;counterbalance;turn the scales;#;contrast;counterpoint;
 ;contrast;counterpoint;#;differ;
 ;conflict;#;contrast;counterpoint;
@@ -21352,13 +18950,11 @@
 ;concern;interest;occupy;worry;#
 ;matter to;interest;#;refer;pertain;relate;concern;come to;bear on;touch;touch on;
 ;qualify;measure up;#;suffice;do;answer;serve;
-;begin;#
 ;prolong;sustain;keep up;#;continue;uphold;carry on;bear on;preserve;
 ;continue;uphold;carry on;bear on;preserve;#;keep;maintain;hold;
 ;cheese;#;discontinue;stop;cease;give up;quit;lay off;
 ;discontinue;stop;cease;give up;quit;lay off;#
 ;break;#;discontinue;stop;cease;give up;quit;lay off;
-;break;#
 ;keep;maintain;hold;#
 ;carry;#;sustain;keep;maintain;
 ;distance;#;keep;maintain;hold;
@@ -21374,7 +18970,6 @@
 ;come;#;run;go;pass;lead;extend;
 ;radiate;ray;#;run;go;pass;lead;extend;
 ;roll;undulate;#
-;lead;#
 ;cover;extend;#;be;
 ;sweep;#;cover;extend;
 ;spread;overspread;#;cover;extend;
@@ -21410,8 +19005,6 @@
 ;befit;suit;beseem;#;match;fit;correspond;check;jibe;gibe;tally;agree;
 ;harmonize;harmonise;consort;accord;concord;fit in;agree;#;match;fit;correspond;check;jibe;gibe;tally;agree;
 ;blend;go;blend in;#;harmonize;harmonise;consort;accord;concord;fit in;agree;
-;go;#
-;go;#
 ;hold;bear;carry;contain;#;include;
 ;contain;take;hold;#;be;
 ;sleep;#;contain;take;hold;
@@ -21477,14 +19070,12 @@
 ;offset;countervail;#;balance;equilibrate;equilibrize;
 ;share;#;overlap;
 ;disagree;disaccord;discord;#;be;
-;can;#
 ;can;may;might;#
 ;must;have;have got;need;#
 ;should;had better;ought;#
 ;must;have;#
 ;shall;will;#
 ;should;ought;must;need;#
-;would;#
 ;may;can;get;#
 ;could;might;#
 ;tend;be given;lean;incline;run;#;be;
@@ -21492,7 +19083,6 @@
 ;follow;#;result;ensue;
 ;follow;come after;#;result;ensue;
 ;follow;#;be;
-;follow;#
 ;run;#;incur;
 ;incur;#;subject;
 ;pride;#;be;
@@ -21500,13 +19090,11 @@
 ;leave;allow for;allow;provide for;#;yield;give;afford;
 ;look out on;look out over;overlook;look across;#;lie;
 ;figure;enter;#;be;
-;play;#
 ;present;pose;#;constitute;represent;make up;comprise;be;
 ;press;#;be;
 ;rage;#;be;
 ;ramp;rage;storm;#;act;behave;do;
 ;elude;escape;#;perplex;get;puzzle;mystify;baffle;beat;bewilder;flummox;stupefy;stupify;nonplus;gravel;amaze;dumbfound;
-;should;#
 ;exemplify;represent;typify;#;embody;be;personify;
 ;become;suit;#;beautify;embellish;prettify;
 ;relate;interrelate;#;be;
@@ -21539,7 +19127,6 @@
 ;shine;#;be;
 ;lie;#;be;
 ;stand;#;be;
-;photograph;#
 ;keep;stay fresh;#;stay;remain;rest;
 ;hang;#;be;
 ;suit;#;be;
@@ -21559,16 +19146,11 @@
 ;wear;#;have;feature;
 ;embody;#;represent;
 ;promise;#;be;
-;hang;#
-;range;#
 ;carry;#;range;
 ;accept;take;#;be;
-;admit;#
-;agree;#
 ;clean;#;be;
 ;draw;#;be;
 ;drive;ride;#
-;mean;#
 ;confront;#;front;look;face;
 ;wash;#;be;
 ;balance;#;be;
@@ -21577,8 +19159,6 @@
 ;come;#;be;
 ;flow;#;exist;be;
 ;issue forth;come;#
-;afford;#
-;open;#
 ;act;#;be;
 ;add;#;form;constitute;make;
 ;make;#;total;number;add up;come;amount;
@@ -21614,14 +19194,11 @@
 ;sprinkle;spit;spatter;patter;pitter-patter;#;rain;rain down;
 ;pour;pelt;stream;rain cats and dogs;rain buckets;#;rain;rain down;
 ;sheet;#;pour;pelt;stream;rain cats and dogs;rain buckets;
-;freeze;#
 ;snow;#;precipitate;come down;fall;
 ;flame;#;burn;combust;
 ;ignite;light;#;burn;
 ;catch;#;ignite;erupt;catch fire;take fire;
-;burn;#
 ;flare;flame;#;shine;beam;
-;shine;#
 ;flicker;flick;#;shine;beam;
 ;shine;beam;#
 ;glare;#;shine;beam;
@@ -21636,10 +19213,8 @@
 ;steam;#;emit;give out;give off;
 ;shadow;shade;shade off;#;obscure;bedim;overcloud;
 ;burn;glow;#;shine;beam;
-;blow;#
 ;breeze;#;blow;
 ;storm;#;blow;
-;storm;#
 ;thunder;boom;#
 ;overcast;cloud;#;darken;
 ;clear up;clear;light up;brighten;#

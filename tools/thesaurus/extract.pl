@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: $
+# $Id$
 # This file is part of the KDE project
 # Copyright (C) 2001 Daniel Naber <daniel.naber@t-online.de>
 
@@ -15,6 +15,10 @@ use strict;
 sub prg()
 {
 
+    my $prefix = "";
+    # TODO?: prefix (n,v,a or r) per line won't work as each word
+    # can have a different prefix (it's rare but it happens)
+    
 	my $filename = $ARGV[0];
 	my $filename_stat = $ARGV[1];
 	if( ! $filename ) {
@@ -107,8 +111,9 @@ __EOF
 		my @parts = split(/\s+/, $line);
 		my $pos = 0;
         my $occurences = hex($parts[3]);
+        #print STDERR "# $parts[4] $occurences\n";
 		my $line_result = ""; 
-		my $occurs = 0;
+		my $occurs = 0;     # how often does it occur in texts according to the statistics?
 		for(my $i = 0; $i < 2*$occurences; $i += 2) {
 			my $syn = $parts[4+$i];
 			if( ! $syn ) {
@@ -124,12 +129,12 @@ __EOF
         $line_result =~ s/_/ /g;
 		if( $filename_stat ) {
 			if( $occurs > 0 ) {		# occurences of all synonyms together
-				print ";$line_result";
+				$line_result = "$prefix;$line_result";
 			} else {
 				next;
 			}
 		} else {
-			print ";$line_result";
+			$line_result = "$prefix;$line_result";
         }
 		my $ct = 0;
 		my $hyper = "";
@@ -145,10 +150,13 @@ __EOF
 		if($ct > 0) {
 			#print STDERR "** $ct hypernyms\n";
             $hyper =~ s/_/ /g;
-			print "#;$hyper\n";
+   			$line_result .= "#;$hyper\n";
 		} else {
-			print "#\n";
+   			$line_result .= "#\n";
 		}
+        if( $occurences > 1 || $ct > 0 ) {
+			print "$line_result";
+        }
 	}
 	close(IN);
 }
