@@ -25,4 +25,4 @@ servicetypesdir = $(kde_servicetypesdir)
 servicetypes_DATA=kexihandler.desktop
 
 servicesdir=$(kde_servicesdir)/kexi
-services_DATA=kexitablehandler.desktop kexiqueryhandler.desktop kexirelationhandler.desktop
+services_DATA=kexitablehandler.desktop kexiqueryhandler.desktop kexirelationhandler.desktop kexiformhandler.desktop

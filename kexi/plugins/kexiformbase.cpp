@@ -132,8 +132,6 @@ KexiFormBase::ViewGUIClient *KexiFormBase::m_viewGUIClient=0;
 KexiFormBase::KexiFormBase(KexiView *view, QWidget *parent, const char *name, QString identifier)
 	: KexiDialogBase(view,parent,name)
 {
-	kdDebug() << "KexiFormBase::KexiFormBase()" << endl;
-
 	setMinimumWidth(50);
 	setMinimumHeight(50);
 
@@ -150,9 +148,8 @@ KexiFormBase::KexiFormBase(KexiView *view, QWidget *parent, const char *name, QS
 	l->setAutoAdd(true);
 	topLevelEditor=new KFormEditor::WidgetContainer(this,"foo","bar");
 
-	PropertyEditor *pedit = new PropertyEditor(0);
-	pedit->show();
-
+	PropertyEditor *peditor = new PropertyEditor(0);
+	peditor->show();
 //	mainWindow()->guiFactory()->addClient(guiClient());
 //	activateActions();
 	registerAs(DocumentWindow);

@@ -31,6 +31,8 @@ class DCOPObject;
 class KexiRelation;
 class KexiProjectHandler;
 
+typedef QPtrList<KexiProjectHandler> ProviderList;
+
 class FileReference
 {
 public:

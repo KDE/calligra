@@ -392,6 +392,7 @@ void KexiTableView::sort()
 		return;
 	}
 
+	
 	m_contents->sort();
 
 	m_curRow = m_contents->findRef(m_pCurrentItem);

@@ -310,7 +310,6 @@ KexiRelationView::addConnection(SourceConnection conn, bool interactive)
 //	SourceConnection *c = &conn;
 	KexiRelationViewTableContainer *rcv = m_tables[conn.rcvTable];
 	KexiRelationViewTableContainer *src = m_tables[conn.srcTable];
-	
 
 	KexiRelationViewConnection *connView = new KexiRelationViewConnection(src, rcv, conn.srcField, conn.rcvField);
 	m_connectionViews.append(connView);

@@ -1,11 +1,11 @@
-kde_module_LTLIBRARIES = kexihandler_table.la kexihandler_query.la kexihandler_relation.la
+kde_module_LTLIBRARIES = kexihandler_table.la kexihandler_query.la kexihandler_relation.la kexihandler_form.la
 
 kexihandler_table_la_SOURCES = kexitablepart.cpp kexitablepartproxy.cpp kexialtertable.cpp
 kexihandler_table_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 kexihandler_table_la_LIBADD = ../core/libkexicore.la ../tableview/libkexidatatable.la \
 		../widget/libkexiextendedwidgets.la ../kexiDB/libkexidb.la
 
-kexihandler_query_la_SOURCES = kexiquerypart.cpp kexiquerydesigner.cpp kexiquerypartitem.cpp kexiquerypartproxy.cpp \
+kexihandler_query_la_SOURCES = kexiquerypart.cpp kexiquerydesigner.cpp kexiquerypartproxy.cpp kexiquerypartitem.cpp \
 				kexiquerydesignerguieditor.cpp
 kexihandler_query_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 kexihandler_query_la_LIBADD = ../core/libkexicore.la ../tableview/libkexidatatable.la ../widget/libkexiextendedwidgets.la
@@ -15,6 +15,11 @@ kexihandler_relation_la_SOURCES = kexirelationhandler.cpp kexirelationhandlerpro
 				kexirelationviewconnection.cpp
 kexihandler_relation_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 kexihandler_relation_la_LIBADD = ../core/libkexicore.la
+
+kexihandler_form_la_SOURCES = kexiformbase.cpp kexiformhandler.cpp kexiformhandlerproxy.cpp
+kexihandler_form_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
+kexihandler_form_la_LIBADD = ../core/libkexicore.la ../formeditor/libkformeditor.la \
+		../widget/libkexiextendedwidgets.la ../kexiDB/libkexidb.la
 
 SUBDIRS = . #kugar
 #SUBDIRS = . forms

@@ -63,7 +63,45 @@ CqlField::sqlType()
 {
 	switch(m_meta->columnType().typeType())
 	{
+		case CqlConstants::CQL_LONGVARCHAR:
 		case CqlConstants::CQL_CHAR:
+		case CqlConstants::CQL_CHARUC:
+			return SQLVarchar;
+
+		case CqlConstants::CQL_INTEGER:
+			return SQLInteger;
+
+		case CqlConstants::CQL_BIGINT:
+			return SQLBigInt;
+
+		case CqlConstants::CQL_LONGVARBINARY:
+		case CqlConstants::CQL_VARBINARY:
+		case CqlConstants::CQL_VARCHAR:
+			return SQLBoolean;
+
+		case CqlConstants::CQL_DATE:
+			return SQLDate;
+
+		case CqlConstants::CQL_REAL:
+		case CqlConstants::CQL_DECIMAL:
+			return SQLDecimal;
+
+		case CqlConstants::CQL_FLOAT:
+			return SQLFloat;
+
+		case CqlConstants::CQL_SMALLINT:
+			return SQLSmallInt;
+
+		case CqlConstants::CQL_TIME:
+		case CqlConstants::CQL_TIMESTAMP:
+		case CqlConstants::CQL_TINYINT:
+
+		case CqlConstants::CQL_COLUMN_UNDEFINED_TYPE:
+			return SQLInvalid;
+
+		case CqlConstants::CQL_BINARY:
+		case CqlConstants::CQL_BIT:
+//			return SqlBlob;	
 			return SQLVarchar;
 
 		default:

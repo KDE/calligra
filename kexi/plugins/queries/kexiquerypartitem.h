@@ -1,5 +1,5 @@
-#ifndef _KEXI_QUERY_PART_ITEM_H
-#define _KEXI_QUERY_PART_ITEM_H
+#ifndef KEXIQUERYPARTITEM_H
+#define KEXIQUERYPARTITEM_H
 
 #include <kexiprojecthandleritem.h>
 #include <qvaluelist.h>

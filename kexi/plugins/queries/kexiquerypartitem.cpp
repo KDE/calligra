@@ -96,3 +96,5 @@ void KexiQueryPartItem::load(KoStore* store) {
 	}
 }
 
+#include "kexiquerypartitem.moc"
+

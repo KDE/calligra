@@ -20,7 +20,7 @@ TODO:
 		- devide gui and meta
 
 	+ relationeditor
-		- try fixing the repaintbugs (worked long before koffice ;)
+		- store relations and sync views
 
 	+ general
 		- add from / to XML
