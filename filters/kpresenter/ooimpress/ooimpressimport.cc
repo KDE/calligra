@@ -2151,7 +2151,7 @@ QDomNode OoImpressImport::findAnimationByObjectID(const QString & id,  int & ord
     if (m_animations.isEmpty() )
         return QDomNode();
 
-    QDomElement *animation = m_animations[id];
+    animationList *animation = m_animations[id];
     //kdDebug()<<"QDomElement *animation = m_animations[id]; :"<<animation<<endl;
     if ( !animation )
         return QDomNode();
