@@ -32,6 +32,7 @@ Until beta2:
 - added formula indicator (small blue rectangle on the corner,
   when the cell holds a formula). idea from Quattro Pro
 - added Greek to EURO() function
+- new function category: Engineering
 
 new functions added:
  ISBLANK, CHAR, CODE, VALUE, DOLLAR, CONCATENATE, FIXED, T, TEXT, SUBSTITUTE,
