@@ -110,12 +110,6 @@
 #include "KSpreadViewIface.h"
 #include "kspread_dlg_paperlayout.h"
 
-/*****************************************************************************
- *
- * KSpreadView
- *
- *****************************************************************************/
-
 KSpreadScripts* KSpreadView::m_pGlobalScriptsDialog = 0L;
 
 // non flickering version of KSpell.
@@ -286,10 +280,187 @@ class KSpreadSpell : public KSpell
   }
 };
 
+class ViewActions
+{
+public:
+    KToggleAction* bold;
+    KToggleAction* italic;
+    KToggleAction* underline;
+    KToggleAction* strikeOut;
+    KToggleAction* percent;
+    KSelectAction* selectStyle;
+    KAction* createStyle;
+    KAction* precplus;
+    KAction* precminus;
+    KToggleAction* money;
+    KToggleAction* alignLeft;
+    KToggleAction* alignCenter;
+    KToggleAction* alignRight;
+    KToggleAction* alignTop;
+    KToggleAction* alignMiddle;
+    KToggleAction* alignBottom;
+    KAction* insertSeries;
+    KAction* insertLink;
+    KAction* insertFunction;
+    KAction* insertSpecialChar;
+    KAction* transform;
+    KAction* copy;
+    KAction* findAction;
+    KAction* replaceAction;
+    KAction* paste;
+    KAction* cut;
+    KAction* specialPaste;
+    KAction* del;
+    KAction* clearText;
+    KAction* clearComment;
+    KAction* clearValidity;
+    KAction* clearConditional;
+    KAction* fillRight;
+    KAction* fillLeft;
+    KAction* fillUp;
+    KAction* fillDown;
+    KAction* recalc_workbook;
+    KAction* recalc_worksheet;
+    KAction* adjust;
+    KAction* editCell;
+    KAction* undo;
+    KAction* redo;
+    KAction* paperLayout;
+    KAction* styleDialog;
+    KAction* definePrintRange;
+    KAction* resetPrintRange;
+    KAction* insertFromDatabase;
+    KAction* insertFromTextfile;
+    KAction* insertFromClipboard;
+    KAction* insertTable;
+    KAction* menuInsertTable;
+    KAction* removeTable;
+    KAction* renameTable;
+    KAction* nextTable;
+    KAction* prevTable;
+    KAction* firstTable;
+    KAction* lastTable;
+    KAction* editGlobalScripts;
+    KAction* editLocalScripts;
+    KAction* reloadScripts;
+    KAction* conditional;
+    KAction* validity;
+    KAction* sort;
+    KAction* goalSeek;
+    KAction* subTotals;
+    KAction* multipleOperations;
+    KAction* textToColumns;
+    KAction* consolidate;
+    KAction* help;
+    KAction* insertCellCopy;
+    KToggleAction* multiRow;
+    KFontAction* selectFont;
+    KFontSizeAction* selectFontSize;
+    KAction* deleteColumn;
+    KAction* hideColumn;
+    KAction* showColumn;
+    KAction* showSelColumns;
+    KAction* insertColumn;
+    KAction* deleteRow;
+    KAction* insertRow;
+    KAction* hideRow;
+    KAction* showRow;
+    KAction* showSelRows;
+    KSelectAction* formulaSelection;
+    KSelectAction* viewZoom;
+    KAction* sortDec;
+    KAction* sortInc;
+    TKSelectColorAction* textColor;
+    TKSelectColorAction* bgColor;
+    KAction* cellLayout;
+    KAction* hideTable;
+    KAction* showTable;
+    KAction* borderLeft;
+    KAction* borderRight;
+    KAction* borderTop;
+    KAction* borderBottom;
+    KAction* borderAll;
+    KAction* borderOutline;
+    KAction* borderRemove;
+    TKSelectColorAction* borderColor;
+    KAction* tableFormat;
+    KAction* autoSum;
+    KToggleAction* showPageBorders;
+    KActionMenu* scripts;
+    KAction* defaultFormat;
+    KAction* areaName;
+    KAction* showArea;
+    KAction* resizeRow;
+    KAction* resizeColumn;
+    KAction* fontSizeUp;
+    KAction* fontSizeDown;
+    KAction* upper;
+    KAction* lower;
+    KAction* equalizeRow;
+    KAction* equalizeColumn;
+    KAction* preference;
+    KAction* firstLetterUpper;
+    KToggleAction* verticalText;
+    KAction* addModifyComment;
+    KAction* removeComment;
+    KAction* insertCell;
+    KAction* removeCell;
+    KAction* changeAngle;
+    KAction* mergeCell;
+    KAction* dissociateCell;
+    KAction* gotoCell;
+    KAction* increaseIndent;
+    KAction* decreaseIndent;
+    KAction* sortList;
+    KAction* spellChecking;
+
+    KAction* createTemplate;
+
+    KAction* insertChartFrame;
+
+    KToggleAction* protectSheet;
+    KToggleAction* protectDoc;
+
+    KToggleAction* recordChanges;
+    KToggleAction* protectChanges;
+    KAction* filterChanges;
+    KAction* acceptRejectChanges;
+    KAction* commentChanges;
+    KAction* mergeDocument;
+
+    KToggleAction* menuCalcMin;
+    KToggleAction* menuCalcMax;
+    KToggleAction* menuCalcAverage;
+    KToggleAction* menuCalcCount;
+    KToggleAction* menuCalcSum;
+    KToggleAction* menuCalcNone;
+
+    KoPartSelectAction *insertPart;
+};
+
+class ViewPrivate
+{
+public:
+    View* view;
+
+    ViewActions* actions;
+
+};
+
+
+/*****************************************************************************
+ *
+ * KSpreadView
+ *
+ *****************************************************************************/
+
 KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
   : KoView( doc, _parent, _name )
 {
     ElapsedTime et( "KSpreadView constructor" );
+
+    d = new ViewPrivate;
+    d->actions = new ViewActions;
 
     m_popupMenuFirstToolId = 0;
     kdDebug(36001) << "sizeof(KSpreadCell)=" << sizeof(KSpreadCell) <<endl;
@@ -454,7 +625,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
           tbl->setHidden( false );
           QString tabName = tbl->tableName();
           m_pTabBar->addTab( tabName );
-          m_pTabBar->removeHiddenTab( tabName );
         }
       }
       setActiveTable( tbl );
@@ -477,11 +647,11 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     viewZoom( QString::number( m_pDoc->zoom() ) );
 
-    QStringList list = m_viewZoom->items();
+    QStringList list = d->actions->viewZoom->items();
     QString zoomStr( i18n("%1%").arg( m_pDoc->zoom()) );
-    m_viewZoom->setCurrentItem( list.findIndex(zoomStr)  );
+    d->actions->viewZoom->setCurrentItem( list.findIndex(zoomStr)  );
 
-    m_selectStyle->setItems( m_pDoc->styleManager()->styleNames() );
+    d->actions->selectStyle->setItems( m_pDoc->styleManager()->styleNames() );
 
     adjustActions( !m_pTable->isProtected() );
     adjustMapActions( !m_pDoc->map()->isProtected() );
@@ -492,53 +662,53 @@ void KSpreadView::initializeCalcActions()
 {
   //menu calc
   /*******************************/
-  m_menuCalcSum = new KToggleAction( i18n("Sum"), 0, actionCollection(),
+  d->actions->menuCalcSum = new KToggleAction( i18n("Sum"), 0, actionCollection(),
                                      "menu_sum");
-  connect( m_menuCalcSum, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->menuCalcSum, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
-  m_menuCalcSum->setExclusiveGroup( "Calc" );
-  m_menuCalcSum->setToolTip(i18n("Calculate using sum."));
+  d->actions->menuCalcSum->setExclusiveGroup( "Calc" );
+  d->actions->menuCalcSum->setToolTip(i18n("Calculate using sum."));
 
   /*******************************/
-  m_menuCalcMin = new KToggleAction( i18n("Min"), 0, actionCollection(),
+  d->actions->menuCalcMin = new KToggleAction( i18n("Min"), 0, actionCollection(),
                                      "menu_min");
-  connect( m_menuCalcMin, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->menuCalcMin, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
-  m_menuCalcMin->setExclusiveGroup( "Calc" );
-  m_menuCalcMin->setToolTip(i18n("Calculate using minimum."));
+  d->actions->menuCalcMin->setExclusiveGroup( "Calc" );
+  d->actions->menuCalcMin->setToolTip(i18n("Calculate using minimum."));
 
   /*******************************/
-  m_menuCalcMax = new KToggleAction( i18n("Max"), 0, actionCollection(),
+  d->actions->menuCalcMax = new KToggleAction( i18n("Max"), 0, actionCollection(),
                                      "menu_max");
-  connect( m_menuCalcMax, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->menuCalcMax, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
-  m_menuCalcMax->setExclusiveGroup( "Calc" );
-  m_menuCalcMax->setToolTip(i18n("Calculate using maximum."));
+  d->actions->menuCalcMax->setExclusiveGroup( "Calc" );
+  d->actions->menuCalcMax->setToolTip(i18n("Calculate using maximum."));
 
   /*******************************/
-  m_menuCalcAverage = new KToggleAction( i18n("Average"), 0, actionCollection(),
+  d->actions->menuCalcAverage = new KToggleAction( i18n("Average"), 0, actionCollection(),
                                          "menu_average");
-  connect( m_menuCalcAverage, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->menuCalcAverage, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
-  m_menuCalcAverage->setExclusiveGroup( "Calc" );
-  m_menuCalcAverage->setToolTip(i18n("Calculate using average."));
+  d->actions->menuCalcAverage->setExclusiveGroup( "Calc" );
+  d->actions->menuCalcAverage->setToolTip(i18n("Calculate using average."));
 
   /*******************************/
-  m_menuCalcCount = new KToggleAction( i18n("Count"), 0, actionCollection(),
+  d->actions->menuCalcCount = new KToggleAction( i18n("Count"), 0, actionCollection(),
                                        "menu_count");
-  connect( m_menuCalcCount, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->menuCalcCount, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
-  m_menuCalcCount->setExclusiveGroup( "Calc" );
-  m_menuCalcCount->setToolTip(i18n("Calculate using the count."));
+  d->actions->menuCalcCount->setExclusiveGroup( "Calc" );
+  d->actions->menuCalcCount->setToolTip(i18n("Calculate using the count."));
 
 
   /*******************************/
-  m_menuCalcNone = new KToggleAction( i18n("None"), 0, actionCollection(),
+  d->actions->menuCalcNone = new KToggleAction( i18n("None"), 0, actionCollection(),
                                       "menu_none");
-  connect( m_menuCalcNone, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->menuCalcNone, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
-  m_menuCalcNone->setExclusiveGroup( "Calc" );
-  m_menuCalcNone->setToolTip(i18n("No calculation"));
+  d->actions->menuCalcNone->setExclusiveGroup( "Calc" );
+  d->actions->menuCalcNone->setToolTip(i18n("No calculation"));
 
   /*******************************/
 }
@@ -546,257 +716,257 @@ void KSpreadView::initializeCalcActions()
 
 void KSpreadView::initializeInsertActions()
 {
-  m_insertFunction = new KAction( i18n("&Function..."), "funct", 0, this,
+  d->actions->insertFunction = new KAction( i18n("&Function..."), "funct", 0, this,
                                   SLOT( insertMathExpr() ), actionCollection(),
                                   "insertMathExpr" );
-  m_insertFunction->setToolTip(i18n("Insert math expression."));
+  d->actions->insertFunction->setToolTip(i18n("Insert math expression."));
 
-  m_insertSeries = new KAction( i18n("&Series..."),"series", 0, this,
+  d->actions->insertSeries = new KAction( i18n("&Series..."),"series", 0, this,
                                 SLOT( insertSeries() ), actionCollection(), "series");
-  m_insertSeries ->setToolTip(i18n("Insert a series."));
+  d->actions->insertSeries ->setToolTip(i18n("Insert a series."));
 
-  m_insertLink = new KAction( i18n("&Link..."), 0, this,
+  d->actions->insertLink = new KAction( i18n("&Link..."), 0, this,
                               SLOT( insertHyperlink() ), actionCollection(),
                               "insertHyperlink" );
-  m_insertLink->setToolTip(i18n("Insert an Internet hyperlink."));
+  d->actions->insertLink->setToolTip(i18n("Insert an Internet hyperlink."));
 
-  m_insertSpecialChar = new KAction( i18n( "S&pecial Character..." ), "char", this,
+  d->actions->insertSpecialChar = new KAction( i18n( "S&pecial Character..." ), "char", this,
                                      SLOT( insertSpecialChar() ), actionCollection(),
                                      "insertSpecialChar" );
-  m_insertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
+  d->actions->insertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
 
 
-  m_insertPart=new KoPartSelectAction( i18n("&Object"), "frame_query", this,
+  d->actions->insertPart=new KoPartSelectAction( i18n("&Object"), "frame_query", this,
                                        SLOT( insertObject() ),
                                        actionCollection(), "insertPart");
-  m_insertPart->setToolTip(i18n("Insert an object from another program."));
+  d->actions->insertPart->setToolTip(i18n("Insert an object from another program."));
 
-  m_insertChartFrame=new KAction( i18n("&Chart"), "frame_chart", 0, this,
+  d->actions->insertChartFrame=new KAction( i18n("&Chart"), "frame_chart", 0, this,
                                   SLOT( insertChart() ), actionCollection(),
                                   "insertChart" );
-  m_insertChartFrame->setToolTip(i18n("Insert a chart."));
+  d->actions->insertChartFrame->setToolTip(i18n("Insert a chart."));
 
 #ifndef QT_NO_SQL
-  m_insertFromDatabase = new KAction( i18n("From &Database..."), 0, this,
+  d->actions->insertFromDatabase = new KAction( i18n("From &Database..."), 0, this,
                                       SLOT( insertFromDatabase() ),
                                       actionCollection(), "insertFromDatabase");
-  m_insertFromDatabase->setToolTip(i18n("Insert data from a SQL database."));
+  d->actions->insertFromDatabase->setToolTip(i18n("Insert data from a SQL database."));
 #endif
 
-  m_insertFromTextfile = new KAction( i18n("From &Text File..."), 0, this,
+  d->actions->insertFromTextfile = new KAction( i18n("From &Text File..."), 0, this,
                                       SLOT( insertFromTextfile() ),
                                       actionCollection(), "insertFromTextfile");
-  m_insertFromTextfile->setToolTip(i18n("Insert data from a text file to the current cursor position/selection."));
-  m_insertFromClipboard = new KAction( i18n("From &Clipboard..."), 0, this,
+  d->actions->insertFromTextfile->setToolTip(i18n("Insert data from a text file to the current cursor position/selection."));
+  d->actions->insertFromClipboard = new KAction( i18n("From &Clipboard..."), 0, this,
                                       SLOT( insertFromClipboard() ),
                                       actionCollection(), "insertFromClipboard");
-  m_insertFromClipboard->setToolTip(i18n("Insert csv data from the clipboard to the current cursor position/selection."));
+  d->actions->insertFromClipboard->setToolTip(i18n("Insert csv data from the clipboard to the current cursor position/selection."));
 
 }
 
 void KSpreadView::initializeEditActions()
 {
-  m_copy = KStdAction::copy( this, SLOT( copySelection() ), actionCollection(),
+  d->actions->copy = KStdAction::copy( this, SLOT( copySelection() ), actionCollection(),
                              "copy" );
-  m_copy->setToolTip(i18n("Copy the cell object to the clipboard."));
+  d->actions->copy->setToolTip(i18n("Copy the cell object to the clipboard."));
 
-  m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(),
+  d->actions->paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(),
                                "paste" );
-  m_paste->setToolTip(i18n("Paste the contents of the clipboard at the cursor."));
+  d->actions->paste->setToolTip(i18n("Paste the contents of the clipboard at the cursor."));
 
-  m_cut = KStdAction::cut( this, SLOT( cutSelection() ), actionCollection(),
+  d->actions->cut = KStdAction::cut( this, SLOT( cutSelection() ), actionCollection(),
                            "cut" );
-  m_cut->setToolTip(i18n("Move the cell object to the clipboard."));
+  d->actions->cut->setToolTip(i18n("Move the cell object to the clipboard."));
 
-  m_specialPaste = new KAction( i18n("Special Paste..."), "special_paste",0,
+  d->actions->specialPaste = new KAction( i18n("Special Paste..."), "special_paste",0,
                                 this, SLOT( specialPaste() ), actionCollection(),
                                 "specialPaste" );
-  m_specialPaste->setToolTip
+  d->actions->specialPaste->setToolTip
     (i18n("Paste the contents of the clipboard with special options."));
 
-  m_insertCellCopy = new KAction( i18n("Paste with Insertion"),
+  d->actions->insertCellCopy = new KAction( i18n("Paste with Insertion"),
                                   "insertcellcopy", 0, this,
                                   SLOT( slotInsertCellCopy() ),
                                   actionCollection(), "insertCellCopy" );
-  m_insertCellCopy->setToolTip(i18n("Inserts a cell from the clipboard into the spreadsheet."));
+  d->actions->insertCellCopy->setToolTip(i18n("Inserts a cell from the clipboard into the spreadsheet."));
 
-  m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
-  m_undo->setEnabled( FALSE );
-  m_undo->setToolTip(i18n("Undo the previous action."));
+  d->actions->undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
+  d->actions->undo->setEnabled( FALSE );
+  d->actions->undo->setToolTip(i18n("Undo the previous action."));
 
-  m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );
-  m_redo->setEnabled( FALSE );
-  m_redo->setToolTip(i18n("Redo the action that has been undone."));
+  d->actions->redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );
+  d->actions->redo->setEnabled( FALSE );
+  d->actions->redo->setToolTip(i18n("Redo the action that has been undone."));
 
-  m_findAction = KStdAction::find(this, SLOT(find()), actionCollection());
-  /*m_findNext =*/ KStdAction::findNext( this, SLOT( findNext() ), actionCollection() );
-  /*m_findPrevious =*/ KStdAction::findPrev( this, SLOT( findPrevious() ), actionCollection() );
+  d->actions->findAction = KStdAction::find(this, SLOT(find()), actionCollection());
+  /*d->actions->findNext =*/ KStdAction::findNext( this, SLOT( findNext() ), actionCollection() );
+  /*d->actions->findPrevious =*/ KStdAction::findPrev( this, SLOT( findPrevious() ), actionCollection() );
 
-  m_replaceAction = KStdAction::replace(this, SLOT(replace()), actionCollection());
+  d->actions->replaceAction = KStdAction::replace(this, SLOT(replace()), actionCollection());
 
-  m_fillRight = new KAction( i18n( "&Right" ), 0, 0, this,
+  d->actions->fillRight = new KAction( i18n( "&Right" ), 0, 0, this,
                              SLOT( fillRight() ), actionCollection(), "fillRight" );
-  m_fillLeft = new KAction( i18n( "&Left" ), 0, 0, this,
+  d->actions->fillLeft = new KAction( i18n( "&Left" ), 0, 0, this,
                              SLOT( fillLeft() ), actionCollection(), "fillLeft" );
-  m_fillDown = new KAction( i18n( "&Down" ), 0, 0, this,
+  d->actions->fillDown = new KAction( i18n( "&Down" ), 0, 0, this,
                              SLOT( fillDown() ), actionCollection(), "fillDown" );
-  m_fillUp = new KAction( i18n( "&Up" ), 0, 0, this,
+  d->actions->fillUp = new KAction( i18n( "&Up" ), 0, 0, this,
                              SLOT( fillUp() ), actionCollection(), "fillUp" );
 }
 
 void KSpreadView::initializeAreaOperationActions()
 {
-  m_areaName = new KAction( i18n("Area Name..."), 0, this,
+  d->actions->areaName = new KAction( i18n("Area Name..."), 0, this,
                             SLOT( setAreaName() ), actionCollection(),
                             "areaname" );
-  m_areaName->setToolTip(i18n("Set a name for a region of the spreadsheet."));
+  d->actions->areaName->setToolTip(i18n("Set a name for a region of the spreadsheet."));
 
-  m_showArea = new KAction( i18n("Show Area..."), 0, this,
+  d->actions->showArea = new KAction( i18n("Show Area..."), 0, this,
                             SLOT( showAreaName() ), actionCollection(),
                             "showArea" );
-  m_showArea->setToolTip(i18n("Display a named area."));
+  d->actions->showArea->setToolTip(i18n("Display a named area."));
 
-  m_sortList = new KAction( i18n("Custom Lists..."), 0, this,
+  d->actions->sortList = new KAction( i18n("Custom Lists..."), 0, this,
                             SLOT( sortList() ), actionCollection(),
                             "sortlist" );
-  m_sortList->setToolTip(i18n("Create custom lists for sorting or autofill."));
+  d->actions->sortList->setToolTip(i18n("Create custom lists for sorting or autofill."));
 
-  m_sort = new KAction( i18n("&Sort..."), 0, this, SLOT( sort() ),
+  d->actions->sort = new KAction( i18n("&Sort..."), 0, this, SLOT( sort() ),
                         actionCollection(), "sort" );
-  m_sort->setToolTip(i18n("Sort a group of cells."));
+  d->actions->sort->setToolTip(i18n("Sort a group of cells."));
 
-  m_autoSum = new KAction( i18n("Autosum"), "black_sum", 0, this,
+  d->actions->autoSum = new KAction( i18n("Autosum"), "black_sum", 0, this,
                            SLOT( autoSum() ), actionCollection(), "autoSum" );
-  m_autoSum->setToolTip(i18n("Insert the 'sum' function"));
+  d->actions->autoSum->setToolTip(i18n("Insert the 'sum' function"));
 
-  m_sortDec = new KAction( i18n("Sort &Decreasing"), "sort_decrease", 0, this,
+  d->actions->sortDec = new KAction( i18n("Sort &Decreasing"), "sort_decrease", 0, this,
                            SLOT( sortDec() ), actionCollection(), "sortDec" );
-  m_sortDec->setToolTip(i18n("Sort a group of cells in decreasing (last to first) order."));
+  d->actions->sortDec->setToolTip(i18n("Sort a group of cells in decreasing (last to first) order."));
 
-  m_sortInc = new KAction( i18n("Sort &Increasing"), "sort_incr", 0, this,
+  d->actions->sortInc = new KAction( i18n("Sort &Increasing"), "sort_incr", 0, this,
                            SLOT( sortInc() ), actionCollection(), "sortInc" );
-  m_sortInc->setToolTip(i18n("Sort a group of cells in ascending (first to last) order."));
+  d->actions->sortInc->setToolTip(i18n("Sort a group of cells in ascending (first to last) order."));
 
-  m_goalSeek = new KAction( i18n("&Goal Seek..."), 0, this,
+  d->actions->goalSeek = new KAction( i18n("&Goal Seek..."), 0, this,
                             SLOT( goalSeek() ), actionCollection(), "goalSeek" );
-  m_goalSeek->setToolTip( i18n("Repeating calculation to find a specific value.") );
+  d->actions->goalSeek->setToolTip( i18n("Repeating calculation to find a specific value.") );
 
-  m_multipleOperations = new KAction( i18n("&Multiple Operations..."), 0, this,
+  d->actions->multipleOperations = new KAction( i18n("&Multiple Operations..."), 0, this,
                             SLOT( multipleOperations() ), actionCollection(), "multipleOperations" );
-  m_multipleOperations->setToolTip( i18n("Apply the same formula to various cells using different values for the parameter.") );
+  d->actions->multipleOperations->setToolTip( i18n("Apply the same formula to various cells using different values for the parameter.") );
 
-  m_subTotals = new KAction( i18n("&Subtotals..."), 0, this,
+  d->actions->subTotals = new KAction( i18n("&Subtotals..."), 0, this,
                              SLOT( subtotals() ), actionCollection(), "subtotals" );
-  m_subTotals->setToolTip( i18n("Create different kind of subtotals to a list or database.") );
+  d->actions->subTotals->setToolTip( i18n("Create different kind of subtotals to a list or database.") );
 
-  m_textToColumns = new KAction( i18n("&Text to Columns..."), 0, this,
+  d->actions->textToColumns = new KAction( i18n("&Text to Columns..."), 0, this,
                             SLOT( textToColumns() ), actionCollection(), "textToColumns" );
-  m_textToColumns->setToolTip( i18n("Expand the content of cells to multiple columns.") );
+  d->actions->textToColumns->setToolTip( i18n("Expand the content of cells to multiple columns.") );
 
-  m_consolidate = new KAction( i18n("&Consolidate..."), 0, this,
+  d->actions->consolidate = new KAction( i18n("&Consolidate..."), 0, this,
                                SLOT( consolidate() ), actionCollection(),
                                "consolidate" );
-  m_consolidate->setToolTip(i18n("Create a region of summary data from a group of similar regions."));
+  d->actions->consolidate->setToolTip(i18n("Create a region of summary data from a group of similar regions."));
 }
 
 void KSpreadView::initializeGlobalOperationActions()
 {
-  m_recalc_workbook = new KAction( i18n("Recalculate Workbook"), Key_F9, this,
+  d->actions->recalc_workbook = new KAction( i18n("Recalculate Workbook"), Key_F9, this,
                                    SLOT( recalcWorkBook() ), actionCollection(),
                                    "RecalcWorkBook" );
-  m_recalc_workbook->setToolTip(i18n("Recalculate the value of every cell in all worksheets."));
+  d->actions->recalc_workbook->setToolTip(i18n("Recalculate the value of every cell in all worksheets."));
 
-  m_recalc_worksheet = new KAction( i18n("Recalculate Sheet"), SHIFT + Key_F9,
+  d->actions->recalc_worksheet = new KAction( i18n("Recalculate Sheet"), SHIFT + Key_F9,
                                     this, SLOT( recalcWorkSheet() ),
                                     actionCollection(), "RecalcWorkSheet" );
-  m_recalc_worksheet->setToolTip(i18n("Recalculate the value of every cell in the current worksheet."));
+  d->actions->recalc_worksheet->setToolTip(i18n("Recalculate the value of every cell in the current worksheet."));
 
-  m_preference = new KAction( i18n("Configure KSpread..."),"configure", 0, this,
+  d->actions->preference = new KAction( i18n("Configure KSpread..."),"configure", 0, this,
                               SLOT( preference() ), actionCollection(),
                               "preference" );
-  m_preference->setToolTip(i18n("Set various KSpread options."));
+  d->actions->preference->setToolTip(i18n("Set various KSpread options."));
 
-  m_editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this,
+  d->actions->editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this,
                                      SLOT( editGlobalScripts() ),
                                      actionCollection(), "editGlobalScripts" );
-  m_editGlobalScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
+  d->actions->editGlobalScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
 
-  m_editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this,
+  d->actions->editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this,
                                     SLOT( editLocalScripts() ),
                                     actionCollection(), "editLocalScripts" );
-  m_editLocalScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
+  d->actions->editLocalScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
 
-  m_reloadScripts = new KAction( i18n("Reload Scripts"), 0, this,
+  d->actions->reloadScripts = new KAction( i18n("Reload Scripts"), 0, this,
                                  SLOT( reloadScripts() ), actionCollection(),
                                  "reloadScripts" );
-  m_reloadScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
+  d->actions->reloadScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
 
-  m_showPageBorders = new KToggleAction( i18n("Show Page Borders"), 0,
+  d->actions->showPageBorders = new KToggleAction( i18n("Show Page Borders"), 0,
                                          actionCollection(), "showPageBorders");
-  connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->showPageBorders, SIGNAL( toggled( bool ) ), this,
            SLOT( togglePageBorders( bool ) ) );
-  m_showPageBorders->setToolTip( i18n( "Show on the spreadsheet where the page borders will be." ) );
+  d->actions->showPageBorders->setToolTip( i18n( "Show on the spreadsheet where the page borders will be." ) );
 
-  m_protectSheet = new KToggleAction( i18n( "Protect &Sheet..." ), 0,
+  d->actions->protectSheet = new KToggleAction( i18n( "Protect &Sheet..." ), 0,
                                       actionCollection(), "protectSheet" );
-  m_protectSheet->setToolTip( i18n( "Protect the sheet from being modified." ) );
-  connect( m_protectSheet, SIGNAL( toggled( bool ) ), this,
+  d->actions->protectSheet->setToolTip( i18n( "Protect the sheet from being modified." ) );
+  connect( d->actions->protectSheet, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleProtectSheet( bool ) ) );
 
-  m_protectDoc = new KToggleAction( i18n( "Protect &Doc..." ), 0,
+  d->actions->protectDoc = new KToggleAction( i18n( "Protect &Doc..." ), 0,
                                       actionCollection(), "protectDoc" );
-  m_protectDoc->setToolTip( i18n( "Protect the document from being modified." ) );
-  connect( m_protectDoc, SIGNAL( toggled( bool ) ), this,
+  d->actions->protectDoc->setToolTip( i18n( "Protect the document from being modified." ) );
+  connect( d->actions->protectDoc, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleProtectDoc( bool ) ) );
 
-  m_recordChanges = new KToggleAction( i18n( "&Record Changes" ), 0,
+  d->actions->recordChanges = new KToggleAction( i18n( "&Record Changes" ), 0,
                                        actionCollection(), "recordChanges" );
-  m_recordChanges->setToolTip( i18n( "Record changes made to this document." ) );
-  connect( m_recordChanges, SIGNAL( toggled( bool ) ), this,
+  d->actions->recordChanges->setToolTip( i18n( "Record changes made to this document." ) );
+  connect( d->actions->recordChanges, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleRecordChanges( bool ) ) );
 
 
-  m_protectChanges = new KToggleAction( i18n( "&Protect Changes..." ), 0,
+  d->actions->protectChanges = new KToggleAction( i18n( "&Protect Changes..." ), 0,
                                         actionCollection(), "protectRecords" );
-  m_protectChanges->setToolTip( i18n( "Protect the change records from being accepted or rejected." ) );
-  m_protectChanges->setEnabled( false );
-  connect( m_protectChanges, SIGNAL( toggled( bool ) ), this,
+  d->actions->protectChanges->setToolTip( i18n( "Protect the change records from being accepted or rejected." ) );
+  d->actions->protectChanges->setEnabled( false );
+  connect( d->actions->protectChanges, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleProtectChanges( bool ) ) );
 
-  m_filterChanges = new KAction( i18n( "&Filter Changes..." ), 0, this,
+  d->actions->filterChanges = new KAction( i18n( "&Filter Changes..." ), 0, this,
                                  SLOT( filterChanges() ), actionCollection(),
                                  "filterChanges" );
-  m_filterChanges->setToolTip( i18n( "Change display settings for changes." ) );
-  m_filterChanges->setEnabled( false );
+  d->actions->filterChanges->setToolTip( i18n( "Change display settings for changes." ) );
+  d->actions->filterChanges->setEnabled( false );
 
-  m_acceptRejectChanges = new KAction( i18n( "&Accept or Reject..." ), 0, this,
+  d->actions->acceptRejectChanges = new KAction( i18n( "&Accept or Reject..." ), 0, this,
                                        SLOT( acceptRejectChanges() ), actionCollection(),
                                        "acceptRejectChanges" );
-  m_acceptRejectChanges->setToolTip( i18n( "Accept or reject changes made to this document." ) );
-  m_acceptRejectChanges->setEnabled( false );
+  d->actions->acceptRejectChanges->setToolTip( i18n( "Accept or reject changes made to this document." ) );
+  d->actions->acceptRejectChanges->setEnabled( false );
 
-  m_commentChanges = new KAction( i18n( "&Comment Changes..." ), 0, this,
+  d->actions->commentChanges = new KAction( i18n( "&Comment Changes..." ), 0, this,
                                   SLOT( commentChanges() ), actionCollection(),
                                   "commentChanges" );
-  m_commentChanges->setToolTip( i18n( "Add comments to changes you made." ) );
-  m_commentChanges->setEnabled( false );
+  d->actions->commentChanges->setToolTip( i18n( "Add comments to changes you made." ) );
+  d->actions->commentChanges->setEnabled( false );
 
-  m_mergeDocument = new KAction( i18n( "&Merge Document..." ), 0, this,
+  d->actions->mergeDocument = new KAction( i18n( "&Merge Document..." ), 0, this,
                                  SLOT( mergeDocument() ), actionCollection(),
                                  "mergeDocument" );
-  m_mergeDocument->setToolTip( i18n( "Merge this document with a document that recorded changes." ) );
+  d->actions->mergeDocument->setToolTip( i18n( "Merge this document with a document that recorded changes." ) );
 
-  m_viewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
+  d->actions->viewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
                                   actionCollection(), "view_zoom" );
 
-  connect( m_viewZoom, SIGNAL( activated( const QString & ) ),
+  connect( d->actions->viewZoom, SIGNAL( activated( const QString & ) ),
            this, SLOT( viewZoom( const QString & ) ) );
-  m_viewZoom->setEditable(true);
+  d->actions->viewZoom->setEditable(true);
   changeZoomMenu( m_pDoc->zoom() );
 
-  m_formulaSelection = new KSelectAction(i18n("Formula Selection"), 0,
+  d->actions->formulaSelection = new KSelectAction(i18n("Formula Selection"), 0,
                                          actionCollection(), "formulaSelection");
-  m_formulaSelection->setToolTip(i18n("Insert a function."));
+  d->actions->formulaSelection->setToolTip(i18n("Insert a function."));
   QStringList lst;
   lst.append( "SUM");
   lst.append( "AVERAGE");
@@ -805,169 +975,169 @@ void KSpreadView::initializeGlobalOperationActions()
   lst.append( "MIN");
   lst.append( "MAX");
   lst.append( i18n("Others...") );
-  ((KSelectAction*) m_formulaSelection)->setItems( lst );
-  m_formulaSelection->setComboWidth( 80 );
-  m_formulaSelection->setCurrentItem(0);
-  connect( m_formulaSelection, SIGNAL( activated( const QString& ) ),
+  ((KSelectAction*) d->actions->formulaSelection)->setItems( lst );
+  d->actions->formulaSelection->setComboWidth( 80 );
+  d->actions->formulaSelection->setCurrentItem(0);
+  connect( d->actions->formulaSelection, SIGNAL( activated( const QString& ) ),
            this, SLOT( formulaSelection( const QString& ) ) );
 
 
-  m_transform = new KAction( i18n("Transform Object..."), "rotate", 0, this,
+  d->actions->transform = new KAction( i18n("Transform Object..."), "rotate", 0, this,
                              SLOT( transformPart() ),
                              actionCollection(), "transform" );
-  m_transform->setToolTip(i18n("Rotate the contents of the cell."));
+  d->actions->transform->setToolTip(i18n("Rotate the contents of the cell."));
 
 
 
-  m_transform->setEnabled( FALSE );
-  connect( m_transform, SIGNAL( activated() ), this, SLOT( transformPart() ) );
+  d->actions->transform->setEnabled( FALSE );
+  connect( d->actions->transform, SIGNAL( activated() ), this, SLOT( transformPart() ) );
 
 
-  m_paperLayout = new KAction( i18n("Page Layout..."), 0, this,
+  d->actions->paperLayout = new KAction( i18n("Page Layout..."), 0, this,
                                SLOT( paperLayoutDlg() ), actionCollection(),
                                "paperLayout" );
-  m_paperLayout->setToolTip(i18n("Specify the layout of the spreadsheet for a printout."));
+  d->actions->paperLayout->setToolTip(i18n("Specify the layout of the spreadsheet for a printout."));
 
-  m_definePrintRange = new KAction( i18n("Define Print Range"), 0, this,
+  d->actions->definePrintRange = new KAction( i18n("Define Print Range"), 0, this,
                                     SLOT( definePrintRange() ), actionCollection(),
                                     "definePrintRange" );
-  m_definePrintRange->setToolTip(i18n("Define the print range in the current sheet."));
+  d->actions->definePrintRange->setToolTip(i18n("Define the print range in the current sheet."));
 
-  m_resetPrintRange = new KAction( i18n("Reset Print Range"), 0, this,
+  d->actions->resetPrintRange = new KAction( i18n("Reset Print Range"), 0, this,
                                    SLOT( resetPrintRange() ), actionCollection(),
                                    "resetPrintRange" );
-  m_definePrintRange->setToolTip(i18n("Define the print range in the current sheet."));
+  d->actions->definePrintRange->setToolTip(i18n("Define the print range in the current sheet."));
 
-  m_createTemplate = new KAction( i18n( "&Create Template From Document..." ), 0, this,
+  d->actions->createTemplate = new KAction( i18n( "&Create Template From Document..." ), 0, this,
                                   SLOT( createTemplate() ), actionCollection(), "createTemplate" );
 
-  m_styleDialog = new KAction( i18n( "Style Manager..." ), 0, this, SLOT( styleDialog() ),
+  d->actions->styleDialog = new KAction( i18n( "Style Manager..." ), 0, this, SLOT( styleDialog() ),
                                actionCollection(), "styles" );
-  m_styleDialog->setToolTip( i18n( "Edit and organize cell styles." ) );
+  d->actions->styleDialog->setToolTip( i18n( "Edit and organize cell styles." ) );
 
-  m_selectStyle = new KSelectAction( i18n( "St&yle" ), 0,
+  d->actions->selectStyle = new KSelectAction( i18n( "St&yle" ), 0,
                                      actionCollection(), "stylemenu" );
-  m_selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells." ) );
-  connect( m_selectStyle, SIGNAL( activated( const QString & ) ), this, SLOT( styleSelected( const QString & ) ) );
+  d->actions->selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells." ) );
+  connect( d->actions->selectStyle, SIGNAL( activated( const QString & ) ), this, SLOT( styleSelected( const QString & ) ) );
 
-  m_createStyle = new KAction( i18n( "Create Style From Cell..." ), 0,
+  d->actions->createStyle = new KAction( i18n( "Create Style From Cell..." ), 0,
                                this, SLOT( createStyleFromCell()), actionCollection(), "createStyle" );
-  m_createStyle->setToolTip( i18n( "Create a new style based on the currently selected cell." ) );
+  d->actions->createStyle->setToolTip( i18n( "Create a new style based on the currently selected cell." ) );
 }
 
 
 void KSpreadView::initializeCellOperationActions()
 {
-  m_editCell = new KAction( i18n("Modify Cell"),"cell_edit", CTRL + Key_M, this,
+  d->actions->editCell = new KAction( i18n("Modify Cell"),"cell_edit", CTRL + Key_M, this,
                             SLOT( editCell() ), actionCollection(), "editCell" );
-  m_editCell->setToolTip(i18n("Edit the highlighted cell."));
+  d->actions->editCell->setToolTip(i18n("Edit the highlighted cell."));
 
-  m_delete = new KAction( i18n("Delete"),"deletecell", 0, this,
+  d->actions->del = new KAction( i18n("Delete"),"deletecell", 0, this,
 
 			  SLOT( deleteSelection() ), actionCollection(),
                           "delete" );
-  m_delete->setToolTip(i18n("Delete all contents and formatting of the current cell."));
+  d->actions->del->setToolTip(i18n("Delete all contents and formatting of the current cell."));
 
-  m_clearText = new KAction( i18n("Text"), 0, this, SLOT( clearTextSelection() ),
+  d->actions->clearText = new KAction( i18n("Text"), 0, this, SLOT( clearTextSelection() ),
                              actionCollection(), "cleartext" );
-  m_clearText->setToolTip(i18n("Remove the contents of the current cell."));
+  d->actions->clearText->setToolTip(i18n("Remove the contents of the current cell."));
 
-  m_gotoCell = new KAction( i18n("Goto Cell..."),"goto", 0, this,
+  d->actions->gotoCell = new KAction( i18n("Goto Cell..."),"goto", 0, this,
                             SLOT( gotoCell() ), actionCollection(), "gotoCell" );
-  m_gotoCell->setToolTip(i18n("Move to a particular cell."));
+  d->actions->gotoCell->setToolTip(i18n("Move to a particular cell."));
 
-  m_mergeCell = new KAction( i18n("Merge Cells"),"mergecell" ,0, this,
+  d->actions->mergeCell = new KAction( i18n("Merge Cells"),"mergecell" ,0, this,
                              SLOT( mergeCell() ), actionCollection(),
                              "mergecell" );
-  m_mergeCell->setToolTip(i18n("Merge the selected region into one large cell."));
+  d->actions->mergeCell->setToolTip(i18n("Merge the selected region into one large cell."));
 
-  m_dissociateCell = new KAction( i18n("Dissociate Cells"),"dissociatecell" ,0,
+  d->actions->dissociateCell = new KAction( i18n("Dissociate Cells"),"dissociatecell" ,0,
                                   this, SLOT( dissociateCell() ),
                                   actionCollection(), "dissociatecell" );
-  m_dissociateCell->setToolTip(i18n("Unmerge the current cell."));
+  d->actions->dissociateCell->setToolTip(i18n("Unmerge the current cell."));
 
-  m_removeCell = new KAction( i18n("Remove Cells..."), "removecell", 0, this,
+  d->actions->removeCell = new KAction( i18n("Remove Cells..."), "removecell", 0, this,
                               SLOT( slotRemove() ), actionCollection(),
                               "removeCell" );
-  m_removeCell->setToolTip(i18n("Removes the current cell from the spreadsheet."));
+  d->actions->removeCell->setToolTip(i18n("Removes the current cell from the spreadsheet."));
 
-  m_insertCell = new KAction( i18n("Insert Cells..."), "insertcell", 0, this,
+  d->actions->insertCell = new KAction( i18n("Insert Cells..."), "insertcell", 0, this,
                               SLOT( slotInsert() ), actionCollection(),
                               "insertCell" );
-  m_insertCell->setToolTip(i18n("Insert a blank cell into the spreadsheet."));
+  d->actions->insertCell->setToolTip(i18n("Insert a blank cell into the spreadsheet."));
 
 }
 
 void KSpreadView::initializeCellPropertyActions()
 {
-  m_addModifyComment = new KAction( i18n("&Add/Modify Comment..."),"comment", 0,
+  d->actions->addModifyComment = new KAction( i18n("&Add/Modify Comment..."),"comment", 0,
                                     this, SLOT( addModifyComment() ),
                                     actionCollection(), "addmodifycomment" );
-  m_addModifyComment->setToolTip(i18n("Edit a comment for this cell."));
+  d->actions->addModifyComment->setToolTip(i18n("Edit a comment for this cell."));
 
-  m_removeComment = new KAction( i18n("&Remove Comment"),"removecomment", 0,
+  d->actions->removeComment = new KAction( i18n("&Remove Comment"),"removecomment", 0,
                                  this, SLOT( removeComment() ),
                                  actionCollection(), "removecomment" );
-  m_removeComment->setToolTip(i18n("Remove this cell's comment."));
+  d->actions->removeComment->setToolTip(i18n("Remove this cell's comment."));
 
-  m_conditional = new KAction( i18n("Conditional Cell Attributes..."), 0, this,
+  d->actions->conditional = new KAction( i18n("Conditional Cell Attributes..."), 0, this,
                                SLOT( conditional() ), actionCollection(),
                                "conditional" );
-  m_conditional->setToolTip(i18n("Set cell format based on certain conditions."));
+  d->actions->conditional->setToolTip(i18n("Set cell format based on certain conditions."));
 
-  m_validity = new KAction( i18n("Validity..."), 0, this, SLOT( validity() ),
+  d->actions->validity = new KAction( i18n("Validity..."), 0, this, SLOT( validity() ),
                             actionCollection(), "validity" );
-  m_validity->setToolTip(i18n("Set tests to confirm cell data is valid."));
+  d->actions->validity->setToolTip(i18n("Set tests to confirm cell data is valid."));
 
-  m_clearComment = new KAction( i18n("Comment"), 0, this,
+  d->actions->clearComment = new KAction( i18n("Comment"), 0, this,
                                 SLOT( clearCommentSelection() ),
                                 actionCollection(), "clearcomment" );
-  m_clearComment->setToolTip(i18n("Remove this cell's comment."));
+  d->actions->clearComment->setToolTip(i18n("Remove this cell's comment."));
 
-  m_clearValidity = new KAction( i18n("Validity"), 0, this,
+  d->actions->clearValidity = new KAction( i18n("Validity"), 0, this,
                                  SLOT( clearValiditySelection() ),
                                  actionCollection(), "clearvalidity" );
-  m_clearValidity->setToolTip(i18n("Remove the validity tests on this cell."));
+  d->actions->clearValidity->setToolTip(i18n("Remove the validity tests on this cell."));
 
-  m_clearConditional = new KAction( i18n("Conditional Cell Attributes"), 0, this,
+  d->actions->clearConditional = new KAction( i18n("Conditional Cell Attributes"), 0, this,
                                     SLOT( clearConditionalSelection() ),
                                     actionCollection(), "clearconditional" );
-  m_clearConditional->setToolTip(i18n("Remove the conditional cell formatting."));
+  d->actions->clearConditional->setToolTip(i18n("Remove the conditional cell formatting."));
 
-  m_increaseIndent = new KAction( i18n("Increase Indent"),
+  d->actions->increaseIndent = new KAction( i18n("Increase Indent"),
                                   QApplication::reverseLayout() ? "format_decreaseindent":"format_increaseindent",0, this,
                                   SLOT( increaseIndent() ), actionCollection(),
                                   "increaseindent" );
-  m_increaseIndent->setToolTip(i18n("Increase the indentation."));
+  d->actions->increaseIndent->setToolTip(i18n("Increase the indentation."));
 
-  m_decreaseIndent = new KAction( i18n("Decrease Indent"),
+  d->actions->decreaseIndent = new KAction( i18n("Decrease Indent"),
                                   QApplication::reverseLayout() ? "format_increaseindent" : "format_decreaseindent" ,0, this,
                                   SLOT( decreaseIndent() ), actionCollection(),
                                   "decreaseindent");
-  m_decreaseIndent->setToolTip(i18n("Decrease the indentation."));
+  d->actions->decreaseIndent->setToolTip(i18n("Decrease the indentation."));
 
-  m_multiRow = new KToggleAction( i18n("Multi Row"), "multirow", 0,
+  d->actions->multiRow = new KToggleAction( i18n("Multi Row"), "multirow", 0,
                                   actionCollection(), "multiRow" );
-  connect( m_multiRow, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->multiRow, SIGNAL( toggled( bool ) ), this,
            SLOT( multiRow( bool ) ) );
-  m_multiRow->setToolTip(i18n("Make the cell text wrap onto multiple lines."));
+  d->actions->multiRow->setToolTip(i18n("Make the cell text wrap onto multiple lines."));
 
-  m_cellLayout = new KAction( i18n("Cell Format..."),"cell_layout",
+  d->actions->cellLayout = new KAction( i18n("Cell Format..."),"cell_layout",
                               CTRL + ALT + Key_F, this, SLOT( layoutDlg() ),
                               actionCollection(), "cellLayout" );
-  m_cellLayout->setToolTip(i18n("Set the cell formatting."));
+  d->actions->cellLayout->setToolTip(i18n("Set the cell formatting."));
 
-  m_default = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ),
+  d->actions->defaultFormat = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ),
                            actionCollection(), "default" );
-  m_default->setToolTip(i18n("Resets to the default format."));
+  d->actions->defaultFormat->setToolTip(i18n("Resets to the default format."));
 
-  m_bgColor = new TKSelectColorAction( i18n("Background Color"),
+  d->actions->bgColor = new TKSelectColorAction( i18n("Background Color"),
                                        TKSelectColorAction::FillColor,
                                        actionCollection(), "backgroundColor",
                                        true );
-  connect(m_bgColor,SIGNAL(activated()),SLOT(changeBackgroundColor()));
-  m_bgColor->setDefaultColor(QColor());
-  m_bgColor->setToolTip(i18n("Set the background color."));
+  connect(d->actions->bgColor,SIGNAL(activated()),SLOT(changeBackgroundColor()));
+  d->actions->bgColor->setDefaultColor(QColor());
+  d->actions->bgColor->setToolTip(i18n("Set the background color."));
 
 }
 
@@ -975,358 +1145,358 @@ void KSpreadView::initializeCellPropertyActions()
 void KSpreadView::initializeTextFormatActions()
 {
   /*******************************/
-  m_percent = new KToggleAction( i18n("Percent Format"), "percent", 0,
+  d->actions->percent = new KToggleAction( i18n("Percent Format"), "percent", 0,
                                  actionCollection(), "percent");
-  connect( m_percent, SIGNAL( toggled( bool ) ), this, SLOT( percent( bool ) ) );
-  m_percent->setToolTip(i18n("Set the cell formatting to look like a percentage."));
+  connect( d->actions->percent, SIGNAL( toggled( bool ) ), this, SLOT( percent( bool ) ) );
+  d->actions->percent->setToolTip(i18n("Set the cell formatting to look like a percentage."));
 
   /*******************************/
-  m_precplus = new KAction( i18n("Increase Precision"), "prec_plus", 0, this,
+  d->actions->precplus = new KAction( i18n("Increase Precision"), "prec_plus", 0, this,
                             SLOT( precisionPlus() ), actionCollection(),
                             "precplus");
-  m_precplus->setToolTip(i18n("Increase the decimal precision shown onscreen."));
+  d->actions->precplus->setToolTip(i18n("Increase the decimal precision shown onscreen."));
 
   /*******************************/
-  m_precminus = new KAction( i18n("Decrease Precision"), "prec_minus", 0, this,
+  d->actions->precminus = new KAction( i18n("Decrease Precision"), "prec_minus", 0, this,
                              SLOT( precisionMinus() ), actionCollection(),
                              "precminus");
-  m_precminus->setToolTip(i18n("Decrease the decimal precision shown onscreen."));
+  d->actions->precminus->setToolTip(i18n("Decrease the decimal precision shown onscreen."));
 
   /*******************************/
-  m_money = new KToggleAction( i18n("Money Format"), "money", 0,
+  d->actions->money = new KToggleAction( i18n("Money Format"), "money", 0,
                                actionCollection(), "money");
-  connect( m_money, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->money, SIGNAL( toggled( bool ) ), this,
            SLOT( moneyFormat( bool ) ) );
-  m_money->setToolTip(i18n("Set the cell formatting to look like your local currency."));
+  d->actions->money->setToolTip(i18n("Set the cell formatting to look like your local currency."));
 
   /*******************************/
-  m_upper = new KAction( i18n("Upper Case"), "fontsizeup", 0, this,
+  d->actions->upper = new KAction( i18n("Upper Case"), "fontsizeup", 0, this,
                          SLOT( upper() ), actionCollection(), "upper" );
-  m_upper->setToolTip(i18n("Convert all letters to upper case."));
+  d->actions->upper->setToolTip(i18n("Convert all letters to upper case."));
 
   /*******************************/
-  m_lower = new KAction( i18n("Lower Case"), "fontsizedown", 0, this,
+  d->actions->lower = new KAction( i18n("Lower Case"), "fontsizedown", 0, this,
                          SLOT( lower() ), actionCollection(), "lower" );
-  m_lower->setToolTip(i18n("Convert all letters to lower case."));
+  d->actions->lower->setToolTip(i18n("Convert all letters to lower case."));
 
   /*******************************/
-  m_firstLetterUpper = new KAction( i18n("Convert First Letter to Upper Case"),
+  d->actions->firstLetterUpper = new KAction( i18n("Convert First Letter to Upper Case"),
                                     "first_letter_upper" ,0, this,
                                     SLOT( firstLetterUpper() ),
                                     actionCollection(), "firstletterupper" );
-  m_firstLetterUpper->setToolTip(i18n("Capitalize the first letter."));
+  d->actions->firstLetterUpper->setToolTip(i18n("Capitalize the first letter."));
 }
 
 void KSpreadView::initializeTextLayoutActions()
 {
   /*******************************/
-  m_alignLeft = new KToggleAction( i18n("Align Left"), "text_left", 0,
+  d->actions->alignLeft = new KToggleAction( i18n("Align Left"), "text_left", 0,
                                    actionCollection(), "left");
-  connect( m_alignLeft, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->alignLeft, SIGNAL( toggled( bool ) ), this,
            SLOT( alignLeft( bool ) ) );
-  m_alignLeft->setExclusiveGroup( "Align" );
-  m_alignLeft->setToolTip(i18n("Left justify the cell contents."));
+  d->actions->alignLeft->setExclusiveGroup( "Align" );
+  d->actions->alignLeft->setToolTip(i18n("Left justify the cell contents."));
 
   /*******************************/
-  m_alignCenter = new KToggleAction( i18n("Align Center"), "text_center", 0,
+  d->actions->alignCenter = new KToggleAction( i18n("Align Center"), "text_center", 0,
                                      actionCollection(), "center");
-  connect( m_alignCenter, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->alignCenter, SIGNAL( toggled( bool ) ), this,
            SLOT( alignCenter( bool ) ) );
-  m_alignCenter->setExclusiveGroup( "Align" );
-  m_alignCenter->setToolTip(i18n("Center the cell contents."));
+  d->actions->alignCenter->setExclusiveGroup( "Align" );
+  d->actions->alignCenter->setToolTip(i18n("Center the cell contents."));
 
   /*******************************/
-  m_alignRight = new KToggleAction( i18n("Align Right"), "text_right", 0,
+  d->actions->alignRight = new KToggleAction( i18n("Align Right"), "text_right", 0,
                                     actionCollection(), "right");
-  connect( m_alignRight, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->alignRight, SIGNAL( toggled( bool ) ), this,
            SLOT( alignRight( bool ) ) );
-  m_alignRight->setExclusiveGroup( "Align" );
-  m_alignRight->setToolTip(i18n("Right justify the cell contents."));
+  d->actions->alignRight->setExclusiveGroup( "Align" );
+  d->actions->alignRight->setToolTip(i18n("Right justify the cell contents."));
 
   /*******************************/
-  m_alignTop = new KToggleAction( i18n("Align Top"), "text_top", 0,
+  d->actions->alignTop = new KToggleAction( i18n("Align Top"), "text_top", 0,
                                   actionCollection(), "top");
-  connect( m_alignTop, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->alignTop, SIGNAL( toggled( bool ) ), this,
            SLOT( alignTop( bool ) ) );
-  m_alignTop->setExclusiveGroup( "Pos" );
-  m_alignTop->setToolTip(i18n("Align cell contents along the top of the cell."));
+  d->actions->alignTop->setExclusiveGroup( "Pos" );
+  d->actions->alignTop->setToolTip(i18n("Align cell contents along the top of the cell."));
 
   /*******************************/
-  m_alignMiddle = new KToggleAction( i18n("Align Middle"), "middle", 0,
+  d->actions->alignMiddle = new KToggleAction( i18n("Align Middle"), "middle", 0,
                                      actionCollection(), "middle");
-  connect( m_alignMiddle, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->alignMiddle, SIGNAL( toggled( bool ) ), this,
            SLOT( alignMiddle( bool ) ) );
-  m_alignMiddle->setExclusiveGroup( "Pos" );
-  m_alignMiddle->setToolTip(i18n("Align cell contents centered in the cell."));
+  d->actions->alignMiddle->setExclusiveGroup( "Pos" );
+  d->actions->alignMiddle->setToolTip(i18n("Align cell contents centered in the cell."));
 
   /*******************************/
-  m_alignBottom = new KToggleAction( i18n("Align Bottom"), "text_bottom", 0,
+  d->actions->alignBottom = new KToggleAction( i18n("Align Bottom"), "text_bottom", 0,
                                      actionCollection(), "bottom");
-  connect( m_alignBottom, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->alignBottom, SIGNAL( toggled( bool ) ), this,
            SLOT( alignBottom( bool ) ) );
-  m_alignBottom->setExclusiveGroup( "Pos" );
-  m_alignBottom->setToolTip(i18n("Align cell contents along the bottom of the cell."));
+  d->actions->alignBottom->setExclusiveGroup( "Pos" );
+  d->actions->alignBottom->setToolTip(i18n("Align cell contents along the bottom of the cell."));
 
   /*******************************/
-  m_verticalText = new KToggleAction( i18n("Vertical Text"),"vertical_text" ,
+  d->actions->verticalText = new KToggleAction( i18n("Vertical Text"),"vertical_text" ,
                                       0 ,actionCollection(), "verticaltext" );
-  connect( m_verticalText, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->verticalText, SIGNAL( toggled( bool ) ), this,
            SLOT( verticalText( bool ) ) );
-  m_verticalText->setToolTip(i18n("Print cell contents vertically."));
+  d->actions->verticalText->setToolTip(i18n("Print cell contents vertically."));
 
   /*******************************/
-  m_changeAngle = new KAction( i18n("Change Angle..."), 0, this,
+  d->actions->changeAngle = new KAction( i18n("Change Angle..."), 0, this,
                                SLOT( changeAngle() ), actionCollection(),
                                "changeangle" );
-  m_changeAngle->setToolTip(i18n("Change the angle that cell contents are printed."));
+  d->actions->changeAngle->setToolTip(i18n("Change the angle that cell contents are printed."));
 }
 
 void KSpreadView::initializeTextPropertyActions()
 {
   /*******************************/
-  m_bold = new KToggleAction( i18n("Bold"), "text_bold", CTRL + Key_B,
+  d->actions->bold = new KToggleAction( i18n("Bold"), "text_bold", CTRL + Key_B,
                               actionCollection(), "bold");
-  connect( m_bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
+  connect( d->actions->bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
 
   /*******************************/
-  m_italic = new KToggleAction( i18n("Italic"), "text_italic", CTRL + Key_I,
+  d->actions->italic = new KToggleAction( i18n("Italic"), "text_italic", CTRL + Key_I,
                                 actionCollection(), "italic");
-  connect( m_italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
+  connect( d->actions->italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
 
   /*******************************/
-  m_underline = new KToggleAction( i18n("Underline"), "text_under",
+  d->actions->underline = new KToggleAction( i18n("Underline"), "text_under",
                                    CTRL + Key_U, actionCollection(),
                                    "underline");
-  connect( m_underline, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->underline, SIGNAL( toggled( bool ) ), this,
            SLOT( underline( bool ) ) );
 
   /*******************************/
-  m_strikeOut = new KToggleAction( i18n("Strike Out"), "text_strike", 0,
+  d->actions->strikeOut = new KToggleAction( i18n("Strike Out"), "text_strike", 0,
                                    actionCollection(), "strikeout");
-  connect( m_strikeOut, SIGNAL( toggled( bool ) ), this,
+  connect( d->actions->strikeOut, SIGNAL( toggled( bool ) ), this,
            SLOT( strikeOut( bool ) ) );
 
   /*******************************/
-  m_selectFont = new KFontAction( i18n("Select Font..."), 0, actionCollection(),
+  d->actions->selectFont = new KFontAction( i18n("Select Font..."), 0, actionCollection(),
                                   "selectFont" );
-  connect( m_selectFont, SIGNAL( activated( const QString& ) ), this,
+  connect( d->actions->selectFont, SIGNAL( activated( const QString& ) ), this,
            SLOT( fontSelected( const QString& ) ) );
 
   /*******************************/
-  m_selectFontSize = new KFontSizeAction( i18n("Select Font Size"), 0,
+  d->actions->selectFontSize = new KFontSizeAction( i18n("Select Font Size"), 0,
                                           actionCollection(), "selectFontSize" );
-  connect( m_selectFontSize, SIGNAL( fontSizeChanged( int ) ), this,
+  connect( d->actions->selectFontSize, SIGNAL( fontSizeChanged( int ) ), this,
            SLOT( fontSizeSelected( int ) ) );
 
   /*******************************/
-  m_fontSizeUp = new KAction( i18n("Increase Font Size"), "fontsizeup", 0, this,
+  d->actions->fontSizeUp = new KAction( i18n("Increase Font Size"), "fontsizeup", 0, this,
                               SLOT( increaseFontSize() ), actionCollection(),
                               "increaseFontSize" );
 
   /*******************************/
-  m_fontSizeDown = new KAction( i18n("Decrease Font Size"), "fontsizedown", 0,
+  d->actions->fontSizeDown = new KAction( i18n("Decrease Font Size"), "fontsizedown", 0,
                                 this, SLOT( decreaseFontSize() ),
                                 actionCollection(), "decreaseFontSize" );
 
   /*******************************/
-  m_textColor = new TKSelectColorAction( i18n("Text Color"),
+  d->actions->textColor = new TKSelectColorAction( i18n("Text Color"),
                                          TKSelectColorAction::TextColor,
                                          actionCollection(), "textColor",true );
-  connect( m_textColor, SIGNAL(activated()), SLOT(changeTextColor()) );
-  m_textColor->setDefaultColor(QColor());
+  connect( d->actions->textColor, SIGNAL(activated()), SLOT(changeTextColor()) );
+  d->actions->textColor->setDefaultColor(QColor());
 
   /*******************************/
 }
 
 void KSpreadView::initializeTableActions()
 {
-  m_insertTable = new KAction( i18n("Insert Sheet"),"inserttable", 0, this,
+  d->actions->insertTable = new KAction( i18n("Insert Sheet"),"inserttable", 0, this,
                                SLOT( insertTable() ), actionCollection(),
                                "insertTable" );
-  m_insertTable->setToolTip(i18n("Insert a new sheet."));
+  d->actions->insertTable->setToolTip(i18n("Insert a new sheet."));
 
   /* basically the same action here, but it's in the insert menu so we don't
      want to also have 'insert' in the caption
   */
-  m_menuInsertTable = new KAction( i18n("&Sheet"),"inserttable", 0, this,
+  d->actions->menuInsertTable = new KAction( i18n("&Sheet"),"inserttable", 0, this,
                                SLOT( insertTable() ), actionCollection(),
                                "menuInsertTable" );
-  m_menuInsertTable->setToolTip(i18n("Insert a new sheet."));
+  d->actions->menuInsertTable->setToolTip(i18n("Insert a new sheet."));
 
-  m_removeTable = new KAction( i18n("Remove Sheet"), "delete_table",0,this,
+  d->actions->removeTable = new KAction( i18n("Remove Sheet"), "delete_table",0,this,
                                SLOT( removeTable() ), actionCollection(),
                                "removeTable" );
-  m_removeTable->setToolTip(i18n("Remove the active sheet."));
+  d->actions->removeTable->setToolTip(i18n("Remove the active sheet."));
 
-  m_renameTable=new KAction( i18n("Rename Sheet..."),0,this,
+  d->actions->renameTable=new KAction( i18n("Rename Sheet..."),0,this,
                              SLOT( slotRename() ), actionCollection(),
                              "renameTable" );
-  m_renameTable->setToolTip(i18n("Rename the active sheet."));
+  d->actions->renameTable->setToolTip(i18n("Rename the active sheet."));
 
-  m_nextTable = new KAction( i18n("Next Sheet"), CTRL + Key_PageDown, this,
+  d->actions->nextTable = new KAction( i18n("Next Sheet"), CTRL + Key_PageDown, this,
                              SLOT( nextTable() ), actionCollection(),
                              "nextTable");
-  m_nextTable->setToolTip(i18n("Move to the next sheet."));
+  d->actions->nextTable->setToolTip(i18n("Move to the next sheet."));
 
-  m_prevTable = new KAction( i18n("Previous Sheet"), CTRL + Key_PageUp, this,
+  d->actions->prevTable = new KAction( i18n("Previous Sheet"), CTRL + Key_PageUp, this,
                              SLOT( previousTable() ), actionCollection(),
                              "previousTable");
-  m_prevTable->setToolTip(i18n("Move to the previous sheet."));
+  d->actions->prevTable->setToolTip(i18n("Move to the previous sheet."));
 
-  m_firstTable = new KAction( i18n("First Sheet"), 0, this,
+  d->actions->firstTable = new KAction( i18n("First Sheet"), 0, this,
                               SLOT( firstTable() ), actionCollection(),
                               "firstTable");
-  m_firstTable->setToolTip(i18n("Move to the first sheet."));
+  d->actions->firstTable->setToolTip(i18n("Move to the first sheet."));
 
-  m_lastTable = new KAction( i18n("Last Sheet"), 0, this,
+  d->actions->lastTable = new KAction( i18n("Last Sheet"), 0, this,
                              SLOT( lastTable() ), actionCollection(),
                              "lastTable");
-  m_lastTable->setToolTip(i18n("Move to the last sheet."));
+  d->actions->lastTable->setToolTip(i18n("Move to the last sheet."));
 
-  m_showTable = new KAction(i18n("Show Sheet..."),0 ,this,SLOT( showTable()),
+  d->actions->showTable = new KAction(i18n("Show Sheet..."),0 ,this,SLOT( showTable()),
                             actionCollection(), "showTable" );
-  m_showTable->setToolTip(i18n("Show a hidden sheet."));
+  d->actions->showTable->setToolTip(i18n("Show a hidden sheet."));
 
-  m_hideTable = new KAction(i18n("Hide Sheet"),0 ,this,SLOT( hideTable()),
+  d->actions->hideTable = new KAction(i18n("Hide Sheet"),0 ,this,SLOT( hideTable()),
                             actionCollection(), "hideTable" );
-  m_hideTable->setToolTip(i18n("Hide the active sheet."));
+  d->actions->hideTable->setToolTip(i18n("Hide the active sheet."));
 
-  m_tableFormat = new KAction( i18n("AutoFormat..."), 0, this,
+  d->actions->tableFormat = new KAction( i18n("AutoFormat..."), 0, this,
                                SLOT( tableFormat() ), actionCollection(),
                                "tableFormat" );
-  m_tableFormat->setToolTip(i18n("Set the worksheet formatting."));
+  d->actions->tableFormat->setToolTip(i18n("Set the worksheet formatting."));
 }
 
 void KSpreadView::initializeSpellChecking()
 {
-  m_spellChecking = KStdAction::spelling( this, SLOT( extraSpelling() ),
+  d->actions->spellChecking = KStdAction::spelling( this, SLOT( extraSpelling() ),
                                           actionCollection(), "spelling" );
-  m_spellChecking->setToolTip(i18n("Check the spelling."));
+  d->actions->spellChecking->setToolTip(i18n("Check the spelling."));
 }
 
 
 void KSpreadView::initializeRowColumnActions()
 {
-  m_adjust = new KAction( i18n("Adjust Row && Column"), 0, this,
+  d->actions->adjust = new KAction( i18n("Adjust Row && Column"), 0, this,
                           SLOT( adjust() ), actionCollection(), "adjust" );
-  m_adjust->setToolTip(i18n("Adjusts row/column size so that the contents will fit."));
+  d->actions->adjust->setToolTip(i18n("Adjusts row/column size so that the contents will fit."));
 
-  m_resizeRow = new KAction( i18n("Resize Row..."), "resizerow", 0, this,
+  d->actions->resizeRow = new KAction( i18n("Resize Row..."), "resizerow", 0, this,
                              SLOT( resizeRow() ), actionCollection(),
                              "resizeRow" );
-  m_resizeRow->setToolTip(i18n("Change the height of a row."));
+  d->actions->resizeRow->setToolTip(i18n("Change the height of a row."));
 
-  m_resizeColumn = new KAction( i18n("Resize Column..."), "resizecol", 0, this,
+  d->actions->resizeColumn = new KAction( i18n("Resize Column..."), "resizecol", 0, this,
                                 SLOT( resizeColumn() ), actionCollection(),
                                 "resizeCol" );
-  m_resizeColumn->setToolTip(i18n("Change the width of a column."));
+  d->actions->resizeColumn->setToolTip(i18n("Change the width of a column."));
 
-  m_equalizeRow = new KAction( i18n("Equalize Row"), "adjustrow", 0, this,
+  d->actions->equalizeRow = new KAction( i18n("Equalize Row"), "adjustrow", 0, this,
                                SLOT( equalizeRow() ), actionCollection(),
                                "equalizeRow" );
-  m_equalizeRow->setToolTip(i18n("Resizes selected rows to be the same size."));
+  d->actions->equalizeRow->setToolTip(i18n("Resizes selected rows to be the same size."));
 
-  m_equalizeColumn = new KAction( i18n("Equalize Column"), "adjustcol", 0, this,
+  d->actions->equalizeColumn = new KAction( i18n("Equalize Column"), "adjustcol", 0, this,
                                   SLOT( equalizeColumn() ), actionCollection(),
                                   "equalizeCol" );
-  m_equalizeColumn->setToolTip(i18n("Resizes selected columns to be the same size."));
+  d->actions->equalizeColumn->setToolTip(i18n("Resizes selected columns to be the same size."));
 
-  m_deleteColumn = new KAction( i18n("Delete Columns"), "delete_table_col", 0,
+  d->actions->deleteColumn = new KAction( i18n("Delete Columns"), "delete_table_col", 0,
                                 this, SLOT( deleteColumn() ),
                                 actionCollection(), "deleteColumn" );
-  m_deleteColumn->setToolTip(i18n("Removes a column from the spreadsheet."));
+  d->actions->deleteColumn->setToolTip(i18n("Removes a column from the spreadsheet."));
 
-  m_deleteRow = new KAction( i18n("Delete Rows"), "delete_table_row", 0, this,
+  d->actions->deleteRow = new KAction( i18n("Delete Rows"), "delete_table_row", 0, this,
                              SLOT( deleteRow() ), actionCollection(),
                              "deleteRow" );
-  m_deleteRow->setToolTip(i18n("Removes a row from the spreadsheet."));
+  d->actions->deleteRow->setToolTip(i18n("Removes a row from the spreadsheet."));
 
-  m_insertColumn = new KAction( i18n("Insert Columns"), "insert_table_col" ,
+  d->actions->insertColumn = new KAction( i18n("Insert Columns"), "insert_table_col" ,
                                 0, this, SLOT( insertColumn() ),
                                 actionCollection(), "insertColumn" );
-  m_insertColumn->setToolTip(i18n("Inserts a new column into the spreadsheet."));
+  d->actions->insertColumn->setToolTip(i18n("Inserts a new column into the spreadsheet."));
 
-  m_insertRow = new KAction( i18n("Insert Rows"), "insert_table_row", 0, this,
+  d->actions->insertRow = new KAction( i18n("Insert Rows"), "insert_table_row", 0, this,
                              SLOT( insertRow() ), actionCollection(),
                              "insertRow" );
-  m_insertRow->setToolTip(i18n("Inserts a new row into the spreadsheet."));
+  d->actions->insertRow->setToolTip(i18n("Inserts a new row into the spreadsheet."));
 
-  m_hideRow = new KAction( i18n("Hide Rows"), "hide_table_row", 0, this,
+  d->actions->hideRow = new KAction( i18n("Hide Rows"), "hide_table_row", 0, this,
                            SLOT( hideRow() ), actionCollection(), "hideRow" );
-  m_hideRow->setToolTip(i18n("Hide a row from view."));
+  d->actions->hideRow->setToolTip(i18n("Hide a row from view."));
 
-  m_showRow = new KAction( i18n("Show Rows..."), "show_table_row", 0, this,
+  d->actions->showRow = new KAction( i18n("Show Rows..."), "show_table_row", 0, this,
                            SLOT( showRow() ), actionCollection(), "showRow" );
-  m_showRow->setToolTip(i18n("Show hidden rows."));
+  d->actions->showRow->setToolTip(i18n("Show hidden rows."));
 
-  m_showSelRows = new KAction( i18n("Show Rows"), "show_table_row", 0, this,
+  d->actions->showSelRows = new KAction( i18n("Show Rows"), "show_table_row", 0, this,
                                SLOT( showSelRows() ), actionCollection(),
                                "showSelRows" );
-  m_showSelRows->setEnabled(false);
-  m_showSelRows->setToolTip(i18n("Show hidden rows in the selection."));
+  d->actions->showSelRows->setEnabled(false);
+  d->actions->showSelRows->setToolTip(i18n("Show hidden rows in the selection."));
 
-  m_hideColumn = new KAction( i18n("Hide Columns"), "hide_table_column", 0,
+  d->actions->hideColumn = new KAction( i18n("Hide Columns"), "hide_table_column", 0,
                               this, SLOT( hideColumn() ), actionCollection(),
                               "hideColumn" );
-  m_hideColumn->setToolTip(i18n("Hide the column from view."));
+  d->actions->hideColumn->setToolTip(i18n("Hide the column from view."));
 
-  m_showColumn = new KAction( i18n("Show Columns..."), "show_table_column", 0,
+  d->actions->showColumn = new KAction( i18n("Show Columns..."), "show_table_column", 0,
                               this, SLOT( showColumn() ), actionCollection(),
                               "showColumn" );
-  m_showColumn->setToolTip(i18n("Show hidden columns."));
+  d->actions->showColumn->setToolTip(i18n("Show hidden columns."));
 
-  m_showSelColumns = new KAction( i18n("Show Columns"), "show_table_column",
+  d->actions->showSelColumns = new KAction( i18n("Show Columns"), "show_table_column",
                                   0, this, SLOT( showSelColumns() ),
                                   actionCollection(), "showSelColumns" );
-  m_showSelColumns->setToolTip(i18n("Show hidden columns in the selection."));
-  m_showSelColumns->setEnabled(false);
+  d->actions->showSelColumns->setToolTip(i18n("Show hidden columns in the selection."));
+  d->actions->showSelColumns->setEnabled(false);
 
 }
 
 
 void KSpreadView::initializeBorderActions()
 {
-  m_borderLeft = new KAction( i18n("Border Left"), "border_left", 0, this,
+  d->actions->borderLeft = new KAction( i18n("Border Left"), "border_left", 0, this,
                               SLOT( borderLeft() ), actionCollection(),
                               "borderLeft" );
-  m_borderLeft->setToolTip(i18n("Set a left border to the selected area."));
+  d->actions->borderLeft->setToolTip(i18n("Set a left border to the selected area."));
 
-  m_borderRight = new KAction( i18n("Border Right"), "border_right", 0, this,
+  d->actions->borderRight = new KAction( i18n("Border Right"), "border_right", 0, this,
                                SLOT( borderRight() ), actionCollection(),
                                "borderRight" );
-  m_borderRight->setToolTip(i18n("Set a right border to the selected area."));
+  d->actions->borderRight->setToolTip(i18n("Set a right border to the selected area."));
 
-  m_borderTop = new KAction( i18n("Border Top"), "border_top", 0, this,
+  d->actions->borderTop = new KAction( i18n("Border Top"), "border_top", 0, this,
                              SLOT( borderTop() ), actionCollection(),
                              "borderTop" );
-  m_borderTop->setToolTip(i18n("Set a top border to the selected area."));
+  d->actions->borderTop->setToolTip(i18n("Set a top border to the selected area."));
 
-  m_borderBottom = new KAction( i18n("Border Bottom"), "border_bottom", 0, this,
+  d->actions->borderBottom = new KAction( i18n("Border Bottom"), "border_bottom", 0, this,
                                 SLOT( borderBottom() ), actionCollection(),
                                 "borderBottom" );
-  m_borderBottom->setToolTip(i18n("Set a bottom border to the selected area."));
+  d->actions->borderBottom->setToolTip(i18n("Set a bottom border to the selected area."));
 
-  m_borderAll = new KAction( i18n("All Borders"), "border_all", 0, this,
+  d->actions->borderAll = new KAction( i18n("All Borders"), "border_all", 0, this,
                              SLOT( borderAll() ), actionCollection(),
                              "borderAll" );
-  m_borderAll->setToolTip(i18n("Set a border around all cells in the selected area."));
+  d->actions->borderAll->setToolTip(i18n("Set a border around all cells in the selected area."));
 
-  m_borderRemove = new KAction( i18n("Remove Borders"), "border_remove", 0,
+  d->actions->borderRemove = new KAction( i18n("Remove Borders"), "border_remove", 0,
                                 this, SLOT( borderRemove() ), actionCollection(),
                                 "borderRemove" );
-  m_borderRemove->setToolTip(i18n("Remove all borders in the selected area."));
+  d->actions->borderRemove->setToolTip(i18n("Remove all borders in the selected area."));
 
-  m_borderOutline = new KAction( i18n("Border Outline"), ("border_outline"), 0,
+  d->actions->borderOutline = new KAction( i18n("Border Outline"), ("border_outline"), 0,
                                  this, SLOT( borderOutline() ),
                                  actionCollection(), "borderOutline" );
-  m_borderOutline->setToolTip(i18n("Set a border to the outline of the selected area."));
+  d->actions->borderOutline->setToolTip(i18n("Set a border to the outline of the selected area."));
 
-  m_borderColor = new TKSelectColorAction( i18n("Border Color"),
+  d->actions->borderColor = new TKSelectColorAction( i18n("Border Color"),
                                            TKSelectColorAction::LineColor,
                                            actionCollection(), "borderColor" );
 
-  connect( m_borderColor, SIGNAL(activated()), SLOT(changeBorderColor()) );
-  m_borderColor->setToolTip( i18n( "Select a new border color." ) );
+  connect( d->actions->borderColor, SIGNAL(activated()), SLOT(changeBorderColor()) );
+  d->actions->borderColor->setToolTip( i18n( "Select a new border color." ) );
 
 }
 
@@ -1363,6 +1533,9 @@ KSpreadView::~KSpreadView()
 
     delete m_pInsertHandle;
     m_pInsertHandle = 0L;
+
+    delete d->actions;
+    delete d;
 }
 
 
@@ -1438,25 +1611,25 @@ void KSpreadView::initCalcMenu()
     switch( doc()->getTypeOfCalc())
     {
         case  SumOfNumber:
-            m_menuCalcSum->setChecked(true);
+            d->actions->menuCalcSum->setChecked(true);
             break;
         case  Min:
-            m_menuCalcMin->setChecked(true);
+            d->actions->menuCalcMin->setChecked(true);
             break;
         case  Max:
-            m_menuCalcMax->setChecked(true);
+            d->actions->menuCalcMax->setChecked(true);
             break;
         case  Average:
-            m_menuCalcAverage->setChecked(true);
+            d->actions->menuCalcAverage->setChecked(true);
             break;
         case  Count:
-            m_menuCalcCount->setChecked(true);
+            d->actions->menuCalcCount->setChecked(true);
             break;
         case  NoneCalc:
-            m_menuCalcNone->setChecked(true);
+            d->actions->menuCalcNone->setChecked(true);
             break;
         default :
-            m_menuCalcSum->setChecked(true);
+            d->actions->menuCalcSum->setChecked(true);
             break;
     }
 
@@ -1902,25 +2075,25 @@ void KSpreadView::initialPosition()
     updateBorderButton();
     updateShowTableMenu();
 
-    m_tableFormat->setEnabled(false);
-    m_sort->setEnabled(false);
-    m_mergeCell->setEnabled(false);
-    m_createStyle->setEnabled(false);
+    d->actions->tableFormat->setEnabled(false);
+    d->actions->sort->setEnabled(false);
+    d->actions->mergeCell->setEnabled(false);
+    d->actions->createStyle->setEnabled(false);
 
-    m_fillUp->setEnabled( false );
-    m_fillRight->setEnabled( false );
-    m_fillDown->setEnabled( false );
-    m_fillLeft->setEnabled( false );
+    d->actions->fillUp->setEnabled( false );
+    d->actions->fillRight->setEnabled( false );
+    d->actions->fillDown->setEnabled( false );
+    d->actions->fillLeft->setEnabled( false );
 
-    m_recordChanges->setChecked( m_pDoc->map()->changes() );
-    m_acceptRejectChanges->setEnabled( m_pDoc->map()->changes() );
-    m_filterChanges->setEnabled( m_pDoc->map()->changes() );
-    m_protectChanges->setEnabled( m_pDoc->map()->changes() );
-    m_commentChanges->setEnabled( m_pDoc->map()->changes() );
+    d->actions->recordChanges->setChecked( m_pDoc->map()->changes() );
+    d->actions->acceptRejectChanges->setEnabled( m_pDoc->map()->changes() );
+    d->actions->filterChanges->setEnabled( m_pDoc->map()->changes() );
+    d->actions->protectChanges->setEnabled( m_pDoc->map()->changes() );
+    d->actions->commentChanges->setEnabled( m_pDoc->map()->changes() );
 
     // make paint effective:
     m_pDoc->decreaseNumOperation();
-    m_insertChartFrame->setEnabled(false);
+    d->actions->insertChartFrame->setEnabled(false);
 
     QRect vr( activeTable()->visibleRect( m_pCanvas ) );
 
@@ -1945,43 +2118,43 @@ void KSpreadView::updateButton( KSpreadCell *cell, int column, int row)
     QColor color=cell->textColor( column, row );
     if (!color.isValid())
         color=QApplication::palette().active().text();
-    m_textColor->setCurrentColor( color );
+    d->actions->textColor->setCurrentColor( color );
 
     color=cell->bgColor(  column, row );
 
     if ( !color.isValid() )
         color = QApplication::palette().active().base();
 
-    m_bgColor->setCurrentColor( color );
+    d->actions->bgColor->setCurrentColor( color );
 
-    m_selectFontSize->setFontSize( cell->textFontSize( column, row ) );
-    m_selectFont->setFont( cell->textFontFamily( column,row ) );
-    m_bold->setChecked( cell->textFontBold( column, row ) );
-    m_italic->setChecked( cell->textFontItalic(  column, row) );
-    m_underline->setChecked( cell->textFontUnderline( column, row ) );
-    m_strikeOut->setChecked( cell->textFontStrike( column, row ) );
+    d->actions->selectFontSize->setFontSize( cell->textFontSize( column, row ) );
+    d->actions->selectFont->setFont( cell->textFontFamily( column,row ) );
+    d->actions->bold->setChecked( cell->textFontBold( column, row ) );
+    d->actions->italic->setChecked( cell->textFontItalic(  column, row) );
+    d->actions->underline->setChecked( cell->textFontUnderline( column, row ) );
+    d->actions->strikeOut->setChecked( cell->textFontStrike( column, row ) );
 
-    m_alignLeft->setChecked( cell->align( column, row ) == KSpreadFormat::Left );
-    m_alignCenter->setChecked( cell->align( column, row ) == KSpreadFormat::Center );
-    m_alignRight->setChecked( cell->align( column, row ) == KSpreadFormat::Right );
+    d->actions->alignLeft->setChecked( cell->align( column, row ) == KSpreadFormat::Left );
+    d->actions->alignCenter->setChecked( cell->align( column, row ) == KSpreadFormat::Center );
+    d->actions->alignRight->setChecked( cell->align( column, row ) == KSpreadFormat::Right );
 
-    m_alignTop->setChecked( cell->alignY( column, row ) == KSpreadFormat::Top );
-    m_alignMiddle->setChecked( cell->alignY( column, row ) == KSpreadFormat::Middle );
-    m_alignBottom->setChecked( cell->alignY( column, row ) == KSpreadFormat::Bottom );
+    d->actions->alignTop->setChecked( cell->alignY( column, row ) == KSpreadFormat::Top );
+    d->actions->alignMiddle->setChecked( cell->alignY( column, row ) == KSpreadFormat::Middle );
+    d->actions->alignBottom->setChecked( cell->alignY( column, row ) == KSpreadFormat::Bottom );
 
-    m_verticalText->setChecked( cell->verticalText( column,row ) );
+    d->actions->verticalText->setChecked( cell->verticalText( column,row ) );
 
-    m_multiRow->setChecked( cell->multiRow( column,row ) );
+    d->actions->multiRow->setChecked( cell->multiRow( column,row ) );
 
     KSpreadCell::FormatType ft = cell->formatType();
-    m_percent->setChecked( ft == KSpreadCell::Percentage );
-    m_money->setChecked( ft == KSpreadCell::Money );
+    d->actions->percent->setChecked( ft == KSpreadCell::Percentage );
+    d->actions->money->setChecked( ft == KSpreadCell::Money );
 
     if ( m_pTable && !m_pTable->isProtected() )
-      m_removeComment->setEnabled( !cell->comment(column,row).isEmpty() );
+      d->actions->removeComment->setEnabled( !cell->comment(column,row).isEmpty() );
 
     if ( m_pTable && !m_pTable->isProtected() )
-      m_decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
+      d->actions->decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
 
     m_toolbarLock = FALSE;
     if ( m_pTable )
@@ -1996,18 +2169,18 @@ void KSpreadView::adjustActions( KSpreadSheet const * const table,
   {
     if ( ( selection.width() > 1 ) || ( selection.height() > 1 ) )
     {
-      if ( m_bold->isEnabled() )
+      if ( d->actions->bold->isEnabled() )
         adjustActions( false );
     }
     else
     {
-      if ( !m_bold->isEnabled() )
+      if ( !d->actions->bold->isEnabled() )
         adjustActions( true );
     }
   }
   else if ( table->isProtected() )
   {
-    if ( m_bold->isEnabled() )
+    if ( d->actions->bold->isEnabled() )
       adjustActions( false );
   }
 }
@@ -2047,9 +2220,9 @@ void KSpreadView::updateEditWidget()
 
     if ( m_pTable && !m_pTable->isProtected() )
     {
-      m_alignLeft->setEnabled(!active);
-      m_alignCenter->setEnabled(!active);
-      m_alignRight->setEnabled(!active);
+      d->actions->alignLeft->setEnabled(!active);
+      d->actions->alignCenter->setEnabled(!active);
+      d->actions->alignRight->setEnabled(!active);
     }
 
     if ( !cell )
@@ -2104,27 +2277,27 @@ void KSpreadView::updateReadWrite( bool readwrite )
   for (; aIt != aEnd; ++aIt )
     (*aIt)->setEnabled( readwrite );
 
-  m_transform->setEnabled( false );
-  m_redo->setEnabled( false );
-  m_undo->setEnabled( false );
+  d->actions->transform->setEnabled( false );
+  d->actions->redo->setEnabled( false );
+  d->actions->undo->setEnabled( false );
   if ( !m_pDoc || !m_pDoc->map() || m_pDoc->map()->isProtected() )
   {
-    m_showTable->setEnabled( false );
-    m_hideTable->setEnabled( false );
+    d->actions->showTable->setEnabled( false );
+    d->actions->hideTable->setEnabled( false );
   }
   else
   {
-    m_showTable->setEnabled( true );
-    m_hideTable->setEnabled( true );
+    d->actions->showTable->setEnabled( true );
+    d->actions->hideTable->setEnabled( true );
   }
-  m_gotoCell->setEnabled( true );
-  m_viewZoom->setEnabled( true );
-  m_showPageBorders->setEnabled( true );
-  m_findAction->setEnabled( true);
-  m_replaceAction->setEnabled( readwrite );
+  d->actions->gotoCell->setEnabled( true );
+  d->actions->viewZoom->setEnabled( true );
+  d->actions->showPageBorders->setEnabled( true );
+  d->actions->findAction->setEnabled( true);
+  d->actions->replaceAction->setEnabled( readwrite );
   if ( !m_pDoc->isReadWrite())
-      m_copy->setEnabled( true );
-  //  m_newView->setEnabled( true );
+      d->actions->copy->setEnabled( true );
+  //  d->actions->newView->setEnabled( true );
   //m_pDoc->KXMLGUIClient::action( "newView" )->setEnabled( true ); // obsolete (Werner)
 }
 
@@ -2214,7 +2387,7 @@ void KSpreadView::changeTextColor()
   m_pDoc->emitBeginOperation(false);
   if ( m_pTable != 0L )
   {
-    m_pTable->setSelectionTextColor( selectionInfo(), m_textColor->color() );
+    m_pTable->setSelectionTextColor( selectionInfo(), d->actions->textColor->color() );
   }
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 }
@@ -2234,7 +2407,7 @@ void KSpreadView::changeBackgroundColor()
   m_pDoc->emitBeginOperation(false);
   if ( m_pTable != 0L )
   {
-    m_pTable->setSelectionbgColor( selectionInfo(), m_bgColor->color() );
+    m_pTable->setSelectionbgColor( selectionInfo(), d->actions->bgColor->color() );
   }
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 }
@@ -2254,7 +2427,7 @@ void KSpreadView::changeBorderColor()
   m_pDoc->emitBeginOperation(false);
   if ( m_pTable != 0L )
   {
-    m_pTable->setSelectionBorderColor( selectionInfo(), m_borderColor->color() );
+    m_pTable->setSelectionBorderColor( selectionInfo(), d->actions->borderColor->color() );
   }
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 }
@@ -2292,27 +2465,27 @@ QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget 
 void KSpreadView::enableUndo( bool _b )
 {
   if ( m_pTable && !m_pTable->isProtected() )
-    m_undo->setEnabled( _b );
-  m_undo->setText(i18n("Undo: %1").arg(m_pDoc->undoBuffer()->getUndoName()));
+    d->actions->undo->setEnabled( _b );
+  d->actions->undo->setText(i18n("Undo: %1").arg(m_pDoc->undoBuffer()->getUndoName()));
 }
 
 void KSpreadView::enableRedo( bool _b )
 {
   if ( m_pTable && !m_pTable->isProtected() )
-    m_redo->setEnabled( _b );
-  m_redo->setText(i18n("Redo: %1").arg(m_pDoc->undoBuffer()->getRedoName()));
+    d->actions->redo->setEnabled( _b );
+  d->actions->redo->setText(i18n("Redo: %1").arg(m_pDoc->undoBuffer()->getRedoName()));
 }
 
 void KSpreadView::enableInsertColumn( bool _b )
 {
   if ( m_pTable && !m_pTable->isProtected() )
-    m_insertColumn->setEnabled( _b );
+    d->actions->insertColumn->setEnabled( _b );
 }
 
 void KSpreadView::enableInsertRow( bool _b )
 {
   if ( m_pTable && !m_pTable->isProtected() )
-    m_insertRow->setEnabled( _b );
+    d->actions->insertRow->setEnabled( _b );
 }
 
 void KSpreadView::undo()
@@ -2641,7 +2814,7 @@ void KSpreadView::verticalText(bool b)
 
 void KSpreadView::insertSpecialChar()
 {
-  QString f( m_selectFont->font() );
+  QString f( d->actions->selectFont->font() );
   QChar c = ' ';
 
   if ( m_specialCharDlg == 0 )
@@ -2901,7 +3074,7 @@ void KSpreadView::borderBottom()
   {
     m_pDoc->emitBeginOperation( false );
 
-    m_pTable->borderBottom( m_selectionInfo, m_borderColor->color() );
+    m_pTable->borderBottom( m_selectionInfo, d->actions->borderColor->color() );
 
     endOperation( m_selectionInfo->selection() );
   }
@@ -2922,7 +3095,7 @@ void KSpreadView::borderRight()
   if ( m_pTable != 0L )
   {
     m_pDoc->emitBeginOperation( false );
-    m_pTable->borderRight( m_selectionInfo, m_borderColor->color() );
+    m_pTable->borderRight( m_selectionInfo, d->actions->borderColor->color() );
     endOperation( m_selectionInfo->selection() );
   }
 }
@@ -2942,7 +3115,7 @@ void KSpreadView::borderLeft()
   if ( m_pTable != 0L )
   {
     m_pDoc->emitBeginOperation( false );
-    m_pTable->borderLeft( m_selectionInfo, m_borderColor->color() );
+    m_pTable->borderLeft( m_selectionInfo, d->actions->borderColor->color() );
     endOperation( m_selectionInfo->selection() );
   }
 }
@@ -2962,7 +3135,7 @@ void KSpreadView::borderTop()
   if ( m_pTable != 0L )
   {
     m_pDoc->emitBeginOperation( false );
-    m_pTable->borderTop( m_selectionInfo, m_borderColor->color() );
+    m_pTable->borderTop( m_selectionInfo, d->actions->borderColor->color() );
     endOperation( m_selectionInfo->selection() );
   }
 }
@@ -2982,7 +3155,7 @@ void KSpreadView::borderOutline()
   if ( m_pTable != 0L )
   {
     m_pDoc->emitBeginOperation( false );
-    m_pTable->borderOutline( m_selectionInfo, m_borderColor->color() );
+    m_pTable->borderOutline( m_selectionInfo, d->actions->borderColor->color() );
     endOperation( m_selectionInfo->selection() );
   }
 }
@@ -3002,7 +3175,7 @@ void KSpreadView::borderAll()
   if ( m_pTable != 0L )
   {
     m_pDoc->emitBeginOperation( false );
-    m_pTable->borderAll( m_selectionInfo, m_borderColor->color() );
+    m_pTable->borderAll( m_selectionInfo, d->actions->borderColor->color() );
     endOperation( m_selectionInfo->selection() );
   }
 }
@@ -3106,7 +3279,7 @@ void KSpreadView::slotTableRemoved( KSpreadSheet *_t )
 void KSpreadView::removeAllTables()
 {
   m_pDoc->emitBeginOperation(false);
-  m_pTabBar->removeAllTabs();
+  m_pTabBar->clear();
 
   setActiveTable( 0L );
 
@@ -3151,9 +3324,9 @@ void KSpreadView::setActiveTable( KSpreadSheet * _t, bool updateTable )
     m_pCanvas->slotMaxRow( m_pTable->maxRow() );
   }
 
-  m_showPageBorders->setChecked( m_pTable->isShowPageBorders() );
-  m_protectSheet->setChecked( m_pTable->isProtected() );
-  m_protectDoc->setChecked( m_pDoc->map()->isProtected() );
+  d->actions->showPageBorders->setChecked( m_pTable->isShowPageBorders() );
+  d->actions->protectSheet->setChecked( m_pTable->isProtected() );
+  d->actions->protectDoc->setChecked( m_pDoc->map()->isProtected() );
   adjustActions( !m_pTable->isProtected() );
   adjustMapActions( !m_pDoc->map()->isProtected() );
 
@@ -3186,7 +3359,6 @@ void KSpreadView::slotTableRenamed( KSpreadSheet* table, const QString& old_name
 void KSpreadView::slotTableHidden( KSpreadSheet* table )
 {
   m_pDoc->emitBeginOperation(false);
-  m_pTabBar->hideTable( table->tableName() );
   updateShowTableMenu();
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 }
@@ -3194,7 +3366,7 @@ void KSpreadView::slotTableHidden( KSpreadSheet* table )
 void KSpreadView::slotTableShown( KSpreadSheet* table )
 {
   m_pDoc->emitBeginOperation(false);
-  m_pTabBar->displayTable( table->tableName() );
+  m_pTabBar->setTabs( m_pDoc->map()->visibleSheets() );
   updateShowTableMenu();
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 }
@@ -3258,8 +3430,8 @@ void KSpreadView::insertTable()
 
   if ( m_pDoc->map()->visibleSheets().count() > 1 )
   {
-    m_removeTable->setEnabled( true );
-    m_hideTable->setEnabled( true );
+    d->actions->removeTable->setEnabled( true );
+    d->actions->hideTable->setEnabled( true );
   }
 
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
@@ -3269,9 +3441,29 @@ void KSpreadView::hideTable()
 {
   if ( !m_pTable )
     return;
+
+  if ( m_pDoc->map()->visibleSheets().count() ==  1)
+  {
+     KMessageBox::error( this, i18n("You cannot hide the last visible table.") );
+     return;
+  }
+
+  QStringList vs = m_pDoc->map()->visibleSheets();
+  int i = vs.findIndex( m_pTable->tableName() ) - 1;
+  if( i < 0 ) i = 1;
+  QString sn = vs[i];
+
   m_pDoc->emitBeginOperation(false);
-  m_pTabBar->hideTable();
+  if ( !m_pDoc->undoBuffer()->isLocked() )
+  {
+    KSpreadUndoHideTable* undo = new KSpreadUndoHideTable( m_pDoc, activeTable() );
+    m_pDoc->undoBuffer()->appendUndo( undo );
+  }
+  m_pTable->hideTable(true);
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
+
+  m_pTabBar->removeTab( m_pTable->tableName() );
+  m_pTabBar->setActiveTab( sn );
 }
 
 void KSpreadView::showTable()
@@ -3475,7 +3667,7 @@ void KSpreadView::decreaseIndent()
   KSpreadCell * cell = m_pTable->cellAt( column, row );
   if ( cell )
     if ( !m_pTable->isProtected() )
-      m_decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
+      d->actions->decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
 
   endOperation( m_selectionInfo->selection() );
 }
@@ -4070,7 +4262,7 @@ void KSpreadView::toggleProtectDoc( bool mode )
      int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect Document" ) );
      if ( result != KPasswordDialog::Accepted )
      {
-       m_protectDoc->setChecked( false );
+       d->actions->protectDoc->setChecked( false );
        return;
      }
 
@@ -4085,7 +4277,7 @@ void KSpreadView::toggleProtectDoc( bool mode )
      int result = KPasswordDialog::getPassword( passwd, i18n( "Unprotect Document" ) );
      if ( result != KPasswordDialog::Accepted )
      {
-       m_protectDoc->setChecked( true );
+       d->actions->protectDoc->setChecked( true );
        return;
      }
 
@@ -4096,7 +4288,7 @@ void KSpreadView::toggleProtectDoc( bool mode )
      if ( !m_pDoc->map()->checkPassword( hash ) )
      {
        KMessageBox::error( 0, i18n( "Incorrect password" ) );
-       m_protectDoc->setChecked( true );
+       d->actions->protectDoc->setChecked( true );
        return;
      }
 
@@ -4109,25 +4301,25 @@ void KSpreadView::toggleProtectDoc( bool mode )
 
 void KSpreadView::adjustMapActions( bool mode )
 {
-  m_hideTable->setEnabled( mode );
-  m_showTable->setEnabled( mode );
-  m_insertTable->setEnabled( mode );
-  m_menuInsertTable->setEnabled( mode );
-  m_removeTable->setEnabled( mode );
+  d->actions->hideTable->setEnabled( mode );
+  d->actions->showTable->setEnabled( mode );
+  d->actions->insertTable->setEnabled( mode );
+  d->actions->menuInsertTable->setEnabled( mode );
+  d->actions->removeTable->setEnabled( mode );
 
   if ( mode )
   {
     if ( m_pTable && !m_pTable->isProtected() )
     {
       bool state = ( m_pDoc->map()->visibleSheets().count() > 1 );
-      m_removeTable->setEnabled( state );
-      m_hideTable->setEnabled( state );
+      d->actions->removeTable->setEnabled( state );
+      d->actions->hideTable->setEnabled( state );
     }
-    m_showTable->setEnabled( m_pDoc->map()->hiddenSheets().count() > 0 );
+    d->actions->showTable->setEnabled( m_pDoc->map()->hiddenSheets().count() > 0 );
     if ( m_pTable->isProtected() )
-      m_renameTable->setEnabled( false );
+      d->actions->renameTable->setEnabled( false );
     else
-      m_renameTable->setEnabled( true );
+      d->actions->renameTable->setEnabled( true );
   }
   // slotUpdateView( m_pTable );
 }
@@ -4143,7 +4335,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
      int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect Sheet" ) );
      if ( result != KPasswordDialog::Accepted )
      {
-       m_protectSheet->setChecked( false );
+       d->actions->protectSheet->setChecked( false );
        return;
      }
 
@@ -4159,7 +4351,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
      int result = KPasswordDialog::getPassword( passwd, i18n( "Unprotect Sheet" ) );
      if ( result != KPasswordDialog::Accepted )
      {
-       m_protectSheet->setChecked( true );
+       d->actions->protectSheet->setChecked( true );
        return;
      }
 
@@ -4171,7 +4363,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
      if ( !m_pTable->checkPassword( hash ) )
      {
        KMessageBox::error( 0, i18n( "Incorrect password" ) );
-       m_protectSheet->setChecked( true );
+       d->actions->protectSheet->setChecked( true );
        return;
      }
 
@@ -4188,140 +4380,140 @@ void KSpreadView::toggleProtectSheet( bool mode )
 
 void KSpreadView::adjustActions( bool mode )
 {
-  m_replaceAction->setEnabled( mode );
-  m_insertSeries->setEnabled( mode );
-  m_insertLink->setEnabled( mode );
-  m_insertSpecialChar->setEnabled( mode );
-  m_insertFunction->setEnabled( mode );
-  m_removeComment->setEnabled( mode );
-  m_decreaseIndent->setEnabled( mode );
-  m_bold->setEnabled( mode );
-  m_italic->setEnabled( mode );
-  m_underline->setEnabled( mode );
-  m_strikeOut->setEnabled( mode );
-  m_percent->setEnabled( mode );
-  m_precplus->setEnabled( mode );
-  m_precminus->setEnabled( mode );
-  m_money->setEnabled( mode );
-  m_alignLeft->setEnabled( mode );
-  m_alignCenter->setEnabled( mode );
-  m_alignRight->setEnabled( mode );
-  m_alignTop->setEnabled( mode );
-  m_alignMiddle->setEnabled( mode );
-  m_alignBottom->setEnabled( mode );
-  m_paste->setEnabled( mode );
-  m_cut->setEnabled( mode );
-  m_specialPaste->setEnabled( mode );
-  m_delete->setEnabled( mode );
-  m_clearText->setEnabled( mode );
-  m_clearComment->setEnabled( mode );
-  m_clearValidity->setEnabled( mode );
-  m_clearConditional->setEnabled( mode );
-  m_recalc_workbook->setEnabled( mode );
-  m_recalc_worksheet->setEnabled( mode );
-  m_adjust->setEnabled( mode );
-  m_editCell->setEnabled( mode );
+  d->actions->replaceAction->setEnabled( mode );
+  d->actions->insertSeries->setEnabled( mode );
+  d->actions->insertLink->setEnabled( mode );
+  d->actions->insertSpecialChar->setEnabled( mode );
+  d->actions->insertFunction->setEnabled( mode );
+  d->actions->removeComment->setEnabled( mode );
+  d->actions->decreaseIndent->setEnabled( mode );
+  d->actions->bold->setEnabled( mode );
+  d->actions->italic->setEnabled( mode );
+  d->actions->underline->setEnabled( mode );
+  d->actions->strikeOut->setEnabled( mode );
+  d->actions->percent->setEnabled( mode );
+  d->actions->precplus->setEnabled( mode );
+  d->actions->precminus->setEnabled( mode );
+  d->actions->money->setEnabled( mode );
+  d->actions->alignLeft->setEnabled( mode );
+  d->actions->alignCenter->setEnabled( mode );
+  d->actions->alignRight->setEnabled( mode );
+  d->actions->alignTop->setEnabled( mode );
+  d->actions->alignMiddle->setEnabled( mode );
+  d->actions->alignBottom->setEnabled( mode );
+  d->actions->paste->setEnabled( mode );
+  d->actions->cut->setEnabled( mode );
+  d->actions->specialPaste->setEnabled( mode );
+  d->actions->del->setEnabled( mode );
+  d->actions->clearText->setEnabled( mode );
+  d->actions->clearComment->setEnabled( mode );
+  d->actions->clearValidity->setEnabled( mode );
+  d->actions->clearConditional->setEnabled( mode );
+  d->actions->recalc_workbook->setEnabled( mode );
+  d->actions->recalc_worksheet->setEnabled( mode );
+  d->actions->adjust->setEnabled( mode );
+  d->actions->editCell->setEnabled( mode );
   if( !mode )
   {
-      m_undo->setEnabled( false );
-      m_redo->setEnabled( false );
+      d->actions->undo->setEnabled( false );
+      d->actions->redo->setEnabled( false );
   }
   else
   {
-      m_undo->setEnabled( m_pDoc->undoBuffer()->hasUndoActions() );
-      m_redo->setEnabled( m_pDoc->undoBuffer()->hasRedoActions() );
+      d->actions->undo->setEnabled( m_pDoc->undoBuffer()->hasUndoActions() );
+      d->actions->redo->setEnabled( m_pDoc->undoBuffer()->hasRedoActions() );
   }
 
-  m_paperLayout->setEnabled( mode );
-  m_styleDialog->setEnabled( mode );
-  m_definePrintRange->setEnabled( mode );
-  m_resetPrintRange->setEnabled( mode );
-  m_insertFromDatabase->setEnabled( mode );
-  m_insertFromTextfile->setEnabled( mode );
-  m_insertFromClipboard->setEnabled( mode );
-  m_conditional->setEnabled( mode );
-  m_validity->setEnabled( mode );
-  m_goalSeek->setEnabled( mode );
-  m_subTotals->setEnabled( mode );
-  m_multipleOperations->setEnabled( mode );
-  m_textToColumns->setEnabled( mode );
-  m_consolidate->setEnabled( mode );
-  m_insertCellCopy->setEnabled( mode );
-  m_multiRow->setEnabled( mode );
-  m_selectFont->setEnabled( mode );
-  m_selectFontSize->setEnabled( mode );
-  m_deleteColumn->setEnabled( mode );
-  m_hideColumn->setEnabled( mode );
-  m_showColumn->setEnabled( mode );
-  m_showSelColumns->setEnabled( mode );
-  m_insertColumn->setEnabled( mode );
-  m_deleteRow->setEnabled( mode );
-  m_insertRow->setEnabled( mode );
-  m_hideRow->setEnabled( mode );
-  m_showRow->setEnabled( mode );
-  m_showSelRows->setEnabled( mode );
-  m_formulaSelection->setEnabled( mode );
-  m_textColor->setEnabled( mode );
-  m_bgColor->setEnabled( mode );
-  m_cellLayout->setEnabled( mode );
-  m_borderLeft->setEnabled( mode );
-  m_borderRight->setEnabled( mode );
-  m_borderTop->setEnabled( mode );
-  m_borderBottom->setEnabled( mode );
-  m_borderAll->setEnabled( mode );
-  m_borderOutline->setEnabled( mode );
-  m_borderRemove->setEnabled( mode );
-  m_borderColor->setEnabled( mode );
-  m_removeTable->setEnabled( mode );
-  m_autoSum->setEnabled( mode );
-  //   m_scripts->setEnabled( mode );
-  m_default->setEnabled( mode );
-  m_areaName->setEnabled( mode );
-  m_resizeRow->setEnabled( mode );
-  m_resizeColumn->setEnabled( mode );
-  m_fontSizeUp->setEnabled( mode );
-  m_fontSizeDown->setEnabled( mode );
-  m_upper->setEnabled( mode );
-  m_lower->setEnabled( mode );
-  m_equalizeRow->setEnabled( mode );
-  m_equalizeColumn->setEnabled( mode );
-  m_verticalText->setEnabled( mode );
-  m_addModifyComment->setEnabled( mode );
-  m_removeComment->setEnabled( mode );
-  m_insertCell->setEnabled( mode );
-  m_removeCell->setEnabled( mode );
-  m_changeAngle->setEnabled( mode );
-  m_dissociateCell->setEnabled( mode );
-  m_increaseIndent->setEnabled( mode );
-  m_decreaseIndent->setEnabled( mode );
-  m_spellChecking->setEnabled( mode );
-  m_menuCalcMin->setEnabled( mode );
-  m_menuCalcMax->setEnabled( mode );
-  m_menuCalcAverage->setEnabled( mode );
-  m_menuCalcCount->setEnabled( mode );
-  m_menuCalcSum->setEnabled( mode );
-  m_menuCalcNone->setEnabled( mode );
-  m_insertPart->setEnabled( mode );
-  m_createStyle->setEnabled( mode );
-  m_selectStyle->setEnabled( mode );
+  d->actions->paperLayout->setEnabled( mode );
+  d->actions->styleDialog->setEnabled( mode );
+  d->actions->definePrintRange->setEnabled( mode );
+  d->actions->resetPrintRange->setEnabled( mode );
+  d->actions->insertFromDatabase->setEnabled( mode );
+  d->actions->insertFromTextfile->setEnabled( mode );
+  d->actions->insertFromClipboard->setEnabled( mode );
+  d->actions->conditional->setEnabled( mode );
+  d->actions->validity->setEnabled( mode );
+  d->actions->goalSeek->setEnabled( mode );
+  d->actions->subTotals->setEnabled( mode );
+  d->actions->multipleOperations->setEnabled( mode );
+  d->actions->textToColumns->setEnabled( mode );
+  d->actions->consolidate->setEnabled( mode );
+  d->actions->insertCellCopy->setEnabled( mode );
+  d->actions->multiRow->setEnabled( mode );
+  d->actions->selectFont->setEnabled( mode );
+  d->actions->selectFontSize->setEnabled( mode );
+  d->actions->deleteColumn->setEnabled( mode );
+  d->actions->hideColumn->setEnabled( mode );
+  d->actions->showColumn->setEnabled( mode );
+  d->actions->showSelColumns->setEnabled( mode );
+  d->actions->insertColumn->setEnabled( mode );
+  d->actions->deleteRow->setEnabled( mode );
+  d->actions->insertRow->setEnabled( mode );
+  d->actions->hideRow->setEnabled( mode );
+  d->actions->showRow->setEnabled( mode );
+  d->actions->showSelRows->setEnabled( mode );
+  d->actions->formulaSelection->setEnabled( mode );
+  d->actions->textColor->setEnabled( mode );
+  d->actions->bgColor->setEnabled( mode );
+  d->actions->cellLayout->setEnabled( mode );
+  d->actions->borderLeft->setEnabled( mode );
+  d->actions->borderRight->setEnabled( mode );
+  d->actions->borderTop->setEnabled( mode );
+  d->actions->borderBottom->setEnabled( mode );
+  d->actions->borderAll->setEnabled( mode );
+  d->actions->borderOutline->setEnabled( mode );
+  d->actions->borderRemove->setEnabled( mode );
+  d->actions->borderColor->setEnabled( mode );
+  d->actions->removeTable->setEnabled( mode );
+  d->actions->autoSum->setEnabled( mode );
+  //   d->actions->scripts->setEnabled( mode );
+  d->actions->defaultFormat->setEnabled( mode );
+  d->actions->areaName->setEnabled( mode );
+  d->actions->resizeRow->setEnabled( mode );
+  d->actions->resizeColumn->setEnabled( mode );
+  d->actions->fontSizeUp->setEnabled( mode );
+  d->actions->fontSizeDown->setEnabled( mode );
+  d->actions->upper->setEnabled( mode );
+  d->actions->lower->setEnabled( mode );
+  d->actions->equalizeRow->setEnabled( mode );
+  d->actions->equalizeColumn->setEnabled( mode );
+  d->actions->verticalText->setEnabled( mode );
+  d->actions->addModifyComment->setEnabled( mode );
+  d->actions->removeComment->setEnabled( mode );
+  d->actions->insertCell->setEnabled( mode );
+  d->actions->removeCell->setEnabled( mode );
+  d->actions->changeAngle->setEnabled( mode );
+  d->actions->dissociateCell->setEnabled( mode );
+  d->actions->increaseIndent->setEnabled( mode );
+  d->actions->decreaseIndent->setEnabled( mode );
+  d->actions->spellChecking->setEnabled( mode );
+  d->actions->menuCalcMin->setEnabled( mode );
+  d->actions->menuCalcMax->setEnabled( mode );
+  d->actions->menuCalcAverage->setEnabled( mode );
+  d->actions->menuCalcCount->setEnabled( mode );
+  d->actions->menuCalcSum->setEnabled( mode );
+  d->actions->menuCalcNone->setEnabled( mode );
+  d->actions->insertPart->setEnabled( mode );
+  d->actions->createStyle->setEnabled( mode );
+  d->actions->selectStyle->setEnabled( mode );
 
-  m_tableFormat->setEnabled( false );
-  m_sort->setEnabled( false );
-  m_mergeCell->setEnabled( false );
-  m_insertChartFrame->setEnabled( false );
-  m_sortDec->setEnabled( false );
-  m_sortInc->setEnabled( false );
-  m_transform->setEnabled( false );
+  d->actions->tableFormat->setEnabled( false );
+  d->actions->sort->setEnabled( false );
+  d->actions->mergeCell->setEnabled( false );
+  d->actions->insertChartFrame->setEnabled( false );
+  d->actions->sortDec->setEnabled( false );
+  d->actions->sortInc->setEnabled( false );
+  d->actions->transform->setEnabled( false );
 
-  m_fillRight->setEnabled( false );
-  m_fillLeft->setEnabled( false );
-  m_fillUp->setEnabled( false );
-  m_fillDown->setEnabled( false );
+  d->actions->fillRight->setEnabled( false );
+  d->actions->fillLeft->setEnabled( false );
+  d->actions->fillUp->setEnabled( false );
+  d->actions->fillDown->setEnabled( false );
 
   if ( mode && m_pDoc && m_pDoc->map() && !m_pDoc->map()->isProtected() )
-    m_renameTable->setEnabled( true );
+    d->actions->renameTable->setEnabled( true );
   else
-    m_renameTable->setEnabled( false );
+    d->actions->renameTable->setEnabled( false );
 
   canvasWidget()->gotoLocation( m_selectionInfo->marker(), m_pTable );
 }
@@ -4336,11 +4528,11 @@ void KSpreadView::toggleRecordChanges( bool mode )
       return;
   }
 
-  if ( m_protectChanges->isChecked() )
+  if ( d->actions->protectChanges->isChecked() )
   {
     if ( !checkChangeRecordPassword() )
       return;
-    m_protectChanges->setChecked( false );
+    d->actions->protectChanges->setChecked( false );
   }
 
   if ( mode )
@@ -4348,17 +4540,17 @@ void KSpreadView::toggleRecordChanges( bool mode )
   else
     m_pTable->map()->stopRecordingChanges();
 
-  m_protectChanges->setEnabled( mode );
-  m_filterChanges->setEnabled( mode );
-  m_acceptRejectChanges->setEnabled( mode );
-  m_commentChanges->setEnabled( mode );
+  d->actions->protectChanges->setEnabled( mode );
+  d->actions->filterChanges->setEnabled( mode );
+  d->actions->acceptRejectChanges->setEnabled( mode );
+  d->actions->commentChanges->setEnabled( mode );
 }
 
 void KSpreadView::toggleProtectChanges( bool mode )
 {
-  if ( !m_recordChanges->isChecked() )
+  if ( !d->actions->recordChanges->isChecked() )
   {
-    m_protectChanges->setChecked( false );
+    d->actions->protectChanges->setChecked( false );
     return;
   }
 
@@ -4368,7 +4560,7 @@ void KSpreadView::toggleProtectChanges( bool mode )
      int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect Recorded Changes" ) );
      if ( result != KPasswordDialog::Accepted )
      {
-       m_protectChanges->setChecked( false );
+       d->actions->protectChanges->setChecked( false );
        return;
      }
 
@@ -4397,7 +4589,7 @@ bool KSpreadView::checkChangeRecordPassword()
   int result = KPasswordDialog::getPassword( passwd, i18n( "Unprotect Recorded Changes" ) );
   if ( result != KPasswordDialog::Accepted )
   {
-    m_protectChanges->setChecked( true );
+    d->actions->protectChanges->setChecked( true );
     return false;
   }
 
@@ -4408,18 +4600,18 @@ bool KSpreadView::checkChangeRecordPassword()
   if ( !m_pTable->map()->changes()->checkPassword( hash ) )
   {
     KMessageBox::error( 0, i18n( "Incorrect password" ) );
-    m_protectChanges->setChecked( true );
+    d->actions->protectChanges->setChecked( true );
     return false;
   }
 
   m_pTable->map()->changes()->setProtected( QCString() );
-  m_protectChanges->setChecked( false );
+  d->actions->protectChanges->setChecked( false );
   return true;
 }
 
 void KSpreadView::filterChanges()
 {
-  if ( !m_recordChanges->isChecked() )
+  if ( !d->actions->recordChanges->isChecked() )
     return;
 
   KSpreadFilterDlg dlg( this, m_pTable->map()->changes() );
@@ -4428,7 +4620,7 @@ void KSpreadView::filterChanges()
 
 void KSpreadView::acceptRejectChanges()
 {
-  if ( !m_recordChanges->isChecked() )
+  if ( !d->actions->recordChanges->isChecked() )
     return;
 
   KSpreadAcceptDlg dlg( this, m_pTable->map()->changes() );
@@ -4437,7 +4629,7 @@ void KSpreadView::acceptRejectChanges()
 
 void KSpreadView::commentChanges()
 {
-  if ( !m_recordChanges->isChecked() )
+  if ( !d->actions->recordChanges->isChecked() )
     return;
 
   KSpreadCommentDlg dlg( this, m_pTable->map()->changes() );
@@ -4460,7 +4652,7 @@ void KSpreadView::togglePageBorders( bool mode )
 
 void KSpreadView::changeZoomMenu( int zoom )
 {
-  if( m_viewZoom->items().isEmpty() )
+  if( d->actions->viewZoom->items().isEmpty() )
   {
     QStringList lst;
     lst << i18n("%1%").arg("33");
@@ -4475,14 +4667,14 @@ void KSpreadView::changeZoomMenu( int zoom )
     lst << i18n("%1%").arg("400");
     lst << i18n("%1%").arg("450");
     lst << i18n("%1%").arg("500");
-    m_viewZoom->setItems( lst );
+    d->actions->viewZoom->setItems( lst );
   }
 
   if( zoom>0 )
   {
     QValueList<int> list;
     bool ok;
-    const QStringList itemsList( m_viewZoom->items() );
+    const QStringList itemsList( d->actions->viewZoom->items() );
     QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
 
     for (QStringList::ConstIterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
@@ -4503,7 +4695,7 @@ void KSpreadView::changeZoomMenu( int zoom )
       QStringList lst;
       for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
         lst.append( i18n("%1%").arg(*it) );
-      m_viewZoom->setItems( lst );
+      d->actions->viewZoom->setItems( lst );
     }
   }
 }
@@ -4527,7 +4719,7 @@ void KSpreadView::viewZoom( const QString & s )
   {
     changeZoomMenu( newZoom );
     QString zoomStr( i18n("%1%").arg( newZoom ) );
-    m_viewZoom->setCurrentItem( m_viewZoom->items().findIndex( zoomStr ) );
+    d->actions->viewZoom->setCurrentItem( d->actions->viewZoom->items().findIndex( zoomStr ) );
 
     m_pDoc->emitBeginOperation( false );
 
@@ -4767,15 +4959,15 @@ void KSpreadView::refreshView()
 
   if ( table && !table->isProtected() )
   {
-    m_alignLeft->setEnabled( !active );
-    m_alignCenter->setEnabled( !active );
-    m_alignRight->setEnabled( !active );
+    d->actions->alignLeft->setEnabled( !active );
+    d->actions->alignCenter->setEnabled( !active );
+    d->actions->alignRight->setEnabled( !active );
   }
   active = m_pDoc->getShowFormulaBar();
   editWidget()->showEditWidget( active );
 
   QString zoomStr( i18n("%1%").arg( m_pDoc->zoom() ) );
-  m_viewZoom->setCurrentItem( m_viewZoom->items().findIndex( zoomStr ) );
+  d->actions->viewZoom->setCurrentItem( d->actions->viewZoom->items().findIndex( zoomStr ) );
 
   int posFrame = 30;
   if ( active )
@@ -4972,32 +5164,32 @@ void KSpreadView::popupColumnMenu( const QPoint & _point )
 
     if ( !isProtected )
     {
-      m_cellLayout->plug( m_pPopupColumn );
+      d->actions->cellLayout->plug( m_pPopupColumn );
       m_pPopupColumn->insertSeparator();
-      m_cut->plug( m_pPopupColumn );
+      d->actions->cut->plug( m_pPopupColumn );
     }
-    m_copy->plug( m_pPopupColumn );
+    d->actions->copy->plug( m_pPopupColumn );
     if ( !isProtected )
     {
-      m_paste->plug( m_pPopupColumn );
-      m_specialPaste->plug( m_pPopupColumn );
-      m_insertCellCopy->plug( m_pPopupColumn );
+      d->actions->paste->plug( m_pPopupColumn );
+      d->actions->specialPaste->plug( m_pPopupColumn );
+      d->actions->insertCellCopy->plug( m_pPopupColumn );
       m_pPopupColumn->insertSeparator();
-      m_default->plug( m_pPopupColumn );
+      d->actions->defaultFormat->plug( m_pPopupColumn );
       // If there is no selection
       if ((util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
       {
-        m_areaName->plug( m_pPopupColumn );
+        d->actions->areaName->plug( m_pPopupColumn );
       }
 
-      m_resizeColumn->plug( m_pPopupColumn );
+      d->actions->resizeColumn->plug( m_pPopupColumn );
       m_pPopupColumn->insertItem( i18n("Adjust Column"), this, SLOT(slotPopupAdjustColumn() ) );
       m_pPopupColumn->insertSeparator();
-      m_insertColumn->plug( m_pPopupColumn );
-      m_deleteColumn->plug( m_pPopupColumn );
-      m_hideColumn->plug( m_pPopupColumn );
+      d->actions->insertColumn->plug( m_pPopupColumn );
+      d->actions->deleteColumn->plug( m_pPopupColumn );
+      d->actions->hideColumn->plug( m_pPopupColumn );
 
-      m_showSelColumns->setEnabled(false);
+      d->actions->showSelColumns->setEnabled(false);
 
       int i;
       ColumnFormat * col;
@@ -5010,8 +5202,8 @@ void KSpreadView::popupColumnMenu( const QPoint & _point )
           col = activeTable()->columnFormat( 1 );
           if ( col->isHide() )
           {
-            m_showSelColumns->setEnabled(true);
-            m_showSelColumns->plug( m_pPopupColumn );
+            d->actions->showSelColumns->setEnabled(true);
+            d->actions->showSelColumns->plug( m_pPopupColumn );
             break;
           }
         }
@@ -5020,8 +5212,8 @@ void KSpreadView::popupColumnMenu( const QPoint & _point )
 
         if ( col->isHide() )
         {
-          m_showSelColumns->setEnabled( true );
-          m_showSelColumns->plug( m_pPopupColumn );
+          d->actions->showSelColumns->setEnabled( true );
+          d->actions->showSelColumns->plug( m_pPopupColumn );
           break;
         }
       }
@@ -5057,32 +5249,32 @@ void KSpreadView::popupRowMenu( const QPoint & _point )
 
     if ( !isProtected )
     {
-        m_cellLayout->plug( m_pPopupRow );
+        d->actions->cellLayout->plug( m_pPopupRow );
         m_pPopupRow->insertSeparator();
-        m_cut->plug( m_pPopupRow );
+        d->actions->cut->plug( m_pPopupRow );
     }
-    m_copy->plug( m_pPopupRow );
+    d->actions->copy->plug( m_pPopupRow );
     if ( !isProtected )
     {
-      m_paste->plug( m_pPopupRow );
-      m_specialPaste->plug( m_pPopupRow );
-      m_insertCellCopy->plug( m_pPopupRow );
+      d->actions->paste->plug( m_pPopupRow );
+      d->actions->specialPaste->plug( m_pPopupRow );
+      d->actions->insertCellCopy->plug( m_pPopupRow );
       m_pPopupRow->insertSeparator();
-      m_default->plug( m_pPopupRow );
+      d->actions->defaultFormat->plug( m_pPopupRow );
       // If there is no selection
       if ( (util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
       {
-	m_areaName->plug( m_pPopupRow );
+	d->actions->areaName->plug( m_pPopupRow );
       }
 
-      m_resizeRow->plug( m_pPopupRow );
+      d->actions->resizeRow->plug( m_pPopupRow );
       m_pPopupRow->insertItem( i18n("Adjust Row"), this, SLOT( slotPopupAdjustRow() ) );
       m_pPopupRow->insertSeparator();
-      m_insertRow->plug( m_pPopupRow );
-      m_deleteRow->plug( m_pPopupRow );
-      m_hideRow->plug( m_pPopupRow );
+      d->actions->insertRow->plug( m_pPopupRow );
+      d->actions->deleteRow->plug( m_pPopupRow );
+      d->actions->hideRow->plug( m_pPopupRow );
 
-      m_showSelColumns->setEnabled(false);
+      d->actions->showSelColumns->setEnabled(false);
 
       int i;
       RowFormat * row;
@@ -5095,8 +5287,8 @@ void KSpreadView::popupRowMenu( const QPoint & _point )
           row = activeTable()->rowFormat( 1 );
           if ( row->isHide() )
           {
-            m_showSelRows->setEnabled(true);
-            m_showSelRows->plug( m_pPopupRow );
+            d->actions->showSelRows->setEnabled(true);
+            d->actions->showSelRows->plug( m_pPopupRow );
             break;
           }
         }
@@ -5104,8 +5296,8 @@ void KSpreadView::popupRowMenu( const QPoint & _point )
         row = activeTable()->rowFormat( i );
         if ( row->isHide() )
         {
-          m_showSelRows->setEnabled(true);
-          m_showSelRows->plug( m_pPopupRow );
+          d->actions->showSelRows->setEnabled(true);
+          d->actions->showSelRows->plug( m_pPopupRow );
           break;
         }
       }
@@ -5242,37 +5434,37 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
 
     if ( !isProtected )
     {
-      m_cellLayout->plug( m_pPopupMenu );
+      d->actions->cellLayout->plug( m_pPopupMenu );
       m_pPopupMenu->insertSeparator();
-      m_cut->plug( m_pPopupMenu );
+      d->actions->cut->plug( m_pPopupMenu );
     }
-    m_copy->plug( m_pPopupMenu );
+    d->actions->copy->plug( m_pPopupMenu );
     if ( !isProtected )
-      m_paste->plug( m_pPopupMenu );
+      d->actions->paste->plug( m_pPopupMenu );
 
     if ( !isProtected )
     {
-      m_specialPaste->plug( m_pPopupMenu );
-      m_insertCellCopy->plug( m_pPopupMenu );
+      d->actions->specialPaste->plug( m_pPopupMenu );
+      d->actions->insertCellCopy->plug( m_pPopupMenu );
       m_pPopupMenu->insertSeparator();
-      m_delete->plug( m_pPopupMenu );
-      m_adjust->plug( m_pPopupMenu );
-      m_default->plug( m_pPopupMenu );
+      d->actions->del->plug( m_pPopupMenu );
+      d->actions->adjust->plug( m_pPopupMenu );
+      d->actions->defaultFormat->plug( m_pPopupMenu );
 
       // If there is no selection
       if ( (util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
       {
-        m_areaName->plug( m_pPopupMenu );
+        d->actions->areaName->plug( m_pPopupMenu );
         m_pPopupMenu->insertSeparator();
-        m_insertCell->plug( m_pPopupMenu );
-        m_removeCell->plug( m_pPopupMenu );
+        d->actions->insertCell->plug( m_pPopupMenu );
+        d->actions->removeCell->plug( m_pPopupMenu );
       }
 
       m_pPopupMenu->insertSeparator();
-      m_addModifyComment->plug( m_pPopupMenu );
+      d->actions->addModifyComment->plug( m_pPopupMenu );
       if ( !cell->comment(m_pCanvas->markerColumn(), m_pCanvas->markerRow()).isEmpty() )
       {
-        m_removeComment->plug( m_pPopupMenu );
+        d->actions->removeComment->plug( m_pPopupMenu );
       }
 
       if (activeTable()->testListChoose(selectionInfo()))
@@ -5579,7 +5771,7 @@ void KSpreadView::styleDialog()
   KSpreadStyleDlg dlg( this, m_pDoc->styleManager() );
   dlg.exec();
 
-  m_selectStyle->setItems( m_pDoc->styleManager()->styleNames() );
+  d->actions->selectStyle->setItems( m_pDoc->styleManager()->styleNames() );
   if ( m_pTable )
   {
     m_pTable->setLayoutDirtyFlag();
@@ -5805,9 +5997,9 @@ void KSpreadView::createStyleFromCell()
 
   m_pDoc->styleManager()->m_styles[ styleName ] = style;
   cell->setKSpreadStyle( style );
-  QStringList lst( m_selectStyle->items() );
+  QStringList lst( d->actions->selectStyle->items() );
   lst.push_back( styleName );
-  m_selectStyle->setItems( lst );
+  d->actions->selectStyle->setItems( lst );
 }
 
 void KSpreadView::styleSelected( const QString & style )
@@ -5861,7 +6053,7 @@ void KSpreadView::percent( bool b )
 void KSpreadView::insertObject()
 {
   m_pDoc->emitBeginOperation( false );
-  KoDocumentEntry e =  m_insertPart->documentEntry();//KoPartSelectDia::selectPart( m_pCanvas );
+  KoDocumentEntry e =  d->actions->insertPart->documentEntry();//KoPartSelectDia::selectPart( m_pCanvas );
   if ( e.isEmpty() )
   {
     m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
@@ -6127,29 +6319,29 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
 
   if ( m_pTable && !m_pTable->isProtected() )
   {
-    m_resizeRow->setEnabled( !colSelected );
-    m_equalizeRow->setEnabled( !colSelected );
-    m_validity->setEnabled( !colSelected && !rowSelected);
-    m_conditional->setEnabled( !colSelected && !rowSelected);
-    m_resizeColumn->setEnabled( !rowSelected );
-    m_equalizeColumn->setEnabled( !rowSelected );
-    m_textToColumns->setEnabled( !rowSelected );
+    d->actions->resizeRow->setEnabled( !colSelected );
+    d->actions->equalizeRow->setEnabled( !colSelected );
+    d->actions->validity->setEnabled( !colSelected && !rowSelected);
+    d->actions->conditional->setEnabled( !colSelected && !rowSelected);
+    d->actions->resizeColumn->setEnabled( !rowSelected );
+    d->actions->equalizeColumn->setEnabled( !rowSelected );
+    d->actions->textToColumns->setEnabled( !rowSelected );
 
     bool simpleSelection = m_selectionInfo->singleCellSelection()
       || colSelected || rowSelected;
-    m_tableFormat->setEnabled( !simpleSelection );
-    m_sort->setEnabled( !simpleSelection );
-    m_mergeCell->setEnabled( !simpleSelection );
-    m_fillRight->setEnabled( !simpleSelection );
-    m_fillUp->setEnabled( !simpleSelection );
-    m_fillDown->setEnabled( !simpleSelection );
-    m_fillLeft->setEnabled( !simpleSelection );
-    m_insertChartFrame->setEnabled( !simpleSelection );
-    m_sortDec->setEnabled( !simpleSelection );
-    m_sortInc->setEnabled( !simpleSelection);
-    m_createStyle->setEnabled( simpleSelection ); // just from one cell
+    d->actions->tableFormat->setEnabled( !simpleSelection );
+    d->actions->sort->setEnabled( !simpleSelection );
+    d->actions->mergeCell->setEnabled( !simpleSelection );
+    d->actions->fillRight->setEnabled( !simpleSelection );
+    d->actions->fillUp->setEnabled( !simpleSelection );
+    d->actions->fillDown->setEnabled( !simpleSelection );
+    d->actions->fillLeft->setEnabled( !simpleSelection );
+    d->actions->insertChartFrame->setEnabled( !simpleSelection );
+    d->actions->sortDec->setEnabled( !simpleSelection );
+    d->actions->sortInc->setEnabled( !simpleSelection);
+    d->actions->createStyle->setEnabled( simpleSelection ); // just from one cell
   }
-  m_selectStyle->setCurrentItem( -1 );
+  d->actions->selectStyle->setCurrentItem( -1 );
   resultOfCalc();
   // Send some event around. This is read for example
   // by the calculator plugin.
@@ -6354,27 +6546,27 @@ void KSpreadView::statusBarClicked(int _id)
 void KSpreadView::menuCalc( bool )
 {
   m_pDoc->emitBeginOperation(false);
-  if ( m_menuCalcMin->isChecked() )
+  if ( d->actions->menuCalcMin->isChecked() )
   {
     doc()->setTypeOfCalc( Min );
   }
-  else if ( m_menuCalcMax->isChecked() )
+  else if ( d->actions->menuCalcMax->isChecked() )
   {
     doc()->setTypeOfCalc( Max );
   }
-  else if ( m_menuCalcCount->isChecked() )
+  else if ( d->actions->menuCalcCount->isChecked() )
   {
     doc()->setTypeOfCalc( Count );
   }
-  else if ( m_menuCalcAverage->isChecked() )
+  else if ( d->actions->menuCalcAverage->isChecked() )
   {
     doc()->setTypeOfCalc( Average );
   }
-  else if ( m_menuCalcSum->isChecked() )
+  else if ( d->actions->menuCalcSum->isChecked() )
   {
     doc()->setTypeOfCalc( SumOfNumber );
   }
-  else if ( m_menuCalcNone->isChecked() )
+  else if ( d->actions->menuCalcNone->isChecked() )
     doc()->setTypeOfCalc( NoneCalc );
 
   resultOfCalc();
@@ -6414,7 +6606,7 @@ void KSpreadView::slotChildSelected( KoDocumentChild* ch )
 {
   if ( m_pTable && !m_pTable->isProtected() )
   {
-    m_transform->setEnabled( TRUE );
+    d->actions->transform->setEnabled( TRUE );
 
     if ( !m_transformToolBox.isNull() )
     {
@@ -6433,7 +6625,7 @@ void KSpreadView::slotChildUnselected( KoDocumentChild* )
 {
   if ( m_pTable && !m_pTable->isProtected() )
   {
-    m_transform->setEnabled( FALSE );
+    d->actions->transform->setEnabled( FALSE );
 
     if ( !m_transformToolBox.isNull() )
     {
@@ -6511,21 +6703,21 @@ void KSpreadView::popupTabBarMenu( const QPoint & _point )
     bool state = ( m_pDoc->map()->visibleSheets().count() > 1 );
     if ( m_pTable && m_pTable->isProtected() )
     {
-      m_removeTable->setEnabled( false );
-      m_hideTable->setEnabled( false );
+      d->actions->removeTable->setEnabled( false );
+      d->actions->hideTable->setEnabled( false );
     }
     else
     {
-      m_removeTable->setEnabled( state);
-      m_hideTable->setEnabled( state );
+      d->actions->removeTable->setEnabled( state);
+      d->actions->hideTable->setEnabled( state );
     }
     if ( !m_pDoc || !m_pDoc->map() || m_pDoc->map()->isProtected() )
     {
-      m_insertTable->setEnabled( false );
-      m_renameTable->setEnabled( false );
-      m_showTable->setEnabled( false );
-      m_hideTable->setEnabled( false );
-      m_removeTable->setEnabled( false );
+      d->actions->insertTable->setEnabled( false );
+      d->actions->renameTable->setEnabled( false );
+      d->actions->showTable->setEnabled( false );
+      d->actions->hideTable->setEnabled( false );
+      d->actions->removeTable->setEnabled( false );
     }
     static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
   }
@@ -6535,7 +6727,7 @@ void KSpreadView::updateBorderButton()
 {
   //  m_pDoc->emitBeginOperation( false );
   if ( m_pTable )
-    m_showPageBorders->setChecked( m_pTable->isShowPageBorders() );
+    d->actions->showPageBorders->setChecked( m_pTable->isShowPageBorders() );
   //  m_pDoc->emitEndOperation();
 }
 
@@ -6547,8 +6739,8 @@ void KSpreadView::removeTable( KSpreadSheet *_t )
   setActiveTable( m_pDoc->map()->findTable( m_pDoc->map()->visibleSheets().first() ));
 
   bool state = m_pDoc->map()->visibleSheets().count() > 1;
-  m_removeTable->setEnabled( state );
-  m_hideTable->setEnabled( state );
+  d->actions->removeTable->setEnabled( state );
+  d->actions->hideTable->setEnabled( state );
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 }
 
@@ -6560,28 +6752,25 @@ void KSpreadView::insertTable( KSpreadSheet* table )
   {
     m_pTabBar->addTab( tabName );
   }
-  else
-  {
-    m_pTabBar->addHiddenTab( tabName );
-  }
+
   bool state = ( m_pDoc->map()->visibleSheets().count() > 1 );
-  m_removeTable->setEnabled( state );
-  m_hideTable->setEnabled( state );
+  d->actions->removeTable->setEnabled( state );
+  d->actions->hideTable->setEnabled( state );
   m_pDoc->emitEndOperation( table->visibleRect( m_pCanvas ) );
 }
 
 QColor KSpreadView::borderColor() const
 {
-  return m_borderColor->color();
+  return d->actions->borderColor->color();
 }
 
 void KSpreadView::updateShowTableMenu()
 {
   m_pDoc->emitBeginOperation( false );
   if ( m_pTable->isProtected() )
-    m_showTable->setEnabled( false );
+    d->actions->showTable->setEnabled( false );
   else
-    m_showTable->setEnabled( m_pDoc->map()->hiddenSheets().count() > 0 );
+    d->actions->showTable->setEnabled( m_pDoc->map()->hiddenSheets().count() > 0 );
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 }
 

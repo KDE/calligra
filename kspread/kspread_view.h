@@ -80,6 +80,10 @@ class TabBar;
 #include <kglobalsettings.h>
 
 #include "kspread_selection.h"
+
+
+class ViewPrivate;
+
 /**
  */
 class KSpreadView : public KoView
@@ -494,6 +498,9 @@ protected:
     KSpreadCell* findNextCell();
 
 private:
+
+    ViewPrivate* d;
+
     // GUI stuff
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
     void updateButton(KSpreadCell *cell, int column, int row);
@@ -510,159 +517,6 @@ private:
     KSpread::TabBar *m_pTabBar;
     KSpreadLocationEditWidget *m_pPosWidget;
     KoCharSelectDia * m_specialCharDlg;
-    KToggleAction* m_bold;
-    KToggleAction* m_italic;
-    KToggleAction* m_underline;
-    KToggleAction* m_strikeOut;
-    KToggleAction* m_percent;
-    KSelectAction* m_selectStyle;
-    KAction* m_createStyle;
-    KAction* m_precplus;
-    KAction* m_precminus;
-    KToggleAction* m_money;
-    KToggleAction* m_alignLeft;
-    KToggleAction* m_alignCenter;
-    KToggleAction* m_alignRight;
-    KToggleAction* m_alignTop;
-    KToggleAction* m_alignMiddle;
-    KToggleAction* m_alignBottom;
-    KAction* m_insertSeries;
-    KAction* m_insertLink;
-    KAction* m_insertFunction;
-    KAction* m_insertSpecialChar;
-    KAction* m_transform;
-    KAction* m_copy;
-    KAction* m_findAction;
-    KAction* m_replaceAction;
-    KAction* m_paste;
-    KAction* m_cut;
-    KAction* m_specialPaste;
-    KAction* m_delete;
-    KAction* m_clearText;
-    KAction* m_clearComment;
-    KAction* m_clearValidity;
-    KAction* m_clearConditional;
-    KAction* m_fillRight;
-    KAction* m_fillLeft;
-    KAction* m_fillUp;
-    KAction* m_fillDown;
-    KAction* m_recalc_workbook;
-    KAction* m_recalc_worksheet;
-    KAction* m_adjust;
-    KAction* m_editCell;
-    KAction* m_undo;
-    KAction* m_redo;
-    KAction* m_paperLayout;
-    KAction* m_styleDialog;
-    KAction* m_definePrintRange;
-    KAction* m_resetPrintRange;
-    KAction* m_insertFromDatabase;
-    KAction* m_insertFromTextfile;
-    KAction* m_insertFromClipboard;
-    KAction* m_insertTable;
-    KAction* m_menuInsertTable;
-    KAction* m_removeTable;
-    KAction* m_renameTable;
-    KAction* m_nextTable;
-    KAction* m_prevTable;
-    KAction* m_firstTable;
-    KAction* m_lastTable;
-    KAction* m_editGlobalScripts;
-    KAction* m_editLocalScripts;
-    KAction* m_reloadScripts;
-    KAction* m_conditional;
-    KAction* m_validity;
-    KAction* m_sort;
-    KAction* m_goalSeek;
-    KAction* m_subTotals;
-    KAction* m_multipleOperations;
-    KAction* m_textToColumns;
-    KAction* m_consolidate;
-    KAction* m_help;
-    KAction* m_insertCellCopy;
-    KToggleAction* m_multiRow;
-    KFontAction* m_selectFont;
-    KFontSizeAction* m_selectFontSize;
-    KAction* m_deleteColumn;
-    KAction* m_hideColumn;
-    KAction* m_showColumn;
-    KAction* m_showSelColumns;
-    KAction* m_insertColumn;
-    KAction* m_deleteRow;
-    KAction* m_insertRow;
-    KAction* m_hideRow;
-    KAction* m_showRow;
-    KAction* m_showSelRows;
-    KSelectAction* m_formulaSelection;
-    KSelectAction* m_viewZoom;
-    KAction* m_sortDec;
-    KAction* m_sortInc;
-    TKSelectColorAction* m_textColor;
-    TKSelectColorAction* m_bgColor;
-    KAction* m_cellLayout;
-    KAction* m_hideTable;
-    KAction* m_showTable;
-    KAction* m_borderLeft;
-    KAction* m_borderRight;
-    KAction* m_borderTop;
-    KAction* m_borderBottom;
-    KAction* m_borderAll;
-    KAction* m_borderOutline;
-    KAction* m_borderRemove;
-    TKSelectColorAction* m_borderColor;
-    KAction* m_tableFormat;
-    KAction* m_autoSum;
-    KToggleAction* m_showPageBorders;
-    KActionMenu* m_scripts;
-    KAction* m_default;
-    KAction* m_areaName;
-    KAction* m_showArea;
-    KAction* m_resizeRow;
-    KAction* m_resizeColumn;
-    KAction* m_fontSizeUp;
-    KAction* m_fontSizeDown;
-    KAction* m_upper;
-    KAction* m_lower;
-    KAction* m_equalizeRow;
-    KAction* m_equalizeColumn;
-    KAction* m_preference;
-    KAction* m_firstLetterUpper;
-    KToggleAction* m_verticalText;
-    KAction* m_addModifyComment;
-    KAction* m_removeComment;
-    KAction* m_insertCell;
-    KAction* m_removeCell;
-    KAction* m_changeAngle;
-    KAction* m_mergeCell;
-    KAction* m_dissociateCell;
-    KAction* m_gotoCell;
-    KAction* m_increaseIndent;
-    KAction* m_decreaseIndent;
-    KAction* m_sortList;
-    KAction* m_spellChecking;
-
-    KAction* m_createTemplate;
-
-    KAction* m_insertChartFrame;
-
-    KToggleAction* m_protectSheet;
-    KToggleAction* m_protectDoc;
-
-    KToggleAction* m_recordChanges;
-    KToggleAction* m_protectChanges;
-    KAction* m_filterChanges;
-    KAction* m_acceptRejectChanges;
-    KAction* m_commentChanges;
-    KAction* m_mergeDocument;
-
-    KToggleAction* m_menuCalcMin;
-    KToggleAction* m_menuCalcMax;
-    KToggleAction* m_menuCalcAverage;
-    KToggleAction* m_menuCalcCount;
-    KToggleAction* m_menuCalcSum;
-    KToggleAction* m_menuCalcNone;
-
-    KoPartSelectAction *m_insertPart;
 
     struct
     {
