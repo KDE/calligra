@@ -83,8 +83,6 @@ VCanvas::eventFilter( QObject* object, QEvent* event )
 	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
 
 	KoPoint canvasCoordinate = toContents( KoPoint( mouseEvent->pos() ) );
-	canvasCoordinate.setX( canvasCoordinate.x() - PAGE_OFFSETX / m_view->zoom() );
-	canvasCoordinate.setY( canvasCoordinate.y() - PAGE_OFFSETY / m_view->zoom() );
 	if( mouseEvent && m_view )
 		return m_view->mouseEvent( mouseEvent, canvasCoordinate );
 	else
@@ -102,11 +100,11 @@ KoPoint
 VCanvas::toContents( const KoPoint &p ) const
 {
 	KoPoint p2 = p;
-	p2.setX( ( p.x() + contentsX() ) / m_view->zoom() );
+	p2.setX( ( p.x() + contentsX() - PAGE_OFFSETX ) / m_view->zoom() );
 	if( contentsHeight() > height() )
-		p2.setY( ( contentsHeight() - ( p.y() + contentsY() ) ) / m_view->zoom() );
+		p2.setY( ( contentsHeight() - ( p.y() + contentsY() + PAGE_OFFSETY) ) / m_view->zoom() );
 	else
-		p2.setY( ( height() - p.y() ) / m_view->zoom() );
+		p2.setY( ( height() - p.y() + PAGE_OFFSETY ) / m_view->zoom() );
 	return p2;
 }
 
