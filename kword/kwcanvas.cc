@@ -330,6 +330,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
     if( doc->getFirstSelectedFrame() )
     {
         KWFrame * frame = doc->getFirstSelectedFrame();
+        frame=settingsFrame(frame);
         m_resizedFrameInitialSize = frame->normalize();
     }
 
@@ -342,6 +343,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
     m_boundingRect = KoRect();
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
+        frame=settingsFrame(frame);
         KWFrameSet * fs = frame->getFrameSet();
         // If one cell belongs to a table, we are in fact moving the whole table
         KWTableFrameSet *table = fs->getGroupManager();
@@ -539,6 +541,9 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
 
     // Can't resize the main frame of a WP document
     KWFrame *frame = doc->getFirstSelectedFrame();
+    //necesary to have other frame otherwise resize doesn't work
+    KWFrame *frame2=settingsFrame(frame);
+
     KWFrameSet *fs = frame->getFrameSet();
     if ( doc->processingType() == KWDocument::WP && fs == doc->getFrameSet(0))
         return;
@@ -603,6 +608,15 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     frame->setTop(newTop);
     frame->setRight(newRight);
     frame->setBottom(newBottom);
+
+    //necessary when a frame is a copy
+    if(frame!=frame2)
+    {
+        frame2->setLeft(newLeft);
+        frame2->setTop(newTop);
+        frame2->setRight(newRight);
+        frame2->setBottom(newBottom);
+    }
 
     kdDebug() << "KWCanvas::mmEditFrameResize new rect " << DEBUGRECT( *frame ) << endl;
 
@@ -732,6 +746,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         {
             KWFrame *frame = frameIt.current();
             if ( frame->isSelected() ) {
+                frame=settingsFrame(frame);
                 if ( frameset->getFrameType() == FT_TABLE ) {
                     if ( tablesMoved.findRef( static_cast<KWTableFrameSet *> (frameset) ) == -1 )
                         tablesMoved.append( static_cast<KWTableFrameSet *> (frameset));
@@ -896,6 +911,7 @@ void KWCanvas::mrEditFrame() // Can be called from KWCanvas and from KWResizeHan
         if ( frameResized )
         {
             KWFrame *frame = doc->getFirstSelectedFrame();
+            frame=settingsFrame(frame);
             ASSERT( frame );
             if ( frame )
             {
