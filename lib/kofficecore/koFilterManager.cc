@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
                  2000, 2001 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2004 Nicolas Goutte <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,6 +40,12 @@
 #include <queue>
 
 #include <unistd.h>
+
+class KoFilterManager::Private
+{
+public:
+    bool m_batch;
+};
 
 
 KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes, const QString &nativeFormat)
@@ -109,6 +116,8 @@ const int KoFilterManager::s_area = 30500;
 KoFilterManager::KoFilterManager( KoDocument* document ) :
     m_document( document ), m_parentChain( 0 ), m_graph( "" ), d( 0 )
 {
+    d = new KoFilterManager::Private;
+    d -> m_batch = false;
     if ( document )
         QObject::connect( this, SIGNAL( sigProgress( int ) ),
                           document, SIGNAL( sigProgress( int ) ) );
@@ -120,10 +129,13 @@ KoFilterManager::KoFilterManager( const QString& url, const QCString& mimetypeHi
     m_document( 0 ), m_parentChain( parentChain ), m_importUrl( url ), m_importUrlMimetypeHint( mimetypeHint ),
     m_graph( "" ), d( 0 )
 {
+    d = new KoFilterManager::Private;
+    d -> m_batch = false;
 }
 
 KoFilterManager::~KoFilterManager()
 {
+    delete d;
 }
 
 QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus& status )
@@ -484,6 +496,16 @@ void KoFilterManager::importErrorHelper( const QString& mimeType, const bool sup
     QString tmp = i18n("Could not import file of type\n%1").arg( mimeType );
     // ###### FIXME: use KLibLoader::lastErrorMessage() here
     if (!suppressDialog) KMessageBox::error( 0L, tmp, i18n("Missing Import Filter") );
+}
+
+void KoFilterManager::setBatchMode( const bool batch )
+{
+    d->m_batch = batch;
+}
+
+bool KoFilterManager::getBatchMode( void ) const
+{
+    return d->m_batch;
 }
 
 #include <koFilterManager.moc>

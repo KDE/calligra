@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
                  2000, 2001 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2004 Nicolas Goutte <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -112,6 +113,18 @@ public:
      */
     static bool filterAvailable( KoFilterEntry::Ptr entry );
 
+    /**
+     * Set the filter manager is batch mode (no dialog shown)
+     * instead of the interactive mode (dialog shown)
+     */
+    void setBatchMode ( const bool batch );
+
+    /**
+     * Get if the filter manager is batch mode (true)
+     * or in interactive mode (true)
+     */
+    bool getBatchMode ( void ) const;
+
 signals:
     void sigProgress( int );
 
@@ -146,7 +159,7 @@ private:
     KOffice::Graph m_graph;
     Direction m_direction;
 
-    // A static cache for the availability checks of filters
+    /// A static cache for the availability checks of filters
     static QMap<QString, bool> m_filterAvailable;
 
     // unused right now
