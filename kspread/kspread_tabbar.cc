@@ -100,7 +100,7 @@ public:
 using namespace KSpread;
 
 // built-in pixmap for scroll-first button
-const char * scroll_first_xpm[] = {
+static const char * scroll_first_xpm[] = {
 "10 10 2 1",
 " 	c None",
 ".	c #000000",
@@ -116,7 +116,7 @@ const char * scroll_first_xpm[] = {
 "          "};
 
 // built-in pixmap for scroll-last button
-const char * scroll_last_xpm[] = {
+static const char * scroll_last_xpm[] = {
 "10 10 2 1",
 " 	c None",
 ".	c #000000",
@@ -132,7 +132,7 @@ const char * scroll_last_xpm[] = {
 "          "};
 
 // built-in pixmap for scroll-left button
-const char * scroll_left_xpm[] = {
+static const char * scroll_left_xpm[] = {
 "10 10 2 1",
 " 	c None",
 ".	c #000000",
@@ -148,7 +148,7 @@ const char * scroll_left_xpm[] = {
 "          "};
 
 // built-in pixmap for scroll-right button
-const char * scroll_right_xpm[] = {
+static const char * scroll_right_xpm[] = {
 "10 10 2 1",
 " 	c None",
 ".	c #000000",
