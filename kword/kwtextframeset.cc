@@ -740,7 +740,8 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
 
             textDocument()->drawParagWYSIWYG(
                 p, static_cast<KoTextParag *>(cursor->parag()),
-                iPoint.x() - 5, iPoint.y(), clip.width(), clip.height(),
+                QMAX(0, iPoint.x() - 5), // negative values create problems
+                iPoint.y(), clip.width(), clip.height(),
                 pix, cg, m_doc, // TODO view's zoom handler
                 cursorVisible, cursor, FALSE /*resetChanged*/, drawingFlags );
 
