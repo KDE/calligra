@@ -82,10 +82,12 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
 KoView::~KoView()
 {
   kdDebug(30003) << "KoView::~KoView " << this << endl;
-  if ( d->m_manager && !koDocument()->isSingleViewMode() )
-    d->m_manager->removePart( koDocument() );
-
-  d->m_doc->removeView(this);
+  if ( !koDocument()->isSingleViewMode() )
+  {
+    if ( d->m_manager )
+      d->m_manager->removePart( koDocument() );
+    d->m_doc->removeView(this);
+  }
   delete d;
   kdDebug(30003) << "leaving KoView::~KoView()" << endl;
 }
