@@ -19,6 +19,7 @@
 
 #include <qpopupmenu.h>
 #include <qscrollview.h>
+#include <qcursor.h>
 
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -85,6 +86,17 @@ KexiSubForm::setFormName(const QString &name)
 
 //////////////////////////////////////////
 
+KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
+ : KLineEdit("bleble", parent, name)
+{
+}
+
+KexiDBLineEdit::~KexiDBLineEdit()
+{
+}
+
+//////////////////////////////////////////
+
 KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, name)
 {
@@ -104,42 +116,47 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wSubForm->setDescription(i18n("A form widget included in another Form"));
 	m_classes.append(wSubForm);
 
-/* todo
+/* @todo allow to inherit from stdwidgets' KLineEdit */
 	KFormDesigner::WidgetInfo *wLineEdit = new KFormDesigner::WidgetInfo(this);
 	wLineEdit->setPixmap("lineedit");
-	wLineEdit->setClassName("KexiDBLineEdit");
-	wLineEdit->addAlternateClassName("QLineEdit");
+	wLineEdit->setClassName("KLineEdit");
+	wLineEdit->addAlternateClassName("QLineEdit", true/*override*/);
+	wLineEdit->addAlternateClassName("KLineEdit", true/*override*/);
 	wLineEdit->setIncludeFileName("klineedit.h");
 	wLineEdit->setName(i18n("Line Edit"));
 	wLineEdit->setNamePrefix(i18n("Widget name (see above)", "LineEdit"));
 	wLineEdit->setDescription(i18n("A widget to input text"));
-	m_classes.append(wLineEdit); */
+	m_classes.append(wLineEdit);
 }
 
-QString
+KexiDBFactory::~KexiDBFactory()
+{
+}
+
+/*QString
 KexiDBFactory::name()
 {
 	return("kexidbwidgets");
-}
-
-KFormDesigner::WidgetInfo::List
-KexiDBFactory::classes()
-{
-	return m_classes;
-}
+}*/
 
 QWidget*
 KexiDBFactory::create(const QString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
 {
 	kexipluginsdbg << "KexiDBFactory::create() " << this << endl;
 
+	QWidget *w=0;
+
 	if(c == "KexiSubForm")
 	{
-		KexiSubForm *subform = new KexiSubForm(container->form()->manager(), p, n);
-		return subform;
+		w = new KexiSubForm(container->form()->manager(), p, n);
+	}
+	else if(c == "KLineEdit")
+	{
+		w = new KexiDBLineEdit(p, n);
+		w->setCursor(QCursor(Qt::ArrowCursor));
 	}
 
-	return 0;
+	return w;
 }
 
 bool
@@ -153,10 +170,25 @@ KexiDBFactory::createMenuActions(const QString &, QWidget *w, QPopupMenu *,
 }
 
 void
-KexiDBFactory::startEditing(const QString &, QWidget *, KFormDesigner::Container *container)
+KexiDBFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
-	return;
+	if(classname == "KLineEdit")
+	{
+//! @todo this code should not be copied here but 
+//! just inherited StdWidgetFactory::clearWidgetContent() should be called 
+		KLineEdit *lineedit = static_cast<KLineEdit*>(w);
+		createEditor(lineedit->text(), lineedit, container, lineedit->geometry(), lineedit->alignment(), true);
+	}
+}
+
+void
+KexiDBFactory::clearWidgetContent(const QString &classname, QWidget *w)
+{
+//! @todo this code should not be copied here but 
+//! just inherited StdWidgetFactory::clearWidgetContent() should be called 
+	if(classname == "KLineEdit")
+		static_cast<KLineEdit*>(w)->clear();
 }
 
 QStringList
@@ -165,10 +197,6 @@ KexiDBFactory::autoSaveProperties(const QString &classname)
 	if(classname == "KexiSubForm")
 		return QStringList("formName");
 	return QStringList();
-}
-
-KexiDBFactory::~KexiDBFactory()
-{
 }
 
 K_EXPORT_COMPONENT_FACTORY(kexidbwidgets, KGenericFactory<KexiDBFactory>("kexidbwidgets"))

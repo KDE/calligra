@@ -385,6 +385,27 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 CCMAIL: dkite@shaw.ca
 
+2004-12-20
+SQLite Drivers (2 and 3)
+*DATABSE FORMAT CHANGED to 1.4* 
+- date-time data type is now stored as "YYYY-MM-DD HH:MM:SS", not as
+ "YYYY-MM-DDTHH:MM:SS". This is compatible with SQLite format
+ http://www.sqlite.org/cvstrac/wiki?p=DateAndTimeFunctions
+ The change is backward compatible.
+ (thanks for reporting: Richard Groult)
+KexiDB
+- Connection: queryStringList() convenience function added
+- information about "possible problems" is displayed in details sections
+  of error message on failed loading db driver
+Migration
+- wizard fixed a bit
+- kexi__* tables are not copied on high-level
+- MySQL Migration driver, contributed by Martin Ellis <m.a.ellis@ncl.ac.uk> 
+KexiDB Drivers
+- MySQL driver better splitted to internal and public part, 
+  so migration driver can easier use it
+
+
 2004-12-18
 Forms
 - WidgetLibrary: check for duplicated factories added
