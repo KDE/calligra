@@ -1,7 +1,7 @@
 #include<FlexLexer.h>
 
 #include <string.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <iostream.h>
 #include <fstream.h>
 
