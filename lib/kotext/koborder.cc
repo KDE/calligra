@@ -100,7 +100,7 @@ KoBorder KoBorder::loadBorder( const QDomElement & elem )
         bd.color.setRgb( r, g, b );
     }
     bd.style = static_cast<BorderStyle>( elem.attribute("style").toInt() );
-    bd.setPenWidth( elem.attribute("width").toInt());
+    bd.setPenWidth( elem.attribute("width").toDouble() );
     return bd;
 }
 
