@@ -969,7 +969,9 @@ bool KoDocument::openFile()
         if ( status != KoFilter::OK )
         {
             QApplication::restoreOverrideCursor();
-            KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
+            if ( status != KoFilter::UserCancelled )
+                // Any way of passing a better error message from the filter?
+                KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
             return false;
         }
         kdDebug(30003) << "KoDocument::openFile - importedFile '" << importedFile
@@ -1372,10 +1374,8 @@ DCOPObject * KoDocument::dcopObject()
 
 QCString KoDocument::dcopObjectId() const
 {
-	return const_cast<KoDocument *>(this)->dcopObject()->objId();
-
+    return const_cast<KoDocument *>(this)->dcopObject()->objId();
 }
-
 
 void KoDocument::setErrorMessage( const QString& errMsg )
 {
