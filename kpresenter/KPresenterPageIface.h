@@ -103,8 +103,8 @@ k_dcop:
     virtual void changeClipart( const QString & );
 
     //return -1 if there is not a rndY or rndX defined
-    virtual int rndY();
-    virtual int rndX();
+    virtual int rndY() const;
+    virtual int rndX() const;
     virtual void setBackGroundColor1(const QColor &col);
     virtual void setBackGroundColor2(const QColor &col);
     virtual void setBackGroundColorType(const QString &type);

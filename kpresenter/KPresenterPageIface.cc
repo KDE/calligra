@@ -622,14 +622,14 @@ void KPresenterPageIface::setBackGroundColorType(const QString &type)
 }
 
 
-int KPresenterPageIface::rndY()
+int KPresenterPageIface::rndY() const
 {
     int ret=-1;
     m_page->getRndY( ret );
     return ret;
 }
 
-int KPresenterPageIface::rndX()
+int KPresenterPageIface::rndX() const
 {
     int ret=-1;
     m_page->getRndX( ret );
