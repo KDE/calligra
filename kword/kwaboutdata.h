@@ -39,7 +39,7 @@ KAboutData * newKWordAboutData()
     aboutData->addAuthor("Thomas Zander", 0, "zander@kde.org");
     aboutData->addAuthor("David Faure", 0, "david@mandrakesoft.com");
     aboutData->addAuthor("Laurent Montel", 0, "lmontel@mandrakesoft.com");
-    aboutData->addAuthor("Sven Lüppken", 0, "sven.lueppken@gutenberg-project.org");
+    aboutData->addAuthor("Sven LÃ¼ppken", 0, "sven.lueppken@gutenberg-project.org");
     return aboutData;
 }
 
