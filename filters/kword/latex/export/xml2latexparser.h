@@ -33,7 +33,7 @@ class Xml2LatexParser : public XmlParser
 	QFile _file;
 	QTextStream _out;
 	/** Name of the latex file. */
-	QString  _filename;
+	//QString  _filename;
 	/** The KWord document exported. */
 	const KoStore* _in;
 

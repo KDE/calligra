@@ -39,9 +39,7 @@ class KoStore;
  */
 class XmlParser
 {
-	/** Latex output file */
-	QString _filename;
-	/** The Koffice app document stored in a XML DOM Tree. */
+		/** The Koffice app document stored in a XML DOM Tree. */
 	QDomDocument _document;
 	/** The koffice document (maindoc, picture, ...). */
 	static KoStore* _in;
@@ -54,6 +52,8 @@ class XmlParser
 		 */
 		//static FileHeader *_fileHeader;
 		static Document   *_root;
+		/** Latex output file */
+		static QString _filename;
 
 	public:
 		XmlParser(Config*, QString);

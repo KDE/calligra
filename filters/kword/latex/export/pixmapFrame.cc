@@ -19,6 +19,7 @@
 **
 */
 
+#include <qdir.h>
 #include <kdebug.h>		/* for kdDebug() stream */
 /* Needed to convert picture in eps file. Use ImageMagick. */
 #ifdef HAVE_MAGICK
@@ -147,9 +148,9 @@ void PixmapFrame::convert()
 	InitializeMagick(NULL);
 	GetExceptionInfo(&exception);
 	image_info = CloneImageInfo((ImageInfo *) NULL);
-	QString filename = getRoot()->extractData(getKey());
-	strcpy(image_info->filename, filename.latin1());
-	kdDebug() << image_info->filename << endl;
+	// 8 characters are deleted when readign the file picture name
+	QString filename = "file:///" + getRoot()->extractData(getKey());
+	strncpy(image_info->filename, filename.latin1(), filename.length());
 	image = ReadImage(image_info, &exception);
 	if (image == (Image *) NULL)
 		MagickError(exception.severity, exception.reason, exception.description);
@@ -157,8 +158,13 @@ void PixmapFrame::convert()
 	{
 		/*
 			Write the image as EPS and destroy it.
+		  Copy image file in the same directory than the tex file.
 		*/
-		(void) strcpy(image->filename, getFilenamePS().latin1());
+		QString dir = getFilename();
+		dir.truncate(getFilename().findRev('/'));
+		kdDebug() << "file " << getFilename() << endl;
+		kdDebug() << "path " << dir << endl;
+		(void) strcpy(image->filename, (dir + "/" + getFilenamePS()).latin1());
 		WriteImage(image_info, image);
 		DestroyImage(image);
 	}
@@ -176,12 +182,11 @@ void PixmapFrame::convert()
 /*******************************************/
 void PixmapFrame::generate(QTextStream &out)
 {
-	convert();
-	//generate_format_begin(out);
-
-	//convert(getFilename());
+	if(Config::instance()->convertPictures())
+		convert();
+	
+	Config::instance()->writeIndent(out);
 	out << "\\includegraphics{" << getFilenamePS()<< "}" << endl;
 
-	//generate_format_end(out);
 }
 

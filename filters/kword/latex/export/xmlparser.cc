@@ -29,10 +29,12 @@
 //FileHeader* XmlParser::_fileHeader = 0;
 Document* XmlParser::_root = 0;
 KoStore* XmlParser::_in = NULL;
+QString XmlParser::_filename = "";
 
-XmlParser::XmlParser(Config* config, QString filename):	_filename(filename), _config(config)
+XmlParser::XmlParser(Config* config, QString filename):_config(config)
 	
 {
+	//_filename = filename;
 	QFile f(filename);
 	if(!f.open(IO_ReadOnly))
 		return;
