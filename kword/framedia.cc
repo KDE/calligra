@@ -164,39 +164,35 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     //kdDebug() << "setup tab 1 Frame options"<<endl;
     tab1 = addPage( i18n("Options") );
 
-    int rows=2;
-    if(frameType == FT_FORMULA || frameType == FT_PICTURE) {
-        rows++;
-        grid1 = new QGridLayout( tab1, rows, 1, KDialog::marginHint(), KDialog::spacingHint() );
-    }
-    if(frameType == FT_TEXT){
-        rows+=2;
-        grid1 = new QGridLayout( tab1, rows, 2, KDialog::marginHint(), KDialog::spacingHint() );
-    }
+    int columns = 0;
+    if(frameType == FT_FORMULA || frameType == FT_PICTURE)
+        columns = 1;
+    else if(frameType == FT_TEXT)
+        columns = 2;
 
-    rows--;
-    for(int i=0;i<rows;i++)
-        grid1->setRowStretch( i, 0 );
-    grid1->setRowStretch( rows, 1 );
+    grid1 = new QGridLayout( tab1, 0 /*auto create*/, columns, KDialog::marginHint(), KDialog::spacingHint() );
 
-    // formula frame
-    if(frameType==FT_FORMULA) {
-        autofit = new QCheckBox (i18n("Autofit framesize"),tab1);
-        autofit->setEnabled(false);
-        grid1->addWidget(autofit,1,0);
+    // Options for all types of frames
+    cbCopy = new QCheckBox( i18n("Frame is a copy of the previous frame"),tab1 );
+    grid1->addWidget(cbCopy,1,0);
 
-        // Picture frame
-    } else if(frameType==FT_PICTURE) {
+    cbCopy->setChecked( frame->isCopy() );
+    cbCopy->setEnabled( frame->getFrameSet()->getFrame( 0 ) != frame ); // First one can't be a copy
+
+    int row = 2;
+
+    // Picture frame
+    if(frameType==FT_PICTURE) {
         aspectRatio = new QCheckBox (i18n("Retain original aspect ratio"),tab1);
         aspectRatio->setEnabled(false);
-        grid1->addWidget(aspectRatio,1,0);
+        grid1->addWidget(aspectRatio, row, 0);
 
         // Text frame
     } else if(frameType==FT_TEXT) {
 
         // AutoCreateNewFrame policy.
         endOfFrame = new QGroupBox(i18n("If text is too long for frame:"), tab1 );
-        grid1->addWidget( endOfFrame, 1, 0 );
+        grid1->addWidget( endOfFrame, row, 0 );
 
         eofGrid= new QGridLayout (endOfFrame, 4, 1, KDialog::marginHint(), KDialog::spacingHint());
         rAppendFrame = new QRadioButton( i18n( "Create a new page" ), endOfFrame );
@@ -226,7 +222,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
         // NewFrameBehaviour
         onNewPage = new QGroupBox(i18n("On new page creation:"),tab1);
-        grid1->addWidget( onNewPage, 1, 1 );
+        grid1->addWidget( onNewPage, row, 1 );
 
         onpGrid = new QGridLayout( onNewPage, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
         reconnect = new QRadioButton (i18n ("Reconnect frame to current flow"), onNewPage);
@@ -247,7 +243,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         grp2->insert( reconnect );
         grp2->insert( noFollowup );
         grp2->insert( copyRadio );
-        grid1->addRowSpacing(1,onNewPage->height());
+        grid1->addRowSpacing( row, onNewPage->height());
         if(frame->getNewFrameBehaviour() == Reconnect) {
             reconnect->setChecked(true);
         } else if(frame->getNewFrameBehaviour() == NoFollowup) {
@@ -257,10 +253,12 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
             setFrameBehaviourInputOff();
         }
 
+        row++;
+
         // SideHeads definition
         sideHeads = new QGroupBox(i18n("SideHead definition"),tab1);
         sideHeads->setEnabled(false);
-        grid1->addWidget(sideHeads,2,0);
+        grid1->addWidget(sideHeads, row, 0);
 
         sideGrid = new QGridLayout( sideHeads, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
         sideTitle1 = new QLabel ( i18n("Size ( %1 ):").arg(doc->getUnitName()),sideHeads);
@@ -294,7 +292,9 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         // add rest of sidehead init..
     }
 
-    //kdDebug() << "setup tab 1 exit"<<endl;
+    for(int i=0;i < grid1->numRows() - 1;i++)
+        grid1->setRowStretch( i, 0 );
+    grid1->setRowStretch( grid1->numRows() - 1, 1 );
 }
 
 
@@ -771,10 +771,10 @@ bool KWFrameDia::applyChanges()
     if ( !frame )
         return false;
 
-    if ( frameType==FT_TEXT ) // tab 1 and 3 only exist for text framesets
+    if ( tab1 )
     {
-        ASSERT( tab1 );
-        ASSERT( tab3 );
+        // Copy
+        frame->setCopy( cbCopy->isChecked() );
 
         // FrameBehaviour
         if(rResizeFrame->isChecked())
@@ -791,7 +791,10 @@ bool KWFrameDia::applyChanges()
             frame->setNewFrameBehaviour(NoFollowup);
         else
             frame->setNewFrameBehaviour(Copy);
+    }
 
+    if ( tab3 )
+    {
         // Frame/Frameset belonging, and frameset naming
         // We have basically three cases:
         // * Creating a frame (fs==0), and creating a frameset ('*' selected)
@@ -891,7 +894,7 @@ bool KWFrameDia::applyChanges()
             // Rename frameset
             frame->getFrameSet()->setName( name );
         }
-    } // end of 'tab1 and text frame'
+    }
 
     if ( tab2 )
     {
