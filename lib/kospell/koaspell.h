@@ -18,6 +18,7 @@
 #ifndef __KOASPELL_H__
 #define __KOASPELL_H__
 
+#ifdef HAVE_LIBASPELL
 #include "koSconfig.h"
 
 #include <qobject.h>
@@ -113,5 +114,5 @@ private slots:
     void slotModalSpellCheckerFinished();
 };
 
-
+#endif
 #endif

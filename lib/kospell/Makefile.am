@@ -1,6 +1,7 @@
 KOSPELLFILECPP = koaspell.cpp
 KOSPELLFILEH = koaspell.h
 
+
 INCLUDES= $(all_includes)
 
 lib_LTLIBRARIES  = libkospell.la
