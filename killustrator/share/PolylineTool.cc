@@ -109,7 +109,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	GObject *o = 0L;
 	int idx = -1;
 	if (doc->findNearestObject ("GPolyline", xpos, ypos, 
-				    80, o, idx)) {
+				    10, o, idx)) {
 	  line = (GPolyline *) o;
 	  last = (idx != 0 ? idx + 1 : idx);
 	  newObj = false;
@@ -177,21 +177,44 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
       if ((last > 0 && line->numOfPoints () >= 3 && 
 	  line->getNeighbourPoint (Coord (xpos, ypos)) == 0) ||
-	  (me->state () & ShiftButton)) {
-	if (me->state () & ShiftButton) 
-	    line->removePoint (line->numOfPoints () - 1, false);
-	// the polyline is closed, so convert it into a polygon
-	GPolygon* obj = new GPolygon (line->getPoints ());
-	doc->deleteObject (line);
-	if (obj->isValid ()) {
-	  doc->insertObject (obj);
-	  doc->setLastObject (obj);
-	  CreatePolygonCmd *cmd = new CreatePolygonCmd (doc, obj);
-	  history->addCommand (cmd);
+	  ((me->state () & ShiftButton) && line->numOfPoints () > 3)) {
+	if (me->state () & ShiftButton) { 
+	  line->removePoint (line->numOfPoints () - 1, false);
+	  // the polyline is closed, so convert it into a polygon
+	  GPolygon* obj = new GPolygon (line->getPoints ());
+	  doc->deleteObject (line);
+	  if (obj->isValid ()) {
+	    doc->insertObject (obj);
+	    doc->setLastObject (obj);
+	    CreatePolygonCmd *cmd = new CreatePolygonCmd (doc, obj);
+	    history->addCommand (cmd);
+	  }
 	}
       }
       else {
 	doc->setLastObject (line);
+#if not_yet
+	// XXXX
+	// look for existing polylines with a point near the mouse pointer
+	QList<GObject> olist;
+	GPolyline *obj = 0L;
+	if (doc->findContainingObjects (xpos, ypos, olist)) {
+	  QListIterator<GObject> it (olist);
+	  while (it.current ()) {
+	    if (it.current () != line && it.current ()->isA ("GPolyline")) {
+	      obj = (GPolyline *) it.current ();
+	      break;
+	    }
+	    ++it;
+	  }
+	}
+	int olast = -1;
+	if (obj && (olast = obj->getNeighbourPoint (Coord (xpos, ypos))) != -1
+	    && (olast == 0 || olast == (int) obj->numOfPoints () - 1)) {
+	  // combine the current line with obj
+	  cout << "COMBINE" << endl;
+	}
+#endif
 	if (newObj) {
 	  if (! line->isValid ())
 	    doc->deleteObject (line);
