@@ -21,6 +21,9 @@
 
 #include "kis_util.h"
 
+struct timeval kisUtil::tv1, kisUtil::tv2;
+struct timezone kisUtil::tz;
+
 kisUtil::kisUtil() {}
 
 void kisUtil::printRect( const QRect& r, const QString& name )

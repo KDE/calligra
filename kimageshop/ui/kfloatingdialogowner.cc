@@ -37,8 +37,6 @@ void KFloatingDialogOwner::removeDialog(KFloatingDialog *d)
 
 void KFloatingDialogOwner::alignRight(int width, int /*height*/)
 {
-  int count = m_fdList.count();
-
   QListIterator<KFloatingDialog> it(m_fdList);
   for( ; it.current(); ++it )
     {

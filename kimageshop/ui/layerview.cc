@@ -291,7 +291,7 @@ void LayerView::slotRemoveLayer()
 
     m_doc->compositeImage( updateRect );
 
-    if( m_selected == m_doc->layerList().count() )
+    if( m_selected == (int)m_doc->layerList().count() )
       m_selected--;
 
     updateTable();
@@ -337,7 +337,7 @@ void LayerView::slotLowerLayer()
 {
   cout << "LayerView::slotLowerLayer()" << endl;
 
-  int newpos = ( m_selected + 1 ) < m_doc->layerList().count() ? m_selected + 1 : m_selected;
+  int newpos = ( m_selected + 1 ) < (int)m_doc->layerList().count() ? m_selected + 1 : m_selected;
 
   if( m_selected != newpos )
   {
@@ -352,7 +352,7 @@ void LayerView::slotFrontLayer()
 {
   cout << "LayerView::slotFrontLayer" << endl;
 
-  if( m_selected != ( m_doc->layerList().count() - 1 ) )
+  if( m_selected != (int) ( m_doc->layerList().count() - 1 ) )
   {
     m_doc->setFrontLayer( m_selected );
     selectLayer( m_doc->layerList().count() - 1 );
@@ -383,7 +383,7 @@ void LayerView::slotBackgroundLayer()
 
 void LayerView::updateAllCells()
 {
-  for( int i = 0; i < m_doc->layerList().count(); i++ )
+  for( int i = 0; i < (int)m_doc->layerList().count(); i++ )
     updateCell( i, 0 );
 }
 

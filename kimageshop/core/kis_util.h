@@ -52,6 +52,7 @@ class kisUtil
   
   static void startTimer();
   static void stopTimer( const QString& text );
+
  private:
   static struct timeval tv1, tv2;
   static struct timezone tz;
