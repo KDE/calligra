@@ -26,6 +26,7 @@
 #include <fstream.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <limits.h>
 #include <qpainter.h>
 #include <qprinter.h>
 #include <qprintdialog.h>
@@ -43,6 +44,7 @@
 QArray<float> Canvas::zoomFactors;
 QString Canvas::psPrologPath = 
      kapp->kde_datadir () + "/killustrator/prolog.ps";
+QDict<QString> Canvas::fontMap;
 
 Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent, 
 		const char* name) : QWidget (parent, name) {
@@ -326,7 +328,38 @@ bool Canvas::writePSProlog (ostream& os) {
 }
 
 const char* Canvas::getPSFont (const QFont& qfont) {
-  return "/Times-Roman";
+  if (fontMap.isEmpty ()) {
+    QString psFontmapPath = kapp->kde_datadir () + "/killustrator/fontmap";
+    ifstream fin ((const char *) psFontmapPath);
+    fin.ignore (INT_MAX, '\n');
+    char key[128], value[128];
+    while (! fin.eof ()) {
+      fin >> key >> value;
+      if (key[0] == '\0')
+	break;
+      fontMap.insert (key, new QString (value));
+    }
+  }
+  QString family = qfont.family ();
+  family = family.lower ();
+  bool italic = qfont.italic ();
+  int weight = qfont.weight ();
+  
+  QString key = family;
+  if (italic)
+    key += ".italic";
+  if (weight >= QFont::Bold)
+    key += ".bold";
+  else if (weight >= QFont::DemiBold)
+    key += ".demibold";
+  else if (weight <= QFont::Light)
+    key += ".light";
+  
+  QString* font = fontMap[key];
+  if (font)
+    return (const char *) *font;
+  else
+    return "/Times-Roman";
 }
 
 void Canvas::printPSDocument () {

@@ -30,6 +30,7 @@
 #include <qpixmap.h>
 #include <qfont.h>
 #include <qarray.h>
+#include <qdict.h>
 
 #include "Painter.h"
 
@@ -125,7 +126,9 @@ private:
   int hGridDistance, vGridDistance;
   bool drawBasePoints;
   static QArray<float> zoomFactors;
+
   static QString psPrologPath;
+  static QDict<QString> fontMap;
 };
 
 #endif
