@@ -53,7 +53,7 @@ public:
 protected:
 	virtual void setupTranslations (void)
 	{
-		KGlobal::locale()->insertCatalogue ("kwordmswritefilter");
+		KGlobal::locale()->insertCatalogue ("kofficefilters");
 	}
 };
 
