@@ -7,11 +7,10 @@
   <Separator/>
   <Action name="copy"/>
   <Action name="cut"/>
-  <Action name="remove"/>
-  <Action name="crop"/>
-  <Action name="scrap_selection"/>
-  <Action name="tool_paste"/>
   <Action name="paste_special"/>
+  <Action name="crop"/>
+  <Action name="remove"/>
+  <Action name="scrap_selection"/>
   <Separator/>
   <Action name="select_all"/>
   <Action name="select_none"/>
@@ -136,10 +135,8 @@
   <Action name="show_sidebar"/>  
   <Action name="float_sidebar"/>
   <Action name="left_sidebar"/>
-  <Separator/>          
   <Action name="toggle_paint_offset"/>
-  <Separator/>    
-  <Action name="configure"/>
+  <Separator/>          
 </Menu>
 
 <!--
