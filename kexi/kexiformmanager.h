@@ -10,13 +10,15 @@ class KexiFormBase;
 class KexiWorkspace;
 class QWidget;
 
+class KexiProject;
+
 class KexiFormManager
 {
 
 public:
 	enum Mode{View=0,Edit=1};
 
-	KexiFormManager();
+	KexiFormManager(KexiProject *project);
 	virtual ~KexiFormManager();
 	QStringList forms() const;
 	bool rename(const QString& oldName, const QString& newName);
@@ -37,6 +39,7 @@ protected:
 
 private:
 	QDict<Item> m_forms;
+	KexiProject *m_project;
 };
 
 #endif

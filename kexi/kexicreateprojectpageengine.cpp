@@ -29,7 +29,6 @@ Boston, MA 02111-1307, USA.
 
 #include "kexiDB/kexidbdriver.h"
 
-#include "kexiapplication.h"
 #include "kexicreateprojectpageengine.h"
 #include "kexiproject.h"
 
@@ -64,7 +63,7 @@ KexiCreateProjectPageEngine::KexiCreateProjectPageEngine(KexiCreateProject *pare
 void
 KexiCreateProjectPageEngine::fill()
 {
-	QStringList drivers = kexi->project()->db()->getDrivers();
+	QStringList drivers = project()->db()->getDrivers();
 	for(QStringList::Iterator it = drivers.begin(); it != drivers.end(); ++it)
 	{
 		m_engine->insertItem(*it);
@@ -82,7 +81,7 @@ KexiCreateProjectPageEngine::fill()
 void
 KexiCreateProjectPageEngine::fillSummery()
 {
-	QString engineSummery = kexi->project()->db()->driverInfo(m_engine->currentText())->service()->comment();
+	QString engineSummery = project()->db()->driverInfo(m_engine->currentText())->service()->comment();
 	QString userSummery = QString("<b>" + m_engine->currentText() + "</b><br><hr><br>" + engineSummery);
 
 
@@ -91,7 +90,7 @@ KexiCreateProjectPageEngine::fillSummery()
 		m_summery->setText(userSummery);
 	}
 
-	QVariant location = kexi->project()->db()->driverInfo(m_engine->currentText())->service()->property("X-Kexi-Location");
+	QVariant location = project()->db()->driverInfo(m_engine->currentText())->service()->property("X-Kexi-Location");
 	setProperty("location", location);
 }
 

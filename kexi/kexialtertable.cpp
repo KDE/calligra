@@ -27,11 +27,10 @@
 #include "kexialtertable.h"
 #include "kexitableview.h"
 #include "kexiDB/kexidbrecord.h"
-#include "kexiapplication.h"
 #include "kexiproject.h"
 
-KexiAlterTable::KexiAlterTable(QWidget *parent, const QString &table, const char *name)
- : KexiDialogBase(parent, name)
+KexiAlterTable::KexiAlterTable(KexiView *view, QWidget *parent, const QString &table, const char *name)
+ : KexiDialogBase(view,parent, name)
 {
 	m_table = table;
 	QVBoxLayout* l = new QVBoxLayout(this);
@@ -67,7 +66,7 @@ KexiAlterTable::KexiAlterTable(QWidget *parent, const QString &table, const char
 
 void KexiAlterTable::initTable()
 {
-	KexiDBRecord* record = kexi->project()->db()->queryRecord("select * from " + m_table + " limit 1 ", false);
+	KexiDBRecord* record = kexiProject()->db()->queryRecord("select * from " + m_table + " limit 1 ", false);
 	record->next();
 	m_fieldnames.clear();
 	int fc = 0;
@@ -102,7 +101,7 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 		if(i->getValue(0).toString() != "" && i->getValue(1).toInt() != 0)
 		{
 			kdDebug() << "Create new field!" << endl;
-			bool ok = kexi->project()->db()->createField(m_table, i->getValue(0).toString(),
+			bool ok = kexiProject()->db()->createField(m_table, i->getValue(0).toString(),
 				static_cast<KexiDBField::ColumnType>(i->getValue(1).toInt() + 1), i->getValue(2).toInt(),
 				i->getValue(3).toBool(), i->getValue(4).toString(), i->getValue(5).toBool());
 
@@ -123,7 +122,7 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 	{
 		int field = i->getHint().toInt();
 		kdDebug() << "KexiAlterTable::slotItemChanged(" << field << ")" << endl;
-		bool ok = kexi->project()->db()->alterField(m_table, m_fieldnames[field],
+		bool ok = kexiProject()->db()->alterField(m_table, m_fieldnames[field],
 			i->getValue(0).toString(), static_cast<KexiDBField::ColumnType> (i->getValue(1).toInt() + 1),
 			i->getValue(2).toInt(), i->getValue(3).toBool(), i->getValue(4).toString(),
 			i->getValue(5).toBool());
@@ -135,7 +134,7 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 		else
 		{
 			// If the query faild revert
-			KexiDBRecord* record = kexi->project()->db()->queryRecord("select * from " + m_table + " limit 1 ", false);
+			KexiDBRecord* record = kexiProject()->db()->queryRecord("select * from " + m_table + " limit 1 ", false);
 			record->next();
 			i->setValue(0, record->fieldInfo(field)->name());
 			i->setValue(1, record->fieldInfo(field)->sqlType() - 1);

@@ -29,7 +29,8 @@
 #include <qlineedit.h>
 //#include <qbytearray.h>
 
-#include "kexiapplication.h"
+#include <koApplication.h>
+
 #include "kexirelationview.h"
 
 KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
@@ -105,7 +106,7 @@ KexiRelationView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 void
 KexiRelationView::drawSource(QPainter *p, RelationSource src)
 {
-	kexi->style().drawPrimitive(QStyle::PE_PanelPopup, p, src.geometry, colorGroup());
+	kapp->style().drawPrimitive(QStyle::PE_PanelPopup, p, src.geometry, colorGroup());
 	p->setBrush(QBrush(colorGroup().background()));
 	p->setBrush(QBrush(colorGroup().highlight()));
 	p->setPen(QPen(colorGroup().highlight()));

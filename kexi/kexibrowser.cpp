@@ -33,8 +33,7 @@
 
 #include "kexiDB/kexidb.h"
 
-#include "keximainwindow.h"
-#include "kexiapplication.h"
+#include "kexiview.h"
 #include "kexibrowser.h"
 #include "kexiformbase.h"
 #include "kexiworkspace.h"
@@ -44,8 +43,9 @@
 #include "kexiquerydesigner.h"
 #include "kexiproject.h"
 
-KexiBrowser::KexiBrowser(QWidget *parent, Section s, const char *name ) : KListView(parent,name)
+KexiBrowser::KexiBrowser(KexiView *view,QWidget *parent, Section s, const char *name ) : KListView(parent,name)
 {
+	m_view=view;
 	m_parent = parent;
 	m_section = s;
 
@@ -99,7 +99,7 @@ void KexiBrowser::addTables(KexiBrowserItem *parent)
 {
 	kdDebug() << "KexiBrowser::addTables()" << endl;
 
-	QStringList tables = kexi->project()->db()->tables();
+	QStringList tables = m_view->project()->db()->tables();
 
 	for(QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 	{
@@ -112,7 +112,7 @@ void KexiBrowser::addQueries(KexiBrowserItem *parent)
 {
 	kdDebug() << "KexiBrowser::addTables()" << endl;
 
-	References fileRefs = kexi->project()->fileReferences("Queries");
+	References fileRefs = m_view->project()->fileReferences("Queries");
 
 	for(References::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
 	{
@@ -178,12 +178,9 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 		{
 			if ( r->type() == KexiBrowserItem::Child)
 			{
-				kexi->project()->formManager()->showForm(r->identifier(), KexiFormManager::View,
-					kexi->mainWindow()->workspaceWidget());
+				m_view->project()->formManager()->showForm(r->identifier(), KexiFormManager::View,
+					m_view);
 
-//    			    KexiFormBase *fb = new KexiFormBase(kexi->mainWindow()->workspace(), "form",r->identifier());
-//			    kexi->mainWindow()->workspace()->addItem(fb);
-//			    fb->show();
 			}
 			break;
 		}
@@ -192,7 +189,7 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 		{
 			if ( r->type() == KexiBrowserItem::Child )
 			{
-				KexiDataTable *kt = new KexiDataTable(kexi->mainWindow()->workspaceWidget(), r->text(0), "table");
+				KexiDataTable *kt = new KexiDataTable(m_view,m_view->workspaceWidget(), r->text(0), "table");
 				if(kt->executeQuery("select * from " + r->text(0)))
 				{
 					kt->show();
@@ -209,7 +206,7 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 		{
 			if ( r->type() == KexiBrowserItem::Child )
 			{
-				KexiQueryDesigner *kqd = new KexiQueryDesigner(kexi->mainWindow()->workspaceWidget(), r->text(0), "oq");
+				KexiQueryDesigner *kqd = new KexiQueryDesigner(m_view, m_view->workspaceWidget(),r->text(0), "oq");
 				kqd->show();
 			}
 			break;
@@ -223,12 +220,11 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 
 void KexiBrowser::slotCreateNewForm()
 {
-	QString name=kexi->project()->formManager()->newForm();
+	QString name=m_view->project()->formManager()->newForm();
 
 	KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Form, m_forms,name,name);
 	item->setPixmap(0, iconLoader->loadIcon("form", KIcon::Small));
 	slotCreate(item);
-
 }
 
 void KexiBrowser::slotDelete()
@@ -246,9 +242,9 @@ void KexiBrowser::slotCreateTable()
 
 	if(ok && name.length() > 0)
 	{
-		if(kexi->project()->db()->query("CREATE TABLE " + name + " (id INT(10))"))
+		if(m_view->project()->db()->query("CREATE TABLE " + name + " (id INT(10))"))
 		{
-			KexiAlterTable* kat = new KexiAlterTable(kexi->mainWindow()->workspaceWidget(), name, "alterTable");
+			KexiAlterTable* kat = new KexiAlterTable(m_view, m_view->workspaceWidget(),name, "alterTable");
 			kat->show();
 			KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, m_tables, name);
 			item->setPixmap(0, iconLoader->loadIcon("table", KIcon::Small));
@@ -262,7 +258,7 @@ void KexiBrowser::slotAlterTable()
 
 	if ( r->type() == KexiBrowserItem::Child )
 	{
-		KexiAlterTable* kat = new KexiAlterTable(kexi->mainWindow()->workspaceWidget(), r->text(0), "alterTable");
+		KexiAlterTable* kat = new KexiAlterTable(m_view, m_view->workspaceWidget(),r->text(0), "alterTable");
 		kat->show();
 	}
 }
@@ -274,16 +270,16 @@ void KexiBrowser::slotCreateQuery()
 
 	if(ok && name.length() > 0)
 	{
-		KexiQueryDesigner *kqd = new KexiQueryDesigner(kexi->mainWindow()->workspaceWidget(), name, "query");
+		KexiQueryDesigner *kqd = new KexiQueryDesigner(m_view, m_view->workspaceWidget(),name, "query");
 		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, m_queries, name);
 //		kexi->project()->addFileReference("/query/" + name + ".query");
 
-		kexi->project()->setModified();
+		m_view->project()->setModified();
 
 		m_queries->setOpen(true);
 		kqd->show();
 
-		kexi->project()->setModified();
+		m_view->project()->setModified();
 	}
 }
 
@@ -298,7 +294,7 @@ void KexiBrowser::slotDeleteTable()
 
 		if(ans == KMessageBox::Yes)
 		{
-			if(kexi->project()->db()->query("DROP TABLE " + r->text(0)))
+			if(m_view->project()->db()->query("DROP TABLE " + r->text(0)))
 			{
 				delete r;
 			}

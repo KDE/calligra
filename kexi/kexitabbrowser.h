@@ -37,10 +37,9 @@ class KexiTabBrowser : public KexiDialogBase
 	Q_OBJECT
 
 	public:
-		KexiTabBrowser(QWidget *parent=0, const char *name=0);
+		KexiTabBrowser(KexiView *view,QWidget *parent=0, const char *name=0);
 		~KexiTabBrowser();
 
-		void			generateView();
 
                 virtual KXMLGUIClient *guiClient();
 
@@ -64,6 +63,8 @@ class KexiTabBrowser : public KexiDialogBase
 
 	protected slots:
 		void			slotTabActivated(int id);
+		void			generateView();
+
 };
 
 #endif

@@ -21,6 +21,7 @@
 	<Action name="widget_push_button"/>
 	<Action name="widget_url_requester"/>
 	<Action name="widget_frame"/>
+	<Action name="widget_tabwidget"/>
 </ToolBar>
 
 </kpartgui>

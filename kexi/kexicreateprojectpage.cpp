@@ -21,12 +21,15 @@ Boston, MA 02111-1307, USA.
 #include "kexicreateprojectpage.h"
 #include "kexicreateprojectpage.moc"
 
-KexiCreateProjectPage::KexiCreateProjectPage(KexiCreateProject *parent, QPixmap *wpic, const char *name) : QWidget(parent, name)
+KexiCreateProjectPage::KexiCreateProjectPage(KexiCreateProject *parent, QPixmap *wpic, const char *name) 
+	: QWidget(parent, name),m_project(parent->project())
 {
 	m_loaded = false;
 
 	parent->registerPage(this);
 }
+
+KexiProject *KexiCreateProjectPage::project(){return m_project;}
 
 QVariant
 KexiCreateProjectPage::data(const QString &property) const

@@ -10,3 +10,7 @@ Terminal=0
 Name=Kexi
 GenericName=Database Management
 Comment=A Database Management Application
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-NativeMimeType=application/x-kexi
+X-KDE-Library=libkexipart
+

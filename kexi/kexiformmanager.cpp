@@ -1,5 +1,6 @@
 #include "kexiformmanager.h"
 #include "kexiformbase.h"
+#include "kexiproject.h"
 #include "kexiworkspace.h"
 #include <klocale.h>
 
@@ -7,8 +8,9 @@
 #include <qstringlist.h>
 #include <qdom.h>
 
-KexiFormManager::KexiFormManager()
+KexiFormManager::KexiFormManager(KexiProject *project)
 {
+	m_project=project;
 }
 
 KexiFormManager::~KexiFormManager()
@@ -62,11 +64,12 @@ void KexiFormManager::clear()
 
 void KexiFormManager::showForm(const QString& name, Mode, QWidget *parent)
 {
+	return;
 	Item *item=m_forms[name];
 	if (!item) return;
 	if (item->form.isNull())
 	{
-        	item->form = new KexiFormBase(parent, "form",name);
+//        	item->form = new KexiFormBase(m_project,parent, "form",name);
                 static_cast<KexiWorkspace*>(parent->qt_cast("KexiWorkspace"))->addItem(item->form);
                 item->form->show();
 	}

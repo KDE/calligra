@@ -33,6 +33,7 @@ class KexiQueryDesignerGuiEditor;
 class KexiDataTable;
 class QWidgetStack;
 class KMultiTabBar;
+class KexiProject;
 
 typedef QIntDict<QWidget> WidgetIndex;
 
@@ -43,7 +44,7 @@ class KexiQueryDesigner : public KexiDialogBase
 	public:
 	
 	
-		KexiQueryDesigner(QWidget *parent, QString indentifier, const char *name=0);
+		KexiQueryDesigner(KexiView *view,QWidget *parent, QString indentifier, const char *name=0);
 		~KexiQueryDesigner();
 		
 		virtual KXMLGUIClient	*guiClient();

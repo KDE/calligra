@@ -1,47 +1,83 @@
-/* This file is part of the KDE project
+/***************************************************************************
+                          kexipart.cpp  -  description
+                             -------------------
+    begin                : Sun Nov  17 23:30:00 CET 2002
+    copyright            : (C) 2002 Joseph Wenninger
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
-					  Daniel Molkentin <molkentin@kde.org>
+                                          Daniel Molkentin <molkentin@kde.org>
 
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+    email                : jowenn@kde.org
+ ***************************************************************************/
 
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
-   You should have received a copy of the GNU General Public License
-   along with this program; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
- */
+#include "kexiproject.h"
+#include "kexiproject.moc"
+#include "kexi_factory.h"
+#include "kexiview.h"
+#include "kexicreateproject.h"
 
-#include <qcstring.h>
-#include <qdom.h>
-
-#include <kpassdlg.h>
-#include <klocale.h>
 #include <koStore.h>
 
-#include "kexiapplication.h"
-#include "kexiproject.h"
-
 #include <kdebug.h>
+#include <kpassdlg.h>
+#include <klocale.h>
 
-KexiProject::KexiProject(QObject* parent) : QObject(parent)
+#include <qpainter.h>
+
+KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject* parent,
+         const char* name, bool singleViewMode )
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
-	//hope that changes soon too
-	m_db = new KexiDB(this);
-	m_formManager=new KexiFormManager();
-	m_url = "";
-	m_modified = false;
+    setInstance( KexiFactory::global(), false );
+	kdDebug()<<"creating KexDB instance"<<endl;
+        m_db = new KexiDB(this);
+        m_formManager=new KexiFormManager(this);
+        m_url = "";
+        m_modified = false;
+
 }
 
-KexiProject::~KexiProject()
+bool KexiProject::initDoc()
+{
+    // If nothing is loaded, do initialize here
+        clear();
+        KexiCreateProject *newDlg = new KexiCreateProject(this,0);
+        newDlg->show();
+//	delete newDlg;
+
+    return TRUE;
+}
+
+KoView* KexiProject::createViewInstance( QWidget* parent, const char* name )
+{
+    return new KexiView( KexiView::MDIWindowMode,this, parent, name );
+}
+
+bool KexiProject::loadXML( QIODevice *, const QDomDocument & )
+{
+    // TODO load the document from the QDomDocument
+    return true;
+}
+
+QDomDocument KexiProject::saveXML()
+{
+    // TODO save the document into a QDomDocument
+    return QDomDocument();
+}
+
+void KexiProject::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/,
+                                double /*zoomX*/, double /*zoomY*/)
 {
 }
+
 
 bool
 KexiProject::saveProject()
@@ -286,8 +322,7 @@ KexiProject::loadProject(const QString& url)
 	return true;
 }
 
-bool 
-KexiProject::initDbConnection(const Credentials &cred, const bool create)
+bool KexiProject::initDbConnection(const Credentials &cred, const bool create)
 {
 	kdDebug() << "KexiProject::initDbConnection()" << endl;
 	
@@ -414,12 +449,4 @@ KexiProject::fileReferences(QString group)
 	return refs;
 }
 
-/*
-QStringList
-KexiProject::fileReferences() const
-{
-	return m_fileReferences;
-}
-*/
 
-#include "kexiproject.moc"

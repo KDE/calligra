@@ -65,7 +65,7 @@ class KexiQueryDesignerGuiEditor : public QWidget
 	Q_OBJECT
 	
 	public:
-		KexiQueryDesignerGuiEditor(QWidget *parent, KexiQueryDesigner *myparent, const char *name=0);
+		KexiQueryDesignerGuiEditor(KexiView *view,QWidget *parent, KexiQueryDesigner *myparent, const char *name=0);
 		~KexiQueryDesignerGuiEditor();
 
 		QString			getQuery();

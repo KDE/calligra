@@ -25,7 +25,8 @@
 #include <kxmlguiclient.h>
 #include <qptrlist.h>
 
-class KexiMainWindow;
+class KexiView;
+class KexiProject;
 
 class KexiDialogBase : public QWidget
 {
@@ -33,15 +34,17 @@ class KexiDialogBase : public QWidget
 	
 	public:
 
-		KexiDialogBase(QWidget *parent, const char *name);
+		KexiDialogBase(KexiView *view,QWidget *parent, const char *name);
 		~KexiDialogBase();
 	
 		virtual KXMLGUIClient *guiClient()=0;
 		virtual void activateActions();
 		virtual void deactivateActions();
-		KexiMainWindow *mainWindow(){return m_mainWindow;};
+		KexiView *mainWindow(){return m_mainWindow;};
 		
 		static KexiDialogBase *activeDocumentView() { return s_activeDocumentWindow;};
+		KexiProject *kexiProject();
+		KexiView *kexiView();
 	signals:
 		void closing(KexiDialogBase *);
 	
@@ -58,7 +61,9 @@ class KexiDialogBase : public QWidget
 
 		class KDockWidget *myDock;
 	private:
-		class KexiMainWindow *m_mainWindow;
+		class KexiView *m_mainWindow;
+		class KexiProject *m_project;
+		class KexiView *m_view;
 };
 
 #endif

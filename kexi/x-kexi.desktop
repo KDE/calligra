@@ -16,3 +16,7 @@ Icon=kexi
 Type=MimeType
 Patterns=*.kexi;
 X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.kexi
+

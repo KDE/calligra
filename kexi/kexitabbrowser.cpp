@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
  */
 
+#include <koApplication.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <klistview.h>
@@ -29,15 +30,15 @@
 
 #include "kexiDB/kexidb.h"
 
-#include "kexiapplication.h"
 #include "kexibrowser.h"
 #include "kexibrowseritem.h"
 #include "kexitabbrowser.h"
 #include "kexiproject.h"
 
-KexiTabBrowser::KexiTabBrowser(QWidget *parent, const char *name)
-	: KexiDialogBase(parent, name)
+KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
+	: KexiDialogBase(view,parent, name)
 {
+	connect(kexiProject(),SIGNAL(updateBrowsers()),this,SLOT(generateView()));
 	setCaption("Project");
 	QGridLayout *layout = new QGridLayout(this);
 
@@ -49,11 +50,11 @@ KexiTabBrowser::KexiTabBrowser(QWidget *parent, const char *name)
 
 	m_activeTab = -1;
 
-	m_db = new KexiBrowser(this, KexiBrowser::SectionDB);
-	m_tables = new KexiBrowser(this, KexiBrowser::SectionTable);
-	m_forms = new KexiBrowser(this, KexiBrowser::SectionForm);
-	m_queries = new KexiBrowser(this, KexiBrowser::SectionQuery);
-	m_reports = new KexiBrowser(this, KexiBrowser::SectionReport);
+	m_db = new KexiBrowser(view,this, KexiBrowser::SectionDB);
+	m_tables = new KexiBrowser(view,this, KexiBrowser::SectionTable);
+	m_forms = new KexiBrowser(view,this, KexiBrowser::SectionForm);
+	m_queries = new KexiBrowser(view,this, KexiBrowser::SectionQuery);
+	m_reports = new KexiBrowser(view,this, KexiBrowser::SectionReport);
 
 	addBrowser(m_db, "db",i18n("Database project"));
 	addBrowser(m_tables, "tables",i18n("Tables"));
@@ -71,7 +72,7 @@ void
 KexiTabBrowser::addBrowser(KexiBrowser *browser, QString icon, QString text)
 {
 	m_tabs++;
-	m_tabBar->appendTab(kexi->iconLoader()->loadIcon(icon, KIcon::Small), m_tabs,text);
+	m_tabBar->appendTab(kapp->iconLoader()->loadIcon(icon, KIcon::Small), m_tabs,text);
 
 	connect(m_tabBar->getTab(m_tabs), SIGNAL(clicked(int)), this, SLOT(slotTabActivated(int)));
 	m_stack->addWidget(browser);
@@ -96,12 +97,12 @@ KexiTabBrowser::generateView()
 void
 KexiTabBrowser::generateTables()
 {
-	QStringList tables = kexi->project()->db()->tables();
+	QStringList tables = kexiProject()->db()->tables();
 
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it )
 	{
 		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, m_tables, (*it) );
-		item->setPixmap(0, kexi->iconLoader()->loadIcon("table", KIcon::Small));
+		item->setPixmap(0, kapp->iconLoader()->loadIcon("table", KIcon::Small));
 	}
 }
 

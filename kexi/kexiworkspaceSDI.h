@@ -7,14 +7,14 @@
 #include "kexiworkspace.h"
 
 class KexiDialogBase;
-class KexiMainWindow;
+class KexiView;
 
 class KexiWorkspaceSDI : public KStatusBar, public KexiWorkspace
 {
 	Q_OBJECT
 	
 	public:
-		KexiWorkspaceSDI(QWidget *parent=0, const char *name=0, KexiMainWindow* mw=0);
+		KexiWorkspaceSDI(QWidget *parent=0, const char *name=0, KexiView* mw=0);
 		virtual ~KexiWorkspaceSDI();
 		
 		virtual void addItem(KexiDialogBase *newItem);
@@ -30,7 +30,7 @@ class KexiWorkspaceSDI : public KStatusBar, public KexiWorkspace
 		virtual void takeItem(KexiDialogBase *delItem);
 		virtual void slotWindowActivated(QWidget*);
 	private:
-	KexiMainWindow *m_mainwindow;
+	KexiView *m_mainwindow;
 };
 
 #endif

@@ -298,18 +298,34 @@ namespace KFormEditor {
 		if (m_pendingWidget) return false;
 		kdDebug() << "event!" << endl;
 		QWidget *sh;
+
+		QWidget *tmp=static_cast<QWidget*>(obj->qt_cast("QWidget"));;
+		while (!(tmp->parentWidget(true)==this))
+			tmp=tmp->parentWidget();
+		containerIface *cif=static_cast<containerIface*>(tmp->qt_cast("KFormEditor::containerIface"));
+		containerIface::Action a=containerIface::AllEat;
 		switch (ev->type())
 		{
 			case QEvent::MouseButtonPress:
-				activateWidget(static_cast<QWidget*>(obj));
-				m_activeMoveWidget=m_activeWidget;
-				m_moveBX=static_cast<QMouseEvent*>(ev)->x();
-				m_moveBY=static_cast<QMouseEvent*>(ev)->y();
-				return true;
+				if (cif) a=cif->allowMousePress(obj,ev);
+				if (a==containerIface::None) return false;
+				if (a & containerIface::Activate)
+					activateWidget(static_cast<QWidget*>(obj));
+				if (a & containerIface::Move)
+				{
+					m_activeMoveWidget=m_activeWidget;
+					m_moveBX=static_cast<QMouseEvent*>(ev)->x();
+					m_moveBY=static_cast<QMouseEvent*>(ev)->y();
+				}
+				return (a & containerIface::EatEvent);
 				break;
 			case QEvent::MouseButtonRelease:
-				m_activeMoveWidget=0;
-				return true;
+				if (m_activeMoveWidget)
+				{
+					m_activeMoveWidget=0;
+					return true;
+				}
+				return false;
 				break;
 			case QEvent::MouseMove:
 				if (m_activeMoveWidget)
@@ -323,8 +339,9 @@ namespace KFormEditor {
 			                tmpy*=m_dotSpacing;
 					if ((tmpx!=m_activeMoveWidget->x()) ||(tmpy!=m_activeMoveWidget->y()) )
 						m_activeMoveWidget->move(tmpx,tmpy);
+					return true;
 				}
-				return true;
+				return false;
 				break;
 			default:
 				break;

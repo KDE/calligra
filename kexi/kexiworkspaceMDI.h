@@ -7,14 +7,14 @@
 #include "kexiworkspace.h"
 
 class KexiDialogBase;
-class KexiMainWindow;
+class KexiView;
 
 class KexiWorkspaceMDI : public QWorkspace, public KexiWorkspace
 {
 	Q_OBJECT
 	
 	public:
-		KexiWorkspaceMDI(QWidget *parent=0, const char *name=0, KexiMainWindow* mw=0);
+		KexiWorkspaceMDI(QWidget *parent=0, const char *name=0, KexiView* mw=0);
 		virtual ~KexiWorkspaceMDI();
 		
 		virtual void addItem(KexiDialogBase *newItem);
@@ -29,7 +29,7 @@ class KexiWorkspaceMDI : public QWorkspace, public KexiWorkspace
 		virtual void slotWindowActivated(QWidget*);
 	private:
 	QGuardedPtr<KexiDialogBase> m_activeDialog;
-	KexiMainWindow *m_mainwindow;
+	KexiView *m_mainwindow;
 };
 
 #endif

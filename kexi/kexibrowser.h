@@ -27,8 +27,8 @@
 class QListViewItem;
 
 class KIconLoader;
-class Kexi;
 class KexiBrowserItem;
+class KexiView;
 
 class KexiBrowser : public KListView {
    Q_OBJECT
@@ -43,7 +43,7 @@ public:
 		SectionReport
 	};
 
-	KexiBrowser(QWidget *parent=0, Section s=SectionDB, const char *name=0);
+	KexiBrowser(KexiView *project,QWidget *parent=0, Section s=SectionDB, const char *name=0);
 	~KexiBrowser();
 	
 	void			clearView();
@@ -51,6 +51,8 @@ public:
 
 	Section			section();
 	
+private:
+	KexiView *m_view;
 protected:
 	void			createForm();
 	void			addTables(KexiBrowserItem *parent);

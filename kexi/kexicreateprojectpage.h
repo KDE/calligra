@@ -25,6 +25,7 @@ Boston, MA 02111-1307, USA.
 #include <qvariant.h>
 
 class KexiCreateProject;
+class KexiProject;
 
 typedef QMap<QString, QVariant> DataMap;
 
@@ -40,10 +41,12 @@ class KexiCreateProjectPage : public QWidget
 		void setProperty(QString property, QVariant data);
 
 		bool	m_loaded;
-
+		
 	protected:
 		DataMap	m_data;
-
+		KexiProject *project();
+	private:
+		KexiProject *m_project;
 	signals:
 		void valueChanged(KexiCreateProjectPage *, QString &);
 };

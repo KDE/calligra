@@ -34,7 +34,6 @@
 #include <ktexteditor/highlightinginterface.h>
 #include <ktexteditor/editinterface.h>
 
-#include "kexiapplication.h"
 #include "kexiproject.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexidatatable.h"
@@ -77,8 +76,8 @@ class KexiQueryDesigner::EditGUIClient: public KXMLGUIClient
 
 KexiQueryDesigner::EditGUIClient *KexiQueryDesigner::m_editGUIClient=0;
 
-KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, QString identifier, const char *name)
- : KexiDialogBase(parent, name)
+KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, QString identifier, const char *name)
+ : KexiDialogBase(view,parent, name)
 {
 	m_identifier = identifier;
 	m_partCount = 0; 
@@ -92,12 +91,12 @@ KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, QString identifier, const 
 	m_widgetStack->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
 
 	l->addWidget(m_widgetStack);
-	m_widgetStack->addWidget(m_editor = new KexiQueryDesignerGuiEditor(m_widgetStack,this));
+	m_widgetStack->addWidget(m_editor = new KexiQueryDesignerGuiEditor(view,m_widgetStack,this));
 	
 	m_sqlDoc = KTextEditor::EditorChooser::createDocument(this, "sqlDoc");
 	m_widgetStack->addWidget(m_sqlView = m_sqlDoc->createView(this, 0L));
 
-	m_widgetStack->addWidget(m_view = new KexiDataTable(this, "query", "query-result", true));
+	m_widgetStack->addWidget(m_view = new KexiDataTable(view,this, "query", "query-result", true));
 
 	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(m_sqlDoc);
 	for(uint i=0; i < hl->hlModeCount(); i++)
@@ -121,7 +120,9 @@ KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, QString identifier, const 
 	l->activate();
 //	activateActions();
 //	connect(kexi->project(), SIGNAL(saving()), this, SLOT(slotSave()));
+#if 0
 	connect(kexi->project(), SIGNAL(saving(KoStore *)), this, SLOT(slotSave(KoStore *)));
+#endif
 	registerAs(DocumentWindow);
 
 }
@@ -280,7 +281,9 @@ KexiQueryDesigner::slotSave(KoStore *store)
 			ref.group = "queries";
 			ref.name = m_identifier;
 			ref.location = "/query/" + m_identifier + ".query";
+#if 0
 			kexi->project()->addFileReference(ref);
+#endif
 			store->open("/query/" + m_identifier + ".query");
 			store->write(data);
 			store->close();

@@ -27,20 +27,20 @@
 #include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbrecord.h"
 
-#include "kexiapplication.h"
 #include "kexitableview.h"
 #include "kexitableitem.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexirelation.h"
 #include "kexiproject.h"
+#include "kexiview.h"
 
-KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(QWidget *parent, KexiQueryDesigner *myparent, const char *name)
+KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *parent, KexiQueryDesigner *myparent, const char *name)
  : QWidget(parent, name)
 {
-	m_db = kexi->project()->db();
+	m_db = view->project()->db();
 	m_parent = myparent;
 
-	m_tables = new KexiRelation(this, "querytables", true);
+	m_tables = new KexiRelation(view,this, "querytables", true);
 
 	m_designTable = new KexiTableView(this);
 	m_designTable->m_editOnDubleClick = true;
@@ -50,7 +50,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(QWidget *parent, KexiQuer
 	m_designTable->viewport()->setAcceptDrops(true);
 	m_designTable->addDropFilter("kexi/field");
 
-	m_sourceList = kexi->project()->db()->tables();
+	m_sourceList = view->project()->db()->tables();
 	m_sourceList.prepend(i18n("[no table]"));
 
 	m_designTable->addColumn(i18n("source"), QVariant::StringList, true, QVariant(m_sourceList));

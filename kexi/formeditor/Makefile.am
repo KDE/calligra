@@ -8,7 +8,7 @@ LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 libkformeditor_la_METASOURCES = AUTO
 
-libkformeditor_la_SOURCES = widgetcontainer.cpp resizehandle.cpp container_frame.cpp containerIface.cpp
+libkformeditor_la_SOURCES = widgetcontainer.cpp resizehandle.cpp container_frame.cpp container_tabwidget.cpp containerIface.cpp
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 

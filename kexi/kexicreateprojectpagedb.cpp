@@ -31,11 +31,11 @@ Boston, MA 02111-1307, USA.
 
 #include "kexiDB/kexidb.h"
 
-#include "kexiapplication.h"
 #include "kexiproject.h"
 #include "kexitabbrowser.h"
 #include "kexicreateprojectpagedb.h"
-#include "keximainwindow.h"
+#include "kexicreateproject.h"
+#include "kexiview.h"
 
 KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPixmap *wpic, const char *name)
  : KexiCreateProjectPage(parent, wpic, name)
@@ -106,27 +106,30 @@ KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host,
 	m_cred.socket = socket;
 	m_cred.port = port;
 	m_cred.savePassword = savePass;
-
-	if(kexi->project()->initHostConnection(m_cred))
+	if(project()->initHostConnection(m_cred))
 	{
 		m_databases->clear();
 
-		KexiDB *db = kexi->project()->db();
+		KexiDB *db = project()->db();
 		QStringList databases = db->databases();
 		for(QStringList::Iterator it = databases.begin(); it != databases.end(); it++)
 		{
 			new KListViewItem(m_databases, (*it));
 		}
 	}
+
 }
 
 bool
 KexiCreateProjectPageDB::connectDB()
 {
 	m_cred.database = data("database").toString();
-	if(kexi->project()->initDbConnection(m_cred, data("create").toBool()))
+	if(project()->initDbConnection(m_cred, data("create").toBool()))
 	{
+		emit project()->updateBrowsers();
+#if 0
                 kexi->mainWindow()->browser()->generateView();
+#endif
                 return true;
 
 	}

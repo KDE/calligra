@@ -27,13 +27,14 @@
 #include "kexicreateprojectpagedb.h"
 #include "kexicreateprojectpagefile.h"
 
-#include "kexiapplication.h"
 #include "kexitabbrowser.h"
 #include "kexicreateproject.h"
-#include "keximainwindow.h"
+#include "kexiview.h"
+#include "kexiproject.h"
 
-KexiCreateProject::KexiCreateProject(QWidget *parent, const char *name, bool modal, WFlags f) : KWizard(parent,name,modal,f)
+KexiCreateProject::KexiCreateProject(KexiProject *project,const char* name) : KWizard(0,name,true)
 {
+	m_project=project;
 	setCaption(i18n("Create Project"));
 
 	m_wpic = new QPixmap(locate("data","kexi/pics/cp-wiz.png"));
@@ -49,6 +50,8 @@ KexiCreateProject::KexiCreateProject(QWidget *parent, const char *name, bool mod
 	m_pageFile = new KexiCreateProjectPageFile(this, m_wpic, "page_file");
 	m_pageFile->hide();
 }
+
+KexiProject *KexiCreateProject::project(){return m_project;}
 
 void
 KexiCreateProject::registerPage(KexiCreateProjectPage *page)
@@ -117,7 +120,8 @@ KexiCreateProject::accept()
 	if(static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectDB())
 	{
 		KWizard::accept();
-		kexi->mainWindow()->browser()->generateView();
+		emit m_project->updateBrowsers();
+//		kexi->mainWindow()->browser()->generateView();
 	}
 }
 

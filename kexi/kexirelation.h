@@ -37,7 +37,7 @@ class KexiRelation : public KexiDialogBase
 	Q_OBJECT
 
 	public:
-		KexiRelation(QWidget *parent, const char *name="relations", bool embedd=false);
+		KexiRelation(KexiView *view,QWidget *parent, const char *name="relations", bool embedd=false);
 		~KexiRelation();
 	
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}

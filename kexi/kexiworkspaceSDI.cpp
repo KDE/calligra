@@ -2,9 +2,9 @@
 
 #include "kexidialogbase.h"
 #include "kexiworkspaceSDI.h"
-#include "keximainwindow.h"
+#include "kexiview.h"
 
-KexiWorkspaceSDI::KexiWorkspaceSDI(QWidget *parent, const char *name,KexiMainWindow *mw)
+KexiWorkspaceSDI::KexiWorkspaceSDI(QWidget *parent, const char *name,KexiView *mw)
 	: KStatusBar(parent, name),KexiWorkspace()
 {
 	setSizeGripEnabled(true);

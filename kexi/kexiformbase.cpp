@@ -40,9 +40,10 @@
 #include <qlayout.h>
 
 #include "kexiformbase.h"
-#include "keximainwindow.h"
+#include "kexiview.h"
 #include "formeditor/widgetcontainer.h"
 #include "formeditor/container_frame.h"
+#include "formeditor/container_tabwidget.h"
 
 class KexiFormBase::EditGUIClient: public KXMLGUIClient
 {
@@ -63,6 +64,9 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 
 		        m_frame = new KAction(i18n("Frame"), "lineedit",
 		                Key_F8, actionCollection(), "widget_frame");
+
+		        m_tabWidget = new KAction(i18n("Tab Widget"), "lineedit",
+		                Key_F9, actionCollection(), "widget_tabwidget");
 			setXMLFile("kexiformeditorui.rc");
 		}
 		virtual ~EditGUIClient(){;}
@@ -73,6 +77,7 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 			connect(m_button,SIGNAL(activated()),o,SLOT(slotWidgetPushButton()));
 			connect(m_urlreq,SIGNAL(activated()),o,SLOT(slotWidgetURLRequester()));
 			connect(m_frame,SIGNAL(activated()),o,SLOT(slotWidgetFrame()));
+			connect(m_tabWidget,SIGNAL(activated()),o,SLOT(slotWidgetTabWidget()));
 		}
 		void deactivate(QObject* o)
 		{
@@ -80,6 +85,7 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 			m_button->disconnect(o);
 			m_urlreq->disconnect(o);
 			m_frame->disconnect(o);
+			m_tabWidget->disconnect(o);
 		}
 	private:
 	KToggleAction *m_formMode;
@@ -88,6 +94,7 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 	KAction *m_button;
 	KAction *m_urlreq;
 	KAction *m_frame;
+	KAction *m_tabWidget;
 };
 
 class KexiFormBase::ViewGUIClient: public KXMLGUIClient
@@ -121,8 +128,8 @@ KexiFormBase::EditGUIClient *KexiFormBase::m_editGUIClient=0;
 KexiFormBase::ViewGUIClient *KexiFormBase::m_viewGUIClient=0;
 
 
-KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString identifier)
-	: KexiDialogBase(parent,name)
+KexiFormBase::KexiFormBase(KexiView *view, QWidget *parent, const char *name, QString identifier)
+	: KexiDialogBase(view,parent,name)
 {
 	setMinimumWidth(50);
 	setMinimumHeight(50);
@@ -180,6 +187,13 @@ void KexiFormBase::slotWidgetFrame()
 {
 	topLevelEditor->addInteractive(new KFormEditor::container_Frame(topLevelEditor,"frame"));
 }
+
+void KexiFormBase::slotWidgetTabWidget()
+{
+	topLevelEditor->addInteractive(new KFormEditor::container_TabWidget(topLevelEditor,"tabwidget"));
+}
+
+
 
 void KexiFormBase::slotWidgetURLRequester()
 {

@@ -4,7 +4,7 @@
 #include <qguardedptr.h>
 
 class KexiDialogBase;
-class KexiMainWindow;
+class KexiView;
 
 class KexiWorkspace
 {

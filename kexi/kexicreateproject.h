@@ -2,8 +2,8 @@
                           kexicreateproject.h  -  description
                              -------------------
     begin                : Sun Jun 9 2002
-    copyright            : (C) 2002 by lucijan busch
-    email                : lucijan@gmx.at
+    copyright            : (C) 2002 by lucijan busch, Joseph Wenninger
+    email                : lucijan@gmx.at, jowenn@kde.org
  ***************************************************************************/
 
 /***************************************************************************
@@ -24,6 +24,7 @@
 
 /**
   *@author lucijan busch
+  *@author Joseph Wenninger
   */
 
 //class KComboBox;
@@ -31,6 +32,7 @@
 //class KListView;
 //class KTextBrowser;
 
+class KexiProject;
 class KexiCreateProjectPage;
 
 typedef QPtrList<KexiCreateProjectPage> PageList;
@@ -43,7 +45,7 @@ class KexiCreateProject : public KWizard  {
    Q_OBJECT
 
 	public: 
-		KexiCreateProject(QWidget *parent=0, const char *name=0, bool modal=false, WFlags f=0);
+		KexiCreateProject(KexiProject *project, const char *name=0);
 		~KexiCreateProject();
 
 		/*! adds the page to the pagelist
@@ -51,7 +53,8 @@ class KexiCreateProject : public KWizard  {
 		*/
 		void			registerPage(KexiCreateProjectPage *page);
 
-
+		KexiProject *project();
+		
 	protected:
 		void			addItem(KexiCreateProjectPage *page, QString title, int index=-1);
 		/*! adds pages, needed for a section
@@ -74,6 +77,8 @@ class KexiCreateProject : public KWizard  {
 
 		QString			m_currentSection;
 
+	private: 
+		KexiProject *m_project;
 	protected slots:
 		void			slotValueChanged(KexiCreateProjectPage *, QString &);
 		void			next();

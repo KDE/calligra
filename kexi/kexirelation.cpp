@@ -31,24 +31,23 @@
 #include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbrecord.h"
 
-#include "kexiapplication.h"
 #include "kexiproject.h"
 #include "kexirelationview.h"
 #include "kexirelation.h"
 
-KexiRelation::KexiRelation(QWidget *parent, const char *name, bool embedd)
- : KexiDialogBase(parent, name)
+KexiRelation::KexiRelation(KexiView *view,QWidget *parent, const char *name, bool embedd)
+ : KexiDialogBase(view,parent, name)
 {
 	setCaption(i18n("Relations"));
 
 
-	m_db = kexi->project()->db();
+	m_db = kexiProject()->db();
 
 	QHBox *hbox = new QHBox(this);
 	
 	m_tableCombo = new QComboBox(hbox);
 	m_tableCombo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-	m_tableCombo->insertStringList(kexi->project()->db()->tables());
+	m_tableCombo->insertStringList(kexiProject()->db()->tables());
 	m_tableCombo->show();
 
 	QPushButton *btnAdd = new QPushButton(i18n("&Add"), hbox);
@@ -58,7 +57,7 @@ KexiRelation::KexiRelation(QWidget *parent, const char *name, bool embedd)
 	m_view = new KexiRelationView(this);
 	m_view->show();
 
-	connect(kexi->project(), SIGNAL(saving(KoStore *)), this, SLOT(slotSave(KoStore *)));
+	connect(kexiProject(), SIGNAL(saving(KoStore *)), this, SLOT(slotSave(KoStore *)));
 
 	RelationList *rl = projectRelations();
 	if(rl)
@@ -103,7 +102,8 @@ KexiRelation::slotAddTable()
 static RelationList*
 KexiRelation::projectRelations()
 {
-	KoStore* store = KoStore::createStore(kexi->project()->url(), KoStore::Read, "application/x-kexi");
+#endif
+	KoStore* store = KoStore::createStore(project()->url(), KoStore::Read, "application/x-kexi");
 	
 	if(!store)
 	{
@@ -150,6 +150,7 @@ KexiRelation::projectRelations()
 	}
 	
 	return list;
+#endif
 }
 
 static bool

@@ -1,8 +1,32 @@
+kde_module_LTLIBRARIES = libkexipart.la
+libkexipart_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
+	kexiinputtableedit.cpp kexidatetableedit.cpp kmultitabbar.cpp kexitabbrowser.cpp kexiwidget.cpp \
+	kexitableheader.cpp kexitablerm.cpp  kexitablelist.cpp kexitableitem.cpp kexitableview.cpp kexidatatable.cpp \
+	kexidialogbase.cpp kexibrowseritem.cpp kexiworkspaceSDI.cpp kexiworkspaceMDI.cpp kexicreateprojectpage.cpp \
+	kexicreateproject.cpp kexibrowser.cpp kexiview.cpp kexiformmanager.cpp \
+	kexicreateprojectpageengine.cpp kexicreateprojectpagelocation.cpp kexicreateprojectpagedb.cpp \
+	kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp kexicreateprojectpageauth.h \
+	kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp kexialtertable.cpp kexiquerydesigner.cpp \
+	kexiquerydesignerguieditor.cpp kexirelation.cpp kexirelationview.cpp kexiformbase.cpp \
+	kexicomboboxtableedit.cpp kexitableedit.cpp
+
+libkexipart_la_LDFLAGS = $(KDE_PLUGIN)
+libkexipart_la_LIBADD = -lkofficecore -lkofficeui $(LIB_KPARTS) -lktexteditor  kexiDB/libkexidb.la formeditor/libkformeditor.la -lkstore
+
+## The kdeinit loadable module
+lib_LTLIBRARIES = kexi.la
+kexi_la_SOURCES = main.cpp
+kexi_la_LDFLAGS = $(all_libraries) -module -avoid-version
+
+## The executable
 bin_PROGRAMS = kexi
+kexi_SOURCES = dummy.cc
+kexi_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kexi_LDADD = kexi.la -lkofficecore
 
-kexi_SOURCES = kexiinputtableedit.cpp kexidatetableedit.cpp kmultitabbar.cpp kexitabbrowser.cpp kexiwidget.cpp kexitableheader.cpp kexitablerm.cpp  kexitablelist.cpp kexitableitem.cpp kexitableview.cpp kexidatatable.cpp kexidialogbase.cpp kexibrowseritem.cpp kexiworkspaceSDI.cpp kexiworkspaceMDI.cpp kexicreateprojectpage.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp kexiproject.cpp kexiformmanager.cpp kexicreateprojectpageengine.cpp kexicreateprojectpagelocation.cpp kexicreateprojectpagedb.cpp kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp kexicreateprojectpageauth.h kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp kexialtertable.cpp kexiquerydesigner.cpp kexiquerydesignerguieditor.cpp kexirelation.cpp kexirelationview.cpp kexiformbase.cpp kexicomboboxtableedit.cpp kexitableedit.cpp
+dummy.cc:
+	echo > dummy.cc
 
-kexi_LDADD   = $(LIB_KPARTS) -lktexteditor  kexiDB/libkexidb.la formeditor/libkformeditor.la -lkstore
 
 SUBDIRS = kexiDB formeditor . interfaces pics setupWizard externalinterfaces
 
@@ -47,8 +71,6 @@ INCLUDES= $(all_includes)
 
 METASOURCES = AUTO
 
-# the library search path. 
-kexi_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 rcdir = $(kde_datadir)/kexi
 rc_DATA = kexiui.rc kexiformeditorui.rc kexiquerydesignerui.rc

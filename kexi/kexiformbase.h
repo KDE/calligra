@@ -30,7 +30,7 @@
 template <class type> class QPtrList;
 
 class KAction;
-
+class KexiProject;
 namespace KFormEditor {
 	class WidgetContainer;
 }
@@ -41,7 +41,7 @@ class KexiFormBase : public KexiDialogBase
 	Q_OBJECT
    
 	public: 
-		KexiFormBase(QWidget *parent=0, const char *name=0, QString identifier=QString::null);
+		KexiFormBase(KexiView *view, QWidget *parent=0, const char *name=0, QString identifier=QString::null);
 		~KexiFormBase();
 		
                 virtual KXMLGUIClient *guiClient();
@@ -62,6 +62,7 @@ class KexiFormBase : public KexiDialogBase
 		void slotWidgetPushButton();
 		void slotWidgetURLRequester();
 		void slotWidgetFrame();
+		void slotWidgetTabWidget();
 		
 };
 

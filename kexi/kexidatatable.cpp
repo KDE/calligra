@@ -37,17 +37,18 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include "koApplication.h"
+
 
 #include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbrecord.h"
 
-#include "kexiapplication.h"
 
 #include "kexidatatable.h"
 #include "kexiproject.h"
 
-KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name, bool embedd)
-	: KexiDialogBase(parent, name)
+KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, QString caption, const char *name, bool embedd)
+	: KexiDialogBase(view,parent, name)
 {
 	QGridLayout *g = new QGridLayout(this);
 	m_tableView = new KexiTableView(this);
@@ -81,7 +82,7 @@ KexiDataTable::executeQuery(QString queryStatement)
 		m_tableView->clearAll();
 
 	kdDebug() << "KexiDataTable::executeQuery(): executing query..." << endl;
-	m_record = kexi->project()->db()->queryRecord(queryStatement, false);
+	m_record = kexiProject()->db()->queryRecord(queryStatement, false);
 
 	for(uint i = 0; i < m_record->fieldCount(); i++)
 	{

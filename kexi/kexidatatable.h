@@ -30,13 +30,14 @@ class QStatusBar;
 class QLineEdit;
 
 class KexiDBRecord;
+class KExiView;
  
 class KexiDataTable : public KexiDialogBase
 {
 	Q_OBJECT
 	
 	public:
-		KexiDataTable(QWidget *parent, QString content, const char *name=0, bool embedd=false);
+		KexiDataTable(KexiView *View,QWidget *parent, QString content, const char *name=0, bool embedd=false);
 		~KexiDataTable();
 		
 		bool executeQuery(QString query);
