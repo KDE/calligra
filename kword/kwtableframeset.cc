@@ -695,6 +695,12 @@ void KWTableFrameSet::selectUntil( Cell *cell)
 
     unsigned int fromRow = 0, fromCol = 0;
     getFirstSelected( fromRow, fromCol );
+    if(cell->m_cols!=1)
+        fromCol=QMIN(fromCol,cell->m_col);
+    if(cell->m_rows!=1)
+        fromRow=QMIN(fromRow,cell->m_row);
+
+
 
     if ( fromRow > toRow ) { // doSwap
         fromRow = fromRow^toRow;
@@ -708,19 +714,24 @@ void KWTableFrameSet::selectUntil( Cell *cell)
         fromCol = fromCol^toCol;
     }
 
-
     for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
         cell = m_cells.at(i);
         // check if cell falls completely in square.
         unsigned int row = cell->m_row + cell->m_rows -1;
         unsigned int col = cell->m_col + cell->m_cols -1;
-        if(row >= fromRow && row <= toRow && col >= fromCol && col <= toCol) {
+        if(row >= fromRow && row <= toRow && col >= fromCol && col <= toCol)
+        {
             cell->getFrame( 0 )->setSelected( true );
             cell->getFrame(0)->createResizeHandles();
             cell->getFrame(0)->updateResizeHandles();
-        } else {
-            cell->getFrame( 0 )->setSelected( false );
-            cell->getFrame(0)->removeResizeHandles();
+        }
+        else
+        {
+            if(cell->getFrame( 0 )->isSelected())
+            {
+                cell->getFrame( 0 )->setSelected( false );
+                cell->getFrame(0)->removeResizeHandles();
+            }
         }
     }
 }
@@ -1051,7 +1062,10 @@ void KWTableFrameSet::ungroup()
 /*================================================================*/
 bool KWTableFrameSet::joinCells() {
     unsigned int colBegin, rowBegin, colEnd,rowEnd;
-    if ( !getFirstSelected( rowBegin, colBegin ) ) return false;
+    if ( !getFirstSelected( rowBegin, colBegin ) )
+        return false;
+    kdDebug()<<"rowBegin :"<<rowBegin<< " colBegin :"<<colBegin<<endl;
+
     Cell *firstCell = getCell(rowBegin, colBegin);
     colEnd=colBegin+firstCell->m_cols-1;
     rowEnd=rowBegin+firstCell->m_rows-1;
