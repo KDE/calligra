@@ -13,9 +13,9 @@ BUGS :
     cursor was, so you end up with "This is texa t" instead of "This is a text".
   - When selecting a whole line and changing attribs, a word in next and/or prev line
     is changed too 
+  - Extend contents to height and so on should also work in dit mode
 - Placing of objects is not precise 
 - When pasting a page set default page to currentPage + 1
-
 
 TO FINISH:
 ===========

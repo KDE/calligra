@@ -124,7 +124,7 @@ KPresenterDoc::KPresenterDoc( QObject* parent, const char* name )
   // make it not empty!!! it should be removed after the modifications
   // are set correctly
   //setModified(true);
-  
+
     dcop = 0;
     docAlreadyOpen = FALSE;
     _clean = true;
@@ -513,8 +513,9 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
     // clean
     if ( _clean ) {
 	//KoPageLayout __pgLayout;
+	__pgLayout = KoPageLayoutDia::standardLayout();
 	__pgLayout.unit = PG_MM;
-
+	
 	if ( !_backgroundList.isEmpty() )
 	    _backgroundList.clear();
 	delete _objectList;
@@ -1197,7 +1198,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	else
 	    setPageLayout( _pageLayout, 0, 0 );
     }
-    
+
     _pixmapCollection.setAllowChangeRef( true );
     _pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
 
@@ -1315,7 +1316,7 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
 	break;
     }
     setUnit( _pageLayout.unit, unit );
-    
+
     setModified(true);
     repaint( false );
 }
