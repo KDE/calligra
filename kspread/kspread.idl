@@ -50,6 +50,13 @@ module KSpread
 	interface Document : KOffice::Document
 	{
 	};
+
+	struct DataToolsId
+	{
+		unsigned long time;
+		unsigned long column;
+		unsigned long row;
+	};
 };
 
 #endif

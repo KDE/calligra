@@ -1833,9 +1833,9 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
 	    {
 	      Align a = (Align)atoi( (*it).m_strValue.c_str() );
 	      // Validation
-	      if ( a < 1 || a > 4 )
+	      if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
 	      {
-		cerr << "Value of of range Cell::align=" << a << endl;
+		cerr << "Value of of range Cell::align=" << (unsigned int)a << endl;
 		return false;
 	      }
 	      // Assignment
@@ -1907,9 +1907,9 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
 	    {
 	      FloatFormat f = (FloatFormat)atoi( (*it).m_strValue.c_str() );
 	      // Validation
-	      if ( f < 1 || f > 3 )
+	      if ( (unsigned int)f < 1 || (unsigned int)f > 3 )
 	      {
-		cerr << "Value of of range Cell::float=" << f << endl;
+		cerr << "Value of of range Cell::float=" << (unsigned int)f << endl;
 		return false;
 	      }
 	      // Assignment
@@ -1919,9 +1919,9 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
 	    {
 	      FloatColor f = (FloatColor)atoi( (*it).m_strValue.c_str() );
 	      // Validation
-	      if ( f < 1 || f > 2 )
+	      if ( (unsigned int)f < 1 || (unsigned int)f > 2 )
 	      {
-		cerr << "Value of of range Cell::floatcolor=" << f << endl;
+		cerr << "Value of of range Cell::floatcolor=" << (unsigned int)f << endl;
 		return false;
 	      }
 	      // Assignment

@@ -18,6 +18,11 @@
 #include <koPartSelectDia.h>
 #include <koPrintDia.h>
 #include <koAboutDia.h>
+#include <koScanTools.h>
+#include <koIMR.h>
+
+#include <time.h>
+
 #include "kspread_map.h"
 #include "kspread_table.h"
 #include "kspread_dlg_scripts.h"
@@ -219,10 +224,27 @@ bool KSpreadView::event( const char* _event, const CORBA::Any& _value )
 
   MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_var, mappingCreateMenubar );
   MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var, mappingCreateToolbar );
+  MAPPING( DataTools::eventDone, DataTools::typeDone, mappingToolDone );
 
   END_EVENT_MAPPER;
   
   return false;
+}
+
+bool KSpreadView::mappingToolDone( DataTools::Answer& _answer )
+{
+  CORBA::String_var str;
+  _answer.value >>= CORBA::Any::to_string( str, 0 );
+  KSpread::DataToolsId id;
+  _answer.id >>= id;
+  
+  cerr << "CORRECTED ´" << str.in() << "´" << endl;
+  cerr << "r=" << id.row << " c=" << id.column << endl;
+  
+  // TODO: check time
+  m_pTable->setText( m_iMarkerRow, m_iMarkerColumn, str.in() );
+
+  return true;
 }
 
 bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
@@ -396,25 +418,25 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   // Edit  
   _menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
 
-  m_idMenuEdit_Undo = m_vMenuEdit->insertItem4( "Un&do", this, "undo", 0, -1, -1 );
-  m_idMenuEdit_Redo = m_vMenuEdit->insertItem4( "&Redo", this, "redo", 0, -1, -1 );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem4( i18n("Un&do"), this, "undo", 0, -1, -1 );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem4( i18n("&Redo"), this, "redo", 0, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
   QString path = kapp->kde_toolbardir().copy();
   path += "/editcut.xpm";
   OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( path );
-  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, "C&ut", this, "cutSelection", CTRL + Key_N, -1, -1 );
+  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, i18n("C&ut"), this, "cutSelection", CTRL + Key_N, -1, -1 );
   
   path = kapp->kde_toolbardir().copy();
   path += "/editcopy.xpm";
   pix = OPUIUtils::loadPixmap( path );
-  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, "&Copy", this, "copySelection", CTRL + Key_N, -1, -1 );
+  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, i18n("&Copy"), this, "copySelection", CTRL + Key_N, -1, -1 );
   
   path = kapp->kde_toolbardir().copy();
   path += "/editpaste.xpm";
   pix = OPUIUtils::loadPixmap( path );
-  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, "&Paste", this, "paste", CTRL + Key_N, -1, -1 );
+  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, i18n("&Paste"), this, "paste", CTRL + Key_N, -1, -1 );
     
   m_vMenuEdit->insertSeparator( -1 );
 
@@ -1179,6 +1201,8 @@ void KSpreadView::print()
 
 void KSpreadView::openPopupMenu( const QPoint & _point )
 {
+    assert( m_pTable );
+
     if ( m_pPopupMenu != 0L )
 	delete m_pPopupMenu;
     
@@ -1190,8 +1214,75 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_pPopupMenu->insertItem( "Delete", this, SLOT( slotDelete() ) );
     m_pPopupMenu->insertSeparator();
     m_pPopupMenu->insertItem( "Layout", this, SLOT( slotLayoutDlg() ) );
-
+    
+    m_lstTools.clear();
+    m_lstTools.setAutoDelete( true );
+    KSpreadCell *cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
+    if ( !cell->isFormular() && !cell->isValue() )
+    {
+      m_popupMenuFirstToolId = 10;
+      int i = 0;
+      QList<KoToolEntry> tools = KoToolEntry::findTools( "text/x-single-word" );
+      if( tools.count() > 0 )
+      {
+	m_pPopupMenu->insertSeparator();
+	KoToolEntry* entry;
+	for( entry = tools.first(); entry != 0L; entry = tools.next() )
+        {
+	  QStrListIterator it = entry->commandsI18N();
+	  for( ; it.current() != 0L; ++it )
+	    m_pPopupMenu->insertItem( it.current(), m_popupMenuFirstToolId + i++ );
+	  QStrListIterator it2 = entry->commands();
+	  for( ; it2.current() != 0L; ++it2 )
+	  {    
+	    ToolEntry *t = new ToolEntry;
+	    t->command = it2.current();
+	    t->entry = entry;
+	    m_lstTools.append( t );
+	  }
+	}
+	
+	QObject::connect( m_pPopupMenu, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
+      }
+    }
+    
     m_pPopupMenu->popup( _point );
+}
+
+void KSpreadView::slotActivateTool( int _id )
+{
+  assert( m_pTable );
+
+  if( _id < m_popupMenuFirstToolId )
+    return;
+
+  ToolEntry* entry = m_lstTools.at( _id - m_popupMenuFirstToolId );
+
+  CORBA::Object_var obj = imr_activate( entry->entry->name(), "IDL:DataTools/Tool:1.0" );
+  if ( CORBA::is_nil( obj ) )
+    // TODO: error message
+    return;
+  
+  DataTools::Tool_var tool = DataTools::Tool::_narrow( obj );
+  if ( CORBA::is_nil( tool ) )
+    // TODO: error message
+    return;
+  
+  KSpreadCell *cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
+  if ( !cell->isFormular() && !cell->isValue() )
+  {    
+    QString text = cell->text();
+    CORBA::Any value;
+    value <<= CORBA::Any::from_string( (char*)text.data(), 0 );
+    CORBA::Any anyid;
+    KSpread::DataToolsId id;
+    id.time = (CORBA::ULong)time( 0L );
+    id.row = m_iMarkerRow;
+    id.column = m_iMarkerColumn;
+    anyid <<= id;
+    tool->run( entry->command, this, value, anyid );
+    return;
+  }
 }
 
 void KSpreadView::slotCopy()

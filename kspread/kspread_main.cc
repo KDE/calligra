@@ -1,6 +1,7 @@
 #include <qprinter.h>
 #include "kspread_main.h"
 #include <koScanParts.h>
+#include <koScanTools.h>
 #include <koIMR.h>
 #include <koFactory.h>
 #include <koDocument.h>
@@ -35,6 +36,7 @@ void KSpreadApp::start()
   {
     imr_init();
     koScanParts();
+    koScanTools();
 
     if ( g_openFiles.size() == 0 )
     {
@@ -57,7 +59,7 @@ void KSpreadApp::start()
 
 int main( int argc, char **argv )
 {
-  KSpreadAutoLoader loader( "IDL:KOffice/DocumentFactory:1.0" );
+  KSpreadAutoLoader loader( "IDL:KOffice/DocumentFactory:1.0", "KSpread" );
 
   KSpreadApp app( argc, argv );
 

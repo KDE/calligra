@@ -14,7 +14,7 @@ kspread_bin_SOURCES = kmetaedit.cc kspread_emacs.cc kspread_main.cc \
 	kspread_layout.cc kspread_map.cc kspread_dlg_layout.cc \
 	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc \
 	chart.cc kspread_calc.cc y.tab.c lex.yy.c dep.tab.c lex.dep.c \
-	kspread_dlg_cons.cc
+	kspread_dlg_cons.cc datatools.cc
 
 noinst_HEADERS = kmetaedit.h kspread_emacs.h kspread_main.cc \
 	kspread_shell.h kspread_doc.h \
@@ -22,7 +22,8 @@ noinst_HEADERS = kmetaedit.h kspread_emacs.h kspread_main.cc \
 	kspread_python.h kspread_autofill.h \
 	kspread_layout.h kspread_map.h kspread_dlg_layout.h \
 	kspread_dlg_scripts.h kspread_table.h kspread_cell.h \
-	chart.h y.tab.h dep.tab.h kspread_calc.h kspread_dlg_cons.h
+	chart.h y.tab.h dep.tab.h kspread_calc.h kspread_dlg_cons.h \
+	datatools.h
 
 SRCMETA = kspread_main.moc kspread_shell.moc kspread_doc.moc \
 	kspread_view.moc kspread_tabbar.moc \
@@ -68,6 +69,10 @@ kspread.h: kspread.idl
 chart.h: ../lib/interfaces/chart.idl
 	$(IDL) $(IDL_FLAGS) ../lib/interfaces/chart.idl
 
+datatools.h: $(idldir)/datatools.idl
+	$(IDL) $(IDL_FLAGS) $(idldir)/datatools.idl
+
+datatools.cc: datatools.h
 kspread.cc: kspread.h
 kspread_dlg_cons.cc: kspread_dlg_cons.moc
 kspread_dlg_layout.cc: kspread_dlg_layout.moc

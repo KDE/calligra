@@ -14,12 +14,15 @@ class KSpreadChildPicture;
 class KSpreadChildFrame;
 class KSpreadShell;
 
+class KoToolEntry;
+
 #include <koFrame.h>
 #include <koView.h>
 #include <opMenu.h>
 #include <opToolBar.h>
 #include <koFrame.h>
 #include <openparts_ui.h>
+#include <datatools.h>
 
 #include <qlist.h>
 #include <qscrbar.h>
@@ -540,6 +543,10 @@ protected slots:
     /**
      * Popup menu
      */
+    void slotActivateTool( int _id );
+    /**
+     * Popup menu
+     */
     void slotCopy();
     /**
      * Popup menu
@@ -616,7 +623,8 @@ protected:
     // C++
     virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
     virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
-  
+    virtual bool mappingToolDone( DataTools::Answer& _answer );
+
     virtual void keyPressEvent ( QKeyEvent * _ev );
     virtual void resizeEvent( QResizeEvent *_ev );
 
@@ -717,7 +725,8 @@ protected:
      * May be 0L.
      */
     QPopupMenu *m_pPopupMenu;
-
+    int m_popupMenuFirstToolId;
+ 
     /**
      * Tells wether the user modfied the current cell.
      * Some key events are passed to the @ref EditWindow. When this flag is set and you
@@ -778,6 +787,13 @@ protected:
    * Set to true if the function @ref #init is entered. The start value if false.
    */
    bool m_bInitialized;
+
+   struct ToolEntry
+   {
+     QString command;
+     KoToolEntry* entry;
+   };
+   QList<ToolEntry> m_lstTools;
 };
 
 #endif
