@@ -2530,8 +2530,7 @@ void KSpreadCell::paintText( QPainter& painter,
     QString t;
     int i;
     int pos = 0;
-    int dy = 0;
-    int dx = 0;
+    double dy = 0.0;
     QFontMetrics fm = painter.fontMetrics();
     do
     {
@@ -2554,16 +2553,19 @@ void KSpreadCell::paintText( QPainter& painter,
       case KSpreadCell::Left:
         m_dTextX = leftBorderWidth( cellRef.x(), cellRef.y() ) + BORDER_SPACE;
         break;
+
       case KSpreadCell::Right:
-        m_dTextX = cellRect.width() - BORDER_SPACE - fm.width( t ) -
+        m_dTextX = cellRect.width() - BORDER_SPACE - doc->unzoomItX( fm.width( t ) ) -
                    rightBorderWidth( cellRef.x(), cellRef.y() );
         break;
+
       case KSpreadCell::Center:
-        m_dTextX = ( cellRect.width() - fm.width( t ) ) / 2;
+        m_dTextX = ( cellRect.width() - doc->unzoomItX( fm.width( t ) ) ) / 2;
       }
-      painter.drawText( doc->zoomItX( indent + cellRect.x() + m_dTextX + dx ),
+
+      painter.drawText( doc->zoomItX( indent + cellRect.x() + m_dTextX ),
                         doc->zoomItY( cellRect.y() + m_dTextY + dy ), t );
-      dy += fm.descent() + fm.ascent();
+      dy += doc->unzoomItY( fm.descent() + fm.ascent() );
     }
     while ( i != -1 );
   }
