@@ -364,24 +364,19 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 
 	    for ( int i = 0; i < pageColumns.columns; i++ ) {
 		if ( j * pageColumns.columns + i < frameset->getNumFrames() ) {
-		    frameset->getFrame( j * pageColumns.columns + i )->setRect( getPTLeftBorder() +
-										i * ( ptColumnWidth +
-										      getPTColumnSpacing() ),
-										j * getPTPaperHeight() +
-										getPTTopBorder() +
-										headOffset,
-										ptColumnWidth,
-										getPTPaperHeight() -
-										getPTTopBorder() -
-										getPTBottomBorder() -
-										headOffset - footOffset );
+		    frameset->getFrame( j * pageColumns.columns + i )->setRect( 
+                        getPTLeftBorder() + i * ( ptColumnWidth + getPTColumnSpacing() ), 
+                        j * getPTPaperHeight() + getPTTopBorder() + headOffset, 
+                        ptColumnWidth,
+                        getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder() -
+                         headOffset - footOffset );
 		} else {
-		    frameset->addFrame( new KWFrame( getPTLeftBorder() +
-						     i * ( ptColumnWidth + getPTColumnSpacing() ),
-						     j * getPTPaperHeight() + getPTTopBorder() + headOffset,
-						     ptColumnWidth, getPTPaperHeight() -
-						     getPTTopBorder() - getPTBottomBorder() -
-						     headOffset - footOffset ) );
+		    frameset->addFrame( new KWFrame(frameset, getPTLeftBorder() +
+                         i * ( ptColumnWidth + getPTColumnSpacing() ),
+                         j * getPTPaperHeight() + getPTTopBorder() + headOffset,
+                         ptColumnWidth, getPTPaperHeight() -
+                         getPTTopBorder() - getPTBottomBorder() -
+                         headOffset - footOffset ) );
 		}
 	    }
 	}
@@ -401,7 +396,7 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 							getPTLeftBorder() - getPTRightBorder(), h );
 		else
 		{
-		    KWFrame *frame = new KWFrame( getPTLeftBorder(), l * getPTPaperHeight() + getPTTopBorder(),
+		    KWFrame *frame = new KWFrame( evenHeader,getPTLeftBorder(), l * getPTPaperHeight() + getPTTopBorder(),
 						  getPTPaperWidth() - getPTLeftBorder() -
 						  getPTRightBorder(), h );
 		    evenHeader->addFrame( frame );
@@ -432,7 +427,7 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 										 getPTRightBorder(), h2 );
 			oddHeader->setCurrent( oddHeader->getCurrent() + 1 );
 		    } else {
-			KWFrame *frame = new KWFrame( getPTLeftBorder(), l * getPTPaperHeight() +
+			KWFrame *frame = new KWFrame( oddHeader, getPTLeftBorder(), l * getPTPaperHeight() +
 						      getPTTopBorder(),
 						      getPTPaperWidth() - getPTLeftBorder() -
 						      getPTRightBorder(), h2 );
@@ -450,7 +445,7 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 										   getPTRightBorder(), h1 );
 			evenHeader->setCurrent( evenHeader->getCurrent() + 1 );
 		    } else {
-			KWFrame *frame = new KWFrame( getPTLeftBorder(), l * getPTPaperHeight() +
+			KWFrame *frame = new KWFrame( evenHeader,getPTLeftBorder(), l * getPTPaperHeight() +
 						      getPTTopBorder(),
 						      getPTPaperWidth() - getPTLeftBorder() -
 						      getPTRightBorder(), h1 );
@@ -493,7 +488,7 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 							    getPTPaperWidth() - getPTLeftBorder() -
 							    getPTRightBorder(), h );
 		else {
-		    KWFrame *frame = new KWFrame( getPTLeftBorder(), l * getPTPaperHeight() + getPTTopBorder(),
+		    KWFrame *frame = new KWFrame( evenHeader, getPTLeftBorder(), l * getPTPaperHeight() + getPTTopBorder(),
 						  getPTPaperWidth() - getPTLeftBorder() -
 						  getPTRightBorder(), h );
 		    evenHeader->addFrame( frame );
@@ -525,7 +520,7 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 							getPTPaperWidth() - getPTLeftBorder() -
 							getPTRightBorder(), h );
 		else {
-		    KWFrame *frame = new KWFrame( getPTLeftBorder(), ( l + 1 ) * getPTPaperHeight() -
+		    KWFrame *frame = new KWFrame(evenFooter, getPTLeftBorder(), ( l + 1 ) * getPTPaperHeight() -
 						  getPTBottomBorder() - h,
 						  getPTPaperWidth() - getPTLeftBorder() -
 						  getPTRightBorder(), h );
@@ -557,7 +552,7 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 										 getPTRightBorder(), h2 );
 			oddFooter->setCurrent( oddFooter->getCurrent() + 1 );
 		    } else {
-			KWFrame *frame = new KWFrame( getPTLeftBorder(),
+			KWFrame *frame = new KWFrame(oddFooter, getPTLeftBorder(),
 						      ( l + 1 )	 * getPTPaperHeight() -
 						      getPTBottomBorder() - h2,
 						      getPTPaperWidth() - getPTLeftBorder() -
@@ -577,7 +572,7 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 										   getPTRightBorder(), h1 );
 			evenFooter->setCurrent( evenFooter->getCurrent() + 1 );
 		    } else {
-			KWFrame *frame = new KWFrame( getPTLeftBorder(),
+			KWFrame *frame = new KWFrame(evenFooter, getPTLeftBorder(),
 						      ( l + 1 )	 * getPTPaperHeight() -
 						      getPTBottomBorder() - h1,
 						      getPTPaperWidth() - getPTLeftBorder() -
@@ -620,7 +615,7 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 							    getPTPaperWidth() - getPTLeftBorder() -
 							    getPTRightBorder(), h );
 		else {
-		    KWFrame *frame = new KWFrame( getPTLeftBorder(), ( l + 1 ) * getPTPaperHeight() -
+		    KWFrame *frame = new KWFrame(evenFooter, getPTLeftBorder(), ( l + 1 ) * getPTPaperHeight() -
 						  getPTBottomBorder() - h,
 						  getPTPaperWidth() - getPTLeftBorder() -
 						  getPTRightBorder(), h );
@@ -1166,7 +1161,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     if ( !_first_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_FIRST_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
+	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTTopBorder(),
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
@@ -1176,7 +1171,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     if ( !_even_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_EVEN_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
+	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTTopBorder(),
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
@@ -1186,7 +1181,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     if ( !_odd_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_ODD_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
+	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTTopBorder(),
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
@@ -1196,7 +1191,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     if ( !_first_footer ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_FIRST_FOOTER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
+	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
@@ -1206,7 +1201,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     if ( !_even_footer ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_EVEN_FOOTER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
+	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
@@ -1216,7 +1211,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     if ( !_odd_footer ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_ODD_FOOTER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
+	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
@@ -1229,7 +1224,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	fs->setName( "Footnotes" );
 
 	for ( int i = 0; i < pages; i++ ) {
-	    KWFrame *frame = new KWFrame( getPTLeftBorder(),
+	    KWFrame *frame = new KWFrame(fs, getPTLeftBorder(),
 					  i * getPTPaperHeight() + getPTPaperHeight() - getPTTopBorder() - 20,
 					  getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	    fs->addFrame( frame );
@@ -1249,7 +1244,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	KWPartFrameSet *frameset = new KWPartFrameSet( this, ch );
 	frameset->setName( i18n( "Frameset %1" ).arg( frames.count() + 1 ) );
 	QRect r = ch->geometry();
-	KWFrame *frame = new KWFrame( r.x(), r.y(), r.width(), r.height() );
+	KWFrame *frame = new KWFrame(frameset, r.x(), r.y(), r.width(), r.height() );
 	frameset->addFrame( frame );
 	addFrameSet( frameset );
 	emit sig_insertObject( ch, frameset );
@@ -1807,7 +1802,7 @@ void KWordDocument::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _
     setModified( TRUE );
 
     KWPartFrameSet *frameset = new KWPartFrameSet( this, ch );
-    KWFrame *frame = new KWFrame( _rect.x() + _diffx, _rect.y() + _diffy, _rect.width(), _rect.height() );
+    KWFrame *frame = new KWFrame(frameset, _rect.x() + _diffx, _rect.y() + _diffy, _rect.width(), _rect.height() );
     frameset->addFrame( frame );
     addFrameSet( frameset );
 
@@ -3149,7 +3144,7 @@ getFrameSet( i ) )->getFrameBehaviour() == AutoCreateNewFrame ) continue;
 	for ( unsigned int j = 0; j < frameSet->getNumFrames(); j++ ) {
 	    frame = frameSet->getFrame( j );
 	    if ( frame->intersects( pageRect ) ) {
-		KWFrame *frm = new KWFrame( frame->x(), frame->y() + getPTPaperHeight(), frame->width(), frame->height(), frame->getRunAround(),
+		KWFrame *frm = new KWFrame(frameSet, frame->x(), frame->y() + getPTPaperHeight(), frame->width(), frame->height(), frame->getRunAround(),
 					    frame->getRunAroundGap() );
 		frm->setLeftBorder( frame->getLeftBorder2() );
 		frm->setRightBorder( frame->getRightBorder2() );
@@ -3543,7 +3538,7 @@ void KWordDocument::updateAllFrames()
 	if ( frameset->getGroupManager() ) {
 	    if ( mgrs.findRef( frameset->getGroupManager() ) == -1 ) {
 		QRect r = frameset->getGroupManager()->getBoundingRect();
-		KWFrame *frm = new KWFrame( r.x(), r.y(), r.width(), r.height() );
+		KWFrame *frm = new KWFrame(0L, r.x(), r.y(), r.width(), r.height() );
 		_frames.append( frm );
 		del.append( frm );
 		mgrs.append( frameset->getGroupManager() );

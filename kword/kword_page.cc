@@ -1048,8 +1048,7 @@ void KWPage::vmrEditFrame( int mx, int my )
 void KWPage::vmrCreateText()
 {
     repaintScreen( FALSE );
-    KWFrame *frame = new KWFrame( insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(),
-				  insRect.height() );
+    KWFrame *frame = new KWFrame(0L, insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(), insRect.height() );
 
     insRect = insRect.normalize();
     if ( insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY() ) {
@@ -1059,8 +1058,7 @@ void KWPage::vmrCreateText()
 	    frameDia = 0;
 	}
 
-	frameDia = new KWFrameDia( this, "", frame, doc, this,
-				   FD_FRAME_CONNECT | FD_FRAME | FD_PLUS_NEW_FRAME | FD_BORDERS );
+	frameDia = new KWFrameDia( this, frame,doc,FT_TEXT);
 	connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
         frameDia->setCaption(i18n("Connect frame"));
 	frameDia->show();
@@ -1077,7 +1075,7 @@ void KWPage::vmrCreatePixmap()
 	KWPictureFrameSet *frameset = new KWPictureFrameSet( doc );
 	frameset->setFileName( pixmap_name, QSize( insRect.width(), insRect.height() ) );
 	insRect = insRect.normalize();
-	KWFrame *frame = new KWFrame( insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(),
+	KWFrame *frame = new KWFrame(frameset, insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(),
 				      insRect.height() );
 	frameset->addFrame( frame );
 	doc->addFrameSet( frameset );
@@ -1107,7 +1105,7 @@ void KWPage::vmrCreateFormula()
     insRect = insRect.normalize();
     if ( insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY() ) {
 	KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, this );
-	KWFrame *frame = new KWFrame( insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(),
+	KWFrame *frame = new KWFrame(frameset, insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(),
 				      insRect.height() );
 	frameset->addFrame( frame );
 	doc->addFrameSet( frameset );
@@ -1136,9 +1134,8 @@ void KWPage::vmrCreateTable()
 	    doc->addGroupManager( grpMgr );
 	    for ( unsigned int i = 0; i < trows; i++ ) {
 		for ( unsigned int j = 0; j < tcols; j++ ) {
-		    KWFrame *frame = new KWFrame( insRect.x() + contentsX(), insRect.y() + contentsY(),
-						  insRect.width(), insRect.height() );
 		    KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
+		    KWFrame *frame = new KWFrame(_frameSet, insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(), insRect.height() );
 		    _frameSet->addFrame( frame );
             _frameSet->setFrameBehaviour(AutoExtendFrame);
 		    _frameSet->setGroupManager( grpMgr );
@@ -1526,6 +1523,7 @@ void KWPage::deleteTable( KWGroupManager *g )
 /*================================================================*/
 void KWPage::editReconnectFrame()
 {
+    // This is ugly please rethink. (TZ)
     if ( mouseMode != MM_EDIT_FRAME ) {
 	KMessageBox::sorry( this, i18n( "Please switch to the frame edit tool and\n"
 	                                "select the frame you want to reconnect." ),
@@ -1593,7 +1591,8 @@ void KWPage::editReconnectFrame()
 	frameDia = 0;
     }
 
-    frameDia = new KWFrameDia( this, "", frame, doc, this, FD_FRAME_CONNECT | FD_PLUS_NEW_FRAME , fs );
+    frameDia = new KWFrameDia( this,  frame,doc,frame->getFrameType());
+
     connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
     frameDia->setCaption( i18n( "Reconnect Frame" ) );
     frameDia->show();
@@ -3523,9 +3522,18 @@ void KWPage::femProps()
 	delete frameDia;
 	frameDia = 0;
     }
+    KWFrame *frame=0L;
 
     repaintScreen( FALSE );
-    frameDia = new KWFrameDia( this, "", 0L, doc, this, FD_FRAME_SET | FD_FRAME | FD_GEOMETRY | FD_BORDERS );
+    for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
+        for ( unsigned int j = 0; j < doc->getFrameSet(i)->getNumFrames(); j++ ) {
+            if(doc->getFrameSet(i)->getFrame( j )->isSelected()) {
+                frame=doc->getFrameSet(i)->getFrame(j);
+                break;
+            }
+        }
+    }
+    frameDia = new KWFrameDia( this, frame);
     connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
     frameDia->setCaption(i18n("Frame Properties"));
     frameDia->show();
@@ -4626,7 +4634,7 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 	pix.save( filename, "PNG" );
 	KWPictureFrameSet *frameset = new KWPictureFrameSet( doc );
 	frameset->setFileName( filename, QSize( pix.width(), pix.height() ) );
-	KWFrame *frame = new KWFrame( e->pos().x() + contentsX(), e->pos().y() + contentsY(), pix.width(),
+	KWFrame *frame = new KWFrame(frameset, e->pos().x() + contentsX(), e->pos().y() + contentsY(), pix.width(),
 				      pix.height() );
 	frameset->addFrame( frame );
 	doc->addFrameSet( frameset );
@@ -4656,7 +4664,7 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 		    QPixmap pix( filename );
 		    KWPictureFrameSet *frameset = new KWPictureFrameSet( doc );
 		    frameset->setFileName( filename, QSize( pix.width(), pix.height() ) );
-		    KWFrame *frame = new KWFrame( e->pos().x() + contentsX(), e->pos().y() + contentsY(),
+		    KWFrame *frame = new KWFrame(frameset, e->pos().x() + contentsX(), e->pos().y() + contentsY(),
 						  pix.width(), pix.height() );
 		    frameset->addFrame( frame );
 		    doc->addFrameSet( frameset );

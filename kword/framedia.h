@@ -36,13 +36,6 @@ class QListView;
 class QListViewItem;
 class QLineEdit;
 
-static const int FD_FRAME_SET      = 1;
-static const int FD_FRAME          = 2;
-static const int FD_FRAME_CONNECT  = 4;
-static const int FD_PLUS_NEW_FRAME = 8;
-static const int FD_GEOMETRY       = 16;
-static const int FD_BORDERS        = 32;
-
 /******************************************************************/
 /* Class: KWFrameDia                                              */
 /******************************************************************/
@@ -51,34 +44,56 @@ class KWFrameDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KWFrameDia( QWidget *parent, const char *name, KWFrame *_frame, KWordDocument *_doc,
-                KWPage *_page, int _flags, KWFrameSet *fs = 0 );
+    KWFrameDia( QWidget *parent, KWFrame *_frame,KWordDocument *_doc,FrameType _ft);
+    KWFrameDia( QWidget *parent, KWFrame *_frame);
+    //KWFrameDia( QWidget *parent, KWPage *_page);
 
 protected:
+    void init();
     bool applyChanges();
-    void setupTab1TextFrameSet();
-    void setupTab2TextFrame();
-    void setupTab3ConnectTextFrames();
-    void setupTab4Geometry();
+    void setupTab1();
+    void setupTab2();
+    void setupTab3();
+    void setupTab4();
     void uncheckAllRuns();
 
-    QWidget *tab1, *tab2, *tab3, *tab4;
-    QGridLayout *grid1, *grid2, *grid3, *grid4, *runGrid, *pGrid, *mGrid;
-    QGroupBox *runGroup, *grp1, *grp2;
-    QRadioButton *rRunNo, *rRunBounding, *rRunContur, *rResizeFrame, *rAppendFrame, *rNoShow;
-    QCheckBox *cAutoCreateFrame;
-    QLabel *lRunNo, *lRunBounding, *lRunContur, *lRGap, *lFrameSet, *lNewFrame;
-    QLabel *lx, *ly, *lw, *lh, *lml, *lmr, *lmt, *lmb;
-    QListView *lFrameSList;
-    QLineEdit *sx, *sy, *sw, *sh, *sml, *smr, *smt, *smb;
+    // TAB 1:
+    QWidget *tab1;
+    QGridLayout *grid1, *eofGrid, *onpGrid, *sideGrid;
+    QGroupBox *endOfFrame, *onNewPage, *sideHeads;
+    QCheckBox *autofit, *aspectRatio, *floating;
+    QRadioButton *rResizeFrame, *rAppendFrame, *rNoShow, *reconnect, *noFollowup, *limitRadio;
+    QLabel *sideTitle1, *sideTitle2;
+    QLineEdit *limitNumber, *sideWidth, *sideGap;
+    QComboBox *sideAlign;
+
+    // TAB 2:
+    QWidget *tab2;
+    QGridLayout *grid2, *runGrid;
+    QRadioButton *rRunNo, *rRunBounding, *rRunContur;
+    QLabel *runAroundLabel, *lRunNo, *lRunBounding, *lRunContur, *lRGap;
+    QGroupBox *runGroup;
+    QLineEdit *eRGap;
+
+    // TAB 3:
+    QWidget *tab3;
+    QGridLayout *grid3;
     QLineEdit *eFrameSetName;
+    QLabel *lFrameSet;
+    QListView *lFrameSList;
+    
+
+    // TAB 4:
+    QWidget *tab4;
+    QGroupBox *grp1, *grp2;
+    QGridLayout *grid4, *pGrid, *mGrid;
+    QLabel *lx, *lml, *lmr, *lmt, *lmb, *ly, *lw, *lh;
+    QLineEdit *sx, *sy, *sw, *sh, *sml, *smr, *smt, *smb;
 
     KWFrame *frame;
-    QLineEdit *eRGap;
-    int flags;
     KWordDocument *doc;
     KWPage *page;
-    KWFrameSet *frameset;
+    FrameType frameType;
 
     float oldX, oldY, oldW, oldH;
 

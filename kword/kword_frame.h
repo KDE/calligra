@@ -54,6 +54,7 @@ enum FrameInfo { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HE
 		 FI_FOOTNOTE = 7 };
 enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_SKIP = 2 };
 enum FrameBehaviour { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
+enum NewFrameBehaviour { Reconnect=0, NoFollowup=1, Limit=2 };
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -65,20 +66,18 @@ class KWFrame : public QRect
 
 public:
     KWFrame();
-    KWFrame( const QPoint &topleft, const QPoint &bottomright );
-    KWFrame( const QPoint &topleft, const QSize &size );
-    KWFrame( int left, int top, int width, int height );
-    KWFrame( int left, int top, int width, int height, RunAround _ra, KWUnit _gap );
-    KWFrame( const QRect &_rect );
+    KWFrame(KWFrameSet *fs, const QPoint &topleft, const QPoint &bottomright );
+    KWFrame(KWFrameSet *fs, const QPoint &topleft, const QSize &size );
+    KWFrame(KWFrameSet *fs, int left, int top, int width, int height );
+    KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAround _ra, KWUnit _gap );
+    KWFrame(KWFrameSet *fs, const QRect &_rect );
     virtual ~KWFrame();
 
     void setRunAround( RunAround _ra ) { runAround = _ra; }
     RunAround getRunAround() { return runAround; }
 
-    void setSelected( bool _selected )
-    { selected = _selected; }
-    bool isSelected()
-    { return selected; }
+    void setSelected( bool _selected ) { selected = _selected; }
+    bool isSelected() { return selected; }
 
     void addIntersect( QRect &_r );
     void clearIntersects()
@@ -87,15 +86,18 @@ public:
     int getLeftIndent( int _y, int _h );
     int getRightIndent( int _y, int _h );
 
-    bool hasIntersections()
-    { return !intersections.isEmpty(); }
+    bool hasIntersections() { return !intersections.isEmpty(); }
 
     QCursor getMouseCursor( int mx, int my, bool table );
 
-    KWUnit getRunAroundGap()
-    { return runAroundGap; }
-    void setRunAroundGap( KWUnit gap )
-    { runAroundGap = gap; }
+    KWUnit getRunAroundGap() { return runAroundGap; }
+    void setRunAroundGap( KWUnit gap ) { runAroundGap = gap; }
+    FrameBehaviour getFrameBehaviour() { return frameBehaviour; }
+    void setFrameBehaviour( FrameBehaviour fb ) { frameBehaviour = fb; }
+    FrameInfo getFrameInfo();
+    FrameType getFrameType();
+    KWFrameSet *getFrameSet() { return frameSet; }
+    void setFrameSet( KWFrameSet *fs ) { frameSet = fs; }
 
     bool isMostRight() { return mostRight; }
     void setMostRight( bool _mr ) { mostRight = _mr; }
@@ -140,6 +142,7 @@ public:
 
 protected:
     RunAround runAround;
+    FrameBehaviour frameBehaviour;
     bool selected;
     KWUnit runAroundGap;
     bool mostRight;
@@ -158,6 +161,7 @@ protected:
 private:
     KWFrame &operator=( const KWFrame &_frame );
     KWFrame ( const KWFrame &_frame );
+    KWFrameSet *frameSet;
 
 };
 
@@ -172,10 +176,8 @@ public:
     virtual ~KWFrameSet()
     {; }
 
-    virtual FrameType getFrameType()
-    { return FT_BASE; }
-    virtual FrameInfo getFrameInfo()
-    { return frameInfo; }
+    virtual FrameType getFrameType() { return FT_BASE; }
+    virtual FrameInfo getFrameInfo() { return frameInfo; }
     void setFrameInfo( FrameInfo fi ) { frameInfo = fi; }
 
     virtual void addFrame( KWFrame _frame );
@@ -211,6 +213,8 @@ public:
 
     int getNext( QRect _rect );
     int getPageOfFrame( int i ) { return frames.at( i )->getPageNum(); }
+
+    KWordDocument* getDocument() {return doc;}
 
     void setCurrent( int i ) { current = i; }
     int getCurrent() { return current; }
@@ -284,6 +288,8 @@ public:
     void joinParag( KWParag *_parag1, KWParag *_parag2 );
     void insertParag( KWParag *_parag, InsertPos _pos );
     void splitParag( KWParag *_parag, unsigned int _pos );
+    NewFrameBehaviour getNewFrameBehaviour() { return newFrameBehaviour; }
+    void setNewFrameBehaviour( NewFrameBehaviour nfb ) { newFrameBehaviour = nfb; }
 
     virtual void save( ostream &out );
     virtual void load( KOMLParser&, vector<KOMLAttrib>& );
@@ -303,6 +309,7 @@ protected:
     // pointer to the first parag of the list of parags
     KWParag *parags;
     FrameBehaviour m_behaviour;
+    NewFrameBehaviour newFrameBehaviour;
 };
 
 /******************************************************************/

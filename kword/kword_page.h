@@ -95,8 +95,8 @@ public:
     KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui );
     ~KWPage() { delete fc; selectAllFrames( FALSE ); }
 
-    void setDocument( KWordDocument *_doc )
-    { doc = _doc; }
+    void setDocument( KWordDocument *_doc ) { doc = _doc; }
+    KWordDocument* getDocument() { return doc; }
     void init();
 
     void viewportMousePressEvent( QMouseEvent* e );
