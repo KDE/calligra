@@ -135,7 +135,7 @@ void KSpreadresize2::slotOk()
           case resize_row:
 	    if( m_pDefault->isChecked() )
 	      for( int i=selection.top(); i<=selection.bottom(); i++ ) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
-	        m_pView->vBorderWidget()->resizeRow( heightOfRow, i, false );
+	        m_pView->vBorderWidget()->resizeRow( heightOfRow*m_pView->canvasWidget()->zoom(), i, false );
 	    else
 	      for( int i=selection.top(); i<=selection.bottom(); i++ ) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
 	        m_pView->vBorderWidget()->resizeRow( new_size, i, false );
@@ -144,7 +144,7 @@ void KSpreadresize2::slotOk()
           case resize_column:
 	    if( m_pDefault->isChecked() )
 	      for( int i=selection.left(); i<=selection.right(); i++ ) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
-	    m_pView->hBorderWidget()->resizeColumn( colWidth, i, false );
+	    m_pView->hBorderWidget()->resizeColumn( colWidth*m_pView->canvasWidget()->zoom(), i, false );
 	    else
 	      for( int i=selection.left(); i<=selection.right(); i++ ) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
 	        m_pView->hBorderWidget()->resizeColumn( new_size, i, false );
