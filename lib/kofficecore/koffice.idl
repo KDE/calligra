@@ -2,7 +2,7 @@
 #define __koffice_idl__
 
 #include <openparts.idl>
-#include <koStore.idl>
+#include <koStoreIf.idl>
 
 module KOffice
 {

@@ -58,16 +58,27 @@ Chart::Matrix::operator=( const Matrix& _s )
 }
 #endif
 
-CORBA::Boolean operator<<=( CORBA::Any &_a, const Chart::Matrix &_s )
+void operator<<=( CORBA::Any &_a, const Chart::Matrix &_s )
 {
   CORBA::StaticAny _sa (_marshaller_Chart_Matrix, &_s);
-  return _a.from_static_any (_sa);
+  _a.from_static_any (_sa);
+}
+
+void operator<<=( CORBA::Any &_a, Chart::Matrix *_s )
+{
+  _a <<= *_s;
+  delete _s;
 }
 
 CORBA::Boolean operator>>=( const CORBA::Any &_a, Chart::Matrix &_s )
 {
   CORBA::StaticAny _sa (_marshaller_Chart_Matrix, &_s);
   return _a.to_static_any (_sa);
+}
+
+CORBA::Boolean operator>>=( const CORBA::Any &_a, Chart::Matrix *&_s )
+{
+  return _a.to_static_any (_marshaller_Chart_Matrix, (void *&)_s);
 }
 
 class _Marshaller_Chart_Matrix : public CORBA::StaticTypeInfo {
@@ -163,16 +174,27 @@ Chart::Range::operator=( const Range& _s )
 }
 #endif
 
-CORBA::Boolean operator<<=( CORBA::Any &_a, const Chart::Range &_s )
+void operator<<=( CORBA::Any &_a, const Chart::Range &_s )
 {
   CORBA::StaticAny _sa (_marshaller_Chart_Range, &_s);
-  return _a.from_static_any (_sa);
+  _a.from_static_any (_sa);
+}
+
+void operator<<=( CORBA::Any &_a, Chart::Range *_s )
+{
+  _a <<= *_s;
+  delete _s;
 }
 
 CORBA::Boolean operator>>=( const CORBA::Any &_a, Chart::Range &_s )
 {
   CORBA::StaticAny _sa (_marshaller_Chart_Range, &_s);
   return _a.to_static_any (_sa);
+}
+
+CORBA::Boolean operator>>=( const CORBA::Any &_a, Chart::Range *&_s )
+{
+  return _a.to_static_any (_marshaller_Chart_Range, (void *&)_s);
 }
 
 class _Marshaller_Chart_Range : public CORBA::StaticTypeInfo {
@@ -238,12 +260,6 @@ Chart::SimpleChart::~SimpleChart()
 {
 }
 
-Chart::SimpleChart_ptr Chart::SimpleChart::_duplicate( SimpleChart_ptr _obj )
-{
-  CORBA::Object::_duplicate (_obj);
-  return _obj;
-}
-
 void *Chart::SimpleChart::_narrow_helper( const char *_repoid )
 {
   if( strcmp( _repoid, "IDL:Chart/SimpleChart:1.0" ) == 0 )
@@ -288,12 +304,6 @@ Chart::SimpleChart::_narrow( CORBA::AbstractBase_ptr _obj )
   return _narrow (_obj->_to_object());
 }
 
-Chart::SimpleChart_ptr
-Chart::SimpleChart::_nil()
-{
-  return NULL;
-}
-
 Chart::SimpleChart_stub::~SimpleChart_stub()
 {
 }
@@ -335,26 +345,30 @@ namespace Chart { CORBA::TypeCodeConst _tc_SimpleChart; };
 CORBA::TypeCodeConst Chart::_tc_SimpleChart;
 #endif
 
-CORBA::Boolean
+void
 operator<<=( CORBA::Any &_a, const Chart::SimpleChart_ptr _obj )
 {
   CORBA::StaticAny _sa (_marshaller_Chart_SimpleChart, &_obj);
-  return _a.from_static_any (_sa);
+  _a.from_static_any (_sa);
 }
 
-CORBA::Boolean
+void
 operator<<=( CORBA::Any &_a, Chart::SimpleChart_ptr* _obj_ptr )
 {
-  CORBA::Object_var _obj = *_obj_ptr;
   CORBA::StaticAny _sa (_marshaller_Chart_SimpleChart, _obj_ptr);
-  return _a.from_static_any (_sa);
+  _a.from_static_any (_sa);
+  CORBA::release (*_obj_ptr);
 }
 
 CORBA::Boolean
 operator>>=( const CORBA::Any &_a, Chart::SimpleChart_ptr &_obj )
 {
-  CORBA::StaticAny _sa (_marshaller_Chart_SimpleChart, &_obj);
-  return _a.to_static_any (_sa);
+  Chart::SimpleChart_ptr *p;
+  if (_a.to_static_any (_marshaller_Chart_SimpleChart, (void *&)p)) {
+    _obj = *p;
+    return TRUE;
+  }
+  return FALSE;
 }
 
 class _Marshaller_Chart_SimpleChart : public CORBA::StaticTypeInfo {
@@ -388,14 +402,12 @@ void _Marshaller_Chart_SimpleChart::free( StaticValueType v ) const
 CORBA::Boolean _Marshaller_Chart_SimpleChart::demarshal( CORBA::DataDecoder &dc, StaticValueType v ) const
 {
   CORBA::Object_ptr obj;
-  if(!CORBA::_stc_Object->demarshal( dc, &obj))
+  if (!CORBA::_stc_Object->demarshal(dc, &obj))
     return FALSE;
   *(_MICO_T *) v = ::Chart::SimpleChart::_narrow( obj );
-  if (!CORBA::is_nil (obj) && CORBA::is_nil (*(_MICO_T*)v)) {
-    CORBA::release (obj);
-    return FALSE;
-  }
-  return TRUE;
+  CORBA::Boolean ret = CORBA::is_nil (obj) || !CORBA::is_nil (*(_MICO_T *)v);
+  CORBA::release (obj);
+  return ret;
 }
 
 void _Marshaller_Chart_SimpleChart::marshal( CORBA::DataEncoder &ec, StaticValueType v ) const
@@ -517,7 +529,7 @@ bool Chart::SimpleChart_skel::dispatch( CORBA::StaticServerRequest_ptr _req, COR
       return true;
     }
   #ifdef HAVE_EXCEPTIONS
-  } catch( CORBA::SystemException_var &_ex ) {
+  } catch( CORBA::SystemException_catch &_ex ) {
     _req->set_exception( _ex->_clone() );
     _req->write_results();
     return true;

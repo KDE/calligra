@@ -8,7 +8,7 @@ libkofficecore_la_LIBADD  = -lkparts ../koml/libkoml.la ../store/libkstore.la -l
 
 lib_LTLIBRARIES = libkofficecore.la
 
-libkofficecore_la_SOURCES = koDocument.cc koView.cc koffice.cc \
+libkofficecore_la_SOURCES = koDocument.cc koView.cc koffice.idl \
 	koFrame.cc koIMR.cc koStream.cc koFilterManager.cc \
 	koPrintExt.cc koMainWindow.cc koScanTools.cc \
 	koScanPlugins.cc koApplication.cc koQueryTrader.cc
@@ -28,3 +28,5 @@ IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib
 
 koffice.idl: $(idldir)/openparts.idl $(idldir)/openparts_ui.idl $(idldir)/kom.idl 
 
+koDocument.cc: koffice.h
+koView: koffice.h

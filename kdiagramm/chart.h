@@ -37,11 +37,11 @@ typedef DoubleSeq_var DoubleSeq_out;
 
 MICO_EXPORT_TYPEVAR_DECL CORBA::TypeCodeConst _tc_DoubleSeq;
 
-typedef SequenceTmpl<CORBA::String_var,MICO_TID_DEF> StringSeq;
+typedef StringSequenceTmpl<CORBA::String_var> StringSeq;
 #ifdef _WINDOWS
 static StringSeq _dummy_StringSeq;
 #endif
-typedef TSeqVar<SequenceTmpl<CORBA::String_var,MICO_TID_DEF> > StringSeq_var;
+typedef TSeqVar<StringSequenceTmpl<CORBA::String_var> > StringSeq_var;
 typedef StringSeq_var StringSeq_out;
 
 MICO_EXPORT_TYPEVAR_DECL CORBA::TypeCodeConst _tc_StringSeq;
@@ -51,7 +51,9 @@ typedef TVarVar<Matrix> Matrix_var;
 typedef Matrix_var Matrix_out;
 
 struct Matrix {
+  #ifdef HAVE_TYPEDEF_OVERLOAD
   typedef Matrix_var _var_type;
+  #endif
   #ifdef HAVE_EXPLICIT_STRUCT_OPS
   Matrix();
   ~Matrix();
@@ -73,7 +75,9 @@ typedef TVarVar<Range> Range_var;
 typedef Range_var Range_out;
 
 struct Range {
+  #ifdef HAVE_TYPEDEF_OVERLOAD
   typedef Range_var _var_type;
+  #endif
   #ifdef HAVE_EXPLICIT_STRUCT_OPS
   Range();
   ~Range();
@@ -104,13 +108,23 @@ class SimpleChart :
   public:
     virtual ~SimpleChart();
 
+    #ifdef HAVE_TYPEDEF_OVERLOAD
     typedef SimpleChart_ptr _ptr_type;
     typedef SimpleChart_var _var_type;
+    #endif
 
-    static SimpleChart_ptr _duplicate( SimpleChart_ptr obj );
     static SimpleChart_ptr _narrow( CORBA::Object_ptr obj );
     static SimpleChart_ptr _narrow( CORBA::AbstractBase_ptr obj );
-    static SimpleChart_ptr _nil();
+    static SimpleChart_ptr _duplicate( SimpleChart_ptr _obj )
+    {
+      CORBA::Object::_duplicate (_obj);
+      return _obj;
+    }
+
+    static SimpleChart_ptr _nil()
+    {
+      return 0;
+    }
 
     virtual void *_narrow_helper( const char *repoid );
     static vector<CORBA::Narrow_proto> *_narrow_helpers;
@@ -169,24 +183,30 @@ class SimpleChart_skel :
 
 #if !defined(MICO_NO_TOPLEVEL_MODULES) || defined(MICO_MODULE__GLOBAL)
 
-CORBA::Boolean operator<<=( CORBA::Any &_a, const ::Chart::Matrix &_s );
+void operator<<=( CORBA::Any &_a, const ::Chart::Matrix &_s );
+void operator<<=( CORBA::Any &_a, ::Chart::Matrix *_s );
 CORBA::Boolean operator>>=( const CORBA::Any &_a, ::Chart::Matrix &_s );
+CORBA::Boolean operator>>=( const CORBA::Any &_a, ::Chart::Matrix *&_s );
 
 extern CORBA::StaticTypeInfo *_marshaller_Chart_Matrix;
 
-CORBA::Boolean operator<<=( CORBA::Any &_a, const ::Chart::Range &_s );
+void operator<<=( CORBA::Any &_a, const ::Chart::Range &_s );
+void operator<<=( CORBA::Any &_a, ::Chart::Range *_s );
 CORBA::Boolean operator>>=( const CORBA::Any &_a, ::Chart::Range &_s );
+CORBA::Boolean operator>>=( const CORBA::Any &_a, ::Chart::Range *&_s );
 
 extern CORBA::StaticTypeInfo *_marshaller_Chart_Range;
 
-CORBA::Boolean operator<<=( CORBA::Any &a, const Chart::SimpleChart_ptr obj );
-CORBA::Boolean operator<<=( CORBA::Any &a, Chart::SimpleChart_ptr* obj_ptr );
+void operator<<=( CORBA::Any &a, const Chart::SimpleChart_ptr obj );
+void operator<<=( CORBA::Any &a, Chart::SimpleChart_ptr* obj_ptr );
 CORBA::Boolean operator>>=( const CORBA::Any &a, Chart::SimpleChart_ptr &obj );
 
 extern CORBA::StaticTypeInfo *_marshaller_Chart_SimpleChart;
 
-CORBA::Boolean operator<<=( CORBA::Any &_a, const SequenceTmpl<CORBA::Double,MICO_TID_DEF> &_s );
+void operator<<=( CORBA::Any &_a, const SequenceTmpl<CORBA::Double,MICO_TID_DEF> &_s );
+void operator<<=( CORBA::Any &_a, SequenceTmpl<CORBA::Double,MICO_TID_DEF> *_s );
 CORBA::Boolean operator>>=( const CORBA::Any &_a, SequenceTmpl<CORBA::Double,MICO_TID_DEF> &_s );
+CORBA::Boolean operator>>=( const CORBA::Any &_a, SequenceTmpl<CORBA::Double,MICO_TID_DEF> *&_s );
 
 #endif // !defined(MICO_NO_TOPLEVEL_MODULES) || defined(MICO_MODULE__GLOBAL)
 

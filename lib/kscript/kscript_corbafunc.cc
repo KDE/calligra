@@ -109,7 +109,7 @@ bool ksUnpack( KSContext& context, KSValue* _arg, CORBA::Any& _any, CORBA::TypeC
     }
   case CORBA::tk_objref:
     {
-      CORBA::Object_var x;
+      CORBA::Object_ptr x;
       if ( !( _any >>= CORBA::Any::to_object( x ) ) )
 	return 0L;
 
@@ -147,7 +147,7 @@ bool ksUnpack( KSContext& context, KSValue* _arg, CORBA::Any& _any, CORBA::TypeC
     }
   case CORBA::tk_TypeCode:
     {
-      CORBA::TypeCode_var x;
+      CORBA::TypeCode_ptr x;
       bool erg = ( _any >>= x );
       ASSERT( erg );
       _arg->setValue( new KSTypeCode( (CORBA::TypeCode*)x ) );

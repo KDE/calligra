@@ -30,7 +30,7 @@ AC_PATH_KDE
 AM_KDE_WITH_NLS
 
 dnl Check for MICO. The argument is the minimal version required.
-KDE_CHECK_MICO(2.2.6)
+KDE_CHECK_MICO(2.2.7)
 
 idldir="\$(includedir)/idl"
 AC_SUBST(idldir)

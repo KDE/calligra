@@ -256,9 +256,9 @@ bool KSpreadView::event( const char* _event, const CORBA::Any& _value )
 
   EVENT_MAPPER( _event, _value );
 
-  MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_var,
+  MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_ptr,
 	   mappingCreateMenubar );
-  MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var,
+  MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_ptr,
 	   mappingCreateToolbar );
   MAPPING( DataTools::eventDone, DataTools::typeDone, mappingToolDone );
   MAPPING( KSpread::eventSetText, KSpread::EventSetText, mappingEventSetText );
@@ -522,16 +522,16 @@ bool KSpreadView::mappingEventSetText( KSpread::EventSetText& _event )
 
 bool KSpreadView::mappingToolDone( DataTools::Answer& _answer )
 {
-  CORBA::String_var str;
+  char* str;
   _answer.value >>= CORBA::Any::to_string( str, 0 );
   KSpread::DataToolsId id;
   _answer.id >>= id;
 
-  cerr << "CORRECTED ´" << str.in() << "´" << endl;
+  cerr << "CORRECTED ´" << str << "´" << endl;
   cerr << "r=" << id.row << " c=" << id.column << endl;
 
   // TODO: check time
-  m_pTable->setText( m_pCanvas->markerRow(), m_pCanvas->markerColumn(), str.in() );
+  m_pTable->setText( m_pCanvas->markerRow(), m_pCanvas->markerColumn(), str );
 
   return true;
 }
