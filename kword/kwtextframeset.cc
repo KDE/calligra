@@ -935,7 +935,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
     emit hideCursor();
 
     switch ( action ) {
-    case ActionDelete:
+    case ActionDelete: {
 	checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
 	if ( !undoRedoInfo.valid() ) {
 	    undoRedoInfo.id = parag->paragId();
@@ -943,12 +943,13 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 	    undoRedoInfo.text = QString::null;
             undoRedoInfo.name = i18n("Delete text");
 	}
-	undoRedoInfo.text += parag->at( cursor->index() )->c;
-        copyCharFormatting( parag->at( cursor->index() ), undoRedoInfo.text.length()-1, true );
+        QTextStringChar * ch = parag->at( cursor->index() );
+	undoRedoInfo.text += ch->c;
+        copyCharFormatting( ch, undoRedoInfo.text.length()-1, true );
 	if ( cursor->remove() )
 	    undoRedoInfo.text += "\n";
-	break;
-    case ActionBackspace:
+    } break;
+    case ActionBackspace: {
         // Remove counter
 	if ( parag->counter() && parag->counter()->style() != Counter::STYLE_NONE && cursor->index() == 0 ) {
 	    // parag->decDepth(); // We don't have support for nested lists at the moment
@@ -967,8 +968,9 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
             undoRedoInfo.name = i18n("Delete text");
 	}
 	cursor->gotoLeft();
-	undoRedoInfo.text.prepend( QString( cursor->parag()->at( cursor->index() )->c ) );
-        copyCharFormatting( parag->at( cursor->index() ), 0, true );
+        QTextStringChar * ch = cursor->parag()->at( cursor->index() );
+	undoRedoInfo.text.prepend( QString( ch->c ) );
+        copyCharFormatting( ch, 0, true );
 	undoRedoInfo.index = cursor->index();
 	if ( cursor->remove() ) {
 	    undoRedoInfo.text.remove( 0, 1 );
@@ -977,7 +979,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 	    undoRedoInfo.id = cursor->parag()->paragId();
 	}
         setLastFormattedParag( cursor->parag() );
-	break;
+    } break;
     case ActionReturn:
 	checkUndoRedoInfo( cursor, UndoRedoInfo::Return );
 	if ( !undoRedoInfo.valid() ) {
@@ -1000,8 +1002,9 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
             undoRedoInfo.name = i18n("Delete text");
 	}
 	if ( cursor->atParagEnd() ) {
-	    undoRedoInfo.text += cursor->parag()->at( cursor->index() )->c;
-            copyCharFormatting( parag->at( cursor->index() ), undoRedoInfo.text.length()-1, true );
+            QTextStringChar * ch = cursor->parag()->at( cursor->index() );
+	    undoRedoInfo.text += ch->c;
+            copyCharFormatting( ch, undoRedoInfo.text.length()-1, true );
             if ( cursor->remove() )
 		undoRedoInfo.text += "\n";
 	} else {
