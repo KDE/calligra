@@ -46,7 +46,7 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   _preferenceConfig = new  preference(parent,page );
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
-  QVBox *page2=addVBoxPage(i18n("Local Parameters"), QString::null,BarIcon("gohome",KIcon::SizeMedium));
+  QVBox *page2=addVBoxPage(i18n("Locale Parameters"), QString::null,BarIcon("gohome",KIcon::SizeMedium));
  _localePage=new parameterLocale(parent,page2 );
 
   QVBox *page3=addVBoxPage(i18n("Interface"), QString::null,BarIcon("signature", KIcon::SizeMedium) );
