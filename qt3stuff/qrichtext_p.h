@@ -786,7 +786,7 @@ public:
     QBrush *paper() const { return backBrush; }
 
     void doLayout( QPainter *p, int w );
-    void draw( QPainter *p, const QRegion &reg, const QColorGroup &cg, const QBrush *paper = 0 );
+    void draw( QPainter *p, const QRect &rect, const QColorGroup &cg, const QBrush *paper = 0 );
     void drawParag( QPainter *p, QTextParag *parag, int cx, int cy, int cw, int ch,
 		    QPixmap *&doubleBuffer, const QColorGroup &cg,
 		    bool drawCursor, QTextCursor *cursor, bool resetChanged = TRUE );

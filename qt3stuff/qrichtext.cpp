@@ -2354,7 +2354,7 @@ QPixmap *QTextDocument::bufferPixmap( const QSize &s )
     return buf_pixmap;
 }
 
-void QTextDocument::draw( QPainter *p, const QRegion &reg, const QColorGroup &cg, const QBrush *paper )
+void QTextDocument::draw( QPainter *p, const QRect &cr, const QColorGroup &cg, const QBrush *paper )
 {
     if ( !firstParag() )
 	return;
@@ -2365,13 +2365,10 @@ void QTextDocument::draw( QPainter *p, const QRegion &reg, const QColorGroup &cg
 //			   -(int)p->translationY() );
 	p->setBrushOrigin( -(int)p->worldMatrix().dx(),
 			   -(int)p->worldMatrix().dy() );
-	p->fillRect( reg.boundingRect(), *paper );
+	p->fillRect( cr, *paper );
     }
 
     QTextParag *parag = firstParag();
-    QRect cr;
-    if ( !reg.isNull() )
-	cr = reg.boundingRect();
     while ( parag ) {
 	if ( !parag->isValid() )
 	    parag->format();
@@ -2379,7 +2376,7 @@ void QTextDocument::draw( QPainter *p, const QRegion &reg, const QColorGroup &cg
 	QRect pr( parag->rect() );
 	pr.setX( 0 );
 	pr.setWidth( QWIDGETSIZE_MAX );
-	if ( !reg.isNull() && !cr.isNull() && !cr.intersects( pr ) ) {
+	if ( !cr.isNull() && !cr.intersects( pr ) ) {
 	    parag = parag->next();
 	    continue;
 	}
@@ -2470,8 +2467,8 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 {
     if ( withoutDoubleBuffer || par && par->withoutDoubleBuffer ) {
 	withoutDoubleBuffer = TRUE;
-	QRegion rg;
-	draw( p, rg, cg );
+        QRect crect( cx, cy, cw, ch );
+	draw( p, crect, cg );
 	return 0;
     }
     withoutDoubleBuffer = FALSE;
