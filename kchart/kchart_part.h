@@ -40,6 +40,7 @@ public:
     virtual QCString mimeType() const;
 
     void setPart( const KChartData& data );
+    void showWizard();
     void initLabelAndLegend();
     void loadConfig(KConfig *conf);
     void saveConfig(KConfig *conf);

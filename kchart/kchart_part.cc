@@ -56,12 +56,8 @@ KChartPart::~KChartPart()
 bool KChartPart::initDoc()
 {
   // Initialize the parameter set for this chart document
-  // PENDING(kalle,torben) Where to delete this?
   kdDebug(35001) << "InitDOC" << endl;
   _params = new KChartParameters;
-  initRandomData();
-  // PENDING(lotzi) This is where to start the wizard and fill the
-  // params struct with the data the users enters there.
 
   return TRUE;
 }
@@ -136,6 +132,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
 
 }
 
+
 void KChartPart::setPart( const KChartData& data )
 {
   currentData = data;
@@ -143,45 +140,50 @@ void KChartPart::setPart( const KChartData& data )
   emit docChanged();
 }
 
+
+void KChartPart::showWizard()
+{
+  KChartWizard* wizard = new KChardWizard( this, this );
+  int ret = wizard->exec();
+  if( ret == QDialog::Accepted ) {
+  }
+  delete wizard;
+}
+
 void KChartPart::initLabelAndLegend()
 {
-
-    if(_params->legend.isEmpty())
-    	{
-        for(unsigned int i=0;i<currentData.rows();i++)
-                {
-                QString tmp;
-                tmp="Legend "+tmp.setNum(i);
-                _params->legend+=tmp;
-                }
-        }
-
-    if(_params->xlbl.isEmpty())
-    	{
-        for(unsigned int i=0;i<currentData.cols();i++)
-                {
-                QString tmp;
-                tmp="Year 200"+tmp.setNum(i);
-    	        _params->xlbl+=tmp;
-                }
-    	}
-
-QArray<int> tmpExp(currentData.cols()*currentData.rows());
-QArray<bool> tmpMissing(currentData.cols()*currentData.rows());
-
-for(unsigned int i=0; i<(currentData.cols()*currentData.rows()); ++i )
-  {
-  tmpExp[i]=0;
-  tmpMissing[i]=FALSE;
+  if( _params->legend.isEmpty() ) {
+    for(unsigned int i=0;i<currentData.rows();i++) {
+      QString tmp;
+      tmp="Legend "+tmp.setNum(i);
+      _params->legend+=tmp;
+    }
   }
-if(_params->missing.isEmpty())
-	{
-  	_params->missing=tmpMissing;
-  	}
-if(_params->explode.isEmpty())
-	{
-  	_params->explode=tmpExp;
-	}
+
+  if( _params->xlbl.isEmpty() ) {
+    for(unsigned int i=0;i<currentData.cols();i++) {
+      QString tmp;
+      tmp="Year 200"+tmp.setNum(i);
+      _params->xlbl+=tmp;
+    }
+  }
+
+  QArray<int> tmpExp(currentData.cols()*currentData.rows());
+  QArray<bool> tmpMissing(currentData.cols()*currentData.rows());
+
+  for(unsigned int i=0; i<(currentData.cols()*currentData.rows()); ++i )
+    {
+      tmpExp[i]=0;
+      tmpMissing[i]=FALSE;
+    }
+  if(_params->missing.isEmpty())
+    {
+      _params->missing=tmpMissing;
+    }
+  if(_params->explode.isEmpty())
+    {
+      _params->explode=tmpExp;
+    }
 }
 
 void KChartPart::loadConfig( KConfig *conf ) {
@@ -202,7 +204,7 @@ QDomDocument KChartPart::saveXML() {
   doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
   QDomElement chart = doc.createElement( "chart" );
   chart.setAttribute( "author", "Kalle Dalheimer, Laszlo Boloni" );
-  chart.setAttribute( "email", "kalle@dalheimer.org, boloni@cs.purdue.edu" );
+  chart.setAttribute( "email", "kalle@kde.org, boloni@cs.purdue.edu" );
   chart.setAttribute( "editor", "KChart" );
   chart.setAttribute( "mime", "application/x-kchart" );
   doc.appendChild( chart );
@@ -889,6 +891,9 @@ QFont KChartPart::toFont(QDomElement &element) const {
 
 /**
  * $Log$
+ * Revision 1.42  2000/07/18 21:48:59  kalle
+ * renamed kchartWizard* to KChartWizard* for consistency with the rest
+ *
  * Revision 1.41  2000/07/16 01:52:40  faure
  * Add support for applying a "pre-processing filter" before loading an
  * XML document. Used in KPresenter to apply a perl script. Currently
