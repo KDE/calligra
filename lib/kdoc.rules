@@ -6,15 +6,14 @@
 
 kde_MODULES = store kofficecore kofficeui kscript
 
-store_FILES = *.idl *.h
-store_LIBS = -lparts -lpartsui -lkom -lqt
+store_FILES = *.h
+store_LIBS = -lkdecore -lqt
 
-kofficecore_FILES = *.idl *.h
-kofficecore_LIBS = -lparts -lpartsui -lkom -lqt
+kofficecore_FILES = *.h
+kofficecore_LIBS = -lkparts -lkdecore -lqt
 
-kofficeui_FILES = *.idl *.h
-kofficeui_LIBS = -lkofficecore -lparts -lpartsui -lkom -lqt
+kofficeui_FILES = *.h
+kofficeui_LIBS = -lqt
 
-kscript_FILES = *.idl *.h
-kscript_LIBS = -lkofficeui -lkofficecore -lparts -lpartsui -lkom -lqt
-
+kscript_FILES = *.h
+kscript_LIBS = -lqt
