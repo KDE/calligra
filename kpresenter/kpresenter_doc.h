@@ -297,6 +297,7 @@ public:
     bool isSlideSelected( int pgNum ) const;
     // Returns the list of selected slides. Slide numbers are 0-based.
     QValueList<int> selectedSlides() const;
+    QString selectedForPrinting() const;
 
     virtual DCOPObject* dcopObject();
 

@@ -247,6 +247,9 @@ void KPresenterView::setupPrinter( KPrinter &prt )
 {
     prt.setMinMax( 1, m_pKPresenterDoc->getPageNums() );
     prt.setFromTo( 1, m_pKPresenterDoc->getPageNums() );
+#ifdef HAVE_KDEPRINT
+    prt.setOption( "kde-range", m_pKPresenterDoc->selectedForPrinting() );
+#endif
     bool makeLandscape = false;
 
     switch ( m_pKPresenterDoc->pageLayout().format ) {

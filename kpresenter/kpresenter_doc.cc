@@ -3344,7 +3344,7 @@ int KPresenterDoc::getPageOfObj( int objNum, int diffx, int diffy, float fakt )
         }
     }
     return -1;
-}                               
+}
 
 /*================== get size of page ===========================*/
 QRect KPresenterDoc::getPageRect( unsigned int num, int diffx, int diffy, float fakt , bool decBorders )
@@ -4128,4 +4128,41 @@ QValueList<int> KPresenterDoc::selectedSlides() const /* returned list is 0-base
         if ( *sit )
             result << i;
     return result;
+}
+
+QString KPresenterDoc::selectedForPrinting() const {
+
+    QString ret;
+    QValueList<bool>::ConstIterator sit = m_selectedSlides.begin();
+    int start=-1, end=-1, i=0;
+    bool continuous=false;
+    for ( ; sit!=m_selectedSlides.end(); ++sit, ++i) {
+        if(*sit) {
+            if(continuous)
+                ++end;
+            else {
+                start=i;
+                end=i;
+                continuous=true;
+            }
+        }
+        else {
+            if(continuous) {
+                if(start==end)
+                    ret+=QString::number(start+1)+",";
+                else
+                    ret+=QString::number(start+1)+"-"+QString::number(end+1)+",";
+                continuous=false;
+            }
+        }
+    }
+    if(continuous) {
+        if(start==end)
+            ret+=QString::number(start+1);
+        else
+            ret+=QString::number(start+1)+"-"+QString::number(end+1);
+    }
+    if(','==ret[ret.length()-1])
+        ret.truncate(ret.length()-1);
+    return ret;
 }
