@@ -75,7 +75,13 @@ class BracketElement : public BasicElement
     /*   virtual void save(int file);
 	 virtual void load(int file);
     */
- protected:
+    
+    QString getContent() const {return content;}  
+    void setContent(QString a) {content=a.copy();}  
+    QString getContent() { return content;}
+
+//protected:
+private:
    
     /*
      * If usePixmap is True we need a...
@@ -84,7 +90,7 @@ class BracketElement : public BasicElement
   
     bool usePixmap;
   
-     
+    QString content;
    
 };
 

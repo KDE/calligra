@@ -42,8 +42,7 @@ class BasicElement
     BasicElement(KFormulaContainer *Formula,
 		 BasicElement *Prev=0,
 		 int Relation=-1,
-		 BasicElement *Next=0,
-		 QString Content="");
+		 BasicElement *Next=0);
   
     /*
      * Link Next & Prev removing itself
@@ -126,7 +125,7 @@ class BasicElement
     /*
      * Return globalsize (see globalSize)
      */
-    QRect getSize() const { return globalSize; }
+    QRect getSize() const { return _globalSize; }
 
     /*
      * Return next
@@ -151,13 +150,18 @@ class BasicElement
      * Return the default color of element
      */ 
     QColor *getColor() const { return defaultColor; }
-  
-    QString getContent() const {return content;}  
+
+    // I want these to disappear.
+    // They are overridden in every subtype. Each time with
+    // completly different meaning.
+    // There should be seperate methodes instead.
+    virtual QString getContent() const {return "";}  
+    virtual void setContent(QString) {}  
+    virtual QString getContent() { return "";}
+
     /*
      * Various Set-GetFunction
      */  
-    void setContent(QString a) {content=a.copy();}  
-    QString getContent() { return content;}
     void setIndex(BasicElement *e,int i) {index[i]=e; }    
     void setChild(BasicElement *e,int i) {child[i]=e; }
     void setColor(QColor *c) {defaultColor=c; }       
@@ -200,7 +204,9 @@ class BasicElement
      * I know nothing about the future of this member
      */
     KFormulaContainer *formula;
-  
+
+    // This one is bad. Prev is better off doing one thing only.
+    // The index and child relationship will need another connection.
     /*
      * realtionship with prev
      * -1=I'm its Next
@@ -215,6 +221,7 @@ class BasicElement
     BasicElement *next;
     BasicElement *prev;
 
+    // Indexes should be handled by a separete class I think.
     /*
      * Index printed near the corners of element 
      * Those aren't integral or Sum limits 
@@ -222,7 +229,9 @@ class BasicElement
      * 0=left_up,1=left_down,2=right_up,3=right_down
      */
     BasicElement  *index[4]; 
-  
+
+    // It should be up to derived classes to have children.
+    // So this attribute is going to disappear.
     /*
      * each dervied class could add children 
      * Sum,integral,matrix,fraction,root,delimiter,decoration need children
@@ -245,30 +254,65 @@ class BasicElement
     /*
      * real data: text,symbol code,delimiter code,matrix rows&cols
      */
-    QString content;    
+    // This has different meaning for different subtypes.
+    // So it should be defined there.
+    //QString content;
   
+private:
+
+    // I don't think all those are needed.
+    
     /*
      * Size of (family+next) & next elements
      */
-    QRect globalSize;   //y=0  base line
+    QRect _globalSize;   //y=0  base line
   
     /*
      * Size of family & indexes
      * This name isn't very good.I'm sorry.
      */
-    QRect localSize;   
+    QRect _localSize;
   
     /*
      * Size of Family:father & children  (without indexes )
      */
-    QRect familySize;
-  
+    QRect _familySize;
+
     /*
      * Area where I am painted (last time)
      * localSize+drawPoint
      */
-    QRect myArea;    
+    QRect _myArea;
 
+protected:
+
+    /*
+     * Size of (family+next) & next elements
+     */
+    QRect& globalSize() { return _globalSize; }
+    void setGlobalSize(QRect globalSize) { _globalSize = globalSize; }
+  
+    /*
+     * Size of family & indexes
+     * This name isn't very good.I'm sorry.
+     */
+    QRect& localSize() { return _localSize; }
+    void setLocalSize(QRect localSize) { _localSize = localSize; }
+    
+    /*
+     * Size of Family:father & children  (without indexes )
+     */
+    QRect& familySize() { return _familySize; }
+    void setFamilySize(QRect familySize) { _familySize = familySize; }
+    
+    /*
+     * Area where I am painted (last time)
+     * localSize+drawPoint
+     */
+    QRect& myArea() { return _myArea; }
+    void setMyArea(QRect area) { _myArea = area; }
+
+    
     /*
      * Font
      *

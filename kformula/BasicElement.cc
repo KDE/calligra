@@ -19,14 +19,14 @@
 BasicElement::BasicElement(KFormulaContainer *Formula,
 			   BasicElement *Prev,
 			   int Relation,
-			   BasicElement *Next,
-			   QString Content)
+			   BasicElement *Next/*,
+                                               QString Content*/)
 {
     formula=Formula;
     prev=Prev;
     relation=Relation;
     next=Next;
-    content=Content;
+    //content=Content;
     if(prev!=NULL)
         {
 	  numericFont=prev->getNumericFont();
@@ -55,7 +55,7 @@ BasicElement::~BasicElement()
 BasicElement *BasicElement::isInside(QPoint point)
 {
     int i;
-    if(myArea.contains(point))
+    if(myArea().contains(point))
         {
 
 	  BasicElement *aValue=0L;
@@ -94,12 +94,12 @@ void BasicElement::draw(QPoint drawPoint,int resolution)
     if( beActive )
       pen->setPen(Qt::red);
     pen->setBrush(Qt::NoBrush);
-    pen->drawRect(x+familySize.x(),y-5,10,10);
+    pen->drawRect(x+familySize().x(),y-5,10,10);
     
-    myArea=globalSize;
-    myArea.moveBy(x,y);
+    setMyArea(globalSize());
+    myArea().moveBy(x,y);
 #ifdef RECT
-    pen->drawRect(myArea);
+    pen->drawRect(myArea());
 #endif
     if(beActive)
       pen->setPen(Qt::blue);
@@ -107,29 +107,29 @@ void BasicElement::draw(QPoint drawPoint,int resolution)
     if(beActive)
       pen->setPen(Qt::black);
     if(next!=0L)
-        next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
+        next->draw(drawPoint+QPoint(localSize().width(),0),resolution);
 
 }
 
 void BasicElement::drawIndexes(QPainter *,int resolution)
 {
     //draw point
-    QPoint dp = myArea.topLeft()-globalSize.topLeft();
+    QPoint dp = myArea().topLeft()-globalSize().topLeft();
 
     if(index[0]!=0L)
-	index[0]->draw(dp + familySize.topLeft() -
+	index[0]->draw(dp + familySize().topLeft() -
 		       index[0]->getSize().bottomRight(),
 		       resolution);
     if(index[1]!=0L)
-	index[1]->draw(dp + familySize.bottomLeft() -
+	index[1]->draw(dp + familySize().bottomLeft() -
 		       index[1]->getSize().topRight(),
 		       resolution);
     if(index[2]!=0L)
-	index[2]->draw(dp + familySize.topRight() -
+	index[2]->draw(dp + familySize().topRight() -
 		       index[2]->getSize().bottomLeft(),
 		       resolution);
     if(index[3]!=0L)
-	index[3]->draw(dp + familySize.bottomRight() -
+	index[3]->draw(dp + familySize().bottomRight() -
 		       index[3]->getSize().topLeft(),
 		       resolution);
 }
@@ -145,14 +145,14 @@ void BasicElement::checkSize()
 	next->checkSize();
 	nextDimension=next->getSize();
       }
-    localSize=QRect(0,-5,10,10);
-    familySize=localSize;
-    checkIndexesSize();  //This will change localSize adding Indexes Size
-    familySize.moveBy(-localSize.left(),0);
-    localSize.moveBy(-localSize.left(),0);
-    globalSize=localSize;
-    nextDimension.moveBy(localSize.width(),0);
-    globalSize=globalSize.unite(nextDimension);
+    setLocalSize(QRect(0,-5,10,10));
+    setFamilySize(localSize());
+    checkIndexesSize();  //This will change localSize() adding Indexes Size
+    familySize().moveBy(-localSize().left(),0);
+    localSize().moveBy(-localSize().left(),0);
+    setGlobalSize(localSize());
+    nextDimension.moveBy(localSize().width(),0);
+    setGlobalSize(globalSize().unite(nextDimension));
 
 }
 
@@ -182,31 +182,31 @@ void BasicElement::checkIndexesSize()
     if(index[0]!=0L)
 	{
 	    indexDimension=index[0]->getSize();
-	    vectorT=familySize.topLeft()-indexDimension.bottomRight();
+	    vectorT=familySize().topLeft()-indexDimension.bottomRight();
 	    indexDimension.moveBy(vectorT.x(),vectorT.y());
-	    localSize=localSize.unite(indexDimension);
+	    setLocalSize(localSize().unite(indexDimension));
 	}
     if(index[1]!=0L)
 	{
 	    indexDimension=index[1]->getSize();
-	    vectorT=familySize.bottomLeft()-indexDimension.topRight();
+	    vectorT=familySize().bottomLeft()-indexDimension.topRight();
 	    indexDimension.moveBy(vectorT.x(),vectorT.y());
-	    localSize=localSize.unite(indexDimension);
+	    setLocalSize(localSize().unite(indexDimension));
 	}
 
     if(index[2]!=0L)
 	{
 	    indexDimension=index[2]->getSize();
-	    vectorT=familySize.topRight()-indexDimension.bottomLeft();
+	    vectorT=familySize().topRight()-indexDimension.bottomLeft();
 	    indexDimension.moveBy(vectorT.x(),vectorT.y());
-	    localSize=localSize.unite(indexDimension);
+	    setLocalSize(localSize().unite(indexDimension));
 	}
     if(index[3]!=0L)
 	{
 	    indexDimension=index[3]->getSize();
-	    vectorT=familySize.bottomRight()-indexDimension.topLeft();
+	    vectorT=familySize().bottomRight()-indexDimension.topLeft();
 	    indexDimension.moveBy(vectorT.x(),vectorT.y());
-	    localSize=localSize.unite(indexDimension);
+	    setLocalSize(localSize().unite(indexDimension));
 	}
 }
 
@@ -273,7 +273,7 @@ void BasicElement::setNumericFont(int value)
 void  BasicElement::substituteElement(BasicElement *clone)
 {
     int i;
-    clone->setContent(content);
+    clone->setContent(getContent());
     clone->setNext(next);
     clone->setPrev(prev);
     for(i=0;i<4;i++) 
@@ -492,15 +492,15 @@ void BasicElement::makeList(bool active)
 
 QRect BasicElement::getCursor(int atPos) 
 {
-    QPoint dp = myArea.topLeft()-globalSize.topLeft();
+    QPoint dp = myArea().topLeft()-globalSize().topLeft();
     if (typeid(*this) == typeid(BasicElement))
-	return (QRect(dp.x()+familySize.x()+3,dp.y()-8,5,16));	
+	return (QRect(dp.x()+familySize().x()+3,dp.y()-8,5,16));	
     else 
 	{
 	    if(atPos==0)
-		return (QRect(dp.x()+localSize.x(),dp.y()-7,5,14));
+		return (QRect(dp.x()+localSize().x(),dp.y()-7,5,14));
 	    else
-		return (QRect(dp.x()+localSize.right(),dp.y()-8,5,16));	
+		return (QRect(dp.x()+localSize().right(),dp.y()-8,5,16));	
 	}
 
 

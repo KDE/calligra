@@ -21,8 +21,7 @@ class RootElement : public BasicElement
      * Normal constructor, Get font from prev element
      */
     RootElement(KFormulaContainer *Formula,BasicElement *Prev=0,
-		int Relation=-1,BasicElement *Next=0,
-		QString Content="");
+		int Relation=-1,BasicElement *Next=0);
        
     /*
      * Link Next & Prev removing itself

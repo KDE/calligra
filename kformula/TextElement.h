@@ -14,8 +14,8 @@
 #include "BasicElement.h"
 
 class TextElement : public BasicElement
- {
- public:
+{
+public:
    /*
     * Normal constructor, Get font from prev element
     */
@@ -91,7 +91,15 @@ class TextElement : public BasicElement
    /*   virtual void save(int file);
 	virtual void load(int file);
    */
- protected:
+
+    QString getContent() const {return text;}  
+    void setContent(QString a) {text=a.copy();}  
+    QString getContent() { return text;}
+    
+//protected:
+private:
+
+    QString text;
 
    /*
     * Normal text need it

@@ -19,7 +19,7 @@ MatrixElement::MatrixElement(KFormulaContainer *Formula,
 			     int Relation,
 			     BasicElement *Next,
 			     QString Content) :
-    BasicElement(Formula,Prev,Relation,Next,Content)
+    BasicElement(Formula,Prev,Relation,Next), content(Content)
 {
     /*
       Central alligned noborder 3x3 Matrix
@@ -50,7 +50,7 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
     pen=formula->painter();
     //QRect globalArea;
     int x,y;
-    x=drawPoint.x()+familySize.x();
+    x=drawPoint.x()+familySize().x();
     y=drawPoint.y();
     int rows=content.mid(3,3).toInt();
     int cols=content.mid(6,3).toInt();
@@ -79,9 +79,9 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
 		QPointArray points(4);
 	        points.setPoint(0,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2-ofs+ofs/2);
 		points.setPoint(1,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2+ofs/2);
-		points.setPoint(2,x+familySize.width(),
+		points.setPoint(2,x+familySize().width(),
 				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2+ofs/2);
-	        points.setPoint(3,x+familySize.width(),
+	        points.setPoint(3,x+familySize().width(),
 				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2-ofs+ofs/2);
 		pen->setBrush(pen->pen().color());
 		pen->drawPolygon(points,FALSE,0,4);
@@ -93,18 +93,18 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
 		QPointArray points(4);
 	        points.setPoint(0,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2-1);
 		points.setPoint(1,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2+ofs-1);
-		points.setPoint(2,x+familySize.width(),
+		points.setPoint(2,x+familySize().width(),
 				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2-1);
-	        points.setPoint(3,x+familySize.width(),
+	        points.setPoint(3,x+familySize().width(),
 				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2+ofs-1);
 		pen->setBrush(pen->pen().color());
 		pen->drawPolygon(points,FALSE,0,4);
 
 	        points.setPoint(0,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2+1+2*ofs);
 		points.setPoint(1,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2+3*ofs+1);
-		points.setPoint(2,x+familySize.width(),
+		points.setPoint(2,x+familySize().width(),
 				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2+1+2*ofs);
-	        points.setPoint(3,x+familySize.width(),
+	        points.setPoint(3,x+familySize().width(),
 				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2+3*ofs+1);
 		pen->setBrush(pen->pen().color());
 		pen->drawPolygon(points,FALSE,0,4);
@@ -118,10 +118,10 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
  	   {
             int hspace=content.mid(12,3).toInt()+ofs;
 	    QPointArray points(4);
-	    points.setPoint(0,minX+x+3-hspace/2-ofs+ofs/2,y+familySize.y());
-	    points.setPoint(1,minX+x+3-hspace/2-ofs+ofs/2,y+familySize.bottom());
-	    points.setPoint(2,minX+x+3-hspace/2+ofs/2,y+familySize.bottom());
-	    points.setPoint(3,minX+x+3-hspace/2+ofs/2,y+familySize.y());
+	    points.setPoint(0,minX+x+3-hspace/2-ofs+ofs/2,y+familySize().y());
+	    points.setPoint(1,minX+x+3-hspace/2-ofs+ofs/2,y+familySize().bottom());
+	    points.setPoint(2,minX+x+3-hspace/2+ofs/2,y+familySize().bottom());
+	    points.setPoint(3,minX+x+3-hspace/2+ofs/2,y+familySize().y());
 	    pen->setBrush(pen->pen().color());
 	    pen->drawPolygon(points,FALSE,0,4);
 	  }
@@ -129,16 +129,16 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
  	   {
             int hspace=content.mid(12,3).toInt();
 	    QPointArray points(4);
-	    points.setPoint(0,minX+x+3-hspace/2-ofs+1,y+familySize.y());
-	    points.setPoint(1,minX+x+3-hspace/2-ofs+1,y+familySize.bottom());
-	    points.setPoint(2,minX+x+3-hspace/2+1,y+familySize.bottom());
-	    points.setPoint(3,minX+x+3-hspace/2+1,y+familySize.y());
+	    points.setPoint(0,minX+x+3-hspace/2-ofs+1,y+familySize().y());
+	    points.setPoint(1,minX+x+3-hspace/2-ofs+1,y+familySize().bottom());
+	    points.setPoint(2,minX+x+3-hspace/2+1,y+familySize().bottom());
+	    points.setPoint(3,minX+x+3-hspace/2+1,y+familySize().y());
 	    pen->setBrush(pen->pen().color());
 	    pen->drawPolygon(points,FALSE,0,4);
-	    points.setPoint(0,minX+x+3-hspace/2-3*ofs-1,y+familySize.y());
-	    points.setPoint(1,minX+x+3-hspace/2-3*ofs-1,y+familySize.bottom());
-	    points.setPoint(2,minX+x+3-hspace/2-2*ofs-1,y+familySize.bottom());
-	    points.setPoint(3,minX+x+3-hspace/2-2*ofs-1,y+familySize.y());
+	    points.setPoint(0,minX+x+3-hspace/2-3*ofs-1,y+familySize().y());
+	    points.setPoint(1,minX+x+3-hspace/2-3*ofs-1,y+familySize().bottom());
+	    points.setPoint(2,minX+x+3-hspace/2-2*ofs-1,y+familySize().bottom());
+	    points.setPoint(3,minX+x+3-hspace/2-2*ofs-1,y+familySize().y());
 	    pen->setBrush(pen->pen().color());
 	    pen->drawPolygon(points,FALSE,0,4);
 
@@ -150,18 +150,18 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
 
     x=drawPoint.x();
 
-    myArea=globalSize;
-    myArea.moveBy(x,y);
+    setMyArea(globalSize());
+    myArea().moveBy(x,y);
 
 #ifdef RECT
-    pen->drawRect(myArea);
+    pen->drawRect(myArea());
     // pen->drawRect(globalArea);
 #endif
 
     drawIndexes(pen,resolution);
     if( beActive )
 	pen->setPen(Qt::black);
-    if(next!=0L) next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
+    if(next!=0L) next->draw(drawPoint+QPoint(localSize().width(),0),resolution);
 
 
 }
@@ -260,23 +260,23 @@ void MatrixElement::checkSize()
 	    sizeC=sizeC.unite(sizeR);
 	}
 
-    familySize=sizeC;
-    // familySize.setBottom(familySize.bottom()+vspace);
-    familySize.moveBy(0,correction);
+    setFamilySize(sizeC);
+    // familySize().setBottom(familySize().bottom()+vspace);
+    familySize().moveBy(0,correction);
     int topBorderCorr=0;
     if(content[17]=='L')
        topBorderCorr=ofs+1+space;
     if(content[17]=='D')
        topBorderCorr=3*ofs+2+space;
     //correction+=topBorderCorr;
-    familySize.setTop(familySize.top()-topBorderCorr);
+    familySize().setTop(familySize().top()-topBorderCorr);
 
     for(c=0;c<cols*rows;c++)
 	childPoint[c]+=QPoint(0,correction);
 
     if(content[1]=='C')
-	correction=-familySize.height()/2;
-    familySize.moveBy(0,correction);
+	correction=-familySize().height()/2;
+    familySize().moveBy(0,correction);
 
     for(c=0;c<cols*rows;c++)
 	childPoint[c]+=QPoint(0,correction);
@@ -317,19 +317,19 @@ And now columns!!
 //	warning("R+X:%i,Y:%i,W:%i,E:%i",sizeR.x(),sizeR.y(),sizeR.height(),sizeR.width());
     }
     sizeR.setRight(sizeR.right()-hspace);
-    familySize=familySize.unite(sizeR);
+    setFamilySize(familySize().unite(sizeR));
 
     //Add Margins!!!
 
-    familySize.setLeft(familySize.left()-3);
-    familySize.setRight(familySize.right()+3);
-    localSize=familySize;
-    checkIndexesSize();  //This will change localSize adding Indexes Size
-    familySize.moveBy(-localSize.left(),0);
-    localSize.moveBy(-localSize.left(),0);
-    globalSize=localSize;
-    nextDimension.moveBy(localSize.width(),0);
-    globalSize=globalSize.unite(nextDimension);
+    familySize().setLeft(familySize().left()-3);
+    familySize().setRight(familySize().right()+3);
+    setLocalSize(familySize());
+    checkIndexesSize();  //This will change localSize() adding Indexes Size
+    familySize().moveBy(-localSize().left(),0);
+    localSize().moveBy(-localSize().left(),0);
+    setGlobalSize(localSize());
+    nextDimension.moveBy(localSize().width(),0);
+    setGlobalSize(globalSize().unite(nextDimension));
 }
 
 /* int MatrixElement::takeAsciiFromKeyb(int)

@@ -26,8 +26,8 @@ TextElement::TextElement(KFormulaContainer *Formula,
 			 BasicElement *Prev,
 			 int Relation,
 			 BasicElement *Next,
-			 QString Content) :
-    BasicElement(Formula,Prev,Relation,Next,Content)
+			 QString Text) :
+    BasicElement(Formula,Prev,Relation,Next), text(Text)
 {
   kdDebug(39001) <<"A new text is born..\n";
   QFont tmpfont = KGlobalSettings::generalFont();
@@ -53,31 +53,31 @@ void TextElement::draw(QPoint drawPoint,int resolution)
   
   if( beActive )
     pen->setPen(Qt::red);
-  if ( content.isEmpty() )
-    pen->drawRect(x+familySize.x(),y-5,5,10);
+  if ( text.isEmpty() )
+    pen->drawRect(x+familySize().x(),y-5,5,10);
   else
     {
       //kdDebug(39001) <<"Font for text\n";
       pen->setFont(font);
-      pen->drawText(x+familySize.x(),y+offsetY,content);
+      pen->drawText(x+familySize().x(),y+offsetY,text);
     }
   if(beActive)
     pen->setPen(Qt::blue);
-  myArea=globalSize;
-  myArea.moveBy(x,y);
+  setMyArea(globalSize());
+  myArea().moveBy(x,y);
 #ifdef RECT
   /*QRect  localArea;
-    localArea=localSize;
+    localArea=localSize();
     localArea.moveBy(x,y);
     pen->drawRect(localArea);
-    localArea=familySize;
+    localArea=familySize();
     localArea.moveBy(x,y);
     pen->drawRect(localArea);
   */
   pen->setBrush(green);
   pen->setBrush(NoBrush);
-  pen->drawRect(myArea);
-  QRect area(localSize);
+  pen->drawRect(myArea());
+  QRect area(localSize());
   area.moveBy(x,y);
   pen->drawRect(area);
   pen->setBrush(SolidPattern);
@@ -87,7 +87,7 @@ void TextElement::draw(QPoint drawPoint,int resolution)
   if(beActive)
     pen->setPen(Qt::black);
   if(next!=0L) 
-    next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
+    next->draw(drawPoint+QPoint(localSize().width(),0),resolution);
 }
 
 void TextElement::checkSize()
@@ -103,27 +103,27 @@ void TextElement::checkSize()
   }
 
   offsetY=fm.strikeOutPos();
-  familySize=fm.boundingRect(content);
-  familySize.moveBy(0,offsetY);
-  if(content.isEmpty())
-    familySize.setRect(0,-5,10,10);
+  setFamilySize(fm.boundingRect(text));
+  familySize().moveBy(0,offsetY);
+  if(text.isEmpty())
+    familySize().setRect(0,-5,10,10);
   
   int offsetX;  // Need To adjust X value
-  offsetX=familySize.left();
+  offsetX=familySize().left();
   
   if( offsetX<0)
-    familySize.moveBy(-offsetX,0);
+    familySize().moveBy(-offsetX,0);
   else {
-    familySize.setLeft(0);
+    familySize().setLeft(0);
     offsetX=0;
   }
-  localSize=familySize;
-  checkIndexesSize();  //This will change localSize adding Indexes Size
-  familySize.moveBy(-localSize.left()-offsetX,0);
-  localSize.moveBy(-localSize.left(),0);
-  globalSize=localSize;
-  nextDimension.moveBy(localSize.width(),0);
-  globalSize=globalSize.unite(nextDimension);
+  setLocalSize(familySize());
+  checkIndexesSize();  //This will change localSize() adding Indexes Size
+  familySize().moveBy(-localSize().left()-offsetX,0);
+  localSize().moveBy(-localSize().left(),0);
+  setGlobalSize(localSize());
+  nextDimension.moveBy(localSize().width(),0);
+  setGlobalSize(globalSize().unite(nextDimension));
   kdDebug(39001) <<"End\n";
 }
 
@@ -164,38 +164,38 @@ void TextElement::split(int pos)
   //fix it
   TextElement *FirstHalf = new TextElement(formula);
   insertElement(FirstHalf);
-  FirstHalf->setContent(content.left(pos));
+  FirstHalf->setContent(text.left(pos));
   FirstHalf->setNumericFont(numericFont);
   
   FirstHalf->changeFontFamily(font.family());
   FirstHalf->changePropertieFont(font.bold(),font.underline(),font.italic());
   
-  setContent(content.right(content.length()-pos));
-  kdDebug(39001) <<content<<endl;
+  setContent(text.right(text.length()-pos));
+  kdDebug(39001) <<text<<endl;
   
-  position=content.length();
+  position=text.length();
   
 }
 
 QRect TextElement::getCursor(int atPos)
 {
-  QPoint dp = myArea.topLeft()-globalSize.topLeft();
+  QPoint dp = myArea().topLeft()-globalSize().topLeft();
   
   if(atPos>0)
     {
       atPos--;
       QFontMetrics fm(font);
-      return (QRect(dp.x()+familySize.x()+fm.width(content,atPos),
-		    dp.y()+familySize.top()-1,
-		    5,familySize.height()+2));
+      return (QRect(dp.x()+familySize().x()+fm.width(text,atPos),
+		    dp.y()+familySize().top()-1,
+		    5,familySize().height()+2));
       
     }
   else
     {
       if(atPos==0)
-	return (QRect(dp.x()+familySize.x()-3,dp.y()-7,5,14));
+	return (QRect(dp.x()+familySize().x()-3,dp.y()-7,5,14));
       else
-	return (QRect(dp.x()+localSize.width()+2,dp.y()-8,5,16));
+	return (QRect(dp.x()+localSize().width()+2,dp.y()-8,5,16));
     }
   
   
@@ -217,7 +217,7 @@ void TextElement::makeList(bool active)
       }
   kdDebug(39001) <<"index OK\n";
   
-  for(unsigned int i=1;i<=content.length()+1;i++)
+  for(unsigned int i=1;i<=text.length()+1;i++)
     formula->addElement(this, i);
   
   for(int i=2;i<4;i++)

@@ -57,7 +57,8 @@ KFormulaDoc::KFormulaDoc( QWidget *parentWidget, const char *widgetName, QObject
   m_bModified = false;
   m_bEmpty = true;
 
-  theFirstElement= new BasicElement(this,0L,-1,0L,"");
+  //theFirstElement= new BasicElement(this,0L,-1,0L,"");
+  theFirstElement= new BasicElement(this,0L,-1,0L);
   addElement(theFirstElement, 0);
   addElement(theFirstElement, -1);
   eList.at(0);
@@ -549,10 +550,13 @@ if(!isReadWrite() )
 
         if(action==Qt::Key_BackSpace)
           {
-            if(eList.prev()->element!=0)
-              action=Qt::Key_Delete;
-            else
-              eList.next();
+              uint c = eList.at();
+              if(eList.prev()!=0) {
+                  if (eList.current()->element!=0)
+                      action=Qt::Key_Delete;
+              }
+              else
+                  eList.at(c);
           }
 
         if(action==Qt::Key_Delete)
@@ -573,14 +577,20 @@ if(!isReadWrite() )
 
             else
               {
-                if(eList.current()->pos==0)
-                  elReturn=FCOM_DELETEME;
-                else
-                  {
-                    if(eList.next()->element!=0)
+                  if(eList.current()->pos==0) {
                       elReturn=FCOM_DELETEME;
-                    else
-                      eList.prev();
+                  }
+                  else
+                  {
+                      // If you press `delete' in an empty document
+                      // there is no next pos.
+                      uint c = eList.at();
+                      if (eList.next()!=0) {
+                          if (eList.current()->element!=0)
+                              elReturn=FCOM_DELETEME;
+                      }
+                      else
+                          eList.at(c);
                   }
               }
           }

@@ -65,7 +65,13 @@ class PrefixedElement : public BasicElement
     /*   virtual void save(int file);
 	 virtual void load(int file);
     */
- protected:
+
+    QString getContent() const {return content;}  
+    void setContent(QString a) {content=a.copy();}  
+    QString getContent() { return content;}
+    
+//protected:
+private:
    
     /*
      *Note: Content meaning
@@ -75,7 +81,8 @@ class PrefixedElement : public BasicElement
      * content[1] 'F'=Fixed size 'S'=AutoScale Size
      * content[2..4] Fixed Size Value
      */
- 
+    QString content;
+    
      /*
      * If usePixmap is True we need a...
      */    

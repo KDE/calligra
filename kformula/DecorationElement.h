@@ -58,8 +58,12 @@ class DecorationElement : public BasicElement
      */
     virtual int takeAsciiFromKeyb(int action);
    
+    QString getContent() const {return content;}  
+    void setContent(QString a) {content=a.copy();}  
+    QString getContent() { return content;}
  
- protected:
+//protected:
+private:
    
     /*
      * If usePixmap is True we need a...
@@ -94,7 +98,7 @@ class DecorationElement : public BasicElement
    .......
    
  */  
-     
+    QString content;
    
 };
 

@@ -66,7 +66,13 @@ class FractionElement : public BasicElement
     /*   virtual void save(int file);
 	 virtual void load(int file);
     */
- protected:
+
+    QString getContent() const {return content;}  
+    void setContent(QString a) {content=a.copy();}  
+    QString getContent() { return content;}
+    
+//protected:
+private:
         
     /*
      * Note for "content" meaning:
@@ -75,6 +81,8 @@ class FractionElement : public BasicElement
      * content[2]( HorizAlign) 'L'=left 'C'=center 'R'=right
      * content+3 space between num & den
      */
+    QString content;
+    
     int offsetY;
     int offsetX;   
 };

@@ -68,7 +68,13 @@ class MatrixElement : public BasicElement
     /*   virtual void save(int file);
 	 virtual void load(int file);
     */
- protected:
+
+    QString getContent() const {return content;}  
+    void setContent(QString a) {content=a.copy();}  
+    QString getContent() { return content;}
+    
+//protected:
+private:
         
     /*
      * Note for "content" meaning:
@@ -80,6 +86,8 @@ class MatrixElement : public BasicElement
      * 2: C,L,R Horiz align
      * 15,16,17,18,19,20=Horiz,Vert,top,bottom,left,right border: L=Single Line
      */
+    QString content;
+    
     QArray<QPoint> childPoint;
     QArray<int> hby;   // Y of internal H border
   

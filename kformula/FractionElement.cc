@@ -20,7 +20,7 @@ FractionElement::FractionElement(KFormulaContainer *Formula,
 				 int Relation,
 				 BasicElement *Next,
 				 QString Content) :
-    BasicElement(Formula,Prev,Relation,Next,Content)
+    BasicElement(Formula,Prev,Relation,Next), content(Content)
 {
     /*
       Central alligned fraction
@@ -63,10 +63,10 @@ void FractionElement::draw(QPoint drawPoint,int resolution)
 
     if (content[0]=='F') {
 	QPointArray points(5);
-	points.setPoint(1,x+familySize.x()+1,y+offsetY-ofs/2);
-	points.setPoint(2,x+familySize.right()-2,y+offsetY-ofs/2);
-	points.setPoint(3,x+familySize.right()-2,y+offsetY+ofs/2);
-	points.setPoint(4,x+familySize.x()+1,y+offsetY+ofs/2);
+	points.setPoint(1,x+familySize().x()+1,y+offsetY-ofs/2);
+	points.setPoint(2,x+familySize().right()-2,y+offsetY-ofs/2);
+	points.setPoint(3,x+familySize().right()-2,y+offsetY+ofs/2);
+	points.setPoint(4,x+familySize().x()+1,y+offsetY+ofs/2);
 	pen->setBrush(pen->pen().color());
 	pen->drawPolygon(points,FALSE,1,9);
     }
@@ -83,18 +83,18 @@ void FractionElement::draw(QPoint drawPoint,int resolution)
 
     child[0]->draw(QPoint(x+x0+3,y+y0),resolution);
     child[1]->draw(QPoint(x+x1+3,y+y1),resolution);
-    myArea=globalSize;
-    myArea.moveBy(x,y);
+    setMyArea(globalSize());
+    myArea().moveBy(x,y);
 
 #ifdef RECT
-    pen->drawRect(myArea);
+    pen->drawRect(myArea());
     // pen->drawRect(globalArea);
 #endif
 
     drawIndexes(pen,resolution);
     if( beActive )
 	pen->setPen(Qt::black);
-    if(next!=0L) next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
+    if(next!=0L) next->draw(drawPoint+QPoint(localSize().width(),0),resolution);
 
 
 }
@@ -134,18 +134,18 @@ void FractionElement::checkSize()
         }
     child0Size.moveBy(0,-space/2-child0Size.bottom());
     child1Size.moveBy(0,space/2-child1Size.top());
-    familySize=child0Size.unite(child1Size);
+    setFamilySize(child0Size.unite(child1Size));
 
-    familySize.moveBy(0,offsetY);
-    familySize.setLeft(familySize.left()-3);
-    familySize.setRight(familySize.right()+3);
-    localSize=familySize;
-    checkIndexesSize();  //This will change localSize adding Indexes Size
-    familySize.moveBy(-localSize.left(),0);
-    localSize.moveBy(-localSize.left(),0);
-    globalSize=localSize;
-    nextDimension.moveBy(localSize.width(),0);
-    globalSize=globalSize.unite(nextDimension);
+    familySize().moveBy(0,offsetY);
+    familySize().setLeft(familySize().left()-3);
+    familySize().setRight(familySize().right()+3);
+    setLocalSize(familySize());
+    checkIndexesSize();  //This will change localSize() adding Indexes Size
+    familySize().moveBy(-localSize().left(),0);
+    localSize().moveBy(-localSize().left(),0);
+    setGlobalSize(localSize());
+    nextDimension.moveBy(localSize().width(),0);
+    setGlobalSize(globalSize().unite(nextDimension));
 }
 
 /*int FractionElement::takeAsciiFromKeyb(int)

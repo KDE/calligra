@@ -23,7 +23,7 @@ PrefixedElement::PrefixedElement(KFormulaContainer *Formula,
 				 int Relation,
 				 BasicElement *Next,
 				 QString Content) :
-    BasicElement(Formula,Prev,Relation,Next,Content)
+    BasicElement(Formula,Prev,Relation,Next), content(Content)
 {
   /*
     Stuff to load pixmap (if need)
@@ -46,7 +46,7 @@ void PrefixedElement::draw(QPoint drawPoint,int resolution)
 
   QPainter *pen=formula->painter();
   //QRect globalArea;
-  int x,y,unit=0; //unit is familySize.height/6,used to draw proportional Prefixeds
+  int x,y,unit=0; //unit is familySize().height/6,used to draw proportional Prefixeds
   x=drawPoint.x();
   y=drawPoint.y();
   if( beActive )
@@ -62,9 +62,9 @@ void PrefixedElement::draw(QPoint drawPoint,int resolution)
   int symB=0;   // symbol (integral,sum...)
   if( content[1]=='S')
     {
-      symT=familySize.top();
-      symB=familySize.bottom();
-      unit = (familySize.height()-2*ofs)/8;
+      symT=familySize().top();
+      symB=familySize().bottom();
+      unit = (familySize().height()-2*ofs)/8;
     }
   if( content[1]=='F')
     {
@@ -84,32 +84,32 @@ void PrefixedElement::draw(QPoint drawPoint,int resolution)
     {
       QColor elementColor(pen->pen().color());
       pen->setBrush(elementColor);
-      pen->drawChord(x+familySize.x()-ofs+unit+1,y+symT,
+      pen->drawChord(x+familySize().x()-ofs+unit+1,y+symT,
 		     unit+2*ofs,(unit+ofs)*2,
 		     0,180*16);
       pen->setBrush(pen->backgroundColor());
       pen->setPen(pen->backgroundColor());
-      pen->drawChord(x+familySize.x()+unit+1,y+symT+ofs  ,
+      pen->drawChord(x+familySize().x()+unit+1,y+symT+ofs  ,
 		     unit,unit*2+ofs,
 		     0,180*16);
       pen->setPen(elementColor);
 
       pen->setBrush(elementColor);
-      pen->drawChord(x+familySize.x()+1,y+symB-(unit+ofs)*2,
+      pen->drawChord(x+familySize().x()+1,y+symB-(unit+ofs)*2,
 		     unit+ofs*2,(unit+ofs)*2,
 		     180*16,180*16);
       pen->setBrush(pen->backgroundColor());
       pen->setPen(pen->backgroundColor());
-      pen->drawChord(x+familySize.x()+ofs+1,y+symB-(unit+ofs)*2,
+      pen->drawChord(x+familySize().x()+ofs+1,y+symB-(unit+ofs)*2,
 		     unit,unit*2+ofs,
 		     180*16,180*16);
       pen->setPen(elementColor);
 
       QPointArray points(5);
-      points.setPoint(1,x+familySize.x()+unit+ofs+1 ,y+symB-unit-ofs    );
-      points.setPoint(2,x+familySize.x()+unit+ofs*2  ,y+symB-unit-ofs  );
-      points.setPoint(3,x+familySize.x()+unit,y+symT+unit+ofs-1);
-      points.setPoint(4,x+familySize.x()-ofs+unit+1,y+symT+unit+ofs-1);
+      points.setPoint(1,x+familySize().x()+unit+ofs+1 ,y+symB-unit-ofs    );
+      points.setPoint(2,x+familySize().x()+unit+ofs*2  ,y+symB-unit-ofs  );
+      points.setPoint(3,x+familySize().x()+unit,y+symT+unit+ofs-1);
+      points.setPoint(4,x+familySize().x()-ofs+unit+1,y+symT+unit+ofs-1);
       pen->setBrush(pen->pen().color());
       pen->drawPolygon(points,FALSE,1,4);
     }
@@ -118,11 +118,11 @@ void PrefixedElement::draw(QPoint drawPoint,int resolution)
     else  if(content[0]=='S')  //Sum
     {
       QPointArray points(6);
-      points.setPoint(1,x+familySize.x()+unit , y+familySize.y()  );
-      points.setPoint(2,x+familySize.x() , y+familySize.y() );
-      points.setPoint(3,x+familySize.x()+unit,y+familySize.y()+ (y+familySize.bottom()-(y+familySize.y()))/2);
-      points.setPoint(4,x+familySize.x(),y+familySize.bottom());
-      points.setPoint(5,x+familySize.x()+unit , y+familySize.bottom());
+      points.setPoint(1,x+familySize().x()+unit , y+familySize().y()  );
+      points.setPoint(2,x+familySize().x() , y+familySize().y() );
+      points.setPoint(3,x+familySize().x()+unit,y+familySize().y()+ (y+familySize().bottom()-(y+familySize().y()))/2);
+      points.setPoint(4,x+familySize().x(),y+familySize().bottom());
+      points.setPoint(5,x+familySize().x()+unit , y+familySize().bottom());
       pen->setBrush(pen->pen().color());
       pen->drawPolyline(points,1,5);
     }
@@ -131,20 +131,20 @@ void PrefixedElement::draw(QPoint drawPoint,int resolution)
     else if(content[0]=='P')  //Product
     {
      QPointArray points(6);
-      points.setPoint(1,x+familySize.x()+unit , y+familySize.y()  );
-      points.setPoint(2,x+familySize.x() , y+familySize.y() );
+      points.setPoint(1,x+familySize().x()+unit , y+familySize().y()  );
+      points.setPoint(2,x+familySize().x() , y+familySize().y() );
       pen->setBrush(pen->pen().color());
       pen->drawPolyline(points,1,2);
-      points.setPoint(1,x+familySize.x()+unit/4,y+familySize.y());
-        points.setPoint(2,x+familySize.x()+unit/4/*+ofs*/,y+familySize.y());
-	  points.setPoint(3,x+familySize.x()+unit/4/*+ofs*/,y+familySize.bottom());
-	  points.setPoint(4,x+familySize.x()+unit/4,y+familySize.bottom());
+      points.setPoint(1,x+familySize().x()+unit/4,y+familySize().y());
+        points.setPoint(2,x+familySize().x()+unit/4/*+ofs*/,y+familySize().y());
+	  points.setPoint(3,x+familySize().x()+unit/4/*+ofs*/,y+familySize().bottom());
+	  points.setPoint(4,x+familySize().x()+unit/4,y+familySize().bottom());
                 pen->setBrush(pen->pen().color());
 	  pen->drawPolyline(points,1,4);
-                        points.setPoint(1,x+familySize.x()+unit*3/4,y+familySize.y());
-	  points.setPoint(2,x+familySize.x()+unit*3/4/*+ofs*/,y+familySize.y());
-	  points.setPoint(3,x+familySize.x()+unit*3/4/*+ofs*/,y+familySize.bottom());
-	  points.setPoint(4,x+familySize.x()+unit*3/4,y+familySize.bottom());
+                        points.setPoint(1,x+familySize().x()+unit*3/4,y+familySize().y());
+	  points.setPoint(2,x+familySize().x()+unit*3/4/*+ofs*/,y+familySize().y());
+	  points.setPoint(3,x+familySize().x()+unit*3/4/*+ofs*/,y+familySize().bottom());
+	  points.setPoint(4,x+familySize().x()+unit*3/4,y+familySize().bottom());
 	  pen->setBrush(pen->pen().color());
 	  pen->drawPolyline(points,1,4);
 
@@ -155,16 +155,16 @@ void PrefixedElement::draw(QPoint drawPoint,int resolution)
   if( beActive )
     pen->setPen(Qt::blue);
   //I must add MaxLimitWidth
-  //    child[0]->draw(QPoint(x+familySize.x()+unit*2+ofs+1,y),resolution);
-  child[0]->draw(QPoint(x+familySize.right()-child[0]->getSize().width(),y),resolution);
+  //    child[0]->draw(QPoint(x+familySize().x()+unit*2+ofs+1,y),resolution);
+  child[0]->draw(QPoint(x+familySize().right()-child[0]->getSize().width(),y),resolution);
 
   int y1=0,y2=0;
   if( content[1]=='S')
     {
       if(child[1]!=0)
-	y1=y-child[1]->getSize().top()+familySize.top();
+	y1=y-child[1]->getSize().top()+familySize().top();
       if(child[2]!=0)
-	y2=y-child[2]->getSize().bottom()+familySize.bottom();
+	y2=y-child[2]->getSize().bottom()+familySize().bottom();
     }
   if( content[1]=='F')
     {
@@ -175,24 +175,24 @@ void PrefixedElement::draw(QPoint drawPoint,int resolution)
     }
 
   if(child[1]!=0)
-    child[1]->draw(QPoint(x+familySize.x()+unit*2+ofs+1,y1),resolution);
+    child[1]->draw(QPoint(x+familySize().x()+unit*2+ofs+1,y1),resolution);
 
   if(child[2]!=0)
-    child[2]->draw(QPoint(x+familySize.x()+unit*2+ofs+1,y2),resolution);
+    child[2]->draw(QPoint(x+familySize().x()+unit*2+ofs+1,y2),resolution);
 
-  myArea=globalSize;
-  myArea.moveBy(x,y);
+  setMyArea(globalSize());
+  myArea().moveBy(x,y);
   // globalArea=
   // globalArea.moveBy(x,y);
 #ifdef RECT
-  pen->drawRect(myArea);
+  pen->drawRect(myArea());
   // pen->drawRect(globalArea);
 #endif
   drawIndexes(pen,resolution);
   if( beActive )
     pen->setPen(Qt::black);
   if(next!=0L)
-    next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
+    next->draw(drawPoint+QPoint(localSize().width(),0),resolution);
 }
 
 void PrefixedElement::checkSize()
@@ -207,7 +207,7 @@ void PrefixedElement::checkSize()
     }
 
   child[0]->checkSize();
-  familySize=child[0]->getSize();
+  setFamilySize(child[0]->getSize());
 
   if (child[1]!=0)
     {
@@ -232,15 +232,16 @@ void PrefixedElement::checkSize()
     MaxX=child1Size.width();
   else
     MaxX=child2Size.width();
-  familySize.moveBy(MaxX,0);
-  child1Size.moveBy(0,familySize.top()-child1Size.bottom());
-  child2Size.moveBy(0,familySize.bottom()-child2Size.top());
-  familySize=familySize.unite(child1Size);
-  familySize=familySize.unite(child2Size);
+  familySize().moveBy(MaxX,0);
+  child1Size.moveBy(0,familySize().top()-child1Size.bottom());
+  child2Size.moveBy(0,familySize().bottom()-child2Size.top());
+#warning Nonsense!
+  setFamilySize(familySize().unite(child1Size));
+  setFamilySize(familySize().unite(child2Size));
 
   int unit=0;
   if( content[1]=='S')
-    unit = (familySize.height())/8 ;
+    unit = (familySize().height())/8 ;
   if( content[1]=='F')
     unit = content.mid(2,3).toInt();
   if (unit< 4)
@@ -249,25 +250,25 @@ void PrefixedElement::checkSize()
 
   int ofs=(numericFont/24);
   if (unit <6)ofs=1;
-  familySize.setTop(familySize.top()-1-ofs);
-  familySize.setLeft(familySize.left()-1-ofs-unit*2);
+  familySize().setTop(familySize().top()-1-ofs);
+  familySize().setLeft(familySize().left()-1-ofs-unit*2);
 
-  if (familySize.height()< unit*8 )
+  if (familySize().height()< unit*8 )
     {
-      if (familySize.top() >-unit*4)
-	familySize.setTop(-unit*4 );
-      if (familySize.bottom() < unit*4)
-	familySize.setBottom( unit*4  );
+      if (familySize().top() >-unit*4)
+	familySize().setTop(-unit*4 );
+      if (familySize().bottom() < unit*4)
+	familySize().setBottom( unit*4  );
 
     }
 
-  localSize=familySize;
-  checkIndexesSize();  //This will change localSize adding Indexes Size
-  familySize.moveBy(-localSize.left(),0);
-  localSize.moveBy(-localSize.left(),0);
-  globalSize=localSize;
-  nextDimension.moveBy(localSize.width(),0);
-  globalSize=globalSize.unite(nextDimension);
+  setLocalSize(familySize());
+  checkIndexesSize();  //This will change localSize() adding Indexes Size
+  familySize().moveBy(-localSize().left(),0);
+  localSize().moveBy(-localSize().left(),0);
+  setGlobalSize(localSize());
+  nextDimension.moveBy(localSize().width(),0);
+  setGlobalSize(globalSize().unite(nextDimension));
 
 }
 /*

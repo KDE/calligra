@@ -21,7 +21,8 @@ BracketElement::BracketElement(KFormulaContainer *Formula,
 			       BasicElement *Prev,
 			       int Relation,
 			       BasicElement *Next,
-			       QString Content) : BasicElement(Formula,Prev,Relation,Next,Content)
+			       QString Content)
+    : BasicElement(Formula,Prev,Relation,Next), content(Content)
 {
   /*
     Stuff to load pixmap (if need)
@@ -47,8 +48,8 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
 
   if( beActive )
     pen->setPen(Qt::red);
-  // familySize IS A QRECT
-  int unit=familySize.height()/4;
+  // familySize() IS A QRECT
+  int unit=familySize().height()/4;
   /*
     Draw Bracket!!
   */
@@ -60,9 +61,9 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
   x+=1;
   for(int i=0;i<2;i++)
     {
-      ch=QChar(content[i]);
+      ch=QChar(getContent()[i]);
       if(i)
-	x+=familySize.width()-unit-ofs-3;
+	x+=familySize().width()-unit-ofs-3;
 
       switch (ch)
 	{
@@ -72,10 +73,10 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
 	  */
 	  {
 	  QPointArray points(5);
-	  points.setPoint(1,x+familySize.x()+unit/2,y+familySize.y());
-	  points.setPoint(2,x+familySize.x()+unit/2+ofs,y+familySize.y());
-	  points.setPoint(3,x+familySize.x()+unit/2+ofs,y+familySize.bottom());
-	  points.setPoint(4,x+familySize.x()+unit/2,y+familySize.bottom());
+	  points.setPoint(1,x+familySize().x()+unit/2,y+familySize().y());
+	  points.setPoint(2,x+familySize().x()+unit/2+ofs,y+familySize().y());
+	  points.setPoint(3,x+familySize().x()+unit/2+ofs,y+familySize().bottom());
+	  points.setPoint(4,x+familySize().x()+unit/2,y+familySize().bottom());
 	  pen->setBrush(pen->pen().color());
 	  pen->drawPolygon(points,FALSE,1,4);
 	  }
@@ -86,16 +87,16 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
                  case '?':
 	  {
 	  QPointArray points(5);
-	  points.setPoint(1,x+familySize.x()+unit/4,y+familySize.y());
-	  points.setPoint(2,x+familySize.x()+unit/4+ofs,y+familySize.y());
-	  points.setPoint(3,x+familySize.x()+unit/4+ofs,y+familySize.bottom());
-	  points.setPoint(4,x+familySize.x()+unit/4,y+familySize.bottom());
+	  points.setPoint(1,x+familySize().x()+unit/4,y+familySize().y());
+	  points.setPoint(2,x+familySize().x()+unit/4+ofs,y+familySize().y());
+	  points.setPoint(3,x+familySize().x()+unit/4+ofs,y+familySize().bottom());
+	  points.setPoint(4,x+familySize().x()+unit/4,y+familySize().bottom());
                 pen->setBrush(pen->pen().color());
 	  pen->drawPolyline(points,1,4);
-                        points.setPoint(1,x+familySize.x()+unit*3/4,y+familySize.y());
-	  points.setPoint(2,x+familySize.x()+unit*3/4+ofs,y+familySize.y());
-	  points.setPoint(3,x+familySize.x()+unit*3/4+ofs,y+familySize.bottom());
-	  points.setPoint(4,x+familySize.x()+unit*3/4,y+familySize.bottom());
+                        points.setPoint(1,x+familySize().x()+unit*3/4,y+familySize().y());
+	  points.setPoint(2,x+familySize().x()+unit*3/4+ofs,y+familySize().y());
+	  points.setPoint(3,x+familySize().x()+unit*3/4+ofs,y+familySize().bottom());
+	  points.setPoint(4,x+familySize().x()+unit*3/4,y+familySize().bottom());
 	  pen->setBrush(pen->pen().color());
 	  pen->drawPolyline(points,1,4);
 	  }
@@ -112,10 +113,10 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
 	case '\\':
 	  {
 	    QPointArray points(5);
-	    points.setPoint(1,x+familySize.x(),y+familySize.y());
-	    points.setPoint(2,x+familySize.x()+ofs,y+familySize.y());
-	    points.setPoint(3,x+familySize.x()+unit+ofs,y+familySize.bottom());
-	    points.setPoint(4,x+familySize.x()+unit,y+familySize.bottom());
+	    points.setPoint(1,x+familySize().x(),y+familySize().y());
+	    points.setPoint(2,x+familySize().x()+ofs,y+familySize().y());
+	    points.setPoint(3,x+familySize().x()+unit+ofs,y+familySize().bottom());
+	    points.setPoint(4,x+familySize().x()+unit,y+familySize().bottom());
 	    pen->setBrush(pen->pen().color());
 	    pen->drawPolygon(points,FALSE,1,4);
 	  }
@@ -123,10 +124,10 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
 	case '/':
 	  {
 	    QPointArray points(5);
-	    points.setPoint(1,x+familySize.x()+unit,y+familySize.y());
-	    points.setPoint(2,x+familySize.x()+unit+ofs,y+familySize.y());
-	    points.setPoint(3,x+familySize.x()+ofs,y+familySize.bottom());
-	    points.setPoint(4,x+familySize.x(),y+familySize.bottom());
+	    points.setPoint(1,x+familySize().x()+unit,y+familySize().y());
+	    points.setPoint(2,x+familySize().x()+unit+ofs,y+familySize().y());
+	    points.setPoint(3,x+familySize().x()+ofs,y+familySize().bottom());
+	    points.setPoint(4,x+familySize().x(),y+familySize().bottom());
 	    pen->setBrush(pen->pen().color());
 	    pen->drawPolygon(points,FALSE,1,4);
 	  }
@@ -134,14 +135,14 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
 	case '[':
 	  {
 	    QPointArray points(10);
-	    points.setPoint(1,x+familySize.x(),y+familySize.y());
-	    points.setPoint(2,x+familySize.x()-1+unit+ofs,y+familySize.y());
-	    points.setPoint(3,x+familySize.x()-1+unit+ofs,y+familySize.y()+ofs);
-	    points.setPoint(4,x+familySize.x()+ofs,y+familySize.y()+ofs);
-	    points.setPoint(5,x+familySize.x()+ofs,y+familySize.bottom()-ofs);
-	    points.setPoint(6,x+familySize.x()-1+unit+ofs,y+familySize.bottom()-ofs);
-	    points.setPoint(7,x+familySize.x()-1+unit+ofs,y+familySize.bottom());
-	    points.setPoint(8,x+familySize.x(),y+familySize.bottom());
+	    points.setPoint(1,x+familySize().x(),y+familySize().y());
+	    points.setPoint(2,x+familySize().x()-1+unit+ofs,y+familySize().y());
+	    points.setPoint(3,x+familySize().x()-1+unit+ofs,y+familySize().y()+ofs);
+	    points.setPoint(4,x+familySize().x()+ofs,y+familySize().y()+ofs);
+	    points.setPoint(5,x+familySize().x()+ofs,y+familySize().bottom()-ofs);
+	    points.setPoint(6,x+familySize().x()-1+unit+ofs,y+familySize().bottom()-ofs);
+	    points.setPoint(7,x+familySize().x()-1+unit+ofs,y+familySize().bottom());
+	    points.setPoint(8,x+familySize().x(),y+familySize().bottom());
 	    pen->setBrush(pen->pen().color());
 	    pen->drawPolygon(points,FALSE,1,8);
 	  }
@@ -149,14 +150,14 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
 	case ']':
 	  {
 	    QPointArray points(10);
-	    points.setPoint(1,x+familySize.x(),y+familySize.y());
-	    points.setPoint(2,x+familySize.x()-1+unit+ofs,y+familySize.y());
-	    points.setPoint(3,x+familySize.x()-1+unit+ofs,y+familySize.bottom());
-	    points.setPoint(4,x+familySize.x(),y+familySize.bottom());
-	    points.setPoint(5,x+familySize.x(),y+familySize.bottom()-ofs);
-	    points.setPoint(6,x+familySize.x()-1+unit,y+familySize.bottom()-ofs);
-	    points.setPoint(7,x+familySize.x()-1+unit,y+familySize.y()+ofs);
-	    points.setPoint(8,x+familySize.x(),y+familySize.y()+ofs);
+	    points.setPoint(1,x+familySize().x(),y+familySize().y());
+	    points.setPoint(2,x+familySize().x()-1+unit+ofs,y+familySize().y());
+	    points.setPoint(3,x+familySize().x()-1+unit+ofs,y+familySize().bottom());
+	    points.setPoint(4,x+familySize().x(),y+familySize().bottom());
+	    points.setPoint(5,x+familySize().x(),y+familySize().bottom()-ofs);
+	    points.setPoint(6,x+familySize().x()-1+unit,y+familySize().bottom()-ofs);
+	    points.setPoint(7,x+familySize().x()-1+unit,y+familySize().y()+ofs);
+	    points.setPoint(8,x+familySize().x(),y+familySize().y()+ofs);
 	    pen->setBrush(pen->pen().color());
 	    pen->drawPolygon(points,FALSE,1,8);
 	  }
@@ -166,16 +167,16 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
 	    QColor elementColor(pen->pen().color());
 	    pen->setBrush(elementColor);
 	    pen->setPen(QPen(elementColor,ofs));
-	    pen->drawArc(x+familySize.x(),y+familySize.y(),
-			 unit+ofs,familySize.height(),
+	    pen->drawArc(x+familySize().x(),y+familySize().y(),
+			 unit+ofs,familySize().height(),
 			 90*16,180*16);
-	    /* pen->drawChord(x+familySize.x(),y+familySize.y(),
-	       unit+ofs,familySize.height(),
+	    /* pen->drawChord(x+familySize().x(),y+familySize().y(),
+	       unit+ofs,familySize().height(),
 	       90*16,180*16);
 	       pen->setBrush(pen->backgroundColor());
 	       pen->setPen(pen->backgroundColor());
-	       pen->drawChord(x+familySize.x()+ofs+1,y+familySize.y(),
-	       unit,familySize.height(),
+	       pen->drawChord(x+familySize().x()+ofs+1,y+familySize().y(),
+	       unit,familySize().height(),
 	       90*16,180*16);
 	    */
 
@@ -189,13 +190,13 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
 	    pen->setBrush(elementColor);
 	    pen->setPen(QPen(elementColor,ofs));
 	    
-	    pen->drawArc(x+familySize.x(),y+familySize.y(),
-			 unit+ofs,familySize.height(),
+	    pen->drawArc(x+familySize().x(),y+familySize().y(),
+			 unit+ofs,familySize().height(),
 			 270*16,180*16);
 	    /*      pen->setBrush(pen->backgroundColor());
 		    pen->setPen(pen->backgroundColor());
-		    pen->drawChord(x+familySize.x()-1,y+familySize.y(),
-		    unit,familySize.height(),
+		    pen->drawChord(x+familySize().x()-1,y+familySize().y(),
+		    unit,familySize().height(),
 		    270*16,180*16);
 	    */
 	    pen->setPen(elementColor);
@@ -205,10 +206,10 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
 	case '<':
 	  {
 	    QPointArray points(5);
-	    points.setPoint(1,x+familySize.x()+unit,y+familySize.y());
-	    points.setPoint(2,x+familySize.x(),y+familySize.y()+ (y+familySize.bottom()-(y+familySize.y()))/2);
-	    points.setPoint(3,x+familySize.x()+unit,y+familySize.bottom());
-	    //points.setPoint(4,x+familySize.x(),y+familySize.bottom());
+	    points.setPoint(1,x+familySize().x()+unit,y+familySize().y());
+	    points.setPoint(2,x+familySize().x(),y+familySize().y()+ (y+familySize().bottom()-(y+familySize().y()))/2);
+	    points.setPoint(3,x+familySize().x()+unit,y+familySize().bottom());
+	    //points.setPoint(4,x+familySize().x(),y+familySize().bottom());
 	    pen->setBrush(pen->pen().color());
 	    pen->drawPolyline(points,1,/*4*/3);
 	  }
@@ -216,10 +217,10 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
 	case '>':
 	  {
 	    QPointArray points(5);
-	    points.setPoint(1,x+familySize.x(),y+familySize.y());
-	    points.setPoint(2,x+familySize.x()+unit,y+familySize.y()+ (y+familySize.bottom()-(y+familySize.y()))/2);
-	    points.setPoint(3,x+familySize.x(),y+familySize.bottom());
-	    //points.setPoint(4,x+familySize.x(),y+familySize.bottom());
+	    points.setPoint(1,x+familySize().x(),y+familySize().y());
+	    points.setPoint(2,x+familySize().x()+unit,y+familySize().y()+ (y+familySize().bottom()-(y+familySize().y()))/2);
+	    points.setPoint(3,x+familySize().x(),y+familySize().bottom());
+	    //points.setPoint(4,x+familySize().x(),y+familySize().bottom());
 	    pen->setBrush(pen->pen().color());
 	    pen->drawPolyline(points,1,/*4*/3);
 
@@ -236,16 +237,16 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
 
   if( beActive )
     pen->setPen(Qt::blue);
-  child[0]->draw(QPoint(x+familySize.x()+unit+ofs+3,y),resolution);
-  myArea=globalSize;;
-  myArea.moveBy(x,y);
+  child[0]->draw(QPoint(x+familySize().x()+unit+ofs+3,y),resolution);
+  setMyArea(globalSize());
+  myArea().moveBy(x,y);
   // globalArea=
   // globalArea.moveBy(x,y);
 #ifdef RECT
   pen->setBrush(Qt::green);
   pen->setBrush(Qt::NoBrush);
-  pen->drawRect(myArea);
-  QRect area(localSize);
+  pen->drawRect(myArea());
+  QRect area(localSize());
   area.moveBy(x,y);
   pen->drawRect(area);
   pen->setBrush(Qt::SolidPattern);
@@ -254,7 +255,7 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
   if( beActive )
     pen->setPen(/*Qt::black*/QApplication::palette().active().text());
   if(next!=0L)
-    next->draw(drawPoint+QPoint(localSize.width()+1,0),resolution);
+    next->draw(drawPoint+QPoint(localSize().width()+1,0),resolution);
 
 
 }
@@ -271,25 +272,25 @@ void BracketElement::checkSize()
     }
 
   child[0]->checkSize();
-  familySize=child[0]->getSize();
+  setFamilySize(child[0]->getSize());
   
-  if (familySize.height()<18)
+  if (familySize().height()<18)
     {
-      int fmY=familySize.height();
-      familySize.setTop(familySize.top()-(16-fmY)/2-1);
-      familySize.setBottom(familySize.bottom()+(16-fmY)/2+1);
+      int fmY=familySize().height();
+      familySize().setTop(familySize().top()-(16-fmY)/2-1);
+      familySize().setBottom(familySize().bottom()+(16-fmY)/2+1);
     }
-  familySize.setLeft(familySize.left()-(numericFont/24)-(familySize.height()/4)-2);
-  familySize.setRight(familySize.right()+(numericFont/24)+(familySize.height()/4)+2);
+  familySize().setLeft(familySize().left()-(numericFont/24)-(familySize().height()/4)-2);
+  familySize().setRight(familySize().right()+(numericFont/24)+(familySize().height()/4)+2);
   
 
-  localSize=familySize;
-  checkIndexesSize();  //This will change localSize adding Indexes Size
-  familySize.moveBy(-localSize.left(),0);
-  localSize.moveBy(-localSize.left(),0);
-  globalSize=localSize;
-  nextDimension.moveBy(localSize.width(),0);
-  globalSize=globalSize.unite(nextDimension);
+  setLocalSize(familySize());
+  checkIndexesSize();  //This will change localSize() adding Indexes Size
+  familySize().moveBy(-localSize().left(),0);
+  localSize().moveBy(-localSize().left(),0);
+  setGlobalSize(localSize());
+  nextDimension.moveBy(localSize().width(),0);
+  setGlobalSize(globalSize().unite(nextDimension));
   //warning("end");
 }
 
