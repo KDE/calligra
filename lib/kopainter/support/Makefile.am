@@ -1,6 +1,6 @@
 noinst_LTLIBRARIES  = support.la
 
-libart_la_SOURCES = \
+support_la_SOURCES = \
 	art_affine.c \
 	art_alphagamma.c \
 	art_bpath.c \
