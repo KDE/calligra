@@ -888,36 +888,32 @@ void ConfigurePathPage::slotSelectionChanged(QListViewItem * item)
 void ConfigurePathPage::slotModifyPath()
 {
     QListViewItem *item = m_pPathView->currentItem ();
-    if ( item && (item->text(0)==i18n("Personal Expression")))
+    if ( item )
     {
-        KoEditPathDia * dlg = new KoEditPathDia( item->text( 1),   0L, "editpath");
-        if (dlg->exec() )
+        if ( item->text(0)==i18n("Personal Expression"))
         {
-            item->setText(1, dlg->newPath());
+            KoEditPathDia * dlg = new KoEditPathDia( item->text( 1),   0L, "editpath");
+            if (dlg->exec() )
+                item->setText(1, dlg->newPath());
+            delete dlg;
         }
-        delete dlg;
-    }
-    if ( item && (item->text(0)==i18n("Picture path")))
-    {
+        if ( item->text(0)==i18n("Picture path"))
+        {
 
-        KURLRequesterDlg * dlg = new KURLRequesterDlg( item->text(1), 0L,
-                      "picture path dlg");
-        dlg->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
-        if ( dlg->exec() )
-        {
-            item->setText( 1, dlg->selectedURL().path());
+            KURLRequesterDlg * dlg = new KURLRequesterDlg( item->text(1), 0L,
+                                                           "picture path dlg");
+            dlg->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
+            if ( dlg->exec() )
+                item->setText( 1, dlg->selectedURL().path());
+            delete dlg;
         }
-        delete dlg;
-    }
-    if ( item && (item->text(0)==i18n("Backup path")))
-    {
-        KoChangePathDia *dlg = new KoChangePathDia( item->text(1), 0L, "backup path" );
-        if (dlg->exec() )
+        if ( item->text(0)==i18n("Backup path"))
         {
-            item->setText(1, dlg->newPath());
+            KoChangePathDia *dlg = new KoChangePathDia( item->text(1), 0L, "backup path" );
+            if (dlg->exec() )
+                item->setText(1, dlg->newPath());
+            delete dlg;
         }
-        delete dlg;
-
     }
 }
 
