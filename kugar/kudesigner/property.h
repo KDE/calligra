@@ -46,14 +46,15 @@ enum PropertyType {
 
 /** Integers that represent the type of the property */
 enum PropertyType {
-    StringValue,   /*string*/
+    StringValue=1,   /*string*/
     IntegerValue,  /*integer number*/
     ValueFromList, /*only numbers or strings from a list*/
     Color,         /*color*/
     Symbol,        /*unicode symbol's code*/
     FontName,      /*font name - "times new roman"*/
     LineStyle,     /*combobox with lines at the place of combo items descriptions */
-    FieldName      /*normally behaves like a StringValue, but can be overriden */
+    FieldName,      /*normally behaves like a StringValue, but can be overriden */
+    UserDefined=1024 /*plugin defined properties should start here*/
 };
 
 /**

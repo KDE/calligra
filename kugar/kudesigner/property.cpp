@@ -102,7 +102,7 @@ QWidget *Property::editorOfType(PropertyEditor *editor, const CanvasBox* cb)
     PComboBox *b;
     
     QWidget *w=0;
-    editor->createPluggedInEditor(w, editor,type(),name(),value(),cb);
+    editor->createPluggedInEditor(w, editor,this,cb);
     if (w) return w;
 
     switch (type())

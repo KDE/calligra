@@ -24,6 +24,7 @@ class PropertyEditor;
 class QString;
 class CanvasBox;
 class QWidget;
+class Property;
 
 class KuDesignerPlugin: public QObject {
 	Q_OBJECT
@@ -35,7 +36,7 @@ public:
 	virtual void newCanvasBox(int type, CanvasBox *cb){;}
 public slots:
     virtual void createPluggedInEditor(QWidget *& retVal, PropertyEditor *editor,
-        int type,QString name,QString value,const CanvasBox *);
+        Property *property,const CanvasBox *);
 };
 
 #endif
