@@ -164,7 +164,7 @@ protected:
 
     KWUnit bleft, bright, btop, bbottom;
     QArray<KWResizeHandle*> handles;
-
+    
 private:
     KWFrame &operator=( const KWFrame &_frame );
     KWFrame ( const KWFrame &_frame );

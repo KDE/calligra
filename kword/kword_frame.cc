@@ -413,15 +413,17 @@ QString KWFrame::bottomBrd2String()
     return str;
 }
 
-FrameInfo KWFrame::getFrameInfo() {
+FrameInfo KWFrame::getFrameInfo() 
+{
     if(frameSet)
-        return frameSet->getFrameInfo();
+	return frameSet->getFrameInfo();
     return (FrameInfo) -1;
 }
 
-FrameType KWFrame::getFrameType() {
+FrameType KWFrame::getFrameType() 
+{
     if(frameSet)
-        return frameSet->getFrameType();
+	return frameSet->getFrameType();
     return (FrameType)  -1;
 }
 

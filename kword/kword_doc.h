@@ -372,6 +372,8 @@ public:
 
     int getSyntaxVersion( ) const { return syntaxVersion; };
 
+    void updateFrameSizes( int oldZoom );
+    
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );

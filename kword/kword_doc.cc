@@ -4161,3 +4161,25 @@ void KWordDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHe
     }
 }
 
+void KWordDocument::updateFrameSizes( int oldZoom )
+{
+    KWFrameSet *fs = frames.first();
+    fs = frames.next();
+    KWFrame *frm = 0;
+    for ( ; fs; fs = frames.next() ) {
+	if ( fs->getFrameInfo() != FI_BODY )
+	    continue;
+	for ( unsigned int i = 0; i < fs->getNumFrames(); ++i ) {
+	    frm = fs->getFrame( i );
+	    double x = ( 100.0 * (double)frm->x() ) / (double)oldZoom;
+	    double y = ( 100.0 * (double)frm->y() ) / (double)oldZoom;
+	    double w = ( 100.0 * (double)frm->width() ) / (double)oldZoom;
+	    double h = ( 100.0 * (double)frm->height() ) / (double)oldZoom;
+	    x = zoomIt( x );
+	    y = zoomIt( y );
+	    w = zoomIt( w );
+	    h = zoomIt( h );
+	    frm->setRect( x, y, w, h );
+	}
+    }
+}

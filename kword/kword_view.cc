@@ -1267,6 +1267,7 @@ void KWordView::viewZoom( const QString &s )
     z = z.replace( QRegExp( "%" ), "" );
     z = z.simplifyWhiteSpace();
     int zoom = z.toInt();
+    int oldZoom = m_pKWordDoc->getZoom();
     if ( zoom != m_pKWordDoc->getZoom() ) {
 	KoPageLayout pgLayout;
 	KoColumns cl;
@@ -1274,6 +1275,7 @@ void KWordView::viewZoom( const QString &s )
 	m_pKWordDoc->setZoom( 100 );
 	m_pKWordDoc->getPageLayout( pgLayout, cl, hf );
 	m_pKWordDoc->setZoom( zoom );
+	m_pKWordDoc->updateFrameSizes( oldZoom );
 	newPageLayout( pgLayout );
 	gui->getVertRuler()->setZoom(static_cast<double>(zoom)/100.0);
 	gui->getHorzRuler()->setZoom(static_cast<double>(zoom)/100.0);
