@@ -1,4 +1,4 @@
-INCLUDES  = -I$(srcdir)/../../../kspread $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES  = -I$(srcdir)/../../../kspread $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) -I$(top_srcdir)/lib/koscript -I$(top_builddir)/lib/koscript $(all_includes)
 
 kde_module_LTLIBRARIES = libkspreadinsertcalendar.la
 

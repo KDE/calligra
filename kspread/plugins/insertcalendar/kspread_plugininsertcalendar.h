@@ -29,8 +29,12 @@
 
 #include <koffice_export.h>
 
+#include <qdatetime.h>
+
 class KAboutData;
 
+//@todo as soon as KSpread gets the KSpread namespce move this below...
+class KSpreadView;
 
 namespace KSpread
 {
@@ -52,6 +56,15 @@ class KSPREAD_EXPORT PluginInsertCalendar : public KParts::Plugin
   Q_OBJECT
   
   protected:
+  
+    /**
+     * This is the parent part of the plugin. It is used
+     * to access the spreadsheet and actually insert the
+     * calendar.
+     * 
+     * It is set in the constructor.
+     */
+    KSpreadView* m_kspreadView;
   
     /**
      * This is the dialog used to select the start/end dates
@@ -94,7 +107,7 @@ class KSPREAD_EXPORT PluginInsertCalendar : public KParts::Plugin
       * from the insert calendar dialog and builds an calendar in the
       * spreadsheet accordingly.
       */
-     void slotInsertCalendar();
+     void slotInsertCalendar(QDate start, QDate end);
 };
 
 }

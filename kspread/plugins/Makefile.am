@@ -1,3 +1,3 @@
 
-SUBDIRS = calculator
+SUBDIRS = calculator insertcalendar
 

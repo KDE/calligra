@@ -90,6 +90,8 @@ void InsertCalendarDialog::datePickerDeleted()
 
 void InsertCalendarDialog::accept()
 {
+  if (m_datePicker)
+    m_datePicker->deleteLater();
   kdDebug() << "insert calendar dialog accepted (insert button clicked)" << endl;
   done(QDialog::Accepted);
   emit insertCalendar(startDate(),endDate());
@@ -97,6 +99,8 @@ void InsertCalendarDialog::accept()
 
 void InsertCalendarDialog::reject()
 {
+  if (m_datePicker)
+    m_datePicker->deleteLater();
   kdDebug() << "insert calendar dialog rejected (cancel button clicked)" << endl;
   done(QDialog::Rejected);
 }
