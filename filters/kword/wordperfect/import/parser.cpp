@@ -826,6 +826,12 @@ Parser::parseDocWP6 (const QString & filename, int start)
                     if( p->data[i]) typeface.append( p->data[i] );
                     else break;
                   typeface = typeface.stripWhiteSpace();
+
+                  // hack: get rid of "Regular" as font name suffix
+                  QString suffix = "Regular";
+                  if( typeface.right( suffix.length() ) == suffix )
+                     typeface = typeface.left( typeface.length() -  suffix.length() ).stripWhiteSpace();
+
                   tokens.append( new Token( Token::FontFace, typeface ) );
                 }
               }
