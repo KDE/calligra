@@ -397,11 +397,7 @@ void KPresenterView_impl::screenStart()
   if (page && !presStarted) 
     {
       page->deSelectAllObj();
-      page->recreate((QWidget*)0L,0,QPoint(0,0),true);
-      page->topLevelWidget()->move(-4,-24);
-      page->topLevelWidget()->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
       page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
-      page->topLevelWidget()->setBackgroundColor(black);
       presStarted = true;
 
       float _presFaktW = (float)page->width() / (float)KPresenterDoc()->getPageSize(1,0,0).width() > 1.0 ? 
@@ -420,7 +416,7 @@ void KPresenterView_impl::screenStart()
  	xOffset -= (page->width() - KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).width()) / 2;
       if (page->height() > KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height())
  	yOffset -= (page->height() - KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height()) / 2;
-      //if (yOffset < 0) yOffset += 10; 
+      
       vert->setEnabled(false);
       horz->setEnabled(false);
       m_bShowGUI = false;
@@ -430,9 +426,8 @@ void KPresenterView_impl::screenStart()
       setSize(page->size().width(),page->size().height());
       page->startScreenPresentation();
 
-      // ugly HACK
-      page->recreate((QWidget*)0L,0,QPoint(0,0),true);
-      page->topLevelWidget()->move(-4,-24);
+      page->recreate((QWidget*)0L,WStyle_Customize | WStyle_NoBorder | WType_Popup,QPoint(0,0),true);
+      page->topLevelWidget()->move(0,0);
       page->topLevelWidget()->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
       page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
       page->topLevelWidget()->setBackgroundColor(black);
@@ -446,6 +441,7 @@ void KPresenterView_impl::screenStop()
 {
   if (presStarted)
     {
+      page->close(false);
       page->recreate((QWidget*)this,0,QPoint(0,0),true);
       zoomBackParts();
       xOffset = _xOffset;
@@ -1235,6 +1231,10 @@ void KPresenterView_impl::keyPressEvent(QKeyEvent *e)
 /*========================= zoom Parts ==========================*/
 void KPresenterView_impl::zoomParts(float _fakt)
 {
+  /*******************************
+   * this doesn't really work !
+   *******************************/
+
   if (!origFramesList.isEmpty()) origFramesList.clear();
   if (!origPartsList.isEmpty()) origPartsList.clear();
   
@@ -1261,6 +1261,10 @@ void KPresenterView_impl::zoomParts(float _fakt)
 /*======================= zoom back Parts =======================*/
 void KPresenterView_impl::zoomBackParts()
 {
+  /*******************************
+   * this doesn't really work !
+   *******************************/
+  
   QListIterator<KPresenterFrame> it(m_lstFrames);
 
   for(unsigned int i = 0;it.current();++it,i++)
