@@ -257,6 +257,10 @@ protected:
     double ratio;
     QPixmap buffer;
 
+private:
+    QValueList<int> pages(const QString &range);
+    bool pagesHelper(const QString &chunk, QValueList<int> &list);
+
 public slots:
     void chPic();
     void chClip();
@@ -309,6 +313,3 @@ signals:
 
 };
 #endif //PAGE_H
-
-
-

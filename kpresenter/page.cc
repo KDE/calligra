@@ -3204,10 +3204,10 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
     QColor c = kapp->winStyleHighlightColor();
     kapp->setWinStyleHighlightColor( colorGroup().highlight() );
 
-    QProgressBar progBar;
-
+#ifndef HAVE_KDEPRINT
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
                               printer->toPage() - printer->fromPage() + 2, this );
+
     int j = 0;
     progress.setProgress( 0 );
 
@@ -3248,6 +3248,53 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
     QListIterator<KPObject> oIt( *objectList() );
     for (; oIt.current(); ++oIt )
         oIt.current()->drawSelection( true );
+#else
+    QValueList<int> pages(pages(printer->option("kde-range")));
+    // okay, if it's empty we simply print everything...
+    if(pages.isEmpty()) {
+        for(int k=printer->fromPage(); k<=printer->toPage(); ++k)
+            pages.append(k);
+    }
+    QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
+                              pages.count() + 2, this );
+
+    int j = 0;
+    progress.setProgress( 0 );
+
+    QValueList<int>::ConstIterator it;
+    for ( it=pages.begin() ; it!=pages.end(); ++it )
+    {
+        progress.setProgress( ++j );
+        kapp->processEvents();
+
+        if ( progress.wasCancelled() )
+            break;
+
+        currPresPage = *it;
+        if (j!=1) printer->newPage();
+
+        painter->resetXForm();
+        painter->fillRect( getPageRect( 0 ), white );
+
+        view->setDiffY( (*it-1) * ( getPageRect( 1, 1.0, false ).height() ) - MM_TO_POINT( top_margin ) );
+        drawPageInPainter( painter, view->getDiffY(), getPageRect( *it - 1 ) );
+        kapp->processEvents();
+
+        painter->resetXForm();
+        kapp->processEvents();
+    }
+
+    setToolEditMode( toolEditMode );
+    view->setDiffX( _xOffset );
+    view->setDiffY( _yOffset );
+
+    progress.setProgress( pages.count() );
+    kapp->setWinStyleHighlightColor( c );
+
+    QListIterator<KPObject> oIt( *objectList() );
+    for (; oIt.current(); ++oIt )
+        oIt.current()->drawSelection( true );
+#endif
 
     currPresPage = 1;
     currPresStep = 0;
@@ -4101,4 +4148,38 @@ void Page::setTextBackground( KPTextObject *obj )
     QPalette pal( obj->getKTextObject()->palette() );
     pal.setBrush( QColorGroup::Base, b );
     obj->getKTextObject()->setPalette( pal );
+}
+
+QValueList<int> Page::pages(const QString &range) {
+
+    if(range.isEmpty())
+        return QValueList<int> ();
+    QValueList<int> list;
+    int start=-1;
+    int end=range.find(',');
+    bool ok=true;
+    QString tmp;
+    while(end!=-1 && start!=end && ok) {
+        tmp=range.mid(start+1, end-start-1);
+        ok=pagesHelper(tmp, list);
+        start=range.find(',', end);
+        end=range.find(',', start+1);
+    }
+    pagesHelper(range.mid(start+1), list);
+    return list;
+}
+
+bool Page::pagesHelper(const QString &chunk, QValueList<int> &list) {
+
+    bool ok=true;
+    int mid=chunk.find('-');
+    if(mid!=-1) {
+        int start=chunk.left(mid).toInt(&ok);
+        int end=chunk.mid(mid+1).toInt(&ok);
+        while(ok && start<=end)
+            list.append(start++);
+    }
+    else
+        list.append(chunk.toInt(&ok));
+    return ok;
 }
