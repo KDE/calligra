@@ -90,16 +90,24 @@ int KSpreadCell::row() const
   /* Make sure this isn't called for the default cell.  This assert can save you
      (could have saved me!) the hassle of some very obscure bugs.
   */
-  Q_ASSERT(!isDefault());
+  if ( isDefault() )
+  {
+    kdWarning(36001) << "Error: Calling KSpreadCell::row() for default cell" << endl;
+    return 0;
+  }
   return m_iRow;
 }
 
 int KSpreadCell::column() const
 {
-  Q_ASSERT(!isDefault());
   /* Make sure this isn't called for the default cell.  This assert can save you
      (could have saved me!) the hassle of some very obscure bugs.
   */
+  if ( isDefault() )
+  {
+    kdWarning(36001) << "Error: Calling KSpreadCell::column() for default cell" << endl;
+    return 0;
+  }
   return m_iColumn;
 }
 
