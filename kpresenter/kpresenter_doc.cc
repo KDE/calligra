@@ -855,7 +855,6 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
             } break;
             case OT_RECT: {
                 KPRectObject *kprectobject = new KPRectObject();
-                kprectobject->setRnds( _xRnd, _yRnd );
                 kprectobject->load(obj);
                 if ( _paste ) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, this );

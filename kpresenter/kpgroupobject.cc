@@ -157,7 +157,6 @@ void KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
                     } break;
                     case OT_RECT: {
                         KPRectObject *kprectobject = new KPRectObject();
-                        kprectobject->setRnds( doc->getRndX(), doc->getRndY() );
                         kprectobject->load(current);
                         objects.append( kprectobject );
                     } break;

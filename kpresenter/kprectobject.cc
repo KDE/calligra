@@ -60,10 +60,12 @@ KPRectObject &KPRectObject::operator=( const KPRectObject & )
 QDomDocumentFragment KPRectObject::save( QDomDocument& doc )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc);
-    QDomElement elem=doc.createElement("RNDS");
-    elem.setAttribute("x", xRnd);
-    elem.setAttribute("y", yRnd);
-    fragment.appendChild(elem);
+    if (xRnd!=0 || yRnd!=0) {
+        QDomElement elem=doc.createElement("RNDS");
+        elem.setAttribute("x", xRnd);
+        elem.setAttribute("y", yRnd);
+        fragment.appendChild(elem);
+    }
     return fragment;
 }
 
