@@ -2358,7 +2358,7 @@ void KSpreadView::insertObject()
 
 void KSpreadView::insertChart()
 {
-    QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'KChart' in ServiceTypes", 1 );
+    QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'KChart' in ServiceTypes" );
     if ( vec.isEmpty() )
     {
 	KMessageBox::error( this, i18n("Sorry, no charting component registered") );
