@@ -451,11 +451,10 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
 
 	    QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
 
-	    QString mime = "image/" + format.lower();
             if ( !isStoredExtern() )
               u2.prepend( url().url() + "/" );
 
-	    if ( _store->open( u2, mime.lower().ascii() ) ) {
+	    if ( _store->open( u2 ) ) {
 	        ostorestream out( _store );
 	        writeImageToStream( out, it.data(), format );
 	        out.flush();
@@ -470,11 +469,10 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
 	if ( _clipartCollection.references( it2.key() ) > 0 && !it2.key().filename.isEmpty() ) {
 
 	    QString u2 = QString( "cliparts/clipart%1.wmf" ).arg( ++i );
-	    QString mime = "clipart/wmf";
             if ( !isStoredExtern() )
               u2.prepend( url().url() + "/" );
 
-	    if ( _store->open( u2, mime.lower().ascii() ) ) {
+	    if ( _store->open( u2 ) ) {
 	        ostorestream out( _store );
 	        out << it2.data();
 	        out.flush();
@@ -1136,13 +1134,13 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	
 	    QImage img;
 
-	    if ( _store->open( u, "" ) ) {
+	    if ( _store->open( u ) ) {
 		istorestream in( _store );
 		in >> img;
 	        _store->close();
 	    } else {
 		u.prepend( "file:" );
-		if ( _store->open( u, "" ) ) {
+		if ( _store->open( u ) ) {
 		    istorestream in( _store );
 		    in >> img;
 		    _store->close();
@@ -1168,13 +1166,13 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	
 	    QPicture pic;
 
-	    if ( _store->open( u, "" ) ) {
+	    if ( _store->open( u ) ) {
 		istorestream in( _store );
 		in >> pic;
 	        _store->close();
 	    } else {
 		u.prepend( "file:" );
-		if ( _store->open( u, "" ) ) {
+		if ( _store->open( u ) ) {
 		    istorestream in( _store );
 		    in >> pic;
 		    _store->close();
