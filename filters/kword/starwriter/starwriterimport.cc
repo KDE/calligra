@@ -252,7 +252,7 @@ bool StarWriterImport::parseNodes(QByteArray n)
 bool StarWriterImport::parseText(QByteArray n)
 {
     QByteArray s;
-    Q_UINT32 len;
+    Q_UINT32 len, len2, len3;
     QString text;
 
     // Preliminary check
@@ -276,9 +276,10 @@ bool StarWriterImport::parseText(QByteArray n)
 bool StarWriterImport::parseTable(QByteArray n)
 {
     /*
-    // QByteArray s;
-    Q_UINT32 len, p;
-    // QString text;
+    QByteArray s;
+    Q_UINT32 len, p, p2;
+    QString text;
+    QString tableCell, tableText;
     Q_UINT8 row, column, columns;   // no need to have 'rows'
 
     // Preliminary check
@@ -286,18 +287,44 @@ bool StarWriterImport::parseTable(QByteArray n)
 
     // Skip useless sections and retrieve the right point
     p = 0x13;
+    p += 0x10;
     while (n[p] != 'L') {
         len = readU24(n, p+1);
         p += len;
     }
 
     // Read rows
-    while (p < n.size()) {
+    while (n[p] == 'L') {
+        // Find the first 't'
+        while (n[p] != 't') p++;
+
         // Read cells
-        // FIXME: find 't'
-        // FIXME: find 'T'
-        // FIXME: get cell text/value
-        // FIXME: add stuff for cell frame
+        while (n[p] == 't') {
+            // Get cell length
+            len2 = readU24(n, p+1);
+            p2 = p + len2;
+
+            // Find the 'T' section
+            while (n[p] != 'T') p++;
+
+            // Get cell text/value
+            len3 = readU24(n, p+0x09) & 0xFFFF;
+            s.resize(len3);
+            for (Q_UINT32 k = 0x00; k < len3; k++)
+                s[k] = n[0x0B+k];
+            text = convertToKWordString(s);
+
+            // FIXME: add stuff for cell frame
+
+            // Skip other sections or bytes
+            p = p2;
+
+            // Increase column pointers
+            column++;
+            columns = max(columns, column);
+        }
+
+        // Increase row pointer
         row++;
     }
 
