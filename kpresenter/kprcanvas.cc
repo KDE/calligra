@@ -2312,11 +2312,19 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
 /*================================================================*/
 bool KPrCanvas::canAssignEffect( QPtrList<KPObject> &objs ) const
 {
-    QPtrListIterator<KPObject> oIt( getObjectList() );
+    QPtrListIterator<KPObject> oIt( m_activePage->objectList() );
     for (; oIt.current(); ++oIt )
         if ( oIt.current()->isSelected() )
             objs.append( oIt.current() );
-
+    oIt= m_view->kPresenterDoc()->stickyPage()->objectList();
+    for (; oIt.current(); ++oIt )
+    {
+        //can't assign a effect to header/footer
+        if(m_view->kPresenterDoc()->isHeaderFooter(oIt.current()))
+            continue;
+        if ( oIt.current()->isSelected() )
+            objs.append( oIt.current() );
+    }
     return !objs.isEmpty();
 }
 
