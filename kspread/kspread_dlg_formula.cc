@@ -246,7 +246,7 @@ void KSpreadDlgFormula::slotPressReturn()
 
 void KSpreadDlgFormula::slotSearchText(const QString &_text)
 {
-    QString result = listFunct.makeCompletion( _text.lower() );
+    QString result = listFunct.makeCompletion( _text.upper() );
     if( !result.isNull() )
         functions->setCurrentItem( functions->index( functions->findItem( result ) ) );
 }
@@ -715,13 +715,11 @@ void KSpreadDlgFormula::slotActivated( const QString& category )
     functions->clear();
     functions->insertStringList( lst );
 
-    QStringList lowerList;
+    QStringList upperList;
     for ( QStringList::Iterator it = lst.begin(); it != lst.end();++it )
-     {
-         lowerList.append((*it).lower());
-     }
+      upperList.append((*it).upper());
 
-    listFunct.setItems( lowerList );
+    listFunct.setItems( upperList );
 
     // Go to the first function in the list.
     functions->setCurrentItem(0);
