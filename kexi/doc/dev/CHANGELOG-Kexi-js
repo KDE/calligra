@@ -339,6 +339,12 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 
 ===================== Kexi 0.1 Beta 4 =====================
 
+2004-07-15
+Forms
+- form's initial sizeHint is now hardcoded to (400,300), will be fixed later
+Query Designer
+- saving existing queries work in SQL View
+
 2004-07-14
 Kexi
 - polish translation updated (also for KFormDesigner)
@@ -574,7 +580,6 @@ Query Designer
 TableView, Alter Table
 - Table Cell Editor's Focus is cleared on slotRefreshRequested()
 - fixed columns recreating on data resetting for a table
-
 TableView
 - fixed inserting row (empty or dropped)
 - dropping indicator line is now painted with XOR mode

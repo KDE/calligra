@@ -463,6 +463,8 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &
 bool KexiQueryDesignerGuiEditor::storeData(bool &cancel)
 {
 	bool ok = KexiViewBase::storeData(cancel);
+	if (cancel)
+		return true;
 	if (ok) {
 		buildSchema();
 		ok = storeLayout();

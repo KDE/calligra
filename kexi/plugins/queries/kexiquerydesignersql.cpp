@@ -53,14 +53,14 @@ class KexiQueryDesignerSQLViewPrivate
 {
 	public:
 		KexiQueryDesignerSQLViewPrivate() :
-		 statusPixmapOk( DesktopIcon("button_ok") )
-		 , history(0)
+		   history(0)
 		 , historyHead(0)
+		 , statusPixmapOk( DesktopIcon("button_ok") )
 		 , statusPixmapErr( DesktopIcon("button_cancel") )
 		 , statusPixmapInfo( DesktopIcon("messagebox_info") )
+		 , parsedQuery(0)
 		 , heightForStatusMode(-1)
 		 , heightForHistoryMode(-1)
-		 , parsedQuery(0)
 		 , eventFilterForSplitterEnabled(true)
 		{
 		}
@@ -449,10 +449,32 @@ KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata, bool &ca
 	return query;
 }
 
-//TODO
-//virtual bool KexiQueryDesignerSQLView::storeData(bool &cancel)
-//{
-//}
+bool KexiQueryDesignerSQLView::storeData(bool &cancel)
+{
+	bool ok = KexiViewBase::storeData(cancel);
+	if (cancel)
+		return true;
+	if (ok) {
+		bool queryOK = slotCheckQuery();
+		if (queryOK) {
+			ok = storeDataBlock( d->editor->text(), "sql" );
+		}
+		else {
+#if 0
+			//query is not ok
+			//TODO: allow saving invalid queries
+			//TODO: just ask this question:
+#else
+			ok = false;
+#endif
+		}
+	}
+	if (ok) {
+		QString empty_xml;
+		ok = storeDataBlock( empty_xml, "query_layout" ); //clear
+	}
+	return ok;
+}
 
 
 /*void KexiQueryDesignerSQLView::slotHistoryHeaderButtonClicked(const QString& buttonIdentifier)
