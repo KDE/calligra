@@ -25,6 +25,7 @@
 #define PAGEEFFECTS_H
 
 #include "global.h"
+#include <qvaluelist.h>
 
 
 class QPaintDevice;
@@ -72,7 +73,7 @@ protected:
     bool effectInterlockingVertical1() const;
     bool effectInterlockingVertical2() const;
     bool effectSurround1() const;
-    bool effectFlyAway1() const;
+    bool effectFlyAway1();
     bool effectBlindsHorizontal() const;
     bool effectBlindsVertical() const;
     bool effectBoxIn() const;
@@ -95,18 +96,20 @@ protected:
     bool effectUncoverRightUp();
     bool effectCoverRightDown() const;
     bool effectUncoverRightDown();
-    bool effectDissolve() const;
+    bool effectDissolve();
     bool effectStripesLeftUp() const;
     bool effectStripesLeftDown() const;
     bool effectStripesRightUp() const;
     bool effectStripesRigthDown() const;
-    bool effectMelting() const;
+    bool effectMelting();
 
     QPaintDevice *m_dst;
     const QPixmap m_pageTo;
     QPixmap m_pageFrom;
     PageEffect m_effect;
+    PageEffect m_randomEffect;
     PresSpeed m_speed;
+    QValueList<int> m_list;
     int m_effectStep;
     int m_stepWidth;
     int m_stepHeight;

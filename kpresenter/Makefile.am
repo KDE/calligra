@@ -48,7 +48,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	KPFreehandObjectIface.skel KPFreehandObjectIface.cc kprstylemanager.cc \
 	kprbgspellcheck.cc kprhelplinedia.cc confpicturedia.cc \
 	KPPolyLineObjectIface.skel KPPolyLineObjectIface.cc \
-	kprduplicateobjdia.cc kppageeffects.cc kpclosedlineobject.cc \
+	kprduplicateobjdia.cc kpclosedlineobject.cc \
 	kprimportstyledia.cc \
 	imageEffectDia.cc imageEffectBase.ui
 
@@ -89,7 +89,7 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		KPCubicbeziercurveObjectIface.h textpreview.h \
 		rotationdialogimpl.h KPFreehandObjectIface.h kprstylemanager.h \
 		kprbgspellcheck.h kprhelplinedia.h confpicturedia.h \
-		KPPolyLineObjectIface.h kprduplicateobjdia.h kppageeffects.h kpclosedlineobject.h kprimportstyledia.h \
+		KPPolyLineObjectIface.h kprduplicateobjdia.h kpclosedlineobject.h kprimportstyledia.h \
 		imageEffectDia.h kprloadinginfo.h
 
 kdelnk_DATA = kpresenter.desktop

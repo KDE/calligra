@@ -73,7 +73,6 @@
 #include "notebar.h"
 #include "kppartobject.h"
 #include "kpresenter_utils.h"
-#include "kppageeffects.h"
 #include "kprcommand.h"
 #include "kppolylineobject.h"
 #include "kpclosedlineobject.h"

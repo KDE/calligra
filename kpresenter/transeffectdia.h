@@ -25,6 +25,7 @@
 
 #include <kdialogbase.h>
 #include <qlabel.h>
+#include <qtimer.h>
 #include "global.h"
 
 class KPresenterDoc;
@@ -43,6 +44,7 @@ class KPPresStructObjectItem;
 class KURLRequester;
 class KIntNumInput;
 class KPresenterSoundPlayer;
+class KPPageEffects;
 
 class KPEffectPreview : public QLabel
 {
@@ -59,7 +61,13 @@ protected:
     KPresenterDoc *doc;
     KPresenterView *view;
     QPixmap m_pixmap;
+    QPixmap m_target;
 
+    QTimer m_pageEffectTimer;
+    KPPageEffects *m_pageEffect;
+
+protected slots:
+    void slotDoPageEffect();
 };
 
 

@@ -27,7 +27,7 @@
 #include "kpresenter_doc.h"
 #include "kprcanvas.h"
 #include "kprpage.h"
-#include "kppageeffects.h"
+#include "pageeffects.h"
 #include "kpresenter_sound_player.h"
 
 #include <qsplitter.h>
@@ -56,7 +56,7 @@
 
 
 KPEffectPreview::KPEffectPreview( QWidget *parent, KPresenterDoc *_doc, KPresenterView *_view )
-    : QLabel( parent ), doc( _doc ), view( _view )
+    : QLabel( parent ), doc( _doc ), view( _view ), m_pageEffect( 0 )
 {
     setFrameStyle( StyledPanel | Sunken );
 }
@@ -92,12 +92,53 @@ void KPEffectPreview::setPixmap( const QPixmap& pixmap )
 void KPEffectPreview::run( PageEffect effect, PresSpeed speed )
 {
     QRect rect = m_pixmap.rect();
-    QPixmap target( rect.size() );
-    target.fill( Qt::black );
+    m_target.resize( rect.size() );
+    m_target.fill( Qt::black );
 
-    kPchangePages( this, m_pixmap, target, effect, speed );
+    //kPchangePages( this, m_pixmap, m_target, effect, speed );
+    if ( m_pageEffect )
+    {
+        m_pageEffectTimer.stop();
+        QObject::disconnect( &m_pageEffectTimer, SIGNAL( timeout() ), this, SLOT( slotDoPageEffect() ) );
+        
+        m_pageEffect->finish();
 
-    QLabel::update();
+        delete m_pageEffect;
+        m_pageEffect = 0;
+        QLabel::repaint();
+    }
+
+    m_pageEffect = new KPPageEffects( this, m_target, effect, speed );
+    if ( m_pageEffect->doEffect() )
+    {
+        delete m_pageEffect;
+        m_pageEffect = 0;
+        QLabel::update();
+    }
+    else
+    {
+        connect( &m_pageEffectTimer, SIGNAL( timeout() ), SLOT( slotDoPageEffect() ) );
+        m_pageEffectTimer.start( 50, true );
+    }
+
+    //QLabel::update();
+}
+
+
+void KPEffectPreview::slotDoPageEffect()
+{
+    if ( m_pageEffect->doEffect() )
+    {
+        m_pageEffectTimer.stop();
+        QObject::disconnect( &m_pageEffectTimer, SIGNAL( timeout() ), this, SLOT( slotDoPageEffect() ) );
+        delete m_pageEffect;
+        m_pageEffect = 0;
+        QLabel::update();
+    }
+    else
+    {
+        m_pageEffectTimer.start( 50, true );
+    }
 }
 
 
