@@ -124,6 +124,12 @@ VText::VText( VObject* parent, VState state )
 	m_boundingBoxIsInvalid = true;
 	m_stroke = new VStroke( this );
 	m_fill = new VFill();
+	m_position			= 0;
+	m_alignment			= 0;
+	m_shadow			= false;
+	m_translucentShadow	= false;
+	m_shadowAngle		= 0;
+	m_shadowDistance	= 0;
 }
 
 
