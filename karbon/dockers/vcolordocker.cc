@@ -140,7 +140,7 @@ void VColorDocker::updateCanvas()
 {
 	if ( m_isStrokeDocker && m_part && m_part->document().selection() )
 	{
-		m_part->addCommand( new VStrokeColorCmd( &m_part->document(), m_Color ), true );
+		m_part->addCommand( new VStrokeCmd( &m_part->document(), m_Color ), true );
 		m_view->selectionChanged();
 	}
 	else if( m_part && m_part->document().selection() )

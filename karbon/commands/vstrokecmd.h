@@ -23,43 +23,11 @@
 
 #include "vcommand.h"
 #include "vcolor.h"
+#include "vstroke.h"
 
 #include <qvaluevector.h>
 
-class VGradient;
-class VPattern;
-
 // Stroke object(s)
-
-class VStrokeColorCmd : public VCommand
-{
-public:
-	VStrokeColorCmd( VDocument *doc, VColor *color );
-	virtual ~VStrokeColorCmd();
-
-	virtual void execute();
-	virtual void unexecute();
-
-private:
-	VSelection			*m_selection;
-	VColor				*m_color;
-	QValueVector<VColor> m_oldcolors;
-};
-
-class VStrokeLineWidthCmd : public VCommand
-{
-public:
-	VStrokeLineWidthCmd( VDocument *doc, double );
-	virtual ~VStrokeLineWidthCmd();
-
-	virtual void execute();
-	virtual void unexecute();
-
-private:
-	VSelection			*m_selection;
-	double				 m_width;
-	QValueVector<double> m_oldwidths;
-};
 
 class VStrokeCmd : public VCommand
 {
@@ -67,19 +35,27 @@ public:
 	VStrokeCmd( VDocument *doc,  const VStroke *, const QString& icon = "14_action" );
 	VStrokeCmd( VDocument *doc, VGradient * );
 	VStrokeCmd( VDocument *doc, VPattern * );
+	VStrokeCmd( VDocument *doc, VColor * );
+	VStrokeCmd( VDocument *doc, double );
 	virtual ~VStrokeCmd();
 
 	virtual void execute();
 	virtual void unexecute();
 
 protected:
-	VSelection* m_selection;
+	typedef enum
+	{
+		LineWidth,
+		Color,
+		Gradient,
+		Pattern,
+		Stroke
+	} State;
 
-	const VStroke	*m_stroke;
-	VGradient		*m_gradient;
-	VPattern		*m_pattern;
-
-	QValueVector<VStroke> m_oldcolors;
+	State					m_state;
+	VSelection				*m_selection;
+	VStroke					m_stroke;
+	QValueVector<VStroke>	m_oldstrokes;
 };
 
 #endif

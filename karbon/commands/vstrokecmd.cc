@@ -25,123 +25,52 @@
 #include "vgradient.h"
 #include "vstrokecmd.h"
 
-VStrokeColorCmd::VStrokeColorCmd( VDocument *doc, VColor *color )
-    : VCommand( doc, i18n( "Stroke Color" ) ), m_color( color )
-{
-	m_selection = document()->selection()->clone();
-}
-
-VStrokeColorCmd::~VStrokeColorCmd()
-{
-	delete( m_selection );
-}
-
-void
-VStrokeColorCmd::execute()
-{
-	VObjectListIterator itr( m_selection->objects() );
-	for ( ; itr.current() ; ++itr )
-	{
-		VStroke stroke = *itr.current()->stroke();
-		stroke.setParent( itr.current() );
-		stroke.setColor( *m_color );
-		itr.current()->setStroke( stroke );
-		m_oldcolors.push_back( itr.current()->stroke()->color() );
-	}
-
-	setSuccess( true );
-}
-
-void
-VStrokeColorCmd::unexecute()
-{
-	VObjectListIterator itr( m_selection->objects() );
-	int i = 0;
-	for ( ; itr.current() ; ++itr )
-	{
-		VStroke stroke = *itr.current()->stroke();
-		stroke.setParent( itr.current() );
-		stroke.setColor( m_oldcolors[ i++ ] );
-		itr.current()->setStroke( stroke );
-	}
-
-	setSuccess( false );
-}
-
-VStrokeLineWidthCmd::VStrokeLineWidthCmd( VDocument *doc, double width )
-    : VCommand( doc, i18n( "Stroke Width" ) ), m_width( width )
-{
-	m_selection = document()->selection()->clone();
-}
-
-VStrokeLineWidthCmd::~VStrokeLineWidthCmd()
-{
-	delete( m_selection );
-}
-
-void
-VStrokeLineWidthCmd::execute()
-{
-	VObjectListIterator itr( m_selection->objects() );
-	for ( ; itr.current() ; ++itr )
-	{
-		VStroke stroke = *itr.current()->stroke();
-		stroke.setParent( itr.current() );
-		stroke.setLineWidth( m_width );
-		itr.current()->setStroke( stroke );
-		m_oldwidths.push_back( itr.current()->stroke()->lineWidth() );
-	}
-
-	setSuccess( true );
-}
-
-void
-VStrokeLineWidthCmd::unexecute()
-{
-	VObjectListIterator itr( m_selection->objects() );
-	int i = 0;
-	for ( ; itr.current() ; ++itr )
-	{
-		VStroke stroke = *itr.current()->stroke();
-		stroke.setParent( itr.current() );
-		stroke.setLineWidth( m_oldwidths[ i++ ] );
-		itr.current()->setStroke( stroke );
-	}
-
-	setSuccess( false );
-}
-
 VStrokeCmd::VStrokeCmd( VDocument *doc,  const VStroke *stroke, const QString& icon )
-    : VCommand( doc, i18n( "Stroke Objects" ), icon ), m_stroke( stroke )
+    : VCommand( doc, i18n( "Stroke Objects" ), icon ), m_stroke( *stroke )
 {
 	m_selection = document()->selection()->clone();
-	m_gradient = 0L;
-	m_pattern = 0L;
+	m_state = Stroke;
 
 	if( m_selection->objects().count() == 1 )
 		setName( i18n( "Stroke Object" ) );
 }
 
 VStrokeCmd::VStrokeCmd( VDocument *doc, VGradient *gradient )
-	: VCommand( doc, i18n( "Stroke Objects" ), "14_gradient" ), m_gradient( gradient )
+	: VCommand( doc, i18n( "Stroke Objects" ), "14_gradient" )
 {
 	m_selection = document()->selection()->clone();
-	m_stroke = 0L;
-	m_pattern = 0L;
+	m_state = Gradient;
+	m_stroke.gradient() = *gradient;
 
 	if( m_selection->objects().count() == 1 )
 		setName( i18n( "Stroke Object" ) );
 }
 
 VStrokeCmd::VStrokeCmd( VDocument *doc, VPattern *pattern )
-	: VCommand( doc, i18n( "Stroke Objects" ) ), m_pattern( pattern )
+	: VCommand( doc, i18n( "Stroke Objects" ) )
 {
 	m_selection = document()->selection()->clone();
-	m_stroke = 0L;
-	m_gradient = 0L;
+	m_state = Pattern;
+	m_stroke.pattern() = *pattern;
 
 	if( m_selection->objects().count() == 1 )
 		setName( i18n( "Stroke Object" ) );
+}
+
+VStrokeCmd::VStrokeCmd( VDocument *doc, double width )
+	: VCommand( doc, i18n( "Stroke Width" ), "linewidth" )
+{
+	m_selection = document()->selection()->clone();
+	m_state = LineWidth;
+	m_stroke.setLineWidth( width );
+}
+
+VStrokeCmd::VStrokeCmd( VDocument *doc, VColor *color )
+	: VCommand( doc, i18n( "Stroke Color" ) )
+{
+	m_selection = document()->selection()->clone();
+	m_state = Color;
+	m_stroke.setColor( *color );
 }
 
 VStrokeCmd::~VStrokeCmd()
@@ -158,32 +87,39 @@ VStrokeCmd::execute()
 		//if( m_opacity == -1 )
 		//	m_color.setOpacity( itr.current()->stroke()->color().opacity() );
 
-		m_oldcolors.push_back( *itr.current()->stroke() );
+		m_oldstrokes.push_back( *itr.current()->stroke() );
 
 		VStroke stroke( *itr.current()->stroke() );
-		if( m_gradient )
+		stroke.setParent( itr.current() );
+		if( m_state == LineWidth )
+			stroke.setLineWidth( m_stroke.lineWidth() );
+		else if( m_state == Color )
 		{
-			stroke.gradient() = *m_gradient;
+			stroke.setColor( m_stroke.color() );
+			stroke.setType( VStroke::solid );
+		}
+		else if( m_state == Gradient )
+		{
+			stroke.gradient() = m_stroke.gradient();
 			stroke.setType( VStroke::grad );
 		}
-		if( m_pattern )
+		else if( m_state == Pattern )
 		{
-			stroke.pattern() = *m_pattern;
+			stroke.pattern() = m_stroke.pattern();
 			stroke.setType( VStroke::patt );
 		}
-		else if( m_stroke )
+		else if( m_state == Stroke )
 		{
-			stroke.setLineCap( m_stroke->lineCap() );
-			stroke.setLineJoin( m_stroke->lineJoin() );
-			stroke.setParent( itr.current() );
-			stroke.setLineWidth( m_stroke->lineWidth() );
-			if( m_stroke->type() == VStroke::none )
+			stroke.setLineCap( m_stroke.lineCap() );
+			stroke.setLineJoin( m_stroke.lineJoin() );
+			stroke.setLineWidth( m_stroke.lineWidth() );
+			if( m_stroke.type() == VStroke::none )
 			{
 				stroke.setType( VStroke::none );
 			}
-			else if( m_stroke->type() == VStroke::solid )
+			else if( m_stroke.type() == VStroke::solid )
 			{
-				stroke.setColor( m_stroke->color() );
+				stroke.setColor( m_stroke.color() );
 				stroke.setType( VStroke::solid );
 			}
 		}
@@ -200,7 +136,7 @@ VStrokeCmd::unexecute()
 	int i = 0;
 	for ( ; itr.current() ; ++itr )
 	{
-		itr.current()->setStroke( m_oldcolors[ i++ ] );
+		itr.current()->setStroke( m_oldstrokes[ i++ ] );
 	}
 
 	setSuccess( false );
