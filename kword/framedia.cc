@@ -1547,7 +1547,7 @@ bool KWFrameDia::applyChanges()
                 }
                 else
                 {
-                    KMessageBox::sorry( this,i18n("The frame will not be resized because the new size would be great than the size of the page."));
+                    KMessageBox::sorry( this,i18n("The frame will not be resized because the new size would be greater than the size of the page."));
                 }
             }
         }
