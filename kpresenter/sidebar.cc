@@ -195,6 +195,10 @@ void SideBar::updateItem( KPrPage *page )
 
 void SideBar::setViewMasterPage( bool _masterPage )
 {
+    m_outline->setViewMasterPage( _masterPage );
+    m_thb->setViewMasterPage( _masterPage );
+    m_outline->rebuildItems();
+    m_thb->rebuildItems();
 }
 
 SideBarBase::SideBarBase(KPresenterDoc *_doc, KPresenterView *_view)
@@ -272,52 +276,57 @@ void ThumbBar::rebuildItems()
     QApplication::setOverrideCursor( Qt::waitCursor );
 
     clear();
-    for ( unsigned int i = 0; i < m_doc->getPageNums(); i++ ) {
-        // calculate the size of the thumb
-        QRect rect = m_doc->pageList().at(i)->getZoomPageRect( );
+    if ( m_viewMasterPage )
+    {
+    }
+    else
+    {
+        for ( unsigned int i = 0; i < m_doc->getPageNums(); i++ ) {
+            // calculate the size of the thumb
+            QRect rect = m_doc->pageList().at(i)->getZoomPageRect( );
 
-        int w = rect.width();
-        int h = rect.height();
-        if ( w > h ) {
-            w = 130;
-            float diff = (float)rect.width() / (float)w;
-            h = (int) (rect.height() / diff);
-            if ( h > 120 ) {
-                h = 120;
-                float diff = (float)rect.height() / (float)h;
-                w = (int) (rect.width() / diff);
-            }
-        }
-        else if ( w < h ) {
-            h = 130;
-            float diff = (float)rect.height() / (float)h;
-            w = (int) (rect.width() / diff);
-            if ( w > 120 ) {
-                w = 120;
+            int w = rect.width();
+            int h = rect.height();
+            if ( w > h ) {
+                w = 130;
                 float diff = (float)rect.width() / (float)w;
                 h = (int) (rect.height() / diff);
+                if ( h > 120 ) {
+                    h = 120;
+                    float diff = (float)rect.height() / (float)h;
+                    w = (int) (rect.width() / diff);
+                }
             }
+            else if ( w < h ) {
+                h = 130;
+                float diff = (float)rect.height() / (float)h;
+                w = (int) (rect.width() / diff);
+                if ( w > 120 ) {
+                    w = 120;
+                    float diff = (float)rect.width() / (float)w;
+                    h = (int) (rect.height() / diff);
+                }
+            }
+            else if ( w == h ) {
+                w = 130;
+                h = 130;
+            }
+
+            // draw an empty thumb
+            QPixmap pix(w, h);
+            pix.fill( Qt::white );
+
+            QPainter p(&pix);
+            p.setPen(Qt::black);
+            p.drawRect(pix.rect());
+
+            ThumbItem *item = new ThumbItem(static_cast<QIconView *>(this), QString::number(i+1), pix);
+            item->setUptodate( false );
+            item->setDragEnabled(false);  //no dragging for now
         }
-        else if ( w == h ) {
-            w = 130;
-            h = 130;
-        }
 
-        // draw an empty thumb
-        QPixmap pix(w, h);
-        pix.fill( Qt::white );
-
-        QPainter p(&pix);
-        p.setPen(Qt::black);
-        p.drawRect(pix.rect());
-
-        ThumbItem *item = new ThumbItem(static_cast<QIconView *>(this), QString::number(i+1), pix);
-        item->setUptodate( false );
-        item->setDragEnabled(false);  //no dragging for now
+        QTimer::singleShot( 10, this, SLOT( slotRefreshItems() ) );
     }
-
-    QTimer::singleShot( 10, this, SLOT( slotRefreshItems() ) );
-
     uptodate = true;
 
     QApplication::restoreOverrideCursor();
@@ -749,11 +758,18 @@ Outline::~Outline()
 void Outline::rebuildItems()
 {
     clear();
-
-    // Rebuild all the items
-    for ( int i = m_doc->getPageNums() - 1; i >= 0; --i ) {
-        KPrPage *page=m_doc->pageList().at( i );
+    if ( m_viewMasterPage )
+    {
+        KPrPage *page=m_doc->masterPage();
         new OutlineSlideItem( this, page );
+    }
+    else
+    {
+        // Rebuild all the items
+        for ( int i = m_doc->getPageNums() - 1; i >= 0; --i ) {
+            KPrPage *page=m_doc->pageList().at( i );
+            new OutlineSlideItem( this, page );
+        }
     }
 }
 
@@ -985,7 +1001,7 @@ void Outline::moveItem( QListViewItem *i, QListViewItem *, QListViewItem *newAft
 
 void Outline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
 {
-    if ( !m_doc->isReadWrite()) return;
+    if ( !m_doc->isReadWrite() || m_viewMasterPage ) return;
 
     QListViewItem *item = QListView::selectedItem();
     if( !item ) return;
@@ -999,7 +1015,7 @@ void Outline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
 void Outline::renamePageTitle()
 {
     QListViewItem *item = QListView::selectedItem();
-    if( !item ) return;
+    if( !item || m_viewMasterPage) return;
 
     OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
     if( !slideItem ) return;
