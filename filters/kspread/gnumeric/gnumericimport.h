@@ -26,7 +26,7 @@
 #include <qdom.h>
 
 class KSpreadCell;
-class KSpreadTable;
+class KSpreadSheet;
 
 class GNUMERICFilter : public KoFilter 
 {
@@ -49,10 +49,10 @@ class GNUMERICFilter : public KoFilter
   };
 
   void dateInit();
-  QString convertVars( QString const & str, KSpreadTable * table ) const;
-  void ParsePrintInfo( QDomNode const & printInfo, KSpreadTable * table );
+  QString convertVars( QString const & str, KSpreadSheet * table ) const;
+  void ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * table );
   void ParseFormat(QString const & formatString, KSpreadCell * kspread_cell);
-  void setStyleInfo(QDomNode *sheet, KSpreadTable *table);
+  void setStyleInfo(QDomNode *sheet, KSpreadSheet *table);
   bool setType( KSpreadCell * kspread_cell, QString const & formatString, QString & cell_content );
   
 };

@@ -246,7 +246,7 @@ void set_document_info(KoDocument * document, QDomElement * docElem)
 }
 
 
-void setColInfo(QDomNode * sheet, KSpreadTable * table)
+void setColInfo(QDomNode * sheet, KSpreadSheet * table)
 {
   QDomNode columns =  sheet->namedItem("gmr:Cols");
   QDomNode columninfo = columns.namedItem("gmr:ColInfo");
@@ -288,7 +288,7 @@ void setColInfo(QDomNode * sheet, KSpreadTable * table)
   }
 }
 
-void setRowInfo(QDomNode *sheet, KSpreadTable *table)
+void setRowInfo(QDomNode *sheet, KSpreadSheet *table)
 {
   QDomNode rows =  sheet->namedItem("gmr:Rows");
   QDomNode rowinfo = rows.namedItem("gmr:RowInfo");
@@ -332,7 +332,7 @@ void setRowInfo(QDomNode *sheet, KSpreadTable *table)
   }
 }
 
-void setSelectionInfo( QDomNode * sheet, KSpreadTable * /* table */ )
+void setSelectionInfo( QDomNode * sheet, KSpreadSheet * /* table */ )
 {
   QDomNode selections =  sheet->namedItem("gmr:Selections");
   QDomNode selection = selections.namedItem("gmr:Selection");
@@ -358,7 +358,7 @@ void setSelectionInfo( QDomNode * sheet, KSpreadTable * /* table */ )
 }
 
 
-void setObjectInfo(QDomNode * sheet, KSpreadTable * table)
+void setObjectInfo(QDomNode * sheet, KSpreadSheet * table)
 {
   QDomNode gmr_objects =  sheet->namedItem("gmr:Objects");
   QDomNode gmr_cellcomment = gmr_objects.namedItem("gmr:CellComment");
@@ -724,7 +724,7 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
   return false; // no date or time
 }
 
-QString GNUMERICFilter::convertVars( QString const & str, KSpreadTable * table ) const
+QString GNUMERICFilter::convertVars( QString const & str, KSpreadSheet * table ) const
 {
   QString result( str );
   uint count = list1.count();
@@ -754,7 +754,7 @@ QString GNUMERICFilter::convertVars( QString const & str, KSpreadTable * table )
   return result;
 }
 
-void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadTable * table )
+void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * table )
 {
   kdDebug() << "Parsing print info " << endl;
 
@@ -958,7 +958,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * ksp
 }
 
 
-void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadTable * table)
+void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
 {
   kdDebug() << "SetStyleInfo entered " << endl;
   
@@ -1376,7 +1376,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
     int value = 0;
     int currentTab = -1;
     int selectedTab = 0;
-    KSpreadTable * selTable = 0;
+    KSpreadSheet * selTable = 0;
 
     QDomElement docElem = doc.documentElement();
     QDomElement uiData  = docElem.namedItem("gmr:UIData").toElement();
@@ -1398,7 +1398,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
     /* This sets the Document information. */
     set_document_info( document, &docElem );
 
-    KSpreadTable * table;
+    KSpreadSheet * table;
 
     // This is a mapping of exprID to expressions.
 

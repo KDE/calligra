@@ -383,7 +383,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
   workbook.appendChild(sheets);
 
   QString str;
-  KSpreadTable * table;
+  KSpreadSheet * table;
 
       for ( table = ksdoc->map()->firstTable(); table != 0L; table =ksdoc->map()->nextTable() )
        {
@@ -426,8 +426,8 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 	 sheet.appendChild(selections);
          */
 	 // Ah ah ah - the document is const, but the map and table aren't. Safety: 0.
-	 // Either we get hold of KSpreadTable::m_dctCells and apply the old method below (for sorting)
-	 // or, cleaner and already sorted, we use KSpreadTable's API (slower probably, though)
+	 // Either we get hold of KSpreadSheet::m_dctCells and apply the old method below (for sorting)
+	 // or, cleaner and already sorted, we use KSpreadSheet's API (slower probably, though)
 	 int iMaxColumn = table->maxColumn();
 	 int iMaxRow = table->maxRow();
 
