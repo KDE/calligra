@@ -5,7 +5,7 @@
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2.
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -41,6 +41,7 @@ KFORMULA_NAMESPACE_BEGIN
 class ComplexElement;
 class Container;
 class ElementType;
+class ElementVisitor;
 class FontCommand;
 class FormulaCursor;
 class FormulaElement;
@@ -94,9 +95,20 @@ public:
     virtual BasicElement* clone() = 0;
 
     /**
+     * Visit this element. An implementation of the visitor pattern.
+     */
+    virtual bool accept( ElementVisitor* ) = 0;
+
+    /**
+     * @returns whether the child should be read-only. The idea is
+     * that a read-only parent has read-only children.
+     */
+    virtual bool readOnly( const BasicElement* child ) const;
+
+    /**
      * Provide fast access to the rootElement for each child.
      */
-    virtual FormulaElement* formula() { return parent->formula(); }
+    virtual FormulaElement* formula();
 
     /**
      * Provide fast access to the rootElement for each child.
@@ -323,6 +335,7 @@ public:
 
     // basic support
 
+    const BasicElement* getParent() const { return parent; }
     BasicElement* getParent() { return parent; }
     void setParent(BasicElement* p) { parent = p; }
 
@@ -373,6 +386,12 @@ public:
     static int getEvilDestructionCount() { return evilDestructionCount; }
 
     /**
+     * @returns our type. This is an object from our parent's syntax tree
+     * or 0 if there was a very bad parsing error.
+     */
+    ElementType* getElementType() const { return elementType; }
+
+    /**
      * Sets a new type. This is done during parsing.
      */
     virtual void setElementType(ElementType* t) { elementType = t; }
@@ -412,12 +431,6 @@ protected:
      * This is a service for all subclasses that contain children.
      */
     bool buildChild( SequenceElement* child, QDomNode node, QString name );
-
-    /**
-     * @returns our type. This is an object from our parent's syntax tree
-     * or 0 if there was a very bad parsing error.
-     */
-    ElementType* getElementType() const { return elementType; }
 
 
     /**

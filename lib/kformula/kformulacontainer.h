@@ -68,12 +68,15 @@ public:
     FormulaDocument() {}
     virtual ~FormulaDocument() {}
 
-    virtual void elementRemoval(BasicElement* child) = 0;
-    virtual void changed() = 0;
-    virtual void cursorHasMoved( FormulaCursor* ) = 0;
-    virtual void moveOutLeft( FormulaCursor* ) = 0;
-    virtual void moveOutRight( FormulaCursor* ) = 0;
+    virtual void elementRemoval(BasicElement* /*child*/) {}
+    virtual void changed() {}
+    virtual void cursorHasMoved( FormulaCursor* ) {}
+    virtual void moveOutLeft( FormulaCursor* ) {}
+    virtual void moveOutRight( FormulaCursor* ) {}
+    virtual void moveOutAbove( FormulaCursor* ) {}
+    virtual void moveOutBelow( FormulaCursor* ) {}
     virtual void tell( const QString& /*msg*/ ) {}
+    virtual void insertFormula( FormulaCursor* ) {}
     virtual void removeFormula( FormulaCursor* ) {}
     virtual void baseSizeChanged( int, bool ) {}
     virtual const SymbolTable& getSymbolTable() const = 0;
@@ -88,21 +91,33 @@ class Container : public QObject, public FormulaDocument {
     friend class MimeSource;
     Q_OBJECT
 
+    // no copying
+    Container( const Container& );
+    Container& operator= ( const Container& );
+
 public:
 
-    enum ViewActions { EXIT_LEFT, EXIT_RIGHT, REMOVE_FORMULA };
+    enum ViewActions { EXIT_LEFT, EXIT_RIGHT,
+                       EXIT_ABOVE, EXIT_BELOW,
+                       INSERT_FORMULA, REMOVE_FORMULA };
 
     /**
-     * Construct a new formula.
+     * Constructs a new formula and register it with the document.
      *
      * @param doc the document we belong to.
-     * @param _history The undo stack we are to store our commands in.
-     *                 It must not deleted as long as we exist because
-     *                 we only store a reference to it.
+     * @param pos the formulas position inside its document.
+     * @param registerMe whether the formula is to be registered
+     * with the document.
      */
-    Container(Document* doc);
-
+    Container( Document* doc, int pos, bool registerMe=true );
     ~Container();
+
+    /**
+     * Needs to be called before anything else can be done with a
+     * newly created formula! This is required to allow polymorphic
+     * formulas. (The virtual method problem.)
+     */
+    void initialize();
 
     /**
      * Returns a new cursor. It points to the beginning of the
@@ -132,6 +147,8 @@ public:
 
     void moveOutLeft( FormulaCursor* );
     void moveOutRight( FormulaCursor* );
+    void moveOutAbove( FormulaCursor* );
+    void moveOutBelow( FormulaCursor* );
     void tell( const QString& msg );
     void removeFormula( FormulaCursor* );
 
@@ -207,6 +224,11 @@ public:
      */
     QRect boundingRect();
 
+    /**
+     * @returns the formula's size including its active cursor.
+     */
+    QRect coveredRect();
+
     double width() const;
     double height() const;
 
@@ -229,7 +251,7 @@ public:
     /**
      * Recalc the formula.
      */
-    void recalc();
+    virtual void recalc();
 
     /**
      * @returns true if there is no element.
@@ -239,7 +261,7 @@ public:
     /**
      * @returns the document this formula belongs to.
      */
-    Document* document() const;
+    virtual Document* document() const;
 
     virtual const SymbolTable& getSymbolTable() const;
 
@@ -261,11 +283,9 @@ signals:
     void cursorMoved(FormulaCursor* cursor);
 
     /**
-     * The cursor has been moved because of a change at the formula.
+     * The cursor wants to leave this formula.
      */
-    //void cursorChanged(FormulaCursor* cursor);
-
-    void leaveFormula( FormulaCursor* cursor, int cmd );
+    void leaveFormula( Container* formula, FormulaCursor* cursor, int cmd );
 
     /**
      * The formula has changed and needs to be redrawn.
@@ -328,6 +348,16 @@ protected:
 
     KoCommandHistory* getHistory() const;
 
+    /**
+     * @returns the root of our element tree. That's the formula's structure.
+     */
+    FormulaElement* rootElement() const;
+
+    /**
+     * Factory method.
+     */
+    virtual FormulaElement* createMainSequence();
+
 private:
 
     /**
@@ -347,8 +377,6 @@ private:
 
     struct Container_Impl;
     Container_Impl* impl;
-
-    FormulaElement* rootElement() const;
 
     // debug
     friend class TestFormulaCursor;

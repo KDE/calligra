@@ -166,6 +166,8 @@ public:
         return new BracketElement( *this );
     }
 
+    virtual bool accept( ElementVisitor* visitor );
+
     /**
      * @returns the type of this element. Used for
      * parsing a sequence.
@@ -265,6 +267,8 @@ public:
         return new OverlineElement( *this );
     }
 
+    virtual bool accept( ElementVisitor* visitor );
+
     /**
      * The cursor has entered one of our child sequences.
      * This is a good point to tell the user where he is.
@@ -325,6 +329,8 @@ public:
     virtual UnderlineElement* clone() {
         return new UnderlineElement( *this );
     }
+
+    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * The cursor has entered one of our child sequences.

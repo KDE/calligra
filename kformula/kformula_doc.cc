@@ -58,7 +58,7 @@ KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject*
 
     history = new KoCommandHistory( actionCollection() );
     document = new KFormula::Document( kapp->config(), actionCollection(), history );
-    formula = new KFormula::Container( document );
+    formula = document->createFormula();
 
     document->setEnabled( true );
 

@@ -73,7 +73,7 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
     }
 
     KFormula::Document* doc = new KFormula::Document( kapp->sessionConfig() );
-    KFormula::Container* formula = new KFormula::Container( doc );
+    KFormula::Container* formula = doc->createFormula();
     if ( !doc->loadXML( dom ) ) {
         kdError() << "Failed." << endl;
     }

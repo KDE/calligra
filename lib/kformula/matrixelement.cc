@@ -5,7 +5,7 @@
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2.
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,6 +26,7 @@
 #include <klocale.h>
 
 #include "MatrixDialog.h"
+#include "elementvisitor.h"
 #include "formulaelement.h"
 #include "formulacursor.h"
 #include "kformulacontainer.h"
@@ -113,6 +114,11 @@ public:
 
 KCommand* MatrixSequenceElement::buildCommand( Container* container, Request* request )
 {
+    FormulaCursor* cursor = container->activeCursor();
+    if ( cursor->isReadOnly() ) {
+        return 0;
+    }
+
     switch ( *request ) {
     case req_appendColumn:
     case req_appendRow:
@@ -306,6 +312,12 @@ MatrixElement::MatrixElement( const MatrixElement& other )
         content.append(list);
     }
     content.setAutoDelete(true);
+}
+
+
+bool MatrixElement::accept( ElementVisitor* visitor )
+{
+    return visitor->visit( this );
 }
 
 
@@ -861,6 +873,13 @@ QString MatrixElement::formulaString()
     return matrix;
 }
 
+
+SequenceElement* MatrixElement::elementAt(uint row, uint column)
+{
+    return getElement( row, column );
+}
+
+
 void MatrixElement::writeMathML( QDomDocument doc, QDomNode parent )
 {
     QDomElement de = doc.createElement( "mtable" );
@@ -1101,6 +1120,11 @@ void MultilineSequenceElement::registerTab( BasicElement* tab )
 
 KCommand* MultilineSequenceElement::buildCommand( Container* container, Request* request )
 {
+    FormulaCursor* cursor = container->activeCursor();
+    if ( cursor->isReadOnly() ) {
+        return 0;
+    }
+
     switch ( *request ) {
     case req_remove: {
         // Remove this line if its empty.
@@ -1256,6 +1280,12 @@ MultilineElement::MultilineElement( const MultilineElement& other )
         line->setParent( this );
         content.append( line );
     }
+}
+
+
+bool MultilineElement::accept( ElementVisitor* visitor )
+{
+    return visitor->visit( this );
 }
 
 

@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "elementvisitor.h"
 #include "indexelement.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
@@ -56,6 +57,11 @@ public:
 
 KCommand* IndexSequenceElement::buildCommand( Container* container, Request* request )
 {
+    FormulaCursor* cursor = container->activeCursor();
+    if ( cursor->isReadOnly() ) {
+        return 0;
+    }
+
     switch ( *request ) {
     case req_addIndex: {
         FormulaCursor* cursor = container->activeCursor();
@@ -157,6 +163,12 @@ IndexElement::IndexElement( const IndexElement& other )
     else {
         lowerRight = 0;
     }
+}
+
+
+bool IndexElement::accept( ElementVisitor* visitor )
+{
+    return visitor->visit( this );
 }
 
 

@@ -104,19 +104,34 @@ struct Container::Container_Impl {
 FormulaElement* Container::rootElement() const { return impl->rootElement; }
 Document* Container::document() const { return impl->document; }
 
-Container::Container(Document* doc)
+Container::Container( Document* doc, int pos, bool registerMe )
 {
-    impl = new Container_Impl(doc);
-    impl->rootElement = new FormulaElement(this);
-    impl->activeCursor = impl->internCursor = createCursor();
-    doc->registerFormula( this );
-    recalc();
+    impl = new Container_Impl( doc );
+    impl->rootElement = 0;
+    if ( registerMe ) {
+        doc->registerFormula( this, pos );
+    }
 }
 
 Container::~Container()
 {
     document()->formulaDies(this);
     delete impl;
+}
+
+
+void Container::initialize()
+{
+    assert( impl->rootElement == 0 );
+    impl->rootElement = createMainSequence();
+    impl->activeCursor = impl->internCursor = createCursor();
+    recalc();
+}
+
+
+FormulaElement* Container::createMainSequence()
+{
+    return new FormulaElement( this );
 }
 
 
@@ -157,12 +172,22 @@ void Container::cursorHasMoved( FormulaCursor* )
 
 void Container::moveOutLeft( FormulaCursor* cursor )
 {
-    emit leaveFormula( cursor, EXIT_LEFT );
+    emit leaveFormula( this, cursor, EXIT_LEFT );
 }
 
 void Container::moveOutRight( FormulaCursor* cursor )
 {
-    emit leaveFormula( cursor, EXIT_RIGHT );
+    emit leaveFormula( this, cursor, EXIT_RIGHT );
+}
+
+void Container::moveOutAbove( FormulaCursor* cursor )
+{
+    emit leaveFormula( this, cursor, EXIT_ABOVE );
+}
+
+void Container::moveOutBelow( FormulaCursor* cursor )
+{
+    emit leaveFormula( this, cursor, EXIT_BELOW );
 }
 
 void Container::tell( const QString& msg )
@@ -172,7 +197,7 @@ void Container::tell( const QString& msg )
 
 void Container::removeFormula( FormulaCursor* cursor )
 {
-    emit leaveFormula( cursor, REMOVE_FORMULA );
+    emit leaveFormula( this, cursor, REMOVE_FORMULA );
 }
 
 void Container::baseSizeChanged( int size, bool owned )
@@ -228,7 +253,6 @@ void Container::testDirty()
 
 void Container::recalc()
 {
-    //kdDebug( DEBUGID ) << "Container::recalc" << endl;
     impl->dirty = false;
     ContextStyle& context = document()->getContextStyle();
     rootElement()->calcSizes( context );
@@ -277,8 +301,10 @@ void Container::checkCursor()
 
 void Container::input( QKeyEvent* event )
 {
-    if ( !hasValidCursor() )
+    //if ( !hasValidCursor() )
+    if ( impl->activeCursor == 0 ) {
         return;
+    }
     execute( activeCursor()->getElement()->input( this, event ) );
     checkCursor();
 }
@@ -367,6 +393,23 @@ QRect Container::boundingRect()
                   context.layoutUnitToPixelY( rootElement()->getHeight() ) );
 }
 
+QRect Container::coveredRect()
+{
+    if ( impl->activeCursor != 0 ) {
+        const ContextStyle& context = document()->getContextStyle();
+        const LuPixelRect& cursorRect = impl->activeCursor->getCursorSize();
+        return QRect( context.layoutUnitToPixelX( rootElement()->getX() ),
+                      context.layoutUnitToPixelY( rootElement()->getY() ),
+                      context.layoutUnitToPixelX( rootElement()->getWidth() ),
+                      context.layoutUnitToPixelY( rootElement()->getHeight() ) ) |
+            QRect( context.layoutUnitToPixelX( cursorRect.x() ),
+                   context.layoutUnitToPixelY( cursorRect.y() ),
+                   context.layoutUnitToPixelX( cursorRect.width() ),
+                   context.layoutUnitToPixelY( cursorRect.height() ) );
+    }
+    return boundingRect();
+}
+
 double Container::width() const
 {
     const ContextStyle& context = document()->getContextStyle();
@@ -431,7 +474,7 @@ void Container::save( QDomElement root )
 bool Container::load( QDomElement fe )
 {
     if (!fe.isNull()) {
-        FormulaElement* root = new FormulaElement(this);
+        FormulaElement* root = createMainSequence();
         if (root->buildFromDom(fe)) {
             delete impl->rootElement;
             impl->rootElement = root;

@@ -357,7 +357,7 @@ public:
     /**
      * @returns whether we are allowed to alter the document.
      */
-    bool isReadOnly() const { return readOnly; }
+    bool isReadOnly() const;
 
     /**
      * Puts the widget in read only mode.

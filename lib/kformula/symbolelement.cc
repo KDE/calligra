@@ -5,7 +5,7 @@
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2.
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,6 +22,7 @@
 
 #include <kdebug.h>
 
+#include "elementvisitor.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
 #include "kformulacommand.h"
@@ -51,6 +52,11 @@ public:
 
 KCommand* SymbolSequenceElement::buildCommand( Container* container, Request* request )
 {
+    FormulaCursor* cursor = container->activeCursor();
+    if ( cursor->isReadOnly() ) {
+        return 0;
+    }
+
     switch ( *request ) {
     case req_addIndex: {
         FormulaCursor* cursor = container->activeCursor();
@@ -118,6 +124,12 @@ SymbolElement::SymbolElement( const SymbolElement& other )
     else {
         lower = 0;
     }
+}
+
+
+bool SymbolElement::accept( ElementVisitor* visitor )
+{
+    return visitor->visit( this );
 }
 
 

@@ -50,6 +50,16 @@ ElementType::~ElementType()
 }
 
 
+QString ElementType::text( SequenceElement* seq ) const
+{
+    QString str;
+    for ( uint i=start(); i<end(); ++i ) {
+        str.append( seq->getChild( i )->getCharacter() );
+    }
+    return str;
+}
+
+
 luPt ElementType::getSpaceBefore( const ContextStyle&,
                                 ContextStyle::TextStyle )
 {
@@ -201,6 +211,7 @@ MultiElementType::MultiElementType( SequenceParser* parser )
     }
     //m_text = parser->text();
 }
+
 
 luPt MultiElementType::getSpaceBefore( const ContextStyle& context,
                                      ContextStyle::TextStyle tstyle )

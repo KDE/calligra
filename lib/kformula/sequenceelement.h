@@ -31,7 +31,7 @@ class QKeyEvent;
 KFORMULA_NAMESPACE_BEGIN
 
 class SymbolTable;
-
+class ElementCreationStrategy;
 
 /**
  * The element that contains a number of children.
@@ -50,6 +50,13 @@ public:
         return new SequenceElement( *this );
     }
 
+    virtual bool accept( ElementVisitor* visitor );
+
+    /**
+     * @returns whether its prohibited to change the sequence with this cursor.
+     */
+    virtual bool readOnly( const FormulaCursor* ) const;
+
     /**
      * @returns true if the sequence contains only text.
      */
@@ -62,7 +69,8 @@ public:
      * is allowed to set the cursor.
      */
     virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+                                   const LuPixelPoint& point,
+                                   const LuPixelPoint& parentOrigin );
 
     // drawing
     //
@@ -86,7 +94,9 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
+    virtual void calcSizes(const ContextStyle& context,
+                           ContextStyle::TextStyle tstyle,
+                           ContextStyle::IndexStyle istyle);
 
     /**
      * Draws the whole element including its children.
@@ -232,7 +242,8 @@ public:
     /**
      * @returns whether the child has the given number.
      */
-    bool isChildNumber( uint pos, BasicElement* child ) { return children.at( pos ) == child; }
+    bool isChildNumber( uint pos, BasicElement* child )
+        { return children.at( pos ) == child; }
 
     /**
      * Selects all children. The cursor is put behind, the mark before them.
@@ -287,8 +298,56 @@ public:
      * @returns the child at position i.
      */
     BasicElement* getChild(uint i) { return children.at(i); }
+    //const BasicElement* getChild(uint i) const { return children.at(i); }
 
     int childPos( BasicElement* child ) { return children.find( child ); }
+    int childPos( const BasicElement* child ) const;
+
+    class ChildIterator {
+    public:
+        ChildIterator( SequenceElement* sequence, int pos=0 )
+            : m_sequence( sequence ), m_pos( pos ) {}
+
+        typedef BasicElement value_type;
+        typedef BasicElement* pointer;
+        typedef BasicElement& reference;
+
+        // we simply expect the compared iterators to belong
+        // to the same sequence.
+        bool operator== ( const ChildIterator& it ) const
+            { return /*m_sequence==it.m_sequence &&*/ m_pos==it.m_pos; }
+        bool operator!= ( const ChildIterator& it ) const
+            { return /*m_sequence!=it.m_sequence ||*/ m_pos!=it.m_pos; }
+
+        const BasicElement& operator* () const
+            { return *m_sequence->getChild( m_pos ); }
+        BasicElement& operator* ()
+            { return *m_sequence->getChild( m_pos ); }
+
+        ChildIterator& operator++ ()
+            { ++m_pos; return *this; }
+        ChildIterator operator++ ( int )
+            { ChildIterator it( *this ); ++m_pos; return it; }
+        ChildIterator& operator-- ()
+            { --m_pos; return *this; }
+        ChildIterator operator-- ( int )
+            { ChildIterator it( *this ); --m_pos; return it; }
+        ChildIterator& operator+= ( int j )
+            { m_pos+=j; return *this; }
+        ChildIterator & operator-= ( int j )
+            { m_pos-=j; return *this; }
+
+    private:
+        SequenceElement* m_sequence;
+        int m_pos;
+    };
+
+    typedef ChildIterator iterator;
+
+    iterator begin() { return ChildIterator( this, 0 ); }
+    iterator end() { return ChildIterator( this, countChildren() ); }
+
+    static void setCreationStrategy( ElementCreationStrategy* strategy );
 
 protected:
 
@@ -373,6 +432,8 @@ private:
      * true if the sequence contains only text
      */
     bool textSequence;
+
+    static ElementCreationStrategy* creationStrategy;
 };
 
 
@@ -389,6 +450,8 @@ public:
     virtual NameSequence* clone() {
         return new NameSequence( *this );
     }
+
+    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * @returns true if the sequence contains only text.

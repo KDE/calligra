@@ -25,6 +25,7 @@
 #include <kprinter.h>
 
 #include "contextstyle.h"
+#include "elementvisitor.h"
 #include "spaceelement.h"
 
 
@@ -40,6 +41,12 @@ SpaceElement::SpaceElement( SpaceWidth space, bool tab, BasicElement* parent )
 SpaceElement::SpaceElement( const SpaceElement& other )
     : BasicElement( other ), spaceWidth( other.spaceWidth )
 {
+}
+
+
+bool SpaceElement::accept( ElementVisitor* visitor )
+{
+    return visitor->visit( this );
 }
 
 

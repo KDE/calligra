@@ -167,7 +167,7 @@ void Formula::generate(QTextStream &out)
 	// better to have only one such beast for the whole document.
 	KFormula::Document formulaDoc( kapp->sessionConfig() );
 
-	KFormula::Container* formula = new KFormula::Container( &formulaDoc );
+	KFormula::Container* formula = formulaDoc.createFormula();
 	if ( !formula->load( doc.documentElement () ) ) {
 		kdError() << "Failed." << endl;
 	}

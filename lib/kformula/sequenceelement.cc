@@ -23,14 +23,19 @@
 
 #include <qpainter.h>
 #include <qpaintdevice.h>
+#include <qvaluestack.h>
 
 #include <kcommand.h>
 #include <kdebug.h>
 #include <klocale.h>
 
+//#include <boost/spirit.hpp>
+
 #include "MatrixDialog.h"
 #include "bracketelement.h"
+#include "creationstrategy.h"
 #include "elementtype.h"
+#include "elementvisitor.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
 #include "fractionelement.h"
@@ -49,12 +54,20 @@
 
 
 KFORMULA_NAMESPACE_BEGIN
-using namespace std;
+//using namespace std;
+
+ElementCreationStrategy* SequenceElement::creationStrategy = 0;
+
+void SequenceElement::setCreationStrategy( ElementCreationStrategy* strategy )
+{
+    creationStrategy = strategy;
+}
 
 
 SequenceElement::SequenceElement(BasicElement* parent)
         : BasicElement(parent), parseTree(0), textSequence(true)
 {
+    assert( creationStrategy != 0 );
     children.setAutoDelete(true);
 }
 
@@ -74,6 +87,18 @@ SequenceElement::SequenceElement( const SequenceElement& other )
         child->setParent( this );
         children.append( child );
     }
+}
+
+
+bool SequenceElement::accept( ElementVisitor* visitor )
+{
+    return visitor->visit( this );
+}
+
+
+bool SequenceElement::readOnly( const FormulaCursor* ) const
+{
+    return getParent()->readOnly( this );
 }
 
 
@@ -338,17 +363,17 @@ void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context
             painter.drawLine( context.layoutUnitToPixelX( point.x() ),
                               context.layoutUnitToPixelY( size.top() ),
                               context.layoutUnitToPixelX( point.x() ),
-                              context.layoutUnitToPixelY( size.bottom() ) );
+                              context.layoutUnitToPixelY( size.bottom() )-1 );
         }
         else {
             painter.drawLine( context.layoutUnitToPixelX( point.x() ),
                               context.layoutUnitToPixelY( size.top() ),
                               context.layoutUnitToPixelX( point.x() ),
-                              context.layoutUnitToPixelY( size.bottom()-1 ) );
+                              context.layoutUnitToPixelY( size.bottom() )-1 );
             painter.drawLine( context.layoutUnitToPixelX( size.left() ),
-                              context.layoutUnitToPixelY( size.bottom() ),
-                              context.layoutUnitToPixelX( size.right() ),
-                              context.layoutUnitToPixelY( size.bottom() ) );
+                              context.layoutUnitToPixelY( size.bottom() )-1,
+                              context.layoutUnitToPixelX( size.right() )-1,
+                              context.layoutUnitToPixelY( size.bottom() )-1 );
         }
     }
     // This might be wrong but probably isn't.
@@ -538,6 +563,9 @@ void SequenceElement::moveUp(FormulaCursor* cursor, BasicElement* from)
         if (getParent() != 0) {
             getParent()->moveUp(cursor, this);
         }
+        else {
+            formula()->moveOutAbove( cursor );
+        }
     }
 }
 
@@ -554,6 +582,9 @@ void SequenceElement::moveDown(FormulaCursor* cursor, BasicElement* from)
     else {
         if (getParent() != 0) {
             getParent()->moveDown(cursor, this);
+        }
+        else {
+            formula()->moveOutBelow( cursor );
         }
     }
 }
@@ -660,6 +691,7 @@ void SequenceElement::insert(FormulaCursor* cursor,
     else {
         cursor->setTo(this, pos, pos+count);
     }
+
     formula()->changed();
     parse();
 }
@@ -825,86 +857,131 @@ bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
 
 KCommand* SequenceElement::buildCommand( Container* container, Request* request )
 {
+    FormulaCursor* cursor = container->activeCursor();
+    if ( cursor->isReadOnly() ) {
+        formula()->tell( i18n( "write protection" ) );
+        return 0;
+    }
+
     switch ( *request ) {
     case req_addText: {
         KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
         TextRequest* tr = static_cast<TextRequest*>( request );
         for ( uint i = 0; i < tr->text().length(); i++ ) {
-            command->addElement( new TextElement( tr->text()[i] ) );
+            command->addElement( creationStrategy->createTextElement( tr->text()[i] ) );
         }
         return command;
     }
     case req_addTextChar: {
         KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
         TextCharRequest* tr = static_cast<TextCharRequest*>( request );
-        TextElement* element = new TextElement( tr->ch(), tr->isSymbol() );
+        TextElement* element = creationStrategy->createTextElement( tr->ch(), tr->isSymbol() );
         command->addElement( element );
         return command;
     }
     case req_addEmptyBox: {
-        KFCReplace* command = new KFCReplace( i18n("Add Empty Box"), container );
-        EmptyElement* element = new EmptyElement;
-        command->addElement( element );
-        return command;
-    }
-    case req_addNameSequence:
-        if ( onlyTextSelected( container->activeCursor() ) ) {
-            //kdDebug( DEBUGID ) << "SequenceElement::buildCommand" << endl;
-            KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add Name" ), container );
-            command->setElement( new NameSequence() );
+        EmptyElement* element = creationStrategy->createEmptyElement();
+        if ( element != 0 ) {
+            KFCReplace* command = new KFCReplace( i18n("Add Empty Box"), container );
+            command->addElement( element );
             return command;
         }
         break;
+    }
+    case req_addNameSequence:
+        if ( onlyTextSelected( container->activeCursor() ) ) {
+            NameSequence* nameSequence = creationStrategy->createNameSequence();
+            if ( nameSequence != 0 ) {
+                KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add Name" ), container );
+                command->setElement( nameSequence );
+                return command;
+            }
+        }
+        break;
     case req_addBracket: {
-        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Bracket"), container);
         BracketRequest* br = static_cast<BracketRequest*>( request );
-        command->setElement( new BracketElement( br->left(), br->right() ) );
-        return command;
+        BracketElement* bracketElement =
+            creationStrategy->createBracketElement( br->left(), br->right() );
+        if ( bracketElement != 0 ) {
+            KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Bracket"), container);
+            command->setElement( bracketElement );
+            return command;
+        }
+        break;
     }
     case req_addOverline: {
-        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Overline"), container);
-        command->setElement(new OverlineElement());
-        return command;
+        OverlineElement* overline = creationStrategy->createOverlineElement();
+        if ( overline != 0 ) {
+            KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Overline"), container);
+            command->setElement( overline );
+            return command;
+        }
+        break;
     }
     case req_addUnderline: {
-        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Underline"), container);
-        command->setElement(new UnderlineElement());
-        return command;
+        UnderlineElement* underline = creationStrategy->createUnderlineElement();
+        if ( underline != 0 ) {
+            KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Underline"), container);
+            command->setElement( underline );
+            return command;
+        }
+        break;
     }
     case req_addMultiline: {
-        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Multiline"), container);
-        command->setElement(new MultilineElement());
-        return command;
+        MultilineElement* multiline = creationStrategy->createMultilineElement();
+        if ( multiline != 0 ) {
+            KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Multiline"), container);
+            command->setElement( multiline );
+            return command;
+        }
+        break;
     }
     case req_addSpace: {
-        KFCReplace* command = new KFCReplace( i18n("Add Space"), container );
         SpaceRequest* sr = static_cast<SpaceRequest*>( request );
-        SpaceElement* element = new SpaceElement( sr->space() );
-        command->addElement( element );
-        return command;
+        SpaceElement* element = creationStrategy->createSpaceElement( sr->space() );
+        if ( element != 0 ) {
+            KFCReplace* command = new KFCReplace( i18n("Add Space"), container );
+            command->addElement( element );
+            return command;
+        }
+        break;
     }
     case req_addFraction: {
-        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Fraction"), container);
-        command->setElement(new FractionElement());
-        return command;
+        FractionElement* fraction = creationStrategy->createFractionElement();
+        if ( fraction != 0 ) {
+            KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Fraction"), container);
+            command->setElement( fraction );
+            return command;
+        }
+        break;
     }
     case req_addRoot: {
-        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Root"), container);
-        command->setElement(new RootElement());
-        return command;
+        RootElement* root = creationStrategy->createRootElement();
+        if ( root != 0 ) {
+            KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Root"), container);
+            command->setElement( root );
+            return command;
+        }
+        break;
     }
     case req_addSymbol: {
-        KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add Symbol" ), container );
         SymbolRequest* sr = static_cast<SymbolRequest*>( request );
-        command->setElement( new SymbolElement( sr->type() ) );
-        return command;
+        SymbolElement* symbol = creationStrategy->createSymbolElement( sr->type() );
+        if ( symbol != 0 ) {
+            KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add Symbol" ), container );
+            command->setElement( symbol );
+            return command;
+        }
+        break;
     }
     case req_addOneByTwoMatrix: {
-        KFCAddReplacing* command = new KFCAddReplacing( i18n("Add 1x2 Matrix"), container );
-        FractionElement* element = new FractionElement();
-        element->showLine(false);
-        command->setElement(element);
-        return command;
+        FractionElement* element = creationStrategy->createFractionElement();
+        if ( element != 0 ) {
+            KFCAddReplacing* command = new KFCAddReplacing( i18n("Add 1x2 Matrix"), container );
+            element->showLine(false);
+            command->setElement(element);
+            return command;
+        }
     }
     case req_addMatrix: {
         MatrixRequest* mr = static_cast<MatrixRequest*>( request );
@@ -920,31 +997,34 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
 
         if ( ( rows != 0 ) && ( cols != 0 ) ) {
             KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add Matrix" ), container );
-            command->setElement( new MatrixElement( rows, cols ) );
+            command->setElement( creationStrategy->createMatrixElement( rows, cols ) );
             return command;
         }
         else
             return 0L;
     }
     case req_addIndex: {
-        FormulaCursor* cursor = container->activeCursor();
         if ( cursor->getPos() > 0 && !cursor->isSelection() ) {
-            IndexElement* element = dynamic_cast<IndexElement*>( children.at( cursor->getPos()-1 ) );
+            IndexElement* element =
+                dynamic_cast<IndexElement*>( children.at( cursor->getPos()-1 ) );
             if ( element != 0 ) {
                 element->getMainChild()->goInside( cursor );
                 return element->getMainChild()->buildCommand( container, request );
             }
         }
-        IndexElement* element = new IndexElement;
-        if ( !cursor->isSelection() ) {
-            cursor->moveLeft( SelectMovement | WordMovement );
+        IndexElement* element = creationStrategy->createIndexElement();
+        if ( element != 0 ) {
+            if ( !cursor->isSelection() ) {
+                cursor->moveLeft( SelectMovement | WordMovement );
+            }
+            IndexRequest* ir = static_cast<IndexRequest*>( request );
+            KFCAddIndex* command = new KFCAddIndex( container, element,
+                                                    element->getIndex( ir->index() ) );
+            return command;
         }
-        IndexRequest* ir = static_cast<IndexRequest*>( request );
-        KFCAddIndex* command = new KFCAddIndex( container, element, element->getIndex( ir->index() ) );
-        return command;
+        break;
     }
     case req_removeEnclosing: {
-        FormulaCursor* cursor = container->activeCursor();
         if ( !cursor->isSelection() ) {
             DirectedRemove* dr = static_cast<DirectedRemove*>( request );
             KFCRemoveEnclosing* command = new KFCRemoveEnclosing( container, dr->direction() );
@@ -952,7 +1032,6 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
         }
     }
     case req_remove: {
-        FormulaCursor* cursor = container->activeCursor();
         SequenceElement* sequence = cursor->normal();
         if ( sequence &&
              ( sequence == sequence->formula() ) &&
@@ -983,21 +1062,19 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
         }
     }
     case req_compactExpression: {
-        FormulaCursor* cursor = container->activeCursor();
         cursor->moveEnd();
         cursor->moveRight();
         formula()->cursorHasMoved( cursor );
         break;
     }
     case req_makeGreek: {
-        FormulaCursor* cursor = container->activeCursor();
         TextElement* element = cursor->getActiveTextElement();
         if ((element != 0) && !element->isSymbol()) {
             cursor->selectActiveElement();
             const SymbolTable& table = container->document()->getSymbolTable();
             if (table.greekLetters().find(element->getCharacter()) != -1) {
                 KFCReplace* command = new KFCReplace( i18n( "Change Char to Symbol" ), container );
-                TextElement* symbol = new TextElement( table.unicodeFromSymbolFont( element->getCharacter() ), true );
+                TextElement* symbol = creationStrategy->createTextElement( table.unicodeFromSymbolFont( element->getCharacter() ), true );
                 command->addElement( symbol );
                 return command;
             }
@@ -1011,7 +1088,6 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
         break;
     case req_formatBold:
     case req_formatItalic: {
-        FormulaCursor* cursor = container->activeCursor();
         if ( cursor->isSelection() ) {
             CharStyleRequest* csr = static_cast<CharStyleRequest*>( request );
             CharStyle cs = normalChar;
@@ -1027,7 +1103,6 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
         break;
     }
     case req_formatFamily: {
-        FormulaCursor* cursor = container->activeCursor();
         if ( cursor->isSelection() ) {
             CharFamilyRequest* cfr = static_cast<CharFamilyRequest*>( request );
             CharFamily cf = cfr->charFamily();
@@ -1226,24 +1301,7 @@ bool SequenceElement::buildChildrenFromDom(QPtrList<BasicElement>& list, QDomNod
 
 BasicElement* SequenceElement::createElement( QString type )
 {
-    if      ( type == "TEXT" )         return new TextElement();
-    else if ( type == "EMPTY" )        return new EmptyElement();
-    else if ( type == "SPACE" )        return new SpaceElement();
-    else if ( type == "ROOT" )         return new RootElement();
-    else if ( type == "BRACKET" )      return new BracketElement();
-    else if ( type == "MATRIX" )       return new MatrixElement();
-    else if ( type == "INDEX" )        return new IndexElement();
-    else if ( type == "FRACTION" )     return new FractionElement();
-    else if ( type == "SYMBOL" )       return new SymbolElement();
-    else if ( type == "NAMESEQUENCE" ) return new NameSequence();
-    else if ( type == "OVERLINE" )     return new OverlineElement();
-    else if ( type == "UNDERLINE" )    return new UnderlineElement();
-    else if ( type == "MULTILINE" )    return new MultilineElement();
-    else if ( type == "SEQUENCE" ) {
-        kdWarning( DEBUGID ) << "malformed data: sequence inside sequence." << endl;
-        return 0;
-    }
-    return 0;
+    return creationStrategy->createElement( type );
 }
 
 /**
@@ -1343,6 +1401,7 @@ QString SequenceElement::toLatex()
     return content;
 }
 
+
 QString SequenceElement::formulaString()
 {
     QString content;
@@ -1356,6 +1415,7 @@ QString SequenceElement::formulaString()
     }
     return content;
 }
+
 
 void SequenceElement::writeMathML( QDomDocument doc, QDomNode parent )
 {
@@ -1385,9 +1445,28 @@ void SequenceElement::writeMathML( QDomDocument doc, QDomNode parent )
 }
 
 
+int SequenceElement::childPos( const BasicElement* child ) const
+{
+    QPtrListIterator<BasicElement> it( children );
+    uint count = it.count();
+    for ( uint i=0; i<count; ++i, ++it ) {
+        if ( it.current() == child ) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
 NameSequence::NameSequence( BasicElement* parent )
     : SequenceElement( parent )
 {
+}
+
+
+bool NameSequence::accept( ElementVisitor* visitor )
+{
+    return visitor->visit( this );
 }
 
 

@@ -55,6 +55,16 @@ public:
     BasicElement* goToPos( FormulaCursor*, const LuPixelPoint& point );
 
     /**
+     * Ordinary formulas are not write protected.
+     */
+    virtual bool readOnly( const BasicElement* /*child*/ ) const { return false; }
+
+    /**
+     * @returns whether its prohibited to change the sequence with this cursor.
+     */
+    virtual bool readOnly( const FormulaCursor* ) const { return false; }
+
+    /**
      * Provide fast access to the rootElement for each child.
      */
     virtual FormulaElement* formula() { return this; }
@@ -74,7 +84,7 @@ public:
      * Gets called whenever something changes and we need to
      * recalc.
      */
-    void changed();
+    virtual void changed();
 
     /**
      * Gets called when a request has the side effect of moving the
@@ -85,6 +95,8 @@ public:
 
     void moveOutLeft( FormulaCursor* );
     void moveOutRight( FormulaCursor* );
+    void moveOutBelow( FormulaCursor* );
+    void moveOutAbove( FormulaCursor* );
 
     /**
      * Tell the user something has happened.
@@ -96,6 +108,27 @@ public:
      * holds it should create an appropriate command and execute it.
      */
     void removeFormula( FormulaCursor* );
+
+    void insertFormula( FormulaCursor* );
+
+    /**
+     * Calculates our width and height and
+     * our children's parentPosition.
+     */
+    virtual void calcSizes( const ContextStyle& context,
+                            ContextStyle::TextStyle tstyle,
+                            ContextStyle::IndexStyle istyle);
+
+    /**
+     * Draws the whole element including its children.
+     * The `parentOrigin' is the point this element's parent starts.
+     * We can use our parentPosition to get our own origin then.
+     */
+    virtual void draw( QPainter& painter, const LuPixelRect& r,
+                       const ContextStyle& context,
+                       ContextStyle::TextStyle tstyle,
+                       ContextStyle::IndexStyle istyle,
+                       const LuPixelPoint& parentOrigin );
 
     /**
      * Calculates the formulas sizes and positions.
@@ -132,6 +165,8 @@ public:
     void setBaseSize( int size );
 
     bool hasOwnBaseSize() const { return ownBaseSize; }
+
+    virtual KCommand* input( Container* container, QKeyEvent* event );
 
     virtual void writeMathML( QDomDocument doc, QDomNode parent );
 

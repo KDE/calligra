@@ -68,7 +68,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
     f.close();
 
     KFormula::Document* doc = new KFormula::Document( kapp->sessionConfig() );
-    KFormula::Container* formula = new KFormula::Container( doc );
+    KFormula::Container* formula = doc->createFormula();
 
     //formula->loadMathML( m_chain->inputFile() );
     f.setName( m_chain->inputFile() );

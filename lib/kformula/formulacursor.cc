@@ -80,8 +80,8 @@ void FormulaCursor::calcCursorSize( const ContextStyle& context, bool smallCurso
 
 void FormulaCursor::draw( QPainter& painter, const ContextStyle& context, bool smallCursor )
 {
-    if (readOnly && !isSelection())
-        return;
+    //if (readOnly && !isSelection())
+    //return;
 
     // We only draw the cursor if its normalized.
     SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
@@ -302,8 +302,7 @@ void FormulaCursor::insert(BasicElement* child, Direction direction)
 void FormulaCursor::insert(QPtrList<BasicElement>& children,
                            Direction direction)
 {
-    if (readOnly)
-        return;
+    assert( !isReadOnly() );
     BasicElement* element = getElement();
     element->insert(this, children, direction);
 }
@@ -317,8 +316,7 @@ void FormulaCursor::insert(QPtrList<BasicElement>& children,
 void FormulaCursor::remove(QPtrList<BasicElement>& children,
                            Direction direction)
 {
-    if (readOnly)
-        return;
+    assert( !isReadOnly() );
     SequenceElement* sequence = normal();
     if (sequence != 0) {
 
@@ -346,8 +344,7 @@ void FormulaCursor::remove(QPtrList<BasicElement>& children,
 void FormulaCursor::replaceSelectionWith(BasicElement* element,
                                          Direction direction)
 {
-    if (readOnly)
-        return;
+    assert( !isReadOnly() );
     QPtrList<BasicElement> list;
     // we suppres deletion here to get an error if something
     // was left in the list.
@@ -383,8 +380,7 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
  */
 BasicElement* FormulaCursor::replaceByMainChildContent(Direction direction)
 {
-    if (readOnly)
-        return 0;
+    assert( !isReadOnly() );
     QPtrList<BasicElement> childrenList;
     QPtrList<BasicElement> list;
     BasicElement* element = getElement();
@@ -413,8 +409,7 @@ BasicElement* FormulaCursor::replaceByMainChildContent(Direction direction)
  */
 BasicElement* FormulaCursor::removeEnclosingElement(Direction direction)
 {
-    if (readOnly)
-        return 0;
+    assert( !isReadOnly() );
     BasicElement* parent = getElement()->getParent();
     if (parent != 0) {
         if (getElement() == parent->getMainChild()) {
@@ -620,6 +615,22 @@ void FormulaCursor::formulaLoaded(FormulaElement* rootElement)
     setSelection(false);
 }
 
+
+bool FormulaCursor::isReadOnly() const
+{
+    if ( readOnly ) {
+        return true;
+    }
+    const SequenceElement* sequence = normal();
+    if ( sequence != 0 ) {
+        bool ro = sequence->readOnly( this );
+        //kdDebug() << k_funcinfo << "readOnly=" << ro << endl;
+        return ro;
+    }
+    return false;
+}
+
+
 /**
  * Stores the currently selected elements inside a dom.
  */
@@ -647,8 +658,7 @@ void FormulaCursor::copy( QDomDocument doc )
  */
 bool FormulaCursor::buildElementsFromDom( QDomElement root, QPtrList<BasicElement>& list )
 {
-    if (readOnly)
-        return false;
+    assert( !isReadOnly() );
     SequenceElement* sequence = normal();
     if (sequence != 0) {
         QDomElement e = root.firstChild().toElement();

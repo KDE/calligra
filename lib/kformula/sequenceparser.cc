@@ -158,7 +158,8 @@ void SequenceParser::readText()
     type = ORDINARY;
     for ( ; tokenEnd < list.count(); tokenEnd++ ) {
         BasicElement* element = list.at( tokenEnd );
-        if ( element->getTokenType() != ORDINARY ) {
+        if ( ( element->getTokenType() != ORDINARY ) ||
+             ( element->getCharacter() == '/' ) ) {
             return;
         }
     }

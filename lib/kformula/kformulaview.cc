@@ -46,8 +46,8 @@ struct View::View_Impl {
                 view, SLOT(slotFormulaLoaded(FormulaElement*)));
         connect(document, SIGNAL(cursorMoved(FormulaCursor*)),
                 view, SLOT(slotCursorMoved(FormulaCursor*)));
-        connect( document, SIGNAL( leaveFormula( FormulaCursor*, int ) ),
-                 view, SLOT( slotLeaveFormula( FormulaCursor*, int ) ) );
+        connect( document, SIGNAL( leaveFormula( Container*, FormulaCursor*, int ) ),
+                 view, SLOT( slotLeaveFormula( Container*, FormulaCursor*, int ) ) );
 
         cursor = document->createCursor();
     }
@@ -112,11 +112,25 @@ void View::setReadOnly(bool ro)
 }
 
 
+void View::calcCursor()
+{
+    cursor()->calcCursorSize( contextStyle(), smallCursor() );
+}
+
+
 void View::draw(QPainter& painter, const QRect& rect, const QColorGroup& cg)
 {
 //     kdDebug( DEBUGID ) << "View::draw: " << rect.x() << " " << rect.y() << " "
 //                      << rect.width() << " " << rect.height() << endl;
     container()->draw( painter, rect, cg, true );
+    if ( cursorVisible() ) {
+        cursor()->draw( painter, contextStyle(), smallCursor() );
+    }
+}
+
+void View::draw(QPainter& painter, const QRect& rect)
+{
+    container()->draw( painter, rect, true );
     if ( cursorVisible() ) {
         cursor()->draw( painter, contextStyle(), smallCursor() );
     }
@@ -130,6 +144,7 @@ void View::keyPressEvent( QKeyEvent* event )
 
 void View::focusInEvent(QFocusEvent*)
 {
+    //cursor()->calcCursorSize( contextStyle(), smallCursor() );
     container()->setActiveCursor(cursor());
 }
 
@@ -258,7 +273,7 @@ void View::slotElementWillVanish(BasicElement* element)
     emitCursorChanged();
 }
 
-void View::slotLeaveFormula( FormulaCursor* c, int cmd )
+void View::slotLeaveFormula( Container*, FormulaCursor* c, int cmd )
 {
     if ( cursor() == c ) {
         switch ( cmd ) {

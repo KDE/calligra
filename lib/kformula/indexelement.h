@@ -44,6 +44,8 @@ public:
         return new IndexElement( *this );
     }
 
+    virtual bool accept( ElementVisitor* visitor );
+
     /**
      * @returns the character that represents this element. Used for
      * parsing a sequence.
@@ -148,6 +150,12 @@ public:
     // If an element has children one has to become the main one.
 
     virtual SequenceElement* getMainChild() { return content; }
+    //SequenceElement* upperLeft;
+    //SequenceElement* upperMiddle;
+    SequenceElement* getExponent() { return upperRight; }
+    //SequenceElement* lowerLeft;
+    //SequenceElement* lowerMiddle;
+    //SequenceElement* lowerRight;
 
 
     /**

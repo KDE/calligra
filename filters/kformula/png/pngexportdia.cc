@@ -46,7 +46,7 @@ PNGExportDia::PNGExportDia( const QDomDocument &dom, const QString &outFile, QWi
     kapp->restoreOverrideCursor();
 
     doc = new KFormula::Document( kapp->config() );
-    formula = new KFormula::Container( doc );
+    formula = doc->createFormula();
     if ( !doc->loadXML( dom ) ) {
         kdError() << "Failed." << endl;
     }

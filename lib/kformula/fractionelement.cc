@@ -5,7 +5,7 @@
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2.
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "elementvisitor.h"
 #include "formulaelement.h"
 #include "formulacursor.h"
 #include "fractionelement.h"
@@ -53,6 +54,11 @@ FractionElement::FractionElement( const FractionElement& other )
     denominator->setParent( this );
 }
 
+
+bool FractionElement::accept( ElementVisitor* visitor )
+{
+    return visitor->visit( this );
+}
 
 void FractionElement::entered( SequenceElement* child )
 {

@@ -27,6 +27,7 @@
 #include <klocale.h>
 
 #include "bracketelement.h"
+#include "elementvisitor.h"
 #include "fontstyle.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
@@ -214,10 +215,17 @@ BracketElement::BracketElement( const BracketElement& other )
 }
 
 
+bool BracketElement::accept( ElementVisitor* visitor )
+{
+    return visitor->visit( this );
+}
+
+
 void BracketElement::entered( SequenceElement* /*child*/ )
 {
     formula()->tell( i18n( "Delimited list" ) );
 }
+
 
 BasicElement* BracketElement::goToPos( FormulaCursor* cursor, bool& handled,
                                        const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
@@ -466,10 +474,18 @@ OverlineElement::OverlineElement( const OverlineElement& other )
 {
 }
 
+
+bool OverlineElement::accept( ElementVisitor* visitor )
+{
+    return visitor->visit( this );
+}
+
+
 void OverlineElement::entered( SequenceElement* /*child*/ )
 {
     formula()->tell( i18n( "Overline" ) );
 }
+
 
 void OverlineElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
@@ -554,6 +570,12 @@ UnderlineElement::~UnderlineElement()
 UnderlineElement::UnderlineElement( const UnderlineElement& other )
     : SingleContentElement( other )
 {
+}
+
+
+bool UnderlineElement::accept( ElementVisitor* visitor )
+{
+    return visitor->visit( this );
 }
 
 

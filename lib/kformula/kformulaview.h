@@ -26,6 +26,7 @@
 #include <qrect.h>
 
 #include "kformuladefs.h"
+#include "contextstyle.h"
 
 class QColorGroup;
 
@@ -85,15 +86,18 @@ public:
     void wheelEvent( QWheelEvent* event, const LuPixelPoint& pos );
 
     void keyPressEvent(QKeyEvent* event);
-    void focusInEvent(QFocusEvent* event);
-    void focusOutEvent(QFocusEvent* event);
+    virtual void focusInEvent(QFocusEvent* event);
+    virtual void focusOutEvent(QFocusEvent* event);
+
+    void calcCursor();
 
     void draw(QPainter& painter, const QRect& rect, const QColorGroup& cg);
+    void draw(QPainter& painter, const QRect& rect);
 
     /**
      * The document we show.
      */
-    Container* getDocument() const { return container(); }
+    virtual Container* getDocument() const { return container(); }
 
     /**
      * Our cursor.
@@ -165,7 +169,11 @@ protected slots:
      */
     void slotElementWillVanish(BasicElement*);
 
-    void slotLeaveFormula( FormulaCursor* cursor, int cmd );
+    void slotLeaveFormula( Container*, FormulaCursor* cursor, int cmd );
+
+protected:
+
+    virtual bool cursorVisible();
 
 private:
 
@@ -176,7 +184,6 @@ private:
 
     FormulaCursor* cursor() const;
     bool& cursorHasChanged();
-    bool cursorVisible();
     bool& smallCursor();
     Container* container() const;
     const ContextStyle& contextStyle() const;

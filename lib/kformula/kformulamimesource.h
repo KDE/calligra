@@ -5,7 +5,7 @@
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2 of the License.
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -40,11 +40,6 @@ public:
     virtual bool provides ( const char * ) const;
     virtual QByteArray encodedData ( const char * ) const;
 
-    virtual void elementRemoval(BasicElement* child);
-    virtual void changed();
-    virtual void cursorHasMoved( FormulaCursor* );
-    virtual void moveOutLeft( FormulaCursor* ) {}
-    virtual void moveOutRight( FormulaCursor* ) {}
     virtual const SymbolTable& getSymbolTable() const;
 
     static const char* selectionMimeType();

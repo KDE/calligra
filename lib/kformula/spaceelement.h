@@ -45,6 +45,8 @@ public:
         return new SpaceElement( *this );
     }
 
+    virtual bool accept( ElementVisitor* visitor );
+
     /**
      * @returns the type of this element. Used for
      * parsing a sequence.

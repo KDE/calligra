@@ -5,7 +5,7 @@
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2.
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,6 +23,7 @@
 
 #include <qdom.h>
 #include <qobject.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 #include <kaction.h>
@@ -75,6 +76,11 @@ public:
     ~Document();
 
     /**
+     * Factory method.
+     */
+    virtual Container* createFormula( int pos=-1 );
+
+    /**
      * Load a kformula DomDocument with all its formulas.
      * This must only be called on a virgin document.
      */
@@ -113,7 +119,8 @@ public:
     /**
      * Sets the zoom by hand. This is to be used in <code>paintContent</code>.
      */
-    void setZoomAndResolution( int zoom, double zoomX, double zoomY, bool updateViews=false, bool forPrint=false );
+    void setZoomAndResolution( int zoom, double zoomX, double zoomY,
+                               bool updateViews=false, bool forPrint=false );
 
     double getXResolution() const;
     double getYResolution() const;
@@ -255,7 +262,30 @@ public slots:
 
     void fontFamily();
 
-private:
+public:
+
+    /**
+     * @returns an iterator for the collection of formulas.
+     */
+    QPtrListIterator<Container> formulas();
+
+protected:
+
+    /**
+     * @returns the internal position of this formula or -1 if it
+     * doesn't belong to us.
+     */
+    int formulaPos( Container* formula );
+
+    /**
+     * @returns the formula at position pos.
+     */
+    Container* formulaAt( uint pos );
+
+    /**
+     * @returns the number of formulas in this document.
+     */
+    int formulaCount();
 
     /**
      * Registers a new formula to be part of this document. Each formula
@@ -264,13 +294,15 @@ private:
      * The formula is not owned by the document so you are responsible
      * to delete in properly.
      */
-    void registerFormula( Container* );
+    void registerFormula( Container*, int pos );
 
     /**
      * Tells that a formula is about to vanish. This must not be
      * the active formula from now on.
      */
     void formulaDies( Container* formula );
+
+private:
 
     /**
      * Return the formula with the given number or create a new one

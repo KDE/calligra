@@ -5,7 +5,7 @@
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2.
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -49,6 +49,8 @@ public:
     virtual MatrixElement* clone() {
         return new MatrixElement( *this );
     }
+
+    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * The cursor has entered one of our child sequences.
@@ -190,6 +192,8 @@ public:
     uint getRows() const { return content.count(); }
     uint getColumns() const { return content.getFirst()->count(); }
 
+    SequenceElement* elementAt(uint row, uint column);
+
     virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
 protected:
@@ -263,6 +267,8 @@ public:
     virtual MultilineElement* clone() {
         return new MultilineElement( *this );
     }
+
+    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * The cursor has entered one of our child sequences.

@@ -1953,7 +1953,7 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc ), m_changed( false )
 {
     kdDebug(32001) << "KWFormulaFrameSet::KWFormulaFrameSet" << endl;
-    formula = new KFormula::Container( _doc->getFormulaDocument() );
+    formula = _doc->getFormulaDocument()->createFormula();
 
     // With the new drawing scheme (drawFrame being called with translated painter)
     // there is no need to move the KFormulaContainer anymore, it remains at (0,0).
@@ -2116,7 +2116,7 @@ void KWFormulaFrameSet::paste( QDomNode& formulaElem )
 {
     if (!formulaElem.isNull()) {
         if (formula == 0) {
-            formula = new KFormula::Container( m_doc->getFormulaDocument() );
+            formula = m_doc->getFormulaDocument()->createFormula();
             connect(formula, SIGNAL(formulaChanged(double, double)),
                     this, SLOT(slotFormulaChanged(double, double)));
         }

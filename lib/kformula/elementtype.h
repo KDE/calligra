@@ -60,14 +60,20 @@ public:
     virtual bool isInvisible(const TextElement&) const { return false; }
 
     /**
+     * @returns the spanned text. seq must be the original
+     * parent sequence.
+     */
+    QString text( SequenceElement* seq ) const;
+
+    /**
      * @returns the position of the first character
      */
-    uint start() { return from; }
+    uint start() const { return from; }
 
     /**
      * @returns the position of the first character after the typed element
      */
-    uint end() { return to; }
+    uint end() const { return to; }
 
     /**
      * @returns the space to be left before each char
@@ -105,6 +111,8 @@ public:
     ElementType* getPrev() const { return prev; }
 
     virtual void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de );
+
+    virtual bool multiElement() const { return false; }
 
 protected:
 
@@ -171,7 +179,7 @@ public:
     virtual luPt getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
     virtual luPt getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 
-    //QString text() const { return m_text; }
+    virtual bool multiElement() const { return true; }
 
 private:
 

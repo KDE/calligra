@@ -58,7 +58,6 @@ public:
      * you can use the @ref KMacroCommand .
      *
      * @param name a description to be used as menu entry.
-     * @param document the container we are working for.
      */
     PlainCommand(const QString& name);
     virtual ~PlainCommand();
@@ -381,7 +380,7 @@ private:
 
 /**
  * Base for all font commands that act on the current selection.
- * Implements the visitor pattern.
+ * Implements the visitor pattern. (Really?)
  */
 class FontCommand : public Command {
 public:

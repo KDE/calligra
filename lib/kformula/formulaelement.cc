@@ -91,6 +91,16 @@ void FormulaElement::moveOutRight( FormulaCursor* cursor )
     document->moveOutRight( cursor );
 }
 
+void FormulaElement::moveOutBelow( FormulaCursor* cursor )
+{
+    document->moveOutBelow( cursor );
+}
+
+void FormulaElement::moveOutAbove( FormulaCursor* cursor )
+{
+    document->moveOutAbove( cursor );
+}
+
 void FormulaElement::tell( const QString& msg )
 {
     document->tell( msg );
@@ -100,6 +110,29 @@ void FormulaElement::removeFormula( FormulaCursor* cursor )
 {
     document->removeFormula( cursor );
 }
+
+void FormulaElement::insertFormula( FormulaCursor* cursor )
+{
+    document->insertFormula( cursor );
+}
+
+void FormulaElement::calcSizes( const ContextStyle& style,
+                                ContextStyle::TextStyle tstyle,
+                                ContextStyle::IndexStyle istyle )
+{
+    inherited::calcSizes( style, tstyle, istyle );
+}
+
+
+void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
+                           const ContextStyle& context,
+                           ContextStyle::TextStyle tstyle,
+                           ContextStyle::IndexStyle istyle,
+                           const LuPixelPoint& parentOrigin )
+{
+    inherited::draw( painter, r, context, tstyle, istyle, parentOrigin );
+}
+
 
 /**
  * Calculates the formulas sizes and positions.
@@ -113,8 +146,8 @@ void FormulaElement::calcSizes( ContextStyle& context )
     else {
         context.setSizeFactor( 1 );
     }
-    inherited::calcSizes( context, context.getBaseTextStyle(),
-                          ContextStyle::normal );
+    calcSizes( context, context.getBaseTextStyle(),
+               ContextStyle::normal );
 }
 
 /**
@@ -130,8 +163,8 @@ void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
     else {
         context.setSizeFactor( 1 );
     }
-    inherited::draw( painter, r, context, context.getBaseTextStyle(),
-                     ContextStyle::normal, LuPixelPoint() );
+    draw( painter, r, context, context.getBaseTextStyle(),
+          ContextStyle::normal, LuPixelPoint() );
 }
 
 KCommand* FormulaElement::buildCommand( Container* container, Request* request )
@@ -161,6 +194,26 @@ QDomElement FormulaElement::emptyFormulaElement( QDomDocument doc )
     }
     */
     return element;
+}
+
+KCommand* FormulaElement::input( Container* container, QKeyEvent* event )
+{
+    QChar ch = event->text().at( 0 );
+    if ( !ch.isPrint() ) {
+        int action = event->key();
+        //int state = event->state();
+        //MoveFlag flag = movementFlag(state);
+
+	switch ( action ) {
+        case Qt::Key_Return:
+        case Qt::Key_Enter: {
+            FormulaCursor* cursor = container->activeCursor();
+            insertFormula( cursor );
+            return 0;
+        }
+        }
+    }
+    return inherited::input( container, event );
 }
 
 /**

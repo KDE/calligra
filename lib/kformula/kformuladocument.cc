@@ -5,7 +5,7 @@
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2.
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -30,8 +30,10 @@
 #include <koDocument.h>
 
 #include "contextstyle.h"
+#include "creationstrategy.h"
 #include "kformulacontainer.h"
 #include "kformuladocument.h"
+#include "sequenceelement.h"
 #include "symboltable.h"
 #include "symbolaction.h"
 
@@ -42,6 +44,11 @@ static const int CURRENT_SYNTAX_VERSION = 1;
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 static const char * CURRENT_DTD_VERSION = "1.3";
 
+/**
+ * The creation strategy that we are going to use.
+ */
+static OrdinaryCreationStrategy creationStrategy;
+
 
 struct Document::Document_Impl {
 
@@ -50,6 +57,7 @@ struct Document::Document_Impl {
               formula(0), firstTime( true ),
               actionsCreated( false ), config( c )
     {
+        SequenceElement::setCreationStrategy( &creationStrategy );
         formulae.setAutoDelete( false );
         //kdDebug( DEBUGID ) << "Document::Document_Impl " << formulae.count() << endl;
     }
@@ -270,6 +278,38 @@ Document::~Document()
 }
 
 
+Container* Document::createFormula( int pos )
+{
+    Container* formula = new Container( this, pos );
+    formula->initialize();
+    return formula;
+}
+
+
+QPtrListIterator<Container> Document::formulas()
+{
+    return QPtrListIterator<Container>( impl->formulae );
+}
+
+
+int Document::formulaPos( Container* formula )
+{
+    return impl->formulae.find( formula );
+}
+
+
+Container* Document::formulaAt( uint pos )
+{
+    return impl->formulae.at( pos );
+}
+
+
+int Document::formulaCount()
+{
+    return impl->formulae.count();
+}
+
+
 bool Document::loadXML( QDomDocument doc )
 {
     //impl->clear();
@@ -295,13 +335,11 @@ bool Document::loadXML( QDomDocument doc )
     while ( !node.isNull() ) {
         if ( node.isElement() ) {
             QDomElement element = node.toElement();
-            if ( element.tagName() == "FORMULA" ) {
-                Container* formula = newFormula( number );
-                if ( !formula->load( node.toElement() ) ) {
-                    return false;
-                }
-                number += 1;
+            Container* formula = newFormula( number );
+            if ( !formula->load( element ) ) {
+                return false;
             }
+            number += 1;
         }
         node = node.nextSibling();
     }
@@ -338,10 +376,17 @@ QDomDocument Document::createDomDocument()
     return KoDocument::createDomDocument( "kformula", "KFORMULA", CURRENT_DTD_VERSION );
 }
 
-void Document::registerFormula( Container* f )
+void Document::registerFormula( Container* f, int pos )
 {
     lazyInit();
-    impl->formulae.append(f);
+    if ( ( pos > -1 ) && ( static_cast<uint>( pos ) < impl->formulae.count() ) ) {
+        impl->formulae.insert( pos, f );
+        //emit sigInsertFormula( f, pos );
+    }
+    else {
+        impl->formulae.append( f );
+        //emit sigInsertFormula( f, impl->formulae.count()-1 );
+    }
 }
 
 void Document::activate(Container* f)
@@ -349,12 +394,12 @@ void Document::activate(Container* f)
     impl->formula = f;
 }
 
-void Document::formulaDies(Container* f)
+void Document::formulaDies( Container* formula )
 {
-    if (f == impl->formula) {
+    if ( formula == impl->formula ) {
         impl->formula = 0;
     }
-    impl->formulae.remove(f);
+    impl->formulae.remove( formula );
 }
 
 
@@ -363,14 +408,14 @@ Container* Document::newFormula( uint number )
     if ( number < impl->formulae.count() ) {
         return impl->formulae.at( number );
     }
-    return new Container( this );
+    return createFormula();
 }
 
 
 void Document::lazyInit()
 {
     if ( impl->firstTime ) {
-        kdDebug( DEBUGID ) << "Document::lazyInit" << endl;
+        kdDebug() << "Document::lazyInit" << endl;
         impl->firstTime = false;
         impl->contextStyle.init();
 

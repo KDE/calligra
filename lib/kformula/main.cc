@@ -236,11 +236,10 @@ static const KCmdLineOptions options[]= {
 
 int main(int argc, char** argv)
 {
-    KAboutData aboutData("formula engine test", "KFormula test",
+    KAboutData aboutData("math test", "KFormula test",
                          "0.01", "test", KAboutData::License_GPL,
-                         "(c) 2001, Andrea Rizzi, Ulrich Kuettler");
-    aboutData.addAuthor("Andrea Rizzi",0, "rizzi@kde.org");
-    aboutData.addAuthor("Ulrich Kuettler",0, "ulrich.kuettler@mailbox.tu-dresden.de");
+                         "(c) 2003, Ulrich Kuettler");
+    aboutData.addAuthor("Ulrich Kuettler",0, "ulrich.kuettler@gmx.de");
 
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineArgs::addCmdLineOptions(options);
@@ -250,49 +249,18 @@ int main(int argc, char** argv)
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
     Document* document = new Document( kapp->config() );
-    Container* container1 = new Container( document );
-    Container* container2 = new Container( document );
+    Container* container1 = document->createFormula();
 
     ScrollView* scrollview1a = new ScrollView;
-    ScrollView* scrollview1b = new ScrollView;
-    ScrollView* scrollview2a = new ScrollView;
-    ScrollView* scrollview2b = new ScrollView;
 
     KFormulaWidget* mw1a = new TestWidget(container1, scrollview1a, "test1a");
-    KFormulaWidget* mw1b = new TestWidget(container1, scrollview1b, "test1b");
-    KFormulaWidget* mw2a = new TestWidget(container2, scrollview2a, "test2a");
-    KFormulaWidget* mw2b = new TestWidget(container2, scrollview2b, "test2b");
 
     scrollview1a->addChild(mw1a);
-    scrollview1b->addChild(mw1b);
-    scrollview2a->addChild(mw2a);
-    scrollview2b->addChild(mw2b);
-
     scrollview1a->setCaption("Test1a of the formula engine");
-    scrollview1b->setCaption("Test1b of the formula engine");
-    scrollview2a->setCaption("Test2a of the formula engine (ro)");
-    scrollview2b->setCaption("Test2b of the formula engine");
-
     scrollview1a->show();
-    scrollview1b->show();
-    scrollview2a->show();
-    scrollview2b->show();
-
-    // to keep things interessting
-    mw2a->setReadOnly(true);
-
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    for ( int i = 0; i < args->count(); ++i ) {
-        QFileInfo fi( args->url( i ).path() );
-        if ( fi.extension() == "mml" )
-            loadMathML( container2, args->url( i ).path() );
-        else if ( fi.extension() == "xml" )
-            load( container2->document(), args->url( i ).path() );
-    }
 
     int result = app.exec();
 
-    delete container2;
     delete container1;
     delete document;
 

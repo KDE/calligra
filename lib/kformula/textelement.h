@@ -45,6 +45,8 @@ public:
         return new TextElement( *this );
     }
 
+    virtual bool accept( ElementVisitor* visitor );
+
     /**
      * @returns the type of this element. Used for
      * parsing a sequence.
@@ -198,6 +200,8 @@ public:
     virtual EmptyElement* clone() {
         return new EmptyElement( *this );
     }
+
+    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * @returns the character that represents this element. Used for

@@ -26,6 +26,7 @@
 #include "basicelement.h"
 #include "contextstyle.h"
 #include "elementtype.h"
+#include "elementvisitor.h"
 #include "fontstyle.h"
 #include "formulaelement.h"
 #include "kformulacommand.h"
@@ -47,6 +48,12 @@ TextElement::TextElement( const TextElement& other )
       character( other.character ),
       symbol( other.symbol )
 {
+}
+
+
+bool TextElement::accept( ElementVisitor* visitor )
+{
+    return visitor->visit( this );
 }
 
 
@@ -427,6 +434,13 @@ EmptyElement::EmptyElement( const EmptyElement& other )
     : BasicElement( other )
 {
 }
+
+
+bool EmptyElement::accept( ElementVisitor* visitor )
+{
+    return visitor->visit( this );
+}
+
 
 void EmptyElement::calcSizes( const ContextStyle& context,
                               ContextStyle::TextStyle tstyle,

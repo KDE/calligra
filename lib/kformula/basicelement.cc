@@ -61,6 +61,21 @@ BasicElement::BasicElement( const BasicElement& other )
 }
 
 
+bool BasicElement::readOnly( const BasicElement* /*child*/ ) const
+{
+    return parent->readOnly( this );
+}
+
+
+FormulaElement* BasicElement::formula()
+{
+    //if ( parent != 0 ) {
+        return parent->formula();
+        //}
+        //return 0;
+}
+
+
 /**
  * Returns the element the point is in.
  */
