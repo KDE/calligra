@@ -19,6 +19,7 @@ class KChartComboPage;
 class KChartBackgroundPixmapConfigPage;
 class KChartHeaderFooterConfigPage;
 class KChartLegendConfigPage;
+class KChartLine3dConfigPage;
 
 class KChartConfigDialog : public QTabDialog
 {
@@ -47,6 +48,7 @@ protected:
     //KChartComboPage *_hlcChart;
     KChartLegendConfigPage *_parameterLegend;
     KChartHeaderFooterConfigPage *_headerfooterpage;
+    KChartLine3dConfigPage *_linepage3d;
 protected slots:
     virtual void apply();
     virtual void defaults();

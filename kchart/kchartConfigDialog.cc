@@ -18,6 +18,7 @@
 #include "kchartParameter3dConfigPage.h"
 #include "kchartLegendConfigPage.h"
 #include "kchartHeaderFooterConfigPage.h"
+#include "kchartLine3dConfigPage.h"
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -40,7 +41,8 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     _subTypePage(0),
     _backgroundpixpage(0),
     _parameterLegend(0),
-    _headerfooterpage(0)
+    _headerfooterpage(0),
+    _linepage3d(0)
 {
     // Geometry page
     //_geompage = new KChartGeometryConfigPage( this );
@@ -103,6 +105,11 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
         {
             _parameter3dpage = new KChartParameter3dConfigPage(_params,this );
             addTab( _parameter3dpage,i18n("3D Parameters"));
+        }
+        if( _params->chartType() == KDChartParams::Line)
+        {
+            _linepage3d= new KChartLine3dConfigPage(_params,this);
+            addTab( _linepage3d,i18n("3D Line Parameters"));
         }
 
         init3dPage();
@@ -187,6 +194,9 @@ void KChartConfigDialog::apply()
     if( _parameter3dpage && _params->chartType() == KDChartParams::Bar  )
         _parameter3dpage->apply();
 
+    if( _linepage3d && _params->chartType() == KDChartParams::Line)
+        _linepage3d->apply();
+
     if(_parameterfontpage)
         _parameterfontpage->apply();
 
@@ -254,6 +264,10 @@ void KChartConfigDialog::defaults()
 
     if(_parameter3dpage && _params->chartType() == KDChartParams::Bar  )
         _parameter3dpage->init();
+
+    if( _linepage3d && _params->chartType() == KDChartParams::Line)
+        _linepage3d->init();
+
     if(_parameterfontpage)
         _parameterfontpage->init();
 

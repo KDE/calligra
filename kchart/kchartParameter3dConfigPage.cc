@@ -1,5 +1,5 @@
 /*
- * Copyright 2000 by Laurent Montel, released under Artistic License.
+ * Copyright 2001 by Laurent Montel, released under Artistic License.
  */
 
 #include "kchartParameter3dConfigPage.h"
@@ -72,27 +72,14 @@ void KChartParameter3dConfigPage::init()
     bool state=_params->threeDBars();
     bar3d->setChecked(state);
 
-    if(_params->chartType()==KDChartParams::Bar)
-    {
-        angle3d->setValue( _params->threeDBarAngle() );
-        depth->setValue( _params->threeDBarDepth() );
-    }
-    else if(_params->chartType()==KDChartParams::Pie)
-    {
-        angle3d->setEnabled(false);
-        depth->setValue(_params->threeDPieHeight());
-    }
+    angle3d->setValue( _params->threeDBarAngle() );
+    depth->setValue( _params->threeDBarDepth() );
     slotChange3DParameter(state);
 }
 
 void KChartParameter3dConfigPage::apply()
 {
     _params->setThreeDBars(bar3d->isChecked());
-    if( _params->chartType()==KDChartParams::Bar)
-    {
-        _params->setThreeDBarAngle( angle3d->value() );
-        _params->setThreeDBarDepth( depth->value() );
-    }
-    else if(_params->chartType()==KDChartParams::Pie)
-        _params->setThreeDPieHeight(depth->value() );
+    _params->setThreeDBarAngle( angle3d->value() );
+    _params->setThreeDBarDepth( depth->value() );
 }

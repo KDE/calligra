@@ -30,7 +30,8 @@ libkchartpart_la_SOURCES = kchart_part.cc \
 	sheetdlg.cc \
 	table.cc qttableview.cpp KChartViewIface.skel KChartViewIface.cc \
 	kchartLegendConfigPage.cc kchart_params.cc KChartParamsIface.skel \
-	KChartParamsIface.cc kchartHeaderFooterConfigPage.cc
+	KChartParamsIface.cc kchartHeaderFooterConfigPage.cc \
+	kchartLine3dConfigPage.cc
 
 libkchartpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
@@ -82,7 +83,9 @@ noinst_HEADERS =  kchart_part.h \
 		kchart_aboutdata.h	\
 		kchartcolorarray.h KChartViewIface.h \
 		kchartLegendConfigPage.h  kchart_params.h \
-		KChartParamsIface.h kchartHeaderFooterConfigPage.h 
+		KChartParamsIface.h kchartHeaderFooterConfigPage.h \
+		kchartLine3dConfigPage.h
+
 METASOURCES = AUTO
 
 rcdir = $(kde_datadir)/kchart
