@@ -56,7 +56,7 @@ const bool CSVExport::filter(const QCString &fileIn, const QCString &fileOut,
     }
 
     KoTarStore in=KoTarStore(QString(fileIn), KoStore::Read);
-    if(!in.open("root", "")) {
+    if(!in.open("root")) {
         QApplication::restoreOverrideCursor();
         KMessageBox::sorry( 0L, i18n("CSV filter can't open input file %1 - please report.").arg( fileIn ) );
         in.close();
