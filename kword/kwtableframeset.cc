@@ -405,7 +405,9 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
 {
     // remove automatically added headers
     for ( unsigned int j = 0; j < m_rows; j++ ) {
-        if ( getCell( j, 0 )->isRemoveableHeader() ) {
+        Cell *tmp=getCell( j, 0 );
+        ASSERT(tmp);
+        if ( tmp && tmp->isRemoveableHeader() ) {
             deleteRow( j, false );
             j--;
         }
@@ -433,7 +435,8 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
 
             if( !(i>=col && i<=(activeCell->m_col+activeCell->m_cols-1))) {
                 cell=getCell(row,i);
-                if(cell->m_row==row) {
+                ASSERT(cell);
+                if(cell && cell->m_row==row) {
                     coordinate=cell->getFrame(0)->top();
                     break;
                 }
@@ -494,7 +497,9 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
             if(coordinate != activeCell->getFrame(0)->bottom()) {
                 for ( unsigned int i = 0; i < m_cols; i++) {
                     cell = getCell(row,i);
-                    if(cell != activeCell && cell->m_col == i) {
+                    ASSERT(cell);
+                    ASSERT(activeCell);
+                    if(cell && cell != activeCell && cell->m_col == i) {
                         double newHeight= cell->getFrame(0)->height() +
                             activeCell->getFrame(0)->bottom() - coordinate;
                         if(newHeight<minFrameHeight) {
@@ -1115,6 +1120,7 @@ void KWTableFrameSet::group()
 }
 
 KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd) {
+    kdDebug()<<"colBegin :"<<colBegin<<" rowBegin :"<<rowBegin<<" colEnd :"<<colEnd<<" rowEnd :"<<rowEnd<<endl;
     Cell *firstCell = getCell(rowBegin, colBegin);
     if(colBegin==0 && rowBegin==0 && colEnd==0 && rowEnd==0)
     {
@@ -1163,11 +1169,13 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
     for(unsigned int i=colBegin; i<=colEnd;i++) {
         for(unsigned int j=rowBegin; j<=rowEnd;j++) {
             Cell *cell = getCell(j,i);
+            kdDebug()<<"cell :"<<cell <<" firstCell :"<<firstCell<<endl;
+            kdDebug()<<"j :"<<j<<" i :"<<i<<endl;
             if(cell && cell!=firstCell) {
 
                 listFrameSet.append(cell);
                 listCopyFrame.append(cell->getFrame(0)->getCopy());
-
+                kdDebug()<<"Remove :"<<cell->getFrame(0)<<endl;
                 frames.remove( cell->getFrame(0) );
                 cell->delFrame( cell->getFrame(0));
                 //m_cells.remove(  cell);
@@ -1175,7 +1183,7 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
             }
         }
     }
-
+    ASSERT(firstCell);
     // update firstcell properties te reflect the merge
     firstCell->m_cols=colEnd-colBegin+1;
     firstCell->m_rows=rowEnd-rowBegin+1;
@@ -1274,7 +1282,10 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
             Cell *lastFrameSet=0L;
 
             if(listFrameSet.isEmpty())
+            {
                 lastFrameSet= new Cell( this, y + row, x + col );
+                kdDebug()<<"y + row :"<<(y + row)<<" x + col :"<<(x + col)<<endl;
+            }
             else
             {
                 lastFrameSet = static_cast<KWTableFrameSet::Cell*> (listFrameSet.at(i));
@@ -1290,6 +1301,7 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
             if(listFrame.isEmpty())
             {
                 frame=firstFrame->getCopy();
+                kdDebug()<<"frame splitted :"<<frame<<endl;
                 frame->setRect(firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x),
                                firstFrame->top() + static_cast<int>((height+tableCellSpacing) * y),
                                width, height);

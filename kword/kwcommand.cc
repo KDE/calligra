@@ -1073,7 +1073,7 @@ void KWSplitCellCommand::unexecute()
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
 
-    //kdDebug()<<"Join Cell m_colBegin :"<<m_colBegin<<" m_colEnd :"<<m_colBegin+m_colEnd-1<<" m_rowBegin :"<<m_rowBegin<<" m_rowEnd :"<<m_rowBegin+m_rowEnd-1<<endl;
+    kdDebug()<<"Join Cell m_colBegin :"<<m_colBegin<<" m_colEnd :"<<m_colBegin+m_colEnd-1<<" m_rowBegin :"<<m_rowBegin<<" m_rowEnd :"<<m_rowBegin+m_rowEnd-1<<endl;
 
     m_pTable->joinCells(m_colBegin,m_rowBegin,m_colEnd+m_colBegin-1,m_rowBegin+m_rowEnd-1);
 
