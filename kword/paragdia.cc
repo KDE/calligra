@@ -422,7 +422,7 @@ int KWParagDia::align() const
 void KWParagDia::setupTab1()
 {
     QWidget *tab = addPage( i18n( "Indent and Spacing" ) );
-    QGridLayout *grid = new QGridLayout( tab, 6, 2, 15, 7 );
+    QGridLayout *grid = new QGridLayout( tab, 5, 2, 15, 7 );
 
     // --------------- indent ---------------
     indentFrame = new QGroupBox( i18n( "Indent" ), tab );
@@ -566,10 +566,10 @@ void KWParagDia::setupTab1()
 
     // --------------- preview --------------------
     prev1 = new KWPagePreview( tab );
-    grid->addMultiCellWidget( prev1, 0, 3, 1, 1 );
+    grid->addMultiCellWidget( prev1, 0, 4, 1, 1 );
 
     grid->setColStretch( 1, 1 );
-    grid->setRowStretch( 3, 1 );
+    grid->setRowStretch( 4, 1 );
 
     m_bPageBreakingChanged=false;
 }
@@ -1061,10 +1061,10 @@ void KWParagDia::delClicked()
 {
     if(lTabs->currentItem()!=-1)
     {
-        lTabs->removeItem(lTabs->currentItem());
         m_bListTabulatorChanged=true;
         _tabList.remove( _tabList.at( lTabs->currentItem() ) );
         eTabPos->setText("");
+        lTabs->removeItem(lTabs->currentItem());
         if(lTabs->count()==0)
 	{
             bDel->setEnabled(false);
