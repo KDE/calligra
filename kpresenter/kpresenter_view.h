@@ -422,7 +422,8 @@ protected:
     int gXFactor, gYFactor;
     int pieLength, pieAngle;
     int rndX, rndY;
-
+    bool sticky;
+    
     // the page
     Page *page;
     KoRuler *h_ruler, *v_ruler;

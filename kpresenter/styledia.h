@@ -99,7 +99,8 @@ public:
     void setFillType( FillType ft );
     void setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
 		      bool _unbalanced, int _xfactor, int _yfactor );
-
+    void setSticky( bool s );
+    
     QPen getPen();
     QBrush getBrush();
     LineEnd getLineBegin();
@@ -111,17 +112,19 @@ public:
     bool getGUnbalanced();
     int getGXFactor();
     int getGYFactor();
+    bool isSticky();
 
 private:
     void setupTab1();
     void setupTab2();
-
+    void setupTab3();
+    
     QWidgetStack *stack;
     KColorButton *choosePCol, *chooseBCol;
     QComboBox *choosePStyle, *chooseBStyle, *clineBegin, *clineEnd, *cFillType;
     QSpinBox *choosePWidth;
     PBPreview *penPrev, *brushPrev;
-    QCheckBox *unbalanced;
+    QCheckBox *unbalanced, *sticky;
     QComboBox *gradients;
     KColorButton *gradient1, *gradient2;
     QSlider *xfactor, *yfactor;

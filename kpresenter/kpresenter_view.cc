@@ -169,7 +169,8 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     sidebar = 0;
     splitter = 0;
     pageBase = 0;
-	
+    sticky = FALSE;
+    
     m_pKPresenterDoc = _doc;
     //m_bKPresenterModified = true;
 
@@ -657,6 +658,7 @@ void KPresenterView::extraPenBrush()
 			   m_pKPresenterDoc->getGUnbalanced( gUnbalanced ),
 			   m_pKPresenterDoc->getGXFactor( gXFactor ),
 			   m_pKPresenterDoc->getGYFactor( gYFactor ) );
+    styleDia->setSticky( m_pKPresenterDoc->getSticky( sticky ) );
     styleDia->setCaption( i18n( "KPresenter - Pen and Brush" ) );
     QObject::connect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
     page->setToolEditMode( TEM_MOUSE );
@@ -2106,7 +2108,8 @@ void KPresenterView::styleOk()
 					 styleDia->getGColor1(),
 					 styleDia->getGColor2(), styleDia->getGType(),
 					 styleDia->getGUnbalanced(),
-					 styleDia->getGXFactor(), styleDia->getGYFactor() ) ) {
+					 styleDia->getGXFactor(), styleDia->getGYFactor(),
+					 styleDia->isSticky() ) ) {
 	pen = styleDia->getPen();
 	brush = styleDia->getBrush();
 	lineBegin = styleDia->getLineBegin();
@@ -2118,6 +2121,7 @@ void KPresenterView::styleOk()
 	gUnbalanced = styleDia->getGUnbalanced();
 	gXFactor = styleDia->getGXFactor();
 	gYFactor = styleDia->getGYFactor();
+	sticky = styleDia->isSticky();
     }
 }
 

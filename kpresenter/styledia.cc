@@ -19,6 +19,7 @@
 
 #include "styledia.h"
 #include "styledia.moc"
+#include "generalconfig.h"
 
 #include <kapp.h>
 #include <klocale.h>
@@ -127,6 +128,7 @@ StyleDia::StyleDia( QWidget* parent, const char* name, int flags_ )
     lockUpdate = true;
     setupTab1();
     setupTab2();
+    setupTab3();
     lockUpdate = false;
 
     if ( flags & SdPen )
@@ -227,6 +229,13 @@ void StyleDia::setupTab1()
 	addTab( tab, i18n( "&Pen Configuration" ) );
     else
 	tab->hide();
+}
+
+void StyleDia::setupTab3()
+{
+    PageConfigGeneral *w = new PageConfigGeneral( this );
+    sticky = w->checkboxSticky;
+    addTab( w , i18n( "&General" ) );
 }
 
 /*==============================================================*/
@@ -644,4 +653,15 @@ int StyleDia::getGXFactor()
 int StyleDia::getGYFactor()
 {
     return yfactor->value();
+}
+
+void StyleDia::setSticky( bool s )
+{
+    sticky->setChecked( s );
+}
+
+
+bool StyleDia::isSticky()
+{
+    return sticky->isChecked();
 }

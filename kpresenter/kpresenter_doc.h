@@ -142,7 +142,7 @@ public:
     void setBackView( unsigned int, BackView );
     void setBackType( unsigned int, BackType );
     bool setPenBrush( QPen, QBrush, LineEnd, LineEnd, FillType, QColor, QColor, BCType,
-                      bool, int, int );
+		      bool, int, int, bool );
     bool setLineBegin( LineEnd );
     bool setLineEnd( LineEnd );
     bool setPieSettings( PieType, int, int );
@@ -179,6 +179,7 @@ public:
     int getRndY( int );
     int getPieLength( int );
     int getPieAngle( int );
+    bool getSticky( bool );
 
     // raise and lower objs
     void raiseObjs( int, int );
@@ -300,7 +301,7 @@ public:
 
     QValueList<int> getSlides( int currPgNum, KPresenterView *view );
     QMap<int, bool > getSelectedSlides() const { return selectedSlides; }
-    
+
     void copyPage( int num );
     virtual DCOPObject* dcopObject();
 
@@ -420,6 +421,7 @@ protected:
     int saveOnlyPage;
     KTextEditFormatCollection *fCollection;
     QMap<int, bool> selectedSlides;
+    bool ignoreSticky;
     
 };
 

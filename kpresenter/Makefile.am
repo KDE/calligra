@@ -30,7 +30,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	KPresenterViewIface.skel KPresenterViewIface.cc \
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
 	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc \
-	textdialog.cc sidebar.cpp insertpagedia.ui
+	textdialog.cc sidebar.cpp insertpagedia.ui generalconfig.ui
 
 libkpresenterpart_la_LDFLAGS = -avoid-version -module -no-undefined
 libkpresenterpart_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la
