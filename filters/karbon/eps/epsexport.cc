@@ -170,7 +170,7 @@ EpsExport::visitVDocument( VDocument& document )
 		// Round up:
 			qRound( rect.right()  + 0.5 ) << " " <<
 			qRound( rect.bottom() + 0.5 ) << "\n" <<
-		"%%HiResBoundingBox: "
+		"%%HiResBoundingBox: " <<
 			rect.left()   << " " <<
 			rect.top()    << " " <<
 			rect.right()  << " " <<

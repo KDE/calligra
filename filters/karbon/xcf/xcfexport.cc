@@ -91,16 +91,17 @@ void
 XcfExport::visitVDocument( VDocument& document )
 {
 	// Write header.
-	*m_stream <<
-		"gimp xcf file"
-	<< endl;
+
+	// Tag.
+	m_stream->writeRawBytes( "gimp xcf file", 14 );
+
 
 	// Export layers.
 	VVisitor::visitVDocument( document );
 }
 
 void
-XcfExport::visitVLayer( VLayer& layer )
+XcfExport::visitVLayer( VLayer& /*layer*/ )
 {
 
 }
