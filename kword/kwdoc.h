@@ -272,8 +272,8 @@ public:
 
     // Currently unused. Not sure we want to go that way, now that we have
     // paragLayoutChanged and formatChanged in applyStyleChange.
-    int applyStyleChangeMask() { return styleMask; }
-    void setApplyStyleChangeMask( int _f ) { styleMask = _f; }
+    //int applyStyleChangeMask() { return styleMask; }
+    //void setApplyStyleChangeMask( int _f ) { styleMask = _f; }
 
     // paragLayoutChanged is a set of flags for the parag layout - see the enum in KWParagLayout
     // formatChanged is a set of flags from QTextFormat
@@ -428,9 +428,14 @@ public:
     bool viewFormattingChars() const { return m_viewFormattingChars; }
     void setViewFormattingChars(bool _b) { m_viewFormattingChars=_b; }
 
+    // Also view properties, but stored, loaded and saved here (lacking a more global object).
+    bool viewFrameBorders() const { return m_viewFrameBorders; }
+    void setViewFrameBorders( bool b ) { m_viewFrameBorders = b; }
+    void setShowRuler(bool _ruler){ m_bShowRuler=_ruler; }
+    bool showRuler() const { return m_bShowRuler; }
+
     bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
     void setDontCheckUpperWord(bool _b) { m_bDontCheckUpperWord=_b;}
-
 
     bool dontCheckTitleCase() const {return  m_bDontCheckTitleCase;}
     void setDontCheckTitleCase(bool _b) {m_bDontCheckTitleCase=_b;}
@@ -442,9 +447,7 @@ public:
     int getNbPagePerRow() { return m_iNbPagePerRow; }
     void setNbPagePerRow(int _nb) { m_iNbPagePerRow=_nb; }
 
-    // This could be in KWView, but the problem is loading/saving it.....
-    void setShowRuler(bool _ruler){ m_bShowRuler=_ruler; }
-    bool showRuler() const { return m_bShowRuler; }
+    int maxRecentFiles() const { return m_maxRecentFiles; }
 
     /**
      * @returns the document for the formulas
@@ -475,8 +478,6 @@ public:
 
     void frameSelectedChanged();
 
-    void initConfig();
-
     // Convert a color into a color to be displayed for it
     // (when using color schemes, we still want to print black on white)
     static QColor resolveTextColor( const QColor & col, QPainter * painter );
@@ -493,8 +494,8 @@ signals:
     void sig_terminateEditing( KWFrameSet * fs );
 
     void sig_refreshMenuCustomVariable();
-    
-    void sig_frameSelectedChanged();   	
+
+    void sig_frameSelectedChanged();
 
 public slots:
     void slotRepaintChanged( KWFrameSet * frameset );
@@ -516,6 +517,9 @@ protected:
     void loadStyleTemplates( QDomElement styles );
 
     void newZoomAndResolution( bool updateViews, bool forPrint );
+
+    void initConfig();
+    void saveConfig();
 
 private:
     QList<KWView> m_lstViews;
@@ -543,11 +547,7 @@ private:
     ProcessingType m_processingType;
     int m_gridX, m_gridY;
 
-    int styleMask;
-
-    bool m_headerVisible, m_footerVisible;
-
- //   KWDisplayFont *cDisplayFont;
+    //int styleMask;
 
     KWUnit::Unit m_unit;
 
@@ -580,11 +580,12 @@ private:
     KSpellConfig *m_pKSpellConfig;
 
     QFont m_defaultFont;
+    bool m_headerVisible, m_footerVisible;
     bool m_viewFormattingChars;
+    bool m_viewFrameBorders;
     bool m_bShowRuler;
     bool m_bDontCheckUpperWord;
     bool m_bDontCheckTitleCase;
-
     //bool m_onlineSpellCheck;
 
     // The document that is used by all formulas
@@ -593,6 +594,7 @@ private:
     double m_indent; // in pt
 
     int m_iNbPagePerRow;
+    int m_maxRecentFiles;
 
     // Maybe the default value should be configurable and saved somehow?
     static const unsigned int s_defaultColumnSpacing = 3;

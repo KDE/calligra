@@ -151,7 +151,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_lstViews.setAutoDelete( false );
     m_lstChildren.setAutoDelete( true );
     m_styleList.setAutoDelete( false );
-    m_deletedStyles.setAutoDelete( false );
+    m_deletedStyles.setAutoDelete( true );
 //    varFormats.setAutoDelete(true);
     frames.setAutoDelete( true );
 
@@ -161,10 +161,12 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_indent = MM_TO_POINT( 10.0 );
 
     m_iNbPagePerRow = 4;
+    m_maxRecentFiles = 10;
 
     m_bShowRuler = true;
 
     m_viewFormattingChars = false;
+    m_viewFrameBorders = true;
 
     m_bDontCheckUpperWord = false;
     m_bDontCheckTitleCase = false;
@@ -185,8 +187,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     setEmpty();
     setModified(false);
 
-    styleMask = U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT |
-                         U_NUMBERING | U_ALIGN | U_TABS | U_SMART;
+    //styleMask = U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT |
+    //                     U_NUMBERING | U_ALIGN | U_TABS | U_SMART;
     m_headerVisible = false;
     m_footerVisible = false;
 
@@ -207,12 +209,21 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;
     m_pKSpellConfig=0;
 
+    initConfig();
+
     // Some simple import filters don't define any style,
     // so let's have a Standard style at least
     KWStyle * standardStyle = new KWStyle( "Standard" ); // This gets translated later on
     addStyleTemplate( standardStyle );
 }
 
+KWDocument::~KWDocument()
+{
+    saveConfig();
+    delete m_autoFormat;
+    delete m_formulaDocument;
+    delete m_commandHistory;
+}
 
 void KWDocument::initConfig()
 {
@@ -243,10 +254,22 @@ void KWDocument::initConfig()
       setShowRuler(config->readBoolEntry("Rulers",true));
       setAutoSave((config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()))*60);
       setNbPagePerRow(config->readNumEntry("nbPagePerRow",4));
+      m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
+
+      m_viewFormattingChars = config->readBoolEntry( "ViewFormattingChars", false );
+      m_viewFrameBorders = config->readBoolEntry( "ViewFrameBorders", true );
   }
 }
 
-
+void KWDocument::saveConfig()
+{
+    // Only save the config that is manipulated by the UI directly.
+    // The config from the config dialog is saved by the dialog itself.
+    KConfig *config = KWFactory::global()->config();
+    config->setGroup( "Interface" );
+    config->writeEntry( "ViewFormattingChars", m_viewFormattingChars );
+    config->writeEntry( "ViewFrameBorders", m_viewFrameBorders );
+}
 
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint )
 {
@@ -903,13 +926,6 @@ void KWDocument::recalcFrames()
     }
 }
 
-KWDocument::~KWDocument()
-{
-    delete m_autoFormat;
-    delete m_formulaDocument;
-    delete m_commandHistory;
-}
-
 bool KWDocument::loadChildren( KoStore *_store )
 {
     QListIterator<KoDocumentChild> it( children() );
@@ -1324,7 +1340,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     setModified( false );
 
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
-    initConfig();
     return TRUE;
 }
 
@@ -1405,6 +1420,7 @@ KWStyle* KWDocument::addStyleTemplate( KWStyle * sty )
 
 void KWDocument::removeStyleTemplate ( KWStyle *style ) {
     if( m_styleList.removeRef(style)) {
+        // Remember to delete this style when deleting the document
         m_deletedStyles.append(style);
     }
 }

@@ -684,6 +684,9 @@ don't put a </?xml...> at the end of the file!).
 -->
 <!ELEMENT IMAGE
     (KEY)>
+<!ATTLIST IMAGE
+    keepAspectRatio CDATA #REQUIRED>
+
 <!--    Definition of a clipart - contains only one element, the key to the clipart.
 -->
 <!ELEMENT CLIPART

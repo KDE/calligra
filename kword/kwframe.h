@@ -585,8 +585,12 @@ public:
 
     // RMB -> normal frame popup
     virtual QString getPopupName() { return "frame_popup"; }
+
+    bool keepAspectRatio() const { return m_keepAspectRatio; }
+    void setKeepAspectRatio( bool b ) { m_keepAspectRatio = b; }
 protected:
     KWImage m_image;
+    bool m_keepAspectRatio;
 };
 
 /******************************************************************/

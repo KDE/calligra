@@ -118,12 +118,11 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     m_specialCharDlg=0L;
     searchEntry = 0L;
     replaceEntry = 0L;
-    backColor = QBrush( white );
     // Default values.
     m_zoomViewModeNormal = m_doc->zoom();
     m_zoomViewModePreview = 33;
-    m_viewFrameBorders = true;
-    m_viewTableGrid = true;
+    m_viewFrameBorders = m_doc->viewFrameBorders();
+    //m_viewTableGrid = true;
 
     setInstance( KWFactory::global() );
     setXMLFile( "kword.rc" );
@@ -134,7 +133,6 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     setKeyCompression( TRUE );
     setAcceptDrops( TRUE );
     createKWGUI();
-    initConfig();
 
     connect( m_doc, SIGNAL( pageNumChanged() ),
              this, SLOT( pageNumChanged()) );
@@ -186,8 +184,11 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     connect( m_gui->canvasWidget(), SIGNAL(updateRuler()),
              this, SLOT(slotUpdateRuler()));
 
-    if(shell())
+    if ( shell() )
+    {
         connect( shell(), SIGNAL( documentSaved()), m_doc,SLOT(slotDocumentInfoModifed() ) );
+        changeNbOfRecentFiles( m_doc->maxRecentFiles() );
+    }
 
     m_gui->canvasWidget()->updateCurrentFormat();
     setFocusProxy( m_gui->canvasWidget() );
@@ -207,40 +208,6 @@ KWView::~KWView()
     // Delete gui while we still exist ( it needs documentDeleted() )
     delete m_gui;
     delete m_sbPageLabel;
-}
-
-void KWView::initConfig()
-{
-  /// ### Why isn't this in KWDocument ??? ( DF )
-  KConfig *config = KWFactory::global()->config();
-  KSpellConfig ksconfig;
-  if( config->hasGroup("KSpell kword" ) )
-  {
-      config->setGroup( "KSpell kword" );
-      ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
-      ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
-      ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
-      ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
-      ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
-      ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
-      m_doc->setKSpellConfig(ksconfig);
-      m_doc->setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
-      m_doc->setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
-  }
-  if(config->hasGroup("Interface" ) )
-  {
-      config->setGroup( "Interface" );
-      m_doc->setGridY(config->readNumEntry("GridY",10));
-      m_doc->setGridX(config->readNumEntry("GridX",10));
-      // Config-file value in mm, default 10 pt
-      double indent = MM_TO_POINT( config->readDoubleNumEntry("Indent", POINT_TO_MM(10.0) ) );
-      m_doc->setIndentValue(indent);
-      changeNbOfRecentFiles(config->readNumEntry("NbRecentFile",10));
-
-      m_doc->setShowRuler(config->readBoolEntry("Rulers",true));
-      m_doc->setAutoSave((config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()))*60);
-      m_doc->setNbPagePerRow(config->readNumEntry("nbPagePerRow",4));
-  }
 }
 
 void KWView::changeNbOfRecentFiles(int _nb)
@@ -2636,7 +2603,7 @@ void KWView::backgroundColor()
 {
     // This action is disabled when no frame is selected.
     // So here we know that a frame is selected.
-    backColor = actionBackgroundColor->color();
+    QColor backColor = actionBackgroundColor->color();
     if ( m_gui )
         m_gui->canvasWidget()->setFrameBackgroundColor( backColor );
 }
@@ -3120,6 +3087,12 @@ void KWView::docStructChanged(int _type)
         m_pDocStruct->getDocStructTree()->refreshTree(_type);
 }
 
+void KWView::setViewFrameBorders(bool b)
+{
+    m_viewFrameBorders = b;
+    // Store setting in doc, for further views and for saving
+    m_doc->setViewFrameBorders( b );
+}
 
 bool KWView::doubleClickActivation() const
 {

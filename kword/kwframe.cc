@@ -1232,6 +1232,7 @@ KWPictureFrameSet::KWPictureFrameSet( KWDocument *_doc, const QString & name )
         m_name = _doc->generateFramesetName( i18n( "Picture %1" ) );
     else
         m_name = name;
+    m_keepAspectRatio = true;
 }
 
 KWPictureFrameSet::~KWPictureFrameSet() {
@@ -1262,6 +1263,7 @@ void KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
 
     QDomElement imageElem = parentElem.ownerDocument().createElement( "IMAGE" );
     framesetElem.appendChild( imageElem );
+    imageElem.setAttribute( "keepAspectRatio", m_keepAspectRatio ? "true" : "false" );
     QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );
     imageElem.appendChild( elem );
     m_image.key().saveAttributes( elem );
@@ -1274,6 +1276,7 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
     // <IMAGE>
     QDomElement image = attributes.namedItem( "IMAGE" ).toElement();
     if ( !image.isNull() ) {
+        m_keepAspectRatio = image.attribute( "keepAspectRatio", "true" ) == "true";
         // <KEY>
         QDomElement keyElement = image.namedItem( "KEY" ).toElement();
         if ( !keyElement.isNull() )

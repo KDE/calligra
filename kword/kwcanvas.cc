@@ -645,6 +645,31 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
             x = QMIN( x, m_doc->ptPaperWidth() );
             newRight = x;
         }
+
+        // Keep Aspect Ratio feature
+        if ( frame->getFrameSet()->type() == FT_PICTURE &&
+             static_cast<KWPictureFrameSet *>( frame->getFrameSet() )->keepAspectRatio()
+              )
+        {
+            double resizedFrameRatio = m_resizedFrameInitialSize.width() / m_resizedFrameInitialSize.height();
+
+            double width = newRight - newLeft;
+            double height = newBottom - newTop;
+            if ( top || bottom )
+                width = height * resizedFrameRatio;
+            else
+                height = width / resizedFrameRatio;
+            //kdDebug() << "KWCanvas::mmEditFrameResize after aspect ratio: width=" << width << " height=" << height << endl;
+            if ( left )
+                newLeft = frame->right() - width;
+            else
+                newRight = frame->left() + width;
+            if ( top )
+                newTop = frame->bottom() - height;
+            else
+                newBottom = frame->top() + height;
+            //kdDebug() << "KWCanvas::mmEditFrameResize after: newRight=" << newRight << " newBottom=" << newBottom << endl;
+        }
     }
     // Keep copy of old rectangle, for repaint()
     QRect oldRect = m_viewMode->normalToView( frame->outerRect() );
@@ -690,7 +715,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     frame->updateResizeHandles();
     // Calculate new rectangle for this frame
     QRect newRect( m_viewMode->normalToView( frame->outerRect() ) );
-    // Repaing only the changed rects (oldRect U newRect)
+    // Repaint only the changed rects (oldRect U newRect)
     repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
     m_frameResized = true;
 

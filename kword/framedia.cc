@@ -113,7 +113,7 @@ void KWFrameDia::init() {
             kdDebug() << "ERROR: KWFrameDia::init frame has no reference to doc.."<<endl;
             return;
         }
-        if(doc->processingType() != KWDocument::DTP &&
+        if(doc->processingType() == KWDocument::WP &&
            frame->getFrameSet() == doc->getFrameSet(0))
         {
             setupTab2();
@@ -129,7 +129,7 @@ void KWFrameDia::init() {
             if(! frame->getFrameSet()) // first creation
                 showPage(2);
         }
-        else if(frameType == FT_PICTURE)
+        else if(frameType == FT_PICTURE || frameType == FT_CLIPART)
         {
             setupTab1();
             setupTab2();
@@ -189,9 +189,10 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     if(frameType==FT_PICTURE)
     {
         aspectRatio = new QCheckBox (i18n("Retain original aspect ratio"),tab1);
-        aspectRatio->setEnabled(false);
         grid1->addWidget(aspectRatio, row, 0);
+        ++row;
     }
+
     // Text frame
     if(frameType==FT_TEXT)
     {
