@@ -44,6 +44,7 @@ class PropertyCommand : public KCommand
 {
 	public:
 		PropertyCommand(ObjectPropertyBuffer *buf, const QString &name, const QVariant &oldValue, const QVariant &value, const QString &property);
+		PropertyCommand(ObjectPropertyBuffer *buf, const QStringList &names, const QVariant &oldValue, const QVariant &value, const QString &property);
 
 		virtual void execute();
 		virtual void unexecute();
@@ -54,7 +55,7 @@ class PropertyCommand : public KCommand
 
 	protected:
 		ObjectPropertyBuffer *m_buffer;
-		QString    m_name;
+		QStringList    m_names;
 		QVariant   m_value;
 		QVariant   m_oldvalue;
 		QString    m_property;

@@ -1,7 +1,6 @@
 ^^^^^^^^^^^^^^^  IMPORTANT  ^^^^^^^^^^^^^^^^^^^^^^
 **** New Features : ******
 * When double-clicking on a QLabel or a QLabel (others ?), the widget should be inline-editable (also on creation)
-* Undo support
 * Create an event editor and manage signals/slots (EventBuffer ?)
 	HOWEVER, SIGNAL/SLOT ISSUES (js):
 	1. signals/slots mechanism is hard to use for average folks
@@ -42,3 +41,4 @@
 * Added real support for old values (2/29/04)
 * Form previewing stuff (3/01/04)
 * QByteArray methods in FormIO (3/01/04)
+* Undo support(3/05/04)

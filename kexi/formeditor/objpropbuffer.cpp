@@ -75,7 +75,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty 
 				m_lastcom->setValue(value);
 			else if(!m_undoing)
 			{
-				m_lastcom = new PropertyCommand(this, m_object->name(), m_object->property(property.latin1()), value, prop.name());
+				m_lastcom = new PropertyCommand(this, QString(m_object->name()), m_object->property(property.latin1()), value, prop.name());
 				m_manager->activeForm()->commandHistory()->addCommand(m_lastcom, false);
 			}
 			m_object->setProperty(property.latin1(), value);
@@ -86,7 +86,19 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty 
 			if(property == "geometry")
 				return;
 
+			QStringList list;
 			QWidget *w;
+			for(w = m_widgets.first(); w; w = m_widgets.next())
+				list.append(w->name());
+
+			if(m_lastcom && m_lastcom->property() == prop.name() && !m_undoing)
+				m_lastcom->setValue(value);
+			else if(!m_undoing)
+			{
+				m_lastcom = new PropertyCommand(this, list, m_object->property(property.latin1()), value, prop.name());
+				m_manager->activeForm()->commandHistory()->addCommand(m_lastcom, false);
+			}
+
 			for(w = m_widgets.first(); w; w = m_widgets.next())
 			{
 				kdDebug() << "saving property for widget " << w->name() << endl;
@@ -109,6 +121,7 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 	m_widgets.clear();
 	m_widgets.append(widg);
 	m_multiple = false;
+	m_lastcom = 0;
 	checkModifiedProp();
 	kdDebug() << "loading object = " << widg->name() << endl;
 
@@ -191,6 +204,7 @@ ObjectPropertyBuffer::addWidget(QWidget *widg)
 	if(m_widgets.find(widg) == -1)
 		m_widgets.append(widg);
 
+	m_lastcom = 0;
 	QString classn;
 	if(m_object->className() == widg->className())
 		classn = m_object->className();
@@ -227,13 +241,13 @@ ObjectPropertyBuffer::showProperty(QObject *obj, const QString &property)
 bool
 ObjectPropertyBuffer::showMultipleProperty(const QString &property, const QString &className)
 {
-	if(className.isNull())
-	{
+//	if(className.isNull())
+//	{
 		QStringList list;
 		list << "font" << "paletteBackgroundColor" << "enabled" << "paletteForegroundColor" << "cursor" << "paletteBackgroundPixmap";
 		if(!(list.grep(property)).isEmpty())
 			return true;
-	}
+//	}
 	return false;
 	// TODO : Filter properties following class name (ie : "alignment" for labels or line edits ...) (maybe using WidgetFactory ?)
 }
@@ -372,7 +386,7 @@ ObjectPropertyBuffer::saveAlignProperty()
 		m_lastcom->setValue(meta->keysToValue(list));
 	else if(!m_undoing)
 	{
-		m_lastcom = new PropertyCommand(this, m_object->name(), m_object->property("alignment"), meta->keysToValue(list), "alignment");
+		m_lastcom = new PropertyCommand(this, QString(m_object->name()), m_object->property("alignment"), meta->keysToValue(list), "alignment");
 		m_manager->activeForm()->commandHistory()->addCommand(m_lastcom, false);
 	}
 }
