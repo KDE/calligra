@@ -1,0 +1,101 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1999-02-06 02:50+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: montel laurent <montell@club-internet.fr>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: kdiagramm_shell.cc:63
+msgid ""
+"The document has been modified\n"
+"Do you want to save it ?"
+msgstr ""
+"Le document a été modifié\n"
+"Voulez vous l'enregistrer ?"
+
+#: kdiagramm_shell.cc:303
+msgid "KDiagramm Error"
+msgstr "Erreur dans KDiagramm"
+
+#: kdiagramm_shell.cc:303
+msgid "Could not create new document"
+msgstr "Impossible de créer un nouveau document"
+
+#: kdiagramm_shell.cc:316
+#, c-format
+msgid ""
+"Could not open\n"
+"%s"
+msgstr ""
+"Impossible d'ouvrir\n"
+"%s"
+
+#: kdiagramm_shell.cc:317 kdiagramm_shell.cc:336 kdiagramm_shell.cc:346
+msgid "IO Error"
+msgstr "Erreur d'E/S"
+
+#: kdiagramm_shell.cc:335
+#, c-format
+msgid ""
+"Could not save\n"
+"%s"
+msgstr ""
+"Impossible d'enregistrer\n"
+"%s"
+
+#: kdiagramm_shell.cc:345
+msgid "Could not save file"
+msgstr "Impossible d'enregistrer le fichier"
+
+#: kdiagramm_view.cc:169
+msgid "Lines"
+msgstr "Courbes"
+
+#: kdiagramm_view.cc:174
+msgid "Areas"
+msgstr "Aires"
+
+#: kdiagramm_view.cc:179
+msgid "3D-Bars"
+msgstr "Histogramme"
+
+#: kdiagramm_view.cc:184
+msgid "Cakes"
+msgstr "Secteurs"
+
+#: kdiagramm_view.cc:210
+msgid "&Lines"
+msgstr "&Courbes"
+
+#: kdiagramm_view.cc:215
+msgid "&Areas"
+msgstr "&Aires"
+
+#: kdiagramm_view.cc:220
+msgid "&Bars"
+msgstr "&Histogramme"
+
+#: kdiagramm_view.cc:225
+msgid "&Cakes"
+msgstr "&Secteurs"
+
+#: kdiagramm_view.cc:229
+msgid "&Edit Data..."
+msgstr "&Editer les données ... "
+
+#: kdiagramm_view.cc:233
+msgid "&Page Layout"
+msgstr ""
+
+#: koDiagramm.cc:562
+msgid "Rest"
+msgstr ""
