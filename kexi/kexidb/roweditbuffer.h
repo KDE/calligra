@@ -81,7 +81,9 @@ public:
 
 protected:
 	SimpleMap *m_simpleBuffer;
+	SimpleMap::Iterator *m_simpleBufferIt;
 	DBMap *m_dbBuffer;
+	DBMap::Iterator *m_dbBufferIt;
 };
 
 } //namespace KexiDB

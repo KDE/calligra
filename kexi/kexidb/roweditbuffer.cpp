@@ -25,35 +25,43 @@ using namespace KexiDB;
 
 
 RowEditBuffer::RowEditBuffer(bool dbAwareBuffer)
-: m_simpleBuffer(dbAwareBuffer ? 0 : new QMap<QString,QVariant>())
-, m_dbBuffer(dbAwareBuffer ? new QMap<Field*,QVariant>() : 0)
+: m_simpleBuffer(dbAwareBuffer ? 0 : new SimpleMap())
+, m_simpleBufferIt(dbAwareBuffer ? 0 : new SimpleMap::Iterator())
+, m_dbBuffer(dbAwareBuffer ? new DBMap() : 0)
+, m_dbBufferIt(dbAwareBuffer ? new DBMap::Iterator() : 0)
 {
 }
 
 RowEditBuffer::~RowEditBuffer()
 {
 	delete m_simpleBuffer;
+	delete m_simpleBufferIt;
 	delete m_dbBuffer;
+	delete m_dbBufferIt;
 }
 
 QVariant* RowEditBuffer::at( Field& f ) 
 { 
-	if (!m_dbBuffer)
+	if (m_dbBuffer) {
+		*m_dbBufferIt = m_dbBuffer->find( &f );
+		if (*m_dbBufferIt==m_dbBuffer->end())
+			return 0;
+		return &(*m_dbBufferIt).data();
+	}
+	*m_simpleBufferIt = m_simpleBuffer->find( f.name() );
+	if (*m_simpleBufferIt==m_simpleBuffer->end())
 		return 0;
-	DBMap::Iterator it = m_dbBuffer->find( &f );
-	if (it==m_dbBuffer->end())
-		return 0;
-	return &it.data();
+	return &(*m_simpleBufferIt).data();
 }
 
 QVariant* RowEditBuffer::at( const QString& fname )
 {
 	if (!m_simpleBuffer)
 		return 0;
-	SimpleMap::Iterator it = m_simpleBuffer->find( fname );
-	if (it==m_simpleBuffer->end())
+	*m_simpleBufferIt = m_simpleBuffer->find( fname );
+	if (*m_simpleBufferIt==m_simpleBuffer->end())
 		return 0;
-	return &it.data();
+	return &(*m_simpleBufferIt).data();
 }
 
 void RowEditBuffer::clear() {
