@@ -55,11 +55,7 @@ string& tstring::stripWhiteSpace()
     return *this;
   }
   
-#ifdef HAVE_MINI_STL
-  remove( 0, i );
-#else
   erase( 0, i );
-#endif
   
   len = length();
   int j = len - 1;
@@ -69,11 +65,7 @@ string& tstring::stripWhiteSpace()
   if ( j == len - 1 )
     return (*this);
   
-#ifdef HAVE_MINI_STL
-  remove( j + 1, len - j - 1 );
-#else
   erase( j + 1, len - j - 1 );
-#endif
   return (*this);
 }
 

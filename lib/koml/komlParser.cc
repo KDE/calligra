@@ -103,11 +103,7 @@ bool KOMLParser::open( const char *_search, string& tag )
       // Do NOT put it on the stack, but make a remark.
       m_bCloseSingleTag = true;
       // Delete trailing '/'
-#ifdef HAVE_MINI_STL
-      tag.remove( tl - 1, 1 );
-#else
       tag.erase( tl - 1, 1 );
-#endif
       return true;
     }
     // Is it a closing tag ?
@@ -268,11 +264,7 @@ bool KOMLParser::readTag( string &_str )
       }
     }
   }
-#ifdef HAVE_MINI_STL
-  _str.remove( _str.length() - 1, 1 );
-#else
   _str.erase( _str.length() - 1, 1 );
-#endif
   return true;
 }
 
