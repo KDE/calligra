@@ -1,6 +1,5 @@
 GUI:
 -	split the dialog under "Object->Transform" into different non-tabbed dialogs
--	put all dockers in a space optimized way into a docker which shows up in "View"
 -	remove the "Selection property" docker, this is basically the same as the above docker
 -	remove the dialogs which show up when double clicking the strokefillpreview, this job is done
 	by "color manager" docker
@@ -10,14 +9,16 @@ GUI:
 -	make a UI for the node manipulation tool.
 -	rework the stroke/fill docker with preview on the document and apply button.
 -	Find a better way to select a color than the color manager. Maybe a popup ?
+-	gradient widget: maybe turn the midpoint arrows to black or 3d triangles like in gimp or illu
+-	gradient widget: better seperate the midpoint arrows from the color stop triangles: put them
+	above the gradient bar like in adobe products. the current situation is a bit nasty
+	with near together midpoints and colorstops
+-	gradient widget: the midpoint arrows are currently hard to hit and modify
 
 REAL BUGS:
 -	patterns dont zoom
 -	VSelectionTool has an offset error relative to the handle nodes in the VSelection.
 -	fix i18n singular/plural
--	zooming has problems (zoom out: shapes and selection coords are different. zoom back:
-	canvas is "fragmented")
--	canvas doesn't repaint correctly while scrolling with the scrollbar
 -	copying works wrong: the last selected shape is pasted instead of the shape one copied
 -	crashes in vtext
 -	make curve1To, curve2To work
@@ -44,8 +45,11 @@ TODO:
 	if the 2 input curves are the same our code runs forever.
 
 WISHLIST:
+-	clipart tool: single click should insert the clipart like a single click like with the shape tools
+-	clipart tool: add ctrl-drag behaviour like with the shape tools
 -	Ctrl or Shift (pressed) while dragging a shape should make the shape move along only one axis
 -	krita export filter (with layers)
+-	gimp gradient import
 
 OPTIMIZATION:
 -	in VShapeTool and all manipulation tools: store temporary objects so one doesnt
@@ -55,12 +59,10 @@ OPTIMIZATION:
 -	check places we use sqrt() if these are really necessary (lenny)
 
 MAKE IT NICE:
--	being a kde/koffice app, we should use the global selection color for selections
 -	use SVG's path notation natively?
 -	can't we pass VTool::draw() a painter inseatd of each tool creating a painter itself?
 -	remove V*Tool::refreshUnit(). call this directly via dialog() instead
 -	pass all dialogs a parent
 -	introduce centroid() for vpath. problem: CM for beziers?
 -	think about using ghostscript's flatten algo (see comments in vflatten.cc)
--	try to import gimps gradient format, even look to make it the default?
 
