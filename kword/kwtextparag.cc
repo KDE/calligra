@@ -364,17 +364,35 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
     {
         QTextFormat format( *lastFormat );
         format.setColor( KWDocument::defaultTextColor( &painter ) );
-        QTextParag::drawParagString( painter, s, start, len, startX,
-                                     lastY, baseLine, bw, h, drawSelections,
-                                     &format, i, selectionStarts,
-                                     selectionEnds, cg, rightToLeft );
+        lastFormat = &format;
     }
-    else
+
+    QTextParag::drawParagString( painter, s, start, len, startX,
+                                 lastY, baseLine, bw, h, drawSelections,
+                                 lastFormat, i, selectionStarts,
+                                 selectionEnds, cg, rightToLeft );
+
+    if ( 0 ) /// TODO
     {
-        QTextParag::drawParagString( painter, s, start, len, startX,
-                                     lastY, baseLine, bw, h, drawSelections,
-                                     lastFormat, i, selectionStarts,
-                                     selectionEnds, cg, rightToLeft );
+        //kdDebug() << "KWTextParag::drawParagString start=" << start << " len=" << len << " length=" << length() << endl;
+        if ( start + len == length() )
+        {
+            // drawing the end of the parag
+            painter.save();
+            QPen pen( Qt::red ); // ?
+            painter.setPen( pen );
+            int size = QMIN( lastFormat->width('x'), h * 3 / 4 );
+            // x,y is the bottom right corner of the reversed L
+            int x = startX + bw;
+            int y = lastY + baseLine;
+            painter.drawLine( x + size, y - size, x + size, y );
+            painter.drawLine( x + size, y, x, y );
+            // Now the arrow
+            int arrowsize = textDocument()->zoomHandler()->zoomItY( 3 );
+            painter.drawLine( x, y, x + arrowsize, y - arrowsize );
+            painter.drawLine( x, y, x + arrowsize, y + arrowsize );
+            painter.restore();
+        }
     }
 }
 

@@ -47,6 +47,7 @@ public:
     QSize size() const;
 
     virtual void resize();
+    virtual void move( int x, int y );
 
     virtual Placement placement() const { return PlaceInline; }
     virtual bool ownLine() const;

@@ -38,25 +38,14 @@ KWAnchor::~KWAnchor()
     kdDebug() << "KWAnchor::~KWAnchor" << endl;
 }
 
-void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
+void KWAnchor::move( int x, int y )
 {
-    ASSERT( !m_deleted );
-    if ( m_deleted ) // can't happen !
-        return;
-
-    if ( placement() != PlaceInline ) {
-        x = xpos;
-        y = ypos;
-    }
-
+    kdDebug() << "KWAnchor::move " << x << "," << y << endl;
     int paragy = paragraph()->rect().y();
-    //kdDebug(32001) << "KWAnchor::draw " << x << "," << y << " paragy=" << paragy
-    //               << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
+    xpos = x;
+    ypos = y;
     KWDocument * doc = m_frameset->kWordDocument();
     KWTextFrameSet * fs = textDocument()->textFrameSet();
-
-    // 1 - move frame. We have to do this here since QTextCustomItem doesn't
-    // have a way to tell us when we are placed (during formatting)
     QPoint nPoint;
     if ( fs->internalToNormal( QPoint( x, y+paragy ), nPoint ) )
     {
@@ -64,8 +53,23 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         // Move the frame to position x,y.
         m_frameset->moveFloatingFrame( m_frameNum, KoPoint( nPoint.x() / doc->zoomedResolutionX(), nPoint.y() / doc->zoomedResolutionY() ) );
     }
+}
 
-    // 2 - draw
+void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
+{
+    ASSERT( !m_deleted );
+    if ( m_deleted ) // can't happen !
+        return;
+
+    int paragy = paragraph()->rect().y();
+    //kdDebug(32001) << "KWAnchor::draw " << x << "," << y << " paragy=" << paragy
+    //               << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
+    KWTextFrameSet * fs = textDocument()->textFrameSet();
+
+    if ( x != xpos || y != ypos ) { // shouldn't happen I guess ?
+        kdDebug() << "rectifying position to " << x << "," << y << endl;
+        move( x, y );
+    }
 
     p->save();
     // Determine crect in view coords
@@ -90,8 +94,12 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     m_frameset->drawContents( p, crect, cg2, false /*?*/, false /*?*/, 0L, fs->currentViewMode() );
 
     if ( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer ) {
-        QPoint vPoint = fs->currentViewMode()->normalToView( nPoint );
-	p->fillRect( QRect( vPoint.x(), vPoint.y(), width, height ), QBrush( cg.highlight(), QBrush::Dense4Pattern) );
+        QPoint nPoint;
+        if ( fs->internalToNormal( QPoint( x, y+paragy ), nPoint ) )
+        {
+            QPoint vPoint = fs->currentViewMode()->normalToView( nPoint );
+            p->fillRect( QRect( vPoint.x(), vPoint.y(), width, height ), QBrush( cg.highlight(), QBrush::Dense4Pattern) );
+        }
     }
 
     p->restore();
