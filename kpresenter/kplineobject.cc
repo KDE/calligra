@@ -65,15 +65,15 @@ DCOPObject* KPLineObject::dcopObject()
 QString KPLineObject::saveOasisStrokeElement( KoGenStyles& mainStyles )
 {
     KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
-    saveOasisMarkerElement( mainStyles,  styleobjectauto );
+    saveOasisMarkerElement( mainStyles, styleobjectauto );
     KPShadowObject::saveOasisStrokeElement( mainStyles, styleobjectauto );
     return mainStyles.lookup( styleobjectauto, "gr" );
 }
 
-bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
+bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
 {
     xmlWriter.startElement( "draw:line" );
-    xmlWriter.addAttribute( "draw:style-name",  saveOasisStrokeElement( mainStyles ) );
+    xmlWriter.addAttribute( "draw:style-name", saveOasisStrokeElement( context.mainStyles() ) );
 
     float x1 = orig.x();
     float y1 = orig.y();

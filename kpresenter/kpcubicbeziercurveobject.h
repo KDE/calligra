@@ -42,7 +42,7 @@ public:
     virtual QString getTypeString() const { return i18n("Cubic Bezier Curve"); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc,double offset );
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj );
 
     virtual double load( const QDomElement &element );
     virtual void loadOasis( const QDomElement &element, KoOasisContext & context,  QDomElement *animation );

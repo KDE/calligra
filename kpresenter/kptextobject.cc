@@ -210,13 +210,14 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPTextObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj  )
+bool KPTextObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  )
 {
     xmlWriter.startElement( "draw:text-box" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles, indexObj ) );
+    // #### This should use KoGenStyle to share the style
+    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(), indexObj ) );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
-    m_textobj->saveOasisContent( xmlWriter, mainStyles );
+    m_textobj->saveOasisContent( xmlWriter, context );
     xmlWriter.endElement();
     return true;
 }

@@ -96,7 +96,7 @@ DCOPObject* KPPixmapObject::dcopObject()
     return dcop;
 }
 
-bool KPPixmapObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
+bool KPPixmapObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
 {
     //FIXME !!!!!!!!!!
     return true;

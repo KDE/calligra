@@ -721,7 +721,7 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
         else if ( x < 0 && y == 0 )
         {
             shadowDirection = SD_LEFT;
-            shadowDistance = fabs ( x );
+            shadowDistance = (int) fabs ( x );
         }
         if ( element.hasAttribute ( "draw:shadow-color" ) )
             shadowColor= QColor(element.attribute( "draw:shadow-color" ) );
@@ -1403,7 +1403,7 @@ QDomDocumentFragment KPShadowObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
-void KPShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto )
+void KPShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle &styleobjectauto )
 {
     if ( pen!=defaultPen() )
     {

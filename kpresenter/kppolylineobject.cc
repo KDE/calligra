@@ -28,6 +28,8 @@
 
 #include <kdebug.h>
 #include <kozoomhandler.h>
+#include <kooasiscontext.h>
+
 #include <math.h>
 using namespace std;
 
@@ -66,7 +68,7 @@ double KPPolylineObject::load(const QDomElement &element)
     return KPPointObject::load( element );
 }
 
-bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
+bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
 {
     xmlWriter.startElement( "draw:polyline" );
     //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
@@ -74,7 +76,7 @@ bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyle
     //KPObject::saveOasis( xmlWriter );
     kdDebug()<<"bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter ) not finished to implemented\n";
     saveOasisPosObject(xmlWriter, indexObj );
-    KPPointObject::saveOasis( xmlWriter, mainStyles );
+    KPPointObject::saveOasis( xmlWriter, context );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
     xmlWriter.endElement();

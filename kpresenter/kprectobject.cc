@@ -29,6 +29,7 @@
 #include <qpainter.h>
 #include <kozoomhandler.h>
 #include <koUnit.h>
+#include <kooasiscontext.h>
 
 KPRectObject::KPRectObject()
     : KP2DObject()
@@ -72,10 +73,10 @@ QDomDocumentFragment KPRectObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPRectObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj  )
+bool KPRectObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  )
 {
     xmlWriter.startElement( "draw:rect" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles, indexObj ) );
+    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(), indexObj ) );
 
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );

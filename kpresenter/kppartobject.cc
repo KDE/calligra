@@ -60,7 +60,7 @@ void KPPartObject::rotate( float _angle )
                                      zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
 }
 
-bool KPPartObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
+bool KPPartObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
 {
     //FIXME
     return true;

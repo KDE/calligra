@@ -931,11 +931,12 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     recalcVariables( VT_DATE );
     recalcVariables( VT_TIME );
 
-
     KoGenStyles mainStyles;
-    // Save user styles as KoGenStyles
-    m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
+    KoSavingContext savingContext( mainStyles );
 
+    // Save user styles as KoGenStyle objects
+    KoSavingContext::StyleNameMap map = m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
+    savingContext.setStyleNameMap( map );
 
     KTempFile contentTmpFile;
     contentTmpFile.setAutoDelete( true );
@@ -949,7 +950,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 //save page
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
     {
-        m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ),mainStyles, indexObj );
+        m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ), savingContext, indexObj );
     }
     saveOasisPresentationSettings( contentTmpWriter );
     contentTmpWriter.endElement(); //office:body
@@ -959,7 +960,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles,  "style:style", (*it).name, "style:paragraph-properties" );
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
     styles = mainStyles.styles( STYLE_BACKGROUNDPAGEAUTO );
     it = styles.begin();

@@ -101,7 +101,7 @@ void KPAutoformObject::setFillType( FillType _fillType )
     }
 }
 
-bool KPAutoformObject::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles& mainStyles, int indexObj )
+bool KPAutoformObject::saveOasis( KoXmlWriter & xmlWriter, KoSavingContext& context, int indexObj )
 {
     kdDebug()<<"bool KPAutoformObject::saveOasis( KoXmlWriter & xmlWriter ) not implemented\n";
     return true;

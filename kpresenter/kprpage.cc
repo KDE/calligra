@@ -99,7 +99,7 @@ DCOPObject* KPrPage::dcopObject()
 }
 
 
-bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoGenStyles& mainStyles, int & indexObj )
+bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj )
 {
     //store use to save picture and co
     xmlWriter.startElement( "draw:page" );
@@ -107,7 +107,7 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     xmlWriter.addAttribute( "draw:id", posPage );
     //xmlWriter.addAttribute( "draw:master-page-name", master-page-name); ??? FIXME
 
-    QString styleName = kpbackground->saveOasisBackgroundPageStyle( store, xmlWriter,mainStyles );
+    QString styleName = kpbackground->saveOasisBackgroundPageStyle( store, xmlWriter, context.mainStyles() );
     kdDebug()<<" styleName :"<<styleName<<endl;
     if ( !styleName.isEmpty() )
         xmlWriter.addAttribute( "draw:style-name", styleName );
@@ -122,7 +122,7 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        it.current()->saveOasis( xmlWriter,mainStyles, indexObj );
+        it.current()->saveOasis( xmlWriter, context, indexObj );
         if ( it.current()->saveOasisObjectStyleAnimation( animationTmpWriter, indexObj ) )
             haveAnimation = true;
         ++indexObj;
@@ -132,16 +132,7 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
 
     if ( haveAnimation )
     {
-        bool openOk = tmpFile->open( IO_ReadOnly );
-        Q_ASSERT( openOk );
-        static const int MAX_CHUNK_SIZE = 8*1024; // 8 KB
-        QByteArray buffer(MAX_CHUNK_SIZE);
-        while ( !tmpFile->atEnd() ) {
-            Q_LONG len = tmpFile->readBlock( buffer.data(), buffer.size() );
-            if ( len <= 0 ) // e.g. on error
-                break;
-            xmlWriter.device()->writeBlock( buffer.data(), len );
-        }
+        xmlWriter.addCompleteElement( tmpFile );
     }
     animationTmpFile.close();
 

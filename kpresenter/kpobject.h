@@ -39,6 +39,7 @@
 #include <koxmlwriter.h>
 #include <koGenStyles.h>
 
+class KoSavingContext;
 class QPainter;
 class DCOPObject;
 class QDomDocumentFragment;
@@ -129,7 +130,7 @@ public:
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context,  QDomElement *animation);
 
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj ) =0;
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext &context, int indexObj ) =0;
 
     void saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj );
     //return true if we have a animation into object

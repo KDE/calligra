@@ -35,6 +35,7 @@
 #include "kppolygonobject.h"
 #include "kpclosedlineobject.h"
 #include <kdebug.h>
+#include <kooasiscontext.h>
 
 #include <qpainter.h>
 using namespace std;
@@ -131,7 +132,7 @@ QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, double offset )
 }
 
 
-bool KPGroupObject::saveOasis(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj)
+bool KPGroupObject::saveOasis(KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj)
 {
     xmlWriter.startElement( "draw:g" );
 
@@ -142,7 +143,7 @@ bool KPGroupObject::saveOasis(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, i
         if ( it.current()->getType() == OT_PART )
             continue;
 #endif
-        it.current()->saveOasis( xmlWriter, mainStyles, indexObj );
+        it.current()->saveOasis( xmlWriter, context, indexObj );
     }
     xmlWriter.endElement();
     return true;

@@ -60,7 +60,7 @@ KPQuadricBezierCurveObject &KPQuadricBezierCurveObject::operator=( const KPQuadr
     return *this;
 }
 
-bool KPQuadricBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
+bool KPQuadricBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
 {
     kdDebug()<<"bool KPQuadricBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter ) not implemented\n";
     //todo

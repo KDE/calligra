@@ -373,7 +373,7 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
     {
         if ( m_presSpeed == 10 )
             stylepageauto.addProperty( "presentation:transition-speed", "fast" );
-        else if ( m_presSpeed = 1 )
+        else if ( m_presSpeed == 1 )
             stylepageauto.addProperty( "presentation:transition-speed", "slow" );
     }
     if ( !m_page->isSlideSelected() )

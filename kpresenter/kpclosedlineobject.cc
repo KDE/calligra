@@ -98,7 +98,7 @@ QDomDocumentFragment KPClosedLineObject::save( QDomDocument& doc, double offset 
     return fragment;
 }
 
-bool KPClosedLineObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
+bool KPClosedLineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
 {
     //FIXME
     return true;

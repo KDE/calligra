@@ -28,6 +28,8 @@
 #include <qpicture.h>
 #include <qpainter.h>
 #include <kozoomhandler.h>
+#include <kooasiscontext.h>
+
 using namespace std;
 
 KPEllipseObject::KPEllipseObject()
@@ -140,10 +142,10 @@ KoSize KPEllipseObject::getRealSize() const {
     return size;
 }
 
-bool KPEllipseObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
+bool KPEllipseObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
 {
     xmlWriter.startElement( ( ext.width() == ext.height() ) ? "draw:circle" : "draw:ellipse" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles, indexObj ) );
+    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(), indexObj ) );
 
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );

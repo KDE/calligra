@@ -27,6 +27,7 @@
 #include <kostyle.h> // for KoStyleChangeDefMap
 #include <koStyleStack.h>
 
+class KoSavingContext;
 class KPresenterView;
 class KPresenterDoc;
 class QDomElement;
@@ -80,7 +81,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext& context, QDomElement *animation);
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj  );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  );
 
 
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,

@@ -35,7 +35,7 @@ public:
     virtual KoPoint getRealOrig() const;
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context );
 
     virtual double load( const QDomElement &element );
     virtual void loadOasis( const QDomElement &element, KoOasisContext & context, QDomElement *animation );
