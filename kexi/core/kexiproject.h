@@ -116,7 +116,8 @@ public:
 
 
 public slots:
-	void	slotImportData();
+	void	slotImportFileData();
+	void	slotImportServerData();
 
 signals:
 	void dbAvaible();

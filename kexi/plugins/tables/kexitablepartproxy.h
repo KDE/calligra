@@ -45,7 +45,8 @@ class KEXI_HAND_TBL_EXPORT KexiTablePartProxy : public KexiProjectHandlerProxy, 
 		void slotAlter(const QString& identifier);
 		void slotDrop(const QString& identifier);
 
-		void slotImport(/*int filter*/);
+		void slotFileImport(/*int filter*/);
+		void slotServerImport(/*int filter*/);
 
 	private:
 		KexiTablePart *m_tablePart;

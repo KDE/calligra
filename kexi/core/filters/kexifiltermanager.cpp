@@ -19,6 +19,7 @@
 #include "kexifiltermanager.h"
 #include "kexifilter.h"
 #include "../kexiproject.h"
+#include "kexifilterwizardbase.h"
 
 #include <kmimetype.h>
 #include <kdebug.h>
@@ -26,6 +27,7 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kparts/componentfactory.h>
+#include <koFilterManager.h>
 
 KexiFilterManager::KexiFilterManager(KexiProject *project):QObject(project),
 	m_project(project)
@@ -33,11 +35,20 @@ KexiFilterManager::KexiFilterManager(KexiProject *project):QObject(project),
 	m_typeNames<<"kexi/table"<<"kexi/query"<<"kexi/form"<<"kexi/script";
 }
 
-bool KexiFilterManager::import(unsigned long importType)
+
+bool KexiFilterManager::import(ImportSourceType sourceType,unsigned long importType)
+{
+	if (sourceType==File) return importFile(importType);
+	else return false;
+}
+
+bool KexiFilterManager::importFile(unsigned long importType) 
 {
 	QString constraints;
 	unsigned long calcImportType=importType;
 	if (calcImportType==0) return false;
+	
+	constraints = "('kexi/*' in [X-KEXI-ImportTypes])";
 	for (unsigned int bitcnt=0;((calcImportType!=0) && (bitcnt<m_typeNames.count()));bitcnt++,calcImportType=(calcImportType>>1)){
 		if (!(calcImportType & 1)) continue;
 
@@ -45,9 +56,10 @@ bool KexiFilterManager::import(unsigned long importType)
 		constraints += "('"+m_typeNames[bitcnt]+"' in [X-KEXI-ImportTypes])";
 	}
 
+
 	kdDebug()<<"KexiFilterManager::import :constraints="<<constraints<<endl;
 
-	KTrader::OfferList filters=KTrader::self()->query("Kexi/ImportFilter",constraints);
+	KTrader::OfferList filters=KTrader::self()->query("Kexi/FileImportFilter",constraints);
 	KTrader::OfferList::Iterator it(filters.begin());
 
 	if (it==filters.end()) {
@@ -59,58 +71,70 @@ bool KexiFilterManager::import(unsigned long importType)
 	}
 
 	QString dialogfilter;
+	QString allNativeSupported;
 	QString allSupported;
 	QMap<QString,QString> mapping;
-
+	QMap<QString,QString> chainMapping;
+	
 	for (;it!=filters.end(); ++it) {
-		QStringList mts=(*it)->property("X-KEXI-Import").toStringList();
-		for (int i=0;i<(int)mts.count();i++) {
-			mapping.insert(mts[i],(*it)->library());
+		if ((*it)->property("X-KEXI-OfficeChainImport").toBool()) {
+			QStringList mtnat=(*it)->property("X-KEXI-Import").toStringList();
+			for (unsigned int i2=0;i2<mtnat.count();i2++) {
+				QStringList mts=KoFilterManager::mimeFilter( mtnat[i2].utf8(), KoFilterManager::Import );
+				for (int i=0;i<(int)mts.count();i++) {
+					if (mts[i]!=mtnat[i2])
+						chainMapping.insert(mts[i],(*it)->library());
+					else 
+						mapping.insert(mts[i],(*it)->library());
+					
+				}
+			}
 
-			KMimeType::Ptr mt = KMimeType::mimeType( mts[i] );
-			dialogfilter+=mt->patterns().join(" ")+"|"+mt->comment()+"\n";
-			allSupported+=mt->patterns().join(" ")+" ";
+		} else {
+			QStringList mts=(*it)->property("X-KEXI-Import").toStringList();
+			for (int i=0;i<(int)mts.count();i++) {
+				mapping.insert(mts[i],(*it)->library());
+			}
 		}
 
 	}
+
+	for (QMap<QString,QString>::const_iterator it=mapping.constBegin();
+		it!=mapping.constEnd();++it) {
+	
+		KMimeType::Ptr mt = KMimeType::mimeType( it.key() );
+		dialogfilter+=mt->patterns().join(" ")+"|"+mt->comment()+"\n";
+		allSupported+=mt->patterns().join(" ")+" ";
+		allNativeSupported+=mt->patterns().join(" ")+" ";
+
+	}
+	
+	dialogfilter+="!!!!KEXI_NATIVE_SEPERATOR!!!!|-------\n";
+
+	for (QMap<QString,QString>::const_iterator it=chainMapping.constBegin();
+		it!=chainMapping.constEnd();++it) {
+		if (!mapping.contains(it.key())) {
+			mapping.insert(it.key(),it.data());
+		
+			KMimeType::Ptr mt = KMimeType::mimeType( it.key() );
+			dialogfilter+=mt->patterns().join(" ")+"|"+mt->comment()+"\n";
+			allSupported+=mt->patterns().join(" ")+" ";
+
+		}
+	}
+
+
 	kdDebug()<<dialogfilter<<endl;
 
 	if (dialogfilter.isEmpty()) return false; //perhaps show a message
-	dialogfilter=allSupported+"|"+i18n("All Supported File Types")+"\n"+dialogfilter;
+	
+	dialogfilter=allNativeSupported+"|"+i18n("All Natively Supported File Types")+"\n"+
+		allSupported+"|"+i18n("All Supported File Types")+"\n"+"!!!!KEXI_NATIVE_SEPERATOR!!!!|-------\n"
+		+dialogfilter;
 
-	KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
-	dialog->setFilter( dialogfilter);
-	if (dialog->exec()!=QDialog::Accepted) {
-		delete dialog;
-		return true;
-	}
-
-	KURL url(dialog->selectedURL());
-	delete dialog;
-
-	if ((!url.isValid()) || (url.isEmpty())) {
-	//error
-		return false;
-	}
-	KMimeType::Ptr im=KMimeType::findByURL(url);
-	if (!mapping.contains(im->name()))  {
-		kdDebug()<<"Unsupported mimetype"<<endl;
-#ifdef __GNUC__
-#warning display an error
-#endif
-		return false;
-	}
-
-	return doImport(mapping[im->name()],url,importType);
-
-}
-
-bool KexiFilterManager::doImport(const QString& lib, const KURL &url, unsigned long allowedTypes)
-{
 	int err=0;
-	QStringList l;
-	l<<"IMPORT";
-	KexiFilter *f=KParts::ComponentFactory::createInstanceFromLibrary<KexiFilter> (lib.utf8(),this,"import filter",l,&err);
+	KexiFilterWizardBase *f=KParts::ComponentFactory::createInstanceFromLibrary<KexiFilterWizardBase>(
+		"kexifileimport",this,"kexi import",QStringList(),&err);
 	if (err!=0) {
 #ifdef __GNUC__
 #warning display some error dialog here
@@ -118,10 +142,26 @@ bool KexiFilterManager::doImport(const QString& lib, const KURL &url, unsigned l
 		kdDebug()<<"Import filter instance couldn't be created:"<<err<<endl;
 		return false;
 	}
+	
+	f->exec(dialogfilter,mapping,importType,false);
+	// f has to delete itself
+	return true;
+}
 
-	bool success=f->import(url,allowedTypes);
-	delete f;
-	return success;
+
+
+KexiFilter* KexiFilterManager::loadFilter(const QString &libname,QObject *parent) {
+	int err=0;
+	KexiFilter *f=KParts::ComponentFactory::createInstanceFromLibrary<KexiFilter>(
+		libname.latin1(),parent,libname.latin1(),QStringList(),&err);
+	if (err!=0) {
+#ifdef __GNUC__
+#warning display some error dialog here
+#endif
+		kdDebug()<<"Import filter instance couldn't be created:"<<err<<endl;
+		return 0;
+	}
+	return f;
 }
 
 KexiProject *KexiFilterManager::project()

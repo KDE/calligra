@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003   Joseph Wenninger <jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,14 +22,16 @@
 #define KEXICSVIMPORTFILTER_H
 
 #include "core/filters/kexifilter.h"
+#include "core/filters/kexifiltermanager.h"
+#include "core/filters/kexitableimportsourceiface.h"
 #include <qmap.h>
+#include <kexiDB/kexidbtable.h>
 
-class Preview;
 class KexiDB;
-//class KexiCSVImport;
+class KexiCSVSource;
 typedef QMap<int, int> DataTypes;
 
-class KexiCSVImport : public KexiFilter
+class KexiCSVImport : public KexiFilter, public KexiTableImportSourceIface
 {
 	Q_OBJECT
 
@@ -44,27 +47,25 @@ class KexiCSVImport : public KexiFilter
 		~KexiCSVImport();
 
 		virtual QString name();
-//		virtual bool	open(KexiDB *);
 
-		bool		parseFile(const QString &file, ImportDlg *p);
+		virtual bool prepareImport(unsigned long type, const KURL& url=KURL());
 
-		bool import(const KURL& url,unsigned long allowedTypes);
+	        virtual KexiDBTable tableStructure();
 
-	public slots:
-		void		reparse();
-		void		reparse(const QString &);
+	        virtual bool firstTableRow();
+        	virtual bool nextTableRow();
+	        virtual QVariant tableValue(int field);
+	
+        	virtual QPtrList<QWidget> tableSourceWidgets(QWidget *parent);
 
-		void		colChanged(int, int);
-		void		headerChanged(const QString &);
-		void		typeChanged(int type);
+		virtual unsigned long supportedTypes() {return KexiFilterManager::Data;}
 
-		void		import();
 
 	private:
-		ImportDlg	*m_dlg;
 		QString		m_file;
+		QString		m_data;
 		DataTypes	m_dataTypes;
-		KexiDB		*m_db;
+		KexiCSVSource   *m_srcWidget;
 };
 
 #endif

@@ -17,31 +17,30 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _KEXIFILTER_
-#define _KEXIFILTER_
+#ifndef _KEXIFILTERWIZARDBASE_
+#define _KEXIFILTERWIZARDBASE_
 
 #include <qobject.h>
 #include <kurl.h>
 
-class KexiFilterWizardBase;
+class KexiFilterManager;
 
 
-#define KEXIFILTERWIZARDBASE(obj) (static_cast<KexiFilterWizardBase*>(obj->qt_cast("KexiFilterWizardBase")))
+#define KEXIFILTERMANAGER(obj) (static_cast<KexiFilterManager*>(obj->qt_cast("KexiFilterManager")))
 
-class KEXIFILTER_EXPORT KexiFilter: public QObject {
+/* this class has to delete itself after usage */
+class KEXIFILTER_EXPORT KexiFilterWizardBase:public QObject {
 
-	Q_OBJECT
-
+Q_OBJECT
 public:
-	KexiFilter(KexiFilterWizardBase *parent, const char *name, const QStringList &);
-	virtual ~KexiFilter();
-	KexiFilterWizardBase *filterWizard();
-
-	virtual bool prepareImport(unsigned long type, const KURL& url=KURL())=0;
-        virtual void widgetActivated(QWidget *current, QWidget *former);
-	virtual unsigned long supportedTypes()=0;
+	KexiFilterWizardBase(KexiFilterManager *parent, const char *name, const QStringList &);
+	virtual ~KexiFilterWizardBase();
+	virtual void exec(const QString& dialogfilter, const QMap<QString,QString> mimePluginMap,unsigned long importTypes,bool modal)=0;
+	KexiFilterManager *filterManager();
+	/* standard modes. Extended modes will later be plugin based, if needed at all */
+	virtual void setMode(unsigned long);
 private:
-	KexiFilterWizardBase *m_filterWizard;
+	KexiFilterManager *m_filterManager;
 };
 
 

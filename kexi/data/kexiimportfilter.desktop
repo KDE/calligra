@@ -3,6 +3,19 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=Kexi/ImportFilter
 Comment=Service type for any kind of kexi import filters (table,forms,queries,....)
+Comment[ca]=Tipus de servei per a qualsevol tipus de filtre d'importació de kexi (taula, formularis, consultes...)
+Comment[cs]=Typ projektu pro jakýkoliv druh importních filtrů Kexi (tabulka, formuláře, dotazy atd)
+Comment[da]=Service-type for vilkårlig slags kexi importfiltre (tabel,formular,forespørgsel,....)
+Comment[es]=Tipo de servicio para cualquier tipo de filtro de importación de kexi (tablas, formas, consultas, ...)
+Comment[fr]=Type de service pour tout genre de filtres d'importation de kexi (table, formulaires, requètes....) 
+Comment[hu]=Szolgáltatástípus Kexi importszűrőkhöz (tábla, űrlap, lekérdezés, ...)
+Comment[pl]=Typ usługi dla wszelkich filtrów importu programu Kexi(tabele,formularze,zapytania,....)
+Comment[pt]=Tipo de serviço para qualquer tipo de filtros de importação do KExi (tabelas, formulários, pesquisas,...)
+Comment[pt_BR]=Tipo de serviço para qualquer tipo de filtros de importação do kexi (tabelas, formulários, consultas, ...)
+Comment[ru]=Тип сервиса для любого вида фильтров импорта в Kexi (таблицы, формы, запросы,....)
+Comment[sk]=Typ služby pre filtre pre import do Kexi (tabuľky, formuláre,dotazy,...)
+Comment[sv]=Tjänsttyp för alla sorters Kexi-importfilter (tabell, formulär, förfrågningar....)
+Comment[tr]=Kexi alım filtreleri için servis türü (tablo,form,sorgular,...)
 
 [PropertyDef::X-KEXI-Import]
 Type=QStringList
@@ -10,5 +23,3 @@ Type=QStringList
 [PropertyDef::X-KEXI-ImportTypes]
 Type=QStringList
 
-[PropertyDef::X-KEXI-OfficeChainImport]
-Type=QString

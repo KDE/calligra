@@ -17,32 +17,21 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _KEXIFILTER_
-#define _KEXIFILTER_
-
-#include <qobject.h>
-#include <kurl.h>
-
-class KexiFilterWizardBase;
+#include "kexifilterwizardbase.h"
+#include "kexifiltermanager.h"
 
 
-#define KEXIFILTERWIZARDBASE(obj) (static_cast<KexiFilterWizardBase*>(obj->qt_cast("KexiFilterWizardBase")))
+KexiFilterWizardBase::KexiFilterWizardBase(KexiFilterManager *parent,const char *name,const QStringList &)
+		:QObject(parent,name),m_filterManager(parent){
+	
+	Q_ASSERT(m_filterManager!=0);
+}
 
-class KEXIFILTER_EXPORT KexiFilter: public QObject {
+KexiFilterWizardBase::~KexiFilterWizardBase() {
+}
 
-	Q_OBJECT
+KexiFilterManager *KexiFilterWizardBase::filterManager() {
+	return m_filterManager;
+}
 
-public:
-	KexiFilter(KexiFilterWizardBase *parent, const char *name, const QStringList &);
-	virtual ~KexiFilter();
-	KexiFilterWizardBase *filterWizard();
-
-	virtual bool prepareImport(unsigned long type, const KURL& url=KURL())=0;
-        virtual void widgetActivated(QWidget *current, QWidget *former);
-	virtual unsigned long supportedTypes()=0;
-private:
-	KexiFilterWizardBase *m_filterWizard;
-};
-
-
-#endif
+void KexiFilterWizardBase::setMode(unsigned long) { }

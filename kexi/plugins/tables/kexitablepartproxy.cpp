@@ -62,7 +62,9 @@ KexiTablePartProxy::groupContext()
 	kdDebug() << "KexiTablePart::groupContext()" << endl;
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
 	m->insertAction(i18n("Create Table..."), SLOT(slotCreate()));
-	m->insertAction(i18n("Import Tables/Data..."),SLOT(slotImport()));
+/* perhaps this should become a submenu*/
+	m->insertAction(i18n("Import Tables/Data from file..."),SLOT(slotFileImport()));
+	m->insertAction(i18n("Import Tables/Data from remote server..."),SLOT(slotServerImport()));
 
 	return m;
 }
@@ -224,9 +226,15 @@ KexiTablePartProxy::executeItem(const QString& identifier)
 }
 
 void
-KexiTablePartProxy::slotImport(/*int filter*/)
+KexiTablePartProxy::slotFileImport(/*int filter*/)
 {
-	m_tablePart->kexiProject()->filterManager()->import(KexiFilterManager::Data);
+	m_tablePart->kexiProject()->filterManager()->import(KexiFilterManager::File,KexiFilterManager::Data);
+}
+
+void
+KexiTablePartProxy::slotServerImport(/*int filter*/)
+{
+	m_tablePart->kexiProject()->filterManager()->import(KexiFilterManager::Server,KexiFilterManager::Data);
 }
 
 #include "kexitablepartproxy.moc"

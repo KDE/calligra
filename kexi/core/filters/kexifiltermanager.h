@@ -24,6 +24,7 @@
 #include <kurl.h>
 
 class KexiProject;
+class KexiFilter;
 
 class KEXIFILTER_EXPORT KexiFilterManager:public QObject {
 
@@ -32,11 +33,13 @@ class KEXIFILTER_EXPORT KexiFilterManager:public QObject {
 public:
 	KexiFilterManager(KexiProject *project);
 	virtual ~KexiFilterManager();
+	enum ImportSourceType{File=1,Server=2};
 	enum StdDataTypes{Data=1,Queries=2,Forms=4,Scripts=8,AllEntries=0xFFFFFFFF};
-	bool import(unsigned long importType);
+	bool import(ImportSourceType sourceType, unsigned long importType);
 	KexiProject *project();
+	KexiFilter* loadFilter(const QString &libname,QObject *parent);
 private:
-	bool doImport(const QString& lib, const KURL &url, unsigned long allowedTypes);
+	bool importFile(unsigned long importType);
 	KexiProject *m_project;
 	QStringList m_typeNames; //This has to be modified if the StdDataTypes enum is changed
 };

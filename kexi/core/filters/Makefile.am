@@ -6,7 +6,7 @@ SUBDIRS = .
 
 libkexifilter_la_METASOURCES = AUTO
 
-libkexifilter_la_SOURCES = kexifiltermanager.cpp kexifilter.cpp
+libkexifilter_la_SOURCES = kexifiltermanager.cpp kexifilter.cpp kexifilterwizardbase.cpp
 
 libkexifilter_la_LIBADD =
 

@@ -1,1 +1,1 @@
-SUBDIRS = tables relations queries kugar
+SUBDIRS = importwizard tables relations queries kugar

@@ -1,11 +1,12 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexi" version="94">
+<kpartgui name="kexi" version="95">
 <MenuBar>
   <Menu name="project" noMerge="1">
     <text>&amp;Project</text>
     <Merge/>
     <Separator/>
-    <Action name="kexi_importdata"/>
+    <Action name="kexi_importfiledata"/>
+    <Action name="kexi_importserverdata"/>
     <Separatpr/>
     <Action name="project_props"/>
   </Menu>

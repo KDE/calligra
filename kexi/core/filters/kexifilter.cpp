@@ -17,27 +17,24 @@
    Boston, MA 02111-1307, USA.
 */
 #include "kexifilter.h"
-#include "kexifiltermanager.h"
+#include "kexifilterwizardbase.h"
 #include <kdebug.h>
 
-KexiFilter::KexiFilter(KexiFilterManager *parent, const char *name, const QStringList &):QObject(parent),m_filterManager(KEXIFILTERMANAGER(parent))
-{
-	Q_ASSERT(m_filterManager!=0);
+KexiFilter::KexiFilter(KexiFilterWizardBase *parent, const char *name, const QStringList &):
+	QObject(parent),m_filterWizard(KEXIFILTERWIZARDBASE(parent)) {
+
+	Q_ASSERT(m_filterWizard!=0);
 }
 
 KexiFilter::~KexiFilter()
 {
 }
 
-bool KexiFilter::import(const KURL& url,unsigned long allowedTypes)
+KexiFilterWizardBase *KexiFilter::filterWizard()
 {
-	kdDebug()<<"KexiFilter::import not implemented"<<endl;
-	return false;
+	return m_filterWizard;
 }
 
-KexiFilterManager *KexiFilter::filterManager()
-{
-	return m_filterManager;
-}
+void KexiFilter::widgetActivated(QWidget *current, QWidget *former) {}
 
 #include "kexifilter.moc"

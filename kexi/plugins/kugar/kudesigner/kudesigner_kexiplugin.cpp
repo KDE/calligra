@@ -179,6 +179,7 @@ QString KuKexiFieldComboBox::value() const {
 
 
 KuKexi::KuKexi(QObject *parent, const char* name, const QStringList& args):KuDesignerPlugin(parent,name,args) {
+	kdDebug()<<"KuKexi::Constructor entered"<<endl;
 	m_kudesigner=static_cast<KudesignerDoc*>(parent->qt_cast("KudesignerDoc"));
 //	m_dialog=((KexiDialogBase*)parent->parent());
 //	m_kexi=(KexiProject*)m_dialog->kexiProject();

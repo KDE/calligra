@@ -275,6 +275,7 @@ MySqlDB::query(const QString& statement)
 	if(!uhQuery(statement))
 	{
 		m_error.setup(1, mysql_error(m_mysql));
+		kdDebug()<<m_error.message();
 		return false;
 	}
 	return true;

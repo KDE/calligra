@@ -175,12 +175,16 @@ void KexiView::initActions()
 	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
 #endif
 
-	KAction *actionImport = new KAction(i18n("Import Data..."), "", 0,
-	 actionCollection(), "kexi_importdata");
-	connect(actionImport, SIGNAL(activated()), m_project, SLOT(slotImportData()));
+	KAction *actionFileImport = new KAction(i18n("Import file based data..."), "", Key_F34,
+	 actionCollection(), "kexi_importfiledata");
+	connect(actionFileImport, SIGNAL(activated()), m_project, SLOT(slotImportFileData()));
 
-	m_actionBrowser = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
-	 actionCollection(), "show_nav");
+	KAction *actionServerImport = new KAction(i18n("Import remote server based data..."), "", Key_F33,
+	 actionCollection(), "kexi_importserverdata");
+	connect(actionServerImport, SIGNAL(activated()), m_project, SLOT(slotImportServerData()));
+
+       m_actionBrowser = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
+        actionCollection(), "show_nav");
 
 #ifndef KEXI_NO_CTXT_HELP
 	m_actionHelper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,

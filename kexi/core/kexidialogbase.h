@@ -54,6 +54,8 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget
 		bool isRegistering(){return m_registering;}
 
 		void	setContextHelp(const QString &title, const QString &message);
+		const QString& contextHelpTitle() const;
+		const QString& contextHelpMessage() const;
 
 		virtual void setupPrinter(KPrinter &/*printer*/){;}
 		virtual void print(KPrinter &/*printer*/) {; }

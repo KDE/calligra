@@ -24,6 +24,7 @@
 #include "kexiworkspaceMDI.h"
 #include "kexiview.h"
 #include "kexiproject.h"
+#include "kexicontexthelp.h"
 
 KexiWorkspaceMDI::KexiWorkspaceMDI(QWidget *parent, const char *name,KexiView *mw) 
 	: QWorkspace(parent, name),KexiWorkspace()
@@ -77,6 +78,12 @@ void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 				if (olddialog->guiClient()->factory()==m_mainwindow->factory())
 					m_mainwindow->factory()->removeClient(olddialog->guiClient());
 				m_mainwindow->factory()->addClient(m_activeDialog->guiClient());
+			        if(m_mainwindow->help()) {
+			 	       m_mainwindow->help()->setContextHelp(
+						m_activeDialog->contextHelpTitle(),
+						m_activeDialog->contextHelpMessage());
+				}
+
 				m_activeDialog->activateActions();
 				m_activeDialog->aboutToShow();
 
@@ -84,6 +91,12 @@ void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 			else
 			{
 				olddialog->deactivateActions();
+			        if(m_mainwindow->help()) {
+			 	       m_mainwindow->help()->setContextHelp(
+						m_activeDialog->contextHelpTitle(),
+						m_activeDialog->contextHelpMessage());
+				}
+
 				m_activeDialog->activateActions();
 				m_activeDialog->aboutToShow();
 			}
@@ -94,6 +107,12 @@ void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 	if (!m_activeDialog.isNull())
 	{
 		m_mainwindow->factory()->addClient(m_activeDialog->guiClient());
+		if(m_mainwindow->help()) {
+			m_mainwindow->help()->setContextHelp(
+			m_activeDialog->contextHelpTitle(),
+			m_activeDialog->contextHelpMessage());
+		}
+
 		m_activeDialog->activateActions();
 		m_activeDialog->aboutToShow();
 	}

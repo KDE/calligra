@@ -81,6 +81,14 @@ KexiDialogBase::setContextHelp(const QString &title, const QString &message)
 #endif
 }
 
+const QString& KexiDialogBase::contextHelpTitle() const {
+	return m_contextTitle;
+}
+
+const QString& KexiDialogBase::contextHelpMessage() const {
+	return m_contextMessage;
+}
+
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt, const QString &identifier)
 {
 	m_wt=wt;

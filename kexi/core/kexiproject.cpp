@@ -485,11 +485,18 @@ void KexiProject::loadHandlers()
 	}
 }
 
-void KexiProject::slotImportData()
+void KexiProject::slotImportFileData()
 {
 #ifndef KEXI_NO_UNFINISHED
-	m_filterManager->import(KexiFilterManager::AllEntries);
+
+	m_filterManager->import(KexiFilterManager::File,KexiFilterManager::AllEntries);
 #else
 	KEXI_UNFINISHED(i18n("Import Data"));
 #endif
 }
+
+void KexiProject::slotImportServerData()
+{
+	m_filterManager->import(KexiFilterManager::Server,KexiFilterManager::AllEntries);
+}
+
