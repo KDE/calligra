@@ -122,10 +122,10 @@ bool DriverManagerInternal::lookupDrivers()
 	for(; it != tlist.end(); ++it)
 	{
 		KService::Ptr ptr = (*it);
-		QString srv_name = ptr->property("X-Kexi-DriverName").toString().lower();
-		if (!srv_name.isEmpty() && !m_services_lcase.contains(srv_name)) {
+		QString srv_name = ptr->property("X-Kexi-DriverName").toString();
+		if (!srv_name.isEmpty() && !m_services_lcase.contains(srv_name.lower())) {
 			m_services.insert(srv_name, ptr);
-			m_services_lcase.insert(srv_name, ptr);
+			m_services_lcase.insert(srv_name.lower(), ptr);
 			KexiDBDbg << "KexiDB::DriverManager::lookupDrivers(): registered driver: " << ptr->name() << "(" << ptr->library() << ")" << endl;
 		}
 		QString mime = ptr->property("X-Kexi-FileDBDriverMime").toString().lower();
