@@ -165,6 +165,12 @@ KWFrame *KWFrame::getCopy() {
     return new KWFrame(this);
 }
 
+
+void KWFrame::invalidateParentFrameset() {
+	if (frameSet()->isFloating())
+		frameSet()->anchorFrameset()->invalidate();
+}
+
 void KWFrame::copySettings(KWFrame *frm)
 {
     setRect(frm->x(), frm->y(), frm->width(), frm->height());
@@ -229,6 +235,10 @@ void KWFrame::updateResizeHandles() {
     for (unsigned int i=0; i< handles.count(); i++) {
         handles.at(i)->updateGeometry();
     }
+}
+
+void KWFrame::frameBordersChanged() {
+	invalidateParentFrameset();
 }
 
 

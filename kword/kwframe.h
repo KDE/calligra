@@ -169,10 +169,13 @@ public:
     const KoBorder &topBorder() const { return brd_top; }
     const KoBorder &bottomBorder() const { return brd_bottom; }
 
+
     void setLeftBorder( KoBorder _brd ) { brd_left = _brd; }
     void setRightBorder( KoBorder _brd ) { brd_right = _brd; }
     void setTopBorder( KoBorder _brd ) { brd_top = _brd; }
     void setBottomBorder( KoBorder _brd ) { brd_bottom = _brd; }
+
+    void invalidateParentFrameset();
 
     /** Return the _zoomed_ rectangle for this frame, including the border - for drawing
      */
@@ -195,6 +198,7 @@ public:
     void createResizeHandlesForPage(KWCanvas *canvas);
     void removeResizeHandlesForPage(KWCanvas *canvas);
     void removeResizeHandles();
+    void frameBordersChanged();
     void updateResizeHandles();
     void updateRulerHandles();
 
