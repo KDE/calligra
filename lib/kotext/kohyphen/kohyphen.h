@@ -81,17 +81,26 @@ public:
          */
         QString hyphenate(const QString& str, const QString& lang) const;
 
+private:
         /**
          * @return the encoding of dictionary for the language @p lang.
          */
-        QCString encodingForLang(const QString& lang) const;
+        QTextCodec* codecForLang(const QString& lang) const;
 
-private:
         KoHyphenator();
         HyphenDict *dict(const QString &lang) const;
 
         QMap<QString, HyphenDict*> dicts;
-        QMap<QString, QString> encodings;
+        struct EncodingStruct {
+            EncodingStruct() // for QMap
+                : encoding(), codec(0L) {}
+            EncodingStruct(const QCString& _encoding)
+                : encoding(_encoding), codec(0L) {}
+            QCString encoding;
+            QTextCodec* codec;
+        };
+        typedef QMap<QString, EncodingStruct> EncodingMap;
+        mutable EncodingMap encodings; // key is the language code
 
         static KoHyphenator* s_self;
 };

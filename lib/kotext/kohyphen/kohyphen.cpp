@@ -29,7 +29,7 @@
 #include <kdebug.h>
 
 
-//#define DEBUG_HYPHENATOR 1
+#define DEBUG_HYPHENATOR 1
 
 KoHyphenator* KoHyphenator::s_self;
 static KStaticDeleter<KoHyphenator> kohyphensd;
@@ -65,9 +65,13 @@ KoHyphenator::KoHyphenator()
             for (uint i = 0; i < records.count(); i++)
             {
                 QDomNamedNodeMap attr = records.item(i).attributes();
-                if (attr.contains("lang") && attr.contains("encoding"))
-                    encodings.insert( attr.namedItem("lang").nodeValue(),
-                                      attr.namedItem("encoding").nodeValue() );
+                if (attr.contains("lang") && attr.contains("encoding")) {
+                    QString lang = attr.namedItem("lang").nodeValue();
+                    QString encoding = attr.namedItem("encoding").nodeValue();
+                    kdDebug() << "KoHyphenator: found lang=" << lang << " encoding=" << encoding << endl;
+                    encodings.insert( lang,
+                                      EncodingStruct( encoding.latin1() ) );
+                }
             }
         }
 
@@ -88,7 +92,7 @@ char *KoHyphenator::hyphens(const QString& str, const QString& lang) const
     char *x = new char[str.length()+1];
     try
     {
-        QTextCodec *codec = QTextCodec::codecForName(encodingForLang(lang));
+        QTextCodec *codec = codecForLang(lang);
         hnj_hyphen_hyphenate(dict(lang), (const char *)(codec->fromUnicode(str)), str.length(), x);
     }
     catch (KoHyphenatorException &e)
@@ -109,7 +113,7 @@ QString KoHyphenator::hyphenate(const QString& str, const QString& lang) const
     QString res = str;
     try
     {
-        QTextCodec *codec = QTextCodec::codecForName(encodingForLang(lang));
+        QTextCodec *codec = codecForLang(lang);
         hnj_hyphen_hyphenate(dict(lang), (const char *)(codec->fromUnicode(str)), str.length(), x);
     }
     catch (KoHyphenatorException &e)
@@ -196,11 +200,24 @@ HyphenDict *KoHyphenator::dict(const QString &_lang) const
     return dicts[lang];
 }
 
-QCString KoHyphenator::encodingForLang(const QString& lang) const
+QTextCodec* KoHyphenator::codecForLang(const QString& lang) const
 {
-    QMap<QString, QString>::ConstIterator it = encodings.find(lang);
+    EncodingMap::Iterator it = encodings.find(lang);
+    if (it == encodings.end())
+    {
+        int underscore = lang.find('_');
+        if ( underscore > -1 ) {
+            QString _lang( lang );
+            _lang.truncate( underscore );
+            it = encodings.find(_lang);
+        }
+    }
     if (it != encodings.end())
-        return (*it).latin1();
-    else
-        return "utf8";
+    {
+        if ( (*it).codec )
+            return (*it).codec;
+        (*it).codec = QTextCodec::codecForName((*it).encoding);
+        return (*it).codec;
+    }
+    return QTextCodec::codecForMib(106); // utf-8
 }
