@@ -9,7 +9,9 @@
 #include "kscript_ext_qpushbutton.h"
 #include "kscript_ext_qcombobox.h"
 #include "kscript_ext_qlabel.h"
+#include "kscript_ext_qboxlayout.h"
 #include "kscript_ext_qvboxlayout.h"
+#include "kscript_ext_qhboxlayout.h"
 #include "kscript_ext_qbuttongroup.h"
 #include "kscript_ext_qstructs.h"
 #include "kscript_value.h"
@@ -34,7 +36,9 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
   module->addObject( "QCheckBox", new KSValue( new KSClass_QCheckBox( module ) ) );
   module->addObject( "QComboBox", new KSValue( new KSClass_QComboBox( module ) ) );
   module->addObject( "QLabel", new KSValue( new KSClass_QLabel( module ) ) );
+  module->addObject( "QBoxLayout", new KSValue( new KSClass_QBoxLayout( module ) ) );
   module->addObject( "QVBoxLayout", new KSValue( new KSClass_QVBoxLayout( module ) ) );
+  module->addObject( "QHBoxLayout", new KSValue( new KSClass_QHBoxLayout( module ) ) );
   module->addObject( "QButtonGroup", new KSValue( new KSClass_QButtonGroup( module ) ) );
   module->addObject( "QRect", new KSValue( new KSQt::Rect( module, "QRect" ) ) );
   module->addObject( "QPoint", new KSValue( new KSQt::Point( module, "QPoint" ) ) );

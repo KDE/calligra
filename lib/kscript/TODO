@@ -12,6 +12,7 @@ Tasks for KScript:
 [s] QButtonGroup
 [s] QCheckBox
 [s] QDialog
+[s] Q*BoxLayout
 [ ] QListBox*
 [s] QComboBox
 [ ] QListView*
