@@ -1166,7 +1166,20 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 p.appendChild( indent );
             }
         }
-
+        if( m_styleStack.hasAttribute("fo:line-height"))
+        {
+            QString value = m_styleStack.attribute( "fo:line-height" );
+            QDomElement lineSpacing = doc.createElement( "LINESPACING" );
+            if( value=="150%")
+            {
+                lineSpacing.setAttribute("type","oneandhalf");
+            }
+            else if( value=="200%")
+            {
+                lineSpacing.setAttribute("type","double");
+            }
+            p.appendChild(lineSpacing );
+        }
         QDomElement text = doc.createElement( "TEXT" );
         text.appendChild( doc.createTextNode( textData ) );
 
