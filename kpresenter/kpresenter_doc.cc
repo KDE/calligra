@@ -1404,7 +1404,7 @@ void KPresenterDocument_impl::raiseObjs(int diffx,int diffy)
 void KPresenterDocument_impl::insertPicture(QString filename,int diffx,int diffy)
 {
   KPPixmapObject *kppixmapobject = new KPPixmapObject(&_pixmapCollection,filename);
-  kppixmapobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
+  kppixmapobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
   kppixmapobject->setSelected(true);
 
   InsertCmd *insertCmd = new InsertCmd(i18n("Insert picture"),kppixmapobject,this);
@@ -1418,7 +1418,7 @@ void KPresenterDocument_impl::insertPicture(QString filename,int diffx,int diffy
 void KPresenterDocument_impl::insertClipart(QString filename,int diffx,int diffy)
 {
   KPClipartObject *kpclipartobject = new KPClipartObject(filename);
-  kpclipartobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
+  kpclipartobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
   kpclipartobject->setSize(150,150);
   kpclipartobject->setSelected(true);
 
@@ -1477,7 +1477,7 @@ void KPresenterDocument_impl::changeClipart(QString filename,int diffx,int diffy
 void KPresenterDocument_impl::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType lt,int diffx,int diffy)
 {
   KPLineObject *kplineobject = new KPLineObject(pen,lb,le,lt);
-  kplineobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
+  kplineobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
   kplineobject->setSize(150,150);
   kplineobject->setSelected(true);
 
@@ -1493,7 +1493,7 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
 					      BCType gt,int diffx,int diffy)
 {
   KPRectObject *kprectobject = new KPRectObject(pen,brush,rt,ft,g1,g2,gt,getRndX(),getRndY());
-  kprectobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
+  kprectobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
   kprectobject->setSize(150,150);
   kprectobject->setSelected(true);
 
@@ -1509,7 +1509,7 @@ void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,FillTy
 						    BCType gt,int diffx,int diffy)
 {
   KPEllipseObject *kpellipseobject = new KPEllipseObject(pen,brush,ft,g1,g2,gt);
-  kpellipseobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
+  kpellipseobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
   kpellipseobject->setSize(150,150);
   kpellipseobject->setSelected(true);
 
@@ -1525,7 +1525,7 @@ void KPresenterDocument_impl::insertPie(QPen pen,QBrush brush,FillType ft,QColor
 					BCType gt,PieType pt,int _angle,int _len,LineEnd lb,LineEnd le,int diffx,int diffy)
 {
   KPPieObject *kppieobject = new KPPieObject(pen,brush,ft,g1,g2,gt,pt,_angle,_len,lb,le);
-  kppieobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
+  kppieobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
   kppieobject->setSize(150,150);
   kppieobject->setSelected(true);
 
@@ -1540,7 +1540,7 @@ void KPresenterDocument_impl::insertPie(QPen pen,QBrush brush,FillType ft,QColor
 void KPresenterDocument_impl::insertText(int diffx,int diffy)
 {
   KPTextObject *kptextobject = new KPTextObject();
-  kptextobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
+  kptextobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
   kptextobject->setSize(170,150);
   kptextobject->setSelected(true);
 
@@ -1556,7 +1556,7 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,Li
 					     BCType gt,QString fileName,int diffx,int diffy)
 {
   KPAutoformObject *kpautoformobject = new KPAutoformObject(pen,brush,fileName,lb,le,ft,g1,g2,gt);
-  kpautoformobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
+  kpautoformobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
   kpautoformobject->setSize(150,150);
   kpautoformobject->setSelected(true);
 

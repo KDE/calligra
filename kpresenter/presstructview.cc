@@ -560,6 +560,64 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
       } break;
     case OT_PIE:
       {
+	list->appendItem(i18n("Sub-Type"));
+	list->changeItemPart(i18n(PieTypeName[static_cast<int>(dynamic_cast<KPPieObject*>(_obj)->getPieType())]),
+			     list->count() - 1,1);
+	list->appendItem(i18n("Pen Color"));
+	if (dynamic_cast<KPPieObject*>(_obj)->getPen().style() == NoPen)
+	  list->changeItemPart("no pen",list->count() - 1,1);
+	else
+	  list->changeItemPart(getColor(dynamic_cast<KPPieObject*>(_obj)->getPen().color()),list->count() - 1,1);
+
+	list->appendItem(i18n("Pen Style"));
+	list->changeItemPart(i18n(PenStyleName[static_cast<int>(dynamic_cast<KPPieObject*>(_obj)->getPen().style())]),
+			     list->count() - 1,1);
+
+	str.sprintf("%d",dynamic_cast<KPPieObject*>(_obj)->getPen().width());
+	list->appendItem(i18n("Pen Width"));
+	list->changeItemPart(str,list->count() - 1,1);
+
+	if (dynamic_cast<KPPieObject*>(_obj)->getFillType() == FT_BRUSH)
+	  {
+	    list->appendItem(i18n("Brush Color"));
+	    if (dynamic_cast<KPPieObject*>(_obj)->getBrush().style() == NoBrush)
+	      list->changeItemPart("no brush",list->count() - 1,1);
+	    else
+	      list->changeItemPart(getColor(dynamic_cast<KPPieObject*>(_obj)->getBrush().color()),list->count() - 1,1);
+	    
+	    list->appendItem(i18n("Brush Style"));
+	    list->changeItemPart(i18n(BrushStyleName[static_cast<int>(dynamic_cast<KPPieObject*>(_obj)->getBrush().style())]),
+				 list->count() - 1,1);
+	  }
+	else
+	  {
+	    list->appendItem(i18n("Gradient Color1"));
+	    list->changeItemPart(getColor(dynamic_cast<KPPieObject*>(_obj)->getGColor1()),list->count() - 1,1);
+
+	    list->appendItem(i18n("Gradient Color2"));
+	    list->changeItemPart(getColor(dynamic_cast<KPPieObject*>(_obj)->getGColor2()),list->count() - 1,1);
+
+	    list->appendItem(i18n("Gradient Type"));
+	    list->changeItemPart(i18n(BackColorTypeName[static_cast<int>(dynamic_cast<KPPieObject*>(_obj)->getGType())]),
+				 list->count() - 1,1);
+	  }
+	list->appendItem(i18n("Line Begin"));
+	list->changeItemPart(i18n(LineEndName[static_cast<int>(dynamic_cast<KPPieObject*>(_obj)->getLineBegin())]),
+			     list->count() - 1,1);
+
+	list->appendItem(i18n("Line End"));
+	list->changeItemPart(i18n(LineEndName[static_cast<int>(dynamic_cast<KPPieObject*>(_obj)->getLineEnd())]),
+			     list->count() - 1,1);
+
+	str.sprintf("%d (=%g deg.)",dynamic_cast<KPPieObject*>(_obj)->getPieAngle(),
+		    static_cast<float>(dynamic_cast<KPPieObject*>(_obj)->getPieAngle()) / 16.0);
+	list->appendItem(i18n("Pie/Arc/Chord Angle"));
+	list->changeItemPart(str,list->count() - 1,1);
+
+	str.sprintf("%d (=%g deg.)",dynamic_cast<KPPieObject*>(_obj)->getPieLength(),
+		    static_cast<float>(dynamic_cast<KPPieObject*>(_obj)->getPieLength()) / 16.0);
+	list->appendItem(i18n("Pie/Arc/Chord Length"));
+	list->changeItemPart(str,list->count() - 1,1);
       } break;
     case OT_LINE:
       {

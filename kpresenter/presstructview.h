@@ -79,6 +79,7 @@ const QString LineTypeName[] = {"Horizontal","Vertical","Left/Top - Right/Bottom
 const QString LineEndName[] = {"Normal","Arrow","Square","Circle"};
 const QString PresSpeedName[] = {"Slow","Normal","Fast"};
 const QString YesNo[] = {"Yes","No"};
+const QString PieTypeName[] = {"Pie","Arc","Chord"};
 
 /******************************************************************/
 /* Class: PVTimeTable                                             */
