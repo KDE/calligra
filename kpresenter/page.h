@@ -325,7 +325,7 @@ private:
     void picViewOrigHelper(int x, int y);
 
     void moveObject( int x, int y, bool key );
-    void resizeObject();
+    void resizeObject( ModifyType _modType, int _dx, int _dy );
 
     void raiseObject();
     void lowerObject();

@@ -899,86 +899,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		} else if ( modType == MT_MOVE ) {
 		    moveObject( mx - oldMx, my - oldMy, false );
 		} else if ( modType != MT_NONE && resizeObjNum != -1 ) {
-		    QPainter p;
-		    p.begin( this );
-
-		    QRect oldRect;
-		    kpobject = objectList()->at( resizeObjNum );
-		    oldRect = kpobject->getBoundingRect( 0, 0 );
-		    kpobject->setMove( true );
-		    kpobject->draw( &p, diffx(), diffy() );
-
-		    int dx = mx - oldMx;
-		    int dy = my - oldMy;
-
-		    switch ( modType ) {
-		    case MT_RESIZE_LU: {
-			if ( keepRatio && ratio != 0.0 )
-			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
-				break;
-			kpobject->moveBy( QPoint( dx, dy ) );
-			kpobject->resizeBy( -dx, -dy );
-			resizeObject();
-		    } break;
-		    case MT_RESIZE_LF: {
-			dy = 0;
-			if ( keepRatio && ratio != 0.0 )
-			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
-				break;
-			kpobject->moveBy( QPoint( dx, 0 ) );
-			kpobject->resizeBy( -dx, -dy );
-			resizeObject();
-		    } break;
-		    case MT_RESIZE_LD: {
-			if ( keepRatio && ratio != 0.0 )
-			    break;
-			kpobject->moveBy( QPoint( dx, 0 ) );
-			kpobject->resizeBy( -dx, dy );
-			resizeObject();
-		    } break;
-		    case MT_RESIZE_RU: {
-			if ( keepRatio && ratio != 0.0 )
-			    break;
-			kpobject->moveBy( QPoint( 0, dy ) );
-			kpobject->resizeBy( dx, -dy );
-			resizeObject();
-		    } break;
-		    case MT_RESIZE_RT: {
-			dy = 0;
-			if ( keepRatio && ratio != 0.0 )
-			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
-				break;
-			kpobject->resizeBy( dx, dy );
-			resizeObject();
-		    } break;
-		    case MT_RESIZE_RD: {
-			if ( keepRatio && ratio != 0.0 )
-			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
-				break;
-			kpobject->resizeBy( QSize( dx, dy ) );
-			resizeObject();
-		    } break;
-		    case MT_RESIZE_UP: {
-			dx = 0;
-			if ( keepRatio && ratio != 0.0 )
-			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
-				break;
-			kpobject->moveBy( QPoint( 0, dy ) );
-			kpobject->resizeBy( -dx, -dy );
-			resizeObject();
-		    } break;
-		    case MT_RESIZE_DN: {
-			dx = 0;
-			if ( keepRatio && ratio != 0.0 )
-			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
-				break;
-			kpobject->resizeBy( dx, dy );
-			resizeObject();
-		    } break;
-		    default: break;
-		    }
-		    kpobject->draw( &p, diffx(), diffy() );
-		    p.end();
+                    resizeObject( modType, mx - oldMx, my - oldMy );
 		}
 
 		oldMx = e->x();
@@ -4014,12 +3935,89 @@ void Page::moveObject( int x, int y, bool key )
     }
 }
 
-void Page::resizeObject()
+void Page::resizeObject( ModifyType _modType, int _dx, int _dy )
 {
+    int dx = _dx;
+    int dy = _dy;
+
     KPObject *kpobject;
 
     kpobject = objectList()->at( resizeObjNum );
     kpobject->setMove( false );
+
+    QPainter p;
+    p.begin( this );
+
+    kpobject->draw( &p, diffx(), diffy() );
+
+    switch ( _modType ) {
+        case MT_RESIZE_LU: {
+            if ( keepRatio && ratio != 0.0 ) {
+                if ( !calcRatio( dx, dy, kpobject, ratio ) )
+                    break;
+            }
+            kpobject->moveBy( QPoint( dx, dy ) );
+            kpobject->resizeBy( -dx, -dy );
+        } break;
+        case MT_RESIZE_LF: {
+            dy = 0;
+            if ( keepRatio && ratio != 0.0 ) {
+                if ( !calcRatio( dx, dy, kpobject, ratio ) )
+                    break;
+            }
+            kpobject->moveBy( QPoint( dx, 0 ) );
+            kpobject->resizeBy( -dx, -dy );
+        } break;
+        case MT_RESIZE_LD: {
+            if ( keepRatio && ratio != 0.0 )
+                break;
+            kpobject->moveBy( QPoint( dx, 0 ) );
+            kpobject->resizeBy( -dx, dy );
+        } break;
+        case MT_RESIZE_RU: {
+            if ( keepRatio && ratio != 0.0 )
+                break;
+            kpobject->moveBy( QPoint( 0, dy ) );
+            kpobject->resizeBy( dx, -dy );
+        } break;
+        case MT_RESIZE_RT: {
+            dy = 0;
+            if ( keepRatio && ratio != 0.0 ) {
+                if ( !calcRatio( dx, dy, kpobject, ratio ) )
+                    break;
+            }
+            kpobject->resizeBy( dx, dy );
+        } break;
+        case MT_RESIZE_RD: {
+            if ( keepRatio && ratio != 0.0 ) {
+                if ( !calcRatio( dx, dy, kpobject, ratio ) )
+                    break;
+            }
+            kpobject->resizeBy( QSize( dx, dy ) );
+        } break;
+        case MT_RESIZE_UP: {
+            dx = 0;
+            if ( keepRatio && ratio != 0.0 ) {
+                if ( !calcRatio( dx, dy, kpobject, ratio ) )
+                    break;
+            }
+            kpobject->moveBy( QPoint( 0, dy ) );
+            kpobject->resizeBy( -dx, -dy );
+	} break;
+        case MT_RESIZE_DN: {
+            dx = 0;
+            if ( keepRatio && ratio != 0.0 ) {
+                if ( !calcRatio( dx, dy, kpobject, ratio ) )
+                    break;
+            }
+            kpobject->resizeBy( dx, dy );
+        } break;
+	default: break;
+    }
+
+    kpobject->draw( &p, diffx(), diffy() );
+    p.end();
+
     _repaint( oldBoundingRect );
     _repaint( kpobject );
 
