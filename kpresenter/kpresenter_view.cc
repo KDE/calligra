@@ -2553,6 +2553,7 @@ void KPresenterView::initGui()
     m_pKPresenterDoc->updateZoomRuler();
     updatePageInfo();
     actionAllowBgSpellCheck->setChecked( m_pKPresenterDoc->backgroundSpellCheckEnabled());
+    m_pKPresenterDoc->updatePresentationButton();
 }
 
 void KPresenterView::updateHeaderFooterButton()

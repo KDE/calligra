@@ -1814,7 +1814,6 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
     //attributes isReadWrite is not placed at the beginning !
     if ( !isReadWrite())
         enableBackgroundSpellCheck( false );
-
     return true;
 }
 
@@ -3266,6 +3265,7 @@ void KPresenterDoc::insertFile(const QString & file )
     selectPage(m_pageList.count()-1, true );
 
     _clean = clean;
+    updatePresentationButton();
 }
 
 void KPresenterDoc::spellCheckParagraphDeleted( KoTextParag *_parag,  KPTextObject *frm)
