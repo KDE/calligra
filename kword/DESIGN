@@ -83,13 +83,57 @@ drawCursor() method, implemented in KWTextFrameSetEdit.
 
 Coordinate systems
 ==================
- 
-Just a quick note, to be expanded later.
- 
+
+This is fun; brace yourself
+
+Document:
+    All objects have an position on the page which is described in the typographic units
+    named points.
+    There are 72 points to the inch, and these absolute coordinates simply place your 
+    objects on the page. 
+    An example; a frame is positioned on paper some 35mm from the left border of the paper and
+    some 35mm from the top of the first page. the absolute position of that frame is 100, 100
+    since 100pt equals 35mm
+    Note that positioning is done from page1, so when a frame is moved from page 1 to page 2 it
+    simply gets a higher Y coordinate.
+
+Zoomed: (aka Normal)
+    Every object on screen has a size, and at different zoom levels we use a different amount
+    of pixels to display the same object.
+    Our object above has a top-left position of document:(100,100). To determine where
+    this is on screen we call KWDocument::zoomItX(xPos) and KWDocument::zoomItY(yPos) to
+    retrieve the pixel positioning on screen at the current zoom level. The zoom level
+    is stored only in the document (an instance of KWDocument)
+    Since we are using pixel values all these values are stored in integers, they should not
+    be used to move something around, the absolute coordinate system has to be used for that.
+
+Internal:
+    The former two were mostly for objects like frames etc, not for text. Text (the individual
+    words and characters) are positioned with the layout coordinates. Layout is similar to the
+    Zoomed system, but always uses the same resolution. This resolution is sufficiently high to
+    do the layout in integers, and not really loose info.
+    Internal coordinates can therefor be converted to Document coordinates with
+    KWTextFrameSet::internalToDocument().
+
+    This is the high-resolution unit in which the text layout is done,
+    currently set to 1440 DPI. Everything known the QRT classes will be in
+    this coordinate system (including the QTextFormats). When painting, we apply
+    the current zoom and resolution to find the right font size to use, and we 
+    have to catch up with rounding differences. However the position of the words
+    (i.e. layout) is the one determined previously in layout units. KoZoomHandler
+    offers methods for converting between layout units and zoom-dependent points 
+    and pixels.
+   
+View:
+    The same as the zoomed coordinate system, but this one can use multiple pages next to each
+    other. So 3 pages horizontal in preview mode is no problem. A frame on page 3 then has a 
+    higher coordinate then the same frame on page 1. When converting to Zoomed the 
+    coordinates are equals.
+
+
 Document (pt values, in double, KoPoint, KoRect.)
-This is called the "Document" coordinate system.
  |               |
- |               |--KWDocument::zoom*
+ |               |--KWDocument::zoomIt[XY]   and unzoomIt[XY]
  |               |
  |               V
  |    Zoomed coordinates (pixel values, in int, QPoint, QRect) 
@@ -108,15 +152,6 @@ This is called the "Document" coordinate system.
  V
 Internal coordinates (the coordinates given to QRT - in "layout units")
 
-About layout units:
-This is the high-resolution unit in which the text layout is done,
-currently set to 1440 DPI. Everything known the QRT classes will be in
-this coordinate system (including the QTextFormats). When painting, we apply
- the current zoom and resolution to find the right font size to use, and we 
-have to catch up with rounding differences. However the position of the words
-(i.e. layout) is the one determined previously in layout units. KoZoomHandler
-offers methods for converting between layout units and zoom-dependent points 
-and pixels.
 
 Wow, you managed to read this until the end ? Good. "GOTO 10" now ;)
 
