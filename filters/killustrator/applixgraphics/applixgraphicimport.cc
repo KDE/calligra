@@ -31,6 +31,7 @@
 #include <applixgraphicimport.moc>
 #include <kdebug.h>
 #include <math.h>
+#include <cmath>
 
 
 
