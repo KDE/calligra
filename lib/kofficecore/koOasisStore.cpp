@@ -137,7 +137,7 @@ bool KoOasisStore::closeManifestWriter()
 
 bool KoOasisStore::loadAndParse( const QString& fileName, QDomDocument& doc, QString& errorMessage )
 {
-    //kdDebug(30003) << "loadAndParse: Trying to open " << filename << endl;
+    //kdDebug(30003) << "loadAndParse: Trying to open " << fileName << endl;
 
     if (!m_store->open(fileName))
     {
