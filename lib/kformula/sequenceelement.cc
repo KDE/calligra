@@ -37,6 +37,7 @@
 #include "sequenceelement.h"
 #include "sequenceparser.h"
 #include "symbolelement.h"
+#include "spaceelement.h"
 #include "textelement.h"
 
 
@@ -838,6 +839,7 @@ bool SequenceElement::buildChildrenFromDom(QPtrList<BasicElement>& list, QDomNod
 BasicElement* SequenceElement::createElement(QString type)
 {
     if      (type == "TEXT")       return new TextElement();
+    else if (type == "SPACE")      return new SpaceElement();
     else if (type == "ROOT")       return new RootElement();
     else if (type == "BRACKET")    return new BracketElement();
     else if (type == "MATRIX")     return new MatrixElement();

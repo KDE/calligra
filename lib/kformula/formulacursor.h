@@ -24,7 +24,7 @@
 #include <qstring.h>
 
 #include "basicelement.h"
-#include "formuladefs.h"
+#include "kformuladefs.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -39,7 +39,7 @@ class TextElement;
  * The selection. This might be a position selection or
  * an area. Each view will need one FormulaCursor.
  *
- * The @ref KFormulaContainer always uses the cursor to operate on
+ * The @ref Container always uses the cursor to operate on
  * the element tree.
  *
  * Note that it is up to the elements to actually move the cursor.
@@ -146,7 +146,7 @@ public:
      * Inserts the child at the current position.
      * Ignores the selection.
      */
-    void insert(BasicElement*, BasicElement::Direction = BasicElement::beforeCursor);
+    void insert(BasicElement*, Direction = beforeCursor);
 
     /**
      * Inserts the listed children at the current position.
@@ -154,7 +154,7 @@ public:
      * The list will be emptied.
      */
     void insert(QPtrList<BasicElement>&,
-                BasicElement::Direction = BasicElement::beforeCursor);
+                Direction = beforeCursor);
 
     /**
      * Removes the current selected children and returns them.
@@ -162,7 +162,7 @@ public:
      * for this to have any effect.
      */
     void remove(QPtrList<BasicElement>&,
-                BasicElement::Direction = BasicElement::beforeCursor);
+                Direction = beforeCursor);
 
 
     /**
@@ -170,13 +170,13 @@ public:
      * The replaced elements become the new element's main child's content.
      */
     void replaceSelectionWith(BasicElement*,
-                              BasicElement::Direction = BasicElement::beforeCursor);
+                              Direction = beforeCursor);
 
     /**
      * Replaces the element the cursor points to with its main child's
      * content.
      */
-    BasicElement* replaceByMainChildContent(BasicElement::Direction = BasicElement::beforeCursor);
+    BasicElement* replaceByMainChildContent(Direction = beforeCursor);
 
     /**
      * Trys to find the element we are the main child of and replace
@@ -185,7 +185,7 @@ public:
      * This is simply another form of replaceByMainChildContent. You
      * use this one if the cursor is normalized and inside the main child.
      */
-    BasicElement* removeEnclosingElement(BasicElement::Direction = BasicElement::beforeCursor);
+    BasicElement* removeEnclosingElement(Direction = beforeCursor);
 
     /**
      * Returns wether the element the cursor points to should be replaced.
@@ -236,7 +236,7 @@ public:
      * You need to call this after each removal because the cursor
      * might point to some non existing place.
      */
-    void normalize(BasicElement::Direction direction = BasicElement::beforeCursor);
+    void normalize(Direction direction = beforeCursor);
 
 
     /**
@@ -365,7 +365,7 @@ private:
      *
      * Might be 0 is there is no such child.
      */
-    BasicElement* getActiveChild(BasicElement::Direction direction);
+    BasicElement* getActiveChild(Direction direction);
 
     /**
      * Returns the child that is currently selected.

@@ -24,7 +24,7 @@
 #include <qdialog.h>
 #include <qvalidator.h>
 
-#include "formuladefs.h"
+#include "kformuladefs.h"
 
 KFORMULA_NAMESPACE_BEGIN
 

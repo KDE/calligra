@@ -58,7 +58,22 @@ void SequenceParser::nextToken()
     tokenEnd++;
     BasicElement* element = list.at( tokenStart );
     type = element->getTokenType();
-    if ( ( type == ORDINARY ) || ( type == SEPARATOR ) ) {
+    if ( type == SEPARATOR ) {
+        if ( tokenEnd < list.count() ) {
+            QChar ch = getEndChar();
+            switch ( ch ) {
+            case ',':
+            case '>':
+            case ';':
+                type = NAME;
+                tokenEnd++;
+                break;
+            default:
+                readText();
+            }
+        }
+    }
+    else if ( type == ORDINARY ) {
         readText();
     }
     else if ( type == NUMBER ) {
@@ -165,13 +180,15 @@ ElementType* SequenceParser::getPrimitive()
     switch ( type ) {
     case ORDINARY: {
         QString text = getText();
-        if ( table.contains( text ) ) {
+        if ( table.contains( text ) || ( text == "\\quad" ) ) {
             return new NameType( this, text );
         }
         else {
             return new TextType( this );
         }
     }
+    case NAME:
+        return new NameType( this, getText() );
     case NUMBER:
         return new NumberType( this );
     case ELEMENT:

@@ -34,10 +34,10 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-struct KFormulaDocument::KFormulaDocument_Impl {
+struct Document::Document_Impl {
 
 
-    KFormulaDocument_Impl()
+    Document_Impl()
             : leftBracketChar('('), rightBracketChar(')'),
               syntaxHighlighting(true), formula(0)
     {
@@ -45,7 +45,7 @@ struct KFormulaDocument::KFormulaDocument_Impl {
     }
 
 
-    ~KFormulaDocument_Impl()
+    ~Document_Impl()
     {
         if (ownHistory) {
             delete history;
@@ -93,7 +93,7 @@ struct KFormulaDocument::KFormulaDocument_Impl {
     /**
      * The active formula.
      */
-    KFormulaContainer* formula;
+    Container* formula;
 
     /**
      * Our undo stack. We don't own it. The stack belongs to
@@ -121,47 +121,47 @@ struct KFormulaDocument::KFormulaDocument_Impl {
     /**
      * All formulae that belong to this document.
      */
-    QPtrList<KFormulaContainer> formulae;
+    QPtrList<Container> formulae;
 };
 
 
-double KFormulaDocument::getXResolution() const { return impl->contextStyle.getXResolution(); }
-double KFormulaDocument::getYResolution() const { return impl->contextStyle.getYResolution(); }
+double Document::getXResolution() const { return impl->contextStyle.getXResolution(); }
+double Document::getYResolution() const { return impl->contextStyle.getYResolution(); }
 
-void KFormulaDocument::setResolution(double zX, double zY) { impl->contextStyle.setResolution(zX, zY); }
+void Document::setResolution(double zX, double zY) { impl->contextStyle.setResolution(zX, zY); }
 
-KCommandHistory* KFormulaDocument::getHistory() const { return impl->history; }
-const SymbolTable& KFormulaDocument::getSymbolTable() const { return impl->table; }
+KCommandHistory* Document::getHistory() const { return impl->history; }
+const SymbolTable& Document::getSymbolTable() const { return impl->table; }
 
-KAction* KFormulaDocument::getAddBracketAction()       { return impl->addBracketAction; }
-KAction* KFormulaDocument::getAddFractionAction()      { return impl->addFractionAction; }
-KAction* KFormulaDocument::getAddRootAction()          { return impl->addRootAction; }
-KAction* KFormulaDocument::getAddSumAction()           { return impl->addSumAction; }
-KAction* KFormulaDocument::getAddProductAction()       { return impl->addProductAction; }
-KAction* KFormulaDocument::getAddIntegralAction()      { return impl->addIntegralAction; }
-KAction* KFormulaDocument::getAddMatrixAction()        { return impl->addMatrixAction; }
-KAction* KFormulaDocument::getAddOneByTwoMatrixAction(){ return impl->addOneByTwoMatrixAction; }
-KAction* KFormulaDocument::getAddUpperLeftAction()     { return impl->addUpperLeftAction; }
-KAction* KFormulaDocument::getAddLowerLeftAction()     { return impl->addLowerLeftAction; }
-KAction* KFormulaDocument::getAddUpperRightAction()    { return impl->addUpperRightAction; }
-KAction* KFormulaDocument::getAddLowerRightAction()    { return impl->addLowerRightAction; }
-KAction* KFormulaDocument::getAddGenericUpperAction()  { return impl->addGenericUpperAction; }
-KAction* KFormulaDocument::getAddGenericLowerAction()  { return impl->addGenericLowerAction; }
-KAction* KFormulaDocument::getRemoveEnclosingAction()  { return impl->removeEnclosingAction; }
-KAction* KFormulaDocument::getMakeGreekAction()        { return impl->makeGreekAction; }
-KAction* KFormulaDocument::getInsertSymbolAction()     { return impl->insertSymbolAction; }
-KSelectAction* KFormulaDocument::getLeftBracketAction()  { return impl->leftBracket; }
-KSelectAction* KFormulaDocument::getRightBracketAction() { return impl->rightBracket; }
-KSelectAction* KFormulaDocument::getSymbolNamesAction()  { return impl->symbolNamesAction; }
-KToggleAction* KFormulaDocument::getSyntaxHighlightingAction() { return impl->syntaxHighlightingAction; }
+KAction* Document::getAddBracketAction()       { return impl->addBracketAction; }
+KAction* Document::getAddFractionAction()      { return impl->addFractionAction; }
+KAction* Document::getAddRootAction()          { return impl->addRootAction; }
+KAction* Document::getAddSumAction()           { return impl->addSumAction; }
+KAction* Document::getAddProductAction()       { return impl->addProductAction; }
+KAction* Document::getAddIntegralAction()      { return impl->addIntegralAction; }
+KAction* Document::getAddMatrixAction()        { return impl->addMatrixAction; }
+KAction* Document::getAddOneByTwoMatrixAction(){ return impl->addOneByTwoMatrixAction; }
+KAction* Document::getAddUpperLeftAction()     { return impl->addUpperLeftAction; }
+KAction* Document::getAddLowerLeftAction()     { return impl->addLowerLeftAction; }
+KAction* Document::getAddUpperRightAction()    { return impl->addUpperRightAction; }
+KAction* Document::getAddLowerRightAction()    { return impl->addLowerRightAction; }
+KAction* Document::getAddGenericUpperAction()  { return impl->addGenericUpperAction; }
+KAction* Document::getAddGenericLowerAction()  { return impl->addGenericLowerAction; }
+KAction* Document::getRemoveEnclosingAction()  { return impl->removeEnclosingAction; }
+KAction* Document::getMakeGreekAction()        { return impl->makeGreekAction; }
+KAction* Document::getInsertSymbolAction()     { return impl->insertSymbolAction; }
+KSelectAction* Document::getLeftBracketAction()  { return impl->leftBracket; }
+KSelectAction* Document::getRightBracketAction() { return impl->rightBracket; }
+KSelectAction* Document::getSymbolNamesAction()  { return impl->symbolNamesAction; }
+KToggleAction* Document::getSyntaxHighlightingAction() { return impl->syntaxHighlightingAction; }
 
-KFormulaContainer* KFormulaDocument::formula() const { return impl->formula; }
+Container* Document::formula() const { return impl->formula; }
 
 
-KFormulaDocument::KFormulaDocument(KActionCollection* collection,
+Document::Document(KActionCollection* collection,
                                    KCommandHistory* his)
 {
-    impl = new KFormulaDocument_Impl;
+    impl = new Document_Impl;
 
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "kformula/pics/");
     createActions(collection);
@@ -178,9 +178,9 @@ KFormulaDocument::KFormulaDocument(KActionCollection* collection,
 }
 
 
-KFormulaDocument::KFormulaDocument(KCommandHistory* his)
+Document::Document(KCommandHistory* his)
 {
-    impl = new KFormulaDocument_Impl;
+    impl = new Document_Impl;
     if (his == 0) {
         impl->history = new KCommandHistory;
         impl->ownHistory = true;
@@ -192,37 +192,37 @@ KFormulaDocument::KFormulaDocument(KCommandHistory* his)
 }
 
 
-KFormulaDocument::~KFormulaDocument()
+Document::~Document()
 {
     delete impl;
 }
 
 
-ContextStyle& KFormulaDocument::getContextStyle( bool forPrinting )
+ContextStyle& Document::getContextStyle( bool forPrinting )
 {
     // Make sure not to change anything depending on `forPrinting' that
     // would require a new calculation of the formula.
-    //kdDebug( 40000 ) << "KFormulaDocument::activate: forPrinting=" << forPrinting << endl;
+    //kdDebug( 40000 ) << "Document::activate: forPrinting=" << forPrinting << endl;
     impl->contextStyle.setSyntaxHighlighting( forPrinting ? false : impl->syntaxHighlighting );
     return impl->contextStyle;
 }
 
 
-KFormulaContainer* KFormulaDocument::createFormula()
+Container* Document::createFormula()
 {
-    KFormulaContainer* f = new KFormulaContainer(this);
+    Container* f = new Container(this);
     impl->formulae.append(f);
     return f;
 }
 
 
-void KFormulaDocument::activate(KFormulaContainer* f)
+void Document::activate(Container* f)
 {
     impl->formula = f;
 }
 
 
-void KFormulaDocument::formulaDies(KFormulaContainer* f)
+void Document::formulaDies(Container* f)
 {
     if (f == impl->formula) {
         impl->formula = 0;
@@ -231,7 +231,7 @@ void KFormulaDocument::formulaDies(KFormulaContainer* f)
 }
 
 
-void KFormulaDocument::createActions(KActionCollection* collection)
+void Document::createActions(KActionCollection* collection)
 {
     impl->addIntegralAction = new KAction(i18n("Add/change to integral"),
                                     "int",
@@ -388,98 +388,98 @@ void KFormulaDocument::createActions(KActionCollection* collection)
 }
 
 
-void KFormulaDocument::paste()
+void Document::paste()
 {
     if (hasFormula()) {
         formula()->paste();
     }
 }
 
-void KFormulaDocument::copy()
+void Document::copy()
 {
     if (hasFormula()) {
         formula()->copy();
     }
 }
 
-void KFormulaDocument::cut()
+void Document::cut()
 {
     if (hasFormula()) {
         formula()->cut();
     }
 }
 
-void KFormulaDocument::addDefaultBracket()
+void Document::addDefaultBracket()
 {
     if (hasFormula()) {
         formula()->addBracket(impl->leftBracketChar, impl->rightBracketChar);
     }
 }
 
-void KFormulaDocument::addSquareBracket()
+void Document::addSquareBracket()
 {
     if (hasFormula()) {
         formula()->addSquareBracket();
     }
 }
 
-void KFormulaDocument::addCurlyBracket()
+void Document::addCurlyBracket()
 {
     if (hasFormula()) {
         formula()->addCurlyBracket();
     }
 }
 
-void KFormulaDocument::addLineBracket()
+void Document::addLineBracket()
 {
     if (hasFormula()) {
         formula()->addLineBracket();
     }
 }
 
-void KFormulaDocument::addFraction()
+void Document::addFraction()
 {
     if (hasFormula()) {
         formula()->addFraction();
     }
 }
 
-void KFormulaDocument::addRoot()
+void Document::addRoot()
 {
     if (hasFormula()) {
         formula()->addRoot();
     }
 }
 
-void KFormulaDocument::addIntegral()
+void Document::addIntegral()
 {
     if (hasFormula()) {
         formula()->addIntegral();
     }
 }
 
-void KFormulaDocument::addProduct()
+void Document::addProduct()
 {
     if (hasFormula()) {
         formula()->addProduct();
     }
 }
 
-void KFormulaDocument::addSum()
+void Document::addSum()
 {
     if (hasFormula()) {
         formula()->addSum();
     }
 }
 
-void KFormulaDocument::addMatrix()
+void Document::addMatrix()
 {
     if (hasFormula()) {
         formula()->addMatrix();
     }
 }
 
-void KFormulaDocument::addOneByTwoMatrix()
+void Document::addOneByTwoMatrix()
 {
     if (hasFormula()) {
 	formula()->addOneByTwoMatrix();
@@ -487,63 +487,63 @@ void KFormulaDocument::addOneByTwoMatrix()
 }
 
 
-void KFormulaDocument::addLowerLeftIndex()
+void Document::addLowerLeftIndex()
 {
     if (hasFormula()) {
         formula()->addLowerLeftIndex();
     }
 }
 
-void KFormulaDocument::addUpperLeftIndex()
+void Document::addUpperLeftIndex()
 {
     if (hasFormula()) {
         formula()->addUpperLeftIndex();
     }
 }
 
-void KFormulaDocument::addLowerRightIndex()
+void Document::addLowerRightIndex()
 {
     if (hasFormula()) {
         formula()->addLowerRightIndex();
     }
 }
 
-void KFormulaDocument::addUpperRightIndex()
+void Document::addUpperRightIndex()
 {
     if (hasFormula()) {
         formula()->addUpperRightIndex();
     }
 }
 
-void KFormulaDocument::addGenericLowerIndex()
+void Document::addGenericLowerIndex()
 {
     if (hasFormula()) {
         formula()->addGenericLowerIndex();
     }
 }
 
-void KFormulaDocument::addGenericUpperIndex()
+void Document::addGenericUpperIndex()
 {
     if (hasFormula()) {
         formula()->addGenericUpperIndex();
     }
 }
 
-void KFormulaDocument::removeEnclosing()
+void Document::removeEnclosing()
 {
     if (hasFormula()) {
         formula()->replaceElementWithMainChild();
     }
 }
 
-void KFormulaDocument::makeGreek()
+void Document::makeGreek()
 {
     if (hasFormula()) {
         formula()->makeGreek();
     }
 }
 
-void KFormulaDocument::insertSymbol()
+void Document::insertSymbol()
 {
     if ( hasFormula() && impl->table.contains( impl->selectedName ) ) {
         QChar ch = impl->table.unicode( impl->selectedName );
@@ -556,45 +556,45 @@ void KFormulaDocument::insertSymbol()
     }
 }
 
-void KFormulaDocument::toggleSyntaxHighlighting()
+void Document::toggleSyntaxHighlighting()
 {
     impl->syntaxHighlighting = impl->syntaxHighlightingAction->isChecked();
 
-    KFormulaContainer* f;
+    Container* f;
     for (f=impl->formulae.first(); f != 0; f=impl->formulae.next()) {
         // Only to notify all views. We don't expect to get new values.
         f->recalc();
     }
 }
 
-void KFormulaDocument::delimiterLeft()
+void Document::delimiterLeft()
 {
     QString left = impl->leftBracket->currentText();
     impl->leftBracketChar = left.at(0).latin1();
 }
 
-void KFormulaDocument::delimiterRight()
+void Document::delimiterRight()
 {
     QString right = impl->rightBracket->currentText();
     impl->rightBracketChar = right.at(0).latin1();
 }
 
-void KFormulaDocument::symbolNames()
+void Document::symbolNames()
 {
     impl->selectedName = impl->symbolNamesAction->currentText();
 }
 
-void KFormulaDocument::undo()
+void Document::undo()
 {
     getHistory()->undo();
 }
 
-void KFormulaDocument::redo()
+void Document::redo()
 {
     getHistory()->redo();
 }
 
-bool KFormulaDocument::hasFormula()
+bool Document::hasFormula()
 {
     return (formula() != 0) && (formula()->getActiveCursor() != 0);
 }

@@ -34,9 +34,9 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-struct KFormulaView::KFormulaView_Impl {
+struct View::View_Impl {
 
-    KFormulaView_Impl(KFormulaContainer* doc, KFormulaView* view)
+    View_Impl(Container* doc, View* view)
             : smallCursor(false), cursorVisible(false), cursorHasChanged(true),
               document(doc)
     {
@@ -53,7 +53,7 @@ struct KFormulaView::KFormulaView_Impl {
         cursor->calcCursorSize(smallCursor);
     }
 
-    ~KFormulaView_Impl()
+    ~View_Impl()
     {
         delete cursor;
     }
@@ -83,7 +83,7 @@ struct KFormulaView::KFormulaView_Impl {
     /**
      * The formula we show.
      */
-    KFormulaContainer* document;
+    Container* document;
 
     /**
      * Out cursor.
@@ -92,40 +92,40 @@ struct KFormulaView::KFormulaView_Impl {
 };
 
 
-FormulaCursor* KFormulaView::cursor() const        { return impl->cursor; }
-bool& KFormulaView::cursorHasChanged()             { return impl->cursorHasChanged; }
-bool& KFormulaView::cursorVisible()                { return impl->cursorVisible; }
-bool& KFormulaView::smallCursor()                  { return impl->smallCursor; }
-KFormulaContainer* KFormulaView::container() const { return impl->document; }
+FormulaCursor* View::cursor() const        { return impl->cursor; }
+bool& View::cursorHasChanged()             { return impl->cursorHasChanged; }
+bool& View::cursorVisible()                { return impl->cursorVisible; }
+bool& View::smallCursor()                  { return impl->smallCursor; }
+Container* View::container() const { return impl->document; }
 
-QRect KFormulaView::getDirtyArea() const { return impl->dirtyArea; }
+QRect View::getDirtyArea() const { return impl->dirtyArea; }
 
 
-KFormulaView::KFormulaView(KFormulaContainer* doc)
+View::View(Container* doc)
 {
-    impl = new KFormulaView_Impl(doc, this);
+    impl = new View_Impl(doc, this);
 }
 
-KFormulaView::~KFormulaView()
+View::~View()
 {
     delete impl;
 }
 
 
-QPoint KFormulaView::getCursorPoint() const
+QPoint View::getCursorPoint() const
 {
     return cursor()->getCursorPoint();
 }
 
-void KFormulaView::setReadOnly(bool ro)
+void View::setReadOnly(bool ro)
 {
     cursor()->setReadOnly(ro);
 }
 
 
-void KFormulaView::draw(QPainter& painter, const QRect& rect, const QColorGroup& cg)
+void View::draw(QPainter& painter, const QRect& rect, const QColorGroup& cg)
 {
-    //cerr << "KFormulaView::draw: " << rect.x() << " " << rect.y() << " "
+    //cerr << "View::draw: " << rect.x() << " " << rect.y() << " "
     //     << rect.width() << " " << rect.height() << endl;
 
     QRect formulaRect = container()->boundingRect();
@@ -147,7 +147,7 @@ void KFormulaView::draw(QPainter& painter, const QRect& rect, const QColorGroup&
                        buffer, sx, sy, sw, sh);
 }
 
-void KFormulaView::keyPressEvent(QKeyEvent* event)
+void View::keyPressEvent(QKeyEvent* event)
 {
     if (cursor()->isReadOnly()) {
         return;
@@ -205,10 +205,10 @@ void KFormulaView::keyPressEvent(QKeyEvent* event)
             slotMoveDown(flag);
             break;
         case Qt::Key_BackSpace:
-            container()->remove(BasicElement::beforeCursor);
+            container()->remove(beforeCursor);
             break;
         case Qt::Key_Delete:
-            container()->remove(BasicElement::afterCursor);
+            container()->remove(afterCursor);
             break;
         case Qt::Key_Home:
             slotMoveHome(flag);
@@ -238,55 +238,55 @@ void KFormulaView::keyPressEvent(QKeyEvent* event)
 }
 
 
-void KFormulaView::focusInEvent(QFocusEvent*)
+void View::focusInEvent(QFocusEvent*)
 {
-    //cerr << "void KFormulaView::focusInEvent(QFocusEvent*): " << cursorVisible() << " " << hasFocus() << endl;
+    //cerr << "void View::focusInEvent(QFocusEvent*): " << cursorVisible() << " " << hasFocus() << endl;
     container()->setActiveCursor(cursor());
     cursorHasChanged() = true;
     cursorVisible() = true;
     emitCursorChanged();
 }
 
-void KFormulaView::focusOutEvent(QFocusEvent*)
+void View::focusOutEvent(QFocusEvent*)
 {
-    //cerr << "void KFormulaView::focusOutEvent(QFocusEvent*): " << cursorVisible() << " " << hasFocus() << endl;
+    //cerr << "void View::focusOutEvent(QFocusEvent*): " << cursorVisible() << " " << hasFocus() << endl;
     container()->setActiveCursor(0);
     cursorHasChanged() = true;
     cursorVisible() = false;
     emitCursorChanged();
 }
 
-void KFormulaView::mousePressEvent(QMouseEvent* event)
+void View::mousePressEvent(QMouseEvent* event)
 {
     int flags = movementFlag(event->state());
     cursor()->mousePress(event->pos(), flags);
     emitCursorChanged();
 }
 
-void KFormulaView::mouseReleaseEvent(QMouseEvent* event)
+void View::mouseReleaseEvent(QMouseEvent* event)
 {
     int flags = movementFlag(event->state());
     cursor()->mouseRelease(event->pos(), flags);
     emitCursorChanged();
 }
 
-void KFormulaView::mouseDoubleClickEvent(QMouseEvent*)
+void View::mouseDoubleClickEvent(QMouseEvent*)
 {
 }
 
-void KFormulaView::mouseMoveEvent(QMouseEvent* event)
+void View::mouseMoveEvent(QMouseEvent* event)
 {
     int flags = movementFlag(event->state());
     cursor()->mouseMove(event->pos(), flags);
     emitCursorChanged();
 }
 
-void KFormulaView::wheelEvent(QWheelEvent*)
+void View::wheelEvent(QWheelEvent*)
 {
 }
 
 
-void KFormulaView::slotCursorMoved(FormulaCursor* c)
+void View::slotCursorMoved(FormulaCursor* c)
 {
     if (c == cursor()) {
         cursorHasChanged() = true;
@@ -294,24 +294,24 @@ void KFormulaView::slotCursorMoved(FormulaCursor* c)
     }
 }
 
-void KFormulaView::slotCursorChanged(FormulaCursor* c)
+void View::slotCursorChanged(FormulaCursor* c)
 {
     if (c == cursor()) {
         cursor()->calcCursorSize(smallCursor());
     }
 }
 
-void KFormulaView::slotFormulaLoaded(FormulaElement* formula)
+void View::slotFormulaLoaded(FormulaElement* formula)
 {
     cursor()->formulaLoaded(formula);
 }
 
-void KFormulaView::slotElementWillVanish(BasicElement* element)
+void View::slotElementWillVanish(BasicElement* element)
 {
     cursor()->elementWillVanish(element);
 }
 
-void KFormulaView::slotSelectAll()
+void View::slotSelectAll()
 {
     cursor()->moveHome(WordMovement);
     cursor()->moveEnd(SelectMovement | WordMovement);
@@ -319,44 +319,44 @@ void KFormulaView::slotSelectAll()
 }
 
 
-void KFormulaView::slotMoveLeft(MoveFlag flag)
+void View::slotMoveLeft(MoveFlag flag)
 {
     cursor()->moveLeft(flag);
     emitCursorChanged();
 }
 
-void KFormulaView::slotMoveRight(MoveFlag flag)
+void View::slotMoveRight(MoveFlag flag)
 {
     cursor()->moveRight(flag);
     emitCursorChanged();
 }
 
-void KFormulaView::slotMoveUp(MoveFlag flag)
+void View::slotMoveUp(MoveFlag flag)
 {
     cursor()->moveUp(flag);
     emitCursorChanged();
 }
 
-void KFormulaView::slotMoveDown(MoveFlag flag)
+void View::slotMoveDown(MoveFlag flag)
 {
     cursor()->moveDown(flag);
     emitCursorChanged();
 }
 
-void KFormulaView::slotMoveHome(MoveFlag flag)
+void View::slotMoveHome(MoveFlag flag)
 {
     cursor()->moveHome(flag);
     emitCursorChanged();
 }
 
-void KFormulaView::slotMoveEnd(MoveFlag flag)
+void View::slotMoveEnd(MoveFlag flag)
 {
     cursor()->moveEnd(flag);
     emitCursorChanged();
 }
 
 
-MoveFlag KFormulaView::movementFlag(int state)
+MoveFlag View::movementFlag(int state)
 {
     int flag = NormalMovement;
 
@@ -369,22 +369,22 @@ MoveFlag KFormulaView::movementFlag(int state)
     return static_cast<MoveFlag>(flag);
 }
 
-void KFormulaView::setSmallCursor(bool small)
+void View::setSmallCursor(bool small)
 {
     smallCursor() = small;
 }
 
-bool KFormulaView::isHome() const
+bool View::isHome() const
 {
     return cursor()->isHome();
 }
 
-bool KFormulaView::isEnd() const
+bool View::isEnd() const
 {
     return cursor()->isEnd();
 }
 
-void KFormulaView::emitCursorChanged()
+void View::emitCursorChanged()
 {
     if (cursor()->hasChanged() || cursorHasChanged()) {
         cursor()->clearChangedFlag();

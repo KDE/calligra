@@ -20,8 +20,8 @@ KFORMULA_NAMESPACE_BEGIN
 void TestFormulaCursor::setUp()
 {
     history = new KCommandHistory;
-    document = new KFormulaDocument(history);
-    container = new KFormulaContainer(document);
+    document = new Document(history);
+    container = new Container(document);
     rootElement = container->rootElement();
     cursor = container->createCursor();
 
@@ -107,19 +107,19 @@ void TestFormulaCursor::testRemoval()
     list.setAutoDelete(true);
 
     // remove to the right: nothing there.
-    cursor->remove(list, BasicElement::afterCursor);
+    cursor->remove(list, afterCursor);
     assert(rootElement->countChildren() == 5);
 
     // remove to the left: one element removed.
-    cursor->remove(list, BasicElement::beforeCursor);
+    cursor->remove(list, beforeCursor);
     assert(rootElement->countChildren() == 4);
     list.clear();
 
     cursor->moveHome();
-    cursor->remove(list, BasicElement::beforeCursor);
+    cursor->remove(list, beforeCursor);
     assert(rootElement->countChildren() == 4);
 
-    cursor->remove(list, BasicElement::afterCursor);
+    cursor->remove(list, afterCursor);
     assert(rootElement->countChildren() == 3);
 }
 

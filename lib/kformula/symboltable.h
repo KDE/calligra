@@ -28,7 +28,7 @@
 #include <qstringlist.h>
 #include <qptrvector.h>
 
-#include "formuladefs.h"
+#include "kformuladefs.h"
 
 KFORMULA_NAMESPACE_BEGIN
 

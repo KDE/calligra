@@ -30,7 +30,7 @@ using namespace KFormula;
 
 class TestWidget : public KFormulaWidget {
 public:
-    TestWidget(KFormulaContainer* doc, QWidget* parent=0, const char* name=0, WFlags f=0)
+    TestWidget(Container* doc, QWidget* parent=0, const char* name=0, WFlags f=0)
             : KFormulaWidget(doc, parent, name, f) {}
 
 protected:
@@ -43,7 +43,7 @@ private:
 
 void TestWidget::keyPressEvent(QKeyEvent* event)
 {
-    KFormulaContainer* document = getDocument();
+    Container* document = getDocument();
 
     //int action = event->key();
     int state = event->state();
@@ -61,13 +61,13 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_0: importOld("oldformula"); return;
             case Qt::Key_A: slotSelectAll(); return;
             case Qt::Key_C: document->copy(); return;
-            case Qt::Key_D: document->replaceElementWithMainChild(BasicElement::afterCursor); return;
+            case Qt::Key_D: document->replaceElementWithMainChild(afterCursor); return;
             case Qt::Key_G: document->makeGreek(); return;
             case Qt::Key_L: document->addGenericLowerIndex(); return;
             case Qt::Key_M: document->loadMathMl("mathml.xml"); return;
             case Qt::Key_O: document->load("test.xml"); return;
             case Qt::Key_Q: kapp->quit(); return;
-            case Qt::Key_R: document->replaceElementWithMainChild(BasicElement::beforeCursor); return;
+            case Qt::Key_R: document->replaceElementWithMainChild(beforeCursor); return;
             case Qt::Key_S: document->save("test.xml"); return;
             case Qt::Key_T: cout << document->texString().latin1() << endl; return;
             case Qt::Key_U: document->addGenericUpperIndex(); return;
@@ -146,9 +146,9 @@ int main(int argc, char** argv)
 
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
-    KFormulaDocument* document = new KFormulaDocument;
-    KFormulaContainer* container1 = document->createFormula();
-    KFormulaContainer* container2 = document->createFormula();
+    Document* document = new Document;
+    Container* container1 = document->createFormula();
+    Container* container2 = document->createFormula();
 
     ScrollView* scrollview1a = new ScrollView;
     ScrollView* scrollview1b = new ScrollView;
@@ -192,9 +192,9 @@ int main(int argc, char** argv)
     if (destruct != 0) {
         cerr << "BasicElement::EvilDestructionCount: " << destruct << endl;
     }
-    destruct = KFormulaCommand::getEvilDestructionCount();
+    destruct = Command::getEvilDestructionCount();
     if (destruct != 0) {
-        cerr << "KFormulaCommand::EvilDestructionCount: " << destruct << endl;
+        cerr << "Command::EvilDestructionCount: " << destruct << endl;
     }
     destruct = ElementType::getEvilDestructionCount();
     if (destruct != 0) {

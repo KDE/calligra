@@ -22,15 +22,10 @@
 #define ELEMENTINDEX_H
 
 #include <iostream>
-#include <memory>
 
 #include "basicelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
-
-class ElementIndex;
-
-typedef std::auto_ptr<ElementIndex> ElementIndexPtr;
 
 
 /**
@@ -47,7 +42,7 @@ public:
     /**
      * Moves the cursor inside the index. The index has to exist.
      */
-    virtual void moveToIndex(FormulaCursor*, BasicElement::Direction) = 0;
+    virtual void moveToIndex(FormulaCursor*, Direction) = 0;
 
     /**
      * Sets the cursor to point to the place where the index normaly

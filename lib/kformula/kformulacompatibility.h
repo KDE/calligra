@@ -29,10 +29,10 @@ KFORMULA_NAMESPACE_BEGIN
  * Converter from the other kformula lib string
  * to a loadable dom.
  */
-class KFormulaCompatibility {
+class Compatibility {
 public:
 
-    KFormulaCompatibility();
+    Compatibility();
 
     /**
      * Builds a kformula DOM from a old formula string.

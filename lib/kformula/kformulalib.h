@@ -2,8 +2,8 @@
  * @libdoc A formula editor library.
  *
  * The kformula editor library. There are three classes you might be interessted in.
- * First there is the @ref KFormulaDocument . It is, you guess it, the document.
- * Next there is the @ref KFormulaContainer . It represents one formula. Each
+ * First there is the @ref Document . It is, you guess it, the document.
+ * Next there is the @ref Container . It represents one formula. Each
  * formula belongs to a document and a document might have any number of formulas.
  * For this reason the formula should be considered as part of the document.
  * The last class is
@@ -26,7 +26,7 @@
  * @ref FormulaCursor . Every edit operation goes throught it. This way
  * the cursor separetes the element tree from the outside world.
  *
- * If you want to edit the formula you ask the document (@ref KFormulaContainer )
- * to create and execute a @ref KFormulaCommand . The commands use the currently
+ * If you want to edit the formula you ask the document (@ref Container )
+ * to create and execute a @ref Command . The commands use the currently
  * active cursor to do their editing. Each command can be undone.
  */

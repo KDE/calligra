@@ -277,7 +277,7 @@ void FormulaCursor::goInsideElement(BasicElement* element)
  * You need to call this after each removal because the cursor
  * might point to some non existing place.
  */
-void FormulaCursor::normalize(BasicElement::Direction direction)
+void FormulaCursor::normalize(Direction direction)
 {
     BasicElement* element = getElement();
     element->normalize(this, direction);
@@ -288,7 +288,7 @@ void FormulaCursor::normalize(BasicElement::Direction direction)
  * Inserts the child at the current position.
  * Ignores the selection.
  */
-void FormulaCursor::insert(BasicElement* child, BasicElement::Direction direction)
+void FormulaCursor::insert(BasicElement* child, Direction direction)
 {
     QPtrList<BasicElement> list;
     list.append(child);
@@ -296,7 +296,7 @@ void FormulaCursor::insert(BasicElement* child, BasicElement::Direction directio
 }
 
 void FormulaCursor::insert(QPtrList<BasicElement>& children,
-                           BasicElement::Direction direction)
+                           Direction direction)
 {
     if (readOnly)
         return;
@@ -311,7 +311,7 @@ void FormulaCursor::insert(QPtrList<BasicElement>& children,
  * for this to have any effect.
  */
 void FormulaCursor::remove(QPtrList<BasicElement>& children,
-                           BasicElement::Direction direction)
+                           Direction direction)
 {
     if (readOnly)
         return;
@@ -340,7 +340,7 @@ void FormulaCursor::remove(QPtrList<BasicElement>& children,
  * The replaced elements become the new element's main child's content.
  */
 void FormulaCursor::replaceSelectionWith(BasicElement* element,
-                                         BasicElement::Direction direction)
+                                         Direction direction)
 {
     if (readOnly)
         return;
@@ -361,7 +361,7 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
         insert(list);
         /*
         BasicElement* parent = element->getParent();
-        if (direction == BasicElement::beforeCursor) {
+        if (direction == beforeCursor) {
             parent->moveRight(this, element);
         }
         else {
@@ -377,7 +377,7 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
  * Replaces the element the cursor points to with its main child's
  * content.
  */
-BasicElement* FormulaCursor::replaceByMainChildContent(BasicElement::Direction direction)
+BasicElement* FormulaCursor::replaceByMainChildContent(Direction direction)
 {
     if (readOnly)
         return 0;
@@ -407,7 +407,7 @@ BasicElement* FormulaCursor::replaceByMainChildContent(BasicElement::Direction d
  * This is simply another form of replaceByMainChildContent. You
  * use this one if the cursor is normalized and inside the main child.
  */
-BasicElement* FormulaCursor::removeEnclosingElement(BasicElement::Direction direction)
+BasicElement* FormulaCursor::removeEnclosingElement(Direction direction)
 {
     if (readOnly)
         return 0;
@@ -440,7 +440,7 @@ bool FormulaCursor::elementIsSenseless()
  *
  * Might be 0 is there is no such child.
  */
-BasicElement* FormulaCursor::getActiveChild(BasicElement::Direction direction)
+BasicElement* FormulaCursor::getActiveChild(Direction direction)
 {
     return getElement()->getChild(this, direction);
 }
@@ -452,11 +452,11 @@ BasicElement* FormulaCursor::getSelectedChild()
             return 0;
         }
         return getActiveChild((getPos() > getMark()) ?
-                              BasicElement::beforeCursor :
-                              BasicElement::afterCursor);
+                              beforeCursor :
+                              afterCursor);
     }
     else {
-        return getActiveChild(BasicElement::beforeCursor);
+        return getActiveChild(beforeCursor);
     }
 }
 

@@ -22,8 +22,8 @@ KFORMULA_NAMESPACE_BEGIN
 void TestCommands::setUp()
 {
     history = new KCommandHistory;
-    document = new KFormulaDocument(history);
-    container = new KFormulaContainer(document);
+    document = new Document(history);
+    container = new Container(document);
     rootElement = container->rootElement();
     cursor = container->createCursor();
 
@@ -96,8 +96,8 @@ void TestCommands::testRemove()
     cursor->moveLeft(SelectMovement);
     cursor->moveLeft(SelectMovement);
 
-    container->remove(BasicElement::beforeCursor);
-    container->remove(BasicElement::beforeCursor);
+    container->remove(beforeCursor);
+    container->remove(beforeCursor);
 
     assert(rootElement->countChildren() == 4);
 
@@ -162,8 +162,8 @@ void TestCommands::testPhantom()
 
 //     cursor->moveLeft();
 //     assert(cursor->getPos() == 3);
-//     container->remove(BasicElement::afterCursor);
-//     container->remove(BasicElement::afterCursor);
+//     container->remove(afterCursor);
+//     container->remove(afterCursor);
 //     assert(rootElement->countChildren() == 3);
 
 //     document->undo();
@@ -172,8 +172,8 @@ void TestCommands::testPhantom()
 //     cursor->moveRight();
 //     cursor->moveRight();
 //     assert(cursor->getPos() == 6);
-//     container->remove(BasicElement::beforeCursor);
-//     container->remove(BasicElement::beforeCursor);
+//     container->remove(beforeCursor);
+//     container->remove(beforeCursor);
 //     assert(rootElement->countChildren() == 3);
 }
 

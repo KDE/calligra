@@ -6,7 +6,7 @@
 #include <TestCase.h>
 #include <TestSuite.h>
 
-#include "formuladefs.h"
+#include "kformuladefs.h"
 
 class KCommandHistory;
 
@@ -16,8 +16,8 @@ class BracketElement;
 class FormulaElement;
 class FormulaCursor;
 class IndexElement;
-class KFormulaContainer;
-class KFormulaDocument;
+class Container;
+class Document;
 class TextElement;
 
 
@@ -44,8 +44,8 @@ private:
     void testCursorSaving();
 
     KCommandHistory* history;
-    KFormulaDocument* document;
-    KFormulaContainer* container;
+    Document* document;
+    Container* container;
     FormulaElement* rootElement;
     FormulaCursor* cursor;
 

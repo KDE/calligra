@@ -38,7 +38,7 @@ KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 
-KFormulaMimeSource::KFormulaMimeSource(QDomDocument formula)
+MimeSource::MimeSource(QDomDocument formula)
         : document(formula)
 {
     // The query for text/plain comes very often. So make sure
@@ -58,13 +58,13 @@ KFormulaMimeSource::KFormulaMimeSource(QDomDocument formula)
     }
 }
 
-KFormulaMimeSource::~KFormulaMimeSource()
+MimeSource::~MimeSource()
 {
     delete rootElement;
 }
 
 
-const char* KFormulaMimeSource::format( int n ) const
+const char* MimeSource::format( int n ) const
 {
     switch (n) {
         case 0:
@@ -79,7 +79,7 @@ const char* KFormulaMimeSource::format( int n ) const
     return NULL;
 }
 
-bool KFormulaMimeSource::provides( const char * format) const
+bool MimeSource::provides( const char * format) const
 {
 //This is not completed
     if(QString(format)=="application/x-kformula")
@@ -94,7 +94,7 @@ bool KFormulaMimeSource::provides( const char * format) const
         return false;
 }
 
-QByteArray KFormulaMimeSource::encodedData ( const char *format ) const
+QByteArray MimeSource::encodedData ( const char *format ) const
 {
     QString fmt=format;  //case sensitive?
 
@@ -140,15 +140,15 @@ QByteArray KFormulaMimeSource::encodedData ( const char *format ) const
     return QByteArray();
 }
 
-void KFormulaMimeSource::elementRemoval(BasicElement*)
+void MimeSource::elementRemoval(BasicElement*)
 {
 }
 
-void KFormulaMimeSource::changed()
+void MimeSource::changed()
 {
 }
 
-const SymbolTable& KFormulaMimeSource::getSymbolTable() const
+const SymbolTable& MimeSource::getSymbolTable() const
 {
     return table;
 }

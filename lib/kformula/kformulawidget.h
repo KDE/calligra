@@ -25,7 +25,7 @@
 #include <qpoint.h>
 #include <qwidget.h>
 
-#include "formuladefs.h"
+#include "kformuladefs.h"
 #include "kformulaview.h"
 
 KFORMULA_NAMESPACE_BEGIN
@@ -33,7 +33,7 @@ KFORMULA_NAMESPACE_BEGIN
 class BasicElement;
 class FormulaCursor;
 class FormulaElement;
-class KFormulaContainer;
+class Container;
 
 KFORMULA_NAMESPACE_END
 
@@ -48,7 +48,7 @@ class KFormulaWidget : public QWidget {
     Q_OBJECT
 
 public:
-    KFormulaWidget(KFormulaContainer*, QWidget* parent=0, const char* name=0, WFlags f=0);
+    KFormulaWidget(Container*, QWidget* parent=0, const char* name=0, WFlags f=0);
     ~KFormulaWidget();
 
 
@@ -98,7 +98,7 @@ protected:
     /**
      * The document we show.
      */
-    KFormulaContainer* getDocument();
+    Container* getDocument();
 
     /**
      * Our cursor.
@@ -110,7 +110,7 @@ private:
     /**
      * This widget is a wrapper around the actual view.
      */
-    KFormulaView formulaView;
+    View formulaView;
 };
 
 #endif // KFORMULAWIDGET_H

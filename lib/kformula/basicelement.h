@@ -22,10 +22,10 @@
 #define BASICELEMENT_H
 
 // Qt Include
+#include <qdom.h>
 #include <qlist.h>
 #include <qrect.h>
 #include <qstring.h>
-#include <qdom.h>
 
 // KDE Include
 #include <koPoint.h>
@@ -33,7 +33,7 @@
 
 // Formula include
 #include "contextstyle.h"
-#include "formuladefs.h"
+#include "kformuladefs.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -230,13 +230,6 @@ public:
     // editing
     //
     // Insert and remove children.
-
-    /**
-     * Wether we want to insert to the left of the cursor
-     * or right of it.
-     * The same for deletion.
-     */
-    enum Direction { beforeCursor, afterCursor };
 
     /**
      * Inserts all new children at the cursor position. Places the

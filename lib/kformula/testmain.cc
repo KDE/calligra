@@ -38,9 +38,9 @@ int main (int argc, char **argv)
     if (destruct != 0) {
         cerr << "BasicElement::EvilDestructionCount: " << destruct << endl;
     }
-    destruct = KFormulaCommand::getEvilDestructionCount();
+    destruct = Command::getEvilDestructionCount();
     if (destruct != 0) {
-        cerr << "KFormulaCommand::EvilDestructionCount: " << destruct << endl;
+        cerr << "Command::EvilDestructionCount: " << destruct << endl;
     }
     destruct = ElementType::getEvilDestructionCount();
     if (destruct != 0) {

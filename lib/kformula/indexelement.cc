@@ -811,9 +811,9 @@ void IndexElement::remove(FormulaCursor* cursor,
  * Moves the cursor to a normal place where new elements
  * might be inserted.
  */
-void IndexElement::normalize(FormulaCursor* cursor, BasicElement::Direction direction)
+void IndexElement::normalize(FormulaCursor* cursor, Direction direction)
 {
-    if (direction == BasicElement::beforeCursor) {
+    if (direction == beforeCursor) {
         content->moveLeft(cursor, this);
     }
     else {

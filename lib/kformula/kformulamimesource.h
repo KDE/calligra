@@ -31,11 +31,11 @@ KFORMULA_NAMESPACE_BEGIN
 class FormulaElement;
 
 
-class KFormulaMimeSource : public QMimeSource, public FormulaDocument
+class MimeSource : public QMimeSource, public FormulaDocument
 {
 public:
-    KFormulaMimeSource(QDomDocument formula);
-    ~KFormulaMimeSource();
+    MimeSource(QDomDocument formula);
+    ~MimeSource();
 
     virtual const char* format ( int n = 0 ) const;
     virtual bool provides ( const char * ) const;

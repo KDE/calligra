@@ -30,7 +30,7 @@
 #include <qstring.h>
 
 //Formula include
-#include "formuladefs.h"
+#include "kformuladefs.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -114,9 +114,11 @@ public:
     /**
      * TeX like spacings. Zoomed.
      */
+    double getSpace( TextStyle tstyle, SpaceWidths space ) const;
     double getThinSpace( TextStyle tstyle ) const;
     double getMediumSpace( TextStyle tstyle ) const;
     double getThickSpace( TextStyle tstyle ) const;
+    double getQuadSpace( TextStyle tstyle ) const;
 
     /**
      * Calculates the font size corresponding to the given TextStyle.
@@ -219,6 +221,7 @@ private:
         double thinSpace() const   { return static_cast<double>( quad )/6.; }
         double mediumSpace() const { return static_cast<double>( quad )*2./9.; }
         double thickSpace() const  { return static_cast<double>( quad )*5./18.; }
+        double quadSpace() const   { return static_cast<double>( quad ); }
 
         double reductionFactor;
         int quad;

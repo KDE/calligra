@@ -24,7 +24,7 @@
 #include "artwork.h"
 #include "basicelement.h"
 #include "elementindex.h"
-#include "formuladefs.h"
+#include "kformuladefs.h"
 
 KFORMULA_NAMESPACE_BEGIN
 

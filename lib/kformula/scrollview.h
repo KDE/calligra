@@ -4,7 +4,7 @@
 
 #include <qscrollview.h>
 
-#include "formuladefs.h"
+#include "kformuladefs.h"
 
 class KFormulaWidget;
 

@@ -38,8 +38,8 @@ Test* TestIndexElement::suite()
 void TestIndexElement::setUp()
 {
     history = new KCommandHistory;
-    document = new KFormulaDocument(history);
-    container = new KFormulaContainer(document);
+    document = new Document(history);
+    container = new Container(document);
     rootElement = container->rootElement();
     cursor = container->createCursor();
 
@@ -82,7 +82,7 @@ void TestIndexElement::testIndexes()
     QPtrList<BasicElement> list;
     list.setAutoDelete(true);
 
-    indexElement->moveToUpperLeft(cursor, BasicElement::beforeCursor);
+    indexElement->moveToUpperLeft(cursor, beforeCursor);
     cursor->remove(list);
     assert(!indexElement->hasUpperLeft());
 
@@ -90,7 +90,7 @@ void TestIndexElement::testIndexes()
     assert(cursor->getElement() == indexElement->getMainChild());
 
     list.clear();
-    indexElement->moveToUpperRight(cursor, BasicElement::beforeCursor);
+    indexElement->moveToUpperRight(cursor, beforeCursor);
     cursor->remove(list);
     assert(!indexElement->hasUpperRight());
 
@@ -98,7 +98,7 @@ void TestIndexElement::testIndexes()
     assert(cursor->getElement() == indexElement->getMainChild());
 
     list.clear();
-    indexElement->moveToLowerLeft(cursor, BasicElement::beforeCursor);
+    indexElement->moveToLowerLeft(cursor, beforeCursor);
     cursor->remove(list);
     assert(!indexElement->hasLowerLeft());
 
@@ -106,7 +106,7 @@ void TestIndexElement::testIndexes()
     assert(cursor->getElement() == indexElement->getMainChild());
 
     list.clear();
-    indexElement->moveToLowerRight(cursor, BasicElement::beforeCursor);
+    indexElement->moveToLowerRight(cursor, beforeCursor);
     cursor->remove(list);
     assert(!indexElement->hasLowerRight());
 
@@ -136,7 +136,7 @@ void TestIndexElement::removeAddIndex(ElementIndexPtr& index)
     QPtrList<BasicElement> list;
     list.setAutoDelete(true);
 
-    index->moveToIndex(cursor, BasicElement::beforeCursor);
+    index->moveToIndex(cursor, beforeCursor);
     cursor->remove(list);
     assert(!index->hasIndex());
 

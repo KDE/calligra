@@ -32,22 +32,22 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-int KFormulaCommand::evilDestructionCount = 0;
+int Command::evilDestructionCount = 0;
 
-KFormulaCommand::KFormulaCommand(const QString &name, KFormulaContainer* document)
+Command::Command(const QString &name, Container* document)
         : KCommand(name), cursordata(0), undocursor(0), doc(document)
 {
     evilDestructionCount++;
 }
 
-KFormulaCommand::~KFormulaCommand()
+Command::~Command()
 {
     evilDestructionCount--;
     delete undocursor;
     delete cursordata;
 }
 
-FormulaCursor* KFormulaCommand::getExecuteCursor()
+FormulaCursor* Command::getExecuteCursor()
 {
     FormulaCursor* cursor = getActiveCursor();
     if (cursordata == 0) {
@@ -59,13 +59,13 @@ FormulaCursor* KFormulaCommand::getExecuteCursor()
     return cursor;
 }
 
-void KFormulaCommand::setExecuteCursor(FormulaCursor* cursor)
+void Command::setExecuteCursor(FormulaCursor* cursor)
 {
     // assert(cursordata == 0);
     cursordata = cursor->getCursorData();
 }
 
-FormulaCursor* KFormulaCommand::getUnexecuteCursor()
+FormulaCursor* Command::getUnexecuteCursor()
 {
     FormulaCursor* cursor = getActiveCursor();
     cursor->setCursorData(undocursor);
@@ -73,7 +73,7 @@ FormulaCursor* KFormulaCommand::getUnexecuteCursor()
     return cursor;
 }
 
-void KFormulaCommand::setUnexecuteCursor(FormulaCursor* cursor)
+void Command::setUnexecuteCursor(FormulaCursor* cursor)
 {
     // assert(undocursor == 0);
     undocursor = cursor->getCursorData();
@@ -82,8 +82,8 @@ void KFormulaCommand::setUnexecuteCursor(FormulaCursor* cursor)
 
 // ******  Generic Add command
 
-KFCAdd::KFCAdd(const QString &name, KFormulaContainer *document)
-        : KFormulaCommand(name, document)
+KFCAdd::KFCAdd(const QString &name, Container *document)
+        : Command(name, document)
 {
     addList.setAutoDelete( true );
 }
@@ -92,7 +92,7 @@ KFCAdd::KFCAdd(const QString &name, KFormulaContainer *document)
 void KFCAdd::execute()
 {
     FormulaCursor* cursor = getExecuteCursor();
-    cursor->insert(addList, BasicElement::beforeCursor);
+    cursor->insert(addList, beforeCursor);
     setUnexecuteCursor(cursor);
     cursor->setSelection(false);
     testDirty();
@@ -102,7 +102,7 @@ void KFCAdd::execute()
 void KFCAdd::unexecute()
 {
     FormulaCursor* cursor = getUnexecuteCursor();
-    cursor->remove(addList, BasicElement::beforeCursor);
+    cursor->remove(addList, beforeCursor);
     //cursor->setSelection(false);
     cursor->normalize();
     testDirty();
@@ -112,9 +112,9 @@ void KFCAdd::unexecute()
 
 // ******  Remove selection command
 
-KFCRemoveSelection::KFCRemoveSelection(KFormulaContainer *document,
-                                       BasicElement::Direction direction)
-        : KFormulaCommand(i18n("Remove selected text"), document),
+KFCRemoveSelection::KFCRemoveSelection(Container *document,
+                                       Direction direction)
+        : Command(i18n("Remove selected text"), document),
           dir(direction)
 {
     removedList.setAutoDelete( true );
@@ -138,7 +138,7 @@ void KFCRemoveSelection::unexecute()
 
 
 
-KFCReplace::KFCReplace(const QString &name, KFormulaContainer* document)
+KFCReplace::KFCReplace(const QString &name, Container* document)
         : KFCAdd(name, document), removeSelection(0)
 {
 }
@@ -169,9 +169,9 @@ void KFCReplace::unexecute()
 
 
 
-KFCRemove::KFCRemove(KFormulaContainer *document,
-                     BasicElement::Direction direction)
-        : KFormulaCommand(i18n("Remove selected text"), document),
+KFCRemove::KFCRemove(Container *document,
+                     Direction direction)
+        : Command(i18n("Remove selected text"), document),
           element(0), simpleRemoveCursor(0), dir(direction)
 {
     removedList.setAutoDelete( true );
@@ -213,9 +213,9 @@ void KFCRemove::unexecute()
 }
 
 
-KFCRemoveEnclosing::KFCRemoveEnclosing(KFormulaContainer* document,
-                                       BasicElement::Direction dir)
-        : KFormulaCommand(i18n("Remove enclosing element"), document),
+KFCRemoveEnclosing::KFCRemoveEnclosing(Container* document,
+                                       Direction dir)
+        : Command(i18n("Remove enclosing element"), document),
           element(0), direction(dir)
 {
 }
@@ -248,8 +248,8 @@ void KFCRemoveEnclosing::unexecute()
 
 // ******  Add root, bracket etc command
 
-KFCAddReplacing::KFCAddReplacing(const QString &name, KFormulaContainer* document)
-        : KFormulaCommand(name, document), element(0)
+KFCAddReplacing::KFCAddReplacing(const QString &name, Container* document)
+        : Command(name, document), element(0)
 {
 }
 
@@ -281,7 +281,7 @@ void KFCAddReplacing::unexecute()
 
 // ******  Add index command
 
-KFCAddGenericIndex::KFCAddGenericIndex(KFormulaContainer* document, ElementIndexPtr _index)
+KFCAddGenericIndex::KFCAddGenericIndex(Container* document, ElementIndexPtr _index)
         : KFCAdd(i18n("Add index"), document), index(_index)
 {
     addElement(new SequenceElement());
@@ -294,7 +294,7 @@ void KFCAddGenericIndex::execute()
 }
 
 
-KFCAddIndex::KFCAddIndex(KFormulaContainer* document,
+KFCAddIndex::KFCAddIndex(Container* document,
                          IndexElement* element, ElementIndexPtr index)
         : KFCAddReplacing(i18n("Add index"), document),
           addIndex(document, index)

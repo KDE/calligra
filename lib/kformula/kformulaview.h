@@ -18,14 +18,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KFORMULAVIEW_H
-#define __KFORMULAVIEW_H
+#ifndef KFORMULAVIEW_H
+#define KFORMULAVIEW_H
 
 #include <qevent.h>
 #include <qobject.h>
 #include <qrect.h>
 
-#include "formuladefs.h"
+#include "kformuladefs.h"
 
 class QColorGroup;
 
@@ -34,7 +34,7 @@ KFORMULA_NAMESPACE_BEGIN
 class BasicElement;
 class FormulaCursor;
 class FormulaElement;
-class KFormulaContainer;
+class Container;
 
 
 /**
@@ -46,12 +46,12 @@ class KFormulaContainer;
  * to be used alone if there is a bigger widget the formula
  * is to be drawn into.
  */
-class KFormulaView : public QObject {
+class View : public QObject {
     Q_OBJECT
 
 public:
-    KFormulaView(KFormulaContainer*);
-    ~KFormulaView();
+    View(Container*);
+    ~View();
 
     /**
      * @returns the point inside the formula view where the cursor is.
@@ -84,7 +84,7 @@ public:
     /**
      * The document we show.
      */
-    KFormulaContainer* getDocument() const { return container(); }
+    Container* getDocument() const { return container(); }
 
     /**
      * Our cursor.
@@ -157,16 +157,16 @@ private:
      */
     void emitCursorChanged();
 
-    struct KFormulaView_Impl;
-    KFormulaView_Impl* impl;
+    struct View_Impl;
+    View_Impl* impl;
 
     FormulaCursor* cursor() const;
     bool& cursorHasChanged();
     bool& cursorVisible();
     bool& smallCursor();
-    KFormulaContainer* container() const;
+    Container* container() const;
 };
 
 KFORMULA_NAMESPACE_END
 
-#endif // __KFORMULAVIEW_H
+#endif // KFORMULAVIEW_H

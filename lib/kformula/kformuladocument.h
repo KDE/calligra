@@ -27,19 +27,19 @@
 #include <kaction.h>
 #include <kcommand.h>
 
-#include "formuladefs.h"
+#include "kformuladefs.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
 class ContextStyle;
-class KFormulaContainer;
+class Container;
 class SymbolTable;
 
 
 /**
  * A document that can contain a lot of formulas.
  */
-class KFormulaDocument : public QObject {
+class Document : public QObject {
     Q_OBJECT
 
 public:
@@ -50,16 +50,16 @@ public:
      * @param collection a place to put the document's actions.
      * @param history the undo stack to use. Creates its own if zero.
      */
-    KFormulaDocument(KActionCollection* collection, KCommandHistory* history = 0);
+    Document(KActionCollection* collection, KCommandHistory* history = 0);
 
     /**
      * Creates a formula document that doesn't use actions.
      *
      * @param history the undo stack to use. Creates its own if zero.
      */
-    KFormulaDocument(KCommandHistory* history = 0);
+    Document(KCommandHistory* history = 0);
 
-    ~KFormulaDocument();
+    ~Document();
 
     /**
      * @returns the documents context style.
@@ -82,18 +82,18 @@ public:
      * The new formula is not owned by the document so you are responsible
      * to delete in properly.
      */
-    KFormulaContainer* createFormula();
+    Container* createFormula();
 
     /**
      * Sets a new formula.
      */
-    void activate(KFormulaContainer* formula);
+    void activate(Container* formula);
 
     /**
      * Tells that a formula is about to vanish. This must not be
      * the active formula from now on.
      */
-    void formulaDies(KFormulaContainer* formula);
+    void formulaDies(Container* formula);
 
     /**
      * @returns our undo stack so the formulas can use it.
@@ -175,10 +175,10 @@ private:
      */
     bool hasFormula();
 
-    struct KFormulaDocument_Impl;
-    KFormulaDocument_Impl* impl;
+    struct Document_Impl;
+    Document_Impl* impl;
 
-    KFormulaContainer* formula() const;
+    Container* formula() const;
 };
 
 KFORMULA_NAMESPACE_END

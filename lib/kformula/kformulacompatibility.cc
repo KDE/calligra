@@ -24,7 +24,7 @@
 
 #include <qvaluelist.h>
 
-#include "formuladefs.h"
+#include "kformuladefs.h"
 #include "kformulacompatibility.h"
 
 KFORMULA_NAMESPACE_BEGIN
@@ -67,12 +67,12 @@ const int ARROW    = SYMBOL_ABOVE + 3;
 // elements of the symbol font are their own codes + SYMBOL_ABOVE
 
 
-KFormulaCompatibility::KFormulaCompatibility()
+Compatibility::Compatibility()
 {
 }
 
 
-QDomDocument KFormulaCompatibility::buildDOM(QString text)
+QDomDocument Compatibility::buildDOM(QString text)
 {
     QDomDocument doc("KFORMULA");
     pos = 0;
@@ -84,7 +84,7 @@ QDomDocument KFormulaCompatibility::buildDOM(QString text)
 }
 
 
-void KFormulaCompatibility::appendNextSequence(QDomDocument doc, QDomElement element)
+void Compatibility::appendNextSequence(QDomDocument doc, QDomElement element)
 {
     if (hasNext() && nextToken() == '{') {
         element.appendChild(readSequence(doc));
@@ -96,7 +96,7 @@ void KFormulaCompatibility::appendNextSequence(QDomDocument doc, QDomElement ele
 }
 
 
-QDomElement KFormulaCompatibility::getLastSequence(QDomDocument doc, QDomElement sequence)
+QDomElement Compatibility::getLastSequence(QDomDocument doc, QDomElement sequence)
 {
     if (sequence.lastChild().nodeName() == "SEQUENCE") {
         QDomNode child = sequence.removeChild(sequence.lastChild());
@@ -113,7 +113,7 @@ QDomElement KFormulaCompatibility::getLastSequence(QDomDocument doc, QDomElement
 }
 
 
-QDomElement KFormulaCompatibility::findIndexNode(QDomDocument doc, QDomElement sequence)
+QDomElement Compatibility::findIndexNode(QDomDocument doc, QDomElement sequence)
 {
     QDomElement element;
     if (sequence.lastChild().nodeName() == "INDEX") {
@@ -130,7 +130,7 @@ QDomElement KFormulaCompatibility::findIndexNode(QDomDocument doc, QDomElement s
 }
 
 
-void KFormulaCompatibility::appendToSequence(QDomElement sequence, QDomElement element, int leftIndexSeen)
+void Compatibility::appendToSequence(QDomElement sequence, QDomElement element, int leftIndexSeen)
 {
     if (leftIndexSeen > 0) {
         if (sequence.lastChild().nodeName() == "INDEX") {
@@ -152,7 +152,7 @@ void KFormulaCompatibility::appendToSequence(QDomElement sequence, QDomElement e
 }
 
 
-QDomElement KFormulaCompatibility::readMatrix(QDomDocument doc)
+QDomElement Compatibility::readMatrix(QDomDocument doc)
 {
     QDomElement element = doc.createElement("MATRIX");
 
@@ -196,7 +196,7 @@ QDomElement KFormulaCompatibility::readMatrix(QDomDocument doc)
 }
 
 
-QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
+QDomElement Compatibility::readSequence(QDomDocument doc)
 {
     // matrizes start with something that isn't a sequence
     if ((tokenLeft() > 6) && (lookAhead(1) == OF_SEPARATOR)) {

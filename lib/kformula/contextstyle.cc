@@ -120,22 +120,35 @@ double ContextStyle::getAdjustedSize( TextStyle tstyle ) const
     return zoomItY( baseSize*getReductionFactor( tstyle ) );
 }
 
+double ContextStyle::getSpace( TextStyle tstyle, SpaceWidths space ) const
+{
+    switch ( space ) {
+    case THIN:   return getThinSpace( tstyle );
+    case MEDIUM: return getMediumSpace( tstyle );
+    case THICK:  return getThickSpace( tstyle );
+    case QUAD:   return getQuadSpace( tstyle );
+    }
+    return 0;
+}
+
 double ContextStyle::getThinSpace( TextStyle tstyle ) const
 {
     return zoomItX( textStyleValues[ tstyle ].thinSpace() );
-    //return textStyleValues[ tstyle ].thinSpace();
 }
 
 double ContextStyle::getMediumSpace( TextStyle tstyle ) const
 {
     return zoomItX( textStyleValues[ tstyle ].mediumSpace() );
-    //return textStyleValues[ tstyle ].mediumSpace();
 }
 
 double ContextStyle::getThickSpace( TextStyle tstyle ) const
 {
     return zoomItX( textStyleValues[ tstyle ].thickSpace() );
-    //return textStyleValues[ tstyle ].thickSpace();
+}
+
+double ContextStyle::getQuadSpace( TextStyle tstyle ) const
+{
+    return zoomItX( textStyleValues[ tstyle ].quadSpace() );
 }
 
 

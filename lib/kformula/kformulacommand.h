@@ -45,7 +45,7 @@ KFORMULA_NAMESPACE_BEGIN
  *
  * If you don't like what you've done feel free to @ref unexecute .
  */
-class KFormulaCommand : public KCommand
+class Command : public KCommand
 {
 public:
 
@@ -58,17 +58,17 @@ public:
      * @param name a description to be used as menu entry.
      * @param document the container we are working for.
      */
-    KFormulaCommand(const QString& name, KFormulaContainer* document);
-    virtual ~KFormulaCommand();
+    Command(const QString& name, Container* document);
+    virtual ~Command();
 
     /**
-     * Executes the command using the KFormulaContainer's active
+     * Executes the command using the Container's active
      * cursor.
      */
     virtual void execute() = 0;
 
     /**
-     * Undoes the command using the KFormulaContainer's active
+     * Undoes the command using the Container's active
      * cursor.
      */
     virtual void unexecute() = 0;
@@ -121,7 +121,7 @@ protected:
     /**
      * @returns our document.
      */
-    KFormulaContainer* getDocument() const { return doc; }
+    Container* getDocument() const { return doc; }
 
 private:
 
@@ -145,7 +145,7 @@ private:
     /**
      * The container we belong to.
      */
-    KFormulaContainer* doc;
+    Container* doc;
 
     // debug
     static int evilDestructionCount;
@@ -155,11 +155,11 @@ private:
 /**
  * Base for all commands that want to add a simple element.
  */
-class KFCAdd : public KFormulaCommand
+class KFCAdd : public Command
 {
 public:
 
-    KFCAdd(const QString &name, KFormulaContainer* document);
+    KFCAdd(const QString &name, Container* document);
 
     virtual void execute();
     virtual void unexecute();
@@ -183,15 +183,15 @@ private:
  * Command that is used to remove the current selection
  * if we want to replace it with another element.
  */
-class KFCRemoveSelection : public KFormulaCommand
+class KFCRemoveSelection : public Command
 {
 public:
 
     /**
      * generic add command, default implementation do nothing
      */
-    KFCRemoveSelection(KFormulaContainer* document,
-                       BasicElement::Direction dir = BasicElement::beforeCursor);
+    KFCRemoveSelection(Container* document,
+                       Direction dir = beforeCursor);
 
     virtual void execute();
     virtual void unexecute();
@@ -204,7 +204,7 @@ private:
      */
     QList<BasicElement> removedList;
 
-    BasicElement::Direction dir;
+    Direction dir;
 };
 
 
@@ -216,7 +216,7 @@ class KFCReplace : public KFCAdd
 {
 public:
 
-    KFCReplace(const QString &name, KFormulaContainer* document);
+    KFCReplace(const QString &name, Container* document);
     ~KFCReplace();
 
     virtual void execute();
@@ -235,14 +235,14 @@ private:
  * Command that is used to remove the currently
  * selected element.
  */
-class KFCRemove : public KFormulaCommand
+class KFCRemove : public Command
 {
 public:
 
     /**
      * generic add command, default implementation do nothing
      */
-    KFCRemove(KFormulaContainer* document, BasicElement::Direction dir);
+    KFCRemove(Container* document, Direction dir);
     ~KFCRemove();
 
     virtual void execute();
@@ -274,17 +274,17 @@ private:
      */
     FormulaCursor::CursorData* simpleRemoveCursor;
 
-    BasicElement::Direction dir;
+    Direction dir;
 };
 
 
 /**
  * Command to remove the parent element.
  */
-class KFCRemoveEnclosing : public KFormulaCommand
+class KFCRemoveEnclosing : public Command
 {
 public:
-    KFCRemoveEnclosing(KFormulaContainer* document, BasicElement::Direction dir);
+    KFCRemoveEnclosing(Container* document, Direction dir);
     ~KFCRemoveEnclosing();
 
     virtual void execute();
@@ -295,7 +295,7 @@ public:
 private:
     BasicElement* element;
 
-    BasicElement::Direction direction;
+    Direction direction;
 };
 
 
@@ -303,10 +303,10 @@ private:
  * The command that takes the main child out of the selected
  * element and replaces the element with it.
  */
-class KFCAddReplacing : public KFormulaCommand
+class KFCAddReplacing : public Command
 {
 public:
-    KFCAddReplacing(const QString &name, KFormulaContainer* document);
+    KFCAddReplacing(const QString &name, Container* document);
     ~KFCAddReplacing();
 
     virtual void execute();
@@ -331,7 +331,7 @@ class KFCAddGenericIndex : public KFCAdd
 {
 public:
 
-    KFCAddGenericIndex(KFormulaContainer* document, ElementIndexPtr index);
+    KFCAddGenericIndex(Container* document, ElementIndexPtr index);
 
     virtual void execute();
 
@@ -349,7 +349,7 @@ class KFCAddIndex : public KFCAddReplacing
 {
 public:
 
-    KFCAddIndex(KFormulaContainer* document, IndexElement* element, ElementIndexPtr index);
+    KFCAddIndex(Container* document, IndexElement* element, ElementIndexPtr index);
     ~KFCAddIndex();
 
     virtual void execute();

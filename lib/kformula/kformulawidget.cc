@@ -34,7 +34,7 @@
 #include "kformulawidget.h"
 
 
-KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const char* name, WFlags f)
+KFormulaWidget::KFormulaWidget(Container* doc, QWidget* parent, const char* name, WFlags f)
     : QWidget(parent, name, f | WRepaintNoErase | WResizeNoErase),
       formulaView(doc)
 {
@@ -126,7 +126,7 @@ void KFormulaWidget::slotFormulaChanged(int width, int height)
 /**
  * The document we show.
  */
-KFormulaContainer* KFormulaWidget::getDocument()
+Container* KFormulaWidget::getDocument()
 {
     return formulaView.getDocument();
 }

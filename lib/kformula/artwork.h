@@ -25,7 +25,7 @@
 #include <qrect.h>
 
 #include "contextstyle.h"
-#include "formuladefs.h"
+#include "kformuladefs.h"
 
 class QPainter;
 

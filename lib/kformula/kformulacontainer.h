@@ -22,6 +22,7 @@
 #define KFORMULACONTAINER_H
 
 #include <qclipboard.h>
+#include <qdom.h>
 #include <qlist.h>
 #include <qobject.h>
 #include <qstack.h>
@@ -30,11 +31,7 @@
 #include <kcommand.h>
 #include <koprinter.h>
 
-#include "artwork.h"
-#include "basicelement.h"
-#include "contextstyle.h"
-#include "elementindex.h"
-#include "formuladefs.h"
+#include "kformuladefs.h"
 
 class QColorGroup;
 class QKeyEvent;
@@ -48,15 +45,15 @@ class BasicElement;
 class FormulaCursor;
 class FormulaElement;
 class IndexElement;
-class KFormulaCommand;
-class KFormulaDocument;
+class Command;
+class Document;
 class SymbolTable;
 
 
 /**
  * The interface the elements expect from its document.
  *
- * Please don't mistake this class for KFormulaDocument.
+ * Please don't mistake this class for Document.
  * This one represents one formula, the other one provides
  * the context in which the formulae exist.
  */
@@ -73,8 +70,8 @@ public:
  * The document. Actually only one part of the whole.
  * Provides everything to edit the formula.
  */
-class KFormulaContainer : public QObject, public FormulaDocument {
-    friend class KFormulaMimeSource;
+class Container : public QObject, public FormulaDocument {
+    friend class MimeSource;
     Q_OBJECT
 
 public:
@@ -87,9 +84,9 @@ public:
      *                 It must not deleted as long as we exist because
      *                 we only store a reference to it.
      */
-    KFormulaContainer(KFormulaDocument* doc);
+    Container(Document* doc);
 
-    ~KFormulaContainer();
+    ~Container();
 
     /**
      * Returns a new cursor. It points to the beginning of the
@@ -220,7 +217,7 @@ public:
     /**
      * @returns the document this formula belongs to.
      */
-    KFormulaDocument* getDocument() const;
+    Document* getDocument() const;
 
     virtual const SymbolTable& getSymbolTable() const;
 
@@ -268,6 +265,8 @@ public:
 
     void addText(QChar ch, bool isSymbol = false);
     void addText(const QString& text);
+
+    void addSpace( SpaceWidths space );
 
     void addLineBreak();
 
@@ -332,9 +331,9 @@ public:
      */
     void addGenericUpperIndex();
 
-    void remove(BasicElement::Direction = BasicElement::beforeCursor);
+    void remove(Direction = beforeCursor);
 
-    void replaceElementWithMainChild(BasicElement::Direction = BasicElement::beforeCursor);
+    void replaceElementWithMainChild(Direction = beforeCursor);
 
     /**
      * Replaces the current name with its text symbol if it has one.
@@ -378,18 +377,18 @@ private:
     /**
      * Execute the command if it makes sense.
      */
-    void execute(KFormulaCommand *command);
+    void execute(Command *command);
 
     /**
      * @returns true if there is a cursor that is allowed to edit the formula.
      */
     bool hasValidCursor() const;
 
-    struct KFormulaContainer_Impl;
-    KFormulaContainer_Impl* impl;
+    struct Container_Impl;
+    Container_Impl* impl;
 
     FormulaElement* rootElement() const;
-    KFormulaDocument* document() const;
+    Document* document() const;
 
     // debug
     friend class TestFormulaCursor;

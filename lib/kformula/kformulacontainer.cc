@@ -49,6 +49,7 @@
 #include "sequenceelement.h"
 #include "symbolelement.h"
 #include "symboltable.h"
+#include "spaceelement.h"
 #include "textelement.h"
 
 
@@ -56,14 +57,14 @@ KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 
-struct KFormulaContainer::KFormulaContainer_Impl {
+struct Container::Container_Impl {
 
-    KFormulaContainer_Impl(KFormulaDocument* doc)
+    Container_Impl(Document* doc)
             : document(doc)
     {
     }
 
-    ~KFormulaContainer_Impl()
+    ~Container_Impl()
     {
         delete internCursor;
         delete rootElement;
@@ -92,16 +93,16 @@ struct KFormulaContainer::KFormulaContainer_Impl {
     /**
      * The document we belong to.
      */
-    KFormulaDocument* document;
+    Document* document;
 };
 
 
-FormulaElement* KFormulaContainer::rootElement() const { return impl->rootElement; }
-KFormulaDocument* KFormulaContainer::document() const { return impl->document; }
+FormulaElement* Container::rootElement() const { return impl->rootElement; }
+Document* Container::document() const { return impl->document; }
 
-KFormulaContainer::KFormulaContainer(KFormulaDocument* doc)
+Container::Container(Document* doc)
 {
-    impl = new KFormulaContainer_Impl(doc);
+    impl = new Container_Impl(doc);
     impl->rootElement = new FormulaElement(this);
     impl->activeCursor = impl->internCursor = createCursor();
     connect(this, SIGNAL(commandExecuted()),
@@ -109,20 +110,20 @@ KFormulaContainer::KFormulaContainer(KFormulaDocument* doc)
     recalc();
 }
 
-KFormulaContainer::~KFormulaContainer()
+Container::~Container()
 {
     document()->formulaDies(this);
     delete impl;
 }
 
 
-FormulaCursor* KFormulaContainer::createCursor()
+FormulaCursor* Container::createCursor()
 {
     return new FormulaCursor(rootElement());
 }
 
 
-KCommandHistory* KFormulaContainer::getHistory() const
+KCommandHistory* Container::getHistory() const
 {
     return document()->getHistory();
 }
@@ -132,7 +133,7 @@ KCommandHistory* KFormulaContainer::getHistory() const
  * Gets called just before the child is removed from
  * the element tree.
  */
-void KFormulaContainer::elementRemoval(BasicElement* child)
+void Container::elementRemoval(BasicElement* child)
 {
     emit elementWillVanish(child);
 }
@@ -141,13 +142,13 @@ void KFormulaContainer::elementRemoval(BasicElement* child)
  * Gets called whenever something changes and we need to
  * recalc.
  */
-void KFormulaContainer::changed()
+void Container::changed()
 {
     impl->dirty = true;
 }
 
 
-FormulaCursor* KFormulaContainer::getActiveCursor()
+FormulaCursor* Container::getActiveCursor()
 {
     return impl->activeCursor;
 }
@@ -157,7 +158,7 @@ FormulaCursor* KFormulaContainer::getActiveCursor()
  * Tells the formula that a view got the focus and might want to
  * edit the formula.
  */
-void KFormulaContainer::setActiveCursor(FormulaCursor* cursor)
+void Container::setActiveCursor(FormulaCursor* cursor)
 {
     document()->activate(this);
     if (cursor != 0) {
@@ -173,20 +174,20 @@ void KFormulaContainer::setActiveCursor(FormulaCursor* cursor)
 }
 
 
-bool KFormulaContainer::hasValidCursor() const
+bool Container::hasValidCursor() const
 {
     return (impl->activeCursor != 0) && !impl->activeCursor->isReadOnly();
 }
 
 
-void KFormulaContainer::testDirty()
+void Container::testDirty()
 {
     if (impl->dirty) {
         recalc();
     }
 }
 
-void KFormulaContainer::recalc()
+void Container::recalc()
 {
     impl->dirty = false;
     rootElement()->calcSizes(document()->getContextStyle());
@@ -198,37 +199,37 @@ void KFormulaContainer::recalc()
     emit cursorMoved(getActiveCursor());
 }
 
-bool KFormulaContainer::isEmpty()
+bool Container::isEmpty()
 {
     return rootElement()->countChildren() == 0;
 }
 
 
-KFormulaDocument* KFormulaContainer::getDocument() const
+Document* Container::getDocument() const
 {
     return document();
 }
 
-const SymbolTable& KFormulaContainer::getSymbolTable() const
+const SymbolTable& Container::getSymbolTable() const
 {
     return document()->getSymbolTable();
 }
 
 
-void KFormulaContainer::draw(QPainter& painter, const QRect& r, const QColorGroup& cg)
+void Container::draw(QPainter& painter, const QRect& r, const QColorGroup& cg)
 {
     painter.fillRect( r, cg.base() );
     draw( painter, r );
 }
 
 
-void KFormulaContainer::draw(QPainter& painter, const QRect& r)
+void Container::draw(QPainter& painter, const QRect& r)
 {
     rootElement()->draw(painter, r, document()->getContextStyle(painter.device()->devType() == QInternal::Printer));
 }
 
 
-void KFormulaContainer::addText(QChar ch, bool isSymbol)
+void Container::addText(QChar ch, bool isSymbol)
 {
     if (!hasValidCursor())
         return;
@@ -238,7 +239,7 @@ void KFormulaContainer::addText(QChar ch, bool isSymbol)
     execute(command);
 }
 
-void KFormulaContainer::addText(const QString& text)
+void Container::addText(const QString& text)
 {
     if (!hasValidCursor())
         return;
@@ -249,14 +250,24 @@ void KFormulaContainer::addText(const QString& text)
     execute(command);
 }
 
-void KFormulaContainer::addLineBreak()
+void Container::addSpace( SpaceWidths space )
+{
+    if (!hasValidCursor())
+        return;
+    KFCReplace* command = new KFCReplace(i18n("Add space"), this);
+    SpaceElement* element = new SpaceElement( space );
+    command->addElement(element);
+    execute(command);
+}
+
+void Container::addLineBreak()
 {
     if (!hasValidCursor())
         return;
     // Not supported right now.
 }
 
-void KFormulaContainer::addBracket(char left, char right)
+void Container::addBracket(char left, char right)
 {
     if (!hasValidCursor())
         return;
@@ -265,7 +276,7 @@ void KFormulaContainer::addBracket(char left, char right)
     execute(command);
 }
 
-void KFormulaContainer::addFraction()
+void Container::addFraction()
 {
     if (!hasValidCursor())
         return;
@@ -275,7 +286,7 @@ void KFormulaContainer::addFraction()
 }
 
 
-void KFormulaContainer::addRoot()
+void Container::addRoot()
 {
     if (!hasValidCursor())
         return;
@@ -285,7 +296,7 @@ void KFormulaContainer::addRoot()
 }
 
 
-void KFormulaContainer::addSymbol(SymbolType type)
+void Container::addSymbol(SymbolType type)
 {
     if (!hasValidCursor())
         return;
@@ -294,7 +305,7 @@ void KFormulaContainer::addSymbol(SymbolType type)
     execute(command);
 }
 
-void KFormulaContainer::addMatrix(int rows, int columns)
+void Container::addMatrix(int rows, int columns)
 {
     if (!hasValidCursor())
         return;
@@ -304,7 +315,7 @@ void KFormulaContainer::addMatrix(int rows, int columns)
 }
 
 
-void KFormulaContainer::addOneByTwoMatrix()
+void Container::addOneByTwoMatrix()
 {
     if (!hasValidCursor())
         return;
@@ -315,7 +326,7 @@ void KFormulaContainer::addOneByTwoMatrix()
     execute(command);
 }
 
-void KFormulaContainer::addMatrix()
+void Container::addMatrix()
 {
     MatrixDialog* dialog = new MatrixDialog(0);
     if (dialog->exec()) {
@@ -326,7 +337,7 @@ void KFormulaContainer::addMatrix()
     delete dialog;
 }
 
-void KFormulaContainer::addLowerLeftIndex()
+void Container::addLowerLeftIndex()
 {
     if (!hasValidCursor())
         return;
@@ -342,7 +353,7 @@ void KFormulaContainer::addLowerLeftIndex()
     }
 }
 
-void KFormulaContainer::addUpperLeftIndex()
+void Container::addUpperLeftIndex()
 {
     if (!hasValidCursor())
         return;
@@ -358,7 +369,7 @@ void KFormulaContainer::addUpperLeftIndex()
     }
 }
 
-void KFormulaContainer::addLowerRightIndex()
+void Container::addLowerRightIndex()
 {
     if (!hasValidCursor())
         return;
@@ -374,7 +385,7 @@ void KFormulaContainer::addLowerRightIndex()
     }
 }
 
-void KFormulaContainer::addUpperRightIndex()
+void Container::addUpperRightIndex()
 {
     if (!hasValidCursor())
         return;
@@ -390,7 +401,7 @@ void KFormulaContainer::addUpperRightIndex()
     }
 }
 
-IndexElement* KFormulaContainer::createIndexElement()
+IndexElement* Container::createIndexElement()
 {
     IndexElement* element = new IndexElement;
     FormulaCursor* cursor = getActiveCursor();
@@ -404,7 +415,7 @@ IndexElement* KFormulaContainer::createIndexElement()
  * Just search an element that gets an index. Don't create one
  * if there is non.
  */
-void KFormulaContainer::addGenericLowerIndex()
+void Container::addGenericLowerIndex()
 {
     if (!hasValidCursor())
         return;
@@ -430,7 +441,7 @@ void KFormulaContainer::addGenericLowerIndex()
  * Just search an element that gets an index. Don't create one
  * if there is non.
  */
-void KFormulaContainer::addGenericUpperIndex()
+void Container::addGenericUpperIndex()
 {
     if (!hasValidCursor())
         return;
@@ -461,21 +472,21 @@ void KFormulaContainer::addGenericUpperIndex()
 /**
  * Helper function that inserts the index it was called with.
  */
-void KFormulaContainer::addGenericIndex(FormulaCursor* cursor, ElementIndexPtr index)
+void Container::addGenericIndex(FormulaCursor* cursor, ElementIndexPtr index)
 {
     if (!index->hasIndex()) {
         KFCAddGenericIndex* command = new KFCAddGenericIndex(this, index);
         execute(command);
     }
     else {
-        index->moveToIndex(cursor, BasicElement::afterCursor);
+        index->moveToIndex(cursor, afterCursor);
         cursor->setSelection(false);
         emit cursorMoved(cursor);
     }
 }
 
 
-void KFormulaContainer::remove(BasicElement::Direction direction)
+void Container::remove(Direction direction)
 {
     if (!hasValidCursor())
         return;
@@ -484,7 +495,7 @@ void KFormulaContainer::remove(BasicElement::Direction direction)
 }
 
 
-void KFormulaContainer::replaceElementWithMainChild(BasicElement::Direction direction)
+void Container::replaceElementWithMainChild(Direction direction)
 {
     if (!hasValidCursor())
         return;
@@ -496,7 +507,7 @@ void KFormulaContainer::replaceElementWithMainChild(BasicElement::Direction dire
 }
 
 
-void KFormulaContainer::compactExpression()
+void Container::compactExpression()
 {
     if (!hasValidCursor())
         return;
@@ -505,20 +516,29 @@ void KFormulaContainer::compactExpression()
     if (!name.isNull()) {
         QChar ch = document()->getSymbolTable().unicode( name );
         if (!ch.isNull()) {
-            KFCReplace* command = new KFCReplace(i18n("Add symbol"), this);
-            TextElement* element = new TextElement( ch, true );
-            command->addElement(element);
-            execute(command);
-            return;
+            addText( ch, true );
+        }
+        else if ( name == "\\," ) {
+            addSpace( THIN );
+        }
+        else if ( name == "\\>" ) {
+            addSpace( MEDIUM );
+        }
+        else if ( name == "\\;" ) {
+            addSpace( THICK );
+        }
+        else if ( name == "\\quad" ) {
+            addSpace( QUAD );
         }
     }
-
-    // It might have moved the cursor. So tell them.
-    emit cursorMoved(cursor);
+    else {
+        // It might have moved the cursor. So tell them.
+        emit cursorMoved(cursor);
+    }
 }
 
 
-void KFormulaContainer::makeGreek()
+void Container::makeGreek()
 {
     if (!hasValidCursor())
         return;
@@ -537,7 +557,7 @@ void KFormulaContainer::makeGreek()
 }
 
 
-void KFormulaContainer::paste()
+void Container::paste()
 {
     if (!hasValidCursor())
         return;
@@ -566,18 +586,18 @@ void KFormulaContainer::paste()
     }
 }
 
-void KFormulaContainer::copy()
+void Container::copy()
 {
     // read-only cursors are fine for copying.
     FormulaCursor* cursor = getActiveCursor();
     if (cursor != 0) {
         QDomDocument formula = cursor->copy();
         QClipboard* clipboard = QApplication::clipboard();
-        clipboard->setData(new KFormulaMimeSource(formula));
+        clipboard->setData(new MimeSource(formula));
     }
 }
 
-void KFormulaContainer::cut()
+void Container::cut()
 {
     if (!hasValidCursor())
         return;
@@ -589,7 +609,7 @@ void KFormulaContainer::cut()
 }
 
 
-void KFormulaContainer::execute(KFormulaCommand* command)
+void Container::execute(Command* command)
 {
     command->execute();
     if (!command->isSenseless()) {
@@ -602,18 +622,18 @@ void KFormulaContainer::execute(KFormulaCommand* command)
 }
 
 
-QRect KFormulaContainer::boundingRect()
+QRect Container::boundingRect()
 {
     return QRect(rootElement()->getX(), rootElement()->getY(),
                  rootElement()->getWidth(), rootElement()->getHeight());
 }
 
-int KFormulaContainer::baseline() const
+int Container::baseline() const
 {
     return static_cast<int>( rootElement()->getBaseline() );
 }
 
-void KFormulaContainer::moveTo(int x, int y)
+void Container::moveTo(int x, int y)
 {
     rootElement()->setX(x);
     rootElement()->setY(y);
@@ -621,7 +641,7 @@ void KFormulaContainer::moveTo(int x, int y)
 
 
 // This doesn't work.
-void KFormulaContainer::setFontSize( int /*pointSize*/, bool /*forPrint*/ )
+void Container::setFontSize( int /*pointSize*/, bool /*forPrint*/ )
 {
     // taken from KWTextFrameSet::zoom
 //     double factor = document()->getContextStyle( forPrint ).getYResolution() *
@@ -630,20 +650,20 @@ void KFormulaContainer::setFontSize( int /*pointSize*/, bool /*forPrint*/ )
 //     double newSize = factor*pointSize;
 //     if ( rootElement()->getBaseSize() != newSize ) {
 //         rootElement()->setBaseSize( newSize );
-//         kdDebug( 40000 ) << "KFormulaContainer::save " << newSize << endl;
+//         kdDebug( 40000 ) << "Container::save " << newSize << endl;
 //         recalc();
 //     }
 }
 
 
-QDomDocument KFormulaContainer::domData()
+QDomDocument Container::domData()
 {
     QDomDocument doc("KFORMULA");
     save(doc);
     return doc;
 }
 
-void KFormulaContainer::save(QString file)
+void Container::save(QString file)
 {
     QFile f(file);
     if(!f.open(IO_Truncate | IO_ReadWrite)) {
@@ -662,13 +682,13 @@ void KFormulaContainer::save(QString file)
 /**
  * Saves the data into the document.
  */
-void KFormulaContainer::save(QDomNode doc)
+void Container::save(QDomNode doc)
 {
     QDomDocument ownerDoc = doc.ownerDocument();
     doc.appendChild(rootElement()->getElementDom(ownerDoc));
 }
 
-void KFormulaContainer::load(QString file)
+void Container::load(QString file)
 {
     QFile f(file);
     if (!f.open(IO_ReadOnly)) {
@@ -690,7 +710,7 @@ void KFormulaContainer::load(QString file)
     f.close();
 }
 
-void KFormulaContainer::loadMathMl(QString file)
+void Container::loadMathMl(QString file)
 {
     QFile f(file);
     if (!f.open(IO_ReadOnly)) {
@@ -716,7 +736,7 @@ void KFormulaContainer::loadMathMl(QString file)
 /**
  * Loads a formula from the document.
  */
-bool KFormulaContainer::load(QDomNode doc)
+bool Container::load(QDomNode doc)
 {
     //cerr << "Loading" << endl;
     QDomElement fe = doc.firstChild().toElement();
@@ -739,7 +759,7 @@ bool KFormulaContainer::load(QDomNode doc)
 }
 
 
-void KFormulaContainer::print(KPrinter& printer)
+void Container::print(KPrinter& printer)
 {
     //printer.setFullPage(true);
     QPainter painter;
@@ -748,15 +768,15 @@ void KFormulaContainer::print(KPrinter& printer)
     }
 }
 
-QString KFormulaContainer::texString()
+QString Container::texString()
 {
     return rootElement()->toLatex();
 }
 
 
-bool KFormulaContainer::importOldText(QString text)
+bool Container::importOldText(QString text)
 {
-    KFormulaCompatibility converter;
+    Compatibility converter;
     QDomDocument doc = converter.buildDOM(text);
     QCString data = doc.toCString();
     cerr << (const char *)data << endl;

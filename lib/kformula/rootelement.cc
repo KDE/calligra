@@ -355,7 +355,7 @@ void RootElement::remove(FormulaCursor* cursor,
  */
 void RootElement::normalize(FormulaCursor* cursor, Direction direction)
 {
-    if (direction == BasicElement::beforeCursor) {
+    if (direction == beforeCursor) {
         content->moveLeft(cursor, this);
     }
     else {

@@ -7,7 +7,7 @@
 #include <TestSuite.h>
 
 #include "elementindex.h"
-#include "formuladefs.h"
+#include "kformuladefs.h"
 
 class KCommandHistory;
 
@@ -17,8 +17,8 @@ class BracketElement;
 class FormulaElement;
 class FormulaCursor;
 class IndexElement;
-class KFormulaContainer;
-class KFormulaDocument;
+class Container;
+class Document;
 class TextElement;
 
 
@@ -41,8 +41,8 @@ private:
     void removeAddIndex(ElementIndexPtr& index);
 
     KCommandHistory* history;
-    KFormulaDocument* document;
-    KFormulaContainer* container;
+    Document* document;
+    Container* container;
     FormulaElement* rootElement;
     FormulaCursor* cursor;
     IndexElement* indexElement;
