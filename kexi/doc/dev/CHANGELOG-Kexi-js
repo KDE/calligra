@@ -232,7 +232,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - add more cell types & options:
   http://mfc.dundas.com/mfc/grid/index.aspx?section=Grid&body=celltypes.htm
 	--including: red corner with a note; sliders; radio buttons
-
+- highlight sorted column's cells slightly darker, like in current KListView's impl.
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -460,7 +460,11 @@ Forms:
 -change form's object caption to "caption" property, when changed and conversely!
 -new forms should have "dirty" set to true, so user can save them quickly
 
-2005-03-28
+2005-03-30
+Forms
+- setting form's background color property fixed
+
+2005-03-29
 Main Window
 - dock windows' width is managed for TabPageMode in the same way as for ChildframeMode
 - hiding property editor's dock when not needed
