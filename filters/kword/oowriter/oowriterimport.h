@@ -41,6 +41,7 @@ public:
 
 private:
     void prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
+    void finishDocumentContent( QDomDocument& mainDocument );
     void writePageLayout( QDomDocument& mainDocument, const QString& masterPageName );
     void parseList( QDomDocument& doc, const QDomElement& list, QDomElement& currentFramesetElement );
     bool pushListLevelStyle( const QString& listStyleName, int level );
@@ -69,6 +70,7 @@ private:
     void importFootnote( QDomDocument& doc, const QDomElement& object, QDomElement& formats, uint pos, const QString& tagName );
     QString appendPicture( QDomDocument& doc, const QDomElement& object );
     QString appendTextBox( QDomDocument& doc, const QDomElement& object );
+    void appendTOC( QDomDocument& doc, const QDomElement& toc );
     void importFrame( QDomElement& frameElementOut, const QDomElement& object, bool isText );
     void anchorFrameset( QDomDocument& doc, QDomElement& formats, uint pos, const QString& frameName );
     void appendField(QDomDocument& doc, QDomElement& outputFormats, QDomElement& object, uint pos);
@@ -95,6 +97,7 @@ private:
     QDomElement m_outlineStyle;
     bool m_insideOrderedList;
     bool m_nextItemIsListItem; // only the first elem inside list-item is numbered
+    bool m_hasTOC;
     int m_restartNumbering;
     QString m_currentMasterPage;
     QDomElement m_currentFrameset; // set by parseBodyOrSimilar
