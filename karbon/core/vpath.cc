@@ -107,6 +107,11 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 			}
 		}
 
+		//kdDebug() << "bbox.x : " << boundingBox().x() << endl;
+		//kdDebug() << "bbox.y : " << boundingBox().y() << endl;
+		//kdDebug() << "bbox.width : " << boundingBox().width() << endl;
+		//kdDebug() << "bbox.height : " << boundingBox().height() << endl;
+
 		painter->setRasterOp( Qt::CopyROP );
 		painter->setPen( Qt::NoPen );
 		painter->setBrush( *fill() );
@@ -117,6 +122,13 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 		painter->setPen( *stroke() );
 		painter->setBrush( Qt::NoBrush );
 		painter->strokePath();
+
+		//m_boundingBox = painter->boundingBox();
+
+		//kdDebug() << "bbox.x : " << m_boundingBox.x() << endl;
+		//kdDebug() << "bbox.y : " << m_boundingBox.y() << endl;
+		//kdDebug() << "bbox.width : " << m_boundingBox.width() << endl;
+		//kdDebug() << "bbox.height : " << m_boundingBox.height() << endl;
 	}
 
 	// draw simplistic contour:

@@ -43,6 +43,7 @@
 #include <math.h>
 
 #include <koPoint.h>
+#include <koRect.h>
 
 VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h ) : VPainter( target, w, h ), m_target( target )
 {
@@ -357,12 +358,20 @@ VKoPainter::clear( unsigned int color )
 			m_width * m_height * 4 );
 }
 
+KoRect
+VKoPainter::boundingBox() const
+{
+	return m_bbox;
+}
+
 void
 VKoPainter::clampToViewport( const ArtSVP &svp, int &x0, int &y0, int &x1, int &y1 )
 {
 	// get SVP bbox
 	ArtDRect bbox;
 	art_drect_svp( &bbox, &svp );
+	// Remove comments if we really decide for SVP bbox usage
+	//m_bbox = KoRect( bbox.x0, bbox.y0, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0 );
 
 	// clamp to viewport
 	x0 = int( bbox.x0 );

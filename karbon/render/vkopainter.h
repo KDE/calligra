@@ -18,6 +18,7 @@ struct _ArtSVP;
 struct _ArtGradientStop;
 class VGradient;
 class VPattern;
+class KoRect;
 
 class VKoPainter : public VPainter
 {
@@ -67,6 +68,8 @@ public:
 	virtual QPaintDevice *device() { return m_target; } 
 	unsigned char *buffer() { return m_buffer; }
 
+	// get the bbox of the currently built path
+	KoRect boundingBox() const;
 
 private:
 	void drawVPath( struct _ArtVpath * );
@@ -86,6 +89,7 @@ private:
 	VStroke *m_stroke;
 	VFill *m_fill;
 	double m_zoomFactor;
+	KoRect m_bbox;
 
 	GC gc;
 };

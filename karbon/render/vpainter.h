@@ -9,6 +9,7 @@
 // painter abstraction
 
 #include <qnamespace.h>
+#include <koRect.h>
 
 class QWMatrix;
 class QPaintDevice;
@@ -68,6 +69,8 @@ public:
 
 	// access to device
 	virtual QPaintDevice *device() = 0;
+
+	virtual KoRect boundingBox() const { return KoRect(); }
 };
 
 #endif
