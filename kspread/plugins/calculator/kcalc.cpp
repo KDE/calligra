@@ -1823,7 +1823,7 @@ void QtCalculator::set_colors(){
 
   QPalette mypalette = (calc_display->palette()).copy();
 
-  QColorGroup cgrp = mypalette.normal();
+  QColorGroup cgrp = mypalette.active();
   QColorGroup ncgrp(kcalcdefaults.forecolor,
                     cgrp.background(),
                     cgrp.light(),
@@ -1832,7 +1832,7 @@ void QtCalculator::set_colors(){
                     kcalcdefaults.forecolor,
                     kcalcdefaults.backcolor);
 
-  mypalette.setNormal(ncgrp);
+  mypalette.setActive(ncgrp);
   mypalette.setDisabled(ncgrp);
   mypalette.setActive(ncgrp);
 
