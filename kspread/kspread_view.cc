@@ -409,10 +409,10 @@ public:
 
     // navigation
     KAction* gotoCell;
-    KAction* nextTable;
-    KAction* prevTable;
-    KAction* firstTable;
-    KAction* lastTable;
+    KAction* nextSheet;
+    KAction* prevSheet;
+    KAction* firstSheet;
+    KAction* lastSheet;
 
     // misc
     KAction* styleDialog;
@@ -823,21 +823,21 @@ void ViewPrivate::initActions()
       0, view, SLOT( gotoCell() ), ac, "gotoCell" );
   actions->gotoCell->setToolTip(i18n("Move to a particular cell."));
 
-  actions->nextTable = new KAction( i18n("Next Sheet"),
+  actions->nextSheet = new KAction( i18n("Next Sheet"),
       Qt::CTRL+Qt::Key_PageDown, view, SLOT( nextTable() ), ac, "nextTable");
-  actions->nextTable->setToolTip(i18n("Move to the next sheet."));
+  actions->nextSheet->setToolTip(i18n("Move to the next sheet."));
 
-  actions->prevTable = new KAction( i18n("Previous Sheet"),
+  actions->prevSheet = new KAction( i18n("Previous Sheet"),
       Qt::CTRL+Qt::Key_PageUp, view, SLOT( previousTable() ), ac, "previousTable");
-  actions->prevTable->setToolTip(i18n("Move to the previous sheet."));
+  actions->prevSheet->setToolTip(i18n("Move to the previous sheet."));
 
-  actions->firstTable = new KAction( i18n("First Sheet"),
+  actions->firstSheet = new KAction( i18n("First Sheet"),
       0, view, SLOT( firstTable() ), ac, "firstTable");
-  actions->firstTable->setToolTip(i18n("Move to the first sheet."));
+  actions->firstSheet->setToolTip(i18n("Move to the first sheet."));
 
-  actions->lastTable = new KAction( i18n("Last Sheet"),
+  actions->lastSheet = new KAction( i18n("Last Sheet"),
       0, view, SLOT( lastTable() ), ac, "lastTable");
-  actions->lastTable->setToolTip(i18n("Move to the last sheet."));
+  actions->lastSheet->setToolTip(i18n("Move to the last sheet."));
 }
 
 
