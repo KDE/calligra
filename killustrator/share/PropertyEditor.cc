@@ -32,7 +32,6 @@
 #include <kbuttonbox.h>
 #include <kseparator.h>
 #include <kiconloader.h>
-#include <kglobal.h>
 
 #include <qpushbt.h>
 #include <qlabel.h>
@@ -296,7 +295,11 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
     QButtonGroup *group = new QButtonGroup (w);
     group->move (80, 140);
 
+#if NEWKDE
     KIconLoader* loader = KGlobal::iconLoader ();
+#else
+    KIconLoader* loader = kapp->getIconLoader ();
+#endif
 
     ellipseKind[0] = new QPushButton (group);
     ellipseKind[0]->setToggleButton (true);
@@ -338,7 +341,11 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
     QButtonGroup *group = new QButtonGroup (w);
     group->move (80, 140);
 
+#if NEWKDE
     KIconLoader* loader = KGlobal::iconLoader ();
+#else
+    KIconLoader* loader = kapp->getIconLoader ();
+#endif
 
     textAlign[0] = new QPushButton (group);
     textAlign[0]->setToggleButton (true);

@@ -36,10 +36,16 @@
 #endif
 
 #include <kapp.h>
-#include <kio_job.h>
 #include "version.h"
+#if NEW_KDE
+#include <kio_job.h>
+#endif
 #include "KIllustrator.h"
 #include "PStateManager.h"
+
+#ifndef KDEMAXPATHLEN
+#define KDEMAXPATHLEN 4095
+#endif
 
 int main (int argc, char** argv) {
 #ifdef __FreeBSD__

@@ -433,6 +433,7 @@ void Canvas::redrawView (bool repaintFlag) {
 
   Painter p;
   float s = scaleFactor ();
+  int w = document->getPaperWidth (), h = document->getPaperHeight ();
 
   // setup the painter  
   pdev = (pixmap ? (QPaintDevice *) pixmap : (QPaintDevice *) this);
@@ -445,15 +446,14 @@ void Canvas::redrawView (bool repaintFlag) {
 
   // clear the canvas
   //  p.translate (1, 1);
-  p.eraseRect (0, 0, document->getPaperWidth (),
-	       document->getPaperHeight ());
+  p.eraseRect (0, 0, w, h);
 
   p.setPen (black);
-  p.drawRect (0, 0, width - 2, height - 2);
+  p.drawRect (0, 0, w - 2, h - 2);
   p.setPen (QPen (darkGray, 2));
-  p.moveTo (width - 1, 2);
-  p.lineTo (width - 1, height - 1);
-  p.lineTo (2, height - 1);
+  p.moveTo (w - 1, 2);
+  p.lineTo (w - 1, h - 1);
+  p.lineTo (2, h - 1);
   p.setPen (black);
 
 

@@ -345,7 +345,11 @@ void KIllustrator::setupMainView () {
 
 void KIllustrator::initToolBars () {
   QPixmap pixmap;
+#if NEWKDE
   KIconLoader* loader = KGlobal::iconLoader ();
+#else
+  KIconLoader* loader = kapp->getIconLoader ();
+#endif
 
   /* main toolbar */
   toolbar = new KToolBar (this);

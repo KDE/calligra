@@ -27,7 +27,6 @@
 
 #include <kapp.h>
 #include <kiconloader.h>
-#include <kglobal.h>
 
 #include <iostream.h>
 
@@ -41,7 +40,11 @@ LayerView::LayerView (QWidget *parent, const char *name)
   setBackgroundColor (white);
 
   document = 0L;
+#if NEWKDE
   KIconLoader* loader = KGlobal::iconLoader ();
+#else
+  KIconLoader* loader = kapp->getIconLoader ();
+#endif
 
   pixmaps[0] = loader->loadIcon ("eye.xpm");
   pixmaps[1] = loader->loadIcon ("freehandtool.xpm");

@@ -758,9 +758,8 @@ void SelectionTool::activate (GDocument* doc, Canvas*) {
     }
     else {
       GObject *sobj = doc->getSelection ().front ();
-      cout << "---> " << sobj->typeName () << endl;
       sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
-	       I18N (sobj->typeName ()), x, u, y, u, w, u, h, u);
+	       sobj->typeName (), x, u, y, u, w, u, h, u);
     }
     emit modeSelected (msgbuf);
   }

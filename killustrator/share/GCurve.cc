@@ -22,12 +22,13 @@
 
 */
 
-#include <klocale.h>
 #include "GCurve.h"
 #include "GCurve.moc"
 #include "GBezier.h"
 #include <qcolor.h>
 #include "version.h"
+#include <kapp.h>
+#include <klocale.h>
 
 static Coord blendPoints (const Coord& p1, const Coord& p2, 
 			  int step, int num) {

@@ -32,7 +32,6 @@
 #include <kbuttonbox.h>
 #include <kseparator.h>
 #include <kiconloader.h>
-#include <kglobal.h>
 
 #include <qpushbt.h>
 #include <qbttngrp.h>
@@ -96,7 +95,11 @@ QWidget* AlignmentDialog::createAlignmentWidget (QWidget* parent) {
   QButtonGroup* group;
   QGroupBox* box;
 
+#if NEWKDE
   KIconLoader* loader = KGlobal::iconLoader ();
+#else
+  KIconLoader* loader = kapp->getIconLoader ();
+#endif
 
   w = new QWidget (parent);
   QGridLayout *layout = new QGridLayout (w, 2, 3, 10);
@@ -172,7 +175,11 @@ QWidget* AlignmentDialog::createDistributionWidget (QWidget* parent) {
   QWidget* w;
   QButtonGroup* group;
 
+#if NEWKDE
   KIconLoader* loader = KGlobal::iconLoader ();
+#else
+  KIconLoader* loader = kapp->getIconLoader ();
+#endif
 
   w = new QWidget (parent);
   QGridLayout *layout = new QGridLayout (w, 2, 3, 10);

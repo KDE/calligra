@@ -30,15 +30,16 @@ sed -e "s#@GMOFILES@#$list#" po/Makefile.am > po/Makefile.am.new && mv po/Makefi
 echo 'dist-hook:' >> Makefile.am
 echo -e "\tcd \$(top_distdir) && perl \$(top_srcdir)/am_edit" >> Makefile.am
 echo "" >> Makefile.am
-sed 's#^myown_dist#myown_dist = am_edit#' Makefile.am > Makefile.am.2
+sed 's#^myown_dist = #myown_dist = am_edit#' Makefile.am > Makefile.am.2
 mv Makefile.am.2 Makefile.am
+sed -e "s/\$(LIB_KIMGIO)/\$(LIB_KIMGIO) \$(LIBJPEG) \$(LIBTIFF)/" standalone/Makefile.am > standalone/Makefile.am.new && mv standalone/Makefile.am.new standalone/Makefile.am
 aclocal
 autoheader
-automake
+automake --gnu --include-deps
 perl am_edit 
 autoconf
 
 # if the following fails, try it by hand.
-./configure
+./configure --with-qt-dir=/usr/local/qt-1.44
 make dist
 

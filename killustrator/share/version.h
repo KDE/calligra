@@ -29,13 +29,17 @@
 
 #if QT_VERSION >= 199
 #define QT_PRFX Qt
-#define NEWKDE
+#define NEWKDE 1
 #define QSTR_NULL QString::null
 #define I18N(s) i18n(s).ascii()
 #else
 #define QT_PRFX
 #define QSTR_NULL (const char *) 0L
 #define I18N(s) i18n(s)
+#endif
+
+#if NEWKDE
+#include <kglobal.h>
 #endif
 
 #define APP_NAME "killustrator"

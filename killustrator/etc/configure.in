@@ -13,11 +13,15 @@ AM_INIT_AUTOMAKE(killustrator, 0.7)
 
 dnl make $KDEDIR the default for the installation
 AC_PREFIX_DEFAULT(${KDEDIR:-/usr/local/kde})
+KDE_USE_QT(1)
 
 AM_DISABLE_LIBRARIES
 KDE_PROG_LIBTOOL
 AC_PATH_KDE 
 AM_KDE_WITH_NLS
+AC_FIND_JPEG
+AC_FIND_TIFF
+AC_FIND_GIF
 
 AC_CHECK_HEADERS(unistd.h sys/param.h floatingpoint.h)
 KDE_CHECK_KIMGIO

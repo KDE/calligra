@@ -33,7 +33,7 @@ bool qwmfDebug = FALSE;
 #include "qwmf.h"
 #include "wmfstruct.h"
 #include "metafuncs.h"
-#include <kautoarray.h>
+//#include <kautoarray.h>
 
 #define ABS(x) ((x)>=0?(x):-(x))
 
@@ -563,7 +563,8 @@ void QWinMetaFile::polypolygon(short num, short* parm)
   QPointArray* pa;
   int i;
   int polyCount = parm[0];
-  kauto_array<int> vertices(polyCount);
+  //  kauto_array<int> vertices(polyCount);
+  int vertices[polyCount];
   bool bgMode = FALSE;
   QT_PRFX::RasterOp rop = mPainter.rasterOp();
   QBrush fgBrush(mPainter.brush());

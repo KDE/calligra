@@ -32,7 +32,6 @@
 #include <kbuttonbox.h>
 #include <kseparator.h>
 #include <kiconloader.h>
-#include <kglobal.h>
 
 #include <qpushbt.h>
 #include <qbttngrp.h>
@@ -288,8 +287,11 @@ QWidget* TransformationDialog::createRotationWidget (QWidget* parent) {
 QWidget* TransformationDialog::createMirrorWidget (QWidget* parent) {
   QWidget* w;
   QButtonGroup* group;
+#if NEWKDE
   KIconLoader* loader = KGlobal::iconLoader ();
-
+#else
+  KIconLoader* loader = kapp->getIconLoader ();
+#endif
   w = new QWidget (parent);
 
   group = new QButtonGroup (w);

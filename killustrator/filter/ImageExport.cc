@@ -77,10 +77,10 @@ bool ImageExport::exportToFile (GDocument* doc) {
   if (buffer == 0L)
     return false;
 
-  buffer->fill (Qt::white);
+  buffer->fill (QT_PRFX::white);
   Painter p;
   p.begin (buffer);
-  p.setBackgroundColor (Qt::white);
+  p.setBackgroundColor (QT_PRFX::white);
   p.eraseRect (0, 0, w, h);
   p.scale (RESOLUTION / 72.0, RESOLUTION / 72.0);
 

@@ -185,7 +185,6 @@ void HelplineDialog::updateHorizLine () {
     sprintf (buf, "%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
     horizList->changeItem (buf, idx);
     horizLines[idx] = value;
-    horizLines.push_back (value);
   }
 }
 
@@ -219,7 +218,6 @@ void HelplineDialog::updateVertLine () {
     sprintf (buf, "%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
     vertList->changeItem (buf, idx);
     vertLines[idx] = value;
-    vertLines.push_back (value);
   }
 }
 

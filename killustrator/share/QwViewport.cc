@@ -80,16 +80,20 @@ bool QwViewport::signal_choke=false;
 void QwViewport::hslide(int pos)
 {
   if (!signal_choke && viewedWidget()) {
-    viewedWidget()->move(-pos + xoff,
-                         /*viewedWidget()->y() + */yoff);
+    int y = yoff;
+    if (porthole.height () < viewedWidget ()->height ())
+      y += viewedWidget()->y();
+    viewedWidget()->move(-pos + xoff, y);
   }
 }
 
 void QwViewport::vslide(int pos)
 {
   if (!signal_choke && viewedWidget()) {
-    viewedWidget()->move(/*viewedWidget()->x() +*/ xoff,
-                         -pos + yoff);
+    int x = xoff;
+    if (porthole.width () < viewedWidget ()->width ())
+      x += viewedWidget()->x();
+    viewedWidget()->move (x, -pos + yoff);
   }
 }
 
@@ -369,7 +373,7 @@ void QwViewport::centralize(int x, int y, float xmargin, float ymargin)
 }
 
 void QwViewport::recalculateChildPosition (QWidget *child) {
-  if (child == 0)
+   if (child == 0)
     child = viewedWidget ();
   if (child) {
     if (porthole.width () > child->width ())

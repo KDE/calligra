@@ -138,14 +138,14 @@ bool XfigImport::setup (GDocument* , const char* /*format*/) {
   fig_resolution = 1200.0 / 72.0;
   coordinate_system = 2;
 
-  colorTable.insert (0, new QColor (Qt::black));
-  colorTable.insert (1, new QColor (Qt::blue));
-  colorTable.insert (2, new QColor (Qt::green));
-  colorTable.insert (3, new QColor (Qt::cyan));
-  colorTable.insert (4, new QColor (Qt::red));
-  colorTable.insert (5, new QColor (Qt::magenta));
-  colorTable.insert (6, new QColor (Qt::yellow));
-  colorTable.insert (7, new QColor (Qt::white));
+  colorTable.insert (0, new QColor (QT_PRFX::black));
+  colorTable.insert (1, new QColor (QT_PRFX::blue));
+  colorTable.insert (2, new QColor (QT_PRFX::green));
+  colorTable.insert (3, new QColor (QT_PRFX::cyan));
+  colorTable.insert (4, new QColor (QT_PRFX::red));
+  colorTable.insert (5, new QColor (QT_PRFX::magenta));
+  colorTable.insert (6, new QColor (QT_PRFX::yellow));
+  colorTable.insert (7, new QColor (QT_PRFX::white));
 
   for (int i = 0; i <= 23; i++)
       colorTable.insert (i + 8, new QColor (colors[i]));
@@ -676,11 +676,11 @@ void XfigImport::setProperties (GObject* obj, int pen_color, int style,
     obj->setOutlineColor (*colorTable[pen_color]);
 
   if (style < 1)
-    obj->setOutlineStyle (Qt::SolidLine);
+    obj->setOutlineStyle (QT_PRFX::SolidLine);
   else if (style == 1)
-    obj->setOutlineStyle (Qt::DashLine);
+    obj->setOutlineStyle (QT_PRFX::DashLine);
   else if (style == 2)
-    obj->setOutlineStyle (Qt::DotLine);
+    obj->setOutlineStyle (QT_PRFX::DotLine);
 
   obj->setOutlineWidth (thickness * 72.0 / 80.0);
 
