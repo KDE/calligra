@@ -147,7 +147,7 @@ KarbonView::print( KPrinter &printer )
 	// print the doc using QPainter at zoom level 1
 	// TODO : better use eps export?
 	// TODO : use real page layout stuff
-	QPtrListIterator<VLayer> i = m_part->layers();
+	QPtrListIterator<VLayer> i = m_part->document().layers();
 	for ( ; i.current(); ++i )
 		if ( i.current()->visible() )
 			i.current()->draw( &p, KoRect::fromQRect( QRect( 0, 0, width(), height() ) ) );
@@ -173,7 +173,7 @@ KarbonView::editPaste()
 	for ( ; itr.current() ; ++itr )
 	{
 		VObject *temp = itr.current()->clone();
-		temp->transform( QWMatrix().translate( Karbon::m_copyOffset, Karbon::m_copyOffset ) );
+		temp->transform( QWMatrix().translate( Karbon::copyOffset, Karbon::copyOffset ) );
 		selection.append( temp );
 	}
 	m_part->document().deselectAllObjects();

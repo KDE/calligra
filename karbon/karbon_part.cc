@@ -24,7 +24,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 {
 	m_commandHistory = new VCommandHistory( this );
 	m_bShowStatusBar = true;
-	m_maxRecentFiles = 10;
+	m_maxRecentFiles = Karbon::maxRecentFiles;
 	dcop = 0;
 
 	connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
@@ -199,7 +199,7 @@ void KarbonPart::initConfig()
 	{
 		config->setGroup( "Interface" );
 		setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave() / 60 ) * 60 );
-		m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
+		m_maxRecentFiles = config->readNumEntry( "NbRecentFile", Karbon::maxRecentFiles );
 		setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
 	}
 

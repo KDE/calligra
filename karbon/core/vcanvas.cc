@@ -60,7 +60,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		mat.translate( -contentsX(), -contentsY() );
 		p->setWorldMatrix( mat );
 
-		QPtrListIterator<VLayer> i = m_part->layers();
+		QPtrListIterator<VLayer> i = m_part->document().layers();
 		for ( ; i.current(); ++i )
 			if ( i.current()->visible() )
 				i.current()->draw( p, r );
@@ -98,7 +98,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 	//VPainter *p = m_view->painterFactory()->painter( this, visibleWidth(), visibleHeight() );
 	//erase( rect );
 
-	QPtrListIterator<VLayer> i = m_part->layers();
+	QPtrListIterator<VLayer> i = m_part->document().layers();
 	for ( ; i.current(); ++i )
 		if ( i.current()->visible() )
 			i.current()->draw( p, KoRect::fromQRect( rect ) );
