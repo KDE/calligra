@@ -2608,6 +2608,8 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if ( !store->close() ) // done with styles.xml
         return false;
 
+    m_pictureCollection->saveOasisToStore( store, savePictureList(), manifestWriter);
+
     // TODO settings.xml
     // manifestWriter->addManifestEntry( "settings.xml", "text/xml" );
     return true;
@@ -2933,14 +2935,9 @@ void KWDocument::saveTableStyle( KWTableStyle *sty, QDomElement parentElem )
     sty->saveTableStyle( tableStyleElem );
 }
 
-// KWord-1.3 format
-bool KWDocument::completeSaving( KoStore *_store )
+
+QValueList<KoPictureKey> KWDocument::savePictureList()
 {
-    if ( !_store )
-        return TRUE;
-
-    QString u = KURL( url() ).path();
-
     QValueList<KoPictureKey> savePictures;
 
     // At first, we must process the data of the KWTextImage classes.
@@ -2968,6 +2965,19 @@ bool KWDocument::completeSaving( KoStore *_store )
                 savePictures.append( key );
         }
     }
+    return savePictures;
+}
+
+// KWord-1.3 format
+bool KWDocument::completeSaving( KoStore *_store )
+{
+    if ( !_store )
+        return TRUE;
+
+    QString u = KURL( url() ).path();
+
+    QValueList<KoPictureKey> savePictures( savePictureList() );
+
     if (specialOutputFlag()==SaveAsKOffice1dot1)
     {
         return m_pictureCollection->saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, savePictures );

@@ -833,6 +833,8 @@ protected:
     void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const;
     void saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const;
 
+    QValueList<KoPictureKey> savePictureList();
+
 private:
     void endOfLoading();
     //private helper functions for frameUnderMouse
