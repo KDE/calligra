@@ -230,6 +230,9 @@ public:
     void emitHideCursor() { emit hideCursor(); }
     void emitShowCursor() { emit showCursor(); }
 
+    void typingStarted();
+    void typingDone();
+
 public slots:
     void formatMore();
 
