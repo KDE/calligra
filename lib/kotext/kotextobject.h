@@ -151,6 +151,7 @@ public:
     double relativeTextSize() const;
     int offsetFromBaseLine()const;
     bool wordByWord()const;
+    bool hyphenation()const;
 };
 
 /**
@@ -281,7 +282,6 @@ public:
 
     KCommand * setShadowCommand( KoTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId= KoTextDocument::Standard  );
     KCommand * setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, int selectionId = KoTextDocument::Standard );
-    KCommand * setHyphenationCommand(  KoTextCursor * cursor, bool _hyph );
 
     KCommand* applyStyle( KoTextCursor * cursor, const KoStyle * style,
                      int selectionId = KoTextDocument::Standard,

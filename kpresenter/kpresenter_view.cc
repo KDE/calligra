@@ -1908,9 +1908,9 @@ void KPresenterView::mtextFont()
         fontAttributeFlags |= KoFontDia::FontAttributeShadowText;
     if( textIface->wordByWord() )
         fontAttributeFlags |= KoFontDia::FontAttributeWordByWord;
-    /*if( textIface->hyphenation() )
+    if( textIface->hyphenation() )
         fontAttributeFlags |= KoFontDia::FontAttributeHyphenation;
-    */
+
     m_fontDlg = new KoFontDia( this, "", textIface->textFont(),
                                (KoFontDia::FontAttributeFlags)fontAttributeFlags,
                                textIface->textColor(),
