@@ -52,7 +52,6 @@
 #include <qdir.h>
 #include <qheader.h>
 #include <qwmatrix.h>
-#include <qfiledialog.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -66,6 +65,7 @@
 
 #include <kstddirs.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
 
 /******************************************************************/
 /* Class: KPWebPresentation                                       */
@@ -287,14 +287,15 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         html += QString( "    <IMG src=\"../pics/slide_%1.%2\">" ).arg( pgNum ).arg( format );
         html += "  </CENTER><BR><HR noshade>\n";
         html += "  <CENTER>\n";
-        html += "    <B>Author: </B>";
+        html += "    <B>"+ i18n("Author:") + " </B>";
         if ( !email.isEmpty() )
             html += QString( "<A HREF=\"mailto:%1\">" ).arg( email );
         html += QString( "<I>%1</I>" ).arg( author );
         if ( !email.isEmpty() )
             html += "</A>";
 
-        html += " - created with <A HREF=\"http://www.koffice.org/kpresenter/\">KPresenter</A>\n";
+        html += i18n(" - created with %1").
+	  arg("<A HREF=\"http://www.koffice.org/kpresenter/\">KPresenter</A>");
         html += "  </CENTER><HR noshade>\n";
         html += "</BODY></HTML>\n";
 
@@ -315,7 +316,9 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
 {
     QString html;
 
-    html = QString( "<HTML><HEAD><TITLE>%1 - Table of Contents</TITLE></HEAD>\n" ).arg( title );
+    html = QString( "<HTML><HEAD><TITLE>%1 - ").arg( title );
+    html += i18n("Table of Contents");
+    html += "</TITLE></HEAD>\n";
 
     html += QString( "<BODY bgcolor=\"%1\" text=\"%2\">\n" ).arg( backColor.name() ).arg( textColor.name() );
 
@@ -323,16 +326,23 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
     html += QString( "<BR><CENTER><H1>%1</H1></CENTER>\n" ).arg( title );
     html += "</FONT>\n";
 
-    html += "<BR><BR><CENTER><H3><A HREF=\"html/slide_1.html\">Click here to start the Slideshow</A></H3></CENTER><BR>\n";
+    html += "<BR><BR><CENTER><H3><A HREF=\"html/slide_1.html\">";
+    html += i18n("Click here to start the Slideshow");
+    html += "</A></H3></CENTER><BR>\n";
 
     html += "<HR noshade><BR><BR>\n";
 
     if ( email.isEmpty() )
-        html += QString( "Created on %1 by <I>%2</I><BR><BR>\n" ).arg( QDate::currentDate().toString() ).arg( author );
+        html += i18n( "Created on %1 by <I>%2</I>" ).
+	  arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).
+	  arg( author );
     else
-        html += QString( "Created on %1 by <I><A HREF=\"mailto:%2\">%3</A></I><BR><BR>\n" ).arg( QDate::currentDate().toString() ).arg( email ).arg( author );
+        html += i18n( "Created on %1 by <I><A HREF=\"mailto:%2\">%3</A></I>" ).
+	  arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).
+	  arg( email ).
+	  arg( author );
 
-    html += "<B>Table of Contents</B><BR>\n";
+    html += "<BR><BR>\n<B>" + i18n("Table of Contents") + "</B><BR>\n";
     html += "<OL>\n";
 
     for ( unsigned int i = 0; i < slideInfos.count(); i++ )
@@ -358,17 +368,13 @@ void KPWebPresentation::init()
 
     pw = getpwuid( getuid() );
     if ( pw ) {
-        author = QString( pw->pw_gecos );
+        author = QString::fromLocal8Bit( pw->pw_gecos );
         int i = author.find( ',' );
         if ( i > 0 ) author.truncate( i );
+	gethostname( str, 79 );
+        email = QString::fromLocal8Bit( pw->pw_name ) + "@" + QString::fromLocal8Bit( str );
     }
-
-    pw = getpwuid( getuid() );
-    if ( pw ) {
-        gethostname( str, 79 );
-        email = QString( pw->pw_name ) + "@" + str;
-    }
-
+    
     title = i18n("Slideshow");
 
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
@@ -390,8 +396,7 @@ void KPWebPresentation::init()
     else
         imgFormat = PNG;
 
-    path = getenv( "HOME" );
-    path += "/www";
+    path = KGlobalSettings::documentPath() + "www";
 
     zoom = 100;
 }
@@ -429,7 +434,7 @@ void KPWebPresentationWizard::createWebPresentation( const QString &_config, KPr
 {
     KPWebPresentationWizard *dlg = new KPWebPresentationWizard( _config, _doc, _view );
 
-    dlg->setCaption( i18n( "Create Web-Presentation (HTML Slideshow)" ) );
+    dlg->setCaption( i18n( "Create HTML Slideshow" ) );
     dlg->resize( 640, 350 );
     dlg->show();
 }
@@ -468,15 +473,6 @@ void KPWebPresentationWizard::setupPage1()
     QLabel *label4 = new QLabel( i18n(" Path: "), row4 );
     label4->setAlignment( Qt::AlignVCenter );
 
-    label1->setMinimumWidth( label3->sizeHint().width() );
-    label2->setMinimumWidth( label3->sizeHint().width() );
-    label3->setMinimumWidth( label3->sizeHint().width() );
-    label4->setMinimumWidth( label3->sizeHint().width() );
-    label1->setMaximumWidth( label3->sizeHint().width() );
-    label2->setMaximumWidth( label3->sizeHint().width() );
-    label3->setMaximumWidth( label3->sizeHint().width() );
-    label4->setMaximumWidth( label3->sizeHint().width() );
-
     author = new QLineEdit( webPres.getAuthor(), row1 );
     title = new QLineEdit( webPres.getTitle(), row2 );
     email = new QLineEdit( webPres.getEmail(), row3 );
@@ -488,6 +484,8 @@ void KPWebPresentationWizard::setupPage1()
 
     addPage( page1, i18n( "General Information" ) );
 
+    setHelpEnabled(page1, false);  //doesn't do anything currently
+
     connect( choosePath, SIGNAL( clicked() ), this, SLOT( slotChoosePath() ) );
 }
 
@@ -497,7 +495,7 @@ void KPWebPresentationWizard::setupPage2()
     page2 = new QHBox( this );
     page2->setSpacing( 5 );
     page2->setMargin( 5 );
-
+    
     QLabel *helptext = new QLabel( page2 );
     helptext->setMargin( 5 );
     helptext->setBackgroundMode( PaletteLight );
@@ -542,17 +540,6 @@ void KPWebPresentationWizard::setupPage2()
     QLabel *label5 = new QLabel( i18n(" Zoom: "), row5 );
     label5->setAlignment( Qt::AlignVCenter );
 
-    label1->setMinimumWidth( label3->sizeHint().width() );
-    label2->setMinimumWidth( label3->sizeHint().width() );
-    label3->setMinimumWidth( label3->sizeHint().width() );
-    label4->setMinimumWidth( label3->sizeHint().width() );
-    label5->setMinimumWidth( label3->sizeHint().width() );
-    label1->setMaximumWidth( label3->sizeHint().width() );
-    label2->setMaximumWidth( label3->sizeHint().width() );
-    label3->setMaximumWidth( label3->sizeHint().width() );
-    label4->setMaximumWidth( label3->sizeHint().width() );
-    label5->setMaximumWidth( label3->sizeHint().width() );
-
     textColor = new KColorButton( webPres.getTextColor(), row1 );
     titleColor = new KColorButton( webPres.getTitleColor(), row2 );
     backColor = new KColorButton( webPres.getBackColor(), row3 );
@@ -568,6 +555,8 @@ void KPWebPresentationWizard::setupPage2()
     zoom->setMaximumHeight( zoom->sizeHint().height() );
 
     addPage( page2, i18n( "Style" ) );
+
+    setHelpEnabled(page2, false);  //doesn't do anything currently
 }
 
 /*================================================================*/
@@ -576,7 +565,7 @@ void KPWebPresentationWizard::setupPage3()
     page3 = new QHBox( this );
     page3->setSpacing( 5 );
     page3->setMargin( 5 );
-
+    
     QLabel *helptext = new QLabel( page3 );
     helptext->setMargin( 5 );
     helptext->setBackgroundMode( PaletteLight );
@@ -618,6 +607,9 @@ void KPWebPresentationWizard::setupPage3()
     }
 
     addPage( page3, i18n( "Slide Titles" ) );
+ 
+    setHelpEnabled(page3, false);  //doesn't do anything currently
+
     setFinish( page3, true );
 }
 
@@ -652,11 +644,7 @@ void KPWebPresentationWizard::slotChoosePath()
     if ( fi.exists() && fi.isDir() )
         url = path->text();
 
-#ifdef USE_QFD
-    url = QFileDialog::getExistingDirectory( url );
-#else
     url = KFileDialog::getExistingDirectory( url );
-#endif
 
     if ( QFileInfo( url ).exists() && QFileInfo( url ).isDir() )
         path->setText( url );
@@ -739,7 +727,7 @@ void KPWebPresentationCreateDialog::createWebPresentation( KPresenterDoc *_doc, 
 {
     KPWebPresentationCreateDialog *dlg = new KPWebPresentationCreateDialog( _doc, _view, _webPres );
 
-    dlg->setCaption( i18n( "Create Web-Presentation (HTML Slideshow)" ) );
+    dlg->setCaption( i18n( "Create HTML Slideshow" ) );
     dlg->resize( 400, 300 );
     dlg->show();
     dlg->start();
@@ -878,9 +866,6 @@ void KPWebPresentationCreateDialog::saveConfig()
     else
         filename = QString::null;
 
-#ifdef USE_QFD
-    filename = QFileDialog::getOpenFileName( filename, i18n("KPresenter Web-Presentation (*.kpweb)") );
-#else
     KURL url = KFileDialog::getOpenURL( filename, i18n("*.kpweb|KPresenter Web-Presentation (*.kpweb)") );
 
     if( url.isEmpty() )
@@ -893,7 +878,6 @@ void KPWebPresentationCreateDialog::saveConfig()
     }
 
     filename = url.path();
-#endif
 
     if ( !filename.isEmpty() ) {
         webPres.setConfig( filename );
