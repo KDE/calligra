@@ -193,7 +193,7 @@ bool AmiProParser::process( const QString& filename )
     {
       if( line.isEmpty() ) 
       {
-         parseParagraph( lines.join(" ") );
+         parseParagraph( lines );
          lines.clear(); 
       }
         lines.append( line );
@@ -309,6 +309,8 @@ bool AmiProParser::parseParagraph( const QStringList& lines )
 
   if( m_listener ) 
     return m_listener->doParagraph( m_text, m_formatList, m_layout );
+
+  return true;
 }
 
 bool AmiProParser::parseStyle( const QStringList& lines )

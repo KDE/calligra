@@ -86,7 +86,8 @@ static QString AmiProFormatAsXML( AmiProFormat format )
   QString italic = format.italic ? "1" : "0";
   QString strikeout = format.strikethrough ? "1" : "0";
   QString vertalign = format.superscript ? "2" : format.subscript ? "1" : "0";
-  QString underline = format.underline|format.word_underline|format.double_underline ? "1" : "0";
+  QString underline = format.double_underline ? "double" : 
+    format.underline|format.word_underline ? "1" : "0";
 
   result = "<FORMAT id=\"1\" pos=\"" + QString::number(format.pos) +
      "\" len=\"" + QString::number(format.len) + "\">\n";
@@ -141,7 +142,8 @@ static QString AmiProLayoutAsXML( const AmiProLayout& layout )
   QString italic = layout.italic ? "1" : "0";
   QString strikeout = layout.strikethrough ? "1" : "0";
   QString vertalign = layout.superscript ? "2" : layout.subscript ? "1" : "0";
-  QString underline = layout.underline|layout.word_underline|layout.double_underline ? "1" : "0";
+  QString underline = layout.double_underline ? "double" :
+    layout.underline|layout.word_underline ? "1" : "0";
 
   QString align;
   align = layout.align==Qt::AlignLeft ? "left" :
@@ -200,7 +202,8 @@ static QString AmiProStyleAsXML( const AmiProStyle& style )
   QString italic = style.italic ? "1" : "0";
   QString strikeout = style.strikethrough ? "1" : "0";
   QString vertalign = style.superscript ? "2" : style.subscript ? "1" : "0";
-  QString underline = style.underline|style.word_underline|style.double_underline ? "1" : "0";
+  QString underline = style.double_underline ? "double" : 
+    style.underline|style.word_underline ? "1" : "0";
 
   QString align;
   align = style.align==Qt::AlignLeft ? "left" :
