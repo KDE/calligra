@@ -27,6 +27,7 @@
 #include <koRect.h>
 
 #include "vglobal.h"
+#include <koffice_export.h>
 
 class QDomElement;
 class VPainter;
@@ -38,7 +39,7 @@ class VPainter;
  * proper ranges.
  */
 
-class VSegment
+class KARBONBASE_EXPORT VSegment
 {
 	friend class VSubpath;
 	friend class VSubpathIterator;

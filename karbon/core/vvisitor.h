@@ -20,7 +20,7 @@
 #ifndef __VVISITOR_H__
 #define __VVISITOR_H__
 
-
+#include <koffice_export.h>
 class VPath;
 class VDocument;
 class VGroup;
@@ -31,7 +31,7 @@ class VSelection;
 class VText;
 class VImage;
 
-class VVisitor
+class KARBONBASE_EXPORT VVisitor
 {
 public:
 	VVisitor()

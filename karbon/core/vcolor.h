@@ -24,7 +24,7 @@
 
 #include <qcolor.h>
 #include <qstring.h>
-
+#include <koffice_export.h>
 class QDomElement;
 
 
@@ -37,7 +37,7 @@ class QDomElement;
  * Default is opaque, rgb, black color.
  */
 
-class VColor
+class KARBONBASE_EXPORT VColor
 {
 public:
 	enum VColorSpace

@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 #include <koPoint.h>
-
+#include <koffice_export.h>
 class KarbonPart;
 class KarbonView;
 class QEvent;
@@ -30,7 +30,7 @@ class QWidget;
 class VPainter;
 
 
-class VTool
+class KARBONBASE_EXPORT VTool
 {
 public:
 	VTool( KarbonPart *part, const char* name );

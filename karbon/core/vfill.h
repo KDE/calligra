@@ -24,7 +24,7 @@
 #include "vcolor.h"
 #include "vgradient.h"
 #include "vpattern.h"
-
+#include <koffice_export.h>
 
 class QDomElement;
 class KoGenStyle;
@@ -41,7 +41,7 @@ class KoOasisContext;
  *
  * Default is no fill and even-odd filling rule.
  */
-class VFill
+class KARBONBASE_EXPORT VFill
 {
 public:
 	enum VFillType

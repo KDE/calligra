@@ -22,11 +22,11 @@
 #define __VPAINTERDACTORY_H__
 
 // painter factory
-
+#include <koffice_export.h>
 class VPainter;
 class QPaintDevice;
 
-class VPainterFactory
+class KARBONBASE_EXPORT VPainterFactory
 {
 public:
 	VPainterFactory();

@@ -22,10 +22,11 @@
 
 
 #include "vobject.h"
+#include <koffice_export.h>
 
 /**
  */
-class VShadowDecorator : public VObject
+class KARBONBASE_EXPORT VShadowDecorator : public VObject
 {
 public:
 	VShadowDecorator( VObject* object, VObject* parent, int distance = 2, int angle = 0, float opacity = 1.0 );

@@ -24,6 +24,7 @@
 
 #include <koRect.h>
 #include <dcopobject.h>
+#include <koffice_export.h>
 
 class QDomElement;
 class VDocument;
@@ -44,7 +45,7 @@ class KoGenStyles;
  * Also each object manages its own bounding box and keeps track of its
  * parent object.
  */
-class VObject
+class KARBONBASE_EXPORT VObject
 {
 public:
 	enum VState

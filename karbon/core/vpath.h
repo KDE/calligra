@@ -24,6 +24,7 @@
 #include <koPoint.h>
 
 #include "vobject.h"
+#include <koffice_export.h>
 
 class QDomElement;
 class QWMatrix;
@@ -38,7 +39,7 @@ class VVisitor;
  * housholding data, please always use a VSubpathIterator to access segments.
  */
 
-class VSubpath : public VObject
+class KARBONBASE_EXPORT VSubpath : public VObject
 {
 	friend class VSubpathIterator;
 

@@ -28,7 +28,7 @@
 
 #include "vobject.h"
 #include "vvisitor.h"
-
+#include <koffice_export.h>
 class KoPoint;
 class QObject;
 class VPainter;
@@ -61,7 +61,7 @@ enum VHandleNode
  * Objects in a layer can be manipulated and worked on independant of objects
  * in other layers.
  */
-class VSelection : public VObject, public VVisitor
+class KARBONBASE_EXPORT VSelection : public VObject, public VVisitor
 {
 public:
 	VSelection( VObject* parent = 0L );

@@ -6,12 +6,12 @@
 #define __VIMAGE_H__
 
 #include "vobject.h"
-
+#include <koffice_export.h>
 class QImage;
 
 // all vobjects exist inside a layer.
 
-class VImage : public VObject
+class KARBONBASE_EXPORT VImage : public VObject
 {
 public:
 	VImage( VObject *parent, const QString &fname = "" );

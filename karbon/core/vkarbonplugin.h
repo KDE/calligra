@@ -21,8 +21,9 @@
 #define __VKARBONPLUGIN_H__
 
 #include <kparts/plugin.h>
+#include <koffice_export.h>
 
-class VKarbonPlugin : public KParts::Plugin
+class KARBONBASE_EXPORT VKarbonPlugin : public KParts::Plugin
 {
 public:
 	VKarbonPlugin( QObject *parent, const char* name );

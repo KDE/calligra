@@ -22,7 +22,7 @@
 
 
 #include "vcommand.h"
-
+#include <koffice_export.h>
 class QString;
 class VSelection;
 
@@ -33,7 +33,7 @@ class VSelection;
  * each object as a whole with a new object.
  */
 
-class VReplacingCmd : public VCommand
+class KARBONBASE_EXPORT VReplacingCmd : public VCommand
 {
 public:
 	virtual void execute();

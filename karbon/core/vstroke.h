@@ -27,7 +27,7 @@
 #include "vdashpattern.h"
 #include "vgradient.h"
 #include "vpattern.h"
-
+#include <koffice_export.h>
 
 class QDomElement;
 class VObject;
@@ -45,7 +45,7 @@ class KoStyleStack;
  * style and no dashes.
  */
 
-class VStroke
+class KARBONBASE_EXPORT VStroke
 {
 public:
 	enum VStrokeType

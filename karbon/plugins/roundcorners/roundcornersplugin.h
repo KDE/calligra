@@ -23,11 +23,12 @@
 #include <kparts/plugin.h>
 #include <kdialogbase.h>
 #include <commands/vreplacingcmd.h>
+#include <koffice_export.h>
 
 class KarbonViewBase;
 class VRoundCornersDlg;
 
-class VRoundCornersPlugin : public KParts::Plugin
+class KARBONBASE_EXPORT VRoundCornersPlugin : public KParts::Plugin
 {
 	Q_OBJECT
 public:

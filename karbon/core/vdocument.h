@@ -30,6 +30,7 @@
 #include "vobject.h"
 
 #include "karbon_grid_data.h"
+#include <koffice_export.h>
 
 class QDomDocument;
 class QDomElement;
@@ -47,7 +48,7 @@ typedef QPtrListIterator<VLayer> VLayerListIterator;
  * the visually oriented karbon part.
  */
 
-class VDocument : public VObject
+class KARBONBASE_EXPORT VDocument : public VObject
 {
 public:
 	enum VSelectionMode {
