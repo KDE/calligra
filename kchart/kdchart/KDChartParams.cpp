@@ -28,7 +28,7 @@
 class KDChartData;
 
 #include <qdom.h>
-
+#include <kdebug.h>
 const uint KDChartParams::KDCHART_MAX_AXES = 12;
 const uint KDChartParams::KDCHART_ALL_AXES = UINT_MAX-1;
 const uint KDChartParams::KDCHART_NO_AXIS = UINT_MAX;
@@ -2014,13 +2014,21 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                         } else if( tagName == "LabelString" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                if( axisSettings->_axisLabelStringList )
-                                    *(axisSettings->_axisLabelStringList) << string;
+                            {
+                                if( !axisSettings->_axisLabelStringList )
+                                    axisSettings->_axisLabelStringList=new QStringList();
+                                *(axisSettings->_axisLabelStringList) << string;
+                                kdDebug()<<"axisSettings->_axisLabelStringList :"<<axisSettings->_axisLabelStringList<<endl;
+                                kdDebug()<<"string :"<<string<<endl;
+                            }
                         } else if( tagName == "ShortLabelString" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                if( axisSettings->_axisShortLabelsStringList )
-                                    *(axisSettings->_axisShortLabelsStringList) << string;
+                            {
+                                if( !axisSettings->_axisShortLabelsStringList )
+                                    axisSettings->_axisShortLabelsStringList=new QStringList();
+                                *(axisSettings->_axisShortLabelsStringList) << string;
+                            }
                         } else if( tagName == "LabelText" ) {
                             QString string;
                             if( readStringNode( element, string ) )
