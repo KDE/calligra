@@ -1421,11 +1421,14 @@ void KWFormatContext::apply( KWFormat &_format )
 }
 
 /*================================================================*/
-void KWFormatContext::selectWord( KWFormatContext &_fc1, KWFormatContext &_fc2, QPainter &painter )
+bool KWFormatContext::selectWord( KWFormatContext &_fc1, KWFormatContext &_fc2, QPainter &painter )
 {
     KWChar *text = parag->getText();
     bool goLeft = false;
 
+    if ( !text || parag->getKWString()->size() <= textPos )
+        return false;
+    
     KWFormatContext fc( document, frameSet );
     fc = *this;
 
@@ -1461,4 +1464,6 @@ void KWFormatContext::selectWord( KWFormatContext &_fc1, KWFormatContext &_fc2, 
         _fc2 = *this;
     }
     if ( goLeft ) _fc1.cursorGotoLeft( painter );
+
+    return true;
 }

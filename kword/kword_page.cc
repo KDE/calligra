@@ -1150,15 +1150,21 @@ void KWPage::mouseDoubleClickEvent( QMouseEvent *e )
             fc->cursorGotoPixelInLine( mx, my, _painter );
 
             KWFormatContext fc1( doc, fc->getFrameSet() ), fc2( doc, fc->getFrameSet() );
-            fc->selectWord( fc1, fc2, _painter );
+            if ( fc->selectWord( fc1, fc2, _painter ) )
+            {
+                doc->drawMarker( *fc, &_painter, xOffset, yOffset );
+                markerIsVisible = true;
 
-            doc->drawMarker( *fc, &_painter, xOffset, yOffset );
-            markerIsVisible = true;
-
-            doc->setSelStart( fc1 );
-            doc->setSelEnd( fc2 );
-            doc->setSelection( true );
-            doc->drawSelection( _painter, xOffset, yOffset );
+                doc->setSelStart( fc1 );
+                doc->setSelEnd( fc2 );
+                doc->setSelection( true );
+                doc->drawSelection( _painter, xOffset, yOffset );
+            }
+            else
+            {
+                doc->drawMarker( *fc, &_painter, xOffset, yOffset );
+                markerIsVisible = true;
+            }
 
             if ( doc->getProcessingType() == KWordDocument::DTP )
                 setRuler2Frame( fc->getFrameSet() - 1, fc->getFrame() - 1 );

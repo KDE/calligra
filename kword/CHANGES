@@ -1253,3 +1253,8 @@ Reggie, 3.6.1999:
 Reggie, 5.6.1999:
 -----------------
 - KRect/KPoint/KSize -> QRect/QPoint/QSize
+
+Reggie, 6.6.1999:
+-----------------
+- Checking some values to avoid crashes in
+  KWFormatContext::selectWord()
