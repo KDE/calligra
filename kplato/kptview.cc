@@ -52,7 +52,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* name)
     // The menu items
     new KAction(i18n("Edit Main Project..."), "edit_project", 0, this,
 		SLOT(slotEditProject()), actionCollection(), "edit_project");
-    new KAction(i18n("Add Subproject..."), "add_sub_project", 0, this,
+    new KAction(i18n("Add Sub-Project..."), "add_sub_project", 0, this,
 		SLOT(slotAddSubProject()), actionCollection(),
 		"add_sub_project");
     new KAction(i18n("Add Task..."), "add_task", 0, this,
