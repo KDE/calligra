@@ -33,9 +33,6 @@ GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     //resizeContents(2000, 2000);
 }
 
-GCanvas::~GCanvas() {
-}
-
 void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
 
     // TODO: 1 - define the region which has to be

@@ -37,7 +37,7 @@ GraphitePart::GraphitePart(QObject *parent, const char *name, bool singleViewMod
     KAction *undo=KStdAction::undo(this, SLOT(edit_undo()), actionCollection(), "edit_undo");
     KAction *redo=KStdAction::redo(this, SLOT(edit_redo()), actionCollection(), "edit_redo");
     history=new GCommandHistory(undo, redo);
-    
+
     KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut" );
 }
 

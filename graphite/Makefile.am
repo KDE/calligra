@@ -23,7 +23,8 @@ graphite_SOURCES = main.cc
 
 noinst_HEADERS =  graphiteglobal.h graphiteshell.h \
     graphitepart.h graphiteview.h graphitefactory.h \
-    gobject.h gcanvas.h gobjectfactory.h gcommand.h
+    gobject.h gcanvas.h gobjectfactory.h gcommand.h \
+    gtool.h
 
 libgraphite_la_METASOURCES = AUTO
 

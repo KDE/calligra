@@ -33,7 +33,7 @@ class GCanvas : public QScrollView {
     Q_OBJECT
 public:
     GCanvas(GraphiteView *view, GraphitePart *doc);
-    virtual ~GCanvas();
+    virtual ~GCanvas() {}
 
 protected:
     virtual void viewportPaintEvent(QPaintEvent *e);
