@@ -536,6 +536,7 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
         {
 	    case 0x01:  // ptgExpr
 		kdDebug() << "WARNING: ptgExpr formula not supported, yet" << endl;
+                return ""; // Return empty formula-string on error
 		break;
             case 0x03:  // ptgAdd
                 stringPtr = parsedFormula.fromLast();
@@ -635,12 +636,15 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
                 break;
 	    case 0x12:  // ptgUPlus
 		kdDebug() << "WARNING: ptgUPlus formula not supported, yet" << endl;
+                return ""; // Return empty formula-string on error
 		break;
 	    case 0x13:  // ptgUMinus
 		kdDebug() << "WARNING: ptgUMinus formula not supported, yet" << endl;
+                return ""; // Return empty formula-string on error
 		break;
 	    case 0x14:  // ptgPercent
 		kdDebug() << "WARNING: ptgPercent formula not supported, yet" << endl;
+                return ""; // Return empty formula-string on error
 		break;	    
             case 0x15:  // ptgParen
                 stringPtr = parsedFormula.fromLast();
@@ -656,12 +660,15 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
                 break;
 	    case 0x16:  // ptgMissArg
 		kdDebug() << "WARNING: ptgMissArg formula not supported, yet" << endl;
+                return ""; // Return empty formula-string on error
 		break;
 	    case 0x17:  // ptgStr
 		kdDebug() << "WARNING: ptgStr formula not supported, yet" << endl;
+                return ""; // Return empty formula-string on error
 		break;
 	    case 0x18:  // ptgExtended
 		kdDebug() << "WARNING: ptgExtended formula not supported, yet" << endl;
+                return ""; // Return empty formula-string on error
 		break;
             case 0x19:  // ptgAttr
                 rgce >> byte >> integer;
@@ -675,6 +682,7 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
                 break;
 	    case 0x1c:  // ptgErr
 		kdDebug() << "WARNING: ptgErr formula not supported, yet" << endl;
+                return ""; // Return empty formula-string on error
 		break;
             case 0x1d:  // ptgBool
                 rgce >> byte;
