@@ -143,7 +143,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
             tab.ptPos = KoStyle::getAttribute( element, "ptpos", 0.0 );
             tab.filling = static_cast<KoTabulatorFilling>( KoStyle::getAttribute( element, "filling", TF_BLANK ) );
             tab.ptWidth = KoStyle::getAttribute( element, "width", 0.5 );
-	    tab.alignChar = element.attribute("alignchar")[0];
+            tab.alignChar = element.attribute("alignchar",".")[0];
             tabList.append( tab );
         }
     }
