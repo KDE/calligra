@@ -46,6 +46,8 @@ protected slots:
     void slotDelExpression();
     void slotAddGroup();
     void slotDelGroup();
+    void slotRenameGroup();
+    void slotRenameExpression();
     void slotSelectionChanged();
     virtual void slotOk();
 
@@ -57,7 +59,9 @@ protected slots:
     QPushButton *m_addExpression;
     QPushButton *m_addGroup;
     QPushButton *m_delGroup;
+    QPushButton *m_renameGroup;
     QPushButton *m_delExpression;
+    QPushButton *m_renameExpression;
     bool m_bChanged;
 };
 

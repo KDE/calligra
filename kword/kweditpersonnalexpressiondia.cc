@@ -59,13 +59,22 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     grid->addWidget(m_delGroup,2,2);
     connect(m_delGroup,SIGNAL(clicked ()),this,SLOT(slotDelGroup()));
 
+
+    m_renameGroup=new QPushButton(i18n("Rename Group"),page);
+    grid->addWidget(m_renameGroup,3,2);
+    connect(m_renameGroup,SIGNAL(clicked ()),this,SLOT(slotRenameGroup()));
+
     m_addExpression=new QPushButton(i18n("Add new expression"),page);
-    grid->addWidget(m_addExpression,3,2);
+    grid->addWidget(m_addExpression,4,2);
     connect(m_addExpression,SIGNAL(clicked ()),this,SLOT(slotAddExpression()));
 
     m_delExpression=new QPushButton(i18n("Delete expression"),page);
-    grid->addWidget(m_delExpression,4,2);
+    grid->addWidget(m_delExpression,5,2);
     connect(m_delExpression,SIGNAL(clicked ()),this,SLOT(slotDelExpression()));
+
+    m_renameExpression=new QPushButton(i18n("Rename expression"),page);
+    grid->addWidget(m_renameExpression,6,2);
+    connect(m_renameExpression,SIGNAL(clicked ()),this,SLOT(slotRenameExpression()));
 
     loadFile();
     initCombobox();
@@ -74,6 +83,7 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     m_delExpression->setEnabled(state);
 
     m_delGroup->setEnabled(state);
+    m_renameExpression->setEnabled(state);
     enableButtonOK( state );
 
     slotExpressionActivated(m_typeExpression->currentText() );
@@ -86,6 +96,7 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
 void KWEditPersonnalExpression::slotSelectionChanged()
 {
     m_delExpression->setEnabled(m_listOfExpression->currentItem()!=-1);
+    m_renameExpression->setEnabled(m_listOfExpression->currentItem()!=-1);
 }
 
 void KWEditPersonnalExpression::slotExpressionActivated(const QString &_text )
@@ -204,6 +215,31 @@ void KWEditPersonnalExpression::slotDelExpression()
     }
 }
 
+void KWEditPersonnalExpression::slotRenameExpression()
+{
+    bool ok;
+    QString oldName=m_listOfExpression->currentText ();
+    if(oldName.isEmpty())
+        return;
+    QString newName=KLineEditDlg::getText(i18n("Rename Expression:"),i18n("Name:"), "",
+                                       &ok, this);
+    if(ok && !newName.isEmpty())
+    {
+        list::Iterator it= listExpression.find(m_typeExpression->currentText());
+        QStringList lst(it.data());
+        QStringList::Iterator it2=lst.find(oldName);
+        lst.insert(it2,newName);
+        lst.remove(oldName);
+        listExpression.replace(m_typeExpression->currentText(),lst);
+
+        m_listOfExpression->clear();
+        m_listOfExpression->insertStringList(lst);
+        m_bChanged=true;
+    }
+
+
+}
+
 void KWEditPersonnalExpression::slotAddGroup()
 {
     bool ok;
@@ -238,8 +274,17 @@ void KWEditPersonnalExpression::slotDelGroup()
     m_addExpression->setEnabled(hasItems);
     m_delExpression->setEnabled(hasItems);
     m_delGroup->setEnabled(hasItems);
+    m_renameExpression->setEnabled(hasItems);
     m_bChanged=true;
 
+}
+
+void KWEditPersonnalExpression::slotRenameGroup()
+{
+//todo
+    QString group=m_typeExpression->currentText();
+    if(group.isEmpty())
+        return;
 }
 
 void KWEditPersonnalExpression::saveFile()
