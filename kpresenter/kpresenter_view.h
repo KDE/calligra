@@ -194,7 +194,8 @@ public:
   virtual void extraOptions();
   virtual void extraLineBegin();
   virtual void extraLineEnd();
-
+  virtual void extraWebPres();
+  
   virtual void extraAlignObjLeftidl();
   virtual void extraAlignObjCenterHidl();
   virtual void extraAlignObjRightidl();
@@ -539,7 +540,8 @@ protected:
   CORBA::Long m_idMenuExtra_Background;
   CORBA::Long m_idMenuExtra_Layout;
   CORBA::Long m_idMenuExtra_Options;
-
+  CORBA::Long m_idMenuExtra_WepPres;
+  
   // screenpresentation menu
   OpenPartsUI::Menu_var m_vMenuScreen;
   CORBA::Long m_idMenuScreen_ConfigPage;
@@ -636,7 +638,8 @@ protected:
   CORBA::Long m_idButtonExtra_Align;
   CORBA::Long m_idButtonExtra_LineBegin;
   CORBA::Long m_idButtonExtra_LineEnd;
-
+  CORBA::Long m_idButtonExtra_WebPres;
+  
   // screen toolbar
   OpenPartsUI::ToolBar_var m_vToolBarScreen;
   CORBA::Long m_idButtonScreen_Stop;

@@ -19,9 +19,9 @@ module KPresenter
       slot void editDelPage();
       slot void editFind();
       slot void editFindReplace();
-      
+
       slot void newView();
-      
+
       slot void insertPage();
       slot void insertPicture();
       slot void insertClipart();
@@ -51,14 +51,15 @@ module KPresenter
       slot void extraOptions();
       slot void extraLineBegin();
       slot void extraLineEnd();
-
+      slot void extraWebPres();
+      
       slot void extraAlignObjLeftidl();
       slot void extraAlignObjCenterHidl();
       slot void extraAlignObjRightidl();
       slot void extraAlignObjTopidl();
       slot void extraAlignObjCenterVidl();
       slot void extraAlignObjBottomidl();
-      
+
       slot void screenConfigPages();
       slot void screenPresStructView();
       slot void screenAssignEffect();
@@ -109,7 +110,7 @@ module KPresenter
       slot void setPenColor(in long id);
       slot void setFillColor(in long id);
     };
-  
+
   interface KPresenterDocument : KOffice::Document, KOffice::Print
     {
     };

@@ -18,6 +18,7 @@
 #include "kpresenter_view.moc"
 #include "kpresenter_shell.h"
 #include "page.h"
+#include "webpresentation.h"
 #include <opUIUtils.h>
 #include <koQueryTypes.h>
 #include <klocale.h>
@@ -640,7 +641,7 @@ void KPresenterView::toolsAutoform()
   sendFocusEvent();
 }
 
-/*======================== insert object ========================*/
+/*===============================================================*/
 void KPresenterView::toolsObject()
 {
   page->deSelectAllObj();
@@ -656,7 +657,7 @@ void KPresenterView::toolsObject()
   sendFocusEvent();
 }
 
-/*===================== extra pen and brush =====================*/
+/*===============================================================*/
 void KPresenterView::extraPenBrush()
 {
   if (styleDia)
@@ -734,7 +735,7 @@ void KPresenterView::extraConfigRect()
   sendFocusEvent();
 }
 
-/*========================== extra raise ========================*/
+/*===============================================================*/
 void KPresenterView::extraRaise()
 {
   page->setToolEditMode(TEM_MOUSE);
@@ -743,7 +744,7 @@ void KPresenterView::extraRaise()
   sendFocusEvent();
 }
 
-/*========================== extra lower ========================*/
+/*===============================================================*/
 void KPresenterView::extraLower()
 {
   page->setToolEditMode(TEM_MOUSE);
@@ -752,7 +753,7 @@ void KPresenterView::extraLower()
   sendFocusEvent();
 }
 
-/*========================== extra rotate =======================*/
+/*===============================================================*/
 void KPresenterView::extraRotate()
 {
   if (rotateDia)
@@ -778,7 +779,7 @@ void KPresenterView::extraRotate()
   sendFocusEvent();
 }
 
-/*========================== extra shadow =======================*/
+/*===============================================================*/
 void KPresenterView::extraShadow()
 {
   if (shadowDia)
@@ -806,7 +807,7 @@ void KPresenterView::extraShadow()
   sendFocusEvent();
 }
 
-/*========================== extra align obj ====================*/
+/*===============================================================*/
 void KPresenterView::extraAlignObj()
 {
   page->setToolEditMode(TEM_MOUSE);
@@ -824,7 +825,7 @@ void KPresenterView::extraAlignObj()
   sendFocusEvent();
 }
 
-/*====================== extra background =======================*/
+/*===============================================================*/
 void KPresenterView::extraBackground()
 {
   if (backDia)
@@ -850,7 +851,7 @@ void KPresenterView::extraBackground()
   sendFocusEvent();
 }
 
-/*======================= extra layout ==========================*/
+/*===============================================================*/
 void KPresenterView::extraLayout()
 {
   KoPageLayout pgLayout = m_pKPresenterDoc->pageLayout();
@@ -867,7 +868,7 @@ void KPresenterView::extraLayout()
   sendFocusEvent();
 }
 
-/*========================== extra options ======================*/
+/*===============================================================*/
 void KPresenterView::extraOptions()
 {
   if (optionDia)
@@ -888,6 +889,19 @@ void KPresenterView::extraOptions()
   optionDia->show();
 
   sendFocusEvent();
+}
+
+/*===============================================================*/
+void KPresenterView::extraWebPres()
+{
+  QString config = QString::null;
+  if (QMessageBox::information((QWidget*)0L,i18n("Create Web-Presentation"),
+			       i18n("Do you want to load a configuration which should be used for this\n"
+				    "Web-Presentation, which you have already saved earlier?"),
+			       i18n("&Yes"),i18n("&No"),QString::null,1,1) == 0)
+    config = KFileDialog::getOpenFileName(QString::null,"*.kpweb | KPresenter Web-Presentation");
+    
+  KPWebPresentationWizard::createWebPresentation(config,m_pKPresenterDoc,this);  
 }
 
 /*===============================================================*/
@@ -3184,6 +3198,12 @@ bool KPresenterView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
   text = Q2C( i18n("&Options...") );
   m_idMenuExtra_Options = m_vMenuExtra->insertItem(text,this,"extraOptions",0);
 
+  m_vMenuExtra->insertSeparator(-1);
+
+  text = Q2C( i18n("Create Web-Presentation (&HTML Slideshow)...") );
+  pix = OPUIUtils::convertPixmap(ICON("webpres.xpm"));
+  m_idMenuExtra_WepPres = m_vMenuExtra->insertItem6(pix,text,this,"extraWebPres",0,-1,-1);
+
   // MENU Screenpresentation
   text = Q2C( i18n("&Screen Presentations") );
   _menubar->insertMenu(text,m_vMenuScreen,-1,-1);
@@ -3766,6 +3786,14 @@ bool KPresenterView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _facto
   toolTip = Q2C( i18n("Line End") );
   m_idButtonExtra_LineEnd = m_vToolBarExtra->insertButton2(pix,1,SIGNAL(clicked()),this,"extraLineEnd",
 							      true,toolTip,-1);
+
+  m_vToolBarExtra->insertSeparator(-1);
+
+  // line end
+  pix = OPUIUtils::convertPixmap(ICON("webpres.xpm"));
+  toolTip = Q2C( i18n("Create HTML Slide show") );
+  m_idButtonExtra_WebPres = m_vToolBarExtra->insertButton2(pix,1,SIGNAL(clicked()),this,"extraWebPres",
+							   true,toolTip,-1);
 
   m_vToolBarExtra->enable(OpenPartsUI::Show);
 
