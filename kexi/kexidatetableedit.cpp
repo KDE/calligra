@@ -87,7 +87,7 @@ KexiDateTableEdit::value()
 		date = m_oldVal;
 	}
 	
-	return QVariant(KGlobal::_locale->formatDate(date, true));
+	return QVariant(date.toString(Qt::ISODate));
 }
 
 void
