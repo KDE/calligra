@@ -44,6 +44,7 @@ protected:
 	bool op_1904(Q_UINT32 size, QDataStream &body);
 	bool op_blank(Q_UINT32 size, QDataStream &body);
 	bool op_bof(Q_UINT32 size, QDataStream &body);
+	bool op_boolerr(Q_UINT32 size, QDataStream &body);
 	bool op_bottommargin(Q_UINT32 size, QDataStream &body);
 	bool op_boundsheet(Q_UINT32 size, QDataStream &body);
 	bool op_chart_fbi(Q_UINT32 size, QDataStream &body);

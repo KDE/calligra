@@ -59,7 +59,7 @@ bool Handler::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
 		{ "BLANK",					0x0001, &Worker::op_blank },
 		{ "BOF",					0x0009, &Worker::op_bof },
 		{ "BOOKBOOL",				0x00da, 0 /* &Worker::op_bookbool */ },
-		{ "BOOLERR",				0x0005, 0 /* &Worker::op_boolerr */ },
+		{ "BOOLERR",				0x0005, &Worker::op_boolerr },
 		{ "BOTTOMMARGIN",			0x0029, &Worker::op_bottommargin },
 		{ "BOUNDSHEET",				0x0085, &Worker::op_boundsheet },
 		{ "CALCCOUNT",				0x000c, 0 /* &Worker::op_calccount */ },

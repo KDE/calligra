@@ -52,7 +52,7 @@ Worker::Worker()
 	m_doc.appendChild(m_map);
 
 	m_mergeList.setAutoDelete(true);
-	
+
 	m_helper = new Helper(m_root, &m_tables);
 
 	m_chartSeriesCount = 0;
@@ -97,13 +97,13 @@ bool Worker::op_blank(Q_UINT32 size, QDataStream &body)
 	Q_UINT16 row, column, xf;
 	ASSERT_SIZE(size,sizeof(row)+sizeof(column)+sizeof(xf));
 	body >> row >> column >> xf;
-	
+
 	QDomElement e = m_root->createElement("cell");
 	e.appendChild(m_helper->getFormat(xf));
 	e.setAttribute("row", (int) ++row);
 	e.setAttribute("column", (int) ++column);
 	if( m_table ) m_table->appendChild(e);
-	
+
 	return true;
 }
 
@@ -137,7 +137,7 @@ bool Worker::op_bof(Q_UINT32, QDataStream &body)
 			delete m_table;
 			m_table = 0;
 		}
-		
+
 		switch(dt)
 		{
 			case 0x5:
@@ -145,13 +145,13 @@ bool Worker::op_bof(Q_UINT32, QDataStream &body)
 				break;
 			case 0x10:
 				m_table = m_tables.take(m_tables.find(m_tables.getFirst()));
-				
+
 				// FIXME: can happen as long as
 				//        the boundsheet stuff isn't _fully_ implemented
 				//		  (macrosheet etc..) (Niko)
 				if(!m_table)
 					break;
-				
+
 				kdDebug(30511) << "BOF: Worksheet: " << m_table->attribute("name") << endl;
 				break;
 			case 0x20:
@@ -161,7 +161,7 @@ bool Worker::op_bof(Q_UINT32, QDataStream &body)
 				//		  (macrosheet etc..) (Niko)
 				if(!m_table)
 					break;
-				
+
 				kdDebug(30511) << "BOF: Chart: " << m_table->attribute("name") << endl;
 				break;
 			default:
@@ -172,17 +172,45 @@ bool Worker::op_bof(Q_UINT32, QDataStream &body)
 				break;
 		}
 	}
-	
+
+	return true;
+}
+
+bool Worker::op_boolerr(Q_UINT32 size, QDataStream &body)
+{
+	Q_UINT16 row, column, xf;
+	Q_UINT8 value, flag;
+	ASSERT_SIZE(size,sizeof(row)+sizeof(column)+
+		sizeof(xf)+sizeof(value)+sizeof(flag));
+	body >> row >> column >> xf >> value >> flag;
+
+	// boolean value
+	if( flag == 0 )
+	{
+		QString str = value ? "True" : "False";
+		QDomElement e = m_root->createElement("cell");
+		e.appendChild(m_helper->getFormat(xf));
+		e.setAttribute("row", (int) ++row);
+		e.setAttribute("column", (int) ++column);
+		QDomElement text = m_root->createElement("text");
+		text.appendChild(m_root->createTextNode( str ));
+		text.setAttribute("outStr",str);
+		e.appendChild(text);
+		if( m_table ) m_table->appendChild(e);
+	}
+
+	// TODO error value (flag==1)
+
 	return true;
 }
 
 bool Worker::op_bottommargin(Q_UINT32 size, QDataStream &body)
 {
 	double valueInch;
-	
+
 	ASSERT_SIZE(size,sizeof(valueInch));
 	body >> valueInch;
-	
+
 	m_borders.setAttribute("bottom", (valueInch * 2.54));
 
 	return true;
@@ -524,7 +552,7 @@ bool Worker::op_chart_ai(Q_UINT32, QDataStream &body)
 bool Worker::op_chart_dataformat(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 pointNumber, seriesIndex;
-	
+
 	ASSERT_SIZE(size,2*sizeof(Q_UINT16));
 	body >> pointNumber >> seriesIndex;
 
@@ -679,7 +707,7 @@ bool Worker::op_chart_tick(Q_UINT32, QDataStream &body)
 {
 	Q_UINT8 major, minor, pos, flags = 0; // FIXME: flags!
 	Q_UINT16 r, g, b;
-	
+
 	body >> major >> minor >> pos;
 
 	switch(major)
@@ -1063,7 +1091,7 @@ bool Worker::op_filepass(Q_UINT32, QDataStream &body)
 	QString hashedSaltData = QString::fromLatin1(read, 16);
 	
 	kdDebug() << "DOCUMENTID " << documentId << " SALTDATA " << saltData << " HASHEDSALTDATA " << hashedSaltData << endl;
-	
+
 	return false;
 }
 
@@ -1201,7 +1229,7 @@ bool Worker::op_header(Q_UINT32, QDataStream &body)
 		body >> cch;
 		if(!cch)
 			return true;
-		
+
 		char *name = new char[cch];
 		body.readRawBytes(name, cch);
 
@@ -1648,7 +1676,7 @@ bool Worker::op_string(Q_UINT32, QDataStream &body)
 	for(int i = 0; i < length; i++)
 	{
 		body >> temp;
-		result += QChar(temp);		
+		result += QChar(temp);
 	}
 
 	kdDebug() << "RESULT " << result << endl;
