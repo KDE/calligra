@@ -1,6 +1,6 @@
 Kugar - A report creation tool for KDE.
 
-Current version: 1.2
+Current version: 1.3
 
 The current maintainer and the author of Kugar Report Designer
 can be reached via Email: cloudtemple@mksat.net
@@ -18,7 +18,7 @@ ABOUT KUGAR:
 
 Current features:
 
-* KDE GUI report designer
+* KDE GUI report designer.
 * Qt report viewer widget for previewing reports from within a Qt application
   (WYSIWYG).
 * KDE report viewer widget that utilizes KDE print dialog
@@ -38,6 +38,7 @@ Current features:
 * Complete implementation of (Qt) printer setup options.
 * Additional formatting (negative numbers, currency, commas for numbers and
   dates).
+* Direct database support.
 
 
 DOCUMENTATION:

@@ -1,3 +1,10 @@
+2003-05-01 Joris Marcillac <Joris@marcillac.com>
+	* lib:
+	Direct database support. Databases and queries can be specified withing template
+	file and then the data file can be generated
+	* samplesdb:
+	Example program that shows usage of the direct database support in Kugar.
+
 2003-04-05 Alexander Dymo <cloudtemple@mksat.net>
 	* kudesigner:
 	Undo/Redo implemented for all insert actions
