@@ -2056,7 +2056,7 @@ double KWTextFrameSet::footNoteSize( KWFrame *theFrame )
         {
             KWFrame * frm=fit.current()->frame( 0 );
             if(frm->pageNum()==page )
-                tmp += frm->innerHeight();
+                tmp += frm->innerHeight()+m_doc->ptFootnoteBodySpacing();
         }
     }
     return tmp;
@@ -2079,12 +2079,14 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
                 KWFrame * frm=fit.current()->frame( 0 );
                 if(frm->pageNum()==page )
                 {
-
-                    return (tmp-frm->innerHeight()-footNoteSize( frm ));
+                    return (tmp-frm->innerHeight()-footNoteSize( theFrame ));
                 }
             }
         }
     }
+    if (theFrame->frameSet()->isHeaderOrFooter())
+        return (tmp-footNoteSize( theFrame ));
+
     return tmp;
 }
 

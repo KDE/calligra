@@ -285,6 +285,7 @@ public:
     double ptColumnWidth() const;
     double ptColumnSpacing() const { return m_pageColumns.ptColumnSpacing; }
     double ptPageTop( int pgNum /*0-based*/ ) const { return pgNum * m_pageLayout.ptHeight; }
+    double ptFootnoteBodySpacing() const { return m_pageHeaderFooter.ptFootNoteBodySpacing; }
 
     unsigned int getColumns() const { return m_pageColumns.columns; }
 
