@@ -2208,6 +2208,8 @@ void KSpreadView::slotListChoosePopupMenu( )
  if(selection.left()==0)
    selection.setCoords(m_pCanvas->markerColumn(),m_pCanvas->markerRow(),
 		       m_pCanvas->markerColumn(),m_pCanvas->markerRow());
+ KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+ QString tmp=cell->text();
  QStringList itemList;
  KSpreadCell* c = m_pTable->firstCell();
  for( ;c; c = c->nextCell() )
@@ -2218,7 +2220,8 @@ void KSpreadView::slotListChoosePopupMenu( )
        {
 	 if(!c->isFormular() && !c->isValue() && !c->valueString().isEmpty()
          && !c->isTime() &&!c->isDate()
-	    && c->content() != KSpreadCell::VisualFormula)
+	    && c->content() != KSpreadCell::VisualFormula
+	    && c->text()!=tmp)
 	   {
 	     if(itemList.findIndex(c->text())==-1)
 	       itemList.append(c->text());
@@ -2235,7 +2238,6 @@ void KSpreadView::slotListChoosePopupMenu( )
  int tx = m_pTable->columnPos( m_pCanvas->markerColumn(), m_pCanvas );
  int ty = m_pTable->rowPos(m_pCanvas->markerRow(), m_pCanvas );
  int h = rl->height( m_pCanvas );
- KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );  
  if ( cell->extraYCells())
    h = cell->extraHeight();
  ty += h;
