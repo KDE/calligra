@@ -183,7 +183,7 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     :QWidget ( parent,name )
 {
     QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
-    
+
     m_pView=_view;
     config = KPresenterFactory::global()->config();
 
@@ -687,7 +687,7 @@ configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget 
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
     box->addItem(spacer);
-	    
+
 }
 
 configureDefaultDocPage::~configureDefaultDocPage()
@@ -780,7 +780,7 @@ void configureDefaultDocPage::slotDefault()
 void configureDefaultDocPage::selectNewDefaultFont() {
     QStringList list;
     KFontChooser::getFontList(list,  KFontChooser::SmoothScalableFonts);
-    KFontDialog dlg( m_pView, "Font Selector", false, true, list, true );
+    KFontDialog dlg( this, "Font Selector", false, true, list, true );
     dlg.setFont(*font);
     int result = dlg.exec();
     if (KDialog::Accepted == result) {
@@ -898,7 +898,7 @@ configurePathPage::configurePathPage( KPresenterView *_view, QWidget *parent, ch
     m_pView=_view;
     KPresenterDoc* doc = m_pView->kPresenterDoc();
     config = KPresenterFactory::global()->config();
-    
+
     m_pPathView = new KListView( this );
     m_pPathView->setResizeMode(QListView::NoColumn);
     m_pPathView->addColumn( i18n( "Type" ) );
