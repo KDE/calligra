@@ -105,8 +105,8 @@ class KPresenterChild : public KoDocumentChild
 public:
 
   // constructor - destructor
-  KPresenterChild( KPresenterDoc *_kpr,const KRect& _rect,KOffice::Document_ptr _doc,int,int);
-  KPresenterChild( KPresenterDoc *_kpr );
+  KPresenterChild(KPresenterDoc *_kpr,const KRect& _rect,KOffice::Document_ptr _doc,int,int);
+  KPresenterChild(KPresenterDoc *_kpr);
   ~KPresenterChild();
 
   // get parent
@@ -140,13 +140,13 @@ public:
   virtual void cleanUp();
 
   // save
-  virtual bool save( ostream&, const char *_format );
+  virtual bool save(ostream&,const char *_format);
   virtual bool exportHTML(QString _filename);
 
   // load
   virtual bool load_template(const QString &_url);
-  virtual bool loadXML( KOMLParser&, KOStore::Store_ptr );
-  virtual bool loadChildren( KOStore::Store_ptr _store );
+  virtual bool loadXML(KOMLParser&,KOStore::Store_ptr);
+  virtual bool loadChildren(KOStore::Store_ptr _store);
 
   virtual KPresenterView* createPresenterView();
 
@@ -166,7 +166,7 @@ public:
 
   // ask, if document is modified
   virtual CORBA::Boolean isModified() {return m_bModified;}
-  virtual void setModified(bool _c) {m_bModified = _c; if ( _c ) m_bEmpty = false; }
+  virtual void setModified(bool _c) {m_bModified = _c; if (_c) m_bEmpty = false; }
   virtual bool isEmpty() { return m_bEmpty; }
 
   // ------ C++ ------
@@ -183,7 +183,7 @@ public:
 
   // insert an object
   virtual void insertObject(const KRect&,KoDocumentEntry&,int,int);
-  virtual void insertChild( KPresenterChild *_child );
+  virtual void insertChild(KPresenterChild *_child);
 
   // change geomentry of a child
   virtual void changeChildGeometry(KPresenterChild*,const KRect&,int,int);
@@ -373,7 +373,7 @@ protected:
    * saving. We must know about every direct and indirect child so that we
    * can save them all.
    */
-  virtual void makeChildListIntern( KOffice::Document_ptr _root, const char *_path );
+  virtual void makeChildListIntern(KOffice::Document_ptr _root,const char *_path);
   /*
    * Overloaded function from @ref KoDocument.
    *

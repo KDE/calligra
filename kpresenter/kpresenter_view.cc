@@ -31,7 +31,7 @@ char *getenv(const char *name);
 /*****************************************************************/
 
 /*======================= constructor ===========================*/
-KPresenterFrame::KPresenterFrame( KPresenterView* _view, KPresenterChild* _child )
+KPresenterFrame::KPresenterFrame(KPresenterView* _view,KPresenterChild* _child)
   : KoFrame(_view)
 {
   m_pKPresenterView = _view;
@@ -44,8 +44,8 @@ KPresenterFrame::KPresenterFrame( KPresenterView* _view, KPresenterChild* _child
 /*****************************************************************/
 
 /*======================= constructor ===========================*/
-KPresenterView::KPresenterView( QWidget *_parent, const char *_name, KPresenterDoc* _doc )
-  : QWidget(_parent,_name), KoViewIf( _doc ), OPViewIf( _doc ), KPresenter::KPresenterView_skel()
+KPresenterView::KPresenterView(QWidget *_parent,const char *_name,KPresenterDoc* _doc)
+  : QWidget(_parent,_name), KoViewIf(_doc), OPViewIf(_doc), KPresenter::KPresenterView_skel()
 {
   setWidget(this);
 
@@ -126,8 +126,8 @@ void KPresenterView::init()
   cerr << "Registering menu as " << id() << endl;
 
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
-  if ( !CORBA::is_nil( menu_bar_manager ) )
-    menu_bar_manager->registerClient( id(), this );
+  if (!CORBA::is_nil(menu_bar_manager))
+    menu_bar_manager->registerClient(id(),this);
   else
     cerr << "Did not get a menu bar manager" << endl;
 
@@ -136,8 +136,8 @@ void KPresenterView::init()
    ****/
 
   OpenParts::ToolBarManager_var tool_bar_manager = m_vMainWindow->toolBarManager();
-  if ( !CORBA::is_nil( tool_bar_manager ) )
-    tool_bar_manager->registerClient( id(), this );
+  if (!CORBA::is_nil(tool_bar_manager))
+    tool_bar_manager->registerClient(id(),this);
   else
     cerr << "Did not get a tool bar manager" << endl;
 
@@ -557,11 +557,11 @@ void KPresenterView::toolsDiagramm()
   page->deSelectAllObj();
   page->setToolEditMode(INS_DIAGRAMM);
 
-  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KDiagramm/DocumentFactory:1.0' in RepoID", 1 );
-  if ( vec.size() == 0 )
+  vector<KoDocumentEntry> vec = koQueryDocuments("'IDL:KDiagramm/DocumentFactory:1.0' in RepoID",1);
+  if (vec.size() == 0)
   {
     cout << "Got no results" << endl;
-    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
+    QMessageBox::critical(0L,i18n("Error"),i18n("Sorry, no charting component registered"),i18n("Ok"));
     return;
   }
 
@@ -577,11 +577,11 @@ void KPresenterView::toolsTable()
   page->deSelectAllObj();
   page->setToolEditMode(INS_TABLE);
 
-  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KSpread/DocumentFactory:1.0' in RepoID", 1 );
-  if ( vec.size() == 0 )
+  vector<KoDocumentEntry> vec = koQueryDocuments("'IDL:KSpread/DocumentFactory:1.0' in RepoID",1);
+  if (vec.size() == 0)
   {
     cout << "Got no results" << endl;
-    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no table component registered"), i18n("Ok") );
+    QMessageBox::critical(0L,i18n("Error"),i18n("Sorry, no table component registered"),i18n("Ok"));
     return;
   }
 
@@ -597,11 +597,11 @@ void KPresenterView::toolsFormula()
   page->deSelectAllObj();
   page->setToolEditMode(INS_FORMULA);
 
-  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KFormula/DocumentFactory:1.0' in RepoID", 1 );
-  if ( vec.size() == 0 )
+  vector<KoDocumentEntry> vec = koQueryDocuments("'IDL:KFormula/DocumentFactory:1.0' in RepoID",1);
+  if (vec.size() == 0)
   {
     cout << "Got no results" << endl;
-    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no formula component registered"), i18n("Ok") );
+    QMessageBox::critical(0L,i18n("Error"),i18n("Sorry, no formula component registered"),i18n("Ok"));
     return;
   }
 
@@ -650,7 +650,7 @@ void KPresenterView::toolsObject()
   page->setToolEditMode(TEM_MOUSE);
 
   KoDocumentEntry pe = KoPartSelectDia::selectPart();
-  if ( pe.name.isEmpty() )
+  if (pe.name.isEmpty())
     return;
 
   page->setToolEditMode(INS_OBJECT);
@@ -1307,8 +1307,8 @@ void KPresenterView::textColor()
   if (KColorDialog::getColor(tbColor))
     {
       OpenPartsUI::Pixmap pix;
-      pix.data = CORBA::string_dup( colorToPixString( tbColor ) );
-      m_vToolBarText->setButtonPixmap(ID_TEXT_COLOR, pix );
+      pix.data = CORBA::string_dup(colorToPixString(tbColor));
+      m_vToolBarText->setButtonPixmap(ID_TEXT_COLOR,pix);
       page->setTextColor(&tbColor);
     }
 
@@ -1771,19 +1771,19 @@ void KPresenterView::slotInsertObject(KPresenterChild *_child,KPPartObject *_kpp
 
   try
   {
-    v = _child->createView( m_vKoMainWindow );
+    v = _child->createView(m_vKoMainWindow);
   }
   catch (OpenParts::Document::MultipleViewsNotSupported &_ex)
   {
     // HACK
-    printf("void KPresenterView::slotInsertObject( const KRect& _rect, OPParts::Document_ptr _doc )\n");
+    printf("void KPresenterView::slotInsertObject(const KRect& _rect, OPParts::Document_ptr _doc)\n");
     printf("Could not create view\n");
     exit(1);
   }
 
   if (CORBA::is_nil(v))
   {
-    printf("void KPresenterView::slotInsertObject( const KRect& _rect, OPParts::Document_ptr _doc )\n");
+    printf("void KPresenterView::slotInsertObject(const KRect& _rect, OPParts::Document_ptr _doc)\n");
     printf("return value is 0L\n");
     exit(1);
   }
@@ -1792,10 +1792,10 @@ void KPresenterView::slotInsertObject(KPresenterChild *_child,KPPartObject *_kpp
   p->setGeometry(_child->geometry());
   m_lstFrames.append(p);
 
-  KOffice::View_var kv = KOffice::View::_narrow( v );
-  kv->setMode( KOffice::View::ChildMode );
-  assert( !CORBA::is_nil( kv ) );
-  p->attachView( kv );
+  KOffice::View_var kv = KOffice::View::_narrow(v);
+  kv->setMode(KOffice::View::ChildMode);
+  assert(!CORBA::is_nil(kv));
+  p->attachView(kv);
 
   p->hide();
   _kppo->setView(p);
@@ -2118,7 +2118,7 @@ void KPresenterView::fontChanged(QFont* font)
       m_vToolBarText->setButton(ID_UNDERLINE,tbFont.underline());
       int pos = fontList.find(tbFont.family());
       cerr << "Setting to number " << pos << endl;
-      m_vToolBarText->setCurrentComboItem(ID_FONT_LIST, pos );
+      m_vToolBarText->setCurrentComboItem(ID_FONT_LIST,pos);
       cerr << "Never reached" << endl;
       m_vToolBarText->setCurrentComboItem(ID_FONT_SIZE,tbFont.pointSize()-4);
     }
@@ -2130,10 +2130,10 @@ void KPresenterView::colorChanged(QColor* color)
   if (color->operator!=(tbColor))
     {
       OpenPartsUI::Pixmap pix;
-      pix.data = CORBA::string_dup( colorToPixString( color->rgb() ) );
+      pix.data = CORBA::string_dup(colorToPixString(color->rgb()));
 
       tbColor.setRgb(color->rgb());
-      m_vToolBarText->setButtonPixmap(ID_TEXT_COLOR, pix );
+      m_vToolBarText->setButtonPixmap(ID_TEXT_COLOR,pix);
     }
 }
 
@@ -2704,7 +2704,7 @@ void KPresenterView::resizeEvent(QResizeEvent *e)
 {
   if (!presStarted) QWidget::resizeEvent(e);
 
-  if ( ( KoViewIf::hasFocus() || mode() == KOffice::View::RootMode ) && m_bShowGUI )
+  if ((KoViewIf::hasFocus() || mode() == KOffice::View::RootMode) && m_bShowGUI)
   {
     horz->show();
     vert->show();
@@ -2882,12 +2882,12 @@ void KPresenterView::presColorChanged()
 }
 
 /*======================= event handler ============================*/
-bool KPresenterView::event( const char* _event, const CORBA::Any& _value )
+bool KPresenterView::event(const char* _event,const CORBA::Any& _value)
 {
-  EVENT_MAPPER( _event, _value );
+  EVENT_MAPPER(_event,_value);
 
-  MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_var, mappingCreateMenubar );
-  MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var, mappingCreateToolbar );
+  MAPPING(OpenPartsUI::eventCreateMenuBar,OpenPartsUI::typeCreateMenuBar_var,mappingCreateMenubar);
+  MAPPING(OpenPartsUI::eventCreateToolBar,OpenPartsUI::typeCreateToolBar_var,mappingCreateToolbar);
 
   END_EVENT_MAPPER;
 
@@ -2895,9 +2895,9 @@ bool KPresenterView::event( const char* _event, const CORBA::Any& _value )
 }
 
 /*======================= setup menu ============================*/
-bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
+bool KPresenterView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
 {
-  if ( CORBA::is_nil( _menubar ) )
+  if (CORBA::is_nil(_menubar))
   {
     m_vMenuEdit = 0L;
     m_vMenuView = 0L;
@@ -2911,218 +2911,218 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   }
 
   // MENU Edit
-  _menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
+  _menubar->insertMenu(i18n("&Edit"),m_vMenuEdit,-1,-1);
 
   OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap(ICON("undo.xpm"));
-  m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, i18n("No Undo possible"), this,"editUndo", CTRL + Key_Z, -1, -1 );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem6(pix,i18n("No Undo possible"),this,"editUndo",CTRL + Key_Z,-1,-1);
   m_vMenuEdit->setItemEnabled(m_idMenuEdit_Undo,false);
 
   pix = OPUIUtils::convertPixmap(ICON("redo.xpm"));
-  m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, i18n("No Redo possible"), this,"editRedo", 0, -1, -1 );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem6(pix,i18n("No Redo possible"),this,"editRedo",0,-1,-1);
   m_vMenuEdit->setItemEnabled(m_idMenuEdit_Redo,false);
-  m_vMenuEdit->insertSeparator( -1 );
+  m_vMenuEdit->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("editcut.xpm"));
-  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6(pix, i18n("&Cut"), this,"editCut", CTRL + Key_X, -1, -1);
+  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6(pix,i18n("&Cut"),this,"editCut",CTRL + Key_X,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
-  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6(pix, i18n("&Copy"), this,"editCopy", CTRL + Key_C, -1, -1 );
+  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6(pix,i18n("&Copy"),this,"editCopy",CTRL + Key_C,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("editpaste.xpm"));
-  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6(pix, i18n("&Paste"), this,"editPaste", CTRL + Key_V, -1, -1 );
+  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6(pix,i18n("&Paste"),this,"editPaste",CTRL + Key_V,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("delete.xpm"));
-  m_idMenuEdit_Delete = m_vMenuEdit->insertItem6(pix, i18n("&Delete"), this,"editDelete", Key_Delete, -1, -1 );
+  m_idMenuEdit_Delete = m_vMenuEdit->insertItem6(pix,i18n("&Delete"),this,"editDelete",Key_Delete,-1,-1);
 
-  m_vMenuEdit->insertSeparator( -1 );
+  m_vMenuEdit->insertSeparator(-1);
 
-  m_idMenuEdit_SelectAll = m_vMenuEdit->insertItem( i18n("&Select all"), this, "editSelectAll", CTRL + Key_A );
+  m_idMenuEdit_SelectAll = m_vMenuEdit->insertItem(i18n("&Select all"),this,"editSelectAll",CTRL + Key_A);
 
-  m_vMenuEdit->insertSeparator( -1 );
+  m_vMenuEdit->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("delslide.xpm"));
-  m_idMenuEdit_DelPage = m_vMenuEdit->insertItem6(pix, i18n("&Delete Page..."), this, "editDelPage", 0, -1, -1 );
+  m_idMenuEdit_DelPage = m_vMenuEdit->insertItem6(pix,i18n("&Delete Page..."),this,"editDelPage",0,-1,-1);
 
-  m_vMenuEdit->insertSeparator( -1 );
+  m_vMenuEdit->insertSeparator(-1);
 
-  m_idMenuEdit_Find = m_vMenuEdit->insertItem( i18n("&Find..."), this,"editFind", CTRL + Key_F );
+  m_idMenuEdit_Find = m_vMenuEdit->insertItem(i18n("&Find..."),this,"editFind",CTRL + Key_F);
 
-  m_idMenuEdit_FindReplace = m_vMenuEdit->insertItem( i18n("&Replace..."), this,"editFindReplace", CTRL + Key_R );
+  m_idMenuEdit_FindReplace = m_vMenuEdit->insertItem(i18n("&Replace..."),this,"editFindReplace",CTRL + Key_R);
 
   // MENU View
-  _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
+  _menubar->insertMenu(i18n("&View"),m_vMenuView,-1,-1);
 
-  m_idMenuView_NewView = m_vMenuView->insertItem(i18n("&New View"), this,"newView", 0 );
+  m_idMenuView_NewView = m_vMenuView->insertItem(i18n("&New View"),this,"newView",0);
 
   // MENU Insert
-  _menubar->insertMenu( i18n( "&Insert" ), m_vMenuInsert, -1, -1 );
+  _menubar->insertMenu(i18n("&Insert"),m_vMenuInsert,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("newslide.xpm"));
-  m_idMenuInsert_Page = m_vMenuInsert->insertItem6(pix, i18n("Pa&ge..."), this,"insertPage", 0, -1, -1 );
-  m_vMenuInsert->insertSeparator( -1 );
+  m_idMenuInsert_Page = m_vMenuInsert->insertItem6(pix,i18n("Pa&ge..."),this,"insertPage",0,-1,-1);
+  m_vMenuInsert->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("picture.xpm"));
-  m_idMenuInsert_Picture = m_vMenuInsert->insertItem6(pix, i18n("&Picture..."), this,"insertPicture", Key_F2, -1, -1 );
+  m_idMenuInsert_Picture = m_vMenuInsert->insertItem6(pix,i18n("&Picture..."),this,"insertPicture",Key_F2,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
-  m_idMenuInsert_Clipart = m_vMenuInsert->insertItem6(pix, i18n("&Clipart..."), this,"insertClipart", Key_F3, -1, -1 );
+  m_idMenuInsert_Clipart = m_vMenuInsert->insertItem6(pix,i18n("&Clipart..."),this,"insertClipart",Key_F3,-1,-1);
 
   m_vMenuInsert->setCheckable(true);
 
   // MENU Tools
-  _menubar->insertMenu( i18n( "&Tools" ), m_vMenuTools, -1, -1 );
+  _menubar->insertMenu(i18n("&Tools"),m_vMenuTools,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("mouse.xpm"));
-  m_idMenuTools_Mouse = m_vMenuTools->insertItem6(pix, i18n("&Mouse"), this,"toolsMouse", Key_F4, -1, -1 );
+  m_idMenuTools_Mouse = m_vMenuTools->insertItem6(pix,i18n("&Mouse"),this,"toolsMouse",Key_F4,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("line.xpm"));
-  m_idMenuTools_Line = m_vMenuTools->insertItem6(pix, i18n("&Line"), this,"toolsLine", Key_F5, -1, -1 );
+  m_idMenuTools_Line = m_vMenuTools->insertItem6(pix,i18n("&Line"),this,"toolsLine",Key_F5,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("rectangle.xpm"));
-  m_idMenuTools_Rectangle = m_vMenuTools->insertItem6(pix, i18n("&Rectangle"), this,"toolsRectangle", Key_F6, -1, -1 );
+  m_idMenuTools_Rectangle = m_vMenuTools->insertItem6(pix,i18n("&Rectangle"),this,"toolsRectangle",Key_F6,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("circle.xpm"));
-  m_idMenuTools_Circle = m_vMenuTools->insertItem6(pix, i18n("C&ircle or Ellipse"), this,"toolsCircleOrEllipse", Key_F7, -1, -1 );
+  m_idMenuTools_Circle = m_vMenuTools->insertItem6(pix,i18n("C&ircle or Ellipse"),this,"toolsCircleOrEllipse",Key_F7,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("pie.xpm"));
-  m_idMenuTools_Pie = m_vMenuTools->insertItem6(pix, i18n("Pie/&Arc/Chord"), this,"toolsPie", Key_F8, -1, -1 );
+  m_idMenuTools_Pie = m_vMenuTools->insertItem6(pix,i18n("Pie/&Arc/Chord"),this,"toolsPie",Key_F8,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("text.xpm"));
-  m_idMenuTools_Text = m_vMenuTools->insertItem6(pix, i18n("&Text"), this,"toolsText", Key_F9, -1, -1 );
+  m_idMenuTools_Text = m_vMenuTools->insertItem6(pix,i18n("&Text"),this,"toolsText",Key_F9,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("autoform.xpm"));
-  m_idMenuTools_Autoform = m_vMenuTools->insertItem6(pix, i18n("&Autoform..."), this,"toolsAutoform", Key_F10, -1, -1 );
+  m_idMenuTools_Autoform = m_vMenuTools->insertItem6(pix,i18n("&Autoform..."),this,"toolsAutoform",Key_F10,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("chart.xpm"));
-  m_idMenuTools_Diagramm = m_vMenuTools->insertItem6(pix, i18n("&Diagramm"), this,"toolsDiagramm", Key_F11, -1, -1 );
+  m_idMenuTools_Diagramm = m_vMenuTools->insertItem6(pix,i18n("&Diagramm"),this,"toolsDiagramm",Key_F11,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
-  m_idMenuTools_Table = m_vMenuTools->insertItem6(pix, i18n("&Table"), this,"toolsTable", Key_F12, -1, -1 );
+  m_idMenuTools_Table = m_vMenuTools->insertItem6(pix,i18n("&Table"),this,"toolsTable",Key_F12,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("formula.xpm"));
-  m_idMenuTools_Formula = m_vMenuTools->insertItem6(pix, i18n("&Formula"), this,"toolsFormula", ALT + Key_F1, -1, -1 );
+  m_idMenuTools_Formula = m_vMenuTools->insertItem6(pix,i18n("&Formula"),this,"toolsFormula",ALT + Key_F1,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
-  m_idMenuTools_Part = m_vMenuTools->insertItem6(pix, i18n("&Object..."), this,"toolsObject", ALT + Key_F2, -1, -1 );
+  m_idMenuTools_Part = m_vMenuTools->insertItem6(pix,i18n("&Object..."),this,"toolsObject",ALT + Key_F2,-1,-1);
 
-  m_vMenuTools->setCheckable( true );
+  m_vMenuTools->setCheckable(true);
 
   // MENU Text
-  _menubar->insertMenu( i18n( "T&ext" ), m_vMenuText, -1, -1 );
+  _menubar->insertMenu(i18n("T&ext"),m_vMenuText,-1,-1);
 
-  m_idMenuText_TFont = m_vMenuText->insertItem(i18n("&Font..."), this, "mtextFont", 0 );
+  m_idMenuText_TFont = m_vMenuText->insertItem(i18n("&Font..."),this,"mtextFont",0);
 
-  m_idMenuText_TColor = m_vMenuText->insertItem(i18n("Text &Color..."), this,"textColor", 0 );
+  m_idMenuText_TColor = m_vMenuText->insertItem(i18n("Text &Color..."),this,"textColor",0);
 
-  m_vMenuText->insertItem8( i18n("Text &Alignment"), m_vMenuText_TAlign, -1, -1 );
-  m_vMenuText_TAlign->setCheckable( true );
+  m_vMenuText->insertItem8(i18n("Text &Alignment"),m_vMenuText_TAlign,-1,-1);
+  m_vMenuText_TAlign->setCheckable(true);
 
   pix = OPUIUtils::convertPixmap(ICON("alignLeft.xpm"));
-  m_idMenuText_TAlign_Left = m_vMenuText_TAlign->insertItem6(pix, i18n("Align &Left"), this,"mtextAlignLeft", 0, -1, -1 );
+  m_idMenuText_TAlign_Left = m_vMenuText_TAlign->insertItem6(pix,i18n("Align &Left"),this,"mtextAlignLeft",0,-1,-1);
   // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Left,true);
 
   pix = OPUIUtils::convertPixmap(ICON("alignCenter.xpm"));
-  m_idMenuText_TAlign_Center = m_vMenuText_TAlign->insertItem6(pix, i18n("Align &Center"), this,"mtextAlignCenter", 0, -1, -1 );
+  m_idMenuText_TAlign_Center = m_vMenuText_TAlign->insertItem6(pix,i18n("Align &Center"),this,"mtextAlignCenter",0,-1,-1);
   // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Center,true);
 
   pix = OPUIUtils::convertPixmap(ICON("alignRight.xpm"));
-  m_idMenuText_TAlign_Right = m_vMenuText_TAlign->insertItem6(pix, i18n("Align &Right"), this,"mtextAlignRight", 0, -1, -1 );
+  m_idMenuText_TAlign_Right = m_vMenuText_TAlign->insertItem6(pix,i18n("Align &Right"),this,"mtextAlignRight",0,-1,-1);
   // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Right,true);
 
-  m_vMenuText->insertItem8( i18n("Text &Type"), m_vMenuText_TType, -1, -1 );
+  m_vMenuText->insertItem8(i18n("Text &Type"),m_vMenuText_TType,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("enumList.xpm"));
-  m_idMenuText_TType_EnumList = m_vMenuText_TType->insertItem6(pix, i18n("&Enumerated List"), this,"textEnumList", 0, -1, -1 );
+  m_idMenuText_TType_EnumList = m_vMenuText_TType->insertItem6(pix,i18n("&Enumerated List"),this,"textEnumList",0,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("unsortedList.xpm"));
-  m_idMenuText_TType_UnsortList = m_vMenuText_TType->insertItem6(pix, i18n("&Unsorted List"), this,"textUnsortList", 0, -1, -1 );
+  m_idMenuText_TType_UnsortList = m_vMenuText_TType->insertItem6(pix,i18n("&Unsorted List"),this,"textUnsortList",0,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("normalText.xpm"));
-  m_idMenuText_TType_NormalText = m_vMenuText_TType->insertItem6(pix, i18n("&Normal Text"), this,"textNormalText", 0, -1, -1 );
+  m_idMenuText_TType_NormalText = m_vMenuText_TType->insertItem6(pix,i18n("&Normal Text"),this,"textNormalText",0,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("depth+.xpm"));
-  m_idMenuText_TDepthPlus = m_vMenuText->insertItem6(pix, i18n("&Increase Depth"), this,"textDepthPlus", 0, -1, -1 );
+  m_idMenuText_TDepthPlus = m_vMenuText->insertItem6(pix,i18n("&Increase Depth"),this,"textDepthPlus",0,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("depth-.xpm"));
-  m_idMenuText_TDepthMinus = m_vMenuText->insertItem6(pix, i18n("&Decrease Depth"), this,"textDepthMinus", 0, -1, -1 );
+  m_idMenuText_TDepthMinus = m_vMenuText->insertItem6(pix,i18n("&Decrease Depth"),this,"textDepthMinus",0,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("spacing.xpm"));
-  m_idMenuText_TSpacing = m_vMenuText->insertItem6(pix, i18n("Paragraph &Spacing..."), this,"textSpacing", 0, -1, -1 );
+  m_idMenuText_TSpacing = m_vMenuText->insertItem6(pix,i18n("Paragraph &Spacing..."),this,"textSpacing",0,-1,-1);
 
 
   // MENU Extra
-  _menubar->insertMenu( i18n( "&Extra" ), m_vMenuExtra, -1, -1 );
+  _menubar->insertMenu(i18n("&Extra"),m_vMenuExtra,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("style.xpm"));
-  m_idMenuExtra_PenBrush = m_vMenuExtra->insertItem6(pix, i18n("&Pen and Brush..."), this,"extraPenBrush", ALT + Key_P, -1, -1 );
+  m_idMenuExtra_PenBrush = m_vMenuExtra->insertItem6(pix,i18n("&Pen and Brush..."),this,"extraPenBrush",ALT + Key_P,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("edit_pie.xpm"));
-  m_idMenuExtra_Pie = m_vMenuExtra->insertItem6(pix, i18n("&Configure Pie/Arc/Chord..."), this,"extraConfigPie", ALT + Key_A, -1, -1 );
+  m_idMenuExtra_Pie = m_vMenuExtra->insertItem6(pix,i18n("&Configure Pie/Arc/Chord..."),this,"extraConfigPie",ALT + Key_A,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("rectangle2.xpm"));
-  m_idMenuExtra_Rect = m_vMenuExtra->insertItem6(pix, i18n("C&onfigure Rectangle..."), this,"extraConfigRect", ALT + Key_R, -1, -1 );
+  m_idMenuExtra_Rect = m_vMenuExtra->insertItem6(pix,i18n("C&onfigure Rectangle..."),this,"extraConfigRect",ALT + Key_R,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("raise.xpm"));
-  m_idMenuExtra_Raise = m_vMenuExtra->insertItem6(pix, i18n("&Raise object(s)"), this,"extraRaise", CTRL + Key_Plus, -1, -1 );
+  m_idMenuExtra_Raise = m_vMenuExtra->insertItem6(pix,i18n("&Raise object(s)"),this,"extraRaise",CTRL + Key_Plus,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("lower.xpm"));
-  m_idMenuExtra_Lower = m_vMenuExtra->insertItem6(pix, i18n("&Lower object(s)"), this,"extraLower", CTRL + Key_Minus, -1, -1 );
+  m_idMenuExtra_Lower = m_vMenuExtra->insertItem6(pix,i18n("&Lower object(s)"),this,"extraLower",CTRL + Key_Minus,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("rotate.xpm"));
-  m_idMenuExtra_Rotate = m_vMenuExtra->insertItem6(pix, i18n("Rot&ate object(s)..."), this,"extraRotate", ALT + Key_R, -1, -1 );
+  m_idMenuExtra_Rotate = m_vMenuExtra->insertItem6(pix,i18n("Rot&ate object(s)..."),this,"extraRotate",ALT + Key_R,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("shadow.xpm"));
-  m_idMenuExtra_Shadow = m_vMenuExtra->insertItem6(pix, i18n("&Shadow object(s)..."), this,"extraShadow", ALT + Key_S, -1, -1 );
+  m_idMenuExtra_Shadow = m_vMenuExtra->insertItem6(pix,i18n("&Shadow object(s)..."),this,"extraShadow",ALT + Key_S,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("alignobjs.xpm"));
-  m_vMenuExtra->insertItem12( pix, i18n("Text &Alignment"), m_vMenuExtra_AlignObj, -1, -1 );
+  m_vMenuExtra->insertItem12(pix,i18n("Text &Alignment"),m_vMenuExtra_AlignObj,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("aoleft.xpm"));
-  m_idMenuExtra_AlignObj_Left = m_vMenuExtra_AlignObj->insertItem6(pix, i18n("Align &Left"), this,"extraAlignObjLeftidl", 0, -1, -1 );
+  m_idMenuExtra_AlignObj_Left = m_vMenuExtra_AlignObj->insertItem6(pix,i18n("Align &Left"),this,"extraAlignObjLeftidl",0,-1,-1);
 
-  m_vMenuExtra_AlignObj->insertSeparator( -1 );
+  m_vMenuExtra_AlignObj->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("aocenterh.xpm"));
-  m_idMenuExtra_AlignObj_CenterH = m_vMenuExtra_AlignObj->insertItem6(pix, i18n("Align Center (&horizontal)"), this,"extraAlignObjCenterHidl", 0, -1, -1);
-  m_vMenuExtra_AlignObj->insertSeparator( -1 );
+  m_idMenuExtra_AlignObj_CenterH = m_vMenuExtra_AlignObj->insertItem6(pix,i18n("Align Center (&horizontal)"),this,"extraAlignObjCenterHidl",0,-1,-1);
+  m_vMenuExtra_AlignObj->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("aoright.xpm"));
-  m_idMenuExtra_AlignObj_Right = m_vMenuExtra_AlignObj->insertItem6(pix, i18n("Align &Right"), this,"extraAlignObjRightidl", 0, -1, -1 );
-  m_vMenuExtra_AlignObj->insertSeparator( -1 );
+  m_idMenuExtra_AlignObj_Right = m_vMenuExtra_AlignObj->insertItem6(pix,i18n("Align &Right"),this,"extraAlignObjRightidl",0,-1,-1);
+  m_vMenuExtra_AlignObj->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("aotop.xpm"));
-  m_idMenuExtra_AlignObj_Top = m_vMenuExtra_AlignObj->insertItem6(pix, i18n("Align &Top"), this,"extraAlignObjTopidl", 0, -1, -1 );
-  m_vMenuExtra_AlignObj->insertSeparator( -1 );
+  m_idMenuExtra_AlignObj_Top = m_vMenuExtra_AlignObj->insertItem6(pix,i18n("Align &Top"),this,"extraAlignObjTopidl",0,-1,-1);
+  m_vMenuExtra_AlignObj->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("aocenterv.xpm"));
-  m_idMenuExtra_AlignObj_CenterV = m_vMenuExtra_AlignObj->insertItem6(pix, i18n("Align Center (&vertical)"), this,"extraAlignObjCenterVidl", 0, -1, -1 );
-  m_vMenuExtra_AlignObj->insertSeparator( -1 );
+  m_idMenuExtra_AlignObj_CenterV = m_vMenuExtra_AlignObj->insertItem6(pix,i18n("Align Center (&vertical)"),this,"extraAlignObjCenterVidl",0,-1,-1);
+  m_vMenuExtra_AlignObj->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("aobottom.xpm"));
-  m_idMenuExtra_AlignObj_Bottom = m_vMenuExtra_AlignObj->insertItem6(pix, i18n("Align &Bottom"), this,"extraAlignObjBottomidl", 0, -1, -1);
+  m_idMenuExtra_AlignObj_Bottom = m_vMenuExtra_AlignObj->insertItem6(pix,i18n("Align &Bottom"),this,"extraAlignObjBottomidl",0,-1,-1);
 
-  m_vMenuExtra->insertSeparator( -1 );
+  m_vMenuExtra->insertSeparator(-1);
 
-  m_idMenuExtra_Background = m_vMenuExtra->insertItem(i18n("Page &Background..."), this,"extraBackground", 0 );
+  m_idMenuExtra_Background = m_vMenuExtra->insertItem(i18n("Page &Background..."),this,"extraBackground",0);
 
-  m_idMenuExtra_Layout = m_vMenuExtra->insertItem(i18n("Pa&ge Layout..."), this,"extraLayout", 0 );
+  m_idMenuExtra_Layout = m_vMenuExtra->insertItem(i18n("Pa&ge Layout..."),this,"extraLayout",0);
 
-  m_vMenuExtra->insertSeparator( -1 );
+  m_vMenuExtra->insertSeparator(-1);
 
-  m_idMenuExtra_Options = m_vMenuExtra->insertItem(i18n("&Options..."), this,"extraOptions", 0 );
+  m_idMenuExtra_Options = m_vMenuExtra->insertItem(i18n("&Options..."),this,"extraOptions",0);
 
   // MENU Screenpresentation
-  _menubar->insertMenu( i18n( "&Screen Presentations" ), m_vMenuScreen, -1, -1 );
+  _menubar->insertMenu(i18n("&Screen Presentations"),m_vMenuScreen,-1,-1);
 
-  m_idMenuScreen_ConfigPage = m_vMenuScreen->insertItem(i18n("&Configure pages..."), this,"screenConfigPages", 0 );
-  m_idMenuScreen_PresStructView = m_vMenuScreen->insertItem(i18n("&Open presentation structure viewer..."), this,"screenPresStructView", 0 );
+  m_idMenuScreen_ConfigPage = m_vMenuScreen->insertItem(i18n("&Configure pages..."),this,"screenConfigPages",0);
+  m_idMenuScreen_PresStructView = m_vMenuScreen->insertItem(i18n("&Open presentation structure viewer..."),this,"screenPresStructView",0);
 
   pix = OPUIUtils::convertPixmap(ICON("effect.xpm"));
-  m_idMenuScreen_AssignEffect = m_vMenuScreen->insertItem6(pix, i18n("&Assign effect..."), this,"screenAssignEffect", 0, -1, -1);
-  m_vMenuScreen->insertSeparator( -1 );
+  m_idMenuScreen_AssignEffect = m_vMenuScreen->insertItem6(pix,i18n("&Assign effect..."),this,"screenAssignEffect",0,-1,-1);
+  m_vMenuScreen->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("kpstart.xpm"));
-  m_idMenuScreen_Start = m_vMenuScreen->insertItem6(pix, i18n("&Start"), this,"screenStart", CTRL + Key_G, -1, -1 );
+  m_idMenuScreen_Start = m_vMenuScreen->insertItem6(pix,i18n("&Start"),this,"screenStart",CTRL + Key_G,-1,-1);
 
   //       pix = OPUIUtils::convertPixmap(ICON("stop.xpm"));
   //       m_idMenuScreen_Stop = m_vMenuScreen->insertItem6(pix,
@@ -3132,65 +3132,65 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   //       m_idMenuScreen_Pause = m_vMenuScreen->insertItem6(pix,
   // 						     i18n("Pa&use"),m_idMenuScreen,
   // 						     this,"screenPause");
-  m_vMenuScreen->insertSeparator( -1 );
+  m_vMenuScreen->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("first.xpm"));
-  m_idMenuScreen_First = m_vMenuScreen->insertItem6(pix, i18n("&Go to start"), this,"screenFirst", Key_Home, -1, -1 );
+  m_idMenuScreen_First = m_vMenuScreen->insertItem6(pix,i18n("&Go to start"),this,"screenFirst",Key_Home,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("kpprev.xpm"));
-  m_idMenuScreen_Prev = m_vMenuScreen->insertItem6(pix, i18n("&Previous step"), this,"screenPrev", Key_Prior, -1, -1 );
+  m_idMenuScreen_Prev = m_vMenuScreen->insertItem6(pix,i18n("&Previous step"),this,"screenPrev",Key_Prior,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("kpnext.xpm"));
-  m_idMenuScreen_Next = m_vMenuScreen->insertItem6(pix, i18n("&Next step"), this,"screenNext", Key_Next, -1, -1 );
+  m_idMenuScreen_Next = m_vMenuScreen->insertItem6(pix,i18n("&Next step"),this,"screenNext",Key_Next,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("last.xpm"));
-  m_idMenuScreen_Last = m_vMenuScreen->insertItem6(pix, i18n("&Go to end"), this,"screenLast", Key_End, -1, -1 );
+  m_idMenuScreen_Last = m_vMenuScreen->insertItem6(pix,i18n("&Go to end"),this,"screenLast",Key_End,-1,-1);
 
 //   m_idMenuScreen_Skip = m_vMenuScreen->insertItem(i18n("Goto &page"),m_idMenuScreen,
 // 						   this,"screenSkip");
 
-  m_vMenuScreen->insertSeparator( -1 );
+  m_vMenuScreen->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("pen.xpm"));
-  m_vMenuScreen->insertItem12( pix, i18n("&Choose Pen"), m_vMenuScreen_Pen, -1, -1 );
-  m_vMenuScreen_Pen->setCheckable( true );
+  m_vMenuScreen->insertItem12(pix,i18n("&Choose Pen"),m_vMenuScreen_Pen,-1,-1);
+  m_vMenuScreen_Pen->setCheckable(true);
 
-  m_vMenuScreen_Pen->insertItem8( i18n("Pen width") ,m_vMenuScreen_PenWidth, -1, -1 );
-  m_vMenuScreen_PenWidth->setCheckable( true );
+  m_vMenuScreen_Pen->insertItem8(i18n("Pen width") ,m_vMenuScreen_PenWidth,-1,-1);
+  m_vMenuScreen_PenWidth->setCheckable(true);
 
-  m_idMenuScreen_PenColor = m_vMenuScreen_Pen->insertItem( i18n("Pen color"), this,"presPenColoridl", 0 );
+  m_idMenuScreen_PenColor = m_vMenuScreen_Pen->insertItem(i18n("Pen color"),this,"presPenColoridl",0);
 
-  m_idMenuScreen_PenW1 = m_vMenuScreen_PenWidth->insertItem(i18n("1"), this,"presPen1idl", 0 );
+  m_idMenuScreen_PenW1 = m_vMenuScreen_PenWidth->insertItem(i18n("1"),this,"presPen1idl",0);
 
-  m_idMenuScreen_PenW2 = m_vMenuScreen_PenWidth->insertItem(i18n("2"), this,"presPen2idl", 0 );
+  m_idMenuScreen_PenW2 = m_vMenuScreen_PenWidth->insertItem(i18n("2"),this,"presPen2idl",0);
 
-  m_idMenuScreen_PenW3 = m_vMenuScreen_PenWidth->insertItem(i18n("3"), this,"presPen3idl", 0 );
+  m_idMenuScreen_PenW3 = m_vMenuScreen_PenWidth->insertItem(i18n("3"),this,"presPen3idl",0);
 
-  m_idMenuScreen_PenW4 = m_vMenuScreen_PenWidth->insertItem(i18n("4"), this,"presPen4idl", 0 );
+  m_idMenuScreen_PenW4 = m_vMenuScreen_PenWidth->insertItem(i18n("4"),this,"presPen4idl",0);
 
-  m_idMenuScreen_PenW5 = m_vMenuScreen_PenWidth->insertItem(i18n("5"), this,"presPen5idl", 0 );
+  m_idMenuScreen_PenW5 = m_vMenuScreen_PenWidth->insertItem(i18n("5"),this,"presPen5idl",0);
 
-  m_idMenuScreen_PenW6 = m_vMenuScreen_PenWidth->insertItem(i18n("6"), this,"presPen6idl", 0 );
+  m_idMenuScreen_PenW6 = m_vMenuScreen_PenWidth->insertItem(i18n("6"),this,"presPen6idl",0);
 
-  m_idMenuScreen_PenW7 = m_vMenuScreen_PenWidth->insertItem(i18n("7"), this,"presPen7idl", 0 );
+  m_idMenuScreen_PenW7 = m_vMenuScreen_PenWidth->insertItem(i18n("7"),this,"presPen7idl",0);
 
-  m_idMenuScreen_PenW8 = m_vMenuScreen_PenWidth->insertItem(i18n("8"), this,"presPen8idl", 0 );
+  m_idMenuScreen_PenW8 = m_vMenuScreen_PenWidth->insertItem(i18n("8"),this,"presPen8idl",0);
 
-  m_idMenuScreen_PenW9 = m_vMenuScreen_PenWidth->insertItem(i18n("9"), this,"presPen9idl", 0 );
+  m_idMenuScreen_PenW9 = m_vMenuScreen_PenWidth->insertItem(i18n("9"),this,"presPen9idl",0);
 
-  m_idMenuScreen_PenW10 = m_vMenuScreen_PenWidth->insertItem(i18n("10"), this,"presPen10idl", 0 );
+  m_idMenuScreen_PenW10 = m_vMenuScreen_PenWidth->insertItem(i18n("10"),this,"presPen10idl",0);
 
   // MENU Help
   m_vMenuHelp = _menubar->helpMenu();
-  if ( CORBA::is_nil( m_vMenuHelp ) )
+  if (CORBA::is_nil(m_vMenuHelp))
   {
-    _menubar->insertSeparator( -1 );
-    _menubar->setHelpMenu( _menubar->insertMenu( i18n( "&Help" ), m_vMenuHelp, -1, -1 ) );
+    _menubar->insertSeparator(-1);
+    _menubar->setHelpMenu(_menubar->insertMenu(i18n("&Help"),m_vMenuHelp,-1,-1));
   }
 
-  m_idMenuHelp_Contents = m_vMenuHelp->insertItem( i18n( "&Contents" ), this, "helpContents", 0 );
+  m_idMenuHelp_Contents = m_vMenuHelp->insertItem(i18n("&Contents"),this,"helpContents",0);
 
-  // Torben: Reggie, Check/uncheck all checked menu items to their actual value in this function
+  // Torben: Reggie,Check/uncheck all checked menu items to their actual value in this function
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,true);
   m_vMenuScreen_PenWidth->setItemChecked(m_idMenuScreen_PenW3,true);
 
@@ -3237,19 +3237,19 @@ void KPresenterView::setupPopupMenus()
   CHECK_PTR(rb_oalign);
   pixmap.load(pixdir + "aoleft.xpm");
   rb_oalign->insertItem(pixmap,this,SLOT(extraAlignObjLeft()));
-  rb_oalign->insertSeparator( -1 );
+  rb_oalign->insertSeparator(-1);
   pixmap.load(pixdir + "aocenterh.xpm");
   rb_oalign->insertItem(pixmap,this,SLOT(extraAlignObjCenterH()));
-  rb_oalign->insertSeparator( -1 );
+  rb_oalign->insertSeparator(-1);
   pixmap.load(pixdir + "aoright.xpm");
   rb_oalign->insertItem(pixmap,this,SLOT(extraAlignObjRight()));
-  rb_oalign->insertSeparator( -1 );
+  rb_oalign->insertSeparator(-1);
   pixmap.load(pixdir + "aotop.xpm");
   rb_oalign->insertItem(pixmap,this,SLOT(extraAlignObjTop()));
-  rb_oalign->insertSeparator( -1 );
+  rb_oalign->insertSeparator(-1);
   pixmap.load(pixdir + "aocenterv.xpm");
   rb_oalign->insertItem(pixmap,this,SLOT(extraAlignObjCenterV()));
-  rb_oalign->insertSeparator( -1 );
+  rb_oalign->insertSeparator(-1);
   pixmap.load(pixdir + "aobottom.xpm");
   rb_oalign->insertItem(pixmap,this,SLOT(extraAlignObjBottom()));
   rb_oalign->setMouseTracking(true);
@@ -3291,9 +3291,9 @@ void KPresenterView::setupPopupMenus()
 }
 
 /*======================= setup toolbar ===================*/
-bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
+bool KPresenterView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
 {
-  if ( CORBA::is_nil( _factory ) )
+  if (CORBA::is_nil(_factory))
   {
     m_vToolBarEdit = 0L;
     m_vToolBarInsert = 0L;
@@ -3303,366 +3303,366 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
     return true;
   }
 
-  cerr << "bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" << endl;
+  cerr << "bool KPresenterView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)" << endl;
 
   ///////
   // Edit
   ///////
-  m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+  m_vToolBarEdit = _factory->create(OpenPartsUI::ToolBarFactory::Transient);
   m_vToolBarEdit->setFullWidth(false);
 
   // undo
   OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap(ICON("undo.xpm"));
-  m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2( pix, ID_UNDO, SIGNAL( clicked() ), this, "editUndo", true, i18n("Undo"), -1 );
+  m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2(pix,ID_UNDO,SIGNAL(clicked()),this,"editUndo",true,i18n("Undo"),-1);
   m_vToolBarEdit->setItemEnabled(ID_UNDO,false);
 
   // redo
   pix = OPUIUtils::convertPixmap(ICON("redo.xpm"));
-  m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2( pix, ID_REDO, SIGNAL( clicked() ), this, "editRedo", true, i18n("Redo"), -1 );
+  m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2(pix,ID_REDO,SIGNAL(clicked()),this,"editRedo",true,i18n("Redo"),-1);
   m_vToolBarEdit->setItemEnabled(ID_REDO,false);
 
-  m_vToolBarEdit->insertSeparator( -1 );
+  m_vToolBarEdit->insertSeparator(-1);
 
   // cut
   pix = OPUIUtils::convertPixmap(ICON("editcut.xpm"));
-  m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editCut", true, i18n("Cut"), -1 );
+  m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2(pix,1,SIGNAL(clicked()),this,"editCut",true,i18n("Cut"),-1);
 
   // copy
   pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
-  m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editCopy", true, i18n("Copy"), -1 );
+  m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2(pix,1,SIGNAL(clicked()),this,"editCopy",true,i18n("Copy"),-1);
 
   // paste
   pix = OPUIUtils::convertPixmap(ICON("editpaste.xpm"));
-  m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editPaste", true, i18n("Paste"), -1 );
+  m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2(pix,1,SIGNAL(clicked()),this,"editPaste",true,i18n("Paste"),-1);
 
-  m_vToolBarEdit->insertSeparator( -1 );
+  m_vToolBarEdit->insertSeparator(-1);
 
   // delete
   pix = OPUIUtils::convertPixmap(ICON("delete.xpm"));
-  m_idButtonEdit_Delete = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editDelete", true, i18n("Delete"), -1 );
+  m_idButtonEdit_Delete = m_vToolBarEdit->insertButton2(pix,1,SIGNAL(clicked()),this,"editDelete",true,i18n("Delete"),-1);
 
-  m_vToolBarEdit->enable( OpenPartsUI::Show );
+  m_vToolBarEdit->enable(OpenPartsUI::Show);
 
   ///////
   // Insert
   //////
-  m_vToolBarInsert = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+  m_vToolBarInsert = _factory->create(OpenPartsUI::ToolBarFactory::Transient);
   m_vToolBarInsert->setFullWidth(false);
 
   // page
   pix = OPUIUtils::convertPixmap(ICON("newslide.xpm"));
-  m_idButtonInsert_Page = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPage", true, i18n("Insert Page"), -1 );
-  m_vToolBarInsert->insertSeparator( -1 );
+  m_idButtonInsert_Page = m_vToolBarInsert->insertButton2(pix,1,SIGNAL(clicked()),this,"insertPage",true,i18n("Insert Page"),-1);
+  m_vToolBarInsert->insertSeparator(-1);
 
   // picture
   pix = OPUIUtils::convertPixmap(ICON("picture.xpm"));
-  m_idButtonInsert_Picture = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPicture", true, i18n("Insert Picture"), -1 );
+  m_idButtonInsert_Picture = m_vToolBarInsert->insertButton2(pix,1,SIGNAL(clicked()),this,"insertPicture",true,i18n("Insert Picture"),-1);
 
   // clipart
   pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
-  m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertClipart", true, i18n("Insert Clipart"), -1 );
+  m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2(pix,1,SIGNAL(clicked()),this,"insertClipart",true,i18n("Insert Clipart"),-1);
 
-  m_vToolBarInsert->enable( OpenPartsUI::Show );
+  m_vToolBarInsert->enable(OpenPartsUI::Show);
 
   ///////
   // Tools
   //////
-  m_vToolBarTools = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+  m_vToolBarTools = _factory->create(OpenPartsUI::ToolBarFactory::Transient);
   m_vToolBarTools->setFullWidth(false);
 
   // mouse
   pix = OPUIUtils::convertPixmap(ICON("mouse.xpm"));
-  m_idButtonTools_Mouse = m_vToolBarTools->insertButton2( pix, ID_TOOL_MOUSE, SIGNAL( clicked() ), this, "toolsMouse",
-							   true, i18n("Mouse Tool"), -1 );
+  m_idButtonTools_Mouse = m_vToolBarTools->insertButton2(pix,ID_TOOL_MOUSE,SIGNAL(clicked()),this,"toolsMouse",
+							   true,i18n("Mouse Tool"),-1);
 
   m_vToolBarTools->setToggle(ID_TOOL_MOUSE,true);
   m_vToolBarTools->setButton(ID_TOOL_MOUSE,true);
 
   // line
   pix = OPUIUtils::convertPixmap(ICON("line.xpm"));
-  m_idButtonTools_Line = m_vToolBarTools->insertButton2( pix, ID_TOOL_LINE, SIGNAL( clicked() ), this, "toolsLine",
-							   true, i18n("Create Line"), -1 );
+  m_idButtonTools_Line = m_vToolBarTools->insertButton2(pix,ID_TOOL_LINE,SIGNAL(clicked()),this,"toolsLine",
+							   true,i18n("Create Line"),-1);
 
   m_vToolBarTools->setToggle(ID_TOOL_LINE,true);
   m_vToolBarTools->setButton(ID_TOOL_LINE,false);
 
   // rectangle
   pix = OPUIUtils::convertPixmap(ICON("rectangle.xpm"));
-  m_idButtonTools_Rectangle = m_vToolBarTools->insertButton2( pix, ID_TOOL_RECT, SIGNAL( clicked() ), this, "toolsRectangle",
-								true, i18n("Create Rectangle"), -1 );
+  m_idButtonTools_Rectangle = m_vToolBarTools->insertButton2(pix,ID_TOOL_RECT,SIGNAL(clicked()),this,"toolsRectangle",
+								true,i18n("Create Rectangle"),-1);
   m_vToolBarTools->setToggle(ID_TOOL_RECT,true);
   m_vToolBarTools->setButton(ID_TOOL_RECT,false);
 
   // circle or ellipse
   pix = OPUIUtils::convertPixmap(ICON("circle.xpm"));
-  m_idButtonTools_Circle = m_vToolBarTools->insertButton2( pix, ID_TOOL_ELLIPSE, SIGNAL( clicked() ), this, "toolsCircleOrEllipse",
-							     true, i18n("Create Circle or Ellipse"), -1 );
+  m_idButtonTools_Circle = m_vToolBarTools->insertButton2(pix,ID_TOOL_ELLIPSE,SIGNAL(clicked()),this,"toolsCircleOrEllipse",
+							     true,i18n("Create Circle or Ellipse"),-1);
   m_vToolBarTools->setToggle(ID_TOOL_ELLIPSE,true);
   m_vToolBarTools->setButton(ID_TOOL_ELLIPSE,false);
 
   // circle or ellipse
   pix = OPUIUtils::convertPixmap(ICON("pie.xpm"));
-  m_idButtonTools_Pie = m_vToolBarTools->insertButton2( pix, ID_TOOL_PIE, SIGNAL( clicked() ), this, "toolsPie",
-							  true, i18n("Create Pie/Arc/Chord"), -1 );
+  m_idButtonTools_Pie = m_vToolBarTools->insertButton2(pix,ID_TOOL_PIE,SIGNAL(clicked()),this,"toolsPie",
+							  true,i18n("Create Pie/Arc/Chord"),-1);
   m_vToolBarTools->setToggle(ID_TOOL_PIE,true);
   m_vToolBarTools->setButton(ID_TOOL_PIE,false);
 
   // text
   pix = OPUIUtils::convertPixmap(ICON("text.xpm"));
-  m_idButtonTools_Text = m_vToolBarTools->insertButton2( pix, ID_TOOL_TEXT, SIGNAL( clicked() ), this, "toolsText",
-							   true, i18n("Create Text"), -1 );
+  m_idButtonTools_Text = m_vToolBarTools->insertButton2(pix,ID_TOOL_TEXT,SIGNAL(clicked()),this,"toolsText",
+							   true,i18n("Create Text"),-1);
   m_vToolBarTools->setToggle(ID_TOOL_TEXT,true);
   m_vToolBarTools->setButton(ID_TOOL_TEXT,false);
 
   // autoform
   pix = OPUIUtils::convertPixmap(ICON("autoform.xpm"));
-  m_idButtonTools_Autoform = m_vToolBarTools->insertButton2( pix, ID_TOOL_AUTOFORM, SIGNAL( clicked() ), this, "toolsAutoform",
-							     true, i18n("Create Autoform"), -1 );
+  m_idButtonTools_Autoform = m_vToolBarTools->insertButton2(pix,ID_TOOL_AUTOFORM,SIGNAL(clicked()),this,"toolsAutoform",
+							     true,i18n("Create Autoform"),-1);
   m_vToolBarTools->setToggle(ID_TOOL_AUTOFORM,true);
   m_vToolBarTools->setButton(ID_TOOL_AUTOFORM,false);
 
   // diagramm
   pix = OPUIUtils::convertPixmap(ICON("chart.xpm"));
-  m_idButtonTools_Diagramm = m_vToolBarTools->insertButton2( pix, ID_TOOL_DIAGRAMM, SIGNAL( clicked() ), this, "toolsDiagramm",
-							   true, i18n("Create Diagramm"), -1 );
+  m_idButtonTools_Diagramm = m_vToolBarTools->insertButton2(pix,ID_TOOL_DIAGRAMM,SIGNAL(clicked()),this,"toolsDiagramm",
+							   true,i18n("Create Diagramm"),-1);
   m_vToolBarTools->setToggle(ID_TOOL_DIAGRAMM,true);
   m_vToolBarTools->setButton(ID_TOOL_DIAGRAMM,false);
 
   // table
   pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
-  m_idButtonTools_Table = m_vToolBarTools->insertButton2( pix, ID_TOOL_TABLE, SIGNAL( clicked() ), this, "toolsTable",
-							   true, i18n("Create Table"), -1 );
+  m_idButtonTools_Table = m_vToolBarTools->insertButton2(pix,ID_TOOL_TABLE,SIGNAL(clicked()),this,"toolsTable",
+							   true,i18n("Create Table"),-1);
   m_vToolBarTools->setToggle(ID_TOOL_TABLE,true);
   m_vToolBarTools->setButton(ID_TOOL_TABLE,false);
 
   // formula
   pix = OPUIUtils::convertPixmap(ICON("formula.xpm"));
-  m_idButtonTools_Formula = m_vToolBarTools->insertButton2( pix, ID_TOOL_FORMULA, SIGNAL( clicked() ), this, "toolsFormula",
-							   true, i18n("Create Formula"), -1 );
+  m_idButtonTools_Formula = m_vToolBarTools->insertButton2(pix,ID_TOOL_FORMULA,SIGNAL(clicked()),this,"toolsFormula",
+							   true,i18n("Create Formula"),-1);
   m_vToolBarTools->setToggle(ID_TOOL_FORMULA,true);
   m_vToolBarTools->setButton(ID_TOOL_FORMULA,false);
 
   // parts
   pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
-  m_idButtonTools_Part = m_vToolBarTools->insertButton2( pix, ID_TOOL_OBJECT, SIGNAL( clicked() ), this, "toolsObject",
-							   true, i18n("Create Object"), -1 );
+  m_idButtonTools_Part = m_vToolBarTools->insertButton2(pix,ID_TOOL_OBJECT,SIGNAL(clicked()),this,"toolsObject",
+							   true,i18n("Create Object"),-1);
   m_vToolBarTools->setToggle(ID_TOOL_OBJECT,true);
   m_vToolBarTools->setButton(ID_TOOL_OBJECT,false);
 
-  m_vToolBarTools->enable( OpenPartsUI::Show );
+  m_vToolBarTools->enable(OpenPartsUI::Show);
 
   /////////
   // Text
   /////////
-  m_vToolBarText = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+  m_vToolBarText = _factory->create(OpenPartsUI::ToolBarFactory::Transient);
   m_vToolBarText->setFullWidth(false);
 
   // size combobox
   OpenPartsUI::StrList sizelist;
-  sizelist.length( 97 );
-  for( int i = 4; i <= 100 ; i++ )
+  sizelist.length(97);
+  for(int i = 4; i <= 100 ; i++)
   {
     char buffer[ 10 ];
-    sprintf( buffer, "%i", i );
-    sizelist[i-4] = CORBA::string_dup( buffer );
+    sprintf(buffer,"%i",i);
+    sizelist[i-4] = CORBA::string_dup(buffer);
   }
-  m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, true, SIGNAL( activated( const QString & ) ),
-							this, "sizeSelected", true,
-							i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
+  m_idComboText_FontSize = m_vToolBarText->insertCombo(sizelist,ID_FONT_SIZE,true,SIGNAL(activated(const QString &)),
+							this,"sizeSelected",true,
+							i18n("Font Size"),50,-1,OpenPartsUI::AtBottom);
   m_vToolBarText->setCurrentComboItem(ID_FONT_SIZE,16);
   tbFont.setPointSize(20);
 
   // fonts combobox
   getFonts();
   OpenPartsUI::StrList fonts;
-  fonts.length( fontList.count() );
-  for(unsigned int i = 0;i < fontList.count(); i++ )
-    fonts[i] = CORBA::string_dup( fontList.at(i) );
-  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, true, SIGNAL( activated( const QString & ) ), this,
-							"fontSelected", true, i18n("Font List"),
-							200, -1, OpenPartsUI::AtBottom );
+  fonts.length(fontList.count());
+  for(unsigned int i = 0;i < fontList.count(); i++)
+    fonts[i] = CORBA::string_dup(fontList.at(i));
+  m_idComboText_FontList = m_vToolBarText->insertCombo(fonts,ID_FONT_LIST,true,SIGNAL(activated(const QString &)),this,
+							"fontSelected",true,i18n("Font List"),
+							200,-1,OpenPartsUI::AtBottom);
   tbFont.setFamily(fontList.at(0));
   m_vToolBarText->setCurrentComboItem(ID_FONT_LIST,0);
 
-  m_vToolBarText->insertSeparator( -1 );
+  m_vToolBarText->insertSeparator(-1);
 
   // bold
   pix = OPUIUtils::convertPixmap(ICON("bold.xpm"));
-  m_idButtonText_Bold = m_vToolBarText->insertButton2( pix, ID_BOLD, SIGNAL( clicked() ), this, "textBold", true, i18n("Bold"), -1 );
+  m_idButtonText_Bold = m_vToolBarText->insertButton2(pix,ID_BOLD,SIGNAL(clicked()),this,"textBold",true,i18n("Bold"),-1);
   m_vToolBarText->setToggle(ID_BOLD,true);
   m_vToolBarText->setButton(ID_BOLD,false);
   tbFont.setBold(false);
 
   // italic
   pix = OPUIUtils::convertPixmap(ICON("italic.xpm"));
-  m_idButtonText_Italic = m_vToolBarText->insertButton2( pix, ID_ITALIC, SIGNAL( clicked() ), this, "textItalic", true, i18n("Italic"), -1 );
+  m_idButtonText_Italic = m_vToolBarText->insertButton2(pix,ID_ITALIC,SIGNAL(clicked()),this,"textItalic",true,i18n("Italic"),-1);
   m_vToolBarText->setToggle(ID_ITALIC,true);
   m_vToolBarText->setButton(ID_ITALIC,false);
   tbFont.setItalic(false);
 
   // underline
   pix = OPUIUtils::convertPixmap(ICON("underl.xpm"));
-  m_idButtonText_Underline = m_vToolBarText->insertButton2( pix, ID_UNDERLINE, SIGNAL( clicked() ), this, "textUnderline",
-							    true, i18n("Underline"), -1 );
+  m_idButtonText_Underline = m_vToolBarText->insertButton2(pix,ID_UNDERLINE,SIGNAL(clicked()),this,"textUnderline",
+							    true,i18n("Underline"),-1);
   m_vToolBarText->setToggle(ID_UNDERLINE,true);
   m_vToolBarText->setButton(ID_UNDERLINE,false);
   tbFont.setUnderline(false);
 
   // color
   OpenPartsUI::Pixmap* p = new OpenPartsUI::Pixmap;
-  p->data = CORBA::string_dup( colorToPixString(black) );
+  p->data = CORBA::string_dup(colorToPixString(black));
   pix = p;
-  m_idButtonText_Color = m_vToolBarText->insertButton2( pix, ID_TEXT_COLOR, SIGNAL( clicked() ), this, "textColor", true, i18n("Color"), -1 );
+  m_idButtonText_Color = m_vToolBarText->insertButton2(pix,ID_TEXT_COLOR,SIGNAL(clicked()),this,"textColor",true,i18n("Color"),-1);
   tbColor = black;
 
-  m_vToolBarText->insertSeparator( -1 );
+  m_vToolBarText->insertSeparator(-1);
 
   // align left
   pix = OPUIUtils::convertPixmap(ICON("alignLeft.xpm"));
-  m_idButtonText_ALeft = m_vToolBarText->insertButton2( pix, ID_ALEFT, SIGNAL( clicked() ), this, "textAlignLeft",
-							true, i18n("Align Left"), -1 );
+  m_idButtonText_ALeft = m_vToolBarText->insertButton2(pix,ID_ALEFT,SIGNAL(clicked()),this,"textAlignLeft",
+							true,i18n("Align Left"),-1);
   m_vToolBarText->setToggle(ID_ALEFT,true);
   m_vToolBarText->setButton(ID_ALEFT,true);
   tbAlign = TxtParagraph::LEFT;
 
   // align center
   pix = OPUIUtils::convertPixmap(ICON("alignCenter.xpm"));
-  m_idButtonText_ACenter = m_vToolBarText->insertButton2( pix, ID_ACENTER, SIGNAL( clicked() ), this, "textAlignCenter",
-							  true, i18n("Align Center"), -1 );
+  m_idButtonText_ACenter = m_vToolBarText->insertButton2(pix,ID_ACENTER,SIGNAL(clicked()),this,"textAlignCenter",
+							  true,i18n("Align Center"),-1);
   m_vToolBarText->setToggle(ID_ACENTER,true);
   m_vToolBarText->setButton(ID_ACENTER,false);
 
   // align right
   pix = OPUIUtils::convertPixmap(ICON("alignRight.xpm"));
-  m_idButtonText_ARight = m_vToolBarText->insertButton2( pix, ID_ARIGHT, SIGNAL( clicked() ), this, "textAlignRight",
-							 true, i18n("Align Right"), -1 );
+  m_idButtonText_ARight = m_vToolBarText->insertButton2(pix,ID_ARIGHT,SIGNAL(clicked()),this,"textAlignRight",
+							 true,i18n("Align Right"),-1);
   m_vToolBarText->setToggle(ID_ARIGHT,true);
   m_vToolBarText->setButton(ID_ARIGHT,false);
 
-  m_vToolBarText->insertSeparator( -1 );
+  m_vToolBarText->insertSeparator(-1);
 
   // enum list
   pix = OPUIUtils::convertPixmap(ICON("enumList.xpm"));
-  m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textEnumList",
-							   true, i18n("Enumerated List"), -1 );
+  m_idButtonText_EnumList = m_vToolBarText->insertButton2(pix,1,SIGNAL(clicked()),this,"textEnumList",
+							   true,i18n("Enumerated List"),-1);
 
   // unsorted list
   pix = OPUIUtils::convertPixmap(ICON("unsortedList.xpm"));
-  m_idButtonText_UnsortList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textUnsortList", true, i18n("Unsorted List"), -1 );
+  m_idButtonText_UnsortList = m_vToolBarText->insertButton2(pix,1,SIGNAL(clicked()),this,"textUnsortList",true,i18n("Unsorted List"),-1);
 
   // normal text
   pix = OPUIUtils::convertPixmap(ICON("normalText.xpm"));
-  m_idButtonText_NormalText = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textNormalText", true, i18n("Normal Text"), -1 );
+  m_idButtonText_NormalText = m_vToolBarText->insertButton2(pix,1,SIGNAL(clicked()),this,"textNormalText",true,i18n("Normal Text"),-1);
 
-  m_vToolBarText->enable( OpenPartsUI::Show );
+  m_vToolBarText->enable(OpenPartsUI::Show);
 
   // depth plus
   pix = OPUIUtils::convertPixmap(ICON("depth+.xpm"));
-  m_idButtonText_DepthPlus = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textDepthPlus", true, i18n("Increase Depth"), -1 );
+  m_idButtonText_DepthPlus = m_vToolBarText->insertButton2(pix,1,SIGNAL(clicked()),this,"textDepthPlus",true,i18n("Increase Depth"),-1);
 
   // depth minus
   pix = OPUIUtils::convertPixmap(ICON("depth-.xpm"));
-  m_idButtonText_DepthPlus = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textDepthMinus", true, i18n("Decrease Depth"), -1 );
+  m_idButtonText_DepthPlus = m_vToolBarText->insertButton2(pix,1,SIGNAL(clicked()),this,"textDepthMinus",true,i18n("Decrease Depth"),-1);
 
   // spacing
   pix = OPUIUtils::convertPixmap(ICON("spacing.xpm"));
-  m_idButtonText_Spacing = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textSpacing", true, i18n("Paragraph Spacing"), -1 );
+  m_idButtonText_Spacing = m_vToolBarText->insertButton2(pix,1,SIGNAL(clicked()),this,"textSpacing",true,i18n("Paragraph Spacing"),-1);
 
-  m_vToolBarText->enable( OpenPartsUI::Show );
+  m_vToolBarText->enable(OpenPartsUI::Show);
 
   /////////
   // Extra
   /////////
-  m_vToolBarExtra = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+  m_vToolBarExtra = _factory->create(OpenPartsUI::ToolBarFactory::Transient);
   m_vToolBarExtra->setFullWidth(false);
 
   // pen and brush
   pix = OPUIUtils::convertPixmap(ICON("style.xpm"));
-  m_idButtonExtra_Style = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraPenBrush", true, i18n("Pen & Brush"), -1 );
-  m_vToolBarExtra->insertSeparator( -1 );
+  m_idButtonExtra_Style = m_vToolBarExtra->insertButton2(pix,1,SIGNAL(clicked()),this,"extraPenBrush",true,i18n("Pen & Brush"),-1);
+  m_vToolBarExtra->insertSeparator(-1);
 
   // pie
   pix = OPUIUtils::convertPixmap(ICON("edit_pie.xpm"));
-  m_idButtonExtra_Pie = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraConfigPie", true, i18n("Configure Pie"), -1 );
+  m_idButtonExtra_Pie = m_vToolBarExtra->insertButton2(pix,1,SIGNAL(clicked()),this,"extraConfigPie",true,i18n("Configure Pie"),-1);
 
   // rect
   pix = OPUIUtils::convertPixmap(ICON("rectangle2.xpm"));
-  m_idButtonExtra_Rect = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraConfigRect", true,
-							 i18n("Configure Rectangle"), -1 );
-  m_vToolBarExtra->insertSeparator( -1 );
+  m_idButtonExtra_Rect = m_vToolBarExtra->insertButton2(pix,1,SIGNAL(clicked()),this,"extraConfigRect",true,
+							 i18n("Configure Rectangle"),-1);
+  m_vToolBarExtra->insertSeparator(-1);
 
   // raise
   pix = OPUIUtils::convertPixmap(ICON("raise.xpm"));
-  m_idButtonExtra_Raise = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraRaise", true, i18n("Raise object"), -1 );
+  m_idButtonExtra_Raise = m_vToolBarExtra->insertButton2(pix,1,SIGNAL(clicked()),this,"extraRaise",true,i18n("Raise object"),-1);
 
   // lower
   pix = OPUIUtils::convertPixmap(ICON("lower.xpm"));
-  m_idButtonExtra_Lower = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLower", true, i18n("Lower object"), -1 );
-  m_vToolBarExtra->insertSeparator( -1 );
+  m_idButtonExtra_Lower = m_vToolBarExtra->insertButton2(pix,1,SIGNAL(clicked()),this,"extraLower",true,i18n("Lower object"),-1);
+  m_vToolBarExtra->insertSeparator(-1);
 
   // rotate
   pix = OPUIUtils::convertPixmap(ICON("rotate.xpm"));
-  m_idButtonExtra_Rotate = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraRotate", true, i18n("Rotate object"), -1 );
+  m_idButtonExtra_Rotate = m_vToolBarExtra->insertButton2(pix,1,SIGNAL(clicked()),this,"extraRotate",true,i18n("Rotate object"),-1);
 
   // shadow
   pix = OPUIUtils::convertPixmap(ICON("shadow.xpm"));
-  m_idButtonExtra_Shadow = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraShadow", true, i18n("Shadow object"), -1 );
-  m_vToolBarExtra->insertSeparator( -1 );
+  m_idButtonExtra_Shadow = m_vToolBarExtra->insertButton2(pix,1,SIGNAL(clicked()),this,"extraShadow",true,i18n("Shadow object"),-1);
+  m_vToolBarExtra->insertSeparator(-1);
 
   // align
   pix = OPUIUtils::convertPixmap(ICON("alignobjs.xpm"));
-  m_idButtonExtra_Align = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraAlignObj", true, i18n("Align object"), -1 );
-  m_vToolBarExtra->insertSeparator( -1 );
+  m_idButtonExtra_Align = m_vToolBarExtra->insertButton2(pix,1,SIGNAL(clicked()),this,"extraAlignObj",true,i18n("Align object"),-1);
+  m_vToolBarExtra->insertSeparator(-1);
 
   // line begin
   pix = OPUIUtils::convertPixmap(ICON("line_begin.xpm"));
-  m_idButtonExtra_LineBegin = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLineBegin",
-							      true, i18n("Line Begin"), -1 );
+  m_idButtonExtra_LineBegin = m_vToolBarExtra->insertButton2(pix,1,SIGNAL(clicked()),this,"extraLineBegin",
+							      true,i18n("Line Begin"),-1);
   // line end
   pix = OPUIUtils::convertPixmap(ICON("line_end.xpm"));
-  m_idButtonExtra_LineEnd = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLineEnd",
-							      true, i18n("Line End"), -1 );
+  m_idButtonExtra_LineEnd = m_vToolBarExtra->insertButton2(pix,1,SIGNAL(clicked()),this,"extraLineEnd",
+							      true,i18n("Line End"),-1);
 
-  m_vToolBarExtra->enable( OpenPartsUI::Show );
+  m_vToolBarExtra->enable(OpenPartsUI::Show);
 
   /////////
   // Screen
   /////////
-  m_vToolBarScreen = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+  m_vToolBarScreen = _factory->create(OpenPartsUI::ToolBarFactory::Transient);
   m_vToolBarScreen->setFullWidth(false);
 
   // start
   pix = OPUIUtils::convertPixmap(ICON("kpstart.xpm"));
-  m_idButtonScreen_Start = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenStart", true, i18n("Start"), -1 );
-  m_vToolBarScreen->insertSeparator( -1 );
+  m_idButtonScreen_Start = m_vToolBarScreen->insertButton2(pix,1,SIGNAL(clicked()),this,"screenStart",true,i18n("Start"),-1);
+  m_vToolBarScreen->insertSeparator(-1);
 
   // first
   pix = OPUIUtils::convertPixmap(ICON("first.xpm"));
-  m_idButtonScreen_First = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenFirst", true, i18n("First"), -1 );
+  m_idButtonScreen_First = m_vToolBarScreen->insertButton2(pix,1,SIGNAL(clicked()),this,"screenFirst",true,i18n("First"),-1);
 
   // previous
   pix = OPUIUtils::convertPixmap(ICON("kpprev.xpm"));
-  m_idButtonScreen_Prev = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenPrev", true, i18n("Previous"), -1 );
+  m_idButtonScreen_Prev = m_vToolBarScreen->insertButton2(pix,1,SIGNAL(clicked()),this,"screenPrev",true,i18n("Previous"),-1);
 
   // next
   pix = OPUIUtils::convertPixmap(ICON("kpnext.xpm"));
-  m_idButtonScreen_Next = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenNext", true, i18n("Next"), -1 );
+  m_idButtonScreen_Next = m_vToolBarScreen->insertButton2(pix,1,SIGNAL(clicked()),this,"screenNext",true,i18n("Next"),-1);
 
   // last
   pix = OPUIUtils::convertPixmap(ICON("last.xpm"));
-  m_idButtonScreen_Last = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenLast", true, i18n("Last"), -1 );
-  m_vToolBarScreen->insertSeparator( -1 );
+  m_idButtonScreen_Last = m_vToolBarScreen->insertButton2(pix,1,SIGNAL(clicked()),this,"screenLast",true,i18n("Last"),-1);
+  m_vToolBarScreen->insertSeparator(-1);
 
   // effect
   pix = OPUIUtils::convertPixmap(ICON("effect.xpm"));
-  m_idButtonScreen_Effect = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenAssignEffect", true, i18n("Assign Effect"), -1 );
-  m_vToolBarScreen->insertSeparator( -1 );
+  m_idButtonScreen_Effect = m_vToolBarScreen->insertButton2(pix,1,SIGNAL(clicked()),this,"screenAssignEffect",true,i18n("Assign Effect"),-1);
+  m_vToolBarScreen->insertSeparator(-1);
 
   // pen
   pix = OPUIUtils::convertPixmap(ICON("pen.xpm"));
-  m_idButtonScreen_Pen = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenPen", true, i18n("choose Pen"), -1 );
+  m_idButtonScreen_Pen = m_vToolBarScreen->insertButton2(pix,1,SIGNAL(clicked()),this,"screenPen",true,i18n("choose Pen"),-1);
 
-  m_vToolBarScreen->enable( OpenPartsUI::Show );
+  m_vToolBarScreen->enable(OpenPartsUI::Show);
 
   setTool(TEM_MOUSE);
 
@@ -4010,7 +4010,7 @@ void KPresenterView::getFonts()
 
     qfontname = "";
     qfontname = *fontNames;
-    int dash = qfontname.find ('-', 1, TRUE);
+    int dash = qfontname.find ('-',1,TRUE);
 
     if (dash == -1)
       {
@@ -4018,7 +4018,7 @@ void KPresenterView::getFonts()
 	continue;
       }
 
-    int dash_two = qfontname.find ('-', dash + 1 , TRUE);
+    int dash_two = qfontname.find ('-',dash + 1 ,TRUE);
 
     if (dash == -1)
       {
@@ -4027,9 +4027,9 @@ void KPresenterView::getFonts()
       }
 
 
-    qfontname = qfontname.mid(dash +1, dash_two - dash -1);
+    qfontname = qfontname.mid(dash +1,dash_two - dash -1);
 
-    if( !qfontname.contains("open look", TRUE))
+    if (!qfontname.contains("open look",TRUE))
       {
 	if(qfontname != "nil"){
 	  if(fontList.find(qfontname) == -1)

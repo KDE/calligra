@@ -24,6 +24,10 @@ class KPresenterView;
 #include <qtimer.h>
 #include <qstring.h>
 
+/*****************************************************************/
+/* class KPresenterShell                                         */
+/*****************************************************************/
+
 class KPresenterShell : public KoMainWindow
 {
   Q_OBJECT
@@ -34,12 +38,12 @@ public:
 
   // C++
   virtual void cleanUp();
-  void setDocument( KPresenterDoc *_doc );
+  void setDocument(KPresenterDoc *_doc);
 
   // C++
   virtual bool newDocument();
-  virtual bool openDocument( const char *_filename, const char* _format );
-  virtual bool saveDocument( const char *_file, const char *_format );
+  virtual bool openDocument(const char *_filename,const char* _format);
+  virtual bool saveDocument(const char *_file,const char *_format);
   virtual bool closeDocument();
   virtual bool closeAllDocuments();
 
@@ -65,7 +69,7 @@ protected:
   bool requestClose();
 
   void releaseDocument();
-  
+
   KPresenterDoc* m_pDoc;
   KPresenterView* m_pView;
 

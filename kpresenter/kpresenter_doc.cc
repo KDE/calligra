@@ -25,7 +25,7 @@
 /******************************************************************/
 
 /*====================== constructor =============================*/
-KPresenterChild::KPresenterChild(KPresenterDoc *_kpr, const KRect& _rect,KOffice::Document_ptr _doc,
+KPresenterChild::KPresenterChild(KPresenterDoc *_kpr,const KRect& _rect,KOffice::Document_ptr _doc,
 				 int _diffx,int _diffy)
   : KoDocumentChild(_rect,_doc)
 {
@@ -35,7 +35,7 @@ KPresenterChild::KPresenterChild(KPresenterDoc *_kpr, const KRect& _rect,KOffice
 }
 
 /*====================== constructor =============================*/
-KPresenterChild::KPresenterChild( KPresenterDoc *_kpr ) :
+KPresenterChild::KPresenterChild(KPresenterDoc *_kpr) :
   KoDocumentChild()
 {
   m_pKPresenterDoc = _kpr;
@@ -129,8 +129,8 @@ void KPresenterDoc::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long _heig
       QPainter painter;
       painter.begin(_dev);
 
-      if ( _scale != 1.0 )
-	painter.scale( _scale, _scale );
+      if (_scale != 1.0)
+	painter.scale(_scale,_scale);
 
       m_lstViews.at(0)->getPage()->draw(KRect(0,0,_width,_height),&painter);
 
@@ -181,7 +181,7 @@ void KPresenterDoc::makeChildListIntern(KOffice::Document_ptr _doc,const char *_
 }
 
 /*========================== save ===============================*/
-bool KPresenterDoc::save( ostream& out, const char * /* format */ )
+bool KPresenterDoc::save(ostream& out,const char * /* format */)
 {
   KPObject *kpobject = 0L;
 
@@ -291,12 +291,12 @@ void KPresenterDoc::saveObjects(ostream& out)
 }
 
 /*========================== load ===============================*/
-bool KPresenterDoc::loadChildren( KOStore::Store_ptr _store )
+bool KPresenterDoc::loadChildren(KOStore::Store_ptr _store)
 {
   QListIterator<KPresenterChild> it(m_lstChildren);
   for(;it.current();++it)
     {
-      if (!it.current()->loadDocument( _store, it.current()->mimeType() ) )
+      if (!it.current()->loadDocument(_store,it.current()->mimeType()))
 	return false;
     }
 
@@ -326,7 +326,7 @@ bool KPresenterDoc::load_template(const QString &_url)
   KOMLStreamFeed feed(in);
   KOMLParser parser(&feed);
 
-  if ( !loadXML( parser, 0L ) )
+  if (!loadXML(parser,0L))
     return false;
 
   m_bModified = true;
@@ -335,7 +335,7 @@ bool KPresenterDoc::load_template(const QString &_url)
 }
 
 /*========================== load ===============================*/
-bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
+bool KPresenterDoc::loadXML(KOMLParser& parser,KOStore::Store_ptr _store)
 {
   string tag;
   vector<KOMLAttrib> lst;
@@ -368,7 +368,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
       return false;
     }
 
-  KOMLParser::parseTag( tag.c_str(), name, lst );
+  KOMLParser::parseTag(tag.c_str(),name,lst);
   vector<KOMLAttrib>::const_iterator it = lst.begin();
   for(;it != lst.end();it++)
     {
@@ -826,17 +826,17 @@ KOffice::MainWindow_ptr KPresenterDoc::createMainWindow()
 {
   KPresenterShell* shell = new KPresenterShell;
   shell->show();
-  shell->setDocument( this );
+  shell->setDocument(this);
 
-  return KOffice::MainWindow::_duplicate( shell->koInterface() );
+  return KOffice::MainWindow::_duplicate(shell->koInterface());
 }
 
 /*========================= create a view ========================*/
 KPresenterView* KPresenterDoc::createPresenterView()
 {
-  KPresenterView *p = new KPresenterView( 0L, 0L, this );
+  KPresenterView *p = new KPresenterView(0L,0L,this);
   //p->QWidget::show();
-  m_lstViews.append( p );
+  m_lstViews.append(p);
 
   return p;
 }
@@ -844,7 +844,7 @@ KPresenterView* KPresenterDoc::createPresenterView()
 /*========================= create a view ========================*/
 OpenParts::View_ptr KPresenterDoc::createView()
 {
-  return OpenParts::View::_duplicate( createPresenterView() );
+  return OpenParts::View::_duplicate(createPresenterView());
 }
 
 /*========================== view list ===========================*/
@@ -885,9 +885,9 @@ void KPresenterDoc::removeView(KPresenterView *_view)
 }
 
 /*========================= insert an object =====================*/
-void KPresenterDoc::insertObject(const KRect& _rect, KoDocumentEntry& _e,int _diffx,int _diffy)
+void KPresenterDoc::insertObject(const KRect& _rect,KoDocumentEntry& _e,int _diffx,int _diffy)
 {
-  KOffice::Document_var doc = imr_createDoc( _e );
+  KOffice::Document_var doc = imr_createDoc(_e);
   if (CORBA::is_nil(doc))
     return;
 
@@ -2441,7 +2441,7 @@ void KPresenterDoc::insertText(KRect r,int diffx,int diffy,QString text = QStrin
       kptextobject->getKTextObject()->clear();
       kptextobject->getKTextObject()->addText(text,_view->currFont(),_view->currColor());
     }
-  
+
   InsertCmd *insertCmd = new InsertCmd(i18n("Insert text"),kptextobject,this);
   insertCmd->execute();
   _commands.addCommand(insertCmd);

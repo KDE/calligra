@@ -135,7 +135,7 @@ public:
 
   // ------ C++ ------
   // constructor - destructor
-  KPresenterView(QWidget *_parent, const char *_name, KPresenterDoc* _doc );
+  KPresenterView(QWidget *_parent,const char *_name,KPresenterDoc* _doc);
   ~KPresenterView();
 
   void setShell(KPresenterShell *_shell) { shell = _shell; }
@@ -343,8 +343,8 @@ public slots:
   void slotUpdateChildGeometry(KPresenterChild *_child);
 
   // KPresenterFrame signals
-  void slotGeometryEnd( KoFrame* );
-  void slotMoveEnd( KoFrame* );
+  void slotGeometryEnd(KoFrame*);
+  void slotMoveEnd(KoFrame*);
 
   void sendFocusEvent();
 
@@ -423,16 +423,16 @@ protected slots:
   void openPageLayoutDia()
     { extraLayout(); }
   void unitChanged(QString);
-  
+
 protected:
 
   // ********* functions ***********
 
   // C++
-  virtual bool event( const char* _event, const CORBA::Any& _value );
+  virtual bool event(const char* _event,const CORBA::Any& _value);
   // C++
-  virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
-  virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
+  virtual bool mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar);
+  virtual bool mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory);
 
   // resize event
   void resizeEvent(QResizeEvent*);
@@ -440,7 +440,7 @@ protected:
   virtual void dragMoveEvent(QDragMoveEvent *e);
   virtual void dragLeaveEvent(QDragLeaveEvent *e);
   virtual void dropEvent(QDropEvent *e);
-  
+
   // GUI
   void setupPopupMenus();
   void setupScrollbars();
