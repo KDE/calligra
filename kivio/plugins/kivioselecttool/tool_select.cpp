@@ -298,11 +298,6 @@ bool SelectTool::startDragging(const QPoint &pos, bool onlySelected)
   // Create a new painter object
   canvas->beginUnclippedSpawnerPainter();
 
-  // Tell the view to update the toolbars to reflect the
-  // first selected stencil's settings
-  view()->updateToolBars();
-
-
   // Build the list of old geometry
   KivioSelectDragData *pData;
   m_lstOldGeometry.clear();
@@ -313,7 +308,6 @@ bool SelectTool::startDragging(const QPoint &pos, bool onlySelected)
     pData = new KivioSelectDragData;
     pData->rect = pStencil->rect();
     m_lstOldGeometry.append(pData);
-
 
     pStencil = canvas->activePage()->selectedStencils()->next();
   }

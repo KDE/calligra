@@ -1,1 +1,1 @@
-SUBDIRS = kivioconnectortool kiviotexttool kiviozoomtool kivioselecttool kiviosmlconnector
+SUBDIRS = kivioconnectortool kiviotexttool kiviozoomtool kivioselecttool kiviosmlconnector kiviotargettool

@@ -41,7 +41,6 @@ protected:
     QPtrList<KivioShape> *m_pShapeList;
     KivioShape *m_pSubSelection;
     QPtrList<KivioConnectorTarget> *m_pConnectorTargets;
-//    QPtrList<KivioConnectorTarget> *m_pOriginalConnectorTargets;
 
     // Offsets and scale which get reused in between
     // various drawing routines.  To save time and
@@ -160,6 +159,8 @@ public:
 
     virtual void setText(const QString& text, const QString& name);
     virtual QString text(const QString& name);
+
+    virtual void addConnectorTarget(const KoPoint&);
 };
 
 #endif

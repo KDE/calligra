@@ -33,12 +33,14 @@ class KivioConnectorTarget
 {
 protected:
     KoPoint m_position;
+    double m_xOffset, m_yOffset;
     int m_id;
     QPtrList<KivioConnectorPoint> *m_pConnectors;
 
 public:
     KivioConnectorTarget();
-    KivioConnectorTarget( float, float );
+    KivioConnectorTarget( double, double );
+    KivioConnectorTarget( double, double, double, double );
     virtual ~KivioConnectorTarget();
 
     bool loadXML( const QDomElement & );
@@ -64,6 +66,10 @@ public:
     void disconnectPoint( KivioConnectorPoint * );
     
     bool hasConnections();
+    
+    void setOffsets(double x, double y);
+    double xOffset() { return m_xOffset; }
+    double yOffset() { return m_yOffset; }
 };
 
 #endif

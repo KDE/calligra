@@ -101,59 +101,65 @@ bool KivioSMLStencilSpawner::load( const QString &file )
 
 bool KivioSMLStencilSpawner::loadXML( const QString &file, QDomDocument &d )
 {
-    KivioConnectorTarget *pTarget;
+  KivioConnectorTarget *pTarget;
 
-    QDomElement root = d.documentElement();
-    QDomElement e;
-    QDomNode node = root.firstChild();
-    QString nodeName;
+  QDomElement root = d.documentElement();
+  QDomElement e;
+  QDomNode node = root.firstChild();
+  QString nodeName;
 
-    while( !node.isNull() )
+  while( !node.isNull() )
+  {
+    nodeName = node.nodeName();
+
+    if( nodeName.compare("KivioSMLStencilSpawnerInfo")==0 )
     {
-        nodeName = node.nodeName();
+      m_pInfo->loadXML( (const QDomElement)node.toElement() );
+    }
+    else if( nodeName.compare("KivioShape")==0 )
+    {
+      loadShape( node );
+    }
+    else if( nodeName.compare("Dimensions")==0 )
+    {
+      e = node.toElement();
 
-        if( nodeName.compare("KivioSMLStencilSpawnerInfo")==0 )
-        {
-            m_pInfo->loadXML( (const QDomElement)node.toElement() );
-        }
-        else if( nodeName.compare("KivioShape")==0 )
-        {
-            loadShape( node );
-        }
-        else if( nodeName.compare("Dimensions")==0 )
-        {
-            e = node.toElement();
+      m_defWidth = XmlReadFloat( e, "w", 72.0f );
+      m_defHeight = XmlReadFloat( e, "h", 72.0f );
+    }
+    else if( nodeName.compare("KivioConnectorTarget")==0 )
+    {
+      pTarget = new KivioConnectorTarget();
+      pTarget->loadXML( (const QDomElement)node.toElement() );
 
-            m_defWidth = XmlReadFloat( e, "w", 72.0f );
-            m_defHeight = XmlReadFloat( e, "h", 72.0f );
-        }
-        else if( nodeName.compare("KivioConnectorTarget")==0 )
-        {
-            pTarget = new KivioConnectorTarget();
-            pTarget->loadXML( (const QDomElement)node.toElement() );
-
-            m_pStencil->m_pConnectorTargets->append( pTarget );
-            m_pTargets->append(pTarget->duplicate());
-//            m_pStencil->m_pOriginalConnectorTargets->append( pTarget->duplicate() );
-        }
-        else
-        {
-	   kdDebug(43000) << "KivioSMLStencilSpawner::load() - Unknown node " << nodeName << " while loading " << file << endl;
-        }
-
-        node = node.nextSibling();
+      m_pStencil->m_pConnectorTargets->append( pTarget );
+    }
+    else
+    {
+      kdDebug(43000) << "KivioSMLStencilSpawner::load() - Unknown node " << nodeName << " while loading " << file << endl;
     }
 
-    // Now load the xpm
-    QFileInfo finfo(file);
-    QString pixFile = finfo.dirPath(true) + "/" + finfo.baseName() + ".xpm";
+    node = node.nextSibling();
+  }
+  
+  pTarget = m_pStencil->m_pConnectorTargets->first();
+  
+  while(pTarget) {
+    pTarget->setOffsets(pTarget->x() / m_defWidth, pTarget->y() / m_defHeight);
+    m_pTargets->append(pTarget->duplicate());
+    pTarget = m_pStencil->m_pConnectorTargets->next();
+  }
 
-    if(!m_icon.load( pixFile )) {
-      QString pixFile = finfo.dirPath(true) + "/" + finfo.baseName() + ".png";
-      m_icon.load( pixFile );
-    }
+  // Now load the xpm
+  QFileInfo finfo(file);
+  QString pixFile = finfo.dirPath(true) + "/" + finfo.baseName() + ".xpm";
 
-    return true;
+  if(!m_icon.load( pixFile )) {
+    QString pixFile = finfo.dirPath(true) + "/" + finfo.baseName() + ".png";
+    m_icon.load( pixFile );
+  }
+
+  return true;
 }
 
 

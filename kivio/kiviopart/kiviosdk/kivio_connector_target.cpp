@@ -33,9 +33,10 @@ KivioConnectorTarget::KivioConnectorTarget()
     m_pConnectors = new QPtrList<KivioConnectorPoint>;
     m_pConnectors->setAutoDelete(false);
     m_id = -1;
+    m_xOffset = m_yOffset = 0;
 }
 
-KivioConnectorTarget::KivioConnectorTarget(float x, float y)
+KivioConnectorTarget::KivioConnectorTarget(double x, double y)
 {
     m_position.setX( x );
     m_position.setY( y );
@@ -43,8 +44,19 @@ KivioConnectorTarget::KivioConnectorTarget(float x, float y)
     m_pConnectors->setAutoDelete(false);
 
     m_id = -1;
+    m_xOffset = m_yOffset = 0;
 }
 
+KivioConnectorTarget::KivioConnectorTarget(double x, double y, double xOffset, double yOffset)
+{
+    m_position.setX( x );
+    m_position.setY( y );
+    m_pConnectors = new QPtrList<KivioConnectorPoint>;
+    m_pConnectors->setAutoDelete(false);
+
+    m_id = -1;
+    setOffsets(xOffset, yOffset);
+}
 
 /**
  * Duplicates this target.
@@ -54,7 +66,7 @@ KivioConnectorTarget::KivioConnectorTarget(float x, float y)
  */
 KivioConnectorTarget *KivioConnectorTarget::duplicate()
 {
-    KivioConnectorTarget *pTarget = new KivioConnectorTarget( m_position.x(), m_position.y() );
+    KivioConnectorTarget *pTarget = new KivioConnectorTarget( m_position.x(), m_position.y(), m_xOffset, m_yOffset );
 
     return pTarget;
 }
@@ -264,4 +276,10 @@ void KivioConnectorTarget::setId( int i )
 
         pPoint = m_pConnectors->next();
     }
+}
+
+void KivioConnectorTarget::setOffsets(double x, double y)
+{
+  m_xOffset = x;
+  m_yOffset = y;
 }

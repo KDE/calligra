@@ -74,19 +74,13 @@ KivioSMLStencil::KivioSMLStencil()
  */
 KivioSMLStencil::~KivioSMLStencil()
 {
-    if( m_pShapeList )
-    {
-        delete m_pShapeList;
-        m_pShapeList = NULL;
-    }
-
-    if( m_pConnectorTargets )
-    {
-        delete m_pConnectorTargets;
-        m_pConnectorTargets = NULL;
-    }
-
-    m_pSubSelection = NULL;
+    delete m_pShapeList;
+    m_pShapeList = 0;
+    
+    delete m_pConnectorTargets;
+    m_pConnectorTargets = 0;
+    
+    m_pSubSelection = 0;
 }
 
 
@@ -137,26 +131,42 @@ bool KivioSMLStencil::loadXML( const QDomElement &e )
  */
 void KivioSMLStencil::loadConnectorTargetListXML( const QDomElement &e )
 {
-    QDomNode node;
-    QDomElement ele;
-    QString nodeName;
-    KivioConnectorTarget *pTarget;
+  QDomNode node;
+  QDomElement ele;
+  QString nodeName;
+  KivioConnectorTarget *pTarget;
 
-    pTarget = m_pConnectorTargets->first();
-    node = e.firstChild();
-    while( !node.isNull() && pTarget)
+  pTarget = m_pConnectorTargets->first();
+  node = e.firstChild();
+  while( !node.isNull() && pTarget)
+  {
+    nodeName = node.nodeName();
+    ele = node.toElement();
+
+    if( nodeName == "KivioConnectorTarget" )
     {
-        nodeName = node.nodeName();
-        ele = node.toElement();
-
-        if( nodeName == "KivioConnectorTarget" )
-        {
-            pTarget->loadXML( ele );
-        }
-
-        pTarget = m_pConnectorTargets->next();
-        node = node.nextSibling();
+      pTarget->loadXML( ele );
+      pTarget->setOffsets((pTarget->x() - x()) / w(), (pTarget->y() - y()) / h());
+      pTarget = m_pConnectorTargets->next();
     }
+
+    node = node.nextSibling();
+  }
+  
+  while(!node.isNull()) {
+    nodeName = node.nodeName();
+    ele = node.toElement();
+
+    if( nodeName == "KivioConnectorTarget" )
+    {
+      pTarget = new KivioConnectorTarget();
+      pTarget->loadXML( ele );
+      pTarget->setOffsets((pTarget->x() - x()) / w(), (pTarget->y() -y()) / h());
+      m_pConnectorTargets->append(pTarget);
+    }
+
+    node = node.nextSibling();
+  }
 }
 
 
@@ -822,14 +832,14 @@ void KivioSMLStencil::paint( KivioIntraStencilData *pData )
  */
 void KivioSMLStencil::paintConnectorTargets( KivioIntraStencilData *pData )
 {
+  // We don't draw these if we are selected!!!
+  //if( isSelected() == true ) {
+  //  return;
+  //}
+
   QPixmap targetPic;
   KivioPainter *painter;
   int x, y;
-
-  // We don't draw these if we are selected!!!
-  if( isSelected() == true ) {
-    return;
-  }
 
   // Obtain the graphic used for KivioConnectorTargets
   targetPic = Kivio::connectorTargetPixmap();
@@ -1553,11 +1563,7 @@ KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, 
 void KivioSMLStencil::updateGeometry()
 {
   KivioConnectorTarget *pTarget, *pOriginal;
-  double defWidth, defHeight;
   //kdDebug(43000) << "m_x = " << m_x << " m_y = " << m_y << endl;
-
-  defWidth = m_pSpawner->defWidth();
-  defHeight = m_pSpawner->defHeight();
 
   QWMatrix m;
   m.translate(m_x, m_y);
@@ -1565,31 +1571,17 @@ void KivioSMLStencil::updateGeometry()
   m.rotate(m_rotation);
   m.translate(-m_w / 2.0, -m_h / 2.0);
 
-  QPtrList<KivioConnectorTarget> *pOriginalTargets;
-
-  KivioSMLStencilSpawner *smlSpawner = dynamic_cast<KivioSMLStencilSpawner *>(m_pSpawner);
-  KivioDiaStencilSpawner *diaSpawner = dynamic_cast<KivioDiaStencilSpawner *>(m_pSpawner);
-
-  if(smlSpawner != 0) {
-    pOriginalTargets = smlSpawner->targets();
-  } else if(diaSpawner != 0) {
-    pOriginalTargets = diaSpawner->targets();
-  }
-
   pTarget = m_pConnectorTargets->first();
-  pOriginal = pOriginalTargets->first();
 
-  while( pTarget && pOriginal )
+  while( pTarget )
   {
-    double _x = (pOriginal->x() / defWidth) * m_w;
-    double _y = (pOriginal->y() / defHeight) * m_h;
+    double _x = pTarget->xOffset() * m_w;
+    double _y = pTarget->yOffset() * m_h;
     double newX = _x * m.m11() + _y * m.m21() + m.dx();
     double newY = _x * m.m12() + _y * m.m22() + m.dy();
-
     pTarget->setPosition( newX, newY );
 
     pTarget = m_pConnectorTargets->next();
-    pOriginal = pOriginalTargets->next();
   }
 }
 
@@ -2097,4 +2089,10 @@ QString KivioSMLStencil::text(const QString& name)
   }
   
   return QString::null;
+}
+
+void KivioSMLStencil::addConnectorTarget(const KoPoint& p)
+{
+  KivioConnectorTarget* target = new KivioConnectorTarget(p.x(), p.y(), (p.x() - x())/ w(), (p.y() - y())/ h());
+  m_pConnectorTargets->append(target);
 }

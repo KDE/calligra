@@ -262,6 +262,8 @@ class KivioStencil
     
     virtual void setPinPoint(const KoPoint& p) { m_pinPoint = p; }
     virtual KoPoint pinPoint() const { return m_pinPoint; }
+    
+    virtual void addConnectorTarget(const KoPoint&) {}
 
     /****** ARROW HEAD STUFF *******/
     virtual void setStartAHType( int ) { ; }
