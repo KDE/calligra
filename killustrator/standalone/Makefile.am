@@ -55,10 +55,6 @@ noinst_HEADERS = KIllustrator.h
 # just to make sure, automake makes them 
 METASOURCES =	KIllustrator.moc 
 
-# make messages.po. Move this one to ../po/ and "make merge" in po
-messages:
-	$(XGETTEXT) -C -ktranslate -ki18n $(killustrator_SOURCES) && mv messages.po ../po/killustrator.pot
-
 appsdir = $(kde_appsdir)/Graphics
 apps_DATA = killustrator.kdelnk
 

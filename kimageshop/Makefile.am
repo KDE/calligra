@@ -41,5 +41,3 @@ rc_DATA = kimageshop.rc kimageshop_shell.rc
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kimageshop.pot
-
-

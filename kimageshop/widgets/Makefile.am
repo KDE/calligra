@@ -14,4 +14,4 @@ libkiswidgets_la_METASOURCES = colorframe.moc colorslider.moc \
 #include_HEADERS =
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc *.h && mv messages.po ../../po/libkiswidgets.pot
+#	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc *.h && mv messages.po ../../po/libkiswidgets.pot

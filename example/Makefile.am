@@ -33,6 +33,6 @@ kdemimedir = $(kde_mimedir)/application
 # SUBDIRS =  . plugins pics dtd toolbar
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/example.pot
+#	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/example.pot
 
 

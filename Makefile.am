@@ -21,9 +21,6 @@ install-data-local:
 	@echo "****************************************************"
 	@echo ""
 
-messages:
-	make -f admin/Makefile.common package-messages
-
 $(top_srcdir)/configure.in: $(top_srcdir)/configure.in.in $(top_srcdir)/subdirs
 	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common configure.in
 

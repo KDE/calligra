@@ -2,7 +2,7 @@
 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) $(PGSQLINC)
 LDFLAGS = $(all_libraries) $(MICO_LDFLAGS) $(PGSQLLIB) $(KATABASE_LIBS) -version-info 1:0:0
-libkdb_la_LIBADD = ../../lib/kofficeui/libkofficeui.la
+libkdb_la_LIBADD = $(top_builddir)/lib/kofficeui/libkofficeui.la
 
 ####### Files
 
@@ -23,3 +23,4 @@ METASOURCES = kdbcalendar.moc kdbcriteria.moc kdbdatabase.moc kdbdatafield.moc \
 
 IDL_FLAGS = --relative-paths --any -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(srcdir) -I$(idldir)
 
+messages:

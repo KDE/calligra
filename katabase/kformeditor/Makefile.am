@@ -72,5 +72,5 @@ kdelnkdir = $(kde_appsdir)/KOffice
 IDL_FLAGS = --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(idldir)
 
 messages:
-	(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kformeditor.pot
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../../po/kformeditor.pot
 
