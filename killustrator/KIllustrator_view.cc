@@ -151,6 +151,8 @@ KIllustratorView::~KIllustratorView()
    if (rulerMenu!=0)
       delete rulerMenu;
    delete mToolDockManager;
+   delete hRuler;
+   delete vRuler;
 }
 
 
@@ -934,6 +936,7 @@ void KIllustratorView::slotShowHelplines( bool b )
    {
       activeDocument()->showHelplines( b );
    }
+   canvas->update();
 }
 
 void KIllustratorView::slotPage()
