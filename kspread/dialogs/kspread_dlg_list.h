@@ -56,8 +56,6 @@ protected:
 
   QListBox * list;
   QMultiLineEdit *entryList;
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
   QPushButton* m_pRemove;
   QPushButton* m_pNew;
   QPushButton* m_pAdd;
