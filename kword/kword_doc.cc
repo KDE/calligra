@@ -324,6 +324,7 @@ void KWordDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHead
 }
 
 /*================================================================*/
+/* append headers and footers if needed */
 void KWordDocument::recalcFrames( bool _cursor)
 {
     if ( processingType != DTP )
@@ -416,6 +417,17 @@ void KWordDocument::recalcFrames( bool _cursor)
     if ( processingType == WP ) {
         int headOffset = 0, footOffset = 0;
 
+        pages = static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( pageColumns.columns ) ) );
+        int pages2=0;
+        for (int m = getNumFrameSets()-1; m>=0; m--) {
+            KWFrameSet *fs=getFrameSet(m);
+            for (int n = fs->getNumFrames()-1;  n >=0; n--) {
+                pages2=QMAX(pages2, fs->getFrame(n)->bottom());
+            }
+        }
+        pages2=pages2/getPTPaperHeight();
+        pages=QMAX(pages2, pages);
+        
         for ( unsigned int j = 0;
               j < static_cast<unsigned int>( ceil( static_cast<double>( frms ) /
                                                    static_cast<double>( pageColumns.columns ) ) ); j++ ) {
@@ -449,7 +461,6 @@ void KWordDocument::recalcFrames( bool _cursor)
             }
         }
 
-        pages = static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( pageColumns.columns ) ) );
     }
 
     if ( hasHeader() ) {
@@ -1381,6 +1392,7 @@ bool KWordDocument::loadXML( QIODevice *, const QDomDocument & doc )
         }
     }
     recalcFrames();
+    recalcWholeText( false,true);
     //updateAllFrames();
     return TRUE;
 }
@@ -1463,62 +1475,62 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, QValueList<KOMLAttrib>& l
             }
 
             if ( fsname.isEmpty() ) {
-            if(frameInfo!=FI_BODY)
-                fsname = i18n( "TextFrameset %1" ).arg( frames.count() + 1 );
-            else
-                fsname = i18n( "Frameset %1" ).arg( frames.count() + 1 );
-        }
+                if(frameInfo!=FI_BODY)
+                    fsname = i18n( "TextFrameset %1" ).arg( frames.count() + 1 );
+                else
+                    fsname = i18n( "Frameset %1" ).arg( frames.count() + 1 );
+            }
 
             switch ( frameType ) {
-            case FT_TEXT: {
-                KWTextFrameSet *frame = new KWTextFrameSet( this );
-                frame->setVisible( _visible );
-                frame->setName( fsname );
-                frame->load( parser, lst );
-                frame->setFrameInfo( frameInfo );
-                frame->setIsRemoveableHeader( removeable );
+                case FT_TEXT: {
+                    KWTextFrameSet *frame = new KWTextFrameSet( this );
+                    frame->setVisible( _visible );
+                    frame->setName( fsname );
+                    frame->load( parser, lst );
+                    frame->setFrameInfo( frameInfo );
+                    frame->setIsRemoveableHeader( removeable );
 
-                if ( !_name.isEmpty() ) {
-                    KWGroupManager *grpMgr = 0L;
-                    if ( getNumGroupManagers() > 0 ) {
-                        for ( unsigned int i = 0; i < getNumGroupManagers(); i++ ) {
-                            if ( getGroupManager( getNumGroupManagers() - 1 - i )->isActive() &&
-                                 getGroupManager( getNumGroupManagers() - 1 - i )->getName() == _name ) {
-                                grpMgr = getGroupManager( getNumGroupManagers() - 1 - i );
-                                break;
+                    if ( !_name.isEmpty() ) {
+                        KWGroupManager *grpMgr = 0L;
+                        if ( getNumGroupManagers() > 0 ) {
+                            for ( unsigned int i = 0; i < getNumGroupManagers(); i++ ) {
+                                if ( getGroupManager( getNumGroupManagers() - 1 - i )->isActive() &&
+                                     getGroupManager( getNumGroupManagers() - 1 - i )->getName() == _name ) {
+                                    grpMgr = getGroupManager( getNumGroupManagers() - 1 - i );
+                                    break;
+                                }
                             }
                         }
-                    }
-                    if ( !grpMgr ) {
-                        grpMgr = new KWGroupManager( this );
-                        grpMgr->setName( _name );
-                        addGroupManager( grpMgr );
-                    }
-                    frame->setGroupManager( grpMgr );
-                    grpMgr->addFrameSet( frame, _row, _col );
-                    KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
-                    if ( cell ) {
-                        cell->rows = _rows;
-                        cell->cols = _cols;
-                    }
-                } else
+                        if ( !grpMgr ) {
+                            grpMgr = new KWGroupManager( this );
+                            grpMgr->setName( _name );
+                            addGroupManager( grpMgr );
+                        }
+                        frame->setGroupManager( grpMgr );
+                        grpMgr->addFrameSet( frame, _row, _col );
+                        KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
+                        if ( cell ) {
+                            cell->rows = _rows;
+                            cell->cols = _cols;
+                        }
+                    } else
+                        frames.append( frame );
+                } break;
+                case FT_PICTURE: {
+                    KWPictureFrameSet *frame = new KWPictureFrameSet( this );
+                    frame->setName( fsname );
+                    frame->load( parser, lst );
+                    frame->setFrameInfo( frameInfo );
                     frames.append( frame );
-            } break;
-            case FT_PICTURE: {
-                KWPictureFrameSet *frame = new KWPictureFrameSet( this );
-                frame->setName( fsname );
-                frame->load( parser, lst );
-                frame->setFrameInfo( frameInfo );
-                frames.append( frame );
-            } break;
-            case FT_FORMULA: {
-                KWFormulaFrameSet *frame = new KWFormulaFrameSet( this );
-                frame->setName( fsname );
-                frame->load( parser, lst );
-                frame->setFrameInfo( frameInfo );
-                frames.append( frame );
-            } break;
-            default: break;
+                } break;
+                case FT_FORMULA: {
+                    KWFormulaFrameSet *frame = new KWFormulaFrameSet( this );
+                    frame->setName( fsname );
+                    frame->load( parser, lst );
+                    frame->setFrameInfo( frameInfo );
+                    frames.append( frame );
+                } break;
+                default: break;
             }
         } else
             kdError(32001) << "Unknown tag '" << tag << "' in FRAMESETS" << endl;
@@ -3252,7 +3264,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString pasteString, KWPage *_p
 void KWordDocument::appendPage( unsigned int /*_page*/, bool redrawBackgroundWhenAppendPage )
 {
     //QRect pageRect( 0, _page * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
-    kdDebug() <<"KWordDocument::appendPage" << endl;
+    kdDebug() <<"KWordDocument::appendPage (" << pages-2 << ")" << endl;
     pages++;
 
     int thisPageNum  = pages-2;
@@ -3271,8 +3283,8 @@ void KWordDocument::appendPage( unsigned int /*_page*/, bool redrawBackgroundWhe
                                   - it is on the former page and the frame is set to double sided.
                                   - the frame is set to be reconnected
                                   -  */
-            if (frame->getPageNum() == thisPageNum ||
-              (frame->getPageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide) &&
+            if ((frame->getPageNum() == thisPageNum ||
+              (frame->getPageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide)) &&
               frame->getNewFrameBehaviour()==Reconnect  ||
               frame->getNewFrameBehaviour()==Copy ) {
 
@@ -3300,9 +3312,8 @@ void KWordDocument::appendPage( unsigned int /*_page*/, bool redrawBackgroundWhe
         }
     }
 
-     if ( redrawBackgroundWhenAppendPage )
-      drawAllBorders();
-    updateAllFrames();
+    if ( redrawBackgroundWhenAppendPage )
+        drawAllBorders();
     updateAllViewportSizes();
 
     if ( hasHeader() || hasFooter() )
@@ -3739,7 +3750,7 @@ void KWordDocument::updateAllFrames()
 }
 
 /*================================================================*/
-void KWordDocument::recalcWholeText( bool _cursor )
+void KWordDocument::recalcWholeText( bool _cursor, bool completeRender )
 {
     KWordView *viewPtr=0;
 
@@ -3749,25 +3760,29 @@ void KWordDocument::recalcWholeText( bool _cursor )
     if(viewPtr) {
         if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() )
             viewPtr->getGUI()->getPaperWidget()->recalcWholeText( _cursor);
-    } else { // we don't have a view. Take this chance to recalculate everything.
+    } 
+
+    if(completeRender) {
         // first tell the floating frames to be invisible so they won't 
         // interfere with rendering of other frames. (since they are probably 
         // not positioned correctly, just yet)
+
         for ( int i = getNumFrameSets()-1; i >= 0; i-- ) 
-            if (getFrameSet(i)->getGroupManager())
+            if (getFrameSet(i)->getGroupManager() && getFrameSet(i)->getGroupManager()->isAnchored())
                 getFrameSet(i)->setVisible(false);
 
-        // next, render all non-floating frame
-/*
+        // next, render all non-floating frames
         for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
             KWFrameSet *fs = getFrameSet(i);
-            if ( fs->getFrameType() == FT_TEXT && fs->getNumFrames() >0  && fs->getGroupManager()!=0 ) {
+            if ( fs->getFrameType() == FT_TEXT && fs->getNumFrames() >0  && 
+                    fs->getGroupManager()==0 ||
+                    fs->getGroupManager() && fs->getGroupManager()->isAnchored()) {
                 KWFormatContext _fc( this, i + 1 );
                 _fc.init( getFirstParag( i ) );
      
                 while ( _fc.makeNextLineLayout());
             }
-        } */
+        }
     }
 }
 

@@ -193,7 +193,7 @@ public:
     void setUnitToAll();
     void updateAllCursors();
     void drawAllBorders( bool back = true);
-    void recalcWholeText( bool _cursor = false);
+    void recalcWholeText( bool _cursor = false, bool completeRender=false);
     void recalcWholeText( KWParag *start, unsigned int fs );
 
     int getPages() { return pages; }

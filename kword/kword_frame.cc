@@ -704,6 +704,16 @@ void KWFrameSet::save( QTextStream&out )
             out << "sheetSide=\"" << static_cast<int>( frame->getSheetSide()) << "\" ";
         }
         out << "/>" << endl;
+        if(doc->getProcessingType() == KWordDocument::WP) {
+            if(doc->getFrameSet(0) == this) break;
+            if(getFrameInfo() == FI_FIRST_HEADER ||
+               getFrameInfo() == FI_ODD_HEADER ||
+               getFrameInfo() == FI_EVEN_HEADER ||
+               getFrameInfo() == FI_FIRST_FOOTER ||
+               getFrameInfo() == FI_ODD_FOOTER ||
+               getFrameInfo() == FI_EVEN_FOOTER ||
+               getFrameInfo() == FI_FOOTNOTE) break;
+        }
     }
 }
 
@@ -2636,8 +2646,8 @@ void KWGroupManager::moveBy( int dx, int dy )
     preRender();
     doc->updateAllFrames();
 
-    recalcRows();
     recalcCols();
+    recalcRows();
 }
 
 /*================================================================*/
@@ -3210,10 +3220,11 @@ void KWGroupManager::preRender() {
             fc.init( doc->getFirstParag( i ) );
     
             // and render
+/*
             if(!isRendered) {
                 while ( fc.makeNextLineLayout());
                 recalcRows();
-            }
+            }*/
         }
     }
     isRendered=true;

@@ -1597,24 +1597,6 @@ void KWPage::recalcWholeText( bool _cursor)
 
     recalcingText = TRUE;
 
-    // first do all floating frames
-/*
-    for ( int i = doc->getNumFrameSets()-1; i >= 0; i-- ) {
-        if (doc->getFrameSet( i )->getGroupManager()) {
-            KWFormatContext _fc( doc, i + 1 );
-            _fc.init( doc->getFirstParag( i ) );
-
-            bool bend = FALSE;
-
-            while ( !bend ) {
-                bend = !_fc.makeNextLineLayout();
-                if ( doc->getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->y() >
-                     static_cast<int>( contentsY() + height() + height() / 2 ) )
-                    bend = TRUE;
-            }
-        }
-    }*/
-    
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
         if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT || doc->getFrameSet( i )->getNumFrames() == 0 || doc->getFrameSet(i)->getGroupManager())
             continue;
