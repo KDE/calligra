@@ -50,9 +50,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		//! Project data of currently opened project or NULL if no project here yet.
 		virtual KexiProject *project() = 0;
 		
-		/**
-		 * registers a dialog for watching and adds it to the view
-		 */
+		/*! Registers dialog \a dlg for watching and adds it to the main window's stack. */
 		virtual void registerChild(KexiDialogBase *dlg) = 0;
 
 		virtual QPopupMenu* findPopupMenu(const char *popupName) = 0;

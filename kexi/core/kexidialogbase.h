@@ -53,7 +53,7 @@ class KEXICORE_EXPORT KexiDialogTempData : public QObject
 /*! This class can contain a number of configurable views, switchable using toggle action.
  It also automatically works as a proxy for shared (application-wide) actions.
 */
-class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionProxy
+class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionProxy, public Kexi::ObjectStatus
 {
 	Q_OBJECT
 
@@ -219,10 +219,12 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		void dirtyChanged(KexiDialogBase*);
 
 	protected:
+
 		void registerDialog();
+
 		virtual void closeEvent( QCloseEvent * e );
 
-		//! Internal.
+		//! \internal
 		void addView(KexiViewBase *view, int mode);
 
 		int m_supportedViewModes;
@@ -246,6 +248,8 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null);
 
 		bool storeDataBlock_internal( const QString &dataString, int o_id, const QString& dataID );
+
+//		void setError(const QString& message, const QString& details);
 
 	private:
 		KexiMainWindow *m_parentWindow;

@@ -166,6 +166,8 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		virtual void setError( const QString &msg );
 		virtual void setError( KexiDB::Object *obj );
 
+		//! setting not KexiDB-related erorr
+		void setError(const QString &msg, const QString &desc);
 				
 	signals:
 		/**
@@ -175,6 +177,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 
 		/** signal emitted on error */
 		void error(const QString &title, KexiDB::Object *obj);
+
+		/** signal emitted on error (not KexiDB-related) */
+		void error(const QString &msg, const QString &desc);
 
 		/** instance pointed by \a item is removed */
 		void itemRemoved(const KexiPart::Item &item);

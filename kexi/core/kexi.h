@@ -35,6 +35,8 @@ namespace Kexi
 	/*! Modes of view for the dialogs. Used mostly for parts and KexiDialogBase. */
 	enum ViewMode { 
 		AllViewModes = 0, //!< Usable primarily in KexiPart::initInstanceActions()
+		NoViewMode = 0, //!< In KexiViewBase::afterSwitchFrom() and KexiViewBase::beforeSwitchTo() 
+		                //!< means that parent dialog of the view has not yet view defined.
 		DataViewMode = 1,
 		DesignViewMode = 2,
 		TextViewMode = 4 //!< Also known as SQL View Mode
@@ -103,6 +105,19 @@ namespace Kexi
 
 	KEXICORE_EXPORT void setWaitCursor();
 	KEXICORE_EXPORT void removeWaitCursor();
+
+	class KEXICORE_EXPORT ObjectStatus
+	{
+		public:
+			ObjectStatus();
+			ObjectStatus(const QString& message, const QString& description);
+			const ObjectStatus& status() const;
+			bool error() const;
+			void setStatus(const QString& message, const QString& description);
+			void clearStatus();
+
+			QString message, description;
+	};
 
 }//namespace Kexi
 

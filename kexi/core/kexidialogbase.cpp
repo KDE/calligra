@@ -50,7 +50,7 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
 // , m_neverSaved(false)
 {
 	m_supportedViewModes = 0; //will be set by KexiPart
-	m_currentViewMode = 0; //override this!
+	m_currentViewMode = Kexi::NoViewMode; //no view available yet
 	m_parentWindow = parent;
 	m_newlySelectedView = 0;
 	m_creatingViewsMode = -1;
@@ -65,6 +65,8 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
 //	m_instance=parent->instance();
 	m_id = -1;
 	m_item = 0;
+
+	hide(); //will be shown later
 }
 
 KexiDialogBase::~KexiDialogBase()
@@ -120,7 +122,7 @@ void KexiDialogBase::registerDialog() {
 	m_parentWindow->registerChild(this);
 	m_isRegistered=true;
 	m_parentWindow->addWindow((KMdiChildView *)this);
-	show();
+//later	show();
 //	m_parentWindow->activeWindowChanged(this);
 }
 
@@ -460,6 +462,7 @@ void KexiDialogBase::activate()
 	KexiViewBase *v = selectedView();
 	if (v)
 		v->updateActions(true);
+	m_parentWindow->invalidateSharedActions(this);
 }
 
 void KexiDialogBase::deactivate()

@@ -315,17 +315,25 @@ void KexiProject::setError( KexiDB::Object *obj )
 		emit error(m_error_title, obj);
 }
 
+void KexiProject::setError(const QString &msg, const QString &desc)
+{
+	Object::setError(msg); //ok?
+	emit error(msg, desc); //not KexiDB-related
+}
+
 KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& item, int viewMode)
 {
+	clearError();
 	KexiPart::Part *part = Kexi::partManager().part(item.mime());
 	if (!part) {
 		setError(&Kexi::partManager());
-//js TODO:		setError(&Kexi::partManager());
 		return 0;
 	}
 	KexiDialogBase *dlg  = part->openInstance(wnd, item, viewMode);
 	if (!dlg) {
-		//js TODO check for errors
+		if (part->lastOperationStatus().error())
+			setError(i18n("Opening object \"%1\" failed.").arg(item.name())+"<br><br>"+part->lastOperationStatus().message, 
+				part->lastOperationStatus().description);
 		return 0;
 	}
 	return dlg;

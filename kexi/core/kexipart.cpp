@@ -149,6 +149,7 @@ void Part::setActionAvailable(const char *action_name, bool avail)
 
 KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, int viewMode )
 {
+	m_status.clearStatus();
 //	KexiDialogBase *dlg = createInstance(win,item,viewMode);
 //	if (!dlg)
 //		return 0;
@@ -176,12 +177,20 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 	dlg->stack()->setIcon( *dlg->icon() );
 
 	bool cancelled;
+	bool switchingFailed = false;
 	if (!dlg->switchToViewMode( viewMode, cancelled )) {
 		//js TODO ERROR???
-		return 0;
+		switchingFailed = true;
 	}
 	if (cancelled)
+		switchingFailed = true;
+
+	if (switchingFailed) {
+		m_status = dlg->status();
+		dlg->close(); //this will destroy dlg
 		return 0;
+	}
+	dlg->show();
 
 	if (dlg->mdiParent() && dlg->mdiParent()->state()==KMdiChildFrm::Normal) //only resize dialog if it is in normal state
 		dlg->resize(dlg->sizeHint());

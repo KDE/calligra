@@ -83,7 +83,9 @@ class KEXICORE_EXPORT Part : public QObject
 		virtual DataSource *dataSource() { return 0; }
 
 		KActionCollection* actionCollectionForMode(int viewMode) const;
-		
+
+		const Kexi::ObjectStatus& lastOperationStatus() const { return m_status; }
+
 	signals: 
 		void newObjectRequest( KexiPart::Info *info );
 
@@ -158,6 +160,8 @@ class KEXICORE_EXPORT Part : public QObject
 //		GUIClient *m_instanceGuiClient;
 		QIntDict<GUIClient> m_instanceGuiClients;
 		KexiMainWindow* m_mainWin;
+
+		Kexi::ObjectStatus m_status;
 
 	friend class Manager;
 	friend class KexiMainWindow;

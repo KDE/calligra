@@ -49,6 +49,7 @@ bool& Kexi::tempShowForms() { return _tempShowForms; }
 QString Kexi::nameForViewMode(ViewMode m)
 {
 	switch (m) {
+	case NoViewMode: return i18n("No View");
 	case DataViewMode: return i18n("Data View");
 	case DesignViewMode: return i18n("Design View");
 	case TextViewMode: return i18n("Text View");
@@ -183,6 +184,40 @@ void Kexi::setWaitCursor() {
 void Kexi::removeWaitCursor() {
 	_delayedCursorHandler.stop();
 }
+
+//--------------------------------------------------------------------------------
+
+ObjectStatus::ObjectStatus()
+{
+}
+
+ObjectStatus::ObjectStatus(const QString& message, const QString& description)
+{
+	setStatus(message, description);
+}
+
+const ObjectStatus& ObjectStatus::status() const
+{
+	return *this;
+}
+
+bool ObjectStatus::error() const
+{
+	return !message.isEmpty() || !message.isEmpty();
+}
+
+void ObjectStatus::setStatus(const QString& message, const QString& description)
+{
+	this->message=message;
+	this->description=description;
+}
+
+void ObjectStatus::clearStatus()
+{
+	message=QString::null;
+	description=QString::null;
+}
+
 
 //--------------------------------------------------------------------------------
 
