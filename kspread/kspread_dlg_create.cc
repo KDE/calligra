@@ -445,13 +445,15 @@ void KSpreadcreate::init()
        tmp_label->setText(exp_funct);
        edit[0]=type_logic;
    }
-   else if (m_funcName=="EXACT")
+   else if (m_funcName=="EXACT"||m_funcName=="find")
    {
        nb_param=2;
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
-       tmp_label->setText(i18n("Text"));
-
+       if(m_funcName=="find")
+	       tmp_label->setText(i18n("Text search"));
+       else
+       	       tmp_label->setText(i18n("Text"));
        f_param = new QLineEdit( this );
        lay1->addWidget(f_param);
 
@@ -467,6 +469,34 @@ void KSpreadcreate::init()
        edit[0]=type_string;
        edit[1]=type_string;
    }
+   else if (m_funcName=="mid")
+   {
+       nb_param=3;
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Text"));
+       f_param = new QLineEdit( this );
+       lay1->addWidget(f_param);
+
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Int"));
+       s_param=new QLineEdit( this );
+       lay1->addWidget(s_param);
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Int"));
+       t_param = new QLineEdit( this );
+       lay1->addWidget(t_param);
+       exp_funct=m_funcName+"("+"String,Int,Int"+")";
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(exp_funct);
+       edit[0]=type_string;
+       edit[1]=type_double;
+       edit[2]=type_double;
+   }
+
    else if (m_funcName=="len")
    {
        nb_param=1;
@@ -486,43 +516,43 @@ void KSpreadcreate::init()
        nb_param=5;
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
-       tmp_label->setText(i18n("Exp Logic"));
+       tmp_label->setText(i18n("String"));
        f_param = new QLineEdit( this );
        lay1->addWidget(f_param);
 
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
-       tmp_label->setText(i18n("Exp Logic"));
+       tmp_label->setText(i18n("String"));
        s_param = new QLineEdit( this );
        lay1->addWidget(s_param);
   	
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
-       tmp_label->setText(i18n("Exp Logic"));
+       tmp_label->setText(i18n("String"));
        t_param = new QLineEdit( this );
        lay1->addWidget(t_param);
   	
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
-       tmp_label->setText(i18n("Exp Logic"));
+       tmp_label->setText(i18n("String"));
        fo_param = new QLineEdit( this );
        lay1->addWidget(fo_param);
   	
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
-       tmp_label->setText(i18n("Exp Logic"));
+       tmp_label->setText(i18n("String"));
        fi_param = new QLineEdit( this );
        lay1->addWidget(fi_param);
   	
-       exp_funct=m_funcName+"("+"logic,logic,..."+")";
+       exp_funct=m_funcName+"("+"string,string,..."+")";
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label,10,0);
        tmp_label->setText(exp_funct);
-       edit[0]=type_logic;
-       edit[1]=type_logic;
-       edit[2]=type_logic;
-       edit[3]=type_logic;
-       edit[4]=type_logic;
+       edit[0]=type_string;
+       edit[1]=type_string;
+       edit[2]=type_string;
+       edit[3]=type_string;
+       edit[4]=type_string;
    }
    else if(m_funcName=="AND"||m_funcName=="OR"||m_funcName=="NAND"||m_funcName=="NOR")
    {

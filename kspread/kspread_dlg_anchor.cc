@@ -124,7 +124,7 @@ else
 QString KSpreadanchor::create_anchor()
 {
 QString anchor;
-anchor="!<a href=\""+m_pView->activeTable()->tableName()+"!"+l_cell->text()+"\""+">";
+anchor="!<a href=\""+m_pView->activeTable()->tableName()+"!"+l_cell->text().upper()+"\""+">";
 if(bold->isChecked()&&!italic->isChecked())
 	{
 	anchor+="<b>"+text->text()+"</b></a>";

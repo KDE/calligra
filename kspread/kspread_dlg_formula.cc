@@ -109,6 +109,7 @@ QStringList list_stat;
 list_stat+="average";
 list_stat+="variance";
 list_stat+="stddev";
+list_stat.sort();
 
 QStringList list_anal;
 list_anal+="sum";
@@ -126,7 +127,7 @@ list_anal+="ENT";
 list_anal+="PI";
 list_anal+="pow";
 list_anal+="MOD";
-
+list_anal.sort();
 
 QStringList list_trig;
 list_trig+="cos";
@@ -148,6 +149,7 @@ list_trig+="COMBIN";
 list_trig+="fact";
 list_trig+="BINO";
 list_trig+="INVBINO";
+list_trig.sort();
 
 QStringList list_logic;
 list_logic+="if";
@@ -156,6 +158,7 @@ list_logic+="AND";
 list_logic+="OR";
 list_logic+="NAND";
 list_logic+="NOR";
+list_logic.sort();
 
 QStringList list_text;
 list_text+="join";
@@ -167,6 +170,9 @@ list_text+="STXT";
 list_text+="REPT";
 list_text+="lower";
 list_text+="upper";
+list_text+="mid";
+list_text+="find";
+list_text.sort();
 
 QStringList list_date_time;
 list_date_time+="date";
@@ -177,6 +183,7 @@ list_date_time+="currentDate";
 list_date_time+="currentTime";
 list_date_time+="currentDateTime";
 list_date_time+="dayOfYear";
+list_date_time.sort();
 
 if(string== i18n("Statistic") )
 	{

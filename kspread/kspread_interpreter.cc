@@ -953,6 +953,26 @@ static bool kspreadfunc_lower( KSContext& context )
     return true;
 }
 
+static bool kspreadfunc_find( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkArgumentsCount( context, 2, "find", true ) )
+	return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+	return false;
+
+    if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
+	return false;
+
+    QString string_find = args[0]->stringValue();
+    QString string = args[1]->stringValue();
+    context.setValue( new KSValue( string.find(string_find) ) ); 	
+    return true;
+}
+
+
 
 static bool kspreadfunc_mid( KSContext& context )
 {
@@ -1727,6 +1747,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "INVBINO", new KSValue( new KSBuiltinFunction( module,"INVBINO",kspreadfunc_bino_inv) ) );
   module->addObject( "lower", new KSValue( new KSBuiltinFunction( module,"lower",kspreadfunc_lower) ) );
   module->addObject( "upper", new KSValue( new KSBuiltinFunction( module,"upper",kspreadfunc_upper) ) );
+  module->addObject( "find", new KSValue( new KSBuiltinFunction( module,"find",kspreadfunc_find) ) );
 
   return module;
 }

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999, 2000 Montel Laurent <montell@club-internet.fr>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -65,7 +65,9 @@ KSpreadgoto::KSpreadgoto( KSpreadView* parent, const char* name )
 
 void KSpreadgoto::slotOk()
 {
-    QString tmp = m_pView->activeTable()->tableName() + "!" + name_cell->text();
+    QString tmp_upper;
+    tmp_upper=name_cell->text().upper();
+    QString tmp = m_pView->activeTable()->tableName() + "!" + tmp_upper;
     m_pView->canvasWidget()->hideMarker();
     // m_pView->canvasWidget()->setgotohorz(true);
     // m_pView->canvasWidget()->setgotovert(true);
@@ -79,8 +81,6 @@ void KSpreadgoto::slotClose()
 {
     reject();
 }
-
-
 
 
 #include "kspread_dlg_goto.moc"
