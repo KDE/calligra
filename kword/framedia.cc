@@ -1844,7 +1844,7 @@ bool KWFrameDia::applyChanges()
 
             }
             if ( frame ) {
-                if ( frame->frameSet()->isMainFrameset() &&
+                if ( !frame->frameSet()->isMainFrameset() &&
                      (oldX != sx->value() || oldY != sy->value() || oldW != sw->value() || oldH != sh->value() )) {
                     //kdDebug() << "Old geom: " << oldX << ", " << oldY<< " " << oldW << "x" << oldH << endl;
                     //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
