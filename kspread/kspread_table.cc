@@ -7653,7 +7653,7 @@ QString KSpreadTable::completeHeading( const QString &_data, int _page, const QS
     while ( ( pos = tmp.find( "<org>", pos ) ) != -1 )
         tmp.replace( pos, 5, organization );
     pos = 0;
-    while ( ( pos = tmp.find( "<table>", pos ) ) != -1 )
+    while ( ( pos = tmp.find( "<sheet>", pos ) ) != -1 )
         tmp.replace( pos, 7, ta );
 
     return tmp;

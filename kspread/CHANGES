@@ -6,6 +6,8 @@ Bugfixes:
 - Small fix: "14: 4 am" is now "14:04 am"
 - Fix scroll to end of sheet when zoomed
 - Fix repainting cells too many times
+- Fix print header/footer makros
+- Fix print header/footer makro "<sheet>" (was internally switched to "<table>")
 
 
 Changes from 1.1 to 1.2
