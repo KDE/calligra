@@ -48,7 +48,7 @@
 
 //#define DEBUG_FLOW
 //#define DEBUG_FORMATS
-#define DEBUG_FORMAT_MORE
+//#define DEBUG_FORMAT_MORE
 
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc ), undoRedoInfo( this )
