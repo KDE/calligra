@@ -290,6 +290,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     //style = f.style;
     //different = f.different;
     //// kotext addition
+    delete d;
     d = new KoTextFormatPrivate;
     m_textBackColor=f.m_textBackColor;
     m_textUnderlineColor=f.m_textUnderlineColor;
