@@ -28,6 +28,8 @@ KivioPage *page;
 #include <kdebug.h>
 #include <math.h>
 
+#include "py_kivio.h"
+
 extern "C" {
    void initkivioc(void);
 }
@@ -41,6 +43,7 @@ KivioPyStencil::KivioPyStencil()
    static bool first_time = true;
    if ( first_time ) {
      Py_Initialize();  // initialize python only once
+	 //qDebug("init kivioc");
      initkivioc();
      first_time = false;
    }
@@ -59,19 +62,20 @@ KivioPyStencil::KivioPyStencil()
    vars = Py_BuildValue( "{s:d,s:d,s:d,s:d,s:d,s:d,s:{},s:[],s:[],s:{}}",
                             "x", m_x, "y", m_y, "w", m_w, "h", m_h, "x2", x2, "y2", y2 , "style","connectors","connector_targets","shapes");
 
-
    resizeCode = "";
 }
+
 
 KivioPyStencil::~KivioPyStencil()
 {
 }
 
+
 int KivioPyStencil::init( QString initCode )
 {
-  runPython("import kivio");
+  runPython(kivio_module);
   if ( !runPython( initCode ) )
-    return 0;
+    return 1;
 
   m_w = getDoubleFromDict( vars, "w");
   m_h = getDoubleFromDict( vars, "h");
@@ -84,6 +88,7 @@ int KivioPyStencil::init( QString initCode )
   old_h = m_h;
   return 1;
 }
+
 
 bool KivioPyStencil::loadXML( const QDomElement &e )
 {
@@ -115,7 +120,7 @@ bool KivioPyStencil::loadXML( const QDomElement &e )
 
             vars = PyDict_GetItemString( ldic, "res" );
             Py_INCREF(vars);
-            runPython("import kivio\n");
+            runPython(kivio_module);
 
             m_w = getDoubleFromDict( vars, "w");
             m_h = getDoubleFromDict( vars, "h");
@@ -236,9 +241,11 @@ void KivioPyStencil::updateGeometry()
        runPython(resizeCode);
 
    // stuff from KivioSMLStensil
-    KivioConnectorTarget *pTarget, *pOriginal;
 
+    KivioConnectorTarget *pTarget, *pOriginal;
+	
     QList<KivioConnectorTarget> *pOriginalTargets = ((KivioPyStencilSpawner*)m_pSpawner)->targets();
+
     pTarget = m_pConnectorTargets->first();
     pOriginal = pOriginalTargets->first();
 
@@ -361,7 +368,7 @@ KivioStencil *KivioPyStencil::duplicate()
         PyErr_Print();
 
     pNewStencil->vars = PyDict_GetItemString( ldic, "res");
-    pNewStencil->runPython("import kivio\n");
+    pNewStencil->runPython(kivio_module);
 
     // Copy the Connector Targets
     KivioConnectorTarget *pTarget = m_pConnectorTargets->first();
@@ -375,9 +382,7 @@ KivioStencil *KivioPyStencil::duplicate()
     *(pNewStencil->protection()) = *m_pProtection;
     *(pNewStencil->canProtect()) = *m_pCanProtect;
 
-
     pReturn = pNewStencil;
-
     return pReturn;
 }
 
@@ -506,15 +511,15 @@ void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
 int KivioPyStencil::runPython(QString code)
 {
 
-
     KivioView * view = dynamic_cast<KivioView*>(KoDocument::documentList()->first()->views().getFirst());
     if ( view ) {
         page = view->activePage();
     }
 
-    const char *ccode = code.latin1();
+    //const char *ccode = code.local8Bit().data();
+	const char *ccode = code.latin1();
 
-    //qDebug( "local8bit :%s", code.local8Bit() );
+    //qDebug( "code to run:\n%s", ccode );
 
     PyObject *v = PyRun_String( const_cast<char*>(ccode) , Py_file_input, globals, vars );
 

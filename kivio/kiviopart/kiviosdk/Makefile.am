@@ -46,6 +46,7 @@ libkiviosdk_la_SOURCES = \
 		kivio_1d_stencil.cpp
 EXTRA_DIST = \
 		kivio_common.cpp\
+		kivio_wrap.cpp\
 		kivio_py_stencil.cpp\
 		kivio_py_stencil.h\
 		kivio_py_stencil_spawner.cpp\

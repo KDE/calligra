@@ -45,6 +45,7 @@ KivioPyStencilSpawner::KivioPyStencilSpawner( KivioStencilSpawnerSet *p )
       m_pStencil(NULL)
 {
     m_pStencil = new KivioPyStencil();
+	m_pStencil->setSpawner(this);
 
     m_pTargets = new QList<KivioConnectorTarget>;
     m_pTargets->setAutoDelete(true);
@@ -107,10 +108,10 @@ bool KivioPyStencilSpawner::load( const QString &file )
         }
         else if( nodeName.compare("init")==0 )
         {
-           if ( ! m_pStencil->init( node.toElement().text() ) ) {
+		   m_pStencil->setSpawner(this);
+		   if ( ! m_pStencil->init( node.toElement().text() ) ) {
               return false;
            }
-           m_pStencil->setSpawner(this);
            // init connector targets list
            PyObject *targets = PyDict_GetItemString(m_pStencil->vars,"connector_targets");
            int size = PyList_Size( targets );

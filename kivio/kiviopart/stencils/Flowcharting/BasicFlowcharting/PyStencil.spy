@@ -1,14 +1,13 @@
 <?xml version="1.0"?>
 <KivioPyStencil creator="vi">
     <KivioPyStencilSpawnerInfo>
-        <Author data="Dima"/>
+        <Author data="Dmitry Poplavsky"/>
         <Title data="Python"/>
         <Id data="Python"/>
         <Description data="Basic flowcharting card shape"/>
         <Version data="0.1"/>
         <Web data="www.thekompany.com"/>
         <Email data="dima@kde.org"/>
-        <Copyright data="Copyright (C) 2000 theKompany.com & Dave Marotti. All rights reserved."/>
         <AutoUpdate data="off"/>
     </KivioPyStencilSpawnerInfo>
 
@@ -103,7 +102,7 @@ shapes["rect2"]["w"] = 20
 shapes["rect2"]["h"] = 20
 
 if ( shapes["text"]["text"] == "1" ):
-    stencil = kivio.curLayer().firstStencil()
+    stencil = curLayer().firstStencil()
     stencil.setText( "x:"+str(x)+"  y:"+str(y) )
 
 ]]>
