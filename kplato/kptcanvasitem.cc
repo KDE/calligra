@@ -429,25 +429,25 @@ void KPTPertRelationItem::setFinishFinishPoints()
     //kdDebug()<<k_funcinfo<<endl;
 	QPoint parentPoint = m_parentItem->exitPoint(FINISH_FINISH);
 	QPoint childPoint = m_childItem->entryPoint(FINISH_FINISH);
-	
+
 	QPointArray a;
 	a.putPoints(0, 1, parentPoint.x(), parentPoint.y());
-	
+
 
     if ( parentRow >= childRow )
 	{
 	    if (parentCol == childCol)
 		{
-		    a.putPoints(1, 5, 
+		    a.putPoints(1, 5,
 			        childPoint.x()+(wgap/2)-3, parentPoint.y(),
-			        childPoint.x()+(wgap/2), parentPoint.y()-3, 
+			        childPoint.x()+(wgap/2), parentPoint.y()-3,
 		            childPoint.x()+wgap/2, childPoint.y()+3,
     	            childPoint.x()+(wgap/2)-3, childPoint.y(),
     	            childPoint.x(), childPoint.y());
 		}
 		else if (parentCol < childCol)
 		{
-			a.putPoints(1, 9, 
+			a.putPoints(1, 9,
 					parentPoint.x()+(wgap/2)-3, parentPoint.y(),                // stop short
 					parentPoint.x()+(wgap/2), parentPoint.y()+3,                // right/down
 					parentPoint.x()+(wgap/2), parentBottom+(hgap/2)-3,  // stop short
@@ -458,14 +458,14 @@ void KPTPertRelationItem::setFinishFinishPoints()
 					childPoint.x()+(wgap/2)-3, childPoint.y(),                      // left/up
 					childPoint.x(), childPoint.y());
 		}
-	} 
+	}
 	else // parentRow < choldRow
 	{
 	    if (parentCol == childCol)
 		{
-		    a.putPoints(1, 5, 
+		    a.putPoints(1, 5,
 			        parentPoint.x()+(wgap/2)-3, parentPoint.y(),
-			        parentPoint.x()+(wgap/2), parentPoint.y()+3, 
+			        parentPoint.x()+(wgap/2), parentPoint.y()+3,
 		            parentPoint.x()+wgap/2, childPoint.y()-3,
     	            parentPoint.x()+(wgap/2)-3, childPoint.y(),
     	            childPoint.x(), childPoint.y());
@@ -478,9 +478,9 @@ void KPTPertRelationItem::setFinishFinishPoints()
 						childPoint.x()+(wgap/2), parentPoint.y()+3,
 						childPoint.x()+(wgap/2), childPoint.y()-3,
 						childPoint.x()+(wgap/2)-3, childPoint.y(),
-						childPoint.x(), childPoint.y());			
+						childPoint.x(), childPoint.y());
 			else
-				a.putPoints(1, 9, 
+				a.putPoints(1, 9,
 						parentPoint.x()+(wgap/2)-3, parentPoint.y(),
 						parentPoint.x()+(wgap/2), parentPoint.y()+3,
 						parentPoint.x()+wgap/2, childTop-(hgap/2)-3,
@@ -491,9 +491,9 @@ void KPTPertRelationItem::setFinishFinishPoints()
 						childPoint.x()+(wgap/2)-3, childPoint.y(),
 						childPoint.x(), childPoint.y());
         }
-		else 
+		else
 		{
-	        a.putPoints(1, 9, 
+	        a.putPoints(1, 9,
 			        parentPoint.x()+(wgap/2)-3, parentPoint.y(),
 			        parentPoint.x()+(wgap/2), parentPoint.y()+3,
 					parentPoint.x()+wgap/2, childTop-(hgap/2)-3,
@@ -513,10 +513,10 @@ void KPTPertRelationItem::setStartStartPoints()
     //kdDebug()<<k_funcinfo<<endl;
 	QPoint parentPoint = m_parentItem->exitPoint(START_START);
 	QPoint childPoint = m_childItem->entryPoint(START_START);
-	
+
 	QPointArray a;
 	a.putPoints(0, 1, parentPoint.x(), parentPoint.y());
-	
+
     if ( parentRow > childRow )
 	{
 	    if (parentCol == childCol) // go up
@@ -542,13 +542,13 @@ void KPTPertRelationItem::setStartStartPoints()
 	}
 	else // go left/down
 	{
-		a.putPoints(1, 2, 
+		a.putPoints(1, 2,
 		    parentPoint.x()-(wgap/2)+3, parentPoint.y(),
 		    parentPoint.x()-(wgap/2), parentPoint.y()+3);
-						  
+
 	    if (parentCol == childCol)
 		{
-		    a.putPoints(3, 2, 
+		    a.putPoints(3, 2,
 			    parentPoint.x()-(wgap/2), childPoint.y()-3,
 		        parentPoint.x()-(wgap/2)+3, childPoint.y());
 		}
@@ -556,7 +556,7 @@ void KPTPertRelationItem::setStartStartPoints()
 		{
             if (parentRow == childRow) // go up
 			{
-				a.putPoints(3, 6, 
+				a.putPoints(3, 6,
 					parentPoint.x()-(wgap/2), parentBottom+hgap/2-3,
 					parentPoint.x()-(wgap/2)+3, parentBottom+hgap/2,
 					childPoint.x()-(wgap/2)-3, parentBottom+hgap/2,
@@ -573,7 +573,7 @@ void KPTPertRelationItem::setStartStartPoints()
 				    childPoint.x()-(wgap/2), childTop-(hgap/2)+3,
 				    childPoint.x()-(wgap/2), childPoint.y()-3,
 				    childPoint.x()-(wgap/2)+3, childPoint.y());
-			}			
+			}
 		}
 	}
     a.putPoints(a.size(), 1, childPoint.x(), childPoint.y());
@@ -623,7 +623,7 @@ bool KPTPertRelationItem::rowFree(int row, int startCol, int endCol)
 {
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
-    for (; it != list.end(); ++it) 
+    for (; it != list.end(); ++it)
     {
 		if ( (*it)->rtti() == KPTPertProjectItem::RTTI ||
 			(*it)->rtti() == KPTPertTaskItem::RTTI  ||
@@ -847,4 +847,5 @@ KDGanttViewItem *KPTGanttViewEventItem::find(KDGanttViewItem *item, KPTNode *nod
         KPTGanttViewSummaryItem *i = static_cast<KPTGanttViewSummaryItem *>(item);
         return i->find(node);
     }
+    return 0;
 }

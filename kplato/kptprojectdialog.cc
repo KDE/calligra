@@ -38,6 +38,8 @@
 #include "kptprojectdialog.h"
 #include "kptproject.h"
 #include "kptresource.h"
+#include "kptprojectdialogbase.h"
+#include "kptresourcespanel.h"
 
 
 KPTProjectDialog::KPTProjectDialog(KPTProject &p, QWidget *parent, const char *name)

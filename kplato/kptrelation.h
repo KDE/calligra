@@ -51,9 +51,9 @@ public:
     ~KPTRelation();
 
     void setTimingType(TimingType );
-    TimingType timingType() { return m_timingType; }
+    TimingType timingType() const { return m_timingType; }
     void setTimingRelation(TimingRelation );
-    TimingRelation timingRelation() { return m_timingRelation; }
+    TimingRelation timingRelation() const { return m_timingRelation; }
 
     /** returns the lag.
     *  The lag of a relation is the time it takes between the parent starting/stopping

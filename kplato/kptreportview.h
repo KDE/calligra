@@ -53,7 +53,7 @@ class KPTReportView : public QWidget
 	void zoom(double /*zoom*/) {}
 
     void draw(const QString &report);
-    KPTView *mainView() { return m_mainview; }
+    KPTView *mainView() const { return m_mainview; }
 
     void print(KPrinter &printer);
 
@@ -75,7 +75,7 @@ class KPTReportView : public QWidget
 
     QString setResourceDetail(KPTResource *res);
 
-    QString setDetail(QString source, QStringList &properties, QString &level);
+    QString setDetail(const QString &source, QStringList &properties, QString &level);
 
 public slots:
 	void slotFirstPage();

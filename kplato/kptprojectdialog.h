@@ -22,13 +22,15 @@
 
 #include "kptresource.h"
 #include "kptprojectdialogbase.h"
-#include "kptresourcespanel.h"
+//#include "kptresourcespanel.h"
 
 #include <kdialogbase.h>
 
 #include <qstring.h>
 
 class KPTProject;
+class KPTProjectDialogImpl;
+class KPTResourcesPanel;
 
 class KPTProjectDialogImpl : public KPTProjectDialogBase {
     Q_OBJECT

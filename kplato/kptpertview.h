@@ -43,7 +43,7 @@ class KPrinter;
     void zoom(double /*zoom*/) {}
 
     void draw();
-    KPTView *mainView();
+    KPTView *mainView() const { return m_mainview; } 
 
     void print(KPrinter &printer);
 

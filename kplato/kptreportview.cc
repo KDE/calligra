@@ -300,7 +300,7 @@ QString KPTReportView::setTaskDetail(KPTNode *node) {
     return s;
 }
 
-QString KPTReportView::setDetail(QString source, QStringList &properties, QString &level) {
+QString KPTReportView::setDetail(const QString & source, QStringList &properties, QString &level) {
     QString s = "<Row";
     s += " level=\"" + level + "\"";
     for (unsigned int i=0; i < properties.count(); ++i) {
