@@ -442,20 +442,20 @@ void KWView::setupActions()
                                            this, SLOT( textStrikeOut() ),
                                            actionCollection(), "format_strike" );
 
-    actionFormatAlignLeft = new KToggleAction( i18n( "Align &Left" ), "alignLeft", ALT + Key_L,
+    actionFormatAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", ALT + Key_L,
                                        this, SLOT( textAlignLeft() ),
                                        actionCollection(), "format_alignleft" );
     actionFormatAlignLeft->setExclusiveGroup( "align" );
     actionFormatAlignLeft->setChecked( TRUE );
-    actionFormatAlignCenter = new KToggleAction( i18n( "Align &Center" ), "alignCenter", ALT + Key_C,
+    actionFormatAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", ALT + Key_C,
                                          this, SLOT( textAlignCenter() ),
                                          actionCollection(), "format_aligncenter" );
     actionFormatAlignCenter->setExclusiveGroup( "align" );
-    actionFormatAlignRight = new KToggleAction( i18n( "Align &Right" ), "alignRight", ALT + Key_R,
+    actionFormatAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", ALT + Key_R,
                                         this, SLOT( textAlignRight() ),
                                         actionCollection(), "format_alignright" );
     actionFormatAlignRight->setExclusiveGroup( "align" );
-    actionFormatAlignBlock = new KToggleAction( i18n( "Align &Block" ), "alignBlock", ALT + Key_B,
+    actionFormatAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", ALT + Key_B,
                                         this, SLOT( textAlignBlock() ),
                                         actionCollection(), "format_alignblock" );
     actionFormatAlignBlock->setExclusiveGroup( "align" );
