@@ -2518,6 +2518,41 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>BETADIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Alpha parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Beta parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+        <Comment>Start</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+        <Comment>End</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the cumulative beta probability density function.
+          The last two parameters are optional. They set the lower and upper
+          bounds, otherwise defaulting to 0.0 and 1.0 respectively.
+        </Text>
+        <Syntax>BETADIST(number;alpha;beta;start;end)</Syntax>
+        <Example>BETADIST(0.2859;0.2606;0.8105) equals 0.675444</Example>
+        <Example>BETADIST(0.2859;0.2606;0.8105;0.2;0.9) equals 0.537856</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Financial</GroupName>

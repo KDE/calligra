@@ -1934,7 +1934,6 @@ static bool kspreadfunc_bino( KSContext& context )
 
 }
 
-
 static bool kspreadfunc_bino_inv( KSContext& context )
 {
   double result=0;
@@ -2208,6 +2207,120 @@ static bool kspreadfunc_gammadist( KSContext& context )
     result = GetGammaDist(x, alpha, beta);
 
   context.setValue( new KSValue(result) );
+  return true;
+}
+
+static double GetLogGamma(double x)
+{
+  bool bReflect;
+  double G = GammaHelp(x, bReflect);
+  G = (x+0.5)*log(x+5.5)+log(G)-(x+5.5);
+  if (bReflect)
+    G = log(F_PI*x)-G-log(sin(F_PI*x));
+  return G;
+}
+
+
+static double beta_helper(double x, double alpha, double beta) {
+  if (beta == 1.0)
+    return pow(x, alpha);
+  else if (alpha == 1.0)
+    return 1.0 - pow(1.0-x,beta);
+
+  double fEps = 1.0E-8;
+  bool bReflect;
+  double cf, fA, fB;
+
+  if (x < (alpha+1.0)/(alpha+beta+1.0)) {
+    bReflect = FALSE;
+    fA = alpha;
+    fB = beta;
+  }
+  else {
+    bReflect = TRUE;
+    fA = beta;
+    fB = alpha;
+    x = 1.0 - x;
+  }
+  if (x < fEps)
+    cf = 0.0;
+  else {
+    double a1, b1, a2, b2, fnorm, rm, apl2m, d2m, d2m1, cfnew;
+    a1 = 1.0; b1 = 1.0;
+    b2 = 1.0 - (fA+fB)*x/(fA+1.0);
+    if (b2 == 0.0) {
+      a2 = b2;
+      fnorm = 1.0;
+      cf = 1.0;
+    }
+    else {
+      a2 = 1.0;
+      fnorm = 1.0/b2;
+      cf = a2*fnorm;
+    }
+    cfnew = 1.0;
+    for (uint j = 1; j <= 100; j++) {
+      rm = (double) j;
+      apl2m = fA + 2.0*rm;
+      d2m = rm*(fB-rm)*x/((apl2m-1.0)*apl2m);
+      d2m1 = -(fA+rm)*(fA+fB+rm)*x/(apl2m*(apl2m+1.0));
+      a1 = (a2+d2m*a1)*fnorm;
+      b1 = (b2+d2m*b1)*fnorm;
+      a2 = a1 + d2m1*a2*fnorm;
+      b2 = b1 + d2m1*b2*fnorm;
+      if (b2 != 0.0) {
+        fnorm = 1.0/b2;
+        cfnew = a2*fnorm;
+        if (fabs(cf-cfnew)/cf < fEps)
+          j = 101;
+        else
+          cf = cfnew;
+      }
+    }
+    if (fB < fEps)
+      b1 = 1.0E30;
+    else
+      b1 = exp(GetLogGamma(fA)+GetLogGamma(fB)-GetLogGamma(fA+fB));
+    
+    cf *= pow(x, fA)*pow(1.0-x,fB)/(fA*b1);
+  }
+  if (bReflect)
+    return 1.0-cf;
+  else
+    return cf;
+}
+
+static bool kspreadfunc_betadist( KSContext& context ) {
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  double fA, fB;  //lower, upper bound
+  fA = 0.0;
+  fB = 1.0;
+  
+  if ( KSUtil::checkArgumentsCount( context, 5, "BETADIST", false ) ) {
+    if( KSUtil::checkType( context, args[3], KSValue::DoubleType, false ) )
+      fA = args[3]->doubleValue();
+    if( KSUtil::checkType( context, args[4], KSValue::DoubleType, false ) )
+      fB = args[4]->doubleValue();
+  }
+  else if ( KSUtil::checkArgumentsCount( context, 4, "BETADIST", false ) ) {
+    if( KSUtil::checkType( context, args[3], KSValue::DoubleType, false ) )
+      fA = args[3]->doubleValue();
+  }
+  else if (!KSUtil::checkArgumentsCount( context, 3, "BETADIST", false ) )
+    return false;
+
+  double x, alpha, beta;
+  x = args[0]->doubleValue();
+  alpha = args[1]->doubleValue();
+  beta = args[2]->doubleValue();
+
+  if (x < fA || x > fB || fA == fB || alpha <= 0.0 || beta <= 0.0) { //checks
+    return false;
+  }
+  x = (x-fA)/(fB-fA); //scaling
+
+  context.setValue( new KSValue( beta_helper(x, alpha, beta) ));
   return true;
 }
 
@@ -4705,6 +4818,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "GAUSS", new KSValue( new KSBuiltinFunction( module, "GAUSS", kspreadfunc_gauss) ) );
   module->addObject( "PHI", new KSValue( new KSBuiltinFunction( module, "PHI", kspreadfunc_phi) ) );
   module->addObject( "GAMMADIST", new KSValue( new KSBuiltinFunction( module, "GAMMADIST", kspreadfunc_gammadist) ) );
+  module->addObject( "BETADIST", new KSValue( new KSBuiltinFunction( module, "BETADIST", kspreadfunc_betadist) ) );
 
   return module;
 }
