@@ -14,6 +14,7 @@
 #include "koRuler.h"
 #include <klocale.h>
 #include <kglobal.h>
+#include <kiconloader.h>
 
 /******************************************************************/
 /* Class: KoRuler                                                 */
@@ -48,8 +49,8 @@ KoRuler::KoRuler(QWidget *_parent,QWidget *_canvas,Orientation _orientation,
   hasToDelete = false;
   whileMovingBorderLeft = whileMovingBorderRight = whileMovingBorderTop = whileMovingBorderBottom = false;
 
-  pmFirst = ICON("koRulerFirst.xpm");
-  pmLeft = ICON("koRulerLeft.xpm");
+  pmFirst = Icon( "koRulerFirst.xpm" );
+  pmLeft = Icon( "koRulerLeft.xpm" );
   currTab = -1;
 
   tabList.setAutoDelete(false);
