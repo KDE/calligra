@@ -19,6 +19,8 @@
 
 /**
  * CHANGES
+ * v1.7 to 1.9
+ * Added the editing duration analysis.
  * v1.6 to 1.7
  * Changed the incorrect meta:date to dc:date
  * Now parse date instead of simply print the ISO date
@@ -74,6 +76,7 @@ static const char * const Advanced[] =
   "meta:initial-creator", I18N_NOOP("Creator"),
   "meta:generator"	, I18N_NOOP("Generator"),
   "meta:editing-cycles" , I18N_NOOP("Editing Cycles"),
+  "meta:editing-duration" , I18N_NOOP("Editing Duration"),
   0};
 
 static const char * dclanguage = "dc:language";
@@ -159,8 +162,12 @@ void KOfficePlugin::makeMimeTypeInfo(const QString& mimeType)
     group = addGroupInfo(info, DocAdvanced, i18n("Document Advanced"));
     for (i = 0; Advanced[i]; i+=2){
       // I should add the isDate property instead of testing the index, but it works well, who cares ? :-)
-      item = addItemInfo(group, Advanced[i], i18n(Advanced[i+1]),
-		         (i>1&&i<8)?(QVariant::DateTime):(QVariant::String));
+    QVariant::Type typ = QVariant::String;
+    if (i > 1 && i < 8)
+	    typ = QVariant::DateTime;
+    if (i == 14)
+	    typ = QVariant::String;
+      item = addItemInfo(group, Advanced[i], i18n(Advanced[i+1]), typ);
       setHint(item, KFileMimeTypeInfo::Description);
     }
     
@@ -170,6 +177,86 @@ void KOfficePlugin::makeMimeTypeInfo(const QString& mimeType)
 		         QVariant::Int);
       setHint(item, KFileMimeTypeInfo::Length);
     }
+}
+
+/**
+ * Gets a number in the string and update the position next character which
+ * is not a number
+ * @param str The string to check
+ * @param the position to start to, updated to the next character NAN
+ * @return the number parsed, 0 if number was not valid
+ */
+int getNumber(QString &str, int * pos){
+	int k = *pos;
+	for (int len = str.length() ;
+	     str.at(k).isNumber() && k < len ;
+	     k++);
+	bool result = false;
+	int num = str.mid( *pos, k-(*pos)).toInt(&result);
+	*pos = k;
+	if (!result)
+		return 0;
+	return num;
+}	
+
+void KOfficePlugin::getEditingTime(KFileMetaInfoGroup group1,
+		                   const char * labelid, QString & txt){
+	QString t;
+	int days = 0;
+	int hours = 0;
+	int minutes = 0;
+	int seconds = 0;
+	if (txt.at(0) != 'P'){
+		kdDebug(7034) << labelid << "=" << txt <<
+			" does not seems to be a valid duration" << endl;
+		return;
+	}
+	int pos = 1;
+	if (txt.at(pos).isNumber()){
+		days = getNumber(txt, &pos);
+		if (txt.at(pos++)!='D'){
+			days=0;
+			kdDebug(7034) << labelid <<
+				" First arg was not a day in " << txt << endl;
+		}
+	}
+	if (txt.at(pos)!= 'T'){
+		kdDebug(7034) << labelid << "=" << txt <<
+			" does not seems to contain time information" << endl;
+		return;
+	}
+	pos++;
+	int len = txt.length();
+	while (pos < len){
+		int res = getNumber(txt, &pos);
+		if (pos >= len)
+			return;
+		switch (txt.at(pos).latin1()){
+			case 'H':
+				hours = res;
+				break;
+			case 'M':
+				minutes = res;
+				break;
+			case 'S':
+				seconds = res;
+				break;
+			default:
+				kdDebug(7034) << "Unknown unit at pos " << pos << " while parsing " <<
+					labelid << "="<< txt << endl;
+		}
+		pos++;
+	}
+	hours += days * 24;
+	appendItem(group1, labelid,
+		   i18n("%1:%2.%3").arg(hours).arg(minutes, 2).arg(seconds,2 ));
+}
+
+void KOfficePlugin::getDateTime(KFileMetaInfoGroup group1,
+		                const char * labelid, QString & txt)
+{
+	QDateTime dt = QDateTime::fromString( txt, Qt::ISODate);
+	appendItem( group1, labelid, dt);
 }
 
 bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
@@ -201,16 +288,21 @@ bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
     KFileMetaInfoGroup group1 = appendGroup(info, DocAdvanced);
     for (int i = 0; Advanced[i]; i+=2){
 	    QString txt = stringFromNode(base, Advanced[i]);
-	    if (! txt.isEmpty()){
-		    // A silly method to do it, but efficient
-		    if (i>1 && i<8){
-			    QDateTime dt = QDateTime::fromString( txt, Qt::ISODate );
-			    appendItem(group1, Advanced[i], dt);
-		    }
-		    else
-			    appendItem(group1, Advanced[i], txt);
+	    if (!txt.isEmpty()){
+		    // A silly way to do it...
+		    switch (i){
+			    case 2:
+			    case 4:
+			    case 6:
+			    	getDateTime(group1, Advanced[i], txt);
+				break;
+			    case 14:
+				getEditingTime(group1, Advanced[i], txt);
+				break;
+			    default:	
+				appendItem(group1, Advanced[i], txt);}
+		   }
 	    }
-    }
 
     QDomNode dstat = base.namedItem(metadocstat);
 
@@ -310,7 +402,7 @@ bool KOfficePlugin::writeInfo( const KFileMetaInfo& info) const
   for (int i = childs.length(); i >= 0; --i){
 	  metaKeyNode.removeChild( childs.item(i) );
   }
-  QStringList keywordList = QStringList::split(",", info[DocumentInfo][metakeyword].value().toString(), true);
+  QStringList keywordList = QStringList::split(",", info[DocumentInfo][metakeyword].value().toString().stripWhiteSpace(), false);
   for ( QStringList::Iterator it = keywordList.begin(); it != keywordList.end(); ++it ) {
 	QDomElement elem = doc.createElement(metakeyword);
 	metaKeyNode.appendChild(elem);
