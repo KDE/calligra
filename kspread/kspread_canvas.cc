@@ -1424,6 +1424,8 @@ void KSpreadCanvas::processHomeKey(QKeyEvent* event)
       }
 
       int col = ( cell ? cell->column() : 1 );
+      if ( col == marker.x())
+        col = 1;
       destination = QPoint(col, marker.y());
     }
 
