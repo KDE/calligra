@@ -179,7 +179,7 @@ void KoTemplateCreateDia::slotSelectionChanged()
     d->m_remove->setEnabled( item );
     if ( ! item )
         return;
-    
+
     if ( item->depth() > 0 )
     {
         d->m_name->setText( item->text( 0 ) );
@@ -361,7 +361,7 @@ void KoTemplateCreateDia::slotSelect() {
                 return;
         }
     }
-    
+
     d->m_customPixmap=QPixmap();
     updatePixmap();
 }
@@ -381,8 +381,10 @@ void KoTemplateCreateDia::slotAddGroup() {
         return;
     KoTemplateGroup *group=d->m_tree->find(name);
     if(group && !group->isHidden())
+    {
+        KMessageBox::information( this, i18n("This name is already used."), i18n("Add Group") );
         return;
-
+    }
     QString dir=d->m_tree->instance()->dirs()->saveLocation(d->m_tree->templateType());
     dir+=name;
     KoTemplateGroup *newGroup=new KoTemplateGroup(name, dir, true);
@@ -452,7 +454,7 @@ void KoTemplateCreateDia::updatePixmap() {
         }
         else
             kdWarning(30004) << "Trying to load picture" << endl;
-        
+
         if(!d->m_customPixmap.isNull())
             d->m_preview->setPixmap(d->m_customPixmap);
         else
