@@ -50,7 +50,7 @@ void KoPrintPreview::preview(QWidget* parent, const char* /*name*/, const QStrin
             {
                 m_pPartPreview->openURL( tmpFile );
                 dialog->setMainWidget(m_pPartPreview->widget());
-                dialog->setInitialSize(QSize(700,500));
+                dialog->setInitialSize(QSize(850,500));
                 QObject::connect( dialog, SIGNAL( finished() ), dialog, SLOT( slotDelayedDestruct() ) );
                 dialog->show();
 
