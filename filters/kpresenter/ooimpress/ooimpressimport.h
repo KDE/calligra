@@ -23,6 +23,7 @@
 #define OoImpress_IMPORT_H__
 
 #include <koFilter.h>
+#include <koStore.h>
 
 #include <qdom.h>
 #include <qdict.h>
@@ -103,6 +104,17 @@ public:
      */
     QString attribute( const QString& name );
 
+    /**
+     * Check if any of the styles on the stack has a child node called 'name'.
+     */
+    bool hasChildNode(const QString & name);
+
+    /**
+     * Search for a child node called 'name', starting on top of the stack,
+     * and return it.
+     */
+    QDomNode childNode(const QString & name);
+
 private:
     uint m_pageMark, m_objectMark;
 
@@ -150,12 +162,14 @@ private:
     QString expandWhitespace(const QDomElement& tag);
 
     QString storeImage( const QDomElement& object );
+    QString storeSound(const QDomElement & object, QDomElement & p, QDomDocument & doc);
     QDomElement parseTextBox( QDomDocument& doc, const QDomElement& textBox );
     QDomElement parseList( QDomDocument& doc, const QDomElement& paragraph );
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& list );
     KoFilter::ConversionStatus openFile();
 
     int m_numPicture;
+    int m_numSound;
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;

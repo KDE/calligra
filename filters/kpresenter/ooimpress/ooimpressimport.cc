@@ -25,6 +25,8 @@
 
 #include <qregexp.h>
 #include <qdatetime.h>
+#include <qfileinfo.h>
+#include <qdir.h>
 
 #include <kzip.h>
 #include <karchive.h>
@@ -44,6 +46,7 @@ K_EXPORT_COMPONENT_FACTORY( libooimpressimport, OoImpressImportFactory( "ooimpre
 OoImpressImport::OoImpressImport( KoFilter *, const char *, const QStringList & )
     : KoFilter(),
       m_numPicture( 1 ),
+      m_numSound(1),
       m_styles( 23, true )
 {
     m_styles.setAutoDelete( true );
@@ -297,6 +300,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     QDomElement pageTitleElement = doc.createElement( "PAGETITLES" );
     QDomElement pageNoteElement = doc.createElement( "PAGENOTES" );
     QDomElement backgroundElement = doc.createElement( "BACKGROUND" );
+    QDomElement soundElement = doc.createElement( "SOUNDS" );
 
     // parse all pages
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
@@ -306,16 +310,17 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         fillStyleStack( dp );
         m_styleStack.setPageMark();
 
-        // take care of a possible page background or slide transition
-        if ( m_styleStack.hasAttribute( "draw:fill" ) ||
-             m_styleStack.hasAttribute( "presentation:transition-style" ) )
+        // take care of a possible page background or slide transition or sound
+        if ( m_styleStack.hasAttribute( "draw:fill" )
+             || m_styleStack.hasAttribute( "presentation:transition-style" ))
         {
+
             QDomElement bgPage = doc.createElement( "PAGE" );
 
             // background
             if ( m_styleStack.hasAttribute( "draw:fill" ) )
             {
-                QString fill = m_styleStack.attribute( "draw:fill" );
+                const QString fill = m_styleStack.attribute( "draw:fill" );
                 if ( fill == "solid" )
                 {
                     QDomElement backColor1 = doc.createElement( "BACKCOLOR1" );
@@ -332,14 +337,12 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 }
                 else if ( fill == "gradient" )
                 {
-                    QDomElement bgPage = doc.createElement( "PAGE" );
                     QString style = m_styleStack.attribute( "draw:fill-gradient-name" );
                     QDomElement* draw = m_draws[style];
                     appendBackgroundGradient( doc, bgPage, *draw );
                 }
                 else if ( fill == "bitmap" )
                 {
-                    QDomElement bgPage = doc.createElement( "PAGE" );
                     QString style = m_styleStack.attribute( "draw:fill-image-name" );
                     QDomElement* draw = m_draws[style];
                     appendBackgroundImage( doc, bgPage, pictureElement, *draw );
@@ -371,8 +374,8 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 QDomElement pgEffect = doc.createElement("PGEFFECT");
 
                 const QString effect = m_styleStack.attribute("presentation:transition-style");
-                kdDebug() << "Transition name: " << effect << endl;
-                int pef;        // PEF_NONE
+                //kdDebug() << "Transition name: " << effect << endl;
+                int pef;
 
                 if (effect=="vertical-stripes" || effect=="vertical-lines") // PEF_BLINDS_VER
                     pef=14;
@@ -429,6 +432,23 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 pgEffect.setAttribute("value", pef);
                 bgPage.appendChild(pgEffect);
             }
+
+            // slide transition sound
+            if (m_styleStack.hasChildNode("presentation:sound"))
+            {
+                QString soundUrl = storeSound(m_styleStack.childNode("presentation:sound").toElement(),
+                                              soundElement, doc);
+
+                if (!soundUrl.isNull())
+                {
+                    QDomElement pseElem = doc.createElement("PGSOUNDEFFECT");
+                    pseElem.setAttribute("soundEffect", 1);
+                    pseElem.setAttribute("soundFileName", soundUrl);
+
+                    bgPage.appendChild(pseElem);
+                }
+            }
+
             backgroundElement.appendChild(bgPage);
         }
 
@@ -583,7 +603,9 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     docElement.appendChild( pageTitleElement );
     docElement.appendChild( pageNoteElement );
     docElement.appendChild( objectElement );
+    docElement.appendChild( soundElement );
     docElement.appendChild( pictureElement );
+
     doccontent.appendChild( doc );
 }
 
@@ -800,7 +822,8 @@ void OoImpressImport::appendPie( QDomDocument& doc, QDomElement& e, const QDomEl
     e.appendChild( length );
 }
 
-void OoImpressImport::appendImage( QDomDocument& doc, QDomElement& e, QDomElement& p, const QDomElement& object )
+void OoImpressImport::appendImage( QDomDocument& doc, QDomElement& e, QDomElement& p,
+                                   const QDomElement& object )
 {
     QString fileName = storeImage( object );
 
@@ -832,7 +855,8 @@ void OoImpressImport::appendImage( QDomDocument& doc, QDomElement& e, QDomElemen
     p.appendChild( key );
 }
 
-void OoImpressImport::appendBackgroundImage( QDomDocument& doc, QDomElement& e, QDomElement& p, const QDomElement& object )
+void OoImpressImport::appendBackgroundImage( QDomDocument& doc, QDomElement& e,
+                                             QDomElement& p, const QDomElement& object )
 {
     QString fileName = storeImage( object );
 
@@ -857,7 +881,8 @@ void OoImpressImport::appendBackgroundImage( QDomDocument& doc, QDomElement& e, 
     p.appendChild( key );
 }
 
-void OoImpressImport::appendBackgroundGradient( QDomDocument& doc, QDomElement& e, const QDomElement& object )
+void OoImpressImport::appendBackgroundGradient( QDomDocument& doc, QDomElement& e,
+                                                const QDomElement& object )
 {
     QDomElement backColor1 = doc.createElement( "BACKCOLOR1" );
     backColor1.setAttribute( "color", object.attribute( "draw:start-color" ) );
@@ -1719,6 +1744,51 @@ QString OoImpressImport::storeImage( const QDomElement& object )
     return fileName;
 }
 
+QString OoImpressImport::storeSound(const QDomElement & object, QDomElement & p, QDomDocument & doc)
+{
+    QFileInfo fi(m_chain->inputFile()); // handle relative URLs
+    QDir::setCurrent(fi.dirPath(true));
+    fi.setFile(object.attribute("xlink:href"));
+    QString url = fi.absFilePath();
+
+    //kdDebug() << "Sound URL: " << url << endl;
+
+    QFile file(url);
+    if (!file.exists())
+        return QString::null;
+
+    QString extension = url.mid( url.find( '.' ) );
+    QString fileName = QString( "sound%1" ).arg( m_numSound++ ) + extension;
+    fileName = "sounds/" + fileName;
+    KoStoreDevice* out = m_chain->storageFile( fileName, KoStore::Write );
+
+    if (out)
+    {
+        if (!file.open(IO_ReadOnly))
+            return QString::null;
+
+        QByteArray data(8*1024);
+
+        uint total = 0;
+        for ( int block = 0; ( block = file.readBlock(data.data(), data.size()) ) > 0;
+              total += block )
+            out->writeBlock(data.data(), data.size());
+
+        Q_ASSERT(total == fi.size());
+
+        file.close();
+    }
+    else
+        return QString::null;
+
+    QDomElement key = doc.createElement("FILE");
+    key.setAttribute("name", fileName);
+    key.setAttribute("filename", url);
+    p.appendChild(key);
+
+    return url;
+}
+
 void OoImpressImport::storeObjectStyles( const QDomElement& object )
 {
     m_styleStack.clearPageMark(); // remove styles of previous object
@@ -1801,6 +1871,31 @@ QString StyleStack::attribute( const QString& name )
 
     return QString::null;
 }
+
+bool StyleStack::hasChildNode(const QString & name)
+{
+    for ( QDomElement *style = m_stack.last(); style; style = m_stack.prev() )
+    {
+        QDomElement properties = style->namedItem( "style:properties" ).toElement();
+        if ( !properties.namedItem( name ).isNull() )
+            return true;
+    }
+
+    return false;
+}
+
+QDomNode StyleStack::childNode(const QString & name)
+{
+    for ( QDomElement *style = m_stack.last(); style; style = m_stack.prev() )
+    {
+        QDomElement properties = style->namedItem( "style:properties" ).toElement();
+        if ( !properties.namedItem( name ).isNull() )
+            return properties.namedItem( name );
+    }
+
+    return QDomNode();          // a null node
+}
+
 
 bool OoImpressImport::parseBorder(const QString & tag, double * width, int * style, QColor * color)
 {
