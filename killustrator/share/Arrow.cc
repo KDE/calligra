@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -26,6 +26,7 @@
 #include "Arrow.h"
 #include "version.h"
 #include "Painter.h"
+#include <kstaticdeleter.h>
 
 #if 0
 static QCOORD sysArrow_1[] = { -5, -3, 10, 0, -5, 3 };
@@ -45,9 +46,12 @@ static QCOORD sysArrow_7[] = { -10, 0, -10, -4, -1, 0, -1, -6, 0, -6,
                                0, 6, -1, 6, -1, 0, -10, 4 };
 #endif
 
-QIntDict<Arrow> Arrow::arrows;
+QIntDict<Arrow> *Arrow::arrows=0L;
+namespace KIlluDeleter {
+static KStaticDeleter< QIntDict<Arrow> > sd;
+};
 
-Arrow::Arrow (long aid, int npts, const QCOORD* pts, bool fillIt) : 
+Arrow::Arrow (long aid, int npts, const QCOORD* pts, bool fillIt) :
   points (npts, pts) {
   id = aid;
   lpreview = 0L;
@@ -98,7 +102,7 @@ QPixmap& Arrow::rightPixmap () {
 }
 
 void Arrow::draw (QPainter& p, const Coord& c, const QColor& color,
-		  float width, float angle) {
+                  float width, float angle) {
   p.save ();
   p.translate (c.x (), c.y ());
   p.rotate (angle);
@@ -144,20 +148,26 @@ Rect Arrow::boundingBox (const Coord& c, float width, float angle) {
 }
 
 void Arrow::install (Arrow* arrow) {
-  arrows.insert (arrow->arrowID (), arrow);
+    if(arrows==0L)
+        arrows=KIlluDeleter::sd.setObject(new QIntDict<Arrow>);
+    arrows->insert (arrow->arrowID (), arrow);
 }
 
 Arrow* Arrow::getArrow (long id) {
-  if (arrows.isEmpty ())
-    Arrow::initialize ();
-  return arrows.find (id);
+    if(arrows==0L)
+        arrows=KIlluDeleter::sd.setObject(new QIntDict<Arrow>);
+    if (arrows->isEmpty ())
+        Arrow::initialize ();
+    return arrows->find (id);
 }
 
 QIntDictIterator<Arrow> Arrow::getArrows () {
-  if (arrows.isEmpty ())
-    Arrow::initialize ();
-  
-  return QIntDictIterator<Arrow> (arrows);
+    if(arrows==0L)
+        arrows=KIlluDeleter::sd.setObject(new QIntDict<Arrow>);
+    if (arrows->isEmpty ())
+        Arrow::initialize ();
+
+    return QIntDictIterator<Arrow> (*arrows);
 }
 
 int Arrow::length () {
@@ -172,11 +182,11 @@ void Arrow::initialize () {
   Arrow::install (new Arrow (4, 4, sysArrow_3));
   Arrow::install (new Arrow (5, 5, sysArrow_4));
   Arrow::install (new Arrow (6, 4, sysArrow_6));
-  Arrow::install (new Arrow (7, 9, sysArrow_7));  
+  Arrow::install (new Arrow (7, 9, sysArrow_7));
   Arrow::install (new Arrow (8, 4, sysArrow_1, false));
   Arrow::install (new Arrow (9, 4, sysArrow_5, false));
-  Arrow::install (new Arrow (10, 4, sysArrow_2, false));  
+  Arrow::install (new Arrow (10, 4, sysArrow_2, false));
   Arrow::install (new Arrow (11, 4, sysArrow_3, false));
-  Arrow::install (new Arrow (12, 5, sysArrow_4, false));  
+  Arrow::install (new Arrow (12, 5, sysArrow_4, false));
   Arrow::install (new Arrow (13, 4, sysArrow_6, false));
 }

@@ -318,7 +318,7 @@ public:
    *                       object.
    */
   virtual void draw (QPainter& /*p*/, bool /*withBasePoints*/ = false,
-		     bool /*outline*/ = false) {}
+                     bool /*outline*/ = false) {}
 
   /**
    * Test, if the object contains the given point.
@@ -346,7 +346,7 @@ public:
    * At the moment only valid for lines and bezier curves.
    */
   virtual bool findNearestPoint (const Coord& , float /*max_dist*/,
-				 float& /*dist*/, int& /*pidx*/, bool /*all*/ = false) {
+                                 float& /*dist*/, int& /*pidx*/, bool /*all*/ = false) {
     return false;
   }
 
@@ -389,7 +389,7 @@ protected:
   void updateBoundingBox (const Coord& p1, const Coord& p2);
 
   void calcUntransformedBoundingBox (const Coord& tleft, const Coord& tright,
-				     const Coord& bright, const Coord& bleft);
+                                     const Coord& bright, const Coord& bleft);
 
   bool sflag;              // object is selected
   Rect box;                // the bounding box
@@ -411,7 +411,7 @@ protected:
   static OutlineInfo defaultOutlineInfo;
   static FillInfo defaultFillInfo;
 
-  static std::map<std::string, GObject*> prototypes;
+  static std::map<std::string, GObject*> *prototypes;
 };
 
 class GOState {

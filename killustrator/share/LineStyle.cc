@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -26,10 +26,14 @@
 #include <qpen.h>
 #include "LineStyle.h"
 #include "version.h"
+#include <kstaticdeleter.h>
 
-QIntDict<LineStyle> LineStyle::styles;
+QIntDict<LineStyle> *LineStyle::styles=0L;
+namespace LineFoo {
+static KStaticDeleter< QIntDict<LineStyle> > sd;
+};
 
-LineStyle::LineStyle (long i) { 
+LineStyle::LineStyle (long i) {
   id = i;
   preview = 0L;
 }
@@ -58,20 +62,27 @@ QPixmap& LineStyle::pixmap () {
 }
 
 void LineStyle::install (LineStyle* style) {
-  styles.insert (style->styleID (), style);
+    if(styles==0L)
+        styles=LineFoo::sd.setObject(new QIntDict<LineStyle>);
+    styles->insert (style->styleID (), style);
 }
 
 LineStyle* LineStyle::getLineStyle (long id) {
-  if (styles.isEmpty ())
-    LineStyle::initialize ();
-  return styles.find (id);
+    if(styles==0L)
+        styles=LineFoo::sd.setObject(new QIntDict<LineStyle>);
+    if (styles->isEmpty ())
+        LineStyle::initialize ();
+    return styles->find (id);
 }
 
 QIntDictIterator<LineStyle> LineStyle::getLineStyles () {
-  if (styles.isEmpty ())
-    LineStyle::initialize ();
-  
-  return QIntDictIterator<LineStyle> (styles);
+
+    if(styles==0L)
+        styles=LineFoo::sd.setObject(new QIntDict<LineStyle>);
+    if (styles->isEmpty ())
+        LineStyle::initialize ();
+
+    return QIntDictIterator<LineStyle> (*styles);
 }
 
 void LineStyle::initialize () {

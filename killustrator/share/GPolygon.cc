@@ -40,7 +40,7 @@ static const int xfactors[] = { 0, 1, -1, 0, 0, -1, 1, 0 };
 static const int yfactors[] = { 1, 0, 0, 1, -1, 0, 0, -1 };
 
 static bool line_intersects (const Coord& p11, const Coord& p12,
-	const Coord& p21, const Coord& p22) {
+        const Coord& p21, const Coord& p22) {
   float x11, x12, y11, y12, x21, x22, y21, y22;
   float m1, m2, n1, n2;
   float xp, yp;
@@ -102,17 +102,17 @@ GPolygon::GPolygon (const QDomElement &element, Kind pkind)
       points.setAutoDelete (true);
       kind = pkind;
       if (kind != PK_Polygon) {
-	  float x = 0, y = 0, w = 0, h = 0;
+          float x = 0, y = 0, w = 0, h = 0;
 
-	  x = element.attribute("x").toFloat();
-	  y = element.attribute("y").toFloat();
-	  w = element.attribute("width").toFloat();
-	  h = element.attribute("height").toFloat();
-	  Roundness = element.attribute("rounding").toFloat();
-	  points.append (new Coord (x, y));
-	  points.append (new Coord (x + w, y));
-	  points.append (new Coord (x + w, y + h));
-	  points.append (new Coord (x, y + h));
+          x = element.attribute("x").toFloat();
+          y = element.attribute("y").toFloat();
+          w = element.attribute("width").toFloat();
+          h = element.attribute("height").toFloat();
+          Roundness = element.attribute("rounding").toFloat();
+          points.append (new Coord (x, y));
+          points.append (new Coord (x + w, y));
+          points.append (new Coord (x + w, y + h));
+          points.append (new Coord (x, y + h));
       }
       calcBoundingBox ();
 }
@@ -175,7 +175,7 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
 
     if (gradientFill ()) {
       if (! gShape.valid ())
-	updateGradientShape (p);
+        updateGradientShape (p);
       gShape.draw (p);
     }
   }
@@ -185,7 +185,7 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
     QPointArray parray (num);
     for (i = 0; i < num; i++) {
       parray.setPoint (i, (int) points.at (i)->x (),
-		       (int) points.at (i)->y ());
+                       (int) points.at (i)->y ());
     }
     p.drawPolygon (parray);
   }
@@ -205,13 +205,13 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
     const Coord& p2 = *(points.at (2));
     if (Roundness != 0)
       p.drawRoundRect (p1.x (), p1.y (),
-		       qRound (p2.x () - p1.x () + xcorr),
-		       qRound (p2.y () - p1.y () + ycorr),
-		       Roundness, Roundness);
+                       qRound (p2.x () - p1.x () + xcorr),
+                       qRound (p2.y () - p1.y () + ycorr),
+                       Roundness, Roundness);
     else
       Painter::drawRect (p, p1.x (), p1.y (),
-			 qRound (p2.x () - p1.x () + xcorr),
-			 qRound (p2.y () - p1.y () + ycorr));
+                         qRound (p2.x () - p1.x () + xcorr),
+                         qRound (p2.y () - p1.y () + ycorr));
   }
 
   p.restore ();
@@ -221,16 +221,16 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
     // p.setBrush (white);
     if (kind == PK_Polygon || Roundness == 0) {
       for (i = 0; i < num; i++) {
-	Coord c = points.at (i)->transform (tmpMatrix);
-	int x = (int) c.x ();
-	int y = (int) c.y ();
-	p.drawRect (x - 2, y - 2, 4, 4);
+        Coord c = points.at (i)->transform (tmpMatrix);
+        int x = (int) c.x ();
+        int y = (int) c.y ();
+        p.drawRect (x - 2, y - 2, 4, 4);
       }
     }
     else {
       for (i = 0; i < rpoints.count (); i++) {
-	Coord c = rpoints.at (i)->transform (tmpMatrix);
-	Painter::drawRect (p, c.x () - 2, c.y () - 2, 4, 4);
+        Coord c = rpoints.at (i)->transform (tmpMatrix);
+        Painter::drawRect (p, c.x () - 2, c.y () - 2, 4, 4);
       }
     }
   }
@@ -288,8 +288,8 @@ void GPolygon::setEndPoint (const Coord& p) {
 }
 
 void GPolygon::setSymmetricPolygon (const Coord& sp, const Coord& ep,
-				    int nCorners,
-				    bool concave, int sharpness) {
+                                    int nCorners,
+                                    bool concave, int sharpness) {
   int i;
   points.clear ();
 
@@ -308,12 +308,12 @@ void GPolygon::setSymmetricPolygon (const Coord& sp, const Coord& ep,
     float r = radius - (sharpness / 100.0 * radius);
     for (i = 1; i < nCorners * 2; i++) {
       if (i % 2) {
-	xp =  r * sin (a);
-	yp = -r * cos (a);
+        xp =  r * sin (a);
+        yp = -r * cos (a);
       }
       else {
-	xp = radius * sin (a);
-	yp = - radius * cos (a);
+        xp = radius * sin (a);
+        yp = - radius * cos (a);
       }
       a += angle;
       points.append (new Coord (xp + xoff, yp + yoff));
@@ -371,16 +371,16 @@ bool GPolygon::inside_polygon (const Coord& p) {
   Coord *p1, *p2;
   Coord t1 (p), t2 (10000.0, p.y ());
   int counter = 0;
-  bool ready = false;
+  //bool ready = false;
   unsigned int i = 0, num = points.count ();
 
   while (i < num) {
     p1 = points.at (i);
     if (! line_intersects (*p1, *p1, t1, t2)) {
       if (i == num - 1)
-	p2 = points.at (0);
+        p2 = points.at (0);
       else
-	p2 = points.at (i + 1);
+        p2 = points.at (i + 1);
       if (line_intersects (*p1, *p2, t1, t2)) {
         counter++;
       }
@@ -424,9 +424,9 @@ void GPolygon::update_rpoints () {
       rpoints.at (i * 2)->x (points.at (i)->x () + xoff * xfactors[i * 2]);
       rpoints.at (i * 2)->y (points.at (i)->y () + yoff * yfactors[i * 2]);
       rpoints.at (i * 2 + 1)->x (points.at (i)->x () +
-				 xoff * xfactors[i * 2 + 1]);
+                                 xoff * xfactors[i * 2 + 1]);
       rpoints.at (i * 2 + 1)->y (points.at (i)->y () +
-				 yoff * yfactors[i * 2 + 1]);
+                                 yoff * yfactors[i * 2 + 1]);
     }
   }
 }
@@ -436,7 +436,7 @@ int GPolygon::getNeighbourPoint (const Coord& p) {
     for (unsigned int i = 0; i < rpoints.count (); i++) {
       Coord c = rpoints.at (i)->transform (tMatrix);
       if (c.isNear (p, NEAR_DISTANCE))
-	return i;
+        return i;
     }
     return -1;
  }
@@ -451,9 +451,9 @@ QDomElement GPolygon::writeToXml (QDomDocument &document) {
 
     QDomElement element;
     if (kind == PK_Polygon)
-	element=document.createElement("polygon");
+        element=document.createElement("polygon");
     else
-	element=document.createElement("rectangle");
+        element=document.createElement("rectangle");
 
     element.setAttribute ("x", nr.left ());
     element.setAttribute ("y", nr.top ());
@@ -481,7 +481,7 @@ void GPolygon::updateGradientShape (QPainter& p) {
   QPointArray pnts (num);
   for (unsigned int i = 0; i < num; i++)
     pnts.setPoint (i, qRound (points.at (i)->x ()),
-		   qRound (points.at (i)->y ()));
+                   qRound (points.at (i)->y ()));
 
   if (kind == PK_Polygon ||
       (kind != PK_Polygon && (Roundness == 0 || Roundness == 100))) {
@@ -498,7 +498,7 @@ void GPolygon::updateGradientShape (QPainter& p) {
       rect = rect.normalize ();
       QPointArray epnts;
       epnts.makeEllipse (rect.x (), rect.y (),
-			 rect.width (), rect.height ());
+                         rect.width (), rect.height ());
       gShape.setRegion (QRegion (matrix.map (epnts)));
     }
   }
@@ -513,12 +513,12 @@ void GPolygon::updateGradientShape (QPainter& p) {
     float yrad = nrect.height () * Roundness / 200.0;
 
     QRect trect (nrect.x (), nrect.y () + yrad,
-		 nrect.width (), nrect.height () - 2 * yrad);
+                 nrect.width (), nrect.height () - 2 * yrad);
     QPointArray tarray (trect, true);
     QPointArray clip1 = matrix.map (tarray);
 
     trect = QRect (nrect.x () + xrad, nrect.y (),
-		   nrect.width () - 2 * xrad, nrect.height ());
+                   nrect.width () - 2 * xrad, nrect.height ());
     tarray = QPointArray (trect, true);
     QPointArray clip2 = matrix.map (tarray);
 
@@ -530,15 +530,15 @@ void GPolygon::updateGradientShape (QPainter& p) {
     region = region.unite (matrix.map (tarray));
 
     tarray.makeEllipse (nrect.right () - (2 * xrad), nrect.y (),
-			xrad * 2, yrad * 2);
+                        xrad * 2, yrad * 2);
     region = region.unite (matrix.map (tarray));
 
     tarray.makeEllipse (nrect.x (), nrect.bottom () - (2 * yrad),
-			xrad * 2, yrad * 2);
+                        xrad * 2, yrad * 2);
     region = region.unite (matrix.map (tarray));
 
     tarray.makeEllipse (nrect.right () - (2 * xrad),
-			nrect.bottom () - (2 * yrad), xrad * 2, yrad * 2);
+                        nrect.bottom () - (2 * yrad), xrad * 2, yrad * 2);
     region = region.unite (matrix.map (tarray));
 
     gShape.setRegion (region);

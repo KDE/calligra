@@ -41,13 +41,17 @@
 #include <GCurve.h>
 
 #include <kdebug.h>
+#include <kstaticdeleter.h>
 
 using namespace std;
 
 GObject::OutlineInfo GObject::defaultOutlineInfo;
 GObject::FillInfo GObject::defaultFillInfo;
 
-map<string, GObject*> GObject::prototypes;
+map<string, GObject*> *GObject::prototypes=0L;
+namespace KIlluFooDeleter {
+static KStaticDeleter< map<string, GObject*> > sd;
+};
 
 void GObject::setDefaultOutlineInfo (const OutlineInfo& oi) {
   if (oi.mask & OutlineInfo::Color)
@@ -375,9 +379,9 @@ void GObject::restoreState (GOState* state) {
 }
 
 void GObject::calcUntransformedBoundingBox (const Coord& tleft,
-					    const Coord& tright,
-					    const Coord& bright,
-					    const Coord& bleft) {
+                                            const Coord& tright,
+                                            const Coord& bright,
+                                            const Coord& bleft) {
   Coord p[4];
   Rect r;
 
@@ -429,30 +433,30 @@ QDomElement GObject::writeToXml (QDomDocument &document) {
 
     QDomElement element=document.createElement("gobject");
     if (hasId ())
-	element.setAttribute ("id", (const char *) id);
+        element.setAttribute ("id", (const char *) id);
     if(hasRefId())
-	element.setAttribute("ref", getRefId());
+        element.setAttribute("ref", getRefId());
     element.setAttribute ("strokecolor", outlineInfo.color.name());
     element.setAttribute ("strokestyle", (int) outlineInfo.style);
     element.setAttribute ("linewidth", outlineInfo.width);
     element.setAttribute ("fillstyle", (int) fillInfo.fstyle);
     switch (fillInfo.fstyle) {
     case FillInfo::SolidFill:
-	element.setAttribute ("fillcolor", fillInfo.color.name());
-	break;
+        element.setAttribute ("fillcolor", fillInfo.color.name());
+        break;
     case FillInfo::PatternFill:
-	element.setAttribute ("fillcolor", fillInfo.color.name());
-	element.setAttribute ("fillpattern", (int) fillInfo.pattern);
-	break;
+        element.setAttribute ("fillcolor", fillInfo.color.name());
+        element.setAttribute ("fillpattern", (int) fillInfo.pattern);
+        break;
     case FillInfo::GradientFill:
-	element.setAttribute ("gradcolor1", fillInfo.gradient.getColor1().name());
-	element.setAttribute ("gradcolor2", fillInfo.gradient.getColor2().name());
-	element.setAttribute ("gradstyle", (int) fillInfo.gradient.getStyle());
-	break;
+        element.setAttribute ("gradcolor1", fillInfo.gradient.getColor1().name());
+        element.setAttribute ("gradcolor2", fillInfo.gradient.getColor2().name());
+        element.setAttribute ("gradstyle", (int) fillInfo.gradient.getStyle());
+        break;
     case FillInfo::NoFill:
     default:
-	// nothing more
-	break;
+        // nothing more
+        break;
     }
     element.appendChild(KIllustrator::createMatrixElement("matrix", tMatrix, document));
     return element;
@@ -474,15 +478,20 @@ const char* GObject::getId () {
 }
 
 void GObject::registerPrototype (const char *className, GObject* proto) {
-  prototypes[className] = proto;
+    if(prototypes==0L)
+        prototypes=KIlluFooDeleter::sd.setObject(new map<string, GObject*>);
+    (*prototypes)[className] = proto;
 }
 
 GObject* GObject::lookupPrototype (const char *className) {
-  GObject* result = 0L;
-  map<string, GObject*>::iterator it = prototypes.find (className);
-  if (it != prototypes.end ())
-    result = it->second;
-  return result;
+
+    if(prototypes==0L)
+        prototypes=KIlluFooDeleter::sd.setObject(new map<string, GObject*>);
+    GObject* result = 0L;
+    map<string, GObject*>::iterator it = prototypes->find (className);
+    if (it != prototypes->end ())
+        result = it->second;
+    return result;
 }
 
 void GObject::setWrapper (SWrapper *wobj) {
@@ -515,34 +524,34 @@ QWMatrix KIllustrator::toMatrix(const QDomElement &matrix) {
 GObject *KIllustrator::objectFactory(const QDomElement &element) {
 
     if (element.tagName () == "polyline")
-	return new GPolyline (element);
+        return new GPolyline (element);
     else if (element.tagName () == "ellipse")
-	return new GOval (element);
+        return new GOval (element);
     else if (element.tagName () == "bezier")
-	return new GBezier (element);
+        return new GBezier (element);
     else if (element.tagName () == "rectangle")
-	return new GPolygon (element, GPolygon::PK_Rectangle);
+        return new GPolygon (element, GPolygon::PK_Rectangle);
     else if (element.tagName () == "polygon")
-	return new GPolygon (element);
+        return new GPolygon (element);
     else if (element.tagName () == "clipart")
-	return new GClipart (element);
+        return new GClipart (element);
     else if (element.tagName () == "pixmap")
-	return new GPixmap (element);
+        return new GPixmap (element);
     else if (element.tagName () == "curve")
-	return new GCurve (element);
+        return new GCurve (element);
     else if (element.tagName() == "text")
-	return new GText(element);
+        return new GText(element);
     else if (element.tagName() == "group")
-	return new GGroup (element);
+        return new GGroup (element);
     else {
-	GObject *obj;
-	GObject *proto = GObject::lookupPrototype (element.tagName());
-	if (proto != 0L) {
-	    obj = proto->clone (element);
-	}
-	else
-	    kdDebug() << "invalid object type: " << element.tagName() << endl;
-	return obj;
+        GObject *obj;
+        GObject *proto = GObject::lookupPrototype (element.tagName());
+        if (proto != 0L) {
+            obj = proto->clone (element);
+        }
+        else
+            kdDebug() << "invalid object type: " << element.tagName() << endl;
+        return obj;
     }
 }
 

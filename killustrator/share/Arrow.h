@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -40,8 +40,8 @@ public:
   long arrowID () const;
   QPixmap& leftPixmap ();
   QPixmap& rightPixmap ();
-  void draw (QPainter& p, const Coord& c, const QColor& color, 
-	     float width, float angle);
+  void draw (QPainter& p, const Coord& c, const QColor& color,
+             float width, float angle);
 
   Rect boundingBox (const Coord& c, float width, float angle);
   int length ();
@@ -58,7 +58,7 @@ private:
   QPointArray points;
   bool fill;
 
-  static QIntDict<Arrow> arrows;
+  static QIntDict<Arrow> *arrows;
 };
 
 #endif
