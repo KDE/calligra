@@ -512,7 +512,7 @@ class KWJoinCellCommand : public KNamedCommand
 {
 public:
     KWJoinCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd, QPtrList<KWFrameSet> listFrameSet,QPtrList<KWFrame> listCopyFrame);
-    ~KWJoinCellCommand() {}
+    ~KWJoinCellCommand();
 
     void execute();
     void unexecute();

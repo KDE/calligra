@@ -1386,6 +1386,10 @@ KWJoinCellCommand::KWJoinCellCommand( const QString &name, KWTableFrameSet * _ta
 {
     Q_ASSERT(m_pTable);
 }
+KWJoinCellCommand::~KWJoinCellCommand()
+{
+    m_copyFrame.setAutoDelete( true );
+}
 
 void KWJoinCellCommand::execute()
 {

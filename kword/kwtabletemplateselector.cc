@@ -67,7 +67,7 @@ KWTableTemplatePreview::~KWTableTemplatePreview()
     delete m_zoomHandler;
 
 //    if (tableTemplate)
-//        delete tableTemplate;
+        delete tableTemplate;
 
 }
 
