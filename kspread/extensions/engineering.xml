@@ -119,11 +119,11 @@
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>From Unit</Comment>
+        <Comment>From unit</Comment>
         <Type>String</Type>
       </Parameter>
       <Parameter>
-        <Comment>To Unit</Comment>
+        <Comment>To unit</Comment>
         <Type>String</Type>
       </Parameter>
       <Help>
