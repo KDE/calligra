@@ -64,6 +64,11 @@ protected:
         QList<SlideText> text;
     } Slide;
 
+    virtual void gotDrawing(
+        unsigned id,
+        QString type,
+        unsigned length,
+        const char *data) = 0;
     virtual void gotSlide(
         Slide &slide) = 0;
 
@@ -220,6 +225,7 @@ private:
     void opMainMaster(Header &op, U32 bytes, QDataStream &operands);
     void opMasterText(Header &op, U32 bytes, QDataStream &operands);
     void opMetaFile(Header &op, U32 bytes, QDataStream &operands);
+    void opMsod(Header &op, U32 bytes, QDataStream &operands);
     void opNamedShow(Header &op, U32 bytes, QDataStream &operands);
     void opNamedShows(Header &op, U32 bytes, QDataStream &operands);
     void opNamedShowSlides(Header &op, U32 bytes, QDataStream &operands);

@@ -70,7 +70,7 @@ void Powerpoint::invokeHandler(
         { "DEFAULTRULERATOM",           4011,   0 /* &Powerpoint::opDefaultRulerAtom */ },
         { "DOCROUTINGSLIP",             1030,   0 /* &Powerpoint::opDocRoutingSlip */ },
         { "DOCUMENT",                   1000,   &Powerpoint::opDocument },
-        { "DOCUMENTATOM",               1001,   0 /* &Powerpoint::opDocumentAtom */ },
+        { "DOCUMENTATOM",               1001,   &Powerpoint::opDocumentAtom },
         { "DOCVIEWINFO",                1014,   0 /* &Powerpoint::opDocViewInfo */ },
         { "EMFORMATATOM",               4065,   0 /* &Powerpoint::opEmFormatAtom */ },
         { "ENDDOCUMENT",                1002,   &Powerpoint::opEndDocument },
@@ -112,7 +112,7 @@ void Powerpoint::invokeHandler(
         { "EXWAVAUDIOLINK",             4112,   0 /* &Powerpoint::opExWAVAudioLink */ },
         { "FONTCOLLECTION",             2005,   &Powerpoint::opFontCollection },
         { "FONTEMBEDDATA",              4024,   0 /* &Powerpoint::opFontEmbedData */ },
-        { "FONTENTITYATOM",             4023,   0 /* &Powerpoint::opFontEntityAtom */ },
+        { "FONTENTITYATOM",             4023,   &Powerpoint::opFontEntityAtom },
         { "FOOTERMCATOM",               4090,   0 /* &Powerpoint::opFooterMCAtom */ },
         { "GENERICDATEMCATOM",          4088,   0 /* &Powerpoint::opGenericDateMCAtom */ },
         { "GLINEATOM",                  10004,  0 /* &Powerpoint::opGlineAtom */ },
@@ -148,7 +148,7 @@ void Powerpoint::invokeHandler(
         { "OESHAPE",                    3008,   0 /* &Powerpoint::opOEShape */ },
         { "OESHAPEATOM",                3035,   0 /* &Powerpoint::opOEShapeAtom */ },
         { "OUTLINETEXTREFATOM",         3998,   0 /* &Powerpoint::opOutlineTextRefAtom */ },
-        { "OUTLINEVIEWINFO",            1031,   0 /* &Powerpoint::opOutlineViewInfo */ },
+        { "OUTLINEVIEWINFO",            1031,   &Powerpoint::opOutlineViewInfo },
         { "PARAFORMATATOM",             4067,   0 /* &Powerpoint::opParaFormatAtom */ },
         { "PERSISTPTRFULLBLOCK",        6001,   0 /* &Powerpoint::opPersistPtrFullBlock */ },
         { "PERSISTPTRINCREMENTALBLOCK", 6002,   &Powerpoint::opPersistPtrIncrementalBlock },
@@ -177,7 +177,7 @@ void Powerpoint::invokeHandler(
         { "SLIDENUMBERMCATOM",          4056,   0 /* &Powerpoint::opSlideNumberMCAtom */ },
         { "SLIDEPERSIST",               1003,   0 /* &Powerpoint::opSlidePersist */ },
         { "SLIDEPERSISTATOM",           1011,   &Powerpoint::opSlidePersistAtom },
-        { "SLIDEVIEWINFO",              1018,   0 /* &Powerpoint::opSlideViewInfo */ },
+        { "SLIDEVIEWINFO",              1018,   &Powerpoint::opSlideViewInfo },
         { "SLIDEVIEWINFOATOM",          1022,   0 /* &Powerpoint::opSlideViewInfoAtom */ },
         { "SORTERVIEWINFO",             1032,   0 /* &Powerpoint::opSorterViewInfo */ },
         { "SOUND",                      2022,   0 /* &Powerpoint::opSound */ },
@@ -186,7 +186,7 @@ void Powerpoint::invokeHandler(
         { "SOUNDDATA",                  2023,   0 /* &Powerpoint::opSoundData */ },
         { "SRKINSOKU",                  4040,   &Powerpoint::opSrKinsoku },
         { "SRKINSOKUATOM",              4050,   0 /* &Powerpoint::opSrKinsokuAtom */ },
-        { "SSDOCINFOATOM",              1025,   0 /* &Powerpoint::opSSDocInfoAtom */ },
+        { "SSDOCINFOATOM",              1025,   &Powerpoint::opSSDocInfoAtom },
         { "SSLIDELAYOUTATOM",           1015,   &Powerpoint::opSSSlideLayoutAtom },
         { "SSSLIDEINFOATOM",            1017,   0 /* &Powerpoint::opSSSlideInfoAtom */ },
         { "STYLETEXTPROPATOM",          4001,   &Powerpoint::opStyleTextPropAtom },
@@ -198,22 +198,23 @@ void Powerpoint::invokeHandler(
         { "TEXTCHARSATOM",              4000,   &Powerpoint::opTextCharsAtom },
         { "TEXTHEADERATOM",             3999,   &Powerpoint::opTextHeaderAtom },
         { "TEXTRULERATOM",              4006,   0 /* &Powerpoint::opTextRulerAtom */ },
-        { "TEXTSPECINFOATOM",           4010,   0 /* &Powerpoint::opTextSpecInfoAtom */ },
+        { "TEXTSPECINFOATOM",           4010,   &Powerpoint::opTextSpecInfoAtom },
         { "TEXTURE",                    1027,   0 /* &Powerpoint::opTexture */ },
         { "TXCFSTYLEATOM",              4004,   0 /* &Powerpoint::opTxCFStyleAtom */ },
         { "TXINTERACTIVEINFOATOM",      4063,   0 /* &Powerpoint::opTxInteractiveInfoAtom */ },
         { "TXMASTERSTYLEATOM",          4003,   &Powerpoint::opTxMasterStyleAtom },
         { "TXPFSTYLEATOM",              4005,   0 /* &Powerpoint::opTxPFStyleAtom */ },
-        { "TXSISTYLEATOM",              4009,   0 /* &Powerpoint::opTxSIStyleAtom */ },
+        { "TXSISTYLEATOM",              4009,   &Powerpoint::opTxSIStyleAtom },
         { "TYPEFACE",                   4025,   0 /* &Powerpoint::opTypeFace */ },
         { "USEREDITATOM",               4085,   &Powerpoint::opUserEditAtom },
-        { "VBAINFO",                    1023,   0 /* &Powerpoint::opVBAInfo */ },
+        { "VBAINFO",                    1023,   &Powerpoint::opVBAInfo },
         { "VBAINFOATOM",                1024,   0 /* &Powerpoint::opVBAInfoAtom */ },
         { "VBASLIDEINFO",               1028,   0 /* &Powerpoint::opVBASlideInfo */ },
         { "VBASLIDEINFOATOM",           1029,   0 /* &Powerpoint::opVBASlideInfoAtom */ },
         { "VIEWINFO",                   1020,   0 /* &Powerpoint::opViewInfo */ },
         { "VIEWINFOATOM",               1021,   0 /* &Powerpoint::opViewInfoAtom */ },
         { NULL,                         0,      0 },
+        { "MSOD",                       0,      &Powerpoint::opMsod }
     };
     unsigned i;
     method result;
@@ -231,6 +232,8 @@ void Powerpoint::invokeHandler(
     // Invoke handler.
 
     result = funcTab[i].handler;
+    if (!result && (op.type >= 0xF000) && (0xFFFF >= op.type))
+        result = funcTab[++i].handler;
     if (!result)
     {
         if (funcTab[i].name)
@@ -388,6 +391,14 @@ void Powerpoint::opDocument(
     walk(bytes, operands);
 }
 
+void Powerpoint::opDocumentAtom(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    skip(bytes, operands);
+}
+
 void Powerpoint::opEndDocument(
     Header & /* op */,
     U32 bytes,
@@ -410,6 +421,14 @@ void Powerpoint::opFontCollection(
     QDataStream &operands)
 {
     walk(bytes, operands);
+}
+
+void Powerpoint::opFontEntityAtom(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    skip(bytes, operands);
 }
 
 void Powerpoint::opHeadersFooters(
@@ -444,6 +463,28 @@ void Powerpoint::opMainMaster(
     walk(bytes, operands);
 }
 
+void Powerpoint::opMsod(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    char *data;
+
+    switch (m_pass)
+    {
+    case PASS_GET_SLIDE_REFERENCES:
+        skip(bytes, operands);
+        break;
+    case PASS_GET_SLIDE_CONTENTS:
+        data = new char[bytes];
+        operands.readRawBytes((char *)data, bytes);
+kdError() <<"       drgid: "<< m_slide->persistentReference << endl;
+        gotDrawing(m_slide->persistentReference, "msod", bytes, data);
+        delete [] data;
+        break;
+    };
+}
+
 void Powerpoint::opNotes(
     Header & /* op */,
     U32 bytes,
@@ -453,7 +494,7 @@ void Powerpoint::opNotes(
 }
 
 void Powerpoint::opNotesAtom(
-    Header &op,
+    Header & /* op */,
     U32 bytes,
     QDataStream &operands)
 {
@@ -465,6 +506,14 @@ void Powerpoint::opNotesAtom(
 
     operands >> data.slideId >> data.flags;
     skip(bytes - 6, operands);
+}
+
+void Powerpoint::opOutlineViewInfo(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
 }
 
 void Powerpoint::opPersistPtrIncrementalBlock(
@@ -539,7 +588,7 @@ void Powerpoint::opSlide(
 }
 
 void Powerpoint::opSlideAtom(
-    Header &op,
+    Header & /* op */,
     U32 bytes,
     QDataStream &operands)
 {
@@ -599,12 +648,28 @@ void Powerpoint::opSlidePersistAtom(
     };
 }
 
+void Powerpoint::opSlideViewInfo(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
 void Powerpoint::opSrKinsoku(
     Header & /* op */,
     U32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
+}
+
+void Powerpoint::opSSDocInfoAtom(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    skip(bytes, operands);
 }
 
 void Powerpoint::opSSSlideLayoutAtom(
@@ -728,7 +793,23 @@ void Powerpoint::opTextHeaderAtom(
     };
 }
 
+void Powerpoint::opTextSpecInfoAtom(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    skip(bytes, operands);
+}
+
 void Powerpoint::opTxMasterStyleAtom(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    skip(bytes, operands);
+}
+
+void Powerpoint::opTxSIStyleAtom(
     Header & /* op */,
     U32 bytes,
     QDataStream &operands)
@@ -786,6 +867,14 @@ void Powerpoint::opUserEditAtom(
     case PASS_GET_SLIDE_CONTENTS:
         break;
     };
+}
+
+void Powerpoint::opVBAInfo(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
 }
 
 void Powerpoint::skip(U32 bytes, QDataStream &operands)

@@ -83,12 +83,18 @@ private:
     bool m_isConverted;
     bool m_success;
     unsigned m_y;
+    QString m_embedded;
     QString m_pages;
     QString m_text;
     void encode(QString &text);
 
     // Override the base class functions.
 
+    void gotDrawing(
+        unsigned id,
+        QString type,
+        unsigned length,
+        const char *data);
     void gotSlide(
         const Slide &slide);
 };

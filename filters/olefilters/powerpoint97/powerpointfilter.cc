@@ -26,6 +26,30 @@ PowerPointFilter::PowerPointFilter(
         FilterBase()
 {
     m_tree = new PptXml(mainStream, currentUser);
+
+    // Hook up the embedded object support.
+
+    connect(
+        m_tree,
+        SIGNAL(signalPart(const char *, QString &, QString &)),
+        this,
+        SIGNAL(signalPart(const char *, QString &, QString &)));
+
+    // Hook up the embedded picture support.
+
+    connect(
+        m_tree,
+        SIGNAL(signalSavePic(const QString &, QString &, const QString &, unsigned int, const char *)),
+        this,
+        SIGNAL(signalSavePic(const QString &, QString &, const QString &, unsigned int, const char *)));
+
+    // Hook up the embedded part support.
+
+    connect(
+        m_tree,
+        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, const QString &, unsigned int, const char *)),
+        this,
+        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, const QString &, unsigned int, const char *)));
 }
 
 PowerPointFilter::~PowerPointFilter()

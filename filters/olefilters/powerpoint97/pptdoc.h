@@ -61,6 +61,11 @@ protected:
         QString notes;
     } Slide;
 
+    virtual void gotDrawing(
+        unsigned id,
+        QString type,
+        unsigned length,
+        const char *data) = 0;
     virtual void gotSlide(
         const Slide &slide) = 0;
 

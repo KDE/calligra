@@ -128,9 +128,63 @@ const QString PptXml::getXml() const
         "<PIXMAPS>\n"
         "</PIXMAPS>\n"
         "<CLIPARTS>\n"
-        "</CLIPARTS>\n"
-        "</DOC>\n";
+        "</CLIPARTS>\n";
+    body += m_embedded;
+    body += "</DOC>\n";
     return body;
+}
+
+void PptXml::gotDrawing(
+    unsigned id,
+    QString type,
+    unsigned length,
+    const char *data)
+{
+    QString ourKey;
+    QString uid;
+    QString mimeType;
+    QString filterArgs;
+
+    // Send the picture to the outside world and get back the UID.
+
+    ourKey = "vectorGraphic" + QString::number(id) + "." + type;
+    if (type == "msod")
+    {
+        filterArgs = "shape-id=";
+        filterArgs += QString::number(id);
+        filterArgs += ";delay-stream=";
+        filterArgs += QString::number(0);
+    }
+    emit signalSavePart(
+            ourKey,
+            uid,
+            mimeType,
+            type,
+            filterArgs,
+            length,
+            data);
+
+    // Add an entry to the list of embedded objects too. TBD: fix
+    // RECT and FRAME settings.
+
+    m_embedded += "  <EMBEDDED>\n"
+                "<OBJECT url=\"" +
+                uid +
+                "\" mime=\"" +
+                mimeType +
+                "\">\n<RECT x=\"30\" y=\"190\" w=\"120\" h=\"80\"/>\n"
+                "</OBJECT>\n"
+                "<SETTINGS>\n"
+                "<EFFECTS effect=\"0\" effect2=\"0\"/>\n"
+                "<PEN red=\"0\" green=\"0\" blue=\"0\" width=\"1\" style=\"0\"/>\n"
+                "<BRUSH red=\"0\" green=\"0\" blue=\"0\" style=\"0\"/>\n"
+                "<PRESNUM value=\"0\"/>\n"
+                "<ANGLE value=\"0\"/>\n"
+                "<FILLTYPE value=\"0\"/>\n"
+                "<GRADIENT red1=\"255\" green1=\"0\" blue1=\"0\" red2=\"0\" green2=\"255\" blue2=\"0\" type=\"1\" unbalanced=\"0\" xfactor=\"100\" yfactor=\"100\"/>\n"
+                "<DISAPPEAR effect=\"0\" doit=\"0\" num=\"1\"/>\n"
+                "</SETTINGS>\n"
+                "  </EMBEDDED>\n";
 }
 
 void PptXml::gotSlide(
