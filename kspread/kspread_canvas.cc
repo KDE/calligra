@@ -1884,6 +1884,8 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
       if(!make_select)
 	  table->unselect();
       int x, y;
+      int rowMax;
+      int colMax;
 
       switch(_ev->key()){
 
@@ -1935,15 +1937,17 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
       //Ctrl+Key_Down
       case Key_Down:
 	  //If we are already at the end, we skip
-	  if ( !m_bChoose && markerRow() >= KS_rowMax )
+          // we only need to go to rowMax
+          rowMax = activeTable()->maxRow();
+	  if ( !m_bChoose && markerRow() >= rowMax )
 	      return;
 	  //If we are already at the end, we skip
-	  if ( m_bChoose && chooseMarkerRow() >= KS_rowMax )
+	  if ( m_bChoose && chooseMarkerRow() >= rowMax )
 	      return;
 
 	  if ( m_bChoose )
 	      //If we are in choose mode, we only go 1 down
-	      chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, chooseMarkerRow() + 1 ), 0, make_select );
+	      chooseGotoLocation( chooseMarkerColumn(), QMIN( rowMax, chooseMarkerRow() + 1 ), 0, make_select );
 	  else{
 
 	      x = markerColumn();
@@ -1959,19 +1963,21 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  // if this is a filled cell
 		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
 		      //Then we search as long as the next field is filled
-		      while ( (y+1 <= KS_rowMax) && !(activeTable()->cellAt(x, y+1, true))->isEmpty() ){
+		      while ( (y+1 <= rowMax) && !(activeTable()->cellAt(x, y+1, true))->isEmpty() ){
 			  y ++;
 		      }
 		  }
 		  else{
 		      //Otherwise we search as long as the next field is empty
-		      while ( (y+1 <= KS_rowMax) && (activeTable()->cellAt(x, y+1, true))->isEmpty() ){
+		      while ( (y+1 <= rowMax) && (activeTable()->cellAt(x, y+1, true))->isEmpty() ){
 			  y ++;
 		      }
 		  }
 	      }
-
-	      gotoLocation( x, QMIN( KS_rowMax, y ), 0, make_select, true, true );
+              // don't go to KS_rowMax, if there is nothing down there, stay where you are
+              if (y >= rowMax)
+                  y = markerRow();
+	      gotoLocation( x, QMIN( rowMax, y ), 0, make_select, true, true );
 	      repaint();
 	  }
 
@@ -1979,16 +1985,19 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
       //Ctrl+Key_Right
       case Key_Right:
-	  //If we are already at the end, we skip
-	  if ( !m_bChoose && markerColumn() >= KS_colMax )
+          // we don't need to go to KS_colMax, maxColumn() is enough
+          colMax = activeTable()->maxColumn();
+
+	  //If we are already at the end, we skip	
+          if ( !m_bChoose && markerColumn() >= colMax )
 	      return;
 	  //If we are already at the end, we skip
-	  if ( m_bChoose && chooseMarkerColumn() >= KS_colMax )
+	  if ( m_bChoose && chooseMarkerColumn() >= colMax )
 	      return;
 
 	  if ( m_bChoose )
 	      //If we are in choose mode, we only go 1 right
-	      chooseGotoLocation( QMIN( KS_colMax, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
+	      chooseGotoLocation( QMIN( colMax, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
 	  else{
 
 	      x = markerColumn();
@@ -2004,17 +2013,20 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  // if this is a filled cell
 		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
 		      //Then we search as long as the next field is filled
-		      while ( (x+1 <= KS_colMax) && !(activeTable()->cellAt(x+1, y, true))->isEmpty() ){
+		      while ( (x+1 <= colMax) && !(activeTable()->cellAt(x+1, y, true))->isEmpty() ){
 			  x ++;
 		      }
 		  }
 		  else{
 		      //Otherwise we search as long as the next field is empty
-		      while ( (x+1 <= KS_colMax) && (activeTable()->cellAt(x+1, y, true))->isEmpty() ){
+		      while ( (x+1 <= colMax) && (activeTable()->cellAt(x+1, y, true))->isEmpty() ){
 			  x ++;
 		      }
 		  }
 	      }
+              // if there is nothing on the right anymore, we stay where we are
+              if (x >= colMax)
+                  x = markerColumn();
 
 	      gotoLocation( QMIN( KS_colMax, x ), y, 0, make_select, true, true );
 	      repaint();
