@@ -56,6 +56,7 @@
 #include "textdialog.h"
 #include "sidebar.h"
 #include "insertpagedia.h"
+#include "duplicatepage.h"
 
 #include <kfiledialog.h>
 #include <kmessagebox.h>
@@ -338,9 +339,24 @@ void KPresenterView::editSelectAll()
 }
 
 /*===============================================================*/
-void KPresenterView::editCopyPage()
+void KPresenterView::editDuplicatePage()
 {
-    m_pKPresenterDoc->copyPage( getCurrPgNum() );
+    DuplicatePageDia dia( this, 0, TRUE );
+    if ( dia.exec() != QDialog::Accepted )
+	return;
+    QString file = getenv( "HOME" );
+    file += "/.tmp.kpr";
+    m_pKPresenterDoc->savePage( file, currPg );
+    InsertPos pos = dia.radioBefore ? IP_BEFORE : IP_AFTER;
+    int pg = m_pKPresenterDoc->insertPage( currPg, pos, FALSE, file );
+    setRanges();
+    sidebar->rebuildItems();
+    if ( pg != -1 )
+	skipToPage( pg );
+    sidebar->setCurrentPage( pg );
+    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
+    pgPrev->setEnabled( currPg > 0 );
+    
 }
 
 /*===============================================================*/
@@ -400,7 +416,7 @@ void KPresenterView::insertPage()
     if ( dia.exec() != QDialog::Accepted )
 	return;
     InsertPos pos = (InsertPos)dia.locationCombo->currentItem();
-    int pg = m_pKPresenterDoc->insertPage( currPg, pos, dia.radioDifferent->isChecked() );
+    int pg = m_pKPresenterDoc->insertPage( currPg, pos, dia.radioDifferent->isChecked(), QString::null );
     setRanges();
     sidebar->rebuildItems();
     if ( pg != -1 )
@@ -1691,9 +1707,10 @@ void KPresenterView::setupActions()
 				    this, SLOT( editDelete() ),
 				    actionCollection(), "edit_delete" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
-    actionEditCopyPage = new KAction( i18n( "Copy &Page to Clipboard" ), "newslide",
-				      0, this, SLOT( editCopyPage() ),
-				      actionCollection(), "edit_copypage" );
+    actionEditDuplicatePage = new KAction( i18n( "Duplicate Page" ), "newslide",
+					   0, this, SLOT( editDuplicatePage() ),
+					   actionCollection(), "edit_duplicatepage" );
+    
     actionEditDelPage = new KAction( i18n( "Delete &Page..." ), "delslide", 0,
 				     this, SLOT( editDelPage() ),
 				     actionCollection(), "edit_delpage" );

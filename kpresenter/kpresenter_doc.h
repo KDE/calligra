@@ -277,7 +277,7 @@ public:
     int getBottomBorder();
 
     void deletePage( int _page );
-    int insertPage( int _page, InsertPos _insPos, bool chooseTemplate );
+    int insertPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile );
 
     void setObjectList( QList<KPObject> *_list ) {
         _objectList->setAutoDelete( false ); _objectList = _list; _objectList->setAutoDelete( false );
@@ -302,7 +302,6 @@ public:
     QValueList<int> getSlides( int currPgNum, KPresenterView *view );
     QMap<int, bool > getSelectedSlides() const { return selectedSlides; }
 
-    void copyPage( int num );
     virtual DCOPObject* dcopObject();
 
     KPresenterView *getFirstView() {

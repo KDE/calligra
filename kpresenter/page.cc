@@ -1534,7 +1534,7 @@ void Page::setupMenus()
     pageMenu->insertSeparator();
     pageMenu->insertItem( i18n( "&Insert Page..." ), this, SLOT( pageInsert() ) );
     pageMenu->insertItem( i18n( "&Use current slide as default template" ), this, SLOT( pageDefaultTemplate() ) );
-    pageMenu->insertItem( KPBarIcon( "newslide" ), i18n( "&Copy Page to Clipboard" ), this, SLOT( pageCopy() ) );
+    pageMenu->insertItem( KPBarIcon( "newslide" ), i18n( "&Duplicate Page" ), this, SLOT( duplicateCopy() ) );
     pageMenu->insertItem( KPBarIcon( "delslide" ), i18n( "&Delete Page..." ), this, SLOT( pageDelete() ) );
     pageMenu->insertSeparator();
     pageMenu->insertItem( i18n( "Edit &Header/Footer..." ), this, SLOT( slotEditHF() ) );
@@ -3897,9 +3897,9 @@ void Page::pageInsert()
 }
 
 /*================================================================*/
-void Page::pageCopy()
+void Page::duplicateCopy()
 {
-    view->editCopyPage();
+    view->editDuplicatePage();
 }
 
 /*================================================================*/

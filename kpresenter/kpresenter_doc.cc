@@ -253,7 +253,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     pasting = false;
     pasteXOffset = pasteYOffset = 0;
     ignoreSticky = TRUE;
-    
+
     _header = new KPTextObject( this );
     _header->setDrawEditRect( false );
     _footer = new KPTextObject( this );
@@ -499,7 +499,7 @@ void KPresenterDoc::saveObjects( QTextStream& out )
 	}
 	kpobject = objectList()->at( i );
 	if ( kpobject->getType() == OT_PART ) continue;
-	out << otag << "<OBJECT type=\"" << static_cast<int>( kpobject->getType() ) 
+	out << otag << "<OBJECT type=\"" << static_cast<int>( kpobject->getType() )
 	    << "\" sticky=\"" << (int)kpobject->isSticky() << "\">" << endl;
 	QPoint orig = kpobject->getOrig();
 	if ( saveOnlyPage != -1 )
@@ -1219,7 +1219,7 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, QValueList<KOMLAttrib>& lst
 	    default: break;
 	    }
 
-	    if ( objStartY > 0 ) 
+	    if ( objStartY > 0 )
 		_objectList->last()->moveBy( 0, objStartY );
 	    if ( pasting ) {
 		_objectList->last()->moveBy( pasteXOffset, pasteYOffset );
@@ -1227,7 +1227,7 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, QValueList<KOMLAttrib>& lst
 	    }
  	    if ( !ignoreSticky )
 		_objectList->last()->setSticky( sticky );
-	    
+	
 	} else
 	    kdWarning() << "Unknown tag '" << tag << "' in OBJECTS" << endl;
 
@@ -3387,7 +3387,7 @@ void KPresenterDoc::deletePage( int _page )
 }
 
 /*================================================================*/
-int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate )
+int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile )
 {
     KPObject *kpobject = 0;
     int _h = getPageSize( 0, 0, 0 ).height();
@@ -3409,10 +3409,12 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
 	_template = getenv( "HOME" );
 	_template += "/.default.kpr";\
 	fileName = _template;
+	if ( !theFile.isEmpty() )
+	    fileName = theFile;
     } else {
 	if ( KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
 					   "", QString::null, QString::null, KoTemplateChooseDia::OnlyTemplates,
-					   "kpresenter_template") != KoTemplateChooseDia::Cancel )
+					   "kpresenter_template") == KoTemplateChooseDia::Cancel )
 	    return -1;
 	QFileInfo fileInfo( _template );
 	fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";
@@ -3592,7 +3594,6 @@ void KPresenterDoc::loadPastedObjs( const QString &in, int currPage )
 	return;
     }
 
-    bool insertPage = false;
     bool ok = false;
 
     parser.parseTag( tag, name, lst );
@@ -3601,9 +3602,6 @@ void KPresenterDoc::loadPastedObjs( const QString &in, int currPage )
 	if ( ( *it ).m_strName == "mime" ) {
 	    if ( ( *it ).m_strValue == "application/x-kpresenter-selection" ) {
 		ok = true;
-	    } else if ( ( *it ).m_strValue == "application/x-kpresenter-page-selection" ) {
-		ok = true;
-		insertPage = true;
 	    }
 	}
     }
@@ -3611,20 +3609,7 @@ void KPresenterDoc::loadPastedObjs( const QString &in, int currPage )
     if ( !ok )
 	return;
 
-    if ( !insertPage )
-	loadObjects( parser, lst, true );
-    else {
-	int _page = currPage;
-	_page++;
-	objStartY = getPageSize( _page - 1, 0, 0 ).y() + getPageSize( _page - 1, 0, 0 ).height();
-	docAlreadyOpen = true;
-	loadXML( parser );
-	objStartY = 0;
-	_clean = true;
-	KPBackGround *kpbackground = _backgroundList.at( _backgroundList.count() - 1 );
-	_backgroundList.take( _backgroundList.count() - 1 );
-	_backgroundList.insert( _page, kpbackground );
-    }
+    loadObjects( parser, lst, true );
 
     repaint( FALSE );
     setModified(FALSE );
@@ -3946,48 +3931,6 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
         if ( rect.intersects( oIt.current()->getBoundingRect( 0, 0 ) ) )
             oIt.current()->draw( &painter, 0, 0 );
 
-}
-
-/*================================================================*/
-void KPresenterDoc::copyPage( int num )
-{
-    num--;
-    if ( num < 0 || num >= (int)_backgroundList.count() )
-	return;
-
-    QClipboard *cb = QApplication::clipboard();
-    QString clip_str;
-    QTextStream out( &clip_str, IO_WriteOnly );
-    KPObject *kpobject = 0;
-    KPBackGround *kpbackground = _backgroundList.at( num );
-
-    out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
-    out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org"
-	<< "\" editor=\"" << "KPresenter"
-	<< "\" mime=\"" << "application/x-kpresenter-page-selection" << "\">" << endl;
-    out << otag << "<BACKGROUND>" << endl;
-    out << otag << "<PAGE>" << endl;
-    kpbackground->save( out );
-    out << etag << "</PAGE>" << endl;
-    out << etag << "</BACKGROUND>" << endl;
-
-    out << otag << "<OBJECTS>" << endl;
-    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-	kpobject = objectList()->at( i );
-	if ( getPageOfObj( i, 0, 0 ) == num + 1 ) {
-	    out << otag << "<OBJECT type=\"" << static_cast<int>( kpobject->getType() ) << "\">" << endl;
-	    int y = kpobject->getOrig().y();
-	    kpobject->setOrig( kpobject->getOrig().x(), kpobject->getOrig().y() -
-			       kpbackground->getSize().height() * num );
-	    kpobject->save( out );
-	    kpobject->setOrig( kpobject->getOrig().x(), y );
-	    out << etag << "</OBJECT>" << endl;
-	}
-    }
-    out << etag << "</OBJECTS>" << endl;
-    out << etag << "</DOC>" << endl;
-
-    cb->setText( clip_str );
 }
 
 /*================================================================*/

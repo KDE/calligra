@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="2">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="3">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
@@ -11,7 +11,7 @@
   <Separator/>
   <Action name="edit_selectall"/>
   <Separator/>
-  <Action name="edit_copypage"/>
+  <Action name="edit_duplicatepage"/>
   <Action name="edit_delpage"/>
   <Separator/>
   <Action name="edit_find"/>

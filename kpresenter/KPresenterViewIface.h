@@ -41,7 +41,7 @@ k_dcop:
     virtual void editPaste();
     virtual void editDelete();
     virtual void editSelectAll();
-    virtual void editCopyPage();
+    virtual void editDuplicatePage();
     virtual void editDelPage();
     virtual void editFind();
     virtual void editHeaderFooter();

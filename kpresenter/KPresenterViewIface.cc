@@ -65,9 +65,9 @@ void KPresenterViewIface::editSelectAll()
     view->editSelectAll();
 }
 
-void KPresenterViewIface::editCopyPage()
+void KPresenterViewIface::editDuplicatePage()
 {
-    view->editCopyPage();
+    view->editDuplicatePage();
 }
 
 void KPresenterViewIface::editDelPage()

@@ -124,7 +124,7 @@ public slots:
     virtual void editPaste();
     virtual void editDelete();
     virtual void editSelectAll();
-    virtual void editCopyPage();
+    virtual void editDuplicatePage();
     virtual void editDelPage();
     virtual void editFind();
     virtual void editHeaderFooter();
@@ -454,7 +454,7 @@ protected:
     KAction *actionEditPaste;
     KAction *actionEditDelete;
     KAction *actionEditSelectAll;
-    KAction *actionEditCopyPage;
+    KAction *actionEditDuplicatePage;
     KAction *actionEditDelPage;
     KAction *actionEditFind;
     KAction *actionEditHeaderFooter;
