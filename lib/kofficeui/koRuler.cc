@@ -50,7 +50,7 @@ public:
     KoTabulator removeTab;     // Do we have to remove a certain tab in the DC Event?
     KoTabulator currTab;
     QPopupMenu *rb_menu;
-    int mMM, mPT, mINCH, mRemoveTab, mPageLayout; // menu item ids
+    int mMM, mPT, mINCH, mCM, mRemoveTab, mPageLayout; // menu item ids
     int frameEnd;
     double i_right;
     bool m_bReadWrite;
@@ -206,6 +206,9 @@ void KoRuler::drawHorizontal( QPainter *_painter )
         break;
     case KoUnit::U_MM:
         dist = MM_TO_POINT ( 10.0 * m_zoom );
+        break;
+    case KoUnit::U_CM:
+        dist = CM_TO_POINT ( m_zoom );
         break;
     }
 
@@ -368,6 +371,10 @@ void KoRuler::drawVertical( QPainter *_painter )
             case KoUnit::U_MM:
                 dist = MM_TO_POINT ( 10.0 * m_zoom );
                 break;
+            case KoUnit::U_CM:
+                dist = CM_TO_POINT (  m_zoom );
+                break;
+
         }
 
         int maxheight = 0;
@@ -925,17 +932,23 @@ void KoRuler::setupMenu()
 				     this, SLOT( rbPT() ) );
     d->mINCH = d->rb_menu->insertItem( KoUnit::unitDescription( KoUnit::U_INCH ),
 				       this, SLOT( rbINCH() ) );
+    d->mCM = d->rb_menu->insertItem( KoUnit::unitDescription( KoUnit::U_CM ),
+				       this, SLOT( rbCM() ) );
+
     d->rb_menu->insertSeparator();
     d->mPageLayout=d->rb_menu->insertItem(i18n("Page Layout..."), this, SLOT(pageLayoutDia()));
     d->rb_menu->insertSeparator();
     d->mRemoveTab=d->rb_menu->insertItem(i18n("Remove Tabulator"), this, SLOT(rbRemoveTab()));
-    int uid;
+    int uid = d->mMM;
     if ( m_unit == KoUnit::U_MM )
 	uid = d->mMM;
     else if ( m_unit == KoUnit::U_PT )
 	uid = d->mPT;
-    else
+    else if ( m_unit == KoUnit::U_INCH )
 	uid = d->mINCH;
+    else if ( m_unit == KoUnit::U_CM )
+	uid = d->mCM;
+
     d->rb_menu->setItemChecked( uid, true );
     d->rb_menu->setItemEnabled( d->mRemoveTab, false );
 }
@@ -945,6 +958,8 @@ void KoRuler::uncheckMenu()
     d->rb_menu->setItemChecked( d->mMM, false );
     d->rb_menu->setItemChecked( d->mPT, false );
     d->rb_menu->setItemChecked( d->mINCH, false );
+    d->rb_menu->setItemChecked( d->mCM, false );
+
 }
 
 void KoRuler::setUnit( const QString& _unit )
@@ -965,6 +980,9 @@ void KoRuler::setUnit( KoUnit::Unit unit )
         break;
     case KoUnit::U_INCH:
         d->rb_menu->setItemChecked( d->mINCH, true );
+        break;
+    case KoUnit::U_CM:
+        d->rb_menu->setItemChecked( d->mCM, true );
         break;
     }
     update();
