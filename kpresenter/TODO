@@ -49,6 +49,7 @@ Done:
 -> save/load  page background
 -> save/load object background
 -> save/load page effect (hide/show effect)
+-> save/load page sound effect
 -> save/load object effect
 -> save/load notes
 -> save/load stroke line

@@ -378,7 +378,17 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
     }
     if ( !m_page->isSlideSelected() )
         stylepageauto.addProperty( "presentation:visibility", "hidden" );
-
+    if ( !soundFileName.isEmpty() && soundEffect )
+    {
+        QBuffer buffer;
+        buffer.open( IO_WriteOnly );
+        KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+        elementWriter.startElement( "presentation:sound" );
+        elementWriter.addAttribute( "xlink:href", soundFileName );
+        elementWriter.endElement();
+        QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+        stylepageauto.addChildElement( "sound effect", elementContents );
+    }
 
     switch ( backType )
     {
@@ -754,19 +764,10 @@ void KPBackGround::loadOasis(KoOasisContext & context )
     }
     if ( styleStack.hasChildNode("presentation:sound"))
     {
-#if 0 //load sound file store it into kpresenter_doc "m_page->kPresenterDoc()"
-        QString soundUrl = storeSound(m_styleStack.childNode("presentation:sound").toElement(),
-                                      soundElement, doc);
-
-        if (!soundUrl.isNull())
-        {
-            QDomElement pseElem = doc.createElement("PGSOUNDEFFECT");
-            pseElem.setAttribute("soundEffect", 1);
-            pseElem.setAttribute("soundFileName", soundUrl);
-
-            bgPage.appendChild(pseElem);
-        }
-#endif
+        kdDebug()<<" presentation:sound !!!!!!!!!!!!!!!!!!!!!\n";
+        QDomElement sound = styleStack.childNode("presentation:sound").toElement();
+        soundEffect = true;
+        soundFileName = sound.attribute( "xlink:href" );
     }
 }
 
