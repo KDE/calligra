@@ -2578,6 +2578,12 @@ void KWTextFrameSetEdit::ctrlPgDownKeyPressed()
     }
 }
 
+void KWTextFrameSetEdit::setCursor( KoTextParag* parag, int index )
+{
+    cursor()->setParag( parag );
+    cursor()->setIndex( index );
+}
+
 void KWTextFrameSetEdit::insertExpression(const QString &_c)
 {
     if(textObject()->hasSelection() )

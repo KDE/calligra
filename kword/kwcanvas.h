@@ -170,6 +170,8 @@ public:
 
     void inlinePictureStarted();
 
+    void editFrame( KWFrame * frame );
+    void editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index );
     bool checkCurrentTextEdit( KWFrameSet * fs );
     bool checkCurrentEdit( KWFrameSet * fs );
 

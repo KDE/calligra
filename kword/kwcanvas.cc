@@ -1697,6 +1697,42 @@ KWTableFrameSet *KWCanvas::getTable()
     return 0L;
 }
 
+void KWCanvas::editFrame( KWFrame * frame )
+{
+    if ( selectAllFrames( false ) )
+        emit frameSelectedChanged();
+
+    KWFrameSet * fs = frame ? frame->frameSet() : 0L;
+    bool emitChanged = false;
+    if ( fs )
+    {
+        KWTableFrameSet *table = fs->getGroupManager();
+        emitChanged = checkCurrentEdit( table ? table : fs );
+    }
+
+    if ( emitChanged ) // emitted after mousePressEvent [for tables]
+        emit currentFrameSetEditChanged();
+    emit updateRuler();
+}
+
+void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index )
+{
+    if ( selectAllFrames( false ) )
+        emit frameSelectedChanged();
+
+    bool emitChanged = false;
+    KWTableFrameSet *table = fs->getGroupManager();
+    emitChanged = checkCurrentEdit( table ? table : fs );
+
+    if ( emitChanged ) { // emitted after mousePressEvent [for tables]
+        emit currentFrameSetEditChanged();
+        if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet()->type()==FT_TEXT ) {
+            static_cast<KWTextFrameSetEdit*>( m_currentFrameSetEdit )->setCursor( parag, index );
+        }
+    }
+    emit updateRuler();
+}
+
 bool KWCanvas::checkCurrentTextEdit( KWFrameSet * fs )
 {
     bool emitChanged = false;

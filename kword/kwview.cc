@@ -67,8 +67,6 @@
 #include <koFrame.h>
 #include <kotextobject.h>
 
-#include <kformulamimesource.h>
-
 #include <ktempfile.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
@@ -81,6 +79,7 @@
 #include <kstandarddirs.h>
 #include <kparts/event.h>
 #include <kformuladocument.h>
+#include <kformulamimesource.h>
 
 #include <stdlib.h>
 
@@ -2831,24 +2830,21 @@ void KWView::insertFormula( QMimeSource* source )
     {
         KWFormulaFrameSet *frameset = new KWFormulaFrameSet( m_doc, QString::null );
         m_doc->addFrameSet( frameset, false ); // done first since the frame number is stored in the undo/redo
-        KWFrame *frame = new KWFrame(frameset, 0, 0, 10, 10 );
-        frameset->addFrame( frame, false );
         if ( source ) {
             QByteArray data = source->encodedData( KFormula::MimeSource::selectionMimeType() );
             QDomDocument formula;
             formula.setContent( data );
             frameset->paste( formula );
         }
+        KWFrame *frame = new KWFrame(frameset, 0, 0, 10, 10 );
+        frameset->addFrame( frame, false );
         edit->insertFloatingFrameSet( frameset, i18n("Insert Formula") );
         frameset->finalize(); // done last since it triggers a redraw
-
-        // Strange, seems we need this - hmm, do we, still ?
-        // There was a bug in KWFormulaFrameSet::slotFormulaChanged that could
-        // have been the cause of this. Maybe we don't need this any longer.
-        //edit->cursor()->parag()->invalidate( 0 ); // and that's done by KWTextParag::setCustomItem. Hmm.
-        //edit->cursor()->parag()->setChanged( true );
-        //m_doc->slotRepaintChanged( edit->frameSet() );
         m_doc->refreshDocStructure(FT_FORMULA);
+
+        m_gui->canvasWidget()->editFrame( frame );
+        frameset->setChanged();
+        m_gui->canvasWidget()->repaintChanged( frameset, true );
     }
 }
 

@@ -1842,11 +1842,28 @@ void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, c
 }
 
 
+
+class FormulaView : public KFormula::View {
+public:
+    FormulaView( KWFormulaFrameSetEdit* edit, KFormula::Container* c )
+        : KFormula::View( c ), m_edit( edit ) {}
+
+    /** Gets called if the cursor ties to leave the formula at its begin. */
+    virtual void exitLeft() { m_edit->exitLeft(); }
+
+    /** Gets called if the cursor ties to leave the formula at its end. */
+    virtual void exitRight() { m_edit->exitRight(); }
+
+private:
+    KWFormulaFrameSetEdit* m_edit;
+};
+
+
 /******************************************************************/
 /* Class: KWFormulaFrameSet                                       */
 /******************************************************************/
 KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
-    : KWFrameSet( _doc ), m_changed( false ), m_loading( false )
+    : KWFrameSet( _doc ), m_changed( false )
 {
     kdDebug(32001) << "KWFormulaFrameSet::KWFormulaFrameSet" << endl;
     formula = _doc->getFormulaDocument()->createFormula();
@@ -1886,6 +1903,15 @@ KWFormulaFrameSet::~KWFormulaFrameSet()
 {
     kdDebug(32001) << "KWFormulaFrameSet::~KWFormulaFrameSet" << endl;
     delete formula;
+}
+
+void KWFormulaFrameSet::addFrame( KWFrame *_frame, bool recalc )
+{
+    if ( formula ) {
+        _frame->setWidth( formula->width() );
+        _frame->setHeight( formula->height() );
+    }
+    KWFrameSet::addFrame( _frame, recalc );
 }
 
 KWFrameSetEdit* KWFormulaFrameSet::createFrameSetEdit(KWCanvas* canvas)
@@ -1934,14 +1960,12 @@ void KWFormulaFrameSet::slotFormulaChanged( double width, double height )
 
     updateFrames();
     kWordDocument()->layout();
-    if ( !m_loading && ( ( oldWidth != width ) || ( oldHeight != height ) ) ) {
+    if ( ( oldWidth != width ) || ( oldHeight != height ) ) {
         kWordDocument()->repaintAllViews( false );
         kWordDocument()->updateRulerFrameStartEnd();
     }
 
     m_changed = true;
-    //if ( !m_loading )
-    //    emit repaintChanged( this );
 }
 
 void KWFormulaFrameSet::updateFrames()
@@ -1974,7 +1998,6 @@ void KWFormulaFrameSet::load(QDomElement& attributes, bool loadFrames)
 void KWFormulaFrameSet::paste( QDomNode& formulaElem )
 {
     if (!formulaElem.isNull()) {
-        m_loading = true;
         if (formula == 0) {
             formula = m_doc->getFormulaDocument()->createFormula();
             connect(formula, SIGNAL(formulaChanged(double, double)),
@@ -1983,7 +2006,6 @@ void KWFormulaFrameSet::paste( QDomNode& formulaElem )
         if (!formula->load(formulaElem)) {
             kdError(32001) << "Error loading formula" << endl;
         }
-        m_loading = false;
     }
     else {
         kdError(32001) << "Missing FORMULA tag in FRAMESET" << endl;
@@ -2019,7 +2041,7 @@ KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* ca
         : KWFrameSetEdit(fs, canvas)
 {
     //kdDebug(32001) << "KWFormulaFrameSetEdit::KWFormulaFrameSetEdit" << endl;
-    formulaView = new KFormula::View(fs->getFormula());
+    formulaView = new FormulaView( this, fs->getFormula() );
     //formulaView->setSmallCursor(true);
 
     connect( formulaView, SIGNAL( cursorChanged( bool, bool ) ),
@@ -2037,7 +2059,6 @@ DCOPObject* KWFormulaFrameSetEdit::dcopObject()
     return dcop;
 }
 
-
 KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
 {
     //kdDebug(32001) << "KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit" << endl;
@@ -2051,26 +2072,12 @@ KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
     delete dcop;
 }
 
+const KFormula::View* KWFormulaFrameSetEdit::getFormulaView() const { return formulaView; }
+KFormula::View* KWFormulaFrameSetEdit::getFormulaView() { return formulaView; }
+
 void KWFormulaFrameSetEdit::keyPressEvent( QKeyEvent* event )
 {
     //kdDebug(32001) << "KWFormulaFrameSetEdit::keyPressEvent" << endl;
-    int action = event->key();
-    if ( event->state() == 0 ) {
-        switch ( action ) {
-        case Qt::Key_Left:
-            if ( formulaView->isHome() ) {
-                // leave left
-                //return;
-            }
-            break;
-        case Qt::Key_Right:
-            if ( formulaView->isEnd() ) {
-                // leave right
-                //return;
-            }
-            break;
-        }
-    }
     formulaView->keyPressEvent( event );;
 }
 
@@ -2133,11 +2140,25 @@ void KWFormulaFrameSetEdit::selectAll()
 
 void KWFormulaFrameSetEdit::moveHome()
 {
-    //formulaView->slotMoveHome( KFormula::WordMovement );
+    formulaView->moveHome( KFormula::WordMovement );
 }
 void KWFormulaFrameSetEdit::moveEnd()
 {
-    //formulaView->slotMoveEnd( KFormula::WordMovement );
+    formulaView->moveEnd( KFormula::WordMovement );
+}
+
+void KWFormulaFrameSetEdit::exitLeft()
+{
+    int index = formulaFrameSet()->findAnchor(0)->index();
+    KoTextParag *parag = static_cast<KoTextParag*>( formulaFrameSet()->findAnchor( 0 )->paragraph() );
+    m_canvas->editTextFrameSet( formulaFrameSet()->anchorFrameset(), parag, index );
+}
+
+void KWFormulaFrameSetEdit::exitRight()
+{
+    int index = formulaFrameSet()->findAnchor(0)->index();
+    KoTextParag *parag = static_cast<KoTextParag*>( formulaFrameSet()->findAnchor( 0 )->paragraph() );
+    m_canvas->editTextFrameSet( formulaFrameSet()->anchorFrameset(), parag, index+1 );
 }
 
 void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )

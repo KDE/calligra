@@ -305,6 +305,8 @@ public:
     virtual void ctrlPgUpKeyPressed();
     virtual void ctrlPgDownKeyPressed();
 
+    void setCursor( KoTextParag* parag, int index );
+
     void insertFrameBreak() { textFrameSet()->insertFrameBreak( cursor() ); }
     void insertVariable( int type, int subtype = 0 );
     void insertCustomVariable( const QString &name);

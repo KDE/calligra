@@ -34,6 +34,7 @@ namespace KFormula {
     class Container;
     class View;
 }
+class FormulaView;
 
 class KCommand;
 class KWAnchor;
@@ -810,6 +811,7 @@ public:
      *  the framesets. Each implementation will return a different frameType.
      */
     virtual FrameSetType type() { return FT_FORMULA; }
+    virtual void addFrame( KWFrame *_frame, bool recalc = true );
 
     virtual KWFrameSetEdit* createFrameSetEdit(KWCanvas*);
 
@@ -844,7 +846,6 @@ protected slots:
 private:
     KFormula::Container* formula;
     bool m_changed;
-    bool m_loading;
 };
 
 
@@ -860,8 +861,8 @@ public:
         return static_cast<KWFormulaFrameSet*>(frameSet());
     }
 
-    const KFormula::View* getFormulaView() const { return formulaView; }
-    KFormula::View* getFormulaView() { return formulaView; }
+    const KFormula::View* getFormulaView() const;
+    KFormula::View* getFormulaView();
 
     virtual DCOPObject* dcopObject();
 
@@ -887,6 +888,12 @@ public:
     /** Moves the cursor to the last position */
     void moveEnd();
 
+    /** Gets called if the cursor ties to leave the formula at its begin. */
+    void exitLeft();
+
+    /** Gets called if the cursor ties to leave the formula at its end. */
+    void exitRight();
+
 protected slots:
 
     /**
@@ -895,7 +902,7 @@ protected slots:
     void cursorChanged( bool visible, bool selecting );
 
 private:
-    KFormula::View* formulaView;
+    FormulaView* formulaView;
     DCOPObject *dcop;
 };
 
