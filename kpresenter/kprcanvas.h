@@ -494,6 +494,8 @@ private:
     void rectSymetricalObjet();
     QPoint applyGrid( const QPoint &pos,bool offset);
     KoPoint applyGrid( const KoPoint &pos);
+    double applyGridX( double x );
+    double applyGridY( double y );
     int applyGridOnPosX( int pos ) const;
     int applyGridOnPosY( int pos ) const;
 

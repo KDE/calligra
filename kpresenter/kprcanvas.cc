@@ -1619,22 +1619,9 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             else
                 return;
         } else if ( mousePressed ) {
-            int mx = e->x()+diffx();
-            int my = e->y()+diffy();
-            if ( m_view->kPresenterDoc()->snapToGrid() )
-            {
-                mx = applyGridOnPosX( mx );
-                my = applyGridOnPosY( my );
-            }
             switch ( toolEditMode ) {
             case TEM_MOUSE: {
                 drawContour = TRUE;
-                if ( m_view->kPresenterDoc()->snapToGrid() )
-                {
-                    oldMx = applyGridOnPosX( oldMx );
-                    oldMy = applyGridOnPosY( oldMy );
-                }
-
                 if ( modType == MT_NONE ) {
                     if ( m_tmpVertHelpline !=-1 || m_tmpHorizHelpline !=-1)
                     {
@@ -1661,11 +1648,22 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     int y = e->y() + diffy();
                     moveObject( x - m_origPos.x(), y - m_origPos.y(), false );
                 } else if ( modType != MT_NONE && resizeObjNum ) {
-                    resizeObject( modType, mx - m_origPos.x(), my - m_origPos.y() );
-                }
+                    int mx = e->x()+diffx();
+                    int my = e->y()+diffy();
+                    
+                    if ( m_view->kPresenterDoc()->snapToGrid() )
+                    {
+                        mx = applyGridOnPosX( mx );
+                        my = applyGridOnPosY( my );
+                        oldMx = applyGridOnPosX( oldMx );
+                        oldMy = applyGridOnPosY( oldMy );
+                    }
 
-                oldMx = e->x()+diffx();
-                oldMy = e->y()+diffy();
+                    resizeObject( modType, mx - oldMx, my - oldMy );
+
+                    oldMx = e->x()+diffx();
+                    oldMy = e->y()+diffy();
+                }
             } break;
             case TEM_ZOOM : {
                 if ( drawRubber ) {
@@ -5452,7 +5450,6 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
 {
     double dx = m_view->zoomHandler()->unzoomItX( _dx);
     double dy = m_view->zoomHandler()->unzoomItY( _dy);
-    KoRect page=m_activePage->getPageRect();
     KPObject *kpobject=resizeObjNum;
 
     //keepRatio = keepRatio || kpobject->isKeepRatio();
@@ -5460,7 +5457,6 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     KoSize objSize = kpobject->getSize();
     KoRect objRect=kpobject->getBoundingRect();
     KoRect pageRect=m_activePage->getPageRect();
-    KoPoint point=objRect.topLeft();
     QPainter p;
     p.begin( this );
     kpobject->moveBy(m_view->zoomHandler()->unzoomItX(-diffx()),m_view->zoomHandler()->unzoomItY(-diffy()));
@@ -5468,84 +5464,100 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
                     (kpobject->isSelected()) && drawContour);
     switch ( _modType ) {
     case MT_RESIZE_LU: {
-        if( (point.x()+dx) <(pageRect.left()-1))
-            dx=0;
-        if( (point.y()+dy) <(pageRect.top()-1))
-            dy=0;
+        // let the edge of the page be on the grid, this makes it 
+        // also possible to resize a object which is close to the edge 
+        if( (objRect.left() + dx) < (pageRect.left() - 1) )
+            dx = pageRect.left() - objRect.left();
+        if( (objRect.top() + dy) < (pageRect.top() - 1) )
+            dy = pageRect.top() - objRect.top();
+        // align to the grid
+        dx = applyGridX( objRect.left() + dx ) - objRect.left();
+        dy = applyGridY( objRect.top() + dy ) - objRect.top();
         if ( keepRatio && ratio != 0.0 )
             calcRatio( dx, dy, _modType, ratio );
-        kpobject->setSize(m_origBRect.width() + dx, m_origBRect.height() + dy);
+        kpobject->resizeBy( -dx, -dy );
         if ( objSize.width() != (kpobject->getSize()).width() )
-            kpobject->setOrig(m_origBRect.x() - dx, kpobject->getOrig().y());
+            kpobject->moveBy( KoPoint( dx, 0 ) );
         if ( objSize.height() != (kpobject->getSize()).height() )
-            kpobject->setOrig(kpobject->getOrig().x(), m_origBRect.y() - dy);
+            kpobject->moveBy( KoPoint( 0, dy ) );
     } break;
     case MT_RESIZE_LF: {
         dy = 0;
-        if( (point.x()+dx) <(pageRect.left()-1))
-            dx=0;
+        if( (objRect.left() + dx) < (pageRect.left() - 1))
+            dx = pageRect.left() - objRect.left();
+        dx = applyGridX( objRect.left() + dx ) - objRect.left();
         if ( keepRatio && ratio != 0.0 )
             calcRatio( dx, dy, _modType, ratio );
-        kpobject->setSize(m_origBRect.width() + dx, m_origBRect.height() + dy);
+        kpobject->resizeBy( -dx, -dy );
         if ( objSize != kpobject->getSize() )
-            kpobject->setOrig(m_origBRect.x() - dx, kpobject->getOrig().y());
+            kpobject->moveBy( KoPoint( dx, 0 ) );
     } break;
     case MT_RESIZE_LD: {
-        if( (point.y()+objRect.height()+dy) > pageRect.height())
-            dy=0;
-        if( (point.x()+dx) <(pageRect.left()-1))
-            dx=0;
+        if( (objRect.bottom() + dy) > pageRect.height())
+            dy = pageRect.bottom() - objRect.bottom();
+        if( (objRect.left() + dx) < (pageRect.left() - 1) )
+            dx = pageRect.left() - objRect.left();
+        dx = applyGridX( objRect.left() + dx ) - objRect.left();
+        dy = applyGridY( objRect.bottom() + dy ) - objRect.bottom();
         if ( keepRatio && ratio != 0.0 )
             calcRatio( dx, dy, _modType, ratio );
-        kpobject->setSize(m_origBRect.width() + dx, m_origBRect.height() + dy);
+        kpobject->resizeBy( -dx, dy );
         if ( objSize.width() != (kpobject->getSize()).width() )
-            kpobject->setOrig(m_origBRect.x() - dx, kpobject->getOrig().y());
+            kpobject->moveBy( KoPoint( dx, 0 ) );
     } break;
     case MT_RESIZE_RU: {
-        if( (point.x()+objRect.width()+dx) > pageRect.width())
-            dx=0;
-        if( (point.y()+dy) <(pageRect.top()-1))
-            dy=0;
+        if( (objRect.right() + dx) > pageRect.width() )
+            dx = pageRect.right() - objRect.right();
+        if( (objRect.top() + dy) < (pageRect.top() - 1) )
+            dy = pageRect.top() - objRect.top();
+        dx = applyGridX( objRect.right() + dx ) - objRect.right();
+        dy = applyGridY( objRect.top() + dy ) - objRect.top();
         if ( keepRatio && ratio != 0.0 )
             calcRatio( dx, dy, _modType, ratio );
-        kpobject->setSize(m_origBRect.width() + dx, m_origBRect.height() + dy);
+        kpobject->resizeBy( dx, -dy );
         if ( objSize.height() != (kpobject->getSize()).height() )
-            kpobject->setOrig(kpobject->getOrig().x(), m_origBRect.y() - dy);
+            kpobject->moveBy( KoPoint( 0, dy ) );
     } break;
     case MT_RESIZE_RT: {
         dy = 0;
-        if( (point.x()+objRect.width()+dx) > pageRect.width())
-            dx=0;
+        if( (objRect.right() + dx) > pageRect.width() )
+            dx = pageRect.right() - objRect.right();
+        dx = applyGridX( objRect.right() + dx ) - objRect.right();
         if ( keepRatio && ratio != 0.0 )
             calcRatio( dx, dy, _modType, ratio );
-        kpobject->setSize(m_origBRect.width() + dx, m_origBRect.height() + dy);
+        kpobject->resizeBy( dx, dy );
     } break;
     case MT_RESIZE_RD: {
-        if( (point.y()+objRect.height()+dy) > pageRect.height())
-            dy=0;
-        if( (point.x()+objRect.width()+dx) > pageRect.width())
-            dx=0;
+        if( (objRect.bottom() + dy) > pageRect.height() )
+            dy = pageRect.bottom() - objRect.bottom();
+        if( (objRect.right() + dx) > pageRect.width() )
+            dx = pageRect.right() - objRect.right();
+        dx = applyGridX( objRect.right() + dx ) - objRect.right();
+        dy = applyGridY( objRect.bottom() + dy ) - objRect.bottom();
         if ( keepRatio && ratio != 0.0 )
             calcRatio( dx, dy, _modType, ratio );
-        kpobject->setSize(m_origBRect.width() + dx, m_origBRect.height() + dy);
+        kpobject->resizeBy( dx, dy );
     } break;
     case MT_RESIZE_UP: {
         dx = 0;
-        if( (point.y()+dy) <(pageRect.top()-1))
-            dy=0;
+        if( (objRect.top() + dy) < (pageRect.top() - 1) )
+            dy = pageRect.top() - objRect.top();
+        dy = applyGridY( objRect.top() + dy) - objRect.top();
         if ( keepRatio && ratio != 0.0 )
             calcRatio( dx, dy, _modType, ratio );
-        kpobject->setSize(m_origBRect.width() + dx, m_origBRect.height() + dy);
+        kpobject->resizeBy( -dx, -dy );
         if ( objSize != kpobject->getSize() )
-            kpobject->setOrig(kpobject->getOrig().x(), m_origBRect.y() - dy);
+            kpobject->moveBy( KoPoint( 0, dy ) );
+            
     } break;
     case MT_RESIZE_DN: {
         dx = 0;
-        if( (point.y()+objRect.height()+dy) > pageRect.height())
-            dy=0;
+        if( (objRect.bottom() + dy) > pageRect.height() )
+            dy = pageRect.bottom() - objRect.bottom();
+        dy = applyGridY( objRect.bottom() + dy ) - objRect.bottom();
         if ( keepRatio && ratio != 0.0 )
             calcRatio( dx, dy, _modType, ratio );
-        kpobject->setSize(m_origBRect.width() + dx, m_origBRect.height() + dy);
+        kpobject->resizeBy( dx, dy );
     } break;
     default: break;
     }
@@ -6971,15 +6983,35 @@ KPPixmapObject * KPrCanvas::getSelectedImage() const
     return obj;
 }
 
+
+double KPrCanvas::applyGridX( double x )
+{
+    if (  !m_view->kPresenterDoc()->snapToGrid() )
+        return x;
+
+    double gridX = m_view->kPresenterDoc()->getGridX();
+    return qRound( x / gridX ) * gridX;
+}
+
+
+double KPrCanvas::applyGridY( double y )
+{
+    if (  !m_view->kPresenterDoc()->snapToGrid() )
+        return y;
+
+    double gridY = m_view->kPresenterDoc()->getGridY();
+    return qRound( y / gridY ) * gridY;
+}
+
+
 KoPoint KPrCanvas::applyGrid( const KoPoint &pos )
 {
     if (  !m_view->kPresenterDoc()->snapToGrid() )
         return pos;
+    
+    KoPoint newPos;
+    newPos.setX( applyGridX( pos.x() ) );
+    newPos.setY( applyGridY( pos.y() ) );
 
-    double gridX = m_view->kPresenterDoc()->getGridX();
-    double gridY = m_view->kPresenterDoc()->getGridY();
-    KoPoint newPos = pos;
-    newPos.setX( qRound( newPos.x() / gridX ) * gridX );
-    newPos.setY( qRound( newPos.y() / gridY ) * gridY );
     return newPos;
 }
