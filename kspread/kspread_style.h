@@ -100,6 +100,8 @@ class KSpreadStyle
 
   virtual ~KSpreadStyle();
 
+    static FormatType formatType( const QString &_format );
+
     static QString saveOasisStyleNumeric( KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString &_postfix);
     static QString saveOasisStyleNumericDate( KoGenStyles &mainStyles, FormatType _style );
     static QString saveOasisStyleNumericFraction( KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString _suffix );

@@ -5069,7 +5069,9 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[str].formatStr<<endl;
         kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[str].prefix<<endl;
         kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[str].suffix<<endl;
-
+        setPrefix( oasisStyles.dataFormats()[str].prefix );
+        setPostfix( oasisStyles.dataFormats()[str].suffix );
+        setFormatType( KSpreadStyle::formatType( oasisStyles.dataFormats()[str].formatStr ) );
     }
     return true;
 }

@@ -479,6 +479,29 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
 #endif
 }
 
+FormatType KSpreadStyle::formatType( const QString &_format )
+{
+    if ( _format == "# ?/2" )
+        return fraction_half;
+    else if ( _format =="# ?/4" )
+        return fraction_quarter;
+    else if ( _format == "# ?/8" )
+        return fraction_eighth;
+    else if ( _format == "# ?/16" )
+        return fraction_sixteenth;
+    else if ( _format == "# ?/10" )
+        return fraction_tenth;
+    else if ( _format == "# ?/100" )
+        return fraction_hundredth;
+    else if ( _format == "# ?/?" )
+        return fraction_one_digit;
+    else if ( _format == "# \?\?/\?\?" )
+        return fraction_two_digits;
+    else if ( _format == "# \?\?\?/\?\?\?" )
+        return fraction_three_digits;
+    else Number_format;
+}
+
 QString KSpreadStyle::saveOasisStyleNumeric( KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString &_postfix )
 {
     QString styleName;
