@@ -283,22 +283,22 @@ void KWBorderPreview::drawContents( QPainter* painter )
 
     if ( m_topBorder.ptWidth > 0 ) {
         painter->setPen( setBorderPen( m_topBorder ) );
-        painter->drawLine( r.x() + 20, r.y() + 20, r.right() - 20, r.y() + 20 );
+        painter->drawLine( r.x() + 20, r.y() + 30, r.right() - 20, r.y() + 30 );
     }
 
     if ( m_bottomBorder.ptWidth > 0 ) {
         painter->setPen( setBorderPen( m_bottomBorder ) );
-        painter->drawLine( r.x() + 20, r.bottom() - 20, r.right() - 20, r.bottom() - 20 );
+        painter->drawLine( r.x() + 20, r.bottom() - 30, r.right() - 20, r.bottom() - 30 );
     }
 
     if ( m_leftBorder.ptWidth > 0 ) {
         painter->setPen( setBorderPen( m_leftBorder ) );
-        painter->drawLine( r.x() + 20, r.y() + 20, r.x() + 20, r.bottom() - 20 );
+        painter->drawLine( r.x() + 20, r.y() + 30, r.x() + 20, r.bottom() - 30 );
     }
 
     if ( m_rightBorder.ptWidth > 0 ) {
         painter->setPen( setBorderPen( m_rightBorder ) );
-        painter->drawLine( r.right() - 20, r.y() + 20, r.right() - 20, r.bottom() - 20 );
+        painter->drawLine( r.right() - 20, r.y() + 30, r.right() - 20, r.bottom() - 30 );
     }
 }
 
