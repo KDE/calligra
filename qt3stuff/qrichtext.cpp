@@ -6029,7 +6029,7 @@ void QTextFlow::adjustFlow( int &yp, int , int h, QTextParag *, bool pages )
     if ( yp + h > height )
     {
 	height = yp + h;
-	qDebug("QTextFlow::adjustFlow now height=%d",height);
+	//qDebug("QTextFlow::adjustFlow now height=%d",height);
     }
 }
 
