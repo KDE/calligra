@@ -117,6 +117,7 @@ void KexiTableViewPropertyBuffer::insert(uint row, KexiPropertyBuffer* buf, bool
 		KexiProperty* prop = new KexiProperty("newrow", QVariant());
 		prop->setVisible(false);
 		buf->add( prop );
+		m_view->setDirty();
 	}
 }
 

@@ -117,6 +117,9 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	viewport()->setBackgroundMode(NoBackground);
 //	viewport()->setFocusPolicy(StrongFocus);
 	viewport()->setFocusPolicy(WheelFocus);
+	setFocusPolicy(WheelFocus); //<--- !!!!! important (was NoFocus), 
+	//                             otherwise QApplication::setActiveWindow() won't activate 
+	//                             this widget when needed!
 //	setFocusProxy(viewport());
 	viewport()->installEventFilter(this);
 
