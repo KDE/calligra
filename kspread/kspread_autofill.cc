@@ -493,7 +493,9 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
                 destList.append( nonDefaultCell( x, y ) );
             QPtrList<KSpreadCell> srcList;
             for ( y = src.top(); y <= src.bottom(); y++ )
+            {
                 srcList.append( cellAt( x, y ) );
+            }
             QPtrList<AutoFillSequence> seqList;
             seqList.setAutoDelete( TRUE );
             for ( y = src.top(); y <= src.bottom(); y++ )
@@ -514,10 +516,14 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
             QPtrList<KSpreadCell> destList;
 
             for ( x = dest.left(); x < src.left(); x++ )
+            {
                 destList.append( nonDefaultCell( x, y ) );
+            }
             QPtrList<KSpreadCell> srcList;
             for ( x = src.left(); x <= src.right(); x++ )
+            {
                 srcList.append( cellAt( x, y ) );
+            }
             QPtrList<AutoFillSequence> seqList;
             seqList.setAutoDelete( TRUE );
             for ( x = src.left(); x <= src.right(); x++ )
@@ -531,8 +537,7 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
     {
         if (src.top() != dest.bottom() )
             dest.setBottom(dest.bottom() - 1);
-
-        for ( int x = src.left(); x <= dest.right(); x++ )
+        for ( int x = dest.left()/*src.left()*/; x <= src.right()/*dest.right()*/; x++ )
         {
             int y;
             QPtrList<KSpreadCell> destList;
@@ -540,7 +545,9 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
                 destList.append( nonDefaultCell( x, y ) );
             QPtrList<KSpreadCell> srcList;
             for ( y = src.top(); y <= src.bottom(); ++y )
+            {
                 srcList.append( cellAt( x, y ) );
+            }
             QPtrList<AutoFillSequence> seqList;
             seqList.setAutoDelete( TRUE );
             for ( y = src.top(); y <= src.bottom(); y++ )
