@@ -82,8 +82,8 @@ public:
     /**
      * TODO: Load and save
      */
-    virtual bool load(QDomElement &element) { return true; }
-    virtual void save(QDomElement &element) const { }
+    virtual bool load(QDomElement &element);
+    virtual void save(QDomElement &element) const;
 
 private:
     QPtrList<KPTResourceGroup> m_resource;

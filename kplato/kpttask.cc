@@ -18,15 +18,20 @@
 */
 
 #include "kpttask.h"
+#include "kptproject.h"
 
+#include <qdom.h>
 #include <kdebug.h>
+
 
 KPTTask::KPTTask() : KPTNode(), m_resource() {
     m_resource.setAutoDelete(true);
 }
 
+
 KPTTask::~KPTTask() {
 }
+
 
 KPTDuration *KPTTask::getExpectedDuration() {
     // I have no idea if this is correct...
@@ -45,9 +50,11 @@ KPTDuration *KPTTask::getExpectedDuration() {
     return ed;
 }
 
+
 KPTDuration *KPTTask::getRandomDuration() {
     return 0L;
 }
+
 
 KPTDuration *KPTTask::getStartTime() {
     if(m_startTime == KPTDuration()) {
@@ -59,21 +66,87 @@ KPTDuration *KPTTask::getStartTime() {
     }
 }
 
+
 KPTDuration *KPTTask::getFloat() {
     return 0L;
 }
 
-void KPTTask::addResource( KPTResourceGroup *resource ) {
+
+void KPTTask::addResource(KPTResourceGroup * /* resource */) {
 }
 
-void KPTTask::removeResource( KPTResourceGroup *resource ){
+
+void KPTTask::removeResource(KPTResourceGroup * /* resource */){
    // always auto remove
 }
 
-void KPTTask::removeResource( int number ){
+
+void KPTTask::removeResource(int /* number */){
    // always auto remove
 }
 
-void KPTTask::insertResource( unsigned int index, KPTResourceGroup *resource ) {
+
+void KPTTask::insertResource( unsigned int /* index */,
+			      KPTResourceGroup * /* resource */) {
 }
 
+
+bool KPTTask::load(QDomElement &element) {
+    // Maybe TODO: Delete old stuff here
+
+    // Load attributes (TODO: Finish with the rest of them)
+    m_name = element.attribute("name");
+    m_leader = element.attribute("leader");
+    m_description = element.attribute("description");
+
+    // Load the project children
+    QDomNodeList list = element.childNodes();
+    for (unsigned int i=0; i<list.count(); ++i) {
+	if (list.item(i).isElement()) {
+	    QDomElement e = list.item(i).toElement();
+
+	    if (e.tagName() == "project") {
+		// Load the subproject
+		KPTProject *child = new KPTProject();
+		if (child->load(e))
+		    addChildNode(child);
+		else
+		    // TODO: Complain about this
+		    delete child;
+	    } else if (e.tagName() == "task") {
+		// Load the task
+		KPTTask *child = new KPTTask();
+		if (child->load(e))
+		    addChildNode(child);
+		else
+		    // TODO: Complain about this
+		    delete child;
+	    } else if (e.tagName() == "milestone") {
+		// TODO: Load the milestone
+	    } else if (e.tagName() == "terminalnode") {
+		// TODO: Load the terminalnode
+	    } else if (e.tagName() == "relation") {
+		// TODO: Load the relation
+	    } else if (e.tagName() == "resource") {
+		// TODO: Load the resource
+	    }
+	}
+    }
+
+    return true;
+}
+
+
+void KPTTask::save(QDomElement &element) const {
+    QDomElement me = element.ownerDocument().createElement("task");
+    element.appendChild(me);
+
+    // TODO: Save the rest of the information
+    me.setAttribute("name", m_name);
+    me.setAttribute("leader", m_leader);
+    me.setAttribute("description", m_description);
+
+    for (int i=0; i<numChildren(); i++)
+	// First add the child
+	getChildNode(i).save(me);
+}
