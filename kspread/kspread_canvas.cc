@@ -3544,7 +3544,6 @@ void KSpreadCanvas::paintUpdates()
 
   /* paint any visible cell that has the paintDirty flag */
   QRect range = visibleCells();
-  KSpreadRangeIterator it(range, activeTable());
   KSpreadCell* cell = NULL;
 
   double topPos = activeTable()->dblRowPos(range.top());
