@@ -424,12 +424,14 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
     {
         // very small clipping around the cursor
         QRect clip( nPoint.x() - 5, nPoint.y(), 10, h );
+        //kdDebug() << " clip(normal, before intersect)=" << DEBUGRECT(clip) << endl;
+
         clip &= normalFrameRect; // clip to frame
-        //kdDebug() << "KWTextFrameSet::drawCursor normalFrameRect=" << DEBUGRECT(normalFrameRect)
+        // kdDebug() << "KWTextFrameSet::drawCursor normalFrameRect=" << DEBUGRECT(normalFrameRect)
         //          << " clip(normal, after intersect)=" << DEBUGRECT(clip) << endl;
 
-        QPoint cPoint = viewMode->normalToView( nPoint );     // from normal to view contents
-        clip.moveTopLeft( QPoint( cPoint.x() - 5, cPoint.y() ) );
+        QPoint cPoint = viewMode->normalToView( clip.topLeft() );     // from normal to view contents
+        clip.moveTopLeft( cPoint );
 
         //kdDebug(32002) << "KWTextFrameSet::drawCursor "
         //               << " cPoint=(" << cPoint.x() << "," << cPoint.y() << ")  h=" << h << endl;
@@ -444,9 +446,9 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
 
             p->setClipRegion( reg );
             // translate to qrt coords - after setting the clip region !
-            //kdDebug(32002) << "KWTextFrameSet::drawCursor translating by "
-            //               << cPoint.x() - iPoint.x() << "," << cPoint.y() - iPoint.y() << endl;
-            p->translate( cPoint.x() - iPoint.x(), cPoint.y() - iPoint.y() );
+            QRect viewFrameRect = viewMode->normalToView( normalFrameRect );
+            // see internalToNormalWithHint
+            p->translate( viewFrameRect.left(), viewFrameRect.top() - frame->internalY() );
 
             // The settings come from this frame
             KWFrame * settings = settingsFrame( frame );
@@ -992,7 +994,7 @@ void KWTextFrameSet::updateFrames()
     if ( frames.isEmpty() )
         return; // No frames. This happens when the frameset is deleted (still exists for undo/redo)
 
-    kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
+    //kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
 
     // Sort frames of this frameset on (page, y coord, x coord)
 

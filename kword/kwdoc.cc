@@ -1668,12 +1668,19 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
         }
         else if ( elem.tagName() == "FRAMESET" )
         {
+            // Prepare a new name for the frameset
+            QString oldName = elem.attribute( "name" );
+            QString newName=i18n("Copy-%1").arg( oldName );
+            if ( getFrameSetByName( newName ) )
+                newName = generateFramesetName( newName+"-%1" );
+            m_pasteFramesetsMap->insert( oldName, newName ); // remember the name transformation
+
             FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( elem, "frameType", FT_BASE ) );
             switch ( frameSetType ) {
             case FT_TABLE: {
-                QString fsname = elem.attribute( "name" );
-                KWTableFrameSet *table = new KWTableFrameSet( this, fsname );
-                table->fromXML( elem, true );
+                KWTableFrameSet *table = new KWTableFrameSet( this, newName );
+                table->fromXML( elem, true, false /*don't apply names*/ );
+                table->moveBy( 20.0, 20.0 );
                 frames.append( table );
                 if ( macroCmd )
                     macroCmd->addCommand( new KWCreateTableCommand( QString::null, table ) );
@@ -1685,6 +1692,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
                 break;
             default:
                 fs = loadFrameSet( elem, false );
+                fs->setName( newName );
                 frameElem = elem.namedItem( "FRAME" ).toElement();
             }
         }
@@ -1696,12 +1704,6 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
         {
             if ( frameSetsToFinalize.findRef( fs ) == -1 )
                 frameSetsToFinalize.append( fs );
-
-            // Rename the frameset
-            QString newName=i18n("Copy-%1").arg(fs->getName());
-            newName = generateFramesetName( newName+"-%1" );
-            m_pasteFramesetsMap->insert( fs->getName(), newName ); // remember the name transformation
-            fs->setName( newName );
 
             // Load the frame
             if ( !frameElem.isNull() )

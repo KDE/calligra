@@ -439,7 +439,7 @@ public:
     /** load from XML - when loading */
     virtual void load( QDomElement &framesetElem, bool loadFrames = true );
     /** load from XML - when pasting from clipboard (usually the same, but not for tables) */
-    virtual void fromXML( QDomElement &framesetElem, bool loadFrames = true )
+    virtual void fromXML( QDomElement &framesetElem, bool loadFrames = true, bool /*useNames*/ = true )
     { load( framesetElem, loadFrames ); }
 
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */

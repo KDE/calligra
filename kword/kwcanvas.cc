@@ -746,8 +746,8 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     // Move the bounding rect containing all the selected frames
     KoRect oldBoundingRect = m_boundingRect;
     //int page = m_doc->getPageOfRect( m_boundingRect );
-    kdDebug() << "KWCanvas::mmEditFrameMove docPoint.x=" << docPoint.x()
-              << "  boundingrect=" << DEBUGRECT(m_boundingRect) << endl;
+    //kdDebug() << "KWCanvas::mmEditFrameMove docPoint.x=" << docPoint.x()
+    //          << "  boundingrect=" << DEBUGRECT(m_boundingRect) << endl;
 
     // (x and y separately for a better behaviour at limit of page)
     KoPoint p( m_boundingRect.topLeft() );
@@ -755,9 +755,9 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     p.setX( docPoint.x() - m_hotSpot.x() );
     if ( !shiftPressed ) // Shift disables the grid
         applyGrid( p );
-    kdDebug() << "KWCanvas::mmEditFrameMove p.x is now " << p.x() << endl;
+    //kdDebug() << "KWCanvas::mmEditFrameMove p.x is now " << p.x() << endl;
     m_boundingRect.moveTopLeft( p );
-    kdDebug() << "KWCanvas::mmEditFrameMove boundingrect now " << DEBUGRECT(m_boundingRect) << endl;
+    //kdDebug() << "KWCanvas::mmEditFrameMove boundingrect now " << DEBUGRECT(m_boundingRect) << endl;
     // But not out of the margins
     if ( m_boundingRect.left() < 1 ) // 1 pt margin to avoid drawing problems
     {
@@ -991,7 +991,7 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
 {
     //kdDebug() << "KWCanvas::mrEditFrame" << endl;
     KWFrame *firstFrame = m_doc->getFirstSelectedFrame();
-    kdDebug() << "KWCanvas::mrEditFrame m_frameMoved=" << m_frameMoved << " m_frameResized=" << m_frameResized << endl;
+    //kdDebug() << "KWCanvas::mrEditFrame m_frameMoved=" << m_frameMoved << " m_frameResized=" << m_frameResized << endl;
     if ( firstFrame && ( m_frameMoved || m_frameResized ) )
     {
         KWTableFrameSet *table = firstFrame->getFrameSet()->getGroupManager();
@@ -1649,6 +1649,7 @@ void KWCanvas::copySelectedFrames()
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * fs = fit.current();
+        bool isTable = ( fs->type() == FT_TABLE );
         QListIterator<KWFrame> frameIt = fs->frameIterator();
         KWFrame * firstFrame = frameIt.current();
         for ( ; frameIt.current(); ++frameIt )
@@ -1660,22 +1661,25 @@ void KWCanvas::copySelectedFrames()
                 // If it's the first frame of a frameset, then copy the frameset (with that frame)
                 // Otherwise copy only the frame information
                 QDomElement parentElem = topElem;
-                if ( frame == firstFrame )
+                if ( frame == firstFrame || isTable )
                 {
-                    fs->save( parentElem, false );
+                    fs->toXML( parentElem, isTable ? true : false );
                     // Get the last FRAMESET element, the one we just added
                     QDomNodeList listFramesets = parentElem.elementsByTagName( "FRAMESET" );
                     // Save the frame inside the frameset tag
                     parentElem = listFramesets.item( listFramesets.count() - 1 ).toElement();
                 }
-                // Save the frame information
-                QDomElement frameElem = parentElem.ownerDocument().createElement( "FRAME" );
-                parentElem.appendChild( frameElem );
-                frame->save( frameElem );
-                if ( frame != firstFrame )
+                if ( !isTable )
                 {
-                    // Frame saved alone -> remember which frameset it's part of
-                    frameElem.setAttribute( "parentFrameset", fs->getName() );
+                    // Save the frame information
+                    QDomElement frameElem = parentElem.ownerDocument().createElement( "FRAME" );
+                    parentElem.appendChild( frameElem );
+                    frame->save( frameElem );
+                    if ( frame != firstFrame )
+                    {
+                        // Frame saved alone -> remember which frameset it's part of
+                        frameElem.setAttribute( "parentFrameset", fs->getName() );
+                    }
                 }
                 foundOne = true;
             }

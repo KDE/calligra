@@ -62,6 +62,8 @@ void KWAnchor::move( int x, int y )
     }
 }
 
+//#define DEBUG_DRAWING
+
 void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
     ASSERT( !m_deleted );
@@ -69,8 +71,10 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         return;
 
     int paragy = paragraph()->rect().y();
-    //kdDebug(32001) << "KWAnchor::draw " << x << "," << y << " paragy=" << paragy
-    //               << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
+#ifdef DEBUG_DRAWING
+    kdDebug(32001) << "KWAnchor::draw " << x << "," << y << " paragy=" << paragy
+                   << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
+#endif
     KWTextFrameSet * fs = textDocument()->textFrameSet();
 
     if ( x != xpos || y != ypos ) { // shouldn't happen I guess ?
@@ -86,10 +90,15 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     else
         crect = QRect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
 
-    //kdDebug() << "KWAnchor::draw crect ( in internal coords ) = " << DEBUGRECT( crect ) << endl;
+#ifdef DEBUG_DRAWING
+    kdDebug() << "KWAnchor::draw crect ( in internal coords ) = " << DEBUGRECT( crect ) << endl;
+#endif
     QPoint cnPoint = crect.topLeft(); //fallback
-    (void) fs->internalToNormal( crect.topLeft(), cnPoint );
-    //kdDebug() << "KWAnchor::draw cnPoint in normal coordinates " << cnPoint.x() << "," << cnPoint.y() << endl;
+    if ( ! fs->internalToNormal( crect.topLeft(), cnPoint ) )
+        kdDebug() << "KWAnchor::draw internalToNormal returned 0L for topLeft of crect!" << endl;
+#ifdef DEBUG_DRAWING
+    kdDebug() << "KWAnchor::draw cnPoint in normal coordinates " << cnPoint.x() << "," << cnPoint.y() << endl;
+#endif
     cnPoint = fs->currentViewMode()->normalToView( cnPoint );
     //kdDebug() << "KWAnchor::draw cnPoint in view coordinates " << cnPoint.x() << "," << cnPoint.y() << endl;
     crect.setLeft( cnPoint.x() );
@@ -97,7 +106,9 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     QPoint brnPoint; // bottom right in normal coords
     if ( fs->internalToNormal( crect.bottomRight(), brnPoint ) )
     {
-        //kdDebug() << "KWAnchor::draw brnPoint in normal coordinates " << brnPoint.x() << "," << brnPoint.y() << endl;
+#ifdef DEBUG_DRAWING
+        kdDebug() << "KWAnchor::draw brnPoint in normal coordinates " << brnPoint.x() << "," << brnPoint.y() << endl;
+#endif
         brnPoint = fs->currentViewMode()->normalToView( brnPoint );
         //kdDebug() << "KWAnchor::draw brnPoint in view coordinates " << brnPoint.x() << "," << brnPoint.y() << endl;
         crect.setRight( brnPoint.x() );
@@ -105,7 +116,9 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     }
     else
         kdWarning() << "internalToNormal returned 0L for bottomRight=" << crect.right() << "," << crect.bottom() << endl;
-    //kdDebug() << "KWAnchor::draw crect ( in view coords ) = " << DEBUGRECT( crect ) << endl;
+#ifdef DEBUG_DRAWING
+    kdDebug() << "KWAnchor::draw crect ( in view coords ) = " << DEBUGRECT( crect ) << endl;
+#endif
 
     // and make painter go back to view coord system
     // (this is exactly the opposite of the code in KWFrameSet::drawContents)
@@ -114,8 +127,10 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     if ( fs->normalToInternal( frameTopLeft, iPoint ) )
     {
         QPoint vPoint = fs->currentViewMode()->normalToView( frameTopLeft );
-        //kdDebug() << "KWAnchor::draw vPoint=" << vPoint.x() << "," << vPoint.y()
-        //          << " translating by " << iPoint.x() - vPoint.x() << "," << iPoint.y() - vPoint.y() - paragy << endl;
+#ifdef DEBUG_DRAWING
+        kdDebug() << "KWAnchor::draw vPoint=" << vPoint.x() << "," << vPoint.y()
+                  << " translating by " << iPoint.x() - vPoint.x() << "," << iPoint.y() - vPoint.y() - paragy << endl;
+#endif
         p->translate( iPoint.x() - vPoint.x(), iPoint.y() - vPoint.y() - paragy );
     } else
         kdWarning() << "normalToInternal returned 0L in KWAnchor::draw - shouldn't happen. "
@@ -130,7 +145,9 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     }
 
     p->restore();
-    //kdDebug() << "KWAnchor::draw done" << endl;
+#ifdef DEBUG_DRAWING
+    kdDebug() << "KWAnchor::draw done" << endl;
+#endif
 }
 
 QSize KWAnchor::size() const

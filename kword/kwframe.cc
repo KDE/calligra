@@ -1146,10 +1146,13 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
     KWDocument * doc = kWordDocument();
     QRect rc = painter->xForm( crect );
     if ( frame )
+    {
+        //kdDebug(32002) << "KWFrameSet::frameClipRegion rc initially " << DEBUGRECT(rc) << endl;
         rc &= painter->xForm( viewMode->normalToView( doc->zoomRect( *frame ) ) ); // intersect
-    //kdDebug(32002) << "KWTextFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame)
-    //               << " clip region rect=" << DEBUGRECT(rc)
-    //               << " rc.isEmpty()=" << rc.isEmpty() << endl;
+        //kdDebug(32002) << "KWFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame)
+        //               << " clip region rect=" << DEBUGRECT(rc)
+        //               << " rc.isEmpty()=" << rc.isEmpty() << endl;
+    }
     if ( !rc.isEmpty() )
     {
         QRegion reg( rc );

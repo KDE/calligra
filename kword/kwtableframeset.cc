@@ -710,10 +710,8 @@ bool KWTableFrameSet::hasSelectedFrame()
 
 void KWTableFrameSet::moveBy( double dx, double dy )
 {
-    // Hmm, don't want that I think....
-//    dx = 0; // Ignore the x-offset.
-
-    if(dx==0 && dy==0) return;
+    if(dx==0 && dy==0)
+        return;
     for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
         m_cells.at( i )->getFrame( 0 )->moveBy( dx, dy );
         if(!m_cells.at( i )->isVisible())
@@ -1703,7 +1701,7 @@ void KWTableFrameSet::toXML( QDomElement &parentElem, bool saveFrames )
     save( framesetElem, saveFrames );
 }
 
-void KWTableFrameSet::fromXML( QDomElement &framesetElem, bool loadFrames )
+void KWTableFrameSet::fromXML( QDomElement &framesetElem, bool loadFrames, bool useNames )
 {
     KWFrameSet::load( framesetElem, false ); // Load the frameset attributes
     // Load the cells
@@ -1711,18 +1709,20 @@ void KWTableFrameSet::fromXML( QDomElement &framesetElem, bool loadFrames )
     for ( ; !cellElem.isNull() ; cellElem = cellElem.nextSibling().toElement() )
     {
         if ( cellElem.tagName() == "FRAMESET" )
-        {
-            loadCell( cellElem, loadFrames );
-        }
+            loadCell( cellElem, loadFrames, useNames );
     }
 }
 
-KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, bool loadFrames )
+KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, bool loadFrames, bool useNames )
 {
     int _row = KWDocument::getAttribute( framesetElem, "row", 0 );
     int _col = KWDocument::getAttribute( framesetElem, "col", 0 );
-    Cell *cell = new Cell( this, _row, _col, QString::null /* HACK. Auto-generate name to avoid dupes */ );
+    Cell *cell = new Cell( this, _row, _col, QString::null /*unused*/ );
+    QString autoName = cell->getName();
+    kdDebug() << "KWTableFrameSet::loadCell autoName=" << autoName << endl;
     cell->load( framesetElem, loadFrames );
+    if ( !useNames )
+        cell->setName( autoName );
     cell->m_rows = KWDocument::getAttribute( framesetElem, "rows", 1 );
     cell->m_cols = KWDocument::getAttribute( framesetElem, "cols", 1 );
     return cell;
