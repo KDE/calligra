@@ -127,7 +127,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
     QObject::connect( doc, SIGNAL( sig_insertObject( KWChild*, KWPartFrameSet* ) ),
                       this, SLOT( slotInsertObject( KWChild*, KWPartFrameSet* ) ) );
-    QObject::connect( doc, SIGNAL( embeddImage( const QString & ) ),
+    QObject::connect( this, SIGNAL( embeddImage( const QString & ) ),
                       this, SLOT( insertPicture( const QString & ) ) );
     QObject::connect( doc, SIGNAL( sig_updateChildGeometry( KWChild* ) ),
                       this, SLOT( slotUpdateChildGeometry( KWChild* ) ) );
