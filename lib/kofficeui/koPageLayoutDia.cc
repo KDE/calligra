@@ -289,22 +289,25 @@ void KoPageLayoutDia::setupTab1()
 {
     QWidget *tab1 = addPage(i18n( "Page Size && Margins" ));
 
-    QGridLayout *grid1 = new QGridLayout( tab1, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid1 = new QGridLayout( tab1, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *lpgUnit;
     if ( !( flags & DISABLE_UNIT ) ) {
         // ------------- unit _______________
+        QWidget* unitFrame = new QWidget( tab1 );
+        grid1->addWidget( unitFrame, 0, 0 );
+        QLayout* unitLayout = new QHBoxLayout( unitFrame, 5 );
+        unitLayout->setAutoAdd( true );
+
         // label unit
-        lpgUnit = new QLabel( i18n( "Unit:" ), tab1 );
-        grid1->addWidget( lpgUnit, 0, 0 );
+        lpgUnit = new QLabel( i18n( "Unit:" ), unitFrame );
+        lpgUnit->setAlignment( Qt::AlignRight || Qt::AlignVCenter );
 
         // combo unit
-        cpgUnit = new QComboBox( false, tab1, "cpgUnit" );
-        cpgUnit->setAutoResize( false );
+        cpgUnit = new QComboBox( false, unitFrame, "cpgUnit" );
         cpgUnit->insertItem( i18n( "Millimeters (mm)" ) );
         cpgUnit->insertItem( i18n( "Points (pt)" ) );
         cpgUnit->insertItem( i18n( "Inches (in)" ) );
-        grid1->addWidget( cpgUnit, 1, 0 );
         connect( cpgUnit, SIGNAL( activated( int ) ), this, SLOT( unitChanged( int ) ) );
     } else {
         QString str=KoUnit::unitDescription(m_unit);
@@ -315,62 +318,46 @@ void KoPageLayoutDia::setupTab1()
 
     // -------------- page size -----------------
     QGroupBox *formatFrame = new QGroupBox( i18n( "Page Size" ), tab1 );
-    QGridLayout *formatGrid = new QGridLayout( formatFrame, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    grid1->addWidget( formatFrame, 1, 0 );
+    QGridLayout *formatGrid = new QGridLayout( formatFrame, 3, 2, 
+       2*KDialog::marginHint(), KDialog::spacingHint() );
 
     // label format
-    QLabel *lpgFormat = new QLabel( i18n( "\nSize:" ), formatFrame );
+    QLabel *lpgFormat = new QLabel( i18n( "Size:" ), formatFrame );
     formatGrid->addWidget( lpgFormat, 0, 0 );
 
     // combo format
     cpgFormat = new QComboBox( false, formatFrame, "cpgFormat" );
     cpgFormat->setAutoResize( false );
     cpgFormat->insertStringList( KoPageFormat::allFormats() );
-    formatGrid->addWidget( cpgFormat, 1, 0 );
+    formatGrid->addWidget( cpgFormat, 0, 1 );
     connect( cpgFormat, SIGNAL( activated( int ) ), this, SLOT( formatChanged( int ) ) );
 
     // label width
     QLabel *lpgWidth = new QLabel( i18n( "Width:" ), formatFrame );
-    formatGrid->addWidget( lpgWidth, 2, 0 );
+    formatGrid->addWidget( lpgWidth, 1, 0 );
 
     // linedit width
     epgWidth = new KDoubleNumInput( formatFrame, "Width" );
-    formatGrid->addWidget( epgWidth, 3, 0 );
+    formatGrid->addWidget( epgWidth, 1, 1 );
     if ( layout.format != PG_CUSTOM )
         epgWidth->setEnabled( false );
     connect( epgWidth, SIGNAL( valueChanged(double) ), this, SLOT( widthChanged() ) );
 
     // label height
     QLabel *lpgHeight = new QLabel( i18n( "Height:" ), formatFrame );
-    formatGrid->addWidget( lpgHeight, 2, 1 );
+    formatGrid->addWidget( lpgHeight, 2, 0 );
 
     // linedit height
     epgHeight = new KDoubleNumInput( formatFrame, "Height" );
-    formatGrid->addWidget( epgHeight, 3, 1 );
+    formatGrid->addWidget( epgHeight, 2, 1 );
     if ( layout.format != PG_CUSTOM )
         epgHeight->setEnabled( false );
     connect( epgHeight, SIGNAL( valueChanged(double ) ), this, SLOT( heightChanged() ) );
 
-    // grid col spacing
-    formatGrid->addColSpacing( 0, lpgFormat->width() );
-    formatGrid->addColSpacing( 0, cpgFormat->width() );
-    formatGrid->addColSpacing( 0, lpgWidth->width() );
-    formatGrid->addColSpacing( 0, epgWidth->width() );
-    formatGrid->addColSpacing( 1, lpgHeight->width() );
-    formatGrid->addColSpacing( 1, epgHeight->width() );
-
-    // grid row spacing
-    formatGrid->addRowSpacing( 0, lpgFormat->height() );
-    formatGrid->addRowSpacing( 1, cpgFormat->height() );
-    formatGrid->addRowSpacing( 2, lpgWidth->height() );
-    formatGrid->addRowSpacing( 2, lpgHeight->height() );
-    formatGrid->addRowSpacing( 3, epgWidth->height() );
-    formatGrid->addRowSpacing( 3, epgHeight->height() );
-
-    grid1->addWidget( formatFrame, 2, 0 );
-
     // --------------- orientation ---------------
     QButtonGroup *orientFrame = new QButtonGroup( i18n( "Orientation" ), tab1 );
-    grid1->addWidget( orientFrame, 3, 0 );
+    grid1->addWidget( orientFrame, 2, 0 );
     QLayout *orientLayout = new QGridLayout( orientFrame, 2, 2,  
        2*KDialog::marginHint(), KDialog::spacingHint() );
     orientLayout->setAutoAdd( true );
@@ -388,7 +375,7 @@ void KoPageLayoutDia::setupTab1()
 
     // --------------- page margins ---------------
     QButtonGroup *marginsFrame = new QButtonGroup( i18n( "Margins" ), tab1 );
-    grid1->addWidget( marginsFrame, 4, 0 );
+    grid1->addWidget( marginsFrame, 3, 0 );
     QLayout *marginsLayout = new QGridLayout( marginsFrame, 4, 2, 
        2*KDialog::marginHint(), KDialog::spacingHint() );
     marginsLayout->setAutoAdd( true );
@@ -419,23 +406,7 @@ void KoPageLayoutDia::setupTab1()
 
     // ------------- preview -----------
     pgPreview = new KoPagePreview( tab1, "Preview", layout );
-    grid1->addMultiCellWidget( pgPreview, 2, 4, 1, 1 );
-
-    // --------------- main grid ------------------
-    grid1->addColSpacing( 0, lpgUnit->width() );
-    grid1->addColSpacing( 0, ( flags & DISABLE_UNIT ) ? 0 : cpgUnit->width() );
-    grid1->addColSpacing( 0, formatFrame->width() );
-    grid1->addColSpacing( 0, marginsFrame->width() );
-    grid1->addColSpacing( 1, 280 );
-    grid1->setColStretch( 1, 1 );
-
-    grid1->addRowSpacing( 0, lpgUnit->height() );
-    grid1->addRowSpacing( 1, ( flags & DISABLE_UNIT ) ? 0 : cpgUnit->height() );
-    grid1->addRowSpacing( 2, formatFrame->height() );
-    grid1->addRowSpacing( 2, 120 );
-    grid1->addRowSpacing( 3, marginsFrame->height() );
-    grid1->addRowSpacing( 3, 120 );
-    grid1->setRowStretch( 4, 1 );
+    grid1->addMultiCellWidget( pgPreview, 1, 4, 1, 1 );
 
     setValuesTab1();
     updatePreview( layout );
