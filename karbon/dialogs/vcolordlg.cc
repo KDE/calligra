@@ -39,8 +39,7 @@ VColorDlg::VColorDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	QGroupBox* groupbox = new QGroupBox(2, Horizontal, i18n("Reference"), mRGBWidget);
 	QLabel *mNewText = new QLabel(i18n("Color:"), groupbox);
 	mColorPreview = new KColorPatch(groupbox);
-	QColor color( "black" );
-	mColorPreview->setColor( color );
+	mColorPreview->setColor( QColor( "black" ) );
 	mainLayout->addWidget( groupbox, 0, 0);
 	
 	//RGB
@@ -66,9 +65,6 @@ VColorDlg::VColorDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	connect(
 		mBlueSlider, SIGNAL( valueChanged ( int ) ),
 		this, SLOT( updateRGBColorPreview() ) );
-	
-	//Opacity
-	
 	
 	//Buttons
 	QPushButton *button;
