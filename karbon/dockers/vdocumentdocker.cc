@@ -293,14 +293,6 @@ VObjectListViewItem::VObjectListViewItem( QListViewItem* parent, VObject* object
 	: QListViewItem( parent, 0L ), m_object( object ), m_document( doc ), m_key( key )
 {
 	update();
-	if( dynamic_cast<VGroup *>( object ) )
-	{
-		uint objcount = 1;
-		VObjectListIterator itr = dynamic_cast<VGroup *>( object )->objects();
-		for( ; itr.current();++itr, objcount++ )
-			if( itr.current()->state() != VObject::deleted )
-				new VObjectListViewItem( this, itr.current(), m_document, objcount );
-	}
 }
 
 QString
@@ -344,12 +336,6 @@ VLayerListViewItem::VLayerListViewItem( QListView* parent, VLayer* layer, VDocum
 	: QCheckListItem( parent, 0L, CheckBox ), m_layer( layer ), m_document( doc)
 {
 	update();
-	VObjectListIterator itr = layer->objects();
-	uint objcount = 1;
-	for( ; itr.current();++itr, objcount++ )
-		if( itr.current()->state() != VObject::deleted )
-			new VObjectListViewItem( this, itr.current(), m_document, objcount );
-
 } // VLayerListViewItem::VLayerListViewItem
 
 void
@@ -491,7 +477,8 @@ VLayersTab::slotSelectionChanged()
 			if( !found )
 			{
 				VLayerListViewItem *layerItem = dynamic_cast<VLayerListViewItem *>( m_layers[ m_document->activeLayer() ] );
-				new VObjectListViewItem( layerItem, itr.current(), m_document, layerItem->childCount() );
+				if( !m_objects[ itr.current() ] )
+					m_objects.insert( itr.current(), new VObjectListViewItem( layerItem, itr.current(), m_document, layerItem->childCount() ) );
 			}
 
 		}
@@ -612,24 +599,33 @@ void
 VLayersTab::raiseItem()
 {
 	VCommand *cmd = 0L;
+	//QListViewItem *newselection = 0L;
 	VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( m_layersListView->selectedItem() );
 	if( layerItem )
 	{
 		VLayer *layer = layerItem->layer();
 		if( layer && m_document->canRaiseLayer( layer ) )
+		{
 			cmd = new VLayerCmd( m_document, i18n( "Raise Layer" ),
 			                                layerItem->layer(), VLayerCmd::raiseLayer );
+			//newselection = layerItem;
+		}
 	}
 	else
 	{
 		VObjectListViewItem* item = dynamic_cast< VObjectListViewItem *>( m_layersListView->selectedItem() );
 		if( item )
+		{
 			cmd = new VZOrderCmd( m_document, item->object(), VZOrderCmd::up );
+			//newselection = item;
+		}
 	}
 	if( cmd )
 	{
 		m_view->part()->addCommand( cmd, true );
 		updatePreviews();
+		//if( newselection )
+		//	m_layersListView->setSelected( newselection, true );
 	}
 } // VLayersTab::raiseItem
 
@@ -694,23 +690,61 @@ VLayersTab::updatePreviews()
 void
 VLayersTab::updateLayers()
 {
-	m_layersListView->clear();
 	QPtrVector<VLayer> vector;
 	m_document->layers().toVector( &vector );
 	VLayerListViewItem* item;
-	KIconLoader il;
-	m_layers.clear();
 	for( int i = vector.count() - 1; i >= 0; i-- )
 	{
 		if ( vector[i]->state() != VObject::deleted )
 		{
-			item = new VLayerListViewItem( m_layersListView, vector[i], m_document );
-			m_layers.insert( vector[i], item );
+			if( !m_layers[ vector[i] ] )
+				m_layers.insert( vector[i], new VLayerListViewItem( m_layersListView, vector[i], m_document ) );
+			item = m_layers[ vector[i] ];
+
 			item->setOpen( true );
+			VObjectListIterator itr = vector[i]->objects();
+			uint objcount = 1;
+			for( ; itr.current();++itr, objcount++ )
+				if( itr.current()->state() != VObject::deleted )
+				{
+					if( !m_objects[ itr.current() ] )
+						m_objects.insert( itr.current(), new VObjectListViewItem( item, itr.current(), m_document, objcount ) );
+					else
+						m_objects[ itr.current() ]->setKey( objcount );
+
+					kdDebug() << "obj : " << itr.current() << ", key : " << m_objects[ itr.current() ]->key( 0, true ).latin1() << endl;
+
+					if( dynamic_cast<VGroup *>( itr.current() ) )
+						updateObjects( itr.current(),  m_objects[ itr.current() ] );
+				}
+
+			item->sort();
 		}
 	}
 	m_layersListView->sort();
 } // VLayersTab::updateLayers
+
+void
+VLayersTab::updateObjects( VObject *object, QListViewItem *item )
+{
+	uint objcount = 1;
+	VObjectListIterator itr = dynamic_cast<VGroup *>( object )->objects();
+	for( ; itr.current();++itr, objcount++ )
+		if( itr.current()->state() != VObject::deleted )
+		{
+			if( !m_objects[ itr.current() ] )
+				m_objects.insert( itr.current(), new VObjectListViewItem( item, itr.current(), m_document, objcount ) );
+			else
+			{
+				delete m_objects[ itr.current() ];
+				m_objects.insert( itr.current(), new VObjectListViewItem( item, itr.current(), m_document, objcount ) );
+				m_objects[ itr.current() ]->setKey( objcount );
+			}
+
+			if( dynamic_cast<VGroup *>( itr.current() ) )
+				updateObjects( itr.current(), m_objects[ itr.current() ] );
+		}
+}
 
 /*************************************************************************
  *  History tab                                                          *

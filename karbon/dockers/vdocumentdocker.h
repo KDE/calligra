@@ -117,6 +117,7 @@ public:
 	VObject* object() { return m_object; }
 	void update();
 	virtual QString key( int column, bool ascending ) const;
+	void setKey( uint key ) { m_key = key; }
 
 private:
 	VObject		*m_object;
@@ -149,6 +150,7 @@ private slots:
 
 protected:
 	VLayerListViewItem* listItem( int pos );
+	void updateObjects( VObject *object, QListViewItem *item );
 
 private:
 	QListView						*m_layersListView;
@@ -156,6 +158,7 @@ private:
 	KarbonView						*m_view;
 	VDocument						*m_document;
 	QPtrDict<VLayerListViewItem>	m_layers;
+	QPtrDict<VObjectListViewItem>	m_objects;
 }; // VLayersTab
 
 /*************************************************************************
