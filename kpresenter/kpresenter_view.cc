@@ -1361,7 +1361,8 @@ void KPresenterView::textSpacing()
 
     if ( obj ) {
 	if ( spacingDia ) {
-	    QObject::disconnect( spacingDia, SIGNAL( spacingDiaOk() ), this, SLOT( spacingOk() ) );
+	    QObject::disconnect( spacingDia, SIGNAL( spacingDiaOk( int, int, int, int ) ), 
+                                 this, SLOT( spacingOk( int, int, int, int ) ) );
 	    spacingDia->close();
 	    delete spacingDia;
 	    spacingDia = 0;
@@ -1625,7 +1626,7 @@ void KPresenterView::setupActions()
     actionEditDelPage = new KAction( i18n( "Delete &Page..." ), KPBarIcon( "delslide"), 0,
 				     this, SLOT( editDelPage() ),
 				     actionCollection(), "edit_delpage" );
-    actionEditFind = new KAction( i18n( "&Find..." ), CTRL + Key_S,
+    actionEditFind = new KAction( i18n( "&Find..." ), CTRL + Key_F,
 				  this, SLOT( editFind() ),
 				  actionCollection(), "edit_find" );
     actionEditFindReplace = new KAction( i18n( "&Replace..." ), CTRL + Key_R,
