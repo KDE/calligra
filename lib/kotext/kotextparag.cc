@@ -601,12 +601,39 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     if ( i + 1 < length() && at( i + 1 )->lineStart && at( i )->c.unicode() == 0xad ) {
 	painter.drawText( startX + bw, lastY + baseLine, "\xad" );
     }
-    if ( painter.device()->devType() != QInternal::Printer && lastFormat->isMisspelled() && !textDocument()->drawingShadow() && textDocument()->drawingMissingSpellLine()) {
-	painter.save();
-	painter.setPen( QPen( Qt::red, 1, Qt::DotLine ) );
-	painter.drawLine( startX, lastY + baseLine + 1, startX + bw, lastY + baseLine + 1 );
-	painter.restore();
-    }
+
+	// Paint a zigzag line for "wrong" background spellchecking checked words:
+	if(
+		painter.device()->devType() != QInternal::Printer &&
+		lastFormat->isMisspelled() &&
+		!textDocument()->drawingShadow() &&
+		textDocument()->drawingMissingSpellLine() )
+	{
+		painter.save();
+		painter.setPen( QPen( Qt::red, 1 ) );
+
+		// Draw 3 pixel lines with increasing offset and distance 4:
+		for( int zigzag_line = 0; zigzag_line < 3; ++zigzag_line )
+		{
+			for( int zigzag_x = zigzag_line; zigzag_x < bw; zigzag_x += 4 )
+			{
+				painter.drawPoint(
+					startX + zigzag_x,
+					h - 3 + zigzag_line );
+			}
+		}
+
+		// "Double" the pixel number for the middle line:
+		for( int zigzag_x = 3; zigzag_x < bw; zigzag_x += 4 )
+		{
+			painter.drawPoint(
+				startX + zigzag_x,
+				h - 2 );
+		}
+
+		painter.restore();
+	}
+
 #if 0
     i -= len;
     if ( doc && lastFormat->isAnchor() && !lastFormat->anchorHref().isEmpty() &&
