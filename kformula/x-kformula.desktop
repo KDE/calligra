@@ -2,6 +2,10 @@
 [Desktop Entry]
 MimeType=application/x-kformula
 Comment=KFormula
-DefaultApp=KFormula
+Comment[eo]=KFormulo
+Comment[is]=Formúla
+Comment[mk]=К-формула
+Comment[pt]=Formulas
+Comment[ru]=Формулы
 Type=MimeType
 Patterns=*.kfo;

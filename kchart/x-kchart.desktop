@@ -2,12 +2,16 @@
 [Desktop Entry]
 MimeType=application/x-kchart
 Comment=KChart
-Comment[eo]=Kartoj
+Comment[eo]=KKarto
+Comment[et]=Diagrammide redaktor
 Comment[fi]=KChart kuvaajienpiirto-ohjelma
-Comment[hu]=KGrafikon
+Comment[is]=KChart-rit
+Comment[mk]=K-график
+Comment[nl]=KChart: de KDE-grafiekweergave
+Comment[pt]=Gráficos
+Comment[pt_BR]=Gerador de diagramas
 Comment[ro]=Document KChart
 Comment[sv]=Diagram
-DefaultApp=KChart
 Type=MimeType
 Patterns=*.chrt;
 X-KDE-AutoEmbed=false
