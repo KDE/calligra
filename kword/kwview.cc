@@ -2075,6 +2075,8 @@ void KWView::updateStyleList()
             act->setExclusiveGroup( "styleListAction" );
             actionFormatStyleMenu->insert( act );
         }
+        else
+            kdWarning() << "No style found for " << *it << endl;
     }
 }
 
@@ -2144,6 +2146,8 @@ void KWView::updateFrameStyleList()
             act->setExclusiveGroup( "frameStyleList" );
             actionFrameStyleMenu->insert( act );
         }
+        else
+            kdWarning() << "No frame style found for " << *it << endl;
     }
 }
 
@@ -2214,6 +2218,8 @@ void KWView::updateTableStyleList()
             act->setGroup( "tableStyleList" );
             actionTableStyleMenu->insert( act );
         }
+        else
+            kdWarning() << "No table style found for " << *it << endl;
     }
 }
 
