@@ -152,14 +152,14 @@ bool AmiProWorker::doFullParagraph(const QString& paraText,
       m_bold = formatData.text.weight >= 75;
       m_italic = formatData.text.italic;
       m_underline = formatData.text.underline;
-      m_underlineDouble = formatData.text.underlineIsDouble;
+      m_underlineDouble = formatData.text.underlineValue == "double";
       m_subscript = formatData.text.verticalAlignment == 1;
       m_superscript = formatData.text.verticalAlignment == 2;
       m_strike = formatData.text.strikeout;
 
       if( m_bold ) partialText = "<+!>" + partialText + "<-!>";
       if( m_italic ) partialText = "<+\">" + partialText + "<-\">";
-      if( m_underline ) partialText = "<+#>" + partialText + "<-#>";
+      if( m_underline && !m_underlineDouble ) partialText = "<+#>" + partialText + "<-#>";
       if( m_underlineDouble ) partialText = "<+)>" + partialText + "<-)>";
       if( m_subscript ) partialText = "<+'>" + partialText + "<-'>";
       if( m_superscript ) partialText = "<+&>" + partialText + "<-&>";
