@@ -6590,8 +6590,78 @@ void KSpreadSheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
     }
     if ( styleStack.hasAttribute("style:num-format" ) )
     {
+        //not implemented into kspread
+        //These attributes specify the numbering style to use.
+        //If a numbering style is not specified, the numbering style is inherited from
+        //the page style. See section 6.7.8 for information on these attributes
         kdDebug()<<" num-format :"<<styleStack.attribute("style:num-format" )<<endl;
-        //todo fixme
+
+    }
+    if ( styleStack.hasAttribute( "fo:background-color" ) )
+    {
+        //todo
+        kdDebug()<<" fo:background-color :"<<styleStack.attribute( "fo:background-color" )<<endl;
+    }
+    if ( styleStack.hasAttribute( "style:print" ) )
+    {
+        //todo parsing
+        QString str = styleStack.attribute( "style:print" );
+        kdDebug()<<" style:print :"<<str<<endl;
+
+        if (str.contains( "headers" ) )
+        {
+            //todo implement it into kspread
+        }
+        if ( str.contains( "grid" ) )
+        {
+            m_pPrint->setPrintGrid( true );
+        }
+        if ( str.contains( "annotations" ) )
+        {
+            //todo it's not implemented
+        }
+        if ( str.contains( "objects" ) )
+        {
+            //todo it's not implemented
+        }
+        if ( str.contains( "charts" ) )
+        {
+            //todo it's not implemented
+        }
+        if ( str.contains( "drawings" ) )
+        {
+            //todo it's not implemented
+        }
+        if ( str.contains( "formulas" ) )
+        {
+            //todo it's not implemented
+        }
+        if ( str.contains( "zero-values" ) )
+        {
+            //todo it's not implemented
+        }
+    }
+    if ( styleStack.hasAttribute( "style:table-centering" ) )
+    {
+        QString str = styleStack.attribute( "style:table-centering" );
+        //not implemented into kspread
+        kdDebug()<<" styleStack.attribute( style:table-centering ) :"<<str<<endl;
+#if 0
+        if ( str == "horizontal" )
+        {
+        }
+        else if ( str == "vertical" )
+        {
+        }
+        else if ( str == "both" )
+        {
+        }
+        else if ( str == "none" )
+        {
+        }
+        else
+            kdDebug()<<" table-centering unknown :"<<str<<endl;
+#endif
     }
     format = QString( "%1x%2" ).arg( width ).arg( height );
     kdDebug()<<" format : "<<format<<endl;
