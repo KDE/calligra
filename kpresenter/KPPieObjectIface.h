@@ -40,6 +40,8 @@ k_dcop:
     virtual int pieAngle() const;
     virtual int pieLength() const;
     void setPieType( const QString & type );
+    virtual void setLineBegin( const QString &);
+    virtual void setLineEnd(const QString & );
 
 private:
     KPPieObject *obj;

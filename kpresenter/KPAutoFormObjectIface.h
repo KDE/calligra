@@ -38,6 +38,9 @@ k_dcop:
     QString fileName() const;
     void setFileName( const QString &_filename );
 
+    virtual void setLineBegin( const QString & );
+    virtual void setLineEnd( const QString & );
+
 private:
     KPAutoformObject *obj;
 };

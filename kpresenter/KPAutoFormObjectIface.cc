@@ -20,6 +20,7 @@
 #include "KPAutoFormObjectIface.h"
 #include "kpautoformobject.h"
 #include "kpobject.h"
+#include <kdebug.h>
 
 #include <kapplication.h>
 #include <dcopclient.h>
@@ -38,4 +39,34 @@ QString KPAutoFormObjectIface::fileName() const
 void KPAutoFormObjectIface::setFileName( const QString &_filename )
 {
     obj->setFileName(_filename);
+}
+
+void KPAutoFormObjectIface::setLineBegin( const QString & type)
+{
+    if(type=="NORMAL")
+        obj->setLineBegin(L_NORMAL );
+    else if(type=="ARROW")
+        obj->setLineBegin(L_ARROW );
+    else if(type=="SQUARE")
+        obj->setLineBegin(L_SQUARE );
+    else if(type=="CIRCLE")
+        obj->setLineBegin(L_CIRCLE );
+    else
+        kdDebug()<<"Error in KPAutoFormObjectIface::setLineBegin\n";
+
+}
+
+void KPAutoFormObjectIface::setLineEnd( const QString & type)
+{
+    if(type=="NORMAL")
+        obj->setLineEnd(L_NORMAL );
+    else if(type=="ARROW")
+        obj->setLineEnd(L_ARROW );
+    else if(type=="SQUARE")
+        obj->setLineEnd(L_SQUARE );
+    else if(type=="CIRCLE")
+        obj->setLineEnd(L_CIRCLE );
+    else
+        kdDebug()<<"Error in KPAutoFormObjectIface::setLineEnd\n";
+
 }
