@@ -5309,7 +5309,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
         if ( valExpression.contains( "cell-content-text-length()" ) )
         {
             //"cell-content-text-length()>45"
-            valExpression = valExpression.remove("cell-content-text-length()" );
+            valExpression = valExpression.remove("oooc:cell-content-text-length()" );
             kdDebug()<<" valExpression = :"<<valExpression<<endl;
             d->extra()->validity->m_allow = Allow_TextLength;
 
@@ -5324,7 +5324,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
         {
             d->extra()->validity->m_allow = Allow_TextLength;
             d->extra()->validity->m_cond = Between;
-            valExpression = valExpression.remove( "cell-content-text-length-is-between(" );
+            valExpression = valExpression.remove( "oooc:cell-content-text-length-is-between(" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
             QStringList listVal = QStringList::split( ",", valExpression );
@@ -5334,7 +5334,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
         {
             d->extra()->validity->m_allow = Allow_TextLength;
             d->extra()->validity->m_cond = Different;
-            valExpression = valExpression.remove( "cell-content-text-length-is-not-between(" );
+            valExpression = valExpression.remove( "oooc:cell-content-text-length-is-not-between(" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
@@ -5344,7 +5344,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
         else if ( valExpression.contains( "cell-content-is-in-list(" ) )
         {
             d->extra()->validity->m_allow = Allow_List;
-            valExpression = valExpression.remove( "cell-content-is-in-list(" );
+            valExpression = valExpression.remove( "oooc:cell-content-is-in-list(" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
             d->extra()->validity->listValidity = QStringList::split( ";", valExpression );
@@ -5356,22 +5356,22 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             if (valExpression.contains( "cell-content-is-whole-number()" ) )
             {
                 d->extra()->validity->m_allow =  Allow_Number;
-                valExpression = valExpression.remove( "cell-content-is-whole-number() and " );
+                valExpression = valExpression.remove( "oooc:cell-content-is-whole-number() and " );
             }
             else if (valExpression.contains( "cell-content-is-decimal-number()" ) )
             {
                 d->extra()->validity->m_allow = Allow_Integer;
-                valExpression = valExpression.remove( "cell-content-is-decimal-number() and " );
+                valExpression = valExpression.remove( "oooc:cell-content-is-decimal-number() and " );
             }
             else if (valExpression.contains( "cell-content-is-date()" ) )
             {
                 d->extra()->validity->m_allow = Allow_Date;
-                valExpression = valExpression.remove( "cell-content-is-date() and " );
+                valExpression = valExpression.remove( "oooc:cell-content-is-date() and " );
             }
             else if (valExpression.contains( "cell-content-is-time()" ) )
             {
                 d->extra()->validity->m_allow = Allow_Time;
-                valExpression = valExpression.remove( "cell-content-is-time() and " );
+                valExpression = valExpression.remove( "oooc:cell-content-is-time() and " );
             }
             kdDebug()<<"valExpression :"<<valExpression<<endl;
 

@@ -164,7 +164,7 @@ QString KSpreadGenValidationStyle::createValidationCondition( KSpreadValidity* _
 
 QString KSpreadGenValidationStyle::createListValidationCondition( KSpreadValidity* _val )
 {
-    QString result = "cell-content-is-in-list(";
+    QString result = "oooc:cell-content-is-in-list(";
     result = _val->listValidity.join( ";" );
     result +=")";
     return result;
@@ -174,9 +174,9 @@ QString KSpreadGenValidationStyle::createNumberValidationCondition( KSpreadValid
 {
     QString result;
     if ( _val->m_allow == Allow_Number )
-        result = "cell-content-is-whole-number() and ";
+        result = "oooc:cell-content-is-whole-number() and ";
     else if ( _val->m_allow == Allow_Integer )
-        result = "cell-content-is-decimal-number() and ";
+        result = "oooc:cell-content-is-decimal-number() and ";
     switch( _val->m_cond )
     {
     case None:
@@ -233,7 +233,7 @@ QString KSpreadGenValidationStyle::createNumberValidationCondition( KSpreadValid
 
 QString KSpreadGenValidationStyle::createTimeValidationCondition( KSpreadValidity* _val )
 {
-    QString result( "cell-content-is-time() and " );
+    QString result( "oooc:cell-content-is-time() and " );
     switch( _val->m_cond )
     {
     case None:
@@ -289,7 +289,7 @@ QString KSpreadGenValidationStyle::createTimeValidationCondition( KSpreadValidit
 
 QString KSpreadGenValidationStyle::createDateValidationCondition( KSpreadValidity* _val )
 {
-    QString result( "cell-content-is-date() and " );
+    QString result( "oooc:cell-content-is-date() and " );
     switch( _val->m_cond )
     {
     case None:
@@ -352,44 +352,44 @@ QString KSpreadGenValidationStyle::createTextValidationCondition( KSpreadValidit
         //nothing
         break;
     case Equal:
-        result+="cell-content-text-length()";
+        result+="oooc:cell-content-text-length()";
         result+="=";
         result+=QString::number( _val->valMin );
         break;
     case Superior:
-        result+="cell-content-text-length()";
+        result+="oooc:cell-content-text-length()";
         result+=">";
         result+=QString::number( _val->valMin );
         break;
     case Inferior:
-        result+="cell-content-text-length()";
+        result+="oooc:cell-content-text-length()";
         result+="<";
         result+=QString::number( _val->valMin );
         break;
     case SuperiorEqual:
-        result+="cell-content-text-length()";
+        result+="oooc:cell-content-text-length()";
         result+=">=";
         result+=QString::number( _val->valMin );
         break;
     case InferiorEqual:
-        result+="cell-content-text-length()";
+        result+="oooc:cell-content-text-length()";
         result+="<=";
         result+=QString::number( _val->valMin );
         break;
     case Different:
-        result+="cell-content-text-length()";
+        result+="oooc:cell-content-text-length()";
         result+="!=";
         result+=QString::number( _val->valMin );
         break;
     case Between:
-        result+="cell-content-text-length-is-between(";
+        result+="oooc:cell-content-text-length-is-between(";
         result+=QString::number( _val->valMin );
         result+=",";
         result+=QString::number( _val->valMax );
         result+=")";
         break;
     case DifferentTo:
-        result+="cell-content-text-length-is-not-between(";
+        result+="oooc:cell-content-text-length-is-not-between(";
         result+=QString::number( _val->valMin );
         result+=",";
         result+=QString::number( _val->valMax );
