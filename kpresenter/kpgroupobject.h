@@ -68,10 +68,12 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element, KPresenterDoc *doc);
-    virtual void loadOasisGroupObject( KPresenterDoc *doc, int pos, KPrPage * newpage, const QDomElement &element, KoOasisContext & context, QDomElement *animation);
+    virtual void loadOasisGroupObject( KPresenterDoc *doc, int pos, KPrPage * newpage, QDomNode &element, KoOasisContext & context, QDomElement *animation);
 
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
                        SelectionMode selectionMode, bool drawContour = FALSE );
+
+    void addObjects( KPObject * obj );
 
     void setUpdateObjects( bool b )
         { updateObjs = b; }

@@ -1108,15 +1108,16 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
 }
 
 
-void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawPage, KoOasisContext & context)
+void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawPage, KoOasisContext & context, KPGroupObject *groupObject)
 {
+    kdDebug()<<"void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawPage, KoOasisContext & context)\n";
     for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
     {
         kdDebug()<<"load Object \n";
         QDomElement o = object.toElement();
         QString name = o.tagName();
         QDomElement * animationShow = 0L;
-
+        kdDebug()<<" name :"<<name<<endl;
         if( o.hasAttribute("draw:id"))
             animationShow = m_loadingInfo->animationShowById(o.attribute("draw:id"));
 
@@ -1127,14 +1128,20 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             fillStyleStack( o, context );
             KPTextObject *kptextobject = new KPTextObject( this );
             kptextobject->loadOasis(o, context, animationShow);
-            newpage->appendObject(kptextobject);
+            if ( groupObject )
+                groupObject->addObjects( kptextobject );
+            else
+                newpage->appendObject(kptextobject);
         }
         else if ( name == "draw:rect" ) // rectangle
         {
             fillStyleStack( o, context );
             KPRectObject *kprectobject = new KPRectObject();
             kprectobject->loadOasis(o, context , animationShow);
-            newpage->appendObject(kprectobject);
+            if ( groupObject )
+                groupObject->addObjects( kprectobject );
+            else
+                newpage->appendObject(kprectobject);
         }
         else if ( name == "draw:circle" || name == "draw:ellipse" )
         {
@@ -1143,13 +1150,19 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             {
                 KPPieObject *kppieobject = new KPPieObject();
                 kppieobject->loadOasis(o, context, animationShow);
-                newpage->appendObject(kppieobject);
+                if ( groupObject )
+                    groupObject->addObjects( kppieobject );
+                else
+                    newpage->appendObject(kppieobject);
             }
             else  // circle or ellipse
             {
                 KPEllipseObject *kpellipseobject = new KPEllipseObject();
                 kpellipseobject->loadOasis(o,context, animationShow);
-                newpage->appendObject(kpellipseobject);
+                if ( groupObject )
+                    groupObject->addObjects( kpellipseobject );
+                else
+                    newpage->appendObject(kpellipseobject);
             }
         }
         else if ( name == "draw:line" ) // line
@@ -1163,27 +1176,43 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             fillStyleStack( o, context );
             KPPolylineObject *kppolylineobject = new KPPolylineObject();
             kppolylineobject->loadOasis(o, context, animationShow);
-            newpage->appendObject(kppolylineobject);
+            if ( groupObject )
+                groupObject->addObjects( kppolylineobject );
+            else
+                newpage->appendObject(kppolylineobject);
         }
         else if (name=="draw:polygon") { // polygon
             fillStyleStack( o, context );
             KPPolygonObject *kpPolygonObject = new KPPolygonObject();
             kpPolygonObject->loadOasis( o, context, animationShow);
-            newpage->appendObject(kpPolygonObject);
+            if ( groupObject )
+                groupObject->addObjects( kpPolygonObject );
+            else
+                newpage->appendObject(kpPolygonObject);
         }
         else if ( name == "draw:image" ) // image
         {
             fillStyleStack( o, context );
             KPPixmapObject *kppixmapobject = new KPPixmapObject( pictureCollection() );
             kppixmapobject->loadOasis( o, context, animationShow);
-            newpage->appendObject(kppixmapobject);
+            if ( groupObject )
+                groupObject->addObjects( kppixmapobject );
+            else
+                newpage->appendObject(kppixmapobject);
         }
         else if ( name == "draw:g" )
         {
             fillStyleStack( o, context );
             KPGroupObject *kpgroupobject = new KPGroupObject();
-            kpgroupobject->loadOasisGroupObject( this, pos, newpage, o, context, animationShow);
-            newpage->appendObject(kpgroupobject);
+            QDomNode nodegroup = /*drawPage.namedItem( "draw:g" )*/object.firstChild();
+
+            kdDebug()<<" nodegroup.isNull() :"<<nodegroup.isNull()<<endl;
+
+            kpgroupobject->loadOasisGroupObject( this, pos, newpage, /*nodegroup*/object, context, animationShow);
+            if ( groupObject )
+                groupObject->addObjects( kpgroupobject );
+            else
+                newpage->appendObject(kpgroupobject);
             kdDebug()<<" grouping object*****************\n";
         }
         else if ( name == "presentation:notes" ) // notes
@@ -1212,6 +1241,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         }
         context.styleStack().restore();
     }
+    kdDebug()<<" finish void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawPage, KoOasisContext & context)\n";
 }
 
 void KPresenterDoc::createPresentationAnimation(const QDomElement& element)
