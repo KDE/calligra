@@ -14,6 +14,7 @@ VDocument::VDocument()
 	// create a layer. we need at least one:
 	m_layers.setAutoDelete( true );
 	m_layers.append( new VLayer() );
+	m_activeLayer = m_layers.getLast();
 }
 
 VDocument::~VDocument()
@@ -25,6 +26,12 @@ VDocument::insertLayer( const VLayer* layer )
 {
 	qDebug ("insert layer");
 	m_layers.append( layer );
+}
+
+void
+VDocument::insertObject( const VObject* object )
+{
+	m_activeLayer->insertObject( object );
 }
 
 void
@@ -173,5 +180,139 @@ VDocument::deselectAllObjects()
 	}
 
 	m_selection.clear();
+}
+
+void
+VDocument::moveSelectionUp()
+{
+	//kdDebug() << "KarbonPart::moveSelectionUp" << endl;
+	VObjectList selection = m_selection;
+
+	VObjectList objects;
+
+	VLayerListIterator litr( m_layers );
+	while( !selection.isEmpty() )
+	{
+		kdDebug() << "!selection.isEmpty()" << endl;
+		for ( ; litr.current(); ++litr )
+		{
+			VObjectList todo;
+			VObjectListIterator itr( selection );
+			for ( ; itr.current() ; ++itr )
+			{
+				objects = litr.current()->objects();
+				VObjectListIterator itr2( objects );
+				// find all selected VObjects that are in the current layer
+				for ( ; itr2.current(); ++itr2 )
+					if( itr2.current() == itr.current() )
+					{
+						todo.append( itr.current() );
+						// remove from selection
+						selection.removeRef( itr.current() );
+					}
+			}
+			// we have found the affected vobjects in this vlayer
+			VObjectListIterator itr3( todo );
+			for ( ; itr3.current(); ++itr3 )
+				litr.current()->moveObjectUp( itr3.current() );
+		}
+	}
+}
+
+void
+VDocument::moveSelectionDown()
+{
+	//kdDebug() << "KarbonPart::moveSelectionDown" << endl;
+	VObjectList selection = m_selection;
+
+	VObjectList objects;
+
+	VLayerListIterator litr( m_layers );
+	while( !selection.isEmpty() )
+	{
+		//kdDebug() << "!selection.isEmpty()" << endl;
+		for ( ; litr.current(); ++litr )
+		{
+			VObjectList todo;
+			VObjectListIterator itr( selection );
+			for ( ; itr.current() ; ++itr )
+			{
+				objects = litr.current()->objects();
+				VObjectListIterator itr2( objects );
+				// find all selected VObjects that are in the current layer
+				for ( ; itr2.current(); ++itr2 )
+					if( itr2.current() == itr.current() )
+					{
+						todo.append( itr.current() );
+						// remove from selection
+						selection.removeRef( itr.current() );
+					}
+			}
+			// we have found the affected vobjects in this vlayer
+			VObjectListIterator itr3( todo );
+			for ( ; itr3.current(); ++itr3 )
+				litr.current()->moveObjectDown( itr3.current() );
+		}
+	}
+}
+
+void
+VDocument::moveSelectionToTop()
+{
+	VLayer *topLayer = m_layers.getLast();
+	//
+	VObjectListIterator itr( m_selection );
+	for ( ; itr.current() ; ++itr )
+	{
+		// remove from old layer
+		VObjectList objects;
+		VLayerListIterator litr( m_layers );
+
+		for ( ; litr.current(); ++litr )
+		{
+			objects = litr.current()->objects();
+			VObjectListIterator itr2( objects );
+			for ( ; itr2.current(); ++itr2 )
+				if( itr2.current() == itr.current() )
+				{
+					litr.current()->removeRef( itr2.current() );
+					// add to new top layer
+					topLayer->insertObject( itr.current() );
+					break;
+				}
+		}
+	}
+
+	m_activeLayer = topLayer;
+}
+
+void
+VDocument::moveSelectionToBottom()
+{
+	VLayer *bottomLayer = m_layers.getFirst();
+	//
+	VObjectListIterator itr( m_selection );
+	for ( ; itr.current() ; ++itr )
+	{
+		// remove from old layer
+		VObjectList objects;
+		VLayerListIterator litr( m_layers );
+
+		for ( ; litr.current(); ++litr )
+		{
+			objects = litr.current()->objects();
+			VObjectListIterator itr2( objects );
+			for ( ; itr2.current(); ++itr2 )
+				if( itr2.current() == itr.current() )
+				{
+					litr.current()->removeRef( itr2.current() );
+					// add to new top layer
+					bottomLayer->prependObject( itr.current() );
+					break;
+				}
+		}
+	}
+
+	m_activeLayer = bottomLayer;
 }
 

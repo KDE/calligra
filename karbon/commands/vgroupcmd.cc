@@ -23,7 +23,7 @@ VGroupCmd::execute()
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
-		m_part->activeLayer()->removeRef( itr.current() );
+		m_part->document().activeLayer()->removeRef( itr.current() );
 	}
 	m_group = new VGroup( m_objects );
 	m_part->insertObject( m_group );
@@ -42,7 +42,7 @@ VGroupCmd::unexecute()
 		m_part->document().selectObject( *( itr.current() ) );
 	}
 	// TODO : remove from corresponding VLayer
-	m_part->activeLayer()->removeRef( m_group );
+	m_part->document().activeLayer()->removeRef( m_group );
 	m_group->empty();
 	delete m_group;
 	m_group = 0L;

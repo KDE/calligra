@@ -46,7 +46,7 @@ public:
 	VDocument& document() { return m_doc; }
 
 	// inserting, deleting objects:
-	void insertObject( const VObject* object );	// insert a new vobject:
+	void insertObject( const VObject* object );	// insert a new vobject
 
 	// insert a command into the undo/redo-history:
 	void addCommand( VCommand* cmd, bool repaint = false );
@@ -56,14 +56,6 @@ public:
 
 	// layers:
 	const QPtrList<VLayer>& layers() const { return m_doc.layers(); }	// r/o access.
-	// TODO: still needed?
-	VLayer* activeLayer() const { return m_activeLayer; }	// active layer.
-
-	// move up/down within layer
-	void moveSelectionToTop();
-	void moveSelectionToBottom();
-	void moveSelectionDown();
-	void moveSelectionUp();
 
 	void setDefaultStrokeColor( const VColor &color ) { m_defaultStrokeColor = color; }
 	void setDefaultFillColor( const VColor &color ) { m_defaultFillColor = color; }
@@ -88,7 +80,6 @@ protected:
 
 private:
 	VDocument m_doc;
-	VLayer* m_activeLayer;				// the active/current layer.
 
 	VCommandHistory* m_commandHistory;	// everybody loves undo/redo.
 

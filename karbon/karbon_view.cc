@@ -233,25 +233,29 @@ KarbonView::editPurgeHistory()
 void
 KarbonView::selectionMoveToTop()
 {
-	m_part->moveSelectionToTop();
+	m_part->document().moveSelectionToTop();
+	m_part->repaintAllViews();
 }
 
 void
 KarbonView::selectionMoveUp()
 {
-	m_part->moveSelectionUp();
+	m_part->document().moveSelectionUp();
+	m_part->repaintAllViews();
 }
 
 void
 KarbonView::selectionMoveDown()
 {
-	m_part->moveSelectionDown();
+	m_part->document().moveSelectionDown();
+	m_part->repaintAllViews();
 }
 
 void
 KarbonView::selectionMoveToBottom()
 {
-	m_part->moveSelectionToBottom();
+	m_part->document().moveSelectionToBottom();
+	m_part->repaintAllViews();
 }
 
 void

@@ -11,6 +11,10 @@
 class QDomDocument;
 class QDomElement;
 
+// All non-visual, static doc info is in here.
+// The karbon part uses this class.
+// Filters can use this class as well instead of
+// the visually oriented karbon part.
 class VDocument
 {
 public: 
@@ -45,9 +49,21 @@ public:
 	void selectObjectsWithinRect( const KoRect& rect,
 								  const double zoomFactor, bool exclusive = false );
 
+	// move up/down within layer
+	void moveSelectionToTop();
+	void moveSelectionToBottom();
+	void moveSelectionDown();
+	void moveSelectionUp();
+
+	void insertObject( const VObject* object ); // insert a new vobject
+
+	VLayer* activeLayer() const { return m_activeLayer; }   // active layer.
+
 private:
 	VLayerList m_layers;			// all layers in this document
 	VObjectList m_selection;        // a list of selected objects.
+	VLayer* m_activeLayer;			// the active/current layer.
+
 	QString m_mime;
 	QString m_version;
 	QString m_editor;

@@ -27,7 +27,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	m_maxRecentFiles = 10;
 	dcop = 0;
 
-	m_activeLayer = m_doc.layers().getLast();
 	connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
 	connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
@@ -86,148 +85,8 @@ KarbonPart::insertObject( const VObject* object )
 {
 	// don't repaint here explicitely. some commands might want to insert many
 	// objects.
-	activeLayer()->insertObject( object );
+	m_doc.insertObject( object );
 	setModified( true );
-}
-
-void
-KarbonPart::moveSelectionUp()
-{
-	//kdDebug() << "KarbonPart::moveSelectionUp" << endl;
-	VObjectList selection = document().selection();
-
-	VObjectList objects;
-
-	VLayerListIterator litr( m_doc.layers() );
-	while( !selection.isEmpty() )
-	{
-		kdDebug() << "!selection.isEmpty()" << endl;
-		for ( ; litr.current(); ++litr )
-		{
-			VObjectList todo;
-			VObjectListIterator itr( selection );
-			for ( ; itr.current() ; ++itr )
-			{
-				objects = litr.current()->objects();
-				VObjectListIterator itr2( objects );
-				// find all selected VObjects that are in the current layer
-				for ( ; itr2.current(); ++itr2 )
-					if( itr2.current() == itr.current() )
-					{
-						todo.append( itr.current() );
-						// remove from selection
-						selection.removeRef( itr.current() );
-					}
-			}
-			// we have found the affected vobjects in this vlayer
-			VObjectListIterator itr3( todo );
-			for ( ; itr3.current(); ++itr3 )
-				litr.current()->moveObjectUp( itr3.current() );
-		}
-	}
-
-	repaintAllViews();
-}
-
-void
-KarbonPart::moveSelectionDown()
-{
-	//kdDebug() << "KarbonPart::moveSelectionDown" << endl;
-	VObjectList selection = document().selection();
-
-	VObjectList objects;
-
-	VLayerListIterator litr( m_doc.layers() );
-	while( !selection.isEmpty() )
-	{
-		//kdDebug() << "!selection.isEmpty()" << endl;
-		for ( ; litr.current(); ++litr )
-		{
-			VObjectList todo;
-			VObjectListIterator itr( selection );
-			for ( ; itr.current() ; ++itr )
-			{
-				objects = litr.current()->objects();
-				VObjectListIterator itr2( objects );
-				// find all selected VObjects that are in the current layer
-				for ( ; itr2.current(); ++itr2 )
-					if( itr2.current() == itr.current() )
-					{
-						todo.append( itr.current() );
-						// remove from selection
-						selection.removeRef( itr.current() );
-					}
-			}
-			// we have found the affected vobjects in this vlayer
-			VObjectListIterator itr3( todo );
-			for ( ; itr3.current(); ++itr3 )
-				litr.current()->moveObjectDown( itr3.current() );
-		}
-	}
-
-	repaintAllViews();
-}
-
-void
-KarbonPart::moveSelectionToTop()
-{
-	VLayer *topLayer = m_doc.layers().getLast();
-	//
-	VObjectListIterator itr( document().selection() );
-	for ( ; itr.current() ; ++itr )
-	{
-		// remove from old layer
-		VObjectList objects;
-		VLayerListIterator litr( m_doc.layers() );
-
-		for ( ; litr.current(); ++litr )
-		{
-			objects = litr.current()->objects();
-			VObjectListIterator itr2( objects );
-			for ( ; itr2.current(); ++itr2 )
-				if( itr2.current() == itr.current() )
-				{
-					litr.current()->removeRef( itr2.current() );
-					// add to new top layer
-					topLayer->insertObject( itr.current() );
-					break;
-				}
-		}
-	}
-
-	m_activeLayer = topLayer;
-	repaintAllViews();
-}
-
-void
-KarbonPart::moveSelectionToBottom()
-{
-	VLayer *bottomLayer = m_doc.layers().getFirst();
-	//
-	VObjectListIterator itr( document().selection() );
-	for ( ; itr.current() ; ++itr )
-	{
-		// remove from old layer
-		VObjectList objects;
-		VLayerListIterator litr( m_doc.layers() );
-
-		for ( ; litr.current(); ++litr )
-		{
-			objects = litr.current()->objects();
-			VObjectListIterator itr2( objects );
-			for ( ; itr2.current(); ++itr2 )
-				if( itr2.current() == itr.current() )
-				{
-					litr.current()->removeRef( itr2.current() );
-					// add to new top layer
-					bottomLayer->prependObject( itr.current() );
-					break;
-				}
-		}
-	}
-
-	m_activeLayer = bottomLayer;
-	repaintAllViews();
 }
 
 void
