@@ -920,6 +920,7 @@ void KWTableFrameSet::deleteCol( unsigned int col )
 /*================================================================*/
 void KWTableFrameSet::updateTempHeaders()
 {
+#if 0
     if ( !m_hasTmpHeaders ) return;
 
     for ( unsigned int i = 1; i < m_rows; i++ ) {
@@ -931,19 +932,18 @@ void KWTableFrameSet::updateTempHeaders()
                 QPainter p;
                 QPicture pic;
                 p.begin( &pic );
-#if 0
                 KWFormatContext fc( doc, m_doc->getFrameSetNum( fs ) + 1 );
                 fc.init( dynamic_cast<KWTextFrameSet*>( fs )->getFirstParag(), true );
 
                 bool bend = false;
                 while ( !bend )
                     bend = !fc.makeNextLineLayout();
-#endif
 
                 p.end();
             }
         }
     }
+#endif
 }
 
 /*================================================================*/
