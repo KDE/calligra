@@ -20,7 +20,7 @@ screen, it is divided into 5 major areas:</para>
 Toolbars</link>.</para></listitem>
 
 <listitem><para><link linkend="da">the Document
-Area</link>.</para></listitem>
+Area</link>, including the rulers and scroll bars.</para></listitem>
 
 <listitem><para><link linkend="statb">and the Statusbar</link>.</para></listitem>
 
@@ -43,7 +43,7 @@ For more information on the titlebar, please see the &kde; User Guide.</para>
 
 <listitem><para>The menubar provides access to all of &kword;'s functions and
 options.  Each part of the &kword; menubar is detailed in the section
-entitled: <link linkend="basic-menubar">The Basic Menu Bar</link>.</para>
+entitled: <link linkend="basic-menubar">The Basic Menubar</link>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -72,7 +72,7 @@ See the section on <link linkend="opt-ui">Configure &kword; User Interface</link
 <itemizedlist>
 <listitem><para><emphasis>Horizontal and Vertical Rulers</emphasis> -
 The rulers can be used to help you layout your document.  For more
-information on Rulers, see <link linkend="rulers">Using
+information on rulers, see <link linkend="rulers">Using
 Rulers</link>.</para>
 </listitem>
 
@@ -105,7 +105,7 @@ frames, select text, and cut and paste text.  </para>
 <sect1 id="rulers">
 <title>Using Rulers</title>
 
-<para>Along the left and top edges of the document area, are a
+<para>Along the top and left edges of the document area, are a
 horizontal and a vertical ruler.</para>
 
 <para>These rulers measure from the top left edge of the page. </para>
@@ -127,7 +127,7 @@ the new frame's settings.</para>
 <orderedlist numeration="arabic">
 <listitem><para>Millimeters (mm)</para></listitem>
 <listitem><para>Points (pt)</para></listitem>
-<listitem><para>Inches (in)</para></listitem>
+<listitem><para>Inches (inch)</para></listitem>
 </orderedlist>
 
 <para>To change the units of the ruler, place the mouse cursor over one

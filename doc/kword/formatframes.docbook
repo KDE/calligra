@@ -51,14 +51,14 @@ edit.</para>
 <itemizedlist>
 <listitem>
 <para>Select <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset</guimenuitem></menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset...</guimenuitem></menuchoice>
 from the menubar.</para>
 </listitem>
 
 <listitem>
 <para>Place the mouse pointer on the border of the frame, and click once
 with the &RMB;.  A small menu
-will appear.  Select <guimenuitem>Frame/Frameset</guimenuitem>.</para>
+will appear.  Select <guimenuitem>Frame/Frameset...</guimenuitem>.</para>
 </listitem>
 
 </itemizedlist>

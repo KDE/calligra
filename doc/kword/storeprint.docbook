@@ -69,8 +69,8 @@ document</link></para>
 <para><link linkend="loading-empty-doc">Start an <quote>Empty</quote>
 document. (This is the default)</link></para>
 </listitem>
-</itemizedlist
->
+</itemizedlist>
+<para>&kword; remembers your previous choice.  That previous choice will be the current default option.</para>
 <tip>
 <para>You can use the following keyboard shortcuts:</para>
 
@@ -89,6 +89,7 @@ action="simul">&Alt;<keycap>E</keycap></keycombo></entry></row>
 <guibutton>OK</guibutton> to confirm your selection.</para>
 
 </tip>
+
 
 <sect2 id="new-doc-from-template">
 <title>Starting a new document from a template</title>
@@ -131,7 +132,7 @@ template, and &kword; will immediately load that template.</para>
 
 <para>Click on the <guibutton>Choose</guibutton> button, and an new
 dialog box is revealed.  For more details on this dialog box refer to
-<link linkend="loading">Retrieving a saved document</link>.</para>
+<link linkend="file-dialog">Using the file selection dialog</link>.</para>
 
 <sect3 id="loading-recent-doc">
 <title>Open a Recent Document</title>
@@ -145,7 +146,7 @@ will load the template.</para>
 <sect3 id="loading-empty-doc">
 <title>Loading an Empty Document</title>
 
-<para>This is the default action, and begins a new document in Text Oriented Mode, with one frame per page.
+<para>This begins a new document in Text Oriented Mode, with one frame per page.
 This is an excellent choice for every day correspondence, or general
 word processing.  Simply click <guibutton>OK</guibutton> to
 begin.</para>
@@ -171,7 +172,7 @@ usually want to save this to a file on your hard drive.</para>
 <listitem>
 <para>By selecting <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice> from
-the Menu Bar</para>
+the Menubar</para>
 </listitem>
 
 <listitem>
@@ -194,7 +195,7 @@ will not be given the option to change the filename or its location. If
 you want to change the name of the file, or where it is saved, you must
 select <link linkend="command-save-as"><menuchoice>
 <guimenu>File</guimenu><guimenuitem>Save
-As...</guimenuitem></menuchoice></link> from the Menu bar.</para></important>
+As...</guimenuitem></menuchoice></link> from the Menubar.</para></important>
 
 <para>If you have not saved this file before, it does not have a
 filename.  &kword; automatically executes the <link
@@ -205,8 +206,8 @@ command so you can provide a file name. </para>
 was saved without incident, &kword; will return you to editing your
 document.</para>
 
-<para>You can verify that the file was saved, by checking &kword;s title
-bar.  If there are unsaved changes, the titlebar will have
+<para>You can verify that the file was saved, by checking the titlebar.  
+If there are unsaved changes, the titlebar will have
 <emphasis>[modified]</emphasis> in the titlebar.</para>
 
 <screenshot>
@@ -270,7 +271,7 @@ previous location.</para></important>
 </screenshot>
 
 <para>For more information on using this dialog, see the section entitled
-<link linkend="file-dialog">Using the file dialog</link>.</para>
+<link linkend="file-dialog">Using the file selection dialog</link>.</para>
 
 <para>When you are in the folder you want to save the file in, type a filename into the
 <guilabel>Location</guilabel> box.</para>
@@ -322,7 +323,7 @@ to save outside that area, &kword; will generate an error.</para>
 <title>Retrieving a Saved Document</title>
 
 <para>
-The <command>Open</command> command can be invoked 4 ways:
+The Open command can be invoked 4 ways:
 </para>
 
 <itemizedlist>
@@ -335,7 +336,7 @@ linkend="new-doc">Opening a New Document</link></para>
 <listitem>
 <para>By selecting <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice> from
-the Menu bar</para>
+the menubar</para>
 </listitem>
 
 <listitem>
@@ -381,8 +382,8 @@ button, the load will be aborted.</para>
 <itemizedlist>
 <listitem>
 <para>By selecting <menuchoice>
-<guimenu>File</guimenu><guimenuitem>Print</guimenuitem></menuchoice>
-from the Menu bar</para>
+<guimenu>File</guimenu><guimenuitem>Print...</guimenuitem></menuchoice>
+from the menubar</para>
 </listitem>
 <listitem>
 <para>You can use the keyboard shortcut:
@@ -405,9 +406,9 @@ appear.</para>
 </mediaobject>
 </screenshot>
 
-<para>The top drop down box labeled <guilabel>Name</guilabel> shows the
+<para>The top drop down box labeled <guilabel>Name:</guilabel> shows the
 currently selected printer.  To configure this printer click on the
-<guibutton>Properties</guibutton> button.</para>
+<guibutton>Properties...</guibutton> button.</para>
 
 <para>To select a different printer, click on the dropdown box and
 select the desired printer.</para>
@@ -415,9 +416,9 @@ select the desired printer.</para>
 <para>If you want to print your output into a postscript file, to a PDF file, 
 a fax modem (to send it as a fax) or email the file as a PDF file, select
 the appropriate option from the dropdown box. Once that option has been selected, enter
-the filename into the text box labled <guilabel>Output File</guilabel>.</para>
+the filename into the text box labled <guilabel>Output File:</guilabel>.</para>
 
-<para>The line labled <guilabel>Print system currently used</guilabel> determines how
+<para>The line labled <guilabel>Print system currently used:</guilabel> determines how
 &kword; interacts with your computer and any attached printers.  Complete setup of the
 printing system is beyond the scope of this document.  For more information see the KDE 
 print web site at <ulink url="http://printing.kde.org">http://printing.kde.org</ulink>.</para>
@@ -445,11 +446,11 @@ located on (simply select <guilabel>Current</guilabel>), or print a range of pag
 <guilabel>Print Range</guilabel> option, enter your page range in the text box
 provided. (Example:  3-13)</para>
 
-<para>In the drop down box labeled <guilabel>Page Set</guilabel> you can tell &kword; to
+<para>In the drop down box labeled <guilabel>Page Set:</guilabel> you can tell &kword; to
 print the <guilabel>Even pages</guilabel>, the <guilabel>Odd pages</guilabel> or 
 <guilabel>All pages</guilabel>.</para>
 
-<para>In the box on the right labeled <guilabel>Copies</guilabel>, you should set the number of copies
+<para>In the box on the right labeled <guilabel>Copies:</guilabel>, you should set the number of copies
 you want printed.  You can either enter the number directly into the
 box, or use the arrows to adjust the number. &kword; can print a maximum
 of 999 copies at once.</para>

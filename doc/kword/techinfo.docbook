@@ -91,7 +91,7 @@ boxes when selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Document In
 
 <varlistentry>
 <term><filename>mimetype</filename></term>
-<listitem><para>This file contains the mimetype for kword files.  This is information is used by &kde; to determine that this is a
+<listitem><para>This file contains the mimetype for kword files.  This information is used by &kde; to determine that this is a
 &kword; file.</para>
 <para>This file always contains:  <emphasis>application/x-kword</emphasis></para>
 </listitem>

@@ -296,7 +296,7 @@ move to another frameset..</para>
 
 <para>You can change the frame set of the currently selected frame by
 selecting <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset</guimenuitem></menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset...</guimenuitem></menuchoice>
 from the Menu bar</para>
 
 <tip><para>You can also accomplish this by clicking on the frame border once with the &RMB;, and selecting

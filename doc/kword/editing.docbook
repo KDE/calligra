@@ -491,7 +491,7 @@ certain formatting options as well as the text itself.</para>
 <guibutton>Show Formatting Options</guibutton>. </para>
 <para>Clicking <guibutton>No options</guibutton> disables all previous formatting options selections.</para>
 
-<para>Once<guibutton>Show Formatting Options</guibutton> has been clicked,  a new dialog will appear.</para>
+<para>Once <guibutton>Show Formatting Options</guibutton> has been clicked,  a new dialog will appear.</para>
 
 <screenshot>
 <mediaobject>
@@ -721,7 +721,7 @@ certain formatting options as well as the text itself.</para>
 <guibutton>Show Formatting Options</guibutton>. </para>
 <para>Clicking <guibutton>No options</guibutton> disables all previous formatting options selections.</para>
 
-<para>Once<guibutton>Show Formatting Options</guibutton> has been clicked,  a new dialog will appear.</para>
+<para>Once <guibutton>Show Formatting Options</guibutton> has been clicked,  a new dialog will appear.</para>
 
 <screenshot>
 <mediaobject>
@@ -799,7 +799,7 @@ to include boldface, italicized or strikeout fonts in the search text.</para>
 <para>Clicking <guibutton>No options</guibutton> disables all previous formatting options selections. This ensures that &kword; 
 changes the text, but not the formatting of the text (bold text will remain boldface, superscript text will remain superscript, etc).</para>
 
-<para>Once<guibutton>Show Formatting Options</guibutton> has been clicked,  a new dialog will appear.</para>
+<para>Once <guibutton>Show Formatting Options</guibutton> has been clicked,  a new dialog will appear.</para>
 
 <screenshot>
 <mediaobject>
@@ -1497,7 +1497,7 @@ button.</para>
 </sect3>
 <sect3 id="autocorrection-exceptions">
 <title>Autocorrection Exceptions</title>
-<para>There are instances where &kword; make make autocorrection changes
+<para>There are instances where &kword; will make autocorrection changes
 that are inappropriate.  You can use the third tab of this dialog to define
 <emphasis>exceptions</emphasis> to the rules previously discussed.</para>
 <para>The dialog for exceptions is shown below:</para>
