@@ -189,6 +189,79 @@ static QDomElement convertValue( QDomDocument& doc, const Sidewinder::Value& val
 }
 
 
+
+static QString convertField( const QString& s )
+{
+  QString result = s;
+
+  result.replace( "&A", "<sheet>" );
+  result.replace( "&P", "<page>" );
+  result.replace( "&N", "<pages>" );
+  result.replace( "&D", "<date>" );
+  result.replace( "&T", "<time>" );
+  result.replace( "&F", "<file>" ); // not really correct
+
+  return result;
+}
+
+static QDomElement convertHeader( QDomDocument& doc, const QString& left,
+  const QString& center, const QString& right )
+{
+  QDomElement headElement = doc.createElement( "head" );
+
+  QDomElement headLeftElement = doc.createElement( "left" );
+  headLeftElement.appendChild( doc.createTextNode( convertField( left ) ) );
+  headElement.appendChild( headLeftElement );
+
+  QDomElement headCenterElement = doc.createElement( "center" );
+  headCenterElement.appendChild( doc.createTextNode( convertField( center ) ) );
+  headElement.appendChild( headCenterElement );
+
+  QDomElement headRightElement = doc.createElement( "right" );
+  headRightElement.appendChild( doc.createTextNode( convertField( right ) ) );
+  headElement.appendChild( headRightElement );
+
+  return headElement;
+}
+
+static QDomElement convertFooter( QDomDocument& doc, const QString& left,
+  const QString& center, const QString& right )
+{
+  QDomElement footElement = doc.createElement( "foot" );
+
+  QDomElement footLeftElement = doc.createElement( "left" );
+  footLeftElement.appendChild( doc.createTextNode( convertField( left ) ) );
+  footElement.appendChild( footLeftElement );
+
+  QDomElement footCenterElement = doc.createElement( "center" );
+  footCenterElement.appendChild( doc.createTextNode( convertField( center ) ) );
+  footElement.appendChild( footCenterElement );
+
+  QDomElement footRightElement = doc.createElement( "right" );
+  footRightElement.appendChild( doc.createTextNode( convertField( right ) ) );
+  footElement.appendChild( footRightElement );
+
+  return footElement;
+}
+
+static QDomElement convertPaper( QDomDocument& doc, double leftMargin,
+  double rightMargin, double topMargin, double bottomMargin )
+{
+  QDomElement paperElement = doc.createElement( "paper" );
+  paperElement.setAttribute( "format", "A4" );
+  paperElement.setAttribute( "orientation", "Portrait" );
+
+  QDomElement bordersElement = doc.createElement( "borders" );
+  bordersElement.setAttribute( "left", leftMargin );
+  bordersElement.setAttribute( "right", rightMargin );
+  bordersElement.setAttribute( "top", topMargin );
+  bordersElement.setAttribute( "bottom", bottomMargin );
+  paperElement.appendChild( bordersElement );
+
+  return paperElement;
+}
+
+
 KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCString& to )
 {
   if (to != "application/x-kspread" || from != "application/msexcel")
@@ -247,6 +320,17 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
     // FIXME the real active sheet
     if( i == 0 ) map.setAttribute( "activeTable",string( sheet->name() ).string() );
 
+    // paper settings, i.e <paper>
+    QDomElement pe = convertPaper( mainDocument,
+      POINT_TO_MM ( sheet->leftMargin() ), POINT_TO_MM ( sheet->rightMargin() ),
+      POINT_TO_MM ( sheet->topMargin() ), POINT_TO_MM ( sheet->bottomMargin() ) );
+    table.appendChild( pe );
+    pe.appendChild( convertHeader( mainDocument, string( sheet->leftHeader() ).string(),
+      string( sheet->centerHeader() ).string(), string( sheet->rightHeader() ).string() ) );
+    pe.appendChild( convertFooter( mainDocument, string( sheet->leftFooter() ).string(),
+      string( sheet->centerFooter() ).string(), string( sheet->rightFooter() ).string() ) );
+
+    // columns, i.e <column>
     for( unsigned i = 0; i <= sheet->maxColumn(); i++ )
     {
       Sidewinder::Column* column = sheet->column( i, false );
@@ -262,6 +346,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
       }
     }
 
+    // rows, i.e <row>
     for( unsigned i = 0; i <= sheet->maxRow(); i++ )
     {
       Sidewinder::Row* row = sheet->row( i, false );
@@ -277,6 +362,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
       }
     }
 
+    // cells, i.e <cell>
     for( unsigned row = 0; row <= sheet->maxRow(); row++ )
       for( unsigned col = 0; col <= sheet->maxColumn(); col++ )
       {
