@@ -56,6 +56,7 @@ public:
 
   KoDocument *m_parent;
   KoDocument *m_doc;
+  bool m_deleted;
 };
 
 KoDocumentChild::KoDocumentChild( KoDocument* parent, KoDocument* doc, const QRect& geometry )
@@ -73,6 +74,7 @@ KoDocumentChild::KoDocumentChild( KoDocument* parent )
   d = new KoDocumentChildPrivate;
   d->m_parent = parent;
   d->m_doc = 0L;
+  d->m_deleted = false;
 }
 
 void KoDocumentChild::setDocument( KoDocument *doc, const QRect &geometry )
@@ -338,6 +340,16 @@ KoDocumentChild::~KoDocumentChild()
     d->m_doc=0L;
   }
   delete d;
+}
+
+bool KoDocumentChild::isDeleted() const
+{
+    return d->m_deleted;
+}
+
+void KoDocumentChild::setDeleted( bool on )
+{
+    d->m_deleted = on;
 }
 
 #include <koDocumentChild.moc>

@@ -2121,6 +2121,20 @@ void KWPartFrameSet::printDebug()
 
 #endif
 
+void KWPartFrameSet::setDeleted( bool on)
+{
+    m_child->setDeleted( on );
+}
+
+void KWPartFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
+{
+    KWFrameSet::delFrame( _num, remove, recalc );
+    if ( frames.isEmpty() )         // then the whole frameset and thus the child is deleted 
+        m_child->setDeleted(); 
+}
+
+
+
 KWPartFrameSetEdit::KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas )
     : KWFrameSetEdit( fs, canvas )
 {

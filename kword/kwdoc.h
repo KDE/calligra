@@ -99,9 +99,6 @@ public:
     KWPartFrameSet * partFrameSet() const { return m_partFrameSet; }
     virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
 
-    virtual bool isDeleted();
-
-
 protected:
     KWDocument *m_pKWordDoc;
     KWPartFrameSet *m_partFrameSet;

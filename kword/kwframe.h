@@ -928,7 +928,16 @@ public:
     virtual void printDebug();
 #endif
 
+    /** 
+    *   Delete a frame from the set of frames this frameSet has.
+    *   @param num The frameNumber to be removed.
+    *   @param remove passing true means that there can not be an undo of the action.
+    *   @param recalc do an updateFrames()
+    */
+    void delFrame( unsigned int _num, bool remove = true, bool recalc = true );
 
+    void setDeleted( bool on = true );
+        
 private:
     KWChild *m_child;
     KWFramePartMoveCommand *m_cmdMoveChild;

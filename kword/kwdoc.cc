@@ -107,10 +107,6 @@ KoDocument* KWChild::hitTest( const QPoint& p, const QWMatrix& _matrix )
     return KoDocumentChild::hitTest( p, _matrix );
 }
 
-bool KWChild::isDeleted()
-{
-    return ( !m_partFrameSet || m_partFrameSet->isDeleted() );
-}
 
 /******************************************************************/
 /* Class: KWCommandHistory                                        */

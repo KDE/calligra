@@ -1037,6 +1037,10 @@ void KWDeleteFrameCommand::unexecute()
     frame->setFrameSet( frameSet );
     frameSet->addFrame( frame );
 
+    KWPartFrameSet * partfs = dynamic_cast<KWPartFrameSet *>( frameSet );
+    if ( partfs )
+        partfs->setDeleted( false );
+        
     KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>( frameSet );
     if ( textfs )
         textfs->textObject()->formatMore( 2 );
