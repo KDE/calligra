@@ -261,6 +261,9 @@ QString KSpreadCellIface::alignY() const
         case KSpreadCell::Bottom :
                 alignString="Bottom";
                 break;
+        case KSpreadCell::UndefinedY :
+                alignString="UndefinedY";
+                break;
         }
     return alignString;
 }
