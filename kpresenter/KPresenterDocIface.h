@@ -181,6 +181,10 @@ k_dcop:
     bool moveHorizontalHelpLine( int index, double newPos);
     bool moveVerticalHelpLine( int index, double newPos);
 
+
+    bool showGrid() const;
+    void setShowGrid ( bool _grid );
+
 private:
     KPresenterDoc *doc;
 

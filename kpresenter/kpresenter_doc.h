@@ -369,7 +369,13 @@ public:
 
 
     void updateHelpLineButton();
+    void updateGridButton();
 
+    double getGridX() { return m_gridX; }
+    void setGridX(double _x) { m_gridX=_x; }
+
+    double getGridY() { return m_gridY; }
+    void setGridY(double _y) { m_gridY=_y; }
 
 public slots:
     void movePage( int from, int to );
@@ -510,6 +516,9 @@ private:
     QValueList<double> m_vertHelplines;
 
     QPtrList<KPrPage> m_pageList;
+
+    double m_gridX;
+    double m_gridY;
 
     KPresenterView *m_kpresenterView;;
     KPrPage *m_initialActivePage;

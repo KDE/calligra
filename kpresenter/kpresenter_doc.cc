@@ -214,6 +214,8 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     //_pageLayout.unit = KoUnit::U_MM;
     m_indent = MM_TO_POINT( 10.0 );
+    m_gridX = MM_TO_POINT( 10.0 );
+    m_gridY = MM_TO_POINT( 10.0 );
     KPrPage *newpage=new KPrPage(this);
     m_pageList.insert( 0,newpage);
     emit sig_changeActivePage(newpage );
@@ -2854,6 +2856,15 @@ QDomElement KPresenterDoc::saveHelpLines( QDomDocument &doc )
         helplines.appendChild( lines );
     }
     return helplines;
+}
+
+
+void KPresenterDoc::updateGridButton()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KPresenterView*)it.current())->updateGridButton();
+
 }
 
 

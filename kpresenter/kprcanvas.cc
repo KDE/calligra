@@ -415,40 +415,42 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2)
 
     if(!doc->isReadWrite())
         return;
-    if( editMode && m_view->kPresenterDoc()->showGrid())
+    if( editMode && doc->showGrid())
     {
         KoRect rect = m_view->zoomHandler()->unzoomRect(rect2);
         QPen _pen = QPen( Qt::black, 6, Qt::DotLine );
         painter->save();
         painter->setPen( _pen );
         QRect pageRect=activePage()->getZoomPageRect();
-        int offset = (int)(pageRect.width()/10);
-        for( int i = pageRect.left() ; i< pageRect.width();)
+        KoRect unZoomPageRect=activePage()->getPageRect();
+        int offset = m_view->zoomHandler()->zoomItX( doc->getGridX() );
+        int nbRow = QMAX( 1, (int )( unZoomPageRect.width()/doc->getGridX()));
+        int nbCol = QMAX( 1, (int )( unZoomPageRect.height()/doc->getGridY()));
+
+        for( int i = 0 ; i <= nbRow; i++)
         {
-            if( rect2.intersects( QRect( i, pageRect.top(), 1 , pageRect.height())))
+            if( rect.intersects( KoRect( i * doc->getGridX() , rect.top(), 1 , rect.height())))
             {
                 for ( int j = pageRect.top() ; j< pageRect.height();)
                 {
-                    painter->drawPoint( i , j );
+                    painter->drawPoint( i * offset , j );
                     j+=offset;
                 }
             }
-            i+=offset;
         }
 
-        for( int i = pageRect.top () ; i< pageRect.height();)
+        offset = m_view->zoomHandler()->zoomItY( doc->getGridY() );
+        for( int i = 0 ; i <= nbCol ; i++)
         {
-            if( rect2.intersects( QRect(  pageRect.left(), i, pageRect.width() , 1)))
+            if( rect.intersects( KoRect( rect.left() , i * doc->getGridY(), pageRect.width(), 1)))
             {
                 for ( int j = pageRect.left() ; j< pageRect.width();)
                 {
-                    painter->drawPoint( j , i );
+                    painter->drawPoint( j, i * offset );
                     j+=offset;
                 }
             }
-            i+=offset;
         }
-
         painter->restore();
 
     }
@@ -461,7 +463,7 @@ void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2)
 
     if(!doc->isReadWrite())
         return;
-    if( editMode && m_view->kPresenterDoc()->showHelplines())
+    if( editMode && doc->showHelplines())
     {
         KoRect rect = m_view->zoomHandler()->unzoomRect(rect2);
         QValueList<double>::Iterator i;

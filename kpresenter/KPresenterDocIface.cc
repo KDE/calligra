@@ -625,3 +625,15 @@ bool KPresenterDocIface::moveVerticalHelpLine( int index, double newPos)
     doc->repaint( false );
     return true;
 }
+
+bool KPresenterDocIface::showGrid() const
+{
+    return doc->showGrid();
+}
+
+void KPresenterDocIface::setShowGrid ( bool _grid )
+{
+    doc->setShowGrid( _grid);
+    doc->updateGridButton();
+    doc->repaint( false );
+}
