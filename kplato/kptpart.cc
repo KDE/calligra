@@ -24,6 +24,7 @@
 #include "kptproject.h"
 #include "kptprojectdialog.h"
 #include "kptresource.h"
+#include "kptcontext.h"
 
 #include <qpainter.h>
 #include <qfileinfo.h>
@@ -45,7 +46,8 @@ namespace KPlato
 KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
 		 QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parentWidget, widgetName, parent, name, singleViewMode),
-      m_project(0), m_projectDialog(0), m_view(0)
+      m_project(0), m_projectDialog(0), m_view(0),
+      m_context(0)
 {
     m_update = m_calculate = false;
     m_commandHistory = new KoCommandHistory(actionCollection());
@@ -131,6 +133,9 @@ KoView *KPTPart::createViewInstance(QWidget *parent, const char *name) {
 	delete m_projectDialog;
 	m_projectDialog = 0;
     }
+    if (m_context)
+        m_view->setContext(*m_context);
+    
     return m_view;
 }
 
@@ -179,7 +184,7 @@ bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
     emit sigProgress(5);
 
     QDomNodeList list = plan.childNodes();
-    if (list.count() > 1) {
+    if (list.count() > 2) {
         // TODO: Make a proper bitching about this
         kdDebug() << "*** Error ***\n";
         kdDebug() << "  Children count should be 1 but is " << list.count()
@@ -191,7 +196,11 @@ bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
 
-            if (e.tagName() == "project") {
+            if (e.tagName() == "context") {
+                delete m_context;
+                m_context = new KPTContext();
+                m_context->load(e);
+            } else if (e.tagName() == "project") {
                 KPTProject *newProject = new KPTProject(m_config.behavior().dateTimeUsage == KPTBehavior::Date);
                 if (newProject->load(e)) {
                     // The load went fine. Throw out the old project
@@ -232,6 +241,15 @@ QDomDocument KPTPart::saveXML() {
     doc.setAttribute("version", CURRENT_SYNTAX_VERSION);
     document.appendChild(doc);
 
+    delete m_context;
+    m_context = 0;
+    if (m_view) {
+        m_context = new KPTContext();
+        m_view->getContext(*m_context);
+    }
+    if (m_context) {
+        m_context->save(doc);
+    }
     // Save the project
     m_project->save(doc);
 

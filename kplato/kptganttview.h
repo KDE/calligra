@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 - 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,6 +49,7 @@ class KPTNode;
 class KPTTask;
 class KPTProject;
 class KPTRelation;
+class KPTContext;
 
 class KPTGanttView : public QSplitter
 {
@@ -66,7 +67,7 @@ class KPTGanttView : public QSplitter
     void drawChanges(KPTProject &project);
     KPTView *mainView();
 
-    KPTNode *currentNode();
+    KPTNode *currentNode() const;
 
     void clear();
     void print(KPrinter &prts);
@@ -75,6 +76,9 @@ class KPTGanttView : public QSplitter
     
     bool exportGantt(QIODevice* device); // testing
     
+    virtual bool setContext(KPTContext &context);
+    virtual void getContext(KPTContext &context) const;
+
 signals:
     void modifyRelation(KPTRelation *rel) ;
     void addRelation(KPTNode *par, KPTNode *child);
@@ -108,7 +112,7 @@ protected:
 private:
     KDGanttViewItem *findItem(KPTNode *node);
     KDGanttViewItem *findItem(KPTNode *node, KDGanttViewItem *item);
-    KPTNode *getNode(KDGanttViewItem *item);
+    KPTNode *getNode(KDGanttViewItem *item) const;
     bool isDrawn(KDGanttViewItem *item);
     void setDrawn(KDGanttViewItem *item, bool state);
     void resetDrawn(KDGanttViewItem *_item);

@@ -30,6 +30,7 @@
 #include "kptdatetime.h"
 #include "kpttaskappointmentsview.h"
 #include "kptrelation.h"
+#include "kptcontext.h"
 
 #include "KDGanttView.h"
 #include "KDGanttViewItem.h"
@@ -180,7 +181,7 @@ KDGanttViewItem *KPTGanttView::findItem(KPTNode *node, KDGanttViewItem *item)
     return 0;
 }
 
-KPTNode *KPTGanttView::getNode(KDGanttViewItem *item) {
+KPTNode *KPTGanttView::getNode(KDGanttViewItem *item) const {
     if (item) {
         if (item->type() == KDGanttViewItem::Event){
             return static_cast<KPTGanttViewEventItem *>(item)->getTask();
@@ -804,7 +805,7 @@ void KPTGanttView::currentItemChanged(KDGanttViewItem* item)
         m_taskView->draw(msItem->getTask());
 }
 
-KPTNode *KPTGanttView::currentNode()
+KPTNode *KPTGanttView::currentNode() const
 {
     return getNode(m_currentItem);
 }
@@ -968,6 +969,32 @@ void KPTGanttView::slotModifyLink(KDGanttViewTaskLink* link) {
     KPTRelation *rel = par->findRelation(getNode(link->to().first()));
     if (rel)
         emit modifyRelation(rel);
+}
+
+bool KPTGanttView::setContext(KPTContext &context) {
+    kdDebug()<<k_funcinfo<<endl;
+    KPTProject &p = m_mainview->getProject();
+    currentItemChanged(findItem(p.findNode(context.currentNode)));
+    for (QStringList::ConstIterator it = context.closedNodes.begin(); it != context.closedNodes.end(); ++it) {
+        KDGanttViewItem *item = findItem(p.findNode(*it));
+        if (item) {
+            item->setOpen(false);
+        }
+    }
+    return true;
+}
+
+void KPTGanttView::getContext(KPTContext &context) const {
+    kdDebug()<<k_funcinfo<<endl;
+    if (currentNode()) {
+        context.currentNode = currentNode()->id();
+    }
+    for (KDGanttViewItem *i = m_gantt->firstChild(); i; i = i->nextSibling()) {
+        if (!i->isOpen()) {
+            context.closedNodes.append(getNode(i)->id());
+            kdDebug()<<k_funcinfo<<"add closed "<<i->listViewText()<<endl;
+        }
+    }
 }
 
 }  //KPlato namespace

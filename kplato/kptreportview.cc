@@ -21,6 +21,7 @@
 
 #include "kptview.h"
 #include "kptpart.h"
+#include "kptcontext.h"
 
 #include <kugar.h>
 
@@ -564,6 +565,15 @@ void KPTReportView::slotPrevPage() {
 
 void KPTReportView::slotLastPage() {
     m_reportview->slotLastPage();
+}
+
+bool KPTReportView::setContext(KPTContext &context) {
+    kdDebug()<<k_funcinfo<<endl;
+    return true;
+}
+
+void KPTReportView::getContext(KPTContext &context) const {
+    kdDebug()<<k_funcinfo<<endl;
 }
 
 }  //KPlato namespace

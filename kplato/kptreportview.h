@@ -42,6 +42,7 @@ namespace KPlato
 
 class KPTView;
 class KPTNode;
+class KPTContext;
 
 class ReportTagsPrivate;
 
@@ -81,6 +82,9 @@ class KPTReportView : public QWidget
     QString setResourceDetail(KPTResource *res);
 
     QString setDetail(const QString &source, QStringList &properties, QString &level);
+
+    virtual bool setContext(KPTContext &context);
+    virtual void getContext(KPTContext &context) const;
 
 public slots:
 	void slotFirstPage();

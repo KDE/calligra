@@ -29,7 +29,7 @@ libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
     kptconfigdialog.cc \
     kpttaskprogresspanel.cc kpttaskprogresspanelbase.ui \
     kptconfigbehaviorpanel.cc kptconfigbehaviorpanelbase.ui \
-    kptconfig.cc \
+    kptconfig.cc kptcontext.cc \
     kptresourceuseview.cc kptresourcesdialog.cc
 
 # (this is not used)
@@ -52,7 +52,7 @@ noinst_HEADERS = kptaboutdata.h kptduration.h kptfactory.h \
     kptconfigdialog.h \
     kpttaskprogresspanel.h \
     kptconfigbehaviorpanel.h \
-    kptconfig.h \
+    kptconfig.h kptcontext.h \
     kptresourceuseview.h kptresourcesdialog.h
 
 ## The part

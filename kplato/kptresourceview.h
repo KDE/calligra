@@ -42,6 +42,7 @@ class KPTNode;
 class KPTResourceGroup;
 class KPTResource;
 class ResourceItemPrivate;
+class KPTContext;
 
 
  class KPTResourceView : public QSplitter
@@ -65,6 +66,9 @@ class ResourceItemPrivate;
 
     KPTNode *currentNode() const { return m_currentNode; }
     
+    virtual bool setContext(KPTContext &context);
+    virtual void getContext(KPTContext &context) const;
+
 public slots:
     void resSelectionChanged(QListViewItem *item);
     void popupMenuRequested(QListViewItem * item, const QPoint & pos, int);

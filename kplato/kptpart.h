@@ -37,7 +37,7 @@ class KPTView;
 class KPTProject;
 class KPTProjectDialog;
 class KPTResourceGroup;
-
+class KPTContext;
 
 class KPTPart : public KoDocument {
     Q_OBJECT
@@ -90,6 +90,7 @@ private:
     bool m_update, m_calculate;
     
     KPTConfig m_config;
+    KPTContext *m_context;
 };
 
 }  //KPlato namespace

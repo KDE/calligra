@@ -24,6 +24,7 @@
 #include "kptpart.h"
 #include "kptproject.h"
 #include "kptrelation.h"
+#include "kptcontext.h"
 
 #include <kdebug.h>
 
@@ -116,6 +117,15 @@ void KPTPertView::print(KPrinter &printer) {
 
 KPTNode *KPTPertView::currentNode() {
     return m_canvasview->selectedNode(); 
+}
+
+bool KPTPertView::setContext(KPTContext &context) {
+    kdDebug()<<k_funcinfo<<endl;
+    return true;
+}
+
+void KPTPertView::getContext(KPTContext &context) const {
+    kdDebug()<<k_funcinfo<<endl;
 }
 
 }  //KPlato namespace

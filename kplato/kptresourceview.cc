@@ -25,6 +25,8 @@
 #include "kpttask.h"
 #include "kptresource.h"
 #include "kptdatetime.h"
+#include "kptcontext.h"
+
 #include <klistview.h>
 
 #include <qtabwidget.h>
@@ -230,6 +232,15 @@ void KPTResourceView::appListMenuRequested(QListViewItem * item, const QPoint & 
 void KPTResourceView::print(KPrinter &printer) {
     kdDebug()<<k_funcinfo<<endl;
 
+}
+
+bool KPTResourceView::setContext(KPTContext &context) {
+    kdDebug()<<k_funcinfo<<endl;
+    return true;
+}
+
+void KPTResourceView::getContext(KPTContext &context) const {
+    kdDebug()<<k_funcinfo<<endl;
 }
 
 }  //KPlato namespace

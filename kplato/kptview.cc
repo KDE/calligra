@@ -906,6 +906,48 @@ void KPTView::renameNode(KPTNode *node, QString name) {
     }
 }
 
+bool KPTView::setContext(KPTContext &context) {
+    kdDebug()<<k_funcinfo<<endl;
+    m_ganttview->setContext(context);
+    m_pertview->setContext(context);
+    m_resourceview->setContext(context);
+    m_resourceuseview->setContext(context);
+    m_reportview->setContext(context);
+    
+    if (context.currentView == "ganttview") {
+        slotViewGantt();
+    } else if (context.currentView == "pertview") {
+        slotViewPert();
+    } else if (context.currentView == "resourceview") {
+        slotViewResources();
+    } else if (context.currentView == "resourceuseview") {
+        slotViewResourceUse();
+    } else if (context.currentView == "reportview") {
+        //slotViewReport();
+    }
+    return true;
+}
+
+void KPTView::getContext(KPTContext &context) const {
+    kdDebug()<<k_funcinfo<<endl;
+    if (m_tab->visibleWidget() == m_ganttview) {
+        context.currentView = "ganttview";
+    } else if (m_tab->visibleWidget() == m_pertview) {
+        context.currentView = "pertview";
+    } else if (m_tab->visibleWidget() == m_resourceview) {
+        context.currentView = "resourceview";
+    } else if (m_tab->visibleWidget() == m_resourceuseview) {
+        context.currentView = "resourceuseview";
+    } else if (m_tab->visibleWidget() == m_reportview) {
+        context.currentView = "reportview";
+    }
+    m_ganttview->getContext(context);
+    m_pertview->getContext(context);
+    m_resourceview->getContext(context);
+    m_resourceuseview->getContext(context);
+    m_reportview->getContext(context);
+}
+
 #ifndef NDEBUG
 void KPTView::slotPrintDebug() {
     kdDebug()<<"-------- Debug printout: Node list" <<endl;

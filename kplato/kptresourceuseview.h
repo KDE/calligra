@@ -41,6 +41,7 @@ class KPTProject;
 class KPTResource;
 class KPTResourceGroup;
 class KPTProject;
+class KPTContext;
 
 class ResourceGroupItemPrivate;
 
@@ -53,6 +54,9 @@ public:
 
     void initMenu(KActionCollection *collection);
     
+    virtual bool setContext(KPTContext &context);
+    virtual void getContext(KPTContext &context) const;
+
 public slots:
     void draw(KPTProject &project);
     void slotLoadPrMinute();

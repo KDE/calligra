@@ -25,6 +25,8 @@
 #include "kptproject.h"
 #include "kptresource.h"
 #include "kptview.h"
+#include "kptcontext.h"
+
 #include <kactioncollection.h>
 
 #include <qpainter.h>
@@ -590,6 +592,15 @@ KPTResource *KPTResourceUseView::currentResource() {
 KPTResourceGroup *KPTResourceUseView::currentGroup() {
     ResourceGroupItemPrivate *g = dynamic_cast<ResourceGroupItemPrivate*>(m_selectedItem);
     return g == 0 ? 0 : g->group;
+}
+
+bool KPTResourceUseView::setContext(KPTContext &context) {
+    kdDebug()<<k_funcinfo<<endl;
+    return true;
+}
+
+void KPTResourceUseView::getContext(KPTContext &context) const {
+    kdDebug()<<k_funcinfo<<endl;
 }
 
 } //KPlato namespace

@@ -680,6 +680,8 @@ KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttView *parent, KPTNode *n
       m_view(parent)
 {
     setRenameEnabled(0, true);
+    setExpandable(true);
+    setOpen(true);
 }
 
 KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNode *node)

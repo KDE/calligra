@@ -34,6 +34,7 @@ class KPTView;
 class KPTPertCanvas;
 class KPTNode;
 class KPTRelation;
+class KPTContext;
 
 class KPTPertView : public QWidget
 {
@@ -53,6 +54,9 @@ public:
     void print(KPrinter &printer);
 
     KPTNode *currentNode();
+
+    virtual bool setContext(KPTContext &context);
+    virtual void getContext(KPTContext &context) const;
 
 public slots:
     void slotRMBPressed(KPTNode *node, const QPoint & point);

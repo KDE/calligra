@@ -22,6 +22,7 @@
 #define KPLATO_VIEW
 
 #include <koView.h>
+#include "kptcontext.h"
 
 class QListViewItem;
 class QPopupMenu;
@@ -49,6 +50,7 @@ class KPTPart;
 class KPTNode;
 class KPTProject;
 class KPTRelation;
+class KPTContext;
 
 class KPTView : public KoView {
     Q_OBJECT
@@ -77,6 +79,9 @@ public:
     
     void renameNode(KPTNode *node, QString name);
    
+    virtual bool setContext(KPTContext &context);
+    virtual void getContext(KPTContext &context) const;
+
 public slots:
     void slotUpdate(bool calculate);
     void slotEditResource();
