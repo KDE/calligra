@@ -132,7 +132,7 @@ public:
     virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles );
 
     void saveOasisPosObject( KoXmlWriter &xmlWriter );
-
+    void saveOasisObjectStyleAnimation( KoGenStyles& mainStyles, int objectId );
 
     virtual void flip(bool horizontal );
 
