@@ -3131,13 +3131,7 @@ void KSpreadView::setActiveTable( KSpreadSheet * _t, bool updateTable )
     return;
 
   m_pDoc->emitBeginOperation(false);
-
-  /* save the current selection on this table */
-  if (m_pTable != NULL)
-  {
-    savedAnchors.replace(m_pTable, selectionInfo()->selectionAnchor());
-    savedMarkers.replace(m_pTable, selectionInfo()->marker());
-  }
+  saveCurrentSheetSelection();
 
   KSpreadSheet * oldSheet = m_pTable;
 
@@ -6632,5 +6626,14 @@ void KSpreadView::paintUpdates()
   m_pCanvas->paintUpdates();
 }
 
+void KSpreadView::saveCurrentSheetSelection()
+{
+    /* save the current selection on this table */
+    if (m_pTable != NULL)
+    {
+        savedAnchors.replace(m_pTable, selectionInfo()->selectionAnchor());
+        savedMarkers.replace(m_pTable, selectionInfo()->marker());
+    }
+}
 #include "kspread_view.moc"
 
