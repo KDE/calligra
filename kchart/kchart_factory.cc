@@ -12,6 +12,7 @@
 #include <kinstance.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <kstandarddirs.h>
 
 namespace KChart
 {
@@ -71,6 +72,8 @@ KInstance* KChartFactory::global()
     if ( !s_global )
     {
          s_global = new KInstance(aboutData());
+         s_global->dirs()->addResourceType( "kchart_template",
+         KStandardDirs::kde_default("data") + "kchart/templates/");
          // Tell the iconloader about share/apps/koffice/icons
          s_global->iconLoader()->addAppDir("koffice");
     }

@@ -10,11 +10,11 @@
 # ================================================================
 # Taken from kspread, originial above
 
-template_DATA = 
-templatedir = $(kde_datadir)/kchart/templates
+template_DATA = .directory BarChart.desktop Empty.desktop
+templatedir = $(kde_datadir)/kchart/templates/chart
 
-templatesrc_DATA = BarChart.chrt
-templatesrcdir = $(kde_datadir)/kchart/templates/.source
+templatesrc_DATA = BarChart.chrt Empty.chrt
+templatesrcdir = $(kde_datadir)/kchart/templates/chart/.source
 
-templateicons_DATA = 
-templateiconsdir = $(kde_datadir)/kchart/templates/.icon
+templateicons_DATA = BarChart.png Empty.png
+templateiconsdir = $(kde_datadir)/kchart/templates/chart/.icon
