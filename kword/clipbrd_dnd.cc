@@ -22,6 +22,8 @@
 #include "parag.h"
 #include "defs.h"
 
+static const char *MimeTypes[] = {"text/plain", "text/html", MIME_TYPE, 0};
+
 /******************************************************************/
 /* Class: KWordDrag                                               */
 /******************************************************************/
@@ -53,10 +55,10 @@ void KWordDrag::setHTML( const QString &_html )
 /*================================================================*/
 const char *KWordDrag::format( int i ) const
 {
-    for ( int j = 0; MimeTypes[ j ] != QString::null; j++ )
+    for ( int j = 0; MimeTypes[ j ]; j++ )
     {
         if ( i == j )
-            return MimeTypes[ j ].ascii();
+            return MimeTypes[ j ];
     }
 
     return 0L;
@@ -67,11 +69,11 @@ QByteArray KWordDrag::encodedData( const char *mime ) const
 {
     QCString str;
 
-    if ( QString( mime ) == MimeTypes[ 0 ] )
+    if ( QString( mime ) == QString::fromLatin1(MimeTypes[ 0 ]) )
         str = plain.ascii();
-    else if ( QString( mime ) == MimeTypes[ 1 ] )
+    else if ( QString( mime ) == QString::fromLatin1(MimeTypes[ 1 ]) )
         str = html.ascii();
-    else if ( QString( mime ) == MimeTypes[ 2 ] )
+    else if ( QString( mime ) == QString::fromLatin1(MimeTypes[ 2 ]) )
         str = kword.ascii();
 
     return str;
@@ -80,9 +82,9 @@ QByteArray KWordDrag::encodedData( const char *mime ) const
 /*================================================================*/
 bool KWordDrag::canDecode( QMimeSource* e )
 {
-    for ( unsigned int i = 0; MimeTypes[ i ] != QString::null; i++ )
+    for ( unsigned int i = 0; MimeTypes[ i ]; i++ )
     {
-        if ( e->provides( MimeTypes[ i ] ) )
+        if ( e->provides( QString::fromLatin1(MimeTypes[ i ]) ) )
             return true;
     }
     return false;
@@ -91,9 +93,9 @@ bool KWordDrag::canDecode( QMimeSource* e )
 /*================================================================*/
 bool KWordDrag::decode( QMimeSource* e, QString& s )
 {
-    for ( unsigned int i = 0; MimeTypes[ i ] != QString::null; i++ )
+    for ( unsigned int i = 0; MimeTypes[ i ]; i++ )
     {
-        QByteArray ba = e->encodedData( MimeTypes[ i ] );
+        QByteArray ba = e->encodedData( QString::fromLatin1(MimeTypes[ i ]) );
         if ( ba.size() )
         {
             s = QString( ba );

@@ -32,7 +32,6 @@ class KWParag;
 /* Class: KWordDrag                                               */
 /******************************************************************/
 
-static const QString MimeTypes[] = {"text/plain", "text/html", MIME_TYPE, QString::null};
 
 class KWordDrag : public QDragObject
 {
