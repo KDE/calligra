@@ -304,7 +304,7 @@ void KPresenterDoc::setUnit( KoUnit::Unit _unit )
 
 void KPresenterDoc::saveConfig()
 {
-    if ( isEmbedded() )
+    if ( isEmbedded() || !isReadWrite())
         return;
     KConfig *config = KPresenterFactory::global()->config();
     config->setGroup( "Interface" );
@@ -1806,6 +1806,10 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
     emit sigProgress( -1 );
 
     connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
+    //desactivate bgspellchecking
+    //attributes isReadWrite is not placed at the beginning !
+    if ( !isReadWrite())
+        enableBackgroundSpellCheck( false );
 
     return true;
 }
