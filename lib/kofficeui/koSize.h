@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 
-   This file borrows from the QSize class; 
+   This file borrows from the QSize class;
    Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 */
 
@@ -80,14 +80,14 @@ public:
     qSwap(wd, ht);
   }
 
-private:  
+private:
   static void warningDivByZero()
   {
 #if defined(QT_CHECK_MATH)
     qWarning( "KoSize: Division by zero error" );
 #endif
   }
-  
+
   double wd;
   double ht;
 };
@@ -107,7 +107,7 @@ inline bool KoSize::isNull() const
 { return wd==0.0 && ht==0.0; }
 
 inline bool KoSize::isEmpty() const
-{ return wd<1.0 || ht<1.0; }
+{ return wd<=0.0 || ht<=0.0; }
 
 inline bool KoSize::isValid() const
 { return wd>=0.0 && ht>=0.0; }
