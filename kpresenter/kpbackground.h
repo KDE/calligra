@@ -22,7 +22,6 @@
 #include <ksize.h>
 
 #include "global.h"
-#include "kpclipart.h"
 #include "kppixmapcollection.h"
 #include "kpclipartcollection.h"
 
