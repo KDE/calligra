@@ -26,7 +26,6 @@
 #include <qdom.h>
 #include <qpainter.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 #include <GCurve.h>
 #include <Arrow.h>
@@ -62,13 +61,14 @@ GPolyline::GPolyline (const QDomElement &element) : GObject (element.namedItem("
               Arrow::getArrow (outlineInfo.endArrowId) : 0L);
 
     QDomElement p = element.firstChild().toElement();
-    Coord point;
+    Coord *point;
     int i=0;
     for( ; !p.isNull(); p = p.nextSibling().toElement() ) {
         if(p.tagName()=="point") {
-            point.x(p.attribute("x").toFloat());
-            point.y(p.attribute("y").toFloat());
-            addPoint(i, point);
+            point=new Coord();
+            point->x(p.attribute("x").toFloat());
+            point->y(p.attribute("y").toFloat());
+            points.insert(i, point);
             ++i;
         }
     }

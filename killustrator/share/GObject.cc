@@ -450,7 +450,7 @@ QDomElement GObject::writeToXml (QDomDocument &document) {
         // nothing more
         break;
     }
-    element.appendChild(KIllustrator::createMatrixElement("matrix", tmpMatrix, document));
+    element.appendChild(KIllustrator::createMatrixElement("matrix", tMatrix, document));
     return element;
 }
 
@@ -492,6 +492,8 @@ QDomElement KIllustrator::createMatrixElement(const QString &tag, const QWMatrix
 
 QWMatrix KIllustrator::toMatrix(const QDomElement &matrix) {
 
+    if(matrix.isNull())
+        return QWMatrix();
     double m11=matrix.attribute("m11").toDouble();
     double m12=matrix.attribute("m12").toDouble();
     double m21=matrix.attribute("m21").toDouble();
