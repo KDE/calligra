@@ -100,7 +100,7 @@ void Formula::getFormula(QDomNode p, int indent)
 			case QDomNode::ElementNode:
 				_formula = _formula + "<" + p.nodeName();
 				QDomNamedNodeMap attr = p.attributes();
-				for(int index = 0; index < attr.length(); index++)
+				for(unsigned int index = 0; index < attr.length(); index++)
 				{ // The attributes
 					_formula = _formula + " " + attr.item(index).nodeName();
 					_formula = _formula + "=\"" + attr.item(index).nodeValue() + "\"";
@@ -111,7 +111,7 @@ void Formula::getFormula(QDomNode p, int indent)
 				{
 					_formula = _formula + ">\n";
 					QDomNodeList child = p.childNodes();
-					for(int index = 0; index < child.length(); index++)
+					for(unsigned int index = 0; index < child.length(); index++)
 					{
 						getFormula(child.item(index), indent+3); // The child elements
 					}

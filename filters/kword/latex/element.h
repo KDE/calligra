@@ -25,6 +25,7 @@
 
 #include <qtextstream.h>
 #include "xmlparser.h"
+#include "border.h"
 
 /* FRAMESET */
 enum SType
@@ -91,7 +92,7 @@ enum TSide
  * This class is a element. An element is a component of a frame (text, picture,
  * formula, ...). 
  */
-class Element: public XmlParser
+class Element: public XmlParser, public Border
 {
 	/* FRAMESET PARAM */
 	SType   _type;

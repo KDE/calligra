@@ -194,7 +194,10 @@ void Document::generate(QTextStream &out, bool hasPreambule)
 	kdDebug() << endl << "body : " << _corps.count() << endl;
 
 	if(hasPreambule)
+	{
 		out << "\\begin{document}" << endl;
+		indent();
+	}
 	if(_corps.getFirst() != 0)
 		_corps.getFirst()->generate(out);
 
@@ -205,7 +208,9 @@ void Document::generate(QTextStream &out, bool hasPreambule)
 		_formulas.getFirst()->generate(out);*/
 	if(hasPreambule)
 		out << "\\end{document}" << endl;
-
+	desindent();
+	if(getIndentation() != 0)
+			kdError() << "Error : indent != 0 at the end ! " << endl;
 }
 
 /*******************************************/
@@ -349,7 +354,7 @@ Element* Document::searchAnchor(QString anchor)
 			return elt;
 		elt = _tables.next();
 	}
-	kdDebug() << "Pas de table, recherche dans les formules" << endl;
+	kdDebug() << "No in table, search in formulae list." << endl;
 	elt = _formulas.first();
 	while(elt != 0)
 	{
@@ -357,7 +362,7 @@ Element* Document::searchAnchor(QString anchor)
 			return elt;
 		elt = _formulas.next();
 	}
-	kdDebug() << "Pas de tables ni de formules, recherche dans les images" << endl;
+	kdDebug() << "No in table and formulae, search in pictures." << endl;
 	elt = _pixmaps.first();
 	while(elt != 0)
 	{

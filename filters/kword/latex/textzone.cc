@@ -314,7 +314,7 @@ void TextZone::analyse()
 /*******************************************/
 /* Generate the text formated (if needed). */
 /*******************************************/
-void TextZone::generate(QTextStream &out, int tab)
+void TextZone::generate(QTextStream &out)
 {
 
 	if(useFormat())
@@ -322,9 +322,9 @@ void TextZone::generate(QTextStream &out, int tab)
 
 	/* Display the text */
 	if(mustUseLatin1())
-		display(escapeLatin1(_texte), out, tab);
+		display(escapeLatin1(_texte), out);
 	else if(mustUseUnicode())
-		display(_texte, out, tab);
+		display(_texte, out);
 
 	if(useFormat())
 		generate_format_end(out);
@@ -336,7 +336,7 @@ void TextZone::generate(QTextStream &out, int tab)
 /* Trunc the text in about 80 caracters of */
 /* width except if there are not spaces.   */
 /*******************************************/
-void TextZone::display(QString texte, QTextStream& out, int tab)
+void TextZone::display(QString texte, QTextStream& out)
 {
 	QString line;
 	int index = 0, end = 0;
@@ -352,11 +352,12 @@ void TextZone::display(QString texte, QTextStream& out, int tab)
 			out << line.utf8() << endl;
 		else if(mustUseLatin1())
 			out << line << endl;
-		out.fill(tab);
+		writeIndent(out);
 		index = end;
 		end = texte.find(' ', index + 60, false);
 		line = texte.mid(index, end - index);
 	}
+	kdDebug() << line << endl;
 	if(mustUseUnicode())
 		out << line.utf8();
 	else if(mustUseLatin1())
@@ -385,7 +386,9 @@ void TextZone::generate_format_begin(QTextStream & out)
 	if(getSize() != 11)
 	{
 		out << "\\fontsize{" << getSize() << "}{1}%" << endl;
+		writeIndent(out);
 		out << "\\selectfont" << endl;
+		writeIndent(out);
 	}
 
 	/* Color */
@@ -423,6 +426,7 @@ void TextZone::generate_format_begin(QTextStream & out)
 void TextZone::generate_format_end(QTextStream & out)
 {
 	kdDebug() << "GENERATE FORMAT END" << endl;
+	
 	/* Alignement */
 	if(getAlign() == EA_SUPER)
 		out << "}";
@@ -437,7 +441,9 @@ void TextZone::generate_format_end(QTextStream & out)
 	if(getSize() != 11)
 	{
 		out << "\\fontsize{11}{1}%" << endl;
+		writeIndent(out);
 		out << "\\selectfont" << endl;
+		writeIndent(out);
 	}
 
 	/* Bold, Italic or underlined */

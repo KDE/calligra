@@ -106,7 +106,7 @@ class Format: public XmlParser
 		virtual void analyse(const QDomNode);
 
 		virtual void generate(QTextStream&) = 0;
-		virtual void generate(QTextStream&, int = 0);
+		//virtual void generate(QTextStream&, int = 0);
 
 };
 

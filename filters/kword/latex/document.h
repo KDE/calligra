@@ -25,8 +25,8 @@
 #include <qptrlist.h>
 #include <qtextstream.h>
 
-//#include "fileheader.h"		/* class header file.      */
 #include "listtable.h"		/* list of tables (another kind of list of elements). */
+#include "config.h"
 //#include "pixmap.h"
 
 enum EGenerate
@@ -44,7 +44,7 @@ enum EGenerate
  * This class hold a whole document with its headers, footers, footnotes, endnotes,
  * content, ... It can generate a latex file.
  */
-class Document: public XmlParser
+class Document: public XmlParser, Config
 {
 
 	QPtrList<Element> _headers;

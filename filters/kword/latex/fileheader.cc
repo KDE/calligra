@@ -40,7 +40,7 @@ FileHeader::FileHeader()
 	_standardPage = 0;
 	_processing   = TP_NORMAL;
 	setFileHeader(this);		/* for xmlParser class. */
-	_tabulationSize = 4;
+	//_tabulationSize = 4;
 }
 
 /*******************************************/
@@ -113,7 +113,7 @@ void FileHeader::generate(QTextStream &out)
 	generatePackage(out);
 	if(getFormat() == TF_CUSTOM)
 		generatePaper(out);
-	out << "%%%%%%%%%%%%%%%%%% END OF PREAMBULE %%%%%%%%%%%%%%%%%%" <<endl;
+	out << "%%%%%%%%%%%%%%%%%% END OF PREAMBULE %%%%%%%%%%%%%%%%%%" << endl << endl;
 }
 
 /*******************************************/

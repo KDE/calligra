@@ -35,6 +35,6 @@ void Format::analyse(const QDomNode balise)
 	setLength(getAttr(balise, "len").toInt());
 }
 
-void Format::generate(QTextStream&, int)
+/*void Format::generate(QTextStream&, int)
 {
-}
+}*/

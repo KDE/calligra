@@ -27,6 +27,7 @@
 #include <qptrlist.h>
 #include "element.h"		/* Child class */
 #include "layout.h"		/* Cell flow   */
+#include "config.h"
 
 /***********************************************************************/
 /* Class: Table                                                        */
@@ -37,7 +38,7 @@
  * frame, ...). It use a special latex package.
  * The color table and the border of the tables is not yet supported.
  */
-class Table: public QPtrList<Element>, public Element
+class Table: public QPtrList<Element>, public Element, Config
 {
 	/* MARKUP DATA */
 	//QString _name;
@@ -81,7 +82,7 @@ class Table: public QPtrList<Element>, public Element
 		int     getMaxCol() const { return _maxCol; }
 
 		EEnv    getCellFlow (int);
-		int     getCellSize (int);
+		double  getCellSize (int);
 
 		/**
 		 * Modifiers
@@ -99,6 +100,8 @@ class Table: public QPtrList<Element>, public Element
 	private:
 		void generateCell(QTextStream&, int, int);
 		void generateTableHeader(QTextStream&);
+		void generateTopLineBorder(QTextStream&, int);
+		void generateBottomLineBorder(QTextStream&, int);
 };
 
 #endif /* __KWORD_TABLE_H__ */

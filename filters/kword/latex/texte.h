@@ -25,8 +25,9 @@
 
 #include <qptrlist.h>
 #include "element.h"
-#include "border.h"
+//#include "border.h"
 #include "para.h"
+#include "config.h"
 
 /***********************************************************************/
 /* Class: Texte                                                        */
@@ -36,15 +37,15 @@
  * This class hold 2 lists of paragraphs for the text and for the footnotes.
  * NOTE : The frame analyse can be (must be) in a Element class.
  */
-class Texte: public Element, Border
+class Texte: public Element, Config
 {
 	/* DATA MARKUP */
-	int  _left,
-		 _top,
-		 _right,
-		 _bottom;
-	TAround  _runaround;
-	double   _runaroundGap;
+	double  _left,
+		 	_top,
+		 	_right,
+		 	_bottom;
+	TAround _runaround;
+	double  _runaroundGap;
 	TCreate _autoCreate;
 	TNFrame _newFrameBehaviour;
 	TSide   _sheetSide;
@@ -79,10 +80,10 @@ class Texte: public Element, Border
 		 */
 		/*bool    hasColor      () const;
 		bool    hasUline      () const;*/
-		int     getLeft       () const { return _left;              }
-		int     getRight      () const { return _right;             }
-		int     getTop        () const { return _top;               }
-		int     getBottom     () const { return _bottom;            }
+		double  getLeft       () const { return _left;              }
+		double  getRight      () const { return _right;             }
+		double  getTop        () const { return _top;               }
+		double  getBottom     () const { return _bottom;            }
 		TAround getRunAround  () const { return _runaround;         }
 		double  getAroundGap  () const { return _runaroundGap;      }
 		TCreate getAutoCreate () const { return _autoCreate;        }
@@ -96,10 +97,10 @@ class Texte: public Element, Border
 		/**
 		 * Modifiors
 		 */
-		void setLeft      (const int l)    { _left   = l;               }
-		void setRight     (const int r)    { _right  = r;               }
-		void setTop       (const int t)    { _top    = t;               }
-		void setBottom    (const int b)    { _bottom = b;               }
+		void setLeft      (const double l)    { _left   = l;               }
+		void setRight     (const double r)    { _right  = r;               }
+		void setTop       (const double t)    { _top    = t;               }
+		void setBottom    (const double b)    { _bottom = b;               }
 
 		void setRunAround (const int a)    { _runaround = (TAround) a;  }
 		void setAroundGap (const double r) { _runaroundGap = r;         }

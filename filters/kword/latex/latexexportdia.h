@@ -76,7 +76,7 @@ class LATEXExportDia : public KDialogBase, public DCOPObject
 		QRadioButton*  newDocRBtn,     *embededRBtn;	/* Latex file     */
 	
 	k_dcop:
-		void useDefaultConfig(){}
+		void useDefaultConfig() { slotOk(); }
 
 	public slots:
 		virtual void slotOk();

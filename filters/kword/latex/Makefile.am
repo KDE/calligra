@@ -14,14 +14,14 @@ kde_module_LTLIBRARIES = liblatexexport.la
 #liblateximport_la_SOURCES = lateximport.cc lateximport_factory.cc
 # elementt.cc listetextzone.cc listefootnote.cc listepara.cc 
 
-liblatexexport_la_SOURCES = anchor.cc document.cc element.cc fileheader.cc footnote.cc \
+liblatexexport_la_SOURCES = anchor.cc config.cc document.cc element.cc fileheader.cc footnote.cc \
 format.cc formula.cc latexexport.cc latexexportdia.cc latexexportdia.skel \
 layout.cc listtable.cc para.cc \
 pixmap.cc table.cc texte.cc textformat.cc textzone.cc variableformat.cc variablezone.cc \
 xml2latexparser.cc xmlparser.cc
 # pictureformat.cc picturezone.cc
 
-noinst_HEADERS = anchor.h border.h document.h element.h fileheader.h footnote.h \
+noinst_HEADERS = anchor.h border.h config.h document.h element.h fileheader.h footnote.h \
 format.h formula.h latexexport.h latexexportdia.h \
 layout.h listtable.h para.h  \
 pixmap.h table.h texte.h textformat.h textzone.h variableformat.h variablezone.h \

@@ -33,6 +33,7 @@
 
 /* static data */
 QPtrStack<EType> Para::_historicList;
+int Para::_tabulation = 0;
 
 /*******************************************/
 /* Constructor                             */
@@ -379,7 +380,7 @@ void Para::generate(QTextStream &out)
 
 		for(zone = _lines->first(); zone != 0; zone = _lines->next())
 		{
-			zone->generate(out, _tabulation);
+			zone->generate(out);
 		}
 		/* To separate the text zones. */
 	}
@@ -429,17 +430,23 @@ void Para::generateDebut(QTextStream &out)
 	{
 		/* switch the type, the depth do */
 		generateTitle(out);
+		indent();
 	}
 	else if(isEnum())
 	{
+		writeIndent(out);
 		out << "\\item ";
 	}
-
+	else
+		writeIndent(out);
 }
 
 void Para::generateBeginEnv(QTextStream &out)
 {
 	kdDebug() << "Begin new Env : " << getEnv() << endl;
+
+	writeIndent(out);
+
 	switch(getEnv())
 	{
 		case ENV_LEFT: out << "\\begin{flushleft}" << endl;
@@ -451,6 +458,8 @@ void Para::generateBeginEnv(QTextStream &out)
 		case ENV_JUSTIFY: out << endl;
 			break;
 	}
+	
+	indent();
 }
 
 /*******************************************/
@@ -463,7 +472,7 @@ void Para::openList(QTextStream &out)
 {
 	EType *type_temp = 0;
 
-	_tabulation = _tabulation + getFileHeader()->getTabulationSize();
+	writeIndent(out);
 
 	switch(getCounterType())
 	{
@@ -503,6 +512,8 @@ void Para::openList(QTextStream &out)
 			out << "\\begin{itemize}[SPECIAL]" << endl;
 	}
 
+	indent();
+
 	/* Keep the list type */
 	type_temp = new EType(getCounterType());
 	kdDebug() << " type list to open : " << *type_temp << endl;
@@ -529,17 +540,31 @@ void Para::generateFin(QTextStream &out)
 void Para::generateEndEnv(QTextStream &out)
 {
 	kdDebug() << "end of an environment : " << getEnv() << endl;
+	
+	desindent();
+	
 	switch(getEnv())
 	{
-		case ENV_LEFT: out << endl << "\\end{flushleft}";
+		case ENV_LEFT:
+				out << endl;
+				writeIndent(out);
+				out << "\\end{flushleft}";
 			break;
-		case ENV_RIGHT: out << endl << "\\end{flushright}";
+		case ENV_RIGHT:
+				out << endl;
+				writeIndent(out);
+				out << "\\end{flushright}";
 			break;
-		case ENV_CENTER: out << endl << "\\end{center}";
+		case ENV_CENTER:
+				out << endl;
+				writeIndent(out);
+				out << "\\end{center}";
 			break;
 		case ENV_JUSTIFY:
 			break;
 	}
+
+	desindent();
 }
 
 /*******************************************/
@@ -584,6 +609,9 @@ void Para::closeList(EType type, QTextStream &out)
 	/* Because of a new markup, we need a new line. */
 	out << endl;
 
+	desindent();
+	writeIndent(out);
+	
 	/* but the next parag is not a same list */
 	switch(type)
 	{
@@ -609,7 +637,7 @@ void Para::closeList(EType type, QTextStream &out)
 				out << "no suported" << endl;
 	}
 
-	_tabulation = _tabulation - getFileHeader()->getTabulationSize();
+	writeIndent(out);
 
 	/* Pop the list which has been closed */
 	_historicList.remove();
@@ -643,4 +671,3 @@ void Para::generateTitle(QTextStream &out)
 			out << "\\textbf{";
 	}
 }
-

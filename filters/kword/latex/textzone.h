@@ -29,6 +29,7 @@
 #include <qtextstream.h>
 #include <qstring.h>
 #include "textformat.h"
+#include "config.h"
 
 /***********************************************************************/
 /* Class: TextZone                                                     */
@@ -37,7 +38,7 @@
 /**
  * This class hold a zone of text with only one formating.
  */
-class TextZone: public TextFormat
+class TextZone: public TextFormat, Config
 {
 	/* TEXT MARKUP */
 	QString _texte;
@@ -96,8 +97,7 @@ class TextZone: public TextFormat
 		
 		void analyse(const QDomNode);
 		void analyse();
-		void generate(QTextStream&, int = 0);
-		void generate(QTextStream& out) { generate(out, 0); };
+		void generate(QTextStream&);
 
 		void generate_format_begin(QTextStream &);
 		void generate_format_end(QTextStream &);
@@ -107,7 +107,7 @@ class TextZone: public TextFormat
 		 * convert a special character in a markup latex.
 		 */
 		void convert(QString&, int, const char*);
-		void display(QString, QTextStream&, int = 0);
+		void display(QString, QTextStream&);
 };
 
 

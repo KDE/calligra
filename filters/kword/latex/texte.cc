@@ -182,12 +182,15 @@ void Texte::generate(QTextStream &out)
 	   getSection() == SS_FOOTERS)
 	{
 		/* If the element has a border display it here */
-		if(hasTopBorder())
+		// deprecated, done in table.cc
+		/*if(hasTopBorder())
 		{
 			out << "\\cline{" << getCol() << "-" << getCol() << "}" << endl;
-		}
+		}*/
+		writeIndent(out);
 		out << "\\begin{minipage}{";
 		out << (getRight() - getLeft()) << "pt}" << endl;
+		indent();
 	}
 	_lastEnv = ENV_NONE;
 	_lastTypeEnum = TL_NONE;
@@ -237,14 +240,16 @@ void Texte::generate(QTextStream &out)
 	if(getSection() == SS_TABLE || getSection() == SS_HEADERS ||
 	   getSection() == SS_FOOTERS)
 	{
+		desindent();
+		writeIndent(out);
 		out << "\\end{minipage}" << endl;
 
 		/* If the element has a border display it here */
-		/* doesn't work */
-		if(hasBottomBorder())
+		/* doesn't work deprecated doen in table.cc */
+		/*if(hasBottomBorder())
 		{
 			out << "\\cline{" << getCol() << "-" << getCol() << "}" << endl;
-		}
+		}*/
 	}
 }
 

@@ -1,3 +1,13 @@
-send bugs to rjacolin@ifrance.com. Thanks you.
+Send bugs to Robert Jacolin <rjacolin@ifrance.com>. Thank you.
+
 	- problems with headers/footers
+
 	- problems with footnotes
+
+	- problems with table :
+		o partial line are not detected.
+
+	- problem with code :
+		o latex code are not very well indented.
+		o latex code generated in minipage from header contains empty line don't accepted by latex.
+

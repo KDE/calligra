@@ -27,7 +27,6 @@
 #include <qtextcodec.h>
 #include "latexexportdia.h"
 
-
 typedef KGenericFactory<LATEXExport, KoFilter> LATEXExportFactory;
 K_EXPORT_COMPONENT_FACTORY( liblatexexport, LATEXExportFactory( "kwordlatexfilter" ) );
 

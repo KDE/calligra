@@ -1,40 +1,47 @@
 VERSION 1
-	- texte						DONE
-		* accent				DONE
+	- texte									DONE
+		* accent							DONE
 		* big parag must be truncated.
 		* ...
-	- layout					DONE
-	- title						DONE
-	- list						DONE
-	- paper						DONE
-	- footer, header				DONE
+	- layout								DONE
+	- title									DONE
+	- list									DONE
+	- paper									DONE
+	- footer, header						DONE
 		* analyse the header and then test if a
-		* header, footer exist			DONE
+		* header, footer exist				DONE
 		* Use hType for hedaers/footers		DONE
 		* Use either \fancyhead or \chead	DONE
 		- add a parameter useformat to generate
-		  method				DONE
+		  method							DONE
 		- put header/footer different place if
 		  it's center, ...
 		  to do that --> isCenter method for
 		  Texte class
-	- clean codes :)))				DONE
-	- kdoc						DONE
+	- clean codes :))	)					DONE
+	- kdoc									DONE
 	- footnote
 	- Get all default informations			DONE
-	- Use QList for all list			DONE
-	- indent lists
+	- Use QList for all list				DONE
+	- indent lists							DONE AT 80 %
 	- break lines
+	- use config class everywhere (with dialog box, ...).
 
 VERSION 2
-	- unicode					DONE
-	- table						DONE AT 80 %
-	- picture					DONE AT 50 %
-	- variable
+	- unicode								DONE
+	- table									DONE AT 80 %
+	- picture								DONE AT 50 %
+	- variable								FIRST WORK
 	- personalization
+	- optimisation
+		o left and right border for table (multicolumn not always usefull) ;
+		o cell scan for know if there are a border => there are several ;
+	- indent (list or paragraph)
+	- border for paragraph.
+	- margin must be reimplemented with package margin.
 
 VERSION 3
 	- parts
-	- formula					DONE AT 50 %
+	- formula								DONE AT 50 %
 	- figure
 	- frame

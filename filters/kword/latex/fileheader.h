@@ -120,7 +120,7 @@ class FileHeader: public XmlParser
 	bool     _hasEnumerate;
 	bool     _hasGraphics;
 	bool     _hasTable;
-	int      _tabulationSize;
+	//int      _tabulationSize;
 
 	public:
 		/**
@@ -151,7 +151,7 @@ class FileHeader: public XmlParser
 		bool      hasEnumerate     () const { return _hasEnumerate;   }
 		bool      hasGraphics      () const { return _hasGraphics;    }
 		bool      hasTable         () const { return _hasTable;       }
-		int       getTabulationSize() const { return _tabulationSize; }
+		//int       getTabulationSize() const { return _tabulationSize; }
 
 		/**
 		 * Modifiors
@@ -172,7 +172,7 @@ class FileHeader: public XmlParser
 		void useEnumerate  ()           { _hasEnumerate = true;           }
 		void useGraphics   ()           { _hasGraphics  = true;           }
 		void useTable      ()           { _hasTable     = true;           }
-		void setTabulationSize (int ts) { _tabulationSize = ts;           }
+		//void setTabulationSize (int ts) { _tabulationSize = ts;           }
 
 		void analysePaper     (const QDomNode);
 		void analyseAttributs (const QDomNode);

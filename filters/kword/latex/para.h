@@ -31,6 +31,7 @@
 #include "layout.h"		/* set of informations about the paragraph style. */
 #include "element.h"		/* to use the father class. */
 #include "format.h"		/* child class */
+#include "config.h"
 
 enum EP_INFO
 {
@@ -55,7 +56,7 @@ class Texte;
  * paragraph, its format, etc. The complete text is a list of Para instances.
  * A footnote is a list of paragraph instances (now but not in the "futur").
  */
-class Para: public Layout
+class Para: public Layout, Config
 {
 	/* MARKUP DATA */
 	QString        _texte;
@@ -65,15 +66,13 @@ class Para: public Layout
 	QPtrList<Format>* _lines;
 
 	/* TO MANAGE THE LIST */
-	/*Para*          _next;
-	Para*          _previous;*/
 
 	/* USEFULL DATA */
-	Texte*                _element;		/* Father frame */
-	unsigned int          _currentPos;	/* Begining of the text to use the good format */
-	static QPtrStack<EType>  _historicList;	/* opened lists but not closed */
-	int                   _nbLines;		/* Nb of lines in a cell (table) */
-	int _tabulation;	/* Size of the para tabulation (for lists). */
+	Texte*                	_element;		/* Father frame */
+	unsigned int          	_currentPos;	/* Begining of the text to use the good format */
+	static QPtrStack<EType> _historicList;	/* opened lists but not closed */
+	int                   	_nbLines;		/* Nb of lines in a cell (table) */
+	static int				_tabulation;	/* Size of the para tabulation (for lists). */
 
 	public:
 		/**
@@ -196,6 +195,7 @@ class Para: public Layout
 		 * Write the markup to close a list
 		 */
 		void closeList        (EType, QTextStream&);
+
 };
 
 #endif /* __KWORD_PARA_H__ */
