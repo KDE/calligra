@@ -95,8 +95,6 @@ Shell* KImageDocument::createShell()
 
 void KImageDocument::paintContent( QPainter& _painter, const QRect& _rect, bool /* _transparent */ )
 {
-  cout << "KImageDocument::paintContent()" << endl;
-
   if( isEmpty() )
     return;
 
@@ -230,6 +228,11 @@ bool KImageDocument::save( ostream& out, const char* )
   image.appendChild( drawmode );
   drawmode.setAttribute( "position", positionString() );
   drawmode.setAttribute( "size", sizeString() );
+  if( m_drawMode == ZoomFactor )
+  {
+    drawmode.setAttribute( "x-factor", m_zoomFactorValue.x() );
+    drawmode.setAttribute( "y-factor", m_zoomFactorValue.y() );
+  }
 
   QBuffer buffer;
   buffer.open( IO_WriteOnly );
@@ -413,6 +416,12 @@ bool KImageDocument::loadXML( const QDomDocument& doc, KoStore* /* store */ )
 
   setPositionString( drawmode.attribute( "position" ) );
   setSizeString( drawmode.attribute( "size" ) );
+  if( m_drawMode == ZoomFactor )
+  {
+    m_zoomFactorValue = QPoint(
+      drawmode.attribute( "x-factor" ).toInt(),
+      drawmode.attribute( "y-factor" ).toInt() );
+  }
 
   setPaperLayout( left, top, right, bottom, format, orientation );
   setHeadFootLine( hl, hm, hr, fl, fm, fr );
@@ -542,6 +551,8 @@ void KImageDocument::draw( QPaintDevice* _dev, long int _width, long int _height
 
 void KImageDocument::paperLayoutDlg()
 {
+  kdebug( KDEBUG_INFO, 0, "KImageDocument::paperLayoutDlg" );
+
   KoPageLayout pl;
   pl.format = paperFormat();
   pl.orientation = orientation();

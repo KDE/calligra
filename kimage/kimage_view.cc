@@ -53,8 +53,8 @@ KImageView::KImageView( KImageDocument* _doc, QWidget* _parent, const char* _nam
   m_redo  = new KAction( i18n( "&Redo" ), KImageBarIcon( "redo" ), 0, this, SLOT( redo() ), actionCollection(), "redo" );
   m_import = new KAction( i18n( "&Import image..." ), 0, this, SLOT( editImportImage() ), actionCollection(), "editImportImage" );
   m_export = new KAction( i18n( "&Export image..." ), 0, this, SLOT( editExportImage() ), actionCollection(), "editExportImage" );
-  m_pageSetup   = new KAction( i18n( "Page &layout" ), 0, this, SLOT( editPageLayout() ), actionCollection(), "editPageLayout" );
-  m_preferences = new KAction( i18n( "Pr&eferences" ), 0, this, SLOT( editPreferences() ), actionCollection(), "editPreferences" );
+  m_pageSetup   = new KAction( i18n( "Page &layout..." ), 0, this, SLOT( editPageLayout() ), actionCollection(), "editPageLayout" );
+  m_preferences = new KAction( i18n( "Pr&eferences..." ), 0, this, SLOT( editPreferences() ), actionCollection(), "editPreferences" );
 
   // view actions
   m_viewFactor      = new KAction( i18n( "&Zoom view..." ), 0, this, SLOT( viewZoomFactor() ), actionCollection(), "viewZoomFactor" );
@@ -63,8 +63,8 @@ KImageView::KImageView( KImageDocument* _doc, QWidget* _parent, const char* _nam
   m_original        = new KAction( i18n( "&Original size" ), KImageBarIcon( "originalsize" ), 0, this, SLOT( viewOriginalSize() ), actionCollection(), "viewOriginalSize" );
   m_center          = new KAction( i18n( "&Center image" ), 0, this, SLOT( viewCentered() ), actionCollection(), "viewCentered" );
   m_scrollbars      = new KAction( i18n( "&Scrollbars" ), 0, this, SLOT( viewScrollbars() ), actionCollection(), "viewScrollbars" );
-  m_info            = new KAction( i18n( "&Informations" ), 0, this, SLOT( viewInformations() ), actionCollection(), "viewInformations" );
-  m_backgroundColor = new KAction( i18n( "&Background color" ), 0, this, SLOT( viewBackgroundColor() ), actionCollection(), "viewBackgroundColor" );
+  m_info            = new KAction( i18n( "&Informations..." ), 0, this, SLOT( viewInformations() ), actionCollection(), "viewInformations" );
+  m_backgroundColor = new KAction( i18n( "&Background color..." ), 0, this, SLOT( viewBackgroundColor() ), actionCollection(), "viewBackgroundColor" );
 
   // transform actions
   m_rotateRight    = new KAction( i18n( "Rotate &right" ), 0, this, SLOT( transformRotateRight() ), actionCollection(), "transformRotateRight" );
@@ -188,7 +188,10 @@ void KImageView::editPreferences()
 void KImageView::editPageLayout()
 {
   if( doc()->isEmpty() )
+  {
+    QMessageBox::critical( this, i18n( "KImage Error" ), i18n( "The document is empty.\nEditing page layout not possible." ), i18n( "OK" ) );
     return;
+  }
 
   doc()->paperLayoutDlg();
 }
@@ -224,7 +227,7 @@ void KImageView::viewInformations()
 {
   if( doc()->isEmpty() )
   {
-    QMessageBox::critical( this, i18n( "KImage Error" ), i18n( "The document is empty\nNo information available." ), i18n( "OK" ) );
+    QMessageBox::critical( this, i18n( "KImage Error" ), i18n( "The document is empty.\nNo information available." ), i18n( "OK" ) );
     return;
   }
 
@@ -242,7 +245,7 @@ void KImageView::viewZoomFactor()
 {
   if( doc()->isEmpty() )
   {
-    QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nAction not available."), i18n( "OK" ) );
+    QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty.\nAction not available."), i18n( "OK" ) );
     return;
   }
 
@@ -264,7 +267,7 @@ void KImageView::viewCentered()
 {
   if( doc()->isEmpty() )
   {
-    QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nAction not available."), i18n( "OK" ) );
+    QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty.\nAction not available."), i18n( "OK" ) );
     return;
   }
 
