@@ -1,3 +1,22 @@
+// -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
+/* This file is part of the KDE project
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 #include "propertyeditor.h"
 
 #include "kpobject.h"
@@ -13,14 +32,14 @@
 
 PropertyEditor::PropertyEditor( QWidget *parent, const char *name, KPrPage *page, KPresenterDoc *doc )
     : QTabDialog( parent, name, true )
-    , m_page(  page )
+    , m_page( page )
     , m_doc( doc )
     , m_objects( page->getSelectedObjects() )
     , m_penProperty( 0 )
     , m_brushProperty( 0 )
     , m_rectProperty( 0 )
+    , m_generalProperty( 0 )
 {
-
     setCancelButton( i18n( "&Cancel" ) );
     setOkButton( i18n( "&OK" ) );
     setApplyButton( i18n( "&Apply" ) );
@@ -104,6 +123,91 @@ KCommand * PropertyEditor::getCommand()
         }
     }
 
+    if ( m_generalProperty )
+    {
+        int change = m_generalProperty->getGeneralPropertyChange();
+
+        if ( change )
+        {
+            GeneralProperty::GeneralValue generalValue( m_generalProperty->getGeneralValue() );
+
+            if ( change & GeneralProperty::Name )
+            {
+                KCommand *cmd = new KPrNameObjectCommand( i18n( "Name Object" ), generalValue.m_name,
+                                                          m_objects.at( 0 ), m_doc );
+
+                if ( !macro )
+                {
+                    macro = new KMacroCommand( i18n( "Apply Properties" ) );
+                }
+
+                macro->addCommand( cmd );
+            }
+
+            if ( change & GeneralProperty::Protect )
+            {
+                KCommand *cmd= new KPrGeometryPropertiesCommand( i18n( "Protect Object" ), m_objects,
+                                                                 generalValue.m_protect == STATE_ON,
+                                                                 KPrGeometryPropertiesCommand::ProtectSize );
+
+                if ( !macro )
+                {
+                    macro = new KMacroCommand( i18n( "Apply Properties" ) );
+                }
+
+                macro->addCommand( cmd );
+            }
+
+            if ( change & GeneralProperty::KeepRatio )
+            {
+                KCommand *cmd= new KPrGeometryPropertiesCommand( i18n( "Keep Ratio" ), m_objects,
+                                                                 generalValue.m_keepRatio == STATE_ON,
+                                                                 KPrGeometryPropertiesCommand::KeepRatio );
+                if ( !macro )
+                {
+                    macro = new KMacroCommand( i18n( "Apply Properties" ) );
+                }
+
+                macro->addCommand( cmd );
+            }
+
+            if ( change & GeneralProperty::Left
+                 || change & GeneralProperty::Top
+                 || change & GeneralProperty::Width
+                 || change & GeneralProperty::Height )
+            {
+                if ( !macro )
+                {
+                    macro = new KMacroCommand( i18n( "Apply Properties" ) );
+                }
+
+                QPtrListIterator<KPObject> it( m_objects );
+                for ( ; it.current(); ++it )
+                {
+                    KoRect oldRect = it.current()->getRect();
+                    if ( ! ( change & GeneralProperty::Left ) )
+                        generalValue.m_rect.moveTopLeft( KoPoint( oldRect.left(), generalValue.m_rect.top() ) );
+
+                    if ( ! ( change & GeneralProperty::Top ) )
+                        generalValue.m_rect.moveTopLeft( KoPoint( generalValue.m_rect.left(), oldRect.top() ) );
+
+                    if ( ! ( change & GeneralProperty::Width ) )
+                        generalValue.m_rect.setWidth( oldRect.width() );
+
+                    if ( ! ( change & GeneralProperty::Height ) )
+                        generalValue.m_rect.setHeight( oldRect.height() );
+
+                    KCommand *cmd = new ResizeCmd( i18n( "Change Size" ),
+                                                   generalValue.m_rect.topLeft() - oldRect.topLeft(),
+                                                   generalValue.m_rect.size() - oldRect.size(),
+                                                   it.current(), m_doc );
+
+                    macro->addCommand( cmd );
+                }
+            }
+        }
+    }
+
     return macro;
 }
 
@@ -120,6 +224,8 @@ void PropertyEditor::setupTabs()
 
     if ( flags & PtRectangle )
         setupTabRect();
+
+    setupTabGeneral();
 }
 
 
@@ -166,6 +272,67 @@ void PropertyEditor::setupTabRect()
         m_rectProperty = new RectProperty( this, 0, rectValue );
         addTab( m_rectProperty, i18n( "&Rectangle" ) );
     }
+}
+
+
+void PropertyEditor::setupTabGeneral()
+{
+    if ( m_generalProperty == 0 )
+    {
+        GeneralProperty::GeneralValue generalValue = getGeneralValue();
+        m_generalProperty = new GeneralProperty( this, 0, generalValue, m_doc->getUnit() );
+        addTab( m_generalProperty, i18n( "&General" ) );
+    }
+}
+
+
+GeneralProperty::GeneralValue PropertyEditor::getGeneralValue()
+{
+    GeneralProperty::GeneralValue generalValue;
+
+    if ( m_objects.count() == 1 )
+    {
+        generalValue.m_name = m_objects.at( 0 )->getObjectName();
+    }
+
+    bool protect = false;
+    generalValue.m_protect = STATE_OFF;
+    bool keepRatio = false;
+    generalValue.m_keepRatio = STATE_OFF;
+
+    QPtrListIterator<KPObject> it( m_objects );
+    if ( it.current() )
+    {
+        protect = it.current()->isProtect();
+        generalValue.m_protect = protect ? STATE_ON : STATE_OFF;
+        keepRatio = it.current()->isKeepRatio();
+        generalValue.m_keepRatio = keepRatio ? STATE_ON : STATE_OFF;
+        generalValue.m_rect = it.current()->getRect();
+        ++it;
+    }
+
+    for ( ; it.current(); ++it )
+    {
+        if ( protect != it.current()->isProtect() )
+        {
+            generalValue.m_protect = STATE_UNDEF;
+            if ( generalValue.m_keepRatio == STATE_UNDEF )
+            {
+                break;
+            }
+        }
+
+        if ( keepRatio != it.current()->isKeepRatio() )
+        {
+            generalValue.m_keepRatio = STATE_UNDEF;
+            if ( generalValue.m_protect == STATE_UNDEF )
+            {
+                break;
+            }
+        }
+    }
+
+    return generalValue;
 }
 
 
