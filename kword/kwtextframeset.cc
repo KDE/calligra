@@ -653,7 +653,9 @@ void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
                 // Apply this style again, to get the changes
                 // To get undo/redo and to reuse code, we call applyStyle with a temp selection
                 // Using Temp+1 to avoid conflicting with QRT's internals (just in case)
+#if 0
                 KWStyle styleApplied=*style;
+#endif
                 QTextCursor start( textdoc );
                 QTextCursor end( textdoc );
                 start.setParag( p );
@@ -662,6 +664,7 @@ void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
                 end.setParag( p );
                 end.setIndex( p->string()->length()-1 );
                 textdoc->setSelectionEnd( QTextDocument::Temp+1, &end );
+#if 0
                 if ( (doc->applyStyleChangeMask() & KWDocument::U_BORDER) == 0)
                 {
                     styleApplied.paragLayout().leftBorder=p->leftBorder();
@@ -694,8 +697,8 @@ void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
                     styleApplied.paragLayout().margins[QStyleSheetItem::MarginBottom]=p->margin(QStyleSheetItem::MarginBottom);
                     styleApplied.paragLayout().margins[QStyleSheetItem::MarginTop]=p->margin(QStyleSheetItem::MarginTop);
                     }
-
-                applyStyle( 0L, &styleApplied, QTextDocument::Temp+1 );
+#endif
+                applyStyle( 0L, style, QTextDocument::Temp+1 );
                 textdoc->removeSelection( QTextDocument::Temp+1 );
             }
         }
