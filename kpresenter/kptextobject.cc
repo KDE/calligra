@@ -357,7 +357,8 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	}
     }
     setSize( ext.width(), ext.height() );
-
+    ktextobject.getCursor()->setMaxPosition( ktextobject.textLength() );
+    
     if ( ktextobject.items() > 0 )
     {
 	ktextobject.setFont( ktextobject.itemAt( 0 )->font() );
@@ -600,7 +601,7 @@ void KPTextObject::saveKTextObject( ostream& out )
     TxtObj *txtObj;
     TxtLine *txtLine;
     TxtParagraph *txtParagraph;
-    unsigned int i, j, k;
+    int i, j, k;
     QFont font;
 
     out << otag << "<TEXTOBJ objType=\"" << static_cast<int>( ktextobject.objType() )
