@@ -560,6 +560,7 @@ private:
     KoRect m_boundingRect; // when moving object(s)
     KoPoint m_hotSpot; // when moving frame(s)
 
+    KoRect m_initBoundingRect;
     int m_tmpHelpPoint;
     KoPoint tmpHelpPointPos;
 

@@ -558,6 +558,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 {
     if(!m_view->koDocument()->isReadWrite())
         return;
+    m_initBoundingRect =objectSelectedBoundingRect();
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
     KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
@@ -1255,9 +1256,9 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         case MT_MOVE: {
             if ( firstX != mx || firstY != my ) {
                 KMacroCommand *macro=0L;
-
-                int x=(QMAX( 0, QMIN(mx,activePage()->getZoomPageRect().width())) - firstX);
-                int y=(QMAX( 0, QMIN(my,activePage()->getZoomPageRect().height())) - firstY);
+                KoRect newPos( objectSelectedBoundingRect() );
+                int x=m_view->zoomHandler()->zoomItX(newPos.x()-m_initBoundingRect.x());
+                int y=m_view->zoomHandler()->zoomItY( newPos.y()-m_initBoundingRect.y());
                 KCommand *cmd=m_activePage->moveObject(m_view,x,y);
                 if(cmd)
                 {
