@@ -1411,7 +1411,14 @@ void KWView::setupPrinter( KPrinter &prt )
 
 void KWView::print( KPrinter &prt )
 {
-    // Don't repaint behind the print dialog until we're done zooming/unzooming the doc
+    bool displayFieldCode = m_doc->getVariableCollection()->variableSetting()->displayFiedCode();
+    if ( displayFieldCode )
+    {
+        m_doc->getVariableCollection()->variableSetting()->setDisplayFiedCode(false);
+        m_doc->recalcVariables(  VT_ALL );
+    }
+
+// Don't repaint behind the print dialog until we're done zooming/unzooming the doc
     m_gui->canvasWidget()->setUpdatesEnabled(false);
     m_gui->canvasWidget()->viewport()->setCursor( waitCursor );
 
@@ -1554,7 +1561,14 @@ void KWView::print( KPrinter &prt )
     m_gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
     m_doc->repaintAllViews();
 
-    m_doc->getVariableCollection()->recalcVariables(VT_MAILMERGE);
+    if ( displayFieldCode )
+    {
+        m_doc->getVariableCollection()->variableSetting()->setDisplayFiedCode(true);
+        m_doc->recalcVariables(  VT_ALL );
+    }
+    else
+        m_doc->getVariableCollection()->recalcVariables(VT_MAILMERGE);
+
 }
 
 void KWView::showFormat( const KoTextFormat &currentFormat )
