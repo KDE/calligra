@@ -1524,6 +1524,16 @@ void KWCanvas::deleteTable( KWTableFrameSet *table )
 {
     if ( !table )
         return;
+    deleteFrameSetEditTable( table );
+    // ## TODO undo/redo support
+    doc->delFrameSet( table );
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
+}
+
+void KWCanvas::deleteFrameSetEditTable( KWTableFrameSet *table )
+{
     if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() == table )
     {
         // Terminate edition of that frameset
@@ -1531,12 +1541,8 @@ void KWCanvas::deleteTable( KWTableFrameSet *table )
         delete m_currentFrameSetEdit;
         m_currentFrameSetEdit = 0L;
         repaintAll();
+        kdDebug()<<"delete current----------------------------\n";
     }
-    // ## TODO undo/redo support
-    doc->delFrameSet( table );
-    doc->updateAllFrames();
-    doc->layout();
-    doc->repaintAllViews();
 }
 
 void KWCanvas::setMouseMode( MouseMode newMouseMode )

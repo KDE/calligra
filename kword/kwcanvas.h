@@ -135,6 +135,10 @@ public:
     void deleteTable( KWTableFrameSet *groupManager );
     void deleteFrame( KWFrame * frame );
 
+    //delete currentFrameSetEdit when you remove table
+    //column, row. Otherwise kword crashs.
+    void deleteFrameSetEditTable( KWTableFrameSet *table );
+
     //move canvas
     void scrollToOffset( int _x, int _y );
     void setContentsPos( int x, int y );
