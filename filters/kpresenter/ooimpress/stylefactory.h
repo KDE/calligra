@@ -125,7 +125,7 @@ private:
 class PageStyle
 {
 public:
-    PageStyle( QDomElement & e, const uint index );
+    PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint index );
     ~PageStyle() {};
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;

@@ -188,7 +188,7 @@ QString StyleFactory::createHatchStyle( int style, QString & color )
 QString StyleFactory::createPageStyle( QDomElement & e )
 {
     PageStyle * newPageStyle, * p;
-    newPageStyle = new PageStyle( e, m_pageStyles.count() + 1 );
+    newPageStyle = new PageStyle( this, e, m_pageStyles.count() + 1 );
     for ( p = m_pageStyles.first(); p ; p = m_pageStyles.next() )
     {
         if ( *p == *newPageStyle )
@@ -343,59 +343,95 @@ GradientStyle::GradientStyle( QDomElement & gradient, int index )
     m_end_intensity = "100%";
     m_border = "0%";
 
-    if ( gradient.hasAttribute( "color1" ) )
-        m_start_color = gradient.attribute( "color1" );
-    if ( gradient.hasAttribute( "color2" ) )
-        m_end_color = gradient.attribute( "color2" );
-    if ( gradient.hasAttribute( "type" ) )
+    int type = 1;
+    if ( gradient.nodeName() == "PAGE" )
     {
-        int type = gradient.attribute( "type" ).toInt();
-        switch ( type )
+        // gradient from page background
+        QDomElement backColor1 = gradient.namedItem( "BACKCOLOR1" ).toElement();
+        QDomElement backColor2 = gradient.namedItem( "BACKCOLOR2" ).toElement();
+        QDomElement bcType = gradient.namedItem( "BCTYPE" ).toElement();
+        QDomElement bGradient = gradient.namedItem( "BGRADIENT" ).toElement();
+
+        if ( !backColor1.isNull() )
+            m_start_color = backColor1.attribute( "color" );
+        if ( !backColor2.isNull() )
+            m_end_color = backColor2.attribute( "color" );
+        if ( !bcType.isNull() )
+            type = bcType.attribute( "value" ).toInt();
+        if ( !bGradient.isNull() )
         {
-        case 1:
-            m_style = "linear";
-            m_angle = "0";
-            break;
-        case 2:
-            m_style = "linear";
-            m_angle = "900";
-            break;
-        case 3:
-            m_style = "linear";
-            m_angle = "450";
-            break;
-        case 4:
-            m_style = "linear";
-            m_angle = "135";
-            break;
-        case 5:
-            m_style = "radial";
-            m_angle = "0";
-            break;
-        case 6:
-            m_style = "square";
-            m_angle = "0";
-            break;
-        case 7:
-            m_style = "axial";
-            m_angle = "0";
-            break;
+            if ( bGradient.attribute( "unbalanced" ) == "0" )
+            {
+                m_cx = "50%";
+                m_cy = "50%";
+            }
+            else
+            {
+                int cx = bGradient.attribute( "xfactor" ).toInt();
+                int cy = bGradient.attribute( "yfactor" ).toInt();
+                m_cx = QString( "%1%" ).arg( cx / 4 + 50 );
+                m_cy = QString( "%1%" ).arg( cy / 4 + 50 );
+            }
         }
+
     }
-    if ( gradient.hasAttribute( "unbalanced" ) )
+    else
     {
-        if ( gradient.attribute( "unbalanced" ) == "0" )
+        // gradient from object
+        if ( gradient.hasAttribute( "color1" ) )
+            m_start_color = gradient.attribute( "color1" );
+        if ( gradient.hasAttribute( "color2" ) )
+            m_end_color = gradient.attribute( "color2" );
+        if ( gradient.hasAttribute( "type" ) )
+            type = gradient.attribute( "type" ).toInt();
+        if ( gradient.hasAttribute( "unbalanced" ) )
         {
-            m_cx = "50%";
-            m_cy = "50%";
+            if ( gradient.attribute( "unbalanced" ) == "0" )
+            {
+                m_cx = "50%";
+                m_cy = "50%";
+            }
+            else
+            {
+                int cx = gradient.attribute( "xfactor" ).toInt();
+                int cy = gradient.attribute( "yfactor" ).toInt();
+                m_cx = QString( "%1%" ).arg( cx / 4 + 50 );
+                m_cy = QString( "%1%" ).arg( cy / 4 + 50 );
+            }
         }
-        else
-        {
-            int cx = gradient.attribute( "xfactor" ).toInt();
-            int cy = gradient.attribute( "yfactor" ).toInt();
-            m_cx = QString( "%1%" ).arg( cx / 4 + 50 );
-            m_cy = QString( "%1%" ).arg( cy / 4 + 50 );
-        }
+
+    }
+
+    switch ( type )
+    {
+    case 1:
+        m_style = "linear";
+        m_angle = "0";
+        break;
+    case 2:
+        m_style = "linear";
+        m_angle = "900";
+        break;
+    case 3:
+        m_style = "linear";
+        m_angle = "450";
+        break;
+    case 4:
+        m_style = "linear";
+        m_angle = "135";
+        break;
+    case 5:
+        m_style = "radial";
+        m_angle = "0";
+        break;
+    case 6:
+        m_style = "square";
+        m_angle = "0";
+        break;
+    case 7:
+        m_style = "axial";
+        m_angle = "0";
+        break;
     }
 }
 
@@ -594,7 +630,7 @@ bool PageMasterStyle::operator==( const PageMasterStyle & pageMasterStyle ) cons
              m_orientation == pageMasterStyle.m_orientation );
 }
 
-PageStyle::PageStyle( QDomElement & e, const uint index )
+PageStyle::PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint index )
 {
     // some defaults that won't be overwritten because they
     // are not available in KPresenter
@@ -611,7 +647,7 @@ PageStyle::PageStyle( QDomElement & e, const uint index )
     if ( backType.isNull() || backType.attribute( "value" ) == "0" )
     {
         // color
-        QDomElement bcType = e.namedItem( "BYTYPE" ).toElement();
+        QDomElement bcType = e.namedItem( "BCTYPE" ).toElement();
         if ( bcType.isNull() || bcType.attribute( "value" ) == "0" )
         {
             // plain
@@ -622,6 +658,9 @@ PageStyle::PageStyle( QDomElement & e, const uint index )
         else
         {
             // gradient
+            m_fill = "gradient";
+            m_fill_gradient_name = styleFactory->createGradientStyle( e );
+            kdDebug() << m_fill_gradient_name << endl;
         }
     }
     else
