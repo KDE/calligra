@@ -903,8 +903,8 @@ void ConfigureDefaultDocPage::slotDefault()
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {
     QStringList list;
-    KFontChooser::getFontList(list,  KFontChooser::SmoothScalableFonts);
-    KFontDialog dlg( m_pView, "Font Selector", false, true, list, true );
+    KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
+    KFontDialog dlg( (QWidget *)this->parent(), "Font Selector", false, true, list, true );
     dlg.setFont(*font);
     int result = dlg.exec();
     if (KDialog::Accepted == result) {
