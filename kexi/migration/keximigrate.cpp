@@ -34,12 +34,13 @@ what the system might be and is a work in progress
 
 //==================================================================================
 //Constructor
-KexiMigrate::KexiMigrate(KexiDB::ConnectionData* externalConnectionData, QString dbname, KexiDB::Connection* kexiConnection, bool keep_data)
+KexiMigrate::KexiMigrate(KexiDB::ConnectionData* externalConnectionData, QString dbname, KexiDB::Connection* kexiConnection, QString newdbname, bool keep_data)
 {
 	m_externalData = externalConnectionData;
 	m_kexiDB = kexiConnection;
 	m_keepData = keep_data;
 	m_dbName = dbname;
+        m_todbname = newdbname;
 }
 
 //==================================================================================
@@ -92,7 +93,7 @@ bool KexiMigrate::performImport()
 			else
 			{
 				//Create new database as we have all required info ;)
-				return createDatabase("kexi_" + m_dbName);
+				return createDatabase(m_todbname);
 				return true;
 			}
 		}

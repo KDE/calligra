@@ -214,6 +214,7 @@ void importWizard::accept()
     QGuardedPtr<KexiDB::Connection> kexi_conn;
     KexiMigrate* import;
     KexiDB::ConnectionData *cdata;
+    QString dbname;
     
     //Start with a driver manager
     KexiDB::DriverManager manager;
@@ -227,27 +228,34 @@ void importWizard::accept()
         manager.debugError();
     }
     
-    if (dstTypeCombo->currentText() == "PostgreSQL")
+    if (!dstConn->selectedConnectionData() == 0)
     {
         //server-based project
         cdata = dstConn->selectedConnectionData();
+        dbname = dstNewDBName->text();
+        
     }
     else if (dstTypeCombo->currentText() == "SQLite") 
     {
-		//file-based project
-		cdata = new KexiDB::ConnectionData;
-		cdata->connName = "/home/piggz/test1.kexi";//dstNewDBName->text();
-		cdata->driverName = "sqlite";
-		cdata->setFileName( dstConn->m_fileDlg->currentFileName() );
+        //file-based project
+        cdata = new KexiDB::ConnectionData;
+        cdata->connName = dstNewDBName->text();
+        cdata->driverName = "sqlite";
+        cdata->setFileName( dstConn->m_fileDlg->currentFileName() );
+        dbname = dstConn->m_fileDlg->currentFileName();
     }
     else
+    {
+        //TODO This needs a better message
+        KMessageBox::error(this, "No connection data was available and you didnt select an SQLite destination", "Error");
         return;
+    }
 
     
     //Create connections to the kexi database
     kexi_conn = driver->createConnection(*cdata);
 
-    import = new pqxxMigrate(srcConn->selectedConnectionData(), srcdbname->selectedProjectData()->databaseName(), kexi_conn, false);
+    import = new pqxxMigrate(srcConn->selectedConnectionData(), srcdbname->selectedProjectData()->databaseName(), kexi_conn, dbname, false);
     
     if (import->performImport())
     {
@@ -265,15 +273,12 @@ void importWizard::nextClicked(const QString & p)
 {
     if (currentPage() == introPage)
     {
-        kdDebug() << "Current page is introduction" << endl;
     }
     else if (currentPage() == srcTypePage)
     {
-        kdDebug() << "Current page is source type" << endl;
     }
     else if (currentPage() == srcConnPage)
     {
-        kdDebug() << "Current page is source connection" << endl;
         srcConnPage->hide();
         if (srcTypeCombo->currentText() == "PostgreSQL Database")
         {
@@ -288,7 +293,6 @@ void importWizard::nextClicked(const QString & p)
     }
     else if (currentPage() == srcdbPage)
     {
-        kdDebug() << "Current page is source database" << endl;
         if (srcTypeCombo->currentText() == "PostgreSQL Database")
         {
             if (!srcdbname)
@@ -303,11 +307,9 @@ void importWizard::nextClicked(const QString & p)
     }
     else if (currentPage() == dstTypePage)
     {
-        kdDebug() << "Current page is destination type" << endl;
     }
     else if (currentPage() == dstPage)
     {
-        kdDebug() << "Current page is destination" << endl;
         dstPage->hide();
         if (dstTypeCombo->currentText() == "PostgreSQL")
         {
@@ -316,12 +318,13 @@ void importWizard::nextClicked(const QString & p)
         else
         {
             dstConn->showSimpleConn();
+            dstConn->m_fileDlg->setMode( KexiStartupFileDialog::SavingFileBasedDB );
         }
         dstPage->show();
     }
     else if (currentPage() == finishPage)
     {
-        kdDebug() << "Current page is finished" << endl;
+        KMessageBox::information(this, dstConn->m_fileDlg->currentFileName(), "Current File Name");
         if (checkUserInput())
         {
             setFinishEnabled(finishPage, true);

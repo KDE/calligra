@@ -84,7 +84,7 @@ namespace KexiMigration
 		public:
 			~pqxxMigrate();
 			//Constructor
-			pqxxMigrate(KexiDB::ConnectionData* externalConnectionData, QString dbFrom, KexiDB::Connection* kexiConnection, bool keep_data);
+			pqxxMigrate(KexiDB::ConnectionData* externalConnectionData, QString dbFrom, KexiDB::Connection* kexiConnection, QString newdbname, bool keep_data);
 			
 	};
 }
