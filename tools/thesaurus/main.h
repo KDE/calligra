@@ -45,7 +45,7 @@ class Thesaurus : public KDataTool
     Q_OBJECT
 
 public:
-    Thesaurus(QObject* parent = 0, const char* name = 0, const QStringList = 0);
+    Thesaurus(QObject* parent, const char* name, const QStringList &);
     ~Thesaurus();
     virtual bool run( const QString& command, void* data, const QString& datatype, const QString& mimetype);
 

@@ -48,7 +48,7 @@ K_EXPORT_COMPONENT_FACTORY( libthesaurustool, KGenericFactory<Thesaurus> );
  * Thesaurus *
  ***************************************************/
 
-Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList)
+Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     : KDataTool(parent, name)
 {
     dialog = new KDialogBase("Thesaurus", KDialogBase::User1|KDialogBase::Cancel,
