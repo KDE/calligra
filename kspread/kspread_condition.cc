@@ -239,22 +239,17 @@ void KSpreadConditions::saveOasisConditions( KoGenStyle &currentCellStyle )
     if ( m_condList.isEmpty() )
         return;
     QValueList<KSpreadConditional>::const_iterator it;
-    QBuffer buffer;
-    buffer.open( IO_WriteOnly );
-    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
-
-    for ( it = m_condList.begin(); it != m_condList.end(); ++it )
+    int i = 0;
+    for ( it = m_condList.begin(); it != m_condList.end(); ++it, ++i )
     {
         KSpreadConditional condition = *it;
-        elementWriter.startElement( "style:map" );
-        elementWriter.addAttribute( "style:condition", saveOasisConditionValue( condition ) );
-        elementWriter.addAttribute("style:apply-style-name", *( condition.styleName ) );
-        //elementWriter.addAttribute( "style:base-cell-address", "..." );//todo
-        elementWriter.endElement();
+        //<style:map style:condition="cell-content()=45" style:apply-style-name="Default" style:base-cell-address="Sheet1.E10"/>
+        QMap<QString, QString> map;
+        map.insert( "style:condition", saveOasisConditionValue( condition ) );
+        map.insert( "style:apply-style-name",  *( condition.styleName ) );
+        //map.insert( ""style:base-cell-address", "..." );//todo
+        currentCellStyle.addStyleMap( map );
     }
-    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
-    currentCellStyle.addChildElement( "conditional attribute", elementContents );
-
 }
 
 QString KSpreadConditions::saveOasisConditionValue( KSpreadConditional &condition)
