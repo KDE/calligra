@@ -513,6 +513,8 @@ KexiPropertyEditor::slotPropertyChanged(KexiPropertyBuffer &buf,KexiProperty &pr
 	if (static_cast<KexiPropertyBuffer*>(m_buffer)!=&buf)
 		return;
 	KexiPropertyEditorItem* item = m_items[prop.name()];
+	if (!item) //this property is not visible here
+		return;
 	item->updateValue();
 	item->updateChildrenValue();
 }
