@@ -1,1 +1,2 @@
-SUBDIRS = export import
+#TODO: export
+SUBDIRS = import
