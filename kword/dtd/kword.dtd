@@ -632,11 +632,12 @@ don't put a </?xml...> at the end of the file!).
 <!-- FLOW
         FLOW is a paragraph and style tag, that determines the alignment of the text.
         align's value is one of: 'left', 'right', 'center', 'justify'
+        It can also be 'auto' for styles, meaning right for RTL text, left otherwise.
 -->
 <!ELEMENT FLOW
     EMPTY>
 <!ATTLIST FLOW
-    align (left|right|center|justify) #REQUIRED>
+    align (left|right|center|justify|auto) #REQUIRED>
 
 <!-- INDENTS
         first: indent (pt) from the left border (of the frame) of the first line of a paragraph
