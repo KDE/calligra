@@ -408,7 +408,7 @@ public:
     void setFloating();
     /** Make this frameset floating, with the anchor at @p parag,@p index in the text frameset @p textfs */
     void setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int index ); // convenience method
-    void setAnchored( KWAnchorPosition & pos );
+    void setAnchored( KWAnchorPosition & pos, bool placeHolderExists = false );
     /** Make this frameset fixed, i.e. not anchored */
     void setFixed();
     /** Return true if this frameset is floating, false if it's fixed */
@@ -457,7 +457,7 @@ protected:
     QRegion frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect );
 
     void deleteAnchors();
-    void updateAnchors();
+    void updateAnchors( bool placeHolderExists = false );
     void findFirstAnchor();
 
     KWDocument *m_doc;            // Document

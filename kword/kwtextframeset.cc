@@ -40,7 +40,7 @@
 
 #include <kdebug.h>
 
-// #define DEBUG_FLOW
+#define DEBUG_FLOW
 
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc )
     : KWFrameSet( _doc ), undoRedoInfo( this )

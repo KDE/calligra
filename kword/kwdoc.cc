@@ -1440,7 +1440,7 @@ bool KWDocument::completeLoading( KoStore *_store )
         KWFrameSet * fs = getFrameSet( itanch.key() );
         ASSERT( fs );
         if ( fs )
-            fs->setAnchored( itanch.data() );
+            fs->setAnchored( itanch.data(), true );
     }
     m_anchorRequests.clear();
 

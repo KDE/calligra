@@ -514,12 +514,12 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int in
     setAnchored( pos );
 }
 
-void KWFrameSet::setAnchored( KWAnchorPosition & pos )
+void KWFrameSet::setAnchored( KWAnchorPosition & pos, bool placeHolderExists /* = false */ )
 {
     if ( isFloating() )
         deleteAnchors();
     m_anchorPos = pos;
-    updateAnchors();
+    updateAnchors( placeHolderExists );
 }
 
 void KWFrameSet::setFixed()
@@ -529,7 +529,7 @@ void KWFrameSet::setFixed()
     m_anchorPos.makeInvalid();
 }
 
-void KWFrameSet::updateAnchors()
+void KWFrameSet::updateAnchors( bool placeHolderExists /*= false */ /*only used when loading*/ )
 {
     kdDebug() << "KWFrameSet::updateAnchors" << endl;
     int index = m_anchorPos.index;
@@ -540,7 +540,8 @@ void KWFrameSet::updateAnchors()
         {
             // Anchor this frame, after the previous one
             KWAnchor * anchor = new KWAnchor( m_anchorPos.textfs->textDocument(), frameIt.current() );
-            m_anchorPos.parag->insert( index, QChar('@') /*whatever*/ );
+            if ( !placeHolderExists )
+                m_anchorPos.parag->insert( index, QChar('@') /*whatever*/ );
             m_anchorPos.parag->setCustomItem( index, anchor, 0 );
             frameIt.current()->setAnchor( anchor );
         }
