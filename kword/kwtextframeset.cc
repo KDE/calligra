@@ -682,7 +682,7 @@ void KWTextFrameSet::updateFrames()
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame * frame = frameIt.current();
-            //kdDebug(32002) << "KWTextFrameSet::updateFrames adding frame " << frame
+            //kdDebugBody(32002) << "KWTextFrameSet::updateFrames adding frame " << frame
             //        << " height:" << frame->height()
             //        << " zoomed height:" << kWordDocument()->zoomItY( frame->height() ) << endl;
             ASSERT( !frames.contains(frame) );
@@ -697,7 +697,7 @@ void KWTextFrameSet::updateFrames()
             }
         }
     }
-    kdDebugBody(32002) << "KWTextFrameSet::updateFrames m_availableHeight=" << m_availableHeight << endl;
+    kdDebugBody(32002) << this << " KWTextFrameSet::updateFrames m_availableHeight=" << m_availableHeight << endl;
     frames.setAutoDelete( true );
 
     KWFrameSet::updateFrames();
@@ -1190,6 +1190,7 @@ void KWTextFrameSet::doChangeInterval()
 
 void KWTextFrameSet::updateViewArea( QWidget * w, int maxY )
 {
+    (void) availableHeight(); // make sure that it's not -1
     //kdDebug(32002) << "KWTextFrameSet::updateViewArea " << (void*)w << " " << w->name() << " maxY=" << maxY << " m_availableHeight=" << m_availableHeight << " textdoc->height()=" << textdoc->height() << endl;
     if ( maxY >= m_availableHeight ) // Speedup
         maxY = m_availableHeight;
