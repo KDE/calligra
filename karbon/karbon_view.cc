@@ -38,6 +38,7 @@
 #include "vmtool_scale.h"
 #include "vmtool_shear.h"
 #include "vpainter.h"
+#include "vqpainter.h"
 #include "vpainterfactory.h"
 #include "vtoolcontainer.h"
 #include "vtext.h"
@@ -107,6 +108,28 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 	m_painterFactory->painter()->resize( width(), height() );
 	m_painterFactory->editpainter()->resize( width(), height() );
 	m_canvas->resize( width(), height() );
+}
+
+void
+KarbonView::setupPrinter( KPrinter &printer )
+{
+}
+
+void
+KarbonView::print( KPrinter &printer )
+{
+	VQPainter p( (QPaintDevice *)&printer, width(), height() );
+	p.begin();
+
+	// print the doc using QPainter at zoom level 1
+	// TODO : better use eps export?
+	// TODO : use real page layout stuff
+	QPtrListIterator<VLayer> i = m_part->layers();
+	for ( ; i.current(); ++i )
+		if ( i.current()->visible() )
+			i.current()->draw( &p, KoRect::fromQRect( QRect( 0, 0, width(), height() ) ), 1.0 );
+
+	p.end();
 }
 
 void

@@ -51,6 +51,10 @@ public:
 
 	VPainterFactory *painterFactory() { return m_painterFactory; }
 
+	// printing support, override from KoView
+	virtual void setupPrinter( KPrinter &printer );
+    virtual void print( KPrinter &printer );
+
 public slots:
 	// editing:
 	void editCut();
