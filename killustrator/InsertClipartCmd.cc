@@ -50,7 +50,7 @@ void InsertClipartCmd::execute () {
     clipart->unref ();
 
   if (wmf.load(filename)) {
-    clipart = new GClipart (document, wmf, filename);
+    clipart = new GClipart (document, filename);
     document->activePage()->insertObject (clipart);
   }
 }

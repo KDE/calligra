@@ -53,17 +53,19 @@ GClipart::GClipart (GDocument *doc, const QDomElement &element)
     calcBoundingBox ();
 }
 
-GClipart::GClipart (GDocument *doc, QWinMetaFile& wmf, const QString &name)
+GClipart::GClipart (GDocument *doc, const QString &name)
 :GObject(doc)
 ,url (name)
 {
-  QRect r = wmf.bbox ();
+    QWinMetaFile wmf;
+    wmf.load(name);
+    QRect r = wmf.bbox ();
 
-  width = (r.right () - r.left ()) * 72.0 / wmf.dpi ();
-  height = (r.bottom () - r.top ()) * 72.0 / wmf.dpi ();
-  pic = new QPicture ();
-  wmf.paint (pic);
-  calcBoundingBox ();
+    width = (r.right () - r.left ()) * 72.0 / wmf.dpi ();
+    height = (r.bottom () - r.top ()) * 72.0 / wmf.dpi ();
+    pic = new QPicture ();
+    wmf.paint (pic);
+    calcBoundingBox ();
 }
 
 GClipart::GClipart (const GClipart& obj)

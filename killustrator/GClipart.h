@@ -36,7 +36,7 @@ class GClipart : public GObject
 {
   Q_OBJECT
 public:
-  GClipart (GDocument* parent, QWinMetaFile& wmf, const QString &name);
+  GClipart (GDocument* parent, const QString &name);
   GClipart (GDocument* parent, const QDomElement &element);
 
   GClipart (GDocument* parent );
