@@ -1693,8 +1693,8 @@ void KivioView::updateButton()
   toggleShowGrid(m_pDoc->grid().isShow);
   toggleSnapGrid(m_pDoc->grid().isSnap);
 
-  toggleShowGuides(true && koDocument()->isReadWrite());
-  toggleSnapGuides(true && koDocument()->isReadWrite());
+  toggleShowGuides(koDocument()->isReadWrite());
+  toggleSnapGuides(koDocument()->isReadWrite());
 
 }
 

@@ -30,7 +30,7 @@ KIvioPageIface::KIvioPageIface( KivioPage *page_ )
     m_page = page_;
 }
 
-bool KIvioPageIface::isHidden()
+bool KIvioPageIface::isHidden()const
 {
     return m_page->isHidden();
 }

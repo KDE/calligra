@@ -36,7 +36,7 @@ k_dcop:
     DCOPRef firstLayer();
     DCOPRef layerAt( int );
 
-    bool isHidden();
+    bool isHidden()const;
     void deleteSelectedStencils();
     void groupSelectedStencils();
     void ungroupSelectedStencils();
