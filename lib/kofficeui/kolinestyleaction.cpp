@@ -1,21 +1,21 @@
-/*
- * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2004 Peter Simonsson
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
+/* This file is part of the KDE project
+   Copyright (C) 2004 Peter Simonsson <psn@linux.se>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 
 #include "kolinestyleaction.h"
 
@@ -33,20 +33,37 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
+class KoLineStyleAction::KoLineStyleActionPrivate
+{
+  public:
+    KoLineStyleActionPrivate()
+    {
+      m_popup = new KPopupMenu(0L,"KoLineStyleAction::popup");
+      m_currentStyle = Qt::SolidLine;
+    }
+    
+    ~KoLineStyleActionPrivate()
+    {
+      delete m_popup;
+      m_popup = 0;
+    }
+    
+    KPopupMenu* m_popup;
+    int m_currentStyle;
+};
+
 KoLineStyleAction::KoLineStyleAction(const QString &text, const QString& icon,
   QObject* parent, const char* name) : KActionMenu(text, icon, parent, name)
 {
-  m_popup = new KPopupMenu(0L,"KoLineStyleAction::popup");
-  m_currentStyle = Qt::SolidLine;
-  
+  d = new KoLineStyleActionPrivate;
+   
   createMenu();
 }
 
 KoLineStyleAction::KoLineStyleAction(const QString &text, const QString& icon, const QObject* receiver,
   const char* slot, QObject* parent, const char* name) : KActionMenu(text, icon, parent, name)
 {
-  m_popup = new KPopupMenu(0L,"KoLineStyleAction::popup");
-  m_currentStyle = Qt::SolidLine;
+  d = new KoLineStyleActionPrivate;
   
   createMenu();
   
@@ -56,8 +73,7 @@ KoLineStyleAction::KoLineStyleAction(const QString &text, const QString& icon, c
 
 KoLineStyleAction::~KoLineStyleAction()
 {
-  delete m_popup;
-  m_popup = 0;
+  delete d;
 }
 
 void KoLineStyleAction::createMenu()
@@ -84,7 +100,7 @@ void KoLineStyleAction::createMenu()
 
 KPopupMenu* KoLineStyleAction::popupMenu() const
 {
-  return m_popup;
+  return d->m_popup;
 }
 
 void KoLineStyleAction::popup(const QPoint& global)
@@ -175,14 +191,19 @@ int KoLineStyleAction::plug(QWidget* widget, int index)
 void KoLineStyleAction::execute(int index)
 {
   setCurrentStyle(index);
-  emit newLineStyle(m_currentStyle);
+  emit newLineStyle(d->m_currentStyle);
+}
+
+int KoLineStyleAction::currentStyle()
+{
+  return d->m_currentStyle;
 }
 
 void KoLineStyleAction::setCurrentStyle(int style)
 {
-  popupMenu()->setItemChecked(m_currentStyle, false);
+  popupMenu()->setItemChecked(d->m_currentStyle, false);
   popupMenu()->setItemChecked(style, true);
-  m_currentStyle = style;
+  d->m_currentStyle = style;
 }
 
 #include "kolinestyleaction.moc"
