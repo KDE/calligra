@@ -981,6 +981,7 @@ bool KoMainWindow::queryClose()
                 bool isNative = ( d->m_rootDoc->outputMimeType() == d->m_rootDoc->nativeFormatMimeType() );
                 if (! saveDocument( !isNative ) )
                     return false;
+                break;
             }
             case KMessageBox::No :
                 rootDocument()->removeAutoSaveFiles();
