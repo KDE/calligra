@@ -1,9 +1,9 @@
-INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/karbon  -I$(top_srcdir)/karbon/core $(all_includes)
+INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/karbon -I$(top_srcdir)/karbon/core -I$(KOPAINTER_INCLUDES) $(all_includes)
 
 kde_module_LTLIBRARIES = karbon_whirlpinchplugin.la
 
 karbon_whirlpinchplugin_la_SOURCES = whirlpinchplugin.cc
-karbon_whirlpinchplugin_la_LIBADD = $(LIB_KPARTS) \
+karbon_whirlpinchplugin_la_LIBADD = $(LIB_KPARTS) $(LIB_KOPAINTER) \
 				../../libkarbonpart.la
 
 
