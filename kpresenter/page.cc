@@ -56,8 +56,6 @@
 
 #include <stdlib.h>
 
-static bool ignoreSkip = FALSE;
-
 /******************************************************************/
 /* class Page - Page                                              */
 /******************************************************************/
@@ -115,29 +113,6 @@ Page::~Page()
     delete presMenu;
 }
 
-/*============================ draw contents ====================*/
-void Page::draw( QRect _rect, QPainter *p )
-{
-    //kdDebug(33001) << "Page::draw" << endl;
-    p->save();
-    editMode = false;
-    fillBlack = false;
-    _presFakt = 1.0;
-    currPresStep = 1000;
-    subPresStep = 1000;
-    currPresPage = currPgNum();
-
-    drawPageInPainter( p, diffy(), _rect );
-
-    currPresPage = 1;
-    currPresStep = 0;
-    subPresStep = 0;
-    _presFakt = 1.0;
-    fillBlack = true;
-    editMode = true;
-    p->restore();
-}
-
 /*======================== paint event ===========================*/
 void Page::paintEvent( QPaintEvent* paintEvent )
 {
@@ -156,7 +131,7 @@ void Page::paintEvent( QPaintEvent* paintEvent )
     painter.setClipRect( paintEvent->rect() );
 
     drawBackground( &painter, paintEvent->rect() );
-    drawObjects( &painter, paintEvent->rect() );
+    drawObjects( &painter, paintEvent->rect(), true );
 
     painter.end();
 
@@ -164,7 +139,7 @@ void Page::paintEvent( QPaintEvent* paintEvent )
 }
 
 /*======================= draw background ========================*/
-void Page::drawBackground( QPainter *painter, QRect rect )
+void Page::drawBackground( QPainter *painter, QRect rect, bool ignoreSkip )
 {
     QRegion grayRegion( rect );
     QPtrListIterator<KPBackGround> it(*backgroundList());
@@ -235,7 +210,7 @@ void Page::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion
 }
 
 /*========================= draw objects =========================*/
-void Page::drawObjects( QPainter *painter, QRect rect )
+void Page::drawObjects( QPainter *painter, QRect rect, bool ignoreSkip, bool drawCursor )
 {
     int pgNum = editMode ? (int)view->getCurrPgNum() : currPresPage;
     //kdDebug(33001) << "Page::drawObjects ----- pgNum=" << pgNum << " currPresStep=" << currPresStep << " _presFakt=" << _presFakt << endl;
@@ -272,7 +247,16 @@ void Page::drawObjects( QPainter *painter, QRect rect )
 	    }
 
             //kdDebug(33001) << "                 drawing object at " << diffx() << "," << diffy() << "  and setting subpresstep to 0 !" << endl;
-	    kpobject->draw( painter, diffx(), diffy() );
+            if ( drawCursor && kpobject->getType() == OT_TEXT && m_currentTextObjectView )
+            {
+                KPTextObject* textObject = static_cast<KPTextObject*>( kpobject );
+                if ( m_currentTextObjectView->kpTextObject() == textObject ) // This is the object we are editing
+                     textObject->draw( painter, diffx(), diffy(),
+                                       false /*onlyChanged. Pass as param ?*/,
+                                       m_currentTextObjectView->cursor(), true /* idem */);
+            }
+            else
+                kpobject->draw( painter, diffx(), diffy() );
 	    kpobject->setSubPresStep( 0 );
 	    kpobject->doSpecificEffects( false );
 	    if ( kpobject->isSticky() )
@@ -1044,8 +1028,7 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
 	    if ( kpobject->contains( QPoint( e->x(), e->y() ), diffx(), diffy() ) ) {
 		if ( kpobject->getType() == OT_TEXT ) {
 		    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-                    if(m_currentTextObjectView)
-                        delete m_currentTextObjectView;
+                    delete m_currentTextObjectView;
                     m_currentTextObjectView=kptextobject->createKPTextView(this);
 
 		    setTextBackground( kptextobject );
@@ -1600,25 +1583,9 @@ bool Page::haveASelectedPictureObj()
 }
 
 /*================================================================*/
-KPTextView *Page::haveASelectedTextObj()
+KPTextObject *Page::selectedTextObj()
 {
     KPObject *kpobject = 0;
-
-    for ( unsigned int i = 0; i < objectList()->count(); i++ )
-    {
-        kpobject = objectList()->at( i );
-        if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT )
-            return dynamic_cast<KPTextObject*>( kpobject )->textObjectView();
-    }
-
-    return 0L;
-}
-
-/*================================================================*/
-KPTextObject *Page::haveASelectedKPTextObj()
-{
-    KPObject *kpobject = 0;
-
     for ( unsigned int i = 0; i < objectList()->count(); i++ )
     {
         kpobject = objectList()->at( i );
@@ -1924,7 +1891,6 @@ bool Page::isOneObjectSelected()
 void Page::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_zoom*/ )
 {
     //kdDebug(33001) << "Page::drawPageInPix2" << endl;
-    ignoreSkip = TRUE;
     currPresPage = pgnum + 1;
     int _yOffset = diffy();
     view->setDiffY( __diffy );
@@ -1938,10 +1904,10 @@ void Page::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_zoom*
 
     bool _editMode = editMode;
     editMode = false;
-    drawBackground( &p, _pix.rect() );
+    drawBackground( &p, _pix.rect(), true );
     editMode = _editMode;
 
-    drawObjects( &p, _pix.rect() );
+    drawObjects( &p, _pix.rect(), false, true );
 
     p.end();
 
@@ -1950,43 +1916,37 @@ void Page::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_zoom*
     oIt.toFirst();
     for (; oIt.current(); ++oIt )
         oIt.current()->drawSelection( true );
-
-    ignoreSkip = FALSE;
 }
 
 /*==================== draw a page in a pixmap ===================*/
 void Page::drawPageInPix( QPixmap &_pix, int __diffy )
 {
     //kdDebug(33001) << "Page::drawPageInPix" << endl;
-    ignoreSkip = TRUE;
     int _yOffset = diffy();
     view->setDiffY( __diffy );
 
     QPainter p;
     p.begin( &_pix );
 
-    drawBackground( &p, _pix.rect() );
-    drawObjects( &p, _pix.rect() );
+    drawBackground( &p, _pix.rect(), true );
+    drawObjects( &p, _pix.rect(), false, true );
 
     p.end();
 
     view->setDiffY( _yOffset );
-    ignoreSkip = FALSE;
 }
 
-/*==================== draw a page in a painter ===================*/
-void Page::drawPageInPainter( QPainter* painter, int __diffy, QRect _rect )
+/*==================== print a page ===================*/
+void Page::printPage( QPainter* painter, int __diffy, QRect _rect )
 {
     //kdDebug(33001) << "Page::drawPageInPainter" << endl;
-    ignoreSkip = TRUE;
     int _yOffset = diffy();
     view->setDiffY( __diffy );
 
-    drawBackground( painter, _rect );
-    drawObjects( painter, _rect );
+    drawBackground( painter, _rect, true );
+    drawObjects( painter, _rect, false, true );
 
     view->setDiffY( _yOffset );
-    ignoreSkip = FALSE;
 }
 
 /*=========================== change pages =======================*/
@@ -2438,7 +2398,7 @@ void Page::doObjEffects()
         QPainter p;
         p.begin( &screen_orig );
         drawBackground( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ) );
-        drawObjects( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ) );
+        drawObjects( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ), false );
         p.end();
         inEffect = false;
         bitBlt( this, 0, 0, &screen_orig, 0, 0, screen_orig.width(), screen_orig.height() );
@@ -3000,7 +2960,7 @@ void Page::doObjEffects()
         QPainter p;
         p.begin( this );
         p.drawPixmap( 0, 0, screen_orig );
-        drawObjects( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ) );
+        drawObjects( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ), false );
         p.end();
     }
     else
@@ -3008,7 +2968,7 @@ void Page::doObjEffects()
         //kdDebug(33001) << "Page::doObjEffects effects" << endl;
         QPainter p;
         p.begin( screen );
-        drawObjects( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ) );
+        drawObjects( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ), false );
         p.end();
         bitBlt( this, 0, 0, screen );
     }
@@ -3113,7 +3073,7 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
         painter->resetXForm();
         painter->fillRect( getPageRect( 0 ), white );
 
-        drawPageInPainter( painter, diffy(), getPageRect( i - 1 ) );
+        printPage( painter, diffy(), getPageRect( i - 1 ) );
         kapp->processEvents();
 
         painter->resetXForm();
@@ -3468,12 +3428,6 @@ void Page::gotoPage( int pg )
         setFocus();
         view->refreshPageButton();
     }
-}
-
-/*================================================================*/
-KPTextView* Page::kTxtObj()
-{
-    return m_currentTextObjectView;
 }
 
 /*================================================================*/

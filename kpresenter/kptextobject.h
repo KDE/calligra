@@ -67,6 +67,8 @@ public:
     virtual void load(const QDomElement &element);
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
+    void draw( QPainter *_painter, int _diffx, int _diffy,
+               bool onlyChanged, QTextCursor* cursor, bool resetChanged );
 
     virtual void zoom( float _fakt );
     virtual void zoomOrig();
@@ -76,11 +78,8 @@ public:
     void recalcPageNum( KPresenterDoc *doc );
 
 
-
     /** Return the contained text object */
     KoTextObject * textObject() const { return m_textobj; }
-
-    KPTextView * textObjectView() const {return m_textobjview;}
 
     KoTextDocument *textDocument() const;
 
@@ -88,6 +87,16 @@ public:
 
     KPTextView * createKPTextView( Page * );
 
+    /**
+     * Use this format for displaying the properties (font/color/...) of the object.
+     * This text format is in fact the one of the first character in the object.
+     */
+    KoTextFormat* globalFormat();
+
+    void setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
+
+signals:
+    void repaintChanged( KPTextObject* );
 
 protected:
     virtual QDomElement saveKTextObject( QDomDocument& doc );
@@ -96,11 +105,9 @@ protected:
                            unsigned int tmpUnderline, unsigned int tmpStrikeOut,const QString &tmpTextBackColor,unsigned int tmpVerticalAlign,QDomDocument &doc);
 
     virtual void loadKTextObject( const QDomElement &e, int type );
-    void drawTextObject( QPainter* _painter );
-    void drawText( QPainter* _painter );
+    void drawTextObject( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
+    void drawText( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
     void drawParags( QPainter *p, int from, int to );
-
-    bool drawEditRect, drawEmpty;
 
 protected slots:
     void slotNewCommand( KCommand *cmd );
@@ -118,12 +125,9 @@ private:
                            &attrBold, &attrItalic, & attrUnderline,& attrStrikeOut,&attrColor, &attrWhitespace, &attrTextBackColor, &attrVertAlign;
 
     /** The contained text object */
-    KoTextObject * m_textobj;
+    KoTextObject *m_textobj;
     KPresenterDoc *m_doc;
-    KPTextView *m_textobjview;
-
-signals:
-    void repaintChanged( KPTextObject* );
+    bool drawEditRect, drawEmpty;
 };
 
 
@@ -134,6 +138,7 @@ public:
     KPTextView( KPTextObject * txtObj, Page *_page );
     virtual ~KPTextView(){};
     KoTextView * textView() { return this; }
+    KPTextObject * kpTextObject() { return m_kptextobj; }
 
     void keyPressEvent( QKeyEvent * );
     void mousePressEvent( QMouseEvent *);
@@ -172,7 +177,7 @@ protected:
 
     virtual void pgDownKeyPressed();
 
-    KPTextObject *m_textobj;
+    KPTextObject *m_kptextobj;
     Page *m_page;
 };
 

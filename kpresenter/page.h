@@ -72,7 +72,6 @@ public:
     ~Page();
 
     // public functions
-    void draw( QRect, QPainter* );
     void selectAllObj();
     void deSelectAllObj();
     void selectObj( int num );
@@ -87,7 +86,6 @@ public:
     void setTextUnderline( bool b );
     void setTextFamily( const QString &f );
     void setTextPointSize( int s );
-    KPTextView* kTxtObj();
     KPTextObject* kpTxtObj();
 
     // Start a screen presentation
@@ -120,8 +118,7 @@ public:
     void setAutoForm( QString _autoform )
     { autoform = _autoform; }
 
-    KPTextView *haveASelectedTextObj();
-    KPTextObject *haveASelectedKPTextObj();
+    KPTextObject *selectedTextObj();
 
     void drawPageInPix( QPixmap&, int );
     void drawPageInPix2( QPixmap&, int, int, float _zoom = 1.0 );
@@ -165,8 +162,8 @@ protected:
     // functions for displaying
     void paintEvent( QPaintEvent* );
     void paintBackground( QPainter*, QRect );
-    void drawBackground( QPainter*, QRect );
-    void drawObjects( QPainter*, QRect );
+    void drawBackground( QPainter*, QRect, bool ignoreSkip = false );
+    void drawObjects( QPainter*, QRect, bool drawCursor, bool ignoreSkip = false );
     void mousePressEvent( QMouseEvent *e );
     void mouseReleaseEvent( QMouseEvent *e );
     void mouseMoveEvent( QMouseEvent *e );
@@ -212,7 +209,7 @@ protected:
     void _repaint( QRect r );
     void _repaint( KPObject *o );
 
-    void drawPageInPainter( QPainter*, int, QRect );
+    void printPage( QPainter*, int, QRect );
     void changePages( QPixmap, QPixmap, PageEffect );
     void doObjEffects();
     void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );

@@ -93,8 +93,6 @@ void KPFooterHeaderEditor::tabSelected( const QString &s )
 /*================================================================*/
 KPFooterHeaderEditor::~KPFooterHeaderEditor()
 {
-    //doc->header()->textObject()->reparent( 0L, 0, QPoint( 0, 0 ), false );
-    //doc->footer()->textObject()->reparent( 0L, 0, QPoint( 0, 0 ), false );
 }
 
 /*================================================================*/
@@ -169,7 +167,7 @@ void KPFooterHeaderEditor::setupHeader()
     htool2->insertSeparator();
 
     QPixmap pix( 18, 18 );
-    //pix.fill( doc->header()->textObjectView()->textColor() );
+    //pix.fill( doc->header()->textColor() );
     h_color = 4;
     htool2->insertButton( pix, h_color,
                           SIGNAL( clicked() ), this,
@@ -223,9 +221,6 @@ void KPFooterHeaderEditor::setupHeader()
     txtFrame->setMargin( 2 );
     txtFrame->setBackgroundColor( Qt::white );
     txtFrame->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
-
-    //doc->header()->textObject()->reparent( txtFrame, 0, QPoint( 0, 0 ), true );
-    //doc->header()->textObjectView()->setBackgroundColor( Qt::white );
 
     tabwidget->addTab( back, i18n( "&Header" ) );
 }
@@ -296,7 +291,7 @@ void KPFooterHeaderEditor::setupFooter()
     ftool2->insertSeparator();
 
     QPixmap pix( 18, 18 );
-    //pix.fill( doc->footer()->textObjectView()->textColor() );
+    //pix.fill( doc->footer()->textColor() );
     f_color = 4;
     ftool2->insertButton( pix, f_color,
                           SIGNAL( clicked() ), this,
@@ -349,9 +344,6 @@ void KPFooterHeaderEditor::setupFooter()
     txtFrame->setMargin( 2 );
     txtFrame->setBackgroundColor( Qt::white );
     txtFrame->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
-
-    //doc->footer()->textObject()->reparent( txtFrame, 0, QPoint( 0, 0 ), true );
-    //doc->footer()->textObjectView()->setBackgroundColor( Qt::white );
 
     tabwidget->addTab( back, i18n( "&Footer" ) );
 }
@@ -470,60 +462,72 @@ void KPFooterHeaderEditor::slotFooterPenBrush()
 /*================================================================*/
 void KPFooterHeaderEditor::headerFont( const QString &f )
 {
-    if(doc->header()->textObjectView())
-        doc->header()->textObjectView()->setFamily(f);
+#if 0
+    if(doc->header())
+        doc->header()->setFamily(f);
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerSize( const QString &s )
 {
-    if(doc->header()->textObjectView())
-        doc->header()->textObjectView()->setPointSize(s.toInt());
-//    doc->header()->textObjectView()->setFocus();
+#if 0
+    if(doc->header())
+        doc->header()->setPointSize(s.toInt());
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerBold()
 {
-    if(doc->header()->textObjectView())
-        doc->header()->textObjectView()->setBold( htool2->isButtonOn( h_bold ) );
+#if 0
+    if(doc->header())
+        doc->header()->setBold( htool2->isButtonOn( h_bold ) );
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerItalic()
 {
-    if(doc->header()->textObjectView())
-        doc->header()->textObjectView()->setItalic( htool2->isButtonOn( h_italic ) );
+#if 0
+    if(doc->header())
+        doc->header()->setItalic( htool2->isButtonOn( h_italic ) );
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerUnderline()
 {
-    if(doc->header()->textObjectView())
-        doc->header()->textObjectView()->setUnderline( htool2->isButtonOn( h_underline ) );
+#if 0
+    if(doc->header())
+        doc->header()->setUnderline( htool2->isButtonOn( h_underline ) );
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerColor()
 {
-    if(doc->header()->textObjectView())
+#if 0
+    if(doc->header())
     {
-        QColor col = doc->header()->textObjectView()->textColor();
+        QColor col = doc->header()->textColor();
         if ( KColorDialog::getColor( col ) ) {
             QPixmap pix( 18, 18 );
             pix.fill( col );
-            doc->header()->textObjectView()->setTextColor( col );
+            doc->header()->setTextColor( col );
             htool2->setButtonPixmap( h_color, pix );
         }
     }
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerAlignLeft()
 {
-    if(doc->header()->textObjectView())
+#if 0
+    if(doc->header())
     {
-        KCommand *cmd=doc->header()->textObjectView()->setAlignCommand(Qt::AlignLeft);
+        KCommand *cmd=doc->header()->setAlignCommand(Qt::AlignLeft);
         if(cmd)
             doc->addCommand(cmd);
 
@@ -531,14 +535,16 @@ void KPFooterHeaderEditor::headerAlignLeft()
         htool2->setButton( h_acenter, false );
         htool2->setButton( h_aright, false );
     }
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerAlignCenter()
 {
-    if(doc->header()->textObjectView())
+#if 0
+    if(doc->header())
     {
-        KCommand* cmd=doc->header()->textObjectView()->setAlignCommand(Qt::AlignCenter);
+        KCommand* cmd=doc->header()->setAlignCommand(Qt::AlignCenter);
         if(cmd)
             doc->addCommand(cmd);
 
@@ -546,15 +552,16 @@ void KPFooterHeaderEditor::headerAlignCenter()
         htool2->setButton( h_acenter, true );
         htool2->setButton( h_aright, false );
     }
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerAlignRight()
 {
-
-    if(doc->header()->textObjectView())
+#if 0
+    if(doc->header())
     {
-        KCommand *cmd=doc->header()->textObjectView()->setAlignCommand(Qt::AlignRight);
+        KCommand *cmd=doc->header()->setAlignCommand(Qt::AlignRight);
         if(cmd)
             doc->addCommand(cmd);
 
@@ -562,6 +569,7 @@ void KPFooterHeaderEditor::headerAlignRight()
         htool2->setButton( h_acenter, false );
         htool2->setButton( h_aright, true );
     }
+#endif
 }
 
 /*================================================================*/
@@ -575,59 +583,72 @@ void KPFooterHeaderEditor::headerInsertPageNum()
 /*================================================================*/
 void KPFooterHeaderEditor::footerFont( const QString &f )
 {
-    if(doc->footer()->textObjectView())
-        doc->footer()->textObjectView()->setFamily(f);
+#if 0
+    if(doc->footer())
+        doc->footer()->setFamily(f);
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerSize( const QString &s )
 {
-    if(doc->footer()->textObjectView())
-        doc->footer()->textObjectView()->setPointSize(s.toInt() );
+#if 0
+    if(doc->footer())
+        doc->footer()->setPointSize(s.toInt() );
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerBold()
 {
-    if(doc->footer()->textObjectView())
-        doc->footer()->textObjectView()->setBold( ftool2->isButtonOn( f_bold ) );
+#if 0
+    if(doc->footer())
+        doc->footer()->setBold( ftool2->isButtonOn( f_bold ) );
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerItalic()
 {
-    if(doc->footer()->textObjectView())
-        doc->footer()->textObjectView()->setItalic( ftool2->isButtonOn( f_italic ) );
+#if 0
+    if(doc->footer())
+        doc->footer()->setItalic( ftool2->isButtonOn( f_italic ) );
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerUnderline()
 {
-    if(doc->footer()->textObjectView())
-        doc->footer()->textObjectView()->setUnderline( ftool2->isButtonOn( f_underline ) );
+#if 0
+    if(doc->footer())
+        doc->footer()->setUnderline( ftool2->isButtonOn( f_underline ) );
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerColor()
 {
-    if( doc->footer()->textObjectView())
+#if 0
+    if(doc->footer())
     {
-        QColor col = doc->footer()->textObjectView()->textColor();
+        QColor col = doc->footer()->textColor();
         if ( KColorDialog::getColor( col ) ) {
             QPixmap pix( 18, 18 );
             pix.fill( col );
-            doc->footer()->textObjectView()->setTextColor( col );
+            doc->footer()->setTextColor( col );
             ftool2->setButtonPixmap( f_color, pix );
         }
     }
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerAlignLeft()
 {
-    if(doc->header()->textObjectView())
+#if 0
+    if(doc->footer())
     {
-        KCommand *cmd=doc->header()->textObjectView()->setAlignCommand(Qt::AlignLeft);
+        KCommand *cmd=doc->footer()->setAlignCommand(Qt::AlignLeft);
         if(cmd)
             doc->addCommand(cmd);
 
@@ -635,14 +656,16 @@ void KPFooterHeaderEditor::footerAlignLeft()
         ftool2->setButton( f_acenter, false );
         ftool2->setButton( f_aright, false );
     }
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerAlignCenter()
 {
-    if(doc->header()->textObjectView())
+#if 0
+    if(doc->footer())
     {
-        KCommand *cmd=doc->header()->textObjectView()->setAlignCommand(Qt::AlignCenter);
+        KCommand *cmd=doc->header()->setAlignCommand(Qt::AlignCenter);
         if(cmd)
             doc->addCommand(cmd);
 
@@ -650,14 +673,16 @@ void KPFooterHeaderEditor::footerAlignCenter()
         ftool2->setButton( f_acenter, true );
         ftool2->setButton( f_aright, false );
     }
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerAlignRight()
 {
-    if(doc->header()->textObjectView())
+#if 0
+    if(doc->footer())
     {
-        KCommand *cmd=doc->header()->textObjectView()->setAlignCommand(Qt::AlignRight);
+        KCommand *cmd=doc->header()->setAlignCommand(Qt::AlignRight);
         if(cmd)
             doc->addCommand(cmd);
 
@@ -665,6 +690,7 @@ void KPFooterHeaderEditor::footerAlignRight()
         ftool2->setButton( f_acenter, false );
         ftool2->setButton( f_aright, true );
     }
+#endif
 }
 
 /*================================================================*/
@@ -767,7 +793,7 @@ void KPFooterHeaderEditor::setShowFooter( bool b )
 void KPFooterHeaderEditor::footerInsertPageNum()
 {
 #if 0
-    doc->footer()->textObjectView()->insertPageNum();
+    doc->footer()->insertPageNum();
 #endif
 }
 

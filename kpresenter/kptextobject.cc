@@ -92,7 +92,6 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
                                                    new KoTextFormatCollection( doc->defaultFont() ));
 
     m_textobj = new KoTextObject( textdoc, doc->standardStyle());
-    m_textobjview=0;
 
     brush = Qt::NoBrush;
     pen = QPen( Qt::black, 1, Qt::NoPen );
@@ -191,6 +190,12 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         return;
     }
 
+    draw( _painter, _diffx, _diffy, false, 0L, true );
+}
+
+void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy,
+                         bool onlyChanged, QTextCursor* cursor, bool resetChanged )
+{
     _painter->save();
     setupClipRegion( _painter, getBoundingRect( _diffx, _diffy ) );
 
@@ -217,7 +222,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
         _painter->drawRect( penw, penw, ow - 2 * penw, oh - 2 * penw );
-        drawTextObject( _painter );
+        drawTextObject( _painter, onlyChanged, cursor, resetChanged );
     }
     else
     {
@@ -249,7 +254,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         _painter->drawRect( rr.left() + xPos + penw, rr.top() + yPos + penw, ow - 2 * penw, oh - 2 * penw );
 
         _painter->translate( rr.left() + xPos, rr.top() + yPos );
-        drawTextObject( _painter );
+        drawTextObject( _painter, onlyChanged, cursor, resetChanged );
     }
     _painter->restore();
 
@@ -258,7 +263,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
 // This method simply draws the paragraphs (and their shadow) in the given painter
 // Assumes the painter is already set up correctly.
-void KPTextObject::drawTextObject( QPainter* _painter )
+void KPTextObject::drawTextObject( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged )
 {
     if ( shadowDistance > 0 )
     {
@@ -271,19 +276,17 @@ void KPTextObject::drawTextObject( QPainter* _painter )
         // TODO
         ktextobject.document()->enableDrawAllInOneColor( shadowColor );
 #endif
-        drawText( _painter );
+        drawText( _painter, onlyChanged, 0L, false );
         // TODO disable 'drawInAllOneColor'
         _painter->restore();
     }
     // Now draw the normal text
-    drawText( _painter );
+    drawText( _painter, onlyChanged, cursor, resetChanged );
 }
 
-void KPTextObject::drawText( QPainter* _painter )
+void KPTextObject::drawText( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged )
 {
-    bool drawCursor = m_textobjview != 0L;
     QColorGroup cg = QApplication::palette().active();
-    QTextCursor * cursor =  m_textobjview ? m_textobjview->cursor() : 0;
     QRect r( 0, 0, ext.width(), ext.height() );
 
     if ( specEffects )
@@ -298,7 +301,7 @@ void KPTextObject::drawText( QPainter* _painter )
             Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
                 _painter, r.x(), r.y(), r.width(), r.height(),
                 cg, m_doc->zoomHandler(), // TODO (long term) the view's zoomHandler
-                false, drawCursor, cursor, false );
+                onlyChanged, cursor != 0, cursor, resetChanged );
         }
     }
     else
@@ -307,7 +310,7 @@ void KPTextObject::drawText( QPainter* _painter )
         Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
             _painter, r.x(), r.y(), r.width(), r.height(),
             cg, m_doc->zoomHandler(), // TODO (long term) the view's zoomHandler
-            false, drawCursor, cursor, false );
+            onlyChanged, cursor != 0, cursor, resetChanged );
     }
 }
 
@@ -616,11 +619,24 @@ KPTextView * KPTextObject::createKPTextView( Page * _page )
     return new KPTextView( this, _page );
 }
 
+KoTextFormat* KPTextObject::globalFormat()
+{
+    QTextStringChar *ch = textDocument()->firstParag()->at( 0 );
+    return static_cast<KoTextFormat *>(ch->format());
+}
+
+void KPTextObject::setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags)
+{
+    //TODO
+}
+
+
+
 KPTextView::KPTextView( KPTextObject * txtObj,Page *_page )
     : KoTextView( txtObj->textObject() )
 {
     m_page=_page;
-    m_textobj=txtObj;
+    m_kptextobj=txtObj;
     KoTextView::setReadWrite( txtObj->kPresenterDocument()->isReadWrite() );
     connect( textView(), SIGNAL( cut() ), SLOT( cut() ) );
     connect( textView(), SIGNAL( copy() ), SLOT( copy() ) );
@@ -706,7 +722,7 @@ void KPTextView::clearSelection()
 void KPTextView::insertSpecialChar(QChar _c)
 {
     if(textObject()->hasSelection() )
-        m_textobj->kPresenterDocument()->addCommand(textObject()->replaceSelectionCommand(
+        m_kptextobj->kPresenterDocument()->addCommand(textObject()->replaceSelectionCommand(
             cursor(), _c, QTextDocument::Standard, i18n("Insert Special Char")));
     else
         textObject()->insert( cursor(), currentFormat(), _c, false /* no newline */, true, i18n("Insert Special Char") );
