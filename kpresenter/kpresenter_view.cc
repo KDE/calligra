@@ -430,15 +430,13 @@ KPresenterView::~KPresenterView()
     delete rb_lbegin;
     delete rb_lend;
     delete dcop;
-    if ( m_specialCharDlg )
-    {
-        m_specialCharDlg->closeDialog();
-    }
 
     delete m_sbPageLabel;
     delete notebar;
     delete m_searchEntry;
+    m_searchEntry = 0L;
     delete m_replaceEntry;
+    m_replaceEntry = 0L;
     delete m_specialCharDlg;
     delete styleDia;
     delete pgConfDia;
@@ -450,6 +448,8 @@ KPresenterView::~KPresenterView()
     delete m_fontDlg;
     delete m_paragDlg;
     delete m_arrangeObjectsPopup;
+    if ( m_specialCharDlg )
+        m_specialCharDlg->closeDialog(); // will call slotSpecialCharDlgClosed
 }
 
 /*=========================== file print =======================*/
@@ -5037,7 +5037,7 @@ void KPresenterView::slotSpecialCharDlgClosed()
                     this, SLOT(slotSpecialChar(QChar,const QString &)));
         disconnect( m_specialCharDlg, SIGNAL( finished() ),
                     this, SLOT( slotSpecialCharDlgClosed() ) );
-        delete m_specialCharDlg;
+        m_specialCharDlg->deleteLater();
         m_specialCharDlg = 0L;
     }
 }
