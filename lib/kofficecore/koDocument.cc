@@ -28,7 +28,7 @@
 #include <komlMime.h>
 #include <komlStreamFeed.h>
 
-#include <k2url.h>
+#include <kurl.h>
 #include <klocale.h>
 #include <kapp.h>
 
@@ -191,7 +191,7 @@ bool KoDocumentChild::loadDocument( KOStore::Store_ptr _store, const char *_form
   assert( !m_strURL.isEmpty() );
 
   cout << "Trying to load " << m_strURL.ascii() << endl;
-  K2URL u( m_strURL.data() );
+  KURL u( m_strURL );
   if ( strcmp( u.protocol(), "store" ) != 0 )
   {
     m_rDoc = imr_createDocByMimeType( m_strMimeType );
@@ -230,7 +230,7 @@ bool KoDocumentChild::isStoredExtern()
   string s = url.in();
   if ( s.empty() )
     return false;
-  K2URL u( s.c_str() );
+  KURL u( s.c_str() );
   if ( strcmp( u.protocol(), "store" ) == 0 )
     return false;
 
@@ -367,9 +367,9 @@ void KoDocument::makeChildList( KOffice::Document_ptr _root, const char *_url )
   // Is this document stored extern ?
   if ( !m_strURL.isEmpty() )
   {
-    K2URL u( m_strURL );
+    KURL u( m_strURL );
     // Do we already use the "store" protocol ?
-    if ( !u.isMalformed() && strcmp( u.protocol(), "store" ) != 0L )
+    if ( !u.isMalformed() && strcmp( u.protocol(), "store" ) != 0 )
       // No "store" protocol, so we are saved externally
       is_embedded = false;
   }
@@ -410,7 +410,7 @@ bool KoDocument::saveChildren( KOStore::Store_ptr _store )
   {
     cerr << "Saving child " << it->url() << endl;
 
-    K2URL u( it->url() );
+    KURL u( it->url() );
     // Do we have to save this child embedded ?
     if ( strcmp( u.protocol(), "store" ) != 0 )
       continue;
@@ -430,7 +430,7 @@ bool KoDocument::saveChildren( KOStore::Store_ptr _store )
 
 CORBA::Boolean KoDocument::saveToURL( const char *_url, const char* _format )
 {
-  K2URL u( _url );
+  KURL u( _url );
   if ( u.isMalformed() )
   {
     cerr << "malformed URL" << endl;
@@ -542,7 +542,7 @@ CORBA::Boolean KoDocument::saveToStore( KOStore::Store_ptr _store, const char *_
 
 CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char *_format )
 {
-  K2URL u( _url );
+  KURL u( _url );
   if ( u.isMalformed() )
   {
     cerr << "Malformed URL " << _url << endl;
