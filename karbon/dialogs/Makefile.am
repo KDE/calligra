@@ -18,6 +18,7 @@ noinst_HEADERS = \
 	vflattendlg.h \
 	vgradientdlg.h \
 	vinsertknotsdlg.h \
+	vobjectdlg.h \
 	vpolygondlg.h \
 	vrectangledlg.h \
 	vroundcornersdlg.h \
@@ -39,6 +40,7 @@ libkarbondialogs_la_SOURCES = \
 	vflattendlg.cc \
 	vgradientdlg.cc \
 	vinsertknotsdlg.cc \
+	vobjectdlg.cc \
 	vpolygondlg.cc \
 	vrectangledlg.cc \
 	vroundcornersdlg.cc \
