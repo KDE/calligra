@@ -17,30 +17,27 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPRECT_OBJECT_IFACE_H
-#define KPRECT_OBJECT_IFACE_H
-
-#include <dcopobject.h>
-#include <dcopref.h>
-#include "KPresenterObjectIface.h"
 #include "KPresenterObject2DIface.h"
-#include <qstring.h>
-#include <qcolor.h>
+#include "KPresenterObjectIface.h"
 
-class KPRectObject;
+#include "kpobject.h"
+#include <kdebug.h>
+#include <kapplication.h>
+#include <dcopclient.h>
 
-class KPRectObjectIface : virtual public KPresenterObjectIface,virtual public KPresenterObject2DIface
+KPresenterObject2DIface::KPresenterObject2DIface(KP2DObject *obj_)
+    : KPresenterObjectIface(obj_)
 {
-    K_DCOP
-public:
-    KPRectObjectIface( KPRectObject *obj_ );
+   obj = obj_;
+}
 
-k_dcop:
-    void setRnds( int _xRnd, int _yRnd );
-    int xRnd() const;
-    int yRnd() const;
-private:
-    KPRectObject *obj;
-};
+QColor KPresenterObject2DIface::gradientColor1() const
+{
+    return obj->getGColor1();
+}
 
-#endif
+QColor KPresenterObject2DIface::gradientColor2() const
+{
+    return obj->getGColor2();
+}
+

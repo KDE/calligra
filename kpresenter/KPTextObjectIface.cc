@@ -18,7 +18,6 @@
 */
 
 #include "KPTextObjectIface.h"
-#include "KPresenterObjectIface.h"
 #include "kptextobject.h"
 #include <KoTextViewIface.h>
 #include "kpresenter_doc.h"
@@ -29,7 +28,7 @@
 #include "kprcanvas.h"
 
 KPTextObjectIface::KPTextObjectIface( KPTextObject *_textobject )
-    : KPresenterObjectIface(_textobject)
+    : KPresenterObjectIface(_textobject),KPresenterObject2DIface(_textobject)
 {
    m_textobject = _textobject;
 }

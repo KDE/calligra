@@ -23,12 +23,13 @@
 #include <dcopobject.h>
 #include <dcopref.h>
 #include "KPresenterObjectIface.h"
+#include "KPresenterObject2DIface.h"
 #include <qstring.h>
 #include <qcolor.h>
 
 class KPPixmapObject;
 
-class KPPixmapObjectIface : virtual public KPresenterObjectIface
+class KPPixmapObjectIface : virtual public KPresenterObjectIface,virtual public KPresenterObject2DIface
 {
     K_DCOP
 public:
