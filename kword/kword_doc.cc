@@ -624,7 +624,7 @@ bool KWordDocument::hasToWriteMultipart()
 /*================================================================*/
 bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
 {
-    cerr << "bool KWordDocument::loadChildren( OPParts::MimeMultipartDict_ptr _dict )" << endl;
+    cerr << "bool KWordDocument::loadChildren" << endl;
 
     QListIterator<KWordChild> it( m_lstChildren );
     for( ; it.current(); ++it ) {
@@ -1304,12 +1304,12 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
 
 	    QImage img;
 
-	    _store->open( u, 0L );
+	    if ( _store->open( u, 0L ) )
 	    {
 		istorestream in( _store );
 		in >> img;
+		_store->close();
 	    }
-	    _store->close();
 
 	    QString filename = *it;
 	    int dashdash = filename.findRev( "--" );
@@ -1439,11 +1439,13 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
 	    format = "BMP";
 
 	QString mime = "image/" + format.lower();
-	_store->open( u2, mime.lower() );
-	ostorestream out( _store );
-	writeImageToStream( out, *it.current(), format );
-	out.flush();
-	_store->close();
+	if ( _store->open( u2, mime.lower() ) )
+	{
+	    ostorestream out( _store );
+	    writeImageToStream( out, *it.current(), format );
+	    out.flush();
+	    _store->close();
+	}
 	keys.append( it.currentKey() );
 	images.append( it.current()->getFilename() );
     }

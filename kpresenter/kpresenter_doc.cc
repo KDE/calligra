@@ -427,11 +427,13 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
 		format = "BMP";
 
 	    QString mime = "image/" + format.lower();
-	    _store->open( u2, mime.lower() );
-	    ostorestream out( _store );
-	    writeImageToStream( out, it.data(), format );
-	    out.flush();
-	    _store->close();
+	    if ( _store->open( u2, mime.lower() ) )
+	    {
+	        ostorestream out( _store );
+	        writeImageToStream( out, it.data(), format );
+	        out.flush();
+	        _store->close();
+	    }
 	}
     }
 
@@ -445,11 +447,13 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
 	    u2 += it2.key().toString();
 
 	    QString mime = "clipart/wmf";
-	    _store->open( u2, mime.lower() );
-	    ostorestream out( _store );
-	    out << it2.data();
-	    out.flush();
-	    _store->close();
+	    if ( _store->open( u2, mime.lower() ) )
+	    {
+	        ostorestream out( _store );
+	        out << it2.data();
+	        out.flush();
+	        _store->close();
+	    }
 	}
     }
 
@@ -1066,12 +1070,12 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 
 	    QImage img;
 
-	    _store->open( u, 0L );
+	    if ( _store->open( u, 0L ) )
 	    {
 		istorestream in( _store );
 		in >> img;
+	        _store->close();
 	    }
-	    _store->close();
 
 	    _pixmapCollection.getPixmapDataCollection().insertPixmapData( it.node->data, img );
 	}
@@ -1086,12 +1090,12 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 	    QPicture pic;
 	    QCString buf;
 
-	    _store->open( u, 0L );
+	    if ( _store->open( u, 0L ) )
 	    {
 		istorestream in( _store );
 		in >> pic;
+	        _store->close();
 	    }
-	    _store->close();
 
 	    _clipartCollection.insertClipart( it2.node->data, pic );
 	}
