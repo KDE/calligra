@@ -93,7 +93,7 @@ class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
 		void returnPressed();
 
 		/*! Emitted whenever caption or name text changes */
-		emit textChanged();
+		void textChanged();
 
 	protected slots:
 		void slotNameTxtChanged(const QString&);
