@@ -1290,7 +1290,7 @@ void KSpreadCell::setOutputText()
   else if( m_value.isString() )
   {
     if (!m_value.asString().isEmpty() && m_value.asString()[0]=='\'' )
-      m_strOutText = m_value.asString().right( m_value.asString().length()-1);
+      m_strOutText = m_value.asString().mid(1);
     else
       m_strOutText = m_value.asString();
   }
@@ -4402,9 +4402,10 @@ void KSpreadCell::checkTextInput()
     // then we don't parse as a value, but as string.
     if ( str.isEmpty() || formatType() == Text_format || str.at(0)=='\'' )
     {
-        m_value = KSpreadValue::empty();
         if(m_pTable->getFirstLetterUpper() && !m_strText.isEmpty())
             m_strText=m_strText[0].upper()+m_strText.right(m_strText.length()-1);
+        
+        m_value.setValue(m_strText);
         //setFormatType(Text_format); // shouldn't be necessary. Won't apply with StringData anyway.
         return;
     }
