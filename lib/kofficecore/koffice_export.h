@@ -26,7 +26,7 @@
 #include <kdeversion.h>
  
 /* Uncomment when -fvisibility support is finished */
-#if 1 /* KDE_IS_VERSION(3,3,90) */
+#if 0 /* KDE_IS_VERSION(3,3,90) */
  
 #include <kdemacros.h>
  
