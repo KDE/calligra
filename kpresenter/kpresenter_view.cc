@@ -4888,7 +4888,11 @@ void KPresenterView::extraSpelling()
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType()==OT_TEXT)
-            m_spell.textObject.append(dynamic_cast<KPTextObject*>( it.current() ));
+        {
+            KPTextObject* tmp = dynamic_cast<KPTextObject*>(it.current() );
+            if ( tmp && !tmp->isProtectContent())
+                m_spell.textObject.append(tmp);
+        }
     }
     startKSpell();
 }
@@ -4901,7 +4905,11 @@ void KPresenterView::spellAddTextObject()
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType()==OT_TEXT)
-            m_spell.textObject.append(dynamic_cast<KPTextObject*>( it.current() ));
+        {
+            KPTextObject* tmp = dynamic_cast<KPTextObject*>(it.current() );
+            if ( tmp && !tmp->isProtectContent())
+                m_spell.textObject.append(tmp);
+        }
     }
 }
 

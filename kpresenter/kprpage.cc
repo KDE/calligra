@@ -3556,7 +3556,7 @@ QPtrList<KoTextObject> KPrPage::objectText()
         if(it.current()->getType() == OT_TEXT)
 	  {
 	    KPTextObject* obj=dynamic_cast<KPTextObject*>(it.current());
-	    if(obj)
+	    if(obj && !obj->isProtectContent())
 	      {
 		lst.append(obj->textObject());
 	      }
@@ -3568,7 +3568,6 @@ QPtrList<KoTextObject> KPrPage::objectText()
 
 KPObject * KPrPage::getCursor(const QPoint &pos )
 {
-    KPObject *obj=0L;
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
@@ -3578,7 +3577,7 @@ KPObject * KPrPage::getCursor(const QPoint &pos )
             break;
         }
     }
-    return obj;
+    return 0L;
 }
 
 KPObject * KPrPage::getCursor(const KoPoint &pos )
@@ -3592,8 +3591,7 @@ KPObject * KPrPage::getCursor(const KoPoint &pos )
                 }
             }
     }
-    kpobject=0L;
-    return kpobject;
+    return 0L;
 }
 
 KPObject * KPrPage::getObjectResized( const KoPoint &pos, ModifyType modType, bool &desel, bool &_over, bool &_resize )
@@ -3612,8 +3610,7 @@ KPObject * KPrPage::getObjectResized( const KoPoint &pos, ModifyType modType, bo
             }
         }
     }
-    kpobject=0L;
-    return kpobject;
+    return 0L;
 }
 
 KPObject * KPrPage::getEditObj(const KoPoint & pos)
@@ -3627,8 +3624,7 @@ KPObject * KPrPage::getEditObj(const KoPoint & pos)
             }
         }
     }
-    kpobject=0L;
-    return kpobject;
+    return 0L;
 }
 
 
@@ -3640,9 +3636,8 @@ KPObject* KPrPage::getObjectAt( const KoPoint&pos )
     if ( obj->contains( pos,m_doc->zoomHandler() ) )
       return obj;
   }
-  obj=0L;
 
-  return obj;
+  return 0L;
 }
 
 KPPixmapObject * KPrPage::picViewOrigHelper( )
