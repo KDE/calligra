@@ -173,7 +173,7 @@ protected:
 
 private:
     void init();
-    void fixWindowsStylePos( int& dx, int& dy );
+    void buttonShift( int& dx, int& dy );
     bool hitArrow( const QPoint& pos );
 
     QPopupMenu* m_popup;

@@ -38,7 +38,7 @@ namespace {
     const int COLS = 15;
     const int TILESIZE = 16;
     // For the KoToolButton
-    const int ARROW_WIDTH = 12;
+    int ARROW_WIDTH = 12;
 }
 
 KoColorPanel::KoColorPanel( QWidget* parent, const char* name ) :
@@ -720,11 +720,11 @@ void KoToolButton::drawButton(QPainter *_painter)
     _painter->setClipping( false );
 
     // ...and the arrow indicating the popup
-    style().drawPrimitive( QStyle::PE_ArrowDown, _painter, QRect( width() - ARROW_WIDTH, 0, ARROW_WIDTH, height() ),
+    style().drawPrimitive( QStyle::PE_ArrowDown, _painter, QRect( width() - ARROW_WIDTH - 1, 0, ARROW_WIDTH, height() ),
                            cg, flags, opt );
 
     if ( KToolBarButton::isRaised() || m_arrowPressed )
-        qDrawShadeLine( _painter, width() - ARROW_WIDTH, 0, width() - ARROW_WIDTH, height() - 1, colorGroup(), true );
+        qDrawShadeLine( _painter, width() - ARROW_WIDTH - 1, 0, width() - ARROW_WIDTH - 1, height() - 1, colorGroup(), true );
 
     int dx, dy;
     QFont tmp_font( KGlobalSettings::toolBarFont() );
@@ -739,7 +739,7 @@ void KoToolButton::drawButton(QPainter *_painter)
         if ( !pixmap.isNull() ) {
             dx = ( width() - ARROW_WIDTH - pixmap.width() ) / 2;
             dy = ( height() - pixmap.height() ) / 2;
-            fixWindowsStylePos( dx, dy );
+            buttonShift( dx, dy );
             _painter->drawPixmap( dx, dy, pixmap );
         }
     }
@@ -750,7 +750,7 @@ void KoToolButton::drawButton(QPainter *_painter)
         if( !pixmap.isNull()) {
             dx = 4;
             dy = ( height() - pixmap.height() ) / 2;
-            fixWindowsStylePos( dx, dy );
+            buttonShift( dx, dy );
             _painter->drawPixmap( dx, dy, pixmap );
         }
 
@@ -761,7 +761,7 @@ void KoToolButton::drawButton(QPainter *_painter)
             else
                 dx = 4;
             dy = 0;
-            fixWindowsStylePos( dx, dy );
+            buttonShift( dx, dy );
             textRect = QRect( dx, dy, width() - dx, height() );
         }
     }
@@ -770,7 +770,7 @@ void KoToolButton::drawButton(QPainter *_painter)
             textFlags = AlignTop | AlignLeft;
             dx = ( width() - ARROW_WIDTH - fm.width( textLabel() ) ) / 2;
             dy = ( height() - fm.lineSpacing() ) / 2;
-            fixWindowsStylePos( dx, dy );
+            buttonShift( dx, dy );
             textRect = QRect( dx, dy, fm.width(textLabel()), fm.lineSpacing() );
         }
     }
@@ -781,7 +781,7 @@ void KoToolButton::drawButton(QPainter *_painter)
         if( !pixmap.isNull()) {
             dx = ( width() - ARROW_WIDTH - pixmap.width() ) / 2;
             dy = ( height() - fm.lineSpacing() - pixmap.height() ) / 2;
-            fixWindowsStylePos( dx, dy );
+            buttonShift( dx, dy );
             _painter->drawPixmap( dx, dy, pixmap );
         }
 
@@ -789,7 +789,7 @@ void KoToolButton::drawButton(QPainter *_painter)
             textFlags = AlignBottom | AlignHCenter;
             dx = ( width() - ARROW_WIDTH - fm.width( textLabel() ) ) / 2;
             dy = height() - fm.lineSpacing() - 4;
-            fixWindowsStylePos( dx, dy );
+            buttonShift( dx, dy );
             textRect = QRect( dx, dy, fm.width( textLabel() ), fm.lineSpacing() );
         }
     }
@@ -809,6 +809,17 @@ void KoToolButton::drawButton(QPainter *_painter)
 
 bool KoToolButton::eventFilter( QObject* o, QEvent* e )
 {
+    if ( o == m_popup ) {
+        if ( e->type() == QEvent::MouseButtonPress )
+            if ( hitArrow( mapFromGlobal( static_cast<QMouseEvent*>( e )->globalPos() ) ) ) {
+                kdDebug() << "KoToolButton::eventFilter-------------->" << endl;
+                m_popup->close();
+                m_arrowPressed = false;
+                return true;
+            }
+        return false;
+    }
+
     if ( e->type() == QEvent::MouseButtonPress ) {
         m_arrowPressed = hitArrow( static_cast<QMouseEvent*>( e )->pos() );
         if ( m_arrowPressed )
@@ -824,13 +835,18 @@ void KoToolButton::init()
     m_popup = KoColorPanel::createColorPopup( KoColorPanel::CustomColors, Qt::yellow, this,
                                               SLOT( colorSelected( const QColor& ) ),
                                               this, "no-name" );
+    // We are interested in the mouse clicks on the arrow button
+    m_popup->installEventFilter( this );
+
+    ARROW_WIDTH = style().pixelMetric(QStyle::PM_MenuButtonIndicator) + 4;
+    kdDebug() << "##################### Arrow: " << ARROW_WIDTH << endl;
 }
 
-void KoToolButton::fixWindowsStylePos( int& dx, int& dy )
+void KoToolButton::buttonShift( int& dx, int& dy )
 {
-    if ( isDown() && !m_arrowPressed && style().styleHint( QStyle::SH_GUIStyle ) == WindowsStyle ) {
-        ++dx;
-        ++dy;
+    if ( isDown() && !m_arrowPressed ) {
+        dx += style().pixelMetric( QStyle::PM_ButtonShiftHorizontal );
+        dy += style().pixelMetric( QStyle::PM_ButtonShiftVertical );
     }
 }
 
