@@ -37,6 +37,28 @@ k_dcop:
     virtual void sortList();
     virtual void setAreaName();
     virtual void showAreaName();
+    virtual void mergeCell();
+    virtual void dissociateCell();
+    virtual void consolidate();
+
+    virtual void deleteColumn();
+    virtual void insertColumn();
+    virtual void deleteRow();
+    virtual void insertRow();
+    virtual void hideRow();
+    virtual void showRow();
+    virtual void hideColumn();
+    virtual void showColumn();
+    virtual void upper();
+    virtual void lower();
+
+    virtual void equalizeColumn();
+    virtual void equalizeRow();
+
+    virtual void clearTextSelection();
+    virtual void clearCommentSelection();
+    virtual void clearValiditySelection();
+    virtual void clearConditionalSelection();
 
 private:
     KSpreadView* m_view;

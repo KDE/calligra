@@ -119,3 +119,97 @@ void KSpreadViewIface::showAreaName()
     m_view->showAreaName();
 }
 
+void KSpreadViewIface::mergeCell()
+{
+    m_view->mergeCell();
+}
+
+void KSpreadViewIface::dissociateCell()
+{
+    m_view->dissociateCell();
+}
+
+void KSpreadViewIface::consolidate()
+{
+    m_view->consolidate();
+}
+
+void KSpreadViewIface::deleteColumn()
+{
+    m_view->deleteColumn();
+}
+
+void KSpreadViewIface::insertColumn()
+{
+    m_view->insertColumn();
+}
+
+void KSpreadViewIface::deleteRow()
+{
+    m_view->deleteRow();
+}
+
+void KSpreadViewIface::insertRow()
+{
+    m_view->insertRow();
+}
+
+void KSpreadViewIface::hideRow()
+{
+    m_view->hideRow();
+}
+
+void KSpreadViewIface::showRow()
+{
+    m_view->showRow();
+}
+
+void KSpreadViewIface::hideColumn()
+{
+    m_view->hideColumn();
+}
+
+void KSpreadViewIface::showColumn()
+{
+    m_view->showColumn();
+}
+
+void KSpreadViewIface::upper()
+{
+    m_view->upper();
+}
+
+void KSpreadViewIface::lower()
+{
+    m_view->lower();
+}
+
+void KSpreadViewIface::equalizeColumn()
+{
+    m_view->equalizeColumn();
+}
+
+void KSpreadViewIface::equalizeRow()
+{
+    m_view->equalizeRow();
+}
+
+void KSpreadViewIface::clearTextSelection()
+{
+    m_view->clearTextSelection();
+}
+
+void KSpreadViewIface::clearCommentSelection()
+{
+    m_view->clearCommentSelection();
+}
+
+void KSpreadViewIface::clearValiditySelection()
+{
+    m_view->clearValiditySelection();
+}
+
+void KSpreadViewIface::clearConditionalSelection()
+{
+    m_view->clearConditionalSelection();
+}
