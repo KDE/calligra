@@ -121,9 +121,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
     frmBrd.color = black;
     frmBrd.style = KWParagLayout::SOLID;
     frmBrd.ptWidth = 1;
-    _viewFormattingChars = FALSE;
-    _viewFrameBorders = TRUE;
-    _viewTableGrid = TRUE;
+
     searchEntry = 0L;
     replaceEntry = 0L;
     searchDia = 0L;
@@ -179,12 +177,19 @@ void KWordView::initGui()
     ( (KToggleAction*)actionToolsEdit )->setChecked( TRUE );
     ( (KToggleAction*)actionToolsEdit )->blockSignals( FALSE );
     ( (KToggleAction*)actionViewFrameBorders )->blockSignals( TRUE );
-    ( (KToggleAction*)actionViewFrameBorders )->setChecked( TRUE );
+    ( (KToggleAction*)actionViewFrameBorders )->setChecked( doc->getViewFrameBorders() );
     ( (KToggleAction*)actionViewFrameBorders )->blockSignals( FALSE );
     ( (KToggleAction*)actionViewTableGrid )->blockSignals( TRUE );
-    ( (KToggleAction*)actionViewTableGrid )->setChecked( TRUE );
+    ( (KToggleAction*)actionViewTableGrid )->setChecked( doc->getViewTableGrid() );
     ( (KToggleAction*)actionViewTableGrid )->blockSignals( FALSE );
+
+    ( (KToggleAction*)actionViewFormattingChars )->blockSignals( TRUE );
+    ( (KToggleAction*)actionViewFormattingChars )->setChecked( doc->getViewFormattingChars() );
+    ( (KToggleAction*)actionViewFormattingChars )->blockSignals( FALSE );
+
+
     setNoteType(doc->getNoteType(), false);
+
 
     ( (KColorAction*)actionFormatColor )->blockSignals( TRUE );
     ( (KColorAction*)actionFormatColor )->setColor( Qt::black );
@@ -1199,22 +1204,23 @@ void KWordView::editSerialLetterDataBase()
 /*===============================================================*/
 void KWordView::viewFormattingChars()
 {
-    _viewFormattingChars = ( (KToggleAction*)actionViewFormattingChars )->isChecked();
-    gui->getPaperWidget()->repaintScreen( !_viewFormattingChars );
+    doc->setViewFormattingChars( ( (KToggleAction*)actionViewFormattingChars )->isChecked());
+    gui->getPaperWidget()->repaintScreen( !doc->getViewFormattingChars() );
 }
 
 /*===============================================================*/
 void KWordView::viewFrameBorders()
 {
-    _viewFrameBorders = ( (KToggleAction*)actionViewFrameBorders )->isChecked();
+    doc->setViewFrameBorders( ( (KToggleAction*)actionViewFrameBorders )->isChecked());
+
     gui->getPaperWidget()->repaintScreen( FALSE );
 }
 
 /*===============================================================*/
 void KWordView::viewTableGrid()
 {
-    _viewTableGrid = ( (KToggleAction*)actionViewTableGrid )->isChecked();
-    gui->getPaperWidget()->repaintScreen( !_viewTableGrid );
+    doc->setViewTableGrid( ( (KToggleAction*)actionViewTableGrid )->isChecked());
+    gui->getPaperWidget()->repaintScreen( !doc->getViewTableGrid() );
 }
 
 /*===============================================================*/

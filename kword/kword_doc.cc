@@ -183,6 +183,10 @@ KWordDocument::KWordDocument(QWidget *parentWidget, const char *widgetName, QObj
 
     rastX = rastY = 10;
 
+    _viewFormattingChars = FALSE;
+    _viewFrameBorders = TRUE;
+    _viewTableGrid = TRUE;
+
     setEmpty();
     setModified(FALSE);
 
@@ -427,7 +431,7 @@ void KWordDocument::recalcFrames( bool _cursor)
         }
         pages2=pages2/getPTPaperHeight();
         pages=QMAX(pages2, pages);
-        
+
         for ( unsigned int j = 0;
               j < static_cast<unsigned int>( ceil( static_cast<double>( frms ) /
                                                    static_cast<double>( pageColumns.columns ) ) ); j++ ) {
@@ -1376,7 +1380,7 @@ bool KWordDocument::loadXML( QIODevice *, const QDomDocument & doc )
                     getFrameSet(i)->getFrame(f)->setHeight(minFrameHeight);
                 }
                 if(getFrameSet(i)->getFrame(f)->width() < static_cast <int>(minFrameWidth)) {
-                    kdWarning() << "frame width is so small no text will fit, adjusting (was: "  
+                    kdWarning() << "frame width is so small no text will fit, adjusting (was: "
                      << getFrameSet(i)->getFrame(f)->width() << " is: " << minFrameWidth  << ")" << endl;
                     getFrameSet(i)->getFrame(f)->setWidth(minFrameWidth);
                 }
@@ -2556,7 +2560,7 @@ void KWordDocument::drawMarker( KWFormatContext &_fc, QPainter *_painter, int xO
 }
 
 /*================================================================*/
-/* Update all views of this document, area can be cleared 
+/* Update all views of this document, area can be cleared
    before redrawing with the clean flag. (false=implied)
    All views EXCEPT the argument _view are updated
  */
@@ -3760,26 +3764,26 @@ void KWordDocument::recalcWholeText( bool _cursor, bool completeRender )
     if(viewPtr) {
         if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() )
             viewPtr->getGUI()->getPaperWidget()->recalcWholeText( _cursor);
-    } 
+    }
 
     if(completeRender) {
-        // first tell the floating frames to be invisible so they won't 
-        // interfere with rendering of other frames. (since they are probably 
+        // first tell the floating frames to be invisible so they won't
+        // interfere with rendering of other frames. (since they are probably
         // not positioned correctly, just yet)
 
-        for ( int i = getNumFrameSets()-1; i >= 0; i-- ) 
+        for ( int i = getNumFrameSets()-1; i >= 0; i-- )
             if (getFrameSet(i)->getGroupManager() && getFrameSet(i)->getGroupManager()->isAnchored())
                 getFrameSet(i)->setVisible(false);
 
         // next, render all non-floating frames
         for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
             KWFrameSet *fs = getFrameSet(i);
-            if ( fs->getFrameType() == FT_TEXT && fs->getNumFrames() >0  && 
+            if ( fs->getFrameType() == FT_TEXT && fs->getNumFrames() >0  &&
                     fs->getGroupManager()==0 ||
                     fs->getGroupManager() && fs->getGroupManager()->isAnchored()) {
                 KWFormatContext _fc( this, i + 1 );
                 _fc.init( getFirstParag( i ) );
-     
+
                 while ( _fc.makeNextLineLayout());
             }
         }

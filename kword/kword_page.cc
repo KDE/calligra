@@ -1867,7 +1867,7 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
                 emptyRegion = emptyRegion.subtract( QRect( _x + li, paintfc->getPTY(),
                                                            _wid - li - re, paintfc->getLineHeight() ) );
                 doc->printLine( *paintfc, painter, contentsX(), contentsY(), width(), height(),
-                                gui->getView()->getViewFormattingChars(), TRUE,
+                                doc->getViewFormattingChars(), TRUE,
                                 fr.x(), fr.y(), fr.width(), fr.height(),
                                 QBrush( frame->getBackgroundColor() ));
                 bend = !paintfc->makeNextLineLayout();
@@ -1942,7 +1942,7 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
                     break;
 
                 doc->printLine( *paintfc, painter, contentsX(), contentsY(), width(), height(),
-                                gui->getView()->getViewFormattingChars() );
+                                doc->getViewFormattingChars() );
                 bend = !paintfc->makeNextLineLayout();
                 if ( paintfc->getPage() > lastVisiblePage )
                     bend = TRUE;
@@ -1997,7 +1997,7 @@ void KWPage::finishPainting( QPaintEvent *e, QPainter &painter )
               frame->getRightIndent( _fc.getPTY(), _fc.getLineHeight() ),
               _fc.getLineHeight() );
     doc->printLine( _fc, painter, contentsX(), contentsY(), width(), height(),
-                    gui->getView()->getViewFormattingChars(), TRUE, fr.x(), fr.y(), fr.width(), fr.height(),
+                    doc->getViewFormattingChars(), TRUE, fr.x(), fr.y(), fr.width(), fr.height(),
                     QBrush( frame->getBackgroundColor() ) );
     drawFrameBorder( painter, frame );
 
@@ -2173,7 +2173,7 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool /*full*/, bool exi
         if ( drawIt || forceDraw ) {
             //      qDebug( "draw: %s", str.latin1() );
             doc->printLine( paintfc, painter, contentsX(), contentsY(), width(), height(),
-                            gui->getView()->getViewFormattingChars(), TRUE,
+                            doc->getViewFormattingChars(), TRUE,
                             _x + li, paintfc.getPTY() - contentsY(), _wid - li - re, paintfc.getLineHeight(),
                             QBrush( frame->getBackgroundColor() ) );
         }
@@ -3341,14 +3341,14 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
             _painter.setPen( lightGray );
             should_draw = TRUE;
             if ( frameset->getGroupManager() ) {
-                if ( gui->getView()->getViewTableGrid() )
+                if ( doc->getViewTableGrid() )
                     _painter.setPen( QPen( black, 1, DotLine ) );
                 else
                     _painter.setPen( NoPen );
             }
             if ( FALSE )//static_cast<int>( i ) == hiliteFrameSet )
                 _painter.setPen( blue );
-            else if ( !gui->getView()->getViewFrameBorders() ) should_draw = FALSE;
+            else if ( !doc->getViewFrameBorders() ) should_draw = FALSE;
 
             if ( v_area.intersects( frame ) && should_draw && !frameset->getGroupManager() ) {
                 if ( region )
@@ -4624,7 +4624,7 @@ void KWPage::repaintTableHeaders( KWGroupManager *grpMgr )
             bool bend = FALSE;
             while ( !bend ) {
                 doc->printLine( *paintfc, painter, contentsX(), contentsY(), width(), height(),
-                                gui->getView()->getViewFormattingChars() );
+                                doc->getViewFormattingChars() );
                 bend = !paintfc->makeNextLineLayout();
                 if ( paintfc->getPage() > lastVisiblePage )
                     bend = TRUE;

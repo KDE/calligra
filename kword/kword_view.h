@@ -113,10 +113,6 @@ public:
     void updateStyle( QString _styleName, bool _updateFormat = true );
     void updateStyleList();
 
-    bool getViewFormattingChars() { return _viewFormattingChars; }
-    bool getViewFrameBorders() { return _viewFrameBorders; }
-    bool getViewTableGrid() { return _viewTableGrid; }
-
     void setSearchEntry( KWSearchDia::KWSearchEntry *e ) { searchEntry = e; }
     void setReplaceEntry( KWSearchDia::KWSearchEntry *e ) { replaceEntry = e; }
 
@@ -426,7 +422,6 @@ protected:
 
     KWordGUI *gui;
     bool m_bShowGUI;
-    bool _viewFormattingChars, _viewFrameBorders, _viewTableGrid;
 
     KWFormat format;
     KWParagLayout::Flow flow;
