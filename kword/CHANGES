@@ -177,3 +177,11 @@ Changes between KWord-1.2-beta1 and KWord-1.2-beta2
 - We can change autoformat language
 - Painting of transparent images
 - Fixed handling of embedded documents
+
+Changes between KWord-1.2-beta2 and KWord-1.2-RC1
+=================================================
+- Fix crash when we remove footnote variable
+- Fix save variable value : save real value and not text displaying (problem when we activate display field code)
+- Fix mem leak : delete "special char dialogbox"
+- Fix crash when we close kword and "special char dialogbox" is not closed
+- Fix infini loop when we resize footnote
