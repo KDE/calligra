@@ -77,7 +77,7 @@ shapes = {
                    "y"    : y+5,
                    "w"    : w-10,
                    "h"    : h-10,
-                   "text" : "abc"
+                   "text" : "2"
                    }
        }
 
@@ -101,6 +101,9 @@ shapes["rect2"]["y"] = y+h-35
 shapes["rect2"]["w"] = 20
 shapes["rect2"]["h"] = 20
 
+if ( shapes["text"]["text"] == "1" ):
+    stencil = kivio.curLayer().firstStencil()
+    stencil.setText( "x:"+str(x)+"  y:"+str(y) )
 
 ]]>
 </resize>

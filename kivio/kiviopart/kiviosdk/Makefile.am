@@ -12,6 +12,7 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 libkiviosdk_la_METASOURCES = AUTO
 libkiviosdk_la_SOURCES = \
 		kivio_common.cpp\
+		kivio_wrap.cpp\
 		kivio_py_stencil.cpp\
 		kivio_py_stencil_spawner.cpp\
 		kivio_fill_style.cpp\

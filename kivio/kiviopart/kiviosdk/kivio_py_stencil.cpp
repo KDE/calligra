@@ -18,11 +18,20 @@
 
 #include "kivio_py_stencil_spawner.h"
 
+#include "kivio_page.h"
+#include "kivio_view.h"
+
 #include <qpainter.h>
 #include <qbrush.h>
 #include <qcolor.h>
 #include <kdebug.h>
 #include <math.h>
+
+extern "C" {
+   void initkivioc(void);
+}
+
+KivioPage *page;
 
 
 KivioPyStencil::KivioPyStencil()
@@ -34,6 +43,7 @@ KivioPyStencil::KivioPyStencil()
    static bool first_time = true;
    if ( first_time ) {
      Py_Initialize();  // initialize python only once
+     initkivioc();
      first_time = false;
    }
 
@@ -61,6 +71,7 @@ KivioPyStencil::~KivioPyStencil()
 
 int KivioPyStencil::init( QString initCode )
 {
+  runPython("import kivio");
   if ( !runPython( initCode ) )
     return 0;
 
@@ -106,6 +117,7 @@ bool KivioPyStencil::loadXML( const QDomElement &e )
 
             vars = PyDict_GetItemString( ldic, "res" );
             Py_INCREF(vars);
+            runPython("import kivio\n");
 
             m_w = getDoubleFromDict( vars, "w");
             m_h = getDoubleFromDict( vars, "h");
@@ -172,7 +184,17 @@ QDomElement KivioPyStencil::saveXML( QDomDocument &doc )
     PyObject* gdic = PyModule_GetDict(mainmod);
     PyObject *ldic = Py_BuildValue("{s:O,s:{}}", "ldic", vars ,"res");
 
-    if ( !PyRun_String("import pickle\nres = pickle.dumps(ldic)", Py_file_input, gdic, ldic) )
+    char *dump_code = "import copy\n"\
+                      "import pickle\n"\
+                      "cres = {}\n"\
+                      "for key in ldic.keys():\n"\
+                      "   try:\n"\
+                      "      cres[key] = copy.deepcopy(ldic[key])\n"\
+                      "   except:\n"\
+                      "      ii=0\n"\
+                      "res = pickle.dumps(cres)\n";
+
+    if ( !PyRun_String(dump_code, Py_file_input, gdic, ldic) )
         PyErr_Print();
 
     QString sVars = PyString_AsString( PyDict_GetItemString( ldic, "res") );
@@ -326,16 +348,22 @@ KivioStencil *KivioPyStencil::duplicate()
     pNewStencil->m_pSpawner = m_pSpawner;
     pNewStencil->resizeCode = resizeCode;
 
-    // make deep copy of vars:
+    //make deep copy of vars:
     PyObject* mainmod = PyImport_AddModule("__main__");
     PyObject* gdic = PyModule_GetDict(mainmod);
     PyObject *ldic = Py_BuildValue("{s:O,s:{}}", "ldic", vars ,"res");
 
-    if ( !PyRun_String("import copy\nres = copy.deepcopy(ldic)", Py_file_input, gdic, ldic) )
+    char *copy_code = "import copy\n"\
+                      "for key in ldic.keys():\n"\
+                      "   try:\n"\
+                      "      res[key] = copy.deepcopy(ldic[key])\n"\
+                      "   except:\n"\
+                      "      i=0\n";
+    if ( !PyRun_String(copy_code, Py_file_input, gdic, ldic) )
         PyErr_Print();
 
     pNewStencil->vars = PyDict_GetItemString( ldic, "res");
-
+    pNewStencil->runPython("import kivio\n");
 
     // Copy the Connector Targets
     KivioConnectorTarget *pTarget = m_pConnectorTargets->first();
@@ -479,6 +507,13 @@ void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
 
 int KivioPyStencil::runPython(QString code)
 {
+
+
+    KivioView * view = dynamic_cast<KivioView*>(KoDocument::documentList()->first()->firstView());
+    if ( view ) {
+        page = view->activePage();
+    }
+
     const char *ccode = code.latin1();
 
     //qDebug( "local8bit :%s", code.local8Bit() );
