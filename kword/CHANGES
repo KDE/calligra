@@ -1651,3 +1651,5 @@ Reggie, 9.12.1999:
 - The few unimplemented menu entries popup a message box with the info, that
   this entry is unimplemented
 - Fixed creating table of contents
+- Select all is now ALT + A, CTRL + A and CTRL + E work as expeced
+

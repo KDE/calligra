@@ -230,7 +230,7 @@ void KWordView::setupActions()
     actionEditFind = new KAction( i18n( "&Find and Replace..." ), KWBarIcon( "kwsearch" ), CTRL + Key_F,
 				  this, SLOT( editFind() ),
 				  actionCollection(), "edit_find" );
-    actionEditSelectAll = new KAction( i18n( "&Select all" ), CTRL + Key_A,
+    actionEditSelectAll = new KAction( i18n( "&Select all" ), ALT + Key_A,
 				       this, SLOT( editSelectAll() ),
 				       actionCollection(), "edit_selectall" );
     actionEditDelFrame = new KAction( i18n( "&Delete Frame" ), 0,

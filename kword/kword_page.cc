@@ -2913,10 +2913,24 @@ void KWPage::keyPressEvent( QKeyEvent *e )
 	if ( !kTab( e, oldPage, oldFrame, oldParag, frameSet ) )
 	    STOP;
 	break;
-    default:
-	if ( !kDefault( e, oldPage, oldFrame, oldParag, frameSet ) )
-	    STOP;
-	break;
+    default: {
+	if ( e->text().length() &&
+	     ( !e->ascii() || e->ascii() >= 32) ) {
+	    if ( !kDefault( e, oldPage, oldFrame, oldParag, frameSet ) )
+		STOP;
+	} else if ( e->state() & ControlButton ) {
+	    switch( e->key() ) {
+	    case Key_E:
+		if ( !kEnd( e, oldPage, oldFrame, oldParag, frameSet ) )
+		    STOP;
+		break;
+	    case Key_A:
+		if ( !kHome( e, oldPage, oldFrame, oldParag, frameSet ) )
+		    STOP;
+		break;
+	    }
+	}
+	} break;
     }
 
     scrollToCursor( *fc );
