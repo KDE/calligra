@@ -74,6 +74,8 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     
     m_gantt->setHeaderVisible(true);
     m_gantt->setScale(KDGanttView::Day);
+    m_gantt->setShowLegendButton(false);
+    m_gantt->setShowHeaderPopupMenu();
     m_taskView = new KPTTaskAppointmentsView(this, "Task widget");
 	draw(view->getPart()->getProject());
 
