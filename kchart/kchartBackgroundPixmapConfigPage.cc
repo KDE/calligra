@@ -46,6 +46,19 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     QVBoxLayout* center = new QVBoxLayout( 10 );
     toplevel->addLayout( center, 2 );
 
+
+    QLabel* backgroundLA = new QLabel( i18n( "&Background color:" ), this );
+    center->addWidget( backgroundLA );
+    _backgroundCB = new KColorButton( this );
+    backgroundLA->setBuddy( _backgroundCB );
+    center->addWidget( _backgroundCB);
+    QString wtstr = i18n( "Here you set the color in which the background "
+                          "of the chart is painted." );
+    QWhatsThis::add( backgroundLA, wtstr );
+    QWhatsThis::add( _backgroundCB, wtstr );
+
+
+
     wallCB = new QComboBox( false, this, "wallCombo" );
     QWhatsThis::add( wallCB, i18n( "You can select a background image from "
                                    "this list. Initially, the installed KDE "
@@ -79,18 +92,6 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
 
     connect( wallCB, SIGNAL( activated( int ) ),
              this, SLOT( slotWallPaperChanged( int ) ) );
-
-
-    QLabel* backgroundLA = new QLabel( i18n( "&Background color" ), this );
-    center->addWidget( backgroundLA );
-    _backgroundCB = new KColorButton( this );
-    backgroundLA->setBuddy( _backgroundCB );
-    center->addWidget( _backgroundCB);
-    QString wtstr = i18n( "Here you set the color in which the background "
-                          "of the chart is painted." );
-    QWhatsThis::add( backgroundLA, wtstr );
-    QWhatsThis::add( _backgroundCB, wtstr );
-
 
     QVGroupBox* right = new QVGroupBox( i18n( "Configuration" ), this );
     QWhatsThis::add( right, i18n( "In this box, you can set various settings "
@@ -148,6 +149,9 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
 
 void KChartBackgroundPixmapConfigPage::init()
 {
+    QStringList lst;
+    lst.append(i18n("Background"));
+    regionList->insertStringList(lst);
     // PENDING(kalle) Readapt
     //     showSettings( _params->backgroundPixmapName );
 //     intensitySB->setValue( (int)(_params->backgroundPixmapIntensity * 100.0) );
