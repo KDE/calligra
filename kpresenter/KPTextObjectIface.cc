@@ -224,6 +224,11 @@ void KPTextObjectIface::changeCaseOfText( const QString & caseType)
     {
         cmd=m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::ToggleCase );
     }
+    else if( caseType.lower() =="sentencecase" )
+    {
+        cmd = m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::SentenceCase );
+    }
+
     else
         kdDebug()<<"Error in void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType) parameter\n";
     delete cmd;

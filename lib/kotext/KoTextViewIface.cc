@@ -432,6 +432,11 @@ void KoTextViewIface::changeCaseOfText( const QString & caseType)
     {
         cmd=m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::ToggleCase );
     }
+    else if ( caseType.lower() =="sentencecase" )
+    {
+        cmd=m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::SentenceCase );
+
+    }
     else
         kdDebug()<<"Error in void KoTextViewIface::changeCaseOfText( const QString & caseType) parameter\n";
     delete cmd;
