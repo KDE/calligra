@@ -86,6 +86,7 @@
 #include <kaction.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
+#include <koPartSelectAction.h>
 
 #include <stdlib.h>
 #include <signal.h>
@@ -651,15 +652,10 @@ void KPresenterView::toolsAutoform()
 /*===============================================================*/
 void KPresenterView::toolsObject()
 {
-    if ( !( (KToggleAction*)actionToolsObject )->isChecked() )
-	return;
-    page->deSelectAllObj();
-    page->setToolEditMode( TEM_MOUSE, false );
-
-    KoDocumentEntry pe = KoPartSelectDia::selectPart();
+    KoDocumentEntry pe = actionToolsObject->documentEntry();
     if ( pe.isEmpty() ) {
-	page->setToolEditMode( TEM_MOUSE );
-	return;
+        page->setToolEditMode( TEM_MOUSE );
+        return;
     }
 
     page->setToolEditMode( INS_OBJECT );
@@ -1970,10 +1966,9 @@ void KPresenterView::setupActions()
 					   actionCollection(), "tools_table" );
     ( (KToggleAction*)actionToolsTable )->setExclusiveGroup( "tools" );
 
-    actionToolsObject = new KToggleAction( i18n( "&Object..." ),"frame_query", CTRL + Key_F2,
-					   this, SLOT( toolsObject() ),
-					   actionCollection(), "tools_object" );
-    ( (KToggleAction*)actionToolsObject )->setExclusiveGroup( "tools" );
+    actionToolsObject = new KoPartSelectAction( i18n( "&Object..." ), "frame_query",
+                                                    this, SLOT( toolsObject() ),
+                                                    actionCollection(), "tools_object" );
 
     // ----------------- text actions
 
@@ -2158,13 +2153,14 @@ void KPresenterView::setupActions()
 				      this, SLOT( extraLineEnd() ),
 				      actionCollection(), "extra_lineend" );
 
+    /*  //these are not used
     actionExtraPenStyle = new KAction( i18n("Pen Style"), "pen_style", 0,
 					this, SLOT( extraPenStyle() ),
-					actionCollection(), "extra_penstyle" );
+					actionCollection(), "pen_style" );
 
     actionExtraPenWidth = new KAction( i18n("Pen Width"), "pen_width", 0,
 					this, SLOT( extraPenWidth() ),
-					actionCollection(), "extra_penwidth" );
+					actionCollection(), "pen_width" );*/
 
     actionExtraGroup = new KAction( i18n( "&Group Objects" ), "group", 0,
 				    this, SLOT( extraGroup() ),
@@ -2316,8 +2312,8 @@ void KPresenterView::objectSelectedChanged()
     actionExtraLower->setEnabled(state && m_pKPresenterDoc->numSelected()==1);
     actionBrushColor->setEnabled(state);
     actionPenColor->setEnabled(state);
-    actionExtraPenStyle->setEnabled(state);
-    actionExtraPenWidth->setEnabled(state);
+    //actionExtraPenStyle->setEnabled(state);
+    //actionExtraPenWidth->setEnabled(state);
 
     bool isText=page->isASelectedTextObj();
     actionTextFont->setEnabled(isText);
@@ -3119,9 +3115,6 @@ void KPresenterView::setTool( ToolEditMode toolEditMode )
 	break;
     case INS_PIE:
 	( (KToggleAction*)actionToolsPie )->setChecked( true );
-	break;
-    case INS_OBJECT:
-	( (KToggleAction*)actionToolsObject )->setChecked( true );
 	break;
     case INS_DIAGRAMM:
 	( (KToggleAction*)actionToolsDiagramm )->setChecked( true );

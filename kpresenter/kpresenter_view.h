@@ -47,6 +47,7 @@ class SideBar;
 class KAction;
 class KToggleAction;
 class TKSelectColorAction;
+class KoPartSelectAction;
 
 class PageBase : public QWidget
 {
@@ -501,7 +502,7 @@ protected:
     KAction *actionToolsDiagramm;
     KAction *actionToolsTable;
     KAction *actionToolsFormula;
-    KAction *actionToolsObject;
+    KoPartSelectAction *actionToolsObject;
 
     KAction *actionTextFont;
     KAction *actionTextFontSize;
