@@ -82,7 +82,11 @@ private slots:
 
 private:
   QCheckBox       *mStroked;
+  QComboBox       *mStartArrowBox;
+  QComboBox       *mEndArrowBox;
+  QSpinBox        *mOpacityBox;
   QSpinBox        *mWidthBox;
+  QComboBox       *mLineStyleBox;
   QButtonGroup    *mJoinBox;
   QButtonGroup    *mCapBox;
   KoColorChooser  *mOutlinePanel;

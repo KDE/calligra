@@ -88,9 +88,42 @@ OutlinePanel::OutlinePanel(QWidget *parent, const char *name):
 QTabWidget(parent, name)
 {
   setTabShape(Triangular);
-  mStroked = new QCheckBox(i18n("stroked"), this);
+
+  QWidget *mOutline = new QWidget(this);
+  QGridLayout *mOutlineLayout = new QGridLayout(mOutline, 4, 2);
+
+  mStroked = new QCheckBox(i18n("stroked"), mOutline);
   connect(mStroked, SIGNAL(toggled(bool)), this, SIGNAL(changeStroked(bool)));
-  insertTab(mStroked, i18n("Stroking"));
+
+  QLabel *mStartArrowText = new QLabel(i18n("Start Arrow"), mOutline);
+  mStartArrowBox = new QComboBox(mOutline); // It's only temporary
+  mStartArrowBox->insertItem("no");
+  mStartArrowBox->insertItem("<-");
+  mStartArrowBox->insertItem("<<-");
+  mStartArrowBox->setCurrentItem(0);
+
+  QLabel *mEndArrowText = new QLabel(i18n("End Arrow"), mOutline);
+  mEndArrowBox = new QComboBox(mOutline); // It's only temporary
+  mEndArrowBox->insertItem("no");
+  mEndArrowBox->insertItem("->");
+  mEndArrowBox->insertItem("->>");
+  mEndArrowBox->setCurrentItem(0);
+
+  QLabel *mOpacityText = new QLabel(i18n("Opacity"), mOutline);
+  mOpacityBox = new QSpinBox(0, 100, 5, mOutline);
+  mOpacityBox->setSuffix("%");
+
+  mOutlineLayout->addMultiCellWidget(mStroked, 0, 0, 0, 1);
+  mOutlineLayout->addWidget(mStartArrowText, 1, 0);
+  mOutlineLayout->addWidget(mStartArrowBox, 1, 1);
+  mOutlineLayout->addWidget(mEndArrowText, 2, 0);
+  mOutlineLayout->addWidget(mEndArrowBox, 2, 1);
+  mOutlineLayout->addWidget(mOpacityText, 3, 0);
+  mOutlineLayout->addWidget(mOpacityBox, 3, 1);
+
+  insertTab(mOutline, i18n("Stroking"));
+
+
   /* Color tab */
   mOutlinePanel = new KoColorChooser(this);
   connect(mOutlinePanel, SIGNAL(colorChanged(const KoColor &)), this, SIGNAL(changeOutlineColor(const KoColor &)));
@@ -100,16 +133,25 @@ QTabWidget(parent, name)
   /* Style tab */
 
   QWidget *mOutlineStyle = new QWidget(this);
-  QGridLayout *mOutlineStyleLayout = new QGridLayout(mOutlineStyle, 3, 2);
+  QGridLayout *mOutlineStyleLayout = new QGridLayout(mOutlineStyle, 4, 2);
 
   /* Outline width */
   QLabel *mWidthText = new QLabel(i18n("Width"), mOutlineStyle);
   mWidthBox = new QSpinBox(0, 100, 1, mOutlineStyle);
   connect(mWidthBox, SIGNAL(valueChanged(int)), this, SLOT(slotChangeLineWidth(int)));
 
+  QLabel *mLineStyleText = new QLabel(i18n("Line Style"), mOutlineStyle);
+  mLineStyleBox = new QComboBox(mOutlineStyle); // It's only temporary
+  mLineStyleBox->insertItem("----------");
+  mLineStyleBox->insertItem("- - - - - ");
+  mLineStyleBox->insertItem("-  -  -  -");
+  mLineStyleBox->setCurrentItem(0);
+
   /* Join style selection */
   mJoinBox = new QButtonGroup(3, Qt::Horizontal, mOutlineStyle);
   mJoinBox->setFrameStyle(QFrame::NoFrame);
+//  mJoinBox->setMargin(1);
+  mJoinBox->setFixedHeight(22); // remove it
   mJoinBox->setExclusive(true);
   QPushButton *mRoundBtn = new QPushButton(mJoinBox);
   mRoundBtn->setToggleButton(true);
@@ -170,6 +212,7 @@ QTabWidget(parent, name)
   /* Cap style selection */
   mCapBox = new QButtonGroup(3, Qt::Horizontal, mOutlineStyle);
   mCapBox->setFrameStyle(QFrame::NoFrame);
+  mCapBox->setFixedHeight(22); // remove it
   mCapBox->setExclusive(true);
   QPushButton *mCRoundBtn = new QPushButton(mCapBox);
   mCRoundBtn->setToggleButton(true);
@@ -189,10 +232,12 @@ QTabWidget(parent, name)
 
   mOutlineStyleLayout->addWidget(mWidthText, 0, 0);
   mOutlineStyleLayout->addWidget(mWidthBox, 0, 1);
-  mOutlineStyleLayout->addWidget(mJoinText, 1, 0);
-  mOutlineStyleLayout->addWidget(mJoinBox, 1, 1);
-  mOutlineStyleLayout->addWidget(mCapText, 2, 0);
-  mOutlineStyleLayout->addWidget(mCapBox, 2, 1);
+  mOutlineStyleLayout->addWidget(mLineStyleText, 1, 0);
+  mOutlineStyleLayout->addWidget(mLineStyleBox, 1, 1);
+  mOutlineStyleLayout->addWidget(mJoinText, 2, 0);
+  mOutlineStyleLayout->addWidget(mJoinBox, 2, 1);
+  mOutlineStyleLayout->addWidget(mCapText, 3, 0);
+  mOutlineStyleLayout->addWidget(mCapBox, 3, 1);
 
 /*  mCapBox = new QButtonGroup(3, Qt::Horizontal, cap);
   mCapBox->setFrameStyle(QFrame::NoFrame);
