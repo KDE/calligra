@@ -25,14 +25,13 @@
 
 #include <assert.h>
 
-#include <kdebug.h>
 #include <koStream.h>
 #include <kword_utils.h>
 
 #include <strstream>
 #include <fstream>
 #include <unistd.h>
-
+#include <kdebug.h>
 #include <qimage.h>
 
 /******************************************************************/

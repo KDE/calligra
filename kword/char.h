@@ -54,7 +54,6 @@ enum ClassIDs
 /* Class: KWCharAttribute                                         */
 /******************************************************************/
 
-#include <kdebug.h>
 class KWCharAttribute
 {
 public:

@@ -57,9 +57,9 @@ enum FrameBehaviour { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
 enum NewFrameBehaviour { Reconnect=0, NoFollowup=1, Copy=2 };
 enum SheetSide { AnySide=0, OddSide=1, EvenSide=2};
 
-const int minFrameWidth=18;
-const int minFrameHeight=20;
-const int tableCellSpacing=3;
+const unsigned int minFrameWidth=18;
+const unsigned int minFrameHeight=20;
+const unsigned int tableCellSpacing=3;
 /******************************************************************/
 /* Class: KWFrame                                                 */
 /******************************************************************/

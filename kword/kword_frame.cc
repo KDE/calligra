@@ -2253,13 +2253,12 @@ void KWGroupManager::init( unsigned int x, unsigned int y, unsigned int width, u
     // I will create 1 mm margins, this will recalculate the actual size needed for the frame.
     KWUnit oneMm;
     oneMm.setMM( 1 );
-    double minBaseHeight= doc->getDefaultParagLayout()->getFormat().getPTFontSize() +  11.0 +
+    double minBaseHeight= doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 
             oneMm.pt() * 2;
-    if(baseHeight <minBaseHeight)
-        baseHeight =minBaseHeight;
+    if(baseHeight < minBaseHeight + oneMm.pt() * 2)
+        baseHeight =minBaseHeight + oneMm.pt() * 2;
     if(baseWidth < minFrameWidth + oneMm.pt() * 2)
         baseWidth = minFrameWidth +  oneMm.pt() * 2;
-
     // cast them only one time up here..
     unsigned int frameWidth = static_cast<unsigned int> (baseWidth + 0.5); 
     unsigned int frameHeight = static_cast<unsigned int> (baseHeight + 0.5);
@@ -2699,7 +2698,7 @@ bool KWGroupManager::isOneSelected(unsigned int &row, unsigned int &col) {
                 selectedCell=cells.count()+1;
         }
     }
-    if(selectedCell>=0 && selectedCell<=cells.count()) {
+    if(selectedCell>=0 && selectedCell<= static_cast<int> (cells.count())) {
         row=cells.at(selectedCell)->row;
         col=cells.at(selectedCell)->col;
         return true;

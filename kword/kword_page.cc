@@ -462,6 +462,7 @@ void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool le
 /*================================================================*/
 void KWPage::vmmCreate( int mx, int my )
 {
+kdDebug() << "KWPage::vmmCreate" << endl;
     mx -= contentsX();
     my -= contentsY();
 
@@ -575,6 +576,7 @@ void KWPage::viewportMouseMoveEvent( QMouseEvent *e )
 /*================================================================*/
 bool KWPage::vmpEdit( int mx, int my )
 {
+kdDebug() << "KWPage::vmpEdit" << endl;
     showCursor(false);
 
     int frameset = doc->getFrameSet( mx, my );
@@ -586,9 +588,9 @@ bool KWPage::vmpEdit( int mx, int my )
         editNum = frameset;
         KWFormat *f = fs->getFormat();
         fc->apply( *f );
-        //formatChanged( *f, FALSE );
+        formatChanged( *f, FALSE );
         gui->getView()->setFormat( *f, TRUE );
-        //delete f;
+        delete f;
 
         return TRUE;
     }
@@ -936,7 +938,8 @@ void KWPage::vmrEditFrame( int /*mx*/, int /*my*/ )
 /*================================================================*/
 void KWPage::vmrCreateText()
 {
-    repaintScreen( FALSE );
+kdDebug() << "KWPage::vmrCreateText\n";
+    //repaintScreen( FALSE );
     KWFrame *frame = new KWFrame(0L, insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(), insRect.height() );
 
     insRect = insRect.normalize();
