@@ -22,8 +22,8 @@ EXTRA_DIST = \
 		kivio_text_cursor.xpm\
 		Text.sml\
 		Text.xpm
-libkiviotexttool_la_LDFLAGS = -module $(KDE_PLUGIN)
-libkiviotexttool_la_LIBADD = $(all_libraries) $(LIB_KOTEXT) $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviocommon.la
+libkiviotexttool_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+libkiviotexttool_la_LIBADD =$(LIB_KOTEXT) $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviocommon.la
 
 rc_DATA = kiviotexttool.rc
 rcdir = $(kde_datadir)/kivio/kpartplugins

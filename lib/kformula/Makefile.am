@@ -22,8 +22,8 @@ libkformulalib_la_SOURCES	= basicelement.cc contextstyle.cc formulacursor.cc \
 #include_HEADERS = kformulacontainer.h kformuladocument.h kformulaview.h \
 #	kformuladefs.h kformulaconfigpage.h
 
-libkformulalib_la_LDFLAGS = -version-info 3:0 -no-undefined
-libkformulalib_la_LIBADD  = $(LIB_KDEUI) $(LIB_KOTEXT) $(all_libraries) $(KDE_RPATH)
+libkformulalib_la_LDFLAGS = $(all_libraries) -version-info 3:0 -no-undefined $(KDE_RPATH)
+libkformulalib_la_LIBADD  = $(LIB_KDEUI) $(LIB_KOTEXT)
 
 libkformulalib_la_METASOURCES = AUTO
 

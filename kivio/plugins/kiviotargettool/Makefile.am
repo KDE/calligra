@@ -8,8 +8,8 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart/config \
 METASOURCES = AUTO
 
 lib_LTLIBRARIES =  libkiviotargettool.la
-libkiviotargettool_la_LDFLAGS = -module $(KDE_PLUGIN)
-libkiviotargettool_la_LIBADD = $(all_libraries) $(LIB_KOTEXT) $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviocommon.la
+libkiviotargettool_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+libkiviotargettool_la_LIBADD = $(LIB_KOTEXT) $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviocommon.la
 libkiviotargettool_la_SOURCES = kiviotargettool.cpp kiviotargettoolfactory.cpp
 
 noinst_HEADERS =  kiviotargettool.h kiviotargettoolfactory.h

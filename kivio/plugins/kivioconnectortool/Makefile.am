@@ -25,8 +25,8 @@ EXTRA_DIST = \
 		kivio_connector_cursor2.xpm\
 		kivio_connector_cursor1.xpm
 
-libkivioconnectortool_la_LDFLAGS = -module $(KDE_PLUGIN)
-libkivioconnectortool_la_LIBADD = $(all_libraries) $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviocommon.la \
+libkivioconnectortool_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+libkivioconnectortool_la_LIBADD = $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviocommon.la \
   $(top_builddir)/kivio/plugins/kivioconnectortool/polyline_connector/libpolyline_connector.la
 
 rc_DATA = kivioconnectortool.rc

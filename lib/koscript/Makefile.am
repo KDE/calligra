@@ -15,8 +15,8 @@ libkoscript_la_LIBADD = $(LIB_KDEUI)
 
 bin_PROGRAMS = koscript
 koscript_SOURCES = main.cc
-koscript_LDADD = ./libkoscript.la $(all_libraries)
-koscript_LDFLAGS = $(KDE_RPATH)
+koscript_LDADD = ./libkoscript.la
+koscript_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 noinst_HEADERS = koscript_locale.h \
 		 koscript_eval.h koscript_func.h koscript_context.h koscript_value.h \

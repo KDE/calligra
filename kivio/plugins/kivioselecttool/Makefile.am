@@ -19,8 +19,8 @@ EXTRA_DIST = \
 		tool_select.cpp\
 		tool_select.h\
 		kivioselecttool.rc
-libkivioselecttool_la_LDFLAGS = -module $(KDE_PLUGIN)
-libkivioselecttool_la_LIBADD = $(LIB_KOTEXT) $(LIB_KOPAINTER) $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviocommon.la
+libkivioselecttool_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+libkivioselecttool_la_LIBADD = $(LIB_KOTEXT) $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviocommon.la
 
 rc_DATA = kivioselecttool.rc
 rcdir = $(kde_datadir)/kivio/kpartplugins
