@@ -63,12 +63,15 @@ protected: // Generating phase
     void writeMetaXml( void );
     void writePreviewFile(void);
 protected: // Preparing phase
+    /// Preparing page layout
+    void preparePageLayout( void );
     void prepareTextFrameset( KWordTextFrameset* frameset );
     /// Also sets the name of the automatical style
     void declareLayout( KWord13Layout& layout );
     /// Also sets the name of the automatical style
     void declareStyle( KWord13Layout& layout );
     double numberOrNull( const QString& str ) const;
+    double positiveNumberOrNull( const QString& str ) const;
     void fillGenStyleWithFormatOne( const KWord13FormatOneData& one, KoGenStyle& gs, const bool style ) const;
     void fillGenStyleWithLayout( const KWord13Layout& layout, KoGenStyle& gs, const bool style ) const;
 protected:

@@ -76,6 +76,28 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
     }
 }
 
+void KWord13OasisGenerator::preparePageLayout( void )
+{
+    // Inspired by KoPageLayout::saveOasis
+    KoGenStyle style(KoGenStyle::STYLE_PAGELAYOUT);
+    style.addPropertyPt("fo:page-width", positiveNumberOrNull ( m_kwordDocument->getProperty( "PAPER:width", "PAPER:ptWidth" ) ) );
+    style.addPropertyPt("fo:page-height", positiveNumberOrNull ( m_kwordDocument->getProperty( "PAPER:height", "PAPER:ptHeight" ) ) );
+    style.addPropertyPt("fo:margin-left", positiveNumberOrNull ( m_kwordDocument->getProperty( "PAPERBORDERS:left", "PAPERBORDERS:ptLeft" ) ) );
+    style.addPropertyPt("fo:margin-right", positiveNumberOrNull ( m_kwordDocument->getProperty( "PAPERBORDERS:right", "PAPERBORDERS:ptRight" ) ) );
+    style.addPropertyPt("fo:margin-top", positiveNumberOrNull ( m_kwordDocument->getProperty( "PAPERBORDERS:top", "PAPERBORDERS:ptTop" ) ) );
+    style.addPropertyPt("fo:margin-bottom", positiveNumberOrNull ( m_kwordDocument->getProperty( "PAPERBORDERS:bottom", "PAPERBORDERS:ptBottom" ) ) );
+    if ( m_kwordDocument->getProperty( "PAPER:orientation" ) == "1" )
+    {
+        style.addProperty("style:print-orientation", "landscape" );
+    }
+    else
+    {
+        style.addProperty("style:print-orientation", "portrait" );
+    }
+    // end of "inspiration"
+}
+
+
 bool KWord13OasisGenerator::prepare( KWord13Document& kwordDocument )
 {
     if ( m_kwordDocument && ( (void*) m_kwordDocument ) != ( (void*) &kwordDocument ) )
@@ -85,6 +107,8 @@ bool KWord13OasisGenerator::prepare( KWord13Document& kwordDocument )
     
     m_kwordDocument = &kwordDocument;
 
+    preparePageLayout();
+    
     // Declare styles
     for ( QValueList<KWord13Layout>::Iterator it = m_kwordDocument->m_styles.begin();
         it != m_kwordDocument->m_styles.end(); ++it)
@@ -105,6 +129,16 @@ double KWord13OasisGenerator::numberOrNull( const QString& str ) const
     bool ok = false;
     const double d = str.toDouble( &ok );
     if ( ok )
+        return d;
+    else
+        return 0.0;
+}
+
+double KWord13OasisGenerator::positiveNumberOrNull( const QString& str ) const
+{
+    bool ok = false;
+    const double d = str.toDouble( &ok );
+    if ( ok && d >= 0.0 )
         return d;
     else
         return 0.0;
