@@ -28,6 +28,7 @@ class KFormulaWidget;
 class KSelectAction;
 class QPaintEvent;
 class QScrollView;
+class DCOPObject;
 
 #include <koView.h>
 #include <qptrlist.h>
@@ -43,6 +44,7 @@ class KFormulaPartView : public KoView
 public:
     KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent=0, const char* _name=0);
     virtual ~KFormulaPartView();
+    virtual DCOPObject* dcopObject();
 
     virtual void setupPrinter( KPrinter &printer );
     virtual void print( KPrinter &printer );
@@ -90,6 +92,8 @@ private:
     KAction* addGenericUpperAction;
     KAction* addGenericLowerAction;
     KAction* removeEnclosingAction;
+
+    DCOPObject *m_dcop;
 };
 
 #endif

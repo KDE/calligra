@@ -5,7 +5,8 @@ KDE_CXXFLAGS = $(USE_RTTI)
 ## The part
 kde_module_LTLIBRARIES = libkformulapart.la
 libkformulapart_la_SOURCES = kformula_doc.cc \
-	kformula_view.cc kformula_factory.cc kformulawidget.cc kfconfig.cc
+	kformula_view.cc kformula_factory.cc kformulawidget.cc kfconfig.cc \
+	kformula_view_iface.skel kformula_view_iface.cc
 libkformulapart_la_LDFLAGS = $(KDE_PLUGIN)
 libkformulapart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KFORMULA) $(LIB_KOTEXT)
 libkformulapart_la_METASOURCES = AUTO
@@ -27,7 +28,7 @@ dummy.cc:
 
 noinst_HEADERS =  kformula_doc.h \
 		  kformula_view.h kformula_factory.h formuladef.h \
-		  matrixwidget.h kformula_aboutdata.h
+		  matrixwidget.h kformula_aboutdata.h kformula_view_iface.h
 
 kdelnk_DATA = kformula.desktop
 kdelnkdir = $(kde_appsdir)/Office

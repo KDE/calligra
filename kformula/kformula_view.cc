@@ -39,12 +39,17 @@ class KPrinter;
 #include "kfconfig.h"
 #include "matrixwidget.h"
 
+#include "kformula_view_iface.h"
+
 
 KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const char* _name)
         : KoView( _doc, _parent, _name ), m_pDoc(_doc)
 {
     setInstance(KFormulaFactory::global());
     setXMLFile("kformula.rc");
+
+    m_dcop = 0;
+    dcopObject(); // build it
 
     scrollview = new QScrollView(this, "scrollview");
     formulaWidget = new KFormulaWidget(_doc->getFormula(), scrollview->viewport(), "formulaWidget");
@@ -122,7 +127,17 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 
 KFormulaPartView::~KFormulaPartView()
 {
+    delete m_dcop;
 }
+
+DCOPObject* KFormulaPartView::dcopObject()
+{
+    if ( !m_dcop )
+	m_dcop = new KformulaViewIface( this );
+
+    return m_dcop;
+}
+
 
 void KFormulaPartView::focusInEvent(QFocusEvent*)
 {
