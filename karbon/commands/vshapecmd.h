@@ -32,7 +32,7 @@ class VComposite;
 class VShapeCmd : public VCommand
 {
 public:
-	VShapeCmd( VDocument* doc, const QString& name, VComposite* composite );
+	VShapeCmd( VDocument* doc, const QString& name, VComposite* shape );
 	virtual ~VShapeCmd() {}
 
 	virtual void execute();
@@ -40,7 +40,7 @@ public:
 
 protected:
 	/// Pointer to the created shape.
-	VComposite* m_composite;
+	VComposite* m_shape;
 };
 
 #endif

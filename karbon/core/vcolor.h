@@ -21,10 +21,12 @@
 #ifndef __VCOLOR_H__
 #define __VCOLOR_H__
 
-#include <qstring.h>
+
 #include <qcolor.h>
+#include <qstring.h>
 
 class QDomElement;
+
 
 /**
  * This class keeps track of color properties.
@@ -34,6 +36,7 @@ class QDomElement;
  *
  * Default is opaque, rgb, black color.
  */
+
 class VColor
 {
 public:
@@ -45,40 +48,41 @@ public:
 		gray = 3
 	};
 
-	VColor();
+	VColor( VColorSpace colorSpace = rgb );
 	VColor( const VColor& color );
-	VColor( const QRgb & );
+	VColor( const QColor& color );
 
-	/// color values in all color spaces range from 0.0 to 1.0
-	void pseudoValues( int& v1, int& v2, int& v3 ) const;
+	QColor toQColor() const;
 
-	float value( uint i ) const { return m_value[i]; }
-	void values(
-		float* v1 = 0L, float* v2 = 0L,
-		float* v3 = 0L, float* v4 = 0L ) const;
-	void setValues(
-		const float* v1 = 0L, const float* v2 = 0L,
-		const float* v3 = 0L, const float* v4 = 0L );
+	float operator[]( unsigned i ) const
+		{ return m_value[i]; }
 
-	/// opacity is a value ranging from 0.0(fully transparent) to 1.0(opaque)
+	void set( float v1 )
+		{ m_value[0] = v1; }
+	void set( float v1, float v2 )
+		{ m_value[0] = v1; m_value[1] = v2; }
+	void set( float v1, float v2, float v3 )
+		{ m_value[0] = v1; m_value[1] = v2; m_value[2] = v3; }
+	void set( float v1, float v2, float v3, float v4 )
+		{ m_value[0] = v1; m_value[1] = v2; m_value[2] = v3; m_value[3] = v4; }
+
+	/**
+	 * Opacity is a value ranging from 0.0 (fully transparent) to 1.0 (opaque).
+	 */
 	float opacity() const { return m_opacity; }
 	void setOpacity( float opacity ) { m_opacity = opacity; }
 
 	VColorSpace colorSpace() const { return m_colorSpace; }
-	void setColorSpace( const VColorSpace colorSpace );
+	void setColorSpace( const VColorSpace colorSpace, bool convert = true );
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
-	/// convenience method
-	QColor toQColor() const;
-
 private:
-	void convertToColorSpace( const VColorSpace colorSpace,
-		float* v1 = 0L, float* v2 = 0L,
-		float* v3 = 0L, float* v4 = 0L ) const;
+	void convertToColorSpace( const VColorSpace colorSpace );
 
 	VColorSpace m_colorSpace;
+
 	float m_value[4];
 	float m_opacity;
 

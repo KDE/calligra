@@ -22,9 +22,9 @@
 
 #include "vcolor.h"
 
-VColor::VColor()
+VColor::VColor( VColorSpace colorSpace )
 {
-	m_colorSpace = rgb;
+	m_colorSpace = colorSpace;
 	m_opacity = 1.0;
 
 	m_value[0] = 0.0;
@@ -44,101 +44,58 @@ VColor::VColor( const VColor& color )
 	m_value[3] = color.m_value[3];
 }
 
-VColor::VColor( const QRgb &c )
-	: m_colorSpace( rgb ), m_opacity( qAlpha( c ) / 255.0 )
+VColor::VColor( const QColor& color )
 {
-	m_value[0] = qRed( c ) /  255.0;
-	m_value[1] = qGreen( c ) / 255.0;
-	m_value[2] = qBlue( c ) / 255.0;
-	m_value[3] = 0.0;
+	m_colorSpace = rgb;
+	m_opacity = 1.0;
+
+	m_value[0] = color.red();
+	m_value[1] = color.green();
+	m_value[2] = color.blue();
+}
+
+QColor
+VColor::toQColor() const
+{
+	VColor copy( *this );
+	copy.convertToColorSpace( rgb );
+
+	QColor color;
+	color.setRgb( 255 * copy[0], 255 * copy[1], 255 * copy[2] );
+
+	return color;
 }
 
 void
-VColor::pseudoValues( int& v1, int& v2, int& v3 ) const
+VColor::setColorSpace( const VColorSpace colorSpace, bool convert )
 {
-	if( m_colorSpace == rgb )
-	{
-		v1 = qRound( 255 * m_value[0] );
-		v2 = qRound( 255 * m_value[1] );
-		v3 = qRound( 255 * m_value[2] );
-	}
-	else
-	{
-		float copy[3];
+	if( convert )
+		convertToColorSpace( colorSpace );
 
-		convertToColorSpace( rgb, &copy[0], &copy[1], &copy[2] );
-
-		v1 = qRound( 255 * copy[0] );
-		v2 = qRound( 255 * copy[1] );
-		v3 = qRound( 255 * copy[2] );
-	}
-}
-
-void
-VColor::values( float* v1, float* v2, float* v3, float* v4 ) const
-{
-	if( v1 )
-		*v1 = m_value[0];
-	if( v2 )
-		*v2 = m_value[1];
-	if( v3 )
-		*v3 = m_value[2];
-	if( v4 )
-		*v4 = m_value[3];
-}
-
-void
-VColor::setValues( const float* v1, const float* v2, const float* v3, const float* v4 )
-{
-	if( v1 )
-		m_value[0] = *v1;
-	if( v2 )
-		m_value[1] = *v2;
-	if( v3 )
-		m_value[2] = *v3;
-	if( v4 )
-		m_value[3] = *v4;
-}
-
-void
-VColor::setColorSpace( const VColorSpace colorSpace )
-{
-	if( colorSpace == m_colorSpace )
-		return;
-
-	convertToColorSpace( colorSpace,
-		&m_value[0], &m_value[1], &m_value[2], &m_value[3] )
-;
 	m_colorSpace = colorSpace;
 }
 
 void
-VColor::convertToColorSpace( const VColorSpace colorSpace,
-	float* v1, float* v2, float* v3, float* v4 ) const
+VColor::convertToColorSpace( const VColorSpace colorSpace )
 {
-	float copy[4];
-
 	if( colorSpace == rgb )
 	{
 		if( m_colorSpace == rgb )
 		{
-			copy[0] = m_value[0];
-			copy[1] = m_value[1];
-			copy[2] = m_value[2];
+			// Do nothing.
 		}
 		else if( m_colorSpace == cmyk )
 		{
-			copy[0] = 1.0 - m_value[0] - m_value[3];
-			copy[1] = 1.0 - m_value[1] - m_value[3];
-			copy[2] = 1.0 - m_value[2] - m_value[3];
+			m_value[0] = 1.0 - m_value[0] - m_value[3];
+			m_value[1] = 1.0 - m_value[1] - m_value[3];
+			m_value[2] = 1.0 - m_value[2] - m_value[3];
 		}
 		else if( m_colorSpace == hsb )
 		{
 			if( 1.0 + m_value[1] == 1.0 )	// saturation == 0.0
 			{
-				copy[0] = m_value[2];	// brightness
-				copy[1] = m_value[2];
-				copy[2] = m_value[2];
+				m_value[0] = m_value[2];	// brightness
+				m_value[1] = m_value[2];
 			}
 			else
 			{
@@ -147,27 +104,23 @@ VColor::convertToColorSpace( const VColorSpace colorSpace,
 		}
 		else if( m_colorSpace == gray )
 		{
-			copy[0] = m_value[0];
-			copy[1] = m_value[0];
-			copy[2] = m_value[0];
+			m_value[1] = m_value[0];
+			m_value[2] = m_value[0];
 		}
 	}
 	else if( colorSpace == cmyk )
 	{
 		if( m_colorSpace == rgb )
 		{
-			copy[0] = 1.0 - m_value[0];
-			copy[1] = 1.0 - m_value[1];
-			copy[2] = 1.0 - m_value[2];
-			copy[3] = 0.0;
+			m_value[0] = 1.0 - m_value[0];
+			m_value[1] = 1.0 - m_value[1];
+			m_value[2] = 1.0 - m_value[2];
+			m_value[3] = 0.0;
 // TODO: undercolor removal
 		}
 		else if( m_colorSpace == cmyk )
 		{
-			copy[0] = m_value[0];
-			copy[1] = m_value[1];
-			copy[2] = m_value[2];
-			copy[3] = m_value[3];
+			// Do nothing.
 		}
 		else if( m_colorSpace == hsb )
 		{
@@ -175,10 +128,10 @@ VColor::convertToColorSpace( const VColorSpace colorSpace,
 		}
 		else if( m_colorSpace == gray )
 		{
-			copy[0] = 0.0;
-			copy[1] = 0.0;
-			copy[2] = 0.0;
-			copy[3] = 1.0 - m_value[0];
+			m_value[1] = 0.0;
+			m_value[2] = 0.0;
+			m_value[3] = 1.0 - m_value[0];
+			m_value[0] = 0.0;
 		}
 	}
 	else if( colorSpace == hsb )
@@ -193,29 +146,27 @@ VColor::convertToColorSpace( const VColorSpace colorSpace,
 		}
 		else if( m_colorSpace == hsb )
 		{
-			copy[0] = m_value[0];
-			copy[1] = m_value[1];
-			copy[2] = m_value[2];
+			// Do nothing.
 		}
 		else if( m_colorSpace == gray )
 		{
-			copy[0] = 0.0;
-			copy[1] = 0.0;
-			copy[2] = m_value[0];
+			m_value[1] = 0.0;
+			m_value[2] = m_value[0];
+			m_value[0] = 0.0;
 		}
 	}
 	else if( colorSpace == gray )
 	{
 		if( m_colorSpace == rgb )
 		{
-			copy[0] =
+			m_value[0] =
 				0.3  * m_value[0] +
 				0.59 * m_value[1] +
 				0.11 * m_value[2];
 		}
 		else if( m_colorSpace == cmyk )
 		{
-			copy[0] =
+			m_value[0] =
 				1.0 - QMIN( 1.0,
 					0.3  * m_value[0] +
 					0.59 * m_value[1] +
@@ -224,22 +175,13 @@ VColor::convertToColorSpace( const VColorSpace colorSpace,
 		}
 		else if( m_colorSpace == hsb )
 		{
-			copy[0] = m_value[2];
+			m_value[0] = m_value[2];
 		}
 		else if( m_colorSpace == gray )
 		{
-			copy[0] = m_value[0];
+			// Do nothing.
 		}
 	}
-
-	if( v1 )
-		*v1 = copy[0];
-	if( v2 )
-		*v2 = copy[1];
-	if( v3 )
-		*v3 = copy[2];
-	if( v4 )
-		*v4 = copy[3];
 }
 
 void
@@ -301,25 +243,5 @@ VColor::load( const QDomElement& element )
 		m_value[2] = 0.0;
 	if( m_value[3] < 0.0 || m_value[3] > 1.0 )
 		m_value[3] = 0.0;
-}
-
-QColor
-VColor::toQColor() const
-{
-	QColor color;
-	switch ( m_colorSpace ) {
-	case rgb:
-		return QColor( int( 255 * m_value[0] ), int( 255 * m_value[1] ), int( 255 * m_value[2] ));
-		break;
-	case cmyk:
-		return QColor( int( 255 * ( 1.0 - m_value[0] - m_value[3] ) ), int( 255 * ( 1.0 - m_value[1] - m_value[3] ) ), int( 255 * ( 1.0 - m_value[2] - m_value[3] ) ) );
-		break;
-	case hsb:
-		color.setHsv( int( 359 * m_value[0] ), int( 255 * m_value[1] ), int( 255 * m_value[2] ) );
-		return color;
-		break;
-	default:
-		return QColor();
-	}
 }
 

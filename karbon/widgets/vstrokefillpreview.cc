@@ -157,7 +157,10 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	}
 
 	// show 3D outline of stroke part
-	stroke.setColor( Qt::white.rgb() );
+	VColor color;
+
+	color.set( 1.0, 1.0, 1.0 );
+	stroke.setColor( color );
 	m_painter->setBrush( Qt::NoBrush );
 	m_painter->setPen( stroke );
 	m_painter->newPath();
@@ -166,7 +169,8 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->lineTo( KoPoint( STROKE_TOPX - 1, STROKE_BOTTOMY + 1 ) );
 	m_painter->strokePath();
 
-	stroke.setColor( Qt::black.rgb() );
+	color.set( 1.0, 1.0, 0.0 );
+	stroke.setColor( color );
 	m_painter->setPen( stroke );
 	m_painter->newPath();
 	m_painter->moveTo( KoPoint( STROKE_BOTTOMX + 1, STROKE_TOPY - 1 ) );
@@ -182,7 +186,8 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->lineTo( KoPoint( STROKE_TOPX_INNER + 1, STROKE_BOTTOMY_INNER - 1 ) );
 	m_painter->strokePath();
 
-	stroke.setColor( Qt::white.rgb() );
+	color.set( 1.0, 1.0, 1.0 );
+	stroke.setColor( color );
 	m_painter->setPen( stroke );
 	m_painter->newPath();
 	m_painter->moveTo( KoPoint( STROKE_BOTTOMX_INNER - 1, STROKE_TOPY_INNER + 1 ) );
@@ -231,7 +236,8 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	}
 	// show 3D outline of fill part
 	m_painter->setBrush( Qt::NoBrush );
-	stroke.setColor( Qt::white.rgb() );
+	color.set( 1.0, 1.0, 1.0 );
+	stroke.setColor( color );
 	m_painter->setPen( stroke );
 	m_painter->newPath();
 	m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
@@ -239,7 +245,8 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
 	m_painter->strokePath();
 
-	stroke.setColor( Qt::black.rgb() );
+	color.set( 0.0, 0.0, 0.0 );
+	stroke.setColor( color );
 	m_painter->setPen( stroke );
 	m_painter->newPath();
 	m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );

@@ -330,39 +330,10 @@ SvgExport::getHexColor( QTextStream *stream, const VColor& color )
 
 	QString Output;
 
-	float v1, v2, v3, v4;
-	color.values( &v1, &v2, &v3, &v4 );
-	// rgb
-	if( color.colorSpace() == VColor::rgb )
-	{
-		Output.sprintf( "#%02x%02x%02x", int( v1 * 255 ), int( v2 * 255 ), int( v3 * 255 ) );
-	}
+	VColor copy( color );
+	copy.setColorSpace( VColor::rgb );
 
-	// cmyk
-	else if( color.colorSpace() == VColor::cmyk )
-	{
-		Output.sprintf( "#%02x%02x%02x", int( ( 1 - v1 - v4 ) * 255 ), int( ( 1 - v2 - v4 ) * 255 ), int( ( 1 - v3 - v4 ) * 255 ) );
-	}
-
-	// hsb
-	else if( color.colorSpace() == VColor::hsb )
-	{
-		// maybe do this manually - or could it stay like this?
-		QColor hsvColor;
-		int rComponent;
-		int gComponent;
-		int bComponent;
-		hsvColor.setHsv( int( v1 * 359 ), int( v2 * 255 ), int( v3 * 255 ) );
-		hsvColor.rgb(&rComponent, &gComponent, &bComponent);
-
-		Output.sprintf( "#%02x%02x%02x", rComponent, gComponent, bComponent );
-	}
-
-	// grey
-	//else if( color.colorSpace() == VColor::gray )
-	//{
-	//	Output.sprintf( "#%02x%02x%02x", int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ) );
-	//}
+	Output.sprintf( "#%02x%02x%02x", copy[0] * 255, copy[1] * 255, copy[2] * 255 );
 
 	*stream << Output;
 }

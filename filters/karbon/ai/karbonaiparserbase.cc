@@ -347,7 +347,7 @@ const VColor KarbonAIParserBase::toKarbonColor (const AIColor &color)
   float cv4 = v4;
 
   value.setColorSpace (VColor::cmyk);
-  value.setValues (&cv1, &cv2, &cv3, &cv4);
+  value.set(cv1, cv2, cv3, cv4);
 
   return value;
 }

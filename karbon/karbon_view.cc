@@ -243,10 +243,15 @@ KarbonView::dropEvent ( QDropEvent *e )
 
 	if ( KColorDrag::decode( e, color) )
 	{
-		float r = color.red() / 255.0, g = color.green() / 255.0, b = color.blue() / 255.0;
-		realcolor.setValues( &r, &g, &b, 0L );
+		float r = color.red() / 255.0;
+		float g = color.green() / 255.0;
+		float b = color.blue() / 255.0;
+
+		realcolor.set( r, g, b );
+
 		if( m_part )
 			m_part->addCommand( new VFillCmd( &m_part->document(), realcolor ), true );
+
 		selectionChanged();
 	}
 }

@@ -213,9 +213,10 @@ VComposite::draw( VPainter* painter, const KoRect* rect ) const
 				painter->newPath();
 				painter->setRasterOp( Qt::NotROP );
 
-				VStroke stroke;
+				VColor color;
+				color.set( 0.5, 0.5, 1.0 );
+				VStroke stroke( color );
 				stroke.setLineWidth( 1.0 );
-				stroke.setColor( Qt::blue.light().rgb() );
 				painter->setPen( stroke );
 				painter->setBrush( Qt::NoBrush );
 

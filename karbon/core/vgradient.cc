@@ -25,8 +25,14 @@ VGradient::VGradient( VGradientType type )
 	: m_type( type )
 {
 	// set up dummy gradient
-	addStop( VColor( Qt::red.rgb() ), 0.0, 0.5 );
-	addStop( VColor( Qt::yellow.rgb() ), 1.0, 0.5 );
+	VColor color;
+
+	color.set( 1.0, 0.0, 0.0 );
+	addStop( color, 0.0, 0.5 );
+
+	color.set( 1.0, 1.0, 0.0 );
+	addStop( color, 1.0, 0.5 );
+
 	setOrigin( KoPoint( 0, 0 ) );
 	setVector( KoPoint( 0, 50 ) );
 	setRepeatMethod( VGradient::reflect );

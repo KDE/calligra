@@ -354,9 +354,9 @@ EpsExport::getColor( const VColor& color )
 	copy.setColorSpace( VColor::rgb );
 
 	*m_stream <<
-		copy.value( 0 ) << " " <<
-		copy.value( 1 ) << " " <<
-		copy.value( 2 ) << " " << l1_setrgbcolor;
+		copy[0] << " " <<
+		copy[1] << " " <<
+		copy[2] << " " << l1_setrgbcolor;
 }
 
 #include "epsexport.moc"

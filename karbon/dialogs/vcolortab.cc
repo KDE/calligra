@@ -171,10 +171,11 @@ void VColorTab::slotUpdateFromHSVSpinBoxes()
 VColor VColorTab::getColor()
 {
 	kdDebug() << "VColorTab::slotApplyButtonPressed" << endl;
-	VColor color;
 	float r = mRed->value() / 255.0, g = mGreen->value() / 255.0, b = mBlue->value() / 255.0;
 	float op = mOpacity->value() / 100.0;
-	color.setValues( &r, &g, &b, 0L );
+
+	VColor color;
+	color.set( r, g, b );
 	color.setOpacity( op );
 
 	return color;

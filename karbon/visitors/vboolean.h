@@ -25,21 +25,20 @@
 
 #include "vvisitor.h"
 
-
 class VSegment;
 
-
-enum VBooleanType
-{
-	bool_intersect,
-	bool_union,
-	bool_xor,
-	bool_subtract
-};
 
 class VBoolean : public VVisitor
 {
 public:
+	enum VBooleanType
+	{
+		bool_intersect,
+		bool_union,
+		bool_xor,
+		bool_subtract
+	};
+
 	VBoolean( VBooleanType type = bool_intersect ) { m_type = type; }
 	virtual ~VBoolean() {}
 

@@ -121,17 +121,23 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 
 void VColorDocker::updateRGB()
 {
-	float r = mRedSlider->value() / 255.0, g = mGreenSlider->value() / 255.0, b = mBlueSlider->value() / 255.0;
+	float r = mRedSlider->value() / 255.0;
+	float g = mGreenSlider->value() / 255.0;
+	float b = mBlueSlider->value() / 255.0;
+
 	m_Color->setColorSpace( VColor::rgb );
-	m_Color->setValues( &r, &g, &b, 0L );
+	m_Color->set( r, g, b );
 }
 
 void VColorDocker::updateCMYK()
 {
-	float c = mCyanSlider->value() / 100.0, m = mMagentaSlider->value() / 100.0, y = mYellowSlider->value() / 100.0;
+	float c = mCyanSlider->value() / 100.0;
+	float m = mMagentaSlider->value() / 100.0;
+	float y = mYellowSlider->value() / 100.0;
 	float k = mBlackSlider->value() / 100.0;
+
 	m_Color->setColorSpace( VColor::cmyk );
-	m_Color->setValues( &c, &m, &y, &k );
+	m_Color->set( c, m, y, k );
 }
 
 void VColorDocker::updateOpacity()
@@ -139,5 +145,6 @@ void VColorDocker::updateOpacity()
 	float op = mOpacity->value() / 100.0;
 	m_Color->setOpacity( op );
 }
+
 #include "vcolordocker.moc"
 

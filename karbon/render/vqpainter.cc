@@ -154,12 +154,7 @@ VQPainter::setPen( const VStroke &stroke )
 	QPen pen;
 
 	// color + linewidth
-	int r;
-	int g;
-	int b;
-
-	stroke.color().pseudoValues( r, g, b );
-	pen.setColor( QColor( r, g, b ) );
+	pen.setColor( stroke.color().toQColor() );
 	pen.setWidth( static_cast<int>(stroke.lineWidth()) );
 
 	// caps

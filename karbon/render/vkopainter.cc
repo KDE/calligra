@@ -300,11 +300,13 @@ VKoPainter::setPen( const QColor &c )
 {
 	delete m_stroke;
 	m_stroke = new VStroke;
-	VColor color;
+
 	float r = static_cast<float>( c.red()   ) / 255.0;
 	float g = static_cast<float>( c.green() ) / 255.0;
 	float b = static_cast<float>( c.blue()  ) / 255.0;
-	color.setValues( &r, &g, &b );
+
+	VColor color;
+	color.set( r, g, b );
 	m_stroke->setColor( color );
 }
 
@@ -323,11 +325,13 @@ VKoPainter::setBrush( const QColor &c )
 {
 	delete m_fill;
 	m_fill = new VFill;
-	VColor color;
+
 	float r = static_cast<float>( c.red()   ) / 255.0;
 	float g = static_cast<float>( c.green() ) / 255.0;
 	float b = static_cast<float>( c.blue()  ) / 255.0;
-	color.setValues( &r, &g, &b );
+
+	VColor color;
+	color.set( r, g, b );
 	m_fill->setColor( color );
 }
 
@@ -426,18 +430,18 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	ArtVpath *temp = art_vpath_affine_transform( vec, affine );
 	vec = temp;
 
-	int r = 0;
-	int g = 0;
-	int b = 0;
 	int af = 0;
 	int as = 0;
 	art_u32 fillColor = 0;
     // filling
+
+	QColor color;
+
 	if( m_fill && m_fill->type() != VFill::none )
 	{
-		m_fill->color().pseudoValues( r, g, b );
+		color = m_fill->color().toQColor();
 		af = qRound( 255 * m_fill->color().opacity() );
-		fillColor = ( 0 << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
+		fillColor = ( 0 << 24 ) | ( color.blue() << 16 ) | ( color.green() << 8 ) | color.red();
 
 		ArtSvpWriter *swr;
 		ArtSVP *temp;
@@ -462,9 +466,9 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		ArtPathStrokeJoinType joinStyle = ART_PATH_STROKE_JOIN_MITER;
 		// TODO : non rgb support ?
 
-		m_stroke->color().pseudoValues( r, g, b );
+		color = m_stroke->color().toQColor();
 		as = qRound( 255 * m_stroke->color().opacity() );
-		strokeColor = ( 0 << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
+		strokeColor = ( 0 << 24 ) | ( color.blue() << 16 ) | ( color.green() << 8 ) | color.red();
 
 		double ratio = m_zoomFactor;//sqrt(pow(affine[0], 2) + pow(affine[3], 2)) / sqrt(2);
 		if( m_stroke->dashPattern().array().count() > 0 )
