@@ -125,13 +125,13 @@ void KPTView::slotAddTask() {
 
     // Execute the dialog
     if (dialog->exec()) {
-	KPTNode &node = ((KPTNodeItem *)m_listview->selectedItem())->getNode();
-	cerr << "Adding child to " << node.name().latin1() << endl;
-	node.addChildNode(task);
-	
-	displayProject();
+        KPTNode &node = ((KPTNodeItem *)m_listview->selectedItem())->getNode();
+        kdebug(42000) << "Adding child to " << node.name().latin1() << endl;
+        node.addChildNode(task);
+
+        displayProject();
     } else
-	delete task;
+        delete task;
 
     delete dialog;
 }
