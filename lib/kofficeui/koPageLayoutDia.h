@@ -256,30 +256,77 @@ protected:
 };
 
 /**
- *  KoPageLayoutDia
+ *  With this dialog the user can specify the layout of this papaer during printing. 
  */
 class KoPageLayoutDia : public QTabDialog
 {
     Q_OBJECT
 
 public:
-    // constructor - destructor
-    KoPageLayoutDia( QWidget*, const char*, KoPageLayout, KoHeadFoot, int );
-    KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayout _layout, KoHeadFoot _hf, 
-		    KoColumns _kw, KoKWHeaderFooter _kwhf, int tabs );
+
+    /**
+     *  Constructor.
+     *
+     *  @param parent   The parent of the dialog.
+     *  @param name     The name of the dialog.
+     *  @param layout   The layout.
+     *  @param headfoot The header and the footer.
+     *  @param tabs     The number of tabs.
+     */
+    KoPageLayoutDia( QWidget* _parent, const char* _name, KoPageLayout _layout, KoHeadFoot _headfoot, int _tabs );
+
+    /**
+     *  Constructor.
+     *
+     *  @param parent     The parent of the dialog.
+     *  @param name       The name of the dialog.
+     *  @param layout     The layout.
+     *  @param headfoot   The header and the footer.
+     *  @param columns    The number of columns on the page.
+     *  @param kwheadfoot The KWord header and footer.
+     *  @param tabs       The number of tabs.
+     */
+    KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayout layout, KoHeadFoot headfoot, 
+		    KoColumns columns, KoKWHeaderFooter kwheadfoot, int tabs );
+
+    /**
+     *  Destructor.
+     */
     ~KoPageLayoutDia();
 
-    // show page layout dialog
+    /**
+     *  Show page layout dialog.
+     */
     static bool pageLayout( KoPageLayout&, KoHeadFoot&, int );
+
+    /**
+     *  Show page layout dialog.
+     */
     static bool pageLayout( KoPageLayout&, KoHeadFoot&, KoColumns&, KoKWHeaderFooter&, int );
 
-    // get a standard page layout
+    /**
+     *  Retrieves a standard page layout.
+     */
     static KoPageLayout standardLayout();
 
-    // should NOT be used by an app - just for internal use!
+    /**
+     *  Do not use, for internal only.
+     */
     KoPageLayout getLayout() {return layout;};
+
+    /**
+     *  Do not use, for internal only.
+     */
     KoHeadFoot getHeadFoot();
+
+    /**
+     *  Do not use, for internal only.
+     */
     KoColumns getColumns();
+
+    /**
+     *  Do not use, for internal only.
+     */
     KoKWHeaderFooter getKWHeaderFooter();
 
 protected:
