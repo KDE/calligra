@@ -42,9 +42,9 @@ public:
     void setCurrentNoteText( const QString &_text );
 
     // print
-    void printNote( QPainter *_painter, KPrinter *_printer );
+    void printNotes( QPainter *_painter, KPrinter *_printer, QValueList<int> );
 
-    QString getAllNoteTextForPrinting() const;
+    QString getNotesTextForPrinting(QValueList<int>) const;
 
 private slots:
     void slotTextChanged();

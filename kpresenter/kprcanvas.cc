@@ -4253,11 +4253,13 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     }
 
     NoteBar *noteBar = m_view->getNoteBar();
-    //don't printing note when there is not note to print
-    if ( noteBar && !noteBar->getAllNoteTextForPrinting().isEmpty()) {
+    //don't print notes when there is no note to print
+    if ( noteBar && !noteBar->getNotesTextForPrinting(list).isEmpty()
+        && !progress.wasCancelled())
+    {
         printer->newPage();
         painter->resetXForm();
-        noteBar->printNote( painter, printer );
+        noteBar->printNotes( painter, printer, list );
         painter->resetXForm();
     }
 

@@ -111,7 +111,7 @@ void NoteBar::slotRedoAvailable( bool /*yes*/ )
     //kdDebug(33001) << "slotRedoAvailable( " << yes << " )" << endl;
 }
 
-void NoteBar::printNote( QPainter *_painter, KPrinter *_printer )
+void NoteBar::printNotes( QPainter *_painter, KPrinter *_printer, QValueList<int> _list )
 {
     // base code from $QTDIR/example/textedit/textedit.cpp
     _painter->save();
@@ -126,7 +126,7 @@ void NoteBar::printNote( QPainter *_painter, KPrinter *_printer )
                 metrics.height() - margin * dpiy / 72 * 2 );
 
     QFont font = KoGlobal::defaultFont();
-    QString allText = getAllNoteTextForPrinting();
+    QString allText = getNotesTextForPrinting(_list);
     QString str = QStyleSheet::convertFromPlainText( allText );
 
     QSimpleRichText richText( str, font, QString::null, QStyleSheet::defaultSheet(),
@@ -150,16 +150,18 @@ void NoteBar::printNote( QPainter *_painter, KPrinter *_printer )
     _painter->restore();
 }
 
-QString NoteBar::getAllNoteTextForPrinting() const
+QString NoteBar::getNotesTextForPrinting(QValueList<int> _list) const
 {
     QString allText = QString::null;
     bool firstText = true;
     bool noteIsEmpty = true;
     int pageCount = 1;
     KPresenterDoc *doc=view->kPresenterDoc();
-    // laurent todo test me
-    for ( int i = 0; i < static_cast<int>( doc->pageList().count() ); i++ )
+    for ( int i = 0; i < static_cast<int>( doc->pageList().count() ); i++, ++pageCount )
     {
+        if (_list.contains(i+1)==0) // that slide isn't printed, don't print its note either
+            continue;
+
         if ( !firstText )
             allText += QString("\n\n");
 
@@ -169,7 +171,6 @@ QString NoteBar::getAllNoteTextForPrinting() const
         allText += doc->pageList().at(i)->noteText();
 
         firstText = false;
-        ++pageCount;
     }
     if( noteIsEmpty )
         return QString::null;
