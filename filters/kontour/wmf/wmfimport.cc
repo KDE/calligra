@@ -23,6 +23,7 @@ DESCRIPTION
 #include <config.h>
 #include <kdebug.h>
 #include <koStore.h>
+#include <qpointarray.h>
 #include <wmfimport.h>
 #include <wmfimport.moc>
 

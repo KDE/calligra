@@ -25,6 +25,7 @@ DESCRIPTION
 #include <koQueryTrader.h>
 #include <koStore.h>
 #include <ktempfile.h>
+#include <qfile.h>
 #include <msodimport.h>
 #include <msodimport.moc>
 #include <qpointarray.h>
