@@ -836,6 +836,8 @@ void KoAutoFormatDia::addEntryList(const QString &key, KoAutoFormatEntry *_autoE
 
 void KoAutoFormatDia::editEntryList(const QString &key,const QString &newFindString, KoAutoFormatEntry *_autoEntry)
 {
+    if ( m_docAutoFormat->findFormatEntry(key) && m_docAutoFormat->findFormatEntry(key)->formatEntryContext())
+        _autoEntry->setFormatEntryContext( new KoSearchContext(*(m_docAutoFormat->findFormatEntry(key)->formatEntryContext()) ));
     m_docAutoFormat->removeAutoFormatEntry( key );
     m_docAutoFormat->addAutoFormatEntry( newFindString, _autoEntry );
 }
