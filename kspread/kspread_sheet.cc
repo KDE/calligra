@@ -44,6 +44,7 @@
 #include <kreplacedialog.h>
 #include <kprinter.h>
 #include <koDocumentInfo.h>
+#include <koOasisStyles.h>
 
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
@@ -6314,8 +6315,28 @@ void KSpreadSheet::checkContentDirection( QString const & name )
     emit sig_refreshView();
 }
 
-bool KSpreadSheet::loadOasis( const QDomElement& tableElement )
+bool KSpreadSheet::loadOasis( const QDomElement& tableElement, KoOasisStyles& oasisStyles )
 {
+    if ( tableElement.hasAttribute( "table:style-name" ) )
+    {
+        QString stylename = tableElement.attribute( "table:style-name" );
+        kdDebug()<<" style of table :"<<stylename<<endl;
+        QDomElement *style = oasisStyles.styles()[stylename];
+        Q_ASSERT( style );
+        kdDebug()<<" style :"<<style<<endl;
+        if ( style )
+        {
+            QDomElement properties( style->namedItem( "style:properties" ).toElement() );
+            if ( !properties.isNull() )
+            {
+                if ( properties.hasAttribute( "table:display" ) )
+                {
+                    bool visible = (properties.attribute( "table:display" ) == "true" ? true : false );
+                    m_bTableHide = !visible;
+                }
+            }
+        }
+    }
     QDomNode rowNode = tableElement.firstChild();
     while( !rowNode.isNull() )
     {
@@ -6328,7 +6349,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement )
 
         rowNode = rowNode.nextSibling();
     }
-    
+
     return true;
 }
 

@@ -277,7 +277,7 @@ public:
      */
     virtual bool loadXML( const QDomElement& );
 
-    virtual bool loadOasis( const QDomElement& table );
+    virtual bool loadOasis( const QDomElement& table, KoOasisStyles& oasisStyles );
 
     /**
      * Saves a children

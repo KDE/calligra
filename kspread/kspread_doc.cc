@@ -584,7 +584,7 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     // TODO check versions and mimetypes etc.
 
     // all <table:table> goes to workbook
-    if ( !d->workbook->loadOasis( body ) )
+    if ( !d->workbook->loadOasis( body, oasisStyles ) )
     {
       d->isLoading = false;
       return false;

@@ -119,7 +119,7 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
   return mymap;
 }
 
-bool KSpreadMap::loadOasis( const QDomElement& body )
+bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles )
 {
     QDomNode tableNode = body.namedItem( "table:table" );
 
@@ -137,11 +137,11 @@ bool KSpreadMap::loadOasis( const QDomElement& body )
                 m_pDoc->addTable( sheet );
                 sheet->setTableName( tableElement.attribute( "table:name" ), true, false );
             }
-        
+
         tableNode = tableNode.nextSibling();
     }
-    
-    // load the table    
+
+    // load the table
     tableNode = body.firstChild();
     while ( !tableNode.isNull() )
     {
@@ -153,11 +153,11 @@ bool KSpreadMap::loadOasis( const QDomElement& body )
             QString name = tableElement.attribute( "table:name" );
             KSpreadSheet* sheet = m_pDoc->map()->findTable( name );
             if( sheet )
-                sheet->loadOasis( tableElement );
-        }        
+                sheet->loadOasis( tableElement , oasisStyles );
+        }
         tableNode = tableNode.nextSibling();
     }
-    
+
     return true;
 }
 
