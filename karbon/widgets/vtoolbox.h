@@ -58,10 +58,10 @@ public slots:
 private:
 	KarbonPart			*m_part;
 	VStrokeFillPreview	*m_strokeFillPreview;
-	QBoxLayout *leftLayout,*rightLayout,*columnsLayouter;
-	QWidget *left, *right;
-	QButtonGroup *buttonGroup;
-	bool insertLeft;
+	QBoxLayout			*leftLayout,*rightLayout,*columnsLayouter;
+	QWidget				*left, *right;
+	QButtonGroup		*buttonGroup;
+	bool				insertLeft;
 
 	QToolButton *addButton(const char* iconName, QString tooltip);
 };
