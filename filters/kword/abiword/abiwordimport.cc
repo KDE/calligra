@@ -61,6 +61,7 @@ public:
     virtual ~AbiPropsMap() {};
 public:
     bool setProperty(QString newName, QString newValue);
+    void splitAndAddAbiProps(const QString& strProps);
 };
 
 bool AbiPropsMap::setProperty(QString newName, QString newValue)
@@ -70,8 +71,12 @@ bool AbiPropsMap::setProperty(QString newName, QString newValue)
 }
 
 // Treat the "props" attribute of AbiWord's tags and split it in separates names and values
-static void TreatAbiProps(QString strProps, AbiPropsMap &abiPropsMap)
+void AbiPropsMap::splitAndAddAbiProps(const QString& strProps)
 {
+    // NOTE: we assume that all AbiWord properties are in the form:
+    //     property:value;
+    //  If, as in CSS2, any new AbiWord property is not anymore in this form,
+    //  then this method will need to be changed (perhaps with QStringList::split())
     if (strProps.isEmpty())
         return;
 
@@ -107,7 +112,7 @@ static void TreatAbiProps(QString strProps, AbiPropsMap &abiPropsMap)
         }
         kdDebug(30506) << "========== (Property :" << name << "=" << value <<":)"<<endl;
         // Now set the property
-        abiPropsMap.setProperty(name,value);
+        setProperty(name,value);
     }
 }
 
@@ -259,12 +264,6 @@ static double ValueWithLengthUnit( const QString& _str )
     return d;
 }
 
-static inline double IndentPos( const QString& _str )
-// DEPRECIATED: use ValueWithLengthUnit
-{
-    return ValueWithLengthUnit(_str);
-}
-
 void PopulateProperties(StackItem* stackItem,
                         const QXmlAttributes& attributes,
                         AbiPropsMap& abiPropsMap, const bool allowInit)
@@ -273,6 +272,7 @@ void PopulateProperties(StackItem* stackItem,
     if (allowInit)
     {
         // Initialize the QStrings with the previous values of the properties
+        // TODO: any others needed?
         if (stackItem->italic)
         {
             abiPropsMap.setProperty("font-style","italic");
@@ -294,8 +294,8 @@ void PopulateProperties(StackItem* stackItem,
 
     kdDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
     // Treat the props attributes in the two available flavors: lower case and upper case.
-    TreatAbiProps(attributes.value("props"),abiPropsMap);
-    TreatAbiProps(attributes.value("PROPS"),abiPropsMap);
+    abiPropsMap.splitAndAddAbiProps(attributes.value("props"));
+    abiPropsMap.splitAndAddAbiProps(attributes.value("PROPS")); // PROPS is deprecated
 
     stackItem->italic=(abiPropsMap["font-style"].getValue()=="italic");
     stackItem->bold=(abiPropsMap["font-weight"].getValue()=="bold");
@@ -586,7 +586,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& 
         else
         {
             // Soemthing went wrong, so we assume that an unit is specified
-            lineHeight=IndentPos(strLineHeight);
+            lineHeight=ValueWithLengthUnit(strLineHeight);
             if (lineHeight>1.0)
             {
                 // We have a meaningful value, so use it!
@@ -800,10 +800,10 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
     // Do we know the page size or do we need to measure
     // For page format that KWord knows, use our own values in case the values in the file would be wrong.
 
-	KoFormat kwordFormat = KoPageFormat::formatFromString(strPageType);
+    KoFormat kwordFormat = KoPageFormat::formatFromString(strPageType);
 
     if (kwordFormat==PG_CUSTOM)
-	{
+    {
         kdDebug(30506) << "Custom or other page format found: " << strPageType << endl;
 
         double height = attributes.value("height").toDouble();
@@ -839,7 +839,7 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
     }
     else
     {
-        // We have a format know by KOffice, so use KOffice's functions
+        // We have a format known by KOffice, so use KOffice's functions
         kwordHeight = MillimetresToPoints(KoPageFormat::height(kwordFormat,PG_PORTRAIT));
         kwordWidth  = MillimetresToPoints(KoPageFormat::width (kwordFormat,PG_PORTRAIT));
     }
@@ -850,6 +850,7 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
         kdWarning(30506) << "Page width or height is too small: "
          << kwordHeight << "x" << kwordWidth << endl;
         // As we have no correct page size, we assume we have A4
+        kwordFormat = PG_DIN_A4;
         kwordHeight = CentimetresToPoints(29.7);
         kwordWidth  = CentimetresToPoints(21.0);
     }
@@ -917,7 +918,7 @@ bool StructureParser::complexForcedBreak(StackItem* stackItem, const bool pageBr
 
 bool StructureParser :: startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes)
 {
-    //Warning: be careful that the element names can be lower case or upper case (not very XML)
+    //Warning: be careful that some element names can be lower case or upper case (not very XML)
     kdDebug(30506) << indent << " <" << name << ">" << endl; //DEBUG
     indent += "*"; //DEBUG
 
@@ -1021,7 +1022,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     }
     else if (name=="field")
     {
-        kdDebug()<<"A Field ------------------------------------\n";
+        kdDebug(30506)<<"A Field ------------------------------------\n";
         success=StartElementField(stackItem,structureStack.current(),attributes);
     }
     else
@@ -1303,7 +1304,7 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
 
     //Write the document!
     QCString strOut=qDomDocumentOut.toCString();
-    // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
+    // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
     out.write(strOut,strOut.length());
     out.close();
 
