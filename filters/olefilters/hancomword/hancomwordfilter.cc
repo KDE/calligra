@@ -18,11 +18,13 @@
 */
 
 #include <hancomwordfilter.h>
-
+#include <qfont.h>
 #include <qstring.h>
 #include <qtextstream.h>
+#include <qregexp.h>
 
 #include <filterbase.h>
+#include <koGlobal.h>
 
 // helper function to escape string for XML-ness
 static QString XMLEscape( const QString& str )
@@ -59,63 +61,95 @@ bool HancomWordFilter::filter()
     return !m_text.isNull();
 }
 
+static QString processPlainParagraph( QString text )
+{
+  QString formats, layout, result;
+
+  // specify FORMAT (just empty element)
+  formats.append ( "  <FORMAT id=\"1\" pos=\"0\" len=\"" +
+    QString::number( text.length() )+ "\">\n" );
+  formats.append ( "  </FORMAT>\n" );
+
+  QFont font = KoGlobal::defaultFont();
+  QString fontFamily = font.family();
+  double fontSize = font.pointSizeFloat();
+
+  // default LAYOUT
+  layout.append( "<LAYOUT>\n" );
+  layout.append( "  <NAME value=\"Standard\" />\n" );
+  layout.append( "  <FLOW align=\"left\" />\n" );
+  layout.append( "  <LINESPACING value=\"0\" />\n" );
+  layout.append( "  <LEFTBORDER width=\"0\" style=\"0\" />\n" );
+  layout.append( "  <RIGHTBORDER width=\"0\" style=\"0\" />\n" );
+  layout.append( "  <TOPBORDER width=\"0\" style=\"0\" />\n" );
+  layout.append( "  <BOTTOMBORDER width=\"0\" style=\"0\" />\n" );
+  layout.append( "  <INDENTS />\n" );
+  layout.append( "  <OFFSETS />\n" );
+  layout.append( "  <PAGEBREAKING />\n" );
+  layout.append( "  <COUNTER />\n" );
+  layout.append( "  <FORMAT id=\"1\">\n" );
+  layout.append( "    <SIZE value=\"" + QString::number( fontSize ) + "\" />\n" );
+  layout.append( "    <WEIGHT value=\"50\" />\n" );
+  layout.append( "    <ITALIC value=\"0\" />\n" );
+  layout.append( "    <UNDERLINE value=\"0\" />\n" );
+  layout.append( "    <STRIKEOUT value=\"0\" />\n" );
+  layout.append( "    <CHARSET value=\"0\" />\n" );
+  layout.append( "    <VERTALIGN value=\"0\" />\n" );
+  layout.append( "    <FONT name=\"" + fontFamily + "\" />\n" );
+  layout.append( "  </FORMAT>\n" );
+  layout.append( "</LAYOUT>\n" );
+
+  // construct the <PARAGRAPH>
+  result.append( "<PARAGRAPH>\n" );
+  result.append( "<TEXT>" + XMLEscape( text ) + "</TEXT>\n" );
+  result.append( "<FORMATS>\n");
+  result.append( formats );
+  result.append( "</FORMATS>\n");
+  result.append( layout );
+  result.append( "</PARAGRAPH>\n" );
+
+  return result;
+}
+
+static QString processPlainDocument( QString plaindoc )
+{
+  QString prolog, content, epilog;
+  QStringList paragraphs;
+
+  paragraphs = QStringList::split( "\n", plaindoc, TRUE );
+  for( int i = 0; i < paragraphs.count(); i++ )
+  {
+      QString text = paragraphs[i];
+      text.replace( QRegExp("\r"), " " );
+      content.append( processPlainParagraph( text ) );
+  }
+
+  prolog = "<!DOCTYPE DOC>\n";
+  prolog.append( "<DOC mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\">\n");
+
+  prolog.append( "<PAPER width=\"595\" height=\"841\" format=\"1\" fType=\"0\" orientation=\"0\" hType=\"0\" columns=\"1\">\n" );
+  prolog.append( " <PAPERBORDERS left=\"36\" right=\"36\" top=\"36\" bottom=\"36\" />\n" );
+  prolog.append( "</PAPER>\n" );
+
+  prolog.append( "<ATTRIBUTES standardpage=\"1\" unit=\"mm\" hasFooter=\"0\" hasHeader=\"0\" processing=\"0\" />\n" );
+
+  prolog.append( "<FRAMESETS>\n" );
+  prolog.append( "<FRAMESET removable=\"0\" frameType=\"1\" frameInfo=\"0\" autoCreateNewFrame=\"1\">\n" );
+  prolog.append( "<FRAME right=\"567\" left=\"28\" top=\"42\" bottom=\"799\" />\n" );
+
+  epilog = "</FRAMESET>\n";
+  epilog.append( "</FRAMESETS>\n" );
+  epilog.append( "</DOC>\n" );
+
+  return prolog + content + epilog;
+}
+
 // still not well-formatted
 QCString HancomWordFilter::CString() const
 {
-    QString newstr;
-
-    // Page sizes, margins etc. all in points.
-
-    const unsigned height = 841; // Height.
-    const unsigned width = 595;  // Width.
-    const unsigned hMargin = 28; // Horizontal margin.
-    const unsigned vMargin = 42; // Vertical margin.
-
-    newstr = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE DOC >\n"
-        "<DOC editor=\"KWord\" mime=\"application/x-kword\">\n"
-        " <PAPER format=\"1\" ptWidth=\"595\" ptHeight=\"841\" mmWidth =\"210\" mmHeight=\"297\" inchWidth =\"8.26772\" inchHeight=\"11.6929\" orientation=\"0\" columns=\"1\" ptColumnspc=\"2\" mmColumnspc=\"1\" inchColumnspc=\"0.0393701\" hType=\"0\" fType=\"0\" ptHeadBody=\"9\" ptFootBody=\"9\" mmHeadBody=\"3.5\" mmFootBody=\"3.5\" inchHeadBody=\"0.137795\" inchFootBody=\"0.137795\">\n"
-        "  <PAPERBORDERS mmLeft=\"10\" mmTop=\"15\" mmRight=\"10\" mmBottom=\"15\" ptLeft=\"");
-    newstr.append(QString::number(hMargin));
-    newstr.append("\" ptTop=\"");
-    newstr.append(QString::number(vMargin));
-    newstr.append("\" ptRight=\"");
-    newstr.append(QString::number(hMargin));
-    newstr.append("\" ptBottom=\"");
-    newstr.append(QString::number(vMargin));
-    newstr.append("\" inchLeft=\"0.393701\" inchTop=\"0.590551\" inchRight=\"0.393701\" inchBottom=\"0.590551\"/>\n"
-        " </PAPER>\n"
-        " <ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"0\" hasFooter=\"0\" unit=\"mm\"/>\n"
-        " <FOOTNOTEMGR>\n"
-        "  <START value=\"1\"/>\n"
-        "  <FORMAT superscript=\"1\" type=\"1\"/>\n"
-        "  <FIRSTPARAG ref=\"(null)\"/>\n"
-        " </FOOTNOTEMGR>\n"
-        " <FRAMESETS>\n");
-    newstr.append(
-        "  <FRAMESET frameType=\"1\" frameInfo=\"0\" removeable=\"0\" visible=\"1\">\n"
-        "   <FRAME left=\"");
-    newstr.append(QString::number(hMargin));
-    newstr.append("\" top=\"");
-    newstr.append(QString::number(vMargin));
-    newstr.append("\" right=\"");
-    newstr.append(QString::number(width - hMargin));
-    newstr.append("\" bottom=\"");
-    newstr.append(QString::number(height - vMargin));
-    newstr.append("\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0");
-    newstr.append("\" autoCreateNewFrame=\"1\" newFrameBehaviour=\"0\"/>\n"
-        "   <PARAGRAPH>\n"
-        "    <TEXT>");
-
-    newstr.append( XMLEscape( m_text ) );
-
-    newstr.append("</TEXT>\n"
-        "   </PARAGRAPH>\n"
-        "  </FRAMESET>\n");
-    newstr.append(
-        " </FRAMESETS>\n"
-        "</DOC>\n");
-
-   return newstr.utf8();
+  QCString cstring = processPlainDocument( m_text ).utf8();
+  cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
+  return cstring;
 }
 
 #include <hancomwordfilter.moc>
