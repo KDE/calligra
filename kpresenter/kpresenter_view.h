@@ -28,6 +28,7 @@
 #include <global.h>
 #include <searchdia.h>
 
+class QPopupMenu;
 class DCOPObject;
 class KPresenterView;
 class BackDia;
