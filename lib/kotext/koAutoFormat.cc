@@ -943,11 +943,9 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
     // This allows an o(n) behaviour instead of an o(n^2).
     for(int i=m_maxFindLength;i>0;--i)
     {
-        kdDebug()<<" wordArray[i] :"<<wordArray[i]<<endl;
         if ( !wordArray[i].isEmpty())
         {
             KoAutoFormatEntry* it = m_entries[wordArray[i].lower()];
-            kdDebug()<<" it :"<<it<<endl;
             if ( wordArray[i]!=0  && it )
             {
                 unsigned int length = wordArray[i].length();
@@ -958,7 +956,6 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
                 textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
                 cursor.setIndex( start + length );
                 textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-                kdDebug()<<" it->formatEntryContext() :"<<it->formatEntryContext()<<endl;
                 KCommand *cmd = 0L;
                 if (!it->formatEntryContext() || !m_bAutoCorrectionWithFormat)
                     cmd = txtObj->replaceSelectionCommand( textEditCursor, it->replace(),
@@ -967,7 +964,6 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
                 else
                 {
                     int flags = 0;
-                    kdDebug()<<" heelo***********\n";
                     KoTextFormat * lastFormat = parag->at( start )->format();
                     KoTextFormat * newFormat = new KoTextFormat(*lastFormat);
                     changeTextFormat(it->formatEntryContext(), newFormat, flags );
@@ -1881,14 +1877,12 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
 
 void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat * format, int & flags )
 {
-    kdDebug()<<" entre 2222222222222\n";
     if (formatOptions )
     {
         if (formatOptions->m_optionsMask & KoSearchContext::Bold)
         {
             format->setBold( formatOptions->m_options & KoSearchContext::Bold);
             flags |=KoTextFormat::Bold;
-            kdDebug()<<" bold*************************************\n";
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::Size)
         {
@@ -1926,7 +1920,6 @@ void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::VertAlign)
         {
-            kdDebug()<<" v align***************** :"<<formatOptions->m_vertAlign<<endl;
             format->setVAlign(formatOptions->m_vertAlign);
             flags |=KoTextFormat::VAlign;
         }
