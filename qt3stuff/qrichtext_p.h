@@ -780,9 +780,9 @@ public:
     void draw( QPainter *p, const QRegion &reg, const QColorGroup &cg, const QBrush *paper = 0 );
     void drawParag( QPainter *p, QTextParag *parag, int cx, int cy, int cw, int ch,
 		    QPixmap *&doubleBuffer, const QColorGroup &cg,
-		    bool drawCursor, QTextCursor *cursor );
+		    bool drawCursor, QTextCursor *cursor, bool resetChanged = TRUE );
     QTextParag *draw( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
-		      bool onlyChanged = FALSE, bool drawCursor = FALSE, QTextCursor *cursor = 0 );
+		      bool onlyChanged = FALSE, bool drawCursor = FALSE, QTextCursor *cursor = 0, bool resetChanged = TRUE );
     void setDefaultFont( const QFont &f );
 
     void registerCustomItem( QTextCustomItem *i, QTextParag *p );

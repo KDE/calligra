@@ -2296,10 +2296,11 @@ void QTextDocument::draw( QPainter *p, const QRegion &reg, const QColorGroup &cg
 
 void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, int cw, int ch,
 			       QPixmap *&doubleBuffer, const QColorGroup &cg,
-			       bool drawCursor, QTextCursor *cursor )
+			       bool drawCursor, QTextCursor *cursor, bool resetChanged )
 {
     QPainter *painter = 0;
-    parag->setChanged( FALSE );
+    if ( resetChanged )
+        parag->setChanged( FALSE );
     QRect ir( parag->rect() );
     bool useDoubleBuffer = !parag->document()->parent();
     if ( !useDoubleBuffer && parag->document()->nextDoubleBuffered )
@@ -2367,7 +2368,7 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 }
 
 QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
-				 bool onlyChanged, bool drawCursor, QTextCursor *cursor )
+				 bool onlyChanged, bool drawCursor, QTextCursor *cursor, bool resetChanged )
 {
     if ( withoutDoubleBuffer || par && par->withoutDoubleBuffer ) {
 	withoutDoubleBuffer = TRUE;
@@ -2425,7 +2426,7 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 	    continue;
 	}
 
-	drawParag( p, parag, cx, cy, cw, ch, doubleBuffer, cg, drawCursor, cursor );
+	drawParag( p, parag, cx, cy, cw, ch, doubleBuffer, cg, drawCursor, cursor, resetChanged );
 	parag = parag->next();
     }
 
