@@ -19,6 +19,7 @@
 
 #include <htmlexport.h>
 #include <htmlexport.moc>
+#include <kdebug.h>
 
 void mainFunc(const char*);
 
@@ -34,7 +35,7 @@ const bool HTMLExport::filter(const QCString &fileIn, const QCString &fileOut,
 
     KoTarStore in=KoTarStore(QString(fileIn), KoStore::Read);
     if(!in.open("root", "")) {
-        kdebug(KDEBUG_ERROR, 31000, "Unable to open input file!");
+        kDebugError( 31503, "Unable to open input file!");
         in.close();
         return false;
     }
@@ -61,7 +62,7 @@ const bool HTMLExport::filter(const QCString &fileIn, const QCString &fileOut,
 
     QFile out(fileOut);
     if(!out.open(IO_WriteOnly)) {
-        kdebug(KDEBUG_ERROR, 31000, "Unable to open output file!");
+        kDebugError( 31503, "Unable to open output file!");
         in.close();
         out.close();
         return false;
