@@ -59,6 +59,8 @@ KWFrame::KWFrame()
   brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
+
+  bleft = bright = btop = bbottom = 0;
 }
 
 /*================================================================*/
@@ -85,6 +87,8 @@ KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright)
   brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
+
+  bleft = bright = btop = bbottom = 0;
 } 
 
 /*================================================================*/
@@ -111,6 +115,8 @@ KWFrame::KWFrame(const KPoint &topleft,const KSize &size)
   brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
+
+  bleft = bright = btop = bbottom = 0;
 }    
 
 /*================================================================*/
@@ -137,6 +143,8 @@ KWFrame::KWFrame(int left,int top,int width,int height)
   brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
+
+  bleft = bright = btop = bbottom = 0;
 }
 
 /*================================================================*/
@@ -163,6 +171,8 @@ KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap)
   brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
+
+  bleft = bright = btop = bbottom = 0;
 }
 
 /*================================================================*/
@@ -189,6 +199,8 @@ KWFrame::KWFrame(const QRect &_rect)
   brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
+
+  bleft = bright = btop = bbottom = 0;
 }
 
 /*================================================================*/
@@ -476,7 +488,8 @@ void KWFrameSet::save(ostream &out)
 	  << frame->leftBrd2String() << frame->rightBrd2String() << frame->topBrd2String() 
 	  << frame->bottomBrd2String() << "bkRed=\"" << frame->getBackgroundColor().color().red()
 	  << "\" bkGreen=\"" << frame->getBackgroundColor().color().green() << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue()
-	  << "\"/>" << endl;
+	  << "\" bleft=\"" << frame->getBLeft() << "\" bright=\"" << frame->getBRight() << "\" btop=\""
+	  << frame->getBTop() << "\" bbottom=\"" << frame->getBBottom() << "\"/>" << endl;
     }
 }
 
@@ -513,7 +526,7 @@ void KWTextFrameSet::init()
 /*================================================================*/
 KWTextFrameSet::~KWTextFrameSet() 
 { 
-  delete parags; 
+  //delete parags; 
 }
 
 /*================================================================*/
@@ -875,6 +888,14 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		c.setRgb(c.red(),atoi((*it).m_strValue.c_str()),c.blue());
 	      else if ((*it).m_strName == "bkBlue")
 		c.setRgb(c.red(),c.green(),atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bleft")
+		rect.setBLeft(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bright")
+		rect.setBRight(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "btop")
+		rect.setBTop(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bbottom")
+		rect.setBBottom(atoi((*it).m_strValue.c_str()));
 	    }
 	  KWFrame *_frame = new KWFrame(rect.x(),rect.y(),rect.width(),rect.height(),rect.getRunAround(),rect.getRunAroundGap());
 	  _frame->setLeftBorder(l);
@@ -882,6 +903,10 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  _frame->setTopBorder(t);
 	  _frame->setBottomBorder(b);
 	  _frame->setBackgroundColor(QBrush(c));
+	  _frame->setBLeft(rect.getBLeft());
+	  _frame->setBRight(rect.getBRight());
+	  _frame->setBTop(rect.getBTop());
+	  _frame->setBBottom(rect.getBBottom());
 	  frames.append(_frame);
 	}
 
@@ -1114,7 +1139,22 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
       else if (name == "FRAME")
 	{
 	  KWFrame rect;
-
+	  KWParagLayout::Border l,r,t,b;
+	  
+	  l.color = white;
+	  l.style = KWParagLayout::SOLID;
+	  l.ptWidth = 1;
+	  r.color = white;
+	  r.style = KWParagLayout::SOLID;
+	  r.ptWidth = 1;
+	  t.color = white;
+	  t.style = KWParagLayout::SOLID;
+	  t.ptWidth = 1;
+	  b.color = white;
+	  b.style = KWParagLayout::SOLID;
+	  b.ptWidth = 1;
+	  QColor c(white);
+	  
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
@@ -1131,8 +1171,72 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		rect.setRunAround(static_cast<RunAround>(atoi((*it).m_strValue.c_str())));
 	      else if ((*it).m_strName == "runaroundGap")
 		rect.setRunAroundGap(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "lWidth")
+		l.ptWidth = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "rWidth")
+		r.ptWidth = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "tWidth")
+		t.ptWidth = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "bWidth")
+		b.ptWidth = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "lRed")
+		l.color.setRgb(atoi((*it).m_strValue.c_str()),l.color.green(),l.color.blue());
+	      else if ((*it).m_strName == "rRed")
+		r.color.setRgb(atoi((*it).m_strValue.c_str()),r.color.green(),r.color.blue());
+	      else if ((*it).m_strName == "tRed")
+		t.color.setRgb(atoi((*it).m_strValue.c_str()),t.color.green(),t.color.blue());
+	      else if ((*it).m_strName == "bRed")
+		b.color.setRgb(atoi((*it).m_strValue.c_str()),b.color.green(),b.color.blue());
+	      else if ((*it).m_strName == "lGreen")
+		l.color.setRgb(l.color.red(),atoi((*it).m_strValue.c_str()),l.color.blue());
+	      else if ((*it).m_strName == "rGreen")
+		r.color.setRgb(r.color.red(),atoi((*it).m_strValue.c_str()),r.color.blue());
+	      else if ((*it).m_strName == "tGreen")
+		t.color.setRgb(t.color.red(),atoi((*it).m_strValue.c_str()),t.color.blue());
+	      else if ((*it).m_strName == "bGreen")
+		b.color.setRgb(b.color.red(),atoi((*it).m_strValue.c_str()),b.color.blue());
+	      else if ((*it).m_strName == "lBlue")
+		l.color.setRgb(l.color.red(),l.color.green(),atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "rBlue")
+		r.color.setRgb(r.color.red(),r.color.green(),atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "tBlue")
+		t.color.setRgb(t.color.red(),t.color.green(),atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bBlue")
+		b.color.setRgb(b.color.red(),b.color.green(),atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "lStyle")
+		l.style = static_cast<KWParagLayout::BorderStyle>(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "rStyle")
+		r.style = static_cast<KWParagLayout::BorderStyle>(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "tStyle")
+		t.style = static_cast<KWParagLayout::BorderStyle>(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bStyle")
+		b.style = static_cast<KWParagLayout::BorderStyle>(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bkRed")
+		c.setRgb(atoi((*it).m_strValue.c_str()),c.green(),c.blue());
+	      else if ((*it).m_strName == "bkGreen")
+		c.setRgb(c.red(),atoi((*it).m_strValue.c_str()),c.blue());
+	      else if ((*it).m_strName == "bkBlue")
+		c.setRgb(c.red(),c.green(),atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bleft")
+		rect.setBLeft(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bright")
+		rect.setBRight(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "btop")
+		rect.setBTop(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bbottom")
+		rect.setBBottom(atoi((*it).m_strValue.c_str()));
 	    }
-	  frames.append(new KWFrame(rect.x(),rect.y(),rect.width(),rect.height(),rect.getRunAround(),rect.getRunAroundGap()));
+	  KWFrame *_frame = new KWFrame(rect.x(),rect.y(),rect.width(),rect.height(),rect.getRunAround(),rect.getRunAroundGap());
+	  _frame->setLeftBorder(l);
+	  _frame->setRightBorder(r);
+	  _frame->setTopBorder(t);
+	  _frame->setBottomBorder(b);
+	  _frame->setBackgroundColor(QBrush(c));
+	  _frame->setBLeft(rect.getBLeft());
+	  _frame->setBRight(rect.getBRight());
+	  _frame->setBTop(rect.getBTop());
+	  _frame->setBBottom(rect.getBBottom());
+	  frames.append(_frame);
 	}
       else
 	cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;    

@@ -724,4 +724,8 @@ Reggie, 25.1.1999:
 ------------------
 - Added dialog for deleting rows/cols in tables
 - Implemented deleting rows and columns
-- Did some internal stuff for borders in frames
+- Did some internal stuff for margins in frames
+- Some fixes and improvements in saving/loading
+- Frame margins can be saved/loaded now
+- Another fix with embedded objects
+- Non-textframes can have borders too now

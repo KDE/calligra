@@ -115,6 +115,16 @@ public:
 
   unsigned int getNextFreeYPos(unsigned int _y,unsigned int _h);
 
+  void setBLeft(unsigned int b) { bleft = b; }
+  void setBRight(unsigned int b) { bright = b; }
+  void setBTop(unsigned int b) { btop = b; }
+  void setBBottom(unsigned int b) { bbottom = b; }
+
+  unsigned int getBLeft() { return bleft; }
+  unsigned int getBRight() { return bright; }
+  unsigned int getBTop() { return btop; }
+  unsigned int getBBottom() { return bbottom; }
+
 protected:
   RunAround runAround;
   bool selected;
@@ -126,6 +136,8 @@ protected:
 
   KWParagLayout::Border brd_left,brd_right,brd_top,brd_bottom;
   QBrush backgroundColor;
+
+  unsigned int bleft,bright,btop,bbottom;
 
 private:
   KWFrame &operator=(KWFrame &_frame)

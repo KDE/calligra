@@ -329,12 +329,16 @@ void KWordShell::releaseDocument()
 
 void KWordShell::slotFileNew()
 {
+  m_pDoc->enableEmbeddedParts(false);
   if ( !newDocument() )    
     QMessageBox::critical( this, i18n("KWord Error"), i18n("Could not create new document"), i18n("Ok") );
+  m_pDoc->enableEmbeddedParts(true);
+  m_pView->getGUI()->getPaperWidget()->repaint(false);
 }
 
 void KWordShell::slotFileOpen()
 {
+  m_pDoc->enableEmbeddedParts(false);
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
 
   if ( file.isNull() )
@@ -346,6 +350,8 @@ void KWordShell::slotFileOpen()
     tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
   }
+  m_pDoc->enableEmbeddedParts(true);
+  m_pView->getGUI()->getPaperWidget()->repaint(false);
 }
 
 void KWordShell::slotFileSave()
