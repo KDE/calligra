@@ -282,44 +282,47 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
 
   float xpos = me->x (), ypos = me->y ();
 
-  if (dragHorizHelpline != -1)
+  if(doc->showHelplines())
   {
-    doc->updateHorizHelpline (dragHorizHelpline, ypos);
-    canvas->update();
-    return;
-  }
-  else if (dragVertHelpline != -1)
-  {
-    doc->updateVertHelpline (dragVertHelpline, xpos);
-    canvas->update();
-    return;
-  }
-  else if (doc->indexOfHorizHelpline (ypos) != -1)
-  {
-    if (ctype != C_Vert)
-    {
-      canvas->setCursor (Qt::sizeVerCursor);
-      ctype = C_Vert;
-    }
-    return;
-  }
-  else if (doc->indexOfVertHelpline (xpos) != -1)
-  {
-    if (ctype != C_Horiz)
-    {
-      canvas->setCursor (Qt::sizeHorCursor);
-      ctype = C_Horiz;
-    }
-    return;
-  }
-  else
-  { // out of a helpline [but keep current cursor type if size/move/rotate]
-    if (ctype == C_Horiz || ctype == C_Vert)
-    {
-      canvas->setCursor(Qt::arrowCursor);
-      ctype = C_Arrow;
-      return;
-    }
+      if (dragHorizHelpline != -1)
+      {
+          doc->updateHorizHelpline (dragHorizHelpline, ypos);
+          canvas->update();
+          return;
+      }
+      else if (dragVertHelpline != -1)
+      {
+          doc->updateVertHelpline (dragVertHelpline, xpos);
+          canvas->update();
+          return;
+      }
+      else if (doc->indexOfHorizHelpline (ypos) != -1)
+      {
+          if (ctype != C_Vert)
+          {
+              canvas->setCursor (Qt::sizeVerCursor);
+              ctype = C_Vert;
+          }
+          return;
+      }
+      else if (doc->indexOfVertHelpline (xpos) != -1)
+      {
+          if (ctype != C_Horiz)
+          {
+              canvas->setCursor (Qt::sizeHorCursor);
+              ctype = C_Horiz;
+          }
+          return;
+      }
+      else
+      { // out of a helpline [but keep current cursor type if size/move/rotate]
+          if (ctype == C_Horiz || ctype == C_Vert)
+          {
+              canvas->setCursor(Qt::arrowCursor);
+              ctype = C_Arrow;
+              return;
+          }
+      }
   }
 
   if (state == S_Inactive)

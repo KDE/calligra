@@ -366,7 +366,7 @@ void Canvas::paintEvent (QPaintEvent* e)
 
   p.restore();
   // draw the help lines
-  if (document->showHelplines())
+  if (document->showHelplines() && document->document()->isReadWrite() )
     drawHelplines (p);
 
   p.end ();
