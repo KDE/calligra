@@ -1272,14 +1272,23 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
                             switch( angle )
                                 {
                                 case 0:
+                                case 180:
                                     tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 9 ) );
                                     break;
                                 case 45:
+                                case 225:
+                                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>(12 ) );
                                     break;
                                 case 90:
+                                case 270:
                                     tmpBrush.setStyle(static_cast<Qt::BrushStyle>(10 ) );
                                     break;
+                                case 135:
+                                case 315:
+                                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 13 ) );
+                                    break;
                                 default:
+                                    //todo fixme when we will have a kopaint
                                     kdDebug()<<" angle : "<<angle<<endl;
                                     break;
                                 }
