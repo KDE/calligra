@@ -190,6 +190,7 @@ void KWFrame::copySettings(KWFrame *frm)
     setZOrder(frm->zOrder());
     setCopy(frm->isCopy());
     setSelected( false );// don't copy this attribute [shouldn't be an attribute of KWFrame]
+    m_drawFootNoteLine = false; // recalculated
     setBackgroundColor( frm->backgroundColor() );
     setLeftBorder(frm->leftBorder());
     setRightBorder(frm->rightBorder());
