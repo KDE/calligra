@@ -83,6 +83,7 @@ class OutlineSlideItem: public KListViewItem
 {
 public:
     OutlineSlideItem( KListView * parent, KPrPage* page );
+    OutlineSlideItem( KListView * parent, OutlineSlideItem *after, KPrPage* page );
 
     KPrPage* page(){ return m_page; }
 
@@ -187,9 +188,7 @@ void SideBar::removeItem( int pos )
 
 void SideBar::updateItem( int pos, bool sticky )
 {
-    //sticky page pos = -1
-    if ( pos >= 0)
-        _outline->updateItem( pos );
+    _outline->updateItem( pos, sticky );
     _thb->updateItem( pos, sticky );
 }
 
@@ -412,6 +411,7 @@ void ThumbBar::addItem( int pos )
 // moves a item without recreating all pages
 void ThumbBar::moveItem( int oldPos, int newPos )
 {
+    kdDebug(33001)<< "ThumbBar::moveItem " << oldPos << " to " << newPos << endl;
     int page = 0;
     QIconViewItem *after = 0;
     QIconViewItem *take = 0;
@@ -431,15 +431,21 @@ void ThumbBar::moveItem( int oldPos, int newPos )
 
     if ( ! take )
         return;
-
-    takeItem( take );
-    insertItem( take, after);
+    
+    // workaround for a bug in qt 3.1.1 insertItem dose not work.
+    // TODO remove workaround when qt 3.1.2 comes out tz
+    //takeItem( take );
+    //insertItem( take, after);
+    ThumbItem *item = new ThumbItem( static_cast<QIconView *>(this), after, QString::number( newPos ), *(take->pixmap()) ); 
+    item->setDragEnabled(false);  //no dragging for now
+    delete take;
     // update the thumbs if new pos was 0
     // because it was insert after the first one
     if ( newPos == 0 ) {
         //todo do not recreate the pics
         after->setPixmap(getSlideThumb( 0 ));
-        take->setPixmap(getSlideThumb( 1 ));
+        //take->setPixmap(getSlideThumb( 1 ));
+        item->setPixmap(getSlideThumb( 1 ));
     }
 
     //write the new page numbers
@@ -478,50 +484,50 @@ void ThumbBar::removeItem( int pos )
 
 QPixmap ThumbBar::getSlideThumb(int slideNr) const
 {
-  //kdDebug(33001) << "ThumbBar::getSlideThumb: " << slideNr << endl;
-  QPixmap pix( 10, 10 );
+    //kdDebug(33001) << "ThumbBar::getSlideThumb: " << slideNr << endl;
+    QPixmap pix( 10, 10 );
 
-  view->getCanvas()->drawPageInPix( pix, slideNr, 60 );
+    view->getCanvas()->drawPageInPix( pix, slideNr, 60 );
 
-  int w = pix.width();
-  int h = pix.height();
+    int w = pix.width();
+    int h = pix.height();
 
-  if ( w > h ) {
-      w = 130;
-      h = 120;
-  }
-  else if ( w < h ) {
-      w = 120;
-      h = 130;
-  }
-  else if ( w == h ) {
-      w = 130;
-      h = 130;
-  }
+    if ( w > h ) {
+        w = 130;
+        h = 120;
+    }
+    else if ( w < h ) {
+        w = 120;
+        h = 130;
+    }
+    else if ( w == h ) {
+        w = 130;
+        h = 130;
+    }
 
-  const QImage img(pix.convertToImage().smoothScale( w, h, QImage::ScaleMin ));
-  pix.convertFromImage(img);
+    const QImage img(pix.convertToImage().smoothScale( w, h, QImage::ScaleMin ));
+    pix.convertFromImage(img);
 
-  // draw a frame around the thumb to show its size
-  QPainter p(&pix);
-  p.setPen(Qt::black);
-  p.drawRect(pix.rect());
+    // draw a frame around the thumb to show its size
+    QPainter p(&pix);
+    p.setPen(Qt::black);
+    p.drawRect(pix.rect());
 
-  return pix;
+    return pix;
 }
 
 void ThumbBar::itemClicked(QIconViewItem *i)
 {
-  if ( !i )
-    return;
-  emit showPage( i->index() );
+    if ( !i )
+        return;
+    emit showPage( i->index() );
 }
 
 void ThumbBar::slotContentsMoving(int x, int y)
 {
     offsetX = x;
     offsetY = y;
-kdDebug(33001) << "offset x,y = " << x << ", " << y << endl;
+    kdDebug(33001) << "offset x,y = " << x << ", " << y << endl;
     refreshItems( true );
 }
 
@@ -533,6 +539,15 @@ void ThumbBar::slotRefreshItems()
 OutlineSlideItem::OutlineSlideItem( KListView* parent, KPrPage* _page )
     : KListViewItem( parent ), m_page( _page )
 {
+    setDragEnabled(true);
+    setPage( _page );
+    setPixmap( 0, KPBarIcon( "newslide" ) );
+}
+
+OutlineSlideItem::OutlineSlideItem( KListView* parent, OutlineSlideItem * after, KPrPage* _page )
+    : KListViewItem( parent, after ), m_page( _page )
+{
+    setDragEnabled(true);
     setPage( _page );
     setPixmap( 0, KPBarIcon( "newslide" ) );
 }
@@ -550,6 +565,63 @@ void OutlineSlideItem::update()
     int index = m_page->kPresenterDoc()->pageList().find( m_page );
     QString title = m_page->pageTitle( i18n( "Slide %1" ).arg( index + 1 ) );
     setText( 0, title );
+
+    // add all objects
+    OutlineObjectItem *ooi = 0;
+    while ( ( ooi = dynamic_cast<OutlineObjectItem*>( this->firstChild() ) ) )
+        delete ooi;
+    
+    // keep selected object
+    ooi = 0;
+    QPtrList<KPObject> list(m_page->objectList());
+    for ( int j = m_page->objNums() - 1; j >= 0; --j ) {
+        KPObject* object = list.at( j );
+        OutlineObjectItem *item = new OutlineObjectItem( this, object, j+1, false );
+        item->setDragEnabled( false ); 
+        if ( object->isSelected() ) 
+            ooi = item;
+    }
+
+    KPObject* header = 0;
+    KPObject* footer = 0;
+
+    KPresenterDoc *doc = m_page->kPresenterDoc();
+    // add sticky objects, exclude header and footer
+    QPtrListIterator<KPObject> it( doc->stickyPage()->objectList() );
+    for ( ; it.current() ; ++it )
+    {
+        KPObject* object = it.current();
+
+        if( doc->hasHeader() && doc->isHeader( object ) )
+            header = object;
+        else if( doc->hasFooter() && doc->isFooter( object ) )
+            footer = object;
+        else if( ! doc->isHeader( object ) && ! doc->isFooter( object ) ) {
+            OutlineObjectItem *item = new OutlineObjectItem( this, object, 0, true );
+            if ( object->isSelected() ) 
+                ooi = item;
+        }
+        
+    }
+
+    // add header and footer (if any)
+    if ( footer ) {
+        OutlineObjectItem *item = new OutlineObjectItem( this, footer, 0, true, i18n("Footer") );
+        if ( footer->isSelected() ) 
+            ooi = item;
+    }
+    
+    if ( header ) {
+        OutlineObjectItem *item = new OutlineObjectItem( this, header, 0, true, i18n("Header") );
+        if ( header->isSelected() ) 
+            ooi = item;
+    }
+
+    // select selected object the page is necessary that a 
+    // sticky object is selected on the active page
+    if ( ooi && doc->activePage() == m_page )
+        (ooi->listView())->setSelected( ooi, true );
+    
 }
 
 
@@ -572,47 +644,47 @@ void OutlineObjectItem::setObject( KPObject* object )
 
     switch ( m_object->getType() ) {
     case OT_PICTURE:
-      setPixmap( 0, KPBarIcon( "frame_image" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "frame_image" ) );
+        break;
     case OT_LINE:
-      setPixmap( 0, KPBarIcon( "mini_line" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "mini_line" ) );
+        break;
     case OT_RECT:
-      setPixmap( 0, KPBarIcon( "mini_rect" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "mini_rect" ) );
+        break;
     case OT_ELLIPSE:
-      setPixmap( 0, KPBarIcon( "mini_circle" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "mini_circle" ) );
+        break;
     case OT_TEXT:
-      setPixmap( 0, KPBarIcon( "frame_text" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "frame_text" ) );
+        break;
     case OT_AUTOFORM:
-      setPixmap( 0, KPBarIcon( "mini_autoform" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "mini_autoform" ) );
+        break;
     case OT_CLIPART:
-      setPixmap( 0, KPBarIcon( "mini_clipart" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "mini_clipart" ) );
+        break;
     case OT_PIE:
-      setPixmap( 0, KPBarIcon( "mini_pie" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "mini_pie" ) );
+        break;
     case OT_PART:
-      setPixmap( 0, KPBarIcon( "frame_query" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "frame_query" ) );
+        break;
     case OT_FREEHAND:
-      setPixmap( 0, KPBarIcon( "freehand" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "freehand" ) );
+        break;
     case OT_POLYLINE:
-      setPixmap( 0, KPBarIcon( "polyline" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "polyline" ) );
+        break;
     case OT_QUADRICBEZIERCURVE:
-      setPixmap( 0, KPBarIcon( "quadricbeziercurve" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "quadricbeziercurve" ) );
+        break;
     case OT_CUBICBEZIERCURVE:
-      setPixmap( 0, KPBarIcon( "cubicbeziercurve" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "cubicbeziercurve" ) );
+        break;
     case OT_POLYGON:
-      setPixmap( 0, KPBarIcon( "mini_polygon" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "mini_polygon" ) );
+        break;
     case OT_CLOSED_LINE: {
         QString name = m_object->getTypeString();
         if ( name == i18n( "Closed Freehand" ) )
@@ -625,10 +697,10 @@ void OutlineObjectItem::setObject( KPObject* object )
             setPixmap( 0, KPBarIcon( "closed_cubicbeziercurve" ) );
     } break;
     case OT_GROUP:
-      setPixmap( 0, KPBarIcon( "group" ) );
-      break;
+        setPixmap( 0, KPBarIcon( "group" ) );
+        break;
     default:
-      break;
+        break;
     }
 }
 
@@ -655,7 +727,6 @@ Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     setAcceptDrops( true );
     setDropVisualizer( true );
     setFullWidth( true );
-    setDragEnabled( true );
     this->setRootIsDecorated( true );
 
 }
@@ -671,40 +742,8 @@ void Outline::rebuildItems()
 
     // Rebuild all the items
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
-
         KPrPage *page=doc->pageList().at( i );
-        OutlineSlideItem *item = new OutlineSlideItem( this, page );
-
-        // add all objects
-        QPtrList<KPObject> list(page->objectList());
-        for ( int j = page->objNums() - 1; j >= 0; --j ) {
-            KPObject* object = list.at( j );
-            new OutlineObjectItem( item, object, j+1, false );
-        }
-
-        KPObject* header = 0;
-        KPObject* footer = 0;
-
-        // add sticky objects, exclude header and footer
-        QPtrListIterator<KPObject> it( doc->stickyPage()->objectList() );
-        for ( ; it.current() ; ++it )
-        {
-            KPObject* object = it.current();
-
-            if( doc->hasHeader() && doc->isHeader( object ) )
-                header = object;
-            else if( doc->hasFooter() && doc->isFooter( object ) )
-                footer = object;
-            else
-                new OutlineObjectItem( item, object, 0, true );
-        }
-
-        // add header and footer (if any)
-        if( footer )
-            new OutlineObjectItem( item, footer, 0, true, i18n("Footer") );
-        if( header )
-            new OutlineObjectItem( item, header, 0, true, i18n("Header") );
-
+        new OutlineSlideItem( this, page );
     }
 }
 
@@ -723,21 +762,46 @@ OutlineSlideItem* Outline::slideItem( int pageNumber )
 
 
 // update the Outline item, the title may have changed
-void Outline::updateItem( int pagenr /* 0-based */)
+void Outline::updateItem( int pagenr /* 0-based */, bool sticky )
 {
-    OutlineSlideItem *item = slideItem( pagenr );
-    if( item )
-        item->update();
+    if ( ! sticky ) {
+        OutlineSlideItem *item = slideItem( pagenr );
+        if( item ) {
+            blockSignals(true);
+            item->update();
+            blockSignals(false);
+        }
+    } else {
+        blockSignals(true);
+        for( QListViewItem *item = this->firstChild(); item; item = item->nextSibling() ) {
+            dynamic_cast<OutlineSlideItem*>(item)->update();
+        }
+        blockSignals(false);
+    }
 }
 
-void Outline::addItem( int /*pos*/ )
+void Outline::addItem( int pos )
 {
     kdDebug(33001)<< "Outline::addItem" << endl;
-    // still use rebuildItems as I had no good idea to do it :-) tz
-    rebuildItems();
+
+    KPrPage *page=doc->pageList().at( pos );
+    OutlineSlideItem *item;
+    if ( pos == 0 ) {
+        item = new OutlineSlideItem( this, page );
+    }
+    else {
+        OutlineSlideItem *after = slideItem( pos - 1 );
+        item = new OutlineSlideItem( this, after, page );
+    }
+
+    // update title
+    for( ; item; item = dynamic_cast<OutlineSlideItem*>(item->nextSibling()) ) {
+        item->update();
+    }
+
 }
 
-// move an Outline Item so that not the hole list has to be recerated
+// move an Outline Item so that not the hole list has to be recreated
 void Outline::moveItem( int oldPos, int newPos )
 {
     kdDebug(33001)<< "Outline::moveItem " << oldPos << " to " << newPos << endl;
@@ -809,7 +873,7 @@ void Outline::itemClicked( QListViewItem *item )
 
         // ensure the owner slide is shown first
         OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(objectItem->parent());
-        if( slideItem ) if( slideItem != currentItem() )
+        if( slideItem && doc->activePage() != slideItem->page() )
         {
             KPrPage* page = slideItem->page();
             if( !page ) return;
@@ -818,13 +882,14 @@ void Outline::itemClicked( QListViewItem *item )
 
         // select the object, make sure it's visible
         QRect rect( doc->zoomHandler()->zoomRect( object->getBoundingRect() ) );
+        doc->deSelectAllObj();
         object->setSelected( true );
-        doc->repaint( object );
         rect.setLeft( rect.left() - 20 );
         rect.setTop( rect.top() - 20 );
         rect.setRight( rect.right() + 20 );
         rect.setBottom( rect.bottom() + 20 );
         view->makeRectVisible( rect );
+        doc->repaint( false );
     }
 }
 

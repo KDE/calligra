@@ -86,7 +86,7 @@ public:
     ~Outline();
     void setCurrentPage( int pg );
     QSize sizeHint() const { return QSize( 145, KListView::sizeHint().height() ); }
-    void updateItem( int pagenr );
+    void updateItem( int pagenr, bool sticky = false);
     void addItem( int pos );
     void moveItem( int oldPos, int newPos );
     void removeItem( int pos );
