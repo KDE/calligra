@@ -894,6 +894,13 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
       headRight = convertVars( head.attribute("Right"), table );
   }
 
+  //Repeate column/row
+        //<gmr:repeat_top value="A1:IV5"/>
+        //<gmr:repeat_left value="B1:D65536"/>
+  //<printrepeatcolumns right="2" left="1" />
+  //<printrepeatrows bottom="4" top="1" />
+
+
   QDomElement orient( printInfo.namedItem("gmr:orientation").toElement() );
   if ( !orient.isNull() )
     orientation = orient.text();
@@ -901,10 +908,10 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
   QDomElement size( printInfo.namedItem("gmr:paper").toElement() );
   if ( !size.isNull() )
     paperSize = size.text();
-/* Laurent FIXME !!!!!!!!!!!!!!!!!!
-  table->setPaperFormat( fleft, ftop, fright, fbottom,
+
+  table->print()->setPaperLayout( fleft, ftop, fright, fbottom,
                          paperSize, orientation );
-*/
+
   table->print()->setHeadFootLine( headLeft, headMiddle, headRight,
                                    footLeft, footMiddle, footRight );
 }

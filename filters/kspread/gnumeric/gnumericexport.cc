@@ -933,6 +933,11 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
         orientation.appendChild( gnumeric_doc.createTextNode(orientString) );
         tmp.appendChild( orientation );
 
+        //TODO for future
+        //<gmr:repeat_top value="A1:IV5"/>
+        //<gmr:repeat_left value="B1:D65536"/>
+
+
         header = gnumeric_doc.createElement( "gmr:Header" );
         header.setAttribute( "Left", convertVariable(table->print()->headLeft() ) );
         header.setAttribute( "Middle", convertVariable(table->print()->headMid() ) );
