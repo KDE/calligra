@@ -1113,23 +1113,23 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
     if(height < minFrameHeight) return false;
     if(width < minFrameWidth) return false;
 
-    int newRows = intoRows-cell->m_rows;
-    int newCols = intoCols-cell->m_cols;
+    int rowsDiff = intoRows-cell->m_rows;
+    int colsDiff = intoCols-cell->m_cols;
 
     // adjust cellspan and rowspan on other cells.
     for (unsigned int i=0; i< m_cells.count() ; i++) {
         Cell *theCell = m_cells.at(i);
         if(cell == theCell) continue;
 
-        if(newRows>0) {
+        if(rowsDiff>0) {
             if(row >= theCell->m_row && row < theCell->m_row + theCell->m_rows)
-                theCell->m_rows+=newRows;
-            if(theCell->m_row > row) theCell->m_row+=newRows;
+                theCell->m_rows+=rowsDiff;
+            if(theCell->m_row > row) theCell->m_row+=rowsDiff;
         }
-        if(newCols>0) {
+        if(colsDiff>0) {
             if(col >= theCell->m_col && col < theCell->m_col + theCell->m_cols)
-                theCell->m_cols+=newCols;
-            if(theCell->m_col > col) theCell->m_col+=newCols;
+                theCell->m_cols+=colsDiff;
+            if(theCell->m_col > col) theCell->m_col+=colsDiff;
         }
     }
 
@@ -1140,16 +1140,9 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
     cell->m_cols = cell->m_cols - intoCols +1;
     if(cell->m_cols < 1)  cell->m_cols=1;
 
-    // laurent
-    // it's necessary to store all m_cols value because when you
-    // split last cell (cell at right) you add a cell (see addCell)
-    // you test : m_cols = QMAX( cell->m_col + 1, m_cols );
-    // so you add a column, but it's not good because after
-    // you add an other column.
-    // you at the end you have col +2 and not col+1
-    // => kword crashs.
-    // this is a bad hack, but I don't know how to do.
-    int tmpCols=m_cols;
+    // If we created extra rows/cols, adjust the groupmanager counters.
+    m_rows+= rowsDiff;
+    m_cols+= colsDiff;
 
     // create new cells
     for (unsigned int y = 0; y < intoRows; y++) {
@@ -1170,18 +1163,12 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
             lastFrameSet->m_cols = 1;
 
             // if the orig cell spans more rows/cols than it is split into, make first col/row wider.
-            if(newRows <0 && y==0)
-                lastFrameSet->m_rows -=newRows;
-            if(newCols <0 && x==0)
-                lastFrameSet->m_cols -=newCols;
+            if(rowsDiff <0 && y==0)
+                lastFrameSet->m_rows -=rowsDiff;
+            if(colsDiff <0 && x==0)
+                lastFrameSet->m_cols -=colsDiff;
         }
     }
-    //restore all value.
-    m_cols=tmpCols;
-
-    // If we created extra rows/cols, adjust the groupmanager counters.
-    if(newRows>0) m_rows+= newRows;
-    if(newCols>0) m_cols+= newCols;
 
     finalize();
 
