@@ -334,19 +334,23 @@ void KWEditPersonnalExpression::saveFile()
     list::Iterator it;
     for( it = listExpression.begin(); it != listExpression.end(); ++it )
     {
-        QDomElement type = doc.createElement( "Type" );
-        begin.appendChild( type );
-        QDomElement typeName = doc.createElement( "TypeName" );
-        type.appendChild( typeName );
-        typeName.appendChild( doc.createTextNode(it.key()  ) );
         lst=it.data();
-        for( uint i=0;i<lst.count();i++ )
+        if ( !lst.isEmpty() )
         {
-            QDomElement expr = doc.createElement( "Expression" );
-            type.appendChild( expr );
-            QDomElement text = doc.createElement( "Text" );
-            expr.appendChild( text );
-            text.appendChild( doc.createTextNode(lst[i] ) );
+            QDomElement type = doc.createElement( "Type" );
+            begin.appendChild( type );
+            QDomElement typeName = doc.createElement( "TypeName" );
+            type.appendChild( typeName );
+            typeName.appendChild( doc.createTextNode(it.key()  ) );
+
+            for( uint i=0;i<lst.count();i++ )
+            {
+                QDomElement expr = doc.createElement( "Expression" );
+                type.appendChild( expr );
+                QDomElement text = doc.createElement( "Text" );
+                expr.appendChild( text );
+                text.appendChild( doc.createTextNode(lst[i] ) );
+            }
         }
     }
     QCString s = doc.toCString();
