@@ -7055,10 +7055,10 @@ void KPresenterView::duplicateObj()
         m_canvas->setToolEditMode( TEM_MOUSE );
         m_canvas->deSelectAllObj();
         QMimeSource *data = QApplication::clipboard()->data();
-        QString clip_str = QString::fromUtf8( data->encodedData(KoStoreDrag::mimeType("application/x-kpresenter")) );
-        if ( data->provides( KoStoreDrag::mimeType("application/x-kpresenter") ) )
+        QCString clip_str = KoStoreDrag::mimeType("application/x-kpresenter");
+        if ( data->provides( clip_str ) )
         {
-            m_canvas->activePage()->pasteObjs( data->encodedData(KoStoreDrag::mimeType("application/x-kpresenter")),
+            m_canvas->activePage()->pasteObjs( data->encodedData(clip_str),
                                                nbCopy, angle, increaseX,increaseY, moveX, moveY );
             m_canvas->setMouseSelectedObject(true);
             emit objectSelectedChanged();

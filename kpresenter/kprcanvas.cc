@@ -78,6 +78,7 @@
 
 #include <koStore.h>
 #include <koStoreDrag.h>
+#include <kmultipledrag.h>
 
 /******************************************************************/
 /* class KPrCanvas - KPrCanvas                                    */
@@ -4951,6 +4952,7 @@ void KPrCanvas::copyObjs()
     QPtrList<KoDocumentChild> embeddedObjectsStickyPage;
 
     KoStoreDrag *kd = new KoStoreDrag( "application/x-kpresenter", 0L );
+    QDragObject* dragObject = kd;
     QByteArray arr;
     QBuffer buffer(arr);
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, "application/x-kpresenter" );
@@ -4976,29 +4978,34 @@ void KPrCanvas::copyObjs()
 
     m_activePage->copyObjs(doc, presenter, savePictures);
     stickyPage()->copyObjs(doc, presenter, savePictures);
-#if 0
-    if ( embeddedObjects.count()>0 ) {
-        delete store;
-        delete kd;
-        return;
-    }
-#endif
 
+    KPresenterDoc* kprdoc = m_view->kPresenterDoc();
     if ( !embeddedObjectsStickyPage.isEmpty() )
     {
-        m_view->kPresenterDoc()->saveEmbeddedObject(stickyPage(), embeddedObjectsStickyPage, doc, presenter );
-
+        kprdoc->saveEmbeddedObject(stickyPage(), embeddedObjectsStickyPage, doc, presenter );
     }
     if ( !embeddedObjectsActivePage.isEmpty())
     {
-        m_view->kPresenterDoc()->saveEmbeddedObject(m_activePage, embeddedObjectsActivePage,doc,presenter);
+        kprdoc->saveEmbeddedObject(m_activePage, embeddedObjectsActivePage,doc,presenter);
     }
 
     if ( !savePictures.isEmpty() ) {
         // Save picture list at the end of the main XML
-        presenter.appendChild( m_view->kPresenterDoc()->pictureCollection()->saveXML( KoPictureCollection::CollectionPicture, doc, savePictures ) );
+        presenter.appendChild( kprdoc->pictureCollection()->saveXML( KoPictureCollection::CollectionPicture, doc, savePictures ) );
         // Save the actual picture data into the store
-        m_view->kPresenterDoc()->pictureCollection()->saveToStore( KoPictureCollection::CollectionPicture, store, savePictures );
+        kprdoc->pictureCollection()->saveToStore( KoPictureCollection::CollectionPicture, store, savePictures );
+        // Single image -> put it in dragobject too
+        if ( savePictures.count() == 1 )
+        {
+            KoPicture pic = kprdoc->pictureCollection()->findPicture( savePictures.first() );
+            QDragObject* picDrag = pic.dragObject( 0L );
+            if ( picDrag ) {
+                KMultipleDrag* multipleDrag = new KMultipleDrag( 0L );
+                multipleDrag->addDragObject( kd );
+                multipleDrag->addDragObject( picDrag );
+                dragObject = multipleDrag;
+            }
+        }
     }
 
     if ( store->open( "root" ) )
@@ -5011,7 +5018,7 @@ void KPrCanvas::copyObjs()
 
     delete store;
     kd->setEncodedData( arr );
-    QApplication::clipboard()->setData( kd );
+    QApplication::clipboard()->setData( dragObject );
 }
 
 /*================================================================*/
