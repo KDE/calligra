@@ -65,7 +65,7 @@ kpresenter_shell.cc: kpresenter.h kpresenter_shell.moc
 kpresenter_view.cc: kpresenter.h kpresenter_view.moc
 graphobj.cc: graphobj.moc
 backdia.cc: backdia.moc
-page.cc: page.moc
+page.cc: page.moc kpresenter.h
 ktextobject.cc: ktextobject.moc
 styledia.cc: styledia.moc
 kenumlistdia.cc: kenumlistdia.moc
