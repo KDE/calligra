@@ -22,6 +22,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
+#include <dcopclient.h>
 
 #include <graphitefactory.h>
 
@@ -38,9 +39,8 @@ int main(int argc, char **argv) {
     KCmdLineArgs::addCmdLineOptions(options);
 
     KoApplication app;
-
-    // Register DCOP interface, TODO
-
+    app.dcopClient()->attach();
+    app.dcopClient()->registerAs("graphite");
     app.start(); // parses command line args, create initial docs and shells
     return app.exec();
 }
