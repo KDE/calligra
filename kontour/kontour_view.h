@@ -52,11 +52,13 @@ class RectTool;
 class OvalTool;
 class ZoomTool;
 class QDockArea;
+class QDockWindow;
 class QButton;
 class QScrollBar;
 class LayerPanel;
 class PaintPanel;
 class OutlinePanel;
+class TransformPanel;
 class KoColor;
 class GStyle;
 class KontourView : public KoView
@@ -136,6 +138,8 @@ private slots:
   void slotShowRuler(bool);
   void slotShowGrid(bool);
   void slotShowHelplines(bool);
+  void slotShowPaintPanel(bool);
+  void slotShowOutlinePanel(bool);
   void slotAlignToGrid(bool);
   void slotAlignToHelplines(bool);
   void slotToFront();
@@ -187,7 +191,10 @@ private:
   /* Panels */
   LayerPanel   *mLayerPanel;
   PaintPanel   *mPaintPanel;
+  QDockWindow  *mPaintDock;
   OutlinePanel *mOutlinePanel;
+  QDockWindow  *mOutlineDock;
+  TransformPanel *mTransformPanel;
 
   // Actions
   KAction *m_copy;
@@ -207,6 +214,8 @@ private:
   KToggleAction *m_showRuler;
   KToggleAction *m_showGrid;
   KToggleAction *m_showHelplines;
+  KToggleAction *m_showPaintPanel;
+  KToggleAction *m_showOutlinePanel;
 
   KToggleAction *m_snapToGrid;
   KToggleAction *m_alignToHelplines;

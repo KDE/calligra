@@ -63,6 +63,7 @@
 #include "ZoomTool.h"
 #include "LayerPanel.h"
 #include "StylePanel.h"
+#include "TransformPanel.h"
 #include "CopyCmd.h"
 #include "CutCmd.h"
 #include "PasteCmd.h"
@@ -160,6 +161,12 @@ void KontourView::setupActions()
 
   m_showHelplines = new KToggleAction(i18n("Show &Helplines"), 0, actionCollection(), "showHelplines");
   connect(m_showHelplines, SIGNAL(toggled(bool)), this, SLOT(slotShowHelplines(bool)));
+
+  m_showPaintPanel = new KToggleAction(i18n("Show &Paint Panel"), 0, actionCollection(), "showPaintPanel");
+  connect(m_showPaintPanel, SIGNAL(toggled(bool)), this, SLOT(slotShowPaintPanel(bool)));
+
+  m_showOutlinePanel = new KToggleAction(i18n("Show &Outline Panel"), 0, actionCollection(), "showOutlinePanel");
+  connect(m_showOutlinePanel, SIGNAL(toggled(bool)), this, SLOT(slotShowOutlinePanel(bool)));
 
   /* Layout menu */
 
@@ -332,32 +339,36 @@ void KontourView::setupPanels()
   mRightDock->moveDockWindow(win);
 
   /* Paint properties panel */
-  QDockWindow *win1 = new QDockWindow();
-  win1->setResizeEnabled(true);
-  mPaintPanel = new PaintPanel(win1);
+  mPaintDock = new QDockWindow();
+  mPaintDock->setResizeEnabled(true);
+  mPaintPanel = new PaintPanel(mPaintDock);
   connect(mPaintPanel, SIGNAL(changeFilled(bool)), this, SLOT(changeFilled(bool)));
   connect(mPaintPanel, SIGNAL(changePaintColor(const KoColor &)), this, SLOT(changePaintColor(const KoColor &)));
   connect(mPaintPanel, SIGNAL(changeBrushStyle(Qt::BrushStyle)), this, SLOT(changeBrushStyle(Qt::BrushStyle)));
   connect(this, SIGNAL(changedStyle(const GStyle &)), mPaintPanel, SLOT(slotStyleChanged(const GStyle &)));
-  win1->setWidget(mPaintPanel);
-  win1->setResizeEnabled(false);
-  //win1->setCaption(i18n("Paint properties"));
-  mRightDock->moveDockWindow(win1);
+  mPaintDock->setWidget(mPaintPanel);
+  mPaintDock->setResizeEnabled(false);
+  mPaintDock->setCaption(i18n("Paint"));
+  mRightDock->moveDockWindow(mPaintDock);
 
- /* Outline properties panel */
-  QDockWindow *win2 = new QDockWindow();
-  win2->setResizeEnabled(true);
-  mOutlinePanel = new OutlinePanel(win2);
+  /* Outline properties panel */
+  mOutlineDock = new QDockWindow();
+  mOutlineDock->setResizeEnabled(true);
+  mOutlinePanel = new OutlinePanel(mOutlineDock);
   connect(mOutlinePanel, SIGNAL(changeStroked(bool)), this, SLOT(changeStroked(bool)));
   connect(mOutlinePanel, SIGNAL(changeOutlineColor(const KoColor &)), this, SLOT(changeOutlineColor(const KoColor &)));
   connect(mOutlinePanel, SIGNAL(changeLinewidth(unsigned int)), this, SLOT(changeLinewidth(unsigned int)));
   connect(mOutlinePanel, SIGNAL(changeJoinStyle(Qt::PenJoinStyle)), this, SLOT(changeJoinStyle(Qt::PenJoinStyle)));
   connect(mOutlinePanel, SIGNAL(changeCapStyle(Qt::PenCapStyle)), this, SLOT(changeCapStyle(Qt::PenCapStyle)));
   connect(this, SIGNAL(changedStyle(const GStyle &)), mOutlinePanel, SLOT(slotStyleChanged(const GStyle &)));
-  win2->setWidget(mOutlinePanel);
-  win2->setResizeEnabled(false);
-  //win1->setCaption(i18n("Outline properties"));
-  mRightDock->moveDockWindow(win2);
+  mOutlineDock->setWidget(mOutlinePanel);
+  mOutlineDock->setResizeEnabled(false);
+  mOutlineDock->setCaption(i18n("Outline"));
+  mRightDock->moveDockWindow(mOutlineDock);
+
+  /* Transform properties panel */
+  mTransformPanel = new TransformPanel();
+  mRightDock->moveDockWindow(mTransformPanel);
 }
 
 void KontourView::setupTools()
@@ -818,6 +829,19 @@ void KontourView::slotShowHelplines(bool b)
     activeDocument()->showHelplines(b);
     mCanvas->update();
   }
+}
+
+void KontourView::slotShowPaintPanel(bool b)
+{
+	if(!mPaintDock) return;
+	b ? mPaintDock->dock() : mPaintDock->undock();
+}
+
+void KontourView::slotShowOutlinePanel(bool b)
+{
+	if(!mOutlineDock) return;
+	b ? mOutlineDock->dock() : mOutlineDock->undock();
+	mOutlineDock->clearFocus();
 }
 
 void KontourView::slotAlignToGrid(bool b)

@@ -27,6 +27,9 @@
   <Action name="showRuler"/>
   <Action name="showGrid"/>
   <Action name="showHelplines"/>
+  <Separator/>
+  <Action name="showPaintPanel"/>
+  <Action name="showOutlinePanel"/>
  </Menu>
  <Menu name="insert"><text>&amp;Insert</text>
  </Menu>
