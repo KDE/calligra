@@ -72,3 +72,10 @@ Tue Jan 19 19:27:51 1999 Simon Hausmann <tronical@gmx.net>
         * fixes with the configuration stuff
 
         * several bug fixes I forgot ;-)
+
+Wed Jan 20 21:52:30 1999 Simon Hausmann <tronical@gmx.net>
+
+        * removed all my caching stuff again ... damn, /me is sooo stupid:
+          there's already nice caching support in libkio ...
+
+        * fixed redirection

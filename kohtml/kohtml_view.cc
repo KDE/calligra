@@ -437,23 +437,6 @@ void KoHTMLView::updateHistory(bool enableBack, bool enableForward)
      }
 }
 
-void KoHTMLView::removeHTMLDocumentFromCache( SavedPage *p )
-{
-  QCache<QString> *cache = KoHTMLJob::cache();  
-  
-  cerr << "removing " << p->url << " from cache : " <<
-  cache->remove( p->url )
-  << endl;
-  
-  if (p->frames)
-     {
-       QListIterator<SavedPage> it( *(p->frames) );
-       for (; it.current(); ++it)
-           removeHTMLDocumentFromCache( it.current() );
-     }
-     
-}
-
 void KoHTMLView::slotInsertObject(KoHTMLChild *child)
 {
   OpenParts::View_var v;
@@ -763,16 +746,10 @@ void KoHTMLView::slotReload()
 {
   cerr << "void KoHTMLView::slotReload()" << endl;
 
+  m_pHTMLView->cancelAllRequests();
+  
   m_pDoc->stopLoading();
 
-  //FIXME: remove images from cache, too
-
-  SavedPage *p = m_pHTMLView->saveYourself();
-  
-  removeHTMLDocumentFromCache( p );
-  
-  delete p;
-  
   m_pDoc->openURL(m_pDoc->htmlURL());
 }
 
@@ -936,7 +913,7 @@ void KoHTMLView::slotOpenURL(KHTMLView *view, const char *url, int button, const
        return;
      }  
      
-  if (target)
+  if (target != 0L && target[0] != 0)
      {
       
         QString tmp = "searching view:\n";
@@ -1069,14 +1046,6 @@ void KoHTMLView::slotUpdateConfig()
   m_pHTMLView->getKHTMLWidget()->setDefaultTextColors(m_txtColor, m_lnkColor, m_vlnkColor);
   m_pHTMLView->getKHTMLWidget()->setStandardFont(m_standardFont.family());
   m_pHTMLView->getKHTMLWidget()->setFixedFont(m_fixedFont.family());
-  
-  config->setGroup("Cache Settings");
-  
-  m_cacheSizeInKBytes = config->readUnsignedNumEntry("MemoryCacheSize", 2048);
-
-  KoHTMLJob::cache()->setMaxCost( m_cacheSizeInKBytes );
-    
-  config->writeEntry("MemoryCacheSize", (unsigned int)2048);
   
   config->sync();
 }

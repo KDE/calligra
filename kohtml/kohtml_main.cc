@@ -30,6 +30,11 @@
 #include <koQueryTypes.h>
 #include <opAutoLoader.h>
 
+#include <kio_job.h>
+#include <kio_cache.h>
+#include <kmimetypes.h>
+#include <kmimemagic.h>
+
 #include "kohtml_shell.h"
 #include "kohtml_doc.h" 
 
@@ -83,6 +88,11 @@ int main( int argc, char **argv )
   KoHTMLAutoLoader loader("IDL:KoHTML/DocumentFactory:1.0", "KoHTML");
   
   KoHTMLApp app(argc, argv);
+
+  KIOJob::initStatic();
+  KIOCache::initStatic();
+  KMimeType::initStatic();
+  KMimeMagic::initStatic();
   
   int i = 1;
   if ( strcmp( argv[i], "-s" ) == 0 || strcmp( argv[i], "--server" ) == 0 )

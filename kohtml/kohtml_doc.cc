@@ -64,9 +64,6 @@ KoHTMLDoc::KoHTMLDoc()
   SIGNAL_IMPL( "documentStarted" );  
   SIGNAL_IMPL( "documentDone" );
 
-  KIOJob::initStatic();
-  KoHTMLJob::initStatic();
-
   m_lstViews.setAutoDelete(false);
   m_lstChildren.setAutoDelete(true);
   m_lstHTMLViews.setAutoDelete(false);

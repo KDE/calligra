@@ -41,13 +41,11 @@ protected:
   void setupMiscTab();
   void setupFontsTab();
   void setupColorsTab();
-  void setupCacheTab();
 
 private:
   QFrame *miscFrame;
   QFrame *fontsFrame;
   QFrame *colorsFrame;
-  QFrame *cacheFrame;
   
   KURLCompletion *completion;
 };

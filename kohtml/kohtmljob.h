@@ -25,11 +25,11 @@
 #ifndef __kohtmljob_h__
 #define __kohtmljob_h__
 
-#include <qcache.h>
 #include <kio_job.h>
+#include <kio_cache.h>
 #include <khtmlview.h>
 
-class KoHTMLJob: public KIOJob
+class KoHTMLJob: public CachedKIOJob
 {
   Q_OBJECT
 public:
@@ -44,12 +44,6 @@ public:
   const char *url() { return m_strURL.data(); }
   KHTMLView *parent() { return m_pParent; }
   KHTMLView *topParent() { return m_pTopParent; }
-  
-  static bool isCacheEnabled() { return m_sbEnableCache; }
-  static void enableCache( bool flag ) { m_sbEnableCache = flag; }
-  static QCache<QString> *cache() { return s_jobCache; }
-  
-  static void initStatic();
   
 signals:  
   void jobDone(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *filename);
@@ -71,11 +65,7 @@ private:
   QString m_strHTML;
   int m_htmlLen;
   bool m_bIsHTTP;
-  bool m_bIsCached;
   unsigned int m_sizeInKBytes;
-
-  static bool m_sbEnableCache;  
-  static QCache<QString> *s_jobCache;
 };
 
 #endif

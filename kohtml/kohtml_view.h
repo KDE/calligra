@@ -142,8 +142,6 @@ protected:
   virtual void pushURLToHistory();
   virtual void updateHistory(bool enableBack, bool enableForward);
 
-  void removeHTMLDocumentFromCache( SavedPage *p );
-  
   OpenPartsUI::MenuBar_var m_vMenuBar;
   OpenPartsUI::Menu_var m_vMenuEdit;
   OpenPartsUI::Menu_var m_vMenuEdit_Insert;
@@ -223,7 +221,6 @@ protected:
   QColor m_lnkColor;
   QColor m_txtColor;
   QColor m_vlnkColor;
-  unsigned int m_cacheSizeInKBytes;
 };	
 
 #endif
