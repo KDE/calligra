@@ -44,8 +44,10 @@ enum StackItemElementType{
     ElementTypeAbiWord,     // <abiword>
     ElementTypeSection,     // <section>
     ElementTypeParagraph,   // <p>
-    ElementTypeContent,     // <c>
-    ElementTypeRealData     // <d>
+    ElementTypeContent,     // <c> (not child of <a>)
+    ElementTypeRealData,    // <d>
+    ElementTypeAnchor,      // <a>
+    ElementTypeAnchorContent// <c>, when child of <a>
 };
 
 class StackItem
@@ -69,8 +71,10 @@ public:
     QColor      fgColor;
     QColor      bgColor;
     int         textPosition; //Normal (0), subscript(1), superscript (2)
-    QString     strMimeType; // for <d>
-    QString     strTemp; // for <d>: collecting the data
+    QString     strTemp1; // for <d>: mime type
+                          // for <a>: link reference
+    QString     strTemp2; // for <d>: collecting the data
+                          // for <a>: link name
 };
 
 class StackItemStack : public QPtrStack<StackItem>

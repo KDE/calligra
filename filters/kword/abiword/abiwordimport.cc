@@ -60,7 +60,7 @@ public:
     {
         createMainFramesetElement();
         structureStack.setAutoDelete(true);
-        StackItem *stackItem=new(StackItem); //TODO: memory failure recovery
+        StackItem *stackItem=new(StackItem);
         stackItem->elementType=ElementTypeBottom;
         stackItem->stackElementText=mainFramesetElement;
         structureStack.push(stackItem); //Security item (not to empty the stack)
@@ -96,8 +96,10 @@ private:
 
 bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttributes& attributes)
 {
-    // <c> elements can be nested in <p> elements or in other <c> elements
+    // <c> elements can be nested in <p> elements, in <a> elements or in other <c> elements
     // AbiWord does not use it but explicitely allows external programs to write AbiWord files with nested <c> elements!
+
+    // <p> or <c> (not child of <a>)
     if ((stackCurrent->elementType==ElementTypeParagraph)||(stackCurrent->elementType==ElementTypeContent))
     {
 
@@ -110,9 +112,14 @@ bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttr
         stackItem->stackElementFormatsPlural=stackCurrent->stackElementFormatsPlural; // <FORMATS>
         stackItem->pos=stackCurrent->pos; //Propagate the position
     }
+    // <a> or <c> when child of <a>
+    else if ((stackCurrent->elementType==ElementTypeAnchor)||(stackCurrent->elementType==ElementTypeAnchorContent))
+    {
+        stackItem->elementType=ElementTypeAnchorContent;
+    }
     else
     {//we are not nested correctly, so consider it a parse error!
-        kdError(30506) << "parse error <c> tag nested neither in <p> nor in <c> but in "
+        kdError(30506) << "parse error <c> tag nested neither in <p> nor in <c> nor in <a> but in "
             << stackCurrent->itemName << endl;
         return false;
     }
@@ -121,31 +128,123 @@ bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttr
 
 bool charactersElementC (StackItem* stackItem, QDomDocument& mainDocument, const QString & ch)
 {
-    QDomElement elementText=stackItem->stackElementText;
-    QDomElement elementFormatsPlural=stackItem->stackElementFormatsPlural;
-    elementText.appendChild(mainDocument.createTextNode(ch));
+    if  (stackItem->elementType==ElementTypeContent)
+    {   // Normal <c>
+        QDomElement elementText=stackItem->stackElementText;
+        QDomElement elementFormatsPlural=stackItem->stackElementFormatsPlural;
+        elementText.appendChild(mainDocument.createTextNode(ch));
 
-    QDomElement formatElementOut=mainDocument.createElement("FORMAT");
-    formatElementOut.setAttribute("id",1); // Normal text!
-    formatElementOut.setAttribute("pos",stackItem->pos); // Start position
-    formatElementOut.setAttribute("len",ch.length()); // Start position
-    elementFormatsPlural.appendChild(formatElementOut); //Append to <FORMATS>
-    stackItem->pos+=ch.length(); // Adapt new starting position
+        QDomElement formatElementOut=mainDocument.createElement("FORMAT");
+        formatElementOut.setAttribute("id",1); // Normal text!
+        formatElementOut.setAttribute("pos",stackItem->pos); // Start position
+        formatElementOut.setAttribute("len",ch.length()); // Start position
+        elementFormatsPlural.appendChild(formatElementOut); //Append to <FORMATS>
+        stackItem->pos+=ch.length(); // Adapt new starting position
 
-    AddFormat(formatElementOut, stackItem, mainDocument);
+        AddFormat(formatElementOut, stackItem, mainDocument);
+    }
+    else if (stackItem->elementType==ElementTypeAnchorContent)
+    {
+        // Add characters to the link name
+        stackItem->strTemp2+=ch;
+        // TODO: how can we care about the text format?
+    }
+    else
+    {
+        kdError(30506) << "Internal error (in charactersElementC)" << endl;
+    }
 
 	return true;
 }
 
 bool EndElementC (StackItem* stackItem, StackItem* stackCurrent)
 {
-    if (!stackItem->elementType==ElementTypeContent)
+    if (stackItem->elementType==ElementTypeContent)
+    {
+        stackItem->stackElementText.normalize();
+        stackCurrent->pos=stackItem->pos; //Propagate the position back to the parent element
+    }
+    else if (stackItem->elementType==ElementTypeAnchorContent)
+    {
+        stackCurrent->strTemp2+=stackItem->strTemp2; //Propagate the link name back to the parent element
+    }
+    else
     {
         kdError(30506) << "Wrong element type!! Aborting! (</c> in StructureParser::endElement)" << endl;
         return false;
     }
-    stackItem->stackElementText.normalize();
-    stackCurrent->pos=stackItem->pos; //Propagate the position back to the parent element
+    return true;
+}
+
+// Element <a>
+static bool StartElementA(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttributes& attributes)
+{
+    // <a> elements can be nested in <p> elements
+    if (stackCurrent->elementType==ElementTypeParagraph)
+    {
+
+        //AbiPropsMap abiPropsMap;
+        //PopulateProperties(stackItem,QString::null,attributes,abiPropsMap,true);
+
+        stackItem->elementType=ElementTypeAnchor;
+        stackItem->stackElementParagraph=stackCurrent->stackElementParagraph;   // <PARAGRAPH>
+        stackItem->stackElementText=stackCurrent->stackElementText;   // <TEXT>
+        stackItem->stackElementFormatsPlural=stackCurrent->stackElementFormatsPlural; // <FORMATS>
+        stackItem->pos=stackCurrent->pos; //Propagate the position
+        stackItem->strTemp1=attributes.value("xlink:href"); // link reference
+        stackItem->strTemp2=QString::null; // link name
+    }
+    else
+    {//we are not nested correctly, so consider it a parse error!
+        kdError(30506) << "parse error <a> tag not a child of <p> but of "
+            << stackCurrent->itemName << endl;
+        return false;
+    }
+    return true;
+}
+
+static bool charactersElementA (StackItem* stackItem, const QString & ch)
+{
+    // Add characters to the link name
+    stackItem->strTemp2+=ch;
+	return true;
+}
+
+static bool EndElementA (StackItem* stackItem, StackItem* stackCurrent, QDomDocument& mainDocument)
+{
+    if (!stackItem->elementType==ElementTypeAnchor)
+    {
+        kdError(30506) << "Wrong element type!! Aborting! (</a> in StructureParser::endElement)" << endl;
+        return false;
+    }
+
+    QDomElement elementText=stackItem->stackElementText;
+    elementText.appendChild(mainDocument.createTextNode("#"));
+    elementText.normalize();
+
+    QDomElement formatElement=mainDocument.createElement("FORMAT");
+    formatElement.setAttribute("id",4); // Variable
+    formatElement.setAttribute("pos",stackItem->pos); // Start position
+    formatElement.setAttribute("len",1); // Start position
+
+    QDomElement variableElement=mainDocument.createElement("VARIABLE");
+    formatElement.appendChild(variableElement);
+
+    QDomElement typeElement=mainDocument.createElement("TYPE");
+    typeElement.setAttribute("key","STRING");
+    typeElement.setAttribute("type",9); // link
+    typeElement.setAttribute("text",stackItem->strTemp2);
+    variableElement.appendChild(typeElement); //Append to <VARIABLE>
+
+    QDomElement linkElement=mainDocument.createElement("LINK");
+    linkElement.setAttribute("hrefName",stackItem->strTemp1);
+    linkElement.setAttribute("linkName",stackItem->strTemp2);
+    variableElement.appendChild(linkElement); //Append to <VARIABLE>
+
+    // Now work on stackCurrent
+    stackCurrent->stackElementFormatsPlural.appendChild(formatElement);
+    stackCurrent->pos++; //Propagate the position back to the parent element
+
     return true;
 }
 
@@ -265,7 +364,23 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
         }
         else if (strType=="time_miltime")
         {
-            InsertTimeVariable(mainDocument, variableElement, "TIMEhh:mm", "00:00");
+            // AbiWord's military time is just the standard 24h time (with seconds)
+            InsertTimeVariable(mainDocument, variableElement, "TIMEhh:mm:ss", "00:00:00");
+        }
+        else if (strType=="date")
+        {
+            QDomElement typeElement=mainDocument.createElement("TYPE");
+            typeElement.setAttribute("key","DATE1Locale"); // Long locale date
+            typeElement.setAttribute("type",0); // date
+            typeElement.setAttribute("text","-"); // Just a dummy, KWord will do the work
+            variableElement.appendChild(typeElement); //Append to <VARIABLE>
+            QDomElement dateElement=mainDocument.createElement("DATE");
+            // As we have no idea about the current date, use the *nix epoch 1970-01-01
+            dateElement.setAttribute("year",1970);
+            dateElement.setAttribute("month",1);
+            dateElement.setAttribute("day",1);
+            dateElement.setAttribute("fix",0);  // AbiWord's <field> is never fixed
+            variableElement.appendChild(dateElement); //Append to <VARIABLE>
         }
         else if ((strType=="page_number")||(strType=="page_count"))
         {
@@ -274,7 +389,7 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
             typeElement.setAttribute("type",4); // page number/count
             typeElement.setAttribute("text",1); // We cannot count the pages, so give a default value
             variableElement.appendChild(typeElement); //Append to <VARIABLE>
-            QDomElement pgnumElement=mainDocument.createElement("PGNUM"); // TODO: not documented in KWord's DTD
+            QDomElement pgnumElement=mainDocument.createElement("PGNUM");
             pgnumElement.setAttribute("subtype",(strType=="page_count")?1:0);
             pgnumElement.setAttribute("value",1);
             variableElement.appendChild(pgnumElement); //Append to <VARIABLE>
@@ -282,6 +397,22 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
         else
         {
             kdWarning(30506) << "Unknown <field> type: " << strType << endl;
+            // Write the field name in red
+            QDomElement formatElement=mainDocument.createElement("FORMAT");
+            formatElement.setAttribute("id",1); // Variable
+            formatElement.setAttribute("pos",stackItem->pos); // Start position
+            formatElement.setAttribute("len",strType.length());
+
+            formatElement.appendChild(variableElement);
+
+            // Now work on stackCurrent
+            stackCurrent->stackElementFormatsPlural.appendChild(formatElement);
+            stackCurrent->stackElementText.appendChild(mainDocument.createTextNode(strType));
+            stackCurrent->pos+=strType.length(); // Adjust position
+
+            // Add formating (use stackItem)
+            stackItem->fgColor.setRgb(255,0,0);
+            AddFormat(formatElement, stackItem, mainDocument);
             return true;
         }
 
@@ -289,11 +420,11 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
         QDomElement formatElement=mainDocument.createElement("FORMAT");
         formatElement.setAttribute("id",4); // Variable
         formatElement.setAttribute("pos",stackItem->pos); // Start position
-        formatElement.setAttribute("len",1); // Start position
-        
+        formatElement.setAttribute("len",1);
+
         formatElement.appendChild(variableElement);
 
-        // Now insert the elemnt into the document (we work on stackCurrent)
+        // Now work on stackCurrent
         stackCurrent->stackElementFormatsPlural.appendChild(formatElement);
         stackCurrent->stackElementText.appendChild(mainDocument.createTextNode("#"));
         stackCurrent->pos++; // Adjust position
@@ -426,7 +557,7 @@ static bool StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
     formatElementOut.setAttribute("len",1); // Start position
     elementFormatsPlural.appendChild(formatElementOut); //Append to <FORMATS>
 
-    // WARNING: we must change the position in stack current!
+    // WARNING: we must change the position in stackCurrent!
     stackCurrent->pos++; // Adapt new starting position
 
     QDomElement anchor=mainDocument.createElement("ANCHOR");
@@ -447,7 +578,7 @@ static bool StartElementD(StackItem* stackItem, StackItem* /*stackCurrent*/,
 
     QString strName=attributes.value("name").stripWhiteSpace();
     kdDebug(30506) << "Data: " << strName << endl;
-    
+
     QString strBase64=attributes.value("base64").stripWhiteSpace();
     QString strMime=attributes.value("mime").stripWhiteSpace();
 
@@ -465,10 +596,10 @@ static bool StartElementD(StackItem* stackItem, StackItem* /*stackCurrent*/,
         strBase64="yes";
     }
 
-    stackItem->fontName=strName;    // Store the data name as font name.
-    stackItem->bold=(strBase64=="yes");// Store base64-coded as bold
-    stackItem->strMimeType=strMime;
-    stackItem->strTemp=QString::null;
+    stackItem->fontName=strName;        // Store the data name as font name.
+    stackItem->bold=(strBase64=="yes"); // Store base64-coded as bold
+    stackItem->strTemp1=strMime;        // Mime type
+    stackItem->strTemp2=QString::null;  // Image data
 
     return true;
 }
@@ -476,7 +607,7 @@ static bool StartElementD(StackItem* stackItem, StackItem* /*stackCurrent*/,
 static bool CharactersElementD (StackItem* stackItem, QDomDocument& /*mainDocument*/, const QString & ch)
 {
     // As we have no guarantee to have the whole stream in one call, we must store the data.
-    stackItem->strTemp+=ch;
+    stackItem->strTemp2+=ch;
     return true;
 }
 
@@ -497,18 +628,24 @@ static bool EndElementD (StackItem* stackItem, KoFilterChain* chain,
     QString strStoreName="pictures/picture";
     strStoreName+=QString::number(++pictureNumber);
 
-    if (stackItem->strMimeType=="image/png")
+    // stackItem->strTemp1 contains the mime type
+    if (stackItem->strTemp1=="image/png")
     {
         strStoreName+=".png";
     }
-    else if (stackItem->strMimeType=="image/jpeg")
+    else if (stackItem->strTemp1=="image/jpeg")
     {
         strStoreName+=".jpeg";
+    }
+    // TODO: verify BMP (including AbiWord's mime type for it)
+    else if (stackItem->strTemp1=="image/x-bmp")
+    {
+        strStoreName+=".bmp";
     }
     else
     {
         kdWarning(30506) << "Unknown or unsupported mime type: "
-            << stackItem->strMimeType << endl;
+            << stackItem->strTemp1 << endl;
         return true;
     }
 
@@ -537,7 +674,7 @@ static bool EndElementD (StackItem* stackItem, KoFilterChain* chain,
         kdDebug(30506) << "Decode and write base64 stream: " << stackItem->fontName << endl;
         // We need to decode the base64 stream
         // However KCodecs has no QString to QByteArray decoder!
-        QByteArray base64Stream=stackItem->strTemp.utf8(); // Use utf8 to avoid corruption of data
+        QByteArray base64Stream=stackItem->strTemp2.utf8(); // Use utf8 to avoid corruption of data
         QByteArray binaryStream;
         KCodecs::base64Decode(base64Stream, binaryStream);
         out->writeBlock(binaryStream, binaryStream.count());
@@ -545,7 +682,7 @@ static bool EndElementD (StackItem* stackItem, KoFilterChain* chain,
     else
     {
         kdDebug(30506) << "Write character stream: " << stackItem->fontName << endl;
-        QCString strOut=stackItem->strTemp.utf8();
+        QCString strOut=stackItem->strTemp2.utf8();
         out->writeBlock(strOut,strOut.length());
     }
 
@@ -720,7 +857,7 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
 
     if (!nodeList.count())
     {
-        kdError(30506) << "Panic: no <PAPER> element was found! Aborting!" << endl;
+        kdError(30506) << "No <PAPER> element was found! Aborting!" << endl;
         return false;
     }
 
@@ -728,7 +865,7 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
 
     if (paperElement.isNull())
     {
-        kdError(30506) << "Panic: <PAPER> element cannot be accessed! Aborting!" << endl;
+        kdError(30506) << "<PAPER> element cannot be accessed! Aborting!" << endl;
         return false;
     }
 
@@ -816,6 +953,10 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         stackItem->stackElementText=structureStack.current()->stackElementText; // TODO: reason?
         success=true;
     }
+    else if (name=="a")
+    {
+        success=StartElementA(stackItem,structureStack.current(),attributes);
+    }
     else if (name=="br") // NOTE: Not sure if it only exists in lower case!
     {
         // We have a forced line break
@@ -885,7 +1026,8 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         stackItem->stackElementText=structureStack.current()->stackElementText; // TODO: reason?
         success=StartElementPageSize(mainDocument,attributes);
     }
-    else if (name=="field")
+    else if ((name=="field") //TODO: upper-case?
+        || (name=="f")) // old deprecated name for <field>
     {
         success=StartElementField(stackItem,structureStack.current(),mainDocument,attributes);
     }
@@ -893,12 +1035,13 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     {
         success=StartElementS(stackItem,structureStack.current(),attributes,styleDataMap);
     }
-    else if (name=="image") // TODO: upper-case? old name?
+    else if ((name=="image") //TODO: upper-case?
+        || (name=="i")) // old deprecated name for <image>
     {
         success=StartElementImage(stackItem,structureStack.current(),
             mainDocument,framesetsPluralElement,attributes,pictureFrameNumber);
     }
-    else if (name=="d") // TODO: upper-case? old name?
+    else if (name=="d") // TODO: upper-case?
     {
         success=StartElementD(stackItem,structureStack.current(),attributes);
     }
@@ -941,6 +1084,10 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     {
         success=EndElementP(stackItem);
     }
+    else if (name=="a")
+    {
+        success=EndElementA(stackItem,structureStack.current(), mainDocument);
+    }
     else if (name=="d")
     {
         success=EndElementD(stackItem, m_chain, pictureNumber, mainDocument, pixmapsElement);
@@ -981,13 +1128,18 @@ bool StructureParser :: characters ( const QString & ch )
 
     StackItem *stackItem=structureStack.current();
 
-    if (stackItem->elementType==ElementTypeContent)
+    if ((stackItem->elementType==ElementTypeContent)
+        || (stackItem->elementType==ElementTypeAnchorContent))
     { // <c>
         success=charactersElementC(stackItem,mainDocument,ch);
     }
     else if (stackItem->elementType==ElementTypeParagraph)
     { // <p>
         success=charactersElementC(stackItem,mainDocument,ch);
+    }
+    else if (stackItem->elementType==ElementTypeAnchor)
+    { // <a>
+        success=charactersElementA(stackItem,ch);
     }
     else if (stackItem->elementType==ElementTypeEmpty)
     {
@@ -1023,6 +1175,7 @@ bool StructureParser::startDocument(void)
     styleDataMap.defineNewStyle("Heading 1",1,"font-weight: bold; font-size: 24pt");
     styleDataMap.defineNewStyle("Heading 2",2,"font-weight: bold; font-size: 16pt");
     styleDataMap.defineNewStyle("Heading 3",3,"font-weight: bold; font-size: 12pt");
+    styleDataMap.defineNewStyle("Block Text",-1,QString::null);
     return true;
 }
 

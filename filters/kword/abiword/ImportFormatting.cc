@@ -1,7 +1,7 @@
 // $Header$
 
 /* This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -100,7 +100,12 @@ void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
    }
 
     QString strBackgroundTextColor=abiPropsMap["bgcolor"].getValue();
-    if(!strBackgroundTextColor.isEmpty())
+    if (strBackgroundTextColor=="transparent")
+    {
+        // KWord has no idea was transparency is, so we use white
+        stackItem->bgColor.setRgb(255,255,255);
+    }
+    else if(!strBackgroundTextColor.isEmpty())
     {
         // The colour information is *not* lead by a hash (#)
         stackItem->bgColor.setNamedColor("#"+strBackgroundTextColor);
@@ -195,7 +200,8 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
     QString strFollowing=abiPropsMap["followedby"].getValue();
     QDomElement followingElement=mainDocument.createElement("FOLLOWING");
     followingElement.setAttribute("name",strFollowing);
-    if (strFollowing.isEmpty())
+    if ((strFollowing.isEmpty())
+        || (strFollowing=="Current Settings")) // "Current Settings" is not a style!
     {
         // We have no idea what style follows
         if (isStyle)
@@ -209,6 +215,7 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
     else
     {
         // Following style is defined
+        // TODO: we should be sure that this style is defined!
         layoutElement.appendChild(followingElement);
     }
 
