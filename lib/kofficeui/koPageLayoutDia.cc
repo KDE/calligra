@@ -96,6 +96,8 @@ KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _
   retPressed = false;
 
   setCaption("Page Layout");
+  setFocusPolicy(QWidget::StrongFocus);
+  setFocus();
 }
 
 /*===================== destructor ===============================*/
