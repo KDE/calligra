@@ -2,14 +2,6 @@
 # the Kross::PythonKexiDB module to access the
 # KexiDB functionality from within Python.
 
-####################
-#TODO: why the hell the script-execution aborts sometimes on my
-#system with following message;
-#KexiDB: WARNING: DriverManagerInternal::lookupDrivers(): problem
-#with detecting 'sqlite' driver's version -- skipping it!
-#Alarm clock
-####################
-
 # Import the KexiDB module.
 import KexiDB
 
