@@ -223,7 +223,7 @@ void KIllustratorView::createMyGUI()
     m_bezierTool->setExclusiveGroup( "Tools" );
     connect( m_bezierTool, SIGNAL( toggled( bool ) ), this, SLOT( slotBezierTool( bool ) ) );
 
-    KToggleAction *m_rectTool = new KToggleAction( i18n("Rectangle"), "recttool", CTRL+Key_6, actionCollection(), "rectangle" );
+    m_rectTool = new KToggleAction( i18n("Rectangle"), "recttool", CTRL+Key_6, actionCollection(), "rectangle" );
     m_rectTool->setExclusiveGroup( "Tools" );
     connect( m_rectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotRectTool( bool ) ) );
 
@@ -1127,10 +1127,12 @@ void KIllustratorView::slotPenChosen( const QColor & c  )
     }
 }
 
-void KIllustratorView::slotSelectTool( bool b )
+void KIllustratorView::slotSelectTool( bool  )
 {
-    if ( b )
-       tcontroller->toolSelected( Tool::ToolSelect );
+    if (  m_selectTool->isChecked() )
+        tcontroller->toolSelected( Tool::ToolSelect  );
+    else
+         m_selectTool->setChecked( true ); // always one has to be checked !
 }
 
 bool KIllustratorView::eventFilter(QObject *o, QEvent *e)
