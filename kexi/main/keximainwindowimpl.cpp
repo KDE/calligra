@@ -856,7 +856,8 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 
 	d->updatePropEditorVisibility(d->curDialog ? d->curDialog->currentViewMode() : 0);
 #ifndef PROPEDITOR_VISIBILITY_CHANGES
-	d->propEditorToolWindow->hide();
+	if (!d->curDialog)
+		d->propEditorToolWindow->hide();
 #endif
 
 	updateAppCaption();
