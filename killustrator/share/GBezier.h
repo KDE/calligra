@@ -37,6 +37,7 @@
 #include <Coord.h>
 //#include <GObject.h>
 #include <GPolyline.h>
+#include <math.h> // Does this line fix it?
 
 class GBezier : public GPolyline {
   Q_OBJECT
