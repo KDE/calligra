@@ -20,37 +20,30 @@
 
 #include "karbon_view.h"
 
-#include <qbuttongroup.h>
-#include <qdockarea.h>
 #include <qdragobject.h>
 #include <qiconset.h>
-#include <qpainter.h>
-#include <qtoolbutton.h>
 #include <qapplication.h>
 #include <qclipboard.h>
 
 #include <kaction.h>
 #include <kcolordrag.h>
-#include <kiconloader.h>
 #include <klocale.h>
+#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <koMainWindow.h>
 #include <kstatusbar.h>
 #include <kstdaction.h>
-#include "kocontexthelp.h"
-
-#include "vtoolbox.h"
-
-#include "vstroke.h"
+#include <kocontexthelp.h>
+#include <koUnitWidgets.h>
 
 // Commands.
 #include "vcleanupcmd.h"
 #include "vdeletecmd.h"
 #include "vfillcmd.h"
 #include "vgroupcmd.h"
+#include "vstrokecmd.h"
 #include "vungroupcmd.h"
 #include "vzordercmd.h"
-#include "vstrokecmd.h"
 
 // Dialogs.
 #include "vconfiguredlg.h"
@@ -80,15 +73,10 @@
 #include "vstatebutton.h"
 #include "vcanvas.h"
 #include "vlayer.h"
-#include <kdeversion.h>
+#include "vtoolbox.h"
 
 // Only for debugging.
 #include <kdebug.h>
-#include "vcomposite.h"
-#include "vpath.h"
-#include "vsegment.h"
-
-#include "koUnitWidgets.h"
 
 
 KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
@@ -500,32 +488,6 @@ void
 KarbonView::dummyForTesting()
 {
 	kdDebug() << "KarbonView::dummyForTesting()" << endl;
-
-	VPath p( 0L );
-	p.moveTo( KoPoint( 235.61, 177.628 ) );
-	p.curveTo( KoPoint( 499.791, 462.572 ), KoPoint( 82.4413, 334.715 ), KoPoint( 66.8293, 192.397 ) );
-
-	KoPoint input( 152, 250 );
-
-	VPath q( 0L );
-	q.moveTo( input );
-
-	KoPoint output =
-		p.getLast()->pointAt(
-			p.getLast()->nearestPointParam( input ) );
-
-	q.lineTo( output );
-
-
-	VComposite* comp = new VComposite( 0L );
-	comp->combinePath( p );
-	part()->document().append( comp );
-
-	comp = new VComposite( 0L );
-	comp->combinePath( q );
-	part()->document().append( comp );
-
-	part()->repaintAllViews();
 }
 
 void
