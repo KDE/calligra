@@ -1101,6 +1101,17 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
     cell->m_cols = cell->m_cols - intoCols +1;
     if(cell->m_cols < 1)  cell->m_cols=1;
 
+    // laurent
+    // it's necessary to store all m_cols value because when you
+    // split last cell (cell at right) you add a cell (see addCell)
+    // you test : m_cols = QMAX( cell->m_col + 1, m_cols );
+    // so you add a column, but it's not good because after
+    // you add an other column.
+    // you at the end you have col +2 and not col+1
+    // => kword crashs.
+    // this is a bad hack, but I don't know how to do.
+    int tmpCols=m_cols;
+
     // create new cells
     for (unsigned int y = 0; y < intoRows; y++) {
         for (unsigned int x = 0; x < intoCols; x++){
@@ -1127,6 +1138,8 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
                 lastFrameSet->m_cols -=newCols;
         }
     }
+    //restore all value.
+    m_cols=tmpCols;
 
     // If we created extra rows/cols, adjust the groupmanager counters.
     if(newRows>0) m_rows+= newRows;
