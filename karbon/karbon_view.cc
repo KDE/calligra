@@ -723,6 +723,8 @@ KarbonView::zoomChanged( const KoPoint &p )
 	KoView::setZoom( zoomFactor );
 	m_horizRuler->setZoom( zoomFactor );
 	m_vertRuler->setZoom( zoomFactor );
+	m_horizRuler->setFrameStartEnd( - m_canvas->contentsX(), part()->document().width() * zoomFactor - m_canvas->contentsX() );
+	m_vertRuler->setFrameStartEnd( - m_canvas->contentsY(), part()->document().height() * zoomFactor - m_canvas->contentsY() );
 
 	m_canvas->viewport()->setUpdatesEnabled( false );
 
