@@ -28,8 +28,10 @@
 
 #include <kdebug.h>
 #include <kaction.h>
+#include <kstdaction.h>
 #include <kruler.h>
 #include <klocale.h>
+#include <khelpmenu.h>
 
 #include "kis_view.h"
 #include "kis_doc.h"
@@ -46,6 +48,7 @@
 #include "kis_dlg_layer.h"
 #include "kis_dlg_gradient.h"
 #include "kis_dlg_gradienteditor.h"
+#include "kis_dlg_preferences.h"
 #include "kis_dlg_brush.h"
 #include "kis_dlg_new.h"
 #include "brusheswidget.h"
@@ -263,16 +266,11 @@ void KisView::setupActions()
 {
   // edit actions
 
-  m_undo = new KAction( i18n("&Undo"), KISBarIcon("undo"), 0, this, SLOT( undo() ),
-			actionCollection(), "undo");
-  m_redo = new KAction( i18n("&Redo"), KISBarIcon("redo"), 0, this, SLOT( redo() ),
-			actionCollection(), "redo");
-  m_cut = new KAction( i18n("C&ut"), KISBarIcon("editcut"), 0, this, SLOT( cut() ),
-		       actionCollection(), "cut");
-  m_copy = new KAction( i18n("&Copy"), KISBarIcon("editcopy"), 0, this, SLOT( copy() ),
-			actionCollection(), "copy");
-  m_paste = new KAction( i18n("&Paste"), KISBarIcon("editpaste"), 0, this, SLOT( paste() ),
-			 actionCollection(), "paste");
+  m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo");
+  m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo");
+  m_cut = KStdAction::cut( this, SLOT( cut() ), actionCollection(), "cut");
+  m_copy = KStdAction::copy( this, SLOT( copy() ), actionCollection(), "copy");
+  m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(), "paste");
 
   // dialog actions
 
@@ -347,10 +345,30 @@ void KisView::setupActions()
   m_merge_linked_layers = new KAction( i18n("Merge &linked layers"), 0, this,
 				    SLOT( merge_linked_layers() ),actionCollection(), "merge_linked_layers");
 
-  // misc actions
-  m_preferences = new KAction( i18n("&Preferences"), 0, this,
-			       SLOT( preferences() ),actionCollection(), "preferences");
+  // setting actions
 
+  (void) KStdAction::showMenubar( this, SLOT( showMenubar() ), actionCollection(), "show_menubar" );
+  
+  (void) KStdAction::showToolbar( this, SLOT( showToolbar() ), actionCollection(), "show_toolbar" );
+  
+  (void) KStdAction::showStatusbar( this, SLOT( showStatusbar() ), actionCollection(), "show_statusbar" );
+  
+  (void) new KRadioAction( i18n("Show &Sidebar"), 0, this,
+                           SLOT( showSidebar() ), actionCollection(), "show_sidebar" );
+  
+  (void) KStdAction::saveOptions( this, SLOT( saveOptions() ), actionCollection(), "save_options" );
+  
+  (void) KStdAction::preferences( this, SLOT( preferences() ), actionCollection(), "configure");
+
+  // help actions
+
+  m_helpMenu = new KHelpMenu( this );
+
+  (void) KStdAction::helpContents( m_helpMenu, SLOT( appHelpActivated() ), actionCollection(), "help_contents" );
+  (void) KStdAction::whatsThis( m_helpMenu, SLOT( contextHelpActivated() ), actionCollection(), "help_whatsthis" );
+  (void) KStdAction::reportBug( m_helpMenu, SLOT( reportBug() ), actionCollection(), "help_bugreport" );
+  (void) KStdAction::aboutApp( m_helpMenu, SLOT( aboutApplication() ), actionCollection(), "help_about" );
+  
   // disable at startup unused actions
   m_undo->setEnabled( false );
   m_redo->setEnabled( false );
@@ -815,7 +833,9 @@ void KisView::merge_linked_layers()
 
 void KisView::preferences()
 {
-    qDebug("PREFERENCES called");
+  qDebug( "PREFERENCES called" );
+
+  PreferencesDialog::editPreferences();
 }
 
 int KisView::docWidth()

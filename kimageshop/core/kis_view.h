@@ -30,6 +30,7 @@
 
 class KAction;
 class KToggleAction;
+class KHelpMenu;
 class QPaintEvent;
 
 class BrushDialog;
@@ -172,8 +173,6 @@ class KisView : public KoView
     , *m_tool_gradient, *m_tool_colorpicker, *m_tool_airbrush, *m_tool_eraser;
   // layer actions
   KAction *m_layer_rotate180, *m_layer_rotateleft90, *m_layer_rotateright90, *m_layer_mirrorX, *m_layer_mirrorY;
-  // misc actions
-  KAction *m_preferences;
   // image actions
   KAction *m_merge_all_layers, *m_merge_visible_layers, *m_merge_linked_layers;
 
@@ -206,6 +205,8 @@ class KisView : public KoView
 
   KisTabBar            *m_pTabBar;
   QButton              *m_pTabFirst, *m_pTabLeft, *m_pTabRight, *m_pTabLast;
+
+  KHelpMenu            *m_helpMenu;
 };
 
 #endif
