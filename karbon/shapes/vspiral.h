@@ -26,11 +26,19 @@
 class VSpiral : public VComposite
 {
 public:
+	enum VSpiralType
+	{
+		round,
+		rectangular
+	};
 	VSpiral( VObject* parent,
 		const KoPoint& center, double radius, uint segments,
-		double fade, bool clockwise, double angle = 0.0 );
+		double fade, bool clockwise, double angle = 0.0, VSpiralType type = round );
 
 	virtual QString name() const;
+
+protected:
+	VSpiralType m_type;
 };
 
 #endif

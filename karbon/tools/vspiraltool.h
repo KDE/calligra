@@ -58,6 +58,7 @@ private:
 		double radius() const;
 		uint segments() const;
 		double fade() const;
+		uint type() const;
 		bool clockwise() const;
 		void setRadius( double value );
 		void setSegments( uint value );
@@ -70,6 +71,7 @@ private:
 		KoUnitDoubleSpinBox	*m_radius;
 		KIntSpinBox			*m_segments;
 		KDoubleNumInput		*m_fade;
+		KComboBox			*m_type;
 		KComboBox			*m_clockwise;
 		KarbonPart			*m_part;
 	};

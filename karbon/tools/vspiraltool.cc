@@ -34,6 +34,11 @@
 VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
 {
+	new QLabel( i18n( "Type:" ), this );
+	m_type = new KComboBox( false, this );
+	m_type->insertItem( i18n( "Round" ), 0 );
+	m_type->insertItem( i18n( "Rectangular" ), 1 );
+
 	new QLabel( i18n( "Radius:" ), this );
 	m_radius = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
 	refreshUnit();
@@ -75,6 +80,12 @@ bool
 VSpiralTool::VSpiralOptionsWidget::clockwise() const
 {
 	return m_clockwise->currentItem() == 0;
+}
+
+uint
+VSpiralTool::VSpiralOptionsWidget::type() const
+{
+	return m_type->currentItem();
 }
 
 void
@@ -161,7 +172,7 @@ VSpiralTool::shape( bool interactive ) const
 				m_optionsWidget->segments(),
 				m_optionsWidget->fade(),
 				m_optionsWidget->clockwise(),
-				m_d2 );
+				m_d2, (VSpiral::VSpiralType)m_optionsWidget->type() );
 	}
 	else
 		return
@@ -172,6 +183,6 @@ VSpiralTool::shape( bool interactive ) const
 				m_optionsWidget->segments(),
 				m_optionsWidget->fade(),
 				m_optionsWidget->clockwise(),
-				m_d2 );
+				m_d2, (VSpiral::VSpiralType)m_optionsWidget->type() );
 }
 

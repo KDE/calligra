@@ -30,8 +30,8 @@
 
 VSpiral::VSpiral( VObject* parent,
 		const KoPoint& center, double radius, uint segments, double fade,
-		bool clockwise, double angle )
-	: VComposite( parent )
+		bool clockwise, double angle, VSpiralType type )
+	: VComposite( parent ), m_type( type )
 {
 	// It makes sense to have at least one segment:
 	if( segments < 1 )
@@ -62,7 +62,10 @@ VSpiral::VSpiral( VObject* parent,
 		newP.setX( r * cos( adv_ang * ( i + 2 ) ) + newCenter.x() );
 		newP.setY( r * sin( adv_ang * ( i + 2 ) ) + newCenter.y() );
 
-		arcTo( oldP + newP - newCenter, newP, r );
+		if( m_type == round )
+			arcTo( oldP + newP - newCenter, newP, r );
+		else
+			lineTo( newP );
 
 		newCenter += ( newP - newCenter ) * ( 1.0 - fade );
 		oldP = newP;
