@@ -1,0 +1,243 @@
+--- admin/acinclude.m4.in
++++ admin/acinclude.m4.in
+@@ -2294,6 +2294,24 @@ LIBTOOL_SHELL="/bin/sh ./libtool"
+ #  LIBTOOL="$LIBTOOL --silent"
+ KDE_PLUGIN="-avoid-version -module -no-undefined \$(KDE_RPATH)"
+ AC_SUBST(KDE_PLUGIN)
++
++  AC_ARG_ENABLE(objprelink, [  --enable-objprelink     prelink apps (experimental, needs objprelink in path)],
++	kde_use_objprelink=$enableval, kde_use_objprelink=no)
++  if test "x$kde_use_objprelink" = "xyes"; then 
++      echo Patching libtool to run objprelink.
++      mv libtool libtool.orig
++      cat > libtool <<\EOF
++#! /bin/sh
++for n ; do case $n in
++  *.o)  test -r $n && echo objprelink $n && objprelink $n ;;
++  *.lo) m=`basename $n .lo`".o" && test -r $m && echo objprelink $m && objprelink $m 
++        m=".libs/$m" && test -r $m && echo objprelink $m && objprelink $m ;;
++esac; done
++EOF
++      cat >> libtool libtool.orig
++      rm libtool.orig
++      chmod a+x libtool
++  fi
+ ])
+ 
+ AC_DEFUN(KDE_CHECK_TYPES,
+--- admin/Makefile.common
++++ admin/Makefile.common
+@@ -92,22 +92,32 @@
+ 	pwd=`pwd` ;\
+ 	dirs=`find . -type d | grep -v CVS | sed -e "s#^./##"` ;\
+ 	for i in $$dirs; do \
+-	  if test ! -d "$$pwd/$$i/CVS"; then \
+-	    echo "D $$i" ;\
+-	    rm -rf "$$pwd/$$i"; \
+-	    continue; \
+-	  fi ;\
+-	  cd $$pwd/$$i ;\
+-	  for f in * .*; do \
+-	    if test ! -d "$$f"; then \
+-	      if grep "^/$$f/" CVS/Entries > /dev/null; then \
+-		a="b"; \
+-	      else \
+-	        echo "F $$i/$$f"; \
+-		rm -f "$$pwd/$$i/$$f"; \
+-	      fi; \
+-	    fi ; \
+-	  done; \
++	  case "$$i" in \
++	    debian) \
++		  echo "Ignoring files in $$i"; \
++		;; \
++		*/HTML) \
++		  echo "Ignoring files in $$i"; \
++		;; \
++		*) \
++	      if test ! -d "$$pwd/$$i/CVS"; then \
++	        echo "D $$i" ;\
++	        rm -rf "$$pwd/$$i"; \
++	        continue; \
++	      fi ;\
++	      cd $$pwd/$$i ;\
++	      for f in * .*; do \
++	        if test ! -d "$$f"; then \
++	          if grep "^/$$f/" CVS/Entries > /dev/null; then \
++		    a="b"; \
++	          else \
++	            echo "F $$i/$$f"; \
++		    rm -f "$$pwd/$$i/$$f"; \
++	          fi; \
++	        fi ; \
++	      done; \
++	    ;; \
++	  esac; \
+ 	done
+ 
+ 
+--- kivio/kiviopart/Makefile.am
++++ kivio/kiviopart/Makefile.am
+@@ -128,7 +128,7 @@
+ #2########################################################!@#$
+ lib_LTLIBRARIES = kivio.la
+ kivio_la_SOURCES = main.cpp
+-kivio_la_LDFLAGS = $(all_libraries) -module -avoid-version
++kivio_la_LDFLAGS = $(all_libraries) -module
+ kivio_la_LIBADD = ../../lib/kofficecore/libkofficecore.la
+ 
+ libkiviopart_la_LDFLAGS = -avoid-version -module $(LIB_KOFFICEUI) $(all_libraries)
+--- kivio/plugins/kiviozoomtool/Makefile.am
++++ kivio/plugins/kiviozoomtool/Makefile.am
+@@ -27,7 +27,7 @@
+ ##############################################################
+ ####                  END KDEStudio part                  ####
+ #2########################################################!@#$
+-libkiviozoomtool_la_LDFLAGS = -avoid-version -module -no-undefined
++libkiviozoomtool_la_LDFLAGS = -module -no-undefined
+ libkiviozoomtool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+ 
+ rc_DATA = kiviozoomtool.rc
+--- kivio/plugins/kiviotexttool/Makefile.am
++++ kivio/plugins/kiviotexttool/Makefile.am
+@@ -31,7 +31,7 @@
+ ##############################################################
+ ####                  END KDEStudio part                  ####
+ #2########################################################!@#$
+-libkiviotexttool_la_LDFLAGS = -avoid-version -module -no-undefined
++libkiviotexttool_la_LDFLAGS = -module -no-undefined
+ libkiviotexttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+ 
+ rc_DATA = kiviotexttool.rc
+--- kivio/plugins/kivioconnectortool/Makefile.am
++++ kivio/plugins/kivioconnectortool/Makefile.am
+@@ -31,7 +31,7 @@
+ ##############################################################
+ ####                  END KDEStudio part                  ####
+ #2########################################################!@#$
+-libkivioconnectortool_la_LDFLAGS = -avoid-version -module -no-undefined
++libkivioconnectortool_la_LDFLAGS = -module -no-undefined
+ libkivioconnectortool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+ 
+ rc_DATA = kivioconnectortool.rc
+--- kivio/plugins/kivioselecttool/Makefile.am
++++ kivio/plugins/kivioselecttool/Makefile.am
+@@ -27,7 +27,7 @@
+ ##############################################################
+ ####                  END KDEStudio part                  ####
+ #2########################################################!@#$
+-libkivioselecttool_la_LDFLAGS = -avoid-version -module -no-undefined
++libkivioselecttool_la_LDFLAGS = -module -no-undefined
+ libkivioselecttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+ 
+ rc_DATA = kivioselecttool.rc
+--- kugar/part/kugar_part.cpp
++++ kugar/part/kugar_part.cpp
+@@ -78,7 +78,7 @@
+ 
+ 	if (!s_instance)
+ 	{
+-		KAboutData *about = new KAboutData(PACKAGE,
++		KAboutData *about = new KAboutData("kugar",
+ 						   I18N_NOOP("Kugar"),
+ 						   VERSION);
+ 
+--- kugar/part/Makefile.am
++++ kugar/part/Makefile.am
+@@ -2,7 +2,7 @@
+ 
+ lib_LTLIBRARIES = libkugarpart.la
+ libkugarpart_la_SOURCES = kugar_part.cpp
+-libkugarpart_la_LDFLAGS = $(all_libraries) -module -avoid-version
++libkugarpart_la_LDFLAGS = $(all_libraries) -module
+ libkugarpart_la_LIBADD = ../lib/libkugar.la $(LIB_KPARTS) $(LIB_KDEPRINT)
+ 
+ libkugarpart_la_METASOURCES = AUTO
+--- kugar/shell/main.cpp
++++ kugar/shell/main.cpp
+@@ -18,7 +18,7 @@
+ 
+ int main(int argc,char **argv)
+ {
+-	KAboutData about(PACKAGE,I18N_NOOP("Kugar"),VERSION,
++	KAboutData about("kugar",I18N_NOOP("Kugar"),VERSION,
+ 			 I18N_NOOP("A template driven report viewer for XML data."),
+ 			 KAboutData::License_GPL_V2,
+ 			 "Copyright (c) 1999-2000 Mutiny Bay Software\n"
+--- kword/Makefile.am
++++ kword/Makefile.am
+@@ -28,7 +28,7 @@
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES = kword.la
+ kword_la_SOURCES = main.cc
+-kword_la_LDFLAGS = $(all_libraries) -avoid-version -module
++kword_la_LDFLAGS = $(all_libraries) -module
+ kword_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+ 
+ ## The executable
+--- kontour/Makefile.am
++++ kontour/Makefile.am
+@@ -18,7 +18,7 @@
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES = kontour.la
+ kontour_la_SOURCES = main.cc
+-kontour_la_LDFLAGS = $(all_libraries) -avoid-version -module
++kontour_la_LDFLAGS = $(all_libraries) -module
+ kontour_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+ 
+ ## The executable
+--- koshell/Makefile.am
++++ koshell/Makefile.am
+@@ -4,7 +4,7 @@
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES = koshell.la
+ koshell_la_SOURCES = koshell_main.cc koshell_shell.cc
+-koshell_la_LDFLAGS = $(all_libraries) -avoid-version -module
++koshell_la_LDFLAGS = $(all_libraries) -module
+ koshell_la_LIBADD = $(LIB_KOFFICEUI)
+ 
+ ## The executable
+--- kspread/Makefile.am
++++ kspread/Makefile.am
+@@ -38,7 +38,7 @@
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES =  kspread.la
+ kspread_la_SOURCES = main.cc
+-kspread_la_LDFLAGS = $(all_libraries) -avoid-version -module
++kspread_la_LDFLAGS = $(all_libraries) -module
+ kspread_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+ 
+ ## The executable
+--- kchart/Makefile.am
++++ kchart/Makefile.am
+@@ -40,7 +40,7 @@
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES = kchart.la
+ kchart_la_SOURCES = main.cc
+-kchart_la_LDFLAGS = $(all_libraries) -avoid-version -module
++kchart_la_LDFLAGS = $(all_libraries) -module
+ kchart_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+ 
+ ## The executable
+--- kpresenter/Makefile.am
++++ kpresenter/Makefile.am
+@@ -38,7 +38,7 @@
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES = kpresenter.la
+ kpresenter_la_SOURCES = main.cc
+-kpresenter_la_LDFLAGS = $(all_libraries) -avoid-version -module
++kpresenter_la_LDFLAGS = $(all_libraries) -module
+ kpresenter_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+ 
+ ## The executable
+--- kformula/Makefile.am
++++ kformula/Makefile.am
+@@ -13,7 +13,7 @@
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES = kformulamain.la
+ kformulamain_la_SOURCES = main.cc
+-kformulamain_la_LDFLAGS = $(all_libraries) -module -avoid-version
++kformulamain_la_LDFLAGS = $(all_libraries) -module
+ kformulamain_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+ 
+ ## The executable
