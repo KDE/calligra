@@ -360,6 +360,12 @@ void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
   if (doc->selectionIsEmpty ())
     return;
 
+  if (ke->key () == Key_Escape) {
+      // clear selection
+      doc->unselectAllObjects ();
+      return;
+  }
+
 #define BIG_STEP 10
 #define SMALL_STEP 2
   int dx = 0, dy = 0;
