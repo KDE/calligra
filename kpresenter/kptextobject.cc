@@ -158,7 +158,7 @@ QBrush KPTextObject::getBrush() const
 
 void KPTextObject::resizeTextDocument()
 {
-    textDocument()->setWidth( m_doc->zoomHandler()->ptToLayoutUnitPixX( getSize().width() ) );
+    textDocument()->setWidth( m_doc->zoomHandler()->ptToLayoutUnitPixX( innerWidth() ) );
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
     slotAvailableHeightNeeded();
     m_textobj->formatMore();
@@ -1248,12 +1248,32 @@ KCommand * KPTextObject::textObjectToContents()
     return 0L;
 }
 
-void KPTextObject::setFrameMargins( double _left, double _top, double _right, double _bottom)
+void KPTextObject::setTextMargins( double _left, double _top, double _right, double _bottom)
 {
     bleft = _left;
     btop = _top;
     bright = _right;
     bbottom = _bottom;
+}
+
+
+KoRect KPTextObject::innerRect() const
+{
+    KoRect inner( getRect());
+    inner.moveBy( bLeft(), bTop());
+    inner.setWidth( inner.width() - bLeft() - bRight() );
+    inner.setHeight( inner.height() - bTop() - bBottom() );
+    return inner;
+}
+
+double KPTextObject::innerWidth() const
+{
+    return getRect().width() - bLeft() - bRight();
+}
+
+double KPTextObject::innerHeight() const
+{
+    return getRect().height() - bTop() - bBottom();
 }
 
 KPTextView::KPTextView( KPTextObject * txtObj,KPrCanvas *_canvas )

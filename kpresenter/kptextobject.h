@@ -146,7 +146,11 @@ public:
     /** get bottom margin size */
     double bBottom()const { return bbottom; }
 
-    void setFrameMargins( double _left, double _top, double right, double bottom);
+    void setTextMargins( double _left, double _top, double right, double bottom);
+
+    KoRect innerRect() const;
+    double innerWidth() const;
+    double innerHeight() const;
 
 
 signals:
