@@ -28,6 +28,8 @@
 #include <koQueryTrader.h>
 #include <ktempfile.h>
 
+using namespace std;
+
 /**
  * This small wrapper program is used to invoke KOffice filters as a
  * separate process. This is quite nice for "alpha-quality" filters which
