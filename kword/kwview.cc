@@ -140,7 +140,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
              this, SLOT( clipboardDataChanged() ) );
 
     connect( gui->canvasWidget(), SIGNAL(currentFrameSetEditChanged()),
-             this, SLOT(updateButtons()) );
+             this, SLOT(slotFrameSetEditChanged()) );
 
     connect( gui->canvasWidget(), SIGNAL(currentMouseModeChanged(MouseMode)),
              this, SLOT(setTool(MouseMode)));
@@ -245,7 +245,7 @@ void KWView::initGui()
     showFormulaToolbar( FALSE );
 
     updatePageInfo();
-    updateButtons();
+    slotFrameSetEditChanged();
     frameSelectedChanged();
 }
 
@@ -2724,7 +2724,7 @@ KWTextFrameSetEdit *KWView::currentTextEdit()
     return 0L;
 }
 
-void KWView::updateButtons()
+void KWView::slotFrameSetEditChanged()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     bool rw = koDocument()->isReadWrite();
@@ -2769,6 +2769,14 @@ void KWView::updateButtons()
     actionInsertVariable->setEnabled(state);
     actionInsertExpression->setEnabled(state);
     actionInsertFrameBreak->setEnabled(state);
+
+    // Set the "frame start" in the ruler (tabs are relative to that position)
+    if ( edit )
+    {
+        QPoint p = doc->zoomPoint( edit->currentFrame()->topLeft() );
+        p = gui->canvasWidget()->viewMode()->normalToView( p );
+        gui->getHorzRuler()->setFrameStart( p.x() );
+    }
 
 }
 

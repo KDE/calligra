@@ -241,7 +241,7 @@ public slots:
     void updateFrameStatusBarItem();
 
     void slotSpecialChar(QChar , const QString &);
-    void updateButtons();
+    void slotFrameSetEditChanged();
     void setTool( MouseMode _mouseMode );
     void frameSelectedChanged();
     void docStructChanged(TypeStructDocItem _type);

@@ -1331,6 +1331,7 @@ void KWTextFrameSet::formatMore()
                             // from here, since it calls formatMore() !
                             m_doc->updateAllFrames();
                             m_doc->invalidate();
+                            m_doc->repaintAllViews();
                             break;
                         }
 
@@ -1361,6 +1362,7 @@ void KWTextFrameSet::formatMore()
                             // from here, since it calls formatMore() !
                             m_doc->updateAllFrames();
                             m_doc->invalidate();
+                            m_doc->repaintAllViews();
                            break;
                         }
                     }

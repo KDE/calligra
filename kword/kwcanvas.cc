@@ -908,14 +908,6 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
 {
     //kdDebug() << "KWCanvas::mrEditFrame" << endl;
     KWFrame *firstFrame = doc->getFirstSelectedFrame();
-
-    if ( firstFrame )
-    {
-        QPoint p = m_viewMode->normalToView( doc->zoomPoint( firstFrame->topLeft() ) );
-        m_gui->getHorzRuler()->setFrameStart( p.x() );
-        // Only done with X since this is for relative position of tabs
-    }
-
     //kdDebug() << "KWCanvas::mrEditFrame frameMoved=" << frameMoved << " frameResized=" << frameResized << endl;
     if ( firstFrame && ( frameMoved || frameResized ) )
     {
