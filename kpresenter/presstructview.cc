@@ -53,14 +53,14 @@ void KPSlidePreview::setPage( QListViewItem *item )
 {
     if ( !item )
         return;
-
-    QPixmap pix( doc->getPageRect( 0, 0, 0 ).size() );
-    pix.fill( Qt::white );
     int i = ( (KPPresStructObjectItem*)item )->getPageNum();
+    QRect rect=doc->pageList().at(i)->getZoomPageRect();
+    QPixmap pix( rect.size() );
+    pix.fill( Qt::white );
     view->getCanvas()->drawPageInPix2( pix, i );
 
-    int w = doc->getPageRect( 0, 0, 0 ).width();
-    int h = doc->getPageRect( 0, 0, 0 ).height();
+    int w = rect.width();
+    int h = rect.height();
     if ( w > h ) {
         w = 297;
         h = 210;
@@ -221,10 +221,11 @@ void KPPresStructView::setupSlideList()
         item->setPage( doc->pageList().at( i )->background(), i );
         item->setText( 0, QString( "%1" ).arg( i + 1 ) );
         item->setText( 1, doc->pageList().at( i )->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) ) );
-        for ( int j = doc->pageList().at( i )->objNums() - 1; j >= 0; --j ) {
+        KPrPage *page=doc->pageList().at( i );
+        for ( int j = page->objNums() - 1; j >= 0; --j ) {
             KPPresStructObjectItem *item_ = new KPPresStructObjectItem( item );
-            item_->setPage( doc->pageList().at( i )->background(), i );
-            QPtrList<KPObject> list(doc->pageList().at( i )->objectList());
+            item_->setPage( page->background(), i );
+            QPtrList<KPObject> list(page->objectList());
             item_->setObject( list.at( j ), j );
             item_->setNum(j);
         }
