@@ -1902,10 +1902,10 @@ void KSpreadView::updateButton( KSpreadCell *cell, int column, int row)
     m_percent->setChecked( ft == KSpreadCell::Percentage );
     m_money->setChecked( ft == KSpreadCell::Money );
 
-    if ( !m_pTable && !m_pTable->isProtected() )
+    if ( m_pTable && !m_pTable->isProtected() )
       m_removeComment->setEnabled( !cell->comment(column,row).isEmpty() );
 
-    if ( !m_pTable && !m_pTable->isProtected() )
+    if ( m_pTable && !m_pTable->isProtected() )
       m_decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
 
     m_toolbarLock = FALSE;
@@ -1971,7 +1971,7 @@ void KSpreadView::updateEditWidget()
     bool active = activeTable()->getShowFormula() 
       && !( m_pTable->isProtected() && cell && cell->isHideFormula( column, row ) );
 
-    if ( !m_pTable && !m_pTable->isProtected() )
+    if ( m_pTable && !m_pTable->isProtected() )
     {
       m_alignLeft->setEnabled(!active);
       m_alignCenter->setEnabled(!active);
@@ -2232,13 +2232,13 @@ void KSpreadView::enableRedo( bool _b )
 
 void KSpreadView::enableInsertColumn( bool _b )
 {
-  if ( !m_pTable && !m_pTable->isProtected() )
+  if ( m_pTable && !m_pTable->isProtected() )
     m_insertColumn->setEnabled( _b );
 }
 
 void KSpreadView::enableInsertRow( bool _b )
 {
-  if ( !m_pTable && !m_pTable->isProtected() )
+  if ( m_pTable && !m_pTable->isProtected() )
     m_insertRow->setEnabled( _b );
 }
 
@@ -4377,7 +4377,7 @@ int KSpreadView::bottomBorder() const
 void KSpreadView::refreshView()
 {
     bool active=activeTable()->getShowFormula();
-    if ( !m_pTable && !m_pTable->isProtected() )
+    if ( m_pTable && !m_pTable->isProtected() )
     {
       m_alignLeft->setEnabled(!active);
       m_alignCenter->setEnabled(!active);
@@ -5546,7 +5546,7 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
     bool colSelected = util_isColumnSelected( selection() );
     bool rowSelected = util_isRowSelected( selection() );
 
-    if ( !m_pTable && !m_pTable->isProtected() )
+    if ( m_pTable && !m_pTable->isProtected() )
     {
       m_resizeRow->setEnabled( !colSelected );
       m_equalizeRow->setEnabled( !colSelected );
@@ -5558,7 +5558,6 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
 
       bool simpleSelection = m_selectionInfo->singleCellSelection()
         || colSelected || rowSelected;
-
       m_tableFormat->setEnabled( !simpleSelection );
       m_sort->setEnabled( !simpleSelection );
       m_mergeCell->setEnabled( !simpleSelection );
@@ -5828,7 +5827,7 @@ void KSpreadView::transformPart()
 
 void KSpreadView::slotChildSelected( KoDocumentChild* ch )
 {
-  if ( !m_pTable && !m_pTable->isProtected() )
+  if ( m_pTable && !m_pTable->isProtected() )
   {
     m_transform->setEnabled( TRUE );
 
@@ -5913,7 +5912,7 @@ void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
     if( m_pTabBar )
     {
         bool state = ( m_pTabBar->listshow().count() > 1 );
-        if ( !m_pTable || m_pTable->isProtected() )
+        if ( m_pTable && m_pTable->isProtected() )
         {
           m_removeTable->setEnabled( false );
           m_hideTable->setEnabled( false );
