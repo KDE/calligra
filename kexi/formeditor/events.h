@@ -1,0 +1,71 @@
+/* This file is part of the KDE project
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+#ifndef KFORMDESIGNEREVENTS_H
+#define KFORMDESIGNEREVENTS_H
+
+#include <qptrlist.h>
+#include <qstring.h>
+
+namespace KFormDesigner {
+
+class KFORMEDITOR_EXPORT Connection
+{
+	public:
+		Connection(const QString &sender, const QString &signal, const QString &receiver, const QString &slot);
+		Connection() {;}
+		~Connection() {;}
+
+		QString	sender() const { return m_sender; }
+		QString	receiver() const { return m_receiver; }
+		QString	signal() const { return m_signal; }
+		QString	slot() const { return m_slot; }
+
+		void	setSender(const QString &v) { m_sender = v; }
+		void	setReceiver(const QString &v) { m_receiver = v; }
+		void	setSignal(const QString &v) { m_signal = v; }
+		void	setSlot(const QString &v) { m_slot = v; }
+
+	protected:
+		QString m_sender;
+		QString m_signal;
+		QString m_receiver;
+		QString m_slot;
+};
+
+typedef QPtrList<Connection> ConnectionList;
+
+class KFORMEDITOR_EXPORT ConnectionBuffer : public ConnectionList
+{
+	//Q_OBJECT
+
+	public:
+		ConnectionBuffer() {;}
+		~ConnectionBuffer() {;}
+
+		//void    fixName(const QString &oldname, const QString &newName) {;}
+
+		//ConnectionList    eventsForSender(const QString &widget) {;}
+		//ConnectionList    eventsForReceiver(const QString &widget) {;}
+};
+
+}
+
+#endif
+
