@@ -695,6 +695,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
 {
     if ( m_lstFrameSet.isEmpty() )
         return;
+    //printDebug();
     kdDebug(32002) << "KWDocument::recalcFrames from=" << fromPage << " to=" << toPage << endl;
 
     KWFrameSet *frameset = m_lstFrameSet.getFirst();
@@ -1933,16 +1934,14 @@ bool KWDocument::completeLoading( KoStore *_store )
     // The fields from documentinfo.xml just got loaded -> update vars
     recalcVariables( VT_FIELD );
 
-    // This computes the number of pages (from the frames)
-    // for the first time (and adds footers/headers/footnotes etc.)
-    // It is necessary to do so BEFORE calling finalize, since updateFrames
-    // (in KWTextFrameSet) needs the number of pages.
-    recalcFrames();
-
     // Finalize all the existing framesets
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->finalize();
+
+    // This computes the number of pages (from the frames)
+    // for the first time (and adds footers/headers/footnotes etc.)
+    recalcFrames();
 
     // Fix z orders on older documents
     fixZOrders();
@@ -2865,10 +2864,11 @@ bool KWDocument::canRemovePage( int num )
 
 void KWDocument::removePage( int num )
 {
-#ifdef DEBUG_PAGES
-    kdDebug(32002) << "KWDocument::removePage " << num << endl;
-#endif
+    // ## This assumes that framesInPage is up-to-date.
     QPtrList<KWFrame> framesToDelete = framesInPage( num, false );
+#ifdef DEBUG_PAGES
+    kdDebug(32002) << "KWDocument::removePage " << num << ", " << framesToDelete.count() << " frames to delete" << endl;
+#endif
     QPtrListIterator<KWFrame> frameIt( framesToDelete );
     for ( ; frameIt.current(); ++frameIt )
     {

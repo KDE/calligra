@@ -258,7 +258,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
 
         // Check for endnotes, on the last page of main text
         // and on any end-notes-only page, i.e. after the last page of main text
-        if ( pageNum >= m_lastMainFramePage ) {
+        if ( pageNum >= m_lastMainFramePage && m_doc->hasEndNotes() ) {
             bool pageHasMainText = ( pageNum == m_lastMainFramePage );
             double textBottom = pageHasMainText ? lastMainFrameBottom : top;
             // Leave some space on top of the endnotes, for the horizontal line
