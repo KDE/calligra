@@ -239,6 +239,14 @@ void GPolyline::setPoint (int idx, const Coord& p) {
   emit changed ();
 }
 
+void GPolyline::removePoint (int idx, bool update) {
+  points.remove (idx);
+  if (update) {
+    calcBoundingBox ();
+    emit changed ();
+  }
+}
+
 void GPolyline::addPoint (int idx, const Coord& p, bool update) {
   QWMatrix mi = tMatrix.invert ();
   Coord np = p.transform (mi);
@@ -304,14 +312,6 @@ int GPolyline::getNeighbourPoint (const Coord& p) {
       return i;
   }
   return -1;
-}
-
-void GPolyline::removePoint (int idx, bool update) {
-  points.remove (idx);
-  if (update) {
-    calcBoundingBox ();
-    emit changed ();
-  }
 }
 
 GObject* GPolyline::copy () {

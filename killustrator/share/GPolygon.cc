@@ -157,6 +157,10 @@ const char* GPolygon::typeName () {
     return i18n ("Square");
 }
 
+bool GPolygon::isFilled () const {
+  return fillInfo.style != NoBrush;
+}
+
 void GPolygon::draw (Painter& p, bool withBasePoints) {
   unsigned int i, num;
 

@@ -56,6 +56,7 @@ public:
   virtual int getNeighbourPoint (const Coord& p);
 
   bool isRectangle () const;
+  bool isFilled () const;
 
   // a shortcut for rectangles and squares
   void setEndPoint (const Coord& p);
