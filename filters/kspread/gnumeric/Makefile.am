@@ -8,11 +8,11 @@ kde_module_LTLIBRARIES = libgnumericexport.la libgnumericimport.la
 
 libgnumericexport_la_SOURCES = gnumericexport.cc
 libgnumericexport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
-libgnumericexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadcommon.la $(LIBZ)
+libgnumericexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadcommon.la
 
 libgnumericimport_la_SOURCES = gnumericimport.cc
 libgnumericimport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
-libgnumericimport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadcommon.la $(LIBZ)
+libgnumericimport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadcommon.la
 
 METASOURCES = AUTO
 
