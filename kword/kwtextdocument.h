@@ -55,7 +55,7 @@ public:
                               KoTextParag* parag, uint pos,
                               QString& textData, KoTextCustomItem* & customItem );
     /// Extensions to KoTextDocument::loadOasisText
-    bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& /*context*/,
+    bool loadOasisBodyTag( const QDomElement& tag, KoOasisContext& /*context*/,
                                            KoTextParag* /*lastParagraph*/ );
 protected:
     void init();
