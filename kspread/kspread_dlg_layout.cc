@@ -823,25 +823,33 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
     dlg = _dlg;
     bBgColorUndefined = !dlg->bBgColor;
 
+    QGridLayout* layout = new QGridLayout( this, 2,2,7,7 );
+    QGroupBox *box = new QGroupBox( this, "Box");
 
+    QGridLayout *grid = new QGridLayout(box,2,6,7,7);
     QLabel *tmpQLabel;
-    tmpQLabel = new QLabel( this, "Label_2" );
-    tmpQLabel->setGeometry( 140, 20, 120, 30 );
+    tmpQLabel = new QLabel( box, "Label_2" );
+    grid->addWidget(tmpQLabel,0,0);
     tmpQLabel->setText( i18n("Background Color") );
 
-    bgColorButton = new KColorButton( this, "ComboBox_3" );
-    bgColorButton->setGeometry( 140, 50, 100, 30 );
+    bgColorButton = new KColorButton( box, "ColorButton" );
+    grid->addWidget(bgColorButton,1,0);
+    if ( dlg->bBgColor )
+	bgColor = dlg->bgColor;
+    else
+	bgColor = colorGroup().base();
+    bgColorButton->setColor(bgColor);
 
     connect( bgColorButton, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotSetBackgroundColor( const QColor & ) ) );
 
-    tmpQLabel = new QLabel( this, "Label_3" );
-    tmpQLabel->setGeometry( 20, 100, 120, 30 );
+    tmpQLabel = new QLabel( box, "Label_3" );
+    grid->addWidget(tmpQLabel,2,0);
     tmpQLabel->setText( i18n("Functionality") );
 
+    styleButton = new QComboBox( box, "ComboBox_2" );
 
-    styleButton = new QComboBox( this, "ComboBox_2" );
-    styleButton->setGeometry( 20, 130, 100, 30 );
+    grid->addWidget(styleButton,3,0);
 
     idStyleNormal = 0; styleButton->insertItem( i18n("Normal"), 0 );
     idStyleButton = 1; styleButton->insertItem( i18n("Button"), 1 );
@@ -854,13 +862,12 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
       idStyleUndef = -1;
     connect( styleButton, SIGNAL( activated( int ) ), this, SLOT( slotStyle( int ) ) );
 
-    tmpQLabel = new QLabel( this, "Label_3" );
-    tmpQLabel->setGeometry( 20, 180, 120, 30 );
-
+    tmpQLabel = new QLabel( box, "Label_3" );
+    grid->addWidget(tmpQLabel,4,0);
     tmpQLabel->setText( i18n("Action") );
 
-    actionText = new QLineEdit( this );
-    actionText->setGeometry( 20, 210, 200, 30 );
+    actionText = new QLineEdit( box );
+    grid->addMultiCellWidget(actionText,5,5,0,1);
 
     if ( dlg->isSingleCell() )
     {
@@ -881,11 +888,7 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
     else if ( dlg->eStyle == KSpreadCell::ST_Undef )
       styleButton->setCurrentItem( idStyleUndef );
 
-    if ( dlg->bBgColor )
-	bgColor = dlg->bgColor;
-    else
-	bgColor = colorGroup().base();
-    bgColorButton->setColor(bgColor);
+    layout->addWidget(box,0,0);
 
     this->resize( 400, 400 );
 }
