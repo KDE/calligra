@@ -1,0 +1,358 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice\n"
+"POT-Creation-Date: 1998-09-21 21:45+0200\n"
+"PO-Revision-Date: 1998-10-03 20:00+0200\n"
+"Last-Translator: Montel laurent <montell@club-internet.fr>\n"
+
+#: kofficecore/koDocument.cc:376 kofficecore/koDocument.cc:386
+#: kofficecore/koDocument.cc:440 kofficecore/koDocument.cc:450
+#: kofficeui/koPrintDia.cc:31
+msgid "KOffice Error"
+msgstr "Erreur dans KOffice"
+
+#: kofficecore/koDocument.cc:376 kofficecore/koDocument.cc:440
+msgid "Can not save to remote URL\n"
+msgstr ""
+
+#: kofficecore/koDocument.cc:376 kofficecore/koDocument.cc:386
+#: kofficecore/koDocument.cc:440 kofficecore/koDocument.cc:450
+#: kofficecore/koIMR.cc:148 kofficeui/koPageLayoutDia.cc:113
+#: kofficeui/koPageLayoutDia.cc:139 kofficeui/koPartSelectDia_data.cc:42
+#: kofficeui/koPrintDia.cc:226
+msgid "Ok"
+msgstr "Ok"
+
+#: kofficecore/koDocument.cc:383
+msgid "Could not write to\n"
+msgstr "Impossible d'écrire sur\n"
+
+# , c-format
+# , c-format
+# , c-format
+#: kofficecore/koDocument.cc:448
+msgid ""
+"Could not write to\n"
+"%s"
+msgstr ""
+"Impossible d'écrire sur\n"
+"%s."
+
+# , c-format
+# , c-format
+# , c-format
+#: kofficecore/koIMR.cc:147
+msgid "Could not start server %s"
+msgstr "Impossible de démarrer le server %s "
+
+#: kofficecore/koIMR.cc:148
+msgid "KSpread Error"
+msgstr "Erreur dans KSpread"
+
+# , c-format
+# , c-format
+# , c-format
+#: kofficecore/koScanParts.cc:35
+msgid ""
+"The OpenParts config file\n"
+"%s\n"
+"does not conatain a %s=... entry"
+msgstr ""
+""
+""
+""
+
+#: kofficeui/koAboutDia.cc:32
+msgid "KPresenter - About"
+msgstr "A propos de KPresenter"
+
+#: kofficeui/koAboutDia.cc:36
+msgid "WMF Clipart Support (c) by Stefan Taferner <taferner@kde.org>"
+msgstr "WMF Clipart Support (c) par Stefan Taferner <taferner@kde.org>"
+
+#: kofficeui/koAboutDia.cc:40
+msgid "KSpread - About"
+msgstr "A propos de Kspread"
+
+#: kofficeui/koAboutDia.cc:48
+msgid "KCharts - About"
+msgstr "A propos de  KCharts"
+
+#: kofficeui/koAboutDia.cc:56
+msgid "KImage - About"
+msgstr "A propos de KImage"
+
+#: kofficeui/koAboutDia.cc:64
+msgid "KAutoformEdit - About"
+msgstr "A propos de KAutoformEdit"
+
+#: kofficeui/koAboutDia.cc:72
+msgid "KOffice - About"
+msgstr "A propos de KOffice"
+
+#: kofficeui/koAboutDia.cc:74
+msgid "the KOffice Team"
+msgstr ""
+
+#: kofficeui/koAboutDia.cc:75
+msgid "<koffice@kde.org>"
+msgstr ""
+
+# , c-format
+# , c-format
+#: kofficeui/koAboutDia.cc:92
+msgid ""
+"Version: %s\n" 
+"\n"
+"(c) by %s 1997 - 1998\n"
+"\n"
+"E-mail: %s \n"
+"\n"
+"The KOffice is under GNU GPL"
+msgstr ""
+"Version: %s\n"
+"\n"
+"(c) par %s 1997 - 1998\n"
+"\n"
+"E-mail: %s \n"
+"\n"
+"KOffice est sous GNU GPL"
+
+#: kofficeui/koAboutDia.cc:143
+msgid "About KDE"
+msgstr ""
+
+#: kofficeui/koAboutDia.cc:144
+msgid ""
+"\n"
+"The KDE Desktop Environment was written by the KDE Team,\n"
+"a world-wide network of software engineers committed to\n"
+"free software development.\n"
+"\n"
+"Visit http://www.kde.org for more information on the KDE\n"
+"Project. Please consider joining and supporting KDE.\n"
+"\n"
+"Please report bugs at http://buglist.kde.org.\n"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:25
+msgid "Page Preview"
+msgstr "Page de presentation"
+
+#: kofficeui/koPageLayoutDia.cc:117 kofficeui/koPageLayoutDia.cc:143
+msgid "Page Layout"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:239
+msgid "Unit:"
+msgstr "Unité:"
+
+#: kofficeui/koPageLayoutDia.cc:246
+msgid "Millimeters (mm)"
+msgstr "Millimètres (mm)"
+
+#: kofficeui/koPageLayoutDia.cc:247
+msgid "Centimeters (cm)"
+msgstr "Centimètres (cm)"
+
+#: kofficeui/koPageLayoutDia.cc:248
+msgid "Inches (in)"
+msgstr "Pouces (in)"
+
+#: kofficeui/koPageLayoutDia.cc:254
+msgid "Page Format"
+msgstr "Format de page"
+
+#: kofficeui/koPageLayoutDia.cc:258
+msgid ""
+"\n"
+"Format:"
+msgstr ""
+"\n"
+"Format:"
+
+#: kofficeui/koPageLayoutDia.cc:263
+msgid ""
+"\n"
+"Orientation:"
+msgstr ""
+"\n"
+"Orientation:"
+
+#: kofficeui/koPageLayoutDia.cc:270
+msgid "DIN A3"
+msgstr "DIN A3"
+
+#: kofficeui/koPageLayoutDia.cc:271
+msgid "DIN A4"
+msgstr "DIN A4"
+
+#: kofficeui/koPageLayoutDia.cc:272
+msgid "DIN A5"
+msgstr "DIN A5"
+
+#: kofficeui/koPageLayoutDia.cc:273
+msgid "US Letter"
+msgstr "Lettre US"
+
+#: kofficeui/koPageLayoutDia.cc:274
+msgid "US Legal"
+msgstr "Legal US"
+
+#: kofficeui/koPageLayoutDia.cc:275
+msgid "Screen"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:276
+msgid "Custom"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:277
+#, fuzzy
+msgid "DIN B5"
+msgstr "DIN A5"
+
+#: kofficeui/koPageLayoutDia.cc:278
+msgid "US Executive"
+msgstr "Exécutive US"
+
+#: kofficeui/koPageLayoutDia.cc:286
+msgid "Portrait"
+msgstr "Portrait"
+
+#: kofficeui/koPageLayoutDia.cc:287
+msgid "Landscape"
+msgstr "Paysage"
+
+#: kofficeui/koPageLayoutDia.cc:293
+msgid "Width:"
+msgstr "Largeur:"
+
+#: kofficeui/koPageLayoutDia.cc:312
+msgid "Height:"
+msgstr "Hauteur:"
+
+#: kofficeui/koPageLayoutDia.cc:356
+msgid "Page Borders"
+msgstr "Marges"
+
+#: kofficeui/koPageLayoutDia.cc:360
+msgid ""
+"\n"
+"Left:"
+msgstr ""
+""
+""
+
+#: kofficeui/koPageLayoutDia.cc:377
+msgid ""
+"\n"
+"Right:"
+msgstr ""
+""
+""
+
+#: kofficeui/koPageLayoutDia.cc:394
+msgid "Top:"
+msgstr "Sommet:"
+
+#: kofficeui/koPageLayoutDia.cc:411
+msgid "Bottom:"
+msgstr "Bas:"
+
+#: kofficeui/koPageLayoutDia.cc:474
+msgid "Format and Borders"
+msgstr "Format et Marges"
+
+#: kofficeui/koPageLayoutDia.cc:529
+msgid "Head line:"
+msgstr "En-tête:"
+
+#: kofficeui/koPageLayoutDia.cc:533 kofficeui/koPageLayoutDia.cc:565
+msgid "Left:"
+msgstr "gauche:"
+
+#: kofficeui/koPageLayoutDia.cc:542 kofficeui/koPageLayoutDia.cc:574
+msgid "Mid:"
+msgstr "Milieu:"
+
+#: kofficeui/koPageLayoutDia.cc:551 kofficeui/koPageLayoutDia.cc:583
+msgid "Right:"
+msgstr "droite:"
+
+#: kofficeui/koPageLayoutDia.cc:561
+msgid ""
+"\n"
+"Foot line:"
+msgstr ""
+"\n"
+"pied de page"
+
+#: kofficeui/koPageLayoutDia.cc:593
+msgid ""
+"\n"
+"Macros:"
+msgstr ""
+"\n"
+"Macros:"
+
+#: kofficeui/koPageLayoutDia.cc:638
+msgid "Header and Footer"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:648
+msgid "Columns:"
+msgstr "Colonnes:"
+
+#: kofficeui/koPageLayoutDia.cc:661
+msgid "Columns Spacing (mm):"
+msgstr "largeur des colonnes (mm):"
+
+#: kofficeui/koPageLayoutDia.cc:694
+msgid "Columns"
+msgstr "Colonnes"
+
+#: kofficeui/koPartSelectDia.cc:51
+msgid "Insert Object"
+msgstr "Inserer un objet"
+
+#: kofficeui/koPartSelectDia_data.cc:36
+msgid "Select an implementation"
+msgstr "Selectionner une zone d'implantation"
+
+#: kofficeui/koPrintDia.cc:23 kofficeui/koPrintDia.cc:72
+msgid "UNIX Printer"
+msgstr "Imprimante UNIX"
+
+#: kofficeui/koPrintDia.cc:31
+msgid "Could not open\n"
+msgstr "Impossible d'ouvrir\n"
+
+#: kofficeui/koPrintDia.cc:58
+msgid "Print Dialog"
+msgstr ""
+
+#: kofficeui/koPrintDia.cc:187
+msgid "Print To:"
+msgstr "Imprimer vers:"
+
+#: kofficeui/koPrintDia.cc:196
+msgid "File Name:"
+msgstr "Nom de Fichier:"
+
+#: kofficeui/koPrintDia.cc:208
+msgid "Print Command:"
+msgstr "Commande d'impression:"
+
+#: kofficeui/koPrintDia.cc:230
+msgid "Copies:"
+msgstr "Copies:"
+
+#: kofficeui/koPrintDia.cc:243
+msgid "Page Setup..."
+msgstr "Panneau de configuration ..."
+
+#: kofficeui/koPrintDia.cc:247
+msgid "Printer Name:"
+msgstr "Nom de l'imprimante:"
+
