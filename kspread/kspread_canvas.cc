@@ -136,7 +136,7 @@ bool KSpreadCanvas::eventFilter( QObject *o, QEvent *e )
   case QEvent::KeyPress:
   {
     QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
-    if (keyev->key()==Key_Tab)
+    if ((keyev->key()==Key_Tab) || (keyev->key()==Key_Backtab))
     {
       keyPressEvent ( keyev );
       return true;
@@ -1679,6 +1679,11 @@ void KSpreadCanvas::processArrowKey( QKeyEvent *event)
   case Key_Tab:
       direction = KSpread::Right;
       break;
+  case Key_Backtab:
+      //Shift+Tab moves to the left
+      direction = KSpread::Left;
+      makingSelection = false;
+      break;
   default:
     Q_ASSERT(false);
     break;
@@ -2269,7 +2274,8 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
    case Key_Up:
    case Key_Left:
    case Key_Right:
-   case Key_Tab: /* a tab behaves just like a right arrow */
+   case Key_Tab: /* a tab behaves just like a right/left arrow */
+   case Key_Backtab:  /* and so does Shift+Tab */
     if (_ev->state() & ControlButton)
     {
       if ( !processControlArrowKey( _ev ) )
