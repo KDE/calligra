@@ -264,17 +264,22 @@ void KPCubicBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHand
     QPen pen2(pen);
     pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
     QPointArray pointArray = allPoints.toQPointArray();
-    if ( !move && _w > 1 ) {
-        double fx = (double)( (double)( ext.width() - _w ) / (double)ext.width() );
-        double fy = (double)( (double)( ext.height() - _w ) / (double)ext.height() );
+    double fx=1.0;
+    double fy=1.0;
+    if ( !move ) {
+        if(_w>1.0)
+        {
+            fx = (double)( (double)( _zoomHandler->zoomItX( ext.width()) - _w ) / (double)_zoomHandler->zoomItX( ext.width()) );
+            fy = (double)( (double)( _zoomHandler->zoomItY( ext.height()) - _w ) / (double)_zoomHandler->zoomItY( ext.height()) );
+        }
 
         unsigned int index = 0;
         KoPointArray tmpPoints;
         KoPointArray::ConstIterator it;
         for ( it = allPoints.begin(); it != allPoints.end(); ++it ) {
             KoPoint point = (*it);
-            double tmpX = ( (double)point.x() * fx );
-            double tmpY = ( (double)point.y() * fy );
+            double tmpX = _zoomHandler->zoomItX( point.x()) * fx;
+            double tmpY = _zoomHandler->zoomItY( point.y()) * fy;
 
             if ( tmpX == 0 )
                 tmpX = _w;

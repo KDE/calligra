@@ -262,22 +262,25 @@ float KPQuadricBezierCurveObject::getAngle( const QPoint &p1, const QPoint &p2 )
 /*======================== paint =================================*/
 void KPQuadricBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
 {
-#if 0
-    int _w = pen.width();
+    double _w =_zoomHandler->zoomItX( pen.width());
     QPen pen2(pen);
-    pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
-    QPointArray pointArray = allPoints;
-    if ( !move && _w > 1 ) {
-        double fx = (double)( (double)( ext.width() - _w ) / (double)ext.width() );
-        double fy = (double)( (double)( ext.height() - _w ) / (double)ext.height() );
-
+    pen2.setWidth(_w);
+    QPointArray pointArray = allPoints.toQPointArray();
+    double fx=1.0;
+    double fy=1.0;
+    if ( !move ) {
+        if(_w>1.0)
+        {
+            fx = (double)( (double)( _zoomHandler->zoomItX( ext.width()) - _w ) / (double)_zoomHandler->zoomItX( ext.width()) );
+            fy = (double)( (double)( _zoomHandler->zoomItY( ext.height()) - _w ) / (double)_zoomHandler->zoomItY( ext.height()) );
+        }
         unsigned int index = 0;
-        QPointArray tmpPoints;
-        QPointArray::ConstIterator it;
+        KoPointArray tmpPoints;
+        KoPointArray::ConstIterator it;
         for ( it = allPoints.begin(); it != allPoints.end(); ++it ) {
-            QPoint point = (*it);
-            int tmpX = (int)( (double)point.x() * fx );
-            int tmpY = (int)( (double)point.y() * fy );
+            KoPoint point = (*it);
+            double tmpX = _zoomHandler->zoomItX(point.x()) * fx ;
+            double tmpY = _zoomHandler->zoomItY(point.y()) * fy ;
 
             if ( tmpX == 0 )
                 tmpX = _w;
@@ -287,7 +290,7 @@ void KPQuadricBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHa
             tmpPoints.putPoints( index, 1, tmpX,tmpY );
             ++index;
         }
-        pointArray = tmpPoints;
+        pointArray = tmpPoints.toQPointArray();
     }
 
     _painter->setPen( pen2 );
@@ -332,7 +335,6 @@ void KPQuadricBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHa
             }
         }
     }
-#endif//FIXME
 }
 
 void KPQuadricBezierCurveObject::setSize( double _width, double _height )
@@ -390,7 +392,6 @@ void KPQuadricBezierCurveObject::updatePoints( double _fx, double _fy )
 
 KoPointArray KPQuadricBezierCurveObject::getQuadricBezierPointsFrom( const KoPointArray &_pointArray )
 {
-#if 0
     if ( _pointArray.isNull() )
         return _pointArray;
 
@@ -449,5 +450,4 @@ KoPointArray KPQuadricBezierCurveObject::getQuadricBezierPointsFrom( const KoPoi
     }
 
     return _allPoints;
-#endif //FIXME
 }
