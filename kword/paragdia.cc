@@ -1322,6 +1322,7 @@ void KWParagCounterWidget::display( const KWParagLayout & lay ) {
     else
         m_counter = Counter();
     preview->setCounter( m_counter );
+    preview->setStyle(lay.style);
     styleBuffer = 999;
 
     gNumbering->setButton( m_counter.numbering() );
