@@ -138,6 +138,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     setInstance( KPresenterFactory::global() );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
     m_pageWhereLoadObject=0L;
+    bgObjSpellChecked = 0L;
     m_tabStop = MM_TO_POINT( 15.0 );
     m_styleColl=new KoStyleCollection();
 
@@ -2851,39 +2852,31 @@ KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)
 {
     if(m_kpresenterView && m_kpresenterView->getCanvas())
     {
-        QPtrList<KPTextObject> objlist;
-        QPtrListIterator<KPObject> oIt(m_kpresenterView->getCanvas()->activePage()->objectList() )  ;
-        for ( ; oIt.current() ; ++oIt )
+        bool findObject = m_kpresenterView->getCanvas()->activePage()->findTextObject( bgObjSpellChecked );
+        if ( !findObject )
         {
-            if(oIt.current()->getType()==OT_TEXT)
-                objlist.append(static_cast<KPTextObject*>( oIt.current() ));
-        }
-
-        oIt=m_stickyPage->objectList();
-        for ( ; oIt.current() ; ++oIt )
-        {
-            if(oIt.current()->getType()==OT_TEXT)
-                objlist.append(static_cast<KPTextObject*>( oIt.current() ));
-        }
-
-        int pos=objlist.findNextRef(obj);
-        if(pos !=-1)
-        {
-            KPTextObject *frm=0L;
-            for ( frm=objlist.at(pos); frm != 0; frm=objlist.next() ){
-                if(frm->textObject()->needSpellCheck())
-                    return frm;
+            findObject = stickyPage()->findTextObject( bgObjSpellChecked );
+            if ( findObject )
+            {
+                bgObjSpellChecked = stickyPage()->nextTextObject( obj );
+                if ( bgObjSpellChecked )
+                    return bgObjSpellChecked->nextTextObject();
+                else
+                    return 0L;
             }
         }
+        bgObjSpellChecked = m_kpresenterView->getCanvas()->activePage()->nextTextObject( obj );
+        if ( bgObjSpellChecked )
+            return bgObjSpellChecked->nextTextObject();
         else
         {
-            //return to 0
-            KPTextObject *frm=0L;
-            for ( frm=objlist.first(); frm != 0; frm=objlist.next() ){
-                if(frm->textObject()->needSpellCheck())
-                    return frm;
-            }
+            bgObjSpellChecked = stickyPage()->nextTextObject( obj );
+            if ( bgObjSpellChecked )
+                return bgObjSpellChecked->nextTextObject();
+            else
+                return 0L;
         }
+        return 0L;
     }
     return 0L;
 }

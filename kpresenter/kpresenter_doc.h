@@ -558,6 +558,7 @@ private:
     KPrPage *m_stickyPage;
     KPrBgSpellCheck *m_bgSpellCheck;
     KoStyleCollection *m_styleColl;
+    KPObject *bgObjSpellChecked;
 };
 
 #endif

@@ -40,6 +40,7 @@ class QDomDocument;
 class QDomElement;
 class KoZoomHandler;
 class KPresenterDoc;
+class KPTextObject;
 
 /******************************************************************/
 /* Class: KPObject                                                */
@@ -211,6 +212,9 @@ public:
     virtual KoSize getOrigSizeInGroup() const{ return origSizeInGroup; }
     void paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler,
 			 SelectionMode selectionMode );
+
+    virtual KPTextObject *nextTextObject() { return 0L;}
+
 protected:
     /**
      * Modifies x and y to add the shadow offsets

@@ -3610,3 +3610,37 @@ void KPrPage::changeTabStopValue ( double _tabStop )
         }
     }
 }
+
+KPObject *KPrPage::nextTextObject(KPTextObject *obj)
+{
+    int pos = -1;
+    if ( obj )
+        pos = m_objectList.findNextRef(obj);
+
+    if (pos != -1 )
+    {
+        KPObject *frm=0L;
+        for ( frm=m_objectList.at(pos); frm != 0; frm=m_objectList.next() )
+        {
+            KPTextObject *newObj = frm->nextTextObject();
+            if(newObj && newObj->nextTextObject()->textObject()->needSpellCheck())
+                return frm;
+        }
+    }
+    else
+    {
+        KPObject *frm=0L;
+        for ( frm=m_objectList.at(0); frm != 0; frm=m_objectList.next() )
+        {
+            KPTextObject *newObj = frm->nextTextObject();
+            if(newObj && newObj->nextTextObject()->textObject()->needSpellCheck())
+                return frm;
+        }
+    }
+    return 0L;
+}
+
+bool KPrPage::findTextObject( KPObject *obj )
+{
+    return (m_objectList.find( obj )>=0 );
+}

@@ -158,6 +158,7 @@ public:
     VerticalAlignmentType verticalAlignment() const { return m_textVertAlign; }
     void setVerticalAligment( VerticalAlignmentType _type) ;
     double alignmentValue() const {  return alignVertical; }
+    virtual KPTextObject *nextTextObject() { return this;}
 signals:
     void repaintChanged( KPTextObject* );
 

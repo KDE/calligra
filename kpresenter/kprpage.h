@@ -275,7 +275,8 @@ public:
     void changeTabStopValue ( double _tabStop );
     bool saveClip(KPresenterView *_view);
     bool savePicture( KPresenterView *_view );
-
+    bool findTextObject( KPObject *obj );
+    KPObject *nextTextObject(KPTextObject *obj);
 protected:
 
 private:
