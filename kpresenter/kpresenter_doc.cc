@@ -1211,13 +1211,7 @@ void KPresenterDoc::parseOasisHelpLine( const QString &text )
             QStringList listVal = QStringList::split( ",", str );
             int posX = ( listVal[0].toInt()/100 );
             int posY = ( listVal[1].toInt()/100 );
-            QString pt_x;
-            QString pt_y;
-            pt_x.setNum(posX);
-            pt_x+="mm";
-            pt_y.setNum(posY);
-            pt_y+="mm";
-            m_helpPoints.append( KoPoint( KoUnit::parseValue(pt_x), KoUnit::parseValue(pt_y)));
+            m_helpPoints.append( KoPoint( MM_TO_POINT( posX ), MM_TO_POINT( posY )));
             newPos = pos-1;
         }
         else if ( text[pos]=='V' )
@@ -1226,10 +1220,7 @@ void KPresenterDoc::parseOasisHelpLine( const QString &text )
             str = text.mid( pos+1, ( newPos-pos ) );
             kdDebug()<<" vertical  :"<< str <<endl;
             int posX = ( str.toInt()/100 );
-            QString pt_x;
-            pt_x.setNum(posX);
-            pt_x+="mm";
-            m_vertHelplines.append( KoUnit::parseValue(pt_x) );
+            m_vertHelplines.append( MM_TO_POINT( posX ) );
             newPos = pos-1;
         }
         else if ( text[pos]=='H' )
@@ -1237,12 +1228,8 @@ void KPresenterDoc::parseOasisHelpLine( const QString &text )
             //horizontal element
             str = text.mid( pos+1, ( newPos-pos ) );
             kdDebug()<<" horizontal  :"<< str <<endl;
-
             int posY = ( str.toInt()/100 );
-            QString pt_y;
-            pt_y.setNum(posY);
-            pt_y+="mm";
-            m_horizHelplines.append( KoUnit::parseValue(pt_y) );
+            m_horizHelplines.append( MM_TO_POINT( posY ) );
             newPos = pos-1;
         }
     }
