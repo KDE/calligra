@@ -12,6 +12,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstdaction.h>
+#include <kstatusbar.h>
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
@@ -61,13 +62,19 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_canvas->viewport()->installEventFilter( this );
 	m_canvas->setGeometry( 0, 0, width(), height() );
 
-	// initial tool is select-tool:
-	selectTool();
-
 	// set up factory
 	m_painterFactory = new VPainterFactory;
 	m_painterFactory->setPainter( canvasWidget()->viewport(), width(), height() );
 	m_painterFactory->setEditPainter( canvasWidget()->viewport(), width(), height() );
+
+	// set up status bar message
+	m_status = new KStatusBarLabel( QString::null, 0, statusBar() );
+	m_status->setAlignment( AlignLeft | AlignVCenter );
+	m_status->setMinimumWidth( 300 );
+	addStatusBarItem( m_status, 0 );
+
+	// initial tool is select-tool:
+	selectTool();
 }
 
 KarbonView::~KarbonView()
@@ -77,6 +84,7 @@ KarbonView::~KarbonView()
 	delete m_canvas;
 	m_canvas = 0L;
 	delete m_toolbox;
+	delete m_status;
 }
 
 DCOPObject* KarbonView::dcopObject()
@@ -212,6 +220,7 @@ KarbonView::objectTrafoShear()
 void
 KarbonView::ellipseTool()
 {
+	m_status->setText( i18n( "Ellipse" ) );
 	s_currentTool = VCToolEllipse::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 }
@@ -240,6 +249,7 @@ KarbonView::roundRectTool()
 void
 KarbonView::selectTool()
 {
+	m_status->setText( i18n( "Selection" ) );
 	s_currentTool = VMToolSelect::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
 	m_selectToolAction->setChecked( true );

@@ -11,6 +11,7 @@
 #include "vcanvas.h"
 
 class QPaintEvent;
+class QLabel;
 
 class KAction;
 class KSelectAction;
@@ -143,6 +144,8 @@ private:
 	VToolContainer *m_toolbox;
 	DCOPObject *m_dcop;
 
+	//status bar message
+	QLabel *m_status;
 };
 
 #endif
