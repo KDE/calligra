@@ -23,7 +23,7 @@ void TestCommands::setUp()
     history = new KCommandHistory;
     document = new KFormulaDocument(history);
     container = new KFormulaContainer(document);
-    rootElement = container->rootElement;
+    rootElement = container->rootElement();
     cursor = container->createCursor();
 
     element1 = new BracketElement('(', ']');
@@ -45,7 +45,7 @@ void TestCommands::tearDown()
 {
     //container->destroyCursor(cursor);
     delete cursor;
-    
+
     delete container;
     delete document;
     delete history;
@@ -86,7 +86,7 @@ void TestCommands::testRemove()
     QString begin = beginDoc.toString();
 
     container->setActiveCursor(cursor);
-    
+
     container->addText('A');
     container->addText('B');
     container->addText('C');

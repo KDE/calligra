@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -180,6 +180,19 @@ QChar SymbolTable::getSymbolChar(QString name) const
     return QChar::null;
 }
 
+QString SymbolTable::getSymbolName(QChar symbol) const
+{
+    QDictIterator<SymbolTableEntry> it(entries);
+
+    while (it.current()) {
+        if (it.current()->getSymbolChar() == symbol) {
+            return it.currentKey();
+        }
+        ++it;
+    }
+    return "";
+}
+
 void SymbolTable::addEntry(QString name, QChar ch)
 {
     entries.insert(name, new SymbolTableEntry(name, ch));
@@ -188,7 +201,7 @@ void SymbolTable::addEntry(QString name, QChar ch)
 QStringList SymbolTable::getAllNames() const
 {
     QStringList list;
-    
+
     for (QDictIterator<SymbolTableEntry> iter = entries; iter.current() != 0; ++iter) {
         list.append(iter.current()->getName());
     }

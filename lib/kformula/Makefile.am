@@ -10,7 +10,7 @@ KFORMULA2VERSION=	0.0.1
 KFORMULA2PATCH=	0
 
 libkformula_la_SOURCES	= basicelement.cc contextstyle.cc formulacursor.cc \
-	formulaelement.cc indexelement.cc kformulacontainer.cc kformulawidget.cc \
+	formulaelement.cc indexelement.cc kformulacontainer.cc \
 	sequenceelement.cc textelement.cc bracketelement.cc \
 	matrixelement.cc fractionelement.cc rootelement.cc symbolelement.cc \
 	artwork.cc kformulacommand.cc kformulamimesource.cc \
@@ -27,7 +27,7 @@ libkformula_la_METASOURCES = AUTO
 
 check_PROGRAMS = kformulatest unittest
 
-kformulatest_SOURCES = main.cc
+kformulatest_SOURCES = main.cc kformulawidget.cc
 kformulatest_LDADD = libkformula.la
 
 # needs the CppUnit from http://www.xProgramming.com/software.htm

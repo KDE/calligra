@@ -91,11 +91,11 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
 
         setBaseline(QMAX(content->getBaseline(),
                          QMAX(left->getBaseline(), right->getBaseline())));
-        
+
         content->setY(getBaseline() - content->getBaseline());
         left   ->setY(getBaseline() - left   ->getBaseline());
         right  ->setY(getBaseline() - right  ->getBaseline());
-        
+
         setMidline(content->getY() + content->getMidline());
         setHeight(QMAX(content->getY() + content->getHeight(),
                        QMAX(left ->getY() + left ->getHeight(),
@@ -114,7 +114,7 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
 
         left   ->setY((getHeight() - left   ->getHeight())/2);
         right  ->setY((getHeight() - right  ->getHeight())/2);
-        
+
         content->setY(getMidline() - content->getMidline());
         calcBaseline();
     }
@@ -142,7 +142,7 @@ void BracketElement::draw(QPainter& painter, const QRect& r,
         return;
 
     content->draw(painter, r, style, tstyle, istyle, myPos);
-    
+
     if (content->isTextOnly()) {
         left->draw(painter, r, style, tstyle, myPos);
         right->draw(painter, r, style, tstyle, myPos);
@@ -363,8 +363,17 @@ QString BracketElement::latexString(char type)
 	    return "(";
 	case ')':
 	    return ")";
-
+	case '|':
+	    return "|";
+        case '<':
+            return "\\langle";
+        case '>':
+            return "\\rangle";
+        case '/':
+            return "/";
+        case '\\':
+            return "\\backslash";
     }
-    return " ";  //this must be a space
+    return ".";
 }
 

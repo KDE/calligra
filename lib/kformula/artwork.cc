@@ -132,10 +132,10 @@ void Artwork::calcSizes(const ContextStyle& style, int parentSize)
         calcCharSize(style, parentSize, '\\');
         break;
     case LeftCornerBracket:
-        calcCharSize(style, parentSize, static_cast<char>(183));
+        calcCharSize(style, parentSize, static_cast<char>(225));
         break;
     case RightCornerBracket:
-        calcCharSize(style, parentSize, static_cast<char>(210));
+        calcCharSize(style, parentSize, static_cast<char>(241));
         break;
     case LeftRoundBracket:
         if (!doSimpleRoundBracket(style, parentSize)) {
@@ -207,10 +207,10 @@ void Artwork::calcSizes(const ContextStyle& style,
         calcCharSize(style, mySize, '\\');
         break;
     case LeftCornerBracket:
-        calcCharSize(style, mySize, static_cast<char>(183));
+        calcCharSize(style, mySize, static_cast<char>(225));
         break;
     case RightCornerBracket:
-        calcCharSize(style, mySize, static_cast<char>(210));
+        calcCharSize(style, mySize, static_cast<char>(241));
         break;
     case LeftRoundBracket:
         calcCharSize(style, mySize, '(');
@@ -279,7 +279,6 @@ void Artwork::draw(QPainter& painter, const QRect& r, const ContextStyle& style,
         }
         break;
     case LineBracket:
-        //drawLineBracket(painter, style, myX, myY, getHeight());
         drawCharacter(painter, style, myX, myY, '|');
         break;
     case SlashBracket:
@@ -289,12 +288,10 @@ void Artwork::draw(QPainter& painter, const QRect& r, const ContextStyle& style,
         drawCharacter(painter, style, myX, myY, '\\');
         break;
     case LeftCornerBracket:
-        //drawLeftCornerBracket(painter, style, myX, myY, getHeight());
-        drawCharacter(painter, style, myX, myY, static_cast<char>(183));
+        drawCharacter(painter, style, myX, myY, static_cast<char>(225));
         break;
     case RightCornerBracket:
-        //drawRightCornerBracket(painter, style, myX, myY, getHeight());
-        drawCharacter(painter, style, myX, myY, static_cast<char>(210));
+        drawCharacter(painter, style, myX, myY, static_cast<char>(241));
         break;
     case LeftRoundBracket:
         if (!doSimpleRoundBracket(style, parentSize)) {
@@ -335,7 +332,7 @@ void Artwork::draw(QPainter& painter, const QRect& r, const ContextStyle& style,
 
 
 void Artwork::draw(QPainter& painter, const QRect& r, const ContextStyle& style,
-                   ContextStyle::TextStyle tstyle, const QPoint& parentOrigin)
+                   ContextStyle::TextStyle, const QPoint& parentOrigin)
 {
     int myX = parentOrigin.x() + getX();
     int myY = parentOrigin.y() + getY();
@@ -367,10 +364,10 @@ void Artwork::draw(QPainter& painter, const QRect& r, const ContextStyle& style,
         drawCharacter(painter, style, myX, myY, '\\');
         break;
     case LeftCornerBracket:
-        drawCharacter(painter, style, myX, myY, static_cast<char>(183));
+        drawCharacter(painter, style, myX, myY, static_cast<char>(225));
         break;
     case RightCornerBracket:
-        drawCharacter(painter, style, myX, myY, static_cast<char>(210));
+        drawCharacter(painter, style, myX, myY, static_cast<char>(241));
         break;
     case LeftRoundBracket:
         drawCharacter(painter, style, myX, myY, '(');
@@ -447,7 +444,7 @@ void Artwork::drawLeftRoundBracket(QPainter& p, const ContextStyle& style, int x
     }
     else {
         drawLeftBigRoundBracket(p, style, leftBigRoundBracket, x, y, style.zoomItY(40), height);
-	//cout << "drawLeftBigRoundBracket" << endl;	
+	//cout << "drawLeftBigRoundBracket" << endl;
     }
 }
 

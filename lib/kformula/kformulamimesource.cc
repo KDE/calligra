@@ -29,87 +29,100 @@
 
 #include <kcommand.h>
 
+#include "contextstyle.h"
 #include "formulacursor.h"
-#include "kformulacontainer.h"
-#include "kformuladocument.h"
+#include "formulaelement.h"
 #include "kformulamimesource.h"
+
 
 using namespace std;
 
+
 KFormulaMimeSource::KFormulaMimeSource(QDomDocument formula)
+        : document(formula)
 {
-    document=formula;
+    // The query for text/plain comes very often. So make sure
+    // it's fast.
+
+    rootElement = new FormulaElement(this);
+    FormulaCursor cursor(rootElement);
+
+    QList<BasicElement> list;
+    list.setAutoDelete(true);
+    if (cursor.buildElementsFromDom(document, list)) {
+        cursor.insert(list);
+        latexString = rootElement->toLatex().utf8();
+        if (latexString.size() > 0) {
+            latexString.truncate(latexString.size()-1);
+        }
+    }
 }
 
-const char* KFormulaMimeSource::format ( int n ) const
+KFormulaMimeSource::~KFormulaMimeSource()
 {
-    switch (n)
-    {
-     case 0:
-      return "application/x-kformula";
-     case 1:
-      return "image/ppm";
-     case 2:
-      return "text/plain";
-     case 3:
-      return "text/x-tex";
+    delete rootElement;
+}
 
+
+const char* KFormulaMimeSource::format( int n ) const
+{
+    switch (n) {
+        case 0:
+            return "application/x-kformula";
+        case 1:
+            return "image/ppm";
+        case 2:
+            return "text/plain";
+        case 3:
+            return "text/x-tex";
     }
     return NULL;
 }
-bool KFormulaMimeSource::provides ( const char * format) const
+
+bool KFormulaMimeSource::provides( const char * format) const
 {
 //This is not completed
     if(QString(format)=="application/x-kformula")
-     return true;
+        return true;
+    else if(QString(format)=="image/ppm")
+        return true;
+    else if(QString(format)=="text/plain")
+        return true;
+    else if(QString(format)=="text/x-tex")
+        return true;
     else
-    if(QString(format)=="image/ppm")
-     return true;
-    else
-    if(QString(format)=="text/plain")
-     return true;
-    else
-    if(QString(format)=="text/x-tex")
-     return true;
-
-    else
-     return false;
-
+        return false;
 }
 
 QByteArray KFormulaMimeSource::encodedData ( const char *format ) const
 {
-QString fmt=format;  //case sensitive?
+    QString fmt=format;  //case sensitive?
 
-    if(fmt=="text/plain")
-      fmt="text/x-tex";
+    if ((fmt=="text/plain") || (fmt=="text/x-tex"))
+        return latexString;
 
-    if(fmt=="application/x-kformula")
-    {
+    if (fmt=="application/x-kformula") {
 	QByteArray d=document.toCString();
-
   	d.truncate(d.size()-1);
-
 	return d;
     }
-    else
-    if(fmt=="image/ppm") {
 
-	cerr << "asking image" << endl;
-        KFormulaDocument document;
-        KFormulaContainer tmpContainer(&document);
-	FormulaCursor *c=tmpContainer.createCursor();
-        tmpContainer.setActiveCursor(c);
-        tmpContainer.paste();
-        delete c;
-        c = 0;
-	QRect rect=tmpContainer.boundingRect();
+    if (fmt=="image/ppm") {
+
+	//cerr << "asking image" << endl;
+        ContextStyle context;
+        context.setResolution(5, 5);
+
+        rootElement->calcSizes(context);
+        QRect rect(rootElement->getX(), rootElement->getY(),
+                   rootElement->getWidth(), rootElement->getHeight());
+
     	QPixmap pm(rect.width(),rect.height());
 	pm.fill();
-	QPainter paint;
-	paint.begin(&pm);
-	tmpContainer.draw(paint, rect);
+	QPainter paint(&pm);
+        rootElement->draw(paint, rect, context);
 	paint.end();
+
 	QByteArray d;
 	QBuffer buff(d);
 	buff.open(IO_WriteOnly);
@@ -122,28 +135,20 @@ QString fmt=format;  //case sensitive?
 
 	buff.close();
     	return d;
-
-
     }
-    else
-    if(fmt=="text/x-tex") {
 
-        KFormulaDocument document;
-        KFormulaContainer tmpContainer(&document);
-	FormulaCursor *c=tmpContainer.createCursor();
-        tmpContainer.setActiveCursor(c);
-        tmpContainer.paste();
-
-        delete c;
-
-        c = 0;
-
-	QByteArray d=tmpContainer.texString().utf8();
-	d.truncate(d.size()-1);
-
-    	return d;
-    }
-    else
-	return QByteArray();
+    return QByteArray();
 }
 
+void KFormulaMimeSource::elementRemoval(BasicElement*)
+{
+}
+
+void KFormulaMimeSource::changed()
+{
+}
+
+const SymbolTable& KFormulaMimeSource::getSymbolTable() const
+{
+    return table;
+}

@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -58,8 +58,8 @@ public:
     /**
      * @returns the area the cursor is currently on.
      */
-    QRect getDirtyArea() const { return dirtyArea; }
-    
+    QRect getDirtyArea() const;
+
     /**
      * Puts the widget in read only mode.
      */
@@ -81,7 +81,14 @@ public:
     /**
      * The document we show.
      */
-    KFormulaContainer* getDocument() { return document; }
+    KFormulaContainer* getDocument() const { return container(); }
+
+    /**
+     * Our cursor.
+     */
+    FormulaCursor* getCursor() const { return cursor(); }
+
+    void setSmallCursor(bool small);
 
 signals:
 
@@ -89,9 +96,9 @@ signals:
      * Is emitted everytime the cursor might have changed.
      */
     void cursorChanged(bool visible, bool selecting);
-    
+
 public slots:
-    
+
     void slotSelectAll();
 
     void slotMoveLeft(MoveFlag flag);
@@ -101,13 +108,6 @@ public slots:
     void slotMoveHome(MoveFlag flag);
     void slotMoveEnd(MoveFlag flag);
 
-    /**
-     * Our cursor.
-     */
-    FormulaCursor* getCursor() { return cursor; }
-
-    void setSmallCursor(bool small);
-    
 protected slots:
 
     /**
@@ -140,7 +140,7 @@ protected:
      * movement flags.
      */
     MoveFlag movementFlag(int state);
-    
+
 private:
 
     /**
@@ -148,37 +148,14 @@ private:
      */
     void emitCursorChanged();
 
-    /**
-     * If set the cursor will never be bigger that the formula.
-     */
-    bool smallCursor;
-    
-    /**
-     * Whether you can see the cursor. This has to be kept
-     * in sync with reality.
-     */
-    bool cursorVisible;
+    struct KFormulaView_Impl;
+    KFormulaView_Impl* impl;
 
-    /**
-     * Whether the cursor changed since the last time
-     * we emitted a cursorChanged signal.
-     */
-    bool cursorHasChanged;
-
-    /**
-     * The area that needs an update because the cursor moved.
-     */
-    QRect dirtyArea;
-    
-    /**
-     * The formula we show.
-     */
-    KFormulaContainer* document;
-
-    /**
-     * Out cursor.
-     */
-    FormulaCursor* cursor;
+    FormulaCursor* cursor() const;
+    bool& cursorHasChanged();
+    bool& cursorVisible();
+    bool& smallCursor();
+    KFormulaContainer* container() const;
 };
 
 #endif // __KFORMULAVIEW_H

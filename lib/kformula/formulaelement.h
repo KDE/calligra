@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -26,7 +26,7 @@
 
 class BasicElement;
 class ContextStyle;
-class KFormulaContainer;
+class FormulaDocument;
 class SymbolTable;
 
 
@@ -39,7 +39,11 @@ class FormulaElement : public SequenceElement {
     typedef SequenceElement inherited;
 public:
 
-    FormulaElement(KFormulaContainer* container);
+    /**
+     * The container this FormulaElement belongs to must not be 0,
+     * except you really know what you are doing.
+     */
+    FormulaElement(FormulaDocument* container);
 
     /**
      * Returns the element the point is in.
@@ -67,7 +71,7 @@ public:
      * Calculates the formulas sizes and positions.
      */
     void calcSizes(const ContextStyle& context);
-    
+
     /**
      * Draws the whole thing.
      */
@@ -79,25 +83,25 @@ public:
     const SymbolTable& getSymbolTable() const;
 
     /**
-     * @returns the latex representation of the element and 
+     * @returns the latex representation of the element and
      * of the element's children
      */
     virtual QString toLatex();
-    
+
 protected:
 
     //Save/load support
-    
+
     /**
      * Returns the tag name of this element type.
      */
     virtual QString getTagName() const { return "FORMULA"; }
-    
+
     /**
      * Appends our attributes to the dom element.
      */
     virtual void writeDom(QDomElement& element);
-    
+
     /**
      * Reads our attributes from the element.
      * Returns false if it failed.
@@ -111,13 +115,13 @@ protected:
      */
     virtual bool readContentFromDom(QDomNode& node);
 
-    
+
 private:
 
     /**
-     * The document that owns this formula.
+     * The document that owns (is) this formula.
      */
-    KFormulaContainer* document;
+    FormulaDocument* document;
 };
 
 #endif // FORMULAELEMENT_H

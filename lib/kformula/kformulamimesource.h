@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -24,17 +24,33 @@
 #include <qmime.h>
 #include <qdom.h>
 
-class KFormulaMimeSource :  public QMimeSource
+#include "kformulacontainer.h"
+#include "symboltable.h"
+
+class FormulaElement;
+
+
+class KFormulaMimeSource : public QMimeSource, public FormulaDocument
 {
 public:
     KFormulaMimeSource(QDomDocument formula);
+    ~KFormulaMimeSource();
+
     virtual const char* format ( int n = 0 ) const;
     virtual bool provides ( const char * ) const;
     virtual QByteArray encodedData ( const char * ) const;
 
-private:
-    QDomDocument   document;
+    virtual void elementRemoval(BasicElement* child);
+    virtual void changed();
+    virtual const SymbolTable& getSymbolTable() const;
 
+private:
+
+    QDomDocument document;
+    QByteArray latexString;
+    SymbolTable table;
+
+    FormulaElement* rootElement;
 };
 
 #endif // KFORMULAMIMESOURCE_H

@@ -30,6 +30,7 @@
 #include "formulaelement.h"
 #include "sequenceelement.h"
 #include "textelement.h"
+#include "symboltable.h"
 
 
 TextElement::TextElement(QChar ch, BasicElement* parent)
@@ -239,30 +240,10 @@ bool TextElement::readContentFromDom(QDomNode& node)
 
 QString TextElement::toLatex()
 {
-    if(isSymbol()) {
-	char latin1 = character.latin1();
-	switch (latin1) {
-	    case 'a': return "\\alpha";	
-	    case 'b': return "\\beta";	
-	    case 'g': return "\\gamma";	
-	    case 'd': return "\\delta";	
-	    case 'e': return "\\varepsilon";	
-	    case 'z': return "\\zeta";	
-	    case 'h': return "\\eta";	
-	}
+    if (isSymbol()) {
+        return formula()->getSymbolTable().getSymbolName(character);
     }
-     else
-    {
-
-	char latin1 = character.latin1();
-	switch (latin1) {
-	    case '\\': return "\\backslash";
-
-            default:
-                return QChar(latin1);
-
-	}
-
+    else {
+        return character;
     }
-
 }

@@ -46,13 +46,30 @@ class KFormulaDocument;
 class QColorGroup;
 class QKeyEvent;
 class QPainter;
+class SymbolTable;
+
+
+/**
+ * The interface the elements expect from its document.
+ *
+ * Please don't mistake this class for KFormulaDocument.
+ * This one represents one formula, the other one provides
+ * the context in which the formulae exist.
+ */
+class FormulaDocument {
+public:
+
+    virtual void elementRemoval(BasicElement* child) = 0;
+    virtual void changed() = 0;
+    virtual const SymbolTable& getSymbolTable() const = 0;
+};
 
 
 /**
  * The document. Actually only one part of the whole.
  * Provides everything to edit the formula.
  */
-class KFormulaContainer : public QObject {
+class KFormulaContainer : public QObject, public FormulaDocument {
     friend class KFormulaMimeSource;
     Q_OBJECT
 
@@ -145,7 +162,7 @@ public:
      * Tries to read a formula string from the other lib.
      */
     bool importOldText(QString text);
-    
+
     /**
      * Prints the formula.
      */
@@ -193,7 +210,9 @@ public:
     /**
      * @returns the document this formula belongs to.
      */
-    KFormulaDocument* getDocument() const { return document; }
+    KFormulaDocument* getDocument() const;
+
+    virtual const SymbolTable& getSymbolTable() const;
 
 signals:
 
@@ -228,7 +247,7 @@ signals:
      */
     void commandExecuted();
 
-public slots:
+public:
 
     // There are a lot of thing we can do with the formula.
 
@@ -238,7 +257,6 @@ public slots:
     void addLineBreak();
 
     void addBracket(char left, char right);
-    void addDefaultBracket();
     void addSquareBracket() { addBracket('[', ']'); }
     void addCurlyBracket()  { addBracket('{', '}'); }
     void addLineBracket()   { addBracket('|', '|'); }
@@ -352,30 +370,11 @@ private:
      */
     bool hasValidCursor() const;
 
-    /**
-     * If true we need to recalc the formula.
-     */
-    bool dirty;
+    struct KFormulaContainer_Impl;
+    KFormulaContainer_Impl* impl;
 
-    /**
-     * The element tree's root.
-     */
-    FormulaElement* rootElement;
-
-    /**
-     * The active cursor is the one that triggered the last command.
-     */
-    FormulaCursor* activeCursor;
-
-    /**
-     * The cursor that is used if there is no view.
-     */
-    FormulaCursor* internCursor;
-
-    /**
-     * The document we belong to.
-     */
-    KFormulaDocument* document;
+    FormulaElement* rootElement() const;
+    KFormulaDocument* document() const;
 
     // debug
     friend class TestFormulaCursor;

@@ -18,6 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qlist.h>
 #include <qstringlist.h>
 
 #include <kglobal.h>
@@ -25,182 +26,301 @@
 #include <klocale.h>
 #include <kstddirs.h>
 
+#include "contextstyle.h"
 #include "kformulacontainer.h"
 #include "kformuladocument.h"
+#include "symboltable.h"
+
+
+struct KFormulaDocument::KFormulaDocument_Impl {
+
+
+    KFormulaDocument_Impl()
+            : leftBracketChar('('), rightBracketChar(')'), formula(0)
+    {
+        formulae.setAutoDelete(false);
+    }
+
+
+    ~KFormulaDocument_Impl()
+    {
+        if (ownHistory) {
+            delete history;
+        }
+    }
+
+    // We know our actions, maybe a client is interessted...
+
+    KAction* addBracketAction;
+    KAction* addSBracketAction;
+    KAction* addCBracketAction;
+    KAction* addAbsAction;
+    KAction* addFractionAction;
+    KAction* addRootAction;
+    KAction* addSumAction;
+    KAction* addProductAction;
+    KAction* addIntegralAction;
+    KAction* addMatrixAction;
+    KAction* addOneByTwoMatrixAction;
+    KAction* addUpperLeftAction;
+    KAction* addLowerLeftAction;
+    KAction* addUpperRightAction;
+    KAction* addLowerRightAction;
+    KAction* addGenericUpperAction;
+    KAction* addGenericLowerAction;
+    KAction* removeEnclosingAction;
+    KAction* makeGreekAction;
+    KAction* insertSymbolAction;
+
+    KToggleAction* syntaxHighlightingAction;
+    KSelectAction* leftBracket;
+    KSelectAction* rightBracket;
+    KSelectAction* symbolNamesAction;
+
+
+    char leftBracketChar;
+    char rightBracketChar;
+    QString selectedName;
+
+    /**
+     * The active formula.
+     */
+    KFormulaContainer* formula;
+
+    /**
+     * Our undo stack. We don't own it. The stack belongs to
+     * our parent and might contain not formula related commands
+     * as well.
+     */
+    KCommandHistory* history;
+
+    /**
+     * Tells whether we are responsible to remove our history.
+     */
+    bool ownHistory;
+
+    /**
+     * The symbols/names that are "known" to the system.
+     */
+    SymbolTable table;
+
+    /**
+     * The documents context style. This is the place where all
+     * the user configurable informations are stored.
+     */
+    ContextStyle contextStyle;
+
+    /**
+     * All formulae that belong to this document.
+     */
+    QList<KFormulaContainer> formulae;
+};
+
+
+const ContextStyle& KFormulaDocument::getContextStyle() const { return impl->contextStyle; }
+
+double KFormulaDocument::getXResolution() const { return impl->contextStyle.getXResolution(); }
+double KFormulaDocument::getYResolution() const { return impl->contextStyle.getYResolution(); }
+
+void KFormulaDocument::setResolution(double zX, double zY) { impl->contextStyle.setResolution(zX, zY); }
+
+KCommandHistory* KFormulaDocument::getHistory() const { return impl->history; }
+const SymbolTable& KFormulaDocument::getSymbolTable() const { return impl->table; }
+
+KAction* KFormulaDocument::getAddBracketAction()       { return impl->addBracketAction; }
+KAction* KFormulaDocument::getAddFractionAction()      { return impl->addFractionAction; }
+KAction* KFormulaDocument::getAddRootAction()          { return impl->addRootAction; }
+KAction* KFormulaDocument::getAddSumAction()           { return impl->addSumAction; }
+KAction* KFormulaDocument::getAddProductAction()       { return impl->addProductAction; }
+KAction* KFormulaDocument::getAddIntegralAction()      { return impl->addIntegralAction; }
+KAction* KFormulaDocument::getAddMatrixAction()        { return impl->addMatrixAction; }
+KAction* KFormulaDocument::getAddOneByTwoMatrixAction(){ return impl->addOneByTwoMatrixAction; }
+KAction* KFormulaDocument::getAddUpperLeftAction()     { return impl->addUpperLeftAction; }
+KAction* KFormulaDocument::getAddLowerLeftAction()     { return impl->addLowerLeftAction; }
+KAction* KFormulaDocument::getAddUpperRightAction()    { return impl->addUpperRightAction; }
+KAction* KFormulaDocument::getAddLowerRightAction()    { return impl->addLowerRightAction; }
+KAction* KFormulaDocument::getAddGenericUpperAction()  { return impl->addGenericUpperAction; }
+KAction* KFormulaDocument::getAddGenericLowerAction()  { return impl->addGenericLowerAction; }
+KAction* KFormulaDocument::getRemoveEnclosingAction()  { return impl->removeEnclosingAction; }
+KAction* KFormulaDocument::getMakeGreekAction()        { return impl->makeGreekAction; }
+KAction* KFormulaDocument::getInsertSymbolAction()     { return impl->insertSymbolAction; }
+KSelectAction* KFormulaDocument::getLeftBracketAction()  { return impl->leftBracket; }
+KSelectAction* KFormulaDocument::getRightBracketAction() { return impl->rightBracket; }
+KSelectAction* KFormulaDocument::getSymbolNamesAction()  { return impl->symbolNamesAction; }
+KToggleAction* KFormulaDocument::getSyntaxHighlightingAction() { return impl->syntaxHighlightingAction; }
+
+KFormulaContainer* KFormulaDocument::formula() const { return impl->formula; }
 
 
 KFormulaDocument::KFormulaDocument(KActionCollection* collection,
                                    KCommandHistory* his)
-        : leftBracketChar('('), rightBracketChar(')'), formula(0)
 {
+    impl = new KFormulaDocument_Impl;
+
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "kformula/pics/");
     createActions(collection);
-    syntaxHighlightingAction->setChecked(contextStyle.getSyntaxHighlighting());
+    impl->syntaxHighlightingAction->setChecked(impl->contextStyle.getSyntaxHighlighting());
 
     if (his == 0) {
-        history = new KCommandHistory(collection);
-        ownHistory = true;
+        impl->history = new KCommandHistory(collection);
+        impl->ownHistory = true;
     }
     else {
-        history = his;
-        ownHistory = false;
+        impl->history = his;
+        impl->ownHistory = false;
     }
-    formulae.setAutoDelete(false);
 }
 
 
 KFormulaDocument::KFormulaDocument(KCommandHistory* his)
-        : leftBracketChar('('), rightBracketChar(')'), formula(0)
 {
+    impl = new KFormulaDocument_Impl;
     if (his == 0) {
-        history = new KCommandHistory;
-        ownHistory = true;
+        impl->history = new KCommandHistory;
+        impl->ownHistory = true;
     }
     else {
-        history = his;
-        ownHistory = false;
+        impl->history = his;
+        impl->ownHistory = false;
     }
-    formulae.setAutoDelete(false);
 }
 
 
 KFormulaDocument::~KFormulaDocument()
 {
-    if (ownHistory) {
-        delete history;
-    }
+    delete impl;
 }
 
 
 KFormulaContainer* KFormulaDocument::createFormula()
 {
     KFormulaContainer* f = new KFormulaContainer(this);
-    formulae.append(f);
+    impl->formulae.append(f);
     return f;
 }
 
 
 void KFormulaDocument::activate(KFormulaContainer* f)
 {
-    formula = f;
+    impl->formula = f;
 }
 
 
 void KFormulaDocument::formulaDies(KFormulaContainer* f)
 {
-    if (f == formula) {
-        formula = 0;
+    if (f == impl->formula) {
+        impl->formula = 0;
     }
-    formulae.remove(f);
+    impl->formulae.remove(f);
 }
 
 
 void KFormulaDocument::createActions(KActionCollection* collection)
 {
-    addIntegralAction = new KAction(i18n("Add/change to integral"),
+    impl->addIntegralAction = new KAction(i18n("Add/change to integral"),
                                     "int",
                                     CTRL + Key_6,
                                     this, SLOT(addIntegral()),
                                     collection, "formula_addintegral");
-    addSumAction      = new KAction(i18n("Add/change to sum"),
+    impl->addSumAction      = new KAction(i18n("Add/change to sum"),
                                     "sum",
                                     CTRL + Key_7,
                                     this, SLOT(addSum()),
                                     collection, "formula_addsum");
-    addProductAction  = new KAction(i18n("Add/change to product"),
+    impl->addProductAction  = new KAction(i18n("Add/change to product"),
                                     "prod",
                                     CTRL + Key_4,
                                     this, SLOT(addProduct()),
                                     collection, "formula_addproduct");
-    addRootAction     = new KAction(i18n("Add/change to root"),
+    impl->addRootAction     = new KAction(i18n("Add/change to root"),
                                     "sqrt",
                                     CTRL + Key_2,
                                     this, SLOT(addRoot()),
                                     collection, "formula_addroot");
-    addFractionAction = new KAction(i18n("Add/change to fraction"),
+    impl->addFractionAction = new KAction(i18n("Add/change to fraction"),
                                     "frac",
                                     CTRL + Key_3,
                                     this, SLOT(addFraction()),
                                     collection, "formula_addfrac");
-    addBracketAction  = new KAction(i18n("Add/change to bracket"),
+    impl->addBracketAction  = new KAction(i18n("Add/change to bracket"),
                                     "paren",
                                     0,
                                     this, SLOT(addDefaultBracket()),
                                     collection,"formula_addbra");
-    addSBracketAction = new KAction(i18n("Add/change to square bracket"),
+    impl->addSBracketAction = new KAction(i18n("Add/change to square bracket"),
                                     "brackets",
                                     0,
                                     this, SLOT(addSquareBracket()),
                                     collection,"formula_addsqrbra");
-    addCBracketAction = new KAction(i18n("Add/change to curly bracket"),
+    impl->addCBracketAction = new KAction(i18n("Add/change to curly bracket"),
                                     "brace",
                                     0,
                                     this, SLOT(addCurlyBracket()),
                                     collection,"formula_addcurbra");
-    addAbsAction      = new KAction(i18n("Add/change to abs"),
+    impl->addAbsAction      = new KAction(i18n("Add/change to abs"),
                                     "abs",
                                     0,
                                     this, SLOT(addLineBracket()),
                                     collection,"formula_addabsbra");
 
-    addMatrixAction   = new KAction(i18n("Add matrix"),
+    impl->addMatrixAction   = new KAction(i18n("Add matrix"),
                                     "matrix",
                                     CTRL + Key_8,
                                     this, SLOT(addMatrix()),
                                     collection, "formula_addmatrix");
 
-    addOneByTwoMatrixAction   = new KAction(i18n("Add 1x2 matrix"),
+    impl->addOneByTwoMatrixAction   = new KAction(i18n("Add 1x2 matrix"),
                                     "onetwomatrix",
                                     0,
                                     this, SLOT(addOneByTwoMatrix()),
                                     collection, "formula_add_one_by_two_matrix");
 
-     
-    addUpperLeftAction  = new KAction(i18n("Add upper left index"),
+
+    impl->addUpperLeftAction  = new KAction(i18n("Add upper left index"),
                                       "lsup",
                                       0,
                                       this, SLOT(addUpperLeftIndex()),
                                       collection, "formula_addupperleft");
-    addLowerLeftAction  = new KAction(i18n("Add lower left index"),
+    impl->addLowerLeftAction  = new KAction(i18n("Add lower left index"),
                                       "lsub",
                                       0,
                                       this, SLOT(addLowerLeftIndex()),
                                       collection, "formula_addlowerleft");
-    addUpperRightAction = new KAction(i18n("Add upper right index"),
+    impl->addUpperRightAction = new KAction(i18n("Add upper right index"),
                                       "rsup",
                                       0,
                                       this, SLOT(addUpperRightIndex()),
                                       collection, "formula_addupperright");
-    addLowerRightAction = new KAction(i18n("Add lower right index"),
+    impl->addLowerRightAction = new KAction(i18n("Add lower right index"),
                                       "rsub",
                                       0,
                                       this, SLOT(addLowerRightIndex()),
                                       collection, "formula_addlowerright");
 
-    addGenericUpperAction = new KAction(i18n("Add upper index"),
+    impl->addGenericUpperAction = new KAction(i18n("Add upper index"),
                                       CTRL + Key_U,
                                       this, SLOT(addGenericUpperIndex()),
                                       collection, "formula_addupperindex");
-    addGenericLowerAction = new KAction(i18n("Add lower index"),
+    impl->addGenericLowerAction = new KAction(i18n("Add lower index"),
                                       CTRL + Key_L,
                                       this, SLOT(addGenericLowerIndex()),
                                       collection, "formula_addlowerindex");
 
-    removeEnclosingAction = new KAction(i18n("Remove enclosing element"),
+    impl->removeEnclosingAction = new KAction(i18n("Remove enclosing element"),
                                         CTRL + Key_R,
                                         this, SLOT(removeEnclosing()),
                                         collection, "formula_removeenclosing");
 
-    makeGreekAction = new KAction(i18n("Convert to greek"),
+    impl->makeGreekAction = new KAction(i18n("Convert to greek"),
                                   CTRL + Key_G,
                                   this, SLOT(makeGreek()),
                                   collection, "formula_makegreek");
 
-    syntaxHighlightingAction = new KToggleAction(i18n("Syntax highlighting"),
+    impl->syntaxHighlightingAction = new KToggleAction(i18n("Syntax highlighting"),
                                                  0,
                                                  this, SLOT(toggleSyntaxHighlighting()),
                                                  collection, "formula_syntaxhighlighting");
-    
+
     QStringList delimiter;
     delimiter.append(QString("("));
     delimiter.append(QString("["));
@@ -213,10 +333,10 @@ void KFormulaDocument::createActions(KActionCollection* collection)
     delimiter.append(QString("}"));
     delimiter.append(QString(">"));
     delimiter.append(QString("|"));
-    leftBracket = new KSelectAction(i18n("Left delimiter"),
+    impl->leftBracket = new KSelectAction(i18n("Left delimiter"),
                                     0, this, SLOT(delimiterLeft()),
                                     collection, "formula_typeleft");
-    leftBracket->setItems(delimiter);
+    impl->leftBracket->setItems(delimiter);
     //leftBracket->setCurrentItem(0);
 
     delimiter.clear();
@@ -231,120 +351,120 @@ void KFormulaDocument::createActions(KActionCollection* collection)
     delimiter.append(QString("{"));
     delimiter.append(QString("<"));
     delimiter.append(QString("|"));
-    rightBracket = new KSelectAction(i18n("Right delimiter"),
+    impl->rightBracket = new KSelectAction(i18n("Right delimiter"),
                                      0, this, SLOT(delimiterRight()),
                                      collection, "formula_typeright");
-    rightBracket->setItems(delimiter);
+    impl->rightBracket->setItems(delimiter);
     //rightBracket->setCurrentItem(0);
 
-    insertSymbolAction = new KAction(i18n("Insert symbol"),
+    impl->insertSymbolAction = new KAction(i18n("Insert symbol"),
                                         CTRL + Key_I,
                                         this, SLOT(insertSymbol()),
                                         collection, "formula_insertsymbol");
-    QStringList names = table.getAllNames();
-    symbolNamesAction = new KSelectAction(i18n("Symbol names"),
+    QStringList names = impl->table.getAllNames();
+    impl->symbolNamesAction = new KSelectAction(i18n("Symbol names"),
                                           0, this, SLOT(symbolNames()),
                                           collection, "formula_symbolnames");
-    symbolNamesAction->setItems(names);
-    selectedName = names[0];
+    impl->symbolNamesAction->setItems(names);
+    impl->selectedName = names[0];
 }
 
 
 void KFormulaDocument::paste()
 {
     if (hasFormula()) {
-        formula->paste();
+        formula()->paste();
     }
 }
 
 void KFormulaDocument::copy()
 {
     if (hasFormula()) {
-        formula->copy();
+        formula()->copy();
     }
 }
 
 void KFormulaDocument::cut()
 {
     if (hasFormula()) {
-        formula->cut();
+        formula()->cut();
     }
 }
 
 void KFormulaDocument::addDefaultBracket()
 {
     if (hasFormula()) {
-        formula->addBracket(leftBracketChar, rightBracketChar);
+        formula()->addBracket(impl->leftBracketChar, impl->rightBracketChar);
     }
 }
 
 void KFormulaDocument::addSquareBracket()
 {
     if (hasFormula()) {
-        formula->addSquareBracket();
+        formula()->addSquareBracket();
     }
 }
 
 void KFormulaDocument::addCurlyBracket()
 {
     if (hasFormula()) {
-        formula->addCurlyBracket();
+        formula()->addCurlyBracket();
     }
 }
 
 void KFormulaDocument::addLineBracket()
 {
     if (hasFormula()) {
-        formula->addLineBracket();
+        formula()->addLineBracket();
     }
 }
 
 void KFormulaDocument::addFraction()
 {
     if (hasFormula()) {
-        formula->addFraction();
+        formula()->addFraction();
     }
 }
 
 void KFormulaDocument::addRoot()
 {
     if (hasFormula()) {
-        formula->addRoot();
+        formula()->addRoot();
     }
 }
 
 void KFormulaDocument::addIntegral()
 {
     if (hasFormula()) {
-        formula->addIntegral();
+        formula()->addIntegral();
     }
 }
 
 void KFormulaDocument::addProduct()
 {
     if (hasFormula()) {
-        formula->addProduct();
+        formula()->addProduct();
     }
 }
 
 void KFormulaDocument::addSum()
 {
     if (hasFormula()) {
-        formula->addSum();
+        formula()->addSum();
     }
 }
 
 void KFormulaDocument::addMatrix()
 {
     if (hasFormula()) {
-        formula->addMatrix();
+        formula()->addMatrix();
     }
 }
 
 void KFormulaDocument::addOneByTwoMatrix()
 {
     if (hasFormula()) {
-	formula->addOneByTwoMatrix();
+	formula()->addOneByTwoMatrix();
     }
 }
 
@@ -352,97 +472,97 @@ void KFormulaDocument::addOneByTwoMatrix()
 void KFormulaDocument::addLowerLeftIndex()
 {
     if (hasFormula()) {
-        formula->addLowerLeftIndex();
+        formula()->addLowerLeftIndex();
     }
 }
 
 void KFormulaDocument::addUpperLeftIndex()
 {
     if (hasFormula()) {
-        formula->addUpperLeftIndex();
+        formula()->addUpperLeftIndex();
     }
 }
 
 void KFormulaDocument::addLowerRightIndex()
 {
     if (hasFormula()) {
-        formula->addLowerRightIndex();
+        formula()->addLowerRightIndex();
     }
 }
 
 void KFormulaDocument::addUpperRightIndex()
 {
     if (hasFormula()) {
-        formula->addUpperRightIndex();
+        formula()->addUpperRightIndex();
     }
 }
 
 void KFormulaDocument::addGenericLowerIndex()
 {
     if (hasFormula()) {
-        formula->addGenericLowerIndex();
+        formula()->addGenericLowerIndex();
     }
 }
 
 void KFormulaDocument::addGenericUpperIndex()
 {
     if (hasFormula()) {
-        formula->addGenericUpperIndex();
+        formula()->addGenericUpperIndex();
     }
 }
 
 void KFormulaDocument::removeEnclosing()
 {
     if (hasFormula()) {
-        formula->replaceElementWithMainChild();
+        formula()->replaceElementWithMainChild();
     }
 }
 
 void KFormulaDocument::makeGreek()
 {
     if (hasFormula()) {
-        formula->makeGreek();
+        formula()->makeGreek();
     }
 }
 
 void KFormulaDocument::insertSymbol()
 {
-    if (hasFormula() && table.contains(selectedName)) {
-        QChar ch = table.getSymbolChar(selectedName);
+    if (hasFormula() && impl->table.contains(impl->selectedName)) {
+        QChar ch = impl->table.getSymbolChar(impl->selectedName);
         if (ch != QChar::null) {
-            formula->addText(ch, true);
+            formula()->addText(ch, true);
         }
         else {
-            formula->addText(selectedName);
+            formula()->addText(impl->selectedName);
         }
     }
 }
 
 void KFormulaDocument::toggleSyntaxHighlighting()
 {
-    contextStyle.setSyntaxHighlighting(syntaxHighlightingAction->isChecked());
-    
+    impl->contextStyle.setSyntaxHighlighting(impl->syntaxHighlightingAction->isChecked());
+
     KFormulaContainer* f;
-    for (f=formulae.first(); f != 0; f=formulae.next()) {
+    for (f=impl->formulae.first(); f != 0; f=impl->formulae.next()) {
         f->recalc();
     }
 }
 
 void KFormulaDocument::delimiterLeft()
 {
-    QString left = leftBracket->currentText();
-    leftBracketChar = left.at(0).latin1();
+    QString left = impl->leftBracket->currentText();
+    impl->leftBracketChar = left.at(0).latin1();
 }
 
 void KFormulaDocument::delimiterRight()
 {
-    QString right = rightBracket->currentText();
-    rightBracketChar = right.at(0).latin1();
+    QString right = impl->rightBracket->currentText();
+    impl->rightBracketChar = right.at(0).latin1();
 }
 
 void KFormulaDocument::symbolNames()
 {
-    selectedName = symbolNamesAction->currentText();
+    impl->selectedName = impl->symbolNamesAction->currentText();
 }
 
 void KFormulaDocument::undo()
@@ -457,7 +577,7 @@ void KFormulaDocument::redo()
 
 bool KFormulaDocument::hasFormula()
 {
-    return (formula != 0) && (formula->getActiveCursor() != 0);
+    return (formula() != 0) && (formula()->getActiveCursor() != 0);
 }
 
 #include "kformuladocument.moc"

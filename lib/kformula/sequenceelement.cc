@@ -212,7 +212,7 @@ void SequenceElement::draw(QPainter& painter, const QRect& r,
     if (!QRect(myPos, getSize()).intersects(r))
         return;
 
-    if (!isEmpty()) {	
+    if (!isEmpty()) {
 	BasicElement* child;
 	for ( child=children.first(); child!=0; child=children.next() ){
 	    if (!child->isPhantom()) {
@@ -876,7 +876,7 @@ void SequenceElement::parse()
         // Those types are gone. Make sure they won't
         // be used.
         element->setElementType(0);
-        
+
         if (element->getCharacter() == QChar::null) {
             textSequence = false;
         }
@@ -899,18 +899,21 @@ QString SequenceElement::toLatex()
 	if(count > 1) content+="{";
         for (uint i = 0; i < count; i++) {
             BasicElement* child = children.at(i);
-            if (child->isPhantom())
-	    {
-		content+="\\phantom{";
-                content+=child->toLatex();
-		content+="}";
-    	    }
-	    else
+
+            // Our idea of a phantom element currently isn't the
+            // TeX one. phantom means invisible for us. Maybe
+            // we need to change the name.
+//             if (child->isPhantom())
+// 	    {
+// 		content+="\\phantom{";
+//                 content+=child->toLatex();
+// 		content+="}";
+//     	    }
+// 	    else
 		content+=child->toLatex();
 
-    	if(count>1)
-	    content+=" ";
-
+//     	if(count>1)
+// 	    content+=" ";
 	}
     	if(count > 1) content+="}";
 

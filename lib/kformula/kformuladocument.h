@@ -21,18 +21,16 @@
 #ifndef KFORMULADOCUMENT_H
 #define KFORMULADOCUMENT_H
 
-#include <qlist.h>
 #include <qobject.h>
 #include <qstring.h>
 
 #include <kaction.h>
 #include <kcommand.h>
 
-#include "contextstyle.h"
-#include "symboltable.h"
-
+class ContextStyle;
 class KFormulaContainer;
 class KFormulaWidget;
+class SymbolTable;
 
 
 /**
@@ -63,16 +61,16 @@ public:
     /**
      * @returns the documents context style.
      */
-    const ContextStyle& getContextStyle() const { return contextStyle; }
+    const ContextStyle& getContextStyle() const;
 
-    double getXResolution() const { return contextStyle.getXResolution(); }
-    double getYResolution() const { return contextStyle.getYResolution(); }
+    double getXResolution() const;
+    double getYResolution() const;
 
     /**
      * Sets the resolution (factor) to be used to draw the formula.
      * Make sure to recalc all formulas after you called this.
      */
-    void setResolution(double zX, double zY) { contextStyle.setResolution(zX, zY); }
+    void setResolution(double zX, double zY);
 
     /**
      * Creates a new formula. The whole idea of the formula document
@@ -97,7 +95,7 @@ public:
     /**
      * @returns our undo stack so the formulas can use it.
      */
-    KCommandHistory* getHistory() const { return history; }
+    KCommandHistory* getHistory() const;
 
     void undo();
     void redo();
@@ -105,29 +103,29 @@ public:
     /**
      * @returns the documents symbol table
      */
-    const SymbolTable& getSymbolTable() const { return table; }
+    const SymbolTable& getSymbolTable() const;
 
-    KAction* getAddBracketAction()       { return addBracketAction; }
-    KAction* getAddFractionAction()      { return addFractionAction; }
-    KAction* getAddRootAction()          { return addRootAction; }
-    KAction* getAddSumAction()           { return addSumAction; }
-    KAction* getAddProductAction()       { return addProductAction; }
-    KAction* getAddIntegralAction()      { return addIntegralAction; }
-    KAction* getAddMatrixAction()        { return addMatrixAction; }
-    KAction* getAddOneByTwoMatrixAction(){ return addOneByTwoMatrixAction; }
-    KAction* getAddUpperLeftAction()     { return addUpperLeftAction; }
-    KAction* getAddLowerLeftAction()     { return addLowerLeftAction; }
-    KAction* getAddUpperRightAction()    { return addUpperRightAction; }
-    KAction* getAddLowerRightAction()    { return addLowerRightAction; }
-    KAction* getAddGenericUpperAction()  { return addGenericUpperAction; }
-    KAction* getAddGenericLowerAction()  { return addGenericLowerAction; }
-    KAction* getRemoveEnclosingAction()  { return removeEnclosingAction; }
-    KAction* getMakeGreekAction()        { return makeGreekAction; }
-    KAction* getInsertSymbolAction()     { return insertSymbolAction; }
-    KSelectAction* getLeftBracketAction()  { return leftBracket; }
-    KSelectAction* getRightBracketAction() { return rightBracket; }
-    KSelectAction* getSymbolNamesAction()  { return symbolNamesAction; }
-    KToggleAction* getSyntaxHighlightingAction() { return syntaxHighlightingAction; }
+    KAction* getAddBracketAction();
+    KAction* getAddFractionAction();
+    KAction* getAddRootAction();
+    KAction* getAddSumAction();
+    KAction* getAddProductAction();
+    KAction* getAddIntegralAction();
+    KAction* getAddMatrixAction();
+    KAction* getAddOneByTwoMatrixAction();
+    KAction* getAddUpperLeftAction();
+    KAction* getAddLowerLeftAction();
+    KAction* getAddUpperRightAction();
+    KAction* getAddLowerRightAction();
+    KAction* getAddGenericUpperAction();
+    KAction* getAddGenericLowerAction();
+    KAction* getRemoveEnclosingAction();
+    KAction* getMakeGreekAction();
+    KAction* getInsertSymbolAction();
+    KSelectAction* getLeftBracketAction();
+    KSelectAction* getRightBracketAction();
+    KSelectAction* getSymbolNamesAction();
+    KToggleAction* getSyntaxHighlightingAction();
 
 public slots:
 
@@ -174,71 +172,10 @@ private:
      */
     bool hasFormula();
 
-    // We know our actions, maybe a client is interessted...
+    struct KFormulaDocument_Impl;
+    KFormulaDocument_Impl* impl;
 
-    KAction* addBracketAction;
-    KAction* addSBracketAction;
-    KAction* addCBracketAction;
-    KAction* addAbsAction;
-    KAction* addFractionAction;
-    KAction* addRootAction;
-    KAction* addSumAction;
-    KAction* addProductAction;
-    KAction* addIntegralAction;
-    KAction* addMatrixAction;
-    KAction* addOneByTwoMatrixAction;
-    KAction* addUpperLeftAction;
-    KAction* addLowerLeftAction;
-    KAction* addUpperRightAction;
-    KAction* addLowerRightAction;
-    KAction* addGenericUpperAction;
-    KAction* addGenericLowerAction;
-    KAction* removeEnclosingAction;
-    KAction* makeGreekAction;
-    KAction* insertSymbolAction;
-
-    KToggleAction* syntaxHighlightingAction;
-    KSelectAction* leftBracket;
-    KSelectAction* rightBracket;
-    KSelectAction* symbolNamesAction;
-
-    
-    char leftBracketChar;
-    char rightBracketChar;
-    QString selectedName;
-
-    /**
-     * The active formula.
-     */
-    KFormulaContainer* formula;
-
-    /**
-     * Our undo stack. We don't own it. The stack belongs to
-     * our parent and might contain not formula related commands
-     * as well.
-     */
-    KCommandHistory* history;
-
-    /**
-     * Tells whether we are responsible to remove our history.
-     */
-    bool ownHistory;
-
-    /**
-     * The symbols/names that are "known" to the system.
-     */
-    SymbolTable table;
-
-    /**
-     * The documents context style. This is the place where all
-     * the user configurable informations are stored.
-     */
-    ContextStyle contextStyle;
-
-    /**
-     * All formulae that belong to this document.
-     */
-    QList<KFormulaContainer> formulae;
+    KFormulaContainer* formula() const;
 };
 
 #endif // KFORMULADOCUMENT_H

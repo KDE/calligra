@@ -21,7 +21,7 @@ void TestFormulaCursor::setUp()
     history = new KCommandHistory;
     document = new KFormulaDocument(history);
     container = new KFormulaContainer(document);
-    rootElement = container->rootElement;
+    rootElement = container->rootElement();
     cursor = container->createCursor();
 
     element1 = new BracketElement('(', ']');
@@ -42,7 +42,7 @@ void TestFormulaCursor::tearDown()
 {
     //container->destroyCursor(cursor);
     delete cursor;
-    
+
     delete container;
     delete document;
     delete history;
@@ -73,7 +73,7 @@ Test* TestFormulaCursor::suite ()
                                                      &TestFormulaCursor::testReplaceSelectionByElement));
     suite->addTest(new TestCaller<TestFormulaCursor>("testCursorSaving",
                                                      &TestFormulaCursor::testCursorSaving));
-    
+
     return suite;
 }
 
@@ -117,7 +117,7 @@ void TestFormulaCursor::testRemoval()
     cursor->moveHome();
     cursor->remove(list, BasicElement::beforeCursor);
     assert(rootElement->countChildren() == 4);
-    
+
     cursor->remove(list, BasicElement::afterCursor);
     assert(rootElement->countChildren() == 3);
 }
@@ -220,7 +220,7 @@ void TestFormulaCursor::testActiveIndexElement()
 void TestFormulaCursor::testReplaceByEmptyContent()
 {
     element3->setToLowerRight(cursor);
-    
+
     BasicElement* element = cursor->replaceByMainChildContent();
     delete element;
     assert(rootElement->countChildren() == 4);
@@ -282,6 +282,6 @@ void TestFormulaCursor::testCursorSaving()
 
 //     assert(cursor2->getPos() == 3);
 //     assert(cursor->getPos() == 0);
-    
+
 //     container->destroyCursor(cursor2);
 }

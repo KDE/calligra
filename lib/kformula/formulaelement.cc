@@ -28,7 +28,7 @@
 #include "kformuladocument.h"
 
 
-FormulaElement::FormulaElement(KFormulaContainer* container)
+FormulaElement::FormulaElement(FormulaDocument* container)
     : document(container)
 {
 }
@@ -80,7 +80,7 @@ void FormulaElement::draw(QPainter& painter, const QRect& r,
 
 const SymbolTable& FormulaElement::getSymbolTable() const
 {
-    return document->getDocument()->getSymbolTable();
+    return document->getSymbolTable();
 }
 
 

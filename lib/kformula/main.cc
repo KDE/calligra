@@ -181,6 +181,10 @@ int main(int argc, char** argv)
     delete container1;
     delete document;
 
+    // Make sure there are no elements in the clipboard.
+    // Okey for a debug app.
+    QApplication::clipboard()->clear();
+
     int destruct = BasicElement::getEvilDestructionCount();
     if (destruct != 0) {
         cerr << "BasicElement::EvilDestructionCount: " << destruct << endl;

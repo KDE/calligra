@@ -38,7 +38,7 @@ void TestIndexElement::setUp()
     history = new KCommandHistory;
     document = new KFormulaDocument(history);
     container = new KFormulaContainer(document);
-    rootElement = container->rootElement;
+    rootElement = container->rootElement();
     cursor = container->createCursor();
 
     indexElement = new IndexElement();
@@ -63,7 +63,7 @@ void TestIndexElement::tearDown()
 {
     //container->destroyCursor(cursor);
     delete cursor;
-    
+
     delete container;
     delete document;
     delete history;
@@ -79,14 +79,14 @@ void TestIndexElement::testIndexes()
 
     QList<BasicElement> list;
     list.setAutoDelete(true);
-    
+
     indexElement->moveToUpperLeft(cursor, BasicElement::beforeCursor);
     cursor->remove(list);
     assert(!indexElement->hasUpperLeft());
 
     cursor->normalize();
     assert(cursor->getElement() == indexElement->getMainChild());
-    
+
     list.clear();
     indexElement->moveToUpperRight(cursor, BasicElement::beforeCursor);
     cursor->remove(list);
@@ -116,13 +116,13 @@ void TestIndexElement::testIndexesGeneric()
 {
     ElementIndexPtr upperLeft = indexElement->getUpperLeft();
     removeAddIndex(upperLeft);
-    
+
     ElementIndexPtr lowerLeft = indexElement->getLowerLeft();
     removeAddIndex(lowerLeft);
-    
+
     ElementIndexPtr upperRight = indexElement->getUpperRight();
     removeAddIndex(upperRight);
-    
+
     ElementIndexPtr lowerRight = indexElement->getLowerRight();
     removeAddIndex(lowerRight);
 }
@@ -133,7 +133,7 @@ void TestIndexElement::removeAddIndex(ElementIndexPtr& index)
 
     QList<BasicElement> list;
     list.setAutoDelete(true);
-    
+
     index->moveToIndex(cursor, BasicElement::beforeCursor);
     cursor->remove(list);
     assert(!index->hasIndex());
@@ -150,7 +150,7 @@ void TestIndexElement::testMainChild()
 //     indexElement->setMainChild(child);
 
 //     delete oldChild;
-    
+
 //     assert(child->getParent() == indexElement);
 //     assert(indexElement->getMainChild() == child);
 }

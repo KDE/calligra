@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -38,7 +38,7 @@ public:
     bool matches(QString n) { return name == n; }
 
     QChar getSymbolChar() const { return symbolChar; }
-    
+
 private:
 
     QString name;
@@ -64,6 +64,8 @@ public:
      */
     QChar getSymbolChar(QString name) const;
 
+    QString getSymbolName(QChar symbol) const;
+
     /**
      * @returns a string with all greek letters.
      */
@@ -73,11 +75,11 @@ public:
      * @returns all known names as strings.
      */
     QStringList getAllNames() const;
-    
+
 private:
 
     void addEntry(QString name, QChar ch = QChar::null);
-    
+
     QDict<SymbolTableEntry> entries;
 
     /**
