@@ -79,7 +79,7 @@ VComposite::~VComposite()
 }
 
 void
-VComposite::draw( VPainter* painter, const KoRect* rect ) const
+VComposite::draw( VPainter* painter, const KoRect * /*rect*/ ) const
 {
 	if(
 		state() == deleted ||
