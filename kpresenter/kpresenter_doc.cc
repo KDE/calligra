@@ -982,6 +982,57 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         KPrPage *newpage=new KPrPage(this);
         m_pageList.insert( pos,newpage);
         m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
+
+        // parse all objects
+        for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
+        {
+            kdDebug()<<"load Object \n";
+            QDomElement o = object.toElement();
+            QString name = o.tagName();
+            if ( name == "draw:text-box" ) // textbox
+            {
+            }
+            else if ( name == "draw:rect" ) // rectangle
+            {
+            }
+            else if ( name == "draw:circle" || name == "draw:ellipse" )
+            {
+                if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
+                {
+                    QString kind = o.attribute( "draw:kind" );
+                    if ( kind == "section" )
+                    {
+                    }
+                    else if ( kind == "cut" )
+                    {
+                    }
+                    else if ( kind == "arc" )
+                    {
+                    }
+                }
+                else  // circle or ellipse
+                {
+                }
+            }
+            else if ( name == "draw:line" ) // line
+            {
+            }
+            else if (name=="draw:polyline") { // polyline
+            }
+            else if (name=="draw:polygon") { // polygon
+            }
+            else if ( name == "draw:image" ) // image
+            {
+            }
+            else if ( name == "presentation:notes" ) // notes
+            {
+            }
+            else
+            {
+                kdDebug() << "Unsupported object '" << name << "'" << endl;
+                continue;
+            }
+        }
     }
 
     //todo load format
@@ -1462,7 +1513,7 @@ void KPresenterDoc::loadBackground( const QDomElement &element )
 {
     kdDebug(33001) << "KPresenterDoc::loadBackground" << endl;
     QDomElement page=element.firstChild().toElement();
-    int i=0+m_insertFilePage;
+    int i=m_insertFilePage;
     while(!page.isNull()) {
         if(m_pageWhereLoadObject)
             m_pageWhereLoadObject->background()->load(page);
