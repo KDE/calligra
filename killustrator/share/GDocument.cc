@@ -472,7 +472,7 @@ QDomDocument GDocument::saveToXml () {
 
     QDomDocument document("killustrator");
     document.appendChild( document.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDomElement killustrator=document.createElement("killustaror");
+    QDomElement killustrator=document.createElement("killustrator");
     killustrator.setAttribute("editor", "KIllustrator");
     killustrator.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
     killustrator.setAttribute("version", "2");
@@ -633,9 +633,9 @@ bool GDocument::readFromXml (const  QDomDocument &document) {
         pLayout.format = PG_DIN_A4;
     else if (tmp == "a5")
         pLayout.format = PG_DIN_A5;
-    else if (tmp == "usletter")
+    else if (tmp == "us_letter")
         pLayout.format = PG_US_LETTER;
-    else if (tmp == "uslegal")
+    else if (tmp == "us_legal")
         pLayout.format = PG_US_LEGAL;
     else if (tmp == "custom")
         pLayout.format = PG_CUSTOM;
