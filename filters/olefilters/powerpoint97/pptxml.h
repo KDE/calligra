@@ -27,6 +27,11 @@ DESCRIPTION
 #include <qobject.h>
 #include <qstring.h>
 
+#define ALIGN_LEFT 		1
+#define ALIGN_RIGHT 	2
+#define ALIGN_CENTER 	4
+#define ALIGN_JUSTIFY 	8
+
 class myFile;
 class QDomDocument;
 
@@ -82,6 +87,7 @@ private:
 
     bool m_isConverted;
     bool m_success;
+    bool m_half;
     unsigned m_y;
     QString m_embedded;
     QString m_pages;
@@ -98,6 +104,7 @@ private:
         unsigned length,
         const char *data);
     void gotSlide(PptSlide &slide);
+    void setPlaceholder(PptSlide &slide);
 };
 #endif
 

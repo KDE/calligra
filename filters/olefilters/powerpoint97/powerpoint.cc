@@ -548,8 +548,8 @@ void Powerpoint::opMsod(
     case PASS_GET_SLIDE_CONTENTS:
         data = new char[bytes];
         operands.readRawBytes((char *)data, bytes);
-kdError() <<"       drgid: "<< m_pptSlide->GetPsrReference() << endl;
-        gotDrawing(m_pptSlide->GetPsrReference(), "msod", bytes, data);
+kdError() <<"       drgid: "<< m_pptSlide->getPsrReference() << endl;
+        gotDrawing(m_pptSlide->getPsrReference(), "msod", bytes, data);
         delete [] data;
         break;
     };
@@ -836,10 +836,10 @@ void Powerpoint::opSlidePersistAtom(
     	if(data.slideId > 0)//if not master slide.. is there another way to tell???
 	{
 		m_pptSlide = new PptSlide;
-		m_pptSlide->SetPsrReference(data.psrReference);
+		m_pptSlide->setPsrReference(data.psrReference);
 		m_slideList.append(m_pptSlide);
 
-		kdDebug(s_area) << "slide: " << data.psrReference <<
+		kdDebug(s_area) << "XXXXXXXXXslide: " << data.psrReference <<
 		" has texts: " << data.numberTexts << endl;
 	}
         break;
@@ -988,7 +988,7 @@ void Powerpoint::opTextBytesAtom(
         //m_slide->text.append(text);
 	if(m_pptSlide)
 	{
-		m_pptSlide->AddText(data, m_textType);
+		m_pptSlide->addText(data, m_textType);
 		kdDebug(s_area) << "Text Added: " << data << " type: " << m_textType << endl;
 	}
 	else
@@ -1026,7 +1026,7 @@ void Powerpoint::opTextCharsAtom(
         //m_slide->text.append(text);
 	if(m_pptSlide)
 	{
-		m_pptSlide->AddText(data, m_textType);
+		m_pptSlide->addText(data, m_textType);
 		kdDebug(s_area) << "Text Added: " << data << " type: " << m_textType << endl;
 	}
 	else

@@ -110,10 +110,9 @@ private:
         PASS_GET_SLIDE_CONTENTS
     } m_pass;
     unsigned m_textType;
-    //Slide *m_slide;
-    //QPtrList<Slide> m_slides;
+    
     QPtrList<PptSlide>	m_slideList;
-    PptSlide*	m_pptSlide;
+    PptSlide*		m_pptSlide;
 
 struct PSR_CurrentUserAtom
 {

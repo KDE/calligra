@@ -35,6 +35,7 @@ PptXml::PptXml(
 {
     m_isConverted = false;
     m_success = false;
+    m_half = false;
     m_y = 0;
 }
 
@@ -46,7 +47,7 @@ bool PptXml::convert()
 {
     if (!m_isConverted)
     {
-        m_y = 0;
+       // m_y = 30;
         m_success = parse();
         m_isConverted = true;
     }
@@ -184,88 +185,134 @@ if (mimeType != "application/x-kontour")
 void PptXml::gotSlide(PptSlide &slide)
 {
 	static const unsigned pageHeight = 510;
+	Q_UINT16 numbOfPholders = 0;
+    	m_pages += "  <PAGE/>\n";
+	numbOfPholders = slide.getNumberOfPholders();
+	for(Q_UINT16 i = 0; i < numbOfPholders; i++)
+	{
+		slide.gotoPlaceholder(i);
+		setPlaceholder(slide);
+	}
+	m_y += pageHeight;
+}
+
+void PptXml::setPlaceholder(PptSlide &slide)
+{
  	QString xml_friendly;
- 	unsigned i;
+ 	unsigned i = 0;
 	bool 		bulletedList = false; 	//is this a bulleted list?
 	Q_UINT16 	type;				//type of text
+	QString 	x;				//x of placeholder
 	QString 	align;				//align of text
 	QString 	height ;			//height of placeholder
+	QString 	width ;			//width of placeholder
+	QString 	pointSize;			//font size
 	
-    	m_pages += "  <PAGE/>\n";
-    	xml_friendly = *slide.GetTitleText();
-
-    	encode(xml_friendly);
-    	m_titles += "  <Title title=\"" + xml_friendly + "\" />\n";
-    	m_notes += "  <Note note=\"\" />\n";
-    	m_text += "<OBJECT type=\"4\">\n"
- 		" <ORIG x=\"30\" y=\"" +
-            	QString::number(30 + m_y) +
-            	"\"/>\n"
-            	" <SIZE width=\"610\" height=\"43\"/>\n"
-            	" <PEN width=\"1\" style=\"0\" color=\"#000000\"/>\n"
-            	" <TEXTOBJ>\n"
-            	"  <P align=\"4\">\n"
-            	"   <TEXT family=\"utopia\" pointSize=\"36\" color=\"#000000\">";
-    	m_text += xml_friendly;
-    	m_text += "</TEXT>\n"
-            	"  </P>\n"
-            	" </TEXTOBJ>\n"
-            	"</OBJECT>\n";
-	type = slide.GetBodyType();
-	height = QString::number(24);		
-	align = QString::number(24);			
+ 	xml_friendly = *slide.getPlaceholderText().at(i);
+  	encode(xml_friendly);
+ 	
+	type = slide.getPlaceholderType();
+	Q_UINT16 y = 0;
+	
 	switch (type)
 	{
 	case TITLE_TEXT:
+		y = 30;
+		height = QString::number(55);
+		x = QString::number(30);
+		width = QString::number(610);
+		align = QString::number(ALIGN_CENTER);
+		pointSize = QString::number(44);
+		bulletedList = false;
+		m_titles += "  <Title title=\"" + xml_friendly + "\" />\n";
+		break;
 	case CENTER_TITLE_TEXT:
+		y = 130;
+		x = QString::number(45);
+		height = QString::number(55);
+		width = QString::number(610);
+		align = QString::number(ALIGN_CENTER);
+		pointSize = QString::number(44);
+		bulletedList = false;
+		m_titles += "  <Title title=\"" + xml_friendly + "\" />\n";
+		break;
 	case CENTER_BODY_TEXT:
-		height = QString::number(24);
-		align = QString::number(4);		//center
+		y = 200;
+		x = QString::number(35);
+		height = QString::number(37);
+		width = QString::number(610);
+		align = QString::number(ALIGN_CENTER);
+		pointSize = QString::number(32);
 		bulletedList = false;
 		break;
 	case NOTES_TEXT:
+		m_notes += "  <Note note=\"\" />\n";
 		break;
 	case BODY_TEXT:
+		y = 130;
+		x = QString::number(35);
+		height = QString::number(268);
+		width = QString::number(610);
+		align = QString::number(ALIGN_LEFT);
+		pointSize = QString::number(28);
+		bulletedList = true;
+		break;
 	case OTHER_TEXT:
 	case HALF_BODY_TEXT:
 	case QUARTER_BODY_TEXT:
+		y = 130;
+		if(m_half)
+		{
+			x = QString::number(335);
+			width = QString::number(300);
+			m_half = false;
+		}
+		else 
+		{
+			x = QString::number(30);
+			width = QString::number(300);
+			m_half = true;
+		}
 		height = QString::number(268);
-		align = QString::number(1);		//left
+		align = QString::number(ALIGN_LEFT);
+		pointSize = QString::number(28);
 		bulletedList = true;
+		break;
+	default:
+		return;
 		break;
 	}
 
     	m_text += "<OBJECT type=\"4\">\n"
-            	" <ORIG x=\"30\" y=\"" +
-            	QString::number(130 + m_y) +
-            	"\"/>\n"
-            	" <SIZE width=\"610\" height=\""+ height +"\"/>\n"
+            	" <ORIG x=\""+x+"\" y=\""+QString::number(y + m_y)+"\"/>\n"
+            	" <SIZE width=\""+width+"\" height=\""+ height +"\"/>\n"
             	" <PEN width=\"1\" style=\"0\" color=\"#000000\"/>\n"
             	" <TEXTOBJ>\n"
             	"  <P align=\""+align+"\">\n";
-		if(bulletedList)
-            		m_text += "   <COUNTER numberingtype=\"0\" type=\"10\" depth=\"0\" />\n";
-           	m_text += "   <TEXT family=\"utopia\" pointSize=\"20\" color=\"#000000\">";
+	if(bulletedList)
+ 		m_text += "   <COUNTER numberingtype=\"0\" type=\"10\" depth=\"0\" />\n";
+	m_text += "   <TEXT family=\"utopia\" pointSize=\""+pointSize+"\" color=\"#000000\">";
 
-    	for (i = 0; i < slide.GetBodyText().count(); i++)
+    	for (i = 0; i < slide.getPlaceholderText().count(); i++)
     	{
-        	xml_friendly = *slide.GetBodyText().at(i);
+        	xml_friendly = *slide.getPlaceholderText().at(i);
         	encode(xml_friendly);
         	m_text += xml_friendly;
-        	if (i < slide.GetBodyText().count() - 1)
+        	if (i < slide.getPlaceholderText().count() - 1)
 		{
         		m_text += "</TEXT>\n"
           			"  </P>\n"
             			"  <P align=\"1\">\n";
 			if(bulletedList)
             			m_text += "   <COUNTER numberingtype=\"0\" type=\"10\" depth=\"0\" />\n";
-           		m_text += "   <TEXT family=\"utopia\" pointSize=\"20\" color=\"#000000\">";
+           		m_text += "   <TEXT family=\"utopia\" pointSize=\""+pointSize+"\" color=\"#000000\">";
 		}
- 	}		
+ 	}
     	m_text += "</TEXT>\n"
      		"  </P>\n"
             	" </TEXTOBJ>\n"
             	"</OBJECT>";
-    	m_y += pageHeight;
+
 }
+
 #include "pptxml.moc"

@@ -23,28 +23,74 @@ DESCRIPTION
 
 #include <pptSlide.h>
 
-//PptSlide::PptSlide()
-//{
-//}
+static const int s_area = 30512;
+
+PptSlide::PptSlide()
+{
+	m_slideLayout = 0;		//type of slide
+	m_numberOfPholders = 0;	//number of placeholder on the slide
+	m_psrReference = 0;		//logical reference
+}
 
 //PptSlide::~PptSlide()
 //{
 //}
 
-void PptSlide::AddText(QString text, Q_UINT16 type)
+QStringList PptSlide::getPlaceholderText(void)
+{
+	return m_currentPholder->paragraphs;
+}
+
+//styleRun PptSlide::getPlaceholderStyleRun(void)
+//{
+//	return m_currentPholder->styleRun;
+//}
+
+Q_UINT16 PptSlide::getPlaceholderType(void)
+{
+	return m_currentPholder->type;
+}
+
+Q_UINT16 PptSlide::gotoPlaceholder(Q_UINT16 pholderNumber)
+{
+	m_currentPholder = m_placeholderList.at(pholderNumber);
+}
+	
+Q_INT32 PptSlide::getPsrReference(void)
+{
+	return m_psrReference;
+}
+
+void PptSlide::setPsrReference(Q_INT32 psr)
+{
+	m_psrReference = psr;
+}
+
+Q_UINT16 PptSlide::getNumberOfPholders()
+{
+	return m_numberOfPholders;
+}
+	
+void PptSlide::addText(QString text, Q_UINT16 type)
 {
 	unsigned j;
-
+	m_currentPholder = new placeholder;
+	m_placeholderList.append(m_currentPholder);
+	m_numberOfPholders++;
+	m_currentPholder->type = type;
+	kdError(s_area) << "adding to slide now!!!!!!!!!!!! m_numberOfPholders: " << m_numberOfPholders << endl;
+	
 	switch (type)
 	{
 	case TITLE_TEXT:
 	case CENTER_TITLE_TEXT:
-		m_titleText = text;
+		m_currentPholder->paragraphs.append(text);
 		//m_titleText.append("\n");
 		break;
 	case NOTES_TEXT:
-		m_notesText = text;
-		m_notesText.append("\n");
+		m_currentPholder->paragraphs.append(text);
+		m_currentPholder->paragraphs.append("\n");
+		//m_notesText.append("\n");
 		break;
 	case BODY_TEXT:
 	case OTHER_TEXT:
@@ -54,9 +100,10 @@ void PptSlide::AddText(QString text, Q_UINT16 type)
 	        QStringList data(QStringList::split(QChar('\r'), text, true));
 		for (j = 0; j < data.count(); j++)
 		{
-			m_body.bodyText.append(data[j]);
+			m_currentPholder->paragraphs.append(data[j]);
+			//m_body.paragraphs.append(data[j]);
 		}
-		m_body.type = type;
+		//m_body.type = type;
 		break;
 	}
 }//addtext

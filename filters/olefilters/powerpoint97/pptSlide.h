@@ -25,10 +25,11 @@ DESCRIPTION
 //#define PPTSLIDE_H
 
 #include <kdebug.h>
-#include <qptrlist.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qptrlist.h>
 
+//--text types
 #define TITLE_TEXT 			0	//title
 #define BODY_TEXT 			1	//body
 #define NOTES_TEXT 		2	//notes
@@ -38,32 +39,55 @@ DESCRIPTION
 #define CENTER_TITLE_TEXT 	6	//center title(title in title slide)
 #define HALF_BODY_TEXT 	7	//half body(body in two-column slide)
 #define QUARTER_BODY_TEXT 	8	//quarter body(body in four-body slide)
+//--
 
+//--char style types
+enum
+{
+	BOLD_STYLE 		= 1,
+	ITALIC_STYLE 		= 2,
+	UNDERLINE_STYLE 	= 3,
+};
+//--
 
 class PptSlide
 {
 public:
- 	inline QString* 		GetTitleText(void){return &m_titleText;}
-	inline QStringList 	GetBodyText(void){return m_body.bodyText;}
-	inline Q_UINT16 	GetBodyType(void){return m_body.type;}
-	inline QString*		GetNotesText(void){return &m_notesText;}
-	inline Q_INT32 		GetPsrReference(void){return m_psrReference;}
-	inline Q_INT32 		SetPsrReference(Q_INT32 psr){m_psrReference = psr;}
-	         void 		AddText(QString text, Q_UINT16 type);		//adds text of the given type
+	typedef struct
+	{
+		Q_UINT16 		style;				//the style of the text run
+		Q_UINT16 		length;			//length of the style run
+	}styleRunType;
+	
+	typedef QPtrList<styleRunType>  styleRun;
+	
+				PptSlide();
+ 	QStringList 	getPlaceholderText(void);					//gets the list of paragraphs from the placeholder
+	//styleRun 		getPlaceholderStyleRun(void);				//gets the list of placeholder style runs
+	Q_UINT16 		getPlaceholderType(void);					//gets the type of the placeholder
+	Q_UINT16 		gotoPlaceholder(Q_UINT16 pholderNumber);		//goto the n'th placeholder
+	Q_UINT16 		getNumberOfPholders();					//gets the number of placeholders on slide
+	
+	Q_INT32	 	getPsrReference(void);
+	void 			setPsrReference(Q_INT32 psr);
+	
+	void 			addText(QString text, Q_UINT16 type);				//adds text of the given type
+	void 			addToStyleRun(Q_UINT16 style, Q_UINT16 length);	//adds to the current style run
 
 private:
-
-typedef struct
-{
-        QStringList 	bodyText;		//text of the body of the slide
-	Q_UINT16 		type;				//what is the text type
-}bodyPlaceholder;
+	typedef struct
+	{
+		QStringList 		paragraphs;		//text of the placeholder
+		Q_UINT16 			type;				//what is the text type
+		styleRun			style;				//char style info
+	}placeholder;
 
 	Q_INT16 			m_slideLayout;		//type of slide
+	Q_INT16 			m_numberOfPholders;	//number of placeholder on the slide
 	Q_INT32			m_psrReference;		//logical reference
-        QString 			m_titleText;			//text of the title of slide
-        QString 			m_notesText;		//text of the notes of the slide
-	bodyPlaceholder		m_body;			//body of the slide
+     	QPtrList<placeholder>	m_placeholderList;	//list of all the placeholders on the slide
+     	placeholder*		m_currentPholder;	//pointer to current placeholder
+
 };
 
 //#endif

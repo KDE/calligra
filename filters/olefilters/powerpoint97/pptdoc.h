@@ -30,7 +30,6 @@ DESCRIPTION
 #include <powerpoint.h>
 #include <qstring.h>
 #include <qstringlist.h>
-//#include <pptSlide.h>
 
 class myFile;
 
@@ -54,14 +53,6 @@ protected:
     // the text along with any relevant attributes.
 
     bool parse();
-
- /*   typedef struct
-    {
-        QString title;
-        QStringList body;
-        QString notes;
-    } Slide;
-*/
 
     virtual void gotDrawing(
         unsigned id,
