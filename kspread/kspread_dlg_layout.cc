@@ -1509,7 +1509,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 {
   dlg = _dlg;
 
-  QGridLayout *grid = new QGridLayout(this,3,2,15,15);
+  QGridLayout *grid = new QGridLayout(this,5,2,15,15);
 
   QGroupBox* tmpQGroupBox;
   tmpQGroupBox = new QGroupBox( this, "GroupBox_1" );
@@ -1555,7 +1555,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
   loadIcon("border_horizontal",horizontal);
   grid2->addWidget(horizontal,4,0);
 
-  grid->addMultiCellWidget(tmpQGroupBox,0,1,0,0);
+  grid->addMultiCellWidget(tmpQGroupBox,0,2,0,0);
 
 
   tmpQGroupBox = new QGroupBox( this, "GroupBox_3" );
@@ -1593,7 +1593,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
         loadIcon("border_inside",all);
         all->setEnabled(false);
         }
-  grid->addWidget(tmpQGroupBox,2,0);
+  grid->addMultiCellWidget(tmpQGroupBox,3,4,0,0);
 
   tmpQGroupBox = new QGroupBox( this, "GroupBox_1" );
   tmpQGroupBox->setFrameStyle( 49 );
@@ -1651,19 +1651,14 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     tmpQLabel->setText( i18n("Color") );
     grid2->addWidget(tmpQLabel,5,0);
 
-    grid->addMultiCellWidget(tmpQGroupBox,0,1,1,1);
 
-
-    tmpQGroupBox = new QGroupBox(this, "GroupBox_4" );
-    tmpQGroupBox->setFrameStyle( 49 );
-    tmpQGroupBox->setTitle( i18n("Customize") );
-    tmpQGroupBox->setAlignment( 1 );
-
-    grid2 = new QGridLayout(tmpQGroupBox,2,2,15,7);
+    QGridLayout *grid3 = new QGridLayout(tmpQGroupBox,2,2,0,7);
+    tmpQLabel = new QLabel( tmpQGroupBox, "Customize" );
+    tmpQLabel->setText( i18n("Customize") );
+    grid3->addWidget(tmpQLabel,0,0);
 
     size=new QComboBox(true,tmpQGroupBox);
-
-    grid2->addWidget(size,0,0);
+    grid3->addWidget(size,1,0);
     size->setValidator(new KIntValidator( size ));
     QString tmp;
     for(int i=0;i<10;i++)
@@ -1674,7 +1669,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
 
     style=new QComboBox(tmpQGroupBox);
-    grid2->addWidget(style,0,1);
+    grid3->addWidget(style,1,1);
     style->insertItem(*paintFormatPixmap(DotLine),0 );
     style->insertItem(*paintFormatPixmap(DashLine) ,1);
     style->insertItem(*paintFormatPixmap(DashDotLine),2 );
@@ -1682,12 +1677,24 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     style->insertItem(*paintFormatPixmap(SolidLine),4);
     style->setBackgroundColor( colorGroup().background() );
 
+    grid2->addMultiCell(grid3,6,6,0,1);
+    grid->addMultiCellWidget(tmpQGroupBox,0,3,1,1);
 
-    customize = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_Customize" );
-    customize->setFrameStyle( 50 );
-    grid2->addWidget(customize,1,1);
 
-    grid->addWidget(tmpQGroupBox,2,1);
+    tmpQGroupBox = new QGroupBox(this, "GroupBox_4" );
+    tmpQGroupBox->setFrameStyle( 49 );
+    tmpQGroupBox->setTitle( i18n("Preview") );
+    tmpQGroupBox->setAlignment( 1 );
+
+    grid2 = new QGridLayout(tmpQGroupBox,1,1,14,7);
+
+
+
+    preview = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_preview" );
+    preview->setFrameStyle( 50 );
+    grid2->addWidget(preview,0,0);
+
+    grid->addWidget(tmpQGroupBox,4,1);
 
  if(dlg->leftBorderStyle != Qt::NoPen || !dlg->bLeftBorderStyle )
     {
@@ -1837,7 +1844,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     pattern9->setPattern( black, 1, DashDotLine );
     pattern10->setPattern( black, 1, DashDotDotLine );
 
-    customize->setPattern( black, 0, NoPen );
+
 
     slotSetColorButton( black );
 
@@ -1864,8 +1871,6 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     connect( pattern9, SIGNAL( clicked( KSpreadPatternSelect* ) ),
 	     this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
     connect( pattern10, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
-    connect( customize, SIGNAL( clicked( KSpreadPatternSelect* ) ),
 	     this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
 
   connect( goUpDiagonal, SIGNAL( clicked (KSpreadBorderButton *) ),
@@ -1901,8 +1906,9 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
   connect( style ,SIGNAL( activated(int)),this,SLOT(slotChangeStyle(int)));
   connect( size ,SIGNAL( textChanged(const QString &)),this,SLOT(slotChangeStyle(const QString &)));
   connect( size ,SIGNAL( activated(int)),this,SLOT(slotChangeStyle(int)));
+  preview->slotSelect();
   pattern1->slotSelect();
-  selectedPattern=pattern1;
+  preview->setPattern( black , 1, DotLine );
   this->resize( 400, 400 );
 }
 
@@ -1917,36 +1923,32 @@ void CellLayoutPageBorder::slotChangeStyle(int)
   QString tmp;
   int penSize=size->currentText().toInt();
   if( !penSize)
-       customize->setPattern( customize->getColor(), penSize, NoPen );
+       preview->setPattern( preview->getColor(), penSize, NoPen );
   else
   {
   switch(index)
 	{
 	case 0:
-                customize->setPattern( customize->getColor(), penSize, DotLine );
+                preview->setPattern( preview->getColor(), penSize, DotLine );
 		break;
 	case 1:
-                customize->setPattern( customize->getColor(), penSize, DashLine );
+                preview->setPattern( preview->getColor(), penSize, DashLine );
 		break;
 	case 2:
-                customize->setPattern( customize->getColor(), penSize, DashDotLine );
+                preview->setPattern( preview->getColor(), penSize, DashDotLine );
 		break;
 	case 3:
-                customize->setPattern( customize->getColor(), penSize, DashDotDotLine );
+                preview->setPattern( preview->getColor(), penSize, DashDotDotLine );
 		break;
 	case 4:
-	        customize->setPattern( customize->getColor(), penSize, SolidLine );
+	        preview->setPattern( preview->getColor(), penSize, SolidLine );
 		break;
 	default:
 		kdDebug(36001)<<"Error in combobox\n";
 		break;
 	}
  }
- if(selectedPattern!=customize)
-        {
-        slotUnselect2(customize);
-        customize->slotSelect();
-        }
+ slotUnselect2(preview);
 }
 
 QPixmap* CellLayoutPageBorder::paintFormatPixmap(PenStyle _style)
@@ -2092,14 +2094,12 @@ void CellLayoutPageBorder::slotSetColorButton( const QColor &_color )
     pattern8->setColor( currentColor );
     pattern9->setColor( currentColor );
     pattern10->setColor( currentColor );
-    customize->setColor( currentColor );
+    preview->setColor( currentColor );
 
 }
 
 void CellLayoutPageBorder::slotUnselect2( KSpreadPatternSelect *_p )
 {
-    selectedPattern = _p;
-
     if ( pattern1 != _p )
 	pattern1->slotUnselect();
     if ( pattern2 != _p )
@@ -2120,9 +2120,7 @@ void CellLayoutPageBorder::slotUnselect2( KSpreadPatternSelect *_p )
 	pattern9->slotUnselect();
     if ( pattern10 != _p )
 	pattern10->slotUnselect();
-    if ( customize != _p )
-	customize->slotUnselect();
-
+    preview->setPattern( _p->getColor(), _p->getPenWidth(), _p->getPenStyle() );
 }
 
 void CellLayoutPageBorder::preselect( KSpreadBorderButton *_p)
@@ -2157,23 +2155,23 @@ void CellLayoutPageBorder::preselect( KSpreadBorderButton *_p)
   if(_p==outline)
         {
         top->setOn(true);
-        top->setPenWidth(selectedPattern->getPenWidth());
-        top->setPenStyle(selectedPattern->getPenStyle());
+        top->setPenWidth(preview->getPenWidth());
+        top->setPenStyle(preview->getPenStyle());
         top->setColor( currentColor );
         top->setChanged(true);
         bottom->setOn(true);
-        bottom->setPenWidth(selectedPattern->getPenWidth());
-        bottom->setPenStyle(selectedPattern->getPenStyle());
+        bottom->setPenWidth(preview->getPenWidth());
+        bottom->setPenStyle(preview->getPenStyle());
         bottom->setColor( currentColor );
         bottom->setChanged(true);
         left->setOn(true);
-        left->setPenWidth(selectedPattern->getPenWidth());
-        left->setPenStyle(selectedPattern->getPenStyle());
+        left->setPenWidth(preview->getPenWidth());
+        left->setPenStyle(preview->getPenStyle());
         left->setColor( currentColor );
         left->setChanged(true);
         right->setOn(true);
-        right->setPenWidth(selectedPattern->getPenWidth());
-        right->setPenStyle(selectedPattern->getPenStyle());
+        right->setPenWidth(preview->getPenWidth());
+        right->setPenStyle(preview->getPenStyle());
         right->setColor( currentColor );
         right->setChanged(true);
         }
@@ -2182,16 +2180,16 @@ void CellLayoutPageBorder::preselect( KSpreadBorderButton *_p)
         if(dlg->oneRow==false)
                 {
                 horizontal->setOn(true);
-                horizontal->setPenWidth(selectedPattern->getPenWidth());
-                horizontal->setPenStyle(selectedPattern->getPenStyle());
+                horizontal->setPenWidth(preview->getPenWidth());
+                horizontal->setPenStyle(preview->getPenStyle());
                 horizontal->setColor( currentColor );
                 horizontal->setChanged(true);
                 }
         if(dlg->oneCol==false)
                 {
                 vertical->setOn(true);
-                vertical->setPenWidth(selectedPattern->getPenWidth());
-                vertical->setPenStyle(selectedPattern->getPenStyle());
+                vertical->setPenWidth(preview->getPenWidth());
+                vertical->setPenStyle(preview->getPenStyle());
                 vertical->setColor( currentColor );
                 vertical->setChanged(true);
                 }
@@ -2202,12 +2200,11 @@ void CellLayoutPageBorder::preselect( KSpreadBorderButton *_p)
 void CellLayoutPageBorder::changeState( KSpreadBorderButton *_p)
 {
   _p->setChanged(true);
-  if ( selectedPattern != 0L )
-    {
+
       if(_p->isOn())
 	{
-	  _p->setPenWidth(selectedPattern->getPenWidth());
-	  _p->setPenStyle(selectedPattern->getPenStyle());
+	  _p->setPenWidth(preview->getPenWidth());
+	  _p->setPenStyle(preview->getPenStyle());
 	  _p->setColor( currentColor );
 	}
       else
@@ -2216,7 +2213,7 @@ void CellLayoutPageBorder::changeState( KSpreadBorderButton *_p)
 	  _p->setPenStyle(Qt::NoPen);
 	  _p->setColor( colorGroup().text() );
 	}
-    }
+
  area->repaint();
 }
 
@@ -2307,8 +2304,8 @@ void CellLayoutPageBorder::invertState(KSpreadBorderButton *_p)
   else
         {
         _p->setOn(!_p->isOn());
-        _p->setPenWidth(selectedPattern->getPenWidth());
-        _p->setPenStyle(selectedPattern->getPenStyle());
+        _p->setPenWidth(preview->getPenWidth());
+        _p->setPenStyle(preview->getPenStyle());
         _p->setColor( currentColor );
         _p->setChanged(true);
         }
@@ -2440,7 +2437,7 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     tmpQGroupBox->setTitle( i18n("Pattern") );
     tmpQGroupBox->setAlignment( 1 );
 
-    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,5,3,15,7);
+    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,6,3,15,7);
 
     brush1 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_1" );
     brush1->setFrameStyle( 50 );
@@ -2502,28 +2499,28 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     brush15->setFrameStyle( 50 );
     grid2->addWidget(brush15,4,2);
 
-    grid->addMultiCellWidget(tmpQGroupBox,0,1,0,0);
-
-    tmpQGroupBox = new QGroupBox( this, "GroupBox1" );
-    tmpQGroupBox->setFrameStyle( 49 );
-    tmpQGroupBox->setAlignment( 1 );
-
-    grid2 = new QGridLayout(tmpQGroupBox,2,2,15,7);
-
+    QGridLayout *grid3=new QGridLayout(tmpQGroupBox,1,2);
     color = new KColorButton (tmpQGroupBox, "ColorButton_1" );
-    grid2->addWidget(color,1,0);
+    grid3->addWidget(color,0,1);
 
     QLabel *tmpQLabel = new QLabel( tmpQGroupBox, "Label_1" );
     tmpQLabel->setText( i18n("Color") );
-    grid2->addWidget(tmpQLabel,0,0);
+    grid3->addWidget(tmpQLabel,0,0);
 
-    tmpQLabel = new QLabel( tmpQGroupBox, "Label_2" );
-    tmpQLabel->setText( i18n("Current") );
-    grid2->addWidget(tmpQLabel,0,1);
+    grid2->addMultiCell(grid3,5,5,0,2);
+
+    grid->addMultiCellWidget(tmpQGroupBox,0,1,0,0);
+
+    tmpQGroupBox = new QGroupBox( this, "GroupBox1" );
+    tmpQGroupBox->setTitle( i18n("Preview") );
+    tmpQGroupBox->setFrameStyle( 49 );
+    tmpQGroupBox->setAlignment( 1 );
+
+    grid2 = new QGridLayout(tmpQGroupBox,1,1,15,7);
 
     current = new KSpreadBrushSelect( tmpQGroupBox, "Current" );
     current->setFrameStyle( 50 );
-    grid2->addWidget(current,1,1);
+    grid2->addWidget(current,0,0);
     grid->addWidget( tmpQGroupBox,2,0);
 
     connect( brush1, SIGNAL( clicked( KSpreadBrushSelect* ) ),

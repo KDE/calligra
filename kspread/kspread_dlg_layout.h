@@ -311,7 +311,6 @@ public slots:
     void slotChangeStyle(const QString & );
 
 protected:
-    KSpreadPatternSelect *selectedPattern;
     KSpreadBorderButton *top;
     KSpreadBorderButton *bottom;
     KSpreadBorderButton *left;
@@ -333,7 +332,7 @@ protected:
     KSpreadPatternSelect* pattern8;
     KSpreadPatternSelect* pattern9;
     KSpreadPatternSelect* pattern10;
-    KSpreadPatternSelect* customize;
+    KSpreadPatternSelect* preview;
     QComboBox* size;
     QComboBox* style;
     KColorButton* color;
