@@ -23,6 +23,7 @@
 
 
 #include <global.h>
+#include <koPointArray.h>
 class QPoint;
 class QColor;
 class QPainter;
@@ -33,4 +34,5 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
 KoSize getBoundingSize( LineEnd figure, int _w, KoZoomHandler*_zoomHandler );
 QString lineEndBeginName( LineEnd type );
 LineEnd lineEndBeginFromString( const QString & name );
+KoPointArray getCloseObject( KoPointArray points, bool close, bool objClosed );
 #endif

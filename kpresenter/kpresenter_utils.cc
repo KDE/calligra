@@ -218,3 +218,17 @@ LineEnd lineEndBeginFromString( const QString & type )
         kdDebug()<<"Error in LineEnd lineEndBeginFromString( const QString & name )\n";
     return L_NORMAL;
 }
+
+KoPointArray getCloseObject( KoPointArray points, bool close, bool objClosed )
+{
+    KoPointArray tmpPoints=points;
+    if ( close )
+    {
+        tmpPoints.putPoints( points.count(), 1, points.at(0).x(), points.at(0).y());
+    }
+    else if ( objClosed)
+    {
+        tmpPoints.resize( points.count() - 1);
+    }
+    return tmpPoints;
+}

@@ -388,16 +388,7 @@ void KPCubicBezierCurveObject::flip(bool horizontal )
 
 void KPCubicBezierCurveObject::closeObject(bool _close)
 {
-    KoPointArray tmpPoints=origAllPoints;
-    if ( _close )
-    {
-        tmpPoints.putPoints( origAllPoints.count(), 1, origAllPoints.at(0).x(), origAllPoints.at(0).y());
-    }
-    else if ( isClosed())
-    {
-        tmpPoints.resize( origAllPoints.count() - 1);
-    }
-    origAllPoints = tmpPoints;
+    origAllPoints=getCloseObject( origAllPoints, _close, isClosed() );
     updatePoints( 1.0, 1.0 );
 }
 

@@ -25,7 +25,6 @@
 #include <qdom.h>
 
 #include <kdebug.h>
-
 #include <math.h>
 using namespace std;
 
@@ -282,16 +281,7 @@ void KPFreehandObject::flip(bool horizontal )
 
 void KPFreehandObject::closeObject(bool _close)
 {
-    KoPointArray tmpPoints=origPoints;
-    if ( _close )
-    {
-        tmpPoints.putPoints( origPoints.count(), 1, origPoints.at(0).x(), origPoints.at(0).y());
-    }
-    else if ( isClosed())
-    {
-        tmpPoints.resize( origPoints.count() - 1);
-    }
-    origPoints = tmpPoints;
+    origPoints=getCloseObject( origPoints, _close, isClosed() );
     updatePoints( 1.0, 1.0 );
 }
 
