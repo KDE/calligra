@@ -2493,13 +2493,14 @@ void QTextDocument::draw( QPainter *p, const QRect &cr, const QColorGroup &cg, c
     if ( !firstParag() )
 	return;
 
-    if ( paper ) {
+    QBrush bgBrush = paper ? *paper : cg.brush( QColorGroup::Base );
+    {
 //QT2HACK
 //	p->setBrushOrigin( -(int)p->translationX(),
 //			   -(int)p->translationY() );
 	p->setBrushOrigin( -(int)p->worldMatrix().dx(),
 			   -(int)p->worldMatrix().dy() );
-	p->fillRect( cr, *paper );
+	p->fillRect( cr, bgBrush );
     }
 
     QTextParag *parag = firstParag();
