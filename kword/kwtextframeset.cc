@@ -3237,6 +3237,7 @@ void KWTextFrameSet::undo()
     QTextCursor *cursor = new QTextCursor( textDocument() ); // Kindof a dummy cursor
     QTextCursor *c = textDocument()->undo( cursor );
     if ( !c ) {
+      delete cursor;
         emit showCursor();
         return;
     }
@@ -3244,6 +3245,7 @@ void KWTextFrameSet::undo()
     // It sucks a bit for useability, but otherwise one view might still have
     // a cursor inside a deleted paragraph -> crash.
     emit setCursor( c );
+    delete cursor;
     setLastFormattedParag( textdoc->firstParag() );
     QTimer::singleShot( 0, this, SLOT( slotAfterUndoRedo() ) );
 }
@@ -3255,11 +3257,13 @@ void KWTextFrameSet::redo()
     QTextCursor *cursor = new QTextCursor( textDocument() ); // Kindof a dummy cursor
     QTextCursor *c = textDocument()->redo( cursor );
     if ( !c ) {
+      delete cursor;
         emit showCursor();
         return;
     }
     emit setCursor( c ); // see undo
     setLastFormattedParag( textdoc->firstParag() );
+    delete cursor;
     QTimer::singleShot( 0, this, SLOT( slotAfterUndoRedo() ) );
 }
 
