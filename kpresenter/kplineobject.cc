@@ -214,7 +214,7 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 				 _zoomHandler->zoomItY( oh - unzoom_diff1_width / 2 ) );
             drawFigure( lineBegin, _painter,
 			KoPoint( 0, 0 ), pen2.color(),
-			_w, _angle,_zoomHandler );
+			_w, _angle - 180,_zoomHandler );
             _painter->restore();
         }
         if ( lineEnd != L_NORMAL && !drawContour ) {
@@ -223,7 +223,7 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 				 _zoomHandler->zoomItY( unzoom_diff2_width / 2) );
             drawFigure( lineEnd, _painter,
 			KoPoint( 0, 0 ), pen2.color(),
-			_w, _angle - 180,_zoomHandler );
+			_w, _angle,_zoomHandler );
             _painter->restore();
         }
         _painter->drawLine( _zoomHandler->zoomItX( unzoom_diff1_height / 2 + _w / 2 ),
