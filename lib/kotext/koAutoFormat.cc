@@ -264,11 +264,22 @@ void KoAutoFormat::readConfig()
     }
 
     if( beginDoubleQuote.isEmpty())
-        m_typographicDoubleQuotes.begin = m_typographicDefaultDoubleQuotes.begin;
+    {
+        if( m_typographicDefaultDoubleQuotes.begin.isNull())
+            m_typographicDoubleQuotes.begin = QChar('«');
+        else
+            m_typographicDoubleQuotes.begin = m_typographicDefaultDoubleQuotes.begin;
+    }
     else
         m_typographicDoubleQuotes.begin = beginDoubleQuote[0];
+
     if( endDoubleQuote.isEmpty() )
-        m_typographicDoubleQuotes.end = m_typographicDefaultDoubleQuotes.end;
+    {
+        if( m_typographicDefaultDoubleQuotes.end.isNull())
+            m_typographicDoubleQuotes.end = QChar('»');
+        else
+            m_typographicDoubleQuotes.end = m_typographicDefaultDoubleQuotes.end;
+    }
     else
         m_typographicDoubleQuotes.end = endDoubleQuote[0];
 
