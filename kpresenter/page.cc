@@ -1765,6 +1765,24 @@ void Page::setTextAlign( int align )
 }
 
 /*================================================================*/
+bool Page::isASelectedTextObj()
+{
+    if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT )
+    {
+        return true;
+    }
+    KPObject *kpobject = 0;
+    for ( unsigned int i = 0; i < objectList()->count(); i++ )
+    {
+        kpobject = objectList()->at( i );
+        if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT )
+            return true;
+    }
+
+    return false;
+}
+
+/*================================================================*/
 KTextEdit *Page::haveASelectedTextObj()
 {
     KPObject *kpobject = 0;

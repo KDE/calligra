@@ -2065,6 +2065,24 @@ void KPresenterView::objectSelectedChanged()
     actionExtraAlignObjCenterV->setEnabled(state);
     actionExtraAlignObjBottom->setEnabled(state);
 
+    bool isText=page->isASelectedTextObj();
+    actionTextFont->setEnabled(isText);
+    actionTextFontSize->setEnabled(isText);
+    actionTextFontFamily->setEnabled(isText);
+    actionTextColor->setEnabled(isText);
+    actionTextAlignLeft->setEnabled(isText);
+    actionTextAlignCenter->setEnabled(isText);
+    actionTextAlignRight->setEnabled(isText);
+    actionTextTypeUnsortList->setEnabled(isText);
+    actionTextTypeNormalText->setEnabled(isText);
+    actionTextDepthPlus->setEnabled(isText);
+    actionTextDepthMinus->setEnabled(isText);
+    actionTextSettings->setEnabled(isText);
+    actionTextExtentCont2Height->setEnabled(isText);
+    actionTextExtendObj2Cont->setEnabled(isText);
+    actionTextBold->setEnabled(isText);
+    actionTextItalic->setEnabled(isText);
+    actionTextUnderline->setEnabled(isText);
 }
 
 /*=========== take changes for backgr dialog =====================*/

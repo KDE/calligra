@@ -126,6 +126,8 @@ public:
 
     bool isOneObjectSelected();
 
+    bool isASelectedTextObj();
+
 public slots:
     void exitEditMode();
 
@@ -313,6 +315,5 @@ signals:
     void updateSideBarItem( int );
     void stopPres();
     void objectSelectedChanged();
-
 };
 #endif //PAGE_H
