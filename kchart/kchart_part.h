@@ -36,7 +36,8 @@ class KChartPart : public KoChart::Part
   bool isLoading() {
     return m_bLoading;
   }
-
+    bool canChangeValue() const { return m_bCanChangeValue;}
+    virtual void setCanChangeValue(bool b ) { m_bCanChangeValue = b;}
  signals:
   void docChanged();
 
@@ -52,6 +53,7 @@ class KChartPart : public KoChart::Part
   KoChart::Data currentData;
   KChartParams* _params;
   QWidget* _parentWidget;
+    bool m_bCanChangeValue;
 };
 
 class WizardExt : public KoChart::WizardExtension

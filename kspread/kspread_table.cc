@@ -6557,7 +6557,7 @@ void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
     ChartChild * ch = new ChartChild( m_pDoc, this, doc, _rect );
     ch->setDataArea( _data );
     ch->update();
-
+    ch->chart()->setCanChangeValue( false  );
     // m_pDoc->insertChild( ch );
     insertChild( ch );
 

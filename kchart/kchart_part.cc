@@ -45,6 +45,7 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName, QObject* 
 
     (void)new WizardExt( this );
     initDoc();
+    m_bCanChangeValue=true;
     // hack
     setModified(true);
 }
@@ -116,7 +117,6 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
 
     // Need to draw only the document rectangle described in the parameter rect.
     //  return;
-
     KDChart::paint( &painter, _params, &currentData, 0, &rect );
 }
 

@@ -121,6 +121,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     // initialize the configuration
     //    loadConfig();
     // make sure there is always some test data
+    m_edit->setEnabled(((KChartPart*)koDocument())->canChangeValue());
     createTempData();
     updateGuiTypeOfChart();
 }
@@ -475,6 +476,7 @@ void KChartView::slotConfigPageLayout()
     connect( dialog, SIGNAL( dataChanged() ),
              this, SLOT( slotRepaint() ) );
     dialog->exec();
+    delete dialog;
 }
 
 #include "kchart_view.moc"
