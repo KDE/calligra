@@ -198,7 +198,7 @@ void KoFontChooser::setupTab2()
 
     connect( d->m_strikeOut, SIGNAL(activated ( int )), this, SLOT( slotStrikeOutTypeChanged( int ) ) );
     connect( m_underlineColorButton, SIGNAL(clicked()), this, SLOT( slotUnderlineColor() ) );
-    connect( m_underlining,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlineType( int )));
+    connect( m_underlining,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlining( int )));
     connect( m_strikeOutType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeStrikeOutType( int )));
     connect( m_underlineType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlineType( int )));
     connect( d->m_shadow, SIGNAL(clicked()), this, SLOT( slotShadowClicked() ) );
@@ -581,7 +581,12 @@ KoTextFormat::StrikeOutLineStyle KoFontChooser::getStrikeOutLineStyle()
 }
 
 
-void KoFontChooser::slotChangeUnderlineType( int i)
+void KoFontChooser::slotChangeUnderlineType( int /*i*/)
+{
+    m_changedFlags |= KoTextFormat::ExtendUnderLine;
+}
+
+void KoFontChooser::slotChangeUnderlining( int i)
 {
     m_changedFlags |= KoTextFormat::ExtendUnderLine;
     m_underlineType->setEnabled( i!= 0);

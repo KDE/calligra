@@ -94,6 +94,8 @@ protected slots:
     void slotChangeBackGroundColor();
     void slotUnderlineColor();
     void slotChangeUnderlineType( int );
+    void slotChangeUnderlining( int);
+
     void slotChangeStrikeOutType( int );
     void slotShadowClicked();
     void slotRelativeSizeChanged( int );
