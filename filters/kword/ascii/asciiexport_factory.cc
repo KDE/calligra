@@ -17,17 +17,19 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <klocale.h>
+#include <kdebug.h>
+#include <kinstance.h>
+
 #include "asciiexport_factory.h"
 #include "asciiexport_factory.moc"
 #include "asciiexport.h"
-
-#include <kinstance.h>
-#include <kdebug.h>
 
 extern "C"
 {
     void* init_libasciiexport()
     {
+        KGlobal::locale()->insertCatalogue("kwordasciifilter");
         return new ASCIIExportFactory;
     }
 };
