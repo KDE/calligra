@@ -699,6 +699,7 @@ public:
     void loadPictureMap ( QDomElement& domElement );
 
     void configureSpellChecker();
+    void testAndCloseAllFrameSetProtectedContent();
 
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );

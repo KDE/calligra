@@ -4093,11 +4093,18 @@ bool KWDocument::cursorInProtectedArea()const
 void KWDocument::setCursorInProtectedArea( bool b )
 {
     m_cursorInProtectectedArea=b;
-    if ( !b )
+    testAndCloseAllFrameSetProtectedContent();
+}
+
+
+void KWDocument::testAndCloseAllFrameSetProtectedContent()
+{
+    if ( !m_cursorInProtectectedArea )
     {
         for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
             viewPtr->testAndCloseAllFrameSetProtectedContent();
     }
+
 }
 
 void KWDocument::insertBookMark(const QString &_name, KWTextParag *_startparag,KWTextParag *_endparag, KWFrameSet *_frameSet, int _start, int _end)
