@@ -450,7 +450,7 @@ protected:
 private:
     // GUI stuff
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
-
+    void updateButton(KSpreadCell *cell, int column, int row);
     QScrollBar *m_pHorzScrollBar;
     QScrollBar *m_pVertScrollBar;
     KSpreadCanvas *m_pCanvas;

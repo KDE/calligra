@@ -1788,25 +1788,10 @@ void KSpreadView::initialPosition()
       initConfig();
 }
 
-void KSpreadView::updateEditWidgetOnPress()
+
+void KSpreadView::updateButton( KSpreadCell *cell, int column, int row)
 {
-    int column = m_pCanvas->markerColumn();
-    int row    = m_pCanvas->markerRow();
-
-    KSpreadCell* cell = m_pTable->cellAt( column, row );
-    if ( !cell )
-    {
-        editWidget()->setText( "" );
-        return;
-    }
-
-    if ( cell->content() == KSpreadCell::VisualFormula )
-        editWidget()->setText( "" );
-    else
-        editWidget()->setText( cell->text() );
-
     m_toolbarLock = TRUE;
-
 
     QColor color=cell->textColor( column, row );
     if(!color.isValid())
@@ -1851,6 +1836,26 @@ void KSpreadView::updateEditWidgetOnPress()
 
 }
 
+void KSpreadView::updateEditWidgetOnPress()
+{
+    int column = m_pCanvas->markerColumn();
+    int row    = m_pCanvas->markerRow();
+
+    KSpreadCell* cell = m_pTable->cellAt( column, row );
+    if ( !cell )
+    {
+        editWidget()->setText( "" );
+        return;
+    }
+
+    if ( cell->content() == KSpreadCell::VisualFormula )
+        editWidget()->setText( "" );
+    else
+        editWidget()->setText( cell->text() );
+    updateButton(cell, column, row);
+
+}
+
 void KSpreadView::updateEditWidget()
 {
     bool active=activeTable()->getShowFormula();
@@ -1858,7 +1863,6 @@ void KSpreadView::updateEditWidget()
     m_alignCenter->setEnabled(!active);
     m_alignRight->setEnabled(!active);
 
-    m_toolbarLock = TRUE;
 
     int column = m_pCanvas->markerColumn();
     int row    = m_pCanvas->markerRow();
@@ -1885,47 +1889,7 @@ void KSpreadView::updateEditWidget()
       m_pCanvas->editor()->setEditorFont(cell->textFont(column, row), true);
       m_pCanvas->editor()->setFocus();
     }
-
-    QColor color=cell->textColor( column, row );
-    if(!color.isValid())
-        color=QApplication::palette().active().text();
-    m_textColor->setCurrentColor( color );
-
-    color=cell->bgColor(  column, row );
-
-    if(!color.isValid())
-        color=QApplication::palette().active().base();
-
-    m_bgColor->setCurrentColor( color );
-
-    m_selectFontSize->setFontSize( cell->textFontSize( column, row ) );
-    m_selectFont->setFont( cell->textFontFamily( column,row ) );
-    m_bold->setChecked( cell->textFontBold( column, row ) );
-    m_italic->setChecked( cell->textFontItalic(  column, row) );
-    m_underline->setChecked( cell->textFontUnderline( column, row ) );
-    m_strikeOut->setChecked( cell->textFontStrike( column, row ) );
-
-    m_alignLeft->setChecked( cell->align( column, row ) == KSpreadLayout::Left );
-    m_alignCenter->setChecked( cell->align( column, row ) == KSpreadLayout::Center );
-    m_alignRight->setChecked( cell->align( column, row ) == KSpreadLayout::Right );
-
-    m_alignTop->setChecked( cell->alignY( column, row ) == KSpreadLayout::Top );
-    m_alignMiddle->setChecked( cell->alignY( column, row ) == KSpreadLayout::Middle );
-    m_alignBottom->setChecked( cell->alignY( column, row ) == KSpreadLayout::Bottom );
-
-    m_verticalText->setChecked( cell->verticalText( column,row ) );
-
-    m_multiRow->setChecked( cell->multiRow( column,row ) );
-
-    KSpreadCell::FormatType ft = cell->formatType();
-    m_percent->setChecked( ft == KSpreadCell::Percentage );
-    m_money->setChecked( ft == KSpreadCell::Money );
-
-    m_removeComment->setEnabled( !cell->comment(column,row).isEmpty() );
-
-    m_decreaseIndent->setEnabled(cell->getIndent(column,row)>0);
-
-    m_toolbarLock = FALSE;
+    updateButton(cell, column, row);
 }
 
 void KSpreadView::activateFormulaEditor()
