@@ -566,3 +566,7 @@ David, 28.11.1999:
 - Changed Find to Ctrl+F, so that Ctrl+S for save works.
 - Fixed bug when saving text with '>' or '<' (a space was added).
 
+Simon, 28.11.1999:
+------------------
+- Added wheel mouse support
+

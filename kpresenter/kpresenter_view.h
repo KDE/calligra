@@ -219,7 +219,7 @@ public slots:
     virtual void textContentsToHeight();
     virtual void textObjectToContents();
     virtual void textInsertPageNum();
-    
+
     // color bar
     virtual void penChosen( const QColor &c );
     virtual void brushChosen( const QColor &c );
@@ -378,6 +378,8 @@ protected:
     virtual void dragLeaveEvent( QDragLeaveEvent *e );
     virtual void dropEvent( QDropEvent *e );
 
+    virtual void wheelEvent( QWheelEvent *e );
+
 // GUI
     void setupActions();
     void setupPopupMenus();
@@ -512,7 +514,7 @@ protected:
     QAction *actionTextItalic;
     QAction *actionTextUnderline;
     QAction *actionTextInsertPageNum;
-    
+
     QAction *actionExtraPenBrush;
     QAction *actionExtraConfigPie;
     QAction *actionExtraConfigRect;

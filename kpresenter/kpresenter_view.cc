@@ -1361,7 +1361,7 @@ void KPresenterView::textSpacing()
 
     if ( obj ) {
 	if ( spacingDia ) {
-	    QObject::disconnect( spacingDia, SIGNAL( spacingDiaOk( int, int, int, int ) ), 
+	    QObject::disconnect( spacingDia, SIGNAL( spacingDiaOk( int, int, int, int ) ),
                                  this, SLOT( spacingOk( int, int, int, int ) ) );
 	    spacingDia->close();
 	    delete spacingDia;
@@ -2549,6 +2549,12 @@ void KPresenterView::dragLeaveEvent( QDragLeaveEvent *e )
 void KPresenterView::dropEvent( QDropEvent *e )
 {
     QApplication::sendEvent( page, e );
+}
+
+/*===============================================================*/
+void KPresenterView::wheelEvent( QWheelEvent *e )
+{
+  QApplication::sendEvent( vert, e );
 }
 
 /*======================= key press event =======================*/
