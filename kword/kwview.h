@@ -413,10 +413,11 @@ public slots:
     void changeHorizontalLine();
 
     void embeddedStoreInternal();
-    
+
     void addWordToDictionary();
-    
+
     void deleteFrameSet();
+    void editFrameSetProperties();
 
 protected slots:
     virtual void slotChildActivated( bool a ); // from KoView
@@ -686,9 +687,9 @@ private:
 
     KAction *actionInsertHorizontalLine;
     KAction *actionChangeHorizontalLine;
-
+    KAction *actionEditFrameSetProperties;
     KToggleAction *actionEmbeddedStoreInternal;
-    
+
     KAction *actionAddWordToPersonalDictionary;
 
     KToggleAction *actionInsertDirectCursor;

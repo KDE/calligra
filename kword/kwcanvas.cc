@@ -1747,6 +1747,14 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
     }
 }
 
+void KWCanvas::editFrameProperties( KWFrameSet * frameset )
+{
+    KWFrameDia *frameDia;
+    KWFrame *frame = frameset->frame(0);
+    frameDia = new KWFrameDia( this, frame );
+    frameDia->exec();
+    delete frameDia;
+}
 
 void KWCanvas::editFrameProperties()
 {

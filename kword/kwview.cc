@@ -1200,6 +1200,10 @@ void KWView::setupActions()
                                         this, SLOT( deleteFrameSet() ),
                                         actionCollection(), "delete_frameset" );
 
+    actionEditFrameSetProperties = new KAction( i18n( "Edit Frameset Properties" ), 0,
+                                        this, SLOT( editFrameSetProperties() ),
+                                        actionCollection(), "edit_frameset_properties" );
+
 
     actionSelectedFrameSet = new KAction( i18n( "Select Frameset" ), 0,
                                             this, SLOT( selectFrameSet() ),
@@ -6479,6 +6483,14 @@ void KWView::editFrameSet()
         m_gui->getDocStruct()->editFrameSet();
         //return focus to canvas.
         m_gui->canvasWidget()->setFocus();
+    }
+}
+
+void KWView::editFrameSetProperties()
+{
+    if ( m_gui->getDocStruct() )
+    {
+        m_gui->getDocStruct()->editProperties();
     }
 }
 

@@ -41,6 +41,7 @@ public:
     virtual void selectFrameSet() {};
     virtual void editFrameSet() {};
     virtual void deleteFrameSet() {};
+    virtual void editProperties() {};
 };
 
 /******************************************************************/
@@ -80,6 +81,7 @@ public:
     virtual void selectFrameSet();
     virtual void editFrameSet();
     virtual void deleteFrameSet();
+    virtual void editProperties();
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
     void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
@@ -103,6 +105,7 @@ public:
     virtual void selectFrameSet();
     virtual void editFrameSet();
     virtual void deleteFrameSet();
+    virtual void editProperties();
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
     void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
@@ -126,6 +129,7 @@ public:
     virtual void selectFrameSet();
     virtual void editFrameSet();
     virtual void deleteFrameSet();
+    virtual void editProperties();
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
     void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
@@ -149,6 +153,7 @@ public:
     KWDocStructPictureItem( QListViewItem *_parent, QString _text, KWPictureFrameSet *_pic, KWGUI*__parent );
     virtual void selectFrameSet();
     virtual void deleteFrameSet();
+    virtual void editProperties();
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
     void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
@@ -172,6 +177,7 @@ public:
     virtual void selectFrameSet();
     virtual void editFrameSet();
     virtual void deleteFrameSet();
+    virtual void editProperties();
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
     void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
@@ -227,6 +233,7 @@ public:
     void selectFrameSet();
     void editFrameSet();
     void deleteFrameSet();
+    void editProperties();
 protected:
     KWDocument *doc;
     KWGUI *gui;
@@ -249,6 +256,7 @@ public:
     void selectFrameSet();
     void editFrameSet();
     void deleteFrameSet();
+    void editProperties();
 protected:
     KWDocStructTree *tree;
     QGridLayout *layout;

@@ -92,6 +92,7 @@ public:
     void setFrameBackgroundColor( const QBrush &backColor );
 
     void editFrameProperties();
+    void editFrameProperties( KWFrameSet * frameset );
     void copySelectedFrames();
     void cutSelectedFrames();
 

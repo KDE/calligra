@@ -135,6 +135,11 @@ void KWDocStructFrameItem::deleteFrameSet()
     gui->getView()->deleteFrameSet( frameset );
 }
 
+void KWDocStructFrameItem::editProperties()
+{
+     gui->canvasWidget()->editFrameProperties( frameset );
+}
+
 /******************************************************************/
 /* Class: KWDocStructTableItem                                    */
 /******************************************************************/
@@ -176,6 +181,11 @@ void KWDocStructTableItem::deleteFrameSet()
     gui->getView()->deleteFrameSet( table );
 }
 
+void KWDocStructTableItem::editProperties()
+{
+     gui->canvasWidget()->editFrameProperties( table );
+}
+
 /******************************************************************/
 /* Class: KWDocStructPictureItem                                  */
 /******************************************************************/
@@ -212,6 +222,10 @@ void KWDocStructPictureItem::deleteFrameSet()
     gui->getView()->deleteFrameSet( pic );
 }
 
+void KWDocStructPictureItem::editProperties()
+{
+    gui->canvasWidget()->editFrameProperties( pic );
+}
 
 /******************************************************************/
 /* Class: KWDocStructFormulaItem                                  */
@@ -253,6 +267,11 @@ void KWDocStructFormulaItem::deleteFrameSet()
     gui->getView()->deleteFrameSet( form );
 }
 
+void KWDocStructFormulaItem::editProperties()
+{
+     gui->canvasWidget()->editFrameProperties( form );
+}
+
 /******************************************************************/
 /* Class: KWDocStructPartItem                                     */
 /******************************************************************/
@@ -290,6 +309,11 @@ void KWDocStructPartItem::editFrameSet()
 void KWDocStructPartItem::deleteFrameSet()
 {
     gui->getView()->deleteFrameSet( part );
+}
+
+void KWDocStructPartItem::editProperties()
+{
+     gui->canvasWidget()->editFrameProperties( part );
 }
 
 /******************************************************************/
@@ -832,6 +856,15 @@ void KWDocStructTree::deleteFrameSet()
 }
 
 
+void KWDocStructTree::editProperties()
+{
+    QListViewItem * select=currentItem ();
+    KWDocListViewItem *tmp = dynamic_cast<KWDocListViewItem *>(select);
+    if ( tmp )
+        tmp->editProperties();
+}
+
+
 /******************************************************************/
 /* Class: KWDocStruct                                             */
 /******************************************************************/
@@ -870,4 +903,9 @@ void KWDocStruct::editFrameSet()
 void KWDocStruct::deleteFrameSet()
 {
     tree->deleteFrameSet();
+}
+
+void KWDocStruct::editProperties()
+{
+    tree->editProperties();
 }
