@@ -24,7 +24,7 @@
 #include <qframe.h>
 #include <qptrlist.h>
 
-#include <kdualcolorbtn.h>
+#include <kdualcolorbutton.h>
 
 #include "kis_framebutton.h"
 #include "kis_color.h"
