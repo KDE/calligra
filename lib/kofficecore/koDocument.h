@@ -98,9 +98,9 @@ protected:
    *                      usually a @ref ifstream or a istringstream.
    * @param _store may be 0L.
    */
-  virtual bool loadBinary( istream &, bool _randomaccess, KOStore::Store_ptr _store )
+  virtual bool loadBinary( istream &, bool , KOStore::Store_ptr )
   { cerr << "KoDocument::loadBinary not implemented" << endl; return false; };
-  virtual bool loadXML( KOMLParser&, KOStore::Store_ptr _store )
+  virtual bool loadXML( KOMLParser&, KOStore::Store_ptr  )
   { cerr << "KoDocument::loadXML not implemented" << endl; return false; };
   /**
    * You need to overload this function if your document may contain embedded documents.
@@ -115,7 +115,7 @@ protected:
    * return true;
    * </PRE>
    */
-  virtual bool loadChildren( KOStore::Store_ptr _store ) { return true; }
+  virtual bool loadChildren( KOStore::Store_ptr ) { return true; }
   /**
    * Overload this function if you have to load additional files from a store.
    * This function is called after @ref #loadXML or @ref #loadBinary and after @ref #loadChildren
@@ -131,7 +131,7 @@ protected:
   /**
    * Saves only an OBJECT tag for this document.
    */
-  virtual bool save( ostream& out, const char *_format )
+  virtual bool save( ostream& , const char * )
   { cerr << "KoDocument::save not implemented" << endl; return false; };
   /**
    * Usually you dont want to overload this function. It saves all children which have

@@ -36,7 +36,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-KoMainWindow::KoMainWindow( const char *_name )
+KoMainWindow::KoMainWindow( const char * )
 {
   m_pFileMenu = 0L;
   m_pHelpMenu = 0L;
@@ -121,7 +121,7 @@ void KoMainWindow::setRootPart( unsigned long _part_id )
   }
 }
 
-void KoMainWindow::slotActivePartChanged( unsigned long _new_part_id, unsigned long _old_part_id )
+void KoMainWindow::slotActivePartChanged( unsigned long _new_part_id, unsigned long )
 {
   menuBarManager()->clear();
   toolBarManager()->clear();

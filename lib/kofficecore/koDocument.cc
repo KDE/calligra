@@ -540,7 +540,7 @@ CORBA::Boolean KoDocument::saveToStore( KOStore::Store_ptr _store, const char *_
   return true;
 }
 
-CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char *_format )
+CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char * )
 {
   KURL u( _url );
   if ( u.isMalformed() )

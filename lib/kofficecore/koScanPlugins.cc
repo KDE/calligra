@@ -258,7 +258,7 @@ void koScanPluginFile( const char* _file, CORBA::ImplRepository_ptr _imr )
 
 KoPluginEntry::KoPluginEntry( const char *_name, const char *_exec, const char *_mode,
 			      const char *_comment, const char *_icon,
-			      const char *_miniicon, bool _is_gui_plugin, QStrList& _repos )
+			      const char *_miniicon, bool, QStrList& _repos )
 {
   m_strName = _name;
   m_strExec = _exec;
@@ -416,7 +416,7 @@ void KoPluginManager::cleanUp()
   m_lstPlugins.clear();
 }
 
-void KoPluginManager::fillMenuBar( OpenPartsUI::MenuBar_ptr _menubar )
+void KoPluginManager::fillMenuBar( OpenPartsUI::MenuBar_ptr  )
 {
 }
 

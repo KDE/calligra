@@ -49,7 +49,7 @@ KoFilterManager* KoFilterManager::self()
   return s_pSelf;
 }
 
-vector<KoFilterEntry> koQueryFilters( const char *_constr = "", int _count = 100 );
+vector<KoFilterEntry> koQueryFilters( const char *_constr , int _count );
 KRegistry * registry = 0L;
 
 QString KoFilterManager::fileSelectorList( Direction direction, const char *_format,
