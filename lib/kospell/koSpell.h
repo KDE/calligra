@@ -449,12 +449,13 @@ protected:
 
     void spellCheckReplaceWord( const QString & _word);
 
-    bool initConfig();
+    bool initConfig(const QString & language= QString::null);
     void changeSpellLanguage( int index );
     void testIgnoreWord( QString & word, bool haveAnNumber );
 
     void initSpell(KOSpellConfig *_ksc);
     void correctWord( const QString & originalword, const QString & newword );
+    void deleteSpellChecker();
 
 private slots:
     void slotSpellCheckerCorrected( const QString &, const QString &, unsigned int );

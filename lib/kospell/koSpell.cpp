@@ -184,13 +184,15 @@ KOSpell::KOSpell (QWidget *_parent, const QString &_caption,
     setUpDialog();
 }
 
-bool KOSpell::initConfig()
+bool KOSpell::initConfig(const QString & language)
 {
     config = new_aspell_config();
     kdDebug()<<" ksconfig->dictionary() :"<<ksconfig->dictionary()<<endl;
 
-    aspell_config_replace(config, "lang", ksconfig->dictionary().isEmpty() ? "fr": ksconfig->dictionary().latin1());
+    aspell_config_replace(config, "lang", language.isEmpty() ? (ksconfig->dictionary().isEmpty() ? "fr": ksconfig->dictionary().latin1()) : language.latin1() );
+
     kdDebug()<<" ksconfig->dictionary() :"<<ksconfig->dictionary()<<endl;
+
     AspellCanHaveError * ret;
     ret = new_aspell_speller(config);
     if (aspell_error(ret) != 0) {
@@ -627,14 +629,18 @@ void KOSpell::spellCheckReplaceWord( const QString & _word)
     ksdlg->show();
 }
 
-
-KOSpell::~KOSpell ()
+void KOSpell::deleteSpellChecker()
 {
     if( speller )
     {
         delete_aspell_speller(speller);
         speller = 0;
     }
+}
+
+KOSpell::~KOSpell ()
+{
+    deleteSpellChecker();
     delete d;
     delete ksconfig;
     delete ksdlg;
@@ -685,14 +691,13 @@ void KOSpell::setIgnoreTitleCase(bool _ignore)
 
 void KOSpell::changeSpellLanguage( int index )
 {
-
-    AspellConfig * spell_config2 = aspell_config_clone(config);
-    kdDebug()<<" KOSpellConfig::listOfLanguageFileName()[index].latin1() :"<<KOSpellConfig::listOfLanguageFileName()[index].latin1()<<endl;
-    aspell_config_replace(spell_config2, "lang",KOSpellConfig::listOfLanguageFileName()[index].latin1());
-
-    /*possible_err =*/ new_aspell_speller(spell_config2);
-
-    delete_aspell_config(spell_config2);
+    deleteSpellChecker();
+    initConfig( KOSpellConfig::listOfLanguageFileName()[index].latin1());
+#if 0
+    kdDebug()<<"Before KOSpellConfig::listOfLanguageFileName()[index].latin1() :"<<KOSpellConfig::listOfLanguageFileName()[index].latin1()<<endl;
+    aspell_config_replace(config, "lang",KOSpellConfig::listOfLanguageFileName()[index].latin1());
+    kdDebug()<<" After aspell_config_retrieve(config, lang) :"<<aspell_config_retrieve(config, "lang")<<endl;
+#endif
 }
 
 
