@@ -13,9 +13,6 @@ note from Raphael: I didn't check if these are reported bugs.
   
   This ONLY happens when text is longer than the current cell
   (has sth to do with automerge).
-  A solution I would propose for 1.4 is to force the user to merge
-  cells -> "The text you just entered is too long for the current cell,
-  do you want to merge all required cells to hold the text?" (or sth).
   
   reported by: Raphael
   taken by:
@@ -31,25 +28,6 @@ note from Raphael: I didn't check if these are reported bugs.
   reported by: Raphael
   taken by:
 
-- Avoid printing empty pages (if the style of last row/col has borders!!)
-
-  reported by: Raphael
-  taken by:
-
-- If possible use the new StyleCluster
-  This would dramatically reduce memory consumption and allows styles for
-  empty cells.
-  Note: the KSpreadFormat class seems to be deprecated, get rid of it.
-
-  reported by: Raphael
-  taken by:
-
-- Speed up selection... (probably improved with StyleCluster?)
-  (maybe not really a must for 1.4, there are more important things)
-
-  reported by: Raphael
-  taken by:
-  
 - Replace the calendar templates with 2005 and 2006 (and 2007?)
   note: there is a insert clander plugin that might be useful
   
@@ -74,12 +52,32 @@ note from Raphael: I didn't check if these are reported bugs.
   
   reported by: Raphael
   taken by:
+
+
+Bugs for after 1.4.0 (if time permits can be fixed before 1.4 as well, of course):
   
 - Make OASIS filter as complete as possible
 
   taken by: Laurent Montel, others welcome :)
 
+- Avoid printing empty pages (if the style of last row/col has borders!!)
 
+  reported by: Raphael
+  taken by:
+
+- If possible use the new StyleCluster
+  This would dramatically reduce memory consumption and allows styles for
+  empty cells.
+  Note: the KSpreadFormat class seems to be deprecated, get rid of it.
+
+  reported by: Raphael
+  taken by:
+
+- Speed up selection... (probably improved with StyleCluster?)
+  (maybe not really a must for 1.4, there are more important things)
+
+  reported by: Raphael
+  taken by:
 
 
 Others bugs not in BT system (Report by - taken by):
