@@ -1180,6 +1180,18 @@ static bool kspreadfunc_istext( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_isnottext( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "ISNOTTEXT", true ) )
+    return false;
+
+  bool logic = !KSUtil::checkType( context, args[0], KSValue::StringType, true );
+  context.setValue( new KSValue(logic));
+  return true;
+}
+
 static bool kspreadfunc_isnum( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -3444,6 +3456,137 @@ static bool kspreadfunc_sumxmy2( KSContext& context )
 }
 
 
+static bool kspreadfunc_delta( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  short result;
+  if ( !KSUtil::checkArgumentsCount( context,2, "DELTA",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if(args[0]->doubleValue()==args[1]->doubleValue())
+        result=1;
+  else
+        result=0;
+  context.setValue( new KSValue(result));
+
+  return true;
+}
+
+static bool kspreadfunc_even( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context,1, "EVEN",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  double result;
+  double val=args[0]->doubleValue();
+  int sign=1;
+  if(val<0)
+        {
+        sign=-1;
+        val=-val;
+        }
+ double valsup=ceil( val );
+ if(fmod(valsup,2)==0)
+        {
+        if(val>valsup)
+                result=(int)(sign*(valsup+2));
+        else
+                result=(int)(sign*valsup);
+        }
+ else
+        {
+        result=(int)(sign*(valsup+1));
+        }
+  context.setValue( new KSValue(result));
+
+  return true;
+}
+
+static bool kspreadfunc_odd( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context,1, "ODD",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  double result;
+  double valsup;
+  int sign=1;
+  double val= args[0]->doubleValue();
+  if (val < 0)
+        {
+        sign = -1;
+        val = -val;
+        }
+  valsup = ceil(val);
+  if (fmod(valsup, 2) == 1)
+        {
+        if (val > valsup)
+                result=(int) (sign * (valsup + 2));
+        else
+                result=(int) (sign * valsup);
+        }
+  else
+        result=(int) (sign * (valsup + 1));
+
+ context.setValue( new KSValue(result));
+
+  return true;
+}
+
+static bool kspreadfunc_isodd( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context,1, "ISODD",true ) )
+    return false;
+  bool result=true;
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+        result= false;
+  if(result)
+        {
+        //it's a integer => test if it's an odd integer
+        if(fmod(args[0]->intValue(),2)==0)
+                result=false;
+        else
+                result=true;
+        }
+
+ context.setValue( new KSValue(result));
+
+  return true;
+}
+
+static bool kspreadfunc_iseven( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context,1, "ISEVEN",true ) )
+    return false;
+  bool result=true;
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+        result= false;
+  if(result)
+        {
+        //it's a integer => test if it's an even integer
+        if(fmod(args[0]->intValue(),2)==0)
+                result=true;
+        else
+                result=false;
+        }
+
+ context.setValue( new KSValue(result));
+
+  return true;
+}
+
+
 static bool kspreadfunc_cell( KSContext& context )
 {
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -3588,9 +3731,14 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "PI", new KSValue( new KSBuiltinFunction( module, "PI",kspreadfunc_PI) ) );
   module->addObject( "rand", new KSValue( new KSBuiltinFunction( module, "rand",kspreadfunc_rand) ) );
   module->addObject( "REPT", new KSValue( new KSBuiltinFunction( module, "REPT",kspreadfunc_REPT) ) );
+
   module->addObject( "ISLOGIC", new KSValue( new KSBuiltinFunction( module,"ISLOGIC",kspreadfunc_islogic) ) );
   module->addObject( "ISTEXT", new KSValue( new KSBuiltinFunction( module,"ISTEXT",kspreadfunc_istext) ) );
   module->addObject( "ISNUM", new KSValue( new KSBuiltinFunction( module,"ISNUM",kspreadfunc_isnum) ) );
+  module->addObject( "ISNOTTEXT", new KSValue( new KSBuiltinFunction( module, "ISNOTTEXT", kspreadfunc_isnottext ) ) );
+  module->addObject( "ISODD", new KSValue( new KSBuiltinFunction( module, "ISODD", kspreadfunc_isodd ) ) );
+  module->addObject( "ISEVEN", new KSValue( new KSBuiltinFunction( module, "ISEVEN", kspreadfunc_iseven ) ) );
+
   module->addObject( "cell", new KSValue( new KSBuiltinFunction( module,"cell",kspreadfunc_cell) ) );
   module->addObject( "select", new KSValue( new KSBuiltinFunction( module,"select",kspreadfunc_select) ) );
   module->addObject( "pow", new KSValue( new KSBuiltinFunction( module,"pow",kspreadfunc_pow) ) );
@@ -3659,10 +3807,6 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "IMCONJUGATE", new KSValue( new KSBuiltinFunction( module, "IMCONJUGATE", kspreadfunc_imconjugate ) ) );
   module->addObject( "IMARGUMENT", new KSValue( new KSBuiltinFunction( module, "IMARGUMENT", kspreadfunc_imargument ) ) );
   module->addObject( "IMABS", new KSValue( new KSBuiltinFunction( module, "IMABS", kspreadfunc_imabs ) ) );
-  module->addObject( "SUMPRODUCT", new KSValue( new KSBuiltinFunction( module, "SUMPRODUCT", kspreadfunc_sumproduct ) ) );
-  module->addObject( "SUMX2PY2", new KSValue( new KSBuiltinFunction( module, "SUMX2PY2", kspreadfunc_sumx2py2 ) ) );
-  module->addObject( "SUMX2MY2", new KSValue( new KSBuiltinFunction( module, "SUMX2MY2", kspreadfunc_sumx2my2 ) ) );
-  module->addObject( "SUM2XMY", new KSValue( new KSBuiltinFunction( module, "SUM2XMY", kspreadfunc_sumxmy2 ) ) );
   module->addObject( "IMDIV", new KSValue( new KSBuiltinFunction( module, "IMDIV", kspreadfunc_imdiv ) ) );
   module->addObject( "IMCOS", new KSValue( new KSBuiltinFunction( module, "IMCOS", kspreadfunc_imcos ) ) );
   module->addObject( "IMSIN", new KSValue( new KSBuiltinFunction( module, "IMSIN", kspreadfunc_imsin ) ) );
@@ -3671,6 +3815,13 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "IMSQRT", new KSValue( new KSBuiltinFunction( module, "IMSQRT", kspreadfunc_imsqrt ) ) );
   module->addObject( "IMPOWER", new KSValue( new KSBuiltinFunction( module, "IMPOWER", kspreadfunc_impower ) ) );
 
+  module->addObject( "SUMPRODUCT", new KSValue( new KSBuiltinFunction( module, "SUMPRODUCT", kspreadfunc_sumproduct ) ) );
+  module->addObject( "SUMX2PY2", new KSValue( new KSBuiltinFunction( module, "SUMX2PY2", kspreadfunc_sumx2py2 ) ) );
+  module->addObject( "SUMX2MY2", new KSValue( new KSBuiltinFunction( module, "SUMX2MY2", kspreadfunc_sumx2my2 ) ) );
+  module->addObject( "SUM2XMY", new KSValue( new KSBuiltinFunction( module, "SUM2XMY", kspreadfunc_sumxmy2 ) ) );
+  module->addObject( "DELTA", new KSValue( new KSBuiltinFunction( module, "DELTA", kspreadfunc_delta ) ) );
+  module->addObject( "EVEN", new KSValue( new KSBuiltinFunction( module, "EVEN", kspreadfunc_even ) ) );
+  module->addObject( "ODD", new KSValue( new KSBuiltinFunction( module, "ODD", kspreadfunc_odd ) ) );
   return module;
 }
 

@@ -849,6 +849,57 @@
     </Function>
 
     <Function>
+      <Name>DELTA</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The DELTA() function returns 1 if x equals y, otherwise returns 0.</Text>
+	<Syntax>DELTA( value; value )</Syntax>
+	<Example>DELTA(1.2;3.4) returns 0</Example>
+	<Example>DELTA(3;3) returns 1</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
+      <Name>EVEN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The EVEN() function returns the number rounded up to the earest even integer.</Text>
+	<Syntax>EVEN( value  )</Syntax>
+	<Example>EVEN(1.2) returns 2</Example>
+	<Example>EVEN(2) returns 2</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ODD</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The ODD() function returns the number rounded up to the earest odd integer.</Text>
+	<Syntax>ODD( value  )</Syntax>
+	<Example>ODD(1.2) returns 3</Example>
+	<Example>ODD(2) returns 3</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
       <Name>MOD</Name>
       <Type>Int</Type>
       <Parameter>
@@ -1768,6 +1819,52 @@ parameters. You can multiply values given by a range multiply(A1:B5) or list of 
 	<Example>ISTEXT("hello") returns True</Example>
       </Help>
     </Function>
+
+    <Function>
+      <Name>ISNOTTEXT</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISNOTTEXT() function returns True if the parameter is not a string and otherwise returns False</Text>
+	<Syntax>ISNOTTEXT( x )</Syntax>
+	<Example>ISNOTTEXT(12) returns True</Example>
+	<Example>ISNOTTEXT("hello") returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISODD</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISODD() function returns True if the number is odd and otherwise returns False</Text>
+	<Syntax>ISODD( x )</Syntax>
+	<Example>ISODD(12) returns False</Example>
+	<Example>ISODD(-7) returns True</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISEVEN</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISEVEN() function returns True if the number is even and otherwise returns False</Text>
+	<Syntax>ISEVEN( x )</Syntax>
+	<Example>ISEVEN(12) returns True</Example>
+	<Example>ISEVEN(-7) returns False</Example>
+      </Help>
+    </Function>
+
 
   </Group>
   <Group>

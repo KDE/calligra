@@ -1095,3 +1095,4 @@ Add new math functions IMDIV, SUMPRODUCT  , SUMX2PY2 ,    SUMX2MY2    ,  SUM2XMY
 2000-12-02-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 Add new functions IMCOS, IMSIN, IMPOWER, IMSQRT, IMEXP, IMLN
+Add new functions ISEVEN, ISODD, ODD, EVEN, DELTA
