@@ -45,8 +45,20 @@ enum StackItemElementType{
 class StackItem
 {
 public:
-    StackItemElementType elementType;
-    QDomNode stackNode;
+    StackItem()
+    {
+        kdDebug()<< "> Creating StackItem " << (void*) this <<endl;
+        propertyFontName="times"; //Default font
+    }
+    ~StackItem()
+    {
+        kdDebug()<< "< Destructing StackItem " << (void*) this <<endl;
+    }
+public:
+    StackItemElementType    elementType;
+    QDomNode                stackNode,stackNode2;
+    QString                 propertyFontName;
+    int                     pos; //Position
 };
 
 
@@ -57,7 +69,7 @@ public:
     StructureParser(QDomElement node)
     {
         structureStack.setAutoDelete(true);
-        nodeStructure=node;
+//        nodeStructure=node;
         StackItem *stackItem=new(StackItem); //TODO: memory failure recovery
         stackItem->elementType=ElementTypeBottom;
         stackItem->stackNode=node;
@@ -79,7 +91,7 @@ private:
     bool startElementSection( const QXmlAttributes& attributes , QDomNode& nodeOut);
     QString indent;
     QStack<StackItem> structureStack;
-    QDomNode nodeStructure;
+//    QDomNode nodeStructure;
 };
 
 bool StructureParser :: startElementSection(const QXmlAttributes &attributes, QDomNode& nodeOut)
@@ -121,27 +133,76 @@ bool StructureParser :: startElementSection(const QXmlAttributes &attributes, QD
     return true;
 }
 
+#define WRITE_LAYOUT 1
+#ifdef WRITE_LAYOUT
+static void FillStandardLayout(QDomElement& layoutElement)
+{//TODO: put the layoutElement.ownerDocument() together
+    QDomElement element;
+    element=layoutElement.ownerDocument().createElement("NAME");
+    element.setAttribute("value","Standard");
+    layoutElement.appendChild(element);
+
+    element=layoutElement.ownerDocument().createElement("FOLLOWING");
+    element.setAttribute("value","Standard");
+    layoutElement.appendChild(element);
+
+    QDomElement formatElement=layoutElement.ownerDocument().createElement("FORMAT");
+    layoutElement.appendChild(formatElement);
+
+    element=layoutElement.ownerDocument().createElement("FONT");
+    element.setAttribute("name","times");
+    formatElement.appendChild(element);
+        
+    element=layoutElement.ownerDocument().createElement("TABULATOR");
+    element.setAttribute("mmpos","64.2055");
+    element.setAttribute("ptpos","182");
+    element.setAttribute("inchpos","2.52778");
+    layoutElement.appendChild(element);
+        
+    element=layoutElement.ownerDocument().createElement("TABULATOR");
+    element.setAttribute("mmpos","128.764");
+    element.setAttribute("ptpos","365");
+    element.setAttribute("inchpos","5.06944");
+    layoutElement.appendChild(element);
+}
+#endif
+
 bool StructureParser :: startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes)
 {
+    //Warning: be careful that the element names can be lower case or upper case (not very XML)
     kdDebug() << indent << " <" << name << ">" << endl;
     indent += "*";
     QDomNode nodeOut=structureStack.current()->stackNode; //TODO: empty stack!
+    QDomNode nodeOut2=structureStack.current()->stackNode2; //TODO: empty stack!
     StackItem *stackItem=new(StackItem); //TODO: memory failure recovery
-    if (name=="c")
+    if ((name=="c")||(name=="C"))
     {
         stackItem->elementType=ElementTypeContent;
-        stackItem->stackNode=nodeOut;
+        stackItem->stackNode=nodeOut;   // <TEXT>
+        stackItem->stackNode2=nodeOut2; // <FORMATS>
+        stackItem->pos=structureStack.current()->pos; //Propagate the position upwards
     }
-    else if (name=="p")
-    {
+    else if ((name=="p")||(name=="P"))
+    {//TODO: put the nodeOut.ownerDocument() together
         QDomElement paragraphElementOut=nodeOut.ownerDocument().createElement("PARAGRAPH");
         nodeOut.appendChild(paragraphElementOut);
         QDomElement textElementOut=nodeOut.ownerDocument().createElement("TEXT");
         paragraphElementOut.appendChild(textElementOut);
+        QDomElement formatsPluralElementOut=nodeOut.ownerDocument().createElement("FORMATS");
+        paragraphElementOut.appendChild(formatsPluralElementOut);
+        
+#ifdef WRITE_LAYOUT
+        QDomElement layoutElementOut=nodeOut.ownerDocument().createElement("LAYOUT");
+        paragraphElementOut.appendChild(layoutElementOut);
+        FillStandardLayout(layoutElementOut);
+#endif
+        
         stackItem->elementType=ElementTypeParagraph;
-        stackItem->stackNode=textElementOut;
+        stackItem->stackNode=textElementOut; // <TEXT>
+        stackItem->stackNode2=formatsPluralElementOut; // <FORMATS>
+        stackItem->pos=0; // No text characters yet
     }
-    else if (name=="section")
+    else if ((name=="section")||(name=="SECTION"))
     {
         startElementSection(attributes,nodeOut);
         stackItem->elementType=ElementTypeSection;
@@ -162,11 +223,12 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     kdDebug() << indent << " </" << name << ">" << endl;
     // TODO: stack empty?
     StackItem *stackItem=structureStack.pop();
-    if (name=="c")
+    if ((name=="c")||(name=="C"))
     {// TODO: verify consistancy with stack!
         stackItem->stackNode.toElement().normalize();
+        structureStack.current()->pos=stackItem->pos; //Propagate the position downwards
     }
-    else if (name=="p")
+    else if ((name=="p")||(name=="P"))
     {// TODO: verify consistancy with stack!
         stackItem->stackNode.toElement().normalize();
     }
@@ -177,16 +239,32 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
 
 bool StructureParser :: characters ( const QString & ch )
 {
-    kdDebug() << indent << " :" << ch << ":" << endl;
+    if (ch=="\n")
+    {
+        kdDebug() << indent << " (LINEFEED)" << endl;
+    }
+    else
+    {
+        kdDebug() << indent << " :" << ch << ":" << endl;
+    }
     StackItem *stackItem=structureStack.current();
     QDomNode nodeOut=stackItem->stackNode; //TODO: empty stack!
-    if (stackItem->elementType==ElementTypeContent)
-    {// TODO: verify consistancy with stack!
+    QDomNode nodeOut2=stackItem->stackNode2; //TODO: empty stack!
+    if ((stackItem->elementType==ElementTypeContent) || (stackItem->elementType==ElementTypeParagraph))
+    { // <c> or <p>
+        // TODO: verify consistancy with stack!
         nodeOut.appendChild(nodeOut.ownerDocument().createTextNode(ch));
-    }
-    else if (stackItem->elementType==ElementTypeParagraph)
-    {// TODO: verify consistancy with stack!
-        nodeOut.appendChild(nodeOut.ownerDocument().createTextNode(ch));
+        
+        QDomElement formatElementOut=nodeOut.ownerDocument().createElement("FORMAT");
+        formatElementOut.setAttribute("id",1); // Normal text!
+        formatElementOut.setAttribute("pos",stackItem->pos); // Start position
+        formatElementOut.setAttribute("len",ch.length()); // Start position
+        nodeOut2.appendChild(formatElementOut); //Append to <FORMATS>
+        stackItem->pos+=ch.length(); // Adapt new starting position
+        
+        QDomElement fontElementOut=nodeOut.ownerDocument().createElement("FONT");
+        fontElementOut.setAttribute("name",stackItem->propertyFontName); // Font name
+        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
     }
     
     return true;
@@ -226,29 +304,32 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     strHeader+="</FRAMESETS>\n";
     strHeader+="</DOC>\n";
        
-    
-    QFile in(fileIn);
-    //ToDo: verify if the encoding of the file is really UTF-8
-    //For now, we arbitrarily decide that Qt can handle it!!
     QDomDocument qDomDocumentOut(fileOut);
     qDomDocumentOut.setContent(strHeader);
     
+    QFile in(fileIn);
+
     StructureParser handler(qDomDocumentOut.documentElement());
+    
+    //TODO: verify if the encoding of the file is really UTF-8
+    //For now, we arbitrarily decide that Qt can handle it!!
+    
     QXmlInputSource source(in);
     QXmlSimpleReader reader;
     reader.setContentHandler( &handler );
-    reader.parse( source );
-   
-    kdError() << "Filter for AbiWord import is not ready yet" << endl; //Todo: remove it!
 
+    if (!reader.parse( source ))
+    {
+        kdError() << "AbiWord Import: Parsing unsuccessful. Aborting!";
+        return false;
+    }
+   
     kdDebug()<< qDomDocumentOut.toCString() << endl << "Now importing to KWord!" << endl;
 
-    //Todo: verify that the output document is valid for KWord, as KWord hates <FRAMESETS/>
-            
     KoStore out=KoStore(QString(fileOut), KoStore::Write);
     if(!out.open("root"))
     {
-        kdError() << "Unable to open output file!" << endl;
+        kdError() << "AbiWord Import unable to open output file!" << endl;
         out.close();
         return false;
     }
