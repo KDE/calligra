@@ -3985,9 +3985,27 @@ void KoTextParag::format( int start, bool doMove )
     }
 
     if ( mFloatingItems ) {
-	for ( KoTextCustomItem *i = mFloatingItems->first(); i; i = mFloatingItems->next() ) {
-	    i->finalize();
-	}
+        // Place custom items - after the formatting is finished
+        int len = length();
+        //int line = -1;
+        int lineY = 0; // the one called "cy" in other algos
+        int baseLine = 0;
+        QMap<int, KoTextParagLineStart*>::Iterator it = lineStarts.begin();
+        for ( int i = 0 ; i < len; ++i ) {
+            KoTextStringChar *chr = &str->at( i );
+            if ( chr->lineStart ) {
+                //++line;
+                lineY = (*it)->y;
+                baseLine = (*it)->baseLine;
+            }
+            if ( chr->isCustom() ) {
+                int x = chr->x;
+                KoTextCustomItem* i = chr->customItem();
+                int y = lineY + baseLine - i->ascent();
+                i->move( x, y );
+                i->finalize();
+            }
+        }
     }
 
     //firstFormat = FALSE; //// unused

@@ -83,7 +83,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     int pixelww = 0; // width in pixels
     int pixelx = zh->layoutUnitToPixelX( x );
 
-    int customItemOffY = 0;
+    //int customItemOffY = 0;
 
     parag->tabCache().clear();
 
@@ -299,8 +299,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height() - c->ascent() );
 		tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
 		tmph = tmpBaseLine + belowBaseLine;
-		if ( c->isCustom() )
-		    customItemOffY = tmpBaseLine - c->ascent();
+		//if ( c->isCustom() )
+		//    customItemOffY = tmpBaseLine - c->ascent();
 		//qDebug(  " -> tmpBaseLine/tmph : %d/%d", tmpBaseLine, tmph );
 	    }
 	    minw = QMAX( minw, tminw );
@@ -367,8 +367,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height() - c->ascent() );
 	    tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
 	    tmph = tmpBaseLine + belowBaseLine;
-	    if ( c->isCustom() )
-		customItemOffY = tmpBaseLine - c->ascent();
+	    //if ( c->isCustom() )
+            //customItemOffY = tmpBaseLine - c->ascent();
 	    //qDebug(  " -> tmpBaseLine/tmph : %d/%d", tmpBaseLine, tmph );
 	}
 
@@ -395,9 +395,9 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
         qDebug("LU: x=%d [equiv. to pix=%d] ; PIX: x=%d  --> adj=%d",
                x, zh->layoutUnitToPixelX( x ), pixelx, c->pixelxadj );
 #endif
-	if ( c->isCustom() )
-	    c->customItem()->move( x, y + customItemOffY );
-	customItemOffY = 0;
+	//if ( c->isCustom() )
+	//    c->customItem()->move( x, y + customItemOffY );
+	//customItemOffY = 0;
 	x += ww;
         pixelx += pixelww;
         wused = QMAX( wused, x );
