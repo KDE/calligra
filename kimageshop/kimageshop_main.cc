@@ -21,6 +21,8 @@
 
 #include <qprinter.h>
 
+#include <kimgio.h>
+
 #include <opAutoLoader.h>
 
 #include <koFactory.h>
@@ -44,6 +46,8 @@ KoMainWindow* KImageShopApp::createNewShell()
 
 int main(int argc, char** argv)
 {
+  kimgioRegister();
+
   KImageShopAutoLoader loader("IDL:KImageShop/DocumentFactory:1.0", "KImageShop");
   KImageShopApp app(argc, argv);
 

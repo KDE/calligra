@@ -1,12 +1,13 @@
 
 datadir = $(prefix)/share/apps/kimageshop/pics
 
-data_DATA = deletelayer.xpm lowerlayer.xpm newlayer.xpm raiselayer.xpm \
-            add_point.xpm airbrush.xpm areaselect.xpm centrejust.xpm \
-			circle.xpm delete.xpm edit_point.xpm editcopy.xpm editcut.xpm \
-            editpaste.xpm ellipse.xpm eraser.xpm exit.xpm filefloppy.xpm \
-            filenew.xpm fileopen.xpm line.xpm pen.xpm rectangle.xpm redo.xpm \
-            roundangle.xpm spraycan.xpm undo.xpm viewmag+.xpm viewmag-.xpm \
-            viewmag.xpm viewzoom.xpm originalsize.xpm fittoview.xpm \
-            fitwithprops.xpm eye.xpm link.xpm close.xpm minimize.xpm \
-			dock.xpm
+data_DATA = deletelayer.png lowerlayer.png newlayer.png raiselayer.png \
+            add_point.png airbrush.png areaselect.png centrejust.png \
+            circle.png delete.png edit_point.png editcopy.png editcut.png \
+            editpaste.png ellipse.png eraser.png exit.png filefloppy.png \
+            filenew.png fileopen.png line.png pen.png rectangle.png redo.png \
+            roundangle.png spraycan.png undo.png viewmag+.png viewmag-.png \
+            viewmag.png viewzoom.png originalsize.png fittoview.png \
+            fitwithprops.png eye.png link.png close.png minimize.png \
+            dock.png
+

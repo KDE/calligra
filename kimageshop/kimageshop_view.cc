@@ -24,7 +24,6 @@
 #include <qkeycode.h>
 #include <qprndlg.h>
 
-#include <kimgio.h>
 #include <kfiledialog.h>
 #include <kcolordlg.h>
 #include <klocale.h>
@@ -328,8 +327,6 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
 
 void KImageShopView::createGUI()
 {
-  kimgioRegister();
-  
   // create canvasview
   m_pCanvasView = new CanvasView(this);
 

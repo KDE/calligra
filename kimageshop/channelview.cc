@@ -69,10 +69,10 @@ void ChannelView::init( KImageShopDoc* doc )
   m_selected = m_doc->layerList().count() - 1;
   if( !m_eyeIcon )
   {
-    QString _icon = locate( "appdata", "pics/eye.xpm" );
+    QString _icon = locate( "appdata", "pics/eye.png" );
     m_eyeIcon = new QPixmap;
     if( !m_eyeIcon->load( _icon ) )
-      QMessageBox::critical( this, "Canvas", "Can't find eye.xpm" );
+      QMessageBox::critical( this, "Canvas", "Can't find eye.png" );
     m_eyeRect = QRect( QPoint( 5,( cellHeight() - m_eyeIcon->height() ) / 2 ), m_eyeIcon->size() );
   }
 

@@ -73,18 +73,18 @@ void LayerView::init( KImageShopDoc* doc )
   m_selected = m_doc->layerList().count() - 1;
   if( !m_eyeIcon )
   {
-    QString _icon = locate( "appdata", "pics/eye.xpm" );
+    QString _icon = locate( "appdata", "pics/eye.png" );
     m_eyeIcon = new QPixmap;
     if( !m_eyeIcon->load( _icon ) )
-      QMessageBox::critical( this, "Canvas", "Can't find eye.xpm" );
+      QMessageBox::critical( this, "Canvas", "Can't find eye.png" );
     m_eyeRect = QRect( QPoint( 2,( cellHeight() - m_eyeIcon->height() ) / 2 ), m_eyeIcon->size() );
   }
   if( !m_linkIcon )
   {
-    QString _icon = locate( "appdata", "pics/link.xpm" );
+    QString _icon = locate( "appdata", "pics/link.png" );
     m_linkIcon = new QPixmap;
     if( !m_linkIcon->load( _icon ) )
-      QMessageBox::critical( this, "Canvas", "Can't find link.xpm" );
+      QMessageBox::critical( this, "Canvas", "Can't find link.png" );
     m_linkRect = QRect( QPoint( 25,( cellHeight() - m_linkIcon->height() ) / 2 ), m_linkIcon->size() );
   }
 
