@@ -98,7 +98,11 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     box->setSpacing( 10 );
     QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
     tmpQGroupBox->setTitle(i18n("Interface"));
-    QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1,15,15);
+
+    QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
+    lay1->setMargin( 20 );
+    lay1->setSpacing( 10 );
+
     int m_iGridX=10;
     int m_iGridY=10;
     int m_iIndent=10;
@@ -115,20 +119,17 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
             m_iNumOfRecentFile=config->readNumEntry("NbRecentFile",10);
         }
     m_iIndent=(int)tmpIndent.value( unit );
-    QLabel *text=new QLabel(tmpQGroupBox);
-    text->setText(i18n("X grid space"));
-    grid1->addWidget(text,0,0);
+
     gridX=new KIntNumInput(m_iGridX, tmpQGroupBox , 10);
     gridX->setRange(1, 50, 1);
-    grid1->addWidget(gridX,1,0);
+    gridX->setLabel(i18n("X grid space"));
+    lay1->addWidget(gridX);
 
-    text=new QLabel(tmpQGroupBox);
-    text->setText(i18n("Y grid space"));
-    grid1->addWidget(text,2,0);
 
     gridY=new KIntNumInput(m_iGridY, tmpQGroupBox , 10);
     gridY->setRange(1, 50, 1);
-    grid1->addWidget(gridY,3,0);
+    gridY->setLabel(i18n("Y grid space"));
+    lay1->addWidget(gridY);
 
     QString unitText;
     switch ( unit )
@@ -143,22 +144,18 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
       default:
 	unitText=i18n("in points ( pt )" );
       }
-    text=new QLabel(tmpQGroupBox);
-    text->setText(i18n("Indent %1").arg(unitText));
-    grid1->addWidget(text,4,0);
 
     indent=new KIntNumInput(m_iIndent, tmpQGroupBox , 10);
     indent->setRange(1, 50, 1);
-    grid1->addWidget(indent,5,0);
+    indent->setLabel(i18n("Indent %1").arg(unitText));
+    lay1->addWidget(indent);
 
-    text=new QLabel(tmpQGroupBox);
-    text->setText(i18n("Number of recent file:"));
-    grid1->addWidget(text,6,0);
 
     oldNbRecentFiles=m_iNumOfRecentFile;
     recentFiles=new KIntNumInput(m_iNumOfRecentFile, tmpQGroupBox , 10);
     recentFiles->setRange(1, 20, 1);
-    grid1->addWidget(recentFiles,7,0);
+    recentFiles->setLabel(i18n("Number of recent file:"));
+    lay1->addWidget(recentFiles);
 
     box->addWidget( tmpQGroupBox);
 }
