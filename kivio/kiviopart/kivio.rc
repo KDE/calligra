@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="10">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="11">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="addStencilSet"/>
@@ -61,6 +61,7 @@
    <Action name="paperLayout"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
+   <Separator group="settings_show"/>
    <Action name="options" group="settings_configure"/>
  </Menu>
 </MenuBar>

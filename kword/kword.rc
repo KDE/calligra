@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="91">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="92">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -157,11 +157,11 @@
   <Menu name="SpellCheck"><text>Spellcheck</text>
 	  <Action name="tool_auto_spellcheck"/>
 	  <Action name="extra_spellcheck"/>
-  </Menu>  
+  </Menu>
   <Menu name="AutoFormat"><text>Autocorrection</text>
 	<Action name="enable_autocorrection"/>
   	<Action name="apply_autoformat"/>
-  </Menu>  
+  </Menu>
   <Separator/>
   <Action name="change_case"/>
   <Action name="sort_text"/>
@@ -174,12 +174,13 @@
   <Action name="edit_sldatabase"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
-  <Action name="configure_autocorrection"/>
-  <Action name="configure_completion"/>
-  <Action name="configure_footendnote"/>
-  <Separator/>
-  <Action name="direct_cursor"/>
-  <Separator/>
+  <Separator group="settings_show"/>
+  <Action name="direct_cursor" group="settings_show"/>
+  <Separator group="settings_show"/>
+  <Action name="configure_autocorrection" group="settings_show"/>
+  <Action name="configure_completion" group="settings_show"/>
+  <Action name="configure_footendnote" group="settings_show"/>
+  <Separator group="settings_show"/>
   <Action name="configure" group="settings_configure"/>
  </Menu>
 </MenuBar>

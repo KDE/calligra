@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KFormula" version="2">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KFormula" version="3">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="koffice_undo"/>
@@ -68,8 +68,9 @@
  </Menu>
 -->
  <Menu name="settings"><text>&amp;Settings</text>
-  <Action name="formula_syntaxhighlighting"/>
-  <Separator/>
+  <Separator group="settings_show"/>
+  <Action name="formula_syntaxhighlighting" group="settings_show"/>
+  <Separator group="settings_show"/>
   <Action name="configure" group="settings_configure"/>
  </Menu>
 

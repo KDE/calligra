@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart" version="11">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart" version="12">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit"/>
@@ -7,10 +7,11 @@
   <Action name="page_layout"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
-  <Action name="loadconfig"/>
-  <Action name="saveconfig"/>	
-  <Action name="defaultconfig" />
-  <Separator />
+  <Separator group="settings_show"/>
+  <Action name="loadconfig" group="settings_show"/>
+  <Action name="saveconfig" group="settings_show"/>
+  <Action name="defaultconfig" group="settings_show"/>
+  <Separator group="settings_show"/>
  </Menu>
 </MenuBar>
 <ToolBar name="KChartToolBar"><Text>Chart</Text>

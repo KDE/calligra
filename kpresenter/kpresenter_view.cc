@@ -3019,7 +3019,7 @@ void KPresenterView::setupActions()
     picResizeMenu->insertSeparator();
     picResizeMenu->insertItem( i18n( "Enter Custom Factor..." ), this, SLOT( picViewOrigFactor() ) );
 #endif
-    (void) new KAction( i18n( "&Autocorrection..." ), 0,
+    (void) new KAction( i18n( "Configure &Autocorrection..." ), 0,
                         this, SLOT( extraAutoFormat() ),
                         actionCollection(), "extra_autocorrection" );
     actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
