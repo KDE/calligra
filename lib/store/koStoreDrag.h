@@ -17,6 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef koStoreDrag_h
+#define koStoreDrag_h
+
 #include <qdragobject.h>
 
 /**
@@ -49,3 +52,5 @@ public:
      */
     static QCString mimeType( const char* nativeMimeType );
 };
+
+#endif
