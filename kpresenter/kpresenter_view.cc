@@ -3392,6 +3392,9 @@ void KPresenterView::setupActions()
                                         this, SLOT( slotAddIgnoreAllWord() ),
                                         actionCollection(), "ignore_all" );
 
+    actionAddWordToPersonalDictionary=new KAction( i18n( "Add word to dictionary" ),0,
+                                                   this, SLOT( addWordToDictionary() ),
+                                                   actionCollection(), "add_word_to_dictionary" );
 
 }
 
@@ -7400,6 +7403,17 @@ void KPresenterView::slotAddIgnoreAllWord()
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
         m_pKPresenterDoc->addIgnoreWordAll( edit->underCursorWord() );
+}
+
+void KPresenterView::addWordToDictionary()
+{
+    KPTextView* edit = m_canvas->currentTextObjectView();
+    if ( edit && m_pKPresenterDoc->backgroundSpellCheckEnabled() )
+    {
+        QString word = edit->wordUnderCursor( *edit->cursor() );
+        if ( !word.isEmpty())
+            m_pKPresenterDoc->addWordToDictionary( word);
+    }
 }
 
 

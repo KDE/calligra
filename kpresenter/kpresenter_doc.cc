@@ -3386,4 +3386,13 @@ KPresenterView *KPresenterDoc::firstView() const
         return 0L;
 }
 
+void KPresenterDoc::addWordToDictionary( const QString & word)
+{
+    if ( m_bgSpellCheck )
+    {
+        m_bgSpellCheck->addPersonalDictonary( word );
+    }
+}
+
+
 #include <kpresenter_doc.moc>

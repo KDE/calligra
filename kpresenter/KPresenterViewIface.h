@@ -183,6 +183,7 @@ k_dcop:
     void importStyle();
     void backgroundPicture();
     void insertFile( const QString & file );
+    void addWordToDictionary();
 
 private:
     KPresenterView *view;

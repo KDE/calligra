@@ -617,3 +617,8 @@ void KPresenterViewIface::insertFile( const QString & file )
 {
     view->insertFile( file );
 }
+
+void KPresenterViewIface::addWordToDictionary()
+{
+    view->addWordToDictionary();
+}

@@ -433,6 +433,7 @@ public:
     QString globalLanguage()const { return m_globalLanguage; }
     void setGlobalLanguage( const QString & _lang ){m_globalLanguage = _lang;}
 
+    void addWordToDictionary( const QString & word);
 
 public slots:
     void movePage( int from, int to );

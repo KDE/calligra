@@ -419,6 +419,7 @@ public slots:
     void updatePresentationButton(bool);
     void refreshGroupButton();
     void slotAddIgnoreAllWord();
+    void addWordToDictionary();
 public:
     // create GUI
     virtual void createGUI();
@@ -586,8 +587,6 @@ public:
 
     void insertDirectCursor(bool b);
     void updateDirectCursorButton();
-
-
 
 protected slots:
     // dialog slots
@@ -1046,6 +1045,8 @@ private:
     KAction *actionEditCustomVarsEdit;
     KActionMenu *actionFormatStyleMenu;
     KToggleAction *actionInsertDirectCursor;
+
+    KAction *actionAddWordToPersonalDictionary;
 
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;
