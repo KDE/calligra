@@ -264,9 +264,9 @@ void KoCounterStyleWidget::makeCounterRepresenterList( QPtrList<StyleRepresenter
             ,  KoParagCounter::STYLE_BOXBULLET , true));
     stylesList.append( new StyleRepresenter(i18n( "Circle Bullet" )
             ,  KoParagCounter::STYLE_CIRCLEBULLET , true));
+    }
     stylesList.append( new StyleRepresenter(i18n( "Custom Bullet" )
             ,  KoParagCounter::STYLE_CUSTOMBULLET , true));
-    }
     stylesList.append( new StyleRepresenter(i18n( "None" ), KoParagCounter::STYLE_NONE));
 }
 
@@ -283,6 +283,8 @@ void KoCounterStyleWidget::selectCustomBullet() {
 
     if ( KoCharSelectDia::selectChar( f, c ) ) {
         emit changeCustomBullet( f, c );
+        m_counter.setCustomBulletFont( f );
+        m_counter.setCustomBulletCharacter( c );
         if ( !f.isEmpty() )
             bCustom->setFont( QFont( f ) );
         bCustom->setText( c );
