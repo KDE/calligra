@@ -501,6 +501,8 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 		       Qt::sizeVerCursor : Qt::sizeHorCursor );
             d->action=A_HELPLINES;
         }
+    default:
+        break;
     }
 }
 

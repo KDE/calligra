@@ -105,8 +105,8 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
         //setMidline( getBaseline() - fm.strikeOutPos() );
     }
     else {
-        setWidth( context.getEmptyRectWidth() * 2./3. );
-        setHeight( context.getEmptyRectHeight() * 2./3. );
+        setWidth( static_cast<int>( context.getEmptyRectWidth() * 2./3. ) );
+        setHeight( static_cast<int>( context.getEmptyRectHeight() * 2./3. ) );
         setBaseline( getHeight() );
         //setMidline( getBaseline() / 2 );
     }
@@ -134,7 +134,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& r,
 
     luPt mySize = context.getAdjustedSize( tstyle );
     QFont font = getFont( context );
-    font.setPointSize( context.layoutUnitToFontSize( mySize, false ) );
+    font.setPointSize( static_cast<int>( context.layoutUnitToFontSize( mySize, false ) ) );
     painter.setFont( font );
 
     //kdDebug( DEBUGID ) << "TextElement::draw font=" << font.rawName() << endl;

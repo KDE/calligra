@@ -240,7 +240,7 @@ void KoPainter::blit()
 //  xlib_draw_rgb_32_image(mWidget->handle(), gc, 0, 0, mWidth, mHeight, XLIB_RGB_DITHER_NONE, mBuffer->bits(), mWidth * 4);
 }
 
-void KoPainter::memset(QRgb *p, int n, QRgb c)
+void KoPainter::memset(QRgb */*p*/, int /*n*/, QRgb /*c*/)
 {
 }
 
@@ -277,7 +277,7 @@ void KoPainter::memset(QRgb *p, int n, QRgb c)
   //  art_render_image_solid (render, color);
   art_render_invoke (render);*/
 
-void KoPainter::drawImage(QImage *img, int alpha, QWMatrix &m)
+void KoPainter::drawImage(QImage *img, int /*alpha*/, QWMatrix &m)
 {
   double affine[6];
   affine[0] = m.m11();

@@ -1,7 +1,7 @@
 ####### General stuff
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES= -I$(srcdir)/.. $(all_includes)
+INCLUDES= -I$(srcdir)/.. $(KSTORE_INCLUDES) $(all_includes)
 
 ####### Files
 

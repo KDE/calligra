@@ -329,11 +329,11 @@ KSelectColorAction::Type KSelectColorAction::type() const
     return m_type;
 }
 
-void KSelectColorAction::setColor( const QColor &c )
+void KSelectColorAction::setColor( const QColor &/*c*/ )
 {
 }
 
-void KSelectColorAction::setType( Type t )
+void KSelectColorAction::setType( Type /*t*/ )
 {
 }
 

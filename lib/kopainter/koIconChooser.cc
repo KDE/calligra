@@ -162,7 +162,7 @@ void KoIconChooser::mousePressEvent(QMouseEvent *e)
 }
 
 // when a big item is shown in full size, delete it on mouseRelease
-void KoIconChooser::mouseReleaseEvent(QMouseEvent *e)
+void KoIconChooser::mouseReleaseEvent(QMouseEvent */*e*/)
 {
   if(mPixmapWidget)
   {
@@ -304,7 +304,7 @@ void KoIconChooser::calculateCells()
 }
 
 // show the full pixmap of a large item in an extra widget
-void KoIconChooser::showFullPixmap(const QPixmap &pix, const QPoint &p)
+void KoIconChooser::showFullPixmap(const QPixmap &pix, const QPoint &/*p*/)
 {
   mPixmapWidget = new KoPixmapWidget(pix, 0L);
 }

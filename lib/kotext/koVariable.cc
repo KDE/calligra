@@ -369,6 +369,8 @@ QPtrList<KAction> KoVariableCollection::variableActionList()
                         v.format=*it;
                         break;
                     }
+                    default:
+                        break;
                     }
                     KAction * act = new KAction(v.translatedString);
                     connect( act, SIGNAL(activated()),this, SLOT(changeFormatOfVariable()) );

@@ -35,7 +35,6 @@
 
 #include <kio/netaccess.h>
 #include <kparts/partmanager.h>
-#include <iostream.h>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kapplication.h>

@@ -34,7 +34,7 @@ KoVectorPath::KoVectorPath(const KoVectorPath &vp, const QWMatrix &m)
   double x;
   double y;
   segments.resize(vp.segments.size());
-  for(int s = 0; s < segments.size(); s++)
+  for(unsigned int s = 0; s < segments.size(); s++)
   {
     m.map(vp.segments[s].x, vp.segments[s].y, &x, &y);
     segments[s].x = x;
@@ -217,8 +217,8 @@ void KoVectorPath::arcTo(double rx, double ry, double sa, double a)
   double x3 = x0;
   double y3 = -y0;
   QWMatrix m, mm;
-  double x;
-  double y;
+  //double x;
+  //double y;
   m.scale(rx, ry);
   m.rotate(sa + a / 2.0);
   m.map(x0, y0, &x0, &y0);
@@ -234,7 +234,7 @@ void KoVectorPath::transform(const QWMatrix &m)
 {
   double x;
   double y;
-  for(int i = 0; i < segments.size() - 1; i++)
+  for(unsigned int i = 0; i < segments.size() - 1; i++)
   {
     m.map(segments[i].x, segments[i].y, &x, &y);
     segments[i].x = x;

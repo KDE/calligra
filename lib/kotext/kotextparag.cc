@@ -603,6 +603,8 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 		painter.setPen( QPen( textColor, lineWidth, Qt::SolidLine ) );
 		painter.drawLine( startX, lastY + baseLine, startX + bw, lastY + baseLine );
 		break;
+            default:
+                break;
 	}
 	painter.restore();
     }

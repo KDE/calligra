@@ -939,6 +939,8 @@ Command* SequenceElement::buildCommand( Container* container, Request* request )
     case req_copy:
     case req_cut:
         break;
+    default:
+        break;
     }
     return 0;
 }

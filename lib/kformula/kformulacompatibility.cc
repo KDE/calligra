@@ -20,10 +20,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <iostream.h>
-
 #include <qvaluelist.h>
 
+#include <kdebug.h>
 #include "kformuladefs.h"
 #include "kformulacompatibility.h"
 
@@ -366,7 +365,7 @@ QDomElement Compatibility::readSequence(QDomDocument doc)
                 break;
             }
             case OF_SYMBOL:
-                cout << "OF_SYMBOL" << endl;
+                kdDebug() << "OF_SYMBOL" << endl;
                 break;
             case INTEGRAL:
             case SUM:

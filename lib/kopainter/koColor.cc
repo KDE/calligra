@@ -379,7 +379,7 @@ void KoColor::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)
   // calc hue
   if(*S == 0)
     *H = -1; // undefined hue
-  else 
+  else
   {
     switch(maxValue)
     {
@@ -450,7 +450,7 @@ void KoColor::RGBtoCMYK(int R, int G, int B, int *C, int *M, int *Y, int *K)
 {
   int min = (R < G) ? R : G;
   *K = (min < B) ? min : B;
-  
+
   *C = 255 - (R - *K);
   *M = 255 - (G - *K);
   *Y = 255 - (B - *K);
@@ -550,13 +550,13 @@ void KoColor::LABtoRGB(int L, int a, int b, int *R, int *G, int *B)
   else
     fY = 7.787 * fY + 16.0 / 116.0;
 
-  fX = a / 500.0 + fY;          
+  fX = a / 500.0 + fY;
   if(fX > 0.206893)
     X = pow(fX, 3.0);
   else
     X = (fX - 16.0 / 116.0) / 7.787;
 
-  fZ = fY - b / 200.0;          
+  fZ = fY - b / 200.0;
   if(fZ > 0.206893)
     Z = pow(fZ, 3.0);
   else
@@ -635,6 +635,8 @@ void KoColor::calcRGB() const
   case csCMYK:
     CMYKtoRGB(mC, mM, mY, mK, &mR, &mG, &mB);
     break;
+  default:
+    break;
   }
   mRGBvalid = true;
 }
@@ -651,6 +653,8 @@ void KoColor::calcHSV() const
     break;
   case csCMYK:
     CMYKtoHSV(mC, mM, mY, mK, &mH, &mS, &mV);
+    break;
+  default:
     break;
   }
   mHSVvalid = true;
@@ -669,6 +673,8 @@ void KoColor::calcCMYK() const
   case csHSV:
     HSVtoCMYK(mH, mS, mV, &mC, &mM, &mY, &mK);
     break;
+  default:
+    break;
   }
   mCMYKvalid = true;
 }
@@ -685,6 +691,8 @@ void KoColor::calcLAB() const
     break;
   case csCMYK:
     CMYKtoLAB(mC, mM, mY, mK, &mL, &ma, &mB);
+    break;
+  default:
     break;
   }
   mLABvalid = true;

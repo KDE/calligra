@@ -19,7 +19,6 @@
 
 #include <math.h>
 #include <assert.h>
-#include <iostream.h>
 #include <qfileinfo.h>
 #include <qpixmap.h>
 #include <qpainter.h>
@@ -27,7 +26,6 @@
 #include <qapplication.h>
 #include <qbuffer.h>
 #include <kdebug.h>
-//#define  kdDebug()  cout
 
 bool qwmfDebug = false;
 
@@ -995,7 +993,7 @@ void QWinMetaFile::createPenIndirect( long, short* parm )
     handle->pen.setColor( color( parm+3 ) );
     handle->pen.setCapStyle( Qt::RoundCap );
 
-    int width = 0;
+    //int width = 0;
     // TODO : width of pen proportional to device context width
     // DOESN'T WORK
 /*
