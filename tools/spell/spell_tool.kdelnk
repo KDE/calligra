@@ -1,0 +1,13 @@
+# KDE Config File
+[KDE Desktop Entry]
+Name=SpellTool
+Exec=spell_tool --server
+Comment=Torben's Spell Tool
+MimeTypes=text/x-single-word,
+RepoID=IDL:DataTools/Tool:1.0,
+ActivationMode=shared
+Type=DataTool
+Icon=unknown.xpm
+MiniIcon=unknown.xpm
+Commands=spellcheck,
+CommandsI18N=Check spelling,
