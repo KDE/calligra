@@ -246,7 +246,8 @@ void KoStyle::propagateChanges( int paragLayoutFlag, int formatFlag )
     if ( !(paragLayoutFlag & KoParagLayout::Alignment) )
         m_paragLayout.alignment = m_parentStyle->paragLayout().alignment;
     if ( !(paragLayoutFlag & KoParagLayout::Margins) )
-        m_paragLayout.margins = m_parentStyle->paragLayout().margins;
+        for ( int i = 0 ; i < 5 ; ++i )
+            m_paragLayout.margins[i] = m_parentStyle->paragLayout().margins[i];
     if ( !(paragLayoutFlag & KoParagLayout::LineSpacing) )
     {
         m_paragLayout.setLineSpacingValue(m_parentStyle->paragLayout().lineSpacingValue());
