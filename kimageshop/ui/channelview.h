@@ -26,7 +26,7 @@
 #include <qtableview.h>
 #include <qrect.h>
 
-class KImageShopDoc;
+class kisDoc;
 class QPopupMenu;
 
 class ChannelView : public QTableView
@@ -38,7 +38,7 @@ public:
   enum action { VISIBLE, ADDCHANNEL, REMOVECHANNEL, RAISECHANNEL, LOWERCHANNEL };
 
   ChannelView( QWidget *_parent = 0, const char *_name = 0 );
-  ChannelView( KImageShopDoc *_doc, QWidget *_parent = 0, const char *_name = 0 );
+  ChannelView( kisDoc *_doc, QWidget *_parent = 0, const char *_name = 0 );
 
   void updateTable();
   void updateAllCells();
@@ -65,9 +65,9 @@ protected:
 
 private:
 
-  void init(KImageShopDoc* doc);
+  void init(kisDoc* doc);
 
-  KImageShopDoc* m_doc;
+  kisDoc* m_doc;
   int m_items, m_selected;
   QPopupMenu* m_contextmenu;
 };

@@ -38,13 +38,13 @@ struct canvasTileDescriptor
   QPixmap pix;
 };
 
-class KImageShopImage : public QObject
+class kisImage : public QObject
 {
     Q_OBJECT
 
  public:
-    KImageShopImage( const QString& _name, int w = 512, int h = 512 );
-    ~KImageShopImage();
+    kisImage( const QString& _name, int w = 512, int h = 512 );
+    ~kisImage();
 
     QString name()                { return m_name; }
     void setName(const QString& _name) { m_name = _name; }

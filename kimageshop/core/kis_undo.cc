@@ -24,7 +24,7 @@
 
 #include "kis_undo.h"
 
-KImageShopCommand::KImageShopCommand( const QString& name, KImageShopDoc* doc )
+KImageShopCommand::KImageShopCommand( const QString& name, kisDoc* doc )
   : KoCommand( name )
   , m_pDoc( doc )
 {

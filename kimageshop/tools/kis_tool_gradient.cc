@@ -22,7 +22,7 @@
 #include "kis_tool_gradient.h"
 #include "kis_gradient.h"
 
-GradientTool::GradientTool( KImageShopDoc *_doc, Gradient *_gradient )
+GradientTool::GradientTool( kisDoc *_doc, Gradient *_gradient )
   : Tool( _doc )
   , m_gradient( _gradient )
 {

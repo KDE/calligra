@@ -4,7 +4,7 @@
 #include "kfloatingdialog.h"
 
 class GradientView;
-class KImageShopDoc;
+class kisDoc;
 
 class GradientEditorDialog : public KFloatingDialog
 {
@@ -12,13 +12,13 @@ class GradientEditorDialog : public KFloatingDialog
 
 public:
 
-  GradientEditorDialog( KImageShopDoc *_doc, QWidget *_parent = 0 , const char *_name = 0 );
+  GradientEditorDialog( kisDoc *_doc, QWidget *_parent = 0 , const char *_name = 0 );
   ~GradientEditorDialog();
 
 private:
 
   GradientView* m_pGradient;
-  KImageShopDoc *m_pDoc;
+  kisDoc *m_pDoc;
 };
 
 #endif

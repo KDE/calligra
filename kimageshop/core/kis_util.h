@@ -2,7 +2,6 @@
  *  kis_util.h - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
- *                1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

@@ -23,7 +23,7 @@
 #include "kis_tool.h"
 #include "kis_cursor.h"
 
-Tool::Tool(KImageShopDoc *doc, KImageShopView *view)
+Tool::Tool(kisDoc *doc, kisView *view)
 {
   m_pDoc = doc;
   m_pView = view;

@@ -1,5 +1,5 @@
 /*
- *  kimageshop_tabbar.h - part of KImageShop
+ *  kis_tabbar.h - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *  based on kpread code Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
@@ -26,15 +26,15 @@
 #include <qpainter.h>
 #include <qstrlist.h>
 
-class KImageShopView;
-class KImageShopDoc;
+class kisView;
+class kisDoc;
 
-class KImageShopTabBar : public QWidget
+class kisTabBar : public QWidget
 {
     Q_OBJECT
 
 public:
-    KImageShopTabBar( KImageShopView *_view, KImageShopDoc *_doc );
+    kisTabBar( kisView *_view, kisDoc *_doc );
 
     /**
      * Adds a tab to the bar and paints it. The tab does not become active.
@@ -101,8 +101,8 @@ protected:
     
     void openPopupMenu( QPoint &_global );
     
-    KImageShopView *m_pView;
-    KImageShopDoc  *m_pDoc;
+    kisView  *m_pView;
+    kisDoc  *m_pDoc;
     
     enum { autoScrollNo = 0, autoScrollLeft, autoScrollRight };
     enum { moveTabNo = 0, moveTabBefore, moveTabAfter };

@@ -49,16 +49,16 @@ QString KImageShopShell::configFile() const
 
 KoDocument* KImageShopShell::createDoc()
 {
-    return new KImageShopDoc;
+    return new kisDoc;
 }
 
 void KImageShopShell::slotFileNew()
 {
-  KImageShopDoc* doc = (KImageShopDoc*)document();
+  kisDoc* doc = (kisDoc*)document();
 
   if ( !doc )
     {
-      doc = (KImageShopDoc*)createDoc();
+      doc = (kisDoc*)createDoc();
       if ( !doc->initDoc() )
 	{
 	  delete doc;

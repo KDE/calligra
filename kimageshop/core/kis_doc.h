@@ -35,7 +35,7 @@
 class Brush;
 class NewDialog;
 
-class KImageShopDoc : public KoDocument
+class kisDoc : public KoDocument
 {
     Q_OBJECT
 
@@ -43,8 +43,8 @@ public:
     enum {RGB=0, CMYK, LAB, GREYSCALE } ColorModel;
     enum {BACKGROUND=0, FOREGROUND, WHITE, TRANSPARENT } BgColor;
 
-    KImageShopDoc( KoDocument* parent = 0, const char* name = 0 );
-    ~KImageShopDoc();
+    kisDoc( KoDocument* parent = 0, const char* name = 0 );
+    ~kisDoc();
 
     virtual bool loadFromURL( const QString& );
     
@@ -98,15 +98,15 @@ public:
     void mergeLinkedLayers();
     void mergeLayers(QList<Layer>);
 
-    KImageShopImage* newImage(const QString& _name, int w, int h, int colorModel = RGB, int backgroundMode = WHITE);
-    void saveImage( const QString& file, KImageShopImage *img );
+    kisImage* newImage(const QString& _name, int w, int h, int colorModel = RGB, int backgroundMode = WHITE);
+    void saveImage( const QString& file, kisImage *img );
     void loadImage( const QString& file );
-    void removeImage( KImageShopImage *img );
+    void removeImage( kisImage *img );
     void slotRemoveImage( const QString& name );
 
     QString currentImage();
 
-    void setCurrentImage(KImageShopImage *img);
+    void setCurrentImage(kisImage *img);
     void setCurrentImage(const QString& _name);
 
     QStringList images();
@@ -135,8 +135,8 @@ protected:
   KoCommandHistory m_commands;
 
 private:
-  QList <KImageShopImage> m_Images;
-  KImageShopImage *m_pCurrent;
+  QList <kisImage> m_Images;
+  kisImage *m_pCurrent;
   NewDialog       *m_pNewDialog;
 };
 

@@ -25,7 +25,7 @@
 #include "kis_vec.h"
 #include "kis_cursor.h"
 
-PenTool::PenTool(KImageShopDoc *doc, KImageShopView *view, const Brush *_brush)
+PenTool::PenTool(kisDoc *doc, kisView *view, const Brush *_brush)
   : Tool(doc, view)
 {
   m_Cursor = KImageShopCursor::penCursor();
@@ -82,7 +82,8 @@ bool PenTool::paint(QPoint pos)
  
   uint dstPix;
   uchar *sl, *ptr;
-  uchar bv;
+  uchar bv, srcA, dstA;
+  int v;
 
   int red = m_pView->fgColor().R();
   int green = m_pView->fgColor().G();
@@ -103,6 +104,17 @@ bool PenTool::paint(QPoint pos)
 	  *ptr++ = red;
 
 	  lay->setPixel(startx + x, starty + y, dstPix);
+
+	  if (lay->hasAlphaChannel())
+	    {
+	      srcA = (uchar) lay->getAlpha(startx + x, starty + y);
+	      v = srcA + bv;
+	      if (v < 0 ) v = 0;
+	      if (v > 255 ) v = 255;
+	      dstA = (uchar) v;
+
+	      lay->setAlpha(startx + x, starty + y, (uint)dstA);
+	    }
 	}
     }
   return true;

@@ -38,9 +38,9 @@ class GradientEditorDialog;
 class ColorDialog;
 class LayerDialog;
 
-class KImageShopDoc;
-class KImageShopCanvas;
-class KImageShopTabBar;
+class kisDoc;
+class kisCanvas;
+class kisTabBar;
 class QScrollBar;
 class KRuler;
 
@@ -49,18 +49,20 @@ class BrushesWidget;
 class Tool;
 class MoveTool;
 class BrushTool;
+class AirBrushTool;
+class EraserTool;
 class PenTool;
 class ZoomTool;
 class GradientTool;
 class ColorPicker;
 class QButton;
 
-class KImageShopView : public ContainerView
+class kisView : public ContainerView
 {
   Q_OBJECT;
 
  public:
-  KImageShopView( KImageShopDoc* doc, QWidget* parent = 0, const char* name = 0 );
+  kisView( kisDoc* doc, QWidget* parent = 0, const char* name = 0 );
 
   KColor& fgColor() { return m_fg; }
   KColor& bgColor() { return m_bg; }
@@ -116,7 +118,9 @@ class KImageShopView : public ContainerView
   void tool_move();
   void tool_zoom();
   void tool_brush();
+  void tool_airbrush();
   void tool_pen();
+  void tool_eraser();
   void tool_gradient();
   void tool_colorpicker();
 
@@ -159,7 +163,7 @@ class KImageShopView : public ContainerView
   KToggleAction *m_dialog_layer, *m_dialog_color, *m_dialog_brush, *m_dialog_gradient, *m_dialog_gradienteditor;
   // tool actions
   KToggleAction *m_tool_move, *m_tool_zoom, *m_tool_brush, *m_tool_pen
-    , *m_tool_gradient, *m_tool_colorpicker;
+    , *m_tool_gradient, *m_tool_colorpicker, *m_tool_airbrush, *m_tool_eraser;
   // layer actions
   KAction *m_layer_rotate180, *m_layer_rotateleft90, *m_layer_rotateright90, *m_layer_mirrorX, *m_layer_mirrorY;
   // misc actions
@@ -167,10 +171,12 @@ class KImageShopView : public ContainerView
   // image actions
   KAction *m_merge_all_layers, *m_merge_visible_layers, *m_merge_linked_layers;
 
-  KImageShopDoc        *m_pDoc;
+  kisDoc               *m_pDoc;
   Tool                 *m_pTool; // currently active tool
   MoveTool             *m_pMoveTool;
   BrushTool            *m_pBrushTool;
+  EraserTool           *m_pEraserTool;
+  AirBrushTool         *m_pAirBrushTool;
   PenTool              *m_pPenTool;
   ZoomTool             *m_pZoomTool;
   GradientTool         *m_pGradientTool;
@@ -184,12 +190,12 @@ class KImageShopView : public ContainerView
   GradientEditorDialog *m_pGradientEditorDialog;
   ColorDialog          *m_pColorDialog;
 
-  KImageShopCanvas     *m_pCanvas;
+  kisCanvas            *m_pCanvas;
   QScrollBar           *m_pHorz, *m_pVert;
   KRuler               *m_pHRuler, *m_pVRuler;
   KColor                m_fg, m_bg;
 
-  KImageShopTabBar     *m_pTabBar;
+  kisTabBar            *m_pTabBar;
   QButton              *m_pTabFirst, *m_pTabLeft, *m_pTabRight, *m_pTabLast;
 };
 

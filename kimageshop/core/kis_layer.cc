@@ -211,6 +211,16 @@ uint Layer::getPixel(int x, int y)
   return dataChannels->getPixel(x,y);
 }
 
+void Layer::setAlpha(int x, int y, uint pixel)
+{
+  alphaChannel->setPixel(x,y, pixel);
+}
+
+uint Layer::getAlpha(int x, int y)
+{
+  return alphaChannel->getPixel(x,y);
+}
+
 void Layer::rotate180()
 {
   alphaChannel->rotate180();

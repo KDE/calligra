@@ -23,12 +23,12 @@
 
 #include <qwidget.h>
 
-class KImageShopCanvas : public QWidget
+class kisCanvas : public QWidget
 {
   Q_OBJECT;
 
  public:
-  KImageShopCanvas( QWidget* parent = 0, const char* name = 0 );
+  kisCanvas( QWidget* parent = 0, const char* name = 0 );
 
  signals:
   void mousePressed( QMouseEvent * );

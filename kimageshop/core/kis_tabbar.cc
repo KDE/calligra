@@ -33,7 +33,7 @@
 #include "kis_view.h"
 #include "kis_doc.h"
 
-KImageShopTabBar::KImageShopTabBar( KImageShopView *_view, KImageShopDoc *_doc )
+kisTabBar::kisTabBar( kisView *_view, kisDoc *_doc )
   : QWidget ( (QWidget*)_view )
   , m_pView ( _view )
   , m_pDoc  ( _doc )
@@ -50,13 +50,13 @@ KImageShopTabBar::KImageShopTabBar( KImageShopView *_view, KImageShopDoc *_doc )
   m_autoScroll = 0;
 }
 
-void KImageShopTabBar::addTab( const QString& _text )
+void kisTabBar::addTab( const QString& _text )
 {
   tabsList.append( _text );
   repaint();
 }
 
-void KImageShopTabBar::removeTab( const QString& _text )
+void kisTabBar::removeTab( const QString& _text )
 {
   int i = tabsList.findIndex( _text );
   if ( i == -1 )
@@ -78,7 +78,7 @@ void KImageShopTabBar::removeTab( const QString& _text )
   repaint();
 }
 
-void KImageShopTabBar::removeAllTabs()
+void kisTabBar::removeAllTabs()
 {
   tabsList.clear();
   activeTab = 0;
@@ -87,7 +87,7 @@ void KImageShopTabBar::removeAllTabs()
   repaint();
 }
 
-void KImageShopTabBar::moveTab( int _from, int _to, bool _before )
+void kisTabBar::moveTab( int _from, int _to, bool _before )
 {
   QStringList::Iterator it;
   
@@ -117,7 +117,7 @@ void KImageShopTabBar::moveTab( int _from, int _to, bool _before )
 }
 
 
-void KImageShopTabBar::scrollLeft()
+void kisTabBar::scrollLeft()
 {
   if ( tabsList.count() == 0 )
     return;
@@ -129,7 +129,7 @@ void KImageShopTabBar::scrollLeft()
   repaint( false );
 }
 
-void KImageShopTabBar::scrollRight()
+void kisTabBar::scrollRight()
 {
   if ( tabsList.count() == 0 )
     return;
@@ -144,7 +144,7 @@ void KImageShopTabBar::scrollRight()
   repaint( false );
 }
 
-void KImageShopTabBar::scrollFirst()
+void kisTabBar::scrollFirst()
 {
   if ( tabsList.count() == 0 )
     return;
@@ -156,7 +156,7 @@ void KImageShopTabBar::scrollFirst()
   repaint( false );
 }
 
-void KImageShopTabBar::scrollLast()
+void kisTabBar::scrollLast()
 {
   if ( tabsList.count() == 0 )
     return;
@@ -189,7 +189,7 @@ void KImageShopTabBar::scrollLast()
   repaint( false );
 }
 
-void KImageShopTabBar::setActiveTab( const QString& _text )
+void kisTabBar::setActiveTab( const QString& _text )
 {
   int i = tabsList.findIndex( _text );
   if ( i == -1 )
@@ -204,7 +204,7 @@ void KImageShopTabBar::setActiveTab( const QString& _text )
   emit tabChanged( _text );
 }
 
-void KImageShopTabBar::slotRemove( )
+void kisTabBar::slotRemove( )
 {
   int ret = QMessageBox::warning( this, i18n("Remove table"),
 				  i18n("You are going to remove the active image.\nDo you want to continue?"),
@@ -216,17 +216,17 @@ void KImageShopTabBar::slotRemove( )
 }
 
 
-void KImageShopTabBar::slotRename()
+void kisTabBar::slotRename()
 {
   renameTab();
 }
 
-void KImageShopTabBar::slotAdd()
+void kisTabBar::slotAdd()
 {
   m_pDoc->slotNewImage();
 }
 
-void KImageShopTabBar::paintEvent( QPaintEvent* )
+void kisTabBar::paintEvent( QPaintEvent* )
 {
   if ( tabsList.count() == 0 )
     {
@@ -289,7 +289,7 @@ void KImageShopTabBar::paintEvent( QPaintEvent* )
 }
 
 
-void KImageShopTabBar::paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y,
+void kisTabBar::paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y,
 			      bool isactive, bool ismovemarked )
 {
   QPointArray parr;
@@ -334,7 +334,7 @@ void KImageShopTabBar::paintTab( QPainter & painter, int x, const QString& text,
 }
 
 
-void KImageShopTabBar::openPopupMenu( const QPoint &_global )
+void kisTabBar::openPopupMenu( const QPoint &_global )
 {
   if ( m_pPopupMenu != 0L )
     delete m_pPopupMenu;
@@ -346,7 +346,7 @@ void KImageShopTabBar::openPopupMenu( const QPoint &_global )
   m_pPopupMenu->popup( _global );
 }
 
-void KImageShopTabBar::renameTab()
+void kisTabBar::renameTab()
 {
   /*
   QString activeName;
@@ -355,7 +355,7 @@ void KImageShopTabBar::renameTab()
   KImageShopTable* table = m_pView->activeTable();
   activeName = table->tableName();
   
-  KImageShopTableName tndlg( (KImageShopView *)this->parentWidget(), "TableName" , activeName );
+  KImageShopTableName tndlg( (kisView *)this->parentWidget(), "TableName" , activeName );
   if ( tndlg.exec() )
     {
       if ( ( newName = tndlg.tableName() ) != activeName )
@@ -373,7 +373,7 @@ void KImageShopTabBar::renameTab()
 	}*/
 }
 
-void KImageShopTabBar::mousePressEvent( QMouseEvent* _ev )
+void kisTabBar::mousePressEvent( QMouseEvent* _ev )
 {
   int old_active = activeTab;
 
@@ -429,7 +429,7 @@ void KImageShopTabBar::mousePressEvent( QMouseEvent* _ev )
       }
 }
 
-void KImageShopTabBar::mouseReleaseEvent( QMouseEvent* )
+void kisTabBar::mouseReleaseEvent( QMouseEvent* )
 {
   /*
   if ( _ev->button() == LeftButton && m_moveTab != 0 )
@@ -455,7 +455,7 @@ void KImageShopTabBar::mouseReleaseEvent( QMouseEvent* )
   */
 }
 
-void KImageShopTabBar::slotAutoScroll( )
+void kisTabBar::slotAutoScroll( )
 {
   if ( m_autoScroll == autoScrollLeft && leftTab > 1 )
     {
@@ -473,7 +473,7 @@ void KImageShopTabBar::slotAutoScroll( )
     }
 }
 
-void KImageShopTabBar::mouseMoveEvent( QMouseEvent* _ev )
+void kisTabBar::mouseMoveEvent( QMouseEvent* _ev )
 {
   if ( m_moveTabFlag == 0)
     return;
@@ -557,7 +557,7 @@ void KImageShopTabBar::mouseMoveEvent( QMouseEvent* _ev )
   painter.end();
 }
 
-void KImageShopTabBar::mouseDoubleClickEvent( QMouseEvent*  )
+void kisTabBar::mouseDoubleClickEvent( QMouseEvent*  )
 {
   renameTab();
 }

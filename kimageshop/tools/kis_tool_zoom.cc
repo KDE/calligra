@@ -23,7 +23,7 @@
 #include "kis_doc.h"
 #include "kis_tool_zoom.h"
 
-ZoomTool::ZoomTool(KImageShopView *view) : Tool(0L, view){}
+ZoomTool::ZoomTool(kisView *view) : Tool(0L, view){}
 ZoomTool::~ZoomTool() {}
 
 void ZoomTool::mousePress(QMouseEvent *e)

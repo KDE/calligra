@@ -23,7 +23,7 @@
 #include "kis_view.h"
 #include "kis_cursor.h"
 
-ColorPicker::ColorPicker(KImageShopDoc *doc, KImageShopView *view)
+ColorPicker::ColorPicker(kisDoc *doc, kisView *view)
   : Tool(doc, view)
 {
   m_Cursor = KImageShopCursor::pickerCursor();

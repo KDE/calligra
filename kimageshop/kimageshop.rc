@@ -53,6 +53,8 @@
   <Action name="tool_colorpicker"/>
   <Action name="tool_pen"/>
   <Action name="tool_brush"/>
+  <Action name="tool_airbrush"/>
+  <Action name="tool_eraser"/>
   </ToolBar>
 </ToolBars>
 </QConfig>

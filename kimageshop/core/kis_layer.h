@@ -69,6 +69,8 @@ class Layer : public QObject {
 	void    allocateRect(QRect _r);
 	void    setPixel(int x, int y, uint val);
 	uint    getPixel(int x, int y);
+	void    setAlpha(int x, int y, uint val);
+	uint    getAlpha(int x, int y);
 
 	void    clear(const QColor& c);
 

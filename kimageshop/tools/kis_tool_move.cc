@@ -25,7 +25,7 @@
 #include "kis_doc.h"
 #include "kis_cursor.h"
 
-MoveCommand::MoveCommand( KImageShopDoc *_doc, int _layer, QPoint _oldpos, QPoint _newpos )
+MoveCommand::MoveCommand( kisDoc *_doc, int _layer, QPoint _oldpos, QPoint _newpos )
   : KImageShopCommand( i18n( "Move layer" ), _doc )
   , m_layer( _layer )
   , m_oldPos( _oldpos )
@@ -73,7 +73,7 @@ void MoveCommand::moveTo( QPoint _pos )
   }
 }
 
-MoveTool::MoveTool( KImageShopDoc *doc )
+MoveTool::MoveTool( kisDoc *doc )
   : Tool( doc )
 {
   m_Cursor = KImageShopCursor::moveCursor();

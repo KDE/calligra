@@ -49,11 +49,13 @@
 #include "kis_tool_move.h"
 #include "kis_tool_zoom.h"
 #include "kis_tool_brush.h"
+#include "kis_tool_airbrush.h"
 #include "kis_tool_pen.h"
 #include "kis_tool_gradient.h"
 #include "kis_tool_colorpicker.h"
+#include "kis_tool_eraser.h"
 
-KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char* name )
+kisView::kisView( kisDoc* doc, QWidget* parent, const char* name )
   : ContainerView( doc, parent, name )
   , m_pDoc(doc)
 {
@@ -74,9 +76,9 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
   setupTools();
 }
 
-void KImageShopView::setupCanvas()
+void kisView::setupCanvas()
 {
-  m_pCanvas = new KImageShopCanvas(this, "kis_canvas");
+  m_pCanvas = new kisCanvas(this, "kis_canvas");
 
   QObject::connect( m_pCanvas, SIGNAL( mousePressed( QMouseEvent* ) ),
                     this, SLOT( canvasGotMousePressEvent ( QMouseEvent* ) ) );
@@ -92,7 +94,7 @@ void KImageShopView::setupCanvas()
   
 }
 
-void KImageShopView::setupScrollBars()
+void kisView::setupScrollBars()
 {
   m_pVert = new QScrollBar( QScrollBar::Vertical, this );
   m_pHorz = new QScrollBar( QScrollBar::Horizontal, this );
@@ -109,7 +111,7 @@ void KImageShopView::setupScrollBars()
 
 }
 
-void KImageShopView::setupRulers()
+void kisView::setupRulers()
 {
   m_pHRuler = new KRuler(KRuler::horizontal, this);
   m_pVRuler = new KRuler(KRuler::vertical, this);
@@ -124,10 +126,10 @@ void KImageShopView::setupRulers()
   m_pHRuler->setRulerStyle(KRuler::pixel);
 }
 
-void KImageShopView::setupTabBar()
+void kisView::setupTabBar()
 {
   // tabbar
-  m_pTabBar = new KImageShopTabBar(this, m_pDoc);
+  m_pTabBar = new kisTabBar(this, m_pDoc);
 
   QStringList images = m_pDoc->images();
   if (!images.isEmpty())
@@ -165,16 +167,22 @@ void KImageShopView::setupTabBar()
   QObject::connect( m_pTabLast, SIGNAL( clicked() ), this, SLOT( slotScrollToLastTab() ) );
 }
 
-void KImageShopView::setupTools()
+void kisView::setupTools()
 {
   // move tool
   m_pMoveTool = new MoveTool(m_pDoc);
   
   // brush tool
   m_pBrushTool = new BrushTool(m_pDoc, this, m_pBrush);
+
+  // airbrush tool
+  m_pAirBrushTool = new AirBrushTool(m_pDoc, this, m_pBrush);
   
   // pen tool
   m_pPenTool = new PenTool(m_pDoc, this, m_pBrush);
+
+  // eraser tool
+  m_pEraserTool = new EraserTool(m_pDoc, this, m_pBrush);
   
   // color picker
   m_pColorPicker = new ColorPicker(m_pDoc, this);
@@ -188,7 +196,7 @@ void KImageShopView::setupTools()
   activateTool(m_pBrushTool);
 }
 
-void KImageShopView::setupDialogs()
+void kisView::setupDialogs()
 {
   // color dialog
   m_pColorDialog = new ColorDialog( this );
@@ -237,7 +245,7 @@ void KImageShopView::setupDialogs()
   //addDialog(m_pGradientEditorDialog);
 }
 
-void KImageShopView::setupActions()
+void kisView::setupActions()
 {
   // edit actions
   
@@ -280,6 +288,12 @@ void KImageShopView::setupActions()
   m_tool_brush = new KToggleAction( i18n("&Brush tool"), KISBarIcon("paintbrush"), 0, this,
 			      SLOT( tool_brush() ),actionCollection(), "tool_brush");
   m_tool_brush->setExclusiveGroup( "tools" );
+  m_tool_airbrush = new KToggleAction( i18n("&Airbrush tool"), KISBarIcon("airbrush"), 0, this,
+				       SLOT( tool_airbrush() ),actionCollection(), "tool_airbrush");
+  m_tool_airbrush->setExclusiveGroup( "tools" );
+  m_tool_eraser = new KToggleAction( i18n("&Eraser tool"), KISBarIcon("eraser"), 0, this,
+			      SLOT( tool_eraser() ),actionCollection(), "tool_eraser");
+  m_tool_eraser->setExclusiveGroup( "tools" );
   m_tool_colorpicker = new KToggleAction( i18n("&Color picker"), KISBarIcon("colorpicker"), 0, this,
 			      SLOT( tool_colorpicker() ),actionCollection(), "tool_colorpicker");
   m_tool_colorpicker->setExclusiveGroup( "tools" );
@@ -319,19 +333,19 @@ void KImageShopView::setupActions()
 			       SLOT( preferences() ),actionCollection(), "preferences");
 }
 
-void KImageShopView::slotTabSelected(const QString& name)
+void kisView::slotTabSelected(const QString& name)
 {
   m_pDoc->setCurrentImage(name);
   resizeEvent(0L);
 }
 
-void KImageShopView::slotImageAdded(const QString& name)
+void kisView::slotImageAdded(const QString& name)
 {
   m_pTabBar->addTab(name);
   m_pTabBar->setActiveTab(name);
 }
 
-void KImageShopView::resizeEvent(QResizeEvent*)
+void kisView::resizeEvent(QResizeEvent*)
 {
   // ruler geometry
   m_pHRuler->setGeometry(20, 0, width()-20, 20);
@@ -343,7 +357,7 @@ void KImageShopView::resizeEvent(QResizeEvent*)
   m_pTabRight->setGeometry(32, height()-16, 16, 16);
   m_pTabLast->setGeometry(48, height()-16, 16, 16);
 
-  // KImageShopView heigth/width - ruler heigth/width
+  // kisView heigth/width - ruler heigth/width
   int canH = m_pCanvas->height();
   int canW = m_pCanvas->width();
   int viewH = height() - 20 - 16;
@@ -409,25 +423,25 @@ void KImageShopView::resizeEvent(QResizeEvent*)
     m_pHRuler->setOffset(-xPaintOffset());
 }
 
-void KImageShopView::scrollH(int)
+void kisView::scrollH(int)
 {
   m_pHRuler->setOffset(m_pHorz->value());
   m_pCanvas->repaint();
 }
 
-void KImageShopView::scrollV(int)
+void kisView::scrollV(int)
 {
   m_pVRuler->setOffset(m_pVert->value());
   m_pCanvas->repaint();
 }
 
-void KImageShopView::slotDocUpdated()
+void kisView::slotDocUpdated()
 {
-  //qDebug("KImageShopView::slotDocUpdated");
+  //qDebug("kisView::slotDocUpdated");
   m_pCanvas->repaint();
 }
 
-void KImageShopView::slotDocUpdated(const QRect& rect)
+void kisView::slotDocUpdated(const QRect& rect)
 {
   QRect r = rect;
 
@@ -438,7 +452,7 @@ void KImageShopView::slotDocUpdated(const QRect& rect)
   int xt = xPaintOffset() + r.x() - m_pHorz->value();
   int yt = yPaintOffset() + r.y() - m_pVert->value();
 
-  //qDebug("KImageShopView::slotDocUpdated l: %d; t: %d; r: %d; b: %d"
+  //qDebug("kisView::slotDocUpdated l: %d; t: %d; r: %d; b: %d"
   //	 ,r.left(), r.top(), r.right(), r.bottom());
 
   QPainter p;
@@ -451,7 +465,7 @@ void KImageShopView::slotDocUpdated(const QRect& rect)
   p.end();
 }
 
-void KImageShopView::canvasGotMousePressEvent( QMouseEvent *e )
+void kisView::canvasGotMousePressEvent( QMouseEvent *e )
 {
   QMouseEvent ev( QEvent::MouseButtonPress
 		  , QPoint(e->pos().x() - xPaintOffset() + m_pHorz->value(),
@@ -461,7 +475,7 @@ void KImageShopView::canvasGotMousePressEvent( QMouseEvent *e )
   emit canvasMousePressEvent( &ev );
 }
 
-void KImageShopView::canvasGotMouseMoveEvent ( QMouseEvent *e )
+void kisView::canvasGotMouseMoveEvent ( QMouseEvent *e )
 {
   QMouseEvent ev( QEvent::MouseMove
 		  , QPoint(e->pos().x() - xPaintOffset() + m_pHorz->value(),
@@ -471,7 +485,7 @@ void KImageShopView::canvasGotMouseMoveEvent ( QMouseEvent *e )
   emit canvasMouseMoveEvent( &ev );
 }
 
-void KImageShopView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
+void kisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
 {
   QMouseEvent ev( QEvent::MouseButtonRelease
 		  , QPoint(e->pos().x() - xPaintOffset() + m_pHorz->value(),
@@ -481,12 +495,12 @@ void KImageShopView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
   emit canvasMouseReleaseEvent( &ev );
 }
 
-void KImageShopView::canvasGotPaintEvent( QPaintEvent*e )
+void kisView::canvasGotPaintEvent( QPaintEvent*e )
 {
   QRect ur = e->rect();
   QPainter p;
 
-  //qDebug("KImageShopView::canvasGotPaintEvent l: %d; t: %d; r: %d; b: %d"
+  //qDebug("kisView::canvasGotPaintEvent l: %d; t: %d; r: %d; b: %d"
   //	 , e->rect().left(), e->rect().top(), e->rect().right(), e->rect().bottom());
 
   p.begin( m_pCanvas );
@@ -520,7 +534,7 @@ void KImageShopView::canvasGotPaintEvent( QPaintEvent*e )
   p.end();
 }
 
-void KImageShopView::activateTool(Tool* t)
+void kisView::activateTool(Tool* t)
 {
   if (!t)
     return;
@@ -548,32 +562,42 @@ void KImageShopView::activateTool(Tool* t)
  * tool action slots
  */
 
-void KImageShopView::tool_move()
+void kisView::tool_move()
 {
   activateTool(m_pMoveTool);
 }
 
-void KImageShopView::tool_zoom()
+void kisView::tool_zoom()
 {
   activateTool(m_pZoomTool);
 }
 
-void KImageShopView::tool_brush()
+void kisView::tool_brush()
 {
   activateTool(m_pBrushTool);
 }
 
-void KImageShopView::tool_pen()
+void kisView::tool_airbrush()
+{
+  activateTool(m_pAirBrushTool);
+}
+
+void kisView::tool_eraser()
+{
+  activateTool(m_pEraserTool);
+}
+
+void kisView::tool_pen()
 {
   activateTool(m_pPenTool);
 }
 
-void KImageShopView::tool_colorpicker()
+void kisView::tool_colorpicker()
 {
   activateTool(m_pColorPicker);
 }
 
-void KImageShopView::tool_gradient()
+void kisView::tool_gradient()
 {
 }
 
@@ -581,27 +605,27 @@ void KImageShopView::tool_gradient()
  * edit action slots
  */
 
-void KImageShopView::undo()
+void kisView::undo()
 {
     qDebug("UNDO called");
 }
 
-void KImageShopView::redo()
+void kisView::redo()
 {
     qDebug("REDO called");
 }
 
-void KImageShopView::copy()
+void kisView::copy()
 {
     qDebug("COPY called");
 }
 
-void KImageShopView::cut()
+void kisView::cut()
 {
     qDebug("CUT called");
 }
 
-void KImageShopView::paste()
+void kisView::paste()
 {
     qDebug("PASTE called");
 }
@@ -610,7 +634,7 @@ void KImageShopView::paste()
  * dialog action slots
  */
 
-void KImageShopView::dialog_layer()
+void kisView::dialog_layer()
 {
   if (m_dialog_layer->isChecked())
     m_pLayerDialog->show();
@@ -618,7 +642,7 @@ void KImageShopView::dialog_layer()
     m_pLayerDialog->hide();
 }
 
-void KImageShopView::dialog_color()
+void kisView::dialog_color()
 {
   if (m_dialog_color->isChecked())
     m_pColorDialog->show();
@@ -626,7 +650,7 @@ void KImageShopView::dialog_color()
     m_pColorDialog->hide();
 }
 
-void KImageShopView::dialog_brush()
+void kisView::dialog_brush()
 {
   if (m_dialog_brush->isChecked())
     m_pBrushDialog->show();
@@ -634,7 +658,7 @@ void KImageShopView::dialog_brush()
     m_pBrushDialog->hide();
 }
 
-void KImageShopView::dialog_gradient()
+void kisView::dialog_gradient()
 {
   if (m_dialog_gradient->isChecked())
     m_pGradientDialog->show();
@@ -643,7 +667,7 @@ void KImageShopView::dialog_gradient()
 }
 
 
-void KImageShopView::dialog_gradienteditor()
+void kisView::dialog_gradienteditor()
 {
   if (m_dialog_gradienteditor->isChecked())
     m_pGradientEditorDialog->show();
@@ -655,27 +679,27 @@ void KImageShopView::dialog_gradienteditor()
  * layer action slots
  */
 
-void KImageShopView::layer_rotate180()
+void kisView::layer_rotate180()
 {
   m_pDoc->rotateLayer180(0);
 }
 
-void KImageShopView::layer_rotateleft90()
+void kisView::layer_rotateleft90()
 {
   m_pDoc->rotateLayerLeft90(0);
 }
 
-void KImageShopView::layer_rotateright90()
+void kisView::layer_rotateright90()
 {
   m_pDoc->rotateLayerRight90(0);
 }
 
-void KImageShopView::layer_mirrorX()
+void kisView::layer_mirrorX()
 {
   m_pDoc->mirrorLayerX(0);
 }
 
-void KImageShopView::layer_mirrorY()
+void kisView::layer_mirrorY()
 {
   m_pDoc->mirrorLayerY(0);
 }
@@ -684,17 +708,17 @@ void KImageShopView::layer_mirrorY()
  * image action slots
  */
 
-void KImageShopView::merge_all_layers()
+void kisView::merge_all_layers()
 {
   m_pDoc->mergeAllLayers();
 }
 
-void KImageShopView::merge_visible_layers()
+void kisView::merge_visible_layers()
 {
   m_pDoc->mergeVisibleLayers();
 }
 
-void KImageShopView::merge_linked_layers()
+void kisView::merge_linked_layers()
 {
   m_pDoc->mergeLinkedLayers();
 }
@@ -703,22 +727,22 @@ void KImageShopView::merge_linked_layers()
  * misc action slots
  */
 
-void KImageShopView::preferences()
+void kisView::preferences()
 {
     qDebug("PREFERENCES called");
 }
 
-int KImageShopView::docWidth()
+int kisView::docWidth()
 {
   return m_pDoc->width();
 }
 
-int KImageShopView::docHeight()
+int kisView::docHeight()
 {
   return m_pDoc->height();
 }
 
-int KImageShopView::xPaintOffset()
+int kisView::xPaintOffset()
 {
   // FIXME : make this configurable
   return 0;
@@ -729,7 +753,7 @@ int KImageShopView::xPaintOffset()
   return v;
 }
 
-int KImageShopView::yPaintOffset()
+int kisView::yPaintOffset()
 {
   // FIXME : make this configurable
   return 0;
@@ -740,46 +764,50 @@ int KImageShopView::yPaintOffset()
   return v;
 }
 
-float KImageShopView::zoomFactor()
+float kisView::zoomFactor()
 {
   return 2.0; // FIXME
 }
 
-void KImageShopView::slotSetBrush(const Brush* b)
+void kisView::slotSetBrush(const Brush* b)
 {
   m_pBrush = b;
   if (m_pBrushTool)
     m_pBrushTool->setBrush(b);
   if (m_pPenTool)
     m_pPenTool->setBrush(b);
+  if (m_pAirBrushTool)
+    m_pAirBrushTool->setBrush(b);
+  if (m_pEraserTool)
+    m_pEraserTool->setBrush(b);
 }
 
-void KImageShopView::slotSetFGColor(const KColor& c)
+void kisView::slotSetFGColor(const KColor& c)
 {
   m_fg = c;
 }
 
-void KImageShopView::slotSetBGColor(const KColor& c)
+void kisView::slotSetBGColor(const KColor& c)
 {
   m_bg = c;
 }
 
-void KImageShopView::slotScrollToFirstTab()
+void kisView::slotScrollToFirstTab()
 {
   m_pTabBar->scrollFirst();
 }
 
-void KImageShopView::slotScrollToLeftTab()
+void kisView::slotScrollToLeftTab()
 {
   m_pTabBar->scrollLeft();
 }
 
-void KImageShopView::slotScrollToRightTab()
+void kisView::slotScrollToRightTab()
 {
   m_pTabBar->scrollRight();
 }
 
-void KImageShopView::slotScrollToLastTab()
+void kisView::slotScrollToLastTab()
 {
   m_pTabBar->scrollLast();
 }

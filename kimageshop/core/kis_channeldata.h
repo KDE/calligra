@@ -55,8 +55,8 @@ class ChannelData
   void moveBy(int dx, int dy);
   void moveTo(int x, int y);
   
-  void setPixel(int x, int y, uint val);
-  uint getPixel(int x, int y);
+  void  setPixel(int x, int y, uint val);
+  uint  getPixel(int x, int y);
 	
   QRect tileRect(int tileNo);
 

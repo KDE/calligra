@@ -44,7 +44,7 @@
 
 #define KIS_DEBUG(AREA, CMD)
 
-KImageShopDoc::KImageShopDoc( KoDocument* parent, const char* name )
+kisDoc::kisDoc( KoDocument* parent, const char* name )
   : KoDocument( parent, name )
   , m_commands()
 {
@@ -56,7 +56,7 @@ KImageShopDoc::KImageShopDoc( KoDocument* parent, const char* name )
   m_Images.setAutoDelete(false);  
 }
 
-bool KImageShopDoc::initDoc()
+bool kisDoc::initDoc()
 {
   QString name;
   name.sprintf("image %d", m_Images.count()+1);
@@ -65,7 +65,7 @@ bool KImageShopDoc::initDoc()
   return true;
 }
 
-void KImageShopDoc::setCurrentImage(KImageShopImage *img)
+void kisDoc::setCurrentImage(kisImage *img)
 {
   if (m_pCurrent)
     {
@@ -89,10 +89,10 @@ void KImageShopDoc::setCurrentImage(KImageShopImage *img)
   emit docUpdated();
 }
 
-void KImageShopDoc::setCurrentImage(const QString& _name)
+void kisDoc::setCurrentImage(const QString& _name)
 {
-  qDebug("KImageShopDoc::setCurrentImage: %s", _name.latin1());
-  KImageShopImage *img = m_Images.first();
+  qDebug("kisDoc::setCurrentImage: %s", _name.latin1());
+  kisImage *img = m_Images.first();
   
   while (img)
     {
@@ -105,11 +105,11 @@ void KImageShopDoc::setCurrentImage(const QString& _name)
     }
 }
 
-QStringList KImageShopDoc::images()
+QStringList kisDoc::images()
 {
   QStringList lst;
   
-  KImageShopImage *img = m_Images.first();
+  kisImage *img = m_Images.first();
   
   while (img)
     {
@@ -119,16 +119,16 @@ QStringList KImageShopDoc::images()
   return lst;  
 }
 
-QString KImageShopDoc::currentImage()
+QString kisDoc::currentImage()
 {
   if (m_pCurrent)
     return m_pCurrent->name();
   return QString("");
 }
 
-KImageShopDoc::~KImageShopDoc()
+kisDoc::~kisDoc()
 {
-  KImageShopImage *img = m_Images.first();
+  kisImage *img = m_Images.first();
   
   while (img)
     {
@@ -137,52 +137,52 @@ KImageShopDoc::~KImageShopDoc()
     }
 }
 
-int KImageShopDoc::height()
+int kisDoc::height()
 {
   if (m_pCurrent)
     return m_pCurrent->height();
   return 0;
 }
 
-int KImageShopDoc::width()
+int kisDoc::width()
 {
   if (m_pCurrent)
     return m_pCurrent->width();
   return 0;
 }
 
-QRect KImageShopDoc::imageExtents()
+QRect kisDoc::imageExtents()
 {
   if (m_pCurrent)
     return m_pCurrent->imageExtents();
   return QRect(0, 0, 0, 0);
 }
 
-QSize KImageShopDoc::size()
+QSize kisDoc::size()
 {
   if (m_pCurrent)
     return m_pCurrent->size();
   return QSize(0, 0);
 }
 
-KImageShopImage* KImageShopDoc::newImage(const QString& _name, int w, int h, int /*colorModel*/, int /*backgroundMode*/)
+kisImage* kisDoc::newImage(const QString& _name, int w, int h, int /*colorModel*/, int /*backgroundMode*/)
 {
-  KImageShopImage *img = new KImageShopImage( _name, w, h );
+  kisImage *img = new kisImage( _name, w, h );
   m_Images.append(img);
   setCurrentImage(img);
   emit imageAdded(img->name());
   return img;
 }
 
-void KImageShopDoc::removeImage( KImageShopImage *img )
+void kisDoc::removeImage( kisImage *img )
 {
   m_Images.remove(img);
   delete img;
 }
 
-void KImageShopDoc::slotRemoveImage( const QString& _name )
+void kisDoc::slotRemoveImage( const QString& _name )
 {
-  KImageShopImage *img = m_Images.first();
+  kisImage *img = m_Images.first();
   
   while (img)
     {
@@ -195,17 +195,17 @@ void KImageShopDoc::slotRemoveImage( const QString& _name )
     }
 }
 
-void KImageShopDoc::saveImage( const QString& /*file*/, KImageShopImage */*img*/ )
+void kisDoc::saveImage( const QString& /*file*/, kisImage */*img*/ )
 {
   
 }
 
-void KImageShopDoc::loadImage( const QString& /*file*/ )
+void kisDoc::loadImage( const QString& /*file*/ )
 {
   
 }
 
-void KImageShopDoc::slotNewImage()
+void kisDoc::slotNewImage()
 {
   if (!m_pNewDialog)
     m_pNewDialog = new NewDialog();
@@ -225,19 +225,19 @@ void KImageShopDoc::slotNewImage()
   newImage(name, w, h, bg, cm);
 }
 
-void KImageShopDoc::slotLoadImage()
+void kisDoc::slotLoadImage()
 {
   // FIXME: KFileDialog -> loadImage( file );
 }
 
-void KImageShopDoc::slotSaveCurrentImage()
+void kisDoc::slotSaveCurrentImage()
 {
   // FIXME: KFileDialog -> saveImage(file, m_pCurrent);
 }
 
-bool KImageShopDoc::loadFromURL( const QString& _url )
+bool kisDoc::loadFromURL( const QString& _url )
 {
-  cout << "KImageShopDoc::loadFromURL" << endl;
+  cout << "kisDoc::loadFromURL" << endl;
   
   QString mimetype = KMimeType::findByURL( _url )->mimeType();
   
@@ -254,20 +254,20 @@ bool KImageShopDoc::loadFromURL( const QString& _url )
   return KoDocument::loadFromURL( _url );
 }
 
-QCString KImageShopDoc::mimeType() const
+QCString kisDoc::mimeType() const
 {
     return "application/x-kimageshop";
 }
 
-View* KImageShopDoc::createView( QWidget* parent, const char* name )
+View* kisDoc::createView( QWidget* parent, const char* name )
 {
-    KImageShopView* view = new KImageShopView( this, parent, name );
+    kisView* view = new kisView( this, parent, name );
     addView( view );
 
     return view;
 }
 
-Shell* KImageShopDoc::createShell()
+Shell* kisDoc::createShell()
 {
     Shell* shell = new KImageShopShell;
     shell->setRootPart( this );
@@ -275,196 +275,196 @@ Shell* KImageShopDoc::createShell()
 
     return shell;}
 
-void KImageShopDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/)
+void kisDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/)
 {
   if (m_pCurrent)
     m_pCurrent->paintPixmap( &painter, rect );
 }
 
-QString KImageShopDoc::configFile() const
+QString kisDoc::configFile() const
 {
   return readConfigFile( locate("kis", "kimageshop.rc", KImageShopFactory::global()) );
 }
 
-void KImageShopDoc::slotUndoRedoChanged( QString /*_undo*/, QString /*_redo*/ )
+void kisDoc::slotUndoRedoChanged( QString /*_undo*/, QString /*_redo*/ )
 {
   //####### FIXME
 }
 
-void KImageShopDoc::slotUndoRedoChanged( QStringList /*_undo*/, QStringList /*_redo*/ )
+void kisDoc::slotUndoRedoChanged( QStringList /*_undo*/, QStringList /*_redo*/ )
 {
   //####### FIXME
 }
 
-void KImageShopDoc::paintPixmap(QPainter *p, QRect area)
+void kisDoc::paintPixmap(QPainter *p, QRect area)
 {
   if (m_pCurrent)
     m_pCurrent->paintPixmap(p, area);
 }
 
-void KImageShopDoc::addRGBLayer(QString file)
+void kisDoc::addRGBLayer(QString file)
 {
   if (m_pCurrent)
     m_pCurrent->addRGBLayer( file );
 }
 
-void KImageShopDoc::addRGBLayer(const QRect& rect, const QColor& c, const QString& name)
+void kisDoc::addRGBLayer(const QRect& rect, const QColor& c, const QString& name)
 {
   if (m_pCurrent)
     m_pCurrent->addRGBLayer( rect, c, name );
 }
 
-void KImageShopDoc::removeLayer( unsigned int _layer )
+void kisDoc::removeLayer( unsigned int _layer )
 {
   if (m_pCurrent)
     m_pCurrent->removeLayer( _layer );
 }
 
-void KImageShopDoc::compositeImage(QRect r)
+void kisDoc::compositeImage(QRect r)
 {
   if (m_pCurrent)
     m_pCurrent->compositeImage( r );
 }
 
-Layer* KImageShopDoc::layerPtr( Layer *_layer )
+Layer* kisDoc::layerPtr( Layer *_layer )
 {
   if (m_pCurrent)
     return m_pCurrent->layerPtr( _layer );
   return 0;
 }
 
-Layer* KImageShopDoc::getCurrentLayer()
+Layer* kisDoc::getCurrentLayer()
 {
   if (m_pCurrent)
     return m_pCurrent->getCurrentLayer();
   return 0;
 }
 
-int KImageShopDoc::getCurrentLayerIndex()
+int kisDoc::getCurrentLayerIndex()
 {
   if (m_pCurrent)
     return m_pCurrent->getCurrentLayerIndex();
   return 0;
 }
 
-void KImageShopDoc::setCurrentLayer( int _layer )
+void kisDoc::setCurrentLayer( int _layer )
 {
   if (m_pCurrent)
     m_pCurrent->setCurrentLayer( _layer );
 }
 
-void KImageShopDoc::setLayerOpacity( uchar _opacity, Layer *_layer )
+void kisDoc::setLayerOpacity( uchar _opacity, Layer *_layer )
 {
   if (m_pCurrent)
     m_pCurrent->setLayerOpacity( _opacity, _layer );
 }
 
-void KImageShopDoc::moveLayer( int _dx, int _dy, Layer *_lay )
+void kisDoc::moveLayer( int _dx, int _dy, Layer *_lay )
 {
   if (m_pCurrent)
     m_pCurrent->moveLayer( _dx, _dy, _lay );
 }
 
-void KImageShopDoc::moveLayerTo( int _x, int _y, Layer *_lay )
+void kisDoc::moveLayerTo( int _x, int _y, Layer *_lay )
 {
   if (m_pCurrent)
     m_pCurrent->moveLayerTo( _x, _y, _lay );
 }
 
-void KImageShopDoc::mergeAllLayers()
+void kisDoc::mergeAllLayers()
 {
   if (m_pCurrent)
     m_pCurrent->mergeAllLayers();
 }
 
-void KImageShopDoc::mergeVisibleLayers()
+void kisDoc::mergeVisibleLayers()
 {
   if (m_pCurrent)
     m_pCurrent->mergeVisibleLayers();
 }
 
-void KImageShopDoc::mergeLinkedLayers()
+void kisDoc::mergeLinkedLayers()
 {
   if (m_pCurrent)
     m_pCurrent->mergeLinkedLayers();
 }
 
-void KImageShopDoc::mergeLayers(QList<Layer> list)
+void kisDoc::mergeLayers(QList<Layer> list)
 {
   if (m_pCurrent)
     m_pCurrent->mergeLayers( list );
 }
 
-void KImageShopDoc::upperLayer( unsigned int _layer )
+void kisDoc::upperLayer( unsigned int _layer )
 {
   if (m_pCurrent)
     m_pCurrent->upperLayer( _layer );
 }
 
-void KImageShopDoc::lowerLayer( unsigned int _layer )
+void kisDoc::lowerLayer( unsigned int _layer )
 {
   if (m_pCurrent)
     m_pCurrent->lowerLayer( _layer );
 }
 
-void KImageShopDoc::setFrontLayer( unsigned int _layer )
+void kisDoc::setFrontLayer( unsigned int _layer )
 {
   if (m_pCurrent)
     m_pCurrent->setFrontLayer( _layer );
 }
 
-void KImageShopDoc::setBackgroundLayer( unsigned int _layer )
+void kisDoc::setBackgroundLayer( unsigned int _layer )
 {
   if (m_pCurrent)
     m_pCurrent->setBackgroundLayer( _layer );
 }
 
-void KImageShopDoc::rotateLayer180(Layer *_layer)
+void kisDoc::rotateLayer180(Layer *_layer)
 {
   if (m_pCurrent)
     m_pCurrent->rotateLayer180( _layer );
 }
 
-void KImageShopDoc::rotateLayerLeft90(Layer *_layer)
+void kisDoc::rotateLayerLeft90(Layer *_layer)
 {
   if (m_pCurrent)
     m_pCurrent->rotateLayerLeft90( _layer );
 }
 
-void KImageShopDoc::rotateLayerRight90(Layer *_layer)
+void kisDoc::rotateLayerRight90(Layer *_layer)
 {
   if (m_pCurrent)
     m_pCurrent->rotateLayerRight90( _layer );
 }
 
-void KImageShopDoc::mirrorLayerX(Layer *_layer)
+void kisDoc::mirrorLayerX(Layer *_layer)
 {
   if (m_pCurrent)
     m_pCurrent->mirrorLayerX( _layer );
 }
 
-void KImageShopDoc::mirrorLayerY(Layer *_layer)
+void kisDoc::mirrorLayerY(Layer *_layer)
 {
   if (m_pCurrent)
     m_pCurrent->mirrorLayerY( _layer );
 }
 
-void KImageShopDoc::slotImageUpdated()
+void kisDoc::slotImageUpdated()
 {
   emit docUpdated();
 }
 
-void KImageShopDoc::slotImageUpdated( const QRect& rect )
+void kisDoc::slotImageUpdated( const QRect& rect )
 {
   emit docUpdated(rect);
 }
 
-void KImageShopDoc::slotLayersUpdated()
+void kisDoc::slotLayersUpdated()
 {
   emit layersUpdated();
 }
 
-LayerList KImageShopDoc::layerList()
+LayerList kisDoc::layerList()
 {
   if (m_pCurrent)
     return m_pCurrent->layerList();

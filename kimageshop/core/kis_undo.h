@@ -23,13 +23,12 @@
 
 #include <koUndo.h>
 
-class KImageShopDoc;
-
+class kisDoc;
 class KImageShopCommand : public KoCommand
 {
 public:
 
-  KImageShopCommand( const QString& name, KImageShopDoc* doc );
+  KImageShopCommand( const QString& name, kisDoc* doc );
   virtual ~KImageShopCommand();
 
   virtual void execute() = 0;
@@ -37,7 +36,7 @@ public:
 
 protected:
 
-  KImageShopDoc *m_pDoc;
+  kisDoc *m_pDoc;
 };
 
 #endif

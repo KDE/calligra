@@ -11,12 +11,12 @@ class GradientDialog : public KFloatingDialog
 
 public:
 
-	GradientDialog( KImageShopDoc *_doc, QWidget *_parent = 0 , const char *_name = 0 );
+	GradientDialog( kisDoc *_doc, QWidget *_parent = 0 , const char *_name = 0 );
 	~GradientDialog();
 
 private:
 
-  KImageShopDoc *m_pDoc;
+  kisDoc *m_pDoc;
 };
 
 #endif

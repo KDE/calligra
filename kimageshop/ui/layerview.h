@@ -26,7 +26,7 @@
 #include <qtableview.h>
 #include <qrect.h>
 
-class KImageShopDoc;
+class kisDoc;
 class QPopupMenu;
 class QLineEdit;
 class KIntSpinBox;
@@ -42,7 +42,7 @@ public:
   enum action { VISIBLE, SELECTION, LINKING, PROPERTIES, ADDLAYER, REMOVELAYER, ADDMASK, REMOVEMASK, UPPERLAYER, LOWERLAYER, FRONTLAYER, BACKLAYER };
 
   LayerView(QWidget* _parent = 0, const char* _name = 0 );
-  LayerView(KImageShopDoc* doc, QWidget* _parent = 0, const char* name = 0 );
+  LayerView(kisDoc* doc, QWidget* _parent = 0, const char* name = 0 );
 
   void updateTable();
   void updateAllCells();
@@ -76,9 +76,9 @@ protected:
 
 private:
 
-  void init(KImageShopDoc* doc);
+  void init(kisDoc* doc);
 
-  KImageShopDoc* m_doc;
+  kisDoc* m_doc;
   int m_items, m_selected;
   QPopupMenu* m_contextmenu;
 };

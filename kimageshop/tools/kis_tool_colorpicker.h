@@ -30,7 +30,7 @@ class ColorPicker : public Tool
 {
 
  public:
-  ColorPicker(KImageShopDoc *doc, KImageShopView *view);
+  ColorPicker(kisDoc *doc, kisView *view);
   ~ColorPicker();
   
   QString toolName() { return QString("Color picker"); }

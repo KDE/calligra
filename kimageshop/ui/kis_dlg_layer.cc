@@ -36,7 +36,7 @@ QPixmap *LayerDialog::m_eyeIcon, *LayerDialog::m_linkIcon;
 QRect LayerDialog::m_eyeRect, LayerDialog::m_linkRect;
 QRect LayerDialog::m_previewRect;
 
-LayerTab::LayerTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
+LayerTab::LayerTab( kisDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
   : QWidget( _parent, _name, _flags )
 {
   QVBoxLayout *layout = new QVBoxLayout( this );
@@ -81,7 +81,7 @@ LayerTab::LayerTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , W
 
 }
 
-ChannelTab::ChannelTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
+ChannelTab::ChannelTab( kisDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
   : QWidget( _parent, _name, _flags )
 {
   QVBoxLayout *layout = new QVBoxLayout( this );
@@ -110,7 +110,7 @@ ChannelTab::ChannelTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name
   connect( pbDown, SIGNAL( clicked() ), channelview, SLOT( slotLowerChannel() ) );
 }
 
-LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent )
+LayerDialog::LayerDialog( kisDoc *_doc, QWidget *_parent )
   : KFloatingTabDialog( _parent, "layerdialog" )
 {
   setCaption( i18n( "Layers&Channels" ) );

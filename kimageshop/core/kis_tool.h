@@ -24,15 +24,15 @@
 #include <qobject.h>
 #include <qcursor.h>
 
-class KImageShopDoc;
-class KImageShopView;
+class kisDoc;
+class kisView;
 
 class Tool : public QObject
 {
   Q_OBJECT;
 
  public:
-  Tool(KImageShopDoc *doc, KImageShopView *view = 0L);
+  Tool(kisDoc *doc, kisView *view = 0L);
   ~Tool();
 
   QString toolName();
@@ -47,8 +47,8 @@ class Tool : public QObject
   virtual void mouseRelease(QMouseEvent*);
     
  protected:
-  KImageShopDoc    *m_pDoc;
-  KImageShopView   *m_pView;
+  kisDoc    *m_pDoc;
+  kisView   *m_pView;
   QCursor           m_Cursor;
 };
 

@@ -31,7 +31,7 @@ class MoveCommand : public KImageShopCommand
 {
 public:
 
-  MoveCommand( KImageShopDoc *_doc, int _layer, QPoint _oldpos, QPoint _newpos );
+  MoveCommand( kisDoc *_doc, int _layer, QPoint _oldpos, QPoint _newpos );
 
   virtual void execute();
   virtual void unexecute();
@@ -49,7 +49,7 @@ class MoveTool : public Tool
 {
 public:
 
-  MoveTool( KImageShopDoc *doc );
+  MoveTool( kisDoc *doc );
   ~MoveTool();
 
   virtual QString toolName() { return QString( "MoveTool" ); }

@@ -23,8 +23,7 @@
 
 #include <kfloatingtabdialog.h>
 
-class KImageShopDoc;
-//class LayerDialog;
+class kisDoc;
 
 #define CELLWIDTH   200
 #define CELLHEIGHT  40
@@ -36,7 +35,7 @@ class LayerTab : public QWidget
 
 public:
 
-  LayerTab( KImageShopDoc* doc, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
+  LayerTab( kisDoc* doc, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
 };
 
 class ChannelTab : public QWidget
@@ -45,7 +44,7 @@ class ChannelTab : public QWidget
 
 public:
 
-  ChannelTab( KImageShopDoc* doc, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
+  ChannelTab( kisDoc* doc, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
 };
 
 class LayerDialog : public KFloatingTabDialog
@@ -54,7 +53,7 @@ class LayerDialog : public KFloatingTabDialog
 
 public:
 
-  LayerDialog( KImageShopDoc* doc, QWidget* _parent = 0 );
+  LayerDialog( kisDoc* doc, QWidget* _parent = 0 );
 
   static QPixmap *m_eyeIcon, *m_linkIcon;
   static QRect m_eyeRect, m_linkRect, m_previewRect;

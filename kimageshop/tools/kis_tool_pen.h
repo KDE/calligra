@@ -30,7 +30,7 @@ class Brush;
 class PenTool : public Tool
 {
  public:
-  PenTool(KImageShopDoc *doc, KImageShopView *view, const Brush *_brush);
+  PenTool(kisDoc *doc, kisView *view, const Brush *_brush);
   ~PenTool();
   
   QString toolName() { return QString("BrushTool"); }

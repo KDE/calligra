@@ -1,5 +1,5 @@
 /*
- *  kis_tool_brush.cc - part of KImageShop
+ *  kis_tool_airbrush.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *
@@ -18,7 +18,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "kis_tool_brush.h"
+#include "kis_tool_airbrush.h"
 #include "kis_brush.h"
 #include "kis_doc.h"
 #include "kis_view.h"
@@ -26,7 +26,7 @@
 #include "kis_cursor.h"
 #include "kis_util.h"
 
-BrushTool::BrushTool(kisDoc *doc, kisView *view, const Brush *_brush)
+AirBrushTool::AirBrushTool(kisDoc *doc, kisView *view, const Brush *_brush)
   : Tool(doc, view)
 {
   m_dragging = false;
@@ -35,14 +35,14 @@ BrushTool::BrushTool(kisDoc *doc, kisView *view, const Brush *_brush)
   m_dragdist = 0;
 }
 
-BrushTool::~BrushTool() {}
+AirBrushTool::~AirBrushTool() {}
 
-void BrushTool::setBrush(const Brush *_brush)
+void AirBrushTool::setBrush(const Brush *_brush)
 {
   m_pBrush = _brush;
 }
 
-void BrushTool::mousePress(QMouseEvent *e)
+void AirBrushTool::mousePress(QMouseEvent *e)
 {
   if (e->button() != QMouseEvent::LeftButton)
     return;
@@ -60,7 +60,7 @@ void BrushTool::mousePress(QMouseEvent *e)
   m_pDoc->compositeImage(updateRect);
 }
 
-bool BrushTool::paint(QPoint pos)
+bool AirBrushTool::paint(QPoint pos)
 {
   if (!m_pBrush)
     return false;
@@ -86,8 +86,7 @@ bool BrushTool::paint(QPoint pos)
   uint srcPix, dstPix;
   uchar *sl, *ptr;
   uchar bv, invbv;
-  uchar r, g, b;
-  uchar srcA, dstA;
+  uchar r, g, b, srcA, dstA;
   int v;
 
   int red = m_pView->fgColor().R();
@@ -134,7 +133,7 @@ bool BrushTool::paint(QPoint pos)
   return true;
 }
 
-void BrushTool::mouseMove(QMouseEvent *e)
+void AirBrushTool::mouseMove(QMouseEvent *e)
 {
   int spacing = m_pBrush->spacing();
 
@@ -192,7 +191,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
     }
 }
 
-void BrushTool::mouseRelease(QMouseEvent *e)
+void AirBrushTool::mouseRelease(QMouseEvent *e)
 {
   if (e->button() != LeftButton)
     return;

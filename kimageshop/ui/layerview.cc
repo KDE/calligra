@@ -47,13 +47,13 @@ LayerView::LayerView( QWidget* _parent, const char* _name )
   init( 0 );
 }
 
-LayerView::LayerView( KImageShopDoc* doc, QWidget* _parent, const char* _name )
+LayerView::LayerView( kisDoc* doc, QWidget* _parent, const char* _name )
   : QTableView( _parent, _name )
 {
   init( doc );
 }
 
-void LayerView::init( KImageShopDoc* doc )
+void LayerView::init( kisDoc* doc )
 {
   setTableFlags( Tbl_autoHScrollBar | Tbl_autoVScrollBar );
 

@@ -1,5 +1,5 @@
 /*
- *  kis_tool_brush.cc - part of KImageShop
+ *  kis_tool_eraser.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *
@@ -18,7 +18,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "kis_tool_brush.h"
+#include "kis_tool_eraser.h"
 #include "kis_brush.h"
 #include "kis_doc.h"
 #include "kis_view.h"
@@ -26,7 +26,7 @@
 #include "kis_cursor.h"
 #include "kis_util.h"
 
-BrushTool::BrushTool(kisDoc *doc, kisView *view, const Brush *_brush)
+EraserTool::EraserTool(kisDoc *doc, kisView *view, const Brush *_brush)
   : Tool(doc, view)
 {
   m_dragging = false;
@@ -35,14 +35,14 @@ BrushTool::BrushTool(kisDoc *doc, kisView *view, const Brush *_brush)
   m_dragdist = 0;
 }
 
-BrushTool::~BrushTool() {}
+EraserTool::~EraserTool() {}
 
-void BrushTool::setBrush(const Brush *_brush)
+void EraserTool::setBrush(const Brush *_brush)
 {
   m_pBrush = _brush;
 }
 
-void BrushTool::mousePress(QMouseEvent *e)
+void EraserTool::mousePress(QMouseEvent *e)
 {
   if (e->button() != QMouseEvent::LeftButton)
     return;
@@ -60,7 +60,7 @@ void BrushTool::mousePress(QMouseEvent *e)
   m_pDoc->compositeImage(updateRect);
 }
 
-bool BrushTool::paint(QPoint pos)
+bool EraserTool::paint(QPoint pos)
 {
   if (!m_pBrush)
     return false;
@@ -83,25 +83,49 @@ bool BrushTool::paint(QPoint pos)
 
   Layer *lay = m_pDoc->getCurrentLayer();
  
-  uint srcPix, dstPix;
-  uchar *sl, *ptr;
+  uchar srcPix, dstPix;
+  uchar *sl;
   uchar bv, invbv;
-  uchar r, g, b;
-  uchar srcA, dstA;
-  int v;
 
-  int red = m_pView->fgColor().R();
-  int green = m_pView->fgColor().G();
-  int blue = m_pView->fgColor().B();
+  if (lay->hasAlphaChannel())
+    {
+      for (int y = sy; y <= ey; y++)
+	{
+	  sl = m_pBrush->scanline(y);
+
+	  for (int x = sx; x <= ex; x++)
+	    {
+	      srcPix = (uchar) lay->getAlpha(startx + x, starty + y);
+	      
+	      bv = *(sl + x);
+	      if (bv == 0) continue;
+	      invbv = 255 - bv;
+	      
+	      int v = srcPix - bv;
+	      if (v < 0 ) v = 0;
+	      dstPix = (uchar) v;
+
+	      lay->setAlpha(startx + x, starty + y, (uint)dstPix);
+	    }
+	}
+      return true;
+    }
+  // no alpha channel -> erase to background color
+  uchar *ptr;
+  uchar r, g, b;
+
+  int red = m_pView->bgColor().R();
+  int green = m_pView->bgColor().G();
+  int blue = m_pView->bgColor().B();
 
   for (int y = sy; y <= ey; y++)
     {
       sl = m_pBrush->scanline(y);
-
+      
       for (int x = sx; x <= ex; x++)
 	{
 	  srcPix = lay->getPixel(startx + x, starty + y);
-
+	  
 	  bv = *(sl + x);
 	  if (bv == 0) continue;
 
@@ -111,30 +135,20 @@ bool BrushTool::paint(QPoint pos)
 	  b = *ptr++;
 	  g = *ptr++;
 	  r = *ptr++;
-
+	  
 	  ptr = (uchar*)&dstPix;
 	  *ptr++ = ((blue * bv) + (b * invbv))/255;
 	  *ptr++ = ((green * bv) + (g * invbv))/255;
 	  *ptr++ = ((red * bv) + (r * invbv))/255;
-
+	  
 	  lay->setPixel(startx + x, starty + y, dstPix);
-
-	  if (lay->hasAlphaChannel())
-	    {
-	      srcA = (uchar) lay->getAlpha(startx + x, starty + y);
-	      v = srcA + bv;
-	      if (v < 0 ) v = 0;
-	      if (v > 255 ) v = 255;
-	      dstA = (uchar) v;
-
-	      lay->setAlpha(startx + x, starty + y, (uint)dstA);
-	    }
 	}
     }
+    
   return true;
 }
 
-void BrushTool::mouseMove(QMouseEvent *e)
+void EraserTool::mouseMove(QMouseEvent *e)
 {
   int spacing = m_pBrush->spacing();
 
@@ -192,7 +206,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
     }
 }
 
-void BrushTool::mouseRelease(QMouseEvent *e)
+void EraserTool::mouseRelease(QMouseEvent *e)
 {
   if (e->button() != LeftButton)
     return;

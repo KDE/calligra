@@ -1,7 +1,7 @@
 /*
- *  zoomtool.h - part of KImageShop
+ *  kis_tool_airbrush.h - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
+ *  Copyright (c) 1999 Matthias Elter
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,23 +18,36 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __zoomtool_h__
-#define __zoomtool_h__
+#ifndef __airbrushtool_h__
+#define __airbrushtool_h__
 
 #include <qpoint.h>
 
 #include "kis_tool.h"
 
-class ZoomTool : public Tool
+class Brush;
+
+class AirBrushTool : public Tool
 {
  public:
-  ZoomTool(kisView *view);
-  ~ZoomTool();
-
-  virtual QString toolName() { return QString("ZoomTool"); }
-  virtual void mousePress(QMouseEvent *e);
-  virtual void mouseMove(QMouseEvent *e);
-  virtual void mouseRelease(QMouseEvent *e);
+  AirBrushTool(kisDoc *doc, kisView *view, const Brush *_brush);
+  ~AirBrushTool();
+  
+  QString toolName() { return QString("AirBrushTool"); }
+  
+  void setBrush(const Brush *_brush);
+  bool paint(QPoint pos);
+  
+ public slots:
+  virtual void mousePress(QMouseEvent*); 
+  virtual void mouseMove(QMouseEvent*);
+  virtual void mouseRelease(QMouseEvent*);
+  
+ protected:
+  QPoint 	m_dragStart;
+  bool   	m_dragging;
+  const Brush  	*m_pBrush;
+  float         m_dragdist;
 };
 
-#endif //__zoomtool_h__
+#endif //__airbrushtool_h__
