@@ -551,7 +551,8 @@ e.appendChild( brush );
 }*/
 }
 
-void OoDrawImport::createStyleMap( QDomDocument &docstyles )
+void
+OoDrawImport::createStyleMap( QDomDocument &docstyles )
 {
 	QDomElement styles = docstyles.documentElement();
 	if( styles.isNull() )
@@ -604,7 +605,8 @@ OoDrawImport::insertStyles( const QDomElement& styles )
 	}
 }
 
-void OoDrawImport::fillStyleStack( const QDomElement& object )
+void
+OoDrawImport::fillStyleStack( const QDomElement& object )
 {
     // find all styles associated with an object and push them on the stack
     if( object.hasAttribute( "presentation:style-name" ) )
@@ -620,7 +622,8 @@ void OoDrawImport::fillStyleStack( const QDomElement& object )
         addStyles( m_styles[object.attribute( "text:style-name" )] );
 }
 
-void OoDrawImport::addStyles( const QDomElement* style )
+void
+OoDrawImport::addStyles( const QDomElement* style )
 {
     // this function is necessary as parent styles can have parents themself
     if( style->hasAttribute( "style:parent-style-name" ) )
@@ -629,11 +632,30 @@ void OoDrawImport::addStyles( const QDomElement* style )
     m_styleStack.push( *style );
 }
 
-void OoDrawImport::storeObjectStyles( const QDomElement& object )
+void
+OoDrawImport::storeObjectStyles( const QDomElement& object )
 {
     //m_styleStack.clearPageMark(); // remove styles of previous object
     fillStyleStack( object );
     //m_styleStack.setObjectMark();
+}
+
+KoRect
+OoDrawImport::parseViewBox( const QDomElement& object )
+{
+	KoRect rect;
+	if( !object.attribute( "svg:viewBox" ).isEmpty() )
+	{
+		// allow for viewbox def with ',' or whitespace
+		QString viewbox( object.attribute( "svg:viewBox" ) );
+		QStringList points = QStringList::split( ' ', viewbox.replace( QRegExp(","), " ").simplifyWhiteSpace() );
+
+		rect.setX( points[0].toFloat() );
+		rect.setY( points[1].toFloat() );
+		rect.setWidth( points[2].toFloat() );
+		rect.setHeight( points[3].toFloat() );
+	}
+	return rect;
 }
 
 void
@@ -644,19 +666,10 @@ OoDrawImport::appendPoints(VComposite &path, const QDomElement& object)
 	double w = KoUnit::parseValue( object.attribute( "svg:width" ) );
 	double h = KoUnit::parseValue( object.attribute( "svg:height" ) );
 
-	KoRect rect;
-	if( !object.attribute( "svg:viewBox" ).isEmpty() )
-	{
-		// allow for viewbox def with ',' or whitespace
-		QString viewbox( object.attribute( "svg:viewBox" ) );
-		QStringList points = QStringList::split( ' ', viewbox.replace( QRegExp(","), " ").simplifyWhiteSpace() );
+	KoRect rect = parseViewBox( object );
+	rect.setX( rect.x() + x );
+	rect.setY( rect.y() + y );
 
-		rect.setX( x + points[0].toFloat() );
-		rect.setY( y + points[1].toFloat() );
-		rect.setWidth( points[2].toFloat() );
-		rect.setHeight( points[3].toFloat() );
-		kdDebug() << rect << endl;
-	}
 	QStringList ptList = QStringList::split( ' ', object.attribute( "draw:points" ) );
 
 	QString pt_x, pt_y;

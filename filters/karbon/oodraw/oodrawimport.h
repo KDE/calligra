@@ -57,6 +57,7 @@ private:
 	void parseGroup( VGroup *parent, const QDomElement& object );
 	void parseColor( VColor &color, const QString &s );
 	double ymirror( double y );
+	KoRect parseViewBox( const QDomElement& object );
 
 	KoFilter::ConversionStatus openFile();
 
