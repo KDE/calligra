@@ -2261,27 +2261,80 @@ void KSpreadCanvas::doAutoScroll()
     }
 
     bool select = false;
-
     QPoint pos( mapFromGlobal( QCursor::pos() ) );
+
+    //The switch defines progressive scrolling. The farer you out, the more steps you scroll
     if ( pos.y() < 0 )
     {
-        vertScrollBar()->setValue( vertScrollBar()->value() - 20 );
+        int step;
+        switch( - pos.y() / 20 )
+        {
+            case 0: step = 5;
+                    break;
+            case 1: step = 20;
+                    break;
+            case 2: step = height();
+                    break;
+            case 3: step = height();
+                    break;
+            default: step = height() * 5;
+        }
+        vertScrollBar()->setValue( vertScrollBar()->value() - step );
         select = true;
     }
     else if ( pos.y() > height() )
     {
-        vertScrollBar()->setValue( vertScrollBar()->value() + 20 );
+        int step;
+        switch( ( pos.y() - height() ) / 20 )
+        {
+            case 0: step = 5;
+                    break;
+            case 1: step = 20;
+                    break;
+            case 2: step = height();
+                    break;
+            case 3: step = height();
+                    break;
+            default: step = height() * 5;
+        }
+        vertScrollBar()->setValue( vertScrollBar()->value() + step );
         select = true;
     }
 
     if ( pos.x() < 0 )
     {
-        horzScrollBar()->setValue( horzScrollBar()->value() - 20 );
+        int step;
+        switch( - pos.x() / 20 )
+        {
+            case 0: step = 5;
+                    break;
+            case 1: step = 20;
+                    break;
+            case 2: step = width();
+                    break;
+            case 3: step = width();
+                    break;
+            default: step = width() * 5;
+        }
+        horzScrollBar()->setValue( horzScrollBar()->value() - step );
         select = true;
     }
     else if ( pos.x() > width() )
     {
-        horzScrollBar()->setValue( horzScrollBar()->value() + 20 );
+        int step;
+        switch( ( pos.x() - width() ) / 20 )
+        {
+            case 0: step = 5;
+                    break;
+            case 1: step = 20;
+                    break;
+            case 2: step = width();
+                    break;
+            case 3: step = width();
+                    break;
+            default: step = width() * 5;
+        }
+        horzScrollBar()->setValue( horzScrollBar()->value() + step );
         select = true;
     }
 
