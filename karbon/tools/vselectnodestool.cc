@@ -36,7 +36,7 @@
 #include "vdrawselection.h"
 #include "vselection.h"
 #include "vtransformnodes.h"
-#include "vnodecmd.h"
+#include "vdeletenodescmd.h"
 
 #include <kdebug.h>
 

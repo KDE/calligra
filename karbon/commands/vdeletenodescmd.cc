@@ -21,7 +21,7 @@
 
 #include <klocale.h>
 
-#include "vnodecmd.h"
+#include "vdeletenodescmd.h"
 #include "vsegment.h"
 
 VDeleteNodeCmd::VDeleteNodeCmd( VSegment *segment )
