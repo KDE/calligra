@@ -1,9 +1,12 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="2">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="5">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
    <Action name="cutStencil"/>
    <Action name="copyStencil"/>
    <Action name="pasteStencil"/>
+   <Separator/>
+   <Action name="selectAllStencils"/>
+   <Action name="unselectAllStencils"/>
    <Separator/>
  </Menu>
  <Menu name="View"><text>&amp;View</text>
@@ -21,8 +24,6 @@
    <Action name="snapGrid"/>
    <Action name="snapGuides"/>
    <Separator/>
-   <Action name="paperLayout"/>
-   <Separator/>
    <Menu name="Docker"><text>&amp;Docker</text>
      <Action name="stencilGeometry"/>
      <Action name="layersPanel"/>
@@ -39,10 +40,7 @@
    <Separator/>
    <Action name="exportPage"/>
  </Menu>
- <Menu name="Selection"><text>&amp;Selection</text>
-   <Action name="selectAllStencils"/>
-   <Action name="unselectAllStencils"/>
-   <Separator/>
+ <Menu name="Selection"><text>F&amp;ormat</text>
    <Action name="groupStencils"/>
    <Action name="ungroupStencils"/>
    <Separator/>
@@ -50,16 +48,17 @@
    <Action name="bringStencilToFront"/>
    <Separator/>
    <Action name="alignStencils"/>
+   <Separator/>
+   <Action name="paperLayout"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
-   <Action name="options"/>
-   <Separator/>
+   <Action name="options" group="settings_configure"/>
  </Menu>
 </MenuBar>
-<ToolBar name="StencilToolBar" fullWidth="false" >
+<ToolBar name="StencilToolBar" fullWidth="false"><text>Stencils</text>
   <Action name="addStencilSet"/>
 </ToolBar>
-<ToolBar name="ViewToolBar" fullWidth="false" >
+<ToolBar name="ViewToolBar" fullWidth="false"><text>View</text>
   <Action name="viewZoom"/>
   <Action name="---"/>
   <Action name="showPageBorders"/>
@@ -69,7 +68,7 @@
   <Action name="showGrid"/>
   <Action name="units"/>
 </ToolBar>
-<ToolBar name="StencilBar" fullWidth="false" >
+<ToolBar name="StencilBar" fullWidth="false"><text>Edit</text>
   <Action name="cutStencil"/>
   <Action name="copyStencil"/>
   <Action name="pasteStencil"/>
@@ -80,13 +79,13 @@
   <Action name="sendStencilToBack"/>
   <Action name="bringStencilToFront"/>
 </ToolBar>
-<ToolBar name="ColorBar" fullWidth="false">
+<ToolBar name="ColorBar" fullWidth="false"><text>Colors</text>
   <Action name="setFGColor"/>
   <Action name="setBGColor"/>
   <Action name="---"/>
   <Action name="setLineWidth"/>
 </ToolBar>
-<ToolBar name="ArrowBar" fullWidth="false" >
+<ToolBar name="ArrowBar" fullWidth="false"><text>Arrows</text>
   <Action name="endArrowSize"/>
   <Separator/>
   <Action name="endArrowHead"/>
@@ -95,7 +94,7 @@
   <Separator/>
   <Action name="startArrowSize"/>
 </ToolBar>
-<ToolBar name="TextBar" fullWidth="false" >
+<ToolBar name="TextBar" fullWidth="false"><text>Format</text>
   <Action name="setFontFamily"/>
   <Action name="setFontSize"/>
   <Action name="---"/>
@@ -108,6 +107,6 @@
   <Action name="setHTextAlignment"/>
   <Action name="setVTextAlignment"/>
 </ToolBar>
-<ToolBar name="ToolsToolBar" fullWidth="false" position="left" >
+<ToolBar name="ToolsToolBar" fullWidth="false" position="left"><text>Tools</text>
 </ToolBar>
 </kpartgui>
