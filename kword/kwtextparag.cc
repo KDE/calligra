@@ -88,6 +88,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, int start, int len,
                 selectionEnds, cg2, rightToLeft, line, zh, false );
         // Clear 'paint end of line' flag, we don't want it overwriting the above
         whichFormattingChars &= ~FormattingEndParag;
+        painter.restore();
     }
 
     KoTextParag::drawFormattingChars( painter, start, len,
