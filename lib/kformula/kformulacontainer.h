@@ -215,11 +215,14 @@ public:
      */
     QRect boundingRect();
 
+    double width() const;
+    double height() const;
+
     /**
      * @returns the distance between the upper bound and the formulas
      * base line.
      */
-    int baseline() const;
+    double baseline() const;
 
     /**
      * Moves the formula to a new location.
@@ -341,11 +344,6 @@ private:
      * @returns true if there is a cursor that is allowed to edit the formula.
      */
     bool hasValidCursor() const;
-
-    /**
-     * @returns true if the cursor can insert any type of element.
-     */
-    bool hasMightyCursor() const;
 
     struct Container_Impl;
     Container_Impl* impl;

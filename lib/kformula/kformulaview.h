@@ -51,7 +51,7 @@ class View : public QObject {
 
 public:
     View(Container*);
-    ~View();
+    virtual ~View();
 
     /**
      * @returns the point inside the formula view where the cursor is.

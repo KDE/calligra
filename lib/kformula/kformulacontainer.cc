@@ -190,9 +190,6 @@ void Container::setActiveCursor(FormulaCursor* cursor)
         impl->activeCursor = cursor;
     }
     else {
-        //FormulaCursor::CursorData* data = activeCursor->getCursorData();
-        //internCursor->setCursorData(data);
-        //delete data;
         *(impl->internCursor) = *(impl->activeCursor);
         impl->activeCursor = impl->internCursor;
     }
@@ -202,17 +199,6 @@ void Container::setActiveCursor(FormulaCursor* cursor)
 bool Container::hasValidCursor() const
 {
     return (impl->activeCursor != 0) && !impl->activeCursor->isReadOnly();
-}
-
-bool Container::hasMightyCursor() const
-{
-    if ( hasValidCursor() ) {
-        const SequenceElement* sequence = activeCursor()->normal();
-        if ( sequence != 0 ) {
-            return sequence->getTokenType() != NAME;
-        }
-    }
-    return false;
 }
 
 void Container::testDirty()
@@ -369,10 +355,23 @@ QRect Container::boundingRect()
                   context.layoutUnitToPixelY( rootElement()->getHeight() ) );
 }
 
-int Container::baseline() const
+double Container::width() const
 {
     const ContextStyle& context = document()->getContextStyle();
-    return context.layoutUnitToPixelY( rootElement()->getBaseline() );
+    return context.layoutUnitPtToPt( context.pixelXToPt( rootElement()->getWidth() ) );
+}
+
+double Container::height() const
+{
+    const ContextStyle& context = document()->getContextStyle();
+    return context.layoutUnitPtToPt( context.pixelYToPt( rootElement()->getHeight() ) );
+}
+
+double Container::baseline() const
+{
+    const ContextStyle& context = document()->getContextStyle();
+    //return context.layoutUnitToPixelY( rootElement()->getBaseline() );
+    return context.layoutUnitPtToPt( context.pixelYToPt( rootElement()->getBaseline() ) );
 }
 
 void Container::moveTo( int x, int y )
