@@ -414,6 +414,9 @@ void SequenceElement::moveWordLeft(FormulaCursor* cursor)
             cursor->setTo(this, type->start());
         }
     }
+    else {
+        moveLeft(cursor, this);
+    }
 }
 
 
@@ -425,6 +428,9 @@ void SequenceElement::moveWordRight(FormulaCursor* cursor)
         if (type != 0) {
             cursor->setTo(this, type->end());
         }
+    }
+    else {
+        moveRight(cursor, this);
     }
 }
 

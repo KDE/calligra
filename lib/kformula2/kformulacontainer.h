@@ -111,7 +111,7 @@ public:
     /**
      * Saves the data into the document.
      */
-    void save(QDomDocument doc);
+    void save(QDomNode doc);
 
     /**
      * Load function.
@@ -128,7 +128,7 @@ public:
     /**
      * Loads a formula from the document.
      */
-    bool load(QDomDocument doc);
+    bool load(QDomNode doc);
 
     /**
      * Prints the formula.

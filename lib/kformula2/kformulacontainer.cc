@@ -545,9 +545,10 @@ void KFormulaContainer::save(QString file)
 /**
  * Saves the data into the document.
  */
-void KFormulaContainer::save(QDomDocument doc)
+void KFormulaContainer::save(QDomNode doc)
 {
-    doc.appendChild(rootElement->getElementDom(doc));
+    QDomDocument ownerDoc = doc.ownerDocument();
+    doc.appendChild(rootElement->getElementDom(ownerDoc));
 }
 
 void KFormulaContainer::load(QString file)
@@ -594,7 +595,7 @@ void KFormulaContainer::loadMathMl(QString file)
 /**
  * Loads a formula from the document.
  */
-bool KFormulaContainer::load(QDomDocument doc)
+bool KFormulaContainer::load(QDomNode doc)
 {
     //cerr << "Loading" << endl;
     QDomElement fe = doc.firstChild().toElement();
