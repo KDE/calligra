@@ -119,11 +119,6 @@ void KFormulaWidget::mouseMoveEvent(QMouseEvent* event)
     formulaView.mouseMoveEvent(event);
 }
 
-void KFormulaWidget::wheelEvent(QWheelEvent* event)
-{
-    formulaView.wheelEvent(event);
-}
-
 void KFormulaWidget::slotFormulaChanged(int width, int height)
 {
     // Magic numbers just to see the cursor.
