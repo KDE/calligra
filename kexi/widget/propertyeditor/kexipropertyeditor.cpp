@@ -33,7 +33,9 @@
 #include <kpushbutton.h>
 #include <kiconloader.h>
 
-#include "kexipropertybuffer.h"
+#include <kexi_utils.h>
+#include <kexipropertybuffer.h>
+
 #include "propertyeditorlist.h"
 #include "propertyeditorinput.h"
 #include "propertyeditorfile.h"
@@ -475,7 +477,7 @@ KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b, bool preservePrevSelection)
 		if (!item && !selectedPropertyName1.isEmpty()) //try old one for current buffer
 			item = m_items[selectedPropertyName1];
 		if (item) {
-			doNotSetFocusOnSelection = true;
+			doNotSetFocusOnSelection = !Kexi::hasParent(this,focusWidget());
 			 setSelected(item, true);
 			doNotSetFocusOnSelection = false;
 			ensureItemVisible(item);
