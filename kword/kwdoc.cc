@@ -1993,7 +1993,7 @@ void KWDocument::saveStyle( KWStyle *sty, QDomElement parentElem )
     QDomElement styleElem = doc.createElement( "STYLE" );
     parentElem.appendChild( styleElem );
 
-    KoStyle::saveStyle( sty->paragLayout(), sty->followingStyle() ,styleElem );
+    sty->saveStyle( styleElem );
 
     QDomElement formatElem = KWTextParag::saveFormat( doc, &sty->format(), 0L, 0, 0 );
     styleElem.appendChild( formatElem );
