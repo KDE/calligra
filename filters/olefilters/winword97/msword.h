@@ -35,8 +35,6 @@ DESCRIPTION
 #include <myfile.h>
 #include <qarray.h>
 
-#define MAX_TABLE_SIZE 500
-
 class Properties;
 
 class MsWord: public MsWordGenerated
@@ -416,6 +414,9 @@ private:
     myFile table0Stream;
     myFile table1Stream;
     myFile dataStream;
+
+    // Word says it never has more than 64 columns in a table. But we allow for more...
+    static const int MAX_TABLE_SIZE = 500;
 
     // Character property handling.
 
