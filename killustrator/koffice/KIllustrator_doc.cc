@@ -148,7 +148,7 @@ void KIllustratorDocument::insertPart (const QRect& rect,
   if (CORBA::is_nil (doc))
     return;
 
-  if (! doc->init ()) {
+  if (! doc->initDoc ()) {
     QMessageBox::critical ((QWidget *) 0L, i18n ("KIllustrator Error"),
 			   i18n ("Could not insert document"), i18n ("OK"));
     return;
@@ -176,7 +176,7 @@ void KIllustratorDocument::changeChildGeometry (KIllustratorChild* child,
   emit childGeometryChanged (child);
 }
 
-CORBA::Boolean KIllustratorDocument::init () {
+CORBA::Boolean KIllustratorDocument::initDoc () {
   return true;
 }
 

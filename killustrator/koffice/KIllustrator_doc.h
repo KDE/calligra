@@ -85,7 +85,7 @@ public:
   void changeChildGeometry (KIllustratorChild* child, const QRect& r);
 
   // --- IDL ---
-  virtual CORBA::Boolean init ();
+  virtual CORBA::Boolean initDoc ();
 
   virtual KOffice::MainWindow_ptr createMainWindow();
 

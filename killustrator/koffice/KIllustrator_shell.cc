@@ -181,7 +181,7 @@ bool KIllustratorShell::newDocument () {
   }
 
   m_pDoc = new KIllustratorDocument ();
-  if (! m_pDoc->init ()) {
+  if (! m_pDoc->initDoc ()) {
     releaseDocument();
     cerr << "ERROR: Could not initialize document" << endl;
     return false;
