@@ -414,6 +414,8 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		parsePA( gc, "stroke-dashoffset", e.attribute( "stroke-dashoffset" ) );
 	if( !e.attribute( "stroke-opacity" ).isEmpty() )
 		parsePA( gc, "stroke-opacity", e.attribute( "stroke-opacity" ) );
+	if( !e.attribute( "stroke-miterlimit" ).isEmpty() )
+		parsePA( gc, "stroke-miterlimit", e.attribute( "stroke-miterlimit" ) );
 	if( !e.attribute( "fill-opacity" ).isEmpty() )
 		parsePA( gc, "fill-opacity", e.attribute( "fill-opacity" ) );
 	if( !e.attribute( "opacity" ).isEmpty() )
