@@ -2282,6 +2282,7 @@ void KWView::tableSplitCells(int cols, int rows)
     m_doc->updateAllFrames();
     m_doc->layout();
     m_gui->canvasWidget()->repaintAll();
+    m_doc->frameSelectedChanged();
 }
 
 void KWView::tableUngroupTable()
