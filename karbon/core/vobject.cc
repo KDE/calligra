@@ -114,7 +114,7 @@ VObject::saveOasis( KoStore *, KoXmlWriter *docWriter, KoGenStyles &mainStyles )
 
 	KoGenStyle styleobjectauto( VDocument::STYLE_GRAPHICAUTO, "graphics" );
 	if( m_fill )
-		m_fill->saveOasis( styleobjectauto );
+		m_fill->saveOasis( mainStyles, styleobjectauto );
 	if( m_stroke )
 		m_stroke->saveOasis( styleobjectauto );
 	QString st = mainStyles.lookup( styleobjectauto, "st" );
@@ -158,8 +158,8 @@ VObject::loadOasis( const QDomElement &object, KoOasisContext &context )
 
 	KoStyleStack &styleStack = context.styleStack();
 	styleStack.setTypeProperties( "graphic" );
-	m_stroke->loadOasis( object, styleStack );
-	m_fill->loadOasis( object, styleStack );
+	m_stroke->loadOasis( styleStack );
+	m_fill->loadOasis( styleStack );
 	return true;
 }
 

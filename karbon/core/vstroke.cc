@@ -123,7 +123,7 @@ VStroke::saveOasis( KoGenStyle &style ) const
 }
 
 void
-VStroke::loadOasis( const QDomElement &, const KoStyleStack &stack )
+VStroke::loadOasis( const KoStyleStack &stack )
 {
 	if( stack.hasAttribute( "draw:stroke" ))
 	{

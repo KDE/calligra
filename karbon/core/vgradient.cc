@@ -22,9 +22,12 @@
 #include <kdebug.h>
 
 #include "vgradient.h"
+#include "vdocument.h"
 #include "vglobal.h"
 #include "vkopainter.h"
 #include "vfill.h"
+
+#include <koGenStyles.h>
 
 int VGradient::VColorStopList::compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )
 {
@@ -157,6 +160,38 @@ VGradient::save( QDomElement& element ) const
 	}
 
 	element.appendChild( me );
+}
+
+QString
+VGradient::saveOasis( KoGenStyles &mainStyles ) const
+{
+	KoGenStyle gradientStyle( VDocument::STYLE_GRADIENT /*no family name*/);
+	if( m_type == VGradient::radial )
+	{
+		gradientStyle.addAttribute( "draw:style", "radial" );
+		gradientStyle.addAttribute( "draw:cx", "50%" );
+		gradientStyle.addAttribute( "draw:cy", "50%" );
+	}
+	else
+	{
+		gradientStyle.addAttribute( "draw:style", "linear" );
+		gradientStyle.addAttributePt( "svg:x1", m_origin.x() );
+		gradientStyle.addAttributePt( "svg:y1", m_origin.y() );
+		gradientStyle.addAttributePt( "svg:x2", m_vector.x() );
+		gradientStyle.addAttributePt( "svg:y2", m_vector.y() );
+	}
+	if( m_repeatMethod == VGradient::repeat )
+		gradientStyle.addAttribute( "svg:spreadMethod", "repeat" );
+	else if( m_repeatMethod == VGradient::reflect )
+		gradientStyle.addAttribute( "svg:spreadMethod", "reflect" );
+	else
+		gradientStyle.addAttribute( "svg:spreadMethod", "pad" );
+	return mainStyles.lookup( gradientStyle, "gradient" );
+}
+
+void
+VGradient::loadOasis( const KoStyleStack &stack )
+{
 }
 
 void

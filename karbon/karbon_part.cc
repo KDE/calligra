@@ -305,6 +305,15 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
 
 	KoXmlWriter styleWriter( &storeDev, "office:document-styles" );
 
+	styleWriter.startElement( "office:styles" );
+
+	styles = mainStyles.styles( VDocument::STYLE_GRADIENT );
+	it = styles.begin();
+	for( ; it != styles.end() ; ++it )
+		(*it).style->writeStyle( &styleWriter, mainStyles, "svg:linearGradient", (*it).name, "style:graphic-properties", true,  true /*add draw:name*/);
+
+	styleWriter.endElement(); // office:styles
+
 	styleWriter.startElement( "office:automatic-styles" );
 
 	QValueList<KoGenStyles::NamedStyle> styleList = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );

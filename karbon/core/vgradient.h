@@ -26,6 +26,9 @@
 #include "vcolor.h"
 
 class QDomElement;
+class KoGenStyle;
+class KoGenStyles;
+class KoStyleStack;
 
 
 class VColorStop
@@ -101,7 +104,9 @@ public:
 	void setVector( const KoPoint &vector ) { m_vector = vector; }
 
 	void save( QDomElement& element ) const;
+	QString saveOasis( KoGenStyles &mainStyles ) const;
 	void load( const QDomElement& element );
+	void loadOasis( const KoStyleStack &stack );
 
 	void transform( const QWMatrix& m );
 

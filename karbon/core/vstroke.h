@@ -111,7 +111,7 @@ public:
 	void save( QDomElement& element ) const;
 	void saveOasis( KoGenStyle &style ) const;
 	void load( const QDomElement& element );
-	void loadOasis( const QDomElement &element, const KoStyleStack &stack );
+	void loadOasis( const KoStyleStack &stack );
 
 
 	VStroke& operator=( const VStroke& stroke );
