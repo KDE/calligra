@@ -34,6 +34,9 @@ class VTransformDocker : public VDocker
 public:
 	VTransformDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
 
+public slots:
+	void update();
+
 private:
 	KarbonPart *m_part;
 	KarbonView *m_view;

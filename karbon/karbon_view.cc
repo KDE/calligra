@@ -131,8 +131,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		m_ColorManager = new VColorDocker( part(), this );
 		m_strokeDocker = new VStrokeDocker( part(), this );
 		m_styleDocker = new VStyleDocker( part(), this );
-
 		m_TransformDocker = new VTransformDocker( part(), this );
+		connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
 	}
 
 	setNumberOfRecentFiles( part()->maxRecentFiles() );
