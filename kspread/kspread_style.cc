@@ -161,8 +161,9 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
         m_fontSize = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "font-size" ),10.0 );
         m_featuresSet |= SFont;
         m_featuresSet |= SFontSize;
+        m_featuresSet |= SFontFlag;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) && styleStack.attributeNS( KoXmlNS::fo, "font-style" ) =="italic")
     {
 #if 0
         QDomElement font = format.namedItem( "font" ).toElement();
@@ -193,18 +194,30 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
             m_featuresSet |= SFontFamily;
         }
 #endif
-        if ( styleStack.attributeNS( KoXmlNS::fo, "font-style" ) =="italic" )
-            m_fontFlags |= FItalic;
-
+        m_fontFlags |= FItalic;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) )
     {
+        m_fontFlags |= FBold;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-underline" ) || styleStack.hasAttributeNS( KoXmlNS::style, "text-underline" ))
     {
+        m_fontFlags |= FUnderline;
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "color" ) )
+    {
+        //FIXME
+        m_featuresSet |= STextPen;
+        m_textPen=QPen( QColor( styleStack.attributeNS( KoXmlNS::fo, "color" ) ) );
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-color" ) )
     {
+        //TODO
+    }
+
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-crossing-out" ) )
+    {
+        m_fontFlags |= FStrike;
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
@@ -698,7 +711,6 @@ QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, F
     //<number:number-style style:name="N60" style:family="data-style">
     //  <number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
     //</number:number-style>
-    //TODO add decimal etc.
     QString format;
     if ( _precision == -1 )
         format="0.0E+00";

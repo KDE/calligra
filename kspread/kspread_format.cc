@@ -1039,35 +1039,33 @@ bool KSpreadFormat::loadFontOasisStyle( KoStyleStack & font )
 
     //kdDebug() << "Copy font style from the layout " << font->tagName() << ", " << font->nodeName() << endl;
 
-  if ( font.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
-    setTextFontFamily( font.attributeNS( KoXmlNS::fo, "font-family" ) );
-  if ( font.hasAttributeNS( KoXmlNS::fo, "color" ) )
-    setTextColor( QColor( font.attributeNS( KoXmlNS::fo, "color" ) ) );
-  if ( font.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
-      setTextFontSize( (int) KoUnit::parseValue( font.attributeNS( KoXmlNS::fo, "font-size" ),10.0 ) );
-  else
-    setTextFontSize( 10 );
+    if ( font.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
+        setTextFontFamily( font.attributeNS( KoXmlNS::fo, "font-family" ) );
+    if ( font.hasAttributeNS( KoXmlNS::fo, "color" ) )
+        setTextColor( QColor( font.attributeNS( KoXmlNS::fo, "color" ) ) );
+    if ( font.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
+        setTextFontSize( (int) KoUnit::parseValue( font.attributeNS( KoXmlNS::fo, "font-size" ),10.0 ) );
+    else
+        setTextFontSize( 10 );
 
-  if ( font.hasAttributeNS( KoXmlNS::fo, "font-style" ) )
-  {
-    kdDebug(30518) << "italic" << endl;
-    setTextFontItalic( true ); // only thing we support
-  }
-  if ( font.hasAttributeNS( KoXmlNS::fo, "font-weight" ) )
-    setTextFontBold( true ); // only thing we support
-  if ( font.hasAttributeNS( KoXmlNS::fo, "font-weight" ) )
-    setTextFontBold( true ); // only thing we support
-  if ( font.hasAttributeNS( KoXmlNS::fo, "text-underline" ) || font.hasAttributeNS( KoXmlNS::style, "text-underline" ) )
-    setTextFontUnderline( true ); // only thing we support
-  if ( font.hasAttributeNS( KoXmlNS::style, "text-crossing-out" ) )
-    setTextFontStrike( true ); // only thing we support
-  if ( font.hasAttributeNS( KoXmlNS::style, "font-pitch" ) )
-  {
-    // TODO: possible values: fixed, variable
-  }
-  // TODO:
-  // text-underline-color
-  return true;
+    if ( font.hasAttributeNS( KoXmlNS::fo, "font-style" ) )
+    {
+        kdDebug(30518) << "italic" << endl;
+        setTextFontItalic( true ); // only thing we support
+    }
+    if ( font.hasAttributeNS( KoXmlNS::fo, "font-weight" ) )
+        setTextFontBold( true ); // only thing we support
+    if ( font.hasAttributeNS( KoXmlNS::fo, "text-underline" ) || font.hasAttributeNS( KoXmlNS::style, "text-underline" ) )
+        setTextFontUnderline( true ); // only thing we support
+    if ( font.hasAttributeNS( KoXmlNS::style, "text-crossing-out" ) )
+        setTextFontStrike( true ); // only thing we support
+    if ( font.hasAttributeNS( KoXmlNS::style, "font-pitch" ) )
+    {
+        // TODO: possible values: fixed, variable
+    }
+    // TODO:
+    // text-underline-color
+    return true;
 }
 
 bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisStyles& oasisStyles )
