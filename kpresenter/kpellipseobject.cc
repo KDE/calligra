@@ -98,11 +98,11 @@ void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
     QSize size( _zoomHandler->zoomSize( ext ) );
 
     if ( drawContour ) {
-	QPen pen3( Qt::black, 1, Qt::DotLine );
-	_painter->setPen( pen3 );
+        QPen pen3( Qt::black, 1, Qt::DotLine );
+        _painter->setPen( pen3 );
         _painter->setRasterOp( Qt::NotXorROP );
-	_painter->drawEllipse( 0, 0, ow, oh );
-	return;
+        _painter->drawEllipse( 0, 0, ow, oh );
+        return;
     }
 
     QPen pen2(pen);

@@ -59,6 +59,12 @@ protected:
 			bool drawingShadow, bool drawContour );
 
     int xRnd, yRnd;
+private:
+    /**
+       Returns a bounding region for a rounded-corners rectangle. Useful for setting
+       further clipping (e.g. to draw a pixmap on such a rectangle).
+     */
+    QPointArray boundingRegion( int x, int y, int w, int h, int _xRnd, int _yRnd) const;
 };
 
 #endif

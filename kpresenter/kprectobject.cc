@@ -23,6 +23,7 @@
 
 #include <kdebug.h>
 #include <qregion.h>
+#include <qbitmap.h>
 #include <qdom.h>
 #include <qpainter.h>
 #include <kozoomhandler.h>
@@ -94,21 +95,50 @@ double KPRectObject::load(const QDomElement &element)
     return offset;
 }
 
-/*======================== paint =================================*/
-void KPRectObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
+QPointArray KPRectObject::boundingRegion( int x, int y, int w, int h, int _xRnd, int _yRnd) const
+{
+    w--;
+    h--;
+    int rxx = w*_xRnd/200;
+    int ryy = h*_yRnd/200;
+    // were there overflows?
+    if ( rxx < 0 )
+        rxx = w/200*_xRnd;
+    if ( ryy < 0 )
+        ryy = h/200*_yRnd;
+    int rxx2 = 2*rxx;
+    int ryy2 = 2*ryy;
+    QPointArray a[4];
+    a[0].makeArc( x, y, rxx2, ryy2, 1*16*90, 16*90);
+    a[1].makeArc( x, y+h-ryy2, rxx2, ryy2, 2*16*90, 16*90);
+    a[2].makeArc( x+w-rxx2, y+h-ryy2, rxx2, ryy2, 3*16*90, 16*90);
+    a[3].makeArc( x+w-rxx2, y, rxx2, ryy2, 0*16*90, 16*90);
+    QPointArray aa;
+    aa.resize( a[0].size() + a[1].size() + a[2].size() + a[3].size() );
+    uint j = 0;
+    for ( int k=0; k<4; k++ ) {
+        for ( uint i=0; i<a[k].size(); i++ ) {
+            aa.setPoint( j, a[k].point(i) );
+            j++;
+        }
+    }
+    return aa;
+}
+
+void KPRectObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 			  bool drawingShadow, bool drawContour )
 {
     int ow = _zoomHandler->zoomItX( ext.width() );
     int oh = _zoomHandler->zoomItY( ext.height() );
 
     if ( drawContour ) {
-	QPen pen3( Qt::black, 1, Qt::DotLine );
-	_painter->setPen( pen3 );
+        QPen pen3( Qt::black, 1, Qt::DotLine );
+        _painter->setPen( pen3 );
         _painter->setRasterOp( Qt::NotXorROP );
 
-	_painter->drawRoundRect( 0, 0, ow, oh,
-				 _zoomHandler->zoomItX( xRnd ),_zoomHandler->zoomItY( yRnd) );
-	return;
+        _painter->drawRoundRect( 0, 0, ow, oh,
+                                 _zoomHandler->zoomItX( xRnd ),_zoomHandler->zoomItY( yRnd) );
+        return;
     }
 
     QPen pen2(pen);
@@ -116,29 +146,36 @@ void KPRectObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
     int pw = pen2.width();
     _painter->setPen( pen2 );
 
-    if ( drawingShadow || fillType == FT_BRUSH || !gradient ) {
+    if ( drawingShadow || fillType == FT_BRUSH || !gradient ) { //plain fill
         _painter->setPen( pen2 );
-	_painter->setBrush( brush );
-
+        _painter->setBrush( brush );
     }
-    else {
-	QSize size( _zoomHandler->zoomSize( ext ) );
+    else { //gradient
+        QSize size( _zoomHandler->zoomSize( ext ) );
         gradient->setSize( size );
-        if ( angle == 0 || angle==360 )
-            _painter->drawPixmap( 0, 0, gradient->pixmap(), 0, 0, 
-                                  ow - pw + 1, oh - pw + 1);
-        else {
-            QPixmap pix( ow - pw + 1, oh - pw + 1);
-            QPainter p;
-            p.begin( &pix );
-            p.drawPixmap( 0, 0, gradient->pixmap() );
-            p.end();
-            _painter->drawPixmap( pw / 2, pw / 2, pix );
-        }
 
-	_painter->setBrush( Qt::NoBrush );
+        QPixmap pix( ow - pw + 1, oh - pw + 1);
+
+        QPointArray arr = boundingRegion( 0, 0, ow - pw + 1, oh - pw + 1,
+                                          _zoomHandler->zoomItX(xRnd),
+                                          _zoomHandler->zoomItY(yRnd) );
+        QRegion clipregion(arr);
+
+        pix.resize ( ow, oh );
+        pix.fill( Qt::white );
+
+        QPainter p;
+        p.begin( &pix );
+        p.setClipRegion( clipregion );
+        p.drawPixmap( 0, 0, gradient->pixmap() );
+        p.end();
+
+        pix.setMask( pix.createHeuristicMask() );
+        _painter->drawPixmap( pw / 2, pw / 2, pix, 0, 0, ow - pw + 1, oh - pw + 1 );
+
+        _painter->setBrush( Qt::NoBrush );
     }
 
     _painter->drawRoundRect( pw / 2, pw / 2, ow - pw + 1, oh - pw + 1,
-			     _zoomHandler->zoomItX( xRnd ),_zoomHandler->zoomItY( yRnd) );
+                             _zoomHandler->zoomItX( xRnd ),_zoomHandler->zoomItY( yRnd) );
 }
