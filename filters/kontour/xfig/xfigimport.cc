@@ -39,7 +39,7 @@ DESCRIPTION
 #include <qtl.h>
 #include <kdebug.h>
 
-#include <KIllustrator_doc.h>
+#include <kontour_doc.h>
 namespace std { };
 using namespace std;
 

@@ -14,7 +14,7 @@ noinst_HEADERS = xfigimport.h xfigimport_factory.h
 
 METASOURCES = AUTO
 
-service_DATA = killustrator_xfig_import.desktop
+service_DATA = kontour_xfig_import.desktop
 servicedir = $(kde_servicesdir)
 data_DATA = x-xfig.desktop
 datadir = $(kde_mimedir)/image
