@@ -1,0 +1,369 @@
+<!DOCTYPE book PUBLIC  "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN" [
+ <!ENTITY KSpread   "<application>KSpread</application>">
+ <!ENTITY % addindex "IGNORE">
+ <![ %addindex; [ <!ENTITY kdedocindex SYSTEM "docindex.docbook"> ]]>
+]>
+<!-- kdoctemplate v0.8 October 1 1999 -->
+<book id="kspread" lang="en">
+<bookinfo>
+<title>The KSpread Users Manual</title>
+<authorgroup><author><firstname>Frank-Andreas</firstname><surname>Schmidt</surname>
+<!-- Finalize this -->
+<!-- <email>frank-andreas.schmidt@t-online.de</email> --> 
+</author></authorgroup> 
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KSpread</keyword>
+<keyword>KOffice</keyword>
+<keyword>Spreadsheet</keyword>
+</keywordset>
+<!-- Date and version information of the documentation
+Don't forget to include this last date and this last revision number, we
+need them for translation coordination !
+Please respect the format of the date (DD/MM/YYYY) and of the version
+(Major.minor.lesser), it could be used by automation scripts -->
+
+<date>30/01/2000</date>
+<releaseinfo>0.1.0</releaseinfo>
+
+<revhistory>
+<revision>
+<revnumber>0.1.0</revnumber>
+<date>30/01/2000</date>
+<authorinitials>FSch</authorinitials>
+<revremark>First try to put a structure to doc based on MPM큦 outline</revremark>
+</revision>
+</revhistory>
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+<application>KSpread</application> is complete a spreadsheet program.
+It is part of the KOffice suite of utilities.
+</para>
+</abstract>
+
+</bookinfo>
+<chapter ID="TODO"><title>Still to be done on this manual</title>
+
+<para>This is a list of things which still need work in this manual:</para>
+
+<itemizedlist>
+<listitem>
+<para>
+A template only. Has to be filled with contents
+</para>
+</listitem>
+</itemizedlist>
+
+</chapter>
+
+<chapter ID="Introduction"><title>Introduction</title>
+<para> This chapter will show the main features of KSpread </para>
+
+<sect1 id="Suite"><title>The KOffice environment</title>
+<para>KSpread is a full featured spreadsheet program. </para>
+<para> It is part of the KOffice productivity suite for the KDesktop Environment.</para>
+<para> Other applications in KOffice include</para>
+<para>
+<simplelist type=vert columns=1>
+<member>KWord (text processing and desktop publishing)</>
+<member>KPresenter (presentation creator)</>
+<member>KIllustrator (a vector drawing program)</>
+<member>KImageShop (a bitmap image editor)</>
+<member>Katabase (database)</>
+<member>KFormula (formula editor)</>
+<member>KChart (for charts/graphs)</>
+<member>and KImage (an image viewer).  </>
+</simplelist>
+</para>
+
+<para>All KOffice applications were designed from the beginning to take advantage from KDE 2.0.
+Because of this, KSpread (like all of KOffice), supports drag and drop, themes, and many other
+ advanced features.
+</para>
+
+<para>KSpread is a spreadsheet which can work as a traditional table-oriented sheet but also allows
+to put in complex formula of higher mathematics and statistics. There큦 also the possibility of
+putting the data to visibility by using graphics
+</para>
+<para> With the use of Python scripting there will be the possibility of having automated processes
+within the spreadsheets such as pre-defined input masks and calculation on demand.
+</para>
+
+<para>Other advantages are:
+</para>
+
+<itemizedlist>
+<listitem><para>This is only a template and has to be filled with information on the main program
+features.
+</para></listitem>
+</itemizedlist>
+</sect1>
+
+<sect1 id="WhoReads"><title>What parts of this guide should I read?</title>
+<para>
+We have to distinguish between different types of users:
+</para>
+<para>
+If you got this file without having installed the software, read the chapter that deals with
+installation first.
+</para>
+<para>
+If you are an experienced user who has a special question you may try the reference section
+and/or the FAQ큦
+</para>
+<para>
+If you got this file while working with KSpread (by pressing F1) it would be best to follow the
+chapter큦 link to the Step-by-Step Guide
+</para>
+
+</sect1>
+
+</chapter>
+
+<chapter id="Installation">
+<title>Installation</title>
+<sect1 id="Requirements"><title>System Requirements</title>
+<para>In order to install and use KSpread you must have:  </para>
+
+<itemizedlist>
+<listitem><para>A functioning Linux system with the X windowing system configured.</para></listitem>
+<listitem><para>The K Desktop Environment 2.0 (KDE 2.0).  KSpread will NOT function with older
+ versions of KDE.  Information on obtaining and installing KDE 2.0 can be found at: 
+ <ulink url="http://www.kde.org">http://www.kde.org.</ulink></para></listitem>
+<listitem><para>Permission to install software on your computer.  If you are on a stand alone 
+system, this will not be a problem.  If, however, you are using a networked computer, check with
+ your administrator.</para></listitem>
+</itemizedlist>
+
+<para>If you plan on <link linkend="FromSource">compiling KOffice from source code</link> you will
+ also need:
+<itemizedlist>
+<listitem><para>Automake 1.4 or newer.  This can be downloaded from: <ulink url="ftp://ftp.gnu.org/pub/gnu/automake/">ftp://ftp.gnu.org/pub/gnu/automake/</ulink></para></listitem>
+<listitem><para>Autoconf 2.13 or later.  This can be downloaded from: <ulink url="ftp://ftp.gnu.org/pub/gnu/autoconf/">ftp://ftp.gnu.org/pub/gnu/autoconf/</ulink></para></listitem>
+<listitem><para>A C++ compiler which supports exceptions (preferably egcs 1.1.x). This can be downloaded from <ulink url="http://egcs.cygnus.com/">http://egcs.cygnus.com/</ulink></para></listitem>
+<listitem><para>Troll Tech's QT 2.1 development packages.  These can be downloaded from <ulink url="ftp://ftp.troll.no/">ftp://ftp.troll.no/</ulink></para></listitem>
+</itemizedlist>
+</para>
+<para>Once your system meets these requirements, you than need to decide whether you want to install
+ from the source code, or premade compiled packages.</para>
+<para>If you want to obtain the most current binary version of KOffice, you can find more 
+information at <link linkend="GettingBinaries">Getting Binary Packages</link>.  </para>
+<para>If pre-compiled binaries are not available for your system, you can download the source code
+ and compile it yourself.  Instructions on where to obtain the current source code and what to do 
+ with the source code once you have it, can be found under <link linkend="GettingSource">Getting the source code</link>.</para> </sect1>
+
+<sect1 id="GettingBinaries"><title>Getting Binary Packages</title><para>You can download the most current binaries from: </para>
+<para><ulink url="http://koffice.kde.org/">http://koffice.kde.org/</ulink></para>
+
+<para>or from one of many mirror sites.  The current list of mirror sites can be found at:</para>
+<para><ulink url="http://www.kde.org/mirrors.html">http://www.kde.org/mirrors.html</ulink></para>
+<Note><para>It is important that you find a binary package that is compatable with your system.  If you are unable to find it here, you may be able to obtain a pre-compiled binary from the website of your distribution.</para></Note>
+
+
+</sect1>
+<sect1 id="FromBinaries"><title>From Binary Packages</title><para>To install KSpread from precompiled binaries, you should:
+<orderedlist numeration="arabic">
+<listitem><para>Ensure your computer has all the required software (excluding KOffice of course), is installed.  You can find the system requirements under <link linkend="Requirements">System Requirements</link>.</para></listitem>
+<listitem><para>Download the KOffice binary (***Insert filenames (rpm and deb and tar) here***) into a temporary directory.</para></listitem>
+<listitem><para>If the file is a .rpm (Red Hat Package Management Package), KOffice can be installed with:
+<screen><prompt>$</prompt> <command>rpm -U <replaceable>filename</replaceable></command></screen> </para>
+<para>If the file is a .deb (Debian Package file), KOffice can be installed with: </para>
+<para><screen><prompt>$</prompt> <command>dpkg -i <replaceable>filename</replaceable></command></screen> </para>
+<para>If the file is a tarball (ends in .tar.gz or .tgz), KOffice can be installed with:
+<screen><prompt>$</prompt> <command>tar -xzvf <replaceable>filename</replaceable></command></screen> </para></listitem>
+<listitem><para>You are now installed!</para></listitem></orderedlist>
+You can now <link linkend="StartingKSpread">Start KSpread</link> or you can go through a <link linkend="Tutorial">Step by Step</link> which will help take you through a sample document. </para></sect1>
+<sect1 id="GettingSource"><title>Getting Source Code</title><para>You can download the current source code from:</para>
+<para><ulink url="http://koffice.kde.org/">http://koffice.kde.org/</ulink></para>
+
+<para>or from one of many mirror sites.  The current list of mirror sites can be found at:</para>
+<para><ulink url="http://www.kde.org/mirrors.html">http://www.kde.org/mirrors.html</ulink></para>
+
+
+
+</sect1>
+<sect1 id="FromSource"><title>From Source Code</title><para>If you want to build KSpread from source code, you should
+<orderedlist numeration="arabic">
+<listitem><para>Ensure your computer has all the required software (excluding KOffice of course), is installed.  You can find the system requirements under <link linkend="Requirements">System Requirements</link>.</para></listitem>
+<listitem><para>Download the KOffice source file (Insert filenames (srpm and tar) here***) into a temporary directory.</para></listitem>
+<listitem><para>If the file is a .rpm (Red Hat Package Management Package), KOffice can be installed with:
+<screen><prompt>$</prompt> <command>rpm -U <replaceable>filename</replaceable></command></screen> </para>
+<para>If the file is a tarball (ends in .tar.gz or .tgz), KOffice can be installed with:
+<screen><prompt>$</prompt> <command>tar -xzvf <replaceable>filename</replaceable></command></screen> </para></listitem>
+<listitem><para>You are now installed!</para></listitem></orderedlist>
+
+STUFF</para></sect1>
+<sect1 id="CompilingProblems"><title>Problems with Compilation</title><para>Problems STUFF</para></sect1>
+</chapter>
+
+
+<chapter id="Fundamental"><title>Fundamentals</title><para>This next section is designed to introduce
+ you to:
+
+<orderedlist Numeration="Arabic">
+<listitem><para><link linkend="StartingKSpread">How to start KSpread</link></para></listitem>
+<listitem><para>Rest deleted, will see to that later</para></listitem>
+</orderedlist></para>
+
+<sect1 id="StartingKSpread"><title>Starting KSpread</title>
+<para>
+KSpread can be started one of three ways:
+
+<orderedlist>
+<listitem><para>You can select KSpread through the system menu by following the KDE Application menue
+-> Applications -> Koffice -> Kpread</para></listitem>
+<listitem><para>If you are in a terminal program (KVT, Xterm, etc), you can type:
+<screen><prompt>$</prompt> <command>KSpread &amp</command></screen></para>
+<para>Or</para>
+<para><screen><prompt>$</prompt> <command>KSpread <replaceable>filename</replaceable> &amp</command></screen></para></listitem>
+<listitem><para>Using Konquerer, you can click on your data file (KSpread documents end in .ksp).
+  This will automatically start KSpread show the last edited table of the sheet.</para></listitem>
+</orderedlist>
+</para>
+</sect1>
+</chapter>
+
+
+<chapter id="Tutorial"><title>Step by Step Tutorial</title>
+
+<para>Hopefully this tutorial has introduced you to the basics of KSpread.
+</para>
+</chapter>
+
+<chapter id="KSpreadScreen"><title>The KSpread Screen</title>
+
+<sect1 id="Overview"><title>Overview</title>
+<para>KSpread, like most GUI based programes, divides the screen up into several areas.
+Each are used to perform a group of similar features. When you start the KSpread screen, it is
+ initially divided into 4 major areas:</para>
+<para>
+<orderedlist numeration="arabic">
+<listitem><para><link linkend="kdeframe">The KDE Frame</link> (which remains at the top of all programs
+ run under KDE).</para></listitem>
+<listitem><para>Rest deleted.</para></listitem>
+</orderedlist>
+</para>
+
+
+<para><emphasis><anchor id="kdeframe">The KDE Frame.</emphasis></para>
+<para>The KDE Frame (which is not labled in the diagram above, surrounds all applications run
+under KDE.  For more information on KDE Frames, please see the KDE User Guide.</para>
+
+</sect1>
+</chapter>
+
+
+
+<chapter id="Guides"><title>Detailed Guides: Document Storage and Printing</title>
+
+<para>This section of the documentation will cover everything you need to know about starting a
+new spreadsheet, saving a spreadsheet to a file, retrieving a saved and printing a document.</para>
+
+<sect1 id="NewDoc"><title>Beginning a new file</title>
+<para>Go on writing...</para>
+</sect1>
+
+<sect1 id="Saving"><title>Saving a spreadsheet to a file</title>
+<para>Once you have entered data, formula and whatsoever into a spreadsheet, you will usually want to save this to
+a file on your hard drive.</para>
+</sect1>
+
+<sect1 id="Loading"><title>Retrieving a saved file</title>
+<para>The "Open" command can be invoked 4 ways:</para>
+</sect1>
+
+<sect1 id="Printing"><title>Printing A Document</title>
+<para>Go on writing</para>
+</sect1>
+</chapter>
+
+<chapter id="menuitems"><title>The Menu Items/Tool Bars</title>
+<para></para>
+</chapter>
+
+<chapter id="Guides2"><title>Detailed Guides: Editing your spreadsheet</title>
+<para></para>
+</chapter>
+
+<chapter id="Guides3"><title>Detailed Guides: Data representation issues</title>
+<para></para>
+</chapter>
+
+<chapter id="Guides4"><title>Detailed Guides: Python scripts</title>
+<para></para>
+</chapter>
+
+<chapter id="Options"><title>KSpread Options</title>
+<para>In this section we may describe how to use filters to im-and export data</para>
+<sect1 id="Filters"><title>Import/Export Filters</title><para></para>
+	<sect2 id="FilterAscii"><title>CSV Filter</title><para></para></sect2>
+	<sect2 id="FilterHTML"><title>HTML Filter</title><para></para></sect2>
+	<sect2 id="FilterExcel97"><title>Microsoft(TM) Excel97 Filter</title><para></para></sect2>
+</sect1>
+</chapter>
+
+<chapter id="QandA"><title>Questions and Answers</title>
+     <sect1 id="FAQ"><title>FAQ</title><para>Frequently asked questions</para></sect1>
+     <sect1 id="Updates"><title>Where can I get updates       </title><para></para></sect1>          
+     <sect1 id="Themes"><title>How do themes affect KSpread</title><para></para></sect1>
+     <sect1 id="DragDrop"><title>Drag and Drop with KSpread</title><para></para></sect1>
+</chapter>
+
+<chapter id="Appendix"><title>Appendix</title>
+<sect1 id="Glossery"><title>Glossary</title><para></para>
+<variablelist>
+<varlistentry><term>ASCII</term><listitem><para>Stands for STUFF.  KSpread can read and write documents in ASCII format.</para></listitem></varlistentry>
+<varlistentry><term>Binary code</term><listitem><para>Binary code is the actual instructioins for the computer.  </para></listitem></varlistentry>
+</variablelist>
+</sect1>
+
+<sect1 id="Keys"><title>Key Bindings Summary</title><para>
+<table>
+<title>Key Bindings for KSpread</title>
+<tgroup cols="2">
+<thead><row><entry>Command</entry><entry>Key Combination</entry></row></thead>
+<tbody>
+<row><entry>Start New Document</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo></entry></row>
+<row><entry>Open Document</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>O</keycap></keycombo></entry></row>
+<row><entry>Save Document</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>S</keycap></keycombo></entry></row>
+<row><entry>Print Document</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>P</keycap></keycombo></entry></row>
+<row><entry>Close Document</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>W</keycap></keycombo></entry></row>
+<row><entry>Quit KSpread</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>Q</keycap></keycombo></entry></row>
+<row><entry>Forgot</entry><entry><keycombo><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo></entry></row>
+<row><entry>Copy</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>C</keycap></keycombo></entry></row>
+<row><entry>Cut<</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>X</keycap></keycombo></entry></row>
+<row><entry>Paste</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>V</keycap></keycombo></entry></row>
+<row><entry>Find and Replace</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo></entry></row>
+<row><entry>Select All</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>A</keycap></keycombo></entry></row>
+<row><entry>Insert Picture</entry><entry><keycombo><keycap>F2</keycap></keycombo></entry></row>
+<row><entry>Insert Clipart</entry><entry><keycombo><keycap>F3</keycap></keycombo></entry></row>
+<row><entry>Insert Special Character</entry><entry><keycombo><keycap>Alt</keycap><keycap>C</keycap></keycombo></entry></row>
+<row><entry>Insert Hard Frame Break</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>Enter</keycap></keycombo></entry></row>
+</tbody>
+</tgroup>
+</table>
+
+</para></sect1>  
+</chapter>     
+
+<chapter id="credits"><title>Credits and License</title>
+<para><application>KSpread</application></para>
+<para>Program copyright 1998-1999 The KOffice Team <email>bongo@kongo.org</email></para>
+<para>Contributors:
+<itemizedlist>
+<listitem><para></para></listitem>
+</itemizedlist></para>
+
+<para>Documentation copyright 2000 Frank-Andreas Schmidt <email>frank-andreas.schmidt@t-online.de</email></para>
+<para>Translations done by:</para>
+    
+<para>
+This program is licensed under the terms of the <ulink url="common/gpl-license.html">GNU GPL</ulink>.
+</para>
+</chapter>
+
+<![ %addindex; [ &kdedocindex; ]]>
+</book>
