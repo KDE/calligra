@@ -104,7 +104,12 @@ class TextFormatting
         int     verticalAlignment;
 
         QString fontAttribute;
-
+        /**
+         * Language code
+         * @note the test language "xx" in converted to "en_US"
+         */
+        QString language;
+        
         bool    missing;   ///< true if this TextFormatting object does not correspond to a real \<FORMAT\> element
 };
 

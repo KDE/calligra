@@ -464,14 +464,22 @@ static void AppendTagProcessingFormatOne(QValueList<TagProcessing>& tagProcessin
         << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     &formatData.text.verticalAlignment )
         << TagProcessing ( "SHADOW" )
         << TagProcessing ( "FONTATTRIBUTE",       ProcessStringValueTag,  &formatData.text.fontAttribute     )
-        << TagProcessing ( "LANGUAGE" )
+        << TagProcessing ( "LANGUAGE",            ProcessStringValueTag,  &formatData.text.language          )
         << TagProcessing ( "ANCHOR" )
         << TagProcessing ( "IMAGE" )
         << TagProcessing ( "PICTURE" )
         << TagProcessing ( "VARIABLE" )
         << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    &formatData.text.bgColor           )
         << TagProcessing ( "OFFSETFROMBASELINE" )
+        << TagProcessing ( "CHARSET" ) // Old KWord documents or KWord's RTF import filter
         ;
+
+    if ( formatData.text.language == "xx" )
+    {
+        // The text language should have been named "x-test" or so to follow the specification
+        // As it does not, we need to convert it.
+        formatData.text.language = "en_US";
+    }
 }
 
 
