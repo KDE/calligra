@@ -151,11 +151,11 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
       int iMaxUsedRow=0;
       int currentrow, currentcolumn;
 
-      for ( currentrow = 1 ; currentrow < iMaxRow ; ++currentrow)
+      for ( currentrow = 1 ; currentrow <= iMaxRow ; ++currentrow)
       {
         KSpreadCell * cell = 0L;
         iUsedColumn=0;
-        for ( currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
+        for ( currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++ )
         {
             cell = table->cellAt( currentcolumn, currentrow, false );
             QString text;
