@@ -21,36 +21,27 @@
 #include "stencilbarbutton.h"
 #include "kotooldockmovemanager.h"
 #include "kivio_stackbar.h"
+#include "kivio_view.h"
 
-#include <qlayout.h>
-#include <qsplitter.h>
 #include <qcursor.h>
 #include <qvaluelist.h>
 #include <kdebug.h>
 
 #include <klocale.h>
 
-StencilBarDockManager::StencilBarDockManager( QWidget* parent, const char* name )
+StencilBarDockManager::StencilBarDockManager( KivioView* parent, const char* name )
 : QWidget(parent,name)
 {
   dragButton = 0L;
   dragWidget = 0L;
-  m_pView = 0L;
-  topLevelDropBar = 0L;
+  m_pView = parent;
+  m_destinationBar = 0L;
   dragPos = OnDesktop;
 
   m_pDoc = NULL;
 
   moveManager = new KoToolDockMoveManager();
   connect(moveManager,SIGNAL(positionChanged()),SLOT(slotMoving()));
-
-  QVBoxLayout* l = new QVBoxLayout(this);
-  l->setResizeMode(QLayout::Minimum);
-
-  split1 = new QSplitter(Horizontal,this);
-  l->addWidget(split1);
-
-  split2 = new QSplitter(Vertical,split1);
 }
 
 StencilBarDockManager::~StencilBarDockManager()
@@ -58,78 +49,97 @@ StencilBarDockManager::~StencilBarDockManager()
   delete moveManager;
 }
 
-void StencilBarDockManager::setView( QWidget* view )
+void StencilBarDockManager::insertStencilSet( QWidget* w, const QString& caption,
+                                              BarPos pos, QRect r, KivioStackBar* destinationBar )
 {
-  m_pView = view;
-  view->reparent(split2,QPoint(0,0),true);
-}
-
-void StencilBarDockManager::insertStencilSet( QWidget* w, const QString& caption, BarPos pos, QRect r, KivioStackBar* onTopLevelBar )
-{
-  if ( pos == AutoSelect ) {
-    if (m_pBars.at(Left))
-      pos = Left;
-    else
-      if (m_pBars.at(Top))
-        pos = Top;
-      else
-        if (m_pBars.at(Right))
-          pos = Right;
-        else
-          if (m_pBars.at(Bottom))
-            pos = Bottom;
-          else
-            pos = Left;
-  }
-
   KivioStackBar* bar = 0L;
+  
+  if(destinationBar) {
+    bar = destinationBar;
+  } else {
+    Qt::Dock position = Qt::DockLeft;
 
-  switch (pos) {
-    case OnDesktop:
-      bar = new KivioStackBar(0L);
-      bar->setCaption(i18n("Stencil Sets"));
-      m_pTopLevelBars.append(bar);
+    if ( pos == AutoSelect ) {
+      pos = Left;
+    }
+
+    switch (pos) {
+      case OnDesktop:
+        position = Qt::DockTornOff;
+        break;
+      case Left:
+      {
+        QPtrList<QDockWindow> dockList = m_pView->mainWindow()->dockWindows(Qt::DockLeft);
+        
+        for(QDockWindow* dock = dockList.first(); dock; dock = dockList.next()) {
+          if(::qt_cast<KivioStackBar*>(dock)) {
+            bar = static_cast<KivioStackBar*>(dock);
+            break;
+          }
+        }
+
+        position = Qt::DockLeft;
+        break;
+      }
+      case Top:
+      {
+        QPtrList<QDockWindow> dockList = m_pView->mainWindow()->dockWindows(Qt::DockTop);
+        
+        for(QDockWindow* dock = dockList.first(); dock; dock = dockList.next()) {
+          if(::qt_cast<KivioStackBar*>(dock)) {
+            bar = static_cast<KivioStackBar*>(dock);
+            break;
+          }
+        }
+
+        position = Qt::DockTop;
+        break;
+      }
+      case Right:
+      {
+        QPtrList<QDockWindow> dockList = m_pView->mainWindow()->dockWindows(Qt::DockRight);
+        
+        for(QDockWindow* dock = dockList.first(); dock; dock = dockList.next()) {
+          if(::qt_cast<KivioStackBar*>(dock)) {
+            bar = static_cast<KivioStackBar*>(dock);
+            break;
+          }
+        }
+
+        position = Qt::DockRight;
+        break;
+      }
+      case Bottom:
+      {
+        QPtrList<QDockWindow> dockList = m_pView->mainWindow()->dockWindows(Qt::DockBottom);
+        
+        for(QDockWindow* dock = dockList.first(); dock; dock = dockList.next()) {
+          if(::qt_cast<KivioStackBar*>(dock)) {
+            bar = static_cast<KivioStackBar*>(dock);
+            break;
+          }
+        }
+
+        position = Qt::DockBottom;
+        break;
+      }
+      case OnTopLevelBar: // hmm this shouldn't happen :)
+        position = Qt::DockTornOff;
+        break;
+      default:
+        break;
+    }
+
+    if (!bar) {
+      bar = new KivioStackBar(m_pView->mainWindow());
+      bar->setResizeEnabled(true);
+      m_pView->mainWindow()->moveDockWindow(bar, position);
+      m_pBars.append(bar);
       connect(bar,SIGNAL(beginDragPage(DragBarButton*)),SLOT(slotBeginDragPage(DragBarButton*)));
       connect(bar,SIGNAL(finishDragPage(DragBarButton*)),SLOT(slotFinishDragPage(DragBarButton*)));
-      connect(bar,SIGNAL(deleteButton(DragBarButton*,QWidget*,KivioStackBar*)), m_pDoc, SLOT(slotDeleteStencilSet(DragBarButton*,QWidget*,KivioStackBar*)));
-      if (r.isNull())
-        r = QRect(50,50,200,300);
-      bar->setGeometry(r);
-      break;
-    case Left:
-    case Top:
-    case Right:
-    case Bottom:
-      bar = m_pBars.at(pos);
-      if (!bar) {
-        bar = new KivioStackBar((pos==Left || pos==Right)?split1:split2);
-        connect(bar,SIGNAL(beginDragPage(DragBarButton*)),SLOT(slotBeginDragPage(DragBarButton*)));
-        connect(bar,SIGNAL(finishDragPage(DragBarButton*)),SLOT(slotFinishDragPage(DragBarButton*)));
-        connect(bar,SIGNAL(deleteButton(DragBarButton*,QWidget*,KivioStackBar*)), m_pDoc, SLOT(slotDeleteStencilSet(DragBarButton*,QWidget*,KivioStackBar*)));
-        m_pBars.insert(pos,bar);
-
-        if (pos==Left) {
-          QValueList<int> sizes;
-          QValueList<int> newSizes;
-          sizes = split1->sizes();
-          split1->moveToFirst(bar);
-          newSizes << 1; // We want the minimum size of the stencilbar, but we haven't loaded the stencils yet...
-          newSizes << sizes[0] - 1;
-          if(sizes.count() > 2) {
-            newSizes << sizes[1];
-          }
-          split1->setSizes(newSizes);
-        }
-        if (pos==Top) {
-          split2->moveToFirst(bar);
-        }
-      }
-      break;
-    case OnTopLevelBar:
-      bar = onTopLevelBar;
-      break;
-    default:
-      break;
+      connect(bar,SIGNAL(deleteButton(DragBarButton*,QWidget*,KivioStackBar*)),
+              m_pDoc, SLOT(slotDeleteStencilSet(DragBarButton*,QWidget*,KivioStackBar*)));
+    }
   }
 
   bar->insertPage(w,caption);
@@ -139,7 +149,7 @@ void StencilBarDockManager::insertStencilSet( QWidget* w, const QString& caption
 
 void StencilBarDockManager::slotBeginDragPage( DragBarButton* w )
 {
-  topLevelDropBar = 0L;
+  m_destinationBar = 0L;
   dragButton = w;
   dragWidget = ((KivioStackBar*)sender())->findPage(dragButton);
   dragButton->setUpdatesEnabled(false);
@@ -161,57 +171,46 @@ void StencilBarDockManager::slotFinishDragPage( DragBarButton* )
   KivioStackBar* bar = (KivioStackBar*)sender();
   bar->removePage(dragWidget);
 
-  insertStencilSet(dragWidget,caption,dragPos,moveManager->geometry(),topLevelDropBar);
+  insertStencilSet(dragWidget,caption,dragPos,moveManager->geometry(),m_destinationBar);
 
   // remove KivioStackBar if no more pages
   if (!bar->visiblePage()) {
     int k = m_pBars.findRef(bar);
+
     if ( k!= -1 ) {
       m_pBars.remove(k);
       m_pBars.insert(k,0L);
-    } else {
-      k = m_pTopLevelBars.findRef(bar);
-      if ( k!= -1 ) {
-        m_pTopLevelBars.remove(k);
-      }
     }
+
     delete bar;
   }
 
   dragButton = 0L;
   dragWidget = 0L;
+  m_destinationBar = 0L;
 }
 
 
 void StencilBarDockManager::slotMoving()
 {
-  topLevelDropBar = 0L;
+  m_destinationBar = 0L;
   QPoint p = QCursor::pos();
+  QPoint globalPos;
 
-  // check "on stackBar"
-  for ( uint k = 0; k<4; k++ ) {
-    KivioStackBar* bar = m_pBars.at(k);
-    if ( bar ) {
-      QRect br(bar->mapToGlobal(QPoint(0,0)),bar->size());
-      if ( bar && br.contains(p) ) {
-        dragPos = (BarPos)m_pBars.findRef(bar);
-        moveManager->movePause(true,false);
-        moveManager->setGeometry(bar->mapToGlobal(QPoint(0,0)).x(),
-                                 moveManager->y(),
-                                 bar->width(),
-                                 moveManager->getWidget()->sizeHint().height());
-        return;
-      }
-    }
-  }
-
-  // check "on topLevel bar"
-  for ( KivioStackBar* bar = m_pTopLevelBars.first(); bar; bar = m_pTopLevelBars.next() ) {
+  // check existing bars
+  for ( KivioStackBar* bar = m_pBars.first(); bar; bar = m_pBars.next() ) {
     if ( bar->geometry().contains(p) ) {
-      dragPos = OnTopLevelBar;
-      topLevelDropBar = bar;
+      if(bar->place() == QDockWindow::OutsideDock) {
+        dragPos = OnTopLevelBar;
+        globalPos = bar->geometry().topLeft();
+      } else {
+        dragPos = AutoSelect;
+        globalPos = bar->mapToGlobal(bar->geometry().topLeft());
+      }
+      
+      m_destinationBar = bar;
       moveManager->movePause(true,false);
-      moveManager->setGeometry(bar->geometry().x(),
+      moveManager->setGeometry(globalPos.x(),
                                moveManager->y(),
                                bar->width(),
                                moveManager->getWidget()->sizeHint().height());
@@ -221,6 +220,7 @@ void StencilBarDockManager::slotMoving()
 
   // check "on mainView"
   QRect mr(m_pView->mapToGlobal(QPoint(0,0)),m_pView->size());
+
   if ( mr.contains(p) ) {
     QRect r(mr);
     r.setWidth(r.width()/4);
@@ -232,6 +232,7 @@ void StencilBarDockManager::slotMoving()
     }
 
     r.moveBy(r.width()*3,0);
+
     if ( r.contains(p) && !m_pBars.at(Right) ) {
       moveManager->movePause();
       moveManager->setGeometry(r);
@@ -240,6 +241,7 @@ void StencilBarDockManager::slotMoving()
     }
 
     QRect t(mr);
+
     t.setHeight(t.height()/4);
     if ( t.contains(p) && !m_pBars.at(Top) ) {
       moveManager->movePause();
@@ -249,6 +251,7 @@ void StencilBarDockManager::slotMoving()
     }
 
     t.moveBy(0,t.height()*3);
+
     if ( t.contains(p) && !m_pBars.at(Bottom) ) {
       moveManager->movePause();
       moveManager->setGeometry(t);
@@ -274,11 +277,6 @@ void StencilBarDockManager::slotDeleteStencilSet( DragBarButton* pBtn, QWidget *
     if ( k!= -1 ) {
       m_pBars.remove(k);
       m_pBars.insert(k,0L);
-    } else {
-      k = m_pTopLevelBars.findRef(pBar);
-      if ( k!= -1 ) {
-        m_pTopLevelBars.remove(k);
-      }
     }
     delete pBar;
   }

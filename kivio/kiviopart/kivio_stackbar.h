@@ -19,16 +19,19 @@
 #ifndef KIVIO_STACK_BAR_H
 #define KIVIO_STACK_BAR_H
 
-#include <qframe.h>
+#include <qdockwindow.h>
 #include <qptrdict.h>
 
 class QVBoxLayout;
+class QFrame;
+
 namespace Kivio {
-class DragBarButton;
+  class DragBarButton;
 }
+
 using namespace Kivio;
 
-class KivioStackBar : public QFrame
+class KivioStackBar : public QDockWindow
 {Q_OBJECT
 public:
   KivioStackBar(QWidget* parent=0, const char* name=0);
@@ -60,6 +63,7 @@ protected slots:
 
 private:
   QVBoxLayout* m_layout;
+  QFrame* m_mainWidget;
   QPtrDict<QWidget> m_data;
   QWidget* m_visiblePage;
 };

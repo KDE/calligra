@@ -22,26 +22,31 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qapplication.h>
+#include <qframe.h>
+
 #include <kdebug.h>
 
 
 KivioStackBar::KivioStackBar( QWidget* parent, const char* name )
-:QFrame(parent,name,WDestructiveClose)
+    : QDockWindow(parent, name)
 {
-  m_layout = new QVBoxLayout( this );
+  QDockWindow::boxLayout()->setSpacing(0);
+  QDockWindow::boxLayout()->setMargin(0);
+  setResizeEnabled(true);
+  setNewLine(true);
   m_visiblePage = 0;
-  setFocusPolicy(NoFocus);
 }
 
 KivioStackBar::~KivioStackBar()
 {
-   kdDebug(43000) << "KivioStackBar::~KivioStackBar()" << endl;
+  kdDebug(43000) << "KivioStackBar::~KivioStackBar()" << endl;
 }
 
 void KivioStackBar::insertPage( QWidget* w, const QString& title )
 {
-  if (w->parent() != this)
+  if (w->parent() != m_mainWidget) {
     w->reparent(this,QPoint(0,0));
+  }
 
   w->hide();
   w->setFocusPolicy(NoFocus);
@@ -55,35 +60,39 @@ void KivioStackBar::insertPage( QWidget* w, const QString& title )
   connect( b, SIGNAL(finishDrag()), SLOT(buttonFinishDrag()) );
   connect( b, SIGNAL(closeRequired(DragBarButton*)), SLOT(slotDeleteButton(DragBarButton*)) );
 
-  m_layout->addWidget( b );
-  m_layout->addWidget( w, 1 );
+  boxLayout()->addWidget(b);
+  boxLayout()->addWidget(w, 1);
 
-  m_data.insert(b,w);
+  m_data.insert(b, w);
   b->show();
 
-  if (m_data.count()==1)
+  if (m_data.count() == 1) {
     showPage(w);
+  }
 }
 
 void KivioStackBar::slotDeleteButton( DragBarButton *b )
 {
-    QWidget *pWidget = m_data[b];
-    kdDebug(43000) << "Emitting deleteButton" << endl;
-    emit deleteButton(b, pWidget, this);
+  QWidget *pWidget = m_data[b];
+  kdDebug(43000) << "Emitting deleteButton" << endl;
+  emit deleteButton(b, pWidget, this);
 }
 
 void KivioStackBar::showPage( QWidget* w )
 {
   emit aboutToShow( w );
 
-  if ( w == m_visiblePage ) return;
+  if(w == m_visiblePage) {
+    return;
+  }
 
-  if ( m_visiblePage ){
+  if ( m_visiblePage ) {
     m_visiblePage->hide();
     w->show();
   } else {
     w->show();
   }
+
   m_visiblePage = w;
 }
 
@@ -106,7 +115,7 @@ void KivioStackBar::removePage( QWidget* widget )
   QPtrDictIterator<QWidget> it(m_data); // iterator for dict
   DragBarButton* pBtn;
   while ( it.current() ) {
-    if ( it.current() == widget ){
+    if ( it.current() == widget ) {
       widget->hide();
       pBtn = (DragBarButton*)it.currentKey();
       it.current()->reparent(0, QPoint(0,0));
@@ -117,7 +126,7 @@ void KivioStackBar::removePage( QWidget* widget )
     ++it;
   }
 
-  if ( it.toFirst() ){
+  if ( it.toFirst() ) {
     showPage( it.current() );
   } else {
     m_visiblePage = 0L;
@@ -126,42 +135,37 @@ void KivioStackBar::removePage( QWidget* widget )
 
 void KivioStackBar::deletePageAndButton( DragBarButton *pBtn )
 {
-    QWidget *pPage;
+  QWidget *pPage;
 
-    if( !pBtn )
-    {
-       kdDebug(43000) << "KivioStackBar::deletePageAndButton() - pBtn is NULL!" << endl;
-        return;
-    }
+  if( !pBtn ) {
+    kdDebug(43000) << "KivioStackBar::deletePageAndButton() - pBtn is NULL!" << endl;
+    return;
+  }
 
-    pPage = m_data[pBtn];
-    if( !pPage )
-    {
-       kdDebug(43000) << "KivioStackBar::deletePageAndButton() - failed to find the key/value pair" << endl;
-        return;
-    }
+  pPage = m_data[pBtn];
+  if( !pPage ) {
+    kdDebug(43000) << "KivioStackBar::deletePageAndButton() - failed to find the key/value pair" << endl;
+    return;
+  }
 
-    if( m_data.remove( pBtn )==false )
-    {
-       kdDebug(43000) << "KivioStackBar::deletePageAndButton() - remove failed" << endl;
-        return;
-    }
+  if( m_data.remove( pBtn )==false ) {
+    kdDebug(43000) << "KivioStackBar::deletePageAndButton() - remove failed" << endl;
+    return;
+  }
 
-    if(pPage == m_visiblePage)
-    {
-      m_visiblePage = 0L;
-    }
+  if(pPage == m_visiblePage) {
+    m_visiblePage = 0L;
+  }
 
-    delete pBtn;
-    delete pPage;
+  delete pBtn;
+  delete pPage;
 
 
-    // Set the next current page, or set it to nothing
-    QPtrDictIterator<QWidget> it(m_data); // iterator for dict
-    if ( it.toFirst() )
-    {
-        showPage( it.current() );
-    }
+  // Set the next current page, or set it to nothing
+  QPtrDictIterator<QWidget> it(m_data); // iterator for dict
+  if ( it.toFirst() ) {
+    showPage( it.current() );
+  }
 }
 
 QWidget* KivioStackBar::findPage( const QString& name )
@@ -193,7 +197,7 @@ void KivioStackBar::closeEvent(QCloseEvent* ev)
     if (it.current())
       ++it;
   }
-  
+
   ev->ignore();
 }
 

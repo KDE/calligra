@@ -170,11 +170,10 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   // QGridLayout for the entire view
   QGridLayout *viewGrid = new QGridLayout(this);
-  viewGrid->addWidget(m_pStencilBarDockManager, 0, 0);
 
   // A widget to hold the entire right side (old view)
-  QWidget *pRightSide = new QWidget(m_pStencilBarDockManager);
-  m_pStencilBarDockManager->setView(pRightSide);
+  QWidget *pRightSide = new QWidget(this);
+  viewGrid->addWidget(pRightSide, 0, 0);
 
   // Split tabbar and Horz. Scroll Bar
   QSplitter* tabSplit = new QSplitter(pRightSide);

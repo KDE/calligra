@@ -29,6 +29,7 @@ class DragBarButton;
 class KivioStackBar;
 class KoToolDockMoveManager;
 class KivioDoc;
+class KivioView;
 
 class StencilBarDockManager : public QWidget
 {
@@ -44,15 +45,14 @@ class StencilBarDockManager : public QWidget
       OnTopLevelBar = 6
     };
   
-    StencilBarDockManager( QWidget* parent, const char* name = 0 );
+    StencilBarDockManager( KivioView* parent, const char* name = 0 );
     ~StencilBarDockManager();
   
-    void setView( QWidget* );
     void setDoc( KivioDoc* );
   
   
-    void insertStencilSet( QWidget*,  const QString&, BarPos = AutoSelect, QRect r = QRect(),
-      KivioStackBar* onTopLevelBar = 0L );
+    void insertStencilSet( QWidget*,  const QString&, BarPos = AutoSelect,
+                           QRect r = QRect(), KivioStackBar* destinationBar = 0L );
   
   public slots:
       void slotDeleteStencilSet( DragBarButton*,QWidget*,KivioStackBar* );
@@ -68,13 +68,12 @@ class StencilBarDockManager : public QWidget
     QWidget* dragWidget;
     KoToolDockMoveManager* moveManager;
     QPtrList<KivioStackBar> m_pBars;
-    QPtrList<KivioStackBar> m_pTopLevelBars;
     QSplitter* split1;
     QSplitter* split2;
-    QWidget* m_pView;
+    KivioView* m_pView;
   
     BarPos dragPos;
-    KivioStackBar* topLevelDropBar;
+    KivioStackBar* m_destinationBar;
 };
 
 #endif
