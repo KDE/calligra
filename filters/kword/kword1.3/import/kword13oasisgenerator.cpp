@@ -362,6 +362,8 @@ void KWord13OasisGenerator::writeStylesXml( void )
     {
         zipWriteData("portrait");
     }
+    
+    const int firstPageNumber = m_kwordDocument->getProperty( "VARIABLESETTINGS:startingPageNumber" ).toInt();
 
     zipWriteData("\" fo:margin-top=\"");
     zipWriteData( m_kwordDocument->getProperty( "PAPERBORDERS:top", "PAPERBORDERS:ptTop" ) );
@@ -372,12 +374,7 @@ void KWord13OasisGenerator::writeStylesXml( void )
     zipWriteData("pt\" fo:margin-right=\"");
     zipWriteData( m_kwordDocument->getProperty( "PAPERBORDERS:right", "PAPERBORDERS:ptRight" ) );
     zipWriteData("pt\" style:first-page-number=\"");
-#if 1
-    // ### TODO
-    zipWriteData( "1" );
-#else
-    zipWriteData(QString::number(m_varSet.startingPageNumber));
-#endif
+    zipWriteData(QString::number( ( firstPageNumber > 1 ) ? firstPageNumber : 1 ) );
     zipWriteData( "\">\n" );
 
     const int columns = m_kwordDocument->getProperty( "PAPER:columns" ).toInt();
@@ -508,27 +505,34 @@ void KWord13OasisGenerator::writeMetaXml(void)
         zipWriteData("</meta:print-date>\n");
     }
 
-#if 0
     zipWriteData( "  <meta:document-statistic" );
 
     // KWord files coming from import filters mostly do not have no page count
-    if ( m_numPages > 0 )
+    const int numPages = m_kwordDocument->getProperty( "PAPER:pages" ).toInt();
+    if ( numPages > 0 )
     {
         zipWriteData( " meta:page-count=\"" );
-        zipWriteData( QString::number ( m_numPages ) );
+        zipWriteData( QString::number ( numPages ) );
         zipWriteData( "\"" );
     }
 
     zipWriteData( " meta:image-count=\"" ); // This is not specified in the OO specification section 2.1.19, fixed in OASIS (### TODO)
+#if 1
+    zipWriteData( "0" ); // ### TODO
+#else
     zipWriteData( QString::number ( m_pictureNumber ) );
+#endif
     zipWriteData( "\"" );
 
     zipWriteData( " meta:table-count=\"" );
+#if 1
+    zipWriteData( "0" ); // ### TODO
+#else
     zipWriteData( QString::number ( m_tableNumber ) );
-    zipWriteData( "\"" );
-
-    zipWriteData( "/>\n" ); // meta:document-statistic
 #endif
+    zipWriteData( "\"" );
+    zipWriteData( "/>\n" ); // meta:document-statistic
+    
     zipWriteData(" </office:meta>\n");
     zipWriteData("</office:document-meta>\n");
 
