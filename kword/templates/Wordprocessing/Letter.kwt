@@ -188,7 +188,7 @@
   <STYLE>
    <NAME value="Bullet List"/>
    <FOLLOWING name="Bullet List"/>
-   <COUNTER type="6" depth="0" bullet="176" start="1" numberingtype="0" lefttext="" righttext="" bulletfont="times" customdef="" />
+   <COUNTER type="10" depth="0" start="1" numberingtype="0"/>
    <FORMAT>
     <FONT name="times"/>
    </FORMAT> 

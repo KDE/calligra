@@ -447,7 +447,7 @@
    <IFIRST pt="0" mm="0" inch="0"/>
    <ILEFT pt="0" mm="0" inch="0"/>
    <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="6" depth="0" bullet="176" start="1" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
+   <COUNTER type="10" depth="0" start="1" numberingtype="0"/>
    <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
