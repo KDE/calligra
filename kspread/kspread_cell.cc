@@ -2550,9 +2550,6 @@ void KSpreadCell::paintCellBorders(QPainter& painter, QPoint corner,
   if ( cellRef.y() < KS_rowMax )
     cell_b = m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 );
 
-  // do we need the stuff below?
-  return;
-
   QPen vert_pen, horz_pen;
   // Fix the borders which meet at the top left corner
   vert_pen = cell_t->leftBorderPen( cellRef.x(), cellRef.y() - 1 );
