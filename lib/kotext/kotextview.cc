@@ -18,6 +18,7 @@
 */
 
 #include <qtimer.h>
+#include <qclipboard.h>
 #include "kotextview.h"
 #include "koparagcounter.h"
 #include "kotextobject.h"
@@ -480,10 +481,11 @@ void KoTextView::handleMouseReleaseEvent()
             textDocument()->removeSelection( QTextDocument::Standard );
 
         textObject()->selectionChangedNotify();
-        // No auto-copy, will readd with Qt 3 using setSelectionMode(true/false)
-        // But auto-copy in readonly mode, since there is no action available in that case.
-        if ( !m_bReadWrite )
-            emit copy();
+
+        // Copy the selection.
+        QApplication::clipboard()->setSelectionMode( true );
+        emit copy();
+        QApplication::clipboard()->setSelectionMode( false );
     }
 
     inDoubleClick = FALSE;
