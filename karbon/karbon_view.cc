@@ -865,10 +865,10 @@ KarbonView::zoomChanged()
 	//kdDebug() << "part()->pageLayout().ptHeight :" << part()->pageLayout().ptHeight << endl;
 	// TODO : the default shouldnt be necessary?
 	if( int( part()->pageLayout().ptWidth ) == 0 || int( part()->pageLayout().ptHeight ) == 0 )
-		m_canvas->resizeContents( int( 600 * zoomFactor ), int( 800 * zoomFactor ) );
+		m_canvas->resizeContents( int( 640 * zoomFactor ), int( 800 * zoomFactor ) + 40 );
 	else
-		m_canvas->resizeContents( int( part()->pageLayout().ptWidth * zoomFactor ),
-									int( part()->pageLayout().ptHeight * zoomFactor ) );
+		m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 40 ) * zoomFactor ),
+									int( part()->pageLayout().ptHeight * zoomFactor ) + 40 );
 	m_canvas->repaintAll();
 	m_canvas->setFocus();
 }
