@@ -126,12 +126,12 @@ bool KivioIconViewItem::acceptDrop( const QMimeSource * ) const
  * KivioIconView
  *
  **********************************************************************/
-KivioIconView::KivioIconView( QWidget *parent, const char *name )
+KivioIconView::KivioIconView( bool _readWrite,QWidget *parent, const char *name )
 : QIconView( parent, name )
 {
     m_pSpawnerSet = NULL;
     m_pCurDrag = NULL;
-
+    isReadWrite=_readWrite;
     objList.append(this);
 
     setGridX( 64 );
@@ -148,8 +148,8 @@ KivioIconView::KivioIconView( QWidget *parent, const char *name )
     setArrangement(LeftToRight);
     setAcceptDrops(false);
     viewport()->setAcceptDrops(false);
-    
-    QObject::connect( this, SIGNAL(doubleClicked(QIconViewItem *)), this, SLOT(slotDoubleClicked(QIconViewItem*)) );
+    if(isReadWrite)
+        QObject::connect( this, SIGNAL(doubleClicked(QIconViewItem *)), this, SLOT(slotDoubleClicked(QIconViewItem*)) );
 }
 
 KivioIconView::~KivioIconView()
@@ -205,7 +205,7 @@ void KivioIconView::drawBackground( QPainter *p, const QRect &r )
 
 QDragObject *KivioIconView::dragObject()
 {
-    if( !currentItem() )
+    if( !currentItem() || !isReadWrite)
         return 0;
 
     QPoint orig = viewportToContents( viewport()->mapFromGlobal( QCursor::pos() ) );
@@ -255,15 +255,15 @@ void KivioIconView::clearCurrentDrag()
 void KivioIconView::slotDoubleClicked( QIconViewItem *pQtItem )
 {
     KivioStencilSpawner *pSpawner;
-    
+
     KivioIconViewItem *pItem = dynamic_cast<KivioIconViewItem *>(pQtItem);
-    
+
     if( !pItem )
     {
        kdDebug() << "KivioIconView::slotDoubleClicked() - Clicked item is not a KivioIconViewItem!" << endl;
         return;
     }
-    
+
     pSpawner = pItem->spawner();
 
     emit createNewStencil( pSpawner );

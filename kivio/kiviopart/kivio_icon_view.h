@@ -67,7 +67,7 @@ signals:
     void createNewStencil( KivioStencilSpawner * );
 
 public:
-    KivioIconView( QWidget *parent=0, const char *name=0 );
+    KivioIconView( bool _readWrite,QWidget *parent=0, const char *name=0 );
     virtual ~KivioIconView();
 
     static void clearCurrentDrag();
@@ -82,6 +82,7 @@ public:
 private:
   static QList<KivioIconView> objList;
   static KivioIconViewVisual visual;
+  bool isReadWrite;
 };
 
 class KivioIconViewItem : public QIconViewItem
