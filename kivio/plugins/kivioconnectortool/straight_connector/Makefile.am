@@ -2,7 +2,7 @@
 ####   Makefile.am generated automatically by KDEStudio   ####
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
-
+libdir = $(kde_datadir)/kivio/autoloadStencils
 lib_LTLIBRARIES =libstraight_connector.la
 
 
