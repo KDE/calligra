@@ -270,7 +270,7 @@ class KEXI_DB_EXPORT Cursor: public Object
 //		CursorData *m_data;
 		QString m_rawStatement;
 		bool m_opened : 1;
-		bool m_beforeFirst : 1;
+//js (m_at==0 is enough)		bool m_beforeFirst : 1;
 		bool m_atLast : 1;
 		bool m_afterLast : 1;
 //		bool m_atLast;

@@ -166,10 +166,12 @@ bool Cursor::moveFirst()
 			if (m_records_in_buf>0) {
 				//set state as we would before first:
 				m_at_buffer = false;
-				m_at = -1;
+//js				m_at = -1;
+				m_at = 0;
 				//..and move to next, ie. 1st record
-				m_afterLast = m_afterLast = !getNextRecord();
-				return !m_beforeFirst;
+//				m_afterLast = m_afterLast = !getNextRecord();
+				m_afterLast = !getNextRecord();
+				return !m_afterLast;
 			}
 		}
 		if (!reopen())
@@ -241,13 +243,13 @@ bool Cursor::moveNext()
 
 bool Cursor::movePrev()
 {
-	if (!m_opened || m_beforeFirst || !(m_options & Buffered))
+	if (!m_opened /*|| m_beforeFirst*/ || !(m_options & Buffered))
 		return false;
 
 	if ((m_at <= 0) || (m_records_in_buf <= 0)) {
 		m_at=-1;
 		m_validRecord=false;
-		m_beforeFirst = true;
+//		m_beforeFirst = true;
 		return false;
 	}
 

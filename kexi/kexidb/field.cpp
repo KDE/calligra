@@ -247,7 +247,7 @@ Field::typeName() const
 	return typeName(m_type);
 }
 
-Field::Type
+inline Field::Type
 Field::type() const
 {
 	return m_type;
