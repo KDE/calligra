@@ -1105,6 +1105,31 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     emit sigProgress(20);
 
+
+#if 0
+
+    QDomElement bookmark = word.namedItem( "BOOKMARKS" ).toElement();
+    if( !bookmark.isNull() )
+    {
+        QDomElement bookmarkitem=word.namedItem("BOOKMARKITEM").toElement();
+        bookmarkitem=bookmarkitem.firstChild().toElement();
+        while ( !bookmarkitem.isNull() )
+        {
+            KWBookMark *book =new KWBookMark( bookmarkitem.attribute("name"));
+            book->setBookmarkIndex(bookmarkitem.attribute("cursorIndex").toInt());
+            KWFrameSet * frameSet()const{ return m_frameSet;}
+            void setFrameSet(KWFrameSet * _frame) { m_frameSet = _frame;}
+            KWTextParag *parag() const { return m_parag;}
+            void setParag( KWTextParag *_parag ) { m_parag = _parag;}
+            void setBookmarkIndex( int _pos ) { m_index = _pos;}
+            int bookmarkIndex() const  { return m_index ; }
+
+
+            bookmarkitem=bookmarkitem.nextSibling().toElement();
+        }
+    }
+#endif
+
     QDomElement spellCheckIgnore = word.namedItem( "SPELLCHECKIGNORELIST" ).toElement();
     if( !spellCheckIgnore.isNull() )
     {
@@ -1988,6 +2013,27 @@ QDomDocument KWDocument::saveXML()
                 KoTextCursor* cursor = textedit->cursor();
                 docattrs.setAttribute( "cursorParagraph", cursor->parag()->paragId() );
                 docattrs.setAttribute( "cursorIndex", cursor->index() );
+            }
+        }
+    }
+
+    if( !m_bookmarkList.isEmpty() )
+    {
+        QDomElement bookmark = doc.createElement( "BOOKMARKS" );
+        kwdoc.appendChild( bookmark );
+
+        QPtrListIterator<KWBookMark> book(m_bookmarkList);
+        for ( ; book.current() ; ++book )
+        {
+            if ( book.current()->parag()!=0 &&
+                 !book.current()->frameSet()->isDeleted())
+            {
+                QDomElement bookElem = doc.createElement( "BOOKMARKITEM" );
+                bookmark.appendChild( bookElem );
+                bookElem.setAttribute( "name", book.current()->bookMarkName());
+                bookElem.setAttribute( "frameset", book.current()->frameSet()->getName());
+                bookElem.setAttribute( "parag", book.current()->parag()->paragId());
+                bookElem.setAttribute( "cursorIndex", book.current()->bookmarkIndex());
             }
         }
     }
