@@ -97,7 +97,7 @@ void StencilsBarOptionsDialog::slotOpenButton()
     return;
 
   if(!url.isLocalFile()) {
-    KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
+    KMessageBox::sorry( 0L, i18n( "Only local files are currently supported." ) );
     return;
   }
 

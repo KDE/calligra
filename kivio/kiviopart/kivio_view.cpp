@@ -287,10 +287,10 @@ void KivioView::createViewManagerDock()
 void KivioView::createBirdEyeDock()
 {
     m_pBirdEyePanel = new KivioBirdEyePanel(this, this);
-    ToolDockBase* birdEyeBase = toolDockManager()->createToolDock(m_pBirdEyePanel,i18n("Bird Eye"));
+    ToolDockBase* birdEyeBase = toolDockManager()->createToolDock(m_pBirdEyePanel,i18n("Bird's Eye"));
     birdEyeBase->move(0,0);
 
-    KToggleAction* showBirdEye = new KToggleAction( i18n("Bird Eye"), 0, actionCollection(), "birdEye" );
+    KToggleAction* showBirdEye = new KToggleAction( i18n("Bird's Eye"), 0, actionCollection(), "birdEye" );
     connect( showBirdEye, SIGNAL(toggled(bool)), birdEyeBase, SLOT(makeVisible(bool)));
     connect( birdEyeBase, SIGNAL(visibleChange(bool)), SLOT(toggleBirdEyePanel(bool)));
 }
