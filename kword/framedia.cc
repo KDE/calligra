@@ -850,6 +850,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     }
 
     bool disable = false;
+    bool disableMargins = false;
     // Only one frame selected, or when creating a frame -> enable coordinates
     if ( doc->isOnlyOneFrameSelected() || !frame->frameSet() )
     {
@@ -880,12 +881,18 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         // Can't change geometry of main WP frame or headers/footers
         if ( fs && ( fs->isHeaderOrFooter() || fs->isMainFrameset() || fs->isFootEndNote()) )
             disable = true;
+        if ( fs && fs->isMainFrameset() )
+            disableMargins = true;
     }
     else
+    {
         disable = true;
+        disableMargins = true;
+    }
+    if (disableMargins )
+        grp2->hide();
     if ( disable )
     {
-        grp2->hide( );
         sx->setEnabled( false );
         sy->setEnabled( false );
         sw->setEnabled( false );
