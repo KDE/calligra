@@ -26,9 +26,11 @@
 #include <qlayout.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
+#include <qcheckbox.h>
+#include <knuminput.h>
 
 KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resize re)
-	: QDialog( parent, name,TRUE )
+	: KDialogBase( parent, name,TRUE,i18n("Default"),Ok|Cancel )
 {
 
   m_pView=parent;
@@ -37,9 +39,10 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
   QString tmpCheck;
   //int pos;
   QString label;
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+  QWidget *page = new QWidget( this );
+  setMainWidget(page);
+
+  QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
   tmpCheck=i18n("Default");
   RowLayout *rl;
   ColumnLayout *cl;
@@ -92,26 +95,18 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 			break;
 	}
 
-  m_pSize2=new KIntNumInput(size, this, 10);
+  m_pSize2=new KIntNumInput(size, page, 10);
   m_pSize2->setRange(2, 400, 1);
   m_pSize2->setLabel(label);
   lay1->addWidget(m_pSize2);
 
-  m_pDefault=new QCheckBox(tmpCheck,this);
+  m_pDefault=new QCheckBox(tmpCheck,page);
   lay1->addWidget(m_pDefault);
 
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("&OK") );
-  m_pOk->setDefault( TRUE );
-  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
-  bb->layout();
-  lay1->addWidget( bb );
   lay1->activate();
   m_pSize2->setFocus();
   connect( m_pDefault, SIGNAL(clicked() ),this, SLOT(slotChangeState()));
-  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
+  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 
 }
 
@@ -170,11 +165,6 @@ void KSpreadresize2::slotOk()
 	break;
       }
     accept();
-}
-
-void KSpreadresize2::slotCancel()
-{
-    reject();
 }
 
 

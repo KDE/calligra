@@ -26,38 +26,23 @@
 #include "kspread_doc.h"
 
 #include <qlayout.h>
-#include <kbuttonbox.h>
-
 #include <qlineedit.h>
-
 #include <kmessagebox.h>
-#include <qpushbutton.h>
 
 KSpreadarea::KSpreadarea( KSpreadView* parent, const char* name,const QPoint &_marker )
-	: QDialog( parent, name,TRUE )
+	: KDialogBase( parent, name,TRUE,i18n("Area Name"),Ok|Cancel )
 {
   m_pView = parent;
   marker=_marker;
 
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+  QWidget *page = new QWidget( this );
+  setMainWidget(page);
+  QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
 
-  areaName=new QLineEdit(this);
+  areaName=new QLineEdit(page);
   lay1->addWidget( areaName );
-
-  setCaption( i18n("Area Name") );
-
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("OK") );
-  m_pOk->setDefault( TRUE );
-  m_pClose = bb->addButton( i18n( "Close" ) );
-  bb->layout();
-  lay1->addWidget( bb );
   areaName->setFocus();
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 }
 
 
@@ -93,12 +78,5 @@ void KSpreadarea::slotOk()
         KMessageBox::error( this, i18n("Area text is empty!") );
   }
 }
-
-void KSpreadarea::slotClose()
-{
-
-  reject();
-}
-
 
 #include "kspread_dlg_area.moc"

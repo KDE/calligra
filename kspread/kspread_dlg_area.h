@@ -20,14 +20,14 @@
 #ifndef __kspread_dlg_area__
 #define __kspread_dlg_area__
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 
 class KSpreadView;
 class QPushButton;
 class QLineEdit;
 class QLabel;
 
-class KSpreadarea: public QDialog
+class KSpreadarea: public KDialogBase
 {
   Q_OBJECT
 public:
@@ -36,12 +36,9 @@ public:
 
 public slots:
   void slotOk();
-  void slotClose();
 protected:
   KSpreadView* m_pView;
   QLineEdit* areaName;
-  QPushButton* m_pOk;
-  QPushButton* m_pClose;
   QPoint  marker;
 };
 

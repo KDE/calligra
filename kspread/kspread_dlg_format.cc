@@ -17,28 +17,21 @@
 
 
 KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
-    : QDialog( view, name, TRUE )
+    : KDialogBase( view, name, TRUE,i18n("Table Style"),Ok|Cancel )
 {
     for( int i = 0; i < 16; ++i )
 	m_cells[ i ] = 0;
-    
+
     m_view = view;
-    setCaption( i18n("Table Style") );
-    QVBoxLayout* vbox = new QVBoxLayout( this, 6, 6 );
-    m_combo = new QComboBox( this );
-    m_label = new QLabel( this );
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+    QVBoxLayout *vbox = new QVBoxLayout( page, 0, spacingHint() );
+    m_combo = new QComboBox( page );
+    m_label = new QLabel( page );
 
     vbox->addWidget( m_combo );
     vbox->addWidget( m_label );
 
-    KButtonBox *bb = new KButtonBox( this );
-    bb->addStretch();
-    QPushButton* ok = bb->addButton( i18n("&OK") );
-    ok->setDefault( TRUE );
-    QPushButton* cancel= bb->addButton( i18n( "&Cancel" ) );
-    bb->layout();
-
-    vbox->addWidget( bb );
 
     QStringList lst = KSpreadFactory::global()->dirs()->findAllResources( "table-styles", "*.ksts", TRUE );
 
@@ -53,16 +46,15 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
 	e.xml = cfg.readEntry( "XML" );
 	e.image = cfg.readEntry( "Image" );
 	e.name = cfg.readEntry( "Name" );
-	
+
 	m_entries.append( e );
-	
+
 	m_combo->insertItem( e.name );
     }
 
     slotActivated( 0 );
 
-    connect( ok, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-    connect( cancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
     connect( m_combo, SIGNAL( activated( int ) ), this, SLOT( slotActivated( int ) ) );
 }
 
@@ -275,7 +267,7 @@ void KSpreadFormatDlg::slotOk()
     }
 
     m_view->activeTable()->setSelection( QRect(), r.topLeft() );
-    m_view->doc()->setModified( true ); 
+    m_view->doc()->setModified( true );
     accept();
 }
 
@@ -303,7 +295,7 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
 	    int i = (row-1)*4 + (column-1);
 	    if ( i < 0 || i >= 16 )
 		return false;
-	    
+
 	    m_cells[ i ] = cell;
 	}
     }

@@ -26,47 +26,38 @@
 #include <qlayout.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kbuttonbox.h>
-
+#include <qlistbox.h>
+#include <qcheckbox.h>
+#include <qradiobutton.h>
+#include <qcombobox.h>
 
 KSpreadSortDlg::KSpreadSortDlg( KSpreadView* parent, const char* name)
-	: QDialog( parent, name, TRUE )
+	: KDialogBase( parent, name, TRUE,i18n("Sort"),Ok|Cancel )
 {
   m_pView = parent;
+  QWidget *page = new QWidget( this );
+  setMainWidget(page);
+  QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
 
-  setCaption( i18n("Sort") );
-
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
   QGridLayout *lay2 = new QGridLayout( lay1,2,2 );
   lay2->setSpacing( 15 );
 
-  QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Sort by"),this);
+  QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Sort by"),page);
   grp->setRadioButtonExclusive( TRUE );
   grp->layout();
   lay2->addWidget(grp,0,0);
   rb_row = new QRadioButton( i18n("Row"), grp );
   rb_column = new QRadioButton( i18n("Column"), grp );
 
-  combo=new QComboBox(this);
+  combo=new QComboBox(page);
   lay2->addWidget(combo,0,1);
 
-  decrease=new QCheckBox(i18n("Decrease mode"),this);
+  decrease=new QCheckBox(i18n("Decrease mode"),page);
   lay2->addWidget(decrease,1,0);
-
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("Sort") );
-  m_pOk->setDefault( TRUE );
-  m_pCancel = bb->addButton( i18n( "&Cancel" ) );
-  bb->layout();
-  lay1->addWidget( bb);
 
   init();
 
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
+  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
   connect( grp, SIGNAL(pressed(int)),this,SLOT(slotpress(int)));
 }
 
@@ -175,12 +166,6 @@ void KSpreadSortDlg::slotOk()
     }
 
     accept();
-}
-
-
-void KSpreadSortDlg::slotCancel()
-{
-    reject();
 }
 
 #include "kspread_dlg_sort.moc"

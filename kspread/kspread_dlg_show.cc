@@ -25,30 +25,21 @@
 #include "kspread_tabbar.h"
 #include <qlayout.h>
 #include <klocale.h>
-#include <kbuttonbox.h>
+#include <qlistbox.h>
 
 
 KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
-	: QDialog( parent, name,TRUE )
+	: KDialogBase( parent, name,TRUE,i18n("Table hidden"),Ok|Cancel )
 {
   m_pView = parent;
+  QWidget *page = new QWidget( this );
+  setMainWidget(page);
+  QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
 
 
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
-  list=new QListBox(this);
+  list=new QListBox(page);
   lay1->addWidget( list );
 
-  setCaption( i18n("Table hidden") );
-
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("&OK") );
-  m_pOk->setDefault( TRUE );
-  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
-  bb->layout();
-  lay1->addWidget( bb );
   QString text;
   QStringList::Iterator it;
   QStringList tabsList=m_pView->tabBar()->listhide();
@@ -58,9 +49,8 @@ KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
     	list->insertItem(text);
     	}
   if(!list->count())
-  	m_pOk->setEnabled(false);
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
+  	enableButtonOK(false);
+  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   resize( 200, 150 );
 
@@ -83,11 +73,5 @@ void KSpreadshow::slotOk()
         }
   accept();
 }
-
-void KSpreadshow::slotCancel()
-{
-  reject();
-}
-
 
 #include "kspread_dlg_show.moc"

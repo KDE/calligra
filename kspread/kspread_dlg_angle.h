@@ -21,20 +21,15 @@
 #ifndef __kspread_dlg_angle__
 #define __kspread_dlg_angle__
 
-#include <qdialog.h>
-//#include <qpushbutton.h>
-//#include <qrect.h>
-//#include <knuminput.h>
-//#include <qcheckbox.h>
+#include <kdialogbase.h>
 
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
-class QPushButton;
 class QCheckBox;
 class KIntNumInput;
 
-class KSpreadAngle : public QDialog
+class KSpreadAngle : public KDialogBase
 {
   Q_OBJECT
 public:
@@ -42,12 +37,9 @@ public:
 
 public slots:
   void slotOk();
-  void slotCancel();
   void slotChangeState();
 protected:
   KSpreadView* m_pView;
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
   QPoint  marker;
   KIntNumInput *m_pSize2;
   QCheckBox *m_pDefault;

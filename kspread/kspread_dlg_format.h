@@ -1,7 +1,7 @@
 #ifndef KSPREAD_DLG_FORMAT
 #define KSPREAD_DLG_FORMAT
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qcolor.h>
@@ -17,7 +17,7 @@ class QDomDocument;
 class KSpreadView;
 class KSpreadLayout;
 
-class KSpreadFormatDlg : public QDialog
+class KSpreadFormatDlg : public KDialogBase
 {
     Q_OBJECT
 public:

@@ -21,15 +21,14 @@
 #ifndef __kspread_dlg_special__
 #define __kspread_dlg_special__
 
-#include <qdialog.h>
-#include <qpushbutton.h>
+#include <kdialogbase.h>
 #include <qradiobutton.h>
 
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 
-class KSpreadspecial : public QDialog
+class KSpreadspecial : public KDialogBase
 {
     Q_OBJECT
 public:
@@ -37,14 +36,10 @@ public:
 
 public slots:
     void slotOk();
-    void slotCancel();
     void slotToggled( bool );
 
 protected:
     KSpreadView* m_pView;
-
-    QPushButton* m_pOk;
-    QPushButton* m_pCancel;
     QRadioButton *rb1;
     QRadioButton *rb2;
     QRadioButton *rb3;

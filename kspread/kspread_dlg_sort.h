@@ -21,20 +21,19 @@
 #ifndef __kspread_dlg_sort__
 #define __kspread_dlg_sort__
 
-#include <qdialog.h>
-#include <qpushbutton.h>
+#include <kdialogbase.h>
 #include <qrect.h>
-#include <qcombobox.h>
 #include <qbuttongroup.h>
-#include <qradiobutton.h>
 #include <qstringlist.h>
-#include <qcheckbox.h>
 
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
+class QComboBox;
+class QRadioButton;
+class QCheckBox;
 
-class KSpreadSortDlg : public QDialog
+class KSpreadSortDlg : public KDialogBase
 {
   Q_OBJECT
 public:
@@ -42,7 +41,6 @@ public:
 
 private slots:
   void slotOk();
-  void slotCancel();
   void slotpress(int id);
 
 private:
@@ -53,8 +51,6 @@ private:
   QRadioButton *rb_row;
   QRadioButton *rb_column;
   QComboBox *combo;
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
   QStringList list_column;
   QStringList list_row;
   QCheckBox *decrease;

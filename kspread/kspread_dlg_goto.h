@@ -21,15 +21,14 @@
 #ifndef __kspread_dlg_goto__
 #define __kspread_dlg_goto__
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
-class QPushButton;
 class QLineEdit;
 
-class KSpreadGotoDlg : public QDialog
+class KSpreadGotoDlg : public KDialogBase
 {
   Q_OBJECT
 public:
@@ -37,16 +36,12 @@ public:
 
 public slots:
   void slotOk();
-  void slotCancel();
   void textChanged ( const QString &_text );
 
 
 protected:
-  KSpreadView* m_pView;
-  
+  KSpreadView* m_pView;  
   QLineEdit* m_nameCell;
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
 };
 
 #endif

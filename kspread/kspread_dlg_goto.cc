@@ -24,41 +24,30 @@
 #include "kspread_util.h"
 
 #include <qlayout.h>
-#include <kbuttonbox.h>
-#include <qpushbutton.h>
 
 
 KSpreadGotoDlg::KSpreadGotoDlg( KSpreadView* parent, const char* name )
-	: QDialog( parent, name, TRUE )
+	: KDialogBase( parent, name, TRUE,i18n("Goto cell"),Ok|Cancel )
 {
   m_pView = parent;
-  setCaption( i18n("Goto cell") );
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+  QWidget *page = new QWidget( this );
+  setMainWidget(page);
+  QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
 
-  m_nameCell = new QLineEdit( this );
+  m_nameCell = new QLineEdit( page );
   lay1->addWidget(m_nameCell);
 
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("&OK") );
-  m_pOk->setDefault( TRUE );
-  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
-  bb->layout();
-  lay1->addWidget( bb );
   m_nameCell->setFocus();
+  enableButtonOK( false );
 
-  m_pOk->setEnabled(false);
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
+  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
   connect( m_nameCell, SIGNAL(textChanged ( const QString & )),
            this, SLOT(textChanged ( const QString & )));
 }
 
 void KSpreadGotoDlg::textChanged ( const QString &_text )
 {
-    m_pOk->setEnabled(!_text.isEmpty());
+    enableButtonOK(!_text.isEmpty());
 }
 
 void KSpreadGotoDlg::slotOk()
@@ -72,11 +61,5 @@ void KSpreadGotoDlg::slotOk()
         m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp_upper, m_pView->doc()->map() ) );
     accept();
 }
-
-void KSpreadGotoDlg::slotCancel()
-{
-    reject();
-}
-
 
 #include "kspread_dlg_goto.moc"

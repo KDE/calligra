@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999, 2000 , 2001, 2002 Montel Laurent <montell@club-internet.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,16 +21,15 @@
 #ifndef __kspread_dlg_resize2__
 #define __kspread_dlg_resize2__
 
-#include <qdialog.h>
-#include <qpushbutton.h>
-#include <qrect.h>
-#include <knuminput.h>
-#include <qcheckbox.h>
+#include <kdialogbase.h>
 
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
-class KSpreadresize2 : public QDialog
+class QCheckBox;
+class KIntNumInput;
+
+class KSpreadresize2 : public KDialogBase
 {
   Q_OBJECT
 public:
@@ -41,12 +40,9 @@ public:
   int size;
 public slots:
   void slotOk();
-  void slotCancel();
   void slotChangeState();
 protected:
   KSpreadView* m_pView;
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
   KIntNumInput *m_pSize2;
   QCheckBox *m_pDefault;
 };

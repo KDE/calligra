@@ -20,15 +20,12 @@
 #ifndef __kspread_dlg_show__
 #define __kspread_dlg_show__
 
-#include <qdialog.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qlistbox.h>
-#include <qlabel.h>
+#include <kdialogbase.h>
 
 class KSpreadView;
+class QListBox;
 
-class KSpreadshow: public QDialog
+class KSpreadshow: public KDialogBase
 {
   Q_OBJECT
 public:
@@ -37,16 +34,11 @@ public:
   
 public slots:
   void slotOk();
-  void slotCancel();
   void slotDoubleClicked(QListBoxItem *);
 protected:
   KSpreadView* m_pView;
   
   QListBox * list;
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
-
-
 };
 
 #endif

@@ -24,21 +24,27 @@
 #include <qlayout.h>
 #include <klocale.h>
 #include <qlabel.h>
-#include <kbuttonbox.h>
+
 #include <qbuttongroup.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 
+#include <qradiobutton.h>
+#include <qcheckbox.h>
+#include <qlineedit.h>
+
+
 KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const QPoint &_marker)
-        : QDialog( parent, name,TRUE )
+        : KDialogBase( parent, name,TRUE,i18n("Series"),Ok|Cancel )
 {
   m_pView = parent;
   marker=_marker;
+  QWidget *page = new QWidget( this );
+  setMainWidget(page);
 
-  setCaption( i18n("Series") );
-  QGridLayout *grid1 = new QGridLayout(this,3,2,15,7);
+  QGridLayout *grid1 = new QGridLayout(page,3,2,15,7);
 
-  QButtonGroup* gb1 = new QButtonGroup( i18n("Mode"), this );
+  QButtonGroup* gb1 = new QButtonGroup( i18n("Mode"), page );
   QGridLayout *grid3 = new QGridLayout(gb1,2,2,15,7);
   column = new QRadioButton( i18n("Column"), gb1 );
   column->resize( column->sizeHint() );
@@ -51,7 +57,7 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   column->setChecked(true);
 
 
-  QButtonGroup* gb2 = new QButtonGroup( i18n("Type"), this );
+  QButtonGroup* gb2 = new QButtonGroup( i18n("Type"), page );
   QGridLayout *grid4 = new QGridLayout(gb2,2,2,15,7);
   linear = new QRadioButton( i18n("Linear"), gb2 );
   linear->resize( linear->sizeHint() );
@@ -64,7 +70,7 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   linear->setChecked(true);
 
 
-  QButtonGroup* gb = new QButtonGroup( i18n("Parameters"), this );
+  QButtonGroup* gb = new QButtonGroup( i18n("Parameters"), page );
   QGridLayout *grid2 = new QGridLayout(gb,2,4,15,7);
 
   QLabel *tmplabel = new QLabel( i18n( "Start value" ), gb );
@@ -94,14 +100,6 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   grid2->addWidget(step,1,2);
   step->setValidator( new KIntValidator( step ) );
 
-
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("&OK") );
-  m_pOk->setDefault( TRUE );
-  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
-  bb->layout();
-  grid1->addWidget( bb,2,1 );
   grid2->setColStretch(0,20);
   grid2->activate();
 
@@ -118,8 +116,7 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
 
   start->setFocus();
 
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
+  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 }
 
 
@@ -182,12 +179,6 @@ else
                 KMessageBox::error( this, i18n("Step is negative!") );
                 }
         }
-}
-
-
-void KSpreadSeriesDlg::slotCancel()
-{
-reject();
 }
 
 

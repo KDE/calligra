@@ -20,33 +20,25 @@
 #ifndef __kspread_dlg_showColRow__
 #define __kspread_dlg_showColRow__
 
-#include <qdialog.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qlistbox.h>
-#include <qlabel.h>
+#include <kdialogbase.h>
 #include <qvaluelist.h>
-
+class QListBox;
 class KSpreadView;
 
-class KSpreadShowColRow: public QDialog
+class KSpreadShowColRow: public KDialogBase
 {
   Q_OBJECT
 public:
   enum ShowColRow { Column, Row};
   KSpreadShowColRow( KSpreadView* parent, const char* name,ShowColRow _type );
 
-
 public slots:
   void slotOk();
-  void slotCancel();
   void slotDoubleClicked(QListBoxItem *);
+
 protected:
   KSpreadView* m_pView;
-
   QListBox * list;
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
   ShowColRow typeShow;
   QValueList<int> listInt;
 };

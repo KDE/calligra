@@ -25,31 +25,25 @@
 #include "kspread_util.h"
 #include <qlayout.h>
 #include <klocale.h>
-#include <kbuttonbox.h>
 
 KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,ShowColRow _type )
-	: QDialog( parent, name,TRUE )
+	: KDialogBase( parent, name,TRUE,"",Ok|Cancel )
 {
   m_pView = parent;
   typeShow=_type;
 
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
-  list=new QListBox(this);
+  QWidget *page = new QWidget( this );
+  setMainWidget(page);
+  QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
+
+
+  list=new QListBox(page);
   lay1->addWidget( list );
   if(_type==Column)
         setCaption( i18n("Name of the hidden column:") );
   else if(_type==Row)
         setCaption( i18n("Number of the hidden row:") );
 
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("&OK") );
-  m_pOk->setDefault( TRUE );
-  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
-  bb->layout();
-  lay1->addWidget( bb );
   bool showColNumber=m_pView->activeTable()->getShowColumnNumber();
   if(_type==Column)
         {
@@ -93,12 +87,11 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
         }
 
   if(!list->count())
-      m_pOk->setEnabled(false);
+      enableButtonOK(false);
 
   //selection multiple
   list->setSelectionMode(QListBox::Multi);
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
+  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   resize( 200, 150 );
 
@@ -129,11 +122,6 @@ void KSpreadShowColRow::slotOk()
 	m_pView->activeTable()->showRow(0,-1,listSelected);
     }
   accept();
-}
-
-void KSpreadShowColRow::slotCancel()
-{
-  reject();
 }
 
 #include "kspread_dlg_showColRow.moc"

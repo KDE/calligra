@@ -30,58 +30,43 @@
 #include <qpushbutton.h>
 
 KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &_marker)
-	: QDialog( parent, name,TRUE )
+	: KDialogBase( parent, name,TRUE,i18n("Change Angle" ), Ok|Cancel)
 {
 
   m_pView=parent;
   marker=_marker;
-  setCaption( i18n("Change Angle" ));
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+  QWidget *page = new QWidget( this );
+  setMainWidget(page);
+  QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
   KSpreadCell *cell = m_pView->activeTable()->cellAt( marker.x(), marker.y() );
   int size=-(cell->getAngle(marker.x(), marker.y()));
-  m_pSize2=new KIntNumInput(size, this, 10);
+  m_pSize2=new KIntNumInput(size, page, 10);
   m_pSize2->setRange(-90, 90, 1);
   m_pSize2->setLabel(i18n("Angle"));
   m_pSize2->setSuffix(" �");
   lay1->addWidget(m_pSize2);
-  m_pDefault=new QCheckBox(i18n("Default (0°)"),this);
+  m_pDefault=new QCheckBox(i18n("Default (0°)"),page);
   lay1->addWidget(m_pDefault);
 
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("&OK") );
-  m_pOk->setDefault( TRUE );
-  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
-  bb->layout();
-  lay1->addWidget( bb );
   lay1->activate();
   m_pSize2->setFocus();
-  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
+  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
   connect( m_pDefault, SIGNAL(clicked() ),this, SLOT(slotChangeState()));
 
 }
 
 void KSpreadAngle::slotChangeState()
 {
-m_pSize2->setEnabled(!m_pDefault->isChecked());
+    m_pSize2->setEnabled(!m_pDefault->isChecked());
 }
 
 void KSpreadAngle::slotOk()
 {
-if(!m_pDefault->isChecked())
+    if(!m_pDefault->isChecked())
         m_pView->activeTable()->setSelectionAngle(marker,-m_pSize2->value());
-else
+    else
         m_pView->activeTable()->setSelectionAngle(marker,0);
-accept();
-}
-
-void KSpreadAngle::slotCancel()
-{
-
-reject();
+    accept();
 }
 
 

@@ -21,7 +21,7 @@
 #ifndef __kspread_dlg_comment__
 #define __kspread_dlg_comment__
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 
 class KSpreadView;
 class KSpreadTable;
@@ -29,7 +29,7 @@ class KSpreadCell;
 class QPushButton;
 class QMultiLineEdit;
 
-class KSpreadComment : public QDialog
+class KSpreadComment : public KDialogBase
 {
   Q_OBJECT
 public:
@@ -37,16 +37,12 @@ public:
 
 public slots:
   void slotOk();
-  void slotCancel();
   void slotTextChanged();
 protected:
 
   KSpreadView* m_pView;
   QMultiLineEdit *multiLine; 
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
   QPoint  marker;
-
 };
 
 #endif

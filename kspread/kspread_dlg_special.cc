@@ -24,20 +24,17 @@
 
 #include <qlayout.h>
 #include <klocale.h>
-#include <kbuttonbox.h>
 #include <qbuttongroup.h>
 
 KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name )
-	: QDialog( parent, name, TRUE )
+	: KDialogBase( parent, name, TRUE,i18n("Special Paste"),Ok|Cancel  )
 {
     m_pView = parent;
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+    QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
 
-    setCaption( i18n("Special Paste") );
-    QVBoxLayout *lay1 = new QVBoxLayout( this );
-    lay1->setMargin( 5 );
-    lay1->setSpacing( 10 );
-
-    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Paste what:" ),this );
+    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Paste what:" ),page );
     grp->setRadioButtonExclusive( TRUE );
     grp->layout();
     lay1->addWidget(grp);
@@ -48,7 +45,7 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name )
     rb4 = new QRadioButton( i18n("Everything without border"), grp );
     rb1->setChecked(true);
 
-    grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Operation"),this);
+    grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Operation"),page);
     grp->setRadioButtonExclusive( TRUE );
     grp->layout();
     lay1->addWidget(grp);
@@ -65,16 +62,7 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name )
     // cb->layout();
     // lay1->addWidget(cb);
 
-    KButtonBox *bb = new KButtonBox( this );
-    bb->addStretch();
-    m_pOk = bb->addButton( i18n("&OK") );
-    m_pOk->setDefault( TRUE );
-    m_pCancel = bb->addButton( i18n( "&Cancel" ) );
-    bb->layout();
-    lay1->addWidget( bb );
-
-    connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-    connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
     connect( rb3, SIGNAL( toggled( bool ) ), this, SLOT( slotToggled( bool ) ) );
     connect( rb10, SIGNAL( toggled( bool ) ), this, SLOT( slotToggled( bool ) ) );
 }
@@ -118,11 +106,6 @@ void KSpreadspecial::slotOk()
     m_pView->activeTable()->paste( QPoint(  m_pView->canvasWidget()->markerColumn(),
 					    m_pView->canvasWidget()->markerRow() ),true, sp, op );
     accept();
-}
-
-void KSpreadspecial::slotCancel()
-{
-    reject();
 }
 
 void KSpreadspecial::slotToggled( bool b )

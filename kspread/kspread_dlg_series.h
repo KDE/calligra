@@ -21,35 +21,31 @@
 #ifndef __kspread_dlg_series__
 #define __kspread_dlg_series__
 
-#include <qdialog.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
+#include <kdialogbase.h>
 
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
+class QRadioButton;
+class QCheckBox;
+class QLineEdit;
 
-class KSpreadSeriesDlg : public QDialog
+class KSpreadSeriesDlg : public KDialogBase
 {
   Q_OBJECT
 public:
   
-KSpreadSeriesDlg(KSpreadView* parent, const char* name,const QPoint &_marker);  
+  KSpreadSeriesDlg(KSpreadView* parent, const char* name,const QPoint &_marker);  
 
-KSpreadTable* table;
+  KSpreadTable* table;
 
 public slots:
   void slotOk();
-  void slotCancel();
 protected:
   KSpreadView* m_pView;
   QLineEdit* start;
   QLineEdit* end;
   QLineEdit* step;
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
   QRadioButton* column;
   QRadioButton* row;
   QRadioButton* linear;

@@ -29,36 +29,25 @@
 #include <qpushbutton.h>
 
 KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoint &_marker)
-	: QDialog( parent, name,TRUE )
+	: KDialogBase( parent, name,TRUE,i18n("Cell comment"),Ok|Cancel )
 {
     m_pView = parent;
     marker= _marker;
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+    QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
 
-    setCaption( i18n("Cell comment") );
-
-    QVBoxLayout *lay1 = new QVBoxLayout( this );
-    lay1->setMargin( 5 );
-    lay1->setSpacing( 10 );
-
-    multiLine = new QMultiLineEdit( this );
+    multiLine = new QMultiLineEdit( page );
     lay1->addWidget(multiLine);
 
     multiLine->setFocus();
 
-    KButtonBox *bb = new KButtonBox( this );
-    bb->addStretch();
-    m_pOk = bb->addButton( i18n("&OK") );
-    m_pOk->setDefault( TRUE );
-    m_pCancel= bb->addButton( i18n( "&Cancel" ) );
-    bb->layout();
-    lay1->addWidget( bb);
 
     KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
     if(!cell->comment(marker.x(),marker.y()).isEmpty())
         multiLine->setText(cell->comment(marker.x(),marker.y()));
 
-    connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-    connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
     connect(multiLine, SIGNAL(textChanged ()),this, SLOT(slotTextChanged()));
 
     slotTextChanged();
@@ -66,19 +55,13 @@ KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoi
 
 void KSpreadComment::slotTextChanged()
 {
-    m_pOk->setEnabled( !multiLine->text().isEmpty());
+    enableButtonOK( !multiLine->text().isEmpty());
 }
 
 void KSpreadComment::slotOk()
 {
     m_pView->activeTable()->setSelectionComment(marker,multiLine->text().stripWhiteSpace() );
     accept();
-}
-
-
-void KSpreadComment::slotCancel()
-{
-    reject();
 }
 
 #include "kspread_dlg_comment.moc"
