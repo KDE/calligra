@@ -285,24 +285,28 @@ bool KOMLParser::findTagStart()
       return false;
   }
 
-  bool bend = false;
+  bool bEnd = false;
 
   do
   {
+    // Look for '<'
     while( m_iPos < m_iLen && m_pData[ m_iPos ] != '<' )
       m_iPos++;
 
+    // We stopped because end of line
     if ( m_iPos == m_iLen )
     {
       if ( !pull() )
 	return false;
     }
-    else
+    else // We stopped because we found '<'
     {
-      bend = true;
       m_iPos++;
+      // What's the next character ?
+      if ( m_pData[ m_iPos ] != '!' ) // ! => not a tag
+        bEnd = true;
     }
-  } while( !bend );
+  } while( !bEnd );
 
   return true;
 }
