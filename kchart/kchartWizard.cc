@@ -83,7 +83,7 @@ void KChartWizard::subType(int _type)
     if( type == KDChartParams::Bar ||
         type == KDChartParams::Line ||
         type == KDChartParams::Area ||
-        type == KDChartParams::HiLo ||
+        /*type == KDChartParams::HiLo ||*/
         type == KDChartParams::Polar ) {
         _selectchartsubtypepage->chartSubType=true;
     } else {
