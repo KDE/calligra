@@ -2069,6 +2069,15 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
         dt = (t.width() + 1 )/2;
       if ( b.style() != Qt::NoPen )
         db = (t.width() / 2);
+
+      //TODO: Remove following hack when we switch to koText
+      //We can't paint the correct width of the pen, so we disable correct shortend default borders.
+      //Drawback: Painting the its twice, better than missing border, Philipp
+      if ( ( view != NULL ) && ( view->zoom() != 1.0 ) )
+      {
+        dt = 0;
+        db = 0;
+      }
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
@@ -2091,6 +2100,15 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
         dt = (t.width() + 1 )/2;
       if ( b.style() != Qt::NoPen )
         db = (t.width() / 2);
+
+      //TODO: Remove following hack when we switch to koText
+      //We can't paint the correct width of the pen, so we disable correct shortend default borders.
+      //Drawback: Painting the its twice, better than missing border, Philipp
+      if ( ( view != NULL ) && ( view->zoom() != 1.0 ) )
+      {
+        dt = 0;
+        db = 0;
+      }
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
@@ -2112,7 +2130,17 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
         dl = ( l.width() - 1 ) / 2 + 1;
       if ( r.style() != Qt::NoPen )
         dr = r.width() / 2;
+
+      //TODO: Remove following hack when we switch to koText
+      //We can't paint the correct width of the pen, so we disable correct shortend default borders.
+      //Drawback: Painting the its twice, better than missing border, Philipp
+      if ( ( view != NULL ) && ( view->zoom() != 1.0 ) )
+      {
+        dl = 0;
+        dr = 0;
+      }
     }
+
     painter.setPen( table()->doc()->defaultGridPen() );
     painter.drawLine( corner.x() + dl,         corner.y(),
                       corner.x() + width - dr, corner.y() );
@@ -2132,7 +2160,17 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
         dl = ( l.width() - 1 ) / 2 + 1;
       if ( r.style() != Qt::NoPen )
         dr = r.width() / 2;
+
+      //TODO: Remove following hack when we switch to koText
+      //We can't paint the correct width of the pen, so we disable correct shortend default borders.
+      //Drawback: Painting the its twice, better than missing border, Philipp
+      if ( ( view != NULL ) && ( view->zoom() != 1.0 ) )
+      {
+        dl = 0;
+        dr = 0;
+      }
     }
+
     painter.setPen( table()->doc()->defaultGridPen() );
     painter.drawLine( corner.x() + dl,         corner.y() + height,
                       corner.x() + width - dr, corner.y() + height );
