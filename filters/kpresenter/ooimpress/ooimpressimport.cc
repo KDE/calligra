@@ -1055,11 +1055,6 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
     QDomElement textObjectElement = doc.createElement( "TEXTOBJ" );
     appendTextObjectMargin( doc, textObjectElement );
 
-    // KPresenter needs an attribute 'verticalValue' for vertical alignment to work
-    // correctly. It is somehow calculated like value = 'height of box' - 'height of text'.
-    // But we have no chance to calculate this value at this place... so needs to be fixed
-    // in kpresenter before we activate this...
-    #if 0
     // vertical alignment
     if ( m_styleStack.hasAttribute( "draw:textarea-vertical-align" ) )
     {
@@ -1070,8 +1065,9 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
             textObjectElement.setAttribute( "verticalAlign", "center" );
         else if ( alignment == "bottom" )
             textObjectElement.setAttribute( "verticalAlign", "bottom" );
+
+        textObjectElement.setAttribute("verticalValue", 0.0);
     }
-    #endif
 
     for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
     {
@@ -1082,9 +1078,7 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
         if ( name == "text:p" ) // text paragraph
             e = parseParagraph( doc, t );
         else if ( name == "text:unordered-list" || name == "text:ordered-list" ) // listitem
-        {
             e = parseList( doc, t );
-        }
         else
         {
             kdDebug() << "Unsupported texttype '" << name << "'" << endl;
