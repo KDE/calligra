@@ -10,7 +10,7 @@ class QDomDocument;
 class QPoint;
 class QRect;
 class QPainter;
-class QActionCollection;
+class KActionCollection;
 
 class KGObject : public QObject {
 
@@ -42,7 +42,7 @@ public:
     virtual const bool intersects(const QRect &r) const = 0;  // does the object intersect the rectangle?
     virtual const QRect boundingRect() const = 0;             // the bounding rectangle of this object
 
-    const QActionCollection *popupActions() const { return popup; } // return all the actions provided from
+    const KActionCollection *popupActions() const { return popup; } // return all the actions provided from
                                                                     // that object. Don't forget to init it!
 
     // (TODO)
@@ -67,7 +67,7 @@ protected:
     mutable bool boundingRectDirty;              // is the cached bounding rect still correct?
     mutable QRect bounds;                        // bounding rect (cache)
 
-    QActionCollection *popup;                    // all the actions which are available
+    KActionCollection *popup;                    // all the actions which are available
 
     QString m_name, m_type;                      // name & type of the object
 
