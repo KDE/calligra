@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="102">
+<kpartgui name="kexi" version="103">
 <MenuBar noMerge="0">
   <Menu name="file" noMerge="1">
     <text>&amp;Project</text>
@@ -38,24 +38,22 @@
     <Merge/>
   </Menu>
   
-  <Menu name="view">
+  <Menu name="view" noMerge="1">
     <text>&amp;View</text>
+    <Action name="view_navigator"/>
     <Action name="view_viewmode"/>
     <Action name="view_next_window"/>
     <Action name="view_previous_window"/>
     <Action name="view_first_window"/>
     <Action name="view_last_window"/>
     <Action name="file_switchto"/>
-    <Separator/>
-    <!--Action name="show_nav"/>
-    <Action name="show_contexthelp"/-->
   </Menu>
   
-  <Menu name="create">
+  <Menu name="create" noMerge="1">
     <text>&amp;Create</text>
   </Menu>
 
-  <Menu name="window">
+  <Menu name="window" noMerge="1">
     <text>&amp;Window</text>
     <DefineGroup name="window_operations"/>
     <Merge/>
@@ -82,7 +80,7 @@
     <Separator/>
     <Menu name="options_show_other">
       <Text>&amp;Other</Text>
-      <Action name="options_show_nav"/>
+      <!-- Action name="options_show_nav"/ -->
       <Action name="options_show_contexthelp"/>
     </Menu>
     <Separator/>
@@ -114,6 +112,7 @@
     <Action name="project_saveas"/>
     <Action name="project_properties"/>
     <Action name="project_close"/>
+    <Action name="view_navigator"/>
   </enable>
 </State>
 

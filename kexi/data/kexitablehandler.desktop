@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 Name=Tables
+Name[bg]=Таблици
 Name[ca]=Taules
 Name[da]=Tabeller
 Name[de]=Tabellen
@@ -21,11 +22,12 @@ Name[pt]=Tabelas
 Name[pt_BR]=Tabelas
 Name[sl]=Tabele
 Name[sv]=Tabeller
+Name[tr]=Tablolar
 Name[uz]=Жадваллар
 X-KDE-Library=kexihandler_table
+X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=1
 X-Kexi-TypeName=table
 X-Kexi-TypeMime=kexi/table
 X-Kexi-GroupIcon=tables
 X-Kexi-ItemIcon=table
-
