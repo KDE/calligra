@@ -58,7 +58,7 @@ class KFORMEDITOR_EXPORT KFormDesignerPart: public KParts::ReadWritePart
 	Q_OBJECT
 
 	public:
-		KFormDesignerPart(QWidget *parent, const char *name, bool readOnly=true);
+		KFormDesignerPart(QWidget *parent, const char *name, bool readOnly=true, const QStringList &args=QStringList());
 		virtual ~KFormDesignerPart();
 
 		KFormDesigner::FormManager*   manager()  { return m_manager; }
@@ -100,6 +100,7 @@ class KFORMEDITOR_EXPORT KFormDesignerPart: public KParts::ReadWritePart
 		int  m_count;
 		bool   m_uniqueFormMode;
 		bool   m_openingFile;
+		bool   m_inShell;
 };
 
 //! Helper: this widget is used to create form's surface

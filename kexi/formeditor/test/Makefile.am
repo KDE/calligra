@@ -40,5 +40,5 @@ partdesktop_DATA = kformdesigner_part.desktop
 
 # this is where the part's XML-GUI resource file goes
 partrcdir   = $(kde_datadir)/kformdesigner_part
-partrc_DATA = kformdesigner_part.rc
+partrc_DATA = kformdesigner_part.rc kformdesigner_part_shell.rc
 

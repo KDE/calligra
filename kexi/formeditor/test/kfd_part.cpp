@@ -73,9 +73,7 @@ KFDFactory::createPartObject( QWidget *parentWidget, const char *, QObject *, co
   const char *classname, const QStringList &args)
 {
 	bool readOnly = (QCString(classname) == "KParts::ReadOnlyPart");
-	KFormDesignerPart *part = new KFormDesignerPart(parentWidget, name, readOnly);
-	if(!args.grep("multipleMode").isEmpty())
-		part->setUniqueFormMode(false);
+	KFormDesignerPart *part = new KFormDesignerPart(parentWidget, name, readOnly, args);
 	return part;
 }
 
@@ -94,7 +92,7 @@ KFDFactory::aboutData()
 	return about;
 }
 
-KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool readOnly)
+KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool readOnly, const QStringList &args)
 : KParts::ReadWritePart(parent, name), m_count(0)
 {
 	setInstance(KFDFactory::instance());
@@ -104,6 +102,10 @@ KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool rea
 	setReadWrite(!readOnly);
 	m_uniqueFormMode = true;
 	m_openingFile = false;
+
+	if(!args.grep("multipleMode").isEmpty())
+		setUniqueFormMode(false);
+	m_inShell = (!args.grep("shell").isEmpty());
 
 	QHBox *container = new QHBox(parent, "kfd_container_widget");
 
@@ -196,7 +198,10 @@ KFormDesignerPart::setupActions()
 	sizeMenu->insert( new KAction(i18n("To Widest"), "aowidest", KShortcut(0), m_manager, SLOT(adjustWidthToBig()), actionCollection(), "adjust_width_big") );
 
 	m_manager->createActions(actionCollection());
-	setXMLFile("kformdesigner_part.rc");
+	if(m_inShell)
+		setXMLFile("kformdesigner_part_shell.rc");
+	else
+		setXMLFile("kformdesigner_part.rc");
 }
 
 void

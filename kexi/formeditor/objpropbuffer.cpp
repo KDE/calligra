@@ -109,7 +109,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 				m_lastcom->setValue(value);
 			else if(!m_undoing)
 			{
-				// We store lod values for each widget
+				// We store old values for each widget
 				QMap<QString, QVariant> list;
 				for(w = m_widgets.first(); w; w = m_widgets.next())
 					list.insert(w->name(), w->property(property.latin1()));
