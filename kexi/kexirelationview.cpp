@@ -185,7 +185,7 @@ KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint
 		}
 	}
 	
-	kdDebug() << "KexiRelationView::drawConnection(): geometry: " << (*conn).geometry.x() << ":" << (*conn).geometry.width() << endl;
+//	kdDebug() << "KexiRelationView::drawConnection(): geometry: " << (*conn).geometry.x() << ":" << (*conn).geometry.width() << endl;
 	
 }
 

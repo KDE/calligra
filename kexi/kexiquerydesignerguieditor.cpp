@@ -144,13 +144,6 @@ KexiQueryDesignerGuiEditor::getQuery()
 
 			query += table + "." + field;
 
-			//use the 1st item as main table
-			//not good since it could be i18n("[no table]") or not the main talbe
-			//but as i don't got any idea how to get the right table (by now we will leafe
-			//that
-
-//			if(mI == 0 && table != i18n("[no table]"))
-//				mainTable = table;
 
 			int iCount;
 			if(m_involvedTables.contains(table))
@@ -218,7 +211,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 						isSrcTable = false;
 						
 						JoinField jf;
-						jf.sourceField = (*itRel).srcField;
+						jf.sourceField = (*itRel).rcvTable;
 						jf.eqLeft = (*itRel).srcTable + "." + (*itRel).srcField;
 						jf.eqRight = (*itRel).rcvTable + "." + (*itRel).rcvField;
 						joinFields.append(jf);
@@ -241,12 +234,20 @@ KexiQueryDesignerGuiEditor::getQuery()
 
 	for(JoinFields::Iterator itJ = joinFields.begin(); itJ != joinFields.end(); itJ++)
 	{
-		query += " LEFT JOIN ";
-		query += (*itJ).sourceField;
-		query += " ON ";
-		query += (*itJ).eqLeft;
-		query += " = ";
-		query += (*itJ).eqRight;
+		QStringList leftList = QStringList::split(".", (*itJ).eqLeft);
+		kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): left: " << (*itJ).eqLeft << endl;
+		kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): current master: " << leftList.first() << endl;
+		
+		
+		if(leftList.first() == maxTable)
+		{
+			query += " LEFT JOIN ";
+			query += (*itJ).sourceField;
+			query += " ON ";
+			query += (*itJ).eqLeft;
+			query += " = ";
+			query += (*itJ).eqRight;
+		}
 	}
 
 	int conditionCount = 0;

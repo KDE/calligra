@@ -80,6 +80,8 @@ KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, QString identifier, const 
  : KexiDialogBase(parent, name)
 {
 	m_identifier = identifier;
+	m_partCount = 0; 
+	m_activeTab = -1;
 
 	setCaption(i18n("Query"));
 	registerAs(DocumentWindow);
@@ -110,12 +112,12 @@ KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, QString identifier, const 
 
 	m_widgetStack->raiseWidget(m_editor);
 
-        KMultiTabBar *tb=new KMultiTabBar(this,KMultiTabBar::Horizontal);
-	tb->showActiveTabTexts(true);
-        tb->insertTab(SmallIcon("state_edit"),-1,"Graphical Designer");
-        tb->insertTab(SmallIcon("state_sql"),-1,"Sql Editor");
-        tb->insertTab(SmallIcon("state_view"),-1,"Result");
-	l->addWidget(tb);
+        m_tb = new KMultiTabBar(this,KMultiTabBar::Horizontal);
+	m_tb->showActiveTabTexts(false);
+        addTab(SmallIcon("state_edit"), "Graphical Designer", m_editor);
+        addTab(SmallIcon("state_sql"), "Sql Editor", m_sqlView);
+        addTab(SmallIcon("table"), "Result", m_view);
+	l->addWidget(m_tb);
 	l->activate();
 //	activateActions();
 //	connect(kexi->project(), SIGNAL(saving()), this, SLOT(slotSave()));
@@ -268,8 +270,6 @@ KexiQueryDesigner::slotSave(KoStore *store)
 		QDomText tPreparsed = domDoc.createTextNode(m_editor->getQuery());
 		preparsed.appendChild(tPreparsed);
 
-//		kdDebug() << "KexiQueryDesigner::slotSave() XML:\n" << domDoc.toString() << endl;
-
 		QByteArray data = domDoc.toCString();
 		data.resize(data.size()-1);
 
@@ -279,6 +279,45 @@ KexiQueryDesigner::slotSave(KoStore *store)
 			store->write(data);
 			store->close();
 		}
+	}
+}
+
+void
+KexiQueryDesigner::addTab(QPixmap pixmap, QString caption, QWidget *assosiated)
+{
+	m_partCount++;
+	kdDebug() << "KexiQueryDesigner::addTab(): adding tab: " << m_partCount << endl;
+	m_tb->insertTab(pixmap, m_partCount, caption);
+	m_parts.insert(m_partCount, assosiated);
+
+	connect(m_tb->getTab(m_partCount), SIGNAL(clicked(int)), this, SLOT(slotTabActivated(int)));
+
+	if(m_activeTab == -1)
+	{
+		m_tb->setTab(m_partCount, true);
+		m_activeTab = m_partCount;
+	}
+}
+
+void
+KexiQueryDesigner::slotTabActivated(int tab)
+{
+	if(tab != m_activeTab)
+	{
+		m_tb->setTab(m_activeTab, false);
+		m_widgetStack->raiseWidget(m_parts[m_activeTab]);
+		
+		//please close your eyes and go some lines down (blind) 
+		if(m_parts[tab] == m_view && m_parts[m_activeTab] == m_editor)
+		{
+			m_view->executeQuery(m_editor->getQuery());
+		}
+		
+		m_activeTab = tab;
+	}
+	else
+	{
+		m_tb->setTab(tab, true);
 	}
 }
 

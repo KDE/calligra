@@ -20,16 +20,21 @@
 #ifndef KEXIQUERYDESIGNER_H
 #define KEXIQUERYDESIGNER_H
 
+#include <qintdict.h>
+
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 
-#include <kexidialogbase.h>
+#include "kexidialogbase.h"
 
 class KAction;
 class KoStore;
 class KexiQueryDesignerGuiEditor;
 class KexiDataTable;
 class QWidgetStack;
+class KMultiTabBar;
+
+typedef QIntDict<QWidget> WidgetIndex;
 
 class KexiQueryDesigner : public KexiDialogBase
 {
@@ -54,6 +59,9 @@ class KexiQueryDesigner : public KexiDialogBase
 
 		void			setCurrentQuery(QString query);
 
+	protected:
+		void			addTab(QPixmap pixmap, QString caption, QWidget *assosiated);
+
 	private:
 		class			EditGUIClient;
 		friend class		EditGUIClient;
@@ -71,6 +79,11 @@ class KexiQueryDesigner : public KexiDialogBase
 		
 		ActivePart		m_currentPart;
 
+		KMultiTabBar		*m_tb;
+		WidgetIndex		m_parts;
+		int			m_partCount;
+		int			m_activeTab;
+
 	signals:
 		void			queryChanged();
 
@@ -78,6 +91,8 @@ class KexiQueryDesigner : public KexiDialogBase
 		void			slotEditState();
 		void			slotSQLState();
 		void			slotViewState();
+
+		void			slotTabActivated(int tab);
 
 		void			slotSave(KoStore *store);
 };

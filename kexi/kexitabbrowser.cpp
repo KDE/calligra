@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Daniel Molkentin <molkentin@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -68,7 +67,7 @@ KexiTabBrowser::KexiTabBrowser(QWidget *parent, const char *name)
 }
 
 void
-KexiTabBrowser::addBrowser(KexiBrowser *browser, QString icon,QString text)
+KexiTabBrowser::addBrowser(KexiBrowser *browser, QString icon, QString text)
 {
 	m_tabs++;
 	m_tabBar->insertTab(kexi->iconLoader()->loadIcon(icon, KIcon::Small), m_tabs,text);
