@@ -2195,9 +2195,10 @@ void KWTextFrameSet::renumberFootNotes()
             vit.current()->setNum( varNumber );
             vit.current()->paragraph()->invalidate(0);
             vit.current()->paragraph()->setChanged( true );
+            needRepaint = true;
         }
     }
-    if (  needRepaint )
+    if ( needRepaint )
         m_doc->slotRepaintChanged( this );
 }
 
