@@ -238,13 +238,14 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
     if ( shadowDistance > 0 && !drawContour )
     {
-      double sx = ox;
-      double sy = oy;
+        double sx = 0;
+        double sy = 0;
 
-      getShadowCoords( sx, sy );
+        getShadowCoords( sx, sy );
 
-      if ( angle == 0 )
+        if ( angle == 0 )
         {
+            _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
             _painter->setPen( QPen( shadowColor ) );
             _painter->setBrush( shadowColor );
             _painter->drawRect( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ),
@@ -264,7 +265,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
             br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
             rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-	    QWMatrix m;
+            QWMatrix m;
             m.translate( pw / 2, ph / 2 );
             m.rotate( angle );
             m.translate( rr.left() + pixXPos + _zoomHandler->zoomItX( sx ),
