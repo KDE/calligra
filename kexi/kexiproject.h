@@ -23,12 +23,22 @@
 #define KEXI_PROJECT_H
 
 #include <qobject.h>
+#include <qmap.h>
+#include <qvaluelist.h>
 
 #include "kexiDB/kexidb.h"
 #include "kexiformmanager.h"
 
-class KexiDoc;
+class QDomElement;
 class KoStore;
+class KexiDoc;
+
+struct FileReference
+{
+	QString group;
+	QString name;
+	QString location;
+};
 
 struct Credentials
 {
@@ -42,6 +52,9 @@ struct Credentials
 	bool savePassword;
 };
 
+typedef QMap<QString, QDomElement> Groups;
+typedef QValueList<FileReference> References;
+
 class KexiProject : public QObject
 {
 Q_OBJECT
@@ -53,8 +66,8 @@ public:
 	bool saveProjectAs(const QString& url);
 	bool loadProject(const QString& url);
 
-	void addFileReference(QString path);
-	QStringList fileReferences() const;
+	void addFileReference(FileReference);
+	References fileReferences(QString group);
 
 	bool initDbConnection(const Credentials& cred, const bool create = false);
 	bool initHostConnection(const Credentials &cred);
@@ -86,7 +99,8 @@ private:
 	QString		m_url;
 	bool		m_modified;
 	bool		m_dbAvaible;
-	QStringList	m_fileReferences;
+	References	m_fileReferences;
+	Groups		m_refGroups;
 };
 
 #endif

@@ -15,6 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qlayout.h>
+#include <qheader.h>
+#include <qpoint.h>
+#include <qlistview.h>
+#include <qdom.h>
+
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <klistview.h>
@@ -24,11 +30,6 @@
 #include <kdebug.h>
 #include <klineeditdlg.h>
 #include <kmessagebox.h>
-
-#include <qlayout.h>
-#include <qheader.h>
-#include <qpoint.h>
-#include <qlistview.h>
 
 #include "kexiDB/kexidb.h"
 
@@ -110,18 +111,12 @@ void KexiBrowser::addQueries(KexiBrowserItem *parent)
 {
 	kdDebug() << "KexiBrowser::addTables()" << endl;
 
-	QStringList fileRefs = kexi->project()->fileReferences();
+	References fileRefs = kexi->project()->fileReferences("Queries");
 
-	for(QStringList::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
+	for(References::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
 	{
-		if((*it).contains(".query") != 0)
-		{
-			QStringList pList = QStringList::split("/", (*it), false);
-//			QString qName=(*pList.end()).left((*pList.end()).contains("."));
-			QString qName(*pList.end());
-			kdDebug() << "KexiProject::loadProject(): adding Q: " << qName << endl;
-			KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, parent, qName);
-		}
+		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, parent, (*it).name);
+		item->setPixmap(0, iconLoader->loadIcon("queries", KIcon::Small));
 	}
 }
 
@@ -209,6 +204,16 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 			break;
 		}
 
+		case KexiBrowserItem::Query:
+		{
+			if ( r->type() == KexiBrowserItem::Child )
+			{
+				KexiQueryDesigner *kqd = new KexiQueryDesigner(kexi->mainWindow()->workspaceWidget(), r->text(0), "oq");
+				kqd->show();
+			}
+			break;
+		}
+
 		default:
 		break;
 	}	
@@ -270,12 +275,14 @@ void KexiBrowser::slotCreateQuery()
 	{
 		KexiQueryDesigner *kqd = new KexiQueryDesigner(kexi->mainWindow()->workspaceWidget(), name, "query");
 		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, m_queries, name);
-		kexi->project()->addFileReference("/query/" + name + ".query");
+//		kexi->project()->addFileReference("/query/" + name + ".query");
+
+		kexi->project()->setModified();
+
 		m_queries->setOpen(true);
 		kqd->show();
 
 		kexi->project()->setModified();
-
 	}
 }
 

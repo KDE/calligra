@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+             (C) 2002 by Joseph Wenninger <jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -213,6 +214,12 @@ KexiQueryDesigner::slotSave(KoStore *store)
 		QDomDocument domDoc("Query");
 		domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
 
+		QDomElement nameElement = domDoc.createElement("Query");
+		QDomText attrName = domDoc.createTextNode(m_identifier);
+		nameElement.appendChild(attrName);
+		domDoc.appendChild(nameElement);
+
+
 		QDomElement itemsElement = domDoc.createElement("Items");
 		domDoc.appendChild(itemsElement);
 
@@ -269,6 +276,11 @@ KexiQueryDesigner::slotSave(KoStore *store)
 
 		if(store)
 		{
+			FileReference ref;
+			ref.group = "queries";
+			ref.name = m_identifier;
+			ref.location = "/query/" + m_identifier + ".query";
+			kexi->project()->addFileReference(ref);
 			store->open("/query/" + m_identifier + ".query");
 			store->write(data);
 			store->close();

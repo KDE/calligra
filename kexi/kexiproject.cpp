@@ -51,6 +51,12 @@ KexiProject::saveProject()
 		return false;
 	}
 
+	KoStore* store = KoStore::createStore(m_url, KoStore::Write, "application/x-kexi");
+	if(store)
+	{
+		emit saving(store);
+	}
+	
 	QDomDocument domDoc("KexiProject");
 	domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
 	
@@ -109,9 +115,36 @@ KexiProject::saveProject()
 	QDomElement refs = domDoc.createElement("references");
 	projectElement.appendChild(refs);
 
-	for(QStringList::Iterator it = m_fileReferences.begin(); it != m_fileReferences.end(); it++)
+	kdDebug() << "KexiProject::saveProject(): storing " << m_fileReferences.count() << " references" << endl;
+	for(References::Iterator it = m_fileReferences.begin(); it != m_fileReferences.end(); it++)
 	{
+		FileReference ref(*it);
 
+		QDomElement item = domDoc.createElement("item");
+		item.setAttribute("name", ref.name);
+		item.setAttribute("location", ref.location);
+
+		if(m_refGroups.contains(ref.group))
+		{
+			kdDebug() << "KexiProject::saveProject(): using existing group: " << ref.group << endl;
+			(&m_refGroups[ref.group])->appendChild(item);
+		}
+		else
+		{
+			kdDebug() << "KexiProject::saveProject(): creating group: " << ref.group << endl;
+			
+			QDomElement group = domDoc.createElement(ref.group);
+			group.appendChild(item);
+			
+			m_refGroups.insert(ref.group, group);
+		}
+	}
+	
+	for(Groups::Iterator itG = m_refGroups.begin(); itG != m_refGroups.end(); itG++)
+	{
+		refs.appendChild(itG.data());
+	}
+/*
 		QDomElement ref = domDoc.createElement("embedded");
 		refs.appendChild(ref);
 
@@ -119,18 +152,16 @@ KexiProject::saveProject()
 		ref.appendChild(tref);
 	}
 
+*/
 	QByteArray data = domDoc.toCString();
 	data.resize(data.size()-1);
 
-	KoStore* store = KoStore::createStore(m_url, KoStore::Write, "application/x-kexi");
-	
 	if(store)
 	{
 		if(store->open("/project.xml"))
 		{
 			store->write(data);
 			store->close();
-			emit saving(store);
 		}
 		
 		delete store;
@@ -191,23 +222,29 @@ KexiProject::loadProject(const QString& url)
 
 	QDomElement fileRefs = projectData.namedItem("references").toElement();
 	QDomNodeList reflist = fileRefs.childNodes();
-	kdDebug() << "KexiProject::loadProject(): looking up references...: " << reflist.count() << endl;
-/*	for(QDomNode n = fileRefs.firstChild(); n != fileRefs.lastChild(); n.nextSibling())
-	{
-		QString reference = n.toText().data();
-		kdDebug() << "KexiProject::loadProject(): reference " << reference << endl;
-		if(reference.contains(".query") != 0)
-		{
-			QStringList pList = QStringList::split("/", reference, false);
-			QString qName=(*pList.end()).left((*pList.end()).contains("."));
-			kdDebug() << "KexiProject::loadProject(): adding Q: " << qName << endl;
-		}
-	}
-*/
+	kdDebug() << "KexiProject::loadProject(): looking up references: " << reflist.count() << endl;
+
 	for(int ci = 0; ci < reflist.count(); ci++)
 	{
-		QDomNode n = reflist.item(ci);
-		m_fileReferences.append(n.toElement().text());
+		QDomNode groups = reflist.item(ci);
+		QDomNodeList groupList = groups.childNodes();
+		QString groupName = groups.toElement().tagName();
+		kdDebug() << "KexiProject::loadProject(): looking up groups: " << groupList.count() << " for " << groupName << endl; 
+		for(int gi = 0; gi < groupList.count(); gi++)
+		{
+			QDomElement item = groupList.item(gi).toElement();
+			QString name = item.attribute("name");
+			QString location = item.attribute("location");
+
+			FileReference ref;
+			ref.group = groupName;
+			ref.name = name;
+			ref.location = location;
+				
+				qDebug("KexiProject::openProject(): #ref %s:%s:%s\n",groupName.latin1(),name.latin1(),location.latin1());
+		
+			m_fileReferences.append(ref);
+		}
 	}
 
 	Credentials parsedCred;
@@ -323,9 +360,9 @@ KexiProject::clear()
 }
 
 void
-KexiProject::addFileReference(QString path)
+KexiProject::addFileReference(FileReference fileref)
 {
-	m_fileReferences.append(path);
+	m_fileReferences.append(fileref);
 }
 
 void
@@ -361,10 +398,28 @@ KexiProject::stringToBool(const QString s)
 	}
 }
 
+References
+KexiProject::fileReferences(QString group)
+{
+	kdDebug() << "KexiProject::fileReferences(" << group << ")" << endl;
+	References refs;
+	for(References::Iterator it = m_fileReferences.begin(); it != m_fileReferences.end(); it++)
+	{
+		if((*it).group == group)
+		{
+			kdDebug() << "KexiProject::fileReferences() found a matching item: " << group << endl;
+			refs.append(*it);
+		}
+	}
+	return refs;
+}
+
+/*
 QStringList
 KexiProject::fileReferences() const
 {
 	return m_fileReferences;
 }
+*/
 
 #include "kexiproject.moc"
