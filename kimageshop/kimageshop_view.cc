@@ -351,24 +351,24 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   menubar->insertMenu( text , m_vMenuView, -1, -1 );
 
   text = Q2C( i18n( "&Layer dialog" ) );
-  m_idMenuView_LayerDialog = m_vMenuView->insertItem( text, this, "viewLayerDialog", 0 );
+  m_idMenuView_LayerDialog = m_vMenuView->insertItem( text, this, "slotLayerDialog", 0 );
 
   text = Q2C( i18n( "&Color dialog" ) );
-  m_idMenuView_ColorDialog = m_vMenuView->insertItem( text, this, "viewColorDialog", 0 );
+  m_idMenuView_ColorDialog = m_vMenuView->insertItem( text, this, "slotColorDialog", 0 );
 
   text = Q2C( i18n( "&Brushes dialog" ) );
-  m_idMenuView_BrushDialog = m_vMenuView->insertItem( text, this, "viewBrushDialog", 0 );
+  m_idMenuView_BrushDialog = m_vMenuView->insertItem( text, this, "slotBrushDialog", 0 );
 
   text = Q2C( i18n( "&Gradient dialog" ) );
-  m_idMenuView_GradientDialog = m_vMenuView->insertItem( text, this, "viewGradientDialog", 0 );
+  m_idMenuView_GradientDialog = m_vMenuView->insertItem( text, this, "slotGradientDialog", 0 );
 
   text = Q2C( i18n( "Gradient &editor dialog" ) );
-  m_idMenuView_GradientEditorDialog = m_vMenuView->insertItem( text, this, "viewGradientEditorDialog", 0 );
+  m_idMenuView_GradientEditorDialog = m_vMenuView->insertItem( text, this, "slotGradientEditorDialog", 0 );
 
   m_vMenuView->insertSeparator( -1 );
 
   text = Q2C( i18n( "&Preferences" ) );
-  m_idMenuView_Preferences = m_vMenuView->insertItem( text, this, "viewPreferences", 0 );
+  m_idMenuView_Preferences = m_vMenuView->insertItem( text, this, "slotPreferences", 0 );
 
   m_vMenuView->setCheckable( true );
   m_vMenuView->setItemChecked( m_idMenuView_LayerDialog, true );
