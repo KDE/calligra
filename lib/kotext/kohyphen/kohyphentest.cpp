@@ -8,6 +8,7 @@
 #include <kapplication.h>
 
 #include "kohyphen.h"
+#include <kdebug.h>
 
 int main (int argc, char ** argv)
 {
@@ -26,23 +27,21 @@ int main (int argc, char ** argv)
     }
     catch (KoHyphenatorException &e)
     {
-        qDebug("%s", e.message().latin1());
+        kdDebug() << e.message() << endl;
         return 1;
     }
 
     QStringList::ConstIterator it = cs_tests.begin();
 
     while (it!=cs_tests.end()) {
-        qDebug("%s hyphenates like this: %s", (*it).latin1(),
-               hypher->hyphenate((*it), "cs").latin1());
+        kdDebug() << (*it) << " hyphenates like this: " << hypher->hyphenate((*it), "cs") << endl;
         ++it;
     }
 
     it = en_tests.begin();
 
     while (it!=en_tests.end()) {
-        qDebug("%s hyphenates like this: %s", (*it).latin1(),
-               hypher->hyphenate((*it), "en").latin1());
+        kdDebug() << (*it) << " hyphenates like this: " << hypher->hyphenate((*it), "en") << endl;
         ++it;
     }
 

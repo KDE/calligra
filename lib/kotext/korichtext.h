@@ -1216,27 +1216,6 @@ inline int KoTextCursor::index() const
     return idx;
 }
 
-inline void KoTextCursor::setIndex( int i, bool restore )
-{
-    if ( restore )
-	restoreState();
-// Note: QRT doesn't allow to position the cursor at string->length
-// However we need it, when applying a style to a paragraph, so that
-// the trailing space gets the style change applied as well.
-// Obviously "right of the trailing space" isn't a good place for a real
-// cursor, but this needs to be checked somewhere else.
-    if ( i < 0 || i > string->length() ) {
-#if defined(QT_CHECK_RANGE)
-	qWarning( "KoTextCursor::setIndex: %d out of range", i );
-        //abort();
-#endif
-	i = i < 0 ? 0 : string->length() - 1;
-    }
-
-    tmpIndex = -1;
-    idx = i;
-}
-
 inline void KoTextCursor::setParag( KoTextParag *s, bool restore )
 {
     if ( restore )
@@ -1341,8 +1320,8 @@ inline void KoTextParag::setParagId( int i )
 
 inline int KoTextParag::paragId() const
 {
-    if ( id == -1 )
-	qWarning( "invalid parag id!!!!!!!! (%p)", (void*)this );
+    //if ( id == -1 )
+    //	kdWarning() << "invalid parag id!!!!!!!! (" << (void*)this << ")" << endl;
     return id;
 }
 

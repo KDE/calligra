@@ -180,7 +180,7 @@ KoTextCursor *KoTextDocDeleteCommand::execute( KoTextCursor *c )
 {
     KoTextParag *s = doc ? doc->paragAt( id ) : parag;
     if ( !s ) {
-	qWarning( "can't locate parag at %d, last parag: %d", id, doc->lastParag()->paragId() );
+	kdWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
 	return 0;
     }
 
@@ -208,7 +208,7 @@ KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
 {
     KoTextParag *s = doc ? doc->paragAt( id ) : parag;
     if ( !s ) {
-	qWarning( "can't locate parag at %d, last parag: %d", id, doc->lastParag()->paragId() );
+	kdWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
 	return 0;
     }
 
@@ -940,7 +940,7 @@ void KoTextCursor::gotoEnd()
 {
     if ( doc && !doc->lastParag()->isValid() )
     {
-	qDebug("Last parag, %d, is invalid - aborting gotoEnd() !",doc->lastParag()->paragId());
+	kdDebug(32500) << "Last parag, " << doc->lastParag()->paragId() << ", is invalid - aborting gotoEnd() !" << endl;
 	return;
     }
 
@@ -1280,7 +1280,7 @@ KoTextDocument::KoTextDocument( KoTextDocument *p, KoTextFormatCollection *f )
 void KoTextDocument::init()
 {
 #if defined(PARSER_DEBUG)
-    qDebug( debug_indent + "new KoTextDocument (%p)", this );
+    kdDebug(32500) << debug_indent + "new KoTextDocument (%p)", this << endl;
 #endif
     //oTextValid = TRUE;
     //if ( par )
@@ -2542,7 +2542,7 @@ void KoTextDocument::registerCustomItem( KoTextCustomItem *i, KoTextParag *p )
 	flow_->registerFloatingItem( i );
     p->registerFloatingItem( i );
     i->setParagraph( p );
-    //qDebug("KoTextDocument::registerCustomItem %p",(void*)i);
+    //kdDebug(32500) << "KoTextDocument::registerCustomItem " << (void*)i << endl;
     customItems.append( i );
 }
 
@@ -2777,7 +2777,7 @@ void KoTextString::insert( int index, const QString &s, KoTextFormat *f )
 	data[ (int)index + i ].startOfRun = 0;
         data[ (int)index + i ].c = s[ i ];
 #ifdef DEBUG_COLLECTION
-	qDebug("KoTextString::insert setting format %p to character %d",f,(int)index+i);
+	kdDebug(32500) << "KoTextString::insert setting format " << f << " to character " << (int)index+i << endl;
 #endif
 	data[ (int)index + i ].setFormat( f );
     }
@@ -2872,10 +2872,10 @@ void KoTextString::clear()
 
 void KoTextString::setFormat( int index, KoTextFormat *f, bool useCollection )
 {
-//    qDebug("KoTextString::setFormat index=%d f=%p",index,f);
+//    kdDebug(32500) << "KoTextString::setFormat index=" << index << " f=" << f << endl;
     if ( useCollection && data[ index ].format() )
     {
-	//qDebug("KoTextString::setFormat removing ref on old format %p",data[ index ].format());
+	//kdDebug(32500) << "KoTextString::setFormat removing ref on old format " << data[ index ].format() << endl;
 	data[ index ].format()->removeRef();
     }
     data[ index ].setFormat( f );
@@ -3114,7 +3114,7 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
 	commandHistory = new KoTextDocCommandHistory( 100 );
     }*/
 #if defined(PARSER_DEBUG)
-    qDebug( debug_indent + "new KoTextParag" );
+    kdDebug(32500) << debug_indent + "new KoTextParag" << endl;
 #endif
     fullWidth = TRUE;
 
@@ -3172,7 +3172,7 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
 
 KoTextParag::~KoTextParag()
 {
-    //qDebug("KoTextParag::~KoTextParag %p id=%d",this,paragId());
+    //kdDebug(32500) << "KoTextParag::~KoTextParag " << this << " id=" << paragId() << endl;
     delete str;
 //    if ( doc && p == doc->minwParag ) {
 //	doc->minwParag = 0;
@@ -3252,7 +3252,7 @@ void KoTextParag::setLineChanged( short int line )
     else
         m_lineChanged = QMIN( m_lineChanged, line ); // also works if line=-1
     changed = true;
-    //qDebug( "KoTextParag::setLineChanged line=%d -> m_lineChanged=%d", line, m_lineChanged );
+    //kdDebug(32500) << "KoTextParag::setLineChanged line=" << line << " -> m_lineChanged=" << m_lineChanged << endl;
 }
 
 void KoTextParag::insert( int index, const QString &s )
@@ -3293,7 +3293,7 @@ void KoTextParag::remove( int index, int len )
 
 void KoTextParag::join( KoTextParag *s )
 {
-    //qDebug("KoTextParag::join this=%d (length %d) with %d (length %d)",paragId(),length(),s->paragId(),s->length());
+    //kdDebug(32500) << "KoTextParag::join this=" << paragId() << " (length " << length() << ") with " << s->paragId() << " (length " << s->length() << ")" << endl;
     int oh = r.height() + s->r.height();
     n = s->n;
     if ( n )
@@ -3352,7 +3352,7 @@ void KoTextParag::join( KoTextParag *s )
 
 void KoTextParag::move( int &dy )
 {
-    //qDebug("KoTextParag::move paragId=%d dy=%d",paragId(),dy);
+    //kdDebug(32500) << "KoTextParag::move paragId=" << paragId() << " dy=" << dy << endl;
     if ( dy == 0 )
 	return;
     changed = TRUE;
@@ -3394,7 +3394,7 @@ void KoTextParag::format( int start, bool doMove )
     if ( invalid == -1 )
 	return;
 
-    //kdDebug() << "KoTextParag::format " << this << " id:" << paragId() << endl;
+    //kdDebug(32500) << "KoTextParag::format " << this << " id:" << paragId() << endl;
 
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     //if ( p )
@@ -3469,7 +3469,7 @@ void KoTextParag::format( int start, bool doMove )
     // do page breaks if required
     if ( doc && doc->isPageBreakEnabled() ) {
         int shift = doc->formatter()->formatVertically( doc, this );
-        //qDebug("formatVertically returned shift=%d",shift);
+        //kdDebug(32500) << "formatVertically returned shift=" << shift << endl;
         if ( shift && !formattedAgain ) {
             formattedAgain = TRUE;
             goto formatAgain;
@@ -3481,7 +3481,7 @@ void KoTextParag::format( int start, bool doMove )
 	int dy = ( r.y() + r.height() ) - n->r.y();
 	KoTextParag *s = n;
 	bool makeInvalid = false; //p && p->lastInFrame;
-	//qDebug("might move of dy=%d. previous's lastInFrame (=makeInvalid): %d", dy, makeInvalid);
+	//kdDebug(32500) << "might move of dy=" << dy << ". previous's lastInFrame (=makeInvalid): " << makeInvalid << endl;
 	while ( s && dy ) {
             if ( s->movedDown ) { // (not in QRT) : moved down -> invalidate and stop moving down
                 s->invalidate( 0 ); // (there is no point in moving down a parag that has a frame break...)
@@ -3501,7 +3501,7 @@ void KoTextParag::format( int start, bool doMove )
 //#define DEBUG_CI_PLACEMENT
     if ( mFloatingItems ) {
 #ifdef DEBUG_CI_PLACEMENT
-        qDebug("%d lines", lineStarts.count());
+        kdDebug(32500) << lineStarts.count() << " lines" << endl;
 #endif
         // Place custom items - after the formatting is finished
         int len = length();
@@ -3518,7 +3518,7 @@ void KoTextParag::format( int start, bool doMove )
                 lineY = (*it)->y;
                 baseLine = (*it)->baseLine;
 #ifdef DEBUG_CI_PLACEMENT
-                qDebug("New line (%d): lineStart=%p lineY=%d baseLine=%d height=%d", line, (*it), lineY, baseLine, (*it)->h);
+                kdDebug(32500) << "New line (" << line << "): lineStart=" << (*it) << " lineY=" << lineY << " baseLine=" << baseLine << " height=" << (*it)->h << endl;
 #endif
             }
             if ( chr->isCustom() ) {
@@ -3527,7 +3527,7 @@ void KoTextParag::format( int start, bool doMove )
                 Q_ASSERT( baseLine >= item->ascent() ); // something went wrong in KoTextFormatter if this isn't the case
                 int y = lineY + baseLine - item->ascent();
 #ifdef DEBUG_CI_PLACEMENT
-                qDebug("Custom item: i=%d x=%d lineY=%d baseLine=%d ascent=%d -> y=%d", i, x, lineY, baseLine, item->ascent(), y);
+                kdDebug(32500) << "Custom item: i=" << i << " x=" << x << " lineY=" << lineY << " baseLine=" << baseLine << " ascent=" << item->ascent() << " -> y=" << y << endl;
 #endif
                 item->move( x, y );
                 item->finalize();
@@ -3561,7 +3561,7 @@ int KoTextParag::lineHeightOfChar( int i, int *bl, int *y ) const
 	--it;
     }
 
-    qWarning( "KoTextParag::lineHeightOfChar: couldn't find lh for %d", i );
+    kdWarning(32500) << "KoTextParag::lineHeightOfChar: couldn't find lh for " << i << endl;
     return 15;
 }
 
@@ -3587,7 +3587,7 @@ KoTextStringChar *KoTextParag::lineStartOfChar( int i, int *index, int *line ) c
 	--l;
     }
 
-    qWarning( "KoTextParag::lineStartOfChar: couldn't find %d", i );
+    kdWarning(32500) << "KoTextParag::lineStartOfChar: couldn't find " << i << endl;
     return 0;
 }
 
@@ -3614,7 +3614,7 @@ KoTextStringChar *KoTextParag::lineStartOfLine( int line, int *index ) const
 	return &str->at( i );
     }
 
-    qWarning( "KoTextParag::lineStartOfLine: couldn't find %d", line );
+    kdWarning(32500) << "KoTextParag::lineStartOfLine: couldn't find " << line << endl;
     return 0;
 }
 
@@ -3675,18 +3675,18 @@ void KoTextParag::setFormat( int index, int len, KoTextFormat *f, bool useCollec
 	}
 	if ( flags == -1 || flags == KoTextFormat::Format || !fc ) {
 #ifdef DEBUG_COLLECTION
-	    qDebug(" KoTextParag::setFormat, will use format(f) %p %s", f, f->key().latin1());
+	    kdDebug(32500) << " KoTextParag::setFormat, will use format(f) " << f << " " << f->key() << endl;
 #endif
 	    if ( fc )
 		f = fc->format( f );
 	    str->setFormat( i + index, f, useCollection );
 	} else {
 #ifdef DEBUG_COLLECTION
-	    qDebug(" KoTextParag::setFormat, will use format(of,f,flags) of=%p %s, f=%p %s", of, of->key().latin1(), f, f->key().latin1() );
+	    kdDebug(32500) << " KoTextParag::setFormat, will use format(of,f,flags) of=" << of << " " << of->key() << ", f=" << f << " " << f->key() << endl;
 #endif
 	    KoTextFormat *fm = fc->format( of, f, flags );
 #ifdef DEBUG_COLLECTION
-	    qDebug(" KoTextParag::setFormat, format(of,f,flags) returned %p %s ", fm,fm->key().latin1());
+	    kdDebug(32500) << " KoTextParag::setFormat, format(of,f,flags) returned " << fm << " " << fm->key() << " " << endl;
 #endif
 	    str->setFormat( i + index, fm, useCollection );
 	}
@@ -3952,7 +3952,7 @@ bool KoTextParag::fullSelected( int id ) const
 int KoTextParag::lineY( int l ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-	qWarning( "KoTextParag::lineY: line %d out of range!", l );
+	kdWarning(32500) << "KoTextParag::lineY: line " << l << " out of range!" << endl;
 	return 0;
     }
 
@@ -3968,7 +3968,7 @@ int KoTextParag::lineY( int l ) const
 int KoTextParag::lineBaseLine( int l ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-	qWarning( "KoTextParag::lineBaseLine: line %d out of range!", l );
+	kdWarning(32500) << "KoTextParag::lineBaseLine: line " << l << " out of range!" << endl;
 	return 10;
     }
 
@@ -3984,7 +3984,7 @@ int KoTextParag::lineBaseLine( int l ) const
 int KoTextParag::lineHeight( int l ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-	qWarning( "KoTextParag::lineHeight: line %d out of range!", l );
+	kdWarning(32500) << "KoTextParag::lineHeight: line " << l << " out of range!" << endl;
 	return 15;
     }
 
@@ -4000,8 +4000,8 @@ int KoTextParag::lineHeight( int l ) const
 void KoTextParag::lineInfo( int l, int &y, int &h, int &bl ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-	qWarning( "KoTextParag::lineInfo: line %d out of range!", l );
-	qDebug( "%d %d", (int)lineStarts.count() - 1, l );
+	kdWarning(32500) << "KoTextParag::lineInfo: line " << l << " out of range!" << endl;
+	kdDebug(32500) << (int)lineStarts.count() - 1 << " " << l << endl;
 	y = 0;
 	h = 15;
 	bl = 10;
@@ -4092,6 +4092,27 @@ QPtrList<KoTextCustomItem> &KoTextParag::floatingItems() const
     return *mFloatingItems;
 }
 
+void KoTextCursor::setIndex( int i, bool restore )
+{
+    if ( restore )
+	restoreState();
+// Note: QRT doesn't allow to position the cursor at string->length
+// However we need it, when applying a style to a paragraph, so that
+// the trailing space gets the style change applied as well.
+// Obviously "right of the trailing space" isn't a good place for a real
+// cursor, but this needs to be checked somewhere else.
+    if ( i < 0 || i > string->length() ) {
+#if defined(QT_CHECK_RANGE)
+	kdWarning(32500) << "KoTextCursor::setIndex: " << i << " out of range" << endl;
+        //abort();
+#endif
+	i = i < 0 ? 0 : string->length() - 1;
+    }
+
+    tmpIndex = -1;
+    idx = i;
+}
+
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 KoTextFormatterBase::KoTextFormatterBase()
@@ -4155,7 +4176,7 @@ KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*para
 {
     int start = (startChar - &text->at(0));
     int last = (lastChar - &text->at(0) );
-    //qDebug("doing BiDi reordering from %d to %d!", start, last);
+    //kdDebug(32500) << "doing BiDi reordering from " << start << " to " << last << "!" << endl;
 
     KoBidiControl *control = new KoBidiControl( line->context(), line->status );
     QString str;
@@ -4251,7 +4272,7 @@ KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*para
 		} else {
 		    ww = c->format()->width( ' ' );
 		}
-		//qDebug("setting char %d at pos %d", pos, x);
+		//kdDebug(32500) << "setting char " << pos << " at pos " << x << endl;
 		if ( xmax < x + toAdd + ww ) xmax = x + toAdd + ww;
 		x += ww;
 		pos++;
@@ -4419,7 +4440,7 @@ KoTextImage::KoTextImage( KoTextDocument *p, const QMap<QString, QString> &attr,
     : KoTextCustomItem( p )
 {
 #if defined(PARSER_DEBUG)
-    qDebug( debug_indent + "new KoTextImage (pappi: %p)", p );
+    kdDebug(32500) << debug_indent + "new KoTextImage (pappi: %p)", p << endl;
 #endif
 
     width = height = 0;
@@ -4435,7 +4456,7 @@ KoTextImage::KoTextImage( KoTextDocument *p, const QMap<QString, QString> &attr,
 	imageName = attr["source"];
 
 #if defined(PARSER_DEBUG)
-    qDebug( debug_indent + "    .." + imageName );
+    kdDebug(32500) << debug_indent + "    .." + imageName << endl;
 #endif
 
     if ( !imageName.isEmpty() ) {
@@ -4453,11 +4474,11 @@ KoTextImage::KoTextImage( KoTextDocument *p, const QMap<QString, QString> &attr,
 	    const QMimeSource* m =
 		factory.data( imageName, context );
 	    if ( !m ) {
-		qWarning("KoTextImage: no mimesource for %s", imageName.latin1() );
+		kdWarning(32500) << "KoTextImage: no mimesource for " << imageName << endl;
 	    }
 	    else {
 		if ( !QImageDrag::decode( m, img ) ) {
-		    qWarning("KoTextImage: cannot decode %s", imageName.latin1() );
+		    kdWarning(32500) << "KoTextImage: cannot decode " << imageName << endl;
 		}
 	    }
 
@@ -5406,7 +5427,7 @@ KoTextTable::KoTextTable( KoTextDocument *p, const QMap<QString, QString> & attr
     cells.setAutoDelete( FALSE );
 #if defined(PARSER_DEBUG)
     debug_indent += "\t";
-    qDebug( debug_indent + "new KoTextTable (%p)", this );
+    kdDebug(32500) << debug_indent + "new KoTextTable (%p)", this << endl;
     debug_indent += "\t";
 #endif
     cellspacing = 2;
@@ -5899,8 +5920,8 @@ KoTextTableCell::KoTextTableCell( KoTextTable* table,
 				const QString& doc)
 {
 #if defined(PARSER_DEBUG)
-    qDebug( debug_indent + "new KoTextTableCell1 (pappi: %p)", table );
-    qDebug( debug_indent + doc );
+    kdDebug(32500) << debug_indent + "new KoTextTableCell1 (pappi: %p)", table << endl;
+    kdDebug(32500) << debug_indent + doc << endl;
 #endif
     cached_width = -1;
     cached_sizehint = -1;
@@ -5976,7 +5997,7 @@ KoTextTableCell::KoTextTableCell( KoTextTable* table,
 KoTextTableCell::KoTextTableCell( KoTextTable* table, int row, int column )
 {
 #if defined(PARSER_DEBUG)
-    qDebug( debug_indent + "new KoTextTableCell2( pappi: %p", table );
+    kdDebug(32500) << debug_indent + "new KoTextTableCell2( pappi: %p", table << endl;
 #endif
     maxw = QWIDGETSIZE_MAX;
     minw = 0;

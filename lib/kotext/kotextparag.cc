@@ -509,7 +509,7 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
     if ( !visible )
 	return;
     //KoTextStringChar *chr = at( 0 );
-    //if (!chr) { qDebug("paragraph %p %d, can't paint, EMPTY !", (void*)this, paragId()); return; }
+    //if (!chr) { kdDebug(32500) << "paragraph " << (void*)this << " " << paragId() << ", can't paint, EMPTY !" << endl;
 
     // This is necessary with the current code, but in theory it shouldn't
     // be necessary, if Xft really gives us fully proportionnal chars....
@@ -953,7 +953,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 bool KoTextParag::lineHyphenated( int l ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-	qWarning( "KoTextParag::lineHyphenated: line %d out of range!", l );
+	kdWarning() << "KoTextParag::lineHyphenated: line " << l << " out of range!" << endl;
 	return false;
     }
 
@@ -973,7 +973,7 @@ void KoTextParag::drawCursor( QPainter &painter, KoTextCursor *cursor, int curx,
         return; // No shadow of the cursor ;)
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     int x = zh->layoutUnitToPixelX( curx ) /*+ cursor->parag()->at( cursor->index() )->pixelxadj*/;
-    //qDebug("  drawCursor: LU: [cur]x=%d, cury=%d -> PIX: x=%d, y=%d", curx, cury, x, zh->layoutUnitToPixelY( cury ) );
+    //kdDebug(32500) << "  drawCursor: LU: [cur]x=" << curx << ", cury=" << cury << " -> PIX: x=" << x << ", y=" << zh->layoutUnitToPixelY( cury ) << endl;
     KoTextParag::drawCursorDefault( painter, cursor, x,
                             zh->layoutUnitToPixelY( cury ),
                             zh->layoutUnitToPixelY( cury, curh ), cg );
@@ -1420,7 +1420,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
     // So abort immediately if there's none to draw.
     if ( !format->isStrikedOrUnderlined() )
         return;
-    kdDebug() << "drawFontEffects wordByWord=" << format->wordByWord() <<
+    kdDebug(32500) << "drawFontEffects wordByWord=" << format->wordByWord() <<
         " firstChar='" << QString(firstChar) << "'" << endl;
     // paintLines ensures that we're called word by word if wordByWord is true.
     if ( format->wordByWord() && firstChar.isSpace() )
