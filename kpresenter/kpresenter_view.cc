@@ -3303,6 +3303,10 @@ void KPresenterView::setupActions()
                                        this,SLOT(removeComment()),
                                        actionCollection(), "remove_comment");
 
+    actionCopyTextOfComment = new KAction( i18n("Copy Text Of Comment..."), 0,
+                                           this,SLOT(copyTextOfComment()),
+                                           actionCollection(), "copy_text_comment");
+
     actionConfigureCompletion = new KAction( i18n( "&Configure Completion..." ), 0,
                                              this, SLOT( configureCompletion() ),
                                              actionCollection(), "configure_completion" );
@@ -7392,6 +7396,13 @@ void KPresenterView::insertDirectCursor(bool b)
 void KPresenterView::updateDirectCursorButton()
 {
     actionInsertDirectCursor->setChecked(m_pKPresenterDoc->insertDirectCursor());
+}
+
+void KPresenterView::copyTextOfComment()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+        edit->copyTextOfComment();
 }
 
 

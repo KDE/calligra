@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="89">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="90">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -602,6 +602,7 @@
  <Separator/>
  <Action name="edit_comment"/>
  <Action name="remove_comment"/>
+ <Action name="copy_text_comment"/>
  <ActionList name="datatools"/>
 </Menu>
 <Menu name="polygonobject_popup">

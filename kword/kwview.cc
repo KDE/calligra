@@ -557,6 +557,10 @@ void KWView::setupActions()
                                      actionCollection(), "remove_comment");
     actionRemoveComment->setToolTip( i18n( "Remove the selected document comment." ) );
     actionRemoveComment->setWhatsThis( i18n( "Remove the selected document comment." ) );
+    actionCopyTextOfComment = new KAction( i18n("Copy Text Of Comment..."), 0,
+                                  this,SLOT(copyTextOfComment()),
+                                  actionCollection(), "copy_text_comment");
+
 
     actionInsertFootEndNote = new KAction( i18n( "&Footnote..." ), 0,
                                            this, SLOT( insertFootNote() ),
@@ -5966,6 +5970,15 @@ void KWView::removeComment()
     if ( edit )
     {
         edit->removeComment();
+    }
+}
+
+void KWView::copyTextOfComment()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+    {
+        edit->copyTextOfComment();
     }
 }
 

@@ -383,6 +383,7 @@ public slots:
     void slotCompletion();
 
     void removeComment();
+    void copyTextOfComment();
 
     //zoom menu
     void zoomMinus();
@@ -957,6 +958,7 @@ private:
     KAction *actionInsertComment;
     KAction *actionEditComment;
     KAction *actionRemoveComment;
+    KAction *actionCopyTextOfComment;
 
     KAction *actionImportStyle;
 
