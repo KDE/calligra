@@ -23,6 +23,11 @@
 #include "rtfimport.h"
 #include "rtfimport.moc"
 
+#include <kdeversion.h>
+#if ! KDE_IS_VERSION(3,1,90)
+# include <kdebugclasses.h>
+#endif
+
 typedef KGenericFactory<RTFImport, KoFilter> RTFImportFactory;
 K_EXPORT_COMPONENT_FACTORY( librtfimport, RTFImportFactory( "rtfimport" ) )
 
@@ -1358,18 +1363,28 @@ void RTFImport::parseField( RTFProperty * )
 	{
 	    DomNode node;
 	    QStringList list = QStringList::split( ' ', fldinst );
+                kdDebug(30515) << "Field: " << list << endl;
 	    uint i;
 
-	    list[0] = list[0].upper();
+                QString test ( list[0].upper() );
+                test.remove('\\'); // Remove \, especialy leading ones in OOWriter RTF files
 	    node.clear(7);
 
+                bool ok=false;
 	    for (i=0; i < sizeof(fieldTable) /sizeof(fieldTable[0]); i++)
 	    {
-		if (list[0] == fieldTable[i].id)
+		if (test == fieldTable[i].id)
 		{
+		    kdDebug(30515) << "Field found: " << fieldTable[i].id << endl;
+		    ok=true;
 		    break;
 		}
 	    }
+                if (!ok)
+                {
+                    kdWarning(30515) << "Field not supported:" << test << endl;
+                    return;
+                }
 	    if (fieldTable[i].type == 4)
 	    {
 		node.addNode( "PGNUM" );
@@ -1545,29 +1560,6 @@ void RTFImport::parseFldinst( RTFProperty * )
     else if (token.type == RTFTokenizer::PlainText)
     {
 	fldinst += token.text;
-    }
-    else if (token.type == RTFTokenizer::CloseGroup)
-    {
-	QStringList list = QStringList::split( ' ', fldinst );
-	bool supported = false;
-
-	if (list.count() > 0)
-	{
-	    list[0] = list[0].upper();
-
-	    for (uint i=0; i < sizeof(fieldTable) /sizeof(fieldTable[0]); i++)
-	    {
-		if (list[0] == fieldTable[i].id)
-		{
-		    supported = true;
-		    break;
-		}
-	    }
-	}
-	if (!supported)
-	{
-	    fldinst = "";
-	}
     }
 }
 
