@@ -3021,13 +3021,13 @@ void KPresenterView::setupRulers()
 		      this, SLOT( unitChanged( QString ) ) );
     QObject::connect( h_ruler, SIGNAL( newPageLayout( KoPageLayout ) ),
 		      this, SLOT( newPageLayout( KoPageLayout ) ) );
-    QObject::connect( h_ruler, SIGNAL( openPageLayoutDia() ),
+    QObject::connect( h_ruler, SIGNAL(doubleClicked()  ),
 		      this, SLOT( openPageLayoutDia() ) );
     QObject::connect( v_ruler, SIGNAL( unitChanged( QString ) ),
 		      this, SLOT( unitChanged( QString ) ) );
     QObject::connect( v_ruler, SIGNAL( newPageLayout( KoPageLayout ) ),
 		      this, SLOT( newPageLayout( KoPageLayout ) ) );
-    QObject::connect( v_ruler, SIGNAL( openPageLayoutDia() ),
+    QObject::connect( v_ruler, SIGNAL( doubleClicked() ),
 		      this, SLOT( openPageLayoutDia() ) );
 
     switch ( m_pKPresenterDoc->pageLayout().unit ) {
