@@ -53,6 +53,13 @@ class QDomDocument;
 
 #define MIME_TYPE "application/x-kspread"
 
+struct Reference
+{
+    QString table_name;
+    QString ref_name;
+    QRect rect;
+};
+
 /**
  * This class holds the data that makes up a spreadsheet.
  */
