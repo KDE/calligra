@@ -365,10 +365,13 @@ void KOSpell::previousWord()
         {
             QChar ch = origbuffer[i];
             if ( ch.isSpace() || ch.isPunct() )
+            {
+                lastpos --;
                 break;
+            }
             word.append(ch);
         }
-        //offset+= i - lastpos+1;
+        lastpos= i-1;
         testIgnoreWord( word );
     }
     while ( word.isEmpty() && (lastpos > 0/*todo fixme !!!!!!!!!!)*/));
