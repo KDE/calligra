@@ -209,7 +209,8 @@ public:
     void showMarker() { if ( m_iMarkerVisible == 1 ) return; m_iMarkerVisible++; if ( m_iMarkerVisible == 1 ) drawMarker(); }
 
     void updateCellRect( const QRect &_rect );
-
+    void updateSelection( const QRect& _old, const QRect& _new );
+    
     const QPen& defaultGridPen() { return m_defaultGridPen; }
 
     double zoom() { return m_pView->zoom(); }
@@ -560,13 +561,13 @@ class KSpreadToolTip : public QToolTip
 {
 public:
     KSpreadToolTip( KSpreadCanvas* canvas );
-    
+
 protected:
     /**
      * @reimp
      */
     void maybeTip( const QPoint& p );
-    
+
 private:
     KSpreadCanvas* m_canvas;
 };

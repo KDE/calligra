@@ -2256,7 +2256,7 @@ void KSpreadView::slotChangeChooseSelection( KSpreadTable *_table, const QRect &
 
 void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new )
 {
-    // printf ("void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old %i %i|%i %i, const QRect &_new %i %i|%i %i )\n",_old.left(),_old.top(),_old.right(),_old.bottom(),_new.left(),_new.top(),_new.right(),_new.bottom());
+    printf ("void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old %i %i|%i %i, const QRect &_new %i %i|%i %i )\n",_old.left(),_old.top(),_old.right(),_old.bottom(),_new.left(),_new.top(),_new.right(),_new.bottom());
 
     // Emit a signal for internal use
     emit sig_selectionChanged( _table, _new );
@@ -2278,33 +2278,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
     if ( _table != m_pTable )
 	return;
 
-    /*
-    QRect uni( _old );
-    if ( uni.left() == 0 && uni.right() == 0 )
-	uni = _new;
-    else if ( _new.left() != 0 || _new.right() != 0 )
-	uni = uni.unite( _new );
-    */
-
-    if ( _old.left() == 0 && _old.right() == 0 )
-	m_pCanvas->updateCellRect( _new );
-    else if ( _new.left() == 0 && _new.right() == 0 )
-    	m_pCanvas->updateCellRect( _old );
-    else
-    {
-	QRegion r1( _new );
-	QRegion r2( _old );
-	QRegion diff = r1 & r2;
-	QRegion uni = ( r1 + r2 ) - diff;
-
-	QArray<QRect> rects = uni.rects();
-	for( int i = 0; i < (int)rects.size(); ++i )
-	    m_pCanvas->updateCellRect( rects[i] );
-    }
-
-    // ########## Torben: Why redraw? Should not we just invert ?
-	// m_pCanvas->updateCellRect( uni );
-    // ### Use smart update here
+    m_pCanvas->updateSelection( _old, _new );
     m_pVBorderWidget->update();
     m_pHBorderWidget->update();
 }
@@ -2319,9 +2293,7 @@ void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
     // with mutiple cells.
     m_tableFormat->setEnabled( FALSE );
 
-    QRect r( _old.x(), _old.y(), _old.width() + 1, _old.height() + 1 );
-    m_pCanvas->updateCellRect( r );
-    // ### Use smart update here
+    m_pCanvas->updateSelection( _old, QRect() );
     m_pVBorderWidget->update();
     m_pHBorderWidget->update();
 }

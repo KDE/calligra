@@ -232,7 +232,7 @@ public:
      * @return a non default ColumnLayout for this column.
      */
     ColumnLayout* nonDefaultColumnLayout( int _column, bool force_creation = TRUE );
-    
+
     const RowLayout* rowLayout( int _row ) const;
     RowLayout* rowLayout( int _row );
     /**
@@ -285,7 +285,7 @@ public:
 
     KSpreadLayout* defaultLayout() { return m_defaultLayout; };
     const KSpreadLayout* defaultLayout() const { return m_defaultLayout; }
-    
+
     int topRow( int _ypos, int &_top, KSpreadCanvas *_canvas = 0L );
     int bottomRow( int _ypos, KSpreadCanvas *_canvas = 0L );
     int leftColumn( int _xpos, int &_left, KSpreadCanvas *_canvas = 0L );
@@ -485,8 +485,6 @@ public:
 
     void mergeCell( const QPoint &_marker );
     void dissociateCell( const QPoint &_marker );
-
-    QRect refreshArea(const QRect &_rect);
 
     /**
      * Change name of reference when the user inserts or removes a column,
@@ -812,7 +810,7 @@ protected:
     bool m_bShowFormular;
     bool m_bLcMode;
     bool m_bShowColumnNumber;
-    
+
     KSpreadLayout* m_defaultLayout;
 };
 

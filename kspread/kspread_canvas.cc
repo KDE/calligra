@@ -1549,11 +1549,9 @@ void KSpreadCanvas::createEditor( EditorType ed )
 
 void KSpreadCanvas::updateCellRect( const QRect &_rect )
 {
-  /*
-  kdDebug(36001) << "======================= UPDATE RECT " << _rect.x() << ", "
-		 << _rect.y() << ", " << _rect.width() << ", " << _rect.height()
-		 << " ==================" << endl;
-  */
+    updateSelection( _rect, QRect() );
+}
+/*
 
   KSpreadTable *table = activeTable();
   if ( !table )
@@ -1603,6 +1601,87 @@ void KSpreadCanvas::updateCellRect( const QRect &_rect )
 
   QPaintEvent event( QRect( tl, br ) );
   paintEvent( &event );
+}
+*/
+
+void KSpreadCanvas::updateSelection( const QRect &_old, const QRect& _new )
+{
+    KSpreadTable *table = activeTable();
+    if ( !table )
+	return;
+
+    QRect uni;
+    // Old selection was empty -> update the entire new one
+    if ( _old.left() == 0 && _old.right() == 0 )
+	uni = _new;
+    // New selection was empty -> update the entire old one
+    else if ( _new.left() == 0 && _new.right() == 0 )
+	uni = _old;
+    else
+	uni = _old.unite( _new );
+
+    // Limit the number of cells
+    uni.rBottom() = QMIN( 9999, uni.bottom() );
+    uni.rRight() = QMIN( 9999, uni.right() );
+	
+    // Determine the position of "uni" rect on the screen.
+    int left = table->columnPos( uni.left() );
+    int top = table->rowPos( uni.top() );
+    // int right = table->columnPos( uni.right() + 1 );
+    // int bottom = table->rowPos( uni.bottom() + 1 );
+
+    QPainter painter;
+    painter.begin( this );
+
+    // Do the view transformation.
+    QWMatrix m = m_pView->matrix();
+    painter.setWorldMatrix( m );
+
+    hideMarker( painter );
+
+    // Which part of the document is visible ?
+    m = m.invert();
+    QPoint tl = m.map( QPoint( 0, 0 ) );
+    QPoint br = m.map( QPoint( width(), height() ) );
+    QRect view( tl, br );
+
+    QPen pen;
+    pen.setWidth( 1 );
+    painter.setPen( pen );
+
+    int top_row = uni.top();
+    int bottom_row = uni.bottom();
+    int left_col = uni.left();
+    int right_col = uni.right();
+
+    QRect r;
+
+    int ypos = top;
+    for ( int y = top_row; y <= bottom_row && ypos <= view.bottom(); y++ )
+    {
+	RowLayout *row_lay = table->rowLayout( y );
+	int xpos = left;
+
+	for ( int x = left_col; x <= right_col && xpos <= view.right(); x++ )
+        {
+	    ColumnLayout *col_lay = table->columnLayout( x );
+	
+	    QPoint p( x, y );
+	    if ( _new.contains( p ) ^ _old.contains( p ) )
+	    {
+		KSpreadCell *cell = table->cellAt( x, y, TRUE );
+		cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
+	    }
+	
+	    xpos += col_lay->width();
+	}
+
+	ypos += row_lay->height();
+    }
+
+    showMarker( painter );
+
+    painter.end();
 }
 
 void KSpreadCanvas::drawMarker( QPainter * _painter )
@@ -2049,15 +2128,17 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   }
   else
   {
+    m_pCanvas->hideMarker();
+
     m_bSelection = TRUE;
 
-    table->unselect();
     int tmp;
     int hit_row = table->topRow( _ev->pos().y(), tmp, m_pCanvas );
     m_iSelectionAnchor = hit_row;
-    QRect selection( table->selectionRect() );
+
+    QRect selection;
     selection.setCoords( 1, hit_row, 0x7FFF, hit_row );
-    update();
+
     table->setSelection( selection, m_pCanvas );
 
     if ( _ev->button() == RightButton )
@@ -2066,6 +2147,8 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
       m_pView->popupRowMenu( p );
       m_bSelection=FALSE;
     }
+
+    m_pCanvas->showMarker();
   }
 
 }
@@ -2419,6 +2502,8 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   }
   else
   {
+      m_pCanvas->hideMarker();
+      
     m_bSelection = TRUE;
 
     table->unselect();
@@ -2434,6 +2519,8 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
       m_pView->popupColumnMenu( p );
       m_bSelection=FALSE;
     }
+    
+    m_pCanvas->showMarker();
   }
 }
 
