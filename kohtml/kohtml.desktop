@@ -2,7 +2,7 @@
 Name=KoHTML
 Name[is]=HTML-sjá
 Exec=kohtml
-CORBAExec=kohtml.bin --server
+CORBAExec=kohtml --server
 Comment=KOffice HTML Viewer
 Comment[ca]=Visualitzador d'HTML KOffice
 Comment[cs]=Prohlí¾eè HTML pro KOffice
