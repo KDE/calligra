@@ -96,7 +96,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     kdDebug() << "KWAnchor::draw crect ( in internal coords ) = " << DEBUGRECT( crect ) << endl;
 #endif
     QPoint cnPoint = crect.topLeft(); //fallback
-    if ( ! fs->internalToNormal( crect.topLeft(), cnPoint ) )
+    if ( ! fs->internalToNormal/*WithHint*/( crect.topLeft(), cnPoint/*, frameTopLeft*/ ) )
         kdDebug() << "KWAnchor::draw internalToNormal returned 0L for topLeft of crect!" << endl;
 #ifdef DEBUG_DRAWING
     kdDebug() << "KWAnchor::draw cnPoint in normal coordinates " << cnPoint.x() << "," << cnPoint.y() << endl;
@@ -106,7 +106,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     crect.setLeft( cnPoint.x() );
     crect.setTop( cnPoint.y() );
     QPoint brnPoint; // bottom right in normal coords
-    if ( fs->internalToNormal( crect.bottomRight(), brnPoint ) )
+    if ( fs->internalToNormal/*WithHint*/( crect.bottomRight(), brnPoint/*, frameTopLeft*/ ) )
     {
 #ifdef DEBUG_DRAWING
         kdDebug() << "KWAnchor::draw brnPoint in normal coordinates " << brnPoint.x() << "," << brnPoint.y() << endl;
@@ -122,9 +122,22 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     kdDebug() << "KWAnchor::draw crect ( in view coords ) = " << DEBUGRECT( crect ) << endl;
 #endif
 
+    KWFrame *frame = fs->currentDrawnFrame();
+    if ( frame->isCopy() )
+    {
+        // Find last real frame, in case we are in a copied frame
+        QListIterator<KWFrame> frameIt( fs->frameIterator() );
+        frameIt.toLast(); // from the end to avoid a 2*N in the worst case
+        while ( !frameIt.atFirst() && frameIt.current() != frame ) // look for 'frame'
+            --frameIt;
+        while ( !frameIt.atFirst() && frameIt.current()->isCopy() ) // go back to last non-copy
+            --frameIt;
+        frame = frameIt.current();
+    }
+    QPoint frameTopLeft = fs->kWordDocument()->zoomPoint( frame->topLeft() );
+
     // and make painter go back to view coord system
     // (this is exactly the opposite of the code in KWFrameSet::drawContents)
-    QPoint frameTopLeft = fs->kWordDocument()->zoomPoint( fs->currentDrawnFrame()->topLeft() );
     QPoint iPoint;
     if ( fs->normalToInternal( frameTopLeft, iPoint ) )
     {
