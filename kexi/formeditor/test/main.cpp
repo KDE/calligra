@@ -50,8 +50,12 @@ int main(int argc, char **argv)
    KGlobal::iconLoader()->addAppDir("kexi");
 
     KFDMainWindow *v = new KFDMainWindow();
-    v->show();
+		if (!v->centralWidget()) { //KFD part could be not found
+			delete v;
+			return 1;
+		}
     app.setMainWidget(v);
+    v->show();
 
 
 
