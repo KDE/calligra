@@ -1,0 +1,9 @@
+# KDE Config File
+[KDE Desktop Entry]
+Name=KFormula
+Exec=kformula.bin --server
+Comment=The Formula Editor
+RepoID=IDL:KFormula/Factory:1.0,
+ActivationMode=shared
+Type=OpenPart
+
