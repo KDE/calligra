@@ -104,7 +104,7 @@ KoFilter::ConversionStatus MSODImport::convert( const QCString& from, const QCSt
     emit sigProgress(100);
 
     QCString appIdentification( "KOffice application/x-kontour\004\006" );
-    KoStore out = KoStore(m_chain->outputFile(), KoStore::Write, appIdentification);
+    KoStore out(m_chain->outputFile(), KoStore::Write, appIdentification);
     if (!out.open("root"))
     {
         kdError(s_area) << "Cannot open output file" << endl;
