@@ -38,6 +38,7 @@ class QSpinBox;
 class KColorButton;
 class KWCanvas;
 class KWTextFrameSet;
+class KMacroCommand;
 
 //
 // This class represents the KWord-specific search extension items, and also the
@@ -184,6 +185,7 @@ private:
     KWCanvas *m_canvas;
     KWTextFrameSet *m_currentFrameSet;
     QTextParag *m_currentParag;
+    KMacroCommand *macroCmd;
     int m_offset;
 };
 

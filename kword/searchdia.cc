@@ -276,6 +276,7 @@ KWFindReplace::KWFindReplace( KWCanvas * canvas, KWReplaceDia * dialog )
     connect( m_replace, SIGNAL( replace( const QString &, int , int, int, const QRect & ) ),
              this, SLOT( replace( const QString &, int , int,int, const QRect & ) ) );
     m_currentFrameSet = 0L;
+    macroCmd=0L;
 }
 
 KWFindReplace::~KWFindReplace()
@@ -341,6 +342,8 @@ void KWFindReplace::proceed()
             }
         }
     }
+    if(macroCmd)
+        m_canvas->kWordDocument()->addCommand(macroCmd);
 }
 
 bool KWFindReplace::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int firstIndex,
@@ -419,6 +422,8 @@ void KWFindReplace::highlight( const QString &, int matchingIndex, int matchingL
 void KWFindReplace::replace( const QString &, int matchingIndex,
                              int /*matchingLength*/ ,int matchedLength,  const QRect &/*expose*/ )
 {
+    if(!macroCmd)
+        macroCmd=new KMacroCommand(i18n("Insert Replacement"));
     int index = m_offset + matchingIndex;
     // highlight might not have happened (if 'prompt on replace' is off)
     m_currentFrameSet->highlightPortion( m_currentParag, index, matchedLength, m_canvas );
@@ -426,9 +431,7 @@ void KWFindReplace::replace( const QString &, int matchingIndex,
     QTextCursor cursor( textdoc );
     cursor.setParag( m_currentParag );
     cursor.setIndex( index );
-
-    m_canvas->kWordDocument()->addCommand(m_currentFrameSet->replaceSelection( &cursor,m_replaceDlg->replacement(),KWTextFrameSet::HighlightSelection, i18n("Insert Replacement")));
-
+    macroCmd->addCommand(m_currentFrameSet->replaceSelection( &cursor,m_replaceDlg->replacement(),KWTextFrameSet::HighlightSelection, i18n("Insert Replacement")));
 }
 
 #include "searchdia.moc"
