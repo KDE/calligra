@@ -1,9 +1,7 @@
-This is an experimental CSV filter for kspread.
-I'm not sure it is properly located (koffice/filters contains OLE filters only
-up to now), but do we want koffice/olefilters and koffice/textfilters and so on,
-or do we want everything in koffice/filters/, as it is now ?
+This is a CSV filter for kspread.
 
-BTW, it does not work. It will soon, though ;)
-It doesn't even read the input file. But I want to make sure it's activated first...
+Read DESIGN for the gory details, TODO for how to help, the source for why
+it screwed up your data.
 
 David Faure <faure@kde.org>
+Werner Trobin <wtrobin@carinthia.com>
