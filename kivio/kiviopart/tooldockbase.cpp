@@ -21,6 +21,7 @@
 #include "stencilbarmovemanager.h"
 
 #include <kdrawutil.h>
+#include <kapplication.h>
 
 #include <qbitmap.h>
 #include <qpainter.h>
@@ -202,10 +203,18 @@ void ToolDockBaseCaptionManager::setView( ToolDockPosition pos )
 
   switch (pos) {
     case ToolDockLeft:
-      m_pLeft->show();
+      if(!kapp->reverseLayout()) {
+        m_pLeft->show();
+      } else {
+        m_pRight->show();
+      }
       break;
     case ToolDockRight:
-      m_pRight->show();
+      if(!kapp->reverseLayout()) {
+        m_pRight->show();
+      } else {
+        m_pLeft->show();
+      }
       break;
     case ToolDockTop:
       m_pTop->show();
