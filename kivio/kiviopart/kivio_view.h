@@ -128,6 +128,7 @@ public:
   QColor fgColor();
   QColor bgColor();
   int lineWidth();
+    void updateButton();
 
 protected:
   virtual void customEvent( QCustomEvent* );

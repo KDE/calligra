@@ -128,6 +128,7 @@ public:
 
   void initConfig();
   void saveConfig();
+    void updateButton();
 
 public slots:
   void updateView(KivioPage*, bool modified=true);

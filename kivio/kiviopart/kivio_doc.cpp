@@ -825,4 +825,11 @@ void KivioDoc::aboutGetStencilSets()
   delete d;
 }
 
+void KivioDoc::updateButton()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KivioView*)it.current())->updateButton();
+}
+
 #include "kivio_doc.moc"

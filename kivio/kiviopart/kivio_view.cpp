@@ -465,11 +465,7 @@ void KivioView::initActions()
   togglePageMargins(true);
   toggleShowRulers(true);
 
-  toggleShowGrid(m_pDoc->grid().isShow);
-  toggleSnapGrid(m_pDoc->grid().isSnap);
-
-  toggleShowGuides(true && koDocument()->isReadWrite());
-  toggleSnapGuides(true && koDocument()->isReadWrite());
+  updateButton();
 
   viewZoom((int)(m_pCanvas->zoom()*100.1f));
   m_unitAct->setCurrentItem(m_pDoc->units());
@@ -1457,4 +1453,15 @@ void KivioView::updateMenuPage()
 {
     m_removePage->setEnabled((doc()->map()->count() > 1 && m_pTabBar->listshow().count()>1));
 }
+
+void KivioView::updateButton()
+{
+  toggleShowGrid(m_pDoc->grid().isShow);
+  toggleSnapGrid(m_pDoc->grid().isSnap);
+
+  toggleShowGuides(true && koDocument()->isReadWrite());
+  toggleSnapGuides(true && koDocument()->isReadWrite());
+
+}
+
 #include "kivio_view.moc"

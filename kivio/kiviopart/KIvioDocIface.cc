@@ -57,6 +57,7 @@ void KIvioDocIface::setShowGrid( bool b )
     KivioGridData d = doc->grid();
     d.isShow = b;
     doc->setGrid(d);
+    doc->updateButton();
 }
 
 bool KIvioDocIface::showGrid() const
