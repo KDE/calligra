@@ -1273,8 +1273,8 @@ void KSpreadView::sortInc()
 	return;
     }
  
-    // Entire row(s) selected ?
-    if( r.right() == 0x7FFF )
+    // Entire row(s) selected ? Or just one row ?
+    if( r.right() == 0x7FFF || r.top() == r.bottom() )
 	activeTable()->sortByRow( r.top() );
     else
 	activeTable()->sortByColumn( r.left());
@@ -1290,8 +1290,8 @@ void KSpreadView::sortDec()
 	return;
     }
     
-    // Entire row(s) selected ?
-    if( r.right() ==0x7FFF)
+    // Entire row(s) selected ? Or just one row ?
+    if( r.right() == 0x7FFF || r.top() == r.bottom() )
 	activeTable()->sortByRow( r.top(),KSpreadTable::Decrease);
     else
 	activeTable()->sortByColumn( r.left(),KSpreadTable::Decrease);

@@ -2564,7 +2564,7 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
 	    int col = key / 0x10000;
 
 	    // Is the cell in the selected columns ?
-	    if ( row >= r.top() && row <= r.bottom() )
+	    if ( !it.current()->isEmpty() && row >= r.top() && row <= r.bottom() )
 	    {
 		if ( col > r.right() )
 		    r.rRight() = col;
@@ -2579,33 +2579,41 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
     }
 
     // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
-    // For each row, we look for all columns under it and we find the one to swap with it.
+    // For each column, we look for all cells right hand of it and we find the one to swap with it.
     // Much faster than the awful bubbleSort...
-    for ( int d = r.left();  d<= r.right(); d++ )
+    for ( int d = r.left();  d <= r.right(); d++ )
     {
-	KSpreadCell *cell1 = cellAt( d,ref_row  );
+	KSpreadCell *cell1 = cellAt( d, ref_row  );
         // Look for which column we want to swap with the one number d
         KSpreadCell * bestCell = cell1;
         int bestX = d;
 
         for ( int x = d + 1 ; x <= r.right(); x++ )
         {
-          KSpreadCell *cell2 = cellAt( x,ref_row );
+	    KSpreadCell *cell2 = cellAt( x, ref_row );
 
-          // Here we use the operators < and > for cells, which do it all.
-          if ( (mode==Increase && *cell2 < *bestCell) ||
-               (mode==Decrease && *cell2 > *bestCell) )
-          {
-            bestCell = cell2;
-            bestX = x;
-          }
+	    if ( cell2->isEmpty() )
+	    { /* No need to swap */ }
+	    else if ( bestCell->isEmpty() )
+	    {
+		// empty cells are always shifted to the end
+		bestCell = cell2;
+		bestX = x;		
+	    }
+	    // Here we use the operators < and > for cells, which do it all.
+	    else if ( (mode == Increase && *cell2 < *bestCell) ||
+		      (mode == Decrease && *cell2 > *bestCell) )
+	    {
+		bestCell = cell2;
+		bestX = x;
+	    }
         }
 
         // Swap columns cell1 and bestCell (i.e. d and bestX)
         if ( d != bestX )
         {
-          for(int y=r.top();y<=r.bottom();y++)
-            swapCells( d,y,bestX,y );
+	    for( int y = r.top(); y <= r.bottom(); y++ )
+		swapCells( d, y, bestX, y );
         }
 
     }
@@ -2639,7 +2647,7 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
 	    int col = key / 0x10000;
 
 	    // Is the cell in the selected columns ?
-	    if ( col >= r.left() && col <= r.right() )
+	    if ( !it.current()->isEmpty() && col >= r.left() && col <= r.right() )
 	    {
 		if ( row > r.bottom() )
 		    r.rBottom() = row;
@@ -2668,24 +2676,30 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
 
         for ( int y = d + 1 ; y <= r.bottom(); y++ )
         {
-          KSpreadCell *cell2 = cellAt( ref_column, y );
+	    KSpreadCell *cell2 = cellAt( ref_column, y );
 
-          // Here we use the operators < and > for cells, which do it all.
-          if ( (mode==Increase && *cell2 < *bestCell) ||
-               (mode==Decrease && *cell2 > *bestCell) )
-          {
-            bestCell = cell2;
-            bestY = y;
-            //kdDebug() << "Best y now " << bestY << endl;
-          }
+	    if ( cell2->isEmpty() )
+	    { /* No need to swap */ }
+	    else if ( bestCell->isEmpty() )
+	    {
+		// empty cells are always shifted to the end
+		bestCell = cell2;
+		bestY = y;
+	    }
+	    // Here we use the operators < and > for cells, which do it all.
+	    else if ( (mode==Increase && *cell2 < *bestCell) ||
+		 (mode==Decrease && *cell2 > *bestCell) )
+	    {
+		bestCell = cell2;
+		bestY = y;
+	    }
         }
 
         // Swap rows cell1 and bestCell (i.e. d and bestY)
         if ( d != bestY )
         {
-          //kdDebug() << "Swapping rows " << d << " and " << bestY << endl;
-          for(int x=r.left();x<=r.right();x++)
-            swapCells( x, d, x, bestY );
+	    for(int x=r.left();x<=r.right();x++)
+		swapCells( x, d, x, bestY );
         }
     }
 
