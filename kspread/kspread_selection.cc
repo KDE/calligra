@@ -107,7 +107,7 @@ QRect KSpreadSelection::selectionHandleArea(KSpreadCanvas* canvas) const
     column = selection().right();
     row = selection().bottom();
   }
-  KSpreadCell* cell = m_pView->activeTable()->cellAt(column, row);
+  const KSpreadCell* cell = m_pView->activeTable()->cellAt(column, row);
 
   int xpos = m_pView->activeTable()->columnPos( column, canvas );
   int ypos = m_pView->activeTable()->rowPos( row, canvas );
@@ -119,22 +119,22 @@ QRect KSpreadSelection::selectionHandleArea(KSpreadCanvas* canvas) const
   return handle;
 }
 
-void KSpreadSelection::setSelection( QPoint newMarker, QPoint newAnchor,
+void KSpreadSelection::setSelection( const QPoint &newMarker,
+                                     const QPoint &newAnchor,
                                      KSpreadTable *table )
 {
-  KSpreadCell* cell = table->cellAt(newMarker);
-  if (cell->isObscured() && cell->isObscuringForced())
-  {
-    cell = cell->obscuringCells().first();
-    newMarker = QPoint(cell->column(), cell->row());
-  }
-
   QRect oldSelection = selection();
-
-
   QPoint oldMarker = m_marker;
   m_marker = newMarker;
   m_anchor = newAnchor;
+
+  const KSpreadCell* cell = table->cellAt(newMarker);
+  if (cell->isObscured() && cell->isObscuringForced())
+  {
+    cell = cell->obscuringCells().first();
+    m_marker = QPoint(cell->column(), cell->row());
+  }
+
   QRect newSelection = selection();
 
   /* see if we've actually changed anything */
@@ -151,10 +151,11 @@ void KSpreadSelection::setSelection( QPoint newMarker, QPoint newAnchor,
   m_pView->slotChangeSelection( table, oldSelection, oldMarker );
 }
 
-void KSpreadSelection::setMarker( const QPoint &point, KSpreadTable* table )
+void KSpreadSelection::setMarker( const QPoint &point,
+                                  KSpreadTable* table )
 {
   QPoint topLeft(point);
-  KSpreadCell* cell = table->cellAt(topLeft);
+  const KSpreadCell* cell = table->cellAt(topLeft);
   if (cell->isObscured() && cell->isObscuringForced())
   {
     cell = cell->obscuringCells().first();
@@ -200,9 +201,9 @@ QPoint KSpreadSelection::selectionAnchor()const
 */
 }
 
-bool KSpreadSelection::setCursorPosition(QPoint position)
+bool KSpreadSelection::setCursorPosition( const QPoint &position )
 {
-  KSpreadCell* cell = m_pView->activeTable()->cellAt(m_marker);
+  const KSpreadCell* cell = m_pView->activeTable()->cellAt(m_marker);
 
   QRect markerArea(m_marker, QPoint(m_marker.x() + cell->extraXCells(),
                                     m_marker.y() + cell->extraYCells()));
@@ -236,9 +237,8 @@ QRect KSpreadSelection::getChooseRect()const
 
 QRect KSpreadSelection::extendToMergedAreas(QRect area) const
 {
-  KSpreadCell *cell;
-
-  cell = m_pView->activeTable()->cellAt(area.left(), area.top());
+  const KSpreadCell *cell = m_pView->activeTable()->
+			    cellAt(area.left(), area.top());
 
   if( util_isColumnSelected(area) ||
       util_isRowSelected(area) )

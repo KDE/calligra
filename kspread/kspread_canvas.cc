@@ -1399,7 +1399,6 @@ void KSpreadCanvas::processHomeKey(QKeyEvent* event)
   else
   {
     QPoint destination;
-    KSpreadCell * cell = NULL;
     /* start at the first used cell in the row and cycle through the right until
        we find a cell that has some output text.  But don't look past the current
        marker.
@@ -1420,7 +1419,7 @@ void KSpreadCanvas::processHomeKey(QKeyEvent* event)
       QPoint marker = m_bChoose ?
         selectionInfo()->getChooseMarker() : selectionInfo()->marker();
 
-      cell = table->getFirstCellRow(marker.y());
+      KSpreadCell * cell = table->getFirstCellRow(marker.y());
       while (cell != NULL && cell->column() < marker.x() && cell->isEmpty())
       {
         cell = table->getNextCellRight(cell->column(), cell->row());

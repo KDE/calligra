@@ -64,7 +64,8 @@ public:
    */
   QRect selectionHandleArea(KSpreadCanvas* canvas) const;
 
-  void setSelection( QPoint marker, QPoint anchor, KSpreadTable* table );
+  void setSelection( const QPoint &marker, const QPoint &anchor,
+                     KSpreadTable* table );
 
   void setMarker( const QPoint &point, KSpreadTable* table );
 
@@ -86,7 +87,7 @@ public:
    * @return true if the position was valid, false if it wasn't.  In other words,
    *         true if something changed, false if there is no change.
    */
-  bool setCursorPosition(QPoint position);
+  bool setCursorPosition(const QPoint &position);
 
   /**
    * @see setCursorPosition for a description of what the cursor position is
@@ -96,9 +97,12 @@ public:
   QPoint cursorPosition() const;
 
 
-  void setChooseAnchor(QPoint chooseAnchor) { m_chooseAnchor = chooseAnchor; }
-  void setChooseMarker(QPoint chooseMarker) { m_chooseMarker = chooseMarker; }
-  void setChooseCursor(KSpreadTable* table, QPoint chooseCursor) { m_chooseTable = table; m_chooseCursor = chooseCursor; }
+  void setChooseAnchor( const QPoint &chooseAnchor )
+    { m_chooseAnchor = chooseAnchor; }
+  void setChooseMarker( const QPoint &chooseMarker )
+    { m_chooseMarker = chooseMarker; }
+  void setChooseCursor( KSpreadTable* table, const QPoint &chooseCursor )
+    { m_chooseTable = table; m_chooseCursor = chooseCursor; }
   void setChooseTable(KSpreadTable* table) { m_chooseTable = table; }
 
   QRect getChooseRect()const;
