@@ -165,7 +165,6 @@ class KMyDoubleLine;
 class KMyDoubleNumInput : public KMyNumInput
 {
     Q_OBJECT
-    Q_PROPERTY( double value READ value WRITE setValue )
     Q_PROPERTY( QString suffix READ suffix WRITE setSuffix )
     Q_PROPERTY( QString prefix READ prefix WRITE setPrefix )
     Q_PROPERTY( QString specialValueText READ specialValueText WRITE setSpecialValueText )
