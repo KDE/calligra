@@ -37,8 +37,24 @@ class QCheckBox;
 class QDateTimeEdit;
 class QLineEdit;
 class QListViewItem;
+class QTextEdit;
 
 class FilterSettings;
+
+class CommentDlg : public QWidget
+{
+  Q_OBJECT
+  
+ public:
+  CommentDlg( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+  ~CommentDlg();
+  
+  QTextEdit   * m_comment;
+  QLabel      * m_author;
+  QLabel      * m_subject;
+  KPushButton * m_nextButton;
+  KPushButton * m_previousButton;
+};
 
 class FilterMain : public QWidget
 {
@@ -118,6 +134,36 @@ class FilterDlg : public QWidget
   FilterMain     * m_filterMain;
 };
 
+
+class KSpreadCommentDlg : public KDialogBase
+{
+  Q_OBJECT  
+ public:
+  KSpreadCommentDlg( KSpreadView * parent, KSpreadChanges * changes, 
+                     const char * name = "KSpreadCommentDlg" );
+  ~KSpreadCommentDlg();
+  
+ protected slots:
+  void slotOk();
+  void slotNext();
+  void slotPrevious();
+
+ private:
+  class CommentList : public QMap<KSpreadChanges::ChangeRecord *, QString *> {};
+
+  KSpreadView    * m_view;
+  KSpreadChanges * m_changes;
+  CommentDlg     * m_dlg;
+
+  CommentList      m_comments;
+
+  KSpreadChanges::RecordMap::iterator m_begin;
+  KSpreadChanges::RecordMap::iterator m_current;
+  KSpreadChanges::RecordMap::iterator m_end;
+  KSpreadChanges::ChangeRecord      * m_currentRecord;
+
+  void addData( KSpreadChanges::ChangeRecord * record );
+};
 
 class KSpreadFilterDlg : public KDialogBase
 {

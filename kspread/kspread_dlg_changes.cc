@@ -39,6 +39,72 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qtabwidget.h>
+#include <qtextedit.h>
+
+CommentDlg::CommentDlg( QWidget * parent, const char * name, WFlags fl )
+  : QWidget( parent, name, fl )
+{
+  QGridLayout * dlgLayout = new QGridLayout( this, 1, 1, 11, 6, "dlgLayout"); 
+
+  m_comment = new QTextEdit( this, "m_comment" );
+
+  dlgLayout->addMultiCellWidget( m_comment, 1, 1, 0, 4 );
+  QSpacerItem * spacer = new QSpacerItem( 91, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+  dlgLayout->addItem( spacer, 2, 4 );
+
+  QVBoxLayout * layout2 = new QVBoxLayout( 0, 0, 6, "layout2"); 
+
+  QLabel * textLabel1 = new QLabel( this, "textLabel1" );
+  textLabel1->setText( i18n( "Author:" ) );
+  layout2->addWidget( textLabel1 );
+  QSpacerItem * spacer_2 = new QSpacerItem( 20, 21, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  layout2->addItem( spacer_2 );
+
+  QLabel * textLabel2 = new QLabel( this, "textLabel2" );
+  textLabel2->setText( i18n( "Subject:" ) );
+  layout2->addWidget( textLabel2 );
+  QSpacerItem * spacer_3 = new QSpacerItem( 20, 21, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  layout2->addItem( spacer_3 );
+
+  QLabel * textLabel3 = new QLabel( this, "textLabel3" );
+  textLabel3->setText( i18n( "Comment:" ) );
+  layout2->addWidget( textLabel3 );
+
+  dlgLayout->addMultiCellLayout( layout2, 0, 0, 0, 1 );
+  QSpacerItem * spacer_4 = new QSpacerItem( 110, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+  dlgLayout->addItem( spacer_4, 2, 0 );
+
+  QVBoxLayout * layout1 = new QVBoxLayout( 0, 0, 6, "layout1"); 
+
+  m_author = new QLabel( this, "m_author" );
+  m_author->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
+  layout1->addWidget( m_author );
+
+  m_subject = new QLabel( this, "m_subject" );
+  m_subject->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
+  layout1->addWidget( m_subject );
+  QSpacerItem* spacer_5 = new QSpacerItem( 221, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+  layout1->addItem( spacer_5 );
+
+  dlgLayout->addMultiCellLayout( layout1, 0, 0, 2, 4 );
+
+  m_nextButton = new KPushButton( this, "m_nextButton" );
+  m_nextButton->setMinimumSize( QSize( 100, 0 ) );
+  m_nextButton->setText( i18n( "&Next" ) );
+
+  dlgLayout->addWidget( m_nextButton, 2, 3 );
+
+  m_previousButton = new KPushButton( this, "m_previousButton" );
+  m_previousButton->setMinimumSize( QSize( 100, 0 ) );
+  m_previousButton->setText( i18n( "&Previous" ) );
+
+  dlgLayout->addMultiCellWidget( m_previousButton, 2, 2, 1, 2 );
+  resize( QSize(600, 362).expandedTo(minimumSizeHint()) );
+}
+
+CommentDlg::~CommentDlg()
+{
+}
 
 FilterMain::FilterMain( FilterSettings * settings, QWidget * parent, 
                         const char * name, WFlags fl )
@@ -343,6 +409,223 @@ FilterDlg::FilterDlg( FilterSettings * settings, QWidget * parent,
 
 FilterDlg::~FilterDlg()
 {
+}
+
+
+KSpreadCommentDlg::KSpreadCommentDlg( KSpreadView * parent, KSpreadChanges * changes, 
+                                      const char * name )
+  : KDialogBase( parent, name, true, "",
+                 KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, false ),
+    m_view( parent ),
+    m_changes( changes ),
+    m_dlg( new CommentDlg( this ) )
+{
+  setCaption( i18n( "Edit Comments" ) );
+  setButtonBoxOrientation( Vertical );
+  setMainWidget( m_dlg );
+
+  connect( m_dlg->m_nextButton, SIGNAL( clicked() ), this, SLOT( slotNext() ) );
+  connect( m_dlg->m_previousButton, SIGNAL( clicked() ), this, SLOT( slotPrevious() ) );
+
+  m_dlg->m_nextButton->setEnabled( false );
+  m_dlg->m_previousButton->setEnabled( false );
+  m_dlg->m_comment->setTextFormat( Qt::PlainText );
+
+  m_begin   = m_changes->m_changeRecords.begin();
+  m_current = m_changes->m_changeRecords.begin();
+  m_end     = m_changes->m_changeRecords.end();
+  
+  while ( m_current != m_end )
+  {
+    KSpreadChanges::ChangeRecord * record = m_current.data();
+    if ( record->m_state == KSpreadChanges::ChangeRecord::PENDING )
+    {
+      addData( record );
+
+      break;
+    }
+
+    ++m_current;
+  }
+
+  KSpreadChanges::RecordMap::iterator i = m_current;
+  if ( ++i != m_end )
+    m_dlg->m_nextButton->setEnabled( true );
+
+  if ( m_current != m_begin )
+    m_dlg->m_previousButton->setEnabled( true );
+}
+
+KSpreadCommentDlg::~KSpreadCommentDlg()
+{
+  CommentList::iterator iter = m_comments.begin();
+  CommentList::iterator end  = m_comments.end();
+
+  while ( iter != end )
+  {
+    QString * s = iter.data();
+    delete s;
+
+    ++iter;
+  }
+  m_comments.clear();
+}
+
+void KSpreadCommentDlg::addData( KSpreadChanges::ChangeRecord * record )
+{
+  KSpreadChanges::CellChange * ch = 0;
+  QString action1;
+  QString newValue;
+  QString cellName( record->m_table->tableName() + '!' + 
+                    util_encodeColumnLabelText( record->m_cell.x() )
+                    + QString::number( record->m_cell.y() ) );
+
+  if ( record->m_dependants.first() )
+  {
+    KSpreadChanges::ChangeRecord * r = record->m_dependants.first();
+    if ( r->m_type == KSpreadChanges::ChangeRecord::CELL )
+      newValue = ((KSpreadChanges::CellChange *) (r->m_change))->oldValue;
+  }
+  else
+    newValue = record->m_table->cellAt( record->m_cell.x(), 
+                                        record->m_cell.y() )->text();
+
+  switch( record->m_type )
+  {
+   case KSpreadChanges::ChangeRecord::CELL:
+    ch = (KSpreadChanges::CellChange *) record->m_change;
+
+    action1 += i18n( "(Cell %1 changed from '%2' to '%3')" )
+      .arg( cellName )
+      .arg( ch->oldValue.length() > 0 ? ch->oldValue : i18n( "<empty>" ) )
+      .arg( newValue.length() > 0 ? newValue : i18n( "<empty>" ) );
+    break;
+    
+   case KSpreadChanges::ChangeRecord::INSERTCOLUMN:
+    action1 = i18n( "Inserted column" );
+    break;
+    
+   case KSpreadChanges::ChangeRecord::INSERTROW:
+    action1 = i18n( "Inserted row" );
+    break;
+    
+   case KSpreadChanges::ChangeRecord::INSERTTABLE:
+    action1 = i18n( "Inserted table" );
+    break;
+    
+   case KSpreadChanges::ChangeRecord::DELETECOLUMN:
+    action1 = i18n( "Deleted column" );
+    break;
+    
+   case KSpreadChanges::ChangeRecord::DELETEROW:
+    action1 = i18n( "Deleted row" );
+    break;
+    
+   case KSpreadChanges::ChangeRecord::DELETETABLE:
+    action1 = i18n( "Deleted table" );
+    break;
+
+   case KSpreadChanges::ChangeRecord::MOVE:
+    action1 = i18n( "Moved content" );
+    break;
+  };
+
+  m_dlg->m_author->setText( m_changes->getAuthor( record->m_change->authorID ) + ", " 
+                            + m_view->doc()->locale()->formatDateTime( record->m_change->timestamp ) );
+  m_dlg->m_subject->setText( action1 );
+
+  QString comment;
+  CommentList::const_iterator iter = m_comments.find( record );
+  if ( iter != m_comments.end() )
+    comment = *(iter.data());
+  else if ( record->m_change->comment )
+    comment = *(record->m_change->comment );
+  
+  m_dlg->m_comment->setText( comment );
+  m_currentRecord = record;
+  m_dlg->m_comment->setModified( false );
+  m_dlg->m_comment->setFocus();
+}
+
+void KSpreadCommentDlg::slotNext()
+{
+  if ( m_dlg->m_comment->isModified() )
+    m_comments[ m_currentRecord ] = new QString( m_dlg->m_comment->text() );
+
+  ++m_current;
+  while ( m_current != m_end )
+  {
+    KSpreadChanges::ChangeRecord * record = m_current.data();
+    if ( record->m_state == KSpreadChanges::ChangeRecord::PENDING )
+    {
+      addData( record );
+
+      break;
+    }
+    ++m_current;
+  }
+
+  KSpreadChanges::RecordMap::iterator i = m_current;
+  if ( m_current == m_end || ( ++i == m_end ) )
+    m_dlg->m_nextButton->setEnabled( false );
+  if ( m_current == m_begin )
+    m_dlg->m_previousButton->setEnabled( false );
+  else
+    m_dlg->m_previousButton->setEnabled( true );
+}
+
+void KSpreadCommentDlg::slotPrevious()
+{
+  if ( m_dlg->m_comment->isModified() )
+    m_comments[ m_currentRecord ] = new QString( m_dlg->m_comment->text() );
+
+  if ( m_current != m_begin )
+    --m_current;
+  while ( m_current != m_begin )
+  {
+    KSpreadChanges::ChangeRecord * record = m_current.data();
+    if ( record->m_state == KSpreadChanges::ChangeRecord::PENDING )
+    {
+      addData( record );
+
+      break;
+    }
+    --m_current;
+  }
+
+  if ( m_current == m_begin )
+  {
+    KSpreadChanges::ChangeRecord * record = m_current.data();
+    if ( record->m_state == KSpreadChanges::ChangeRecord::PENDING )
+      addData( record );
+
+    m_dlg->m_previousButton->setEnabled( false );
+  }
+  KSpreadChanges::RecordMap::iterator i = m_current;
+  if ( m_current == m_end || ( ++i == m_end ) )
+    m_dlg->m_nextButton->setEnabled( false );
+  else 
+    m_dlg->m_nextButton->setEnabled( true );
+}
+  
+void KSpreadCommentDlg::slotOk()
+{
+  if ( m_dlg->m_comment->isModified() )
+    m_comments[ m_currentRecord ] = new QString( m_dlg->m_comment->text() );
+
+  CommentList::const_iterator iter = m_comments.begin();
+  CommentList::const_iterator end  = m_comments.end();
+
+  while ( iter != end )
+  {
+    iter.key()->m_change->comment = iter.data();
+
+    ++iter;
+  }
+
+  m_comments.clear();
+
+  KDialogBase::slotOk();
 }
 
 

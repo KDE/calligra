@@ -188,6 +188,7 @@ class KSpreadChanges : public QObject
 
    private:
     friend class KSpreadAcceptDlg;
+    friend class KSpreadCommentDlg;
     friend class KSpreadFilterDlg;
     
     int            m_id;
@@ -204,7 +205,8 @@ class KSpreadChanges : public QObject
   class RecordMap : public QMap<int, ChangeRecord *> {};
 
   friend class KSpreadAcceptDlg;
-  friend class KSpreadFilterDlg;
+  friend class KSpreadCommentDlg;
+  friend class KSpreadFilterDlg;  
 
   QPtrList<ChangeRecord> m_dependancyList;
   QPtrList<AuthorInfo>   m_authors;

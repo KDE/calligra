@@ -4283,6 +4283,9 @@ void KSpreadView::commentChanges()
 {
   if ( !m_recordChanges->isChecked() )
     return;
+
+  KSpreadCommentDlg dlg( this, m_pTable->map()->changes() );
+  dlg.exec();
 }
 
 void KSpreadView::mergeDocument()
