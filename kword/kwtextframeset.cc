@@ -599,7 +599,9 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     int left = frame ? kWordDocument()->zoomItX( frame->left() ) : 0;
     int from = left;
     int to = frame ? kWordDocument()->zoomItX( frame->right() ) : 0;
+#ifdef DEBUG_FLOW
     int width = to - from;
+#endif
     int bottomSkip = 0;
 
 #ifdef DEBUG_FLOW
@@ -986,7 +988,6 @@ void KWTextFrameSet::updateFrames()
 
     QValueList<FrameStruct> sortedFrames;
 
-    double pageHeight = m_doc->ptPaperHeight();
     int width = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
