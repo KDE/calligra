@@ -51,12 +51,12 @@ public:
     /**
      * Copy constructor
      */
-    KoPicture::KoPicture(const KoPicture &other);
+    KoPicture(const KoPicture &other);
 
     /**
      * Assignment operator
      */
-    KoPicture& KoPicture::operator=(const KoPicture& other);
+    KoPicture& operator=(const KoPicture& other);
 
     KoPictureType::Type getType(void) const;
 
