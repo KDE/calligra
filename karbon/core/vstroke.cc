@@ -33,7 +33,6 @@ VStroke::VStroke( VObject* parent, float width, const VLineCap cap, const VLineJ
 	m_lineCap = cap;
 	m_lineJoin = join;
 	m_miterLimit = miterLimit;
-	kdDebug() << "Size of VStroke : " << sizeof(*this) << endl;
 }
 
 VStroke::VStroke( const VColor &c, VObject* parent, float width, const VLineCap cap, const VLineJoin join,
@@ -46,7 +45,6 @@ VStroke::VStroke( const VColor &c, VObject* parent, float width, const VLineCap 
 	m_lineJoin = join;
 	m_miterLimit = miterLimit;
 	m_color = c;
-	kdDebug() << "Size of VStroke : " << sizeof(*this) << endl;
 }
 
 VStroke::VStroke( const VStroke& stroke )

@@ -71,7 +71,6 @@ VSegment::VSegment( unsigned short degree )
 
 	m_prev = 0L;
 	m_next = 0L;
-	kdDebug() << "Size f seg : " << sizeof(*this) << endl;
 }
 
 VSegment::VSegment( const VSegment& segment )
