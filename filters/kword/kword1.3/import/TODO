@@ -77,3 +77,11 @@ Table
 ...
 
 === Long term ===
+
+=== Raw Notes === (Raw ideas, may not apply to the problem)
+- add code of KoPagelayout::saveOasis (right memeber function name?)
+- pictures (loading, copying...)
+- preview image: a point for each character (if there is no preview in the original document. But do we need such a preview?)
+- variables: use provisorily the replacement text
+- the main frameset is not necessarily the first one (at least in recent files it seems.)
+- middle term solution for debug.xml (transform it in a sort of test case?)
