@@ -2705,9 +2705,9 @@ void KSpreadView::refreshView()
     m_pCanvas->setGeometry( widthRowHeader, heightColHeader,
                             m_pFrame->width() -widthRowHeader, m_pFrame->height() - heightColHeader );
 
-    m_pHBorderWidget->setGeometry( widthRowHeader, 0, m_pFrame->width() - widthRowHeader, heightColHeader );
+    m_pHBorderWidget->setGeometry( widthRowHeader + 1, 0, m_pFrame->width() - widthRowHeader, heightColHeader );
 
-    m_pVBorderWidget->setGeometry( 0,heightColHeader, widthRowHeader,
+    m_pVBorderWidget->setGeometry( 0,heightColHeader + 1, widthRowHeader,
                                    m_pFrame->height() - heightColHeader );
 }
 
