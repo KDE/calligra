@@ -205,8 +205,8 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 		if( shell() )
 		{
 			m_strokeFillPreview = m_toolbox->strokeFillPreview();
-			connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
-			connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
+			connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( slotStrokeChanged( const VStroke & ) ) );
+			connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( slotFillChanged( const VFill & ) ) );
 
 			connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
 			connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
@@ -691,22 +691,14 @@ void
 KarbonView::slotStrokeChanged( const VStroke &c )
 {
 	part()->document().selection()->setStroke( c );
-
-	part()->addCommand( new VStrokeCmd( &part()->document(), &c ), true );
-
-	m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
-								 *( part()->document().selection()->fill() ) );
+	selectionChanged();
 }
 
 void
 KarbonView::slotFillChanged( const VFill &f )
 {
 	part()->document().selection()->setFill( f );
-
-	part()->addCommand( new VFillCmd( &part()->document(), f ), true );
-
-	m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
-								 *( part()->document().selection()->fill() ) );
+	selectionChanged();
 }
 
 void
