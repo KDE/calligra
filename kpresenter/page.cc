@@ -89,6 +89,8 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
         tmpObjs.setAutoDelete( false );
         setAcceptDrops( true );
         inEffect = false;
+        ratio = 0;
+        keepRatio = false;
     }
     else
     {
@@ -212,6 +214,9 @@ void Page::mousePressEvent( QMouseEvent *e )
 {
     //setFocus();
 
+    if ( e->state() & ControlButton )
+        keepRatio = true;
+    
     view->sendFocusEvent();
 
     KPObject *kpobject = 0;
@@ -271,7 +276,9 @@ void Page::mousePressEvent( QMouseEvent *e )
                     for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0 ; i-- )
                     {
                         kpobject = objectList()->at( i );
-                        if ( kpobject->contains( QPoint( e->x(), e->y() ), diffx(), diffy() ) )
+                        QSize s = kpobject->getSize();
+                        QPoint pnt = kpobject->getOrig();
+                        if ( QRect( pnt.x() - diffx(), pnt.y() - diffy(), s.width(), s.height() ).contains( QPoint( e->x(), e->y() ) ) )
                         {
                             overObject = true;
                             if ( kpobject->isSelected() && modType == MT_MOVE ) deSelAll = false;
@@ -424,12 +431,29 @@ void Page::mousePressEvent( QMouseEvent *e )
     }
 
     mouseMoveEvent( e );
+
+    if ( modType != MT_NONE && modType != MT_MOVE )
+    {
+        KPObject *kpobject = objectList()->at( resizeObjNum );
+        if ( kpobject ) 
+        {
+            ratio = static_cast<double>( static_cast<double>( kpobject->getSize().width() ) /
+                                         static_cast<double>( kpobject->getSize().height() ) );
+            oldRect = QRect( kpobject->getOrig().x(), kpobject->getOrig().y(),
+                             kpobject->getSize().width(), kpobject->getSize().height() );
+        }
+    }
 }
 
 /*=================== handle mouse released ======================*/
 void Page::mouseReleaseEvent( QMouseEvent *e )
 {
-    if ( e->button() != LeftButton ) return;
+    if ( e->button() != LeftButton ) 
+    {
+        ratio = 0;
+        keepRatio = false;
+        return;
+    }
 
     int mx = e->x();
     int my = e->y();
@@ -443,6 +467,21 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
 
     if ( toolEditMode != INS_LINE )
         insRect = insRect.normalize();
+
+    QPoint mv;
+    QSize sz;
+    if ( toolEditMode == TEM_MOUSE && modType != MT_NONE && modType != MT_MOVE )
+    {
+        kpobject = objectList()->at( resizeObjNum );
+        if ( kpobject )
+        {   
+            mv = QPoint( kpobject->getOrig().x() - oldRect.x(),
+                         kpobject->getOrig().y() - oldRect.y() );
+            sz = QSize( kpobject->getSize().width() - oldRect.width(),
+                        kpobject->getSize().height() - oldRect.height() );
+        }
+        kpobject = 0L;
+    }
 
     switch ( toolEditMode )
     {
@@ -521,7 +560,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
             if ( firstX != mx || firstY != my )
             {
                 kpobject = objectList()->at( resizeObjNum );
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object up" ), QPoint( 0, my - firstY ), QSize( 0, firstY - my ),
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object up" ), mv, sz,
                                                       kpobject, view->kPresenterDoc() );
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
@@ -539,7 +578,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
             if ( firstX != mx || firstY != my )
             {
                 kpobject = objectList()->at( resizeObjNum );
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object down" ), QPoint( 0, 0 ), QSize( 0, my - firstY ),
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object down" ), mv, sz,
                                                       kpobject, view->kPresenterDoc() );
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
@@ -557,7 +596,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
             if ( firstX != mx || firstY != my )
             {
                 kpobject = objectList()->at( resizeObjNum );
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left" ), QPoint( mx - firstX, 0 ), QSize( firstX - mx, 0 ),
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left" ), mv, sz,
                                                       kpobject, view->kPresenterDoc() );
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
@@ -575,7 +614,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
             if ( firstX != mx || firstY != my )
             {
                 kpobject = objectList()->at( resizeObjNum );
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right" ), QPoint( 0, 0 ), QSize( mx - firstX, 0 ),
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right" ), mv, sz,
                                                       kpobject, view->kPresenterDoc() );
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
@@ -593,8 +632,8 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
             if ( firstX != mx || firstY != my )
             {
                 kpobject = objectList()->at( resizeObjNum );
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left up" ), QPoint( mx - firstX, my - firstY ),
-                                                      QSize( firstX - mx, firstY - my ), kpobject, view->kPresenterDoc() );
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left up" ), mv, sz,
+                                                      kpobject, view->kPresenterDoc() );
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
@@ -611,8 +650,8 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
             if ( firstX != mx || firstY != my )
             {
                 kpobject = objectList()->at( resizeObjNum );
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left down" ), QPoint( mx - firstX, 0 ),
-                                                      QSize( firstX - mx, my - firstY ), kpobject, view->kPresenterDoc() );
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left down" ), mv, sz,
+                                                      kpobject, view->kPresenterDoc() );
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
@@ -629,8 +668,8 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
             if ( firstX != mx || firstY != my )
             {
                 kpobject = objectList()->at( resizeObjNum );
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right up" ), QPoint( 0, my - firstY ),
-                                                      QSize( mx - firstX, firstY - my ), kpobject, view->kPresenterDoc() );
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right up" ), mv, sz,
+                                                      kpobject, view->kPresenterDoc() );
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
@@ -647,7 +686,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
             if ( firstX != mx || firstY != my )
             {
                 kpobject = objectList()->at( resizeObjNum );
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right down" ), QPoint( 0, 0 ), QSize( mx - firstX, my - firstY ),
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right down" ), mv, sz,
                                                       kpobject, view->kPresenterDoc() );
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
@@ -745,6 +784,8 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
     modType = MT_NONE;
     resizeObjNum = -1;
     mouseMoveEvent( e );
+    ratio = 0;
+    keepRatio = false;
 }
 
 /*==================== handle mouse moved ========================*/
@@ -767,7 +808,9 @@ void Page::mouseMoveEvent( QMouseEvent *e )
                 for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- )
                 {
                     kpobject = objectList()->at( i );
-                    if ( kpobject->contains( QPoint( e->x(), e->y() ), diffx(), diffy() ) )
+                    QSize s = kpobject->getSize();
+                    QPoint pnt = kpobject->getOrig();
+                    if ( QRect( pnt.x() - diffx(), pnt.y() - diffy(), s.width(), s.height() ).contains( QPoint( e->x(), e->y() ) ) )
                     {
                         if ( kpobject->isSelected() )
                             setCursor( kpobject->getCursor( QPoint( e->x(), e->y() ), diffx(), diffy(), modType ) );
@@ -828,7 +871,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
                     p.end();
                 }
                 else if ( modType != MT_NONE && resizeObjNum != -1 )
-                {
+                {                    
                     QPainter p;
                     p.begin( this );
 
@@ -838,42 +881,76 @@ void Page::mouseMoveEvent( QMouseEvent *e )
                     kpobject->setMove( true );
                     kpobject->draw( &p, diffx(), diffy() );
 
+                    int dx = mx - oldMx;
+                    int dy = my - oldMy;
+                        
                     switch ( modType )
                     {
                     case MT_RESIZE_LU:
                     {
-                        kpobject->moveBy( QPoint( mx - oldMx, my - oldMy ) );
-                        kpobject->resizeBy( QSize( oldMx - mx, oldMy - my ) );
+                        if ( keepRatio && ratio != 0.0 )
+                            if ( !calcRatio( dx, dy, kpobject, ratio ) )
+                                break;
+                        kpobject->moveBy( QPoint( dx, dy ) );
+                        kpobject->resizeBy( QSize( -dx, -dy ) );
                     } break;
                     case MT_RESIZE_LF:
                     {
-                        kpobject->moveBy( QPoint( mx - oldMx, 0 ) );
-                        kpobject->resizeBy( QSize( oldMx - mx, 0 ) );
+                        dy = 0;
+                        if ( keepRatio && ratio != 0.0 )
+                            if ( !calcRatio( dx, dy, kpobject, ratio ) )
+                                break;
+                        kpobject->moveBy( QPoint( dx, 0 ) );
+                        kpobject->resizeBy( QSize( -dx, -dy ) );
                     } break;
                     case MT_RESIZE_LD:
                     {
-                        kpobject->moveBy( QPoint( mx - oldMx, 0 ) );
-                        kpobject->resizeBy( QSize( oldMx - mx, my - oldMy ) );
+                        if ( keepRatio && ratio != 0.0 ) 
+                            //if ( !calcRatio( dx, dy, kpobject, ratio ) )
+                                break;
+                        kpobject->moveBy( QPoint( dx, 0 ) );
+                        kpobject->resizeBy( QSize( -dx, dy ) );
                     } break;
                     case MT_RESIZE_RU:
                     {
-                        kpobject->moveBy( QPoint( 0, my - oldMy ) );
-                        kpobject->resizeBy( QSize( mx - oldMx, oldMy - my ) );
+                        if ( keepRatio && ratio != 0.0 )
+                            //if ( !calcRatio( dx, dy, kpobject, ratio ) )
+                                break;
+                        kpobject->moveBy( QPoint( 0, dy ) );
+                        kpobject->resizeBy( QSize( dx, -dy ) );
                     } break;
                     case MT_RESIZE_RT:
-                        kpobject->resizeBy( QSize( mx - oldMx, 0 ) );
-                        break;
+                    {
+                        dy = 0;
+                        if ( keepRatio && ratio != 0.0 )
+                            if ( !calcRatio( dx, dy, kpobject, ratio ) )
+                                break;
+                        kpobject->resizeBy( QSize( dx, dy ) );
+                    } break;
                     case MT_RESIZE_RD:
-                        kpobject->resizeBy( QSize( mx - oldMx, my - oldMy ) );
-                        break;
+                    {
+                        if ( keepRatio && ratio != 0.0 )
+                            if ( !calcRatio( dx, dy, kpobject, ratio ) )
+                                break;
+                        kpobject->resizeBy( QSize( dx, dy ) );
+                    } break;
                     case MT_RESIZE_UP:
                     {
-                        kpobject->moveBy( QPoint( 0, my - oldMy ) );
-                        kpobject->resizeBy( QSize( 0, oldMy - my ) );
+                        dx = 0;
+                        if ( keepRatio && ratio != 0.0 )
+                            if ( !calcRatio( dx, dy, kpobject, ratio ) )
+                                break;
+                        kpobject->moveBy( QPoint( 0, dy ) );
+                        kpobject->resizeBy( QSize( -dx, -dy ) );
                     } break;
                     case MT_RESIZE_DN:
-                        kpobject->resizeBy( QSize( 0, my - oldMy ) );
-                        break;
+                    {
+                        dx = 0;
+                        if ( keepRatio && ratio != 0.0 )
+                            if ( !calcRatio( dx, dy, kpobject, ratio ) )
+                                break;
+                        kpobject->resizeBy( QSize( dx, dy ) );
+                    } break;
                     default: break;
                     }
                     kpobject->draw( &p, diffx(), diffy() );
@@ -1820,7 +1897,7 @@ bool Page::pNext( bool )
     }
     else
     {
-        QValueList<int>::Iterator test(  slideListIterator ); 
+        QValueList<int>::Iterator test(  slideListIterator );
         if ( /*currPresPage + 1 > pageNums()*/ ++test == slideList.end() )
         {
             for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
@@ -1880,7 +1957,7 @@ bool Page::pNext( bool )
         drawPageInPix( _pix1, view->getDiffY() );
 
         currPresPage = *( ++slideListIterator );
-        
+
         tmpObjs.clear();
         for ( int j = 0; j < static_cast<int>( objectList()->count() ); j++ )
         {
@@ -3873,4 +3950,17 @@ void Page::switchingMode()
     presMenu->setItemChecked( PM_DM, false );
     presMenu->setItemChecked( PM_SM, true );
     drawMode = false; setCursor( blankCursor );
+}
+
+/*================================================================*/
+bool Page::calcRatio( int &dx, int &dy, KPObject *kpobject, double ratio )
+{
+    if ( abs( dy ) > abs( dx ) )
+        dx = static_cast<int>( static_cast<double>( dy ) * ratio );
+    else
+        dy = static_cast<int>( static_cast<double>( dx ) / ratio );
+    if ( kpobject->getSize().width() + dx < 20 || 
+         kpobject->getSize().height() + dy < 20 )
+        return false;
+    return true;
 }

@@ -303,3 +303,9 @@ Reggie, 11.6.1999:
 - Fixed saving pixmap collection (pixmaps which are
   only in the undo-buffer but not really used anymore
   are not saved)
+
+Reggie, 12.6.1999:
+------------------
+- Implemented resizing objects with keeping constraints 
+  (when pressing Control while resizing)
+- Fixes

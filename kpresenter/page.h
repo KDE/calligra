@@ -176,7 +176,8 @@ protected:
     int getPageOfObj( int i, float fakt = 1.0 );
     float objSpeedFakt();
     float pageSpeedFakt();
-
+    bool calcRatio( int &dx, int &dy, KPObject *kpobject, double ratio );
+    
     void _repaint( bool erase=true );
     void _repaint( QRect r );
     void _repaint( KPObject *o );
@@ -222,13 +223,14 @@ protected:
     int PM_DM, PM_SM;
     int firstX, firstY;
     bool drawRubber;
-    QRect rubber, oldBoundingRect;
+    QRect rubber, oldBoundingRect, oldRect;
     ToolEditMode toolEditMode;
     QRect insRect;
     KoDocumentEntry partEntry;
     QList <KPObject> tmpObjs;
     QString autoform;
-    bool inEffect;
+    bool inEffect, keepRatio;
+    double ratio;
     
 public slots:
     void chPic();
