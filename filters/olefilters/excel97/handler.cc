@@ -155,7 +155,7 @@ bool Handler::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
 		{ "EXTERNNAME",				0x0023, 0 /* &Worker::op_externname */ },
 		{ "EXTERNSHEET",			0x0017, 0 /* &Worker::op_externsheet */ },
 		{ "EXTSST",					0x00ff, 0 /* &Worker::op_extsst */ },
-		{ "FILEPASS",				0x002f, 0 /* &Worker::op_filepass */ },
+		{ "FILEPASS",				0x002f, &Worker::op_filepass },
 		{ "FILESHARING",			0x005b, 0 /* &Worker::op_filesharing */ },
 		{ "FILESHARING2",			0x00a5, 0 /* &Worker::op_filesharing2 */ },
 		{ "FILTERMODE",				0x009b, 0 /* &Worker::op_filtermode */ },

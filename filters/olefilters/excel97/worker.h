@@ -71,6 +71,7 @@ protected:
 	bool op_codepage(Q_UINT32 size, QDataStream &body);
 	bool op_colinfo(Q_UINT32 size, QDataStream &body);
 	bool op_eof(Q_UINT32 size, QDataStream &body);
+	bool op_filepass(Q_UINT32 size, QDataStream &body);
 	bool op_font(Q_UINT32 size, QDataStream &body);
 	bool op_footer(Q_UINT32 size, QDataStream &body);
 	bool op_format(Q_UINT32 size, QDataStream &body);

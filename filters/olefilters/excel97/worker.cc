@@ -193,41 +193,31 @@ bool Worker::op_boundsheet(Q_UINT32, QDataStream &body)
 			return false;
 	}
 
+	char *name = new char[cch];
+	body.readRawBytes(name, cch);
+	QString s = QString::fromLatin1(name, cch);
+	delete []name;
+
 	if((grbit & 0x0f) == 0)
 	{
-		char *name = new char[cch];
-		body.readRawBytes(name, cch);
-		QString s = QString::fromLatin1(name, cch);
-		delete []name;
-
 		kdDebug(30511) << "Worksheet: " << s << " at: " << lbPlyPos << endl;
 		e = new QDomElement(m_root->createElement("table"));
 		e->setAttribute("name", s);
 
 		// Hide the table if it is either hidden, or very hidden.
 		if(((grbit >> 8) & 0x03) != 0)
-			e->setAttribute("hide",true);
+			e->setAttribute("hide", true);
 		
 		m_map.appendChild(*e);
 		m_tables.append(e);
 	}
 	else if((grbit & 0x0f) == 1)
 	{
-		char *name = new char[cch];
-		body.readRawBytes(name, cch);
-		QString s = QString::fromLatin1(name, cch);
-		delete []name;
-
 		// Macrosheet
 		kdDebug(30511) << "Macrosheet: " << s << " at: " << lbPlyPos << "! UNIMPLEMENTED" << endl;
 	}
 	else if ((grbit & 0x0f) == 2)
 	{
-		char *name = new char[cch];
-		body.readRawBytes(name, cch);
-		QString s = QString::fromLatin1(name, cch);
-		delete []name;
-
 		// Chart
 		kdDebug(30511) << "Chart: " << s << " at: " << lbPlyPos << "! UNIMPLEMENTED" << endl;
 	}
@@ -967,6 +957,32 @@ bool Worker::op_eof(Q_UINT32, QDataStream &)
 
 	m_streamDepth--;
 	return true;
+}
+
+bool Worker::op_filepass(Q_UINT32 size, QDataStream &body)
+{
+	Q_UINT16 temp;
+	Q_UINT16 wantOne;
+	body >> temp >> temp >> temp;
+
+	char *read = new char[16];
+	body.readRawBytes(read, 16);
+
+	QString documentId = QString::fromLatin1(read, 16);
+
+	read = new char[16];
+	body.readRawBytes(read, 16);
+
+	QString saltData = QString::fromLatin1(read, 16);
+
+	read = new char[16];
+	body.readRawBytes(read, 16);
+
+	QString hashedSaltData = QString::fromLatin1(read, 16);
+	
+	kdDebug() << "DOCUMENTID " << documentId << " SALTDATA " << saltData << " HASHEDSALTDATA " << hashedSaltData << endl;
+	
+	return false;
 }
 
 bool Worker::op_font(Q_UINT32, QDataStream &body)
