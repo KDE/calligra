@@ -52,7 +52,7 @@ bool KHTMLReader::filter(KURL url) {
 	_html->setAutoloadImages(false);
 	_html->openURL(url);
 	_html->setAutoloadImages(false);
-	QWidget dummy(0,0,WType_Modal);
+	QWidget dummy(0,0,WType_Dialog | WShowModal);
 	qt_enter_modal(&dummy);
 	qApp->enter_loop();
 	qt_leave_modal(&dummy);
