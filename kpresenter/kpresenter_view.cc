@@ -2697,6 +2697,18 @@ void KPresenterView::objectSelectedChanged()
         //unzoom font
         format.setPointSize( KoTextZoomHandler::layoutUnitToPt( format.font().pointSize() ) );
         showFormat( format );
+        const KoParagLayout * paragLayout=page->applicableTextInterfaces().first()->currentParagLayoutFormat();
+        if(paragLayout->counter)
+        {
+            KoParagCounter counter=*(paragLayout->counter);
+            showCounter( counter );
+        }
+        else
+        {
+            actionTextTypeUnsortList->setChecked( false );
+            actionTextTypeEnumList->setChecked( false );
+        }
+        alignChanged(  paragLayout->alignment );
     }
 
     KPTextView *edit=page->currentTextObjectView();
