@@ -53,13 +53,11 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 
 KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser )
     : m_parser( parser ), m_sectionNumber( 0 ), m_footNoteNumber( 0 ), m_endNoteNumber( 0 ),
-      m_currentStyle( 0L ), m_shadowTextFound( NoShadow ), m_index( 0 ),
+      m_previousLSID( 0 ), m_currentStyle( 0L ), m_shadowTextFound( NoShadow ), m_index( 0 ),
       m_currentTable( 0L ),
       m_bInParagraph( false ),
       m_insideField( false ), m_fieldAfterSeparator( false ), m_fieldType( 0 )
 {
-    for ( int i = 0; i < 9; ++i )
-        m_previousLSID[ i ] = 0;  // 0 == invalid
 }
 
 void KWordTextHandler::sectionStart( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
@@ -722,9 +720,9 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
         const wvWare::Word97::PAP& pap = paragraphProperties.pap();
         counterElement.setAttribute( "start", listInfo->startAt() );
         if ( listInfo->startAtOverridden() ||
-             ( m_previousLSID[ pap.ilvl ] != 0 && m_previousLSID[ pap.ilvl ] != listInfo->lsid() ) )
+             ( m_previousLSID != 0 && m_previousLSID != listInfo->lsid() ) )
             counterElement.setAttribute( "restart", "true" );
-        m_previousLSID[ pap.ilvl ] = listInfo->lsid(); // update the ID
+        m_previousLSID = listInfo->lsid(); // update the ID
 
         int depth = pap.ilvl; /*both are 0 based*/
         // Heading styles don't set the ilvl, but must have a depth coming
