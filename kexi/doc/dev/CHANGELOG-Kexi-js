@@ -297,8 +297,6 @@ CC_MAIL: dkite@shaw.ca
 CCPASTEUR: 
 	-why pixmap's code is in kexiproperty/kexipropertybuffer?
 	-perhaps we'd reuse KDE Menu editor GUI?
-	-backgroundOrigin property should have 'ParentOrigin' as default 
-	 (not it's as in QtDesigner, and it's not intuitive)
 TODO: RENAME IN FORMS:
  -s/Spacer/Spring/
  -s/A spacer widget to fill in blanks/A spring to place between widgets/

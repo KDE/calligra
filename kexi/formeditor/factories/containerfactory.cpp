@@ -267,21 +267,21 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wHBox = new KFormDesigner::Widget(this);
 	wHBox->setPixmap("frame");
 	wHBox->setClassName("HBox");
-	wHBox->setName(i18n("HBox"));
+	wHBox->setName(i18n("Horizontal Box"));
 	wHBox->setDescription(i18n("A simple container to group widgets horizontally"));
 	m_classes.append(wHBox);
 
 	KFormDesigner::Widget *wVBox = new KFormDesigner::Widget(this);
 	wVBox->setPixmap("frame");
 	wVBox->setClassName("VBox");
-	wVBox->setName(i18n("VBox"));
+	wVBox->setName(i18n("Vertical Box"));
 	wVBox->setDescription(i18n("A simple container to group widgets vertically"));
 	m_classes.append(wVBox);
 
 	KFormDesigner::Widget *wGrid = new KFormDesigner::Widget(this);
 	wGrid->setPixmap("frame");
 	wGrid->setClassName("Grid");
-	wGrid->setName(i18n("Grid"));
+	wGrid->setName(i18n("Grid Box"));
 	wGrid->setDescription(i18n("A simple container to group widgets in a grid"));
 	m_classes.append(wGrid);
 }

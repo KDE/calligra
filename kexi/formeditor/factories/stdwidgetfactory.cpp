@@ -127,8 +127,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wSpacer = new KFormDesigner::Widget(this);
 	wSpacer->setPixmap("spacer");
 	wSpacer->setClassName("Spacer");
-	wSpacer->setName(i18n("Spacer"));
-	wSpacer->setDescription(i18n("A spacer widget to fill in blanks"));
+	wSpacer->setName(i18n("Spring"));
+	wSpacer->setDescription(i18n("A spring to place between widgets"));
 	m_classes.append(wSpacer);
 
 	KFormDesigner::Widget *wPushButton = new KFormDesigner::Widget(this);
@@ -137,7 +137,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	wPushButton->setAlternateClassName("QPushButton");
 	wPushButton->setInclude("kpushbutton.h");
 	wPushButton->setName(i18n("Push Button"));
-	wPushButton->setDescription(i18n("A simple push button to execute a command"));
+	wPushButton->setDescription(i18n("A simple push button to execute actions"));
 	m_classes.append(wPushButton);
 
 	KFormDesigner::Widget *wRadioButton = new KFormDesigner::Widget(this);
