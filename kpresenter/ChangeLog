@@ -1,5 +1,7 @@
 1998-05-09  Reginald Stadlbauer  <reggie@kde.org>
 
+	* page.cc (drawBackColor): fixed problems with vertical gradient
+
 	* backdia.cc (BackDia): added possibility to choose a gradient
 	colored background
 

@@ -39,7 +39,11 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
       setMouseTracking(true);
       show();
     }
-  else hide();
+  else 
+    {
+      view = 0;
+      hide();
+    }
 }
 
 /*======================== destructor ============================*/
@@ -984,7 +988,12 @@ void Page::drawBackColor(QColor cb,QColor ca,BCType bcType,QRect rect,
 			 QPainter* painter,QRect viewRect)
 {
   int ncols = 4;
-  int depth = QColor::numBitPlanes();
+  int depth = QColor::numBitPlanes(),dx = 0,dy = 0;
+  if (view)
+    {
+      dx = diffy();
+      dy = diffy();
+    }
 
   switch (bcType)
     {
@@ -1086,13 +1095,16 @@ void Page::drawBackColor(QColor cb,QColor ca,BCType bcType,QRect rect,
 	    }
 	else 
 	  {
-	    QWMatrix matrix;
-	    matrix.translate((float)rect.width(),0.0);
-	    matrix.rotate(90.0);
-	    painter->setWorldMatrix(matrix);
-	    for(int i=0;i < s;i++)
-	      painter->drawPixmap(sSize*i+rect.y(),rect.x(),pmCrop,sOffset,0,sSize,ySize);
-	}
+ 	    QWMatrix matrix;
+ 	    matrix.translate((float)rect.width()+(float)rect.x(),(float)rect.y());
+ 	    matrix.rotate(90.0);
+ 	    painter->setWorldMatrix(matrix);
+	    for(int i = 0;i < s;i++)
+	      painter->drawPixmap(sSize*i,0,pmCrop,sOffset,0,sSize,ySize);
+ 	    matrix.rotate(-90.0);
+ 	    matrix.translate(-((float)rect.width()+(float)rect.x()),-(float)rect.y());
+ 	    painter->setWorldMatrix(matrix);
+	  }
       } break;
     }
 }
