@@ -220,7 +220,9 @@ public:
     virtual void zoom();
 
     /** Contribute to the document statistics */
-    virtual void statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences );
+    virtual int paragraphs();
+    virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, 
+        ulong & sentences, ulong & syllables );
 
     virtual void finalize();
 

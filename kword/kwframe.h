@@ -27,6 +27,7 @@
 #include <koRect.h>
 #include <qbrush.h>
 #include <qlist.h>
+#include <qprogressdialog.h>
 
 #include "border.h"
 
@@ -430,7 +431,9 @@ public:
      * The default implementation calls updateFrames() and zoom(). Call the parent :) */
     virtual void finalize();
 
-    virtual void statistics( ulong & /*charsWithSpace*/, ulong & /*charsWithoutSpace*/, ulong & /*words*/, ulong & /*sentences*/ ) {}
+    virtual int paragraphs() { return 0; }
+    virtual bool statistics( QProgressDialog */*progress*/,  ulong & /*charsWithSpace*/, ulong & /*charsWithoutSpace*/, ulong & /*words*/,
+        ulong & /*sentences*/, ulong & /*syllables*/ ) { return true; }
 
     KWDocument* kWordDocument() const { return m_doc; }
 

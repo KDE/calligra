@@ -22,6 +22,7 @@
 
 #include <qptrdict.h>
 #include "qrichtext_p.h"
+#include <qprogressdialog.h>
 #include "kwframe.h"
 #include "kwtextparag.h" // for KWParagLayout
 #include "kwtextdocument.h"
@@ -200,7 +201,9 @@ public:
     virtual void invalidate();
 
     // Calculate statistics for this frameset
-    virtual void statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences );
+    virtual int paragraphs();
+    virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, 
+        ulong & words, ulong& sentences, ulong & syllables );
 
     // reimplemented from QTextFlow
     virtual int adjustLMargin( int yp, int h, int margin, int space );

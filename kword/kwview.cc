@@ -716,15 +716,45 @@ void KWView::fileStatistics()
     ulong charsWithoutSpace = 0L;
     ulong words = 0L;
     ulong sentences = 0L;
+    ulong syllables = 0L;
     QListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+    int paragraphs = 0;
+    // count paragraphs for progress dialog:
     for ( ; framesetIt.current(); ++framesetIt )
     {
         KWFrameSet *frameSet = framesetIt.current();
+        if ( frameSet->frameSetInfo() == KWFrameSet::FI_BODY && frameSet->isVisible() )
+            paragraphs += frameSet->paragraphs();
+    }
+    QProgressDialog progress( i18n( "Counting..." ), i18n( "Cancel" ), paragraphs, 0, "count", true );
+    progress.setMinimumDuration( 1000 );
+    progress.setProgress( 0 );
+    QListIterator<KWFrameSet> framesetIt2( m_doc->framesetsIterator() );
+    for ( ; framesetIt2.current(); ++framesetIt2 )
+    {
+        KWFrameSet *frameSet = framesetIt2.current();
         // Exclude headers and footers
         if ( frameSet->frameSetInfo() == KWFrameSet::FI_BODY && frameSet->isVisible() )
         {
-            frameSet->statistics( charsWithSpace, charsWithoutSpace, words, sentences );
-        }
+            if( ! frameSet->statistics( &progress, charsWithSpace, charsWithoutSpace, words, sentences, syllables ) )
+            {
+                // someone pressed "Cancel"
+                return;
+            }
+        }	    
+    }
+    // calculate Flesch reading ease score:
+    float flesch_score = 0;
+    if( words > 0 && sentences > 0 )
+        flesch_score = 206.835 - (1.015 * (words/sentences)) - (84.6 * syllables/words);
+    QString flesch;
+    QString flesch_score_string;
+    flesch_score_string.setNum(flesch_score, 'f', 1);
+    if( words < 200 ) {
+        // a kind of warning if too few words:
+        flesch = i18n("approximately %1").arg(flesch_score_string);
+    } else {
+        flesch = flesch_score_string;
     }
 
     KDialogBase dlg( KDialogBase::Plain, i18n( "Document Statistics" ),
@@ -737,8 +767,11 @@ void KWView::fileStatistics()
               "Characters (total count including spaces) : <b>%1</b><br/>"
               "Characters without spaces: <b>%2</b><br/>"
               "Words: <b>%3</b><br/>"
-              "Sentences: <b>%4</b></p>" ).
-        arg( charsWithSpace ).arg( charsWithoutSpace ).arg( words ).arg( sentences ),
+              "Sentences: <b>%4</b><br/>"
+              "Syllables: <b>%5</b><br/>"
+              "Flesch reading ease: <b>%6</b></p>" ).
+        arg( charsWithSpace ).arg( charsWithoutSpace ).arg( words ).arg( sentences ).
+        arg( syllables ).arg( flesch ),
                         dlg.plainPage() ) );
     dlg.setInitialSize( QSize( 400, 200 ) ); // not too good for long translations... -> use a real layout and 5 labels
     dlg.show();

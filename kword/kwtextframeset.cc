@@ -41,6 +41,7 @@
 #include <qclipboard.h>
 #include <qdragobject.h>
 #include <qtl.h>
+#include <kapp.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <koDataTool.h>
@@ -433,48 +434,106 @@ void KWTextFrameSet::layout()
     formatMore();
 }
 
+int KWTextFrameSet::paragraphs()
+{
+    int paragraphs = 0;
+    QTextParag * parag = textdoc->firstParag();
+    for ( ; parag ; parag = parag->next() )
+        paragraphs++;
+    return paragraphs;
+}
+
 void KWTextFrameSet::invalidate()
 {
     m_lastFormatted = textdoc->firstParag();
     textdoc->invalidate(); // lazy layout, real update follows upon next repaint
 }
 
-void KWTextFrameSet::statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences )
+bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, 
+    ulong & sentences, ulong & syllables )
 {
+    // parts of words for better counting of syllables:
+    QStringList subs_syl; 
+    subs_syl << "cial" << "tia" << "cius" << "cious" << "giu" << "ion" << "iou" << "sia$" << "ely$";
+    QStringList add_syl;
+    add_syl << "ia" << "riet" << "dien" << "iu" << "io" << "ii" << "[aeiouym]bl$" << "[aeiou]{3}"
+            << "^mc" << "ism$" << "([^aeiouy])\1l$" << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
+
     QTextParag * parag = textdoc->firstParag();
     for ( ; parag ; parag = parag->next() )
     {
+        progress->setProgress(progress->progress()+1);
+        kapp->processEvents();
+        if ( progress->wasCancelled() )
+            return false;
+
         QString s = parag->string()->toString();
-        bool wordStarted = false;
-        bool sentenceStarted = false;
+
+        // Character count
         for ( uint i = 0 ; i < s.length() - 1 /*trailing-space*/ ; ++i )
         {
             QChar ch = s[i];
             ++charsWithSpace;
             if ( !ch.isSpace() )
                 ++charsWithoutSpace;
-            if ( ch.isSpace() || ch.isPunct() )
-            {
-                if ( wordStarted )
-                {
-                    ++words;
-                    wordStarted = false;
-                }
-                if ( KWAutoFormat::isMark( ch ) && sentenceStarted )
-                {
-                    ++sentences;
-                    sentenceStarted = false;
-                }
-            }
-            else
-            {
-                wordStarted = true;
-                sentenceStarted = true;
-            }
         }
-        if ( wordStarted )
-            ++words;
+
+        // Syllable and Word count
+        // Algorithm taken from Greg Fast's Lingua::EN::Syllable module for Perl.
+        // This guesses correct for 70-90% of English words, but the overall value
+        // is quite good, as some words get a number that's too high and others get
+        // one that's too low.
+        QRegExp re("\\s+");
+        QStringList wordlist = QStringList::split(re, s);
+        words += wordlist.count();
+       	re.setCaseSensitive(false);
+        for ( QStringList::Iterator it = wordlist.begin(); it != wordlist.end(); ++it ) {
+            int word_syllables = 0;
+            QString word = *it;
+            re.setPattern("e$");
+            word.replace(re, "");
+            re.setPattern("[^aeiouy]+");
+            QStringList syls = QStringList::split(re, word);
+
+            for ( QStringList::Iterator it = subs_syl.begin(); it != subs_syl.end(); ++it ) {
+                re.setPattern(*it);
+                if( word.contains(re) )
+	            word_syllables--;
+            }
+            for ( QStringList::Iterator it = add_syl.begin(); it != add_syl.end(); ++it ) {
+                re.setPattern(*it);
+                if( word.contains(re) )
+                    word_syllables++;
+            }
+
+            if ( word.length() == 1 )
+	        word_syllables++;
+            word_syllables += syls.count();
+	    if ( word_syllables == 0 ) 
+                word_syllables = 1;
+	    syllables += word_syllables;
+	}
+        re.setCaseSensitive(true);
+
+        // Sentence count
+        // Clean up for better result, destroys the original text but we only want to count
+	s = s.stripWhiteSpace();
+        QChar lastchar = s.at(s.length());
+        if( ! s.isEmpty() && ! KWAutoFormat::isMark( lastchar ) ) {  // e.g. for headlines
+            s = s + ".";
+	}
+        re.setPattern("[.?!]+");         // count "..." as only one "."
+        s.replace(re, ".");
+        re.setPattern("[A-Z]\\.+");      // don't count "U.S.A." as three sentences
+        s.replace(re, "*");
+        for ( uint i = 0 ; i < s.length() ; ++i )
+        {
+            QChar ch = s[i];
+            if ( KWAutoFormat::isMark( ch ) )
+                ++sentences;
+        }
     }
+    return true;
 }
 
 // Only interested in the body textframeset, not in header/footer

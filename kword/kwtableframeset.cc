@@ -1509,11 +1509,25 @@ void KWTableFrameSet::save( QDomElement &parentElem, bool saveFrames ) {
     }
 }
 
-void KWTableFrameSet::statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences )
+int KWTableFrameSet::paragraphs() 
+{
+    int paragraphs = 0;
+    for (unsigned int i =0; i < m_cells.count(); i++) {
+        paragraphs += m_cells.at(i)->paragraphs();
+    }
+    return paragraphs;
+}
+
+bool KWTableFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, 
+    ulong & sentences, ulong & syllables )
 {
     for (unsigned int i =0; i < m_cells.count(); i++) {
-        m_cells.at(i)->statistics( charsWithSpace, charsWithoutSpace, words, sentences );
+        if( ! m_cells.at(i)->statistics( progress, charsWithSpace, charsWithoutSpace, words, sentences, syllables ) )
+        {
+            return false;
+        }
     }
+    return true;
 }
 
 void KWTableFrameSet::finalize( ) {
