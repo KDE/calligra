@@ -29,11 +29,9 @@ void
 VSelectNodes::visitVPath( VPath& path )
 {
 	path.first();
-	if( m_exclusive )
-		path.first()->selectKnot( false );
 
 	// skip "begin":
-	while( path.next() )
+	while( path.current() )
 	{
 		if( m_rect.isEmpty() )
 		{
@@ -85,6 +83,7 @@ VSelectNodes::visitVPath( VPath& path )
 			else if( m_exclusive )
 				path.current()->selectKnot( !m_select );
 		}
+		path.next();
 	}
 }
 

@@ -32,8 +32,7 @@ void
 VTransformNodes::visitVPath( VPath& path )
 {
 	path.first();
-	// skip "begin":
-	while( path.next() )
+	while( path.current() )
 	{
 		/*if(
 			path.current()->prev() &&
@@ -82,6 +81,7 @@ VTransformNodes::visitVPath( VPath& path )
 
 		if( !success() )
 			setSuccess();
+		path.next();
 	}
 }
 
