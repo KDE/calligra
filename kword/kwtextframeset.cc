@@ -2461,7 +2461,7 @@ void KWTextFrameSetEdit::setFont(const QFont &font,bool _underline,bool _subscri
 
     format.setUnderline( _underline );
 
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Format /* zoom the font size */);
+    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Format,true /* zoom the font size */);
 }
 
 void KWTextFrameSetEdit::setTextColor(const QColor &color) {
