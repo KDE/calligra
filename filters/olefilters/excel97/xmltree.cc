@@ -16,9 +16,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <xmltree.h>
-#include <qstringlist.h>
 #include <kdebug.h>
+#include <qdatastream.h>
+#include <qstringlist.h>
+#include <xmltree.h>
 
 const char *palette[65] = {
   "#000000", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff",
@@ -41,6 +42,10 @@ const int ldays[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 XMLTree::XMLTree():QObject(),table(0L), fontCount(0), footerCount(0),
                     headerCount(0), xfCount(0)
 {
+    biff = 0;
+    date1904 = 0;
+    m_streamDepth = 0;
+
     root = new QDomDocument("spreadsheet");
 
     root->appendChild(root->createProcessingInstruction
@@ -65,7 +70,7 @@ XMLTree::XMLTree():QObject(),table(0L), fontCount(0), footerCount(0),
 
     map = root->createElement("map");
     doc.appendChild(map);
-    
+
     // ### David: I added m_locale to xmltree.h to make this compile
     //     But setting the language on that locale isn't done at all in here...
     m_locale.setLanguage("C"); // ##### FIXME
@@ -115,7 +120,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
     pen.setAttribute("style", 1);
     pen.setAttribute("color", palette[(fonts[fontid]->icv) & 0x7f]);
     f.appendChild(pen);
-   
+
     if ((xfs[xf]->borderStyle & 0x0f) != 0) {
     border = root->createElement("left-border");
     pen = root->createElement("pen");
@@ -321,7 +326,7 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
 
     int angle = xfs[xf]->align >> 8;
     if(angle!=255 && angle !=0)
-      format.setAttribute("angle", angle < 91 ? angle * (-1) : angle - 90);      
+      format.setAttribute("angle", angle < 91 ? angle * (-1) : angle - 90);
     else if(angle==255)
       format.setAttribute("verticaltext", "yes");
     int indent = xfs[xf]->indent & 0x0f;
@@ -761,7 +766,7 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
                         (*stringPtr).prepend("degree(");
                         break;
                     default:
-                        kdDebug(30511) << "Formula contains unhandled function " << integer << endl;
+                        kdDebug(s_area) << "Formula contains unhandled function " << integer << endl;
                         break;
                 }
                 break;
@@ -804,7 +809,7 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
                         *stringPtr = "";
                         break;
                     default:
-                        kdDebug(30511) << "Formula contains unhandled function " << integer << endl;
+                        kdDebug(s_area) << "Formula contains unhandled function " << integer << endl;
                         break;
                 }
                 break;
@@ -883,7 +888,7 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
                 parsedFormula.append("");
                 break;
             default:
-                kdDebug(30511) << "Formula contains unhandled ptg " << ptg << endl;
+                kdDebug(s_area) << "Formula contains unhandled ptg " << ptg << endl;
                 return ""; // Return empty formula-string on error
                 break;
         }
@@ -892,24 +897,153 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
     return parsedFormula.join("");
 }
 
-bool XMLTree::_1904(Q_UINT16, QDataStream& body)
+bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operands)
+{
+    typedef bool (XMLTree::*method)(Q_UINT32 size, QDataStream &operands);
+
+    typedef struct
+    {
+        const char *name;
+        Q_UINT16 opcode;
+        method handler;
+    } opcodeEntry;
+
+    static const opcodeEntry funcTab[] =
+    {
+        { "1904",           0x0022, &XMLTree::_1904 },
+        { "ARRAY",          0x0221, &XMLTree::_array },
+        { "BACKUP",         0x0040, &XMLTree::_backup },
+        { "BLANK",          0x0201, &XMLTree::_blank },
+        { "BOF",            0x0809, &XMLTree::_bof },
+        { "BOOKBOOL",       0x00da, &XMLTree::_bookbool },
+        { "BOOLERR",        0x0205, &XMLTree::_boolerr },
+        { "BOTTOMMARGIN",   0x0029, &XMLTree::_bottommargin },
+        { "BOUNDSHEET",     0x0085, &XMLTree::_boundsheet },
+        { "CF",             0x01b1, &XMLTree::_cf },
+        { "CONDFMT",        0x01b0, &XMLTree::_condfmt },
+        { "CODEPAGE",       0x0042, &XMLTree::_codepage },
+        { "COLINFO",        0x007d, &XMLTree::_colinfo },
+        { "COUNTRY",        0x008c, &XMLTree::_country },
+        { "CRN",            0x005a, &XMLTree::_crn },
+        { "DBCELL",         0x00d7, &XMLTree::_dbcell },
+        { "DEFAULTROWHEIGHT", 0x0225, &XMLTree::_defaultrowheight },
+        { "DEFCOLWIDTH",    0x0055, &XMLTree::_defcolwidth },
+        { "DIMENSIONS",     0x0200, &XMLTree::_dimensions },
+        { "EOF",            0x000a, &XMLTree::_eof },
+        { "EXTERNCOUNT",    0x0016, &XMLTree::_externcount },
+        { "EXTERNNAME",     0x0223, &XMLTree::_externname },
+        { "EXTERNSHEET",    0x0017, &XMLTree::_externsheet },
+        { "EXTSST",         0x00ff, &XMLTree::_extsst },
+        { "FILEPASS",       0x002f, &XMLTree::_filepass },
+        { "FILESHARING",    0x005b, &XMLTree::_filesharing },
+        { "FILESHARING2",   0x01a5, &XMLTree::_filesharing2 },
+        { "FONT",           0x0031, &XMLTree::_font },
+        { "FOOTER",         0x0015, &XMLTree::_footer },
+        { "FORMAT",         0x041e, &XMLTree::_format },
+        { "FORMULA",        0x0006, &XMLTree::_formula },
+        { "GCW",            0x00ab, &XMLTree::_gcw },
+        { "GUTS",           0x0080, &XMLTree::_guts },
+        { "HCENTER",        0x0083, &XMLTree::_hcenter },
+        { "HEADER",         0x0014, &XMLTree::_header },
+        { "HLINK",          0x01b8, &XMLTree::_hlink },
+        { "HORIZONTALPAGEBREAKS", 0x001b, &XMLTree::_horizontalpagebreaks },
+        { "IMDATA",         0x007f, &XMLTree::_imdata },
+        { "LABELSST",       0x00fd, &XMLTree::_labelsst },
+        { "LABEL",          0x0204, &XMLTree::_label },
+        { "LEFTMARGIN",     0x0026, &XMLTree::_leftmargin },
+        { "MULBLANK",       0x00be, &XMLTree::_mulblank },
+        { "MULRK",          0x00bd, &XMLTree::_mulrk },
+        { "NAME",           0x0218, &XMLTree::_name },
+        { "NOTE",           0x001c, &XMLTree::_note },
+        { "NUMBER",         0x0203, &XMLTree::_number },
+        { "PANE",           0x0041, &XMLTree::_pane },
+        { "PARAMQRY",       0x00dc, &XMLTree::_paramqry },
+        { "PASSWORD",       0x0013, &XMLTree::_password },
+        { "PROTECT",        0x0012, &XMLTree::_protect },
+        { "QSI",            0x01ad, &XMLTree::_qsi },
+        { "RECIPNAME",      0x00b9, &XMLTree::_recipname },
+        { "RIGHTMARGIN",    0x0027, &XMLTree::_rightmargin },
+        { "RK",             0x027e, &XMLTree::_rk },
+        { "ROW",            0x0208, &XMLTree::_row },
+        { "SCL",            0x00a0, &XMLTree::_scl },
+        { "SETUP",          0x00a1, &XMLTree::_setup },
+        { "SHRFMLA",        0x00bc, &XMLTree::_shrfmla },
+        { "SORT",           0x0090, &XMLTree::_sort },
+        { "SST",            0x00fc, &XMLTree::_sst },
+        { "STANDARDWIDTH",  0x0099, &XMLTree::_standardwidth },
+        { "STRING",         0x0207, &XMLTree::_string },
+        { "TABID",          0x013d, &XMLTree::_tabid },
+        { "TABIDCONF",      0x00ea, &XMLTree::_tabidconf },
+        { "TABLE",          0x0236, &XMLTree::_table },
+        { "TOPMARGIN",      0x0028, &XMLTree::_topmargin },
+        { "VCENTER",        0x0084, &XMLTree::_vcenter },
+        { "VERTICALPAGEBREAKS", 0x001a, &XMLTree::_verticalpagebreaks },
+        { "WINDOW1",        0x003d, &XMLTree::_window1 },
+        { "WINDOW2",        0x023e, &XMLTree::_window2 },
+        { "WRITEACCESS",    0x005C, &XMLTree::_writeaccess },
+        { "WRITEPROT",      0x0086, &XMLTree::_writeprot },
+        { "WSBOOL",         0x0081, &XMLTree::_wsbool },
+        { "XF",             0x00e0, &XMLTree::_xf },
+        { 0, 0x0000, 0 }
+    };
+    unsigned int i;
+    method result;
+
+    // Scan lookup table for operation.
+
+    for (i = 0; funcTab[i].name; i++)
+    {
+        if (funcTab[i].opcode == opcode)
+        {
+            break;
+        }
+    }
+
+    // Invoke handler.
+
+    result = funcTab[i].handler;
+    if (!result)
+    {
+        if (funcTab[i].name)
+            kdWarning(s_area) << "invokeHandler: unsupported opcode: " <<
+                funcTab[i].name <<
+                " operands: " << bytes << endl;
+        else
+            kdWarning(s_area) << "invokeHandler: unsupported opcode: 0x" <<
+                QString::number(opcode, 16) <<
+                " operands: " << bytes << endl;
+
+        // Skip data we cannot use.
+
+        //skip(bytes, operands);
+    }
+    else
+    {
+        kdDebug(s_area) << "invokeHandler: opcode: " << funcTab[i].name <<
+            " operands: " << bytes << endl;
+        return (this->*result)(bytes, operands);
+    }
+    return true;
+}
+
+bool XMLTree::_1904(Q_UINT32, QDataStream &body)
 {
     body >> date1904;
 
     return true;
 }
 
-bool XMLTree::_array(Q_UINT16, QDataStream&)
+bool XMLTree::_array(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_backup(Q_UINT16, QDataStream&)
+bool XMLTree::_backup(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_blank(Q_UINT16, QDataStream& body)
+bool XMLTree::_blank(Q_UINT32, QDataStream &body)
 {
     Q_UINT16 row, column, xf;
 
@@ -922,35 +1056,71 @@ bool XMLTree::_blank(Q_UINT16, QDataStream& body)
     return true;
 }
 
-bool XMLTree::_bof(Q_UINT16, QDataStream& body)
+bool XMLTree::_bof(Q_UINT32, QDataStream &body)
 {
-    Q_UINT16 type;
+    Q_UINT16 dt;
+    Q_UINT16 rupBuild;
+    Q_UINT16 rupYear;
+    Q_UINT32 bfh;
+    Q_UINT32 sfo;
 
-    body >> biff >> type;
+    body >> biff;
 
-    if (biff != BIFF_5_7 && biff != BIFF_8)
+    switch (biff)
+    {
+    case BIFF_5_7:
+        body >> dt >> rupBuild >> rupYear;
+        break;
+    case BIFF_8:
+        body >> dt >> rupBuild >> rupYear >> bfh >> sfo;
+        break;
+    default:
         return false;
+    }
 
-    if (type == 0x10)
+    m_streamDepth++;
+    if (m_streamDepth == 1)
     {
         if (table != 0L)
+        {
             delete table;
-        table = tables.dequeue();
+            table = 0L;
+        }
+        switch (dt)
+        {
+        case 0x5:
+            kdDebug(s_area) << "BOF: Workbook globals" << endl;
+            break;
+        case 0x10:
+            table = tables.dequeue();
+            kdDebug(s_area) << "BOF: Worksheet: " << table->attribute("name") << endl;
+            break;
+        case 0x20:
+            table = tables.dequeue();
+            kdDebug(s_area) << "BOF: Chart: " << table->attribute("name") << endl;
+            break;
+        default:
+            kdWarning(s_area) << "BOF: Unsupported substream: 0x" << QString::number(dt, 16) << endl;
+    //        table = tables.dequeue();
+    //        delete table;
+            table = 0L;
+            break;
+        }
     }
     return true;
 }
 
-bool XMLTree::_bookbool(Q_UINT16, QDataStream&)
+bool XMLTree::_bookbool(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_boolerr(Q_UINT16, QDataStream&)
+bool XMLTree::_boolerr(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_bottommargin(Q_UINT16, QDataStream& body)
+bool XMLTree::_bottommargin(Q_UINT32, QDataStream &body)
 {
     double value;
     body >> value;//value in INCH
@@ -959,77 +1129,68 @@ bool XMLTree::_bottommargin(Q_UINT16, QDataStream& body)
     return true;
 }
 
-bool XMLTree::_boundsheet(Q_UINT16, QDataStream& body)
+bool XMLTree::_boundsheet(Q_UINT32, QDataStream &body)
 {
-  //kdDebug() <<"New table\n";
-  QDomElement *e;
-  if (biff == BIFF_5_7) {
-    Q_UINT8 length;
-    Q_UINT16 type;
-    Q_UINT32 skip;
-    body >> skip >> type >> length;
-    if ((type & 0x0f) == 0) {
-      char *name = new char[length];
-      body.readRawBytes(name, length);
-      QString s = QString::fromLatin1(name, length);
+    Q_UINT32 lbPlyPos;
+    Q_UINT16 grbit;
+    Q_UINT16 cch;
+    Q_UINT8 tmp8;
+    QDomElement *e;
 
-      delete []name;
-
-      e = new QDomElement(root->createElement("table"));
-      e->setAttribute("name", s);
-      map.appendChild(*e);
-      tables.enqueue(e);
+    switch (biff)
+    {
+    case BIFF_5_7:
+        body >> lbPlyPos >> grbit >> tmp8;
+        cch = tmp8;
+        break;
+    case BIFF_8:
+        body >> lbPlyPos >> grbit >> cch;
+        break;
+    default:
+        return false;
     }
-  }
-  else if (biff == BIFF_8) {
-    Q_UINT16 type, length;
-    Q_UINT32 skip;
-    body >> skip >> type >> length;
-    //hack for test if table is hidden
-    // it works but I don't know if it's good
-    
-    if ((type & 0x0f) == 0) {
-      char *name = new char[length];
-      body.readRawBytes(name, length);
-      QString s = QString::fromLatin1(name, length);
-      delete []name;
-      e = new QDomElement(root->createElement("table"));
-      e->setAttribute("name", s);
-      map.appendChild(*e);
-      tables.enqueue(e);
-      }
-    if((type & 0x0f)==1)
-      {
-	char *name = new char[length];
-	body.readRawBytes(name, length);
-	QString s = QString::fromLatin1(name, length);
-	delete []name;
-	e = new QDomElement(root->createElement("table"));
-	e->setAttribute("name", s);
-	e->setAttribute("hide",true);
-	map.appendChild(*e);
-	tables.enqueue(e);
-      }
-  }
-  return true;
+
+    if ((grbit & 0x0f) == 0)
+    {
+        char *name = new char[cch];
+        body.readRawBytes(name, cch);
+        QString s = QString::fromLatin1(name, cch);
+        delete [] name;
+
+        kdDebug(s_area) << "Worksheet: " << s << " at: " << lbPlyPos << endl;
+        e = new QDomElement(root->createElement("table"));
+        e->setAttribute("name", s);
+
+        // Hide the table if it is either hidden, or very hidden.
+        if (((grbit >> 8) & 0x03) != 0)
+        {
+            e->setAttribute("hide",true);
+        }
+        map.appendChild(*e);
+        tables.enqueue(e);
+    }
+    return true;
 }
 
-bool XMLTree::_cf(Q_UINT16, QDataStream&)
+bool XMLTree::_cf(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_condfmt(Q_UINT16, QDataStream&)
+bool XMLTree::_condfmt(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_codepage(Q_UINT16, QDataStream&)
+bool XMLTree::_codepage(Q_UINT32, QDataStream &body)
 {
-  return true;
+    Q_UINT16 cv;
+
+    body >> cv;
+    return true;
 }
 
-bool XMLTree::_colinfo(Q_UINT16, QDataStream& body)
+bool XMLTree::_colinfo(Q_UINT32, QDataStream &body)
 {
     Q_UINT16 first, last, width, xf, options;
 
@@ -1037,7 +1198,7 @@ bool XMLTree::_colinfo(Q_UINT16, QDataStream& body)
 
     bool hidden = (options & 0x0001) ? true : false;
 
-    for (Q_UINT16 i = first; i <= last; ++i)
+    for (Q_UINT32 i = first; i <= last; ++i)
     {
         QDomElement col = root->createElement("column");
         col.setAttribute("column", (int) i+1);
@@ -1051,77 +1212,78 @@ bool XMLTree::_colinfo(Q_UINT16, QDataStream& body)
     return true;
 }
 
-bool XMLTree::_country(Q_UINT16, QDataStream&)
+bool XMLTree::_country(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_crn(Q_UINT16, QDataStream&)
+bool XMLTree::_crn(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_dbcell(Q_UINT16, QDataStream &)
+bool XMLTree::_dbcell(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_defaultrowheight(Q_UINT16, QDataStream&)
+bool XMLTree::_defaultrowheight(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_defcolwidth(Q_UINT16, QDataStream&)
+bool XMLTree::_defcolwidth(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_dimensions(Q_UINT16, QDataStream&)
+bool XMLTree::_dimensions(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_eof(Q_UINT16, QDataStream&)
+bool XMLTree::_eof(Q_UINT32, QDataStream &)
+{
+    m_streamDepth--;
+    return true;
+}
+
+bool XMLTree::_externcount(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_externcount(Q_UINT16, QDataStream&)
+bool XMLTree::_externname(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_externname(Q_UINT16, QDataStream&)
+bool XMLTree::_externsheet(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_externsheet(Q_UINT16, QDataStream&)
+bool XMLTree::_extsst(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_extsst(Q_UINT16, QDataStream&)
+bool XMLTree::_filepass(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_filepass(Q_UINT16, QDataStream&)
+bool XMLTree::_filesharing(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_filesharing(Q_UINT16, QDataStream&)
+bool XMLTree::_filesharing2(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_filesharing2(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_font(Q_UINT16, QDataStream& body)
+bool XMLTree::_font(Q_UINT32, QDataStream &body)
 {
     QChar *c;
     Q_UINT8 lsb, msb;
@@ -1154,7 +1316,7 @@ bool XMLTree::_font(Q_UINT16, QDataStream& body)
     return true;
 }
 
-bool XMLTree::_footer(Q_UINT16, QDataStream& body)
+bool XMLTree::_footer(Q_UINT32, QDataStream &body)
 {
 if (footerCount++ == 0)
   {
@@ -1164,9 +1326,9 @@ if (footerCount++ == 0)
         if (!cch) return true;
         char *name = new char[cch];
         body.readRawBytes(name, cch);
-	
+
         QString s = QString::fromLatin1(name, cch);
-	
+
         QDomElement e = root->createElement("foot");
         QDomElement text = root->createElement("center");
         text.appendChild(root->createTextNode(s));
@@ -1177,7 +1339,7 @@ if (footerCount++ == 0)
     return true;
 }
 
-bool XMLTree::_format(Q_UINT16, QDataStream& body)
+bool XMLTree::_format(Q_UINT32, QDataStream &body)
 {
   Q_UINT16 id;
   format_rec *f = new format_rec;
@@ -1189,7 +1351,7 @@ bool XMLTree::_format(Q_UINT16, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_formula(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_formula(Q_UINT32 size, QDataStream &body)
 {
   char *store = new char[size];
   Q_UINT16 row, column, xf, skip;
@@ -1219,22 +1381,22 @@ bool XMLTree::_formula(Q_UINT16 size, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_gcw(Q_UINT16, QDataStream&)
+bool XMLTree::_gcw(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_guts(Q_UINT16, QDataStream&)
+bool XMLTree::_guts(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_hcenter(Q_UINT16, QDataStream&)
+bool XMLTree::_hcenter(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_header(Q_UINT16, QDataStream& body)
+bool XMLTree::_header(Q_UINT32, QDataStream &body)
 {
     if (headerCount++ == 0)
     {
@@ -1257,22 +1419,22 @@ bool XMLTree::_header(Q_UINT16, QDataStream& body)
     return true;
 }
 
-bool XMLTree::_hlink(Q_UINT16, QDataStream&)
+bool XMLTree::_hlink(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_horizontalpagebreaks(Q_UINT16, QDataStream&)
+bool XMLTree::_horizontalpagebreaks(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_imdata(Q_UINT16, QDataStream&)
+bool XMLTree::_imdata(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_label(Q_UINT16, QDataStream& body)
+bool XMLTree::_label(Q_UINT32, QDataStream &body)
 {
   Q_UINT16 row, column, xf, length;
 
@@ -1294,7 +1456,7 @@ bool XMLTree::_label(Q_UINT16, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_labelsst(Q_UINT16, QDataStream& body)
+bool XMLTree::_labelsst(Q_UINT32, QDataStream &body)
 {
   Q_UINT16 row, column, xf;
   Q_UINT32 isst;
@@ -1312,7 +1474,7 @@ bool XMLTree::_labelsst(Q_UINT16, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_leftmargin(Q_UINT16, QDataStream& body)
+bool XMLTree::_leftmargin(Q_UINT32, QDataStream &body)
 {
   double value;
   body >> value;
@@ -1321,7 +1483,7 @@ bool XMLTree::_leftmargin(Q_UINT16, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_mulblank(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_mulblank(Q_UINT32 size, QDataStream &body)
 {
   Q_UINT16 row, xf, count, first;
 
@@ -1338,7 +1500,7 @@ bool XMLTree::_mulblank(Q_UINT16 size, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_mulrk(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_mulrk(Q_UINT32 size, QDataStream &body)
 {
 
   double value = 0;
@@ -1383,7 +1545,7 @@ bool XMLTree::_mulrk(Q_UINT16 size, QDataStream& body)
     case 178:
     case 179:
     case 180:
-    case 181: 
+    case 181:
     case 182:
     case 183:
     case 184:
@@ -1410,12 +1572,12 @@ bool XMLTree::_mulrk(Q_UINT16 size, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_name(Q_UINT16, QDataStream&)
+bool XMLTree::_name(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_note(Q_UINT16, QDataStream &body)
+bool XMLTree::_note(Q_UINT32, QDataStream &body)
 {
   kdDebug() <<"Note\n";
   Q_UINT16 row,col;
@@ -1426,7 +1588,7 @@ bool XMLTree::_note(Q_UINT16, QDataStream &body)
   return true;
 }
 
-bool XMLTree::_number(Q_UINT16, QDataStream& body)
+bool XMLTree::_number(Q_UINT32, QDataStream &body)
 {
   double value;
   QString s;
@@ -1442,12 +1604,12 @@ bool XMLTree::_number(Q_UINT16, QDataStream& body)
     case 0x13:
     case 0x14: // Time
     case 0x15:
-    case 0x2D:  
-    case 0x2E:  
-    case 0x2F: 
+    case 0x2D:
+    case 0x2E:
+    case 0x2F:
     case 0xB5:
     case 0xB6:
-    case 0xB9:  
+    case 0xB9:
       int hour, min, second;
       getTime( value, hour, min, second);
       s.sprintf("%d:%d:%d", hour, min, second);
@@ -1456,7 +1618,7 @@ bool XMLTree::_number(Q_UINT16, QDataStream& body)
       s = m_locale.formatNumber(value);
       break;
     }
-  
+
 
   QDomElement text = root->createElement("text");
   text.appendChild(root->createTextNode(s));
@@ -1466,37 +1628,37 @@ bool XMLTree::_number(Q_UINT16, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_pane(Q_UINT16, QDataStream&)
+bool XMLTree::_pane(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_paramqry(Q_UINT16, QDataStream&)
+bool XMLTree::_paramqry(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_password(Q_UINT16, QDataStream&)
+bool XMLTree::_password(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_protect(Q_UINT16, QDataStream&)
+bool XMLTree::_protect(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_qsi(Q_UINT16, QDataStream&)
+bool XMLTree::_qsi(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_recipname(Q_UINT16, QDataStream&)
+bool XMLTree::_recipname(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_rightmargin(Q_UINT16, QDataStream& body)
+bool XMLTree::_rightmargin(Q_UINT32, QDataStream &body)
 {
   double value;
   body >> value;
@@ -1505,7 +1667,7 @@ bool XMLTree::_rightmargin(Q_UINT16, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_rk(Q_UINT16, QDataStream& body)
+bool XMLTree::_rk(Q_UINT32, QDataStream &body)
 {
   double value = 0;
 
@@ -1573,7 +1735,7 @@ bool XMLTree::_rk(Q_UINT16, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_row(Q_UINT16, QDataStream& body)
+bool XMLTree::_row(Q_UINT32, QDataStream &body)
 {
   Q_UINT16 rowNr, skip, height,flags,flags2,xf;
 
@@ -1597,27 +1759,27 @@ bool XMLTree::_row(Q_UINT16, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_scl(Q_UINT16, QDataStream&)
+bool XMLTree::_scl(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_setup(Q_UINT16, QDataStream&)
+bool XMLTree::_setup(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_shrfmla(Q_UINT16, QDataStream&)
+bool XMLTree::_shrfmla(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_sort(Q_UINT16, QDataStream&)
+bool XMLTree::_sort(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_sst(Q_UINT16, QDataStream& body)
+bool XMLTree::_sst(Q_UINT32, QDataStream &body)
 {
     char *buffer_8bit;
     QString *s;
@@ -1662,7 +1824,7 @@ bool XMLTree::_sst(Q_UINT16, QDataStream& body)
     return true;
 }
 
-bool XMLTree::_standardwidth(Q_UINT16, QDataStream&body)
+bool XMLTree::_standardwidth(Q_UINT32, QDataStream&body)
 {
   Q_UINT16 width;
   body >> width;
@@ -1671,27 +1833,27 @@ bool XMLTree::_standardwidth(Q_UINT16, QDataStream&body)
   return true;
 }
 
-bool XMLTree::_string(Q_UINT16, QDataStream&)
+bool XMLTree::_string(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_tabid(Q_UINT16, QDataStream&)
+bool XMLTree::_tabid(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_tabidconf(Q_UINT16, QDataStream&)
+bool XMLTree::_tabidconf(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_table(Q_UINT16, QDataStream&)
+bool XMLTree::_table(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_topmargin(Q_UINT16, QDataStream& body)
+bool XMLTree::_topmargin(Q_UINT32, QDataStream &body)
 {
   double value;
   body >> value;
@@ -1700,22 +1862,22 @@ bool XMLTree::_topmargin(Q_UINT16, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_vcenter(Q_UINT16, QDataStream&)
+bool XMLTree::_vcenter(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_verticalpagebreaks(Q_UINT16, QDataStream&)
+bool XMLTree::_verticalpagebreaks(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_window1(Q_UINT16, QDataStream&)
+bool XMLTree::_window1(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_window2(Q_UINT16, QDataStream & body)
+bool XMLTree::_window2(Q_UINT32, QDataStream & body)
 {
   Q_UINT16 nOpt;
   body>> nOpt;
@@ -1725,47 +1887,47 @@ bool XMLTree::_window2(Q_UINT16, QDataStream & body)
 	{
 	  table->setAttribute("formular",1);
 	  // Display Formulas
-	  //kdDebug()<<"Show formular\n"; 
+	  //kdDebug()<<"Show formular\n";
 	}
       else
 	{
 	  table->setAttribute("formular",0);
-	  //kdDebug()<<"Hide formular\n"; 
+	  //kdDebug()<<"Hide formular\n";
 	}
-      
+
       if( nOpt & 0x0002 )
 	{
 	  // Display Gridlines
-	  //kdDebug()<<"Show grid\n"; 
+	  //kdDebug()<<"Show grid\n";
 	  table->setAttribute("grid",1);
 	}
       else
 	{
 	  // Display No Gridlines
-	  //kdDebug()<<"Hide grid\n"; 
+	  //kdDebug()<<"Hide grid\n";
 	  table->setAttribute("grid",0);
 	}
-      
+
       if( nOpt & 0x0004 )
-	kdDebug()<<"Show col/row hearder\n"; 
+	kdDebug()<<"Show col/row hearder\n";
       else
-	kdDebug()<<"Hide col/row hearder. Not store in table\n"; 
-      
+	kdDebug()<<"Hide col/row hearder. Not store in table\n";
+
       if( nOpt & 0x0010 )
 	{
 	  table->setAttribute("hidezero",0);
-	  //kdDebug()<<"Show zero value\n"; 
+	  //kdDebug()<<"Show zero value\n";
 	}
       else
 	{
 	table->setAttribute("hidezero",1);
-	//kdDebug()<<"Hide zero value\n"; 
+	//kdDebug()<<"Hide zero value\n";
 	}
     }
   return true;
 }
 
-bool XMLTree::_writeaccess(Q_UINT16, QDataStream& body)
+bool XMLTree::_writeaccess(Q_UINT32, QDataStream &body)
 {
   Q_UINT8 length;
 
@@ -1786,17 +1948,17 @@ bool XMLTree::_writeaccess(Q_UINT16, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_writeprot(Q_UINT16, QDataStream&)
+bool XMLTree::_writeprot(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_wsbool(Q_UINT16, QDataStream&)
+bool XMLTree::_wsbool(Q_UINT32, QDataStream &)
 {
   return true;
 }
 
-bool XMLTree::_xf(Q_UINT16, QDataStream& body)
+bool XMLTree::_xf(Q_UINT32, QDataStream &body)
 {
   xf_rec *x = new xf_rec;
 

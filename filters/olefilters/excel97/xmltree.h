@@ -26,9 +26,6 @@
 #include <qintdict.h>
 #include <klocale.h>
 
-const int BIFF_5_7 = 0x0500;
-const int BIFF_8 = 0x0600;
-
 class XMLTree:public QObject
 {
 public:
@@ -37,86 +34,16 @@ public:
 
   const QDomDocument * const part();
 
-  bool _1904(Q_UINT16 size, QDataStream& body);
-  bool _array(Q_UINT16, QDataStream&);
-  bool _backup(Q_UINT16, QDataStream&);
-  bool _blank(Q_UINT16 size, QDataStream& body);
-  bool _bof(Q_UINT16 size, QDataStream& body);
-  bool _bookbool(Q_UINT16, QDataStream&);
-  bool _boolerr(Q_UINT16, QDataStream&);
-  bool _bottommargin(Q_UINT16 size, QDataStream& body);
-  bool _boundsheet(Q_UINT16 size, QDataStream& body);
-  bool _cf(Q_UINT16, QDataStream&);
-  bool _condfmt(Q_UINT16, QDataStream&);
-  bool _codepage(Q_UINT16, QDataStream&);
-  bool _colinfo(Q_UINT16 size, QDataStream& body);
-  bool _country(Q_UINT16, QDataStream&);
-  bool _crn(Q_UINT16, QDataStream&);
-  bool _dbcell(Q_UINT16, QDataStream&);
-  bool _defaultrowheight(Q_UINT16, QDataStream&);
-  bool _defcolwidth(Q_UINT16, QDataStream&);
-  bool _dimensions(Q_UINT16, QDataStream&);
-  bool _eof(Q_UINT16, QDataStream&);
-  bool _externcount(Q_UINT16, QDataStream&);
-  bool _externname(Q_UINT16, QDataStream&);
-  bool _externsheet(Q_UINT16, QDataStream&);
-  bool _extsst(Q_UINT16, QDataStream&);
-  bool _filepass(Q_UINT16, QDataStream&);
-  bool _filesharing(Q_UINT16, QDataStream&);
-  bool _filesharing2(Q_UINT16, QDataStream&);
-  bool _font(Q_UINT16 size, QDataStream& body);
-  bool _footer(Q_UINT16 size, QDataStream& body);
-  bool _format(Q_UINT16 size, QDataStream& body);
-  bool _formula(Q_UINT16 size, QDataStream& body);
-  bool _gcw(Q_UINT16, QDataStream&);
-  bool _guts(Q_UINT16, QDataStream&);
-  bool _hcenter(Q_UINT16, QDataStream&);
-  bool _header(Q_UINT16 size, QDataStream& body);
-  bool _hlink(Q_UINT16, QDataStream&);
-  bool _horizontalpagebreaks(Q_UINT16, QDataStream&);
-  bool _imdata(Q_UINT16, QDataStream&);
-  bool _label(Q_UINT16 size, QDataStream& body);
-  bool _labelsst(Q_UINT16 size, QDataStream& body);
-  bool _leftmargin(Q_UINT16 size, QDataStream& body);
-  bool _mulblank(Q_UINT16 size, QDataStream& body);
-  bool _mulrk(Q_UINT16 size, QDataStream& body);
-  bool _name(Q_UINT16, QDataStream&);
-  bool _note(Q_UINT16, QDataStream&);
-  bool _number(Q_UINT16 size, QDataStream& body);
-  bool _pane(Q_UINT16, QDataStream&);
-  bool _paramqry(Q_UINT16, QDataStream&);
-  bool _password(Q_UINT16, QDataStream&);
-  bool _protect(Q_UINT16, QDataStream&);
-  bool _qsi(Q_UINT16, QDataStream&);
-  bool _recipname(Q_UINT16, QDataStream&);
-  bool _rightmargin(Q_UINT16 size, QDataStream& body);
-  bool _rk(Q_UINT16 size, QDataStream& body);
-  bool _row(Q_UINT16 size, QDataStream& body);
-  bool _scl(Q_UINT16, QDataStream&);
-  bool _setup(Q_UINT16, QDataStream&);
-  bool _shrfmla(Q_UINT16, QDataStream&);
-  bool _sort(Q_UINT16, QDataStream&);
-  bool _sst(Q_UINT16 size, QDataStream& body);
-  bool _standardwidth(Q_UINT16, QDataStream&);
-  bool _string(Q_UINT16, QDataStream&);
-  bool _tabid(Q_UINT16, QDataStream&);
-  bool _tabidconf(Q_UINT16, QDataStream&);
-  bool _table(Q_UINT16, QDataStream&);
-  bool _topmargin(Q_UINT16 size, QDataStream& body);
-  bool _vcenter(Q_UINT16, QDataStream&);
-  bool _verticalpagebreaks(Q_UINT16, QDataStream&);
-  bool _window1(Q_UINT16, QDataStream&);
-  bool _window2(Q_UINT16, QDataStream&);
-  bool _writeaccess(Q_UINT16 size, QDataStream& body);
-  bool _writeprot(Q_UINT16, QDataStream&);
-  bool _wsbool(Q_UINT16, QDataStream&);
-  bool _xf(Q_UINT16 size, QDataStream& body);
+  bool invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operands);
 
 private:
   // Debug support.
 
   static const int s_area = 30511;
-  
+
+  static const int BIFF_5_7 = 0x0500;
+  static const int BIFF_8 = 0x0600;
+
   const QString getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rgce);
   const QDomElement getFormat(Q_UINT16 xf);
   void getFont(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid);
@@ -156,7 +83,8 @@ private:
   };
 
   Q_UINT16 biff, date1904;
-
+  unsigned m_streamDepth;
+  
   QDomDocument *root;
 
   QIntDict<xf_rec> xfs;
@@ -172,6 +100,81 @@ private:
 
   // To avoid static variables:
   int fontCount, footerCount, headerCount, xfCount;
+
+  bool _1904(Q_UINT32 size, QDataStream &body);
+  bool _array(Q_UINT32 size, QDataStream &body);
+  bool _backup(Q_UINT32 size, QDataStream &body);
+  bool _blank(Q_UINT32 size, QDataStream &body);
+  bool _bof(Q_UINT32 size, QDataStream &body);
+  bool _bookbool(Q_UINT32 size, QDataStream &body);
+  bool _boolerr(Q_UINT32 size, QDataStream &body);
+  bool _bottommargin(Q_UINT32 size, QDataStream &body);
+  bool _boundsheet(Q_UINT32 size, QDataStream &body);
+  bool _cf(Q_UINT32 size, QDataStream &body);
+  bool _condfmt(Q_UINT32 size, QDataStream &body);
+  bool _codepage(Q_UINT32 size, QDataStream &body);
+  bool _colinfo(Q_UINT32 size, QDataStream &body);
+  bool _country(Q_UINT32 size, QDataStream &body);
+  bool _crn(Q_UINT32 size, QDataStream &body);
+  bool _dbcell(Q_UINT32 size, QDataStream &body);
+  bool _defaultrowheight(Q_UINT32 size, QDataStream &body);
+  bool _defcolwidth(Q_UINT32 size, QDataStream &body);
+  bool _dimensions(Q_UINT32 size, QDataStream &body);
+  bool _eof(Q_UINT32 size, QDataStream &body);
+  bool _externcount(Q_UINT32 size, QDataStream &body);
+  bool _externname(Q_UINT32 size, QDataStream &body);
+  bool _externsheet(Q_UINT32 size, QDataStream &body);
+  bool _extsst(Q_UINT32 size, QDataStream &body);
+  bool _filepass(Q_UINT32 size, QDataStream &body);
+  bool _filesharing(Q_UINT32 size, QDataStream &body);
+  bool _filesharing2(Q_UINT32 size, QDataStream &body);
+  bool _font(Q_UINT32 size, QDataStream &body);
+  bool _footer(Q_UINT32 size, QDataStream &body);
+  bool _format(Q_UINT32 size, QDataStream &body);
+  bool _formula(Q_UINT32 size, QDataStream &body);
+  bool _gcw(Q_UINT32 size, QDataStream &body);
+  bool _guts(Q_UINT32 size, QDataStream &body);
+  bool _hcenter(Q_UINT32 size, QDataStream &body);
+  bool _header(Q_UINT32 size, QDataStream &body);
+  bool _hlink(Q_UINT32 size, QDataStream &body);
+  bool _horizontalpagebreaks(Q_UINT32 size, QDataStream &body);
+  bool _imdata(Q_UINT32 size, QDataStream &body);
+  bool _label(Q_UINT32 size, QDataStream &body);
+  bool _labelsst(Q_UINT32 size, QDataStream &body);
+  bool _leftmargin(Q_UINT32 size, QDataStream &body);
+  bool _mulblank(Q_UINT32 size, QDataStream &body);
+  bool _mulrk(Q_UINT32 size, QDataStream &body);
+  bool _name(Q_UINT32 size, QDataStream &body);
+  bool _note(Q_UINT32 size, QDataStream &body);
+  bool _number(Q_UINT32 size, QDataStream &body);
+  bool _pane(Q_UINT32 size, QDataStream &body);
+  bool _paramqry(Q_UINT32 size, QDataStream &body);
+  bool _password(Q_UINT32 size, QDataStream &body);
+  bool _protect(Q_UINT32 size, QDataStream &body);
+  bool _qsi(Q_UINT32 size, QDataStream &body);
+  bool _recipname(Q_UINT32 size, QDataStream &body);
+  bool _rightmargin(Q_UINT32 size, QDataStream &body);
+  bool _rk(Q_UINT32 size, QDataStream &body);
+  bool _row(Q_UINT32 size, QDataStream &body);
+  bool _scl(Q_UINT32 size, QDataStream &body);
+  bool _setup(Q_UINT32 size, QDataStream &body);
+  bool _shrfmla(Q_UINT32 size, QDataStream &body);
+  bool _sort(Q_UINT32 size, QDataStream &body);
+  bool _sst(Q_UINT32 size, QDataStream &body);
+  bool _standardwidth(Q_UINT32 size, QDataStream &body);
+  bool _string(Q_UINT32 size, QDataStream &body);
+  bool _tabid(Q_UINT32 size, QDataStream &body);
+  bool _tabidconf(Q_UINT32 size, QDataStream &body);
+  bool _table(Q_UINT32 size, QDataStream &body);
+  bool _topmargin(Q_UINT32 size, QDataStream &body);
+  bool _vcenter(Q_UINT32 size, QDataStream &body);
+  bool _verticalpagebreaks(Q_UINT32 size, QDataStream &body);
+  bool _window1(Q_UINT32 size, QDataStream &body);
+  bool _window2(Q_UINT32 size, QDataStream &body);
+  bool _writeaccess(Q_UINT32 size, QDataStream &body);
+  bool _writeprot(Q_UINT32 size, QDataStream &body);
+  bool _wsbool(Q_UINT32 size, QDataStream &body);
+  bool _xf(Q_UINT32 size, QDataStream &body);
 };
 
 #endif
