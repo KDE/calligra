@@ -232,6 +232,8 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
 
 KoDocument::~KoDocument()
 {
+    d->m_autoSaveTimer.stop();
+
     QPtrListIterator<KoDocumentChild> childIt( d->m_children );
     for (; childIt.current(); ++childIt )
         disconnect( childIt.current(), SIGNAL( destroyed() ),
