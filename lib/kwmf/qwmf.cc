@@ -256,7 +256,7 @@ bool QWinMetaFile::load( QBuffer &buffer )
     }
     else // no, not enhanced
     {
-        //----- Read as enhanced metafile header
+        //----- Read as standard metafile header
         buffer.at( filePos );
         st >> header.mtType;
         st >> header.mtHeaderSize;

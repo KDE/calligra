@@ -538,7 +538,7 @@ bool KWmf::parse(
     else // no, not enhanced
     {
         //    debug("WMF Header");
-        //----- Read as enhanced metafile header
+        //----- Read as standard metafile header
         stream.device()->at(fileAt);
         stream >> header.mtType;
         stream >> header.mtHeaderSize;
