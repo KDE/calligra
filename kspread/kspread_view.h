@@ -252,6 +252,10 @@ public:
     /**
      * Menu Data
      */
+      void sort();
+    /**
+     * Menu Data
+     */
     void consolidate();
 
     /**
@@ -544,6 +548,7 @@ protected:
     OpenPartsUI::Menu_var m_vMenuData;
     CORBA::Long m_idMenuData_Consolidate;
     CORBA::Long m_idMenuData_replace;
+    CORBA::Long m_idMenuData_sort;
     CORBA::Long m_idMenuData_goto;
     OpenPartsUI::Menu_var m_vMenuFolder;
     CORBA::Long m_idMenuFolder_NewTable;

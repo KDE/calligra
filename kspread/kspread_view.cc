@@ -59,6 +59,7 @@
 #include "kspread_dlg_special.h"
 #include "kspread_dlg_goto.h"
 #include "kspread_dlg_replace.h"
+#include "kspread_dlg_sort.h"
 
 /*****************************************************************************
  *
@@ -798,6 +799,10 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuData_replace = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Replace" ) ) ), this, "replace", 0 );
 
   m_vMenuData->insertSeparator( -1 );
+  m_idMenuData_sort = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Sort" ) ) ), this, "sort", 0 );
+
+
+  m_vMenuData->insertSeparator( -1 );
   m_idMenuData_Consolidate = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Consolidate" ) ) ), this, "consolidate", 0 );
 
   // Folder
@@ -1357,9 +1362,17 @@ void KSpreadView::gotocell()
 
 void KSpreadView::replace()
 {
-  //KSpreadreplace* dlg = new KSpreadreplace( this, "Replace" );
+  KSpreadreplace* dlg = new KSpreadreplace( this, "Replace" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+  dlg->show();
+}
+
+void KSpreadView::sort()
+{
+//don't work for the moment
+  //KSpreadsort* dlg = new KSpreadsort( this, "Sort" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
   //dlg->show();
 }
+
 
 
 void KSpreadView::newView()

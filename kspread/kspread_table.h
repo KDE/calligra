@@ -367,6 +367,8 @@ public:
     void cutSelection( const QPoint &_marker );
     enum Special_paste { ALL,Formula,Format,Wborder,Link,ALL_trans,Formula_trans,Format_trans,Wborder_trans,Link_trans};
     void paste( const QPoint &_marker,Special_paste=ALL );
+
+    bool replace( const QPoint &_marker,QString _find,QString _replace );
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
      */

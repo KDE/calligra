@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -23,19 +24,19 @@
 #include "kspread_view.h"
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
-#include "kspread_tabbar.h"
+#include "kspread_table.h"
 #include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
 
 
 
-KSpreadreplace::KSpreadreplace( KSpreadView* parent, const char* name)
+KSpreadreplace::KSpreadreplace( KSpreadView* parent, const char* name,const QPoint &_marker)
 	: QDialog( 0L, name )
 {
   m_pView = parent;
-
-  setCaption( i18n("Replace") );
+  marker= _marker;
+  setCaption( i18n("Replace text") );
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
@@ -73,7 +74,42 @@ KSpreadreplace::KSpreadreplace( KSpreadView* parent, const char* name)
 
 void KSpreadreplace::slotOk()
 {
-accept();
+if(l_replace->text()==l_find->text())
+	{
+	QMessageBox::warning( 0L, i18n("Error"), i18n("Text find and text replace are same"),
+			   i18n("Ok") );
+	l_find->setText("");
+	l_replace->setText("");
+	}
+else if(l_replace->text().isEmpty() || l_find->text().isEmpty())
+	{
+	 QMessageBox::warning( 0L, i18n("Error"), i18n("A Qlineedit is empty"),
+			   i18n("Ok") );
+	}
+else
+	{
+	if(!(m_pView->activeTable()->replace( marker,l_find->text(),l_replace->text())))
+		{
+		 QMessageBox::warning( 0L, i18n("Error"), i18n("Not any text replaces"),
+			   i18n("Ok") );
+	        }
+	 else
+	 	{
+		//refresh editWidget
+		KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
+		if ( cell->text() != 0L )
+			m_pView->editWidget()->setText( cell->text() );
+		 else
+			m_pView->editWidget()->setText( "" );
+	
+		accept();
+		}
+	}
+}
+
+void KSpreadreplace::keyPressEvent ( QKeyEvent* _ev )
+{
+//todo  press tab => active other QlineEdit
 }
 
 void KSpreadreplace::slotClose()

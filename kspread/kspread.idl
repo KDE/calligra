@@ -97,6 +97,7 @@ module KSpread
 		slot void consolidate();
 		slot void gotocell();
 		slot void replace();
+		slot void sort();
 		slot void TextColor();
 		slot void BackgroundColor();
 		slot void RemoveTable();

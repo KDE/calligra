@@ -1048,6 +1048,145 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker )
     }
 }
 
+bool KSpreadTable::replace( const QPoint &_marker,QString _find,QString _replace )
+{
+    m_pDoc->setModified( true );
+
+    bool selected = ( m_rctSelection.left() != 0 );
+    bool b_replace=false;
+    // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
+    {
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int row = l & 0xFFFF;
+	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+	{
+	  if(!it.current()->isValue() && !it.current()->isBool() &&!it.current()->isFormular() &&!it.current()->isDefault()&&!it.current()->text().isEmpty())
+		{	
+		if( it.current()->text().find(_find) >=0)
+			{
+			int index=0;
+			int lenreplace=0;
+			int lenfind=0;
+			it.current()->setDisplayDirtyFlag();
+			QString stmp=it.current()->text();
+			b_replace=true;
+			do
+				{
+				index=stmp.find(_find,index+lenreplace);
+				int len=stmp.length();
+				lenfind=_find.length();
+				lenreplace=_replace.length();
+				stmp=stmp.left(index)+_replace+stmp.right(len-index-lenfind);
+				}
+			while( stmp.find(_find,index+lenreplace) >=0);
+			it.current()->setText(stmp);
+			it.current()->clearDisplayDirtyFlag();
+			}
+		}
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return b_replace;
+    }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int col = l >> 16;
+	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+	{
+	   if(!it.current()->isValue() && !it.current()->isBool() &&!it.current()->isFormular() &&!it.current()->isDefault()&&!it.current()->text().isEmpty())
+		{	
+		if( it.current()->text().find(_find) >=0)
+			{
+			int index=0;
+			int lenreplace=0;
+			int lenfind=0;
+			it.current()->setDisplayDirtyFlag();
+			QString stmp=it.current()->text();
+			b_replace=true;
+			do
+				{
+				index=stmp.find(_find,index+lenreplace);
+				int len=stmp.length();
+				lenfind=_find.length();
+				lenreplace=_replace.length();
+				stmp=stmp.left(index)+_replace+stmp.right(len-index-lenfind);
+				}
+			while( stmp.find(_find,index+lenreplace) >=0);
+			it.current()->setText(stmp);
+			it.current()->clearDisplayDirtyFlag();
+			}
+		}
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return b_replace;
+    }
+    else
+    {
+	QRect r( m_rctSelection );
+	if ( !selected )
+	    r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+	KSpreadUndoCellLayout *undo;
+	if ( !m_pDoc->undoBuffer()->isLocked() )
+	{
+	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+	    m_pDoc->undoBuffer()->appendUndo( undo );
+	}
+	for ( int x = r.left(); x <= r.right(); x++ )
+	    for ( int y = r.top(); y <= r.bottom(); y++ )
+	    {		
+		KSpreadCell *cell = cellAt( x, y );
+
+		if ( cell == m_pDefaultCell )
+		{
+		    cell = new KSpreadCell( this, x, y );
+		    int key = y + ( x * 0x10000 );
+		    m_dctCells.insert( key, cell );
+		}
+                if(!cell->isValue() && !cell->isBool() &&!cell->isFormular() &&!cell->isDefault()&&!cell->text().isEmpty())
+		{	
+		if( cell->text().find(_find) >=0)
+			{
+			cell->setDisplayDirtyFlag();
+			QString stmp=cell->text();
+			int index=0;
+			int lenreplace=0;
+			int lenfind=0;
+			b_replace=true;
+			do
+				{
+				index=stmp.find(_find,index+lenreplace);
+				int len=stmp.length();
+				lenfind=_find.length();
+				lenreplace=_replace.length();
+				
+				stmp=stmp.left(index)+_replace+stmp.right(len-index-lenfind);
+				
+				}
+			while( stmp.find(_find,index+lenreplace) >=0);
+			cell->setText(stmp);
+			cell->clearDisplayDirtyFlag();
+			}
+		}
+	    }
+	
+	emit sig_updateView( this, r );
+	return b_replace;
+    }
+}
+
 void KSpreadTable::setSelectionMultiRow( const QPoint &_marker)
 {
     m_pDoc->setModified( true );

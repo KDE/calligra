@@ -18,39 +18,46 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#ifndef __kspread_dlg_replace__
-#define __kspread_dlg_replace__
+#ifndef __kspread_dlg_sort__
+#define __kspread_dlg_sort__
 
 #include <qdialog.h>
 #include <qpushbutton.h>
-#include <qlineedit.h>
 #include <qrect.h>
-
+#include <qcombobox.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
+#include <qlistbox.h>
 
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 
-class KSpreadreplace : public QDialog
+class KSpreadsort : public QDialog
 {
   Q_OBJECT
 public:
-  KSpreadreplace( KSpreadView* parent, const char* name,const QPoint &_marker );
-
+  KSpreadsort( KSpreadView* parent, const char* name,const QPoint &_marker );
+  void init();
 public slots:
   void slotOk();
   void slotClose();
+  void slotpress(int id);
+
+
 
 protected:
 
-  virtual void keyPressEvent ( QKeyEvent* _ev );
   KSpreadView* m_pView;
-  
-  QLineEdit* l_find;
-  QLineEdit* l_replace;
+  QButtonGroup *grp;
+  QRadioButton *rb_row;
+  QRadioButton *rb_column;
+  QComboBox *combo;
   QPushButton* m_pOk;
   QPushButton* m_pClose;
   QPoint  marker;
+  QListBox *list_column;
+  QListBox *list_row;
 
 };
 
