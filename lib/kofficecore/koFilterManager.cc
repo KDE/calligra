@@ -315,7 +315,8 @@ namespace  // in order not to mess with the global namespace ;)
             v->setColor( Vertex::Black );
             connected.append( v->mimeType() );
         }
-        return sortMimeList (connected);
+        return connected;
+        //return sortMimeList (connected);
     }
 }
 
