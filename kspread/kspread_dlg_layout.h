@@ -376,6 +376,7 @@ public slots:
     void slotUnselect2( KSpreadBrushSelect *_select );
     void slotSetColorButton( const QColor &_color );
     void slotSetBackgroundColor( const QColor &_color );
+    void slotNotAnyColor( );
 protected:
     KSpreadBrushSelect *selectedBrush;
     KSpreadBrushSelect *brush1;
@@ -395,13 +396,13 @@ protected:
     KSpreadBrushSelect *brush15;
     KSpreadBrushSelect *current;
     KColorButton* color;
-
+    QPushButton* notAnyColor;
     QColor currentColor;
 
     QColor bgColor;
     bool bBgColorUndefined;
     KColorButton *bgColorButton;
-
+    bool b_notAnyColor;
     CellLayoutDlg *dlg;
 };
 

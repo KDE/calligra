@@ -2730,7 +2730,7 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 
     grid2->addMultiCell(grid3,5,5,0,2);
 
-    grid3=new QGridLayout(tmpQGroupBox,1,2);
+    grid3=new QGridLayout(tmpQGroupBox,1,3);
 
     tmpQLabel = new QLabel( tmpQGroupBox, "Label_2" );
     grid3->addWidget(tmpQLabel,0,0);
@@ -2743,9 +2743,14 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     else
 	bgColor = colorGroup().base();
     bgColorButton->setColor(bgColor);
-
     connect( bgColorButton, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotSetBackgroundColor( const QColor & ) ) );
+
+    notAnyColor=new QPushButton(i18n("Not any Color"),tmpQGroupBox);
+    grid3->addWidget(notAnyColor,0,2);
+    connect( notAnyColor, SIGNAL( clicked( ) ),
+             this, SLOT( slotNotAnyColor(  ) ) );
+    b_notAnyColor=false;
 
     grid2->addMultiCell(grid3,6,6,0,2);
 
@@ -2824,10 +2829,18 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     this->resize( 400, 400 );
 }
 
+void CellLayoutPagePattern::slotNotAnyColor()
+{
+b_notAnyColor=true;
+current->setBackgroundColor(colorGroup().base());
+}
+
 void CellLayoutPagePattern::slotSetBackgroundColor( const QColor &_color )
 {
 bgColor =_color;
 current->setBackgroundColor(bgColor);
+bBgColorUndefined=false;
+b_notAnyColor=false;
 }
 
 void CellLayoutPagePattern::init()
@@ -2963,7 +2976,9 @@ void CellLayoutPagePattern::apply( KSpreadCell *_obj )
          _obj->setBackGroundBrushColor(selectedBrush->getBrushColor() );
          _obj->setBackGroundBrushStyle(selectedBrush->getBrushStyle() );
         }
-  if ( !bBgColorUndefined )
+  if( b_notAnyColor)
+        _obj->setBgColor( QColor() );
+  else if ( !bBgColorUndefined )
 	_obj->setBgColor( bgColor );
 }
 #include "kspread_dlg_layout.moc"

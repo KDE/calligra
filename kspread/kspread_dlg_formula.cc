@@ -730,6 +730,9 @@ void KSpreadDlgFormula::slotActivated(const QString & string)
     list_logic+="OR";
     list_logic+="NAND";
     list_logic+="NOR";
+    list_logic+="ISLOGIC";
+    list_logic+="ISTEXT";
+    list_logic+="ISNUM";
     list_logic.sort();
 
     QStringList list_text;
@@ -837,6 +840,7 @@ void KSpreadDlgFormula::changeFunction()
     tmp.nb_param=0;
     tmp.multiple=false;
     QString tmp1;
+    QString tmp2;
     if(m_funcName=="cos" || m_funcName=="sin" || m_funcName=="tan" || m_funcName=="acos" || m_funcName=="asin" || m_funcName=="atan" ||
        m_funcName=="cosh" || m_funcName=="sinh" || m_funcName=="tanh" || m_funcName=="acosh" || m_funcName=="asinh" || m_funcName=="atanh" ||
        m_funcName=="degree" || m_funcName=="radian" )
@@ -850,24 +854,24 @@ void KSpreadDlgFormula::changeFunction()
 	if( m_funcName =="cos")
 		{
 		tmp1=i18n("The cos() function returns the cosine of x,\nwhere x is given in radians.\n");
-	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
-	        tmp1+=i18n("Example : \n");
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
                 tmp1+=i18n("cos(0.98) equals 0.5502255.\ncos(0) equals 1.");
                 tmp.help=tmp1;
 		}
 	else if( m_funcName=="sin")
 		{
 		tmp1=i18n("The sin() function returns the sine of x,\nwhere x is given in radians.\n");
-	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
-	        tmp1+=i18n("Example : \n");
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
                 tmp1+=i18n("sin(0.12) equals 0.11971221.\nsin(0) equals 0.");
                 tmp.help=tmp1;
 		}
 	else if( m_funcName=="tan")
 		{
 		tmp1=i18n("The tan() function returns the tangent of x,\nwhere x is given in radians.\n");
-	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
-	        tmp1+=i18n("Example : \n");
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
                 tmp1+=i18n("tan(0.7) equals 0.84228838.\ntan(0) equals 0.");
                 tmp.help=tmp1;
 		}
@@ -876,8 +880,8 @@ void KSpreadDlgFormula::changeFunction()
 		tmp1=i18n("The acos() function returns the arc cosine\n"
 			  "in radians and the value is mathematically\n"
 			  "defined to be between 0 and PI(inclusive).\n");
-	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
-	        tmp1+=i18n("Example : \n");
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
                 tmp1+=i18n("acos(0.8) equals 0.6435011.\nacos(0) equals 1.57079633.");
                 tmp.help=tmp1;
 		}
@@ -886,8 +890,8 @@ void KSpreadDlgFormula::changeFunction()
 		tmp1=i18n("The asin() function returns the arc sine\n"
 			  "in radians and the value is mathematically\n"
 			  "defined to be between -PI/2 and PI/2 (inclusive).\n");
-	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
-	        tmp1+=i18n("Example : \n");
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
                 tmp1+=i18n("asin(0.8) equals 0.92729522.\nasin(0) equals 0.");
                 tmp.help=tmp1;
 		}
@@ -896,8 +900,8 @@ void KSpreadDlgFormula::changeFunction()
 		tmp1=i18n("The atan() function returns the arc tangent\n"
 			  "in radians and the value is mathematically\n"
 			  "defined to be between -PI/2 and PI/2 (inclusive).\n");
-	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
-	        tmp1+=i18n("Example : \n");
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
                 tmp1+=i18n("atan(0.8) equals 0.67474094.\natan(0) equals 0.");
                 tmp.help=tmp1;
 		}
@@ -906,16 +910,16 @@ void KSpreadDlgFormula::changeFunction()
 		tmp1=i18n("The cosh() function returns the hyperbolic\n"
 			  "cosine of x, which is defined\n"
 			  "mathematically as (exp(x) + exp(-x)) / 2.\n");
-	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
-	        tmp1+=i18n("Example : \n");
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
                 tmp1+=i18n("cosh(0.8) equals 1.33743495.\ncosh(0) equals 1.");
                 tmp.help=tmp1;
 		}
 	else if( m_funcName=="sinh")
 		{
 		tmp1=i18n("The  sinh()  function  returns the hyperbolic\nsine of x,which is defined\nmathematically as (exp(x) - exp(-x)) / 2.\n");
-	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
-	        tmp1+=i18n("Example : \n");
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
                 tmp1+=i18n("sinh(0.8) equals 0.88810598.\nsinh(0) equals 0.");
                 tmp.help=tmp1;
 		}
@@ -924,8 +928,8 @@ void KSpreadDlgFormula::changeFunction()
 		tmp1=i18n("The tanh() function returns the hyperbolic\n"
 			  "tangent of x, which is defined\n"
 			  "mathematically as sinh(x)/cosh(x).\n");
-	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
-	        tmp1+=i18n("Example : \n");
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
                 tmp1+=i18n("tanh(0.8) equals 0.66403677.\ntanh(0) equals 0.");
                 tmp.help=tmp1;
 		}
@@ -937,8 +941,8 @@ void KSpreadDlgFormula::changeFunction()
 			  "cosine is x. If x is less\n"
 			  "than 1.0, acosh() returns not-a-number\n"
 			  "(NaN) and errno is set.\n");
-	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
-	        tmp1+=i18n("Example : \n");
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
                 tmp1+=i18n("acosh(5) equals 2.29243167.\nacosh(0) equals nan.");
                 tmp.help=tmp1;
 		}
@@ -948,8 +952,8 @@ void KSpreadDlgFormula::changeFunction()
 			  "the inverse hyperbolic sine\n"
 			  "of x; that is the value whose\n"
 			  "hyperbolic sine is x.\n");
-		tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
-	        tmp1+=i18n("Example : \n");
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
                 tmp1+=i18n("asinh(0.8) equals 0.73266826.\nasinh(0) equals 0.");
                 tmp.help=tmp1;
 		}
@@ -961,8 +965,8 @@ void KSpreadDlgFormula::changeFunction()
 			  "tangent is x. If the absolute value\n"
 			  "of x is greater than 1.0, atanh()\n"
 			  "returns not-a-number (NaN)\n");
-		tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
-	        tmp1+=i18n("Example : \n");
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
                 tmp1+=i18n("atanh(0.8) equals 1.09861229.\natanh(0) equals 0.");
                 tmp.help=tmp1;
 		}
@@ -970,7 +974,7 @@ void KSpreadDlgFormula::changeFunction()
                 {
                 tmp1=i18n("This function transforms\n"
                         "a radian angle to degree angle.\n");
-                tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
                 tmp1+=i18n("Example : \n");
                 tmp1+=i18n("degree(75) equals 44.69 \ndegree(1) equals 57.29.");
                 tmp.help=tmp1;
@@ -979,7 +983,7 @@ void KSpreadDlgFormula::changeFunction()
                 {
                 tmp1=i18n("This function transforms\n"
                         "a degree angle to radian angle.\n");
-                tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
                 tmp1+=i18n("Example : \n");
                 tmp1+=i18n("radian(75) equals 1.308 \nradian(90) equals 1.5707.");
                 tmp.help=tmp1;
@@ -991,7 +995,7 @@ void KSpreadDlgFormula::changeFunction()
     else if( m_funcName == "PI")
     {
         tmp1=i18n("The PI() function returns the PI value\n");
-        tmp1+=i18n("Syntax : ") +m_funcName+"()\n";
+        tmp1+=i18n("Syntax : %1()\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("PI() equals 3.141592654..... ");
         tmp.help=tmp1;
@@ -1002,7 +1006,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp.nb_param = 0;
         tmp1=i18n("The currentDay() function returns the current\n"
                 "date formated with local parameters.\n");
-        tmp1+=i18n("Syntax : ") +m_funcName+"()\n";
+        tmp1+=i18n("Syntax : %1()\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("currentDay() returns saturday 15 July 2000");
         tmp.help=tmp1;
@@ -1014,12 +1018,9 @@ void KSpreadDlgFormula::changeFunction()
         tmp1=i18n("The currentDayTime() function returns\n"
                 "the current date and time formated\n"
                 "with local parameters.\n");
-        tmp1+=i18n("Syntax : ") +m_funcName+"()\n";
+        tmp1+=i18n("Syntax : %1()\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("currentDateTime() returns\nsaturday 15 July 2000 19:12:01\n");
-        tmp1+=i18n("Syntax : ") +m_funcName+"()\n";
-        tmp1+=i18n("Example : \n");
-        tmp1+=i18n("currentTime() returns 19:12:01");
         tmp.help=tmp1;
     }
     else if( m_funcName=="currentTime")
@@ -1027,7 +1028,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp.nb_param = 0;
         QString tmp1=i18n("The currentTime() function returns the current time\n"
                         "formated with local parameters.\n");
-        tmp1+=i18n("Syntax : ") +m_funcName+"()\n";
+        tmp1+=i18n("Syntax : %1()\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("currentTime() returns 19:12:01");
         tmp.help=tmp1;
@@ -1035,13 +1036,38 @@ void KSpreadDlgFormula::changeFunction()
     else if( m_funcName=="right" || m_funcName=="left" || m_funcName=="REPT" )
     {
         tmp.nb_param=2;
+        tmp2=i18n("Syntax : %1(String,Int)\n").arg(m_funcName);
+        tmp2+=i18n("Example : \n");
         tmp.firstElementLabel=i18n("Text");
         if( m_funcName=="right"||m_funcName=="left")
             tmp.secondElementLabel=i18n("Number of characters");
         else if(m_funcName=="REPT")
             tmp.secondElementLabel=i18n("Number of repetitions");
+        if( m_funcName=="right")
+        {
+                tmp1+=i18n("The right() function returns a substring\n"
+                "that contains the len rightmost characters\n"
+                "of the string. The whole string is returned\n"
+                "if len exceeds the length of the string.\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("right(\"hello\",2) returns lo\nlen(\"kspread\",10) returns kspread");
+        }
+        else if(m_funcName=="left")
+        {
+                tmp1+=i18n("The right() function returns a substring\n"
+                "that contains the len leftmost characters\n"
+                "of the string. The whole string is returned\n"
+                "if len exceeds the length of the string.\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("left(\"hello\",2) returns he\nlen(\"kspread\",10) returns kspread");
 
-  	tmp.help=m_funcName+"("+"String,Int"+")";
+        }
+        else
+        {
+                tmp1+="help";
+                tmp1+=tmp2;
+        }
+        tmp.help=tmp1;
   	tmp.firstElementType=type_string;
   	tmp.secondElementType=type_int;
     }
@@ -1049,8 +1075,24 @@ void KSpreadDlgFormula::changeFunction()
     {
         tmp.nb_param=1;
         tmp.firstElementLabel=i18n("Text");
+        tmp2=i18n("Syntax : %1(String)\n").arg(m_funcName);
+        tmp2+=i18n("Example : \n");
+        if( m_funcName=="upper")
+        {
+                tmp1=i18n("The upper() function converts\n"
+                                "a string to upper case\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("upper(\"hello\") returns HELLO\nupper(\"HELLO\") returns HELLO");
+        }
+        else if(m_funcName=="lower")
+        {
+                tmp1=i18n("The lower() function converts\n"
+                        "a string to lower case\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("lower(\"HELLO\") returns hello\nlower(\"Hello\") returns hello");
+        }
+        tmp.help=tmp1;
 
-  	tmp.help=m_funcName+"("+"String"+")";
   	tmp.firstElementType=type_string;
     }
     else if ( m_funcName=="sqrt" || m_funcName=="ln" || m_funcName=="log" || m_funcName=="exp" ||
@@ -1058,7 +1100,7 @@ void KSpreadDlgFormula::changeFunction()
     {
         tmp.nb_param=1;
         tmp.firstElementLabel=i18n("Double");
-	QString tmp1;
+
         tmp.firstElementType=type_double;
         if(m_funcName=="ln")
         	{
@@ -1133,7 +1175,7 @@ void KSpreadDlgFormula::changeFunction()
         	{
                 tmp1=i18n("The ENT() function returns\n"
                         "the integer part of the value\n");
-                tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
                 tmp1+=i18n("Example : \n");
                 tmp1+=i18n("ENT(12.55) equals 12\nENT(15) equals 15.");
                 tmp.help=tmp1;
@@ -1147,24 +1189,102 @@ void KSpreadDlgFormula::changeFunction()
     else if (m_funcName=="ISLOGIC"||m_funcName=="ISTEXT"||m_funcName=="ISNUM")
     {
    	tmp.nb_param=1;
+        tmp2=i18n("Syntax : %1(value)\n").arg(m_funcName);
+        tmp2+=i18n("Example : \n");
         tmp.firstElementLabel=i18n("Value");
-  	tmp.help=m_funcName+"("+"Value"+")";
+        if(m_funcName=="ISNUM")
+        {
+                tmp1=i18n("The ISNUM() function returns True\n"
+                        "if the parameter is a numerical value\n"
+                        "otherwise it returns False\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("ISNUM(12) returns True\nISNUM(hello) returns False");
+        }
+        else if( m_funcName=="ISLOGIC")
+        {
+                tmp1=i18n("The ISLOGIC() function returns True\n"
+                        "if the parameter is a bool value\n"
+                        "otherwise returns False\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("ISLOGIC(A1>A2) returns True\nISLOGIC(12) returns False");
+        }
+        else if( m_funcName=="ISTEXT")
+        {
+                tmp1=i18n("The ISTEXT() function returns True\n"
+                        "if the parameter is a string\n"
+                        "and otherwise returns False\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("ISTEXT(12) returns False\nISTEXT(\"hello\") returns True");
 
+        }
   	if(m_funcName=="ISTEXT")
             tmp.firstElementType=type_string;
   	else
             tmp.firstElementType=type_double;
+        tmp.help=tmp1;
     }
     else if( m_funcName=="sum" || m_funcName=="max" || m_funcName=="min" ||
              m_funcName=="multiply" || m_funcName=="average" || m_funcName=="variance" || m_funcName=="stddev")
     {
-   	tmp.nb_param=5;
+
+        tmp2=i18n("Syntax : %1(Double,Double,Double....)\n").arg(m_funcName);
+        tmp2+=i18n("Example : \n");
+        tmp.nb_param=5;
         tmp.firstElementLabel=i18n("Double");
   	tmp.secondElementLabel=i18n("Double");
   	tmp.thirdElementLabel=i18n("Double");
   	tmp.fourElementLabel=i18n("Double");
   	tmp.fiveElementLabel=i18n("Double");
-        tmp.help=m_funcName+"("+"Double,Double,..."+")";
+        if( m_funcName=="sum")
+        {
+                tmp1=i18n("The sum() function calculates the sum\n"
+                "of all the values given as parameters.\n"
+                "You can calculate the sum of a range (sum(A1:B5))\n"
+                "or a list of values like (sum(12,5,12.5))\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("sum(12,5,7) equals 24\nsum(12.5,2) equals 14.5");
+        }
+        else if(m_funcName=="average")
+        {
+                tmp1=i18n("The average() function calculates the average\n"
+                "of all the values given as parameters.\n"
+                "You can calculate the average of a range ( average(A1:B5))\n"
+                "or a list of values like (average(12,5,12.5))\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("average(12,5,7) equals 8\naverage(12.5,2) equals 7.25");
+        }
+        else if(m_funcName=="max")
+        {
+                tmp1=i18n("The max() function returns the biggest value\n"
+                        "given in the parameters.\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("max(12,5,7) returns 12\nmax(12.5,2) returns 12.5");
+        }
+        else if( m_funcName=="min")
+        {
+                tmp1=i18n("The min() function returns the smallest\n"
+                        "value given in the parameters.\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("min(12,5,7) returns 5\nmin(12.5,2) returns 2");
+
+        }
+        else if(m_funcName=="multiply")
+        {
+                tmp1=i18n("The multiply() function multiplies all the values\n"
+                        "given in the parameters.\n"
+                        "You can multiply values given by a range ( multiply(A1:B5))\n"
+                        "or list of values like (multiply(12,5,12.5))\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("multiply(12,5,7) equals 420\nmultiply(12.5,2) equals 25");
+
+        }
+        else
+                {
+                tmp1="Help";
+                tmp1+=tmp2;
+                }
+
+        tmp.help=tmp1;
   	tmp.firstElementType=type_double;
   	tmp.secondElementType=type_double;
   	tmp.thirdElementType=type_double;
@@ -1191,7 +1311,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp.thirdElementLabel=i18n("Day (int)");
         QString tmp1=i18n("The dayOfYear() function returns the\n"
                         "number of days in the year (1...365).\n");
-        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Year,Month,Day"+")\n";
+        tmp1+=i18n("Syntax : %1(Year,Month,Day)\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("dayOfYear(2000,12,1) returns 336\ndayOfYear(2000,2,29) return 60");
         tmp.help=tmp1;
@@ -1205,9 +1325,9 @@ void KSpreadDlgFormula::changeFunction()
         tmp.firstElementLabel=i18n("Year (int)");
         tmp.secondElementLabel=i18n("Month (int)");
         tmp.thirdElementLabel=i18n("Day (int)");
-        QString tmp1=i18n("The date() function returns a name\n"
-                "formated with loacal parameters\n");
-        tmp1+=i18n("Syntax : ") +m_funcName+"("+i18n("Year,Month,Day")+")\n";
+        tmp1=i18n("The date() function returns the date\n"
+                "formated with local parameters\n");
+        tmp1+=i18n("Syntax : %1(Year,Month,Day)\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("date(2000,5,5) return Friday 05 May 2000");
         tmp.help=tmp1;
@@ -1221,7 +1341,12 @@ void KSpreadDlgFormula::changeFunction()
         tmp.firstElementLabel=i18n("Hour (int)");
         tmp.secondElementLabel=i18n("Minute (int)");
         tmp.thirdElementLabel=i18n("Second (int)");
-        tmp.help=m_funcName+"("+"Hour,Minute,Second"+")";
+        tmp1=i18n("The date() function returns the time\n"
+                "formated with local parameters\n");
+        tmp1+=i18n("Syntax : %1(Hour,Minute,Second)\n").arg(m_funcName);
+        tmp1+=i18n("Example : \n");
+        tmp1+=i18n("time(8,5,5) returns 08:05:05");
+        tmp.help=tmp1;
         tmp.firstElementType=type_int;
         tmp.secondElementLabel=type_int;
         tmp.thirdElementLabel=type_int;
@@ -1230,9 +1355,13 @@ void KSpreadDlgFormula::changeFunction()
     {
         tmp.nb_param=1;
         tmp.firstElementLabel=i18n("Day (int)");
-
-        tmp.help=m_funcName+"("+"Day"+")";
-
+        tmp.firstElementLabel=i18n("Int");
+        tmp1=i18n("The day() function returns name of day\n"
+                "of the week (0...7).\n");
+        tmp1+=i18n("Syntax : %1(Int)\n").arg(m_funcName);
+        tmp1+=i18n("Example : \n");
+        tmp1+=i18n("day(1) return Monday (if the week starts the monday");
+        tmp.help=tmp1;
         tmp.firstElementType=type_int;
     }
     else if (m_funcName=="month")
@@ -1241,7 +1370,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp.firstElementLabel=i18n("Month (Int)");
         QString tmp1=i18n("The month() function returns name\n"
                         "of the month (1...12).\n");
-        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Int"+")\n";
+        tmp1+=i18n("Syntax : %1(Int)\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("month(5) return May");
         tmp.help=tmp1;
@@ -1268,18 +1397,43 @@ void KSpreadDlgFormula::changeFunction()
     {
         tmp.nb_param=1;
         tmp.firstElementLabel=i18n("Exp Logic");
-        tmp.help=m_funcName+"("+"Exp Logic"+")";
+        tmp1+=i18n("The not() function returns True\n"
+        "if the value is False and returns False\n"
+        "if the value is True\n");
+        tmp1+=i18n("Syntax : %1(Exp Logic)\n").arg(m_funcName);
+        tmp1+=i18n("Example : \n");
+        tmp1+=i18n("not(False) returns True\nnot(True) returns False");
+        tmp.help=tmp1;
+
         tmp.firstElementType=type_logic;
     }
     else if (m_funcName=="EXACT"||m_funcName=="find")
     {
         tmp.nb_param=2;
+        tmp2=i18n("Syntax : %1(String,String)\n").arg(m_funcName);
+        tmp2+=i18n("Example : \n");
         if(m_funcName=="find")
             tmp.firstElementLabel=i18n("Text search");
         else
             tmp.firstElementLabel=i18n("Text");
         tmp.secondElementLabel=i18n("Text");
-        tmp.help=m_funcName+"("+"String,String"+")";
+        if(m_funcName=="EXACT")
+        {
+                tmp1=i18n("The EXACT() function returns True\n"
+                "if this two strings are equal,\n"
+                "otherwise returns False\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("EXACT(\"Koffice\",\"Koffice\") returns True\n"
+                "EXACT(\"kspread\",\"Koffice\") returns False");
+
+
+        }
+        else if(m_funcName=="find")
+        {
+                tmp1="help";
+                tmp1+=tmp2;
+        }
+        tmp.help=tmp1;
         tmp.firstElementType=type_string;
         tmp.secondElementType=type_string;
     }
@@ -1287,9 +1441,15 @@ void KSpreadDlgFormula::changeFunction()
     {
         tmp.nb_param=3;
         tmp.firstElementLabel=i18n("Text");
-        tmp.secondElementLabel=i18n("Int");
-        tmp.thirdElementLabel=i18n("Int");
-        tmp.help=m_funcName+"("+"String,Int,Int"+")";
+        tmp.secondElementLabel=i18n("Position (int)");
+        tmp.thirdElementLabel=i18n("Lenght (int)");
+        tmp1=i18n("The mid() function returns a substring that contains\n"
+                 "the len characters of this string, starting\n"
+                "at position index.\n");
+        tmp1+=i18n("Syntax : ") +m_funcName+"("+i18n("String,Position,Length")+")\n";
+        tmp1+=i18n("Example : \n");
+        tmp1+=i18n("mid(\"Koffice\",2,3) returns ffi");
+        tmp.help=tmp1;
         tmp.firstElementType=type_string;
         tmp.secondElementType=type_int;
         tmp.thirdElementType=type_int;
@@ -1298,7 +1458,13 @@ void KSpreadDlgFormula::changeFunction()
     {
         tmp.nb_param=1;
         tmp.firstElementLabel=i18n("Text");
-        tmp.help=m_funcName+"("+"String"+")";
+        tmp1+=i18n("The len() function returns\n"
+                "the length of the string\n");
+        tmp1+=i18n("Syntax : %1(String)\n").arg(m_funcName);
+        tmp1+=i18n("Example : \n");
+        tmp1+=i18n("len(\"hello\") returns 5\nlen(\"kspread\") returns 7");
+        tmp.help=tmp1;
+
         tmp.firstElementType=type_string;
     }
     else if(m_funcName=="join")
@@ -1321,12 +1487,49 @@ void KSpreadDlgFormula::changeFunction()
     else if(m_funcName=="AND"||m_funcName=="OR"||m_funcName=="NAND"||m_funcName=="NOR")
     {
         tmp.nb_param=5;
+        tmp2=i18n("Syntax : %1(Exp logic,Exp logic,...)\n").arg(m_funcName);
+        tmp2+=i18n("Example : \n");
+
         tmp.firstElementLabel=i18n("Exp logic");
         tmp.secondElementLabel=i18n("Exp logic");
         tmp.thirdElementLabel=i18n("Exp logic");
         tmp.fourElementLabel=i18n("Exp logic");
         tmp.fiveElementLabel=i18n("Exp logic");
-        tmp.help=m_funcName+"("+"Exp logic,Exp logic,..."+")";
+        if( m_funcName=="AND")
+        {
+                tmp1=i18n("The AND() function returns True if all\n"
+                "the values are true, otherwise returns False\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("AND(True,True,True) returns True\nAND(True,False) returns False");
+
+        }
+        else if( m_funcName=="OR")
+        {
+                tmp1=i18n("The OR() function returns True if at least\n"
+                "one value is true, otherwise returns False\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("OR(True,False,False) returns True\nOR(False,False) returns False");
+
+        }
+        else if(m_funcName=="NOR")
+        {
+                tmp1=i18n("The NOR() function returns True\n"
+                "if all the values given as parameters are of type bool\n"
+                "and have the value false. Otherwise it returns False\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("NOR(True,False,False) returns False\nOR(False,False) returns True");
+
+        }
+        else if(m_funcName=="NAND")
+        {
+                tmp1=i18n("The NAND() function returns True\n"
+                "if at least one value is not true,\n"
+                "otherwise returns False\n");
+                tmp1+=tmp2;
+                tmp1+=i18n("NAND(True,False,False) returns True\nNAND(True,True) returns False");
+        }
+        tmp.help=tmp1;
+
         tmp.firstElementType=type_logic;
         tmp.secondElementType=type_logic;
         tmp.thirdElementType=type_logic;
@@ -1443,7 +1646,7 @@ void KSpreadDlgFormula::changeFunction()
 
         QString tmp1=i18n("The pow(x,y) function returns\n"
 			  "the value of x raised to the power of y.\n");
-        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double,Double"+")\n";
+        tmp1+=i18n("Syntax : %1(Double,Double)\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("pow(1.2,3.4) equals 1.8572.\npow(2,3) equals 8");
         tmp.help=tmp1;
@@ -1469,7 +1672,7 @@ void KSpreadDlgFormula::changeFunction()
 			  "-1 if the number is negative\n"
 			  "0 if the number is null\n"
 			  "and 1 if the number is positive.\n");
-        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+        tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("sign(5) equals 5.\nsign(-5) equals -1.\nsign(0) equals 0.\n");
         tmp.help=tmp1;
@@ -1480,7 +1683,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp.nb_param=1;
         tmp.firstElementLabel=i18n("Double");
         QString tmp1=i18n("This function multiply by -1 each value\n");
-        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+        tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("INV(-5) equals 5.\nINV(-5) equals 5.\nINV(0) equals 0.\n");
         tmp.help=tmp1;
@@ -1498,8 +1701,8 @@ void KSpreadDlgFormula::changeFunction()
 			  "It is similar to calculating the arc tangent of y/x,\n"
 			  "except that the signs of both arguments\n"
 			  "are used to determine the quadrant of the result.\n");
-	tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double,Double"+")\n";
-	tmp1+=i18n("Example : \n");
+        tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
+        tmp1+=i18n("Example : \n");
         tmp1+=i18n("atan2(0.5,1.0) equals 1.107149.\natan2(-0.5,2.0) equals 1.815775.");
         tmp.help=tmp1;
         tmp.firstElementType=type_double;
@@ -1519,7 +1722,7 @@ void KSpreadDlgFormula::changeFunction()
                 "from decimal format to octal format.(base 8)\n");
 
         tmp.firstElementLabel=i18n("Int");
-        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Int"+")\n";
+        tmp1+=i18n("Syntax : %1(Int)\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         if(m_funcName=="DECBIN")
                tmp1+=i18n("DECBIN(12) returns 1100 \nDECHEX(55) returns 110111.");
