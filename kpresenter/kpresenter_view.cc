@@ -1854,7 +1854,7 @@ void KPresenterView::setupActions()
 				      this, SLOT( extraWebPres() ),
 				      actionCollection(), "extra_webpres" );
 
-    actionExtraCreateTemplate = new KAction( i18n( "Create Template from current slide..." ), 0,
+    actionExtraCreateTemplate = new KAction( i18n( "Create Template from Current Slide..." ), 0,
 					     this, SLOT( extraCreateTemplate() ),
 					     actionCollection(), "extra_template" );
 
