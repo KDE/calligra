@@ -1403,7 +1403,6 @@ void KWView::editDeleteFrame()
 void KWView::deleteFrame( bool _warning )
 {
     QList<KWFrame> frames=m_doc->getSelectedFrames();
-    ASSERT( frames.count() == 1 ); // the action isn't enabled otherwise.
     if( frames.count() != 1)
         return;
     KWFrame *theFrame = frames.at(0);
