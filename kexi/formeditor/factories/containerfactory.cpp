@@ -267,10 +267,11 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wTabWidget->setPixmap("tabwidget");
 	wTabWidget->setClassName("MyTabWidget");
 	#if KDE_IS_VERSION(3,1,9) //TMP
-	wTabWidget->setAlternateClassName("KTabWidget|QTabWidget");
+	wTabWidget->addAlternateClassName("KTabWidget");
+	wTabWidget->addAlternateClassName("QTabWidget");
 	#endif
 	wTabWidget->setSavingName("KTabWidget");
-	wTabWidget->setInclude("ktabwidget.h");
+	wTabWidget->setIncludeFileName("ktabwidget.h");
 	wTabWidget->setName(i18n("Tab Widget"));
 	wTabWidget->setNamePrefix(i18n("TabWidget"));
 	wTabWidget->setDescription(i18n("A widget to display multiple pages using tabs"));

@@ -133,7 +133,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wPixLabel->setPixmap("pixmaplabel");
 	wPixLabel->setClassName("MyPicLabel");
 	wPixLabel->setName(i18n("Picture Label"));
-	wPixLabel->setAlternateClassName("PictureLabel");
+	wPixLabel->addAlternateClassName("PictureLabel");
 	wPixLabel->setSavingName("PictureLabel");
 	wPixLabel->setNamePrefix(i18n("Widget name (see above)", "PictureLabel"));
 	wPixLabel->setDescription(i18n("A widget to display pixmaps"));
@@ -142,8 +142,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	KFormDesigner::WidgetInfo *wLineEdit = new KFormDesigner::WidgetInfo(this);
 	wLineEdit->setPixmap("lineedit");
 	wLineEdit->setClassName("KLineEdit");
-	wLineEdit->setAlternateClassName("QLineEdit");
-	wLineEdit->setInclude("klineedit.h");
+	wLineEdit->addAlternateClassName("QLineEdit");
+	wLineEdit->setIncludeFileName("klineedit.h");
 	wLineEdit->setName(i18n("Line Edit"));
 	wLineEdit->setNamePrefix(i18n("Widget name (see above)", "LineEdit"));
 	wLineEdit->setDescription(i18n("A widget to input text"));
@@ -160,8 +160,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	KFormDesigner::WidgetInfo *wPushButton = new KFormDesigner::WidgetInfo(this);
 	wPushButton->setPixmap("button");
 	wPushButton->setClassName("KPushButton");
-	wPushButton->setAlternateClassName("QPushButton");
-	wPushButton->setInclude("kpushbutton.h");
+	wPushButton->addAlternateClassName("QPushButton");
+	wPushButton->setIncludeFileName("kpushbutton.h");
 	wPushButton->setName(i18n("Push Button"));
 	wPushButton->setNamePrefix(i18n("Widget name (see above)", "PushButton"));
 	wPushButton->setDescription(i18n("A simple push button to execute actions"));
@@ -186,8 +186,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	KFormDesigner::WidgetInfo *wSpinBox = new KFormDesigner::WidgetInfo(this);
 	wSpinBox->setPixmap("spin");
 	wSpinBox->setClassName("KIntSpinBox");
-	wSpinBox->setAlternateClassName("QSpinBox");
-	wSpinBox->setInclude("knuminput.h");
+	wSpinBox->addAlternateClassName("QSpinBox");
+	wSpinBox->setIncludeFileName("knuminput.h");
 	wSpinBox->setName(i18n("Spin Box"));
 	wSpinBox->setNamePrefix(i18n("Widget name (see above)", "SpinBox"));
 	wSpinBox->setDescription(i18n("A spin box widget"));
@@ -196,8 +196,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	KFormDesigner::WidgetInfo *wComboBox = new KFormDesigner::WidgetInfo(this);
 	wComboBox->setPixmap("combo");
 	wComboBox->setClassName("KComboBox");
-	wComboBox->setAlternateClassName("QComboBox");
-	wComboBox->setInclude("kcombobox.h");
+	wComboBox->addAlternateClassName("QComboBox");
+	wComboBox->setIncludeFileName("kcombobox.h");
 	wComboBox->setName(i18n("Combo Box"));
 	wComboBox->setNamePrefix(i18n("Widget name (see above)", "ComboBox"));
 	wComboBox->setDescription(i18n("A combo box widget"));
@@ -206,8 +206,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	KFormDesigner::WidgetInfo *wListBox = new KFormDesigner::WidgetInfo(this);
 	wListBox->setPixmap("listbox");
 	wListBox->setClassName("KListBox");
-	wListBox->setAlternateClassName("QListBox");
-	wListBox->setInclude("klistbox.h");
+	wListBox->addAlternateClassName("QListBox");
+	wListBox->setIncludeFileName("klistbox.h");
 	wListBox->setName(i18n("List Box"));
 	wListBox->setNamePrefix(i18n("Widget name (see above)", "ListBox"));
 	wListBox->setDescription(i18n("A simple list widget"));
@@ -216,8 +216,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	KFormDesigner::WidgetInfo *wTextEdit = new KFormDesigner::WidgetInfo(this);
 	wTextEdit->setPixmap("textedit");
 	wTextEdit->setClassName("KTextEdit");
-	wTextEdit->setAlternateClassName("QTextEdit");
-	wTextEdit->setInclude("ktextedit.h");
+	wTextEdit->addAlternateClassName("QTextEdit");
+	wTextEdit->setIncludeFileName("ktextedit.h");
 	wTextEdit->setName(i18n("Text Editor"));
 	wTextEdit->setNamePrefix(i18n("Widget name (see above)", "TextEditor"));
 	wTextEdit->setDescription(i18n("A simple single-page rich text editor"));
@@ -226,8 +226,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	KFormDesigner::WidgetInfo *wListView = new KFormDesigner::WidgetInfo(this);
 	wListView->setPixmap("listview");
 	wListView->setClassName("KListView");
-	wListView->setAlternateClassName("QListView");
-	wListView->setInclude("klistview.h");
+	wListView->addAlternateClassName("QListView");
+	wListView->setIncludeFileName("klistview.h");
 	wListView->setName(i18n("List View"));
 	wListView->setNamePrefix(i18n("Widget name (see above)", "ListView"));
 	wListView->setDescription(i18n("A list (or tree) widget"));
@@ -244,8 +244,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	KFormDesigner::WidgetInfo *wProgressBar = new KFormDesigner::WidgetInfo(this);
 	wProgressBar->setPixmap("progress");
 	wProgressBar->setClassName("KProgress");
-	wProgressBar->setAlternateClassName("QProgressBar");
-	wProgressBar->setInclude("kprogress.h");
+	wProgressBar->addAlternateClassName("QProgressBar");
+	wProgressBar->setIncludeFileName("kprogress.h");
 	wProgressBar->setName(i18n("Progress Bar"));
 	wProgressBar->setNamePrefix(i18n("Widget name (see above)", "ProgressBar"));
 	wProgressBar->setDescription(i18n("A progress indicator widget"));
@@ -263,8 +263,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wDate->setPixmap("dateedit");
 	wDate->setClassName("KDateWidget");
 	#if KDE_IS_VERSION(3,1,9) //TMP
-	wDate->setAlternateClassName("QDateEdit");
-	wDate->setInclude("kdatewidget.h");
+	wDate->addAlternateClassName("QDateEdit");
+	wDate->setIncludeFileName("kdatewidget.h");
 	#endif
 	wDate->setName(i18n("Date Widget"));
 	wDate->setNamePrefix(i18n("Widget name (see above)", "DateWidget"));
@@ -275,8 +275,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wTime->setPixmap("timeedit");
 	wTime->setClassName("KTimeWidget");
 	#if KDE_IS_VERSION(3,1,9) //TMP
-	wTime->setAlternateClassName("QTimeEdit");
-	wTime->setInclude("ktimewidget.h");
+	wTime->addAlternateClassName("QTimeEdit");
+	wTime->setIncludeFileName("ktimewidget.h");
 	#endif
 	wTime->setName(i18n("Time Widget"));
 	wTime->setNamePrefix(i18n("Widget name (see above)", "TimeWidget"));
@@ -287,8 +287,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wDateTime->setPixmap("datetimeedit");
 	wDateTime->setClassName("KDateTimeWidget");
 	#if KDE_IS_VERSION(3,1,9) //TMP
-	wDateTime->setAlternateClassName("QDateTimeEdit");
-	wDateTime->setInclude("kdatetimewidget.h");
+	wDateTime->addAlternateClassName("QDateTimeEdit");
+	wDateTime->setIncludeFileName("kdatetimewidget.h");
 	#endif
 	wDateTime->setName(i18n("Date/Time Widget"));
 	wDateTime->setNamePrefix(i18n("Widget name (see above)", "DateTimeWidget"));

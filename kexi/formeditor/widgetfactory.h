@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,7 +48,7 @@ class ResizeHandleSet;
 class ObjectTreeItem;
 
 /**
- * this class holds properties of widgets
+ * This class holds properties of widget classes provided by a factory.
  */
 class KFORMEDITOR_EXPORT WidgetInfo
 {
@@ -55,50 +56,81 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		typedef QPtrList<WidgetInfo> List;
 		typedef QDict<WidgetInfo> Dict;
 
-		WidgetInfo(WidgetFactory *f=0) {m_factory = f; }
-		virtual ~WidgetInfo() { }
+		WidgetInfo(WidgetFactory *f=0);
+		virtual ~WidgetInfo();
 
 		//! \return a pixmap associated with the widget
-		virtual QString	pixmap() const { return m_pixmap; }
+		QString pixmap() const { return m_pixmap; }
+
 		//! \return the class name of a widget e.g. 'QLineEdit'
-		virtual QString	className() const { return m_class; }
+		QString className() const { return m_class; }
+
 		/*! \return the name used to name widget, that will appear eg in scripts (must not contain spaces
 		  nor non-latin1 characters) */
-		virtual QString	namePrefix() const { return m_prefixName; }
-		//! \return the real name e.g. 'Line Edit', showed eg in ObjectTreeView
-		virtual QString	name() const { return m_name; }
-		virtual QString description() const { return m_desc; }
-		virtual QString  includeFile() const { return m_include; }
-		virtual QString  alternateClassName() const { return m_alternate; }
-		virtual QString  savingName() const { return m_saveName; }
-		virtual WidgetFactory *factory() const { return m_factory; }
+		QString namePrefix() const { return m_prefixName; }
 
-		void		setPixmap(const QString &p) { m_pixmap = p; }
-		void		setClassName(const QString &s) { m_class = s; }
-		void		setName(const QString &n) { m_name = n; }
-		void		setNamePrefix(const QString &n) { m_prefixName = n; }
-		void		setDescription(const QString &desc) { m_desc = desc;}
-		/*! Sets the C++ include file corresponding to this class, that uic will need to add when creating the file. */
-		void		setInclude(const QString &include) { m_include = include;}
-		/*! Sets alternate names for this class. You can use a list of class names separated by '|'.
-		  If this name is found when loading a .ui file, the className() will be used instead.
-		   It allows to support both KDE and Qt versions of widget, without duplicating code. */
-		void		setAlternateClassName(const QString &alternate) { m_alternate = alternate; }
-		/*! Sets the name that will be written in the .ui file when saving. This name must be one of alternate
-		 names (or loading will be impossible).  */
-		void		setSavingName(const QString &saveName) { m_saveName = saveName; }
+		//! \return the real name e.g. 'Line Edit', showed eg in ObjectTreeView
+		QString name() const { return m_name; }
+
+		QString description() const { return m_desc; }
+		QString includeFileName() const { return m_include; }
+		QStringList alternateClassNames() const { return m_alternateNames; }
+		QString savingName() const { return m_saveName; }
+		WidgetFactory *factory() const { return m_factory; }
+
+		void setPixmap(const QString &p) { m_pixmap = p; }
+		void setClassName(const QString &s) { m_class = s; }
+		void setName(const QString &n) { m_name = n; }
+		void setNamePrefix(const QString &n) { m_prefixName = n; }
+		void setDescription(const QString &desc) { m_desc = desc;}
+
+		/*! Sets the C++ include file corresponding to this class, 
+		 that uic will need to add when creating the file. */
+		void setIncludeFileName(const QString &name) { m_include = name;}
+
+		/*! Sets alternate names for this class.
+		 If this name is found when loading a .ui file, the className() will be used instead.
+		 It allows to support both KDE and Qt versions of widget, without duplicating code. 
+		 As a rule, className() should always return a class name which is inherited from
+		 alternate class. For example KListView class has alternate QListView class.
+
+		 \a override parameter overrides class name of a widget,
+		 even if it was implemented in other factory.
+		 By default it's set to false, what means that no other class is overridden 
+		 by this widget class if there is already a class implementing it 
+		 (no matter in which factory).
+		 By forced overriding existing class with other - custom, user
+		 will be able to see more or less properties and experience different behaviour.
+		 For example, in Kexi application, KLineEdit class contains additional 
+		 "datasource" property for binding to database sources.
+		*/
+		void addAlternateClassName(const QString& alternateName, bool override = false);
+
+		/*! \return true is a class \a alternateName is defined as alternate name with 
+		 'override' flag set to true, using addAlternateClassName(). 
+		 If this flag is set to false (the default) or there's no such alternate class 
+		 name defined. */
+		bool isOverriddenClassName(const QString& alternateName) const;
+
+		/*! Sets the name that will be written in the .ui file when saving. 
+		 This name must be one of alternate names (or loading will be impossible). 
+
+		 On form data saving to XML .ui format, saveName is used instead,
+		 so .ui format is not broken and still usable with other software as Qt Designer.
+		 Custom properties are saved as well with 'stdset' attribute set to 0. */
+		void setSavingName(const QString &saveName) { m_saveName = saveName; }
 
 	private:
-		QString		m_pixmap;
-		QString		m_class;
-		QString		m_name;
-		QString		m_prefixName;
-		QString		m_desc;
-		QString		m_include;
-		QString		m_alternate;
-		QString		m_saveName;
-		QGuardedPtr<WidgetFactory>	m_factory;
-
+		QString m_pixmap;
+		QString m_class;
+		QString m_name;
+		QString m_prefixName;
+		QString m_desc;
+		QString m_include;
+		QStringList m_alternateNames;
+		QDict<char> *m_overriddenAlternateNames;
+		QString m_saveName;
+		QGuardedPtr<WidgetFactory> m_factory;
 };
 
 //! The base class for all widget Factories

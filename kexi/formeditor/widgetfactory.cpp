@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +20,7 @@
 */
 #include <qcursor.h>
 #include <qobjectlist.h>
+#include <qdict.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -42,6 +44,38 @@
 #include "utils.h"
 
 using namespace KFormDesigner;
+
+///// Widget Info //////////////////////////
+
+WidgetInfo::WidgetInfo(WidgetFactory *f)
+ : m_overriddenAlternateNames(0)
+ , m_factory(f)
+{
+}
+
+WidgetInfo::~WidgetInfo()
+{
+	delete m_overriddenAlternateNames;
+}
+
+void WidgetInfo::addAlternateClassName(const QString& alternateName, bool override)
+{
+	m_alternateNames += alternateName;
+	if (override) {
+		if (!m_overriddenAlternateNames)
+			m_overriddenAlternateNames = new QDict<char>();
+		m_overriddenAlternateNames->insert(alternateName, (char*)1);
+	}
+	else {
+		if (m_overriddenAlternateNames)
+			m_overriddenAlternateNames->take(alternateName);
+	}
+}
+
+bool WidgetInfo::isOverriddenClassName(const QString& alternateName) const
+{
+	return m_overriddenAlternateNames && (m_overriddenAlternateNames->find(alternateName) != 0);
+}
 
 ///// Widget Factory //////////////////////////
 

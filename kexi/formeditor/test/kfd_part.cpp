@@ -109,7 +109,10 @@ KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool rea
 
 	m_workspace = new QWorkspace(container, "kfd_workspace");
 	m_workspace->show();
-	m_manager = new KFormDesigner::FormManager(this, "kfd_manager");
+
+/* @todo add configuration for supported factory groups */
+	QStringList supportedFactoryGroups;
+	m_manager = new KFormDesigner::FormManager(this, supportedFactoryGroups, "kfd_manager");
 
 	if(!readOnly)
 	{

@@ -974,7 +974,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		delete list;
 	}
 
-	addIncludeFile(lib->includeFile(item->widget()->className()), domDoc);
+	addIncludeFileName(lib->includeFileName(item->widget()->className()), domDoc);
 
 	if(resetCurrentForm)
 		m_currentForm = 0;
@@ -1292,7 +1292,7 @@ FormIO::createGridLayout(const QDomElement &el, ObjectTreeItem *tree)
 }
 
 void
-FormIO::addIncludeFile(const QString &include, QDomDocument &domDoc)
+FormIO::addIncludeFileName(const QString &include, QDomDocument &domDoc)
 {
 	if(include.isEmpty())
 		return;

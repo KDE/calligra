@@ -4,8 +4,10 @@ Type=Service
 ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Container Widgets
+Name[bg]=Контейнери
 Name[da]=Container-kontroller
 Name[es]=Widgets contenedores
+Name[et]=Konteinervidinad
 Name[fr]=Conteneur d'éléments graphiques
 Name[pl]=Kontenery
 Name[pt]=Elementos Contentores
@@ -13,6 +15,8 @@ Name[pt_BR]=Widgets Recipientes
 Name[ru]=Контейнеры
 Name[sv]=Omgivande komponenter
 Name[ta]=கொள்கலன் சாளர உருக்கள் 
+Name[tr]= Containers
 Name[xx]=xxContainer Widgetsxx
 
 X-KDE-Library=containers
+X-KFormDesigner-FactoryGroup=

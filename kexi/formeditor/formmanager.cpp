@@ -67,10 +67,11 @@
 
 using namespace KFormDesigner;
 
-FormManager::FormManager(QObject *parent=0, const char *name=0)
+FormManager::FormManager(QObject *parent, 
+	const QStringList& supportedFactoryGroups, const char *name)
    : QObject(parent, name)
 {
-	m_lib = new WidgetLibrary(this);
+	m_lib = new WidgetLibrary(this, supportedFactoryGroups);
 	m_buffer = new ObjectPropertyBuffer(this, this, "buffer");
 
 	m_editor = 0;

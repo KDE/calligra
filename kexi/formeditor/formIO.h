@@ -75,6 +75,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    \sa saveForm()
 		 */
 		static int saveFormToDom(Form *form, QDomDocument &domDoc);
+
 		/*! \return 0 if saving failed, 1 otherwise\n
 		    Save the Form \a form to the file \a filename. If \a filename is null or not given,
 		    a Save File dialog will be shown to choose dest file.
@@ -82,6 +83,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		*/
 		static int saveFormToFile(Form *form, const QString &filename=QString::null);
 		static int saveFormToString(Form *form, QString &dest);
+
 		/*! \return 0 if saving failed, 1 otherwise\n
 		 *  Saves the \a form inside the \a dest QByteArray.
 		 *  \sa saveFormToDom(), saveForm()
@@ -96,7 +98,9 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		 *   Loads a form from the \a src QByteArray.
 		 *  \sa loadFormFromDom(), loadForm().
 		 */
-		static int loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src, bool preview=false);
+		static int loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src, 
+			bool preview=false);
+
 		static int loadFormFromString(Form *form, QWidget *container, QString &src, bool preview=false);
 
 		/*! \return 0 if loading failed, 1 otherwise\n
@@ -113,60 +117,76 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    itself to save child widgets.\n
 		    This is used to copy/paste widgets.
 		*/
-		static void         saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout=false);
-		/*! Cleans the "UI" QDomElement after saving widget. It deletes the "includes" element not needed when pasting, and
-		  make sure all the "widget" elements are at the beginning. Calls this after copying a widget, before pasting.*/
-		static void         cleanClipboard(QDomElement &uiElement);
+		static void saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, 
+			bool insideGridLayout=false);
+
+		/*! Cleans the "UI" QDomElement after saving widget. It deletes the "includes" element 
+		 not needed when pasting, and make sure all the "widget" elements are at the beginning. 
+		 Call this after copying a widget, before pasting.*/
+		static void cleanClipboard(QDomElement &uiElement);
+
 		/*! Loads the widget associated to the QDomElement \a el into the Container \a container,
 		    with \a parent as parent widget. \a lib is the WidgetLibrary to use to create the widget.
 		    If parent = 0, the Container::widget() is used as parent widget.
 		    This is used to copy/paste widgets.
 		*/
-		static void         loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent=0);
-		/*! Save an element in the \a domDoc as child of \a parentNode. The element will be saved like this :
+		static void loadWidget(Container *container, WidgetLibrary *lib, 
+			const QDomElement &el, QWidget *parent=0);
+		/*! Save an element in the \a domDoc as child of \a parentNode. 
+		  The element will be saved like this :
 		  \code  <$(tagName) name = "$(property)">< value_as_XML ><$(tagName)/>
 		  \endcode
 		*/
-		static void         saveProperty(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName, const QString &property, const QVariant &value);
+		static void saveProperty(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName, 
+			const QString &property, const QVariant &value);
 		/*! Read an object property in the DOM doc.
 		   \param node   the QDomNode of the property
 		   \param obj    the widget whose property is being read
 		   \param name   the name of the property being saved
 		*/
-		static QVariant     readProp(QDomNode node, QObject *obj, const QString &name);
+		static QVariant readProp(QDomNode node, QObject *obj, const QString &name);
 		/*! Write an object property in the DOM doc.
 		   \param parent the DOM document to write to
 		   \param name   the name of the property being saved
 		   \param value  the value of this property
 		   \param w       the widget whose property is being saved
 		*/
-		static void   prop(QDomElement &parentNode, QDomDocument &parent, const char *name, const QVariant &value, QWidget *w, WidgetLibrary *lib=0);
+		static void prop(QDomElement &parentNode, QDomDocument &parent, const char *name, 
+			const QVariant &value, QWidget *w, WidgetLibrary *lib=0);
 
 	protected:
 		/*! Saves the QVariant \a value as text to be included in an xml file, with \a parentNode.*/
-		static void   writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant value);
+		static void writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant value);
 
-		/*! Creates a toplevel widget from the QDomElement \a element in the Form \a form, with \a parent as parent widget.
-		  It calls readProp() and loadWidget() to load child widgets.
+		/*! Creates a toplevel widget from the QDomElement \a element in the Form \a form, 
+		 with \a parent as parent widget.
+		 It calls readProp() and loadWidget() to load child widgets.
 		*/
-		static void         createToplevelWidget(Form *form, QWidget *container, QDomElement &element);
+		static void createToplevelWidget(Form *form, QWidget *container, QDomElement &element);
 
 		/*! \return the name of the pixmap saved, to use to access it
 		    This function save the QPixmap \a pixmap into the DOM document \a domDoc.
-		    The pixmap is converted to XPM and compressed for compatibility with Qt Designer. Encoding code is taken from Designer.
+		    The pixmap is converted to XPM and compressed for compatibility with Qt Designer. 
+		    Encoding code is taken from Designer.
 		*/
-		static QString      saveImage(QDomDocument &domDoc, const QPixmap &pixmap);
+		static QString saveImage(QDomDocument &domDoc, const QPixmap &pixmap);
+
 		/*! \return the loaded pixmap
 		    This function loads the pixmap named \a name in the DOM document \a domDoc.
 		    Decoding code is taken from QT Designer.
 		*/
-		static QPixmap      loadImage(QDomDocument domDoc, QString name);
+		static QPixmap loadImage(QDomDocument domDoc, QString name);
+
 		/*! Creates a grid layout with the appropriate number of rows/cols.*/
-		static void         createGridLayout(const QDomElement &el, ObjectTreeItem *tree);
+		static void createGridLayout(const QDomElement &el, ObjectTreeItem *tree);
+
 		/*! Reads the child nodes of a "widget" element. */
-		static void         readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *w);
-		/*! Adds an include file to be saved in the "includehints" part of .ui file, which is needed by uic. */
-		static void         addIncludeFile(const QString &include, QDomDocument &domDoc);
+		static void readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary *lib, 
+			const QDomElement &el, QWidget *w);
+
+		/*! Adds an include file name to be saved in the "includehints" part of .ui file, 
+		 which is needed by uic. */
+		static void addIncludeFileName(const QString &include, QDomDocument &domDoc);
 
 	private:
 		// This dict stores buddies associations until the Form is completely loaded.

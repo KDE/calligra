@@ -59,7 +59,12 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 	Q_OBJECT
 
 	public:
-		FormManager(QObject *parent, const char *name);
+		/*! Constructs FormManager object. 
+		 See WidgetLibrary's constructor documentation for information about 
+		 \a supportedFactoryGroups parameter. */
+		FormManager(QObject *parent=0, const QStringList& supportedFactoryGroups = QStringList(), 
+			const char *name=0);
+
 		virtual ~FormManager();
 
 		/*! Creates all the KAction related to widget insertion, and plug them into the KActionCollection \a parent.

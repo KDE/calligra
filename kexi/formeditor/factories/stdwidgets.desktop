@@ -4,8 +4,10 @@ Type=Service
 ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Basic Widgets
+Name[bg]=Основни графични обекти
 Name[da]=Basale kontroller
 Name[es]=Widgets básicos
+Name[et]=Standardvidinad
 Name[fr]=Éléments graphiques basiques
 Name[pl]=Proste widżety
 Name[pt]=Elementos Básicos
@@ -16,3 +18,4 @@ Name[ta]=அடிப்படை சாளர உருக்கள்
 Name[xx]=xxBasic Widgetsxx
 
 X-KDE-Library=stdwidgets
+X-KFormDesigner-FactoryGroup=
