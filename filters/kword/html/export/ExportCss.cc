@@ -52,45 +52,29 @@ QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
         strReturn+="kWoRd_"; // The curious spelling is for allowing a HTML import to identfy it and to remove it.
     }
 
-    bool lastEscaped=false; // Was the last character escaped?
-
     for (uint i=0; i<strText.length(); i++)
     {
         const QChar qch(strText.at(i));
         const ushort ch=qch.unicode();
 
-        if (lastEscaped
-            && (((ch>='a') && (ch<='f'))
-            || ((ch>='A') && (ch<='F'))
-            || ((ch>='0') && (ch<='9')) ))
-        {
-             // The previous character was escaped and the current character could be an hexadecimal digit
-             // Therefore we need to escape it too.
-            strReturn+='\\'; // start escape
-            strReturn+=QString::number(ch,16);
-            lastEscaped=true;
-        }
-        else if (((ch>='a') && (ch<='z'))
+        if (((ch>='a') && (ch<='z'))
             || ((ch>='A') && (ch<='Z'))
             || ((ch>='0') && (ch<='9'))
             || (ch=='-') || (ch=='_')) // The underscore is allowed by the CSS2 errata
         {
             // Normal allowed characters (whitout any problem)
             strReturn+=qch;
-            lastEscaped=false;
         }
         else if ((ch<=' ') || (ch>=128 && ch<=160)) // space (breaking or not) and control characters
         {
             // CSS2 would allow to escape them but no HTML user agent supports this
             strReturn+='_'; // This makes the identifier (style name) potentially non-unique
-            lastEscaped=false;
         }
         else if ((ch>=161) && (getCodec()->canEncode(qch)))
         {
             // Any Unicode character greater or egual to 161 is allowed too, even at start.
             // Except if the encoding cannot write the character
             strReturn+=qch;
-            lastEscaped=false;
         }
         else // if ch >= 33 && ch <=127 but without alphanumerics (or not in encoding)
         {
@@ -99,7 +83,6 @@ QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
             strReturn+="--"; // start our private escape
             strReturn+=QString::number(ch,16);
             strReturn+="--"; // end our private escape
-            lastEscaped=false;
         }
     }
     // It is supposed that a last escape do not need an extra space
