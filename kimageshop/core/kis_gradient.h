@@ -1,7 +1,7 @@
 /*
- *  kis_gradient.h - part of KImageShop
+ *  kis_gradient.h - part of Krayon
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
+ *  Copyright (c) 2001 John Califf <jcaliff@compuzone.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,20 +21,33 @@
 #ifndef __kis_gradient_h__
 #define __kis_gradient_h__
 
-#include <qobject.h>
 
-class KisGradient : public QObject 
+#include <kimageeffect.h>
+
+class KisSelection;
+
+class KisGradient 
 {
-  Q_OBJECT
 
 public:
 
-  KisGradient();
-  ~KisGradient();
+    KisGradient(KImageEffect::GradientType _type, 
+                KImageEffect::RGBComponent _rgbComponent, 
+                KImageEffect::Lighting _lighting,
+                KImageEffect::ModulationType _modulationType);
+    
+    ~KisGradient();
 
+    bool paintGradient(QImage *image);
+    bool paintGradient(KisSelection *selection);
+    
 private:
 
-  int m_data;
+    KImageEffect::GradientType type; 
+    KImageEffect::RGBComponent rgbComponent; 
+    KImageEffect::Lighting lighting;
+    KImageEffect::ModulationType modulationType;
+  
 };
 
 #endif

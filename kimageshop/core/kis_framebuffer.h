@@ -26,9 +26,8 @@
 #include <qcolor.h>
 
 #include "kis_doc.h"
-#include "kis_image.h"
-#include "kis_layer.h"
-#include "kis_selection.h"
+ 
+class KisSelection;
 
 class KisFrameBuffer : public QObject 
 {

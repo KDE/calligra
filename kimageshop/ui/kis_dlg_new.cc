@@ -1,5 +1,5 @@
 /*
- *  newdialog.cc - part of KImageShop
+ *  newdialog.cc - part of Krayon
  *
  *  Copyright (c) 1999 Sven Fischer    <herpes@kawo2.rwth-aachen.de>
  *
@@ -59,7 +59,7 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
     grid->addWidget( iheight, 1, 1 );
 
     // Create an exclusive button group
-    QButtonGroup *cmodeg = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Color Mode"), this);
+    QButtonGroup *cmodeg = new QButtonGroup( 2, QGroupBox::Horizontal, i18n("Color Mode"), this);
     cmodeg->setExclusive( TRUE );
 
     // insert radiobuttons
@@ -70,7 +70,6 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
     cmode[cm_Greyscale]->setEnabled(false);
 
     cmode[cm_RGB] = new QRadioButton( i18n("&RGB"), cmodeg );
-
 	cmode[cm_RGBA] = new QRadioButton( i18n("RGB + &alpha channel"), cmodeg );
 	cmode[cm_RGBA]->setChecked( true );
 
@@ -83,7 +82,7 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
     layout->addWidget( cmodeg );
 
     // Create an exclusive button group
-    QButtonGroup *ground = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Background"), this);
+    QButtonGroup *ground = new QButtonGroup( 2, QGroupBox::Horizontal, i18n("Background"), this);
     ground->setExclusive( TRUE );
 
     // insert radiobuttons
@@ -111,8 +110,8 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
     connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
     buttons->addWidget( cancel );
 
-    //resize( 1, 1 );
-    resize(320,320);
+    resize( 1, 1 );
+    //resize(320,320);
 }
 
 bgMode NewDialog::backgroundMode()

@@ -48,7 +48,6 @@ public:
     static QString writeFilters();
   
     static QImage roughScaleQImage(QImage & src, int width, int height);
-    static QImage roughScaleQImageAA(QImage & src, int width, int height);
 };
 
 #endif

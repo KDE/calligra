@@ -1,5 +1,5 @@
 /*
- *  kis_factory.h - part of KImageShop
+ *  kis_factory.h - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *
@@ -35,7 +35,13 @@ public:
     KisFactory( QObject* parent = 0, const char* name = 0 );
     ~KisFactory();
 
-    virtual KParts::Part *createPart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent = 0, const char *name = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() ); 
+    virtual KParts::Part *createPart( 
+        QWidget *parentWidget = 0, 
+        const char *widgetName = 0, 
+        QObject *parent = 0, 
+        const char *name = 0, 
+        const char *classname = "KoDocument", 
+        const QStringList &args = QStringList() ); 
 
     static KAboutData        *aboutData();
     static KInstance         *global();

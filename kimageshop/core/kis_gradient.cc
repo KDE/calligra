@@ -1,7 +1,7 @@
 /*
- *  kis_gradient.cc - part of KImageShop
+ *  kis_gradient.cc - part of Krayon
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
+ *  Copyright (c) 2001 John Califf <jcaliff@compuzone.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,16 +17,33 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
+ 
+#include "kis_selection.h"
 #include "kis_gradient.h"
 
-KisGradient::KisGradient()
+KisGradient::KisGradient(KImageEffect::GradientType _type, 
+    KImageEffect::RGBComponent _rgbComponent, 
+    KImageEffect::Lighting _lighting,
+    KImageEffect::ModulationType _modulationType)
 {
+    type = _type;
+    rgbComponent = _rgbComponent;
+    lighting = _lighting;
+    modulationType = _modulationType;
 }
 
 KisGradient::~KisGradient()
 {
 }
 
-#include "kis_gradient.moc"
+
+bool KisGradient::paintGradient(QImage *image)
+{
+    return true;
+}
+
+bool KisGradient::paintGradient(KisSelection *selection)
+{
+    return true;
+}
 

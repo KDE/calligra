@@ -31,11 +31,16 @@
 #include <iostream.h>
 #include "kis_image.h"
 #include "kis_global.h"
+
 #include "kis_view.h"
 #include "kis_selection.h"
 #include "kis_framebuffer.h"
 
 class NewDialog;
+
+//class KisView;
+//class KisSelection;
+//class KisFrameBuffer;
 
 /*
  * A KisDoc can hold multiple KisImages.
