@@ -22,7 +22,11 @@
 
 #include <koDocument.h>
 
+class KoView;
+class KCommandHistory;
 class KPTProject;
+class KPTProjectDialog;
+
 
 class KPTPart : public KoDocument {
     Q_OBJECT
@@ -39,6 +43,11 @@ public:
 
     virtual bool initDoc();
 
+    /**
+     * Edit the settings of the project
+     */
+    void editProject();
+
     // The load and save functions. Look in the file kplato.dtd for info
     virtual bool loadXML(QIODevice *, const QDomDocument &document);
     virtual QDomDocument saveXML();
@@ -46,8 +55,14 @@ public:
 protected:
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
 
+protected slots:
+    void slotDocumentRestored();
+
 private:
-    KPTProject *project;
+    KPTProject *m_project;
+    KPTProjectDialog *m_projectDialog;
+    KoView *m_view;
+    KCommandHistory *m_commandHistory;
 };
 
 #endif

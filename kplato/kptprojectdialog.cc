@@ -10,8 +10,7 @@
 
 KPTProjectDialog::KPTProjectDialog(KPTProject &p, QWidget *q, const char *n)
     : KDialogBase(Tabbed, QString("Project Settings"), Ok|Cancel, Ok, q,
-		  n, true, true),
-      project(p)
+		  n, true, true), project(p)
 {
     // For now the setup is pretty trivial. It's planned to be able to control
     // the children here too.
@@ -20,17 +19,17 @@ KPTProjectDialog::KPTProjectDialog(KPTProject &p, QWidget *q, const char *n)
 					 spacingHint());
 
     // First line: Name of the project
-    layout->addWidget(new QLabel("Project name", this), 0, 0);
-    layout->addWidget(namefield=new KLineEdit(project.name(), this), 0, 1);
+    layout->addWidget(new QLabel("Project name", panel), 0, 0);
+    layout->addWidget(namefield=new KLineEdit(project.name(), panel), 0, 1);
 
     // Second line: Name of responsible person
-    layout->addWidget(new QLabel("Project leader", this), 1, 0);
-    layout->addWidget(leaderfield = new KLineEdit(project.leader(), this),
+    layout->addWidget(new QLabel("Project leader", panel), 1, 0);
+    layout->addWidget(leaderfield = new KLineEdit(project.leader(), panel),
 		      1, 1);
 
     // Last: The description field
-    layout->addMultiCellWidget(new QLabel("Description", this), 2, 2, 0, 1);
-    descriptionfield = new QTextEdit(this);
+    layout->addMultiCellWidget(new QLabel("Description", panel), 2, 2, 0, 1);
+    descriptionfield = new QTextEdit(panel);
     descriptionfield->setText(project.description());
     layout->addMultiCellWidget(descriptionfield, 3, 3, 0, 1);
 }

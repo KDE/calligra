@@ -31,6 +31,7 @@ class KPTPart;
 
 class KPTView : public KoView {
     Q_OBJECT
+
 public:
     KPTView(KPTPart* part, QWidget* parent=0, const char* name=0);
 

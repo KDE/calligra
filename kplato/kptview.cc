@@ -30,8 +30,8 @@
 #include <kdebug.h>
 #include <klistview.h>
 
-KPTView::KPTView( KPTPart* part, QWidget* parent, const char* name )
-    : KoView( part, parent, name )
+KPTView::KPTView(KPTPart* part, QWidget* parent, const char* name)
+    : KoView(part, parent, name)
 {
     setInstance(KPTFactory::global());
     setXMLFile("kplato.rc");
@@ -50,7 +50,7 @@ KPTView::KPTView( KPTPart* part, QWidget* parent, const char* name )
 	    this, SLOT(slotSelectionChanged(QListViewItem *)));
 
     // The menu items
-    new KAction("Edit project...", "edit_project", 0, this,
+    new KAction("Edit main project...", "edit_project", 0, this,
 		SLOT(slotEditProject()), actionCollection(), "edit_project");
     new KAction("Add subproject...", "add_sub_project", 0, this,
 		SLOT(slotAddSubProject()), actionCollection(),
@@ -63,6 +63,7 @@ KPTView::KPTView( KPTPart* part, QWidget* parent, const char* name )
 
 
 void KPTView::slotEditProject() {
+    ((KPTPart *)koDocument())->editProject();
 }
 
 

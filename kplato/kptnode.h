@@ -36,7 +36,8 @@ class QDomElement;
 
 
 /**
- * This class represents any node in the project, a node can be a project to a subproject and any task.
+ * This class represents any node in the project, a node can be a project to
+ * a subproject and any task.
  * This class is basically an abstract interface to make the design more OO.
  */
 class KPTNode {

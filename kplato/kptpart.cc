@@ -21,24 +21,34 @@
 #include "kptview.h"
 #include "kptfactory.h"
 #include "kptproject.h"
+#include "kptprojectdialog.h"
 
 #include <qpainter.h>
 #include <qfileinfo.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kcommand.h>
 #include <kstandarddirs.h>
 #include <koTemplateChooseDia.h>
 
+
 KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
-		 QObject* parent, const char* name, bool singleViewMode)
-    : KoDocument(parentWidget, widgetName, parent, name, singleViewMode)
+		 QObject *parent, const char *name, bool singleViewMode)
+    : KoDocument(parentWidget, widgetName, parent, name, singleViewMode),
+      m_project(0), m_projectDialog(0), m_view(0)
 {
-    project = new KPTProject();
+    m_project = new KPTProject();
+    m_commandHistory = new KCommandHistory(actionCollection());
+
+    setInstance(KPTFactory::global());
 }
 
+
 KPTPart::~KPTPart() {
-    delete project;
+    delete m_project;
+    delete m_projectDialog;
 }
+
 
 bool KPTPart::initDoc() {
     bool result = true;
@@ -61,12 +71,11 @@ bool KPTPart::initDoc() {
         kdDebug() << "KPTPart::initDoc opening URL " << url.prettyURL() <<endl;
         result = openURL(url);
     } else if (ret == KoTemplateChooseDia::Empty) {
-	// TODO: Load the simple template file or what??
-//         QString fileName(locate("kplato_template", "Simple/Plain.kpt",
-// 				KPTFactory::global()));
-//         resetURL();
-//         result = loadNativeFormat(fileName);
-	project = new KPTProject();
+	// Make a fresh project and let the user enter some info
+	m_project = new KPTProject();
+	m_projectDialog = new KPTProjectDialog(*m_project, m_view);
+	m_projectDialog->exec();
+
 	result = true;
     }
 
@@ -75,8 +84,28 @@ bool KPTPart::initDoc() {
 }
 
 
-KoView* KPTPart::createViewInstance(QWidget* parent, const char* name) {
-    return new KPTView(this, parent, name);
+KoView *KPTPart::createViewInstance(QWidget *parent, const char *name) {
+    m_view = new KPTView(this, parent, name);
+
+    // If there is a project dialog this should be deleted so it will
+    // use the m_view as parent. If the dialog will be needed again,
+    // it will be made at that point
+    if (m_projectDialog != 0) {
+	kdDebug() << "Deleting m_projectDialog because of new ViewInstance\n";
+	delete m_projectDialog;
+	m_projectDialog = 0;
+    }
+
+    return m_view;
+}
+
+
+void KPTPart::editProject() {
+    if (m_projectDialog == 0)
+	// Make the dialog
+	m_projectDialog = new KPTProjectDialog(*m_project, m_view);
+
+    m_projectDialog->exec();
 }
 
 
@@ -106,8 +135,10 @@ bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
 		KPTProject *newProject = new KPTProject();
 		if (newProject->load(e)) {
 		    // The load went fine. Throw out the old project
-		    delete project;
-		    project = newProject;
+		    delete m_project;
+		    delete m_projectDialog;
+		    m_project = newProject;
+		    m_projectDialog = 0;
 		}
 	    }
 	}
@@ -131,14 +162,20 @@ QDomDocument KPTPart::saveXML() {
     document.appendChild(doc);
 
     // Save the project
-    project->save(doc);
+    m_project->save(doc);
 
     return document;
 }
 
 
-void KPTPart::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/,
-                                double /*zoomX*/, double /*zoomY*/ )
+void KPTPart::slotDocumentRestored() {
+    setModified(false);
+}
+
+
+void KPTPart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/,
+			   bool /*transparent*/,
+			   double /*zoomX*/, double /*zoomY*/)
 {
     // ####### handle transparency
 

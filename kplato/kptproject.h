@@ -89,26 +89,27 @@ protected:
      * @return The start node.
      */
     virtual KPTNode* start_node(){ return &startNode; }
+
     /**
      * @return The end node.
      */
     virtual KPTNode* end_node(){ return &endNode; }
-protected:
+
     /**
      * Class to handle find_if function. This really is necessary
      * if we want to use find_if.
      */
     class no_unvisited {
     private:
-      typedef const KPTNode::dependencies KPTNode::*dep_type;
+	typedef const KPTNode::dependencies KPTNode::*dep_type;
     public:
-      no_unvisited( dep_type deps )
-        : deps(deps) {}
-      bool operator()( KPTNode* node ) const
-        { return (node->*deps).unvisited == 0; }
+	no_unvisited(dep_type deps) : deps(deps) {}
+      bool operator()(KPTNode* node) const
+	    { return (node->*deps).unvisited == 0; }
     private:
-      dep_type deps;
+	dep_type deps;
     };
+
     /**
      * Forward pass. This and backward_pass could be implemented as
      * function objects with function pointer parameters, but the
@@ -116,11 +117,13 @@ protected:
      * @param nodelist. A list of nodes to work on.
      */
     void forward_pass( std::list<KPTNode*> nodelist );
+
     /**
      * Backward pass.
      * @param nodelist. A list of nodes to work on.
      */
     void backward_pass( std::list<KPTNode*> nodelist );
+
     KPTTerminalNode startNode;
     KPTTerminalNode endNode;
 
