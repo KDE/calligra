@@ -23,81 +23,99 @@ need them for translation coordination !
 Please respect the format of the date (DD/MM/YYYY) and of the version
 (Major.minor.lesser), it could be used by automation scripts -->
 
-<date>19/01/2000</date>
-<releaseinfo>0.1.0</releaseinfo>
+<date>27/2/2000</date>
+<releaseinfo>0.1.5</releaseinfo>
 
 <revhistory>
 <revision>
-<revnumber>1.1.0</revnumber>
+<revnumber>1.5.0</revnumber>
+<date>27/2/2000</date>
+<authorinitials>MPM</authorinitials>
+<revremark>Working on "Detailed Guides" (Document layout).</revremark>
+</revision>
+<revision><revnumber>1.4.0</revnumber>
+<date>29/01/2000</date>
+<authorinitials>MPM</authorinitials>
+<revremark>Additional work on Detailed Guides.  All screenshots/icons work now.</revremark>
+</revision>
+<!-- *************** -->   
+<revision><revnumber>1.3.0</revnumber>
+<date>24/01/2000</date>
+<authorinitials>MPM</authorinitials>
+<revremark>More work on Detailed Guides.  Other minor edits</revremark>
+</revision>
+<!-- *************** -->   
+<revision><revnumber>1.2.0</revnumber>
 <date>22/01/2000</date>
 <authorinitials>MPM</authorinitials>
-<revremark>Updated overall layout, split several large sections into small ones, all pictures should be included this time.</revremark>
+<revremark>Started writing Detailed Guides.  More pics added.</revremark>
 </revision>
-<revision>
-<revnumber>0.1.0</revnumber>
+<!-- *************** -->   
+<revision><revnumber>1.1.0</revnumber>
+<date>20/01/2000</date>
+<authorinitials>MPM</authorinitials>
+<revremark>Updated overall layout, split several large sections into small ones, all pictures should be included this time.  Revision numbers now match numbers on CVS.</revremark>
+</revision>
+<!-- *************** -->   
+<revision><revnumber>0.1.0</revnumber>
 <date>21/01/2000</date>
 <authorinitials>MPM</authorinitials>
-<revremark>Substantial updates.  Moved all graphics elements to /pics directories.  Revision numbers now match numbers on CVS.</revremark>
+<revremark>Substantial updates.  Moved all graphics elements to /pics directories.</revremark>
 </revision>
-<revision>
-<revnumber>0.1.0</revnumber>
+<!-- *************** -->   
+<revision><revnumber>0.1.0</revnumber>
 <date>19/01/2000</date>
 <authorinitials>MPM</authorinitials>
 <revremark>First made available to the CVS</revremark>
-</revision>
-</revhistory>
-
+</revision></revhistory>
 <!-- Abstract about this handbook -->
 
 <abstract>
 <para>
-<application>KWord</application> is complete wordprocessing program.  It is part of the KOffice suite of utilities.
+<application>KWord</application> is a complete wordprocessing program.  It is part of the KOffice suite of utilities.
 </para>
 </abstract>
 
 </bookinfo>
+<!-- **************************************************************************************************** -->   
 <chapter ID="TODO"><title>Still to be done on this manual</title>
 
 <para>This is a list (a rather long list) of things which still need work in this manual:</para>
 <itemizedlist>
 
 <listitem><para>Write "What parts of this guide should I read?"</para></listitem>
-<listitem><para>Write Getting Binary Packages</para></listitem>
-<listitem><para>Finish From Binary Packages</para></listitem>
-<listitem><para>Finish Getting Source Code</para></listitem>
-<listitem><para>Finish From Source Code</para></listitem>
-<listitem><para>Write Problems with Compilation -- Probably Last section to write.</para></listitem>
-<listitem><para>Finish Tutorial.-- First pass done -- Check screenshots before release.</para></listitem>
-<listitem><para>Write The KWord Screen -- done</para></listitem>
+<listitem><para>Finish Tutorial.-- First pass done -- </para></listitem>
 <listitem><para>Write Working with Frames -- section merged into other areas</para></listitem>
-<listitem><para>Write Hiding/Moving Menubars -- Done</para></listitem>
-<listitem><para>Reformat all Toolbar Sections -- Done</para></listitem>
 <listitem><para>Write "Character Formatting Toolbars"</para></listitem>
-<listitem><para>Write Kword Options -- not finished </para></listitem>
-<listitem><para>Organize "Detailed Guides" into subjects...Then write the dang things</para></listitem>
+<listitem><para>Write Kword Options -- not coded yet </para></listitem>
+<listitem><para>Organize "Detailed Guides" into subjects...Then write the dang things - in progress</para></listitem>
 <listitem><para>Write Answers to Questions in Q and A</para></listitem>
 <listitem><para>Add to Glossary where needed. Some terms are undefined.  Most are poorly defined.</para></listitem>
-<listitem><para>Write a section for each of the inport/export filters (ASCII, HTML, Word97, etc).</para></listitem>
-<listitem><para>Fix minor errors in Key bindings summary. -- Done</para></listitem>
-<listitem><para>Complete section on authors.....</para></listitem>
-<listitem><para>Gather last few icons/graphics -- done</para></listitem>
-<listitem><para>Write "Using the scrollbar" -- deleted</para></listitem>
-<listitem><para>Write "Using tab stops"</para></listitem>
+<listitem><para>Write "Using tab stops" - in progress</para></listitem>
 <listitem><para>If Open template dialog continues to not need an ok, rework tutorial.</para></listitem>
-<listitem><para>Capture New Choose Template Dialog -- Look has changed</para></listitem>
 <listitem><para>Organize "Keyboard shortcuts" into subjects, then organize table by subject</para></listitem>
+<listitem><para>KWord now uses different open/save dialogs.   Review all sections relating to this.</para></listitem>
 </itemizedlist>
-<para>You may also notice (if you are reading this closely at all), that sections of this guide will often end abruptly with "STUFF".  This is a marker to remind myself that more needs to be added, or the section needs to be worked on again.</para>
+<para>Just before release of KOffice.......</para>
+<itemizedlist>
+<listitem><para>Complete section on authors.....</para></listitem>
+<listitem><para>Write a section for each of the inport/export filters (ASCII, HTML, Word97, etc).</para></listitem>
+<listitem><para>Check all screenshots for new features, differnt looks</para></listitem>
 
+</itemizedlist>
+<para>I want to make this very clear.  This is a first draft (of many).  My initial goal, is to get a good start on every section of this documentation.  After this first draft is complete, I will rework each section again for more clairity/completeness.  </para>
+<para>I would be very interested in any part of KWord that people find particularly difficult or confusing.  You can either write me directly, or post your comments on the koffice mailing list (which I faithfully read).  These comments will help me focus the documentation better.</para>
+<para>You may also notice (if you are reading this closely at all), that sections of this guide will often end abruptly with "STUFF".  This is a marker to remind myself that more needs to be added, or the section needs to be worked on again.</para>
 <para>If anyone wants to help me write this monster, I will erect a temple in your honor.  Please drop me a note and let me know what you would like to work on.</para>
 <para>Thanks</para>
 <para>Mike <email>mmcbride@ematic.com</email> </para>
 
 </chapter>
+<!-- **************************************************************************************************** -->   
 
 <chapter ID="Introduction"><title>Introduction</title>
 
-<sect1 ID="Introduction1">
+<sect1>
 <title>Introduction</title>
 <para>KWord, is a full featured WYSIWYG (What You See Is What You Get) Wordprocessor/Desktop Publishing Program. </para>
 <para> KWord is part of the KOffice productivity suite for the K Dekstop Environment.  Other applications in KOffice include</para>
@@ -133,74 +151,16 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 <listitem><para>STUFF....  </para></listitem>
 </itemizedlist>
 </sect1>
+<sect1 id="Conventions"><title>Conventions Used Throughout this User Guide</title>
+<para>
+</para>
+</sect1>
 <sect1 id="WhoReads"><title>What parts of this guide should I read?</title>
 <para>
 </para>
 </sect1>
 </chapter> 
-
-<chapter id="Installation">
-<title>Installation</title>
-<sect1 id="Requirements"><title>System Requirements</title><para>In order to install and use KWord you must have:  </para>
-<itemizedlist>
-<listitem><para>A functioning Linux system with the X windowing system configured.</para></listitem>
-<listitem><para>The K Desktop Environment 2.0 (KDE 2.0).  KWord will NOT function with older versions of KDE.  Information on obtaining and installing KDE 2.0 can be found at: <ulink url="http://www.kde.org">http://www.kde.org.</ulink></para></listitem>
-<listitem><para>Permission to install software on your computer.  If you are on a stand alone system, this will not be a problem.  If, however, you are using a networked computer, check with your administrator.</para></listitem>
-</itemizedlist>
-<para>If you plan on <link linkend="FromSource">compiling KOffice from source code</link> you will also need:
-<itemizedlist>
-<listitem><para>Automake 1.4 or newer.  This can be downloaded from: <ulink url="ftp://ftp.gnu.org/pub/gnu/automake/">ftp://ftp.gnu.org/pub/gnu/automake/</ulink></para></listitem>
-<listitem><para>Autoconf 2.13 or later.  This can be downloaded from: <ulink url="ftp://ftp.gnu.org/pub/gnu/autoconf/">ftp://ftp.gnu.org/pub/gnu/autoconf/</ulink></para></listitem>
-<listitem><para>a C++ compiler which supports exceptions (preferably egcs 1.1.x). This can be downloaded from <ulink url="http://egcs.cygnus.com/">http://egcs.cygnus.com/</ulink></para></listitem>
-<listitem><para>Troll Tech's QT 2.1 development packages.  These can be downloaded from <ulink url="ftp://ftp.troll.no/">ftp://ftp.troll.no/</ulink></para></listitem>
-</itemizedlist></para>
-<para>Once your system meets these requirements, you then need to decide wether you want to install from the source code, or premade compiled packages.</para>
-<para>If you want to obtain the most current binary version of KOffice, you can find more information at <link linkend="GettingBinaries">Getting Binary Packages</link>.  </para>
-<para>If pre-compiled binaries are not available for your system, you can download the source code and compile it yourself.  Instructions on where to obtain the current source code and what to do with the source code once you have it, can be found under <link linkend="GettingSource">Getting the source code</link>.</para> </sect1>
-<sect1 id="GettingBinaries"><title>Getting Binary Packages</title><para>You can download the most current binaries from: </para>
-<para><ulink url="http://koffice.kde.org/">http://koffice.kde.org/</ulink></para>
-
-<para>or from one of many mirror sites.  The current list of mirror sites can be found at:</para>
-<para><ulink url="http://www.kde.org/mirrors.html">http://www.kde.org/mirrors.html</ulink></para>
-<Note><para>It is important that you find a binary package that is compatable with your system.  If you are unable to find it here, you may be able to obtain a pre-compiled binary from the website of your distribution.</para></Note>
-
-
-</sect1>
-<sect1 id="FromBinaries"><title>From Binary Packages</title><para>To install KWord from precompiled binaries, you should:
-<orderedlist numeration="arabic">
-<listitem><para>Ensure your computer has all the required software (excluding KOffice of course), is installed.  You can find the system requirements under <link linkend="Requirements">System Requirements</link>.</para></listitem>
-<listitem><para>Download the KOffice binary (***Insert filenames (rpm and deb and tar) here***) into a temporary directory.</para></listitem>
-<listitem><para>If the file is a .rpm (Red Hat Package Management Package), KOffice can be installed with:
-<screen><prompt>$</prompt> <command>rpm -U <replaceable>filename</replaceable></command></screen> </para>
-<para>If the file is a .deb (Debian Package file), KOffice can be installed with: </para>
-<para><screen><prompt>$</prompt> <command>dpkg -i <replaceable>filename</replaceable></command></screen> </para>
-<para>If the file is a tarball (ends in .tar.gz or .tgz), KOffice can be installed with:
-<screen><prompt>$</prompt> <command>tar -xzvf <replaceable>filename</replaceable></command></screen> </para></listitem>
-<listitem><para>You are now installed!</para></listitem></orderedlist>
-You can now <link linkend="StartingKWord">Start KWord</link> or you can go through a <link linkend="Tutorial">Step by Step</link> which will help take you through a sample document. </para></sect1>
-<sect1 id="GettingSource"><title>Getting Source Code</title><para>You can download the current source code from:</para>
-<para><ulink url="http://koffice.kde.org/">http://koffice.kde.org/</ulink></para>
-
-<para>or from one of many mirror sites.  The current list of mirror sites can be found at:</para>
-<para><ulink url="http://www.kde.org/mirrors.html">http://www.kde.org/mirrors.html</ulink></para>
-
-
-
-</sect1>
-<sect1 id="FromSource"><title>From Source Code</title><para>If you want to build KWord from source code, you should 
-<orderedlist numeration="arabic">
-<listitem><para>Ensure your computer has all the required software (excluding KOffice of course), is installed.  You can find the system requirements under <link linkend="Requirements">System Requirements</link>.</para></listitem>
-<listitem><para>Download the KOffice source file (Insert filenames (srpm and tar) here***) into a temporary directory.</para></listitem>
-<listitem><para>If the file is a .rpm (Red Hat Package Management Package), KOffice can be installed with:
-<screen><prompt>$</prompt> <command>rpm -U <replaceable>filename</replaceable></command></screen> </para>
-<para>If the file is a tarball (ends in .tar.gz or .tgz), KOffice can be installed with:
-<screen><prompt>$</prompt> <command>tar -xzvf <replaceable>filename</replaceable></command></screen> </para></listitem>
-<listitem><para>You are now installed!</para></listitem></orderedlist>
-
-STUFF</para></sect1>
-<sect1 id="CompilingProblems"><title>Problems with Compilation</title><para>Problems STUFF</para></sect1>
-</chapter>
-
+<!-- **************************************************************************************************** -->   
 
 <chapter id="Fundimental"><title>Fundimentals</title><para>This next section is designed to introduce you to:
 <orderedlist Numeration="Arabic">
@@ -385,7 +345,7 @@ the left mouse button.  Drag the mouse diagonally.  An outline will appear which
 </sect1>
 </chapter>
 <chapter id="KWordScreen"><title>The KWord Screen</title>
-<sect1 id="Overview"><title>Overview</title>
+<sect1><title>Overview</title>
 <para>KWord, like most GUI based programs, divides the screen up into several areas. Each area of the screen is used to perform a group of similar features
 .  When you start the KWord screen, it is initially divided into 4 major areas:</para>
 <orderedlist numeration="arabic">
@@ -438,6 +398,7 @@ the left mouse button.  Drag the mouse diagonally.  An outline will appear which
 </sect1>
 
 </chapter>
+<!-- **************************************************************************************************** -->   
 
 <chapter id="Guides"><title>Detailed Guides: Document Storage and Printing</title>
 <para>This section of the documentation will cover everything you need to know about starting a new document, saving a document, retrieving a saved document and printing a docuemnt.</para> 
@@ -593,6 +554,8 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>If you click on "Cancel", the printing will be aborted.</para>
 </sect1>
 </chapter>    
+<!-- **************************************************************************************************** -->   
+
 <chapter id="Guides2"><title>Detailed Guides: Editing your Document</title>
 <para>This section of the guide will cover more advanced features of data editing.  This section focuses entirely on text data.  For working with other types of data, please see the <link linkend="Guides3">next section</link>. </para>
 <sect1 id="select"><title>Selecting Text</title>
@@ -788,20 +751,486 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>To switch to the Advanced Autocorrection, click on the tab labled "Advanced Autocorrection".</para>
 <screenshot><graphic fileref="pics/auto2" format="png" align="center"></graphic></screenshot>
 <para>STUFF----Need to wait until option is complete.</para>
-</sect2></sect1></chapter>    
+</sect2></sect1></chapter> 
+<!-- **************************************************************************************************** -->   
 <chapter id="Guides3"><title>Detailed Guides: Document Layout</title>
-<sect1 id="TabStops"><title>Using Tab Stops</title><para></para></sect1>
-<sect1 id="PageFormat"><title>Formatting the Page</title><para></para></sect1>
-<sect1 id="Frames"><title>Working with Frames</title><para></para></sect1>
-<sect1 id="FormatFrame"><title>Formatting Frame</title><para></para></sect1>
-<sect1 id="Formatpara"><title>Formatting paragraph</title><para></para></sect1>
-<sect1 id="FormatChar"><title>Formatting Characters</title><para></para></sect1>
+<para><link linkend="Guides">Two sections ago</link>, we talked about <link linkend="NewDoc">creating</link>, <link linkend="Saving">saving</link>, <link linkend="Loading">loading</link> and <link linkend="Printing">printing documents</link>. <link linkend="Guides2">The section after that</link> (the previous section), discussed <link linkend="Select">entering the textual information</link>, <link linkend="Clipboard">moving it around</link>, <link linkend="SpellCheck">spell checing</link>, and <link linkend="AutoCorrect">autocorrecting</link> your text.</para>
+<para>This section of the guide is designed to help you layout your documents.  We will begin with changing the size and shape of the page and the margins, and work progressively trhough smaller and smaller blocks of text (frames, ethen paragraphs, then characters).</para>
+<para>After we have discussed formatting individual characters, we will deal with some miscellaneous topics related to layout of your document.</para>
+<sect1 id="PageFormat"><title>Formatting the Page</title>
+<para>If you will remember back to when we talked about <link linkend="WPVSDTP">Wordprocessing Templates and DTP Templates</link>, we mentioned that there were differences in your formatting options.</para>
+<para>Well these differences are most important when we talk about Formatting the Page.  What follows are two sections, one for formatting the page with a <link linkend="WPPageFormat">Wordprocessing Template</link>, and another section for formatting the page with a <link linkend="DTPPageFormat">DTP Template</link>. Each section is independent of each other, so you should refer to the section that applies to your document.</para>
+<sect2 id="WPPageFormat"><title> Formatting the Page (Wordprocessing)</title>
+<para>When you are working with a Wordprocessing Template, you control the size and shape of the main frame by setting the margins. </para>
+<para>Formating the page is usually done by selecting: </para>
+<para><menuchoice> <guimenu>Format</guimenu><guimenuitem>Page...</guimenuitem></menuchoice></para>
+<para>From the menubar.</para>
+<tip><para>You can also go straight to the "Format Page" options by double clicking on either of the rulers.</para></tip>
+<para>A dialog box will appear with 3 tabs, labled "Format and Borders", "Columns" and "Header and Footer".</para>
+<para>The "Format and Borders" tab is for altering the paper size, and changing the margins.</para>
+<screenshot><graphic fileref="pics/wpfmtpg1" format="png" align="center"></graphic></screenshot>
+<para>First you will notice, that a preview box appears on the right half of this dialog.  This will <emphasis>approximate</emphasis> the final look of your document.  It is updated with each change, and should be used as a guide for your changes. </para>
+<para>On the left, the dialog first informs you what unit of measurement it is using.  This unit of measurement is the same unit of measurement you have set for your rulers. (In this example, we are using inches.)</para>
+<para>Below that, you can determine the paper format you will eventually print to.  Your choices are:</para>
+<itemizedlist>
+<listitem><para>DIN A3</para></listitem>
+<listitem><para>DIN A4</para></listitem>
+<listitem><para>DIN A5</para></listitem>
+<listitem><para>DIN B5</para></listitem>
+<listitem><para>US Letter</para></listitem>
+<listitem><para>US Legal</para></listitem>
+<listitem><para>US Exective</para></listitem>
+<listitem><para>Screen</para></listitem>
+<listitem><para>Custom</para></listitem>
+</itemizedlist>
+<para>All of these options (with the exception of Screen and Custom), refers to standard paper sizes.</para>
+<para>Screen is used to generate a document where each "page" has an <link linkend="defaspectratio">aspect ratio</link> (shape) which matches the aspect ratios of computer monitors.</para>
+<para>If you select the "Custom" paper size, two text entry boxes (labled "Width" and "Height") become active.  Using these two boxes you can now enter any size paper you need.</para>
+<para>Next to the paper format, you can select either <link linkend="defportrait">Portrait</link> or <link linkend="deflandscape">Landscape</link> layout for your document. (!!!!!!!!Does Landscape/Portrait mean anything with "Screen" or "custom"!!!!!!!!)</para>
+<para>Below the page format options, is the Page Borders Options, which consists of 4 entry boxes labled ("Right", "Left", "Top" and "Bottom").</para>
+<para>The Page Borders (aka Margins), define the whitespace surrounding the text in your main frame.  You can enter any number from 0 to the maximum size of the page in these boxes.  The units are the same for all four boxes, and is the same as the measurement listed at the top of the dialog..</para>
+<para>Clicking on the "Columns" tab allows you to change the number of columns on each page.  Details can be found <link linkend="Columns">here</link>.</para>
+<para>Clicking on the "Header and Footer" tab changes the dialog options.</para>
+<screenshot><graphic fileref="pics/wpfmtpg3" format="png" align="center"></graphic></screenshot>
+<para>This dialog can be broken into two major sections, with each section being divided in to smaller divisions.</para>
+<para>If you are not familiar with Headers and Footers yet, you should first read the section entitled <link linkend="Headfoot">Headers/Footers</link></para>
+<para><emphasis>Headers</emphasis></para>
+<para>This section lets you determine the placement of headers, and which pages have which headers on them.</para>
+<para>In the text box labled "Spacing between header and body", you can specify how much empty space should be placed between the bottom of the header, and the top of the main frame.</para>
+<para>You are also presented with three options.  You must choose one:</para>
+<itemizedlist>
+<listitem><para>Same header for all pages - If you select this option, all pages, even or odd, including the first page, will have the same headers. This is the default.</para></listitem>
+<listitem><para>Different header for first page - If you select this option, the first page will use a different header than the other pages.  After the first page, all pages have use the same header</para></listitem>
+<listitem><para>Different header for even and odd pages - If you select this option, the even pages will use one header, the odd pages use another header.  You can use this to ensure the page numbers are always on the outside of the page, or to list the title of the document on odd pages and the chapter number on the even pages.</para></listitem>
+</itemizedlist>
+<para><emphasis>Footers</emphasis></para>
+<para>This section lets you determine the placement of footers, and which pages have which footers on them.</para>
+<para>In the text box labled "Spacing between footer and body", you can specify how much empty space should be placed between the top of the footer, and the bottom of the main frame.</para>
+<para>You are also presented with three options.  You must choose one:</para>
+<itemizedlist>
+<listitem><para>Same footer for all pages - If you select this option, all pages, even or odd, including the first page, will have the same footer. This is the default.</para></listitem>
+<listitem><para>Different footer for first page - If you select this option, the first page will use a different footer than the other pages.  After the first page, all pages have use the same footer</para></listitem>
+<listitem><para>Different footer for even and odd pages - If you select this option, the even pages will use one footer, the odd pages use another footer.  </para></listitem>
+</itemizedlist>
+<para>When you are satisfied with the changes you are ready to make, click "OK".</para>
+<para>If you click "Cancel", all your changes will be ignored.</para>
+</sect2>
+<sect2 id="DTPPageFormat"><title> Formatting the Page (DeskTop Publishing)</title>
+<para>When you are working with a DTP Template, you control the size and shape of all the frames individually. </para>
+<para>Formating the page is usually done by selecting: </para>
+<para><menuchoice> <guimenu>Format</guimenu><guimenuitem>Page...</guimenuitem></menuchoice></para>
+<para>From the menubar.</para>
+<tip><para>You can also go straight to the "Format Page" options by double clicking on either of the rulers.</para></tip>
+<para>A dialog box will appear with 2 tabs, labled "Format and Borders" and "Header and Footer".</para>
+<para>The "Format and Borders" tab is for altering the paper size.</para>
+<screenshot><graphic fileref="pics/dtpfmtpg1" format="png" align="center"></graphic></screenshot>
+<para>First you will notice, that a preview box appears on the right half of this dialog.  This will <emphasis>approximate</emphasis> the final look of your document.  It is updated with each change, and should be used as a guide for your changes. </para>
+<para>On the left, the dialog first informs you what unit of measurement it is using.  This unit of measurement is the same unit of measurement you have set for your rulers. (In this example, we are using inches.)</para>
+<para>Below that, you can determine the paper format you will eventually print to.  Your choices are:</para>
+<itemizedlist>
+<listitem><para>DIN A3</para></listitem>
+<listitem><para>DIN A4</para></listitem>
+<listitem><para>DIN A5</para></listitem>
+<listitem><para>DIN B5</para></listitem>
+<listitem><para>US Letter</para></listitem>
+<listitem><para>US Legal</para></listitem>
+<listitem><para>US Exective</para></listitem>
+<listitem><para>Screen</para></listitem>
+<listitem><para>Custom</para></listitem>
+</itemizedlist>
+<para>All of these options (with the exception of Screen and Custom), refers to standard paper sizes.</para>
+<para>Screen is used to generate a document where each "page" has an <link linkend="defaspectratio">aspect ratio</link> (shape) which matches the aspect ratios of computer monitors.</para>
+<para>If you select the "Custom" paper size, two text entry boxes (labled "Width" and "Height") become active.  Using these two boxes you can now enter any size paper you need.</para>
+<para>Next to the paper format, you can select either <link linkend="defportrait">Portrait</link> or <link linkend="deflandscape">Landscape</link> layout for your document. (!!!!!!!!Does Landscape/Portrait mean anything with "Screen" or "custom"!!!!!!!!)</para>
+<para>Below the page format options, is the Page Borders Options, which consists of 4 entry boxes labled ("Right", "Left", "Top" and "Bottom"). These boxes are inactive and cannot be changed.</para>
+<para>Clicking on the "Header and Footer" tab changes the dialog options.</para>
+<screenshot><graphic fileref="pics/dtpfmtpg2" format="png" align="center"></graphic></screenshot>
+<para>This dialog can be broken into two major sections, with each section being divided in to smaller divisions.</para>
+<para>If you are not familiar with Headers and Footers yet, you should first read the section entitled <link linkend="Headfoot">Headers/Footers</link></para>
+<para><emphasis>Headers</emphasis></para>
+<para>This section lets you determine the placement of headers, and which pages have which headers on them.</para>
+<para>In the text box labled "Spacing between header and body", you can specify how much empty space should be placed between the bottom of the header, and the top of the main frame.</para>
+<para>You are also presented with three options.  You must choose one:</para>
+<itemizedlist>
+<listitem><para>Same header for all pages - If you select this option, all pages, even or odd, including the first page, will have the same headers. This is the default.</para></listitem>
+<listitem><para>Different header for first page - If you select this option, the first page will use a different header than the other pages.  After the first page, all pages have use the same header</para></listitem>
+<listitem><para>Different header for even and odd pages - If you select this option, the even pages will use one header, the odd pages use another header.  You can use this to ensure the page numbers are always on the outside of the page, or to list the title of the document on odd pages and the chapter number on the even pages.</para></listitem>
+</itemizedlist>
+<para><emphasis>Footers</emphasis></para>
+<para>This section lets you determine the placement of footers, and which pages have which footers on them.</para>
+<para>In the text box labled "Spacing between footer and body", you can specify how much empty space should be placed between the top of the footer, and the bottom of the main frame.</para>
+<para>You are also presented with three options.  You must choose one:</para>
+<itemizedlist>
+<listitem><para>Same footer for all pages - If you select this option, all pages, even or odd, including the first page, will have the same footer. This is the default.</para></listitem>
+<listitem><para>Different footer for first page - If you select this option, the first page will use a different footer than the other pages.  After the first page, all pages have use the same footer</para></listitem>
+<listitem><para>Different footer for even and odd pages - If you select this option, the even pages will use one footer, the odd pages use another footer.  </para></listitem>
+</itemizedlist>
+<para>When you are satisfied with the changes you are ready to make, click "OK".</para>
+<para>If you click "Cancel", all your changes will be ignored.</para>
+</sect2></sect1>
+<sect1 id="Frames"><title>Working with Frames</title>
+<para>Since KWord is a frames based wordprocessor, an understanding of Frames is necessary for all but the most simple of documents.</para>
+<para>This section is designed to give you a firm understanding of how to create, destroy and manipulate frames so KWord can provide you with the exact document you want.</para>
+<sect2 id="lFrameset"><title>Framesets</title>
+<para>Before we continue our discussion of Frames, its important that we define a couple terms now:</para>
+<variablelist>
+<varlistentry><term>Frame</term><listitem><para>A frame is a rectangular space on the page.  This space defines an area where text (or other data), can be placed.</para></listitem></varlistentry>
+<varlistentry><term>Frameset</term><listitem><para>A frameset is a group of frames.  Each frame in the framset has a position within the framset</para>
+<para>The position is determined when the frames are created.  The first frame created is Frame #1, the second is Frame #2, etc.</para>
+<para>All text flows from one frame to another <emphasis>within a frameset, and only within a frameset.</emphasis> Text flows from frame to frame within the frameset <emphasis>according to the position of each frame</emphasis></para>
+<para>As an example:  If we have a frameset that consists of three frames (#1, #2, and #3).</para>
+<para>As we type text into Frame #1, the text is shaped to the outline of Frame #1</para>
+<para>When the text will no longer fit within Frame #1, it is automatically continued into Frame #2.</para>
+</listitem></varlistentry></variablelist>
+<para>As you can see, text must (and does) move freely between frames within a framset.</para>
+</sect2>
+<sect2 id="lAddFrame"><title>Adding a Frame to a Document</title>
+<para>Adding a frame can be done one of three ways:</para>
+<itemizedlist>
+<listitem><para>By selecting <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Create Text Frame</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F6</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinegraphic fileref="pics/tfcreatebut" format="png" align="center"></inlinegraphic> on the toolbar.</para></listitem>
+</itemizedlist>
+<para>Whatever method you choose, KWord responds by changing the cursor from to a set of crosshairs.</para>
+<para>Using the mouse, place the cursor at one of the corners of your new text frame. (Any corner will work)</para>
+<para>Now click and hold with the left mouse button.</para>
+<para>Drag the mouse towards the opposite corner of the rectangle.  As you drag the mouse, you will see a box drawn.  This box represents the boundries of your new text frame.</para>
+<para>When you are satisfied with the size and shape of your new text box, release the mouse button.  </para>
+<para>A dialog box appears.</para>
+<screenshot><graphic fileref="pics/Tut15" format="png" align="center"></graphic></screenshot>
+<para>The purpose of this dialog box is two fold:</para>
+<orderedlist numeration="arabic">
+<listitem><para>Determine which frameset this new frame will belong to</para></listitem>
+<listitem><para>Set up text flow options.</para></listitem>
+</orderedlist>
+<para>The first tab ("Connect Text Frames") in this dialog box is used to determine which frameset this new text box belongs.</para>
+<para>Using the example given, you have just created a new frame in a document which currently has two framesets (called Frameset 1, and Frameset 2).</para>
+<para>You now have the option of either:</para>
+<orderedlist numeration="arabic">
+<listitem><para>appending this text box to one of the previously created framesets.</para>
+<para>To do this, simply select the frameset you want to connect this new text box two (either "Frameset 1", or "Frameset 2")</para>
+<para>When this text frame is created, the new text frame will become the last frame in the selected frameset.</para>
+<para>or</para></listitem>
+<listitem><para>You can create a new frameset.  This newly added frame will be the first (and currently only) frame in the frameset.</para>
+<para>If you want this to be a new frameset, you can enter a descriptive name for your new frameset.  (A name which will tell you what you might find in that frameset).  This name should be entered in the text box labled "Name of new Frameset".</para></listitem>
+</orderedlist>
+<para>The other tab ("Text Frame"), can be used to set some options for this frame.  For more information on these options, see the section entitled <link linkend="FormatFrame">Formatting Frames</link>.</para>
+<para>If you click "OK", the new frame will be created.</para>
+<para>If you click "Cancel", the new frame will not be created, and you will be returned to editing your document.</para>
+<note><para>KWord assumes you want to continue to add new text frames until you say otherwise.  </para>
+<para>In other words, when you have created your new text frame, you must now tell KWord you want to <link linkend="lresizeframe">resize a frame</link>, or insert text into the frame, etc...</para>
+<para>If you fail to change to another function, clicking with the mouse will create yet another text frame.</para></note>
+</sect2>
+<sect2 id="ldeleteframe"><title>Deleteing a Frame From a Document</title>
+<para>You may decide you no longer need a frame in your document.  You could leave it blank (so it would not be visible in the final output), but you should probably delete it to keep your document as simple as possible.</para>
+<para>By deleting a frame, you will also be deleteing from you document any data inside that frame.</para>
+<para>In order to delete a frame, you must be in "Frame Edit Mode".  To change to Frame Edit Mode, you can:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F5</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinegraphic fileref="pics/framemode" format="png" align="center"></inlinegraphic> on the toolbar.</para></listitem>
+</itemizedlist>
+<para>Once you are in frame edit mode, the cursor will change to an arrow.</para>
+<para>Place the arrow inside the frame you want to delete, and click once with the left mouse button.</para>
+<para>There is now 8 black squares on the edges of the frame.</para>
+<para>If this is the frame you want to delete, you can do so by:</para>
+<itemizedlist>
+<listitem><para>selecting <menuchoice> <guimenu>Edit</guimenu><guimenuitem>Delete Frame</guimenuitem></menuchoice> from the Menu bar</para><para>or</para></listitem>
+<listitem><para>While the cursor is inside the frame you want to delete, click once with the <emphasis>right</emphasis> mouse button.</para><para>A small menu will appear.  Select "Delete Frame".</para></listitem>
+</itemizedlist>
+<para>If you are trying to delete the last frame in a frameset, KWord will ask you if you want to delete the current text frame.  If you click "Yes", the frame, all frames connected to it, and the data within these frames (if there is any), will be deleted. If you click "No", the frame will not be deleted.</para>
+<para>If you are trying to delete a frame that is not the last frame in a frameset, KWord will not ask for a confirmation.  It will delete the current frame immediately, and move the data into the next frame in a frameset. No data will be deleted. </para>
+<warning><para>Deleteing the last frame in a framset will delete the entire frameset.  All data within that frameset will be lost.  Always use caution when deleting the last frame in a frameset.</para></warning>
+</sect2>
+<sect2 id="lmoveframe"><title>Moving an Existing Frame</title>
+<para>If you want to move a frame around on a page, you must be in Frame Edit Mode.  To change to Frame Edit Mode, you can:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F5</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinegraphic fileref="pics/framemode" format="png" align="center"></inlinegraphic> on the toolbar.</para></listitem>
+</itemizedlist>
+<para>Once you are in frame edit mode, the cursor will change to an arrow.</para>
+<para>Place the arrow inside the frame you want to move, and click once with the left mouse button.</para>
+<para>There are now 8 black squares on the edges of the frame.</para>
+<para>If this is the frame you need to move, place the cursor inside the frame.</para>
+<para>Move the cursor slightly in any direction.  The cursor will now change to four arrows arranged in a cross.</para>
+<para>Hold the left mouse button down, and drag the cursor in the direction you want to move the frame.</para>
+<para>You will see an outline of the frame as you move it.  When the outline is at the new location on the page, release the mouse button.</para>
+</sect2>
+<sect2 id="lresizeframe"><title>Resizing an Existing Frame</title>
+<para>If you want to resize a frame, you must be in Frame Edit Mode.  If you are not currently in frame edit mode, you can change to Frame Edit Mode, in one of three ways.:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F5</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinegraphic fileref="pics/framemode" format="png" align="center"></inlinegraphic> on the toolbar.</para></listitem>
+</itemizedlist>
+<para>Once you are in frame edit mode, the cursor will change to an arrow.</para>
+<para>Place the arrow inside the frame you want to move, and click once with the left mouse button. This selects this frame as the current frame.</para>
+<para>There are now 8 black squares on the edges of the frame. By moving these squares, you will be able to drag the frame border(s) to a new location.</para>
+<para>Each square will move a different combination of borders.</para>
+<screenshot><graphic fileref="pics/framers" format="png" align="center"></graphic></screenshot>
+<para>As an example:  To move the bottom border of a frame, place the mouse over the box at the six oclock position in the frame.  When the mouse is over the box, it will change to a double headed arrow.</para>
+<para>Now click with the left mouse button and hold the button down.  As you move the mouse up and down on the page, you will see that the frame changes shape to match your mouse movements. When you have the bottom edge of the frame where you want it, simply release the mouse button, and your changes will become permenant.</para>
+<para>If you need to resize the frame of a neighboring frame, you should click once inside that frame (to make it the current frame), and you can move its borders in the same fashion.</para>
+<note><para>If you are using a Wordprocessing Template, you cannot change the size of the primary frame by draging the edges of the frame.  If you want to resize this frame, you must do so by <link linkend="PageFormat">Changing the margins</link> </para></note>
+</sect2>
+<sect2 id="lconnectframe"><title>"Connecting"/"Unconnecting" Frames in a Frameset.</title>
+<para>This section of the Users Guide is devoted to controlling where (which text frame) text flows when the current frame is full.</para>
+<para>!!!!!!!!!!!This part of KWord is not currently stable enough to write about!!!!!!!!!!!!!!!!!</para>
+</sect2>
+<sect2 id="lhardbreak"><title>Hard Frame Breaks</title>
+<para>A hard frame break is a special formatting character.  It is invisible on the final printed output.</para>
+<para>The purpose of a hard frame break, is to force all the text that follows it into the next frame in the framset.</para>
+<para>If we have the following sentance:  "We have nothing to fear but fear itself"</para>
+<para>and we insert a Hard Frame Break, just before the word "but".</para>
+<para>We will end up with one frame containing "We have nothing to fear", and the next frame in the frameset begins with "but fear itself".</para>
+<para>To add a Hard Frame Break, you should first place the keyboard cursor where you want the break to be located in the document.</para>
+<para>A Hard Frame Break can be inserted one of two ways:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Insert</guimenu><guimenuitem>Hard Frame Break</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>Ctrl</keycap><keycap>Return</keycap></keycombo></para></listitem>
+</itemizedlist>
+<para>If you want to remove a Hard Frame Break, you simply delete it like you would any other character.  Since this is not a character that you can see, I recommend the following procedure to most easily delete the Hard Frame Break.</para>
+<para>First, I recommend turning on "View Formatting Characters" (Select <menuchoice> <guimenu>View</guimenu><guimenuitem>Formatting Characters</guimenuitem></menuchoice> from the Menu bar)</para>
+<para>This will let you see the charage returns, and tab stops in your document.</para>
+<para>Find the <emphasis>last</emphasis> carrage return <emphasis>before</emphasis> the break in your text.  Place the cursor in front of this carrage return.</para>
+<para>Now press the delete key.</para>
+</sect2>
+<sect2 id="ltextwrap"><title>Frames and Text Wrapping</title><para></para></sect2>
+</sect1>
+<sect1 id="FormatFrame"><title>Setting the Properties for a Frame/Formatting Frames</title>
+<para>For each frame in your document, you can determine how:</para>
+<itemizedlist>
+<listitem><para>How Kword handles full text frames</para></listitem>
+<listitem><para>How text wraps on overlapping frames</para></listitem>
+<listitem><para>You can determine the frames exact size</para></listitem>
+<listitem><para>You can establish margins within a frame.</para></listitem>
+</itemizedlist>
+<para>All of these settings can be determined in the "Frame Properties" dialog box.</para>
+<para>In order to adjust the properties of any frame, you must be in "Frame Edit Mode".</para>
+<para>If you are not currently in frame edit mode, you can change to Frame Edit Mode, in one of three ways.:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F5</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinegraphic fileref="pics/framemode" format="png" align="center"></inlinegraphic> on the toolbar.</para></listitem>
+</itemizedlist>
+<para>Once you are in frame edit mode, the cursor will change to an arrow.  Place this arrow inside the frame you want to modify, and click once with the left button. You have now designated that frame as the "current" frame.</para>
+<para>You can now edit the properties one of two ways:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Format</guimenu><guimenuitem>Frame/Frameset</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>Place the cursor inside the "current frame", and click once with the right mouse button.  A small menu will appear.  Select "Properties".</para></listitem>
+</itemizedlist>
+<para>The Properties dialog consists of one dialog box, with three index tabs labled "Frameset", "Text Frame", and "Geometry".</para>
+<screenshot><graphic fileref="pics/formframe1" format="png" align="center"></graphic></screenshot>
+<para>It is a common situation.  You define a frame, and begin to type.  There is too much text to fit within the current bounds of the frame.</para>
+<para>KWord has two solutions to this problem.  Using this dialog, you can determine which method it uses.</para>
+<para>If you choose "Create automatically a new frame", whenever a frameset becomes full, KWord automatically creates a new page. On this new page, it creates a new frame, of the same size and position.  It also sets the frame so that your text automatically flows into the new frame</para>
+<para>If you choose "Resize automatically last frame", whenever a frameset becomes full, KWord automatically extends the bottom border of the text frame to accomidate the new text.  It will continue to expand as new text is added.</para>
+<note><para>Remember this only applies to a full frameset.  If there is already another window for text to flow into, this will supersede any settings in this dialog box.</para></note>
+<para>To adjust how text flows around overlapping frames, click the tab labled "Text Frame".</para>
+<screenshot><graphic fileref="pics/formframe2" format="png" align="center"></graphic></screenshot>
+<para>When you overlay two text frames, and text from both frames is competing for the same space on the page, KWord can (at your option), make sure that text from two frames does not overlap. </para>
+<para>As you can see from the options in the dialog box, there are three possible choices.</para>
+<variablelist>
+<varlistentry><term>"Run through other frames"</term><listitem><para>By selecting this option, you are telling KWord to ignore all other frames when it displays the text in this frame.</para></listitem></varlistentry>
+<varlistentry><term>"Run around the Bounding Rectangle of other frames"</term><listitem><para>By selecting this option, you are telling KWord to wrap the text of this frame around other overlapping frames.</para></listitem></varlistentry>
+<varlistentry><term>"Don't run around other frames"</term><listitem><para>By selecting this option, you are telling KWord to not wrap any text around the edges of other frames, but instead, to skip down below the other frames before continuing to display text in this frame..</para></listitem></varlistentry>
+</variablelist>
+<para>You can also determine how close your frames appear by setting the "Runaround Gap" in the textbox provided.  Increasing the size of the runaround gap will create a white border between the text in the two text frames. </para>
+<tip><para>One common problem people have, when setting the text wrap features, is that they set both paragraphs to the same setting (Run around the bounding Rectangle of other frames).  When they do this, they end up with two paragraphs that look like this:</para>
+<screenshot><graphic fileref="pics/formframe4" format="png" align="center"></graphic></screenshot>
+<para>As you can see, both Frame 1 and Frame 2 are wrapping around each other.  This leaves a blank space where the two frames overlap.  You can eliminate this space, and produce a cleaner look by changing either Frame 1 or Frame 2 to "Run through other frames". </para></tip>
+<para>You can adjust the size, position and margins of your frame by clicking on the tab labled "Geometry"</para>
+<screenshot><graphic fileref="pics/formframe3" format="png" align="center"></graphic></screenshot>
+<para>This dialog box allows you to specify <emphasis>exactly</emphasis> where the frame goes and how large it is.</para>
+<para>You can locate your frame on the page by first entering the top and left measurements.  This determines where the top left corner of the frame will be.  All measurements are from the top left corner of the page.</para>
+<para>You can also determine the exact size of the frame by entering its height and width in the text boxes provided.  These two measurements are relative to the top left corner of the frame you specified above.</para>
+<para>You can also use this dialog box to specify margins for your frame.  The margins of the frame are similar to margins on a page. By entering a margin into the text boxes, you can have KWord automatically set aside a border of whitespace around the text in this frame.  This will ensure that the text will not be located too closely to other frames or margins.</para>
+<tip><para>It is important to understand the difference between setting the margins here, and setting the "Runaround Gap" (see above).  </para>
+<para>KWord only applies the Runaround Gap when two frames overlap.  If two frames are placed right next to each other, the runaround gap does not affect the final output.</para>
+<para>When you set a margin for a frame, however, the whitspace is set aside reguardless of what other frames may be overlapping.</para></tip>
+</sect1>
+<sect1 id="Formatpara"><title>Formatting paragraph</title>
+<para>This section will detail all the options available to format your paragraphs.</para>
+<para>Before you start forma</para>
+<para>The formatting paragraphs dialog consists of 5 tabbed sections labled "Indent and spacing", "Flows", "Borders", "Numbering", and "Tabulators"</para>
+<screenshot><graphic fileref="pics/fpara1" format="png" align="center"></graphic></screenshot>
+<para>This dialog box allows you to set the paragraph margins, the spacing between lines, and the spacing between paragraphs.</para>
+<para>The first section of this dialog box is labled "Indent", and consists of three parts:</para>
+<variablelist>
+<varlistentry><term>"Left"</term><listitem><para>You can indent all the lines of a paragraph by entering a value in this box. The first line is unaffected by this box.  If you want to alter the first line, you must specify that seperately.</para></listitem></varlistentry>
+<varlistentry><term>"Right"</term><listitem><para>!!!!Just blacked out!!!!!</para></listitem></varlistentry>
+<varlistentry><term>"First Line"</term><listitem><para>Any non-zero value entered in this text box, will shift the left margin of the first line.</para></listitem></varlistentry>
+</variablelist>
+<para>The next section is labled "Line Spacing".  It consists of two elements:</para>
+<variablelist>
+<varlistentry><term>Dropdown box</term><listitem><para>!!!!!!!!!!!!!!Blacked out!!!!!!!!!!!!!!!</para></listitem></varlistentry>
+<varlistentry><term>Text box</term><listitem><para>By entering a value in here, you can adjust the spacing between lines from the default.  If you enter a positive number, you will increase the spacing between lines.  If, on the other hand, you enter a negative number, you will decrease the spacing between lines.</para><note><para>Changes to this entry do NOT affect the line spaceing between lines of different paragraphs.</para></note></listitem></varlistentry>
+</variablelist>
+<para>The last section is labled "Paragraph Space".  It consists of two entries:</para>
+<variablelist>
+<varlistentry><term>"Before"</term><listitem><para>By entering a value in here, you can adjust the spacing before each paragraph from the default spacing.  If you enter a positive number, you will increase the spacing before a paragraph.  If, on the other hand, you enter a negative number, you will decrease the spacing before each paragraph.</para></listitem></varlistentry>
+<varlistentry><term>"After"</term><listitem><para>By entering a value in here, you can adjust the spacing after each paragraph from the default spacing.  If you enter a positive number, you will increase the spacing after a paragraph.  If, on the other hand, you enter a negative number, you will decrease the spacing after each paragraph.</para></listitem></varlistentry>
+</variablelist>
+<para>On the right of the dialog box, is a preview box, which will <emphasis>approximate</emphasis> the final layout of your document.</para>
+<para>The next section is labled "Flows".  This section determines how the text is placed <emphasis>within the line</emphasis>.  With other packages, you may have referred to flows as "Alighment", or "Justfication".</para>
+<screenshot><graphic fileref="pics/fpara2" format="png" align="center"></graphic></screenshot>
+<para>As you can see, there are only 4 choices.</para>
+<para>If you choose "Left", "Right" or "Center", the text will be moved on the line.</para>
+<para>If you choose "Block", KWord will increase the space <emphasis>between</emphasis> words, so that each line (with the exception of the last liine), reaches both the left and right margins.</para>
+<para>On the right of the dialog box, is a preview box, which will <emphasis>approximate</emphasis> the final layout of your document.</para>
+<para>The next section is labled "Borders".</para>
+<screenshot><graphic fileref="pics/fpara3" format="png" align="center"></graphic></screenshot>
+<para>You can tell KWord to surround (on some or all sides) a paragraph with a border.  This border can be solid or not, of any color and of any size.  You use this dialog panel to adjust the borders.</para>
+<para>To define some borders for a paragraph, you first determine how the borders should appear on the document.  Then you select which paragraph borders should be used.  You can mix and match styles, weights and colors of paragraph borders for maximum flexibility in you document.</para>
+<para><emphasis>Determine the "Look" of the border.</emphasis></para>
+<variablelist>
+<varlistentry><term>"Style"</term><listitem><para>You can use this dropdown box to select the overall type of the new border. </para><para>Your choices are: Solid Line, Dash Line, Dot line, Dash Dot line, Dash Dot Dot line</para></listitem></varlistentry>
+<varlistentry><term>"Width"</term><listitem><para>This will determine how wide the resulting border will be.  It is measured in points.</para>  </listitem></varlistentry>
+<varlistentry><term>"Color"</term><listitem><para>Clicking on the color bar will allow you to <link linkend="SelColor">select a color using a new dialog box</link></para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Selecting the borders</emphasis></para>
+<informaltable frame=none>
+<tgroup cols=2 align=left>
+<tbody>
+<row><entry><inlinegraphic fileref="pics/borbutL" format="png" align="right"></inlinegraphic></entry><entry valign=middle>Select/Unselect Left Border.  Clicking this button will apply the current options to the left paragraph border.  Clicking a second time will remove the left paragraph border.</entry></row>
+<row><entry><inlinegraphic fileref="pics/borbutR" format="png" align="right"></inlinegraphic></entry><entry valign=middle>Select/Unselect Right Border.  Clicking this button will apply the current options to the right paragraph border.  Clicking a second time will remove the right paragraph border.</entry></row>
+<row><entry><inlinegraphic fileref="pics/borbutT" format="png" align="right"></inlinegraphic></entry><entry valign=middle>Select/Unselect Top Border.  Clicking this button will apply the current options to the top paragraph border.  Clicking a second time will remove the top paragraph border.</entry></row>
+<row><entry><inlinegraphic fileref="pics/borbutB" format="png" align="right"></inlinegraphic></entry><entry valign=middle>Select/Unselect Bottom Border.  Clicking this button will apply the current options to the bottom paragraph border.  Clicking a second time will remove the bottom paragraph border.</entry></row>
+</tbody></tgroup></informaltable>
+<para>The "Preview" window will show you how your paragraph borders will look.</para>
+
+<para>!!!!!!!!!!Still needs work before writing!!!!!!!!!</para>
+<screenshot><graphic fileref="pics/fpara5" format="png" align="center"></graphic></screenshot>
+<para>This dialog is used to adjust the tab stops.  For more details, see <link linkend="TabStops">Using Tab Stops</link>.</para>
+</sect1>
+<sect1 id="TabStops"><title>Using Tab Stops</title>
+<para>Tab stops are a holdover from the days of typewriters.  They allow you to align text into columns quickly and easily.</para>
+<para>When a tab stop is in place, you can immediatly jump to that horizontal position on the page by pressing the "Tab" key.  Tab stops are most commonly used to allign columns in a table, or to automatically indent paragraphs.</para>
+<para>Tab stops are part of the properties of a paragraph.  Each paragraph keeps track of its own set of tab stops.  You can view the tab stops of a particular paragraph by placing the mouse cursor within a paragraph, clicking once, and checking the top ruler.  The tab stops are marked as symbols in black. </para>
+<para>KWord recognises 4 types of tab stops.  Each of these types has a corresponding symbol to help you identify the type in the ruler.  </para>
+<informaltable frame=none><tgroup cols=4 align=left>
+<colspec colname=c1>
+<colspec colname=c2>
+<colspec colname=c3>
+<colspec colname=c4>
+<spanspec spanname=hspan namest=c3 nameend=c4 align=left>
+<tbody>
+<row><entry align=center>Type</entry><entry align=center>Symbol</entry><entry align=center>Description</entry></row>
+<row><entry>Right Tab Stop</entry><entry><graphic fileref="pics/rtab" format="png" align="center"></graphic></entry>
+<entry spanname=hspan>With a right tab stop, the right edge of the next set of words is aligned at the tab stop. </entry></row>
+<row><entry></entry></row>
+<row><entry></entry><entry></entry><entry align=right><emphasis>Example:</emphasis></entry><entry align=left><graphic fileref="pics/rtab2" format="png" align="center"></graphic></entry></row>
+<row><entry></entry></row>
+<row><entry>Center Tab Stop</entry><entry><graphic fileref="pics/ctab" format="png" align="center"></graphic></entry>
+<entry spanname=hspan>With a right tab stop, the text is centered at the tab stop. </entry></row>
+<row><entry></entry></row>
+<row><entry></entry><entry></entry><entry align=right><emphasis>Example:</emphasis></entry><entry align=left><graphic fileref="pics/ctab2" format="png" align="center"></graphic></entry></row>
+<row><entry></entry></row>
+<row><entry>Left Tab Stop</entry><entry><graphic fileref="pics/ltab" format="png" align="center"></graphic></entry>
+<entry spanname=hspan>With a left tab stop, the left edge of the next set of words is aligned at the tab stop. </entry></row>
+<row><entry></entry></row>
+<row><entry></entry><entry></entry><entry align=right><emphasis>Example:</emphasis></entry><entry align=left><graphic fileref="pics/ltab2" format="png" align="center"></graphic></entry></row>
+<row><entry></entry></row>
+<row><entry>Decimal Tab Stop</entry><entry><graphic fileref="pics/dtab" format="png" align="center"></graphic></entry>
+<entry spanname=hspan>With a decimal tab stop, the decimal points of the text are aligned at the tab stop. </entry></row>
+<row><entry></entry></row>
+<row><entry></entry><entry></entry><entry align=right><emphasis>Example:</emphasis></entry><entry align=left><graphic fileref="pics/dtab2" format="png" align="center"></graphic></entry></row>
+</tbody></tgroup></informaltable>
+<sect2 id="TabStopsetting"><title>Setting Tab Stops</title>
+<para>Tab stops can be set one of two ways:</para>
+<itemizedlist>
+<listitem><para><link linkend="TabStopsettingr">Using the rulers of KWord</link></para></listitem>
+<listitem><para><link linkend="TabStopsettingdb">Using a specialized dialog panel.</link></para></listitem>
+</itemizedlist>
+<sect3 id="TabStopsettingr"><title>Using the Ruler</title>
+<para>You can use the top ruler on KWord to interactively insert tab stops.  </para>
+<para>First, you should select the type of tab stop you want to use.</para>
+<para>Place the mouse cursor over the current tab character (located directly to the left of the top ruler).  Click once with the right button of the mouse.  A small submenu will appear.  You can select the tab stop you want from the sub menu.</para>
+<tip><para>You can also use the left mouse button to cycle through the different types of tab stops.  </para>
+<para>Click once on the current tab character, and the tab stop changes from "Left Tab Stop", to "Center Tab Stop".  If you continue to click with the left mouse button, you will change to "Right Tab Stop", then to "Decimal Tab Stop", then back to "Left Tab Stop". </para></tip>
+<para>Once you have the correct type of tab stop, you can simply place the mouse cursor on the top ruler bar, and click once with the left mouse button.  This will place a tab stop at that position.</para>
+</sect3>
+<sect3 id="TabStopsettingdb"><title>Using the Dialog Box</title>
+<para>The fastest way to get to the tab stop dialog panel, is to select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice> from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
+<para>Click on the tab labled "Tabulators"</para>
+<screenshot><graphic fileref="pics/fpara5" format="png" align="center"></graphic></screenshot>
+<para>You can now add tab stops by:</para>
+<orderedlist numeration="arabic">
+<listitem><para>Type the horizontal location of the tab stop in the space provided.  The units are listed above the text box.</para></listitem>
+<listitem><para>Select the type of tab stop from the list on the right.</para></listitem>
+<listitem><para>Click Add.</para></listitem>
+</orderedlist>
+<para>When you are done adding tab stops, you can click "OK" to finish.</para>
+</sect3></sect2>
+<sect2 id="TabStopmoving"><title>Moving Tab Stops</title>
+<para>Tab stops can be moved one of two ways:</para>
+<itemizedlist>
+<listitem><para><link linkend="TabStopmover">Using the rulers of KWord</link></para></listitem>
+<listitem><para><link linkend="TabStopmovedb">Using a specialized dialog panel.</link></para></listitem>
+</itemizedlist>
+<sect3 id="TabStopmover"><title>Using the Ruler</title>
+<orderedlist numeration="arabic">
+<listitem><para>To move a tab stop with the ruler, place the mouse over the desired tab stop.  The mouse cursor will change to a double arrow.</para></listitem>
+<listitem><para>Click and hold down the right button on the mouse.  Drag the tab stop to its new location</para></listitem>
+<listitem><para>When the tab stop is where you want it, release the mouse button.</para></listitem>
+</orderedlist>
+</sect3>
+<sect3 id="TabStopmovedb"><title>Using the Dialog Box</title>
+<para>The fastest way to get to the tab stop dialog panel, is to select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice> from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
+<para>Click on the tab labled "Tabulators"</para>
+<screenshot><graphic fileref="pics/fpara5" format="png" align="center"></graphic></screenshot>
+<para>You can now move tab stops by: !!!!!!!!!This is assumed, not working when written!!!!!!!!!!!</para>
+<orderedlist numeration="arabic">
+<listitem><para>Click on the tab stop you want moved.  The list of all tab stops is in the box on the left side of the dialog panel</para></listitem>
+<listitem><para>Click "Modify".</para></listitem>
+<listitem><para>Edit the horizontal location of the tab stop in the space provided.  The units are listed above the text box.</para></listitem>
+<listitem><para>If you need to make changes, select the type of tab stop from the list on the right.</para></listitem>
+<listitem><para>Click "OK".</para></listitem>
+</orderedlist></sect3></sect2>
+<sect2 id="TabStopremove"><title>Removing Tab Stops</title><para>Tab stops can be removed one of two ways:</para>
+<itemizedlist>
+<listitem><para><link linkend="TabStopdelr">Using the rulers of KWord</link></para></listitem>
+<listitem><para><link linkend="TabStopdeldb">Using a specialized dialog panel.</link></para></listitem>
+</itemizedlist>
+<sect3 id="TabStopdelr"><title>Using the Ruler</title>
+<orderedlist numeration="arabic">
+<listitem><para>To delete a tab stop with the ruler, place the mouse over the desired tab stop.  The mouse cursor will change to a double arrow.</para></listitem>
+<listitem><para>Click and hold down the right button on the mouse. Drag the tab stop off the edge of the document.</para></listitem>
+<listitem><para>Release the mouse button.</para></listitem>
+</orderedlist></sect3>
+<sect3 id="TabStopdeldb"><title>Using the Dialog Box</title>
+<para>The fastest way to get to the tab stop dialog panel, is to select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice> from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
+<para>Click on the tab labled "Tabulators"</para>
+<screenshot><graphic fileref="pics/fpara5" format="png" align="center"></graphic></screenshot>
+<para>You can now delete tab stops by: !!!!!!!!!This is assumed, not working when written!!!!!!!!!!!</para>
+<orderedlist numeration="arabic">
+<listitem><para>Click on the tab stop you want moved.  The list of all tab stops is in the box on the left side of the dialog panel</para></listitem>
+<listitem><para>Click "Delete".</para></listitem>
+</orderedlist>
+<para>When you are done adding tab stops, you can click "OK" to finish.</para>
+</sect3></sect2></sect1>
+<sect1 id="FormatChar"><title>Formatting Characters</title>
+<para></para>
+
+
+
+
+
+
+
+</sect1>
 <sect1 id="Styles"><title>Styles</title><para></para></sect1>
-<sect1 id="Columns"><title>Columns</title><para></para></sect1>
+<sect1 id="Columns"><title>Columns</title>
+<para></para>
+<screenshot><graphic fileref="pics/wpfmtpg2" format="png" align="center"></graphic></screenshot>
+</sect1>
 <sect1 id="Tables"><title>Tables</title><para></para></sect1>
 <sect1 id="HeadFoot"><title>Headers/Footers</title><para></para></sect1>
 <sect1 id="TempCr"><title>Creating Templates/Saving a document as a template</title><para></para></sect1>
+
 </chapter>    
+<!-- **************************************************************************************************** -->   
 <chapter id="Guides4"><title>Detailed Guides: More than just text</title>
 <sect1 id="InsGraphics"><title>Insert Graphics</title><para></para></sect1>
 <sect1 id="TOC"><title>Insert Table of Contents</title><para></para></sect1>
@@ -811,6 +1240,15 @@ This is an excellent choice for every day correspondance, or general word proces
 <sect1 id="InsKspread"><title>Insert Kspread Table</title><para></para></sect1>
 <sect1 id="Formulas"><title>Formulas</title><para></para></sect1>
 </chapter>     
+<!-- **************************************************************************************************** -->   
+<chapter id="quickdirty"><title>How do I...</title><para></para>
+<sect1 id="qd1"><title>How do I get the pages numbers on the outsides of the page (like a novel)?</title><para></para></sect1>
+<sect1 id="qd2"><title>How do I get the chapter name on the top of each page?</title><para></para></sect1>
+<sect1 id="qd3"><title>How do I create a pdf file to post on the web?</title><para></para></sect1>
+
+</chapter>
+<!-- **************************************************************************************************** -->   
+
 <chapter id="menuitems"><title>The Menu Items/Tool Bars</title>
 <sect1 id="menuintro"><title>Introduction to Menu Bars and Tool Bars</title>
 <para>The key to getting the most out of KWord, is found in the menu bars and the toolbars.</para>
@@ -818,8 +1256,6 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>The tool bars are also organized into groups.  Each toolbar consists of a set of buttons.  Each button performs a specific function.  The toolbars are designed to act as shortcuts for more commonly used functions.</para>
 <para>The first part of this section of the manual discusses the manipulation of Kword's toolbars to suit your needs.</para>
 <para>The second part of this section, takes a detailed look at each menu bar function, and each tool bar button, and provides you with a brief summary of its action.  Most of these menu bar functions and tool bar buttons also provide you with a link to more detailed information.</para>
-
-
 </sect1>
 <sect1 id="Toolbars"><title>Hiding, Changing, and Moving Tool Bars</title>
 <para>KWord offers the user great flexibility when it comes to toolbars.  This first section will show you some of the many options you have for relocating, reformatting and removing toolbars from your desktop.</para>
@@ -1606,59 +2042,66 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 
 </tbody></tgroup>
 </informaltable>
-</sect1></chapter>   
+</sect1>
+<sect1 id="SelColor"><title>Selecting Colors from a Color dialog</title><para></para></sect1>
+</chapter>   
 <chapter id="Options"><title>Kword Options</title>    <para></para>                              
 </chapter>
+<!-- **************************************************************************************************** -->   
 <chapter id="QandA"><title>Questions and Answers</title>
      <sect1 id="FAQ"><title>FAQ</title><para>When I try to load a document, it does not appear in my dialog box, but I know I saved it there (file extensions)</para></sect1>
      <sect1 id="Updates"><title>Where can I get updates       </title><para></para></sect1>          
      <sect1 id="Themes"><title>How do themes affect Kword</title><para></para></sect1>
      <sect1 id="DragDrop"><title>Drag and Drop with KWord</title><para></para></sect1>
 </chapter>
+<!-- **************************************************************************************************** -->   
 <chapter id="Appendix"><title>Appendix</title>
 <sect1 id="Glossery"><title>Glossary</title><para></para>
 <variablelist>
-<varlistentry><term>ASCII</term><listitem><para>Stands for STUFF.  KWord can read and write documents in ASCII format.</para></listitem></varlistentry>
-<varlistentry><term>Binary code</term><listitem><para>Binary code is the actual instructioins for the computer.  </para></listitem></varlistentry>
-<varlistentry><term>Bitmap Image</term><listitem><para>Bit mapped images are composed of individual dots.  The filenames of pictures often end in jpeg, png or gif.</para></listitem></varlistentry>
-<varlistentry><term>Cells</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Clipart</term><listitem><para>Clip art refers to vector based graphics.   </para></listitem></varlistentry>
-<varlistentry><term>Clipboard</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Compiling</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Compiling</term><listitem><para>When you compile a program, you are converting it from a source file (which is easily edited by a programmer) into a binary file (which the computer uses).  If you are planning on compiling KWord, please try to find a binary verison of KOffice first.  Compiling programs is not for the beginner.</para></listitem></varlistentry>
-<varlistentry><term>Custom Variables</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>DEB</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>DTP</term><listitem><para>Stands for DeskTop Publishing.</para></listitem></varlistentry>
-<varlistentry><term>Dialog Box</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>FAQ</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>FTP</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Filter</term><listitem><para>A filter takes a document file from one program (Microsoft Word), and "filters" out the text and formatting information and converts that information into a KWord document.  Filters are used to read and write files for other programs.</para></listitem></varlistentry>
-<varlistentry><term>Footer</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Frame Edit Mode</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Frame</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>HTML</term><listitem><para>Stands for HyperText Markup Language.  KWord can read and write HTML documents for publishing on the World Wide Web.</para></listitem></varlistentry>
-<varlistentry><term>Hard Frame Break</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Header</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>KDE 2.0</term><listitem><para>Stands for the K Desktop Environment version 2.0 which is required for KWord to operate.  The KDesktop Environment is user interface which allows users to manipulate files and operate programs graphically.  For more information, please visit <ulink url="http://www.kde.org">www.kde.org</ulink>  </para></listitem></varlistentry>
-<varlistentry><term>Key Binding</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Menubar</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Picture</term><listitem><para>Yes, I know what your thinking--Who doesn't know what a picture is?  When we speak of pictures with KWord, however, the term has a very specific meaning and should not be confused with clip-art.  Pictures are bit-mapped images. See Clipart for more information..</para></listitem></varlistentry>
-<varlistentry><term>RPM</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Scaling Pictures</term><listitem><para>Whenever you change the size of a graphics image, you are scaling that image.</para></listitem></varlistentry>
-<varlistentry><term>Serial Letters</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Source Code</term><listitem><para>Source code is the human readable version of an application (such as KWord).  Computers cannot use source code directly.  Instead, source code must be compiled into binary code, before use.</para></listitem></varlistentry>
-<varlistentry><term>TAR</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>TGZ</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Text Edit Mode</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Toolbar</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Vector Image</term><listitem><para>A vector based graphic is described in terms of lines and shapes, not in terms of dots.  Because of this, Clipart usually scales better than bit-mapped images. </para></listitem></varlistentry>
-<varlistentry><term>Views</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>WYSIWYG</term><listitem><para>Stands for What You See Is What You Get.  KWord is a WYSIWYG word processor, which means that the document will appear the same on the screen while you are editing it, as it will on the printed page.</para></listitem></varlistentry>
-<varlistentry><term>X Windows system</term><listitem><para>The X Windows System (also known simply as 'X') is required for KOffice to operate.  More information on X windows for linux can be found at <ulink url="">STUFF</ulink></para></listitem></varlistentry>
-<varlistentry><term>Frameset</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Minimize</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>Maximize</term><listitem><para></para></listitem></varlistentry>
-<varlistentry><term>File Mask</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defascii">ASCII</term><listitem><para>Stands for STUFF.  KWord can read and write documents in ASCII format.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="defaspectratio">Aspect Ratio</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defbinarycode">Binary code</term><listitem><para>Binary code is the actual instructioins for the computer.  </para></listitem></varlistentry>
+<varlistentry><term><anchor id="defbitmap">Bitmap Image</term><listitem><para>Bit mapped images are composed of individual dots.  The filenames of pictures often end in jpeg, png or gif.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="defcell">Cells</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defclipart">Clipart</term><listitem><para>Clip art refers to vector based graphics.   </para></listitem></varlistentry>
+<varlistentry><term><anchor id="defclipboard">Clipboard</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defcompiling">Compiling</term><listitem><para>When you compile a program, you are converting it from a source file (which is easily edited by a programmer) into a binary file (which the computer uses).  If you are planning on compiling KWord, please try to find a binary verison of KOffice first.  Compiling programs is not for the beginner.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="defcustomvariables">Custom Variables</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defdeb">DEB</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defdialogbox">Dialog Box</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defdtp">DTP</term><listitem><para>Stands for DeskTop Publishing.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="deffaq">FAQ</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="deffilemask">File Mask</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="deffilter">Filter</term><listitem><para>A filter takes a document file from one program (Microsoft Word), and "filters" out the text and formatting information and converts that information into a KWord document.  Filters are used to read and write files for other programs.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="deffooter">Footer</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defframe">Frame</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defframeset">Frameset</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="deffrmaeeditmode">Frame Edit Mode</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defftp">FTP</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defhardframebreak">Hard Frame Break</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defheader">Header</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defhtml">HTML</term><listitem><para>Stands for HyperText Markup Language.  KWord can read and write HTML documents for publishing on the World Wide Web.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="defkde2">KDE 2.0</term><listitem><para>Stands for the K Desktop Environment version 2.0 which is required for KWord to operate.  The KDesktop Environment is user interface which allows users to manipulate files and operate programs graphically.  For more information, please visit <ulink url="http://www.kde.org">www.kde.org</ulink>  </para></listitem></varlistentry>
+<varlistentry><term><anchor id="defkeybinding">Key Binding</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="deflandscape">Landscape</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defmaximize">Maximize</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defmenubar">Menubar</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defminimize">Minimize</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defpicture">Picture</term><listitem><para>Yes, I know what your thinking--Who doesn't know what a picture is?  When we speak of pictures with KWord, however, the term has a very specific meaning and should not be confused with clip-art.  Pictures are bit-mapped images. See Clipart for more information..</para></listitem></varlistentry>
+<varlistentry><term><anchor id="defportrait">Portrait</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defrpm">RPM</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defscalingpicture">Scaling Pictures</term><listitem><para>Whenever you change the size of a graphics image, you are scaling that image.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="defserialletter">Serial Letters</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defsourcecode">Source Code</term><listitem><para>Source code is the human readable version of an application (such as KWord).  Computers cannot use source code directly.  Instead, source code must be compiled into binary code, before use.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="deftar">TAR</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="deftexteditmode">Text Edit Mode</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="deftgz">TGZ</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="deftoolbar">Toolbar</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defvectorimage">Vector Image</term><listitem><para>A vector based graphic is described in terms of lines and shapes, not in terms of dots.  Because of this, Clipart usually scales better than bit-mapped images. </para></listitem></varlistentry>
+<varlistentry><term><anchor id="defviews">Views</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defwysiwyg">WYSIWYG</term><listitem><para>Stands for What You See Is What You Get.  KWord is a WYSIWYG word processor, which means that the document will appear the same on the screen while you are editing it, as it will on the printed page.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="defx">X Windows system</term><listitem><para>The X Windows System (also known simply as 'X') is required for KOffice to operate.  More information on X windows for linux can be found at <ulink url="">STUFF</ulink></para></listitem></varlistentry>
+
 </variablelist>
 </sect1>
 <sect1 id="Filters"><title>Import/Export Filters</title><para></para>
@@ -1666,11 +2109,9 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <sect2 id="FilterHTML"><title>HTML Filter</title><para></para></sect2> 
 <sect2 id="FilterWord97"><title>Microsoft Word 97 Filter</title><para></para></sect2>    
 </sect1>
+<sect1 id="kwordrc"><title>kword.rc:</title><para></para></sect1>
 <sect1 id="Keys"><title>Key Bindings Summary</title><para>
-
-<table>
-<title>Key Bindings for KWord</title>
-<tgroup cols="2">
+<table><title>Key Bindings for KWord</title><tgroup cols="2">
 <thead><row><entry>Command</entry><entry>Key Combination</entry></row></thead>
 <tbody>
 <row><entry align=center><link linkend="MenuNew">Start New Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo></entry></row>
@@ -1706,12 +2147,9 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <row><entry align=center>Selects all characters from the start of the selection, to the character directly down one line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Down Arrow</keycap></keycombo></entry></row>
 <row><entry align=center>Selects all characters from the start of the selection, to the beginning of the line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Home</keycap></keycombo></entry></row>
 <row><entry align=center>Selects all characters from the start of the selection, to the end of the line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>End</keycap></keycombo></entry></row>
-
-</tbody>
-</tgroup>
-</table>
-</para></sect1>  
+</tbody></tgroup></table></para></sect1>  
 </chapter>     
+<!-- **************************************************************************************************** -->   
 <chapter id="credits"><title>Credits and License</title>
 <para><application>KWord</application></para>
 <para>Program copyright 1998-2000 Reginald Stadlbauer <email>reggie@kde.org</email></para>
