@@ -662,6 +662,10 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                     if ( txt.isEmpty() && lastParag->length() == 0 )
                         txt = ' ';
                     if ( !txt.isEmpty() ) {
+                        if ( !txt[txt.length()-1].isSpace() ) {
+                            kdWarning() << "Found a TEXT element which doesn't end with a trailing space, adding one." << endl;
+                            txt+=' ';
+                        }
                         lastParag->append( txt );
                         lastParag->setFormat( i, txt.length(), fm, TRUE, KTextEditFormat::Format );
                         i += txt.length();

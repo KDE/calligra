@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="6">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="7">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -75,7 +75,6 @@
   <Separator/>
   <Action name="text_con2hei"/>
   <Action name="text_obj2cont"/>
-  <Separator/>
   <Action name="text_inspgnum"/>
  </Menu>
  <Menu name="Extra"><text>E&amp;xtra</text>
