@@ -1,4 +1,4 @@
-SUBDIRS = People Buildings Transport Arrows
+SUBDIRS = People Buildings Transport Arrows NassiShneiderman
 
 miscdir = $(kde_datadir)/kivio/stencils/Miscellaneous
 
