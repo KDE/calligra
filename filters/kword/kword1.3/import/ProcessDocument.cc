@@ -62,7 +62,9 @@ void ProcessTextTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 
     *tagText = myNode.toElement().text(); // Get the text, also from a CDATA section
 
-    AllowNoAttributes (myNode);
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList.append ( TagProcessing ( "xml:space" ) );
+    ProcessSubtags (myNode, tagProcessingList, leader);
 
     AllowNoSubtags (myNode, leader);
 }
