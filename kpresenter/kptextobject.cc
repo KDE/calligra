@@ -637,7 +637,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem )
                 else if(tmpAlign==2)
                     lastParag->setAlign(Qt::AlignRight);
                 else if(tmpAlign==4)
-                    lastParag->setAlign(Qt::AlignCenter);
+                    lastParag->setAlign(Qt::AlignHCenter);
                 else if(tmpAlign==8)
                     lastParag->setAlign(Qt::AlignJustify);
                 else
@@ -2272,7 +2272,7 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
     case Qt::AlignRight:
         tmpAlign=2;
         break;
-    case Qt::AlignCenter:
+    case Qt::AlignHCenter:
         tmpAlign=4;
         break;
     case Qt::AlignJustify:

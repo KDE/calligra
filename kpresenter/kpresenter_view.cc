@@ -1773,7 +1773,7 @@ void KPresenterView::textAlignCenter()
 {
     if ( actionTextAlignCenter->isChecked() )
     {
-        tbAlign = Qt::AlignCenter;
+        tbAlign = Qt::AlignHCenter;
         m_canvas->setTextAlign(tbAlign);
     }
     else
