@@ -144,8 +144,9 @@ Changes after KPresenter 1.2
 - Add new lineSpacing type :"At least"/"exactly"/"Multiple"
 - Use new kospell API
 - Allow to copy/paste image/embedded object from different kpresenter app, thanks to David to implement koStoreDrag
-- Now right button gives spell check result
+- Access to spellcheck result via context menu
 - Transition effect dialog (with preview)
 - Better loading of background pictures (especially for remote files)
 - Web presentation: better HTML generation, usability improvement of the wizard
 - Display an "End of presentation"-slide at end of presentation
+- Ability to go with a per-slide default when inserting a new one (wishlist #22629)
