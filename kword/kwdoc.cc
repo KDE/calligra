@@ -432,6 +432,8 @@ void KWDocument::initConfig()
       setShowScrollBar( config->readBoolEntry( "ShowScrollBar", true ) );
       if ( isEmbedded() )
           m_bShowDocStruct = false; // off by default for embedded docs, but still toggleable
+      m_pgUpDownMovesCaret = config->readBoolEntry( "PgUpDownMovesCaret", false );
+
   }
   else
       m_zoom = 100;
