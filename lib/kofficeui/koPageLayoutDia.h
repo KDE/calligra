@@ -1,18 +1,18 @@
-/******************************************************************/
-/* KOffice Library - (c) by Reginald Stadlbauer 1998              */
-/* Version: 1.0                                                   */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* License: GNU GPL                                               */
-/******************************************************************/
-/* Module: Page Layout Dialog (header)                            */
-/******************************************************************/
+/*
+   KOffice Library - (c) by Reginald Stadlbauer 1998
+   Version: 1.0
+   Author: Reginald Stadlbauer
+   E-Mail: reggie@kde.org
+   Homepage: http://boch35.kfunigraz.ac.at/~rs
+   needs c++ library Qt (http://www.troll.no)
+   written for KDE (http://www.kde.org)
+   License: GNU GPL
 
-#ifndef KOPGLAYOUTDIA_H
-#define KOPGLAYOUTDIA_H
+   Module: Page Layout Dialog (header)
+*/
+
+#ifndef __KOPGLAYOUTDIA_H__
+#define __KOPGLAYOUTDIA_H__
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -80,10 +80,31 @@ const int KW_HEADER_AND_FOOTER = 16;
 const int DISABLE_UNIT = 32;
 const int USE_NEW_STUFF = 64;
 
-enum KoFormat {PG_DIN_A3 = 0,PG_DIN_A4 = 1,PG_DIN_A5 = 2,PG_US_LETTER = 3,PG_US_LEGAL = 4,PG_SCREEN = 5,PG_CUSTOM = 6,PG_DIN_B5 = 7,PG_US_EXECUTIVE = 8};
-enum KoOrientation {PG_PORTRAIT = 0,PG_LANDSCAPE = 1};
-enum KoUnit {PG_MM = 0,PG_PT = 1,PG_INCH = 2};
-enum KoHFType {HF_SAME = 0,HF_FIRST_DIFF = 2,HF_EO_DIFF = 3};
+enum KoFormat {
+  PG_DIN_A3 = 0,
+  PG_DIN_A4 = 1,
+  PG_DIN_A5 = 2,
+  PG_US_LETTER = 3,
+  PG_US_LEGAL = 4,
+  PG_SCREEN = 5,
+  PG_CUSTOM = 6,
+  PG_DIN_B5 = 7,
+  PG_US_EXECUTIVE = 8
+};
+enum KoOrientation {
+  PG_PORTRAIT = 0,
+  PG_LANDSCAPE = 1
+};
+enum KoUnit {
+  PG_MM = 0,
+  PG_PT = 1,
+  PG_INCH = 2
+};
+enum KoHFType {
+  HF_SAME = 0,
+  HF_FIRST_DIFF = 2,
+  HF_EO_DIFF = 3
+};
 
 // structure for page layout
 struct KoPageLayout
@@ -150,9 +171,9 @@ struct KoKWHeaderFooter
   float inchHeaderBodySpacing,inchFooterBodySpacing;
 };
 
-/******************************************************************/
-/* class KoPagePreview                                            */
-/******************************************************************/
+/**
+ *  KoPagePreview
+ */
 
 class KoPagePreview : public QGroupBox
 {
@@ -160,13 +181,20 @@ class KoPagePreview : public QGroupBox
 
 public:
 
-  // constructor - destructor
-  KoPagePreview(QWidget*,const char*,KoPageLayout);
+  /**
+   *  constructor
+   */
+  KoPagePreview( QWidget*, const char*, KoPageLayout );
+  /**
+   *  destructor
+   */
   ~KoPagePreview();
 
-  // set page layout
-  void setPageLayout(KoPageLayout);
-  void setPageColumns(KoColumns);
+  /**
+   *  set page layout
+   */
+  void setPageLayout( KoPageLayout );
+  void setPageColumns( KoColumns );
 
 protected:
 
@@ -179,16 +207,14 @@ protected:
 
 };
 
-/******************************************************************/
-/* class KoPageLayoutDia                                          */
-/******************************************************************/
-
+/**
+ *  KoPageLayoutDia
+ */
 class KoPageLayoutDia : public QTabDialog
 {
   Q_OBJECT
 
 public:
-
   // constructor - destructor
   KoPageLayoutDia(QWidget*,const char*,KoPageLayout,KoHeadFoot,int);
   KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _layout,KoHeadFoot _hf,
@@ -209,7 +235,6 @@ public:
   KoKWHeaderFooter getKWHeaderFooter();
 
 protected:
-
   // setup tabs
   void setupTab1();
   void setValuesTab1();
@@ -250,7 +275,6 @@ protected:
   int flags;
 
 private slots:
-
   // take changes
   void Ok() {}
 
@@ -273,7 +297,5 @@ private slots:
   void nSpaceChanged(const QString &);
 
 };
-#endif //KOPGLAYOUTDIA_H
 
-
-
+#endif

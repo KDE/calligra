@@ -1,15 +1,15 @@
-/******************************************************************/
-/* KOffice Library - (c) by Reginald Stadlbauer 1998              */
-/* Version: 1.0                                                   */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* License: GNU GPL                                               */
-/******************************************************************/
-/* Module: About Dialog (header)                                  */
-/******************************************************************/
+/*
+   KOffice Library - (c) by Reginald Stadlbauer 1998              
+   Version: 1.0                                                   
+   Author: Reginald Stadlbauer                                    
+   E-Mail: reggie@kde.org                                         
+   Homepage: http://boch35.kfunigraz.ac.at/~rs                    
+   needs c++ library Qt (http://www.troll.no)                     
+   written for KDE (http://www.kde.org)                           
+   License: GNU GPL                                               
+
+   Module: About Dialog (header)                                  
+*/
 
 #ifndef KOABOUTDIA_H
 #define KOABOUTDIA_H
@@ -24,10 +24,9 @@
 #include <kbuttonbox.h>
 #include <kapp.h>
 
-/******************************************************************/
-/* class KoAboutDia                                               */
-/******************************************************************/
-
+/**
+ * class KoAboutDia
+ */
 class KoAboutDia : public QDialog
 {
   Q_OBJECT
@@ -55,4 +54,5 @@ protected:
   KButtonBox *bbox;
 
 };
-#endif //KOABOUTDIA_H
+
+#endif
