@@ -150,6 +150,8 @@ k_dcop:
     //don't print text
     virtual void setDontPrintText ( bool _b);
     virtual bool getDontprintText() const ;
+    virtual bool hasValidation() const;
+    virtual void removeValidity();
 private:
     QPoint m_point;
     KSpreadSheet* m_table;

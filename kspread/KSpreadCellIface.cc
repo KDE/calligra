@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 2002-2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2002-2003 Philipp Mueller <philipp.mueller@gmx.de>
    Copyright 2002-2003 Norbert Andres <nandres@web.de>
@@ -23,7 +23,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-   
+
 */
 
 #include "KSpreadCellIface.h"
@@ -77,7 +77,7 @@ QString KSpreadCellIface::visibleContentAsString() const
     QString ret;
     ret=cell->value().asString();
 
-    if (ret.isEmpty()) 
+    if (ret.isEmpty())
     {
 	ret=QString::number(cell->value().asFloat());
     }
@@ -1130,4 +1130,21 @@ bool KSpreadCellIface::getDontprintText() const
     if( !m_table ) return false;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->getDontprintText(m_point.x(), m_point.y());
+}
+
+bool KSpreadCellIface::hasValidation() const
+{
+    if( !m_table ) return false;
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    if ( cell->getValidity( 0  ) )
+        return true;
+    else
+        return false;
+}
+
+void KSpreadCellIface::removeValidity()
+{
+    if( !m_table ) return;
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->removeValidity();
 }
