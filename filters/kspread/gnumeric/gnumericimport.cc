@@ -912,6 +912,8 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
       QString repeate = repeateRow.attribute( "value" );
       if ( !repeate.isEmpty() )
       {
+          //fix row too high
+          repeate = repeate.replace( "65536", "32500" );
           KSpreadRange range(repeate);
           kdDebug()<<" repeate :"<<repeate<<"range. ::start row : "<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ()<<endl;
           table->print()->setPrintRepeatColumns( qMakePair( range.startCol (),range.endCol ()) );
