@@ -1055,7 +1055,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
            ColumnLayout *cl=table->columnLayout(y);
            columnSize tmpSize;
            tmpSize.columnNumber=y;
-           tmpSize.columnWidth=cl->width();
+           tmpSize.columnWidth=/*cl->width();*/cl->mmWidth();
            listCol.append(tmpSize);
         }
     }
@@ -1066,7 +1066,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
            RowLayout *rw=table->rowLayout(y);
            rowSize tmpSize;
            tmpSize.rowNumber=y;
-           tmpSize.rowHeight=rw->height();
+           tmpSize.rowHeight=/*rw->height();*/rw->mmHeight();
            listRow.append(tmpSize);
         }
     }
@@ -1077,7 +1077,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
            ColumnLayout *cl=table->columnLayout(y);
            columnSize tmpSize;
            tmpSize.columnNumber=y;
-           tmpSize.columnWidth=cl->width();
+           tmpSize.columnWidth=cl->mmWidth();/*cl->width();*/
            listCol.append(tmpSize);
         }
     for( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
@@ -1085,7 +1085,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
            RowLayout *rw=table->rowLayout(y);
            rowSize tmpSize;
            tmpSize.rowNumber=y;
-           tmpSize.rowHeight=rw->height();
+           tmpSize.rowHeight=rw->mmHeight();//rw->height();
            listRow.append(tmpSize);
         }
 
@@ -1112,7 +1112,7 @@ void KSpreadUndoResizeColRow::undo()
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
-           cl->setWidth((*it2).columnWidth);
+           cl->setMMWidth((*it2).columnWidth);
         }
     }
     else if(m_rctRect.right()==0x7FFF) // complete row(s)
@@ -1121,7 +1121,7 @@ void KSpreadUndoResizeColRow::undo()
     for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
         {
            RowLayout *rw=table->rowLayout((*it2).rowNumber);
-           rw->setHeight((*it2).rowHeight);
+           rw->setMMHeight((*it2).rowHeight);
         }
     }
     else // row and column
@@ -1130,13 +1130,13 @@ void KSpreadUndoResizeColRow::undo()
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
-           cl->setWidth((*it2).columnWidth);
+           cl->setMMWidth((*it2).columnWidth);
         }
     QValueList<rowSize>::Iterator it1;
     for ( it1 = m_lstRow.begin(); it1 != m_lstRow.end(); ++it1 )
         {
            RowLayout *rw=table->rowLayout((*it1).rowNumber);
-           rw->setHeight((*it1).rowHeight);
+           rw->setMMHeight((*it1).rowHeight);
         }
     }
 
@@ -1156,7 +1156,7 @@ void KSpreadUndoResizeColRow::redo()
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
-           cl->setWidth((*it2).columnWidth);
+           cl->setMMWidth((*it2).columnWidth);
         }
     }
     else if(m_rctRect.right()==0x7FFF) // complete row(s)
@@ -1165,7 +1165,7 @@ void KSpreadUndoResizeColRow::redo()
     for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
         {
            RowLayout *rw=table->rowLayout((*it2).rowNumber);
-           rw->setHeight((*it2).rowHeight);
+           rw->setMMHeight((*it2).rowHeight);
         }
     }
     else // row and column
@@ -1174,13 +1174,13 @@ void KSpreadUndoResizeColRow::redo()
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
-           cl->setWidth((*it2).columnWidth);
+           cl->setMMWidth((*it2).columnWidth);
         }
     QValueList<rowSize>::Iterator it1;
     for ( it1 = m_lstRedoRow.begin(); it1 != m_lstRedoRow.end(); ++it1 )
         {
            RowLayout *rw=table->rowLayout((*it1).rowNumber);
-           rw->setHeight((*it1).rowHeight);
+           rw->setMMHeight((*it1).rowHeight);
         }
     }
 
