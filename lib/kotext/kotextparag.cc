@@ -1683,20 +1683,14 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
                 howmany = ts.attribute("text:c").toInt();
 
             textData.fill(32, howmany);
-            //shouldWriteFormat=true;
         }
-        else if ( textFoo && afterText == "tab-stop" ) // text:tab-stop
+        else if ( textFoo && afterText == "tab" ) // text:tab (it's tab-stop in OO-1.1 but tab in oasis)
         {
-            // KWord currently uses \t.
-            // Known bug: a line with only \t\t\t\t isn't loaded - XML (QDom) strips out whitespace.
-            // One more good reason to switch to <text:tab-stop> instead...
             textData = '\t';
-            //shouldWriteFormat=true;
         }
         else if ( textFoo && afterText == "line-break" ) // text:line-break
         {
             textData = '\n';
-            //shouldWriteFormat=true;
         }
         else
         {
@@ -1794,7 +1788,79 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
     invalidate( 0 );
 }
 
-void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KoTextParag::writeSpanText( KoXmlWriter& writer, const QString& text ) const
+{
+    uint len = text.length();
+    int nrSpaces = 0; // number of sequential spaces
+    QString str;
+    str.reserve( len );
+    // Accumulate chars either in str or in nrSpaces (for spaces).
+    // Flush str when writing a subelement (for spaces or for another reason)
+    // Flush nrSpaces when encountering two or more sequential spaces
+    for ( uint i = 0; i < len ; ++i ) {
+        QChar ch = text[i];
+        if ( ch != ' ' ) {
+            if ( nrSpaces > 0 ) {
+                // For the first space we use ' '.
+                // "it is good practice to use (text:s) for the second and all following SPACE characters in a sequence."
+                str += ' ';
+                --nrSpaces;
+                if ( nrSpaces > 0 ) { // there are more spaces
+                    if ( !str.isEmpty() )
+                        writer.addTextNode( str );
+                    str = QString::null;
+                    writer.startElement( "text:s" );
+                    if ( nrSpaces > 1 ) // it's 1 by default
+                        writer.addAttribute( "text:c", nrSpaces );
+                    writer.endElement();
+                }
+            }
+            nrSpaces = 0;
+        }
+        switch ( ch.unicode() ) {
+        case '\t':
+            if ( !str.isEmpty() )
+                writer.addTextNode( str );
+            str = QString::null;
+            writer.startElement( "text:tab" );
+            writer.endElement();
+            // TODO write tab-ref to make it easier for some export filters
+            break;
+        case '\n':
+            if ( !str.isEmpty() )
+                writer.addTextNode( str );
+            str = QString::null;
+            writer.startElement( "text:line-break" );
+            writer.endElement();
+            break;
+        case ' ':
+            ++nrSpaces;
+            break;
+        default:
+            str += text[i];
+            break;
+        }
+    }
+    // either we still have text in str or we have spaces in nrSpaces
+    if ( nrSpaces > 0 ) {
+        Q_ASSERT( str.isEmpty() );
+        str = ' ';
+        --nrSpaces;
+    }
+    if ( !str.isEmpty() ) {
+        writer.addTextNode( str );
+    }
+    if ( nrSpaces > 0 ) { // there are more spaces
+        writer.startElement( "text:s" );
+        if ( nrSpaces > 1 ) // it's 1 by default
+            writer.addAttribute( "text:c", nrSpaces );
+        writer.endElement();
+    }
+}
+
+void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
+                             int from /* default 0 */, int to /* default -1 i.e. length()-2 */,
+                             bool saveAnchorsFramesets /* default false */ ) const
 {
     KoGenStyles& mainStyles = context.mainStyles();
 
@@ -1804,18 +1870,66 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) con
         parentStyleName = context.styleAutoName( m_layout.style );
 
     KoGenStyle autoStyle( KoGenStyle::STYLE_AUTO, "paragraph", parentStyleName );
+    paragFormat()->save( autoStyle );
     m_layout.saveOasis( autoStyle );
-    QString autoStyleName = mainStyles.lookup( autoStyle, "P", true );
 
-    // TODO Write parag default format to styles
+    QString autoParagStyleName = mainStyles.lookup( autoStyle, "P", true );
 
     writer.startElement( "text:p" );
-    writer.addAttribute( "text:style-name", autoStyleName );
+    writer.addAttribute( "text:style-name", autoParagStyleName );
 
-    // TODO Write spans of similar format (see KWTextParag::save)
-    QString text = string()->toString(); // HACK
-    Q_ASSERT( text.right(1)[0] == ' ' ); // HACK
-    writer.addTextNode( text.mid( 0, text.length()-1 ) ); // HACK
+    if ( to == -1 ) {
+        // Save the whole parag. If length() == 1 (only trailing space),
+        // then to will be set to -1, and we'll save no characters, as intended.
+        to = length() - 2;
+    }
+    QString text = string()->toString();
+    Q_ASSERT( text.right(1)[0] == ' ' );
+
+    //kdDebug() << k_funcinfo << "'" << text << "' from=" << from << " to=" << to << endl;
+
+    // A helper method would need no less than 7 params...
+#define WRITESPAN( next ) \
+    if ( curFormat == paragFormat() && !usesSpan ) { \
+        writeSpanText( writer, text.mid( startPos, next - startPos ) ); \
+    } else { \
+        KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text", autoParagStyleName ); \
+        curFormat->save( gs ); \
+        QString autoStyleName = mainStyles.lookup( gs, "T" ); \
+        writer.startElement( "text:span" ); \
+        writer.addAttribute( "text:style-name", autoStyleName ); \
+        writeSpanText( writer, text.mid( startPos, next - startPos ) ); \
+        writer.endElement(); \
+        usesSpan = true; \
+    }
+
+    KoTextFormat *curFormat = paragraphFormat();
+    int startPos = from;
+    // Once we have a span, we need to keep using them. Otherwise we might generate
+    // <text:span>foo</text:span> <text:span>bar</text:span> and lose the space between
+    // the two spans.
+    bool usesSpan = false;
+    for ( int i = from; i <= to; ++i ) {
+        KoTextStringChar & ch = string()->at(i);
+        KoTextFormat * newFormat = static_cast<KoTextFormat *>( ch.format() );
+        if ( ch.isCustom() ) {
+            // TODO implement saving custom items
+        } else {
+            if ( newFormat != curFormat ) { // Format changed, save.
+                if ( i > startPos && curFormat) { // Save former format
+                    WRITESPAN( i )
+                }
+                startPos = i;
+                curFormat = newFormat;
+            }
+        }
+    }
+
+    //kdDebug() << k_funcinfo << "startPos=" << startPos << " to=" << to << " curFormat=" << curFormat << endl;
+
+    if ( to > startPos && curFormat) { // Save last format
+        WRITESPAN( to + 1 )
+    }
 
     writer.endElement();
 }

@@ -148,7 +148,10 @@ public:
     /// Load from XML
     void loadOasis( const QDomElement& e, KoOasisContext& context, KoStyleCollection *styleCollection );
     /// Save to XML
-    void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    /// By default the whole paragraph is saved. from/to allow to save only a portion of it.
+    /// The 'from' and 'to' characters are both included.
+    void saveOasis( KoXmlWriter& writer, KoSavingContext& context,
+                    int from = 0, int to = -1, bool saveAnchorsFramesets = false ) const;
 
     void loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos );
 
@@ -195,4 +198,5 @@ protected:
     QMap<int, int> m_tabCache;
 
 private:
-   KoParagLayout loadParagLayout( KoOasisContext& context, KoStyleCollection *styleCollection, bool findStyle );
+    KoParagLayout loadParagLayout( KoOasisContext& context, KoStyleCollection *styleCollection, bool findStyle );
+    void writeSpanText( KoXmlWriter& writer, const QString& text ) const;
