@@ -20,7 +20,7 @@ wave (RTF import problem?)
 Paragraph direction
 Paragraph bullets/counters
 Text boxes (framesets)
-Anchors [Has KWord still something that needs to be transformed to an anchor?]
+Anchors (floating framesets/frames...)
 Mail merge
 "Sections" (e.g. table of contents)
 Table styles, frame styles [How?]
@@ -38,6 +38,20 @@ Underline?
 
 === KWord syntax variants ===
 Files where the supposed children of <VARIABLE> are directly children of <FORMAT id="4">
+
+=== File kofficetests/documents/export/kword/para/chapter.kwd ===
+[File of syntax 1]
+What are those (Table of content support?)
+<NAME> as child of <PARAGRAPH>
+<INFO>
+<CPARAGS>, <PARAG>
+
+=== File kofficetests/documents/export/kword/text/all.kwd ===
+[File of syntax 2]
+Floating image
+Formula
+Table
+...
 
 === Low Priority ===
 <SERIALL>, <SAMPLE>, <DB>
