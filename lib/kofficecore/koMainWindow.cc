@@ -34,18 +34,13 @@
 #include <qmime.h>
 #include <qmessagebox.h>
 #include <qfileinfo.h>
-#ifdef USE_QFD
-#include <qfiledialog.h>
-#endif
 
 #include <kaboutdialog.h>
 #include <kstdaction.h>
 #include <kaction.h>
 #include <khelpmenu.h>
 #include <kapp.h>
-#ifndef USE_QFD
 #include <kfiledialog.h>
-#endif
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -303,28 +298,15 @@ bool KoMainWindow::saveDocument( bool saveas )
 
     if ( pDoc->url().isEmpty() || saveas )
     {
-#ifdef USE_QFD
-        QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
-								    _native_format, nativeFormatPattern(),
-                                                                    nativeFormatName(), TRUE );
-#else
         KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
         dialog->setCaption( i18n("Save document as") );
         KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Export,
                                               _native_format, nativeFormatPattern(),
                                               nativeFormatName(), true);
-#endif
 	KURL newURL;
 
         bool bOk = true;
 	do {
-#ifdef USE_QFD
-	    QString file = QFileDialog::getSaveFileName( QString::null, filter );
-            if ( file.isNull() )
-                return false;
-            KURL::encode(file);
-            newURL = file;
-#else
             if(dialog->exec()==QDialog::Accepted)
                 newURL=dialog->selectedURL();
             else
@@ -332,7 +314,6 @@ bool KoMainWindow::saveDocument( bool saveas )
 
             KoFilterManager::self()->cleanUp();
             delete dialog;
-#endif
 	    if ( newURL.isEmpty() )
 		return false;
 
@@ -435,25 +416,12 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-#ifdef USE_QFD
-    QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
-								KoDocument::readNativeFormatMimeType(), nativeFormatPattern(),
-								nativeFormatName(), TRUE );
-#else
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
     dialog->setCaption( i18n("Open document") );
     KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import,
                                            KoDocument::readNativeFormatMimeType(), nativeFormatPattern(),
                                            nativeFormatName(), true);
-#endif
-
     KURL url;
-#ifdef USE_QFD
-    QString file = QFileDialog::getOpenFileName( QString::null, filter );
-    if (file.isEmpty()) return;
-    KURL::encode(file);
-    url = file;
-#else
     if(dialog->exec()==QDialog::Accepted)
         url=dialog->selectedURL();
     else
@@ -461,7 +429,6 @@ void KoMainWindow::slotFileOpen()
 
     KoFilterManager::self()->cleanUp();
     delete dialog;
-#endif
     if ( url.isEmpty() )
 	return;
 

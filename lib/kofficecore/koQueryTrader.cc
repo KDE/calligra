@@ -253,7 +253,6 @@ KoFilter* KoFilterEntry::createFilter( QObject* parent, const char* name )
     return (KoFilter*)obj;
 }
 
-#ifndef USE_QFD
 /*******************************************************************
  *
  * koParseFilterDialogProperties
@@ -331,7 +330,7 @@ KoFilterDialog* KoFilterDialogEntry::createFilterDialog( QObject* parent, const 
 
     return (KoFilterDialog*)obj;
 }
-#endif
+
 /*******************************************************************
  *
  * koParseToolProperties

@@ -21,11 +21,11 @@
 #define __ko_main_window_h__
 
 #include <kparts/mainwindow.h>
-#include <kurl.h>
 
 class KoDocument;
 class KoView;
 class KoMainWindowPrivate;
+class KURL;
 class KRecentFilesAction;
 
 namespace KParts

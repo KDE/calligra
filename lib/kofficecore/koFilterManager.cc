@@ -43,7 +43,7 @@ class KoFilterManagerPrivate {
 public:
     KoFilterManagerPrivate() { prepare=false; }
     ~KoFilterManagerPrivate() {}
-    
+
     QString tmpFile;
     QString exportFile;
     QString native_format, mime_type;
@@ -166,9 +166,9 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
     d->ps=new PreviewStack(0L, "preview stack", this);
 
-    unsigned int id;                 // id for the next widget
+    unsigned int id=1;                 // id for the next widget
 
-    for(unsigned int i=0, id=1; i<vec1.count(); ++i) {
+    for(unsigned int i=0; i<vec1.count(); ++i) {
         KMimeType::Ptr t;
         QString mime;
         if ( direction == Import )

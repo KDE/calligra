@@ -36,7 +36,6 @@
 #include <qlayout.h>
 #include <kstddirs.h>
 
-#include <qfiledialog.h>
 
 /******************************************************************/
 /* Class: KoTemplateChooseDia					  */
@@ -246,7 +245,7 @@ void KoTemplateChooseDia::chosen()
 		    QFileInfo f(grpPtr->loadWid->getCurrent());
 		    emit templateChosen( QString( grpPtr->name + "/" + f.fileName() ) );
 		    templateName = QString( grpPtr->name + "/" + f.fileName() );
-		    fullTemplateName = grpPtr->loadWid->getCurrent();	    
+		    fullTemplateName = grpPtr->loadWid->getCurrent();	
 		    accept();
 		}
 	    }
@@ -325,16 +324,10 @@ void KoTemplateChooseDia::chooseFile()
     if ( QFile::exists( lFile->text() ) )
 	dir = QFileInfo( lFile->text() ).absFilePath();
 
-#ifdef USE_QFD
-    QString filename = QFileDialog::getOpenFileName( dir, m_strImportFilter );
-    QString url = filename;
-    bool local = true;
-#else
     KURL u = KFileDialog::getOpenURL( dir, m_strImportFilter );
     QString filename = u.path();
     QString url = u.url();
     bool local = u.isLocalFile();
-#endif
 
     bool ok = !url.isEmpty();
     if (local) // additionnal checks for local files
