@@ -254,7 +254,7 @@ returns 1,025.787</Example>
 	<Text>The DOLLARDE() function returns a dollar price expressed as a decimal number. The fractional dollar is the number to be converted and the fraction is the denominator of the fraction</Text>
 	<Syntax>DOLLARDE(fractional dollar; fraction)</Syntax>
 	<Example>DOLLARDE(1.02; 16) - stands for 1 and 2/16 - returns 1.125</Example>
-        <Related>DOLLARFR</Related>
+        <Related>DOLLARDE</Related>
       </Help>
     </Function>
 
@@ -271,8 +271,8 @@ returns 1,025.787</Example>
       </Parameter>
       <Help>
 	<Text>The DOLLARFR() function returns a dollar price expressed as a fraction. The decimal dollar is the number to be converted and the fraction is the denominator of the fraction</Text>
-	<Syntax>DOLLARDE(fractional dollar; fraction)</Syntax>
-	<Example>DOLLARDE</Example>
+	<Syntax>DOLLARFR(fractional dollar; fraction)</Syntax>
+	<Example>DOLLARFR</Example>
         <Related>DOLLARFR(1.125; 16) returns 1.02. (1 + 2/16)</Related>
       </Help>
     </Function>
