@@ -24,7 +24,7 @@ kudesigner_la_LIBADD = $(LIB_KOFFICECORE)
 appsdir = $(kde_appsdir)/Office
 apps_DATA = kudesigner.desktop
 
-kudesigner_METASOURCES = AUTO
+METASOURCES = AUTO
 
 rcdir = $(kde_datadir)/kudesigner
 rc_DATA = kudesignerui.rc kudesigner_readonly.rc
