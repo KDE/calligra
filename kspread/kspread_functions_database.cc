@@ -74,24 +74,26 @@ bool kspreadfunc_dstdevp( KSContext & context );
 bool kspreadfunc_dsum( KSContext & context );
 bool kspreadfunc_dvar( KSContext & context );
 bool kspreadfunc_dvarp( KSContext & context );
+bool kspreadfunc_getpivotdata( KSContext & context );
 
-// registers all math functions
+// registers all database functions
 void KSpreadRegisterDatabaseFunctions()
 {
   KSpreadFunctionRepository * repo = KSpreadFunctionRepository::self();
 
-  repo->registerFunction( "DAVERAGE",   kspreadfunc_daverage );
-  repo->registerFunction( "DCOUNT",     kspreadfunc_dcount );
-  repo->registerFunction( "DCOUNTA",    kspreadfunc_dcounta );
-  repo->registerFunction( "DGET",       kspreadfunc_dget );
-  repo->registerFunction( "DMAX",       kspreadfunc_dmax );
-  repo->registerFunction( "DMIN",       kspreadfunc_dmin );
-  repo->registerFunction( "DPRODUCT",   kspreadfunc_dproduct );
-  repo->registerFunction( "DSTDEV",     kspreadfunc_dstdev );
-  repo->registerFunction( "DSTDEVP",    kspreadfunc_dstdevp );
-  repo->registerFunction( "DSUM",       kspreadfunc_dsum );
-  repo->registerFunction( "DVAR",       kspreadfunc_dvar );
-  repo->registerFunction( "DVARP",      kspreadfunc_dvarp );
+  repo->registerFunction( "DAVERAGE",     kspreadfunc_daverage );
+  repo->registerFunction( "DCOUNT",       kspreadfunc_dcount );
+  repo->registerFunction( "DCOUNTA",      kspreadfunc_dcounta );
+  repo->registerFunction( "DGET",         kspreadfunc_dget );
+  repo->registerFunction( "DMAX",         kspreadfunc_dmax );
+  repo->registerFunction( "DMIN",         kspreadfunc_dmin );
+  repo->registerFunction( "DPRODUCT",     kspreadfunc_dproduct );
+  repo->registerFunction( "DSTDEV",       kspreadfunc_dstdev );
+  repo->registerFunction( "DSTDEVP",      kspreadfunc_dstdevp );
+  repo->registerFunction( "DSUM",         kspreadfunc_dsum );
+  repo->registerFunction( "DVAR",         kspreadfunc_dvar );
+  repo->registerFunction( "DVARP",        kspreadfunc_dvarp );
+  repo->registerFunction( "GETPIVOTDATA", kspreadfunc_getpivotdata ); // partially Excel-compatible
 }
 
 /*********************************************************************
@@ -1151,5 +1153,44 @@ bool kspreadfunc_dvarp( KSContext & context )
   return true;
 }
 
+// Function: GETPIVOTDATA
+// FIXME implement more things with this, see Excel !
+bool kspreadfunc_getpivotdata( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args  = context.value()->listValue();
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
 
+  if ( !KSUtil::checkArgumentsCount( context, 2, "GETPIVOTDATA", true ) )
+    return false;
 
+  KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+
+  KSpreadRange db( extra[0]->stringValue(), map, table );
+  if ( !db.isValid()  )
+    return false;
+
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  if ( fieldIndex == -1 )
+    return false;
+
+  kdDebug() << "Fieldindex: " << fieldIndex << endl;
+
+  KSpreadCell * cell = table->cellAt( fieldIndex, db.range.bottom() );
+  if( cell->isEmpty() )
+    return false;
+
+  KSValue value;
+  if ( cell->value().isNumber() )
+    value.setValue( cell->value().asFloat() );
+  else if ( cell->value().isString() )
+    value.setValue( cell->value().asString() );
+  else if ( cell->value().isBoolean() )
+    value.setValue( cell->value().asBoolean() );
+  else
+    return false;
+
+  context.setValue( new KSValue( value ) );
+
+  return true;
+}
