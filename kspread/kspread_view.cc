@@ -295,6 +295,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_dcop = 0;
     dcopObject(); // build it
     m_bLoading =false;
+    
+    m_pInsertHandle = 0;
 
     m_selectionInfo = new KSpreadSelection(this);
 
@@ -1242,6 +1244,8 @@ KSpreadView::~KSpreadView()
     delete m_popupListChoose;
     delete m_sbCalcLabel;
     delete m_dcop;
+    delete m_pInsertHandle;
+    m_pInsertHandle = 0;
 }
 
 
@@ -4341,7 +4345,11 @@ void KSpreadView::insertObject()
     if ( e.isEmpty() )
         return;
 
-    (void)new KSpreadInsertHandler( this, m_pCanvas, e );
+    //Don't start handles more than once
+    if( m_pInsertHandle )
+        delete m_pInsertHandle;
+
+    m_pInsertHandle = new KSpreadInsertHandler( this, m_pCanvas, e );
 }
 
 void KSpreadView::insertChart()
@@ -4358,7 +4366,11 @@ void KSpreadView::insertChart()
         return;
     }
 
-    (void)new KSpreadInsertHandler( this, m_pCanvas, vec[0], TRUE );
+    //Don't start handles more than once
+    if( m_pInsertHandle )
+        delete m_pInsertHandle;
+
+    m_pInsertHandle = new KSpreadInsertHandler( this, m_pCanvas, vec[0], TRUE );
 }
 
 

@@ -29,6 +29,7 @@ Bugfixes:
 - Fix display of cells overlapping in vertical direction
 - Set a minimum size for embedded objects (so it cannot have a size of 0).
 - Fix for endless loop when calculating formulas.
+- Clicking several times on insert object, inserts now only the last clicked object.
 
 
 Changes from 1.1 to 1.2
