@@ -1790,6 +1790,7 @@ AC_MSG_CHECKING([for MICO version])
 AC_CACHE_VAL(kde_cv_mico_version,
 [
 cat >conftest.$ac_ext <<EOF
+#include <stdio.h>
 #include <mico/version.h>
 int main() { printf("MICO_VERSION=%s\n",MICO_VERSION); return (0); }
 EOF
