@@ -65,7 +65,7 @@ public:
 
     virtual void setPagesPerRow(int) {}
     virtual int pagesPerRow() {return 0;}
-
+    virtual bool drawSelections() {return true;}
 protected:
     // Draw the border around one page, and clear up the empty space in that page
     void drawOnePageBorder( QPainter * painter, const QRect & crect, const QRect & pageRect,
@@ -91,6 +91,24 @@ public:
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
 };
+
+// The 'embedded' view mode (pages below one another)
+class KWViewModeEmbedded : public KWViewMode
+{
+public:
+     KWViewModeEmbedded ( ) : KWViewMode( 0L ) {}
+    virtual ~ KWViewModeEmbedded() {}
+
+    // This view mode is very easy to implement ;-P
+    virtual QPoint normalToView( const QPoint & nPoint ) { return nPoint; }
+    virtual QPoint viewToNormal( const QPoint & vPoint ) { return vPoint; }
+    virtual QSize contentsSize() {return QSize();}
+
+    virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion ){}
+    virtual bool drawSelections() {return false;}
+};
+
+
 
 // A mode for previewing the overall document
 // Pages are organized in a grid (mostly useful when zooming out a lot)

@@ -27,6 +27,7 @@
 #include "kwanchor.h"
 #include "kwtextimage.h"
 #include "kwtextframeset.h"
+#include "kwviewmode.h"
 #include "variable.h"
 #include "counter.h"
 #include <klocale.h>
@@ -388,15 +389,12 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
         localFormat->setColor( KWDocument::defaultTextColor( &painter ) );
         lastFormat = localFormat;
     }
-    QTextParag::drawParagString( painter, s, start, len, startX,
-                                 lastY, baseLine, bw, h, drawSelections,
-                                 lastFormat, i, selectionStarts,
-                                 selectionEnds, cg, rightToLeft );
 
     KWTextFrameSet * textfs = kwTextDocument()->textFrameSet();
     if ( textfs )
     {
         KWDocument * doc = textfs->kWordDocument();
+        drawSelections=textfs->currentViewMode()->drawSelections();
         if ( doc && doc->viewFormattingChars() && painter.device()->devType() != QInternal::Printer )
         {
             painter.save();
@@ -473,6 +471,12 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
             painter.restore();
         }
     }
+     QTextParag::drawParagString( painter, s, start, len, startX,
+                                 lastY, baseLine, bw, h, drawSelections,
+                                 lastFormat, i, selectionStarts,
+                                 selectionEnds, cg, rightToLeft );
+
+
     if ( localFormat )
         delete localFormat;
 }

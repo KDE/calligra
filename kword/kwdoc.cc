@@ -1989,7 +1989,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
     /*painter.translate( -leftBorder(), -topBorder() );
     rect.moveBy( leftBorder(), topBorder() );*/
 
-    KWViewModeNormal * viewMode = new KWViewModeNormal( 0L ); // m_canvas==0L could be dangerous,
+     KWViewModeEmbedded * viewMode = new  KWViewModeEmbedded( ); // m_canvas==0L could be dangerous,
     // but we only use viewToNormal and normalToView.
 
     QColorGroup cg = QApplication::palette().active();
