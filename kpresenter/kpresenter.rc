@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="15">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="16">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -81,6 +81,7 @@
    <Action name="text_alignleft"/>
    <Action name="text_aligncenter"/>
    <Action name="text_alignright"/>
+   <Action name="text_alignblock"/>
   </Menu>
   <Separator/>
   <Menu name="Type"><text>T&amp;ype</text>
@@ -195,6 +196,7 @@
   <Action name="text_alignleft"/>
   <Action name="text_aligncenter"/>
   <Action name="text_alignright"/>
+  <Action name="text_alignblock"/>
   <Separator/>
   <Action name="text_unsortedList"/>
   <Action name="text_normalText"/>

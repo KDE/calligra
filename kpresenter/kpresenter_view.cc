@@ -1309,6 +1309,14 @@ void KPresenterView::textAlignRight()
     page->setTextAlign( Qt::AlignRight );
 }
 
+void KPresenterView::textAlignBlock()
+{
+    if ( !actionTextAlignBlock->isChecked() )
+        return;
+    tbAlign = Qt::AlignJustify;
+    page->setTextAlign(Qt::AlignJustify);
+}
+
 void KPresenterView::textInsertPageNum()
 {
 #if 0 // note: also the action is disabled now (Werner)
@@ -1386,23 +1394,6 @@ void KPresenterView::textUnsortList()
 	    txtObj->setParagType( KTextEdit::BulletList );
 	    txtObj->setListDepth( 0 );
 	}
-	if ( !page->currentTextObjectView() )
-	    page->repaint( false );
-	else
-	    txtObj->repaint( FALSE );
-    }
-#endif
-}
-
-/*===============================================================*/
-void KPresenterView::textNormalText()
-{
-#if 0
-    KPTextObject *txtObj = page->currentTextObjectView()->textObject();
-    if ( !txtObj )
-	txtObj = page->selectedTextObj();
-    if ( txtObj ) {
-	txtObj->setParagType( KTextEdit::Normal );
 	if ( !page->currentTextObjectView() )
 	    page->repaint( false );
 	else
@@ -2075,18 +2066,20 @@ void KPresenterView::setupActions()
 					actionCollection(), "text_alignright" );
     actionTextAlignRight->setExclusiveGroup( "align" );
 
+    actionTextAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", CTRL + Key_J,
+                                        this, SLOT( textAlignBlock() ),
+                                        actionCollection(), "text_alignblock" );
+    actionTextAlignBlock->setExclusiveGroup( "align" );
+
+
 #if 0
     actionTextTypeEnumList = new KAction( i18n( "&Enumerated List" ), "enum_list", 0,
 					  this, SLOT( textEnumList() ),
 					  actionCollection(), "text_enumList" );
 #endif
-    actionTextTypeUnsortList = new KAction( i18n( "&Unsorted List" ), "unsorted_list",
+    actionTextTypeUnsortList = new KToggleAction( i18n( "&Unsorted List" ), "unsorted_list",
 					    0, this, SLOT( textUnsortList() ),
 					    actionCollection(), "text_unsortedList" );
-
-    actionTextTypeNormalText = new KAction( i18n( "&Normal Text" ), "text_block", 0,
-					    this, SLOT( textNormalText() ),
-					    actionCollection(), "text_normalText" );
 
     actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ), "format_increaseindent",
 				       CTRL + Key_Plus, this, SLOT( textDepthPlus() ),
@@ -2419,8 +2412,8 @@ void KPresenterView::objectSelectedChanged()
     actionTextAlignLeft->setEnabled(isText);
     actionTextAlignCenter->setEnabled(isText);
     actionTextAlignRight->setEnabled(isText);
+    actionTextAlignBlock->setEnabled(isText);
     actionTextTypeUnsortList->setEnabled(isText);
-    actionTextTypeNormalText->setEnabled(isText);
     actionTextDepthPlus->setEnabled(isText);
     actionTextDepthMinus->setEnabled(isText);
     actionTextSettings->setEnabled(isText);
@@ -2729,7 +2722,11 @@ void KPresenterView::alignChanged( int align )
 	    actionTextAlignRight->blockSignals( true );
 	    actionTextAlignRight->setChecked( true );
 	    actionTextAlignRight->blockSignals( false );
-	}
+	} else if ( (align & AlignJustify ) == AlignJustify ) {
+	    actionTextAlignBlock->blockSignals( true );
+	    actionTextAlignBlock->setChecked( true );
+	    actionTextAlignBlock->blockSignals( false );
+        }
     }
 }
 

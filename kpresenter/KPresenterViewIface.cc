@@ -385,11 +385,6 @@ void KPresenterViewIface::textUnsortList()
     view->textUnsortList();
 }
 
-void KPresenterViewIface::textNormalText()
-{
-    view->textNormalText();
-}
-
 void KPresenterViewIface::textDepthPlus()
 {
     view->textDepthPlus();

@@ -121,7 +121,6 @@ k_dcop:
     virtual void mtextFont();
     virtual void textEnumList();
     virtual void textUnsortList();
-    virtual void textNormalText();
     virtual void textDepthPlus();
     virtual void textDepthMinus();
     virtual void textSettings();

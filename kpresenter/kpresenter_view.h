@@ -203,10 +203,10 @@ public slots:
     void textAlignLeft();
     void textAlignCenter();
     void textAlignRight();
+    void textAlignBlock();
     void mtextFont();
     void textEnumList();
     void textUnsortList();
-    void textNormalText();
     void textDepthPlus();
     void textDepthMinus();
     void textSettings();
@@ -553,9 +553,9 @@ private:
     KToggleAction *actionTextAlignLeft;
     KToggleAction *actionTextAlignCenter;
     KToggleAction *actionTextAlignRight;
+    KToggleAction *actionTextAlignBlock;
     KAction *actionTextTypeEnumList;
-    KAction *actionTextTypeUnsortList;
-    KAction *actionTextTypeNormalText;
+    KToggleAction *actionTextTypeUnsortList;
     KAction *actionTextDepthPlus;
     KAction *actionTextDepthMinus;
     KAction *actionTextSettings;
