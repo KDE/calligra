@@ -31,6 +31,8 @@
 
 #include <kdialogbase.h>
 
+class ExportDialogUI;
+
 class HtmlExportDialog : public KDialogBase
 {
     Q_OBJECT
@@ -40,10 +42,7 @@ public:
     ~HtmlExportDialog(void);
     QString getState(void);
 private:
-    QWidget m_widget;
-    QVButtonGroup *box1, *box2;
-    QRadioButton *r1, *r2;  // Document Type
-    QRadioButton *ra1, *ra2, *ra3; // Mode
+    ExportDialogUI* m_dialog;
 };
 
 #endif /* EXPORT_DIALOG_H */

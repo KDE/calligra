@@ -1,0 +1,192 @@
+<!DOCTYPE UI><UI>
+<class>ExportDialogUI</class>
+<comment>Export dialog for KWord's HTML export filter</comment>
+<author>Nicolas GOUTTE &lt;nicog@snafu.de&gt;</author>
+<widget>
+    <class>QWidget</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>ExportDialogUI</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>375</width>
+            <height>237</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>HTML Export Dialog</string>
+    </property>
+    <widget>
+        <class>QLayoutWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>Layout9</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>12</x>
+                <y>14</y>
+                <width>350</width>
+                <height>207</height>
+            </rect>
+        </property>
+        <vbox>
+            <property stdset="1">
+                <name>margin</name>
+                <number>0</number>
+            </property>
+            <property stdset="1">
+                <name>spacing</name>
+                <number>6</number>
+            </property>
+            <widget>
+                <class>QButtonGroup</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>buttonGroup1</cstring>
+                </property>
+                <property stdset="1">
+                    <name>title</name>
+                    <string>Document Type</string>
+                </property>
+                <vbox>
+                    <property stdset="1">
+                        <name>margin</name>
+                        <number>11</number>
+                    </property>
+                    <property stdset="1">
+                        <name>spacing</name>
+                        <number>6</number>
+                    </property>
+                    <widget>
+                        <class>QRadioButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>radioDocType1</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>&amp;HTML 4.01</string>
+                        </property>
+                        <property stdset="1">
+                            <name>checked</name>
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QRadioButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>radioDocType2</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>&amp;XHTML 1.0</string>
+                        </property>
+                        <property stdset="1">
+                            <name>checked</name>
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                </vbox>
+            </widget>
+            <spacer>
+                <property>
+                    <name>name</name>
+                    <cstring>Spacer13</cstring>
+                </property>
+                <property stdset="1">
+                    <name>orientation</name>
+                    <enum>Vertical</enum>
+                </property>
+                <property stdset="1">
+                    <name>sizeType</name>
+                    <enum>Expanding</enum>
+                </property>
+                <property>
+                    <name>sizeHint</name>
+                    <size>
+                        <width>20</width>
+                        <height>20</height>
+                    </size>
+                </property>
+            </spacer>
+            <widget>
+                <class>QButtonGroup</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>buttonGroup2</cstring>
+                </property>
+                <property stdset="1">
+                    <name>title</name>
+                    <string>Mode</string>
+                </property>
+                <vbox>
+                    <property stdset="1">
+                        <name>margin</name>
+                        <number>11</number>
+                    </property>
+                    <property stdset="1">
+                        <name>spacing</name>
+                        <number>6</number>
+                    </property>
+                    <widget>
+                        <class>QRadioButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>radioMode1</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>S&amp;partan (Only document structure, no formatting!)</string>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QRadioButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>radioMode2</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>&amp;Direct (Formatting coded using HTML, no style sheets)</string>
+                        </property>
+                        <property stdset="1">
+                            <name>checked</name>
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QRadioButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>radioMode3</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>&amp;Style (Formatting coded using CSS2, no style sheets)</string>
+                        </property>
+                        <property stdset="1">
+                            <name>autoResize</name>
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                </vbox>
+            </widget>
+        </vbox>
+    </widget>
+</widget>
+<tabstops>
+    <tabstop>radioDocType1</tabstop>
+    <tabstop>radioDocType2</tabstop>
+    <tabstop>radioMode1</tabstop>
+    <tabstop>radioMode2</tabstop>
+    <tabstop>radioMode3</tabstop>
+</tabstops>
+</UI>
