@@ -17,11 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "paragdia.h"
-#include "paragdia.moc"
-#include "kword_doc.h"
-#include "kcharselectdia.h"
-#include "defs.h"
+#include <paragdia.h>
+#include <kword_doc.h>
+#include <kcharselectdia.h>
+#include <defs.h>
 
 #include <qwidget.h>
 #include <qlayout.h>
@@ -36,6 +35,7 @@
 #include <qradiobutton.h>
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
+#include <qhbuttongroup.h>
 #include <qlistbox.h>
 #include <qspinbox.h>
 #include <qlineedit.h>
@@ -316,11 +316,11 @@ void KWParagDia::setLeftIndent( KWUnit _left )
 {
     QString str;
     switch ( KWUnit::unitType( doc->getUnit() ) ) {
-    case U_MM: str.sprintf( "%g", _left.mm() );
+    case U_MM: str=QString::number(_left.mm());
         break;
-    case U_INCH: str.sprintf( "%g", _left.inch() );
+    case U_INCH: str=QString::number(_left.inch());
         break;
-    case U_PT: str.sprintf( "%g", _left.pt() );
+    case U_PT: str=QString::number(_left.pt());
         break;
     }
 
@@ -333,11 +333,11 @@ void KWParagDia::setFirstLineIndent( KWUnit _first )
 {
     QString str;
     switch ( KWUnit::unitType( doc->getUnit() ) ) {
-    case U_MM: str.sprintf( "%g", _first.mm() );
+    case U_MM: str=QString::number(_first.mm());
         break;
-    case U_INCH: str.sprintf( "%g", _first.inch() );
+    case U_INCH: str=QString::number(_first.inch());
         break;
-    case U_PT: str.sprintf( "%g", _first.pt() );
+    case U_PT: str=QString::number(_first.pt());
         break;
     }
 
@@ -350,11 +350,11 @@ void KWParagDia::setSpaceBeforeParag( KWUnit _before )
 {
     QString str;
     switch ( KWUnit::unitType( doc->getUnit() ) ) {
-    case U_MM: str.sprintf( "%g", _before.mm() );
+    case U_MM: str=QString::number(_before.mm());
         break;
-    case U_INCH: str.sprintf( "%g", _before.inch() );
+    case U_INCH: str=QString::number(_before.inch());
         break;
-    case U_PT: str.sprintf( "%g", _before.pt() );
+    case U_PT: str=QString::number(_before.pt());
         break;
     }
 
@@ -367,11 +367,11 @@ void KWParagDia::setSpaceAfterParag( KWUnit _after )
 {
     QString str;
     switch ( KWUnit::unitType( doc->getUnit() ) ) {
-    case U_MM: str.sprintf( "%g", _after.mm() );
+    case U_MM: str=QString::number(_after.mm());
         break;
-    case U_INCH: str.sprintf( "%g", _after.inch() );
+    case U_INCH: str=QString::number(_after.inch());
         break;
-    case U_PT: str.sprintf( "%g", _after.pt() );
+    case U_PT: str=QString::number(_after.pt());
         break;
     }
 
@@ -382,9 +382,7 @@ void KWParagDia::setSpaceAfterParag( KWUnit _after )
 /*================================================================*/
 void KWParagDia::setLineSpacing( KWUnit _spacing )
 {
-    QString str;
-    str.sprintf( "%g", _spacing.pt() );
-    eSpacing->setText( str );
+    eSpacing->setText(QString::number(_spacing.pt()));
 }
 
 /*================================================================*/
@@ -431,7 +429,6 @@ void KWParagDia::setupTab1()
     indentGrid = new QGridLayout( indentFrame, 4, 2, 15, 7 );
 
     lLeft = new QLabel( i18n("Left ( %1 ):").arg(doc->getUnit()), indentFrame );
-    lLeft->resize( lLeft->sizeHint() );
     lLeft->setAlignment( AlignRight );
     indentGrid->addWidget( lLeft, 1, 0 );
 
@@ -440,16 +437,14 @@ void KWParagDia::setupTab1()
         eLeft->setValidator( new QIntValidator( eLeft ) );
     else
         eLeft->setValidator( new QDoubleValidator( eLeft ) );
-    eLeft->setText( "0.00" );
+    eLeft->setText( i18n("0.00") );
     eLeft->setMaxLength( 5 );
     eLeft->setEchoMode( QLineEdit::Normal );
     eLeft->setFrame( true );
-    eLeft->resize( eLeft->sizeHint().width() / 2, eLeft->sizeHint().height() );
     indentGrid->addWidget( eLeft, 1, 1 );
     connect( eLeft, SIGNAL( textChanged( const QString & ) ), this, SLOT( leftChanged( const QString & ) ) );
 
     lRight = new QLabel( i18n("Right ( %1 ):").arg(doc->getUnit()), indentFrame );
-    lRight->resize( lRight->sizeHint() );
     lRight->setAlignment( AlignRight );
     indentGrid->addWidget( lRight, 2, 0 );
 
@@ -458,17 +453,15 @@ void KWParagDia::setupTab1()
         eRight->setValidator( new QIntValidator( eRight ) );
     else
         eRight->setValidator( new QDoubleValidator( eRight ) );
-    eRight->setText( "0.00" );
+    eRight->setText( i18n("0.00") );
     eRight->setMaxLength( 5 );
     eRight->setEchoMode( QLineEdit::Normal );
     eRight->setFrame( true );
-    eRight->resize( eLeft->size() );
     indentGrid->addWidget( eRight, 2, 1 );
     connect( eRight, SIGNAL( textChanged( const QString & ) ), this, SLOT( rightChanged( const QString & ) ) );
     eRight->setEnabled( false );
 
     lFirstLine = new QLabel( i18n("First Line ( %1 ):").arg(doc->getUnit()), indentFrame );
-    lFirstLine->resize( lFirstLine->sizeHint() );
     lFirstLine->setAlignment( AlignRight );
     indentGrid->addWidget( lFirstLine, 3, 0 );
 
@@ -477,27 +470,15 @@ void KWParagDia::setupTab1()
         eFirstLine->setValidator( new QIntValidator( eFirstLine ) );
     else
         eFirstLine->setValidator( new QDoubleValidator( eFirstLine ) );
-    eFirstLine->setText( "0.00" );
+    eFirstLine->setText( i18n("0.00") );
     eFirstLine->setMaxLength( 5 );
     eFirstLine->setEchoMode( QLineEdit::Normal );
     eFirstLine->setFrame( true );
-    eFirstLine->resize( eLeft->size() );
     connect( eFirstLine, SIGNAL( textChanged( const QString & ) ), this, SLOT( firstChanged( const QString & ) ) );
     indentGrid->addWidget( eFirstLine, 3, 1 );
 
-    // grid col spacing
-    indentGrid->addColSpacing( 0, lFirstLine->width() );
-    indentGrid->addColSpacing( 1, eFirstLine->width() );
-
-    // grid row spacing
+     // grid row spacing
     indentGrid->addRowSpacing( 0, 5 );
-    indentGrid->addRowSpacing( 1, eLeft->height() );
-    indentGrid->addRowSpacing( 1, lLeft->height() );
-    indentGrid->addRowSpacing( 2, eRight->height() );
-    indentGrid->addRowSpacing( 2, lRight->height() );
-    indentGrid->addRowSpacing( 3, eFirstLine->height() );
-    indentGrid->addRowSpacing( 3, lFirstLine->height() );
-
     grid1->addWidget( indentFrame, 0, 0 );
 
     // --------------- spacing ---------------
@@ -510,7 +491,6 @@ void KWParagDia::setupTab1()
     cSpacing->insertItem( i18n( "1.5 lines" ) );
     cSpacing->insertItem( i18n( "2.0 lines" ) );
     cSpacing->insertItem( i18n( "Space ( pt )" ) );
-    cSpacing->resize( cSpacing->sizeHint() );
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
     spacingGrid->addWidget( cSpacing, 1, 0 );
 
@@ -519,23 +499,16 @@ void KWParagDia::setupTab1()
         eSpacing->setValidator( new QIntValidator( eSpacing ) );
     else
         eSpacing->setValidator( new QDoubleValidator( eSpacing ) );
-    eSpacing->setText( "0" );
+    eSpacing->setText( i18n("0") );
     eSpacing->setMaxLength( 2 );
     eSpacing->setEchoMode( QLineEdit::Normal );
     eSpacing->setFrame( true );
-    eSpacing->resize( cSpacing->size() );
     eSpacing->setEnabled( false );
     connect( eSpacing, SIGNAL( textChanged( const QString & ) ), this, SLOT( spacingChanged( const QString & ) ) );
     spacingGrid->addWidget( eSpacing, 2, 0 );
 
-    // grid col spacing
-    spacingGrid->addColSpacing( 0, cSpacing->width() );
-
     // grid row spacing
     spacingGrid->addRowSpacing( 0, 5 );
-    spacingGrid->addRowSpacing( 1, cSpacing->height() );
-    spacingGrid->addRowSpacing( 2, eSpacing->height() );
-
     grid1->addWidget( spacingFrame, 1, 0 );
 
     cSpacing->setCurrentItem( 4 );
@@ -547,7 +520,6 @@ void KWParagDia::setupTab1()
     pSpaceGrid = new QGridLayout( pSpaceFrame, 3, 2, 15, 7 );
 
     lBefore = new QLabel( i18n("Before ( %1 ):").arg(doc->getUnit()), pSpaceFrame );
-    lBefore->resize( lBefore->sizeHint() );
     lBefore->setAlignment( AlignRight );
     pSpaceGrid->addWidget( lBefore, 1, 0 );
 
@@ -556,16 +528,14 @@ void KWParagDia::setupTab1()
         eBefore->setValidator( new QIntValidator( eBefore ) );
     else
         eBefore->setValidator( new QDoubleValidator( eBefore ) );
-    eBefore->setText( "0.00" );
+    eBefore->setText( i18n("0.00") );
     eBefore->setMaxLength( 5 );
     eBefore->setEchoMode( QLineEdit::Normal );
     eBefore->setFrame( true );
-    eBefore->resize( eBefore->sizeHint().width() / 2, eBefore->sizeHint().height() );
     connect( eBefore, SIGNAL( textChanged( const QString & ) ), this, SLOT( beforeChanged( const QString & ) ) );
     pSpaceGrid->addWidget( eBefore, 1, 1 );
 
     lAfter = new QLabel( i18n("After ( %1 ):").arg(doc->getUnit()), pSpaceFrame );
-    lAfter->resize( lAfter->sizeHint() );
     lAfter->setAlignment( AlignRight );
     pSpaceGrid->addWidget( lAfter, 2, 0 );
 
@@ -574,42 +544,22 @@ void KWParagDia::setupTab1()
         eAfter->setValidator( new QIntValidator( eAfter ) );
     else
         eAfter->setValidator( new QDoubleValidator( eAfter ) );
-    eAfter->setText( "0.00" );
+    eAfter->setText( i18n("0.00") );
     eAfter->setMaxLength( 5 );
     eAfter->setEchoMode( QLineEdit::Normal );
     eAfter->setFrame( true );
-    eAfter->resize( eAfter->sizeHint().width() / 2, eAfter->sizeHint().height() );
     connect( eAfter, SIGNAL( textChanged( const QString & ) ), this, SLOT( afterChanged( const QString & ) ) );
     pSpaceGrid->addWidget( eAfter, 2, 1 );
 
-    // grid col spacing
-    pSpaceGrid->addColSpacing( 0, lBefore->width() );
-    pSpaceGrid->addColSpacing( 0, lAfter->width() );
-    pSpaceGrid->addColSpacing( 1, eBefore->width() );
-    pSpaceGrid->addColSpacing( 1, eAfter->width() );
-
     // grid row spacing
     pSpaceGrid->addRowSpacing( 0, 5 );
-    pSpaceGrid->addRowSpacing( 1, eBefore->height() );
-    pSpaceGrid->addRowSpacing( 2, eAfter->height() );
-
     grid1->addWidget( pSpaceFrame, 2, 0 );
 
     // --------------- preview --------------------
     prev1 = new KWPagePreview( tab1, "" );
     grid1->addMultiCellWidget( prev1, 0, 3, 1, 1 );
 
-    // --------------- main grid ------------------
-    grid1->addColSpacing( 0, indentFrame->width() );
-    grid1->addColSpacing( 0, spacingFrame->width() );
-    grid1->addColSpacing( 0, pSpaceFrame->width() );
-    grid1->addColSpacing( 1, 250 );
     grid1->setColStretch( 1, 1 );
-
-    grid1->addRowSpacing( 0, indentFrame->height() );
-    grid1->addRowSpacing( 1, spacingFrame->height() );
-    grid1->addRowSpacing( 2, pSpaceFrame->height() );
-    grid1->addRowSpacing( 3, 20 );
     grid1->setRowStretch( 3, 1 );
 }
 
@@ -621,26 +571,21 @@ void KWParagDia::setupTab2()
     grid2 = new QGridLayout( tab2, 6, 2, 15, 7 );
 
     lFlow = new QLabel( i18n( "Flow:" ), tab2 );
-    lFlow->resize( lFlow->sizeHint() );
     grid2->addWidget( lFlow, 0, 0 );
 
     rLeft = new QRadioButton( i18n( "Left" ), tab2 );
-    rLeft->resize( rLeft->sizeHint() );
     grid2->addWidget( rLeft, 1, 0 );
     connect( rLeft, SIGNAL( clicked() ), this, SLOT( flowLeft() ) );
 
     rCenter = new QRadioButton( i18n( "Center" ), tab2 );
-    rCenter->resize( rCenter->sizeHint() );
     grid2->addWidget( rCenter, 2, 0 );
     connect( rCenter, SIGNAL( clicked() ), this, SLOT( flowCenter() ) );
 
     rRight = new QRadioButton( i18n( "Right" ), tab2 );
-    rRight->resize( rRight->sizeHint() );
     grid2->addWidget( rRight, 3, 0 );
     connect( rRight, SIGNAL( clicked() ), this, SLOT( flowRight() ) );
 
     rBlock = new QRadioButton( i18n( "Block" ), tab2 );
-    rBlock->resize( rBlock->sizeHint() );
     grid2->addWidget( rBlock, 4, 0 );
     connect( rBlock, SIGNAL( clicked() ), this, SLOT( flowBlock() ) );
 
@@ -652,20 +597,7 @@ void KWParagDia::setupTab2()
     grid2->addMultiCellWidget( prev2, 0, 5, 1, 1 );
 
     // --------------- main grid ------------------
-    grid2->addColSpacing( 0, lFlow->width() );
-    grid2->addColSpacing( 0, rLeft->width() );
-    grid2->addColSpacing( 0, rCenter->width() );
-    grid2->addColSpacing( 0, rRight->width() );
-    grid2->addColSpacing( 0, rBlock->width() );
-    grid2->addColSpacing( 1, 250 );
     grid2->setColStretch( 1, 1 );
-
-    grid2->addRowSpacing( 0, lFlow->height() );
-    grid2->addRowSpacing( 1, rLeft->height() );
-    grid2->addRowSpacing( 2, rCenter->height() );
-    grid2->addRowSpacing( 3, rRight->height() );
-    grid2->addRowSpacing( 4, rBlock->height() );
-    grid2->addRowSpacing( 5, 20 );
     grid2->setRowStretch( 5, 1 );
 }
 
@@ -677,7 +609,6 @@ void KWParagDia::setupTab3()
     grid3 = new QGridLayout( tab3, 8, 2, 15, 7 );
 
     lStyle = new QLabel( i18n( "Style:" ), tab3 );
-    lStyle->resize( lStyle->sizeHint() );
     grid3->addWidget( lStyle, 0, 0 );
 
     cStyle = new QComboBox( false, tab3 );
@@ -686,50 +617,39 @@ void KWParagDia::setupTab3()
     cStyle->insertItem( i18n( "dot line ( **** )" ) );
     cStyle->insertItem( i18n( "dash dot line ( -*-* )" ) );
     cStyle->insertItem( i18n( "dash dot dot line ( -**- )" ) );
-    cStyle->resize( cStyle->sizeHint() );
     grid3->addWidget( cStyle, 1, 0 );
     connect( cStyle, SIGNAL( activated( const QString & ) ), this, SLOT( brdStyleChanged( const QString & ) ) );
 
     lWidth = new QLabel( i18n( "Width:" ), tab3 );
-    lWidth->resize( lWidth->sizeHint() );
     grid3->addWidget( lWidth, 2, 0 );
 
     cWidth = new QComboBox( false, tab3 );
     for( unsigned int i = 1; i <= 10; i++ )
-    {
-        char buffer[ 10 ];
-        sprintf( buffer, "%i", i );
-        cWidth->insertItem( buffer );
-    }
+        cWidth->insertItem(QString::number(i));
     grid3->addWidget( cWidth, 3, 0 );
-    cWidth->resize( cStyle->size() );
     connect( cWidth, SIGNAL( activated( const QString & ) ), this, SLOT( brdWidthChanged( const QString & ) ) );
 
     lColor = new QLabel( i18n( "Color:" ), tab3 );
-    lColor->resize( lColor->sizeHint() );
     grid3->addWidget( lColor, 4, 0 );
 
     bColor = new KColorButton( tab3, "" );
-    bColor->resize( bColor->sizeHint() );
     grid3->addWidget( bColor, 5, 0 );
     connect( bColor, SIGNAL( changed( const QColor& ) ), this, SLOT( brdColorChanged( const QColor& ) ) );
 
-    bb = new KButtonBox( tab3 );
-    bb->addStretch();
-    bLeft = bb->addButton( "", true );
+    bb = new QHButtonGroup( tab3 );
+    bb->setFrameStyle(QFrame::NoFrame);
+    bLeft = new QPushButton(bb);
     bLeft->setPixmap( KWBarIcon( "borderleft" ) );
     bLeft->setToggleButton( true );
-    bRight = bb->addButton( "", true );
+    bRight = new QPushButton(bb);
     bRight->setPixmap( KWBarIcon( "borderright" ) );
     bRight->setToggleButton( true );
-    bTop = bb->addButton( "", true );
+    bTop = new QPushButton(bb);
     bTop->setPixmap( KWBarIcon( "bordertop" ) );
     bTop->setToggleButton( true );
-    bBottom = bb->addButton( "", true );
+    bBottom = new QPushButton(bb);
     bBottom->setPixmap( KWBarIcon( "borderbottom" ) );
     bBottom->setToggleButton( true );
-    bb->addStretch();
-    bb->layout();
     grid3->addWidget( bb, 6, 0 );
 
     connect( bLeft, SIGNAL( toggled( bool ) ), this, SLOT( brdLeftToggled( bool ) ) );
@@ -740,31 +660,7 @@ void KWParagDia::setupTab3()
     prev3 = new KWBorderPreview( tab3, "" );
     grid3->addMultiCellWidget( prev3, 0, 7, 1, 1 );
 
-    grid3->addRowSpacing( 0, lStyle->height() );
-    grid3->addRowSpacing( 1, cStyle->height() );
-    grid3->addRowSpacing( 2, lWidth->height() );
-    grid3->addRowSpacing( 3, cWidth->height() );
-    grid3->addRowSpacing( 4, lColor->height() );
-    grid3->addRowSpacing( 5, bColor->height() );
-    grid3->addRowSpacing( 6, bb->height() );
-    grid3->setRowStretch( 0, 0 );
-    grid3->setRowStretch( 1, 0 );
-    grid3->setRowStretch( 2, 0 );
-    grid3->setRowStretch( 3, 0 );
-    grid3->setRowStretch( 4, 0 );
-    grid3->setRowStretch( 5, 0 );
-    grid3->setRowStretch( 6, 0 );
     grid3->setRowStretch( 7, 1 );
-
-    grid3->addColSpacing( 0, lStyle->width() );
-    grid3->addColSpacing( 0, cStyle->width() );
-    grid3->addColSpacing( 0, lWidth->width() );
-    grid3->addColSpacing( 0, cWidth->width() );
-    grid3->addColSpacing( 0, lColor->width() );
-    grid3->addColSpacing( 0, bColor->width() );
-    grid3->addColSpacing( 0, bb->width() );
-    grid3->addColSpacing( 1, 250 );
-    grid3->setColStretch( 0, 0 );
     grid3->setColStretch( 1, 1 );
 }
 
@@ -783,44 +679,36 @@ void KWParagDia::setupTab4()
     g1->setExclusive( true );
 
     rNone = new QRadioButton( i18n( "&No numbering" ), gType );
-    rNone->resize( rNone->sizeHint() );
     tgrid->addWidget( rNone, 1, 0 );
     g1->insert( rNone, 0 );
 
     rANums = new QRadioButton( i18n( "&Arabic Numbers ( 1, 2, 3, 4, ... )" ), gType );
-    rANums->resize( rANums->sizeHint() );
     tgrid->addWidget( rANums, 2, 0 );
     g1->insert( rANums, 1 );
 
     rLRNums = new QRadioButton( i18n( "&Lower Roman Numbers ( i, ii, iii, iv, ... )" ), gType );
-    rLRNums->resize( rLRNums->sizeHint() );
     tgrid->addWidget( rLRNums, 3, 0 );
     g1->insert( rLRNums, 4 );
 
     rURNums = new QRadioButton( i18n( "&Upper Roman Numbers ( I, II, III, IV, ... )" ), gType );
-    rURNums->resize( rURNums->sizeHint() );
     tgrid->addWidget( rURNums, 4, 0 );
     g1->insert( rURNums, 5 );
 
     rLAlph = new QRadioButton( i18n( "L&ower Alphabetical ( a, b, c, d, ... )" ), gType );
-    rLAlph->resize( rLAlph->sizeHint() );
     tgrid->addWidget( rLAlph, 5, 0 );
     g1->insert( rLAlph, 2 );
 
     rUAlph = new QRadioButton( i18n( "U&pper Alphabetical ( A, B, C, D, ... )" ), gType );
-    rUAlph->resize( rUAlph->sizeHint() );
     tgrid->addWidget( rUAlph, 6, 0 );
     g1->insert( rUAlph, 3 );
 
     rCustom = new QRadioButton( i18n( "&Custom" ), gType );
-    rCustom->resize( rCustom->sizeHint() );
     tgrid->addWidget( rCustom, 7, 0 );
     g1->insert( rCustom, 7 );
 
     eCustomNum = new QLineEdit( gType );
-    eCustomNum->resize( eCustomNum->sizeHint() );
     eCustomNum->setEnabled( false );
-    tgrid->addWidget( eCustomNum, 8, 0 );
+    tgrid->addWidget( eCustomNum, 7, 1 );
     connect( rCustom, SIGNAL( toggled(bool) ), eCustomNum, SLOT( setEnabled(bool) ));
     connect( eCustomNum, SIGNAL( textChanged(const QString&) ),
              this, SLOT( counterDefChanged(const QString&) ) );
@@ -837,52 +725,19 @@ void KWParagDia::setupTab4()
     QWhatsThis::add( eCustomNum, custcountwt );
 
     rBullets = new QRadioButton( i18n( "&Bullets" ), gType );
-    rBullets->resize( rBullets->sizeHint() );
     tgrid->addWidget( rBullets, 9, 0 );
     g1->insert( rBullets, 6 );
 
     bBullets = new QPushButton( gType );
-    bBullets->resize( 30, 30 );
-    bBullets->setMinimumSize( bBullets->size() );
-    bBullets->setMaximumSize( bBullets->size() );
     tgrid->addWidget( bBullets, 9, 1 );
     connect( bBullets, SIGNAL( clicked() ), this, SLOT( changeBullet() ) );
 
     connect( g1, SIGNAL( clicked( int ) ), this, SLOT( typeChanged( int ) ) );
 
     tgrid->addRowSpacing( 0, 10 );
-    tgrid->addRowSpacing( 1, rNone->height() );
-    tgrid->addRowSpacing( 2, rANums->height() );
-    tgrid->addRowSpacing( 3, rLRNums->height() );
-    tgrid->addRowSpacing( 4, rURNums->height() );
-    tgrid->addRowSpacing( 5, rLAlph->height() );
-    tgrid->addRowSpacing( 6, rUAlph->height() );
-    tgrid->addRowSpacing( 7, rCustom->height() );
-    tgrid->addRowSpacing( 8, eCustomNum->height() );
-    tgrid->addRowSpacing( 9, rBullets->height() );
-    tgrid->addRowSpacing( 9, bBullets->height() );
-    tgrid->setRowStretch( 0, 0 );
-    tgrid->setRowStretch( 1, 0 );
-    tgrid->setRowStretch( 2, 0 );
-    tgrid->setRowStretch( 3, 0 );
-    tgrid->setRowStretch( 4, 0 );
-    tgrid->setRowStretch( 5, 0 );
-    tgrid->setRowStretch( 6, 0 );
-    tgrid->setRowStretch( 7, 0 );
     tgrid->setRowStretch( 8, 1 );
     tgrid->setRowStretch( 9, 1 );
-
-    tgrid->addColSpacing( 0, rANums->width() );
-    tgrid->addColSpacing( 0, rLRNums->width() );
-    tgrid->addColSpacing( 0, rURNums->width() );
-    tgrid->addColSpacing( 0, rLAlph->width() );
-    tgrid->addColSpacing( 0, rUAlph->width() );
-    tgrid->addColSpacing( 0, rCustom->width() );
-    tgrid->addColSpacing( 0, eCustomNum->width() );
-    tgrid->addColSpacing( 0, rBullets->width() );
-    tgrid->addColSpacing( 1, bBullets->width() );
     tgrid->setColStretch( 0, 1 );
-    tgrid->setColStretch( 1, 0 );
 
     grid4->addWidget( gType, 0, 0 );
 
@@ -890,36 +745,22 @@ void KWParagDia::setupTab4()
     txtgrid = new QGridLayout( gText, 4, 2, 5, 5 );
 
     lcLeft = new QLabel( i18n( "Left" ), gText );
-    lcLeft->resize( lcLeft->sizeHint() );
     txtgrid->addWidget( lcLeft, 1, 0 );
 
     lcRight = new QLabel( i18n( "Right" ), gText );
-    lcRight->resize( lcRight->sizeHint() );
     txtgrid->addWidget( lcRight, 1, 1 );
 
     ecLeft = new QLineEdit( gText );
-    ecLeft->resize( ecLeft->sizeHint() );
     txtgrid->addWidget( ecLeft, 2, 0 );
     connect( ecLeft, SIGNAL( textChanged( const QString & ) ), this, SLOT( leftTextChanged( const QString & ) ) );
 
     ecRight = new QLineEdit( gText );
-    ecRight->resize( ecRight->sizeHint() );
     txtgrid->addWidget( ecRight, 2, 1 );
     connect( ecRight, SIGNAL( textChanged( const QString & ) ), this, SLOT( rightTextChanged( const QString & ) ) );
 
     txtgrid->addRowSpacing( 0, 10 );
-    txtgrid->addRowSpacing( 1, lcLeft->height() );
-    txtgrid->addRowSpacing( 1, lcRight->height() );
-    txtgrid->addRowSpacing( 2, ecLeft->height() );
-    txtgrid->addRowSpacing( 2, ecRight->height() );
-    txtgrid->setRowStretch( 1, 0 );
-    txtgrid->setRowStretch( 2, 0 );
     txtgrid->setRowStretch( 3, 1 );
 
-    txtgrid->addColSpacing( 0, lcLeft->width() );
-    txtgrid->addColSpacing( 0, ecLeft->width() );
-    txtgrid->addColSpacing( 1, lcRight->width() );
-    txtgrid->addColSpacing( 1, ecRight->width() );
     txtgrid->setColStretch( 0, 1 );
     txtgrid->setColStretch( 1, 1 );
 
@@ -933,78 +774,41 @@ void KWParagDia::setupTab4()
 
     lDepth = new QLabel( i18n( "Depth:" ), gOther );
     lDepth->setAlignment( AlignRight | AlignVCenter );
-    lDepth->resize( lDepth->sizeHint() );
     ogrid->addWidget( lDepth, 1, 0 );
 
     sDepth = new QSpinBox( 0, 15, 1, gOther );
-    sDepth->resize( sDepth->sizeHint() );
     ogrid->addWidget( sDepth, 1, 1 );
     connect( sDepth, SIGNAL( valueChanged( int ) ), this, SLOT( depthChanged( int ) ) );
 
     lStart = new QLabel( i18n( "Start at ( 1, 2, ... ) :" ), gOther );
     lStart->setAlignment( AlignRight | AlignVCenter );
-    lStart->resize( lStart->sizeHint() );
     ogrid->addWidget( lStart, 2, 0 );
 
     // TODO: make this a spinbox or a combo, with values depending on the type
     // of numbering.
     eStart = new QLineEdit( gOther );
-    eStart->resize( eStart->sizeHint() );
     ogrid->addWidget( eStart, 2, 1 );
     connect( eStart, SIGNAL( textChanged( const QString & ) ), this, SLOT( startChanged( const QString & ) ) );
 
     rList = new QRadioButton( i18n( "&List Numbering" ), gOther );
-    rList->resize( rList->sizeHint() );
     ogrid->addWidget( rList, 3, 0 );
     g2->insert( rList, 0 );
 
     rChapter = new QRadioButton( i18n( "&Chapter Numbering" ), gOther );
-    rChapter->resize( rChapter->sizeHint() );
     ogrid->addWidget( rChapter, 3, 1 );
     g2->insert( rChapter, 1 );
 
     connect( g2, SIGNAL( clicked( int ) ), this, SLOT( numTypeChanged( int ) ) );
 
     ogrid->addRowSpacing( 0, 10 );
-    ogrid->addRowSpacing( 1, lDepth->height() );
-    ogrid->addRowSpacing( 1, sDepth->height() );
-    ogrid->addRowSpacing( 2, lStart->height() );
-    ogrid->addRowSpacing( 2, eStart->height() );
-    ogrid->addRowSpacing( 3, rList->height() );
-    ogrid->addRowSpacing( 3, rChapter->height() );
-    ogrid->setRowStretch( 1, 0 );
-    ogrid->setRowStretch( 2, 0 );
-    ogrid->setRowStretch( 3, 0 );
     ogrid->setRowStretch( 4, 1 );
-
-    ogrid->addColSpacing( 0, lDepth->width() );
-    ogrid->addColSpacing( 0, lStart->width() );
-    ogrid->addColSpacing( 0, rList->width() );
-    ogrid->addColSpacing( 1, sDepth->width() );
-    ogrid->addColSpacing( 1, eStart->width() );
-    ogrid->addColSpacing( 1, rChapter->width() );
-    ogrid->setColStretch( 0, 1 );
-    ogrid->setColStretch( 1, 1 );
 
     grid4->addWidget( gOther, 2, 0 );
 
     prev4 = new KWNumPreview( tab4, "" );
-    grid4->addMultiCellWidget( prev4, 0, 3, 1, 1 );
-
-    grid4->addRowSpacing( 0, gType->height() );
-    grid4->addRowSpacing( 1, gText->height() );
-    grid4->addRowSpacing( 2, gOther->height() );
-    grid4->setRowStretch( 0, 1 );
-    grid4->setRowStretch( 1, 1 );
-    grid4->setRowStretch( 2, 1 );
-    grid4->setRowStretch( 3, 1 );
-
-    grid4->addColSpacing( 0, gType->width() );
-    grid4->addColSpacing( 0, gText->width() );
-    grid4->addColSpacing( 0, gOther->width() );
-    grid4->addColSpacing( 1, 250 );
-    grid4->setColStretch( 0, 1 );
-    grid4->setColStretch( 1, 1 );
+    grid4->addMultiCellWidget( prev4, 0, 2, 1, 1 );
+    grid4->addColSpacing( 1, 100 );
+    grid4->setColStretch(1, 1);
 }
 
 /*================================================================*/
@@ -1014,7 +818,6 @@ void KWParagDia::setupTab5()
     grid5 = new QGridLayout( tab5, 4, 2, 15, 7 );
 
     lTab = new QLabel( i18n( "Tabulator positions are given in points ( pt )" ), tab5 );
-    lTab->resize( lTab->sizeHint() );
     grid5->addWidget( lTab, 0, 0 );
 
     eTabPos = new QLineEdit( tab5 );
@@ -1022,19 +825,18 @@ void KWParagDia::setupTab5()
         eTabPos->setValidator( new QIntValidator( eTabPos ) );
     else
         eTabPos->setValidator( new QDoubleValidator( eTabPos ) );
-    eTabPos->resize( eTabPos->sizeHint() );
     grid5->addWidget( eTabPos, 1, 0 );
 
     bbTabs = new KButtonBox( tab5 );
     bAdd = bbTabs->addButton( i18n( "Add" ), false );
+    bAdd->setEnabled(false);
     bDel = bbTabs->addButton( i18n( "Delete" ), false );
+    bDel->setEnabled(false);
     bModify = bbTabs->addButton( i18n( "Modify" ), false );
-    bbTabs->layout();
-    bbTabs->resize( bbTabs->sizeHint() );
+    bModify->setEnabled(false);
     grid5->addWidget( bbTabs, 2, 0 );
 
     lTabs = new QListBox( tab5 );
-    lTabs->resize( lTabs->sizeHint() );
     grid5->addWidget( lTabs, 3, 0 );
 
     g3 = new QButtonGroup( "", tab5 );
@@ -1042,60 +844,25 @@ void KWParagDia::setupTab5()
     g3->setExclusive( true );
 
     rtLeft = new QRadioButton( i18n( "Left" ), g3 );
-    rtLeft->resize( rtLeft->sizeHint() );
     tabGrid->addWidget( rtLeft, 0, 0 );
     g3->insert( rtLeft );
 
     rtCenter = new QRadioButton( i18n( "Center" ), g3 );
-    rtCenter->resize( rtCenter->sizeHint() );
     tabGrid->addWidget( rtCenter, 1, 0 );
     g3->insert( rtCenter );
 
     rtRight = new QRadioButton( i18n( "Right" ), g3 );
-    rtRight->resize( rtRight->sizeHint() );
     tabGrid->addWidget( rtRight, 2, 0 );
     g3->insert( rtRight );
 
     rtDecimal = new QRadioButton( i18n( "Decimal" ), g3 );
-    rtDecimal->resize( rtDecimal->sizeHint() );
     tabGrid->addWidget( rtDecimal, 3, 0 );
     g3->insert( rtDecimal );
 
-    tabGrid->addRowSpacing( 0, rtLeft->height() );
-    tabGrid->addRowSpacing( 1, rtRight->height() );
-    tabGrid->addRowSpacing( 2, rtCenter->height() );
-    tabGrid->addRowSpacing( 3, rtDecimal->height() );
-    tabGrid->setRowStretch( 0, 0 );
-    tabGrid->setRowStretch( 1, 0 );
-    tabGrid->setRowStretch( 2, 0 );
-    tabGrid->setRowStretch( 3, 0 );
     tabGrid->setRowStretch( 4, 1 );
-
-    tabGrid->addColSpacing( 0, rtLeft->width() );
-    tabGrid->addColSpacing( 0, rtRight->width() );
-    tabGrid->addColSpacing( 0, rtCenter->width() );
-    tabGrid->addColSpacing( 0, rtDecimal->width() );
     tabGrid->setColStretch( 0, 1 );
-
     grid5->addWidget( g3, 3, 1 );
-
-    grid5->addRowSpacing( 0, lTab->height() );
-    grid5->addRowSpacing( 1, eTabPos->height() );
-    grid5->addRowSpacing( 2, bbTabs->height() );
-    grid5->addRowSpacing( 3, lTabs->height() );
-    grid5->addRowSpacing( 3, g3->height() );
-    grid5->setRowStretch( 0, 0 );
-    grid5->setRowStretch( 1, 0 );
-    grid5->setRowStretch( 2, 0 );
     grid5->setRowStretch( 3, 1 );
-
-    grid5->addColSpacing( 0, lTab->width() );
-    grid5->addColSpacing( 0, eTabPos->width() );
-    grid5->addColSpacing( 0, bbTabs->width() );
-    grid5->addColSpacing( 0, lTabs->width() );
-    grid5->addColSpacing( 1, g3->width() );
-    grid5->setColStretch( 0, 1 );
-    grid5->setColStretch( 1, 1 );
 }
 
 /*================================================================*/
@@ -1526,3 +1293,4 @@ KWUnit KWParagDia::getLineSpacing()
     return u;
 }
 
+#include <paragdia.moc>
