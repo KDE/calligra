@@ -500,7 +500,7 @@ void KWTableFrameSet::position( Cell *theCell, bool setMinFrameHeight ) {
     double height  = getPositionOfRow(theCell->m_row + theCell->m_rows-1, true) - y;
 
     // Now take the border sizes and make the cell smaller so it still fits inside the grid.
-    KWFrame *frame = theCell->frame(0);
+    KWFrame *theFrame = theCell->frame(0);
     x+=theCell->leftBorder();
     width-=theCell->leftBorder();
     width-=theCell->rightBorder();
@@ -508,9 +508,9 @@ void KWTableFrameSet::position( Cell *theCell, bool setMinFrameHeight ) {
     height-=theCell->topBorder();
     height-=theCell->bottomBorder();
 
-    frame->setRect( x,y,width,height);
+    theFrame->setRect( x,y,width,height);
     if( setMinFrameHeight ) {
-        frame->setMinFrameHeight(height);
+        theFrame->setMinFrameHeight(height);
     }
 
     if(!theCell->isVisible())
@@ -728,17 +728,17 @@ kdDebug() << "adjusting " << rowPos << " -> " << rowPos + height << endl;
     unsigned int i =0;
     double oneMm = MM_TO_POINT( 1.0 );
     while(i < m_cols) {
-        KWFrame *frame = 0L;
+        KWFrame *theFrame = 0L;
         if(redoFrame.isEmpty())
         {
-            frame=new KWFrame(0L, 1, 1, 100, 20, KWFrame::RA_NO); // use dummy values here...
-            frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
-            frame->setNewFrameBehavior(KWFrame::NoFollowup);
+            theFrame=new KWFrame(0L, 1, 1, 100, 20, KWFrame::RA_NO); // use dummy values here...
+            theFrame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+            theFrame->setNewFrameBehavior(KWFrame::NoFollowup);
         }
         else
         {
             if(i<redoFrame.count())
-                frame=redoFrame.at(i)->getCopy();
+                theFrame=redoFrame.at(i)->getCopy();
         }
 
         Cell *newCell=0L;
@@ -761,11 +761,11 @@ kdDebug() << "adjusting " << rowPos << " -> " << rowPos + height << endl;
 
         newCell->m_cols=getCell(copyFromRow,i)->m_cols;
         newCell->setIsRemoveableHeader( isAHeader );
-        newCell->addFrame( frame, false );
-        frame->setBLeft( oneMm );
-        frame->setBRight( oneMm );
-        frame->setBTop( oneMm );
-        frame->setBBottom( oneMm );
+        newCell->addFrame( theFrame, false );
+        theFrame->setBLeft( oneMm );
+        theFrame->setBRight( oneMm );
+        theFrame->setBTop( oneMm );
+        theFrame->setBBottom( oneMm );
         position(newCell);
 
         i+=newCell->m_cols;
@@ -837,17 +837,17 @@ void KWTableFrameSet::insertCol( unsigned int newColNumber,QPtrList<KWFrameSet> 
                 continue;
             }
         }
-        KWFrame *frame = 0L;
+        KWFrame *theFrame = 0L;
         if(redoFrame.isEmpty())
         {
-            frame=new KWFrame(newCell, 1, 1, width, 20, KWFrame::RA_NO ); // dummy values..
-            frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+            theFrame=new KWFrame(newCell, 1, 1, width, 20, KWFrame::RA_NO ); // dummy values..
+            theFrame->setFrameBehaviour(KWFrame::AutoExtendFrame);
         }
         else
         {
-            frame=redoFrame.at(i)->getCopy();
+            theFrame=redoFrame.at(i)->getCopy();
         }
-        newCell->addFrame( frame,false );
+        newCell->addFrame( theFrame,false );
         if(cell->m_rows >1) {
             newCell->m_rows = cell->m_rows;
             i+=cell->m_rows -1;
@@ -1149,14 +1149,14 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
                 addCell( lastFrameSet );
             }
 
-            KWFrame *frame=0L;
+            KWFrame *theFrame=0L;
             if(listFrame.isEmpty())
             {
-                frame=firstFrame->getCopy();
-                frame->setRunAround( KWFrame::RA_NO );
-                frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
-                frame->setNewFrameBehavior(KWFrame::NoFollowup);
-                lastFrameSet->addFrame( frame,false );
+                theFrame=firstFrame->getCopy();
+                theFrame->setRunAround( KWFrame::RA_NO );
+                theFrame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+                theFrame->setNewFrameBehavior(KWFrame::NoFollowup);
+                lastFrameSet->addFrame( theFrame,false );
             }
             else
                 lastFrameSet->addFrame( listFrame.at(i)->getCopy(),false );
@@ -1191,14 +1191,14 @@ void KWTableFrameSet::viewFormatting( QPainter &/*painter*/, int )
 void KWTableFrameSet::validate()
 {
     for (unsigned int j=0; j < getNumCells() ; j++) {
-        KWFrame *frame = getCell(j)->frame(0);
-        if(frame->frameBehavior()==KWFrame::AutoCreateNewFrame) {
-            frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+        KWFrame *theFrame = getCell(j)->frame(0);
+        if(theFrame->frameBehavior()==KWFrame::AutoCreateNewFrame) {
+            theFrame->setFrameBehaviour(KWFrame::AutoExtendFrame);
             kdWarning() << "Table cell property frameBehaviour was incorrect; fixed" << endl;
         }
-        if(frame->newFrameBehavior()!=KWFrame::NoFollowup) {
+        if(theFrame->newFrameBehavior()!=KWFrame::NoFollowup) {
             kdWarning() << "Table cell property newFrameBehavior was incorrect; fixed" << endl;
-            frame->setNewFrameBehavior(KWFrame::NoFollowup);
+            theFrame->setNewFrameBehavior(KWFrame::NoFollowup);
         }
     }
 
@@ -1245,10 +1245,10 @@ void KWTableFrameSet::validate()
                 if(width== -1) width=minFrameWidth;
                 if(height== -1) height=minFrameHeight;
                 kdWarning() << " x: " << x << ", y:" << y << ", width: " << width << ", height: " << height << endl;
-                KWFrame *frame = new KWFrame(_frameSet, x, y, width, height, KWFrame::RA_NO );
-                frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
-                frame->setNewFrameBehavior(KWFrame::NoFollowup);
-                _frameSet->addFrame( frame,false );
+                KWFrame *theFrame = new KWFrame(_frameSet, x, y, width, height, KWFrame::RA_NO );
+                theFrame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+                theFrame->setNewFrameBehavior(KWFrame::NoFollowup);
+                _frameSet->addFrame( theFrame,false );
                 _frameSet->m_rows = 1;
                 _frameSet->m_cols = 1;
             }
@@ -1342,9 +1342,9 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
     for(uint i = 0; i < m_cells.count(); i++)
     {
         Cell *cell = m_cells.at(i);
-        //KWFrame *frame = frameIt.current();
-        KWFrame *frame = cell->frame( 0 );
-        if ( !frame )
+        //KWFrame *theFrame = frameIt.current();
+        KWFrame *theFrame = cell->frame( 0 );
+        if ( !theFrame )
             continue;
 
         // This sets topOfPage for the first cell that is on top of a page,
@@ -1358,13 +1358,13 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
         //kdDebug() << "KWTableFrameSet::drawBorders i=" << i << " row=" << cell->m_row << " col=" << cell->m_col
         //          << " topOfPage=" << topOfPage << endl;
 
-        QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
+        QRect outerRect( viewMode->normalToView( theFrame->outerRect() ) );
         if ( !crect.intersects( outerRect ) )
             continue;
 
-        QRect rect( viewMode->normalToView( m_doc->zoomRect( *frame ) ) );
+        QRect rect( viewMode->normalToView( m_doc->zoomRect( *theFrame ) ) );
         // Set the background color.
-        QBrush bgBrush( frame->backgroundColor() );
+        QBrush bgBrush( theFrame->backgroundColor() );
 	bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), &painter ) );
         painter.setBrush( bgBrush );
 
@@ -1382,17 +1382,17 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
         // otherwise the frames will erase the border when painting themselves.
 
         //    Border::drawBorders( painter, m_doc, frameRect,
-        //         frame->leftBorder(), frame->rightBorder(),
-        //         frame->topBorder(), frame->bottomBorder(),
+        //         theFrame->leftBorder(), theFrame->rightBorder(),
+        //         theFrame->topBorder(), theFrame->bottomBorder(),
         //         1, viewSetting );
 
         const int minborder = 1;
 
         // ###### We'll need some code to ensure that this->rightborder == cell_on_right->leftborder etc.
-        KoBorder topBorder = frame->topBorder();
-        KoBorder bottomBorder = frame->bottomBorder();
-        KoBorder leftBorder = frame->leftBorder();
-        KoBorder rightBorder = frame->rightBorder();
+        KoBorder topBorder = theFrame->topBorder();
+        KoBorder bottomBorder = theFrame->bottomBorder();
+        KoBorder leftBorder = theFrame->leftBorder();
+        KoBorder rightBorder = theFrame->rightBorder();
         int topBorderWidth = KoBorder::zoomWidthY( topBorder.ptWidth, m_doc, minborder );
         int bottomBorderWidth = KoBorder::zoomWidthY( bottomBorder.ptWidth, m_doc, minborder );
         int leftBorderWidth = KoBorder::zoomWidthX( leftBorder.ptWidth, m_doc, minborder );
@@ -1605,9 +1605,9 @@ void KWTableFrameSet::addTextFrameSets( QPtrList<KWTextFrameSet> & lst )
 }
 
 #ifndef NDEBUG
-void KWTableFrameSet::printDebug( KWFrame * frame )
+void KWTableFrameSet::printDebug( KWFrame * theFrame )
 {
-    KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>( frame->frameSet() );
+    KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>( theFrame->frameSet() );
     Q_ASSERT( cell );
     if ( cell ) {
         kdDebug() << " |  |- row :" << cell->m_row << endl;
@@ -1835,12 +1835,12 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
         m_currentCell->keyPressEvent( e );
 }
 
-void KWTableFrameSet::showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *view, const QPoint &point )
+void KWTableFrameSet::showPopup( KWFrame *theFrame, KWFrameSetEdit *edit, KWView *view, const QPoint &point )
 {
     KWTextFrameSetEdit * textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);
     Q_ASSERT( textedit ); // is it correct that this is always set ?
     if (textedit)
-        textedit->showPopup( frame, view, point );
+        textedit->showPopup( theFrame, view, point );
     else
     {
         QPopupMenu * popup = view->popupMenu("text_popup");

@@ -151,24 +151,24 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
     QPtrListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
     for ( ; frameIt.current(); ++frameIt )
     {
-        KWFrame *frame = frameIt.current();
+        KWFrame *theFrame = frameIt.current();
         // Due to zooming problems (and to QRect's semantics), be tolerant for one more pixel
         //frameRect.rRight() += 1;
         //frameRect.rBottom() += 1;
-        if ( frame->contains( dPoint ) )
+        if ( theFrame->contains( dPoint ) )
         {
-            iPoint.setX( m_doc->ptToLayoutUnit( dPoint.x() - frame->left() ) );
-            iPoint.setY( m_doc->ptToLayoutUnit( dPoint.y() - frame->top() ) + frame->internalY() );
+            iPoint.setX( m_doc->ptToLayoutUnit( dPoint.x() - theFrame->left() ) );
+            iPoint.setY( m_doc->ptToLayoutUnit( dPoint.y() - theFrame->top() ) + theFrame->internalY() );
 #ifdef DEBUG_DTI
             kdDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
-                      << " internalY=" << frame->internalY() << " because frame=" << frame
+                      << " internalY=" << theFrame->internalY() << " because frame=" << theFrame
                       << " contains dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
-            return frame;
+            return theFrame;
         }
         else if ( mouseSelection ) // try harder if true
         {
-            KoRect openLeftRect( *frame );
+            KoRect openLeftRect( *theFrame );
             openLeftRect.setLeft( 0 );
 #ifdef DEBUG_DTI
             kdDebug() << "documentToInternal: openLeftRect=" << DEBUGRECT( openLeftRect ) << endl;
@@ -177,29 +177,29 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
             {
                 // We are at the left of this frame (and not in any other frame of this frameset)
                 iPoint.setX( 0 );
-                iPoint.setY( m_doc->ptToLayoutUnit( dPoint.y() - frame->top() ) + frame->internalY() );
+                iPoint.setY( m_doc->ptToLayoutUnit( dPoint.y() - theFrame->top() ) + theFrame->internalY() );
 #ifdef DEBUG_DTI
                 kdDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
-                          << " internalY=" << frame->internalY() << " because openLeftRect=" << DEBUGRECT(openLeftRect)
+                          << " internalY=" << theFrame->internalY() << " because openLeftRect=" << DEBUGRECT(openLeftRect)
                           << " contains dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
-                return frame;
+                return theFrame;
             }
-            KoRect openTopRect( KoPoint( 0, 0 ), frame->bottomRight() );
+            KoRect openTopRect( KoPoint( 0, 0 ), theFrame->bottomRight() );
 #ifdef DEBUG_DTI
             kdDebug() << "documentToInternal: openTopRect=" << DEBUGRECT( openTopRect ) << endl;
 #endif
             if ( openTopRect.contains( dPoint ) )
             {
                 // We are at the top of this frame (...)
-                iPoint.setX( m_doc->ptToLayoutUnit( dPoint.x() - frame->left() ) );
-                iPoint.setY( frame->internalY() );
+                iPoint.setX( m_doc->ptToLayoutUnit( dPoint.x() - theFrame->left() ) );
+                iPoint.setY( theFrame->internalY() );
 #ifdef DEBUG_DTI
                 kdDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
-                          << " internalY=" << frame->internalY() << " because openTopRect=" << DEBUGRECT(openTopRect)
+                          << " internalY=" << theFrame->internalY() << " because openTopRect=" << DEBUGRECT(openTopRect)
                           << " contains dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
-                return frame;
+                return theFrame;
             }
         }
 #ifdef DEBUG_NTI
@@ -216,14 +216,14 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
         if ( pageNum + 1 >= (int)m_framesInPage.size() + m_firstPage )
         {
             // Under last frame of last page!
-            KWFrame *frame = frames.getLast();
-            iPoint.setX( m_doc->ptToLayoutUnit( frame->width() ) );
-            iPoint.setY( frame->internalY() + m_doc->ptToLayoutUnit( frame->height() ) );
+            KWFrame *theFrame = frames.getLast();
+            iPoint.setX( m_doc->ptToLayoutUnit( theFrame->width() ) );
+            iPoint.setY( theFrame->internalY() + m_doc->ptToLayoutUnit( theFrame->height() ) );
 #ifdef DEBUG_DTI
             kdDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
                       << " because we are under all frames of the last page" << endl;
 #endif
-            return frame;
+            return theFrame;
         }
         else
         {
@@ -231,19 +231,19 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
             if ( frameIt.current() )
             {
                 // There is a frame on the next page
-                KWFrame *frame = frameIt.current();
-                KoRect openTopRect( *frame );
+                KWFrame *theFrame = frameIt.current();
+                KoRect openTopRect( *theFrame );
                 openTopRect.setTop( 0 );
                 if ( openTopRect.contains( dPoint ) ) // We are at the top of this frame
-                    iPoint.setX( m_doc->ptToLayoutUnit( dPoint.x() - frame->left() ) );
+                    iPoint.setX( m_doc->ptToLayoutUnit( dPoint.x() - theFrame->left() ) );
                 else
                     iPoint.setX( 0 ); // We are, hmm, on the left or right of the frames
-                iPoint.setY( frame->internalY() );
+                iPoint.setY( theFrame->internalY() );
 #ifdef DEBUG_DTI
                 kdDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
                           << " because we are under all frames of page " << pageNum << endl;
 #endif
-                return frame;
+                return theFrame;
             } // else there is a gap (no frames on that page, but on some other further down)
             // This case isn't handled (and should be VERY rare I think)
         }
@@ -262,27 +262,27 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
     QPtrListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
-        KWFrame *frame = frameIt.current();
-        QRect r( 0, frame->internalY(), m_doc->ptToLayoutUnit( frame->width() ), m_doc->ptToLayoutUnit( frame->height() ) );
+        KWFrame *theFrame = frameIt.current();
+        QRect r( 0, theFrame->internalY(), m_doc->ptToLayoutUnit( theFrame->width() ), m_doc->ptToLayoutUnit( theFrame->height() ) );
 #ifdef DEBUG_ITD
         kdDebug() << "ITN: r=" << DEBUGRECT(r) << " iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
 #endif
         // r is the frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in layout units (aka internal)
         {
-            double offsetX = frame->x();
-            double offsetY = frame->y() - m_doc->layoutUnitToPt( frame->internalY() );
+            double offsetX = theFrame->x();
+            double offsetY = theFrame->y() - m_doc->layoutUnitToPt( theFrame->internalY() );
             dPoint.setX( m_doc->layoutUnitToPt( iPoint.x() ) + offsetX );
             dPoint.setY( m_doc->layoutUnitToPt( iPoint.y() ) + offsetY );
 #ifdef DEBUG_ITD
-            kdDebug() << "copy: " << frame->isCopy() << " hintDPoint.y()=" << hintDPoint.y() << " dPoint.y()=" << dPoint.y() << endl;
+            kdDebug() << "copy: " << theFrame->isCopy() << " hintDPoint.y()=" << hintDPoint.y() << " dPoint.y()=" << dPoint.y() << endl;
 #endif
             // First test: No "hintDPoint" specified, go for the first match
             // Second test: hintDPoint specified, check if we are far enough
             if ( hintDPoint.isNull() || hintDPoint.y() <= dPoint.y() )
-                return frame;
+                return theFrame;
             // Remember that this frame matched, in case we find no further frame that matches
-            lastFrame = frame;
+            lastFrame = theFrame;
         }
         else if ( lastFrame )
         {
@@ -323,8 +323,8 @@ QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
         return QPoint( 0, frames.getFirst()->internalY() + 2 );
     else
     {
-        KWFrame * frame = frames.getLast();
-        return QPoint( 0, frame->internalY() + m_doc->ptToLayoutUnit( frame->height() ) );
+        KWFrame * theFrame = frames.getLast();
+        return QPoint( 0, theFrame->internalY() + m_doc->ptToLayoutUnit( theFrame->height() ) );
     }
 }
 
@@ -336,12 +336,12 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
     KWFrameSet::drawContents( p, crect, cg, onlyChanged, resetChanged, edit, viewMode, canvas );
 }
 
-void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &r,
+void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRect &r,
                                 QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                 KWFrameSetEdit *edit )
 {
-    //kdDebug() << "KWTextFrameSet::drawFrame " << getName() << "(frame " << frameFromPtr( frame ) << ") crect(r)=" << DEBUGRECT( r ) << endl;
-    m_currentDrawnFrame = frame;
+    //kdDebug() << "KWTextFrameSet::drawFrame " << getName() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << DEBUGRECT( r ) << endl;
+    m_currentDrawnFrame = theFrame;
     // Update variables for each frame (e.g. for page-number)
     // If more than KWPgNumVariable need this functionality, create an intermediary base class
     QPtrListIterator<QTextCustomItem> cit( textDocument()->allCustomItems() );
@@ -350,9 +350,9 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
         KWPgNumVariable * var = dynamic_cast<KWPgNumVariable *>( cit.current() );
         if ( var && !var->isDeleted() && var->subtype() == KWPgNumVariable::VST_PGNUM_CURRENT )
         {
-            //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << frame->pageNum()+1
+            //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNum()+1
             //          << " and invalidating parag " << var->paragraph() << endl;
-            var->setPgNum( frame->pageNum() + 1 );
+            var->setPgNum( theFrame->pageNum() + 1 );
             var->resize();
             var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
             var->paragraph()->setChanged( true );
@@ -397,7 +397,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     {
         // This is drawing code, so we convert everything to pixels
         int docHeight = m_doc->layoutUnitToPixelY( textDocument()->height() );
-        QRect frameRect = m_doc->zoomRect( *frame );
+        QRect frameRect = m_doc->zoomRect( *theFrame );
 
         int totalHeight = m_doc->layoutUnitToPixelY( frames.last()->internalY() )
                           +  m_doc->zoomItY( frames.last()->height() );
@@ -411,15 +411,15 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     m_currentDrawnFrame = 0L;
 }
 
-void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *frame )
+void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *theFrame )
 {
     // This redraws the paragraph where the cursor is - with a small clip region around the cursor
     m_currentDrawnCanvas = canvas;
     KWViewMode *viewMode = canvas->viewMode();
     m_currentViewMode = viewMode;
-    m_currentDrawnFrame = frame;
+    m_currentDrawnFrame = theFrame;
 
-    QRect normalFrameRect( m_doc->zoomRect( *frame ) );
+    QRect normalFrameRect( m_doc->zoomRect( *theFrame ) );
     QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
     int lineY;
     // Cursor height, in pixels
@@ -433,7 +433,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
               << "   cursorHeight=" << cursorHeight << endl;
 #endif
     KoPoint dPoint;
-    KoPoint hintDPoint = frame->topLeft();
+    KoPoint hintDPoint = theFrame->topLeft();
     if ( internalToDocumentWithHint( iPoint, dPoint, hintDPoint ) )
     {
         QPoint vPoint = viewMode->normalToView( m_doc->zoomPoint( dPoint ) ); // from doc to view contents
@@ -459,7 +459,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
                   << " clip(view, after intersect)=" << DEBUGRECT(clip) << endl;
 #endif
 
-        QRegion reg = frameClipRegion( p, frame, clip, viewMode, true );
+        QRegion reg = frameClipRegion( p, theFrame, clip, viewMode, true );
         if ( !reg.isEmpty() )
         {
 #ifdef DEBUG_CURSOR
@@ -474,11 +474,11 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             p->setClipRegion( reg );
             // translate to qrt coords - after setting the clip region !
             // see internalToNormalWithHint
-            p->translate( viewFrameRect.left(), viewFrameRect.top() - m_doc->layoutUnitToPixelY( frame->internalY() ) );
-            p->setBrushOrigin( p->brushOrigin().x() + viewFrameRect.left(), p->brushOrigin().y() + viewFrameRect.top() - frame->internalY() );
+            p->translate( viewFrameRect.left(), viewFrameRect.top() - m_doc->layoutUnitToPixelY( theFrame->internalY() ) );
+            p->setBrushOrigin( p->brushOrigin().x() + viewFrameRect.left(), p->brushOrigin().y() + viewFrameRect.top() - theFrame->internalY() );
 
             // The settings come from this frame
-            KWFrame * settings = settingsFrame( frame );
+            KWFrame * settings = settingsFrame( theFrame );
 
             QPixmap *pix = 0;
             QColorGroup cg = QApplication::palette().active();
@@ -652,8 +652,8 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     // be moved down by formatVertically. We anticipate, and look at the bottom of the
     // line rather than the top of it, in order to find the bottom frame (the one
     // in which we'll end up). See TODO file for a real solution.
-    KWFrame * frame = internalToDocument( QPoint(0, yp+h), pt );
-    if (!frame)
+    KWFrame * theFrame = internalToDocument( QPoint(0, yp+h), pt );
+    if (!theFrame)
     {
 #ifdef DEBUG_MARGINS
         kdDebug(32002) << "  getMargins: internalToDocument returned frame=0L for yp+h=" << yp+h << " ->aborting with 0 margins" << endl;
@@ -668,7 +668,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     }
 #ifdef DEBUG_MARGINS
     else
-        kdDebugBody(32002) << "  getMargins: internalToDocument returned frame=" << DEBUGRECT( *frame )
+        kdDebugBody(32002) << "  getMargins: internalToDocument returned frame=" << DEBUGRECT( *theFrame )
                            << " and pt=" << pt.x() << "," << pt.y() << endl;
 #endif
     // Everything from there is in layout units
@@ -677,7 +677,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     // as still in one piece, and we miss the frames in the 2nd column.
     int left = 0;
     int from = left;
-    int to = m_doc->ptToLayoutUnit( frame->width() );
+    int to = m_doc->ptToLayoutUnit( theFrame->width() );
     bool init = false;
 
 #ifdef DEBUG_MARGINS
@@ -757,7 +757,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 #endif
     if ( from == to ) {
         from = 0;
-        to = m_doc->ptToLayoutUnit( frame->width() );
+        to = m_doc->ptToLayoutUnit( theFrame->width() );
     }
 
     if ( marginLeft )
@@ -1123,21 +1123,21 @@ void KWTextFrameSet::updateFrames()
     QValueList<FrameStruct>::Iterator it = sortedFrames.begin();
     for ( ; it != sortedFrames.end() ; ++it )
     {
-        KWFrame * frame = (*it).frame;
-        frames.append( frame );
+        KWFrame * theFrame = (*it).frame;
+        frames.append( theFrame );
 
-        Q_ASSERT( frame->pageNum() <= lastPage );
-        m_framesInPage[frame->pageNum() - m_firstPage]->append( frame );
+        Q_ASSERT( theFrame->pageNum() <= lastPage );
+        m_framesInPage[theFrame->pageNum() - m_firstPage]->append( theFrame );
 
-        if ( !frame->isCopy() )
+        if ( !theFrame->isCopy() )
             internalY += lastRealFrameHeight;
 
-        frame->setInternalY( internalY );
+        theFrame->setInternalY( internalY );
 
         // Update availHeight with the internal height of this frame - unless it's a copy
-        if ( ! ( frame->isCopy() && it != sortedFrames.begin() ) )
+        if ( ! ( theFrame->isCopy() && it != sortedFrames.begin() ) )
         {
-            lastRealFrameHeight = m_doc->ptToLayoutUnit( frame->height() );
+            lastRealFrameHeight = m_doc->ptToLayoutUnit( theFrame->height() );
             availHeight += lastRealFrameHeight;
         }
     }
@@ -1193,8 +1193,8 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
             res = -1;
         else
         {
-            KWFrame * frame = m_framesInPage[mid]->first();
-            internalY = frame->internalY();
+            KWFrame * theFrame = m_framesInPage[mid]->first();
+            internalY = theFrame->internalY();
 #ifdef DEBUG_ITD
             kdDebug() << "ITN: iPoint.y=" << iPoint.y() << " internalY=" << internalY << endl;
 #endif
@@ -1206,7 +1206,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
             // (Using the next page's first frame's internalY only works if there is a frame on the next page)
             if ( res >= 0 )
             {
-                int height = m_doc->ptToLayoutUnit( frame->height() );
+                int height = m_doc->ptToLayoutUnit( theFrame->height() );
 #ifdef DEBUG_ITD
                 kdDebug() << "ITN: height=" << height << endl;
 #endif
@@ -1256,11 +1256,11 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
         mid--;
         if ( !m_framesInPage[mid]->isEmpty() )
         {
-            KWFrame * frame = m_framesInPage[mid]->first();
+            KWFrame * theFrame = m_framesInPage[mid]->first();
 #ifdef DEBUG_ITN
-            kdDebug() << "KWTextFrameSet::internalToNormal going back to page " << mid << " - frame: " << frame->internalY() << endl;
+            kdDebug() << "KWTextFrameSet::internalToNormal going back to page " << mid << " - frame: " << theFrame->internalY() << endl;
 #endif
-            if ( frame->internalY() == internalY ) // same internalY as the frame we found before
+            if ( theFrame->internalY() == internalY ) // same internalY as the frame we found before
                 result = mid;
             else
                 break;
@@ -1271,14 +1271,14 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
     QPtrListIterator<KWFrame> frameIt( *m_framesInPage[result] );
     for ( ; frameIt.current(); ++frameIt )
     {
-        KWFrame *frame = frameIt.current();
-        QRect r( 0, frame->internalY(), m_doc->ptToLayoutUnit( frame->width() ), m_doc->ptToLayoutUnit( frame->height() ) );
+        KWFrame *theFrame = frameIt.current();
+        QRect r( 0, theFrame->internalY(), m_doc->ptToLayoutUnit( theFrame->width() ), m_doc->ptToLayoutUnit( theFrame->height() ) );
         // r is the frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
         {
-            dPoint.setX( m_doc->layoutUnitToPt( iPoint.x() ) + frame->left() );
-            dPoint.setY( m_doc->layoutUnitToPt( iPoint.y() - frame->internalY() ) + frame->top() );
-            return frame;
+            dPoint.setX( m_doc->layoutUnitToPt( iPoint.x() ) + theFrame->left() );
+            dPoint.setY( m_doc->layoutUnitToPt( iPoint.y() - theFrame->internalY() ) + theFrame->top() );
+            return theFrame;
         }
     }
 #ifdef DEBUG_ITD
@@ -1617,10 +1617,10 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastForma
             if ( frames.count() == oldCount )
             {
                 // Otherwise, create a new frame on next page
-                KWFrame *frame = frames.last();
-                KWFrame *frm = frame->getCopy();
+                KWFrame *theFrame = frames.last();
+                KWFrame *frm = theFrame->getCopy();
                 frm->moveBy( 0, m_doc->ptPaperHeight() );
-                //frm->setPageNum( frame->pageNum()+1 );
+                //frm->setPageNum( theFrame->pageNum()+1 );
                 addFrame( frm );
             }
 
@@ -1762,18 +1762,18 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame )
     QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );
 }
 
-bool KWTextFrameSet::isFrameEmpty( KWFrame * frame )
+bool KWTextFrameSet::isFrameEmpty( KWFrame * theFrame )
 {
     Qt3::QTextParag * lastParag = textDocument()->lastParag();
     ensureFormatted( lastParag );
     int bottom = lastParag->rect().top() + lastParag->rect().height();
 
-    if ( frame->frameSet() == this ) // safety check
-        return bottom < frame->internalY();
+    if ( theFrame->frameSet() == this ) // safety check
+        return bottom < theFrame->internalY();
 
-    kdWarning() << "KWTextFrameSet::isFrameEmpty called for frame " << frame << " which isn't a child of ours!" << endl;
-    if ( frame->frameSet() )
-        kdDebug() << "(this is " << getName() << " and the frame belongs to " << frame->frameSet()->getName() << ")" << endl;
+    kdWarning() << "KWTextFrameSet::isFrameEmpty called for frame " << theFrame << " which isn't a child of ours!" << endl;
+    if ( theFrame->frameSet() )
+        kdDebug() << "(this is " << getName() << " and the frame belongs to " << theFrame->frameSet()->getName() << ")" << endl;
     return false;
 }
 
@@ -1788,16 +1788,16 @@ bool KWTextFrameSet::canRemovePage( int num )
     QPtrListIterator<KWFrame> frameIt( framesInPage( num ) );
     for ( ; frameIt.current(); ++frameIt )
     {
-        KWFrame * frame = frameIt.current();
-        Q_ASSERT( frame->pageNum() == num );
-        Q_ASSERT( frame->frameSet() == this );
-        bool isEmpty = isFrameEmpty( frame );
+        KWFrame * theFrame = frameIt.current();
+        Q_ASSERT( theFrame->pageNum() == num );
+        Q_ASSERT( theFrame->frameSet() == this );
+        bool isEmpty = isFrameEmpty( theFrame );
 #ifdef DEBUG_FORMAT_MORE
         kdDebug() << "KWTextFrameSet(" << getName() << ")::canRemovePage"
                   << " found a frame on page " << num << " empty:" << isEmpty << endl;
 #endif
         // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame OR it's empty
-        bool isCopy = frame->isCopy() && frameIt.current() != frames.first();
+        bool isCopy = theFrame->isCopy() && frameIt.current() != frames.first();
         if ( !isCopy && !isEmpty )
             return false;
     }
@@ -2291,12 +2291,12 @@ void KWTextFrameSet::applyStyleChange( KoStyle * changedStyle, int paragLayoutCh
     m_textobj->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
 }
 
-void KWTextFrameSet::showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *view, const QPoint &point )
+void KWTextFrameSet::showPopup( KWFrame *theFrame, KWFrameSetEdit *edit, KWView *view, const QPoint &point )
 {
     KWTextFrameSetEdit * textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);
     Q_ASSERT( textedit ); // is it correct that this is always set ?
     if (textedit)
-        textedit->showPopup( frame, view, point );
+        textedit->showPopup( theFrame, view, point );
     else
     {
         QPopupMenu * popup = view->popupMenu("text_popup");
@@ -2474,11 +2474,11 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     KoPoint hintDPoint;
     if ( m_currentFrame )
         hintDPoint = m_currentFrame->topLeft();
-    KWFrame * frame = textFrameSet()->internalToDocumentWithHint( QPoint(x, y), pt, hintDPoint );
-    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible frame=" << frame << " m_currentFrame=" << m_currentFrame << endl;
-    if ( frame && m_currentFrame != frame )
+    KWFrame * theFrame = textFrameSet()->internalToDocumentWithHint( QPoint(x, y), pt, hintDPoint );
+    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible frame=" << theFrame << " m_currentFrame=" << m_currentFrame << endl;
+    if ( theFrame && m_currentFrame != theFrame )
     {
-        m_currentFrame = frame;
+        m_currentFrame = theFrame;
         m_canvas->gui()->getView()->updatePageInfo();
     }
     QPoint p = textFrameSet()->kWordDocument()->zoomPoint( pt );
@@ -2500,10 +2500,10 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
         hideCursor(); // Need to do that with the old m_currentFrame
 
     QPoint iPoint;
-    KWFrame * frame = textFrameSet()->documentToInternal( dPoint, iPoint, true );
-    if ( frame && m_currentFrame != frame )
+    KWFrame * theFrame = textFrameSet()->documentToInternal( dPoint, iPoint, true );
+    if ( theFrame && m_currentFrame != theFrame )
     {
-        m_currentFrame = frame;
+        m_currentFrame = theFrame;
         m_canvas->gui()->getView()->updatePageInfo();
     }
 
