@@ -85,14 +85,14 @@ KFMView::KFMView()
 	new KAction(i18n("Bring Widget to Front"), "raise", KShortcut(0), manager, SLOT(bringWidgetToFront()), actionCollection(), "format_raise");
 	new KAction(i18n("Send Widget to Back"), "lower", KShortcut(0), manager, SLOT(sendWidgetToBack()), actionCollection(), "format_lower");
 
-	KActionMenu *alignMenu = new KActionMenu(i18n("Align Widgets position"), "aopos2grid", actionCollection(), "align_menu");
+	KActionMenu *alignMenu = new KActionMenu(i18n("Align Widget's position"), "aopos2grid", actionCollection(), "align_menu");
 	alignMenu->insert( new KAction(i18n("To Left"), "aoleft", KShortcut(0), manager, SLOT(alignWidgetsToLeft()), actionCollection(), "align_to_left") );
 	alignMenu->insert( new KAction(i18n("To Right"), "aoright", KShortcut(0), manager, SLOT(alignWidgetsToRight()), actionCollection(), "align_to_right") );
 	alignMenu->insert( new KAction(i18n("To Top"), "aotop", KShortcut(0), manager, SLOT(alignWidgetsToTop()), actionCollection(), "align_to_top") );
 	alignMenu->insert( new KAction(i18n("To Bottom"), "aobottom", KShortcut(0), manager, SLOT(alignWidgetsToBottom()), actionCollection(), "align_to_bottom") );
 	alignMenu->insert( new KAction(i18n("To Grid"), "aopos2grid", KShortcut(0), manager, SLOT(alignWidgetsToGrid()), actionCollection(), "align_to_grid") );
 
-	KActionMenu *sizeMenu = new KActionMenu(i18n("Adjust Widgets size"), "aogrid", actionCollection(), "adjust_size_menu");
+	KActionMenu *sizeMenu = new KActionMenu(i18n("Adjust Widget's size"), "aogrid", actionCollection(), "adjust_size_menu");
 	sizeMenu->insert( new KAction(i18n("To Fit"), "aofit", KShortcut(0), manager, SLOT(adjustWidgetSize()), actionCollection(), "adjust_to_fit") );
 	sizeMenu->insert( new KAction(i18n("To Grid"), "aogrid", KShortcut(0), manager, SLOT(adjustSizeToGrid()), actionCollection(), "adjust_size_grid") );
 	sizeMenu->insert( new KAction(i18n("To Shortest"), "aoshortest", KShortcut(0), manager, SLOT(adjustHeightToSmall()), actionCollection(), "adjust_height_small") );

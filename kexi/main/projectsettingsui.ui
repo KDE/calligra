@@ -128,7 +128,7 @@
                                 <cstring>autoStartup</cstring>
                             </property>
                             <property name="text">
-                                <string>Automatically launc a document on startup</string>
+                                <string>Automatically launch a document on startup</string>
                             </property>
                         </widget>
                         <widget class="QLabel" row="1" column="0">
@@ -391,7 +391,7 @@
                     <widget class="QListBox" row="0" column="0" rowspan="2" colspan="1">
                         <item>
                             <property name="text">
-                                <string>-- Seperator --</string>
+                                <string>-- Separator --</string>
                             </property>
                         </item>
                         <item>

@@ -45,7 +45,7 @@ KexiUserAction::execute()
 			Kexi::partManager().part(i); //load part if doesn't exists
 			KexiPart::Item *item = m_win->project()->item(i, m_args[1].toString());
 			if(!m_win->openObject(item, Kexi::DataViewMode)) {
-				KMessageBox::error(m_win, i18n("Specified document couldn't be opened"));
+				KMessageBox::error(m_win, i18n("Specified document could not be opened."));
 				return;
 			}
 			break;
