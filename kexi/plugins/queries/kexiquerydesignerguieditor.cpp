@@ -22,6 +22,7 @@
 
 #include <qlayout.h>
 #include <qpainter.h>
+#include <qdom.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -104,9 +105,12 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 		this, SLOT(slotDroppedAtRow(KexiTableItem*,int,QDropEvent*,KexiTableItem*&)));
 	connect(m_data, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)),
 		this, SLOT(slotBeforeCellChanged(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)));
-
 	connect(m_data, SIGNAL(rowInserted(KexiTableItem*,uint)), 
 		this, SLOT(slotRowInserted(KexiTableItem*,uint)));
+	connect(m_relations, SIGNAL(tablePositionChanged(KexiRelationViewTableContainer*)),
+		this, SLOT(slotTablePositionChanged(KexiRelationViewTableContainer*)));
+	connect(m_relations, SIGNAL(aboutConnectionRemove(KexiRelationViewConnection*)),
+		this, SLOT(slotAboutConnectionRemove(KexiRelationViewConnection*)));
 
 	kdDebug() << "KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor() data = " << m_data << endl;
 //	m_table = new KexiTableView(m_data, s, "designer");
@@ -125,6 +129,10 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 //	m_spl->setResizeMode(m_relations, QSplitter::KeepSize);
 //	m_spl->setResizeMode(m_head, QSplitter::FollowSizeHint);
 	m_spl->setSizes(QValueList<int>()<< 800<<400);
+
+	if (!m_dialog->neverSaved()) {
+		loadLayout();
+	}
 }
 
 
@@ -415,10 +423,20 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata)
 	KexiDB::QuerySchema *query = temp->query;
 	temp->query = 0; //will be returend, so: don't keep it
 	(KexiDB::SchemaData&)*query = sdata; //copy main attributes
-	if (!KexiViewBase::storeNewData(*query)) {
+
+//	storeObjectSchemaData( *query );
+	if (!m_mainWin->project()->dbConnection()
+			->storeObjectSchemaData( *query, true /*newObject*/ ))
+	{
 		delete query;
 		return 0;
 	}
+	m_dialog->setId( query->id() );
+
+/*	if (!KexiViewBase::storeNewData(*query)) {
+		delete query;
+		return 0;
+	}*/
 
 	//serialize detailed XML query definition
 	QString xml = "<query_layout>", tmp;
@@ -429,10 +447,17 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata)
 		 +"\" y=\""+QString::number(table_cont->y())
 		 +"\" width=\""+QString::number(table_cont->width())
 		 +"\" height=\""+QString::number(table_cont->height())
-		 +"\" />";
+		 +"\"/>";
 		xml += tmp;
 	}
-	
+
+	KexiRelationViewConnection *con; 
+	for (ConnectionListIterator it(*m_relations->connections()); (con = it.current()); ++it) {
+		tmp = QString("<conn mtable=\"") + con->masterTable()->table()->name() 
+			+ "\" mfield=\"" + con->masterField() + "\" dtable=\"" + con->detailsTable()->table()->name() 
+			+ "\" dfield=\"" + con->detailsField() + "\"/>";
+		xml += tmp;
+	}
 	xml += "</query_layout>";
 	if (!storeDataBlock( xml, "query_layout" )) {
 		delete query;
@@ -440,6 +465,45 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata)
 	}
 	
 	return query;
+}
+
+bool KexiQueryDesignerGuiEditor::loadLayout()
+{
+	QString xml;
+	if (!loadDataBlock( xml, "query_layout" )) {
+		//TODO errmsg
+		return false;
+	}
+	QDomDocument doc;
+	doc.setContent(xml);
+	QDomElement doc_el = doc.documentElement(), el;
+	if (doc_el.tagName()!="query_layout") {
+		//TODO errmsg
+		return false;
+	}
+
+	const bool was_dirty = dirty();
+
+	//add tables
+	for (el = doc_el.firstChild().toElement(); !el.isNull(); el=el.nextSibling().toElement()) {
+		if (el.tagName()=="table") {
+			KexiDB::TableSchema *t = m_conn->tableSchema(el.attribute("name"));
+			QRect rect(el.attribute("x").toInt(),el.attribute("y").toInt(),
+				el.attribute("width").toInt(),el.attribute("height").toInt());
+			m_relations->addTable( t, rect );
+		}
+		else if (el.tagName()=="conn") {
+			SourceConnection src_conn;
+			src_conn.masterTable = el.attribute("mtable");
+			src_conn.masterField = el.attribute("mfield");
+			src_conn.detailsTable = el.attribute("dtable");
+			src_conn.detailsField = el.attribute("dfield");
+			m_relations->addConnection(src_conn);
+		}
+	}
+	if (!was_dirty)
+		setDirty(false);
+	return true;
 }
 
 bool KexiQueryDesignerGuiEditor::storeData()
@@ -575,6 +639,16 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		//TODO:
 		//unused yet
 	}
+}
+
+void KexiQueryDesignerGuiEditor::slotTablePositionChanged(KexiRelationViewTableContainer*)
+{
+	setDirty(true);
+}
+
+void KexiQueryDesignerGuiEditor::slotAboutConnectionRemove(KexiRelationViewConnection*)
+{
+	setDirty(true);
 }
 
 KexiPropertyBuffer *KexiQueryDesignerGuiEditor::propertyBuffer()

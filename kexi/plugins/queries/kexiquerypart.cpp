@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004   Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -134,7 +135,6 @@ void KexiQueryPart::initInstanceActions( int mode, KActionCollection *col )
 KexiQueryPart::TempData::TempData(QObject* parent)
  : KexiDialogTempData(parent)
  , query(0)
- , needsToLoadLayout(false)
 {
 }
 

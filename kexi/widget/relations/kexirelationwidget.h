@@ -49,7 +49,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase //QWidge
 		~KexiRelationWidget();
 
 		//! \return a dictionary of added tables
-		TablesDict* tables();
+		TablesDict* tables() const;
+		const ConnectionList* connections() const;
 
 //		KexiRelationView	*relationView() const { return m_relationView; }
 		void			addTable(QString t);
@@ -61,9 +62,18 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase //QWidge
 	signals:
 		void tableAdded(KexiDB::TableSchema& t);
 		void tableHidden(KexiDB::TableSchema& t);
+		void tablePositionChanged(KexiRelationViewTableContainer*);
+		void aboutConnectionRemove(KexiRelationViewConnection*);
 	
 	public slots:
-		void addTable(KexiDB::TableSchema *t);
+		/*! Adds a table \a t to the area. This changes only visual representation.
+		 If \a rect is valid, table widget rgeometry will be initialized.
+		 */
+		void addTable(KexiDB::TableSchema *t, const QRect &rect = QRect());
+
+		//! Adds a connection \a con to the area. This changes only visual representation.
+		void addConnection(const SourceConnection& conn);
+
 		void removeSelectedObject();
 
 	protected slots:

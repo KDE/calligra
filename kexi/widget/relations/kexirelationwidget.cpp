@@ -112,6 +112,11 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 		this, SLOT(connectionContextMenuRequest( const QPoint& )));
 	connect(m_relationView, SIGNAL(tableHidden(KexiDB::TableSchema&)),
 		this, SLOT(slotTableHidden(KexiDB::TableSchema&)));
+	connect(m_relationView, SIGNAL(tablePositionChanged(KexiRelationViewTableContainer*)),
+		this, SIGNAL(tablePositionChanged(KexiRelationViewTableContainer*)));
+	connect(m_relationView, SIGNAL(aboutConnectionRemove(KexiRelationViewConnection*)),
+		this, SIGNAL(aboutConnectionRemove(KexiRelationViewConnection*)));
+
 
 #if 0
 	if(!embedd)
@@ -135,9 +140,14 @@ KexiRelationWidget::~KexiRelationWidget()
 {
 }
 
-TablesDict* KexiRelationWidget::tables() 
+TablesDict* KexiRelationWidget::tables() const
 {
 	return m_relationView->tables();
+}
+
+const ConnectionList* KexiRelationWidget::connections() const
+{ 
+	return m_relationView->connections();
 }
 
 void
@@ -151,11 +161,11 @@ KexiRelationWidget::slotAddTable()
 }
 
 void
-KexiRelationWidget::addTable(KexiDB::TableSchema *t)
+KexiRelationWidget::addTable(KexiDB::TableSchema *t, const QRect &rect)
 {
 	if (!t)
 		return;
-	m_relationView->addTable(t);
+	m_relationView->addTable(t, rect);
 	kdDebug() << "KexiRelationWidget::slotAddTable(): adding table " << t->name() << endl;
 
 	int oi=m_tableCombo->currentItem();
@@ -163,7 +173,8 @@ KexiRelationWidget::addTable(KexiDB::TableSchema *t)
 	m_tableCombo->removeItem(m_tableCombo->currentItem());
 	if (m_tableCombo->count()>0)
 	{
-		if (oi>=m_tableCombo->count()) oi=m_tableCombo->count()-1;
+		if (oi>=m_tableCombo->count())
+			oi=m_tableCombo->count()-1;
 		m_tableCombo->setCurrentItem(oi);
 	}
 	else {
@@ -173,6 +184,11 @@ KexiRelationWidget::addTable(KexiDB::TableSchema *t)
 	emit tableAdded(*t);
 }
 
+void
+KexiRelationWidget::addConnection(const SourceConnection& conn)
+{
+	m_relationView->addConnection(conn);
+}
 
 void
 KexiRelationWidget::addTable(QString t)

@@ -538,7 +538,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 		s.detailsField = rcvField;
 
 //		m_parent->addConnection(s);
-		m_view->addConnection(s, false);
+		m_view->addConnection(s); //, false);
 
 		kdDebug() << "KexiRelationViewTable::slotDropped() " << srcTable << ":" << srcField << " " 
 			<< m_table << ":" << rcvField << endl;

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003   Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -62,7 +63,6 @@ class KexiQueryPart : public KexiPart::Part
 			public:
 				TempData(QObject* parent);
 				KexiDB::QuerySchema *query;
-				bool needsToLoadLayout : 1;
 		};
 
 	protected:

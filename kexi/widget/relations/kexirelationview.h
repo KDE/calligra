@@ -45,6 +45,7 @@ namespace KexiDB
 typedef QDict<KexiRelationViewTableContainer> TablesDict;
 typedef QDictIterator<KexiRelationViewTableContainer> TablesDictIterator;
 typedef QPtrList<KexiRelationViewConnection> ConnectionList;
+typedef QPtrListIterator<KexiRelationViewConnection> ConnectionListIterator;
 
 struct SourceConnection
 {
@@ -52,7 +53,6 @@ struct SourceConnection
 	QString detailsTable;
 	QString masterField;
 	QString detailsField;
-
 };
 
 /*! KexiRelationView class provides a view for displaying relations between database tables.
@@ -75,11 +75,13 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 		//! \return a dictionary of added tables
 		TablesDict* tables() { return &m_tables; }
 
-		//! Adds a table \a t to the area. This changes only visual representation.
-		void		addTable(KexiDB::TableSchema *t);
+		/*! Adds a table \a t to the area. This changes only visual representation.
+		 If \a rect is valid, table widget rgeometry will be initialized.
+		 */
+		void addTable(KexiDB::TableSchema *t, const QRect &rect = QRect());
 
 		//! Adds a connection \a con to the area. This changes only visual representation.
-		void		addConnection(SourceConnection con, bool interactive=true);
+		void addConnection(const SourceConnection& _conn /*, bool interactive=true*/);
 
 //		RelationList	getConnections()const { return m_connections; };
 		void setReadOnly(bool);
@@ -89,6 +91,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 
 		virtual QSize sizeHint() const;
 
+		const ConnectionList* connections() const { return &m_connectionViews; }
+
 	signals:
 		void tableContextMenuRequest( const QPoint& pos );
 		void connectionContextMenuRequest( const QPoint& pos );
@@ -97,6 +101,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 		void connectionViewGotFocus();
 		void emptyAreaGotFocus();
 		void tableHidden(KexiDB::TableSchema& t);
+		void tablePositionChanged(KexiRelationViewTableContainer*);
+		void aboutConnectionRemove(KexiRelationViewConnection*);
 
 	public slots:
 		//! Clears current selection - table/query or connection

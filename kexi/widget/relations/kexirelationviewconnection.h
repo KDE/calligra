@@ -54,6 +54,9 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewConnection
 
 		KexiRelationViewTableContainer	*masterTable() { return m_masterTable; }
 		KexiRelationViewTableContainer	*detailsTable() { return m_detailsTable; }
+		QString masterField() const { return m_masterField; }
+		QString detailsField() const { return m_detailsField; }
+
 
 		bool matchesPoint(const QPoint &p, int tolerance=3);
 //		SourceConnection	connection() { return m_conn; }

@@ -140,7 +140,7 @@ void KexiDialogBase::detachFromGUIClient() {
 
 int KexiDialogBase::id() const 
 {
-	return partItem() ? partItem()->identifier() : m_id;
+	return (partItem() && partItem()->identifier()>0) ? partItem()->identifier() : m_id;
 }
 
 void KexiDialogBase::setContextHelp(const QString& caption, const QString& text, const QString& iconName) {
@@ -400,6 +400,8 @@ bool KexiDialogBase::storeData()
 
 bool KexiDialogBase::storeDataBlock_internal( const QString &dataString, int o_id, const QString& dataID )
 {
+	if (o_id<=0)
+		return false;
 	KexiDB::Connection *conn = m_parentWindow->project()->dbConnection();
 	KexiDB::Driver *drv = conn->driver();
 	

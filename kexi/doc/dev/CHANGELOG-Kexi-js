@@ -317,6 +317,10 @@ KexiTableView
 - Combobox's button is now in "toggle" mode; popping up is now better hidden/shown
 KexiViewBase
 - storeNewData(), storeDataBlock() simplified; parts code updated for this change
+Query Desinger
+- relations widget: geometries for tables and connection lines are now stored
+- 'dirty' flag better updated
+
 
 2004-06-15
 2004-06-16

@@ -103,7 +103,7 @@ KexiRelationView::~KexiRelationView()
 }
 
 void
-KexiRelationView::addTable(KexiDB::TableSchema *t)
+KexiRelationView::addTable(KexiDB::TableSchema *t, const QRect &rect)
 {
 	if(!t)
 		return;
@@ -128,10 +128,15 @@ KexiRelationView::addTable(KexiDB::TableSchema *t)
 	
 	addChild(c, 100,100);
 //	c->setFixedSize(110, 160);
+	if (rect.isValid()) {
+		c->setGeometry(rect);
+	}
 	c->show();
 	updateGeometry();
-	c->updateGeometry();
-	c->resize(c->sizeHint());
+	if (!rect.isValid()) {
+		c->updateGeometry();
+		c->resize(c->sizeHint());
+	}
 	int x, y;
 
 	if(m_tables.count() > 0)
@@ -155,7 +160,9 @@ KexiRelationView::addTable(KexiDB::TableSchema *t)
 	y = 5;
 	QPoint p = viewportToContents(QPoint(x, y));
 	recalculateSize(p.x() + c->width(), p.y() + c->height());
-	moveChild(c, x, y);
+	if (!rect.isValid()) {
+		moveChild(c, x, y);
+	}
 
 	m_tables.insert(t->name(), c);
 
@@ -166,8 +173,9 @@ KexiRelationView::addTable(KexiDB::TableSchema *t)
 }
 
 void
-KexiRelationView::addConnection(SourceConnection conn, bool)
+KexiRelationView::addConnection(const SourceConnection& _conn)
 {
+	SourceConnection conn = _conn;
 	kdDebug() << "KexiRelationView::addConnection()" << endl;
 
 	KexiRelationViewTableContainer *master = m_tables[conn.masterTable];
@@ -273,6 +281,8 @@ KexiRelationView::containerMoved(KexiRelationViewTableContainer *c)
 
 	QPoint p = viewportToContents(QPoint(c->x(), c->y()));
 	recalculateSize(p.x() + c->width(), p.y() + c->height());
+
+	emit tablePositionChanged(c);
 }
 
 void
@@ -490,6 +500,7 @@ KexiRelationView::hideTable(KexiRelationViewTableContainer* tableView)
 void
 KexiRelationView::removeConnection(KexiRelationViewConnection *conn)
 {
+	emit aboutConnectionRemove(conn);
 	m_connectionViews.remove(conn);
 	updateContents(conn->connectionRect());
 	kdDebug() << "KexiRelationView::removeConnection()" << endl;

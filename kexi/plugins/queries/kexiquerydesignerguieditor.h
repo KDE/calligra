@@ -35,6 +35,8 @@ class KexiTableItem;
 class KexiRelationWidget;
 class KexiSectionHeader;
 class KexiTableViewPropertyBuffer;
+class KexiRelationViewTableContainer;
+class KexiRelationViewConnection;
 
 namespace KexiPart
 {
@@ -92,6 +94,9 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 
 		KexiQueryPart::TempData * tempData();
 
+		/*! Loads layout of relation GUI diagram. */
+		bool loadLayout();
+
 	protected slots:
 		void slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e);
 		void slotDroppedAtRow(KexiTableItem *item, int row, 
@@ -104,6 +109,8 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 			QVariant newValue, KexiDB::ResultInfo* result);
 
 		void slotRowInserted(KexiTableItem* item, uint row);
+		void slotTablePositionChanged(KexiRelationViewTableContainer*);
+		void slotAboutConnectionRemove(KexiRelationViewConnection*);
 
 	private:
 		KexiTableViewData *m_data;

@@ -193,6 +193,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 dialog has not yet assigned valid identifier (it has just negative temp. number).
 		 \sa KexiDialogBase::id()
 		 */
+//UNUSED NOW: TODO: REMOVE
 		int m_newlyAssignedID;
 
 		bool m_dirty : 1;

@@ -117,19 +117,16 @@ void KexiViewBase::setDirty(bool set)
 	return true;
 }*/
 
-/*virtual*/
 KexiDB::SchemaData* KexiViewBase::storeNewData(const KexiDB::SchemaData& sdata)
 {
-	KexiDB::SchemaData *new_schema = new KexiDB::SchemaData(sdata);
+	KexiDB::SchemaData *new_schema = new KexiDB::SchemaData();
+	*new_schema = sdata;
 
 	if (!m_mainWin->project()->dbConnection()
-			->storeObjectSchemaData( *new_schema, true /*newObject*/ ))
+			->storeObjectSchemaData( *new_schema, true ))
 	{
 		delete new_schema;
 		new_schema=0;
-	}
-	else {
-		setDirty(false);
 	}
 	m_newlyAssignedID = new_schema->id();
 	return new_schema;
@@ -148,7 +145,6 @@ bool KexiViewBase::storeData()
 	return true;
 }
 
-//bool KexiViewBase::storeDataBlock( const QString &dataString, const QString &id, const QString& dataID )
 bool KexiViewBase::storeDataBlock( const QString &dataString, const QString &dataID )
 {
 	if (!m_dialog)
