@@ -315,7 +315,48 @@ TODO: fix lucijan's hack, with part loading (29 feb)
                  friend class Manager;
                  friend class KexiProject;
 +                friend class KexiMainWindowImpl;
- 
+
+
+TODO: reuse KexiNameWidget in KexiNewProjectWizard!
+
+2004-03-08
+
+
+2004-03-06
+2004-03-05
+KexiDB
+	-'helpText' for SchemaData and Field members renamed to 'description'
+	-KEXIDB METADATA FORMAT CHANGED (to 1.1): 
+	  helpText renamed to description in kexi__objects table
+	-Connection::storeObjectSchemaData() added -can be reused mostly for object storage 
+Core
+	-string2Identifier(): now created identifier is forced to lowercase
+Kexi Parts
+	-part item's and part info's 'mime' is now of QCString type
+	-structures like items dicts are now case insensitive QAsciiDict
+Kexi Dialogs
+	-storeData() and storeNewData() methods added
+	-currently used KexiDB::SchemaData object is pointed by KexiDialogBase 
+	 (useful for data saving)
+Kexi Views
+	-storeData() and storeNewData() methods added; called by parent dialog
+Kexi Project
+	-now keeps a list of never-stored part items (on 1st saving, a given 
+	 item is moved to a list of regular part items)
+	-createObject() -generic method for initiating object creation on the backend; 
+	 updates item's data when necessary, etc.
+Kexi Properties
+	-QCString is used for property name instead of QString
+	-structure like properties dict (in the buffer) is now case insensitive QAsciiDict
+KexiMainWindow
+	-saveObject() added, KexiNameDialog is used for prompting for object name and caption
+	-user is asked for object saving on dialog closing (and thus on app closing as well)
+Kexi Alter Table
+	-storeNewObject() and storeObject() implementation started
+Main
+	-KexiNameWidget and KexiNameDialog utility classes 
+	 (for entering both names and caption names) implemented
+
 2004-03-04
 Main Window
 	-Both on window close and application close: User is prompted for saving 
@@ -330,7 +371,6 @@ Kexi Dialogs
 	-currently not only dialog is activated when focus come to any of its children,
 	 but also when any children is clicked.
 	-KexiViews have now 'dirty' flag and parent KexiDialog reuses that
-
 
 2004-03-03
 2004-03-02
