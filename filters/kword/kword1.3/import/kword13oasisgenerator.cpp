@@ -923,11 +923,13 @@ void KWord13OasisGenerator::writeMetaXml(void)
     writer.startElement( "office:meta" );
     
     // Tell who we are in case that we have a bug in our filter output!
+    // According to OASIS spec section 3.1.1, it has to follow section 14.43 of RFC 2616
     writer.startElement( "meta:generator" );
-    QString strVersion = "KOffice ";
+    QString strVersion;
+    strVersion += "KWord-OOWriter-Export-Filter/";
+    strVersion += QString( "$Revision$" ).mid( 10 ).remove( '$' ).stripWhiteSpace();
+    strVersion = " KOffice/";
     strVersion += KOFFICE_VERSION_STRING;
-    strVersion += " / KWord's OOWriter Export Filter ";
-    strVersion += QString( "$Revision$" ).remove( '$' );
     writer.addTextSpan( strVersion );
     writer.endElement();
        
