@@ -4,7 +4,7 @@
 
 
 <h3>Welcome</h3>
-<p>Kexi is under active development. This document is to keep you informed about state of the project.</p>
+<p>Kexi is under active development. This document is to keep you informed about the state of the project.</p>
 <p>Current Kexi version is <b>Beta3 Pre1</b>.</p>
 
 
@@ -23,7 +23,7 @@
 <h3>Restrictions in this version</h3>
 <p>
 <ul>
-<li>File-based projects are only supported</li>
+<li>Only file-based projects are supported</li>
 <li>Table designer works only for new designs, altering existing table not available</li>
 <li></li>
 </p>
