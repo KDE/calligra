@@ -21,6 +21,7 @@
 #include "formulacursor.h"
 #include "basicelement.h"
 #include "textelement.h"
+#include "rootelement.h"
 
 KFormulaCommand::KFormulaCommand(KFormulaContainer *document,
 				 FormulaCursor *cursor)
@@ -67,6 +68,58 @@ bool KFCAddText::undo(FormulaCursor *cursor)
 
 
 bool KFCAddText::redo(FormulaCursor *cursor)
+{
+
+  cursor->setCursorData(cursordata);
+  cursor->insert(removedList);
+
+
+}
+
+
+// ******  Add root command 
+
+KFCAddRoot::KFCAddRoot(KFormulaContainer *document,FormulaCursor *cursor)
+		        : KFormulaCommand(document,cursor)
+{
+
+    RootElement* root = new RootElement();
+    if (cursor->isSelection()) {
+        cursor->replaceSelectionWith(root);
+    }
+    else {
+        cursor->insert(root);
+        //cursor->setSelection(false);
+    }
+    cursor->goInsideElement(root);
+    
+/*
+
+    if (cursor->isSelection()) {
+        doc->removeSelection(cursor, BasicElement::beforeCursor);
+#warning TODO: get the removed selection !! 
+ 
+    }
+
+    QList<BasicElement> list;
+    list.setAutoDelete(true);
+    list.append(new RootElement(ch));
+    cursor->insert(list);
+    cursor->setSelection(false);
+*/
+
+}
+
+bool KFCAddRoot::undo(FormulaCursor *cursor)
+{
+
+  cursor->setCursorData(cursordata);
+  cursor->remove(removedList,BasicElement::afterCursor);
+
+}
+
+
+bool KFCAddRoot::redo(FormulaCursor *cursor)
 {
 
   cursor->setCursorData(cursordata);

@@ -79,6 +79,23 @@ private:
    
 };
 
+class KFCAddRoot : public KFormulaCommand
+{
+public:
+   /**
+    * Build a addRootElement command and add
+    * at cursor a root element
+    */
+    KFCAddRoot(KFormulaContainer *document,FormulaCursor* cursor);
+ 
+    virtual bool undo(FormulaCursor *cursor);
+    virtual bool redo(FormulaCursor *cursor);
+private:
+
+     QList<BasicElement> removedList;
+   
+};
+
 
 #if 0
    void addOperator(FormulaCursor* cursor, QChar ch);

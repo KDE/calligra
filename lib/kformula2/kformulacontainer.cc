@@ -166,6 +166,14 @@ void KFormulaContainer::addFraction(FormulaCursor* cursor)
 
 void KFormulaContainer::addRoot(FormulaCursor* cursor)
 {
+
+KFCAddRoot *command=new KFCAddRoot(this,cursor);
+
+pushUndoStack(command);
+cleanRedoStack();
+
+
+/*
     RootElement* root = new RootElement();
     if (cursor->isSelection()) {
         cursor->replaceSelectionWith(root);
@@ -175,7 +183,9 @@ void KFormulaContainer::addRoot(FormulaCursor* cursor)
         //cursor->setSelection(false);
     }
     cursor->goInsideElement(root);
+*/
 }
+
 
 void KFormulaContainer::addSymbol(FormulaCursor* cursor,
                                   Artwork::SymbolType type)
