@@ -161,7 +161,7 @@ KontourImport::parseGroup( const QDomElement &e )
 			int y = b.attribute( "y" ).toInt();
 			int width = b.attribute( "width" ).toInt();
 			int height = b.attribute( "height" ).toInt();
-			VObject *rect = new VRectangle( 0L, KoPoint( x, y ) , width, height );
+			VObject *rect = new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
 			QDomElement object = b.namedItem( "polyline" ).namedItem( "gobject" ).toElement();
 			parseGObject( rect, object );
 			m_document.append( rect );
