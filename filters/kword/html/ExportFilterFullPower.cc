@@ -450,9 +450,9 @@ void ClassExportFilterHtmlFullPower::processStyleTag (QDomNode myNode, void *, Q
     strStyles+=".";
     strStyles+=escapeCssIdentifier(layout->styleName);
     kdDebug(30503) << "Class: " << escapeCssIdentifier(layout->styleName) << endl;
-    strStyles+=" {\n";
+    strStyles+="\n{\n ";
     strStyles+=layoutToCss(*layout);
-    strStyles+="}\n";
+    strStyles+="\n}\n";
 
     delete layout;
     kdDebug(30503) << "Exiting ClassExportFilterHtmlFullPower::processStyleTag" << endl;
