@@ -96,8 +96,7 @@ void KDChartPiePainter::paintData( QPainter* painter,
     QRect ourClipRect( _dataRect );
 
     const QWMatrix & world = painter->worldMatrix();
-    ourClipRect.moveBy( static_cast < int > ( world.dx() ),
-                        static_cast < int > ( world.dy() ) );
+    ourClipRect = world.mapRect( ourClipRect );
 
     painter->setClipRect( ourClipRect );
 

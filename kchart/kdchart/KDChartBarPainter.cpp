@@ -111,8 +111,7 @@ void KDChartBarPainter::paintData( QPainter* painter,
         ourClipRect.setHeight( ourClipRect.height() + clipShiftUp / 2 - 1 );
 
     const QWMatrix & world = painter->worldMatrix();
-    ourClipRect.moveBy( static_cast < int > ( world.dx() ),
-                        static_cast < int > ( world.dy() ) );
+    ourClipRect = world.mapRect( ourClipRect );
 
     painter->setClipRect( ourClipRect );
     painter->translate( _dataRect.x(), _dataRect.y() );
