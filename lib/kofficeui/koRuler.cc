@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -38,7 +38,7 @@ public:
     int oldMx, oldMy;
     bool mousePressed;
     KoRuler::Action action;
-    bool whileMovingBorderLeft, whileMovingBorderRight; 	
+    bool whileMovingBorderLeft, whileMovingBorderRight;
     bool whileMovingBorderTop, whileMovingBorderBottom;
     QPixmap pmFirst, pmLeft;
     KoTabChooser *tabChooser;
@@ -51,12 +51,12 @@ public:
 
 
 /******************************************************************/
-/* Class: KoRuler						  */
+/* Class: KoRuler                                                 */
 /******************************************************************/
 
 /*================================================================*/
 KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
-		 KoPageLayout _layout, int _flags, KoTabChooser *_tabChooser )
+                 KoPageLayout _layout, int _flags, KoTabChooser *_tabChooser )
     : QFrame( _parent ), buffer( width(), height() ), m_zoom(1.0), m_1_zoom(1.0),
       unit( "mm" )
 {
@@ -74,6 +74,8 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
 
     diffx = 0;
     diffy = 0;
+    i_left=0.0;
+    i_first=0.0;
 
     setMouseTracking( true );
     d->mousePressed = false;
@@ -117,17 +119,17 @@ void KoRuler::setMousePos( int mx, int my )
     p.setPen( QPen( black, 1, SolidLine ) );
 
     if ( orientation == Qt::Horizontal ) {
-	if ( hasToDelete )
-	    p.drawLine( mposX, 1, mposX, height() - 1 );
-	p.drawLine( mx, 1, mx, height() - 1 );
-	hasToDelete = true;
+        if ( hasToDelete )
+            p.drawLine( mposX, 1, mposX, height() - 1 );
+        p.drawLine( mx, 1, mx, height() - 1 );
+        hasToDelete = true;
     }
 
     if ( orientation == Qt::Vertical ) {
-	if ( hasToDelete )
-	    p.drawLine( 1, mposY, width() - 1, mposY );
-	p.drawLine( 1, my, width() - 1, my );
-	hasToDelete = true;
+        if ( hasToDelete )
+            p.drawLine( 1, mposY, width() - 1, mposY );
+        p.drawLine( 1, my, width() - 1, my );
+        hasToDelete = true;
     }
     p.end();
 
@@ -156,14 +158,14 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 
     QRect r;
     if ( !d->whileMovingBorderLeft )
-	r.setLeft( -diffx + double2Int(zoomIt(layout.ptLeft)) );
+        r.setLeft( -diffx + double2Int(zoomIt(layout.ptLeft)) );
     else
-	r.setLeft( d->oldMx );
+        r.setLeft( d->oldMx );
     r.setTop( 0 );
     if ( !d->whileMovingBorderRight )
-	r.setRight( -diffx + i_pw - double2Int(zoomIt(layout.ptRight)) );
+        r.setRight( -diffx + i_pw - double2Int(zoomIt(layout.ptRight)) );
     else
-	r.setRight( d->oldMx );
+        r.setRight( d->oldMx );
     r.setBottom( height() );
 
     p.drawRect( r );
@@ -172,29 +174,29 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     p.setFont( font );
 
     if ( unit == "inch" )
-	dist = INCH_TO_POINT (m_zoom);
+        dist = INCH_TO_POINT (m_zoom);
     else if ( unit == "pt" )
-	dist = 100.0 * m_zoom;
+        dist = 100.0 * m_zoom;
     else
-	dist = MM_TO_POINT ( 10.0 * m_zoom );
+        dist = MM_TO_POINT ( 10.0 * m_zoom );
 
     for ( double i = 0.0;i <= pw;i += dist ) {
-	str=QString::number(j++);
-	if ( unit == "pt" && j!=1)
-	    str+="00";
-	p.drawText( double2Int(i) - diffx - double2Int(fm.width( str ) * 0.5),
-		    double2Int(( height() - fm.height() ) * 0.5),
-		    fm.width( str ), height(), AlignLeft | AlignTop, str );
+        str=QString::number(j++);
+        if ( unit == "pt" && j!=1)
+            str+="00";
+        p.drawText( double2Int(i) - diffx - double2Int(fm.width( str ) * 0.5),
+                    double2Int(( height() - fm.height() ) * 0.5),
+                    fm.width( str ), height(), AlignLeft | AlignTop, str );
     }
 
     for ( double i = dist * 0.5;i <= pw;i += dist ) {
-	int ii=double2Int(i);
-	p.drawLine( ii - diffx, 5, ii - diffx, height() - 5 );
+        int ii=double2Int(i);
+        p.drawLine( ii - diffx, 5, ii - diffx, height() - 5 );
     }
 
     for ( double i = dist * 0.25;i <= pw;i += dist * 0.5 ) {
-	int ii=double2Int(i);
-	p.drawLine( ii - diffx, 7, ii - diffx, height() - 7 );
+        int ii=double2Int(i);
+        p.drawLine( ii - diffx, 7, ii - diffx, height() - 7 );
     }
 
     p.setPen( QPen( black ) );
@@ -211,21 +213,21 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     p.drawLine( -diffx - constant, 1, -diffx - constant, height() - 1 );
 
     if ( d->flags & F_INDENTS ) {
-	p.drawPixmap( double2Int(zoomIt(i_first) - d->pmFirst.size().width() * 0.5 +
-				 static_cast<double>(r.left())), 2, d->pmFirst );
-	p.drawPixmap( double2Int(zoomIt(i_left) - d->pmLeft.size().width() * 0.5 +
-				 static_cast<double>(r.left())),
-		      height() - d->pmLeft.size().height() - 2, d->pmLeft );
+        p.drawPixmap( double2Int(zoomIt(i_first) - d->pmFirst.size().width() * 0.5 +
+                                 static_cast<double>(r.left())), 2, d->pmFirst );
+        p.drawPixmap( double2Int(zoomIt(i_left) - d->pmLeft.size().width() * 0.5 +
+                                 static_cast<double>(r.left())),
+                      height() - d->pmLeft.size().height() - 2, d->pmLeft );
     }
 
     if ( d->action == A_NONE && showMPos ) {
-	p.setPen( QPen( black, 1, SolidLine ) );
-	p.drawLine( mposX, 1, mposX, height() - 1 );
+        p.setPen( QPen( black, 1, SolidLine ) );
+        p.drawLine( mposX, 1, mposX, height() - 1 );
     }
     hasToDelete = false;
 
     if ( d->tabChooser && ( d->flags & F_TABS ) && !d->tabList.isEmpty() )
-	drawTabs( p );
+        drawTabs( p );
 
     p.end();
     _painter->drawPixmap( 0, 0, buffer );
@@ -240,33 +242,33 @@ void KoRuler::drawTabs( QPainter &_painter )
     _painter.setPen( QPen( black, 2, SolidLine ) );
 
     for ( unsigned int i = 0;i < d->tabList.count();i++ ) {
-	_tab = d->tabList.at( i );
-	ptPos = double2Int(zoomIt(_tab->ptPos)) - diffx + ( frameStart == -1 ? double2Int( zoomIt(layout.ptLeft) ) :
-							    zoomIt(frameStart) );
-	switch ( _tab->type ) {
-	case T_LEFT: {
-	    ptPos -= 4;
-	    _painter.drawLine( ptPos + 4, height() - 4, ptPos + 20 - 4, height() - 4 );
-	    _painter.drawLine( ptPos + 5, 4, ptPos + 5, height() - 4 );
-	} break;
-	case T_CENTER: {
-	    ptPos -= 10;
-	    _painter.drawLine( ptPos + 4, height() - 4, ptPos + 20 - 4, height() - 4 );
-	    _painter.drawLine( ptPos + 20 * 0.5, 4, ptPos + 20 * 0.5, height() - 4 );
-	} break;
-	case T_RIGHT: {
-	    ptPos -= 16;
-	    _painter.drawLine( ptPos + 4, height() - 4, ptPos + 20 - 4, height() - 4 );
-	    _painter.drawLine( ptPos + 20 - 5, 4, ptPos + 20 - 5, height() - 4 );
-	} break;
-	case T_DEC_PNT: {
-	    ptPos -= 10;
-	    _painter.drawLine( ptPos + 4, height() - 4, ptPos + 20 - 4, height() - 4 );
-	    _painter.drawLine( ptPos + 20 * 0.5, 4, ptPos + 20 * 0.5, height() - 4 );
-	    _painter.fillRect( ptPos + 20 * 0.5 + 2, height() - 9, 3, 3, black );
-	} break;
-	default: break;
-	}
+        _tab = d->tabList.at( i );
+        ptPos = double2Int(zoomIt(_tab->ptPos)) - diffx + ( frameStart == -1 ? double2Int( zoomIt(layout.ptLeft) ) :
+                                                            zoomIt(frameStart) );
+        switch ( _tab->type ) {
+        case T_LEFT: {
+            ptPos -= 4;
+            _painter.drawLine( ptPos + 4, height() - 4, ptPos + 20 - 4, height() - 4 );
+            _painter.drawLine( ptPos + 5, 4, ptPos + 5, height() - 4 );
+        } break;
+        case T_CENTER: {
+            ptPos -= 10;
+            _painter.drawLine( ptPos + 4, height() - 4, ptPos + 20 - 4, height() - 4 );
+            _painter.drawLine( ptPos + 20 * 0.5, 4, ptPos + 20 * 0.5, height() - 4 );
+        } break;
+        case T_RIGHT: {
+            ptPos -= 16;
+            _painter.drawLine( ptPos + 4, height() - 4, ptPos + 20 - 4, height() - 4 );
+            _painter.drawLine( ptPos + 20 - 5, 4, ptPos + 20 - 5, height() - 4 );
+        } break;
+        case T_DEC_PNT: {
+            ptPos -= 10;
+            _painter.drawLine( ptPos + 4, height() - 4, ptPos + 20 - 4, height() - 4 );
+            _painter.drawLine( ptPos + 20 * 0.5, 4, ptPos + 20 * 0.5, height() - 4 );
+            _painter.fillRect( ptPos + 20 * 0.5 + 2, height() - 9, 3, 3, black );
+        } break;
+        default: break;
+        }
     }
 }
 
@@ -292,14 +294,14 @@ void KoRuler::drawVertical( QPainter *_painter )
     QRect r;
 
     if ( !d->whileMovingBorderTop )
-	r.setTop( -diffy + double2Int(zoomIt(layout.ptTop)) );
+        r.setTop( -diffy + double2Int(zoomIt(layout.ptTop)) );
     else
-	r.setTop( d->oldMy );
+        r.setTop( d->oldMy );
     r.setLeft( 0 );
     if ( !d->whileMovingBorderBottom )
-	r.setBottom( -diffy + i_ph - double2Int(zoomIt(layout.ptBottom)) );
+        r.setBottom( -diffy + i_ph - double2Int(zoomIt(layout.ptBottom)) );
     else
-	r.setBottom( d->oldMy );
+        r.setBottom( d->oldMy );
     r.setRight( width() );
 
     p.drawRect( r );
@@ -308,29 +310,29 @@ void KoRuler::drawVertical( QPainter *_painter )
     p.setFont( font );
 
     if ( unit == "inch" )
-	dist = INCH_TO_POINT ( m_zoom );
+        dist = INCH_TO_POINT ( m_zoom );
     else if ( unit == "pt" )
-	dist = 100.0 * m_zoom;
+        dist = 100.0 * m_zoom;
     else
-	dist = MM_TO_POINT ( 10.0 * m_zoom );
+        dist = MM_TO_POINT ( 10.0 * m_zoom );
 
     for ( double i = 0.0;i <= ph;i += dist ) {
-	str=QString::number(j++);
-	if ( unit == "pt" && j!=1 )
-	    str+="00";
-	p.drawText( double2Int(( width() - fm.width( str ) ) * 0.5),
-		    double2Int(i) - diffy - double2Int(fm.height() * 0.5),
-		    width(), fm.height(), AlignLeft | AlignTop, str );
+        str=QString::number(j++);
+        if ( unit == "pt" && j!=1 )
+            str+="00";
+        p.drawText( double2Int(( width() - fm.width( str ) ) * 0.5),
+                    double2Int(i) - diffy - double2Int(fm.height() * 0.5),
+                    width(), fm.height(), AlignLeft | AlignTop, str );
     }
 
     for ( double i = dist * 0.5;i <= ph;i += dist ) {
-	int ii=double2Int(i);
-	p.drawLine( 5, ii - diffy, width() - 5, ii - diffy );
+        int ii=double2Int(i);
+        p.drawLine( 5, ii - diffy, width() - 5, ii - diffy );
     }
 
     for ( double i = dist * 0.25;i <= ph;i += dist *0.5 ) {
-	int ii=double2Int(i);
-	p.drawLine( 7, ii - diffy, width() - 7, ii - diffy );
+        int ii=double2Int(i);
+        p.drawLine( 7, ii - diffy, width() - 7, ii - diffy );
     }
 
     p.setPen( QPen( black ) );
@@ -344,8 +346,8 @@ void KoRuler::drawVertical( QPainter *_painter )
     p.drawLine( 1, -diffy - 1, width() - 1, -diffy - 1 );
 
     if ( d->action == A_NONE && showMPos ) {
-	p.setPen( QPen( black, 1, SolidLine ) );
-	p.drawLine( 1, mposY, width() - 1, mposY );
+        p.setPen( QPen( black, 1, SolidLine ) );
+        p.drawLine( 1, mposY, width() - 1, mposY );
     }
     hasToDelete = false;
 
@@ -362,103 +364,103 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
     d->removeTab=false;
 
     if ( e->button() == RightButton ) {
-	QPoint pnt( QCursor::pos() );
-	if(d->currTab==-1)
-	    d->rb_menu->setItemEnabled(d->mRemoveTab, false);
-	else
-	    d->rb_menu->setItemEnabled(d->mRemoveTab, true);
-	d->rb_menu->popup( pnt );
-	d->action = A_NONE;
-	d->mousePressed = false;
-	return;
+        QPoint pnt( QCursor::pos() );
+        if(d->currTab==-1)
+            d->rb_menu->setItemEnabled(d->mRemoveTab, false);
+        else
+            d->rb_menu->setItemEnabled(d->mRemoveTab, true);
+        d->rb_menu->popup( pnt );
+        d->action = A_NONE;
+        d->mousePressed = false;
+        return;
     }
 
     if ( d->action == A_BR_RIGHT || d->action == A_BR_LEFT ) {
-	if ( d->action == A_BR_RIGHT )
-	    d->whileMovingBorderRight = true;
-	else
-	    d->whileMovingBorderLeft = true;
+        if ( d->action == A_BR_RIGHT )
+            d->whileMovingBorderRight = true;
+        else
+            d->whileMovingBorderLeft = true;
 
-	if ( d->canvas ) {
-	    QPainter p;
-	    p.begin( d->canvas );
-	    p.setRasterOp( NotROP );
-	    p.setPen( QPen( black, 1, SolidLine ) );
-	    p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
-	    p.end();
-	}
+        if ( d->canvas ) {
+            QPainter p;
+            p.begin( d->canvas );
+            p.setRasterOp( NotROP );
+            p.setPen( QPen( black, 1, SolidLine ) );
+            p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
+            p.end();
+        }
 
-	repaint( false );
+        repaint( false );
     } else if ( d->action == A_BR_TOP || d->action == A_BR_BOTTOM ) {
-	if ( d->action == A_BR_TOP )
-	    d->whileMovingBorderTop = true;
-	else
-	    d->whileMovingBorderBottom = true;
+        if ( d->action == A_BR_TOP )
+            d->whileMovingBorderTop = true;
+        else
+            d->whileMovingBorderBottom = true;
 
-	if ( d->canvas ) {
-	    QPainter p;
-	    p.begin( d->canvas );
-	    p.setRasterOp( NotROP );
-	    p.setPen( QPen( black, 1, SolidLine ) );
-	    p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
-	    p.end();
-	}
+        if ( d->canvas ) {
+            QPainter p;
+            p.begin( d->canvas );
+            p.setRasterOp( NotROP );
+            p.setPen( QPen( black, 1, SolidLine ) );
+            p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
+            p.end();
+        }
 
-	repaint( false );
+        repaint( false );
     } else if ( d->action == A_FIRST_INDENT || d->action == A_LEFT_INDENT ) {
-	if ( d->canvas ) {
-	    QPainter p;
-	    p.begin( d->canvas );
-	    p.setRasterOp( NotROP );
-	    p.setPen( QPen( black, 1, SolidLine ) );
-	    p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
-	    p.end();
-	}
+        if ( d->canvas ) {
+            QPainter p;
+            p.begin( d->canvas );
+            p.setRasterOp( NotROP );
+            p.setPen( QPen( black, 1, SolidLine ) );
+            p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
+            p.end();
+        }
     } else if ( d->action == A_TAB ) {
-	if ( d->canvas ) {
-	    QPainter p;
-	    p.begin( d->canvas );
-	    p.setRasterOp( NotROP );
-	    p.setPen( QPen( black, 1, SolidLine ) );
-	    double pt=zoomIt(d->tabList.at(d->currTab)->ptPos);
-	    pt+= (frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(zoomIt(frameStart)));
-	    int i_pt=double2Int(pt);
-	    p.drawLine( i_pt, 0, i_pt, d->canvas->height() );
-	    p.end();
-	}
+        if ( d->canvas ) {
+            QPainter p;
+            p.begin( d->canvas );
+            p.setRasterOp( NotROP );
+            p.setPen( QPen( black, 1, SolidLine ) );
+            double pt=zoomIt(d->tabList.at(d->currTab)->ptPos);
+            pt+= (frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(zoomIt(frameStart)));
+            int i_pt=double2Int(pt);
+            p.drawLine( i_pt, 0, i_pt, d->canvas->height() );
+            p.end();
+        }
     } else if ( d->tabChooser && ( d->flags & F_TABS ) && d->tabChooser->getCurrTabType() != 0 ) {
-	int pw = double2Int(zoomIt(layout.ptWidth));
-	int left = double2Int(zoomIt(layout.ptLeft));
-	left -= diffx;
+        int pw = double2Int(zoomIt(layout.ptWidth));
+        int left = double2Int(zoomIt(layout.ptLeft));
+        left -= diffx;
         int right = double2Int(zoomIt(layout.ptRight));
-	right = pw - right - diffx;
-	
-	if( e->x()-left < 0 || right-e->x() < 0 )
-	    return;
-	KoTabulator *_tab = new KoTabulator;
-	switch ( d->tabChooser->getCurrTabType() ) {
-	case KoTabChooser::TAB_LEFT:
-	    _tab->type = T_LEFT;
-	    break;
-	case KoTabChooser::TAB_CENTER:
-	    _tab->type = T_CENTER;
-	    break;
-	case KoTabChooser::TAB_RIGHT:
-	    _tab->type = T_RIGHT;
-	    break;
-	case KoTabChooser::TAB_DEC_PNT:
-	    _tab->type = T_DEC_PNT;
-	    break;
-	default: break;
-	}
-	_tab->ptPos = static_cast<double>(unZoomIt(e->x() + diffx - (frameStart == -1 ? double2Int(zoomIt(layout.ptLeft)) : zoomIt(frameStart)) ));
-	_tab->mmPos = POINT_TO_MM( _tab->ptPos );
-	_tab->inchPos = POINT_TO_INCH( _tab->ptPos );
+        right = pw - right - diffx;
 
-	d->tabList.append( _tab );
-	d->removeTab=true;
-	emit tabListChanged( &d->tabList );
-	repaint( false );
+        if( e->x()-left < 0 || right-e->x() < 0 )
+            return;
+        KoTabulator *_tab = new KoTabulator;
+        switch ( d->tabChooser->getCurrTabType() ) {
+        case KoTabChooser::TAB_LEFT:
+            _tab->type = T_LEFT;
+            break;
+        case KoTabChooser::TAB_CENTER:
+            _tab->type = T_CENTER;
+            break;
+        case KoTabChooser::TAB_RIGHT:
+            _tab->type = T_RIGHT;
+            break;
+        case KoTabChooser::TAB_DEC_PNT:
+            _tab->type = T_DEC_PNT;
+            break;
+        default: break;
+        }
+        _tab->ptPos = static_cast<double>(unZoomIt(e->x() + diffx - (frameStart == -1 ? double2Int(zoomIt(layout.ptLeft)) : zoomIt(frameStart)) ));
+        _tab->mmPos = POINT_TO_MM( _tab->ptPos );
+        _tab->inchPos = POINT_TO_INCH( _tab->ptPos );
+
+        d->tabList.append( _tab );
+        d->removeTab=true;
+        emit tabListChanged( &d->tabList );
+        repaint( false );
     }
 }
 
@@ -469,86 +471,86 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
 
     // Hacky, but necessary to prevent multiple tabs with the same coordinates (Werner)
     if(d->removeTab)
-	mouseMoveEvent(e);
+        mouseMoveEvent(e);
 
     if ( d->action == A_BR_RIGHT || d->action == A_BR_LEFT ) {
-	d->whileMovingBorderRight = false;
-	d->whileMovingBorderLeft = false;
+        d->whileMovingBorderRight = false;
+        d->whileMovingBorderLeft = false;
 
-	if ( d->canvas ) {
-	    QPainter p;
-	    p.begin( d->canvas );
-	    p.setRasterOp( NotROP );
-	    p.setPen( QPen( black, 1, SolidLine ) );
-	    p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
-	    p.end();
-	}
+        if ( d->canvas ) {
+            QPainter p;
+            p.begin( d->canvas );
+            p.setRasterOp( NotROP );
+            p.setPen( QPen( black, 1, SolidLine ) );
+            p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
+            p.end();
+        }
 
-	repaint( false );
-	emit newPageLayout( layout );
+        repaint( false );
+        emit newPageLayout( layout );
     } else if ( d->action == A_BR_TOP || d->action == A_BR_BOTTOM ) {
-	d->whileMovingBorderTop = false;
-	d->whileMovingBorderBottom = false;
+        d->whileMovingBorderTop = false;
+        d->whileMovingBorderBottom = false;
 
-	if ( d->canvas ) {
-	    QPainter p;
-	    p.begin( d->canvas );
-	    p.setRasterOp( NotROP );
-	    p.setPen( QPen( black, 1, SolidLine ) );
-	    p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
-	    p.end();
-	}
+        if ( d->canvas ) {
+            QPainter p;
+            p.begin( d->canvas );
+            p.setRasterOp( NotROP );
+            p.setPen( QPen( black, 1, SolidLine ) );
+            p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
+            p.end();
+        }
 
-	repaint( false );
-	emit newPageLayout( layout );
+        repaint( false );
+        emit newPageLayout( layout );
     } else if ( d->action == A_FIRST_INDENT ) {
-	if ( d->canvas ) {
-	    QPainter p;
-	    p.begin( d->canvas );
-	    p.setRasterOp( NotROP );
-	    p.setPen( QPen( black, 1, SolidLine ) );
-	    p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
-	    p.end();
-	}
+        if ( d->canvas ) {
+            QPainter p;
+            p.begin( d->canvas );
+            p.setRasterOp( NotROP );
+            p.setPen( QPen( black, 1, SolidLine ) );
+            p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
+            p.end();
+        }
 
-	repaint( false );
-	emit newFirstIndent( i_first );
+        repaint( false );
+        emit newFirstIndent( i_first );
     } else if ( d->action == A_LEFT_INDENT ) {
-	if ( d->canvas ) {
-	    QPainter p;
-	    p.begin( d->canvas );
-	    p.setRasterOp( NotROP );
-	    p.setPen( QPen( black, 1, SolidLine ) );
-	    p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
-	    p.end();
-	}
+        if ( d->canvas ) {
+            QPainter p;
+            p.begin( d->canvas );
+            p.setRasterOp( NotROP );
+            p.setPen( QPen( black, 1, SolidLine ) );
+            p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
+            p.end();
+        }
 
-	repaint( false );
-	double _tmp = i_first;
-	emit newLeftIndent( i_left );
-	i_first = _tmp;
-	emit newFirstIndent( i_first );
+        repaint( false );
+        double _tmp = i_first;
+        emit newLeftIndent( i_left );
+        i_first = _tmp;
+        emit newFirstIndent( i_first );
     } else if ( d->action == A_TAB ) {
-	if ( d->canvas ) {
-	    QPainter p;
-	    p.begin( d->canvas );
-	    p.setRasterOp( NotROP );
-	    p.setPen( QPen( black, 1, SolidLine ) );
-	    double pt=zoomIt(d->tabList.at(d->currTab)->ptPos);
-	    pt+= (frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(zoomIt(frameStart)));
-	    int i_pt=double2Int(pt);
-	    p.drawLine( i_pt, 0, i_pt, d->canvas->height() );
-	    p.end();
-	}
-	if ( /*tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
-	       frameStart ) < layout.ptLeft ||
-	      tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
-	      frameStart ) > layout.ptWidth -
-	      ( layout.ptRight + layout.ptLeft ) || */e->y() < -50 || e->y() > height() + 50 )
-	    d->tabList.remove( d->currTab );
+        if ( d->canvas ) {
+            QPainter p;
+            p.begin( d->canvas );
+            p.setRasterOp( NotROP );
+            p.setPen( QPen( black, 1, SolidLine ) );
+            double pt=zoomIt(d->tabList.at(d->currTab)->ptPos);
+            pt+= (frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(zoomIt(frameStart)));
+            int i_pt=double2Int(pt);
+            p.drawLine( i_pt, 0, i_pt, d->canvas->height() );
+            p.end();
+        }
+        if ( /*tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
+               frameStart ) < layout.ptLeft ||
+              tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
+              frameStart ) > layout.ptWidth -
+              ( layout.ptRight + layout.ptLeft ) || */e->y() < -50 || e->y() > height() + 50 )
+            d->tabList.remove( d->currTab );
 
-	emit tabListChanged( &d->tabList );
-	repaint( false );
+        emit tabListChanged( &d->tabList );
+        repaint( false );
     }
 }
 
@@ -576,228 +578,228 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
     my = my+diffy < 0 ? 0 : my;
 
     switch ( orientation ) {
-	case Qt::Horizontal: {
-	    if ( !d->mousePressed ) {
-		setCursor( ArrowCursor );
-		d->action = A_NONE;
-		if ( mx > left - 5 && mx < left + 5 ) {
-		    setCursor( sizeHorCursor );
-		    d->action = A_BR_LEFT;
-		} else if ( mx > right - 5 && mx < right + 5 ) {
-		    setCursor( sizeHorCursor );
-		    d->action = A_BR_RIGHT;
-		}
+        case Qt::Horizontal: {
+            if ( !d->mousePressed ) {
+                setCursor( ArrowCursor );
+                d->action = A_NONE;
+                if ( mx > left - 5 && mx < left + 5 ) {
+                    setCursor( sizeHorCursor );
+                    d->action = A_BR_LEFT;
+                } else if ( mx > right - 5 && mx < right + 5 ) {
+                    setCursor( sizeHorCursor );
+                    d->action = A_BR_RIGHT;
+                }
 
-		if ( d->flags & F_INDENTS ) {
-		    if ( mx > left + ip_first - 5 && mx < left + ip_first + 5 &&
-			 my >= 2 && my <= d->pmFirst.size().height() + 2 ) {
-			setCursor( ArrowCursor );
-			d->action = A_FIRST_INDENT;
-		    } else if ( mx > left + ip_left - 5 && mx < left + ip_left + 5 &&
-				my >=	height() - d->pmLeft.size().height() - 2 && my <= height() - 2 ) {
-			setCursor( ArrowCursor );
-			d->action = A_LEFT_INDENT;
-		    }
-		}
-	
-		if ( d->flags & F_TABS ) {
-		    int pos;
-		    d->currTab = -1;
-		    for ( unsigned int i = 0; i < d->tabList.count(); i++ ) {
-			pos = double2Int(zoomIt(d->tabList.at( i )->ptPos)) - diffx + ( frameStart == -1 ?
-									     double2Int(zoomIt(layout.ptLeft)) :
-									     zoomIt(frameStart));
-			if ( mx > pos - 5 && mx < pos + 5 ) {
-			    setCursor( sizeHorCursor );
-			    d->action = A_TAB;
-			    d->currTab = i;
-			    break;
-			}
-		    }
-		}
-	    } else {
-		// Note: All limits should be 0, but KWord crashes currently, when the
-		// page is too small (infinite loop in the line breaking algorithm)! (Werner)
-		switch ( d->action ) {
-		    case A_BR_LEFT: {
-			if ( d->canvas && mx+diffx < right-10 ) {
-			    QPainter p;
-			    p.begin( d->canvas );
-			    p.setRasterOp( NotROP );
-			    p.setPen( QPen( black, 1, SolidLine ) );
-			    p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
-			    p.drawLine( mx, 0, mx, d->canvas->height() );
-			    layout.ptLeft = unZoomIt(static_cast<double>(mx + diffx));
-			    layout.mmLeft = POINT_TO_MM(layout.ptLeft);
-			    layout.inchLeft = POINT_TO_INCH(layout.ptLeft);
-			    if( ip_first > right-left-15 ) {
-				ip_first=right-left-15;
-				ip_first=ip_first<0 ? 0 : ip_first;
-				i_first=unZoomIt(static_cast<double>(ip_first));
-				emit newFirstIndent( i_first );
-			    }
-			    if( ip_left > right-left-15 ) {
-				ip_left=right-left-15;
-				ip_left=ip_left<0 ? 0 : ip_left;
-				i_left=unZoomIt(static_cast<double>(ip_left));
-				emit newLeftIndent( i_left );
-			    }
-			    d->oldMx = mx;
-			    d->oldMy = my;
-			    p.end();
-			    repaint( false );
-			}
-		    } break;
-		    case A_BR_RIGHT: {
-			if ( d->canvas && mx+diffx > left+10 && mx+diffx <= pw) {
-			    QPainter p;
-			    p.begin( d->canvas );
-			    p.setRasterOp( NotROP );
-			    p.setPen( QPen( black, 1, SolidLine ) );
-			    p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
-			    p.drawLine( mx, 0, mx, d->canvas->height() );
-			    p.end();
-			    layout.ptRight = unZoomIt(static_cast<double>(pw - ( mx + diffx )));
-			    layout.mmRight = POINT_TO_MM( layout.ptRight );
-			    layout.inchRight = POINT_TO_INCH( layout.ptRight );
-			    if( ip_first > right-left-15 ) {
-				ip_first=right-left-15;
-				ip_first=ip_first<0 ? 0 : ip_first;
-				i_first=unZoomIt(static_cast<double>(ip_first));
-				emit newFirstIndent( i_first );
-			    }
-			    if( ip_left > right-left-15 ) {
-				ip_left=right-left-15;
-				ip_left=ip_left<0 ? 0 : ip_left;
-				i_left=unZoomIt(static_cast<double>(ip_left));
-				emit newLeftIndent( i_left );
-			    }
-			    d->oldMx = mx;
-			    d->oldMy = my;
-			    repaint( false );
-			}
-		    } break;
-		    case A_FIRST_INDENT: {
-			if ( d->canvas ) {
-			    if ( mx - left >= 0 && right - mx >= 10 ) {
-				QPainter p;
-				p.begin( d->canvas );
-				p.setRasterOp( NotROP );
-				p.setPen( QPen( black, 1, SolidLine ) );
-				p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
-				p.drawLine( mx, 0, mx, d->canvas->height() );
-				p.end();
-			    } else
-				return;
-			    i_first = unZoomIt(static_cast<double>(mx - left));
-			    d->oldMx = mx;
-			    d->oldMy = my;
-			    repaint( false );
-			}
-		    } break;
-		    case A_LEFT_INDENT: {
-			if ( d->canvas ) {
-			    if ( mx - left >= 0 && right - mx >= 10 ) {
-				QPainter p;
-				p.begin( d->canvas );
-				p.setRasterOp( NotROP );
-				p.setPen( QPen( black, 1, SolidLine ) );
-				p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
-				p.drawLine( mx, 0, mx, d->canvas->height() );
-				p.end();
-			    } else
-				return;
-			    int oldDiff = ip_first-ip_left;
-			    ip_left = mx - left;
-			    ip_first = ip_left + oldDiff;
-			    if( ip_first < 0)
-				ip_first=0;
-			    else if( ip_first > right-left-10 )
-				ip_first=right-left-10;
-			    i_left=unZoomIt(static_cast<double>(ip_left));
-			    i_first=unZoomIt(static_cast<double>(ip_first));
-			    d->oldMx = mx;
-			    d->oldMy = my;
-			    repaint( false );
-			}
-		    } break;
-		    case A_TAB: {
-			if ( d->canvas && mx-left >= 0 && right-mx >= 0) {
-			    QPainter p;
-			    p.begin( d->canvas );
-			    p.setRasterOp( NotROP );
-			    p.setPen( QPen( black, 1, SolidLine ) );
-			    double pt=zoomIt(d->tabList.at( d->currTab )->ptPos);
-			    double fr=(frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(zoomIt(frameStart)) );
-			    int pt_fr=double2Int(pt+fr);
-			    p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
-			    d->tabList.at( d->currTab )->ptPos = unZoomIt(static_cast<double>(mx) - fr );
-			    d->tabList.at( d->currTab )->mmPos = POINT_TO_MM( d->tabList.at( d->currTab )->ptPos );
-			    d->tabList.at( d->currTab )->inchPos = POINT_TO_INCH( d->tabList.at( d->currTab )->ptPos );
-			    pt=zoomIt(d->tabList.at( d->currTab )->ptPos);
-			    pt_fr=double2Int(pt+fr);
-			    p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
-			    p.end();
-			    d->oldMx = mx;
-			    d->oldMy = my;
-			    repaint( false );
-			}
-		    } break;
-		    default: break;
-		}
-	    }
-	} break;
-	case Qt::Vertical: {
-	    if ( !d->mousePressed ) {
-		setCursor( ArrowCursor );
-		d->action = A_NONE;
-		if ( my > top - 5 && my < top + 5 ) {
-		    setCursor( sizeVerCursor );
-		    d->action = A_BR_TOP;
-		} else if ( my > bottom - 5 && my < bottom + 5 ) {
-		    setCursor( sizeVerCursor );
-		    d->action = A_BR_BOTTOM;
-		}
-	    } else {
-		switch ( d->action ) {
-		    case A_BR_TOP: {
-			if ( d->canvas && my+diffy < bottom-20 ) {
-			    QPainter p;
-			    p.begin( d->canvas );
-			    p.setRasterOp( NotROP );
-			    p.setPen( QPen( black, 1, SolidLine ) );
-			    p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
-			    p.drawLine( 0, my, d->canvas->width(), my );
-			    p.end();
-			    layout.ptTop = unZoomIt(static_cast<double>(my + diffy));
-			    layout.mmTop = POINT_TO_MM( layout.ptTop );
-			    layout.inchTop = POINT_TO_INCH( layout.ptTop );
-			    d->oldMx = mx;
-			    d->oldMy = my;
-			    repaint( false );
-			}
-		    } break;
-		    case A_BR_BOTTOM: {
-			if ( d->canvas && my+diffy > top+20 && my+diffy < ph-2) {
-			    QPainter p;
-			    p.begin( d->canvas );
-			    p.setRasterOp( NotROP );
-			    p.setPen( QPen( black, 1, SolidLine ) );
-			    p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
-			    p.drawLine( 0, my, d->canvas->width(), my );
-			    p.end();
-			    layout.ptBottom = unZoomIt(static_cast<double>(ph - ( my + diffy )));
-			    layout.mmBottom = POINT_TO_MM( layout.ptBottom );
-			    layout.inchBottom = POINT_TO_INCH( layout.ptBottom );
-			    d->oldMx = mx;
-			    d->oldMy = my;
-			    repaint( false );
-			}
-		    } break;
-		    default: break;
-		}
-	    }
-	} break;
+                if ( d->flags & F_INDENTS ) {
+                    if ( mx > left + ip_first - 5 && mx < left + ip_first + 5 &&
+                         my >= 2 && my <= d->pmFirst.size().height() + 2 ) {
+                        setCursor( ArrowCursor );
+                        d->action = A_FIRST_INDENT;
+                    } else if ( mx > left + ip_left - 5 && mx < left + ip_left + 5 &&
+                                my >=   height() - d->pmLeft.size().height() - 2 && my <= height() - 2 ) {
+                        setCursor( ArrowCursor );
+                        d->action = A_LEFT_INDENT;
+                    }
+                }
+
+                if ( d->flags & F_TABS ) {
+                    int pos;
+                    d->currTab = -1;
+                    for ( unsigned int i = 0; i < d->tabList.count(); i++ ) {
+                        pos = double2Int(zoomIt(d->tabList.at( i )->ptPos)) - diffx + ( frameStart == -1 ?
+                                                                             double2Int(zoomIt(layout.ptLeft)) :
+                                                                             zoomIt(frameStart));
+                        if ( mx > pos - 5 && mx < pos + 5 ) {
+                            setCursor( sizeHorCursor );
+                            d->action = A_TAB;
+                            d->currTab = i;
+                            break;
+                        }
+                    }
+                }
+            } else {
+                // Note: All limits should be 0, but KWord crashes currently, when the
+                // page is too small (infinite loop in the line breaking algorithm)! (Werner)
+                switch ( d->action ) {
+                    case A_BR_LEFT: {
+                        if ( d->canvas && mx+diffx < right-10 ) {
+                            QPainter p;
+                            p.begin( d->canvas );
+                            p.setRasterOp( NotROP );
+                            p.setPen( QPen( black, 1, SolidLine ) );
+                            p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
+                            p.drawLine( mx, 0, mx, d->canvas->height() );
+                            layout.ptLeft = unZoomIt(static_cast<double>(mx + diffx));
+                            layout.mmLeft = POINT_TO_MM(layout.ptLeft);
+                            layout.inchLeft = POINT_TO_INCH(layout.ptLeft);
+                            if( ip_first > right-left-15 ) {
+                                ip_first=right-left-15;
+                                ip_first=ip_first<0 ? 0 : ip_first;
+                                i_first=unZoomIt(static_cast<double>(ip_first));
+                                emit newFirstIndent( i_first );
+                            }
+                            if( ip_left > right-left-15 ) {
+                                ip_left=right-left-15;
+                                ip_left=ip_left<0 ? 0 : ip_left;
+                                i_left=unZoomIt(static_cast<double>(ip_left));
+                                emit newLeftIndent( i_left );
+                            }
+                            d->oldMx = mx;
+                            d->oldMy = my;
+                            p.end();
+                            repaint( false );
+                        }
+                    } break;
+                    case A_BR_RIGHT: {
+                        if ( d->canvas && mx+diffx > left+10 && mx+diffx <= pw) {
+                            QPainter p;
+                            p.begin( d->canvas );
+                            p.setRasterOp( NotROP );
+                            p.setPen( QPen( black, 1, SolidLine ) );
+                            p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
+                            p.drawLine( mx, 0, mx, d->canvas->height() );
+                            p.end();
+                            layout.ptRight = unZoomIt(static_cast<double>(pw - ( mx + diffx )));
+                            layout.mmRight = POINT_TO_MM( layout.ptRight );
+                            layout.inchRight = POINT_TO_INCH( layout.ptRight );
+                            if( ip_first > right-left-15 ) {
+                                ip_first=right-left-15;
+                                ip_first=ip_first<0 ? 0 : ip_first;
+                                i_first=unZoomIt(static_cast<double>(ip_first));
+                                emit newFirstIndent( i_first );
+                            }
+                            if( ip_left > right-left-15 ) {
+                                ip_left=right-left-15;
+                                ip_left=ip_left<0 ? 0 : ip_left;
+                                i_left=unZoomIt(static_cast<double>(ip_left));
+                                emit newLeftIndent( i_left );
+                            }
+                            d->oldMx = mx;
+                            d->oldMy = my;
+                            repaint( false );
+                        }
+                    } break;
+                    case A_FIRST_INDENT: {
+                        if ( d->canvas ) {
+                            if ( mx - left >= 0 && right - mx >= 10 ) {
+                                QPainter p;
+                                p.begin( d->canvas );
+                                p.setRasterOp( NotROP );
+                                p.setPen( QPen( black, 1, SolidLine ) );
+                                p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
+                                p.drawLine( mx, 0, mx, d->canvas->height() );
+                                p.end();
+                            } else
+                                return;
+                            i_first = unZoomIt(static_cast<double>(mx - left));
+                            d->oldMx = mx;
+                            d->oldMy = my;
+                            repaint( false );
+                        }
+                    } break;
+                    case A_LEFT_INDENT: {
+                        if ( d->canvas ) {
+                            if ( mx - left >= 0 && right - mx >= 10 ) {
+                                QPainter p;
+                                p.begin( d->canvas );
+                                p.setRasterOp( NotROP );
+                                p.setPen( QPen( black, 1, SolidLine ) );
+                                p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
+                                p.drawLine( mx, 0, mx, d->canvas->height() );
+                                p.end();
+                            } else
+                                return;
+                            int oldDiff = ip_first-ip_left;
+                            ip_left = mx - left;
+                            ip_first = ip_left + oldDiff;
+                            if( ip_first < 0)
+                                ip_first=0;
+                            else if( ip_first > right-left-10 )
+                                ip_first=right-left-10;
+                            i_left=unZoomIt(static_cast<double>(ip_left));
+                            i_first=unZoomIt(static_cast<double>(ip_first));
+                            d->oldMx = mx;
+                            d->oldMy = my;
+                            repaint( false );
+                        }
+                    } break;
+                    case A_TAB: {
+                        if ( d->canvas && mx-left >= 0 && right-mx >= 0) {
+                            QPainter p;
+                            p.begin( d->canvas );
+                            p.setRasterOp( NotROP );
+                            p.setPen( QPen( black, 1, SolidLine ) );
+                            double pt=zoomIt(d->tabList.at( d->currTab )->ptPos);
+                            double fr=(frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(zoomIt(frameStart)) );
+                            int pt_fr=double2Int(pt+fr);
+                            p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
+                            d->tabList.at( d->currTab )->ptPos = unZoomIt(static_cast<double>(mx) - fr );
+                            d->tabList.at( d->currTab )->mmPos = POINT_TO_MM( d->tabList.at( d->currTab )->ptPos );
+                            d->tabList.at( d->currTab )->inchPos = POINT_TO_INCH( d->tabList.at( d->currTab )->ptPos );
+                            pt=zoomIt(d->tabList.at( d->currTab )->ptPos);
+                            pt_fr=double2Int(pt+fr);
+                            p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
+                            p.end();
+                            d->oldMx = mx;
+                            d->oldMy = my;
+                            repaint( false );
+                        }
+                    } break;
+                    default: break;
+                }
+            }
+        } break;
+        case Qt::Vertical: {
+            if ( !d->mousePressed ) {
+                setCursor( ArrowCursor );
+                d->action = A_NONE;
+                if ( my > top - 5 && my < top + 5 ) {
+                    setCursor( sizeVerCursor );
+                    d->action = A_BR_TOP;
+                } else if ( my > bottom - 5 && my < bottom + 5 ) {
+                    setCursor( sizeVerCursor );
+                    d->action = A_BR_BOTTOM;
+                }
+            } else {
+                switch ( d->action ) {
+                    case A_BR_TOP: {
+                        if ( d->canvas && my+diffy < bottom-20 ) {
+                            QPainter p;
+                            p.begin( d->canvas );
+                            p.setRasterOp( NotROP );
+                            p.setPen( QPen( black, 1, SolidLine ) );
+                            p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
+                            p.drawLine( 0, my, d->canvas->width(), my );
+                            p.end();
+                            layout.ptTop = unZoomIt(static_cast<double>(my + diffy));
+                            layout.mmTop = POINT_TO_MM( layout.ptTop );
+                            layout.inchTop = POINT_TO_INCH( layout.ptTop );
+                            d->oldMx = mx;
+                            d->oldMy = my;
+                            repaint( false );
+                        }
+                    } break;
+                    case A_BR_BOTTOM: {
+                        if ( d->canvas && my+diffy > top+20 && my+diffy < ph-2) {
+                            QPainter p;
+                            p.begin( d->canvas );
+                            p.setRasterOp( NotROP );
+                            p.setPen( QPen( black, 1, SolidLine ) );
+                            p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
+                            p.drawLine( 0, my, d->canvas->width(), my );
+                            p.end();
+                            layout.ptBottom = unZoomIt(static_cast<double>(ph - ( my + diffy )));
+                            layout.mmBottom = POINT_TO_MM( layout.ptBottom );
+                            layout.inchBottom = POINT_TO_INCH( layout.ptBottom );
+                            d->oldMx = mx;
+                            d->oldMy = my;
+                            repaint( false );
+                        }
+                    } break;
+                    default: break;
+                }
+            }
+        } break;
     }
 
     d->oldMx = mx;
@@ -815,10 +817,10 @@ void KoRuler::resizeEvent( QResizeEvent *e )
 void KoRuler::mouseDoubleClickEvent( QMouseEvent* )
 {
     if ( d->tabChooser && ( d->flags & F_TABS ) && d->tabChooser->getCurrTabType() != 0 && d->removeTab ) {
-	d->tabList.remove( d->tabList.count() - 1 );
-	emit tabListChanged( &d->tabList );
-	repaint( false );
-	d->removeTab=false;
+        d->tabList.remove( d->tabList.count() - 1 );
+        emit tabListChanged( &d->tabList );
+        repaint( false );
+        d->removeTab=false;
     }
 
     emit openPageLayoutDia();
@@ -832,12 +834,12 @@ void KoRuler::setTabList( const QList<KoTabulator>* _tabList )
     d->tabList.setAutoDelete( false );
     QListIterator<KoTabulator> it( *_tabList );
     for ( it.toFirst(); it.current(); ++it ) {
-	KoTabulator *t = new KoTabulator;
-	t->type = it.current()->type;
-	t->mmPos = it.current()->mmPos;
-	t->inchPos = it.current()->inchPos;
-	t->ptPos = it.current()->ptPos;
-	d->tabList.append( t );
+        KoTabulator *t = new KoTabulator;
+        t->type = it.current()->type;
+        t->mmPos = it.current()->mmPos;
+        t->inchPos = it.current()->inchPos;
+        t->ptPos = it.current()->ptPos;
+        d->tabList.append( t );
     }
     repaint( false );
 }
@@ -882,14 +884,14 @@ void KoRuler::setUnit( const QString& _unit )
     uncheckMenu();
 
     if ( unit == "mm" ) {
-	d->rb_menu->setItemChecked( d->mMM, true );
-	layout.unit = PG_MM;
+        d->rb_menu->setItemChecked( d->mMM, true );
+        layout.unit = PG_MM;
     } else if ( unit == "pt" ) {
-	d->rb_menu->setItemChecked( d->mPT, true );
-	layout.unit = PG_PT;
+        d->rb_menu->setItemChecked( d->mPT, true );
+        layout.unit = PG_PT;
     } else if ( unit == "inch" ) {
-	d->rb_menu->setItemChecked( d->mINCH, true );
-	layout.unit = PG_INCH;
+        d->rb_menu->setItemChecked( d->mINCH, true );
+        layout.unit = PG_INCH;
     }
     repaint( false );
 }
@@ -897,7 +899,7 @@ void KoRuler::setUnit( const QString& _unit )
 void KoRuler::setZoom( const double& zoom )
 {
     if(zoom==m_zoom)
-	return;
+        return;
     m_zoom=zoom;
     m_1_zoom=1/m_zoom;
     repaint( false );

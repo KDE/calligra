@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -48,18 +48,8 @@
 #include <koGlobal.h>
 #include <koTabChooser.h>
 
-//#define _MM_TO_POINT 2.83465058
-//#define _INCH_TO_POINT 72.0
-
-//#define cPOINT_TO_MM( px ) ( px*0.352777167 )
-//#define cMM_TO_POINT( mm ) ( mm*2.83465058  )
-//#define cPOINT_TO_INCH( px ) ( px*0.01388888888889 )
-//#define cINCH_TO_POINT( inch ) ( inch*72.0 )
-//#define cMM_TO_INCH( mm ) ( mm*0.039370147 )
-//#define cINCH_TO_MM( inch ) ( inch*25.399956 )
-
 /******************************************************************/
-/* Struct: KoTabulator						  */
+/* Struct: KoTabulator                                            */
 /******************************************************************/
 
 enum KoTabulators { T_LEFT = 0, T_CENTER = 1, T_RIGHT = 2, T_DEC_PNT = 3 };
@@ -74,7 +64,7 @@ struct KoTabulator {
 class KoRulerPrivate;
 
 /******************************************************************/
-/* Class: KoRuler						  */
+/* Class: KoRuler                                                 */
 /******************************************************************/
 
 class KoRuler : public QFrame
@@ -86,8 +76,8 @@ public:
     static const int F_TABS = 1;
     static const int F_INDENTS = 2;
 
-    KoRuler( QWidget *_parent,	QWidget *_canvas, Orientation _orientation,
-	     KoPageLayout _layout, int _flags, KoTabChooser *_tabChooser = 0L );
+    KoRuler( QWidget *_parent,  QWidget *_canvas, Orientation _orientation,
+             KoPageLayout _layout, int _flags, KoTabChooser *_tabChooser = 0L );
     ~KoRuler();
 
     void setUnit( const QString& _unit );
@@ -126,7 +116,7 @@ signals:
 
 protected:
     enum Action {A_NONE, A_BR_LEFT, A_BR_RIGHT, A_BR_TOP, A_BR_BOTTOM,
-		 A_LEFT_INDENT, A_FIRST_INDENT, A_TAB};
+                 A_LEFT_INDENT, A_FIRST_INDENT, A_TAB};
 
     void drawContents( QPainter *_painter )
     { orientation == Qt::Horizontal ? drawHorizontal( _painter ) : drawVertical( _painter ); }
@@ -178,48 +168,48 @@ protected slots:
 
 inline double KoRuler::zoomIt(const double &value) const {
     if (m_zoom==1.0)
-	return value;
+        return value;
     return m_zoom*value;
 }
 
 inline int KoRuler::zoomIt(const int &value) const {
     if (m_zoom==1.0)
-	return value;
+        return value;
     return double2Int(m_zoom*value);
 }
 
 inline unsigned int KoRuler::zoomIt(const unsigned int &value) const {
     if (m_zoom==1.0)
-	return value;
+        return value;
     return static_cast<unsigned int>(double2Int(m_zoom*value));
 }
 
 inline double KoRuler::unZoomIt(const double &value) const {
     if(m_zoom==1.0)
-	return value;
+        return value;
     return value*m_1_zoom;
 }
 
 inline int KoRuler::unZoomIt(const int &value) const {
     if(m_zoom==1.0)
-	return value;
+        return value;
     return double2Int(value*m_1_zoom);
 }
 
 inline unsigned int KoRuler::unZoomIt(const unsigned int &value) const {
     if(m_zoom==1.0)
-	return value;
+        return value;
     return static_cast<unsigned int>(double2Int(value*m_1_zoom));
 }
 
 inline int KoRuler::double2Int(const double &value) const {
 
     if( static_cast<double>((value-static_cast<int>(value)))>=0.5 )
-	return static_cast<int>(value)+1;
+        return static_cast<int>(value)+1;
     else if( static_cast<double>((value-static_cast<int>(value)))<=-0.5 )
-	return static_cast<int>(value)-1;
+        return static_cast<int>(value)-1;
     else
-	return static_cast<int>(value);
+        return static_cast<int>(value);
 }
 
 #endif
