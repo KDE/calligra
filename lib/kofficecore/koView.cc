@@ -125,8 +125,9 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
 
   connect( d->m_doc, SIGNAL( sigEndOperation() ),
            this, SLOT( endOperation() ) );
-  
 
+
+  actionCollection()->setWidget( this );
   setupGlobalActions();
   QValueList<KAction*> docActions = document->actionCollection()->actions();
   QValueList<KAction*>::ConstIterator it = docActions.begin();
