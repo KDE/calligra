@@ -7,6 +7,7 @@ Changes after KWord-1.3-beta3
 allow to type the name of an existing style to update it, and select the style
 for the current paragraph after creating it.
 - Fixed wrong layouting of inline frames (e.g. pictures)
+- Don't select inline frame after pasting text containing it (only select non-inline frames)
 
 Changes after KWord-1.3-beta2
 =============================

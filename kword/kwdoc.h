@@ -378,13 +378,12 @@ public:
     void framesChanged( const QPtrList<KWFrame> & frames, KWView * view = 0L );
 
     QString uniqueFramesetName( const QString& oldName );
-    //use insert file attribute for footnote frameset
-    //don't change it attibute otherwise we have a footnote with is not fixed
     /*
-     * dontCreateFootNote = true when we copy footnote into an other
-     * frameset that mainFrameSet => footnote is removed !
+     * @param copyFootNote ...
+     * @param dontCreateFootNote = true when we copy footnote into an other frameset than mainFrameSet => footnote is removed !
+     * @param selectFrames if true, pasted frames are auto-selected. Set to false when loading from a file etc.
      */
-    void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote = false, bool dontCreateFootNote = false);
+    void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote = false, bool dontCreateFootNote = false, bool selectFrames = true );
 
     void insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd, double offset );
     void completePasting();

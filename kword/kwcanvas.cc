@@ -2051,7 +2051,7 @@ void KWCanvas::pasteFrames()
             QDomElement topElem = domDoc.documentElement();
 
             KMacroCommand * macroCmd = new KMacroCommand( i18n( "Paste Frames" ) );
-            m_doc->pasteFrames( topElem, macroCmd );
+            m_doc->pasteFrames( topElem, macroCmd, false, false, true /*select frames*/ );
             m_doc->loadPictureMap( topElem );
             store->close();
             m_doc->loadImagesFromStore( store );

@@ -6738,7 +6738,7 @@ void KWView::insertFile(const QString & path)
                 {
                     // insert fixed framesets
                     //kdDebug() << k_funcinfo << domDocFrames.toCString() << endl;
-                    m_doc->pasteFrames( topElem, macroCmd );
+                    m_doc->pasteFrames( topElem, macroCmd, false, false, false /* don't select frames */ );
                 }
                 if ( hasEmbedded )
                 {

@@ -2096,7 +2096,7 @@ QString KWDocument::uniqueFramesetName( const QString& oldName )
     return newName;
 }
 
-void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote, bool loadFootNote )
+void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote, bool loadFootNote, bool selectFrames )
 {
     m_pasteFramesetsMap = new QMap<QString, QString>();
     //QPtrList<KWFrameSet> frameSetsToFinalize;
@@ -2187,7 +2187,8 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, boo
                 KWFrame * frame = new KWFrame( fs, rect.x(), rect.y(), rect.width(), rect.height() );
                 frame->load( frameElem, fs, KWDocument::CURRENT_SYNTAX_VERSION );
                 frame->setZOrder( maxZOrder( frame->pageNum(this) ) + 1 +nb ); // make sure it's on top
-                frame->setSelected(TRUE);
+                if ( selectFrames )
+                    frame->setSelected(TRUE);
                 nb++;
                 fs->addFrame( frame, false );
                 if ( macroCmd )

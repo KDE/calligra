@@ -144,7 +144,10 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
 
     kdDebug() << "KWPasteTextCommand::execute calling doc->pasteFrames" << endl;
     // In case of any inline frameset
-    doc->pasteFrames( elem, 0,true /*don't change footnote attribute*/ , (textFs->isMainFrameset()));
+    doc->pasteFrames( elem, 0,
+                      true /*don't change footnote attribute*/ ,
+                      (textFs->isMainFrameset()) /*load footnotes if mainframeset*/,
+                      false /*don't select frames*/ );
     doc->completePasting();
 
     m_lastParag = c->parag()->paragId();
