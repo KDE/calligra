@@ -185,15 +185,6 @@
     </Function>
     
     <Function>
-      <Name>VERSION</Name>
-      <Type>String</Type>
-      <Help>
-	<Text>Returns the KSpread version as a string. This function is obsolete and will be removed in a later version of KSpread. It is provided only for compatibility. Please use function INFO("release") instead.</Text>
-	<Syntax>VERSION()</Syntax>
-	</Help>
-    </Function>
-    
-    <Function>
       <Name>FILENAME</Name>
       <Type>String</Type>
       <Help>

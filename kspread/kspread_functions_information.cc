@@ -389,13 +389,6 @@ bool kspreadfunc_filename( KSContext & context )
   return true;
 }
 
-bool kspreadfunc_version( KSContext & context )
-{
-  context.setValue( new KSValue( QString( VERSION ) ) );
-
-  return true;
-}
-
 // Function: N
 bool kspreadfunc_n( KSContext & context )
 {

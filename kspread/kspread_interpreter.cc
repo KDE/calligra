@@ -686,7 +686,6 @@ static const functionEntry funcTab[] = {
   { "DECBIN", kspreadfunc_dec2bin },
   { "DECOCT", kspreadfunc_dec2oct },
   { "ISLOGIC", kspreadfunc_islogical }, // obsolete, use ISLOGICAL
-  { "VERSION", kspreadfunc_version }, // obsolete, use INFO("release")
 
   // end  marker
   { NULL, NULL }
