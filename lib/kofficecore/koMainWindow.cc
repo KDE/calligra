@@ -677,6 +677,9 @@ void KoMainWindow::slotFilePrintPreview()
     }
     QPrinter printer;
     KTempFile tmpFile;
+
+    rootView()->setupPrinter( printer );
+
     printer.setOutputFileName(tmpFile.name());
     rootView()->print(printer);
     KoPrintPreview::preview(this, "KoPrintPreviewDialog", tmpFile.name());
