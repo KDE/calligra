@@ -1397,7 +1397,9 @@ void KWView::formatFont()
 
     if ( KFontDialog::getFont( tmpFont ) ) {
         tbFont = tmpFont;
-	 gui->canvasWidget()->setFont(tbFont);
+        KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
+        if ( edit )
+            edit->setFont(tbFont);
     }
 
 #if 0
