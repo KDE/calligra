@@ -115,9 +115,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     frmBrd.color = black;
     frmBrd.style = Border::SOLID;
     frmBrd.ptWidth = 1;
-    _viewFormattingChars = FALSE;
-    _viewFrameBorders = TRUE;
-    _viewTableGrid = TRUE;
+
     searchEntry = new KWSearchContext();
     replaceEntry = new KWSearchContext();
     doc = _doc;
@@ -172,8 +170,9 @@ void KWView::initGui()
     if ( gui )
         gui->showGUI();
     actionToolsEdit->setChecked( TRUE );
-    actionViewFrameBorders->setChecked( TRUE );
-    actionViewTableGrid->setChecked( TRUE );
+    actionViewFrameBorders->setChecked( doc->getViewFrameBorders() );
+    actionViewTableGrid->setChecked( doc->getViewTableGrid());
+    actionViewFormattingChars->setChecked( doc->getViewFormattingChars());
     //setNoteType(doc->getNoteType(), false);
 
     actionFormatColor->setColor( Qt::black );
@@ -1107,21 +1106,22 @@ void KWView::editSerialLetterDataBase()
 /*===============================================================*/
 void KWView::viewFormattingChars()
 {
-    _viewFormattingChars = actionViewFormattingChars->isChecked();
+
+    doc->setViewFormattingChars(actionViewFormattingChars->isChecked());
     gui->canvasWidget()->repaintAll();
 }
 
 /*===============================================================*/
 void KWView::viewFrameBorders()
 {
-    _viewFrameBorders = actionViewFrameBorders->isChecked();
+    doc->setViewFrameBorders(actionViewFrameBorders->isChecked());
     gui->canvasWidget()->repaintAll();
 }
 
 /*===============================================================*/
 void KWView::viewTableGrid()
 {
-    _viewTableGrid = actionViewTableGrid->isChecked();
+    doc->setViewTableGrid( actionViewTableGrid->isChecked());
     gui->canvasWidget()->repaintAll();
 }
 

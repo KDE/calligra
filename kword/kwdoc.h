@@ -360,6 +360,14 @@ public:
     /** calls layout() on all framesets  */
     void layout();
 
+    bool getViewFormattingChars() { return _viewFormattingChars; }
+    void setViewFormattingChars(bool _b) {_viewFormattingChars=_b;}
+    bool getViewFrameBorders() { return _viewFrameBorders; }
+    void setViewFrameBorders(bool _b){_viewFrameBorders=_b;}
+    bool getViewTableGrid() { return _viewTableGrid; }
+    void setViewTableGrid(bool _b) { _viewTableGrid=_b;}
+
+
 signals:
     void sig_imageModified();
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
@@ -457,6 +465,8 @@ private:
     QStyleSheet *styleSheet;
 
     KSpellConfig *m_pKSpellConfig;
+
+    bool _viewFormattingChars, _viewFrameBorders, _viewTableGrid;	
 };
 
 inline int KWDocument::zoomIt( int z ) const

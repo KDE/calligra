@@ -197,14 +197,14 @@ void KWCanvas::drawBorders( QPainter *painter, QRect v_area, bool drawBack, QReg
             painter->setPen( lightGray );
             bool should_draw = TRUE;
             if ( frameset->getGroupManager() ) {
-                if ( m_gui->getView()->getViewTableGrid() )
+                if ( doc->getViewTableGrid() )
                     painter->setPen( QPen( black, 1, DotLine ) );
                 else
                     painter->setPen( NoPen );
             }
             if ( FALSE )//static_cast<int>( i ) == hiliteFrameSet )
                 painter->setPen( blue );
-            else if ( !m_gui->getView()->getViewFrameBorders() )
+            else if ( !doc->getViewFrameBorders() )
                 should_draw = FALSE;
 
             if ( v_area.intersects( frameRect ) && should_draw && !frameset->getGroupManager() ) {

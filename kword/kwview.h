@@ -127,10 +127,6 @@ public:
     void setTool( MouseMode _mouseMode );
     void updateStyleList();
 
-    bool getViewFormattingChars() { return _viewFormattingChars; }
-    bool getViewFrameBorders() { return _viewFrameBorders; }
-    bool getViewTableGrid() { return _viewTableGrid; }
-
     void initGui();
 
     /**
@@ -441,7 +437,6 @@ protected:
     QStringList styleList;
 
     KWGUI *gui;
-    bool _viewFormattingChars, _viewFrameBorders, _viewTableGrid;
 
     Border left, right, top, bottom, tmpBrd, frmBrd;
     KWSearchContext *searchEntry, *replaceEntry;

@@ -172,6 +172,10 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     // ## TODO make this configurable
     m_gridX = m_gridY = 10;
 
+    _viewFormattingChars = FALSE;
+    _viewFrameBorders = TRUE;
+    _viewTableGrid = TRUE;
+
     setEmpty();
     setModified(false);
 
