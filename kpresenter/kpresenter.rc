@@ -1,4 +1,4 @@
-<!DOCTYPE KPartGUI ><KPartGUI name="KPresenter">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
@@ -207,4 +207,4 @@
 <ToolBar name="colorBar" position="right">
   <Action name="colorbar"/>
 </ToolBar>
-</KPartGUI>
+</kpartgui>
