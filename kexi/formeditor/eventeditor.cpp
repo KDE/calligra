@@ -32,6 +32,8 @@ EventEditor::EventEditor(QWidget *parent, KFormEditor::EventBuffer *buff, const 
 {
 	header()->setLabel(0, i18n("Event"));
 	header()->setLabel(1, i18n("Handler"));
+
+	m_buffer = buff;
 }
 
 void
@@ -49,7 +51,11 @@ EventEditor::setObject(QObject *o)
 	{
 		kdDebug() << "EventEditor::setObject(): events: " << name << endl;
 //		PropertyEditorItem *i = new PropertyEditorItem(this, name, QVariant::BitArray, QVariant(QString()));
-		new EventEditorItem(this, o, name, "", "", 0);
+		EventBufferItem *ev = m_buffer->sender(o, name);
+		if(ev)
+			new EventEditorItem(this, o, name, ev->receiver(), ev->slot(), 0);
+		else
+			new EventEditorItem(this, o, name, "", "", 0);
 	}
 }
 

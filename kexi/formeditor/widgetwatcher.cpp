@@ -22,15 +22,16 @@
 #include <kdebug.h>
 
 #include "propertybuffer.h"
+#include "eventbuffer.h"
 #include "widgetwatcher.h"
 #include "widgetcontainer.h"
 #include "widgetprovider.h"
 
 namespace KFormEditor {
 
-WidgetWatcher::WidgetWatcher(QObject *parent, PropertyBuffer *b, const char *name)
+WidgetWatcher::WidgetWatcher(QObject *parent, PropertyBuffer *b, EventBuffer *eb, const char *name)
  : QObject(parent, name),
-   QMap<char *, QObject *>()
+   QMap<QString, QObject *>()
 {
 	if(b)
 	{
@@ -39,6 +40,8 @@ WidgetWatcher::WidgetWatcher(QObject *parent, PropertyBuffer *b, const char *nam
 
 		m_buffer = b;
 	}
+
+	m_eb = eb;
 }
 
 QString
@@ -87,7 +90,7 @@ WidgetWatcher::store(WidgetContainer *parentC)
 	parent.appendChild(prop(&domDoc, "dataSource", parentC->property("dataSource")));
 
 
-	for(QMapIterator<char *, QObject *> it = begin(); it != end(); it++)
+	for(QMapIterator<QString, QObject *> it = begin(); it != end(); it++)
 	{
 		QDomElement tclass = domDoc.createElement("widget");
 		tclass.setAttribute("class", it.data()->className());
@@ -106,6 +109,38 @@ WidgetWatcher::store(WidgetContainer *parentC)
 		}
 
 		parent.appendChild(tclass);
+	}
+
+	QDomElement connections = domDoc.createElement("connections");
+	uiElement.appendChild(connections);
+
+	EventBufferItem *it;
+	for(it = m_eb->first(); it; it = m_eb->next())
+	{
+		QDomElement connection = domDoc.createElement("connection");
+		connection.setAttribute("fake", "true");
+		connections.appendChild(connection);
+
+		QDomElement csender = domDoc.createElement("sender");
+		QDomText tsender= domDoc.createTextNode(it->sender());
+		csender.appendChild(tsender);
+
+		QDomElement csignal = domDoc.createElement("signal");
+		QDomText tsignal= domDoc.createTextNode(it->signal());
+		csignal.appendChild(tsignal);
+
+		QDomElement creceiver = domDoc.createElement("receiver");
+		QDomText treceiver= domDoc.createTextNode(it->receiver());
+		creceiver.appendChild(treceiver);
+
+		QDomElement cslot = domDoc.createElement("slot");
+		QDomText tslot = domDoc.createTextNode(it->slot());
+		cslot.appendChild(tslot);
+
+		connection.appendChild(csender);
+		connection.appendChild(csignal);
+		connection.appendChild(creceiver);
+		connection.appendChild(cslot);
 	}
 
 	domDoc.appendChild(uiElement);
@@ -200,6 +235,25 @@ WidgetWatcher::load(WidgetContainer *p, WidgetProvider *wp, const QByteArray &da
 
 		kdDebug() << "WidgetWatcher::load(): finding details..." << endl;
 		setUpWidget(p, wp, n.toElement());
+	}
+
+	QDomElement connections = ui.namedItem("connections").toElement();
+	for(QDomNode n = connections.firstChild(); !n.isNull(); n = n.nextSibling())
+	{
+		QDomElement connection = n.toElement();
+
+		QString sender   = connection.namedItem("sender").toElement().text();
+		QString signal   = connection.namedItem("signal").toElement().text();
+		QString receiver = connection.namedItem("receiver").toElement().text();
+		QString slot     = connection.namedItem("slot").toElement().text();
+
+		kdDebug() << "WidgetWatcher::load(): tag =" << connection.namedItem("sender").toElement().tagName() << endl;
+		kdDebug() << "WidgetWatcher::load(): sender =" << sender << endl;
+
+		QObject *o = find(sender).data();
+		kdDebug() << "WidgetWatcher::load(): count: " << count() << endl;
+		EventBufferItem *eb = new EventBufferItem(sender, receiver, signal, slot, true, o);
+		m_eb->insertEvent(eb);
 	}
 }
 

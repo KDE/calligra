@@ -17,6 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <kdebug.h>
+
 #include "eventbuffer.h"
 
 EventBufferItem::EventBufferItem(const QString &sender, const QString &receiver,
@@ -50,13 +52,18 @@ namespace KFormEditor
 	void
 	EventBuffer::insertEvent(EventBufferItem *e)
 	{
-		append(e);
+		kdDebug() << "EventBuffer::insertEvent() e=" << e << endl;
+//		insert(e);
+		kdDebug() << "EventBuffer::insertEvent() i am: " << this << endl;
+		kdDebug() << "EventBuffer::insertEvent() bufferbase is: " << &m_eb << endl;
+		m_eb.append(e);
+		kdDebug() << "EventBuffer::insertEvent() peh, updated!" << endl;
 	}
 
 	void
 	EventBuffer::takeEvent(EventBufferItem *e)
 	{
-		remove(e);
+		m_eb.remove(e);
 	}
 
 	EventBuffer
@@ -80,5 +87,38 @@ namespace KFormEditor
 		}
 
 		return eb;
+	}
+
+	EventBufferItem*
+	EventBuffer::sender(QObject *o, const QString &signal)
+	{
+		kdDebug() << "EventBuffer::sender() o=" << o << endl;
+
+		EventBufferItem *it;
+		for(it = m_eb.first(); it; it = m_eb.next())
+		{
+			kdDebug() << "EventBuffer::sender(): sender: " << it->sender()
+			 << " " << it->signal() << " == " << it->osender() << endl;
+			if(it->osender() == o && it->signal() == signal)
+			{
+				kdDebug() << "EventBuffer::sender(): matching" << endl;
+				return it;
+			}
+		}
+
+		return 0;
+	}
+
+	void
+	EventBuffer::appendFake(const QString &name, FakeHandler *f)
+	{
+		m_fakes.insert(name, f);
+
+		EventBufferItem *it;
+		for(it = m_eb.first(); it; it = m_eb.next())
+		{
+			if(it->receiver() == name)
+				f->callConnect(it->osender(), it->signal().latin1(), it->slot());
+		}
 	}
 };

@@ -23,6 +23,8 @@
 #include <qlabel.h>
 
 
+#include <kdebug.h>
+
 #include "propertyeditoritem.h"
 #include "eventeditoritem.h"
 #include "eventeditoreditor.h"
@@ -69,9 +71,11 @@ EventEditorEditor::slotShowDetails()
 		{
 			FakeHandler *f = m_editor->fakes().find(m_ed->handler->currentText()).data();
 			f->callConnect(m_item->sender(), m_item->event(), m_ed->function->currentText());
-//			EventBufferItem *eb = new EventBufferItem(m_item->sender()->name(),
-//			 m_ed->handler->currentText(), m_item->event(), m_ed->function->currentText());
-//			m_item->parent()->buffer()->insertEvent(eb);
+			kdDebug() << "EventEditorEditor::slotShowDetails(): on =" << m_item->sender() << endl;
+			EventBufferItem *eb = new EventBufferItem(m_item->sender()->name(),
+			 m_ed->handler->currentText(), m_item->event(), m_ed->function->currentText(),
+			  true, m_item->sender());
+			m_item->parent()->buffer()->insertEvent(eb);
 		}
 	}
 }

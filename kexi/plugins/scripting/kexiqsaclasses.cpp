@@ -17,6 +17,8 @@ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 */
 
+#include <stdlib.h>
+
 #include <qmessagebox.h>
 
 #include "kexiqsaclasses.h"
@@ -29,21 +31,10 @@ KexiQSAClasses::KexiQSAClasses(QSInterpreter *i)
 QObject*
 KexiQSAClasses::create(const QString &className, const QValueList<QSArgument> &arguments, QObject *context)
 {
-/*	if(className == "MessageBox")
+	if(className == "Sys")
 	{
-		QString message;
-		QString caption;
-		int lap = 0;
-		for(QValueList<QSArgument>::ConstIterator it = arguments.begin(); it != arguments.end(); ++it)
-		{
-			if(lap == 0)
-				caption = (*it).variant().toString();
-			else
-				message = (*it).variant().toString();
-		}
-
-		return new QMessageBox(caption, message, QMessageBox::NoIcon, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
-	}*/
+		return new Sys(0, "system");
+	}
 }
 
 QStringList
@@ -51,9 +42,26 @@ KexiQSAClasses::classes() const
 {
 	QStringList c;
 //	c.append("MessageBox");
+	c.append("Sys");
 	return c;
 }
 
 KexiQSAClasses::~KexiQSAClasses()
 {
 }
+
+
+//helper classes
+
+Sys::Sys(QObject *parent, const char *name)
+ : QObject(parent, name)
+{
+}
+
+int
+Sys::run(const QString &cmd)
+{
+	return system(cmd.latin1());
+}
+
+#include "kexiqsaclasses.moc"

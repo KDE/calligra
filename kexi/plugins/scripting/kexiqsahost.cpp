@@ -33,6 +33,7 @@ Boston, MA 02111-1307, USA.
 
 #include "kexiqsahost.h"
 #include "kexiqsaeditor.h"
+#include "kexiqsaclasses.h"
 #include "kexiview.h"
 #include "kexiscripthandler.h"
 
@@ -45,6 +46,8 @@ KexiQSAHost::KexiQSAHost(KexiScriptHandler *parent, const char *name)
 
 //	m_project->open("/home/luci/db/kexi.qsa");
 	m_interpreter = QSInterpreter::defaultInterpreter();
+	new KexiQSAClasses(m_interpreter);
+//	m_editors.setAutoDelete(true);
 //	m_interpreter->setProject(m_project);
 
 //	m_interpreter->call("helloWorld", QValueList<QVariant>());
@@ -101,9 +104,10 @@ QByteArray
 KexiQSAHost::getProjectData()
 {
 	kdDebug() << "KexiQSAHost::getProjectData() editors: " << m_project->editors()->count() << endl;
-	for(KexiQSAEditor *it = m_editors.first(); it; it = m_editors.next())
+	for(QSEditor *it = m_project->editors()->first(); it; it = m_project->editors()->next())
 	{
-		it->save();
+		if(it)
+			it->save();
 	}
 
 	return m_project->projectData();

@@ -77,14 +77,11 @@ KexiScriptHandler::store(KoStore *store)
 {
 	kdDebug() << "KexiScriptHandler::store()" << endl;
 
-	if(m_host->projectChanged())
-	{
 		kdDebug() << "KexiScriptHandler::store(): changes in scripts" << endl;
 
 		store->open("/script/project.qsa");
 		store->write(m_host->getProjectData());
 		store->close();
-	}
 }
 
 void

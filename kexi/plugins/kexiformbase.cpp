@@ -58,6 +58,7 @@
 #include "formeditor/propertyeditor.h"
 #include "formeditor/eventeditor.h"
 #include "formeditor/widgetwatcher.h"
+#include "formeditor/eventbuffer.h"
 
 #include "kexidbwidgetcontainer.h"
 #include "kexidbwidgets.h"
@@ -231,6 +232,7 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 	connect(topLevelEditor, SIGNAL(activated(QObject *)), peditor, SLOT(setObject(QObject *)));
 	connect(topLevelEditor, SIGNAL(widgetInserted(QObject *)), this, SLOT(slotWidgetInserted(QObject *)));
 
+	kdDebug() << "KexiFormBase::KexiFormBase(): eventbuffer is: " << item->eventBuffer() << endl;
 	EventEditor *eeditor = new EventEditor(formProperties, item->eventBuffer());
 	connect(topLevelEditor, SIGNAL(activated(QObject *)), eeditor, SLOT(setObject(QObject *)));
 
@@ -246,6 +248,7 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 		{
 			eeditor->appendFake(ev->name(), ev->formHandler());
 			ev->provideObject(this);
+			item->eventBuffer()->appendFake(ev->name(), ev->formHandler());
 		}
 	}
 

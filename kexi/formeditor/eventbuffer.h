@@ -22,6 +22,7 @@
 
 #include <qobject.h>
 #include <qptrlist.h>
+#include "eventeditor.h"
 
 class EventBufferItem
 {
@@ -54,11 +55,12 @@ class EventBufferItem
 		bool	m_fake;
 };
 
-typedef QPtrList<EventBufferItem> EventBufferBase;
 
 namespace KFormEditor
 {
-	class EventBuffer : public EventBufferBase
+	typedef QPtrList<EventBufferItem> EventBufferBase;
+
+	class EventBuffer
 	{
 		public:
 			EventBuffer();
@@ -68,6 +70,17 @@ namespace KFormEditor
 			void		takeEvent(EventBufferItem *);
 			EventBuffer	sender(const QString &);
 			EventBuffer	sender(QObject *);
+			EventBufferItem	*sender(QObject *o, const QString &signal);
+
+			//some std functions to access ptrlist
+			EventBufferItem	*first() { return m_eb.first(); }
+			EventBufferItem	*next() { return m_eb.next(); }
+
+			void		appendFake(const QString &name, FakeHandler *);
+
+		private:
+			EventBufferBase	m_eb;
+			Fakes		m_fakes;
 	};
 };
 

@@ -34,7 +34,7 @@ KexiFormHandlerItem::KexiFormHandlerItem(KexiProjectHandler *parent, const QStri
 	m_propertyBuffer = new PropertyBuffer(this, "pb");
 	m_eventBuffer = new KFormEditor::EventBuffer();
 //	m_widgetList = new WidgetList();
-	m_widgetWatcher = new KFormEditor::WidgetWatcher(this, m_propertyBuffer);
+	m_widgetWatcher = new KFormEditor::WidgetWatcher(this, m_propertyBuffer, m_eventBuffer);
 	m_container = new KexiDBWidgetContainer(0, "form", "bar");
 
 //	m_container = 0;

@@ -34,13 +34,14 @@ namespace KFormEditor
 {
 	class WidgetProvider;
 	class WidgetContainer;
+	class EventBuffer;
 
-	class WidgetWatcher : public QObject, public QMap<char *, QObject *>
+	class WidgetWatcher : public QObject, public QMap<QString, QObject *>
 	{
 		Q_OBJECT
 
 		public:
-			WidgetWatcher(QObject *parent, PropertyBuffer *b, const char *name=0);
+			WidgetWatcher(QObject *parent, PropertyBuffer *b, EventBuffer *eb, const char *name=0);
 			~WidgetWatcher();
 
 			QString	genName(const QString &base);
@@ -59,6 +60,7 @@ namespace KFormEditor
 		private:
 			NameCounter	m_nameCounter;
 			PropertyBuffer	*m_buffer;
+			EventBuffer	*m_eb;
 	};
 };
 

@@ -21,8 +21,20 @@ Boston, MA 02111-1307, USA.
 #define KEXIQSACLASSES_H
 
 #include <qsobjectfactory.h>
+#include <qobject.h>
 
 class QSInterpreter;
+
+class Sys : public QObject
+{
+	Q_OBJECT
+
+	public:
+		Sys(QObject *parent, const char *name);
+
+	public slots:
+		int	run(const QString &cmd);
+};
 
 class KexiQSAClasses : public QSObjectFactory
 {
