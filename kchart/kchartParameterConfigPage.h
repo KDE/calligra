@@ -26,6 +26,7 @@
 class QSpinBox;
 class QCheckBox;
 class QLineEdit;
+class QRadioButton;
 
 namespace KChart
 {
@@ -57,10 +58,13 @@ private:
     // Lineedits on the right side of the tab.
     QLineEdit *xtitle;
     QLineEdit *ytitle;
+
+    QRadioButton *lin;
+    QRadioButton *log;
     //QLineEdit *ylabel_fmt;
     //QLineEdit *ytitle2;
     //QLineEdit *ylabel2_fmt;
-    QLineEdit *annotation;
+    //QLineEdit *annotation;
 };
 
 }  //KChart namespace

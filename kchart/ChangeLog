@@ -1,5 +1,16 @@
 2005-03-12  Inge Wallin  <inge@lysator.liu.se>
 
+	Grant wish 99391: Should be possible to select linear or
+	logarithmic axes.
+	* kchartParameterConfigPage.h (KChartParameterConfigPage::lin and
+	log): new members
+	* kchartParameterConfigPage.cc (KChartParameterConfigPage): Add
+	new widgets to the Settings buttonbox (used to be Title)
+	(init): initialize the members from the params.
+	(apply): store the parameters from the values of the widgets
+
+	----------------------------------------------------------------
+
 	Fix the bad layout of the title buttonbox.
 	* kchartParameterConfigPage.cc (KChartParameterConfigPage): Change
 	the layout slightly, and add row and col stretch.

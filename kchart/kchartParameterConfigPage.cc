@@ -29,6 +29,7 @@
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qbuttongroup.h>
+#include <qradiobutton.h>
 #include <kfontdialog.h>
 
 #include "kchart_params.h"
@@ -75,11 +76,13 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid1->addWidget(llabel,6,0);
 #endif
 
-    QButtonGroup* gb2 = new QButtonGroup( 0, Qt::Vertical, i18n("Title"), this );
+    QButtonGroup* gb2 = new QButtonGroup( 0, Qt::Vertical, 
+					  i18n("Settings"), this );
     gb2->layout()->setSpacing(KDialog::spacingHint());
     gb2->layout()->setMargin(KDialog::marginHint());
     QGridLayout *grid2 = new QGridLayout(gb2->layout(),8,3);
 
+    // The Y axis title
     QLabel *tmpLabel = new QLabel( i18n( "Y-title:" ), gb2 );
     grid2->addWidget(tmpLabel,2,0);
 
@@ -88,6 +91,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid2->addWidget(ytitle, 2, 1);
     ytitle->setEnabled(false);
 
+    // The X axis title
     tmpLabel = new QLabel( i18n( "X-title:" ), gb2 );
     grid2->addWidget(tmpLabel, 3, 0);
 
@@ -95,6 +99,12 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     xtitle->setMaximumWidth(130);
     grid2->addWidget(xtitle, 3, 1);
     xtitle->setEnabled(false);
+
+    // Linear or logarithmic scale
+    lin = new QRadioButton( i18n("Linear scale"), gb2);
+    grid2->addWidget(lin, 5, 0);
+    log = new QRadioButton( i18n("Logarithmic scale"), gb2);
+    grid2->addWidget(log, 6, 0);
 
     // Make the widgets collect in the upper left corner.
     grid2->setColStretch(2, 1);
@@ -162,13 +172,11 @@ void KChartParameterConfigPage::init()
     llabel->setChecked(_params->legendPosition()!=KDChartParams::NoLegend);
 #endif
 
-    if( _params->chartType() == KDChartParams::Line )
-    {
+    if ( _params->chartType() == KDChartParams::Line ) {
         lineMarker->setEnabled(true);
         lineMarker->setChecked(_params->lineMarker());
     }
-    else
-    {
+    else {
         lineMarker->setEnabled(false);
         lineMarker->setChecked(false);
     }
@@ -201,6 +209,13 @@ void KChartParameterConfigPage::init()
     //     else
     xlabel->setEnabled(false);
 #endif
+
+    // Linear / logarithmic Y axis
+    if ( _params->axisParams( KDChartAxisParams::AxisPosLeft ).axisCalcMode()
+	 == KDChartAxisParams::AxisCalcLinear )
+	lin->setChecked(true);
+    else
+	log->setChecked(true);
 }
 
 
@@ -259,6 +274,19 @@ void KChartParameterConfigPage::apply()
 
     if( _params->chartType() == KDChartParams::Line )
         _params->setLineMarker(lineMarker->isChecked());
+
+    // Set the scale for the Y axis (linear / logarithmic)
+    {
+	KDChartAxisParams  params
+	    = _params->axisParams( KDChartAxisParams::AxisPosLeft );
+
+	if (lin->isChecked())
+	    params.setAxisCalcMode(KDChartAxisParams::AxisCalcLinear);
+	else
+	    params.setAxisCalcMode(KDChartAxisParams::AxisCalcLogarithmic);
+
+	_params->setAxisParams( KDChartAxisParams::AxisPosLeft, params );
+    }
 }
 
 }  //KChart namespace
