@@ -215,6 +215,43 @@ void KSpreadStyle::loadOasisStyle( const QDomElement & element )
         setIndent( KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ),0.0 ) );
         m_featuresSet |= SIndent;
     }
+    if ( styleStack.hasAttribute( "fo:border" ) )
+    {
+        str=styleStack.attribute( "fo:border" );
+        QPen pen = convertOasisStringToPen( str );
+        m_featuresSet |= SLeftBorder;
+        m_featuresSet |= SRightBorder;
+        m_featuresSet |= STopBorder;
+        m_featuresSet |= SBottomBorder;
+        m_leftBorderPen = pen;
+        m_topBorderPen = pen;
+        m_bottomBorderPen = pen;
+        m_rightBorderPen = pen;
+    }
+    if ( styleStack.hasAttribute( "fo:border-left" ) )
+    {
+        str=styleStack.attribute( "fo:border-left" );
+        m_leftBorderPen = convertOasisStringToPen( str );
+        m_featuresSet |= SLeftBorder;
+    }
+    if ( styleStack.hasAttribute( "fo:border-right" ) )
+    {
+        str=styleStack.attribute( "fo:border-right" );
+        m_rightBorderPen = convertOasisStringToPen( str );
+        m_featuresSet |= SRightBorder;
+    }
+    if ( styleStack.hasAttribute( "fo:border-top" ) )
+    {
+        str=styleStack.attribute( "fo:border-top" );
+        m_topBorderPen = convertOasisStringToPen( str );
+        m_featuresSet |= STopBorder;
+    }
+    if ( styleStack.hasAttribute( "fo:border-bottom" ) )
+    {
+        str=styleStack.attribute( "fo:border-bottom" );
+        m_bottomBorderPen = convertOasisStringToPen( str );
+        m_featuresSet |= SBottomBorder;
+    }
 #if 0
     bool ok;
     if ( format.hasAttribute( "type" ) )
@@ -361,49 +398,6 @@ void KSpreadStyle::loadOasisStyle( const QDomElement & element )
         m_featuresSet |= STextPen;
     }
 
-    QDomElement left = format.namedItem( "left-border" ).toElement();
-    if ( !left.isNull() )
-    {
-        QDomElement pen = left.namedItem( "pen" ).toElement();
-        if ( !pen.isNull() )
-        {
-            m_leftBorderPen = util_toPen( pen );
-            m_featuresSet |= SLeftBorder;
-        }
-    }
-
-    QDomElement top = format.namedItem( "top-border" ).toElement();
-    if ( !top.isNull() )
-    {
-        QDomElement pen = top.namedItem( "pen" ).toElement();
-        if ( !pen.isNull() )
-        {
-            m_topBorderPen = util_toPen( pen );
-            m_featuresSet |= STopBorder;
-        }
-    }
-
-    QDomElement right = format.namedItem( "right-border" ).toElement();
-    if ( !right.isNull() )
-    {
-        QDomElement pen = right.namedItem( "pen" ).toElement();
-        if ( !pen.isNull() )
-        {
-            m_rightBorderPen = util_toPen( pen );
-            m_featuresSet |= SRightBorder;
-        }
-    }
-
-    QDomElement bottom = format.namedItem( "bottom-border" ).toElement();
-    if ( !bottom.isNull() )
-    {
-        QDomElement pen = bottom.namedItem( "pen" ).toElement();
-        if ( !pen.isNull() )
-        {
-            m_bottomBorderPen = util_toPen( pen );
-            m_featuresSet |= SBottomBorder;
-        }
-    }
 
     QDomElement fallDiagonal = format.namedItem( "fall-diagonal" ).toElement();
     if ( !fallDiagonal.isNull() )

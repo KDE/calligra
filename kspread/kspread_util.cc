@@ -1119,7 +1119,7 @@ QString convertOasisPenToString( const QPen & pen )
         s+="dashed";
         break;
     case Qt::DotLine:
-        s=+"dotted";
+        s+="dotted";
         break;
     case Qt::DashDotLine:
         s+="dot-dash";
@@ -1171,5 +1171,5 @@ QPen convertOasisStringToPen( const QString &border )
     else
         pen.setColor(  QColor( _color ) );
 
-    return QPen();
+    return pen;
 }
