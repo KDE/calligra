@@ -93,6 +93,7 @@ class KEXICORE_EXPORT KexiBrowser : public KexiDockBase
 		BaseItemList	m_baseItems;
 		KPopupMenu *m_itemPopup, *m_partPopup;
 		KAction *m_newObjectAction;
+		int m_itemPopupTitle_id;
 
 		KListView *m_list;
 };

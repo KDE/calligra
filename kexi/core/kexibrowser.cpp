@@ -79,6 +79,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *parent )
 
 	//init popups
 	m_itemPopup = new KPopupMenu(this, "itemPopup");
+	m_itemPopupTitle_id = m_itemPopup->insertTitle("");
 	KAction *a = new KAction(i18n("&Open"), SmallIcon("fileopen"), Key_Enter, this, 
 		SLOT(slotOpenObject()), this, "open_object");
 	a->plug(m_itemPopup);
@@ -160,10 +161,16 @@ KexiBrowser::slotContextMenu(KListView *list, QListViewItem *item, const QPoint 
 	KPopupMenu *pm;
 	if (bit->item()) {
 		pm = m_itemPopup;
+		QString title_text = bit->text(0);
+		KexiBrowserItem *par_it = static_cast<KexiBrowserItem*>(bit->parent());
+		KexiPart::Part* par_part = 0;
+		if (par_it && par_it->info() && ((par_part = Kexi::partManager().part(par_it->info()))) && !par_part->instanceName().isEmpty())
+			title_text +=  (" : " + par_part->instanceName());
+		pm->changeTitle(m_itemPopupTitle_id, *bit->pixmap(0), title_text);
 	}
 	else {
 		pm = m_partPopup;
-		KexiPart::Part * part = Kexi::partManager().part(bit->info());
+		KexiPart::Part* part = Kexi::partManager().part(bit->info());
 		if (part)
 			m_newObjectAction->setText(i18n("&Create Object: %1...").arg( part->instanceName() ));
 		else
