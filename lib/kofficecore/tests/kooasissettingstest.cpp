@@ -36,6 +36,14 @@ void testParseConfigItemString( KoOasisSettings& settings )
     assert( unit == "mm" );
 }
 
+void testSelectItemMap( KoOasisSettings& settings )
+{
+    bool ok = settings.selectItemSet( "view-settings" );
+    assert( ok );
+    ok = settings.selectItemMap( "Views" );
+    assert( ok );
+}
+
 int main( int, char** ) {
 
     const QCString xml = "\
@@ -44,6 +52,11 @@ int main( int, char** ) {
  <office:settings> \
   <config:config-item-set config:name=\"view-settings\"> \
     <config:config-item config:name=\"unit\" config:type=\"string\">mm</config:config-item> \
+    <config:config-item-map-indexed config:name=\"Views\"> \
+      <config:config-item-map-entry> \
+        <config:config-item config:name=\"SnapLinesDrawing\" config:type=\"string\">value</config:config-item> \
+      </config:config-item-map-entry> \
+    </config:config-item-map-indexed> \
   </config:config-item-set> \
  </office:settings> \
 </office:document-settings> \
@@ -57,5 +70,6 @@ int main( int, char** ) {
 
     testSelectItemSet( settings );
     testParseConfigItemString( settings );
+    testSelectItemMap( settings );
     return 0;
 }
