@@ -2,13 +2,13 @@ SUBDIRS = xrgbrender
 
 INCLUDES = $(KOFFICE_INCLUDES) \
 	-I$(srcdir)/.. \
-	-I$(srcdir)/$(top_builddir)/lib/kopainter/support \
-	-I$(srcdir)/../../../kdenonbeta/ksvg/impl/libs/xrgbrender \
+	-I$(top_srcdir)/lib/kopainter/support \
+	-I$(srcdir)/xrgbrender \
 	-I$(srcdir)/../core \
 	-DLIBART_COMPILATION \
 	$(all_includes)
 
-libvpainter_la_LIBADD = -lksvgxrgbrender $(top_builddir)/lib/kopainter/support/libsupport.la
+libvpainter_la_LIBADD = $(top_builddir)/lib/kopainter/support/libsupport.la ./xrgbrender/libkarbonxrgbrender.la
 
 noinst_LTLIBRARIES = libvpainter.la
 
