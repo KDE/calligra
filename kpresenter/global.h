@@ -37,6 +37,7 @@ enum RectType {RT_NORM,RT_ROUND};
 enum ModifyType {MT_NONE,MT_MOVE,MT_RESIZE_UP,MT_RESIZE_DN,MT_RESIZE_LF,MT_RESIZE_RT,MT_RESIZE_LU,MT_RESIZE_LD,MT_RESIZE_RU,MT_RESIZE_RD};
 enum Effect {EF_NONE = 0};
 enum Effect2 {EF2_NONE = 0,EF2T_PARA = 1};
+enum PageEffect {PEF_NONE = 0,PEF_CLOSE_HORZ = 1,PEF_CLOSE_VERT = 2};
 
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;
@@ -60,6 +61,7 @@ struct Background
   QPixmap *cPix;
   QList<int> timeParts;
   bool hasSameCPix;
+  PageEffect pageEffect;
 };
 
 // page object

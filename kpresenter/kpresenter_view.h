@@ -207,9 +207,11 @@ public:
   virtual void createGUI();
   virtual void construct();
 
-  // get offsets
+  // get - set offsets
   int getDiffX() {return xOffset;}
   int getDiffY() {return yOffset;}
+  void setDiffX(int _x) {xOffset = _x;}
+  void setDiffY(int _y) {yOffset = _y;}
 
   // get current pagenum
   unsigned int getCurrPgNum() {return((int)(vert->value()+this->height()/2) / vert->pageStep() + 1);}

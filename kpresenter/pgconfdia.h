@@ -24,9 +24,12 @@
 #include <qbttngrp.h>
 #include <qchkbox.h>
 #include <qlabel.h>
+#include <qcombo.h>
 
 #include <kspinbox.h>
 #include <krestrictedline.h>
+
+#include "global.h"
 
 /******************************************************************/
 /* class PgConfDia                                                */
@@ -40,16 +43,18 @@ public:
 
   // constructor - destructor
   PgConfDia(QWidget* parent=0,const char* name=0,
-	    bool infLoop=false,bool swMan=true,int pgNum=1);
+	    bool infLoop=false,bool swMan=true,int pgNum=1,PageEffect pageEffect=PEF_NONE);
   ~PgConfDia();                                             
   bool getInfinitLoop() {return infinitLoop->isChecked();}
   bool getManualSwitch() {return manualSwitch->isChecked();}
+  PageEffect getPageEffect() {return (PageEffect)effectCombo->currentItem();}
 
 protected:
   QButtonGroup *general,*page; 
   QCheckBox *infinitLoop,*manualSwitch;
   QLabel *label1,*label2,*label3;
   QPushButton *cancelBut,*okBut;
+  QComboBox *effectCombo;
 
 public slots:
   void confDiaOk() {emit pgConfDiaOk();}

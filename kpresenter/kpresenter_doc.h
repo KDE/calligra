@@ -196,6 +196,7 @@ public:
   void setBPicView(unsigned int,BackView);
   void setBackType(unsigned int,BackType);
   bool setPenBrush(QPen,QBrush,int,int);
+  void setPageEffect(unsigned int,PageEffect);
   BackType getBackType(unsigned int);
   BackView getBPicView(unsigned int);
   const char* getBackPic(unsigned int);
@@ -203,6 +204,7 @@ public:
   QColor getBackColor1(unsigned int);
   QColor getBackColor2(unsigned int);
   BCType getBackColorType(unsigned int);
+  PageEffect getPageEffect(unsigned int);
   QPen getPen(QPen);
   QBrush getBrush(QBrush);
 

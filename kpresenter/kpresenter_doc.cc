@@ -299,6 +299,7 @@ void KPresenterDocument_impl::saveBackground(ostream& out)
       for (unsigned int i = 0;i < pagePtr->timeParts.count();i++)
 	  out << indent << "<PART time=\"" << (int)pagePtr->timeParts.at(i) << "\"/>" << endl;
       out << etag << "</TIMEPARTS>" << endl;
+      out << indent << "<PGEFFECT value=\"" << pagePtr->pageEffect << "\"/>" << endl; 
       out << etag << "</PAGE>" << endl;
     }
 }
@@ -729,6 +730,22 @@ void KPresenterDocument_impl::loadBackground(KOMLParser& parser,vector<KOMLAttri
 		    {
 		      if ((*it).m_strName == "value")
 			setBackType(_num,(BackType)atoi((*it).m_strValue.c_str()));
+		    }
+		  
+		  // to avoid problems with older files
+		  setPageEffect(_num,PEF_NONE);
+		}
+
+	      // pageEffect
+	      else if (name == "PGEFFECT")
+		{
+		  pagePtr = _pageList.last();
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "value")
+			setPageEffect(_num,(PageEffect)atoi((*it).m_strValue.c_str()));
 		    }
 		}
 	      
@@ -1560,6 +1577,27 @@ void KPresenterDocument_impl::setBackType(unsigned int pageNum,BackType backType
 	  return;
 	}
     }
+}
+
+/*========================== set page effect =====================*/
+void KPresenterDocument_impl::setPageEffect(unsigned int pageNum,PageEffect _pageEffect)
+{
+  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
+    {
+      if (pagePtr->pageNum == pageNum)
+	{
+	  pagePtr->pageEffect = _pageEffect;
+	  return;
+	}
+    }
+}
+
+/*====================== get page effect =========================*/
+PageEffect KPresenterDocument_impl::getPageEffect(unsigned int pageNum)
+{
+  for (pagePtr = _pageList.first();pagePtr != 0;pagePtr = _pageList.next())
+    if (pagePtr->pageNum == pageNum) return pagePtr->pageEffect;
+  return PEF_NONE;
 }
 
 /*===================== set pen and brush ========================*/

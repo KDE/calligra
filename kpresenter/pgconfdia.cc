@@ -22,7 +22,7 @@
 
 /*==================== constructor ===============================*/
 PgConfDia::PgConfDia(QWidget* parent,const char* name,
-		     bool infLoop,bool swMan,int pgNum=1)
+		     bool infLoop,bool swMan,int pgNum=1,PageEffect pageEffect=PEF_NONE)
   :QDialog(parent,name,true)
 {
   general = new QButtonGroup(this,"general");
@@ -55,7 +55,15 @@ PgConfDia::PgConfDia(QWidget* parent,const char* name,
   label2->resize(label2->sizeHint());
   label2->move(label1->x(),label1->y()+label1->height()+20);
 
-  page->resize(label2->width()+20,label2->y()+label2->height()+10);
+  effectCombo = new QComboBox(false,page);
+  effectCombo->move(label2->x(),label2->y()+label2->height()+5);
+  effectCombo->insertItem("No effect");
+  effectCombo->insertItem("Close horizontal");
+  effectCombo->insertItem("Close vertical");
+  effectCombo->resize(effectCombo->sizeHint());
+  effectCombo->setCurrentItem((int)pageEffect);
+  
+  page->resize(label2->width()+20,effectCombo->y()+effectCombo->height()+10);
   general->resize(manualSwitch->x()+manualSwitch->width()+20,manualSwitch->y()+manualSwitch->height()+10);
   page->move(20,general->y()+general->height()+20);
 

@@ -365,7 +365,8 @@ void KPresenterView_impl::screenConfigPages()
       pgConfDia = 0;
     }
   pgConfDia = new PgConfDia(0,"PageConfig",KPresenterDoc()->spInfinitLoop(),
-			    KPresenterDoc()->spManualSwitch(),getCurrPgNum());
+			    KPresenterDoc()->spManualSwitch(),getCurrPgNum(),
+			    KPresenterDoc()->pageList()->at(getCurrPgNum()-1)->pageEffect);
   pgConfDia->setMaximumSize(pgConfDia->width(),pgConfDia->height());
   pgConfDia->setMinimumSize(pgConfDia->width(),pgConfDia->height());
   pgConfDia->setCaption("KPresenter - Page Configuration for Screenpresentations");
@@ -489,7 +490,7 @@ void KPresenterView_impl::screenPrev()
 	{
 	  yOffset -= KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height()+10; 
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
-	  page->repaint(true);
+	  page->repaint(false);
 	  page->setFocus();
 	}
       else
@@ -509,7 +510,7 @@ void KPresenterView_impl::screenNext()
 	{
 	  yOffset += KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height()+10; 
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
-	  page->repaint(true);
+	  page->repaint(false);
 	  page->setFocus();
 	}
       else
@@ -1010,6 +1011,7 @@ void KPresenterView_impl::pgConfOk()
 {
   KPresenterDoc()->setManualSwitch(pgConfDia->getManualSwitch());
   KPresenterDoc()->setInfinitLoop(pgConfDia->getInfinitLoop());
+  KPresenterDoc()->setPageEffect(getCurrPgNum(),pgConfDia->getPageEffect());
 }
 
 /*=================== effect dialog ok ===========================*/

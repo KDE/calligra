@@ -38,6 +38,7 @@
 #include <qpntarry.h>
 #include <qpopmenu.h>
 #include <qimage.h>
+#include <qdatetm.h>
 
 #include "ktextobject.h"
 #include "graphobj.h"
@@ -144,6 +145,10 @@ protected:
   void _repaint(bool erase=true) {view->KPresenterDoc()->repaint(erase);}
   void _repaint(int _x,int _y,int _w,int _h,bool erase=true)
     {view->KPresenterDoc()->repaint(_x+diffx(),_y+diffy(),_w,_h,erase);}
+
+  // changing pages with effects
+  void drawPageInPix(QPixmap&,int);
+  void changePages(QPixmap,QPixmap,PageEffect);
 
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu;

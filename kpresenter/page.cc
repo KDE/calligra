@@ -1313,12 +1313,33 @@ bool Page::pNext(bool manual)
       else if (clearSubPres)
 	subPresStep = 0;
 
-      currPresPage++;
-      presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
-      currPresStep = (int)presStepList.first();
-      drawBack = true;
-      return true;
+      if (pageList()->at(currPresPage-1)->pageEffect != PEF_NONE)
+	{
+	  QPixmap _pix1(QApplication::desktop()->width(),QApplication::desktop()->height());
+	  drawPageInPix(_pix1,view->getDiffY());
+
+	  currPresPage++;
+	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
+	  currPresStep = (int)presStepList.first();
+
+	  QPixmap _pix2(QApplication::desktop()->width(),QApplication::desktop()->height());
+	  drawPageInPix(_pix2,view->getDiffY() + view->KPresenterDoc()->getPageSize(1,0,0,_presFakt).height()+10);
+	  
+	  changePages(_pix1,_pix2,pageList()->at(currPresPage-1)->pageEffect);
+
+	  drawBack = true;
+	  return true;
+	}
+      else
+	{
+	  currPresPage++;
+	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
+	  currPresStep = (int)presStepList.first();
+	  drawBack = true;
+	  return true;
+	}
     }
+  return false;
 }
 
 /*====================== previous ================================*/
@@ -1551,4 +1572,45 @@ void Page::restoreBackColor(unsigned int pgNum)
     }
 }
 
+/*==================== draw a page in a pixmap ===================*/ 
+void Page::drawPageInPix(QPixmap &_pix,int __diffy)
+{
+  int _yOffset = view->getDiffY();
+  view->setDiffY(__diffy);
 
+  QPainter p;
+  p.begin(&_pix);
+
+  paintBackground(&p,_pix.rect());
+  if (!objList()->isEmpty()) paintObjects(&p,_pix.rect());
+  
+  p.end();
+
+  view->setDiffY(_yOffset);
+}
+
+/*=========================== change pages =======================*/
+void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
+{
+//   QTime _time;
+//   int _step = 0,_steps;
+
+//   switch (_effect)
+//     {
+//     case PEF_CLOSE_HORZ:
+//       {
+// 	_steps = 10;
+// 	int _height = getPageSize(1,_presFakt).height() / _steps;
+
+// 	for (;;)
+// 	  {
+// 	    if (_step > _steps) break;
+// 	    if (_time.msec() >= 100)
+// 	      {
+// 		step++;
+// 		_time.setHMS(0,0,0,0);
+// 	      }
+// 	  }
+//       } break;
+//     }
+}
