@@ -1,15 +1,18 @@
 README for Thesaurus KDataTool
-Daniel Naber (daniel.naber@t-online.de), 2001-11-18
+Daniel Naber (daniel.naber@t-online.de), 2001-11-19
 
 This software offers two different functions. Note that it only
 supports English, even if the user interface may appear in a
 different language:
 
-1. A small thesaurus, build from a subset of WordNet. Note that this
-doesn't distinguish between parts of speech, e.g. verbs and nouns are
-mixed up in the lists of words. Also the frontend won't separate the
+1. A small thesaurus, build from a subset of WordNet. Many not so
+common words have been removed, very few words have been added
+(function words and word specific to KDE). Note that this doesn't
+distinguish between parts of speech, e.g. verbs and nouns are mixed
+up in the lists of words. Also the frontend won't separate the
 different meanings most words can have. If you need this, use the
-WordNet frontend.
+WordNet frontend. Please do *not* report bugs to the WordNet people
+but to KDE.
 
 2. A frontend to WordNet 1.7. WordNet is "an online lexical reference
 system whose design is inspired by current psycholinguistic theories

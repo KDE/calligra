@@ -312,6 +312,9 @@ void Thesaurus::thesExited(KProcess *)
     QStringList lines = lines.split(QRegExp("\n"), m_thesproc_stdout, false);
     for ( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it ) {
         QString line = (*it);
+        if( line.startsWith("  ") ) {  // ignore license (two spaces)
+            continue;
+        }
         int sep_pos = line.find("#");
         QString syn_part = line.left(sep_pos);
         QString hyper_part = line.right(line.length()-sep_pos-1);
