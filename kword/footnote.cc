@@ -43,6 +43,10 @@ void KWFootNoteManager::recalc()
       fn->updateDescription(curr);
       curr = fn->setStart(curr) + 1;
     }
+  for (fn = footNotes.first();fn;fn = footNotes.next())
+    fn->makeTempNames();
+  for (fn = footNotes.first();fn;fn = footNotes.next())
+    fn->updateNames();
 }
 
 /*================================================================*/
@@ -146,7 +150,7 @@ void KWFootNoteManager::removeFootNote(KWFootNote *fn)
 	  else
 	    firstParag = QString::null;
 	}
-      
+
       fn->destroy();
       footNotes.take(n);
     }
@@ -166,7 +170,7 @@ void KWFootNoteManager::addFootNoteText(KWFootNote *fn)
   KWTextFrameSet *frameSet = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(0));
   KWParag *parag = frameSet->getLastParag();
   KWParag *next = 0L;
-  
+
   if (!firstParag.isEmpty())
     {
       while (parag && parag->getParagName() != firstParag)
@@ -184,6 +188,9 @@ void KWFootNoteManager::addFootNoteText(KWFootNote *fn)
 
   KWParag *parag2 = new KWParag(frameSet,doc,parag,next,doc->findParagLayout("Standard"));
   parag2->setHardBreak(hardBreak);
+  QString paragName;
+  paragName.sprintf("Footnote/Endnote_%d",fn->getStart());
+  parag2->setParagName(paragName);
   QString txt = fn->getText();
   txt += " ";
   parag2->insertText(0,txt);
@@ -296,6 +303,48 @@ void KWFootNote::updateDescription(int _start)
 }
 
 /*================================================================*/
+void KWFootNote::makeTempNames()
+{
+  if (parag.isEmpty())
+    return;
+
+  KWParag *p = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(0))->getLastParag();
+
+  while (p && p->getParagName() != parag)
+    p = p->getPrev();
+
+  if (p)
+    {
+      parag.prepend("_");
+      p->setParagName(parag);
+    }
+  else
+    warning(i18n("Footnote couldn't find the parag with the footnote description"));
+  
+}
+
+/*================================================================*/
+void KWFootNote::updateNames()
+{
+  if (parag.isEmpty())
+    return;
+
+  KWParag *p = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(0))->getLastParag();
+
+  while (p && p->getParagName() != parag)
+    p = p->getPrev();
+
+  if (p)
+    {
+      parag.sprintf("Footnote/Endnote_%d",start);
+      p->setParagName(parag);
+    }
+  else
+    warning(i18n("Footnote couldn't find the parag with the footnote description"));
+  
+}
+
+/*================================================================*/
 void KWFootNote::destroy()
 {
   if (parag.isEmpty())
@@ -310,12 +359,12 @@ void KWFootNote::destroy()
     {
       KWParag *prev = p->getPrev();
       KWParag *next = p->getNext();
-      
+
       if (prev)
 	prev->setNext(next);
       if (next)
 	next->setPrev(prev);
-      
+
       delete p;
     }
   else

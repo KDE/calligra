@@ -98,9 +98,11 @@ public:
   QString getParag() { return parag; }
 
   void updateDescription(int _start);
-
-  void destroy();
+  void makeTempNames();
+  void updateNames();
   
+  void destroy();
+
 protected:
   void makeText();
 

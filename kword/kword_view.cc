@@ -995,7 +995,7 @@ void KWordView::insertFootNoteEndNote()
 						"endotes into the first frameset!"),i18n("OK"));
   else
     {
-      debug("NUMBER: %d",start);
+      //debug("NUMBER: %d",start);
 
       KWFootNoteDia dia(0L,"",m_pKWordDoc,gui->getPaperWidget(),start);
       dia.setCaption(i18n("Insert Footnote/Endnote"));

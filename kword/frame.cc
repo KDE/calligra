@@ -734,6 +734,9 @@ bool KWTextFrameSet::isPTYInFrame(unsigned int _frame,unsigned int _ypos)
 /*================================================================*/
 void KWTextFrameSet::deleteParag(KWParag *_parag)
 {
+  if (_parag->getInfo() == KWParag::PI_FOOTNOTE)
+    return;
+  
   KWParag *p,*p2;
 
   if (!getFirstParag()->getPrev() && !getFirstParag()->getNext()) return;
@@ -2207,7 +2210,7 @@ bool KWGroupManager::splitCell(QPainter &_painter)
 	  getCell(i + cell->row,col)->frameSet->setVisible(true);
 	}
       recalcRows(_painter);
-      
+
       return true;
     }
   else if (cell->cols > 1)
@@ -2218,10 +2221,10 @@ bool KWGroupManager::splitCell(QPainter &_painter)
 	  getCell(row,i + cell->col)->frameSet->setVisible(true);
 	}
       recalcCols();
-      
+
       return true;
     }
-  
+
   return false;
 }
 

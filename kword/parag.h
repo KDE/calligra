@@ -167,7 +167,9 @@ public:
   bool hasHardBreak() { return hardBreak; }
 
   QString getParagName() { return paragName; }
-
+  void setParagName(const QString &name)
+  { paragName = name; }
+  
   void setFrameSet(KWTextFrameSet *_fs)
     { frameSet = _fs; }
   void setDocument(KWordDocument *_doc)
