@@ -76,6 +76,49 @@ KChartParameters::KChartParameters() :
 	hard_yorig = 0;
 }
 
+bool KChartParameters::do_vol() {
+  bool val = ( type == KCHARTTYPE_COMBO_HLC_BAR   ||		// aka: combo
+	     type == KCHARTTYPE_COMBO_HLC_AREA  ||
+	     type == KCHARTTYPE_COMBO_LINE_BAR  ||
+	     type == KCHARTTYPE_COMBO_LINE_AREA ||
+	     type == KCHARTTYPE_3DCOMBO_HLC_BAR ||
+	     type == KCHARTTYPE_3DCOMBO_HLC_AREA||
+	     type == KCHARTTYPE_3DCOMBO_LINE_BAR||
+	     type == KCHARTTYPE_3DCOMBO_LINE_AREA );
+  return val;
+}
+
+bool KChartParameters::threeD() {
+  bool val = ( type == KCHARTTYPE_3DAREA          ||
+	       type == KCHARTTYPE_3DLINE          ||
+	       type == KCHARTTYPE_3DBAR           ||
+	       type == KCHARTTYPE_3DHILOCLOSE     ||
+	       type == KCHARTTYPE_3DCOMBO_HLC_BAR ||
+	       type == KCHARTTYPE_3DCOMBO_HLC_AREA||
+	       type == KCHARTTYPE_3DCOMBO_LINE_BAR||
+	       type == KCHARTTYPE_3DCOMBO_LINE_AREA );
+  return val;
+}
+
+bool KChartParameters::has_hlc_sets() {
+  bool val =
+		( type == KCHARTTYPE_COMBO_HLC_BAR   ||
+		  type == KCHARTTYPE_COMBO_HLC_AREA  ||
+		  type == KCHARTTYPE_3DCOMBO_HLC_BAR ||
+		  type == KCHARTTYPE_3DCOMBO_HLC_AREA||
+		  type == KCHARTTYPE_3DHILOCLOSE     ||
+		  type == KCHARTTYPE_HILOCLOSE );
+ return val;
+}
+
+bool KChartParameters::do_bar() {
+  bool val = ( type == KCHARTTYPE_3DBAR || // offset X objects to leave
+	       type == KCHARTTYPE_BAR );  //  room at X(0) and X(n)
+  return val;
+}
+
+
+
 void KChartParameters::saveColorArray(KConfig *conf, 
 				      KChartColorArray *arr,
 				      QString name) {

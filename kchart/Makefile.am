@@ -13,7 +13,12 @@ bin_PROGRAMS = kchart
 lib_LTLIBRARIES = libkchart.la
 
 libkchart_la_SOURCES = kchart_shell.cc kchart_part.cc \
-	kchart_view.cc kchart_factory.cc engine.cc \
+	kchart_view.cc kchart_factory.cc \
+	engine.cc \
+	enginehelper.cc \
+	enginedraw.cc \
+	enginepie.cc \
+	enginetoremove.cc \
 	kchartparams.cc \
 	kchartWizard.cc \
 	kchartWizardLabelsLegendPage.cc \

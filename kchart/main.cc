@@ -24,9 +24,10 @@
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv );
+    KoApplication app( argc, argv, "kchart" );
 
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kchart" );
+    
     ASSERT( !entry.isEmpty() );
     KoDocument* doc = entry.createDoc();
     doc->initDoc();

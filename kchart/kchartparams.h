@@ -118,7 +118,13 @@ inline QColor KChartColorArray::color( uint pos ) const
 
 struct KChartParameters
 {
-	KChartParameters();
+  KChartParameters();
+
+  bool do_vol();
+  bool do_bar();
+  bool threeD();
+  bool has_hlc_sets();
+
     void saveConfig(KConfig *conf);
     void loadConfig(KConfig *conf);
 
