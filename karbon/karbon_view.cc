@@ -784,6 +784,21 @@ KarbonView::slotJoinStyleClicked()
 }
 
 void
+KarbonView::slotCapStyleClicked()
+{
+	VObjectListIterator itr( m_part->document().selection()->objects() );
+	for ( ; itr.current() ; ++itr )
+	{
+		VStroke stroke( *( itr.current()->stroke() ) );
+		stroke.setParent( itr.current() );
+		stroke.setLineCap( (VStroke::VLineCap)m_capStyle->getState() );
+		itr.current()->setStroke( stroke );
+	}
+
+	m_part->repaintAllViews();
+}
+
+void
 KarbonView::setLineWidth()
 {
     setLineWidth( m_setLineWidth->value() );
@@ -1027,6 +1042,17 @@ KarbonView::initActions()
 	new KWidgetAction( m_joinStyle, i18n("Set Join Style"), 0, this, SLOT( slotJoinStyleClicked() ), actionCollection(), "setJoinStyle" );
 #endif
 	connect( m_joinStyle, SIGNAL(clicked()), this, SLOT(slotJoinStyleClicked()) );
+
+	// set up cap style widget
+	m_capStyle = new VStateButton( this );
+	m_capStyle->addState( new QPixmap( "pics/hi16-action-cap_butt.png" ) );
+    m_capStyle->addState( new QPixmap( "pics/hi16-action-cap_square.png" ) );
+    m_capStyle->addState( new QPixmap( "pics/hi16-action-cap_round.png" ) );
+    m_capStyle->setState( 0 );
+#if KDE_VERSION >= 305
+	new KWidgetAction( m_capStyle, i18n("Set Cap Style"), 0, this, SLOT( slotCapStyleClicked() ), actionCollection(), "setCapStyle" );
+#endif
+	connect( m_capStyle, SIGNAL(clicked()), this, SLOT(slotCapStyleClicked()) );
 
 	if( !m_strokeFillPreview )
 	{

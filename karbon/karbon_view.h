@@ -153,6 +153,7 @@ protected slots:
 	void slotStrokeChanged(  const VStroke & );
 	void slotFillChanged( const VFill & );
 	void slotJoinStyleClicked();
+	void slotCapStyleClicked();
 
 protected:
 	virtual void updateReadWrite( bool rw );
@@ -218,6 +219,7 @@ private:
 
 	// line join style
 	VStateButton *m_joinStyle;
+	VStateButton *m_capStyle;
 
 	// settings:
 	KAction* m_configureAction;
