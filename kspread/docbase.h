@@ -74,7 +74,7 @@ class DocBase {
   DocInfo *di;
 };
 
-};
+}
 
 #endif  //DOCBASE
 
