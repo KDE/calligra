@@ -36,7 +36,7 @@ class KivioGuideLines;
 
 #include <koDocument.h>
 
-#include <kprinter.h>
+#include <koprinter.h>
 #include <qpen.h>
 #include <qlist.h>
 #include <qintdict.h>

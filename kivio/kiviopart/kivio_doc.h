@@ -51,7 +51,7 @@ class QDomDocument;
 #include <qpainter.h>
 #include <qpen.h>
 #include <qlist.h>
-#include <kprinter.h>
+#include <koprinter.h>
 
 
 #define MIME_TYPE "application/x-kivio"
