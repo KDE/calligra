@@ -2015,35 +2015,6 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
         }
 
         switch ( e->type() ) {
-             case QEvent::AccelOverride:
-             {
-                 QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
-                 KWFormulaFrameSetEdit * formulaEdit = dynamic_cast<KWFormulaFrameSetEdit *>(m_currentFrameSetEdit);
-                 if ( !formulaEdit && keyev->state()==ControlButton&&keyev->key()==Key_R )
-                 {
-                     m_gui->getView()->editReplace();
-                     return true;
-                 }
-                 else if(keyev->state()==ControlButton )
-                 {
-                     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
-                     if(edit)
-                     {
-                         KoTextFormat *format=edit->currentFormat();
-                         if(keyev->key()==Key_I)
-                         {
-                             edit->setItalic(!format->font().italic());
-                             return true;
-                         }
-                         else if(keyev->key()==Key_U)
-                         {
-                             edit->setUnderline(!format->font().underline());
-                             return true;
-                         }
-                     }
-                 }
-             }
-
             case QEvent::FocusIn:
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusInEvent();

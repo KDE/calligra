@@ -280,7 +280,7 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
         KWFrame *theFrame = frameIt.current();
         QRect r( 0, theFrame->internalY(), m_doc->ptToLayoutUnitPixX( theFrame->width() ), m_doc->ptToLayoutUnitPixY( theFrame->height() ) );
 #ifdef DEBUG_ITD
-        kdDebug() << "ITN: r=" << DEBUGRECT(r) << " iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
+        kdDebug() << "ITD: r=" << DEBUGRECT(r) << " iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
 #endif
         // r is the frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in layout units (aka internal)
@@ -353,7 +353,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
                                 QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                 KWFrameSetEdit *edit )
 {
-    //kdDebug() << "KWTextFrameSet::drawFrame " << getName() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << DEBUGRECT( r ) << endl;
+    //kdDebug() << "KWTextFrameSet::drawFrame " << getName() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << DEBUGRECT( r ) << " onlyChanged=" << onlyChanged << endl;
     m_currentDrawnFrame = theFrame;
     // Update variables for each frame (e.g. for page-number)
     // If more than KWPgNumVariable need this functionality, create an intermediary base class
@@ -406,7 +406,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
 
     // Blank area under the very last paragraph - QRT draws it up to textdoc->height,
     // we have to draw it from there up to the bottom of the last frame.
-    if ( lastFormatted == textDocument()->lastParag() && !onlyChanged )
+    if ( lastFormatted == textDocument()->lastParag() /* && !onlyChanged BUG!*/ )
     {
         // This is drawing code, so we convert everything to pixels
         int docHeight = m_doc->layoutUnitToPixelY( textDocument()->height() );
@@ -492,7 +492,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
 
             p->setClipRegion( reg );
             // translate to qrt coords - after setting the clip region !
-            // see internalToNormalWithHint
+            // see internalToDocumentWithHint
             p->translate( viewFrameRect.left(), viewFrameRect.top() - m_doc->layoutUnitToPixelY( theFrame->internalY() ) );
             p->setBrushOrigin( p->brushOrigin().x() + viewFrameRect.left(), p->brushOrigin().y() + viewFrameRect.top() - theFrame->internalY() );
 
@@ -1244,7 +1244,7 @@ const QPtrList<KWFrame> & KWTextFrameSet::framesInPage( int pageNum ) const
 KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPoint ) const
 {
 #ifdef DEBUG_ITD
-    kdDebug() << getName() << " ITN called for iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
+    kdDebug() << getName() << " ITD called for iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
 #endif
     // This does a binary search in the m_framesInPage array, with internalY as criteria
     // We only look at the first frame of each page. Refining is done later on.
@@ -1259,7 +1259,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
         int res;
         mid = (n1 + n2)/2;
 #ifdef DEBUG_ITD
-        kdDebug() << "ITN: begin. mid=" << mid << endl;
+        kdDebug() << "ITD: begin. mid=" << mid << endl;
 #endif
         Q_ASSERT( m_framesInPage[mid] ); // We have no null items
         if ( m_framesInPage[mid]->isEmpty() )
@@ -1269,11 +1269,11 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
             KWFrame * theFrame = m_framesInPage[mid]->first();
             internalY = theFrame->internalY();
 #ifdef DEBUG_ITD
-            kdDebug() << "ITN: iPoint.y=" << iPoint.y() << " internalY=" << internalY << endl;
+            kdDebug() << "ITD: iPoint.y=" << iPoint.y() << " internalY=" << internalY << endl;
 #endif
             res = iPoint.y() - internalY;
 #ifdef DEBUG_ITD
-            kdDebug() << "ITN: res=" << res << endl;
+            kdDebug() << "ITD: res=" << res << endl;
 #endif
             // Anything between this internalY (top) and internalY+height (bottom) is fine
             // (Using the next page's first frame's internalY only works if there is a frame on the next page)
@@ -1281,12 +1281,12 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
             {
                 int height = m_doc->ptToLayoutUnitPixY( theFrame->height() );
 #ifdef DEBUG_ITD
-                kdDebug() << "ITN: height=" << height << endl;
+                kdDebug() << "ITD: height=" << height << endl;
 #endif
                 if ( iPoint.y() < internalY + height )
                 {
 #ifdef DEBUG_ITD
-                    kdDebug() << "ITN: found a match " << mid << endl;
+                    kdDebug() << "ITD: found a match " << mid << endl;
 #endif
                     found = true;
                     break;
@@ -1299,7 +1299,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
         else // if ( res > 0 )
             n1 = mid + 1;
 #ifdef DEBUG_ITD
-        kdDebug() << "ITN: End of loop. n1=" << n1 << " n2=" << n2 << endl;
+        kdDebug() << "ITD: End of loop. n1=" << n1 << " n2=" << n2 << endl;
 #endif
     }
     if ( !found )
@@ -1309,7 +1309,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
         // (and we only looked at the first one).
         mid = n2;
 #ifdef DEBUG_ITD
-        kdDebug() << "ITN: Setting mid to n2=" << mid << endl;
+        kdDebug() << "ITD: Setting mid to n2=" << mid << endl;
 #endif
         if ( mid < 0 )
         {
@@ -1330,8 +1330,8 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
         if ( !m_framesInPage[mid]->isEmpty() )
         {
             KWFrame * theFrame = m_framesInPage[mid]->first();
-#ifdef DEBUG_ITN
-            kdDebug() << "KWTextFrameSet::internalToNormal going back to page " << mid << " - frame: " << theFrame->internalY() << endl;
+#ifdef DEBUG_ITD
+            kdDebug() << "KWTextFrameSet::internalToDocument going back to page " << mid << " - frame: " << theFrame->internalY() << endl;
 #endif
             if ( theFrame->internalY() == internalY ) // same internalY as the frame we found before
                 result = mid;
@@ -1345,7 +1345,11 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *theFrame = frameIt.current();
-        QRect r( 0, theFrame->internalY(), m_doc->ptToLayoutUnitPixX( theFrame->width() ), m_doc->ptToLayoutUnitPixY( theFrame->height() ) );
+        // Calculate frame's rect in LU. The +1 gives some tolerance for QRect's semantics.
+        QRect r( 0, theFrame->internalY(), m_doc->ptToLayoutUnitPixX( theFrame->width() ) +1, m_doc->ptToLayoutUnitPixY( theFrame->height() )+1 );
+#ifdef DEBUG_ITD
+        kdDebug() << "KWTextFrameSet::internalToDocument frame's LU-rect:" << DEBUGRECT(r) << endl;
+#endif
         // r is the frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
         {

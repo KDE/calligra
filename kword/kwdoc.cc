@@ -315,7 +315,7 @@ void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 
 KWTextFrameSet * KWDocument::textFrameSet ( unsigned int _num)
 {
-    int i=0;
+    unsigned int i=0;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {

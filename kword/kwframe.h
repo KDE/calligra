@@ -425,6 +425,7 @@ public:
     /**
      * Draw a particular frame of this frameset.
      * This is called by drawContents and is what framesets must reimplement.
+     * @param crect rectangle to be repainted, in the _frame_'s coordinate system (in pixels).
      */
     virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
                             QColorGroup &cg, bool onlyChanged, bool resetChanged,

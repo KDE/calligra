@@ -922,8 +922,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
         {
             // This translates the coordinates in the document contents
             // ( frame and r are up to here in this system )
-            // into the QTextDocument's coordinate system
-            // (which doesn't have frames, borders, etc.)
+            // into the frame's own coordinate system.
             int offsetX = normalFrameRect.left();
             int offsetY = normalFrameRect.top() - ( ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight );
 

@@ -23,6 +23,7 @@
 #include "kwviewmode.h"
 #include <kdebug.h>
 
+
 KWAnchor::KWAnchor( KoTextDocument *textDocument, KWFrameSet * frameset, int frameNum )
     : KoTextCustomItem( textDocument),
       m_frameset( frameset ),
@@ -64,14 +65,21 @@ void KWAnchor::move( int x, int y )
 }
 
 //#define DEBUG_DRAWING
-//#define DEBUG_DRAWING2
 
 void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
+    // (x,y) is the position of the inline item (in Layout Units)
+    // (cx,cy,cw,ch) is the rectangle to be painted, in layout units too
+
     if ( m_deleted )
         return;
 
-    // containing text-frameset.
+    if ( x != xpos || y != ypos ) { // shouldn't happen I guess ?
+        kdDebug() << "rectifying position to " << x << "," << y << endl;
+        move( x, y );
+    }
+
+    // The containing text-frameset.
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     KoZoomHandler* zh = fs->textDocument()->paintingZoomHandler();
     int paragy = paragraph()->rect().y();
@@ -80,89 +88,93 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
                    << "  cliprect(LU)" << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
 #endif
 
-    // What are we going to draw and where; (all in Layout Units)
-    int leftLU = QMAX(cx > 0 ? cx : 0,x);
-    int topLU = QMAX(y+paragy,-cy);
-    int rightLU = leftLU + QMIN(width,cw);
-    int bottomLU = QMIN(y + paragy + height, paragy+cy+ch);
+#if 0
+    QPoint topLeftLU( QMAX(cx > 0 ? cx : 0,x), QMAX(y+paragy,-cy) );
+    QPoint bottomRightLU( leftLU + QMIN(width,cw), paragy + QMIN(y + height, cy + ch) );
 #ifdef DEBUG_DRAWING
-    kdDebug(32001) << "KWAnchor::draw x1: " << leftLU << ", y1: " << topLU << ", x2: " << rightLU << ", y2: " << bottomLU << endl;
+    //kdDebug(32001) << "KWAnchor::draw x1: " << leftLU << ", y1: " << topLU << ", x2: " << rightLU << ", y2: " << bottomLU << endl;
+#endif
 #endif
 
-    if ( x != xpos || y != ypos ) { // shouldn't happen I guess ?
-        kdDebug() << "rectifying position to " << x << "," << y << endl;
-        move( x, y );
-    }
+    QRect crectLU;
+    // Special case: QRichText calls us with (-1,-1,-1,-1) to mean "draw it all"
+    if ( cx == -1 && cy+paragy == -1 && cw == -1 && ch == -1 )
+        crectLU = QRect( x, y+paragy, width, height );
+    else // otherwise just use the passed data as crect
+        crectLU = QRect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
+#ifdef DEBUG_DRAWING
+    kdDebug() << "KWAnchor::draw crect in LU coordinates:                   " << DEBUGRECT( crectLU ) << endl;
+#endif
 
-    KoPoint tmpPoint;
-    KWFrame *containingFrame=fs->internalToDocument(QPoint(leftLU, topLU), tmpPoint );
+    KWFrame* containingFrame = fs->currentDrawnFrame();
+    // Intersect with containing frame - in case the inline item is
+    // bigger, it shouldn't go out of it!
+    QRect frameRectLU( 0, containingFrame->internalY(),
+                     zh->ptToLayoutUnitPixX( containingFrame->width() ),
+                     zh->ptToLayoutUnitPixY( containingFrame->height() ) );
+    crectLU &= frameRectLU;
+#ifdef DEBUG_DRAWING
+    kdDebug() << "KWAnchor::draw crect LU, after intersect with framerect : " << DEBUGRECT( crectLU ) << endl;
+#endif
 
-    if(containingFrame==0L) {
+    QPoint topLeftLU = crectLU.topLeft();
+    QPoint bottomRightLU = crectLU.bottomRight();
+
+    // Convert crect to document coordinates, first topleft then bottomright
+    KoPoint topLeftPt;
+    if ( ! fs->internalToDocument( topLeftLU, topLeftPt ))
+    {
         kdDebug() << "KWAnchor::paint Hmm? it seems my frame is positioned outside all text areas!!, aboring draw\n";
         return;
     }
-
-    // left side from the containing frameset and we can get the top from the calculated point of our parag.
-    tmpPoint.setX(containingFrame->x());
-    KoPoint topLeft=zh->zoomPoint(tmpPoint);
-
-    // Determine crect in view coords
-    // 1 - use the LU ints above..
-    // 2 - convert to view coords, first topleft then bottomright
-    fs->internalToDocument( QPoint(leftLU, topLU), tmpPoint);
-    QPoint cnPoint = zh->zoomPoint( tmpPoint );
-    /*else
-        kdDebug() << "KWAnchor::draw internalToNormal returned 0L for topLeft of crect!" << endl; */
-#ifdef DEBUG_DRAWING2
-    kdDebug() << "KWAnchor::draw cnPoint in normal coordinates " << cnPoint.x() << "," << cnPoint.y() << endl;
-#endif
-    cnPoint = fs->currentViewMode()->normalToView( cnPoint );
-    //kdDebug() << "KWAnchor::draw cnPoint in view coordinates " << cnPoint.x() << "," << cnPoint.y() << endl;
-
-    QRect crect; // clipping rect in view coordinates. (pixels)
-    crect.setLeft( cnPoint.x() );
-    crect.setTop( cnPoint.y() );
-    if ( fs->internalToDocument( QPoint(rightLU, bottomLU), tmpPoint ) )
+    KoPoint bottomRightPt;
+    if ( ! fs->internalToDocument( bottomRightLU, bottomRightPt ) )
     {
-        QPoint brnPoint = zh->zoomPoint( tmpPoint );
-#ifdef DEBUG_DRAWING2
-        kdDebug() << "KWAnchor::draw brnPoint in normal coordinates " << brnPoint.x() << "," << brnPoint.y() << endl;
-#endif
-        brnPoint = fs->currentViewMode()->normalToView( brnPoint );
-        crect.setRight( brnPoint.x() );
-        crect.setBottom( brnPoint.y() );
+        kdWarning() << "internalToDocument returned 0L for bottomRightLU=" << bottomRightLU.x() << "," << bottomRightLU.y() << endl;
+        return;
     }
-    else
-        kdWarning() << "internalToNormal returned 0L for bottomRight=" << crect.right() << "," << crect.bottom() << endl;
+    KoRect crectPt( topLeftPt, bottomRightPt );
+
+    // Convert crect to view coords
+    QRect crect = fs->currentViewMode()->normalToView( zh->zoomRect( crectPt ) );
 #ifdef DEBUG_DRAWING
-    kdDebug() << "KWAnchor::draw crect (in pixel) = " << DEBUGRECT( crect ) << endl;
+    kdDebug() << "KWAnchor::draw crect in view coordinates (pixel) : " << DEBUGRECT( crect ) << endl;
 #endif
 
-    KWFrame *frame = fs->currentDrawnFrame();
-    if ( frame->isCopy() )
+    // Ok, we finally have our crect in view coordinates!
+    // Now ensure the containing frame is the one actually containing our text
+    // (for copies, e.g. headers and footers, we need to go back until finding a real frame)
+
+    if ( containingFrame->isCopy() )
     {
         // Find last real frame, in case we are in a copied frame
         QPtrListIterator<KWFrame> frameIt( fs->frameIterator() );
         frameIt.toLast(); // from the end to avoid a 2*N in the worst case
-        while ( !frameIt.atFirst() && frameIt.current() != frame ) // look for 'frame'
+        while ( !frameIt.atFirst() && frameIt.current() != containingFrame ) // look for 'containingFrame'
             --frameIt;
-        if ( frameIt.atFirst() && frameIt.current() != frame )
-            kdWarning() << "KWAnchor::draw: frame not found " << frame << endl;
+        if ( frameIt.atFirst() && frameIt.current() != containingFrame )
+            kdWarning() << "KWAnchor::draw: containingFrame not found " << containingFrame << endl;
         while ( !frameIt.atFirst() && frameIt.current()->isCopy() ) // go back to last non-copy
             --frameIt;
-        frame = frameIt.current();
-        //kdDebug() << "KWAnchor::draw frame=" << frame << endl;
+        containingFrame = frameIt.current();
+        //kdDebug() << "KWAnchor::draw frame=" << containingFrame << endl;
     }
 
-    // and make painter go back to view coord system
-    // (this is exactly the opposite of the code in KWFrameSet::drawContents)
-    // (It does translate(view - internal), so we do translate(internal - view))
+#if 0 // Why this code? Why draw from x=0 if the crect is positionned correctly? (DF)
+    // left side from the containing frameset and we can get the top from the calculated point of our parag. (TZ)
+    // ## Looks wrong to me. The translation can't depend on the crect.... (DF)
+    QPoint topLeft( zh->zoomItX(containingFrame->x()), cnpoint.y() );
+#endif
+    QPoint topLeft = fs->currentViewMode()->normalToView( zh->zoomPoint( containingFrame->topLeft() ) );
 
+    // Finally, make the painter go back to view coord system
+    // (this is exactly the opposite of the code in KWFrameSet::drawContents)
+    // (It does translate(view - internal), so we do translate(internal - view) - e.g. with (0,0) for internal)
+    p->save();
+    p->translate( -topLeft.x(), -topLeft.y() );
 #ifdef DEBUG_DRAWING
     kdDebug() << "KWAnchor::draw translating by " << -topLeft.x() << "," << -topLeft.y() << endl;
 #endif
-    p->save();
-    p->translate( -topLeft.x(),-topLeft.y());
     QColorGroup cg2( cg );
     m_frameset->drawContents( p, crect, cg2, false, true, 0L, fs->currentViewMode(), fs->currentDrawnCanvas() );
 
