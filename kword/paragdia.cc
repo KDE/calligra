@@ -1109,19 +1109,8 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
     styleLayoutLayout->addLayout( Layout7 );
     Form1Layout->addWidget( gStyle );
 
-    gPreview = new QGroupBox( this, "previewLayout" );
-    gPreview->setTitle( i18n( "Preview" ) );
-    gPreview->setColumnLayout(0, Qt::Vertical );
-    gPreview->layout()->setSpacing( 0 );
-    gPreview->layout()->setMargin( 0 );
-    QHBoxLayout *previewLayoutLayout = new QHBoxLayout( gPreview->layout() );
-    previewLayoutLayout->setAlignment( Qt::AlignTop );
-    previewLayoutLayout->setSpacing( 6 );
-    previewLayoutLayout->setMargin( 11 );
-
-    preview = new KWNumPreview( gPreview );
-    previewLayoutLayout->addWidget( preview );
-    Form1Layout->addWidget( gPreview );
+    preview = new KWNumPreview( this );
+    Form1Layout->addWidget( preview );
     QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
     Form1Layout->addItem( spacer_2 );
 }
@@ -1216,7 +1205,7 @@ void KWParagCounterWidget::changeKWSpinboxType() {
 void KWParagCounterWidget::numTypeChanged( int nType ) {
     m_counter.setNumbering( static_cast<Counter::Numbering>( nType ) );
 
-    gPreview->setEnabled( m_counter.numbering() != Counter::NUM_NONE );
+    preview->setEnabled( m_counter.numbering() != Counter::NUM_NONE );
     gStyle->setEnabled( m_counter.numbering() != Counter::NUM_NONE );
 
     fillStyleCombo(m_counter.numbering());

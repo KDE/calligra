@@ -247,7 +247,7 @@ private:
     QList <StyleRepresenter> stylesList;
     void fillStyleCombo(Counter::Numbering type = Counter::NUM_LIST);
 
-    QGroupBox *gStyle, *gPreview;
+    QGroupBox *gStyle;
     QButtonGroup *gNumbering; 
     QComboBox *cStyle;
     Counter m_counter; 
