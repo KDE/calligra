@@ -46,10 +46,12 @@ public:
 	virtual ~KexiStatusBar();
 	virtual void addWidget( QWidget *widget, int stretch = 0, bool permanent = false);
 
+public slots:
+	virtual void setStatus(const QString &str);
+
 private slots:
 	virtual void cursorPositionChanged();
 	virtual void activePartChanged(KParts::Part *part);
-	virtual void setStatus(const QString &str);
 	virtual void setCursorPosition(int line, int col);
 
 private:

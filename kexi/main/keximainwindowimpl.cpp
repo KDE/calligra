@@ -252,6 +252,8 @@ class KexiMainWindowImpl::Private
 
 	KexiMainWindowImpl *wnd;
 
+	KexiStatusBar *statusBar;
+
 	/*! Toggles last checked view mode radio action, if available. */
 	void toggleLastCheckedMode()
 	{
@@ -368,7 +370,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		createShellGUI(true);
 	}
 
-	(void) new KexiStatusBar(this, "status_bar");
+	d->statusBar = new KexiStatusBar(this, "status_bar");
 
 	d->origAppCaption = caption();
 
@@ -2389,6 +2391,8 @@ void KexiMainWindowImpl::detachWindow(KMdiChildView *pWnd,bool bShow)
 	// update icon - from small to large
 	pWnd->setIcon( DesktopIcon( static_cast<KexiDialogBase *>(pWnd)->itemIcon() ) );
 //	pWnd->setIcon( DesktopIcon( static_cast<KexiDialogBase *>(pWnd)->part()->info()->itemIcon() ) );
+	if (dynamic_cast<KexiDialogBase*>(pWnd))
+		dynamic_cast<KexiDialogBase*>(pWnd)->sendDetachedStateToCurrentView();
 }
 
 void KexiMainWindowImpl::attachWindow(KMdiChildView *pWnd, bool /*bShow*/, bool bAutomaticResize)
@@ -2405,6 +2409,8 @@ void KexiMainWindowImpl::attachWindow(KMdiChildView *pWnd, bool /*bShow*/, bool 
 	}
 	// update icon - from large to small
 	pWnd->mdiParent()->setIcon( SmallIcon( static_cast<KexiDialogBase *>(pWnd)->itemIcon() ) );
+	if (dynamic_cast<KexiDialogBase*>(pWnd))
+		dynamic_cast<KexiDialogBase*>(pWnd)->sendAttachedStateToCurrentView();
 }
 
 QWidget* KexiMainWindowImpl::findWindow(QWidget *w)
@@ -2493,12 +2499,26 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 		KexiVDebug << "Focus EVENT" << endl;
 		KexiVDebug << (focus_w ? focus_w->name() : "" )  << endl;
 		KexiVDebug << "eventFilter: " <<e->type() << " " <<obj->name() <<endl;
+#ifdef KEXI_STATUSBAR_DEBUG
+		QWidget *focus_widget = focus_w ? focus_w->focusWidget() : 0;
+		d->statusBar->setStatus(QString("FOCUS VIEW: %1 %2, FOCUS WIDGET: %3 %4")
+			.arg(focus_w ? focus_w->className() : "").arg(focus_w ? focus_w->name() : "")
+			.arg(focus_widget ? focus_widget->className() : "").arg(focus_widget ? focus_widget->name() : "")
+			);
+#endif
 	}
 	else if (e->type()==QEvent::FocusOut) {
 		focus_w = focusWindow();
-		KexiVDebug << "Focus EVENT" << endl;
+		KexiVDebug << "Focus OUT EVENT" << endl;
 		KexiVDebug << (focus_w ? focus_w->name() : "" )  << endl;
 		KexiVDebug << "eventFilter: " <<e->type() << " " <<obj->name() <<endl;
+#ifdef KEXI_STATUSBAR_DEBUG
+		QWidget *focus_widget = focus_w ? focus_w->focusWidget() : 0;
+		d->statusBar->setStatus(QString("FOCUS VIEW: %1 %2, FOCUS WIDGET: %3 %4")
+			.arg(focus_w ? focus_w->className() : "").arg(focus_w ? focus_w->name() : "")
+			.arg(focus_widget ? focus_widget->className() : "").arg(focus_widget ? focus_widget->name() : "")
+			);
+#endif
 	}
 	if (e->type()==QEvent::WindowActivate) {
 		KexiVDebug << "WindowActivate EVENT" << endl;
