@@ -516,9 +516,12 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             bool emitChanged = false;
             if ( fs )
             {
-                if ( m_currentFrameSetEdit )
-                    terminateCurrentEdit();
-                mpEditFrame( e, normalPoint );
+                // ########### Laurent I don't know what is the usefull
+                // of this code but it breaks kword => I comment it.
+                // if it's necessary fix it.
+                //if ( m_currentFrameSetEdit )
+                //    terminateCurrentEdit();
+                //mpEditFrame( e, normalPoint );
 
                 KWTableFrameSet *table = fs->getGroupManager();
                 emitChanged = checkCurrentEdit( table ? table : fs );
