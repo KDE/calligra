@@ -6,11 +6,16 @@
 #include <TestCase.h>
 #include <TestSuite.h>
 
-class BracketElement;
-class FormulaCursor;
-class FormulaElement;
-class IndexElement;
+#include "formuladefs.h"
+
 class KCommandHistory;
+
+KFORMULA_NAMESPACE_BEGIN
+
+class BracketElement;
+class FormulaElement;
+class FormulaCursor;
+class IndexElement;
 class KFormulaContainer;
 class KFormulaDocument;
 class TextElement;
@@ -21,7 +26,7 @@ public:
     TestFormulaCursor(string name) : TestCase(name) {}
 
     static Test* suite();
-    
+
     void setUp();
     void tearDown();
 
@@ -37,7 +42,7 @@ private:
     void testReplaceByContent();
     void testReplaceSelectionByElement();
     void testCursorSaving();
-    
+
     KCommandHistory* history;
     KFormulaDocument* document;
     KFormulaContainer* container;
@@ -50,5 +55,7 @@ private:
     TextElement* element4;
     TextElement* element5;
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // TESTFORMULACURSOR_H

@@ -17,6 +17,7 @@
 #include "textelement.h"
 #include "testcommands.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 void TestCommands::setUp()
 {
@@ -234,3 +235,5 @@ void TestCommands::testAddOneByTwoMatrix()
     document->redo();
     assert(rootElement->countChildren() == 1);
 }
+
+KFORMULA_NAMESPACE_END

@@ -15,6 +15,7 @@
 #include "textelement.h"
 #include "testformulacursor.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 void TestFormulaCursor::setUp()
 {
@@ -285,3 +286,5 @@ void TestFormulaCursor::testCursorSaving()
 
 //     container->destroyCursor(cursor2);
 }
+
+KFORMULA_NAMESPACE_END

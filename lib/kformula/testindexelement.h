@@ -7,14 +7,19 @@
 #include <TestSuite.h>
 
 #include "elementindex.h"
+#include "formuladefs.h"
 
-class FormulaCursor;
-class FormulaElement;
-class IndexElement;
 class KCommandHistory;
+
+KFORMULA_NAMESPACE_BEGIN
+
+class BracketElement;
+class FormulaElement;
+class FormulaCursor;
+class IndexElement;
 class KFormulaContainer;
 class KFormulaDocument;
-class SequenceElement;
+class TextElement;
 
 
 class TestIndexElement : public TestCase {
@@ -22,10 +27,10 @@ public:
     TestIndexElement(string name) : TestCase(name) {}
 
     static Test* suite();
-    
+
     void setUp();
     void tearDown();
-    
+
 private:
 
     void testIndexes();
@@ -47,5 +52,7 @@ private:
     SequenceElement* lowerLeft;
     SequenceElement* lowerRight;
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // TESTINDEXELEMENT_H

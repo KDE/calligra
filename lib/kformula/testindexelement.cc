@@ -18,6 +18,8 @@
 #include "testindexelement.h"
 
 
+KFORMULA_NAMESPACE_BEGIN
+
 Test* TestIndexElement::suite()
 {
     TestSuite *suite = new TestSuite("TestIndexElement");
@@ -163,3 +165,5 @@ void TestIndexElement::testMovement()
     indexElement->moveRight(cursor, rootElement);
     assert(cursor->getElement() == indexElement->getMainChild());
 }
+
+KFORMULA_NAMESPACE_END
