@@ -116,7 +116,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wCustomWidget->setPixmap("custom_widget");
 	wCustomWidget->setClassName("CustomWidget");
 	wCustomWidget->setName(i18n("Custom Widget"));
-	wCustomWidget->setNamePrefix(i18n("CustomWidget"));
+	wCustomWidget->setNamePrefix(i18n("This string will be used to name widgets of this class. It must _not_ contain white "
+	"spaces and non latin1 characters", "CustomWidget"));
 	wCustomWidget->setDescription(i18n("A custom or non-supported widget"));
 	m_classes.append(wCustomWidget);
 
@@ -124,8 +125,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wLabel->setPixmap("label");
 	wLabel->setClassName("QLabel");
 	wLabel->setName(i18n("Text Label"));
-	wLabel->setNamePrefix(i18n("This string will be used to name widgets of this class. It must _not_ contain white "
-	"spaces and non latin1 characters", "TextLabel"));
+	wLabel->setNamePrefix(i18n("Widget name (see above)", "TextLabel"));
 	wLabel->setDescription(i18n("A widget to display text"));
 	m_classes.append(wLabel);
 
@@ -133,7 +133,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wPixLabel->setPixmap("pixmaplabel");
 	wPixLabel->setClassName("MyPicLabel");
 	wPixLabel->setName(i18n("Picture Label"));
-	wPixLabel->setNamePrefix(i18n("PictureLabel"));
+	wPixLabel->setNamePrefix(i18n("Widget name (see above)", "PictureLabel"));
 	wPixLabel->setDescription(i18n("A widget to display pixmaps"));
 	m_classes.append(wPixLabel);
 
@@ -143,7 +143,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wLineEdit->setAlternateClassName("QLineEdit");
 	wLineEdit->setInclude("klineedit.h");
 	wLineEdit->setName(i18n("Line Edit"));
-	wLineEdit->setNamePrefix(i18n("LineEdit"));
+	wLineEdit->setNamePrefix(i18n("Widget name (see above)", "LineEdit"));
 	wLineEdit->setDescription(i18n("A widget to input text"));
 	m_classes.append(wLineEdit);
 
@@ -151,7 +151,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wSpring->setPixmap("spring");
 	wSpring->setClassName("Spring");
 	wSpring->setName(i18n("Spring"));
-	wSpring->setNamePrefix(i18n("Spring"));
+	wSpring->setNamePrefix(i18n("Widget name (see above)", "Spring"));
 	wSpring->setDescription(i18n("A spring to place between widgets"));
 	m_classes.append(wSpring);
 
@@ -161,7 +161,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wPushButton->setAlternateClassName("QPushButton");
 	wPushButton->setInclude("kpushbutton.h");
 	wPushButton->setName(i18n("Push Button"));
-	wPushButton->setNamePrefix(i18n("PushButton"));
+	wPushButton->setNamePrefix(i18n("Widget name (see above)", "PushButton"));
 	wPushButton->setDescription(i18n("A simple push button to execute actions"));
 	m_classes.append(wPushButton);
 
@@ -169,7 +169,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wRadioButton->setPixmap("radio");
 	wRadioButton->setClassName("QRadioButton");
 	wRadioButton->setName(i18n("Radio"));
-	wRadioButton->setNamePrefix(i18n("Radio"));
+	wRadioButton->setNamePrefix(i18n("Widget name (see above)", "Radio"));
 	wRadioButton->setDescription(i18n("A radio button with text or pixmap label"));
 	m_classes.append(wRadioButton);
 
@@ -177,7 +177,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wCheckBox->setPixmap("check");
 	wCheckBox->setClassName("QCheckBox");
 	wCheckBox->setName(i18n("Check Box"));
-	wCheckBox->setNamePrefix(i18n("CheckBox"));
+	wCheckBox->setNamePrefix(i18n("Widget name (see above)", "CheckBox"));
 	wCheckBox->setDescription(i18n("A check box with text or pixmap label"));
 	m_classes.append(wCheckBox);
 
@@ -187,7 +187,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wSpinBox->setAlternateClassName("QSpinBox");
 	wSpinBox->setInclude("knuminput.h");
 	wSpinBox->setName(i18n("Spin Box"));
-	wSpinBox->setNamePrefix(i18n("SpinBox"));
+	wSpinBox->setNamePrefix(i18n("Widget name (see above)", "SpinBox"));
 	wSpinBox->setDescription(i18n("A spin box widget"));
 	m_classes.append(wSpinBox);
 
@@ -197,7 +197,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wComboBox->setAlternateClassName("QComboBox");
 	wComboBox->setInclude("kcombobox.h");
 	wComboBox->setName(i18n("Combo Box"));
-	wComboBox->setNamePrefix(i18n("ComboBox"));
+	wComboBox->setNamePrefix(i18n("Widget name (see above)", "ComboBox"));
 	wComboBox->setDescription(i18n("A combo box widget"));
 	m_classes.append(wComboBox);
 
@@ -207,7 +207,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wListBox->setAlternateClassName("QListBox");
 	wListBox->setInclude("klistbox.h");
 	wListBox->setName(i18n("List Box"));
-	wListBox->setNamePrefix(i18n("ListBox"));
+	wListBox->setNamePrefix(i18n("Widget name (see above)", "ListBox"));
 	wListBox->setDescription(i18n("A simple list widget"));
 	m_classes.append(wListBox);
 
@@ -217,7 +217,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wTextEdit->setAlternateClassName("QTextEdit");
 	wTextEdit->setInclude("ktextedit.h");
 	wTextEdit->setName(i18n("Text Editor"));
-	wTextEdit->setNamePrefix(i18n("TextEditor"));
+	wTextEdit->setNamePrefix(i18n("Widget name (see above)", "TextEditor"));
 	wTextEdit->setDescription(i18n("A simple single-page rich text editor"));
 	m_classes.append(wTextEdit);
 
@@ -227,7 +227,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wListView->setAlternateClassName("QListView");
 	wListView->setInclude("klistview.h");
 	wListView->setName(i18n("List View"));
-	wListView->setNamePrefix(i18n("ListView"));
+	wListView->setNamePrefix(i18n("Widget name (see above)", "ListView"));
 	wListView->setDescription(i18n("A list (or tree) widget"));
 	m_classes.append(wListView);
 
@@ -235,7 +235,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wSlider->setPixmap("slider");
 	wSlider->setClassName("QSlider");
 	wSlider->setName(i18n("Slider"));
-	wSlider->setNamePrefix(i18n("Slider"));
+	wSlider->setNamePrefix(i18n("Widget name (see above)", "Slider"));
 	wSlider->setDescription(i18n("An horizontal slider"));
 	m_classes.append(wSlider);
 
@@ -245,7 +245,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wProgressBar->setAlternateClassName("QProgressBar");
 	wProgressBar->setInclude("kprogress.h");
 	wProgressBar->setName(i18n("Progress Bar"));
-	wProgressBar->setNamePrefix(i18n("ProgressBar"));
+	wProgressBar->setNamePrefix(i18n("Widget name (see above)", "ProgressBar"));
 	wProgressBar->setDescription(i18n("A progress indicator widget"));
 	m_classes.append(wProgressBar);
 
@@ -253,7 +253,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wLine->setPixmap("line");
 	wLine->setClassName("Line");
 	wLine->setName(i18n("Line"));
-	wLine->setNamePrefix(i18n("Line"));
+	wLine->setNamePrefix(i18n("Widget name (see above)", "Line"));
 	wLine->setDescription(i18n("A line to be used as a separator"));
 	m_classes.append(wLine);
 
@@ -265,7 +265,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wDate->setInclude("kdatewidget.h");
 	#endif
 	wDate->setName(i18n("Date Widget"));
-	wDate->setNamePrefix(i18n("DateWidget"));
+	wDate->setNamePrefix(i18n("Widget name (see above)", "DateWidget"));
 	wDate->setDescription(i18n("A widget to input or display a date"));
 	m_classes.append(wDate);
 
@@ -277,7 +277,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wTime->setInclude("ktimewidget.h");
 	#endif
 	wTime->setName(i18n("Time Widget"));
-	wTime->setNamePrefix(i18n("TimeWidget"));
+	wTime->setNamePrefix(i18n("Widget name (see above)", "TimeWidget"));
 	wTime->setDescription(i18n("A widget to input or display a time"));
 	m_classes.append(wTime);
 
@@ -289,7 +289,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wDateTime->setInclude("kdatetimewidget.h");
 	#endif
 	wDateTime->setName(i18n("Date/Time Widget"));
-	wDateTime->setNamePrefix(i18n("DateTimeWidget"));
+	wDateTime->setNamePrefix(i18n("Widget name (see above)", "DateTimeWidget"));
 	wDateTime->setDescription(i18n("A widget to input or display a time and a date"));
 	m_classes.append(wDateTime);
 }
