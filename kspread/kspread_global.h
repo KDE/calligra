@@ -69,7 +69,8 @@ namespace KSpread
 enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc};
 
 enum FormatType {
-    Number_format=0, Text_format=5, Money_format=10, Percentage_format=25,  
+    Generic_format=0,
+    Number_format=1, Text_format=5, Money_format=10, Percentage_format=25,  
     Scientific_format=30,
     ShortDate_format=35, TextDate_format=36, Time_format=50,
     SecondeTime_format=51,
