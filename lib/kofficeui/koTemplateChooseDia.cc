@@ -446,7 +446,7 @@ void MyIconCanvas::slotLoadDir()
                     if ( icon[0] != '/' ) // allow absolute paths for icons
                         icon = dirname + '/' + icon;
                     templatePath = config.readEntry("URL");
-                    kdDebug() << "Link to : " << templatePath << endl;
+                    //kdDebug() << "Link to : " << templatePath << endl;
                     if ( templatePath[0] != '/' )
                     {
                         if ( templatePath.left(6) == "file:/" ) // I doubt this will happen
@@ -473,10 +473,12 @@ void MyIconCanvas::slotLoadDir()
             // We've got our info, now create the item
             // This code is shamelessly borrowed from KIconCanvas::slotLoadFiles
             QImage img;
-            kdDebug() << "Icon=" << icon << endl;
             img.load(icon);
             if (img.isNull())
+            {
+                kdWarning() << "Couldn't find icon " << icon << endl;
                 continue;
+            }
             if (img.width() > 60 || img.height() > 60)
             {
                 if (img.width() > img.height())
