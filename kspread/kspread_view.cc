@@ -5948,8 +5948,7 @@ void KSpreadView::insertObject()
   }
 
   //Don't start handles more than once
-  if ( d->insertHandler )
-    delete d->insertHandler;
+  delete d->insertHandler;
 
   d->insertHandler = new KSpreadInsertHandler( this, d->canvas, e );
   d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
@@ -5970,8 +5969,7 @@ void KSpreadView::insertChart()
   }
 
   //Don't start handles more than once
-  if ( d->insertHandler )
-    delete d->insertHandler;
+  delete d->insertHandler;
 
   d->doc->emitBeginOperation( false );
 
