@@ -102,10 +102,10 @@ QPointArray KPRectObject::boundingRegion( int x, int y, int w, int h, int _xRnd,
     int rxx2 = 2*rxx;
     int ryy2 = 2*ryy;
     QPointArray a[4];
-    a[0].makeArc( x, y, rxx2, ryy2, 1*16*90, 16*90);
-    a[1].makeArc( x, y+h-ryy2, rxx2, ryy2, 2*16*90, 16*90);
-    a[2].makeArc( x+w-rxx2, y+h-ryy2, rxx2, ryy2, 3*16*90, 16*90);
-    a[3].makeArc( x+w-rxx2, y, rxx2, ryy2, 0*16*90, 16*90);
+    a[0].makeArc( x, y, rxx2, ryy2, 1440, 1440); // ..., 1*16*90, 16*90);
+    a[1].makeArc( x, y+h-ryy2, rxx2, ryy2, 2880, 1440); // ..., 2*16*90, 16*90);
+    a[2].makeArc( x+w-rxx2, y+h-ryy2, rxx2, ryy2, 4320, 1440); // ..., 3*16*90, 16*90);
+    a[3].makeArc( x+w-rxx2, y, rxx2, ryy2, 0, 1440); // ..., 0*16*90, 16*90);
     QPointArray aa;
     aa.resize( a[0].size() + a[1].size() + a[2].size() + a[3].size() );
     uint j = 0;
