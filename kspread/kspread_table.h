@@ -37,7 +37,7 @@ class QPainter;
 #include "kspread_cell.h"
 #include "kspread_dlg_layout.h"
 
-#include <chart.h>
+#include "../kchart/chart.h"
 
 /********************************************************************
  *
