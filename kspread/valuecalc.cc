@@ -258,12 +258,38 @@ int ValueCalc::count (const KSpreadValue &range)
       if (v.isArray())
         res += count (v);
       else
+        if (!v.isEmpty() && !v.isString())
+          res++;
+    }
+
+  return res;
+}
+
+int ValueCalc::countA (const KSpreadValue &range)
+{
+    ValueConverter *vc = converter();
+
+    if (!range.isArray())
+        return range.isEmpty() ? 0 : 1;
+
+  int res = 0;
+
+  int cols = range.columns ();
+  int rows = range.rows ();
+  for (int r = 0; r < rows; r++)
+    for (int c = 0; c < cols; c++)
+    {
+      KSpreadValue v = range.element (c, r);
+      if (v.isArray())
+        res += countA (v);
+      else
         if (!range.element (c, r).isEmpty())
           res++;
     }
 
   return res;
 }
+
 
 KSpreadValue ValueCalc::avg (const KSpreadValue &range)
 {

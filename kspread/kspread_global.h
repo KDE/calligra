@@ -70,7 +70,7 @@ namespace KSpread
 {  // necessary due to QDock* enums (Werner)
   enum MoveTo { Bottom, Left, Top, Right, BottomFirst };
 }
-enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc};
+enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc, CountA };
 
 enum FormatType {
     Generic_format=0,

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="26">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="27">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -160,6 +160,7 @@
  <Separator/>
  <Action name="menu_average"/>
  <Action name="menu_count"/>
+ <Action name="menu_counta"/>
  <Action name="menu_max"/>
  <Action name="menu_min"/>
  <Action name="menu_sum"/>

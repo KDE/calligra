@@ -59,6 +59,7 @@ class ValueCalc : public DocBase {
   /** basic range functions */
   KSpreadValue sum (const KSpreadValue &range);
   int count (const KSpreadValue &range);
+  int countA (const KSpreadValue &range);
   KSpreadValue avg (const KSpreadValue &range);
   KSpreadValue max (const KSpreadValue &range);
   KSpreadValue min (const KSpreadValue &range);

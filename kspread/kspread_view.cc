@@ -417,6 +417,7 @@ public:
     KToggleAction* calcAverage;
     KToggleAction* calcCount;
     KToggleAction* calcSum;
+    KToggleAction* calcCountA;
 };
 
 
@@ -1094,6 +1095,12 @@ void ViewPrivate::initActions()
   actions->calcCount->setExclusiveGroup( "Calc" );
   actions->calcCount->setToolTip(i18n("Calculate using the count."));
 
+  actions->calcCountA = new KToggleAction( i18n("CountA"), 0, ac, "menu_counta");
+  QObject::connect( actions->calcCountA, SIGNAL( toggled( bool ) ),
+      view, SLOT( menuCalc( bool ) ) );
+  actions->calcCountA->setExclusiveGroup( "Calc" );
+  actions->calcCountA->setToolTip(i18n("Calculate using the countA."));
+
   // -- special action, only for developers --
 
   actions->internalTests = new KAction( i18n("Run Internal Tests..."), "internalTests",
@@ -1203,6 +1210,7 @@ void ViewPrivate::adjustActions( bool mode )
   actions->calcMax->setEnabled( mode );
   actions->calcAverage->setEnabled( mode );
   actions->calcCount->setEnabled( mode );
+  actions->calcCountA->setEnabled( mode );
   actions->calcSum->setEnabled( mode );
   actions->calcNone->setEnabled( mode );
   actions->insertPart->setEnabled( mode );
@@ -1776,6 +1784,9 @@ void KSpreadView::initCalcMenu()
             break;
         case  Count:
             d->actions->calcCount->setChecked(true);
+            break;
+        case  CountA:
+            d->actions->calcCountA->setChecked(true);
             break;
         case  NoneCalc:
             d->actions->calcNone->setChecked(true);
@@ -6129,6 +6140,9 @@ void KSpreadView::resultOfCalc()
       case Max:
         val = calc()->max (range);
       break;
+      case CountA:
+        val = KSpreadValue (calc()->countA (range));
+        break;
       case Count:
         val = KSpreadValue (calc()->count (range));
       case NoneCalc:
@@ -6157,6 +6171,9 @@ void KSpreadView::resultOfCalc()
     break;
    case Count:
     tmp = i18n("Count: ") + res;
+    break;
+   case CountA:
+    tmp = i18n("CountA: ") + res;
     break;
    case NoneCalc:
     tmp = "";
@@ -6202,6 +6219,10 @@ void KSpreadView::menuCalc( bool )
   else if ( d->actions->calcSum->isChecked() )
   {
     doc()->setTypeOfCalc( SumOfNumber );
+  }
+  else if ( d->actions->calcCountA->isChecked() )
+  {
+    doc()->setTypeOfCalc( CountA );
   }
   else if ( d->actions->calcNone->isChecked() )
     doc()->setTypeOfCalc( NoneCalc );
