@@ -21,6 +21,7 @@
 
 #include <gnumericexport.h>
 #include <kdebug.h>
+#include <kfilterdev.h>
 #include <kmessagebox.h>
 #include <kgenericfactory.h>
 #include <koFilterChain.h>
@@ -28,6 +29,7 @@
 #include <qptrlist.h>
 #include <qsortedlist.h>
 #include <qfile.h>
+#include <qtextstream.h>
 
 #include <kspread_map.h>
 #include <kspread_sheet.h>
@@ -35,7 +37,6 @@
 
 #include <koDocumentInfo.h>
 
-#include <zlib.h>
 
 typedef KGenericFactory<GNUMERICExport, KoFilter> GNUMERICExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libgnumericexport, GNUMERICExportFactory( "kofficefilters" ) )
@@ -589,20 +590,29 @@ Hidden="0"/>
 
     // Ok, now write to export file
     const QCString cstr(str.utf8());
-
-    gzFile gzfile;
-    gzfile = gzopen( QFile::encodeName(m_chain->outputFile()), "wb");
-
-    if (gzfile==NULL)
-      {
-        kdError(30501) << "Unable to open output file!" << endl;
+    
+    QIODevice* out = KFilterDev::deviceForFile(m_chain->outputFile(),"application/x-gzip");
+    
+    if (!out)
+    {
+        kdError(30501) << "No output file! Aborting!" << endl;
         return KoFilter::FileNotFound;
-      }
+    }
 
-
-    gzwrite(gzfile,cstr.data() ,cstr.length());
-
-    gzclose(gzfile);
+    if (!out->open(IO_WriteOnly))
+    {
+        kdError(30501) << "Unable to open output file! Aborting!" << endl;
+        delete out;
+        return KoFilter::FileNotFound;
+    }
+    
+    QTextStream streamOut(out);
+    streamOut.setEncoding(QTextStream::UnicodeUTF8);
+    
+    streamOut << cstr;
+    
+    out->close();
+    delete out;    
 
     return KoFilter::OK;
 }

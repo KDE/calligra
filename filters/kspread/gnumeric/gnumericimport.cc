@@ -27,6 +27,7 @@
 
 #include <gnumericimport.h>
 #include <kmessagebox.h>
+#include <kfilterdev.h> 
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <koFilterChain.h>
@@ -40,7 +41,6 @@
 #include <kspread_util.h>
 #include <koDocumentInfo.h>
 
-#include <zlib.h>
 #include <math.h>
 
 #define SECS_PER_DAY 86400
@@ -1359,36 +1359,28 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
     }
 
 
+    QIODevice* in = KFilterDev::deviceForFile(m_chain->inputFile(),"application/x-gzip");
+    
+    if ( !in )
+    {
+        kdError(30501) << "Cannot create device for uncompressing! Aborting!" << endl;
+        return KoFilter::FileNotFound;
+    }
+
+    if (!in->open(IO_ReadOnly))
+    {
+        kdError(30501) << "Cannot open file for uncompressing! Aborting!" << endl;
+        delete in;
+        return KoFilter::FileNotFound;
+    }
+    
     QString UncompressedContents="";
 
     QDomDocument doc( "gnumeric" );
 
-#define GZIP_SIZE 512
-
-    char temp_data[GZIP_SIZE];
-
-
-    gzFile gzfile;
-    gzfile = gzopen( QFile::encodeName(m_chain->inputFile()), "rb" );
-    /* Check for a failure to open... */
-
-    if ( gzfile == NULL )
-    {
-      kdWarning(30501) << "Couldn't open the requested file." << endl;
-      return KoFilter::FileNotFound;
-    }
-
-    int size;
-
-    QCString TotalString="";
-
-    while ( (size = gzread(gzfile, &temp_data, GZIP_SIZE)) != 0 )
-    {
-	QCString TempString(temp_data, size + 1);
-	TotalString = TotalString + TempString;
-    }
-    gzclose(gzfile);
-    doc.setContent(TotalString);
+    doc.setContent(in);
+    
+    in->close();
 
 
     int row, column;
@@ -1576,6 +1568,8 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 
     if ( selTable )
       ksdoc->setDisplayTable( selTable );
+      
+    delete in;
 
     emit sigProgress(100);
     if ( bSuccess )
