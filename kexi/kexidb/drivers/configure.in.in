@@ -75,14 +75,14 @@ dnl Libpq header/library direcrories
 dnl ========================================
 
 AC_ARG_WITH(pgsqlincdir,
-AC_HELP_STRING([--with-pgsql-includes=DIR],[use PostgreSQL(libpq)-includes installed in this directory ]),
+AC_HELP_STRING([--with-pgsqlincdir=DIR],[use PostgreSQL(libpq)-includes installed in this directory ]),
 [
   ac_pgsql_incdir=$withval
 ], ac_pgsql_incdir=/usr/local/include
 )
 
 AC_ARG_WITH(pgsqllibdir,
-AC_HELP_STRING([  --with-pgsql-libraries=DIR],[use PostgreSQL(libpq)-libraries installed in this directory ]),
+AC_HELP_STRING([  --with-pgsqllibdir=DIR],[use PostgreSQL(libpq)-libraries installed in this directory ]),
 [
   ac_pgsql_libdir=$withval
 ], ac_pgsql_libdir=/usr/local/lib
@@ -93,14 +93,14 @@ dnl Libpqxx header/library direcrories
 dnl ========================================
 
 AC_ARG_WITH(pqxxsincdir,
-AC_HELP_STRING([--with-pqxx-includes=DIR],[use PostgreSQL(libpqxx)-includes installed in this directory ]),
+AC_HELP_STRING([--with-pqxxsincdir=DIR],[use PostgreSQL(libpqxx)-includes installed in this directory ]),
 [
   ac_ppqxx_incdir=$withval
 ], ac_pqxx_incdir=/usr/local/pqxx/include/pqxx
 )
 
 AC_ARG_WITH(pqxxlibdir,
-AC_HELP_STRING([--with-pqxx-libraries=DIR],[use PostgreSQL(libpqxx)-libraries installed in this directory ]),
+AC_HELP_STRING([--with-pqxxslibdir=DIR],[use PostgreSQL(libpqxx)-libraries installed in this directory ]),
 [
   ac_pqxx_libdir=$withval
 ], ac_pqxx_libdir=/usr/local/pqxx/lib
