@@ -559,6 +559,7 @@ void MsWord::getParagraphsFromPapxs(
         {
             QString text;
             CHPXarray chpxs;
+            bool discardedEnd;
 
             //kdDebug(s_area) << "pap from: " << actualStartFc << ".." << actualEndFc << ": rgb: " << rgb << endl;
             if (actualEndFc <= startFc)
@@ -581,8 +582,20 @@ void MsWord::getParagraphsFromPapxs(
                 //" actual FCs: " << actualStartFc << ".." << actualEndFc << endl;
             if (actualStartFc < startFc)
                 actualStartFc = startFc;
+            discardedEnd = false;
             if (actualEndFc > endFc)
+            {
                 actualEndFc = endFc;
+
+                // Note that we will not use the end of the paragraph.
+
+                discardedEnd = true;
+            }
+
+            // Read the text we are after, and output it if we got to the end
+            // of the paragraph. Otherwise, we save it away for next time
+            // around. TBD: Make sure we output any trailing partial
+            // paragraph.
 
             read(
                 m_fib.lid,
@@ -590,11 +603,17 @@ void MsWord::getParagraphsFromPapxs(
                 &text,
                 (actualEndFc - actualStartFc) / (unicode ? 2 : 1),
                 unicode);
-            if (text[text.length()] == '\r')
-                text.truncate(text.length() - 1);
+            if (discardedEnd)
+            {
+                m_partialParagraph += text;
+                continue;
+            }
+            text = m_partialParagraph + text;
+            m_partialParagraph = "";
 
-            // Get the CHPXs that apply to this paragraph, then bias all the start and end positions
-            // to be relative to the string we just extracted.
+            // Get the CHPXs that apply to this paragraph, then bias all the
+            // start and end positions to be relative to the string we just
+            // extracted.
 
             unsigned i;
 
@@ -899,6 +918,7 @@ void MsWord::parse()
     // Initialise the parse state.
 
     m_wasInTable = false;
+    m_partialParagraph = "";
 
     // Note that we test for the presence of complex structure, rather than
     // m_fib.fComplex. This allows us to treat newer files which always seem

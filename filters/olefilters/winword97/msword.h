@@ -274,6 +274,7 @@ private:
         U32 startFc,
         U32 endFc,
         bool unicode);
+    QString m_partialParagraph;
 
     // Convert a char into a unicode character.
 

@@ -192,6 +192,16 @@ void WinWordDoc::gotHeadingParagraph(const QString &text, PAP &style)
 
 void WinWordDoc::gotListParagraph(const QString &text, PAP &style)
 {
+    static char *listStyle[6] =
+    {
+        "Enumerated List",
+        "Enumerated List",
+        "Enumerated List",
+        "Alphabetical List",
+        "Alphabetical List",
+        "Bullet List"
+    };
+
     if (m_phase == TEXT_PASS)
     {
         QString xml_friendly = text;
@@ -201,6 +211,12 @@ void WinWordDoc::gotListParagraph(const QString &text, PAP &style)
         m_body.append(xml_friendly);
         m_body.append("</TEXT>\n"
             " <LAYOUT>\n"
+            "  <NAME value=\"");
+        m_body.append(listStyle[style.anld.nfc]);
+        m_body.append("\"/>\n"
+            "  <FOLLOWING name=\"");
+        m_body.append(listStyle[style.anld.nfc]);
+        m_body.append("\"/>\n"
             "  <COUNTER type=\"");
         m_body.append(numberingType(style.anld.nfc));
         m_body.append("\" depth=\"");
