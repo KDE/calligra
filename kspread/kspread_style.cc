@@ -153,7 +153,11 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "font-name" ) )
     {
+        m_fontFamily = styleStack.attributeNS( KoXmlNS::style, "font-name" );
         kdDebug()<<"styleStack.hasAttribute( style:font-name ) :"<<styleStack.hasAttributeNS( KoXmlNS::style, "font-name" )<<endl;
+        m_featuresSet |= SFontFamily;
+        m_featuresSet |= SFont;
+        m_featuresSet |= SFontFlag;
     }
 //fo:font-size="13pt" fo:font-style="italic" style:text-underline="double" style:text-underline-color="font-color" fo:font-weight="bold"
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
@@ -965,14 +969,11 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     {
         style.addProperty( "style:vertical-align", ( alignY() == KSpreadFormat::Bottom ? "bottom" : "top" ) );
     }
-
-    //TODO FIXME not saved :(
     if ( featureSet( SBackgroundColor ) && m_bgColor != QColor() && m_bgColor.isValid() )
         style.addProperty( "fo:background-color", m_bgColor.name() );
 
     if ( featureSet( SMultiRow ) && hasProperty( PMultiRow ) )
         style.addProperty( "fo:wrap-option", "wrap" );
-
     if ( featureSet( SVerticalText ) && hasProperty( PVerticalText ) )
     {
         style.addProperty( "fo:direction", "ttb" );
@@ -1077,12 +1078,15 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     {
         style.addProperty("style:diagonal-bl-tr", convertOasisPenToString(m_goUpDiagonalPen ) );
     }
-
-#if 0
     if ( featureSet( SFontFamily ) )
-        format.setAttribute( "font-family", m_fontFamily );
+    {
+        style.addProperty("style:font-name", m_fontFamily );
+    }
     if ( featureSet( SFontSize ) )
-        format.setAttribute( "font-size", m_fontSize );
+    {
+        style.addProperty("fo:font-size",m_fontSize  );
+    }
+#if 0
     if ( featureSet( SFontFlag ) )
         format.setAttribute( "font-flags", m_fontFlags );
 
@@ -1092,11 +1096,6 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     if ( featureSet( STextPen ) && m_textPen.color().isValid() )
         format.appendChild( util_createElement( "pen", m_textPen, doc ) );
 
-    if ( featureSet( SBackgroundBrush ) )
-    {
-        format.setAttribute( "brushcolor", m_backGroundBrush.color().name() );
-        format.setAttribute( "brushstyle", (int) m_backGroundBrush.style() );
-    }
 #endif
 
     if ( featureSet( SBackgroundBrush ) )
