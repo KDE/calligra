@@ -52,18 +52,29 @@ public:
    *  
    *  @return Returns the number of parameters stored in the object.
    */
-  uint countParams() const;
+  uint count();
   /**
-   *  Retrieves a argument that is saved in the object. The index begins
-   *  with zero und ends with the number of arguments saved in the object
-   *  minus one.
+   *  Retrieves the string of an argument that is saved in the object.
+   *  The index begins with zero und ends with the number of arguments
+   *  saved in the object minus one.
    *
    *  @param _index Index of the argument that will be retrieved.
    *  
    *  @return Returns the string that is stored at the position _index.
    *  If there is no entry with that index an empty string will be returned.
    */
-  QString getParam( const uint _index ) const;
+  QString get( uint _index );
+  /**
+   *  Retrieves the string of an argument that is saved in the object.
+   *  The string will be found by the Iterator.
+   *
+   *  @param _it Iterator that represents the command-line argument, that
+   *  will be returned.
+   *  
+   *  @return Returns the string that is stored represented by the iterator.
+   *  If the iterator is invalid an empty string will be returned.
+   */
+  QString get( QStringList::Iterator _it );
   /**
    *  Deletes an argument that is saved in the object. The index begins
    *  with zero und ends with the number of arguments saved in the object
@@ -71,23 +82,35 @@ public:
    *
    *  @param _index Index of the argument that will be deleted.
    */
-  void deleteParam( const uint _index );
+  void del( const uint _index );
   /**
    *  Deletes an argument that is saved in the object. The iterator
    *  represents the param that will be deleted.
    *
-   *  @param _index Iterator that represents the argument that will be deleted.
+   *  @param _it Iterator that represents the argument that will be deleted.
    */
-  void deleteParam( const QStringList::Iterator _it );
+  void del( const QStringList::Iterator _it );
   /**
    *  Deletes the first appearance of an argument that is saved in the object.
    *  If it is not present in the list, nothing will be deleted
    *
    *  @param _param Beginning of the argument that will be deleted.
+   *  @param _check If true the whole command-line argument will be tested.
+   *  If false only the beginning will be compared.
    */
-  //void deleteParam( const QString& _param );
-  void deleteParam( const QString& _param, bool _check );
-  void deleteParam( const QString& _shortparam, const QString& _longparam, bool _check );
+  void del( const QString& _param, bool _check );
+  /**
+   *  Deletes the first appearance of an argument that is saved in the object.
+   *  If it is not present in the list, nothing will be deleted
+   *
+   *  @param _shortparam Beginning of the short version of the argument that
+   *  will be deleted.
+   *  @param _longparam Beginning of the long version of the argument that
+   *  will be deleted.
+   *  @param _check If true the whole command-line argument will be tested.
+   *  If false only the beginning will be compared.
+   */
+  void del( const QString& _shortparam, const QString& _longparam, bool _check );
   /**
    *  Test if an argument is present in the list of arguments.
    *
@@ -96,8 +119,7 @@ public:
    *  
    *  @return Returns true if the paramter is present or false if it is not.
    */
-  //bool paramIsPresent( const QString& _param );
-  bool paramIsPresent( const QString& _param, bool _check, QStringList::Iterator& _it );
+  bool check( const QString& _param, bool _check, QStringList::Iterator& _it );
   /**
    *  Test if an argument is present in the list of arguments, either in the 
    *  short or the long version of the option.
@@ -110,44 +132,53 @@ public:
    *  @return Returns true if the paramter is present or false if it is not.
    */
   //bool paramIsPresent( const QString& _longparam, const QString& _shortparam );
-  bool paramIsPresent( const QString& _longparam, const QString& _shortparam, bool _check, QStringList::Iterator& _it );
+  bool check( const QString& _longparam, const QString& _shortparam, bool _check, QStringList::Iterator& _it );
   /**
    *  Retrieves the index of the first appearance of _param in the
    *  argument list.
    *  
    *  @param _param String of the param that will be searched for.
-   *  @param _checkWholeString If this parameter is true the whole command-line argument will 
-   *  be compared with _param. If it is false the beginning of the command-line arguments will
-   *  be checked.
-   *  @param _it In this variable a iterator for later access to the parameter will be stored
+   *  @param _check If this parameter is true the whole command-line argument
+   *  will be compared with _param. If it is false the beginning of the
+   *  command-line arguments will be checked.
+   *  @param _it In this variable a iterator for later access to the parameter
+   *  will be stored
    *  
    *  @return Returns either true if a parmater of a command-line begins with
    *  _param or false no argument meets this.
    */
-  bool getIndex( const QString& _param, bool _check, QStringList::Iterator& _it );
+  bool find( const QString& _param, bool _check, QStringList::Iterator& _it );
   /**
-   *  Retrieves the index of the first appearance of one of the parameters in the
-   *  argument list.
+   *  Retrieves the index of the first appearance of one of the parameters in
+   *  the argument list.
    *  
    *  @param _longparam This string represents the long version that will be
    *  compared with all stored arguments stored in the object.
    *  @param _shortparam This string represents the short version that will be
    *  compared with all stored arguments stored in the object.
-   *  @param _check If this parameter is true the whole command-line argument will 
-   *  be compared with _param. If it is false the beginning of the command-line arguments will
-   *  be checked.
-   *  @param _it In this variable a iterator for later access to the parameter will be stored
+   *  @param _check If this parameter is true the whole command-line argument
+   *  will be compared with _param. If it is false the beginning of the
+   *  command-line arguments will be checked.
+   *  @param _it In this variable a iterator for later access to the parameter
+   *  will be stored
    *  
    *  @return Returns either true if a parmater of a command-line begins with
    *  _longparam or _shortparam or false no argument meets this.
    */
-  bool getIndex( const QString& _longparam, const QString& _shortparam, bool _check, QStringList::Iterator& _it );
+  bool find( const QString& _longparam, const QString& _shortparam, bool _check, QStringList::Iterator& _it );
 
 protected:
-  bool compareParam( const QString& _arg, const QString& _param, bool _check ) const;
+  /**
+   *  Only for internal use.
+   */
+  bool compare( const QString& _arg, const QString& _param, bool _check ) const;
 
 private:
   QStringList m_paramList;
 };
 
 #endif
+
+
+
+

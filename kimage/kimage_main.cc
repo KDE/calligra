@@ -45,10 +45,10 @@ KImageApp::KImageApp( int& argc, char** argv )
 
   // sollte in KoApplication
   QStringList::Iterator it;
-  if( m_params.paramIsPresent( "--server", "-s", true, it ) )
+  if( m_params.find( "--server", "-s", true, it ) )
   {
     m_bWithGUI = false;
-    m_params.deleteParam( it );
+    m_params.del( it );
   }
 }
 
@@ -78,11 +78,11 @@ void KImageApp::start()
 
   if( m_bWithGUI )
   {
-    for( uint i = 0; i < m_params.countParams(); i++ )
+    for( uint i = 0; i < m_params.count(); i++ )
     {
-      if( m_params.getParam( i ).left( 1 ) != "-" )
+      if( m_params.get( i ).left( 1 ) != "-" )
       {
-        openFiles.append( m_params.getParam( i ) );
+        openFiles.append( m_params.get( i ) );
       }
     }
     if( openFiles.isEmpty() )
