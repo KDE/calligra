@@ -69,6 +69,13 @@ void Part::createGUIClient(KexiMainWindow *win)
 	}
 }
 
+/*void Part::removeGUIClient(KexiMainWindow *win)
+{
+	if (m_guiClient
+	i.current()->removeClient(win->guiFactory());
+}*/
+
+
 KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, int viewMode )
 {
 //	KexiDialogBase *dlg = createInstance(win,item,viewMode);

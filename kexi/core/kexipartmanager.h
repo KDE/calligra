@@ -23,6 +23,7 @@
 
 #include <qobject.h>
 #include <qdict.h>
+#include <qasciidict.h>
 #include <qintdict.h>
 #include <qvaluelist.h>
 #include <qptrlist.h>
@@ -46,7 +47,7 @@ namespace KexiPart
 		QString url;
 	};
 
-	typedef QDict<Info> PartInfoDict;
+	typedef QAsciiDict<Info> PartInfoDict;
 	typedef QDictIterator<Info> PartInfoDictIterator;
 	typedef QValueList<Missing> MissingList;
 	typedef QPtrList<Info> PartInfoList;
@@ -107,6 +108,11 @@ class KEXICORE_EXPORT Manager : public QObject
 		 */
 		PartInfoList		*partInfoList() { return &m_partlist; }
 
+
+#if 0
+		void unloadPart(Info *i);
+		void unloadAllParts();
+#endif
 	signals:
 		void partLoaded(KexiPart::Part*);
 

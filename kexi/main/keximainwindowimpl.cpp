@@ -56,6 +56,7 @@
 #include "kexiprojectdata.h"
 #include "kexiprojectset.h"
 #include "kexi.h"
+#include "kexi_utils.h"
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
 
@@ -110,6 +111,7 @@ class KexiMainWindowImpl::Private
 //		QSignalMapper *actionMapper;
 
 		QAsciiDict<QPopupMenu> popups; //list of menu popups
+		QPopupMenu *createMenu;
 
 		QString origAppCaption; //<! original application's caption (without project name)
 		QString appCaptionPrefix; //<! application's caption prefix - prj name (if opened), else: null
@@ -167,6 +169,7 @@ class KexiMainWindowImpl::Private
 		action_view_nav=0;
 		action_view_propeditor=0;
 		forceDialogClosing=false;
+		createMenu=0;
 	}
 };
 
@@ -180,11 +183,11 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 	d->config = kapp->config();
 	
 	if ( !initialGeometrySet() ) {
-    	int scnum = QApplication::desktop()->screenNumber(parentWidget());
+		int scnum = QApplication::desktop()->screenNumber(parentWidget());
 		QRect desk = QApplication::desktop()->screenGeometry(scnum);
 		d->config->setGroup("MainWindow");
-	    QSize s ( d->config->readNumEntry( QString::fromLatin1("Width %1").arg(desk.width()), 700 ),
-              d->config->readNumEntry( QString::fromLatin1("Height %1").arg(desk.height()), 480 ) );
+		QSize s ( d->config->readNumEntry( QString::fromLatin1("Width %1").arg(desk.width()), 700 ),
+			d->config->readNumEntry( QString::fromLatin1("Height %1").arg(desk.height()), 480 ) );
 		resize (kMin (s.width(), desk.width()), kMin(s.height(), desk.height()));
 	}
 	
@@ -219,6 +222,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 			d->popups.insert(it.current()->name(), static_cast<QPopupMenu*>(it.current()));
 		}
 		delete l;
+		d->createMenu = d->popups["create"];
 	}
 
 	if (!isFakingSDIApplication()) {
@@ -274,9 +278,13 @@ KexiMainWindowImpl::initActions()
 	// PROJECT MENU
 	KAction *action = new KAction(i18n("&New..."), "filenew", KStdAccel::shortcut(KStdAccel::New), 
 		this, SLOT(slotProjectNew()), actionCollection(), "project_new");
-	action->setWhatsThis(i18n("Create a new project"));
-	KStdAction::open( this, SLOT( slotProjectOpen() ), actionCollection(), "project_open" )
-		->setWhatsThis(i18n("Open an existing project"));
+	action->setToolTip(i18n("Create a new project"));
+	action->setWhatsThis(i18n("Creates a new project. Currently opened project is not affected."));
+
+	action = KStdAction::open( this, SLOT( slotProjectOpen() ), actionCollection(), "project_open" );
+	action->setToolTip(i18n("Open an existing project"));
+	action->setWhatsThis(i18n("Opens an existing project. Currently opened project is not affected."));
+
 	d->action_open_recent = new KActionMenu(i18n("Open Recent"), 
 		actionCollection(), "project_open_recent");
 	connect(d->action_open_recent->popupMenu(),SIGNAL(activated(int)),this,SLOT(slotProjectOpenRecent(int)));
@@ -287,19 +295,28 @@ KexiMainWindowImpl::initActions()
 	
 	d->action_save = new KAction(i18n("&Save"), "filesave", KStdAccel::shortcut(KStdAccel::Save), 
 		this, SLOT(slotProjectSave()), actionCollection(), "project_save");
-	d->action_project_properties = new KAction(i18n("Project properties"), "info", 0,
-		this, SLOT(slotProjectProperties()), actionCollection(), "project_properties");
+	d->action_save->setToolTip(i18n("Save object changes"));
+	d->action_save->setWhatsThis(i18n("Saves object changes from currently selected window."));
+
 	d->action_save_as = new KAction(i18n("Save &As..."), "filesaveas", 0, 
 		this, SLOT(slotProjectSaveAs()), actionCollection(), "project_saveas");
-	d->action_close = new KAction(i18n("&Close"), 0, KStdAccel::shortcut(KStdAccel::Close),
+	d->action_save_as->setToolTip(i18n("Save object as"));
+	d->action_save_as->setWhatsThis(i18n("Saves object changes from currently selected window under a new name (within the same project)."));
+
+	d->action_project_properties = new KAction(i18n("Project properties"), "info", 0,
+		this, SLOT(slotProjectProperties()), actionCollection(), "project_properties");
+
+	d->action_close = new KAction(i18n("&Close Project"), 0, KStdAccel::shortcut(KStdAccel::Close),
 		this, SLOT(slotProjectClose()), actionCollection(), "project_close" );
-	d->action_close->setWhatsThis(i18n("Close the current project."));
+	d->action_close->setToolTip(i18n("Close the current project"));
+	d->action_close->setWhatsThis(i18n("Closes the current project."));
+
 	KStdAction::quit( this, SLOT(slotQuit()), actionCollection(), "quit");
 
 	d->action_project_relations = new KAction(i18n("&Relationships..."), "relation", CTRL + Key_R, 
 		this, SLOT(slotProjectRelations()), actionCollection(), "project_relations");
 	d->action_project_relations->setToolTip(i18n("Project relationships"));
-	d->action_project_relations->setWhatsThis(i18n("Show project relationships"));
+	d->action_project_relations->setWhatsThis(i18n("Shows project relationships."));
 
 	//EDIT MENU
 	d->action_edit_cut = createSharedAction( KStdAction::Cut, "edit_cut");
@@ -307,25 +324,43 @@ KexiMainWindowImpl::initActions()
 	d->action_edit_paste = createSharedAction( KStdAction::Paste, "edit_paste");
 
 	d->action_edit_delete = createSharedAction(i18n("&Delete"), "button_cancel", Key_Delete, "edit_delete");
+	d->action_edit_delete->setToolTip(i18n("Delete object"));
+	d->action_edit_delete->setWhatsThis(i18n("Deletes currently selected object."));
+
 	d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), 0/*SmallIcon("button_cancel")*/, 
 		SHIFT+Key_Delete, "edit_delete_row");
+	d->action_edit_delete_row->setToolTip(i18n("Delete currently selected row from a table."));
+	d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected row from a table ."));
 
 	//VIEW MENU
 	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "table", KShortcut(), 
 		this, SLOT(slotViewDataMode()), actionCollection(), "view_data_mode");
 	d->action_view_data_mode->setExclusiveGroup("view_mode");
+	d->action_view_data_mode->setToolTip(i18n("Switch to Data View mode"));
+	d->action_view_data_mode->setWhatsThis(i18n("Switches to Data View mode."));
+
 	d->action_view_design_mode = new KRadioAction(i18n("D&esign View"), "state_edit", KShortcut(), 
 		this, SLOT(slotViewDesignMode()), actionCollection(), "view_design_mode");
 	d->action_view_design_mode->setExclusiveGroup("view_mode");
+	d->action_view_design_mode->setToolTip(i18n("Switch to Design View mode"));
+	d->action_view_design_mode->setWhatsThis(i18n("Switches to Design View mode."));
+
 	d->action_view_text_mode = new KRadioAction(i18n("&Text View"), "state_sql", KShortcut(), 
 		this, SLOT(slotViewTextMode()), actionCollection(), "view_text_mode");
 	d->action_view_text_mode->setExclusiveGroup("view_mode");
+	d->action_view_text_mode->setToolTip(i18n("Switch to Text View mode"));
+	d->action_view_text_mode->setWhatsThis(i18n("Switches to Text View mode."));
 
 	d->action_view_nav = new KAction(i18n("Project navigator"), "", ALT + Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
+	d->action_view_nav->setToolTip(i18n("Go to Project navigator panel"));
+	d->action_view_nav->setWhatsThis(i18n("Goes to Project navigator panel."));
+
 #ifdef KEXI_PROP_EDITOR
 	d->action_view_propeditor = new KAction(i18n("Property editor"), "", ALT + Key_2,
 		this, SLOT(slotViewPropertyEditor()), actionCollection(), "view_propeditor");
+	d->action_view_propeditor->setToolTip(i18n("Go to Property editor panel"));
+	d->action_view_propeditor->setWhatsThis(i18n("Goes to Property editor panel."));
 #endif
 
 	new KAction(i18n("From File..."), "fileopen", 0, 
@@ -335,12 +370,16 @@ KexiMainWindowImpl::initActions()
 
 	//DATA MENU
 	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "button_ok", SHIFT | Key_Return, "data_save_row");
+	d->action_data_save_row->setToolTip(i18n("Save currently selected table row's data"));
+	d->action_data_save_row->setWhatsThis(i18n("Saves currently selected table row's data."));
 
 	//SETTINGS MENU
 	setStandardToolBarMenuEnabled( true );
-	KStdAction::keyBindings(this, SLOT( slotConfigureKeys() ), actionCollection() );
-	KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection() );
-	(void*) KStdAction::preferences(this, SLOT(slotShowSettings()), actionCollection());
+	action = KStdAction::keyBindings(this, SLOT( slotConfigureKeys() ), actionCollection() );
+	action->setWhatsThis(i18n("Lets you configure shortcut keys."));
+
+	action = KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection() );
+	action->setWhatsThis(i18n("Lets you configure toolbars."));
 
 	d->action_show_other = new KActionMenu(i18n("Other"), 
 		actionCollection(), "options_show_other");
@@ -348,11 +387,14 @@ KexiMainWindowImpl::initActions()
 	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
 	 actionCollection(), "options_show_contexthelp");
 #endif
-	
-	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
-	 actionCollection(), "kexi_settings");
-	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
 
+	action =  KStdAction::preferences(this, SLOT(slotShowSettings()), actionCollection());
+	action->setWhatsThis(i18n("Lets you configure Kexi."));
+
+//	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
+//	 actionCollection(), "kexi_settings");
+//	actionSettings->setWhatsThis(i18n("Lets you configure Kexi."));
+//	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
 }
 
 /* moved to host:*/
@@ -414,16 +456,19 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 {
 //	stateChanged("project_opened",d->prj ? StateNoReverse : StateReverse);
 
-	d->action_save->setEnabled(d->prj);
-	d->action_save_as->setEnabled(d->prj);
+	const bool have_dialog = d->curDialog;
+	const bool dialog_dirty = d->curDialog && d->curDialog->dirty();
+
+	//PROJECT MENU
+	d->action_save->setEnabled(have_dialog && dialog_dirty);
+	d->action_save_as->setEnabled(have_dialog);
 	d->action_project_properties->setEnabled(d->prj);
 	d->action_close->setEnabled(d->prj);
-	d->action_view_nav->setEnabled(d->prj);
 	d->action_project_relations->setEnabled(d->prj);
 
-	const bool have_dialog = d->curDialog;
 	//VIEW MENU
-
+	d->action_view_nav->setEnabled(d->prj);
+	d->action_view_propeditor->setEnabled(d->prj);
 	d->action_view_data_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::DataViewMode) );
 	if (!d->action_view_data_mode->isEnabled())
 		d->action_view_data_mode->setChecked(false);
@@ -433,10 +478,12 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	d->action_view_text_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::TextViewMode) );
 	if (!d->action_view_text_mode->isEnabled())
 		d->action_view_text_mode->setChecked(false);
-
 #ifndef KEXI_NO_CTXT_HELP
 	d->action_show_helper->setEnabled(d->prj);
 #endif
+
+	if (d->createMenu)
+		d->createMenu->setEnabled(d->prj);
 }
 
 void KexiMainWindowImpl::invalidateViewModeActions()
@@ -652,9 +699,15 @@ bool KexiMainWindowImpl::closeProject(bool &cancelled)
 		if (cancelled)
 			return true;
 	}
+	d->nav->clear();
+	d->navToolWindow->hide();
+	d->propEditorToolWindow->hide();
 
 	delete d->prj;
 	d->prj=0;
+
+//	Kexi::partManager().unloadAllParts();
+	invalidateActions();
 	return true;
 }
 
@@ -874,7 +927,7 @@ void KexiMainWindowImpl::slotChildViewIsDetachedNow(QWidget*)
 	slotCaptionForCurrentMDIChild(false);
 }
 
-void
+/*void
 KexiMainWindowImpl::closeEvent(QCloseEvent *ev)
 {
 	storeSettings();
@@ -890,6 +943,25 @@ KexiMainWindowImpl::closeEvent(QCloseEvent *ev)
 	}
 	
 	ev->accept();
+}*/
+
+bool
+KexiMainWindowImpl::queryClose()
+{
+//	storeSettings();
+	bool cancelled;
+	if (!closeProject(cancelled)) {
+		//todo: error message
+		return true;
+	}
+	return !cancelled;
+}
+
+bool
+KexiMainWindowImpl::queryExit()
+{
+	storeSettings();
+	return true;
 }
 
 void
@@ -1111,6 +1183,8 @@ KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 	}
 	bool update_dlg_caption = dlg && dlg!=(KexiDialogBase*)d->curDialog && dlg->mdiParent();
 
+	if (d->curDialogGUIClient && !client) 
+		guiFactory()->removeClient(d->curDialogGUIClient);
 	d->curDialogGUIClient=client;
 	bool dialogChanged = ((KexiDialogBase*)d->curDialog)!=dlg;
 	d->curDialog=dlg;
@@ -1314,26 +1388,35 @@ KexiMainWindowImpl::slotProjectOpenRecent(int id)
 void
 KexiMainWindowImpl::slotProjectOpenRecentMore()
 {
+	KEXI_UNFINISHED(i18n("Open Recent"));
 }
 
 void
 KexiMainWindowImpl::slotProjectSave()
 {
+	if (!d->curDialog)
+		return;
+	bool cancelled;
+	saveObject( d->curDialog, cancelled );
 }
 
 void
 KexiMainWindowImpl::slotProjectSaveAs()
 {
+	KEXI_UNFINISHED(i18n("Save object as"));
 }
 
 void
 KexiMainWindowImpl::slotProjectProperties()
 {
+	KEXI_UNFINISHED(i18n("Project properties"));
 }
 
 void
 KexiMainWindowImpl::slotProjectClose()
 {
+	bool cancelled;
+	closeProject(cancelled);
 }
 
 void KexiMainWindowImpl::slotProjectRelations()
@@ -1365,13 +1448,23 @@ void KexiMainWindowImpl::slotAction(const QString& act_id)
 	proxy->activateSharedAction(act_id.latin1());
 }*/
 
-void KexiMainWindowImpl::slotImportFile() {
+void KexiMainWindowImpl::slotImportFile()
+{
+	KEXI_UNFINISHED("Import: " + i18n("From File..."));
+}
+
+void KexiMainWindowImpl::slotImportServer()
+{
+	KEXI_UNFINISHED("Import: " + i18n("From Server..."));
 }
 
 void
 KexiMainWindowImpl::slotQuit()
 {
-	//TODO
+	bool cancelled;
+	closeProject(cancelled);
+	if (cancelled)
+		return;
 	close();
 }
 
@@ -1574,6 +1667,8 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 		d->nav->updateItemName( dlg->partItem(), false );
 	}
 
+	d->dialogs.take(dlg->docID()); //don't remove -KMDI will do that
+
 	KXMLGUIClient *client = dlg->guiClient();
 	if (d->curDialogGUIClient==client) {
 		d->curDialogGUIClient=0;
@@ -1592,7 +1687,6 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 		}
 	}
 
-	d->dialogs.take(dlg->docID()); //don't remove -KMDI will do that
 	KMdiMainFrm::closeWindow(dlg, layoutTaskBar);
 
 	//focus navigator if nothing else available
@@ -1783,7 +1877,7 @@ KexiMainWindowImpl::openObject(const QString& mime, const QString& name, int vie
 KexiDialogBase *
 KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 {
-	if (!item)
+	if (!d->prj || !item)
 		return 0;
 	KexiDialogBase *dlg = d->dialogs[ item->identifier() ];
 	if (dlg) {
@@ -1813,7 +1907,7 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 KexiDialogBase *
 KexiMainWindowImpl::openObjectFromNavigator(KexiPart::Item* item, int viewMode)
 {
-	if (!item)
+	if (!d->prj || !item)
 		return false;
 	KexiDialogBase *dlg = d->dialogs[ item->identifier() ];
 	if (dlg) {
@@ -1828,7 +1922,7 @@ KexiMainWindowImpl::openObjectFromNavigator(KexiPart::Item* item, int viewMode)
 
 bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 {
-	if (!info)
+	if (!d->prj || !info)
 		return false;
 	KexiPart::Part *part = Kexi::partManager().part(info->mime());
 	if(!part)
@@ -1913,7 +2007,7 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 
 bool KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 {
-	if (!item)
+	if (!d->prj || !item)
 		return false;
 
 	KexiPart::Part *part = Kexi::partManager().part(item->mime());
@@ -1966,6 +2060,7 @@ void KexiMainWindowImpl::slotDirtyFlagChanged(KexiDialogBase* dlg)
 	//update text in navigator and app. caption
 	d->nav->updateItemName( item, dlg->dirty() );
 	updateAppCaption();
+	invalidateActions();
 }
 
 #include "keximainwindowimpl.moc"

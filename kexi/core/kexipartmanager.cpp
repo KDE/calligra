@@ -45,7 +45,6 @@ Manager::Manager(QObject *parent)
 void
 Manager::lookup()
 {
-	
 	m_partlist.clear();
 	m_partsByMime.clear();
 	KTrader::OfferList tlist = KTrader::self()->query("Kexi/Handler", "[X-Kexi-PartVersion] == " + QString::number(KEXI_PART_VERSION));
@@ -74,7 +73,8 @@ Manager::lookup()
 		KService::Ptr ptr = ordered[i];
 		if (ptr) {
 			Info *info = new Info(ptr);
-			m_partsByMime.insert(ptr->property("X-Kexi-TypeMime").toString(), info);
+			m_partsByMime.insert(info->mime(), info);
+//			m_partsByMime.insert(ptr->property("X-Kexi-TypeMime").toString(), info);
 			m_partlist.append(info);
 		}
 	}
@@ -113,6 +113,41 @@ Manager::part(Info *i)
 	kdDebug() << "Manager::part(): fine!" << endl;
 	return p;
 }
+
+#if 0
+void
+Manager::unloadPart(Info *i)
+{
+	m_parts.setAutoDelete(true);
+	m_parts.remove(i->projectPartID());
+	m_parts.setAutoDelete(false);
+/*	if (!p)
+		return;
+	m_partsByMime.take(i->mime());
+	m_partlist.removeRef(p);*/
+}
+
+void 
+Manager::unloadAllParts()
+{
+//	m_partsByMime.clear();
+	m_parts.setAutoDelete(true);
+	m_parts.clear();
+	m_parts.setAutoDelete(false);
+//	m_partlist.clear();
+}
+#endif
+
+/*void 
+Manager::removeClients( KexiMainWindow *win )
+{
+	if (!win)
+		return;
+	QIntDictIterator<Part> it(m_parts);
+	for (;i.current();++it) {
+		i.current()->removeClient(win->guiFactory());
+	}
+}*/
 
 Part *
 Manager::part(const QString &mime)

@@ -132,7 +132,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		void initPropertyEditor();
 		
 		//! reimplementation of events
-		virtual void	closeEvent(QCloseEvent *);
+//		virtual void	closeEvent(QCloseEvent *);
 
 		/**
 		 * creates standard actions like new, open, save ...
@@ -206,7 +206,10 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 
 		void restoreWindowConfiguration(KConfig *config);
 		void storeWindowConfiguration(KConfig *config);
-	
+
+		virtual bool queryClose();
+		virtual bool queryExit();
+
 	protected slots:
 
 		/**
@@ -279,6 +282,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		void slotQuit();
 
 		void slotImportFile();
+		void slotImportServer();
 
 		//! There are performed all actions that need to be done immediately after  ctro (using timer)
 		void slotLastActions();
