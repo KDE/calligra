@@ -134,6 +134,8 @@ KWordDocument::KWordDocument(QObject* parent, const char* name, bool singleViewM
 
     QObject::connect( &history, SIGNAL( undoRedoChanged( QString, QString ) ), this,
 		      SLOT( slotUndoRedoChanged( QString, QString ) ) );
+    connect( this, SIGNAL( childChanged( KoDocumentChild * ) ),
+             this, SLOT( slotChildChanged( KoDocumentChild * ) ) );
 
     spellCheck = FALSE;
     contents = new KWContents( this );
@@ -1803,19 +1805,41 @@ void KWordDocument::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _
 }
 
 /*================================================================*/
-void KWordDocument::changeChildGeometry( KWordChild *_child, const QRect& _rect )
+void KWordDocument::slotChildChanged( KoDocumentChild *child )
 {
     setModified(TRUE);
-    _child->setGeometry( _rect );
 
-    emit sig_updateChildGeometry( _child );
+    // Problem: we have to find the frame that contains this child.
+    // We could do a lot better if we could connect this signal's changed() signal
+    // directly in the appropriate KWPartFrameSet.
+    // But framesets are not a QObject. Should it ?
+    // (David)
+    for ( int j = 0; j < frames.count(); j++ ) {
+        if ( frames.at( j )->getFrameType() == FT_PART )
+        {
+            KWPartFrameSet *partFS = dynamic_cast<KWPartFrameSet*>( getFrameSet( j ) );
+            if ( partFS->getChild() == child )
+            {
+                KWFrame *frame = partFS->getFrame( 0 );
+                QRect r = child->geometry();
+                // ugly: *(static_cast<QRect *>(frame)) = r;
+                frame->setCoords( r.left(), r.top(), r.right(), r.bottom() );
+                break;
+            }
+        }
+    }
+
+    // ...to update the views - do we need that ?
+    //emit sig_updateChildGeometry( _child );
 }
 
+#if 0
 /*================================================================*/
 QListIterator<KWordChild> KWordDocument::childIterator()
 {
     return QListIterator<KWordChild> ( m_lstChildren );
 }
+#endif
 
 /*================================================================*/
 void KWordDocument::draw( QPaintDevice *, long int, long int, float )

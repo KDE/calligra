@@ -125,10 +125,6 @@ public:
     virtual void removeView( KWordView *_view );
 
     virtual void insertObject( const QRect& _rect, KoDocumentEntry& _e, int diffx, int diffy );
-    virtual void changeChildGeometry( KWordChild *_child, const QRect& );
-
-    virtual QListIterator<KWordChild> childIterator();
-
     void setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf );
 
     void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf );
@@ -378,13 +374,15 @@ public:
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
-    void sig_updateChildGeometry( KWordChild *_child );
+    void sig_updateChildGeometry( KWordChild *_child ); // unused
     void sig_removeObject( KWordChild *_child );
 
 protected slots:
     void slotUndoRedoChanged( QString, QString );
 
     void slotDocumentLoaded();
+
+    void slotChildChanged( KoDocumentChild * child );
 
 protected:
     virtual bool saveChildren( KoStore *_store, const char *_path );
@@ -423,9 +421,6 @@ protected:
 
     ProcessingType processingType;
     int rastX, rastY;
-
-    //    bool m_bEmpty;
-    // This overwrites the one in koDocument!!! Lotzi Boloni
 
     int applyStyleTemplate;
 

@@ -31,7 +31,6 @@
 #include <komlMime.h>
 #include <koPageLayoutDia.h>
 
-#include <strstream>
 #include <fstream>
 #include <unistd.h>
 #include <limits.h>
@@ -42,6 +41,7 @@
 #include <qfile.h>
 #include <qscrollview.h>
 #include <qarray.h>
+#include <kdebug.h>
 
 #include <koFrame.h>
 
@@ -1095,7 +1095,7 @@ void KWTextFrameSet::updateCounters()
 			// value, not depending on the numbering type. That caused problems.
 			counterData[ i ] = atoi( p->getParagLayout()->getStartCounter() );
 			/* switch ( p->getParagLayout()->getCounterType() ) {
-			case KWParagLayout::CT_NUM: case KWParagLayout::CT_ROM_NUM_L: 
+			case KWParagLayout::CT_NUM: case KWParagLayout::CT_ROM_NUM_L:
 			case KWParagLayout::CT_ROM_NUM_U:
 			    counterData[ i ] = atoi( p->getParagLayout()->getStartCounter() );
 			    break;
@@ -1451,7 +1451,9 @@ QPicture *KWPartFrameSet::getPicture()
     if ( !_enableDrawing )
 	return 0;
 
-    update();
+    // No ! This moves back the child, when moving it while activated (David)
+    //update();
+
     QPainter p( &pic );
     //child->transform( p );
 
@@ -1473,7 +1475,7 @@ void KWPartFrameSet::activate( QWidget *_widget, int diffx, int diffy, int diffx
     KoDocument* part = child->document();
     if ( !part )
 	return;
-    //    view->shell()->setActiveView( view, part );
+    kdDebug() << "Child activated. part="<<part<<" child="<<child<<endl;
     view->partManager()->addPart( part, false );
     view->partManager()->setActivePart(  part, view );
     view->child( part )->frame()->move( frames.at( 0 )->x() - diffx - diffxx,
