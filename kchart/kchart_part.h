@@ -61,6 +61,8 @@ public:
     KoChart::Data   *data()                    { return &m_currentData; }
     KChartParams    *params() const            { return m_params;       }
     KChartAuxiliary *auxdata()                 { return &m_auxiliary;   }
+    QStringList     &rowLabelTexts()           { return m_rowLabels;  }
+    QStringList     &colLabelTexts()           { return m_colLabels;  }
 
     // Save and load
     virtual       QDomDocument saveXML();
@@ -76,11 +78,13 @@ public:
     bool  canChangeValue()   const             { return m_bCanChangeValue; }
     virtual void  setCanChangeValue(bool b )   { m_bCanChangeValue = b;    }
 
+    // FIXME: Remove this ugly thing.
+    void  initTestChart();
+
 signals:
     void docChanged();
 
 protected:
-    void  initRandomData();
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
     bool  loadOldXML( const QDomDocument& doc );
     bool  loadAuxiliary( const QDomDocument& doc );
@@ -95,7 +99,11 @@ private:
 private:
     // The chart and its contents
     KoChart::Data  m_currentData;
+    QStringList    m_rowLabels;
+    QStringList    m_colLabels;
     KChartParams  *m_params;
+
+    //FIXME: To be deprecated:
     QStringList    m_longLabels;
     QStringList    m_shortLabels;
 

@@ -135,7 +135,12 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
 
     // Make sure there is always some test data.
     m_edit->setEnabled(((KChartPart*)koDocument())->canChangeValue());
+#if 0
     createTempData();
+#else
+    ((KChartPart*)koDocument())->initTestChart();
+#endif
+
     updateGuiTypeOfChart();
 }
 
@@ -180,32 +185,6 @@ void KChartView::updateReadWrite( bool /*readwrite*/ )
 #endif
 }
 
-void KChartView::createTempData()
-{
-    int row, col;
-    int nbrow,nbcol;
-
-    KoChart::Data *dat = ((KChartPart*)koDocument())->data();
-
-    // initialize some data, if there is none
-    nbrow=4;
-    nbcol=4;
-    if (dat->rows() == 0) {
-	kdDebug(35001) << "Initialize with some data!!!" << endl;
-	dat->expand(4,4);
-	dat->setUsedCols( 4 );
-	dat->setUsedRows( 4 );
-	for (row = 0;row < nbrow;row++)
-	    for (col = 0;col < nbcol;col++) {
-		//	  _widget->fillCell(row,col,row+col);
-		KoChart::Value t( (double)row+col );
-		kdDebug(35001) << "Set cell for " << row << "," << col << endl;
-		dat->setCell(row,col,t);
-	    }
-	//      _dlg->exec();
-    }
-}
-
 
 // Edit the data to the chart.
 // This opens a spreadsheet like editor with the data in it.
@@ -224,18 +203,24 @@ void KChartView::edit()
 		   << "  usedRows = "  << dat->usedRows() << endl;
 
     ed.setData(dat);
+    ed.setRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
+    ed.setColLabels(((KChartPart*)koDocument())->colLabelTexts());
 
     // TODO: Replace following with passing document pointer to the
     //       constructor of the dialog.
+#if 0
     ed.setAxisLabelTextShort( ( (KChartPart*)koDocument() )->axisLabelTextShort() );
     ed.setAxisLabelTextLong( ( (KChartPart*)koDocument() )->axisLabelTextLong() );
-
+#endif
     // Set the legend in the editor.
+#if 0
     QStringList  lst;
     for( uint i =0; i < dat->rows(); i++ )
         lst << params->legendText( i );
     ed.setLegend(lst);
+#endif
 
+#if 0
     // TODO: Following should be done in the init part of the dialog,
     //       when doc pointer is passed in constructor.
     QStringList *axisLabelTextLong = ( ( (KChartPart*)koDocument() )->axisLabelTextLong() );
@@ -243,7 +228,7 @@ void KChartView::edit()
         QStringList lstLabel( *axisLabelTextLong );
         ed.setXLabel( lstLabel );
     }
-
+#endif
     // Execute the data editor.
     if ( ed.exec() != QDialog::Accepted ) {
         return;
@@ -251,10 +236,14 @@ void KChartView::edit()
 
     // Get the data and legend back.
     ed.getData(dat);
+    ed.getRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
+    ed.getColLabels(((KChartPart*)koDocument())->colLabelTexts());
+#if 0
     ed.getLegend(params);
 
     //TODO: Should be done in the destructor of the dialog.
     ed.getXLabel(params );
+#endif
     kdDebug(35001) << "***After calling editor: cols =" << dat->cols()
 		   << " , rows = "     << dat->rows()
 		   << " , usedCols = " << dat->usedCols()
@@ -590,6 +579,7 @@ void KChartView::print(KPrinter &printer)
   {
     	int const scalex = printer.option("kde-kchart-printsizex").toInt();
 	int const scaley = printer.option("kde-kchart-printsizey").toInt();
+	// FIXME: Losing precision here.  First multiply, then divide.
 	width = (double)pdm.width()/100*scalex;
 	height = (double)pdm.height()/100*scaley;
   }

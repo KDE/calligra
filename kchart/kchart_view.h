@@ -40,7 +40,6 @@ public slots:
     void  saveConfig();
     void  loadConfig();
     void  defaultConfig();
-    void  createTempData();
 
     void  pieChart();
     void  barsChart();

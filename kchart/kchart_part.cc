@@ -43,6 +43,7 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
 			QObject* parent, const char* name,
 			bool singleViewMode )
   : KoChart::Part( parentWidget, widgetName, parent, name, singleViewMode ),
+    m_rowLabels(), m_colLabels(),
     m_params( 0 ),
     m_parentWidget( parentWidget )
 {
@@ -75,6 +76,7 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
     // Initialize the parameter set for this chart document
     kdDebug(35001) << "InitDOC" << endl;
 
+    // Create the chart parameters.
     m_params = new KChartParams();
     m_params->setThreeDBars( true );
 
@@ -85,25 +87,37 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 }
 
 
-void KChartPart::initRandomData()
+// FIXME: This function seems to be never called!!
+
+void KChartPart::initTestChart()
 {
-    kdDebug()<<"KChartPart::initRandomData()\n";
-    // fill cells
-    int col,row;
-    // initialize some data, if there is none
+    int  col;
+    int  row;
+
+    kdDebug()<<"KChartPart::initTestChart()\n";
+
+    // Fill cells with data if there is none.
     if (m_currentData.rows() == 0) {
         kdDebug(35001) << "Initialize with some data!!!" << endl;
         m_currentData.expand(4,4);
         m_currentData.setUsedRows( 4 );
         m_currentData.setUsedCols( 4 );
-        for (row = 0; row < 4; row++)
+        for (row = 0; row < 4; row++) {
             for (col = 0; col < 4; col++) {
                 KoChart::Value t( (double) row + col );
                 // kdDebug(35001) << "Set cell for " << row << "," << col << endl;
                 m_currentData.setCell(row, col, t);
-            }
-    }
 
+		if (row == 0) {
+		    // Fill columnlabel.
+		    m_colLabels << QString("Column %1").arg(col + 1);
+		}
+            }
+
+	    // Fill row label.
+	    m_rowLabels << QString("Row %1").arg(row + 1);
+	}
+    }
 }
 
 
@@ -129,6 +143,25 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     if (m_auxiliary.m_dataDirection == KChartAuxiliary::DataRows) {
 	// These are efficient so it doesn't matter if we always copy.
 	m_displayData = m_currentData;
+
+	{
+	    KDChartAxisParams  bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+	    QStringList        longLabels;
+	    QStringList        shortLabels;
+
+	    longLabels.clear();
+	    shortLabels.clear();
+	    for ( uint col = 0; col < m_currentData.cols(); col++ ) {
+		longLabels  << m_colLabels[col];
+		shortLabels << m_colLabels[col].left( 3 );
+	    }
+	    bottomparms.setAxisLabelStringLists( &longLabels, &shortLabels );
+	    m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, 
+				     bottomparms );
+	}
+
+	for ( uint row = 0; row < m_currentData.rows(); row++ )
+	    m_params->setLegendText( row, m_rowLabels[row] );
     }
     else {
 	// FIXME: Only copy when necessary.
@@ -144,10 +177,29 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	    }
 	}
 
-	// FIXME: Transpose headers as well.  This is done in params.
+	// Transpose labels.
+	{
+	    KDChartAxisParams  bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+	    QStringList        longLabels;
+	    QStringList        shortLabels;
+
+	    longLabels.clear();
+	    shortLabels.clear();
+	    for ( uint row = 0; row < m_currentData.rows(); row++ ) {
+		longLabels  << m_rowLabels[row];
+		shortLabels << m_rowLabels[row].left( 3 );
+	    }
+	    bottomparms.setAxisLabelStringLists( &longLabels, &shortLabels );
+	    m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, 
+				     bottomparms );
+	}
+
+	for ( uint col = 0; col < m_currentData.cols(); col++ )
+	    m_params->setLegendText( col, m_colLabels[col] );
     }
 
-    // Now start the real painting.
+    // Ok, we have now created a data set for display, and params with
+    // suitable legends and axis labels.  Now start the real painting.
 
     // Handle transparency.
     if( !transparent )
@@ -267,6 +319,9 @@ void KChartPart::setData( const KoChart::Data& data )
     emit docChanged();
 }
 
+
+// FIXME: This has to be totally wrong.  It has to be the view that
+//        shows the wizard, not the document.
 
 bool KChartPart::showWizard()
 {

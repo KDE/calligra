@@ -21,6 +21,11 @@ public:
     kchartDataEditor(QWidget* parent = 0);
     void setData(KoChart::Data* dat);
     void getData(KoChart::Data* dat);
+    void setRowLabels(const QStringList &rowLabels);
+    void getRowLabels(QStringList &rowLabels);
+    void setColLabels(const QStringList &colLabels);
+    void getColLabels(QStringList &colLabels);
+
     void getLegend(KChartParams* params);
     void setLegend(const QStringList &legend);
     void getXLabel(KChartParams* params);

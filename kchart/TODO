@@ -7,6 +7,16 @@ Before release of KOffice 1.4
   - 41612: No titles for axes
   - 100004: Manual should describe stand-alone charting 
             (see below also)
+  - 1001007: Error in reading back axis labels.
+      - Store row and column labels separately in the document		DONE
+      - Save / Load row and column labels 
+
+* Wishes
+  - 14971: Data in rows or columns					DONE
+      - Store in document						DONE
+      - Save / Load							DONE
+      - Manipulate with GUI						DONE
+      - Paint chart using it						DONE
 
 * Other fixes
   - Include me in Authors						DONE
@@ -35,7 +45,7 @@ Before release of KOffice 1.4
   - Smaller column widths?
 
 * Config dialog
-  - Make Data page work.
+  - Make Data page work.						DONE
   - Pie settings at the same place as Subtype?
   - Check *all* subpages.
     - Axes page is ugly.

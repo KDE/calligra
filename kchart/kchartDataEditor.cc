@@ -177,6 +177,65 @@ void kchartDataEditor::getData( KoChart::Data* dat )
     }
 }
 
+
+void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
+{
+    QHeader  *rowHeader = m_table->verticalHeader();
+    int       row;
+    int       numRows = m_rowsSB->value();
+
+    rowHeader->setLabel(0, "");
+    for (row = 0; row < numRows; row++) {
+	rowHeader->setLabel(row + 1, QString("%1").arg(row + 1));
+
+        if( rowLabels[row].isNull() )
+	    m_table->setText(row + 1, 0, "");
+	else
+	    m_table->setText(row + 1, 0, rowLabels[row]);
+    }
+}
+
+void kchartDataEditor::getRowLabels(QStringList &rowLabels)
+{
+    int  numRows = m_rowsSB->value();
+    int  row;
+
+    rowLabels.clear();
+    for (row = 0; row < numRows; row++) {
+	rowLabels << m_table->text(row + 1, 0);
+    }
+}
+
+void kchartDataEditor::setColLabels(const QStringList &colLabels)
+{
+    QHeader  *colHeader = m_table->horizontalHeader();
+    int       col;
+
+    int  numCols = m_colsSB->value();
+
+    colHeader->setLabel(0, "");
+    for (col = 0; col < numCols; col++) {
+	colHeader->setLabel(col + 1, QString("%1").arg(col + 1));
+
+        if( colLabels[col].isNull() )
+	    m_table->setText(0, col + 1, "");
+	else
+	    m_table->setText(0, col + 1, colLabels[col]);
+    }
+}
+
+void kchartDataEditor::getColLabels(QStringList &colLabels)
+{
+    int  numCols = m_colsSB->value();
+    int  col;
+
+    colLabels.clear();
+    for (col = 0; col < numCols; col++) {
+	colLabels << m_table->text(0, col + 1);
+    }
+}
+
+
 void kchartDataEditor::setLegend( const QStringList &legend )
 {
     QHeader  *rowHeader = m_table->verticalHeader();

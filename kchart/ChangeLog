@@ -1,3 +1,23 @@
+2005-03-08  Inge Wallin  <inge@lysator.liu.se>
+
+	Initialize the chart in the document instead of the view.
+	* kchart_part.{h,cc} (initTestChart): Renamed from initRandomData
+	and enhanced to generate row and column headers as well.
+	* kchart_view.{h,cc}: (createTempData): removed
+	
+	Store labels for rows and columns separately in the document.
+	This fixes bug 14971.
+	* kchart_part.h (m_rowLabels, m_colLabels): new members
+	(rowLabelTexts, colLabelTexts): new methods
+	* kchart_part.cc (paintContent): Paint using the new labels, both
+	for ordinary and transposed tables.
+	* kchartDataEditor.{h,cc} (setRowLabels): new method
+	 (getRowLabels): new method
+	 (setColLabels): new method
+	 (getColLabels): new method
+	* kchart_view.cc (edit): call new methods above in data editor,
+	and don't call old methods setLegend, getLegend, setXLabel, etc.
+
 2005-03-07    <inge@lysator.liu.se>
 
 	Start on bug 14971: kchart data import should flip X & Y data.
@@ -15,6 +35,7 @@
 	(apply): Set data direction in aux data
 	(init): Read data direction from aux data
 
+	----------------------------------------------------------------
 	
 	Cleaning:
 	* kchart_part.cc (loadOasis): remove parameter names to remove
