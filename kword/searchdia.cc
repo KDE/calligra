@@ -353,7 +353,7 @@ bool KWFindReplace::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag
     m_currentFrameSet = fs;
     fs->textDocument()->addSelection( HIGHLIGHTSELECTION );
     fs->textDocument()->setSelectionColor( HIGHLIGHTSELECTION,
-                                           QApplication::palette().color( QPalette::Active, QColorGroup::Mid ) );
+                                           QApplication::palette().color( QPalette::Active, QColorGroup::Dark ) );
     m_currentParag = firstParag;
     m_offset = 0;
     if ( firstParag == lastParag )
