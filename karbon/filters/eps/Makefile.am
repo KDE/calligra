@@ -10,7 +10,7 @@ INCLUDES = \
 	-I$(srcdir)/../../../../koffice/lib/kofficeui \
 	$(all_includes)
 
-service_DATA = karbon_ai_import.desktop
+service_DATA = karbon_eps_export.desktop
 servicedir = $(kde_servicesdir)
 
 noinst_HEADERS = \
