@@ -49,60 +49,68 @@ PolygonTool::PolygonTool (CommandHistory* history)
    m_id=ToolPolygon;
 }
 
-void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () == QEvent::MouseButtonPress) {
-    QMouseEvent *me = (QMouseEvent *) e;
-    float xpos = me->x (), ypos = me->y ();
-    canvas->snapPositionToGrid (xpos, ypos);
+void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
+{
+   if (e->type () == QEvent::MouseButtonPress)
+   {
+      QMouseEvent *me = (QMouseEvent *) e;
+      float xpos = me->x (), ypos = me->y ();
+      canvas->snapPositionToGrid (xpos, ypos);
 
-    obj = new GPolygon (doc, GPolygon::PK_Polygon);
-    sPoint = Coord (xpos, ypos);
-    obj->setSymmetricPolygon (sPoint, sPoint, nCorners,
+      obj = new GPolygon (doc, GPolygon::PK_Polygon);
+      sPoint = Coord (xpos, ypos);
+      obj->setSymmetricPolygon (sPoint, sPoint, nCorners,
                                  createConcavePolygon, sharpValue);
-    doc->insertObject (obj);
-  }
-  else if (e->type () == QEvent::MouseMove) {
-    if (obj == 0L)
-      return;
-    QMouseEvent *me = (QMouseEvent *) e;
-    float xpos = me->x (), ypos = me->y ();
-    canvas->snapPositionToGrid (xpos, ypos);
+      doc->insertObject (obj);
+   }
+   else if (e->type () == QEvent::MouseMove)
+   {
+      if (obj == 0L)
+         return;
+      QMouseEvent *me = (QMouseEvent *) e;
+      float xpos = me->x (), ypos = me->y ();
+      canvas->snapPositionToGrid (xpos, ypos);
 
-    obj->setSymmetricPolygon (sPoint, Coord (xpos, ypos), nCorners,
-                              createConcavePolygon, sharpValue);
-  }
-  else if (e->type () == QEvent::MouseButtonRelease) {
-    if (obj == 0L)
-      return;
-    QMouseEvent *me = (QMouseEvent *) e;
-    float xpos = me->x (), ypos = me->y ();
-    canvas->snapPositionToGrid (xpos, ypos);
+      obj->setSymmetricPolygon (sPoint, Coord (xpos, ypos), nCorners,
+                                createConcavePolygon, sharpValue);
+   }
+   else if (e->type () == QEvent::MouseButtonRelease)
+   {
+      if (obj == 0L)
+         return;
+      QMouseEvent *me = (QMouseEvent *) e;
+      float xpos = me->x (), ypos = me->y ();
+      canvas->snapPositionToGrid (xpos, ypos);
 
-    obj->setSymmetricPolygon (sPoint, Coord (xpos, ypos), nCorners,
-                              createConcavePolygon, sharpValue);
+      obj->setSymmetricPolygon (sPoint, Coord (xpos, ypos), nCorners,
+                                createConcavePolygon, sharpValue);
 
-    if (! obj->isValid ()) {
-      doc->deleteObject (obj);
-    }
-    else {
-      CreatePolygonCmd *cmd = new CreatePolygonCmd (doc, obj);
-      history->addCommand (cmd);
+      if (! obj->isValid ())
+      {
+         doc->deleteObject (obj);
+      }
+      else
+      {
+         CreatePolygonCmd *cmd = new CreatePolygonCmd (doc, obj);
+         history->addCommand (cmd);
 
-      doc->unselectAllObjects ();
-      doc->setLastObject (obj);
-    }
-    obj = 0L;
-  }
-  else if (e->type () == QEvent::KeyPress) {
-    QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == Qt::Key_Escape)
-      m_toolController->emitOperationDone (m_id);
-  }
-  return;
+         doc->unselectAllObjects ();
+         doc->setLastObject (obj);
+      }
+      obj = 0L;
+   }
+   else if (e->type () == QEvent::KeyPress)
+   {
+      QKeyEvent *ke = (QKeyEvent *) e;
+      if (ke->key () == Qt::Key_Escape)
+         m_toolController->emitOperationDone (m_id);
+   }
+   return;
 }
 
-void PolygonTool::configure () {
-  PolygonConfigDialog::setupTool(this);
+void PolygonTool::configure ()
+{
+   PolygonConfigDialog::setupTool(this);
 }
 
 unsigned int PolygonTool::numCorners () const {
@@ -129,9 +137,8 @@ void PolygonTool::setConcavePolygon (bool flag) {
   createConcavePolygon = flag;
 }
 
-void PolygonTool::writeOutConfig() {
-
-   kdDebug()<<"PStateManager::writeOutConfig()"<<endl;
+void PolygonTool::writeOutConfig()
+{
     KConfig* config = kapp->config ();
     config->setGroup("PolygonTool");
     config->writeEntry("Corners", nCorners);

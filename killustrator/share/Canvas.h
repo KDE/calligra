@@ -108,6 +108,7 @@ public:
   void setOutlineMode (bool flag);
 
 protected:
+   //return the size of the canvas with current zoom and resolution in pixels
   QSize actualSize();
   QSize actualPaperSizePt() const;
   void updateScrollBars();
@@ -173,19 +174,22 @@ private:
   float zoomFactor;
   GDocument *document;
   ToolController *toolController;
-  bool gridIsOn;
-  bool gridSnapIsOn;
   QColor mGridColor;
-  bool dragging, ensureVisibilityFlag;
   float hGridDistance, vGridDistance;
-  bool drawBasePoints;
-  bool outlineMode;
   int pendingRedraws;
   Rect regionForUpdate, region;
 
   QValueList<float> horizHelplines, vertHelplines;
-  bool helplinesAreOn, helplinesSnapIsOn;
   float tmpHorizHelpline, tmpVertHelpline;
+
+  bool gridSnapIsOn;
+  bool helplinesSnapIsOn;
+  bool helplinesAreOn:1;
+  bool gridIsOn:1;
+  bool dragging:1;
+  bool ensureVisibilityFlag:1;
+  bool drawBasePoints:1;
+  bool outlineMode:1;
 };
 
 #endif

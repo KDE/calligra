@@ -32,6 +32,7 @@
 
 #include <klocale.h>
 #include <kcolorbtn.h>
+#include <kdebug.h>
 
 #include <Canvas.h>
 #include <UnitBox.h>
@@ -107,7 +108,9 @@ void GridDialog::setShowGridOn (bool flag) {
   sbutton->setChecked (flag);
 }
 
-void GridDialog::setSnapToGridOn (bool flag) {
+void GridDialog::setSnapToGridOn (bool flag)
+{
+   kdDebug()<<"GridDialog::setSnapToGridOn: flag "<<int(flag)<<endl;
   gbutton->setChecked (flag);
 }
 
@@ -125,6 +128,7 @@ void GridDialog::setGridColor(QColor color)
 void GridDialog::setupGrid (Canvas* canvas)
 {
    GridDialog dialog (0L, "Grid");
+   kdDebug()<<"GridDialog::setupGrid(): snapToGrid "<<int(canvas->snapToGrid())<<endl;
    dialog.setShowGridOn (canvas->showGrid ());
    dialog.setSnapToGridOn (canvas->snapToGrid ());
    dialog.setDistances ((float) canvas->getHorizGridDistance (),

@@ -214,8 +214,16 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline)
        */
       const QWMatrix& m = p.worldMatrix ();
 
-      xcorr = 1.0 / m.m11 ();
-      ycorr = 1.0 / m.m22 ();
+      if (m.m11()!=0)
+         xcorr = 1.0 / m.m11 ();
+      else
+         xcorr = 0;
+
+      if (m.m22()!=0)
+         ycorr = 1.0 / m.m22 ();
+      else
+         ycorr = 0;
+      kdDebug()<<"xcorr: "<<xcorr<<"  ycorr: "<<ycorr<<endl;
       const Coord& p1 = *(points.at (0));
       const Coord& p2 = *(points.at (2));
       if (Roundness != 0)
@@ -277,33 +285,39 @@ bool GPolygon::contains (const Coord& p) {
   return false;
 }
 
-void GPolygon::setEndPoint (const Coord& p) {
-  assert (kind != PK_Polygon);
+void GPolygon::setEndPoint (const Coord& p)
+{
+   assert (kind != PK_Polygon);
 
-  gShape.setInvalid ();
+   gShape.setInvalid ();
 
-  Coord& p0 = *(points.at (0));
-  Coord& p2 = *(points.at (2));
+   Coord& p0 = *(points.at (0));
+   Coord& p2 = *(points.at (2));
 
-  if (kind == PK_Square && p2.x () != 0 && p2.y () != 0) {
-    float dx = (float) fabs (p.x () - p0.x ());
-    float dy = (float) fabs (p.y () - p0.y ());
-    float xoff = p.x () - p0.x ();
-    float yoff = p.y () - p0.y ();
-    if (dx > dy) {
-      p2.x (p.x ());
-      p2.y (p0.y () + xoff);
-    }
-    else {
-      p2.x (p0.x () + yoff);
-      p2.y (p.y ());
-    }
-  }
-  else
-    p2 = p;
-  setPoint (1, Coord (p2.x (), p0.y ()));
-  setPoint (3, Coord (p0.x (), p2.y ()));
-  updateRegion ();
+   if (kind == PK_Square && p2.x () != 0 && p2.y () != 0)
+   {
+      float dx = (float) fabs (p.x () - p0.x ());
+      float dy = (float) fabs (p.y () - p0.y ());
+      float xoff = p.x () - p0.x ();
+      float yoff = p.y () - p0.y ();
+      if (dx > dy)
+      {
+         p2.x (p.x ());
+         p2.y (p0.y () + xoff);
+      }
+      else
+      {
+         p2.x (p0.x () + yoff);
+         p2.y (p.y ());
+      }
+   }
+   else
+      p2 = p;
+   setPoint (1, Coord (p2.x (), p0.y ()));
+   setPoint (3, Coord (p0.x (), p2.y ()));
+   kdDebug()<<"GPolygon::setEndPoint(): p0: ("<<p0.x()<<" | "<<p0.y()<<")"<<endl;
+   kdDebug()<<"GPolygon::setEndPoint(): p2: ("<<p2.x()<<" | "<<p2.y()<<")"<<endl;
+   updateRegion ();
 }
 
 void GPolygon::setSymmetricPolygon (const Coord& sp, const Coord& ep,

@@ -29,6 +29,8 @@
 #include <qpixmap.h>
 #include <qglobal.h>
 
+#include <kdebug.h>
+
 #include <Painter.h>
 
 #include <stdio.h>
@@ -203,230 +205,250 @@ void Ruler::updateVisibleArea (int xpos, int ypos) {
   repaint ();
 }
 
-void Ruler::paintEvent (QPaintEvent *e) {
-  if (! buffer)
-    return;
+void Ruler::paintEvent (QPaintEvent *e)
+{
+   if (! buffer)
+      return;
 
-  const QRect& rect = e->rect ();
+   const QRect& rect = e->rect ();
 
-  if (orientation == Horizontal) {
-    if (firstVisible >= 0)
-      bitBlt (this, rect.x (), rect.y (), buffer,
-              rect.x () + firstVisible, rect.y (),
-              rect.width (), rect.height ());
-    else
-      bitBlt (this, rect.x (), rect.y (), buffer,
-              rect.x (), rect.y (),
-              rect.width (), rect.height ());
-  }
-  else {
-    if (firstVisible >= 0)
-      bitBlt (this, rect.x (), rect.y (), buffer,
-              rect.x (), rect.y () + firstVisible,
-              rect.width (), rect.height ());
-    else
-      bitBlt (this, rect.x (), rect.y (), buffer,
-              rect.x (), rect.y (),
-              rect.width (), rect.height ());
-  }
-  QFrame::paintEvent (e);
+   if (orientation == Horizontal)
+   {
+      kdDebug()<<"Ruler::paintEvent(): firstVis: "<<firstVisible<<" e->x: "<<rect.x()<<" e->y: "<<rect.y()<<" e->w: "<<rect.width()<<" e->h: "<<rect.height()<<endl;
+      if (firstVisible >= 0)
+      {
+         bitBlt (this, rect.x (), rect.y (), buffer,
+                 rect.x () + firstVisible, rect.y (),
+                 rect.width (), rect.height ());
+      }
+      else
+         bitBlt (this, rect.x (), rect.y (), buffer,
+                 rect.x (), rect.y (),
+                 rect.width (), rect.height ());
+   }
+   else
+   {
+      if (firstVisible >= 0)
+         bitBlt (this, rect.x (), rect.y (), buffer,
+                 rect.x (), rect.y () + firstVisible,
+                 rect.width (), rect.height ());
+      else
+         bitBlt (this, rect.x (), rect.y (), buffer,
+                 rect.x (), rect.y (),
+                 rect.width (), rect.height ());
+   }
+   QFrame::paintEvent (e);
 }
 
-void Ruler::drawRuler () {
-  QPainter p;
-  int start, pos, step;
-  bool s1, s2, s3;
+void Ruler::drawRuler ()
+{
+   QPainter p;
+   int start, pos, step;
+   bool s1, s2, s3;
   
-  if (! buffer)
-    return;
+   if (! buffer)
+      return;
   
-  p.begin (buffer);
-  p.setBackgroundColor (colorGroup ().background ());
-  p.setPen (black);
-  p.setFont (QFont ("helvetica", 8));
-  p.eraseRect (0, 0, buffer->width (), buffer->height ());
+   p.begin (buffer);
+   p.setBackgroundColor (colorGroup ().background ());
+   p.setPen (black);
+   p.setFont (QFont ("helvetica", 8));
+   p.eraseRect (0, 0, buffer->width (), buffer->height ());
 
-  switch (munit) {
-  case UnitPoint:
-    s1 = cvtInchToPt(10.0) * zoom > 3.0;
-    s2 = cvtInchToPt(50.0) * zoom > 3.0;
-    s3 = cvtInchToPt(100.0) * zoom > 3.0;
-    step = 30 / (100.0 * zoom);
-    if(step == 0)
-     step = 1;
-    start = (int)(firstVisible / zoom);
-    break;
-  case UnitInch:
-    s1 = cvtInchToPt(0.1) * zoom > 3.0;
-    s2 = cvtInchToPt(0.5) * zoom > 3.0;
-    s3 = cvtInchToPt(1.0) * zoom > 3.0;
-    step = 24 / (cvtInchToPt(1.0) * zoom);
-    if(step == 0)
-     step = 1;
-    start = 10*(int)(cvtPtToInch(firstVisible) / zoom);
-    break;
-  case UnitCentimeter:
-  case UnitMillimeter:
-    s1 = cvtMmToPt(1.0) * zoom > 3.0;
-    s2 = cvtMmToPt(5.0) * zoom > 3.0;
-    s3 = cvtMmToPt(10.0) * zoom > 3.0;
-    step = 30 / (cvtMmToPt(10.0) * zoom);
-    if(step == 0)
-     step = 1;
-    start = (int)(cvtPtToMm(firstVisible) / zoom);
-    break;
-  case UnitPica:
-    s1 = cvtPicaToPt(1.0) * zoom > 3.0;
-    s2 = cvtPicaToPt(5.0) * zoom > 3.0;
-    s3 = cvtPicaToPt(10.0) * zoom > 3.0;
-    step = 30 / (cvtPicaToPt(10.0) * zoom);
-    if(step == 0)
-     step = 1;
-    start = (int)(cvtPtToPica(firstVisible) / zoom);
-    break;
-  case UnitDidot:
-    s1 = cvtDidotToPt(10.0) * zoom > 3.0;
-    s2 = cvtDidotToPt(50.0) * zoom > 3.0;
-    s3 = cvtDidotToPt(100.0) * zoom > 3.0;
-    step = 30 / (cvtDidotToPt(100.0) * zoom);
-    if(step == 0)
-     step = 1;
-    start = (int)(cvtPtToDidot(firstVisible) / zoom);
-    break;
-  case UnitCicero:
-    s1 = cvtCiceroToPt(1.0) * zoom > 3.0;
-    s2 = cvtCiceroToPt(5.0) * zoom > 3.0;
-    s3 = cvtCiceroToPt(10.0) * zoom > 3.0;
-    step = 30 / (cvtCiceroToPt(10.0) * zoom);
-    if(step == 0)
-     step = 1;
-    start = (int)(cvtPtToCicero(firstVisible) / zoom);
-    break;
-  }
-
-  if (orientation == Horizontal) {
-    switch (munit) {
-    case UnitPoint:
-      {
-        do{
-	  pos = (int)(start * zoom - firstVisible);
-	  if( s3 && start % 100 == 0 )
-           p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
-	  if( s2 && start % 50 == 0 )
-           p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
-	  if( s1 && start % 10 == 0 )
-	   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-	  if( start % (step * 100) == 0 )
-           drawNum (p, pos, 8, start, true);
-	  start++;
-	 }while(pos < buffer->width());
-        break;
-      }
-    case UnitMillimeter:
-      {
-        do{
-	  pos = (int)(cvtMmToPt(start) * zoom - firstVisible);
-	  if( s3 && start % 10 == 0 )
-           p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
-	  if( s2 && start % 5 == 0 )
-           p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
-	  if( s1 )
-	   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-	  if( start % (step * 10) == 0 )
-           drawNum (p, pos, 8, start, true);
-	  start++;
-	 }while(pos < buffer->width());
-        break;
-      }
-    case UnitCentimeter:
-      {
-	do{
-	  pos = (int)(cvtMmToPt(start) * zoom - firstVisible);
-	  if( s3 && start % 10 == 0 )
-           p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
-	  if( s2 && start % 5 == 0 )
-           p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
-	  if( s1 )
-	   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-	  if( start % (step * 10) == 0 )
-           drawNum (p, pos, 8, start/10, true);
-	  start++;
-	 }while(pos < buffer->width());
-        break;
-      }
-    case UnitDidot:
-      {
-        do{
-	  pos = (int)(cvtDidotToPt(start) * zoom - firstVisible);
-          if( s3 && start % 100 == 0 )
-           p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
-	  if( s2 && start % 50 == 0 )
-           p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
-	  if( s1 && start % 10 == 0 )
-	   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-	  if( start % (step * 100) == 0 )
-           drawNum (p, pos, 8, start, true);
-	  start++;
-	 }while(pos < buffer->width());
-        break;
-      }
-    case UnitCicero:
-      {
-        do{
-	  pos = (int)(cvtCiceroToPt(start) * zoom - firstVisible);
-	  if( s3 && start % 10 == 0 )
-           p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
-	  if( s2 && start % 5 == 0 )
-           p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
-	  if( s1 )
-	   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-	  if( start % (step * 10) == 0 )
-           drawNum (p, pos, 8, start, true);
-	  start++;
-	 }while(pos < buffer->width());
-        break;
-      }
-    case UnitPica:
-      {
-        do{
-	  pos = (int)(cvtPicaToPt(start) * zoom - firstVisible);
-	  if( s3 && start % 10 == 0 )
-           p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
-	  if( s2 && start % 5 == 0 )
-           p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
-	  if( s1 )
-	   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-	  if( start % (step * 10) == 0 )
-           drawNum (p, pos, 8, start, true);
-	  start++;
-	 }while(pos < buffer->width());
-        break;
-      }
-    case UnitInch:
-      {
-	do{
-	  pos = (int)(cvtInchToPt(start/10.0) * zoom - firstVisible);
-	  if( s3 && start % 10 == 0 )
-           p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
-	  if( s2 && start % 5 == 0 )
-           p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
-	  if( s1 )
-	   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-	  if( start % (step * 10) == 0 )
-           drawNum (p, pos, 8, start/10, true);
-	  start++;
-	 }while(pos < buffer->width());
-        break;
-      }
-    default:
+   switch (munit)
+   {
+   case UnitPoint:
+      s1 = cvtInchToPt(10.0) * zoom > 3.0;
+      s2 = cvtInchToPt(50.0) * zoom > 3.0;
+      s3 = cvtInchToPt(100.0) * zoom > 3.0;
+      step = 30 / (100.0 * zoom);
+      if(step == 0)
+         step = 1;
+      start = (int)(firstVisible / zoom);
       break;
-    }
-  }
-  else {
-    switch (munit) {
-    case UnitPoint:
-      { 
-        do{
+   case UnitInch:
+      s1 = cvtInchToPt(0.1) * zoom > 3.0;
+      s2 = cvtInchToPt(0.5) * zoom > 3.0;
+      s3 = cvtInchToPt(1.0) * zoom > 3.0;
+      step = 24 / (cvtInchToPt(1.0) * zoom);
+      if(step == 0)
+         step = 1;
+      start = 10*(int)(cvtPtToInch(firstVisible) / zoom);
+      break;
+   case UnitCentimeter:
+   case UnitMillimeter:
+      s1 = cvtMmToPt(1.0) * zoom > 3.0;
+      s2 = cvtMmToPt(5.0) * zoom > 3.0;
+      s3 = cvtMmToPt(10.0) * zoom > 3.0;
+      step = 30 / (cvtMmToPt(10.0) * zoom);
+      if(step == 0)
+         step = 1;
+      start = (int)(cvtPtToMm(firstVisible) / zoom);
+      break;
+   case UnitPica:
+      s1 = cvtPicaToPt(1.0) * zoom > 3.0;
+      s2 = cvtPicaToPt(5.0) * zoom > 3.0;
+      s3 = cvtPicaToPt(10.0) * zoom > 3.0;
+      step = 30 / (cvtPicaToPt(10.0) * zoom);
+      if(step == 0)
+         step = 1;
+      start = (int)(cvtPtToPica(firstVisible) / zoom);
+      break;
+   case UnitDidot:
+      s1 = cvtDidotToPt(10.0) * zoom > 3.0;
+      s2 = cvtDidotToPt(50.0) * zoom > 3.0;
+      s3 = cvtDidotToPt(100.0) * zoom > 3.0;
+      step = 30 / (cvtDidotToPt(100.0) * zoom);
+      if(step == 0)
+         step = 1;
+      start = (int)(cvtPtToDidot(firstVisible) / zoom);
+      break;
+   case UnitCicero:
+      s1 = cvtCiceroToPt(1.0) * zoom > 3.0;
+      s2 = cvtCiceroToPt(5.0) * zoom > 3.0;
+      s3 = cvtCiceroToPt(10.0) * zoom > 3.0;
+      step = 30 / (cvtCiceroToPt(10.0) * zoom);
+      if(step == 0)
+         step = 1;
+      start = (int)(cvtPtToCicero(firstVisible) / zoom);
+      break;
+   }
+
+   if (orientation == Horizontal)
+   {
+      switch (munit)
+      {
+      case UnitPoint:
+         {
+            do
+            {
+               pos = (int)(start * zoom - firstVisible);
+               if( s3 && start % 100 == 0 )
+                  p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
+               if( s2 && start % 50 == 0 )
+                  p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
+               if( s1 && start % 10 == 0 )
+                  p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
+               if( start % (step * 100) == 0 )
+                  drawNum (p, pos, 8, start, true);
+               start++;
+            } while(pos < buffer->width());
+            break;
+         }
+      case UnitMillimeter:
+         {
+            do
+            {
+               pos = (int)(cvtMmToPt(start) * zoom - firstVisible);
+               if( s3 && start % 10 == 0 )
+                  p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
+               if( s2 && start % 5 == 0 )
+                  p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
+               if( s1 )
+                  p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
+               if( start % (step * 10) == 0 )
+                  drawNum (p, pos, 8, start, true);
+               start++;
+            } while(pos < buffer->width());
+            break;
+         }
+      case UnitCentimeter:
+      {
+         do
+         {
+            pos = (int)(cvtMmToPt(start) * zoom - firstVisible);
+            if( s3 && start % 10 == 0 )
+               p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
+            if( s2 && start % 5 == 0 )
+               p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
+            if( s1 )
+               p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
+            if( start % (step * 10) == 0 )
+               drawNum (p, pos, 8, start/10, true);
+            start++;
+         } while(pos < buffer->width());
+         break;
+      }
+      case UnitDidot:
+         {
+            do
+            {
+               pos = (int)(cvtDidotToPt(start) * zoom - firstVisible);
+               if( s3 && start % 100 == 0 )
+                  p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
+               if( s2 && start % 50 == 0 )
+                  p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
+               if( s1 && start % 10 == 0 )
+                  p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
+               if( start % (step * 100) == 0 )
+                  drawNum (p, pos, 8, start, true);
+               start++;
+            } while(pos < buffer->width());
+            break;
+         }
+      case UnitCicero:
+         {
+            do
+            {
+               pos = (int)(cvtCiceroToPt(start) * zoom - firstVisible);
+               if( s3 && start % 10 == 0 )
+                  p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
+               if( s2 && start % 5 == 0 )
+                  p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
+               if( s1 )
+                  p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
+               if( start % (step * 10) == 0 )
+                  drawNum (p, pos, 8, start, true);
+               start++;
+            } while(pos < buffer->width());
+            break;
+         }
+      case UnitPica:
+         {
+            do
+            {
+               pos = (int)(cvtPicaToPt(start) * zoom - firstVisible);
+               if( s3 && start % 10 == 0 )
+                  p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
+               if( s2 && start % 5 == 0 )
+                  p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
+               if( s1 )
+                  p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
+               if( start % (step * 10) == 0 )
+                  drawNum (p, pos, 8, start, true);
+               start++;
+            } while(pos < buffer->width());
+            break;
+         }
+      case UnitInch:
+         {
+            do
+            {
+               pos = (int)(cvtInchToPt(start/10.0) * zoom - firstVisible);
+               if( s3 && start % 10 == 0 )
+                  p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
+               if( s2 && start % 5 == 0 )
+                  p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
+               if( s1 )
+                  p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
+               if( start % (step * 10) == 0 )
+                  drawNum (p, pos, 8, start/10, true);
+               start++;
+            } while(pos < buffer->width());
+            break;
+         }
+      default:
+         break;
+      }
+   }
+   else
+   {
+      switch (munit)
+      {
+      case UnitPoint:
+         {
+            do
+            {
 	  pos = (int)(start * zoom  - firstVisible);
 	  if( s3 && start % 100 == 0 )
 	   p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);

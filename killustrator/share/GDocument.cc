@@ -623,8 +623,9 @@ bool GDocument::parseBody (const QDomElement &element, QList<GObject>& /*newObjs
     return true;
 }
 
-bool GDocument::readFromXml (const  QDomDocument &document) {
-
+bool GDocument::readFromXml (const  QDomDocument &document)
+{
+   kdDebug()<<"GDocument::readFromXml()"<<endl;
     if ( document.doctype().name() != "killustrator" )
         return false;
     QDomElement killustrator = document.documentElement();

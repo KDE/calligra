@@ -197,13 +197,27 @@ void GObject::updateRegion (bool recalcBBox) {
   emit changed (newbox);
 }
 
-void GObject::transform (const QWMatrix& m, bool update) {
-  tMatrix = tMatrix * m;
-  iMatrix = tMatrix.invert ();
-  initTmpMatrix ();
-  gShape.setInvalid ();
-  if (update)
-    updateRegion ();
+void GObject::transform (const QWMatrix& m, bool update)
+{
+   kdDebug()<<"----------------------"<<endl;
+   kdDebug()<<"GObject::transform() m"<<endl;
+   kdDebug()<<"( "<<m.m11()<<" | "<<m.m12()<<" 0 )"<<endl;
+   kdDebug()<<"( "<<m.m21()<<" | "<<m.m22()<<" 0 )"<<endl;
+   kdDebug()<<"( "<<m.dx()<<" | "<<m.dy()<<" 1 )"<<endl;
+   tMatrix = tMatrix * m;
+   kdDebug()<<"GObject::transform() tmpMatrix"<<endl;
+   kdDebug()<<"( "<<tMatrix.m11()<<" | "<<tMatrix.m12()<<" 0 )"<<endl;
+   kdDebug()<<"( "<<tMatrix.m21()<<" | "<<tMatrix.m22()<<" 0 )"<<endl;
+   kdDebug()<<"( "<<tMatrix.dx()<<" | "<<tMatrix.dy()<<" 1 )"<<endl;
+   iMatrix = tMatrix.invert ();
+   initTmpMatrix ();
+   kdDebug()<<"GObject::transform() iMatrix"<<endl;
+   kdDebug()<<"( "<<iMatrix.m11()<<" | "<<iMatrix.m12()<<" 0 )"<<endl;
+   kdDebug()<<"( "<<iMatrix.m21()<<" | "<<iMatrix.m22()<<" 0 )"<<endl;
+   kdDebug()<<"( "<<iMatrix.dx()<<" | "<<iMatrix.dy()<<" 1 )"<<endl;
+   gShape.setInvalid ();
+   if (update)
+      updateRegion ();
 }
 
 void GObject::initTmpMatrix () {

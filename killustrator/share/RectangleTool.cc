@@ -26,6 +26,7 @@
 
 #include <qkeycode.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <GDocument.h>
 #include <GPolygon.h>
@@ -47,79 +48,85 @@ RectangleTool::RectangleTool (CommandHistory* history) : Tool (history)
 
 void RectangleTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 {
-  if (e->type () == QEvent::MouseButtonPress) {
-    QMouseEvent *me = (QMouseEvent *) e;
-    float xpos = me->x (), ypos = me->y ();
-    canvas->snapPositionToGrid (xpos, ypos);
+   if (e->type () == QEvent::MouseButtonPress)
+   {
+      QMouseEvent *me = (QMouseEvent *) e;
+      float xpos = me->x (), ypos = me->y ();
+      canvas->snapPositionToGrid (xpos, ypos);
 
-    bool flag = me->state () & Qt::ControlButton;
-    rect = new GPolygon (doc, flag ? GPolygon::PK_Square : GPolygon::PK_Rectangle);
+      bool flag = me->state () & Qt::ControlButton;
+      rect = new GPolygon (doc, flag ? GPolygon::PK_Square : GPolygon::PK_Rectangle);
 
-    rect->addPoint (0, Coord (xpos, ypos));
-    rect->addPoint (1, Coord (xpos, ypos));
-    rect->addPoint (2, Coord (xpos, ypos));
-    rect->addPoint (3, Coord (xpos, ypos));
-    doc->insertObject (rect);
-    m_toolController->emitModeSelected(m_id,flag?i18n("Create Square"):i18n("Create Rectangle"));
-  }
-  else if (e->type () == QEvent::MouseMove) {
-    if (rect == 0L)
-      return;
+      rect->addPoint (0, Coord (xpos, ypos));
+      rect->addPoint (1, Coord (xpos, ypos));
+      rect->addPoint (2, Coord (xpos, ypos));
+      rect->addPoint (3, Coord (xpos, ypos));
+      doc->insertObject (rect);
+      m_toolController->emitModeSelected(m_id,flag?i18n("Create Square"):i18n("Create Rectangle"));
+   }
+   else if (e->type () == QEvent::MouseMove)
+   {
+      if (rect == 0L)
+         return;
 
-    QMouseEvent *me = (QMouseEvent *) e;
-    float xpos = me->x (), ypos = me->y ();
-    canvas->snapPositionToGrid (xpos, ypos);
-    rect->setEndPoint (Coord (xpos, ypos));
-    bool flag = me->state () & Qt::ControlButton;
+      QMouseEvent *me = (QMouseEvent *) e;
+      float xpos = me->x (), ypos = me->y ();
+      canvas->snapPositionToGrid (xpos, ypos);
+      rect->setEndPoint (Coord (xpos, ypos));
+      bool flag = me->state () & Qt::ControlButton;
 
-    Rect r = rect->boundingBox ();
-    MeasurementUnit unit =
-      PStateManager::instance ()->defaultMeasurementUnit ();
-    QString u = unitToString (unit);
-    float xval, yval, wval, hval;
-    xval = cvtPtToUnit (unit, r.x ());
-    yval = cvtPtToUnit (unit, r.y ());
-    wval = cvtPtToUnit (unit, r.width ());
-    hval = cvtPtToUnit (unit, r.height ());
+      Rect r = rect->boundingBox ();
+      MeasurementUnit unit =
+         PStateManager::instance ()->defaultMeasurementUnit ();
+      QString u = unitToString (unit);
+      float xval, yval, wval, hval;
+      xval = cvtPtToUnit (unit, r.x ());
+      yval = cvtPtToUnit (unit, r.y ());
+      wval = cvtPtToUnit (unit, r.width ());
+      hval = cvtPtToUnit (unit, r.height ());
 
-    msgbuf=flag ? i18n("Create Square") : i18n("Create Rectangle");
-    msgbuf+=" [";
-    msgbuf+=QString::number(xval, 'f', 3);
-    msgbuf+=QString(" ") + u + QString(", ");
-    msgbuf+=QString::number(yval, 'f', 3);
-    msgbuf+=QString(" ") + u + QString(", ");
-    msgbuf+=QString::number(wval, 'f', 3);
-    msgbuf+=QString(" ") + u + QString(", ");
-    msgbuf+=QString::number(hval, 'f', 3);
-    msgbuf+=QString(" ") + u + QString("]");
-    m_toolController->emitModeSelected (m_id,msgbuf);
-  }
-  else if (e->type () == QEvent::MouseButtonRelease) {
-    if (rect == 0L)
-      return;
+      msgbuf=flag ? i18n("Create Square") : i18n("Create Rectangle");
+      msgbuf+=" ["+QString::number(xval, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(yval, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(wval, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(hval, 'f', 3);
+      msgbuf+=QString(" ") + u + QString("]");
+      m_toolController->emitModeSelected (m_id,msgbuf);
+   }
+   else if (e->type () == QEvent::MouseButtonRelease)
+   {
+      if (rect == 0L)
+         return;
 
-    QMouseEvent *me = (QMouseEvent *) e;
-    float xpos = me->x (), ypos = me->y ();
-    canvas->snapPositionToGrid (xpos, ypos);
+      QMouseEvent *me = (QMouseEvent *) e;
+      float xpos = me->x (), ypos = me->y ();
+      kdDebug()<<"RectTool::processMouseEvent(): x: "<<xpos<<" y: "<<ypos<<endl;
+      canvas->snapPositionToGrid (xpos, ypos);
+      kdDebug()<<"RectTool::processMouseEvent(): x: "<<xpos<<" y: "<<ypos<<endl;
+      rect->setEndPoint (Coord (xpos, ypos));
+      if (! rect->isValid ())
+      {
+         doc->deleteObject (rect);
+      }
+      else
+      {
+         CreateRectangleCmd *cmd = new CreateRectangleCmd (doc, rect);
+         history->addCommand (cmd);
 
-    rect->setEndPoint (Coord (xpos, ypos));
-    if (! rect->isValid ()) {
-      doc->deleteObject (rect);
-    }
-    else {
-      CreateRectangleCmd *cmd = new CreateRectangleCmd (doc, rect);
-      history->addCommand (cmd);
-
-      doc->unselectAllObjects ();
-      doc->setLastObject (rect);
-    }
-    rect = 0L;
-  }
-  else if (e->type () == QEvent::KeyPress) {
-    QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == Qt::Key_Escape)
-      m_toolController->emitOperationDone (m_id);
-  }
+         doc->unselectAllObjects ();
+         doc->setLastObject (rect);
+      }
+      rect = 0L;
+   }
+   else if (e->type () == QEvent::KeyPress)
+   {
+      QKeyEvent *ke = (QKeyEvent *) e;
+      if (ke->key () == Qt::Key_Escape)
+         m_toolController->emitOperationDone (m_id);
+   }
 }
 
 void RectangleTool::activate (GDocument*, Canvas* canvas)

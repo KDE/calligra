@@ -110,6 +110,7 @@ void Canvas::resizeEvent(QResizeEvent *e)
    buffer->resize(size());
    mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
    mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
+   updateScrollBars();
    emit visibleAreaChanged(mXOffset, mYOffset);
 }
 
@@ -135,7 +136,8 @@ void Canvas::updateScrollBars()
    if (i<=0)
       hBar->setRange(0,0);
    else
-      hBar->setRange(-i/2-10,i/2+10);
+      hBar->setRange(-i/2,i/2);
+      //hBar->setRange(-i/2-10,i/2+10);
 
    i=tmpSize.height()-height();
    if (i<=0)
@@ -150,9 +152,22 @@ void Canvas::updateScrollBars()
 void Canvas::scrollX(int v)
 {
    xPaper = v;
-   mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
+   int i=actualPaperSizePt().width()-width();
+   if (i<=0)
+   {
+      mXOffset=-width()/2;
+   }
+   else
+   {
+      //mXOffset=(-v+hBar->minValue())/zoomFactor+10;
+      mXOffset=-v+hBar->minValue();
+      kdDebug()<<"Canvas::scrollX: mXOffset: "<<mXOffset<<" v: "<<v<<" minValue: "<<hBar->minValue()<<endl;
+   };
+   //mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
+   mXOffset=(width() - actualPaperSizePt().width())/2 - xPaper;
    repaint();
-   emit visibleAreaChanged((width() - actualPaperSizePt().width())/2-xPaper,(height() - actualPaperSizePt().height())/2 -yPaper);
+   emit visibleAreaChanged(mXOffset,mYOffset);
+
 }
  
 void Canvas::scrollY(int v)
@@ -161,7 +176,7 @@ void Canvas::scrollY(int v)
 
    mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
    repaint();
-   emit visibleAreaChanged((width() - actualPaperSizePt().width())/2-xPaper,(height() - actualPaperSizePt().height())/2 -yPaper);
+   emit visibleAreaChanged(mXOffset,mYOffset);
 }
 
 void Canvas::centerPage()
@@ -175,44 +190,44 @@ void Canvas::centerPage()
 */
 
 void Canvas::paintEvent (QPaintEvent* e)
- {
+{
    //kdDebug()<<"Canvas::paintEvent(): width: "<<width()<<" height: "<<height()<<endl;
-  pendingRedraws = 0;
+   pendingRedraws = 0;
 
-  QPainter p;
-  float s = scaleFactor ();
+   QPainter p;
+   float s = scaleFactor ();
 
-  // setup the painter
-  p.begin (buffer);
-  p.setBackgroundColor(white);
-  buffer->fill (white);
+   // setup the painter
+   p.begin (buffer);
+   p.setBackgroundColor(white);
+   buffer->fill (white);
 
 
-  // clear the canvas
+   // clear the canvas
+
+   // draw the grid
+   if(gridIsOn)
+      drawGrid (p);
   
-  // draw the grid
-  if(gridIsOn)
-   drawGrid (p);
-  
-  p.save();
-  
-  int w = (int) (document->getPaperWidth () * resolution * zoomFactor / 72.0);
-  int h = (int) (document->getPaperHeight () * resolution * zoomFactor / 72.0);
-  p.setPen(Qt::black);
-  p.translate(mXOffset, mYOffset);
-  p.drawRect (0, 0, w, h);
-  p.setPen (QPen(Qt::darkGray, 2));
-  p.moveTo (w+1, 1);
-  p.lineTo (w+1, h+1);
-  p.moveTo(w, h+1);
-  p.lineTo (1, h+1);
-  p.setPen(Qt::black);
+   p.save();
 
-  // next the document contents
-  p.scale (s, s);
-  document->drawContents (p, drawBasePoints, outlineMode);
+   int w = (int) (document->getPaperWidth () * resolution * zoomFactor / 72.0);
+   int h = (int) (document->getPaperHeight () * resolution * zoomFactor / 72.0);
+   p.setPen(Qt::black);
+   p.translate(mXOffset, mYOffset);
+   p.drawRect (0, 0, w, h);
+   p.setPen (QPen(Qt::darkGray, 2));
+   p.moveTo (w+1, 1);
+   p.lineTo (w+1, h+1);
+   p.moveTo(w, h+1);
+   p.lineTo (1, h+1);
+   p.setPen(Qt::black);
 
-  // and finally the handle
+   // next the document contents
+   p.scale (s, s);
+   document->drawContents (p, drawBasePoints, outlineMode);
+
+   // and finally the handle
   if (! document->selectionIsEmpty ())
    document->handle ().draw (p);
   
@@ -251,12 +266,11 @@ void Canvas::setZoomFactor (float factor)
    mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
    repaint();
    emit sizeChanged ();
-   emit visibleAreaChanged((width() - actualPaperSizePt().width())/2-xPaper,(height() - actualPaperSizePt().height())/2 -yPaper);
+   emit visibleAreaChanged(mXOffset,mYOffset);
    //emit zoomFactorChanged (zoomFactor, x/2 ,y/2);
    emit zoomFactorChanged (zoomFactor);
-   /*kdDebug()<<"Canvas::setZoomFactor(): width: "<<width()<<" actPaperSize.width: "<<actualPaperSizePt().width()<<" xPaper: "<<xPaper<<" actPaperSize.height: "<<actualPaperSizePt().height()<<" yPaper: "<<yPaper<<endl;
-   kdDebug()<<"Canvas::setZoomFactor(): width: "<<width()<<" actPaperSize.width: "<<actualPaperSizePt().width()<<" xPaper: "<<xPaper<<" actPaperSize.height: "<<actualPaperSizePt().height()<<" yPaper: "<<yPaper<<endl;
-   kdDebug()<<"Canvas::setZoomFactor(): actSize w: "<<actualSize().width()<<" actualSize h: "<<actualSize().height()<<endl;
+/*   kdDebug()<<"Canvas::setZoomFactor(): width: "<<width()<<" actPaperSize.width: "<<actualPaperSizePt().width()<<" xPaper: "<<xPaper<<" actPaperSize.height: "<<actualPaperSizePt().height()<<" yPaper: "<<yPaper<<endl;
+   kdDebug()<<"Canvas::setZoomFactor(): width: "<<width()<<" actPaperSize.width: "<<actualPaperSizePt().width()<<" xPaper: "<<xPaper<<" xPaper: "<<xPaper<<endl;
    kdDebug()<<"Canvas::setZoomFactor(): paperwidth: "<<document->getPaperWidth()<<" height: "<<document->getPaperHeight()<<endl;
    kdDebug()<<"Canvas::setZoomFactor(): zoom: "<<zoomFactor<<" res: "<<resolution<<endl;
    kdDebug()<<"Canvas::setZoomFactor(): hbar min: "<<hBar->minValue()<<" max: "<<hBar->maxValue()<<" val: "<<hBar->value()<<endl;
@@ -360,8 +374,9 @@ bool Canvas::eventFilter (QObject *o, QEvent *e)
    return QWidget::eventFilter(o, e);
 }
 
-void Canvas::moveEvent(QMoveEvent *e) {
-    emit visibleAreaChanged (e->pos ().x (), e->pos ().y ());
+void Canvas::moveEvent(QMoveEvent *e)
+{
+   emit visibleAreaChanged (e->pos ().x (), e->pos ().y ());
 }
 
 
@@ -696,6 +711,7 @@ void Canvas::snapPositionToGrid (float& x, float& y) {
   }
 }
 
+#include <iostream.h>
 void Canvas::drawGrid (QPainter& p)
 {
    float h, v;
@@ -706,12 +722,14 @@ void Canvas::drawGrid (QPainter& p)
    p.save ();
    p.setPen (pen1);
    h = ((width() - actualPaperSizePt().width())/2 - xPaper) % (int)hd;
+   cerr<<"grid x: ";
    for (; h < width(); h += hd)
    {
       int hi = qRound (h);
       p.drawLine (hi, 0, hi, height());
+      cerr<<hi<<" ";
    }
-  
+   cerr<<endl;
    v = ((height() - actualPaperSizePt().height())/2 - yPaper) % (int)vd;
   
    for (; v < height() ; v += vd)
