@@ -128,7 +128,7 @@ k_dcop:
     bool haveASelectedPictureObj() const;
     bool haveASelectedPartObj() const;
     bool haveASelectedGroupObj() const;
-
+    void rotateAllObjSelected(float _newAngle);
 
 private:
     KPrPage *m_page;

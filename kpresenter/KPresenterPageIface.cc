@@ -667,3 +667,9 @@ bool KPresenterPageIface::haveASelectedGroupObj() const
 {
     return m_page->haveASelectedGroupObj();
 }
+
+void KPresenterPageIface::rotateAllObjSelected(float _newAngle)
+{
+    KCommand *cmd= m_page->rotateObj( _newAngle);
+    delete cmd;
+}
