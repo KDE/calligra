@@ -37,13 +37,13 @@
 
 #include <kaboutdialog.h>
 #include <kaction.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <koGlobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstdaction.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kurl.h>
 
 #include <kformulacontainer.h>

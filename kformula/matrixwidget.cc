@@ -12,7 +12,7 @@
 
 
 
-#include <kapp.h>
+#include <kapplication.h>
 
 #include <kdebug.h>
 
@@ -23,7 +23,7 @@
 #include <qspinbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-
+#include <qradiobutton.h>
 #include "matrixwidget.h"
 
 /*

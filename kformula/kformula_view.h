@@ -30,7 +30,7 @@ class QPaintEvent;
 class QScrollView;
 
 #include <koView.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 
 /**

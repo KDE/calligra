@@ -14,10 +14,8 @@
 #include <klocale.h>
 #include <kdialogbase.h>
 
-#include <qradiobt.h>
-
 class QSpinBox;
-
+class QRadioButton;
 class MatrixSetupWidget  : public KDialogBase
 {
     Q_OBJECT
