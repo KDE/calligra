@@ -189,8 +189,20 @@ void SideBar::removeItem( int pos )
     m_thb->removeItem( pos );
 }
 
-void SideBar::updateItem( int pos, bool sticky )
+void SideBar::updateItem( KPrPage *page )
 {
+    bool sticky = false;
+    int pos = 0;
+    if ( page == m_doc->masterPage() )
+    {
+        pos = -1;
+        sticky = true;
+    }
+    else
+    {
+        pos = m_doc->pageList().findRef( page );
+    }
+
     m_outline->updateItem( pos, sticky );
     m_thb->updateItem( pos, sticky );
 }

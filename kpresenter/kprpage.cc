@@ -496,8 +496,7 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle,
     //update sidebar
     if ( angle == 0.0 || (increaseY == 0.0 && increaseX == 0.0) )
     {
-        int pos=m_doc->pageList().findRef(this);
-        m_doc->updateSideBarItem(pos);
+        m_doc->updateSideBarItem( this );
     }
 
     m_doc->setModified(true);
@@ -2368,8 +2367,7 @@ KCommand *KPrPage::moveObject(KPresenterView *_view, double diffx, double diffy)
         moveByCmd = new MoveByCmd( i18n( "Move Objects" ), KoPoint( diffx, diffy ),
                                    _objects, m_doc,this );
 
-        int pos=m_doc->pageList().findRef(this);
-        m_doc->updateSideBarItem(pos, ( this == m_doc->masterPage()) ? true: false );
+        m_doc->updateSideBarItem( this );
     }
     return moveByCmd;
 }

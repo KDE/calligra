@@ -367,7 +367,7 @@ class KPresenterDoc : public KoDocument
 
     void movePageTo( int oldPos, int newPos );
 
-    void updateSideBarItem( int pgNum, bool sticky = false );
+    void updateSideBarItem( KPrPage * page );
     KPrPage * findSideBarPage(KPObject *object);
     KPrPage * findSideBarPage(QPtrList<KPObject> &objects);
 

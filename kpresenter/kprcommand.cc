@@ -89,8 +89,7 @@ void ShadowCmd::execute()
                                          newShadow.shadowColor);
     doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 void ShadowCmd::unexecute()
@@ -101,8 +100,7 @@ void ShadowCmd::unexecute()
                                             oldShadow.at(i)->shadowColor);
     doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 
@@ -203,13 +201,11 @@ void SetBackCmd::execute()
     if ( takeGlobal ) {
         QPtrListIterator<KPrPage> it( doc->getPageList() );
         for ( int pos = 0; it.current(); ++it, ++pos ) {
-            KPrPage *_page = it.current();
-            doc->updateSideBarItem( pos, ( _page == doc->masterPage() ) ? true : false );
+            doc->updateSideBarItem( it.current() );
         }
     }
     else {
-        int pos = doc->pageList().findRef( m_page );
-        doc->updateSideBarItem( pos, ( m_page == doc->masterPage() ) ? true : false );
+        doc->updateSideBarItem( m_page );
     }
 }
 
@@ -239,13 +235,11 @@ void SetBackCmd::unexecute()
     if ( takeGlobal ) {
         QPtrListIterator<KPrPage> it( doc->getPageList() );
         for ( int pos = 0; it.current(); ++it, ++pos ) {
-            KPrPage *_page = it.current();
-            doc->updateSideBarItem( pos, ( _page == doc->masterPage() ) ? true : false );
+            doc->updateSideBarItem( it.current() );
         }
     }
     else {
-        int pos = doc->pageList().findRef( m_page );
-        doc->updateSideBarItem( pos, ( m_page == doc->masterPage() ) ? true : false );
+        doc->updateSideBarItem( m_page );
     }
 }
 
@@ -293,8 +287,7 @@ void RotateCmd::execute()
     m_doc->updateRuler();
     m_doc->repaint( false );
 
-    int pos=m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos, (m_page == m_doc->masterPage()) ? true: false );
+    m_doc->updateSideBarItem( m_page );
 }
 
 void RotateCmd::unexecute()
@@ -304,8 +297,7 @@ void RotateCmd::unexecute()
     m_doc->updateRuler();
     m_doc->repaint( false );
 
-    int pos=m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos, (m_page == m_doc->masterPage()) ? true: false );
+    m_doc->updateSideBarItem( m_page );
 }
 
 
@@ -334,8 +326,7 @@ void ChgPixCmd::execute()
     m_page->replaceObject( oldObject, newObject );
     doc->repaint( newObject );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 void ChgPixCmd::unexecute()
@@ -343,8 +334,7 @@ void ChgPixCmd::unexecute()
     m_page->replaceObject( newObject, oldObject );
     doc->repaint( oldObject );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 DeleteCmd::DeleteCmd( const QString &_name, QPtrList<KPObject> &_objects,
@@ -407,8 +397,7 @@ void DeleteCmd::execute()
     if(textObj)
         m_doc->updateRuler();
 
-    int pos=m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos, (m_page == m_doc->masterPage()) ? true: false );
+    m_doc->updateSideBarItem( m_page );
 }
 
 void DeleteCmd::unexecute()
@@ -421,8 +410,7 @@ void DeleteCmd::unexecute()
         m_doc->repaint( it.current() );
     }
 
-    int pos=m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos, (m_page == m_doc->masterPage()) ? true: false );
+    m_doc->updateSideBarItem( m_page );
 }
 
 
@@ -529,8 +517,7 @@ void GroupObjCmd::execute()
 
     m_doc->repaint( false );
 
-    int pos = m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos, (m_page == m_doc->masterPage()) ? true: false );
+    m_doc->updateSideBarItem( m_page );
 }
 
 void GroupObjCmd::unexecute()
@@ -551,8 +538,7 @@ void GroupObjCmd::unexecute()
 
     m_doc->repaint( false );
 
-    int pos = m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos, (m_page == m_doc->masterPage()) ? true: false );
+    m_doc->updateSideBarItem( m_page );
 }
 
 UnGroupObjCmd::UnGroupObjCmd( const QString &_name,
@@ -560,8 +546,8 @@ UnGroupObjCmd::UnGroupObjCmd( const QString &_name,
                               KPresenterDoc *_doc, KPrPage *_page )
 : KNamedCommand( _name )
 , m_groupedObjects( grpObj_->getObjects() )
-, m_doc( _doc )
 , m_groupObject( grpObj_ )
+, m_doc( _doc )
 , m_page( _page )
 {
     m_groupObject->incCmdRef();
@@ -591,8 +577,7 @@ void UnGroupObjCmd::execute()
 
     m_doc->repaint( false );
 
-    int pos=m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos, (m_page == m_doc->masterPage()) ? true: false );
+    m_doc->updateSideBarItem( m_page );
 }
 
 void UnGroupObjCmd::unexecute()
@@ -618,8 +603,7 @@ void UnGroupObjCmd::unexecute()
 
     m_doc->repaint( false );
 
-    int pos=m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos, (m_page == m_doc->masterPage()) ? true: false );
+    m_doc->updateSideBarItem( m_page );
 }
 
 InsertCmd::InsertCmd( const QString &_name, KPObject *_object,
@@ -645,8 +629,7 @@ void InsertCmd::execute()
         doc->updateRuler();
     doc->repaint( object );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos);
+    doc->updateSideBarItem( m_page );
 }
 
 void InsertCmd::unexecute()
@@ -665,8 +648,7 @@ void InsertCmd::unexecute()
     }
     doc->repaint( oldRect );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos);
+    doc->updateSideBarItem( m_page );
 }
 
 LowerRaiseCmd::LowerRaiseCmd( const QString &_name, QPtrList<KPObject> _oldList,
@@ -697,8 +679,7 @@ void LowerRaiseCmd::execute()
     m_page->setObjectList( newList );
     doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 void LowerRaiseCmd::unexecute()
@@ -706,8 +687,7 @@ void LowerRaiseCmd::unexecute()
     m_page->setObjectList( oldList );
     doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 
@@ -748,8 +728,7 @@ void MoveByCmd::execute()
         doc->repaint( objects.at( i ) );
     }
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 void MoveByCmd::unexecute()
@@ -768,8 +747,7 @@ void MoveByCmd::unexecute()
         doc->repaint( objects.at( i ) );
     }
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 AlignCmd::AlignCmd( const QString &_name, QPtrList<KPObject> &_objects, AlignType _at, KPresenterDoc *_doc )
@@ -853,8 +831,7 @@ void AlignCmd::execute()
         doc->repaint( objects.at( i ) );
     }
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 void AlignCmd::unexecute()
@@ -874,8 +851,7 @@ void AlignCmd::unexecute()
         doc->updateRuler();
     }
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 PenCmd::PenCmd( const QString &_name, QPtrList<KPObject> &_objects, Pen _newPen,
@@ -922,8 +898,7 @@ void PenCmd::execute()
         applyPen( objects.at( i ), &tmpPen );
     }
 
-    int pos = doc->pageList().findRef( m_page );
-    doc->updateSideBarItem( pos, ( m_page == doc->masterPage() ) ? true : false );
+    doc->updateSideBarItem( m_page );
 }
 
 void PenCmd::applyPen( KPObject *object, Pen *tmpPen )
@@ -973,8 +948,7 @@ void PenCmd::unexecute()
             applyPen( objects.at( i ), oldPen.at( i ) );
     }
 
-    int pos = doc->pageList().findRef( m_page );
-    doc->updateSideBarItem( pos, ( m_page == doc->masterPage() ) ? true : false );
+    doc->updateSideBarItem( m_page );
 }
 
 void PenCmd::addObjects( const QPtrList<KPObject> &_objects )
@@ -1131,8 +1105,7 @@ void BrushCmd::execute()
         applyBrush( objects.at( i ), &tmpBrush );
     }
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 void BrushCmd::applyBrush( KP2DObject *object, Brush *tmpBrush )
@@ -1154,8 +1127,7 @@ void BrushCmd::unexecute()
         applyBrush( objects.at( i ), oldBrush.at( i ) );
     }
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 
@@ -1329,8 +1301,7 @@ void PieValueCmd::execute()
     }
     doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 void PieValueCmd::unexecute()
@@ -1347,8 +1318,7 @@ void PieValueCmd::unexecute()
     }
     doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 
@@ -1395,8 +1365,7 @@ void PolygonSettingCmd::execute()
     }
     doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 void PolygonSettingCmd::unexecute()
@@ -1413,8 +1382,7 @@ void PolygonSettingCmd::unexecute()
     }
     doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 
@@ -1459,8 +1427,7 @@ void PictureSettingCmd::execute()
     }
     doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 void PictureSettingCmd::unexecute()
@@ -1477,8 +1444,7 @@ void PictureSettingCmd::unexecute()
     }
     doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 
@@ -1532,8 +1498,7 @@ void RectValueCmd::execute()
     }
     doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 void RectValueCmd::unexecute()
@@ -1547,8 +1512,7 @@ void RectValueCmd::unexecute()
     }
     doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 
@@ -1586,8 +1550,7 @@ void ResizeCmd::execute()
     doc->repaint( oldRect );
     doc->repaint( object );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 void ResizeCmd::unexecute()
@@ -1609,8 +1572,7 @@ void ResizeCmd::unexecute()
     doc->repaint( oldRect );
     doc->repaint( object );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 
@@ -1882,16 +1844,14 @@ KPrChangeTitlePageNameCommand::KPrChangeTitlePageNameCommand( const QString &_na
 void KPrChangeTitlePageNameCommand::execute()
 {
     m_page->insertManualTitle(newPageName);
-    int pos=m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos);
+    m_doc->updateSideBarItem( m_page );
     m_doc->recalcVariables( VT_PGNUM );
 }
 
 void KPrChangeTitlePageNameCommand::unexecute()
 {
     m_page->insertManualTitle(oldPageName);
-    int pos=m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos);
+    m_doc->updateSideBarItem( m_page );
     m_doc->recalcVariables( VT_PGNUM );
 }
 
@@ -1980,8 +1940,7 @@ void KPrStickyObjCommand::execute()
     }
     m_doc->repaint( false );
 
-    int pos=m_doc->pageList().findRef(m_doc->masterPage());
-    m_doc->updateSideBarItem(pos,  true/*master page*/ );
+    m_doc->updateSideBarItem( m_doc->masterPage() );
 }
 
 void KPrStickyObjCommand::unexecute()
@@ -1996,8 +1955,7 @@ void KPrStickyObjCommand::unexecute()
     }
     m_doc->repaint( false );
 
-    int pos=m_doc->pageList().findRef(m_doc->masterPage());
-    m_doc->updateSideBarItem(pos,  true/*master page*/ );
+    m_doc->updateSideBarItem( m_doc->masterPage() );
 }
 
 void KPrStickyObjCommand::stickObj(KPObject *_obj)
@@ -2035,16 +1993,14 @@ void KPrNameObjectCommand::execute()
     object->setObjectName( newObjectName );
     m_page->unifyObjectName( object );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 void KPrNameObjectCommand::unexecute()
 {
     object->setObjectName( oldObjectName );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 KPrHideShowHeaderFooter::KPrHideShowHeaderFooter( const QString &name, KPresenterDoc *_doc,
@@ -2066,8 +2022,7 @@ void KPrHideShowHeaderFooter::execute()
     else
         kdDebug(33001)<<"Error in void KPrHideShowHeaderFooter::execute()\n";
 
-    int pos=m_doc->pageList().findRef(m_doc->masterPage());
-    m_doc->updateSideBarItem(pos,  true/*master page*/ );
+    m_doc->updateSideBarItem( m_doc->masterPage() );
 }
 
 void KPrHideShowHeaderFooter::unexecute()
@@ -2079,8 +2034,7 @@ void KPrHideShowHeaderFooter::unexecute()
     else
         kdDebug(33001)<<"Error in void KPrHideShowHeaderFooter::unexecute()\n";
 
-    int pos=m_doc->pageList().findRef(m_doc->masterPage());
-    m_doc->updateSideBarItem(pos,  true/*master page*/ );
+    m_doc->updateSideBarItem( m_doc->masterPage() );
 }
 
 KPrFlipObjectCommand::KPrFlipObjectCommand( const QString &name, KPresenterDoc *_doc,
@@ -2125,8 +2079,7 @@ void KPrFlipObjectCommand::flipObjects()
         m_doc->repaint( it.current() );
     }
 
-    int pos=m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos, (m_page == m_doc->masterPage()) ? true: false );
+    m_doc->updateSideBarItem( m_page );
 }
 
 KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &_name, QValueList<bool> &_lst,
@@ -2267,8 +2220,7 @@ void KPrCloseObjectCommand::closeObject(bool close)
         }
     }
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 MarginsStruct::MarginsStruct( KPTextObject *obj )
@@ -2306,8 +2258,7 @@ void KPrChangeMarginCommand::execute()
     m_obj->kPresenterDocument()->layout(m_obj);
     m_obj->kPresenterDocument()->repaint(m_obj);
 
-    int pos=m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos, (m_page == m_doc->masterPage()) ? true: false );
+    m_doc->updateSideBarItem( m_page );
 }
 
 void KPrChangeMarginCommand::unexecute()
@@ -2317,8 +2268,7 @@ void KPrChangeMarginCommand::unexecute()
     m_obj->kPresenterDocument()->layout(m_obj);
     m_obj->kPresenterDocument()->repaint(m_obj);
 
-    int pos=m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos, (m_page == m_doc->masterPage()) ? true: false );
+    m_doc->updateSideBarItem( m_page );
 }
 
 
@@ -2341,8 +2291,7 @@ void KPrChangeVerticalAlignmentCommand::execute()
     m_obj->kPresenterDocument()->layout(m_obj);
     m_obj->kPresenterDocument()->repaint(m_obj);
 
-    int pos=m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos, (m_page == m_doc->masterPage()) ? true: false );
+    m_doc->updateSideBarItem( m_page );
 }
 
 void KPrChangeVerticalAlignmentCommand::unexecute()
@@ -2351,8 +2300,7 @@ void KPrChangeVerticalAlignmentCommand::unexecute()
     m_obj->kPresenterDocument()->layout(m_obj);
     m_obj->kPresenterDocument()->repaint(m_obj);
 
-    int pos=m_doc->pageList().findRef(m_page);
-    m_doc->updateSideBarItem(pos, (m_page == m_doc->masterPage()) ? true: false );
+    m_doc->updateSideBarItem( m_page );
 }
 
 
@@ -2413,8 +2361,7 @@ void ImageEffectCmd::execute()
     }
     doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }
 
 void ImageEffectCmd::unexecute()
@@ -2429,6 +2376,5 @@ void ImageEffectCmd::unexecute()
     }
     doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->masterPage()) ? true: false );
+    doc->updateSideBarItem( m_page );
 }

@@ -4769,7 +4769,7 @@ void KPrCanvas::exitEditMode()
                 _repaint( static_cast<KPObject*>( kpTextObj ) );
             }
             // Title of slide may have changed
-            emit updateSideBarItem( currPgNum()-1 );
+            m_view->kPresenterDoc()->updateSideBarItem( m_activePage );
             emit objectSelectedChanged();
             editNum=0L;
         }

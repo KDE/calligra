@@ -2172,8 +2172,6 @@ void KPresenterView::createGUI()
                       this, SLOT( colorChanged( const QColor & ) ) );
     QObject::connect( m_canvas, SIGNAL( alignChanged( int ) ),
                       this, SLOT( alignChanged( int ) ) );
-    QObject::connect( m_canvas, SIGNAL( updateSideBarItem( int ) ),
-                      this, SLOT( updateSideBarItem( int ) ) );
     QObject::connect( m_canvas, SIGNAL( objectSelectedChanged()),
                       this, SLOT( objectSelectedChanged()));
     QObject::connect( m_canvas, SIGNAL( sigMouseWheelEvent( QWheelEvent* ) ),
@@ -3601,10 +3599,9 @@ void KPresenterView::pgConfOk()
     pgConfCmd->execute();
     kPresenterDoc()->addCommand( pgConfCmd );
 
-    for( unsigned i = 0; i < kPresenterDoc()->pageList().count(); i++ ) {
-        // Title of slide may have changed
-        updateSideBarItem( i );
-    }
+    QPtrListIterator<KPrPage> it( kPresenterDoc()->pageList() );
+    for ( ; it.current(); ++it )
+        updateSideBarItem( it.current() );
 }
 
 
@@ -4425,11 +4422,10 @@ void KPresenterView::updateSideBar()
     }
 }
 
-void KPresenterView::updateSideBarItem( int pagenr, bool sticky )
+void KPresenterView::updateSideBarItem( KPrPage * page )
 {
-    //kdDebug(33001) << "KPresenterView::updateSideBarItem " << pagenr << endl;
-    if (sidebar)
-        sidebar->updateItem( pagenr, sticky );
+    if ( sidebar )
+        sidebar->updateItem( page );
 }
 
 void KPresenterView::addSideBarItem( int pos )
@@ -5767,8 +5763,7 @@ void KPresenterView::viewFooter()
                                                                 m_pKPresenterDoc, state, m_pKPresenterDoc->footer());
     m_pKPresenterDoc->addCommand(cmd);
 
-    int pos=m_pKPresenterDoc->pageList().findRef(m_pKPresenterDoc->masterPage());
-    m_pKPresenterDoc->updateSideBarItem(pos, true/*sticky page*/ );
+    m_pKPresenterDoc->updateSideBarItem( m_pKPresenterDoc->masterPage() );
 }
 
 void KPresenterView::viewHeader()
@@ -5779,8 +5774,7 @@ void KPresenterView::viewHeader()
                                                                 m_pKPresenterDoc, state, m_pKPresenterDoc->header());
     m_pKPresenterDoc->addCommand(cmd);
 
-    int pos=m_pKPresenterDoc->pageList().findRef(m_pKPresenterDoc->masterPage());
-    m_pKPresenterDoc->updateSideBarItem(pos, true/*sticky page*/ );
+    m_pKPresenterDoc->updateSideBarItem( m_pKPresenterDoc->masterPage() );
 }
 
 void KPresenterView::showStyle( const QString & styleName )

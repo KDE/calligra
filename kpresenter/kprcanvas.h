@@ -415,7 +415,6 @@ signals:
     void fontChanged( const QFont & );
     void colorChanged( const QColor & );
     void alignChanged( int );
-    void updateSideBarItem( int );
     /**
      * Emmitted when presentation should be restarted
      * This is used in automatic screen and infinite loop mode.

@@ -79,8 +79,7 @@ QString KPresenterPageIface::manualTitle()const
 void KPresenterPageIface::insertManualTitle(const QString & title)
 {
     m_page->insertManualTitle(title);
-    int pos=m_page->kPresenterDoc()->pageList().findRef(m_page);
-    m_page->kPresenterDoc()->updateSideBarItem(pos);
+    m_page->kPresenterDoc()->updateSideBarItem( m_page );
 }
 
 QString KPresenterPageIface::pageTitle( const QString &_title ) const
@@ -490,8 +489,7 @@ bool KPresenterPageIface::isSlideSelected()
 void KPresenterPageIface::slideSelected(bool _b)
 {
     m_page->slideSelected(_b);
-    int pos=m_page->kPresenterDoc()->pageList().findRef(m_page);
-    m_page->kPresenterDoc()->updateSideBarItem(pos);
+    m_page->kPresenterDoc()->updateSideBarItem( m_page );
     m_page->kPresenterDoc()->updatePresentationButton();
 }
 

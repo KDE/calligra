@@ -3547,11 +3547,12 @@ void KPresenterDoc::clipboardDataChanged()
 void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
 {
     Q_ASSERT( pgNum >= 0 );
-    m_pageList.at(pgNum)->slideSelected(select);
+    KPrPage *page = m_pageList.at( pgNum );
+    page->slideSelected(select);
     kdDebug(33001) << "KPresenterDoc::selectPage pgNum=" << pgNum << " select=" << select << endl;
     setModified(true);
 
-    updateSideBarItem(pgNum);
+    updateSideBarItem( page );
     updatePresentationButton();
     //update statusbar
     emit pageNumChanged();
@@ -3598,12 +3599,12 @@ KPrPage * KPresenterDoc::findSideBarPage(QPtrList<KPObject> &objects)
     return 0L;
 }
 
-void KPresenterDoc::updateSideBarItem(int pgNum, bool sticky )
+void KPresenterDoc::updateSideBarItem( KPrPage * page )
 {
     // Update the views
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->updateSideBarItem( pgNum, sticky );
+        static_cast<KPresenterView*>( it.current() )->updateSideBarItem( page );
 }
 
 bool KPresenterDoc::isSlideSelected( int pgNum /* 0-based */ )

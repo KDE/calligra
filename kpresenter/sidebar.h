@@ -37,6 +37,7 @@ class OutlineSlideItem;
 class ThumbBar;
 class ThumbToolTip;
 class OutlineToolTip;
+class KPrPage;
 
 class ThumbBar : public KIconView
 {
@@ -130,7 +131,7 @@ public:
     };
     void setOn( int , bool ) { };
     //QSize sizeHint() const { return QSize( 120, QTabWidget::sizeHint().height() ); };
-    void updateItem( int pagenr, bool sticky = false);
+    void updateItem( KPrPage *page );
     void addItem( int pos );
     void moveItem( int oldPos, int newPos );
     void removeItem( int pos );
