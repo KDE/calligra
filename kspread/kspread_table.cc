@@ -4391,7 +4391,8 @@ void KSpreadTable::mergeCell( const QPoint &_marker, bool makeUndo)
                            abs(m_rctSelection.bottom() - m_rctSelection.top()));
 
     setMarker(QPoint(x,y));
-    if(getAutoCalc()) recalc(true);
+    if(getAutoCalc())
+        recalc(true);
     emit sig_updateView( this, m_rctSelection );
 }
 

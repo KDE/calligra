@@ -765,6 +765,16 @@
     </Function>
 
     <Function>
+      <Name>shortcurrentDate</Name>
+      <Type>String</Type>
+      <Help>
+	<Text>The shortcurrentDate() function returns the current date formatted with local parameters.</Text>
+	<Syntax>shortcurrentDate()</Syntax>
+	<Example>shortcurrentDate() returns "2001-05-19"</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>currentDateTime</Name>
       <Type>String</Type>
       <Help>

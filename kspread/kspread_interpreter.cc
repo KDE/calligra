@@ -247,7 +247,7 @@ static bool kspreadfunc_tan( KSContext& context )
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "tan", true ) )
     return false;
-  
+
   double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
     {
@@ -705,7 +705,7 @@ static bool kspreadfunc_max_helper( KSContext& context, QValueList<KSValue::Ptr>
       if(result <  (*it)->doubleValue())
         result =(*it)->doubleValue();
     }
-    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )  
+    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
       return false;
   }
 
@@ -1625,6 +1625,19 @@ static bool kspreadfunc_currentDate( KSContext& context )
 
     return true;
 }
+
+static bool kspreadfunc_shortcurrentDate( KSContext& context )
+{
+    // QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkArgumentsCount( context,0, "shortcurrentDate",true ) )
+      return false;
+
+    context.setValue( new KSValue(KGlobal::locale()->formatDate(QDate::currentDate(),true)));
+
+    return true;
+}
+
 
 static bool kspreadfunc_currentTime( KSContext& context )
 {
@@ -3996,7 +4009,7 @@ static bool kspreadfunc_count_helper( KSContext& context, QValueList<KSValue::Pt
 	result++;
       }
   }
-  
+
   return true;
 }
 
@@ -4046,10 +4059,10 @@ static bool kspreadfunc_sexdec( KSContext& context )
       if ( !KSUtil::checkArgumentsCount( context,1, "SEXDEC",true ) )
 	return false;
       if ( !KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
-	return false; 
-      
+	return false;
+
       result=args[0]->timeValue().hour()+(double)args[0]->timeValue().minute()/60.0+(double)args[0]->timeValue().second()/3600.0;
-      
+
       context.setValue( new KSValue(result));
     }
   else
@@ -4061,7 +4074,7 @@ static bool kspreadfunc_sexdec( KSContext& context )
       if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
 	return false;
       result=args[0]->intValue()+(double)args[1]->intValue()/60.0+(double)args[2]->intValue()/3600.0;
-      
+
       context.setValue( new KSValue(result));
     }
 
@@ -4354,6 +4367,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "weeksInYear", new KSValue( new KSBuiltinFunction( module, "weeksInYear", kspreadfunc_weeksInYear) ) );
   module->addObject( "seconds", new KSValue( new KSBuiltinFunction( module, "seconds", kspreadfunc_seconds) ) );
   module->addObject( "ROMAN", new KSValue( new KSBuiltinFunction( module, "ROMAN", kspreadfunc_roman) ) );
+  module->addObject( "shortcurrentDate", new KSValue( new KSBuiltinFunction( module, "shortcurrentDate", kspreadfunc_shortcurrentDate) ) );
   return module;
 }
 
