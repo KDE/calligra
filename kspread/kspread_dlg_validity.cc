@@ -36,7 +36,7 @@
 #include <kmessagebox.h>
 
 KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , const QRect &_marker )
-        :KDialogBase(KDialogBase::Tabbed, i18n("Validity"), User1|Cancel, User1, parent, name,true,false,i18n("OK"))
+        :KDialogBase(KDialogBase::Tabbed, i18n("Validity"),User2|User1|Cancel, User1, parent, name,true,false,i18n("OK"),i18n("Clear All"))
 
 {
     m_pView=parent;
@@ -151,6 +151,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
      connect(choose,SIGNAL(highlighted(int )),this,SLOT(changeIndexCond(int)));
      connect(chooseType,SIGNAL(highlighted(int )),this,SLOT(changeIndexType(int)));
      connect( this, SIGNAL(user1Clicked()), SLOT(OkPressed()) );
+     connect( this, SIGNAL(user2Clicked()), SLOT(clearAllPressed()) );
      init();
 }
 
@@ -430,6 +431,14 @@ void KSpreadDlgValidity::init()
         }
 changeIndexType(chooseType->currentItem()) ;
 changeIndexCond(choose->currentItem()) ;
+}
+
+void KSpreadDlgValidity::clearAllPressed()
+{
+  val_min->setText("");
+  val_max->setText("");
+  message->setText("");
+  title->setText("");
 }
 
 void KSpreadDlgValidity::OkPressed()

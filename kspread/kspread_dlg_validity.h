@@ -41,9 +41,10 @@ KSpreadDlgValidity(KSpreadView* parent, const char* name ,const QRect &_marker )
 void init();
 
 public slots:
-  void OkPressed();
-  void changeIndexCond(int);
-  void changeIndexType(int);
+ void OkPressed();
+ void clearAllPressed();
+ void changeIndexCond(int);
+ void changeIndexType(int);
 protected:
   KSpreadView* m_pView;
   QRect  marker;

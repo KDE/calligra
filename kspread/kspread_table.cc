@@ -4684,6 +4684,8 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
         {
            c->clearProperty(KSpreadCell::PIndent);
            c->clearNoFallBackProperties( KSpreadCell::PIndent );
+	   c->clearProperty(KSpreadCell::PAlign);
+           c->clearNoFallBackProperties( KSpreadCell::PAlign );
         }
       }
 
@@ -4691,6 +4693,7 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
         {
         RowLayout *rw=nonDefaultRowLayout(i);
         rw->setIndent( tmpIndent+valIndent);
+	rw->setAlign(KSpreadCell::Left);
         }
 
       emit sig_updateView( this );
@@ -4711,6 +4714,8 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
         {
            c->clearProperty(KSpreadCell::PIndent);
            c->clearNoFallBackProperties( KSpreadCell::PIndent );
+	   c->clearProperty(KSpreadCell::PAlign);
+           c->clearNoFallBackProperties( KSpreadCell::PAlign );
         }
       }
 
@@ -4718,6 +4723,7 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
         {
         ColumnLayout *cl=nonDefaultColumnLayout(i);
         cl->setIndent( tmpIndent+valIndent);
+	cl->setAlign(KSpreadCell::Left);
         }
 
         RowLayout* rw =m_rows.first();
@@ -4734,6 +4740,7 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
                                 m_cells.insert( cell, i,  rw->row() );
                                 }
                         cell->setIndent( tmpIndent+valIndent);
+			cell->setAlign( KSpreadCell::Left);
                         }
                 }
         }
@@ -4755,7 +4762,12 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
                     cell = new KSpreadCell( this, x, y );
                     m_cells.insert( cell, x, y );
                 }
-
+		//indent works when align is Left
+		if(cell->align(x,y)!=KSpreadCell::Left)
+		  {
+		    cell->setAlign(KSpreadCell::Left);
+		    cell->setIndent(0);
+		  }
                 cell->setDisplayDirtyFlag();
                 cell->setIndent( cell->getIndent(x,y)+valIndent);
                 cell->clearDisplayDirtyFlag();
