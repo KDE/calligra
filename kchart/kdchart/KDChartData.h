@@ -42,6 +42,9 @@ class KDChartData
 {
 public:
     enum ValueType { NoValue, String, Double, DateTime };
+    KDChartData( QDateTime value ) :
+        _valueType( DateTime ), dtValue( value )
+    {}
     KDChartData( double value ) :
         _valueType( Double ), dValue( value )
     {}
@@ -71,6 +74,25 @@ public:
     bool isDateTime() const
     {
         return _valueType == DateTime;
+    }
+
+    KDChartData& operator=( const KDChartData& R )
+    {
+        _valueType = R._valueType;
+        switch ( valueType() ) {
+        case String:
+            sValue  = R.sValue;
+            break;
+        case Double:
+            dValue  = R.dValue;
+            break;
+        case DateTime:
+            dtValue = R.dtValue;
+            break;
+        default:
+            /* NOOP */;
+        }
+        return *this;
     }
 
     bool operator==( const KDChartData& it ) const
