@@ -613,6 +613,14 @@ KarbonView::zoomChanged( const KoPoint &p )
 		centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
 		zoomFactor = zoom() * double( m_canvas->visibleWidth() ) / double( m_canvas->contentsWidth() );
 	}
+	else if( m_zoomAction->currentText() == "Whole page" )
+	{
+		centerX = 0.5;
+		centerY = 0.5;
+		double zoomFactorX = zoom() * double( m_canvas->visibleWidth() ) / double( m_canvas->contentsWidth() );
+		double zoomFactorY = zoom() * double( m_canvas->visibleHeight() ) / double( m_canvas->contentsHeight() );
+		zoomFactor = kMin( zoomFactorX, zoomFactorY );
+	}
 	else
 	{
 		centerX = double( m_canvas->contentsX() + m_canvas->visibleWidth() / 2 ) / double( m_canvas->contentsWidth() );
@@ -786,6 +794,7 @@ KarbonView::initActions()
 	<< i18n( "   300%" )
 	<< i18n( "   400%" )
 	<< i18n( "   800%" )
+	<< i18n( "Whole page" )
 	<< i18n( "  Width" );
 
 	m_zoomAction->setItems( stl );
