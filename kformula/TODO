@@ -1,14 +1,14 @@
-TODO List  (20 Dec 1998)
+TODO List  (5 Jen 1999)
 
 Elements:
 -BracketElement add types {}<> & other
--Decoration
+-Decoration  //Started!!
 -Symbol
 -implement saveMe()
 -implement openMe()  //Bad name :-(
 -usedColor fucntion 
--Shape in qpen
--Bitmap drawing (for root,integral etc)
+-Use shape & qpen better
+-Bitmap drawing (for root,integral etc) // In a far future....
 -Slash fraction
 -Sum,product
 
@@ -21,6 +21,7 @@ Interface/doc:
 -(de)Activate element menu entries
 -Solve Focus/input problems
 -Template (for lim, sup , inf, etc...)
+-Delete Element !!!!!
 
 General:
 -Remove numbers & replace with defined const
