@@ -14,7 +14,7 @@ fi
 # first check which main application we could compile
 for args in $SUBDIRLIST ; do
     case $args in
-        kontour) COMPILE_LIB_FOR_KONTOUR="$args " ;;
+        krita) COMPILE_LIB_FOR_KRITA="$args " ;;
         karbon) COMPILE_LIB_FOR_KARBON="$args " ;;
         kivio) COMPILE_LIB_FOR_KIVIO="$args " ;;
     esac
@@ -23,13 +23,13 @@ done
 # now remove the applications the user has asked not to compile
 for args in $DO_NOT_COMPILE ; do
     case $args in
-        kontour) COMPILE_LIB_FOR_KONTOUR= ;;
+        krita) COMPILE_LIB_FOR_KRITA= ;;
         karbon) COMPILE_LIB_FOR_KARBON= ;;
         kivio) COMPILE_LIB_FOR_KIVIO= ;;
     esac
 done
 
-if test -n "$COMPILE_LIB_FOR_KONTOUR$COMPILE_LIB_FOR_KARBON$COMPILE_LIB_FOR_KIVIO" ; then
+if test -n "$COMPILE_LIB_FOR_KRITA$COMPILE_LIB_FOR_KARBON$COMPILE_LIB_FOR_KIVIO" ; then
     USERFEEDBACKCOMPILELIB="yes"
 else
     USERFEEDBACKCOMPILELIB="no"
