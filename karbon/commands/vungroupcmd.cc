@@ -26,7 +26,7 @@
 
 
 VUnGroupCmd::VUnGroupCmd( VDocument *doc )
-	: VCommand( doc, i18n( "ungroup Objects" ) )
+	: VCommand( doc, i18n( "Ungroup Objects" ) )
 {
 	m_group = dynamic_cast<VGroup *>( m_doc->selection()->objects().getFirst() );
 	if( m_group )
