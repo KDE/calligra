@@ -16,5 +16,3 @@ METASOURCES = AUTO
 
 service_DATA = killustrator_wmf_import.desktop
 servicedir = $(kde_servicesdir)
-data_DATA = x-wmf.desktop
-datadir = $(kde_mimedir)/image
