@@ -586,9 +586,11 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     // all <table:table> goes to workbook
     if ( !d->workbook->loadOasis( body, oasisStyles ) )
     {
-      d->isLoading = false;
-      return false;
+        d->isLoading = false;
+        return false;
     }
+    loadOasisAreaName( body );
+
 
     emit sigProgress( 90 );
     initConfig();
@@ -1779,6 +1781,53 @@ QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
         element.appendChild(e);
    }
    return element;
+}
+
+void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
+{
+    QDomNode namedAreas = body.namedItem( "table:named-expressions" );
+    if ( !namedAreas.isNull() )
+    {
+        QDomNode area = namedAreas.firstChild();
+        while ( !area.isNull() )
+        {
+            QDomElement e = area.toElement();
+            if ( e.isNull() || !e.hasAttribute( "table:name" ) || !e.hasAttribute( "table:cell-range-address" ) )
+            {
+                kdDebug() << "Reading in named area failed" << endl;
+                area = area.nextSibling();
+                continue;
+            }
+
+            // TODO: what is: table:base-cell-address
+            QString name  = e.attribute( "table:name" );
+            QString areaPoint = e.attribute( "table:cell-range-address" );
+
+            //todo create a kspread_info.h
+            //m_namedAreas.append( name );
+            kdDebug() << "Reading in named area, name: " << name << ", area: " << areaPoint << endl;
+
+            QString range( KSpreadSheet::translateOpenCalcPoint( areaPoint ) );
+
+            if ( range.find( ':' ) == -1 )
+            {
+                KSpreadPoint p( range );
+
+                int n = range.find( '!' );
+                if ( n > 0 )
+                    range = range + ":" + range.right( range.length() - n - 1);
+
+                kdDebug() << "=> Area: " << range << endl;
+            }
+
+            KSpreadRange p( range );
+
+            addAreaName( p.range, name, p.tableName );
+            kdDebug() << "Area range: " << p.tableName << endl;
+
+            area = area.nextSibling();
+        }
+    }
 }
 
 void KSpreadDoc::loadAreaName( const QDomElement& element )

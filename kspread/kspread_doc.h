@@ -438,6 +438,7 @@ public:
   virtual bool loadChildren( KoStore* _store );
   QDomElement saveAreaName( QDomDocument& doc ) ;
   void loadAreaName( const QDomElement& element );
+  void loadOasisAreaName( const QDomElement& element );
   virtual void addView( KoView *_view );
 
   virtual bool initDoc();

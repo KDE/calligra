@@ -1333,7 +1333,7 @@ public:
 	virtual QString getUndoTitle( ) =0;
 	class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r );
     };
-
+    static QString translateOpenCalcPoint( const QString & str );
 protected:
     typedef enum { CompleteRows, CompleteColumns, CellRegion } SelectionType;
     SelectionType workOnCells( KSpreadSelection* selectionInfo,
@@ -1353,8 +1353,6 @@ private:
     void checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, int & ret);
     int  adjustColumnHelper( KSpreadCell * c, int _col, int _row );
     void checkContentDirection( QString const & name );
-    QString translateOpenCalcPoint( const QString & str );
-
 };
 
 typedef KSpreadSheet KSpreadTable;
