@@ -36,7 +36,8 @@ extern "C"
 static const char* description=I18N_NOOP("Example KOffice Program");
 static const char* version="0.1";
 
-KInstance* ExampleFactory::s_global = 0;
+KInstance* ExampleFactory::s_global = 0L;
+KAboutData* ExampleFactory::s_aboutData = 0L;
 
 ExampleFactory::ExampleFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
@@ -46,9 +47,13 @@ ExampleFactory::ExampleFactory( QObject* parent, const char* name )
 
 ExampleFactory::~ExampleFactory()
 {
+    if ( s_aboutData )
+    {
+      delete s_aboutData;
+      s_aboutData = 0L;
+    }
     if ( s_global )
     {
-      delete s_global->aboutData();
       delete s_global;
       s_global = 0L;
     }
@@ -74,11 +79,14 @@ KParts::Part* ExampleFactory::createPart( QWidget *parentWidget, const char *wid
 
 KAboutData* ExampleFactory::aboutData()
 {
-    // Change this, of course
-    KAboutData *aboutData = new KAboutData( "example", I18N_NOOP("Example"),
-        version, description, KAboutData::License_GPL,
-        "(c) 1998-2000, Torben Weis");
-    aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
+    if ( !s_aboutData )
+    {
+    	// Change this, of course
+    	KAboutData *aboutData = new KAboutData( "example", I18N_NOOP("Example"),
+            version, description, KAboutData::License_GPL,
+            "(c) 1998-2000, Torben Weis");
+    	    aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
+    }
     return aboutData;
 }
 
