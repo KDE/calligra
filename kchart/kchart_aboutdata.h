@@ -11,7 +11,7 @@
 #include <klocale.h>
 
 static const char* description=I18N_NOOP("KOffice Chart Generator");
-static const char* version="0.9";
+static const char* version="1.1.1";
 
 KAboutData * newKChartAboutData()
 {
