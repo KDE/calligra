@@ -1,4 +1,5 @@
 ####### General stuff
+SUBDIRS = xsl
 
 INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KDE_INCLUDES)/libxml2 $(KDE_INCLUDES)/libxslt $(all_includes) $(LIBXML_CFLAGS) $(LIBXSLT_CFLAGS)
 

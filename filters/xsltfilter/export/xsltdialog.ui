@@ -46,11 +46,6 @@
                     <number>6</number>
                 </property>
                 <widget class="QListBox">
-                    <item>
-                        <property name="text">
-                            <string>Export XSL:FO</string>
-                        </property>
-                    </item>
                     <property name="name">
                         <cstring>xsltList</cstring>
                     </property>

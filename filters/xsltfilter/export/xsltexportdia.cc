@@ -25,13 +25,17 @@
 #include <stdlib.h>
 
 #include <qcombobox.h>
-#include <kapplication.h>
 #include <qstringlist.h>
+#include <qdir.h>
+
+#include <kapplication.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 #include <krecentdocument.h>
 #include <koFilterManager.h>
 #include <kdebug.h>
+
 #include <xsltproc.h>
 
 /*
@@ -68,7 +72,36 @@ XSLTExportDia::XSLTExportDia(KoStore* in, const QCString &format, QWidget* paren
 	}
 
 	/* Common xslt files box */
+	QString appName = (const char*) KGlobal::instance()->instanceName();
+	kdDebug() << "app name = " << appName << endl;
 	
+	QString filenames = QString("xsltfilter") + QDir::separator() + QString("export") +
+			QDir::separator() + appName + QDir::separator() + "*/*.xsl";
+	QStringList commonFilesList = KGlobal::dirs()->findAllResources("data", filenames, true);
+	kdDebug() << "There are " << commonFilesList.size() << " entries like  " << filenames << endl;
+	
+	QStringList tempList;
+	QString name;
+	QString file;
+
+	for(QStringList::Iterator it = commonFilesList.begin(); it != commonFilesList.end(); ++it)
+	{
+		tempList = QStringList::split("/", (*it));
+		file = tempList.last();
+		tempList.pop_back();
+		name = tempList.last();
+		tempList.pop_back();
+		kdDebug() << name << " " << file << endl;
+		if(!_namesList.contains(name) && file == "main.xsl")
+		{
+			_filesList.append(file);
+			_namesList.append(name);
+			_dirsList.append(tempList.join("/"));
+			kdDebug() << file << " get" << endl;
+		}
+	}
+	
+	xsltList->insertStringList(_namesList);
 }
 
 /*
@@ -79,6 +112,7 @@ XSLTExportDia::~XSLTExportDia()
     //delete _in;
 	delete _config;
 }
+
 /**
  * Called when thecancel button is clicked.
  * Close the dialog box.
@@ -153,8 +187,10 @@ void XSLTExportDia::chooseRecentSlot()
  */
 void XSLTExportDia::chooseCommonSlot()
 {
-	kdDebug() << "common slot : " << _commonDir << "/" << xsltList->currentText() << endl;
-	_currentFile = _commonDir + "/" + xsltList->currentText();
+	int num = xsltList->currentItem();
+	_currentFile = QDir::separator() + _dirsList[num] + QDir::separator() +
+			xsltList->currentText() + QDir::separator() + _filesList[num];
+	kdDebug() << "common slot : " << _currentFile.url() << endl;
 }
 
 /**
@@ -164,9 +200,11 @@ void XSLTExportDia::chooseCommonSlot()
 void XSLTExportDia::okSlot()
 {
 	hide();
+	if(_currentFile.url().isEmpty())
+		return;
 	kdDebug() << "XSLT FILTER --> BEGIN" << endl;
 	_in->open("root");
-	QString stylesheet = _currentFile.directory() + "/" + _currentFile.fileName();
+	QString stylesheet = _currentFile.directory() + QDir::separator() + _currentFile.fileName();
 
 	/* Add the current file in the recent list if is not and save the list. */
 	if(_recentList.contains(stylesheet) == 0)

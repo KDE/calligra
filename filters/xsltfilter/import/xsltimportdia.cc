@@ -16,6 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+
 #include "xsltimportdia.h"
 #include "xsltimportdia.moc"
 
@@ -23,13 +24,17 @@
 #include <stdlib.h>
 
 #include <qcombobox.h>
-#include <kapplication.h>
 #include <qstringlist.h>
+#include <dir.h>
+
+#include <kapplication.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 #include <krecentdocument.h>
 #include <koFilterManager.h>
 #include <kdebug.h>
+
 #include <xsltproc.h>
 
 /*
@@ -66,6 +71,36 @@ XSLTImportDia::XSLTImportDia(KoStore* out, const QCString &format, QWidget* pare
 	}
 
 	/* Common xslt files box */
+	QString appName = (const char*) KGlobal::instance()->instanceName();
+	kdDebug() << "app name = " << appName << endl;
+	
+	QString filenames = QString("xsltfilter") + QDir::separator() + QString("import") +
+			QDir::separator() + appName + QDir::separator() + "*/*.xsl";
+	QStringList commonFilesList = KGlobal::dirs()->findAllResources("data", filenames, true);
+	kdDebug() << "There are " << commonFilesList.size() << " entries like  " << filenames << endl;
+	
+	QStringList tempList;
+	QString name;
+	QString file;
+
+	for(QStringList::Iterator it = commonFilesList.begin(); it != commonFilesList.end(); ++it)
+	{
+		tempList = QStringList::split("/", (*it));
+		file = tempList.last();
+		tempList.pop_back();
+		name = tempList.last();
+		tempList.pop_back();
+		kdDebug() << name << " " << file << endl;
+		if(!_namesList.contains(name) && file == "main.xsl")
+		{
+			_filesList.append(file);
+			_namesList.append(name);
+			_dirsList.append(tempList.join("/"));
+			kdDebug() << file << " get" << endl;
+		}
+	}
+	
+	xsltList->insertStringList(_namesList);
 }
 
 /*
@@ -77,12 +112,21 @@ XSLTImportDia::~XSLTImportDia()
 	delete _config;
 }
 
+/**
+ * Called when thecancel button is clicked.
+ * Close the dialog box.
+ */
 void XSLTImportDia::cancelSlot()
 {
 	kdDebug() << "import cancelled" << endl;
 	reject();
 }
 
+/**
+ * Called when the choose button is clicked. A file dialog is open to allow to choose
+ * the xslt to use.
+ * Change the value of the current file.
+ */
 void XSLTImportDia::chooseSlot()
 {
 
@@ -142,8 +186,10 @@ void XSLTImportDia::chooseRecentSlot()
  */
 void XSLTImportDia::chooseCommonSlot()
 {
-	kdDebug() << "common slot : " << _commonDir << "/" << xsltList->currentText() << endl;
-	_currentFile = _commonDir + "/" + xsltList->currentText();
+	int num = xsltList->currentItem();
+	_currentFile = QDir::separator() + _dirsList[num] + QDir::separator() +
+			xsltList->currentText() + QDir::separator() + _filesList[num];
+	kdDebug() << "common slot : " << _currentFile.url() << endl;
 }
 
 /**
@@ -153,6 +199,8 @@ void XSLTImportDia::chooseCommonSlot()
 void XSLTImportDia::okSlot()
 {
 	hide();
+	if(_currentFile.url().isEmpty())
+		return;
 	kdDebug() << "XSLT FILTER --> BEGIN" << endl;
 	_out->open("root");
 	QString stylesheet = _currentFile.directory() + "/" + _currentFile.fileName();

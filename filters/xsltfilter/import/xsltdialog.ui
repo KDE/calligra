@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Import XSLT Configuration</string>
+        <string>Export XSLT Configuration</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>false</bool>
@@ -46,11 +46,6 @@
                     <number>6</number>
                 </property>
                 <widget class="QListBox">
-                    <item>
-                        <property name="text">
-                            <string>Import XSL:FO</string>
-                        </property>
-                    </item>
                     <property name="name">
                         <cstring>xsltList</cstring>
                     </property>
@@ -215,6 +210,9 @@
         <slot>chooseCommonSlot()</slot>
     </connection>
 </connections>
+<includes>
+    <include location="local" impldecl="in implementation">xsltdialog.ui.h</include>
+</includes>
 <slots>
     <slot>cancelSlot()</slot>
     <slot>chooseRecentSlot()</slot>

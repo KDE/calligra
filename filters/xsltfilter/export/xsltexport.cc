@@ -26,7 +26,6 @@
 #include <klocale.h>
 #include <qtextcodec.h>
 #include "xsltexportdia.h"
-//#include <kwfactory.h>
 
 typedef KGenericFactory<XSLTExport, KoFilter> XSLTExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libxsltexport, XSLTExportFactory( "xsltexportfilter" ) );
@@ -39,16 +38,15 @@ XSLTExport::XSLTExport(KoFilter *, const char *, const QStringList&) :
 KoFilter::ConversionStatus XSLTExport::convert( const QCString& from, const QCString& to )
 {
     QString config;
-    kdDebug() << "In my filter" << endl;
     if(from != "application/x-kword" &&
 		from != "application/x-kontour" && from != "application/x-kspread" &&
 		from != "application/x-kivio" && from != "application/x-kchart" &&
 		from != "application/x-kpresenter")
         return KoFilter::NotImplemented;
-    kdDebug() << "filter accepted" << endl;
+	kdDebug() << "In the xslt filter" << endl;
     KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
-    if(!in || in->open("root")) {
-        kdError(30503) << "Unable to open input file!" << endl;
+    if(!in || !in->open("root")) {
+        kdError() << "Unable to open input file!" << endl;
         delete in;
         return KoFilter::FileNotFound;
     }

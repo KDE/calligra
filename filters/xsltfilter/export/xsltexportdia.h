@@ -35,13 +35,16 @@ class XSLTExportDia : public XSLTDialog
 	KoStore* _in;
 	/** xslt file current */
 	KURL _currentFile;
-	/** Path of the directory which containts common xslt files. */
-	QString _commonDir;
 	QCString _format;
 	KConfig* _config;
 	/** List of the most recent xslt file used. */
 	QStringList _recentList;
-
+	
+	/** Lits use for common xslt files. */
+	QStringList _dirsList;
+	QStringList _filesList;
+	QStringList _namesList;
+	
 public:
     XSLTExportDia( KoStore*, const QCString &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~XSLTExportDia();
