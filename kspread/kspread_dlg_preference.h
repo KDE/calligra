@@ -111,6 +111,26 @@ protected:
   KConfig* config;
 } ;
 
+class configureLayoutPage : public QWidget
+{
+  Q_OBJECT
+public:
+  configureLayoutPage( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  void apply();
+  void slotDefault();
+  void initCombo();
+protected:
+  KSpreadView* m_pView;
+  QComboBox *defaultOrientationPage;
+  QComboBox *defaultSizePage;
+  
+  //store old config
+  unsigned int paper;
+  unsigned int orientation;
+  
+  KConfig* config;
+} ;
+
 
 class KSpreadpreference : public KDialogBase
 {
@@ -126,6 +146,7 @@ private :
   configure * _configure;
   miscParameters *_miscParameter;
   colorParameters *_colorParameter;
+  configureLayoutPage *_layoutPage;
 };
 
 

@@ -1152,3 +1152,7 @@ used "cell layout" dialogbox -> misc -> "don't print text"
 ----------------------------------------------------
 -Add new functions : ISDATE ISTIME DECSEX (convert decimal to time value)
 SEXDEC( converts time value to decimal)
+
+2001-01-24-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+now you can define "Default page layout parameters" (size and orientation)

@@ -59,15 +59,18 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
 
   page=addVBoxPage(i18n("Color"), QString::null,BarIcon("misc",KIcon::SizeMedium) );
   _colorParameter=new colorParameters(parent,page );
+  page=addVBoxPage(i18n("Page layout"), QString::null,BarIcon("misc",KIcon::SizeMedium) );
+  _layoutPage=new configureLayoutPage(parent,page );
 }
 
 void KSpreadpreference::slotApply()
 {
-_preferenceConfig->apply();
-_configure->apply();
-_miscParameter->apply();
-_colorParameter->apply();
-m_pView->doc()->refreshInterface();
+  _preferenceConfig->apply();
+  _configure->apply();
+  _miscParameter->apply();
+  _colorParameter->apply();
+  _layoutPage->apply();
+  m_pView->doc()->refreshInterface();
 }
 
 void KSpreadpreference::slotDefault()
@@ -76,6 +79,7 @@ void KSpreadpreference::slotDefault()
   _configure->slotDefault();
   _miscParameter->slotDefault();
   _colorParameter->slotDefault();
+  _layoutPage->slotDefault();
 }
 
  preference::preference( KSpreadView* _view,QWidget *parent , char *name )
@@ -632,6 +636,98 @@ void colorParameters::apply()
 void colorParameters::slotDefault()
 {
     gridColor->setColor(lightGray);
+}
+
+
+
+configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , char *name )
+ :QWidget ( parent,name)
+{
+  m_pView = _view;
+
+  QVBoxLayout *box = new QVBoxLayout( this );
+  box->setMargin( 5 );
+  box->setSpacing( 10 );
+
+  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  tmpQGroupBox->setTitle(i18n("Default parameters"));
+  QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
+  lay1->setMargin( 20 );
+  lay1->setSpacing( 10 );
+  config = KSpreadFactory::global()->config();
+
+  QLabel *label=new QLabel(tmpQGroupBox);
+  label->setText(i18n("Default size page:"));
+  lay1->addWidget(label);
+  
+  defaultSizePage=new QComboBox( tmpQGroupBox);
+  QStringList listType;
+  listType+=i18n( "DIN A3" );
+  listType+=i18n( "DIN A4" );
+  listType+=i18n( "DIN A5" );
+  listType+=i18n( "US Letter");
+  listType+=i18n( "US Legal");
+  listType+=i18n( "Screen" );
+  listType+=i18n( "Custom" );
+  listType+=i18n( "DIN B5" );
+  listType+=i18n( "US Executive" );
+  defaultSizePage->insertStringList(listType);
+  defaultSizePage->setCurrentItem(1);
+  lay1->addWidget(defaultSizePage);
+  
+  label=new QLabel(tmpQGroupBox);
+  label->setText(i18n("Default page orientation:"));
+  lay1->addWidget(label);
+  
+  defaultOrientationPage=new QComboBox( tmpQGroupBox);
+  listType.clear();
+  listType+=i18n( "Portrait" );
+  listType+=i18n( "Landscape" );
+  defaultOrientationPage->insertStringList(listType);
+  defaultOrientationPage->setCurrentItem(0);
+  lay1->addWidget(defaultOrientationPage);
+  initCombo();
+  box->addWidget( tmpQGroupBox);
+
+}
+
+void configureLayoutPage::slotDefault()
+{
+  defaultSizePage->setCurrentItem(1);
+  defaultOrientationPage->setCurrentItem(0);
+}
+
+void configureLayoutPage::initCombo()
+{
+  paper=0;
+  orientation=0;
+  if( config->hasGroup("Parameters" ))
+        {
+        config->setGroup( "Parameters" );
+	paper=config->readNumEntry( "Default size page" ,0);
+	orientation=config->readNumEntry( "Default orientation page" ,0);
+	}
+  defaultSizePage->setCurrentItem(paper);
+  defaultOrientationPage->setCurrentItem(orientation);
+}
+
+
+void configureLayoutPage::apply()
+{
+  config->setGroup( "Parameters" );
+
+ if(paper!=defaultSizePage->currentItem())
+   {
+     unsigned int sizePage=defaultSizePage->currentItem();
+     config->writeEntry( "Default size page", sizePage);
+     m_pView->doc()->setPaperFormat((KoFormat)sizePage);
+   }
+ if(orientation!=defaultOrientationPage->currentItem())
+   {
+     unsigned int orientationPage=defaultOrientationPage->currentItem();
+     config->writeEntry( "Default orientation page", orientationPage);
+     m_pView->doc()->setPaperOrientation((KoOrientation)orientationPage);
+   }
 }
 
 

@@ -152,6 +152,12 @@ public:
    */
   QString paperFormatString();
 
+
+  void setPaperFormat(KoFormat _format) {m_paperFormat=_format;}
+
+  void setPaperOrientation(KoOrientation _orient) { m_orientation=_orient;}
+
+
   /**
    * Changes the paper layout and repaints the currently displayed KSpreadTable.
    */

@@ -493,6 +493,9 @@ if( config->hasGroup("Parameters" ))
 	m_pDoc->changeDefaultGridPenColor(_col);
 	m_pDoc->setShowMessageError(config->readBoolEntry( "Msg error" ,false) );
 	m_pDoc->setShowCommentIndicator(config->readBoolEntry("Comment Indicator",true));
+
+	m_pDoc->setPaperFormat((KoFormat)config->readNumEntry("Default size page",1));
+	m_pDoc->setPaperOrientation((KoOrientation)config->readNumEntry("Default orientation page",0));
 	}
 }
 
