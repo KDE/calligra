@@ -2417,12 +2417,12 @@ void KPTextView::dropEvent( QDropEvent * e )
         QString returnedTypeMime;
         if ( KPrTextDrag::provides( e , KPrTextDrag::selectionMimeType(), KPrTextDrag::acceptSelectionMimeType(),  returnedTypeMime) )
         {
-            kdDebug()<<" dropevent !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
             QByteArray arr = e->encodedData( returnedTypeMime.latin1() );
             if ( arr.size() )
             {
-                kdDebug()<<" arr.size !!!!!!!!!!!!\n";
-                macroCmd->addCommand(kpTextObject()->pasteOasis( cursor(), QCString(arr, arr.size()+1), false ));
+                KCommand *cmd = kpTextObject()->pasteOasis( cursor(), QCString(arr, arr.size()+1), false );
+                if ( cmd )
+                    macroCmd->addCommand(cmd);
             }
         }
         else
