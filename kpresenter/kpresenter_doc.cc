@@ -1020,6 +1020,51 @@ void KPresenterDoc::createHeaderFooter()
     m_stickyPage->appendObject(_footer);
 }
 
+void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement elem, KMacroCommand * macroCmd, double offset )
+{
+    while(!elem.isNull()) {
+        kdDebug(33001) << "Element name: " << elem.tagName() << endl;
+        if(elem.tagName()=="EMBEDDED") {
+            KPresenterChild *ch = new KPresenterChild( this );
+            KPPartObject *kppartobject = 0L;
+            QRect r;
+
+            QDomElement object=elem.namedItem("OBJECT").toElement();
+            if(!object.isNull()) {
+                ch->load(object, true);  // true == uppercase
+                r = ch->geometry();
+                insertChild( ch );
+                kppartobject = new KPPartObject( ch );
+            }
+            QDomElement settings=elem.namedItem("SETTINGS").toElement();
+            int tmp=0;
+            if(settings.hasAttribute("sticky"))
+                tmp=settings.attribute("sticky").toInt();
+            bool sticky=static_cast<bool>(tmp);
+            double offset = 0.0;
+            if(!settings.isNull() && kppartobject!=0)
+                offset=kppartobject->load(settings);
+            else if ( settings.isNull() ) // all embedded obj must have SETTING tags
+            {
+                delete kppartobject;
+                kppartobject = 0L;
+            }
+            if ( sticky && !ignoreSticky && kppartobject )
+            {
+                m_stickyPage->appendObject(kppartobject );
+                kppartobject->setOrig(r.x(), offset);
+                kppartobject->setSize( r.width(), r.height() );
+                kppartobject->setSticky(sticky);
+            }
+            else if ( kppartobject ) {
+                kppartobject->setOrig( r.x(), 0 );
+                kppartobject->setSize( r.width(), r.height() );
+                insertObjectInPage(offset, kppartobject);
+            }
+        }
+    }
+}
+
 /*========================== load ===============================*/
 bool KPresenterDoc::loadXML( const QDomDocument &doc )
 {
