@@ -20,6 +20,11 @@ Small Feature Wishes
 * Make UnitBoxes etc i18n (i.e. comma or \cdot instead of dot as decimal
   seperator; maybe: output '.', except ',' and '·' as '.')
 
+* Support in Page Dialog: Add Page size rectangle
+  maybe: Change the pagedialog (from koffice) to a KIll. one,
+  with support for pagecolor and other units as well as more
+  pageformats (Keep in mind things like pagearrangements and facing pages)
+
 --------------------------------
 Bugs and features from the bug and wish website
 * [optional] Cross cursors [Torsten Rahn supas121@astrophysik.uni-kiel.de].  

@@ -44,13 +44,13 @@ FloatSpinBox::FloatSpinBox (QWidget* parent, const char* name,
   format = "%3.2f";
   setValue ((float) 1);
   setSteps (10, 10);
-   val = new QDoubleValidator (minval, maxval, 2, this);
+  val = new QDoubleValidator (minval, maxval, 2, this);
   setValidator (val);
   //  connect (this, SIGNAL (valueIncreased ()), SLOT(slotIncrease ()));
   //  connect (this, SIGNAL (valueDecreased ()), SLOT(slotDecrease ()));
   //  connect (this, SIGNAL (valueChanged (int)), this, SLOT(reportChanges ()));
-  connect ((QObject *) editor (), SIGNAL (returnPressed ()), this,
-	   SLOT (slotValueChange ()));
+  /*connect ((QObject *) editor (), SIGNAL (returnPressed ()), this,
+	   SLOT (slotValueChange ()));*/
 }
 
 FloatSpinBox::~FloatSpinBox () {
@@ -105,14 +105,16 @@ void FloatSpinBox::slotDecrease () {
   setValue ((float) getValue () - step);
 }
 
-void FloatSpinBox::slotValueChange () {
-debug("FloatSpinBox::slotValueChange");
-  emit valueChanged (getValue ());
+void FloatSpinBox::valueChange () {
+    updateDisplay();
+    emit valueChanged( (float) getValue() );
 }
 
-void FloatSpinBox::reportChanges () {
+
+
+/*void FloatSpinBox::reportChanges () {
   printf ("SpinBox::changed\n");
-}
+}*/
 
 int FloatSpinBox::mapTextToValue (bool *ok) {
   const char *txt = TEXT (text ());

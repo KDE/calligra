@@ -82,8 +82,17 @@ Bugs from above bug page:
   More bugs: You cannot select a point using a fine grid
 
 * Arrange|Transform:
-  Proportional doesn't work: Reason: FloatSpinBox only emits an valueChanged,
-  if Return is hit, and UnitBox doesn't seem to re-broadcast it
+  Proportional doesn't really reliably work.
+  In Transformation.cc everything in updateProportionalDimension
+  seems to work correct, but somehow the value isn't updated!
 
 * FloatSpinbox: '-' always decreases the value; it should be used to type in a
-  negativ number!
+  negativ number! Enter sometimes decreases the values!
+
+* When using Transformation|Mirror it should be possible to mirror right on the
+  place, presently horizontal mirroring moves upwards (analog for vert.)
+
+* Draging helplines out of the ruler doesn't work (yet)
+  Need to implement the slot in canvas and the connection in
+  standardalone/* and koffice/*.
+  Draging  Helplines doesn't work either.

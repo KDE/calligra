@@ -53,13 +53,14 @@ public slots:
   void slotIncrease ();
   void slotDecrease ();
 
-protected slots:
-  void slotValueChange ();
-  void reportChanges ();
+//protected slots:
+//  void ValueChange ();
+//  void reportChanges ();
 
 protected:
   int mapTextToValue (bool *ok);
   QString mapValueToText (int v);
+  void valueChange ();
 
 private:
   float step, minval, maxval, value_;

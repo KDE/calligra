@@ -539,3 +539,29 @@ void Ruler::hide () {
     setFixedWidth (1);
   QWidget::hide ();
 }
+
+void Ruler::mousePressEvent ( QMouseEvent * ){
+  isMousePressed = true;
+}
+
+void Ruler::mouseMoveEvent ( QMouseEvent * me){
+   /* Implement the hooks so that a helpline can be drawn out of the ruler:
+      - if the mouse is on the widget, draw a helpline
+      - if it is outside remove the XOR'd helpline
+      - if the mouse it over the page view, set the helpline
+       (different place: update the helpline position in the status bar)*/
+   if (isMousePressed) {
+      debug("Ruler: drawHelpline");
+      emit drawHelpline(me->globalX(), me->globalY(),
+              (orientation==Horizontal) ? true : false );
+   }
+}
+
+void Ruler::mouseReleaseEvent ( QMouseEvent * me){
+  if (isMousePressed) {
+     isMousePressed = false;
+     debug("Ruler: addHelpline");
+     emit addHelpline(me->globalX(), me->globalY(),
+                  (orientation==Horizontal) ? true : false );
+  }
+}

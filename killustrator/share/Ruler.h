@@ -34,7 +34,6 @@
 class Ruler : public QFrame {
   Q_OBJECT
 public:
-  //  enum MeasurementUnit { Point, Centimeter, Inch };
   enum Orientation { Horizontal, Vertical };
 
   Ruler (Orientation o, MeasurementUnit mu = UnitPoint, QWidget *parent = 0L,
@@ -51,8 +50,18 @@ public slots:
   void hide ();
   void show ();
 
+signals:
+  /*emit signal for drawing a ruler, note: the position is in sceen positions
+    and might be out of the drawing area; in such a case the position should
+    be ignored by the slot of drawRuler and -- if drawn -- remove the
+    draw'ed-Ruler; note: the can be only one drawRuler at a time    
+    orientationHoriz = true <=> horizontal
+   */
+  void drawHelpline(int x, int y, bool orientationHoriz);
+  void addHelpline (int x, int y, bool orientationHoriz);
+
 protected:
-  void paintEvent (QPaintEvent *e);
+  void paintEvent  (QPaintEvent *e);
   void resizeEvent (QResizeEvent *e);
 
   void recalculateSize (QResizeEvent *e);
@@ -60,7 +69,13 @@ protected:
 
   void initMarker (int w, int h);
 
+protected slots:
+  void mousePressEvent ( QMouseEvent * );
+  void mouseReleaseEvent ( QMouseEvent * );
+  void mouseMoveEvent ( QMouseEvent * );
+
 private:
+  bool isMousePressed;
   float zoom;
   MeasurementUnit munit;
   Orientation orientation;

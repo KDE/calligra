@@ -623,20 +623,25 @@ void TransformationDialog::update () {
 }
 
 void TransformationDialog::updateProportionalDimension (float /*value*/) {
-  debug("updateProportionalDimension");
   if (proportional->isChecked ()) {
     if (sender () == horizDim) {
-      if (percent->isChecked ())
-	vertDim->setValue (horizDim->getValue ());
+    debug("updateProportionalDimension--Horizontal");
+      if (percent->isChecked ()){
+        debug("updateProportionalDimension--Percental");
+	vertDim->setValue (horizDim->getValue ());}
       else {
+        debug("updateProportionalDimension--Non-Percental");
 	float h = horizDim->getValue ();
 	vertDim->setValue (h / dimRatio);
       }
     }
     else if (sender () == vertDim) {
-      if (percent->isChecked ())
-	horizDim->setValue (vertDim->getValue ());
+      debug("updateProportionalDimension--vertical");
+      if (percent->isChecked ()){
+      debug("updateProportionalDimension--percental");
+	horizDim->setValue (vertDim->getValue ());}
       else {
+        debug("updateProportionalDimension--non-percental");
 	float v = vertDim->getValue ();
 	horizDim->setValue (v * dimRatio);
       }
