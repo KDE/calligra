@@ -62,7 +62,7 @@ typedef struct
   { 
     int type;
     long size, pos;
-    QArray<int> data;
+    QMemArray<int> data;
   } Packet;
 
   typedef struct
@@ -128,8 +128,8 @@ class WPImport : public KoFilter
     bool readHeader();
     bool parseDocument();
 
-    void handleFunction( int function, int subfunction, QArray<int>& data );
-    void handlePacket( int type, QArray<int>& data );
+    void handleFunction( int function, int subfunction, QMemArray<int>& data );
+    void handlePacket( int type, QMemArray<int>& data );
 
     void resetTextFormat();
     void resetParagraphLayout();

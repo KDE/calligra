@@ -232,7 +232,7 @@ bool WPImport::readHeader()
   kdDebug() << "WordPerfect import filter: checking document header" << endl;
 
   // get 16-byte header
-  QArray<int> header( 16 );
+  QMemArray<int> header( 16 );
   for( int c = 0; c < 16; c++ )
     header[c] = readByte();
 
@@ -268,7 +268,7 @@ bool WPImport::readHeader()
   // look for packets in prefix area
   for( long next_block = 16; next_block > 0; )
     {
-      QArray<int> buf( 10 );
+      QMemArray<int> buf( 10 );
 
       stream.device()->at( next_block );
       for( int c = 0; c < 10; c++ )
@@ -331,7 +331,7 @@ bool WPImport::readHeader()
 // parse the document
 bool WPImport::parseDocument()
 {
-  QArray<int> data;
+  QMemArray<int> data;
 
   // initialize
   m_text = "";
@@ -399,7 +399,7 @@ bool WPImport::parseDocument()
   return true;
 }
 
-void WPImport::handleFunction( int function, int subfunction, QArray<int>& data )
+void WPImport::handleFunction( int function, int subfunction, QMemArray<int>& data )
 {
   // hard return: write the paragraph out
   if( function == Code_HardReturn )
@@ -507,7 +507,7 @@ void WPImport::handleFunction( int function, int subfunction, QArray<int>& data 
 
 }
 
-void WPImport::handlePacket( int type, QArray<int>& data )
+void WPImport::handlePacket( int type, QMemArray<int>& data )
 {
 
   // document summary
