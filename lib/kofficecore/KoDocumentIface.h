@@ -78,7 +78,17 @@ k_dcop:
     QString documentInfoPostalCode() const;
     QString documentInfoCity() const;
     QString documentInfoStreet() const;
-
+    void setDocumentInfoAuthorName(const QString & text);
+    void setDocumentInfoEmail(const QString &text);
+    void setDocumentInfoCompanyName(const QString &text);
+    void setDocumentInfoTelephone(const QString &text);
+    void setDocumentInfoFax(const QString &text);
+    void setDocumentInfoCountry(const QString &text);
+    void setDocumentInfoTitle(const QString & text);
+    void setDocumentInfoPostalCode(const QString &text);
+    void setDocumentInfoCity(const QString & text);
+    void setDocumentInfoStreet(const QString &text);
+    void setDocumentInfoAbstract(const QString &text);
 
 protected:
     KoDocument * m_pDoc;

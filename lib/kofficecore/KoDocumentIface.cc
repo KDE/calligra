@@ -254,3 +254,144 @@ QString KoDocumentIface::documentInfoAbstract() const
     else
         return aboutPage->abstract();
 }
+
+void KoDocumentIface::setDocumentInfoAuthorName(const QString & text)
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    }
+    else
+        authorPage->setFullName(text);
+
+}
+
+void KoDocumentIface::setDocumentInfoEmail(const QString &text)
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    }
+    else
+        authorPage->setEmail(text);
+}
+
+void KoDocumentIface::setDocumentInfoCompanyName(const QString &text)
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    }
+    else
+        authorPage->setCompany(text);
+}
+
+void KoDocumentIface::setDocumentInfoTelephone(const QString &text)
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    }
+    else
+        authorPage->setTelephone(text);
+
+}
+
+void KoDocumentIface::setDocumentInfoFax(const QString &text)
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    }
+    else
+        authorPage->setFax(text);
+}
+
+void KoDocumentIface::setDocumentInfoCountry(const QString &text)
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    }
+    else
+        authorPage->setCountry(text);
+
+}
+
+void KoDocumentIface::setDocumentInfoTitle(const QString & text)
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
+    if ( !aboutPage )
+    {
+        kdWarning() << "'About' page not found in documentInfo !" << endl;
+    }
+    else
+        aboutPage->setTitle(text);
+}
+
+void KoDocumentIface::setDocumentInfoPostalCode(const QString &text)
+{
+        KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    }
+    else
+        authorPage->setPostalCode(text);
+
+}
+
+
+void KoDocumentIface::setDocumentInfoCity(const QString & text)
+{
+        KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    }
+    else
+        authorPage->setCity(text);
+
+}
+void KoDocumentIface::setDocumentInfoStreet(const QString &text)
+{
+        KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    }
+    else
+        authorPage->setStreet(text);
+
+}
+
+
+void KoDocumentIface::setDocumentInfoAbstract(const QString &text)
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
+    if ( !aboutPage )
+    {
+        kdWarning() << "'About' page not found in documentInfo !" << endl;
+    }
+    else
+       aboutPage->setAbstract(text);
+}
+
+
