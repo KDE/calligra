@@ -216,6 +216,12 @@ public:
 
     /** override save so we save in table style.. */
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
+    /** load one cell */
+    Cell* loadCell( QDomElement &frameElem, bool loadFrames = true );
+
+    /** from and to XML - used when copying and pasting a table */
+    virtual void toXML( QDomElement &parentElem, bool saveFrames = true );
+    virtual void fromXML( QDomElement &framesetElem, bool loadFrames = true );
 
     virtual void zoom( bool forPrint );
     virtual void preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags );

@@ -430,9 +430,17 @@ public:
     /** which popup (from the XML file) should be shown when right-clicking inside this frame */
     virtual QString getPopupName() = 0;
 
-    /** create XML to describe yourself */
+    /** save to XML - when saving */
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
+    /** save to XML - when copying to clipboard (usually the same, but not for tables) */
+    virtual void toXML( QDomElement &parentElem, bool saveFrames = true )
+    { save( parentElem, saveFrames ); }
+
+    /** load from XML - when loading */
     virtual void load( QDomElement &framesetElem, bool loadFrames = true );
+    /** load from XML - when pasting from clipboard (usually the same, but not for tables) */
+    virtual void fromXML( QDomElement &framesetElem, bool loadFrames = true )
+    { load( framesetElem, loadFrames ); }
 
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
     virtual void zoom( bool forPrint );

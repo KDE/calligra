@@ -1517,17 +1517,13 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
                     break;
                 }
             }
+            // No such table yet -> create
             if ( !table ) {
                 table = new KWTableFrameSet( this, tableName );
                 frames.append( table );
             }
-            int _row = KWDocument::getAttribute( framesetElem, "row", 0 );
-            int _col = KWDocument::getAttribute( framesetElem, "col", 0 );
-            KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, _row, _col, fsname );
-            cell->load( framesetElem, loadFrames );
-            cell->m_rows = getAttribute( framesetElem, "rows", 1 );
-            cell->m_cols = getAttribute( framesetElem, "cols", 1 );
-            return cell;
+            // Load the cell
+            return table->loadCell( framesetElem );
         }
         else
         {
@@ -1565,22 +1561,15 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
         return fs;
     } break;
     // Note that FT_PART cannot happen when loading from a file (part frames are saved into the SETTINGS tag)
-    // But this can happen when pasting !
-    // However cloning a KoDocumentChild isn't yet supported...
-    case FT_PART: {
-        /*
-        KWPartFrameSet *fs = new KWPartFrameSet( this, ......, fsname );
-        fs->load( framesetElem, loadFrames );
-        frames.append( fs );
-        return fs;
-        */
-        kdWarning(32001) << "Copying part objects isn't implemented yet" << endl;
-    } break;
+    // and FT_TABLE can't happen either.
+    case FT_PART:
+        kdWarning(32001) << "loadFrameSet: FT_PART: impossible case" << endl;
+        break;
     case FT_TABLE:
-        kdWarning(32001) << "Copying tables isn't implemented yet" << endl;
+        kdWarning(32001) << "loadFrameSet: FT_TABLE: impossible case" << endl;
         break;
     case FT_BASE:
-        kdWarning(32001) << "FT_BASE !?!?" << endl;
+        kdWarning(32001) << "loadFrameSet: FT_BASE !?!?" << endl;
         break;
     }
     return 0L;
@@ -1679,35 +1668,58 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
         }
         else if ( elem.tagName() == "FRAMESET" )
         {
-            fs = loadFrameSet( elem, false );
-            frameElem = elem.namedItem( "FRAME" ).toElement();
+            FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( elem, "frameType", FT_BASE ) );
+            switch ( frameSetType ) {
+            case FT_TABLE: {
+                QString fsname = elem.attribute( "name" );
+                KWTableFrameSet *table = new KWTableFrameSet( this, fsname );
+                table->fromXML( elem, true );
+                frames.append( table );
+                if ( macroCmd )
+                    macroCmd->addCommand( new KWCreateTableCommand( QString::null, table ) );
+                fs = table;
+                break;
+            }
+            case FT_PART:
+                kdWarning(32001) << "Copying part objects isn't implemented yet" << endl;
+                break;
+            default:
+                fs = loadFrameSet( elem, false );
+                frameElem = elem.namedItem( "FRAME" ).toElement();
+            }
         }
-
-        if ( frameSetsToFinalize.findRef( fs ) == -1 )
-            frameSetsToFinalize.append( fs );
         // Test commented out since the toplevel element can contain "PARAGRAPH" now
         //else
         //kdWarning(32001) << "Unsupported toplevel-element in KWCanvas::pasteFrames : '" << elem.tagName() << "'" << endl;
 
-        if ( fs && !frameElem.isNull() )
+        if ( fs )
         {
-            double offs = 20.0;
-            KoRect rect;
-            rect.setLeft( KWDocument::getAttribute( frameElem, "left", 0.0 ) + offs );
-            rect.setTop( KWDocument::getAttribute( frameElem, "top", 0.0 ) + offs );
-            rect.setRight( KWDocument::getAttribute( frameElem, "right", 0.0 ) + offs );
-            rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) + offs );
-            KWFrame * frame = new KWFrame( fs, rect.x(), rect.y(), rect.width(), rect.height() );
-            frame->load( frameElem, fs->isHeaderOrFooter(), KWDocument::CURRENT_SYNTAX_VERSION );
+            if ( frameSetsToFinalize.findRef( fs ) == -1 )
+                frameSetsToFinalize.append( fs );
+
+            // Rename the frameset
             QString newName=i18n("Copy-%1").arg(fs->getName());
             newName = generateFramesetName( newName+"-%1" );
             m_pasteFramesetsMap->insert( fs->getName(), newName ); // remember the name transformation
             fs->setName( newName );
-            fs->addFrame( frame, false );
-            if ( macroCmd )
+
+            // Load the frame
+            if ( !frameElem.isNull() )
             {
-                KWCreateFrameCommand *cmd = new KWCreateFrameCommand( QString::null, frame );
-                macroCmd->addCommand(cmd);
+                double offs = 20.0;
+                KoRect rect;
+                rect.setLeft( KWDocument::getAttribute( frameElem, "left", 0.0 ) + offs );
+                rect.setTop( KWDocument::getAttribute( frameElem, "top", 0.0 ) + offs );
+                rect.setRight( KWDocument::getAttribute( frameElem, "right", 0.0 ) + offs );
+                rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) + offs );
+                KWFrame * frame = new KWFrame( fs, rect.x(), rect.y(), rect.width(), rect.height() );
+                frame->load( frameElem, fs->isHeaderOrFooter(), KWDocument::CURRENT_SYNTAX_VERSION );
+                fs->addFrame( frame, false );
+                if ( macroCmd )
+                {
+                    KWCreateFrameCommand *cmd = new KWCreateFrameCommand( QString::null, frame );
+                    macroCmd->addCommand(cmd);
+                }
             }
             int type=0;
             // Please move this to some common method somewhere (e.g. in KWDocument) (David)

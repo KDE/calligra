@@ -1687,9 +1687,45 @@ void KWTableFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progr
 }
 
 void KWTableFrameSet::save( QDomElement &parentElem, bool saveFrames ) {
+    // When saving to a file, we don't have anything specific to the frameset to save.
+    // Save the cells only.
     for (unsigned int i =0; i < m_cells.count(); i++) {
         m_cells.at(i)->save(parentElem, saveFrames);
     }
+}
+
+void KWTableFrameSet::toXML( QDomElement &parentElem, bool saveFrames )
+{
+    QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
+    parentElem.appendChild( framesetElem );
+    KWFrameSet::save( framesetElem, false ); // Save the frameset attributes
+    // Save the cells
+    save( framesetElem, saveFrames );
+}
+
+void KWTableFrameSet::fromXML( QDomElement &framesetElem, bool loadFrames )
+{
+    KWFrameSet::load( framesetElem, false ); // Load the frameset attributes
+    // Load the cells
+    QDomElement cellElem = framesetElem.firstChild().toElement();
+    for ( ; !cellElem.isNull() ; cellElem = cellElem.nextSibling().toElement() )
+    {
+        if ( cellElem.tagName() == "FRAMESET" )
+        {
+            loadCell( cellElem, loadFrames );
+        }
+    }
+}
+
+KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, bool loadFrames )
+{
+    int _row = KWDocument::getAttribute( framesetElem, "row", 0 );
+    int _col = KWDocument::getAttribute( framesetElem, "col", 0 );
+    Cell *cell = new Cell( this, _row, _col, QString::null /* HACK. Auto-generate name to avoid dupes */ );
+    cell->load( framesetElem, loadFrames );
+    cell->m_rows = KWDocument::getAttribute( framesetElem, "rows", 1 );
+    cell->m_cols = KWDocument::getAttribute( framesetElem, "cols", 1 );
+    return cell;
 }
 
 int KWTableFrameSet::paragraphs()

@@ -783,9 +783,10 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
             static_cast<KWTextCustomItem *>( ch.customItem() )->save( formatElem );
             startPos = -1;
             curFormat = paragraphFormat();
-
+            // Save the contents of the frameset inside the anchor
+            // This is NOT used when saving, but it is used when copying an inline frame
             if ( saveAnchorsFramesets && dynamic_cast<KWAnchor *>( ch.customItem() ) )
-                static_cast<KWAnchor *>( ch.customItem() )->frameSet()->save( parentElem );
+                static_cast<KWAnchor *>( ch.customItem() )->frameSet()->toXML( parentElem );
         }
         else
         {
