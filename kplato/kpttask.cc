@@ -826,18 +826,13 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
         }
     } else if (type() == KPTNode::Type_Milestone) {
         switch (m_constraint) {
-        case KPTNode::ASAP:
+        case KPTNode::ASAP: {
+            setEndTime(m_startTime);
+            break;
+        }
         case KPTNode::ALAP: {
-            // milestones generally wants to stick to their dependant parent
-            KPTDateTime time = schedulePredeccessors(dependParentNodes(), use);
-            if (time.isValid() && time < m_endTime) {
-                setEndTime(time);
-            }
-            // Then my parents
-            time = schedulePredeccessors(m_parentProxyRelations, use);
-            if (time.isValid() && time < m_endTime) {
-                setEndTime(time);
-            }
+            setStartTime(latestFinish);
+            setEndTime(latestFinish);
             break;
         }
         case KPTNode::MustStartOn:
@@ -1027,11 +1022,12 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
     } else if (type() == KPTNode::Type_Milestone) {
         switch (m_constraint) {
         case KPTNode::ASAP:
-        case KPTNode::ALAP:
-            // milestones generally wants to stick to their dependant parent
-            // let's try using earliestStart
             setStartTime(earliestStart);
             setEndTime(earliestStart);
+            break;
+        case KPTNode::ALAP:
+            setStartTime(latestFinish);
+            setEndTime(latestFinish);
             break;
         case KPTNode::MustStartOn:
         case KPTNode::FixedInterval:
