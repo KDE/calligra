@@ -33,7 +33,6 @@ class ClassExportFilterHtmlSpartan : public ClassExportFilterBase
         ClassExportFilterHtmlSpartan (void) {}
         virtual ~ClassExportFilterHtmlSpartan (void) {}
     public: //virtual
-        virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
         virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
@@ -51,7 +50,6 @@ class ClassExportFilterXHtmlSpartan : public ClassExportFilterHtmlSpartan
         virtual ~ClassExportFilterXHtmlSpartan (void) {}
     public: //virtual
         virtual bool isXML(void) const {return true;}
-        virtual QString getDocType(void) const;
 };
 
 #endif /* EXPORTFILTERSPARTAN_H */

@@ -23,18 +23,6 @@
 #include "ExportFilterBase.h"
 #include "ExportFilterFullPower.h"
 
-QString ClassExportFilterHtmlFullPower::getDocType(void) const
-{
-    // We are STRICT
-    return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">";
-}
-
-QString ClassExportFilterXHtmlFullPower::getDocType(void) const
-{
-    // We are STRICT
-    return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"DTD/xhtml1-strict.dtd\">";
-}
-
 void ClassExportFilterHtmlFullPower::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)
 {
     if (! paraText.isEmpty() )

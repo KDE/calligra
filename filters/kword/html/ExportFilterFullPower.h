@@ -35,7 +35,6 @@ class ClassExportFilterHtmlFullPower : public ClassExportFilterBase
         ClassExportFilterHtmlFullPower (void) {}
         virtual ~ClassExportFilterHtmlFullPower (void) {}
     public: //virtual
-        virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
         virtual QString getStyleElement(void);
@@ -54,7 +53,6 @@ class ClassExportFilterXHtmlFullPower : public ClassExportFilterHtmlFullPower
         virtual ~ClassExportFilterXHtmlFullPower (void) {}
     public: //virtual
         virtual bool isXML(void) const {return true;}
-        virtual QString getDocType(void) const;
         virtual QString getStyleElement(void);
 };
 

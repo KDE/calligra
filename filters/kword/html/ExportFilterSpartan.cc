@@ -26,18 +26,6 @@
 #include "ExportFilterSpartan.h"
 
 
-QString ClassExportFilterHtmlSpartan::getDocType(void) const
-{
-    // We are STRICT
-    return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">";
-}
-
-QString ClassExportFilterXHtmlSpartan::getDocType(void) const
-{
-    // We are STRICT
-    return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"DTD/xhtml1-strict.dtd\">";
-}
-
 QString ClassExportFilterHtmlSpartan::getBodyOpeningTagExtraAttributes(void) const
 {
     return QString::null;

@@ -23,18 +23,6 @@
 #include "ExportFilterBase.h"
 #include "ExportFilterStyle.h"
 
-QString ClassExportFilterHtmlStyle::getDocType(void) const
-{
-    // We are STRICT
-    return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">";
-}
-
-QString ClassExportFilterXHtmlStyle::getDocType(void) const
-{
-    // We are STRICT
-    return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"DTD/xhtml1-strict.dtd\">";
-}
-
 void ClassExportFilterHtmlStyle::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)
 {
     if (! paraText.isEmpty() )
@@ -397,4 +385,18 @@ QString ClassExportFilterHtmlStyle::getParagraphElement(const QString& strTag, c
     strElement+=strTag;
     strElement+=">\n";
     return strElement;
+}
+
+QString ClassExportFilterHtmlStyle::getAfterBodyOpeningTag(void) const
+{
+    // Add an additional <div> element, as AbiWord CVS 2001-08-21 needs a
+    //  <div> element for being able to import XHTML files (AbiWord bug #1884)
+    return "<div>\n";
+}
+
+QString ClassExportFilterHtmlStyle::getBeforeBodyClosingTag(void) const
+{
+    // Close the additional <div> element, we have needed for compatibility
+    //  with AbiWord CVS 2001-08-21
+    return "</div>\n";
 }

@@ -115,3 +115,27 @@ QString ClassExportFilterBase::escapeText(const QString& strIn) const
 
     return strReturn;
 }
+
+QString ClassExportFilterBase::getDocType(void) const
+{
+    // We are STRICT
+
+    if (isXML())
+    {
+        return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"DTD/xhtml1-strict.dtd\">";
+    }
+
+    return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">";
+}
+
+QString ClassExportFilterBase::getAfterBodyOpeningTag(void) const
+{
+    // We need nothing special after the <body> tag
+    return QString::null;
+}
+
+QString ClassExportFilterBase::getBeforeBodyClosingTag(void) const
+{
+    // We need nothing special before the </body> tag
+    return QString::null;
+}

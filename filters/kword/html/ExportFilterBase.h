@@ -155,12 +155,14 @@ class ClassExportFilterBase
         QString getHtmlOpeningTagExtraAttributes(void) const;
     public: //virtual
         virtual bool isXML(void) const;
-        virtual QString getDocType(void) const = 0;
+        virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const = 0;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText) = 0;
         virtual QString getStyleElement(void);
         virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)=0;
         virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout)=0;
+        virtual QString getAfterBodyOpeningTag(void) const;
+        virtual QString getBeforeBodyClosingTag(void) const;
     public: // Public variables
         bool inList; // Are we currently in a list?
         bool orderedList; // Is the current list ordered or not (undefined, if we are not in a list)

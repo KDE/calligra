@@ -32,12 +32,13 @@ class ClassExportFilterHtmlStyle : public ClassExportFilterBase
         ClassExportFilterHtmlStyle (void) {}
         virtual ~ClassExportFilterHtmlStyle (void) {}
     public: //virtual
-        virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
         virtual QString getStyleElement(void);
         virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
         virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout);
+        virtual QString getAfterBodyOpeningTag(void) const;
+        virtual QString getBeforeBodyClosingTag(void) const;
 };
 
 //
@@ -51,7 +52,6 @@ class ClassExportFilterXHtmlStyle : public ClassExportFilterHtmlStyle
         virtual ~ClassExportFilterXHtmlStyle (void) {}
     public: //virtual
         virtual bool isXML(void) const {return true;}
-        virtual QString getDocType(void) const;
         virtual QString getStyleElement(void);
 };
 
