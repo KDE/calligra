@@ -67,7 +67,7 @@
 #include <koSconfig.h>
 #endif
 
-#define DEBUG_PAGES
+//#define DEBUG_PAGES
 //#define DEBUG_SPEED
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
@@ -2820,29 +2820,8 @@ void KWDocument::repaintAllViews( bool erase )
         viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
 }
 
-void KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page 0'
+QPtrList<KWFrame> KWDocument::framesToCopyOnNewPage( int afterPageNum ) const // can be -1 for 'before page 0'
 {
-#ifdef DEBUG_PAGES
-    kdDebug(32002) << "insertPage: afterPageNum=" << afterPageNum << endl;
-#endif
-    if ( processingType() == WP )
-        Q_ASSERT( afterPageNum == m_pages-1 ); // WP mode: can only append.
-
-    // If not appending, move down everything after 'afterPageNum', to make room.
-    for ( int pg = m_pages-1 ; pg > afterPageNum ; --pg )
-    {
-        // pg is the 'src' page. Its contents must be moved to the page pg+1
-        QPtrList<KWFrame> frames = framesInPage( pg, false );
-#ifdef DEBUG_PAGES
-        kdDebug(32002) << "insertPage: moving " << frames.count() << " frames down, from page " << pg << endl;
-#endif
-        QPtrListIterator<KWFrame> frameIt( frames );
-        for ( ; frameIt.current(); ++frameIt )
-            frameIt.current()->moveBy( 0, ptPaperHeight() );
-    }
-
-    m_pages++;
-
     // Look at frames on pages afterPageNum and afterPageNum-1 (for sheetside stuff)
     QPtrList<KWFrame> framesToLookAt;
     if ( afterPageNum >= 0 )
@@ -2858,7 +2837,8 @@ void KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page 0'
             framesToLookAt.append( frameAlsoIt.current() );
     }
 
-    // Fill in the new page
+    QPtrList<KWFrame> framesToCopy; // the result
+
     QPtrListIterator<KWFrame> frameIt( framesToLookAt );
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -2887,16 +2867,50 @@ void KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page 0'
             // (*) : Reconnect only makes sense for text frames
             // (**) : NewFrameBehavior == Copy is handled here except for headers/footers, which
             // are created in recalcFrames() anyway.
-
-            KWFrame *frm = frame->getCopy();
-            frm->moveBy( 0, ptPaperHeight() );
-            //frm->setPageNum( frame->pageNum()+1 );
-            frameSet->addFrame( frm );
-
-            if ( frame->newFrameBehavior()==KWFrame::Copy )
-                frm->setCopy( true );
-            //kdDebug(32002) << "   => created frame " << frm << endl;
+            framesToCopy.append( frame );
         }
+    }
+    return framesToCopy;
+}
+
+void KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page 0'
+{
+#ifdef DEBUG_PAGES
+    kdDebug(32002) << "insertPage: afterPageNum=" << afterPageNum << endl;
+#endif
+    if ( processingType() == WP )
+        Q_ASSERT( afterPageNum == m_pages-1 ); // WP mode: can only append.
+
+    // If not appending, move down everything after 'afterPageNum', to make room.
+    for ( int pg = m_pages-1 ; pg > afterPageNum ; --pg )
+    {
+        // pg is the 'src' page. Its contents must be moved to the page pg+1
+        QPtrList<KWFrame> frames = framesInPage( pg, false );
+#ifdef DEBUG_PAGES
+        kdDebug(32002) << "insertPage: moving " << frames.count() << " frames down, from page " << pg << endl;
+#endif
+        QPtrListIterator<KWFrame> frameIt( frames );
+        for ( ; frameIt.current(); ++frameIt )
+            frameIt.current()->moveBy( 0, ptPaperHeight() );
+    }
+
+    m_pages++;
+
+    // Fill in the new page
+    QPtrList<KWFrame> framesToCopy = framesToCopyOnNewPage( afterPageNum );
+    QPtrListIterator<KWFrame> frameIt( framesToCopy );
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        KWFrame * frame = frameIt.current();
+
+        KWFrame *newFrame = frame->getCopy();
+        newFrame->moveBy( 0, ptPaperHeight() );
+        //newFrame->setPageNum( frame->pageNum()+1 );
+        frame->frameSet()->addFrame( newFrame );
+
+        if ( frame->newFrameBehavior()==KWFrame::Copy )
+            newFrame->setCopy( true );
+        //kdDebug(32002) << "   => created frame " << newFrame << " " << *newFrame << endl;
     }
 }
 

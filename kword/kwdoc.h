@@ -418,6 +418,12 @@ public:
      */
     void afterAppendPage( int num );
     /**
+     * @return list of frames that will be copied onto the new page
+     * Used by insertPage but also by KWTextFrameSet to check if it's worth
+     * auto-inserting a new page (to avoid infinite loops if not)
+     */
+    QPtrList<KWFrame> framesToCopyOnNewPage( int afterPageNum ) const;
+    /**
      * Remove a page. Call afterRemovePages() after removing one or more pages.
      */
     void removePage( int num );

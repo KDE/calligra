@@ -1880,21 +1880,21 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                 frmBehavior = KWFrame::Ignore;
         }
 
+        int difference = ( bottom + 2 ) - availHeight; // in layout unit pixels
+#ifdef DEBUG_FORMAT_MORE
+        kdDebug(32002) << "AutoExtendFrame bottom=" << bottom << " availHeight=" << availHeight
+                       << " => difference = " << difference << endl;
+#endif
+        if( lastFormatted && bottom + lastFormatted->rect().height() > availHeight ) {
+#ifdef DEBUG_FORMAT_MORE
+            kdDebug(32002) << " next will be off -> adding " << lastFormatted->rect().height() << endl;
+#endif
+            difference += lastFormatted->rect().height();
+        }
+
         switch ( frmBehavior ) {
         case KWFrame::AutoExtendFrame:
         {
-            int difference = ( bottom + 2 ) - availHeight; // in layout unit pixels
-#ifdef DEBUG_FORMAT_MORE
-            kdDebug(32002) << "AutoExtendFrame bottom=" << bottom << " availHeight=" << availHeight
-                           << " => difference = " << difference << endl;
-#endif
-            if( lastFormatted && bottom + lastFormatted->rect().height() > availHeight ) {
-#ifdef DEBUG_FORMAT_MORE
-                kdDebug(32002) << " next will be off -> adding " << lastFormatted->rect().height() << endl;
-#endif
-                difference += lastFormatted->rect().height();
-            }
-
             if(difference > 0) {
                 // There's no point in resizing a copy, so go back to the last non-copy frame
                 KWFrame *theFrame = settingsFrame( frames.last() );
@@ -1910,6 +1910,13 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
 #ifdef DEBUG_FORMAT_MORE
                     kdDebug() << "  diffPt=" << diffPt << " -> wantedPosition=" << wantedPosition << endl;
 #endif
+                    if ( wantedPosition < 0 )
+                    {
+                        m_textobj->setLastFormattedParag( 0 );
+                        *abort = true;
+                        return;
+                    }
+
                     if ( wantedPosition != theFrame->top() &&
                          ( theFrame->frameSet()->isFootEndNote() ||
                            theFrame->bottom() - maxFooterSize <= wantedPosition ) ) // Apply maxFooterSize for footers only
@@ -1986,60 +1993,12 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                 }
             }
         }
+
         case KWFrame::AutoCreateNewFrame:
-        {
             // We need a new frame in this frameset.
-//#ifdef DEBUG_FORMAT_MORE
-            kdDebug(32002) << "slotAfterFormatting creating new frame in frameset " << getName() << endl;
-//#endif
-            uint oldCount = frames.count();
-            kdDebug() << " last frame=" << frames.last() << " pagenum=" << frames.last()->pageNum() << " getpages-1=" << m_doc->numPages()-1 << "   frames count=" << oldCount << endl;
+            createNewPageAndNewFrame( lastFormatted, difference, wantedPosition, abort );
+        break;
 
-            // First create a new page for it if necessary
-            if ( frames.last()->pageNum() == m_doc->numPages() - 1 )
-            {
-                int num = m_doc->appendPage();
-                m_doc->afterAppendPage( num );
-                kdDebug() << "now frames count=" << frames.count() << endl;
-            }
-
-            // Maybe this created the frame, then we're done
-            if ( frames.count() == oldCount )
-            {
-                Q_ASSERT( !isMainFrameset() ); // ouch, should have gone to the appendPage case above...
-                // Otherwise, create a new frame on next page
-                KWFrame *theFrame = frames.last();
-                kdDebug() << "KWTextFrameSet::slotAfterFormatting creating frame on page " << theFrame->pageNum()+1 << endl;
-                KWFrame *frm = theFrame->getCopy();
-                frm->moveBy( 0, m_doc->ptPaperHeight() );
-                //frm->setPageNum( theFrame->pageNum()+1 );
-                addFrame( frm );
-            }
-
-            if (wantedPosition > 0 && !frames.last()->frameSet()->isEndNote())
-                frames.last()->setBottom( wantedPosition );
-
-            updateFrames();
-            m_doc->updateFramesOnTopOrBelow( frames.last()->pageNum() );
-            /// We don't want to start from the beginning every time !
-            ////m_doc->invalidate();
-
-            if ( lastFormatted )
-            {
-                // Reformat the last paragraph. If it's over the two pages, it will need
-                // the new page (e.g. for inline frames that need internalToDocument to work)
-                if ( lastFormatted->prev() )
-                {
-                    m_textobj->setLastFormattedParag( lastFormatted->prev() );
-                    lastFormatted->invalidate( 0 );
-                }
-
-                m_textobj->formatMore( 2 );
-                *abort = true;
-                return;
-            }
-	    m_doc->delayedRepaintAllViews();
-        } break;
         case KWFrame::Ignore:
 #ifdef DEBUG_FORMAT_MORE
             kdDebug(32002) << "slotAfterFormatting frame behaviour is Ignore" << endl;
@@ -2140,6 +2099,89 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
     }
 }
 
+// This is called when a text frame with behaviour AutoCreateNewFrame
+// has more text than available frame height, so we need to create a new page
+// so that a followup frame is created for this one
+void KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int difference, double wantedPosition, bool* abort )
+{
+    KWFrame* lastFrame = frames.last();
+    // This is only going to help us if the new frame is reconnected. Otherwise bail out.
+    if ( !lastFrame || lastFrame->newFrameBehavior() != KWFrame::Reconnect )  {
+        kdDebug(32002) << getName() << " : frame is AutoCreateNewFrame but not Reconnect !?!? Aborting." << endl;
+        m_textobj->setLastFormattedParag( 0 );
+        *abort = true;
+        return;
+    }
+
+//#ifdef DEBUG_FORMAT_MORE
+    kdDebug(32002) << "createNewPageAndNewFrame creating new frame in frameset " << getName() << endl;
+//#endif
+    uint oldCount = frames.count();
+    kdDebug(32002) << " last frame=" << lastFrame << " pagenum=" << lastFrame->pageNum() << " getpages-1=" << m_doc->numPages()-1 << "   frames count=" << oldCount << endl;
+
+    // First create a new page for it if necessary
+    if ( lastFrame->pageNum() == m_doc->numPages() - 1 )
+    {
+        // Let's first check if it will give us more space than we
+        // already have left in this page. Otherwise we'll loop infinitely.
+        QPtrList<KWFrame> framesToCopy = m_doc->framesToCopyOnNewPage( m_doc->numPages() - 1 );
+        QPtrListIterator<KWFrame> frameIt( framesToCopy );
+        int heightWeWillGet = 0;
+        for ( ; frameIt.current(); ++frameIt )
+            if (frameIt.current()->frameSet() == this &&
+                frameIt.current()->newFrameBehavior()==KWFrame::Reconnect)
+                heightWeWillGet += frameIt.current()->height();
+
+        kdDebug(32002) << "height we will get in the new page:" << heightWeWillGet << " current overflow height:" << difference << endl;
+        if ( heightWeWillGet < difference )
+        {
+            kdDebug(32002) << "not enough height on the new page, not worth it" << endl;
+            m_textobj->setLastFormattedParag( 0 );
+            *abort = true;
+            return;
+        }
+
+        int num = m_doc->appendPage();
+        m_doc->afterAppendPage( num );
+        kdDebug(32002) << "now frames count=" << frames.count() << endl;
+    }
+
+    // Maybe this created the frame, then we're done
+    if ( frames.count() == oldCount )
+    {
+        Q_ASSERT( !isMainFrameset() ); // ouch, should have gone to the appendPage case above...
+        // Otherwise, create a new frame on next page
+        kdDebug(32002) << "createNewPageAndNewFrame creating frame on page " << lastFrame->pageNum()+1 << endl;
+        KWFrame *frm = lastFrame->getCopy();
+        frm->moveBy( 0, m_doc->ptPaperHeight() );
+        //frm->setPageNum( lastFrame->pageNum()+1 );
+        addFrame( frm );
+    }
+
+    if (wantedPosition > 0 && !lastFrame->frameSet()->isEndNote())
+        lastFrame->setBottom( wantedPosition );
+
+    updateFrames();
+    m_doc->updateFramesOnTopOrBelow( lastFrame->pageNum() );
+    /// We don't want to start from the beginning every time !
+    ////m_doc->invalidate();
+
+    if ( lastFormatted )
+    {
+        // Reformat the last paragraph. If it's over the two pages, it will need
+        // the new page (e.g. for inline frames that need internalToDocument to work)
+        if ( lastFormatted->prev() )
+        {
+            m_textobj->setLastFormattedParag( lastFormatted->prev() );
+            lastFormatted->invalidate( 0 );
+        }
+
+        m_textobj->formatMore( 2 );
+        *abort = true;
+        return;
+    }
+    m_doc->delayedRepaintAllViews();
+}
 
 double KWTextFrameSet::footNoteSize( KWFrame *theFrame )
 {
