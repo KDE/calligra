@@ -624,24 +624,45 @@ bool KoMainWindow::exportConfirmation( const QCString &outputFormat, const QCStr
 {
     if ( outputFormat != nativeFormat )
     {
-        // Warn the user
         KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
+
         const bool neverHeardOfIt = ( mime->name() == KMimeType::defaultMimeType() );
         QString comment = neverHeardOfIt ?
                             i18n( "%1 (unknown file type)" ).arg( outputFormat )
                             : mime->comment();
 
-        return KMessageBox::warningContinueCancel(
+        // Warn the user
+        int ret;
+        if (!isExporting ()) // File --> Save
+        {
+            ret = KMessageBox::warningContinueCancel
+            (
             0,
-            i18n( "<qt>%1 as a %2 may cause some loss of formatting."
-                  "<p>Do you still want to %3 this format?</qt>" )
-                .arg( isExporting () ? i18n ("Exporting") : i18n ("Saving") )
-                .arg( QString( "<b>%1</b>" ).arg( comment ) ) // in case we want to remove the bold later
-                .arg( isExporting() ? i18n ("export to") : i18n ("save in") ),
-            QString::null,
+                i18n( "<qt>Saving as a %1 may result in some loss of formatting."
+                      "<p>Do you still want to save in this format?</qt>" )
+                    .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
+                i18n( "Confirm Save" ),
             KStdGuiItem::save (),
-            "FileExportConfirmation",
-            true ) == KMessageBox::Continue;
+                "NonNativeSaveConfirmation",
+                true
+            );
+        }
+        else // File --> Export
+        {
+            ret = KMessageBox::warningContinueCancel
+            (
+                0,
+                i18n( "<qt>Exporting as a %1 may result in some loss of formatting."
+                      "<p>Do you still want to export to this format?</qt>" )
+                    .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
+                i18n( "Confirm Export" ),
+                i18n ("Export"),
+                "NonNativeExportConfirmation", // different to the one used for Save (above)
+                true
+            );
+        }
+
+        return (ret == KMessageBox::Continue);
     }
     else
         return true;
