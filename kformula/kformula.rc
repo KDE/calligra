@@ -21,6 +21,7 @@
   <Action name="formula_addsum"/>
   <Action name="formula_addproduct"/>
   <Action name="formula_addmatrix"/>
+  <Action name="formula_add_one_by_two_matrix"/>
   <Action name="formula_addupperindex"/>
   <Action name="formula_addlowerindex"/>
   </Menu>
@@ -52,6 +53,8 @@
 
   <Action name="formula_removeenclosing"/>
   <Action name="formula_makegreek"/>
+  <Action name="formula_insertsymbol"/>
+  <Action name="formula_syntaxhighlighting"/>
  </Menu>
 <!--
  <Menu name="Font"><text>Font</text>
@@ -92,6 +95,7 @@
   <Action name="formula_addsum"/>
   <Action name="formula_addproduct"/>
   <Action name="formula_addmatrix"/>
+  <Action name="formula_add_one_by_two_matrix"/>
   <Action name="formula_addupperleft"/>
   <Action name="formula_addlowerleft"/>
   <Action name="formula_addupperright"/>
@@ -99,6 +103,8 @@
 
   <Action name="formula_typeleft"/>
   <Action name="formula_typeright"/>
+  <Separator/>
+  <Action name="formula_symbolnames"/>
  </ToolBar>
 <!--
  <ToolBar name="Font"><Text>Font</Text>
