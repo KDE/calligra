@@ -573,8 +573,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                             selectObj( kpobject );
                             modType = MT_NONE;
                             raiseObject( kpobject );
-			    drawContour = TRUE;
-                        }
+			}
                     }
                     else {
                         modType = MT_NONE;
@@ -618,7 +617,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 		    // select and raise object
 		    else {
 			rotateNum = kpobject;
-			drawContour = TRUE;
 			startAngle = -kpobject->getAngle();
 			selectObj( kpobject );
 			raiseObject( kpobject );
@@ -812,7 +810,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         }
     }
 
-    mouseMoveEvent( e );
+    // ME: I have no idea why this is needed at all
+    if ( toolEditMode == TEM_MOUSE )
+	mouseMoveEvent( e );
 
     if ( modType != MT_NONE && modType != MT_MOVE ) {
         KPObject *kpobject=resizeObjNum;
@@ -1232,6 +1232,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 	    my = ( my / rastY() ) * rastY();
 	    switch ( toolEditMode ) {
 	    case TEM_MOUSE: {
+		drawContour = TRUE;
 
 		oldMx = ( oldMx / rastX() ) * rastX();
 		oldMy = ( oldMy / rastY() ) * rastY();
@@ -1259,6 +1260,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		oldMy = e->y()+diffy();
 	    } break;
 	    case TEM_ROTATE: {
+		drawContour = TRUE;
 		double angle = KoPoint::getAngle( KoPoint( e->x() + diffx(), e->y() + diffy() ),
 						  KoPoint( axisX, axisY ) );
 		double angle1 = KoPoint::getAngle( KoPoint( firstX, firstY ),
