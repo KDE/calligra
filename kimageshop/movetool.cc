@@ -49,6 +49,7 @@ void MoveCommand::unexecute()
 void MoveCommand::moveTo( QPoint _pos )
 {
   cout << "MoveCommand::moveTo" << endl;
+  cout << "moveTo : " << _pos.x() << ":" << _pos.y() << endl;
 
   QRect oldRect;
   QRect newRect;
@@ -114,7 +115,10 @@ void MoveTool::mouseRelease( const KImageShop::MouseEvent& e )
   {
     cout << "add move command" << endl;
 
-    MoveCommand *moveCommand = new MoveCommand( m_pDoc, m_pDoc->getCurrentLayerIndex(), m_dragStart, m_dragPosition );
+    QPoint pos( e.posX, e.posY );
+
+    MoveCommand *moveCommand = new MoveCommand( m_pDoc,
+      m_pDoc->getCurrentLayerIndex(), pos - m_dragStart, pos - m_dragPosition );
 
     m_pDoc->commandHistory()->addCommand( moveCommand );
   }
