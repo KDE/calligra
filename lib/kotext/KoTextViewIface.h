@@ -112,9 +112,9 @@ k_dcop:
     void changeCaseOfText( const QString & caseType);
     bool isALinkVariable() const;
     //return false if there is not a link
-    bool changeLinkVariableUrl( const QString & _url);
+    bool changeLinkVariableUrl( const QString & _url) const;
     //return false if there is not a link
-    bool changeLinkVariableName( const QString & _name);
+    bool changeLinkVariableName( const QString & _name) const;
 
     //be carefull these functions return QString::null when there is not
     //a variable
@@ -124,7 +124,7 @@ k_dcop:
     bool isANoteVariable() const ;
     QString noteVariableText() const;
     //return false if there is not a note variable
-    bool setNoteVariableText(const QString & note);
+    bool setNoteVariableText(const QString & note) const;
 
     void removeComment();
 

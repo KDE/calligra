@@ -400,7 +400,7 @@ QString KoTextViewIface::linkVariableName( ) const
 }
 
 
-bool KoTextViewIface::changeLinkVariableUrl( const QString & _url)
+bool KoTextViewIface::changeLinkVariableUrl( const QString & _url) const
 {
     KoLinkVariable *var=m_textView->linkVariable();
     if ( !var)
@@ -413,7 +413,7 @@ bool KoTextViewIface::changeLinkVariableUrl( const QString & _url)
     return true;
 }
 
-bool KoTextViewIface::changeLinkVariableName( const QString & _name)
+bool KoTextViewIface::changeLinkVariableName( const QString & _name) const
 {
     KoLinkVariable *var=m_textView->linkVariable();
     if ( !var)
@@ -441,7 +441,7 @@ QString KoTextViewIface::noteVariableText() const
         return QString::null;
 }
 
-bool KoTextViewIface::setNoteVariableText(const QString & note)
+bool KoTextViewIface::setNoteVariableText(const QString & note) const
 {
     KoNoteVariable *var = dynamic_cast<KoNoteVariable *>(m_textView->variable());
     if( var )
