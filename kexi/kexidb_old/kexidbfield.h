@@ -53,7 +53,8 @@ class KexiDBField
 		KexiDBField(QString table, unsigned int field);
 		virtual ~KexiDBField();
 
-		QVariant::Type sql2qt(ColumnType sqltype);
+		static QVariant::Type sql2qt(ColumnType sqltype);
+		static QString typeName(ColumnType sqltype);
 
 		virtual QString		name() const;
 		virtual QString		table() const;

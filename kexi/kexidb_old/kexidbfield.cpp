@@ -60,6 +60,48 @@ KexiDBField::sql2qt(KexiDBField::ColumnType sqltype)
 }
 
 QString
+KexiDBField::typeName(ColumnType sqltype)
+{
+	switch(sqltype)
+	{
+		case SQLLongVarChar:
+			return "Long varchar";
+		case SQLVarchar:
+			return "Varchar";
+		case SQLInteger:
+			return "Integer";
+		case SQLSmallInt:
+			return "Small Integer";
+		case SQLTinyInt:
+			return "Tiny Integer";
+		case SQLNumeric:
+			return "Numeric";
+		case SQLDouble:
+			return "Double";
+		case SQLBigInt:
+			return "Big Ineger";
+		case SQLDecimal:
+			return "Decimal";
+		case SQLFloat:
+			return "Float";
+		case SQLBinary:
+			return "Binary";
+		case SQLLongVarBinary:
+			return "Long Var Binary";
+		case SQLVarBinary:
+			return "Var Binary";
+		case SQlDate:
+			return "Date";
+		case SQLTime:
+			return "Time";
+		case SQLTimeStamp:
+			return "Time Stamp";
+		case SQLBit:
+			return "Bool";
+	}
+}
+
+QString
 KexiDBField::name() const
 {
 	return QString::null;
