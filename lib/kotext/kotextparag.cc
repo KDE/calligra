@@ -752,6 +752,7 @@ int KoTextParag::shadowX( KoZoomHandler *zh ) const
     case KoParagLayout::SD_RIGHT_BOTTOM:
         return zh->zoomItX( m_layout.shadowDistance );
     }
+    return 0;
 }
 
 int KoTextParag::shadowY( KoZoomHandler *zh ) const
@@ -770,6 +771,7 @@ int KoTextParag::shadowY( KoZoomHandler *zh ) const
     case KoParagLayout::SD_RIGHT_BOTTOM:
         return zh->zoomItY( m_layout.shadowDistance );
     }
+    return 0;
 }
 
 void KoTextParag::applyStyle( KoStyle *style )
