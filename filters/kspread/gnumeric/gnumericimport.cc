@@ -197,7 +197,9 @@ void setSelectionInfo(QDomNode *sheet, KSpreadTable *table){
 	  kspread_selection.setTop((e.attribute("startRow").toInt()+1));
 	  kspread_selection.setRight((e.attribute("endCol").toInt()+1));
 	  kspread_selection.setBottom((e.attribute("endRow").toInt()+1));
-	  table->setSelection(kspread_selection);
+
+          /* can't set it in the table -- must set it to a view */
+//	  table->setSelection(kspread_selection);
 
 	  selection = selection.nextSibling();
 	}

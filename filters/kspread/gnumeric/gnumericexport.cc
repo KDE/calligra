@@ -421,9 +421,10 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
          rows = gnumeric_doc.createElement("gmr:Rows");
 	 sheet.appendChild(rows);
 
+         /*
 	 selections = gnumeric_doc.createElement("gmr:Selections");
 	 sheet.appendChild(selections);
-
+         */
 	 // Ah ah ah - the document is const, but the map and table aren't. Safety: 0.
 	 // Either we get hold of KSpreadTable::m_dctCells and apply the old method below (for sorting)
 	 // or, cleaner and already sorted, we use KSpreadTable's API (slower probably, though)
@@ -440,19 +441,21 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
 	 /* Save selection info. */
 
+         /* can't save selection anymore -- part of the view, not table */
+         /*
 	 QDomElement selection = gnumeric_doc.createElement("gmr:Selection");
 	 QRect table_selection(table->selection());
 
 	 selections.appendChild(selection);
-
+         */
 	 /*  <gmr:Selection startCol="3" startRow="2" endCol="3" endRow="2"/>*/
-
+/*
 	 selection.setAttribute("startCol", QString::number(table_selection.left()-1));
 	 selection.setAttribute("startRow", QString::number(table_selection.top()-1));
 
 	 selection.setAttribute("endCol", QString::number(table_selection.right()-1));
 	 selection.setAttribute("endRow", QString::number(table_selection.bottom()-1));
-
+*/
 	 /* End selection info. */
 
 
