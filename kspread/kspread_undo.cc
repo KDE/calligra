@@ -1027,6 +1027,46 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> & list,
 
 KSpreadUndoCellLayout::~KSpreadUndoCellLayout()
 {
+    QValueList<layoutCell>::Iterator it2;
+    for ( it2 = m_lstLayouts.begin(); it2 != m_lstLayouts.end(); ++it2 )
+    {
+        delete (*it2).l;
+    }
+    m_lstLayouts.clear();
+
+    for ( it2 = m_lstRedoLayouts.begin(); it2 != m_lstRedoLayouts.end(); ++it2 )
+    {
+        delete (*it2).l;
+    }
+    m_lstRedoLayouts.clear();
+
+    QValueList<layoutColumn>::Iterator it3;
+    for ( it3 = m_lstColLayouts.begin(); it3 != m_lstColLayouts.end(); ++it3 )
+    {
+        delete (*it3).l;
+    }
+    m_lstColLayouts.clear();
+
+    for ( it3 = m_lstRedoColLayouts.begin(); it3 != m_lstRedoColLayouts.end(); ++it3 )
+    {
+        delete (*it3).l;
+    }
+    m_lstRedoColLayouts.clear();
+
+    QValueList<layoutRow>::Iterator it4;
+    for ( it4 = m_lstRowLayouts.begin(); it4 != m_lstRowLayouts.end(); ++it4 )
+    {
+        delete (*it4).l;
+    }
+    m_lstRowLayouts.clear();
+
+    for ( it4 = m_lstRedoRowLayouts.begin(); it4 != m_lstRedoRowLayouts.end(); ++it4 )
+    {
+        delete (*it4).l;
+    }
+    m_lstRedoRowLayouts.clear();
+
+
 }
 
 void KSpreadUndoCellLayout::undo()
