@@ -642,13 +642,22 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 
 	QString not_found_msg;
 	//ok, now open "autoopen: objects
-//	for (QValueList< QPair<QString,QString> >::Iterator it = projectData->autoopenObjects.begin(); it != projectData->autoopenObjects.end(); ++it ) {
-	for (QValueList<KexiProjectData::ObjectInfo>::Iterator it = projectData->autoopenObjects.begin(); it != projectData->autoopenObjects.end(); ++it ) {
-//		openObject(QString("kexi/")+(*it).first,(*it).second);
+	for (QValueList<KexiProjectData::ObjectInfo>::Iterator it = projectData->autoopenObjects.begin(); 
+		it != projectData->autoopenObjects.end(); ++it )
+	{
 		KexiProjectData::ObjectInfo info = *it;
-		KexiPart::Info *i = Kexi::partManager().info( QCString("kexi/")+info["type"].latin1() );
+		KexiPart::Info *i = Kexi::partManager().info( QCString("kexi/")+info["type"].lower().latin1() );
 		if (!i) {
-			not_found_msg += ( info["name"] + " - " + i18n("unknown object type \"%1\"").arg(info["type"])+"<br>" );
+			if (!info["name"].isEmpty())
+				not_found_msg += (info["name"] + " - ");
+			if (info["action"]=="new")
+				not_found_msg += i18n("cannot create object - ");
+			not_found_msg += (i18n("unknown object type \"%1\"").arg(info["type"])+"<br>");
+			continue;
+		}
+		if (info["action"]=="new") {
+			if (!newObject( i ))
+				not_found_msg += (i18n("cannot create object of type \"%1\"").arg(info["type"])+"<br>");
 			continue;
 		}
 
