@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>LatexExportDia</class>
 <comment>This dialog box is used for all latex filter in koffice.</comment>
 <author>Robert Jacolin &lt;rjacolin@ifrance.com&gt;</author>
@@ -15,7 +15,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Latex Export Filter configuration</string>
+        <string>Latex Export Filter Configuration</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>
@@ -44,92 +44,6 @@
                 <attribute name="title">
                     <string>Document</string>
                 </attribute>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel1_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>38</x>
-                            <y>174</y>
-                            <width>187</width>
-                            <height>18</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Document class :</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>39</x>
-                            <y>208</y>
-                            <width>186</width>
-                            <height>18</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Quality :</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>defaultFontSizeTextZone</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>39</x>
-                            <y>241</y>
-                            <width>186</width>
-                            <height>18</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Default Font Size :</string>
-                    </property>
-                </widget>
-                <widget class="QComboBox">
-                    <item>
-                        <property name="text">
-                            <string>article</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>book</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>letter</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>report</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>slides</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>classComboBox</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>240</x>
-                            <y>168</y>
-                            <width>125</width>
-                            <height>27</height>
-                        </rect>
-                    </property>
-                </widget>
                 <widget class="KIntNumInput">
                     <property name="name">
                         <cstring>defaultFontSize</cstring>
@@ -152,29 +66,6 @@
                         <number>1000</number>
                     </property>
                 </widget>
-                <widget class="KComboBox">
-                    <item>
-                        <property name="text">
-                            <string>final</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>draft</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>qualityComboBox</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>241</x>
-                            <y>201</y>
-                            <width>125</width>
-                            <height>28</height>
-                        </rect>
-                    </property>
-                </widget>
                 <widget class="QButtonGroup">
                     <property name="name">
                         <cstring>styleGroup</cstring>
@@ -188,7 +79,7 @@
                         </rect>
                     </property>
                     <property name="title">
-                        <string>Document Style :</string>
+                        <string>Document Style</string>
                     </property>
                     <widget class="QRadioButton">
                         <property name="name">
@@ -239,7 +130,7 @@
                         </rect>
                     </property>
                     <property name="title">
-                        <string>Document Type :</string>
+                        <string>Document Type</string>
                     </property>
                     <widget class="QRadioButton">
                         <property name="name">
@@ -288,6 +179,115 @@
                             <string>The document will be generated as a latex document which will have to incldue in a main latex document. It's allow you to generate several little files for each chapter of your document.</string>
                         </property>
                     </widget>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>30</x>
+                            <y>170</y>
+                            <width>187</width>
+                            <height>18</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Document class:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>39</x>
+                            <y>208</y>
+                            <width>186</width>
+                            <height>18</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Quality:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>defaultFontSizeTextZone</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>39</x>
+                            <y>241</y>
+                            <width>186</width>
+                            <height>18</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Default font size:</string>
+                    </property>
+                </widget>
+                <widget class="KComboBox">
+                    <item>
+                        <property name="text">
+                            <string>Final</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Draft</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>qualityComboBox</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>241</x>
+                            <y>201</y>
+                            <width>125</width>
+                            <height>28</height>
+                        </rect>
+                    </property>
+                </widget>
+                <widget class="QComboBox">
+                    <item>
+                        <property name="text">
+                            <string>Article</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Book</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Letter</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Report</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Slides</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>classComboBox</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>240</x>
+                            <y>168</y>
+                            <width>125</width>
+                            <height>27</height>
+                        </rect>
+                    </property>
                 </widget>
             </widget>
             <widget class="QWidget">
@@ -345,7 +345,7 @@
                         </rect>
                     </property>
                     <property name="text">
-                        <string>Pictures directory :</string>
+                        <string>Pictures directory:</string>
                     </property>
                 </widget>
             </widget>
@@ -369,7 +369,7 @@
                         </rect>
                     </property>
                     <property name="title">
-                        <string>Encoding :</string>
+                        <string>Encoding</string>
                     </property>
                     <widget class="KComboBox">
                         <item>
@@ -486,7 +486,7 @@
                         </rect>
                     </property>
                     <property name="title">
-                        <string>Language :</string>
+                        <string>Language</string>
                     </property>
                     <widget class="QPushButton">
                         <property name="name">
@@ -772,7 +772,7 @@
                         </rect>
                     </property>
                     <property name="title">
-                        <string>Notes :</string>
+                        <string>Notes</string>
                     </property>
                     <widget class="QRadioButton">
                         <property name="name">
@@ -844,10 +844,10 @@
                         <cstring>buttonHelp</cstring>
                     </property>
                     <property name="text">
-                        <string>Help</string>
+                        <string>&amp;Help</string>
                     </property>
                     <property name="accel">
-                        <number>4144</number>
+                        <string>F1</string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
@@ -875,10 +875,10 @@
                         <cstring>buttonOk</cstring>
                     </property>
                     <property name="text">
-                        <string>OK</string>
+                        <string>&amp;OK</string>
                     </property>
                     <property name="accel">
-                        <number>0</number>
+                        <string>Alt+O</string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
@@ -892,10 +892,10 @@
                         <cstring>buttonCancel</cstring>
                     </property>
                     <property name="text">
-                        <string>Cancel</string>
+                        <string>&amp;Cancel</string>
                     </property>
                     <property name="accel">
-                        <number>0</number>
+                        <string>Alt+C</string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
@@ -936,4 +936,15 @@
     <slot>removeLanguage()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klistbox.h</includehint>
+    <includehint>klistbox.h</includehint>
+</includehints>
 </UI>

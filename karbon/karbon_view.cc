@@ -692,13 +692,13 @@ KarbonView::zoomChanged( const KoPoint &p )
 		centerY = 1 - ( p.y() * zoom() ) / double( m_canvas->contentsHeight() );
 		zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
 	}
-	else if( m_zoomAction->currentText() == "  Width" )
+	else if( m_zoomAction->currentText() == i18n("  Width") )
 	{
 		centerX = 0.5;
 		centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
 		zoomFactor = zoom() * double( m_canvas->visibleWidth() ) / double( m_canvas->contentsWidth() );
 	}
-	else if( m_zoomAction->currentText() == "Whole page" )
+	else if( m_zoomAction->currentText() == i18n("Whole Page") )
 	{
 		centerX = 0.5;
 		centerY = 0.5;
@@ -822,7 +822,7 @@ KarbonView::initActions()
 						   SLOT( editSelectAll() ), actionCollection(), "edit_select_all" );
 
 	new KAction(
-		i18n( "&Import graphic" ), 0, 0, this,
+		i18n( "&Import Graphic..." ), 0, 0, this,
 		SLOT( fileImportGraphic() ), actionCollection(), "file_import" );
 
 	new KAction(
@@ -851,22 +851,22 @@ KarbonView::initActions()
 		SLOT( selectionSendToBack() ), actionCollection(), "object_move_tobottom" );
 
 	new KAction(
-		i18n( "Align left" ), "aoleft", 0, this,
+		i18n( "Align Left" ), "aoleft", 0, this,
 		SLOT( selectionAlignHorizontalLeft() ), actionCollection(), "object_align_horizontal_left" );
 	new KAction(
-		i18n( "Align center (Horizontal)" ), "aocenterh", 0, this,
+		i18n( "Align Center (Horizontal)" ), "aocenterh", 0, this,
 		SLOT( selectionAlignHorizontalCenter() ), actionCollection(), "object_align_horizontal_center" );
 	new KAction(
-		i18n( "Align right" ), "aoright", 0, this,
+		i18n( "Align Right" ), "aoright", 0, this,
 		SLOT( selectionAlignHorizontalRight() ), actionCollection(), "object_align_horizontal_right" );
 	new KAction(
-		i18n( "Align top" ), "aotop", 0, this,
+		i18n( "Align Top" ), "aotop", 0, this,
 		SLOT( selectionAlignVerticalTop() ), actionCollection(), "object_align_vertical_top" );
 	new KAction(
-		i18n( "Align center (Vertical)" ), "aocenterv", 0, this,
+		i18n( "Align Center (Vertical)" ), "aocenterv", 0, this,
 		SLOT( selectionAlignVerticalCenter() ), actionCollection(), "object_align_vertical_center" );
 	new KAction(
-		i18n( "Align bottom" ), "aobottom", 0, this,
+		i18n( "Align Bottom" ), "aobottom", 0, this,
 		SLOT( selectionAlignVerticalBottom() ), actionCollection(), "object_align_vertical_bottom" );
 
 	m_showRulerAction = new KToggleAction( i18n( "Show Rulers" ), 0, this, SLOT( showRuler() ), actionCollection(), "view_show_ruler" );
@@ -913,7 +913,7 @@ KarbonView::initActions()
 	<< i18n( "   300%" )
 	<< i18n( "   400%" )
 	<< i18n( "   800%" )
-	<< i18n( "Whole page" )
+	<< i18n( "Whole Page" )
 	<< i18n( "  Width" );
 
 	m_zoomAction->setItems( stl );

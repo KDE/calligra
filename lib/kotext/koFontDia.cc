@@ -232,7 +232,7 @@ void KoFontChooser::setupTab2()
     lab4->setBuddy( d->m_language );
     grid->addWidget( d->m_language, 9, 0 );
 
-    d->m_hyphenation = new QCheckBox( i18n("Auto H&yphenation"), grp );
+    d->m_hyphenation = new QCheckBox( i18n("Auto h&yphenation"), grp );
     grid->addWidget( d->m_hyphenation, 10, 0 );
 
     // Add one row that can stretch

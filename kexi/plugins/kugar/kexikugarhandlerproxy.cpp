@@ -52,7 +52,7 @@ KexiPartPopupMenu*
 KexiKugarHandlerProxy::groupContext()
 {
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
-	m->insertAction(i18n("Create Report"), SLOT(slotCreateReport()));
+	m->insertAction(i18n("Create Report..."), SLOT(slotCreateReport()));
 	m->insertAction(i18n("Report Generator Licensing"),SLOT(slotGeneratorLicense()));
 	return m;
 }

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>430</width>
-            <height>237</height>
+            <height>240</height>
         </rect>
     </property>
     <property name="caption">
@@ -193,7 +193,7 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Leap year(s)</string>
+                                    <string>Leap Year(s)</string>
                                 </property>
                             </item>
                             <item>
@@ -291,4 +291,7 @@
     </vbox>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>qwidget.h</includehint>
+</includehints>
 </UI>

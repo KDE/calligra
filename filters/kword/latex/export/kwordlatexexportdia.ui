@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Latex Export Filter configuration</string>
+        <string>Latex Export Filter Configuration</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>
@@ -185,29 +185,6 @@
                         <string>Document class:</string>
                     </property>
                 </widget>
-                <widget class="KComboBox">
-                    <item>
-                        <property name="text">
-                            <string>Final</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Draft</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>qualityComboBox</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>156</x>
-                            <y>210</y>
-                            <width>109</width>
-                            <height>28</height>
-                        </rect>
-                    </property>
-                </widget>
                 <widget class="QComboBox">
                     <item>
                         <property name="text">
@@ -243,6 +220,29 @@
                             <y>168</y>
                             <width>112</width>
                             <height>27</height>
+                        </rect>
+                    </property>
+                </widget>
+                <widget class="KComboBox">
+                    <item>
+                        <property name="text">
+                            <string>Final</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Draft</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>qualityComboBox</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>156</x>
+                            <y>210</y>
+                            <width>109</width>
+                            <height>28</height>
                         </rect>
                     </property>
                 </widget>

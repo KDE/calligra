@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>dlgNew</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>404</width>
-            <height>268</height>
+            <height>323</height>
         </rect>
     </property>
     <property name="caption">
@@ -47,10 +47,10 @@
                         <cstring>buttonHelp</cstring>
                     </property>
                     <property name="text">
-                        <string>Help</string>
+                        <string>&amp;Help</string>
                     </property>
                     <property name="accel">
-                        <number>4144</number>
+                        <string>F1</string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
@@ -78,10 +78,10 @@
                         <cstring>buttonOk</cstring>
                     </property>
                     <property name="text">
-                        <string>OK</string>
+                        <string>&amp;OK</string>
                     </property>
                     <property name="accel">
-                        <number>0</number>
+                        <string>Alt+O</string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
@@ -95,10 +95,10 @@
                         <cstring>buttonCancel</cstring>
                     </property>
                     <property name="text">
-                        <string>Cancel</string>
+                        <string>&amp;Cancel</string>
                     </property>
                     <property name="accel">
-                        <number>0</number>
+                        <string>Alt+C</string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
@@ -133,7 +133,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Page Size:</string>
+                        <string>Page size:</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0">
@@ -141,7 +141,7 @@
                         <cstring>laFileName</cstring>
                     </property>
                     <property name="text">
-                        <string>Report Template Name:</string>
+                        <string>Report template name:</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="1" column="0">
@@ -333,7 +333,7 @@
                         <cstring>laRight</cstring>
                     </property>
                     <property name="text">
-                        <string>Right Margin</string>
+                        <string>Right margin:</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
@@ -341,7 +341,7 @@
                         <cstring>laTop</cstring>
                     </property>
                     <property name="text">
-                        <string>Top Margin</string>
+                        <string>Top margin:</string>
                     </property>
                 </widget>
                 <widget class="QSpinBox" row="4" column="0">
@@ -364,7 +364,7 @@
                         <cstring>laBottom</cstring>
                     </property>
                     <property name="text">
-                        <string>Bottom Margin</string>
+                        <string>Bottom margin:</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="1">
@@ -372,7 +372,7 @@
                         <cstring>laLeft</cstring>
                     </property>
                     <property name="text">
-                        <string>Left Margin</string>
+                        <string>Left margin:</string>
                     </property>
                 </widget>
                 <widget class="QSpinBox" row="2" column="1">
@@ -401,7 +401,7 @@
                             <rect>
                                 <x>10</x>
                                 <y>40</y>
-                                <width>87</width>
+                                <width>300</width>
                                 <height>20</height>
                             </rect>
                         </property>
@@ -417,7 +417,7 @@
                             <rect>
                                 <x>10</x>
                                 <y>20</y>
-                                <width>87</width>
+                                <width>310</width>
                                 <height>20</height>
                             </rect>
                         </property>

@@ -41,7 +41,7 @@ ShadowEffectPlugin::ShadowEffectPlugin( KarbonViewBase *parent, const char* name
 : Plugin( parent, name )
 {
 	new KAction(
-		i18n( "&Shadow Effect" ), "shadowRB", 0, this,
+		i18n( "&Shadow Effect..." ), "shadowRB", 0, this,
 		SLOT( slotShadowEffect() ), actionCollection(), "object_shadow" );
 
 	m_shadowEffectDlg = new VShadowEffectDlg();
@@ -58,7 +58,7 @@ ShadowEffectPlugin::slotShadowEffect()
 }
 
 VShadowEffectDlg::VShadowEffectDlg( QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true,  i18n( "Create shadow effect" ), Ok | Cancel )
+	: KDialogBase( parent, name, true,  i18n( "Create Shadow Effect" ), Ok | Cancel )
 {
 	// add input fields on the left:
 	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );

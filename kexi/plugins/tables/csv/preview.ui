@@ -159,7 +159,7 @@
                 <cstring>textLabel4</cstring>
             </property>
             <property name="text">
-                <string>Table Name:</string>
+                <string>Table name:</string>
             </property>
         </widget>
         <widget class="QCheckBox" row="0" column="4" rowspan="1" colspan="2">
@@ -167,7 +167,7 @@
                 <cstring>checkBox3</cstring>
             </property>
             <property name="text">
-                <string>Create ID-Column</string>
+                <string>Create ID column</string>
             </property>
         </widget>
         <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="3">

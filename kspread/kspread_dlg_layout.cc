@@ -137,7 +137,7 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDlg * dlg )
   groupBoxLayout->addWidget( m_nameEdit, 0, 1 );
 
   QLabel * label2 = new QLabel( groupBox, "label2" );  
-  label2->setText( i18n( "Inherit Style:" ) );
+  label2->setText( i18n( "Inherit style:" ) );
   groupBoxLayout->addWidget( label2, 1, 0 );
 
   m_parentBox = new KComboBox( false, groupBox, "m_parentBox" );
@@ -2492,11 +2492,11 @@ CellFormatPageProtection::CellFormatPageProtection( QWidget* parent, CellFormatD
   Form1Layout->addItem( spacer_4 );
 
   m_bIsProtected->setText( i18n( "&Protected" ) );
-  m_bHideFormula->setText( i18n( "&Hide Formula" ) );
+  m_bHideFormula->setText( i18n( "&Hide formula" ) );
   groupBox1->setTitle(   i18n( "Protection" ) );
-  m_bHideAll->setText(   i18n( "Hide &All" ) );
+  m_bHideAll->setText(   i18n( "Hide &all" ) );
   groupBox2->setTitle(   i18n( "Printing" ) );
-  m_bDontPrint->setText( i18n( "&Don't Print Text" ) );
+  m_bDontPrint->setText( i18n( "&Don't print text" ) );
 
   m_bDontPrint->setChecked( m_dlg->bDontPrintText );
   m_bHideAll->setChecked( m_dlg->bHideAll );

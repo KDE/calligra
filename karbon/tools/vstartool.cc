@@ -36,7 +36,7 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 {
 	new QLabel( i18n( "Type:" ), this );
 	m_type = new KComboBox( false, this );
-	m_type->insertItem( i18n( "Star outline" ), VStar::star_outline );
+	m_type->insertItem( i18n( "Star Outline" ), VStar::star_outline );
 	m_type->insertItem( i18n( "Spoke" ), VStar::spoke );
 	m_type->insertItem( i18n( "Wheel" ), VStar::wheel );
 	m_type->insertItem( i18n( "Polygon" ), VStar::polygon );

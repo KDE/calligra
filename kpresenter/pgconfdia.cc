@@ -84,7 +84,7 @@ void PgConfDia::setupPageGeneral()
 
     // presentation pen (color and width)
 
-    QGroupBox* penGroup = new QGroupBox( 1, Qt::Horizontal, i18n("Presentation pen:") , generalPage );
+    QGroupBox* penGroup = new QGroupBox( 1, Qt::Horizontal, i18n("Presentation Pen") , generalPage );
     penGroup->setInsideSpacing( KDialog::spacingHint() );
     penGroup->setInsideMargin( KDialog::marginHint() );
     penGroup->setFlat(true);

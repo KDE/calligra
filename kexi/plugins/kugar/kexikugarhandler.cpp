@@ -120,7 +120,7 @@ void KexiKugarHandler::editReport(KexiView *view,const QString &identifier)
 void KexiKugarHandler::createReport(KexiView *view)
 {
     bool ok = false;
-    QString name = KLineEditDlg::getText(i18n("New Report"), i18n("Report Name:"), "", &ok, view);
+    QString name = KLineEditDlg::getText(i18n("New Report"), i18n("Report name:"), "", &ok, view);
 
     if(ok && name.length() > 0)
     {

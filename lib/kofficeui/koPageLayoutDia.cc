@@ -385,7 +385,7 @@ void KoPageLayoutDia::setupTab1()
     marginsLayout->setColStretch( 1, 1 );
 
     // left margin
-    QLabel* lbLeft = new QLabel( i18n( "&Left" ), marginsFrame );
+    QLabel* lbLeft = new QLabel( i18n( "&Left:" ), marginsFrame );
     marginsLayout->addWidget( lbLeft,
        0, 0, Qt::AlignRight | Qt::AlignVCenter );
     ebrLeft = new KDoubleNumInput( marginsFrame, "Left" );
@@ -395,7 +395,7 @@ void KoPageLayoutDia::setupTab1()
     if ( !enableBorders ) ebrLeft->setEnabled( false );
 
     // right margin
-    QLabel* lbRight = new QLabel( i18n( "&Right" ), marginsFrame );
+    QLabel* lbRight = new QLabel( i18n( "&Right:" ), marginsFrame );
     marginsLayout->addWidget( lbRight,
        1, 0, Qt::AlignRight | Qt::AlignVCenter );
     ebrRight = new KDoubleNumInput( marginsFrame, "Right" );

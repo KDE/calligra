@@ -65,7 +65,7 @@ KexiTablePartProxy::groupContext()
 		{
 			menuImport->insertItem(it->comment());
 		}
-		m->insertItem("Import...", menuImport);
+		m->insertItem("Import", menuImport);
 		connect(menuImport, SIGNAL(activated(int)), this, SLOT(slotImport(int)));
 	}
 

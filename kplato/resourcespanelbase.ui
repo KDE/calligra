@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>530</width>
+            <width>680</width>
             <height>442</height>
         </rect>
     </property>
@@ -125,7 +125,7 @@
                                 <cstring>lEnd</cstring>
                             </property>
                             <property name="text">
-                                <string>Until</string>
+                                <string>Until:</string>
                             </property>
                         </widget>
                         <widget class="QTimeEdit">
@@ -225,4 +225,7 @@
     </hbox>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>qwidget.h</includehint>
+</includehints>
 </UI>

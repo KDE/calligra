@@ -116,22 +116,22 @@ FilterMain::FilterMain( FilterSettings * settings, QWidget * parent,
   QGridLayout * FilterMainLayout = new QGridLayout( this, 1, 1, 11, 6, "FilterMainLayout"); 
 
   m_dateBox = new QCheckBox( this, "m_dateBox" );
-  m_dateBox->setText( i18n( "&Date" ) );
+  m_dateBox->setText( i18n( "&Date:" ) );
   connect( m_dateBox, SIGNAL( toggled( bool ) ), this, SLOT( slotDateStateChanged( bool ) ) );
   FilterMainLayout->addWidget( m_dateBox, 0, 0 );
 
   m_authorBox = new QCheckBox( this, "m_authorBox" );
-  m_authorBox->setText( i18n( "&Author" ) );
+  m_authorBox->setText( i18n( "&Author:" ) );
   connect( m_authorBox, SIGNAL( toggled( bool ) ), this, SLOT( slotAuthorStateChanged( bool ) ) );
   FilterMainLayout->addWidget( m_authorBox, 2, 0 );
 
   m_rangeBox = new QCheckBox( this, "m_rangeBox" );
-  m_rangeBox->setText( i18n( "&Range" ) );
+  m_rangeBox->setText( i18n( "&Range:" ) );
   connect( m_rangeBox, SIGNAL( toggled( bool ) ), this, SLOT( slotRangeStateChanged( bool ) ) );
   FilterMainLayout->addWidget( m_rangeBox, 3, 0 );
 
   m_commentBox = new QCheckBox( this, "m_commentBox" );
-  m_commentBox->setText( i18n( "&Comment" ) );
+  m_commentBox->setText( i18n( "&Comment:" ) );
   connect( m_commentBox, SIGNAL( toggled( bool ) ), this, SLOT( slotCommentStateChanged( bool ) ) );
   FilterMainLayout->addWidget( m_commentBox, 4, 0 );
     

@@ -738,13 +738,13 @@ void KSpreadView::initializeGlobalOperationActions()
            SLOT( togglePageBorders( bool ) ) );
   m_showPageBorders->setToolTip( i18n( "Show on the spreadsheet where the page borders will be." ) );
 
-  m_protectSheet = new KToggleAction( i18n( "Protect &Sheet..." ), 0,
+  m_protectSheet = new KToggleAction( i18n( "Protect &Sheet" ), 0,
                                       actionCollection(), "protectSheet" );
   m_protectSheet->setToolTip( i18n( "Protect the sheet from being modified" ) );
   connect( m_protectSheet, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleProtectSheet( bool ) ) );
 
-  m_protectDoc = new KToggleAction( i18n( "Protect &Doc..." ), 0,
+  m_protectDoc = new KToggleAction( i18n( "Protect &Doc" ), 0,
                                       actionCollection(), "protectDoc" );
   m_protectDoc->setToolTip( i18n( "Protect the document from being modified" ) );
   connect( m_protectDoc, SIGNAL( toggled( bool ) ), this,
@@ -869,7 +869,7 @@ void KSpreadView::initializeGlobalOperationActions()
   m_selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells" ) );
   connect( m_selectStyle, SIGNAL( activated( const QString & ) ), this, SLOT( styleSelected( const QString & ) ) );
 
-  m_createStyle = new KAction( i18n( "Create style from cell..." ), 0,
+  m_createStyle = new KAction( i18n( "Create Style From Cell..." ), 0,
                                this, SLOT( createStyleFromCell()), actionCollection(), "createStyle" );
   m_createStyle->setToolTip( i18n( "Create a new style based on the currently selected cell." ) );
 }
@@ -5745,7 +5745,7 @@ void KSpreadView::createStyleFromCell()
 
   while( true )
   {
-    styleName = KLineEditDlg::getText( i18n( "Create style from cell..." ),
+    styleName = KLineEditDlg::getText( i18n( "Create Style From Cell" ),
                                        i18n( "Enter name:" ), styleName, &ok, this );
 
     if ( !ok ) // User pushed an OK button.

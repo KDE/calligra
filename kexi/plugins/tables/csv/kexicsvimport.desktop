@@ -4,7 +4,12 @@ Type=Service
 ServiceTypes=Kexi/TableFilter
 
 Name=KexiCSVImport
-Comment=Import CSV File
+Name[sv]=Kexi CSV-import
+Comment=Import CSV File...
+Comment[hu]=CSV fájl importálása
+Comment[pt]=Importa um ficheiro CSV
+Comment[pt_BR]=Importa Arquivo CSV
+Comment[sv]=Importera CSV-fil
 
 X-KDE-Library=kexicsvimport
 X-Kexi-Direction=import

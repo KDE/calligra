@@ -39,7 +39,7 @@ FlattenPathPlugin::FlattenPathPlugin( KarbonViewBase *parent, const char* name, 
 : Plugin( parent, name )
 {
 	new KAction(
-		i18n( "&Flatten Path" ), 0, 0, this,
+		i18n( "&Flatten Path..." ), 0, 0, this,
 		SLOT( slotFlattenPath() ), actionCollection(), "path_flatten" );
 
 	m_flattenPathDlg = new VFlattenDlg();

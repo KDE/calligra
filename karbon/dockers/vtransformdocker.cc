@@ -41,8 +41,8 @@
 VTranslateWidget::VTranslateWidget( QWidget* parent ) : QWidget ( parent )
 {
 	QVBoxLayout* mainLayout = new QVBoxLayout( this );
-	
-	QGroupBox* groupBox = new QGroupBox( 2, Vertical, i18n( "Position:" ), this );
+
+	QGroupBox* groupBox = new QGroupBox( 2, Vertical, i18n( "Position" ), this );
 	new QLabel( i18n( "H:" ), groupBox );
 	new QLabel( i18n( "V:" ), groupBox );
 	mHSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
@@ -70,7 +70,7 @@ VTranslateWidget::VTranslateWidget( QWidget* parent ) : QWidget ( parent )
 VRotateWidget::VRotateWidget( QWidget* parent ) : QWidget ( parent )
 {
 	QVBoxLayout* mainLayout = new QVBoxLayout( this );
-	
+
 	QGroupBox* groupBox = new QGroupBox( 3, Vertical, i18n( "Rotation:" ), this );
 	new QLabel( i18n( "Angle:" ), groupBox );
 	new QLabel( i18n( "H:" ), groupBox );
@@ -107,7 +107,7 @@ VShearWidget::VShearWidget( QWidget* parent ) : QWidget ( parent )
 {
 	QVBoxLayout* mainLayout = new QVBoxLayout( this );
 	
-	QGroupBox* groupBox = new QGroupBox( 2, Vertical, i18n( "Shear:" ), this );
+	QGroupBox* groupBox = new QGroupBox( 2, Vertical, i18n( "Shear" ), this );
 	new QLabel( i18n( "H:" ), groupBox );
 	new QLabel( i18n( "V:" ), groupBox );
 	mHSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
@@ -132,7 +132,7 @@ VScaleWidget::VScaleWidget( QWidget* parent ) : QWidget ( parent )
 {
 	QVBoxLayout* mainLayout = new QVBoxLayout( this );
 
-	QGroupBox* groupBox = new QGroupBox( 2, Vertical, i18n( "Size:" ), this );
+	QGroupBox* groupBox = new QGroupBox( 2, Vertical, i18n( "Size" ), this );
 	new QLabel( i18n( "H:" ), groupBox );
 	new QLabel( i18n( "V:" ), groupBox );
 	mHSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );

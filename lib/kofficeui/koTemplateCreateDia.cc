@@ -120,7 +120,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     d->m_add=new QPushButton(i18n("&Add Group..."), mainwidget);
     connect(d->m_add, SIGNAL(clicked()), this, SLOT(slotAddGroup()));
     bbox->addWidget(d->m_add);
-    d->m_remove=new QPushButton(i18n("&Remove..."), mainwidget);
+    d->m_remove=new QPushButton(i18n("&Remove"), mainwidget);
     connect(d->m_remove, SIGNAL(clicked()), this, SLOT(slotRemove()));
     bbox->addWidget(d->m_remove);
 

@@ -306,7 +306,7 @@ void KivioOptionsDialog::initGuides()
   lgl->addMultiCell(new QSpacerItem(0, 0), 4, 4, 0, 1);
 
   tabs->addTab(managerTab, i18n("&Manager"));
-  tabs->addTab(lookTab, i18n("&Look And Feel"));
+  tabs->addTab(lookTab, i18n("&Look && Feel"));
 
   QGridLayout* gl = new QGridLayout(page);
   gl->setSpacing(KDialog::spacingHint());
