@@ -38,6 +38,7 @@
 #include <kcommand.h>
 #include <kotextformat.h>
 #include <kcompletion.h>
+#include <kcommand.h>
 
 /******************************************************************/
 /* Class: KoAutoFormat						  */
@@ -475,11 +476,33 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
 
         detectStartOfLink(lastWord);
         //kdDebug() << "KoAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
-        if ( !doAutoCorrect( textEditCursor, parag, index, txtObj ) )
+        KMacroCommand *macro =new KMacroCommand(i18n("Autocorrection"));
+        bool cmdCreate=false;
+        int newPos = index;
+        KCommand *cmd = doAutoCorrect( textEditCursor, parag, newPos , txtObj );
+
+        if( cmd )
         {
-            if ( !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) )
-                doUpperCase( textEditCursor, parag, index, lastWord, txtObj );
+            macro->addCommand( cmd );
+            cmdCreate = true;
         }
+
+        if ( !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) )
+        {
+            lastWord = getLastWord(parag, newPos);
+            cmd = doUpperCase( textEditCursor, parag, newPos, lastWord, txtObj );
+            if( cmd )
+            {
+                macro->addCommand( cmd );
+                cmdCreate = true;
+            }
+        }
+
+        if ( cmdCreate )
+            txtObj->emitNewCommand( macro );
+        else
+            delete macro;
+
     }
     if ( ch == '"' && m_typographicDoubleQuotes.replace )
     {
@@ -491,10 +514,10 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
     }
 }
 
-bool KoAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj )
+KCommand *KoAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *parag, int &index, KoTextObject *txtObj )
 {
     if(!m_advancedAutoCorrect)
-        return false;
+        return 0L;
     // Prepare an array with words of different lengths, all terminating at "index".
     // Obviously only full words are put into the array
     // But this allows 'find strings' with spaces and punctuation in them.
@@ -534,20 +557,21 @@ bool KoAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *para
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setIndex( start + length );
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            txtObj->emitNewCommand(txtObj->replaceSelectionCommand( textEditCursor, it.data().replace(),
-                                      KoTextObject::HighlightSelection,
-                                      i18n("Autocorrect word") ));
+            KCommand *cmd = txtObj->replaceSelectionCommand( textEditCursor, it.data().replace(),
+                                                             KoTextObject::HighlightSelection,
+                                                             i18n("Autocorrect word") );
             // The space/tab/CR that we inserted is still there but delete/insert moved the cursor
             // -> go right
             txtObj->emitHideCursor();
             textEditCursor->gotoRight();
             txtObj->emitShowCursor();
             delete [] wordArray;
-            return true;
+            index = index - length +it.data().replace().length();
+            return cmd;
         }
     }
     delete [] wordArray;
-    return false;
+    return 0L;
 }
 
 void KoAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes )
@@ -584,7 +608,7 @@ void KoAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag
                               i18n("Typographic quote") ));
 }
 
-void KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *parag,
+KCommand * KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *parag,
                                 int index, const QString & word, KoTextObject *txtObj )
 {
     KoTextDocument * textdoc = parag->textDocument();
@@ -597,7 +621,7 @@ void KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *parag,
     // backCursor now points at the first char of the word
     QChar firstChar = backCursor.parag()->at( backCursor.index() )->c;
     bool bNeedMove = false;
-
+    KCommand *cmd = 0L;
     if ( m_convertUpperCase && isLower( firstChar ) )
     {
         bool beginningOfSentence = true; // true if beginning of text
@@ -631,9 +655,9 @@ void KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *parag,
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setIndex( start + 1 );
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            txtObj->emitNewCommand(txtObj->replaceSelectionCommand( textEditCursor, QString( firstChar.upper() ),
+            cmd = txtObj->replaceSelectionCommand( textEditCursor, QString( firstChar.upper() ),
                                       KoTextObject::HighlightSelection,
-                                      i18n("Autocorrect (capitalize first letter)") ));
+                                      i18n("Autocorrect (capitalize first letter)") );
             bNeedMove = true;
         }
     }
@@ -658,7 +682,7 @@ void KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *parag,
                 textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
 
                 QString replacement = word[1].lower();
-                txtObj->emitNewCommand(txtObj->replaceSelectionCommand( textEditCursor, replacement,KoTextObject::HighlightSelection,i18n("Autocorrect (Convert two Upper Case letters to one Upper Case and one Lower Case letter.)") ));
+                cmd = txtObj->replaceSelectionCommand( textEditCursor, replacement,KoTextObject::HighlightSelection,i18n("Autocorrect (Convert two Upper Case letters to one Upper Case and one Lower Case letter.)") );
 
                 bNeedMove = true;
             }
@@ -672,6 +696,7 @@ void KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *parag,
         textEditCursor->gotoRight(); // not the same thing as index+1, in case of CR
         txtObj->emitShowCursor();
     }
+    return cmd;
 }
 
 void KoAutoFormat::doAutoReplaceNumber( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj )

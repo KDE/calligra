@@ -34,6 +34,7 @@ class KoTextObject;
 class KoVariableCollection;
 class KoVariableFormatCollection;
 class KCompletion;
+class KCommand;
 namespace Qt3 {
     class QTextCursor;
 }
@@ -248,8 +249,9 @@ public:
     static bool isSeparator( const QChar &c );
 
 protected:
-    bool doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj );
-    void doUpperCase( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
+    //return a ref to index otherwise when we uperCase, index is bad !
+    KCommand *doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *parag, int & index, KoTextObject *txtObj );
+    KCommand * doUpperCase( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
     void doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes );
     void buildMaxLen();
 
