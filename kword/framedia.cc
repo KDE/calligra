@@ -653,12 +653,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     sh->setValidator( new QDoubleValidator( sh ) );
     sw->setValidator( new QDoubleValidator( sw ) );
 
-    if (doc->isOnlyOneFrameSelected() &&
-        ( doc->processingType() == KWDocument::DTP ||
-          ( doc->processingType() == KWDocument::WP &&
-            doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) )
+    bool disable = false;
+    if ( doc->isOnlyOneFrameSelected() )
     {
-
         KWFrame * theFrame = doc->getFirstSelectedFrame();
 
         oldX = KWUnit::userValue( theFrame->x(), doc->getUnit() );
@@ -674,8 +671,16 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         bool f = theFrame->getFrameSet()->isFloating();
         floating->setChecked( f );
         slotFloatingToggled( f );
+
+        // Can't change geometry of main WP frame
+        if ( doc->processingType() == KWDocument::WP &&
+             doc->getFrameSetNum( theFrame->getFrameSet() ) == 0 )
+            disable = true;
     }
     else
+        disable = true;
+
+    if ( disable )
     {
         sx->setEnabled( false );
         sy->setEnabled( false );
