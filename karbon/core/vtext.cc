@@ -49,8 +49,8 @@
 
 int traceMoveto( FT_Vector *to, VComposite *composite )
 {
-	double tox = (to->x / 64);
-	double toy = (-to->y / 64);
+	double tox = ( to->x / 64.0 );
+	double toy = ( -to->y / 64.0 );
 
 	//QString add = "M" + QString::number(tox) + "," + QString::number(toy) + " ";
 	//kdDebug() << add.latin1() << endl;
@@ -61,8 +61,8 @@ int traceMoveto( FT_Vector *to, VComposite *composite )
 
 int traceLineto( FT_Vector *to, VComposite *composite )
 {
-	double tox = (to->x / 64);
-	double toy = (-to->y / 64);
+	double tox = ( to->x / 64.0 );
+	double toy = ( -to->y / 64.0 );
 
 	//QString add = "L" + QString::number(tox) + "," + QString::number(toy) + " ";
 	//kdDebug() << add.latin1() << endl;
@@ -74,14 +74,14 @@ int traceLineto( FT_Vector *to, VComposite *composite )
 
 int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VComposite *composite )
 {
-	double x1 = (control->x / 64);
-	double y1 = (-control->y / 64);
-	double x2 = (to->x / 64);
-	double y2 = (-to->y / 64);
+	double x1 = ( control->x / 64.0 );
+	double y1 = ( -control->y / 64.0 );
+	double x2 = ( to->x / 64.0 );
+	double y2 = ( -to->y / 64.0 );
 
-	//QString add = "Q" + QString::number(x1) + "," + QString::number(y1) + "," + QString::number(x2) + "," + QString::number(y2) + " ";
-	//kdDebug() << add.latin1() << endl;
-	composite->curveTo( KoPoint( x1, y1 ), KoPoint( x1, y1 ), KoPoint( x2, y2 ) );
+	QString add = "Q" + QString::number(x1) + "," + QString::number(y1) + "," + QString::number(x2) + "," + QString::number(y2) + " ";
+	kdDebug() << add.latin1() << endl;
+	composite->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x2, y2 ) );
 	//composite->curve2To( KoPoint( x1, y1 ), KoPoint( x2, y2 ) );
 	
 	return 0;
@@ -89,12 +89,12 @@ int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VComposite *composi
 
 int traceCubicBezier( FT_Vector *p, FT_Vector *q, FT_Vector *to, VComposite *composite )
 {
-	double x1 = (p->x / 64);
-	double y1 = (-p->y / 64);
-	double x2 = (q->x / 64);
-	double y2 = (-q->y / 64);
-	double x3 = (to->x / 64);
-	double y3 = (-to->y / 64);
+	double x1 = ( p->x / 64.0 );
+	double y1 = ( -p->y / 64.0 );
+	double x2 = ( q->x / 64.0 );
+	double y2 = ( -q->y / 64.0 );
+	double x3 = ( to->x / 64.0 );
+	double y3 = ( -to->y / 64.0 );
 
 	//QString add = "C" + QString::number(x1) + "," + QString::number(y1) + "," + QString::number(x2) + "," + QString::number(y2) + "," + QString::number(x3) + "," + QString::number(y3);
 	//kdDebug() << add.latin1() << endl;
@@ -418,9 +418,9 @@ VText::traceText( const KarbonView* view )
 		FT_OutlineGlyph g;
 		FT_Get_Glyph( fontFace->glyph, reinterpret_cast<FT_Glyph *>( &g ) );
 		VComposite *composite = new VComposite( this );
-		VFill *fill = composite->fill();
-		fill->setFillRule( VFill::evenOdd );
-		composite->setFill( *fill );
+		//VFill *fill = composite->fill();
+		//fill->setFillRule( VFill::evenOdd );
+		//composite->setFill( *fill );
 		FT_Outline_Decompose(&g->outline, &OutlineMethods, composite );
 		//composite->close();
 
