@@ -1,3 +1,10 @@
+22.1.1999 - Reggie:
+-------------------
+- Fix for glibc2 systems in lex.l
+- KoPrintExt is working correctly now (correct rows/cols are displayed and
+  background colors are displayed)
+- In KoPrintExt no grid is drawn
+
 Sun May 31 03:11:57 1998  Torben Weis  <weis@localhost>
 
 	* kspread_table.cc (insertChart): Support for KChart added

@@ -442,6 +442,10 @@ char *yytext;
 #include <stdlib.h>
 #include <math.h>
 
+#ifndef PI
+#define PI M_PI
+#endif
+
 char* putSymbol( char *_name );
 double getCell( const char *_str );
 double getCell2( const char *_str );
@@ -454,7 +458,7 @@ extern double cellValue( void* _table, int _x, int _y );
 
 int yywrap();
 
-#line 458 "lex.yy.c"
+#line 462 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -605,10 +609,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 23 "lex.l"
+#line 27 "lex.l"
 
 
-#line 612 "lex.yy.c"
+#line 616 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -693,130 +697,130 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 25 "lex.l"
+#line 29 "lex.l"
 { return (int)(*yytext); }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 27 "lex.l"
+#line 31 "lex.l"
 { yylval.b = 1; return BOOL; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 28 "lex.l"
+#line 32 "lex.l"
 { yylval.b = 0; return BOOL; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 29 "lex.l"
+#line 33 "lex.l"
 { return WENN; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 30 "lex.l"
+#line 34 "lex.l"
 { return LEQ; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 31 "lex.l"
+#line 35 "lex.l"
 { return GEQ; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 32 "lex.l"
+#line 36 "lex.l"
 { return NEQ; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 33 "lex.l"
+#line 37 "lex.l"
 { yylval.dbl = PI; return NUM; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 34 "lex.l"
+#line 38 "lex.l"
 { yylval.dbl = PI; return NUM; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 35 "lex.l"
+#line 39 "lex.l"
 { return OR; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 36 "lex.l"
+#line 40 "lex.l"
 { return OR; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 37 "lex.l"
+#line 41 "lex.l"
 { return AND; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 38 "lex.l"
+#line 42 "lex.l"
 { return AND; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 39 "lex.l"
+#line 43 "lex.l"
 { return NOT; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 40 "lex.l"
+#line 44 "lex.l"
 { return NOT; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 42 "lex.l"
+#line 46 "lex.l"
 { yylval.dbl = (double)atoi( yytext ); return NUM; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 44 "lex.l"
+#line 48 "lex.l"
 { yylval.dbl = atof( yytext ); return NUM; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 46 "lex.l"
+#line 50 "lex.l"
 { yylval.dbl = getCell( yytext ); return NUM; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 47 "lex.l"
+#line 51 "lex.l"
 { yylval.dbl = getCell2( yytext ); return NUM; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 48 "lex.l"
+#line 52 "lex.l"
 { yylval.range = parseRange2( yytext ); return RANGE; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 49 "lex.l"
+#line 53 "lex.l"
 { yylval.range = parseRange( yytext ); return RANGE; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 51 "lex.l"
+#line 55 "lex.l"
 { yylval.name = putSymbol( yytext ); return ID; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 53 "lex.l"
+#line 57 "lex.l"
 /* eat up whitespace */
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 55 "lex.l"
+#line 59 "lex.l"
 { printf( "Unrecognized character: %s\n", yytext ); }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 57 "lex.l"
+#line 61 "lex.l"
 ECHO;
 	YY_BREAK
-#line 820 "lex.yy.c"
+#line 824 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1702,7 +1706,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 57 "lex.l"
+#line 61 "lex.l"
 
 
 double getCell( const char *_str )

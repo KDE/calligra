@@ -1218,12 +1218,18 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
   if ( m_bLayoutDirtyFlag)
     makeLayout( _painter, _col, _row );
         
-  if ( !_only_left && !_only_top )
+  if ( !_only_left && !_only_top && m_bgColor != white )
   {
     _painter.setBackgroundColor( m_bgColor );
-    //	_painter.eraseRect( _tx, _ty, cl->width() - 1, rl->height() - 1 );
+    _painter.eraseRect( _tx, _ty, cl->width() - 1, rl->height() - 1 );
   }
   
+//   if (m_bgColor != white)
+//     {
+//       _painter.setBackgroundColor( m_bgColor );
+//       _painter.eraseRect( _tx, _ty, cl->width(), rl->height() );
+//     }
+
   // Draw the border
   if ( !_only_top )
   {

@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <math.h>
 
+#ifndef PI
+#define PI M_PI
+#endif
+
 char* putSymbol( char *_name );
 double getCell( const char *_str );
 double getCell2( const char *_str );

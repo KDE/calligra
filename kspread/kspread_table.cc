@@ -1770,8 +1770,8 @@ void KSpreadTable::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _he
 			 CORBA::Float _scale )
 {
   QRect page_range;
-  page_range.setLeft( 0 );
-  page_range.setTop( 0 );
+  page_range.setLeft( 1 );
+  page_range.setTop( 1 );
 
   QRect rect( 1, 1, _width, _height );
   
@@ -1790,7 +1790,7 @@ void KSpreadTable::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _he
     else
       x += w;
   }
-  page_range.setRight( col - 1 );
+  page_range.setRight( col );
 	    
   int row = 1;
   int y = rowLayout( row )->height();
@@ -1807,7 +1807,7 @@ void KSpreadTable::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _he
     else
       y += h;
   }
-  page_range.setBottom( row - 1 );
+  page_range.setBottom( row );
 
   QPainter painter;
   painter.begin( _dev );
@@ -1815,7 +1815,7 @@ void KSpreadTable::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _he
   if ( _scale != 1.0 )
     painter.scale( _scale, _scale );
   
-  printPage( painter, &page_range, doc()->defaultGridPen() );
+  printPage( painter, &page_range, NoPen);//doc()->defaultGridPen() );
   
   painter.end();
 }
