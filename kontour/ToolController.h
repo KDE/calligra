@@ -30,7 +30,7 @@
 
 class GDocument;
 class Canvas;
-class MainView;
+class KIllustratorView;
 
 //this one serves also as a signal proxy for the various tools
 //this makes the tool objects smaller
@@ -38,14 +38,14 @@ class ToolController : public QObject
 {
   Q_OBJECT
 public:
-  ToolController (MainView* view);
+  ToolController (KIllustratorView *view);
   ~ToolController ();
 
   //void registerTool (int id, Tool* tool);
   void registerTool (Tool* tool);
   Tool* getActiveTool ();
 
-  void delegateEvent (QEvent *e, GDocument* doc, Canvas* canvas);
+  void delegateEvent (QEvent *e, GDocument *doc, Canvas *canvas);
 
   void emitModeSelected (Tool::ToolID id, const QString &msg);
   void emitOperationDone (Tool::ToolID id);
@@ -68,7 +68,7 @@ public slots:
 private:
   QIntDict<Tool> tools;
   Tool* activeTool;
-  MainView* mainView;
+  KIllustratorView *mainView;
 };
 
 #endif

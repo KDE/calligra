@@ -26,23 +26,8 @@
 #define KIllustrator_view_h_
 
 #include <CommandHistory.h>
-#include <MainView.h>
 #include <koView.h>
 #include <Tool.h>
-
-/*const int ID_TOOL_DUMMY=1000;
-const int ID_TOOL_SELECT=1001;
-const int ID_TOOL_EDITPOINT=1002;
-const int ID_TOOL_FREEHAND=1003;
-const int ID_TOOL_LINE=1004;
-const int ID_TOOL_BEZIER=1005;
-const int ID_TOOL_RECTANGLE=1006;
-const int ID_TOOL_POLYGON=1007;
-const int ID_TOOL_ELLIPSE=1008;
-const int ID_TOOL_TEXT=1009;
-const int ID_TOOL_ZOOM=1010;
-const int ID_TOOL_PATHTEXT=1011;
-const int ID_TOOL_INSERTPART=1012;*/
 
 class KIllustratorView;
 class KIllustratorChild;
@@ -72,7 +57,7 @@ class QButton;
 class KoPartSelectAction;
 
 
-class KIllustratorView : public KoView, public MainView
+class KIllustratorView : public KoView
 {
     Q_OBJECT
 public:
@@ -82,14 +67,8 @@ public:
     void createMyGUI ();
     virtual bool eventFilter(QObject *o, QEvent *e);
 
-    /**
-     * Overloaded @ref MainView::activeDocument
-     */
-    GDocument* activeDocument ();
-    /**
-     * Overloaded @ref MainView::getCanvas
-     */
-    Canvas* getCanvas () { return canvas; }
+    GDocument *activeDocument();
+    Canvas *getCanvas() { return canvas; }
 
     bool printDlg();
 

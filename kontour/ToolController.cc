@@ -23,14 +23,14 @@
 */
 
 #include "ToolController.h"
+#include "KIllustrator_view.h"
 #include "GDocument.h"
 #include "GPage.h"
 #include "GLayer.h"
-#include "MainView.h"
 #include <kdebug.h>
 
 
-ToolController::ToolController (MainView* view) {
+ToolController::ToolController (KIllustratorView *view) {
   activeTool = 0;
   mainView = view;
 }
