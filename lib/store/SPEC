@@ -43,7 +43,7 @@ Instead, we use the "normal" endings like ".kwd", ".ksp", ".kpr", etc. To recogn
 KOffice documents without a proper extension David Faure <faure@kde.org>
 added some magic numbers to the gzip header (to see what I'm talking about
 please use the "file" command on a KOffice document or see
-http://lists.kde.org/?l=kde-cvs&m=98603907306662&w=2).
+http://lists.kde.org/?l=koffice-devel&m=98609092618214&w=2);
 
 External Structure
 ------------------
