@@ -503,7 +503,7 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
 {
     setButtonText( KDialogBase::User1, i18n("&Reset") );
 
-    m_chooser = new KoFontChooser( this, "kofontchooser", _withSubSuperScript );
+    m_chooser = new KoFontChooser( this, "kofontchooser", _withSubSuperScript, KFontChooser::SmoothScalableFonts);
     setMainWidget( m_chooser );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
 
