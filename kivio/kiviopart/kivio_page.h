@@ -118,8 +118,8 @@ class KivioPage : public QObject
     void unselectAllStencils();
     bool unselectStencil( KivioStencil * );
     void selectStencil( KivioStencil * );
-    void selectStencils( float, float, float, float );
-    bool stencilInRect( float, float, float, float, KivioStencil * );
+    void selectStencils( double, double, double, double );
+    bool stencilInRect( double, double, double, double, KivioStencil * );
     QPtrList<KivioStencil> *selectedStencils() { return &m_lstSelection; }
 
     KivioRect getRectForAllSelectedStencils();
@@ -127,7 +127,7 @@ class KivioPage : public QObject
 
     int generateStencilIds( int );
 
-    KivioStencil *checkForStencil( KivioPoint *, int *, float, bool);
+    KivioStencil *checkForStencil( KivioPoint *, int *, double, bool);
 
 
     KivioLayer *curLayer()const { return m_pCurLayer; }
@@ -152,7 +152,7 @@ class KivioPage : public QObject
     void alignStencils( AlignData );
     void distributeStencils( DistributeData );
 
-    KivioConnectorTarget *connectPointToTarget( KivioConnectorPoint *, float );
+    KivioConnectorTarget *connectPointToTarget( KivioConnectorPoint *, double );
     void setHidePage(bool _hide);
   public slots:
     void deleteSelectedStencils();

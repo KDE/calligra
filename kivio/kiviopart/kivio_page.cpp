@@ -441,7 +441,7 @@ bool KivioPage::addStencil( KivioStencil *pStencil )
     return m_pCurLayer->addStencil( pStencil );
 }
 
-void KivioPage::selectStencils( float x, float y, float w, float h )
+void KivioPage::selectStencils( double x, double y, double w, double h )
 {
   // Iterate through all stencils of this layer
   KivioStencil *pStencil = m_pCurLayer->stencilList()->first();
@@ -460,9 +460,9 @@ void KivioPage::selectStencils( float x, float y, float w, float h )
   m_pDoc->slotSelectionChanged();
 }
 
-bool KivioPage::stencilInRect( float x, float y, float w, float h, KivioStencil *pStencil )
+bool KivioPage::stencilInRect( double x, double y, double w, double h, KivioStencil *pStencil )
 {
-  float sx, sy, sw, sh;
+  double sx, sy, sw, sh;
 
   sx = pStencil->x();
   sy = pStencil->y();
@@ -572,7 +572,7 @@ bool KivioPage::isStencilSelected( KivioStencil *pStencil )
  * for stencils.  The first one it finds will be returned.
  * If none are found, it will return NULL.
  */
-KivioStencil *KivioPage::checkForStencil( KivioPoint *pPoint, int *collisionType, float threshold, bool selectedOnly )
+KivioStencil *KivioPage::checkForStencil( KivioPoint *pPoint, int *collisionType, double threshold, bool selectedOnly )
 {
     KivioStencil *pStencil;
     int colType;
@@ -1114,31 +1114,12 @@ void KivioPage::alignStencils(AlignData d)
     if(!pStencil)
         return;
 
-    if (d.centerOfPage) {
-        KMacroCommand *macro = new KMacroCommand(i18n("Move Stencil"));
-        float w = m_pPageLayout.ptWidth;
-        float h = m_pPageLayout.ptHeight;
-
-        while( pStencil )
-        {
-            KivioRect oldRect = pStencil->rect();
-            pStencil->setPosition((w-pStencil->w())/2,(h-pStencil->h())/2);
-            KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"),
-              pStencil, oldRect, pStencil->rect(), this);
-            macro->addCommand(cmd);
-            pStencil = m_lstSelection.next();
-        }
-
-        m_pDoc->addCommand(macro);
-        return;
-    }
-
     if (d.v != AlignData::None || d.h != AlignData::None) {
         KMacroCommand *macro = new KMacroCommand(i18n("Move Stencil"));
-        float x = pStencil->x();
-        float y = pStencil->y();
-        float w = pStencil->w();
-        float h = pStencil->h();
+        double x = pStencil->x();
+        double y = pStencil->y();
+        double w = pStencil->w();
+        double h = pStencil->h();
 
         while( pStencil )
         {
@@ -1171,6 +1152,28 @@ void KivioPage::alignStencils(AlignData d)
                   break;
             }
 
+            KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"),
+              pStencil, oldRect, pStencil->rect(), this);
+            macro->addCommand(cmd);
+            pStencil = m_lstSelection.next();
+        }
+
+        m_pDoc->addCommand(macro);
+    }
+
+    if (d.centerOfPage) {
+        KMacroCommand *macro = new KMacroCommand(i18n("Move Stencil"));
+        double w = m_pPageLayout.ptWidth;
+        double h = m_pPageLayout.ptHeight;
+        KivioRect r = getRectForAllSelectedStencils();
+        double dx = ((w - r.w()) / 2.0) - r.x();
+        double dy = ((h - r.h()) / 2.0) - r.y();
+        pStencil = m_lstSelection.first();
+
+        while( pStencil )
+        {
+            KivioRect oldRect = pStencil->rect();
+            pStencil->setPosition(pStencil->x() + dx, pStencil->y() + dy);
             KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"),
               pStencil, oldRect, pStencil->rect(), this);
             macro->addCommand(cmd);
@@ -1212,10 +1215,10 @@ private:
 
 void KivioPage::distributeStencils(DistributeData d)
 {
-  float x  = 0.0;
-  float y  = 0.0;
-  float x1 = 0.0;
-  float y1 = 0.0;
+  double x  = 0.0;
+  double y  = 0.0;
+  double x1 = 0.0;
+  double y1 = 0.0;
 
   KivioStencil* pStencil = m_lstSelection.first();
   if (!pStencil)
@@ -1264,8 +1267,8 @@ void KivioPage::distributeStencils(DistributeData d)
   /*****************************************************/
   KivioStencil* firstx = xSortList.first();
   KivioStencil* lastx = xSortList.last();
-  float countx = (float)(xSortList.count()-1);
-  float distx = 0.0;
+  double countx = (double)(xSortList.count()-1);
+  double distx = 0.0;
   switch (d.h) {
     case DistributeData::Left:
       x1 = x1 - lastx->w();
@@ -1277,7 +1280,7 @@ void KivioPage::distributeStencils(DistributeData d)
       distx = (x1 - x)/countx;
       break;
     case DistributeData::Spacing: {
-      float allw = 0.0;
+      double allw = 0.0;
       pStencil = xSortList.first();
       while( pStencil )
       {
@@ -1294,7 +1297,7 @@ void KivioPage::distributeStencils(DistributeData d)
       break;
   }
 
-  float xx = x;
+  double xx = x;
   switch (d.h) {
     case DistributeData::Center:
       pStencil = xSortList.first();
@@ -1338,8 +1341,8 @@ void KivioPage::distributeStencils(DistributeData d)
   /*****************************************************/
   KivioStencil* firsty = ySortList.first();
   KivioStencil* lasty = ySortList.last();
-  float county = (float)(ySortList.count()-1);
-  float disty = 0.0;
+  double county = (double)(ySortList.count()-1);
+  double disty = 0.0;
   switch (d.v) {
     case DistributeData::Top:
       y1 = y1 - lasty->h();
@@ -1351,7 +1354,7 @@ void KivioPage::distributeStencils(DistributeData d)
       disty = (y1 - y)/countx;
       break;
     case DistributeData::Spacing: {
-      float allh = 0.0;
+      double allh = 0.0;
       pStencil = ySortList.first();
       while( pStencil )
       {
@@ -1368,7 +1371,7 @@ void KivioPage::distributeStencils(DistributeData d)
       break;
   }
 
-  float yy = y;
+  double yy = y;
   switch (d.v) {
     case DistributeData::Center:
       pStencil = ySortList.first();
@@ -1503,9 +1506,9 @@ void KivioPage::setPaperLayout(const KoPageLayout &l)
   emit sig_pageLayoutChanged(m_pPageLayout);
 }
 
-KivioConnectorTarget *KivioPage::connectPointToTarget( KivioConnectorPoint *p, float /*thresh*/)
+KivioConnectorTarget *KivioPage::connectPointToTarget( KivioConnectorPoint *p, double /*thresh*/)
 {
-   float oldX, oldY;
+   double oldX, oldY;
    KivioLayer *pLayer, *pCurLayer;
    bool doneSearching = false;
    KivioConnectorTarget *pTarget;
