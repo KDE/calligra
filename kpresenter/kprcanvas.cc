@@ -172,6 +172,10 @@ KPrCanvas::~KPrCanvas()
     blockSignals(true);
 
     // deactivate possible opened textobject to avoid double deletion, KPTextObject deletes this already
+    delete m_currentTextObjectView;
+    m_currentTextObjectView = 0;
+    if ( editNum )
+        editNum = 0;
 
     exitEditMode();
 
