@@ -1270,6 +1270,9 @@ void Page::deSelectObj( KPObject *kpobject )
 /*====================== select all objects ======================*/
 void Page::selectAllObj()
 {
+    if(view->kPresenterDoc()->numSelected()==objectList()->count())
+        return;
+
     QProgressDialog progress( i18n( "Selecting..." ), 0,
                               objectList()->count(), this );
 
@@ -1288,6 +1291,9 @@ void Page::selectAllObj()
 /*==================== deselect all objects ======================*/
 void Page::deSelectAllObj()
 {
+    if(view->kPresenterDoc()->numSelected()==0)
+        return;
+
     KPObject *kpobject;
 
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
