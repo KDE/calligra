@@ -121,6 +121,7 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   pixCache.setAutoDelete(true);
   undo_redo = new UndoRedoAdmin(64);
   QObject::connect(undo_redo,SIGNAL(undo_redo_change(QString,bool,QString,bool)),this,SLOT(undoRedoChange(QString,bool,QString,bool)));
+  _presPen = QPen(red,3,SolidLine);
 }
 
 /*====================== constructor =============================*/
@@ -163,6 +164,7 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   pixCache.setAutoDelete(true);
   undo_redo = new UndoRedoAdmin(64);
   QObject::connect(undo_redo,SIGNAL(undo_redo_change(QString,bool,QString,bool)),this,SLOT(undoRedoChange(QString,bool,QString,bool)));
+  _presPen = QPen(red,3,SolidLine);
 }
 
 /*====================== destructor ==============================*/
@@ -2008,6 +2010,12 @@ void KPresenterDocument_impl::changePicture(const char *filename,int diffx,int d
 		  objPtr = _objList.at(i);
 		  if (objPtr->objType == OT_PICTURE)
 		    {
+		      PageObjects *_page_obj_ = new PageObjects;
+		      *_page_obj_ = *objPtr;
+		  
+		      _page_obj_->graphObj = new GraphObj(0,"graphObj");
+		      *_page_obj_->graphObj = *objPtr->graphObj;
+
 		      objPtr->graphObj->setFileName(QString(filename));
 		      objPtr->graphObj->loadPixmap();
 		      objPtr->isSelected = false;
@@ -2018,6 +2026,10 @@ void KPresenterDocument_impl::changePicture(const char *filename,int diffx,int d
 		      objPtr->ow = pix.width();
 		      objPtr->oh = pix.height();
 		      objPtr->isSelected = true;
+
+		      UndoRedoPageObjects *urpo = new UndoRedoPageObjects(_page_obj_,objPtr,i18n("Change picture"));
+		      addUndo(urpo);
+
 		      repaint(objPtr->ox,objPtr->oy,
 			      objPtr->ow,objPtr->oh,false);
 		      break;
@@ -2046,6 +2058,12 @@ void KPresenterDocument_impl::changeClipart(const char *filename,int diffx,int d
 		  objPtr = _objList.at(i);
 		  if (objPtr->objType == OT_CLIPART)
 		    {
+		      PageObjects *_page_obj_ = new PageObjects;
+		      *_page_obj_ = *objPtr;
+		  
+		      _page_obj_->graphObj = new GraphObj(0,"graphObj");
+		      *_page_obj_->graphObj = *objPtr->graphObj;
+
 		      objPtr->graphObj->setFileName(QString(filename));
 		      objPtr->graphObj->loadClipart();
 		      objPtr->isSelected = false;
@@ -2053,6 +2071,10 @@ void KPresenterDocument_impl::changeClipart(const char *filename,int diffx,int d
 			      objPtr->ow,objPtr->oh,false);
 		      objPtr = _objList.at(i);
 		      objPtr->isSelected = true;
+
+		      UndoRedoPageObjects *urpo = new UndoRedoPageObjects(_page_obj_,objPtr,i18n("Change clipart"));
+		      addUndo(urpo);
+
 		      repaint(objPtr->ox,objPtr->oy,
 			      objPtr->ow,objPtr->oh,false);
 		      break;
@@ -2363,7 +2385,7 @@ void KPresenterDocument_impl::reArrangeObjs()
   _objNums = 0;
   if (!_objList.isEmpty())
     {
-      for (objPtr=_objList.first();objPtr != 0;objPtr=_objList.next())
+      for (objPtr = _objList.first();objPtr != 0;objPtr = _objList.next())
 	{
 	  _objNums++;
 	  objPtr->objNum = _objNums;
@@ -2375,21 +2397,31 @@ void KPresenterDocument_impl::reArrangeObjs()
 void KPresenterDocument_impl::deleteObjs()
 {
   bool changed = false;
+  QList<PageObjects> *_list = new QList<PageObjects>;
+  _list->setAutoDelete(false);
   
   if (!_objList.isEmpty())
     {
-      for (unsigned int i=0;i < _objList.count();i++)
+      for (unsigned int i = 0;i < _objList.count();i++)
 	{
 	  objPtr = _objList.at(i);
 	  if (objPtr->isSelected)
 	    {
-	      _objList.remove(i);
+	      _list->append(objPtr);
+	      _objList.take(i);
 	      i--;
 	      changed = true;
 	    }
 	}
       if (changed) repaint(false);
       reArrangeObjs();
+
+      if (!_list->isEmpty())
+	{
+	  UndoRedoDeletePageObjects *urdpo = new UndoRedoDeletePageObjects(&_objList,_list,i18n("Delete object(s)"));
+	  addUndo(urdpo);
+	}
+      else delete _list;
     }      
 }
 

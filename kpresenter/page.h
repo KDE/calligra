@@ -196,7 +196,6 @@ protected:
   QList<int> presStepList;
   QList<PicCache> picCache;
   int PM_DM,PM_SM;
-  QPen presPen;
   bool _clear_undo_list_,_append_undo_list_,_assign_page_obj_;
   int firstX,firstY;
 
@@ -214,8 +213,7 @@ private slots:
     {presMenu->setItemChecked(PM_DM,true);presMenu->setItemChecked(PM_SM,false);drawMode = true;setCursor(arrowCursor);}
   void switchingMode()
     {presMenu->setItemChecked(PM_DM,false);presMenu->setItemChecked(PM_SM,true);drawMode = false;setCursor(blankCursor);}
-  void choosePen();
-
+ 
 signals:
 
   // signals to notify of changes

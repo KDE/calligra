@@ -177,6 +177,17 @@ public:
   virtual void screenSkip();
   virtual void screenFullScreen();
   virtual void screenPen();
+  virtual void presPen1idl();
+  virtual void presPen2idl();
+  virtual void presPen3idl();
+  virtual void presPen4idl();
+  virtual void presPen5idl();
+  virtual void presPen6idl();
+  virtual void presPen7idl();
+  virtual void presPen8idl();
+  virtual void presPen9idl();
+  virtual void presPen10idl();
+  virtual void presPenColoridl();
 
   // help menu
   virtual void helpContents();
@@ -243,6 +254,8 @@ public:
   void changeUndo(QString,bool);
   void changeRedo(QString,bool);
 
+  void presColorChanged();
+
 public slots:
 
   // Document signals
@@ -253,7 +266,7 @@ public slots:
   // KPresenterFrame signals
   void slotGeometryEnd(PartFrame_impl*);
   void slotMoveEnd(PartFrame_impl*);
-  
+
 protected slots:
 
   // dialog slots
@@ -280,6 +293,19 @@ protected slots:
   void insertLineD2();
   void insertNormRect();
   void insertRoundRect();
+
+  // screen presentation
+  void presPen1();
+  void presPen2();
+  void presPen3();
+  void presPen4();
+  void presPen5();
+  void presPen6();
+  void presPen7();
+  void presPen8();
+  void presPen9();
+  void presPen10();
+  void presPenColor();
 
 protected:
 
@@ -394,6 +420,18 @@ protected:
   CORBA::Long m_idMenuScreen_Skip;
   CORBA::Long m_idMenuScreen_FullScreen;
   CORBA::Long m_idMenuScreen_Pen;
+  CORBA::Long m_idMenuScreen_PenWidth;
+  CORBA::Long m_idMenuScreen_PenColor;
+  CORBA::Long m_idMenuScreen_PenW1;
+  CORBA::Long m_idMenuScreen_PenW2;
+  CORBA::Long m_idMenuScreen_PenW3;
+  CORBA::Long m_idMenuScreen_PenW4;
+  CORBA::Long m_idMenuScreen_PenW5;
+  CORBA::Long m_idMenuScreen_PenW6;
+  CORBA::Long m_idMenuScreen_PenW7;
+  CORBA::Long m_idMenuScreen_PenW8;
+  CORBA::Long m_idMenuScreen_PenW9;
+  CORBA::Long m_idMenuScreen_PenW10;
 
   // help menu
   CORBA::Long m_idMenuHelp;
@@ -403,7 +441,9 @@ protected:
   CORBA::Long m_idMenuHelp_AboutKDE;
 
   // right button popup menus
-  QPopupMenu *rb_line,*rb_rect;
+  QPopupMenu *rb_line,*rb_rect,*rb_pen,*rb_pen_width;
+
+  int W1,W2,W3,W4,W5,W6,W7,W8,W9,W10,P_COL;
 
   // toolbar
   OPParts::ToolBarFactory_var m_vToolBarFactory;

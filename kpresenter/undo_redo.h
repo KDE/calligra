@@ -164,6 +164,28 @@ protected:
 
 };
 
+/******************************************************************/
+/* Class: UndoRedoDeletePageObjects                               */
+/******************************************************************/
+class UndoRedoDeletePageObjects : public UndoRedoBaseClass
+{
+public:
+  UndoRedoDeletePageObjects(QList<PageObjects> *_ptr_list_,QList<PageObjects> *_ptr_objs_,QString _description_);
+  virtual ~UndoRedoDeletePageObjects();
+
+  void set_list(QList<PageObjects>* _ptr_list_);
+  QList<PageObjects>* get_list();
+  void set_objs(QList<PageObjects>* _ptr_objs_);
+  QList<PageObjects>* get_objs();
+
+  virtual void revert(Action);
+
+protected:
+  QList<PageObjects> *ptr_list;
+  QList<PageObjects> *ptr_objs;
+
+};
+
 #endif
 
 

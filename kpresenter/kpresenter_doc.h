@@ -291,6 +291,9 @@ public:
   void undo();
   void redo();
 
+  QPen presPen() {return _presPen;}
+  void setPresPen(QPen p) {_presPen = p;}
+
 signals:
 
   // document modified
@@ -390,6 +393,8 @@ protected:
   int objStartY,objStartNum;
 
   UndoRedoAdmin *undo_redo;
+
+  QPen _presPen;
 
 };
 

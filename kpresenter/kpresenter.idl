@@ -54,6 +54,17 @@ module KPresenter
       oneway void screenSkip();
       oneway void screenFullScreen();
       oneway void screenPen();
+      oneway void presPen1idl();
+      oneway void presPen2idl();
+      oneway void presPen3idl();
+      oneway void presPen4idl();
+      oneway void presPen5idl();
+      oneway void presPen6idl();
+      oneway void presPen7idl();
+      oneway void presPen8idl();
+      oneway void presPen9idl();
+      oneway void presPen10idl();
+      oneway void presPenColoridl();
 
       oneway void helpContents();
       oneway void helpAbout();

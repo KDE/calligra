@@ -391,6 +391,103 @@ void UndoRedoInsertPageObject::revert(Action a)
   UndoRedoBaseClass::revert(a);
 }
 
+/******************************************************************/
+/* Class: UndoRedoDeletePageObjects                               */
+/******************************************************************/
+
+/*=================== constructor ================================*/
+UndoRedoDeletePageObjects::UndoRedoDeletePageObjects(QList<PageObjects> *_ptr_list_,QList<PageObjects> *_ptr_objs_,QString _description_)
+  : UndoRedoBaseClass(_description_)
+{
+  ptr_list = _ptr_list_;
+  ptr_objs = _ptr_objs_;
+}
+
+/*===================== destructor ===============================*/
+UndoRedoDeletePageObjects::~UndoRedoDeletePageObjects()
+{
+  if (ptr_list && ptr_objs && !ptr_list->isEmpty() && !ptr_objs->isEmpty())
+    {
+      PageObjects *po;
+      int index;
+      
+      for (po = ptr_objs->first();po != 0;po = ptr_objs->next())
+	{
+	  index = ptr_list->findRef(po);
+	  if (index == -1) 
+	    {
+	      if (po->graphObj)
+		delete po->graphObj;
+	      if (po->textObj)
+		delete po->textObj;
+	      delete po;
+	    }
+	}
+
+      ptr_objs->clear();
+      delete ptr_objs;
+    }
+}
+
+/*======================== set list ==============================*/
+void UndoRedoDeletePageObjects::set_list(QList<PageObjects>* _ptr_list_)
+{
+  ptr_list = _ptr_list_;
+}
+
+/*========================== get list ============================*/
+QList<PageObjects>* UndoRedoDeletePageObjects::get_list()
+{
+  return ptr_list;
+}
+
+/*========================== set objs ============================*/
+void UndoRedoDeletePageObjects::set_objs(QList<PageObjects>* _ptr_objs_)
+{
+  ptr_objs = _ptr_objs_;
+}
+
+/*========================== get objs ============================*/
+QList<PageObjects>* UndoRedoDeletePageObjects::get_objs()
+{
+  return ptr_objs;
+}
+
+/*======================== revert ================================*/
+void UndoRedoDeletePageObjects::revert(Action a)
+{
+  switch (a)
+    {
+    case UNDO:
+      {
+	if (ptr_list && ptr_objs && !ptr_objs->isEmpty())
+	  {
+	    PageObjects *po;
+
+	    for (po = ptr_objs->first();po != 0;po = ptr_objs->next())
+	      ptr_list->append(po);
+	  }
+      } break;
+    case REDO:
+      {
+	if (ptr_list && ptr_objs && !ptr_list->isEmpty() && !ptr_objs->isEmpty())
+	  {
+	    PageObjects *po;
+	    int index;
+
+	    for (po = ptr_objs->first();po != 0;po = ptr_objs->next())
+	      {
+		index = ptr_list->findRef(po);
+		if (index != -1) ptr_list->take(index);
+	      }
+	  }
+ 	
+      } break;
+    }
+
+  UndoRedoBaseClass::revert(a);
+}
+
 
 
 

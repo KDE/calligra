@@ -609,6 +609,7 @@ void KPresenterView_impl::screenPause()
 /*========================== screen first =======================*/
 void KPresenterView_impl::screenFirst()
 {
+  vert->setValue(0); 
 }
 
 /*========================== screen pevious =====================*/
@@ -632,6 +633,8 @@ void KPresenterView_impl::screenPrev()
       presentParts(page->presFakt(),&p,QRect(0,0,0,0),xOffset,yOffset);
       p.end();
     }
+  else
+    vert->setValue(yOffset - KPresenterDoc()->getPageSize(1,0,0).height() - 10); 
 }
 
 /*========================== screen next ========================*/
@@ -655,11 +658,14 @@ void KPresenterView_impl::screenNext()
       presentParts(page->presFakt(),&p,QRect(0,0,0,0),xOffset,yOffset);
       p.end();
     }
+  else
+    vert->setValue(yOffset + KPresenterDoc()->getPageSize(1,0,0).height() + 10); 
 }
 
 /*========================== screen last ========================*/
 void KPresenterView_impl::screenLast()
 {
+  vert->setValue(vert->maxValue());
 }
 
 /*========================== screen skip =======================*/
@@ -670,11 +676,15 @@ void KPresenterView_impl::screenSkip()
 /*========================== screen full screen ================*/
 void KPresenterView_impl::screenFullScreen()
 {
+  warning("Screenpresentations only work in FULLSCREEN mode at the moment!");
 }
 
 /*========================== screen pen/marker =================*/
 void KPresenterView_impl::screenPen()
 {
+  QPoint pnt(QCursor::pos());
+
+  rb_pen->popup(pnt);
 }
 
 /*======================= help contents ========================*/
@@ -937,6 +947,7 @@ void KPresenterView_impl::createGUI()
   setupScrollbars();
   setRanges();
   m_rMenuBar->setItemChecked(m_idMenuExtra_TAlign_Left,true);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW3,true);
  
   if (m_pKPresenterDoc && page)
     {
@@ -949,8 +960,8 @@ void KPresenterView_impl::createGUI()
 
   // Show every embedded object
   QListIterator<KPresenterChild> it = m_pKPresenterDoc->childIterator();
-  for( ; it.current(); ++it )
-    slotInsertObject( it.current() );
+  for(;it.current();++it)
+    slotInsertObject(it.current());
 
   edeb("...void KPresenterView_impl::createGUI() %i | %i\n",refCount(),_refcnt());
 }
@@ -1287,6 +1298,368 @@ void KPresenterView_impl::insertRoundRect()
   m_pKPresenterDoc->insertRectangle(pen,brush,RT_ROUND,xOffset,yOffset);
 }
 
+/*======================== set pres pen width 1 =================*/
+void KPresenterView_impl::presPen1()
+{
+  QPen p = KPresenterDoc()->presPen();
+  p.setWidth(1);
+  KPresenterDoc()->setPresPen(p);
+  rb_pen_width->setItemChecked(W1,true);
+  rb_pen_width->setItemChecked(W2,false);
+  rb_pen_width->setItemChecked(W3,false);
+  rb_pen_width->setItemChecked(W4,false);
+  rb_pen_width->setItemChecked(W5,false);
+  rb_pen_width->setItemChecked(W6,false);
+  rb_pen_width->setItemChecked(W7,false);
+  rb_pen_width->setItemChecked(W8,false);
+  rb_pen_width->setItemChecked(W9,false);
+  rb_pen_width->setItemChecked(W10,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW1,true);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW2,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW3,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW4,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW5,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW6,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW7,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW8,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW9,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW10,false);
+}
+
+/*======================== set pres pen width 2 =================*/
+void KPresenterView_impl::presPen2()
+{
+  QPen p = KPresenterDoc()->presPen();
+  p.setWidth(2);
+  KPresenterDoc()->setPresPen(p);
+  rb_pen_width->setItemChecked(W1,false);
+  rb_pen_width->setItemChecked(W2,true);
+  rb_pen_width->setItemChecked(W3,false);
+  rb_pen_width->setItemChecked(W4,false);
+  rb_pen_width->setItemChecked(W5,false);
+  rb_pen_width->setItemChecked(W6,false);
+  rb_pen_width->setItemChecked(W7,false);
+  rb_pen_width->setItemChecked(W8,false);
+  rb_pen_width->setItemChecked(W9,false);
+  rb_pen_width->setItemChecked(W10,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW1,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW2,true);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW3,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW4,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW5,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW6,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW7,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW8,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW9,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW10,false);
+}
+
+/*======================== set pres pen width 3 =================*/
+void KPresenterView_impl::presPen3()
+{
+  QPen p = KPresenterDoc()->presPen();
+  p.setWidth(3);
+  KPresenterDoc()->setPresPen(p);
+  rb_pen_width->setItemChecked(W1,false);
+  rb_pen_width->setItemChecked(W2,false);
+  rb_pen_width->setItemChecked(W3,true);
+  rb_pen_width->setItemChecked(W4,false);
+  rb_pen_width->setItemChecked(W5,false);
+  rb_pen_width->setItemChecked(W6,false);
+  rb_pen_width->setItemChecked(W7,false);
+  rb_pen_width->setItemChecked(W8,false);
+  rb_pen_width->setItemChecked(W9,false);
+  rb_pen_width->setItemChecked(W10,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW1,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW2,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW3,true);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW4,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW5,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW6,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW7,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW8,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW9,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW10,false);
+}
+
+/*======================== set pres pen width 4 =================*/
+void KPresenterView_impl::presPen4()
+{
+  QPen p = KPresenterDoc()->presPen();
+  p.setWidth(4);
+  KPresenterDoc()->setPresPen(p);
+  rb_pen_width->setItemChecked(W1,false);
+  rb_pen_width->setItemChecked(W2,false);
+  rb_pen_width->setItemChecked(W3,false);
+  rb_pen_width->setItemChecked(W4,true);
+  rb_pen_width->setItemChecked(W5,false);
+  rb_pen_width->setItemChecked(W6,false);
+  rb_pen_width->setItemChecked(W7,false);
+  rb_pen_width->setItemChecked(W8,false);
+  rb_pen_width->setItemChecked(W9,false);
+  rb_pen_width->setItemChecked(W10,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW1,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW2,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW3,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW4,true);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW5,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW6,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW7,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW8,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW9,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW10,false);
+}
+
+/*======================== set pres pen width 5 =================*/
+void KPresenterView_impl::presPen5()
+{
+  QPen p = KPresenterDoc()->presPen();
+  p.setWidth(5);
+  KPresenterDoc()->setPresPen(p);
+  rb_pen_width->setItemChecked(W1,false);
+  rb_pen_width->setItemChecked(W2,false);
+  rb_pen_width->setItemChecked(W3,false);
+  rb_pen_width->setItemChecked(W4,false);
+  rb_pen_width->setItemChecked(W5,true);
+  rb_pen_width->setItemChecked(W6,false);
+  rb_pen_width->setItemChecked(W7,false);
+  rb_pen_width->setItemChecked(W8,false);
+  rb_pen_width->setItemChecked(W9,false);
+  rb_pen_width->setItemChecked(W10,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW1,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW2,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW3,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW4,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW5,true);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW6,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW7,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW8,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW9,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW10,false);
+}
+
+/*======================== set pres pen width 6 =================*/
+void KPresenterView_impl::presPen6()
+{
+  QPen p = KPresenterDoc()->presPen();
+  p.setWidth(6);
+  KPresenterDoc()->setPresPen(p);
+  rb_pen_width->setItemChecked(W1,false);
+  rb_pen_width->setItemChecked(W2,false);
+  rb_pen_width->setItemChecked(W3,false);
+  rb_pen_width->setItemChecked(W4,false);
+  rb_pen_width->setItemChecked(W5,false);
+  rb_pen_width->setItemChecked(W6,true);
+  rb_pen_width->setItemChecked(W7,false);
+  rb_pen_width->setItemChecked(W8,false);
+  rb_pen_width->setItemChecked(W9,false);
+  rb_pen_width->setItemChecked(W10,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW1,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW2,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW3,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW4,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW5,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW6,true);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW7,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW8,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW9,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW10,false);
+}
+
+/*======================== set pres pen width 7 =================*/
+void KPresenterView_impl::presPen7()
+{
+  QPen p = KPresenterDoc()->presPen();
+  p.setWidth(7);
+  KPresenterDoc()->setPresPen(p);
+  rb_pen_width->setItemChecked(W1,false);
+  rb_pen_width->setItemChecked(W2,false);
+  rb_pen_width->setItemChecked(W3,false);
+  rb_pen_width->setItemChecked(W4,false);
+  rb_pen_width->setItemChecked(W5,false);
+  rb_pen_width->setItemChecked(W6,false);
+  rb_pen_width->setItemChecked(W7,true);
+  rb_pen_width->setItemChecked(W8,false);
+  rb_pen_width->setItemChecked(W9,false);
+  rb_pen_width->setItemChecked(W10,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW1,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW2,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW3,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW4,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW5,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW6,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW7,true);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW8,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW9,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW10,false);
+}
+
+/*======================== set pres pen width 8 =================*/
+void KPresenterView_impl::presPen8()
+{
+  QPen p = KPresenterDoc()->presPen();
+  p.setWidth(8);
+  KPresenterDoc()->setPresPen(p);
+  rb_pen_width->setItemChecked(W1,false);
+  rb_pen_width->setItemChecked(W2,false);
+  rb_pen_width->setItemChecked(W3,false);
+  rb_pen_width->setItemChecked(W4,false);
+  rb_pen_width->setItemChecked(W5,false);
+  rb_pen_width->setItemChecked(W6,false);
+  rb_pen_width->setItemChecked(W7,false);
+  rb_pen_width->setItemChecked(W8,true);
+  rb_pen_width->setItemChecked(W9,false);
+  rb_pen_width->setItemChecked(W10,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW1,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW2,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW3,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW4,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW5,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW6,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW7,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW8,true);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW9,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW10,false);
+}
+
+/*======================== set pres pen width 9 =================*/
+void KPresenterView_impl::presPen9()
+{
+  QPen p = KPresenterDoc()->presPen();
+  p.setWidth(9);
+  KPresenterDoc()->setPresPen(p);
+  rb_pen_width->setItemChecked(W1,false);
+  rb_pen_width->setItemChecked(W2,false);
+  rb_pen_width->setItemChecked(W3,false);
+  rb_pen_width->setItemChecked(W4,false);
+  rb_pen_width->setItemChecked(W5,false);
+  rb_pen_width->setItemChecked(W6,false);
+  rb_pen_width->setItemChecked(W7,false);
+  rb_pen_width->setItemChecked(W8,false);
+  rb_pen_width->setItemChecked(W9,true);
+  rb_pen_width->setItemChecked(W10,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW1,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW2,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW3,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW4,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW5,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW6,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW7,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW8,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW9,true);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW10,false);
+}
+
+/*======================== set pres pen width 10 ================*/
+void KPresenterView_impl::presPen10()
+{
+  QPen p = KPresenterDoc()->presPen();
+  p.setWidth(10);
+  KPresenterDoc()->setPresPen(p);
+  rb_pen_width->setItemChecked(W1,false);
+  rb_pen_width->setItemChecked(W2,false);
+  rb_pen_width->setItemChecked(W3,false);
+  rb_pen_width->setItemChecked(W4,false);
+  rb_pen_width->setItemChecked(W5,false);
+  rb_pen_width->setItemChecked(W6,false);
+  rb_pen_width->setItemChecked(W7,false);
+  rb_pen_width->setItemChecked(W8,false);
+  rb_pen_width->setItemChecked(W9,false);
+  rb_pen_width->setItemChecked(W10,true);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW1,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW2,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW3,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW4,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW5,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW6,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW7,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW8,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW9,false);
+  m_rMenuBar->setItemChecked(m_idMenuScreen_PenW10,true);
+}
+
+/*======================== set pres pen color ===================*/
+void KPresenterView_impl::presPenColor()
+{
+  QColor c = KPresenterDoc()->presPen().color();
+  
+  if (KColorDialog::getColor(c))
+    {
+      QPen p = KPresenterDoc()->presPen();
+      p.setColor(c);
+      KPresenterDoc()->setPresPen(p);
+      QPixmap pix(16,16);
+      pix.fill(c);
+      rb_pen->changeItem(pix,i18n("Pen color..."),P_COL);
+    }
+}
+
+/*======================== set pres pen width 1 =================*/
+void KPresenterView_impl::presPen1idl()
+{
+  presPen1();
+}
+
+/*======================== set pres pen width 2 =================*/
+void KPresenterView_impl::presPen2idl()
+{
+  presPen2();
+}
+
+/*======================== set pres pen width 3 =================*/
+void KPresenterView_impl::presPen3idl()
+{
+  presPen3();
+}
+
+/*======================== set pres pen width 4 =================*/
+void KPresenterView_impl::presPen4idl()
+{
+  presPen4();
+}
+
+/*======================== set pres pen width 5 =================*/
+void KPresenterView_impl::presPen5idl()
+{
+  presPen5();
+}
+
+/*======================== set pres pen width 6 =================*/
+void KPresenterView_impl::presPen6idl()
+{
+  presPen6();
+}
+
+/*======================== set pres pen width 7 =================*/
+void KPresenterView_impl::presPen7idl()
+{
+  presPen7();
+}
+
+/*======================== set pres pen width 8 =================*/
+void KPresenterView_impl::presPen8idl()
+{
+  presPen8();
+}
+
+/*======================== set pres pen width 9 =================*/
+void KPresenterView_impl::presPen9idl()
+{
+  presPen9();
+}
+
+/*======================== set pres pen width 10 ================*/
+void KPresenterView_impl::presPen10idl()
+{
+  presPen10();
+}
+
+/*======================== set pres pen color ===================*/
+void KPresenterView_impl::presPenColoridl()
+{
+  presPenColor();
+}
+
 /*======================= insert line (-) =======================*/
 void KPresenterView_impl::insertLineHidl()
 {
@@ -1474,6 +1847,16 @@ void KPresenterView_impl::changeRedo(QString _text,bool _enable)
     }
 
   m_rMenuBar->setItemEnabled(m_idMenuEdit_Redo,_enable);
+}
+
+/*================ color of pres-pen changed ====================*/
+void KPresenterView_impl::presColorChanged()
+{
+  QPen p = KPresenterDoc()->presPen();
+  QColor c = p.color();
+  QPixmap pix(16,16);
+  pix.fill(c);
+  rb_pen->changeItem(pix,i18n("Pen color..."),P_COL);
 }
 
 /*======================= setup menu ============================*/
@@ -1731,18 +2114,18 @@ void KPresenterView_impl::setupMenu()
       m_idMenuScreen_Start = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
 						     CORBA::string_dup(i18n("&Start")),m_idMenuScreen,
 						     this,CORBA::string_dup("screenStart"));
-      tmp = kapp->kde_datadir().copy();
-      tmp += "/kpresenter/toolbar/stop.xpm";
-      pix = loadPixmap(tmp);
-      m_idMenuScreen_Stop = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(i18n("St&op")),m_idMenuScreen,
-						    this,CORBA::string_dup("screenStop"));
-      tmp = kapp->kde_datadir().copy();
-      tmp += "/kpresenter/toolbar/pause.xpm";
-      pix = loadPixmap(tmp);
-      m_idMenuScreen_Pause = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						     CORBA::string_dup(i18n("Pa&use")),m_idMenuScreen,
-						     this,CORBA::string_dup("screenPause"));
+//       tmp = kapp->kde_datadir().copy();
+//       tmp += "/kpresenter/toolbar/stop.xpm";
+//       pix = loadPixmap(tmp);
+//       m_idMenuScreen_Stop = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
+// 						    CORBA::string_dup(i18n("St&op")),m_idMenuScreen,
+// 						    this,CORBA::string_dup("screenStop"));
+//       tmp = kapp->kde_datadir().copy();
+//       tmp += "/kpresenter/toolbar/pause.xpm";
+//       pix = loadPixmap(tmp);
+//       m_idMenuScreen_Pause = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
+// 						     CORBA::string_dup(i18n("Pa&use")),m_idMenuScreen,
+// 						     this,CORBA::string_dup("screenPause"));
       m_rMenuBar->insertSeparator(m_idMenuScreen);
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/first.xpm";
@@ -1768,15 +2151,48 @@ void KPresenterView_impl::setupMenu()
       m_idMenuScreen_Last = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
 						    CORBA::string_dup(i18n("&Go to end")),m_idMenuScreen,
 						    this,CORBA::string_dup("screenLast"));
-      m_idMenuScreen_Skip = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Goto &page")),m_idMenuScreen,
-						   this,CORBA::string_dup("screenSkip"));
+//       m_idMenuScreen_Skip = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Goto &page")),m_idMenuScreen,
+// 						   this,CORBA::string_dup("screenSkip"));
       m_rMenuBar->insertSeparator(m_idMenuScreen);
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/pen.xpm";
       pix = loadPixmap(tmp);
-      m_idMenuScreen_Pen = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						   CORBA::string_dup(i18n("&Marker or Pen")),m_idMenuScreen,
-						   this,CORBA::string_dup("screenPen"));
+      m_idMenuScreen_Pen = m_rMenuBar->insertSubMenuP(CORBA::string_dup(pix),
+						      CORBA::string_dup(i18n("&Choose Pen")),m_idMenuScreen);
+      m_idMenuScreen_PenWidth = m_rMenuBar->insertSubMenuP(CORBA::string_dup(pix),
+							  CORBA::string_dup(i18n("Pen width")),m_idMenuScreen_Pen);
+      m_idMenuScreen_PenColor = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Pen color")),m_idMenuScreen_Pen,
+						       this,CORBA::string_dup("presPenColoridl"));
+      m_idMenuScreen_PenW1 = m_rMenuBar->insertItem(CORBA::string_dup(i18n("1")),m_idMenuScreen_PenWidth,
+						    this,CORBA::string_dup("presPen1idl"));
+      m_idMenuScreen_PenW2 = m_rMenuBar->insertItem(CORBA::string_dup(i18n("2")),m_idMenuScreen_PenWidth,
+						    this,CORBA::string_dup("presPen2idl"));
+      m_idMenuScreen_PenW3 = m_rMenuBar->insertItem(CORBA::string_dup(i18n("3")),m_idMenuScreen_PenWidth,
+						    this,CORBA::string_dup("presPen3idl"));
+      m_idMenuScreen_PenW4 = m_rMenuBar->insertItem(CORBA::string_dup(i18n("4")),m_idMenuScreen_PenWidth,
+						    this,CORBA::string_dup("presPen4idl"));
+      m_idMenuScreen_PenW5 = m_rMenuBar->insertItem(CORBA::string_dup(i18n("5")),m_idMenuScreen_PenWidth,
+						    this,CORBA::string_dup("presPen5idl"));
+      m_idMenuScreen_PenW6 = m_rMenuBar->insertItem(CORBA::string_dup(i18n("6")),m_idMenuScreen_PenWidth,
+						    this,CORBA::string_dup("presPen6idl"));
+      m_idMenuScreen_PenW7 = m_rMenuBar->insertItem(CORBA::string_dup(i18n("7")),m_idMenuScreen_PenWidth,
+						    this,CORBA::string_dup("presPen7idl"));
+      m_idMenuScreen_PenW8 = m_rMenuBar->insertItem(CORBA::string_dup(i18n("8")),m_idMenuScreen_PenWidth,
+						    this,CORBA::string_dup("presPen8idl"));
+      m_idMenuScreen_PenW9 = m_rMenuBar->insertItem(CORBA::string_dup(i18n("9")),m_idMenuScreen_PenWidth,
+						    this,CORBA::string_dup("presPen9idl"));
+      m_idMenuScreen_PenW10 = m_rMenuBar->insertItem(CORBA::string_dup(i18n("10")),m_idMenuScreen_PenWidth,
+						     this,CORBA::string_dup("presPen10idl"));
+      m_rMenuBar->setCheckable(m_idMenuScreen_PenW1,true);
+      m_rMenuBar->setCheckable(m_idMenuScreen_PenW2,true);
+      m_rMenuBar->setCheckable(m_idMenuScreen_PenW3,true);
+      m_rMenuBar->setCheckable(m_idMenuScreen_PenW4,true);
+      m_rMenuBar->setCheckable(m_idMenuScreen_PenW5,true);
+      m_rMenuBar->setCheckable(m_idMenuScreen_PenW6,true);
+      m_rMenuBar->setCheckable(m_idMenuScreen_PenW7,true);
+      m_rMenuBar->setCheckable(m_idMenuScreen_PenW8,true);
+      m_rMenuBar->setCheckable(m_idMenuScreen_PenW9,true);
+      m_rMenuBar->setCheckable(m_idMenuScreen_PenW10,true);
 
       // help menu
       m_idMenuHelp = m_rMenuBar->insertMenu(CORBA::string_dup(i18n("&Help")));
@@ -1827,6 +2243,32 @@ void KPresenterView_impl::setupPopupMenus()
   rb_rect->insertItem(pixmap,this,SLOT(insertRoundRect()));
   rb_rect->setMouseTracking(true);
   rb_rect->setCheckable(false);
+
+  // create right button pen menu
+  rb_pen_width = new QPopupMenu();
+  CHECK_PTR(rb_pen_width);
+  W1 = rb_pen_width->insertItem("1",this,SLOT(presPen1()));
+  W2 = rb_pen_width->insertItem("2",this,SLOT(presPen2()));
+  W3 = rb_pen_width->insertItem("3",this,SLOT(presPen3()));
+  W4 = rb_pen_width->insertItem("4",this,SLOT(presPen4()));
+  W5 = rb_pen_width->insertItem("5",this,SLOT(presPen5()));
+  W6 = rb_pen_width->insertItem("6",this,SLOT(presPen6()));
+  W7 = rb_pen_width->insertItem("7",this,SLOT(presPen7()));
+  W8 = rb_pen_width->insertItem("8",this,SLOT(presPen8()));
+  W9 = rb_pen_width->insertItem("9",this,SLOT(presPen9()));
+  W10 = rb_pen_width->insertItem("10",this,SLOT(presPen10()));
+  rb_pen_width->setCheckable(true);
+  rb_pen_width->setMouseTracking(true);
+  rb_pen_width->setItemChecked(W3,true);
+
+  rb_pen = new QPopupMenu();
+  CHECK_PTR(rb_pen);
+  rb_pen->insertItem(i18n("Pen width"),rb_pen_width);
+  QPixmap pix(16,16);
+  pix.fill(red);
+  P_COL = rb_pen->insertItem(pix,i18n("Pen color..."),this,SLOT(presPenColor()));
+  rb_pen->setMouseTracking(true);
+  rb_pen->setCheckable(false);
 }
 
 /*======================= setup edit toolbar ===================*/
@@ -2123,23 +2565,23 @@ void KPresenterView_impl::setupScreenToolbar()
       m_rToolBarScreen = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Screen Presentations")));
  
       // stop
-      QString tmp = kapp->kde_datadir().copy();
-      tmp += "/kpresenter/toolbar/stop.xpm";
-      QString pix = loadPixmap(tmp);
-      m_idButtonScreen_Stop = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Stop")),
-							     this,CORBA::string_dup("screenStop"));
+//       QString tmp = kapp->kde_datadir().copy();
+//       tmp += "/kpresenter/toolbar/stop.xpm";
+//       QString pix = loadPixmap(tmp);
+//       m_idButtonScreen_Stop = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Stop")),
+// 							     this,CORBA::string_dup("screenStop"));
 
       // pause
-      tmp = kapp->kde_datadir().copy();
-      tmp += "/kpresenter/toolbar/pause.xpm";
-      pix = loadPixmap(tmp);
-      m_idButtonScreen_Pause = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Pause")),
-							      this,CORBA::string_dup("screenPause"));
+//       tmp = kapp->kde_datadir().copy();
+//       tmp += "/kpresenter/toolbar/pause.xpm";
+//       pix = loadPixmap(tmp);
+//       m_idButtonScreen_Pause = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Pause")),
+// 							      this,CORBA::string_dup("screenPause"));
 
       // start
-      tmp = kapp->kde_datadir().copy();
+      QString tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/start.xpm";
-      pix = loadPixmap(tmp);
+      QString pix = loadPixmap(tmp);
       m_idButtonScreen_Start = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Start")),
 							      this,CORBA::string_dup("screenStart"));
       m_rToolBarScreen->insertSeparator();
@@ -2183,20 +2625,20 @@ void KPresenterView_impl::setupScreenToolbar()
       m_rToolBarScreen->insertSeparator();
 
       // full screen
-      tmp = kapp->kde_datadir().copy();
-      tmp += "/kpresenter/toolbar/screen.xpm";
-      pix = loadPixmap(tmp);
-      m_idButtonScreen_Full = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),
-							     CORBA::string_dup(i18n("Full Screen")),
-							     this,CORBA::string_dup("screenFullScreen"));
-      m_rToolBarScreen->setToggle(m_idButtonScreen_Full,true);
-      m_rToolBarScreen->setButton(m_idButtonScreen_Full,true);
+//       tmp = kapp->kde_datadir().copy();
+//       tmp += "/kpresenter/toolbar/screen.xpm";
+//       pix = loadPixmap(tmp);
+//       m_idButtonScreen_Full = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),
+// 							     CORBA::string_dup(i18n("Full Screen")),
+// 							     this,CORBA::string_dup("screenFullScreen"));
+//       m_rToolBarScreen->setToggle(m_idButtonScreen_Full,true);
+//       m_rToolBarScreen->setButton(m_idButtonScreen_Full,true);
 
       // pen
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/pen.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonScreen_Pen = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Marker/Pen")),
+      m_idButtonScreen_Pen = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("choose Pen")),
 							    this,CORBA::string_dup("screenPen"));
     }
 }

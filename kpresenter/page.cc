@@ -47,7 +47,6 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
       _presFakt = 1.0;
       goingBack = false;
       drawMode = false;
-      presPen.operator=(QPen(red,3,SolidLine));
       picCache.setAutoDelete(true);
       fillBlack = true;
       _page_obj_list_ = 0;
@@ -234,10 +233,11 @@ void Page::paintBackground(QPainter *painter,QRect rect)
 void Page::paintObjects(QPainter *painter,QRect rect)
 {
   QRect r = painter->viewport();
+  QRect r_orig = r;
   objPtr = 0;
   for (objPtr=objList()->first();objPtr != 0;objPtr=objList()->next())
     {
-      painter->setViewport(r);
+      painter->setViewport(r_orig);
       painter->resetXForm();
       r = painter->viewport();
       /* draw the objects */
@@ -281,6 +281,7 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 	      } break;
 	    default:
 	      {
+		painter->save();
 		if (objPtr->objType != OT_CLIPART)
 		  {
 		    r = painter->viewport();
@@ -302,12 +303,14 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 		painter->setViewport(r);
 
 		painter->resetXForm();
+		painter->restore();
 	      } break;
 	    }
 
 	  /* draw selection, if selected */
 	  if (objPtr->isSelected)
 	    {
+	      painter->setViewport(r_orig);
 	      RasterOp rastOp = painter->rasterOp();
 	      painter->setRasterOp(NotROP);
 	      painter->setBrush(black);
@@ -728,7 +731,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
     {
       QPainter p;
       p.begin(this);
-      p.setPen(presPen);
+      p.setPen(view->KPresenterDoc()->presPen());
       p.drawLine(oldMx,oldMy,e->x(),e->y());
       oldMx = e->x();
       oldMy = e->y();
@@ -1121,10 +1124,6 @@ void Page::setupMenus()
   presMenu->setCheckable(true);
   PM_SM = presMenu->insertItem(i18n("&Switching mode"),this,SLOT(switchingMode()));
   PM_DM = presMenu->insertItem(i18n("&Drawing mode"),this,SLOT(drawingMode()));
-  presMenu->insertSeparator();
-  pixdir = KApplication::kde_datadir();
-  pixmap.load(pixdir+"/kpresenter/toolbar/pen.xpm");
-  presMenu->insertItem(pixmap,i18n("&Choose Pen..."),this,SLOT(choosePen()));
   presMenu->setItemChecked(PM_SM,true);
   presMenu->setItemChecked(PM_DM,false);
   presMenu->setMouseTracking(true);
@@ -1133,21 +1132,21 @@ void Page::setupMenus()
 /*======================== clipboard cut =========================*/
 void Page::clipCut()
 {
-  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT) ;//txtPtr->clipCut();
+  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT) getObject(editNum)->textObj->cutRegion();
   else view->editCut();
 }
 
 /*======================== clipboard copy ========================*/
 void Page::clipCopy()
 {
-  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT) ;// txtPtr->clipCopy();
+  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT) getObject(editNum)->textObj->copyRegion();
   else view->editCopy();
 }
 
 /*====================== clipboard paste =========================*/
 void Page::clipPaste()
 {
-  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT) ;//txtPtr->clipPaste();
+  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT) getObject(editNum)->textObj->paste();
   else view->editPaste();
 }
 
@@ -1193,11 +1192,6 @@ void Page::chClip()
 	    }
 	}
     }
-}
-
-/*==================== choose pen for presentations ==============*/
-void Page::choosePen()
-{
 }
 
 /*======================= set text font ==========================*/
