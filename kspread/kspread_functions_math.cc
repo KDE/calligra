@@ -989,6 +989,7 @@ bool kspreadfunc_mod( KSContext& context )
   if( (int)args[1]->doubleValue()!=0)
   {
         result=(int)args[0]->doubleValue() % (int)args[1]->doubleValue();
+        if( result < 0 ) result += (int)args[1]->doubleValue();	
         context.setValue( new KSValue(  result  ) );
   }
   else
