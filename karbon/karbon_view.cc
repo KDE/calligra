@@ -114,6 +114,12 @@ KarbonView::editCopy()
 void
 KarbonView::editPaste()
 {
+	VObjectListIterator itr( m_part->selection() );
+	for ( ; itr.current() ; ++itr )
+	{
+		m_part->insertObject( itr.current()->clone() );
+	}
+	m_part->repaintAllViews();
 }
 
 void

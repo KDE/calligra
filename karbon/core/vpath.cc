@@ -30,7 +30,7 @@ VPath::VPath()
 }
 
 VPath::VPath( const VPath& path )
-	: VObject()
+	: VObject( path )
 {
 	m_segmentLists.setAutoDelete( true );
 

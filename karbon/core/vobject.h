@@ -33,6 +33,7 @@ class VObject
 public:
 	VObject()
 		: m_state( state_normal ) {}
+	VObject( const VObject &obj ) { m_fill = obj.m_fill; m_stroke = obj.m_stroke; m_state = obj.m_state; }
 	virtual ~VObject() {}
 
 	virtual void draw( VPainter* painter, const QRect& rect,
