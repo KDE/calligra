@@ -123,7 +123,7 @@ KexiDataTable::init(/*QString caption, QString identifier, bool embedd*/)
 	setXMLFile("kexitableview.rc");
 #ifndef KEXI_NO_DATATABLE_SEARCH
 	//TODO
-	new KToggleAction(i18n("Show incremental search"), 0, t, SLOT(showISearch()), 0, "showISearch");
+//	new KToggleAction(i18n("Show incremental search"), 0, t, SLOT(showISearch()), 0, "showISearch");
 #endif
 
 }
