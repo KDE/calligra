@@ -22,11 +22,6 @@
 #ifndef SIDEWINDER_USTRING_H_
 #define SIDEWINDER_USTRING_H_
 
-// Hacks, should be in autoconf !!!
-//#define HAVE_STRING_H
-#define HAVE_MATH_H
-#define HAVE_FUNC_ISNAN
-
 namespace Sidewinder {
 
   /**
