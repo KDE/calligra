@@ -26,6 +26,9 @@ VPath::VPath( VObject* parent, VState state )
 
 	// add an initial segmentlist:
 	m_segmentLists.append( new VSegmentList( this ) );
+
+	// we need a stroke for boundingBox() at anytime:
+	m_stroke = new VStroke( this );
 }
 
 VPath::VPath( const VPath& path )
@@ -38,6 +41,10 @@ VPath::VPath( const VPath& path )
 	{
 		m_segmentLists.append( new VSegmentList( *( itr.current() ) ) );
 	}
+
+	// we need a stroke for boundingBox() at anytime:
+	if( !m_stroke )
+		m_stroke = new VStroke( this );
 }
 
 VPath::~VPath()
