@@ -75,6 +75,7 @@ QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
             || ((ch>='0') && (ch<='9'))
             || (ch=='-') || (ch=='_')) // The underscore is allowed by the CSS2 errata
         {
+            // Normal allowed characters (whitout any problem)
             strReturn+=qch;
             lastEscaped=false;
         }
@@ -101,10 +102,11 @@ QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
         }
         else // if ch >= 33 && ch <=127 but without alphanumerics
         {
-            // ### FIXME: CSS2 does not allow these character unescaped, so probably it breaks some HTML user agents
-            // We have a non-acceptable character, so escape it!
-            strReturn+='\\'; // start escape
+            // CSS2 does not allow these character unescaped, but a CSS escape would break some HTML user agents
+            // So we have to do our own incompatible cooking. :-(
+            strReturn+="--"; // start our private escape
             strReturn+=QString::number(ch,16);
+            strReturn+="--"; // end our private escape
             lastEscaped=true;
         }
     }
