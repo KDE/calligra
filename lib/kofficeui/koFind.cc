@@ -33,10 +33,10 @@
 #include <koFind.h>
 #include <kmessagebox.h>
 
-KoFindDialog::KoFindDialog(QWidget *parent, const char *name, long options, const QStringList &findStrings) :
+KoFindDialog::KoFindDialog(QWidget *parent, const char *name, long options, const QStringList &findStrings, bool hasSelection) :
     KDialogBase(parent, name, true, i18n("Find Text"), Ok | Cancel, Ok)
 {
-    init(false, findStrings);
+    init(false, findStrings, hasSelection);
     setOptions(options);
 }
 
@@ -59,7 +59,7 @@ QStringList KoFindDialog::findHistory() const
     return m_find->historyItems();
 }
 
-void KoFindDialog::init(bool forReplace, const QStringList &findStrings)
+void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool hasSelection)
 {
     QVBoxLayout *topLayout;
     QGridLayout *optionsLayout;
@@ -130,6 +130,7 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings)
     m_fromCursor = new QCheckBox(i18n("&From Cursor"), m_optionGrp);
     m_findBackwards = new QCheckBox(i18n("Find &Backwards"), m_optionGrp);
     m_selectedText = new QCheckBox(i18n("&Selected Text"), m_optionGrp);
+    setHasSelection( hasSelection );
     m_promptOnReplace = new QCheckBox(i18n("&Prompt On Replace"), m_optionGrp);
 
     optionsLayout->addWidget(m_caseSensitive, 0, 0);
@@ -207,6 +208,13 @@ void KoFindDialog::setFindHistory(const QStringList &strings)
         m_find->setHistoryItems(strings, true);
     else
         m_find->clearHistory();
+}
+
+void KoFindDialog::setHasSelection(bool hasSelection)
+{
+    m_selectedText->setEnabled( hasSelection );
+    if (!hasSelection)
+        m_selectedText->setChecked(false);
 }
 
 void KoFindDialog::setOptions(long options)
@@ -333,12 +341,14 @@ void KoFindDialog::slotOk()
 // Create the dialog.
 KoFind::KoFind(const QString &pattern, long options, QWidget *parent) :
     KDialogBase(parent, __FILE__, false,  // non-modal!
-        i18n("Find next %1").arg(pattern),
+        i18n("Find"),
         User1 | Close,
         User1,
         false,
         i18n("&Yes"))
 {
+    setMainWidget( new QLabel( i18n("Find next '%1'").arg(pattern), this ) );
+
     m_cancelled = false;
     m_options = options;
     m_parent = parent;
@@ -352,11 +362,11 @@ KoFind::KoFind(const QString &pattern, long options, QWidget *parent) :
 
 KoFind::~KoFind()
 {
-    if (!m_matches)
+    if (!m_matches && !m_cancelled)
         KMessageBox::information(m_parent, i18n("No match was found."));
 }
 
-void KoFind::closeEvent(QCloseEvent */*close*/)
+void KoFind::slotClose()
 {
     m_cancelled = true;
     kapp->exit_loop();

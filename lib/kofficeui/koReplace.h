@@ -78,8 +78,11 @@ public:
      * @param parent The parent object of this widget
      * @param name The name of this widget
      * @param options A bitfield of the @ref Options to be enabled.
+     * @param hasSelection Whether a selection exists
      */
-    KoReplaceDialog( QWidget *parent = 0, const char *name = 0, long options = 0, const QStringList &findStrings = QStringList(), const QStringList &replaceStrings = QStringList() );
+    KoReplaceDialog( QWidget *parent = 0, const char *name = 0, long options = 0,
+                     const QStringList &findStrings = QStringList(), const QStringList &replaceStrings = QStringList(),
+                     bool hasSelection = true );
 
     /**
      * Destructor.
@@ -239,7 +242,6 @@ private:
     QRect m_expose;
     int m_matchedLength;
     bool m_cancelled;
-    void closeEvent(QCloseEvent *close);
 
     static int replace( QString &text, const QString &replacement, int index, int length );
 
@@ -252,5 +254,6 @@ private slots:
     void slotUser1();   // All
     void slotUser2();   // Skip
     void slotUser3();   // Yes
+    void slotClose();
 };
 #endif

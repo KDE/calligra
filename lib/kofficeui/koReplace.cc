@@ -19,6 +19,7 @@
 */
 
 #include <qcheckbox.h>
+#include <qlabel.h>
 #include <kapp.h>
 #include <kdebug.h>
 #include <kcombobox.h>
@@ -26,10 +27,10 @@
 #include <koReplace.h>
 #include <kmessagebox.h>
 
-KoReplaceDialog::KoReplaceDialog(QWidget *parent, const char *name, long options, const QStringList &findStrings, const QStringList &replaceStrings) :
+KoReplaceDialog::KoReplaceDialog(QWidget *parent, const char *name, long options, const QStringList &findStrings, const QStringList &replaceStrings, bool hasSelection) :
     KoFindDialog(parent, name, true)
 {
-    init(true, findStrings);
+    init(true, findStrings, hasSelection);
     setOptions(options);
     setReplacementHistory(replaceStrings);
 }
@@ -89,12 +90,13 @@ void KoReplaceDialog::slotOk()
 // Create the dialog.
 KoReplace::KoReplace(const QString &pattern, const QString &replacement, long options, QWidget *parent) :
     KDialogBase(parent, __FILE__, false,  // non-modal!
-        i18n("Replace %1 with %2?").arg(pattern).arg(replacement),
+        i18n("Replace"),
         User3 | User2 | User1 | Close,
         User3,
         false,
         i18n("&All"), i18n("&Skip"), i18n("&Yes"))
 {
+    setMainWidget( new QLabel( i18n("Replace '%1' with '%2'?").arg(pattern).arg(replacement), this ) );
     m_cancelled = false;
     m_options = options;
     m_parent = parent;
@@ -109,11 +111,11 @@ KoReplace::KoReplace(const QString &pattern, const QString &replacement, long op
 
 KoReplace::~KoReplace()
 {
-    if (!m_replacements)
+    if (!m_replacements && !m_cancelled)
         KMessageBox::information(m_parent, i18n("No text was replaced."));
 }
 
-void KoReplace::closeEvent(QCloseEvent */*close*/)
+void KoReplace::slotClose()
 {
     m_cancelled = true;
     kapp->exit_loop();

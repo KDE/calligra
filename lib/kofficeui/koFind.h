@@ -47,6 +47,11 @@ class QRect;
  * To use the basic find dialog:
  *
  * <pre>
+ *  KoFindDialog dlg(....)
+ *  if ( dlg.exec() != QDialog::Accepted )
+ *      return;
+ *
+ *  // proceed with KoFind from here
  * </pre>
  *
  * To use your own extensions:
@@ -68,7 +73,7 @@ public:
     {
         WholeWordsOnly = 1,     // Match whole words only.
         FromCursor = 2,         // Start from current cursor position.
-        SelectedText = 4,       // Only search slected area.
+        SelectedText = 4,       // Only search selected area.
         CaseSensitive = 8,      // Consider case when matching.
         FindBackwards = 16,     // Go backwards.
         RegularExpression = 32, // Interpret the pattern as a regular expression.
@@ -82,8 +87,11 @@ public:
      * @param parent The parent object of this widget.
      * @param name The name of this widget.
      * @param options A bitfield of the @ref Options to be enabled.
+     * @param findStrings The find history, @see findHistory()
+     * @param hasSelection Whether a selection exists
      */
-    KoFindDialog( QWidget *parent = 0, const char *name = 0, long options = 0, const QStringList &findStrings = QStringList() );
+    KoFindDialog( QWidget *parent = 0, const char *name = 0, long options = 0,
+                  const QStringList &findStrings = QStringList(), bool hasSelection = true );
 
     /**
      * Destructor.
@@ -108,6 +116,14 @@ public:
     QStringList findHistory() const;
 
     /**
+     * Enable/disable the 'search in selection' option, depending
+     * on whether there actually is a selection.
+     *
+     * @param hasSelection true if a selection exists
+     */
+    void setHasSelection( bool hasSelection );
+
+    /**
      * Set the options which are enabled.
      *
      * @param options The setting of the @ref Options.
@@ -130,8 +146,8 @@ public:
     /**
      * Returns an empty widget which the user may fill with additional UI
      * elements as required. The widget occupies the width of the dialog,
-     * and is positioned immediately the regular expression support widgets
-     * for the pattern string.
+     * and is positioned immediately below the regular expression support
+     * widgets for the pattern string.
      */
     QWidget *findExtension();
 
@@ -180,7 +196,7 @@ private:
      * @param forReplace Is this a replace dialog?
      */
     KoFindDialog( QWidget *parent, const char *name, bool forReplace );
-    void init( bool forReplace, const QStringList &findStrings );
+    void init( bool forReplace, const QStringList &findStrings, bool hasSelection );
 
     QGroupBox *m_replaceGrp;
     QLabel *m_replaceLabel;
@@ -216,18 +232,21 @@ private:
  *
  * <pre>
  *
- *  // This creates a replace-on-prompt dialog if needed.
+ *  // This creates a find-next-prompt dialog if needed.
  *  dialog = new KoFind(find, options);
  *
  *  // Connect signals to code which handles highlighting
  *  // of found text.
- *  QObject::connect(
- *      dialog, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
- *      this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
+ *  connect(dialog, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
+ *          this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
  *
+ *  // Loop over all the text fragments of our document or selection
  *  for (text chosen by option SelectedText and in a direction set by FindBackwards)
+ *       // don't forget to honour FromCursor too
  *  {
- *      dialog->find()
+ *      // Let KoFind inspect the text fragment, and display a dialog if a match is found
+ *      if ( !dialog->find( text_fragment, region_to_expose ) )
+ *          break; // if cancelled by user
  *  }
  *  delete dialog;
  *
@@ -245,13 +264,15 @@ public:
     KoFind(const QString &pattern, long options, QWidget *parent = 0);
     ~KoFind();
 
-    // Walk the text fragment (e.g. kwrite line, kspread cell) looking for matches.
-    // For each match, emits the expose() signal and displays the find-again dialog
-    // proceeding.
-    //
-    // @param text The text fragment to modify.
-    // @param exposeOnReplace The region to expose
-    // @return False if the user elected to discontinue the find.
+    /**
+     * Walk the text fragment (e.g. kwrite line, kspread cell) looking for matches.
+     * For each match, emits the expose() signal and displays the find-again dialog
+     * proceeding.
+     *
+     * @param text The text fragment to modify.
+     * @param expose The region to expose
+     * @return false if the user elected to discontinue the find.
+     */
     bool find(const QString &text, const QRect &expose);
 
     /**
@@ -288,7 +309,6 @@ private:
     QRect m_expose;
     int m_matchedLength;
     bool m_cancelled;
-    void closeEvent(QCloseEvent *close);
 
     static bool isInWord( QChar ch );
     static bool isWholeWords( const QString &text, int starts, int matchedLength );
@@ -299,7 +319,8 @@ private:
 
 private slots:
 
-    void slotUser1();   // Yes
+    virtual void slotUser1();   // Yes
+    virtual void slotClose();
 };
 
 #endif
