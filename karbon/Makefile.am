@@ -16,7 +16,7 @@ lib_LTLIBRARIES = \
 libkarbonpart_la_SOURCES = \
 	karbon_part.cc \
 	karbon_view.cc \
-	karbon_factory.cc
+	karbon_factory.cc KArbonViewIface.skel KArbonViewIface.cc
 
 libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) \

@@ -20,6 +20,7 @@ class KarbonPart;
 class VTool;
 class VToolContainer;
 class VPainterFactory;
+class DCOPObject;
 
 class KarbonView : public KoView
 {
@@ -27,6 +28,9 @@ class KarbonView : public KoView
 public:
 	KarbonView( KarbonPart* part, QWidget* parent = 0, const char* name = 0 );
 	virtual ~KarbonView();
+	
+	virtual DCOPObject* dcopObject();
+
 
 	virtual void paintEverything( QPainter &p, const QRect &rect,
 		bool transparent = false );
@@ -41,7 +45,7 @@ public:
 
 	VPainterFactory *painterFactory() { return m_painterFactory; }
 
-protected slots:
+public slots:
 	// editing:
 	void editCut();
 	void editCopy();
@@ -50,6 +54,8 @@ protected slots:
 	void editDeselectAll();
 	void editDeleteSelection();
 	void editPurgeHistory();
+
+protected slots:
 
 	// object related operations:
 	void objectMoveToTop();
@@ -116,6 +122,8 @@ private:
 
 	//toolbox
 	VToolContainer *m_toolbox;
+	DCOPObject *m_dcop;
+
 };
 
 #endif

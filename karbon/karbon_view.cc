@@ -37,6 +37,9 @@
 #include <kdebug.h>
 #include <koMainWindow.h>
 
+#include "KArbonViewIface.h"
+
+
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
 {
@@ -44,6 +47,9 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 	setXMLFile( QString::fromLatin1( "karbon.rc" ) );
 	initActions();
+	m_dcop = 0;
+	dcopObject(); // build it
+
 
 	m_canvas = new VCanvas( this, part );
 	m_canvas->viewport()->installEventFilter( this );
@@ -62,9 +68,18 @@ KarbonView::~KarbonView()
 {
 	delete m_canvas;
 	m_canvas = 0L;
-
+	delete m_dcop;
 	delete m_painterFactory;
 }
+
+DCOPObject* KarbonView::dcopObject()
+{
+    if ( !m_dcop )
+	m_dcop = new KArbonViewIface( this );
+
+    return m_dcop;
+}
+
 
 void
 KarbonView::updateReadWrite( bool /*rw*/ )
