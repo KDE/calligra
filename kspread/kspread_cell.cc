@@ -2896,12 +2896,26 @@ void KSpreadCell::paintMoreTextIndicator( QPainter& painter,
     }
 
     QPointArray point( 3 );
-    point.setPoint( 0, doc->zoomItX( cellRect.right() - 4.0 ),
-                       doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 - 4.0 ) );
-    point.setPoint( 1, doc->zoomItX( cellRect.right() ),
-                       doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 ) );
-    point.setPoint( 2, doc->zoomItX( cellRect.right() - 4.0 ),
-                       doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 + 4.0 ) );
+
+    if ( d->strOutText.isRightToLeft() )
+    {
+      point.setPoint( 0, doc->zoomItX( cellRect.left() + 4.0 ),
+                         doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 -4.0 ) );
+      point.setPoint( 1, doc->zoomItX( cellRect.left() ),
+                         doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 ));
+      point.setPoint( 2, doc->zoomItX( cellRect.left() + 4.0 ),
+                         doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 +4.0 ) );
+    }
+    else
+    {
+      point.setPoint( 0, doc->zoomItX( cellRect.right() - 4.0 ),
+                         doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 - 4.0 ) );
+      point.setPoint( 1, doc->zoomItX( cellRect.right() ),
+                         doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 ) );
+      point.setPoint( 2, doc->zoomItX( cellRect.right() - 4.0 ),
+                         doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 + 4.0 ) );
+    }
+
     painter.setBrush( QBrush( penColor ) );
     painter.setPen( Qt::NoPen );
     painter.drawPolygon( point );
