@@ -26,6 +26,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
+
 class KoRulerPrivate {
 public:
     KoRulerPrivate() {
@@ -472,9 +473,10 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
     d->mousePressed = false;
 
     // Hacky, but necessary to prevent multiple tabs with the same coordinates (Werner)
+    bool fakeMovement=false;
     if(d->removeTab) {
         mouseMoveEvent(e);
-        d->action=A_NONE;
+        fakeMovement=true;
     }
 
     if ( d->action == A_BR_RIGHT || d->action == A_BR_LEFT ) {
@@ -535,7 +537,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
         i_first = _tmp;
         emit newFirstIndent( i_first );
     } else if ( d->action == A_TAB ) {
-        if ( d->canvas ) {
+        if ( d->canvas && !fakeMovement ) {
             QPainter p;
             p.begin( d->canvas );
             p.setRasterOp( NotROP );
