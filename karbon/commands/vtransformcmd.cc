@@ -32,16 +32,16 @@
 VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat )
 	: VCommand( doc, i18n( "Transform Objects" ) ), m_mat( mat )
 {
-	m_selection = document()->selection()->clone();
+	m_selection = document() ? document()->selection()->clone() : 0L;
 
-	if( m_selection->objects().count() == 1 )
+	if( !m_selection || m_selection->objects().count() == 1 )
 		setName( i18n( "Transform Object" ) );
 }
 
 VTransformCmd::VTransformCmd( VDocument *doc, const QString& name, const QString& icon )
 		: VCommand( doc, name, icon )
 {
-	m_selection = document()->selection()
+	m_selection = ( document() && document()->selection() )
 		? new VSelection( *document()->selection() )
 		: new VSelection();
 }
@@ -127,7 +127,7 @@ VTransformCmd::visitVText( VText& text )
 VTranslateCmd::VTranslateCmd( VDocument *doc, double d1, double d2 )
 		: VTransformCmd( doc, i18n( "Translate Objects" ), "14_select" )
 {
-	if( m_selection->objects().count() == 1 )
+	if( !m_selection || m_selection->objects().count() == 1 )
 		setName( i18n( "Translate Object" ) );
 
 	m_mat.translate( d1, d2 );
@@ -137,7 +137,7 @@ VTranslateCmd::VTranslateCmd( VDocument *doc, double d1, double d2 )
 VScaleCmd::VScaleCmd( VDocument *doc, const KoPoint& p, double s1, double s2 )
 		: VTransformCmd( doc, i18n( "Scale Objects" ), "14_select" )
 {
-	if( m_selection->objects().count() == 1 )
+	if( !m_selection || m_selection->objects().count() == 1 )
 		setName( i18n( "Scale Object" ) );
 
 	m_mat.translate( p.x(), p.y() );
@@ -149,7 +149,7 @@ VScaleCmd::VScaleCmd( VDocument *doc, const KoPoint& p, double s1, double s2 )
 VShearCmd::VShearCmd( VDocument *doc, const KoPoint& p, double s1, double s2 )
 		: VTransformCmd( doc, i18n( "Shear Objects" ), "14_shear" )
 {
-	if( m_selection->objects().count() == 1 )
+	if( !m_selection || m_selection->objects().count() == 1 )
 		setName( i18n( "Shear Object" ) );
 
 	m_mat.translate( p.x(), p.y() );
@@ -160,7 +160,7 @@ VShearCmd::VShearCmd( VDocument *doc, const KoPoint& p, double s1, double s2 )
 VRotateCmd::VRotateCmd( VDocument *doc, const KoPoint& p, double angle )
 		: VTransformCmd( doc, i18n( "Rotate Objects" ), "14_rotate" )
 {
-	if( m_selection->objects().count() == 1 )
+	if( !m_selection || m_selection->objects().count() == 1 )
 		setName( i18n( "Rotate Object" ) );
 
 	m_mat.translate( p.x(), p.y() );
