@@ -15,6 +15,7 @@
 #include "pythonkexidbconnection.h"
 #include "pythonkexidbcursor.h"
 #include "pythonkexidbfield.h"
+#include "pythonkexidbfieldlist.h"
 
 #include <string>
 
@@ -28,6 +29,7 @@ PythonKexiDB::PythonKexiDB()
     PythonKexiDBConnection::init_type();
     PythonKexiDBCursor::init_type();
     PythonKexiDBField::init_type();
+    PythonKexiDBFieldList::init_type();
 
     add_varargs_method("driverNames", &PythonKexiDB::driverNames,
         "list KexiDB.driverNames()\n"

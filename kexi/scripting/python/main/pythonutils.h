@@ -99,6 +99,14 @@ namespace Kross
              */
             static uint toUInt(Py::Object obj);
 
+            /**
+             * Convert a Py::Object to a QVariant.
+             *
+             * \param obj The Py::Object to convert.
+             * \return The to QVariant converted Py::Object.
+             */
+            static QVariant toVariant(Py::Object obj);
+
         private:
             /// Private Constructor. Not needed to instanciate the class.
             PythonUtils() {}

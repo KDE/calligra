@@ -40,6 +40,8 @@ namespace Kross
             virtual bool accepts(PyObject* pyobj) const;
             static void init_type(void);
 
+            KexiDB::FieldList* getFieldList();
+
         private:
             PythonKexiDBFieldListPrivate* d;
 

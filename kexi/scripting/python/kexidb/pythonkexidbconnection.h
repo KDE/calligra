@@ -58,21 +58,23 @@ namespace Kross
             Py::Object useDatabase(const Py::Tuple&);
             Py::Object closeDatabase(const Py::Tuple&);
 
-            Py::Object insertRecord(const Py::Tuple&);
+            Py::Object tableNames(const Py::Tuple&);
 
-            //bool createDatabase( const QString &dbName );
-            //bool dropDatabase( const QString &dbName = QString::null );
+            Py::Object executeQuery(const Py::Tuple&);
+            Py::Object querySingleString(const Py::Tuple&);
+
+            Py::Object executeSQL(const Py::Tuple&);
+
+            Py::Object insertRecord(const Py::Tuple&);
+            Py::Object createDatabase(const Py::Tuple&);
+            Py::Object dropDatabase(const Py::Tuple&);
+
             //bool createTable( TableSchema* tableSchema, bool replaceExisting = false );
             //tristate dropTable( TableSchema* tableSchema );
             //tristate dropTable( const QString& table );
             //tristate alterTable( TableSchema& tableSchema, TableSchema& newTableSchema);
             //bool alterTableName(TableSchema& tableSchema, const QString& newName, bool replace = false);
-            //bool executeSQL( const QString& statement );
             //QString selectStatement( QuerySchema& querySchema, int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const;
-
-            Py::Object tableNames(const Py::Tuple&);
-
-            Py::Object executeQuery(const Py::Tuple&);
     };
 
 }

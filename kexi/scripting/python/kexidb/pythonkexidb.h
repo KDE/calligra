@@ -54,48 +54,6 @@ namespace Kross
              */
             static void checkObject(KexiDB::Object* obj);
 
-            /**
-             * Converts a QString to a Py::String. If
-             * the QString isNull() then Py::None() will
-             * be returned.
-             *
-             * \param s The QString to convert.
-             * \return The to a Py::String converted QString.
-             */
-            static Py::Object toString(const QString& s);
-
-            /**
-             * Converts a QStringList to a Py::List.
-             *
-             * \param list The QStringList to convert.
-             * \return The to a Py::List converted QStringList.
-             */
-            static Py::List toObject(QStringList list);
-
-            /**
-             * Converts a QMap to a Py::Dict.
-             *
-             * \param map The QMap to convert.
-             * \return The to a Py::Dict converted QMap.
-             */
-            static Py::Dict toObject(QMap<QString, QVariant> map);
-
-            /**
-             * Converts a QValueList to a Py::List.
-             *
-             * \param list The QValueList to convert.
-             * \return The to a Py::List converted QValueList.
-             */
-            static Py::List toObject(QValueList<QVariant> list);
-
-            /**
-             * Converts a QVariant to a Py::Object.
-             *
-             * \param variant The QVariant to convert.
-             * \return The to a Py::Object converted QVariant.
-             */
-            static Py::Object toObject(QVariant variant);
-
         private:
             KexiDB::DriverManager m_drivermanager;
 

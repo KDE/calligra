@@ -92,3 +92,52 @@ uint PythonUtils::toUInt(Py::Object obj)
         throw Py::OverflowError("Maximal value exceeded.");
     return (uint)v;
 }
+
+QVariant PythonUtils::toVariant(Py::Object obj)
+{
+    if(obj.isNumeric()) {
+        if(Py::Int().is(obj)) {
+            return QVariant( (int)Py::Int(obj) );
+        }
+        if(Py::Float().is(obj)) {
+            return QVariant( (double)Py::Float(obj) );
+        }
+        if(Py::Long().is(obj)) {
+#if(QT_VERSION >= 0x030200)
+            return QVariant( (Q_LLONG)((long)Py::Long(obj)) );
+#else
+            kdWarning() << "PythonUtils::toVariant() can't handle long. Trying to handle it as int." << endl;
+            return QVariant( (int)Py::Int(obj) );
+#endif
+        }
+        throw Py::TypeError("Invalid numeric variant value.");
+    }
+
+    if(obj.isString()) {
+        return QVariant( obj.as_string().c_str() );
+    }
+
+    if(obj.isList()) {
+        Py::List pylist(obj);
+        QValueList<QVariant> vlist;
+        uint length = pylist.length();
+        for(uint i = 0; i < length; i++)
+            vlist.append( toVariant(pylist[i]) );
+        return vlist;
+    }
+
+    if(obj.isDict()) {
+        QMap<QString, QVariant> vmap;
+        Py::Dict pydict( obj.ptr() );
+        Py::Dict::iterator it( pydict.begin() );
+        for(; it != pydict.end(); ++it) {
+            Py::Dict::value_type vt(*it);
+            vmap.replace(vt.first.as_string().c_str(), toVariant(vt.second));
+        }
+        return vmap;
+    }
+
+    throw Py::TypeError("Invalid variant value.");
+}
+
+

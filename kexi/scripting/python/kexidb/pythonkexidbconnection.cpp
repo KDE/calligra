@@ -9,11 +9,12 @@
  ***************************************************************************/
 
 #include "pythonkexidbconnection.h"
+#include "../main/pythonutils.h"
 #include "pythonkexidbconnectiondata.h"
 #include "pythonkexidb.h"
-#include "../main/pythonutils.h"
 #include "pythonkexidbdriver.h"
 #include "pythonkexidbcursor.h"
+#include "pythonkexidbfieldlist.h"
 
 using namespace Kross;
 
@@ -90,9 +91,21 @@ void PythonKexiDBConnection::init_type(void)
     add_varargs_method("executeQuery", &PythonKexiDBConnection::executeQuery,
         "KexiDBCursor KexiDBConnection.executeQuery(querystatement)\n"
     );
+    add_varargs_method("querySingleString", &PythonKexiDBConnection::querySingleString,
+        "boolean KexiDBConnection.querySingleString(sqlstatement, value, columnnumber)\n"
+    );
 
     add_varargs_method("insertRecord", &PythonKexiDBConnection::insertRecord,
         "boolean KexiDBConnection.insertRecord(KexiDBFieldList)\n"
+    );
+    add_varargs_method("createDatabase", &PythonKexiDBConnection::createDatabase,
+        "boolean KexiDBConnection.createDatabase(databasename)\n"
+    );
+    add_varargs_method("dropDatabase", &PythonKexiDBConnection::dropDatabase,
+        "boolean KexiDBConnection.dropDatabase(databasename)\n"
+    );
+    add_varargs_method("executeSQL", &PythonKexiDBConnection::executeSQL,
+        "boolean KexiDBConnection.executeSQL(sqlstatement)\n"
     );
 }
 
@@ -208,13 +221,71 @@ Py::Object PythonKexiDBConnection::executeQuery(const Py::Tuple& args)
     return Py::asObject( new PythonKexiDBCursor(this, cursor) );
 }
 
+Py::Object PythonKexiDBConnection::querySingleString(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 2, 3);
+    PythonKexiDB::checkObject(d->connection);
+
+    QString sql = args[0].as_string().c_str();
+    QString value = args[1].as_string().c_str();
+    uint column = 0;
+    if(args.size() >= 3) {
+        if(! args[2].isNumeric())
+            throw Py::TypeError("KexiDBConnection.querySingleString(sqlstatement,value,columnnumber) columnnumber needs to be numeric.");
+        column = (unsigned long)Py::Long(args[2]);
+    }
+
+    return Py::Int( d->connection->querySingleString(sql, value, column) );
+}
+
 Py::Object PythonKexiDBConnection::insertRecord(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 2, 2);
+    PythonKexiDB::checkObject(d->connection);
 
-    //TODO
-    //bool insertRecord(FieldList& fields, QValueList<QVariant>& values);
+    Py::ExtensionObject<PythonKexiDBFieldList> obj(args[0]);
+    PythonKexiDBFieldList* fieldlist = obj.extensionObject();
+    if(! fieldlist)
+        throw Py::TypeError("KexiDBConnection.insertRecord(KexiDBFieldList,valuelist) Failed to determinate the defined KexiDBFieldList object.");
 
-    return Py::Int(1); // boolean
+    if(! args[1].isList())
+        throw Py::TypeError("KexiDBConnection.insertRecord(KexiDBFieldList,valuelist) Failed to determinate the defined List of values.");
+    Py::List valuelist = args[1];
+
+    QValueList<QVariant> vlist = PythonUtils::toVariant(valuelist).toList();
+    return Py::Int( d->connection->insertRecord(*fieldlist->getFieldList(), vlist) );
+}
+
+Py::Object PythonKexiDBConnection::createDatabase(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 1, 1);
+    PythonKexiDB::checkObject(d->connection);
+    QString dbname = args[0].as_string().c_str();
+    if(dbname.isEmpty() || ! args[0].isString())
+        throw Py::TypeError("KexiDBConnection.createDatabase(databasename) Invalid databasename string.");
+    return Py::Int( d->connection->createDatabase(dbname) );
+}
+
+Py::Object PythonKexiDBConnection::dropDatabase(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 0, 1);
+    PythonKexiDB::checkObject(d->connection);
+    QString dbname = QString::null;
+    if(args.size() > 0) {
+        if(! args[0].isString())
+            throw Py::TypeError("KexiDBConnection.dropDatabase(databasename) Invalid databasename string.");
+        dbname = args[0].as_string().c_str();
+    }
+    return Py::Int( d->connection->dropDatabase(dbname) );
+}
+
+Py::Object PythonKexiDBConnection::executeSQL(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 1, 1);
+    PythonKexiDB::checkObject(d->connection);
+    QString sql = args[0].as_string().c_str();
+    if(sql.isEmpty() || ! args[0].isString())
+        throw Py::TypeError("KexiDBConnection.executeSQL(sqlstatement) Invalid SQL string.");
+    return Py::Int( d->connection->executeSQL(sql) );
 }
 

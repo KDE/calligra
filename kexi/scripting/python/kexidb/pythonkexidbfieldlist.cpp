@@ -72,6 +72,11 @@ void PythonKexiDBFieldList::init_type(void)
     );
 }
 
+KexiDB::FieldList* PythonKexiDBFieldList::getFieldList()
+{
+    return d->fieldlist;
+}
+
 Py::Object PythonKexiDBFieldList::fieldCount(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 0, 0);

@@ -26,12 +26,19 @@
 #include "../main/pythonmanager.h"
 
 KApplication *app = 0;
-KInstance *instance = 0;
+
+static KCmdLineOptions options[] =
+{
+    { "file <filename>", I18N_NOOP("Pythonfile to execute."), "test.py" },
+    { 0, 0, 0}
+};
 
 int main(int argc, char **argv)
 {
+    int result = 0;
+
     KCmdLineArgs::init(argc, argv,
-        new KAboutData("test", "KrossTest",
+        new KAboutData("KrossPythonTest", "KrossPythonTest",
             "0.1", "", KAboutData::License_GPL,
             "(c) 2004, Sebastian Sauer (mail@dipe.org)\n"
             "http://www.koffice.org/kexi\n"
@@ -39,24 +46,27 @@ int main(int argc, char **argv)
             "kross@dipe.org"
         )
     );
+    KCmdLineArgs::addCmdLineOptions(options);
     app = new KApplication(true, true);
-    instance = new KInstance("test");
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
     Kross::PythonManager* pymanager = new Kross::PythonManager("Kross");
 
-    kdDebug() << "##############################################" << endl;
-    QFile f( QFile::encodeName("test/test.py") );
+    QFile f(QFile::encodeName( args->getOption("file") ));
     if(f.exists() && f.open(IO_ReadOnly)) {
         QString data = f.readAll();
         f.close();
 
+        kdDebug() << "##############################################" << endl;
         pymanager->execute(data, QStringList() << "kexidb");
+        kdDebug() << "##############################################" << endl;
     }
-    kdDebug() << "##############################################" << endl;
+    else {
+        kdWarning() << "Failed to load Python scriptfile: " << args->getOption("file") << endl;
+        result = -1;
+    }
 
     delete pymanager;
-
-    delete instance;
     delete app;
-    return 0;
+    return result;
 }
