@@ -96,6 +96,7 @@ class Test:
             print "ERROR in executeSQLQuery(): useDatabase %s failed!" % dbname
             return None
         #print "connection.currentDatabase() = %s" % connection.currentDatabase()
+        self.printConnectionInfos(connection)
 
         cursor = connection.executeQuery(sqlquerystatement)
         if cursor == None:
@@ -132,15 +133,13 @@ if __name__ == '__main__':
 
     t.connect(connection)
 
-    t.printConnectionInfos(connection)
-
     cursor = t.executeSQLQuery(
         connection, # KexiDBConnection object.
         "/home/snoopy/New_database.kexi", # databasename
         "SELECT * FROM table1" # sql query statement
     )
 
-    tableschema = KexiDB.getTableSchema("myTableSchema4")
+    tableschema = KexiDB.getTableSchema("myTableSchema3")
     print "tableschema = %s %s" % (tableschema, dir(tableschema))
     print "tableschema.name = %s" % tableschema.name
     print "tableschema.caption = %s" % tableschema.caption
@@ -151,9 +150,9 @@ if __name__ == '__main__':
     #tableschema.caption = "TheCaption"
     #tableschema.description = "TheDescription"
 
-    ###################################################
+    #
     # "Failed loading object's definition."
-    ###################################################
+    #
     # KexiDB: ******** CREATE TABLE myTableSchema3 (myField1 Text(200))
     # KexiDB: ######## NEW obj_id == 9
     # KexiDB: val0: 9
@@ -167,7 +166,7 @@ if __name__ == '__main__':
     # KexiDB: val8: 0
     # KexiDB: val9: NULL
     # KexiDB: val10: NULL
-    ###################################################
+    #
 
     field = KexiDB.getField("myField1")
     #field.name = "myField1"
@@ -176,6 +175,10 @@ if __name__ == '__main__':
 
     # WORKS
     #print "connection.createTable() = %s" % connection.createTable(tableschema)
+
+    # Needs testing;
+    #print "connection.alterTable() = %s" % connection.alterTable(tableschema, newtableschema)
+    #print "connection.alterTableName() = %s" % connection.alterTableName(tableschema, "myNewTableName")
 
     t.disconnect(connection)
 

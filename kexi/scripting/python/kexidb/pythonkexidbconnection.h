@@ -78,13 +78,11 @@ namespace Kross
 
             Py::Object createTable(const Py::Tuple&);
             Py::Object dropTable(const Py::Tuple&);
+            Py::Object alterTable(const Py::Tuple&);
+            Py::Object alterTableName(const Py::Tuple&);
 
-            //bool createTable( TableSchema* tableSchema, bool replaceExisting = false );
-            //tristate dropTable( TableSchema* tableSchema );
-            //tristate dropTable( const QString& table );
-            //tristate alterTable( TableSchema& tableSchema, TableSchema& newTableSchema);
-            //bool alterTableName(TableSchema& tableSchema, const QString& newName, bool replace = false);
-            //QString selectStatement( QuerySchema& querySchema, int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const;
+            Py::Object tableSchema(const Py::Tuple&);
+            Py::Object isEmptyTable(const Py::Tuple&);
     };
 
 }
