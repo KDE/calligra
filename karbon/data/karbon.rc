@@ -28,7 +28,7 @@
 			<Action name="object_trafo_shear"/>
 		</Menu>
 		<Menu name="object_arrange">
-			<text>&amp;Move</text>
+			<text>&amp;Order</text>
 			<Action name="object_move_totop"/>
 			<Action name="object_move_up"/>
 			<Action name="object_move_down"/>
