@@ -43,6 +43,8 @@ public:
 
     void removeStyleTemplate ( KoStyle *style );
 
+    void updateStyleListOrder( const QStringList &list );
+
 private:
     QPtrList<KoStyle> m_styleList;
     QPtrList<KoStyle> m_deletedStyles;

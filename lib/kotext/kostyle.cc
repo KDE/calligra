@@ -87,6 +87,37 @@ void KoStyleCollection::removeStyleTemplate ( KoStyle *style ) {
     }
 }
 
+void KoStyleCollection::updateStyleListOrder( const QStringList &list )
+{
+    QPtrList<KoStyle> orderStyle;
+    QStringList lst( list );
+    for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
+    {
+        //kdDebug()<<" style :"<<(*it)<<endl;
+        QPtrListIterator<KoStyle> style( m_styleList );
+        for ( ; style.current() ; ++style )
+        {
+            if ( style.current()->name() == *it)
+            {
+                orderStyle.append( style.current() );
+                //kdDebug()<<" found !!!!!!!!!!!!\n";
+                break;
+            }
+        }
+    }
+    m_styleList.setAutoDelete( false );
+    m_styleList.clear();
+    m_styleList = orderStyle;
+#if 0
+    QPtrListIterator<KoStyle> style( m_styleList );
+    for ( ; style.current() ; ++style )
+    {
+        kdDebug()<<" style.current()->name() :"<<style.current()->name()<<endl;
+    }
+#endif
+}
+
+
 KoStyle::KoStyle( const QString & name )
 {
     m_name = name;
@@ -133,3 +164,5 @@ KoParagLayout KoStyle::loadStyle( QDomElement & parentElem, int docVersion )
 
     return layout;
 }
+
+

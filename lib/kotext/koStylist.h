@@ -55,6 +55,7 @@ public:
     virtual void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )=0;
     virtual void removeStyleTemplate( KoStyle *style )=0;
     virtual void updateAllStyleLists()=0;
+    virtual void updateStyleListOrder( const QStringList & list)=0;
 
 protected:
     void updateFollowingStyle( KoStyle *s );
@@ -81,6 +82,7 @@ protected:
     QPtrList<KoStyle> m_origStyles;      // internal list of orig styles we have modified
     QPtrList<KoStyle> m_changedStyles;   // internal list of changed styles.
     QPtrList<KoStyleManagerTab> m_tabsList;
+    QStringList m_styleOrder;
     int numStyles;
     bool noSignals;
 

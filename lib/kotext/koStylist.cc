@@ -115,6 +115,7 @@ void KoStyleManager::setupWidget(const QPtrList<KoStyle> & styleList)
         m_stylesList->insertItem( style.current()->translatedName() );
         m_origStyles.append( style.current() );
         m_changedStyles.append( style.current() );
+        m_styleOrder<< style.current()->name();
     }
 
     frame1Layout->addMultiCellWidget( m_stylesList, 0, 0, 0, 1 );
@@ -292,7 +293,9 @@ void KoStyleManager::save() {
 	// this would break the TOC stuff.
         if ( m_currentStyle->name() != m_nameString->text() &&
             m_currentStyle->translatedName() != m_nameString->text() )
+        {
             m_currentStyle->setName( m_nameString->text() );
+        }
 
         int indexNextStyle = styleIndex( m_styleCombo->currentItem() );
         m_currentStyle->setFollowingStyle( m_changedStyles.at( indexNextStyle ) );
@@ -318,6 +321,7 @@ void KoStyleManager::addStyle() {
     m_styleCombo->insertItem( str );
     m_stylesList->setCurrentItem( m_stylesList->count() - 1 );
     noSignals=false;
+    m_styleOrder<< str;
 
     updateGUI();
 }
@@ -337,6 +341,7 @@ void KoStyleManager::deleteStyle() {
     unsigned int cur = styleIndex( m_stylesList->currentItem() );
     unsigned int curItem = m_stylesList->currentItem();
     KoStyle *s = m_changedStyles.at(cur);
+    m_styleOrder.remove( s->name());
     updateFollowingStyle( s );
     Q_ASSERT( s == m_currentStyle );
     delete s;
@@ -370,6 +375,13 @@ void KoStyleManager::moveUpStyle()
             break;
         }
     }
+    int pos2 = m_styleOrder.findIndex( currentStyleName );
+    if ( pos2 != -1 )
+    {
+        m_styleOrder.remove( m_styleOrder.at(pos2));
+        m_styleOrder.insert( m_styleOrder.at(pos2-1), currentStyleName);
+    }
+
     pos=m_stylesList->currentItem();
     noSignals=true;
     m_stylesList->changeItem( m_stylesList->text ( pos-1 ),pos);
@@ -404,6 +416,14 @@ void KoStyleManager::moveDownStyle()
             break;
         }
     }
+
+    int pos2 = m_styleOrder.findIndex( currentStyleName );
+    if ( pos2 != -1 )
+    {
+        m_styleOrder.remove( m_styleOrder.at(pos2));
+        m_styleOrder.insert( m_styleOrder.at(pos2+1), currentStyleName);
+    }
+
 
     pos=m_stylesList->currentItem();
     noSignals=true;
@@ -464,7 +484,7 @@ void KoStyleManager::apply() {
         }// else
          //     kdDebug(32500) << "has not changed " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
     }
-
+    updateStyleListOrder( m_styleOrder);
     updateAllStyleLists();
     noSignals=false;
 }
@@ -479,6 +499,7 @@ void KoStyleManager::renameStyle(const QString &theText) {
     // rename only in the GUI, not even in the underlying objects (save() does it).
     kdDebug(32500) << "KoStyleManager::renameStyle before " << m_styleCombo->currentText() << endl;
     m_styleCombo->changeItem( theText, index );
+    m_styleOrder[index]=theText;
     kdDebug(32500) << "KoStyleManager::renameStyle after " << m_styleCombo->currentText() << endl;
     m_stylesList->changeItem( theText, index );
 
