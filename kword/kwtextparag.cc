@@ -265,43 +265,43 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
 
 int KWTextParag::topMargin() const
 {
-    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
-    return doc->zoomItY( m_layout.margins[ QStyleSheetItem::MarginTop ] )
-        + Border::zoomWidthY( m_layout.topBorder.ptWidth, doc, 0 );
+    KWZoomHandler * zh = textDocument()->zoomHandler();
+    return zh->zoomItY( m_layout.margins[ QStyleSheetItem::MarginTop ] )
+        + Border::zoomWidthY( m_layout.topBorder.ptWidth, zh, 0 );
 }
 
 int KWTextParag::bottomMargin() const
 {
-    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
-    return doc->zoomItY( m_layout.margins[ QStyleSheetItem::MarginBottom ] )
-        + Border::zoomWidthY( m_layout.bottomBorder.ptWidth, doc, 0 );
+    KWZoomHandler * zh = textDocument()->zoomHandler();
+    return zh->zoomItY( m_layout.margins[ QStyleSheetItem::MarginBottom ] )
+        + Border::zoomWidthY( m_layout.bottomBorder.ptWidth, zh, 0 );
 }
 
 int KWTextParag::leftMargin() const
 {
-    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
-    return doc->zoomItX( m_layout.margins[ QStyleSheetItem::MarginLeft ] )
-        + Border::zoomWidthX( m_layout.leftBorder.ptWidth, doc, 0 )
+    KWZoomHandler * zh = textDocument()->zoomHandler();
+    return zh->zoomItX( m_layout.margins[ QStyleSheetItem::MarginLeft ] )
+        + Border::zoomWidthX( m_layout.leftBorder.ptWidth, zh, 0 )
         + counterWidth() /* shouldn't be zoomed, it depends on the font sizes */;
 }
 
 int KWTextParag::rightMargin() const
 {
-    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
-    return doc->zoomItX( m_layout.margins[ QStyleSheetItem::MarginRight ] )
-        + Border::zoomWidthX( m_layout.rightBorder.ptWidth, doc, 0 );
+    KWZoomHandler * zh = textDocument()->zoomHandler();
+    return zh->zoomItX( m_layout.margins[ QStyleSheetItem::MarginRight ] )
+        + Border::zoomWidthX( m_layout.rightBorder.ptWidth, zh, 0 );
 }
 
 int KWTextParag::firstLineMargin() const
 {
-    return textDocument()->textFrameSet()->kWordDocument()->zoomItX(
+    return textDocument()->zoomHandler()->zoomItX(
         m_layout.margins[ QStyleSheetItem::MarginFirstLine ] );
 }
 
 int KWTextParag::lineSpacing( int line ) const
 {
     if ( m_layout.lineSpacing >= 0 )
-        return textDocument()->textFrameSet()->kWordDocument()->zoomItY(
+        return textDocument()->zoomHandler()->zoomItY(
             m_layout.lineSpacing );
     else {
         KWTextParag * that = const_cast<KWTextParag *>(this);
@@ -338,7 +338,7 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
          || m_layout.leftBorder.ptWidth > 0
          || m_layout.rightBorder.ptWidth > 0 )
     {
-        KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
+        KWZoomHandler * zh = textDocument()->zoomHandler();
 
         QRect r;
         // r.setLeft( leftMargin() ); // breaks with centered text and with counters
@@ -348,7 +348,7 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
         int lastLine = lines() - 1;
         r.setBottom( static_cast<int>( lineY( lastLine ) + lineHeight( lastLine ) - lineSpacing( lastLine ) ) - 1 );
 
-        Border::drawBorders( painter, doc, r, m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
+        Border::drawBorders( painter, zh, r, m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
                              0, QPen() );
     }
 }
@@ -392,10 +392,15 @@ void KWTextParag::copyParagData( QTextParag *_parag )
         if ( newStyle && style != newStyle ) // if same style, keep paragraph-specific changes as usual
         {
             setParagLayout( newStyle->paragLayout() );
-            QTextFormat * format = textDocument()->textFrameSet()->zoomFormatFont( &newStyle->format() );
-            setFormat( format );
-            format->addRef();
-            string()->setFormat( 0, format, true ); // prepare format for text insertion
+            KWTextFrameSet * textfs = textDocument()->textFrameSet();
+            ASSERT( textfs );
+            if ( textfs )
+            {
+                QTextFormat * format = textfs->zoomFormatFont( &newStyle->format() );
+                setFormat( format );
+                format->addRef();
+                string()->setFormat( 0, format, true ); // prepare format for text insertion
+            }
             styleApplied = true;
         }
     }
@@ -464,12 +469,12 @@ void KWTextParag::setTabList( const KoTabulatorList &tabList )
     m_layout.setTabList( lst );
     if ( !tabList.isEmpty() )
     {
-        KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
+        KWZoomHandler * zh = textDocument()->zoomHandler();
         int * tabs = new int[ tabList.count() + 1 ]; // will be deleted by ~QTextParag
         KoTabulatorList::Iterator it = lst.begin();
         unsigned int i = 0;
         for ( ; it != lst.end() ; ++it, ++i )
-            tabs[i] = (int)doc->zoomItX( (*it).ptPos );
+            tabs[i] = zh->zoomItX( (*it).ptPos );
         tabs[i] = 0;
         assert( i == tabList.count() );
         setTabArray( tabs );

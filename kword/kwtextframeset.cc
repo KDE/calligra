@@ -70,13 +70,9 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     m_origFontSizes.setAutoDelete( true );
     m_framesInPage.setAutoDelete( true );
     m_firstPage = 0;
-    textdoc = new KWTextDocument( this, 0, new KWTextFormatCollection( _doc ) );
-    QTextFormatter * formatter = new QTextFormatterBreakWords;
-    formatter->setAllowBreakInWords( true ); // Necessary for lines without a single space
-    textdoc->setFormatter( formatter );
+    textdoc = new KWTextDocument( this, 0, new KWTextFormatCollection( _doc->defaultFont() ) );
     textdoc->setFlow( this );
     textdoc->setVerticalBreak( true );              // get QTextFlow methods to be called
-    textdoc->setAddMargins( true );                 // top margin and bottom are added, not max'ed
 
     /* if ( QFile::exists( "bidi.txt" ) ) {
        QFile fl( "bidi.txt" );
@@ -3212,6 +3208,7 @@ void KWTextFrameSetEdit::moveCursor( CursorAction action )
             cursor->gotoLineEnd();
             break;
         case MoveEnd:
+            textFrameSet()->ensureFormatted( textFrameSet()->textDocument()->lastParag() );
             cursor->gotoEnd();
             break;
         case MoveParagUp: {

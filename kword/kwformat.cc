@@ -25,14 +25,14 @@
 #include <kcharsets.h>
 #endif
 
-KWTextFormatCollection::KWTextFormatCollection( KWDocument * doc )
+KWTextFormatCollection::KWTextFormatCollection( const QFont & defaultFont )
     : QTextFormatCollection(), m_cachedFormat( 0L )
 {
     //kdDebug() << "KWTextFormatCollection::KWTextFormatCollection" << endl;
     //kdDebug() << "Deleting default format " << defaultFormat() << endl;
     delete defaultFormat();
 
-    setDefaultFormat( new KWTextFormat( doc->defaultFont(), QColor(), 0L /* no coll, for no refcounting */ ) );
+    setDefaultFormat( new KWTextFormat( defaultFont, QColor(), 0L /* no coll, for no refcounting */ ) );
 }
 
 QTextFormat * KWTextFormatCollection::format( const QFont &f, const QColor &c )

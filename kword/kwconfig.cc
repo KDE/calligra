@@ -260,7 +260,7 @@ void configureInterfacePage::apply()
         m_pView->changeNbOfRecentFiles(nbRecent);
     }
 
-    if(ruler != doc->getShowRuler())
+    if(ruler != doc->showRuler())
     {
         config->writeEntry( "Rulers", ruler );
         doc->setShowRuler( ruler );

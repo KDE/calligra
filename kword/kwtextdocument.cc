@@ -19,16 +19,35 @@
 
 #include "kwtextparag.h"
 #include "kwtextdocument.h"
+#include "kwdoc.h"
+#include "kwtextframeset.h"
 #include "kwformat.h"
 #include <kdebug.h>
 
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTextFormatCollection *fc )
-    : QTextDocument( p, fc ), m_textfs( textfs ), m_bDestroying( false )
+    : QTextDocument( p, fc ), m_textfs( textfs ), m_zoomHandler( textfs->kWordDocument() ), m_bDestroying( false )
+{
+    init();
+}
+
+KWTextDocument::KWTextDocument( KWZoomHandler * zoomHandler, KWTextFormatCollection *fc )
+    : QTextDocument( 0, fc ), m_textfs( 0 ), m_zoomHandler( zoomHandler ), m_bDestroying( false )
+{
+    init();
+}
+
+
+void KWTextDocument::init()
 {
     // QTextDocument::QTextDocument creates a parag, but too early for our createParag to get called !
     // So we have to get rid of it.
     clear( true );
     // Using clear( false ) is a bit dangerous, since we don't always check cursor->parag() for != 0
+
+    setAddMargins( true );                 // top margin and bottom are added, not max'ed
+    QTextFormatter * formatter = new QTextFormatterBreakWords;
+    formatter->setAllowBreakInWords( true ); // Necessary for lines without a single space
+    setFormatter( formatter );
 }
 
 KWTextDocument::~KWTextDocument()

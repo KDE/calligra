@@ -59,7 +59,7 @@ protected:
 class KWTextFormatCollection : public QTextFormatCollection
 {
 public:
-    KWTextFormatCollection( KWDocument * doc );
+    KWTextFormatCollection( const QFont & defaultFont );
     virtual ~KWTextFormatCollection() {}
 
     virtual QTextFormat *format( const QFont &f, const QColor &c );

@@ -139,24 +139,25 @@ signals:
 /******************************************************************/
 /* class KWNumPreview                                             */
 /******************************************************************/
-
+class KWTextDocument;
 class KWNumPreview : public QGroupBox
 {
     Q_OBJECT
 
 public:
     KWNumPreview( QWidget*, const char* = 0L );
-    ~KWNumPreview() {}
+    ~KWNumPreview();
 
-    void setCounter( Counter counter ) { m_counter = counter; repaint( true ); }
-    void setStyle(KWStyle *style) { m_style= style; repaint(true); }
+    void setCounter( const Counter & counter );
+    void setStyle(KWStyle *style);
 
 protected:
     void drawContents( QPainter* );
 
-    Counter m_counter;
-    KWStyle *m_style;
-
+    //Counter m_counter;
+    //KWStyle *m_style;
+    KWTextDocument *m_textdoc;
+    KWZoomHandler *m_zoomHandler;
 };
 
 #endif

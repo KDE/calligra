@@ -243,8 +243,8 @@ void KWView::initGui()
     if ( m_gui )
         m_gui->showGUI();
     setTool( MM_EDIT );
-    actionViewFrameBorders->setChecked( m_doc->getViewFrameBorders() );
-    actionViewFormattingChars->setChecked( m_doc->getViewFormattingChars());
+    actionViewFrameBorders->setChecked( m_doc->viewFrameBorders() );
+    actionViewFormattingChars->setChecked( m_doc->viewFormattingChars() );
 
     actionViewHeader->setChecked(m_doc->isHeaderVisible());
     actionViewFooter->setChecked(m_doc->isFooterVisible());
@@ -743,7 +743,7 @@ void KWView::fileStatistics()
                 // someone pressed "Cancel"
                 return;
             }
-        }	    
+        }
     }
     // calculate Flesch reading ease score:
     float flesch_score = 0;
@@ -768,19 +768,19 @@ void KWView::fileStatistics()
     vlayout->addWidget( new QLabel(
               "<qt><center>" +i18n("Document Statistics") +"</center><hr/><br/>"
               "<table>"
-              "<tr><td>" +i18n("Characters including spaces:")+ 
+              "<tr><td>" +i18n("Characters including spaces:")+
               "</td> <td align=\"right\"><b>" +locale.formatNumber(charsWithSpace, 0)+ "</b></td></tr>"
               "<tr><td>" +i18n("Characters without spaces:")+
               "</td> <td align=\"right\"><b>" +locale.formatNumber(charsWithoutSpace, 0)+ "</b></td></tr>"
-              "<tr><td>" +i18n("Syllables:")+ 
+              "<tr><td>" +i18n("Syllables:")+
               "</td> <td align=\"right\"><b>" +locale.formatNumber(syllables, 0)+ "</b></td></tr>"
-              "<tr><td>" +i18n("Words:")+ 
+              "<tr><td>" +i18n("Words:")+
               "</td> <td align=\"right\"><b>" +locale.formatNumber(words, 0)+ "</b></td></tr>"
-              "<tr><td>" +i18n("Sentences:")+ 
+              "<tr><td>" +i18n("Sentences:")+
               "</td> <td align=\"right\"><b>" +locale.formatNumber(sentences, 0)+ "</b></td></tr>"
               "<tr><td>&nbsp;</td></tr>"
               "<tr><td>" +i18n("Flesch reading ease:")+
-              "</td> <td align=\"right\"><b>" +flesch+ "</b></td></tr>" 
+              "</td> <td align=\"right\"><b>" +flesch+ "</b></td></tr>"
               "</table></qt>",
 	dlg.plainPage() ) );
     dlg.setInitialSize( QSize( 400, 200 ) ); // not too good for long translations... -> use a real layout and 5 labels
@@ -2675,7 +2675,7 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
 void KWView::startKSpell()
 {
     KSpellConfig *_spellConf(m_doc->getKSpellConfig());
-    if(m_doc->getDontCheckMajWord())
+    if(m_doc->dontCheckMajWord())
     {
         if(!_spellConf)
             _spellConf=new KSpellConfig;
@@ -3089,7 +3089,7 @@ void KWGUI::resizeEvent( QResizeEvent *e )
 void KWGUI::reorganize()
 {
     int space=20;
-    if(view->kWordDocument()->getShowRuler())
+    if(view->kWordDocument()->showRuler())
     {
         r_vert->show();
         r_horz->show();

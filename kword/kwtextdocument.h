@@ -23,6 +23,7 @@
 #include "qrichtext_p.h"
 using namespace Qt3;
 class KWTextFrameSet;
+class KWZoomHandler;
 class KWTextFormatCollection;
 class KCommand;
 class QDomElement;
@@ -36,16 +37,26 @@ class KWTextDocument : public QTextDocument
     Q_OBJECT
 public:
     KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTextFormatCollection *fc );
+    KWTextDocument( KWZoomHandler * zoomHandler, KWTextFormatCollection *fc );
     ~KWTextDocument();
 
     virtual QTextParag * createParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE );
 
+    // Return the text frameset in which this document is.
+    // Note that this can be 0L (e.g. for paragraphs in the paragdia preview)
     KWTextFrameSet * textFrameSet() const { return m_textfs; }
+
+    // Return the zoom handler associated with this document.
+    // (Usually the KWDocument, but a simple zoom handler in the paragdia preview)
+    KWZoomHandler * zoomHandler() const { return m_zoomHandler; }
 
     // Used by ~KWTextParag to know if it should die quickly
     bool isDestroying() const { return m_bDestroying; }
+protected:
+    void init();
 private:
     KWTextFrameSet * m_textfs;
+    KWZoomHandler * m_zoomHandler;
     bool m_bDestroying;
 };
 

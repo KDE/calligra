@@ -24,7 +24,8 @@
 #include <qpalette.h>
 #include <qpainter.h>
 #include <kdebug.h>
-#include <kwdoc.h>
+#include "kwzoomhandler.h"
+#include "kwdoc.h"
 
 Border::Border()
     : color(), style( SOLID ), ptWidth( 1 ) { }
@@ -128,26 +129,26 @@ QString Border::getStyle( const BorderStyle &style )
     return "_________";
 }
 
-int Border::zoomWidthX( double ptWidth, KWDocument * doc, int minborder )
+int Border::zoomWidthX( double ptWidth, KWZoomHandler * zoomHandler, int minborder )
 {
     // If a border was set, then zoom it and apply a minimum of 1, so that it's always visible.
     // If no border was set, apply minborder ( 0 for paragraphs, 1 for frames )
-    return ptWidth > 0 ? QMAX( 1, doc->zoomItX( ptWidth ) /*applies qRound*/ ) : minborder;
+    return ptWidth > 0 ? QMAX( 1, zoomHandler->zoomItX( ptWidth ) /*applies qRound*/ ) : minborder;
 }
 
-int Border::zoomWidthY( double ptWidth, KWDocument * doc, int minborder )
+int Border::zoomWidthY( double ptWidth, KWZoomHandler * zoomHandler, int minborder )
 {
     // If a border was set, then zoom it and apply a minimum of 1, so that it's always visible.
     // If no border was set, apply minborder ( 0 for paragraphs, 1 for frames )
-    return ptWidth > 0 ? QMAX( 1, doc->zoomItY( ptWidth ) /*applies qRound*/ ) : minborder;
+    return ptWidth > 0 ? QMAX( 1, zoomHandler->zoomItY( ptWidth ) /*applies qRound*/ ) : minborder;
 }
 
-void Border::drawBorders( QPainter& painter, KWDocument * doc, QRect rect, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder, int minborder, QPen defaultPen )
+void Border::drawBorders( QPainter& painter, KWZoomHandler * zoomHandler, QRect rect, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder, int minborder, QPen defaultPen )
 {
-    int topBorderWidth = zoomWidthY( topBorder.ptWidth, doc, minborder );
-    int bottomBorderWidth = zoomWidthY( bottomBorder.ptWidth, doc, minborder );
-    int leftBorderWidth = zoomWidthX( leftBorder.ptWidth, doc, minborder );
-    int rightBorderWidth = zoomWidthX( rightBorder.ptWidth, doc, minborder );
+    int topBorderWidth = zoomWidthY( topBorder.ptWidth, zoomHandler, minborder );
+    int bottomBorderWidth = zoomWidthY( bottomBorder.ptWidth, zoomHandler, minborder );
+    int leftBorderWidth = zoomWidthX( leftBorder.ptWidth, zoomHandler, minborder );
+    int rightBorderWidth = zoomWidthX( rightBorder.ptWidth, zoomHandler, minborder );
 
     //kdDebug() << "Border::drawBorders top=" << topBorderWidth << " bottom=" << bottomBorderWidth
     //          << " left=" << leftBorderWidth << " right=" << rightBorderWidth << endl;

@@ -57,6 +57,7 @@
 #include <kmessagebox.h>
 #include <kwutils.h>
 #include <kwstyle.h>
+#include "kwtextdocument.h"
 
 KWSpinBox::KWSpinBox( QWidget * parent, const char * name )
     : QSpinBox(parent,name)
@@ -334,77 +335,58 @@ QPen KWBorderPreview::setBorderPen( Border _brd )
 KWNumPreview::KWNumPreview( QWidget* parent, const char* name )
     : QGroupBox( i18n( "Preview" ), parent, name ) {
     setMinimumHeight(80);
-    m_style=0;
+    // Hmm, we need a doc for KWTextParag's method that need it to zoom values
+    // Maybe we should make KWDocument inherit a simple KWZoomHandler class or so.
+    m_zoomHandler = new KWZoomHandler;
+    m_textdoc = new KWTextDocument( m_zoomHandler, new KWTextFormatCollection( QFont("helvetica") /*unused*/ ) );
+    m_textdoc->setWidth( 1000 );
+    KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
+    parag->insert( 0, i18n("Normal paragraph text") );
 }
 
-void KWNumPreview::drawContents( QPainter* painter) {
-    if(!m_style) {
-        m_style=new KWStyle("tmp");
-    }
+KWNumPreview::~KWNumPreview()
+{
+    delete m_textdoc;
+    delete m_zoomHandler;
+}
 
+void KWNumPreview::setCounter( const Counter & counter )
+{
+    KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
+    parag->setCounter( counter );
+    repaint( true );
+}
+
+void KWNumPreview::setStyle( KWStyle * style )
+{
+    KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
+    parag->setParagLayout( style->paragLayout() );
+    KWTextFormat *newFormat = &style->format();
+    parag->setFormat( 0, parag->string()->length(), newFormat, true );
+    parag->setFormat( newFormat );
+    repaint(true);
+}
+
+void KWNumPreview::drawContents( QPainter* painter ) {
+    painter->save();
     QRect r = contentsRect();
     QFontMetrics fm( font() );
 
-    painter->fillRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
-                       r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height(), white );
-    painter->setClipRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
-                          r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height() );
+    // (Hmm, why use width('W') etc. here ? +/- 10 would be fine too IMHO)
+    QRect textRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
+                    r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height() );
+    //kdDebug() << "KWNumPreview::drawContents textRect=" << DEBUGRECT(textRect) << endl;
+    painter->fillRect( textRect, white );
+    painter->setClipRect( textRect );
 
-    QFont f( m_style->format().font() );
-    QColor c( m_style->format().color() );
+    KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
+    parag->format();
 
-    painter->setPen( QPen( c ) );
-    painter->setFont( f );
+    painter->translate( textRect.x(), textRect.y() );
 
-    fm = QFontMetrics( f );
-    int y = height() / 2 - fm.height() / 2;
-
-    // Make the numbering example in the QString theText.
-    QString theText = "";
-    if(m_counter.numbering() != Counter::NUM_NONE) {
-        theText.append(m_counter.prefix());
-        for(unsigned int i = 0; m_counter.depth() > i; theText.append("1."), i++);
-        switch(m_counter.style()) {
-            case Counter::STYLE_NUM:
-                theText.append(QString::number(m_counter.startNumber()));
-                break;
-            case Counter::STYLE_ALPHAB_L:
-                theText.append(makeAlphaLowerNumber(m_counter.startNumber()));
-                break;
-            case Counter::STYLE_ALPHAB_U:
-                theText.append(makeAlphaUpperNumber(m_counter.startNumber()));
-                break;
-            case Counter::STYLE_ROM_NUM_L:
-                theText.append(makeRomanNumber(m_counter.startNumber()));
-                break;
-            case Counter::STYLE_ROM_NUM_U:
-                theText.append(makeRomanNumber(m_counter.startNumber()).upper());
-            case Counter::STYLE_NONE:
-            case Counter::STYLE_CUSTOM:
-                break;
-            case Counter::STYLE_CUSTOMBULLET:
-                theText.append(m_counter.customBulletCharacter());
-                break;
-            case Counter::STYLE_CIRCLEBULLET:
-                theText.append("o");
-                break;
-            case Counter::STYLE_SQUAREBULLET:
-                theText.append("[]");
-                break;
-            case Counter::STYLE_DISCBULLET:
-                theText.append("O");
-                break;
-        }
-        theText.append(m_counter.suffix());
-        theText.append(" ");
-    }
-    theText.append(i18n("Normal paragraph text"));
-
-    painter->drawText( 20 + (int)( m_style->paragLayout().margins[QStyleSheetItem::MarginFirstLine]
-                                   + m_style->paragLayout().margins[QStyleSheetItem::MarginLeft] ),
-                       y, fm.width( theText ),
-                       fm.height(), 0, theText );
-
+    m_textdoc->draw( painter, 0, 0, textRect.width(), textRect.height(),
+                     QApplication::palette().active() );
+    painter->restore();
 }
 
 

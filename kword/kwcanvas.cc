@@ -201,8 +201,7 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
-        if ( frameset->isVisible() && !frameset->isFloating() )
-            drawFrameSet( frameset, painter, crect, false, false );
+        drawFrameSet( frameset, painter, crect, false, false );
     }
 
     // Draw the outside of the pages (shadow, gray area)
@@ -217,6 +216,9 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
 void KWCanvas::drawFrameSet( KWFrameSet * frameset, QPainter * painter,
                              const QRect & crect, bool onlyChanged, bool resetChanged )
 {
+    if ( !frameset->isVisible() || frameset->isFloating() )
+        return;
+
     bool focus = hasFocus() || viewport()->hasFocus();
     if ( painter->device()->devType() == QInternal::Printer )
         focus = false;

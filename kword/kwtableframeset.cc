@@ -1380,7 +1380,7 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, KWView
         // Draw default borders using view settings except when printing, or disabled.
         QPen viewSetting( lightGray );
         if ( ( painter->device()->devType() == QInternal::Printer ) ||
-            !m_doc->getViewFrameBorders() )
+            !m_doc->viewFrameBorders() )
         {
             viewSetting.setColor( bgBrush.color() );
         }

@@ -53,9 +53,9 @@ namespace KFormula {
 
 #include <koDocument.h>
 #include <koGlobal.h>
-#include <koRect.h>
 #include <koDocumentChild.h>
 #include <koClipartCollection.h>
+#include "kwzoomhandler.h"
 #include "kwimage.h"
 #include "kwanchorpos.h"
 #include "kwunit.h"
@@ -89,7 +89,7 @@ protected:
 /* Class: KWDocument                                           */
 /******************************************************************/
 
-class KWDocument : public KoDocument
+class KWDocument : public KoDocument, public KWZoomHandler
 {
     Q_OBJECT
 
@@ -241,7 +241,6 @@ public:
     QFont defaultFont() const { return m_defaultFont; }
 
     int getPages() const { return m_pages; }
-    //void setPages( int _pages ) { m_pages = _pages;  }
 
     KWImageCollection *imageCollection() { return &m_imageCollection; }
     KoClipartCollection *clipartCollection() { return &m_clipartCollection; }
@@ -351,22 +350,12 @@ public:
     int getSerialLetterRecord() const;
     void setSerialLetterRecord( int r );
 
-    bool onLineSpellCheck() const {
-        return spellCheck;
-    }
-    void setOnLineSpellCheck( bool b ) {
-        spellCheck = b;
-    }
+#if 0
+    bool onLineSpellCheck() const { return m_onlineSpellCheck; }
+    void setOnLineSpellCheck( bool b ) { m_onlineSpellCheck = b; }
+#endif
 
     bool canRemovePage( int num );
-
-    /**
-     * @return the conversion factor between pt and pixel, that
-     * takes care of the zoom and the DPI setting.
-     * Use zoomIt(pt) instead, though.
-     */
-    double zoomedResolutionX() const { return m_zoomedResolutionX; }
-    double zoomedResolutionY() const { return m_zoomedResolutionY; }
 
     /**
      * Change the zoom factor to @p z (e.g. 150 for 150%)
@@ -375,36 +364,7 @@ public:
      * The same call combines both so that all the updating done behind
      * the scenes is done only once, even if both zoom and DPI must be changed.
      */
-    void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews );
-
-    int zoom() const { return m_zoom; }
-
-    // Input: pt. Output: pixels. Resolution and zoom are applied.
-    int zoomItX( double z ) const {
-        return qRound( m_zoomedResolutionX * z );
-    }
-    int zoomItY( double z ) const {
-        return qRound( m_zoomedResolutionY * z );
-    }
-
-    QPoint zoomPoint( const KoPoint & p ) const {
-        return QPoint( zoomItX( p.x() ), zoomItY( p.y() ) );
-    }
-    QRect zoomRect( const KoRect & r ) const {
-        return QRect( zoomItX( r.x() ), zoomItY( r.y() ),
-                      zoomItX( r.width() ), zoomItY( r.height() ) );
-    }
-
-    // Input: pixels. Output: pt.
-    double unzoomItX( int x ) const {
-        return static_cast<double>( x ) / m_zoomedResolutionX;
-    }
-    double unzoomItY( int y ) const {
-        return static_cast<double>( y ) / m_zoomedResolutionY;
-    }
-    KoPoint unzoomPoint( const QPoint & p ) const {
-        return KoPoint( unzoomItX( p.x() ), unzoomItY( p.y() ) );
-    }
+    virtual void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews );
 
     // useless method
     static QString getAttribute(QDomElement &element, const char *attributeName, const QString &defaultValue)
@@ -457,14 +417,18 @@ public:
     /** call by undo/redo frame border => update all button border frame **/
     void refreshFrameBorderButton();
 
-    bool getViewFormattingChars() { return _viewFormattingChars; }
-    void setViewFormattingChars(bool _b) {_viewFormattingChars=_b;}
-    bool getViewFrameBorders() { return _viewFrameBorders; }
-    void setViewFrameBorders(bool _b){_viewFrameBorders=_b;}
-    bool getViewTableGrid() { return _viewTableGrid; }
-    void setViewTableGrid(bool _b) { _viewTableGrid=_b;}
+    // Settings
 
-    bool getDontCheckMajWord() { return m_bDontCheckMajWord; }
+    bool viewFormattingChars() const { return m_viewFormattingChars; }
+    void setViewFormattingChars(bool _b) { m_viewFormattingChars=_b; }
+
+    bool viewFrameBorders() const { return m_viewFrameBorders; }
+    void setViewFrameBorders(bool _b){ m_viewFrameBorders=_b; }
+
+    bool viewTableGrid() const { return m_viewTableGrid; }
+    void setViewTableGrid(bool _b) { m_viewTableGrid = _b;}
+
+    bool dontCheckMajWord() const { return m_bDontCheckMajWord; }
     void setDontCheckMajWord(bool _b) { m_bDontCheckMajWord=_b;}
 
     // in pt
@@ -474,14 +438,13 @@ public:
     int getNbPagePerRow() { return m_iNbPagePerRow; }
     void setNbPagePerRow(int _nb) { m_iNbPagePerRow=_nb; }
 
+    void setShowRuler(bool _ruler){ m_bShowRuler=_ruler; }
+    bool showRuler() const { return m_bShowRuler; }
+
     /**
      * @returns the document for the formulas
      */
     KFormula::KFormulaDocument* getFormulaDocument();
-
-
-    void setShowRuler(bool _ruler){m_bShowRuler=_ruler;}
-    bool getShowRuler(){return m_bShowRuler;}
 
     void reorganizeGUI();
     //necessary to update resize handle when you change layout
@@ -591,14 +554,6 @@ private:
     KWSerialLetterDataBase *slDataBase;
     int slRecordNum;
 
-    bool spellCheck;
-
-    int m_zoom;
-    double m_resolutionX;
-    double m_resolutionY;
-    double m_zoomedResolutionX;
-    double m_zoomedResolutionY;
-
     // When a document is written out, the syntax version in use will be recorded. When read back
     // in, this variable reflects that value.
     int m_syntaxVersion;
@@ -606,18 +561,17 @@ private:
     KSpellConfig *m_pKSpellConfig;
 
     QFont m_defaultFont;
-    bool _viewFormattingChars, _viewFrameBorders, _viewTableGrid;
+    bool m_viewFormattingChars, m_viewFrameBorders, m_viewTableGrid;
+    bool m_bShowRuler;
+    bool m_bDontCheckMajWord;
+    //bool m_onlineSpellCheck;
 
     // The document that is used by all formulas
     KFormula::KFormulaDocument* m_formulaDocument;
 
     double m_indent; // in pt
 
-    bool m_bShowRuler;
-
     int m_iNbPagePerRow;
-
-    bool m_bDontCheckMajWord;
 };
 
 

@@ -159,15 +159,15 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_gridX = m_gridY = 10;
     m_indent = MM_TO_POINT( 10.0 );
 
-    m_iNbPagePerRow=4;
+    m_iNbPagePerRow = 4;
 
-    m_bShowRuler=true;
+    m_bShowRuler = true;
+    m_viewFormattingChars = false;
+    m_viewFrameBorders = true;
+    m_viewTableGrid = true;
 
-    _viewFormattingChars = FALSE;
-    _viewFrameBorders = TRUE;
-    _viewTableGrid = TRUE;
-
-    m_bDontCheckMajWord=false;
+    m_bDontCheckMajWord = false;
+    //m_onlineSpellCheck = false;
 
     m_autoFormat = new KWAutoFormat(this);
 
@@ -196,20 +196,13 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     slDataBase = new KWSerialLetterDataBase( this );
     slRecordNum = -1;
 
-    spellCheck = FALSE;
-
     // Get default font from KDE
     m_defaultFont = KGlobalSettings::generalFont();
     KGlobal::charsets()->setQFont(m_defaultFont, KGlobal::locale()->charset());
 
-    // Set no-op initial values (for setZoomAndResolution)
-    m_zoomedResolutionX = 1;
-    m_zoomedResolutionY = 1;
-    m_zoom = 100;
+    getFormulaDocument()->setResolution( m_zoomedResolutionX, m_zoomedResolutionY );
 
-    setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;
-
     m_pKSpellConfig=0;
 
     // Some simple import filters don't define any style,
@@ -220,21 +213,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews )
 {
-    //double oldZoomedResolutionX = m_zoomedResolutionX;
-    //double oldZoomedResolutionY = m_zoomedResolutionY;
-
-    m_zoom = zoom;
-    // m_resolution[XY] is in pixel per pt
-    m_resolutionX = POINT_TO_INCH( static_cast<double>(dpiX) );
-    m_resolutionY = POINT_TO_INCH( static_cast<double>(dpiY) );
-    m_zoomedResolutionX = static_cast<double>(m_zoom) * m_resolutionX / 100.0;
-    m_zoomedResolutionY = static_cast<double>(m_zoom) * m_resolutionY / 100.0;
-    kdDebug(32002) << "KWDocument::setZoomAndResolution " << zoom << " " << dpiX << "," << dpiY
-                   << " m_resolutionX=" << m_resolutionX
-                   << " m_zoomedResolutionX=" << m_zoomedResolutionX
-                   << " m_resolutionY=" << m_resolutionY
-                   << " m_zoomedResolutionY=" << m_zoomedResolutionY << endl;
-
+    KWZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY, updateViews );
     newZoomAndResolution( updateViews );
 }
 
