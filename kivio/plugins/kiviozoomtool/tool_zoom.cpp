@@ -42,25 +42,32 @@ ZoomTool::ZoomTool(KivioView* view)
   m_pToolBar = 0L;
 
   m_z1 = new KRadioAction( i18n("Zoom"), "kivio_zoom", CTRL + ALT + Key_Z, actionCollection(), "zoom" );
+  m_z1->setWhatsThis(i18n("By pressing this button you can zoom in on a specific area."));
   m_z2 = new KRadioAction( i18n("Hand"), "kivio_zoom_hand", CTRL + ALT + Key_H, actionCollection(), "zoomHand" );
+  m_z2->setWhatsThis(i18n("You can drag the document by using the mouse."));
   m_z1->setExclusiveGroup("zoomAction");
   m_z2->setExclusiveGroup("zoomAction");
   connect(m_z1,SIGNAL(activated()),SLOT(zoomActivated()));
   connect(m_z2,SIGNAL(activated()),SLOT(handActivated()));
 
   m_pPlus = new KAction( i18n("Zoom Plus"), "kivio_zoom_plus", SHIFT+Key_F2, actionCollection(), "zoomPlus" );
+  m_pPlus->setWhatsThis(i18n("You can zoom in on the document by pressing this button."));
   connect(m_pPlus,SIGNAL(activated()),SLOT(zoomPlus()));
 
   m_pMinus = new KAction( i18n("Zoom Minus"), "kivio_zoom_minus", SHIFT+Key_F3, actionCollection(), "zoomMinus" );
+  m_pMinus->setWhatsThis(i18n("By pressing this button you can zoom out of the document."));
   connect(m_pMinus,SIGNAL(activated()),SLOT(zoomMinus()));
 
   m_pZoomWidth = new KAction( i18n("Zoom Width"), "kivio_zoom_width", SHIFT+Key_F4, actionCollection(), "zoomWidth" );
+  m_pZoomWidth->setWhatsThis(i18n("You can zoom the document that it fits into the window width."));
   connect(m_pZoomWidth,SIGNAL(activated()),SLOT(zoomWidth()));
 
   m_pZoomHeight = new KAction( i18n("Zoom Height"), "kivio_zoom_height", SHIFT+Key_F5, actionCollection(), "zoomHeight" );
+  m_pZoomHeight->setWhatsThis(i18n("You can zoom the document that it fits into the window height."));
   connect(m_pZoomHeight,SIGNAL(activated()),SLOT(zoomHeight()));
 
   m_pZoomPage = new KAction( i18n("Zoom Page"), "kivio_zoom_page", SHIFT+Key_F6, actionCollection(), "zoomPage" );
+  m_pZoomPage->setWhatsThis(i18n("The Zoom Page button shows the entire page."));
   connect(m_pZoomPage,SIGNAL(activated()),SLOT(zoomPage()));
 
   m_pZoomSelected = new KAction( i18n("Zoom Selected"), "kivio_zoom_selected", CTRL+Key_Y, actionCollection(), "zoomSelected" );
