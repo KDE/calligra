@@ -67,10 +67,6 @@ public:
 
   bool singleViewMode() const;
 
-  virtual bool saveFile();
-
-  virtual bool openFile();
-
   virtual QWidget *widget();
 
   virtual QAction *action( const QDomElement &element );
@@ -198,27 +194,19 @@ public:
   virtual bool isEmpty() const;
 
   /**
-   *  Sets the URL where the document is located and should be saved.
-   */
-  virtual void setURL( const KURL& url );
-
-  /**
-   *  Retrieves the URL of the document where the file is located.
-   */
-  virtual const KURL & url() const;
-
-  /**
-   *  Loads a document from a given URL.
+   *  Loads a document from m_file (KParts takes care of downloading
+   *  remote documents)
    *  Applies a filter if necessary, and calls loadNativeFormat in any case
-   *  You should never have to reimplement.
+   *  You should not have to reimplement, except for very special cases.
    */
-  virtual bool loadFromURL( const KURL& url );
+  virtual bool openFile();
 
   /**
    *  Loads a document in the native format from a given URL.
    *  Reimplement if your native format isn't XML.
+   *  @param file the file to load - m_file or the result of a filter
    */
-  virtual bool loadNativeFormat( const KURL& url );
+  virtual bool loadNativeFormat( const QString & file );
 
   /**
    *  Loads a document from a store.
@@ -228,9 +216,18 @@ public:
   virtual bool loadFromStore( KoStore* store, const KURL& url );
 
   /**
-   *  Saves the document to a given URL.
+   *  Saves a document to m_file (KParts takes care of uploading
+   *  remote documents)
+   *  Applies a filter if necessary, and calls saveNativeFormat in any case
+   *  You should not have to reimplement, except for very special cases.
    */
-  virtual bool saveToURL( const KURL& url, const QCString& format );
+  virtual bool saveFile();
+
+  /**
+   *  Saves the document in native format, to a given file
+   *  You should never have to reimplement.
+   */
+  virtual bool saveNativeFormat( const QString & file );
 
   /**
    *  Saves a document to a store.
@@ -376,6 +373,9 @@ protected:
    */
   virtual bool save( ostream&, const char* format );
 
+  // Hmm, name clash. We want to give access to parent's save()
+  virtual bool save() { return KParts::ReadWritePart::save(); }
+
   /**
    *  Overload this function with your personal text.
    */
@@ -410,6 +410,14 @@ protected:
    * an internal url in the store, like "tar:/..."
    */
   virtual bool isStoredExtern();
+
+  /**
+   * Sets the document URL to empty URL
+   * KParts doesn't allow this, but KOffice apps have e.g. templates
+   * After using loadNativeFormat on a template, one wants
+   * to set the url to KURL()
+   */
+  void resetURL() { m_url = KURL(); }
 
   void addShell( KoMainWindow *shell );
   void removeShell( KoMainWindow *shell );

@@ -62,11 +62,11 @@ void KoApplication::start()
         kdError() << "Couldn't find the native MimeType in " << kapp->name() << "'s desktop file. Check your installation !" << endl;
         ::exit(1);
     }
-    
+
     KCmdLineArgs *args= KCmdLineArgs::parsedArgs();
 
     int argsCount=args->count();
-    
+
     // No argument
     if (!argsCount) {
         KoDocument* doc = entry.createDoc( 0, "Document" );
@@ -80,12 +80,12 @@ void KoApplication::start()
           ::exit(1);
     } else {
         // Loop through arguments
-        
+
         short int n=0;
         for(int i=0; i < argsCount; i++ )
         {
             KoDocument* doc = entry.createDoc( 0 );
-            if ( doc->loadFromURL( args->url(i) ) )
+            if ( doc->openURL( args->url(i) ) )
             {
               KoMainWindow* shell = doc->createShell();
               shell->show();
@@ -96,7 +96,7 @@ void KoApplication::start()
         if (n == 0) // no doc, all URLs were malformed
           ::exit(1);
     }
-    
+
     args->clear();
     // not calling this before since the program will quit there.
 }

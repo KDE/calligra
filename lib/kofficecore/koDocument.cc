@@ -32,6 +32,7 @@
 #include <koBinaryStore.h>
 #include <koTarStore.h>
 #include <koStoreStream.h>
+#include <kio/netaccess.h>
 
 #include <komlWriter.h>
 #include <komlMime.h>
@@ -116,12 +117,40 @@ bool KoDocument::saveFile()
   if ( !kapp->inherits( "KoApplication" ) )
     return false;
 
-  return saveToURL( KURL( m_file ), nativeFormatMimeType( instance() ) );
-}
+  KMimeType::Ptr t = KMimeType::findByURL( m_url, 0, TRUE );
+  QCString outputMimeType = t->mimeType().latin1();
 
-bool KoDocument::openFile()
-{
-  return loadFromURL( KURL( m_file ) );
+  QApplication::setOverrideCursor( waitCursor );
+
+  if ( KIO::NetAccess::exists( m_url ) ) { // this file exists => backup
+	// TODO : make this configurable ?
+        KURL backup( m_url );
+        backup.setPath( backup.path() + QString::fromLatin1("~") );
+        (void) KIO::NetAccess::del( backup );
+        (void) KIO::NetAccess::copy( m_url, backup );
+
+        //QString cmd = QString( "rm -rf %1~" ).arg( url.path() );
+        //system( cmd.local8Bit() );
+        //cmd = QString("cp %1 %2~").arg( url.path() ).arg( url.path() );
+        //system( cmd.local8Bit() );
+    }
+  QCString _native_format = nativeFormatMimeType();
+  bool ret;
+  if ( outputMimeType != _native_format ) {
+    // Not native format : save using export filter
+    QString nativeFile=KoFilterManager::self()->prepareExport( m_file, _native_format);
+    ret = saveNativeFormat( nativeFile ) && KoFilterManager::self()->export_();
+  } else {
+    // Native format => normal save
+    ret = saveNativeFormat( m_file );
+  }
+
+  if ( !ret )
+  {
+    KMessageBox::error( 0L, i18n( "Could not save\n%1" ).arg( m_file ) );
+  }
+  QApplication::restoreOverrideCursor();
+  return ret;
 }
 
 QWidget *KoDocument::widget()
@@ -339,7 +368,7 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
   }
 }
 
-bool KoDocument::saveChildren( KoStore* /*_store*/, const char */*_path*/ )
+bool KoDocument::saveChildren( KoStore* /*_store*/, const char * /*_path*/ )
 {
   // Lets assume that we do not have children
   kDebugWarning( 30003, "KoDocument::saveChildren( KoStore*, const char * )");
@@ -347,20 +376,8 @@ bool KoDocument::saveChildren( KoStore* /*_store*/, const char */*_path*/ )
   return true;
 }
 
-bool KoDocument::saveToURL( const KURL &url, const QCString &_format )
+bool KoDocument::saveNativeFormat( const QString & file )
 {
-  if ( url.isMalformed() )
-  {
-    kDebugInfo( 30003, "malformed URL" );
-    return false;
-  }
-
-  if ( !url.isLocalFile() )
-  {
-    KMessageBox::error( 0L, i18n( "Can not save to remote URL (not implemented yet)" ) );
-    return false;
-  }
-
   if ( hasToWriteMultipart() )
   {
     kDebugInfo( 30003, "Saving to store" );
@@ -368,7 +385,7 @@ bool KoDocument::saveToURL( const KURL &url, const QCString &_format )
     //Use this to save to a binary store (deprecated)
     //KoStore * store = new KoBinaryStore ( url.path(), KOStore::Write );
 
-    KoStore* store = new KoTarStore( url.path(), KoStore::Write );
+    KoStore* store = new KoTarStore( file, KoStore::Write );
 
     // Save childen first since they might get a new url
     if ( store->bad() || !saveChildren( store, STORE_PROTOCOL ) )
@@ -378,10 +395,10 @@ bool KoDocument::saveToURL( const KURL &url, const QCString &_format )
     }
 
     kDebugInfo( 30003, "Saving root" );
-    if ( store->open( "root", _format ) )
+    if ( store->open( "root" ) )
     {
       ostorestream out( store );
-      if ( !save( out, _format ) )
+      if ( !save( out, 0L /* to remove */ ) )
       {
 	store->close();
 	return false;
@@ -393,20 +410,20 @@ bool KoDocument::saveToURL( const KURL &url, const QCString &_format )
       return false;
 
     bool ret = completeSaving( store );
-    kDebugInfo( 30003, "Saving done" );
+    kdDebug(30003) << "Saving done" << endl;
     delete store;
     return ret;
   }
   else
   {
-    ofstream out( url.path() );
+    ofstream out( file );
     if ( !out )
     {
-      KMessageBox::error( 0L, i18n("Could not write to\n%1" ).arg(url.path()) );
+      KMessageBox::error( 0L, i18n("Could not write to\n%1" ).arg( file ) );
       return false;
     }
 
-    return save( out, _format );
+    return save( out, 0L /* to remove */ );
   }
 }
 
@@ -415,7 +432,7 @@ bool KoDocument::saveToStore( KoStore* _store, const QCString & _format, const Q
   kDebugInfo( 30003, "Saving document to store" );
 
   // Use the path as the internal url
-  setURL( _path );
+  m_url = _path;
 
   // Save childen first since they might get a new url
   if ( !saveChildren( _store, _path ) )
@@ -439,30 +456,28 @@ bool KoDocument::saveToStore( KoStore* _store, const QCString & _format, const Q
   return true;
 }
 
-bool KoDocument::loadFromURL( const KURL & url )
+bool KoDocument::openFile()
 {
-  kDebugInfo( 30003, QString("KoDocument::loadFromURL( %1 )").arg(url.url()) );
-  // TODO : assert local url
-  QString file = url.path();
+  kdDebug(30003) << QString("KoDocument::openFile for %1").arg( m_file ) << endl;
 
   QApplication::setOverrideCursor( waitCursor );
 
 
   // Launch a filter if we need one for this url ?
-  QString importedFile = KoFilterManager::self()->import( file, nativeFormatMimeType( instance() ) );
+  QString importedFile = KoFilterManager::self()->import( m_file, nativeFormatMimeType( instance() ) );
 
   // The filter, if any, has been applied. It's all native format now.
-  bool loadOk = (!importedFile.isEmpty()) &&        // Empty = an error occured in the filter
+  bool loadOk = (!importedFile.isEmpty()) && // Empty = an error occured in the filter
     loadNativeFormat( importedFile );
 
   if (!loadOk)
     KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg(importedFile) );
 
-  if ( importedFile != file )
+  if ( importedFile != m_file )
   {
     // We opened a temporary file (result of an import filter)
     // Set document URL to empty - we don't want to save in /tmp !
-    setURL(KURL());
+    m_url = KURL();
     // and remove temp file
     unlink( importedFile.ascii() );
   }
@@ -470,30 +485,16 @@ bool KoDocument::loadFromURL( const KURL & url )
   return loadOk;
 }
 
-bool KoDocument::loadNativeFormat( const KURL & url )
+bool KoDocument::loadNativeFormat( const QString & file )
 {
   QApplication::setOverrideCursor( waitCursor );
 
-  kDebugInfo( 30003, QString("KoDocument::loadNativeFormat( %1 )").arg(url.url()) );
+  kDebugInfo( 30003, QString("KoDocument::loadNativeFormat( %1 )").arg( file ) );
 
-  if ( url.isMalformed() )
-  {
-    kDebugWarning( 30003, QString("Malformed URL %1").arg(url.url()) );
-    QApplication::restoreOverrideCursor();
-    return false;
-  }
-
-  if ( !url.isLocalFile() )
-  {
-    kDebugInfo( 30003, "Can not load remote URL (not implemented yet)" );
-    QApplication::restoreOverrideCursor();
-    return false;
-  }
-
-  ifstream in( url.path() );
+  ifstream in( file );
   if ( !in )
   {
-    kDebugWarning( 30003, QString("Could not open %1").arg(url.path()) );
+    kDebugWarning( 30003, QString("Could not open %1").arg( file ) );
     QApplication::restoreOverrideCursor();
     return false;
   }
@@ -504,9 +505,6 @@ bool KoDocument::loadNativeFormat( const KURL & url )
   in.unget(); in.unget(); in.unget(); in.unget();
 
   //kDebugInfo( 30003, "PATTERN=%s", buf );
-
-  // Store the URL as the Document URL
-  setURL( url );
 
   // Is it plain XML ?
   if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
@@ -524,11 +522,11 @@ bool KoDocument::loadNativeFormat( const KURL & url )
     KoStore * store;
     if ( strncasecmp( buf, "KS01", 4 ) == 0 )
     {
-      store = new KoBinaryStore( url.path(), KoStore::Read );
+      store = new KoBinaryStore( file, KoStore::Read );
     }
     else // new (tar.gz)
     {
-      store = new KoTarStore( url.path(), KoStore::Read );
+      store = new KoTarStore( file, KoStore::Read );
     }
 
     if ( store->bad() )
@@ -575,7 +573,7 @@ bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
     _store->close();
   }
   // Store as document URL
-  setURL( url );
+  m_url = url;
 
   if ( !loadChildren( _store ) )
   {	
@@ -617,7 +615,7 @@ bool KoDocument::load( istream& in, KoStore* _store )
 
 bool KoDocument::isStoredExtern()
 {
-  return ( m_strURL.protocol() != STORE_PROTOCOL );
+  return ( m_url.protocol() != STORE_PROTOCOL );
 }
 
 void KoDocument::setModified( bool _mod )
@@ -631,16 +629,6 @@ void KoDocument::setModified( bool _mod )
 bool KoDocument::isEmpty() const
 {
     return m_bEmpty;
-}
-
-void KoDocument::setURL( const KURL& url )
-{
-    m_strURL = url;
-}
-
-const KURL & KoDocument::url() const
-{
-    return m_strURL;
 }
 
 bool KoDocument::loadBinary( istream& , bool, KoStore* )
@@ -693,19 +681,17 @@ bool KoDocument::hasToWriteMultipart()
 
 QCString KoDocument::nativeFormatMimeType( KInstance *instance )
 {
-  QString instname = kapp->instanceName();
-  if ( instance )
-    instname = instance->instanceName();
+  QString instname = instance ? instance->instanceName() : kapp->instanceName();
 
   KService::Ptr service = KService::service( instname );
 
   if ( !service )
     return QCString();
 
-  KDesktopFile deFile( service->desktopEntryPath(), true );
+  KDesktopFile deFile( service->desktopEntryPath(), true /*readonly*/);
 
-  QStringList types = deFile.readListEntry( "MimeType", ';' );
-  return types.last().utf8();
+  QString nativeType = deFile.readEntry( "X-KDE-NativeMimeType" );
+  return nativeType.latin1();
 }
 
 void KoDocument::addShell( KoMainWindow *shell )

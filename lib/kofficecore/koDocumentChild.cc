@@ -530,7 +530,7 @@ bool KoDocumentChild::loadDocument( KoStore* _store )
   else
   {
       // Reference to an external document. Hmmm...
-      res = document()->loadFromURL( m_tmpURL );
+      res = document()->openURL( m_tmpURL );
       // Still waiting...
       QApplication::setOverrideCursor( waitCursor );
   }
