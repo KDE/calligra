@@ -507,6 +507,10 @@ public:
     void dissociateCell( const QPoint &_marker, bool makeUndo=true );
     void changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY);
 
+    bool areaIsEmpty() ;
+
+    void refreshPreference() ;
+
     /**
      * Change name of reference when the user inserts or removes a column,
      * a row or a cell (= insertion of a row [or column] on a single column [or row]).

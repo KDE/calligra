@@ -1714,7 +1714,6 @@ for ( int incr=start;incr<=end; )
         else
             kdDebug(36001) << "Error in Series::type" << endl;
         }
-
 }
 
 
@@ -2820,6 +2819,63 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2 )
   delete tmp;
 }
 
+void KSpreadTable::refreshPreference()
+{
+        recalc();
+        emit sig_updateHBorder( this );
+        emit sig_updateView( this );
+}
+
+bool KSpreadTable::areaIsEmpty()
+{
+    bool selected = ( m_rctSelection.left() != 0 );
+
+    // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
+    {
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+      int row = c->row();
+      if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+      &&!c->isObscuringForced() && !c->text().isEmpty())
+        {
+        return false;
+        }
+      }
+    }
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int col = c->column();
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced() && !c->text().isEmpty())
+        {
+        return false;
+        }
+      }
+    }
+    else
+    {
+        QRect r( m_rctSelection );
+        if ( !selected )
+            r.setCoords( marker().x(), marker().y(), marker().x(), marker().y() );
+
+        for ( int x = r.left(); x <= r.right(); x++ )
+            for ( int y = r.top(); y <= r.bottom(); y++ )
+            {
+                KSpreadCell *cell = cellAt( x, y );
+                if(!cell->isObscuringForced() && !cell->text().isEmpty())
+                {
+                return false;
+                }
+            }
+    }
+    return true;
+}
+
 void KSpreadTable::setSelectionMultiRow( const QPoint &_marker, bool enable )
 {
     m_pDoc->setModified( true );
@@ -3393,6 +3449,9 @@ void KSpreadTable::clearSelection( const QPoint &_marker )
 {
     m_pDoc->setModified( true );
     bool selected = ( m_rctSelection.left() != 0 );
+
+    if(areaIsEmpty())
+        return;
 
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )

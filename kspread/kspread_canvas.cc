@@ -2033,6 +2033,9 @@ void KSpreadCanvas::adjustArea(bool makeUndo)
 {
   QRect selection( activeTable()->selectionRect() );
   QRect rect=selection;
+  if(activeTable()->areaIsEmpty())
+        return;
+
   if(selection.left() == 0)
         rect.setCoords(markerColumn(),markerRow(),markerColumn(),markerRow() );
   if(makeUndo)

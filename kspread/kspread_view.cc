@@ -82,6 +82,7 @@
 #include "kspread_dlg_comment.h"
 #include "kspread_dlg_angle.h"
 #include "kspread_dlg_goto.h"
+#include "kspread_undo.h"
 
 #include "handler.h"
 #include "toolbox.h"
@@ -1556,11 +1557,7 @@ void KSpreadView::preference()
        return;
   KSpreadpreference* dlg = new KSpreadpreference( this, "Preference");
   if(dlg->exec())
-        {
-        m_pTable->recalc();
-        m_pCanvas->repaint();
-        slotUpdateHBorder(activeTable());
-        }
+        m_pTable->refreshPreference();
 }
 
 void KSpreadView::addModifyComment()
@@ -1904,9 +1901,16 @@ void KSpreadView::slotActivateTool( int _id )
   ASSERT( !cell->isFormular() && !cell->isValue() );
 
   QString text = cell->text();
+  QString tmpText=cell->text();
   if ( tool->run( entry->command, &text, "QString", "text/plain") )
+      {
+      if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+        KSpreadUndoSetText* undo = new KSpreadUndoSetText( m_pDoc, m_pTable, tmpText, m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+        }
       cell->setCellText( text, true );
-
+      }
 }
 
 void KSpreadView::deleteSelection()
