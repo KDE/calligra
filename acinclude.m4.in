@@ -1777,7 +1777,7 @@ AC_DEFUN(KDE_CHECK_MICO,
 [
 AC_MSG_CHECKING(for MICO)
 AC_ARG_WITH(micodir,
-  [--with-micodir=micodir   where mico is installed ],
+  [  --with-micodir=micodir  where mico is installed ],
   kde_micodir=$withval,
   kde_micodir=/usr/local
 )
@@ -1829,8 +1829,11 @@ req_v_mid=`echo $1 | sed -e 's/^.*\.\(.*\)\..*$/\1/'`
 req_v_min=`echo $1 | sed -e 's/^.*\..*\.\(.*\)$/\1/'` 
 
 if test "$mico_v_maj" -lt "$req_v_maj" || \
-    test "$mico_v_mid" -lt "$req_v_mid" || \
-      test "$mico_v_min" -lt "$req_v_min"
+   ( test "$mico_v_maj" -eq "$req_v_maj" && \
+        test "$mico_v_mid" -lt "$req_v_mid" ) || \
+   ( test "$mico_v_mid" -eq "$req_v_mid" && \
+        test "$mico_v_min" -lt "$req_v_min" )
+
 then
   AC_MSG_ERROR([found MICO version $kde_cv_mico_version but version $1 \
 at least is required. You should upgrade MICO.])
