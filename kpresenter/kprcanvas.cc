@@ -4731,8 +4731,8 @@ void KPrCanvas::moveObject( int x, int y, bool key )
 
 void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
 {
-    double dx = m_view->zoomHandler()->zoomItX( _dx);
-    double dy = m_view->zoomHandler()->zoomItY( _dy);
+    double dx = m_view->zoomHandler()->unzoomItX( _dx);
+    double dy = m_view->zoomHandler()->unzoomItY( _dy);
 
     KPObject *kpobject;
 
