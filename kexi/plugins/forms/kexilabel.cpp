@@ -31,7 +31,13 @@
 #define SHADOW_THICKNESS 1
 
 KexiLabelPrivate::KexiLabelPrivate( KexiLabel* parent )
-	: QLabel( parent ) {}
+	: QLabel( parent )
+	{
+	}
+
+KexiLabelPrivate::~KexiLabelPrivate()
+{
+}
 
 /*!
 * This method is copied from kdebase/kdesktop/kshadowengine.cpp
@@ -39,7 +45,9 @@ KexiLabelPrivate::KexiLabelPrivate( KexiLabel* parent )
 * --
 * Christian Nitschkowski
 */
-QImage KexiLabelPrivate::makeShadow( const QImage& textImage, const QColor &bgColor, const QRect& boundingRect ) {
+QImage KexiLabelPrivate::makeShadow( const QImage& textImage, 
+	const QColor &bgColor, const QRect& boundingRect )
+{
 	QImage result;
 
 	// create a new image for for the shaddow
@@ -109,7 +117,7 @@ double KexiLabelPrivate::defaultDecay( QImage& source, int i, int j ) {
 	return alphaShadow;
 }
 
-KPixmap KexiLabelPrivate::getShadowPixmap( void ) {
+KPixmap KexiLabelPrivate::getShadowPixmap() {
 	/*!
 	* Backup the default color used to draw text.
 	*/
@@ -191,11 +199,13 @@ KPixmap KexiLabelPrivate::getShadowPixmap( void ) {
 	to another pixmap.
 	*/
 	tempPixmap.resize( p_shadowRect.size() );
-	bitBlt( &tempPixmap, 0, 0, &finalPixmap,
-		p_shadowRect.x() + SHADOW_OFFSET_X,
-		p_shadowRect.y() + SHADOW_OFFSET_Y,
-		p_shadowRect.width(),
-		p_shadowRect.height() );
+	if (!finalPixmap.isNull()) {
+		bitBlt( &tempPixmap, 0, 0, &finalPixmap,
+			p_shadowRect.x() + SHADOW_OFFSET_X,
+			p_shadowRect.y() + SHADOW_OFFSET_Y,
+			p_shadowRect.width(),
+			p_shadowRect.height() );
+	}
 	/*!
 	Replace the big background pixmap with the
 	part we could out just before.
@@ -214,7 +224,9 @@ KPixmap KexiLabelPrivate::getShadowPixmap( void ) {
 	/*!
 	Anyways, merge the shadow with the background.
 	*/
-	bitBlt( &finalPixmap, 0, 0, &tempPixmap );
+	if (!tempPixmap.isNull()) {
+		bitBlt( &finalPixmap, 0, 0, &tempPixmap );
+	}
 
 	/**
 	Now move the rect.
@@ -297,19 +309,25 @@ QRect KexiLabelPrivate::getBounding( const QImage &image, const QRect& startRect
 		bottomRight.y() - topLeft.y() );
 }
 
+//=========================================================
 
 KexiLabel::KexiLabel( QWidget *parent, const char *name, WFlags f )
-		: QLabel( parent, name, f ), KexiDataItemInterface(),
-		p_pixmapDirty( true ), p_shadowEnabled( false ) {
-
+		: QLabel( parent, name, f )
+		, KexiFormDataItemInterface(),
+		p_pixmapDirty( true ), p_shadowEnabled( false )
+{
+	m_hasFocusableWidget = false;
 	p_privateLabel = new KexiLabelPrivate( this );
 	p_privateLabel->hide();
 }
 
 KexiLabel::KexiLabel( const QString& text, QWidget *parent, const char *name, WFlags f )
-		: QLabel( parent, name, f ), KexiDataItemInterface(),
-		p_pixmapDirty( true ), p_shadowEnabled( false ) {
-
+		: QLabel( parent, name, f )
+		, KexiFormDataItemInterface()
+		, p_pixmapDirty( true )
+		, p_shadowEnabled( false )
+{
+	m_hasFocusableWidget = false;
 	p_privateLabel = new KexiLabelPrivate( this );
 	p_privateLabel->hide();
 	setText( text );
@@ -363,8 +381,10 @@ void KexiLabel::paintEvent( QPaintEvent* e ) {
 	QLabel::paintEvent( e );
 }
 
-void KexiLabel::setValueInternal( const QVariant& value ) {
-	setText( value.toString() );
+void KexiLabel::setValueInternal( const QVariant& add, bool removeOld ) {
+	if (removeOld) 
+		setText(add.toString());
+	setText( m_origValue.toString() + add.toString() );
 }
 
 QVariant KexiLabel::value() {
@@ -374,6 +394,41 @@ QVariant KexiLabel::value() {
 void KexiLabel::setInvalidState( const QString& displayText )
 {
 	setText( displayText );
+}
+
+bool KexiLabel::valueIsNull()
+{
+	return text().isNull();
+}
+
+bool KexiLabel::valueIsEmpty()
+{
+	return text().isEmpty();
+}
+
+bool KexiLabel::isReadOnly() const
+{
+	return true;
+}
+
+QWidget* KexiLabel::widget()
+{
+	return this;
+}
+
+bool KexiLabel::cursorAtStart()
+{
+	return false;
+}
+
+bool KexiLabel::cursorAtEnd()
+{
+	return false;
+}
+
+void KexiLabel::clear()
+{
+	setText(QString::null);
 }
 
 #include "kexilabel.moc"
