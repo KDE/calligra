@@ -35,7 +35,7 @@ KivioStencil::KivioStencil()
   m_w = m_h = 72.0f;
 
   m_rotation = 0;
-  
+
   m_hidden = false;
 
   m_selected = false;
@@ -58,17 +58,10 @@ KivioStencil::KivioStencil()
 KivioStencil::~KivioStencil()
 {
     kdDebug(43000)<<" KivioStencil::~KivioStencil() !"<<this<<endl;
-    if( m_pProtection )
-    {
-        delete m_pProtection;
-        m_pProtection = NULL;
-    }
-
-    if( m_pCanProtect )
-    {
-        delete m_pCanProtect;
-        m_pCanProtect = NULL;
-    }
+    delete m_pProtection;
+    m_pProtection = NULL;
+    delete m_pCanProtect;
+    m_pCanProtect = NULL;
 
 
     m_pSpawner = NULL;
@@ -128,7 +121,7 @@ void KivioStencil::paintSelectionHandles( KivioIntraStencilData *pData )
   painter->saveState();
   painter->setTranslation(newX, newY);
   rotatePainter(pData);  // Rotate the painter if needed
-  
+
   painter->drawSelectionBox(QRect(0, 0, newW, newH));
 
   // top left, top right, bottom left, bottom right
@@ -263,6 +256,6 @@ bool KivioStencil::isInRect(const KoRect& rect)
   bool retVal;
   retVal = rect.contains(m_x, m_y);
   retVal = retVal && rect.contains(m_x + m_w, m_y + m_h);
-  
+
   return retVal;
 }

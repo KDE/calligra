@@ -26,7 +26,7 @@
 #include <qptrlist.h>
 #include <qbitarray.h>
 #include <koPoint.h>
-
+#include <kglobalsettings.h>
 #include <koRect.h>
 
 #include <kivio_line_style.h>
@@ -196,7 +196,7 @@ class KivioStencil
     virtual QColor textColor() { return QColor(0,0,0); }
     virtual void setTextColor( QColor ) {;}
 
-    virtual QFont textFont() { return QFont("times",12); }
+    virtual QFont textFont() { return KGlobalSettings::generalFont(); }
     virtual void setTextFont( const QFont & ) {;}
 
     virtual int hTextAlign() { return -1; }
