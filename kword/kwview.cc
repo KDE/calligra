@@ -211,7 +211,7 @@ void KWView::initGui()
 
     actionViewHeader->setChecked(doc->isHeaderVisible());
     actionViewFooter->setChecked(doc->isFooterVisible());
-
+    actionFormatDecreaseIndent->setEnabled(false);
     //setNoteType(doc->getNoteType(), false);
 
     actionFormatColor->setColor( Qt::black );
@@ -220,6 +220,7 @@ void KWView::initGui()
     QStringList list=actionViewZoom->items();
     QString zoomStr=QString::number(doc->zoom())+'%';
     actionViewZoom->setCurrentItem(list.findIndex(zoomStr)  );
+
 
     MouseMode mouseMode=gui->canvasWidget()->getMouseMode();
     gui->canvasWidget()->setMouseMode( mouseMode );
@@ -886,6 +887,7 @@ void KWView::showRulerIndent( double _leftMargin, double _firstLine )
   {
       hRuler->setFirstIndent( KWUnit::userValue( _firstLine + _leftMargin, doc->getUnit() ) );
       hRuler->setLeftIndent( KWUnit::userValue( _leftMargin, doc->getUnit() ) );
+      actionFormatDecreaseIndent->setEnabled( _leftMargin>0);
   }
 }
 
