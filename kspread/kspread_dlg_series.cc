@@ -26,6 +26,7 @@
 #include <qlabel.h>
 
 #include <qbuttongroup.h>
+#include <qgroupbox.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 
@@ -42,77 +43,45 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   QWidget *page = new QWidget( this );
   setMainWidget(page);
 
-  QGridLayout *grid1 = new QGridLayout(page,3,2,15,7);
+  QBoxLayout *grid1 = new QHBoxLayout(page);
+  grid1->setSpacing( spacingHint() );
 
-  QButtonGroup* gb1 = new QButtonGroup( i18n("Mode"), page );
-  QGridLayout *grid3 = new QGridLayout(gb1,2,2,15,7);
-  column = new QRadioButton( i18n("Column"), gb1 );
-  column->resize( column->sizeHint() );
-  grid3->addWidget(column,0,0);
-
-  row = new QRadioButton( i18n("Row"), gb1 );
-  row->resize( row->sizeHint() );
-  grid3->addWidget(row,1,0);
+  QButtonGroup* gb1 = new QButtonGroup( 2, Qt::Vertical, 
+    i18n("Insert values"), page );
+  column = new QRadioButton( i18n("Vertical"), gb1 );
+  row = new QRadioButton( i18n("Horizontal"), gb1 );
 
   column->setChecked(true);
 
-
-  QButtonGroup* gb2 = new QButtonGroup( i18n("Type"), page );
-  QGridLayout *grid4 = new QGridLayout(gb2,2,2,15,7);
-  linear = new QRadioButton( i18n("Linear"), gb2 );
-  linear->resize( linear->sizeHint() );
-  grid4->addWidget(linear,0,0);
-
-  geometric = new QRadioButton( i18n("Geometric"), gb2 );
-  geometric->resize( geometric->sizeHint() );
-  grid4->addWidget(geometric,1,0);
+  QButtonGroup* gb2 = new QButtonGroup( 2, Qt::Vertical, 
+    i18n("Type"), page );
+  linear = new QRadioButton( i18n("Linear (2,4,6,...)"), gb2 );
+  geometric = new QRadioButton( i18n("Geometric (2,4,8,...)"), gb2 );
 
   linear->setChecked(true);
 
+  QGroupBox* gb = new QGroupBox( 1, Qt::Vertical, i18n("Parameters"), page );
+  QWidget *params = new QWidget( gb );
+  QGridLayout *params_layout = new QGridLayout( params, 3, 2 );
+  params_layout->setSpacing( spacingHint() );
+  params_layout->setAutoAdd( true );
 
-  QButtonGroup* gb = new QButtonGroup( i18n("Parameters"), page );
-  QGridLayout *grid2 = new QGridLayout(gb,2,4,15,7);
-
-  QLabel *tmplabel = new QLabel( i18n( "Start value:" ), gb );
-  tmplabel->resize( tmplabel->sizeHint() );
-  grid2->addWidget(tmplabel,0,0);
-
-  start=new QLineEdit(gb);
-  start->resize( start->sizeHint() );
-  grid2->addWidget(start,1,0);
+  new QLabel( i18n( "Start value:" ), params );
+  start=new QLineEdit( params );
   start->setValidator( new KFloatValidator( 0, 0, true, start ) );
 
-  tmplabel = new QLabel( i18n( "End value:" ), gb );
-  tmplabel->resize( tmplabel->sizeHint() );
-  grid2->addWidget(tmplabel,0,1);
-
-  end=new QLineEdit(gb);
-  end->resize( end->sizeHint() );
-  grid2->addWidget(end,1,1);
+  new QLabel( i18n( "Stop value:" ), params );
+  end=new QLineEdit( params );
   end->setValidator( new KFloatValidator( 0, 0, true, end ) );
 
-  tmplabel = new QLabel( i18n( "Step:" ), gb );
-  tmplabel->resize( tmplabel->sizeHint() );
-  grid2->addWidget(tmplabel,0,2);
-
-  step=new QLineEdit(gb);
-  step->resize( step->sizeHint() );
-  grid2->addWidget(step,1,2);
+  new QLabel( i18n( "Step value:" ), params );
+  step=new QLineEdit( params );
   step->setValidator( new KFloatValidator( 0, 0, true, step ) );
 
-  grid2->setColStretch(0,20);
-  grid2->activate();
+  grid1->addWidget(gb);
 
-  grid1->addWidget(gb1,0,0);
-  grid1->addRowSpacing(0,gb1->height());
-
-  grid1->addWidget(gb2,0,1);
-  grid1->addRowSpacing(0,gb2->height());
-
-  grid1->addMultiCellWidget(gb,1,1,0,1);
-  grid1->addRowSpacing(1,gb->height());
-
-  grid1->activate();
+  grid1->addWidget(gb1);
+  grid1->addWidget(gb2);
 
   start->setFocus();
 
