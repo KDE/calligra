@@ -59,5 +59,7 @@ There is some truth in it!
 
 Hint: Press <space> on a name that is not a symbol to select it.
 
+Hint: If you don't want to separate your names with operators, you
+might use the backslash instead.
 
 See DESIGN to know the structure of the formulas

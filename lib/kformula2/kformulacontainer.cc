@@ -101,12 +101,10 @@ void KFormulaContainer::changed()
  * Tells the formula that a view got the focus and might want to
  * edit the formula.
  */
-void KFormulaContainer::setActiveView(KFormulaWidget* view)
+void KFormulaContainer::setActiveCursor(FormulaCursor* cursor)
 {
     getDocument()->activate(this);
-    if (view != 0) {
-        setActiveCursor(view->getCursor());
-    }
+    activeCursor = cursor;
 }
 
 void KFormulaContainer::testDirty()

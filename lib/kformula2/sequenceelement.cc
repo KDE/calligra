@@ -293,6 +293,11 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         if (cursor->isSelectionMode()) {
             cursor->setMark(fromPos+1);
         }
+
+        // phantom elements are not visible so we move on.
+        if (from->isPhantom()) {
+            moveLeft(cursor, this);
+        }
     }
 }
 
@@ -334,6 +339,11 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         cursor->setTo(this, fromPos+1);
         if (cursor->isSelectionMode()) {
             cursor->setMark(fromPos);
+        }
+
+        // phantom elements are not visible so we move on.
+        if (from->isPhantom()) {
+            moveRight(cursor, this);
         }
     }
 }
@@ -502,18 +512,37 @@ void SequenceElement::remove(FormulaCursor* cursor,
         if (direction == beforeCursor) {
             int pos = cursor->getPos() - 1;
             if (pos >= 0) {
-                removeChild(removedChildren, pos);
+                while (pos >= 0) {
+                    BasicElement* child = children.at(pos);
+                    formula()->elementRemoval(child);
+                    children.take(pos);
+                    removedChildren.prepend(child);
+                    if (!child->isPhantom()) {
+                        break;
+                    }
+                    pos--;
+                }
                 cursor->setTo(this, pos);
+                formula()->changed();
             }
         }
         else {
             uint pos = cursor->getPos();
             if (pos < children.count()) {
-                removeChild(removedChildren, pos);
+                while (pos < children.count()) {
+                    BasicElement* child = children.at(pos);
+                    formula()->elementRemoval(child);
+                    children.take(pos);
+                    removedChildren.append(child);
+                    if (!child->isPhantom()) {
+                        break;
+                    }
+                }
                 // It is necessary to set the cursor to its old
                 // position because it got a notification and
                 // moved to the beginning of this sequence.
                 cursor->setTo(this, pos);
+                formula()->changed();
             }
         }
     }
@@ -593,7 +622,10 @@ QString SequenceElement::getCurrentName(FormulaCursor* cursor)
             }
         }
         if (pos == children.count()) {
+            bool linear = cursor->getLinearMovement();
+            cursor->setLinearMovement(false);
             cursor->moveRight();
+            cursor->setLinearMovement(linear);
         }
     }
     return QString::null;

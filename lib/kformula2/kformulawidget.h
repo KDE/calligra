@@ -25,9 +25,6 @@
 #include <qpoint.h>
 #include <qwidget.h>
 
-//#include <kaccel.h>
-//#include <kaction.h>
-
 #include "formuladefs.h"
 
 
@@ -40,9 +37,13 @@ class KFormulaContainer;
 /**
  * The view. A widget that shows the formula. There are methods
  * to move the cursor around. To edit the formula use the document.
+ *
+ * One day this will be split into two classes. A view that handles
+ * input and the cursor and a widget that shows the formula.
+ * This is because there are applications that provide their own
+ * widget but need to use the view.
  */
 class KFormulaWidget : public QWidget {
-    friend class KFormulaContainer;
     Q_OBJECT
 
 public:

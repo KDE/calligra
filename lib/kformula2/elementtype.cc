@@ -103,6 +103,11 @@ Term::Term(SequenceParser* parser)
         : OperatorType(parser)
 {
     lhs = parser->getPrimitive();
+
+    if (parser->getTokenType() == SequenceParser::Separator) {
+        // A separator doesn't have a type
+        parser->nextToken();
+    }
     
     switch (parser->getTokenType()) {
         case SequenceParser::Mul:

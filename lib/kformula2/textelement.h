@@ -42,6 +42,11 @@ public:
      */
     virtual QChar getCharacter() const { return character; }
 
+    /**
+     * @returns true if we don't want to see the element.
+     */
+    virtual bool isPhantom() const { return character == '\\'; }
+    
     // drawing
     //
     // Drawing depends on a context which knows the required properties like

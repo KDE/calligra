@@ -46,7 +46,7 @@ public:
      */
     enum TokenType { Text, Number, Element, Error, End,
                      Plus='+', Minus='-', Mul='*', Div='/',
-                     Assign='=', Less='<', Greater='>'
+                     Assign='=', Less='<', Greater='>', Separator='\\'
     };
 
     /**

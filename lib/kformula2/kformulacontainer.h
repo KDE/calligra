@@ -41,11 +41,9 @@ class FormulaElement;
 class KCommand;
 class KFormulaCommand;
 class KFormulaDocument;
-class KFormulaWidget;
 class QKeyEvent;
 class QPainter;
 class QPrinter;
-class QWidget;
 
 
 /**
@@ -143,10 +141,12 @@ public:
     FormulaCursor* getActiveCursor() { return activeCursor; }
 
     /**
-     * Tells the formula that a view got the focus and might want to
-     * edit the formula.
+     * Sets the cursor that is to be used for any editing.
+     *
+     * The active cursor might 0. In this case you must not
+     * request any change from the formula.
      */
-    void setActiveView(KFormulaWidget* view);
+    void setActiveCursor(FormulaCursor* cursor);
     
     /**
      * @returns the formula's size.
@@ -298,14 +298,6 @@ private:
      */
     void execute(KFormulaCommand *command);
 
-    /**
-     * Sets the cursor that is to be used for any editing.
-     *
-     * The active cursor might 0. In this case you must not
-     * request any change from the formula.
-     */
-    void setActiveCursor(FormulaCursor* cursor) { activeCursor = cursor; }
-    
     /**
      * @returns true if there is a cursor.
      */

@@ -60,6 +60,9 @@ void SequenceParser::nextToken()
         case '*':
         case '/':
         case '=':
+        case '<':
+        case '>':
+        case '\\':
             type = TokenType(latin1);
             break;
         case '\0':

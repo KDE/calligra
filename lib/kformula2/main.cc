@@ -19,6 +19,7 @@
 #include "kformulacontainer.h"
 #include "kformuladocument.h"
 #include "kformulawidget.h"
+#include "scrollview.h"
 
 
 class TestWidget : public KFormulaWidget {
@@ -70,6 +71,35 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
 }
 
 
+ScrollView::ScrollView()
+        : QScrollView(), child(0)
+{
+}
+
+void ScrollView::addChild(KFormulaWidget* c, int x=0, int y=0)
+{
+    QScrollView::addChild(c, x, y);
+    child = c;
+    connect(child, SIGNAL(cursorChanged(bool, bool)),
+            this, SLOT(cursorChanged(bool, bool)));
+}
+    
+void ScrollView::focusInEvent(QFocusEvent*)
+{
+    if (child != 0) child->setFocus();
+}
+
+
+void ScrollView::cursorChanged(bool visible, bool /*selecting*/)
+{
+    if (visible) {
+        int x = child->getCursorPoint().x();
+        int y = child->getCursorPoint().y();
+        ensureVisible(x, y);
+    }
+}
+
+
 static const KCmdLineOptions options[]= {
     {0,0,0}
 };
@@ -90,26 +120,41 @@ int main(int argc, char** argv)
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
     KFormulaDocument* document = new KFormulaDocument;
-    KFormulaContainer* container = new KFormulaContainer(document);
-    KFormulaWidget* mw1 = new TestWidget(container, 0, "test1");
-    KFormulaWidget* mw2 = new TestWidget(container, 0, "test2");
+    KFormulaContainer* container1 = document->createFormula();
+    KFormulaContainer* container2 = document->createFormula();
 
-//     QAccel ac1(mw1);
-//     ac1.insertItem(Qt::CTRL + Qt::Key_Q, 1);
-//     ac1.connectItem(1, &app, SLOT(quit()));
+    ScrollView* scrollview1a = new ScrollView;
+    ScrollView* scrollview1b = new ScrollView;
+    ScrollView* scrollview2a = new ScrollView;
+    ScrollView* scrollview2b = new ScrollView;
 
-//     QAccel ac2(mw2);
-//     ac2.insertItem(Qt::CTRL + Qt::Key_Q, 1);
-//     ac2.connectItem(1, &app, SLOT(quit()));
+    KFormulaWidget* mw1a = new TestWidget(container1, scrollview1a, "test1a");
+    KFormulaWidget* mw1b = new TestWidget(container1, scrollview1b, "test1b");
+    KFormulaWidget* mw2a = new TestWidget(container2, scrollview2a, "test2a");
+    KFormulaWidget* mw2b = new TestWidget(container2, scrollview2b, "test2b");
 
-    mw1->setCaption("Test1 of the formula engine");
-    mw2->setCaption("Test2 of the formula engine");
+    scrollview1a->addChild(mw1a);
+    scrollview1b->addChild(mw1b);
+    scrollview2a->addChild(mw2a);
+    scrollview2b->addChild(mw2b);
 
-    mw1->show();
-    mw2->show();
+    scrollview1a->setCaption("Test1a of the formula engine");
+    scrollview1b->setCaption("Test1b of the formula engine");
+    scrollview2a->setCaption("Test2a of the formula engine (ro)");
+    scrollview2b->setCaption("Test2b of the formula engine");
+
+    scrollview1a->show();
+    scrollview1b->show();
+    scrollview2a->show();
+    scrollview2b->show();
+
+    // to keep things interessting
+    mw2a->setReadOnly(true);
+    
     int result = app.exec();
 
-    delete container;
+    delete container2;
+    delete container1;
     delete document;
     
     int destruct = BasicElement::getEvilDestructionCount();
@@ -127,3 +172,5 @@ int main(int argc, char** argv)
 
     return result;
 }
+
+#include "scrollview.moc"

@@ -36,7 +36,7 @@
 
 KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const char* name, WFlags f)
     : QWidget(parent, name, f | WRepaintNoErase | WResizeNoErase),
-      cursorVisible(false), cursorHasChanged(true), document(doc)
+      cursorVisible(false), cursorHasChanged(true), readOnly(false), document(doc)
 {
     
     // This is buggy. We do need more/other messages.
@@ -178,7 +178,12 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
 void KFormulaWidget::focusInEvent(QFocusEvent*)
 {
     //cerr << "void KFormulaWidget::focusInEvent(QFocusEvent*): " << cursorVisible << " " << hasFocus() << endl;
-    document->setActiveView(this);
+    if (!readOnly) {
+        document->setActiveCursor(cursor);
+    }
+    else {
+        document->setActiveCursor(0);
+    }
     showCursor();
     cursorHasChanged = true;
     emitCursorChanged();
@@ -187,7 +192,10 @@ void KFormulaWidget::focusInEvent(QFocusEvent*)
 void KFormulaWidget::focusOutEvent(QFocusEvent*)
 {
     //cerr << "void KFormulaWidget::focusOutEvent(QFocusEvent*): " << cursorVisible << " " << hasFocus() << endl;
-    document->setActiveView(0);
+
+    // doesn't work with the matrix dialog
+    //document->setActiveCursor(0);
+    
     hideCursor();
     cursorHasChanged = true;
     emitCursorChanged();

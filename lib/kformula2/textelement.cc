@@ -42,6 +42,12 @@ TextElement::TextElement(QChar ch, BasicElement* parent)
  */
 void TextElement::calcSizes(const ContextStyle& context, int parentSize)
 {
+    if (isPhantom()) {
+        setWidth(0);
+        setHeight(0);
+        setMidline(0);
+        return;
+    }
     int mySize = QMAX(parentSize, context.getMinimumSize());
 
     QFont font = getFont(context);
@@ -67,6 +73,9 @@ void TextElement::calcSizes(const ContextStyle& context, int parentSize)
 void TextElement::draw(QPainter& painter, const ContextStyle& context,
                        int parentSize, const QPoint& parentOrigin)
 {
+    if (isPhantom()) {
+        return;
+    }
     int mySize = QMAX(parentSize, context.getMinimumSize());
 
     QFont font = getFont(context);

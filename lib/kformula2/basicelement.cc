@@ -147,7 +147,7 @@ bool BasicElement::buildFromDom(QDomElement& element)
 /**
  * Appends our attributes to the dom element.
  */
-void BasicElement::writeDom(QDomElement& element)
+void BasicElement::writeDom(QDomElement&)
 {
 }
     
@@ -155,7 +155,7 @@ void BasicElement::writeDom(QDomElement& element)
  * Reads our attributes from the element.
  * Returns false if it failed.
  */
-bool BasicElement::readAttributesFromDom(QDomElement& element)
+bool BasicElement::readAttributesFromDom(QDomElement&)
 {
     return true;
 }

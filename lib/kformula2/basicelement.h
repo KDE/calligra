@@ -94,6 +94,10 @@ public:
      */
     virtual QChar getCharacter() const { return QChar::null; }
 
+    /**
+     * @returns true if we don't want to see the element.
+     */
+    virtual bool isPhantom() const { return false; }
     
     /**
      * Sets the cursor and returns the element the point is in.

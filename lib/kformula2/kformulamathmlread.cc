@@ -231,3 +231,5 @@ bool MathMl2KFormula::processElement(QDomNode *node,QDomDocument *doc,QDomNode *
     }
  
 }
+
+#include "kformulamathmlread.moc"
