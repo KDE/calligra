@@ -66,6 +66,7 @@
 #include <klocale.h>
 #include <kimgio.h>
 #include <qrect.h>
+#undef Bool
 #include <kspell.h>
 #include <kcolordlg.h>
 #include <kiconloader.h>
