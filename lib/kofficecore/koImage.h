@@ -63,6 +63,7 @@ public:
 
 inline KoImage::KoImage( const KoImage &other )
 {
+    d = 0;
     (*this) = other;
 }
 
