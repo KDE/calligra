@@ -1,5 +1,10 @@
 2005-03-14  Inge Wallin  <inge@lysator.liu.se>
 
+	Remove unused file:
+	* kchartBarConfigDialog.{h,cc}
+	
+	----------------------------------------------------------------
+
 	Don't include kchartDataEditor.h where is shouldn't be included.
 	* kchartBarConfigDialog.cc, kchartColorConfigPage.cc,
 	kchartDataConfigPage.cc: remove it, and include koChart.h instead

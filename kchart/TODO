@@ -66,7 +66,7 @@ Item								   Prio Status
     - kchartDataEditor.cc:316  // FIXME: Remove			      2 done
     - kchartDataEditor.cc:345  // FIXME: Remove			      2 done
   + Remove include of kchartDataEditor in a lot of .h files	      2 DONE
-  + What is kchartBarConfigDialog.{h,cc}? Remove it if possible.      1 ----
+  + What is kchartBarConfigDialog.{h,cc}? Remove it if possible.      1 DONE
 
 * Toolbars
   + Separate toolbar for chart types (separate from config, etc).     2 ----

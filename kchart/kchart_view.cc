@@ -10,7 +10,7 @@
 #include "kchart_part.h"
 #include "kchartWizard.h"
 #include "kchartDataEditor.h"
-#include "kchartBarConfigDialog.h"
+#include "kchartConfigDialog.h"
 #include "KChartViewIface.h"
 #include "kchartPageLayout.h"
 #include "kchart_params.h"
