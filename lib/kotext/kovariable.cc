@@ -2176,7 +2176,18 @@ void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
 
 void KoNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
-    kdWarning(32500) << "Not implemented: OASIS saving of note variables" << endl;
+//    <office:annotation><dc:date>2004-11-10</dc:date><text:p/><text:p>---- 10/11/2004, 16:18 ----</text:p><text:p>dfgsdfsdfg</text:p><text:p>---- 10/11/2004, 16:18 ----</text:p><text:p/><text:p>---- 10/11/2004, 16:18 ----</text:p><text:p>gs</text:p><text:p>---- 10/11/2004, 16:18 ----</text:p><text:p>fg</text:p></office:annotation>
+    writer.startElement( "office:annotation" );
+    writer.startElement( "dc:date" );
+    writer.addTextNode( QDate::currentDate().toString(Qt::ISODate) ); //todo fixme add date when we create it.
+    QStringList text = QStringList::split( "\n", m_varValue.toString() );
+    for ( QStringList::Iterator it = text.begin(); it != text.end(); ++it ) {
+        writer.startElement( "text:p" );
+        writer.addTextNode( *it );
+        writer.endElement();
+    }
+    writer.endElement();
+    writer.endElement();
 }
 
 void KoNoteVariable::saveVariable( QDomElement& parentElem )
