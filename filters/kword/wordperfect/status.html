@@ -2,194 +2,324 @@
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <title>KOffice filters status: WordPerfect Filter</title>
+   <title>WordPerfect Filter for KWord</title>
 </head>
+
 <body text="#000000" bgcolor="#FFFFFF" link="#000099" vlink="#666666" alink="#666666">
-<A NAME="START">&nbsp;</A>
 
-<BR>
-<center>
- <h1>
-  KOffice filters status: &nbsp;&nbsp;<i>WordPerfect Filter</i>
- </h1>
-</center>
+<h1>WordPerfect Filter for KWord</h1>
 
-<hr NOSHADE SIZE=2 WIDTH=70%>
+<p><a href="mailto:ariya@kde.org">Ariya Hidayat</a> (ariya at kde.org)<br>
+Last update: 17 August 2002</p>
 
-<font size=-1><b>
- <A HREF="#import">Import</A> |
- <A HREF="#export">Export</A>
-</b></font>
+<hr>
 
-<BR><BR><BR>
-<center><a NAME="import"></a></center>
+<p>This is WordPerfect filter for KWord, which lets KWord
+imports and exports to WordPerfect document format.
+Currently, supported WordPerfect document is version 
+5.1, 5.2, 6, 7, or later (this includes the latest
+WordPerfect 2002).</p>
 
-<A HREF="#START"><font size=-1><b>Up</b></font></A>
-<center>
-<table BORDER=0 CELLSPACING=0 BGCOLOR="#000000" WIDTH=100%>
- <tr>
-  <td>
-   <table BORDER=0 CELLPADDING=2 BGCOLOR="#FFFFFF"  WIDTH=100%>
+<p>The filter itself is (always) in development
+stage so not all WordPerfect features are already
+supported. However, also expect some improvements
+which somehow may (or may not) happen over the time.
+The feature matrix provided below will help the users
+to track which features are supported and which aren't.
+</p>
 
-    <tr BGCOLOR="#DDFFDD">
-     <td COLSPAN="2">
-      <center><b><i><font size=+1>
-       <BR>
-        Import WordPerfect for kword<BR>
-       <BR>
-      </font></i></b></center>
-     </td>
-    </tr>
+<p>For a complete reference on WordPerfect 7 file format,
+please visit <a 
+href="http://www.corel.com/partners_developers/ds/CO32SDK/docs/ff/A_FRNTFF.HTM">Corel 
+WordPerfect 7 file format</a> (at Corel website).
+In addition, <a href="http://www.wotsit.org/download.asp?f=wp51ref">WordPerfect 
+5.1 format</a> is also available (at wotsit.org). 
+Although the description of the file format is rather clear
+and concise, the implementation for a few parts can be hard and tricky.
+</p>
 
-    <tr BGCOLOR="#EEEEFF">
-     <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>13 Jul 2002</td>
-    </tr>
+<p>Comments, helps, and patches are all welcomed.</p>
 
-    <tr BGCOLOR="#CCCCFF">
-     <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
-     <td>
-     <ul>
-       <li>can import all text</li>
-       <li>support WP 5.x and WP 6/7/8 document</li>
-       <li>font information: size, typeface, color</li>
-       <li>WP extended character converted to Unicode</li>
-       <li>character formatting: bold, italics, underline, double underline, strikeout, superscript, subscript</li>
-       <li>paragraph layout: linespacing, justification</li>
-       <li>page settings: margins</li>
-       <li>document summary: title, author, abstract</li>
-     </ul>
-     </td>
-    </tr>
+<h2>Feature Matrix</h2>
 
-    <tr BGCOLOR="#EEEEFF">
-     <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
-     <td>
-     <ul>
-       <li>header and footer</li>
-       <li>multicolumn pages</li>
-       <li>styles</li>
-       <li>tables</li>
-       <li>...</li>
-     </ul>
-     </td>
-    </tr>
+<table cellspacing="1" cellpadding="2" border="1">
+<tr>
+  <td width="200">&nbsp;</td>           
+  <td align="center" colspan="2"><b>Import</b></td>
+  <td align="center" colspan="2"><b>Export</b></td>
+</tr>
+<tr>
+  <td width="200">&nbsp;</td>           
+  <td align="center" width="90">WP 5</td>
+  <td align="center" width="90">WP 6/7/8</td>
+  <td align="center" width="90">WP 5</td>
+  <td align="center" width="90">WP 6/7/8</td>
+</tr>
+<tr>
+  <td colspan="5"><b>Basic features</b></td>           
+</tr>
+<tr>
+  <td>Text formatting</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#008000">partial</td>
+  <td align="center" bgcolor="#008000">partial</td>
+</tr>
+<tr>
+  <td>Tables</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Styles</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Header/footer</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Frames</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Hypertext</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Graphics (WPG)</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Equation/formula</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Barcode</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
 
-    <tr BGCOLOR="#CCCCFF">
-     <td VALIGN=TOP><b><font size=+1>History</font></b></td>
-     <td>
-     <dl>
-     <dt>19 Dec 2001
-     <dd>parser rewritten, support for WP 6/7/8,
-     WP extended characters, better performance
-     </dl>
-     <dl>
-     <dt>29 Aug 2001
-     <dd>first implementation, only for WP 5.x, can import
-     all text along with formatting, using QDom
-     </dl>
-     </td>
-    </tr>
+<tr>
+  <td colspan="5"><b>Character Properties</b></td>           
+</tr>
+<tr>
+  <td>Typeface</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Font size</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Color</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Background color (highlight)</td>
+  <td align="center" bgcolor="#808080">n/a</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#808080">n/a</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Bold</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Italic</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
 
-    <tr BGCOLOR="#EEEEFF">
-     <td VALIGN=TOP><b><font size=+1>Author</font></b></td>
-     <td>
-      Ariya Hidayat <a href="mailto:ariya@kde.org">&lt;ariya@kde.org&gt;</a>
-     </td>
-    </tr>
+<tr>
+  <td>Underline</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
 
-    <tr BGCOLOR="#CCCCFF">
-     <td VALIGN=TOP><b><font size=+1>Links</font></b></td>
-     <td>
-     <a href="http://www.corel.com/partners_developers/ds/CO32SDK/docs/ff/A_FRNTFF.HTM">
-     Corel WordPerfect 7 file format</a><br>
-     <a href="http://www.wotsit.org/download.asp?f=wp51ref">
-     WP 5.1 Format</a> (ZIP file)<br>
-     </td>
-    </tr>
+<tr>
+  <td>Double underline</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Strikeout</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Subscript</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Superscript</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Extended character sets</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
 
-    <tr BGCOLOR="#EEEEFF">
-     <td VALIGN=TOP><b><font size=+1>Progress report </font></b></td>
-     <td>-</td>
-    </tr>
-   </table>
-  </td>
- </tr>
+<tr>
+  <td colspan="5"><b>Paragraph Properties</b></td>           
+</tr>
+<tr>
+  <td>Alignment</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Linespacing</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Indentation</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Spacing before/after</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Tabulators</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Border</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+
+<tr>
+  <td colspan="5"><b>Page Properties</b></td>           
+</tr>
+<tr>
+  <td>Paper size</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Margins</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Borders</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Page break</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+
+<tr>
+  <td width="200" colspan="5"><b>Document Properties</b></td>           
+</tr>
+<tr>
+  <td>Document summary</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+
 </table>
-</center>
-<A HREF="#START"><font size=-1><b>Up</b></font></A>
 
-<br><br><br>
+<h2>ChangeLog</h2>
 
-<hr NOSHADE SIZE=1>
-<br><br><br>
+<pre>
+15 Jul 2002: very basic export filter
+19 Dec 2001: rewritten for better performance
+             added support for WP 6/7/8
+             able to cope with most WP extended characters
+29 Aug 2001: first version of import filter
+             support text with basic formatting
+             only handle WP 5.1 document
+</pre>
 
+<h2>Disclaimer</h2>
 
-<center>
- <a NAME="export"></a>
-</center>
-
-<A HREF="#START"><font size=-1><b>Up</b></font></A>
-<center>
-<table BORDER=0 CELLSPACING=0 BGCOLOR="#000000"  WIDTH=100%>
- <tr>
-  <td>
-   <table BORDER=0 CELLPADDING=2 BGCOLOR="#FFFFFF"  WIDTH=100%>
-    <tr BGCOLOR="#FFDDDD">
-     <td COLSPAN="2">
-      <center><b><i><font size=+1>
-       <BR>Export KWord to WordPerfect<BR><BR>
-      </font></i></b></center>
-     </td>
-    </tr>
-
-    <tr BGCOLOR="#EEEEFF">
-     <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>10 Aug 2001</td>
-    </tr>
-
-    <tr BGCOLOR="#CCCCFF">
-     <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
-     <td>Filter is not yet ready</td>
-    </tr>
-
-    <tr BGCOLOR="#EEEEFF">
-     <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
-     <td>-</td>
-    </tr>
-
-    <tr BGCOLOR="#CCCCFF">
-     <td VALIGN=TOP><b><font size=+1>History</font></b></td>
-     <td>-</td>
-    </tr>
-
-    <tr BGCOLOR="#EEEEFF">
-     <td VALIGN=TOP><b><font size=+1>Author</font></b></td>
-     <td>
-     </td>
-    </tr>
-
-    <tr BGCOLOR="#CCCCFF">
-     <td VALIGN=TOP><b><font size=+1>Links</font></b></td>
-     <td>
-     <a href="http://www.corel.com/partners_developers/ds/CO32SDK/docs/ff/A_FRNTFF.HTM">
-     Corel WordPerfect 7 file format</a>
-     </td>
-    </tr>
-
-    <tr BGCOLOR="#EEEEFF">
-     <td VALIGN=TOP><b><font size=+1>Progress report </font></b></td>
-     <td>-</td>
-    </tr>
-   </table>
-  </td>
- </tr>
-</table>
-</center>
-<A HREF="#START"><font size=-1><b>Up</b></font></A>
-
-<br>
-<br><br><br><br><br><br><br>
+<p>This product is not manufactured, 
+approved, or supported by Corel Corporation or 
+Corel Corporation Limited.</p>
 
 </body>
 </html>
