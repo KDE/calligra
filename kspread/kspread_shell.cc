@@ -28,6 +28,7 @@ KSpreadShell::KSpreadShell( const char* name )
     : KoMainWindow( 0L, name )
 {
   setInstance( KSpreadFactory::global(), false ); 
+  resize( 800, 600 );
 }
 
 KSpreadShell::~KSpreadShell()
