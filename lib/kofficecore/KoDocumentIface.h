@@ -44,8 +44,6 @@ public:
     KoDocumentIface( KoDocument * doc, const char * name = 0 );
     ~KoDocumentIface();
 
-    void openURL( QString url );
-
     // Generate a name for this interface. Automatically used if name=0 is
     // passed to the constructor
     static QCString newIfaceName();
@@ -55,6 +53,8 @@ k_dcop:
      * Returns the URL for this document (empty, real URL, or internal one)
      */
     QString url();
+
+    void openURL( QString url );
 
     bool isModified();
 
