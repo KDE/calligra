@@ -101,11 +101,11 @@ void KWTextImage::load( QDomElement & parentElem )
 {
     // <IMAGE>
     QDomElement image = parentElem.namedItem( "IMAGE" ).toElement();
-    if ( !image.isNull() )
-	parentElem = image;
+    if ( image.isNull() )
+	image = parentElem;
     // The FILENAME tag can be under IMAGE, or directly under parentElement in old koffice-1.0 docs.
     // <FILENAME>
-    QDomElement filenameElement = parentElem.namedItem( "FILENAME" ).toElement();
+    QDomElement filenameElement = image.namedItem( "FILENAME" ).toElement();
     if ( !filenameElement.isNull() )
     {
         QString filename = filenameElement.attribute( "value" );
