@@ -93,7 +93,7 @@ KOSpell::KOSpell (QWidget *_parent, const QString &_caption,
   offset = 0;
   ksconfig=0;
   ksdlg=0;
-  lastpos = 0;
+  lastpos = -1;
   //won't be using the dialog in ksconfig, just the option values
   if (_ksc!=0)
     ksconfig = new KOSpellConfig (*_ksc);
@@ -311,6 +311,7 @@ bool KOSpell::spellWord( const QString &_word )
 void KOSpell::nextWord()
 {
     QString word;
+    lastpos++;
     do
     {
         int i =0;
@@ -324,7 +325,7 @@ void KOSpell::nextWord()
             }
             word.append(ch);
         }
-        lastpos=i+1;
+        lastpos = i;
         testIgnoreWord( word );
     }
     while ( word.isEmpty() && (lastpos < (int)origbuffer.length()-1));
@@ -357,10 +358,11 @@ void KOSpell::testIgnoreWord( QString & word )
 void KOSpell::previousWord()
 {
     QString word;
+    lastpos--;
     do
     {
         int i =0;
-        for ( i = lastpos; i>=0;i--)
+        for ( i = lastpos; i>=0;--i)
         {
             QChar ch = origbuffer[i];
             if ( ch.isSpace() || ch.isPunct() )
@@ -370,7 +372,7 @@ void KOSpell::previousWord()
             }
             word.prepend(ch);
         }
-        lastpos= i-1;
+        lastpos = i;
         testIgnoreWord( word );
     }
     while ( word.isEmpty() && (lastpos >= 0));
@@ -407,7 +409,8 @@ bool KOSpell::check( const QString &_buffer, bool _usedialog )
 
     newbuffer=origbuffer;
     //lastpos is a position in newbuffer (it has offset in it)
-    offset=lastlastline=lastpos=lastline=0;
+    offset=lastlastline=lastline=0;
+    lastpos = -1;
 
 
     // send first buffer line
@@ -441,9 +444,9 @@ void KOSpell::dialog(const QString & word, QStringList & sugg )
     connect (ksdlg, SIGNAL (command (int)), this, SLOT (dialog2(int)));
     ksdlg->init (word, &sugg);
     if (!ksdlg->previousWord())
-        emit misspelling (word, sugg, lastpos+offset-word.length()-1);
+        emit misspelling (word, sugg, lastpos+offset-word.length());
     else
-        emit misspelling (word, sugg, lastpos+offset-word.length()-1);
+        emit misspelling (word, sugg, lastpos+offset+1);
 
     ksdlg->show();
 }
