@@ -1409,6 +1409,7 @@ void KoTextParag::printRTDebug( int info )
                 kdDebug(32500) << " - custom item " << item
                           << " ownline=" << item->ownLine()
                           << " size=" << item->width << "x" << item->height
+                          << " ascent=" << item->ascent()
                           << endl;
             }
         }
