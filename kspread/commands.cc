@@ -85,6 +85,34 @@ void MergeCellCommand::unexecute()
   sheet->changeMergedCell( cell->column(), cell->row(), oldColSpan, oldRowSpan);
 }
 
+// ----- DissociateCellCommand -----
+
+DissociateCellCommand::DissociateCellCommand( KSpreadCell* c )
+{
+  cell = c;
+  oldColSpan = cell->extraXCells();
+  oldRowSpan = cell->extraYCells();
+}
+  
+QString DissociateCellCommand::name() const
+{
+  return i18n("Dissociate Cell");
+}
+
+void DissociateCellCommand::execute()
+{
+  KSpreadSheet* sheet = cell->sheet();
+  if( !sheet ) return;
+  sheet->changeMergedCell( cell->column(), cell->row(), 0, 0 );
+}
+
+void DissociateCellCommand::unexecute()
+{
+  KSpreadSheet* sheet = cell->sheet();
+  if( !sheet ) return;
+  sheet->changeMergedCell( cell->column(), cell->row(), oldColSpan, oldRowSpan);
+}
+
 // ----- RenameSheetCommand -----
 
 RenameSheetCommand::RenameSheetCommand( KSpreadSheet* s, QString name )

@@ -59,6 +59,7 @@ happens for the "redo".
 Alphabetical list of commands:
  
 \li AddSheetCommand
+\li DissociateCellCommand
 \li MergeCellCommand
 \li RemoveSheetCommand
 \li RenameSheetCommand
@@ -108,6 +109,25 @@ protected:
   int oldColSpan;
   int oldRowSpan;
   QString rangeName;
+};
+
+
+/**
+ * Class DissociateCellCommand implements a command for breaking merged cells.
+ */
+class DissociateCellCommand : public KCommand
+{
+public:
+  DissociateCellCommand( KSpreadCell* cell );
+  
+  virtual void execute();
+  virtual void unexecute();
+  virtual QString name() const;
+  
+protected:
+  KSpreadCell* cell;
+  int oldColSpan;
+  int oldRowSpan;
 };
 
 
