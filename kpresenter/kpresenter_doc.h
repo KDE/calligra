@@ -342,7 +342,7 @@ protected:
     QDomElement saveNote( QDomDocument &doc );
     QDomElement saveAttribute( QDomDocument &doc );
     void loadBackground( const QDomElement &element );
-    void loadObjects( const QDomElement &element );
+    void loadObjects( const QDomElement &element,bool paste=false );
     void loadTitle( const QDomElement &element );
     void loadNote( const QDomElement &element );
     virtual bool completeLoading( KoStore* /* _store */ );

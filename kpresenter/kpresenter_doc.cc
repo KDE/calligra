@@ -1012,7 +1012,7 @@ void KPresenterDoc::loadBackground( const QDomElement &element )
 }
 
 /*========================= load objects =========================*/
-void KPresenterDoc::loadObjects( const QDomElement &element )
+void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
 {
     ObjType t = OT_LINE;
     QDomElement obj=element.firstChild().toElement();
@@ -1032,143 +1032,185 @@ void KPresenterDoc::loadObjects( const QDomElement &element )
             case OT_LINE: {
                 KPLineObject *kplineobject = new KPLineObject();
                 offset=kplineobject->load(obj);
-                if (m_pageWhereLoadObject) {
+                if (m_pageWhereLoadObject && paste) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, this,m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
-                } else
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                    m_pageWhereLoadObject->appendObject(kplineobject);
+                else
                     insertObjectInPage(offset, kplineobject);
             } break;
             case OT_RECT: {
                 KPRectObject *kprectobject = new KPRectObject();
                 offset=kprectobject->load(obj);
-                if (m_pageWhereLoadObject) {
+                if (m_pageWhereLoadObject && paste) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
-                } else
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                    m_pageWhereLoadObject->appendObject(kprectobject);
+                else
                     insertObjectInPage(offset, kprectobject);
             } break;
             case OT_ELLIPSE: {
                 KPEllipseObject *kpellipseobject = new KPEllipseObject();
                 offset=kpellipseobject->load(obj);
-                if ( m_pageWhereLoadObject) {
+                if ( m_pageWhereLoadObject && paste) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
-                } else
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                    m_pageWhereLoadObject->appendObject(kpellipseobject);
+                else
                     insertObjectInPage(offset, kpellipseobject);
             } break;
             case OT_PIE: {
                 KPPieObject *kppieobject = new KPPieObject();
                 offset=kppieobject->load(obj);
-                if ( m_pageWhereLoadObject) {
+                if ( m_pageWhereLoadObject && paste) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chord" ), kppieobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
-                } else
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                    m_pageWhereLoadObject->appendObject(kppieobject);
+                else
                     insertObjectInPage(offset, kppieobject);
             } break;
             case OT_AUTOFORM: {
                 KPAutoformObject *kpautoformobject = new KPAutoformObject();
                 offset=kpautoformobject->load(obj);
-                if ( m_pageWhereLoadObject) {
+                if ( m_pageWhereLoadObject&& paste) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
-                } else
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                    m_pageWhereLoadObject->appendObject(kpautoformobject);
+                else
                     insertObjectInPage(offset, kpautoformobject);
             } break;
             case OT_CLIPART: {
                 KPClipartObject *kpclipartobject = new KPClipartObject( &_clipartCollection );
                 offset=kpclipartobject->load(obj);
-                if ( m_pageWhereLoadObject) {
+                if ( m_pageWhereLoadObject && paste) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, this , m_pageWhereLoadObject);
                     insertCmd->execute();
                     addCommand( insertCmd );
                     kpclipartobject->reload();
-                } else
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                    m_pageWhereLoadObject->appendObject(kpclipartobject);
+                else
                     insertObjectInPage(offset, kpclipartobject);
             } break;
             case OT_TEXT: {
                 KPTextObject *kptextobject = new KPTextObject( this );
                 offset=kptextobject->load(obj);
-                if ( m_pageWhereLoadObject) {
+                if ( m_pageWhereLoadObject && paste) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
-                } else
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                    m_pageWhereLoadObject->appendObject(kptextobject);
+                else
                     insertObjectInPage(offset, kptextobject);
             } break;
             case OT_PICTURE: {
                 KPPixmapObject *kppixmapobject = new KPPixmapObject( &_imageCollection );
                 offset=kppixmapobject->load(obj);
-                if ( m_pageWhereLoadObject) {
+                if ( m_pageWhereLoadObject && paste) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
                     kppixmapobject->reload();
-                } else
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                    m_pageWhereLoadObject->appendObject(kppixmapobject);
+                else
                     insertObjectInPage(offset, kppixmapobject);
             } break;
             case OT_FREEHAND: {
                 KPFreehandObject *kpfreehandobject = new KPFreehandObject();
                 offset=kpfreehandobject->load(obj);
-                if ( m_pageWhereLoadObject) {
+                if ( m_pageWhereLoadObject && paste) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Freehand" ), kpfreehandobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
-                } else
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                    m_pageWhereLoadObject->appendObject(kpfreehandobject);
+                else
                     insertObjectInPage(offset,kpfreehandobject);
             } break;
             case OT_POLYLINE: {
                 KPPolylineObject *kppolylineobject = new KPPolylineObject();
                 offset=kppolylineobject->load(obj);
-                if (m_pageWhereLoadObject) {
+                if (m_pageWhereLoadObject && paste) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polyline" ), kppolylineobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
-                } else
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                    m_pageWhereLoadObject->appendObject(kppolylineobject);
+                else
                     insertObjectInPage(offset, kppolylineobject);
             } break;
             case OT_QUADRICBEZIERCURVE: {
                 KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject();
                 offset=kpQuadricBezierCurveObject->load(obj);
-                if ( m_pageWhereLoadObject) {
+                if ( m_pageWhereLoadObject && paste) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
-                } else
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                    m_pageWhereLoadObject->appendObject(kpQuadricBezierCurveObject);
+                else
                     insertObjectInPage(offset, kpQuadricBezierCurveObject);
             } break;
             case OT_CUBICBEZIERCURVE: {
                 KPCubicBezierCurveObject *kpCubicBezierCurveObject = new KPCubicBezierCurveObject();
                 offset=kpCubicBezierCurveObject->load(obj);
-                if ( m_pageWhereLoadObject) {
+                if ( m_pageWhereLoadObject && paste) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
-                } else
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                    m_pageWhereLoadObject->appendObject(kpCubicBezierCurveObject);
+                else
                     insertObjectInPage(offset, kpCubicBezierCurveObject);
             } break;
             case OT_POLYGON: {
                 KPPolygonObject *kpPolygonObject = new KPPolygonObject();
                 offset=kpPolygonObject->load( obj );
-                if ( m_pageWhereLoadObject) {
+                if ( m_pageWhereLoadObject && paste) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polygon" ), kpPolygonObject, this , m_pageWhereLoadObject);
                     insertCmd->execute();
                     addCommand( insertCmd );
-                } else
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                    m_pageWhereLoadObject->appendObject(kpPolygonObject);
+                else
                     insertObjectInPage(offset, kpPolygonObject);
             } break;
             case OT_GROUP: {
                 KPGroupObject *kpgroupobject = new KPGroupObject();
                 offset=kpgroupobject->load(obj, this);
-                if ( m_pageWhereLoadObject) {
+                if ( m_pageWhereLoadObject && paste) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Group Object" ), kpgroupobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
-                } else
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                    m_pageWhereLoadObject->appendObject(kpgroupobject);
+                else
                     insertObjectInPage(offset, kpgroupobject);
             } break;
             default: break;
@@ -1661,7 +1703,7 @@ void KPresenterDoc::loadPastedObjs( const QString &in, int,KPrPage* _page )
     if ( !ok )
         return;
     m_pageWhereLoadObject=_page;
-    loadObjects(document);
+    loadObjects(document,true);
     m_pageWhereLoadObject=0L;
 
     repaint( false );
