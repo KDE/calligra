@@ -159,8 +159,6 @@ public:
 
     unsigned int getColumns() const { return pageColumns.columns; }
 
-    void print() {}
-
     bool isPTYInFrame( unsigned int _frameSet, unsigned int _frame, unsigned int _ypos );
     int getPageOfRect( QRect & _rect ) const;
 

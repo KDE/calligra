@@ -31,6 +31,8 @@
 #include <qtimer.h>
 #include <qclipboard.h>
 #include <qdragobject.h>
+#include <qprogressdialog.h>
+#include <qprinter.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -110,6 +112,33 @@ bool KWCanvas::isOutOfPage( QRect & r, int page ) const
         r.right() > static_cast<int>( doc->ptPaperWidth() ) ||
         r.y() < page * static_cast<int>( doc->ptPaperHeight() ) ||
         r.bottom() > ( page + 1 ) * static_cast<int>( doc->ptPaperHeight() );
+}
+
+void KWCanvas::print( QPainter *painter, QPrinter *printer,
+                      float left_margin, float top_margin )
+{
+    QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
+                              printer->toPage() - printer->fromPage() + 2, this );
+    int j = 0;
+    progress.setProgress( 0 );
+        for ( int i = printer->fromPage(); i <= printer->toPage(); i++ )
+    {
+        progress.setProgress( ++j );
+        kapp->processEvents();
+
+        if ( progress.wasCancelled() )
+            break;
+
+        if ( i > printer->fromPage() ) printer->newPage();
+
+        painter->resetXForm();
+        int pgNum = i - 1;
+        QRect pageRect( 0, pgNum * doc->ptPaperHeight(), doc->ptPaperWidth(), doc->ptPaperHeight() );
+        painter->fillRect( pageRect, white );
+
+        drawDocument( 0L, painter, pageRect.x(), pageRect.y(), pageRect.width(), pageRect.height() );
+        kapp->processEvents();
+    }
 }
 
 void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )

@@ -63,6 +63,8 @@ public:
     KWFrameSetEdit *currentFrameSetEdit() const { return m_currentFrameSetEdit; }
 
     void repaintAll( bool erase = false );
+    void print( QPainter *painter, QPrinter *printer,
+                float left_margin, float top_margin );
     bool eventFilter( QObject *o, QEvent *e );
     bool focusNextPrevChild( bool );
 

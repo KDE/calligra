@@ -680,41 +680,30 @@ void KWView::setupPrinter( QPrinter &prt )
     case PG_DIN_B5: prt.setPageSize( QPrinter::B5 );
         break;
     case PG_SCREEN: {
-        kdWarning() << i18n( "You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!" ) << endl;
+        kdWarning() << "You use the page layout SCREEN. Printing in DIN A4 LANDSCAPE." << endl;
         prt.setPageSize( QPrinter::A4 );
         makeLandscape = TRUE;
     } break;
     default: {
-        kdWarning() << i18n( "The used page layout is not supported by QPrinter. I set it to DIN A4." ) << endl;
+        kdWarning() << "The used page layout is not supported by QPrinter. Printing in A4." << endl;
         prt.setPageSize( QPrinter::A4 );
     } break;
     }
 
-    switch ( pgLayout.orientation ) {
-    case PG_PORTRAIT: prt.setOrientation( QPrinter::Portrait );
-        break;
-    case PG_LANDSCAPE: prt.setOrientation( QPrinter::Landscape );
-        break;
-    }
-
-    float left_margin = 0.0;
-    float top_margin = 0.0;
-
-    if ( makeLandscape ) {
+    if ( pgLayout.orientation == PG_LANDSCAPE || makeLandscape )
         prt.setOrientation( QPrinter::Landscape );
-        left_margin = 28.5;
-        top_margin = 15.0;
-    }
+    else
+        prt.setOrientation( QPrinter::Portrait );
 }
 
-void KWView::print( QPrinter &/*prt*/ )
+void KWView::print( QPrinter &prt )
 {
     setCursor( waitCursor );
     gui->canvasWidget()->viewport()->setCursor( waitCursor );
+    bool serialLetter = FALSE;
 #if 0
     QList<KWVariable> *vars = doc->getVariables();
     KWVariable *v = 0;
-    bool serialLetter = FALSE;
     for ( v = vars->first(); v; v = vars->next() ) {
         if ( v->getType() == VT_SERIALLETTER ) {
             serialLetter = TRUE;
@@ -740,25 +729,25 @@ void KWView::print( QPrinter &/*prt*/ )
         top_margin = 15.0;
     }
 
-#if 0
     if ( !serialLetter ) {
         QPainter painter;
         painter.begin( &prt );
-        doc->print( &painter, &prt, left_margin, top_margin );
+        gui->canvasWidget()->print( &painter, &prt, left_margin, top_margin );
         painter.end();
     } else {
+#if 0
         QPainter painter;
         painter.begin( &prt );
-        for ( int i = 0;i < doc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
+        for ( int i = 0; i < doc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
             doc->setSerialLetterRecord( i );
-            doc->print( &painter, &prt, left_margin, top_margin );
+            gui->canvasWidget()->print( &painter, &prt, left_margin, top_margin );
             if ( i < doc->getSerialLetterDataBase()->getNumRecords() - 1 )
                 prt.newPage();
         }
         doc->setSerialLetterRecord( -1 );
         painter.end();
-    }
 #endif
+    }
 
     setCursor( arrowCursor );
     gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
