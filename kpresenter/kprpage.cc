@@ -151,7 +151,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
 
     if ( !listObjectAnimation.isEmpty() )
     {
-        kdDebug()<<"! listObjectAnimation.isEmpty() \n";
+        kdDebug()<<"! listObjectAnimation.isEmpty() :"<<listObjectAnimation.count()<<endl;
         animationTmpWriter.startElement( "presentation:animations" );
         lstMap::Iterator it = listObjectAnimation.begin();
         lstMap::Iterator end = listObjectAnimation.end();
