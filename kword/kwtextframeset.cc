@@ -444,6 +444,24 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                             p->save();
                             QPen pen( KoTextFormat::defaultTextColor( p ),   // always in default fg color (and black when printing)
                                       KoBorder::zoomWidthY( m_doc->footNoteSeparatorLineWidth(), m_doc, 1 ) ); // penwidth = zoomIt( 2 pt )
+                            switch( m_doc->footNoteSeparatorLineType())
+                            {
+                            case SLT_SOLID:
+                                pen.setStyle( SolidLine );
+                                break;
+                            case SLT_DASH:
+                                pen.setStyle( DashLine );
+                                break;
+                            case SLT_DOT:
+                                pen.setStyle( DotLine );
+                                break;
+                            case SLT_DASH_DOT:
+                                pen.setStyle( DashDotLine );
+                                break;
+                            case SLT_DASH_DOT_DOT:
+                                pen.setStyle( DashDotDotLine );
+                                break;
+                            }
                             p->setPen( pen );
                             p->drawLine( flatRect.left(), flatRect.top(), flatRect.right(), flatRect.top() );
                             //kdDebug() << "  drawLine( " << flatRect.left() << ", " << flatRect.top() << ", " << flatRect.right() << ", " << flatRect.top() << endl;
@@ -3293,7 +3311,7 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
         QPopupMenu * popup = view->popupMenu("variable_popup");
         Q_ASSERT(popup);
         if (popup)
-            popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)    
+            popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
     }
     else
     {

@@ -145,6 +145,7 @@ don't put a </?xml...> at the end of the file!).
             
             slFootNoteLength:   percentage of page width default is 20
             slFootNoteWidth:    width of line seperator default = 2pt
+            slFootNoteType:     type of line seperator solid, dot, dash etc...
 -->
 <!ELEMENT PAPER
     (PAPERBORDERS?)>
@@ -161,7 +162,8 @@ don't put a </?xml...> at the end of the file!).
     spFootBody CDATA #IMPLIED
     spFootNoteBody CDATA #IMPLIED
     slFootNotePosition CDATA #IMPLIED
-    slFootNoteLength CDATA #IMPLIED>
+    slFootNoteLength CDATA #IMPLIED
+    slFootNoteType CDATA #IMPLIED>
 
 
 <!--    Describes the margins of the page.

@@ -190,7 +190,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_frameStyleColl = new KWFrameStyleCollection();
     m_tableStyleColl = new KWTableStyleCollection();
     m_tableTemplateColl = new KWTableTemplateCollection();
-    
+
     setInstance( KWFactory::global(), false );
 
     m_gridX = m_gridY = 10.0;
@@ -206,6 +206,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     //by default it's 1/5
     m_iFootNoteSeparatorLineLength = 20;
     m_footNoteSeparatorLineWidth = 2.0;
+    m_footNoteSeparatorLineType = SLT_SOLID;
 
     m_viewFormattingChars = false;
 
@@ -303,7 +304,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     // And let's do the same for tablestyles
     KWTableStyle *standardTableStyle = new KWTableStyle( "Plain", standardStyle, standardFrameStyle );
     m_tableStyleColl->addTableStyleTemplate( standardTableStyle );
-    
+
     if ( name )
         dcopObject();
     connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
@@ -994,6 +995,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         __hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
         m_iFootNoteSeparatorLineLength = getAttribute( paper, "slFootNoteLength", 20);
         m_footNoteSeparatorLineWidth = getAttribute( paper, "slFootNoteWidth",2.0);
+        m_footNoteSeparatorLineType = static_cast<SeparatorLineLineType>(getAttribute( paper, "slFootNoteType",0));
 
         if ( paper.hasAttribute("slFootNotePosition"))
         {
@@ -1111,9 +1113,9 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         loadDefaultTableStyleTemplates();
 
     emit sigProgress(19);
-    
+
     loadDefaultTableTemplates();
-    
+
     emit sigProgress(20);
 
     QDomElement bookmark = word.namedItem( "BOOKMARKS" ).toElement();
@@ -1628,7 +1630,7 @@ void KWDocument::loadDefaultTableTemplates()
         KWTableTemplate *temp = new KWTableTemplate( templateElem, this );
         m_tableTemplateColl->addTableTemplate( temp );
     }
-}    
+}
 
 void KWDocument::progressItemLoaded()
 {
@@ -2052,6 +2054,10 @@ QDomDocument KWDocument::saveXML()
         else if ( m_footNoteSeparatorLinePos==SLP_LEFT ) //never !
             paper.setAttribute( "slFootNotePosition", "left" );
     }
+    if ( m_footNoteSeparatorLineType != SLT_SOLID )
+        paper.setAttribute( "slFootNoteType", static_cast<int>(m_footNoteSeparatorLineType) );
+
+
     paper.setAttribute("slFootNoteLength", m_iFootNoteSeparatorLineLength);
     paper.setAttribute("slFootNoteWidth", m_footNoteSeparatorLineWidth);
 

@@ -656,6 +656,10 @@ public:
     double footNoteSeparatorLineWidth() const { return m_footNoteSeparatorLineWidth;}
     void setFootNoteSeparatorLineWidth( double _width){  m_footNoteSeparatorLineWidth=_width;}
 
+    SeparatorLineLineType footNoteSeparatorLineType()const { return m_footNoteSeparatorLineType;}
+    void setFootNoteSeparatorLineType( SeparatorLineLineType _type) {m_footNoteSeparatorLineType = _type;}
+
+
     void insertBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos, int _length);
     void deleteBookMark(const QString &_name);
     void renameBookMark(const QString &_oldname, const QString &_newName);
@@ -842,6 +846,8 @@ private:
     int m_iFootNoteSeparatorLineLength;
 
     double m_footNoteSeparatorLineWidth;
+
+    SeparatorLineLineType m_footNoteSeparatorLineType;
 
     /** Page number -> section title array, for the Section variable.
      * Note that pages without a section title don't appear in the array. */

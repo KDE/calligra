@@ -474,7 +474,7 @@ void KWTableStyleCommand::unexecute()
         m_fsc->unexecute();
     if (m_sc)
         m_sc->unexecute();
-    
+
     m_frame->frameSet()->kWordDocument()->repaintAllViews();
 }
 
@@ -483,15 +483,15 @@ KWTableTemplateCommand::KWTableTemplateCommand( const QString &name, KWTableFram
 {
     m_table = _table;
     m_tt = _tt;
-    
+
     // No need for i18n because it will never be displayed.
     m_tableCommands = new KMacroCommand( "Apply tablestyles to table" );
-    
+
 
     KWTableStyle *cell = 0L;
     unsigned int rows = m_table->getRows();
     unsigned int cols = m_table->getCols();
-    
+
     for ( unsigned int i = 0; i < rows; i++ )
     {
         for ( unsigned int j = 0; j < cols; j++ )
@@ -522,7 +522,7 @@ KWTableTemplateCommand::KWTableTemplateCommand( const QString &name, KWTableFram
             else
             if ( (i>0) && (j>0) && (i<(rows-1)) && (j<(cols-1)) ) // BODY
                 cell = m_tt->pBodyCell();
-            
+
             m_tableCommands->addCommand( new KWTableStyleCommand( "Apply tablestyle to cell", m_table->getCell(i,j)->frame(0),cell ) );
         }
     }
@@ -1877,7 +1877,7 @@ void KWChangeFootNoteParametersCommand::changeVariableParameter( FootNoteParamet
 }
 
 
-KWChangeFootNoteLineSeparatorParametersCommand::KWChangeFootNoteLineSeparatorParametersCommand( const QString &name, SeparatorLinePos _oldValuePos, SeparatorLinePos _newValuePos, int _oldLength, int _newLength, double _oldWidth, double _newWidth, KWDocument *_doc):
+KWChangeFootNoteLineSeparatorParametersCommand::KWChangeFootNoteLineSeparatorParametersCommand( const QString &name, SeparatorLinePos _oldValuePos, SeparatorLinePos _newValuePos, int _oldLength, int _newLength, double _oldWidth, double _newWidth, SeparatorLineLineType _oldLineType, SeparatorLineLineType _newLineType, KWDocument *_doc):
     KNamedCommand(name),
     m_doc( _doc ),
     m_oldValuePos(_oldValuePos),
@@ -1885,25 +1885,28 @@ KWChangeFootNoteLineSeparatorParametersCommand::KWChangeFootNoteLineSeparatorPar
     m_oldLength(_oldLength),
     m_newLength(_newLength),
     m_oldWidth(_oldWidth),
-    m_newWidth(_newWidth)
+    m_newWidth(_newWidth),
+    m_oldLineType(_oldLineType),
+    m_newLineType(_newLineType)
 
 {
 }
 
 void KWChangeFootNoteLineSeparatorParametersCommand::execute()
 {
-    changeLineSeparatorParameter( m_newValuePos, m_newLength, m_newWidth);
+    changeLineSeparatorParameter( m_newValuePos, m_newLength, m_newWidth,m_newLineType );
 }
 
 void KWChangeFootNoteLineSeparatorParametersCommand::unexecute()
 {
-    changeLineSeparatorParameter( m_oldValuePos, m_oldLength, m_oldWidth);
+    changeLineSeparatorParameter( m_oldValuePos, m_oldLength, m_oldWidth, m_oldLineType);
 }
 
-void KWChangeFootNoteLineSeparatorParametersCommand::changeLineSeparatorParameter( SeparatorLinePos _pos, int _length, double _width)
+void KWChangeFootNoteLineSeparatorParametersCommand::changeLineSeparatorParameter( SeparatorLinePos _pos, int _length, double _width, SeparatorLineLineType _type)
 {
     m_doc->setFootNoteSeparatorLinePosition( _pos );
     m_doc->setFootNoteSeparatorLineLength( _length);
     m_doc->setFootNoteSeparatorLineWidth(_width );
+    m_doc->setFootNoteSeparatorLineType( _type );
     m_doc->slotRepaintAllViews();
 }

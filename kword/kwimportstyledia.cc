@@ -149,7 +149,7 @@ void KWImportStyleDia::initList()
 
 void KWImportStyleDia::slotOk()
 {
-    for (int i = 0; i< m_listStyleName->count();i++)
+    for (uint i = 0; i< m_listStyleName->count();i++)
     {
         if ( !m_listStyleName->isSelected( i ))
         {

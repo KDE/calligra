@@ -30,6 +30,7 @@
 #include <koParagDia.h>
 #include <kwvariable.h>
 #include "kwcommand.h"
+#include <qcombobox.h>
 
 KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc )
     : KDialogBase(Tabbed, QString::null, Ok | Cancel , Ok, parent, name, true)
@@ -93,6 +94,19 @@ void KWConfigFootNoteDia::setupTab3()
     spWidth = new KDoubleNumInput( 1, bgSeparatorWidth );
     spWidth->setRange( 0, 5, 0.5 ,false );
     spWidth->setValue( m_doc->footNoteSeparatorLineWidth());
+
+    QVButtonGroup *bgSeparatorType = new QVButtonGroup( i18n( "Separator Line Type" ), page );
+
+    lab = new QLabel(i18n("Type of Line:"), bgSeparatorType);
+    m_cbLineType = new QComboBox( bgSeparatorType );
+    QStringList lst;
+    lst <<i18n("Solid");
+    lst <<i18n("Dash Line");
+    lst <<i18n("Dot Line");
+    lst <<i18n("Dash Dot Line");
+    lst <<i18n("Dash Dot Dot Line");
+    m_cbLineType->insertStringList( lst );
+    m_cbLineType->setCurrentItem( static_cast<int>(m_doc->footNoteSeparatorLineType()));
 }
 
 
@@ -119,6 +133,7 @@ void KWConfigFootNoteDia::slotOk()
     int val =spLength->value();
     double width = spWidth->value();
     SeparatorLinePos tmp = SLP_LEFT;
+    SeparatorLineLineType type = static_cast<SeparatorLineLineType>(m_cbLineType->currentItem());
     if ( rbPosRight->isChecked())
         tmp = SLP_RIGHT;
     else if ( rbPosCentered->isChecked())
@@ -128,11 +143,12 @@ void KWConfigFootNoteDia::slotOk()
 
     if ( (val != m_doc->footNoteSeparatorLineLength())||
          tmp != m_doc->footNoteSeparatorLinePosition()||
-        width!= m_doc->footNoteSeparatorLineWidth())
+         width!= m_doc->footNoteSeparatorLineWidth() ||
+         type != m_doc->footNoteSeparatorLineType())
     {
         if ( !macro )
             macro = new KMacroCommand(i18n("Change Foot Note Line Separator Settings"));
-        cmd = new KWChangeFootNoteLineSeparatorParametersCommand( i18n("Change Foot Note Line Separator Settings") , m_doc->footNoteSeparatorLinePosition(), tmp, m_doc->footNoteSeparatorLineLength(), val,m_doc->footNoteSeparatorLineWidth(), width, m_doc);
+        cmd = new KWChangeFootNoteLineSeparatorParametersCommand( i18n("Change Foot Note Line Separator Settings") , m_doc->footNoteSeparatorLinePosition(), tmp, m_doc->footNoteSeparatorLineLength(), val,m_doc->footNoteSeparatorLineWidth(), width, m_doc->footNoteSeparatorLineType(), type, m_doc);
         macro->addCommand( cmd );
     }
 

@@ -797,14 +797,14 @@ protected:
 class KWChangeFootNoteLineSeparatorParametersCommand : public KNamedCommand
 {
 public:
-    KWChangeFootNoteLineSeparatorParametersCommand( const QString &name, SeparatorLinePos _oldValuePos, SeparatorLinePos _newValuePos, int _oldLength, int _newLength, double _oldWidth, double _newWidth,KWDocument *_doc);
+    KWChangeFootNoteLineSeparatorParametersCommand( const QString &name, SeparatorLinePos _oldValuePos, SeparatorLinePos _newValuePos, int _oldLength, int _newLength, double _oldWidth, double _newWidth,SeparatorLineLineType _oldLineType, SeparatorLineLineType _newLineType, KWDocument *_doc);
 
     ~KWChangeFootNoteLineSeparatorParametersCommand() {}
 
     virtual void execute();
     virtual void unexecute();
 protected:
-    void changeLineSeparatorParameter( SeparatorLinePos _pos, int length, double _width);
+    void changeLineSeparatorParameter( SeparatorLinePos _pos, int length, double _width, SeparatorLineLineType _type);
     KWDocument *m_doc;
     SeparatorLinePos m_oldValuePos;
     SeparatorLinePos m_newValuePos;
@@ -812,6 +812,8 @@ protected:
     int m_newLength;
     double m_oldWidth;
     double m_newWidth;
+    SeparatorLineLineType m_oldLineType;
+    SeparatorLineLineType m_newLineType;
 };
 
 #endif
