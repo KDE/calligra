@@ -918,7 +918,7 @@ KSpreadUndoSort::KSpreadUndoSort( KSpreadDoc * _doc, KSpreadTable * _table, QRec
   copyAll( m_lstLayouts, m_lstColLayouts, m_lstRowLayouts, _table );
 }
 
-void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layoutColumn> & listCol, 
+void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layoutColumn> & listCol,
                               QValueList<layoutRow> & listRow, KSpreadTable * table )
 {
   list.clear();
@@ -948,7 +948,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
         tmplayout.text = c->text();
         list.append(tmplayout);
       }
-    }    
+    }
   }
   else if (table->isRowSelected( m_rctRect ) )
   {
@@ -1006,10 +1006,10 @@ void KSpreadUndoSort::undo()
   KSpreadTable * table = doc()->map()->findTable( m_tableName );
   if ( !table )
     return;
-  
+
   doc()->undoBuffer()->lock();
-  
-  copyAll( m_lstRedoLayouts, m_lstRedoColLayouts, 
+
+  copyAll( m_lstRedoLayouts, m_lstRedoColLayouts,
            m_lstRedoRowLayouts, table );
 
   if ( table->isColumnSelected( m_rctRect ) )
@@ -1048,7 +1048,7 @@ void KSpreadUndoSort::undo()
     cell->setDisplayDirtyFlag();
     table->updateCell( cell, (*it2).col, (*it2).row );
   }
-  
+
   table->updateView(m_rctRect);
   doc()->undoBuffer()->unlock();
 }
@@ -1079,12 +1079,12 @@ void KSpreadUndoSort::redo()
         row->copy( *(*it2).l );
       }
     }
-    
+
     QValueList<layoutTextCell>::Iterator it2;
     for ( it2 = m_lstRedoLayouts.begin(); it2 != m_lstRedoLayouts.end(); ++it2 )
     {
       KSpreadCell *cell = table->nonDefaultCell( (*it2).col,(*it2).row );
-      
+
       if ( (*it2).text.isEmpty() )
       {
         if(!cell->text().isEmpty())
@@ -1092,13 +1092,13 @@ void KSpreadUndoSort::redo()
       }
       else
         cell->setCellText( (*it2).text );
-      
+
       cell->copy( *(*it2).l );
       cell->setLayoutDirtyFlag();
       cell->setDisplayDirtyFlag();
       table->updateCell( cell, (*it2).col, (*it2).row );
     }
-    
+
     table->updateView(m_rctRect);
     doc()->undoBuffer()->unlock();
 }
@@ -2407,5 +2407,61 @@ void KSpreadUndoStyleCell::redo()
       }
     table->updateView(m_selection);
 
+    doc()->undoBuffer()->unlock();
+}
+
+
+
+KSpreadUndoAddTable::KSpreadUndoAddTable(KSpreadDoc *_doc, KSpreadTable* _table)
+    : KSpreadUndoAction( _doc ),
+      m_table( _table )
+{
+    name=i18n("Add Table");
+}
+
+KSpreadUndoAddTable::~KSpreadUndoAddTable()
+{
+}
+
+void KSpreadUndoAddTable::undo()
+{
+    doc()->undoBuffer()->lock();
+    m_table->map()->takeTable( m_table );
+    doc()->takeTable( m_table );
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoAddTable::redo()
+{
+    doc()->undoBuffer()->lock();
+    m_table->map()->insertTable( m_table );
+    doc()->insertTable( m_table );
+    doc()->undoBuffer()->unlock();
+}
+
+KSpreadUndoRemoveTable::KSpreadUndoRemoveTable(KSpreadDoc *_doc, KSpreadTable* _table)
+    : KSpreadUndoAction( _doc ),
+      m_table( _table )
+{
+    name=i18n("Remove Table");
+}
+
+KSpreadUndoRemoveTable::~KSpreadUndoRemoveTable()
+{
+}
+
+void KSpreadUndoRemoveTable::undo()
+{
+    doc()->undoBuffer()->lock();
+    m_table->map()->insertTable( m_table );
+    doc()->insertTable( m_table );
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoRemoveTable::redo()
+{
+    doc()->undoBuffer()->lock();
+    m_table->map()->takeTable( m_table );
+    doc()->takeTable( m_table );
     doc()->undoBuffer()->unlock();
 }

@@ -93,7 +93,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   m_defaultGridPen.setColor( lightGray );
   m_defaultGridPen.setWidth( 1 );
-  m_defaultGridPen.setStyle( SolidLine ); 
+  m_defaultGridPen.setStyle( SolidLine );
 
   initInterpreter();
 
@@ -216,7 +216,7 @@ QDomDocument KSpreadDoc::saveXML()
   spread.setAttribute( "editor", "KSpread" );
   spread.setAttribute( "mime", "application/x-kspread" );
   spread.setAttribute( "syntaxVersion", CURRENT_SYNTAX_VERSION );
-  
+
   QDomElement locale = m_locale.save( doc );
   spread.appendChild( locale );
 
@@ -690,6 +690,20 @@ void KSpreadDoc::updateBorderButton()
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
       static_cast<KSpreadView *>( it.current() )->updateBorderButton();
+}
+
+void KSpreadDoc::insertTable( KSpreadTable * table )
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KSpreadView*)it.current())->insertTable( table );
+}
+
+void KSpreadDoc::takeTable( KSpreadTable * table )
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KSpreadView*)it.current())->removeTable( table );
 }
 
 

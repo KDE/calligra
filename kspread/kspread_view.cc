@@ -500,15 +500,15 @@ void KSpreadView::initializeInsertActions()
                                   "insertChart" );
   m_insertChartFrame->setToolTip(i18n("Insert a chart."));
   m_insertFromDatabase = new KAction( i18n("From &Database"), 0, this,
-                                      SLOT( insertFromDatabase() ), 
+                                      SLOT( insertFromDatabase() ),
                                       actionCollection(), "insertFromDatabase");
   m_insertFromDatabase->setToolTip(i18n("Insert data from a SQL database"));
   m_insertFromTextfile = new KAction( i18n("From &Text File"), 0, this,
-                                      SLOT( insertFromTextfile() ), 
+                                      SLOT( insertFromTextfile() ),
                                       actionCollection(), "insertFromTextfile");
   m_insertFromTextfile->setToolTip(i18n("Insert data from a text file to the current cursor position/selection"));
   m_insertFromClipboard = new KAction( i18n("From &Clipboard"), 0, this,
-                                      SLOT( insertFromClipboard() ), 
+                                      SLOT( insertFromClipboard() ),
                                       actionCollection(), "insertFromClipboard");
   m_insertFromClipboard->setToolTip(i18n("Insert csv data from the clipboard to the current cursor position/selection"));
 
@@ -2405,15 +2405,7 @@ void KSpreadView::borderRemove()
 
 void KSpreadView::addTable( KSpreadTable *_t )
 {
-    if( !_t->isHidden() )
-    {
-        m_pTabBar->addTab( _t->tableName() );
-        setActiveTable( _t );
-    }
-    else
-    {
-        m_pTabBar->addHiddenTab(_t->tableName());
-    }
+    insertTable( _t );
 
     // Connect some signals
     QObject::connect( _t, SIGNAL( sig_updateView( KSpreadTable* ) ), SLOT( slotUpdateView( KSpreadTable* ) ) );
@@ -2591,6 +2583,8 @@ void KSpreadView::insertTable()
   m_pHorzScrollBar->setValue(t->getScrollPosX());
   m_pVertScrollBar->setValue(t->getScrollPosY());
   updateEditWidget();
+  KSpreadUndoAddTable *undo = new KSpreadUndoAddTable(m_pDoc, t);
+  m_pDoc->undoBuffer()->appendUndo( undo );
 }
 
 void KSpreadView::hideTable()
@@ -2751,7 +2745,7 @@ void KSpreadView::goalSeek()
   if ( m_pCanvas->editor() )
   {
     m_pCanvas->deleteEditor( true ); // save changes
-  }  
+  }
 
   KSpreadGoalSeekDlg dlg( this, QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),
                           "KSpreadGoalSeekDlg" );
@@ -2974,27 +2968,27 @@ void KSpreadView::print( KPrinter &prt )
 {
     //store the current setting in a temporary variable
     KoOrientation _orient =  m_pTable->orientation();
-    
+
     //use the current orientation from print dialog
     if ( prt.orientation() == KPrinter::Landscape )
     {
         m_pTable->setPaperOrientation( PG_LANDSCAPE );
     }
     else
-    {   
+    {
         m_pTable->setPaperOrientation( PG_PORTRAIT );
     }
-    
+
     prt.setFullPage( TRUE );
     prt.setResolution ( 72 );
-    
+
     QPainter painter;
 
     painter.begin( &prt );
     // Print the table and tell that m_pDoc is NOT embedded.
     m_pTable->print( painter, &prt );
     painter.end();
-    
+
     //Restore original orientation
     m_pTable->setPaperOrientation( _orient );
 }
@@ -4132,10 +4126,11 @@ void KSpreadView::removeTable()
         }
         m_pDoc->setModified( true );
         KSpreadTable *tbl = activeTable();
-        tbl->removeTable();
+        KSpreadUndoRemoveTable* undo = new KSpreadUndoRemoveTable(m_pDoc, tbl);
+        m_pDoc->undoBuffer()->appendUndo( undo );
+        tbl->map()->takeTable( tbl );
+        doc()->takeTable( tbl );
 
-        doc()->map()->removeTable( tbl );
-        delete tbl;
     }
 }
 
@@ -4639,6 +4634,25 @@ void KSpreadView::updateBorderButton()
 {
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders() );
 }
+
+void KSpreadView::removeTable( KSpreadTable *_t )
+{
+  QString m_tablName=_t->tableName();
+  m_pTabBar->removeTab( m_tablName );
+  setActiveTable( m_pDoc->map()->findTable( m_pTabBar->listshow().first() ));
+}
+
+void KSpreadView::insertTable( KSpreadTable* table )
+{
+    QString tabName = table->tableName();
+    if( !table->isHidden() ) {
+    m_pTabBar->addTab(tabName);
+    setActiveTable(table);
+  } else {
+      m_pTabBar->addHiddenTab(tabName);
+  }
+}
+
 
 #include "kspread_view.moc"
 

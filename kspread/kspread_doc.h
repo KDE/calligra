@@ -267,6 +267,10 @@ public:
 
   void updateBorderButton();
 
+    void insertTable( KSpreadTable * table );
+    void takeTable( KSpreadTable * table );
+
+
   /**
    * Returns the syntax version of the currently opened file
    */

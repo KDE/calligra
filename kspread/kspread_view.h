@@ -183,6 +183,8 @@ public:
     void openPopupMenuMenuPage( const QPoint & _point );
 
     void updateBorderButton();
+    void removeTable( KSpreadTable *_t );
+    void insertTable( KSpreadTable* table );
 
 public slots:
     void initialPosition();

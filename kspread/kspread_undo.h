@@ -379,7 +379,7 @@ public:
     virtual void undo();
     virtual void redo();
 
-    void copyAll( QValueList<layoutTextCell> & list, QValueList<layoutColumn> & listCol, 
+    void copyAll( QValueList<layoutTextCell> & list, QValueList<layoutColumn> & listCol,
                   QValueList<layoutRow> & listRow, KSpreadTable * table );
 
 protected:
@@ -577,7 +577,29 @@ protected:
     QString m_tableName;
 };
 
+class KSpreadUndoAddTable : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoAddTable(KSpreadDoc *_doc, KSpreadTable* _table);
+    virtual ~KSpreadUndoAddTable();
 
+    virtual void undo();
+    virtual void redo();
+protected:
+    KSpreadTable* m_table;
+};
+
+class KSpreadUndoRemoveTable : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoRemoveTable(KSpreadDoc *_doc, KSpreadTable* _table);
+    virtual ~KSpreadUndoRemoveTable();
+
+    virtual void undo();
+    virtual void redo();
+protected:
+    KSpreadTable* m_table;
+};
 
 class KSpreadUndo
 {

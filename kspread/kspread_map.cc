@@ -225,7 +225,19 @@ DCOPObject* KSpreadMap::dcopObject()
     return m_dcop;
 }
 
-KSpreadDoc* KSpreadMap::doc()
+KSpreadDoc* KSpreadMap::doc() const
 {
     return m_pDoc;
+}
+
+void KSpreadMap::takeTable( KSpreadTable* table )
+{
+    int pos=m_lstTables.findRef(table);
+    m_lstTables.take( pos );
+
+}
+
+void KSpreadMap::insertTable( KSpreadTable* table )
+{
+    m_lstTables.append(table);
 }

@@ -124,7 +124,10 @@ public:
 
   virtual DCOPObject* dcopObject();
 
-  KSpreadDoc* doc();
+  KSpreadDoc* doc()const;
+    void takeTable( KSpreadTable* table );
+    void insertTable( KSpreadTable* table );
+
 
 private:
   /**
