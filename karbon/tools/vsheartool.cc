@@ -63,8 +63,6 @@ VShearTool::draw()
 	painter->setZoomFactor( view()->zoom() );
 	for( ; itr.current(); ++itr )
 		itr.current()->draw( painter, &itr.current()->boundingBox() );
-
-	painter->setZoomFactor( 1.0 );
 }
 
 void

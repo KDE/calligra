@@ -93,7 +93,7 @@ VCanvas::setYMirroring( bool edit )
 	if( edit )
 	{
 		p = m_view->painterFactory()->editpainter();
-		mat.scale( m_view->zoom(), -m_view->zoom() );
+		mat.scale( 1, -1 );
 	}
 	else
 	{

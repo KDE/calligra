@@ -69,8 +69,6 @@ VRotateTool::draw()
 	{
 		itr.current()->draw( painter, &itr.current()->boundingBox() );
 	}
-
-	painter->setZoomFactor( 1.0 );
 }
 
 void
