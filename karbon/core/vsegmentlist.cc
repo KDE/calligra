@@ -330,6 +330,12 @@ VSegmentList::arcTo(
 void
 VSegmentList::close()
 {
+
+	if ( !getLast() || !getFirst() ) {
+            kdDebug() << "File seems to be corrupt!" << endl;
+            Q_ASSERT( 0 );
+        }
+
 	// move end-segment if we are already closed:
 	if( m_isClosed )
 	{

@@ -481,10 +481,6 @@ void
 VSegment::save( QDomElement& element ) const
 {
 	QDomElement me;
-	element.appendChild( me );
-
-	if( m_ctrlPointFixing )
-		me.setAttribute( "ctrlPointFixing", m_ctrlPointFixing );
 
 	if( m_type == segment_curve )
 	{
@@ -508,6 +504,11 @@ VSegment::save( QDomElement& element ) const
 		me.setAttribute( "x", m_point[2].x() );
 		me.setAttribute( "y", m_point[2].y() );
 	}
+
+	if( m_ctrlPointFixing )
+		me.setAttribute( "ctrlPointFixing", m_ctrlPointFixing );
+
+	element.appendChild( me );
 }
 
 void
