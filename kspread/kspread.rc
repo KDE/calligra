@@ -18,8 +18,8 @@
   <Action name="delete"/>
   <Action name="mergecell"/>
   <Action name="dissociatecell"/>
-  <Action name="increaseindent"/>
   <Action name="decreaseindent"/>
+  <Action name="increaseindent"/>
   <Separator/>
   <Action name="RecalcWorkSheet"/>
   <Action name="RecalcWorkBook"/>
@@ -187,8 +187,8 @@
  <Action name="borderColor"/>
  <Action name="dissociatecell"/>
  <Action name="mergecell"/>
- <Action name="increaseindent"/>
  <Action name="decreaseindent"/>
+ <Action name="increaseindent"/>
 </ToolBar>
 <!--
 <InPlaceEditing>
