@@ -185,3 +185,7 @@ Changes between KWord-1.2-beta2 and KWord-1.2-RC1
 - Fix mem leak : delete "special char dialogbox"
 - Fix crash when we close kword and "special char dialogbox" is not closed
 - Fix infini loop when we resize footnote
+- Add menu for readonly mode
+- Fix a lot of crash in framedia 
+- Fix crash when we delete style requested by followingstyle.
+- Fix crash in bookmark
