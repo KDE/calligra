@@ -1708,7 +1708,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  }
 	  return;
       case Key_Home:
-	  printf("Bernd Going Home\n");
+
 	      gotoLocation( 1,1 , 0, make_select,true,true );
 	      repaint();
 

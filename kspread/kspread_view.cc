@@ -1666,7 +1666,9 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
 
     if ( _ev->state() & ( Qt::ControlButton ) ){
 
-      // Universally reserved Spreadsheet Navigators known to all spreadsheet users around the world
+      // Universally reserved spreadsheet bavigators known to all professional 
+      // spreadsheet users around the world -- Bernd
+
       switch( _ev->key() ){
       case Key_PageDown:
 
