@@ -1880,6 +1880,99 @@ void RKRecord::dump( std::ostream& out ) const
   out << "    Value : " << asFloat() << std::endl;
 }
 
+// ========== Row ==========
+
+const unsigned int RowRecord::id = 0x0208;
+
+class RowRecord::Private
+{
+public:
+  unsigned row;
+  unsigned height;
+  unsigned xfIndex;
+  bool hidden;
+};
+
+RowRecord::RowRecord():
+  Record(), ColumnSpanInfo()
+{
+  d = new RowRecord::Private();
+  d->row     = 0;
+  d->height  = 50;
+  d->xfIndex = 0;
+  d->hidden  = false;
+}
+
+RowRecord::~RowRecord()
+{
+  delete d;
+}
+
+unsigned RowRecord::row() const
+{
+  return d->row;
+}
+
+void RowRecord::setRow( unsigned r )
+{
+  d->row = r;
+}
+
+unsigned RowRecord::height() const
+{
+  return d->height;
+}
+
+void RowRecord::setHeight( unsigned h )
+{
+  d->height = h;
+}
+
+unsigned RowRecord::xfIndex() const
+{
+  return d->xfIndex;
+}
+
+void RowRecord::setXfIndex( unsigned i )
+{
+  d->xfIndex = i;
+}
+
+bool RowRecord::hidden() const
+{
+  return d->hidden;
+}
+
+void RowRecord::setHidden( bool h )
+{
+  d->hidden = h;
+}
+
+void RowRecord::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 16 ) return;
+  
+  setRow( readU16( data ) );
+  setFirstColumn( readU16( data+2 ) );
+  setLastColumn( readU16( data+4 ) );
+  setHeight( readU16( data+6 ) & 0x7fff );
+  setXfIndex( readU16( data+14 ) & 0xfff );
+  
+  unsigned options = readU16( data+12 );
+  setHidden ( options & 0x20 );
+}
+
+void RowRecord::dump( std::ostream& out ) const
+{
+  out << "ROW" << std::endl;
+  out << "           Row : " << row() << std::endl;
+  out << "  First Column : " << firstColumn() << std::endl;
+  out << "   Last Column : " << lastColumn() << std::endl;
+  out << "        Height : " << height() << std::endl;
+  out << "      XF Index : " << xfIndex() << std::endl;
+  out << "        Hidden : " << ( hidden() ? "Yes" : "No" ) << std::endl;
+}
+
 // ========== RSTRING ========== 
 
 const unsigned int RStringRecord::id = 0x00d6;

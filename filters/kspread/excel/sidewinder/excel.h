@@ -1738,6 +1738,107 @@ private:
 };
 
 /**
+  Class RowRecord represents Row record, which provides information
+  (such as row height and formatting) for a span of columns.
+ */
+class RowRecord : public Record, public ColumnSpanInfo
+{
+public:
+
+  static const unsigned int id;
+
+  /**
+   * Creates a new Row record.
+   */
+  RowRecord();
+
+  /**
+   * Destroys the record.
+   */
+  virtual ~RowRecord();
+  
+  /**
+   * Returns the index of the row.
+   *
+   * \sa setRow
+   */
+  unsigned row() const;
+  
+  /**
+   * Sets the index of the row.
+   *
+   * \sa row
+   */
+  void setRow( unsigned r );
+    
+  /**
+   * Returns the XF index for the formatting of the cells.
+   *
+   * \sa setXfIndex
+   */
+  unsigned xfIndex() const;
+  
+  /**
+   * Sets the XF index for the formatting of the cells.
+   *
+   * \sa xfIndex
+   */
+  void setXfIndex( unsigned i );
+  
+  /**
+   * Returns the height of the row, specified in twips (1/20 pt).
+   *
+   * \sa setHeight
+   */
+  unsigned height() const;
+  
+  /**
+   * Sets the height of the row, specified in twips (1/20 pt).
+   *
+   * \sa height
+   */
+  void setHeight( unsigned h );
+  
+  /**
+   * Returns true if the row should be hidden, i.e not visible.
+   *
+   * \sa setHidden
+   */
+  bool hidden() const;
+  
+  /**
+   * Sets whether row should be hidden or visible.
+   *
+   * \sa hidden
+   */
+  void setHidden( bool h );
+
+  /**
+   \reimpl
+   */
+  virtual void setData( unsigned size, const unsigned char* data );
+
+  /**
+   \reimpl
+   */
+  virtual const char* name(){ return "ROW"; }
+
+  /**
+   \reimpl
+   */
+  virtual void dump( std::ostream& out ) const;
+
+private:
+   // no copy or assign
+   RowRecord( const RowRecord& );
+   RowRecord& operator=( const RowRecord& );
+
+   class Private;
+   Private *d;
+};
+
+
+/**
   Class RStringRecord represents a cell that contains rich-text string.
    
   In Excel 97 and later version, it is replaced by LabelSSTRecord. However,
