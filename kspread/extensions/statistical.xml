@@ -167,11 +167,11 @@
 	<Type>Double</Type>
       </Parameter>
       <Parameter>
-	<Comment>Mean of the Distribution</Comment>
+	<Comment>Mean of the distribution</Comment>
 	<Type>Double</Type>
       </Parameter>
       <Parameter>
-	<Comment>Standard Deviation</Comment>
+	<Comment>Standard deviation</Comment>
 	<Type>Double</Type>
       </Parameter>
       <Help>
@@ -1050,15 +1050,15 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>NORMDIST</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>number</Comment>
+        <Comment>Number</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>linear middle of the distribution</Comment>
+        <Comment>Linear middle of the distribution</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>standard deviation of the distribution</Comment>
+        <Comment>S	tandard deviation of the distribution</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
@@ -1083,15 +1083,15 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>LOGNORMDIST</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>probability value for which the standard logarithmic distribution is to be calculated</Comment>
+        <Comment>Probability value for which the standard logarithmic distribution is to be calculated</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>mean value of the standard logarithmic distribution</Comment>
+        <Comment>Mean value of the standard logarithmic distribution</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>standard deviation of the standard logarithmic distribution</Comment>
+        <Comment>Standard deviation of the standard logarithmic distribution</Comment>
         <Type>Float</Type>
       </Parameter>
       <Help>
@@ -1107,15 +1107,15 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>LOGINV</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>probability</Comment>
+        <Comment>Probability</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>mean value of the standard logarithmic distribution</Comment>
+        <Comment>Mean value of the standard logarithmic distribution</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>standard deviation of the standard logarithmic distribution</Comment>
+        <Comment>Standard deviation of the standard logarithmic distribution</Comment>
         <Type>Float</Type>
       </Parameter>
       <Help>
@@ -1129,7 +1129,7 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>NORMSDIST</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>value to which the standard normal distribution is calculated</Comment>
+        <Comment>Value to which the standard normal distribution is calculated</Comment>
         <Type>Float</Type>
       </Parameter>
       <Help>
@@ -1145,11 +1145,11 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>EXPONDIST</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>number</Comment>
+        <Comment>Number</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>lambda parameter</Comment>
+        <Comment>Lambda parameter</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
@@ -1172,15 +1172,15 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>WEIBULL</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>number</Comment>
+        <Comment>Number</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>alpha parameter</Comment>
+        <Comment>Alpha parameter</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>beta parameter</Comment>
+        <Comment>Beta parameter</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
@@ -1204,7 +1204,7 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>NORMSINV</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>number</Comment>
+        <Comment>Number</Comment>
         <Type>Float</Type>
       </Parameter>
       <Help>
@@ -1221,15 +1221,15 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>NORMINV</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>probability value for which the standard logarithmic distribution is to be calculated</Comment>
+        <Comment>Probability value for which the standard logarithmic distribution is to be calculated</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>middle value in the normal distribution</Comment>
+        <Comment>Middle value in the normal distribution</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>standard deviation of the normal distribution</Comment>
+        <Comment>Standard deviation of the normal distribution</Comment>
         <Type>Float</Type>
       </Parameter>
       <Help>
@@ -1246,7 +1246,7 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>GAMMALN</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>number</Comment>
+        <Comment>Number</Comment>
         <Type>Float</Type>
       </Parameter>
       <Help>
@@ -1263,11 +1263,11 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>POISSON</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>number</Comment>
+        <Comment>Number</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>lambda parameter (the middle value)</Comment>
+        <Comment>Lambda parameter (the middle value)</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
@@ -1290,15 +1290,15 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>CONFIDENCE</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>level of the confidence interval</Comment>
+        <Comment>Level of the confidence interval</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>standard deviation for the total population</Comment>
+        <Comment>Standard deviation for the total population</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>size of the total population</Comment>
+        <Comment>Size of the total population</Comment>
         <Type>Int</Type>
       </Parameter>
       <Help>
@@ -1316,15 +1316,15 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>TDIST</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>number</Comment>
+        <Comment>Number</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>degrees of freedom for the t-distribution</Comment>
+        <Comment>Degrees of freedom for the t-distribution</Comment>
         <Type>Int</Type>
       </Parameter>
       <Parameter>
-        <Comment>mode (1 or 2)</Comment>
+        <Comment>Mode (1 or 2)</Comment>
         <Type>Int</Type>
       </Parameter>
       <Help>
@@ -1341,15 +1341,15 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>FDIST</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>number</Comment>
+        <Comment>Number</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>degrees of freedom 1</Comment>
+        <Comment>Degrees of freedom 1</Comment>
         <Type>Int</Type>
       </Parameter>
       <Parameter>
-        <Comment>degrees of freedom 2</Comment>
+        <Comment>Degrees of freedom 2</Comment>
         <Type>Int</Type>
       </Parameter>
       <Help>
@@ -1365,11 +1365,11 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>CHIDIST</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>number</Comment>
+        <Comment>Number</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>degrees of freedom</Comment>
+        <Comment>Degrees of freedom</Comment>
         <Type>Int</Type>
       </Parameter>
       <Help>

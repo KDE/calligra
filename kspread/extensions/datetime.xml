@@ -2,7 +2,7 @@
 <KSpreadFunctions>
 
   <Group>
-    <GroupName>Date and Time</GroupName>
+    <GroupName>Date &amp; Time</GroupName>
 
     <Function>
       <Name>WEEKDAY</Name>
@@ -384,7 +384,7 @@
      <Name>HOURS</Name>
       <Type>Int</Type>
       <Parameter>
-	<Comment>time</Comment>
+	<Comment>Time</Comment>
 	<Type>String</Type>
       </Parameter>
       <Help>
@@ -398,7 +398,7 @@
      <Name>ISLEAPYEAR</Name>
       <Type>Boolean</Type>
       <Parameter>
-	<Comment>year</Comment>
+	<Comment>Year</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
@@ -412,11 +412,11 @@
      <Name>DAYSINMONTH</Name>
       <Type>Int</Type>
       <Parameter>
-	<Comment>year</Comment>
+	<Comment>Year</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Parameter>
-	<Comment>month</Comment>
+	<Comment>Month</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
@@ -430,7 +430,7 @@
      <Name>DAYSINYEAR</Name>
       <Type>Int</Type>
       <Parameter>
-	<Comment>year</Comment>
+	<Comment>Year</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
@@ -444,7 +444,7 @@
      <Name>WEEKSINYEAR</Name>
       <Type>Int</Type>
       <Parameter>
-	<Comment>year</Comment>
+	<Comment>Year</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
@@ -458,7 +458,7 @@
      <Name>MINUTES</Name>
       <Type>Int</Type>
       <Parameter>
-	<Comment>time</Comment>
+	<Comment>T	ime</Comment>
 	<Type>String</Type>
       </Parameter>
       <Help>
@@ -472,7 +472,7 @@
      <Name>SECONDS</Name>
       <Type>Int</Type>
       <Parameter>
-	<Comment>time</Comment>
+	<Comment>Time</Comment>
 	<Type>String</Type>
       </Parameter>
       <Help>

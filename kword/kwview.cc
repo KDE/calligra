@@ -452,7 +452,7 @@ void KWView::setupActions()
     actionExtraCreateTemplate->setToolTip( i18n( "Save this document and use it later as a template" ) );
     actionExtraCreateTemplate->setWhatsThis( i18n( "You can save this document as a template.<br><br>You can use this new template as a starting point for another document." ) );
 
-    actionFileStatistics = new KAction( i18n( "Statistics..." ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
+    actionFileStatistics = new KAction( i18n( "Statistics" ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
     actionFileStatistics->setToolTip( i18n( "Sentence, word and letter counts for this document" ) );
     actionFileStatistics->setWhatsThis( i18n( "Information on the number of letters, words, syllables and sentences for this document.<p>Evaluates readability using the Flesch reading score." ) );
     // -------------- Edit actions
@@ -729,14 +729,14 @@ void KWView::setupActions()
     actionFormatPage->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings." ) );
 
 
-    actionFormatFrameStylist = new KAction( i18n( "&Frame Style Manager..." ), 0 /*shortcut?*/,
+    actionFormatFrameStylist = new KAction( i18n( "&Frame Style Manager" ), 0 /*shortcut?*/,
                                 this, SLOT( extraFrameStylist() ),
                                 actionCollection(), "frame_stylist" );
     actionFormatFrameStylist->setToolTip( i18n( "Change attributes of framestyles." ) );
     actionFormatFrameStylist->setWhatsThis( i18n( "Change background and borders of framestyles.<p>Multiple framestyles can be changed using the dialog box." ) );
 
 
-    actionFormatStylist = new KAction( i18n( "&Style Manager..." ), ALT + CTRL + Key_S,
+    actionFormatStylist = new KAction( i18n( "&Style Manager" ), ALT + CTRL + Key_S,
                         this, SLOT( extraStylist() ),
                         actionCollection(), "format_stylist" );
     actionFormatStylist->setToolTip( i18n( "Change attributes of styles." ) );
@@ -991,7 +991,7 @@ void KWView::setupActions()
     actionTableDelete->setWhatsThis( i18n( "Deletes all cells and the content within the cells of the currently selected table." ) );
 
 
-    actionTableStylist = new KAction( i18n( "T&able Style Manager..." ), 0,
+    actionTableStylist = new KAction( i18n( "T&able Style Manager" ), 0,
                         this, SLOT( tableStylist() ),
                         actionCollection(), "table_stylist" );
     actionTableStylist->setToolTip( i18n( "Change attributes of tablestyles." ) );
@@ -1036,7 +1036,7 @@ void KWView::setupActions()
                                         this, SLOT( editCustomVars() ), // TODO: new dialog w add etc.
                                         actionCollection(), "custom_vars" );
 
-    actionEditPersonnalExpr=new KAction( i18n( "&Personal Expressions..." ), 0,
+    actionEditPersonnalExpr=new KAction( i18n( "Edit &Personal Expressions..." ), 0,
                                          this, SLOT( editPersonalExpr() ),
                                      actionCollection(), "personal_expr" );
     actionEditPersonnalExpr->setToolTip( i18n( "Add or change one or more personal expressions." ) );
@@ -7706,7 +7706,7 @@ void KWStatisticsDialog::addBoxGeneral( QFrame *page, QLabel **resultLabel )
     resultLabel[4] = new QLabel( "", box );
     grid->addWidget( resultLabel[4], 5, 2, 2 );
 
-    QLabel *label6 = new QLabel( i18n( "Number of formula frameSet:" ), box );
+    QLabel *label6 = new QLabel( i18n( "Number of formula frameset:" ), box );
     grid->addWidget( label6, 6, 0, 1 );
     resultLabel[5] = new QLabel( "", box );
     grid->addWidget( resultLabel[5], 6, 2, 2 );

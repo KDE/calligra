@@ -333,11 +333,11 @@ returns 1,025.787</Example>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Present Value (PV)</Comment>
+	<Comment>Present value (PV)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Future Value (FV)</Comment>
+	<Comment>Future value (FV)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -361,11 +361,11 @@ returns 1,025.787</Example>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Present Value (PV)</Comment>
+	<Comment>Present value (PV)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Future Value (FV - optional)</Comment>
+	<Comment>Future value (FV - optional)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
@@ -388,15 +388,15 @@ returns 1,025.787</Example>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Number of Periods (NPer)</Comment>
+	<Comment>Number of periods (NPer)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Present Value (PV)</Comment>
+	<Comment>Present value (PV)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Future Value (FV - optional)</Comment>
+	<Comment>Future value (FV - optional)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
@@ -447,15 +447,15 @@ returns 1,025.787</Example>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Number of Periods</Comment>
+	<Comment>Number of periods</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Present Value</Comment>
+	<Comment>Present value</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Future Value (optional)</Comment>
+	<Comment>Future value (optional)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
@@ -491,11 +491,11 @@ Type (optional) defines the due date. 1 for payment at the beginning of a period
 	<Type>IntType</Type>
       </Parameter>
       <Parameter>
-	<Comment>Number of Periods</Comment>
+	<Comment>Number of periods</Comment>
 	<Type>IntType</Type>
       </Parameter>
       <Parameter>
-	<Comment>Present Values (PV)</Comment>
+	<Comment>Present values (PV)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -525,15 +525,15 @@ PV is the present value in the sequence of payments.
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Number of Periods</Comment>
+	<Comment>Number of periods</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Present Values</Comment>
+	<Comment>Present values</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Future Value (optional)</Comment>
+	<Comment>Future value (optional)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
@@ -721,7 +721,7 @@ The example shows the interest to pay in the last year of a three year loan. The
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Coupons per Year</Comment>
+	<Comment>Coupons per year</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
@@ -729,7 +729,7 @@ The example shows the interest to pay in the last year of a three year loan. The
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Market Interest Rate</Comment>
+	<Comment>Market interest rate</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>

@@ -87,7 +87,7 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
 
     // presentation pen (color and width)
 
-    new QLabel( i18n( "Presentation Pen:" ), general );
+    new QLabel( i18n( "Presentation pen:" ), general );
 
     QHBox* penGroup = new QHBox( general );
     penGroup->setSpacing( KDialog::spacingHint() );

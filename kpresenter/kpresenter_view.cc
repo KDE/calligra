@@ -2989,7 +2989,7 @@ void KPresenterView::setupActions()
                                       this, SLOT( extraWebPres() ),
                                       actionCollection(), "extra_webpres" );
 
-    actionExtraCreateTemplate = new KAction( i18n( "Template Manager..." ), 0,
+    actionExtraCreateTemplate = new KAction( i18n( "Template Manager" ), 0,
                                              this, SLOT( extraCreateTemplate() ),
                                              actionCollection(), "extra_template" );
 
@@ -3031,11 +3031,11 @@ void KPresenterView::setupActions()
                                            this, SLOT( screenConfigPages() ),
                                            actionCollection(), "screen_configpages" );
 
-    actionScreenPresStructView = new KAction( i18n( "&Open Presentation Structure Editor" ), 0,
+    actionScreenPresStructView = new KAction( i18n( "Present&ation Structure Editor" ), 0,
                                               this, SLOT( screenPresStructView() ),
                                               actionCollection(), "screen_presstruct" );
 
-    actionScreenAssignEffect = new KAction( i18n( "&Object Effect..." ),
+    actionScreenAssignEffect = new KAction( i18n( "Edit &Object Effect..." ),
                                             "effect", 0,
                                             this, SLOT( screenAssignEffect() ),
                                             actionCollection(), "screen_assigneffect");
@@ -3252,7 +3252,7 @@ void KPresenterView::setupActions()
     actionViewZoom->setEditable(true);
     changeZoomMenu( );
 
-    actionFormatStylist = new KAction( i18n( "&Style Manager..." ), ALT + CTRL + Key_S,
+    actionFormatStylist = new KAction( i18n( "&Style Manager" ), ALT + CTRL + Key_S,
                         this, SLOT( extraStylist() ),
                         actionCollection(), "format_stylist" );
 

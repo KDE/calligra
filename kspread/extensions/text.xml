@@ -152,7 +152,7 @@
       <Name>COMPARE</Name>
       <Type>Int</Type>
       <Parameter>
-	<Comment>First String</Comment>
+	<Comment>First string</Comment>
 	<Type>String</Type>
       </Parameter>
       <Parameter>
@@ -529,7 +529,7 @@
       <Name>CHAR</Name>
       <Type>String</Type>
       <Parameter>
-	<Comment>Character Code</Comment>
+	<Comment>Character code</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>

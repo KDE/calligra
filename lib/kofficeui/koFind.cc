@@ -313,7 +313,7 @@ void KoFindDialog::showPlaceholders()
     } term;
     static const term items[] =
     {
-        { I18N_NOOP("Complete text found"),             "/0" },
+        { I18N_NOOP("Complete Text Found"),             "/0" },
     };
     int i;
 

@@ -17,35 +17,35 @@
       <BODYCELL name="Simple 3"/>
   </TABLETEMPLATE>
   <TABLETEMPLATE>
-      <NAME value="Blue heading"/>
+      <NAME value="Blue Heading"/>
       <FIRSTROW name="Header 2" topleftcorner="1" toprightcorner="1"/>
       <BODYCELL name="Simple 1"/>
   </TABLETEMPLATE>
   <TABLETEMPLATE>
-      <NAME value="Grey heading"/>
+      <NAME value="Grey Heading"/>
       <FIRSTROW name="Header 1" topleftcorner="1" toprightcorner="1"/>
       <BODYCELL name="Simple 1"/>
   </TABLETEMPLATE>
   <TABLETEMPLATE>
-      <NAME value="Blue traditional"/>
+      <NAME value="Blue Traditional"/>
       <FIRSTROW name="Header 4" topleftcorner="1" toprightcorner="1"/>
       <FIRSTCOL name="Header 2" bottomleftcorner="1"/>
       <BODYCELL name="Simple 1"/>
   </TABLETEMPLATE>
   <TABLETEMPLATE>
-      <NAME value="Grey traditional"/>
+      <NAME value="Grey Traditional"/>
       <FIRSTROW name="Header 3" topleftcorner="1" toprightcorner="1"/>
       <FIRSTCOL name="Header 1" bottomleftcorner="1"/>
       <BODYCELL name="Simple 1"/>
   </TABLETEMPLATE>
   <TABLETEMPLATE>
-      <NAME value="Blue top and bottom"/>
+      <NAME value="Blue Top and Bottom"/>
       <FIRSTROW name="Header 4" topleftcorner="1" toprightcorner="1"/>
       <LASTROW name="Header 2" bottomleftcorner="1" bottomrightcorner="1"/>
       <BODYCELL name="Simple 1"/>
   </TABLETEMPLATE>
   <TABLETEMPLATE>
-      <NAME value="Grey top and bottom"/>
+      <NAME value="Grey Top and Bottom"/>
       <FIRSTROW name="Header 3" topleftcorner="1" toprightcorner="1"/>
       <LASTROW name="Header 1" bottomleftcorner="1" bottomrightcorner="1"/>
       <BODYCELL name="Simple 1"/>

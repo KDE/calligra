@@ -215,7 +215,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
                     this, SLOT( slotReloadFile() ),
                     actionCollection(), "file_reload_file");
 
-    d->m_paDocInfo = new KAction( i18n( "&Document Information..." ), "documentinfo", 0,
+    d->m_paDocInfo = new KAction( i18n( "&Document Information" ), "documentinfo", 0,
                         this, SLOT( slotDocumentInfo() ),
                         actionCollection(), "file_documentinfo" );
 

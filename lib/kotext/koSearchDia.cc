@@ -513,7 +513,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_checkBold = new QCheckBox( i18n( "Bold:" ), page );
     m_checkItalic = new QCheckBox( i18n( "Italic:" ),page );
     m_checkShadow = new QCheckBox( i18n( "Shadow:" ), page );
-    m_checkWordByWord = new QCheckBox( i18n( "WordByWord:" ), page );
+    m_checkWordByWord = new QCheckBox( i18n( "Word by word:" ), page );
 
     m_checkUnderline = new QCheckBox( i18n( "Underline:" ), page);
     m_underlineItem = new QComboBox( page );

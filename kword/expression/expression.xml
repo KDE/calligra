@@ -28,7 +28,7 @@
 			</Expression>
 	</Type>
     <Type>
-    		<TypeName>Email:</TypeName>	
+    		<TypeName>Email</TypeName>	
 			<Expression>
 				<Text>To:</Text>
 			</Expression>
@@ -49,7 +49,7 @@
 			</Expression>
 	</Type>
     <Type>
-    		<TypeName>Closing:</TypeName>	
+    		<TypeName>Closing</TypeName>	
 			<Expression>
 				<Text>Best regards,</Text>
 			</Expression>
@@ -73,13 +73,13 @@
 			</Expression>
 	</Type>
     <Type>
-    		<TypeName>Subject:</TypeName>	
+    		<TypeName>Subject</TypeName>	
 			<Expression>
 				<Text>Subject</Text>
             </Expression>
 	</Type>
     <Type>
-    		<TypeName>Salutation:</TypeName>	
+    		<TypeName>Salutation</TypeName>	
 			<Expression>
 				<Text>Dear Sir or Madam:</Text>
             </Expression>
@@ -91,7 +91,7 @@
             </Expression>
 	</Type>
         <Type>
-    		<TypeName>Attention:</TypeName>	
+    		<TypeName>Attention</TypeName>	
 			<Expression>
 				<Text>Attention:</Text>
             </Expression>
@@ -100,7 +100,7 @@
             </Expression>
 	</Type>
         <Type>
-    		<TypeName>Instructions:</TypeName>	
+    		<TypeName>Instructions</TypeName>	
 			<Expression>
 				<Text>CERTIFIED</Text>
             </Expression>

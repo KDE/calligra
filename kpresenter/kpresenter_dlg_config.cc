@@ -909,8 +909,8 @@ ConfigurePathPage::ConfigurePathPage( KPresenterView *_view, QVBox *box, char *n
     m_pPathView->setResizeMode(QListView::NoColumn);
     m_pPathView->addColumn( i18n( "Type" ) );
     m_pPathView->addColumn( i18n( "Path" ) );
-    (void) new QListViewItem( m_pPathView, i18n("Picture path"),doc->picturePath() );
-    (void) new QListViewItem( m_pPathView, i18n("Backup path"),doc->backupPath() );
+    (void) new QListViewItem( m_pPathView, i18n("Picture Path"),doc->picturePath() );
+    (void) new QListViewItem( m_pPathView, i18n("Backup Path"),doc->backupPath() );
 
     m_modifyPath = new QPushButton( i18n("Modify Path..."), gbPathGroup);
     connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
@@ -929,7 +929,7 @@ void ConfigurePathPage::slotModifyPath()
     QListViewItem *item = m_pPathView->currentItem ();
     if ( item )
     {
-        if ( item->text(0)==i18n("Picture path"))
+        if ( item->text(0)==i18n("Picture Path"))
         {
             KURLRequesterDlg * dlg = new KURLRequesterDlg( item->text(1), 0L,
                                                            "picture path dlg");
@@ -938,7 +938,7 @@ void ConfigurePathPage::slotModifyPath()
                 item->setText( 1, dlg->selectedURL().path());
             delete dlg;
         }
-        else if ( item->text(0)==i18n("Backup path"))
+        else if ( item->text(0)==i18n("Backup Path"))
         {
             KoChangePathDia *dlg = new KoChangePathDia( item->text(1), 0L,
                                                         "backup path" );
@@ -952,17 +952,17 @@ void ConfigurePathPage::slotModifyPath()
 
 void ConfigurePathPage::slotDefault()
 {
-    QListViewItem * item = m_pPathView->findItem(i18n("Picture path"), 0);
+    QListViewItem * item = m_pPathView->findItem(i18n("Picture Path"), 0);
     if ( item )
         item->setText(1, KGlobalSettings::documentPath());
-    item = m_pPathView->findItem(i18n("Backup path"), 0);
+    item = m_pPathView->findItem(i18n("Backup Path"), 0);
     if ( item )
         item->setText(1, QString::null );
 }
 
 void ConfigurePathPage::apply()
 {
-    QListViewItem *item = m_pPathView->findItem(i18n("Backup path"), 0);
+    QListViewItem *item = m_pPathView->findItem(i18n("Backup Path"), 0);
     if ( item )
     {
         QString res = item->text(1 );
@@ -973,7 +973,7 @@ void ConfigurePathPage::apply()
             config->writeEntry( "backup path",res );
         }
     }
-    item = m_pPathView->findItem(i18n("Picture path"), 0);
+    item = m_pPathView->findItem(i18n("Picture Path"), 0);
     if ( item )
     {
         QString res = item->text(1 );

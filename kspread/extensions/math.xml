@@ -45,7 +45,7 @@
         <Type range="true">FLOAT</Type>
       </Parameter>
       <Parameter>
-        <Comment>Second Number</Comment>
+        <Comment>Second number</Comment>
         <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
@@ -66,11 +66,11 @@
         <Type range="true">Int</Type>
       </Parameter>
       <Parameter>
-        <Comment>Second Number</Comment>
+        <Comment>Second number</Comment>
         <Type range="true">Int</Type>
       </Parameter>
       <Parameter>
-        <Comment>Third Number</Comment>
+        <Comment>Third number</Comment>
         <Type range="true">Int</Type>
       </Parameter>
       <Help>
@@ -91,11 +91,11 @@
         <Type range="true">Int</Type>
       </Parameter>
       <Parameter>
-        <Comment>Second Number</Comment>
+        <Comment>Second number</Comment>
         <Type range="true">Int</Type>
       </Parameter>
       <Parameter>
-        <Comment>Third Number</Comment>
+        <Comment>Third number</Comment>
         <Type range="true">Int</Type>
       </Parameter>
       <Help>

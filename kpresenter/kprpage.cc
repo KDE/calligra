@@ -2113,7 +2113,7 @@ KCommand* KPrPage::setRectSettings( int _rx, int _ry, int flags )
     }
 
     if ( !_objects.isEmpty() && changed ) {
-        rectValueCmd = new RectValueCmd( i18n( "Change Rectangle values" ), _oldValues,
+        rectValueCmd = new RectValueCmd( i18n( "Change Rectangle Values" ), _oldValues,
                                          _newValues, _objects, m_doc, this, flags );
         rectValueCmd->execute();
     } else {

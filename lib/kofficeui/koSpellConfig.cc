@@ -72,8 +72,8 @@ KoSpellConfigWidget::KoSpellConfigWidget( QWidget *_parent, KSpellConfig *_confi
 
     tab->addTab(tmpQGroupBox, i18n("General"));
 
-    QVGroupBox* tmpQGroupBox2 = new QVGroupBox( i18n("IgnoreAllList"), tab, "GroupBox2" );
-    m_listignoreall =  new KEditListBox( i18n("Word:"),
+    QVGroupBox* tmpQGroupBox2 = new QVGroupBox( i18n("Ignore All List"), tab, "GroupBox2" );
+    m_listignoreall =  new KEditListBox( i18n("Word"),
                                     tmpQGroupBox2, "list_ignoreall" , false,
                                     KEditListBox::Add|KEditListBox::Remove );
 
@@ -84,7 +84,7 @@ KoSpellConfigWidget::KoSpellConfigWidget( QWidget *_parent, KSpellConfig *_confi
 
 
     QVGroupBox* tmpQGroupBox3 = new QVGroupBox( i18n("Personal Dictionary"), tab, "GroupBox3" );
-    m_dictionary =  new KEditListBox( i18n("Word:"),
+    m_dictionary =  new KEditListBox( i18n("Word"),
                                       tmpQGroupBox3, "dictionary" , false,
                                       KEditListBox::Add|KEditListBox::Remove );
 

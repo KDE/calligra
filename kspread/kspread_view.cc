@@ -573,7 +573,7 @@ void KSpreadView::initializeEditActions()
   m_specialPaste->setToolTip
     (i18n("Paste the contents of the clipboard with special options."));
 
-  m_insertCellCopy = new KAction( i18n("Paste with Insertion..."),
+  m_insertCellCopy = new KAction( i18n("Paste with Insertion"),
                                   "insertcellcopy", 0, this,
                                   SLOT( slotInsertCellCopy() ),
                                   actionCollection(), "insertCellCopy" );
@@ -1056,7 +1056,7 @@ void KSpreadView::initializeTableActions()
                                "menuInsertTable" );
   m_menuInsertTable->setToolTip(i18n("Insert a new sheet."));
 
-  m_removeTable = new KAction( i18n("Remove Sheet..."), "delete_table",0,this,
+  m_removeTable = new KAction( i18n("Remove Sheet"), "delete_table",0,this,
                                SLOT( removeTable() ), actionCollection(),
                                "removeTable" );
   m_removeTable->setToolTip(i18n("Remove the active sheet."));

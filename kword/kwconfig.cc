@@ -881,9 +881,9 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
     m_pPathView->addColumn( i18n( "Type" ) );
     m_pPathView->addColumn( i18n( "Path" ) );
     (void) new QListViewItem( m_pPathView, i18n("Personal Expression"), doc->personalExpressionPath().join(";") );
-    (void) new QListViewItem( m_pPathView, i18n("Picture path"),doc->picturePath() );
-    (void) new QListViewItem( m_pPathView, i18n("Backup path"),doc->backupPath() );
-    (void) new QListViewItem( m_pPathView, i18n("Horizontal Line path"),doc->horizontalLinePath().join(";") );
+    (void) new QListViewItem( m_pPathView, i18n("Picture Path"),doc->picturePath() );
+    (void) new QListViewItem( m_pPathView, i18n("Backup Path"),doc->backupPath() );
+    (void) new QListViewItem( m_pPathView, i18n("Horizontal Line Path"),doc->horizontalLinePath().join(";") );
 
     m_modifyPath = new QPushButton( i18n("Modify Path..."), gbPathGroup);
     connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
@@ -909,14 +909,14 @@ void ConfigurePathPage::slotModifyPath()
                 item->setText(1, dlg->newPath());
             delete dlg;
         }
-        if ( item->text(0)==i18n("Horizontal Line path"))
+        if ( item->text(0)==i18n("Horizontal Line Path"))
         {
             KoEditPathDia * dlg = new KoEditPathDia( item->text( 1),   0L, "editpath");
             if (dlg->exec() )
                 item->setText(1, dlg->newPath());
             delete dlg;
         }
-        if ( item->text(0)==i18n("Picture path"))
+        if ( item->text(0)==i18n("Picture Path"))
         {
 
             KURLRequesterDlg * dlg = new KURLRequesterDlg( item->text(1), 0L,
@@ -926,7 +926,7 @@ void ConfigurePathPage::slotModifyPath()
                 item->setText( 1, dlg->selectedURL().path());
             delete dlg;
         }
-        if ( item->text(0)==i18n("Backup path"))
+        if ( item->text(0)==i18n("Backup Path"))
         {
             KoChangePathDia *dlg = new KoChangePathDia( item->text(1), 0L, "backup path" );
             if (dlg->exec() )
@@ -941,10 +941,10 @@ void ConfigurePathPage::slotDefault()
     QListViewItem * item = m_pPathView->findItem(i18n("Personal Expression"), 0);
     if ( item )
         item->setText(1, KWFactory::global()->dirs()->resourceDirs("expression").join(";"));
-    item = m_pPathView->findItem(i18n("Picture path"), 0);
+    item = m_pPathView->findItem(i18n("Picture Path"), 0);
     if ( item )
         item->setText(1, KGlobalSettings::documentPath());
-    item = m_pPathView->findItem(i18n("Backup path"), 0);
+    item = m_pPathView->findItem(i18n("Backup Path"), 0);
     if ( item )
         item->setText(1, QString::null );
 
@@ -980,7 +980,7 @@ void ConfigurePathPage::apply()
         }
     }
 
-    item = m_pPathView->findItem(i18n("Picture path"), 0);
+    item = m_pPathView->findItem(i18n("Picture Path"), 0);
     if ( item )
     {
         QString res = item->text(1 );
@@ -991,7 +991,7 @@ void ConfigurePathPage::apply()
             config->writeEntry( "picture path",res );
         }
     }
-    item = m_pPathView->findItem(i18n("Backup path"), 0);
+    item = m_pPathView->findItem(i18n("Backup Path"), 0);
     if ( item )
     {
         QString res = item->text(1 );
