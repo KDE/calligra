@@ -1236,7 +1236,7 @@ QWidget* KexiMainWindow::findWindow(QWidget *w)
 	return w;
 }
 
-bool KexiMainWindow::acceptsSharedActions(QWidget *w)
+bool KexiMainWindow::acceptsSharedActions(QObject *w)
 {
 	return w->inherits("KexiDialogBase") || w->inherits("KexiDockBase");
 }

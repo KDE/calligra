@@ -79,6 +79,7 @@ KexiSharedActionHost::~KexiSharedActionHost()
 		KexiSharedActionHost_defaultHost = &KexiSharedActionHost_dummy;
 	}
 	delete d;
+	d=0; //! to let takeActionProxyFor() know that we are almost dead :)
 }
 
 void KexiSharedActionHost::setActionAvailable(const char *action_name, bool avail)
@@ -128,7 +129,9 @@ KexiActionProxy* KexiSharedActionHost::actionProxyFor(QObject *o) const
 
 KexiActionProxy* KexiSharedActionHost::takeActionProxyFor(QObject *o)
 {
-	return d->actionProxies.take( o );
+	if (d)
+		return d->actionProxies.take( o );
+	return 0;
 }
 
 bool KexiSharedActionHost::acceptsSharedActions(QObject *o)

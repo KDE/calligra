@@ -162,7 +162,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 
 		/*! Reimplemented from KexiSharedActionHost: 
 		 accepts only KexiDockBase and KexiDialogBase subclasses.  */
-		virtual bool acceptsSharedActions(QWidget *w);
+		virtual bool acceptsSharedActions(QObject *w);
 
 		/*! Performs lookup like in KexiSharedActionHost::focusWindow() 
 		 but starting from \a w instead of a widget returned by QWidget::focusWidget(). 
