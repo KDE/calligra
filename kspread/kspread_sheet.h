@@ -1208,12 +1208,6 @@ protected:
      * Doing so costs some time, so by default it should be turned off.
      */
     bool m_bShowPageBorders;
-
-
-    /**
-     * The label returned by @ref #columnLabel
-     */
-    char m_arrColumnLabel[20];
     
     /**
      * List of all embedded objects.
