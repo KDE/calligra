@@ -659,7 +659,7 @@ void KPresenterView::insertPicture()
         return;
     }
     QString file;
-    if ( !KIO::NetAccess::download( url, file ) )
+    if ( !KIO::NetAccess::download( url, file, this ) )
     {
         m_canvas->setToolEditMode( TEM_MOUSE, false );
         return;
@@ -708,7 +708,7 @@ void KPresenterView::savePicture( const QString& oldName, KoPicture& picture)
                                 i18n("Save Picture"));
             return;
         }
-        QFile file( url.path() );
+        QFile file( url.path() ); // ### TODO: network transparency (kio/netaccess.h)
         if ( file.open( IO_ReadWrite ) ) {
             picture.save( &file );
             file.close();
