@@ -2521,11 +2521,12 @@ void KPresenterView::setupActions()
     addVariableActions( VT_FIELD, KoFieldVariable::actionTexts(), actionInsertVariable, i18n("&Property") );
     addVariableActions( VT_DATE, KoDateVariable::actionTexts(), actionInsertVariable, i18n("&Date") );
     addVariableActions( VT_TIME, KoTimeVariable::actionTexts(), actionInsertVariable, i18n("&Time") );
+    addVariableActions( VT_PGNUM, KoPgNumVariable::actionTexts(), actionInsertVariable, QString::null );
 
     actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
                                             actionCollection(), "insert_custom" );
-     actionInsertVariable->insert(actionInsertCustom);
-     refreshCustomMenu();
+    actionInsertVariable->insert(actionInsertCustom);
+    refreshCustomMenu();
 }
 
 void KPresenterView::textSubScript()

@@ -53,6 +53,7 @@
 #include <qpopupmenu.h>
 #include <koVariable.h>
 #include <koVariableDlgs.h>
+#include "kprvariable.h"
 
 using namespace std;
 
@@ -656,6 +657,20 @@ void KPTextObject::recalcPageNum( KPresenterDoc *doc )
     if ( pgnum == -1 )
         pgnum = doc->getPageNums();
 
+    QPtrListIterator<QTextCustomItem> cit( textDocument()->allCustomItems() );
+    for ( ; cit.current() ; ++cit )
+    {
+        KPrPgNumVariable * var = dynamic_cast<KPrPgNumVariable *>( cit.current() );
+        if ( var && !var->isDeleted() && var->subtype() == KPrPgNumVariable::VST_PGNUM_CURRENT )
+        {
+            var->setPgNum( pgnum );
+            var->resize();
+            var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
+            var->paragraph()->setChanged( true );
+        }
+    }
+
+
 #if 0
     ktextobject.setPageNum( pgnum );
 #endif
@@ -996,6 +1011,12 @@ void KPTextView::insertVariable( int type, int subtype )
         KoVariableNameDia dia( m_page, doc->getVariableCollection()->getVariables() );
         if ( dia.exec() == QDialog::Accepted )
             var = new KoCustomVariable( textObject()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection() );
+    }
+    else if(type ==VT_PGNUM)
+    {
+        //force to recalc variable
+        kpTextObject()->recalcPageNum( doc );
+        var = new KPrPgNumVariable( textObject()->textDocument(),subtype, doc->variableFormatCollection()->format( "NUMBER" ),doc->getVariableCollection(),doc  );
     }
     else
         var = KoVariable::createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textObject()->textDocument(),doc,doc->getVariableCollection());

@@ -3021,6 +3021,8 @@ void KPresenterDoc::deletePage( int _page )
 	    ( (KPTextObject*)kpobject )->recalcPageNum( this );
     }
 
+    recalcVariables( VT_PGNUM );
+
     _backgroundList.remove( _page );
     repaint( false );
 
@@ -3102,6 +3104,13 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
 
     // Insert page title.
     pageTitleInsert( _page );
+
+    for ( kpobject = objectList()->first(); kpobject; kpobject = objectList()->next() ) {
+	if ( kpobject->getType() == OT_TEXT )
+	    ( (KPTextObject*)kpobject )->recalcPageNum( this );
+    }
+
+    recalcVariables( VT_PGNUM );
 
     // Update the sidebars
     QPtrListIterator<KoView> it( views() );
