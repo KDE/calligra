@@ -65,11 +65,12 @@ VShadowEffectDlg::VShadowEffectDlg( QWidget* parent, const char* name )
 	new QLabel( i18n( "Distance:" ), group );
 	m_distance = new KIntNumInput( group );
 	m_distance->setRange( -1000, 1000, 1, true );
-	m_distance->setValue( 2.0 );
+	m_distance->setValue( 2 );
 	new QLabel( i18n( "Angle:" ), group );
 	m_angle = new KIntNumInput( group );
 	m_angle->setRange( 0, 360, 10, true );
-	m_angle->setValue( 0.0 );
+	m_angle->setValue( 0 );
+        m_angle->setSuffix(" °");
 	new QLabel( i18n( "Opacity:" ), group );
 	m_opacity = new KIntNumInput( group );
 	m_opacity->setRange( 0, 100, 1, true );
@@ -90,31 +91,31 @@ VShadowEffectDlg::setDistance( int d )
 	m_distance->setValue( d );
 }
 
-void 
+void
 VShadowEffectDlg::setAngle( int a )
 {
 	m_angle->setValue( a );
 }
 
-void 
+void
 VShadowEffectDlg::setOpacity( int o )
 {
 	m_angle->setValue( o );
 }
 
-int 
+int
 VShadowEffectDlg::distance() const
 {
 	return m_distance->value();
 }
 
-int 
+int
 VShadowEffectDlg::angle() const
 {
 	return m_angle->value();
 }
 
-int 
+int
 VShadowEffectDlg::opacity() const
 {
 	return m_opacity->value();
