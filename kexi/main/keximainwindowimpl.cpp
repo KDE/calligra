@@ -211,6 +211,7 @@ class KexiMainWindowImpl::Private
 		showImportantInfoOnStartup=true;
 		disableErrorMessages=false;
 //		last_checked_mode=0;
+		propEditorDockSeparatorPos=-1;
 	}
 	~Private() {
 	}
@@ -227,6 +228,20 @@ class KexiMainWindowImpl::Private
 //			return;
 //		last_checked_mode->setChecked(true);
 	}
+
+	int propEditorDockSeparatorPos;
+
+	void updatePropEditorDockWidthInfo() {
+		if (propEditor) {
+			KDockWidget *dw = (KDockWidget *)propEditor->parentWidget();
+#if defined(KDOCKWIDGET_P)
+			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+			if (ds)
+				propEditorDockSeparatorPos = ds->separatorPos();
+#endif
+		}
+	}
+
 };
 
 //-------------------------------------------------
@@ -968,9 +983,9 @@ void KexiMainWindowImpl::slotLastActions()
 	if (mdiMode()==KMdi::ChildframeMode) {
 		KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-		ds->resize(ds->width()*3, ds->height());
-		ds->setSeparatorPos(30, true);
-		ds->setForcedFixedWidth( dw, 200 );
+//1		ds->resize(ds->width()*3, ds->height());
+//1		ds->setSeparatorPos(30, true);
+//1		ds->setForcedFixedWidth( dw, 200 );
 	}
 #endif
 #ifdef Q_WS_WIN
@@ -1004,19 +1019,28 @@ void KexiMainWindowImpl::initPropertyEditor()
 	//	ds->resize(400, ds->height());
 //		ds->setSeparatorPos(400, true);
 //		ds->setForcedFixedWidth( dw, 400 );
-		ds->setSeparatorPos(600, true);
-		ds->setForcedFixedWidth( dw, 600 );
+//		ds->setSeparatorPos(600, true);
+
+		
+		d->config->setGroup("MainWindow");
+		ds->setSeparatorPos(d->config->readNumEntry("RightDockPosition", 80/* % */), true);
+//1		ds->setForcedFixedWidth( dw, 600 );
 	//	ds->resize(400, ds->height());
 	//	dw->resize(400, dw->height());
 #endif
-		dw->setMinimumWidth(200);
+
+//1		dw->setMinimumWidth(200);
+
 //	ds->setSeparatorPos(d->propEditor->sizeHint().width(), true);
 
+		//heh, this is for IDEAl only, I suppose?
 		if (m_rightContainer) {
 			m_rightContainer->setForcedFixedWidth( 400 );
 		}
 	}
 #endif
+
+	int w = d->propEditor->width();
 /*    KMdiToolViewAccessor *tmp=createToolWindow();
     tmp->setWidgetToWrap(d->propEditor);
 	d->propEditor->show(); // I'm not sure, if this is a bug in kdockwidget, which I would better fix there
@@ -1148,13 +1172,16 @@ KexiMainWindowImpl::queryClose()
 		//todo: error message
 		return true;
 	}
+	if (!cancelled)
+		storeSettings();
+
 	return !cancelled;
 }
 
 bool
 KexiMainWindowImpl::queryExit()
 {
-	storeSettings();
+//	storeSettings();
 	return true;
 }
 
@@ -1246,6 +1273,13 @@ KexiMainWindowImpl::storeSettings()
 	d->config->writeEntry("MDIMode", mdiMode());
 //	config->sync();
 	d->config->writeEntry("maximized childframes", isInMaximizedChildFrmMode());
+
+	if (mdiMode()==KMdi::ChildframeMode) {
+		if (d->propEditorDockSeparatorPos > 0 && d->propEditorDockSeparatorPos <= 100) {
+			d->config->setGroup("MainWindow");
+			d->config->writeEntry("RightDockPosition", d->propEditorDockSeparatorPos);
+		}
+	}
 }
 
 void
@@ -2147,6 +2181,13 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 	if (e->type()==QEvent::ShowMaximized) {
 		KexiVDebug << "ShowMaximized EVENT" << endl;
 	}
+
+	if (obj==d->propEditor) {
+		if (e->type()==QEvent::Resize) {
+			d->updatePropEditorDockWidthInfo();
+		}
+	}
+
 	QWidget *focus_w = 0;
 	if (obj->inherits("QPopupMenu")) {
 		/* Fixes for popup menus behaviour:

@@ -316,6 +316,8 @@ PropertyEditor
 - font size is decreased to a reasonable minimum
 Core
 - generateIconSetWithStar() not used, static icons added insted (icon cache was confused)
+MainWindow
+- right dock width is now stored in config file
 
 2004-08-04
 MySQL Driver
