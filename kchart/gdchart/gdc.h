@@ -9,18 +9,23 @@ General header common to chart (xy[z]) and pie
 
 #include <math.h>
 #ifdef GDC_INCL
-#include "gd.h"
-#include "gdfonts.h"
-#include "gdfontt.h"
-#include "gdfontmb.h"
-#include "gdfontg.h"
-#include "gdfontl.h"
+/* #include "gd.h" */
+/* #include "gdfonts.h" */
+/* #include "gdfontt.h" */
+/* #include "gdfontmb.h" */
+/* #include "gdfontg.h" */
+/* #include "gdfontl.h" */
 #endif
 
-#ifndef TRUE
-#define TRUE	1
-#define FALSE	0
-#endif
+class QFont;
+
+extern QFont* theKChartTinyFont;
+extern QFont* theKChartSmallFont;
+extern QFont* theKChartMediumFont;
+extern QFont* theKChartLargeFont;
+extern QFont* theKChartGiantFont;
+
+#include <qfont.h>
 
 #define GDC_NOVALUE			-MAXFLOAT
 #define GDC_NULL			GDC_NOVALUE
@@ -29,8 +34,8 @@ General header common to chart (xy[z]) and pie
 #define MAX( x, y )			( (x)>(y)?(x):(y) )
 #define MIN( x, y )			( (x)<(y)?(x):(y) ) 
 
-#define GDC_NOCOLOR			0x1000000L
-#define GDC_DFLTCOLOR		0x2000000L
+#define GDC_NOCOLOR			&Qt::black
+#define GDC_DFLTCOLOR		&Qt::black
 #define PVRED               0x00FF0000
 #define PVGRN               0x0000FF00
 #define PVBLU               0x000000FF
@@ -58,62 +63,51 @@ static unsigned long		_gdccfoo2;
 									gdImageColorAllocate(im,l2gdshd(_gdccfoo2)) )
 
 /* ordered by size */
-enum GDC_font_size { GDC_pad     = 0,
-					 GDC_TINY    = 1,
-					 GDC_SMALL   = 2,
-					 GDC_MEDBOLD = 3,
-					 GDC_LARGE   = 4,
-					 GDC_GIANT   = 5,
-					 GDC_numfonts= 6 };		/* GDC[PIE]_fontc depends on this */
+enum GDC_font_size { GDC_pad = 0, GDC_TINY = 1, GDC_SMALL = 2, GDC_MEDBOLD = 3, 
+                     GDC_LARGE = 4, GDC_GIANT = 5, GDC_numfonts= 6 };
 
-typedef enum {
-			 GDC_DESTROY_IMAGE = 0,			/* default */
-			 GDC_EXPOSE_IMAGE  = 1,			/* user must call GDC_destroy_image() */
-			 GDC_REUSE_IMAGE   = 2			/* i.e., paint on top of */
-			 } GDC_HOLD_IMAGE_T;			/* EXPOSE & REUSE */
+/* GDC[PIE]_fontc depends on this */
+typedef enum { GDC_DESTROY_IMAGE = 0, /* default */ 
+               GDC_EXPOSE_IMAGE  = 1, /* user must call GDC_destroy_image() */ 
+               GDC_REUSE_IMAGE   = 2  /* i.e., paint on top of */
+} GDC_HOLD_IMAGE_T;			/* EXPOSE & REUSE */
 
-#ifdef GDC_INCL
-struct	GDC_FONT_T	{
-					gdFontPtr	f;
-					char		h;
-					char		w;
-					};
+struct GDC_FONT_T {
+  QFont*	f;
+  char		h;
+  char		w;
+};
 
 typedef enum { GDC_JUSTIFY_RIGHT,
 			   GDC_JUSTIFY_CENTER,
 			   GDC_JUSTIFY_LEFT } GDC_justify_t;
 
-void	GDCImageStringNL( gdImagePtr, struct GDC_FONT_T*, int, int, char*, int, GDC_justify_t );
 void	load_font_conversions();
 short	cnt_nl( char*, int* );
-#endif
 
-#ifdef GDC_LIB
-#define EXTERND	extern
-#define DEFAULTO(val)
-extern struct	GDC_FONT_T	GDC_fontc[];
-#else
+
+
+extern struct	GDC_FONT_T*	GDC_fontc;
 #define EXTERND
 #define DEFAULTO(val) = val
-#endif
 
 /**** COMMON OPTIONS ********************************/
 #ifndef _GDC_COMMON_OPTIONS
 #define _GDC_COMMON_OPTIONS
-EXTERND char				GDC_generate_gif	DEFAULTO( TRUE );
+extern char				GDC_generate_gif;
 
-EXTERND GDC_HOLD_IMAGE_T	GDC_hold_img		DEFAULTO( GDC_DESTROY_IMAGE );
-EXTERND void				*GDC_image			DEFAULTO( (void*)NULL );	/* in/out */
+extern GDC_HOLD_IMAGE_T	GDC_hold_img;
+extern void				*GDC_image;	/* in/out */
 #endif
 /****************************************************/
 
 
 void	GDC_destroy_image( void* );
-void	out_err( int			GIFWIDTH,
-				 int			GIFHEIGHT,
-				 FILE*,
-				 unsigned long	BGColor,
-				 unsigned long	LineColor,
+void	out_err( QPainter* p,
+				 int			imagewidth,
+				 int			imageheight,
+				 QColor	BGColor,
+				 QColor	LineColor,
 				 char			*str );
 
 #endif /*!_GDC_H*/

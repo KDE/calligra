@@ -7,6 +7,11 @@
 #include "gdc.h"
 #endif
 
+#include <qcolor.h>
+#include <values.h>
+
+class QPainter;
+
 #define MAX_NOTE_LEN		19
 
 typedef enum {
@@ -54,85 +59,85 @@ typedef enum {
 			 GDC_SCATTER_TRIANGLE_DOWN,
 			 GDC_SCATTER_TRIANGLE_UP
 			 } GDC_SCATTER_IND_T;
-typedef struct
-			{
-			float				point;		/* 0 <= point < num_points */
-			float				val;
-			unsigned short		width;		/* % (1-100) */
-			unsigned long		color;
-			GDC_SCATTER_IND_T	ind;
-			} GDC_SCATTER_T;
+typedef struct {
+	float				point;		/* 0 <= point < num_points */
+	float				val;
+	unsigned short		width;		/* % (1-100) */
+	unsigned long		color;
+	GDC_SCATTER_IND_T	ind;
+} GDC_SCATTER_T;
 
 /****************************************************/
 /********** USER CHART OPTIONS w/ defaults **********/
 /****************************************************/
-EXTERND char				*GDC_ytitle;
-EXTERND char				*GDC_xtitle;
-EXTERND char				*GDC_ytitle2;		/* ostesibly: volume label */
-EXTERND char				*GDC_title;			/* NLs ok here */
-EXTERND enum GDC_font_size	GDC_title_size		DEFAULTO( GDC_MEDBOLD );
-EXTERND enum GDC_font_size	GDC_ytitle_size		DEFAULTO( GDC_MEDBOLD );
-EXTERND enum GDC_font_size	GDC_xtitle_size		DEFAULTO( GDC_MEDBOLD );
-EXTERND enum GDC_font_size	GDC_yaxisfont_size	DEFAULTO( GDC_SMALL );
-EXTERND enum GDC_font_size	GDC_xaxisfont_size	DEFAULTO( GDC_SMALL );
-EXTERND char				*GDC_ylabel_fmt		DEFAULTO( NULL );		/* printf fmt'ing, e.g.: "%.2f" */
-EXTERND char				*GDC_ylabel2_fmt	DEFAULTO( NULL );		/* default: "%.0f" future: fractions */
-EXTERND short				GDC_xlabel_spacing	DEFAULTO( 5 );			/* pixels  MAXSHORT means force all */
-EXTERND char				GDC_ylabel_density	DEFAULTO( 80 );			/* % */
-EXTERND float				GDC_requested_ymin	DEFAULTO( GDC_NOVALUE );
-EXTERND float				GDC_requested_ymax	DEFAULTO( GDC_NOVALUE );
-EXTERND float				GDC_requested_yinterval	DEFAULTO( GDC_NOVALUE );
-EXTERND char				GDC_0Shelf			DEFAULTO( TRUE );		/* if applicable */
-EXTERND char				GDC_grid			DEFAULTO( TRUE );
-EXTERND char				GDC_xaxis			DEFAULTO( TRUE );
-EXTERND char				GDC_yaxis			DEFAULTO( TRUE );
-EXTERND char				GDC_yaxis2			DEFAULTO( TRUE );
-EXTERND char				GDC_yval_style		DEFAULTO( TRUE );
-EXTERND GDC_STACK_T			GDC_stack_type		DEFAULTO( GDC_STACK_DEPTH );
-EXTERND float				GDC_3d_depth		DEFAULTO( 5.0 );		/* % gif size */
-EXTERND unsigned char		GDC_3d_angle		DEFAULTO( 45 );			/* 1-89 */
-EXTERND unsigned char		GDC_bar_width		DEFAULTO( 75 );			/* % (1-100) */
-EXTERND GDC_HLC_STYLE_T		GDC_HLC_style		DEFAULTO( GDC_HLC_CLOSE_CONNECTED );
-EXTERND unsigned char		GDC_HLC_cap_width	DEFAULTO( 25 );			/* % (1-100) */
-EXTERND GDC_ANNOTATION_T	*GDC_annotation		DEFAULTO( (GDC_ANNOTATION_T*)NULL );
-EXTERND enum GDC_font_size	GDC_annotation_font	DEFAULTO( GDC_SMALL );
-EXTERND int					GDC_num_scatter_pts	DEFAULTO( 0 );
-EXTERND GDC_SCATTER_T		*GDC_scatter		DEFAULTO( (GDC_SCATTER_T*)NULL );
-EXTERND char				GDC_thumbnail		DEFAULTO( FALSE );
-EXTERND char				*GDC_thumblabel;
-EXTERND float				GDC_thumbval		DEFAULTO( -MAXFLOAT );
-EXTERND char				GDC_border			DEFAULTO( TRUE );
-EXTERND unsigned long		GDC_BGColor			DEFAULTO( 0x000000L );	 /* black */
-EXTERND unsigned long		GDC_GridColor		DEFAULTO( 0xA0A0A0L );	 /* gray */
-EXTERND unsigned long		GDC_LineColor		DEFAULTO( GDC_DFLTCOLOR );
-EXTERND unsigned long		GDC_PlotColor		DEFAULTO( GDC_DFLTCOLOR );
-EXTERND unsigned long		GDC_VolColor		DEFAULTO( 0xA0A0FFL );	 /* lgtblue1 */
-EXTERND unsigned long		GDC_TitleColor		DEFAULTO( GDC_DFLTCOLOR ); /* "opposite" of BG */
-EXTERND unsigned long		GDC_XTitleColor		DEFAULTO( GDC_DFLTCOLOR );
-EXTERND unsigned long		GDC_YTitleColor		DEFAULTO( GDC_DFLTCOLOR );
-EXTERND unsigned long		GDC_YTitle2Color	DEFAULTO( GDC_DFLTCOLOR );
-EXTERND unsigned long		GDC_XLabelColor		DEFAULTO( GDC_DFLTCOLOR );
-EXTERND unsigned long		GDC_YLabelColor		DEFAULTO( GDC_DFLTCOLOR );
-EXTERND unsigned long		GDC_YLabel2Color	DEFAULTO( GDC_DFLTCOLOR );
-							/* supercedes VolColor	ulong_color[num_points] */
-EXTERND unsigned long		*GDC_ExtVolColor	DEFAULTO( (unsigned long*)NULL );
-							/* supercedes LineColor	ulong_color[num_sets] */
-EXTERND unsigned long		*GDC_SetColor		DEFAULTO( (unsigned long*)NULL );
-							/* supercedes SetColor	ulong_color[num_sets][num_points] */
-EXTERND unsigned long		*GDC_ExtColor		DEFAULTO( (unsigned long*)NULL );
-EXTERND char				GDC_transparent_bg	DEFAULTO( FALSE );
-EXTERND char				*GDC_BGImage		DEFAULTO( (char*)NULL );
+extern char	*GDC_ytitle;
+extern char	*GDC_xtitle;
+extern char	*GDC_ytitle2;		/* ostesibly: volume label */
+extern char	*GDC_title;			/* NLs ok here */
+extern enum GDC_font_size GDC_title_size;
+extern enum GDC_font_size GDC_ytitle_size;
+extern enum GDC_font_size GDC_xtitle_size;
+extern enum GDC_font_size GDC_yaxisfont_size;
+extern enum GDC_font_size GDC_xaxisfont_size;
+extern char	*GDC_ylabel_fmt;		/* printf fmt'ing, e.g.: "%.2f" */
+extern char	*GDC_ylabel2_fmt;		/* default: "%.0f" future: fractions */
+extern short GDC_xlabel_spacing;			/* pixels  MAXSHORT means force all */
+extern char	GDC_ylabel_density;			/* % */
+extern float GDC_requested_ymin;
+extern float GDC_requested_ymax;
+extern float GDC_requested_yinterval;
+extern char	GDC_0Shelf;		/* if applicable */
+extern char	GDC_grid;
+extern char	GDC_xaxis;
+extern char	GDC_yaxis;
+extern char	GDC_yaxis2;
+extern char	GDC_yval_style;
+extern GDC_STACK_T GDC_stack_type;
+extern float GDC_3d_depth;		/* % gif size */
+extern unsigned char GDC_3d_angle;			/* 1-89 */
+extern unsigned char GDC_bar_width;			/* % (1-100) */
+extern GDC_HLC_STYLE_T GDC_HLC_style;
+extern unsigned char GDC_HLC_cap_width;			/* % (1-100) */
+extern GDC_ANNOTATION_T	*GDC_annotation;
+extern enum GDC_font_size GDC_annotation_font;
+extern int GDC_num_scatter_pts;
+extern GDC_SCATTER_T *GDC_scatter;
+extern char	GDC_thumbnail;
+extern char	*GDC_thumblabel;
+extern float GDC_thumbval;
+extern char	GDC_border;
+extern QColor* GDC_BGColor;
+extern QColor* GDC_GridColor;
+extern QColor* GDC_LineColor;
+extern QColor* GDC_PlotColor;
+extern QColor* GDC_VolColor;
+extern QColor* GDC_TitleColor;
+extern QColor* GDC_XTitleColor;
+extern QColor* GDC_YTitleColor;
+extern QColor* GDC_YTitle2Color;
+extern QColor* GDC_XLabelColor;
+extern QColor* GDC_YLabelColor;
+extern QColor* GDC_YLabel2Color;
+/* supercedes VolColor	ulong_color[num_points] */
+extern QColor *GDC_ExtVolColor;
+/* supercedes LineColor	ulong_color[num_sets] */
+extern QColor *GDC_SetColor;
+/* supercedes SetColor	ulong_color[num_sets][num_points] */
+extern QColor *GDC_ExtColor;
+extern char	GDC_transparent_bg;
+extern char	*GDC_BGImage;
+
 /* legends?  separate gif? */
 /* auto-size fonts, based on GIF size? */
 
 /* ----- following options are for expert users only ----- */
 												/* for alignment of multiple charts */
 												/* USE WITH CAUTION! */
-EXTERND char				GDC_hard_size		DEFAULTO( FALSE );
-EXTERND int					GDC_hard_xorig		DEFAULTO( 0 );				/* in/out */
-EXTERND int					GDC_hard_graphwidth	DEFAULTO( 0 );				/* in/out */
-EXTERND int					GDC_hard_yorig		DEFAULTO( 0 );				/* in/out */
-EXTERND int					GDC_hard_grapheight	DEFAULTO( 0 );				/* in/out */
+extern char GDC_hard_size;
+extern int GDC_hard_xorig;				/* in/out */
+extern int GDC_hard_graphwidth;				/* in/out */
+extern int GDC_hard_yorig;				/* in/out */
+extern int GDC_hard_grapheight;				/* in/out */
 
 /**** COMMON OPTIONS ********************************/
 /* NOTE:  common options copy here for reference only! */
@@ -151,13 +156,13 @@ EXTERND void				*GDC_image			DEFAULTO( (void*)NULL );	/* in/out */
 #define clrshdallocate( im, rawclr )	_clrshdallocate( im, rawclr, GDC_BGColor )
 #endif
 
-int GDC_out_graph( short		gifwidth,
-				   short		gifheight,  
-				   FILE			*gif_fptr,		/* open file pointer (gif out) */
-				   GDC_CHART_T	type,
-				   int			num_points,		/* points along x axis (even iterval) */
-				   char			*xlbl[],
-				   int			num_sets,
+int out_graph( short		gifwidth,
+			   short		gifheight,  
+			   QPainter*	p, // paint here
+			   GDC_CHART_T	type,
+			   int			num_points,		/* points along x axis (even iterval) */
+			   char			*xlbl[],
+			   int			num_sets,
 								... );
 /* expected params (...) for each chart type:
 GDC_LINE
