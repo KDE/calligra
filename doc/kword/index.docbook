@@ -54,7 +54,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-07-04</date>
+<date>2002-11-04</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -2120,6 +2120,19 @@ Web.</para>
 <glossdef>
 <para>Hue is a more technically correct term for what we generally refer to as <emphasis>color</emphasis>.</para>
 <para>Examples of hues include red, green, blue and purple.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="definlineframe">
+<glossterm>Inline frame</glossterm>
+<glossdef>
+<para>An inline frame is a special frame type in &kword;.  Inline frames are associated with a position in a text frame.  
+&kword; will keep the inline frame near the specified text.  You will not be able to determine where exactly on a page the 
+frame will appear, but it will be located close to the specified text.</para>
+<para>If you insert or delete text in front of the specified text, the inline image will move up or down the page to follow the 
+specified text</para>
+<tip><para>Inline frames are very useful when they contain a picture, graph or figure.  Simply place the inline frame within the 
+text which describes the object, and &kword; will make sure both the text and the inline frame are always near each other.</para></tip>
 </glossdef>
 </glossentry>
 
