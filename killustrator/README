@@ -52,7 +52,7 @@ Here is a short description of currently implemented features:
   ellipses, squares, rectangles, symmetric polygones,
   bezier curves and muliline text
 - tools for creating these objects
-- tools for moving, scaling, rotating as well as
+- tools for moving, scaling, rotating, shearing as well as
   grouping, ungrouping, aligning, distributing and
   reordering objects
 - a property editor

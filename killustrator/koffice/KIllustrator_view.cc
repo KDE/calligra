@@ -24,7 +24,6 @@
 
 #include <iostream.h>
 
-#include <utils.h>
 #include <qaccel.h>
 #include "KIllustrator_shell.h"
 #include "KIllustrator_view.h"
@@ -75,18 +74,18 @@
 #include <qlayout.h>
 #include <unistd.h>
 
-KIllustratorChildFrame::KIllustratorChildFrame (KIllustratorView* view, 
-						KIllustratorChild* child) :
-PartFrame_impl (view) {
+KIllustratorFrame::KIllustratorFrame (KIllustratorView* view, 
+				      KIllustratorChild* child) :
+  KoFrame (view) {
   m_pView = view;
   m_pChild = child;
 }
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name, 
 				    KIllustratorDocument* doc) :
-QWidget (parent), View_impl (), KIllustrator::View_skel () {
+QWidget (parent), KoViewIf (doc), OPViewIf (doc), KIllustrator::View_skel () {
   setWidget (this);
-  Control_impl::setFocusPolicy (OPControls::Control::ClickFocus);
+  OPPartIf::setFocusPolicy (OpenParts::Part::ClickFocus);
 
   m_lstFrames.setAutoDelete (true);
   m_pDoc = doc;
@@ -105,6 +104,38 @@ QWidget (parent), View_impl (), KIllustrator::View_skel () {
   colorPalette.resize (18);
   for (int i = 0; i < 18; i++)
     colorPalette.insert (i, new QColor (cpalette[i]));
+
+  zFactors.resize (5);
+  zFactors[0] = 0.5;
+  zFactors[1] = 1.0;
+  zFactors[2] = 1.5;
+  zFactors[3] = 2.0;
+  zFactors[4] = 4.0;
+  Canvas::initZoomFactors (zFactors);
+
+  createGUI ();
+}
+
+void KIllustratorView::init () {
+  cerr << "Registering menu as " << id () << endl;
+  
+  OpenParts::MenuBarManager_var menu_bar_manager = 
+    m_vMainWindow->menuBarManager ();
+  if (! CORBA::is_nil (menu_bar_manager))
+    menu_bar_manager->registerClient (id (), this);
+  else
+    cerr << "Did not get a menu bar manager" << endl;
+
+  /******************************************************
+   * Toolbar
+   ******************************************************/
+
+  OpenParts::ToolBarManager_var tool_bar_manager = 
+    m_vMainWindow->toolBarManager ();
+  if (! CORBA::is_nil (tool_bar_manager))
+    tool_bar_manager->registerClient (id (), this);
+  else
+    cerr << "Did not get a tool bar manager" << endl;  
 }
 
 KIllustratorView::~KIllustratorView () {
@@ -112,14 +143,149 @@ KIllustratorView::~KIllustratorView () {
 }
 
 void KIllustratorView::createGUI () {
-  setupMenu ();
-  setupMainToolbar ();
   setupToolsToolbar ();
   setupColorToolbar ();
   setupCanvas ();
-  setUndoStatus(false, false);
-  QObject::connect(&cmdHistory, SIGNAL(changed(bool, bool)), 
-	  SLOT(setUndoStatus(bool, bool)));
+  setUndoStatus (false, false);
+  QObject::connect (&cmdHistory, SIGNAL(changed(bool, bool)), 
+		    SLOT(setUndoStatus(bool, bool)));
+}
+
+bool KIllustratorView::event (const char* _event, const CORBA::Any& _value) {
+  EVENT_MAPPER (_event, _value);
+
+  MAPPING (OpenPartsUI::eventCreateMenuBar, 
+	   OpenPartsUI::typeCreateMenuBar_var, mappingCreateMenubar);
+  MAPPING (OpenPartsUI::eventCreateToolBar, 
+	   OpenPartsUI::typeCreateToolBar_var, mappingCreateToolbar);
+
+  END_EVENT_MAPPER;
+  
+  return false;
+}
+
+bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr 
+					     menubar) {
+  if (CORBA::is_nil (menubar)) {
+    m_vMenuEdit = 0L;
+    m_vMenuView = 0L;
+    m_vMenuLayout = 0L;
+    m_vMenuArrange = 0L;
+    m_vMenuTransform = 0L;
+    m_vMenuExtras = 0L;
+    m_vMenuHelp = 0L;
+    return true;
+  }
+
+  // Menu: Edit  
+  menubar->insertMenu (i18n ("&Edit"), m_vMenuEdit, -1, -1);
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem (i18n ("Undo"), this, 
+					       "editUndo", 0);
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem (i18n ("Redo"), this, 
+					       "editRedo", 0);
+  m_vMenuEdit->insertSeparator (-1);
+  m_idMenuEdit_Copy = m_vMenuEdit->insertItem (i18n ("&Copy"), this, 
+					   "editCopy", 0); 
+  m_idMenuEdit_Paste = m_vMenuEdit->insertItem (i18n ("&Paste"), this, 
+					    "editPaste", 0);
+  m_idMenuEdit_Cut = m_vMenuEdit->insertItem (i18n ("C&ut"), this, 
+					      "editCut", 0);
+  m_vMenuEdit->insertSeparator (-1);
+  m_idMenuEdit_Delete = m_vMenuEdit->insertItem (i18n ("&Delete"), this,
+						 "editDelete", 0);
+  m_vMenuEdit->insertSeparator (-1);
+  m_idMenuEdit_SelectAll = m_vMenuEdit->insertItem (i18n ("&Select All"), this,
+						    "editSelectAll", 0);
+  m_vMenuEdit->insertSeparator (-1);
+  m_idMenuEdit_InsertObject = 
+    m_vMenuEdit->insertItem (i18n ("&Insert Object..."), this,
+			     "editInsertObject", 0);
+  m_idMenuEdit_Properties = 
+    m_vMenuEdit->insertItem (i18n ("Pr&operties"), this,
+			     "editProperties", 0);
+
+  // Menu: View
+  menubar->insertMenu (i18n ("&View"), m_vMenuView, -1, -1);
+  m_idMenuView_Outline =
+    m_vMenuView->insertItem (i18n ("Outline"), this, "viewOutline", 0);
+  m_vMenuView->setCheckable (true);
+  m_idMenuView_Normal =
+    m_vMenuView->insertItem (i18n ("Normal"), this, "viewNormal", 0);
+  m_vMenuView->insertSeparator (-1);
+  m_idMenuView_Ruler =
+    m_vMenuView->insertItem (i18n ("Ruler"), this, "toggleRuler", 0);
+  m_vMenuView->setItemChecked (m_idMenuView_Ruler, m_bShowRulers);
+  m_idMenuView_Grid =
+    m_vMenuView->insertItem (i18n ("Grid"), this, "toggleGrid", 0);
+  m_vMenuView->setItemChecked (m_idMenuView_Grid, false);
+
+  // Menu: Layout
+  menubar->insertMenu (i18n ("&Layout"), m_vMenuLayout, -1, -1);
+  m_idMenuLayout_PageLayout =
+    m_vMenuLayout->insertItem (i18n ("Page Layout"), this, "setupPage", 0);
+  m_vMenuLayout->insertSeparator (-1);
+  m_idMenuLayout_Layers =
+    m_vMenuLayout->insertItem (i18n ("Layers"), this, "editLayers", 0);
+  m_vMenuLayout->insertSeparator (-1);
+  m_idMenuLayout_SetupGrid =
+    m_vMenuLayout->insertItem (i18n ("Setup Grid"), this, "setupGrid", 0);
+  m_idMenuLayout_AlignToGrid =
+    m_vMenuLayout->insertItem (i18n ("Align to Grid"), this, "alignToGrid", 0);
+  m_vMenuLayout->setCheckable (true);
+  m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToGrid, false);
+
+  // Menu: Arrange
+  menubar->insertMenu (i18n ("&Arrange"), m_vMenuArrange, -1, -1);
+  m_vMenuArrange->insertItem8 (i18n ("Transform"), m_vMenuTransform, -1, -1);
+  m_idMenuArrange_Align = m_vMenuArrange->insertItem (i18n ("Align"), this, 
+						      "arrangeAlign", 0);
+  m_idMenuArrange_ToFront = m_vMenuArrange->insertItem (i18n ("To Front"), 
+							this, 
+							"arrangeToFront", 0);
+  m_idMenuArrange_ToBack = m_vMenuArrange->insertItem (i18n ("To Back"), this, 
+				"arrangeToBack", 0);
+  m_idMenuArrange_1Forward = 
+    m_vMenuArrange->insertItem (i18n ("Forward One"), this, 
+				"arrangeOneForward", 0);
+  m_idMenuArrange_1Back = m_vMenuArrange->insertItem (i18n ("Back One"), this, 
+						      "arrangeOneBack", 0);
+  m_vMenuArrange->insertSeparator (-1);
+  m_idMenuArrange_Group = m_vMenuArrange->insertItem (i18n ("Group"), this, 
+						      "arrangeGroup", 0);
+  m_idMenuArrange_Ungroup = m_vMenuArrange->insertItem (i18n ("Ungroup"), 
+							this, 
+							"arrangeUngroup", 0);
+
+  // Menu: Arrange->Transform
+  m_idMenuTransform_Position =
+    m_vMenuTransform->insertItem (i18n ("Position"), this, 
+				  "transformPosition", 0);
+  m_idMenuTransform_Dimension =
+    m_vMenuTransform->insertItem (i18n ("Dimension"), this, 
+				  "transformDimension", 0);
+  m_idMenuTransform_Rotation =
+    m_vMenuTransform->insertItem (i18n ("Rotation"), this, 
+				  "transformRotation", 0);
+  m_idMenuTransform_Mirror =
+    m_vMenuTransform->insertItem (i18n ("Mirror"), this, 
+				  "transformMirror", 0);
+
+  // Menu: Extras  
+  menubar->insertMenu (i18n ("&Extras"), m_vMenuExtras, -1, -1);
+
+  // Menu: Help
+  m_vMenuHelp = menubar->helpMenu ();
+  if (CORBA::is_nil (m_vMenuHelp)) {
+    menubar->insertSeparator (-1);
+    menubar->setHelpMenu (menubar->insertMenu (i18n ("&Help"),
+					       m_vMenuHelp, -1, -1));
+  }
+  return true;
+}
+
+bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr 
+					     factory) {
+  return true;
 }
 
 void KIllustratorView::setupCanvas () {
@@ -215,224 +381,9 @@ void KIllustratorView::showCurrentMode (const char* msg) {
     //  statusbar->changeItem (msg, 2);
 }
 
-void KIllustratorView::setupMenu () {
-  m_vMenuBarFactory = m_vPartShell->menuBarFactory ();
-  if (! CORBA::is_nil (m_vMenuBarFactory)) {
-    m_rMenuBar = m_vMenuBarFactory->createMenuBar (this);
-
-    /* ------------- Edit Menu ------------- */
-    m_idMenuEdit = m_rMenuBar->insertMenu (CORBA::string_dup (i18n ("&Edit")));
-  
-    m_idMenuEdit_Undo = 
-	m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Undo")), 
-				m_idMenuEdit, this, 
-				CORBA::string_dup ("editUndo"));
-    m_rMenuBar->setAccel(CTRL + Key_Z, m_idMenuEdit_Undo);
-
-    m_idMenuEdit_Redo = 
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Redo")), 
-			      m_idMenuEdit, this, 
-			      CORBA::string_dup ("editRedo"));
-    m_rMenuBar->insertSeparator (m_idMenuEdit);
-    m_idMenuEdit_Copy = 
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("&Copy")), 
-			      m_idMenuEdit, this, 
-			      CORBA::string_dup ("editCopy"));
-    m_rMenuBar->setAccel(CTRL + Key_C, m_idMenuEdit_Copy);
-
-    m_idMenuEdit_Paste = 
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("&Paste")), 
-			      m_idMenuEdit, this, 
-			      CORBA::string_dup ("editPaste"));
-    m_rMenuBar->setAccel(CTRL + Key_V, m_idMenuEdit_Paste);
-
-    m_idMenuEdit_Cut = 
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("C&ut")), 
-			      m_idMenuEdit, this, 
-			      CORBA::string_dup ("editCut"));
-    m_rMenuBar->setAccel(CTRL + Key_X, m_idMenuEdit_Cut);
-
-    m_rMenuBar->insertSeparator (m_idMenuEdit);
-
-    m_idMenuEdit_Delete = 
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("&Delete")), 
-			      m_idMenuEdit, this, 
-			      CORBA::string_dup ("editDelete"));
-    m_rMenuBar->setAccel(Key_Delete, m_idMenuEdit_Delete);
-
-    m_rMenuBar->insertSeparator (m_idMenuEdit);
-
-    m_idMenuEdit_SelectAll = 
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("&Select All")), 
-			      m_idMenuEdit, this, 
-			      CORBA::string_dup ("editSelectAll"));
-
-    m_rMenuBar->insertSeparator (m_idMenuEdit);
-
-    m_idMenuEdit_InsertObject = 
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("&Insert Object...")), 
-			      m_idMenuEdit, this, 
-			      CORBA::string_dup ("editInsertObject"));
-    m_idMenuEdit_Properties = 
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Pr&operties")), 
-			      m_idMenuEdit, this, 
-			      CORBA::string_dup ("editProperties"));
-
-    /* ------------- View Menu ------------- */
-    m_idMenuView = m_rMenuBar->insertMenu (CORBA::string_dup (i18n ("&View")));
-    m_idMenuView_Outline =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Outline")), 
-			      m_idMenuView, this, 
-			      CORBA::string_dup ("viewOutline"));
-    m_rMenuBar->setCheckable (m_idMenuView, true);
-
-    m_idMenuView_Draft =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Draft")), 
-			      m_idMenuView, this, 
-			      CORBA::string_dup ("viewDraft"));
-
-    m_idMenuView_Normal =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Normal")), 
-			      m_idMenuView, this, 
-			      CORBA::string_dup ("viewNormal"));
-
-    m_rMenuBar->insertSeparator (m_idMenuView);
-
-    m_idMenuView_Ruler =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Ruler")), 
-			      m_idMenuView, this, 
-			      CORBA::string_dup ("toggleRuler"));
-    m_rMenuBar->setItemChecked (m_idMenuView_Ruler, m_bShowRulers);
-
-    m_idMenuView_Grid =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Grid")), 
-			      m_idMenuView, this, 
-			      CORBA::string_dup ("toggleGrid"));
-    m_rMenuBar->setItemChecked (m_idMenuView_Grid, false);
-      
-    /* ------------- Layout Menu ------------- */
-    m_idMenuLayout = 
-      m_rMenuBar->insertMenu (CORBA::string_dup (i18n ("&Layout")));
-    m_idMenuLayout_InsertPage =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Insert Page")), 
-			      m_idMenuLayout, this, 
-			      CORBA::string_dup ("insertPage"));
-    m_idMenuLayout_RemovePage =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Remove Page")), 
-			      m_idMenuLayout, this, 
-			      CORBA::string_dup ("removePage"));
-    m_idMenuLayout_GotoPage =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Go to Page")), 
-			      m_idMenuLayout, this, 
-			      CORBA::string_dup ("gotoPage"));
-    m_idMenuLayout_PageLayout =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Page Layout")), 
-			      m_idMenuLayout, this, 
-			      CORBA::string_dup ("setupPage"));
-
-    m_rMenuBar->insertSeparator (m_idMenuLayout);
-    m_idMenuLayout_Layers =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Layers")), 
-			      m_idMenuLayout, this, 
-			      CORBA::string_dup ("editLayers"));
-
-    m_rMenuBar->insertSeparator (m_idMenuLayout);
-
-    m_idMenuLayout_SetupGrid =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Setup Grid")), 
-			      m_idMenuLayout, this, 
-			      CORBA::string_dup ("setupGrid"));
-
-    m_idMenuLayout_AlignToGrid =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Align to Grid")), 
-			      m_idMenuLayout, this, 
-			      CORBA::string_dup ("alignToGrid"));
-    m_rMenuBar->setCheckable (m_idMenuLayout_AlignToGrid, true);
-    m_rMenuBar->setItemChecked (m_idMenuLayout_AlignToGrid, false);
-
-    /* ------------- Arrange Menu ------------- */
-    m_idMenuArrange = 
-      m_rMenuBar->insertMenu (CORBA::string_dup (i18n ("&Arrange")));
-    m_idMenuTransform =
-      m_rMenuBar->insertSubMenu (CORBA::string_dup (i18n ("Transform")),
-				 m_idMenuArrange);
-    m_idMenuArrange_Align =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Align")), 
-			      m_idMenuArrange, this, 
-			      CORBA::string_dup ("arrangeAlign"));
-    m_rMenuBar->setAccel (CTRL + Key_A, m_idMenuArrange_Align);
-
-    m_idMenuArrange_ToFront =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("To Front")), 
-			      m_idMenuArrange, this, 
-			      CORBA::string_dup ("arrangeToFront"));
-    m_rMenuBar->setAccel (SHIFT + Key_PageUp, m_idMenuArrange_ToFront);
-
-    m_idMenuArrange_ToBack =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("To Back")), 
-			      m_idMenuArrange, this, 
-			      CORBA::string_dup ("arrangeToBack"));
-    m_rMenuBar->setAccel (SHIFT + Key_PageDown, m_idMenuArrange_ToBack);
-
-    m_idMenuArrange_1Forward =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Forward One")), 
-			      m_idMenuArrange, this, 
-			      CORBA::string_dup ("arrangeOneForward"));
-    m_rMenuBar->setAccel (CTRL + Key_PageUp, m_idMenuArrange_1Forward);
-
-    m_idMenuArrange_1Back =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Back One")), 
-			      m_idMenuArrange, this, 
-			      CORBA::string_dup ("arrangeOneBack"));
-    m_rMenuBar->setAccel (CTRL + Key_PageDown, m_idMenuArrange_1Back);
-
-    m_rMenuBar->insertSeparator (m_idMenuArrange);
-    m_idMenuArrange_Group =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Group")), 
-			      m_idMenuArrange, this, 
-			      CORBA::string_dup ("arrangeGroup"));
-    m_rMenuBar->setAccel (CTRL + Key_G, m_idMenuArrange_Group);
-
-    m_idMenuArrange_Ungroup =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Ungroup")), 
-			      m_idMenuArrange, this, 
-			      CORBA::string_dup ("arrangeUngroup"));
-    m_rMenuBar->setAccel (CTRL + Key_U, m_idMenuArrange_Ungroup);
-
-    /* ------------- Arrange->Transform Menu ------------- */
-    m_idMenuTransform_Position =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Position")), 
-			      m_idMenuTransform, this, 
-			      CORBA::string_dup ("transformPosition"));
-    m_idMenuTransform_Dimension =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Dimension")), 
-			      m_idMenuTransform, this, 
-			      CORBA::string_dup ("transformDimension"));
-    m_idMenuTransform_Rotation =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Rotation")), 
-			      m_idMenuTransform, this, 
-			      CORBA::string_dup ("transformRotation"));
-    m_idMenuTransform_Mirror =
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Mirror")), 
-			      m_idMenuTransform, this, 
-			      CORBA::string_dup ("transformMirror"));
-
-
-    /* ------------- Extras Menu ------------- */
-    m_idMenuExtras = 
-      m_rMenuBar->insertMenu (CORBA::string_dup (i18n ("Ex&tras")));
-
-    /* ------------- Help Menu ------------- */
-
-    CORBA::Long id = m_rMenuBar->helpMenuId ();
-    m_idMenuHelp_About = 
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("About")), 
-			      id, this, 
-			      CORBA::string_dup ("helpAbout"));
-  }
-}
-
+// XXXXXXXXXXXXXXXXXXX
 void KIllustratorView::setupColorToolbar () {
+#if 0
     m_vToolBarFactory = m_vPartShell->toolBarFactory ();
     if (! CORBA::is_nil (m_vToolBarFactory)) {
 	m_rToolBarColors = 
@@ -453,25 +404,26 @@ void KIllustratorView::setupColorToolbar () {
 	m_rToolBarColors->connect ("pressed", this, "setPenColor");
 	m_rToolBarColors->setPos(KToolBar::Right);
     }
-}
-
-void KIllustratorView::setupMainToolbar () {
+#endif
 }
 
 CORBA::Long KIllustratorView::addToolButton (const char* pictname,
 					     const char* tooltip) {
   CORBA::Long id;
-
+#if 0
   QString path = kapp->kde_datadir ().copy ();
   path += "/killustrator/pics/";
   path += pictname;
   QString pix = loadPixmap (path);
   id = m_rToolBarTools->insertLRButton (CORBA::string_dup (pix),
 				      CORBA::string_dup (tooltip), 0L, 0L);
+#endif
   return id;
 }
 
+// XXXXXXXXXXXXXXXXXXX
 void KIllustratorView::setupToolsToolbar () {
+#if 0
     m_vToolBarFactory = m_vPartShell->toolBarFactory ();
     if (! CORBA::is_nil (m_vToolBarFactory)) {
 	m_rToolBarTools = 
@@ -505,16 +457,30 @@ void KIllustratorView::setupToolsToolbar () {
 
 	m_rToolBarTools->setPos(KToolBar::Left);
     }
+#endif
 }
 
 void KIllustratorView::cleanUp () {
   if (m_bIsClean)
     return;
 
+  QListIterator<KIllustratorFrame> it (m_lstFrames);
+  for (; it.current () != 0L; ++it)
+    it.current ()->detach ();
+
+  OpenParts::MenuBarManager_var menu_bar_manager = 
+    m_vMainWindow->menuBarManager ();
+  if (! CORBA::is_nil (menu_bar_manager))
+    menu_bar_manager->unregisterClient (id ());
+
+  OpenParts::ToolBarManager_var tool_bar_manager = 
+    m_vMainWindow->toolBarManager ();
+  if (! CORBA::is_nil (tool_bar_manager))
+    tool_bar_manager->unregisterClient (id ());
+
   m_pDoc->removeView (this);
-  m_lstFrames.clear ();
-  
-  View_impl::cleanUp ();
+
+  KoViewIf::cleanUp();
 }
 
 void KIllustratorView::construct () {
@@ -522,18 +488,14 @@ void KIllustratorView::construct () {
 }
 
 void KIllustratorView::newView () {
-  KIllustratorShell* shell = new KIllustratorShell;
-  shell->enableMenuBar ();
-  shell->PartShell_impl::enableStatusBar ();
-  shell->enableToolBars ();
+  KIllustratorShell* shell = new KIllustratorShell ();
   shell->show ();
   shell->setDocument (m_pDoc);
-
-  CORBA::release (shell);
 }
 
 void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 {
+#if 0
   // we do this " " trick to avoid double translation of "Undo" and "Undo "
   m_rMenuBar->setItemEnabled(m_idMenuEdit_Undo, undoPossible);
   
@@ -549,6 +511,7 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
       label += " " + cmdHistory.getRedoName();
   
   m_rMenuBar->changeItem(label, m_idMenuEdit_Redo);
+#endif
 }
 
 void KIllustratorView::resizeEvent (QResizeEvent* ) {
@@ -571,6 +534,7 @@ void KIllustratorView::resizeEvent (QResizeEvent* ) {
   }
 }
 
+#if 0
 void KIllustratorView::setMode (OPParts::Part::Mode m) {
   Part_impl::setMode (m);
   if (mode () == OPParts::Part::ChildMode && ! m_bFocus)
@@ -599,6 +563,7 @@ void KIllustratorView::setFocus (CORBA::Boolean m) {
   if (old != m_bShowGUI)
     resizeEvent (0L);
 }
+#endif
 
 void KIllustratorView::showTransformationDialog (int id) {
   TransformationDialog *transformationDialog = 
@@ -616,13 +581,13 @@ CORBA::Boolean KIllustratorView::printDlg () {
 
 void KIllustratorView::editUndo () {
   cmdHistory.undo ();
-  m_rToolBarTools->setButton (m_idActiveTool, false);
+  //  m_rToolBarTools->setButton (m_idActiveTool, false);
   tcontroller->toolSelected (m_idActiveTool = m_idSelectionTool);
 }
 
 void KIllustratorView::editRedo () {
   cmdHistory.redo ();
-  m_rToolBarTools->setButton (m_idActiveTool, false);
+  //  m_rToolBarTools->setButton (m_idActiveTool, false);
   tcontroller->toolSelected (m_idActiveTool = m_idSelectionTool);
 }
 
@@ -663,7 +628,7 @@ void KIllustratorView::editProperties () {
 
 void KIllustratorView::toggleRuler () {
   m_bShowRulers = !m_bShowRulers;
-  m_rMenuBar->setItemChecked (m_idMenuView_Ruler, m_bShowRulers);
+  //  m_rMenuBar->setItemChecked (m_idMenuView_Ruler, m_bShowRulers);
   if (m_bShowRulers) {
     hRuler->show ();
     vRuler->show ();
@@ -724,7 +689,7 @@ void KIllustratorView::transformMirror () {
 void KIllustratorView::toggleGrid () {
   bool gridIsShown = ! canvas->showGrid ();
   canvas->showGrid (gridIsShown);
-  m_rMenuBar->setItemChecked (m_idMenuView_Grid, gridIsShown);
+  //  m_rMenuBar->setItemChecked (m_idMenuView_Grid, gridIsShown);
 }
 
 void KIllustratorView::setupGrid () {
@@ -734,7 +699,7 @@ void KIllustratorView::setupGrid () {
 void KIllustratorView::alignToGrid () {
   bool snap = ! canvas->snapToGrid ();
   canvas->snapToGrid (snap);
-  m_rMenuBar->setItemChecked (m_idMenuLayout_AlignToGrid, snap);
+  //  m_rMenuBar->setItemChecked (m_idMenuLayout_AlignToGrid, snap);
 }
 
 void KIllustratorView::configureTool (CORBA::Long id) {
@@ -742,7 +707,7 @@ void KIllustratorView::configureTool (CORBA::Long id) {
 }
 
 void KIllustratorView::activateTool (CORBA::Long id) {
-  m_rToolBarTools->setButton (m_idActiveTool, false);
+  //  m_rToolBarTools->setButton (m_idActiveTool, false);
   tcontroller->toolSelected (m_idActiveTool = id);
 }
 

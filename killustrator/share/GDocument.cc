@@ -134,7 +134,7 @@ int GDocument::getPaperHeight () const {
   return paperHeight;
 }
 
-void GDocument::drawContents (Painter& p, bool withBasePoints) {
+void GDocument::drawContents (Painter& p, bool withBasePoints, bool outline) {
   vector<GLayer*>::iterator i = layers.begin ();
   for (; i != layers.end (); i++) {
     GLayer* layer = *i;
@@ -142,13 +142,13 @@ void GDocument::drawContents (Painter& p, bool withBasePoints) {
       const list<GObject*>& contents = layer->objects ();
       for (list<GObject*>::const_iterator oi = contents.begin ();
 	   oi != contents.end (); oi++)
-	(*oi)->draw (p, withBasePoints && (*oi)->isSelected ());
+	(*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline);
     }
   }
 }
 
-void GDocument::drawContentsInRegion (Painter& p, 
-				      const Rect& r, bool withBasePoints) {
+void GDocument::drawContentsInRegion (Painter& p, const Rect& r, 
+				      bool withBasePoints, bool outline) {
   vector<GLayer*>::iterator i = layers.begin ();
   for (; i != layers.end (); i++) {
     GLayer* layer = *i;
@@ -160,7 +160,7 @@ void GDocument::drawContentsInRegion (Painter& p,
 	// intersects the active region 
 	const Rect& bbox = (*oi)->boundingBox ();
 	if (r.intersects (bbox))
-	  (*oi)->draw (p, withBasePoints && (*oi)->isSelected ());
+	  (*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline);
       }
     }
   }

@@ -25,228 +25,289 @@
 #include "KIllustrator_shell.h"
 #include "KIllustrator_shell.moc"
 
-#include <op_app.h>
+#include "KIllustrator_view.h"
+
+#include <kfiledialog.h>
 #include <qmsgbox.h>
 
-#include <utils.h>
+list<KIllustratorShell*>* KIllustratorShell::s_lstShells = 0L;
 
 KIllustratorShell::KIllustratorShell () {
-  setWidget ((KTopLevelWidget *) this);
+  m_pDoc = 0L;
+  m_pView = 0L;
+
+  if (s_lstShells == 0L)
+    s_lstShells = new list<KIllustratorShell*>;
+
+  s_lstShells->push_back (this);
 }
 
 KIllustratorShell::~KIllustratorShell () {
   cleanUp ();
+  s_lstShells->remove (this);
+}
+
+bool KIllustratorShell::isModified () {
+  return (m_pDoc != 0L ? m_pDoc->isModified () : false);
+}
+
+void KIllustratorShell::cleanUp () {
+  releaseDocument ();
+  KoMainWindow::cleanUp ();
 }
 
 void KIllustratorShell::setDocument (KIllustratorDocument* doc) {
-  m_rDoc = OPParts::Document::_duplicate (doc);
-  
-  m_vView = doc->createView ();
-  m_vView->setPartShell (this);
-  setRootPart (m_vView);
-}
+  if (m_pDoc)
+    releaseDocument ();
 
-bool KIllustratorShell::openDocument (const char* filename) {
-  return false;
-}
+  m_pDoc = doc;
+  m_pDoc->_ref ();
+  m_pView = doc->createKIllustratorView ();
+  m_pView->incRef ();
+  m_pView->setMode (KOffice::View::RootMode);
+  m_pView->setMainWindow (interface ());
 
-bool KIllustratorShell::saveDocument (const char* filename, const char* fmt) {
-  return false;
-}
+  setRootPart (m_pView->id ());
+  interface ()->setActivePart (m_pView->id ());
 
-void KIllustratorShell::enableMenuBar () {
-  PartShell_impl::enableMenuBar ();
-
-  m_rMenuBar = m_pMenuBarFactory->createMenuBar (this);
-  m_idMenuFile = m_rMenuBar->insertMenu (CORBA::string_dup (i18n ("&File")));
-  
-  m_idMenuFile_New = 
-    m_rMenuBar->insertItem (CORBA::string_dup (i18n ("&New...")), 
-			    m_idMenuFile, this, CORBA::string_dup ("fileNew"));
-  m_idMenuFile_Open = 
-    m_rMenuBar->insertItem (CORBA::string_dup (i18n ("&Open...")), 
-			    m_idMenuFile, this, 
-			    CORBA::string_dup ("fileOpen"));
-  m_rMenuBar->insertSeparator (m_idMenuFile);
-  m_idMenuFile_Save = 
-    m_rMenuBar->insertItem (CORBA::string_dup (i18n ("&Save")), 
-			    m_idMenuFile, this, 
-			    CORBA::string_dup ("fileSave"));
-  m_idMenuFile_SaveAs = 
-    m_rMenuBar->insertItem (CORBA::string_dup (i18n ("S&ave as...")), 
-			    m_idMenuFile, this, 
-			    CORBA::string_dup ("fileSaveAs"));
-  m_idMenuFile_Close = 
-    m_rMenuBar->insertItem (CORBA::string_dup (i18n ("&Close")), 
-			    m_idMenuFile, this, 
-			    CORBA::string_dup ("fileClose"));
-  m_rMenuBar->insertSeparator (m_idMenuFile);
-  m_idMenuFile_Exit = 
-    m_rMenuBar->insertItem (CORBA::string_dup (i18n ("E&xit")), 
-			    m_idMenuFile, this, 
-			    CORBA::string_dup ("fileExit"));
-
-  CORBA::Long id = m_rMenuBar->helpMenuId ();
-  m_idMenuHelp_About = 
-    m_rMenuBar->insertItem (CORBA::string_dup (i18n ("About")), 
-			     id, this, 
-			     CORBA::string_dup ("helpAbout"));
-  fillMenuBar ();
-}
-
-void KIllustratorShell::enableToolBars () {
-  PartShell_impl::enableToolBars ();
-
-  m_rToolBarFile = 
-    m_pToolBarFactory->createToolBar (this, CORBA::string_dup ("File"));
-  m_rToolBarFile->setFileToolBar (true);
-
-  QString tmp = kapp->kde_toolbardir ().copy ();
-  tmp += "/filenew.xpm";
-  QString pix = loadPixmap (tmp);
-  m_idButtonFile_Open = 
-      m_rToolBarFile->insertButton (CORBA::string_dup (pix), 
-				    CORBA::string_dup (i18n ("New")),
-				    this, CORBA::string_dup ("fileNew" ));
-
-  tmp = kapp->kde_toolbardir ().copy ();
-  tmp += "/fileopen.xpm";
-  pix = loadPixmap (tmp);
-  m_idButtonFile_Open = 
-    m_rToolBarFile->insertButton (CORBA::string_dup (pix), 
-				  CORBA::string_dup (i18n ("Open")),
-				  this, CORBA::string_dup ("fileOpen" ));
-  
-  tmp = kapp->kde_toolbardir ().copy ();
-  tmp += "/filefloppy.xpm";
-  pix = loadPixmap (tmp);
-  m_idButtonFile_Save = 
-    m_rToolBarFile->insertButton (CORBA::string_dup (pix), 
-				  CORBA::string_dup (i18n ("Save")),
-				  this, CORBA::string_dup ("fileSave"));
-  m_rToolBarFile->setItemEnabled (m_idButtonFile_Save, false);
-  
-  tmp = kapp->kde_toolbardir ().copy ();
-  tmp += "/fileprint.xpm";
-  pix = loadPixmap (tmp);
-  m_idButtonFile_Print = 
-    m_rToolBarFile->insertButton (CORBA::string_dup (pix), 
-				  CORBA::string_dup (i18n ("Print")),
-				  this, CORBA::string_dup ("filePrint"));
-  m_rToolBarFile->setItemEnabled (m_idButtonFile_Print, false);
-    
-  m_rToolBarFile->insertSeparator ();
-
-  tmp = kapp->kde_toolbardir ().copy ();
-  tmp += "/editcopy.xpm";
-  pix = loadPixmap (tmp);
-  m_idButtonEdit_Copy = 
-    m_rToolBarFile->insertButton (CORBA::string_dup (pix), 
-				  CORBA::string_dup (i18n ("Copy")),
-				  this, CORBA::string_dup ("editCopy"));
-  m_rToolBarFile->setItemEnabled (m_idButtonEdit_Copy, false);
-    
-  tmp = kapp->kde_toolbardir ().copy ();
-  tmp += "/editpaste.xpm";
-  pix = loadPixmap (tmp);
-  m_idButtonEdit_Paste = 
-    m_rToolBarFile->insertButton (CORBA::string_dup (pix), 
-				  CORBA::string_dup (i18n ("Paste")),
-				  this, CORBA::string_dup ("editPaste"));
-  m_rToolBarFile->setItemEnabled (m_idButtonEdit_Paste, false);
-    
-  tmp = kapp->kde_toolbardir ().copy ();
-  tmp += "/editcut.xpm";
-  pix = loadPixmap (tmp);
-  m_idButtonEdit_Cut = 
-    m_rToolBarFile->insertButton (CORBA::string_dup (pix), 
-				  CORBA::string_dup (i18n ("Cut")),
-				  this, CORBA::string_dup ("editCut"));
-  m_rToolBarFile->setItemEnabled (m_idButtonEdit_Cut, false);
-    
-  m_rToolBarFile->insertSeparator ();
-
-  m_idComboFile_Zoom =
-    m_rToolBarFile->insertCombo (true, 
-				 CORBA::string_dup (i18n ("Zoom Factor")),
-				 60, this, 
-				 CORBA::string_dup ("setZoomFactor"));
-  float zFactors [] = { 0.5, 1.0, 1.5, 2.0, 4.0 };
-  for (int i = 0; i < 5; i++) {
-    char buf[10];
-    sprintf (buf, "%3.0f%%", zFactors[i] * 100);
-    m_rToolBarFile->insertComboItem (m_idComboFile_Zoom, 
-				     CORBA::string_dup (buf), -1);
+  if (m_pFileMenu) {
+    m_pFileMenu->setItemEnabled (m_idMenuFile_Save, true);
+    m_pFileMenu->setItemEnabled (m_idMenuFile_SaveAs, true);
+    m_pFileMenu->setItemEnabled (m_idMenuFile_Close, true);
+    m_pFileMenu->setItemEnabled (m_idMenuFile_Quit, true);
   }
-  m_rToolBarFile->setCurrentComboItem (m_idComboFile_Zoom, 1);
-
-  m_rToolBarFile->setItemEnabled (m_idComboFile_Zoom, false);
+  
+//  opToolBar ()->setItemEnabled (TOOLBAR_PRINT, true);
+//  opToolBar ()->setItemEnabled (TOOLBAR_SAVE, true);
 }
 
-void KIllustratorShell::enableButtons (bool enable) {
-  m_rToolBarFile->setItemEnabled (m_idButtonEdit_Copy, enable);
-  m_rToolBarFile->setItemEnabled (m_idButtonEdit_Paste, enable);
-  m_rToolBarFile->setItemEnabled (m_idButtonEdit_Cut, enable);
-  m_rToolBarFile->setItemEnabled (m_idComboFile_Zoom, enable);
-}
-
-void KIllustratorShell::fileQuit () {
-  opapp_orb->shutdown (true);
-//  exit (0);
-}
-
-void KIllustratorShell::fileNew () {
-  m_rDoc = 0L;
-  m_rDoc = OPParts::Document::_duplicate (new KIllustratorDocument);
-  if (! m_rDoc->init ()) {
-    QMessageBox::critical (this, i18n ("KIllustrator Error"),
-			   i18n ("Could not initialize document !"),
-			   i18n ("OK"));
-    return;
+bool KIllustratorShell::newDocument () {
+  if (m_pDoc) {
+    KIllustratorShell *shell = new KIllustratorShell ();
+    shell->show ();
+    shell->newDocument ();
+    return true;
+  }
+  
+  m_pDoc = new KIllustratorDocument ();
+  if (! m_pDoc->init ()) {
+    cerr << "ERROR: Could not initialize document" << endl;
+    return false;
   }
 
-  m_vView = m_rDoc->createView ();
-  m_vView->setPartShell (this);
-  setRootPart (m_vView);
-  enableButtons (true);
-}
+  cout << "create KIllustratorView ..." << endl;
+  m_pView = m_pDoc->createKIllustratorView ();
+  m_pView->incRef ();
+  m_pView->setMode (KOffice::View::RootMode);
+  m_pView->setMainWindow (interface ());
+  cout << "setMainWindow done ..." << endl;
 
-void KIllustratorShell::fileOpen () {
-}
-
-void KIllustratorShell::fileSave () {
-}
-
-void KIllustratorShell::fileSaveAs () {
-}
-
-void KIllustratorShell::fileClose () {
-}
-
-void KIllustratorShell::filePrint () {
-}
-
-void KIllustratorShell::editCut () {
-}
-
-void KIllustratorShell::editCopy () {
-}
-
-void KIllustratorShell::editPaste () {
-}
-
-void KIllustratorShell::helpAbout () {
-}
+  setRootPart (m_pView->id());
+  interface ()->setActivePart (m_pView->id ());
+  cout << "setActivePart done ..." << endl;
   
-void KIllustratorShell::cleanUp () {
-  if (m_bIsClean)
+  if (m_pFileMenu) {
+    m_pFileMenu->setItemEnabled (m_idMenuFile_Save, true);
+    m_pFileMenu->setItemEnabled (m_idMenuFile_SaveAs, true);
+    m_pFileMenu->setItemEnabled (m_idMenuFile_Close, true);
+    m_pFileMenu->setItemEnabled (m_idMenuFile_Quit, true);
+  }
+  
+  //  opToolBar ()->setItemEnabled (TOOLBAR_PRINT, true);
+  //  opToolBar ()->setItemEnabled (TOOLBAR_SAVE, true);
+
+  return true;
+}
+
+bool KIllustratorShell::openDocument (const char* url, const char* fmt) {
+  if (fmt == 0L || *fmt == '\0')
+    fmt = "application/x-killustrator";
+  
+  if (m_pDoc && m_pDoc->objectCount () == 0)
+    releaseDocument ();
+  else if (m_pDoc && m_pDoc->objectCount  ()> 0) {
+    KIllustratorShell *shell = new KIllustratorShell ();
+    shell->show ();
+    return shell->openDocument (url, fmt);
+  }
+  
+  m_pDoc = new KIllustratorDocument ();
+  if (! m_pDoc->loadFromURL (url, fmt))
+    return false;
+
+  m_pView = m_pDoc->createKIllustratorView ();
+  m_pView->incRef ();
+  m_pView->setMode (KOffice::View::RootMode);
+  m_pView->setMainWindow (interface ());
+
+  setRootPart (m_pView->id());
+  interface ()->setActivePart (m_pView->id ());
+  
+  if (m_pFileMenu) {
+    m_pFileMenu->setItemEnabled (m_idMenuFile_Save, true);
+    m_pFileMenu->setItemEnabled (m_idMenuFile_SaveAs, true);
+    m_pFileMenu->setItemEnabled (m_idMenuFile_Close, true);
+    m_pFileMenu->setItemEnabled (m_idMenuFile_Quit, true);
+  }
+  
+  //  opToolBar ()->setItemEnabled (TOOLBAR_PRINT, true);
+  //  opToolBar ()->setItemEnabled (TOOLBAR_SAVE, true);
+  m_pDoc->setURL (url);
+  
+  return true;
+}
+
+bool KIllustratorShell::saveDocument (const char* _url, const char* fmt) {
+  assert (m_pDoc != 0L);
+
+  CORBA::String_var url;
+  if (_url == 0L || *_url == '\0') {
+    url = m_pDoc->url ();
+    _url = url.in ();
+  }
+  
+  QString file;
+  if (_url == 0L || *_url == '\0') {
+    file = KFileDialog::getSaveFileName (getenv ("HOME"));
+
+    if (file.isNull ())
+      return false;
+    _url = file.data ();
+    m_pDoc->setURL (_url);
+  }
+  
+  if (fmt == 0L || *fmt == '\0')
+    fmt = "application/x-killustrator";
+  
+  return m_pDoc->saveToURL (_url, fmt);
+}
+
+bool KIllustratorShell::closeDocument () {
+  if (isModified ()) {
+    if (! requestClose ())
+      return false;
+  }
+
+  return true;
+}
+
+bool KIllustratorShell::closeAllDocuments () {
+  list<KIllustratorShell*>::iterator i;
+  for (i = s_lstShells->begin (); i != s_lstShells->end (); i++) {
+    if ((*i)->isModified ()) {
+      if (! (*i)->requestClose ())
+	return false;
+    }
+  }
+  return true;
+}
+
+bool KIllustratorShell::printDlg () {
+  assert (m_pView != 0L);
+
+  return m_pView->printDlg ();
+}
+
+void KIllustratorShell::slotFileNew () {
+  if (! newDocument ())
+    QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+			   i18n ("Could not create new document"), 
+			   i18n ("Ok"));
+}
+
+void KIllustratorShell::slotFileOpen () {
+  QString file = KFileDialog::getOpenFileName (getenv ("HOME"));
+
+  if (file.isNull ())
+    return;
+  
+  if (! openDocument (file, "")) {
+    QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+			   i18n ("Could not open file"), i18n ("OK"));
+  }
+}
+
+void KIllustratorShell::slotFileSave () {
+  assert (m_pDoc != 0L);
+  
+  CORBA::String_var url = m_pDoc->url ();
+  if (strlen (url.in ()) == 0) {
+    slotFileSaveAs ();
+    return;
+  }
+  
+  if (! saveDocument (url.in (), "")) {
+    QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+			   i18n ("Could not save file"), i18n ("OK"));
+  }
+}
+
+void KIllustratorShell::slotFileSaveAs () {
+  if (! saveDocument ("", "")) {
+    QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+			   i18n ("Could not save file"), i18n ("OK"));
+  }
+}
+
+void KIllustratorShell::slotFileClose () {
+  if (documentCount () <= 1) {
+    slotFileQuit ();
+    return;
+  }
+  
+  if (isModified () && ! requestClose ())
+    return;
+  
+  delete this;
+}
+
+void KIllustratorShell::slotFilePrint () {
+  assert (m_pView != 0L);
+  m_pView->printDlg ();
+}
+
+void KIllustratorShell::slotFileQuit () {
+  if (! closeAllDocuments ())
     return;
 
-  m_vView = 0L;
-  PartShell_impl::cleanUp ();
-  m_rDoc = 0L;
+  delete this;
+  kapp->exit ();
 }
 
-void KIllustratorShell::setZoomFactor (const char* factor) {
+void KIllustratorShell::slotHelpAbout () {
+}
+
+int KIllustratorShell::documentCount () {
+  return s_lstShells->size ();
+}
+
+bool KIllustratorShell::requestClose () {
+  int result = 
+    QMessageBox::warning (0L, i18n ("Warning"), 
+			  i18n ("The document has been modified\nDo you want to save it ?" ),
+			  i18n ("Yes"), i18n ("No"), i18n ("Cancel"));
+  
+  if (result == 0)
+    return saveDocument ("", "");
+  
+  if (result == 1)
+    return true;
+  
+  return false;
 }
   
+void KIllustratorShell::releaseDocument () {
+  int views = 0;
+  if (m_pDoc)
+    views = m_pDoc->viewCount();
+  setRootPart (0);
+  interface ()->setActivePart (0);
+  if (m_pView)
+    m_pView->decRef ();
+  if (m_pDoc && views <= 1)
+    m_pDoc->cleanUp ();
+  if (m_pDoc)
+    CORBA::release (m_pDoc);
+  m_pView = 0L;
+  m_pDoc = 0L;
+}

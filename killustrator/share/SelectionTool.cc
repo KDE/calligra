@@ -33,6 +33,7 @@
 #include "TranslateCmd.h"
 #include "ScaleCmd.h"
 #include "RotateCmd.h"
+#include "ShearCmd.h"
 #include "CommandHistory.h"
 #include <kapp.h>
 #include <klocale.h>
@@ -131,6 +132,13 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
     canvas->snapPositionToGrid (xpos, ypos);
     rotate (doc, xpos - firstpos.x (), ypos - firstpos.y (), 
 	    me->x (), me->y (), true);
+  }
+  else if (state == S_Shear) {
+    state = S_RotateSelect;
+    mode = Handle::HMode_Rotate;
+    canvas->snapPositionToGrid (xpos, ypos);
+    shear (doc, oldmask, xpos - firstpos.x (), ypos - firstpos.y (),
+	   true);
   }
   /**********
    * S_MoveRotCenter
@@ -266,6 +274,9 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
       case S_Rotate:
 	rotate (doc, xoff, yoff, me->x (), me->y ());
 	break;
+      case S_Shear:
+	shear (doc, oldmask, xoff, yoff);
+	break;
       default:
 	break;
       }
@@ -382,8 +393,10 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
       else if (hmask == Handle::HPos_Center) {
 	state = S_MoveRotCenter;
       }
-      else
+      else {
 	state = S_Shear;
+	rotCenter = doc->handle().rotCenter ();
+      }
     }
     else
       state = S_Intermediate2;
@@ -499,15 +512,15 @@ void SelectionTool::scale (GDocument* doc, int mask, int dx, int dy,
   float xoff = r.x (), yoff = r.y ();
   float xback = xoff, yback = yoff;
   
-  if (mask & Handle_Right)
+  if (mask & Handle::HPos_Right)
     sx = (r.width () + dx) / r.width ();
-  if (mask & Handle_Bottom) 
+  if (mask & Handle::HPos_Bottom) 
     sy = (r.height () + dy) / r.height ();
-  if (mask & Handle_Left) {
+  if (mask & Handle::HPos_Left) {
     sx = (r.width () - dx) / r.width ();
     xback = r.x () + dx;
   }
-  if (mask & Handle_Top) {
+  if (mask & Handle::HPos_Top) {
     sy = (r.height () - dy) / r.height ();
     yback = r.y () + dy;
   }
@@ -524,6 +537,40 @@ void SelectionTool::scale (GDocument* doc, int mask, int dx, int dy,
     m1.translate (-xoff, -yoff);
     m2.scale (sx, sy);
     m3.translate (xback, yback);
+    
+    for (list<GObject*>::iterator it = doc->getSelection ().begin (); 
+	 it != doc->getSelection ().end (); it++) {
+      (*it)->setWorkInProgress (true);
+      (*it)->initTmpMatrix ();
+      
+      (*it)->ttransform (m1);
+      (*it)->ttransform (m2);
+      (*it)->ttransform (m3, true);
+    }
+  }
+}
+
+void SelectionTool::shear (GDocument* doc, int mask, int dx, int dy, 
+			   bool permanent) {
+  Rect& r = origbox;
+  float sx = 0.0, sy = 0.0;
+  if (mask == Handle::HPos_Top || mask == Handle::HPos_Bottom)
+    sx = -dx / r.width ();
+  else
+    sy = dy / r.height ();
+
+  if (permanent) {
+    for_each (doc->getSelection ().begin (), doc->getSelection ().end (), 
+	      finalize_obj ());
+    ShearCmd *cmd = new ShearCmd (doc, rotCenter, sx, sy);
+    history->addCommand (cmd, true);
+  }
+  else {
+    QWMatrix m1, m2, m3;
+
+    m1.translate (-rotCenter.x (), -rotCenter.y ());
+    m2.shear (sx, sy);
+    m3.translate (rotCenter.x (), rotCenter.y ());
     
     for (list<GObject*>::iterator it = doc->getSelection ().begin (); 
 	 it != doc->getSelection ().end (); it++) {

@@ -124,7 +124,7 @@ const char* GPolyline::typeName () {
   return i18n ("Polyline");
 }
 
-void GPolyline::draw (Painter& p, bool withBasePoints) {
+void GPolyline::draw (Painter& p, bool withBasePoints, bool outline) {
   unsigned int i;
   QPen pen;
 

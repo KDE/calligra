@@ -307,9 +307,6 @@ bool GObject::contains (const Coord& p) {
   return box.contains (p);
 }
 
-void GObject::draw (Painter&, bool) {
-}
-
 void GObject::setLayer (GLayer* l) {
   layer = l;
 }

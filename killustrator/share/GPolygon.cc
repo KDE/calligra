@@ -164,7 +164,7 @@ bool GPolygon::isFilled () const {
   return fillInfo.fstyle != GObject::FillInfo::NoFill;
 }
 
-void GPolygon::draw (Painter& p, bool withBasePoints) {
+void GPolygon::draw (Painter& p, bool withBasePoints, bool outline) {
   unsigned int i, num;
 
   QPen pen;
@@ -174,7 +174,7 @@ void GPolygon::draw (Painter& p, bool withBasePoints) {
   p.setPen (pen);
   p.setWorldMatrix (tmpMatrix, true);
 
-  if (! workInProgress ()) {
+  if (! workInProgress () && !outline) {
     initBrush (brush);
     p.setBrush (brush);
     

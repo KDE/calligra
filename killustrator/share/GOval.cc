@@ -95,7 +95,7 @@ const char* GOval::typeName () {
     return i18n ("Ellipse");
 }
 
-void GOval::draw (Painter& p, bool withBasePoints) {
+void GOval::draw (Painter& p, bool withBasePoints, bool outline) {
   float alen = 0;
   QPen pen;
   QBrush brush;
@@ -105,7 +105,7 @@ void GOval::draw (Painter& p, bool withBasePoints) {
   p.setPen (pen);
   p.setWorldMatrix (tmpMatrix, true);
 
-  if (! workInProgress ()) {
+  if (! workInProgress () && ! outline) {
     initBrush (brush);
     p.setBrush (brush);
     if (gradientFill () && 

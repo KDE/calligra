@@ -25,9 +25,7 @@
 #ifndef KIllustrator_main_h_
 #define KIllustrator_main_h_
 
-#include <op_app.h>
-#include <part_shell_impl.h>
-#include <parts.h>
+#include <opApplication.h>
 
 #include "KIllustrator_doc.h"
 

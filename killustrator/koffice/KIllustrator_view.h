@@ -25,11 +25,11 @@
 #ifndef KIllustrator_view_h_
 #define KIllustrator_view_h_
 
-#include <part_frame_impl.h>
-#include <view_impl.h>
-#include <document_impl.h>
-#include <menu_impl.h>
-#include <toolbar_impl.h>
+#include <koFrame.h>
+#include <koView.h>
+#include <opMenu.h>
+#include <opToolBar.h>
+#include <openparts_ui.h>
 
 #include <qlist.h>
 #include <qlayout.h>
@@ -40,6 +40,7 @@
 #include "MainView.h"
 #include "CommandHistory.h"
 
+class KIlustratorView;
 class KIllustratorDocument;
 class Canvas;
 class GDocument;
@@ -49,12 +50,12 @@ class ToolController;
 class Canvas;
 class Ruler;
 
-class KIllustratorChildFrame : public PartFrame_impl {
+class KIllustratorFrame : public KoFrame {
   Q_OBJECT
 public:
-  KIllustratorChildFrame (KIllustratorView* view, KIllustratorChild* child);
+  KIllustratorFrame (KIllustratorView* view, KIllustratorChild* child);
   KIllustratorChild* child () { return m_pChild; }
-  KIllustratorView* view () { return m_pView; }
+  KIllustratorView* killustratorView () { return m_pView; }
 
 protected:
   KIllustratorChild *m_pChild;
@@ -62,7 +63,7 @@ protected:
 };
 
 class KIllustratorView : public QWidget, public MainView,
-			 virtual public View_impl,
+			 virtual public KoViewIf,
 			 virtual public KIllustrator::View_skel {
   Q_OBJECT
 public:
@@ -79,8 +80,8 @@ public:
 
   // --- IDL ---
   void newView ();
-  void setMode (OPParts::Part::Mode mode);
-  void setFocus (CORBA::Boolean mode);
+  //  void setMode (OPParts::Part::Mode mode);
+  //  void setFocus (CORBA::Boolean mode);
   CORBA::Boolean printDlg ();
 
   void editUndo ();
@@ -121,12 +122,15 @@ public:
   void setFillColor (CORBA::Long id);
 
 protected:
+  void init ();
+  bool event (const char* _event, const CORBA::Any& _value);
+  bool mappingCreateMenubar (OpenPartsUI::MenuBar_ptr menubar);
+  bool mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr factory);
+
   CORBA::Long addToolButton (const char* pictname, const char* tooltip);
   void showTransformationDialog (int id);
 
-  void setupMenu ();
   void setupColorToolbar ();
-  void setupMainToolbar ();
   void setupToolsToolbar ();
   void setupCanvas ();
   void resizeEvent (QResizeEvent*);
@@ -136,38 +140,38 @@ protected slots:
   void showCurrentMode (const char* msg);
 
 protected:
-
-  OPParts::MenuBarFactory_var m_vMenuBarFactory;
-  OPParts::ToolBarFactory_var m_vToolBarFactory;
-
-  MenuBar_ref m_rMenuBar;
   /* Menu: Edit */
-  CORBA::Long m_idMenuEdit, m_idMenuEdit_Undo, m_idMenuEdit_Redo,
+  OpenPartsUI::Menu_var m_vMenuEdit;
+  CORBA::Long m_idMenuEdit_Undo, m_idMenuEdit_Redo,
     m_idMenuEdit_Cut, m_idMenuEdit_Copy, m_idMenuEdit_Paste, 
     m_idMenuEdit_Delete, m_idMenuEdit_SelectAll, 
     m_idMenuEdit_InsertObject, m_idMenuEdit_Properties;
   /* Menu: View */
-  CORBA::Long m_idMenuView, m_idMenuView_Outline, m_idMenuView_Draft,
+  OpenPartsUI::Menu_var m_vMenuView;
+  CORBA::Long m_idMenuView_Outline, 
     m_idMenuView_Normal, m_idMenuView_Ruler, m_idMenuView_Grid;
   /* Menu: Layout */
-  CORBA::Long m_idMenuLayout, m_idMenuLayout_InsertPage, 
+  OpenPartsUI::Menu_var m_vMenuLayout;
+  CORBA::Long m_idMenuLayout_InsertPage, 
     m_idMenuLayout_RemovePage, m_idMenuLayout_GotoPage, 
     m_idMenuLayout_PageLayout, m_idMenuLayout_Layers, 
     m_idMenuLayout_SetupGrid, m_idMenuLayout_AlignToGrid;
   /* Menu: Arrange */
-  CORBA::Long m_idMenuArrange, m_idMenuTransform, m_idMenuTransform_Position,
+  OpenPartsUI::Menu_var m_vMenuArrange;
+  OpenPartsUI::Menu_var m_vMenuTransform;
+  CORBA::Long m_idMenuTransform_Position,
     m_idMenuTransform_Dimension, m_idMenuTransform_Rotation, 
     m_idMenuTransform_Mirror, m_idMenuArrange_Align, 
     m_idMenuArrange_ToFront, m_idMenuArrange_ToBack, 
     m_idMenuArrange_1Forward, m_idMenuArrange_1Back, 
     m_idMenuArrange_Group, m_idMenuArrange_Ungroup;
   /* Menu: Extras */
-  CORBA::Long m_idMenuExtras;
+  OpenPartsUI::Menu_var m_vMenuExtras;
   /* Menu: Help */
-  CORBA::Long m_idMenuHelp_About;
+  OpenPartsUI::Menu_var m_vMenuHelp;
 
   /* Toolbar: Tools */
-  ToolBar_ref m_rToolBarTools;
+  OpenPartsUI::ToolBar_var m_vToolBarTools;
   CORBA::Long m_idSelectionTool;
   CORBA::Long m_idEditPointTool;
   CORBA::Long m_idFreeHandTool;
@@ -181,14 +185,14 @@ protected:
   CORBA::Long m_idActiveTool;
 
   /* Toolbar: Colors */
-  ToolBar_ref m_rToolBarColors;
+  OpenPartsUI::ToolBar_var m_vToolBarColors;
   CORBA::Long m_idFirstColor;
   QVector<QColor> colorPalette;
 
-  Part_impl *m_pPart;
   KIllustratorDocument *m_pDoc;
 
-  QList<KIllustratorChildFrame> m_lstFrames;
+  QList<KIllustratorFrame> m_lstFrames;
+  QArray<float> zFactors;
 
   bool m_bShowGUI;
   bool m_bShowRulers;

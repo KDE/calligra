@@ -303,7 +303,8 @@ public:
    * @param withBasePoints If true, draw the base points of the 
    *                       object.
    */
-  virtual void draw (Painter& p, bool withBasePoints = false);
+  virtual void draw (Painter& p, bool withBasePoints = false,
+		     bool outline = false) {}
 
   /**
    * Test, if the object contains the given point.

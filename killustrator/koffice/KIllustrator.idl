@@ -1,28 +1,12 @@
 #ifndef KIllustrator_idl_
 #define KIllustrator_idl_
 
-#include <parts.idl>
-
+#include <openparts.idl>
+#include <koffice.idl>
+#include <openparts_ui.idl>
+ 
 module KIllustrator {
-  interface Shell : OPParts::PartShell {
-    oneway void fileNew ();
-    oneway void fileOpen ();
-    oneway void fileClose ();
-    oneway void fileQuit ();
-    oneway void fileSave ();	
-    oneway void fileSaveAs ();
-    oneway void filePrint ();
-
-    oneway void editCut ();
-    oneway void editCopy ();
-    oneway void editPaste ();
-
-    oneway void setZoomFactor (in string size);
-
-    oneway void helpAbout();
-  };
-
-  interface View : OPParts::View {
+  interface View : KOffice::View {
     oneway void editUndo ();
     oneway void editRedo ();
     oneway void editCut ();
@@ -61,10 +45,7 @@ module KIllustrator {
     oneway void setFillColor (in long id);
   };
   
-  interface Document : OPParts::Document {
-  };
-  
-  interface Factory : OPParts::Factory {
+  interface Document : KOffice::Document, KOffice::Print {
   };
 };
 

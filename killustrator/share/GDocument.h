@@ -65,9 +65,11 @@ public:
   void setModified (bool flag = true);
   bool isModified () const { return modifyFlag; }
 
-  void drawContents (Painter& p, bool withBasePoints = false);
+  void drawContents (Painter& p, bool withBasePoints = false, 
+		     bool outline = false);
   void drawContentsInRegion (Painter& p, const Rect& r,
-			     bool withBasePoints = false);
+			     bool withBasePoints = false, 
+			     bool outline = false);
 
   void invalidateClipRegions ();
 

@@ -25,9 +25,12 @@
 #ifndef KIllustrator_doc_h_
 #define KIllustrator_doc_h_
 
-#include <part_frame_impl.h>
-#include <document_impl.h>
+#include <koFrame.h>
 #include <koDocument.h>
+#include <koView.h>
+#include <koPrintExt.h>
+#include <koStore.h>
+#include <koIMR.h>
 
 #include "KIllustrator.h"
 #include "GDocument.h"
@@ -41,7 +44,7 @@ class KIllustratorView;
 class KIllustratorChild : public KoDocumentChild {
 public:
   KIllustratorChild (KIllustratorDocument* killu, const QRect& rect, 
-		     OPParts::Document_ptr doc);
+		     KOffice::Document_ptr doc);
   ~KIllustratorChild ();
 
   KIllustratorDocument* parent () { return m_pKilluDoc; }
@@ -51,6 +54,7 @@ protected:
 
 class KIllustratorDocument : public GDocument,
 			virtual public KoDocument, 
+			virtual public KoPrintExt, 
 			virtual public KIllustrator::Document_skel {
   Q_OBJECT
 public:
@@ -60,23 +64,22 @@ public:
   // --- C++ ---
   // Overloaded methods from KoDocument
 
-  bool save (ostream& os);
-  bool load (istream &, bool _randomaccess = false);
-  bool loadChildren (OPParts::MimeMultipartDict_ptr dict);
+  
+  bool save (ostream& os, const char *fmt);
+  bool load (istream& is, KOStore::Store_ptr store);
+  bool loadChildren (KOStore::Store_ptr store);
   bool hasToWriteMultipart ();
 
   void cleanUp ();
 
   // --- IDL ---
-  // Overloaded methods from OPParts::Document
-  //
   virtual CORBA::Boolean init ();
 
   // create a view
-  virtual OPParts::View_ptr createView ();
+  virtual OpenParts::View_ptr createView ();
 
   // get list of views
-  virtual void viewList (OPParts::Document::ViewList*& list_ptr);
+  virtual void viewList (OpenParts::Document::ViewList*& list_ptr);
 
   void removeView (KIllustratorView* view);
 
@@ -85,6 +88,11 @@ public:
 
   // ask, if document is modified
   virtual CORBA::Boolean isModified ();
+
+  virtual void draw (QPaintDevice* dev, CORBA::Long w, CORBA::Long h);
+
+  virtual int viewCount ();
+  virtual KIllustratorView* createKIllustratorView ();
 
 protected:
   QList<KIllustratorView> m_lstViews;

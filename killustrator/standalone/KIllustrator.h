@@ -75,7 +75,9 @@ class LayerDialog;
 #define ID_EDIT_SELECT_ALL     206
 #define ID_EDIT_PROPERTIES     207
 
-#define ID_VIEW_LAYERS         301
+#define ID_VIEW_OUTLINE        301
+#define ID_VIEW_NORMAL         302
+#define ID_VIEW_LAYERS         305
 #define ID_VIEW_RULER          310
 #define ID_VIEW_GRID           311
 

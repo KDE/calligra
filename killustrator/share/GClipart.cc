@@ -74,16 +74,22 @@ const char* GClipart::typeName () {
   return i18n ("Clipart object");
 }
 
-void GClipart::draw (Painter& p, bool withBasePoints) {
+void GClipart::draw (Painter& p, bool withBasePoints, bool outline) {
   p.save ();
-  QRect oldWin = p.window ();
-  QRect vPort = p.viewport ();
-  p.setViewport ((int) tmpMatrix.dx (), (int) tmpMatrix.dy (), 
-		 (int) (width * tmpMatrix.m11 ()),
-		 (int) (height * tmpMatrix.m22 ()));
-  p.drawPicture (*pic);
-  p.setWindow (oldWin);
-  p.setViewport (vPort);
+  if (outline) {
+    p.setPen (black);
+    p.drawRect (box.x (), box.y (), box.width (), box.height ());
+  }
+  else {
+    QRect oldWin = p.window ();
+    QRect vPort = p.viewport ();
+    p.setViewport ((int) tmpMatrix.dx (), (int) tmpMatrix.dy (), 
+		   (int) (width * tmpMatrix.m11 ()),
+		   (int) (height * tmpMatrix.m22 ()));
+    p.drawPicture (*pic);
+    p.setWindow (oldWin);
+    p.setViewport (vPort);
+  }
   p.restore ();
 }
 

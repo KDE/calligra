@@ -28,13 +28,16 @@
 #include "KIllustrator_shell.h"
 
 #include <koScanParts.h>
-#include <factory_impl.h>
+#include <koFactory.h>
+#include <koDocument.h>
+#include <opAutoLoader.h>
+#include <koIMR.h>
 
 bool withGUI = true;
 
-FACTORY(KIllustratorDocument, KIllustrator::Factory_skel, KIllustratorFactory)
+KOFFICE_DOCUMENT_FACTORY(KIllustratorDocument, KIllustratorFactory)
 
-typedef AutoLoader<KIllustratorFactory> KIllustratorAutoLoader;
+typedef OPAutoLoader<KIllustratorFactory> KIllustratorAutoLoader;
 
 KIllustratorOPApp::KIllustratorOPApp (int argc, char** argv) :
     OPApplication (argc, argv, "killustrator") 
@@ -46,17 +49,14 @@ KIllustratorOPApp::~KIllustratorOPApp () {
 }
 
 void KIllustratorOPApp::start () {
-  koScanParts ();
-
   if (withGUI) {
+    imr_init ();
+    koScanParts ();
     KIllustratorShell* m_pShell;
 
     m_pShell = new KIllustratorShell;
-    m_pShell->enableMenuBar ();
-    m_pShell->PartShell_impl::enableStatusBar ();
-    m_pShell->enableToolBars ();
-
     m_pShell->show ();
+    m_pShell->newDocument ();
   }
 }
 
@@ -67,7 +67,7 @@ int main (int argc, char** argv) {
       withGUI = false;
   }
 
-  KIllustratorAutoLoader loader ("IDL:KIllustrator/Factory:1.0");
+  KIllustratorAutoLoader loader ("IDL:KOffice/DocumentFactory:1.0");
   KIllustratorOPApp app (argc, argv);
   app.exec ();
 

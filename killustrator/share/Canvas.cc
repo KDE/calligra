@@ -71,6 +71,7 @@ Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
 
   dragging = false;
   ensureVisibilityFlag = false;
+  outlineMode = false;
 }
 
 Canvas::~Canvas () {
@@ -251,6 +252,13 @@ void Canvas::showBasePoints (bool flag) {
   updateView ();
 }
 
+void Canvas::setOutlineMode (bool flag) {
+  if (outlineMode != flag) {
+    outlineMode = flag;
+    updateView ();
+  }
+}
+
 float Canvas::scaleFactor () const {
   return resolution * zoomFactor / 72.0;
 }
@@ -274,7 +282,7 @@ void Canvas::updateView () {
     drawGrid (p);
 
   // next the document contents
-  document->drawContents (p, drawBasePoints);
+  document->drawContents (p, drawBasePoints, outlineMode);
 
   // and finally the handle
   if (! document->selectionIsEmpty ())
@@ -309,7 +317,7 @@ void Canvas::updateRegion (const Rect& r) {
     drawGrid (p);
 
   // next the document contents
-  document->drawContentsInRegion (p, r, drawBasePoints);
+  document->drawContentsInRegion (p, r, drawBasePoints, outlineMode);
 
   // and finally the handle
   if (! document->selectionIsEmpty ())

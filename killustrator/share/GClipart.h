@@ -49,7 +49,8 @@ public:
   GClipart (const GClipart& obj);
   ~GClipart () {}
   
-  virtual void draw (Painter& p, bool withBasePoints = false);
+  virtual void draw (Painter& p, bool withBasePoints = false,
+		     bool outline = false);
 
   virtual const char* typeName ();
 

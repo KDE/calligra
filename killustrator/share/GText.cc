@@ -114,7 +114,7 @@ const char* GText::typeName () {
   return i18n ("Text");
 }
 
-void GText::draw (Painter& p, bool) {
+void GText::draw (Painter& p, bool, bool) {
   QPen pen (outlineInfo.color, (uint) outlineInfo.width, 
             outlineInfo.style);
   p.save ();

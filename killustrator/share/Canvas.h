@@ -72,6 +72,7 @@ public:
   void zoomOut ();
 
   void showBasePoints (bool flag = true);
+  void setOutlineMode (bool flag);
 
   float scaleFactor () const;
 
@@ -123,6 +124,7 @@ private:
   bool dragging, ensureVisibilityFlag;
   int hGridDistance, vGridDistance;
   bool drawBasePoints;
+  bool outlineMode;
   static QArray<float> zoomFactors;
 };
 

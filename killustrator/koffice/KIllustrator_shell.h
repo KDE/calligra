@@ -25,68 +25,56 @@
 #ifndef KIllustrator_shell_h_
 #define KIllustrator_shell_h_
 
-#include <ktopwidget.h>
-
-#include <default_shell_impl.h>
-#include <document_impl.h>
+#include <koMainWindow.h>
 
 #include "KIllustrator.h"
 #include "KIllustrator_doc.h"
+#include "KIllustrator_view.h"
 
-class KIllustratorShell : public KTopLevelWidget,
-			  virtual public PartShell_impl,
-			  virtual KIllustrator::Shell_skel {
+#include <list>
+
+class KIllustratorShell : public KoMainWindow {
   Q_OBJECT
 public:
+  // C++
   KIllustratorShell ();
   ~KIllustratorShell ();
 
-  // set a document
+  // C++
+  virtual void cleanUp ();
   void setDocument (KIllustratorDocument* doc);
 
-  // open a document
-  bool openDocument (const char* filename);
+  // C++
+  virtual bool newDocument ();
+  virtual bool openDocument (const char* filename, const char* fmt);
+  virtual bool saveDocument (const char* filename, const char* fmt);
+  virtual bool closeDocument ();
+  virtual bool closeAllDocuments ();
 
-  // save the document
-  bool saveDocument (const char* filename, const char* fmt);
-
-  void enableMenuBar ();
-  void enableToolBars ();
-
-  void fileNew ();
-  void fileOpen ();
-  void fileSave ();
-  void fileSaveAs ();
-  void fileClose ();
-  void fileQuit ();
-  void filePrint ();
-  void helpAbout ();
-
-  void editCut ();
-  void editCopy ();
-  void editPaste ();
-
-  void setZoomFactor (const char* factor);
-
-  void cleanUp ();
+protected slots:
+  void slotFileNew ();
+  void slotFileOpen ();
+  void slotFileSave ();
+  void slotFileSaveAs ();
+  void slotFilePrint ();
+  void slotFileClose ();
+  void slotFileQuit ();
+  void slotHelpAbout ();
 
 protected:
-  void enableButtons (bool enable);
+  // C++
+  virtual KoDocument* document () { return m_pDoc; }
+  virtual KoViewIf* view () { return m_pView; }
+  void releaseDocument ();
+  virtual bool printDlg ();
+  int documentCount ();
+  bool requestClose ();
+  bool isModified ();
 
-  Document_ref m_rDoc;
-  OPParts::View_var m_vView;
+  KIllustratorDocument* m_pDoc;
+  KIllustratorView* m_pView;
 
-  MenuBar_ref m_rMenuBar;
-  CORBA::Long m_idMenuFile, m_idMenuFile_New, m_idMenuFile_Open,
-    m_idMenuFile_Save, m_idMenuFile_SaveAs, m_idMenuFile_Close,
-    m_idMenuFile_Exit;
-  ToolBar_ref m_rToolBarFile;
-  CORBA::Long m_idButtonFile_Open, m_idButtonFile_Save, 
-    m_idButtonFile_Print;
-  CORBA::Long m_idButtonEdit_Copy, m_idButtonEdit_Cut, 
-    m_idButtonEdit_Paste;
-  CORBA::Long m_idComboFile_Zoom;
-  CORBA::Long m_idMenuHelp_About;
+  static list<KIllustratorShell*>* s_lstShells;
 };
 
 #endif

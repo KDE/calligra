@@ -60,7 +60,8 @@ public:
   GText (const GText& obj);
   ~GText () {}
   
-  virtual void draw (Painter& p, bool withBasePoints = false);
+  virtual void draw (Painter& p, bool withBasePoints = false,
+		     bool outline = false);
 
   void setOrigin (const Coord& p);
   const Coord& origin () const { return opos; }

@@ -493,6 +493,11 @@ void KIllustrator::initMenu () {
   edit->insertItem (i18n ("Pr&operties"), ID_EDIT_PROPERTIES);
   connect (edit, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
+  view->insertItem (i18n ("Outline"), ID_VIEW_OUTLINE);
+  view->setItemChecked (ID_VIEW_OUTLINE, false);
+  view->insertItem (i18n ("Normal"), ID_VIEW_NORMAL);
+  view->setItemChecked (ID_VIEW_NORMAL, true);
+  view->insertSeparator ();
   view->insertItem (i18n ("Layers..."), ID_VIEW_LAYERS);
   view->insertSeparator ();
   view->insertItem (i18n ("Show Ruler"), ID_VIEW_RULER);
@@ -704,6 +709,16 @@ void KIllustrator::menuCallback (int item) {
       if (result == 1)
 	PropertyEditor::edit (&cmdHistory, document);
     }
+    break;
+  case ID_VIEW_OUTLINE:
+    view->setItemChecked (ID_VIEW_OUTLINE, true);
+    view->setItemChecked (ID_VIEW_NORMAL, false);
+    canvas->setOutlineMode (true);
+    break;
+  case ID_VIEW_NORMAL:
+    view->setItemChecked (ID_VIEW_OUTLINE, false);
+    view->setItemChecked (ID_VIEW_NORMAL, true);
+    canvas->setOutlineMode (false);
     break;
   case ID_VIEW_LAYERS:
     if (!layerDialog) 

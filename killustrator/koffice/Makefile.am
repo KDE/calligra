@@ -4,9 +4,11 @@ LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 FILTER_LIBS = ../filter/libfilter.a
 XML_LIBS = ../xmlutils/libxml.a
 KSHARE_LIBS = ../share/libkillu.a
-LDADD = $(KSHARE_LIBS) $(XML_LIBS) $(FILTER_LIBS) $(KOFFICE_LIBS) \
-	 -lop -lkom -lkfile -lkfm -lkdeui -lkdecore \
-	$(LIBMICO) -lqt -lXext -lX11 $(LIBSOCKET)
+LDADD = $(KSHARE_LIBS) $(XML_LIBS) $(FILTER_LIBS) \
+../../lib/kofficeui/libkofficeui.la ../../lib/kofficecore/libkofficecore.la \
+../../lib/koml/libkoml.la -lkparts -lkpartsui -lkom -lkfile -lkfm -lkdeui \
+-lkdeutil -lkdecore -lqt $(LIBMICO) -lXext -lX11 $(LIBSOCKET) \
+../../lib/store/libkstore.la 
 
 ####### Files
 

@@ -47,6 +47,8 @@ public:
 	       bool permanent = false);
   void scale (GDocument* doc, int mask, int dx, int dy, 
 	      bool permanent = false);
+  void shear (GDocument* doc, int mask, int dx, int dy, 
+	      bool permanent = false);
   void translate (GDocument* doc, int dx, int dy, bool permanent = false);
   
   virtual bool consumesRMBEvents () { return false; }

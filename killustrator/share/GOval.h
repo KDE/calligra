@@ -45,7 +45,8 @@ public:
   GOval (const GOval& obj);
   ~GOval () {}
   
-  virtual void draw (Painter& p, bool withBasePoints = false);
+  virtual void draw (Painter& p, bool withBasePoints = false,
+		     bool outline = false);
   virtual bool contains (const Coord& p);
   
   void setStartPoint (const Coord& p);

@@ -28,9 +28,9 @@
 
 KIllustratorChild::KIllustratorChild (KIllustratorDocument* killu, 
 				      const QRect& rect, 
-				      OPParts::Document_ptr doc) {
+				      KOffice::Document_ptr doc) {
   m_pKilluDoc = killu;
-  m_rDoc = OPParts::Document::_duplicate (doc);
+  m_rDoc = KOffice::Document::_duplicate (doc);
   m_geometry = rect;
 }
 
@@ -48,7 +48,7 @@ KIllustratorDocument::~KIllustratorDocument () {
   cleanUp ();
 }
 
-bool KIllustratorDocument::save (ostream& os) {
+bool KIllustratorDocument::save (ostream& os, const char* fmt) {
   cout << "save KIllu to stream !!!!!!!!!!!!!!!" << endl;
   return GDocument::saveToXml (os);
 }
@@ -59,16 +59,16 @@ void KIllustratorDocument::cleanUp () {
   
   m_lstChildren.clear ();
   
-  Document_impl::cleanUp ();
+  KoDocument::cleanUp ();
 }
 
 
-bool KIllustratorDocument::load (istream& in, bool) {
+bool KIllustratorDocument::load (istream& in, KOStore::Store_ptr store) {
   cout << "load KIllu from stream !!!!!!!!!" << endl;
   return GDocument::readFromXml (in);
 }
 
-bool KIllustratorDocument::loadChildren (OPParts::MimeMultipartDict_ptr dict) {
+bool KIllustratorDocument::loadChildren (KOStore::Store_ptr store) {
   return true;
 }
 
@@ -80,28 +80,39 @@ CORBA::Boolean KIllustratorDocument::init () {
   return true;
 }
 
-OPParts::View_ptr KIllustratorDocument::createView () {
+KIllustratorView* KIllustratorDocument::createKIllustratorView () {
   KIllustratorView *view = new KIllustratorView (0L, 0L, this);
-  view->setGeometry (5000, 5000, 100, 100);
   view->QWidget::show ();
-  view->setDocument (this);
   m_lstViews.append (view);
-  return OPParts::View::_duplicate (view);
+  return view;
+}
+
+OpenParts::View_ptr KIllustratorDocument::createView () {
+  return OpenParts::View::_duplicate (createKIllustratorView ());
 }
 
 void KIllustratorDocument::removeView (KIllustratorView* view) {
   m_lstViews.removeRef (view);
 }
 
-void KIllustratorDocument::viewList (OPParts::Document::ViewList*& list_ptr) {
+int KIllustratorDocument::viewCount () {
+  return m_lstViews.count ();
+}
+
+void KIllustratorDocument::viewList (OpenParts::Document::ViewList*& list_ptr) {
   list_ptr->length (m_lstViews.count ());
   int i = 0;
   QListIterator<KIllustratorView> it (m_lstViews);
   for (; it.current (); ++it)
-    (*list_ptr)[i++] = OPParts::View::_duplicate (it.current ());
+    (*list_ptr)[i++] = OpenParts::View::_duplicate (it.current ());
 }
 
 CORBA::Boolean KIllustratorDocument::isModified () {
   return GDocument::isModified ();
 }
+
+void KIllustratorDocument::draw (QPaintDevice* dev, 
+				 CORBA::Long w, CORBA::Long h) {
+}
+
 

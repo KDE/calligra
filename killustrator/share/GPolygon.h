@@ -51,7 +51,8 @@ public:
 
   virtual void movePoint (int idx, float dx, float dy);
 
-  virtual void draw (Painter& p, bool withBasePoints = false);
+  virtual void draw (Painter& p, bool withBasePoints = false,
+		     bool outline = false);
   virtual bool contains (const Coord& p);
   virtual int getNeighbourPoint (const Coord& p);
 

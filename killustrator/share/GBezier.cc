@@ -212,7 +212,7 @@ const char* GBezier::typeName () {
   return i18n ("Bezier curve");
 }
 
-void GBezier::draw (Painter& p, bool withBasePoints) {
+void GBezier::draw (Painter& p, bool withBasePoints, bool outline) {
   QPen pen;
   QBrush brush;
 
@@ -236,7 +236,7 @@ void GBezier::draw (Painter& p, bool withBasePoints) {
 #else
   if (num > 3) {
     if (closed) {
-      if (! workInProgress ()) {
+      if (! workInProgress () && !outline) {
 	initBrush (brush);
 	p.setBrush (brush);
 
