@@ -510,6 +510,8 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
 {
     // Detect if text frame needs transparency painting, to save time if it's using SolidPattern
     // In theory this code should be in kwFrameSet, but currently only text frames obey m_backgroundColor.
+    if ( !theFrame )
+        return;
     bool transparent = theFrame->backgroundColor().style() != Qt::SolidPattern;
     drawUnderlyingFrames &= transparent;
     KWFrameSet::drawFrame( theFrame, painter, fcrect, crect, settingsFrame, cg, onlyChanged, resetChanged, edit, viewMode, drawUnderlyingFrames );

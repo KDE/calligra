@@ -1145,7 +1145,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGro
         }
     } else {
         // Text view mode
-        drawFrame( 0L /*frame*/, p, crect, crect, 0L /*settingsFrame*/, cg, onlyChanged, resetChanged, edit, viewMode, true );
+        drawFrame( m_doc->frameSet( 0 )->frame(0)/*0L*/ /*frame*/, p, crect, crect, 0L /*settingsFrame*/, cg, onlyChanged, resetChanged, edit, viewMode, true );
     }
 }
 
