@@ -196,6 +196,15 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
              this, SLOT( verticalSliderMoved( int ) ) );
 }
 
+KWPage::~KWPage() 
+{ 
+  delete oldFc;
+  delete formatFC;
+  delete fc; 
+  delete mm_menu;
+  delete frame_edit_menu;
+  selectAllFrames( FALSE ); 
+}
 /*================================================================*/
 unsigned int KWPage::ptLeftBorder()
 {
@@ -3493,7 +3502,7 @@ void KWPage::setupMenus()
     QString pixdir;
     QPixmap pixmap;
 
-    mm_menu = new QPopupMenu();
+    mm_menu = new QPopupMenu;
     CHECK_PTR( mm_menu );
     mm_edit = mm_menu->insertItem( i18n( "Edit" ), this, SLOT( mmEdit() ) );
     mm_edit_frame = mm_menu->insertItem( i18n( "Edit Frames" ), this, SLOT( mmEditFrame() ) );
@@ -3507,7 +3516,7 @@ void KWPage::setupMenus()
     mm_create_part = mm_menu->insertItem( i18n( "Create Part-Frame" ), this, SLOT( mmPart() ) );
     mm_menu->setCheckable( TRUE );
 
-    frame_edit_menu = new QPopupMenu();
+    frame_edit_menu = new QPopupMenu;
     CHECK_PTR( frame_edit_menu );
     frame_edit_menu->insertItem( i18n( "Properties..." ), this, SLOT( femProps() ) );
     frame_edit_menu->insertSeparator();
