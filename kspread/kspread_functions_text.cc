@@ -197,10 +197,14 @@ bool kspreadfunc_exact( KSContext& context )
 // Function: FIND
 bool kspreadfunc_find( KSContext& context )
 {
+    QString find_text, within_text;
+    int start_num = 1;
+
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-    if ( !KSUtil::checkArgumentsCount( context, 2, "find", true ) )
-      return false;
+    if ( !KSUtil::checkArgumentsCount( context, 2, "FIND", true ) &&
+         !KSUtil::checkArgumentsCount( context, 3, "FIND", true ) )
+           return false;
 
     if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
       return false;
@@ -208,10 +212,21 @@ bool kspreadfunc_find( KSContext& context )
     if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
       return false;
 
-    QString string_find = args[0]->stringValue();
-    QString string = args[1]->stringValue();
-    bool exist=(string.find(string_find)!=-1)?true:false;
-    context.setValue( new KSValue( exist ) );
+    if ( KSUtil::checkArgumentsCount( context, 3, "FIND", false ) )
+      if ( KSUtil::checkType( context, args[2], KSValue::IntType, false ) )
+         start_num = args[2]->intValue();
+
+    find_text = args[0]->stringValue();
+    within_text = args[1]->stringValue();
+
+    // conforms to Excel behaviour
+    if( start_num <= 0 ) return false;
+    if( start_num > within_text.length() ) return false;
+
+    int pos = within_text.find( find_text, start_num-1 );
+    if( pos < 0 ) return false;
+
+    context.setValue( new KSValue( pos + 1 ) );
     return true;
 }
 
