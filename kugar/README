@@ -1,0 +1,73 @@
+Kugar - A report creation tool for KDE.
+
+Current version: 1.0
+
+The current maintainer can be reached via Email: phil@river-bank.demon.co.uk
+or visit http://www.thekompany.com/projects/kugar
+
+The original author can be reached via Email: keidav@mutinybaysoftware.com
+or visit http://www.mutinybaysoftware.com.  The original name of the package
+was Metaphrast.
+
+
+ABOUT KUGAR:
+
+Current features:
+
+* Qt report viewer widget for previewing reports from within a Qt application
+  (WYSIWYG).
+* KDE report viewer utility.
+* KPart report viewer component - view reports from within Konqueror.
+* Report printing in Postscript.
+* Database/datasource neutral, data is supplied to the report engine in XML.
+* Open report definition files, report layout is stored in XML.
+* Report Header/Footer.
+* Page Header/Footer.
+* Detail Section.
+* Grand totals: count, sum, average, variance and standard deviation.
+* Report print progress and cancellation.
+* Report rendering progress and cancellation.
+* Complete implementation of printer setup options.
+* Additional formatting (negative numbers, currency, commas for numbers and
+  dates).
+
+
+DOCUMENTATION:
+
+The first draft of the user documentation can be found in ./docs.
+
+
+REQUIREMENTS:
+
+The following items must be installed prior to building Kugar:
+
+1. Qt version 2.2+		- http://www.troll.no
+2. KDE 1.91+			- http://www.kde.org
+
+
+BUILDING KUGAR:
+
+Basically:
+
+	./configure
+	make
+	make install
+
+See the INSTALL file for details.
+
+
+RUNNING A SAMPLE REPORT WITH KUGAR:
+
+There are two sample templates and matching datafiles in ./samples.
+
+The kugar program takes two commandline arguments:
+	-d <xml data file>
+	-r <xml report template URL>
+
+Example: kugar -d samples/sample1.kud -r samples/sample1.kut
+
+If the template file is omitted then any template specified in the data file
+will be used.
+
+To use Konqueror to display a sample, just click on the data file (with the
+.kud extension) from within Konqueror.

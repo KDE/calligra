@@ -1,0 +1,43 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.61C-CCK-MCD Caldera Systems OpenLinux [en] (X11; I; Linux 2.2.10 i686) [Netscape]">
+   <meta name="Author" content="Phil Thompson">
+   <title>KugarData Document Type Definition</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink="#51188E" alink="#FF0000">
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%" NOSAVE >
+<tr>
+<td ALIGN=RIGHT VALIGN=BOTTOM><font size=-1><a href="index.html">[Contents]</a>[Next]<a href="rowset.html">[Prev]</a></font></td>
+</tr>
+</table>
+
+<hr NOSHADE WIDTH="100%">
+<h1>
+KugarData Document Type Definition</h1>
+
+<hr NOSHADE WIDTH="100%">
+<p><tt>&lt;?xml version="1.0" encoding="UTF-8"?></tt>
+<p><tt>&lt;!DOCTYPE KugarData [</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;!ELEMENT KugarData (Row* )></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;!ATTLIST KugarData</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Template&nbsp; CDATA&nbsp;
+#REQUIRED&gt;</tt>
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;!ELEMENT Row EMPTY></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;!ATTLIST Row</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; col1&nbsp; CDATA&nbsp;
+#REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; col2&nbsp; CDATA&nbsp;
+#REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...&nbsp;&nbsp; CDATA&nbsp;
+#REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; coln&nbsp; CDATA&nbsp;
+#REQUIRED&gt;</tt>
+<br><tt>]&gt;</tt>
+<p>
+<hr NOSHADE WIDTH="100%">
+<br><font size=-1>Copyright &copy; 2000 Mutiny Bay Software</font>
+<br><font size=-1>Copyright &copy; 2000 Phil Thompson</font>
+</body>
+</html>

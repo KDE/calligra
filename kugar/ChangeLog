@@ -1,0 +1,63 @@
+*************************
+VERSION 1.0
+*************************
+
+Changes:
+
+ 1. Change the documentation to reflect the new maintainer and web site.
+ 2. Renamed the whole package.
+ 3. Switched from the Apache Xerces XML Parser to the parser included with Qt
+    v2.2.0.
+ 4. Converted the reportviewer to being a KPart.
+ 5. Extended the data DTD to include a prefered template.
+ 6. The template can be specified as a URL.
+
+
+*************************
+VERSION 0.2
+*************************
+
+Changes:
+
+ 1. Added new class MLineObject for drawing simple lines on a report.
+ 2. Moved metaphrast code to a seperate dir and added code to create a shared
+    library.
+ 3. Switched from IBM XML4C to Apache Xerces XML Parser. Not using ICU, just
+    native transcoding.
+ 4. Added command line switches to the viewer utility.
+ 5. Added support for formatting negative numbers with a user defined color.
+ 6. Added currency data type to field and calc objects.
+ 7. Added support for formatting numbers.
+ 8. Added support for formatting dates. To format dates, the field type must be
+    defined as a date and the date string in the data file must be in
+    mm/dd/yyyy or mm-dd-yyyy format.
+ 9. Fixed bug that added an empty page to the end of a report.
+10. Added a progress dialog to MReportViewer for printing. User can now cancel
+    a print job.
+11. Added code to MReportViewer to allow printing of selected pages.
+12. Added code to MReportViewer to print multiple copies. QPrinter does not
+    appear to handle this correctly.
+13. Added code to MReportViewer to print reverse page order.
+14. Added method getRenderSteps() to MReportEngine, returns count of rendering
+    steps required to process the report.  Convenience funtion for UI progress
+    indicators.
+15. Added signal signalRenderStatus(int) to MReportEngine to track rendering
+    progress.  Convenience funtion for UI progress indicators.
+16. Added public slot cancelRendering() to MReportEngine to cancel report
+    rendering.
+17. Added a progress dialog for report rendering to MReportViewer.  User can
+    now cancel report processing.
+18. Changed rendering code to draw at absolute y position. Previous version
+    used to subtract 1 from the y pos so that bordered fields would not have
+    double borders on one side.  Existing reports that used bordered fields in
+    this way will need to be modified, shrink the height of the report section
+    by one - the bordered fields will still form a grid (see samplereport1.xml).
+19. Added clear functions to report sections so the report engine can clear
+    existing formatting data before setting a new report template.
+
+
+*************************
+VERSION 0.1 
+*************************
+
+First release

@@ -1,0 +1,108 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+   <meta name="Author" content="Phil Thompson">
+   <title>ReportHeader &amp; ReportFooter Reference</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink="#51188E" alink="#FF0000">
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%" NOSAVE >
+<tr>
+<td ALIGN=RIGHT VALIGN=BOTTOM><font size=-1><a href="index.html">[Contents]</a><a href="page_header.html">[Next]</a><a href="report.html">[Prev]</a></font></td>
+</tr>
+</table>
+<hr NOSHADE WIDTH="100%">
+<h1>
+ReportHeader &amp; ReportFooter Sections</h1>
+
+<hr NOSHADE WIDTH="100%">
+<h4>
+Description:</h4>
+The ReportHeader and ReportFooter elements define report sections that
+are usually printed at the beginning and end of the report.
+<h4>
+Definitions:</h4>
+<tt>&lt;!ELEMENT ReportHeader (<a href="line.html">Line*</a>,
+<a href="label.html">Label*</a>,
+<a href="special.html">Special*</a>)></tt>
+<br><tt>&lt;!ATTLIST ReportHeader</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#Height">Height</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#PrintFrequency">PrintFrequency</a>&nbsp;
+CDATA #REQUIRED&gt;</tt>
+<p><tt>&lt;!ELEMENT ReportFooter (<a href="line.html">Line*</a>,
+<a href="label.html">Label*</a>,
+<a href="special.html">Special*</a>, <a href="calculated_field.html">CalculatedField*</a>)></tt>
+<br><tt>&lt;!ATTLIST ReportFooter</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#Height">Height</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#PrintFrequency">PrintFrequency</a>
+CDATA #REQUIRED&gt;</tt>
+<h4>
+Elements:</h4>
+The <b>ReportHeader</b> element can contain the following elements:
+<ul>
+<li>
+Line objects- <a href="line.html">Line</a></li>
+
+<li>
+Label objects - <a href="label.html">Label</a></li>
+
+<li>
+Special objects - <a href="special.html">Special</a></li>
+</ul>
+The <b>ReportFooter</b> element can contain the following elements:
+<ul>
+<li>
+Line objects- <a href="line.html">Line</a></li>
+
+<li>
+Label objects - <a href="label.html">Label</a></li>
+
+<li>
+Special objects - <a href="special.html">Special</a></li>
+
+<li>
+Calculated field objects - <a href="calculated_field.html">CalculatedField</a></li>
+</ul>
+
+<h4>
+Attributes:</h4>
+<a NAME="Height"></a><b>Height - </b>Sets the height of the report section.&nbsp;
+If you don't want this section, set this value to zero.
+<p><a NAME="PrintFrequency"></a><b>PrintFrequency</b> - Set the print frequency
+of the section.
+<br>&nbsp;
+<table WIDTH="180" BGCOLOR="#FFCCCC" NOSAVE >
+<tr NOSAVE>
+<td NOSAVE><b>Value</b></td>
+
+<td NOSAVE><b>Print Frequency</b></td>
+</tr>
+
+<tr>
+<td>0</td>
+
+<td>First Page</td>
+</tr>
+
+<tr>
+<td>1</td>
+
+<td>Every Page</td>
+</tr>
+
+<tr>
+<td>2</td>
+
+<td>Last Page</td>
+</tr>
+</table>
+
+<p>
+<hr NOSHADE WIDTH="100%">
+<br><font size=-1>Copyright &copy; 2000 Mutiny Bay Software</font>
+<br><font size=-1>Copyright &copy; 2000 Phil Thompson</font>
+</body>
+</html>

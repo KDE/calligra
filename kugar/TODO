@@ -1,0 +1,24 @@
+1.  Review the progress updating in the engine - use either percentages or Page
+    n of m.  Integrate properly with the Konqueror status bar.
+2.  The engine should also report (through signals) the current page and the
+    total number of pages so that the GUI can display them on the status line.
+3.  Look at adding some chart types.
+4   Write a GUI report template designer.
+5.  Fix the problem putting the KPart menu options into the Konqueror Go menu
+    (where I think they should be) - rather than the View menu.
+6.  Make the GUI more sophisticated - a right button menu containing the page
+    navigation options for example.
+7.  Fix the problem where the First Page/Last Page buttons don't appear on the
+    shell toolbar.
+8.  Make the shell a proper shell (ie. use KPart::MainWindow) and remove the
+    duplicated code.
+9.  Implement session management in the shell.
+10. Add a recent reports list to the shell.
+11. For some template elements we want the user (ie. the data DTD) to be able
+    to optionally override them to give them some local control over the
+    format, eg. paper size.
+12. Review MReportViewer::printReport().  Should it display the printer dialog?
+    What if there is a KDE specific printer dialog?
+13. Fix the bug with Konqueror which means that the scrollbars don't get
+    displayed until Konqueror is re-sized.
+14. Improve the error reporting - particularly about bad XML.

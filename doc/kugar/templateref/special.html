@@ -1,0 +1,380 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+   <meta name="Author" content="Phil Thompson">
+   <title>Special Reference</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink="#51188E" alink="#FF0000">
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%" NOSAVE >
+<tr>
+<td ALIGN=RIGHT VALIGN=BOTTOM><font size=-1><a href="index.html">[Contents]</a><a href="dtd.html">[Next]</a><a href="calculated_field.html">[Prev]</a></font></td>
+</tr>
+</table>
+<hr NOSHADE WIDTH="100%">
+<h1>
+Special</h1>
+
+<hr NOSHADE WIDTH="100%">
+<h4>
+Description:</h4>
+The Special element defines a report object used to draw page numbers and
+the current date on a report.
+<h4>
+Definition:</h4>
+<tt>&lt;!ELEMENT Special EMPTY></tt>
+<br><tt>&lt;!ATTLIST Special</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#Type">Type</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#Text">Text</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#X">X</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#Y">Y</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#Width">Width</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#Height">Height</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#BackgroundColor">BackgroundColor</a>
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#ForegroundColor">ForegroundColor</a>
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#BorderColor">BorderColor</a>&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#BorderWidth">BorderWidth</a>&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#BorderStyle">BorderStyle</a>&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#FontFamily">FontFamily</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#FontSize">FontSize</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#FontWeight">FontWeight</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#FontItalic">FontItalic</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#HAlignment">HAlignment</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#VAlignment">VAlignment</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#WordWrap">WordWrap</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; <a href="#DateFormat">DateFormat</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+CDATA #REQUIRED&gt;</tt>
+<h4>
+Attributes:</h4>
+<a NAME="Type"></a><b>Type - </b>Sets the type of special object.
+<br>&nbsp;
+<table WIDTH="160" BGCOLOR="#FFCCCC" NOSAVE >
+<tr NOSAVE>
+<td NOSAVE><b>Value</b></td>
+
+<td NOSAVE><b>Type</b></td>
+</tr>
+
+<tr>
+<td>0</td>
+
+<td>Current Date</td>
+</tr>
+
+<tr>
+<td>1</td>
+
+<td>Page Number</td>
+</tr>
+</table>
+
+<p><a NAME="Text"></a><b>Text - </b>(Not used)
+<p><a NAME="X"></a><b>X - </b>Sets the x coordinate for positioning the
+field.
+<p><a NAME="Y"></a><b>Y - </b>Sets the y coordinate for positioning the
+field.
+<p><a NAME="Width"></a><b>Width - </b>Sets the width of the field.
+<p><a NAME="Height"></a><b>Height - </b>Sets the height of the field.
+<p><a NAME="BackgroundColor"></a><b>BackgroundColor - </b>Sets the background
+color of the field.&nbsp;&nbsp; The color is defined as an RGB value (r,g,b).
+r, g and b must be in the range 0..255.
+<p><a NAME="ForegroundColor"></a><b>ForegroundColor - </b>Sets the foreground
+color of the field.&nbsp;&nbsp; The color is defined as an RGB value (r,g,b).
+r, g and b must be in the range 0..255.
+<p><a NAME="BorderColor"></a><b>BorderColor - </b>Sets the border color
+of the field.&nbsp;&nbsp; The color is defined as an RGB value (r,g,b).
+r, g and b must be in the range 0..255.
+<p><a NAME="BorderWidth"></a><b>BorderWidth - </b>Sets the border width
+for the field.
+<p><a NAME="BorderStyle"></a><b>BorderStyle - </b>Sets the border style
+for the field.
+<br>&nbsp;
+<table WIDTH="180" BGCOLOR="#FFCCCC" NOSAVE >
+<tr NOSAVE>
+<td NOSAVE><b>Value</b></td>
+
+<td NOSAVE><b>Border Style</b></td>
+</tr>
+
+<tr>
+<td>0</td>
+
+<td>None</td>
+</tr>
+
+<tr>
+<td>1</td>
+
+<td>Solid</td>
+</tr>
+
+<tr>
+<td>2</td>
+
+<td>Dash</td>
+</tr>
+
+<tr>
+<td>3</td>
+
+<td>Dot</td>
+</tr>
+
+<tr>
+<td>4</td>
+
+<td>Dash Dot</td>
+</tr>
+
+<tr>
+<td>5</td>
+
+<td>Dash Dot Dot</td>
+</tr>
+</table>
+
+<p><a NAME="FontFamily"></a><b>FontFamily - </b>Sets the font family for
+the field's text.&nbsp; Example: FontFamily="Helvetica"
+<p><a NAME="FontSize"></a><b>FontSize - </b>Sets the font size for the
+field's text.
+<p><a NAME="FontWeight"></a><b>FontWeight - </b>Sets the font weight for
+the field's text.
+<br>&nbsp;
+<table WIDTH="180" BGCOLOR="#FFCCCC" NOSAVE >
+<tr NOSAVE>
+<td NOSAVE><b>Value</b></td>
+
+<td NOSAVE><b>Font Weight</b></td>
+</tr>
+
+<tr>
+<td>25</td>
+
+<td>Light</td>
+</tr>
+
+<tr>
+<td>50</td>
+
+<td>Normal</td>
+</tr>
+
+<tr>
+<td>63</td>
+
+<td>Demi Bold</td>
+</tr>
+
+<tr>
+<td>75</td>
+
+<td>Bold</td>
+</tr>
+
+<tr>
+<td>87</td>
+
+<td>Black</td>
+</tr>
+</table>
+
+<p><a NAME="FontItalic"></a><b>FontItalic - </b>Sets the font italic flag
+for the field's text.
+<br>&nbsp;
+<table WIDTH="120" BGCOLOR="#FFCCCC" NOSAVE >
+<tr NOSAVE>
+<td NOSAVE><b>Value</b></td>
+
+<td NOSAVE><b>Italic</b></td>
+</tr>
+
+<tr>
+<td>0</td>
+
+<td>False</td>
+</tr>
+
+<tr>
+<td>1</td>
+
+<td>True</td>
+</tr>
+</table>
+
+<p><a NAME="HAlignment"></a><b>HAlignment - </b>Sets the field's horizontal
+text alignment.
+<br>&nbsp;
+<table WIDTH="220" BGCOLOR="#FFCCCC" NOSAVE >
+<tr NOSAVE>
+<td NOSAVE><b>Value</b></td>
+
+<td NOSAVE><b>Horizontal Alignment</b></td>
+</tr>
+
+<tr>
+<td>0</td>
+
+<td>Left</td>
+</tr>
+
+<tr>
+<td>1</td>
+
+<td>Center</td>
+</tr>
+
+<tr>
+<td>2</td>
+
+<td>Right</td>
+</tr>
+</table>
+
+<p><a NAME="VAlignment"></a><b>VAlignment - </b>Sets the field's vertical
+text alignment.
+<br>&nbsp;
+<table WIDTH="220" BGCOLOR="#FFCCCC" NOSAVE >
+<tr NOSAVE>
+<td NOSAVE><b>Value</b></td>
+
+<td NOSAVE><b>Vertical Alignment</b></td>
+</tr>
+
+<tr>
+<td>0</td>
+
+<td>Top</td>
+</tr>
+
+<tr>
+<td>1</td>
+
+<td>Middle</td>
+</tr>
+
+<tr>
+<td>2</td>
+
+<td>Bottom</td>
+</tr>
+</table>
+
+<p><a NAME="WordWrap"></a><b>WordWrap - </b>Sets the word wrap flag for
+the field's text.
+<br>&nbsp;
+<table WIDTH="160" BGCOLOR="#FFCCCC" NOSAVE >
+<tr NOSAVE>
+<td NOSAVE><b>Value</b></td>
+
+<td NOSAVE><b>Word Wrap</b></td>
+</tr>
+
+<tr>
+<td>0</td>
+
+<td>False</td>
+</tr>
+
+<tr>
+<td>1</td>
+
+<td>True</td>
+</tr>
+</table>
+
+<p><a NAME="DateFormat"></a><b>DateFormat - </b>Sets the field's date format.&nbsp;&nbsp;
+If type is other than current date, set to 0.
+<br>&nbsp;
+<table WIDTH="160" BGCOLOR="#FFCCCC" NOSAVE >
+<tr NOSAVE>
+<td NOSAVE><b>Value</b></td>
+
+<td NOSAVE><b>Date Format</b></td>
+</tr>
+
+<tr>
+<td>0</td>
+
+<td>m/d/yy</td>
+</tr>
+
+<tr>
+<td>1</td>
+
+<td>m-d-yy</td>
+</tr>
+
+<tr>
+<td>2</td>
+
+<td>mm/dd/yy</td>
+</tr>
+
+<tr>
+<td>3</td>
+
+<td>mm-dd-yy</td>
+</tr>
+
+<tr>
+<td>4</td>
+
+<td>m/d/yyyy</td>
+</tr>
+
+<tr>
+<td>5</td>
+
+<td>m-d-yyyy</td>
+</tr>
+
+<tr>
+<td>6</td>
+
+<td>mm/dd/yyyy</td>
+</tr>
+
+<tr>
+<td>7</td>
+
+<td>mm-dd-yyyy</td>
+</tr>
+
+<tr>
+<td>8</td>
+
+<td>yyyy/m/d</td>
+</tr>
+
+<tr>
+<td>9</td>
+
+<td>yyyy-m-d</td>
+</tr>
+</table>
+
+<p>
+<hr NOSHADE WIDTH="100%">
+<br><font size=-1>Copyright &copy; 2000 Mutiny Bay Software</font>
+<br><font size=-1>Copyright &copy; 2000 Phil Thompson</font>
+</body>
+</html>
