@@ -1987,16 +1987,16 @@ void KPresenterView::setupActions()
 				      this, SLOT( extraOptions() ),
 				      actionCollection(), "extra_options" );
 
-    actionExtraWebPres = new KAction( i18n( "Create &Web-Presentation (HTML Slideshow)..." ),
+    actionExtraWebPres = new KAction( i18n( "Create &HTML Slideshow..." ),
 				      "webpres", 0,
 				      this, SLOT( extraWebPres() ),
 				      actionCollection(), "extra_webpres" );
 
-    actionExtraCreateTemplate = new KAction( i18n( "Create Template from Current Slide..." ), 0,
+    actionExtraCreateTemplate = new KAction( i18n( "Create Template From Current Slide..." ), 0,
 					     this, SLOT( extraCreateTemplate() ),
 					     actionCollection(), "extra_template" );
 
-    actionExtraDefaultTemplate = new KAction( i18n( "Use current slide as default template" ), 0,
+    actionExtraDefaultTemplate = new KAction( i18n( "Use Current Slide As Default Template" ), 0,
 					     this, SLOT( extraDefaultTemplate() ),
 					     actionCollection(), "extra_defaulttemplate" );
 
