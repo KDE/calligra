@@ -45,6 +45,7 @@ class KivioArrowHeadAction : public KActionMenu
   public slots:
     void setCurrentStartArrow(int c);
     void setCurrentEndArrow(int c);
+    void setEmitSignals(bool e) { m_emitSignals = e; }
 
   signals:
     void startChanged(int);
@@ -59,6 +60,7 @@ class KivioArrowHeadAction : public KActionMenu
     KPopupMenu* m_endPopup;
     int m_currentStart;
     int m_currentEnd;
+    bool m_emitSignals;
 };
 
 #endif

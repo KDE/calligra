@@ -898,32 +898,39 @@ void SelectTool::endRubberBanding(const QPoint &pos)
 
 void SelectTool::endDragging(const QPoint&)
 {
-    KMacroCommand *macro=new KMacroCommand( i18n("Move Stencil"));
-    KivioStencil *pStencil = m_pCanvas->activePage()->selectedStencils()->first();
-    KivioSelectDragData *pData = m_lstOldGeometry.first();
+  KMacroCommand *macro=new KMacroCommand( i18n("Move Stencil"));
+  KivioStencil *pStencil = m_pCanvas->activePage()->selectedStencils()->first();
+  KivioSelectDragData *pData = m_lstOldGeometry.first();
+  bool moved = false;
 
-    while( pStencil && pData )
-    {
-        KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"),
-          pStencil, pData->rect, pStencil->rect(), m_pCanvas->activePage());
-        macro->addCommand( cmd);
+  while( pStencil && pData )
+  {
+    if((pData->rect.x() != pStencil->rect().x()) || (pData->rect.y() != pStencil->rect().y())) {
+      KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"),
+        pStencil, pData->rect, pStencil->rect(), m_pCanvas->activePage());
+      macro->addCommand( cmd);
 
-         if(pStencil->type() == kstConnector) {
-           pStencil->searchForConnections(m_pView->activePage(), m_pView->zoomHandler()->unzoomItY(4));
-         }
+      if(pStencil->type() == kstConnector) {
+        pStencil->searchForConnections(m_pView->activePage(), m_pView->zoomHandler()->unzoomItY(4));
+      }
 
-        pData = m_lstOldGeometry.next();
-        pStencil = m_pCanvas->activePage()->selectedStencils()->next();
+      moved = true;
     }
 
+    pData = m_lstOldGeometry.next();
+    pStencil = m_pCanvas->activePage()->selectedStencils()->next();
+  }
+
+  if(moved) {
     m_pCanvas->doc()->addCommand( macro );
+  } else {
+    delete macro;
+  }
 
-    m_pCanvas->drawSelectedStencilsXOR();
-
-    m_pCanvas->endUnclippedSpawnerPainter();
-
-    // Clear the list of old geometry
-    m_lstOldGeometry.clear();
+  m_pCanvas->drawSelectedStencilsXOR();
+  m_pCanvas->endUnclippedSpawnerPainter();
+  // Clear the list of old geometry
+  m_lstOldGeometry.clear();
 }
 
 void SelectTool::endCustomDragging(const QPoint&)

@@ -1219,6 +1219,7 @@ void KivioView::updateToolBars()
     KivioStencil *pStencil;
     pStencil = m_pActivePage->selectedStencils()->first();
     m_pStencilGeometryPanel->setEmitSignals(false);
+    m_setArrowHeads->setEmitSignals(false);
 
     if( !pStencil )
     {
@@ -1264,6 +1265,7 @@ void KivioView::updateToolBars()
     }
 
     m_pStencilGeometryPanel->setEmitSignals(true);
+    m_setArrowHeads->setEmitSignals(true);
     m_pProtectionPanel->updateCheckBoxes();
 }
 

@@ -538,33 +538,33 @@ void KivioCanvas::mouseMoveEvent(QMouseEvent* e)
       KivioGuideLines* gl = activePage()->guideLines();
 
       if ((e->state() & LeftButton == LeftButton) && gl->hasSelected()) {
-	if (m_guideLinesTimer->isActive()) {
-	  m_guideLinesTimer->stop();
-	  guideLinesTimerTimeout();
-	}
-	delegateThisEvent = false;
-	eraseGuides();
-	QPoint p = e->pos();
-	p -= lastPoint;
-	if (p.x() != 0)
-	  gl->moveSelectedByX(m_pView->zoomHandler()->unzoomItX(p.x()));
-	if (p.y() != 0)
-	  gl->moveSelectedByY(m_pView->zoomHandler()->unzoomItY(p.y()));
-	m_pDoc->setModified( true );
-	paintGuides();
+        if (m_guideLinesTimer->isActive()) {
+          m_guideLinesTimer->stop();
+          guideLinesTimerTimeout();
+        }
+        delegateThisEvent = false;
+        eraseGuides();
+        QPoint p = e->pos();
+        p -= lastPoint;
+        if (p.x() != 0)
+          gl->moveSelectedByX(m_pView->zoomHandler()->unzoomItX(p.x()));
+        if (p.y() != 0)
+          gl->moveSelectedByY(m_pView->zoomHandler()->unzoomItY(p.y()));
+        m_pDoc->setModified( true );
+        paintGuides();
       } else {
-	if ((e->state() & ~ShiftButton) == NoButton) {
-	  KoPoint p = mapFromScreen(e->pos());
-	  KivioGuideLineData* gd = gl->find(p.x(), p.y(), m_pView->zoomHandler()->unzoomItY(2));
-	  if (gd) {
-	    delegateThisEvent = false;
-	    if (!storedCursor)
-	      storedCursor = new QCursor(cursor());
-	    setCursor(gd->orientation()==Qt::Vertical ? sizeHorCursor:sizeVerCursor);
-	  } else {
-	    updateGuidesCursor();
-	  }
-	}
+        if ((e->state() & ~ShiftButton) == NoButton) {
+          KoPoint p = mapFromScreen(e->pos());
+          KivioGuideLineData* gd = gl->find(p.x(), p.y(), m_pView->zoomHandler()->unzoomItY(2));
+          if (gd) {
+            delegateThisEvent = false;
+            if (!storedCursor)
+              storedCursor = new QCursor(cursor());
+            setCursor(gd->orientation()==Qt::Vertical ? sizeHorCursor:sizeVerCursor);
+          } else {
+            updateGuidesCursor();
+          }
+        }
       }
     }
   }

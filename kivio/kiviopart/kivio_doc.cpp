@@ -878,12 +878,9 @@ void KivioDoc::setUnits(KoUnit::Unit unit)
   emit unitsChanged(unit);
 }
 
-void KivioDoc::updateView(KivioPage* page, bool modified)
+void KivioDoc::updateView(KivioPage* page)
 {
   emit sig_updateView(page);
-
-  if (modified)
-    setModified(true);
 }
 
 void KivioDoc::updateButton()

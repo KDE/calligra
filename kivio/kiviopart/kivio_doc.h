@@ -151,7 +151,7 @@ class KivioDoc : public KoDocument
     QFont defaultFont() { return m_font; }
 
   public slots:
-    void updateView(KivioPage*, bool modified=true);
+    void updateView(KivioPage*);
 
     void slotDeleteStencilSet( DragBarButton *, QWidget *, KivioStackBar * );
     void slotSelectionChanged();

@@ -491,7 +491,6 @@ void KivioPage::selectStencil( KivioStencil *pStencil )
   kdDebug() <<"KivioPage::selectStencil - Selecting stencil" << endl;
   pStencil->select();
   m_lstSelection.append( pStencil );
-
   m_pDoc->slotSelectionChanged();
 }
 

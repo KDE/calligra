@@ -332,7 +332,7 @@ void KivioOptionsDialog::applyGrid()
   d.color = m_gridColorBtn->color();
   KivioView* view = static_cast<KivioView*>(parent());
   view->doc()->setGrid(d);
-  view->doc()->updateView(0, true);
+  view->doc()->updateView(0);
 }
 
 void KivioOptionsDialog::applyGuides()

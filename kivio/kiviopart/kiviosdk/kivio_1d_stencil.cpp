@@ -347,112 +347,102 @@ KivioCollisionType Kivio1DStencil::checkForCollision( KivioPoint *, double )
  */
 void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
 {
-    double _x = pData->x;
-    double _y = pData->y;
-    int id = pData->id;
-    double oldX, oldY;
-    bool doneSearching = false;
-    bool foundConnection = false;
+  double _x = pData->x;
+  double _y = pData->y;
+  int id = pData->id;
+  double oldX, oldY;
+  bool doneSearching = false;
+  bool foundConnection = false;
+  double oldStencilX, oldStencilY;
+  KivioConnectorPoint *p;
 
-    double oldStencilX, oldStencilY;
+  // Locate the point specified by id
+  p = m_pConnectorPoints->at( id - (kctCustom+1));
 
+  if( !p )
+  {
+    kdDebug() << "Kivio1DStencil::customDrag() - KivioConnectorPoint id: " << (id - (kctCustom+1)) << "  not found\n" << endl;
+    return;
+  }
 
+  oldX = p->x();
+  oldY = p->y();
+  p->setPosition(_x,_y,true);
 
-    KivioConnectorPoint *p;
+  if( p->connectable()==true )
+  {
+    // Attempt a snap....
+    KivioLayer *pCurLayer = pData->page->curLayer();
+    KivioLayer *pLayer = pData->page->firstLayer(); //pData->page->curLayer();
 
-
-    // Locate the point specified by id
-    p = m_pConnectorPoints->at( id - (kctCustom+1));
-
-
-    if( !p )
+    while( pLayer && doneSearching==false)
     {
-       kdDebug() << "Kivio1DStencil::customDrag() - KivioConnectorPoint id: " << (id - (kctCustom+1)) << "  not found\n" << endl;
-       return;
+      // To be connected to, a layer must be visible and connectable
+      if( pLayer!=pCurLayer )
+      {
+          if( pLayer->connectable()==false || pLayer->visible()==false )
+          {
+            pLayer = pData->page->nextLayer();
+            continue;
+          }
+      }
+
+      // Tell the layer to search for a target
+      if( pLayer->connectPointToTarget( p, 8.0f ) )
+      {
+        foundConnection = true;
+        doneSearching = true;
+      }
+
+      pLayer = pData->page->nextLayer();
     }
 
-    oldX = p->x();
-    oldY = p->y();
-    p->setPosition(_x,_y,true);
-
-    if( p->connectable()==true )
+    if( foundConnection == false )
     {
-       // Attempt a snap....
-       KivioLayer *pCurLayer = pData->page->curLayer();
-       KivioLayer *pLayer = pData->page->firstLayer(); //pData->page->curLayer();
+      p->disconnect();
+    }
+  }
 
-       while( pLayer && doneSearching==false)
-       {
-	  // To be connected to, a layer must be visible and connectable
-	  if( pLayer!=pCurLayer )
-	  {
-	     if( pLayer->connectable()==false || pLayer->visible()==false )
-	     {
-                pLayer = pData->page->nextLayer();
-                continue;
-	     }
-	  }
-
-	  // Tell the layer to search for a target
-	  if( pLayer->connectPointToTarget( p, 8.0f ) )
-	  {
-	     foundConnection = true;
-	     doneSearching = true;
-	  }
-
-	  pLayer = pData->page->nextLayer();
-       }
-
-       if( foundConnection == false )
-       {
-	  p->disconnect();
-       }
+  // If it is a start/end point, then make a request to update the connectors (must be implemented by stencil developer)
+  if( id == kctCustom+1 || id == kctCustom+2 )
+  {
+    // If it's the end connector, then update the text point
+    if( p==m_pEnd && m_needsText==true )
+    {
+      m_pTextConn->setPosition( m_pTextConn->x() + (m_pEnd->x() - oldX),
+        m_pTextConn->y() + (m_pEnd->y() - oldY), false );
     }
 
+    updateConnectorPoints(p, oldX, oldY);
+  }
+  // If it is one of the width handles, then fix the width and update the opposite point
+  // only if the stencils 'needs width' connectors
+  else if( (id == kctCustom+3 || id == kctCustom+4) && (m_needsWidth==true) )
+  {
+    double vx = m_pStart->x() - m_pEnd->x();
+    double vy = m_pStart->y() - m_pEnd->y();
+    double len = sqrt( vx*vx + vy*vy );
+    double midX = (m_pStart->x() + m_pEnd->x())/2.0f;
+    double midY = (m_pStart->y() + m_pEnd->y())/2.0f;
 
-    // If it is a start/end point, then make a request to update the connectors (must be implemented by stencil developer)
-    if( id == kctCustom+1 ||
-	id == kctCustom+2 )
-    {
-       // If it's the end connector, then update the text point
-       if( p==m_pEnd && m_needsText==true )
-       {
-	  m_pTextConn->setPosition( m_pTextConn->x() + (m_pEnd->x() - oldX),
-			            m_pTextConn->y() + (m_pEnd->y() - oldY),
-				    false );
-       }
+    vx /= len;
+    vy /= len;
 
-       updateConnectorPoints(p, oldX, oldY);
-    }
-    // If it is one of the width handles, then fix the width and update the opposite point
-    // only if the stencils 'needs width' connectors
-    else if( (id == kctCustom+3 || id == kctCustom+4) &&
-             (m_needsWidth==true) )
-    {
-       double vx = m_pStart->x() - m_pEnd->x();
-       double vy = m_pStart->y() - m_pEnd->y();
-       double len = sqrt( vx*vx + vy*vy );
-       double midX = (m_pStart->x() + m_pEnd->x())/2.0f;
-       double midY = (m_pStart->y() + m_pEnd->y())/2.0f;
+    double d = shortestDistance( m_pStart, m_pEnd, (id==kctCustom+3) ? m_pLeft : m_pRight );
 
-       vx /= len;
-       vy /= len;
+    m_pLeft->setPosition( midX + d*vy, midY + d*(-vx), false );
+    m_pRight->setPosition( midX + d*(-vy), midY + d*vx, false );
 
-       double d = shortestDistance( m_pStart, m_pEnd, (id==kctCustom+3) ? m_pLeft : m_pRight );
+    m_connectorWidth = d*2.0f;
 
-       m_pLeft->setPosition( midX + d*vy, midY + d*(-vx), false );
-       m_pRight->setPosition( midX + d*(-vy), midY + d*vx, false );
-
-       m_connectorWidth = d*2.0f;
-
-       updateConnectorPoints(p, oldX, oldY);
-       return;
-    }
-    // Text handle
-    else if( id == kctCustom+5 )
-    {
-       updateConnectorPoints(p, oldX, oldY);
-    }
+    updateConnectorPoints(p, oldX, oldY);
+    return;
+  }
+  // Text handle
+  else if( id == kctCustom+5 )
+  {
+    updateConnectorPoints(p, oldX, oldY);
+  }
 }
 
 

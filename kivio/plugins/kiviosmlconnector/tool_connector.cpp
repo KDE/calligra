@@ -126,7 +126,7 @@ void SMLConnector::connector(QRect)
         page->selectStencil(m_pStencil);
         page->deleteSelectedStencils();
         m_pStencil = 0;
-        doc->updateView(page,false);
+        doc->updateView(page);
         return;
     }
 

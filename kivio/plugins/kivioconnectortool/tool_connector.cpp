@@ -126,7 +126,7 @@ void ConnectorTool::connector(QRect)
         page->selectStencil(m_pStencil);
         page->deleteSelectedStencils();
         m_pStencil = 0;
-        doc->updateView(page,false);
+        doc->updateView(page);
         return;
     }
 
@@ -192,50 +192,50 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
 
 void ConnectorTool::mouseMove( QMouseEvent * e )
 {
-    switch( m_mode )
-    {
-        case stmDrawRubber:
-            continueRubberBanding(e);
-            break;
+  switch( m_mode )
+  {
+    case stmDrawRubber:
+      continueRubberBanding(e);
+      break;
 
-        default:
-            break;
-    }
+    default:
+      break;
+  }
 }
 
 void ConnectorTool::continueRubberBanding( QMouseEvent *e )
 {
-    KoPoint endPoint = m_pCanvas->mapFromScreen( e->pos() );
-    endPoint = m_pCanvas->snapToGrid(endPoint);
+  KoPoint endPoint = m_pCanvas->mapFromScreen( e->pos() );
+  endPoint = m_pCanvas->snapToGrid(endPoint);
 
-    m_pStencil->setStartPoint(endPoint.x(), endPoint.y());
+  m_pStencil->setStartPoint(endPoint.x(), endPoint.y());
 
 
-    m_pDragData->x = endPoint.x();
-    m_pDragData->y = endPoint.y();
-    m_pDragData->id = kctCustom + 1;
-    m_pStencil->customDrag(m_pDragData);
+  m_pDragData->x = endPoint.x();
+  m_pDragData->y = endPoint.y();
+  m_pDragData->id = kctCustom + 1;
+  m_pStencil->customDrag(m_pDragData);
 
-    m_pStencil->updateGeometry();
-    m_pCanvas->repaint();
+  m_pStencil->updateGeometry();
+  m_pCanvas->repaint();
 }
 
 void ConnectorTool::mouseRelease( QMouseEvent *e )
 {
-    switch( m_mode )
-    {
-        case stmDrawRubber:
-            endRubberBanding(e);
-            break;
-    }
+  switch( m_mode )
+  {
+    case stmDrawRubber:
+      endRubberBanding(e);
+      break;
+  }
 
-    m_pCanvas->setCursor(*m_pConnectorCursor1);
-  	m_mode = stmNone;
+  m_pCanvas->setCursor(*m_pConnectorCursor1);
+  m_mode = stmNone;
 }
 
 void ConnectorTool::endRubberBanding(QMouseEvent *)
 {
-    connector(m_pCanvas->rect());
-    m_pStencil = 0;
+  connector(m_pCanvas->rect());
+  m_pStencil = 0;
 }
 #include "tool_connector.moc"

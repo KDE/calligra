@@ -190,13 +190,13 @@ void TextTool::text(QRect r)
     page->addStencil(stencil);
     page->selectStencil(stencil);
 
-    doc->updateView(page,false);
+    doc->updateView(page);
 
     setStencilText();
 
     if (stencil->text().isEmpty()) {
         page->deleteSelectedStencils();
-        doc->updateView(page,false);
+        doc->updateView(page);
     }
 }
 

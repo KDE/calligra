@@ -40,6 +40,7 @@ KivioArrowHeadAction::KivioArrowHeadAction(const QString &text, const QString &p
   QObject* parent, const char *name)
   : KActionMenu(text, pix, parent, name)
 {
+  m_emitSignals = true;
   setShortcutConfigurable( false );
   m_popup = new KPopupMenu(0L,"KivioArrowHeadAction::popup");
   m_startPopup = new KPopupMenu;
@@ -213,7 +214,9 @@ void KivioArrowHeadAction::setCurrentStartArrow(int c)
   m_currentStart = c;
   m_startPopup->setItemChecked(m_currentStart, true);
 
-  emit startChanged(m_currentStart);
+  if(m_emitSignals) {
+    emit startChanged(m_currentStart);
+  }
 }
 
 void KivioArrowHeadAction::setCurrentEndArrow(int c)
@@ -222,7 +225,9 @@ void KivioArrowHeadAction::setCurrentEndArrow(int c)
   m_currentEnd = c;
   m_endPopup->setItemChecked(m_currentEnd, true);
 
-  emit endChanged(m_currentEnd);
+  if(m_emitSignals) {
+    emit endChanged(m_currentEnd);
+  }
 }
 
 #include "kivioarrowheadaction.moc"
