@@ -945,7 +945,7 @@ void KWDocument::loadPictureMap ( QDomElement& domElement )
     {
        m_pictureCollection.readXML( picturesElem, m_pictureMap );
     }
-    
+
     // <PIXMAPS>
     QDomElement pixmapsElem = domElement.namedItem( "PIXMAPS" ).toElement();
     if ( !pixmapsElem.isNull() )
@@ -3547,7 +3547,6 @@ void KWDocument::deleteSelectedFrames()
             else
             {
                 KWDeleteTableCommand *cmd = new KWDeleteTableCommand( i18n("Delete Table"), table );
-                addCommand( cmd );
                 cmd->execute();
                 macroCmd->addCommand(cmd);
                 nbCommand++;
@@ -3574,14 +3573,13 @@ void KWDocument::deleteSelectedFrames()
             else
             {
                 KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand( i18n("Delete Frame"), tmp );
-                addCommand( cmd );
                 cmd->execute();
                 macroCmd->addCommand(cmd);
                 nbCommand++;
             }
         }
     }
-    if( nbCommand)
+    if( nbCommand )
     {
         addCommand(macroCmd);
         emit refreshDocStructure(docItem);
