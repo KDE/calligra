@@ -8,11 +8,14 @@ Comment[es]=Documento de KWord
 Comment[is]=kword:  Ritvinnsluforrit K-vöndulsins
 Comment[ko]=KDE용 글틀 (워드 프로세서)
 Comment[oc]=Processador de textos KWord
-Comment[pt]=Processador de Texto
 Comment[pt_BR]=Processador de texto
+Comment[pt]=Processador de Texto
 Comment[ru]=Текстовый процессор KWord
 Comment[sr]=KWord dokument
 Icon=kword
 Type=MimeType
 Patterns=*.kwd;*.kwt;
 X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.kwd

@@ -510,12 +510,20 @@ bool KoMainWindow::saveDocument( bool saveas )
 
 // ###### To be made configurable !
             if ( QFileInfo( newURL.path() ).extension().isEmpty() ) {
+#if KDE_VERSION < 220
                 // assume that the pattern ends with .extension
                 QString s( dialog->currentFilter() );
                 QString extension = s.mid( s.find( "." ) );
                 extension = extension.left( extension.find( " " ) );
 
                 newURL.setPath( newURL.path() + extension );
+#else
+                // No more extensions in filters. We need to get it from the mimetype.
+                KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
+                QString extension = mime->property( "X-KDE-NativeExtension" ).toString();
+                kdDebug() << "KoMainWindow::saveDocument outputFormat=" << outputFormat << " extension=" << extension << endl;
+                newURL.setPath( newURL.path() + extension );
+#endif
             }
 
             if ( KIO::NetAccess::exists( newURL ) ) { // this file exists => ask for confirmation
