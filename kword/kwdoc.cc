@@ -1093,7 +1093,7 @@ void KWDocument::loadPictureMap ( QDomElement& domElement )
 }
 
 
-bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles )
+bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* store )
 {
     QTime dt;
     dt.start();
@@ -1210,7 +1210,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles 
 
     // TODO MAILMERGE
 
-    KoOasisContext context( this, m_varColl, oasisStyles );
+    KoOasisContext context( this, *m_varColl, oasisStyles, store );
     Q_ASSERT( !oasisStyles.officeStyle().isNull() );
 
     // Load all styles before the corresponding paragraphs try to use them!
@@ -1246,7 +1246,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     QTime dt;
     dt.start();
     emit sigProgress( 0 );
-    //kdDebug(32001) << "KWDocument::loadXML" << endl;
+    kdDebug(32001) << "KWDocument::loadXML" << endl;
     m_pictureMap.clear();
     m_textImageRequests.clear();
     m_pictureRequests.clear();
@@ -1326,11 +1326,15 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         __pgLayout.orientation = static_cast<KoOrientation>( KWDocument::getAttribute( paper, "orientation", 0 ) );
         __pgLayout.ptWidth = getAttribute( paper, "width", 0.0 );
         __pgLayout.ptHeight = getAttribute( paper, "height", 0.0 );
+	kdDebug() << " ptWidth=" << __pgLayout.ptWidth << endl;
+	kdDebug() << " ptHeight=" << __pgLayout.ptHeight << endl;
         if ( __pgLayout.ptWidth <= 0 || __pgLayout.ptHeight <= 0 )
         {
             // Old document?
             __pgLayout.ptWidth = getAttribute( paper, "ptWidth", 0.0 );
             __pgLayout.ptHeight = getAttribute( paper, "ptHeight", 0.0 );
+		kdDebug() << " ptWidth=" << __pgLayout.ptWidth << endl;
+		kdDebug() << " ptHeight=" << __pgLayout.ptHeight << endl;
 
             // Still wrong?
             if ( __pgLayout.ptWidth <= 0 || __pgLayout.ptHeight <= 0 )
@@ -3959,10 +3963,10 @@ void KWDocument::setFrameMargins( double l, double r, double t, double b )
             KWFrameSet *frameset = frameSet( i );
             for ( unsigned int j = 0; j < frameset->getNumFrames(); j++ ) {
                 if ( frameset->frame( j )->isSelected() ) {
-                    frameset->frame( j )->setBLeft( l );
-                    frameset->frame( j )->setBRight( r );
-                    frameset->frame( j )->setBTop( t );
-                    frameset->frame( j )->setBBottom( b );
+                    frameset->frame( j )->setPaddingLeft( l );
+                    frameset->frame( j )->setPaddingRight( r );
+                    frameset->frame( j )->setPaddingTop( t );
+                    frameset->frame( j )->setPaddingBottom( b );
                 }
             }
         }

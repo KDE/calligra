@@ -134,7 +134,7 @@ class KPresenterDoc : public KoDocument
     virtual bool completeSaving( KoStore* _store );
 
     // load
-    virtual bool loadOasis( const QDomDocument&, KoOasisStyles& );
+    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& styles, KoStore* store );
 
     virtual bool loadXML( const QDomDocument& doc );
     virtual bool loadXML( QIODevice *, const QDomDocument & doc );

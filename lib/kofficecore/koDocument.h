@@ -420,9 +420,11 @@ public:
 
     /**
      *  Reimplement this method to load the contents of your KOffice document,
-     *  from the XML document ("content.xml").
+     *  from the XML document ("content.xml"). The styles have been parsed already,
+     *  you can find them in the oasisStyles parameter. The store can be used
+     *  to load images and embedded documents.
      */
-    virtual bool loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles ) = 0;
+    virtual bool loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles, KoStore* store ) = 0;
 
     /**
      *  Reimplement this to save the contents of the KOffice document into

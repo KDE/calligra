@@ -434,7 +434,7 @@ public:
   virtual QDomDocument saveXML();
 
   virtual bool loadXML( QIODevice *, const QDomDocument& doc );
-    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles );
+  virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* );
   virtual bool loadChildren( KoStore* _store );
   QDomElement saveAreaName( QDomDocument& doc ) ;
   void loadAreaName( const QDomElement& element );

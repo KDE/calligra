@@ -269,10 +269,10 @@ QDomDocument KivioDoc::saveXML()
   return doc;
 }
 
-bool KivioDoc::loadOasis( const QDomDocument& /*doc*/, KoOasisStyles& /*oasisStyles*/ )
+bool KivioDoc::loadOasis( const QDomDocument& /*doc*/, KoOasisStyles& /*oasisStyles*/, KoStore* )
 {
     //todo
-    return true;
+    return false;
 }
 
 bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
@@ -413,11 +413,11 @@ bool KivioDoc::loadStencilSpawnerSet( const QString &id )
               return true;
             }
           }
-          
+
           ++innerIT;
         }
       }
-      
+
       ++listIT;
     }
   }
@@ -574,7 +574,7 @@ bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDi
       p.setTranslation(-zoom.zoomItX(pPage->getRectForAllStencils().x()),
         -zoom.zoomItY(pPage->getRectForAllStencils().y()));
     }
-    
+
     pPage->printContent(p);
   }
   else
@@ -583,7 +583,7 @@ bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDi
       p.setTranslation(-zoom.zoomItX(pPage->getRectForAllSelectedStencils().x()),
         -zoom.zoomItY(pPage->getRectForAllSelectedStencils().y()));
     }
-    
+
     pPage->printSelected(p);
   }
 
@@ -632,15 +632,15 @@ void KivioDoc::addSpawnerSet( const QString &dirName )
       delete set;
       return;
   }
-  
+
   // Queue set for loading stencils
   m_stencilSetLoadQueue.append(set);
-  
+
   if(!m_loadTimer) {
     m_loadTimer = new QTimer(this);
     connect(m_loadTimer, SIGNAL(timeout()), this, SLOT(loadStencil()));
   }
-  
+
   if(!m_loadTimer->isActive()) {
     emit initProgress();
     m_loadTimer->start(0, false);
@@ -661,12 +661,12 @@ void KivioDoc::addSpawnerSetDuringLoad( const QString &dirName )
 
   QStringList::iterator it;
   QStringList files = set->files();
-  
+
   for(it = files.begin(); it != files.end(); ++it) {
     QString fileName = set->dir() + "/" + (*it);
     set->loadFile(fileName);
   }
-  
+
   m_pLstSpawnerSets->append(set);
 }
 
@@ -726,11 +726,11 @@ void KivioDoc::initConfig()
         d.snap.setHeight(config->readDoubleNumEntry("GridYSnap", 10.0));
         setGrid(d);
         QString defMS = "mm";
-        
+
         if(KGlobal::locale()->measureSystem() == KLocale::Imperial) {
           defMS = "in";
         }
-        
+
         m_units = KoUnit::unit(config->readEntry("Unit", defMS));
         QFont def = KoGlobal::defaultFont();
         m_font = config->readFontEntry("Font", &def);
@@ -947,19 +947,19 @@ void KivioDoc::loadStencil()
   set->loadFile(fileName);
   m_currentFile++;
   emit progress(qRound(((float)m_currentFile / (float)set->files().count()) * 100.0));
-  
-  if(m_currentFile >= set->files().count()) {    
+
+  if(m_currentFile >= set->files().count()) {
     m_pLstSpawnerSets->append(set);
-    
+
     if(!m_bLoading) {
       setModified(true);
       emit sig_addSpawnerSet(set);
     }
-    
+
     m_currentFile = 0;
     set = 0;
     m_stencilSetLoadQueue.pop_front();
-    
+
     if(m_stencilSetLoadQueue.isEmpty()) {
       m_loadTimer->stop();
       emit endProgress();

@@ -970,7 +970,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
         m_inputLeftMargin = new KDoubleNumInput( grp2 );
 
-        m_inputLeftMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bLeft()), doc->getUnit() ) );
+        m_inputLeftMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->paddingLeft()), doc->getUnit() ) );
         m_inputLeftMargin->setRange(0, 9999, 1,  false);
         m_inputLeftMargin->resize( m_inputLeftMargin->sizeHint() );
         mGrid->addWidget( m_inputLeftMargin, 3, 0 );
@@ -981,7 +981,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
         m_inputRightMargin = new KDoubleNumInput( grp2 );
 
-        m_inputRightMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bRight()), doc->getUnit() ) );
+        m_inputRightMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->paddingRight()), doc->getUnit() ) );
         m_inputRightMargin->resize( m_inputRightMargin->sizeHint() );
         m_inputRightMargin->setRange(0, 9999, 1,  false);
         mGrid->addWidget( m_inputRightMargin, 3, 1 );
@@ -992,7 +992,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
         m_inputTopMargin = new KDoubleNumInput( grp2 );
 
-        m_inputTopMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bTop()), doc->getUnit() ) );
+        m_inputTopMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->paddingTop()), doc->getUnit() ) );
         m_inputTopMargin->resize( m_inputTopMargin->sizeHint() );
         m_inputTopMargin->setRange(0, 9999, 1,  false);
 
@@ -1004,7 +1004,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
         m_inputBottomMargin = new KDoubleNumInput( grp2 );
 
-        m_inputBottomMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bBottom()), doc->getUnit() ) );
+        m_inputBottomMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->paddingBottom()), doc->getUnit() ) );
         m_inputBottomMargin->resize( m_inputBottomMargin->sizeHint() );
         m_inputBottomMargin->setRange(0, 9999, 1,  false);
         mGrid->addWidget( m_inputBottomMargin, 5, 1 );

@@ -259,7 +259,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
     {
         KWFrame *theFrame = frameIt.current();
         KoRect openLeftRect( theFrame->innerRect() );
-        openLeftRect.setLeft( theFrame->bLeft() );
+        openLeftRect.setLeft( theFrame->paddingLeft() );
 #ifdef DEBUG_DTI
         kdDebug() << "documentToInternal: openLeftRect=" << openLeftRect << endl;
 #endif
@@ -2061,7 +2061,7 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
     if (  frmBehavior ==  KWFrame::AutoCreateNewFrame )
     {
         KWFrame *theFrame = settingsFrame( frames.last() );
-        double minHeight = s_minFrameHeight + theFrame->bTop() + theFrame->bBottom()+5;
+        double minHeight = s_minFrameHeight + theFrame->paddingTop() + theFrame->paddingBottom() + 5;
         if ( availHeight < minHeight )
             frmBehavior = KWFrame::Ignore;
     }

@@ -75,7 +75,7 @@ class KivioDoc : public KoDocument
     virtual QDomDocument saveXML();
 
     virtual bool loadXML( QIODevice *, const QDomDocument& doc );
-    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles );
+    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* );
 
     virtual bool initDoc();
 
@@ -147,7 +147,7 @@ class KivioDoc : public KoDocument
     void updateProtectPanelCheckBox();
 
     QFont defaultFont() { return m_font; }
-    
+
   public slots:
     void updateView(KivioPage*);
 
@@ -172,7 +172,7 @@ class KivioDoc : public KoDocument
     void sig_updateGrid();
 
     void unitsChanged(KoUnit::Unit);
-    
+
     void initProgress();
     void progress(int);
     void endProgress();
@@ -243,7 +243,7 @@ class KivioDoc : public KoDocument
     KCommandHistory * m_commandHistory;
 
     QFont m_font;
-    
+
     QTimer* m_loadTimer;
     unsigned int m_currentFile;
     KivioStencilSpawnerSet* m_currentSet;

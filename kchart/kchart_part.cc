@@ -479,10 +479,10 @@ QDomDocument KChartPart::saveXML()
     return doc;
 }
 
-bool KChartPart::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles )
+bool KChartPart::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* )
 {
     //todo
-    return true;
+    return false;
 }
 
 bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )

@@ -110,22 +110,22 @@ void KWordFrameSetIface::setBackgroundColor( const QString &_color )
 
 double KWordFrameSetIface::ptMarginLeft()const
 {
-    return m_frame->frame(0)->bLeft();
+    return m_frame->frame(0)->paddingLeft();
 }
 
 double KWordFrameSetIface::ptMarginRight()const
 {
-    return m_frame->frame(0)->bRight();
+    return m_frame->frame(0)->paddingRight();
 }
 
 double KWordFrameSetIface::ptMarginTop()const
 {
-    return m_frame->frame(0)->bTop();
+    return m_frame->frame(0)->paddingTop();
 }
 
 double KWordFrameSetIface::ptMarginBottom()const
 {
-    return m_frame->frame(0)->bBottom();
+    return m_frame->frame(0)->paddingBottom();
 }
 
 bool KWordFrameSetIface::isCopy()const
@@ -135,25 +135,25 @@ bool KWordFrameSetIface::isCopy()const
 
 void KWordFrameSetIface::setPtMarginLeft(double val)
 {
-    m_frame->frame( 0 )->setBLeft(val);
+    m_frame->frame( 0 )->setPaddingLeft(val);
     m_frame->kWordDocument()->layout();
 }
 
 void KWordFrameSetIface::setPtMarginRight(double val)
 {
-    m_frame->frame( 0 )->setBRight(val);
+    m_frame->frame( 0 )->setPaddingRight(val);
     m_frame->kWordDocument()->layout();
 
 }
 void KWordFrameSetIface::setPtMarginTop(double val)
 {
-    m_frame->frame( 0 )->setBTop(val);
+    m_frame->frame( 0 )->setPaddingTop(val);
     m_frame->kWordDocument()->layout();
 }
 
 void KWordFrameSetIface::setPtMarginBottom(double val)
 {
-    m_frame->frame( 0 )->setBBottom(val);
+    m_frame->frame( 0 )->setPaddingBottom(val);
     m_frame->kWordDocument()->layout();
 }
 

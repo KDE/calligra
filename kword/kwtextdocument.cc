@@ -60,34 +60,34 @@ KoTextDocCommand *KWTextDocument::deleteTextCommand( KoTextDocument *textdoc, in
     return new KWTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
-
-bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& context, QString& textData )
+bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& context,
+                                  KoTextParag* parag, int pos,
+                                  QString& textData, KoTextCustomItem* & /*customItem*/ )
 {
     const QString tagName( tag.tagName() );
     bool textFoo = tagName.startsWith( "text:" );
     kdDebug() << k_funcinfo << tagName << endl;
 
-#if 0 // TODO (move to loadSpanTag in kword)
-        if ( textFoo &&
+    if ( tagName == "draw:image" )
+    {
+        KWFrameSet* fs = new KWPictureFrameSet( m_textfs->kWordDocument(), tag, context );
+        fs->setAnchored( m_textfs, parag, pos, true, false /*don't repaint yet*/ );
+        m_textfs->kWordDocument()->addFrameSet( fs, false );
+    }
+    else if ( tagName == "draw:text-box" )
+    {
+        textData = '#'; // anchor placeholder
+        // TODO new KWTextFrameSet
+        // TODO anchorFrameset( frameName, parag, pos );
+    }
+
+#if 0 // TODO
+        else if ( textFoo &&
                   ( tagName == "text:footnote" || tagName == "text:endnote" ) )
         {
             textData = '#'; // anchor placeholder
             importFootnote( doc, ts, outputFormats, pos, tagName );
             // do me last, combination of variable and frameset.
-        }
-        else if ( tagName == "draw:image" )
-        {
-            textData = '#'; // anchor placeholder
-            QString frameName = appendPicture(doc, ts);
-            anchorFrameset( doc, outputFormats, pos, frameName );
-            // see KWTextParag::loadFormatting "case 6:" for inspiration
-        }
-        else if ( tagName == "draw:text-box" )
-        {
-            textData = '#'; // anchor placeholder
-            QString frameName = appendTextBox(doc, ts);
-            anchorFrameset( doc, outputFormats, pos, frameName );
-            // see KWTextParag::loadFormatting "case 6:" for inspiration
         }
         else if ( textFoo && tagName == "text:a" )
         {

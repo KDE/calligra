@@ -49,6 +49,8 @@
 #include "KWordFormulaFrameSetEditIface.h"
 #include "KWordPictureFrameSetIface.h"
 #include "KWordHorizontalLineFrameSetIface.h"
+#include <koStoreDevice.h>
+#include <kooasiscontext.h>
 
 //#define DEBUG_DRAW
 
@@ -89,10 +91,10 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_frameBehavior( AutoExtendFrame ),
       m_newFrameBehavior( ( fs && fs->type() == FT_TEXT ) ? Reconnect : NoFollowup ),
       m_runAroundGap( _gap ),
-      bleft( 0 ),
-      bright( 0 ),
-      btop( 0 ),
-      bbottom( 0 ),
+      m_paddingLeft( 0 ),
+      m_paddingRight( 0 ),
+      m_paddingTop( 0 ),
+      m_paddingBottom( 0 ),
       m_minFrameHeight( 0 ),
       m_internalY( 0 ),
       m_zOrder( 0 ),
@@ -100,10 +102,10 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_selected( false ),
       m_drawFootNoteLine( false ),
       m_backgroundColor( (fs && (fs->type() == FT_PICTURE || fs->type() == FT_PART)) ? QBrush( QColor(), Qt::NoBrush) : QBrush( QColor() ) ), // valid brush with invalid color ( default )
-      brd_left( QColor(), KoBorder::SOLID, 0 ),
-      brd_right( QColor(), KoBorder::SOLID, 0 ),
-      brd_top( QColor(), KoBorder::SOLID, 0 ),
-      brd_bottom( QColor(), KoBorder::SOLID, 0 ),
+      m_borderLeft( QColor(), KoBorder::SOLID, 0 ),
+      m_borderRight( QColor(), KoBorder::SOLID, 0 ),
+      m_borderTop( QColor(), KoBorder::SOLID, 0 ),
+      m_borderBottom( QColor(), KoBorder::SOLID, 0 ),
       handles(),
       m_framesOnTop(),
       m_framesBelow(),
@@ -213,10 +215,10 @@ void KWFrame::copySettings(KWFrame *frm)
     setFrameBehavior(frm->frameBehavior());
     setNewFrameBehavior(frm->newFrameBehavior());
     setRunAroundGap(frm->runAroundGap());
-    setBLeft(frm->bLeft());
-    setBRight(frm->bRight());
-    setBTop(frm->bTop());
-    setBBottom(frm->bBottom());
+    setPaddingLeft(frm->paddingLeft());
+    setPaddingRight(frm->paddingRight());
+    setPaddingTop(frm->paddingTop());
+    setPaddingBottom(frm->paddingBottom());
     setMinFrameHeight(frm->minFrameHeight());
     m_internalY = 0; // internal Y is recalculated
     setZOrder(frm->zOrder());
@@ -433,17 +435,17 @@ void KWFrame::save( QDomElement &frameElem )
         frameElem.setAttribute( "bkBlue", backgroundColor().color().blue() );
         frameElem.setAttribute( "bkStyle", (int)backgroundColor().style ());
     }
-    if(bLeft() != 0)
-        frameElem.setAttribute( "bleftpt", bLeft() );
+    if(paddingLeft() != 0)
+        frameElem.setAttribute( "bleftpt", paddingLeft() );
 
-    if(bRight()!=0)
-        frameElem.setAttribute( "brightpt", bRight() );
+    if(paddingRight()!=0)
+        frameElem.setAttribute( "brightpt", paddingRight() );
 
-    if(bTop()!=0)
-        frameElem.setAttribute( "btoppt", bTop() );
+    if(paddingTop()!=0)
+        frameElem.setAttribute( "btoppt", paddingTop() );
 
-    if(bBottom()!=0)
-        frameElem.setAttribute( "bbottompt", bBottom() );
+    if(paddingBottom()!=0)
+        frameElem.setAttribute( "bbottompt", paddingBottom() );
 
     if(frameBehavior()!=AutoCreateNewFrame)
         frameElem.setAttribute( "autoCreateNewFrame", static_cast<int>( frameBehavior()) );
@@ -531,24 +533,60 @@ void KWFrame::load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVers
         if(c==b.color && b.penWidth()==1 && b.getStyle()==0 )
             b.setPenWidth(0);
     }
-    brd_left = l;
-    brd_right = r;
-    brd_top = t;
-    brd_bottom = b;
+    m_borderLeft = l;
+    m_borderRight = r;
+    m_borderTop = t;
+    m_borderBottom = b;
     m_backgroundColor = QBrush( c );
 
 
     if( frameElem.hasAttribute("bkStyle"))
         m_backgroundColor.setStyle (static_cast<Qt::BrushStyle>(KWDocument::getAttribute( frameElem, "bkStyle", Qt::SolidPattern )));
 
-    bleft = frameElem.attribute( "bleftpt" ).toDouble();
-    bright = frameElem.attribute( "brightpt" ).toDouble();
-    btop = frameElem.attribute( "btoppt" ).toDouble();
-    bbottom = frameElem.attribute( "bbottompt" ).toDouble();
+    m_paddingLeft = frameElem.attribute( "bleftpt" ).toDouble();
+    m_paddingRight = frameElem.attribute( "brightpt" ).toDouble();
+    m_paddingTop = frameElem.attribute( "btoppt" ).toDouble();
+    m_paddingBottom = frameElem.attribute( "bbottompt" ).toDouble();
     m_bCopy = KWDocument::getAttribute( frameElem, "copy", frameSet->isHeaderOrFooter() /* default to true for h/f */ );
     m_zOrder = frameElem.attribute( "z-index" ).toInt();
 }
 
+void KWFrame::loadCommonOasisProperties( KoOasisContext& context )
+{
+    KoStyleStack& styleStack = context.styleStack();
+    // padding. fo:padding for 4 values or padding-left/right/top/bottom (3.11.29 p228)
+    m_paddingLeft = KoUnit::parseValue( styleStack.attribute( "fo:padding", "left" ) );
+    m_paddingRight = KoUnit::parseValue( styleStack.attribute( "fo:padding", "right" ) );
+    m_paddingTop = KoUnit::parseValue( styleStack.attribute( "fo:padding", "top" ) );
+    m_paddingBottom = KoUnit::parseValue( styleStack.attribute( "fo:padding", "bottom" ) );
+
+    // background color (3.11.25)
+    if ( styleStack.hasAttribute( "fo:background-color" ) ) {
+        QString color = styleStack.attribute( "fo:background-color" );
+        if ( color == "transparent" )
+            m_backgroundColor = QBrush( QColor(), Qt::NoBrush );
+        else
+        {
+            // OOwriter doesn't support fill patterns (bkStyle).
+            // But the file support is more generic, and supports: draw:stroke, svg:stroke-color, draw:fill, draw:fill-color
+            // TODO figure out again how to import the brush style, iirc it's possible.
+            m_backgroundColor = QBrush( QColor( color ) /*, TODO */ );
+        }
+    }
+
+    // borders (3.11.27)
+    // can be none/hidden, solid and double. General form is the XSL/FO "width|style|color"
+    {
+        m_borderLeft.loadFoBorder( styleStack.attribute("fo:border", "left") );
+        m_borderRight.loadFoBorder( styleStack.attribute("fo:border", "right") );
+        m_borderTop.loadFoBorder( styleStack.attribute("fo:border", "top") );
+        m_borderBottom.loadFoBorder( styleStack.attribute("fo:border", "bottom") );
+    }
+    // TODO more refined border spec for double borders (3.11.28)
+
+    // TODO m_bCopy
+    // TODO m_newFrameBehavior
+}
 
 bool KWFrame::frameAtPos( const QPoint& point, bool borderOfFrameOnly) {
     // Forwarded to KWFrameSet to make it virtual
@@ -558,7 +596,7 @@ bool KWFrame::frameAtPos( const QPoint& point, bool borderOfFrameOnly) {
 KoRect KWFrame::innerRect() const
 {
     KoRect inner( this->normalize());
-    inner.moveBy( bLeft(), bTop());
+    inner.moveBy( paddingLeft(), paddingTop() );
     inner.setWidth( innerWidth() );
     inner.setHeight( innerHeight() );
     return inner;
@@ -566,20 +604,20 @@ KoRect KWFrame::innerRect() const
 
 double KWFrame::innerWidth() const
 {
-    return KMAX( 0.0, width() - bLeft() - bRight() );
+    return KMAX( 0.0, width() - m_paddingLeft - m_paddingRight );
 }
 
 double KWFrame::innerHeight() const
 {
-    return KMAX( 0.0, height() - bTop() - bBottom() );
+    return KMAX( 0.0, height() - m_paddingTop - m_paddingBottom );
 }
 
 void KWFrame::setFrameMargins( double _left, double _top, double _right, double _bottom)
 {
-    bleft = _left;
-    btop = _top;
-    bright = _right;
-    bbottom = _bottom;
+    m_paddingLeft = _left;
+    m_paddingTop = _top;
+    m_paddingRight = _right;
+    m_paddingBottom = _bottom;
 }
 
 void KWFrame::setMinFrameHeight(double h)
@@ -705,6 +743,7 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
     }
 }
 
+// This is in fact called "padding" now (from the OO/OASIS definition)
 void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect, const QColorGroup &, KWViewMode *viewMode )
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect(viewMode) ) );
@@ -724,10 +763,10 @@ void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect, c
     QBrush bgBrush( frame->backgroundColor() );
     bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
     p->setBrush( bgBrush );
-    int leftMargin = m_doc->zoomItX(frame->bLeft());
-    int topMargin = m_doc->zoomItY(frame->bTop());
-    int rightMargin = m_doc->zoomItX(frame->bRight());
-    int bottomMargin = m_doc->zoomItY(frame->bBottom());
+    int leftMargin = m_doc->zoomItX(frame->paddingLeft());
+    int topMargin = m_doc->zoomItY(frame->paddingTop());
+    int rightMargin = m_doc->zoomItX(frame->paddingRight());
+    int bottomMargin = m_doc->zoomItY(frame->paddingBottom());
     //kdDebug(32001) << "KWFrameSet::drawMargins leftMargin=" << leftMargin << " topMargin=" << topMargin << " rightMargin=" << rightMargin << " bottomMargin=" << bottomMargin << endl;
 
     if ( topMargin != 0 )
@@ -745,7 +784,7 @@ void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect, c
         QRect r( frameRect.right()-rightMargin, frameRect.top(), rightMargin, frameRect.height() );
         p->fillRect( r, bgBrush );
     }
-    if ( frame->bBottom() != 0 )
+    if ( bottomMargin != 0 )
     {
         QRect r( frameRect.left(), frameRect.bottom()-bottomMargin, frameRect.width(), bottomMargin );
         p->fillRect( r, bgBrush );
@@ -812,7 +851,7 @@ void KWFrameSet::setFloating()
         kdDebug(32001) << "KWFrameSet::setFloating looking for pos at " << dPoint.x() << " " << dPoint.y() << endl;
         frameSet->findPosition( dPoint, parag, index );
         // Create anchor. TODO: refcount the anchors!
-        setAnchored( frameSet, parag->paragId(), index );
+        setAnchored( frameSet, parag, index );
         frameSet->layout();
         frames.first()->updateResizeHandles();
         m_doc->frameChanged( frames.first() );
@@ -822,18 +861,28 @@ void KWFrameSet::setFloating()
 
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists /* = false */, bool repaint )
 {
-    Q_ASSERT( textfs );
     kdDebug(32001) << "KWFrameSet::setAnchored " << textfs << " " << paragId << " " << index << " " << placeHolderExists << endl;
-    if ( isFloating() )
-        deleteAnchors();
-    m_anchorTextFs = textfs;
     KWTextParag * parag = static_cast<KWTextParag *>( textfs->textDocument()->paragAt( paragId ) );
     Q_ASSERT( parag );
     if ( parag )
+        setAnchored( textfs, parag, index, placeHolderExists, repaint );
+}
+
+void KWFrameSet::setAnchored( KWTextFrameSet* textfs, KoTextParag* parag, int index, bool placeHolderExists /* = false */, bool repaint )
+{
+    Q_ASSERT( textfs );
+    Q_ASSERT( parag );
+    if ( isFloating() )
+        deleteAnchors();
+    m_anchorTextFs = textfs;
+    if ( parag )
         createAnchors( parag, index, placeHolderExists, repaint );
 
-    m_doc->updateAllFrames(); // We just became floating, so we need to be removed from "frames on top/below".
-    // TODO pass page number - hmm, we could have several frames in theory
+    if ( !placeHolderExists ) // i.e. not while loading
+    {
+        m_doc->updateAllFrames(); // We just became floating, so we need to be removed from "frames on top/below".
+        // TODO pass page number to updateAllFrames - hmm, we could have several frames in theory
+    }
 }
 
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs )
@@ -883,7 +932,7 @@ KWAnchor * KWFrameSet::createAnchor( KoTextDocument *txt, int frameNum )
     return anchor;
 }
 
-void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/,
+void KWFrameSet::createAnchors( KoTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/,
                                 bool repaint )
 {
     kdDebug(32001) << "KWFrameSet::createAnchors" << endl;
@@ -1325,7 +1374,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
             }
         }
 
-        if ( frame->bLeft() || frame->bTop() || frame->bRight() || frame->bBottom() )
+        if ( frame->paddingLeft() || frame->paddingTop() || frame->paddingRight() || frame->paddingBottom() )
             drawMargins( frame, doubleBufPainter, outerCRect, cg, viewMode );
         doubleBufPainter->save();
 #ifdef DEBUG_DRAW
@@ -1348,7 +1397,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
     }
     else
     {
-        if ( frame && (frame->bLeft() || frame->bTop() || frame->bRight() || frame->bBottom()) )
+        if ( frame && (frame->paddingLeft() || frame->paddingTop() || frame->paddingRight() || frame->paddingBottom()) )
             drawMargins( frame, painter, outerCRect, cg, viewMode );
         painter->save();
         painter->translate( translationOffset.x(), translationOffset.y() );
@@ -1467,7 +1516,7 @@ void KWFrameSet::loadOasis( QDomElement &bodyElem, bool loadFrames )
     // TODO removableheader
     // TODO protectSize
     // TODO visible?
-    // TODO load frames
+    // TODO load frames (see loadOasisFrames)
 }
 #endif
 
@@ -1504,6 +1553,65 @@ void KWFrameSet::load( QDomElement &framesetElem, bool loadFrames )
             }
         }
     }
+}
+
+KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& context )
+{
+    double width = 100;
+    if ( tag.hasAttribute( "svg:width" ) ) { // fixed width
+        // TODO handle percentage (of enclosing table/frame/page)
+        width = KoUnit::parseValue( tag.attribute( "svg:width" ) );
+    } else if ( tag.hasAttribute( "fo:min-width" ) ) {
+        // min-width is not supported in KWord. Let's use it as a fixed width.
+        width = KoUnit::parseValue( tag.attribute( "fo:min-width" ) );
+    } else {
+        kdWarning(32001) << "Error in text-box: neither width nor min-width specified!" << endl;
+    }
+    double height = 100;
+    bool hasMinHeight = false;
+    if ( tag.hasAttribute( "svg:height" ) ) { // fixed height
+        // TODO handle percentage (of enclosing table/frame/page)
+        height = KoUnit::parseValue( tag.attribute( "svg:height" ) );
+    } else if ( tag.hasAttribute( "fo:min-height" ) ) {
+        height = KoUnit::parseValue( tag.attribute( "fo:min-height" ) );
+        hasMinHeight = true;
+    } else {
+        kdWarning(32001) << "Error in text-box: neither height nor min-height specified!" << endl;
+    }
+
+    KWFrame::RunAround runAround = KWFrame::RA_BOUNDINGRECT;
+    KWFrame::RunAroundSide runAroundSide = KWFrame::RA_BIGGEST;
+    const QCString oowrap = context.styleStack().attribute( "style:wrap" ).latin1();
+    if ( oowrap == "none" )        // 'no wrap' means 'avoid horizontal space'
+        runAround = KWFrame::RA_SKIP;
+    else if ( oowrap == "left" )
+        runAroundSide = KWFrame::RA_LEFT;
+    else if ( oowrap == "right" )
+        runAroundSide= KWFrame::RA_RIGHT;
+    else if ( oowrap == "run-through" )
+        runAround = KWFrame::RA_NO;
+    //if ( oowrap == "biggest" ) // OASIS extension
+    // ->( KWFrame::RA_BOUNDINGRECT, KWFrame::RA_BIGGEST ), already set above
+    //if ( oowrap == "parallel" || oowrap == "dynamic" )
+    // dynamic is called "optimal" in the OO GUI. It's different from biggest because it can lead to parallel.
+    // Those are not supported in KWord, let's use biggest instead
+
+    // ## runAroundGap is a problem. KWord has one value, OO has 4 (margins on all sides, see p98).
+    // => TODO, implement 4 values in KWord.
+    double runAroundGap = 0;
+
+    KWFrame * frame = new KWFrame(this,
+                                  KoUnit::parseValue( tag.attribute( "svg:x" ) ),
+                                  KoUnit::parseValue( tag.attribute( "svg:y" ) ),
+                                  width, height, runAround, runAroundGap );
+    if ( hasMinHeight )
+        frame->setMinFrameHeight( height );
+    frame->setRunAroundSide( runAroundSide );
+    frame->setZOrder( tag.attribute( "draw:z-index" ).toInt() );
+    frame->loadCommonOasisProperties( context );
+
+    addFrame( frame, false );
+    return frame;
 }
 
 bool KWFrameSet::hasSelectedFrame()
@@ -1807,13 +1915,19 @@ void KWFrameSetEdit::showPopup( KWFrame* frame, KWView* view, const QPoint & _po
 /* Class: KWPictureFrameSet                                       */
 /******************************************************************/
 KWPictureFrameSet::KWPictureFrameSet( KWDocument *_doc, const QString & name )
-    : KWFrameSet( _doc ), m_finalSize( false )
+    : KWFrameSet( _doc ), m_keepAspectRatio( true ), m_finalSize( false )
 {
     if ( name.isEmpty() )
         m_name = _doc->generateFramesetName( i18n( "Picture %1" ) );
     else
         m_name = name;
-    m_keepAspectRatio = true;
+}
+
+KWPictureFrameSet::KWPictureFrameSet( KWDocument* doc, const QDomElement& tag, KoOasisContext& context )
+    : KWFrameSet( doc ), m_keepAspectRatio( true ), m_finalSize( false )
+{
+    m_name = doc->generateFramesetName( tag.attribute( "draw:name" ) );
+    loadOasis( tag, context );
 }
 
 KWPictureFrameSet::~KWPictureFrameSet() {
@@ -1944,6 +2058,38 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
         }
     } else {
         kdError(32001) << "Missing PICTURE/IMAGE/CLIPART tag in FRAMESET" << endl;
+    }
+}
+
+void KWPictureFrameSet::loadOasis( const QDomElement& tag, KoOasisContext& context )
+{
+    const QString href( tag.attribute("xlink:href") );
+    if ( !href.isEmpty() && href[0] == '#' )
+    {
+        QString strExtension;
+        const int result=href.findRev(".");
+        if (result>=0)
+        {
+            strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.
+        }
+        QString filename(href.mid(1));
+        const KoPictureKey key(filename, QDateTime::currentDateTime(Qt::UTC));
+        m_picture.setKey(key);
+
+        KoStore* store = context.store();
+        if ( store->open( filename ) )
+        {
+            KoStoreDevice dev(store);
+            if ( !m_picture.load( &dev, strExtension ) )
+                kdWarning(30518) << "Cannot load picture: " << filename << " " << href << endl;
+            store->close();
+        }
+        m_doc->pictureCollection()->insertPicture( key, m_picture );
+
+        context.styleStack().save();
+        context.fillStyleStack( tag, "draw:style-name" ); // get the style for the graphics element
+        loadOasisFrame( tag, context );
+        context.styleStack().restore();
     }
 }
 

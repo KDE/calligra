@@ -48,10 +48,9 @@ KugarPart::~KugarPart()
 //	closeURL();
 }
 
-bool KugarPart::loadOasis( const QDomDocument&, KoOasisStyles& )
+bool KugarPart::loadOasis( const QDomDocument&, KoOasisStyles&, KoStore* )
 {
-    //todo
-    return true;
+	return false;
 }
 
 

@@ -20,10 +20,12 @@
 #ifndef KOOASISCONTEXT_H
 #define KOOASISCONTEXT_H
 
-class KoOasisStyles;
 class QDomElement;
-class KoVariableCollection;
 class KoDocument;
+class KoOasisStyles;
+class KoPictureCollection;
+class KoStore;
+class KoVariableCollection;
 
 #include <koStyleStack.h>
 #include "koliststylestack.h"
@@ -40,16 +42,22 @@ class KoDocument;
 class KoOasisContext
 {
 public:
-    /// Stores reference to the KoOasisStyles parsed by KoDocument.
-    /// Make sure that the KoOasisStyles instance outlives this KoOasisContext instance.
-    /// (This is the case during loaiding, when using the KoOasisStyles given by KoDocument)
-    /// @param doc KoDocument, needed by some field variables
-    /// @param varColl collection, to create variables
-    KoOasisContext( KoDocument* doc, KoVariableCollection *varColl, KoOasisStyles& styles );
+    /**
+     * Stores reference to the KoOasisStyles parsed by KoDocument.
+     * Make sure that the KoOasisStyles instance outlives this KoOasisContext instance.
+     * (This is the case during loaiding, when using the KoOasisStyles given by KoDocument)
+     * @param doc KoDocument, needed by some field variables
+     * @param varColl reference to the collection that creates and stores variables (fields)
+     * @param styles reference to the KoOasisStyles parsed by KoDocument
+     * @param store pointer to store, if available, for e.g. loading images.
+     */
+    KoOasisContext( KoDocument* doc, KoVariableCollection& varColl,
+                    KoOasisStyles& styles, KoStore* store );
     ~KoOasisContext();
 
     KoDocument* koDocument() { return m_doc; }
-    KoVariableCollection *variableCollection() { return m_varColl; }
+    KoVariableCollection& variableCollection() { return m_varColl; }
+    KoStore* store() { return m_store; }
 
     KoOasisStyles& oasisStyles() { return m_styles; }
     KoStyleStack& styleStack() { return m_styleStack; }
@@ -75,7 +83,8 @@ private:
 
 private:
     KoDocument* m_doc;
-    KoVariableCollection *m_varColl;
+    KoStore* m_store;
+    KoVariableCollection& m_varColl;
     KoOasisStyles& m_styles;
     KoStyleStack m_styleStack;
 

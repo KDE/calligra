@@ -1746,10 +1746,10 @@ void KWInsertRemovePageCommand::unexecute()
 
 FrameMarginsStruct::FrameMarginsStruct( KWFrame *frame )
 {
-    topMargin = frame->bTop();
-    bottomMargin= frame->bBottom();
-    leftMargin = frame->bLeft();
-    rightMargin= frame->bRight();
+    topMargin = frame->paddingTop();
+    bottomMargin= frame->paddingBottom();
+    leftMargin = frame->paddingLeft();
+    rightMargin= frame->paddingRight();
 }
 
 FrameMarginsStruct::FrameMarginsStruct( double _left, double _top, double _right, double _bottom ):

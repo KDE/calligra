@@ -560,7 +560,7 @@ bool KSpreadDoc::loadChildren( KoStore* _store )
     return d->workbook->loadChildren( _store );
 }
 
-bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles )
+bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* )
 {
     //todo Laurent just init for the moment
     // format for oasis is not implemented
@@ -572,7 +572,7 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles 
     d->spellListIgnoreAll.clear();
 
     d->refs.clear();
-    
+
     QDomElement content = doc.documentElement();
     QDomElement body ( content.namedItem( "office:body" ).toElement() );
     if ( body.isNull() )
@@ -582,7 +582,7 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles 
     }
 
     // TODO check versions and mimetypes etc.
-    
+
     // all <table:table> goes to workbook
     if ( !d->workbook->loadOasis( body ) )
     {

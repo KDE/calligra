@@ -34,7 +34,7 @@ public:
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE, double zoomX = 1.0, double zoomY = 1.0 );
 
     virtual bool initDoc() { return true; }
-    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles );
+    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* );
 
     virtual bool loadXML( QIODevice *, const QDomDocument & );
     virtual bool saveFile();

@@ -802,8 +802,8 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     if ( page == oldPage )
     {
         //kdDebug() << "KWCanvas::mmEditFrameResize old rect " << DEBUGRECT( *frame ) << endl;
-        int minHeight = s_minFrameHeight + static_cast<int>(frame->bTop() + frame->bBottom());
-        int minWidth = s_minFrameWidth + static_cast<int>(frame->bLeft() + frame->bRight());
+        int minHeight = s_minFrameHeight + static_cast<int>(frame->paddingTop() + frame->paddingBottom());
+        int minWidth = s_minFrameWidth + static_cast<int>(frame->paddingLeft() + frame->paddingRight());
         if ( top && newTop != y )
         {
             if (newBottom - y < minHeight+5)

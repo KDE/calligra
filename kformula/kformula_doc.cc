@@ -86,12 +86,11 @@ QDomDocument KFormulaDoc::saveXML()
     return doc;
 }
 
-bool KFormulaDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles )
+bool KFormulaDoc::loadOasis( const QDomDocument&, KoOasisStyles&, KoStore* )
 {
     //todo
-    return true;
+    return false;
 }
-
 
 bool KFormulaDoc::loadXML(QIODevice *, const QDomDocument& doc)
 {

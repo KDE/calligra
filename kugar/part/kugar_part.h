@@ -26,7 +26,7 @@ public:
 
 	virtual bool initDoc();
 
-    virtual bool loadOasis( const QDomDocument&, KoOasisStyles& );
+	virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, KoStore* );
 
 	virtual bool loadXML( QIODevice *, const QDomDocument & );
 //	virtual QDomDocument saveXML();

@@ -115,10 +115,9 @@ KoView* KudesignerDoc::createViewInstance( QWidget* parent, const char* name )
     return new KudesignerView( this, parent, name );
 }
 
-bool KudesignerDoc::loadOasis( const QDomDocument&, KoOasisStyles& )
+bool KudesignerDoc::loadOasis( const QDomDocument&, KoOasisStyles&, KoStore* )
 {
-    //todo
-    return true;
+    return false;
 }
 
 

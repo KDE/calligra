@@ -41,8 +41,9 @@ KoView* KoUnavailPart::createViewInstance( QWidget* parent, const char* name )
     return new KoUnavailView( this, parent, name );
 }
 
-bool KoUnavailPart::loadOasis( const QDomDocument&, KoOasisStyles& )
+bool KoUnavailPart::loadOasis( const QDomDocument& doc, KoOasisStyles&, KoStore* )
 {
+    m_doc = doc;
     return true;
 }
 

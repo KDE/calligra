@@ -1528,7 +1528,7 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
             // Also load styles from content.xml
             oasisStyles.createStyleMap( contentDoc );
 
-            ok = loadOasis( contentDoc, oasisStyles );
+            ok = loadOasis( contentDoc, oasisStyles, store );
         }
         if ( !ok ) {
             delete store;

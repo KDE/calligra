@@ -21,8 +21,9 @@
 #include <koOasisStyles.h>
 #include <kdebug.h>
 
-KoOasisContext::KoOasisContext( KoDocument* doc, KoVariableCollection *varColl, KoOasisStyles& styles )
-    : m_doc( doc ), m_varColl( varColl ), m_styles( styles )
+KoOasisContext::KoOasisContext( KoDocument* doc, KoVariableCollection& varColl,
+                                KoOasisStyles& styles, KoStore* store )
+    : m_doc( doc ), m_store( store ), m_varColl( varColl ), m_styles( styles )
 {
 }
 

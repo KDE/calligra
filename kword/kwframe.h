@@ -188,16 +188,16 @@ public:
 
     /** All borders can be custom drawn with their own colors etc.
      */
-    const KoBorder &leftBorder() const { return brd_left; }
-    const KoBorder &rightBorder() const { return brd_right; }
-    const KoBorder &topBorder() const { return brd_top; }
-    const KoBorder &bottomBorder() const { return brd_bottom; }
+    const KoBorder &leftBorder() const { return m_borderLeft; }
+    const KoBorder &rightBorder() const { return m_borderRight; }
+    const KoBorder &topBorder() const { return m_borderTop; }
+    const KoBorder &bottomBorder() const { return m_borderBottom; }
 
 
-    void setLeftBorder( KoBorder _brd ) { brd_left = _brd; }
-    void setRightBorder( KoBorder _brd ) { brd_right = _brd; }
-    void setTopBorder( KoBorder _brd ) { brd_top = _brd; }
-    void setBottomBorder( KoBorder _brd ) { brd_bottom = _brd; }
+    void setLeftBorder( KoBorder _brd ) { m_borderLeft = _brd; }
+    void setRightBorder( KoBorder _brd ) { m_borderRight = _brd; }
+    void setTopBorder( KoBorder _brd ) { m_borderTop = _brd; }
+    void setBottomBorder( KoBorder _brd ) { m_borderBottom = _brd; }
 
     void invalidateParentFrameset();
 
@@ -245,31 +245,23 @@ public:
     void setInternalY( double y ) { m_internalY = y; }
     double internalY() const { return m_internalY; }
 
-    /** set left margin size
-     */
-    void setBLeft( double b ) { bleft = b; }
-    /** set right margin size
-     */
-    void setBRight( double b ) { bright = b; }
-    /** set top margin size
-     */
-    void setBTop( double b ) { btop = b; }
-    /** set bottom margin size
-     */
-    void setBBottom( double b ) { bbottom = b; }
+    /// set left padding (distance between frame contents and frame border)
+    void setPaddingLeft( double b ) { m_paddingLeft = b; }
+    /// set right padding
+    void setPaddingRight( double b ) { m_paddingRight = b; }
+    /// set top padding
+    void setPaddingTop( double b ) { m_paddingTop = b; }
+    /// set bottom padding
+    void setPaddingBottom( double b ) { m_paddingBottom = b; }
 
-    /** get left margin size
-     */
-    double bLeft()const { return bleft; }
-    /** get right margin size
-     */
-    double bRight()const { return bright; }
-    /** get top margin size
-     */
-    double bTop()const { return btop; }
-    /** get bottom margin size
-     */
-    double bBottom()const { return bbottom; }
+    /// get left padding
+    double paddingLeft() const { return m_paddingLeft; }
+    /// get right padding
+    double paddingRight() const { return m_paddingRight; }
+    /// get top padding
+    double paddingTop() const { return m_paddingTop; }
+    /// get bottom padding
+    double paddingBottom() const { return m_paddingBottom; }
 
     void setFrameMargins( double _left, double _top, double right, double bottom);
     /** returns a copy of self
@@ -284,6 +276,7 @@ public:
     /** read attributes from XML. @p headerOrFooter if true some defaults are different
      */
     void load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVersion );
+    void loadCommonOasisProperties( KoOasisContext& context );
 
     void setMinFrameHeight(double h);
     double minFrameHeight(void)const {return m_minFrameHeight;}
@@ -308,7 +301,7 @@ private:
     char /*FrameBehavior*/ m_frameBehavior;
     char /*NewFrameBehavior*/ m_newFrameBehavior;
     double m_runAroundGap;
-    double bleft, bright, btop, bbottom; // margins
+    double m_paddingLeft, m_paddingRight, m_paddingTop, m_paddingBottom;
     double m_minFrameHeight;
 
     double m_internalY;
@@ -318,7 +311,7 @@ private:
     bool m_drawFootNoteLine;
 
     QBrush m_backgroundColor;
-    KoBorder brd_left, brd_right, brd_top, brd_bottom;
+    KoBorder m_borderLeft, m_borderRight, m_borderTop, m_borderBottom;
 
     QPtrList<KWResizeHandle> handles;
     KWFrameList m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
@@ -666,6 +659,7 @@ public:
 
     /** load from XML - when loading */
     virtual void load( QDomElement &framesetElem, bool loadFrames = true );
+    KWFrame* loadOasisFrame( const QDomElement& tag, KoOasisContext& context );
     /** load from XML - when pasting from clipboard */
     virtual void fromXML( QDomElement &framesetElem, bool loadFrames = true, bool /*useNames*/ = true )
     { load( framesetElem, loadFrames ); }
@@ -692,9 +686,14 @@ public:
     //Note: none of those floating-frameset methods creates undo/redo
     //They are _called_ by the undo/redo commands.
 
-    /** Make this frameset floating, as close to its current position as possible. */
+    /** Make this frameset floating (anchored), as close to its current position as possible. */
     void setFloating();
-    /** Make this frameset floating, with the anchor at @p paragId,@p index in the text frameset @p textfs */
+    /**
+     * Make this frameset anchored, with the anchor at @p paragId,@p index in the text frameset @p textfs.
+     * Also used during OASIS loading (placeHolderExists=true)
+     */
+    void setAnchored( KWTextFrameSet* textfs, KoTextParag* parag, int index, bool placeHolderExists = false, bool repaint = true );
+    /** Make this frameset floating, with the anchor at @p paragId,@p index in the text frameset @p textfs. DEPRECATED */
     void setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists = false, bool repaint = true );
     /** Note that this frameset has been made floating already, and store anchor position */
     void setAnchored( KWTextFrameSet* textfs );
@@ -805,7 +804,7 @@ protected:
 
     void deleteAnchor( KWAnchor * anchor );
     virtual void deleteAnchors();
-    virtual void createAnchors( KWTextParag * parag, int index, bool placeHolderExists = false, bool repaint = true );
+    virtual void createAnchors( KoTextParag * parag, int index, bool placeHolderExists = false, bool repaint = true );
 
 
     KWDocument *m_doc;            // Document
@@ -835,6 +834,8 @@ class KWPictureFrameSet : public KWFrameSet
 {
 public:
     KWPictureFrameSet( KWDocument *_doc, const QString & name );
+    // Used for OASIS loading
+    KWPictureFrameSet( KWDocument* doc, const QDomElement& tag, KoOasisContext& context );
     virtual ~KWPictureFrameSet();
 
     virtual KWordFrameSetIface* dcopObject();
@@ -890,6 +891,8 @@ public:
     bool keepAspectRatio() const;
     void setKeepAspectRatio( bool b );
 protected:
+    void loadOasis( const QDomElement& tag, KoOasisContext& context );
+
     /// The picture
     KoPicture m_picture;
     bool m_keepAspectRatio;

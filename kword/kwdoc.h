@@ -227,7 +227,7 @@ public:
     virtual bool initDoc();
     void initEmpty();
 
-    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles );
+    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* store );
     virtual bool loadXML( QIODevice *, const QDomDocument & dom );
     virtual bool loadChildren( KoStore *_store );
     virtual QDomDocument saveXML();
@@ -271,11 +271,11 @@ public:
     void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf );
 
     KWTextFrameSet * textFrameSet ( unsigned int _num ) const;
-    // Return the frameset number @p _num
+    /// Return the frameset number @p _num
     KWFrameSet *frameSet( unsigned int _num )
     { return m_lstFrameSet.at( _num ); }
 
-    // Return the frameset with a given name
+    /// Return the frameset with a given name
     KWFrameSet * frameSetByName( const QString & name );
 
     /** Returns the frame under the mouse. (or 0 if no frame is found)
@@ -285,30 +285,31 @@ public:
      */
     KWFrame * frameUnderMouse( const QPoint& nPoint, bool* border = 0L, bool firstNonSelected = false );
 
-    // Return the total number of framesets
-    unsigned int getNumFrameSets()
+    /// Return the total number of framesets
+    unsigned int getNumFrameSets() const
     { return m_lstFrameSet.count(); }
 
-    // Generate a new name for a frameset. @p templateName must contain a %1 [for a number].
+    /// Generate a new name for a frameset. @p templateName must contain a %1 [for a number].
     QString generateFramesetName( const QString & templateName );
 
-    // Prefer this over frameSet(i), if iterating over all of them
+    /// Prefer this over frameSet(i), if iterating over all of them
     QPtrListIterator<KWFrameSet> framesetsIterator() const { return QPtrListIterator<KWFrameSet>(m_lstFrameSet); }
 
     QValueList<KoTextObject *> visibleTextObjects(KWViewMode *viewmode) const;
 
+    /// Register new frameset
     void addFrameSet( KWFrameSet *f, bool finalize = true );
-    // Remove frameset from list (don't delete)
+    /// Remove frameset from list (don't delete)
     void removeFrameSet( KWFrameSet *f );
 
-    // Frame/table deletion - with undo/redo support
-    // Moved to KWDocument so that dialogs can call them if necessary
+    /// Frame/table deletion - with undo/redo support
+    /// Moved to KWDocument so that dialogs can call them if necessary
     void deleteTable( KWTableFrameSet *groupManager );
     void deleteFrame( KWFrame * frame );
 
     void deleteSelectedFrames();
 
-    // Those distances are in _pixels_, i.e. with zoom and resolution applied.
+    /// Those distances are in _pixels_, i.e. with zoom and resolution applied.
     unsigned int topBorder() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptTop )); }
     unsigned int bottomBorder() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptBottom )); }
     unsigned int leftBorder() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptLeft )); }

@@ -803,10 +803,10 @@ void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize
     double oneMm = MM_TO_POINT( 1.0 );
     for (TableIter cell(this); cell; ++cell) {
         KWFrame *frame = cell->frame(0);
-        frame->setBLeft( oneMm );
-        frame->setBRight( oneMm );
-        frame->setBTop( oneMm );
-        frame->setBBottom( oneMm );
+        frame->setPaddingLeft( oneMm );
+        frame->setPaddingRight( oneMm );
+        frame->setPaddingTop( oneMm );
+        frame->setPaddingBottom( oneMm );
         frame->setNewFrameBehavior( KWFrame::NoFollowup );
         position(cell, true);
     }

@@ -50,11 +50,15 @@ public:
 
     virtual KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
 
-    virtual bool loadSpanTag( const QDomElement& /*tag*/, KoOasisContext& /*context*/, QString& textData );
+    /// Extensions to KoTextParag::loadOasisSpan
+    virtual bool loadSpanTag( const QDomElement& tag, KoOasisContext& context,
+                              KoTextParag* parag, int pos,
+                              QString& textData, KoTextCustomItem* & customItem );
 
 protected:
     void init();
 private:
+
     KWTextFrameSet * m_textfs;
 };
 

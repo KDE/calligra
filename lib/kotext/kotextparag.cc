@@ -1701,7 +1701,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         else if ( textFoo )
         {
             // Check if it's a variable
-            KoVariable* var = context.variableCollection()->loadOasisField( textDocument(), ts, context );
+            KoVariable* var = context.variableCollection().loadOasisField( textDocument(), ts, context );
             if ( var )
             {
                 textData = "#";     // field placeholder
