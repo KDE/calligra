@@ -27,7 +27,7 @@
 #include <qwidget.h>
 
 class QLabel;
-class KIntNumInput;
+class KIntSpinBox;
 class KGradientSelector;
 
 class VColorSlider : public QWidget
