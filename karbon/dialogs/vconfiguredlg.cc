@@ -250,7 +250,8 @@ void VConfigMiscPage::apply()
     if(m_oldUnit!=m_unit->currentItem())
     {
         QString unitName;
-        switch (m_unit->currentItem())
+        m_oldUnit=m_unit->currentItem();
+        switch (m_oldUnit)
         {
         case 0:
             unitName=KoUnit::unitName(KoUnit::U_MM  );
