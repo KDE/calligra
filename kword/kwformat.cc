@@ -35,24 +35,26 @@ KWTextFormatCollection::KWTextFormatCollection( const QFont & defaultFont )
     setDefaultFormat( new KWTextFormat( defaultFont, QColor(), 0L /* no coll, for no refcounting */ ) );
 }
 
-QTextFormat * KWTextFormatCollection::format( const QFont &f, const QColor &c )
+QTextFormat * KWTextFormatCollection::format( const QFont &fn, const QColor &c )
 {
     //kdDebug() << "KWTextFormatCollection::format font, color " << endl;
-    if ( m_cachedFormat && m_cfont == f && m_ccol == c ) {
+    if ( m_cachedFormat && m_cfont == fn && m_ccol == c ) {
         m_cachedFormat->addRef();
         return m_cachedFormat;
     }
 
-    QString key = QTextFormat::getKey( f, c, FALSE, QString::null, QString::null, QTextFormat::AlignNormal );
-    //kdDebug() << "format() textformat=" << this << " pointsizefloat=" << f.pointSizeFloat() << endl;
+    QString key = QTextFormat::getKey( fn, c, FALSE, QString::null, QString::null, QTextFormat::AlignNormal );
+    //kdDebug() << "format() textformat=" << this << " pointsizefloat=" << fn.pointSizeFloat() << endl;
     // SYNC any changes with generateKey below
     ASSERT( !key.contains( '+' ) );
     key += '+';
-    key += QString::number( (int)f.strikeOut() );
+    key += QString::number( (int)fn.strikeOut() );
     key += '/';
-    key += QString::number( (int)(f.pointSizeFloat() * 10) );
+    key += QString::number( (int)(fn.pointSizeFloat() * 10) );
+    key += '/';
+    key += QString::number( (int)fn.charSet() );
     m_cachedFormat = static_cast<KWTextFormat *>( dict().find( key ) );
-    m_cfont = f;
+    m_cfont = fn;
     m_ccol = c;
 
     if ( m_cachedFormat ) {
@@ -60,7 +62,7 @@ QTextFormat * KWTextFormatCollection::format( const QFont &f, const QColor &c )
         return m_cachedFormat;
     }
 
-    m_cachedFormat = static_cast<KWTextFormat *>( createFormat( f, c ) );
+    m_cachedFormat = static_cast<KWTextFormat *>( createFormat( fn, c ) );
     dict().insert( m_cachedFormat->key(), m_cachedFormat );
     return m_cachedFormat;
 }
@@ -89,6 +91,8 @@ void KWTextFormat::copyFormat( const QTextFormat & nf, int flags )
         fn.setPointSizeFloat( nf.font().pointSizeFloat() );
     if ( flags & KWTextFormat::StrikeOut )
         fn.setStrikeOut( nf.font().strikeOut() );
+    if ( flags & KWTextFormat::CharSet )
+        fn.setCharSet( nf.font().charSet() );
     update();
     //kdDebug() << "KWTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf
     //          << " " << nf.key() " flags=" << flags
@@ -111,6 +115,14 @@ void KWTextFormat::setStrikeOut(bool b)
     update();
 }
 
+void KWTextFormat::setCharset( QFont::CharSet charset )
+{
+    if ( fn.charSet() == charset )
+        return;
+    fn.setCharSet( charset );
+    update();
+}
+
 void KWTextFormat::generateKey()
 {
 #if 0 // doesn't seem to help...
@@ -127,6 +139,8 @@ void KWTextFormat::generateKey()
     k += QString::number( (int)fn.strikeOut() );
     k += '/';
     k += QString::number( (int)(fn.pointSizeFloat() * 10) );
+    k += '/';
+    k += QString::number( (int)fn.charSet() );
     setKey( k );
     //kdDebug() << "generateKey textformat=" << this << " k=" << k << " pointsizefloat=" << fn.pointSizeFloat() << endl;
 }
@@ -152,6 +166,8 @@ int KWTextFormat::compare( const KWTextFormat & format ) const
 
     if ( fn.strikeOut() != format.fn.strikeOut() )
         flags |= KWTextFormat::StrikeOut;
+    if ( fn.charSet() != format.fn.charSet() )
+        flags |= KWTextFormat::CharSet;
 
     return flags;
 }

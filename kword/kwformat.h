@@ -25,7 +25,8 @@ using namespace Qt3;
 class KWDocument;
 
 /**
- * KWord's reimplementation of QTextFormat, to add setPixelSizeFloat().
+ * KWord's reimplementation of QTextFormat, to add setPixelSizeFloat(),
+ * and storing StrikeOut and CharSet as part of the format.
  */
 class KWTextFormat : public QTextFormat
 {
@@ -44,13 +45,18 @@ public:
     int compare( const KWTextFormat & format ) const;
 
     // Extending QTextFormat's enum
-    enum { StrikeOut = 256 };
+    enum { StrikeOut = 256, CharSet = 512 };
 
     void setPointSizeFloat( float );
     float pointSizeFloat() const { return fn.pointSizeFloat(); }
-    void setStrikeOut(bool );
+    void setStrikeOut(bool);
+    void setCharset( QFont::CharSet charset );
 protected:
     virtual void generateKey();
+
+    // NOTE: adding a member var here will make KWTextFormat bigger than QTextFormat,
+    // which might break some casts somewhere. We'll need to do this, but carefully :)
+    // (i.e. making sure that all formats are created as KWTextFormats)
 };
 
 /**

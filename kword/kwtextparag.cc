@@ -727,6 +727,12 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KWTextFormat * curForma
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->font().strikeOut()) );
     }
+    if( !refFormat || curFormat->font().charSet() != refFormat->font().charSet() )
+    {
+        elem = doc.createElement( "CHARSET" );
+        formatElem.appendChild( elem );
+        elem.setAttribute( "value", static_cast<int>(curFormat->font().charSet()) );
+    }
     if( !refFormat || curFormat->vAlign() != refFormat->vAlign() )
     {
         elem = doc.createElement( "VERTALIGN" );
@@ -854,6 +860,9 @@ KWTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KWTextFormat * re
     elem = formatElem.namedItem( "STRIKEOUT" ).toElement();
     if ( !elem.isNull() )
         font.setStrikeOut( elem.attribute("value").toInt() == 1 );
+    elem = formatElem.namedItem( "CHARSET" ).toElement();
+    if ( !elem.isNull() )
+        font.setCharSet( (QFont::CharSet) elem.attribute("value").toInt() );
 
     format.setFont( font );
 

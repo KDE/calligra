@@ -111,6 +111,9 @@ void KWFontChooser::slotFontChanged(const QFont & f)
         m_changedFlags |= QTextFormat::Family;
     if ( f.pointSize() != m_newFont.pointSize() )
         m_changedFlags |= QTextFormat::Size;
+    kdDebug() << "KWFontChooser::slotFontChanged newcharset=" << f.charSet() << " oldcharset=" << m_newFont.charSet() << endl;
+    if ( f.charSet() != m_newFont.charSet() )
+        m_changedFlags |= KWTextFormat::CharSet;
     kdDebug() << "KWFontChooser::slotFontChanged m_changedFlags=" << m_changedFlags << endl;
     m_newFont = f;
 }

@@ -375,7 +375,7 @@ don't put a </?xml...> at the end of the file!).
         When FORMAT is used to specify the format of a style, pos and len are omitted.
 -->
 <!ELEMENT FORMAT
-    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|ANCHOR|IMAGE|VARIABLE)*>
+    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|CHARSET|VERTALIGN|ANCHOR|IMAGE|VARIABLE)*>
 <!ATTLIST FORMAT
     id CDATA #REQUIRED
     pos CDATA #IMPLIED
@@ -460,6 +460,16 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT VERTALIGN
     EMPTY>
 <!ATTLIST VERTALIGN
+    value CDATA #REQUIRED>
+
+<!-- CHARSET
+            Font charset
+            See "man qfont" for the meaning of the values.
+            If unspecified, the charset globally set in KControl's language module is applied.
+-->
+<!ELEMENT CHARSET
+    EMPTY>
+<!ATTLIST CHARSET
     value CDATA #REQUIRED>
 
 <!-- LAYOUT
