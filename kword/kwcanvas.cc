@@ -1840,13 +1840,9 @@ void KWCanvas::updateCurrentFormat()
 void KWCanvas::ungroupTable(KWTableFrameSet *table)
 {
     deleteFrameSetEditTable(table);
-    table->ungroup();
-    doc->delFrameSet(table);
-    //when you ungroup a table
-    // you must remove table item in docstruct
-    // create items in text item in docstruct
-    emit docStructChanged(TextFrames);
-    emit docStructChanged(Tables);
+    KWUngroupTableCommand *cmd = new KWUngroupTableCommand( i18n("Ungroup Table"), doc, table ) ;
+    doc->addCommand( cmd );
+    cmd->execute();
     emit currentFrameSetEditChanged();
     repaintAll();
 }

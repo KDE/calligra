@@ -31,6 +31,7 @@ class QTextCommand;
 }
 class KWTextFrameSet;
 class KWDocument;
+class KWTableFrameSet;
 
 /**
  * Wraps a QTextCommand into a KCommand, for the UI
@@ -307,6 +308,24 @@ protected:
     KWDocument *m_pDoc;
     FrameIndex frameIndex;
     KWFrame *copyFrame;
+};
+
+/**
+ * Command created when you ungroup a table
+ */
+class KWUngroupTableCommand : public KCommand
+{
+public:
+    KWUngroupTableCommand( const QString &name, KWDocument *_doc, KWTableFrameSet * _table) ;
+    ~KWUngroupTableCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWDocument *m_pDoc;
+    FrameIndex frameIndex;
+    KWTableFrameSet *m_pTable;
+    QList<FrameIndex> m_IndexFrame;
 };
 
 #endif

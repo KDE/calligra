@@ -89,7 +89,8 @@ KWFrameSetEdit * KWTableFrameSet::createFrameSetEdit( KWCanvas * canvas )
 
 void KWTableFrameSet::updateFrames()
 {
-
+    if(m_cells.count()==0)
+        return;
     for (unsigned int i =0; i < m_cells.count(); i++)
     {
         m_cells.at(i)->updateFrames();
@@ -1023,15 +1024,23 @@ void KWTableFrameSet::updateTempHeaders()
 
 void KWTableFrameSet::ungroup()
 {
+    /*
     for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
         m_cells.at( i )->setGroupManager( 0L );
         m_doc->addFrameSet(m_cells.at( i ));
-    }
-
+        }
+    */
     m_cells.setAutoDelete( false );
     m_cells.clear();
 
     m_active = false;
+}
+void KWTableFrameSet::group()
+{
+   m_cells.setAutoDelete( true );
+   m_cells.clear();
+
+   m_active = true;
 }
 
 bool KWTableFrameSet::joinCells() {
@@ -1305,7 +1314,8 @@ bool KWTableFrameSet::contains( double mx, double my ) {
         can always get the last cell on a page by substracting 1 from the firs cell of the
         next page. (Well, in theory anyway, untill someone joins the last cell of a page ;)
     */
-
+    if(m_cells.count()==0)
+        return false;
     if(m_pageBoundaries.count() ==0)
         recalcRows();
     KWFrame *first, *last;
@@ -1501,7 +1511,7 @@ void KWTableFrameSet::finalize( ) {
 }
 
 bool KWTableFrameSet::canRemovePage( int num ) {
-    /*  This one is a lot simpler then the one it overrides, we simply don't have 
+    /*  This one is a lot simpler then the one it overrides, we simply don't have
         to check if the frame contains something, the simple existence of a frame
         is enough
     */

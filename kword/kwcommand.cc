@@ -721,3 +721,52 @@ void KWCreateFrameCommand::unexecute()
 
 }
 
+
+
+KWUngroupTableCommand::KWUngroupTableCommand( const QString &name, KWDocument *_doc, KWTableFrameSet * _table ):
+    KCommand(name),
+    m_pDoc(_doc),
+    m_pTable(_table)
+{
+    m_IndexFrame.clear();
+    for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ ) {
+        FrameIndex *index=new FrameIndex;
+        index->m_pFrameSet=m_pTable->getCell( i );
+        index->m_iFrameIndex=0;
+        m_IndexFrame.append(index);
+    }
+}
+
+void KWUngroupTableCommand::execute()
+{
+    for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ ) {
+        m_pTable->getCell( i )->setGroupManager( 0L );
+        m_pDoc->addFrameSet(m_pTable->getCell( i ));
+    }
+    m_pTable->ungroup();
+    m_pDoc->delFrameSet(m_pTable,false);
+    //when you ungroup a table
+    // you must remove table item in docstruct
+    // create items in text item in docstruct
+    m_pDoc->refreshDocStructure(FT_TEXT);
+    m_pDoc->refreshDocStructure(FT_TABLE);
+}
+
+void KWUngroupTableCommand::unexecute()
+{
+    ASSERT(m_pTable);
+    m_pTable->group();
+    FrameIndex *tmp;
+    for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
+    {
+        tmp->m_pFrameSet->setGroupManager(m_pTable);
+        m_pDoc->delFrameSet(tmp->m_pFrameSet,false);
+        KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(tmp->m_pFrameSet);
+        ASSERT(cell);
+        m_pTable->addCell( cell );
+    }
+    m_pDoc->addFrameSet(m_pTable);
+    m_pDoc->refreshDocStructure(FT_TEXT);
+    m_pDoc->refreshDocStructure(FT_TABLE);
+}
+

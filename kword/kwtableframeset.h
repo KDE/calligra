@@ -183,6 +183,8 @@ public:
      * edited apart from each other. (ps. there is no way back..) */
     void ungroup();
 
+    void group();
+
     bool isActive() { return m_active; }
 
     /** merge cells to one cell. Will loose all text not in top-left cell */
@@ -227,11 +229,11 @@ public:
     virtual void printDebug( KWFrame * frame );
     virtual void printDebug();
 #endif
-
+    void addCell( Cell *cell );
 protected:
     virtual void deleteAnchors();
     virtual void updateAnchors( bool placeHolderExists = false );
-    void addCell( Cell *cell );
+    //void addCell( Cell *cell );
 
 private:
     unsigned int m_rows, m_cols;
