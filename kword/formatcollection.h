@@ -41,7 +41,7 @@ public:
     QString generateKey( KWFormat *_format )
     { return generateKey( *_format ); }
 
-    QMap< KWFormat*, unsigned int > &getIndexMap() {
+    const QMap< KWFormat*, unsigned int > &getIndexMap() const {
 	return indexMap;
     }
 

@@ -1124,11 +1124,6 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     paper.setAttribute( "mmFootBody", (int)pageHeaderFooter.mmFooterBodySpacing );
     paper.setAttribute( "inchFootBody", (int)pageHeaderFooter.inchFooterBodySpacing );
 
-    QDomElement e = formatCollection.save( doc );
-    if ( e.isNull() )
-	return FALSE;
-    word.appendChild( e );
-
     QDomElement border = doc.createElement( "PAPERBORDERS" );
     paper.appendChild( border );
     border.setAttribute( "mmLeft", (int)pageLayout.mmLeft );
@@ -1151,6 +1146,11 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     attr.setAttribute( "hasFooter", hasFooter() );
     attr.setAttribute( "unit", getUnit() );
 
+    QDomElement e = formatCollection.save( doc );
+    if ( e.isNull() )
+	return FALSE;
+    word.appendChild( e );
+    
     QDomElement fn = footNoteManager.save( doc );
     if ( fn.isNull() )
 	return false;
