@@ -1117,6 +1117,12 @@ void KoTextView::insertNonbreakingSpace()
                           false /* no newline */, true, i18n("Insert Non-Breaking Space") );
 }
 
+void KoTextView::insertNonbreakingHyphen()
+{
+    textObject()->insert( cursor(), currentFormat(), QChar(0x2013),
+                          false /* no newline */, true, i18n("Insert Non-Breaking Hyphen") );
+}
+
 void KoTextView::insertSpecialChar(QChar _c, const QString& font)
 {
     KoTextFormat * newFormat = new KoTextFormat(*currentFormat());

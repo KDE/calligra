@@ -130,6 +130,7 @@ public:
     void insertSoftHyphen();
     void insertLineBreak();
     void insertNonbreakingSpace();
+    void insertNonbreakingHyphen();
     void increaseNumberingLevel( const KoStyleCollection* styleCollection );
     void decreaseNumberingLevel( const KoStyleCollection* styleCollection );
     void insertSpecialChar(QChar _c, const QString& font);
