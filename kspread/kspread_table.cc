@@ -2134,11 +2134,17 @@ bool KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
+        if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+                KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, m_rctSelection );
+                m_pDoc->undoBuffer()->appendUndo( undo );
+        }
         KSpreadCell* c = m_cells.firstCell();
         for( ;c; c = c->nextCell() )
         {
             int row = c->row();
-            if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+            if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+            && !c->isObscured())
             {
                 if(!c->isValue() && !c->isBool() &&!c->isFormular() &&!c->isDefault()&&!c->text().isEmpty())
                 {
@@ -2160,11 +2166,17 @@ bool KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
+        if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+                KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, m_rctSelection );
+                m_pDoc->undoBuffer()->appendUndo( undo );
+        }
         KSpreadCell* c = m_cells.firstCell();
         for( ;c; c = c->nextCell() )
         {
             int col = c->column();
-            if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+            if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+            && !c->isObscured())
             {
                 if(!c->isValue() && !c->isBool() &&!c->isFormular() &&!c->isDefault()&&!c->text().isEmpty())
                 {
@@ -2198,14 +2210,15 @@ bool KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
                 KSpreadCell *cell = cellAt( x, y );
-
-                if ( cell == m_pDefaultCell )
+                if( !cell->isObscured())
                 {
+                  if ( cell == m_pDefaultCell )
+                  {
                     cell = new KSpreadCell( this, x, y );
                     m_cells.insert( cell, x, y );
-                }
-                if(!cell->isValue() && !cell->isBool() &&!cell->isFormular() &&!cell->isDefault()&&!cell->text().isEmpty())
-                {
+                  }
+                  if(!cell->isValue() && !cell->isBool() &&!cell->isFormular() &&!cell->isDefault()&&!cell->text().isEmpty())
+                  {
                     QString text;
                     if((text=replaceText(cell->text(), _find, _replace,b_sensitive,b_whole))!=cell->text())
                     {
@@ -2214,6 +2227,7 @@ bool KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
                         cell->clearDisplayDirtyFlag();
                         b_replace=true;
                     }
+                  }
                 }
             }
 
@@ -3332,11 +3346,18 @@ void KSpreadTable::clearSelection( const QPoint &_marker )
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
+      if ( !m_pDoc->undoBuffer()->isLocked() )
+      {
+        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, m_rctSelection );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+      }
+
       KSpreadCell* c = m_cells.firstCell();
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        && !c->isObscured())
         {
           c->setCellText("");
         }
@@ -3348,11 +3369,17 @@ void KSpreadTable::clearSelection( const QPoint &_marker )
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
+      if ( !m_pDoc->undoBuffer()->isLocked() )
+      {
+        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, m_rctSelection );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+      }
       KSpreadCell* c = m_cells.firstCell();
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        && !c->isObscured())
         {
           c->setCellText("");
         }
@@ -3378,13 +3405,16 @@ void KSpreadTable::clearSelection( const QPoint &_marker )
             {
                 KSpreadCell *cell = cellAt( x, y );
 
-                if ( cell == m_pDefaultCell )
+                if(!cell->isObscured())
                 {
-                    cell = new KSpreadCell( this, x, y );
-                    m_cells.insert( cell, x, y );
-                }
+                   if ( cell == m_pDefaultCell )
+                   {
+                        cell = new KSpreadCell( this, x, y );
+                        m_cells.insert( cell, x, y );
+                   }
 
-                cell->setCellText("");
+                   cell->setCellText("");
+                }
             }
 
         emit sig_updateView( this, r );

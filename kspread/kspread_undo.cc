@@ -742,16 +742,58 @@ KSpreadUndoChangeAreaTextCell::KSpreadUndoChangeAreaTextCell( KSpreadDoc *_doc, 
 void KSpreadUndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, KSpreadTable* table )
 {
     list.clear();
-    for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
-	for ( int x = m_rctRect.left(); x <= m_rctRect.right(); x++ )
+    if( m_rctRect.bottom()==0x7FFF)
+    {
+        KSpreadCell* c = table->firstCell();
+        for( ; c; c = c->nextCell() )
         {
-                KSpreadCell *cell = table->nonDefaultCell( x, y );
+            int col = c->column();
+            if ( m_rctRect.left() <= col && m_rctRect.right() >= col
+            &&!c->isObscuringForced())
+            {
                 textOfCell tmpText;
-                tmpText.col=x;
-                tmpText.row=y;
-                tmpText.text=cell->text();
+                tmpText.col=c->column();
+                tmpText.row=c->row();
+                tmpText.text=c->text();
                 list.append(tmpText);
+            }
+
         }
+    }
+    else if(m_rctRect.right()==0x7FFF)
+    {
+
+        KSpreadCell* c = table->firstCell();
+        for( ; c; c = c->nextCell() )
+        {
+        int row = c->row();
+        if ( m_rctRect.top() <= row && m_rctRect.bottom() >= row
+        &&!c->isObscuringForced())
+                {
+                textOfCell tmpText;
+                tmpText.col=c->column();
+                tmpText.row=c->row();
+                tmpText.text=c->text();
+                list.append(tmpText);
+                }
+        }
+    }
+    else
+    {
+        for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
+	        for ( int x = m_rctRect.left(); x <= m_rctRect.right(); x++ )
+                {
+                KSpreadCell *cell = table->nonDefaultCell( x, y );
+                if(!cell->isObscured())
+                        {
+                        textOfCell tmpText;
+                        tmpText.col=x;
+                        tmpText.row=y;
+                        tmpText.text=cell->text();
+                        list.append(tmpText);
+                        }
+                }
+     }
 }
 
 KSpreadUndoChangeAreaTextCell::~KSpreadUndoChangeAreaTextCell()
