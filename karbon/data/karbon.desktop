@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Karbon
+Exec=karbon
+X-KDE-Library=libkarbonpart
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+MimeType=application/x-karbon
+Type=Application
+Icon=karbon
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-NativeMimeType=application/x-karbon

@@ -1,0 +1,6 @@
+# KDE Config File
+[Desktop Entry]
+MimeType=application/x-karbon
+Comment=Karbon Part
+Patterns=*.k14;
+X-KDE-AutoEmbed=false
