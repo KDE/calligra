@@ -360,19 +360,14 @@ class KPShadowObject : public KPObject
 public:
     KPShadowObject();
     KPShadowObject( const QPen &_pen );
-    KPShadowObject( const QPen &_pen, const QBrush &_brush );
 
     KPShadowObject &operator=( const KPShadowObject & );
 
     virtual void setPen( const QPen &_pen )
         { pen = _pen; }
-    virtual void setBrush( const QBrush &_brush )
-        { brush = _brush; }
 
     virtual QPen getPen() const
         { return pen; }
-    virtual QBrush getBrush() const
-        { return brush; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
@@ -404,7 +399,6 @@ protected:
     virtual void paint( QPainter* /* painter */, KoZoomHandler* /* zoomHandler */,
                         int /* pageNum */, bool /* drawingShadow */, bool /* drawContour */ =  FALSE ) {}
     QPen pen;
-    QBrush brush;
 };
 
 class KP2DObject : public KPShadowObject
@@ -417,6 +411,8 @@ public:
     virtual ~KP2DObject() { delete gradient; }
 
     virtual void setFillType( FillType _fillType );
+    virtual void setBrush( const QBrush &_brush )
+        { brush = _brush; }
     virtual void setGColor1( const QColor &_gColor1 )
         { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; }
     virtual void setGColor2( const QColor &_gColor2 )
@@ -432,6 +428,8 @@ public:
 
     virtual FillType getFillType() const
         { return fillType; }
+    virtual QBrush getBrush() const
+        { return brush; }
     virtual QColor getGColor1() const
         { return gColor1; }
     virtual QColor getGColor2() const
@@ -458,6 +456,7 @@ protected:
 
     virtual void saveOasisMarginElement( KoGenStyle& /*styleobjectauto*/ ) const { /* nothing just used into kptextobject*/};
 
+    QBrush brush;
     QColor gColor1, gColor2;
     BCType gType;
     FillType fillType;

@@ -1556,11 +1556,6 @@ KPShadowObject::KPShadowObject( const QPen &_pen )
 {
 }
 
-KPShadowObject::KPShadowObject( const QPen &_pen, const QBrush &_brush )
-    : KPObject(), pen( _pen ), brush( _brush )
-{
-}
-
 KPShadowObject &KPShadowObject::operator=( const KPShadowObject & )
 {
     return *this;
@@ -1572,8 +1567,6 @@ QDomDocumentFragment KPShadowObject::save( QDomDocument& doc,double offset )
 
     if(pen!=defaultPen())
         fragment.appendChild(KPObject::createPenElement(tagPEN, pen, doc));
-    if(brush.color()!=Qt::black || brush.style()!=Qt::NoBrush)
-        fragment.appendChild(KPObject::createBrushElement(tagBRUSH, brush, doc));
     return fragment;
 }
 
@@ -1721,12 +1714,6 @@ double KPShadowObject::load(const QDomElement &element)
         setPen(KPObject::toPen(e));
     else
         pen = defaultPen();
-    e=element.namedItem(tagBRUSH).toElement();
-    if(!e.isNull())
-        setBrush(KPObject::toBrush(e));
-    else
-        brush=QBrush();
-    e=element.namedItem(tagFILLTYPE).toElement();
     return offset;
 }
 
@@ -1741,9 +1728,10 @@ void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     if ( shadowDistance > 0 && !drawContour )
     {
         _painter->save();
+        // tz TODO fix tmpPen usage
         QPen tmpPen( pen );
         pen.setColor( shadowColor );
-        QBrush tmpBrush( brush );
+        QBrush brush;
         brush.setColor( shadowColor );
 
         if ( angle == 0 )
@@ -1763,7 +1751,6 @@ void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         }
 
         pen = tmpPen;
-        brush = tmpBrush;
         _painter->restore();
     }
 
@@ -1797,7 +1784,7 @@ KP2DObject::KP2DObject()
 KP2DObject::KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
                         const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                         bool _unbalanced, int _xfactor, int _yfactor )
-    : KPShadowObject( _pen, _brush ), gColor1( _gColor1 ), gColor2( _gColor2 )
+    : KPShadowObject( _pen ), brush( _brush ), gColor1( _gColor1 ), gColor2( _gColor2 )
 {
     gType = _gType;
     fillType = _fillType;
@@ -1827,6 +1814,8 @@ void KP2DObject::setFillType( FillType _fillType )
 QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
 {
     QDomDocumentFragment fragment=KPShadowObject::save(doc, offset);
+    if(brush.color()!=Qt::black || brush.style()!=Qt::NoBrush)
+        fragment.appendChild(KPObject::createBrushElement(tagBRUSH, brush, doc));
     if(fillType!=FT_BRUSH)
         fragment.appendChild(KPObject::createValueElement(tagFILLTYPE, static_cast<int>(fillType), doc));
     if(gColor1!=Qt::red || gColor2!=Qt::green || gType!=BCT_GHORZ || unbalanced || xfactor!=100 || yfactor!=100)
@@ -2368,6 +2357,12 @@ double KP2DObject::load(const QDomElement &element)
     }
     else
         setFillType(FT_BRUSH);
+
+    e=element.namedItem(tagBRUSH).toElement();
+    if(!e.isNull())
+        setBrush(KPObject::toBrush(e));
+    else
+        brush=QBrush();
 
     e=element.namedItem(tagGRADIENT).toElement();
     if(!e.isNull()) {

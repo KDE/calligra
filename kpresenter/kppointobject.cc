@@ -41,12 +41,6 @@ KPPointObject::KPPointObject( const QPen &_pen, LineEnd _lineBegin, LineEnd _lin
 }
 
 
-KPPointObject::KPPointObject( const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd, const QBrush &_brush )
-    : KPShadowObject( _pen, _brush ), KPStartEndLine( _lineBegin, _lineEnd)
-{
-}
-
-
 KoSize KPPointObject::getRealSize() const
 {
     KoSize size( ext );
