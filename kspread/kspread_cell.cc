@@ -1866,7 +1866,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     _painter.drawPolygon( point );
     }
   //static QColorGroup g( Qt::black, Qt::white, Qt::white, Qt::darkGray, Qt::lightGray, Qt::black, Qt::black );
-  static QBrush fill( Qt::lightGray );
+  QBrush fill( Qt::lightGray );
   /**
    * Modification for drawing the button
    */
