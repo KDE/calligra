@@ -351,6 +351,10 @@
                 <title xml:lang="en_us">Xfig</title>
                 <stat import="planned" export="none"/>
             </filter>
+            <filter id="karbon_latex">
+                <title xml:lang="en_us">LaTeX</title>
+                <stat import="none" export="planned"/>
+            </filter>
         </application>
 
         <application id="krita">
@@ -363,11 +367,6 @@
 
         <application id="kontour" released="no">
             <title xml:lang="en_us">Kontour</title>
-            <filter id="kontour_latex">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kontour/latex"/>
-                <title xml:lang="en_us">LaTeX</title>
-                <stat import="none" export="abandoned"/>
-            </filter>
             <filter id="kontour_rtf">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kontour/rtf"/>
                 <title xml:lang="en_us">RTF</title>
