@@ -40,35 +40,36 @@ KontourImport::~KontourImport()
 
 KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QCString& to)
 {
-    // check for proper conversion
-    if ( to != "application/x-karbon" || ( from != "application/x-kontour" && from != "application/x-killustrator") )
-        return KoFilter::NotImplemented;
+	// check for proper conversion
+	if ( to != "application/x-karbon" || ( from != "application/x-kontour" && from != "application/x-killustrator") )
+		return KoFilter::NotImplemented;
 
 
-    KoStoreDevice* inpdev = m_chain->storageFile( "root", KoStore::Read );
-    if ( !inpdev )
-    {
-        kdError(30502) << "Unable to open input stream" << endl;
-        return KoFilter::StorageCreationError;
-    }
+	KoStoreDevice* inpdev = m_chain->storageFile( "root", KoStore::Read );
+	if ( !inpdev )
+	{
+		kdError(30502) << "Unable to open input stream" << endl;
+		return KoFilter::StorageCreationError;
+	}
 
-    inpdoc.setContent( inpdev );
-    outdoc.appendChild( outdoc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+	inpdoc.setContent( inpdev );
+	outdoc.appendChild( outdoc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
             
 	// Do the conversion!
 
 	convert();
 	kdDebug() << outdoc.toString() << endl;
-    //return KoFilter::NotImplemented; // Change to KoFilter::OK if the conversion
-    KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
-    if(!out) {
-        kdError(30502) << "Unable to open output file!" << endl;
-        return KoFilter::StorageCreationError;
-    }
-    QCString cstring = outdoc.toCString(); // utf-8 already
-    out->writeBlock( cstring.data(), cstring.length() );
+	//return KoFilter::NotImplemented; // Change to KoFilter::OK if the conversion
+	KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
+	if(!out) 
+	{
+		kdError(30502) << "Unable to open output file!" << endl;
+		return KoFilter::StorageCreationError;
+	}
+	QCString cstring = outdoc.toCString(); // utf-8 already
+	out->writeBlock( cstring.data(), cstring.length() );
 
-    return KoFilter::OK;
+	return KoFilter::OK;
                                      // was successfull
 }
 
@@ -76,35 +77,47 @@ void KontourImport::convert()
 {
 	QDomElement karbondoc = outdoc.createElement( "DOC" );
 	karbondoc.setAttribute( "editor", "karbon converter" );
-    karbondoc.setAttribute( "mime", "application/x-karbon" );
-    karbondoc.setAttribute( "syntaxVersion", 0.1 );
-    outdoc.appendChild( karbondoc );
+	karbondoc.setAttribute( "mime", "application/x-karbon" );
+	karbondoc.setAttribute( "syntaxVersion", 0.1 );
+	outdoc.appendChild( karbondoc );
 	
 	QDomElement docElem = inpdoc.documentElement();
 	
 	QDomElement page = docElem.namedItem( "page" ).toElement();
 	QDomElement paper = page.namedItem( "layout" ).toElement();
-    int ptPageHeight = paper.attribute( "height" ).toInt();
-    int ptPageWidth = paper.attribute( "width" ).toInt();
+	int ptPageHeight = paper.attribute( "height" ).toInt();
+	int ptPageWidth = paper.attribute( "width" ).toInt();
 
 	QDomElement outPaper = outdoc.createElement( "PAPER" );
-    karbondoc.appendChild( outPaper );
-    outPaper.setAttribute( "width", ptPageWidth );
-    outPaper.setAttribute( "height", ptPageHeight );
-    outPaper.setAttribute( "unit", KoUnit::unitName(KoUnit::U_PT) );
+	karbondoc.appendChild( outPaper );
+	outPaper.setAttribute( "width", ptPageWidth );
+	outPaper.setAttribute( "height", ptPageHeight );
+	outPaper.setAttribute( "unit", KoUnit::unitName(KoUnit::U_PT) );
 	
 	QDomElement layer = outdoc.createElement( "LAYER" );
-    karbondoc.appendChild( layer );
-    layer.setAttribute( "name", "Layer" );
-    layer.setAttribute( "visible", "1" );
+	
+        karbondoc.appendChild( layer );
+        layer.setAttribute( "name", "Layer" );
+        layer.setAttribute( "visible", "1" );
 		
 	QDomElement composite = outdoc.createElement( "COMPOSITE" );
 	layer.appendChild( composite );
 	
-	QDomElement stroke = outdoc.createElement( "STROKE" );
-	composite.appendChild( stroke );
-	
 	QDomElement lay = page.namedItem( "layer" ).toElement();
+	QDomElement b = lay.firstChild().toElement();
+	for( ; !b.isNull(); b = b.nextSibling().toElement() )
+	{	
+		if ( b.tagName() == "rectangle" )
+			importRectangle( composite, lay );
+	}
+}
+
+void KontourImport::importRectangle( QDomElement base, QDomElement lay )
+{	
+	QDomElement stroke = outdoc.createElement( "STROKE" );
+	base.appendChild( stroke );
+	
+	QDomElement docElem = inpdoc.documentElement();
 	QDomElement rect = lay.namedItem( "rectangle" ).toElement();
 	QDomElement poly = rect.namedItem( "polyline" ).toElement();
 	QDomElement gobject = poly.namedItem( "gobject" ).toElement();
@@ -126,17 +139,19 @@ void KontourImport::convert()
 	color.setAttribute( "colorSpace", "0" );
 		
 	QDomElement fill = outdoc.createElement( "FILL" );	
-	composite.appendChild( fill );	
+
+	base.appendChild( fill );	
 	
-	QDomElement segment = outdoc.createElement( "SEGMENTS");
+	QDomElement path = outdoc.createElement( "PATH");
 	QDomElement seg = docElem.namedItem( "seg" ).toElement();
 	int kind = seg.attribute( "kind" ).toInt();
-	composite.appendChild( segment );
-	segment.setAttribute( "isClosed", kind );
+	base.appendChild( path );
+	path.setAttribute( "isClosed", kind );
+	
 	QDomElement move = outdoc.createElement( "MOVE" );
 	int x = rect.attribute( "x" ).toInt();
 	int y = rect.attribute( "y" ).toInt();
-	segment.appendChild( move );
+	path.appendChild( move );
 	move.setAttribute( "x", x );
 	move.setAttribute( "y", y );
 			
@@ -148,11 +163,10 @@ void KontourImport::convert()
 			QDomElement line = outdoc.createElement( "LINE" );
 			int lineX = c.attribute( "x" ).toInt();
 			int lineY = c.attribute( "y" ).toInt();
-			segment.appendChild( line );
+			path.appendChild( line );
 			line.setAttribute( "x", lineX );
 			line.setAttribute( "y", lineY );
 		}
 	}	
 }
-
 #include <kontourimport.moc>

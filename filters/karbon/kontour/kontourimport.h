@@ -25,17 +25,18 @@
 
 class KontourImport : public KoFilter
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    KontourImport(KoFilter *parent, const char *name, const QStringList&);
-    virtual ~KontourImport();
+	KontourImport(KoFilter *parent, const char *name, const QStringList&);
+	virtual ~KontourImport();
 
-    virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+	virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
 protected:
-    void convert();
-    QDomDocument inpdoc;
-    QDomDocument outdoc;
+	QDomDocument inpdoc;
+	QDomDocument outdoc;
+	void convert();
+	void importRectangle( QDomElement base, QDomElement lay );
 };
 
 #endif // __KONTOURIMPORT_H__
