@@ -105,6 +105,9 @@ protected slots:
 #ifndef NDEBUG
     void slotPrintDebug();
     void slotPrintCalendarDebug();
+#else
+    static void slotPrintDebug() { };
+    static void slotPrintCalendarDebug() { };
 #endif
 
 protected:
