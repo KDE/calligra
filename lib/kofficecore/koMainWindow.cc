@@ -68,20 +68,22 @@ public:
   KoMainWindowPrivate()
   {
     m_rootDoc = 0L;
-    m_rootView = 0L;
+    m_rootViews = 0L;
     m_manager = 0L;
     bMainWindowGUIBuilt = false;
     m_activePart = 0L;
     m_activeView = 0L;
     m_splitViewActionList=0L;
     m_splitter=0L;
+    m_orientation=0L;
+    m_removeView=0L;
   }
   ~KoMainWindowPrivate()
   {
   }
 
   KoDocument *m_rootDoc;
-  KoView *m_rootView;
+  QList<KoView> *m_rootViews;
   KParts::PartManager *m_manager;
 
   KParts::Part *m_activePart;
@@ -89,6 +91,8 @@ public:
 
   QList<KAction> *m_splitViewActionList;
   QSplitter *m_splitter;
+  KSelectAction *m_orientation;
+    KAction *m_removeView;
 
   bool bMainWindowGUIBuilt;
 };
@@ -125,12 +129,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 			actionCollection(), "file_documentinfo" );
 
     KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection(), "configurekeys" );
-    //(void) new KAction( i18n( "Configure &Keys..." ), 0, this,
-    //  SLOT( slotConfigureKeys() ), actionCollection(), "configurekeys" );
-
     KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection(), "configuretoolbars" );
-    //(void) new KAction( i18n( "Configure Tool&bars..." ), 0, this,
-    //  SLOT( slotConfigureToolbars() ), actionCollection(), "configuretoolbars" );
 
     KHelpMenu * m_helpMenu = new KHelpMenu( this );
     KStdAction::helpContents( m_helpMenu, SLOT( appHelpActivated() ), actionCollection(), "contents" );
@@ -143,16 +142,18 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_splitViewActionList=new QList<KAction>;
     d->m_splitViewActionList->append(new KAction(i18n("Split View"), 0, this, SLOT(slotSplitView()),
 						actionCollection(), "view_split"));
-    d->m_splitViewActionList->append(new KAction(i18n("Remove View"), 0, this, SLOT(slotRemoveView()),
-						actionCollection(), "view_rm_splitter"));
-    KSelectAction *orientation=new KSelectAction(i18n("Splitter Orientation"), 0, this, SLOT(slotSetOrientation()),
-						 actionCollection(), "view_splitter_orientation");
+    d->m_removeView=new KAction(i18n("Remove View"), 0, this, SLOT(slotRemoveView()),
+				actionCollection(), "view_rm_splitter");
+    d->m_splitViewActionList->append(d->m_removeView);
+    d->m_removeView->setEnabled(false);
+    d->m_orientation=new KSelectAction(i18n("Splitter Orientation"), 0, this, SLOT(slotSetOrientation()),
+				       actionCollection(), "view_splitter_orientation");
     QStringList items;
     items << i18n("Vertical")
 	  << i18n("Horizontal");
-    orientation->setItems(items);
-    orientation->setCurrentItem(0);
-    d->m_splitViewActionList->append(orientation);
+    d->m_orientation->setItems(items);
+    d->m_orientation->setCurrentItem(0); // doesn't work - why? (Werner)
+    d->m_splitViewActionList->append(d->m_orientation);
 
     if ( instance )
       setInstance( instance );
@@ -164,6 +165,8 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
     d->m_splitter=new QSplitter(Qt::Vertical, this, "funky-splitter");
     setView( d->m_splitter );
+
+    d->m_rootViews=new QList<KoView>;
 
     buildMainWindowGUI();
     //createGUI( 0L ); // NOT this ! (duplicates shell entries !)
@@ -181,7 +184,14 @@ KoMainWindow::~KoMainWindow()
     // The doc and view might still exist (this is the case when closing the window)
     if (d->m_rootDoc)
         d->m_rootDoc->removeShell(this);
-    delete d->m_rootView;
+
+    KoView *view=d->m_rootViews->first();
+    for ( ; view!=0L; view=d->m_rootViews->next()) {
+	delete view;
+	view=0L;
+    }
+    delete d->m_rootViews;
+
     if ( d->m_rootDoc && d->m_rootDoc->viewCount() == 0 )
     {
         kdDebug(30003) << "Destructor. No more views, deleting old doc " << d->m_rootDoc << endl;
@@ -198,17 +208,19 @@ KoMainWindow::~KoMainWindow()
 	s_lstMainWindows->removeRef( this );
 
     delete d->m_manager;
+    d->m_splitViewActionList->setAutoDelete(true);
+    d->m_splitViewActionList->clear();
     delete d->m_splitViewActionList;
     delete d->m_splitter;
     d->m_splitter=0L;
-
     delete d;
 }
 
 void KoMainWindow::setRootDocument( KoDocument *doc )
 {
   kdDebug(30003) <<  "KoMainWindow::setRootDocument this = " << this << " doc = " << doc << endl;
-  KoView *oldRootView = d->m_rootView;
+  QList<KoView> *oldRootViews = new QList<KoView>(*d->m_rootViews);
+  d->m_rootViews->clear();
   KoDocument *oldRootDoc = d->m_rootDoc;
 
   if ( oldRootDoc )
@@ -219,21 +231,24 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   if ( doc )
   {
     doc->setSelectable( false );
-    d->m_rootView = doc->createView( d->m_splitter );
-    d->m_rootView->setPartManager( d->m_manager );
+    d->m_rootViews->append( doc->createView( d->m_splitter ) );
+    d->m_rootViews->current()->setPartManager( d->m_manager );
 
-    d->m_rootView->show();
+    d->m_rootViews->current()->show();
     d->m_rootDoc->addShell( this );
+    d->m_removeView->setEnabled(false);
   }
-  else
-    d->m_rootView = 0L;
 
   updateCaption();
 
-  d->m_manager->setActivePart( d->m_rootDoc, d->m_rootView );
+  d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews->current() );
 
-  if ( oldRootView )
-    delete oldRootView;
+  if ( !oldRootViews->isEmpty() ) {
+    for(KoView *view=oldRootViews->first(); view!=0L; view=oldRootViews->next()) {
+      delete view;
+      view=0L;
+    }
+  }
   if ( oldRootDoc && oldRootDoc->viewCount() == 0 )
   {
     kdDebug(30003) << "No more views, deleting old doc " << oldRootDoc << endl;
@@ -279,7 +294,7 @@ KoDocument *KoMainWindow::rootDocument() const
 
 KoView *KoMainWindow::rootView() const
 {
-  return d->m_rootView;
+  return d->m_rootViews->first();
 }
 
 KParts::PartManager *KoMainWindow::partManager()
@@ -312,7 +327,7 @@ bool KoMainWindow::openDocument( const KURL & url )
     if ( !newdoc || !newdoc->openURL( url ) )
     {
 	delete newdoc;
-	return FALSE;
+	return false;
     }
 
     if ( doc && doc->isEmpty() )
@@ -334,7 +349,7 @@ bool KoMainWindow::openDocument( const KURL & url )
         // We had no document, set the new one
         setRootDocument( newdoc );
     }
-    return TRUE;
+    return true;
 }
 
 bool KoMainWindow::saveDocument( bool saveas )
@@ -401,10 +416,10 @@ bool KoMainWindow::saveDocument( bool saveas )
 bool KoMainWindow::queryClose()
 {
   if ( rootDocument() == 0 )
-    return TRUE;
+    return true;
   kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount() << endl;
   if ( rootDocument()->viewCount() > 1 ) // last view ?
-    return TRUE; // no, so no problem for closing
+    return true; // no, so no problem for closing
 
   if ( rootDocument()->isModified() )
   {
@@ -418,11 +433,10 @@ bool KoMainWindow::queryClose()
           case KMessageBox::No :
               break;
           default : // case KMessageBox::Cancel :
-              return FALSE;
+              return false;
       }
   }
-
-  return TRUE;
+  return true;
 }
 
 bool KoMainWindow::closeAllDocuments()
@@ -431,12 +445,11 @@ bool KoMainWindow::closeAllDocuments()
     for( ; win; win = nextMainWindow() )
     {
 	if ( !win->queryClose() )
-	    return FALSE;
+	    return false;
         else
             win->setRootDocument( 0L );
     }
-
-    return TRUE;
+    return true;
 }
 
 void KoMainWindow::slotFileNew()
@@ -449,7 +462,6 @@ void KoMainWindow::slotFileNew()
 	delete newdoc;
 	return;
     }
-
     if ( doc && doc->isEmpty() )
     {
 	setRootDocument( newdoc );
@@ -462,7 +474,6 @@ void KoMainWindow::slotFileNew()
         s->setRootDocument( newdoc );
 	return;
     }
-
     setRootDocument( newdoc );
     return;
 }
@@ -500,7 +511,7 @@ void KoMainWindow::slotFileSave()
 
 void KoMainWindow::slotFileSaveAs()
 {
-    saveDocument( TRUE );
+    saveDocument( true );
 }
 
 void KoMainWindow::slotDocumentInfo()
@@ -559,7 +570,7 @@ void KoMainWindow::slotHelpAbout()
 {
     KAboutDialog *dia = new KAboutDialog( KAboutDialog::AbtProduct | KAboutDialog::AbtTitle | KAboutDialog::AbtImageOnly,
 					  kapp->caption(),
-					  KDialogBase::Ok, KDialogBase::Ok, this, 0, TRUE );
+					  KDialogBase::Ok, KDialogBase::Ok, this, 0, true );
     dia->setTitle( kapp->caption() );
     dia->setProduct( "", "pre-Beta1", "the KOffice Team", "1998-2000" );
     dia->setImage( locate( "data", "koffice/pics/koffice-logo.png" ) );
@@ -568,16 +579,40 @@ void KoMainWindow::slotHelpAbout()
 }
 
 void KoMainWindow::slotSplitView() {
+
     kdDebug(30003) << "KoMainWindow::slotSplitView() called" << endl;
+    d->m_rootViews->append(d->m_rootDoc->createView(d->m_splitter));
+    d->m_rootViews->current()->show();
+    d->m_rootViews->current()->setPartManager( d->m_manager );
+    d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews->current() );
+    d->m_removeView->setEnabled(true);
 }
 
 void KoMainWindow::slotRemoveView() {
+
     kdDebug(30003) << "KoMainWindow::slotRemoveView() called" << endl;
+
+    KoView *view;
+    if(d->m_rootViews->findRef(d->m_activeView)!=-1)    
+        view=d->m_rootViews->current();
+    else
+	view=d->m_rootViews->first();
+    view->hide();
+    d->m_rootViews->removeRef(view);
+
+    if(d->m_rootViews->count()==1)
+	d->m_removeView->setEnabled(false);
+    delete view;
+    view=0L;
+    d->m_rootViews->first()->setPartManager( d->m_manager );
+    d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews->first() );
 }
 
 void KoMainWindow::slotSetOrientation() {
+
     kdDebug(30003) << "KoMainWindow::slotSetOrientation() called" << endl;
-    // access the state via d->m_splitViewActionList->last()->currentItem()
+    d->m_splitter->setOrientation(static_cast<Qt::Orientation>
+				  (d->m_orientation->currentItem()));
 }
 
 
@@ -655,7 +690,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     for (; pIt != pEnd; ++pIt )
       factory->addClient( *pIt );
 
-    if(d->m_activeView==d->m_rootView)
+    if(d->m_rootViews->findRef(d->m_activeView)!=-1)
 	factory->plugActionList((KXMLGUIClient*)d->m_activeView, "view_split", *d->m_splitViewActionList );
   }
   else
@@ -663,9 +698,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     d->m_activeView = 0L;
     d->m_activePart = 0L;
   }
-
   setUpdatesEnabled( true );
   updateRects();
 }
-
 #include "koMainWindow.moc"
