@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexitableview" version="1">
+
+<MenuBar>
+	<Menu name="view">
+		<text>&amp;View</text>
+		<Action name="showISearch"/>
+	</Menu>
+</MenuBar>
+
+</kpartgui>
