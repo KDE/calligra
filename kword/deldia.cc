@@ -117,7 +117,7 @@ bool KWDeleteDia::doDelete()
     doc->recalcFrames();
     doc->updateAllFrames();
     doc->repaintAllViews();
-
+    doc->layout();
     canvas->repaintAll();
     return true;
 }
