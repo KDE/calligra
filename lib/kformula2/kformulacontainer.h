@@ -25,6 +25,7 @@
 #include <qlist.h>
 #include <qobject.h>
 #include <qstack.h>
+#include <qstring.h>
 
 #include <kcommand.h>
 #include <koprinter.h>
@@ -226,7 +227,8 @@ public slots:
 
     // There are a lot of thing we can do with the formula.
 
-    void addText(QChar ch);
+    void addText(QChar ch, bool isSymbol = false);
+    void addText(const QString& text);
 
     void addLineBreak();
 

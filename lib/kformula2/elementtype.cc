@@ -132,10 +132,10 @@ Term::Term(SequenceParser* parser)
 {
     lhs = parser->getPrimitive();
 
-    if (parser->getTokenType() == SEPARATOR) {
+    //if (parser->getTokenType() == SEPARATOR) {
         // A separator doesn't have a type
-        parser->nextToken();
-    }
+    //    parser->nextToken();
+    //}
 
     switch (parser->getTokenType()) {
         case MUL:

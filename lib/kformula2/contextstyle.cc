@@ -43,7 +43,43 @@ ContextStyle::ContextStyle()
     emptyRectWidth = 10;
     emptyRectHeight = 10;
     centerSymbol = false;
+    syntaxHighlighting = true;
 }
+
+
+QColor ContextStyle::getNumberColor()   const
+{
+    if (syntaxHighlighting) {
+        return numberColor;
+    }
+    return getDefaultColor();
+}
+
+QColor ContextStyle::getOperatorColor() const
+{
+    if (syntaxHighlighting) {
+        return operatorColor;
+    }
+    return getDefaultColor();
+}
+
+QColor ContextStyle::getErrorColor()    const
+{
+    if (syntaxHighlighting) {
+        return errorColor;
+    }
+    return getDefaultColor();
+}
+
+QColor ContextStyle::getEmptyColor()    const
+{
+    if (syntaxHighlighting) {
+        return emptyColor;
+    }
+    return getDefaultColor();
+}
+
+
 
 void ContextStyle::setResolution(double zX, double zY)
 {

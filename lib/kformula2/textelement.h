@@ -51,7 +51,7 @@ public:
     /**
      * @returns true if we don't want to see the element.
      */
-    virtual bool isPhantom() const { return character == '\\'; }
+    //virtual bool isPhantom() const { return character == '\\'; }
 
     // drawing
     //

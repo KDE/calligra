@@ -171,12 +171,25 @@ void KFormulaContainer::draw(QPainter& painter, const QRect& r)
 }
 
 
-void KFormulaContainer::addText(QChar ch)
+void KFormulaContainer::addText(QChar ch, bool isSymbol)
 {
     if (!hasValidCursor())
         return;
     KFCReplace* command = new KFCReplace(i18n("Add text"), this);
-    command->addElement(new TextElement(ch));
+    TextElement* element = new TextElement(ch);
+    element->setSymbol(isSymbol);
+    command->addElement(element);
+    execute(command);
+}
+
+void KFormulaContainer::addText(const QString& text)
+{
+    if (!hasValidCursor())
+        return;
+    KFCReplace* command = new KFCReplace(i18n("Add text"), this);
+    for (uint i = 0; i < text.length(); i++) {
+        command->addElement(new TextElement(text[i]));
+    }
     execute(command);
 }
 

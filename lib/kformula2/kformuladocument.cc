@@ -35,6 +35,7 @@ KFormulaDocument::KFormulaDocument(KActionCollection* collection,
 {
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "kformula/pics/");
     createActions(collection);
+    syntaxHighlightingAction->setChecked(contextStyle.getSyntaxHighlighting());
 
     if (his == 0) {
         history = new KCommandHistory(collection);
@@ -44,6 +45,7 @@ KFormulaDocument::KFormulaDocument(KActionCollection* collection,
         history = his;
         ownHistory = false;
     }
+    formulae.setAutoDelete(false);
 }
 
 
@@ -58,6 +60,7 @@ KFormulaDocument::KFormulaDocument(KCommandHistory* his)
         history = his;
         ownHistory = false;
     }
+    formulae.setAutoDelete(false);
 }
 
 
@@ -71,7 +74,9 @@ KFormulaDocument::~KFormulaDocument()
 
 KFormulaContainer* KFormulaDocument::createFormula()
 {
-    return new KFormulaContainer(this);
+    KFormulaContainer* f = new KFormulaContainer(this);
+    formulae.append(f);
+    return f;
 }
 
 
@@ -86,6 +91,7 @@ void KFormulaDocument::formulaDies(KFormulaContainer* f)
     if (f == formula) {
         formula = 0;
     }
+    formulae.remove(f);
 }
 
 
@@ -144,7 +150,7 @@ void KFormulaDocument::createActions(KActionCollection* collection)
                                     collection, "formula_addmatrix");
 
     addOneByTwoMatrixAction   = new KAction(i18n("Add 1x2 matrix"),
-                                    "one_by_two_matrix",
+                                    "onetwomatrix",
                                     0,
                                     this, SLOT(addOneByTwoMatrix()),
                                     collection, "formula_add_one_by_two_matrix");
@@ -190,14 +196,21 @@ void KFormulaDocument::createActions(KActionCollection* collection)
                                   this, SLOT(makeGreek()),
                                   collection, "formula_makegreek");
 
+    syntaxHighlightingAction = new KToggleAction(i18n("Syntax highlighting"),
+                                                 0,
+                                                 this, SLOT(toggleSyntaxHighlighting()),
+                                                 collection, "formula_syntaxhighlighting");
+    
     QStringList delimiter;
     delimiter.append(QString("("));
     delimiter.append(QString("["));
+    delimiter.append(QString("{"));
     delimiter.append(QString("<"));
     delimiter.append(QString("/"));
     delimiter.append(QString("\\"));
     delimiter.append(QString(")"));
     delimiter.append(QString("]"));
+    delimiter.append(QString("}"));
     delimiter.append(QString(">"));
     delimiter.append(QString("|"));
     leftBracket = new KSelectAction(i18n("Left delimiter"),
@@ -209,11 +222,13 @@ void KFormulaDocument::createActions(KActionCollection* collection)
     delimiter.clear();
     delimiter.append(QString(")"));
     delimiter.append(QString("]"));
+    delimiter.append(QString("}"));
     delimiter.append(QString(">"));
     delimiter.append(QString("/"));
     delimiter.append(QString("\\"));
     delimiter.append(QString("("));
     delimiter.append(QString("["));
+    delimiter.append(QString("{"));
     delimiter.append(QString("<"));
     delimiter.append(QString("|"));
     rightBracket = new KSelectAction(i18n("Right delimiter"),
@@ -221,6 +236,16 @@ void KFormulaDocument::createActions(KActionCollection* collection)
                                      collection, "formula_typeright");
     rightBracket->setItems(delimiter);
     //rightBracket->setCurrentItem(0);
+
+    insertSymbolAction = new KAction(i18n("Insert symbol"),
+                                        CTRL + Key_I,
+                                        this, SLOT(insertSymbol()),
+                                        collection, "formula_insertsymbol");
+    QStringList names = table.getAllNames();
+    symbolNamesAction = new KSelectAction(i18n("Symbol names"),
+                                          0, this, SLOT(symbolNames()),
+                                          collection, "formula_symbolnames");
+    symbolNamesAction->setItems(names);
 }
 
 
@@ -379,6 +404,29 @@ void KFormulaDocument::makeGreek()
     }
 }
 
+void KFormulaDocument::insertSymbol()
+{
+    if (hasFormula() && table.contains(selectedName)) {
+        QChar ch = table.getSymbolChar(selectedName);
+        if (ch != QChar::null) {
+            formula->addText(ch, true);
+        }
+        else {
+            formula->addText(selectedName);
+        }
+    }
+}
+
+void KFormulaDocument::toggleSyntaxHighlighting()
+{
+    contextStyle.setSyntaxHighlighting(syntaxHighlightingAction->isChecked());
+    
+    KFormulaContainer* f;
+    for (f=formulae.first(); f != 0; f=formulae.next()) {
+        f->changed();
+    }
+}
+
 void KFormulaDocument::delimiterLeft()
 {
     QString left = leftBracket->currentText();
@@ -391,6 +439,10 @@ void KFormulaDocument::delimiterRight()
     rightBracketChar = right.at(0).latin1();
 }
 
+void KFormulaDocument::symbolNames()
+{
+    selectedName = symbolNamesAction->currentText();
+}
 
 void KFormulaDocument::undo()
 {
@@ -406,4 +458,5 @@ bool KFormulaDocument::hasFormula()
 {
     return (formula != 0) && (formula->getActiveCursor() != 0);
 }
+
 #include "kformuladocument.moc"

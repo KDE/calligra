@@ -21,7 +21,9 @@
 #ifndef KFORMULADOCUMENT_H
 #define KFORMULADOCUMENT_H
 
+#include <qlist.h>
 #include <qobject.h>
+#include <qstring.h>
 
 #include <kaction.h>
 #include <kcommand.h>
@@ -146,8 +148,12 @@ public slots:
     void addGenericUpperIndex();
     void removeEnclosing();
     void makeGreek();
+    void insertSymbol();
+
+    void toggleSyntaxHighlighting();
     void delimiterLeft();
     void delimiterRight();
+    void symbolNames();
 
 private:
 
@@ -183,12 +189,17 @@ private:
     KAction* addGenericLowerAction;
     KAction* removeEnclosingAction;
     KAction* makeGreekAction;
+    KAction* insertSymbolAction;
 
+    KToggleAction* syntaxHighlightingAction;
     KSelectAction* leftBracket;
     KSelectAction* rightBracket;
+    KSelectAction* symbolNamesAction;
 
+    
     char leftBracketChar;
     char rightBracketChar;
+    QString selectedName;
 
     /**
      * The active formula.
@@ -217,6 +228,11 @@ private:
      * the user configurable informations are stored.
      */
     ContextStyle contextStyle;
+
+    /**
+     * All formulae that belong to this document.
+     */
+    QList<KFormulaContainer> formulae;
 };
 
 #endif // KFORMULADOCUMENT_H

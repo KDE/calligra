@@ -70,11 +70,14 @@ public:
 
     void setResolution(double zX, double zY);
 
+    bool getSyntaxHighlighting() { return syntaxHighlighting; }
+    void setSyntaxHighlighting(bool highlight) { syntaxHighlighting = highlight; }
+
     QColor getDefaultColor()  const { return defaultColor; }
-    QColor getNumberColor()   const { return numberColor; }
-    QColor getOperatorColor() const { return operatorColor; }
-    QColor getErrorColor()    const { return errorColor; }
-    QColor getEmptyColor()    const { return emptyColor; }
+    QColor getNumberColor()   const;
+    QColor getOperatorColor() const;
+    QColor getErrorColor()    const;
+    QColor getEmptyColor()    const;
 
     QFont getDefaultFont()    const { return defaultFont; }
     QFont getNameFont()       const { return nameFont; }
@@ -247,6 +250,11 @@ private:
      * false means alignment to the right.
      */
     bool centerSymbol;
+
+    /**
+     * Whether we want coloured formulae.
+     */
+    bool syntaxHighlighting;
 
     /**
      * All characters that are valid as exponent chars inside a number.

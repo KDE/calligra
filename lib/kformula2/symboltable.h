@@ -23,14 +23,15 @@
 
 #include <qdict.h>
 #include <qstring.h>
+#include <qstringlist.h>
 
 
 /**
  * An entry of our symbol table.
  */
-class SymbolTableEnty {
+class SymbolTableEntry {
 public:
-    SymbolTableEnty(QString name, QChar ch = QChar::null);
+    SymbolTableEntry(QString name, QChar ch = QChar::null);
 
     QString getName() const { return name; }
 
@@ -67,12 +68,17 @@ public:
      * @returns a string with all greek letters.
      */
     QString getGreekLetters() const { return greekLetters; }
+
+    /**
+     * @returns all known names as strings.
+     */
+    QStringList getAllNames() const;
     
 private:
 
     void addEntry(QString name, QChar ch = QChar::null);
     
-    QDict<SymbolTableEnty> entries;
+    QDict<SymbolTableEntry> entries;
 
     /**
      * All greek letters that are known.

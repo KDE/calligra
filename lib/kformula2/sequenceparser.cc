@@ -53,7 +53,7 @@ void SequenceParser::nextToken()
     tokenEnd++;
     BasicElement* element = list.at(tokenStart);
     type = element->getTokenType();
-    if (type == TEXT) {
+    if ((type == TEXT) || (type == SEPARATOR)) {
         readText();
     }
     else if (type == NUMBER) {
