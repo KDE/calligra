@@ -3,6 +3,12 @@
  <Menu name="Edit"><text>Edit</text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
+  <Separator/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Separator/>
+  <Action name="edit_select_all"/>
   <Action name="addtext"/>
  </Menu>
  <Menu name="Element"><text>Element</text>

@@ -1,100 +1,71 @@
+/* This file is part of the KDE project
+   Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
+	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2.
+ 
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+ 
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #ifndef KFORMULA_DOC_H
 #define KFORMULA_DOC_H
 
+class FormulaCursor;
+class KFormulaContainer;
 class KFormulaDoc;
-class BasicElement;
 
-
-#include "formuladef.h"
-#include "kformula_view.h"
-#include "formula_container.h"
 
 #include <qlist.h>
 #include <qpainter.h>
 
+#include <kcommand.h>
 #include <koDocument.h>
 
+#include "formuladef.h"
+#include "kformula_view.h"
 
-//class KFormulaDoc :    virtual public KoDocument,public KFormulaContainer
-class KFormulaDoc :    public KoDocument,public KFormulaContainer
 
+/**
+ * The part's document. Forwards most of the requests.
+ */
+class KFormulaDoc : public KoDocument
 {
     Q_OBJECT
+    
 public:
-    KFormulaDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+
+    KFormulaDoc(QWidget *parentWidget = 0,
+                const char *widgetName = 0,
+                QObject* parent = 0,
+                const char* name = 0,
+                bool singleViewMode = false);
     ~KFormulaDoc();
 
-    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
+    virtual void paintContent(QPainter& painter,
+                              const QRect& rect, bool transparent = FALSE);
 
     virtual bool initDoc();
 
-    virtual bool loadXML( QIODevice *, const QDomDocument& doc );
+    virtual bool loadXML(QIODevice *, const QDomDocument& doc);
     virtual QDomDocument saveXML();
 
-protected:
-    virtual QString configFile() const;
-    virtual KoView* createViewInstance( QWidget* parent, const char* name );
-
-
-public:
-    /*int addBlock( int Type = -1, int ID = -1, int nextID = -1, int prevID = -1,
-      QString Cont = "", int Child1 = -1, int Child2 = -1, int Child3 = -1 );
-      void checkAndCreate( FormulaBlock *bl );
-      void deleteIt( FormulaBlock *bl );
-    */
-    QString name;
-
-    /*    BasicElement *activeElement,*firstElement;
-          KFormulaDoc *theFormula;
-    */
-    /**
-     * This is just a hack til view and doc are really split
-     */
-    void mousePressEvent(QMouseEvent *a,  QWidget *wid);
-    void paintEvent( QPaintEvent *_ev, QWidget *paintGround );
-    void print( QPrinter *thePrt);
-    void keyPressEvent( QKeyEvent *k );
-
-    virtual void cleanUp();
-
- public:
-    KFormulaView* createFormulaView( QWidget* _parent = 0 );
-
-//    virtual void addView( KFormulaView *_view );
-//    virtual void removeView( KFormulaView *_view );
-
-    virtual void emitModified();
-    virtual bool isEmpty() { return m_bEmpty; };
-
-    void addTextElement(QString cont="");
-    void addRootElement();
-    BasicElement * addIndex(int index);
-    BasicElement * addChild(int child);
-    void addFractionElement(QString cont);
-    void addMatrixElement(QString cont);
-    void addPrefixedElement(QString cont);
-
-    /*
-      void addSymbolElement();
-      void addDecorationElement();
-    */
-    void addBracketElement(QString cont);
-
-    void setActiveElement(BasicElement* c);
-    void setCursor(const QRect& r) { theCursor=r; }
-
-    int thePosition;
-
-    BasicElement *activeElement() const { return theActiveElement; }
-    QRect cursor() const { return theCursor; }
-
- signals:
-    void sig_modified();
-
-    void sig_changeText( const char * );
-    void sig_changeType(const BasicElement* );
+    KFormulaContainer* getFormula() { return formula; }
+    
+    void print(QPrinter *thePrt);
 
 public slots:
+
     void enlarge();
     void reduce();
     void enlargeRecur();
@@ -104,18 +75,28 @@ public slots:
     void pro();
     void dele();
 
- protected:
-    QList<KFormulaView> m_lstViews;
+protected slots:
 
-    bool m_bModified;
-    bool m_bEmpty;
+    void addBracket();
+    void commandExecuted();
+    void documentRestored();
+    
+protected:
+    
+    virtual QString configFile() const;
+    virtual KoView* createViewInstance(QWidget* parent, const char* name);
 
-    // QTimer *cursorTimer;
-    bool showIt;
+private:
 
-    BasicElement *theActiveElement;
-
-    QRect theCursor;
+    /**
+     * Our undo stack.
+     */
+    KCommandHistory history;
+    
+    /**
+     * The place where all formula related work is done.
+     */
+    KFormulaContainer* formula;
 };
 
 #endif

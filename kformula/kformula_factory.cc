@@ -14,7 +14,7 @@
 #include <qstringlist.h>
 
 static const char* description=I18N_NOOP("KOffice Formula Editor");
-static const char* version="0.2";
+static const char* version="0.3";
 
 extern "C"
 {
@@ -35,6 +35,7 @@ KAboutData* KFormulaFactory::aboutData()
                                    version, description, KAboutData::License_GPL,
                                    "(c) 1998-2000, Andrea Rizzi");
       s_aboutData->addAuthor("Andrea Rizzi",0, "rizzi@kde.org");
+      s_aboutData->addAuthor("Ulrich Kuettler",0, "ulrich.kuettler@mailbox.tu-dresden.de");
     }
     return s_aboutData;
 }

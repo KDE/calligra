@@ -1,51 +1,112 @@
+/* This file is part of the KDE project
+   Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
+	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2.
+ 
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+ 
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #ifndef __kformula_view_h__
 #define __kformula_view_h__
 
-class KFormulaView;
+class FormulaCursor;
+class KAction;
 class KFormulaDoc;
-
+class KFormulaView;
+class KFormulaWidget;
+class QPaintEvent;
+class QScrollView;
 
 #include <koView.h>
-
 #include <qlist.h>
 
-class BasicElement;
 
-class KAction;
-class QPaintEvent;
-
-
+/**
+ * The parts view.
+ */
 class KFormulaView : public KoView
 {
     Q_OBJECT
 
- public:
-    // C++
-    KFormulaView( KFormulaDoc * _doc,QWidget *_parent=0, const char *_name=0);
+public:
+    KFormulaView(KFormulaDoc* _doc, QWidget* _parent=0, const char* _name=0);
     virtual ~KFormulaView();
 
     virtual bool printDlg();
+    
 public slots:
+
     // Document signals
     void modifyMatrix(QString str);
-    void createMatrix(QString str);
-    void slotModified();
-    void slotTypeChanged( const BasicElement *elm);
-    void undo();
-    void redo();
 
+    void reduce();
+    void enlarge();
+    void fractionAlignU();
+    void fractionAlignD();
+    void fractionAlignM();
+    void fractionAlignL();
+    void fractionAlignR();
+    void fractionAlignC();
+    void fractionDist();
+    void fractionDistMore();
+    void fractionDistLess();
+    void fontSwitch();
+    void indexList();
+    void sizeSelected(int);
+    void fontSelected(const QString& );
+    void bold(bool);
+    void underline(bool);
+    void italic(bool);
+    void modeSelected(char*);
+    void textFont();
+    void textSplit();
+    void togglePixmap();
+    void integralLower();
+    void integralHigher();
+    void bracketType();
+    void matrixSet();
+    void matrixRemRow();
+    void matrixRemCol();
+    void matrixInsRow();
+    void matrixInsCol();
+    void fractionHAlign();
+    void toggleMidline();
+    void symbolType();
+    void DecorationType();
+    void remove();
+    void elementColor();
+    void generalColor();
+    void generalFont();
+    void delimiterLeft();
+    void delimiterRight();
+    
 protected:
-    // C++
+
     virtual void init();
     virtual void cleanUp();
 
-    void mousePressEvent(QMouseEvent *a);
-    void paintEvent( QPaintEvent *_ev );
-    void resizeEvent( QResizeEvent *_ev );
-    void keyPressEvent( QKeyEvent *k );
+    virtual void resizeEvent(QResizeEvent* _ev);
+    
     virtual void updateReadWrite( bool );
-    KFormulaDoc *m_pDoc;
 
+private:
+    
+    KFormulaDoc *m_pDoc;
+    KFormulaWidget* formulaWidget;
+    QScrollView* scrollview;
+    
     QPopupMenu *mn_indexList;
 
     KAction *actionEditUndo;
@@ -113,62 +174,6 @@ protected:
     KAction *actionFormula_Color;
     KAction *actionFormula_Font;
 //    KAction *actionHelp_Using;
-
-public slots:
-     void addText();
-     void addRoot();
-     void addFraction();
-     void addVertSpace();
-     void addBracket();
-     void addMatrix();
-     void addIntegral();
-     void addSymbol();
-     void reduce();
-     void enlarge();
-     void fractionAlignU();
-     void fractionAlignD();
-     void fractionAlignM();
-     void fractionAlignL();
-     void fractionAlignR();
-     void fractionAlignC();
-     void fractionDist();
-     void fractionDistMore();
-     void fractionDistLess();
-     void fontSwitch();
-     void addTopLeftIndex();
-     void addBottomLeftIndex();
-     void addTopRightIndex();
-     void addBottomRightIndex();
-     void indexList();
-     void sizeSelected(int);
-     void fontSelected(const QString& );
-     void bold(bool);
-     void underline(bool);
-     void italic(bool);
-     void modeSelected(char*);
-     void textFont();
-     void textSplit();
-     void togglePixmap();
-     void integralLower();
-     void integralHigher();
-     void bracketType();
-     void matrixSet();
-     void matrixRemRow();
-     void matrixRemCol();
-     void matrixInsRow();
-     void matrixInsCol();
-     void fractionHAlign();
-     void toggleMidline();
-     void symbolType();
-     void DecorationType();
-     void remove();
-     void elementColor();
-     void generalColor();
-     void generalFont();
-     void delimiterLeft();
-     void delimiterRight();
- protected slots:
-    void insertIndex(int i);
 };
 
 #endif
