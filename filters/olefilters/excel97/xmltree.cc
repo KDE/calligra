@@ -953,8 +953,8 @@ bool XMLTree::_boolerr(Q_UINT16, QDataStream&)
 bool XMLTree::_bottommargin(Q_UINT16, QDataStream& body)
 {
     double value;
-    body >> value;
-    borders.setAttribute("bottom", value/2.54);
+    body >> value;//value in INCH
+    borders.setAttribute("bottom", (value*2.54));
 
     return true;
 }
@@ -1061,7 +1061,7 @@ bool XMLTree::_crn(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_dbcell(Q_UINT16, QDataStream&)
+bool XMLTree::_dbcell(Q_UINT16, QDataStream &)
 {
   return true;
 }
@@ -1316,7 +1316,7 @@ bool XMLTree::_leftmargin(Q_UINT16, QDataStream& body)
 {
   double value;
   body >> value;
-  borders.setAttribute("left", value/2.54);
+  borders.setAttribute("left", (value*2.54));
 
   return true;
 }
@@ -1415,8 +1415,14 @@ bool XMLTree::_name(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_note(Q_UINT16, QDataStream&)
+bool XMLTree::_note(Q_UINT16, QDataStream &body)
 {
+  kdDebug() <<"Note\n";
+  Q_UINT16 row,col;
+
+  body >> row >>col;
+  kdDebug() <<"col :"<<++col <<"row :"<<++row<<endl;
+
   return true;
 }
 
@@ -1494,7 +1500,7 @@ bool XMLTree::_rightmargin(Q_UINT16, QDataStream& body)
 {
   double value;
   body >> value;
-  borders.setAttribute("right", value/2.54);
+  borders.setAttribute("right", (value*2.54));
 
   return true;
 }
@@ -1690,7 +1696,7 @@ bool XMLTree::_topmargin(Q_UINT16, QDataStream& body)
 {
   double value;
   body >> value;
-  borders.setAttribute("top", value/2.54);
+  borders.setAttribute("top", (value*2.54));
 
   return true;
 }
