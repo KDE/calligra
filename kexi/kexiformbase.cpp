@@ -16,6 +16,9 @@
  ***************************************************************************/
 
 #include <kdebug.h>
+#include <klocale.h>
+#include <kglobal.h>
+#include <kiconloader.h>
 
 #include <qsize.h>
 #include <qpainter.h>
@@ -25,10 +28,16 @@
 
 #include "kexiformbase.h"
 
-KexiFormBase::KexiFormBase(QWidget *parent, const char *name )
+KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString datasource)
 	: QWidget(parent,name)
 {
-//	setMouseTracking(true);
+	if(datasource == "")
+	{
+		setCaption(i18n("[new form]"));
+	}
+
+	KIconLoader *iloader = KGlobal::iconLoader();
+	setIcon(iloader->loadIcon("form", KIcon::Small));
 	
 	m_dotSpacing = 10;
 

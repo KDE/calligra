@@ -30,7 +30,8 @@
 
 #include "kexi.h"
 #include "kexibrowser.h"
-#include "kexiformedit.h"
+#include "kexiformbase.h"
+#include "kexiworkspace.h"
 
 
 KexiBrowser::KexiBrowser(Kexi *mainWin, QWidget *parent, const char *name ) : QWidget(parent,name)
@@ -76,6 +77,7 @@ KexiBrowser::KexiBrowser(Kexi *mainWin, QWidget *parent, const char *name ) : QW
 
 void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p)
 {
+	#warning "TODO: look up the type, wich we have to create"
 	kdDebug() << "context menu requested..." << endl;
 	if(i)
 	{
@@ -90,10 +92,8 @@ void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p
 
 void KexiBrowser::slotCreate()
 {
-	kdDebug() << "creating..." << endl;
-	KexiFormEdit *nef = new KexiFormEdit(m_parent);
-	m_mainWin->setDocumentWidget(nef);
-	m_mainWin->setFormEdit(nef);
+	KexiFormBase *fb = new KexiFormBase(m_mainWin->workspace(), "form");
+	fb->show();
 }
 
 
@@ -103,5 +103,4 @@ void KexiBrowser::slotEdit() {};
 KexiBrowser::~KexiBrowser(){
 }
 
-//#include "kexibrowser.moc"
 #include "kexibrowser.moc"

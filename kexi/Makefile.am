@@ -3,7 +3,7 @@ bin_PROGRAMS = kexi
 
 ## INCLUDES were found outside kdevelop specific part
 
-kexi_SOURCES = kexiinterfacetemplate.cpp kexiformedit.cpp kexiformbase.cpp kexiinterfacemanager.cpp kexiinterface.cpp kexicreateproject.cpp kexibrowser.cpp kexi.cpp main.cpp 
+kexi_SOURCES = kexiworkspace.cpp kexiinterfacetemplate.cpp kexiformbase.cpp kexiinterfacemanager.cpp kexiinterface.cpp kexicreateproject.cpp kexibrowser.cpp kexi.cpp main.cpp 
 kexi_LDADD   =  $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
 
 SUBDIRS = interfaces 
