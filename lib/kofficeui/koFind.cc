@@ -481,6 +481,8 @@ int KoFind::find(const QString &text, const QString &pattern, int index, long op
                     break;
                 index++;
             }
+            if (index >= (int)text.length()) // end of line
+                index = -1; // not found
         }
     }
     else
