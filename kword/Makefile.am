@@ -80,7 +80,7 @@ kdelnkdir = $(kde_appsdir)/Office
 rcdir = $(kde_datadir)/kword
 rc_DATA = kword.rc kword_readonly.rc
 
-SUBDIRS = . mailmerge toolbar templates dtd pics expression data
+SUBDIRS = . mailmerge templates dtd pics expression data
 
 messages: rc.cpp
 	perl ../kspread/extracti18n expression/*.xml > xml_doc.cc
