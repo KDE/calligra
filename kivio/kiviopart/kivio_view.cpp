@@ -1001,17 +1001,17 @@ void KivioView::unselectAllStencils()
     m_pCanvas->repaint();
 }
 
-QColor KivioView::fgColor()
+QColor KivioView::fgColor() const
 {
     return m_setFGColor->color();
 }
 
-QColor KivioView::bgColor()
+QColor KivioView::bgColor() const
 {
     return m_setBGColor->color();
 }
 
-int KivioView::lineWidth()
+int KivioView::lineWidth() const
 {
     return (int)m_setLineWidth->value();
 }
@@ -1709,5 +1709,12 @@ void KivioView::resetLayerPanel()
     }
 }
 
+void KivioView::updateProtectPanelCheckBox()
+{
+    if ( m_pProtectionPanel )
+    {
+        m_pProtectionPanel->updateCheckBoxes();
+    }
+}
 
 #include "kivio_view.moc"

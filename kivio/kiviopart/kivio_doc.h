@@ -139,6 +139,7 @@ public:
     void insertPage( KivioPage * page );
     void takePage( KivioPage * page );
     void resetLayerPanel();
+    void updateProtectPanelCheckBox();
 
 public slots:
   void updateView(KivioPage*, bool modified=true);

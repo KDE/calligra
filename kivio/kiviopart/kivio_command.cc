@@ -603,5 +603,6 @@ void KivioChangeStencilProtectCommand::changeValue( bool b )
     default:
         break;
     }
+    m_page->doc()->updateProtectPanelCheckBox();
 }
 

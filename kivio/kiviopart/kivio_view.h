@@ -125,12 +125,13 @@ public:
 
 
   // Returns the current interface color/lineWidth settings
-  QColor fgColor();
-  QColor bgColor();
-  int lineWidth();
+  QColor fgColor()const;
+  QColor bgColor()const;
+  int lineWidth()const;
     void updateButton();
     void insertPage( KivioPage* page );
     void resetLayerPanel();
+    void updateProtectPanelCheckBox();
 
 
 protected:

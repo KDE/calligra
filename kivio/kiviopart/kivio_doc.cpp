@@ -888,5 +888,12 @@ void KivioDoc::slotCommandExecuted()
     setModified( true );
 }
 
+void KivioDoc::updateProtectPanelCheckBox()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KivioView*)it.current())->updateProtectPanelCheckBox();
+}
+
 
 #include "kivio_doc.moc"
