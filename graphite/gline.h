@@ -69,7 +69,7 @@ public:
 
     virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false) const;
     // Do we need this? Maybe even lines should have rectangular handles... nah, doesn't look sexy :)
-    virtual void drawHandles(QPainter &p, const QRect &rect, QList<QRect> *handles=0L) const;
+    virtual void drawHandles(QPainter &p, const QRect &rect, QPtrList<QRect> *handles=0L) const;
 
     virtual const GLine *hit(const QPoint &p) const;
     virtual bool intersects(const QRect &r) const;

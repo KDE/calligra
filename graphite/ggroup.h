@@ -20,7 +20,7 @@
 #ifndef ggroup_h
 #define ggroup_h
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <gobject.h>
 
 // This is an abstract middle layer for two kinds of gourps:
@@ -78,8 +78,8 @@ protected:
 private:
     GAbstractGroup &operator=(const GAbstractGroup &rhs);
 
-    QList<GObject> m_members;
-    mutable QListIterator<GObject> *m_iterator;
+    QPtrList<GObject> m_members;
+    mutable QPtrListIterator<GObject> *m_iterator;
 };
 
 

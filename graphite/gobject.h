@@ -20,7 +20,7 @@
 #ifndef gobject_h
 #define gobject_h
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qbrush.h>
 #include <qpen.h>
 #include <qrect.h>
@@ -136,7 +136,7 @@ protected:
     virtual void createPropertyDialog();
 
     bool created() const { return m_created; }
-    QList<QRect> *handles() const { return m_handles; }
+    QPtrList<QRect> *handles() const { return m_handles; }
 
 private:
     GObjectM9r(const GObjectM9r &rhs);
@@ -145,7 +145,7 @@ private:
     GObject *m_object;
     Mode m_mode;
     GraphitePart *m_part;     // we need that for the history
-    QList<QRect> *m_handles;  // contains all the handle rects
+    QPtrList<QRect> *m_handles;  // contains all the handle rects
     bool m_pressed;           // mouse button pressed?
     bool m_changed;           // true, if the Apply button is "active"
     bool m_created;           // dia created?
@@ -266,7 +266,7 @@ public:
     virtual bool unplugChild(GObject */*child*/) { return false; }
 
     // These methods are used to access the object's children
-    // Implemented via QListIterator - Leaf classes don't override
+    // Implemented via QPtrListIterator - Leaf classes don't override
     // that default behavior...
     virtual const GObject *firstChild() const { return 0L; }
     virtual const GObject *nextChild() const { return 0L; }
@@ -283,7 +283,7 @@ public:
     // All handles which are drawn are added to the list if the list
     // is != 0L. Use this list to check "mouseOver" stuff
     // drawing: setROP(Not)
-    virtual void drawHandles(QPainter &p, const QRect &rect, QList<QRect> *handles=0L) const;
+    virtual void drawHandles(QPainter &p, const QRect &rect, QPtrList<QRect> *handles=0L) const;
 
     // does the object contain this point? (Note: finds the most nested child which is hit!)
     virtual const GObject *hit(const QPoint &p) const = 0;

@@ -37,7 +37,7 @@ GAbstractGroup::~GAbstractGroup() {
 
 bool GAbstractGroup::isOk() const {
 
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L && it.current()->isOk(); ++it);
 
     if(it==0L)
@@ -48,14 +48,14 @@ bool GAbstractGroup::isOk() const {
 
 void GAbstractGroup::setOk(bool ok) {
 
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->setOk(ok);
 }
 
 void GAbstractGroup::setDirty() {
 
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->setDirty();
     GObject::setDirty();
@@ -122,7 +122,7 @@ QDomElement GAbstractGroup::save(QDomDocument &doc) const {
     QDomElement element=doc.createElement(tagGAbstractGroup);
     QDomElement children=doc.createElement(tagChildren);
 
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it) {
         if(it.current()->state()!=GObject::Deleted)
             children.appendChild(it.current()->save(doc));
@@ -141,7 +141,7 @@ void GAbstractGroup::draw(QPainter &p, const QRect &rect, bool toPrinter) const 
     if(!rect.intersects(boundingRect()))
         return;
 
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->draw(p, rect, toPrinter);
 }
@@ -151,7 +151,7 @@ const GObject *GAbstractGroup::hit(const QPoint &p) const {
     if(dirty())
         recalculate();
 
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     it.toLast();
     for( ; it!=0L; --it) {
         if(it.current()->hit(p)) {
@@ -187,7 +187,7 @@ const QRect &GAbstractGroup::boundingRect() const {
         return GObject::boundingRect();
     }
 
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     QRect br=it.current()->boundingRect();
     ++it;
     for( ; it!=0L; ++it) {
@@ -208,7 +208,7 @@ const QRect &GAbstractGroup::boundingRect() const {
 
 void GAbstractGroup::moveX(const double &dx) {
 
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->moveX(dx);
     setBoundingRectDirty();
@@ -216,7 +216,7 @@ void GAbstractGroup::moveX(const double &dx) {
 
 void GAbstractGroup::moveY(const double &dy) {
 
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->moveY(dy);
     setBoundingRectDirty();
@@ -224,7 +224,7 @@ void GAbstractGroup::moveY(const double &dy) {
 
 void GAbstractGroup::move(const double &dx, const double &dy) {
 
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->move(dx, dy);
     setBoundingRectDirty();
@@ -232,7 +232,7 @@ void GAbstractGroup::move(const double &dx, const double &dy) {
 
 void GAbstractGroup::rotate(const FxPoint &center, const double &ang) {
 
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->rotate(center, ang);
     setAngle(Graphite::normalizeRad(angle()+ang));
@@ -241,7 +241,7 @@ void GAbstractGroup::rotate(const FxPoint &center, const double &ang) {
 
 void GAbstractGroup::scale(const FxPoint &origin, const double &xfactor, const double &yfactor) {
 
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->scale(origin, xfactor, yfactor);
     setBoundingRectDirty();
@@ -255,7 +255,7 @@ void GAbstractGroup::setState(const State s) {
     if(s==GObject::Handles || s==GObject::Rot_Handles)
         return;
 
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->setState(s);
 }
@@ -265,7 +265,7 @@ void GAbstractGroup::setFillStyle(const FillStyle &fs) {
     if(fillStyle()==fs)
         return;
     GObject::setFillStyle(fs);
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->setFillStyle(fs);
 }
@@ -275,7 +275,7 @@ void GAbstractGroup::setBrush(const QBrush &b) {
     if(brush()==b)
         return;
     GObject::setBrush(b);
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->setBrush(b);
 }
@@ -285,7 +285,7 @@ void GAbstractGroup::setGradient(const Gradient &g) {
     if(gradient()==g)
         return;
     GObject::setGradient(g);
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->setGradient(g);
 }
@@ -295,18 +295,18 @@ void GAbstractGroup::setPen(const QPen &p) {
     if(pen()==p)
         return;
     GObject::setPen(p);
-    QListIterator<GObject> it(m_members);
+    QPtrListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->setPen(p);
 }
 
 GAbstractGroup::GAbstractGroup(const QString &name) : GObject(name), m_iterator(0L) {
-    m_iterator=new QListIterator<GObject>(m_members);
+    m_iterator=new QPtrListIterator<GObject>(m_members);
 }
 
 GAbstractGroup::GAbstractGroup(const GAbstractGroup &rhs) : GObject(rhs), m_iterator(0L) {
 
-    m_iterator=new QListIterator<GObject>(m_members);
+    m_iterator=new QPtrListIterator<GObject>(m_members);
 
     for(const GObject *object=rhs.firstChild(); object!=0L; object=rhs.nextChild()) {
         const GObject *cloned=object->clone();
@@ -330,7 +330,7 @@ GAbstractGroup::GAbstractGroup(const QDomElement &element) :
 
     static const QString &tagChildren=KGlobal::staticQString("children");
 
-    m_iterator=new QListIterator<GObject>(m_members);
+    m_iterator=new QPtrListIterator<GObject>(m_members);
 
     QDomElement children=element.namedItem(tagChildren).toElement();
     if(children.isNull()) {

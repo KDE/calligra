@@ -58,7 +58,7 @@ GObjectM9r::GObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
     m_changed(false), m_created(false), m_sticky(false), m_type(type),
     m_line(0L), m_view(view) {
 
-    m_handles=new QList<QRect>;
+    m_handles=new QPtrList<QRect>;
     m_handles->setAutoDelete(true);
 }
 
@@ -578,7 +578,7 @@ QDomElement GObject::save(QDomDocument &doc) const {
     return e;
 }
 
-void GObject::drawHandles(QPainter &p, const QRect &/*rect*/, QList<QRect> *handles) const {
+void GObject::drawHandles(QPainter &p, const QRect &/*rect*/, QPtrList<QRect> *handles) const {
 
     if(dirty())
         recalculate();

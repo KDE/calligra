@@ -176,7 +176,7 @@ void GLine::draw(QPainter &p, const QRect &rect, bool toPrinter) const {
     p.drawLine(m_a.pxX(), m_a.pxY(), m_b.pxX(), m_b.pxY());
 }
 
-void GLine::drawHandles(QPainter &p, const QRect &/*rect*/, QList<QRect> *handles) const {
+void GLine::drawHandles(QPainter &p, const QRect &/*rect*/, QPtrList<QRect> *handles) const {
 
     if(dirty())
         recalculate();
