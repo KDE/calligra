@@ -25,6 +25,7 @@
 #include "koView.h"
 #include "koFilterManager.h"
 #include "koIcons.h"
+#include "koDocumentInfo.h"
 #include "koDocumentInfoDlg.h"
 
 #include <qkeycode.h>
@@ -184,6 +185,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     d->m_rootView->setPartManager( d->m_manager );
 
     setView( d->m_rootView );
+
     if ( m_dummyWidget )
     {
       delete m_dummyWidget;
@@ -195,10 +197,36 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   else
     d->m_rootView = 0L;
 
+  updateCaption();
+
   d->m_manager->setActivePart( d->m_rootDoc, d->m_rootView );
 
   if ( oldRootView )
     delete oldRootView;
+}
+
+void KoMainWindow::updateCaption()
+{
+  kdDebug(30003) << "KoMainWindow::updateCaption()" << endl;
+  if ( !d->m_rootDoc )
+    setCaption(QString::null);
+  else
+  {
+      QString caption;
+      // Get caption from document info (title(), in about page)
+      if ( d->m_rootDoc->documentInfo() )
+      {
+          KoDocumentInfoPage * page = d->m_rootDoc->documentInfo()->page( QString::fromLatin1("about"));
+          if (page)
+              caption = static_cast<KoDocumentInfoAbout *>(page)->title();
+      }
+      if ( caption.isEmpty() )
+          // Fall back to document URL
+          caption = d->m_rootDoc->url().decodedURL();
+
+      // KTMW hides some of the functionality of kapp->makeStdCaption !
+      QWidget::setCaption( kapp->makeStdCaption( caption, true, d->m_rootDoc->isModified() ) );
+  }
 }
 
 KoDocument *KoMainWindow::rootDocument() const

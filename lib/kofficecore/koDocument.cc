@@ -133,7 +133,7 @@ KoDocument::KoDocument( QObject* parent, const char* name, bool singleViewMode )
       d->m_wrapperWidget = new KoViewWrapperWidget( (QWidget *)parent );
       setWidget( d->m_wrapperWidget );
   }
-  
+
   d->m_docInfo = new KoDocumentInfo( this, "document info" );
 }
 
@@ -329,8 +329,8 @@ KoDocumentChild *KoDocument::child( KoDocument *doc )
 
 KoDocumentInfo *KoDocument::documentInfo() const
 {
-  return d->m_docInfo; 
-} 
+  return d->m_docInfo;
+}
 
 void KoDocument::setViewContainerStates( KoView *view, const QMap<QString,QByteArray> &states )
 {
@@ -494,16 +494,16 @@ bool KoDocument::saveNativeFormat( const QString & file )
       QTextStream str( &buffer );
       str << d->m_docInfo->save();
       buffer.close();
-      
+
       ostorestream out( store );
-      
+
       out.write( buffer.buffer().data(), buffer.buffer().size() );
-      
+
       out.flush();
-    
+
       store->close();
     }
-    
+
     bool ret = completeSaving( store );
     kdDebug(30003) << "Saving done" << endl;
     delete store;
@@ -678,7 +678,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
     if ( store->open( "/documentinfo.xml", "" ) )
     {
       istorestream in( store );
-      
+
       QBuffer buffer;
       buffer.open( IO_WriteOnly );
 
@@ -693,12 +693,12 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
       buffer.close();
       buffer.open( IO_ReadOnly );
-      
+
       QDomDocument doc( &buffer );
       d->m_docInfo->load( doc );
-      
+
       buffer.close();
-      
+
       store->close();
     }
     else
@@ -707,7 +707,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
       delete d->m_docInfo;
       d->m_docInfo = new KoDocumentInfo( this, "document info" );
     }
-    
+
     bool res = completeLoading( store );
     delete store;
     QApplication::restoreOverrideCursor();
@@ -780,6 +780,11 @@ void KoDocument::setModified( bool mod )
 
     if ( mod )
 	m_bEmpty = FALSE;
+
+    // Now take care of the caption
+    QListIterator<KoMainWindow> it( d->m_shells );
+    for (; it.current(); ++it )
+        it.current()->updateCaption();
 }
 
 void KoDocument::changedByFilter( bool changed ) const
