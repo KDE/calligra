@@ -119,8 +119,9 @@ SvgImport::convert()
 {
 	GraphicsContext *gc = new GraphicsContext;
 	QDomElement docElem = inpdoc.documentElement();
-	double width	= !docElem.attribute( "width" ).isEmpty() ? parseUnit( docElem.attribute( "width" ) ) : 550.0;
-	double height	= !docElem.attribute( "height" ).isEmpty() ? parseUnit( docElem.attribute( "height" ) ) : 841.0;
+	KoRect bbox( 0, 0, 550.0, 841.0 );
+	double width	= !docElem.attribute( "width" ).isEmpty() ? parseUnit( docElem.attribute( "width" ), true, false, bbox ) : 550.0;
+	double height	= !docElem.attribute( "height" ).isEmpty() ? parseUnit( docElem.attribute( "height" ), false, true, bbox ) : 841.0;
 	m_document.setWidth( width );
 	m_document.setHeight( height );
 	m_outerRect = m_document.boundingBox();
