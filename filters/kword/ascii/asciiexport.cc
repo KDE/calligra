@@ -136,7 +136,15 @@ void ASCIIWorker::ProcessParagraphData (const QString& paraText,
               paraFormatDataIt != paraFormatDataList.end ();
               paraFormatDataIt++ )
         {
-            *m_streamOut << paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
+            if (1==(*paraFormatDataIt).id)
+            {
+                *m_streamOut << paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
+            }
+            else
+            {
+                kdWarning(30502) << "Not supported paragraph type: "
+                    << (*paraFormatDataIt).id << endl;
+            }
         }
     }
 
@@ -146,7 +154,7 @@ void ASCIIWorker::ProcessParagraphData (const QString& paraText,
 bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& layout,
     const ValueListFormatData& paraFormatDataList)
 {
-    kdDebug(30503) << "Entering ASCIIWorker::doFullParagraph" << endl;
+    kdDebug(30502) << "Entering ASCIIWorker::doFullParagraph" << endl;
     
     // As KWord has only one depth of lists, we can process lists very simply.
     if ( layout.counter.numbering == CounterData::NUM_LIST )
@@ -258,6 +266,11 @@ bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& lay
                 *m_streamOut << "## ";
                 ProcessParagraphData ( paraText, paraFormatDataList);
             }
+            else if (layout.counter.depth==3)
+            {   // HEAD 4
+                *m_streamOut << "# ";
+                ProcessParagraphData ( paraText, paraFormatDataList);
+            }
             else
             {
                 ProcessParagraphData ( paraText, paraFormatDataList);
@@ -269,7 +282,7 @@ bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& lay
         }
     }
 
-    kdDebug(30503) << "Exiting ASCIIWorker::doFullParagraph" << endl;
+    kdDebug(30502) << "Exiting ASCIIWorker::doFullParagraph" << endl;
     return true;
 }
 
