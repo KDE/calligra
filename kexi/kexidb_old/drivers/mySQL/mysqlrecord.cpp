@@ -30,6 +30,7 @@ MySqlRecord::MySqlRecord(MYSQL_RES *result, MySqlDB *db, bool buffer, MySqlRecor
  : KexiDBRecord(), MySqlResult(result, db)
 {
 	m_db = db;
+	m_lastItem = 0;
 	m_readOnly = findKey();
 }
 
@@ -74,18 +75,20 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 		if((*it).record == record && (*it).done == false)
 		{
 			QString value = m_db->escape((*it).value.toString());
-			kdDebug() << "MySqlRecord::commit(): escaping" << endl;
 			QString key = m_db->escape(m_keyBuffer.find(record).data().toString());
-			kdDebug() << "MySqlRecord::commit(): key is now: " << key << endl;
-			kdDebug() << "MySqlRecord::commit(): endEscape" << endl;
-
-			kdDebug() << (*it).field << endl;
 			
-			QString statement("update " + m_table + " set " + (*it).field + "='" + value + "' where " + m_keyField + "='" + key + "'");
-			kdDebug() << "MySqlRecord::commit(): query: " << statement << endl;
-			m_db->query(statement);
-//			m_updateBuffer.erase(it);
-			(*it).done = true;
+			if(!(*it).insertItem)
+			{
+
+				QString statement("update " + m_table + " set " + (*it).field + "='" + value + "' where " + m_keyField + "='" + key + "'");
+				kdDebug() << "MySqlRecord::commit(): query: " << statement << endl;
+				m_db->query(statement);
+				(*it).done = true;
+			}
+			else
+			{
+//				QString statement("insert into %s set %s = '%s'"). m_table, (*it).field, (*it).value;
+			}
 		}
 	}
 }
@@ -134,6 +137,17 @@ MySqlRecord::sqlType(QString)
 	return KexiDBField::SQLInvalid;
 }
 
+KexiDBField*
+MySqlRecord::fieldInfo(unsigned int column)
+{
+	return MySqlResult::fieldInfo(column);
+}
+
+KexiDBField*
+MySqlRecord::fieldInfo(QString column)
+{
+	return MySqlResult::fieldInfo(column);
+}
 
 bool
 MySqlRecord::update(unsigned int record, unsigned int field, QVariant value)
@@ -169,7 +183,8 @@ MySqlRecord::insert()
 	if(readOnly())
 		return -1;
 
-	
+	m_lastItem++;
+	return m_lastItem;
 }
 
 bool
@@ -204,6 +219,7 @@ MySqlRecord::next()
 //		m_keyContent = value(m_keyField);
 		kdDebug() << "MySqlRecord::next(): hint: " << MySqlResult::currentRecord() - 1<< ", " << value(m_keyField).toString() << endl;
 		m_keyBuffer.insert(MySqlResult::currentRecord() - 1, value(m_keyField));
+		m_lastItem++;
 		kdDebug() << "MySqlRecord::next(): but: " << m_keyBuffer[MySqlResult::currentRecord() - 1].toString() << " found" << endl;
 		return true;
 	}

@@ -66,7 +66,9 @@ class KexiDBField
 		virtual	bool		primary_key();
 		virtual bool		unique_key();
 		virtual bool		forign_key();
-		
+
+		virtual bool		not_null();
+
 		virtual QVariant::Type	type();
 		virtual ColumnType	sqlType();
 };

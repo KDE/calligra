@@ -74,6 +74,15 @@ MySqlField::forign_key()
 	return false; //mySQL doen't know forign keys
 }
 
+bool
+MySqlField::not_null()
+{
+	if(m_field->flags & NOT_NULL_FLAG)
+		return true;
+	else
+		return false;
+}
+
 QVariant::Type
 MySqlField::type()
 {

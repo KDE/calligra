@@ -43,6 +43,7 @@ typedef struct UpdateItem
 	unsigned int record;
 	QString field;
 	QVariant value;
+	bool insertItem;
 	bool done;
 };
 
@@ -74,6 +75,9 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 
 		KexiDBField::ColumnType sqlType(unsigned int field);
 		KexiDBField::ColumnType sqlType(QString field);
+
+		KexiDBField* fieldInfo(unsigned int column);
+		KexiDBField* fieldInfo(QString column);
 
 		bool update(unsigned int record, unsigned int field, QVariant value);
 		bool update(unsigned int record, QString field, QVariant value);
@@ -114,6 +118,8 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 		InsertList	m_insertList;   /* insert-buffers, don't wan't to loose them */
 		UpdateBuffer	m_updateBuffer; /* update buffer */
 		ContentBuffer	m_contentBuffer; /* interesting if buffer was enabled */
+
+		int		m_lastItem;
 };
 
 #endif

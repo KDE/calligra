@@ -99,6 +99,15 @@ class KexiDBRecord
 		 */
 		virtual KexiDBField::ColumnType sqlType(QString field) = 0;
 
+		/*!
+		 *  returns KexiDBField*
+		 */
+		virtual KexiDBField* fieldInfo(unsigned int field) = 0;
+
+		/*!
+		 *  returns KexiDBField*
+		 */
+		virtual KexiDBField* fieldInfo(QString field) = 0;
 
 		/*!
 		 *  sets the nth field in the buffer to "value"

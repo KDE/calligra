@@ -95,6 +95,12 @@ KexiDBField::forign_key()
 	return false;
 }
 
+bool
+KexiDBField::not_null()
+{
+	return false;
+}
+
 QVariant::Type
 KexiDBField::type()
 {

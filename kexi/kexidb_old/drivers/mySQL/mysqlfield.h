@@ -39,7 +39,9 @@ class MySqlField : public KexiDBField
 		bool				primary_key();
 		bool				unique_key();
 		bool				forign_key();
-		
+
+		bool				not_null();
+
 		QVariant::Type			type();
 		KexiDBField::ColumnType		sqlType();
 

@@ -109,6 +109,8 @@ KexiDataTable::slotItemChanged(KexiTableItem *i, int col)
 	if(i->isInsertItem())
 	{
 		i->setInsertItem(false);
+		i->setHint(QVariant(m_record->insert()));
+		m_record->commit(i->getHint().toInt(), true);
 		KexiTableItem *newinsert = new KexiTableItem(m_tableView);
 		newinsert->setHint(QVariant(i->getHint().toInt() + 1));
 		newinsert->setInsertItem(true);
