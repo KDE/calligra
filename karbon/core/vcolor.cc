@@ -22,9 +22,9 @@ VColor::values( VColorSpace colorSpace,
 		if( v1 )
 			*v1 = qRound( 255 * m_value[0] );
 		if( v2 )
-			*v1 = qRound( 255 * m_value[1] );
+			*v2 = qRound( 255 * m_value[1] );
 		if( v3 )
-			*v1 = qRound( 255 * m_value[2] );
+			*v3 = qRound( 255 * m_value[2] );
 	}
 }
 
