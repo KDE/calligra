@@ -548,7 +548,7 @@ void KPTAppointment::printDebug(QString indent)
     kdDebug()<<indent<<"  + Appointment to task: "<<m_task->name()<<endl;
     indent += "  !";
     kdDebug()<<indent<<"      From: "<<m_startTime.toString()<<endl;
-    kdDebug()<<indent<<"  Duration: "<<m_duration.dateTime().toString()<<endl;
+    kdDebug()<<indent<<"  Duration: "<<m_duration.toString()<<endl;
 }
 
 void KPTResourceGroupRequest::printDebug(QString indent)

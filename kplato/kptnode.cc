@@ -455,9 +455,9 @@ void KPTEffort::set( int e, int p, int o ) {
     m_expectedEffort.set(KPTDuration(e));
     p < 0 ? m_pessimisticEffort.set(KPTDuration(e)) :  m_pessimisticEffort.set(KPTDuration(p));
     o < 0 ? m_optimisticEffort.set(KPTDuration(e)) : m_optimisticEffort.set(KPTDuration(o));
-    //kdDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.dateTime().toString()<<endl;
-    //kdDebug()<<k_funcinfo<<"   Optimistic: "<<m_optimisticEffort.dateTime().toString()<<endl;
-    //kdDebug()<<k_funcinfo<<"   Pessimistic: "<<m_pessimisticEffort.dateTime().toString()<<endl;
+    //kdDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<"   Optimistic: "<<m_optimisticEffort.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<"   Pessimistic: "<<m_pessimisticEffort.toString()<<endl;
 
     //kdDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.duration()<<" manseconds"<<endl;
 }
@@ -489,9 +489,9 @@ bool KPTEffort::load(QDomElement &element) {
 void KPTEffort::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("effort");
     element.appendChild(me);
-    me.setAttribute("expected", m_expectedEffort.dateTime().toString());
-    me.setAttribute("optimistic", m_optimisticEffort.dateTime().toString());
-    me.setAttribute("pessimistic", m_pessimisticEffort.dateTime().toString());
+    me.setAttribute("expected", m_expectedEffort.toString());
+    me.setAttribute("optimistic", m_optimisticEffort.toString());
+    me.setAttribute("pessimistic", m_pessimisticEffort.toString());
     me.setAttribute("type", typeToString());
 }
 
@@ -520,8 +520,8 @@ void KPTNode::printDebug(bool children, QCString indent) {
     if (m_effort) m_effort->printDebug(indent);
     QString s = "  Constraint: " + constraintToString();
     kdDebug()<<indent<<s<<" ("<<constraintTime().toString()<<")"<<endl;
-    //kdDebug()<<indent<<"  Duration: "<<m_duration.dateTime().toString()<<endl;
-    kdDebug()<<indent<<"  Duration: "<<m_duration.duration()<<QCString(" secs")<<" ("<<m_duration.dateTime().toString()<<")"<<endl;
+    //kdDebug()<<indent<<"  Duration: "<<m_duration.toString()<<endl;
+    kdDebug()<<indent<<"  Duration: "<<m_duration.duration()<<QCString(" secs")<<" ("<<m_duration.toString()<<")"<<endl;
     kdDebug()<<indent<<"  Start time: "<<m_startTime.toString()<<endl;
     kdDebug()<<indent<<"  End time: " <<m_endTime.toString()<<endl;
     kdDebug()<<indent<<"  Earliest start: "<<earliestStart.toString()<<endl;
@@ -562,10 +562,10 @@ void KPTNode::printDebug(bool children, QCString indent) {
 
 #ifndef NDEBUG
 void KPTEffort::printDebug(QCString indent) {
-    kdDebug()<<indent<<"  Effort: "<<m_expectedEffort.dateTime().toString()<<endl;
+    kdDebug()<<indent<<"  Effort: "<<m_expectedEffort.toString()<<endl;
     indent += "  ";
-    kdDebug()<<indent<<"  Expected: "<<m_expectedEffort.dateTime().toString()<<endl;
-    kdDebug()<<indent<<"  Optimistic: "<<m_optimisticEffort.dateTime().toString()<<endl;
-    kdDebug()<<indent<<"  Pessimistic: "<<m_pessimisticEffort.dateTime().toString()<<endl;
+    kdDebug()<<indent<<"  Expected: "<<m_expectedEffort.toString()<<endl;
+    kdDebug()<<indent<<"  Optimistic: "<<m_optimisticEffort.toString()<<endl;
+    kdDebug()<<indent<<"  Pessimistic: "<<m_pessimisticEffort.toString()<<endl;
 }
 #endif

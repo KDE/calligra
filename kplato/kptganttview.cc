@@ -217,26 +217,9 @@ void KPTGanttView::draw(KPTProject &project)
 {
     //kdDebug()<<k_funcinfo<<endl;
 	m_gantt->setUpdateEnabled(false);
+
 	clear();
-	/*KPTDateTime *time;
-	KPTDuration *dur;
-
-	 //The root node is supposed to be hidden.
-	KDGanttViewSummaryItem *item = new KPTGanttViewSummaryItem(m_gantt, project);
-	time = project.getStartTime();
-	dur = project.getExpectedDuration();
-	item->setStartTime(time->dateTime());
-	time->add(dur);
-	item->setEndTime(time->dateTime());
-	item->setOpen(true);
-	project.setGanttItem(item);
-	delete time;
-	delete dur;
-*/
 	drawChildren(NULL, project);
-
-	// Relations
-	//drawRelations(project);
 	drawRelations();
 
 	m_gantt->setUpdateEnabled(true);
@@ -264,7 +247,7 @@ void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &par
 			drawMilestone(parentItem, t);
         }
 		else
-		    kdDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
+		    kdDebug()<<k_funcinfo<<"Node type "<<n->type()<<" not implemented yet"<<endl;
 
 	}
 }

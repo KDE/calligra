@@ -164,7 +164,7 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
          * which we can search: refer to node as currentNode and earliest
          * finish (or latest start) time for currentNode as duration */
         KPTNode &currentNode = **curNode;
-        //kdDebug()<<k_funcinfo<<"currentNode="<<currentNode.name()<<" earliest start="<<currentNode.earliestStart.dateTime().toString()<<endl;
+        //kdDebug()<<k_funcinfo<<"currentNode="<<currentNode.name()<<" earliest start="<<currentNode.earliestStart.toString()<<endl;
         KPTDateTime startTime = currentNode.earliestStart;
         /* *** expected should be more general than this *** */
         /* *** we could use (say) a member function pointer *** */
@@ -180,7 +180,7 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
             if( startTime > (*i)->earliestStart ){
                 (*i)->earliestStart = startTime;
             }
-            //kdDebug()<<"Node="<<currentNode.name()<<" Successor Node="<<(*i)->name()<<" Earliest start="<<(*i)->earliestStart.dateTime().toString()<<endl;
+            //kdDebug()<<"Node="<<currentNode.name()<<" Successor Node="<<(*i)->name()<<" Earliest start="<<(*i)->earliestStart.toString()<<endl;
         }
         /* Only act if node is an end node here - KPTRelations
          * should not be followed for a start node */
@@ -197,11 +197,11 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
                 KPTDateTime u = startTime;
                 u += i.current()->lag();
                 /* act if u is later than start of next node */
-                //kdDebug()<<k_funcinfo<<"Calc time="<<u.dateTime().toString()<<" childs time="<<i.current()->child()->start_node()->getEarliestStart().dateTime().toString()<<endl;
+                //kdDebug()<<k_funcinfo<<"Calc time="<<u.toString()<<" childs time="<<i.current()->child()->start_node()->getEarliestStart().toString()<<endl;
                 if( u > i.current()->child()->start_node()->earliestStart ) {
                     i.current()->child()->start_node()->earliestStart = u;
                 }
-                //kdDebug()<<"Node="<<currentNode.owner_node()->name()<<" Child node="<<i.current()->child()->start_node()->name()<<" Move earliest start="<<u.dateTime().toString()<<endl;
+                //kdDebug()<<"Node="<<currentNode.owner_node()->name()<<" Child node="<<i.current()->child()->start_node()->name()<<" Move earliest start="<<u.toString()<<endl;
             }
         /* Remove currentNode from list so that we don't use it again */
         nodelist.erase( curNode );
@@ -230,13 +230,13 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
         KPTNode &currentNode = **curNode;
         KPTDateTime t = currentNode.latestFinish;
 #ifdef DEBUGPERT
-        kdDebug() << "Node: " <<currentNode.name()<< " latestFinish="<< t.toString().latin1() << endl;
+        kdDebug() << "Node: " <<currentNode.name()<< " latestFinish="<< t.toString() << endl;
 #endif
         /* *** expected should be more general than this *** */
         /* *** we could use (say) a member function pointer *** */
         t -= currentNode.expectedDuration(t);
 #ifdef DEBUGPERT
-        kdDebug() << "  New calculated latest finish=" << t.toString().latin1() << endl;
+        kdDebug() << "  New calculated latest finish=" << t.toString() << endl;
 #endif
         /* Go through arcs from currentNode, propagating values */
         for( std::vector<KPTNode*>::iterator i = currentNode.predecessors.list.begin(); i != currentNode.predecessors.list.end(); ++i ) {
@@ -248,7 +248,7 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
             /* act if t is earlier than finish of arc node */
             if( t < (*i)->latestFinish ) {
                 (*i)->latestFinish = t;
-                //kdDebug() << "Node: " <<(*i)->name()<< " reduce latestFinish="<< t.dateTime().toString().latin1() << endl;
+                //kdDebug() << "Node: " <<(*i)->name()<< " reduce latestFinish="<< t.toString() << endl;
             }
         }
         /* Only act if node is an start node here - KPTRelations
@@ -269,7 +269,7 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
                 if( u < i.current()->parent()->end_node()->latestFinish ) {
                     i.current()->parent()->end_node()->latestFinish = u;
                 }
-                //kdDebug() << "Node: " <<i.current()->parent()->end_node()->name()<< " reduce latestFinish="<< u.dateTime().toString().latin1() << endl;
+                //kdDebug() << "Node: " <<i.current()->parent()->end_node()->name()<< " reduce latestFinish="<< u.toString() << endl;
         }
         /* Remove currentNode from list so that we don't use it again */
         nodelist.erase( curNode );

@@ -63,7 +63,7 @@ int KPTTask::type() const {
 KPTDuration *KPTTask::getExpectedDuration() {
     //kdDebug()<<k_funcinfo<<endl;
     // Duration should already be calculated
-    KPTDuration *ed= new KPTDuration(m_duration.dateTime());
+    KPTDuration *ed= new KPTDuration(m_duration);
     return ed;
 }
 

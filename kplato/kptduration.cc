@@ -102,13 +102,10 @@ QString KPTDuration::toString(Format format) const {
             return m_theTime.toString();
         case Format_Hour:
             return QString("%1h%2m").arg(days*24 + secs/3600).arg((secs%3600)/60);
-            break;
         case Format_Day:
             return QString("%1.%2").arg(days).arg(secs*10/3600);
-            break;
         case Format_Week:
             return QString("%1w%2.%3").arg(days/7).arg(days%7).arg(secs*10/3600);
-            break;
         default: // avoid warning
             break;
     }

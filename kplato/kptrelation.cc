@@ -113,7 +113,7 @@ void KPTRelation::save(QDomElement &element) const {
             break;
     }
     me.setAttribute("timingrelation", tr);
-    //me.setAttribute("lag", m_lag.dateTime().toString());
+    //me.setAttribute("lag", m_lag.toString());
 }
 
 #ifndef NDEBUG
