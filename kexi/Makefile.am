@@ -15,10 +15,12 @@ install-data-local:
 #	$(INSTALL_DATA) $(srcdir)/kexiinterface.desktop $(kde_servicetypesdir)/kexiinterface.desktop
 #	$(mkinstalldirs) $(kde_servicedir)
 #	$(INSTALL_DATA) $(srcdir)/interfaces/mysqlinterface.desktop $(kde_servicesdir)/mysqlinterface.desktop
-	$(mkinstalldirs) $(kde_mimedir)
-	$(INSTALL_DATA) $(srcdir)/x-kexi.desktop $(kde_mimedir)/x-kexi.desktop
+	$(mkinstalldirs) $(kde_mimedir)/application/
+	$(INSTALL_DATA) $(srcdir)/x-kexi.desktop $(kde_mimedir)/application/x-kexi.desktop
 	
 uninstall-local:
+	rm -f $(kde_appsdir)/Office/kexi.desktop
+	rm -f $(kde_mimedir)/application/x-kexi.desktop
 
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.
