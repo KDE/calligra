@@ -39,7 +39,7 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
   drawShadowColor=new QCheckBox(i18n("Draw shadow color"),gb);
   grid1->addWidget(drawShadowColor,2,0);
 
-  tmpLabel = new QLabel( i18n( "Rotation around the X axis in degrees:" ), gb );
+  tmpLabel = new QLabel( i18n( "Rotation around the X-axis in degrees:" ), gb );
   tmpLabel->resize( tmpLabel->sizeHint() );
   grid1->addWidget(tmpLabel,3,0);
 
@@ -47,7 +47,7 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
   grid1->addWidget(angle3dX,3,1);
   angle3dX->setRange(0, 90, 1);
 
-  tmpLabel = new QLabel( i18n( "Rotation around the Y axis in degrees:" ), gb );
+  tmpLabel = new QLabel( i18n( "Rotation around the Y-axis in degrees:" ), gb );
   tmpLabel->resize( tmpLabel->sizeHint() );
   grid1->addWidget(tmpLabel,4,0);
 

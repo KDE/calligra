@@ -57,7 +57,7 @@ KChartBarConfigPage::KChartBarConfigPage( QWidget* parent ) :
     grid2->activate();
     grid1->addWidget(gb,0,0);
 
-    QGroupBox* gb2 = new QGroupBox( i18n( "X Axis Layout" ), this );
+    QGroupBox* gb2 = new QGroupBox( i18n( "X-Axis Layout" ), this );
     QGridLayout *grid3 = new QGridLayout(gb2,3,2,15,7);
 
     QLabel* label = new QLabel( i18n( "&Distance between bars as a percentage of bar width" ), gb2 );
