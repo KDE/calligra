@@ -142,7 +142,7 @@ public:
      * Call this instead of openURL() to implement KoMainWindow's
      * File --> Import feature.
      *
-     * Note: This will call openURL(). To differentiate this from an ordinary
+     * @note This will call openURL(). To differentiate this from an ordinary
      *       Open operation (in any reimplementation of openURL() or openFile())
      *       call @ref isImporting().
      */
@@ -154,14 +154,15 @@ public:
      * KParts::ReadWritePart::saveAs() to implement KoMainWindow's
      * File --> Export feature.
      *
-     * Note: This will call KoDocument::saveAs(). To differentiate this
+     * @note This will call KoDocument::saveAs(). To differentiate this
      *       from an ordinary Save operation (in any reimplementation of
      *       saveFile()) call @ref isExporting().
      */
     bool exp0rt( const KURL &url );
 
     /**
-     * Sets whether the document can be edited or is read only.
+     * @brief Sets whether the document can be edited or is read only.
+     *
      * This recursively applied to all child documents and
      * @ref KoView::updateReadWrite is called for every attached
      * view.
@@ -169,7 +170,7 @@ public:
     virtual void setReadWrite( bool readwrite = true );
 
     /**
-     * Used by KoApplication, and by KoMainWindow, when no document exists yet.
+     * @brief Used by KoApplication, and by KoMainWindow, when no document exists yet.
      *
      * With the help of @p instance or @ref KApplication::instance() this
      * method figures out which .desktop file matches this application. In this
@@ -216,14 +217,16 @@ public:
     QCString mimeType() const;
 
     /**
-     * Sets the mime type for the document.
+     * @brief Sets the mime type for the document.
+     *
      * When choosing "save as" this is also the mime type
      * selected by default.
      */
     void setMimeType( const QCString & mimeType );
 
     /**
-     * Set the format in which the document should be saved.
+     * @brief Set the format in which the document should be saved.
+     *
      * This is called on loading, and in "save as", so you shouldn't
      * have to call it.
      * @param specialOutputFlag is for "save as older version" etc.
@@ -374,7 +377,8 @@ public:
      */
     bool checkAutoSaveFile();
 
-    // Who calls initDoc?
+    // ### TODO Who calls initDoc?
+    
     enum InitDocFlags { InitDocAppStarting, InitDocFileNew, InitDocFileClose, InitDocEmbedded, InitDocEmpty };
 
     /**
@@ -415,7 +419,9 @@ public:
     virtual bool isEmpty() const { return m_bEmpty; }
 
     /**
-     *  Sets the document to empty. Used after loading a template
+     *  @brief Sets the document to empty.
+     *
+     *  Used after loading a template
      *  (which is not empty, but not the user's input).
      *
      *  @see #isEmpty
@@ -423,20 +429,23 @@ public:
     virtual void setEmpty() { m_bEmpty = true; }
 
     /**
-     *  Loads a document from a store.
+     *  @brief Loads a document from a store.
+     *
      *  You should never have to reimplement.
      *  @param url An internal url, like tar:/1/2
      */
     virtual bool loadFromStore( KoStore* store, const QString& url );
 
     /**
-     *  Saves a document to a store.
+     *  @brief Saves a document to a store.
+     *
      *  You should not have to reimplement this - but call it in @ref #saveChildren.
      */
     virtual bool saveToStore( KoStore* store, const QString& path );
 
     /**
-     *  Saves a document to a store.
+     *  @brief Saves a document to a store.
+     *
      *  Return name of store object
      *  You should not have to reimplement this - but call it in @ref #saveChildren.
      */
@@ -608,7 +617,8 @@ public:
     static QPtrList<KoDocument> *documentList() { return s_documentList; }
 
     /**
-     * Return a DCOP interface for this document
+     * @brief Return a DCOP interface for this document
+     *
      * %KOffice parts are strongly recommended to reimplement this method,
      * so that their DCOP interface provides more functionality than the basic KoDocumentIface
      */
@@ -893,7 +903,7 @@ protected:
      *  Returns true on success.
      * @see #saveChildren for internal children
      */
-    bool saveExternalChildren(); // BCI: make this virtual
+    bool saveExternalChildren(); // ### TODO? BCI: make this virtual
 
 private slots:
     void slotChildChanged( KoChild *c );
