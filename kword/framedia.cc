@@ -1223,7 +1223,7 @@ bool KWFrameDia::applyChanges()
         // * Creating a frame (fs==0), and attaching to an existing frameset (other)
         // * Editing a frame (fs!=0), possibly changing the frameset attachment (maybe creating a new one)
 
-
+        name = eFrameSetName->text();
         if ( name.isEmpty() ) // Don't allow empty names
             name = doc->generateFramesetName( i18n( "Text Frameset %1" ) );
 
