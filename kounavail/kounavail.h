@@ -38,7 +38,7 @@ public:
     virtual bool loadXML( QIODevice *, const QDomDocument & );
     virtual bool saveFile();
     virtual QDomDocument saveXML();
-    virtual bool saveChildren( KoStore* /*_store*/, const QString& /*_path*/ ) { return true; }
+    virtual bool saveChildren( KoStore* /*_store*/ ) { return true; }
 
     /** This is called by KoDocumentChild::save */
     virtual QCString nativeFormatMimeType() const { return m_mimetype; }

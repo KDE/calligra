@@ -52,6 +52,10 @@
 // This used to "store" but KURL didn't like it,
 // so let's simply make it "tar" !
 #define STORE_PROTOCOL "tar"
+// The internal path is a hack to make KURL happy and still pass
+// some kind of relative path to KoDocumentChild
+#define INTERNAL_PROTOCOL "intern:"
+#define INTERNAL_PREFIX "intern:/"
 // Warning, keep it sync in koStore.cc and koDocumentChild.cc
 
 QPtrList<KoDocument> *KoDocument::s_documentList=0L;
@@ -594,10 +598,10 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
     }
 }
 
-bool KoDocument::saveChildren( KoStore* /*_store*/, const QString& /*_path*/ )
+bool KoDocument::saveChildren( KoStore* /*_store*/ )
 {
     // Lets assume that we do not have children
-    kdWarning(30003) << "KoDocument::saveChildren( KoStore*, const QString & )" << endl;
+    kdWarning(30003) << "KoDocument::saveChildren( KoStore* )" << endl;
     kdWarning(30003) << "Not implemented ( not really an error )" << endl;
     return true;
 }
@@ -620,7 +624,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
     }
 
     // Save childen first since they might get a new url
-    if ( !saveChildren( store, QString(STORE_PROTOCOL) + ':' ) )
+    if ( !saveChildren( store ) )
     {
         if ( d->lastErrorMessage.isEmpty() )
             d->lastErrorMessage = i18n( "Error while saving embedded documents" ); // more details needed
@@ -682,14 +686,23 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
     kdDebug(30003) << "Saving document to store " << _path << endl;
 
     // Use the path as the internal url
-    m_url = _path;
+    if ( _path.startsWith( STORE_PROTOCOL ) )
+        m_url = KURL( _path );
+    else // ugly hack to pass a relative URI
+        m_url = KURL( INTERNAL_PREFIX +  _path );
+
+    // To make the children happy cd to the correct directory
+    _store->pushDirectory();
+    _store->enterDirectory( _path );
 
     // Save childen first since they might get a new url
-    if ( !saveChildren( _store, _path ) )
+    if ( !saveChildren( _store ) )
         return false;
 
-    QString u = url().url();
-    if ( _store->open( u ) )
+    // Now the children are saved, leave the directory/directories again
+    _store->popDirectory();
+
+    if ( _store->open( _path ) )
     {
         KoStoreDevice dev( _store );
         if ( !saveToStream( &dev ) )
@@ -1063,9 +1076,9 @@ bool KoDocument::loadNativeFormat( const QString & file )
     }
 }
 
-bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
+bool KoDocument::loadFromStore( KoStore* _store, const QString& url )
 {
-    if ( _store->open( url.url() ) )
+    if ( _store->open( url ) )
     {
         QDomDocument doc;
         doc.setContent( _store->device() );
@@ -1073,14 +1086,24 @@ bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
             return false;
         _store->close();
     }
+
+    _store->pushDirectory();
     // Store as document URL
-    m_url = url;
+    if ( url.startsWith( STORE_PROTOCOL ) )
+        m_url = KURL( url );
+    else {
+        m_url = KURL( INTERNAL_PREFIX + url );
+        _store->enterDirectory( url );
+    }
 
     if ( !loadChildren( _store ) )
     {
         kdError(30003) << "ERROR: Could not load children" << endl;
         return false;
     }
+
+    // Now the children are saved, leave the directory/directories again
+    _store->popDirectory();
 
     return completeLoading( _store );
 }
@@ -1113,7 +1136,7 @@ void KoDocument::emitEndOperation()
 
 bool KoDocument::isStoredExtern()
 {
-    return ( url().protocol() != STORE_PROTOCOL );
+    return ( url().protocol() != STORE_PROTOCOL && url().protocol() != INTERNAL_PROTOCOL );
 }
 
 void KoDocument::setModified( bool mod )

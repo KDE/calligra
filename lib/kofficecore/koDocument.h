@@ -314,7 +314,7 @@ public:
      *  You should never have to reimplement.
      *  @param url An internal url, like tar:/1/2
      */
-    virtual bool loadFromStore( KoStore* store, const KURL& url );
+    virtual bool loadFromStore( KoStore* store, const QString& url );
 
     /**
      *  Saves a document to a store.
@@ -531,7 +531,7 @@ protected:
      *  return true;
      *  </PRE>
      */
-    virtual bool saveChildren( KoStore* store, const QString &path );
+    virtual bool saveChildren( KoStore* store );
 
     /**
      *  Overload this function if you have to load additional files

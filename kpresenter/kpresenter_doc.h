@@ -401,7 +401,7 @@ protected:
     /**
      * Overloaded function from @ref Document_impl. Saves all children.
      */
-    virtual bool saveChildren( KoStore* _store, const QString &_path );
+    virtual bool saveChildren( KoStore* _store );
 
     void loadStyleTemplates( QDomElement styles );
     void saveStyle( KoStyle *sty, QDomElement parentElem );

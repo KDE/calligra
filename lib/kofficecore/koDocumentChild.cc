@@ -35,8 +35,8 @@
 // This used to "store" but KURL didn't like it,
 // so let's simply make it "tar" !
 #define STORE_PROTOCOL "tar"
-#define STORE_PROTOCOL_LENGTH 3
-// Warning, keep it sync in koStore.cc
+#define INTERNAL_PROTOCOL "intern:"
+// Warning, keep it sync in koStore.cc and koDocument.cc
 
 /**********************************************************
  *
@@ -160,6 +160,7 @@ bool KoDocumentChild::loadDocument( KoStore* store )
 
     kdDebug(30003) << "KoDocumentChild::loadDocument: trying to load " << m_tmpURL << endl;
 
+    // Backwards compatibility
     if ( m_tmpMimeType == "application/x-killustrator" )
         m_tmpMimeType = "application/x-kontour";
 
@@ -174,7 +175,7 @@ bool KoDocumentChild::loadDocument( KoStore* store )
             QString mimeName = m_tmpMimeType;
             KMimeType::Ptr mime = KMimeType::mimeType( m_tmpMimeType );
             if ( mime->name() != KMimeType::defaultMimeType() )
-                mimeName = mime->name();
+                mimeName = mime->comment();
             d->m_doc->setProperty( "unavailReason", i18n( "No handler found for %1" ).arg( mimeName ) );
         }
         return res;
@@ -196,12 +197,13 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEnt
     bool res = true;
     if ( doOpenURL )
     {
-        if ( m_tmpURL.left( STORE_PROTOCOL_LENGTH ) == STORE_PROTOCOL )
+        if ( m_tmpURL.startsWith( STORE_PROTOCOL ) || KURL::isRelativeURL( m_tmpURL ) )
             res = document()->loadFromStore( _store, m_tmpURL );
         else
         {
             // Reference to an external document. Hmmm...
-            if ( !KURL(m_tmpURL).isLocalFile() )
+            KURL url( m_tmpURL );
+            if ( !url.isLocalFile() )
             {
                 QApplication::restoreOverrideCursor();
                 // For security reasons we need to ask confirmation if the url is remote
@@ -215,11 +217,11 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEnt
                     return false;
                 }
                 if ( result == KMessageBox::Yes )
-                    res = document()->openURL( m_tmpURL );
+                    res = document()->openURL( url );
                 // and if == No, res will still be false so we'll use a kounavail below
             }
             else
-                res = document()->openURL( m_tmpURL );
+                res = document()->openURL( url );
             if ( !res )
             {
                 delete d->m_doc;
@@ -281,8 +283,14 @@ QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
     if( document() )
     {
         QDomElement e = doc.createElement( ( uppercase ? "OBJECT" : "object" ) );
-        e.setAttribute( "url", document()->url().url() );
-        kdDebug() << "KoDocumentChild::save url=" << document()->url().url() << endl;
+        if ( document()->url().protocol() != INTERNAL_PROTOCOL ) {
+            e.setAttribute( "url", document()->url().url() );
+            kdDebug() << "KoDocumentChild::save url=" << document()->url().url() << endl;
+        }
+        else {
+            e.setAttribute( "url", document()->url().path().mid( 1 ) );
+            kdDebug() << "KoDocumentChild::save url=" << document()->url().path().mid( 1 ) << endl;
+        }
         e.setAttribute( "mime", document()->nativeFormatMimeType() );
         kdDebug() << "KoDocumentChild::save mime=" << document()->nativeFormatMimeType() << endl;
         QDomElement rect = doc.createElement( ( uppercase ? "RECT" : "rect" ) );
@@ -301,7 +309,9 @@ bool KoDocumentChild::isStoredExtern()
   const KURL & url = document()->url();
   if ( !url.hasPath() )
     return false;
-  if ( url.protocol() == STORE_PROTOCOL )
+  else if ( url.protocol() == STORE_PROTOCOL )
+    return false;
+  else if ( url.protocol() == INTERNAL_PROTOCOL )
     return false;
 
   return true;

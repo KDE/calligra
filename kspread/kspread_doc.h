@@ -334,7 +334,7 @@ public:
 
   bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
   void setDontCheckUpperWord(bool _b) { m_bDontCheckUpperWord = _b; }
-  
+
   bool dontCheckTitleCase() const { return  m_bDontCheckTitleCase; }
   void setDontCheckTitleCase(bool _b) { m_bDontCheckTitleCase = _b; }
 
@@ -395,7 +395,7 @@ protected:
   /**
    * Overloaded function of @ref KoDocument.
    */
-  virtual bool saveChildren( KoStore* _store, const QString &_path );
+  virtual bool saveChildren( KoStore* _store );
 
   /**
    * Initializes the KScript Interpreter.

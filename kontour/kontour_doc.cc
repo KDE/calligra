@@ -167,14 +167,13 @@ QDomDocument KontourDocument::saveXML()
   return mGDoc->saveToXml();
 }
 
-bool KontourDocument::saveChildren(KoStore *store, const QString &path)
+bool KontourDocument::saveChildren(KoStore *store)
 {
   int i = 0;
   QPtrListIterator<KoDocumentChild> it(children());
   for(; it.current(); ++it)
   {
-    QString p = QString("%1/%2").arg(path).arg(i++);
-    if(!((KoDocumentChild*)it.current())->document()->saveToStore(store, p))
+    if(!((KoDocumentChild*)it.current())->document()->saveToStore(store, QString::number(i++)))
       return false;
   }
   return true;

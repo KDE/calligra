@@ -55,12 +55,12 @@ class KontourDocument : public KoDocument
 public:
   KontourDocument(QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
   ~KontourDocument();
-  
+
   GDocument *document() const {return mGDoc; }
   KCommandHistory *history() const {return mHistory; }
 
   void paintContent(QPainter &painter, const QRect &rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0);
-  
+
   bool initDoc();
 
   void addShell(KoMainWindow *shell);
@@ -70,7 +70,7 @@ public:
   bool completeLoading(KoStore *store);
 
   QDomDocument saveXML();
-  bool saveChildren(KoStore *store, const QString &path);
+  bool saveChildren(KoStore *store);
   bool completeSaving(KoStore *store);
 
   KoView *createViewInstance(QWidget *parent, const char *name);
@@ -86,7 +86,7 @@ public:
 
 private slots:
   void modified(bool m);
-  
+
 private:
   GDocument* mGDoc;
   KCommandHistory *mHistory;

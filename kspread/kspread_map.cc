@@ -195,14 +195,13 @@ KSpreadTable* KSpreadMap::previousTable( KSpreadTable* currentTable )
     return 0L;
 }
 
-bool KSpreadMap::saveChildren( KoStore* _store, const QString &_path )
+bool KSpreadMap::saveChildren( KoStore* _store )
 {
   QPtrListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
   {
     // set the child document's url to an internal url (ex: "tar:/0/1")
-    QString path = QString( "%1/%2" ).arg( _path ).arg( it.current()->tableName() );
-    if ( !it.current()->saveChildren( _store, path ) )
+    if ( !it.current()->saveChildren( _store, it.current()->tableName() ) )
       return false;
   }
   return true;

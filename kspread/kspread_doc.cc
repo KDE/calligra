@@ -197,9 +197,9 @@ KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
     return new KSpreadView( parent, name, this );
 }
 
-bool KSpreadDoc::saveChildren( KoStore* _store, const QString &_path )
+bool KSpreadDoc::saveChildren( KoStore* _store )
 {
-  return m_pMap->saveChildren( _store, _path );
+  return m_pMap->saveChildren( _store );
 }
 
 QDomDocument KSpreadDoc::saveXML()

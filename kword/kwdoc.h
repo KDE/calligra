@@ -548,7 +548,7 @@ protected:
     void nextParagraphNeedingCheck();
 
     KoView* createViewInstance( QWidget* parent, const char* name );
-    virtual bool saveChildren( KoStore *_store, const QString &_path );
+    virtual bool saveChildren( KoStore *_store );
 
     virtual bool completeLoading( KoStore* _store );
     virtual bool completeSaving( KoStore *_store );

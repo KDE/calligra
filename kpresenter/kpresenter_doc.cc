@@ -391,7 +391,7 @@ void KPresenterDoc::addCommand( KCommand * cmd )
 }
 
 /*======================= make child list intern ================*/
-bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
+bool KPresenterDoc::saveChildren( KoStore* _store )
 {
     int i = 0;
 
@@ -411,9 +411,8 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
                   if ( oIt.current()->getType() == OT_PART &&
                        dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == it.current() )
                   {
-                      QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
                       if (((KoDocumentChild*)(it.current()))->document()!=0)
-                          if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
+                          if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, QString::number( i++ ) ) )
                               return false;
                   }
               }
