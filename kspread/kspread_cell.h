@@ -236,10 +236,10 @@ public:
 
     void setAction( const QString& action );
     
-    KSpreadCell* previousCell()const { return m_previousCell; }
-    KSpreadCell* nextCell()const { return m_nextCell; }
-    void setPreviousCell( KSpreadCell* c ) { m_previousCell = c; }
-    void setNextCell( KSpreadCell* c ) { m_nextCell = c; }
+    KSpreadCell* previousCell() const;
+    KSpreadCell* nextCell() const;
+    void setPreviousCell( KSpreadCell* c );
+    void setNextCell( KSpreadCell* c );
 
     /**
      * Moves around the cell. It cares about obscured and obscuring cells and
@@ -727,18 +727,10 @@ public:
      */
     void setConditionList(const QValueList<KSpreadConditional> &newList);
 
-    KSpreadValidity * getValidity( int newStruct = -1 )
-    {
-        if( ( m_Validity == 0 ) && ( newStruct == -1 ) )
-            m_Validity = new KSpreadValidity;
-        return  m_Validity;
-    }
-    void removeValidity()
-    {
-        delete m_Validity;
-        m_Validity = 0;
-    }
-
+    KSpreadValidity * getValidity( int newStruct = -1 );
+    
+    void removeValidity();
+    
     /**
      * return true if value is good
      * else show a messagebox
@@ -915,38 +907,6 @@ protected:
 private:
 
     CellPrivate* d;
-
-    /**
-     * list of cells that must be calculated in order to calculate this cell
-     */
-    QPtrList<KSpreadDependency> m_lstDepends;
-
-    /**
-     * list of cells that require this cell's value to be calculated
-     */
-    QPtrList<KSpreadDependency> m_lstDependingOnMe;
-
-
-    KSpreadCellPrivate *m_pPrivate;
-
-    KSpreadConditions* m_conditions;
-
-    /**
-     * if true: "Shrink to fit" for cell values
-     */
-    // bool m_bShrinkToSize;
-
-    /**
-    * Store the number of line when you used multirow
-    * default is 0
-    */
-    int m_nbLines;
-
-    KSpreadValidity * m_Validity;
-
-    KSpreadCell* m_nextCell;
-    KSpreadCell* m_previousCell;
-
     // static const char* s_dataTypeToString[];
 
     /* helper functions to the paintCell(...) function */

@@ -137,10 +137,21 @@ public:
     QValueList<KSpreadCell*> obscuringCells;
            
     // list of cells that must be calculated in order to calculate this cell
-    QPtrList<KSpreadDependency> m_lstDepends;
+    QPtrList<KSpreadDependency> lstDepends;
 
     // list of cells that require this cell's value to be calculated
-    QPtrList<KSpreadDependency> m_lstDependingOnMe;
+    QPtrList<KSpreadDependency> lstDependingOnMe;
+    
+    KSpreadCellPrivate *cellPrivate;
+
+    KSpreadConditions* conditions;
+    KSpreadValidity * validity;
+
+    // Store the number of line when you used multirow (default is 0)
+    int nbLines;
+
+    KSpreadCell* nextCell;
+    KSpreadCell* previousCell;
 };
 
 
@@ -151,13 +162,7 @@ public:
  *****************************************************************************/
 
 KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
-  : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() ),
-    m_pPrivate( 0 ),
-    m_conditions( 0 ),
-    m_nbLines( 0 ),
-    m_Validity( 0 ),
-    m_nextCell( 0 ),
-    m_previousCell( 0 )
+  : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() )
 {
   d = new CellPrivate;
   d->row = _row;
@@ -167,6 +172,9 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
   d->code = 0;
   d->style = ST_Normal;
   d->QML = 0;
+  
+  d->conditions = 0;
+  d->validity = 0;
   
   d->textX = 0.0;
   d->textY = 0.0;
@@ -179,21 +187,21 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
   d->extraWidth = 0.0;
   d->extraHeight = 0.0;
   d->fmAscent = 0;
+  d->nbLines = 0;
+  
+  d->nextCell = 0;
+  d->previousCell = 0;
 
-  m_lstDepends.setAutoDelete( true );
-  m_lstDependingOnMe.setAutoDelete( true );
+  d->lstDepends.setAutoDelete( true );
+  d->lstDependingOnMe.setAutoDelete( true );
 
+  d->cellPrivate = 0;
+  
   clearAllErrors();
 }
 
 KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _column, int _row )
-  : KSpreadFormat( _table, _style ),
-    m_pPrivate( 0 ),
-    m_conditions( 0 ),
-    m_nbLines( 0 ),
-    m_Validity( 0 ),
-    m_nextCell( 0 ),
-    m_previousCell( 0 )
+  : KSpreadFormat( _table, _style )
 {
   d = new CellPrivate;
   d->row = _row;
@@ -202,6 +210,9 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
   d->value = KSpreadValue::empty();
   d->code = 0;
   d->QML = 0;
+  
+  d->conditions = 0;
+  d->validity  = 0;
   
   d->style = ST_Normal;
   d->textX = 0.0;
@@ -215,21 +226,21 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
   d->extraWidth = 0.0;
   d->extraHeight = 0.0;
   d->fmAscent = 0;
+  d->nbLines = 0;
 
-  m_lstDepends.setAutoDelete( true );
-  m_lstDependingOnMe.setAutoDelete( true );
+  d->nextCell = 0;
+  d->previousCell = 0;
 
+  d->lstDepends.setAutoDelete( true );
+  d->lstDependingOnMe.setAutoDelete( true );
+
+  d->cellPrivate = 0;
+  
   clearAllErrors();
 }
 
 KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _deponme, int _column, int _row )
-  : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() ),
-    m_pPrivate( 0 ),
-    m_conditions( 0 ),
-    m_nbLines( 0 ),
-    m_Validity( 0 ),
-    m_nextCell( 0 ),
-    m_previousCell( 0 )
+  : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() )
 {
   d = new CellPrivate;
   d->row = _row;
@@ -238,6 +249,9 @@ KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _dep
   d->value = KSpreadValue::empty();
   d->code = 0;
   d->QML = 0;
+  
+  d->conditions = 0;
+  d->validity = 0;
   
   d->style = ST_Normal;
   d->textX = 0.0;
@@ -251,11 +265,18 @@ KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _dep
   d->extraWidth = 0.0;
   d->extraHeight = 0.0;
   d->fmAscent = 0;
+  d->nbLines = 0;
 
-  m_lstDepends.setAutoDelete( true );
-  m_lstDependingOnMe = _deponme ;
-  m_lstDependingOnMe.setAutoDelete( true );
+  d->nextCell = 0;
+  d->previousCell = 0;
 
+
+  d->lstDepends.setAutoDelete( true );
+  d->lstDependingOnMe = _deponme ;
+  d->lstDependingOnMe.setAutoDelete( true );
+
+  d->cellPrivate = 0;
+  
   clearAllErrors();
 }
 
@@ -406,15 +427,15 @@ void KSpreadCell::setStyle( Style _s )
   d->style = _s;
   setFlag(Flag_LayoutDirty);
 
-  delete m_pPrivate;
-  m_pPrivate = 0;
+  delete d->cellPrivate;
+  d->cellPrivate = 0;
 
   if ( _s != ST_Select )
     return;
 
-  m_pPrivate = new SelectPrivate( this );
+  d->cellPrivate = new SelectPrivate( this );
 
-  SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+  SelectPrivate *s = (SelectPrivate*)d->cellPrivate;
   if ( isFormula() )
       s->parse( d->strFormulaOut );
   else
@@ -434,6 +455,40 @@ void KSpreadCell::setAction( const QString& action )
 {
     d->strAction = action;
 }
+
+KSpreadCell* KSpreadCell::previousCell() const 
+{ 
+    return d->previousCell;
+}
+
+KSpreadCell* KSpreadCell::nextCell() const
+{ 
+    return d->nextCell;
+}
+
+void KSpreadCell::setPreviousCell( KSpreadCell* c )
+{ 
+    d->previousCell = c;
+}
+
+void KSpreadCell::setNextCell( KSpreadCell* c )
+{
+    d->nextCell = c; 
+}
+
+KSpreadValidity* KSpreadCell::getValidity( int newStruct  )
+{
+    if( ( d->validity == 0 ) && ( newStruct == -1 ) )
+        d->validity = new KSpreadValidity;
+    return  d->validity;
+}
+
+void KSpreadCell::removeValidity()
+{
+    delete d->validity;
+    d->validity = 0;
+}
+
 
 void KSpreadCell::copyFormat( KSpreadCell * _cell )
 {
@@ -477,11 +532,11 @@ void KSpreadCell::copyFormat( int _column, int _row )
       setCurrency( c );
 
     QValueList<KSpreadConditional> conditionList = cell->conditionList();
-    delete m_conditions;
-    if ( cell->m_conditions )
+    delete d->conditions;
+    if ( cell->d->conditions )
       setConditionList( conditionList );
     else
-      m_conditions = 0;
+      d->conditions = 0;
 
     setComment( cell->comment( _column, _row ) );
 }
@@ -509,24 +564,24 @@ void KSpreadCell::copyContent( KSpreadCell* cell )
 
     setAction( cell->action() );
 
-    delete m_pPrivate;
-    m_pPrivate = 0;
-    if ( cell->m_pPrivate )
-        m_pPrivate = cell->m_pPrivate->copy( this );
+    delete d->cellPrivate;
+    d->cellPrivate = 0;
+    if ( cell->d->cellPrivate )
+        d->cellPrivate = cell->d->cellPrivate->copy( this );
 }
 
 void KSpreadCell::defaultStyle()
 {
   defaultStyleFormat();
 
-  if ( m_conditions )
+  if ( d->conditions )
   {
-    delete m_conditions;
-    m_conditions = 0;
+    delete d->conditions;
+    d->conditions = 0;
   }
 
-  delete m_Validity;
-  m_Validity = 0L;
+  delete d->validity;
+  d->validity = 0L;
 }
 
 void KSpreadCell::formatChanged()
@@ -734,7 +789,7 @@ void KSpreadCell::clicked( KSpreadCanvas * _canvas )
       return;
 
     QPopupMenu *popup = new QPopupMenu( _canvas );
-    SelectPrivate *s = (SelectPrivate*) m_pPrivate;
+    SelectPrivate *s = (SelectPrivate*) d->cellPrivate;
 
     int id = 0;
     QStringList::ConstIterator it = s->m_lstItems.begin();
@@ -1039,7 +1094,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     if ( !testFlag( Flag_LayoutDirty ) && !d->QML )
       return;
 
-    m_nbLines = 0;
+    d->nbLines = 0;
     clearFlag( Flag_CellTooShortX );
     clearFlag( Flag_CellTooShortY );
 
@@ -1297,7 +1352,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
         d->textHeight *= lines;
 
-        m_nbLines = lines;
+        d->nbLines = lines;
         d->textX = 0.0;
 
         // Calculate the maximum width
@@ -1466,8 +1521,8 @@ void KSpreadCell::setOutputText()
   if ( isDefault() )
   {
     d->strOutText = QString::null;
-    if ( m_conditions )
-      m_conditions->checkMatches();
+    if ( d->conditions )
+      d->conditions->checkMatches();
     return;
   }
 
@@ -1495,8 +1550,8 @@ void KSpreadCell::setOutputText()
       d->strOutText = "####";
       kdDebug(36001) << "Unhandled error type." << endl;
     }
-    if ( m_conditions )
-      m_conditions->checkMatches();
+    if ( d->conditions )
+      d->conditions->checkMatches();
     return;
   }
 
@@ -1518,7 +1573,7 @@ void KSpreadCell::setOutputText()
   {
     // If this is a select box, find out about the selected item
     // in the KSpreadPrivate data struct
-    SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+    SelectPrivate *s = (SelectPrivate*)d->cellPrivate;
     d->strOutText = s->text();
   }
   else if ( d->value.isBoolean() )
@@ -1617,8 +1672,8 @@ void KSpreadCell::setOutputText()
 //    kdDebug(36001) << "Please report: final case of makeLayout ...  d->strText=" << d->strText << endl;
     d->strOutText = d->value.asString();
   }
-  if ( m_conditions )
-    m_conditions->checkMatches();
+  if ( d->conditions )
+    d->conditions->checkMatches();
 }
 
 QString KSpreadCell::createFormat( double value, int _col, int _row )
@@ -1733,30 +1788,30 @@ void KSpreadCell::offsetAlign( int _col, int _row )
     bool   tmpMultiRow;
     int    tmpTopBorderWidth = effTopBorderPen( _col, _row ).width();
 
-    if ( m_conditions && m_conditions->matchedStyle() )
+    if ( d->conditions && d->conditions->matchedStyle() )
     {
-      if ( m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SAlignX, true ) )
-        a = m_conditions->matchedStyle()->alignX();
+      if ( d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAlignX, true ) )
+        a = d->conditions->matchedStyle()->alignX();
       else
         a = align( _col, _row );
 
-      if ( m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SVerticalText, true ) )
-        tmpVerticalText = m_conditions->matchedStyle()->hasProperty( KSpreadStyle::PVerticalText );
+      if ( d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SVerticalText, true ) )
+        tmpVerticalText = d->conditions->matchedStyle()->hasProperty( KSpreadStyle::PVerticalText );
       else
         tmpVerticalText = verticalText( _col, _row );
 
-      if ( m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SMultiRow, true ) )
-        tmpMultiRow = m_conditions->matchedStyle()->hasProperty( KSpreadStyle::PMultiRow );
+      if ( d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SMultiRow, true ) )
+        tmpMultiRow = d->conditions->matchedStyle()->hasProperty( KSpreadStyle::PMultiRow );
       else
         tmpMultiRow = multiRow( _col, _row );
 
-      if ( m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SAlignY, true ) )
-        ay = m_conditions->matchedStyle()->alignY();
+      if ( d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAlignY, true ) )
+        ay = d->conditions->matchedStyle()->alignY();
       else
         ay = alignY( _col, _row );
 
-      if ( m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SAngle, true ) )
-        tmpAngle = m_conditions->matchedStyle()->rotateAngle();
+      if ( d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAngle, true ) )
+        tmpAngle = d->conditions->matchedStyle()->rotateAngle();
       else
         tmpAngle = getAngle( _col, _row );
     }
@@ -1824,10 +1879,10 @@ void KSpreadCell::offsetAlign( int _col, int _row )
       }
       else if ( tmpMultiRow )
       {
-        int tmpline = m_nbLines;
-        if ( m_nbLines > 1 )
-          tmpline = m_nbLines - 1;
-        if( h - BORDER_SPACE - d->textHeight * m_nbLines - effBottomBorderPen( _col, _row ).width() > 0 )
+        int tmpline = d->nbLines;
+        if ( d->nbLines > 1 )
+          tmpline = d->nbLines - 1;
+        if( h - BORDER_SPACE - d->textHeight * d->nbLines - effBottomBorderPen( _col, _row ).width() > 0 )
           d->textY = h - BORDER_SPACE - d->textHeight * tmpline - effBottomBorderPen( _col, _row ).width();
         else
           d->textY = tmpTopBorderWidth + BORDER_SPACE
@@ -1870,8 +1925,8 @@ void KSpreadCell::offsetAlign( int _col, int _row )
       }
       else if ( tmpMultiRow )
       {
-        int tmpline = m_nbLines;
-        if ( m_nbLines == 0 )
+        int tmpline = d->nbLines;
+        if ( d->nbLines == 0 )
           tmpline = 1;
         if ( h - d->textHeight * tmpline > 0 )
           d->textY = ( h - d->textHeight * tmpline ) / 2
@@ -1919,25 +1974,25 @@ void KSpreadCell::textSize( QPainter &_paint )
     bool   fontUnderlined;
     AlignY ay;
 
-    if ( m_conditions && m_conditions->matchedStyle() )
+    if ( d->conditions && d->conditions->matchedStyle() )
     {
-      if ( m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SAngle, true ) )
-        tmpAngle = m_conditions->matchedStyle()->rotateAngle();
+      if ( d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAngle, true ) )
+        tmpAngle = d->conditions->matchedStyle()->rotateAngle();
       else
         tmpAngle = getAngle( _col, _row );
 
-      if ( m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SVerticalText, true ) )
-        tmpVerticalText = m_conditions->matchedStyle()->hasProperty( KSpreadStyle::PVerticalText );
+      if ( d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SVerticalText, true ) )
+        tmpVerticalText = d->conditions->matchedStyle()->hasProperty( KSpreadStyle::PVerticalText );
       else
         tmpVerticalText = verticalText( _col, _row );
 
-      if ( m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SAlignY, true ) )
-        ay = m_conditions->matchedStyle()->alignY();
+      if ( d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAlignY, true ) )
+        ay = d->conditions->matchedStyle()->alignY();
       else
         ay = alignY( _col, _row );
 
-      if ( m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SFontFlag, true ) )
-        fontUnderlined = ( m_conditions->matchedStyle()->fontFlags() && (uint) KSpreadStyle::FUnderline );
+      if ( d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SFontFlag, true ) )
+        fontUnderlined = ( d->conditions->matchedStyle()->fontFlags() && (uint) KSpreadStyle::FUnderline );
       else
         fontUnderlined = textFontUnderline( _col, _row );
     }
@@ -1996,9 +2051,9 @@ void KSpreadCell::textSize( QPainter &_paint )
 void KSpreadCell::applyZoomedFont( QPainter &painter, int _col, int _row )
 {
     QFont tmpFont( textFont( _col, _row ) );
-    if ( m_conditions && m_conditions->matchedStyle() )
+    if ( d->conditions && d->conditions->matchedStyle() )
     {
-      KSpreadStyle * s = m_conditions->matchedStyle();
+      KSpreadStyle * s = d->conditions->matchedStyle();
       if ( s->hasFeature( KSpreadStyle::SFontSize, true ) )
         tmpFont.setPointSizeFloat( s->fontSize() );
       if ( s->hasFeature( KSpreadStyle::SFontFlag, true ) )
@@ -2016,7 +2071,7 @@ void KSpreadCell::applyZoomedFont( QPainter &painter, int _col, int _row )
       /*
        * could somebody please explaint why we check for isProtected or isHideFormula here
        *
-      if ( m_conditions && m_conditions->currentCondition( condition )
+      if ( d->conditions && d->conditions->currentCondition( condition )
         && !(m_pTable->getShowFormula()
               && !( m_pTable->isProtected() && isHideFormula( d->column, d->row ) ) ) )
       {
@@ -2075,11 +2130,11 @@ bool KSpreadCell::makeFormula()
     sDelocalizedText.replace( pos++, 1, "." );
     // At least,  =2,5+3,2  is turned into =2.5+3.2, which can get parsed...
   */
-  d->code = m_pTable->doc()->interpreter()->parse( context, m_pTable, /*sDelocalizedText*/d->strText, m_lstDepends );
+  d->code = m_pTable->doc()->interpreter()->parse( context, m_pTable, /*sDelocalizedText*/d->strText, d->lstDepends );
   // Did a syntax error occur ?
   if ( context.exception() )
   {
-    m_lstDepends.clear();
+    d->lstDepends.clear();
     clearFormula();
 
     setFlag(Flag_ParseError);
@@ -2098,7 +2153,7 @@ bool KSpreadCell::makeFormula()
   }
 
   /* notify the new dependancy list that we are depending on them now */
-  NotifyDependancyList(m_lstDepends, true);
+  NotifyDependancyList(d->lstDepends, true);
 
   return true;
 }
@@ -2106,9 +2161,9 @@ bool KSpreadCell::makeFormula()
 void KSpreadCell::clearFormula()
 {
   /*notify dependancies that we're not depending on them any more */
-  NotifyDependancyList(m_lstDepends, false);
+  NotifyDependancyList(d->lstDepends, false);
 
-  m_lstDepends.clear();
+  d->lstDepends.clear();
   delete d->code;
   d->code = 0L;
 }
@@ -2128,7 +2183,7 @@ bool KSpreadCell::calc(bool delay)
     setFlag(Flag_LayoutDirty);
     if ( d->style == ST_Select )
     {
-        SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+        SelectPrivate *s = (SelectPrivate*)d->cellPrivate;
         s->parse( d->strFormulaOut );
     }
     return false;
@@ -2167,7 +2222,7 @@ bool KSpreadCell::calc(bool delay)
 
   /* calculate any dependancies */
   KSpreadDependency *dep;
-  for ( dep = m_lstDepends.first(); dep != 0L; dep = m_lstDepends.next() )
+  for ( dep = d->lstDepends.first(); dep != 0L; dep = d->lstDepends.next() )
   {
     for ( int x = dep->Left(); x <= dep->Right(); x++ )
     {
@@ -2182,7 +2237,7 @@ bool KSpreadCell::calc(bool delay)
           clearFlag(Flag_Progress);
 	  if ( d->style == ST_Select )
           {
-	    SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+	    SelectPrivate *s = (SelectPrivate*)d->cellPrivate;
 	    s->parse( d->strFormulaOut );
 	  }
 	  setFlag(Flag_LayoutDirty);
@@ -2216,7 +2271,7 @@ bool KSpreadCell::calc(bool delay)
 
     if ( d->style == ST_Select )
     {
-        SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+        SelectPrivate *s = (SelectPrivate*)d->cellPrivate;
         s->parse( d->strFormulaOut );
     }
     return false;
@@ -2309,7 +2364,7 @@ bool KSpreadCell::calc(bool delay)
   }
   if ( d->style == ST_Select )
   {
-      SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+      SelectPrivate *s = (SelectPrivate*)d->cellPrivate;
       s->parse( d->strFormulaOut );
   }
 
@@ -2390,9 +2445,9 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
   }
 
   QColor backgroundColor;
-  if ( m_conditions && m_conditions->matchedStyle()
-       && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SBackgroundColor, true ) )
-    backgroundColor = m_conditions->matchedStyle()->bgColor();
+  if ( d->conditions && d->conditions->matchedStyle()
+       && d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SBackgroundColor, true ) )
+    backgroundColor = d->conditions->matchedStyle()->bgColor();
   else
     backgroundColor = bgColor( cellRef.x(), cellRef.y() );
 
@@ -2650,9 +2705,9 @@ void KSpreadCell::paintBackground( QPainter& painter, const KoRect &cellRect,
 
   // Draw a background brush
   QBrush bb;
-  if ( m_conditions && m_conditions->matchedStyle()
-       && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SBackgroundBrush, true ) )
-    bb = m_conditions->matchedStyle()->backGroundBrush();
+  if ( d->conditions && d->conditions->matchedStyle()
+       && d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SBackgroundBrush, true ) )
+    bb = d->conditions->matchedStyle()->backGroundBrush();
   else
     bb = backGroundBrush( cellRef.x(), cellRef.y() );
 
@@ -2985,7 +3040,7 @@ void KSpreadCell::paintText( QPainter& painter,
   applyZoomedFont( painter, cellRef.x(), cellRef.y() );
 
   //Check for red font color for negative values
-  if ( !m_conditions || !m_conditions->matchedStyle() )
+  if ( !d->conditions || !d->conditions->matchedStyle() )
   {
     if ( d->value.isNumber()
          && !( m_pTable->getShowFormula()
@@ -3054,9 +3109,9 @@ void KSpreadCell::paintText( QPainter& painter,
   //apply indent if text is align to left not when text is at right or middle
   if (  a == KSpreadCell::Left && !isEmpty() )
   {
-    if ( m_conditions && m_conditions->matchedStyle()
-         && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SIndent, true ) )
-      indent = m_conditions->matchedStyle()->indent();
+    if ( d->conditions && d->conditions->matchedStyle()
+         && d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SIndent, true ) )
+      indent = d->conditions->matchedStyle()->indent();
     else
       indent = getIndent( column(), row() );
   }
@@ -3080,20 +3135,20 @@ void KSpreadCell::paintText( QPainter& painter,
   bool tmpMultiRow;
   bool tmpVerticalText;
 
-  if ( m_conditions && m_conditions->matchedStyle() )
+  if ( d->conditions && d->conditions->matchedStyle() )
   {
-    if ( m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SAngle, true ) )
-      tmpAngle = m_conditions->matchedStyle()->rotateAngle();
+    if ( d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAngle, true ) )
+      tmpAngle = d->conditions->matchedStyle()->rotateAngle();
     else
       tmpAngle = getAngle( cellRef.x(), cellRef.y() );
 
-    if ( m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SVerticalText, true ) )
-      tmpVerticalText = m_conditions->matchedStyle()->hasProperty( KSpreadStyle::PVerticalText );
+    if ( d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SVerticalText, true ) )
+      tmpVerticalText = d->conditions->matchedStyle()->hasProperty( KSpreadStyle::PVerticalText );
     else
       tmpVerticalText = verticalText( cellRef.x(), cellRef.y() );
 
-    if ( m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SMultiRow, true ) )
-      tmpMultiRow = m_conditions->matchedStyle()->hasProperty( KSpreadStyle::PMultiRow );
+    if ( d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SMultiRow, true ) )
+      tmpMultiRow = d->conditions->matchedStyle()->hasProperty( KSpreadStyle::PMultiRow );
     else
       tmpMultiRow = multiRow( cellRef.x(), cellRef.y() );
   }
@@ -3646,9 +3701,9 @@ int KSpreadCell::defineAlignX()
 
 int KSpreadCell::effAlignX()
 {
-  if ( m_conditions && m_conditions->matchedStyle()
-       && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SAlignX, true ) )
-    return m_conditions->matchedStyle()->alignX();
+  if ( d->conditions && d->conditions->matchedStyle()
+       && d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAlignX, true ) )
+    return d->conditions->matchedStyle()->alignX();
 
   return defineAlignX();
 }
@@ -4005,9 +4060,9 @@ const QPen& KSpreadCell::topBorderPen( int _col, int _row ) const
 
 const QColor & KSpreadCell::effTextColor( int col, int row ) const
 {
-  if ( m_conditions && m_conditions->matchedStyle()
-       && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::STextPen, true ) )
-    return m_conditions->matchedStyle()->pen().color();
+  if ( d->conditions && d->conditions->matchedStyle()
+       && d->conditions->matchedStyle()->hasFeature( KSpreadStyle::STextPen, true ) )
+    return d->conditions->matchedStyle()->pen().color();
 
   return textColor( col, row );
 }
@@ -4020,9 +4075,9 @@ const QPen& KSpreadCell::effLeftBorderPen( int col, int row ) const
     return cell->effLeftBorderPen( cell->column(), cell->row() );
   }
 
-  if ( m_conditions && m_conditions->matchedStyle()
-       && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SLeftBorder, true ) )
-    return m_conditions->matchedStyle()->leftBorderPen();
+  if ( d->conditions && d->conditions->matchedStyle()
+       && d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SLeftBorder, true ) )
+    return d->conditions->matchedStyle()->leftBorderPen();
 
   return KSpreadFormat::leftBorderPen( col, row );
 }
@@ -4035,9 +4090,9 @@ const QPen& KSpreadCell::effTopBorderPen( int col, int row ) const
     return cell->effTopBorderPen( cell->column(), cell->row() );
   }
 
-  if ( m_conditions && m_conditions->matchedStyle()
-       && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::STopBorder, true ) )
-    return m_conditions->matchedStyle()->topBorderPen();
+  if ( d->conditions && d->conditions->matchedStyle()
+       && d->conditions->matchedStyle()->hasFeature( KSpreadStyle::STopBorder, true ) )
+    return d->conditions->matchedStyle()->topBorderPen();
 
   return KSpreadFormat::topBorderPen( col, row );
 }
@@ -4050,9 +4105,9 @@ const QPen& KSpreadCell::effRightBorderPen( int col, int row ) const
     return cell->effRightBorderPen( cell->column(), cell->row() );
   }
 
-  if ( m_conditions && m_conditions->matchedStyle()
-       && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SRightBorder, true ) )
-    return m_conditions->matchedStyle()->rightBorderPen();
+  if ( d->conditions && d->conditions->matchedStyle()
+       && d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SRightBorder, true ) )
+    return d->conditions->matchedStyle()->rightBorderPen();
 
   return KSpreadFormat::rightBorderPen( col, row );
 }
@@ -4065,27 +4120,27 @@ const QPen& KSpreadCell::effBottomBorderPen( int col, int row ) const
     return cell->effBottomBorderPen( cell->column(), cell->row() );
   }
 
-  if ( m_conditions && m_conditions->matchedStyle()
-       && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SBottomBorder, true ) )
-    return m_conditions->matchedStyle()->bottomBorderPen();
+  if ( d->conditions && d->conditions->matchedStyle()
+       && d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SBottomBorder, true ) )
+    return d->conditions->matchedStyle()->bottomBorderPen();
 
   return KSpreadFormat::bottomBorderPen( col, row );
 }
 
 const QPen & KSpreadCell::effGoUpDiagonalPen( int col, int row ) const
 {
-  if ( m_conditions && m_conditions->matchedStyle()
-       && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SGoUpDiagonal, true ) )
-    return m_conditions->matchedStyle()->goUpDiagonalPen();
+  if ( d->conditions && d->conditions->matchedStyle()
+       && d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SGoUpDiagonal, true ) )
+    return d->conditions->matchedStyle()->goUpDiagonalPen();
 
   return KSpreadFormat::goUpDiagonalPen( col, row );
 }
 
 const QPen & KSpreadCell::effFallDiagonalPen( int col, int row ) const
 {
-  if ( m_conditions && m_conditions->matchedStyle()
-       && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SFallDiagonal, true ) )
-    return m_conditions->matchedStyle()->fallDiagonalPen();
+  if ( d->conditions && d->conditions->matchedStyle()
+       && d->conditions->matchedStyle()->hasFeature( KSpreadStyle::SFallDiagonal, true ) )
+    return d->conditions->matchedStyle()->fallDiagonalPen();
 
   return KSpreadFormat::fallDiagonalPen( col, row );
 }
@@ -4098,8 +4153,8 @@ uint KSpreadCell::effBottomBorderValue( int col, int row ) const
     return cell->effBottomBorderValue( cell->column(), cell->row() );
   }
 
-  if ( m_conditions && m_conditions->matchedStyle() )
-    return m_conditions->matchedStyle()->bottomPenValue();
+  if ( d->conditions && d->conditions->matchedStyle() )
+    return d->conditions->matchedStyle()->bottomPenValue();
 
   return KSpreadFormat::bottomBorderValue( col, row );
 }
@@ -4112,8 +4167,8 @@ uint KSpreadCell::effRightBorderValue( int col, int row ) const
     return cell->effRightBorderValue( cell->column(), cell->row() );
   }
 
-  if ( m_conditions && m_conditions->matchedStyle() )
-    return m_conditions->matchedStyle()->rightPenValue();
+  if ( d->conditions && d->conditions->matchedStyle() )
+    return d->conditions->matchedStyle()->rightPenValue();
 
   return KSpreadFormat::rightBorderValue( col, row );
 }
@@ -4126,8 +4181,8 @@ uint KSpreadCell::effLeftBorderValue( int col, int row ) const
     return cell->effLeftBorderValue( cell->column(), cell->row() );
   }
 
-  if ( m_conditions && m_conditions->matchedStyle() )
-    return m_conditions->matchedStyle()->leftPenValue();
+  if ( d->conditions && d->conditions->matchedStyle() )
+    return d->conditions->matchedStyle()->leftPenValue();
 
   return KSpreadFormat::leftBorderValue( col, row );
 }
@@ -4140,8 +4195,8 @@ uint KSpreadCell::effTopBorderValue( int col, int row ) const
     return cell->effTopBorderValue( cell->column(), cell->row() );
   }
 
-  if ( m_conditions && m_conditions->matchedStyle() )
-    return m_conditions->matchedStyle()->topPenValue();
+  if ( d->conditions && d->conditions->matchedStyle() )
+    return d->conditions->matchedStyle()->topPenValue();
 
   return KSpreadFormat::topBorderValue( col, row );
 }
@@ -4390,7 +4445,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
    */
   if ( d->style == ST_Select && !m_pTable->isLoading() )
   {
-      SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+      SelectPrivate *s = (SelectPrivate*)d->cellPrivate;
       if ( d->content == Formula )
           s->parse( d->strFormulaOut );
       else
@@ -4431,81 +4486,81 @@ void KSpreadCell::update()
 bool KSpreadCell::testValidity() const
 {
     bool valid = false;
-    if( m_Validity != NULL )
+    if( d->validity != NULL )
     {
       if( d->value.isNumber() &&
-	  (m_Validity->m_allow == Allow_Number ||
-	   (m_Validity->m_allow == Allow_Integer &&
+	  (d->validity->m_allow == Allow_Number ||
+	   (d->validity->m_allow == Allow_Integer &&
 	    d->value.asFloat() == ceil(d->value.asFloat()))))
       {
-	switch( m_Validity->m_cond)
+	switch( d->validity->m_cond)
 	{
 	  case Equal:
-	    valid = ( d->value.asFloat() - m_Validity->valMin < DBL_EPSILON
-		      && d->value.asFloat() - m_Validity->valMin >
+	    valid = ( d->value.asFloat() - d->validity->valMin < DBL_EPSILON
+		      && d->value.asFloat() - d->validity->valMin >
 		      (0.0 - DBL_EPSILON));
 	    break;
           case Superior:
-	    valid = ( d->value.asFloat() > m_Validity->valMin);
+	    valid = ( d->value.asFloat() > d->validity->valMin);
 	    break;
           case Inferior:
-	    valid = ( d->value.asFloat()  <m_Validity->valMin);
+	    valid = ( d->value.asFloat()  <d->validity->valMin);
 	    break;
           case SuperiorEqual:
-	    valid = ( d->value.asFloat() >= m_Validity->valMin);
+	    valid = ( d->value.asFloat() >= d->validity->valMin);
             break;
           case InferiorEqual:
-	    valid = (d->value.asFloat() <= m_Validity->valMin);
+	    valid = (d->value.asFloat() <= d->validity->valMin);
 	    break;
 	  case Between:
-	    valid = ( d->value.asFloat() >= m_Validity->valMin &&
-		      d->value.asFloat() <= m_Validity->valMax);
+	    valid = ( d->value.asFloat() >= d->validity->valMin &&
+		      d->value.asFloat() <= d->validity->valMax);
 	    break;
 	  case Different:
-	    valid = (d->value.asFloat() < m_Validity->valMin ||
-		     d->value.asFloat() > m_Validity->valMax);
+	    valid = (d->value.asFloat() < d->validity->valMin ||
+		     d->value.asFloat() > d->validity->valMax);
 	    break;
 	  default :
 	    break;
         }
       }
-      else if(m_Validity->m_allow==Allow_Text)
+      else if(d->validity->m_allow==Allow_Text)
       {
 	valid = d->value.isString();
       }
-      else if(m_Validity->m_allow==Allow_TextLength)
+      else if(d->validity->m_allow==Allow_TextLength)
       {
 	if( d->value.isString() )
         {
 	  int len = d->strOutText.length();
-	  switch( m_Validity->m_cond)
+	  switch( d->validity->m_cond)
 	  {
 	    case Equal:
-	      if (len == m_Validity->valMin)
+	      if (len == d->validity->valMin)
 		valid = true;
 	      break;
 	    case Superior:
-	      if(len > m_Validity->valMin)
+	      if(len > d->validity->valMin)
 		valid = true;
 	      break;
 	    case Inferior:
-	      if(len < m_Validity->valMin)
+	      if(len < d->validity->valMin)
 		valid = true;
 	      break;
 	    case SuperiorEqual:
-	      if(len >= m_Validity->valMin)
+	      if(len >= d->validity->valMin)
 		valid = true;
 	      break;
 	    case InferiorEqual:
-	      if(len <= m_Validity->valMin)
+	      if(len <= d->validity->valMin)
 		valid = true;
 	      break;
 	    case Between:
-	      if(len >= m_Validity->valMin && len <= m_Validity->valMax)
+	      if(len >= d->validity->valMin && len <= d->validity->valMax)
 		valid = true;
 	      break;
 	    case Different:
-	      if(len <m_Validity->valMin || len >m_Validity->valMax)
+	      if(len <d->validity->valMin || len >d->validity->valMax)
 		valid = true;
 	      break;
 	    default :
@@ -4513,64 +4568,64 @@ bool KSpreadCell::testValidity() const
 	  }
 	}
       }
-      else if(m_Validity->m_allow == Allow_Time && isTime())
+      else if(d->validity->m_allow == Allow_Time && isTime())
       {
-	switch( m_Validity->m_cond)
+	switch( d->validity->m_cond)
 	{
 	  case Equal:
-	    valid = (valueTime() == m_Validity->timeMin);
+	    valid = (valueTime() == d->validity->timeMin);
 	    break;
 	  case Superior:
-	    valid = (valueTime() > m_Validity->timeMin);
+	    valid = (valueTime() > d->validity->timeMin);
 	    break;
 	  case Inferior:
-	    valid = (valueTime() < m_Validity->timeMin);
+	    valid = (valueTime() < d->validity->timeMin);
 	    break;
 	  case SuperiorEqual:
-	    valid = (valueTime() >= m_Validity->timeMin);
+	    valid = (valueTime() >= d->validity->timeMin);
 	    break;
 	  case InferiorEqual:
-	    valid = (valueTime() <= m_Validity->timeMin);
+	    valid = (valueTime() <= d->validity->timeMin);
 	    break;
 	  case Between:
-	    valid = (valueTime() >= m_Validity->timeMin &&
-		     valueTime() <= m_Validity->timeMax);
+	    valid = (valueTime() >= d->validity->timeMin &&
+		     valueTime() <= d->validity->timeMax);
 	    break;
   	  case Different:
-	    valid = (valueTime() < m_Validity->timeMin ||
-		     valueTime() > m_Validity->timeMax);
+	    valid = (valueTime() < d->validity->timeMin ||
+		     valueTime() > d->validity->timeMax);
 	    break;
 	  default :
 	    break;
 
 	}
       }
-      else if(m_Validity->m_allow == Allow_Date && isDate())
+      else if(d->validity->m_allow == Allow_Date && isDate())
       {
-	switch( m_Validity->m_cond)
+	switch( d->validity->m_cond)
 	{
 	  case Equal:
-	    valid = (valueDate() == m_Validity->dateMin);
+	    valid = (valueDate() == d->validity->dateMin);
 	    break;
 	  case Superior:
-	    valid = (valueDate() > m_Validity->dateMin);
+	    valid = (valueDate() > d->validity->dateMin);
 	    break;
 	  case Inferior:
-	    valid = (valueDate() < m_Validity->dateMin);
+	    valid = (valueDate() < d->validity->dateMin);
 	    break;
 	  case SuperiorEqual:
-	    valid = (valueDate() >= m_Validity->dateMin);
+	    valid = (valueDate() >= d->validity->dateMin);
 	    break;
 	  case InferiorEqual:
-	    valid = (valueDate() <= m_Validity->dateMin);
+	    valid = (valueDate() <= d->validity->dateMin);
 	    break;
 	  case Between:
-	    valid = (valueDate() >= m_Validity->dateMin &&
-		     valueDate() <= m_Validity->dateMax);
+	    valid = (valueDate() >= d->validity->dateMin &&
+		     valueDate() <= d->validity->dateMax);
 	    break;
 	  case Different:
-	    valid = (valueDate() < m_Validity->dateMin ||
-		     valueDate() > m_Validity->dateMax);
+	    valid = (valueDate() < d->validity->dateMin ||
+		     valueDate() > d->validity->dateMax);
 	    break;
 	  default :
 	    break;
@@ -4583,25 +4638,25 @@ bool KSpreadCell::testValidity() const
       valid= true;
     }
 
-    if(!valid &&m_Validity != NULL )
+    if(!valid &&d->validity != NULL )
     {
-      switch (m_Validity->m_action)
+      switch (d->validity->m_action)
       {
         case Stop:
-	  KMessageBox::error((QWidget*)0L, m_Validity->message,
-			     m_Validity->title);
+	  KMessageBox::error((QWidget*)0L, d->validity->message,
+			     d->validity->title);
 	  break;
         case Warning:
-	  KMessageBox::warningYesNo((QWidget*)0L, m_Validity->message,
-				    m_Validity->title);
+	  KMessageBox::warningYesNo((QWidget*)0L, d->validity->message,
+				    d->validity->title);
 	  break;
         case Information:
-	  KMessageBox::information((QWidget*)0L, m_Validity->message,
-				   m_Validity->title);
+	  KMessageBox::information((QWidget*)0L, d->validity->message,
+				   d->validity->title);
 	  break;
       }
     }
-    return (valid || m_Validity == NULL || m_Validity->m_action != Stop);
+    return (valid || d->validity == NULL || d->validity->m_action != Stop);
 }
 
 KSpreadFormat::FormatType KSpreadCell::formatType() const
@@ -4691,7 +4746,7 @@ void KSpreadCell::setCalcDirtyFlag()
   m_pTable->setRegionPaintDirty(cellRect());
 
   /* if this cell is dirty, every cell that references this one is dirty */
-  for (dep = m_lstDependingOnMe.first(); dep != NULL; dep = m_lstDependingOnMe.next())
+  for (dep = d->lstDependingOnMe.first(); dep != NULL; dep = d->lstDependingOnMe.next())
   {
     for (int c = dep->Left(); c <= dep->Right(); c++)
     {
@@ -4747,7 +4802,7 @@ void KSpreadCell::checkTextInput()
     // Get the text from that cell (using result of formula if any)
     QString str = d->strText;
     if ( d->style == ST_Select )
-        str = (static_cast<SelectPrivate*>(m_pPrivate))->text();
+        str = (static_cast<SelectPrivate*>(d->cellPrivate))->text();
     else if ( isFormula() )
         str = d->strFormulaOut;
 
@@ -5032,7 +5087,7 @@ bool KSpreadCell::cellDependsOn(KSpreadSheet *table, int col, int row)
   bool isdep = FALSE;
 
   KSpreadDependency *dep;
-  for ( dep = m_lstDepends.first(); dep != 0L && !isdep; dep = m_lstDepends.next() )
+  for ( dep = d->lstDepends.first(); dep != 0L && !isdep; dep = d->lstDepends.next() )
   {
     if (dep->Table() == table &&
 	dep->Left() <= col && dep->Right() >= col &&
@@ -5072,61 +5127,61 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         format.setAttribute( "style", (int) d->style );
 
 
-    if ( m_conditions )
+    if ( d->conditions )
     {
-      QDomElement conditionElement = m_conditions->saveConditions( doc );
+      QDomElement conditionElement = d->conditions->saveConditions( doc );
 
       if ( !conditionElement.isNull() )
         cell.appendChild( conditionElement );
     }
 
-    if ( m_Validity != 0 )
+    if ( d->validity != 0 )
     {
         QDomElement validity = doc.createElement("validity");
 
         QDomElement param=doc.createElement("param");
-        param.setAttribute("cond",(int)m_Validity->m_cond);
-        param.setAttribute("action",(int)m_Validity->m_action);
-        param.setAttribute("allow",(int)m_Validity->m_allow);
-        param.setAttribute("valmin",m_Validity->valMin);
-        param.setAttribute("valmax",m_Validity->valMax);
+        param.setAttribute("cond",(int)d->validity->m_cond);
+        param.setAttribute("action",(int)d->validity->m_action);
+        param.setAttribute("allow",(int)d->validity->m_allow);
+        param.setAttribute("valmin",d->validity->valMin);
+        param.setAttribute("valmax",d->validity->valMax);
         validity.appendChild(param);
         QDomElement title = doc.createElement( "title" );
-        title.appendChild( doc.createTextNode( m_Validity->title ) );
+        title.appendChild( doc.createTextNode( d->validity->title ) );
         validity.appendChild( title );
         QDomElement message = doc.createElement( "message" );
-        message.appendChild( doc.createCDATASection( m_Validity->message ) );
+        message.appendChild( doc.createCDATASection( d->validity->message ) );
         validity.appendChild( message );
 
         QString tmp;
-        if ( m_Validity->timeMin.isValid() )
+        if ( d->validity->timeMin.isValid() )
         {
                 QDomElement timeMin = doc.createElement( "timemin" );
-                tmp=m_Validity->timeMin.toString();
+                tmp=d->validity->timeMin.toString();
                 timeMin.appendChild( doc.createTextNode( tmp ) );
                 validity.appendChild( timeMin );
         }
-        if ( m_Validity->timeMax.isValid() )
+        if ( d->validity->timeMax.isValid() )
         {
                 QDomElement timeMax = doc.createElement( "timemax" );
-                tmp=m_Validity->timeMax.toString();
+                tmp=d->validity->timeMax.toString();
                 timeMax.appendChild( doc.createTextNode( tmp ) );
                 validity.appendChild( timeMax );
         }
 
-        if ( m_Validity->dateMin.isValid() )
+        if ( d->validity->dateMin.isValid() )
         {
                 QDomElement dateMin = doc.createElement( "datemin" );
                 QString tmp("%1/%2/%3");
-                tmp = tmp.arg(m_Validity->dateMin.year()).arg(m_Validity->dateMin.month()).arg(m_Validity->dateMin.day());
+                tmp = tmp.arg(d->validity->dateMin.year()).arg(d->validity->dateMin.month()).arg(d->validity->dateMin.day());
                 dateMin.appendChild( doc.createTextNode( tmp ) );
                 validity.appendChild( dateMin );
         }
-        if ( m_Validity->dateMax.isValid() )
+        if ( d->validity->dateMax.isValid() )
         {
                 QDomElement dateMax = doc.createElement( "datemax" );
                 QString tmp("%1/%2/%3");
-                tmp = tmp.arg(m_Validity->dateMax.year()).arg(m_Validity->dateMax.month()).arg(m_Validity->dateMax.day());
+                tmp = tmp.arg(d->validity->dateMax.year()).arg(d->validity->dateMax.month()).arg(d->validity->dateMax.day());
                 dateMax.appendChild( doc.createTextNode( tmp ) );
                 validity.appendChild( dateMax );
         }
@@ -5443,10 +5498,10 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
     QDomElement conditionsElement = cell.namedItem( "condition" ).toElement();
     if ( !conditionsElement.isNull())
     {
-      delete m_conditions;
-      m_conditions = new KSpreadConditions( this );
-      m_conditions->loadConditions( conditionsElement );
-      m_conditions->checkMatches();
+      delete d->conditions;
+      d->conditions = new KSpreadConditions( this );
+      d->conditions->loadConditions( conditionsElement );
+      d->conditions->checkMatches();
     }
 
     QDomElement validity = cell.namedItem( "validity" ).toElement();
@@ -5455,34 +5510,34 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
         QDomElement param = validity.namedItem( "param" ).toElement();
         if(!param.isNull())
         {
-          m_Validity = new KSpreadValidity;
+          d->validity = new KSpreadValidity;
           if ( param.hasAttribute( "cond" ) )
           {
-            m_Validity->m_cond = (Conditional) param.attribute("cond").toInt( &ok );
+            d->validity->m_cond = (Conditional) param.attribute("cond").toInt( &ok );
             if ( !ok )
               return false;
           }
           if ( param.hasAttribute( "action" ) )
           {
-            m_Validity->m_action = (Action) param.attribute("action").toInt( &ok );
+            d->validity->m_action = (Action) param.attribute("action").toInt( &ok );
             if ( !ok )
               return false;
           }
           if ( param.hasAttribute( "allow" ) )
           {
-            m_Validity->m_allow = (Allow) param.attribute("allow").toInt( &ok );
+            d->validity->m_allow = (Allow) param.attribute("allow").toInt( &ok );
             if ( !ok )
               return false;
           }
           if ( param.hasAttribute( "valmin" ) )
           {
-            m_Validity->valMin = param.attribute("valmin").toDouble( &ok );
+            d->validity->valMin = param.attribute("valmin").toDouble( &ok );
             if ( !ok )
               return false;
           }
           if ( param.hasAttribute( "valmax" ) )
           {
-            m_Validity->valMax = param.attribute("valmax").toDouble( &ok );
+            d->validity->valMax = param.attribute("valmax").toDouble( &ok );
             if ( !ok )
               return false;
           }
@@ -5490,32 +5545,32 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
         QDomElement title = validity.namedItem( "title" ).toElement();
         if (!title.isNull())
         {
-            m_Validity->title = title.text();
+            d->validity->title = title.text();
         }
         QDomElement message = validity.namedItem( "message" ).toElement();
         if (!message.isNull())
         {
-            m_Validity->message = message.text();
+            d->validity->message = message.text();
         }
         QDomElement timeMin = validity.namedItem( "timemin" ).toElement();
         if ( !timeMin.isNull()  )
         {
-            m_Validity->timeMin = toTime(timeMin);
+            d->validity->timeMin = toTime(timeMin);
         }
         QDomElement timeMax = validity.namedItem( "timemax" ).toElement();
         if ( !timeMax.isNull()  )
         {
-            m_Validity->timeMax = toTime(timeMax);
+            d->validity->timeMax = toTime(timeMax);
          }
         QDomElement dateMin = validity.namedItem( "datemin" ).toElement();
         if ( !dateMin.isNull()  )
         {
-            m_Validity->dateMin = toDate(dateMin);
+            d->validity->dateMin = toDate(dateMin);
          }
         QDomElement dateMax = validity.namedItem( "datemax" ).toElement();
         if ( !dateMax.isNull()  )
         {
-            m_Validity->dateMax = toDate(dateMax);
+            d->validity->dateMax = toDate(dateMax);
          }
     }
 
@@ -5811,8 +5866,8 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
   if ( !m_pTable->isLoading() )
     setCellText( d->strText );
 
-  if ( m_conditions )
-    m_conditions->checkMatches();
+  if ( d->conditions )
+    d->conditions->checkMatches();
 
   return true;
 }
@@ -5972,20 +6027,20 @@ void KSpreadCell::tableDies()
     d->extraYCells = 0;
     d->mergedXCells = 0;
     d->mergedYCells = 0;
-    m_nextCell = 0;
-    m_previousCell = 0;
+    d->nextCell = 0;
+    d->previousCell = 0;
 }
 
 KSpreadCell::~KSpreadCell()
 {
-    if ( m_nextCell )
-        m_nextCell->setPreviousCell( m_previousCell );
-    if ( m_previousCell )
-        m_previousCell->setNextCell( m_nextCell );
+    if ( d->nextCell )
+        d->nextCell->setPreviousCell( d->previousCell );
+    if ( d->previousCell )
+        d->previousCell->setNextCell( d->nextCell );
 
-    delete m_pPrivate;
+    delete d->cellPrivate;
     delete d->QML;
-    delete m_Validity;
+    delete d->validity;
     delete d->code;
 
     // Unobscure cells.
@@ -6085,27 +6140,27 @@ void KSpreadCell::NotifyDepending( int col, int row, KSpreadSheet* table, bool i
     return;
   }
 
-  KSpreadDependency *d = NULL;
+  KSpreadDependency *dep = NULL;
   bool alreadyInList = false;
 
   /* see if this cell is already in the list */
-  for (d = m_lstDependingOnMe.first(); d != NULL && !alreadyInList; d = m_lstDependingOnMe.next() )
+  for (dep = d->lstDependingOnMe.first(); dep != NULL && !alreadyInList; dep = d->lstDependingOnMe.next() )
   {
-    alreadyInList = (d->Left() <= col && d->Right() >= col &&
-		     d->Top() <= row && d->Bottom() >= row &&
-		     d->Table() == table);
+    alreadyInList = (dep->Left() <= col && dep->Right() >= col &&
+		     dep->Top() <= row && dep->Bottom() >= row &&
+		     dep->Table() == table);
   }
 
   if (isDepending && !alreadyInList)
   {
     /* if we're supposed to add it and it's not already in there, add it */
-    d = new KSpreadDependency(col, row, table);
-    m_lstDependingOnMe.prepend(d);
+    dep = new KSpreadDependency(col, row, table);
+    d->lstDependingOnMe.prepend(dep);
   }
   else if (!isDepending && alreadyInList)
   {
     /* if we're supposed to remove it and it actually was there, then remove it */
-    m_lstDependingOnMe.remove();
+    d->lstDependingOnMe.remove();
   }
 
   return;
@@ -6132,7 +6187,7 @@ QPtrList<KSpreadDependency> KSpreadCell::getDepending ()
   QPtrList<KSpreadDependency> retval ;
   KSpreadDependency *dep = NULL ;
 
-  for (dep = m_lstDependingOnMe.first() ; dep != NULL ; dep = m_lstDependingOnMe.next())
+  for (dep = d->lstDependingOnMe.first() ; dep != NULL ; dep = d->lstDependingOnMe.next())
   {
     KSpreadDependency *d_copy = new KSpreadDependency (*dep) ;
 	retval.prepend (d_copy) ;
@@ -6143,21 +6198,21 @@ QPtrList<KSpreadDependency> KSpreadCell::getDepending ()
 
 QValueList<KSpreadConditional> KSpreadCell::conditionList() const
 {
-  if ( !m_conditions )
+  if ( !d->conditions )
   {
     QValueList<KSpreadConditional> emptyList;
     return emptyList;
   }
 
-  return m_conditions->conditionList();
+  return d->conditions->conditionList();
 }
 
 void KSpreadCell::setConditionList( const QValueList<KSpreadConditional> & newList )
 {
-  delete m_conditions;
-  m_conditions = new KSpreadConditions( this );
-  m_conditions->setConditionList( newList );
-  m_conditions->checkMatches();
+  delete d->conditions;
+  d->conditions = new KSpreadConditions( this );
+  d->conditions->setConditionList( newList );
+  d->conditions->checkMatches();
 }
 
 bool KSpreadCell::hasError() const
