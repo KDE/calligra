@@ -160,8 +160,9 @@ VSelectTool::mouseButtonPress()
 
 	recalc();
 
-	//view()->part()->document().selection()->setState( VObject::edit );
-	//view()->painterFactory()->painter()->end();
+	view()->part()->document().selection()->setState( VObject::edit );
+	view()->canvasWidget()->repaintAll( view()->part()->document().selection()->boundingBox() );
+	view()->part()->document().selection()->setState( VObject::selected );
 
 	draw();
 }
