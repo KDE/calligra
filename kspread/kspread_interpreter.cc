@@ -79,7 +79,7 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
       d->m_pTable = extra->point()->table;
       if (!d->m_pTable)
       {
-        QString tmp( "The expression %1 is not valid" );
+        QString tmp( i18n("The expression %1 is not valid") );
         tmp = tmp.arg( node->getStringLiteral() );
         context.setException( new KSException( "InvalidTableExpression", tmp ) );
         return;
@@ -98,7 +98,7 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
       d->m_pTable = extra->range()->table;
       if (!d->m_pTable)
       {
-        QString tmp( "The expression %1 is not valid" );
+        QString tmp( i18n("The expression %1 is not valid") );
         tmp = tmp.arg( node->getStringLiteral() );
         context.setException( new KSException( "InvalidTableExpression", tmp ) );
         return;
