@@ -122,8 +122,9 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     setupCanvas();
     kdDebug()<<"KIlluView after setupCanvas: "<<time.elapsed()<<endl;
     createMyGUI();
-    setXMLFile( "KIllustrator.rc" );
     kdDebug()<<"KIlluView after createMyGUI: "<<time.elapsed()<<endl;
+    setXMLFile( "KIllustrator.rc" );
+    kdDebug()<<"KIlluView after setXMLFile(): "<<time.elapsed()<<endl;
     canvas->docSizeChanged();
 }
 
@@ -138,8 +139,11 @@ KIllustratorView::~KIllustratorView()
    delete mToolDockManager;
 }
 
+
 void KIllustratorView::createMyGUI()
 {
+   QTime time;
+   time.start();
     // File menu
     new KAction( i18n("&Import..."), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
     new KAction( i18n("&Export..."), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
@@ -177,6 +181,7 @@ void KIllustratorView::createMyGUI()
     // Insert menu
     new KAction( i18n("Insert &Bitmap..."),"insertpicture", 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
     new KAction( i18n("Insert &Clipart..."),"insertclipart", 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
+    kdDebug()<<"inside createMyGUI(): a: "<<time.elapsed()<<" msecs elapsed"<<endl;
 
     // Tools
     m_selectTool = new KToggleAction( i18n("Select objects"), "selecttool", CTRL+Key_1, actionCollection(), "mouse" );
@@ -260,6 +265,8 @@ void KIllustratorView::createMyGUI()
     new KAction( i18n("&Ellipse..."), 0, this, SLOT( slotConfigureEllipse() ), actionCollection(), "ellipseSettings");
     new KAction( i18n("&Polygon..."), 0, this, SLOT( slotConfigurePolygon() ), actionCollection(), "polygonSettings");
 
+    kdDebug()<<"inside createMyGUI(): b: "<<time.elapsed()<<" msecs elapsed"<<endl;
+
     m_viewZoom = new KSelectAction (i18n ("&Zoom"), 0, actionCollection (), "view_zoom");
     QStringList zooms;
     zooms << "50%";
@@ -277,9 +284,6 @@ void KIllustratorView::createMyGUI()
     connect(m_viewZoom, SIGNAL(activated(const QString &)),this, SLOT(slotViewZoom(const QString &)));
     m_viewZoom->setCurrentItem(1);
 
-
-    new KAction( i18n("Zoom in"), "viewmag+", 0, this, SLOT( slotZoomIn() ), actionCollection(), "tool_zoomin");
-    new KAction( i18n("Zoom out"), "viewmag-", 0, this, SLOT( slotZoomOut() ), actionCollection(), "tool_zoomout");
 
     // Colorbar action
     QValueList<QColor> colorList;
@@ -320,11 +324,11 @@ void KIllustratorView::createMyGUI()
     tcontroller->toolSelected( Tool::ToolSelect);
 
     setUndoStatus (false, false);
-    QObject::connect (&cmdHistory, SIGNAL(changed(bool, bool)),
-                      SLOT(setUndoStatus(bool, bool)));
+    connect (&cmdHistory, SIGNAL(changed(bool, bool)),SLOT(setUndoStatus(bool, bool)));
 
     // Disable node actions
     toolActivated(Tool::ToolEditPoint,false);
+    kdDebug()<<"inside createMyGUI(): c: "<<time.elapsed()<<" msecs elapsed"<<endl;
 
 }
 
