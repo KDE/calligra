@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -44,7 +44,7 @@ public:
   enum Kind { PK_Square, PK_Rectangle, PK_Polygon };
 
   GPolygon (Kind pkind = PK_Polygon);
-  GPolygon (const list<XmlAttribute>& attribs, Kind pkind = PK_Polygon);
+  GPolygon (const QDomElement &element, Kind pkind = PK_Polygon);
   GPolygon (const GPolygon& obj);
   GPolygon (QList<Coord>& coords);
   ~GPolygon () {}
@@ -64,17 +64,17 @@ public:
   // a shortcut for rectangles and squares
   void setEndPoint (const Coord& p);
 
-  void setSymmetricPolygon (const Coord& sp, const Coord& ep, int nCorners, 
+  void setSymmetricPolygon (const Coord& sp, const Coord& ep, int nCorners,
 			    bool concave, int sharpness);
-  
+
   virtual void getPath (vector<Coord>& path);
 
   virtual QString typeName () const;
 
   virtual GObject* copy ();
-  virtual GObject* clone (const list<XmlAttribute>& attribs);
+  virtual GObject* clone (const QDomElement &element);
 
-  virtual void writeToXml (XmlWriter&);
+  virtual QDomElement writeToXml (QDomDocument &document);
 
   void setKind (GPolygon::Kind k);
   GPolygon::Kind getKind () { return kind; }

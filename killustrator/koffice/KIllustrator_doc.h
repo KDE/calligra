@@ -36,6 +36,7 @@ class KoDocumentEntry;
 class KoStore;
 class GDocument;
 class GPart;
+class QDomDocument;
 
 class KIllustratorChild : public KoDocumentChild
 {
@@ -57,12 +58,12 @@ public:
     // Overloaded methods from KoDocument
 
     virtual bool saveChildren (KoStore* _store, const char *_path);
-    bool save (std::ostream& os, const char *fmt);
-    virtual bool save() { return KParts::ReadWritePart::save(); }
+    virtual QDomDocument saveXML ();
+    //virtual bool save() { return KParts::ReadWritePart::save(); }
 
-    bool completeSaving (KoStore* store);
+    //bool completeSaving (KoStore* store); // not needed? - what about embedded wmf files?
 
-    bool load (std::istream& is, KoStore* store);
+    virtual bool loadXML (const QDomDocument &document);
     bool loadChildren (KoStore* store);
 
     /**

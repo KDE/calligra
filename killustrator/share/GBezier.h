@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -42,7 +42,7 @@ class GBezier : public GPolyline {
   Q_OBJECT
 public:
   GBezier ();
-  GBezier (const list<XmlAttribute>& attribs);
+  GBezier (const QDomElement &element);
   GBezier (const GBezier& obj);
   ~GBezier () {}
 
@@ -54,15 +54,15 @@ public:
   virtual void movePoint (int idx, float dx, float dy);
   virtual void removePoint (int idx, bool update = true);
   virtual void insertPoint (int idx, const Coord& p, bool update = true);
-  
+
   virtual QString typeName () const;
 
   virtual GObject* copy ();
-  virtual GObject* clone (const list<XmlAttribute>& attribs);
+  virtual GObject* clone (const QDomElement &element);
 
-  virtual void writeToXml (XmlWriter&);
+  virtual QDomElement writeToXml (QDomDocument &document);
 
-  virtual bool findNearestPoint (const Coord& p, float max_dist, 
+  virtual bool findNearestPoint (const Coord& p, float max_dist,
 				 float& dist, int& pidx, bool all = false);
   virtual int containingSegment (float xpos, float ypos);
 
@@ -82,7 +82,7 @@ public:
   virtual GCurve* convertToCurve () const;
 
   static bool bezier_segment_contains (const Coord& p0, const Coord& p1,
-				       const Coord& p2, const Coord& p3, 
+				       const Coord& p2, const Coord& p3,
 				       const Coord& c);
 protected:
   void calcBoundingBox ();
@@ -104,4 +104,3 @@ private:
 };
 
 #endif
-

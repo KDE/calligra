@@ -6,7 +6,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -14,7 +14,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -33,7 +33,7 @@
 #include <kapp.h>
 
 GPolyline::GPolyline () {
-  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this, 
+  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
            SLOT(updateProperties (GObject::Property, int)));
   points.setAutoDelete (true);
   sArrow = eArrow = 0L;
@@ -42,43 +42,42 @@ GPolyline::GPolyline () {
   edx = edy = 0;
 }
 
-GPolyline::GPolyline (const list<XmlAttribute>& attribs) : GObject (attribs) {
-  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this, 
-           SLOT(updateProperties (GObject::Property, int)));
-  points.setAutoDelete (true);
-  sArrow = eArrow = 0L;
-  sAngle = eAngle = 0;
+GPolyline::GPolyline (const QDomElement &element) : GObject (element) {
 
-  list<XmlAttribute>::const_iterator first = attribs.begin ();
-	
-  while (first != attribs.end ()) {
-    const string& attr = (*first).name ();
-    if (attr == "arrow1")
-      outlineInfo.startArrowId = (*first).intValue ();
-    else if (attr == "arrow2")
-      outlineInfo.endArrowId = (*first).intValue ();
-    first++;
-  }
-  sArrow = (outlineInfo.startArrowId > 0 ? 
-	    Arrow::getArrow (outlineInfo.startArrowId) : 0L);
-  eArrow = (outlineInfo.endArrowId > 0 ? 
-	    Arrow::getArrow (outlineInfo.endArrowId) : 0L);
-  calcBoundingBox ();
+    connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
+	     SLOT(updateProperties (GObject::Property, int)));
+    points.setAutoDelete (true);
+    sArrow = eArrow = 0L;
+    sAngle = eAngle = 0;
+
+    while (first != attribs.end ()) {
+	const string& attr = (*first).name ();
+	if (attr == "arrow1")
+	    outlineInfo.startArrowId = (*first).intValue ();
+	else if (attr == "arrow2")
+	    outlineInfo.endArrowId = (*first).intValue ();
+	first++;
+    }
+    sArrow = (outlineInfo.startArrowId > 0 ?
+	      Arrow::getArrow (outlineInfo.startArrowId) : 0L);
+    eArrow = (outlineInfo.endArrowId > 0 ?
+	      Arrow::getArrow (outlineInfo.endArrowId) : 0L);
+    calcBoundingBox ();
 }
-  
+
 GPolyline::GPolyline (const GPolyline& obj) : GObject (obj) {
-  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this, 
+  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
            SLOT(updateProperties (GObject::Property, int)));
   points.setAutoDelete (true);
   QListIterator<Coord> it (obj.points);
-  for (; it.current (); ++it) 
+  for (; it.current (); ++it)
     points.append (new Coord (* (it.current ())));
   sArrow = obj.sArrow;
   eArrow = obj.eArrow;
   calcBoundingBox ();
 }
-  
-float GPolyline::calcArrowAngle (const Coord& p1, const Coord& p2, 
+
+float GPolyline::calcArrowAngle (const Coord& p1, const Coord& p2,
 				 int direction) {
   float angle = 0.0;
 
@@ -134,10 +133,10 @@ void GPolyline::draw (QPainter& p, bool withBasePoints, bool /*outline*/) {
 
   unsigned int num = points.count ();
   for (i = 1; i < num; i++) {
-    Painter::drawLine (p, points.at (i - 1)->x () + ((i==1) ? sdx : 0), 
+    Painter::drawLine (p, points.at (i - 1)->x () + ((i==1) ? sdx : 0),
 		       points.at (i - 1)->y () + ((i==1) ? sdy : 0),
-		       points.at (i)->x () - ((i==num-1) ? edx : 0), 
-		       points.at (i)->y () - ((i==num-1) ? edy : 0));     
+		       points.at (i)->x () - ((i==num-1) ? edx : 0),
+		       points.at (i)->y () - ((i==num-1) ? edy : 0));
   }
 
   p.restore ();
@@ -179,7 +178,7 @@ void GPolyline::setPoint (int idx, const Coord& p) {
 void GPolyline::removePoint (int idx, bool update) {
   if (points.count () > 2) {
     points.remove (idx);
-    if (update) 
+    if (update)
       updateRegion ();
   }
 }
@@ -193,7 +192,7 @@ void GPolyline::addPoint (int idx, const Coord& p, bool update) {
 
   points.insert (idx, new Coord (np));
 
-  if (update) 
+  if (update)
     updateRegion ();
 }
 
@@ -243,7 +242,7 @@ int GPolyline::getNeighbourPoint (const Coord& p) {
     return last;
 
   // and now the remaining
-  for (unsigned int i = 1; i < last; i++) { 
+  for (unsigned int i = 1; i < last; i++) {
     c = points.at (i)->transform (tMatrix);
     if (c.isNear (p, NEAR_DISTANCE))
       return i;
@@ -255,8 +254,8 @@ GObject* GPolyline::copy () {
   return new GPolyline (*this);
 }
 
-GObject* GPolyline::clone (const list<XmlAttribute>& attribs) {
-  return new GPolyline (attribs);
+GObject* GPolyline::clone (const QDomElement &element) {
+  return new GPolyline (element);
 }
 
 void GPolyline::calcBoundingBox () {
@@ -265,9 +264,9 @@ void GPolyline::calcBoundingBox () {
 
   if (num == 0)
     return;
-  
+
   Coord p = points.at (0)->transform (tmpMatrix);
-  
+
   r.left (p.x ());
   r.top (p.y ());
   r.right (p.x ());
@@ -312,7 +311,7 @@ void GPolyline::calcBoundingBox () {
     Rect er = eArrow->boundingBox (p2, w, eAngle);
     r = r.unite (er);
 
-    float angle = calcArrowAngle (*(points.at (num - 2)), 
+    float angle = calcArrowAngle (*(points.at (num - 2)),
 				  *(points.at (num - 1)), 0);
     angle = 1.0 / (RAD_FACTOR / angle);
     edx = w * eArrow->length () * cos (angle);
@@ -332,31 +331,31 @@ void GPolyline::updateProperties (GObject::Property prop, int /*mask*/) {
       (sArrow && sArrow->arrowID () != outlineInfo.startArrowId) ||
       (eArrow == 0L && outlineInfo.endArrowId > 0) ||
       (eArrow && eArrow->arrowID () != outlineInfo.endArrowId)) {
-    sArrow = (outlineInfo.startArrowId > 0 ? 
+    sArrow = (outlineInfo.startArrowId > 0 ?
 	      Arrow::getArrow (outlineInfo.startArrowId) : 0L);
-    eArrow = (outlineInfo.endArrowId > 0 ? 
+    eArrow = (outlineInfo.endArrowId > 0 ?
 	      Arrow::getArrow (outlineInfo.endArrowId) : 0L);
     updateRegion ();
   }
 }
 
-void GPolyline::writeToXml (XmlWriter& xml) {
-  xml.startTag ("polyline", false);
-  writePropertiesToXml (xml);
-  xml.addAttribute ("arrow1", outlineInfo.startArrowId);
-  xml.addAttribute ("arrow2", outlineInfo.endArrowId);
-  xml.closeTag (false);
+QDomElement GPolyline::writeToXml (QDomDocument &document) {
 
-  for (QListIterator<Coord> it (points); it.current (); ++it) {
-    xml.startTag ("point", false);
-    xml.addAttribute ("x", it.current ()->x ());
-    xml.addAttribute ("y", it.current ()->y ());
-    xml.closeTag (true);
-  }
-  xml.endTag ();
+    QDomElement polyline=document.createElement("polyline");
+    polyline.setAttribute ("arrow1", outlineInfo.startArrowId);
+    polyline.setAttribute ("arrow2", outlineInfo.endArrowId);
+
+    for (QListIterator<Coord> it (points); it.current (); ++it) {
+	QDomElement point=document.createElement("point");
+	point.setAttribute ("x", it.current ()->x ());
+	point.setAttribute ("y", it.current ()->y ());
+	polyline.appendChild(point);
+    }
+    polyline.appendChild(GObject::writeToXml(document));
+    return polyline;
 }
 
-bool GPolyline::findNearestPoint (const Coord& p, float max_dist, 
+bool GPolyline::findNearestPoint (const Coord& p, float max_dist,
 				  float& dist, int& pidx, bool all) {
   float dx, dy, min_dist = max_dist + 1, d;
   pidx = -1;
@@ -390,9 +389,9 @@ Rect GPolyline::calcEnvelope () {
 
   if (num == 0)
     return r;
-  
+
   const Coord& p = *points.at (0);
-  
+
   r.left (p.x ());
   r.top (p.y ());
   r.right (p.x ());
@@ -463,7 +462,7 @@ int GPolyline::containingSegment (float xpos, float ypos) {
 	  }
 	  else {
 	    yp = m * pp.x () + n;
-	    
+	
 	    if (yp - 5 <= pp.y () && pp.y () <= yp + 5) {
 	      seg = i - 1;
 	      break;
@@ -502,7 +501,7 @@ bool GPolyline::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2) {
   if (idx > 0 && idx < points.count ()) {
     GPolyline* other1 = (GPolyline *) this->copy ();
     unsigned int i, num = points.count ();
-    for (i = idx + 1; i < num; i++) 
+    for (i = idx + 1; i < num; i++)
       other1->points.remove (idx + 1);
     other1->calcBoundingBox ();
 

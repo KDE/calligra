@@ -32,8 +32,9 @@
 #include <qlist.h>
 #include <qstring.h>
 
-#include "xmlutils/XmlWriter.h"
-#include "xmlutils/XmlElement.h"
+//#include "xmlutils/XmlWriter.h"
+//#include "xmlutils/XmlElement.h"
+#include <qdom.h>
 
 #include "Painter.h"
 #include "Handle.h"
@@ -137,9 +138,9 @@ public:
   bool findContainingObjects (int x, int y, QList<GObject>& olist);
   bool findObjectsContainedIn (const Rect& r, QList<GObject>& olist);
 	
-  bool saveToXml (ostream& os);
-  bool readFromXml (istream& is);
-  bool insertFromXml (istream& is, std::list<GObject*>& newObjs);
+  QDomDocument saveToXml ();
+  bool readFromXml (const QDomDocument &document);
+  bool insertFromXml (const QDomDocument &document, list<GObject*>& newObjs);
 
   Handle& handle () { return selHandle; }
 
@@ -169,7 +170,7 @@ public:
 
 protected:
   void updateHandle ();
-  bool parseBody (XmlReader& xml, std::list<GObject*>& newObjs, bool markNew);
+  bool parseBody (const QDomDocument &document, std::list<GObject*>& newObjs, bool markNew);
 
 public slots:
   void objectChanged ();

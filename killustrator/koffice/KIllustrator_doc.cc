@@ -34,6 +34,7 @@
 #include <qmessagebox.h>
 #include <qstring.h>
 #include <qfileinfo.h>
+#include <qdom.h>
 #include <klocale.h>
 #include <kstddirs.h>
 #include <koTemplateChooseDia.h>
@@ -66,16 +67,18 @@ KIllustratorDocument::~KIllustratorDocument()
     delete m_gdocument;
 }
 
+/*
 bool KIllustratorDocument::save (ostream& os, const char* )
 {
     cout << "save KIllu to stream !!!!!!!!!!!!!!!" << endl;
     return m_gdocument->saveToXml (os);
 }
+*/
 
-bool KIllustratorDocument::load (istream& in, KoStore* )
+bool KIllustratorDocument::loadXML (const QDomDocument &doc)
 {
   cout << "load KIllu from stream !!!!!!!!!" << endl;
-  if ( m_gdocument->readFromXml (in)) {
+  if ( m_gdocument->readFromXml (doc)) {
 
     // now look for part objects in order to create the child list
     vector<GLayer*>& layers = (vector<GLayer*>&) m_gdocument->getLayers();
@@ -121,6 +124,7 @@ bool KIllustratorDocument::saveChildren (KoStore* _store, const char *_path)
   return true;
 }
 
+/*
 bool KIllustratorDocument::completeSaving (KoStore* store)
 {
   if (!store)
@@ -128,6 +132,7 @@ bool KIllustratorDocument::completeSaving (KoStore* store)
 
   return true;
 }
+*/
 
 void KIllustratorDocument::insertPart (const QRect& rect, KoDocumentEntry& e)
 {

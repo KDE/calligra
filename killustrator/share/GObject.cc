@@ -6,7 +6,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -14,13 +14,14 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
+#include <qdom.h>
 #include <stdlib.h>
 #include <iostream>
 #include <math.h>
@@ -55,7 +56,7 @@ void GObject::setDefaultOutlineInfo (const OutlineInfo& oi) {
 }
 
 void GObject::setDefaultFillInfo (const FillInfo& fi) {
-  if (fi.mask & FillInfo::Color) 
+  if (fi.mask & FillInfo::Color)
     defaultFillInfo.color = fi.color;
   if (fi.mask & FillInfo::FillStyle)
     defaultFillInfo.fstyle = fi.fstyle;
@@ -80,7 +81,7 @@ GObject::GObject () {
   wrapper = 0L;
 
   outlineInfo = defaultOutlineInfo;
-  outlineInfo.mask = OutlineInfo::Color | OutlineInfo::Style | 
+  outlineInfo.mask = OutlineInfo::Color | OutlineInfo::Style |
     OutlineInfo::Width | OutlineInfo::Custom;
   outlineInfo.roundness = 0;
   outlineInfo.shape = OutlineInfo::DefaultShape;
@@ -92,67 +93,68 @@ GObject::GObject () {
   rcount = 1;
 }
 
-GObject::GObject (const list<XmlAttribute>& attribs) {
-  list<XmlAttribute>::const_iterator first = attribs.begin ();
-  layer = 0L;
-  inWork = false;
-  wrapper = 0L;
+GObject::GObject (const QDomElement &element) {
 
-  outlineInfo.mask = 0;
-  fillInfo.mask = 0;
-  while (first != attribs.end ()) {
+    /*
+    //list<XmlAttribute>::const_iterator first = attribs.begin ();
+    //layer = 0L;
+    //inWork = false;
+    //wrapper = 0L;
+
+    outlineInfo.mask = 0;
+    fillInfo.mask = 0;
     const string& attr = (*first).name ();
     if (attr == "matrix") {
-      tMatrix = (*first).matrixValue ();
-      iMatrix = tMatrix.invert ();
-      tmpMatrix = tMatrix;
+	tMatrix = (*first).matrixValue ();
+	iMatrix = tMatrix.invert ();
+	tmpMatrix = tMatrix;
     }
     else if (attr == "strokecolor") {
-      outlineInfo.color = (*first).colorValue ();
-      outlineInfo.mask |= OutlineInfo::Color;
+	outlineInfo.color = (*first).colorValue ();
+	outlineInfo.mask |= OutlineInfo::Color;
     }
     else if (attr == "strokestyle") {
-      outlineInfo.style = (QT_PRFX::PenStyle) (*first).intValue ();
-      outlineInfo.mask |= OutlineInfo::Style;
+	outlineInfo.style = (QT_PRFX::PenStyle) (*first).intValue ();
+	outlineInfo.mask |= OutlineInfo::Style;
     }
     else if (attr == "linewidth") {
-      outlineInfo.width = (*first).floatValue ();
-      outlineInfo.mask |= OutlineInfo::Width;
+	outlineInfo.width = (*first).floatValue ();
+	outlineInfo.mask |= OutlineInfo::Width;
     }
     else if (attr == "fillstyle") {
-      fillInfo.fstyle = (FillInfo::Style) (*first).intValue ();
-      fillInfo.mask |= FillInfo::FillStyle;
+	fillInfo.fstyle = (FillInfo::Style) (*first).intValue ();
+	fillInfo.mask |= FillInfo::FillStyle;
     }
     else if (attr == "fillcolor") {
-      fillInfo.color = (*first).colorValue ();
-      fillInfo.mask |= FillInfo::Color;
+	fillInfo.color = (*first).colorValue ();
+	fillInfo.mask |= FillInfo::Color;
     }
     else if (attr == "fillpattern") {
-      fillInfo.pattern = (QT_PRFX::BrushStyle) (*first).intValue ();
-      fillInfo.mask |= FillInfo::Pattern;
+	fillInfo.pattern = (QT_PRFX::BrushStyle) (*first).intValue ();
+	fillInfo.mask |= FillInfo::Pattern;
     }
     else if (attr == "gradcolor1") {
-      fillInfo.gradient.setColor1 ((*first).colorValue ());
-      fillInfo.mask |= FillInfo::GradientInfo;
+	fillInfo.gradient.setColor1 ((*first).colorValue ());
+	fillInfo.mask |= FillInfo::GradientInfo;
     }
     else if (attr == "gradcolor2") {
-      fillInfo.gradient.setColor2 ((*first).colorValue ());
-      fillInfo.mask |= FillInfo::GradientInfo;
+	fillInfo.gradient.setColor2 ((*first).colorValue ());
+	fillInfo.mask |= FillInfo::GradientInfo;
     }
     else if (attr == "gradstyle") {
-      fillInfo.gradient.setStyle ((Gradient::Style) (*first).intValue ());
-      fillInfo.mask |= FillInfo::GradientInfo;
+	fillInfo.gradient.setStyle ((Gradient::Style) (*first).intValue ());
+	fillInfo.mask |= FillInfo::GradientInfo;
     }
     else if (attr == "id")
-      id = (*first).stringValue ().c_str ();
+	id = (*first).stringValue ().c_str ();
     else if (attr == "ref")
-      refid = (*first).stringValue ().c_str ();
-    
+	refid = (*first).stringValue ().c_str ();
+
     first++;
-  }
+    */
 }
 
-GObject::GObject (const GObject& obj) : QObject() 
+GObject::GObject (const GObject& obj) : QObject()
 {
   sflag = false;
   outlineInfo = obj.outlineInfo;
@@ -203,7 +205,7 @@ void GObject::transform (const QWMatrix& m, bool update) {
   iMatrix = tMatrix.invert ();
   initTmpMatrix ();
   gShape.setInvalid ();
-  if (update) 
+  if (update)
     updateRegion ();
 }
 
@@ -213,7 +215,7 @@ void GObject::initTmpMatrix () {
 
 void GObject::ttransform (const QWMatrix& m, bool update) {
   tmpMatrix = tmpMatrix * m;
-  if (update) 
+  if (update)
     updateRegion ();
 }
 
@@ -237,7 +239,7 @@ void GObject::setOutlineInfo (const GObject::OutlineInfo& info) {
 GObject::OutlineInfo GObject::getOutlineInfo () const {
   return outlineInfo;
 }
-  
+
 void GObject::setOutlineShape (OutlineInfo::Shape s) {
   outlineInfo.shape = s;
   updateRegion ();
@@ -291,7 +293,7 @@ void GObject::setFillInfo (const GObject::FillInfo& info) {
 GObject::FillInfo GObject::getFillInfo () const {
   return fillInfo;
 }
-  
+
 void GObject::setFillColor (const QColor& color) {
   fillInfo.color = color;
   updateRegion (false);
@@ -383,9 +385,9 @@ void GObject::restoreState (GOState* state) {
   updateRegion ();
 }
 
-void GObject::calcUntransformedBoundingBox (const Coord& tleft, 
+void GObject::calcUntransformedBoundingBox (const Coord& tleft,
 					    const Coord& tright,
-					    const Coord& bright, 
+					    const Coord& bright,
 					    const Coord& bleft) {
   Coord p[4];
   Rect r;
@@ -434,32 +436,35 @@ void GObject::initPen (QPen& pen) {
   pen.setStyle (inWork ? SolidLine : outlineInfo.style);
 }
 
-void GObject::writePropertiesToXml (XmlWriter& xml) {
-  if (hasId ())
-    xml.addAttribute ("id", (const char *) id);
-  xml.addAttribute ("matrix", tMatrix);
-  xml.addAttribute ("strokecolor", outlineInfo.color);
-  xml.addAttribute ("strokestyle", (int) outlineInfo.style);
-  xml.addAttribute ("linewidth", outlineInfo.width);
-  xml.addAttribute ("fillstyle", (int) fillInfo.fstyle);
-  switch (fillInfo.fstyle) {
-  case FillInfo::SolidFill:
-    xml.addAttribute ("fillcolor", fillInfo.color);
-    break;
-  case FillInfo::PatternFill:
-    xml.addAttribute ("fillcolor", fillInfo.color);
-    xml.addAttribute ("fillpattern", (int) fillInfo.pattern);
-    break;
-  case FillInfo::GradientFill:
-    xml.addAttribute ("gradcolor1", fillInfo.gradient.getColor1 ());
-    xml.addAttribute ("gradcolor2", fillInfo.gradient.getColor2 ());
-    xml.addAttribute ("gradstyle", (int) fillInfo.gradient.getStyle ());
-    break;
-  case FillInfo::NoFill:
-  default:
-    // nothing more
-    break;
-  }
+virtual QDomElement GObject::writeToXml (QDomDocument &document) {
+
+    QDomElement element=document.createElement("object");
+    if (hasId ())
+	element.setAttribute ("id", (const char *) id);
+    element.setAttribute ("strokecolor", outlineInfo.color.name());
+    element.setAttribute ("strokestyle", (int) outlineInfo.style);
+    element.setAttribute ("linewidth", outlineInfo.width);
+    element.setAttribute ("fillstyle", (int) fillInfo.fstyle);
+    switch (fillInfo.fstyle) {
+    case FillInfo::SolidFill:
+	element.setAttribute ("fillcolor", fillInfo.color.name());
+	break;
+    case FillInfo::PatternFill:
+	element.setAttribute ("fillcolor", fillInfo.color.name());
+	element.setAttribute ("fillpattern", (int) fillInfo.pattern);
+	break;
+    case FillInfo::GradientFill:
+	element.setAttribute ("gradcolor1", fillInfo.gradient.getColor1().name());
+	element.setAttribute ("gradcolor2", fillInfo.gradient.getColor2().name());
+	element.setAttribute ("gradstyle", (int) fillInfo.gradient.getStyle());
+	break;
+    case FillInfo::NoFill:
+    default:
+	// nothing more
+	break;
+    }
+    element.appendChild(createMatrixElement("matrix", tMatrix, document));
+    return element;
 }
 
 void GObject::printInfo () {
@@ -491,4 +496,27 @@ GObject* GObject::lookupPrototype (const char *className) {
 
 void GObject::setWrapper (SWrapper *wobj) {
   wobj->setObject (this);
+}
+
+QDomElement KIllustrator::createMatrixElement(const QString &tag, const QWMatrix &matrix, QDomDocument &document) {
+
+    QDomElement m=document.createElement(tag);
+    m.setAttribute("m11", matrix.m11());
+    m.setAttribute("m12", matrix.m12());
+    m.setAttribute("m21", matrix.m21());
+    m.setAttribute("m22", matrix.m22());
+    m.setAttribute("dx", matrix.dx());
+    m.setAttribute("dy", matrix.dy());
+    return m;
+}
+
+QWMatrix KIllustrator::toMatrix(const QDomElement &matrix) {
+
+    double m11=matrix.attribute("m11").toDouble();
+    double m12=matrix.attribute("m12").toDouble();
+    double m21=matrix.attribute("m21").toDouble();
+    double m22=matrix.attribute("m22").toDouble();
+    double dx=matrix.attribute("dx").toDouble();
+    double dy=matrix.attribute("dy").toDouble();
+    return QWMatrix(m11, m12, m21, m22, dx, dy);
 }

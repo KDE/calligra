@@ -96,8 +96,8 @@ GPolygon::GPolygon (GPolygon::Kind pkind) : GPolyline () {
   kind = pkind;
 }
 
-GPolygon::GPolygon (const list<XmlAttribute>& attribs, Kind pkind)
-  : GPolyline (attribs) {
+GPolygon::GPolygon (const QDomElement &element, Kind pkind)
+  : GPolyline (element.childToElement("polyline")) {
   points.setAutoDelete (true);
   kind = pkind;
   if (kind != PK_Polygon) {
@@ -201,9 +201,9 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
   else {
     float xcorr = 0, ycorr = 0;
     /*
-     * Qt draws a rectangle from xpos to (xpos + width - 1). This seems 
-     * to be a bug, because a rectangle from position (20, 20) with a 
-     * witdh of 20 doesn't align to a 20pt grid. Therefore we correct 
+     * Qt draws a rectangle from xpos to (xpos + width - 1). This seems
+     * to be a bug, because a rectangle from position (20, 20) with a
+     * witdh of 20 doesn't align to a 20pt grid. Therefore we correct
      * the width and height values...
      */
     const QWMatrix& m = p.worldMatrix ();
@@ -215,10 +215,10 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
     if (Roundness != 0)
       p.drawRoundRect (p1.x (), p1.y (),
 		       qRound (p2.x () - p1.x () + xcorr),
-		       qRound (p2.y () - p1.y () + ycorr), 
+		       qRound (p2.y () - p1.y () + ycorr),
 		       Roundness, Roundness);
     else
-      Painter::drawRect (p, p1.x (), p1.y (), 
+      Painter::drawRect (p, p1.x (), p1.y (),
 			 qRound (p2.x () - p1.x () + xcorr),
 			 qRound (p2.y () - p1.y () + ycorr));
   }
@@ -363,8 +363,8 @@ GObject* GPolygon::copy () {
   return new GPolygon (*this);
 }
 
-GObject* GPolygon::clone (const list<XmlAttribute>& attribs) {
-  return new GPolygon (attribs);
+GObject* GPolygon::clone (const QDomElement &element) {
+  return new GPolygon (element);
 }
 
 void GPolygon::calcBoundingBox () {
@@ -453,34 +453,26 @@ int GPolygon::getNeighbourPoint (const Coord& p) {
     return GPolyline::getNeighbourPoint (p);
 }
 
-void GPolygon::writeToXml (XmlWriter& xml) {
-  Rect r (*(points.at (0)), *(points.at (2)));
-  Rect nr = r.normalize ();
+QDomElement GPolygon::writeToXml (QDomDocument &document) {
 
-  if (kind == PK_Polygon)
-    xml.startTag ("polygon", false);
-  else
-    xml.startTag ("rectangle", false);
+    Rect r (*(points.at (0)), *(points.at (2)));
+    Rect nr = r.normalize ();
 
-  writePropertiesToXml (xml);
-  xml.addAttribute ("x", nr.left ());
-  xml.addAttribute ("y", nr.top ());
-  xml.addAttribute ("width", nr.width ());
-  xml.addAttribute ("height", nr.height ());
-  xml.addAttribute ("rounding", (Roundness > 0.1 ? Roundness : 0.0));
+    QDomElement element;
+    if (kind == PK_Polygon)
+	element=document.createElement("polygon");
+    else
+	element=document.createElement("rectangle");
 
-  if (kind == PK_Polygon) {
-    xml.closeTag (false);
-    for (QListIterator<Coord> it (points); it.current (); ++it) {
-      xml.startTag ("point", false);
-      xml.addAttribute ("x", it.current ()->x ());
-      xml.addAttribute ("y", it.current ()->y ());
-      xml.closeTag (true);
-    }
-    xml.endTag ();
-  }
-  else
-    xml.closeTag (true);
+    element.setAttribute ("x", nr.left ());
+    element.setAttribute ("y", nr.top ());
+    element.setAttribute ("width", nr.width ());
+    element.setAttribute ("height", nr.height ());
+    element.setAttribute ("rounding", (Roundness > 0.1 ? Roundness : 0.0));
+
+    if (kind == PK_Polygon)
+	element.appendChild(GPolyline::writeToXml(document));
+    return element;
 }
 
 void GPolygon::updateGradientShape (QPainter& p) {

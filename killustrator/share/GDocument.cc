@@ -502,7 +502,7 @@ void GDocument::objectChanged (const Rect& r) {
       emit changed (r);
 }
 
-bool GDocument::saveToXml (ostream& os) {
+QDomDocument GDocument::saveToXml () {
   static const char* formats[] = {
     "a3", "a4", "a5", "us_letter", "us_legal", "screen", "custom"
   };
@@ -510,53 +510,49 @@ bool GDocument::saveToXml (ostream& os) {
     "portrait", "landscape"
   };
 
-  XmlWriter xml (os);
+  QDomDocument document("killustator");
+  document.appendChild( document.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+  QDomElement killustaror=document.createElement("killustaror");
+  killustaror.setAttribute("editor", "KIllustrator");
+  killustrator.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
+  killustrator.setAttribute ("comment",(const char *)comment);
+  killustrator.setAttribute ("keywords",(const char *)keywords);
+  document.appendChild(killustrator);
 
-  xml.startTag ("doc", false);
-  //  xml.addAttribute ("author", "Kai-Uwe Sattler");
-  //  xml.addAttribute ("email", "kus@iti.cs.uni-magdeburg.de");
-  xml.addAttribute ("editor", "KIllustrator");
-  xml.addAttribute ("mime", KILLUSTRATOR_MIMETYPE);
-  xml.addAttribute ("comment",(const char *)comment);
-  xml.addAttribute ("keywords",(const char *)keywords);
-  xml.closeTag ();
+  QDomElement head=document.createElement("head");
+  document.appendChild(head);
 
-  xml.startTag ("head"); // <head>
+  QDomElement layout=document.createElement("layout");
+  layout.setAttribute ("format", formats[pLayout.format]);
+  layout.setAttribute ("orientation", orientations[pLayout.orientation]);
+  layout.setAttribute ("width", pLayout.mmWidth);
+  layout.setAttribute ("height", pLayout.mmHeight);
+  layout.setAttribute ("lmargin", pLayout.mmLeft);
+  layout.setAttribute ("tmargin", pLayout.mmTop);
+  layout.setAttribute ("rmargin", pLayout.mmRight);
+  layout.setAttribute ("bmargin", pLayout.mmBottom);
+  head.appendChild(layout);
 
-  xml.startTag ("layout", false);
-  xml.addAttribute ("format", formats[pLayout.format]);
-  xml.addAttribute ("orientation", orientations[pLayout.orientation]);
-  xml.addAttribute ("width", pLayout.mmWidth);
-  xml.addAttribute ("height", pLayout.mmHeight);
-  xml.addAttribute ("lmargin", pLayout.mmLeft);
-  xml.addAttribute ("tmargin", pLayout.mmTop);
-  xml.addAttribute ("rmargin", pLayout.mmRight);
-  xml.addAttribute ("bmargin", pLayout.mmBottom);
-  xml.closeTag (true);
+  QDomElement grid=document.createElement("grid");
+  grid.setAttribute ("dx", gridx);
+  grid.setAttribute ("dy", gridy);
+  grid.setAttribute ("align", snapToGrid ? 1 : 0);
+  head.appendChild(grid);
 
-  xml.startTag ("grid", false);
-  xml.addAttribute ("dx", gridx);
-  xml.addAttribute ("dy", gridy);
-  xml.addAttribute ("align", snapToGrid ? 1 : 0);
-  xml.closeTag (true);
-
-  xml.startTag ("helplines", false);
-  xml.addAttribute ("align", snapToHelplines ? 1 : 0);
-  xml.closeTag ();
+  QDomElement helplines=document.createElement("helplines");
+  helplines.setAttribute ("align", snapToHelplines ? 1 : 0);
   vector<float>::iterator hi;
   for (hi = hHelplines.begin (); hi != hHelplines.end (); hi++) {
-    xml.startTag ("hl", false);
-    xml.addAttribute ("pos", *hi);
-    xml.closeTag (true);
+    QDomElement hl=document.createElement("hl");
+    hl.setAttribute ("pos", *hi);
+    helplines.appendChild(hl);
   }
   for (hi = vHelplines.begin (); hi != vHelplines.end (); hi++) {
-    xml.startTag ("vl", false);
-    xml.addAttribute ("pos", *hi);
-    xml.closeTag (true);
+    QDomElement vl=document.createElement("vl");
+    vl.setAttribute ("pos", *hi);
+    helplines.appendChild(vl);
   }
-  xml.endTag ();
-
-  xml.endTag (); // </head>
+  gird.appendChild(helplines);
 
   bool save_layer_info = (layers.size () > 2);
   for (vector<GLayer*>::iterator li = layers.begin ();
@@ -568,27 +564,24 @@ bool GDocument::saveToXml (ostream& os) {
       int flags = ((*li)->isVisible () ? LAYER_VISIBLE : 0) +
 	  ((*li)->isPrintable () ? LAYER_PRINTABLE : 0) +
 	  ((*li)->isEditable () ? LAYER_EDITABLE : 0);
-      xml.startTag ("layer", false);
-      xml.addAttribute ("id", (*li)->name ());
-      xml.addAttribute ("flags", flags);
-      xml.closeTag ();
+      QDomElement layer=document.createElement("layer");
+      layer.setAttribute ("id", (*li)->name ());
+      layer.setAttribute ("flags", flags);
+      killustrator.appendChild(layer);
     }
     list<GObject*>& contents = (*li)->objects ();
     for (list<GObject*>::iterator oi = contents.begin ();
 	 oi != contents.end (); oi++)
-      (*oi)->writeToXml (xml);
-    if (save_layer_info)
-      xml.endTag (); // </layer>
+      layer.appendChild((*oi)->writeToXml (document));
   }
 
-  xml.endTag (); // </doc>
-
   setModified (false);
-  return ! os.fail ();
+  return true;
 }
 
-bool GDocument::insertFromXml (istream& is, list<GObject*>& newObjs) {
-  XmlReader xml (is);
+bool GDocument::insertFromXml (const QDomDocument &document, list<GObject*>& newObjs) {
+
+    /*XmlReader xml (is);
   XmlElement elem;
 
   if (! xml.validHeader ())
@@ -608,12 +601,14 @@ bool GDocument::insertFromXml (istream& is, list<GObject*>& newObjs) {
       first++;
   }
   return parseBody (xml, newObjs, true);
+    */
+    return true;
 }
 
-bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
-			   bool markNew) {
-  GObject* obj = 0L;
-  stack<GGroup*, vector<GGroup*> > groups;
+bool parseBody (const QDomDocument &document, std::list<GObject*>& newObjs, bool markNew) {
+    /*
+    GObject* obj = 0L;
+    stack<GGroup*, vector<GGroup*> > groups;
   bool finished = false;
   XmlElement elem;
   bool endOfBody = false;
@@ -869,10 +864,12 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
   }
 
   setAutoUpdate (true);
+    */
   return true;
 }
 
-bool GDocument::readFromXml (istream& is) {
+bool GDocument::readFromXml (const  QDomDocument &document) {
+
   bool endOfHeader = false;
 
   XmlReader xml (is);

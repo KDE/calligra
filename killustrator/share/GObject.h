@@ -41,11 +41,12 @@
 
 #include "version.h"
 
-#include "xmlutils/XmlWriter.h"
-#include "xmlutils/XmlElement.h"
+//#include "xmlutils/XmlWriter.h"
+//#include "xmlutils/XmlElement.h"
 
 #include <map>
 #include <string>
+#include <vector>
 #include <math.h>
 
 using std::vector;
@@ -62,6 +63,8 @@ class GOState;
 class GLayer;
 class SWrapper;
 class GCurve;
+class QDomDocument;
+class QDomElement;
 
 /**
  * The base class for all graphical objects.
@@ -75,7 +78,7 @@ class GObject : public QObject {
   Q_OBJECT
 protected:
   GObject ();
-  GObject (const std::list<XmlAttribute>& attribs);
+  GObject (const QDomElement &element);
   GObject (const GObject& obj);
 
   virtual void initState (GOState* state);
@@ -303,7 +306,7 @@ public:
   void setLayer (GLayer* l);
   GLayer* getLayer () { return layer; }
 
-  void writePropertiesToXml (XmlWriter& xml);
+  void writePropertiesToXml (QDomElement &element, QDomDocument &document);
 
   void ref ();
   void unref ();
@@ -347,9 +350,9 @@ public:
    * @return A copy of this object.
    */
   virtual GObject* copy () = 0;
-  virtual GObject* clone (const std::list<XmlAttribute>& attribs) = 0;
+  virtual GObject* clone (const QDomElement &element) = 0;
 
-  virtual void writeToXml (XmlWriter&) = 0;
+  virtual QDomElement writeToXml (QDomDocument &document);
 
   /**
    * At the moment only valid for lines and bezier curves.
@@ -459,5 +462,10 @@ inline float seg_length (const Coord& c1, const Coord& c2) {
   float dy = c2.y () - c1.y ();
   return std::sqrt (dx * dx + dy * dy);
 }
+
+namespace KIllustrator {
+QDomElement createMatrixElement(const QString &tag, const QWMatrix &matrix, QDomDocument &document);
+QWMatrix toMatrix(const QDomElement &matrix);
+};
 
 #endif
