@@ -661,10 +661,6 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText )
 
     outputText += "<pagesize ";
 
-    // TODO: why decimal commas? (not very english! Bug in AbiWord?)
-    // TODO: Decimal points do not work with a custom format! :-(
-
-#if 0
     switch (format)
     {
         // European A formats
@@ -726,8 +722,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText )
     }
     outputText += "\" ";
 
-    outputText += "page-scale=\"1,0\"/>\n"; // What is this exactly?
-#endif
+    outputText += "page-scale=\"1.0\"/>\n"; // TODO: What is this exactly? Zoom?
 }
 
 static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText)
@@ -826,12 +821,7 @@ bool ABIWORDExport::filter(const QString  &filenameIn,
     // (AbiWord and QString handles UTF-8 well, so we stay with this encoding!)
     stringBufOut = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     // First magic: "<abiword"
-    // TODO: only when <pagesize> is fixed, <abiword> should have again the fileformat attribute
-#if 1
-    stringBufOut += "<abiword version=\"unnumbered\">\n";
-#else
     stringBufOut += "<abiword version=\"unnumbered\" fileformat=\"1.0\">\n";
-#endif
     // Second magic: "<!-- This file is an AbiWord document."
     stringBufOut += "<!-- This file is an AbiWord document. -->\n";
     // We have chosen NOT to have the full comment header that AbiWord files normally have.
