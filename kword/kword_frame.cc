@@ -2079,7 +2079,10 @@ KWGroupManager::KWGroupManager( const KWGroupManager &original ) :
             cell->cols = lCells.at(i)->cols;
             cell->frameSet= dynamic_cast<KWTextFrameSet*>(lCells.at(i)->frameSet)->getCopy();
             if ( anchored ) {
-                cell->frameSet->getFrame( 0 )->moveBy( origin.x(), origin.y() );
+                KWFrame *topLeftFrame = cell->frameSet->getFrame( 0 );
+
+                if (topLeftFrame)
+                    topLeftFrame->moveBy( origin.x(), origin.y() );
             }
             cells.append( cell );
         }
@@ -2105,7 +2108,10 @@ void KWGroupManager::addFrameSet( KWFrameSet *fs, unsigned int row, unsigned int
 
     // If the group is anchored, we must adjust the incoming frameset.
     if ( anchored ) {
-        fs->getFrame( 0 )->moveBy( origin.x(), origin.y() );
+        KWFrame *topLeftFrame = fs->getFrame( 0 );
+
+        if (topLeftFrame)
+            topLeftFrame->moveBy( origin.x(), origin.y() );
     }
 
     Cell *cell = new Cell;
@@ -2626,7 +2632,10 @@ void KWGroupManager::insertRow( unsigned int _idx, bool _recalc, bool _removeabl
         // If the group is anchored, we must avoid double-application of
         // the anchor offset.
         if ( anchored ) {
-            _frameSet->getFrame( 0 )->moveBy( -origin.x(), -origin.y() );
+            KWFrame *topLeftFrame = _frameSet->getFrame( 0 );
+
+            if (topLeftFrame)
+                topLeftFrame->moveBy( -origin.x(), -origin.y() );
         }
         addFrameSet( _frameSet, _idx, i );
 
@@ -2680,7 +2689,10 @@ void KWGroupManager::insertCol( unsigned int _idx )
         // If the group is anchored, we must avoid double-application of
         // the anchor offset.
         if ( anchored ) {
-            _frameSet->getFrame( 0 )->moveBy( -origin.x(), -origin.y() );
+            KWFrame *topLeftFrame = _frameSet->getFrame( 0 );
+
+            if (topLeftFrame)
+                topLeftFrame->moveBy( -origin.x(), -origin.y() );
         }
         addFrameSet( _frameSet, i, _idx );
 
@@ -2901,9 +2913,13 @@ void KWGroupManager::viewFormatting( QPainter &painter, int )
 {
     KWFrame *topLeftFrame;
 
-    // Draw a line from the origin to the top left corner.
-    topLeftFrame = cells.at( 0 )->frameSet->getFrame( 0 );
-    painter.drawLine( origin.x(), origin.y(), topLeftFrame->x(), topLeftFrame->y());
+    // If we have been populated, then draw a line from the origin to the
+    // top left corner.
+    if ( cells.at( 0 ) )
+    {
+        topLeftFrame = cells.at( 0 )->frameSet->getFrame( 0 );
+        painter.drawLine( origin.x(), origin.y(), topLeftFrame->x(), topLeftFrame->y());
+    }
 }
 
 /*================================================================*/
