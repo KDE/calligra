@@ -34,8 +34,34 @@ VTransformNodes::visitVPath( VPath& path )
 	path.first();
 	while( path.current() )
 	{
-		if( path.current()->knotIsSelected() || path.current()->type() == VSegment::curve )
-			path.current()->transform( m_matrix );
+		if( path.current()->type() == VSegment::curve )
+		{
+			if( !path.current()->knotIsSelected() &&
+				path.current()->pointIsSelected( 1 ) &&
+				path.current()->next() &&
+				path.current()->next()->type() == VSegment::curve &&
+				!path.current()->next()->pointIsSelected( 0 ) &&
+				path.current()->isSmooth() )
+			{
+				// Do extra reverse trafo for smooth beziers
+				QWMatrix m2( m_matrix.m11(), m_matrix.m12(), m_matrix.m21(), m_matrix.m22(),
+							-m_matrix.dx(), -m_matrix.dy() );
+				path.current()->next()->setPoint( 0, path.current()->next()->point( 0 ).transform( m2 ) );
+			}
+			if( path.current()->pointIsSelected( 0 ) &&
+				path.current()->prev() &&
+				path.current()->prev()->type() == VSegment::curve &&
+				!path.current()->prev()->knotIsSelected() &&
+				!path.current()->prev()->pointIsSelected( 1 ) &&
+				path.current()->prev()->isSmooth() )
+			{
+				// Do extra reverse trafo for smooth beziers
+				QWMatrix m2( m_matrix.m11(), m_matrix.m12(), m_matrix.m21(), m_matrix.m22(),
+							-m_matrix.dx(), -m_matrix.dy() );
+				path.current()->prev()->setPoint( 1, path.current()->prev()->point( 1 ).transform( m2 ) );
+			}
+		}
+		path.current()->transform( m_matrix );
 
 		if( !success() )
 			setSuccess();

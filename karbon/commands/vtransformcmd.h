@@ -90,7 +90,7 @@ public:
 class VTranslateBezierCmd : public VCommand
 {
 public:
-	VTranslateBezierCmd( VSegment *segment, double d1, double d2 );
+	VTranslateBezierCmd( VSegment *segment, double d1, double d2, bool firstControl );
 	virtual ~VTranslateBezierCmd();
 
 	virtual void execute();
@@ -99,7 +99,8 @@ public:
 protected:
 	QWMatrix m_mat;
 	VSegment *m_segment;
-	VSegment *m_segmentcopy;
+	VSegment *m_segmenttwo;
+	bool	  m_firstControl;
 };
 
 #endif

@@ -49,36 +49,30 @@ VSelectNodes::visitVPath( VPath& path )
 
 			if( path.current()->type() == VSegment::curve )
 			{
-				// select first control point, when previous knot is selected:
-				if(
-					path.current()->prev() &&
-					path.current()->prev()->knotIsSelected() )
+				if( m_rect.contains( path.current()->point( 0 ) ) )
 				{
-					path.current()->selectPoint( 0, true );
+					path.current()->selectPoint( 0, m_select );
+					setSuccess();
+				}
+
+				if( m_rect.contains( path.current()->point( 1 ) ) )
+				{
+					path.current()->selectPoint( 1, m_select );
+					setSuccess();
 				}
 			}
-
-			if( path.current()->type() == VSegment::curve &&
-				m_rect.contains( path.current()->point( 0 ) ) )
-			{
-				path.current()->selectPoint( 0, m_select );
-				if( path.current()->prev() && path.current()->prev()->type() == VSegment::curve )
-					path.current()->prev()->selectPoint( 1, true );
-				setSuccess();
-			}
-
-			if( path.current()->type() == VSegment::curve &&
-				m_rect.contains( path.current()->point( 1 ) ) )
-			{
-				path.current()->selectPoint( 1, m_select );
-				setSuccess();
-			}
+			if( path.current()->prev() &&
+				path.current()->prev()->knotIsSelected() &&
+				path.current()->prev()->isSmooth() )
+					path.current()->selectPoint( 0, m_select );
 
 			if( m_rect.contains( path.current()->knot() ) )
 			{
 				path.current()->selectKnot( m_select );
 				if( path.current()->type() == VSegment::curve )
+				{
 					path.current()->selectPoint( 1, m_select );
+				}
 
 				setSuccess();
 			}

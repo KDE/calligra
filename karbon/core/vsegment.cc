@@ -87,7 +87,7 @@ VSegment::VSegment( const VSegment& segment )
 	m_next = segment.m_next;
 
 	// Copy points.
-	for( unsigned short i = 0; i < degree(); ++i )
+	for( unsigned short i = 0; i < degree(); i++ )
 	{
 		setPoint( i, segment.point( i ) );
 		selectPoint( i, segment.pointIsSelected( i ) );
@@ -924,34 +924,9 @@ VSegment::next() const
 void
 VSegment::transform( const QWMatrix& m )
 {
-	if( degree() == 1 )
-	{
-		if( knotIsSelected() )
-			setKnot( knot().transform( m ) );
-	}
-	else
-	{
-		if( knotIsSelected() )
-		{
-			for( unsigned short i = 0; i < degree(); ++i )
-				setPoint( i, point( i ).transform( m ) );
-		}
-		else if( pointIsSelected( 0 ) )
-		{
-			if( prev() && ( prev()->type() == begin || ( prev()->type() == curve && prev()->knotIsSelected() ) ) )
-				setPoint( 0, point( 0 ).transform( m ) );
-		}
-		else if( pointIsSelected( 1 ) )
-		{
-			setPoint( 1, point( 1 ).transform( m ) );
-			if( next() && next()->type() == curve )
-			{
-				QWMatrix m2( m.m11(), m.m12(), m.m21(), m.m22(), -m.dx(), -m.dy() );
-				next()->selectPoint( 0 );
-				next()->setPoint( 0, next()->point( 0 ).transform( m2 ) );
-			}
-		}
-	}
+	for( unsigned short i = 0; i < degree(); ++i )
+		if( pointIsSelected( i ) )
+			setPoint( i, point( i ).transform( m ) );
 }
 
 void

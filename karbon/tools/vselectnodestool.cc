@@ -79,10 +79,17 @@ VSelectNodesTool::draw()
 		{
 			if( segments.count() == 1 && !selrect.contains( segments.at( 0 )->knot() ) )
 			{
-				if( selrect.contains( segments.at( 0 )->point( 1 ) ) || segments.at( 0 )->prev()->type() != VSegment::curve )
+				if( selrect.contains( segments.at( 0 )->point( 1 ) ) ||
+					segments.at( 0 )->prev()->type() != VSegment::curve )
+				{
 					m_state = movingbezier1;
+					segments.at( 0 )->selectPoint( 1, false );
+				}
 				else
+				{
 					m_state = movingbezier2;
+					segments.at( 0 )->selectPoint( 0, false );
+				}
 				view()->part()->document().selection()->append( selrect.normalize(), false, true );
 			}
 			else
@@ -196,27 +203,26 @@ VSelectNodesTool::mouseDragRelease()
 	{
 		view()->part()->document().selection()->setState( VObject::selected );
 		VCommand *cmd;
+		QPtrList<VSegment> segments;
 		if( m_state == movingbezier1 || m_state == movingbezier2 )
 		{
 			double tolerance = 2.0 / view()->zoom();
 
 			KoRect selrect( first().x() - tolerance, first().y() - tolerance,
 							2 * tolerance + 1.0, 2 * tolerance + 1.0 );
-			QPtrList<VSegment> segments = view()->part()->document().selection()->getSegments( selrect );
-			if( m_state == movingbezier2 )
-				cmd = new VTranslateBezierCmd( segments.at( 0 )->prev(),
-						qRound( ( first().x() - last().x() ) ),
-						qRound( ( first().y() - last().y() ) ) );
-			else
-				cmd = new VTranslateBezierCmd( segments.at( 0 ),
-						qRound( ( last().x() - first().x() ) ),
-						qRound( ( last().y() - first().y() ) ) );
+			segments = view()->part()->document().selection()->getSegments( selrect );
+			cmd = new VTranslateBezierCmd( segments.at( 0 ),
+					qRound( ( last().x() - first().x() ) ),
+					qRound( ( last().y() - first().y() ) ),
+					m_state == movingbezier2 );
 		}
 		else
+		{
 			cmd = new VTranslateCmd(
 					&view()->part()->document(),
 					qRound( ( last().x() - first().x() ) ),
 					qRound( ( last().y() - first().y() ) ) );
+		}
 		view()->part()->addCommand( cmd, true );
 		m_state = normal;
 	}
@@ -257,12 +263,8 @@ VSelectNodesTool::recalc()
 	{
 		// move operation
 		QWMatrix mat;
-		if( m_state == movingbezier2 )
-			mat.translate(	( first().x() - last().x() ),
-							( first().y() - last().y() ) );
-		else
-			mat.translate(	( last().x() - first().x() ),
-							( last().y() - first().y() ) );
+		mat.translate(	( last().x() - first().x() ),
+						( last().y() - first().y() ) );
 
 		// Copy selected objects and transform:
 		m_objects.clear();

@@ -92,7 +92,10 @@ VDrawSelection::visitVComposite( VComposite &composite )
 					// Draw control lines:
 					if(
 						jtr.current()->pointIsSelected( 1 ) ||
-						jtr.current()->knotIsSelected() )
+						jtr.current()->knotIsSelected() ||
+						( jtr.current()->next() &&
+						  jtr.current()->next()->pointIsSelected( 0 ) &&
+						  jtr.current()->isSmooth() ) )
 					{
 						m_painter->newPath();
 						m_painter->moveTo(
@@ -110,7 +113,9 @@ VDrawSelection::visitVComposite( VComposite &composite )
 					if(
 						jtr.current()->prev() && 
 						( jtr.current()->prev()->knotIsSelected() ||
-						  jtr.current()->pointIsSelected( 0 ) ) )
+						  jtr.current()->pointIsSelected( 0 ) ) ||
+						  ( jtr.current()->prev()->pointIsSelected( 1 ) &&
+							jtr.current()->prev()->isSmooth() ) )
 					{
 						m_painter->newPath();
 						m_painter->moveTo(

@@ -30,6 +30,7 @@
 #include "vstroke.h"
 #include "vfill.h"
 
+#include <kdebug.h>
 
 VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat )
 	: VCommand( doc, i18n( "Transform Objects" ) ), m_mat( mat )
@@ -170,16 +171,15 @@ VRotateCmd::VRotateCmd( VDocument *doc, const KoPoint& p, double angle )
 	m_mat.translate( -p.x(), -p.y() );
 }
 
-VTranslateBezierCmd::VTranslateBezierCmd( VSegment *segment, double d1, double d2 )
-		: VCommand( 0L, i18n( "Translate Bezier" ) ), m_segment( segment )
+VTranslateBezierCmd::VTranslateBezierCmd( VSegment *segment, double d1, double d2, bool firstControl )
+		: VCommand( 0L, i18n( "Translate Bezier" ) ), m_segment( segment ), m_firstControl( firstControl )
 {
 	m_mat.translate( d1, d2 );
-	m_segmentcopy = 0L;
+	m_segmenttwo = 0L;
 }
 
 VTranslateBezierCmd::~VTranslateBezierCmd()
 {
-	//delete m_segmentcopy;
 }
 
 void
@@ -187,7 +187,31 @@ VTranslateBezierCmd::execute()
 {
 	if( m_segment->type() == VSegment::curve )
 	{
-		//m_segmentcopy = m_segment->clone();
+		QWMatrix m2( m_mat.m11(), m_mat.m12(), m_mat.m21(), m_mat.m22(), -m_mat.dx(), -m_mat.dy() );
+		if( m_firstControl )
+		{
+			if( m_segment->prev() &&
+				m_segment->prev()->type() == VSegment::curve &&
+				m_segment->prev()->isSmooth() )
+			{
+				m_segmenttwo = m_segment->prev();
+				for( uint i = 0;i < m_segmenttwo->degree();i++ )
+					m_segmenttwo->selectPoint( i, i == 1 );
+				m_segmenttwo->transform( m2 );
+			}
+		}
+		else
+		{
+			m_segmenttwo = ( m_segment->isSmooth() && m_segment->next()->type() == VSegment::curve ) ? m_segment->next() : 0L;
+			if( m_segmenttwo )
+			{
+				for( uint i = 0;i < m_segmenttwo->degree();i++ )
+					m_segmenttwo->selectPoint( i, i == 0 );
+				m_segmenttwo->transform( m2 );
+			}
+		}
+		for( uint i = 0;i < m_segment->degree();i++ )
+			m_segment->selectPoint( i, i == ( m_firstControl ? 0 : 1 ) );
 		m_segment->transform( m_mat );
 	}
 	setSuccess( true );
@@ -196,11 +220,19 @@ VTranslateBezierCmd::execute()
 void
 VTranslateBezierCmd::unexecute()
 {
-	m_mat = m_mat.invert();
-	if( m_segment->type() == VSegment::curve )
+	QWMatrix m2( m_mat.m11(), m_mat.m12(), m_mat.m21(), m_mat.m22(), -m_mat.dx(), -m_mat.dy() );
+	if( m_segment )
 	{
-		m_segment->transform( m_mat );
-		//*m_segment = *m_segmentcopy;
+		for( uint i = 0;i < m_segment->degree();i++ )
+			m_segment->selectPoint( i, i == ( m_firstControl ? 0 : 1 ) );
+		m_segment->transform( m_mat.invert() );
+		if( m_segmenttwo )
+		{
+			uint index = m_firstControl ? 1 : 0;
+			for( uint i = 0;i < m_segmenttwo->degree();i++ )
+				m_segmenttwo->selectPoint( i, i == index );
+			m_segmenttwo->transform( m2.invert() );
+		}
 	}
 	setSuccess( false );
 }
