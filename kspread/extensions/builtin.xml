@@ -1398,6 +1398,37 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>IMARGUMENT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMARGUMENT(complex number) returns the argument of a complex number of form x+yi.</Text>
+	<Syntax>IMARGUMENT( complex number )</Syntax>
+	<Example>IMARGUMENT("1.2+5i") returns 0.6072</Example>
+	<Example>IMARGUMENT("-i") returns nan</Example>
+                <Example>IMARGUMENT("12") returns "#Div/0"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMABS</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMABS(complex number) returns the norme of a complex number of form x+yi.</Text>
+	<Syntax>IMABS( complex number )</Syntax>
+	<Example>IMABS("1.2+5i") returns 5.1419</Example>
+	<Example>IMABS("-i") returns 1</Example>
+                <Example>IMABS("12") returns 12</Example>
+      </Help>
+    </Function>
 
 
   </Group>

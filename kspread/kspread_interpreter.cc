@@ -2735,6 +2735,85 @@ static bool kspreadfunc_imconjugate( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_imargument( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,1, "IMARGUMENT",true ) )
+    return false;
+  QString tmp;
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+        {
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+                return false;
+        tmp= tmp.setNum(args[0]->doubleValue());
+        }
+  else
+        {
+        tmp=args[0]->stringValue();
+        }
+  bool ok;
+  double real=real_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  double imag=imag_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  if(imag==0)
+        {
+        context.setValue( new KSValue(i18n("#Div/0")));
+        return true;
+        }
+  double arg=1/(tan(imag/real));
+
+  context.setValue( new KSValue(arg));
+
+  return true;
+}
+
+static bool kspreadfunc_imabs( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,1, "IMABS",true ) )
+    return false;
+  QString tmp;
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+        {
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+                return false;
+        tmp= tmp.setNum(args[0]->doubleValue());
+        }
+  else
+        {
+        tmp=args[0]->stringValue();
+        }
+  bool ok;
+  double real=real_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  double imag=imag_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  double arg=sqrt(pow(imag,2)+pow(real,2));
+
+  context.setValue( new KSValue(arg));
+
+  return true;
+}
+
 
 static bool kspreadfunc_polr( KSContext& context )
 {
@@ -3022,6 +3101,9 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "IMSUB", new KSValue( new KSBuiltinFunction( module, "IMSUB", kspreadfunc_imsub ) ) );
   module->addObject( "IMPRODUCT", new KSValue( new KSBuiltinFunction( module, "IMPRODUCT", kspreadfunc_improduct ) ) );
   module->addObject( "IMCONJUGATE", new KSValue( new KSBuiltinFunction( module, "IMCONJUGATE", kspreadfunc_imconjugate ) ) );
+  module->addObject( "IMARGUMENT", new KSValue( new KSBuiltinFunction( module, "IMARGUMENT", kspreadfunc_imargument ) ) );
+  module->addObject( "IMABS", new KSValue( new KSBuiltinFunction( module, "IMABS", kspreadfunc_imabs ) ) );
+
   return module;
 }
 
