@@ -3,6 +3,7 @@
 Name=KWordWinword97Filter
 Exec=kword_winword97.bin --server
 Comment=Werner's KWord Winword97 Filter
+Comment[pt_BR]=Filtro do KWord para WinWord97
 Export=application/x-kword
 ExportDescription=KWord
 Import=text/winword97
