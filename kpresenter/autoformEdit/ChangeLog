@@ -1,0 +1,4 @@
+Thu Apr 30 02:12:31 1998  Torben Weis  <weis@localhost>
+
+	* Makefile (LDFLAGS): Addes libkofficecore and friends
+
