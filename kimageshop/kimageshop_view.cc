@@ -486,7 +486,8 @@ void KImageShopView::canvasGotPaintEvent( QPaintEvent*e )
 
   p.translate(xt, yt);
   
-  ur.
+#warning Strange line here : "ur."  (David)
+  //ur.
 
   // let the document draw the image
   part()->paintEverything( p, ur, FALSE, this );
