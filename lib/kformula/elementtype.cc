@@ -308,12 +308,12 @@ void TextType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de
             text.appendChild( doc.createEntityReference( s.sprintf( "#x%05X", be->getCharacter().unicode() ) ) );
         }
 
+        de.appendChild( text );
         if ( i != end() - 1 ) {
             QDomElement op = doc.createElement( oasisFormat ? "math:mo" : "mo" );
             op.appendChild( doc.createEntityReference( "InvisibleTimes" ) );
-            text.appendChild( op );
+            de.appendChild( op );
         }
-        de.appendChild( text );
     }
 }
 
