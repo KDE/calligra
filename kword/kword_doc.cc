@@ -716,7 +716,7 @@ KWParag* KWordDocument::findFirstParagOfPage(unsigned int _page,unsigned int _fr
   KWParag *p = dynamic_cast<KWTextFrameSet*>(frames.at(_frameset))->getFirstParag();
   while (p)
     {
-      if (p->getEndPage() == _page || p->getStartPage() == _page)
+      if (p->getEndPage() == _page || p->getStartPage() == _page || (p->getEndPage() > _page && p->getStartPage() < _page))
  	return p;
       p = p->getNext();
     }
@@ -1441,6 +1441,7 @@ void KWordDocument::appendPage(unsigned int _page,QPainter &_painter)
 
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
+      if (getFrameSet(i)->getFrameType() != FT_TEXT) continue;
       frameSet = getFrameSet(i);
 
       for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
@@ -1485,7 +1486,7 @@ int KWordDocument::selectFrame(unsigned int mx,unsigned int my)
 
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
-      frameSet = getFrameSet(i);
+      frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       if (frameSet->contains(mx,my))
 	{
 	  return frameSet->selectFrame(mx,my);
@@ -1503,7 +1504,7 @@ void KWordDocument::deSelectFrame(unsigned int mx,unsigned int my)
 
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
-      frameSet = getFrameSet(i);
+      frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       if (frameSet->contains(mx,my))
 	frameSet->deSelectFrame(mx,my);
     }
@@ -1516,7 +1517,7 @@ void KWordDocument::deSelectAllFrames()
 
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
-      frameSet = getFrameSet(i);
+      frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
 	frameSet->getFrame(j)->setSelected(false);
     }
@@ -1529,7 +1530,7 @@ QCursor KWordDocument::getMouseCursor(unsigned int mx,unsigned int my)
 
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
-      frameSet = getFrameSet(i);
+      frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       if (frameSet->contains(mx,my))
 	{
 	  return frameSet->getMouseCursor(mx,my);
@@ -1546,7 +1547,7 @@ KWFrame *KWordDocument::getFirstSelectedFrame()
 
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
-      frameSet = getFrameSet(i);
+      frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
 	{	
 	  if (frameSet->getFrame(j)->isSelected())
@@ -1566,7 +1567,7 @@ KWFrame *KWordDocument::getFirstSelectedFrame(int &_frameset)
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
       _frameset = i;
-      frameSet = getFrameSet(i);
+      frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
 	{	
 	  if (frameSet->getFrame(j)->isSelected())
@@ -1598,16 +1599,39 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
 
   for (i = 0;i < static_cast<unsigned int>(pages);i++)
     {
+      QRect pageRect(0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
+      unsigned int minus = 0;
       if (i + 1> static_cast<unsigned int>(printer->fromPage())) printer->newPage();
       for (j = 0;j < frames.count();j++)
 	{
-	  bool bend = false;
-	  fc = fcList.at(j);
-	  while (fc->getPage() == i + 1 && !bend)
+	  switch (frames.at(j)->getFrameType())
 	    {
-	      if (i + 1 >= static_cast<unsigned int>(printer->fromPage()) && i + 1 <= static_cast<unsigned int>(printer->toPage()))
-		printLine(*fc,*painter,0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
-	      bend = !fc->makeNextLineLayout(*painter);
+	    case FT_PICTURE:
+	      {
+		minus++;
+
+		KWPictureFrameSet *picFS = dynamic_cast<KWPictureFrameSet*>(frames.at(j));
+		KWFrame *frame = picFS->getFrame(0);
+		if (!frame->intersects(pageRect)) break;
+
+		QSize _size = QSize(frame->width(),frame->height());
+		if (_size != picFS->getImage()->size())
+		  picFS->setSize(_size);
+
+		painter->drawImage(frame->x(),frame->y() - i * getPTPaperHeight(),*picFS->getImage());
+	      } break;
+	    case FT_TEXT:
+	      {
+		bool bend = false;
+		fc = fcList.at(j - minus);
+		while (fc->getPage() == i + 1 && !bend)
+		  {
+		    if (i + 1 >= static_cast<unsigned int>(printer->fromPage()) && i + 1 <= static_cast<unsigned int>(printer->toPage()))
+		      printLine(*fc,*painter,0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
+		    bend = !fc->makeNextLineLayout(*painter);
+		  }
+	      } break;
+	    default: minus++; break;
 	    }
 	}
     }
@@ -1648,7 +1672,7 @@ void KWordDocument::updateAllFrames()
 	  frame2 = _frames.at(j); 
 	  if (frame1->intersects(QRect(frame2->x(),frame2->y(),frame2->width(),frame2->height())))
 	    {
-	      QRect r = QRect(frame2->x(),frame2->y(),frame2->width(),frame2->height()); //frame1->intersect(QRect(frame2->x(),frame2->y(),frame2->width(),frame2->height()));
+	      QRect r = QRect(frame2->x(),frame2->y(),frame2->width(),frame2->height());
 	      if (r.left() > frame1->left() || r.top() > frame1->top() || r.right() < frame1->right() || r.bottom() < frame1->bottom())
 		{
 		  if (r.left() < frame1->left()) r.setLeft(frame1->left());

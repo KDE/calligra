@@ -293,7 +293,7 @@ void KWTextFrameSet::init()
   format->setDefaults(doc);
   parags->setFormat(0,1,*format);
 
-//   for (int i = 0;i < 300;i++)
+//   for (int i = 0;i < 100;i++)
 //     {
 //       p = new KWParag( this,doc, p, 0L, defaultParagLayout );
 //       p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen.");
@@ -311,11 +311,13 @@ void KWTextFrameSet::update()
   frameList.setAutoDelete(true);
 
   QRect pageRect;
-  for (unsigned int i = 0;i < static_cast<unsigned int>(doc->getPages());i++)
+  for (unsigned int i = 0;i < static_cast<unsigned int>(doc->getPages() + 1);i++)
     {
       pageRect = QRect(0,i * doc->getPTPaperHeight(),doc->getPTPaperWidth(),doc->getPTPaperHeight());
 
-      FrameList *l = new FrameList;
+      //debug("%d %d %d %d",pageRect.x(),pageRect.y(),pageRect.width(),pageRect.height());
+
+      FrameList *l = new FrameList();
       l->setAutoDelete(false);
       for (unsigned int j = 0;j < frames.count();j++)
 	{
@@ -325,7 +327,7 @@ void KWTextFrameSet::update()
       
       if (!l->isEmpty())
 	{
-	  FrameList *ll = new FrameList;
+	  FrameList *ll = new FrameList();
 	  ll->setAutoDelete(false);
 	  ll->append(l->first());
 	  for (unsigned int k = 1;k < l->count();k++)
@@ -346,7 +348,7 @@ void KWTextFrameSet::update()
 	  delete l;
 	  l = ll;
 	}
-      
+
       frameList.append(l);
     }
 
@@ -547,4 +549,60 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  return;
 	}
     }
+}
+
+/******************************************************************/
+/* Class: KWPictureFrameSet                                       */
+/******************************************************************/
+
+/*================================================================*/
+void KWPictureFrameSet::setFileName(QString _filename)
+{
+  if (image) 
+    {
+      image->decRef();
+      image = 0L;
+    }
+
+  filename = _filename;
+
+  KWImage _image = KWImage(doc,filename);
+  QString key;
+
+  image = doc->getImageCollection()->getImage(_image,key);
+}
+
+/*================================================================*/
+void KWPictureFrameSet::setFileName(QString _filename,QSize _imgSize)
+{
+  if (image) 
+    {
+      image->decRef();
+      image = 0L;
+    }
+
+  filename = _filename;
+
+  KWImage _image = KWImage(doc,filename);
+  QString key;
+
+  image = doc->getImageCollection()->getImage(_image,key,_imgSize);
+}
+
+/*================================================================*/
+void KWPictureFrameSet::setSize(QSize _imgSize)
+{
+  if (image && _imgSize == image->size()) return;
+
+  setFileName(filename,_imgSize);
+}
+
+/*================================================================*/
+void KWPictureFrameSet::save(ostream &out)
+{
+}
+
+/*================================================================*/
+void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
+{
 }

@@ -20,6 +20,9 @@
 #include <qpoint.h>
 #include <qlist.h>
 #include <qcursor.h>
+#include <qsize.h>
+
+#include "image.h"
 
 #include "parag.h"
 #include "paraglayout.h"
@@ -114,6 +117,9 @@ public:
   virtual void update()
     {;}
 
+  virtual void clear()
+    { frames.clear(); }
+
   virtual bool contains(unsigned int mx,unsigned int my);
   /**
    * Return 1, if a frame gets selected which was not selected before,
@@ -138,7 +144,7 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWFrameSet                                              */
+/* Class: KWTextFrameSet                                          */
 /******************************************************************/
 
 class KWTextFrameSet : public KWFrameSet
@@ -155,9 +161,6 @@ public:
 
   virtual void update();
   
-  virtual void clear()
-    { frames.clear(); }
-
   /**
    * If another parag becomes the first one it uses this function
    * to tell the document about it.
@@ -190,5 +193,39 @@ protected:
 
 };
 
+/******************************************************************/
+/* Class: KWPictureFrameSet                                       */
+/******************************************************************/
+
+class KWPictureFrameSet : public KWFrameSet
+{
+public:
+  KWPictureFrameSet(KWordDocument *_doc)
+    : KWFrameSet(_doc) 
+    { image = 0L; }
+  virtual ~KWPictureFrameSet() 
+    {;}
+
+  virtual FrameType getFrameType()
+    { return FT_PICTURE; }
+
+  virtual void setImage(KWImage *_image)
+    { image = _image; }
+  void setFileName(QString _filename);
+  void setFileName(QString _filename,QSize _imgSize);
+  void setSize(QSize _imgSize);
+
+  virtual KWImage* getImage()
+    { return image; }
+  QString getFileName() { return filename; }
+
+  virtual void save(ostream &out);
+  virtual void load(KOMLParser&,vector<KOMLAttrib>&);
+
+protected:
+  KWImage *image;
+  QString filename;
+
+};
 
 #endif

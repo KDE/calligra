@@ -317,3 +317,10 @@ Reggie, 4.11.1998:
 - Fixed some bugs with moving/resizing frames
 - Inserting text frames works now (quite :-) correctly
 - When changing something with frames/framesets they get updated correctly now
+
+Reggie, 5.11.1998:
+------------------
+- Implemented inserting freely placeable pictures (picture frames)
+- Some fixes with moving/resizing frames again
+- Implemented printing of freely placeable pictures too
+- Fixed a redraw-bug when scrolling the canvas

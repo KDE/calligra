@@ -35,6 +35,8 @@ public:
     { ref = 0; doc = _doc; filename = _filename; }
   KWImage(KWordDocument *_doc,KWImage _image) : QImage((QImage)_image)
     { ref = 0; filename = _image.getFilename(); doc = _doc; }
+  KWImage(KWordDocument *_doc,QImage _image,QString _filename) : QImage(_image)
+    { ref = 0; filename = _filename; doc = _doc; }
   KWImage() : QImage()
     { ref = 0; doc = 0L; }
 

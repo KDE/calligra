@@ -141,6 +141,7 @@ public:
   void recalcText();
   void recalcWholeText();
   void drawBorders(QPainter &_painter,QRect v_area);
+  void drawFrameSelection(QPainter &_painter,KWFrame *_frame);
   void setRuler2Frame(unsigned int _frameset,unsigned int _frame);
   void setMouseMode(MouseMode _mm);
   int getPageOfRect(QRect _rect);

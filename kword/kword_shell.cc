@@ -183,6 +183,8 @@ bool KWordShell::openDocument( const char *_url, const char *_format )
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
   
+  m_pDoc->setURL(_url);
+
   return true;
 }
 
@@ -205,6 +207,7 @@ bool KWordShell::saveDocument( const char *_url, const char *_format )
     if ( file.isNull() )
       return false;
     _url = file.data();
+    m_pDoc->setURL(_url);
   }
   
   if ( _format == 0L || *_format == 0 )

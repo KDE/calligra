@@ -13,6 +13,7 @@
 /* Module: Page                                                   */
 /******************************************************************/
 
+#include <kfiledialog.h>
 #include "kword_doc.h"
 #include "kword_page.h"
 #include "kword_page.moc"
@@ -98,7 +99,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 	    int frameset = doc->getFrameSet(mx,my);
 	    
 	    // only if we are in the _same_ frameset as before!!
-	    if (frameset != -1 && frameset == static_cast<int>(fc->getFrameSet()) - 1)
+	    if (frameset != -1 && frameset == static_cast<int>(fc->getFrameSet()) - 1 && doc->getFrameSet(frameset)->getFrameType() == FT_TEXT)
 	      {
 		doc->drawMarker(*fc,&_painter,xOffset,yOffset);
 		
@@ -494,7 +495,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	      
 	      int frameset = doc->getFrameSet(mx,my);
 	      
-	      if (frameset != -1)
+	      if (frameset != -1 && doc->getFrameSet(frameset)->getFrameType() == FT_TEXT)
 		{
 		  fc->setFrameSet(frameset + 1);
 		  
@@ -668,9 +669,33 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MM_CREATE_PIX:
       {
-	if (insRect.width() != 0 && insRect.height() != 0)
-	  debug("insert pix");
 	repaint(false);
+
+	if (insRect.width() != 0 && insRect.height() != 0)
+	  {
+	    QString file = KFileDialog::getOpenFileName(0,
+							i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
+							     "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
+							     "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
+							     "*.gif *.GIF|GIF-Pictures\n"
+							     "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+							     "*.bmp *.BMP|Windows Bitmaps\n"
+							     "*.xbm *.XBM|XWindow Pitmaps\n"
+							     "*.xpm *.XPM|Pixmaps\n"
+							     "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
+							     "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
+	    
+	    if (!file.isEmpty()) 
+	      {
+		KWPictureFrameSet *frameset = new KWPictureFrameSet(doc);
+		frameset->setFileName(file,QSize(insRect.width(),insRect.height()));
+		KWFrame *frame = new KWFrame(insRect.x() + xOffset,insRect.y() + yOffset,insRect.width(),insRect.height());
+		frameset->addFrame(frame);
+		doc->addFrameSet(frameset);
+		repaint(false);
+	      }
+	  }
+
       } break;
     default: break;
     }
@@ -695,7 +720,7 @@ void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
 
   int frameset = doc->getFrameSet(mx,my);
   
-  if (frameset != -1)
+  if (frameset != -1 && doc->getFrameSet(frameset)->getFrameType() == FT_TEXT)
     {
       fc->setFrameSet(frameset + 1);
 
@@ -837,6 +862,7 @@ void KWPage::recalcWholeText()
 
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
+      if (doc->getFrameSet(i)->getFrameType() != FT_TEXT) continue;      
       KWFormatContext _fc(doc,i + 1);
       _fc.init(doc->getFirstParag(i),painter,true);
 
@@ -870,26 +896,46 @@ void KWPage::paintEvent(QPaintEvent* e)
   KWFormatContext *paintfc = new KWFormatContext(doc,1);
   for (unsigned i = 0;i < doc->getNumFrameSets();i++)
     {
-      KWParag *p = doc->findFirstParagOfPage(firstVisiblePage,i);
-      if (p)
+      switch (doc->getFrameSet(i)->getFrameType())
 	{
-	  if (p->getPrev()) p = p->getPrev();
-	  paintfc->setFrameSet(i + 1);
-	  paintfc->init(p,painter,true,recalcAll);
+	case FT_PICTURE:
+	  {
+	    KWPictureFrameSet *picFS = dynamic_cast<KWPictureFrameSet*>(doc->getFrameSet(i));
+	    KWFrame *frame = picFS->getFrame(0);
+	    QSize _size = QSize(frame->width(),frame->height());
+	    
+	    if (_size != picFS->getImage()->size())
+	      picFS->setSize(_size);
 
-	  bool bend = false;
-	  while (!bend)
-	    {
-	      if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->top() - static_cast<int>(yOffset) >
-		  static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
-		break;
-	      doc->printLine(*paintfc,painter,xOffset,yOffset,width(),height());
-	      bend = !paintfc->makeNextLineLayout(painter);
-	      if (paintfc->getPage() > lastVisiblePage)
-		bend = true; 
-	    }
+	    painter.drawImage(frame->x() - xOffset,frame->y() - yOffset,*picFS->getImage());
+	    if (frame->isSelected())
+	      drawFrameSelection(painter,frame);
+	  } break;
+	case FT_TEXT:
+	  {
+	    KWParag *p = doc->findFirstParagOfPage(firstVisiblePage,i);
+	    if (p)
+	      {
+		if (p->getPrev()) p = p->getPrev();
+		paintfc->setFrameSet(i + 1);
+		paintfc->init(p,painter,true,recalcAll);
+		
+		bool bend = false;
+		while (!bend)
+		  {
+		    if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->top() - static_cast<int>(yOffset) >
+			static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
+		      break;
+		    doc->printLine(*paintfc,painter,xOffset,yOffset,width(),height());
+		    bend = !paintfc->makeNextLineLayout(painter);
+		    if (paintfc->getPage() > lastVisiblePage)
+		      bend = true; 
+		  }
       
-	} 
+	      }
+	  } break;
+	default: break;
+	}
     }
   delete paintfc;
   if (doc->has_selection()) doc->drawSelection(painter,xOffset,yOffset);
@@ -1822,6 +1868,24 @@ void KWPage::drawBorders(QPainter &_painter,QRect v_area)
       if (v_area.intersects(tmp2))
 	_painter.drawRect(tmp2);
     }
+
+  _painter.restore();
+}
+
+/*================================================================*/
+void KWPage::drawFrameSelection(QPainter &_painter,KWFrame *_frame)
+{
+  _painter.save();
+  _painter.setRasterOp(NotROP);
+
+  _painter.fillRect(_frame->x() - xOffset,_frame->y() - yOffset,6,6,black);
+  _painter.fillRect(_frame->x() - xOffset + _frame->width() / 2 - 3,_frame->y() - yOffset,6,6,black);
+  _painter.fillRect(_frame->x() - xOffset,_frame->y() - yOffset + _frame->height() / 2 - 3,6,6,black);
+  _painter.fillRect(_frame->x() - xOffset + _frame->width() - 6,_frame->y() - yOffset,6,6,black);
+  _painter.fillRect(_frame->x() - xOffset,_frame->y() - yOffset + _frame->height() - 6,6,6,black);
+  _painter.fillRect(_frame->x() - xOffset + _frame->width() / 2 - 3,_frame->y() - yOffset + _frame->height() - 6,6,6,black);
+  _painter.fillRect(_frame->x() - xOffset + _frame->width() - 6,_frame->y() - yOffset + _frame->height() / 2 - 3,6,6,black);
+  _painter.fillRect(_frame->x() - xOffset + _frame->width() - 6,_frame->y() - yOffset + _frame->height() - 6,6,6,black);
 
   _painter.restore();
 }
