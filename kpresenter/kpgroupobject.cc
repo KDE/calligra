@@ -60,8 +60,8 @@ KPGroupObject &KPGroupObject::operator=( const KPGroupObject & )
 /*================================================================*/
 void KPGroupObject::setSize( int _width, int _height )
 {
-    float fx = (float)_width / (float)ext.width();
-    float fy = (float)_height / (float)ext.height();
+    float fx = (float)(_width / ext.width());
+    float fy = (float)(_height / ext.height());
     KPObject::setSize( _width, _height );
     updateSizes( fx, fy );
 }
@@ -69,10 +69,7 @@ void KPGroupObject::setSize( int _width, int _height )
 /*================================================================*/
 void KPGroupObject::setOrig( QPoint _point )
 {
-    int dx = orig.x() - _point.x();
-    int dy = orig.y() - _point.y();
-    KPObject::setOrig( _point );
-    updateCoords( dx, dy );
+    setOrig(_point.x(), _point.y());
 }
 
 /*================================================================*/
@@ -87,8 +84,7 @@ void KPGroupObject::setOrig( int _x, int _y )
 /*================================================================*/
 void KPGroupObject::moveBy( QPoint _point )
 {
-    KPObject::moveBy( _point );
-    updateCoords( _point.x(), _point.y() );
+    moveBy(_point.x(), _point.y());
 }
 
 /*================================================================*/
@@ -101,17 +97,14 @@ void KPGroupObject::moveBy( int _dx, int _dy )
 /*================================================================*/
 void KPGroupObject::resizeBy( QSize _size )
 {
-    float fx = (float)( (float)ext.width() + (float)_size.width() ) / (float)ext.width();
-    float fy = (float)( (float)ext.height() + (float)_size.height() ) / (float)ext.height();
-    KPObject::resizeBy( _size );
-    updateSizes( fx, fy );
+    resizeBy(_size.width(), _size.height());
 }
 
 /*================================================================*/
 void KPGroupObject::resizeBy( int _dx, int _dy )
 {
-    float fx = (float)( (float)ext.width() + (float)_dx ) / (float)ext.width();
-    float fy = (float)( (float)ext.height() + (float)_dy ) / (float)ext.height();
+    float fx = (float)(( ext.width() + _dx ) / ext.width());
+    float fy = (float)(( ext.height() + _dy ) / ext.height());
     KPObject::resizeBy( _dx, _dy );
     updateSizes( fx, fy );
 }
