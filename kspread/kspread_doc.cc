@@ -320,7 +320,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
         float right = borders.attribute( "right" ).toFloat();
         float top = borders.attribute( "top" ).toFloat();
         float bottom = borders.attribute( "bottom" ).toFloat();
-        setPaperLayout( left, top, right, bottom, format.latin1(), orientation.latin1() ); // latin1 is ok, it's only "A4" "Letter" etc.
+        setPaperLayout( left, top, right, bottom, format, orientation );
     }
     QString hleft, hright, hcenter;
     QString fleft, fright, fcenter;
@@ -456,7 +456,7 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
 }
 
 void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
-                              const char * _paper, const char* _orientation )
+                              const QString& _paper, const QString& _orientation )
 {
     KoFormat f = paperFormat();
     KoOrientation o = orientation();
@@ -486,12 +486,12 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
         f = KoPageFormat::formatFromString( paper );
         if ( f == PG_CUSTOM )
             // We have no idea about height or width, therefore assume ISO A4
-            f = PG_DIN_A4; 
+            f = PG_DIN_A4;
     }
 
-    if ( strcmp( "Portrait", _orientation ) == 0L )
+    if ( _orientation == "Portrait" )
         o = PG_PORTRAIT;
-    else if ( strcmp( "Landscape", _orientation ) == 0L )
+    else if ( _orientation == "Landscape" )
         o = PG_LANDSCAPE;
 
     setPaperLayout( _leftBorder, _topBorder, _rightBorder, _bottomBorder, f, o );

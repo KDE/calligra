@@ -170,10 +170,10 @@ public:
   void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
                        KoFormat _paper, KoOrientation orientation );
   /**
-   * A convenience function using a string as paper format and orientation.
+   * A convenience function using a QString as paper format and orientation.
    */
   void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
-                       const char* _paper, const char* _orientation );
+                       const QString& _paper, const QString& _orientation );
 
   QString headLeft( int _p, const QString &_t  ) { if ( m_headLeft.isNull() ) return "";
   return completeHeading( m_headLeft, _p, _t ); }
