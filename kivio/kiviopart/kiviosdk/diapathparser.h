@@ -28,9 +28,9 @@ class DiaPointFinder : public SVGPathParser
 {
 	public:
 		DiaPointFinder(QValueList<float> *xlist,  QValueList<float> *ylist);
-		void svgMoveTo( double x1, double y1 );
-		void svgLineTo( double x1, double y1 );
-		void svgCurveTo( double x1, double y1, double x2, double y2, double x3, double y3 );
+		void svgMoveTo( double x1, double y1, bool abs = true );
+		void svgLineTo( double x1, double y1, bool abs = true );
+		void svgCurveToCubic( double x1, double y1, double x2, double y2, double x3, double y3, bool abs = true );
 		void svgClosePath();
 
 	private:
@@ -43,9 +43,9 @@ class DiaPathParser : public SVGPathParser
 	public:
 		DiaPathParser(QDomDocument *doc, QDomElement *shape, float xscale, float yscale, float lowestx, float lowesty);
 
-		void svgMoveTo( double x1, double y1 );
-		void svgLineTo( double x1, double y1 );
-		void svgCurveTo( double x1, double y1, double x2, double y2, double x3, double y3 );
+		void svgMoveTo( double x1, double y1, bool abs = true );
+		void svgLineTo( double x1, double y1, bool abs = true );
+		void svgCurveToCubic( double x1, double y1, double x2, double y2, double x3, double y3, bool abs = true );
 		void svgClosePath();
 
 	private:

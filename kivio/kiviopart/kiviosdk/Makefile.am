@@ -1,7 +1,7 @@
 noinst_LTLIBRARIES =libkiviosdk.la
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
-	-I$(top_srcdir)/kivio/kiviopart/tklib $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes) $(PYTHONINC)
+	-I$(top_srcdir)/kivio/kiviopart/tklib $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes) $(PYTHONINC)
 libkiviosdk_la_METASOURCES = AUTO
 libkiviosdk_la_SOURCES = \
 		kivio_common.cpp\
@@ -37,7 +37,6 @@ libkiviosdk_la_SOURCES = \
 		kivio_text_style.cpp\
 		kivio_base_target_stencil.cpp\
 		kivio_1d_stencil.cpp \
-		svgpathparser.cc \
 		diapathparser.cpp
 EXTRA_DIST = \
 		kivio_common.cpp\
@@ -102,5 +101,4 @@ EXTRA_DIST = \
 		kivio_base_target_stencil.cpp\
 		kivio_base_target_stencil.h\
 		kivio_1d_stencil.cpp\
-		kivio_1d_stencil.h \
-		svgpathparser.cpp
+		kivio_1d_stencil.h

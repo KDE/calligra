@@ -1247,7 +1247,7 @@ void KivioCanvas::updateGuidesCursor()
   }
 }
 
-bool KivioCanvas::eventFilter(QObject* o, QEvent* e)
+bool KivioCanvas::eventFilter(QObject* /*o*/, QEvent* /*e*/)
 {
 /*  if ((o == view()->vertRuler() || o == view()->horzRuler()) && (e->type() == QEvent::MouseMove || e->type() ==
     QEvent::MouseButtonRelease) && m_pView->isShowGuides())

@@ -214,7 +214,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 				if(svgChild.hasAttribute("d"))
 				{
 					DiaPointFinder *dpf = new DiaPointFinder(&m_xlist, &m_ylist);
-					dpf->parseSVG(svgChild.attribute("d"));
+					dpf->parseSVG(svgChild.attribute("d"), true);
 					delete dpf;
 				}
 			}
@@ -433,7 +433,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 					DiaPathParser *dpp = new DiaPathParser(&kivio,
 						&kivioShape, m_xscale, m_yscale,
 						m_lowestx, m_lowesty);
-					dpp->parseSVG(svgChild.attribute("d"));
+					dpp->parseSVG(svgChild.attribute("d"), true);
 					delete dpp;
 
 

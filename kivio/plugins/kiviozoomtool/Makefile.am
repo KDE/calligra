@@ -18,7 +18,7 @@ EXTRA_DIST = \
 		tool_zoom.cpp\
 		tool_zoom.h
 libkiviozoomtool_la_LDFLAGS = -module $(KDE_PLUGIN)
-libkiviozoomtool_la_LIBADD = $(LIB_KOTEXT) $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+libkiviozoomtool_la_LIBADD = $(LIB_KOTEXT) $(all_libraries) $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviopart.la
 
 rc_DATA = kiviozoomtool.rc
 rcdir = $(kde_datadir)/kivio/kpartplugins

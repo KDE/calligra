@@ -6,7 +6,7 @@ libkiviopart_la_LIBADD = \
 		$(top_builddir)/kivio/kiviopart/tklib/libtklib.la\
 		$(top_builddir)/kivio/kiviopart/kiviosdk/libkiviosdk.la\
 		$(top_builddir)/kivio/kiviopart/ui/libui.la \
-		$(LIB_KOFFICEUI) $(LIB_KOTEXT) $(LIBPYTHON) $(PYTHONLIB)
+		$(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOTEXT) $(LIBPYTHON) $(PYTHONLIB)
 
 INCLUDES = -I$(srcdir)/ui\
 	-Iui\

@@ -25,17 +25,17 @@ DiaPointFinder::DiaPointFinder(QValueList<float> *xlist,  QValueList<float> *yli
 	;
 }
 
-void DiaPointFinder::svgMoveTo( double x1, double y1 )
+void DiaPointFinder::svgMoveTo( double x1, double y1, bool )
 {
 	m_xlist->append(x1);
 	m_ylist->append(y1);
 }
-void DiaPointFinder::svgLineTo( double x1, double y1 )
+void DiaPointFinder::svgLineTo( double x1, double y1, bool )
 {
 	m_xlist->append(x1);
 	m_ylist->append(y1);
 }
-void DiaPointFinder::svgCurveTo( double x1, double y1, double x2, double y2, double x3, double y3 )
+void DiaPointFinder::svgCurveToCubic( double x1, double y1, double x2, double y2, double x3, double y3, bool )
 {
 	m_xlist->append(x1);
 	m_ylist->append(y1);
@@ -43,13 +43,11 @@ void DiaPointFinder::svgCurveTo( double x1, double y1, double x2, double y2, dou
 	m_ylist->append(y2);
 	m_xlist->append(x3);
 	m_ylist->append(y3);
-
 }
 void DiaPointFinder::svgClosePath()
 {
 
 }
-
 DiaPathParser::DiaPathParser(QDomDocument *doc, QDomElement *shape, float xscale, float yscale, float lowestx, float lowesty) :
 	SVGPathParser(), m_doc(doc), m_shape(shape),
 	m_xscale(xscale), m_yscale(yscale),
@@ -59,12 +57,12 @@ DiaPathParser::DiaPathParser(QDomDocument *doc, QDomElement *shape, float xscale
 	lastY = 0.0;
 }
 
-void DiaPathParser::svgMoveTo( double x1, double y1 )
+void DiaPathParser::svgMoveTo( double x1, double y1, bool )
 {
 	lastX = x1;
 	lastY = y1;
 }
-void DiaPathParser::svgLineTo( double x1, double y1 )
+void DiaPathParser::svgLineTo( double x1, double y1, bool )
 {
 	// Line
 	float currentX = x1;
@@ -84,7 +82,7 @@ void DiaPathParser::svgLineTo( double x1, double y1 )
 	lastY = currentY;
 }
 
-void DiaPathParser::svgCurveTo( double x1, double y1, double x2, double y2, double x3, double y3 )
+void DiaPathParser::svgCurveToCubic( double x1, double y1, double x2, double y2, double x3, double y3, bool )
 {
 	// Spline
 	float lastControlX = x1;

@@ -11,7 +11,7 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 METASOURCES = AUTO
 libkiviosmlconnector_la_SOURCES = plugin.cpp tool_connector.cpp
 libkiviosmlconnector_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
-libkiviosmlconnector_la_LIBADD = $(top_builddir)/kivio/kiviopart/libkiviopart.la
+libkiviosmlconnector_la_LIBADD = $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviopart.la
 
 
 
