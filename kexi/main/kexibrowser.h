@@ -44,6 +44,17 @@ namespace KexiPart
 	class Item;
 }
 
+/*! @internal */
+class KexiBrowserListView : public KListView
+{
+	Q_OBJECT
+	public:
+		KexiBrowserListView(QWidget *parent);
+	public slots:
+		virtual void rename(QListViewItem *item, int c);
+	protected:
+//		virtual void contentsMousePressEvent(QMouseEvent *e);
+};
 
 class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 {
@@ -74,6 +85,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		void openOrActivateItem( KexiPart::Item*, int viewMode );
 		void newItem( KexiPart::Info* );
 		void removeItem( KexiPart::Item* );
+		void renameItem( KexiPart::Item *item, const QString& _newName, bool &succes );
 
 //		void actionAvailable(const char *name, bool avail);
 
@@ -82,7 +94,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 //		void		slotItemListChanged(KexiPart::Info *);
 		void		slotExecuteItem(QListViewItem *item);
 		void slotSelectionChanged(QListViewItem* i);
-//		void slotClicked(QListViewItem* i);
+		void slotItemRenamed(QListViewItem *item);
 
 		void slotNewObject();
 		void slotOpenObject();
@@ -92,6 +104,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		void slotCut();
 		void slotCopy();
 		void slotPaste();
+		void slotRename();
 
 	private:
 //		KexiView	*m_view;
@@ -100,10 +113,10 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		QAsciiDict<KexiBrowserItem> m_baseItems;
 		QIntDict<KexiBrowserItem> m_normalItems;
 		KPopupMenu *m_itemPopup, *m_partPopup;
-		KAction *m_newObjectAction;
-		int m_itemPopupTitle_id;
+		KAction *m_newObjectAction, *m_renameObjectAction;
+		int m_itemPopupTitle_id, m_partPopupTitle_id;
 
-		KListView *m_list;
+		KexiBrowserListView *m_list;
 };
 
 #endif

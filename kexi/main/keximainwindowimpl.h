@@ -21,6 +21,7 @@
 #ifndef KEXIMAINWINDOWIMPL_H
 #define KEXIMAINWINDOWIMPL_H
 
+#include <kmessagebox.h>
 #include "core/keximainwindow.h"
 
 class KexiProjectData;
@@ -248,6 +249,8 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		void showErrorMessage(const QString &title, const QString &details = QString::null);
 		void showErrorMessage(Kexi::ObjectStatus *status);
 		void showErrorMessage(const QString &message, Kexi::ObjectStatus *status);
+		void showSorryMessage(const QString &title, const QString &details = QString::null);
+		void showMessage(KMessageBox::DialogType dlgType, const QString &title, const QString &details);
 
 		//! internal - creates and initializes kexi project
 		void createKexiProject(KexiProjectData* new_data);
@@ -265,6 +268,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		 Asks for confirmation. \return true on success. 
 		 if \a dontAsk is true. */
 		bool removeObject( KexiPart::Item *item, bool dontAsk = true );
+
+		/*! Renames object pointed by \a item to a new name \a _newName.
+		 Sets \a success to false on failure. Used as a slot for connected 
+		 to KexiBrowser::renameItem(). */
+		void renameObject( KexiPart::Item *item, const QString& _newName, bool &succes );
 
 		void invalidateSharedActions();
 		void invalidateSharedActionsLater();

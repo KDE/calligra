@@ -27,6 +27,7 @@
 #include <kpopupmenu.h>
 #include <klistview.h>
 #include <kmessagebox.h>
+#include <klineedit.h>
 
 #include "kexi.h"
 #include "kexipart.h"
@@ -38,16 +39,16 @@
 #include "kexidialogbase.h"
 #include "keximainwindow.h"
 #include "kexi_utils.h"
+#include "kexi.h"
 
 
-//KexiBrowser::KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *part )
 KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
  : KexiViewBase(mainWin, mainWin, "KexiBrowser")
  , m_baseItems(199, false)
  , m_normalItems(199)
 {
 	QHBoxLayout *lyr = new QHBoxLayout(this);
-	m_list = new KListView(this, "list");
+	m_list = new KexiBrowserListView(this);
 	lyr->addWidget(m_list);
 //	setFocusProxy(m_list);
 //	m_list->installEventFilter(this);
@@ -68,6 +69,9 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_list->setRootIsDecorated(true);
 	m_list->setSorting(0);
 	m_list->sort();
+	m_list->setAllColumnsShowFocus(true);
+	m_list->setTooltipColumn(0);
+	m_list->renameLineEdit()->setValidator( new Kexi::IdentifierValidator(this) );
 //	setResizeMode(QListView::LastColumn);
 
 	connect(m_list, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
@@ -79,6 +83,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 
 	connect(m_list, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
 	connect(m_list, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
+	connect(m_list, SIGNAL(itemRenamed(QListViewItem*)), this, SLOT(slotItemRenamed(QListViewItem*)));
 
 	//init popups
 	m_itemPopup = new KPopupMenu(this, "itemPopup");
@@ -93,9 +98,13 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	plugSharedAction("edit_cut", m_itemPopup);
 	plugSharedAction("edit_copy", m_itemPopup);
 	m_itemPopup->insertSeparator();
+	m_renameObjectAction = new KAction(i18n("&Rename"), 0, Key_F2, this, 
+		SLOT(slotRename()), this, "rename_object");
+	m_renameObjectAction->plug(m_itemPopup);
 	plugSharedAction("edit_delete", m_itemPopup);
 
 	m_partPopup = new KPopupMenu(this, "partPopup");
+	m_partPopupTitle_id = m_partPopup->insertTitle("");
 	m_newObjectAction = new KAction("", 0, this, SLOT(slotNewObject()), this, "new_object");
 	m_newObjectAction->plug(m_partPopup);
 	m_partPopup->insertSeparator();
@@ -118,16 +127,10 @@ KexiBrowser::addGroup(KexiPart::Info *info)
 	if(!info->addTree())
 		return;
 
-
-//	KexiBrowserItem *item = new KexiBrowserItem(this, info->mime(), info->groupName(), 0, info);
 	KexiBrowserItem *item = new KexiBrowserItem(m_list, info);
-//	item->setPixmap(0, SmallIcon(info->groupIcon()));
-//	item->setOpen(true);
-//	item->setSelectable(false);
 	m_baseItems.insert(info->mime().lower(), item);
 
 	kdDebug() << "KexiBrowser::addGroup()" << endl;
-//js: now it's executed by hand from keximainwindow:	slotItemListChanged(info);
 }
 
 void
@@ -140,11 +143,9 @@ KexiBrowser::addItem(KexiPart::Item *item)
 	if (!parent) //TODO: add "Other" part group for that
 		return;
 	kdDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
-//	KexiBrowserItem *bitem = new KexiBrowserItem(parent, item.mime(), item.name(), item.identifier());
 	
 	KexiBrowserItem *bitem = new KexiBrowserItem(parent, parent->info(), item);
 	m_normalItems.insert(item->identifier(), bitem);
-//	bitem->setPixmap(0, SmallIcon(parent->info()->itemIcon()));
 }
 
 void 
@@ -190,6 +191,8 @@ KexiBrowser::slotContextMenu(KListView* /*list*/, QListViewItem *item, const QPo
 	}
 	else {
 		pm = m_partPopup;
+		QString title_text = bit->text(0).stripWhiteSpace();
+		pm->changeTitle(m_partPopupTitle_id, *bit->pixmap(0), title_text);
 		KexiPart::Part* part = Kexi::partManager().part(bit->info());
 		if (part)
 			m_newObjectAction->setText(i18n("&Create Object: %1...").arg( part->instanceName() ));
@@ -211,33 +214,6 @@ KexiBrowser::slotExecuteItem(QListViewItem *vitem)
 	if (!it->item())
 		return;
 	emit openOrActivateItem( it->item(), Kexi::DataViewMode );
-
-/*	if(m_parent->activateWindow(it->item().identifier()))
-		return;
-
-	if(!it || it->info())
-		return;
-
-	KexiPart::Item item;
-	item.setName(it->name());
-	item.setIdentifier(it->identifier());
-	item.setMime(it->mime());
-
-	kdDebug() << "KexiBrowser::slotExecuteItem() searching stuff for mime: " << it->mime() << endl;
-//	KexiPart::Info *info = m_parent->project()->partManager()->info(it->mime());
-//	if(!info)
-//		return;
-
-//	kdDebug() << "KexiBrowser::slotExecuteItem() info=" << info << endl;
-
-	KexiPart::Part *part = Kexi::partManager().part(it->mime());
-//	if(!info->instance())
-	if (!part)
-		return;
-
-//	info->instance()->execute(m_parent, it->name());
-	part->execute(m_parent, item);
-	*/
 }
 
 void
@@ -246,19 +222,13 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(i);
 	bool gotitem = it && it->item();
 	bool gotgroup = it && !it->item();
+ //TODO: also check if the item is not read only
 	setAvailable("edit_delete",gotitem);
 	setAvailable("edit_cut",gotitem);
 	setAvailable("edit_copy",gotitem);
 	setAvailable("edit_paste",gotgroup);
+	m_renameObjectAction->setEnabled(gotitem);
 }
-
-/*void
-KexiBrowser::slotClicked(QListViewItem* i)
-{
-	//workaround for non-selectable item
-	//if (!i || !static_cast<KexiBrowserItem*>(i)->item())
-		//slotSelectionChanged(i);
-}*/
 
 void KexiBrowser::installEventFilter ( const QObject * filterObj )
 {
@@ -322,6 +292,29 @@ void KexiBrowser::slotPaste()
 	//TODO
 }
 
+void KexiBrowser::slotRename()
+{
+	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
+	if (it)
+		m_list->rename(it, 0);
+}
+
+void KexiBrowser::slotItemRenamed(QListViewItem *item)
+{
+	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(item);
+	QString txt = item->text(0).stripWhiteSpace();
+	bool ok = it->item()->name().lower()!=txt.lower(); //the new name must be different
+	if (ok) {
+		/* TODO */
+		emit renameItem(it->item(), txt, ok);
+	}
+	if (!ok) {
+		txt = it->item()->name(); //revert
+	}
+	item->setText(0, QString(" ") + txt + " ");
+	m_list->setFocus();
+}
+
 void KexiBrowser::setFocus()
 {
 	m_list->setFocus();
@@ -346,6 +339,25 @@ void KexiBrowser::updateItemName( KexiPart::Item *item, bool dirty )
 		m_list->setSelected(m_list->firstChild(), true);
 	m_list->setFocus();
 }*/
+
+//--------------------------------------------
+
+KexiBrowserListView::KexiBrowserListView(QWidget *parent)
+ : KListView(parent, "KexiBrowserListView")
+{
+}
+
+void KexiBrowserListView::rename(QListViewItem *item, int c)
+{
+	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(item);
+	if (it->item() && c==0) {
+		//only edit 1st column for items, not item groups
+//TODO: also check it this item is not read-only
+		item->setText(0, item->text(0).mid(1,item->text(0).length()-2));
+		KListView::rename(item, c);
+		adjustColumn(0);
+	}
+}
 
 #include "kexibrowser.moc"
 

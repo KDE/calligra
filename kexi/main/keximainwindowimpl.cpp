@@ -26,7 +26,6 @@
 #include <qobjectlist.h>
 
 #include <kapplication.h>
-#include <kmessagebox.h>
 #include <kcmdlineargs.h>
 #include <kaction.h>
 #include <klocale.h>
@@ -918,6 +917,8 @@ KexiMainWindowImpl::initNavigator()
 			this,SLOT(newObject(KexiPart::Info*)));
 		connect(d->nav,SIGNAL(removeItem(KexiPart::Item*)),
 			this,SLOT(removeObject(KexiPart::Item*)));
+		connect(d->nav,SIGNAL(renameItem(KexiPart::Item*,const QString&, bool&)),
+			this,SLOT(renameObject(KexiPart::Item*,const QString&, bool&)));
 		if (d->prj) {//connect to the project
 			connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
 				d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
@@ -1801,7 +1802,20 @@ void KexiMainWindowImpl::slotViewTextMode()
 }
 
 void
+KexiMainWindowImpl::showSorryMessage(const QString &title, const QString &details)
+{
+	showMessage(KMessageBox::Sorry, title, details);
+}
+
+void
 KexiMainWindowImpl::showErrorMessage(const QString &title, const QString &details)
+{
+	showMessage(KMessageBox::Error, title, details);
+}
+
+void
+KexiMainWindowImpl::showMessage(KMessageBox::DialogType dlgType,
+	const QString &title, const QString &details)
 {
 	if (d->disableErrorMessages)
 		return;
@@ -1810,10 +1824,16 @@ KexiMainWindowImpl::showErrorMessage(const QString &title, const QString &detail
 		msg = i18n("Unknown error");
 	msg = "<qt><p>"+msg+"</p>";
 	if (!details.isEmpty()) {
-		KMessageBox::detailedError(this, msg, details);
+		switch (dlgType) {
+		case KMessageBox::Error:
+			KMessageBox::detailedError(this, msg, details);
+			break;
+		default:
+			KMessageBox::detailedSorry(this, msg, details);
+		}
 	}
 	else {
-		KMessageBox::error(this, msg);
+		KMessageBox::messageBox(this, dlgType, msg);
 	}
 }
 
@@ -2386,6 +2406,20 @@ bool KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 		return false;
 	}
 	return true;
+}
+
+void KexiMainWindowImpl::renameObject( KexiPart::Item *item, const QString& _newName, bool &success )
+{
+	QString newName = _newName.stripWhiteSpace();
+	if (newName.isEmpty()) {
+		showSorryMessage( i18n("Could not set empty name for this object.") );
+		success = false;
+		return;
+	}
+	if (!d->prj->renameObject(this, *item, newName)) {
+		success = false;
+		return;
+	}
 }
 
 int KexiMainWindowImpl::generatePrivateID()

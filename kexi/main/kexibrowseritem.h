@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002-2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,23 +34,8 @@ namespace KexiPart
 class KEXIMAIN_EXPORT KexiBrowserItem : public KListViewItem
 {
 	public:
-		/*constructor for listviews in seperated lists */
-/*		KexiBrowserItem(KListView *parent, KexiProjectHandlerProxy  *proxy);
-		KexiBrowserItem(KListView *parent, KexiProjectHandlerItem *item);*/
-		/*constructor for main db listing */
-
-//		KexiBrowserItem(KListView *parent, QString mime, QString name, int identifier, KexiPart::Info *i);
-//		KexiBrowserItem(KListViewItem *parent, QString mime, QString name, int identifier);
-
 		KexiBrowserItem(KListView *parent, KexiPart::Info *i);
 		KexiBrowserItem(KListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item);
-//		KexiBrowserItem(KListViewItem *parent, KexiProjectHandlerItem *item);
-
-		~KexiBrowserItem() {};
-
-//js		QString			mime();
-//js		QString			name();
-//js		int			identifier() { return m_identifier; }
 
 		void			clearChildren();
 
@@ -63,11 +49,6 @@ class KEXIMAIN_EXPORT KexiBrowserItem : public KListViewItem
 		void initItem();
 		virtual QString key( int column, bool ascending ) const;
 		
-//		KexiProjectHandlerItem	*m_item;
-//		KexiProjectHandlerProxy	*m_proxy;
-//js		QString			m_mime;
-//js		QString			m_name;
-//js		int			m_identifier;
 		KexiPart::Info *m_info;
 		KexiPart::Item *m_item;
 
