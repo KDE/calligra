@@ -7,12 +7,10 @@
 
 # To use this script, you need to change this path to an existing kwd file
 # Don't use a relative path, dcopstart won't handle it
-input=/mnt/devel/kofficetests/documents/native/kspread/test.ksp
-
-test -f "$input" || { echo "No such file $input"; exit 1; }
+test -f "$1" || { echo "No such file $1"; exit 1; }
 
 # Load KPR
-appid=`dcopstart kspread $input`
+appid=`dcopstart kspread $1`
 while `dcop $appid Document-0 isLoading` == "true"; do
     sleep 1;
 done
