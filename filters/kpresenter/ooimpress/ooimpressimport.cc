@@ -61,7 +61,8 @@ KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCSt
 {
     kdDebug(30518) << "Entering Ooimpress Import filter: " << from << " - " << to << endl;
 
-    if ( from != "application/vnd.sun.xml.impress" || to != "application/x-kpresenter" )
+    if ( (from != "application/vnd.sun.xml.impress" && from != "application/vnd.sun.xml.impress.template" )
+                            || to != "application/x-kpresenter" )
     {
         kdWarning(30518) << "Invalid mimetypes " << from << " " << to << endl;
         return KoFilter::NotImplemented;

@@ -2615,8 +2615,8 @@ KoFilter::ConversionStatus OpenCalcImport::convert( QCString const & from, QCStr
     kdWarning(30518) << "document isn't a KSpreadDoc but a " << document->className() << endl;
     return KoFilter::NotImplemented;
   }
-
-  if ( from != "application/vnd.sun.xml.calc" || to != "application/x-kspread" )
+  
+  if ( ( from != "application/vnd.sun.xml.calc" && from != "application/vnd.sun.xml.calc.template") || to != "application/x-kspread" )
   {
     kdWarning(30518) << "Invalid mimetypes " << from << " " << to << endl;
     return KoFilter::NotImplemented;
