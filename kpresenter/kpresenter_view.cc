@@ -2007,8 +2007,8 @@ void KPresenterView::updateRuler()
 {
     //update koruler
     QRect r=m_pKPresenterDoc->getPageRect( currPg, page->diffx(), page->diffy() );
-    getHRuler()->setFrameStartEnd( r.left() , r.right() );
-    getVRuler()->setFrameStartEnd( r.top() , r.bottom() );
+    getHRuler()->setFrameStartEnd( r.left() , r.right()+page->diffx() );
+    getVRuler()->setFrameStartEnd( r.top() , r.bottom()+page->diffy() );
 }
 
 /*======================== create GUI ==========================*/
