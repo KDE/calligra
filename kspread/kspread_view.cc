@@ -1705,9 +1705,13 @@ void KSpreadView::updateEditWidget()
     }
 
     if ( cell->content() == KSpreadCell::VisualFormula )
+    {
         editWidget()->setText( "" );
+    }
     else
+    {
         editWidget()->setText( cell->text() );
+    }
 
     QColor color=cell->textColor( column, row );
     if(!color.isValid())
@@ -2620,20 +2624,22 @@ void KSpreadView::paste()
 {
     if ( !m_pTable )
         return;
-    if(!m_pCanvas->editor())
+    if( !m_pCanvas->editor() )
     {
         QRect r( activeTable()-> selectionRect() );
-        if(r.left()==0 )
-            r.setCoords(m_pCanvas->markerColumn(), m_pCanvas->markerRow() ,
-                        m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-        m_pTable->paste( QPoint( r.left(),r.top() ) );
-        if(m_pTable->getAutoCalc())
+        if( r.left()==0 )
+            r.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ,
+                         m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+        m_pTable->paste( QPoint( r.left(), r.top() ) );
+        if( m_pTable->getAutoCalc() )
             m_pTable->recalc();
         resultOfCalc();
         updateEditWidget();
     }
     else
+    {
         m_pCanvas->editor()->paste();
+    }
 }
 
 void KSpreadView::specialPaste()
@@ -2860,14 +2866,27 @@ void KSpreadView::setupPrinter( KPrinter &prt )
 
 void KSpreadView::print( KPrinter &prt )
 {
+    //store the current setting in a temporary variable
+    KoOrientation _orient =  m_pDoc->orientation();
+    
+    //use the current orientation from print dialog
+    if ( prt.orientation() == KPrinter::Landscape )
+        m_pDoc->setPaperOrientation( PG_LANDSCAPE );
+    else
+        m_pDoc->setPaperOrientation( PG_PORTRAIT );
+    
     prt.setFullPage( TRUE );
     prt.setResolution ( 72 );
+    
     QPainter painter;
 
     painter.begin( &prt );
     // Print the table and tell that m_pDoc is NOT embedded.
     m_pTable->print( painter, &prt );
     painter.end();
+    
+    //Restore original orientation
+    m_pDoc->setPaperOrientation( _orient );
 }
 
 void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
