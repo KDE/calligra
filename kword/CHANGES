@@ -304,4 +304,4 @@ Changes after KWord-1.2
 - Use new kospell API
 - Now right button give spell check result
 - Load pictures only one time when inserting from file (Good for remote files)
-- Fix printing of EPS files
+
