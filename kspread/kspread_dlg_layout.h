@@ -21,19 +21,17 @@
 #define __kspread_dlg_layout_h__
 
 
-#include <qcombobox.h>
 #include <qtabdialog.h>
 #include <qapplication.h>
 #include <qbuttongroup.h>
 #include <qgroupbox.h>
-#include <kcolorbutton.h>
 #include <knuminput.h>
 #include <kcompletion.h>
 #include "kspread_view.h"
 #include "kspread_cell.h"
 #include "kspread_doc.h"
+#include <qpushbutton.h>
 #include <qcheckbox.h>
-
 class QPixmap;
 class QRadioButton;
 class QPushButton;
@@ -46,6 +44,9 @@ class KSpreadTable;
 class KLineEdit;
 class QFrame;
 class QListBox;
+class QCheckBox;
+class KColorButton;
+class QComboBox;
 
 enum BorderType
 {

@@ -575,7 +575,7 @@ public:
      * Sets the hide flag
      */
     void setHide( bool _hide );
-    bool isHide() { return m_bHide;}
+    bool isHide()const { return m_bHide;}
 
 protected:
     /**
@@ -712,7 +712,7 @@ public:
     void setLeftBorderPen( const QPen& p );
 
     void setHide( bool _hide );
-    bool isHide() { return m_bHide;}
+    bool isHide()const { return m_bHide;}
 
 
 protected:

@@ -33,6 +33,9 @@
 #include <knumvalidator.h>
 #include <qradiobutton.h>
 #include <klineedit.h>
+#include <qcheckbox.h>
+#include <kcolorbutton.h>
+#include <qcombobox.h>
 
 KSpreadPatternSelect::KSpreadPatternSelect( QWidget *parent, const char * ) : QFrame( parent )
 {

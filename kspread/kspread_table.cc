@@ -1490,7 +1490,7 @@ void KSpreadTable::setSelectionBorderColor( KSpreadSelection* selectionInfo,
 }
 
 
-void KSpreadTable::setSeries( QPoint _marker, double start, double end, double step, Series mode, Series type)
+void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, double step, Series mode, Series type)
 {
   doc()->emitBeginOperation();
 
