@@ -1013,6 +1013,21 @@ void OoImpressImport::appendImage( QDomDocument& doc, QDomElement& e, QDomElemen
     settings.setAttribute( "depth", 0 );
     e.appendChild( settings );
 
+    QDomElement effects = doc.createElement( "EFFECTS" );
+    bool hasEffect = false;
+    if ( m_styleStack.hasAttribute( "draw:contrast" ) )
+    {
+        QString str( m_styleStack.attribute( "draw:contrast" ) );
+        str = str.remove( "%" );
+        int val = str.toInt();
+        val = ( int )( 255.0 *val/100.0 );
+        effects.setAttribute( "type", "5" );
+        effects.setAttribute( "param1", QString::number( val ) );
+        hasEffect = true;
+    }
+    if ( hasEffect )
+        e.appendChild( effects );
+
     QDomElement key = image.cloneNode().toElement();
     key.setAttribute( "name", "pictures/" + fileName );
     p.appendChild( key );
