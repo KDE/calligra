@@ -774,6 +774,18 @@ void KoTextView::referenceLink(QString & href)
      }
 }
 
+KoLinkVariable * KoTextView::linkVariable()
+{
+    KoTextStringChar * ch = m_cursor->parag()->at( varLinkPosition );
+     ch = m_cursor->parag()->at( varLinkPosition );
+     if(ch->isCustom())
+     {
+         KoLinkVariable *var=dynamic_cast<KoLinkVariable *>(ch->customItem());
+         return var;
+     }
+     return 0L;
+}
+
 QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
 {
     m_singleWord = false;

@@ -686,7 +686,7 @@ void QTextCursor::restoreState()
 bool QTextCursor::place( const QPoint &p, QTextParag *s, bool link, int *customItemIndex )
 {
     if ( customItemIndex )
-        *customItemIndex = 0;
+        *customItemIndex = -1;
     QPoint pos( p );
     QRect r;
     if ( pos.y() < s->rect().y() )

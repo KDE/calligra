@@ -36,6 +36,7 @@ class QTimer;
 class KAction;
 class KInstance;
 class KDataToolInfo;
+class KoLinkVariable;
 #include "qrichtext_p.h"
 using namespace Qt3;
 class KoBorder;
@@ -118,6 +119,7 @@ public:
     void insertSpecialChar(QChar _c);
     void changeCaseOfText(KoChangeCaseDia::TypeOfCase _type);
     void referenceLink(QString & href);
+    KoLinkVariable * linkVariable();
 
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.
