@@ -10,7 +10,6 @@ Architecture: any
 Section: x11
 Depends: ${shlibs:Depends}
 Suggests: kdebase
-Replaces: koffice-cvs
 Description: KDE Office Suite
  KDE Office Suite
 
@@ -18,7 +17,6 @@ Package: koffice-dev
 Architecture: any
 Section: devel
 Depends: koffice (= ${Source-Version}), kdelibs3-dev
-Replaces: koffice-dev-cvs
 Description: Core libraries for KOffice (Development files)
  Core libraries for Koffice (Development files)
 
