@@ -88,8 +88,8 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   _spInfinitLoop = false;
   _spManualSwitch = true;
   _spPageConfig.setAutoDelete(true);
-  _rastX = 20;
-  _rastY = 20;
+  _rastX = 10;
+  _rastY = 10;
   _xRnd = 20;
   _yRnd = 20;
   _txtBackCol.operator=(white);
@@ -231,7 +231,6 @@ void KPresenterDocument_impl::saveBackground(ostream& out)
   for (pagePtr = _pageList.first();pagePtr != 0;pagePtr = _pageList.next())
     {
       out << otag << "<PAGE>" << endl;
-      out << indent << "<PAGENUM value=" << pagePtr->pageNum << "/>" << endl; 
       out << indent << "<BACKTYPE value=" << pagePtr->backType << "/>" << endl; 
       out << indent << "<BACKVIEW value=" << pagePtr->backPicView << "/>" << endl; 
       out << indent << "<BACKCOLOR1 red=" << pagePtr->backColor1.red() << " green=" 
@@ -372,7 +371,7 @@ bool KPresenterDocument_impl::load(const char *_url)
   
    KOMLParser::parseTag(tag.c_str(),name,lst);
    vector<KOMLAttrib>::const_iterator it = lst.begin();
-   for(;it != lst.end();it++)
+   for (;it != lst.end();it++)
      {
        if ((*it).m_strName == "mime")
 	 {
@@ -402,10 +401,17 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
   string name;
 
   KoPageLayout __pgLayout;
-  QString tmp;
   
+  // clean
+  if (!_pageList.isEmpty())
+    _pageList.clear();
+
+  if (!_objList.isEmpty())
+    _objList.clear();
+      
+
   // PAPER
-  while(parser.open(0L,tag))
+  while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
  
@@ -416,20 +422,19 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "format")
-		{
-		  //__pgLayout.format = (KoFormat)(int)
-		  tmp.sprintf("%d",(*it).m_strValue);
-		  printf("Format: %s\n",(const char*)tmp);
-		}
+		__pgLayout.format = (KoFormat)atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "orientation")
-		{
-		}
+		__pgLayout.orientation = (KoOrientation)atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "width")
+		__pgLayout.width = (double)atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "height")
+		__pgLayout.height = (double)atof((*it).m_strValue.c_str());
 	      else
 		cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'" << endl;
 	    }
 
 	  // PAPERBORDERS, HEAD, FOOT
-	  while( parser.open( 0L, tag ) )
+	  while (parser.open(0L,tag))
 	    {
 	      KOMLParser::parseTag(tag.c_str(),name,lst);
 	      if (name == "PAPERBORDERS")
@@ -439,17 +444,13 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 		  for(;it != lst.end();it++)
 		    {
 		      if ((*it).m_strName == "left")
-			{
-			}
+			__pgLayout.left = (double)atof((*it).m_strValue.c_str());
 		      else if ((*it).m_strName == "top")
-			{
-			}
+			__pgLayout.top = (double)atof((*it).m_strValue.c_str());
 		      else if ((*it).m_strName == "right")
-			{
-			}
+			__pgLayout.right = (double)atof((*it).m_strValue.c_str());
 		      else if ((*it).m_strName == "bottom")
-			{
-			}
+			__pgLayout.bottom = (double)atof((*it).m_strValue.c_str());
 		      else
 			cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
 		    } 
@@ -463,57 +464,184 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 		  return false;
 		}
 	    }
+
 	}
-    }
+      
+      else if (name == "BACKGROUND")
+	loadBackground(parser,lst);
 
-  return true;
-
-  /*
-    KSpreadMap *map2 = new XclMap( this );
-
-    printf("Loading map ....\n");
-
-    // For use as values in the ObjectType property
-    TYPE t_map = _korb->findType( "KDE:kxcl:Map" );
-    if ( !t_map || !KPart::load( _korb, _map, t_map ) )
-	return FALSE;
-    
-    bool ret = map2->load( _korb, _map );
-
-    if ( ret )
-    {
-	tableId = 1;
+      else
+	cerr << "Unknown tag '" << tag << "' in PRESENTATION" << endl;    
 	
-	printf("Adding to gui\n");
-
-	if ( pGui )
-	    pGui->removeAllKSpreadTables();
-	delete pMap;
-
-	pMap = map2;
-
-	if ( pGui )
+      if (!parser.close(tag))
 	{
-	    KSpreadTable *t;
-	    for ( t = pMap->firstKSpreadTable(); t != 0L; t = pMap->nextTable() )
-		pGui->addKSpreadTable( t );
+	  cerr << "ERR: Closing Child" << endl;
+	  return false;
 	}
-	
-	pMap->initAfterLoading();
-	tableId = pMap->count() + 1;
-	
-	if ( pGui )
-	    pGui->setActiveKSpreadTable( pMap->firstTable() );
     }
-    else
-	delete map2;
 
-    printf("... Done map\n");
-
-    return TRUE;
-*/
+  
+  setPageLayout(__pgLayout,0,0);
+  repaint(true);
+  return true;
 }
 
+/*====================== load background =========================*/
+void KPresenterDocument_impl::loadBackground(KOMLParser& parser,vector<KOMLAttrib>& lst)
+{
+  string tag;
+  string name;
+
+  while (parser.open(0L,tag))
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+      
+      // page
+      if (name == "PAGE")
+	{    
+	  insertNewPage(0,0);
+	  unsigned int _num = _pageList.count()-1;
+	  pagePtr = _pageList.last();
+	  
+	  while (parser.open(0L,tag))
+	    {
+	      KOMLParser::parseTag(tag.c_str(),name,lst);
+	      
+	      // backtype
+	      if (name == "BACKTYPE")
+		{
+		  pagePtr = _pageList.last();
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "value")
+			setBackType(_num,(BackType)atoi((*it).m_strValue.c_str()));
+		    }
+		}
+	      
+	      // backview
+	      else if (name == "BACKVIEW")
+		{
+		  pagePtr = _pageList.last();
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "value")
+			setBPicView(_num,(BackView)atoi((*it).m_strValue.c_str()));
+		    }
+		}
+	      
+	      // backcolor 1
+	      else if (name == "BACKCOLOR1")
+		{
+		  pagePtr = _pageList.last();
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      pagePtr = _pageList.last();
+		      if ((*it).m_strName == "red")
+			setBackColor(_num,QColor(atoi((*it).m_strValue.c_str()),
+						 pagePtr->backColor1.green(),pagePtr->backColor1.blue()),
+				     pagePtr->backColor2,pagePtr->bcType);
+		      if ((*it).m_strName == "green")
+			setBackColor(_num,QColor(pagePtr->backColor1.red(),
+						 atoi((*it).m_strValue.c_str()),pagePtr->backColor1.blue()),
+				     pagePtr->backColor2,pagePtr->bcType);
+		      
+		      if ((*it).m_strName == "blue")
+			setBackColor(_num,QColor(pagePtr->backColor1.red(),pagePtr->backColor1.green(),
+						 atoi((*it).m_strValue.c_str())),
+				     pagePtr->backColor2,pagePtr->bcType);
+		    }
+		}
+	      
+	      // backcolor 2
+	      else if (name == "BACKCOLOR2")
+		{
+		  pagePtr = _pageList.last();
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      pagePtr = _pageList.last();
+		      if ((*it).m_strName == "red")
+			setBackColor(_num,pagePtr->backColor1,QColor(atoi((*it).m_strValue.c_str()),
+								     pagePtr->backColor2.green(),pagePtr->backColor2.blue()),
+				     pagePtr->bcType);
+		      if ((*it).m_strName == "green")
+			setBackColor(_num,pagePtr->backColor1,QColor(pagePtr->backColor2.red(),
+								     atoi((*it).m_strValue.c_str()),pagePtr->backColor2.blue()),
+				     pagePtr->bcType);
+		      
+		      if ((*it).m_strName == "blue")
+			setBackColor(_num,pagePtr->backColor1,QColor(pagePtr->backColor2.red(),pagePtr->backColor2.green(),
+								     atoi((*it).m_strValue.c_str())),
+				     pagePtr->bcType);
+		    }
+		}
+	      
+	      // backColorType
+	      else if (name == "BCTYPE")
+		{
+		  pagePtr = _pageList.last();
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "value")
+			setBackColor(_num,pagePtr->backColor1,pagePtr->backColor2,
+				     (BCType)atoi((*it).m_strValue.c_str()));
+		    }
+		}
+	      
+	      // backpic
+	      else if (name == "BACKPIC")
+		{
+		  pagePtr = _pageList.last();
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "value")
+			setBackPic(_num,(*it).m_strValue.c_str());
+		    }
+		}
+	      
+	      // backclip
+	      else if (name == "BACKCLIP")
+		{
+		  pagePtr = _pageList.last();
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "value")
+			setBackClip(_num,(*it).m_strValue.c_str());
+		    }
+		}
+	      else
+		cerr << "Unknown tag '" << tag << "' in PAGE" << endl;    
+	      
+	      if (!parser.close(tag))
+		{
+		  cerr << "ERR: Closing Child" << endl;
+		  return;
+		}
+	    }
+	}
+      else
+	cerr << "Unknown tag '" << tag << "' in BACKGROUND" << endl;    
+      
+      if (!parser.close(tag))
+	{
+	  cerr << "ERR: Closing Child" << endl;
+	  return;
+	}
+    }
+}
 
 /*========================== open ================================*/
 CORBA::Boolean KPresenterDocument_impl::open(const char *_filename)
@@ -1236,3 +1364,12 @@ void KPresenterDocument_impl::rotateObjs()
 {
 }
 
+/*====================== replace objects =========================*/
+void KPresenterDocument_impl::replaceObjs()
+{
+  for (objPtr = _objList.first();objPtr != 0;objPtr = _objList.next())
+    {
+      objPtr->ox = (objPtr->ox / _rastX) * _rastX;
+      objPtr->oy = (objPtr->oy / _rastY) * _rastY;
+    }
+}

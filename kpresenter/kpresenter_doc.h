@@ -228,13 +228,27 @@ public:
   QList<Background> *pageList() {return &_pageList;}
   QList<PageObjects> *objList() {return &_objList;}
 
-  // get raster
+  // get - set raster
   unsigned int rastX() {return _rastX;}
   unsigned int rastY() {return _rastY;}
+  unsigned int getRastX() {return _rastX;}
+  unsigned int getRastY() {return _rastY;}
+  void setRasters(unsigned int rx,unsigned int ry)
+    {_rastX = rx; _rastY = ry; replaceObjs();}
 
-  // get options for editmodi
+  // get - set options for editmodi
   QColor txtBackCol() {return _txtBackCol;}
   QColor txtSelCol() {return _txtSelCol;}
+  QColor getTxtBackCol() {return _txtBackCol;}
+  QColor getTxtSelCol() {return _txtSelCol;}
+  void setTxtBackCol(QColor c) {_txtBackCol = c;}
+  void setTxtSelCol(QColor c) {_txtSelCol = c;}
+
+  // get - set roundedness
+  unsigned int getRndX() {return _xRnd;}
+  unsigned int getRndY() {return _yRnd;}
+  void setRnds(unsigned int rx,unsigned int ry)
+    {_xRnd = rx; _yRnd = ry;}
 
   // get values for screenpresentations
   bool spInfinitLoop() {return _spInfinitLoop;}
@@ -274,7 +288,9 @@ protected:
   void saveBackground(ostream&);
   void saveObjects(ostream&);
   void saveTxtObj(ostream&,KTextObject*);
-
+  void loadBackground(KOMLParser&,vector<KOMLAttrib>&);
+  void replaceObjs();
+  
   // ************ variables ************
 
   // list of views and children

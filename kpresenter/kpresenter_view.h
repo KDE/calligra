@@ -68,6 +68,7 @@ class Page;
 #include "ktextobject.h"
 #include "kcharselectdia.h"
 #include "kenumlistdia.h"
+#include "optiondia.h"
 
 /******************************************************************/
 /* class KPresenterFrame                                          */
@@ -238,6 +239,7 @@ protected slots:
   void backOk(bool);
   void afChooseOk(const char*);
   void styleOk();
+  void optionOk();
   
   // scrolling
   void scrollH(int);
@@ -445,6 +447,7 @@ protected:
   BackDia *backDia;
   AFChoose *afChoose;
   StyleDia *styleDia;
+  OptionDia *optionDia;
 
   // default pen and brush
   QPen pen;

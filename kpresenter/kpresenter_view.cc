@@ -56,6 +56,7 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name
   backDia = 0;
   afChoose = 0;
   styleDia = 0;
+  optionDia = 0;
   xOffset = 0;
   yOffset = 0;
   pen.operator=(QPen(black,1,SolidLine));
@@ -317,6 +318,25 @@ void KPresenterView_impl::extraLayout()
 /*========================== extra options ======================*/
 void KPresenterView_impl::extraOptions()
 {
+  if (optionDia)
+    {
+      QObject::disconnect(optionDia,SIGNAL(applyButtonPressed()),this,SLOT(optionOk()));
+      optionDia->close();
+      delete optionDia;
+      optionDia = 0;
+    }
+  optionDia = new OptionDia(0,"OptionDia");
+  optionDia->setCaption("KPresenter - Options");
+  optionDia->setMaximumSize(optionDia->width(),optionDia->height());
+  optionDia->setMinimumSize(optionDia->width(),optionDia->height());
+  QObject::connect(optionDia,SIGNAL(applyButtonPressed()),this,SLOT(optionOk()));
+  optionDia->setRastX(KPresenterDoc()->getRastX());
+  optionDia->setRastY(KPresenterDoc()->getRastY());
+  optionDia->setBackCol(KPresenterDoc()->getTxtBackCol());
+  optionDia->setSelCol(KPresenterDoc()->getTxtSelCol());
+  optionDia->setRndX(KPresenterDoc()->getRndX());
+  optionDia->setRndY(KPresenterDoc()->getRndY());
+  optionDia->show();
 }
 
 /*========================== screen config pages ================*/
@@ -865,6 +885,26 @@ void KPresenterView_impl::styleOk()
       pen.operator=(styleDia->getPen());
       brush.operator=(styleDia->getBrush());
     }
+}
+
+/*=========== take changes for option dialog ====================*/
+void KPresenterView_impl::optionOk()
+{
+  if (optionDia->getRastX() < 1)
+    optionDia->setRastX(1);
+  if (optionDia->getRastY() < 1)
+    optionDia->setRastY(1);
+  KPresenterDoc()->setRasters(optionDia->getRastX(),optionDia->getRastY());
+
+  KPresenterDoc()->setTxtBackCol(optionDia->getBackCol());
+  KPresenterDoc()->setTxtSelCol(optionDia->getSelCol());
+  if (optionDia->getRndX() < 1)
+    optionDia->setRndX(1);
+  if (optionDia->getRndY() < 1)
+    optionDia->setRndY(1);
+  KPresenterDoc()->setRnds(optionDia->getRndX(),optionDia->getRndY());
+
+  KPresenterDoc()->repaint(false);
 }
 
 /*================== scroll horizontal ===========================*/
@@ -1751,8 +1791,6 @@ void KPresenterView_impl::setupScreenToolbar()
       pix = loadPixmap(tmp);
       m_idButtonScreen_Pause = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Pause")),
 							      this,CORBA::string_dup("screenPause"));
-      m_rToolBarScreen->setToggle(m_idButtonScreen_Pause,true);
-      m_rToolBarScreen->setButton(m_idButtonScreen_Pause,false);
 
       // start
       tmp = kapp->kde_datadir().copy();
@@ -1760,8 +1798,6 @@ void KPresenterView_impl::setupScreenToolbar()
       pix = loadPixmap(tmp);
       m_idButtonScreen_Start = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Start")),
 							      this,CORBA::string_dup("screenStart"));
-      m_rToolBarScreen->setToggle(m_idButtonScreen_Start,true);
-      m_rToolBarScreen->setButton(m_idButtonScreen_Start,false);
       m_rToolBarScreen->insertSeparator();
 
       // first
