@@ -73,14 +73,4 @@ void KoPartSelectAction::slotActivated()
     emit activated();
 }
 
-/*int KoPartSelectAction::plug( QWidget *widget, int index )
-{
-    if ( widget->inherits("KToolBar") )
-    {
-        // Let's be clever... if we want a simple toolbar button, kaction can do it for us
-        return KAction::plug( widget, index );
-    }
-    return KActionMenu::plug( widget, index );
-}*/
-
 #include "koPartSelectAction.moc"

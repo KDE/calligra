@@ -54,6 +54,7 @@ protected slots:
   void selectColorDialog();
   void panelColorSelected( const QColor& );
   void panelReject();
+  virtual void slotActivated();
 
 protected:
   virtual void initToolBarButton(TKToolBarButton*);

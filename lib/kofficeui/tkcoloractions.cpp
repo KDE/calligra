@@ -127,6 +127,12 @@ void TKSelectColorAction::selectColorDialog()
   }
 }
 
+// Called when activating the menu item
+void TKSelectColorAction::slotActivated()
+{
+    selectColorDialog();
+}
+
 void TKSelectColorAction::activate()
 {
   emit colorSelected(m_pCurrentColor);
