@@ -1,6 +1,7 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
+ * Copyright (C) 2000-2003 theKompany.com & Dave Marotti,
+ *                         Peter Simonsson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -210,7 +211,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   // The widget on which we display the page
   QWidgetStack* canvasBase = new QWidgetStack(pRightSide);
-  m_pCanvas = new KivioCanvas(canvasBase,this,doc,vertScrollBar,horzScrollBar/*,vRuler,hRuler*/);
+  m_pCanvas = new KivioCanvas(canvasBase,this,doc,vertScrollBar,horzScrollBar);
   canvasBase->addWidget(m_pCanvas,0);
   canvasBase->raiseWidget(m_pCanvas);
   m_pCanvas->setFocusPolicy(QWidget::StrongFocus);

@@ -31,48 +31,50 @@ class StencilBarMoveManager;
 class KivioDoc;
 
 class StencilBarDockManager : public QWidget
-{ Q_OBJECT
-public:
-  enum BarPos {
-    Left = 0,
-    Top = 1,
-    Right = 2,
-    Bottom = 3,
-    OnDesktop = 4,
-    AutoSelect = 5,
-    OnTopLevelBar = 6
-  };
-
-  StencilBarDockManager( QWidget* parent, const char* name = 0 );
-  ~StencilBarDockManager();
-
-  void setView( QWidget* );
-  void setDoc( KivioDoc* );
-
-
-  void insertStencilSet( QWidget*,  const QString&, BarPos = AutoSelect, QRect r = QRect(), KivioStackBar* onTopLevelBar = 0L );
-
-public slots:
-    void slotDeleteStencilSet( DragBarButton*,QWidget*,KivioStackBar* );
-
-protected slots:
-  void slotBeginDragPage( DragBarButton* );
-  void slotFinishDragPage( DragBarButton* );
-  void slotMoving();
-
-private:
-  KivioDoc *m_pDoc;
-  DragBarButton* dragButton;
-  QWidget* dragWidget;
-  StencilBarMoveManager* moveManager;
-  QPtrList<KivioStackBar> m_pBars;
-  QPtrList<KivioStackBar> m_pTopLevelBars;
-  QSplitter* split1;
-  QSplitter* split2;
-  QWidget* m_pView;
-
-  BarPos dragPos;
-  KivioStackBar* topLevelDropBar;
+{
+  Q_OBJECT
+  public:
+    enum BarPos {
+      Left = 0,
+      Top = 1,
+      Right = 2,
+      Bottom = 3,
+      OnDesktop = 4,
+      AutoSelect = 5,
+      OnTopLevelBar = 6
+    };
+  
+    StencilBarDockManager( QWidget* parent, const char* name = 0 );
+    ~StencilBarDockManager();
+  
+    void setView( QWidget* );
+    void setDoc( KivioDoc* );
+  
+  
+    void insertStencilSet( QWidget*,  const QString&, BarPos = AutoSelect, QRect r = QRect(),
+      KivioStackBar* onTopLevelBar = 0L );
+  
+  public slots:
+      void slotDeleteStencilSet( DragBarButton*,QWidget*,KivioStackBar* );
+  
+  protected slots:
+    void slotBeginDragPage( DragBarButton* );
+    void slotFinishDragPage( DragBarButton* );
+    void slotMoving();
+  
+  private:
+    KivioDoc *m_pDoc;
+    DragBarButton* dragButton;
+    QWidget* dragWidget;
+    StencilBarMoveManager* moveManager;
+    QPtrList<KivioStackBar> m_pBars;
+    QPtrList<KivioStackBar> m_pTopLevelBars;
+    QSplitter* split1;
+    QSplitter* split2;
+    QWidget* m_pView;
+  
+    BarPos dragPos;
+    KivioStackBar* topLevelDropBar;
 };
 
 #endif

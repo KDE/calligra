@@ -33,11 +33,6 @@
 StencilBarDockManager::StencilBarDockManager( QWidget* parent, const char* name )
 : QWidget(parent,name)
 {
-  m_pBars.append(0L);
-  m_pBars.append(0L);
-  m_pBars.append(0L);
-  m_pBars.append(0L);
-
   dragButton = 0L;
   dragWidget = 0L;
   m_pView = 0L;
@@ -111,17 +106,16 @@ void StencilBarDockManager::insertStencilSet( QWidget* w, const QString& caption
         connect(bar,SIGNAL(beginDragPage(DragBarButton*)),SLOT(slotBeginDragPage(DragBarButton*)));
         connect(bar,SIGNAL(finishDragPage(DragBarButton*)),SLOT(slotFinishDragPage(DragBarButton*)));
         connect(bar,SIGNAL(deleteButton(DragBarButton*,QWidget*,KivioStackBar*)), m_pDoc, SLOT(slotDeleteStencilSet(DragBarButton*,QWidget*,KivioStackBar*)));
-        m_pBars.remove(pos);
         m_pBars.insert(pos,bar);
 
         if (pos==Left) {
-          split1->moveToFirst(bar);
           QValueList<int> sizes;
           QValueList<int> newSizes;
           sizes = split1->sizes();
+          split1->moveToFirst(bar);
           newSizes << 1; // We want the minimum size of the stencilbar, but we haven't loaded the stencils yet...
-          newSizes << (split1->width() - 1 - sizes[2]);
-          newSizes << sizes[2];
+          newSizes << (split1->width() - 1 - sizes[1]);
+          newSizes << sizes[1];
           split1->setSizes(newSizes);
         }
         if (pos==Top) {

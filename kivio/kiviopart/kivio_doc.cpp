@@ -539,8 +539,18 @@ bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDi
   KoZoomHandler zoom;
   zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
     QPaintDevice::x11AppDpiY());
-  QPixmap buffer( zoom.zoomItX(pPage->paperLayout().ptWidth) + dlg->border()*2,
-      zoom.zoomItY(pPage->paperLayout().ptHeight) + dlg->border()*2 );
+  QPixmap buffer;
+  
+  if( dlg->fullPage()==true )
+  {
+    buffer.resize(zoom.zoomItX(pPage->paperLayout().ptWidth) + dlg->border()*2,
+      zoom.zoomItY(pPage->paperLayout().ptHeight) + dlg->border()*2);
+  }
+  else
+  {
+    buffer.resize(zoom.zoomItX(pPage->getRectForAllSelectedStencils().width()) + dlg->border()*2,
+      zoom.zoomItY(pPage->getRectForAllSelectedStencils().height()) + dlg->border()*2);
+  }
 
   kdDebug(43000) << "KivioDoc::exportCurPage() to " << fileName << "\n";
 
@@ -557,6 +567,8 @@ bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDi
   }
   else
   {
+    p.setTranslation(-zoom.zoomItX(pPage->getRectForAllSelectedStencils().x()),
+      -zoom.zoomItY(pPage->getRectForAllSelectedStencils().y()));
     pPage->printSelected(p);
   }
 
