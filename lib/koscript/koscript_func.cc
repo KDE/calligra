@@ -353,7 +353,7 @@ KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
 
 // ariya: for the time being, let's just disable KoScript built-in functions
 // because many have the same name as KSpread functions
-#ifdef 0
+#if 0
   module->addObject( "time", new KSValue( new KSBuiltinFunction( module, "time", ksfunc_time ) ) );
   module->addObject( "date", new KSValue( new KSBuiltinFunction( module, "date", ksfunc_date ) ) );
   module->addObject( "print", new KSValue( new KSBuiltinFunction( module, "print", ksfunc_print ) ) );
