@@ -740,10 +740,15 @@ static bool kspread_convert_distance( const QString& fromUnit,
   // first-time initialization
   if( distanceMap.isEmpty() )
   {
-    distanceMap[ "m" ] = 1.0;
-    distanceMap[ "in" ] = 1.0 / 0.0254;
-    distanceMap[ "ft" ] = 1.0 / (12.0 * 0.0254);
-    distanceMap[ "yd" ] = 1.0 / (3.0 * 12.0 * 0.0254);
+    distanceMap[ "m" ]         = 1.0;  // meter (the reference)
+    distanceMap[ "in" ]        = 1.0 / 0.0254; // inch
+    distanceMap[ "ft" ]        = 1.0 / (12.0 * 0.0254); // feet
+    distanceMap[ "yd" ]        = 1.0 / (3.0 * 12.0 * 0.0254); // yar
+    distanceMap[ "mi" ]        = 6.2137119223733397e-4; // mile
+    distanceMap[ "Nmi" ]       = 5.3995680345572354e-04; // nautical mile
+    distanceMap[ "ang" ]       = 1e10; // Angstrom
+    distanceMap[ "parsec" ]    = 3.240779e-17; // Parsec
+    distanceMap[ "lightyear" ] = 1.057023455773293e-16; // lightyear
   }
 
   if( !distanceMap.contains( fromUnit ) ) return false;
