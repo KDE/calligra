@@ -70,7 +70,8 @@ private:
   QString ident;    // layer identifier
   bool visibleFlag, // layer is visible
     printableFlag,  // layer is printable
-    editableFlag;   // layer is editable
+    editableFlag,   // layer is editable
+    wasEditable;    // layer was editable before the change to unvisible
 
   list<GObject*> contents; // the list of objects
 

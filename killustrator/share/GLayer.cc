@@ -41,7 +41,7 @@ struct unref_obj {
 
 
 GLayer::GLayer (const char* text) : visibleFlag (true), printableFlag (true), 
-  editableFlag (true) {
+  editableFlag (true), wasEditable (true) {
   if (text == 0L) {
     char buf[20];
 
@@ -68,6 +68,10 @@ void GLayer::setVisible (bool flag) {
     visibleFlag = flag;
     if (!visibleFlag)
       editableFlag = false;
+    else {
+      if (wasEditable)
+	editableFlag = true;
+    }
     emit propertyChanged ();
   }
 }
@@ -82,8 +86,9 @@ void GLayer::setPrintable (bool flag) {
 void GLayer::setEditable (bool flag) {
   if (editableFlag != flag) {
     editableFlag = flag;
-    if (editableFlag)
+    if (editableFlag) 
       visibleFlag = true;
+    wasEditable = editableFlag;
     emit propertyChanged ();
   }
 }
