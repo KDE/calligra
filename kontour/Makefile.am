@@ -75,8 +75,9 @@ libkontourpart_la_SOURCES = \
 	ShearCmd.cc \
 	RotateCmd.cc \
 	SetPropertyCmd.cc \
-	CreateOvalCmd.cc \
 	CreateRectCmd.cc \
+	CreateOvalCmd.cc \
+	CreatePolygonCmd.cc \
 	CreateImageCmd.cc \
 	OptionsDialog.cc \
 	UnitBox.cc \

@@ -21,7 +21,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
-
+/*
 #ifndef CreatePolygonCmd_h_
 #define CreatePolygonCmd_h_
 
@@ -48,6 +48,6 @@ private:
   int nCorners;
   int sharpness;
   bool isConcave;
-};
+};*/
 
 #endif

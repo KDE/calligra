@@ -21,7 +21,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
-
+/*
 #include <CreatePolygonCmd.h>
 
 #include <klocale.h>
@@ -70,4 +70,4 @@ void CreatePolygonCmd::execute () {
 void CreatePolygonCmd::unexecute () {
   document->activePage()->deleteObject (object);
 }
-
+*/
