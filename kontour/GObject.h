@@ -80,6 +80,11 @@ public:
    */
   virtual ~GObject();
 
+  /**
+   *
+   */
+  virtual GObject *copy() const = 0;
+
   unsigned int id() const {return mId; }
 
   void ref();

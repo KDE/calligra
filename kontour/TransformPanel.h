@@ -32,7 +32,7 @@ class QGroupBox;
 class KIntNumInput;
 class GPage;
 class Handle;
-class TransformationCmd;
+class KCommand;
 class TransformPanel : public QDockWindow
 {
   Q_OBJECT
@@ -43,11 +43,12 @@ public slots:
   void setContext(const QWMatrix &, GPage *);
 
 private slots:
-  void slotTranslateChanged();
+  void slotDupPressed();
+  void slotApplyPressed();
   void slotRelativeToggled(bool);
 
 signals:
-  void changeTransform(TransformationCmd *);
+  void changeTransform(KCommand *);
 
 private:
   QTabWidget   *m_tab;

@@ -38,6 +38,8 @@ public:
   GOval(const QDomElement &element, bool cFlag = false);
   GOval(const GOval &obj);
 
+  virtual GObject *copy() const;
+
   Type type() const {return mType; }
   void type(Type t);
 

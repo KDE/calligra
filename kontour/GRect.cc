@@ -72,6 +72,11 @@ GObject(obj)
   calcBoundingBox();
 }
 
+GObject *GRect::copy() const
+{
+	return new GRect(*this);
+}
+
 void GRect::type(Type t)
 {
   mType = t;

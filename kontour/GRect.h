@@ -38,6 +38,8 @@ public:
   GRect(const QDomElement &element, bool sFlag = false);
   GRect(const GRect &obj);
 
+  virtual GObject *copy() const;
+
   Type type() const {return mType; }
   void type(Type t);
 

@@ -78,6 +78,11 @@ GObject(obj)
   calcBoundingBox();
 }
 
+GObject *GOval::copy() const
+{
+    return new GOval(*this);
+}
+
 void GOval::type(Type t)
 {
   mType = t;

@@ -59,7 +59,7 @@ class LayerPanel;
 class PaintPanel;
 class OutlinePanel;
 class TransformPanel;
-class TransformationCmd;
+class Command;
 class KoColor;
 class GStyle;
 class KontourView : public KoView
@@ -67,7 +67,7 @@ class KontourView : public KoView
 Q_OBJECT
 public:
   KontourView(QWidget *parent, const char *name = 0, KontourDocument *doc = 0);
-  ~KontourView();
+  virtual ~KontourView();
 
   virtual bool eventFilter(QObject *o, QEvent *e);
 
@@ -120,7 +120,7 @@ private slots:
   void changeBrushStyle(Qt::BrushStyle);
   void changeJoinStyle(Qt::PenJoinStyle);
   void changeCapStyle(Qt::PenCapStyle);
-  void changeTransform(TransformationCmd *);
+  void changeTransform(KCommand *);
   void changeSelection();
 
   void slotZoomFactorChanged();

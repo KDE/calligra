@@ -791,6 +791,11 @@ GObject(obj)
 {
 }
 
+GObject *GPath::copy() const
+{
+    return new GPath(this);
+}
+
 void GPath::closed(bool aClosed)
 {
   mClosed = aClosed;

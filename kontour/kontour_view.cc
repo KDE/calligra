@@ -106,6 +106,16 @@ KontourView::~KontourView()
   delete vRuler;
   delete mSBCoords;
   delete mSBState;
+
+  // Delete dockers when not in dock area
+  if(mTransformPanel && !mTransformPanel->area())
+    delete mTransformPanel;
+  if(mPaintDock && !mPaintDock->area())
+    delete mPaintDock;
+  if(mOutlineDock && !mOutlineDock->area())
+    delete mOutlineDock;
+  //if(mLayerPanel && !mLayerPanel->area())
+  //  delete mLayerPanel;
 }
 
 void KontourView::unit(MeasurementUnit u)
@@ -368,7 +378,7 @@ void KontourView::setupPanels()
 
   /* Transform properties panel */
   mTransformPanel = new TransformPanel();
-  connect(mTransformPanel, SIGNAL(changeTransform(TransformationCmd *)), this, SLOT(changeTransform(TransformationCmd *)));
+  connect(mTransformPanel, SIGNAL(changeTransform(KCommand *)), this, SLOT(changeTransform(KCommand *)));
   mRightDock->moveDockWindow(mTransformPanel);
 }
 
@@ -641,19 +651,11 @@ void KontourView::changeJoinStyle(Qt::PenJoinStyle style)
   }
 }
 
-void KontourView::changeTransform(TransformationCmd *command)
+void KontourView::changeTransform(KCommand *command)
 {
   if(activeDocument() && activeDocument()->activePage() &&
      !activeDocument()->activePage()->selectionIsEmpty() && command)
   {
-    /*QPtrListIterator<GObject> it(activeDocument()->activePage()->getSelection());
-	GObject *obj;
-	while(obj = it.current())
-	{
-	  obj->transform(mat, true); 
-	  ++it;
-	}
-	activeDocument()->activePage()->updateSelection();*/
 	mDoc->history()->addCommand(command);
   }
 }

@@ -73,17 +73,17 @@ void DuplicateCmd::execute()
 //    yoff = PStateManager::instance ()->duplicateYOffset ();
   }
   QWMatrix m;
-  m.translate(xoff, yoff);
+  //m.translate(xoff, yoff);
 
   document()->activePage()->unselectAllObjects();
   for(GObject *i = objects.first(); i != 0L; i = objects.next())
   {
-/*    GObject *o = i->copy();
+    GObject *o = i->copy();
     o->ref();
     o->transform(m, true);
     document()->activePage()->insertObject(o);
     document()->activePage()->selectObject(o);
-    new_objects.append(o);*/
+    new_objects.append(o);
   }
 }
 

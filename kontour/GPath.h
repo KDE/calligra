@@ -166,6 +166,8 @@ public:
   GPath(const QDomElement &element);
   GPath(const GPath &obj);
 
+  virtual GObject *copy() const;
+
   bool closed() const {return mClosed; }
   void closed(bool aClosed);
 

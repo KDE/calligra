@@ -40,15 +40,6 @@ KCommand(name)
 TransformationCmd::TransformationCmd(GDocument *aGDoc, const QString& name):
 Command(aGDoc, name)
 {
-  objects.resize(document()->activePage()->selectionCount());
-  states.resize(document()->activePage()->selectionCount());
-  QPtrListIterator<GObject> it(document()->activePage()->getSelection());
-  for(unsigned int i = 0; it.current(); ++it, ++i)
-  {
-    (*it)->ref();
-    objects.insert(i, (*it));
-    states[i] = (*it)->matrix();
-  }
 }
 
 TransformationCmd::~TransformationCmd()
@@ -59,6 +50,15 @@ TransformationCmd::~TransformationCmd()
 
 void TransformationCmd::execute()
 {
+  objects.resize(document()->activePage()->selectionCount());
+  states.resize(document()->activePage()->selectionCount());
+  QPtrListIterator<GObject> it(document()->activePage()->getSelection());
+  for(unsigned int i = 0; it.current(); ++it, ++i)
+  {
+    (*it)->ref();
+    objects.insert(i, (*it));
+    states[i] = (*it)->matrix();
+  }
 }
 
 void TransformationCmd::unexecute()
