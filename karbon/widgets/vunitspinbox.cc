@@ -81,13 +81,15 @@ void
 VUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 {
 	KDoubleSpinBox::setValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value(), m_unit ), unit ) );
+	setMinValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( minValue(), m_unit ), unit ) );
+	setMaxValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( maxValue(), m_unit ), unit ) );
 	m_unit = unit;
 	setSuffix( KoUnit::unitName( unit ) );
 }
 
 
 VUnitDoubleLineEdit::VUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value, unsigned int precision, const char *name )
-	: QLineEdit( parent, name ), VUnitDoubleBase( precision ), m_value( value )
+	: QLineEdit( parent, name ), VUnitDoubleBase( precision ), m_value( value ), m_lower( lower ), m_upper( upper )
 {
 	setAlignment( Qt::AlignRight );
 	m_validator = new KoUnitDoubleValidator( this, this );
@@ -113,6 +115,8 @@ VUnitDoubleLineEdit::setUnit( KoUnit::Unit unit )
 {
 	KoUnit::Unit old = m_unit;
 	m_unit = unit;
+	m_lower = KoUnit::ptToUnit( KoUnit::ptFromUnit( m_lower, old ), unit );
+	m_upper = KoUnit::ptToUnit( KoUnit::ptFromUnit( m_upper, old ), unit );
 	changeValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( m_value, old ), unit ) );
 }
 
@@ -133,7 +137,7 @@ VUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
 
 
 VUnitDoubleComboBox::VUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value, unsigned int precision, const char *name )
-	: QComboBox( true, parent, name ), VUnitDoubleBase( precision ), m_value( value )
+	: QComboBox( true, parent, name ), VUnitDoubleBase( precision ), m_value( value ), m_lower( lower ), m_upper( upper )
 {
 	lineEdit()->setAlignment( Qt::AlignRight );
 	m_validator = new KoUnitDoubleValidator( this, this );
@@ -153,6 +157,8 @@ VUnitDoubleComboBox::setUnit( KoUnit::Unit unit )
 {
 	KoUnit::Unit old = m_unit;
 	m_unit = unit;
+	m_lower = KoUnit::ptToUnit( KoUnit::ptFromUnit( m_lower, old ), unit );
+	m_upper = KoUnit::ptToUnit( KoUnit::ptFromUnit( m_upper, old ), unit );
 	changeValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( m_value, old ), unit ) );
 }
 

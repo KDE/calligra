@@ -91,7 +91,9 @@ protected:
 
 private:
 	KoUnitDoubleValidator *m_validator;
-	double	m_value;
+	double m_value;
+	double m_lower;
+	double m_upper;
 };
 
 class VUnitDoubleComboBox : public QComboBox, public VUnitDoubleBase
@@ -110,7 +112,9 @@ protected:
 
 private:
 	KoUnitDoubleValidator *m_validator;
-	double	m_value;
+	double m_value;
+	double m_lower;
+	double m_upper;
 };
 
 
