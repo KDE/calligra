@@ -1,2 +1,5 @@
 # Come back if you're maintained
+AC_MSG_NOTICE([Do not compile kontour (unmaintained!)])
 DO_NOT_COMPILE="$DO_NOT_COMPILE kontour"
+AM_CONDITIONAL(maintained_KONTOUR, test -n "")
+
