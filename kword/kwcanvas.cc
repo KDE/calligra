@@ -2623,6 +2623,8 @@ int KWCanvas::currentTableRow() const
     if ( !m_currentFrameSetEdit )
         return -1;
     KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+    if ( !edit )
+        return -1;
     KWTextFrameSet* textfs = edit->textFrameSet();
     if ( textfs && textfs->getGroupManager() )
         return static_cast<KWTableFrameSet::Cell *>(textfs)->firstRow();
@@ -2634,6 +2636,8 @@ int KWCanvas::currentTableCol() const
     if ( !m_currentFrameSetEdit )
         return -1;
     KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+    if ( !edit )
+        return -1;
     KWTextFrameSet* textfs = edit->textFrameSet();
     if ( textfs && textfs->getGroupManager() )
         return static_cast<KWTableFrameSet::Cell *>(textfs)->firstCol();
