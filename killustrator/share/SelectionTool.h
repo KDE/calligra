@@ -55,7 +55,7 @@ public:
   void translate (GDocument* doc, Canvas* canvas,
                   float dx, float dy, bool snap, bool permanent = false);
 
-  virtual bool consumesRMBEvents () { return false; }
+  //virtual bool consumesRMBEvents () { return false; }
 
   void setPickMode () { state = S_Pick; }
 

@@ -60,16 +60,19 @@ static unsigned char resize_ptrmsk_bits[] = {
     0xff, 0xfe, 0xef, 0xee, 0x07, 0xc0, 0xef, 0xee, 0xff, 0xfe, 0xfe, 0xfe,
     0xfc, 0x7e, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe};
 
-SelectionTool::SelectionTool (CommandHistory *history) : Tool (history) {
-  state = S_Init;
-  dragHorizHelpline = dragVertHelpline = -1;
-  cursor = new QCursor (QBitmap(resize_ptr_width,
-                                resize_ptr_height,
-                                resize_ptr_bits),
-                        QBitmap(resize_ptrmsk_width,
-                                resize_ptrmsk_height,
-                                resize_ptrmsk_bits),
-                        resize_ptr_x_hot, resize_ptr_y_hot);
+SelectionTool::SelectionTool (CommandHistory *history)
+:Tool(history)
+{
+   state = S_Init;
+   dragHorizHelpline = dragVertHelpline = -1;
+   cursor = new QCursor (QBitmap(resize_ptr_width,
+                                 resize_ptr_height,
+                                 resize_ptr_bits),
+                         QBitmap(resize_ptrmsk_width,
+                                 resize_ptrmsk_height,
+                                 resize_ptrmsk_bits),
+                         resize_ptr_x_hot, resize_ptr_y_hot);
+   m_id=ToolSelect;
 }
 
 void SelectionTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
@@ -689,6 +692,8 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
   emit modeSelected (msgbuf);
 }
 
+#include <iostream.h>
+
 void SelectionTool::rotate (GDocument* doc, float , float ,
                             float xp, float yp, bool permanent) {
   //  float adx = fabs (dx);
@@ -713,8 +718,15 @@ void SelectionTool::rotate (GDocument* doc, float , float ,
   */
   // proposed by Stefan Eickeler <eickeler@fb9-ti.uni-duisburg.de>
   angle=atan2 ((float)rotCenter.y()-yp,(float)rotCenter.x()-xp);
-  angle-=atan2 ((float)(rotCenter.y()-firstpos.y()),
-                (float)(rotCenter.x()-firstpos.x()));
+  kdDebug()<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)rotCenter.y()-yp<<" b: "<<(float)rotCenter.x()-xp<<endl;
+  angle-=atan2 ((float)(rotCenter.y()-firstpos.y()),(float)(rotCenter.x()-firstpos.x()));
+  kdDebug()<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)(rotCenter.y()-firstpos.y())<<" b: "<<(float)(rotCenter.x()-firstpos.x())<<endl;
+
+  cout<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)rotCenter.y()-yp<<" b: "<<(float)rotCenter.x()-xp<<endl;
+  cout<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)(rotCenter.y()-firstpos.y())<<" b: "<<(float)(rotCenter.x()-firstpos.x())<<endl;
+
+
+
   angle*=180.0/3.141;
   if (angle<180.0) angle+=360.0;
   if (angle>180.0) angle-=360.0;

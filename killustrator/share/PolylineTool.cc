@@ -38,11 +38,13 @@
 
 #include <math.h>
 
-PolylineTool::PolylineTool (CommandHistory* history) : Tool (history) {
+PolylineTool::PolylineTool (CommandHistory* history) : Tool (history)
+{
   line = 0L;
   last = 0;
   newObj = true;
   points.setAutoDelete (true);
+  m_id=ToolLine;
 }
 
 void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {

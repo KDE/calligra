@@ -55,9 +55,11 @@ static unsigned char bigarrow_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-PathTextTool::PathTextTool (CommandHistory* history) : Tool (history) {
+PathTextTool::PathTextTool (CommandHistory* history) : Tool (history)
+{
   QBitmap bm (bigarrow_width, bigarrow_height, bigarrow_bits, true);
   cursor = QCursor (bm, bm, bigarrow_x_hot, bigarrow_y_hot);
+  m_id=ToolPathText;
 }
 
 void PathTextTool::activate (GDocument* doc, Canvas* canvas) {

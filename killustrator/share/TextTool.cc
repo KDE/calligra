@@ -34,9 +34,11 @@
 #include <SetTextCmd.h>
 #include <CommandHistory.h>
 
-TextTool::TextTool (CommandHistory *history) : Tool (history) {
+TextTool::TextTool (CommandHistory *history) : Tool (history)
+{
   text = 0L;
   origState = 0L;
+  m_id=ToolText;
 }
 
 void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {

@@ -39,7 +39,9 @@
 #include <PolygonConfigDialog.h>
 #include <CreatePolygonCmd.h>
 
-PolygonTool::PolygonTool (CommandHistory* history) : Tool (history) {
+PolygonTool::PolygonTool (CommandHistory* history)
+   : Tool (history)
+{
   obj = 0L;
   KConfig* config = kapp->config ();
   QString oldgroup = config->group ();
@@ -48,6 +50,7 @@ PolygonTool::PolygonTool (CommandHistory* history) : Tool (history) {
   sharpValue = config->readEntry("SharpValue", "0").toInt();
   createConcavePolygon = config->readBoolEntry("Concave", false);
   config->setGroup (oldgroup);
+  m_id=ToolPolygon;
 }
 
 void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {

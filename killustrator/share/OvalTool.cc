@@ -42,7 +42,8 @@
 #include <math.h>
 #include <stdio.h>
 
-OvalTool::OvalTool (CommandHistory *history) : Tool (history) {
+OvalTool::OvalTool (CommandHistory *history) : Tool (history)
+{
   oval = 0L;
   KConfig* config = kapp->config ();
   QString oldgroup = config->group ();
@@ -50,6 +51,7 @@ OvalTool::OvalTool (CommandHistory *history) : Tool (history) {
   config->setGroup("EllipseTool");
   useFixedCenter = config->readBoolEntry("FixedCenter", false);
   config->setGroup (oldgroup);
+  m_id=ToolEllipse;
 }
 
 void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {

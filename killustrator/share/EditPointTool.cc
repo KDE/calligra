@@ -56,17 +56,20 @@ static unsigned char right_ptrmsk_bits[] = {
    0xc0, 0x3f, 0xe0, 0x3f, 0xf0, 0x3f, 0xf8, 0x3f, 0xfc, 0x3f, 0x7e, 0x3e,
    0x0e, 0x3c, 0x00, 0x38, 0x00, 0x38, 0x00, 0x30};
 
-EditPointTool::EditPointTool (CommandHistory* history) : Tool (history) {
-  obj = 0L;
-  pointIdx = -1;
-  mode = MovePoint;
-  cursor = new QCursor (QBitmap (right_ptr_width,
-                                 right_ptr_height,
-                                 right_ptr_bits, true),
-                        QBitmap (right_ptrmsk_width,
-                                 right_ptrmsk_height,
-                                 right_ptrmsk_bits, true),
-                        right_ptr_x_hot, right_ptr_y_hot);
+EditPointTool::EditPointTool (CommandHistory* history)
+:Tool(history)
+{
+   obj = 0L;
+   pointIdx = -1;
+   mode = MovePoint;
+   cursor = new QCursor (QBitmap (right_ptr_width,
+                                  right_ptr_height,
+                                  right_ptr_bits, true),
+                         QBitmap (right_ptrmsk_width,
+                                  right_ptrmsk_height,
+                                  right_ptrmsk_bits, true),
+                         right_ptr_x_hot, right_ptr_y_hot);
+   m_id=ToolEditPoint;
 }
 
 EditPointTool::~EditPointTool () {

@@ -32,20 +32,25 @@ class Canvas;
 class CommandHistory;
 class QEvent;
 
-class Tool : public QObject {
+class Tool : public QObject
+{
   Q_OBJECT
 protected:
   Tool (CommandHistory* chist);
 
 public:
   ~Tool () {}
+  enum ToolID {ToolDummy, ToolSelect, ToolEditPoint, ToolFreeHand, ToolLine,\
+  ToolBezier, ToolRectangle, ToolPolygon, ToolEllipse, ToolText, ToolZoom, ToolPathText, ToolInsertPart};
+
   virtual void processEvent (QEvent* e, GDocument* doc, Canvas* canvas) = 0;
   virtual void activate (GDocument* doc, Canvas* canvas);
   virtual void deactivate (GDocument*, Canvas*) {}
 
   virtual void configure () {}
 
-  virtual bool consumesRMBEvents () { return true; }
+  //virtual bool consumesRMBEvents () { return true; }
+  long int id() {return m_id;};
 
 signals:
   void modeSelected (const QString &msg);
@@ -54,6 +59,7 @@ signals:
 protected:
   CommandHistory* history;
   QString msgbuf;
+  ToolID m_id;
 };
 
 #endif

@@ -37,11 +37,20 @@ ToolController::ToolController (MainView* view) {
 ToolController::~ToolController () {
 }
 
-void ToolController::registerTool (int id, Tool* tool) {
+/*void ToolController::registerTool (int id, Tool* tool)
+{
   tools.insert ((long) id, tool);
+}*/
+
+void ToolController::registerTool (Tool* tool)
+{
+   if (tool==0)
+      return;
+  tools.insert ((long) tool->id(), tool);
 }
 
-Tool* ToolController::getActiveTool () {
+Tool* ToolController::getActiveTool ()
+{
   return activeTool;
 }
 
@@ -57,20 +66,25 @@ void ToolController::reset () {
 }
 */
 
-void ToolController::toolSelected (int id) {
-    if (activeTool)
-        activeTool->deactivate (mainView->activeDocument (),
-                                mainView->getCanvas ());
-    activeTool = tools.find ((long) id);
-    if (activeTool)
-        activeTool->activate (mainView->activeDocument (),
+void ToolController::toolSelected (Tool::ToolID id)
+{
+   if (activeTool)
+   {
+      if (activeTool->id()==id) return;
+      activeTool->deactivate (mainView->activeDocument (),
                               mainView->getCanvas ());
+   };
+
+   activeTool = tools.find ((long) id);
+   if (activeTool)
+      activeTool->activate(mainView->activeDocument (),mainView->getCanvas());
 }
 
-void ToolController::configureTool (int id) {
-  Tool *t = tools.find ((long) id);
-  if (t)
-    t->configure ();
+void ToolController::configureTool (Tool::ToolID id)
+{
+   Tool *t = tools.find ((long) id);
+   if (t)
+      t->configure ();
 }
 
 #include <ToolController.moc>

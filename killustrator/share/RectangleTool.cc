@@ -38,8 +38,10 @@
 
 #include <stdio.h>
 
-RectangleTool::RectangleTool (CommandHistory* history) : Tool (history) {
+RectangleTool::RectangleTool (CommandHistory* history) : Tool (history)
+{
   rect = 0L;
+  m_id=ToolRectangle;
 }
 
 void RectangleTool::processEvent (QEvent* e, GDocument *doc,

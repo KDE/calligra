@@ -289,30 +289,34 @@ void Canvas::propagateMouseEvent (QMouseEvent *e) {
 //      scrollview->ensureVisible (e->x (), e->y (), 10, 10);
   }
 
-  if (e->button () == RightButton &&
-      e->type () == QEvent::MouseButtonPress && ! toolController->getActiveTool ()->consumesRMBEvents ()) {
-    if (document->selectionIsEmpty ()) {
-      GObject* obj = document->findContainingObject (new_pos.x (),
-                                                     new_pos.y ());
-      if (obj) {
-        // pop up menu for the picked object
-        emit rightButtonAtObjectClicked (e->x (), e->y (), obj);
-      }
-      else {
-        emit rightButtonClicked (e->x (), e->y ());
-      }
-    }
-    else {
-      // pop up menu for the current selection
-      emit rightButtonAtSelectionClicked (e->x (), e->y ());
-    }
-    return;
+  if (e->button()==RightButton && e->type()==QEvent::MouseButtonPress)
+  {
+     if (document->selectionIsEmpty ())
+     {
+        GObject* obj = document->findContainingObject (new_pos.x (),
+                                                       new_pos.y ());
+        if (obj)
+        {
+           // pop up menu for the picked object
+           emit rightButtonAtObjectClicked (e->x (), e->y (), obj);
+        }
+        else
+        {
+           emit rightButtonClicked (e->x (), e->y ());
+        }
+     }
+     else
+     {
+        // pop up menu for the current selection
+        emit rightButtonAtSelectionClicked (e->x (), e->y ());
+     }
+     return;
   }
-  else
-    if (toolController) {
-      // the tool controller processes the event
-      toolController->delegateEvent (&new_ev, document, this);
-    }
+  else if (toolController)
+  {
+     // the tool controller processes the event
+     toolController->delegateEvent (&new_ev, document, this);
+  }
 }
 
 void Canvas::keyPressEvent (QKeyEvent* e)

@@ -41,12 +41,14 @@
 #include <qkeycode.h>
 #include <klocale.h>
 
-BezierTool::BezierTool (CommandHistory* history) : Tool (history) {
-
+BezierTool::BezierTool (CommandHistory* history)
+   : Tool (history)
+{
     curve = 0L;
     last = 0;
     newObj = true;
     oldNumOfPoints = 0;
+    m_id=ToolBezier;
 }
 
 void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {

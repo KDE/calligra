@@ -33,7 +33,7 @@
 #include <CommandHistory.h>
 
 ZoomTool::ZoomTool (CommandHistory* history) : Tool (history)
- {
+{
   zoomFactors.append(0.5);
   zoomFactors.append(1.0);
   zoomFactors.append(1.5);
@@ -42,7 +42,8 @@ ZoomTool::ZoomTool (CommandHistory* history) : Tool (history)
   zoomFactors.append(6.0);
   zoomFactors.append(8.0);
   zoomFactors.append(10.0);
- }
+  m_id=ToolZoom;
+}
 
 void ZoomTool::processEvent (QEvent* e, GDocument *_doc, Canvas* _canvas)
  {

@@ -36,12 +36,15 @@
 #include <AddLineSegmentCmd.h>
 #include <CommandHistory.h>
 
-FreeHandTool::FreeHandTool (CommandHistory* history) : Tool (history) {
-  line = 0L;
-  last = 0;
-  newObj = true;
-  buttonIsDown = false;
-  points.setAutoDelete (true);
+FreeHandTool::FreeHandTool (CommandHistory* history)
+   :Tool (history)
+{
+   line = 0L;
+   last = 0;
+   newObj = true;
+   buttonIsDown = false;
+   points.setAutoDelete (true);
+   m_id=ToolFreeHand;
 }
 
 void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {

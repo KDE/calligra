@@ -38,14 +38,17 @@ public:
   ToolController (MainView* view);
   ~ToolController ();
 
-  void registerTool (int id, Tool* tool);
+  //void registerTool (int id, Tool* tool);
+  void registerTool (Tool* tool);
   Tool* getActiveTool ();
 
   void delegateEvent (QEvent *e, GDocument* doc, Canvas* canvas);
 
 public slots:
-  void toolSelected (int id);
-  void configureTool (int id);
+   void toolSelected (Tool::ToolID id);
+  void configureTool (Tool::ToolID id);
+  //void toolSelected (int id);
+  //void configureTool (int id);
 
   //  void reset ();
 

@@ -26,7 +26,9 @@
 #include <GDocument.h>
 #include <CommandHistory.h>
 
-Tool::Tool (CommandHistory *chist) {
+Tool::Tool (CommandHistory *chist)
+   :m_id(ToolDummy)
+{
   history = chist;
 }
 

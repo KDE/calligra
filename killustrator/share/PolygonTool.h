@@ -32,7 +32,7 @@ class GPolygon;
 class PolygonTool : public Tool {
   Q_OBJECT
 public:
-  PolygonTool (CommandHistory* history);
+   PolygonTool (CommandHistory* history);
 
   virtual void processEvent (QEvent* e, GDocument* doc, Canvas* canvas);
   virtual void activate (GDocument* doc, Canvas* canvas);
