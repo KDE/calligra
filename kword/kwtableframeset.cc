@@ -215,6 +215,7 @@ void KWTableFrameSet::recalcCols(int _col,int _row)
         }
         else
             isOneSelected(row,col);
+
         // ** check/set sizes of frames **
         // we assume only left or only right pos has changed.
         // check if leftCoordinate is same as rest of tableRow
@@ -361,6 +362,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
         }
         else
             isOneSelected(row,col);
+
         // check if topCoordinate is same as rest of tableRow
         Cell *activeCell = getCell(row,col);
         Cell *cell;
@@ -737,7 +739,11 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
     KoRect br = boundingRect();
 
     bool needFinetune=false;
-    unsigned int copyFromRow=_idx-1;
+    //laurent
+    //it's an unsigned so if idx==0 when you put before first row
+    // you substract 1 to 0 to an unsigned value is bad
+    unsigned int copyFromRow=(_idx==0)? 0 : _idx-1;
+
     if(isAHeader) copyFromRow=0;
 
     // build a list of colStart positions.
@@ -749,15 +755,15 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
             else {
                 needFinetune=true;
                 for( int rowspan=cell->m_cols; rowspan>0; rowspan--)
-{
-                colStart.append(cell->getFrame( 0 )->left() + (cell->getFrame( 0 )->width() / cell->m_cols)*(rowspan - 1) );
-}
+                {
+
+                    colStart.append(cell->getFrame( 0 )->left() + (cell->getFrame( 0 )->width() / cell->m_cols)*(rowspan - 1) );
+                }
             }
         }
         // also move all cells beneath the new row.
         if ( cell->m_row >= _idx ) cell->m_row++;
     }
-
     if(needFinetune) {
         for( unsigned int col = 0; col < colStart.count(); col++) {
             for ( i = 0; i < m_cells.count(); i++ ) {
@@ -770,11 +776,12 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
     }
 
     colStart.append(br.right());
-
     QList<KWTableFrameSet::Cell> nCells;
     nCells.setAutoDelete( false );
-    double height = getCell(copyFromRow,0)->getFrame(0)->height();
+    if(_idx==0)
+        copyFromRow=1;
 
+    double height = getCell(copyFromRow,0)->getFrame(0)->height();
     for ( i = 0; i < getCols(); i++ ) {
         int colSpan = getCell(copyFromRow,i)->m_cols;
         double tmpWidth= colStart[i+colSpan] - colStart[i];
@@ -782,7 +789,6 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
             tmpWidth-=tableCellSpacing;
         else
             tmpWidth+=1;
-
         KWFrame *frame = new KWFrame(0L, colStart[i], br.y(), tmpWidth, height);
         frame->setFrameBehaviour(AutoExtendFrame);
         frame->setNewFrameBehaviour(NoFollowup);
@@ -796,7 +802,6 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
 
         newCell->m_cols = getCell(copyFromRow,i)->m_cols;
     }
-
     m_rows = ++_rows;
 
     for ( i = 0; i < nCells.count(); i++ ) {
