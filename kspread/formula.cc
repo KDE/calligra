@@ -36,6 +36,8 @@
 #include <qvaluevector.h>
 #include <qvaluestack.h>
 
+#include <klocale.h>
+
 /*
   To understand how this formula engine works, please refer to the documentation
   in file DESIGN.html.
@@ -56,7 +58,6 @@
  /*
 TODO - features:
  - array/list for function arguments
- - conversion using KLocale
  - handle Intersection
  - cell reference is made relative (absolute now)
  - shared formula (different owner, same data)
@@ -437,7 +438,7 @@ Tokens Formula::tokens() const
   return scan( d->expression );
 }
 
-Tokens Formula::scan( const QString& expr )
+Tokens Formula::scan( const QString& expr, KLocale* locale )
 {
   // to hold the result
   Tokens tokens;
@@ -446,9 +447,9 @@ Tokens Formula::scan( const QString& expr )
   enum { Start, Finish, Bad, InNumber, InDecimal, InExpIndicator, InExponent,
     InString, InIdentifier, InCell, InRange, InSheetName } state;
 
-  // TODO use locale settings if specified
-  QString thousand = "";
-  QString decimal = ".";
+  // use locale settings if specified
+  QString thousand = locale ? locale->thousandsSeparator() : "";
+  QString decimal = locale ? locale->decimalSymbol() : ".";
 
   // initialize variables
   state = Start;

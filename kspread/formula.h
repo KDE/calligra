@@ -282,7 +282,7 @@ class Formula : public DocBase
      * If the expression contains error (e.g. unknown operator, string no terminated)
      * this function returns tokens which is not valid.
      */     
-    static Tokens scan( const QString& expr );
+    static Tokens scan( const QString& expr, KLocale* locale = 0 );
 
     /**
      * Returns an assembler dump of the formula.
