@@ -700,10 +700,6 @@ private:
     RotationDialogImpl *rotateDia;
     ShadowDialogImpl *shadowDia;
     KPPresStructView *presStructView;
-    ConfPieDia *confPieDia;
-    ConfRectDia *confRectDia;
-    ConfPolygonDia *confPolygonDia;
-    ConfPictureDia *confPictureDia;
     KPPresDurationDia *presDurationDia;
 
     // default pen and brush
