@@ -568,6 +568,9 @@ Record* Record::create( unsigned type )
   else if( type == SSTRecord::id )
     record = new SSTRecord();
   
+  else if( type == StringRecord::id )
+    record = new StringRecord();
+  
   else if( type == XFRecord::id )
     record = new XFRecord();
   
@@ -2746,6 +2749,54 @@ void SSTRecord::dump( std::ostream& out ) const
     stringAt( i ).ascii() << std::endl;
 }
 
+// ========== STRING ==========
+
+const unsigned int StringRecord::id = 0x0207;
+
+class StringRecord::Private
+{
+public:
+  UString string;
+};
+
+StringRecord::StringRecord():
+  Record()
+{
+  d = new StringRecord::Private();
+}
+
+StringRecord::~StringRecord()
+{
+  delete d;
+}
+
+void StringRecord::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 3 ) return;
+  
+  //  TODO simple string for BIFF7
+  
+  EString es = EString::fromUnicodeString( data );
+  d->string = es.str();
+}
+
+UString StringRecord::ustring() const
+{
+  return d->string;
+}
+
+Value StringRecord::value() const
+{
+  return Value( d->string );
+}  
+
+void StringRecord::dump( std::ostream& out ) const
+{
+  out << "STRING" << std::endl;
+  out << "             String : " << ustring().ascii() << std::endl;
+}
+
+
 // ========== TOPMARGIN ==========
 
 const unsigned int TopMarginRecord::id = 0x0028;
@@ -3324,6 +3375,9 @@ public:
   // active sheet, all cell records will be stored here
   Sheet* activeSheet;
   
+  // for FORMULA+STRING record pair
+  Cell* formulaCell;
+  
   // mapping from BOF pos to actual Sheet
   std::map<unsigned,Sheet*> bofMap;
   
@@ -3515,6 +3569,8 @@ void ExcelReader::handleRecord( Record* record )
       handleRString( static_cast<RStringRecord*>( record ) ); break;
     case SSTRecord::id: 
       handleSST( static_cast<SSTRecord*>( record ) ); break;
+    case StringRecord::id: 
+      handleString( static_cast<StringRecord*>( record ) ); break;
     case TopMarginRecord::id: 
       handleTopMargin( static_cast<TopMarginRecord*>( record ) ); break;
     case XFRecord::id: 
@@ -3723,6 +3779,10 @@ void ExcelReader::handleFormula( FormulaRecord* record )
   {
     cell->setValue( value );
     cell->setFormat( convertFormat( xfIndex ) );
+    
+    // if value is string, real value is in subsequent String record
+    if( value.isString() )
+      d->formulaCell = cell;
   }
 }
 
@@ -3735,7 +3795,6 @@ void ExcelReader::handleFont( FontRecord* record )
   // font #4 is never used, so add a dummy one
   if( d->fontTable.size() == 4 )
     d->fontTable.push_back( FontRecord() );
-
 }
 
 void ExcelReader::handleFooter( FooterRecord* record )
@@ -4030,7 +4089,6 @@ void ExcelReader::handleRString( RStringRecord* record )
   }
 }
 
-
 void ExcelReader::handleSST( SSTRecord* record )
 {
   if( !record ) return;
@@ -4041,7 +4099,18 @@ void ExcelReader::handleSST( SSTRecord* record )
     UString str = record->stringAt( i );
     d->stringTable.push_back( str );
   }
+}
+
+void ExcelReader::handleString( StringRecord* record )
+{
+  if( !record ) return;
   
+  if( !d->activeSheet ) return;
+  if( !d->formulaCell ) return;
+  
+  d->formulaCell->setValue( record->value() );
+  
+  d->formulaCell = 0;
 }
 
 void ExcelReader::handleTopMargin( TopMarginRecord* record )

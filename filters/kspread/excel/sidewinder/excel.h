@@ -2292,6 +2292,57 @@ private:
 
 
 /**
+  Class String represents a string record, which holds the value of 
+  calculation if a formula returns a string. This record must appear 
+  right after the associated formula record.
+
+  \sa FormulaRecord
+  
+ */
+class StringRecord : public Record
+{
+public:
+
+  static const unsigned int id;
+  
+  unsigned int rtti(){ return this->id; }
+
+  /**
+   * Creates a new string record.
+   */ 
+  StringRecord();
+  
+  /**
+   * Destroys the record.
+   */ 
+  virtual ~StringRecord();
+
+  virtual void setData( unsigned size, const unsigned char* data );
+  
+  /**
+    Returns the string (in Unicode).
+   */  
+  UString ustring() const;
+  
+  /**
+    Returns the string as a value.
+   */  
+  Value value() const;
+  
+  virtual const char* name(){ return "STRING"; }
+  
+  virtual void dump( std::ostream& out ) const;
+  
+private:
+   // no copy or assign
+   StringRecord( const SSTRecord& );
+   StringRecord& operator=( const SSTRecord& );
+
+   class Private;
+   Private *d;
+};
+
+/**
   Class TopMarginRecord holds information about top margin.
   
  */
@@ -2876,6 +2927,7 @@ private:
   void handleRK( RKRecord* record );
   void handleRow( RowRecord* record );
   void handleSST( SSTRecord* record );
+  void handleString( StringRecord* record );
   void handleTopMargin( TopMarginRecord* record );
   void handleXF( XFRecord* record );    
   
