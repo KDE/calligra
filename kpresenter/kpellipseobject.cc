@@ -125,3 +125,17 @@ void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
     }
     _painter->drawEllipse( pw / 2, pw / 2, ow - pw + 1, oh - pw + 1 );
 }
+
+KoSize KPEllipseObject::getRealSize() const {
+    KoSize size = ext;
+
+    if ( angle != 0.0 ) {
+      float angInRad = angle * M_PI / 180;
+      size.setWidth( sqrt( pow ( ext.width() * cos( angInRad ), 2) + 
+                           pow ( ext.height() * sin( angInRad ) ,2 ) ) );
+      size.setHeight( sqrt( pow ( ext.width() * sin( angInRad ), 2) + 
+                            pow ( ext.height() * cos( angInRad ) ,2 ) ) );
+    }
+      
+    return size;
+}

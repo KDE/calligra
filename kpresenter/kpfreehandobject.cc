@@ -30,7 +30,7 @@
 using namespace std;
 
 KPFreehandObject::KPFreehandObject()
-    : KPShadowObject()
+    : KPPointObject()
 {
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
@@ -38,7 +38,7 @@ KPFreehandObject::KPFreehandObject()
 
 KPFreehandObject::KPFreehandObject( const KoPointArray &_points, const KoSize &_size,
                                     const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
-    : KPShadowObject( _pen )
+    : KPPointObject( _pen )
 {
     points = KoPointArray( _points );
     ext = _size;

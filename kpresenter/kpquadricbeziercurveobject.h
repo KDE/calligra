@@ -30,7 +30,7 @@ class QPainter;
 class KoZoomHandler;
 class DCOPObject;
 
-class KPQuadricBezierCurveObject : public KPShadowObject
+class KPQuadricBezierCurveObject : public KPPointObject
 {
 public:
     KPQuadricBezierCurveObject();
@@ -69,7 +69,7 @@ protected:
 
     KoPointArray getQuadricBezierPointsFrom( const KoPointArray &_pointArray );
 
-    KoPointArray controlPoints, allPoints;
+    KoPointArray controlPoints;
     LineEnd lineBegin, lineEnd;
 };
 

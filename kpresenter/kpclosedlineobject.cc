@@ -262,3 +262,18 @@ void KPClosedLineObject::flip( bool horizontal )
     }
 }
 
+KoSize KPClosedLineObject::getRealSize() const {
+    KoSize size( ext );
+    KoPoint realOrig( orig );
+    KoPointArray p( points );
+    getRealSizeAndOrigFromPoints( p, angle, size, realOrig );
+    return size;
+}
+
+KoPoint KPClosedLineObject::getRealOrig() const {
+    KoSize size( ext );
+    KoPoint realOrig( orig );
+    KoPointArray p( points );
+    getRealSizeAndOrigFromPoints( p, angle, size, realOrig );
+    return realOrig;
+}

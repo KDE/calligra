@@ -21,6 +21,7 @@
 #include "kplineobject.h"
 #include "kpresenter_utils.h"
 #include "KPLineObjectIface.h"
+#include "koPointArray.h"
 
 #include <qpainter.h>
 #include <qwmatrix.h>
@@ -28,6 +29,7 @@
 #include <kdebug.h>
 #include <kozoomhandler.h>
 #include <math.h>
+
 using namespace std;
 
 KPLineObject::KPLineObject()
@@ -255,4 +257,75 @@ void KPLineObject::flip( bool horizontal )
         lineBegin = lineEnd;
         lineEnd = tmp;
     }
+}
+
+KoSize KPLineObject::getRealSize() const {
+    KoSize size( ext );
+
+    if ( angle != 0.0 ) {
+        float angInRad = angle * M_PI / 180;
+        switch (lineType ) {
+        case LT_HORZ: 
+            size.setWidth( ext.width() * cos( angInRad ) + pen.width() * sin( angInRad ) );
+            size.setHeight( ext.width() * sin( angInRad ) + pen.width() * cos( angInRad ) );
+            break;
+        case LT_VERT:
+            size.setWidth( pen.width() * cos( angInRad ) + ext.height() * sin( angInRad ) );
+            size.setHeight( pen.width() * sin( angInRad ) + ext.height() * cos( angInRad ) );
+            break;
+        case LT_LU_RD:
+        case LT_LD_RU: 
+            {
+                KoPointArray points(2);
+                if ( lineType == LT_LU_RD ) {  
+                    points.setPoint( 0, 0, 0 );
+                    points.setPoint( 1, ext.width(), ext.height() );
+                }
+                else {
+                    points.setPoint( 0, 0, ext.height() );
+                    points.setPoint( 1, ext.width(), 0 );
+                }
+                KoPoint realOrig(orig);
+                getRealSizeAndOrigFromPoints( points, angle, size, realOrig );
+            } break;
+        }
+    }
+    else if ( lineType == LT_HORZ ) {
+        size.setHeight( pen.width() );
+    }
+    else if ( lineType == LT_VERT ) {
+        size.setWidth( pen.width() );
+    }
+      
+    return size;
+}
+
+KoPoint KPLineObject::getRealOrig() const {
+    KoPoint realOrig( orig );
+    
+    if ( angle != 0.0 ) { 
+        KoPointArray points(2);
+        switch ( lineType ) {
+            case LT_HORZ:
+                points.setPoint( 0, 0, ext.height() / 2.0 );
+                points.setPoint( 1, ext.width(), ext.height() / 2.0 );
+                break;
+            case LT_VERT:
+                points.setPoint( 0, ext.width() / 2.0, 0 );
+                points.setPoint( 1, ext.width() / 2.0, ext.height() );
+                break;
+            case LT_LU_RD:
+                points.setPoint( 0, 0, 0 );
+                points.setPoint( 1, ext.width(), ext.height() );
+                break;
+            case LT_LD_RU: 
+                points.setPoint( 0, 0, ext.height() );
+                points.setPoint( 1, ext.width(), 0 );
+                break;
+        }
+        KoSize size( ext );
+        getRealSizeAndOrigFromPoints( points, angle, size, realOrig );
+    }
+
+    return realOrig;
 }

@@ -315,7 +315,35 @@ double KPObject::load(const QDomElement &element) {
     return offset;
 }
 
-void KPObject::flip( bool horizontal ) {
+KoSize KPObject::getRealSize() const {
+    KoSize size = ext;
+
+    if ( angle != 0.0 ) {
+      float angInRad = angle * M_PI / 180;
+      size.setWidth( ext.width() * cos( angInRad ) + ext.height() * sin( angInRad ) );
+      size.setHeight( ext.width() * sin( angInRad ) + ext.height() * cos( angInRad ) );
+    }
+      
+    return size;
+}
+
+KoPoint KPObject::getRealOrig() const {
+    KoPoint origin = orig;
+    
+    if ( angle != 0.0 ) {
+        KoSize dist( ( getRealSize() - ext ) / 2 ); 
+        origin.setX( orig.x() - dist.width() );
+        origin.setY( orig.y() - dist.height() );
+    }
+
+    return origin;
+}
+
+KoRect KPObject::getRealRect() const {
+    return KoRect( getRealOrig(), getRealSize() );
+}
+
+void KPObject::flip( bool /*horizontal*/ ) {
     // flip the angle
     if ( angle ) {
         angle = 360.0 - angle;
@@ -757,6 +785,51 @@ QPen KPObject::getPen() const
     return QPen();
 }
 
+void KPObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle, 
+                                            KoSize &size, KoPoint &orig )
+{
+    if ( angle == 0 ) 
+        return;
+    
+    float angInRad = angle * M_PI / 180;
+    float sinus = sin( angInRad );
+    float cosinus = cos( angInRad );
+
+    float mid_x = size.width() / 2;
+    float mid_y = size.height() / 2;
+
+    float min_x = 0;
+    float max_x = 0;
+    float min_y = 0;
+    float max_y = 0;
+    KoPointArray::ConstIterator it;
+    for ( it = points.begin(); it != points.end(); ++it ) {
+        KoPoint cord( mid_x - (*it).x(), (*it).y() - mid_y );
+        float tmp_x = cord.x() * cosinus + cord.y() * sinus;
+        float tmp_y = - cord.x() * sinus + cord.y() * cosinus;
+
+        if ( tmp_x < min_x ) {
+            min_x = tmp_x;
+        }
+        else if ( tmp_x > max_x ) {
+            max_x = tmp_x;
+        }
+          
+        if ( tmp_y < min_y ) {
+            min_y = tmp_y;
+        }
+        else if ( tmp_y > max_y ) {
+            max_y = tmp_y;
+        }
+    }
+
+    size.setWidth( max_x - min_x );
+    size.setHeight( max_y - min_y );
+
+    orig.setX( orig.x() + mid_x - max_x );
+    orig.setY( orig.y() + mid_y + min_y );
+}
+
 KPShadowObject::KPShadowObject()
     : KPObject()
 {
@@ -851,6 +924,39 @@ void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     _painter->restore();
 
     KPObject::draw( _painter, _zoomHandler, selectionMode, drawContour );
+}
+
+KPPointObject::KPPointObject()
+    : KPShadowObject()
+{
+}
+
+KPPointObject::KPPointObject( const QPen &_pen )
+    : KPShadowObject( _pen )
+{
+}
+
+KPPointObject::KPPointObject( const QPen &_pen, const QBrush &_brush )
+    : KPShadowObject( _pen, _brush )
+{
+}
+
+KoSize KPPointObject::getRealSize() const
+{
+    KoSize size( ext );
+    KoPoint realOrig( orig );
+    KoPointArray p( points );
+    getRealSizeAndOrigFromPoints( p, angle, size, realOrig );
+    return size;
+}
+
+KoPoint KPPointObject::getRealOrig() const
+{
+    KoSize size( ext );
+    KoPoint realOrig( orig );
+    KoPointArray p( points );
+    getRealSizeAndOrigFromPoints( p, angle, size, realOrig );
+    return realOrig;
 }
 
 KP2DObject::KP2DObject()

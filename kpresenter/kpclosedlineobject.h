@@ -63,6 +63,8 @@ public:
     virtual double load( const QDomElement &element );
 
     virtual void flip(bool horizontal );
+    virtual KoSize getRealSize() const;
+    virtual KoPoint getRealOrig() const;
 
 protected:
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,

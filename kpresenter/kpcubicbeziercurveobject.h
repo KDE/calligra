@@ -29,7 +29,7 @@
 class QPainter;
 class DCOPObject;
 
-class KPCubicBezierCurveObject : public KPShadowObject
+class KPCubicBezierCurveObject : public KPPointObject
 {
 public:
     KPCubicBezierCurveObject();
@@ -69,7 +69,7 @@ protected:
 
     KoPointArray getCubicBezierPointsFrom( const KoPointArray &_pointArray );
 
-    KoPointArray controlPoints, allPoints;
+    KoPointArray controlPoints;
     LineEnd lineBegin, lineEnd;
 };
 

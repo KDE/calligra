@@ -32,7 +32,7 @@
 using namespace std;
 
 KPPolylineObject::KPPolylineObject()
-    : KPShadowObject()
+    : KPPointObject()
 {
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
@@ -47,7 +47,7 @@ DCOPObject* KPPolylineObject::dcopObject()
 
 KPPolylineObject::KPPolylineObject(  const KoPointArray &_points, const KoSize &_size,
                                      const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
-    : KPShadowObject( _pen )
+    : KPPointObject( _pen )
 {
     points = KoPointArray( _points );
     ext = _size;

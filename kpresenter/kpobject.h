@@ -28,6 +28,7 @@
 #include "global.h"
 
 #include "kpgradient.h"
+#include "koPointArray.h"
 #include <klocale.h>
 #include <koPoint.h>
 #include <koSize.h>
@@ -145,6 +146,11 @@ public:
         { return orig; }
     KoRect getRect() const
         { return KoRect( getOrig(), getSize() ); }
+    
+    virtual KoSize getRealSize() const;
+    virtual KoPoint getRealOrig() const;
+    KoRect getRealRect() const;
+
     virtual Effect getEffect() const
         { return effect; }
     virtual Effect2 getEffect2() const
@@ -227,6 +233,15 @@ public:
     virtual QPen getPen() const;
 
 protected:
+    /**
+     * Helper function to caluclate the size and the orig of a point object 
+     * that might be also rotated.
+     * The size and orig will be changed to the real size and orig in the 
+     * method.
+     */
+    static void getRealSizeAndOrigFromPoints( KoPointArray &points, float angle, 
+                                              KoSize &size, KoPoint &orig );
+
     /**
      * Modifies x and y to add the shadow offsets
      */
@@ -339,6 +354,19 @@ protected:
     QBrush brush;
 };
 
+class KPPointObject : public KPShadowObject
+{
+public:
+    KPPointObject();
+    KPPointObject( const QPen &_pen );
+    KPPointObject( const QPen &_pen, const QBrush &_brush );
+
+    virtual KoSize getRealSize() const;
+    virtual KoPoint getRealOrig() const;
+
+protected:
+    KoPointArray points;
+};
 
 class KP2DObject : public KPShadowObject
 {

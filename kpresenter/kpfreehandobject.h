@@ -28,7 +28,7 @@
 class QPainter;
 class DCOPObject;
 
-class KPFreehandObject : public KPShadowObject
+class KPFreehandObject : public KPPointObject
 {
 public:
     KPFreehandObject();
@@ -61,7 +61,6 @@ protected:
 
     void updatePoints( double _fx, double _fy );
 
-    KoPointArray points;
     LineEnd lineBegin, lineEnd;
 };
 

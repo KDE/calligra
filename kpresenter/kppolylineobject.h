@@ -30,7 +30,7 @@
 class QPainter;
 class DCOPObject;
 
-class KPPolylineObject : public KPShadowObject
+class KPPolylineObject : public KPPointObject
 {
 public:
     KPPolylineObject();
@@ -66,7 +66,6 @@ protected:
 
     void updatePoints( double _fx, double _fy );
 
-    KoPointArray points;
     LineEnd lineBegin, lineEnd;
 };
 

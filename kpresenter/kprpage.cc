@@ -1271,9 +1271,9 @@ KCommand * KPrPage::alignObjsLeft(const KoRect &rect)
         if(it.current()->isSelected() && !it.current()->isProtect())
         {
             _objects.append( it.current() );
-            if( !newPosition &&_x != it.current()->getOrig().x())
+            if( !newPosition &&_x != it.current()->getRealOrig().x())
                 newPosition=true;
-            _diffs.append( new KoPoint( _x - it.current()->getOrig().x(), 0 ) );
+            _diffs.append( new KoPoint( _x - it.current()->getRealOrig().x(), 0 ) );
         }
     }
 
@@ -1315,9 +1315,9 @@ KCommand * KPrPage::alignObjsCenterH(const KoRect &rect)
         if(it.current()->isSelected()&& !it.current()->isProtect())
         {
             _objects.append( it.current() );
-            if(!newPosition && (( _w - it.current()->getSize().width() ) / 2 - it.current()->getOrig().x() + _x)!=0)
+            if(!newPosition && (( _w - it.current()->getRealSize().width() ) / 2 - it.current()->getRealOrig().x() + _x)!=0)
                 newPosition=true;
-            _diffs.append( new KoPoint( ( _w - it.current()->getSize().width() ) / 2 - it.current()->getOrig().x() + _x, 0 ) );
+            _diffs.append( new KoPoint( ( _w - it.current()->getRealSize().width() ) / 2 - it.current()->getRealOrig().x() + _x, 0 ) );
         }
     }
     if(newPosition)
@@ -1357,9 +1357,9 @@ KCommand * KPrPage::alignObjsRight(const KoRect &rect)
         if(it.current()->isSelected()&& !it.current()->isProtect())
         {
             _objects.append( it.current() );
-            if(!newPosition && (( _w - it.current()->getSize().width() ) != it.current()->getOrig().x()))
+            if(!newPosition && (( _w - it.current()->getRealSize().width() ) != it.current()->getRealOrig().x()))
                 newPosition=true;
-            _diffs.append( new KoPoint( ( _w - it.current()->getSize().width() ) - it.current()->getOrig().x(), 0 ) );
+            _diffs.append( new KoPoint( ( _w - it.current()->getRealSize().width() ) - it.current()->getRealOrig().x(), 0 ) );
         }
     }
     if(newPosition)
@@ -1400,10 +1400,10 @@ KCommand *KPrPage::alignObjsTop(const KoRect &rect)
         {
             _y = area.y();
             _objects.append( it.current() );
-            if(!newPosition && (_y != it.current()->getOrig().y()))
+            if(!newPosition && (_y != it.current()->getRealOrig().y()))
                 newPosition=true;
 
-            _diffs.append( new KoPoint( 0, _y - it.current()->getOrig().y() ) );
+            _diffs.append( new KoPoint( 0, _y - it.current()->getRealOrig().y() ) );
         }
     }
     if(newPosition)
@@ -1445,10 +1445,10 @@ KCommand * KPrPage::alignObjsCenterV(const KoRect &rect)
             _y = area.y();
             _h = area.height();
             _objects.append( it.current() );
-            if(!newPosition &&(( _h - it.current()->getSize().height() ) / 2 - it.current()->getOrig().y() + _y )!=0)
+            if(!newPosition &&(( _h - it.current()->getRealSize().height() ) / 2 - it.current()->getRealOrig().y() + _y )!=0)
                 newPosition=true;
-            _diffs.append( new KoPoint( 0, ( _h - it.current()->getSize().height() ) / 2 -
-                                        it.current()->getOrig().y() + _y ) );
+            _diffs.append( new KoPoint( 0, ( _h - it.current()->getRealSize().height() ) / 2 -
+                                        it.current()->getRealOrig().y() + _y ) );
         }
     }
     if(newPosition)
@@ -1487,9 +1487,9 @@ KCommand * KPrPage::alignObjsBottom(const KoRect &rect)
         {
             _h = area.y() + area.height();
             _objects.append( it.current() );
-            if(!newPosition && _h != (it.current()->getSize().height() + it.current()->getOrig().y()))
+            if(!newPosition && _h != (it.current()->getRealSize().height() + it.current()->getRealOrig().y()))
                 newPosition=true;
-            _diffs.append( new KoPoint( 0, _h - it.current()->getSize().height() - it.current()->getOrig().y() ) );
+            _diffs.append( new KoPoint( 0, _h - it.current()->getRealSize().height() - it.current()->getRealOrig().y() ) );
         }
     }
 

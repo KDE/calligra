@@ -352,3 +352,19 @@ void KPPolygonObject::flip( bool horizontal )
         redrawPix = true;
     }
 }
+
+KoSize KPPolygonObject::getRealSize() const {
+    KoSize size( ext );
+    KoPoint realOrig( orig );
+    KoPointArray p( points );
+    getRealSizeAndOrigFromPoints( p, angle, size, realOrig );
+    return size;
+}
+
+KoPoint KPPolygonObject::getRealOrig() const {
+    KoSize size( ext );
+    KoPoint realOrig( orig );
+    KoPointArray p( points );
+    getRealSizeAndOrigFromPoints( p, angle, size, realOrig );
+    return realOrig;
+}
