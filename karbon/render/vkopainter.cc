@@ -763,6 +763,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 			conical->spread = ART_GRADIENT_REFLECT;
 
 		double cx = gradient.origin().x() * m_zoomFactor;
+		cx = m_matrix.m11() * cx + m_matrix.dx();
 		double cy = gradient.origin().y() * m_zoomFactor;
 		cy = m_matrix.m22() * cy + m_matrix.dy();
 		double r = sqrt( pow( gradient.vector().x() - gradient.origin().x(), 2 ) +
