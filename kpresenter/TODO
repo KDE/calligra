@@ -69,6 +69,8 @@ Bugs:
 -> fix default value
 -> fix some arrow style  
 
+In Progress:
+-> save/load animation group
 
 Reginald Stadlbauer <reggie@kde.org>
 Laurent Montel <montel@kde.org>
