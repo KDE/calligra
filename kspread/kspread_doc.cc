@@ -48,6 +48,7 @@
 #include <kscript_context.h>
 #include <kstddirs.h>
 #include <kdebug.h>
+#include <kconfig.h>
 #include <koTemplateChooseDia.h>
 #include <koFilterManager.h>
 
