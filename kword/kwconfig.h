@@ -119,11 +119,13 @@ private:
 
     int m_oldStartingPage;
     bool m_oldBackupFile;
+    QString m_oldBackupFileExtension;
     KIntNumInput* m_variableNumberOffset;
     KDoubleNumInput *m_tabStopWidth;
     QCheckBox *m_cursorInProtectedArea;
     QCheckBox *m_createBackupFile;
     QCheckBox *m_directInsertCursor;
+    QLineEdit *m_backupFileExtension;
 };
 
 class ConfigurePathPage : public QObject

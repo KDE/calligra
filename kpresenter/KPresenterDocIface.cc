@@ -878,3 +878,14 @@ void KPresenterDocIface::setInsertDirectCursor(bool _b)
     doc->setInsertDirectCursor( _b );
 }
 
+void KPresenterDocIface::setBackupFileExtension( const QString & _ext )
+{
+    doc->setBackupFileExtension( _ext );
+}
+
+
+QString KPresenterDocIface::backupFileExtension()const
+{
+    return doc->backupFileExtension();
+}
+

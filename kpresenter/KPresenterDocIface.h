@@ -253,6 +253,9 @@ k_dcop:
     bool insertDirectCursor() const;
     void setInsertDirectCursor(bool _b);
 
+    void setBackupFileExtension( const QString & _ext );
+    QString backupFileExtension()const;
+
 private:
     KPresenterDoc *doc;
 

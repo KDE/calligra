@@ -29,6 +29,7 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qvbox.h>
+#include <qhbox.h>
 #include <qcombobox.h>
 #include <qwhatsthis.h>
 #include <qvgroupbox.h>
@@ -758,14 +759,23 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     autoSave->setSuffix(i18n(" min"));
 
     m_oldBackupFile = true;
+    m_oldBackupFileExtension = QString::fromLatin1("~");
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
         m_oldBackupFile=config->readBoolEntry("BackupFile",m_oldBackupFile);
+        m_oldBackupFileExtension=config->readEntry("BackupFileExtension",m_oldBackupFileExtension);
     }
 
-    m_createBackupFile = new QCheckBox( i18n("Create Backup File"), gbDocumentSettings);
+    m_createBackupFile = new QCheckBox( i18n("Create Backup File"), gbDocumentSettings );
+
     m_createBackupFile->setChecked( m_oldBackupFile );
+
+    QHBox* gbHorziGroupBox = new QHBox( gbDocumentSettings );
+
+    new QLabel(i18n("Backup File Extension:"), gbHorziGroupBox);
+    m_backupFileExtension = new QLineEdit(gbHorziGroupBox );
+    m_backupFileExtension->setText( m_oldBackupFileExtension );
 
     new QLabel(i18n("Starting page number:"), gbDocumentSettings);
 
@@ -820,6 +830,15 @@ KCommand *ConfigureDefaultDocPage::apply()
         doc->setBackupFile( state);
         m_oldBackupFile=state;
     }
+    QString tmp = m_backupFileExtension->text();
+    if ( tmp != m_oldBackupFileExtension)
+    {
+        if ( tmp.isEmpty())
+            tmp = QString::fromLatin1("~");
+        config->writeEntry( "BackupFileExtension", tmp );
+        doc->setBackupFileExtension( tmp );
+        m_oldBackupFileExtension = tmp;
+    }
 
     state = m_cursorInProtectedArea->isChecked();
     if ( state != doc->cursorInProtectedArea() )
@@ -870,6 +889,7 @@ void ConfigureDefaultDocPage::slotDefault()
    m_tabStopWidth->setValue(KoUnit::ptToUnit( MM_TO_POINT(15), m_pView->kWordDocument()->getUnit()));
    m_createBackupFile->setChecked( true );
    m_directInsertCursor->setChecked( false );
+   m_backupFileExtension->setText( QString::fromLatin1("~") );
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {
