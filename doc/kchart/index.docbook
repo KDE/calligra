@@ -42,7 +42,7 @@ ring charts and more.
 <para>
 &kchart; is a &koffice; component and is very well integrated with &kspread;
 to allow visualization of spreadsheet data. But it is also possible to use
-&kchart; as a standalone application.
+&kchart; as a stand alone application.
 </para>
 </abstract>
 
@@ -69,25 +69,65 @@ uses the &kchart; component for charts and diagrams. &kspread;
 can be seen as a very powerful data provider for &kchart; input.
 </para>
 <para>
-To start with we will look at how &kchart; can be used as a
-stand alone component. When we are familiar with &kchart; we
-will investigate the charting capabilities it offers together
-with &kspread;.
+To start with we will look at the user interface of &kchart;
+and how it can be used as a stand alone application. When we
+are familiar with &kchart; we will investigate the charting
+capabilities it offers together with &kspread;.
 </para>
-<para>
-A command reference is added at the end to make the handbook
-complete.
-</para>
-
 </chapter>
 
 <chapter id="kchartstandalone">
+<title>The &kchart; Application</title>
 
-<title>The &kchart; application</title>
-
+<sect1 id="userinterface">
+<title>The User Interface</title>
+<sect2 id="mainuserinterface">
+<title>Main Application Interface</title>
+<para>
+We will take a look at a simple example to get to know &kchart;.
+</para>
+<para>
+Start &kchart; with the default settings and you will see the main
+user interface of &kchart;
+</para>
+<screenshot>
+<screeninfo>KChart User Interface</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-default.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+As you can see, there is already some example data present. &kchart;
+offers the default toolbar for creating a new chart, saving, loading
+and printing the chart. The second toolbar offers icons for editing
+the data, configuring the chart or using a configuration wizard.
+You can also switch between different chart types with the rest
+of the icons. Note that some of these types also have subtypes.
+</para>
+<para>
+The menu offers all standard entries, including shortcut and
+toolbar configuration and page layout for printing.
+</para>
+<para>
+Note that data editing is not available if you use &kchart; from
+within &kspread; because all data is provided by the spreadsheet.
+As a standalone application the data editor is an important part
+of the application.
+</para>
+</sect2>
+<sect2 id="dataeditorinterface">
+<title>The Data Editor</title>
 <para>
 </para>
-
+</sect2>
+<sect2 id="configurationinterface">
+<title>Chart Configuration</title>
+<para>
+</para>
+</sect2>
+</sect1>
 </chapter>
 
 <chapter id="kchartinkspread">
