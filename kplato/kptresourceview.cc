@@ -161,9 +161,8 @@ void KPTResourceView::drawAppointments(KPTResource *resource)
         if (t) {
             KPTDuration *dur = t->getExpectedDuration();
             QListViewItem *item = new QListViewItem(appList,
-                    t->name(), t->leader(),
-                    t->startTime().date().toString(), t->endTime().date().toString(),
-                    dur->toString(KPTDuration::Format_Hour)); // FIXME
+               t->name(), t->leader(), it.current()->startTime().date().toString(), (it.current()->startTime()+it.current()->duration()).date().toString(),
+               it.current()->duration().toString(KPTDuration::Format_Hour)); // FIXME
             delete dur;
         }
     }
