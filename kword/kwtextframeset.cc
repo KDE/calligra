@@ -2161,9 +2161,6 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
 
     m_doc->updateAllFrames();
 
-    if ( theFrame->frameSet()->frameSetInfo() != KWFrameSet::FI_BODY )
-        m_doc->recalcFrames();
-
     KWTableFrameSet *table = theFrame->frameSet()->getGroupManager();
     if ( table )
     {
@@ -2171,13 +2168,16 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
         table->recalcCols(cell->m_col,cell->m_row);
         table->recalcRows(cell->m_col,cell->m_row);
     }
+    theFrame->updateRulerHandles();
+
+    if ( theFrame->frameSet()->frameSetInfo() != KWFrameSet::FI_BODY )
+        m_doc->recalcFrames(); // warning this can delete theFrame!
 
     // m_doc->frameChanged( theFrame );
     // Warning, can't call layout() (frameChanged calls it)
     // from here, since it calls formatMore() !
     if ( invalidateLayout )
         m_doc->invalidate(this);
-    theFrame->updateRulerHandles();
 
     // Can't repaint directly, we might be in a paint event already
     m_doc->delayedRepaintAllViews();
