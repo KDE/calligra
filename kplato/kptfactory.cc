@@ -51,17 +51,24 @@ KPTFactory::~KPTFactory()
     s_global = 0L;
 }
 
-KParts::Part* KPTFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part *KPTFactory::createPartObject(QWidget *parentWidget,
+					   const char *widgetName,
+					   QObject* parent, const char* name,
+					   const char* classname,
+					   const QStringList &)
 {
     // If classname is "KoDocument", our host is a koffice application
-    // otherwise, the host wants us as a simple part, so switch to readonly and single view.
-    bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
+    // otherwise, the host wants us as a simple part, so switch to readonly
+    // and single view.
+    bool bWantKoDocument = (strcmp(classname, "KoDocument") == 0);
 
-    // parentWidget and widgetName are used by KoDocument for the "readonly+singleView" case.
-    KPTPart *part = new KPTPart( parentWidget, widgetName, parent, name, !bWantKoDocument );
+    // parentWidget and widgetName are used by KoDocument for the
+    // "readonly+singleView" case.
+    KPTPart *part = new KPTPart(parentWidget, widgetName, parent, name,
+				!bWantKoDocument);
 
-    if ( !bWantKoDocument )
-      part->setReadWrite( false );
+    if (!bWantKoDocument)
+      part->setReadWrite(false);
 
     return part;
 }

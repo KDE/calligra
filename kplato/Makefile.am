@@ -1,3 +1,5 @@
+SUBDIRS = templates
+
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 
 libkplatopart_la_SOURCES =  kptmilestone.cc kptnode.cc kptproject.cc \
