@@ -133,6 +133,7 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i)//, const QRect &geom
 			break;
 			
 		case QVariant::Pixmap:
+		case QVariant::Invalid:
 			editor = new PropertyEditorPixmap(viewport(), i->property());
 			break;
 			
@@ -189,7 +190,6 @@ KexiPropertyEditor::showDefaultsButton( bool show )
 	int y = viewportToContents(QPoint(0, itemRect(m_editItem).y())).y();
 	QRect geometry(columnWidth(0), y, columnWidth(1), m_editItem->height());
 
-	m_currentEditor->setGeometry(geometry);
 	if (!show) {
 		m_currentEditor->resize(geometry.width(), geometry.height());
 		m_defaults->hide();
@@ -199,6 +199,7 @@ KexiPropertyEditor::showDefaultsButton( bool show )
 	m_defaults->resize(geometry.height(), geometry.height());
 	QPoint p = contentsToViewport(QPoint(0, geometry.y()));
 	m_defaults->move(geometry.x() + geometry.width() - m_defaults->width(), p.y());
+	m_currentEditor->move(m_currentEditor->x(), p.y());
 	m_currentEditor->resize(geometry.width()-m_defaults->width(), geometry.height());
 	m_defaults->show();
 }
