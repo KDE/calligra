@@ -20,6 +20,7 @@
 #include "resizehandles.h"
 #include "kwdoc.h"
 #include "kwcanvas.h"
+#include "kwviewmode.h"
 #include "kwframe.h"
 #include <kdebug.h>
 
@@ -134,33 +135,35 @@ void KWResizeHandle::mouseReleaseEvent( QMouseEvent * )
 void KWResizeHandle::updateGeometry()
 {
     KWDocument * doc = frame->getFrameSet()->kWordDocument();
+    QRect newRect( frame->outerRect() );
+    QRect frameRect( m_canvas->viewMode()->normalToView( newRect ) );
     switch ( direction ) {
     case LeftUp:
-        m_canvas->moveChild( this, doc->zoomItX(frame->x()), doc->zoomItY(frame->y()) );
+        m_canvas->moveChild( this, frameRect.x(), frameRect.y() );
         break;
     case Up:
-        m_canvas->moveChild( this, doc->zoomItX(frame->x() + frame->width() / 2) - 3, doc->zoomItY(frame->y()) );
+        m_canvas->moveChild( this, frameRect.x() + frameRect.width() / 2 - 3, frameRect.y() );
         break;
     case RightUp:
-        m_canvas->moveChild( this, doc->zoomItX(frame->x() + frame->width()) - 6, doc->zoomItY(frame->y()) );
+        m_canvas->moveChild( this, frameRect.x() + frameRect.width() - 6, frameRect.y() );
         break;
     case Right:
-        m_canvas->moveChild( this, doc->zoomItX(frame->x() + frame->width()) - 6,
-                             doc->zoomItY(frame->y() + frame->height() / 2) - 3 );
+        m_canvas->moveChild( this, frameRect.x() + frameRect.width() - 6,
+                             frameRect.y() + frameRect.height() / 2 - 3 );
         break;
     case RightDown:
-        m_canvas->moveChild( this, doc->zoomItX(frame->x() + frame->width()) - 6,
-                             doc->zoomItY(frame->y() + frame->height()) - 6 );
+        m_canvas->moveChild( this, frameRect.x() + frameRect.width() - 6,
+                             frameRect.y() + frameRect.height() - 6 );
         break;
     case Down:
-        m_canvas->moveChild( this, doc->zoomItX(frame->x() + frame->width() / 2) - 3,
-                             doc->zoomItY(frame->y() + frame->height()) - 5 );
+        m_canvas->moveChild( this, frameRect.x() + frameRect.width() / 2 - 3,
+                             frameRect.y() + frameRect.height() - 5 );
         break;
     case LeftDown:
-        m_canvas->moveChild( this, doc->zoomItX(frame->x()), doc->zoomItY(frame->y() + frame->height()) - 6 );
+        m_canvas->moveChild( this, frameRect.x(), frameRect.y() + frameRect.height() - 6 );
         break;
     case Left:
-        m_canvas->moveChild( this,doc->zoomItX(frame->x()), doc->zoomItY(frame->y() + frame->height() / 2) - 3 );
+        m_canvas->moveChild( this,frameRect.x(), frameRect.y() + frameRect.height() / 2 - 3 );
         break;
     }
     resize( 6, 6 );
