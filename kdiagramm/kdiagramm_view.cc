@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+ 
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+ 
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+ 
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/     
+
 #include <qprinter.h>
 #include "kdiagramm_view.h"
 
@@ -100,10 +119,34 @@ bool KDiagrammView::event( const char* _event, const CORBA::Any& _value )
 
   MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_var, mappingCreateMenubar );
   MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var, mappingCreateToolbar );
+  MAPPING( KDiagramm::View::eventConfigured, KDiagramm::View::EventConfigured,
+	   mappingEventConfigured );
+
 
   END_EVENT_MAPPER;
   
   return false;
+}
+
+bool KDiagrammView::mappingEventConfigured( KDiagramm::View::EventConfigured _event )
+{
+  switch ( _event.mode )
+  {
+  case KDiagramm::LINES:
+    m_pDoc->setDiaType( KoDiagramm::DT_LINIEN );
+    break;
+  case KDiagramm::AREAS:
+    m_pDoc->setDiaType( KoDiagramm::DT_AREA );
+    break;
+  case KDiagramm::BARS:
+    m_pDoc->setDiaType( KoDiagramm::DT_SAEULEN );
+    break;
+  case KDiagramm::CAKES:
+    m_pDoc->setDiaType( KoDiagramm::DT_KREIS );
+    break;
+  }
+
+  return true;
 }
 
 bool KDiagrammView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
@@ -140,6 +183,11 @@ bool KDiagrammView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _facto
   pix = OPUIUtils::loadPixmap( tmp );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "modeCakes", true, i18n( "Cakes" ), -1 );
   
+  m_vToolBarEdit->enable( OpenPartsUI::Show );
+
+  m_vToolBarEdit->enable( OpenPartsUI::Hide );
+  m_vToolBarEdit->setBarPos(OpenPartsUI::Floating);
+  m_vToolBarEdit->setBarPos(OpenPartsUI::Top);
   m_vToolBarEdit->enable( OpenPartsUI::Show );
 
   return true;
@@ -224,22 +272,34 @@ void KDiagrammView::newView()
 
 void KDiagrammView::modeLines()
 {
-  m_pDoc->setDiaType( KoDiagramm::DT_LINIEN );
+  KDiagramm::View::EventConfigured event;
+  event.mode = KDiagramm::LINES;
+  
+  EMIT_EVENT( this, KDiagramm::View::eventConfigured, event );
 }
 
 void KDiagrammView::modeAreas()
 {
-  m_pDoc->setDiaType( KoDiagramm::DT_AREA );
+  KDiagramm::View::EventConfigured event;
+  event.mode = KDiagramm::AREAS;
+  
+  EMIT_EVENT( this, KDiagramm::View::eventConfigured, event );
 }
 
 void KDiagrammView::modeBars()
 {
-  m_pDoc->setDiaType( KoDiagramm::DT_SAEULEN );
+  KDiagramm::View::EventConfigured event;
+  event.mode = KDiagramm::BARS;
+  
+  EMIT_EVENT( this, KDiagramm::View::eventConfigured, event );
 }
 
 void KDiagrammView::modeCakes()
 {
-  m_pDoc->setDiaType( KoDiagramm::DT_KREIS );
+  KDiagramm::View::EventConfigured event;
+  event.mode = KDiagramm::CAKES;
+  
+  EMIT_EVENT( this, KDiagramm::View::eventConfigured, event );
 }
 
 void KDiagrammView::slotUpdateView()

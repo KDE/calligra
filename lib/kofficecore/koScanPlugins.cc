@@ -257,8 +257,9 @@ void koScanPluginFile( const char* _file, CORBA::ImplRepository_ptr _imr )
   g_plstPluginEntries->append( plugin );
 }
 
-KoPluginEntry::KoPluginEntry( const char *_name, const char *_exec, const char *_mode, const char *_comment,
-			      const char *_icon, const char *_miniicon, bool _is_gui_plugin, QStrList& _repos )
+KoPluginEntry::KoPluginEntry( const char *_name, const char *_exec, const char *_mode,
+			      const char *_comment, const char *_icon,
+			      const char *_miniicon, bool _is_gui_plugin, QStrList& _repos )
 {
   m_strName = _name;
   m_strExec = _exec;
@@ -352,7 +353,11 @@ KOM::Plugin_ptr KoPluginProxy::ref()
   if ( !CORBA::is_nil( m_vPlugin ) )
     return KOM::Plugin::_duplicate( m_vPlugin );
   
-  CORBA::Object_var obj = imr_activate( m_pEntry->name(), "IDL:KOM/PluginFactory:1.0" );
+  const char *repoid = m_pEntry->repoID().current();
+  assert( repoid );
+  cerr << "Creating " << repoid << endl;
+  CORBA::Object_var obj = imr_activate( m_pEntry->name(), repoid );
+  // CORBA::Object_var obj = imr_activate( m_pEntry->name(), "IDL:KOM/PluginFactory:1.0" );
   if ( CORBA::is_nil( obj ) )
   {
     QString tmp;
@@ -360,6 +365,8 @@ KOM::Plugin_ptr KoPluginProxy::ref()
     QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
     return 0L;
   }
+  
+  cerr << "Got factory" << endl;
   
   KOM::PluginFactory_var factory = KOM::PluginFactory::_narrow( obj );
   if ( CORBA::is_nil( factory ) )
@@ -369,6 +376,8 @@ KOM::Plugin_ptr KoPluginProxy::ref()
     QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
     return 0L;
   }
+  
+  cerr << "Narrow ok" << endl;
   
   KOM::Component_var comp = m_pManager->view();
   m_vPlugin = factory->create( comp );
@@ -380,6 +389,8 @@ KOM::Plugin_ptr KoPluginProxy::ref()
     return 0L;
   }
 
+  cerr << "Plugin ok" << endl;
+  
   return KOM::Plugin::_duplicate( m_vPlugin );
 }
 
@@ -448,7 +459,14 @@ void KoPluginManager::fillToolBar( OpenPartsUI::ToolBarFactory_ptr _factory )
   }
 
   if ( !CORBA::is_nil( m_vToolBar ) )
+  {
     m_vToolBar->enable( OpenPartsUI::Show );
+    // HACK
+    m_vToolBar->enable( OpenPartsUI::Hide );
+    m_vToolBar->setBarPos(OpenPartsUI::Floating);
+    m_vToolBar->setBarPos(OpenPartsUI::Top);
+    m_vToolBar->enable( OpenPartsUI::Show );
+  }
 }
 
 

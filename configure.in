@@ -138,6 +138,8 @@ AC_OUTPUT( \
 	plugins/Makefile \
 	plugins/recorder/Makefile \
 	plugins/recorder/pics/Makefile \
+	plugins/calc/Makefile \
+	plugins/calc/pics/Makefile \
 	pics/Makefile
 	pics/toolbar/Makefile \
 	po/Makefile \

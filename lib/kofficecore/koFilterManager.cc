@@ -184,7 +184,7 @@ QString KoFilterManager::import( const char* _url, const char *_native_format )
   }
 
   char *p = new char[ size ];
-  int n = fread( p, 1, size, f );
+  fread( p, 1, size, f );
   fclose( f );
 
   data.length( size );

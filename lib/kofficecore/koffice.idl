@@ -82,6 +82,12 @@ module KOffice
 		unsigned long bottomGUISize();
 
 		boolean printDlg();
+
+		struct EventNewPart
+		{
+			View view;
+		};
+		const string eventNewPart = "KOffice/View/NewPart";
 	};
 
 	interface DocumentFactory : KOM::ComponentFactory
