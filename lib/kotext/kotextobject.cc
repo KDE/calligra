@@ -1574,8 +1574,11 @@ void KoTextFormatInterface::setTextSuperScript(bool on)
 void KoTextFormatInterface::setDefaultFormat() {
     QTextFormatCollection * coll = currentFormat()->parent();
     Q_ASSERT(coll);
-    KoTextFormat * format = static_cast<KoTextFormat *>(coll->defaultFormat());
-    setFormat( format, QTextFormat::Format );
+    if(coll)
+    {
+        KoTextFormat * format = static_cast<KoTextFormat *>(coll->defaultFormat());
+        setFormat( format, QTextFormat::Format );
+    }
 }
 
 void KoTextFormatInterface::setAlign(int align)
