@@ -338,6 +338,7 @@ void KoCommandHistory::clipCommands() {
 void KoCommandHistory::slotUndoAboutToShow()
 {
     d->m_undoListBox->clear();
+    slotChangeUndoNumberOfSelectedItem( -1 );
     int i = 0;
     QStringList lst;
     if (m_commands.findRef(d->m_present)!=-1)
@@ -383,6 +384,7 @@ void KoCommandHistory::slotChangeRedoNumberOfSelectedItem( int pos)
 void KoCommandHistory::slotRedoAboutToShow()
 {
     d->m_redoListBox->clear();
+    slotChangeRedoNumberOfSelectedItem( -1 );
     QStringList lst;
     int i = 0;
     if (m_first)
