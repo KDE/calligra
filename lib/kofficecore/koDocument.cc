@@ -18,50 +18,49 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koDocument.h>
+#include "koDocument.h"
+
+#include "koDocument_p.h"
+#include "KoDocumentIface.h"
+#include "koDocumentChild.h"
+#include "koView.h"
+#include "koMainWindow.h"
+#include "koFilterManager.h"
+#include "koDocumentInfo.h"
+#include "koOasisStyles.h"
+#include "koOasisStore.h"
+#include "koxmlns.h"
+
+#include <koStoreDevice.h>
+#include <koxmlwriter.h>
+
+#include <kapplication.h>
+#include <kdebug.h>
+#include <kdeversion.h>
+#include <kfileitem.h>
+#include <kiconloader.h>
+#include <kio/job.h>
+#include <kio/netaccess.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kmimetype.h>
+#include <kparts/partmanager.h>
+#include <kprinter.h>
+
+#include <qbuffer.h>
+#include <qcursor.h>
+#include <qdir.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qimage.h>
+#include <qmap.h>
+#include <qpainter.h>
+#include <qtimer.h>
+#include <qxml.h>
 
 #include <config.h>
 #include <assert.h>
 
-#include <qbuffer.h>
-
-#include <koDocument_p.h>
-#include <KoDocumentIface.h>
-#include <koDocumentChild.h>
-#include <koView.h>
-#include <koMainWindow.h>
-#include <koStoreDevice.h>
-#include <koFilterManager.h>
-#include <koDocumentInfo.h>
-#include <koOasisStyles.h>
-#include <koxmlwriter.h>
-#include <koxmlns.h>
-
-#include <kprinter.h>
-#include <kio/netaccess.h>
-#include <kio/job.h>
-#include <kparts/partmanager.h>
-#include <klocale.h>
-#include <kmimetype.h>
-#include <kapplication.h>
-#include <kdebug.h>
-#include <kmessagebox.h>
-#include <kdeversion.h>
-#include <kfileitem.h>
-#if ! KDE_IS_VERSION(3,1,90)
-#include <kdebugclasses.h>
-#endif
-
-#include <qfile.h>
-#include <qmap.h>
-#include <qpainter.h>
-#include <qtimer.h>
-#include <qimage.h>
-#include <kiconloader.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qcursor.h>
-#include <qxml.h>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but KURL didn't like it,
@@ -1565,9 +1564,9 @@ void KoDocument::setMimeTypeAfterLoading( const QString& mimeType )
 }
 
 // The caller must call store->close() if loadAndParse returns true.
-bool KoDocument::loadAndParse(KoStore* store, const QString& filename, QDomDocument& doc, bool reportWhitespace)
+bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, QDomDocument& doc)
 {
-    //kdDebug(30003) << "loadAndParse: Trying to open " << filename << endl;
+    //kdDebug(30003) << "oldLoadAndParse: Trying to open " << filename << endl;
 
     if (!store->open(filename))
     {
@@ -1578,26 +1577,7 @@ bool KoDocument::loadAndParse(KoStore* store, const QString& filename, QDomDocum
     // Error variables for QDomDocument::setContent
     QString errorMsg;
     int errorLine, errorColumn;
-    bool ok;
-
-    // We need to be able to see the space in <text:span> </text:span>, this is why
-    // we activate the "report-whitespace-only-CharData" feature.
-    // Unfortunately this leads to lots of whitespace text nodes in between real
-    // elements in the rest of the document, watch out for that.
-    if ( reportWhitespace )
-    {
-        QXmlInputSource source( store->device() );
-        // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
-        QXmlSimpleReader reader;
-        setupXmlReader( reader, true /*namespaceProcessing*/ );
-        //reader.setUndefEntityInAttrHack(true);
-
-        ok = doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn );
-    }
-    else
-    {
-        ok = doc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn );
-    }
+    bool ok = doc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn );
     if ( !ok )
     {
         kdError(30003) << "Parsing error in " << filename << "! Aborting!" << endl
@@ -1706,25 +1686,23 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
         //d->m_specialOutputFlag = SaveAsOASIS;
         store->disallowNameExpansion();
 
+        KoOasisStore oasisStore( store );
+
         // TODO check mimetype file?
         // TODO read manifest?
         KoOasisStyles oasisStyles;
         QDomDocument contentDoc;
         QDomDocument settingsDoc;
-        bool ok = loadAndParse( store, "content.xml", contentDoc, true );
+        bool ok = oasisStore.loadAndParse( "content.xml", contentDoc, d->lastErrorMessage );
         if ( ok ) {
-            store->close();
             QDomDocument stylesDoc;
-            if ( loadAndParse( store, "styles.xml", stylesDoc, true ) )
-                store->close();
+            (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, d->lastErrorMessage );
             // Load styles from style.xml
             oasisStyles.createStyleMap( stylesDoc );
             // Also load styles from content.xml
             oasisStyles.createStyleMap( contentDoc );
 
-            if ( loadAndParse( store, "settings.xml", settingsDoc, true ) )
-                store->close();
-
+            (void)oasisStore.loadAndParse( "settings.xml", settingsDoc, d->lastErrorMessage );
             ok = loadOasis( contentDoc, oasisStyles, settingsDoc, store );
         }
         if ( !ok ) {
@@ -1738,7 +1716,7 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
         oasis = false;
 
         QDomDocument doc;
-        bool ok = loadAndParse( store, "root", doc, false );
+        bool ok = oldLoadAndParse( store, "root", doc );
         if ( ok )
             ok = loadXML( store->device(), doc );
         if ( !ok )
@@ -1765,7 +1743,7 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
 
     if ( oasis && store->hasFile( "meta.xml" ) ) {
         QDomDocument metaDoc;
-        if ( loadAndParse( store, "meta.xml", metaDoc, true ) ) {
+        if ( oldLoadAndParse( store, "meta.xml", metaDoc ) ) {
             store->close();
             d->m_docInfo->loadOasis( metaDoc );
         }
@@ -1773,7 +1751,7 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
     else if ( !oasis && store->hasFile( "documentinfo.xml" ) )
     {
         QDomDocument doc;
-        if ( loadAndParse( store, "documentinfo.xml", doc, false ) ) {
+        if ( oldLoadAndParse( store, "documentinfo.xml", doc ) ) {
             store->close();
             d->m_docInfo->load( doc );
         }

@@ -26,7 +26,7 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	KoDocumentIface.cc KoDocumentIface.skel KoViewIface.cc KoViewIface.skel \
 	KoMainWindowIface.cc KoMainWindowIface.skel kofficeversion.cc koOasisStyles.cc \
 	koStyleStack.cc koGenStyles.cpp koOasisSettings.cc koPageLayout.cpp \
-	kofiledialog.cpp koxmlns.cpp kodom.cpp koversiondialog.cc
+	kofiledialog.cpp koxmlns.cpp kodom.cpp koversiondialog.cc koOasisStore.cpp
 
 libkofficecore_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 

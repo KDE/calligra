@@ -940,7 +940,7 @@ private:
     KService::Ptr nativeService();
     QCString nativeOasisMimeType() const;
 
-    bool loadAndParse( KoStore* store, const QString& filename, QDomDocument& doc, bool reportWhiteSpace );
+    bool oldLoadAndParse( KoStore* store, const QString& filename, QDomDocument& doc );
     bool loadNativeFormatFromStore( const QString& file );
     bool savePreview( KoStore* store );
     bool saveOasisPreview( KoStore* store, KoXmlWriter* manifestWriter );
