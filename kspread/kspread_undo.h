@@ -449,21 +449,6 @@ protected:
                        QRect const & rect );
 };
 
-class KSpreadUndoSetTableName : public KSpreadUndoAction
-{
-public:
-    KSpreadUndoSetTableName( KSpreadDoc *doc, KSpreadSheet *table, const QString& name );
-    virtual ~KSpreadUndoSetTableName();
-
-    virtual void undo();
-    virtual void redo();
-
-protected:
-    QString m_tableName;
-    QString m_name;
-    QString m_redoName;
-};
-
 class KSpreadUndoResizeColRow : public KSpreadUndoAction
 {
 public:

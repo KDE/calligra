@@ -924,53 +924,6 @@ void KSpreadUndoSetText::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoSetTableName
- *
- ***************************************************************************/
-
-KSpreadUndoSetTableName::KSpreadUndoSetTableName( KSpreadDoc *doc, KSpreadSheet *table, const QString& _name ) :
-    KSpreadUndoAction( doc )
-{
-    name=i18n("Change Table Name");
-
-    m_name = _name;
-    m_tableName = table->tableName();
-}
-
-KSpreadUndoSetTableName::~KSpreadUndoSetTableName()
-{
-}
-
-void KSpreadUndoSetTableName::undo()
-{
-    KSpreadSheet* table = doc()->map()->findTable( m_tableName );
-    if ( !table )
-	return;
-
-    doc()->undoLock();
-
-    m_redoName = table->tableName();
-
-    table->setTableName( m_name,false,false );
-
-    doc()->undoUnlock();
-}
-
-void KSpreadUndoSetTableName::redo()
-{
-    KSpreadSheet* table = doc()->map()->findTable( m_name );
-    if ( !table )
-	return;
-
-    doc()->undoLock();
-
-    table->setTableName( m_redoName,false,false );
-
-    doc()->undoUnlock();
-}
-
-/****************************************************************************
- *
  * KSpreadUndoCellFormat
  *
  ***************************************************************************/
