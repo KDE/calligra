@@ -291,7 +291,7 @@ void KWFormatContext::cursorGotoRight( QPainter &_painter, int _pos )
             cursorGotoNextChar( _painter );
             continue;
         }
-    
+
         // If the cursor is in the last line of some paragraph,
         // then we should not care here.
         if ( isCursorAtLastChar() )
@@ -302,7 +302,7 @@ void KWFormatContext::cursorGotoRight( QPainter &_painter, int _pos )
             cursorGotoLineStart( _painter );
             continue;
         }
-    
+
         cursorGotoNextChar( _painter );
     }
 }
@@ -375,7 +375,7 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
         if ( parag->getPrev() == 0L )
             return;
         // Enter the prev paragraph
-    
+
         init( parag->getPrev(), _painter, false, false );
         int ret;
         do
@@ -390,10 +390,10 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
             }
         }
         while ( ret );
-    
+
         if ( frm != frame )
             WantedPtPos = ptStartPos; //doc->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->left();
-        
+
         cursorGotoLineStart( _painter );
         while ( ptPos < WantedPtPos && textPos < lineEndPos && !isCursorAtLineEnd() )
             cursorGotoRight( _painter );
@@ -649,15 +649,15 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
                 KWCharFormat *f = ( KWCharFormat* )text[ pos ].attrib;
                 apply( *f->getFormat() );
             }
-    
+
             if ( text[ pos ].c == ' ' && lay->getFlow() == KWParagLayout::BLOCK &&
                  lineEndPos != parag->getTextLen() )
             {
                 float sp = ptSpacing + spacingError;
-    
+
                 float dx = floor( sp );
                 spacingError = sp - dx;
-    
+
                 ptPos += ( unsigned int )dx + displayFont->getPTWidth( text[ pos ].c );
 
                 pos++;
@@ -931,7 +931,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     }
 
     if ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->hasIntersections() )
-    {   
+    {
         _left = document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getLeftIndent( ptY, getLineHeight() );
         _right = document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getRightIndent( ptY, getLineHeight() );
     }
@@ -998,7 +998,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
             counterfm.setUserFont( document->findUserFont( parag->getParagLayout()->getBulletFont() ) );
         _painter.setFont( *( counterfm.loadFont( document ) ) );
         _painter.setPen( counterfm.getColor() );
-    
+
         left += ptCounterWidth;
     }
 
@@ -1027,7 +1027,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
         ptY = document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getNextFreeYPos( ptY, getLineHeight() ) + 2;
         return makeLineLayout( _painter );
     }
-    
+
     bool _broken = false;
     bool _break = false;
 
@@ -1114,8 +1114,9 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
             {
             case ID_KWCharImage:
             {
-                ptPos += ( ( KWCharImage* )text[ textPos ].attrib )->getImage()->width();
-                tmpPTWidth += ( ( KWCharImage* )text[ textPos ].attrib )->getImage()->width();
+                int w = ( ( KWCharImage* )text[ textPos ].attrib )->getImage()->width();
+                ptPos += w;
+                tmpPTWidth += w;
                 specialHeight = max(specialHeight,(unsigned int)((KWCharImage*)text[textPos].attrib)->getImage()->height());
                 textPos++;
             } break;
@@ -1125,14 +1126,18 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
                 v->getVar()->setInfo( frameSet, frame, doc->getPageNum( ptY + document->getPTPaperHeight() ), parag );
                 v->getVar()->recalc();
                 apply( *v->getFormat() );
-                ptPos += displayFont->getPTWidth( v->getText() );
+                int w = displayFont->getPTWidth( v->getText() );
+                ptPos += w;
+                tmpPTWidth += w;
                 textPos++;
             } break;
             case ID_KWCharFootNote:
             {
                 KWCharFootNote *fn = dynamic_cast<KWCharFootNote*>( text[ textPos ].attrib );
                 apply( *fn->getFormat() );
-                ptPos += displayFont->getPTWidth( fn->getText() );
+                int w = displayFont->getPTWidth( fn->getText() );
+                ptPos += w;
+                tmpPTWidth += w;
                 textPos++;
             } break;
             case ID_KWCharTab:
@@ -1208,7 +1213,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
         if ( ptAscender > ptMaxAscender )
             ptMaxAscender = ptAscender;
         if ( ptDescender > ptMaxDescender )
-            ptMaxDescender = ptDescender;   
+            ptMaxDescender = ptDescender;
         spaces = tmpSpaces;
     }
 
@@ -1251,31 +1256,31 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
         {
             int diff = ( ptY + getLineHeight() ) - ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->bottom() -
                                                      document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBBottom().pt() );
-    
+
             if ( document->canResize( document->getFrameSet( frameSet - 1 ), document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 ),
                                       document->getFrameSet( frameSet - 1 )->getPageOfFrame( frame - 1 ), diff + 1 ) )
             {
                 document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->
                     setHeight( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->height() + diff + 1 );
-        
+
                 if ( document->getFrameSet( frameSet - 1 )->getGroupManager() )
                 {
                     document->getFrameSet( frameSet - 1 )->getGroupManager()->deselectAll();
                     document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->setSelected( true );
                     document->getFrameSet( frameSet - 1 )->getGroupManager()->recalcRows( _painter );
                 }
-        
+
                 QPaintDevice *dev = _painter.device();
                 _painter.end();
 
                 document->recalcFrames( false, true );
                 document->updateAllFrames();
                 document->setNeedRedraw( true );
-        
+
                 _painter.begin( dev );
             }
             else
-            {       
+            {
                 outOfFrame = true;
                 return false;
             }
@@ -1300,13 +1305,13 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
             {
                 int diff = ( ptY + getLineHeight() ) - ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->bottom() -
                                                          document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBBottom().pt() );
-        
+
                 if ( document->canResize( document->getFrameSet( frameSet - 1 ), document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 ),
                                           document->getFrameSet( frameSet - 1 )->getPageOfFrame( frame - 1 ), diff + 1 ) )
                 {
                     document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->
                         setHeight( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->height() + diff + 1 );
-        
+
                     if ( document->getFrameSet( frameSet - 1 )->getGroupManager() )
                     {
                         document->getFrameSet( frameSet - 1 )->getGroupManager()->deselectAll();
@@ -1324,7 +1329,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
                     _painter.begin( dev );
                 }
                 else
-                {       
+                {
                     outOfFrame = true;
                     return false;
                 }

@@ -97,10 +97,10 @@ public:
     {
         TypographicQuotes() : begin( ( char )'»' ), end( ( char )'«' ), replace( true )
         {}
-        TypographicQuotes( const TypographicQuotes &t )
-            : replace( t.replace ) {
+        TypographicQuotes( const TypographicQuotes &t ) {
                 begin = t.begin;
                 end = t.end;
+                replace = t.replace;
         }
         TypographicQuotes &operator=( const TypographicQuotes &t ) {
             begin = t.begin;
@@ -164,13 +164,13 @@ public:
 
     QMap< QString, KWAutoFormatEntry >::Iterator firstAutoFormatEntry()
     { return entries.begin(); }
-    
+
     QMap< QString, KWAutoFormatEntry >::Iterator lastAutoFormatEntry()
     { return entries.end(); }
 
 protected:
     void buildMaxLen();
-    
+
     KWordDocument *doc;
     TypographicQuotes typographicQuotes;
     bool enabled;

@@ -848,14 +848,16 @@ void KWTextFrameSet::save( ostream &out )
 
         unsigned int _row = 0, _col = 0;
         grpMgr->getFrameSet( this, _row, _col );
+        KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
         QString tmp = "";
-        tmp.sprintf( "\" row=\"%d\" col=\"%d", _row, _col );
+        tmp.sprintf( "\" row=\"%d\" col=\"%d\" rows=\"%d\" cols=\"%d", _row, _col, cell->rows, cell->cols  );
         grp += tmp.copy();
     }
 
     out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() )
         << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\""
         << static_cast<int>( frameInfo ) << correctQString( grp ).latin1() << "\" removeable=\"" << static_cast<int>( removeableHeader )
+        << "\" visible=\"" << static_cast<int>( visible )
         << "\">" << endl;
 
     KWFrameSet::save( out );
@@ -2199,7 +2201,6 @@ bool KWGroupManager::joinCells( QPainter &_painter )
         {
             Cell *cell = _cells.first();
             cell->rows = _cells.count();
-            debug( "cell %d/%d, rows: %d", cell->row, cell->col, cell->rows );
             for ( cell = _cells.next(); cell != 0; cell = _cells.next() )
             {
                 cell->frameSet->setVisible( false );
@@ -2224,7 +2225,8 @@ bool KWGroupManager::splitCell( QPainter &_painter )
     Cell *cell = getCell( row, col );
     if ( cell->rows > 1 )
     {
-        for ( unsigned int i = 0; i < cell->rows; i++ )
+        unsigned int rows = cell->rows;
+        for ( unsigned int i = 0; i < rows; i++ )
         {
             getCell( i + cell->row, col )->rows = 1;
             getCell( i + cell->row, col )->frameSet->setVisible( true );
@@ -2235,7 +2237,8 @@ bool KWGroupManager::splitCell( QPainter &_painter )
     }
     else if ( cell->cols > 1 )
     {
-        for ( unsigned int i = 0; i < cell->cols; i++ )
+        unsigned int cols = cell->cols;
+        for ( unsigned int i = 0; i < cols; i++ )
         {
             getCell( row, i + cell->col )->cols = 1;
             getCell( row, i + cell->col )->frameSet->setVisible( true );

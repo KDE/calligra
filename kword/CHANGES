@@ -1229,3 +1229,10 @@ Reggie, 29.5.1999:
 ------------------
 - Fixed some problems with loading/saving strings. Now
   inserting Endnotes works again too.
+
+Reggie, 30.5.1999:
+------------------
+- Fixed a formatting bug for lines in "blocksatz" which contain special chars (vars, footnotes, ...)
+- Improved configuration of advanced autocorrection
+- Fixed splitting table cells
+- Saving tables with splitted/joined cells works now

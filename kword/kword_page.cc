@@ -1350,8 +1350,8 @@ void KWPage::recalcWholeText( bool _cursor = false, bool _fast = false )
 
     if ( recalcingText ) return;
 
+    QApplication::setOverrideCursor( waitCursor );
     setCursor( waitCursor );
-    dynamic_cast<QWidget*>( parent() )->setCursor( waitCursor );
 
     recalcingText = true;
     QPainter painter;
@@ -1377,8 +1377,8 @@ void KWPage::recalcWholeText( bool _cursor = false, bool _fast = false )
     if ( _cursor ) recalcCursor();
     recalcingText = false;
 
+    QApplication::restoreOverrideCursor();
     setCursor( ibeamCursor );
-    dynamic_cast<QWidget*>( parent() )->setCursor( arrowCursor );
 
     if ( blinking )
         startBlinkCursor();

@@ -1145,9 +1145,9 @@ void KWordView::extraSpelling()
 /*===============================================================*/
 void KWordView::extraAutoFormat()
 {
-//     KWAutoFormatDia dia( 0L, "", m_pKWordDoc, gui->getPaperWidget() );
-//     dia.setCaption( i18n( "Autocorrection" ) );
-//     dia.show();
+    KWAutoFormatDia dia( 0L, "", m_pKWordDoc, gui->getPaperWidget() );
+    dia.setCaption( i18n( "Autocorrection" ) );
+    dia.show();
 
     sendFocusEvent();
 }

@@ -1251,7 +1251,8 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
     bool autoCreateNewFrame = true;
     FrameInfo frameInfo = FI_BODY;
     QString _name = "";
-    int _row = 0, _col = 0;
+    int _row = 0, _col = 0, _rows = 1, _cols = 1;
+    bool _visible = true;
 
     while ( parser.open( 0L, tag ) )
     {
@@ -1262,7 +1263,8 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
         {
             FrameType frameType = FT_BASE;
             _name = "";
-            _row = _col = 0;
+            _row = _col = 0, _rows = 1, _cols = 1;
+            _visible = true;
             bool removeable = false;
 
             KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -1283,6 +1285,12 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
                     _col = atoi( ( *it ).m_strValue.c_str() );
                 if ( ( *it ).m_strName == "removeable" )
                     removeable = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+                if ( ( *it ).m_strName == "rows" )
+                    _rows = atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "cols" )
+                    _cols = atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "visible" )
+                    _visible = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
             }
 
             switch ( frameType )
@@ -1318,6 +1326,13 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
                     }
                     frame->setGroupManager( grpMgr );
                     grpMgr->addFrameSet( frame, _row, _col );
+                    KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
+                    frame->setVisible( _visible );
+                    if ( cell )
+                    {
+                        cell->rows = _rows;
+                        cell->cols = _cols;
+                    }
                 }
                 else
                     frames.append( frame );

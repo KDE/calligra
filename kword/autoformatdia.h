@@ -48,11 +48,11 @@ protected:
     QPushButton *pbQuote1, *pbQuote2, *pbEdit, *pbRemove, *pbAdd;
     KCharSelect *charselect;
     QListView *entries;
-    
+
+    KWordDocument *doc;
     QChar oBegin, oEnd;
     bool quotesChanged;
 
-    KWordDocument *doc;
     KWPage *page;
 
 protected slots:
