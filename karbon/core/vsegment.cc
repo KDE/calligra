@@ -6,6 +6,7 @@
 #include <qdom.h>
 
 #include "vsegment.h"
+#include "vsegmentlist.h"
 
 VSegmentListTraverser::VSegmentListTraverser()
 	:  m_previousPoint( 0.0, 0.0 )

@@ -15,9 +15,7 @@ class QDomElement;
 // it hides the implementation details of segments.
 
 class VSegment;
-typedef QPtrList<VSegment> VSegmentList;
-typedef QPtrListIterator<VSegment> VSegmentListIterator;
-
+class VSegmentList;
 
 class VSegmentListTraverser
 {

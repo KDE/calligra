@@ -12,7 +12,7 @@
 #include <koPoint.h>
 
 #include "vobject.h"
-#include "vsegment.h"
+#include "vsegmentlist.h"
 
 class QDomElement;
 class QWMatrix;
@@ -106,7 +106,7 @@ public:
 	}
 
 	VPath& close();
-	bool closed() const { return m_closed; }
+	bool isClosed() const;
 
 	// return a reverted path:
 	VPath* revert() const;
@@ -115,13 +115,13 @@ public:
 	VPath* booleanOp( const VPath* path, int type = 0 ) const;
 
 	void combine( const VPath& path );
-	void combineSegments( const VSegmentList& segments );
+	void combineSegmentList( const VSegmentList& segmentList );
 
 	virtual void draw( VPainter *painter, const QRect& rect,
 		const double zoomFactor = 1.0 );
 
 	const VSegment* lastSegment() const
-		{ return m_segments.getLast()->getLast(); }
+		{ return m_segmentLists.getLast()->getLast(); }
 
 	// apply an affine map:
 	virtual VObject& transform( const QWMatrix& m );
@@ -135,9 +135,7 @@ public:
 	virtual void load( const QDomElement& element );
 
 private:
-	QPtrList<VSegmentList> m_segments;		// list of segments
-
-	bool m_closed;
+	QPtrList<VSegmentList> m_segmentLists;		// list of segmentLists
 };
 
 #endif

@@ -21,41 +21,24 @@
 
 
 VPath::VPath()
-	: VObject(), m_closed( false )
+	: VObject()
 {
-	m_segments.setAutoDelete( true );
+	m_segmentLists.setAutoDelete( true );
 
-	// add an initial segment at (0,0):
-	VSegmentList* list = new VSegmentList();
-	list->setAutoDelete( true );
-	list->append( new VSegment() );
-
-	m_segments.append( list );
+	// add an initial segmentlist:
+	m_segmentLists.append( new VSegmentList() );
 }
 
 VPath::VPath( const VPath& path )
 	: VObject()
 {
-	m_segments.setAutoDelete( true );
+	m_segmentLists.setAutoDelete( true );
 
-	VSegmentList* list;
-
-	QPtrListIterator<VSegmentList> itr( path.m_segments );
+	QPtrListIterator<VSegmentList> itr( path.m_segmentLists );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
-		list = new VSegmentList();
-		list->setAutoDelete( true );
-
-		VSegmentListIterator itr2( *( itr.current() ) );
-		for( ; itr2.current() ; ++itr2 )
-		{
-			list->append( new VSegment( *( itr2.current() ) ) );
-		}
-
-		m_segments.append( list );
+		m_segmentLists.append( new VSegmentList( *( itr.current() ) ) );
 	}
-
-	m_closed = path.m_closed;
 }
 
 VPath::~VPath()
@@ -73,11 +56,8 @@ VPath::draw( VPainter *painter, const QRect& rect,
 		return;
 
 	painter->save();
-	/*QWMatrix mat;
-	mat.scale( zoomFactor, zoomFactor );
-	painter->setWorldMatrix( mat );*/
 	painter->setZoomFactor( zoomFactor );
-	QPtrListIterator<VSegmentList> itr( m_segments );
+	QPtrListIterator<VSegmentList> itr( m_segmentLists );
 
 	VPathFill pathfill( fill() );
 	VPathStroke pathstrk( stroke() );
@@ -111,7 +91,7 @@ VPath::draw( VPainter *painter, const QRect& rect,
 
 /*
 // TODO: convert the following to Traversers:
-	VSegmentListIterator itr( m_segments );
+	VSegmentListIterator itr( m_segmentLists );
 
 	if( state() == selected )
 	{
@@ -155,25 +135,25 @@ const KoPoint&
 VPath::currentPoint() const
 {
 	return
-		m_segments.getLast()->getLast()->point( 3 );
+		m_segmentLists.getLast()->getLast()->point( 3 );
 }
 
 VPath&
 VPath::moveTo( const double& x, const double& y )
 {
-	if( closed() ) return *this;
+	if( isClosed() ) return *this;
 
-	if( m_segments.getLast()->getLast()->type() == VSegment::begin )
-		m_segments.getLast()->getLast()->setPoint( 3, KoPoint( x, y ) );
-	else // subpaths
+	// move "begin" when path is still empty:
+	if( m_segmentLists.getLast()->getLast()->type() == VSegment::begin )
+		m_segmentLists.getLast()->getLast()->setPoint( 3, KoPoint( x, y ) );
+	// otherwise create a new subpath:
+	else
 	{
-		// add an initial segment at (0,0):
+		// add an initial segmentlist:
 		VSegmentList* list = new VSegmentList();
-		list->setAutoDelete( true );
-		list->append( new VSegment() );
 
-		m_segments.append( list );
-		m_segments.getLast()->getLast()->setPoint( 3, KoPoint( x, y ) );
+		m_segmentLists.append( list );
+		m_segmentLists.getLast()->getLast()->setPoint( 3, KoPoint( x, y ) );
 	}
 
 	return *this;
@@ -182,12 +162,12 @@ VPath::moveTo( const double& x, const double& y )
 VPath&
 VPath::lineTo( const double& x, const double& y )
 {
-	if( closed() ) return *this;
+	if( isClosed() ) return *this;
 
 	VSegment* s = new VSegment();
 	s->setType( VSegment::line );
 	s->setPoint( 3, KoPoint( x, y ) );
-	m_segments.getLast()->append( s );
+	m_segmentLists.getLast()->append( s );
 
 	return *this;
 }
@@ -198,7 +178,7 @@ VPath::curveTo(
 	const double& x2, const double& y2,
 	const double& x3, const double& y3 )
 {
-	if( closed() ) return *this;
+	if( isClosed() ) return *this;
 
 	VSegment* s = new VSegment();
 	s->setType( VSegment::curve );
@@ -206,7 +186,7 @@ VPath::curveTo(
 	s->setPoint( 2, KoPoint( x2, y2 ) );
 	s->setPoint( 3, KoPoint( x3, y3 ) );
 
-	m_segments.getLast()->append( s );
+	m_segmentLists.getLast()->append( s );
 
 	return *this;
 }
@@ -216,14 +196,14 @@ VPath::curve1To(
 	const double& x2, const double& y2,
 	const double& x3, const double& y3 )
 {
-	if( closed() ) return *this;
+	if( isClosed() ) return *this;
 
 	VSegment* s = new VSegment();
 	s->setType( VSegment::curve1 );
 	s->setPoint( 2, KoPoint( x2, y2 ) );
 	s->setPoint( 3, KoPoint( x3, y3 ) );
 
-	m_segments.getLast()->append( s );
+	m_segmentLists.getLast()->append( s );
 
 	return *this;
 }
@@ -233,14 +213,14 @@ VPath::curve2To(
 	const double& x1, const double& y1,
 	const double& x3, const double& y3 )
 {
-	if( closed() ) return *this;
+	if( isClosed() ) return *this;
 
 	VSegment* s = new VSegment();
 	s->setType( VSegment::curve2 );
 	s->setPoint( 1, KoPoint( x1, y1 ) );
 	s->setPoint( 3, KoPoint( x3, y3 ) );
 
-	m_segments.getLast()->append( s );
+	m_segmentLists.getLast()->append( s );
 
 	return *this;
 }
@@ -252,7 +232,7 @@ VPath::arcTo(
 {
 	// parts of this routine are inspired by GNU ghostscript
 
-	if( closed() ) return *this;
+	if( isClosed() ) return *this;
 
 	// we need to calculate the tangent points. therefore calculate tangents
 	// D10=P1P0 and D12=P1P2 first:
@@ -325,27 +305,21 @@ VPath::arcTo(
 VPath&
 VPath::close()
 {
-	if( m_segments.getLast() == 0L || m_segments.getLast()->getLast() == 0L )
+	if( m_segmentLists.getLast() == 0L )
 		return *this;
 
-	// move end-segment if one already exists:
-	if( m_segments.getLast()->getLast()->type() == VSegment::end )
-	{
-		m_segments.getLast()->getLast()->
-			setPoint( 3, m_segments.getLast()->getFirst()->point( 3 ) );
-	}
-	// append one, if no end-segment exists:
-	else if( currentPoint() != m_segments.getLast()->getFirst()->point( 3 ) )
-	{
-		VSegment* s = new VSegment();
-		s->setType( VSegment::end );
-		s->setPoint( 3, m_segments.getLast()->getFirst()->point( 3 ) );
-		m_segments.getLast()->append( s );
-	}
-
-	m_closed = true;
+	m_segmentLists.getLast()->close();
 
 	return *this;
+}
+
+bool
+VPath::isClosed() const
+{
+	if( m_segmentLists.getLast() == 0L )
+		return false;
+
+	return m_segmentLists.getLast()->isClosed();
 }
 
 VPath*
@@ -363,33 +337,23 @@ VPath::booleanOp( const VPath* /*path*/, int /*type*/ ) const
 void
 VPath::combine( const VPath& path )
 {
-	QPtrListIterator<VSegmentList> itr( path.m_segments );
+	QPtrListIterator<VSegmentList> itr( path.m_segmentLists );
 	for( ; itr.current(); ++itr )
 	{
-		combineSegments( *( itr.current() ) );
+		combineSegmentList( *( itr.current() ) );
 	}
 }
 
 void
-VPath::combineSegments( const VSegmentList& segments )
+VPath::combineSegmentList( const VSegmentList& segmentList )
 {
-	VSegmentList* list = new VSegmentList();
-	list->setAutoDelete( true );
-
-	VSegmentListIterator itr( segments );
-	for( ; itr.current() ; ++itr )
-	{
-// TODO: intersection checks needed?
-		list->append( new VSegment( *( itr.current() ) ) );
-	}
-
-	m_segments.append( list );
+	m_segmentLists.append( new VSegmentList( segmentList ) );
 }
 
 VObject&
 VPath::transform( const QWMatrix& m )
 {
-	QPtrListIterator<VSegmentList> itr( m_segments );
+	QPtrListIterator<VSegmentList> itr( m_segmentLists );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
 		VSegmentListIterator itr2( *( itr.current() ) );
@@ -410,7 +374,7 @@ VPath::boundingBox( const double zoomFactor ) const
 	QRect rect;
 	VPathBounding bb;
 
-	QPtrListIterator<VSegmentList> itr( m_segments );
+	QPtrListIterator<VSegmentList> itr( m_segmentLists );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
 		bb.calculate( rect, zoomFactor, *( itr.current() ) );
@@ -422,7 +386,7 @@ bool
 VPath::intersects( const QRect& rect, const double zoomFactor ) const
 {
 	VPathBounding bb;
-	QPtrListIterator<VSegmentList> itr( m_segments );
+	QPtrListIterator<VSegmentList> itr( m_segmentLists );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
 		if( bb.intersects( rect, zoomFactor, *( itr.current() ) ) )
@@ -446,22 +410,13 @@ VPath::save( QDomElement& element ) const
 		QDomElement me = element.ownerDocument().createElement( "PATH" );
 		element.appendChild( me );
 
-		if( m_closed )
-			me.setAttribute( "closed", m_closed );
-
 		VObject::save( me );
 
-		QPtrListIterator<VSegmentList> itr( m_segments );
+		// save segmentlists:
+		QPtrListIterator<VSegmentList> itr( m_segmentLists );
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			QDomElement segment = element.ownerDocument().createElement( "SEGMENTS" );
-			me.appendChild( segment );
-
-			VSegmentListIterator itr2( *( itr.current() ) );
-			for( ; itr2.current() ; ++itr2 )
-			{
-				itr2.current()->save( segment );
-			}
+			itr.current()->save( me );
 		}
 	}
 }
@@ -469,45 +424,26 @@ VPath::save( QDomElement& element ) const
 void
 VPath::load( const QDomElement& element )
 {
-	m_segments.clear();
-
+	m_segmentLists.clear();
 	setState( state_normal );
-	m_closed   = element.attribute( "closed" ) == 0 ? false : true;
 
 	QDomNodeList list = element.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
 		{
-			QDomElement pathChild = list.item( i ).toElement();
+			QDomElement child = list.item( i ).toElement();
 
-			if( pathChild.tagName() == "SEGMENTS" )
+			if( child.tagName() == "SEGMENTS" )
 			{
 				VSegmentList sl;
-				sl.setAutoDelete( true );
-
-				QDomNodeList segmentList = pathChild.childNodes();
-				for( uint j = 0; j < segmentList.count(); ++j )
-				{
-					if( segmentList.item( j ).isElement() )
-					{
-						QDomElement segment = segmentList.item( j ).toElement();
-
-						VSegment* s = new VSegment();
-						s->load( segment );
-						sl.append( s );
-					}
-				}
-
-				combineSegments( sl );
+				sl.load( child );
+				combineSegmentList( sl );
 			}
 			else
 			{
-				VObject::load( pathChild );
+				VObject::load( child );
 			}
 		}
 	}
-
-	if( m_closed )
-		close();
 }

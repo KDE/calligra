@@ -31,10 +31,6 @@ namespace VSegmentTools
 	const VSegment* segB, const double u0, const double u1,
 	QValueList<double>& paramsA, QValueList<double>& paramsB ) const;
 */
-	void polygonize(
-		const KoPoint& previous, const VSegment& segment,
-		const double zoomFactor,
-		VSegmentList& list );
 }
 
 #endif

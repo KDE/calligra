@@ -127,11 +127,3 @@ VSegmentTools::boundingBox( const KoPoint& previous, const VSegment& segment )
 	return rect;
 }*/
 
-void
-VSegmentTools::polygonize(
-	const KoPoint& /*previous*/, const VSegment& /*segment*/,
-	const double /*zoomFactor*/,
-	VSegmentList& /*list*/ )
-{
-
-}

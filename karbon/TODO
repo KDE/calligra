@@ -1,4 +1,3 @@
--	move "closed" from vpath to vsegmentlist
 -	fix crash (something to do with static of current tool?)
 	when loading or adding new view
 -	fix tool-bar
