@@ -22,6 +22,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <qtextcodec.h>
 
 void mainFunc(const char*,const char*);
 
@@ -50,39 +51,56 @@ const bool HTMLExport::filter(const QString &fileIn, const QString &fileOut,
       in.close();
       return false;
     }
+    in.close();
 
-    //kdDebug(30503) << buf << endl;
-    // Note: I have no idea if I should use KLocale::charset or KGlocal::charset....
-    //QCString charset = KGlobal::locale()->charset().ascii();
-    // Problem: the charset of the document may not be the one of the user
-    // (for instance, someone sent me a non-latin 1 doc :-)
+    // Here comes the difficult part: choosing the charset to use for the
+    // HTML file.
+    // * Using the user's locale is stupid (someone can send me a czech document)
+    // * UTF 8 is the logical choice, but unicode fonts are still very much missing
+    // * TODO: ask the charset to use with a combobox in a filter dialog
     QCString charset( "utf-8" );
 
     int begin = buf.find( "<DOC" ); // skip <?...?>
+
+    // Let's convert !
     mainFunc( (const char*)buf + begin, charset );
 
+    // It would certainly be more efficient if the filter was writing
+    // into a QString (using fromUtf8 for the stuff coming from the xml file)
+    // instead of using a temporary file !
     QFile f( "/tmp/kword2html" );
     if ( !f.open( IO_ReadOnly ) ) {
-        in.close();
         return false;
     }
 
     QTextStream s( &f );
+    s.setEncoding( QTextStream::UnicodeUTF8 ); // The contents comes from XML, it will always be utf 8
+    // Yes, your eyes are working well: we put everything we just wrote
+    // into a file back into a QString !
     QString str = s.read();
     f.close();
-
-    QCString cstr(str.utf8());
 
     QFile out(fileOut);
     if(!out.open(IO_WriteOnly)) {
         kdError(30503) << "Unable to open output file!" << endl;
-        in.close();
         out.close();
         return false;
     }
-    out.writeBlock((const char*)cstr, cstr.length());
+    QTextStream sout( &out );
+    QTextCodec * codec = QTextCodec::codecForName( charset );
+    if ( !codec )
+    {
+        kdError(30503) << "Unable to find codec for " << charset << " !" << endl;
+        out.close();
+        return false;
+    }
+    sout.setCodec( codec );
+    sout << str;
 
-    in.close();
+    //QCString cstr(str.utf8());
+    //QCString cstr(str.latin1());
+    //out.writeBlock((const char*)cstr, cstr.length());
+
     out.close();
     return true;
 }
