@@ -365,7 +365,9 @@ VLayerListViewItem::update()
 	setOn( m_layer->selected() );
 	setText( 0, m_layer->name() );
 	if( m_layer->state() == VObject::normal_locked || m_layer->state() == VObject::hidden_locked )
-		setPixmap( 1, QPixmap( il.iconPath( "lock.png", KIcon::Small ) ) );
+		setPixmap( 1, QPixmap( il.iconPath( "locked.png", KIcon::Small ) ) );
+	else
+		setPixmap( 1, QPixmap( il.iconPath( "unlocked.png", KIcon::Small ) ) );
 	setPixmap( 2, QPixmap( il.iconPath( ( m_layer->state() == VObject::normal || m_layer->state() == VObject::normal_locked ? "14_layer_visible.png" : "14_layer_novisible.png" ), KIcon::Small ) ) );
 	setPixmap( 0, preview );
 } // VLayerListViewItem::update
@@ -496,14 +498,15 @@ VLayersTab::selectionChanged( QListViewItem* item, const QPoint &, int col )
 						obj->setState( VObject::hidden );
 					else if( obj->state() == VObject::normal_locked )
 						obj->setState( VObject::normal );
-					else if( obj->state() == VObject::normal )
+					else if( obj->state() == VObject::normal || obj->state() >= VObject::selected )
 						obj->setState( VObject::normal_locked );
 					else if( obj->state() == VObject::hidden )
 						obj->setState( VObject::hidden_locked );
 				objectItem->update();
 				m_view->part()->repaintAllViews();
 			}
-			else if( obj->state() != VObject::hidden ) // select only obj
+			else if( obj->state() == VObject::normal ||
+					 obj->state() >= VObject::selected ) // select only visible and unlocked objects
 			{
 				m_document->selection()->clear();
 				m_document->selection()->append( obj );
