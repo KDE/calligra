@@ -212,26 +212,6 @@ void KFormulaContainer::addText(QChar ch)
     execute(command);
 }
 
-void KFormulaContainer::addNumber(QChar ch)
-{
-    if (!hasValidCursor())
-        return;
-    removeSelection();
-    KFCAdd* command = new KFCAdd(i18n("Add number"), this);
-    command->addElement(new NumberElement(ch));
-    execute(command);
-}
-
-void KFormulaContainer::addOperator(QChar ch)
-{
-    if (!hasValidCursor())
-        return;
-    removeSelection();
-    KFCAdd* command = new KFCAdd(i18n("Add operator"), this);
-    command->addElement(new OperatorElement(ch));
-    execute(command);
-}
-
 void KFormulaContainer::addLineBreak()
 {
     if (!hasValidCursor())

@@ -22,6 +22,8 @@
 #include "contextstyle.h"
 
 ContextStyle::ContextStyle()
-    : defaultFont("helvetica"), defaultSymbolFont("symbol"), defaultColor(Qt::black)
+    : defaultFont("helvetica"), numberFont("symbol"), operatorFont("symbol"),
+      defaultColor(Qt::black), numberColor(Qt::blue),
+      operatorColor(Qt::darkGreen), errorColor(Qt::darkRed)
 {
 }

@@ -27,6 +27,7 @@
 #include <qlist.h>
 #include <qpoint.h>
 #include <qsize.h>
+#include <qstring.h>
 #include <qdom.h>
 
 // KDE Include
@@ -39,6 +40,7 @@ class ComplexElement;
 class FormulaCursor;
 class FormulaElement;
 class SequenceElement;
+class Token;
 
 
 /**
@@ -60,7 +62,8 @@ class SequenceElement;
  * replace the element. See @ref getMainChild and @ref setMainChild .
  *
  * If there can be children you might want to @ref insert and @ref remove
- * them. After a removal the element might be senseless. (See @ref isSenseless )
+ * them. After a removal the element might be senseless.
+ * (See @ref isSenseless )
  * If it is it must be removed.
  */
 class BasicElement
@@ -82,6 +85,18 @@ public:
      */
     virtual FormulaElement* formula() { return parent->formula(); }
 
+    /**
+     * @returns the character that represents this element. Used for
+     * parsing a sequence.
+     */
+    virtual QChar getCharacter() const { return QChar::null; }
+
+    /**
+     * Sets a new token. This is done during parsing.
+     */
+    void setToken(Token* t) { token = t; }
+    
+    
     /**
      * Sets the cursor and returns the element the point is in.
      * The handled flag shows whether the cursor has been set.
@@ -329,6 +344,11 @@ protected:
      * This is a service for all subclasses that contain children.
      */
     SequenceElement* buildChild(QDomNode& node, QString name);
+
+    /**
+     * @returns the token that contains our type.
+     */
+    Token* getToken() { return token; }
     
 private:
 
@@ -359,6 +379,12 @@ private:
      * Our size relative to those of our parent.
      */
     int relativeSize;
+
+    /**
+     * The token that describes our type. Please note that we don't
+     * own it.
+     */
+    Token* token;
 
     // debug
     static int evilDestructionCount;

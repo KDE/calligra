@@ -107,14 +107,6 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
         case '|':
             document->addLineBracket();
             break;
-        case '+':
-        case '-':
-        case '*':
-        case '=':
-        case '<':
-        case '>':
-            document->addOperator(ch);
-            break;
         case '^':
             document->addUpperRightIndex();
             break;
@@ -125,18 +117,6 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
         case '}':
         case ']':
         case ')':
-            break;
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-            document->addNumber(ch);
             break;
         default:
             document->addText(ch);

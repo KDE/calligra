@@ -263,6 +263,12 @@ protected:
 private:
 
     /**
+     * Parses the sequence and generates a new syntax tree.
+     * Has to be called after each modification.
+     */
+    void parse();
+    
+    /**
      * Removes the children at pos and appends it to the list.
      */
     void removeChild(QList<BasicElement>& removedChildren, int pos);
@@ -273,6 +279,8 @@ private:
      * you remove any.
      */
     QList<BasicElement> children;
+
+    Token* parseTree;
 };
 
 #endif // __SEQUENCEELEMENT_H

@@ -14,6 +14,7 @@
 #include <kcmdlineargs.h>
 #include <kcommand.h>
 
+#include "formulatoken.h"
 #include "kformulacommand.h"
 #include "kformulacontainer.h"
 #include "kformulawidget.h"
@@ -116,6 +117,10 @@ int main(int argc, char** argv)
     destruct = KFormulaCommand::getEvilDestructionCount();
     if (destruct != 0) {
         cerr << "KFormulaCommand::EvilDestructionCount: " << destruct << endl;
+    }
+    destruct = Token::getEvilDestructionCount();
+    if (destruct != 0) {
+        cerr << "Token::EvilDestructionCount: " << destruct << endl;
     }
 
     return result;

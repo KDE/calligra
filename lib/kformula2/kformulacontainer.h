@@ -207,8 +207,6 @@ public slots:
     // There are a lot of thing we can do with the formula.
     
     void addText(QChar ch);
-    void addNumber(QChar ch);
-    void addOperator(QChar ch);
 
     void addLineBreak();
 

@@ -25,6 +25,7 @@
 #include <qpainter.h>
 
 #include "basicelement.h"
+#include "formulatoken.h"
 #include "textelement.h"
 #include "contextstyle.h"
 
@@ -42,30 +43,28 @@ TextElement::TextElement(QChar ch, BasicElement* parent)
 void TextElement::calcSizes(ContextStyle& context, int parentSize)
 {
     int mySize = QMAX(parentSize + getRelativeSize(), 8);
-    //QFontMetrics fm = context.fontMetrics();
-    QFont font = getFont(context);
+    QFont font;
+    
+    Token* token = getToken();
+    if (token != 0) {
+        spaceWidth = token->getSpace(context, mySize);
+        font = token->getFont(context);
+    }
+    else {
+        spaceWidth = 0;
+        font = context.getDefaultFont();
+    }
     font.setPointSize(mySize);
 
     QFontMetrics fm(font);
-/*    setWidth(fm.width(character));
-    setHeight(fm.height());
-    setMidline(getHeight() / 2);
-    baseline = fm.ascent();
-*/
     QRect bound=fm.boundingRect(character);
     bound.moveBy(0,fm.strikeOutPos());
-//    cerr << character << "  Top:" << bound.top() << "Bottom:" << bound.bottom() <<endl;
 
-    setWidth(fm.width(character));
+    setWidth(fm.width(character) + spaceWidth*2);
     setHeight(bound.height());
 
     baseline = -bound.top()+fm.strikeOutPos();
     setMidline(-bound.top());
-
-//    cerr << character << "  baseline:" << baseline <<endl;
-//    cerr << character << "  midline:" << getMidline() <<endl;
-
-    
 }
 
 /**
@@ -77,13 +76,21 @@ void TextElement::draw(QPainter& painter, ContextStyle& context,
                        int parentSize, const QPoint& parentOrigin)
 {
     int mySize = QMAX(parentSize + getRelativeSize(), 10);
-    //context.setupPainter(painter);
-//    cerr << "TextElement::draw: " << getY() << " " << getY()+baseline << " " << character << "\n";
-    QFont font = getFont(context);
+    QFont font;
+    
+    Token* token = getToken();
+    if (token != 0) {
+        font = token->getFont(context);
+        token->setUpPainter(context, painter);
+    }
+    else {
+        font = context.getDefaultFont();
+        //painter.setPen(context.getDefaultColor());
+        painter.setPen(Qt::red);
+    }
     font.setPointSize(mySize);
     painter.setFont(font);
-    painter.setPen(context.getDefaultColor());
-    painter.drawText(parentOrigin.x()+getX(),
+    painter.drawText(parentOrigin.x()+getX()+spaceWidth,
                      parentOrigin.y()+getY()+baseline, character);
 }
 

@@ -26,11 +26,10 @@
 #include "bracketelement.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
+#include "formulatoken.h"
 #include "fractionelement.h"
 #include "indexelement.h"
 #include "matrixelement.h"
-#include "numberelement.h"
-#include "operatorelement.h"
 #include "rootelement.h"
 #include "sequenceelement.h"
 #include "symbolelement.h"
@@ -38,7 +37,7 @@
 
 
 SequenceElement::SequenceElement(BasicElement* parent)
-    : BasicElement(parent)
+        : BasicElement(parent), parseTree(0)
 {
     children.setAutoDelete(true);
 }
@@ -46,6 +45,7 @@ SequenceElement::SequenceElement(BasicElement* parent)
 
 SequenceElement::~SequenceElement()
 {
+    delete parseTree;
 }
 
 
@@ -466,6 +466,7 @@ void SequenceElement::insert(FormulaCursor* cursor,
         cursor->setTo(this, pos, pos+count);
     }
     formula()->changed();
+    parse();
 }
 
 
@@ -507,6 +508,7 @@ void SequenceElement::remove(FormulaCursor* cursor,
             }
         }
     }
+    parse();
 }
 
 
@@ -621,6 +623,7 @@ bool SequenceElement::buildChildrenFromDom(QList<BasicElement>& list, QDomNode n
         }
         n = n.nextSibling();
     }
+    parse();
     return true;
 }
 
@@ -628,8 +631,6 @@ bool SequenceElement::buildChildrenFromDom(QList<BasicElement>& list, QDomNode n
 BasicElement* SequenceElement::createElement(QString type)
 {
     if      (type == "TEXT")     return new TextElement();
-    else if (type == "NUMBER")   return new NumberElement();
-    else if (type == "OPERATOR") return new OperatorElement();
     else if (type == "ROOT")     return new RootElement();
     else if (type == "BRACKET")  return new BracketElement();
     else if (type == "MATRIX")   return new MatrixElement();
@@ -679,4 +680,22 @@ bool SequenceElement::readContentFromDom(QDomNode& node)
     }
     
     return buildChildrenFromDom(children, node);
+}
+
+
+void SequenceElement::parse()
+{
+    delete parseTree;
+
+    // Those tokens are gone. Make sure they won't
+    // be used.
+    for (uint i = 0; i < children.count(); i++) {
+        children.at(i)->setToken(0);
+    }
+    
+    SequenceParser parser;
+    parseTree = parser.parse(children);
+
+    // debug
+    //parseTree->output();
 }

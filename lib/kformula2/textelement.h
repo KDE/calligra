@@ -36,6 +36,12 @@ public:
     TextElement(QChar ch = ' ', BasicElement* parent = 0);
 
     
+    /**
+     * @returns the character that represents this element. Used for
+     * parsing a sequence.
+     */
+    virtual QChar getCharacter() const { return character; }
+
     // drawing
     //
     // Drawing depends on a context which knows the required properties like
@@ -98,6 +104,11 @@ private:
      * The position of our baseline.
      */
     int baseline;
+
+    /**
+     * Room to be left before and after the character.
+     */
+    int spaceWidth;
 };
 
 

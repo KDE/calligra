@@ -52,14 +52,14 @@ public:
     //ContextStyle(KConfig *config);
 
     
-    /**
-     * return default color
-     */
-    QColor getDefaultColor() { return defaultColor; }
+    QColor getDefaultColor()  { return defaultColor; }
+    QColor getNumberColor()   { return numberColor; }
+    QColor getOperatorColor() { return operatorColor; }
+    QColor getErrorColor()    { return errorColor; }
 
-    QFont getDefaultFont() { return defaultFont; }
-
-    QFont getDefaultSymbolFont() { return defaultSymbolFont; }
+    QFont getDefaultFont()    { return defaultFont; }
+    QFont getNumberFont()     { return numberFont; }
+    QFont getOperatorFont()   { return operatorFont; }
 
     int getDistance() { return 5; }
 
@@ -68,9 +68,13 @@ public:
 private:
     
     QFont defaultFont;
-    QFont defaultSymbolFont;
+    QFont numberFont;
+    QFont operatorFont;
+    
     QColor defaultColor;
-
+    QColor numberColor;
+    QColor operatorColor;
+    QColor errorColor;
  
     DrawMode mode;
     bool editing;
