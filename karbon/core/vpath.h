@@ -12,8 +12,6 @@
 #include <koPoint.h>
 
 #include "vobject.h"
-#include "vpath_fill.h"
-#include "vpath_stroke.h"
 #include "vsegment.h"
 
 class QDomElement;
@@ -136,18 +134,8 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
-	VFillRule fillRule() { return m_fill.fillRule(); }
-	void setFillRule( VFillRule rule ) { m_fill.setFillRule( rule ); }
-
-private:
-// TODO: this looks ugly somehow:
-	void drawBox( VPainter *painter, double x, double y, uint handleSize = 3 ); // helper function for draw()
-
 private:
 	QPtrList<VSegmentList> m_segments;		// list of segments
-
-	VPathStroke m_stroke;		// stroke.
-	VPathFill m_fill;			// fill.
 
 	bool m_closed;
 };

@@ -9,8 +9,8 @@
 
 #include "vpath_fill.h"
 
-VPathFill::VPathFill()
-	: VFill(), VSegmentListTraverser()
+VPathFill::VPathFill( const VFill& fill )
+	: VSegmentListTraverser(), m_fill( fill )
 {
 }
 
@@ -37,9 +37,7 @@ VPathFill::end_draw()
 {
 	m_painter->setRasterOp( Qt::CopyROP );
 	m_painter->setPen( Qt::NoPen );
-	m_painter->setBrush( *this );
-	//m_painter->drawPolygon( m_pa );
-//		m_fillRule == evenOdd ? false : true );
+	m_painter->setBrush( m_fill );
 	m_painter->fillPath();
 }
 

@@ -2,7 +2,7 @@ kde_module_LTLIBRARIES = libkarbonepsexport.la
 
 libkarbonepsexport_la_LDFLAGS = $(KDE_PLUGIN) -module -avoid-version -no-undefined
 libkarbonepsexport_la_LIBADD = \
-	../../../../koffice/lib/kofficeui/libkofficeui.la
+	$(srcdir)/../../../../koffice/lib/kofficeui/libkofficeui.la
 
 INCLUDES = \
 	-I$(srcdir)/.. \

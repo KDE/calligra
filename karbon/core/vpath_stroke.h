@@ -6,16 +6,15 @@
 #ifndef __VPATHSTROKE_H__
 #define __VPATHSTROKE_H__
 
-#include "vstroke.h"
 #include "vsegment.h"
 
+class VStroke;
 class VPainter;
 
-class VPathStroke : public VStroke, VSegmentListTraverser
+class VPathStroke : public VSegmentListTraverser
 {
 public:
-	VPathStroke( const double width = 1.0, const VLineCap cap = cap_butt,
-		const VLineJoin join = join_miter );
+	VPathStroke( const VStroke& stroke );
 	virtual ~VPathStroke() {}
 
 	void draw( VPainter *painter, const double zoomFactor, const VSegmentList& list,
@@ -32,6 +31,7 @@ public:
 		{ return lineTo( p ); }
 
 private:
+	const VStroke& m_stroke;
 	VPainter *m_painter;
 	double m_zoomFactor;
 	QPointArray m_pa;

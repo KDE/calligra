@@ -23,7 +23,8 @@ noinst_HEADERS = \
 	vpath_stroke.h \
 	vsegment.h \
 	vsegment_tools.h \
-	vstroke.h
+	vstroke.h \
+	vtext.h
 
 libkarboncore_la_SOURCES = \
 	vcanvas.cc \
@@ -31,6 +32,7 @@ libkarboncore_la_SOURCES = \
 	vfill.cc \
 	vgradient.cc \
 	vlayer.cc \
+	vobject.cc \
 	vobjectlist.cc \
 	vpath.cc \
 	vpath_bounding.cc \
@@ -39,7 +41,8 @@ libkarboncore_la_SOURCES = \
 	vpath_stroke.cc \
 	vsegment.cc \
 	vsegment_tools.cc \
-	vstroke.cc
+	vstroke.cc \
+	vtext.cc
 
 libkarboncore_la_METASOURCES = \
 	AUTO

@@ -6,15 +6,15 @@
 #ifndef __VPATHFILL_H__
 #define __VPATHFILL_H__
 
-#include "vfill.h"
 #include "vsegment.h"
 
+class VFill;
 class VPainter;
 
-class VPathFill : public VFill, VSegmentListTraverser
+class VPathFill : public VSegmentListTraverser
 {
 public:
-	VPathFill();
+	VPathFill( const VFill& fill );
 	virtual ~VPathFill() {}
 
 	void begin_draw( VPainter *painter, const double zoomFactor );
@@ -32,6 +32,7 @@ public:
 		{ return lineTo( p ); }
 
 private:
+	const VFill& m_fill;
 	VPainter* m_painter;
 	double m_zoomFactor;
 	QPointArray m_pa;

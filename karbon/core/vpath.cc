@@ -14,6 +14,8 @@
 
 #include "vpath.h"
 #include "vpath_bounding.h"
+#include "vpath_fill.h"
+#include "vpath_stroke.h"
 
 #include <kdebug.h>
 
@@ -29,8 +31,6 @@ VPath::VPath()
 	list->append( new VSegment() );
 
 	m_segments.append( list );
-
-	m_stroke.setLineWidth( 3.0 );
 }
 
 VPath::VPath( const VPath& path )
@@ -79,20 +79,23 @@ VPath::draw( VPainter *painter, const QRect& rect,
 	painter->setZoomFactor( zoomFactor );
 	QPtrListIterator<VSegmentList> itr( m_segments );
 
+	VPathFill pathfill( fill() );
+	VPathStroke pathstrk( stroke() );
+
 	if( state() != state_edit )
 	{
 		// paint fill:
-		m_fill.begin_draw( painter, zoomFactor );
+		pathfill.begin_draw( painter, zoomFactor );
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			m_fill.draw( *( itr.current() ) );
+			pathfill.draw( *( itr.current() ) );
 		}
-		m_fill.end_draw();
+		pathfill.end_draw();
 
 		// draw stroke:
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			m_stroke.draw( painter, zoomFactor, *( itr.current() ) );
+			pathstrk.draw( painter, zoomFactor, *( itr.current() ) );
 		}
 	}
 
@@ -101,7 +104,7 @@ VPath::draw( VPainter *painter, const QRect& rect,
 	{
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			m_stroke.draw( painter, zoomFactor, *( itr.current() ), true );
+			pathstrk.draw( painter, zoomFactor, *( itr.current() ), true );
 		}
 	}
 
@@ -146,14 +149,6 @@ VPath::draw( VPainter *painter, const QRect& rect,
 */
 
 	painter->restore();
-}
-
-void
-VPath::drawBox( VPainter *painter, double x, double y, uint handleSize )
-{
-	// TODO : use moveTo / lineTo
-	//painter->drawRect( x - handleSize, y - handleSize,
-	//				  handleSize*2 + 1, handleSize*2 + 1 );
 }
 
 const KoPoint&
@@ -446,8 +441,7 @@ VPath::save( QDomElement& element ) const
 		if( m_closed )
 			me.setAttribute( "closed", m_closed );
 
-		m_stroke.save( me );
-		m_fill.save( me );
+		VObject::save( me );
 
 		QPtrListIterator<VSegmentList> itr( m_segments );
 		for( itr.toFirst(); itr.current(); ++itr )
@@ -499,13 +493,9 @@ VPath::load( const QDomElement& element )
 
 				combineSegments( sl );
 			}
-			else if( pathChild.tagName() == "STROKE" )
+			else
 			{
-				m_stroke.load( pathChild );
-			}
-			else if( pathChild.tagName() == "FILL" )
-			{
-				m_fill.load( pathChild );
+				VObject::load( pathChild );
 			}
 		}
 	}

@@ -20,7 +20,7 @@ libkarbonpart_la_SOURCES = \
 
 libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonpart_la_LIBADD = \
-	../../koffice/lib/kofficeui/libkofficeui.la \
+	$(srcdir)/../../../../koffice/lib/kofficeui/libkofficeui.la \
 	tools/libkarbontools.la \
 	core/libkarboncore.la \
 	render/libvpainter.la

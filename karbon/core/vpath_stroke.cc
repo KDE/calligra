@@ -12,8 +12,8 @@
 
 #include <kdebug.h>
 
-VPathStroke::VPathStroke( const double width, const VLineCap cap, const VLineJoin join )
-	: VStroke( width, cap, join ), VSegmentListTraverser()
+VPathStroke::VPathStroke( const VStroke& stroke )
+	: VSegmentListTraverser(), m_stroke( stroke )
 {
 }
 
@@ -46,7 +46,7 @@ VPathStroke::draw( VPainter *painter, const double zoomFactor, const VSegmentLis
 			pen.setCapStyle( Qt::SquareCap );*/
 
 		painter->setRasterOp( Qt::CopyROP );
-		painter->setPen( *this );
+		painter->setPen( m_stroke );
 		//painter->setPen( pen );
 	}
 	else
