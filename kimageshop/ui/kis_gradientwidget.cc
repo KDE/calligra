@@ -25,7 +25,7 @@
 
 #define ITEMSIZE 34
 
-KisGradientWidget::KisGradientWidget( QWidget* parent, const char* name ) 
+KisGradientWidget::KisGradientWidget( QWidget* parent, const char* name )
     : QFrame( parent, name )
 {
     setBackgroundColor( white );
@@ -38,27 +38,27 @@ void KisGradientWidget::slotSetGradient( const KisGradient& g)
     repaint();
 }
 
-void KisGradientWidget::drawContents ( QPainter *p )
+void KisGradientWidget::drawContents ( QPainter */*p*/ )
 {
     if (!m_pGradient)
         return;
-  
-    int x = 0;
-    int y = 0;
+
+    //int x = 0;
+    //int y = 0;
 
     // IconItem *item = (IconItem *)m_pGradient;
 
-#if 0    
+#if 0
     if (item->hasValidThumb())
-    {    
+    {
         if (m_pBrush->thumbPixmap().width() < ITEMSIZE)
             x = (ITEMSIZE - m_pBrush->thumbPixmap().width()) / 2;
 
         if (m_pBrush->thumbPixmap().height() < ITEMSIZE)
             y = (ITEMSIZE - m_pBrush->thumbPixmap().height()) / 2;
 
-        p->drawPixmap(x, y, m_pBrush->thumbPixmap()); 
-    }    
+        p->drawPixmap(x, y, m_pBrush->thumbPixmap());
+    }
 #endif
 }
 

@@ -33,19 +33,19 @@
 #include "kis_dlg_toolopts.h"
 
 
-StampTool::StampTool(KisDoc *doc, KisView *view, 
+StampTool::StampTool(KisDoc *doc, KisView *view,
     KisCanvas *canvas, KisPattern *pattern)
   : KisTool(doc, view)
 {
     m_dragging = false;
-    m_dragdist = 0;    
+    m_dragdist = 0;
     m_pView = view;
     m_pCanvas = canvas;
 
     opacity = 255;
     useGradient = false;
     useBlend = false;
-            
+
     setPattern(pattern);
 }
 
@@ -54,15 +54,15 @@ StampTool::~StampTool() {}
 
 void StampTool::setPattern(KisPattern *pattern)
 {
-    m_pPattern = pattern;    
-    
+    m_pPattern = pattern;
+
     /* Use this to establish pattern size and the
     "hot spot" in center of image. This will be the
     same for all stamps, no need to vary it.
     when tiling patterns, use point 0,0 instead
     these are simple variables for speed to avoid
     copy constructors within loops. */
-    
+
     patternWidth = m_pPattern->width();
     patternHeight = m_pPattern->height();
     mPatternSize = QSize(patternWidth, patternHeight);
@@ -77,13 +77,13 @@ void StampTool::setPattern(KisPattern *pattern)
 void StampTool::setOpacity(int /* opacity */)
 {
     /* this will allow, eventually, for a global
-    opacity setting for painting tools which 
+    opacity setting for painting tools which
     overrides individual settings */
 }
 
 
 /*
-    On mouse press, the image is stamped or pasted 
+    On mouse press, the image is stamped or pasted
     into the current layer
 */
 
@@ -93,9 +93,9 @@ void StampTool::mousePress(QMouseEvent *e)
 
     // do sanity checking here, if possible, not inside loops
     // when moving mouse!
-    
+
     KisImage *img = m_pDoc->current();
-    if (!img)  return;    
+    if (!img)  return;
 
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
     {
@@ -109,24 +109,24 @@ void StampTool::mousePress(QMouseEvent *e)
     if(!lay->visible()) return;
 
     QImage qImage = *(m_pPattern->image());
-    if(qImage.isNull()) 
+    if(qImage.isNull())
     {
         kdDebug(0) << "Stamptool::no pattern image!" << endl;
         return;
-    }    
+    }
     if(qImage.depth() < 32)
     {
         kdDebug(0) << "Stamptool::pattern less than 32 bit!" << endl;
         return;
-    }    
-    
+    }
+
     spacing = m_pPattern->spacing();
     if (spacing < 1) spacing = 3;
 
     m_dragging = true;
 
     QPoint pos = e->pos();
-    
+
     m_dragStart = pos;
     m_dragdist = 0;
 
@@ -140,7 +140,7 @@ void StampTool::mousePress(QMouseEvent *e)
 
 /*
     Stamp to canvas - stamp the pattern only onto canvas -
-    it will not affect the layer or image 
+    it will not affect the layer or image
 */
 
 bool StampTool::stampToCanvas(QPoint pos)
@@ -150,26 +150,26 @@ bool StampTool::stampToCanvas(QPoint pos)
     float zF = m_pView->zoomFactor();
 
     int pX = pos.x();
-    int pY = pos.y();  
-    pX = (int)(pX / zF); 
+    int pY = pos.y();
+    pX = (int)(pX / zF);
     pY = (int)(pY / zF);
     pos = QPoint(pX, pY);
-    
+
     QPainter p;
     p.begin(m_pCanvas);
     p.scale(zF, zF);
-    
-    QRect ur(pos.x() - mHotSpotX, pos.y()- mHotSpotY, 
+
+    QRect ur(pos.x() - mHotSpotX, pos.y()- mHotSpotY,
         patternWidth, patternHeight);
-    
-    /* check image bounds.  The image extents are a rectangle 
-    containing all the layers that contribute to it, or 
+
+    /* check image bounds.  The image extents are a rectangle
+    containing all the layers that contribute to it, or
     maybe just a rectangle containing the current layer in
     terms of canvas coords.  This is unclear... */
-    
+
     ur = ur.intersect(img->imageExtents());
- 
-    if (ur.top()    > img->height() 
+
+    if (ur.top()    > img->height()
     || ur.left()    > img->width()
     || ur.bottom()  < 0
     || ur.right()   < 0)
@@ -184,22 +184,22 @@ bool StampTool::stampToCanvas(QPoint pos)
     Note:  This is probably unnecessary because intersects
     imageExtents() above is probably the same, but I'm not sure.
     Better to be safe... */
-    
+
     if (!ur.intersects(lay->layerExtents()))
     {
         p.end();
         return false;
     }
     ur = ur.intersect(lay->layerExtents());
-    
+
     int startX = 0;
     int startY = 0;
-    
+
     if(patternWidth > ur.right())
         startX = patternWidth - ur.right();
-    if(patternHeight > ur.bottom())    
+    if(patternHeight > ur.bottom())
         startY = patternHeight - ur.bottom();
-    
+
     // paranioa
     if(startX < 0) startX = 0;
     if(startY < 0) startY = 0;
@@ -208,14 +208,14 @@ bool StampTool::stampToCanvas(QPoint pos)
 
     int xt = m_pView->xPaintOffset() - m_pView->xScrollOffset();
     int yt = m_pView->yPaintOffset() - m_pView->yScrollOffset();
-        
+
     p.translate(xt, yt);
 
-    p.drawPixmap( ur.left(), ur.top(), 
-                  m_pPattern->pixmap(), 
-                  startX, startY, 
+    p.drawPixmap( ur.left(), ur.top(),
+                  m_pPattern->pixmap(),
+                  startX, startY,
                   ur.width(), ur.height());
-                  
+
     p.end();
 
     return true;
@@ -230,7 +230,7 @@ bool StampTool::stampColor(QPoint pos)
     KisImage *img = m_pDoc->current();
     KisLayer *lay = img->getCurrentLayer();
     QImage  *qimg = m_pPattern->image();
-    
+
     int startx = pos.x();
     int starty = pos.y();
 
@@ -238,7 +238,7 @@ bool StampTool::stampColor(QPoint pos)
 
     if (!clipRect.intersects(lay->imageExtents()))
         return false;
-  
+
     clipRect = clipRect.intersect(lay->imageExtents());
 
     int sx = clipRect.left() - startx;
@@ -249,16 +249,16 @@ bool StampTool::stampColor(QPoint pos)
     uchar r = 0, g = 0, b = 0, a = 255;
     int   v = 255;
     int   bv = 0;
-    
+
     int red     = m_pView->fgColor().R();
     int green   = m_pView->fgColor().G();
     int blue    = m_pView->fgColor().B();
 
     bool colorBlending = false;
     bool grayscale = false;
-    bool layerAlpha =  (img->colorMode() == cm_RGBA); 
+    bool layerAlpha =  (img->colorMode() == cm_RGBA);
     bool patternAlpha = (qimg->hasAlphaBuffer());
-  
+
     for (int y = sy; y <= ey; y++)
     {
         for (int x = sx; x <= ex; x++)
@@ -269,17 +269,17 @@ bool StampTool::stampColor(QPoint pos)
 	            r = lay->pixel(0, startx + x, starty + y);
 	            g = lay->pixel(1, startx + x, starty + y);
 	            b = lay->pixel(2, startx + x, starty + y);
-            }    
+            }
 
             // pixel value in scanline at x offset to right
             uint *p = (uint *)qimg->scanLine(y) + x;
 
-            /* If the image pixel has an alpha channel value of 0, 
-            don't paint the pixel. This is normal in many images used 
-            as sprites. Setting an alpha value of 0 in the layer does 
-            the same but also changes the layer and we don't want that 
+            /* If the image pixel has an alpha channel value of 0,
+            don't paint the pixel. This is normal in many images used
+            as sprites. Setting an alpha value of 0 in the layer does
+            the same but also changes the layer and we don't want that
             for images with transparent backgrounds. */
-            
+
             if(patternAlpha)
             {
                 //if (!(*p & 0xff000000)) continue;
@@ -287,33 +287,33 @@ bool StampTool::stampColor(QPoint pos)
             }
 
             /*  Do rudimentary color blending based on averaging
-            values in the pattern, the background, and the current 
-            fgColor.  Later, various types of color blending will 
-            be implemented for patterns and brushes using krayon's 
-            predefined blend types. (not finished coding yet, but 
-            the types have been defined and there is a combo box 
+            values in the pattern, the background, and the current
+            fgColor.  Later, various types of color blending will
+            be implemented for patterns and brushes using krayon's
+            predefined blend types. (not finished coding yet, but
+            the types have been defined and there is a combo box
             for selecting them in tool opts dialogs.) */
-            
+
             if(colorBlending)
             {
                 // make mud!
-	            lay->setPixel(0, startx + x, starty + y, 
+	            lay->setPixel(0, startx + x, starty + y,
                     (qRed(*p) + r + red)/3);
-	            lay->setPixel(1, startx + x, starty + y, 
+	            lay->setPixel(1, startx + x, starty + y,
                     (qGreen(*p) + g + green)/3);
-	            lay->setPixel(2, startx + x, starty + y, 
+	            lay->setPixel(2, startx + x, starty + y,
                     (qBlue(*p) + b + blue)/3);
             }
             else
             {
                 /* set layer pixel to be same as image - this is
                 the same as the overwrite blend mode */
-                
+
 	            lay->setPixel(0, startx + x, starty + y, qRed(*p));
 	            lay->setPixel(1, startx + x, starty + y, qGreen(*p));
 	            lay->setPixel(2, startx + x, starty + y, qBlue(*p));
             }
-                      	  
+
             if (layerAlpha)
 	        {
 	            a = lay->pixel(3, startx + x, starty + y);
@@ -323,20 +323,20 @@ bool StampTool::stampColor(QPoint pos)
                     v = a + bv;
 		            if (v < 0 ) v = 0;
 		            if (v > 255 ) v = 255;
-		            a = (uchar) v; 
+		            a = (uchar) v;
 			    }
                 else
                 {
-                    v = (int)((*p) >> 24); 
+                    v = (int)((*p) >> 24);
                     v += a;
 		            if (v < 0 ) v = 0;
 		            if (v > 255 ) v = 255;
-		            a = (uchar) v; 
-                }     
+		            a = (uchar) v;
+                }
 
-	            lay->setPixel(3, startx + x, starty + y, a);                
+	            lay->setPixel(3, startx + x, starty + y, a);
 	        }
-	    } 
+	    }
     }
 
     return true;
@@ -353,35 +353,35 @@ void StampTool::mouseMove(QMouseEvent *e)
 {
     KisImage * img = m_pDoc->current();
     if(!img) return;
-    
+
     KisLayer *lay = img->getCurrentLayer();
     if (!lay)  return;
 
     float zF = m_pView->zoomFactor();
 
-    QPoint pos = e->pos();      
+    QPoint pos = e->pos();
     int mouseX = e->x();
     int mouseY = e->y();
 
     KisVector end(mouseX, mouseY);
     KisVector start(m_dragStart.x(), m_dragStart.y());
-            
+
     KisVector dragVec = end - start;
     float saved_dist = m_dragdist;
     float new_dist = dragVec.length();
     float dist = saved_dist + new_dist;
-	  
+
     if ((int)dist < spacing)
 	{
-	    m_dragdist += new_dist; 
+	    m_dragdist += new_dist;
 	    m_dragStart = pos;
 	    return;
 	}
     else
     {
-	    m_dragdist = 0; 
+	    m_dragdist = 0;
 	}
-          
+
     dragVec.normalize();
     KisVector step = start;
 
@@ -394,52 +394,52 @@ void StampTool::mouseMove(QMouseEvent *e)
 	    }
 	    else
 	       step += dragVec * spacing;
-		  
-	    QPoint p(step.x(), step.y());
-            
+
+	    QPoint p(qRound(step.x()), qRound(step.y()));
+
 	    if(m_dragging)
         {
-            /* mouse button is down. Actually draw the 
-            image into the layer so long as spacing is 
+            /* mouse button is down. Actually draw the
+            image into the layer so long as spacing is
             less than distance moved */
 
             if (stampColor(zoomed(p) - mHotSpot))
             {
 	            img->markDirty(QRect(zoomed(p) - mHotSpot, mPatternSize));
-            }    
+            }
         }
         else
         {
             /* Button is not down. Refresh canvas from the layer
-            and then blit the image to the canvas without affecting 
-            the layer at all ! No need for double buffer!!!    
-            Refresh first - markDirty relies on timer, 
+            and then blit the image to the canvas without affecting
+            the layer at all ! No need for double buffer!!!
+            Refresh first - markDirty relies on timer,
             so we need force by directly updating the canvas. */
 
-            QRect ur(zoomed(oldp.x()) - mHotSpotX - m_pView->xScrollOffset(), 
-                zoomed(oldp.y()) - mHotSpotY - m_pView->yScrollOffset(), 
-                (int)(patternWidth  * (zF > 1.0 ? zF : 1.0)), 
+            QRect ur(zoomed(oldp.x()) - mHotSpotX - m_pView->xScrollOffset(),
+                zoomed(oldp.y()) - mHotSpotY - m_pView->yScrollOffset(),
+                (int)(patternWidth  * (zF > 1.0 ? zF : 1.0)),
                 (int)(patternHeight * (zF > 1.0 ? zF : 1.0)));
-            
+
             m_pView->updateCanvas(ur);
-                                
+
             // after old spot is refreshed, stamp image into canvas
             // at current location. This may be slow or messy if updates
             // rely on a timer - need threads and semaphores here to let
             // us know when old marking has been replaced with image
             // if timer is used, but the timer is not used for this.
-                
+
              if(!stampToCanvas(p /*- mHotSpot*/))
              {
-                 // kdDebug(0) << "off canvas!" << endl;                
-             }            
+                 // kdDebug(0) << "off canvas!" << endl;
+             }
         }
-            
-	    oldp = p; 
-        dist -= spacing; 
+
+	    oldp = p;
+        dist -= spacing;
 	}
-	  
-    if (dist > 0) m_dragdist = dist; 
+
+    if (dist > 0) m_dragdist = dist;
     m_dragStart = pos;
 }
 
@@ -448,23 +448,23 @@ void StampTool::mouseRelease(QMouseEvent *e)
 {
     if (e->button() != LeftButton)
         return;
-        
+
     m_dragging = false;
 }
 
 
 void StampTool::optionsDialog()
 {
-    ToolOptsStruct ts;    
-    
+    ToolOptsStruct ts;
+
     ts.useGradient      = useGradient;
     ts.opacity          = opacity;
 
-    ToolOptionsDialog *pOptsDialog 
+    ToolOptionsDialog *pOptsDialog
         = new ToolOptionsDialog(tt_stamptool, ts);
 
     pOptsDialog->exec();
-    
+
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
 

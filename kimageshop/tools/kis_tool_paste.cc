@@ -38,10 +38,10 @@ PasteTool::PasteTool(KisDoc *doc, KisView *view, KisCanvas *canvas)
     : KisTool(doc, view)
 {
     m_dragging = false;
-    m_dragdist = 0;    
+    m_dragdist = 0;
     m_pView = view;
     m_pCanvas = canvas;
-        
+
     m_Cursor = KisCursor::crossCursor();
 }
 
@@ -51,12 +51,12 @@ PasteTool::~PasteTool() {}
 bool PasteTool::setClip()
 {
     clipImage = kapp->clipboard()->image();
-    
-    if (clipImage.isNull()) 
+
+    if (clipImage.isNull())
     {
         kdDebug(0) << "PasteTool:: clipboard image is null!" << endl;
         return false;
-    }    
+    }
     else
     {
         kdDebug(0) << "PasteTool:: clipboard image is NOT null!" << endl;
@@ -67,34 +67,34 @@ bool PasteTool::setClip()
     {
         QImage sI = clipImage.smoothScale(clipImage.width(), clipImage.height());
         clipImage = sI;
-        
+
         if(clipImage.isNull())
         {
             kdDebug(0) << "PasteTool:: can't smooth scale clip image!" << endl;
             return false;
-        }    
+        }
     }
-    
+
     clipPix.convertFromImage(clipImage, QPixmap::AutoColor);
     if(clipPix.isNull())
     {
-        kdDebug(0) << "PasteTool:: can't convernt from image!" << endl;    
+        kdDebug(0) << "PasteTool:: can't convernt from image!" << endl;
         return false;
     }
-            
-    /* use this to establish clip size and the "hot spot" in center 
+
+    /* use this to establish clip size and the "hot spot" in center
     of image, will be the  same for all clips, no need to vary it. */
-    
+
     clipWidth = clipPix.width();
     clipHeight = clipPix.height();
     mClipSize = QSize(clipWidth, clipHeight);
     mHotSpotX = 0;
     mHotSpotY = 0;
     mHotSpot = QPoint(mHotSpotX, mHotSpotY);
-    
+
     if(!clipImage.hasAlphaBuffer())
         kdDebug() << "paste tool - clipImage has no alpha buffer!" << endl;
-        
+
     return true;
 }
 
@@ -114,14 +114,14 @@ void PasteTool::mousePress(QMouseEvent *e)
         return;
 
     KisImage *img = m_pDoc->current();
-    if (!img)  return;    
+    if (!img)  return;
 
     if(!img->getCurrentLayer()->visible()) return;
 
     m_dragging = true;
 
     QPoint pos = e->pos();
-    
+
     m_dragStart = pos;
     m_dragdist = 0;
 
@@ -135,13 +135,13 @@ void PasteTool::mousePress(QMouseEvent *e)
 bool PasteTool::pasteColor(QPoint pos)
 {
     KisImage *img = m_pDoc->current();
-    if (!img)   return false;    
+    if (!img)   return false;
 
     KisLayer *lay = img->getCurrentLayer();
     if (!lay)   return false;
-    
+
     QImage *qimg = &clipImage;
-    
+
     int startx = pos.x();
     int starty = pos.y();
 
@@ -149,7 +149,7 @@ bool PasteTool::pasteColor(QPoint pos)
 
     if (!clipRect.intersects(img->getCurrentLayer()->imageExtents()))
         return false;
-  
+
     clipRect = clipRect.intersect(img->getCurrentLayer()->imageExtents());
 
     int sx = clipRect.left() - startx;
@@ -160,7 +160,7 @@ bool PasteTool::pasteColor(QPoint pos)
     uchar r, g, b, a;
     int   v = 255;
     int   bv = 0;
-    
+
     int red     = m_pView->fgColor().R();
     int green   = m_pView->fgColor().G();
     int blue    = m_pView->fgColor().B();
@@ -169,7 +169,7 @@ bool PasteTool::pasteColor(QPoint pos)
     bool colorBlending = false;
     bool layerAlpha = (img->colorMode() == cm_RGBA);
     bool imageAlpha = qimg->hasAlphaBuffer();
-      
+
     for (int y = sy; y <= ey; y++)
     {
         for (int x = sx; x <= ex; x++)
@@ -181,19 +181,19 @@ bool PasteTool::pasteColor(QPoint pos)
 
             // pixel value in scanline at x offset to right
             uint *p = (uint *)qimg->scanLine(y) + x;
-            
+
             // if the alpha value of the pixel in the selection
             // image is 0, don't paint the pixel.  It's transparent.
             if((imageAlpha) && (((*p) >> 24) == 0)) continue;
-                        
+
             if(colorBlending)
             {
                 // make mud!
-	            lay->setPixel(0, startx + x, starty + y, 
+	            lay->setPixel(0, startx + x, starty + y,
                     (qRed(*p) + r + red)/3);
-	            lay->setPixel(1, startx + x, starty + y, 
+	            lay->setPixel(1, startx + x, starty + y,
                     (qGreen(*p) + g + green)/3);
-	            lay->setPixel(2, startx + x, starty + y, 
+	            lay->setPixel(2, startx + x, starty + y,
                     (qBlue(*p) + b + blue/3));
             }
             else
@@ -203,7 +203,7 @@ bool PasteTool::pasteColor(QPoint pos)
 	            lay->setPixel(1, startx + x, starty + y, qGreen(*p));
 	            lay->setPixel(2, startx + x, starty + y, qBlue(*p));
             }
-                       	  
+
             if (layerAlpha)
 	        {
 	            a = lay->pixel(3, startx + x, starty + y);
@@ -212,12 +212,12 @@ bool PasteTool::pasteColor(QPoint pos)
                     v = a + bv;
 		            if (v < 0 ) v = 0;
 		            if (v > 255 ) v = 255;
-		            a = (uchar) v; 
+		            a = (uchar) v;
 			    }
-                
+
 		        lay->setPixel(3, startx + x, starty + y, a);
 	        }
-	    } 
+	    }
     }
 
     return true;
@@ -232,7 +232,7 @@ bool PasteTool::pasteMonochrome(QPoint /* pos */)
 
 /*
     Stamp to canvas - stamp the pattern only onto canvas -
-    it will not affect the layer or image 
+    it will not affect the layer or image
 */
 
 bool PasteTool::pasteToCanvas(QPoint pos)
@@ -246,8 +246,8 @@ bool PasteTool::pasteToCanvas(QPoint pos)
     float zF = m_pView->zoomFactor();
 
     int pX = pos.x();
-    int pY = pos.y();  
-    pX = (int)(pX / zF); 
+    int pY = pos.y();
+    pX = (int)(pX / zF);
     pY = (int)(pY / zF);
     pos = QPoint(pX, pY);
 
@@ -256,12 +256,12 @@ bool PasteTool::pasteToCanvas(QPoint pos)
     p.scale( zF, zF );
 
     QRect ur(pos.x(), pos.y(), clipPix.width(), clipPix.height());
-    
-    /* check image bounds.  The image extents are a rectangle 
+
+    /* check image bounds.  The image extents are a rectangle
     containing all the layers that contribute to it, or maybe
     just the current layer in terms of canvas coords.  This
     is not clear, so also check layerExtents() below. */
-    
+
     ur = ur.intersect(img->imageExtents());
 
     if (ur.top() - mHotSpotY > img->height()
@@ -278,7 +278,7 @@ bool PasteTool::pasteToCanvas(QPoint pos)
     current layer - which usually is also the topmost one
     This may be unnecessary because imageExtents above may
     be the same as layerExtents, but just to be sure.. */
-    
+
     if (!ur.intersects(lay->layerExtents()))
     {
         p.end();
@@ -291,9 +291,9 @@ bool PasteTool::pasteToCanvas(QPoint pos)
 
     if(clipPix.width() > ur.right())
         startX = clipPix.width() - ur.right();
-    if(clipPix.height() > ur.bottom())    
+    if(clipPix.height() > ur.bottom())
         startY = clipPix.height() - ur.bottom();
-    
+
     // paranioa
     if(startX < 0) startX = 0;
     if(startY < 0) startY = 0;
@@ -305,13 +305,13 @@ bool PasteTool::pasteToCanvas(QPoint pos)
 
     p.translate(xt, yt);
 
-    p.drawPixmap( ur.left(), ur.top(), 
-                  clipPix, 
-                  startX, startY, 
+    p.drawPixmap( ur.left(), ur.top(),
+                  clipPix,
+                  startX, startY,
                   ur.width(), ur.height() );
-                  
+
     p.end();
-    
+
     return true;
 }
 
@@ -322,32 +322,32 @@ void PasteTool::mouseMove(QMouseEvent *e)
     if (!img) return;
 
     int spacing = 10;
-    
+
     float zF = m_pView->zoomFactor();
 
-    QPoint pos = e->pos();      
+    QPoint pos = e->pos();
     int mouseX = e->x();
     int mouseY = e->y();
 
     KisVector end(mouseX, mouseY);
     KisVector start(m_dragStart.x(), m_dragStart.y());
-            
+
     KisVector dragVec = end - start;
     float saved_dist = m_dragdist;
     float new_dist = dragVec.length();
     float dist = saved_dist + new_dist;
-	  
+
     if ((int)dist < spacing)
 	{
-	    m_dragdist += new_dist; 
+	    m_dragdist += new_dist;
 	    m_dragStart = pos;
 	    return;
 	}
     else
     {
-	    m_dragdist = 0; 
+	    m_dragdist = 0;
 	}
-          
+
     dragVec.normalize();
     KisVector step = start;
 
@@ -360,52 +360,52 @@ void PasteTool::mouseMove(QMouseEvent *e)
 	    }
 	    else
 		    step += dragVec * spacing;
-		  
-	    QPoint p(step.x(), step.y());
-            
+
+	    QPoint p(qRound(step.x()), qRound(step.y()));
+
 	    if(m_dragging)
         {
-            /* mouse button is down. Actually draw the 
-            image into the layer so long as spacing is 
+            /* mouse button is down. Actually draw the
+            image into the layer so long as spacing is
             less than distance moved */
 
             if (pasteColor(zoomed(p) - mHotSpot))
             {
 		        img->markDirty(QRect(zoomed(p) - mHotSpot, clipPix.size()));
-            }    
+            }
         }
         else
         {
             /* Button is not down. Refresh canvas from the layer
-            and then blit the image to the canvas without affecting 
-            the layer at all ! No need for double buffer!!!    
-            Refresh first - markDirty relies on timer, 
+            and then blit the image to the canvas without affecting
+            the layer at all ! No need for double buffer!!!
+            Refresh first - markDirty relies on timer,
             so we need force by directly updating the canvas. */
-                
-            QRect ur(zoomed(oldp.x()) - mHotSpotX - m_pView->xScrollOffset(), 
-                     zoomed(oldp.y()) - mHotSpotY - m_pView->yScrollOffset(), 
-                     (int)(clipPix.width() * (zF > 1.0 ? zF : 1.0)), 
+
+            QRect ur(zoomed(oldp.x()) - mHotSpotX - m_pView->xScrollOffset(),
+                     zoomed(oldp.y()) - mHotSpotY - m_pView->yScrollOffset(),
+                     (int)(clipPix.width() * (zF > 1.0 ? zF : 1.0)),
                      (int)(clipPix.height() * (zF > 1.0 ? zF : 1.0)));
-                         
+
             m_pView->updateCanvas(ur);
-                
+
             /* after old spot is refreshed, stamp image into canvas
             at current location. This may be slow or messy as updates
             rely on a timer - need threads and semaphores here to let
             us know when old marking has been replaced with image
             if timer is used, but it's not used for this. */
-                
+
             if(!pasteToCanvas(p /*- mHotSpot*/))
             {
-                //kdDebug(0) << "off canvas" << endl;                
-            }            
+                //kdDebug(0) << "off canvas" << endl;
+            }
         }
-            
-	    oldp = p; 
-        dist -= spacing; 
+
+	    oldp = p;
+        dist -= spacing;
     }
-	  
-    if (dist > 0) m_dragdist = dist; 
+
+    if (dist > 0) m_dragdist = dist;
     m_dragStart = pos;
 }
 
@@ -414,7 +414,7 @@ void PasteTool::mouseRelease(QMouseEvent *e)
 {
     if (e->button() != LeftButton)
         return;
-        
+
     m_dragging = false;
 }
 

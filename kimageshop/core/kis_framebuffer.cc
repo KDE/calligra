@@ -22,17 +22,17 @@
     The krayon framebuffer is for all pixel-writing operations
     caused by the user.  It differs from the krayon engine which
     is responsible for writing to the tiles which compose a krayon
-    image as they are marked dirty and updated with the timer. 
+    image as they are marked dirty and updated with the timer.
     These tile are then painted to the canvas to actually show the
     changed channel data on the screen.
-    
+
     The framebuffer allows writing directly to channel memory
     without being concerned about tiles and layer and channel
     internals, which should be encapsulated from these kinds of
     operations.  This makes it like a conventional framebuffer while
     also allowing the speed of direct access to the channel (binary)
-    data mostly through KisLayer::setPixel() and layer::pixel().  
-    
+    data mostly through KisLayer::setPixel() and layer::pixel().
+
     The krayon framebuffer also allows use of QImage methods to
     translate back and forth between QImage data and Krayon channel
     data - for example, in patterns which are accessed as QImages and
@@ -62,7 +62,7 @@ KisFrameBuffer::KisFrameBuffer(KisDoc *doc)
 {
     pDoc = doc;
     pScratchLayer = 0;
-    
+
     mPatternPaint  =  false;
     mGradientPaint =  false;
 }
@@ -78,7 +78,7 @@ void KisFrameBuffer::setRect(QRect & rect)
     destRect.setLeft(rect.left());
     destRect.setTop(rect.top());
     destRect.setRight(rect.right());
-    destRect.setBottom(rect.bottom());    
+    destRect.setBottom(rect.bottom());
 }
 
 
@@ -88,14 +88,14 @@ void KisFrameBuffer::setNull()
     destRect.setHeight(0);
 }
 
-void KisFrameBuffer::addScratchLayer(int width, int height)
+void KisFrameBuffer::addScratchLayer(int /*width*/, int /*height*/)
 {
-    
+
 }
 
 void KisFrameBuffer::removeScratchLayer()
 {
-    
+
 }
 
 
@@ -114,10 +114,10 @@ bool KisFrameBuffer::eraseCurrentLayer()
 {
     KisImage *img = pDoc->current();
     if (!img) return false;
-    
+
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return false;
-    
+
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
     {
         kdDebug(0) << "colormode is not RGB or RGBA!" << endl;
@@ -125,14 +125,14 @@ bool KisFrameBuffer::eraseCurrentLayer()
     }
 
     QRect clipRect(destRect);
-    
+
     if (!clipRect.intersects(lay->imageExtents()))
         return false;
-  
+
     clipRect = clipRect.intersect(lay->imageExtents());
 
     int sx = clipRect.left();
-    int sy = clipRect.top(); 
+    int sy = clipRect.top();
     int ex = clipRect.right();
     int ey = clipRect.bottom();
 
@@ -143,7 +143,7 @@ bool KisFrameBuffer::eraseCurrentLayer()
 	        lay->setPixel(0, x, y, 255);
 	        lay->setPixel(1, x, y, 255);
 	        lay->setPixel(2, x, y, 255);
-	    } 
+	    }
     }
 
     return true;
@@ -151,47 +151,47 @@ bool KisFrameBuffer::eraseCurrentLayer()
 
 
 
-/* 
+/*
     scale - from a rectangle in current layer smoothing colors.
-    first, add new layer the size of rectange. 
+    first, add new layer the size of rectange.
     This will become the new current layer.
     Scale from one layer to other by copying pixels and
     averaging 4 adjacent pixels -
 */
 
 bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
-{    
+{
     KisImage *img = pDoc->current();
     if (!img) return false;
-    
+
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return false;
 
-    QRect nr(0, 0, newWidth, newHeight);    
-    
-    QString layerName; 
+    QRect nr(0, 0, newWidth, newHeight);
+
+    QString layerName;
     layerName.sprintf("layer %d", img->layerList().count());
     // paramaters: rectangle,  color, clear to transparent, name
     img->addLayer(nr, white, true, layerName);
-    
+
     // adding a layer makes it the new current layer
     KisLayer *nlay = img->getCurrentLayer();
-    if(!nlay) 
+    if(!nlay)
     {
         kdDebug() << "scaleSmooth(): new layer not allocated!" << endl;
         return false;
-    }    
+    }
 
     bool alpha = (img->colorMode() == cm_RGBA);
-    
+
     int srcXoffset = srcR.left();
     int srcYoffset = srcR.top();
     int srcWidth   = srcR.width();
     int srcHeight  = srcR.height();
-    
+
     int x = 0, y = 0;
     int xpos = x, ypos = y;
-    
+
     float r, g, b;
     int r1, g1, b1, a1;
     int r2, g2, b2;
@@ -202,13 +202,13 @@ bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
 
     float xerr, yerr;
     float xfloat, yfloat;
-    
+
     float ratio_x = (float)srcR.width()  / (float)newWidth;
     float ratio_y = (float)srcR.height() / (float)newHeight;
 
     for (ypos = y; ypos < y + newHeight; ypos++)
     {
-        for (xpos = x; xpos < x + newWidth; xpos++) 
+        for (xpos = x; xpos < x + newWidth; xpos++)
         {
             xfloat = (float)(xpos - x) * ratio_x;
             yfloat = (float)(ypos - y) * ratio_y;
@@ -219,50 +219,50 @@ bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
             xerr = 1.0 - (xfloat - (float)(x1 - srcXoffset));
             yerr = 1.0 - (yfloat - (float)(y1 - srcYoffset));
 
-            r1 = lay->pixel(0, x1, y1); 
-            g1 = lay->pixel(1, x1, y1);
-            b1 = lay->pixel(2, x1, y1);
+            r1 = lay->pixel(0, static_cast<unsigned int>(x1), static_cast<unsigned int>(y1));
+            g1 = lay->pixel(1, static_cast<unsigned int>(x1), static_cast<unsigned int>(y1));
+            b1 = lay->pixel(2, static_cast<unsigned int>(x1), static_cast<unsigned int>(y1));
 
-            if(alpha) a1 = lay->pixel(3, x1, y1);
-            
-            // do not exceed layer width with check 
-            // on right edge in source        
-            if((xpos < x + newWidth) 
+            if(alpha) a1 = lay->pixel(3, static_cast<unsigned int>(x1), static_cast<unsigned int>(y1));
+
+            // do not exceed layer width with check
+            // on right edge in source
+            if((xpos < x + newWidth)
             && (x1 + 1 < srcWidth + srcXoffset))
             {
-                r2 = lay->pixel(0, x1+1, y1); 
-                g2 = lay->pixel(1, x1+1, y1);
-                b2 = lay->pixel(2, x1+1, y1);
+                r2 = lay->pixel(0, static_cast<unsigned int>(x1+1), static_cast<unsigned int>(y1));
+                g2 = lay->pixel(1, static_cast<unsigned int>(x1+1), static_cast<unsigned int>(y1));
+                b2 = lay->pixel(2, static_cast<unsigned int>(x1+1), static_cast<unsigned int>(y1));
             }
             else
             {
                 r2 = r1; g2 = g1; b2 = b1;
             }
-            // do not exceed layer width & height with check 
+            // do not exceed layer width & height with check
             // at bottom right corner pixel in source (unique condition!)
-            if((xpos < x + newWidth) 
+            if((xpos < x + newWidth)
             && (ypos < y + newHeight)
-            && (x1 + 1 < srcWidth + srcXoffset) 
+            && (x1 + 1 < srcWidth + srcXoffset)
             && (y1 + 1 < srcHeight + srcYoffset))
             {
-                r3 = lay->pixel(0, x1+1, y1+1); 
-                g3 = lay->pixel(1, x1+1, y1+1);
-                b3 = lay->pixel(2, x1+1, y1+1);
+                r3 = lay->pixel(0, static_cast<unsigned int>(x1+1), static_cast<unsigned int>(y1+1));
+                g3 = lay->pixel(1, static_cast<unsigned int>(x1+1), static_cast<unsigned int>(y1+1));
+                b3 = lay->pixel(2, static_cast<unsigned int>(x1+1), static_cast<unsigned int>(y1+1));
             }
             else
             {
                 r3 = r1; g3 = g1; b3 = b1;
             }
 
-            // do not exceed layer height in check 
-            // along bottom row in source 
-            if((ypos < y + newHeight) 
+            // do not exceed layer height in check
+            // along bottom row in source
+            if((ypos < y + newHeight)
             && (y1 + 1 < srcHeight + srcYoffset))
-            {            
-                r4 = lay->pixel(0, x1, y1+1); 
-                g4 = lay->pixel(1, x1, y1+1);
-                b4 = lay->pixel(2, x1, y1+1);
-            }                
+            {
+                r4 = lay->pixel(0, static_cast<unsigned int>(x1), static_cast<unsigned int>(y1+1));
+                g4 = lay->pixel(1, static_cast<unsigned int>(x1), static_cast<unsigned int>(y1+1));
+                b4 = lay->pixel(2, static_cast<unsigned int>(x1), static_cast<unsigned int>(y1+1));
+            }
             else
             {
                 r4 = r1; g4 = g1; b4 = b1;
@@ -307,62 +307,62 @@ bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
             nlay->setPixel(0, xpos - x, ypos - y, (int)r);
             nlay->setPixel(1, xpos - x, ypos - y, (int)g);
             nlay->setPixel(2, xpos - x, ypos - y, (int)b);
-            
+
             if(alpha) nlay->setPixel(3, xpos - x, ypos - y, (int)a1);
         }
     }
 
-    return true;    
-} 
+    return true;
+}
 
 /*
     Scale area without smoothing colors - a must for indexed mode.
-    This can produce jaggies when scaling up and inaccuracies in 
+    This can produce jaggies when scaling up and inaccuracies in
     scaling down but when scaling down this is not so noticeable
 */
 bool KisFrameBuffer::scaleRough(QRect & srcR, int newWidth, int newHeight)
-{    
+{
     KisImage *img = pDoc->current();
     if (!img) return false;
-    
+
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return false;
 
-    QRect nr(0, 0, newWidth, newHeight);    
+    QRect nr(0, 0, newWidth, newHeight);
 
-    QString layerName; 
+    QString layerName;
     layerName.sprintf("layer %d", img->layerList().count());
     img->addLayer(nr, white, true, layerName);
 
     // adding a layer makes it the new current layer
     KisLayer *nlay = img->getCurrentLayer();
-    if(!nlay) 
+    if(!nlay)
     {
         kdDebug() << "scaleRough(): new layer not allocated!" << endl;
         return false;
-    }    
+    }
 
     bool alpha = (img->colorMode() == cm_RGBA);
 
     int srcXoffset = srcR.left();
     int srcYoffset = srcR.top();
-    
-    int x = 0, y = 0;
-    int xpos = x, ypos = y;    
 
-    kdDebug() << "srcR.left() " << srcR.left() 
+    int x = 0, y = 0;
+    int xpos = x, ypos = y;
+
+    kdDebug() << "srcR.left() " << srcR.left()
               << "srcR.top() " << srcR.top()  << endl;
-    
+
     float r, g, b, a;
     float x1, y1;
     float xfloat, yfloat;
-    
+
     float ratio_x = (float)srcR.width()  / (float)newWidth;
     float ratio_y = (float)srcR.height() / (float)newHeight;
 
     for (ypos = y; ypos < y + newHeight; ypos++)
     {
-        for (xpos = x; xpos < x + newWidth; xpos++) 
+        for (xpos = x; xpos < x + newWidth; xpos++)
         {
             xfloat = (xpos - x) * ratio_x;
             yfloat = (ypos - y) * ratio_y;
@@ -370,16 +370,16 @@ bool KisFrameBuffer::scaleRough(QRect & srcR, int newWidth, int newHeight)
             x1 = srcXoffset + (int)xfloat;
             y1 = srcYoffset + (int)yfloat;
 
-            r = lay->pixel(0, x1, y1); 
-            g = lay->pixel(1, x1, y1);
-            b = lay->pixel(2, x1, y1);
-            
-            if(alpha) a = lay->pixel(3, x1, y1);
-            
+            r = lay->pixel(0, static_cast<unsigned int>(x1), static_cast<unsigned int>(y1));
+            g = lay->pixel(1, static_cast<unsigned int>(x1), static_cast<unsigned int>(y1));
+            b = lay->pixel(2, static_cast<unsigned int>(x1), static_cast<unsigned int>(y1));
+
+            if(alpha) a = lay->pixel(3, static_cast<unsigned int>(x1), static_cast<unsigned int>(y1));
+
             nlay->setPixel(0, xpos - x , ypos - y, (int)r);
             nlay->setPixel(1, xpos - x,  ypos - y, (int)g);
             nlay->setPixel(2, xpos - x,  ypos - y, (int)b);
-            
+
             if(alpha) nlay->setPixel(3, xpos - x,  ypos - y, (int)a);
         }
     }
@@ -389,116 +389,116 @@ bool KisFrameBuffer::scaleRough(QRect & srcR, int newWidth, int newHeight)
 
 
 bool KisFrameBuffer::mirror(QRect & )
-{    
+{
     // add new layer
-    // copy from end of src row data to 
+    // copy from end of src row data to
     // beginning of dest row for each row.
 
     KisImage *img = pDoc->current();
     if (!img) return false;
-    
+
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return false;
 
-    return true;    
-} 
+    return true;
+}
 
 
 bool KisFrameBuffer::flip(QRect & )
-{    
+{
     // add new layer - same x and y sizes as src
-    // copy last row in src to first row in dest for each row 
+    // copy last row in src to first row in dest for each row
     // data in each row should be same
 
     KisImage *img = pDoc->current();
     if (!img) return false;
-    
+
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return false;
-    
-    return true;    
-} 
+
+    return true;
+}
 
 
 bool KisFrameBuffer::rotate90(QRect & )
-{    
+{
     // add new layer - reverse x and y sizes
     // for each row in src, start at end of
     // row in dest and place data in reverse order
 
     KisImage *img = pDoc->current();
     if (!img) return false;
-    
+
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return false;
 
-    return true;    
-} 
+    return true;
+}
 
 
 bool KisFrameBuffer::rotate180(QRect & )
-{    
+{
     // add new layer - same x and y sizes
     // start at top left of src  and copy data in
-    // each row in reverse order from bottom of dest 
+    // each row in reverse order from bottom of dest
     // to top
-    
+
     KisImage *img = pDoc->current();
     if (!img) return false;
-    
+
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return false;
 
-    return true;    
-} 
+    return true;
+}
 
 
 bool KisFrameBuffer::rotate270(QRect & )
-{    
+{
     // add new layer - reverse x and y sizes
     // start at top left of src and copy data in
     // each row in src to each column in dest
 
     KisImage *img = pDoc->current();
     if (!img) return false;
-    
-    KisLayer *lay = img->getCurrentLayer();
-    if (!lay) return false;
 
-    return true;    
-} 
-    
-
-bool KisFrameBuffer::QImageToLayer(QImage *, QRect & , QRect & )
-{    
-    // use current layer only
-    // copy from rectangle in QImage to rectangle in current layer
-    KisImage *img = pDoc->current();
-    if (!img) return false;
-    
-    KisLayer *lay = img->getCurrentLayer();
-    if (!lay) return false;
-
-    return true;    
-} 
-
-
-bool KisFrameBuffer::layerToQImage(QImage *, QRect &, QRect &)
-{    
-    // use current layer only
-    // normally src and destination rectangles are same size
-    KisImage *img = pDoc->current();
-    if (!img) return false;
-    
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return false;
 
     return true;
-} 
+}
 
 
-bool KisFrameBuffer::changeColors(uint oldColor, uint newColor, 
-    QRect & r, KisSelection *selection) 
+bool KisFrameBuffer::QImageToLayer(QImage *, QRect & , QRect & )
+{
+    // use current layer only
+    // copy from rectangle in QImage to rectangle in current layer
+    KisImage *img = pDoc->current();
+    if (!img) return false;
+
+    KisLayer *lay = img->getCurrentLayer();
+    if (!lay) return false;
+
+    return true;
+}
+
+
+bool KisFrameBuffer::layerToQImage(QImage *, QRect &, QRect &)
+{
+    // use current layer only
+    // normally src and destination rectangles are same size
+    KisImage *img = pDoc->current();
+    if (!img) return false;
+
+    KisLayer *lay = img->getCurrentLayer();
+    if (!lay) return false;
+
+    return true;
+}
+
+
+bool KisFrameBuffer::changeColors(uint oldColor, uint newColor,
+                                  QRect & r, KisSelection */*selection*/)
 {
     KisImage *img = pDoc->current();
     if (!img) return false;
@@ -507,29 +507,29 @@ bool KisFrameBuffer::changeColors(uint oldColor, uint newColor,
     if (!lay) return false;
 
     QRect clipRect(r);
-    
+
     if (!clipRect.intersects(lay->imageExtents()))
         return false;
-  
+
     clipRect = clipRect.intersect(lay->imageExtents());
 
     if (!clipRect.intersects(lay->layerExtents()))
         return false;
-  
+
     clipRect = clipRect.intersect(lay->layerExtents());
     bool imageAlpha = (img->colorMode() == cm_RGBA);
 
     int oldRed   = qRed(oldColor);
     int oldGreen = qGreen(oldColor);
     int oldBlue  = qBlue(oldColor);
-    
+
     int newRed   = qRed(newColor);
     int newGreen = qGreen(newColor);
     int newBlue  = qBlue(newColor);
     int newAlpha = qAlpha(newColor);
-    
+
     int sx = clipRect.left();
-    int sy = clipRect.top(); 
+    int sy = clipRect.top();
     int ex = clipRect.right();
     int ey = clipRect.bottom();
 
@@ -537,7 +537,7 @@ bool KisFrameBuffer::changeColors(uint oldColor, uint newColor,
     {
         for (int x = sx; x <= ex; x++)
 	    {
-            if((oldRed   == lay->pixel(0, x, y)) 
+            if((oldRed   == lay->pixel(0, x, y))
             && (oldGreen == lay->pixel(1, x, y))
             && (oldBlue  == lay->pixel(2, x, y)))
             {
@@ -555,10 +555,10 @@ bool KisFrameBuffer::changeColors(uint oldColor, uint newColor,
 	                lay->setPixel(1, x, y, newGreen);
 	                lay->setPixel(2, x, y, newBlue);
                 }
-                
+
                 if(imageAlpha) lay->setPixel(3, x, y, newAlpha);
-            }    
-	    } 
+            }
+	    }
     }
 
     return true;
@@ -570,7 +570,7 @@ bool KisFrameBuffer::changeColors(uint oldColor, uint newColor,
     view's current pattern, but it can be set to any pattern.
     Normally this is called when the view sets a new current
     pattern - kis_view.cc.
-    
+
 */
 
 void KisFrameBuffer::setPattern(KisPattern *pattern)
@@ -584,24 +584,24 @@ void KisFrameBuffer::setPattern(KisPattern *pattern)
     setPatternToPixel - map a pixel in an imaginary tile of
     patterns to a pixel in the given layer and set the layer
     pixel value to the tile pixel value.
-    
+
     This is used for drawing, or filling a selection or region,
     with a pattern.  Note:  value is the color of the pixel in the
     layer for blending with a pattern - later.
 */
 
-void KisFrameBuffer::setPatternToPixel(KisLayer *lay, 
+void KisFrameBuffer::setPatternToPixel(KisLayer *lay,
     int _x, int _y, uint /*value*/)
 {
-    if(!pPenPattern) 
+    if(!pPenPattern)
         return;
-        
+
     if(pPenPattern->width() == 0 || pPenPattern->height() == 0)
         return;
 
     int xTiles = lay->imageExtents().width() / pPenPattern->width();
     int yTiles = lay->imageExtents().height() / pPenPattern->height();
-    
+
     int xOffset = lay->imageExtents().x();
     int yOffset = lay->imageExtents().y();
 
@@ -611,16 +611,16 @@ void KisFrameBuffer::setPatternToPixel(KisLayer *lay,
     // pixel value in pattern image scanline at x offset to right
     // not that we must take into account offset of layer to start
     // at topleft of pattern image
-    
+
     uint *p = (uint *)
-        pPenPattern->image()->scanLine(y / (yTiles * pPenPattern->height()) 
-            +  y % pPenPattern->height()) 
-            + (x / (xTiles * pPenPattern->width())) 
+        pPenPattern->image()->scanLine(y / (yTiles * pPenPattern->height())
+            +  y % pPenPattern->height())
+            + (x / (xTiles * pPenPattern->width()))
             + (x % pPenPattern->width());
-    
+
     lay->setPixel(0, x, y, qRed(*p));
     lay->setPixel(1, x, y, qGreen(*p));
-    lay->setPixel(2, x, y, qBlue(*p));    
+    lay->setPixel(2, x, y, qBlue(*p));
 }
 
 void KisFrameBuffer::setGradientPaint(bool _gradientPaint,
@@ -631,33 +631,33 @@ void KisFrameBuffer::setGradientPaint(bool _gradientPaint,
 
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return;
-     
-    mGradient.mapKdeGradient(QRect(0, 0, 
+
+    mGradient.mapKdeGradient(QRect(0, 0,
         lay->imageExtents().width(), lay->imageExtents().height()),
         _startColor, _endColor);
-    
+
     // set boolean value
-    mGradientPaint = _gradientPaint;    
+    mGradientPaint = _gradientPaint;
 }
 
 
-void KisFrameBuffer::setGradientToPixel(KisLayer *lay, 
+void KisFrameBuffer::setGradientToPixel(KisLayer *lay,
     int x, int y)
 {
     if(mGradient.width() == 0 || mGradient.height() == 0)
         return;
-    
+
     uint u32Color = 0;
-    
+
     int xOffset = lay->imageExtents().x();
     int yOffset = lay->imageExtents().y();
-    
+
     // pixel value in gradient array
     u32Color = mGradient.imagePixelValue(x - xOffset, y - yOffset);
-    
+
     lay->setPixel(0, x, y, qRed(u32Color));
     lay->setPixel(1, x, y, qGreen(u32Color));
-    lay->setPixel(2, x, y, qBlue(u32Color));    
+    lay->setPixel(2, x, y, qBlue(u32Color));
 }
 
 #include "kis_framebuffer.moc"

@@ -40,10 +40,10 @@ EraserTool::EraserTool(KisDoc *doc, KisView *view, KisBrush *_brush)
 
     usePattern  = false;
     useGradient = false;
-    
+
     lineThickness = 1;
     lineOpacity = 255;
-    
+
     setBrush(_brush);
 }
 
@@ -52,10 +52,10 @@ EraserTool::~EraserTool() {}
 void EraserTool::setBrush(KisBrush *_brush)
 {
     m_pBrush = _brush;
-    
+
     int w = m_pBrush->pixmap().width();
     int h = m_pBrush->pixmap().height();
-    
+
     // cursor cannot be larger than 32x32
     if((w < 33 && h < 33) && (w > 9 && h > 9))
     {
@@ -66,11 +66,11 @@ void EraserTool::setBrush(KisBrush *_brush)
         m_pView->kisCanvas()->setCursor(QCursor(pix));
         m_Cursor = QCursor(pix);
     }
-    else 
+    else
     {
-        m_pView->kisCanvas()->setCursor(KisCursor::brushCursor()); 
+        m_pView->kisCanvas()->setCursor(KisCursor::brushCursor());
         m_Cursor = KisCursor::brushCursor();
-    }    
+    }
 }
 
 void EraserTool::mousePress(QMouseEvent *e)
@@ -93,11 +93,11 @@ void EraserTool::mousePress(QMouseEvent *e)
     pos = zoomed(pos);
     m_dragStart = pos;
     m_dragdist = 0;
-    
+
     if(paint(pos))
     {
-         m_pDoc->current()->markDirty(QRect(pos 
-            - m_pBrush->hotSpot(), m_pBrush->size()));      
+         m_pDoc->current()->markDirty(QRect(pos
+            - m_pBrush->hotSpot(), m_pBrush->size()));
     }
 }
 
@@ -106,7 +106,7 @@ bool EraserTool::paint(QPoint pos)
 {
     KisImage * img = m_pDoc->current();
     KisLayer *lay = img->getCurrentLayer();
-    
+
     if (!img)	return false;
     if (!lay)   return false;
     if (!m_pBrush) return false;
@@ -122,7 +122,7 @@ bool EraserTool::paint(QPoint pos)
 
     if (!clipRect.intersects(img->getCurrentLayer()->imageExtents()))
         return false;
-  
+
     clipRect = clipRect.intersect(img->getCurrentLayer()->imageExtents());
 
     int sx = clipRect.left() - startx;
@@ -143,7 +143,7 @@ bool EraserTool::paint(QPoint pos)
         for (int y = sy; y <= ey; y++)
 	    {
 	        sl = m_pBrush->scanline(y);
-		  
+
 	        for (int x = sx; x <= ex; x++)
 	        {
 	            bv = *(sl + x);
@@ -154,7 +154,7 @@ bool EraserTool::paint(QPoint pos)
 		        if (v < 0 ) v = 0;
 		        if (v > 255 ) v = 255;
 		        a = (uchar) v;
-			  
+
 		        lay->setPixel(3, startx + x, starty + y, a);
 	        }
 	    }
@@ -169,26 +169,26 @@ bool EraserTool::paint(QPoint pos)
 	    for (int y = sy; y <= ey; y++)
 	    {
 	        sl = m_pBrush->scanline(y);
-		  
+
 	        for (int x = sx; x <= ex; x++)
 	        {
 		        r = lay->pixel(0, startx + x, starty + y);
 		        g = lay->pixel(1, startx + x, starty + y);
 		        b = lay->pixel(2, startx + x, starty + y);
-			  
+
 		        bv = *(sl + x);
 		        if (bv == 0) continue;
-			  
+
 		        invbv = 255 - bv;
-			  
+
 		        b = ((blue * bv) + (b * invbv))/255;
 		        g = ((green * bv) + (g * invbv))/255;
 		        r = ((red * bv) + (r * invbv))/255;
-			  
+
 		        lay->setPixel(0, startx + x, starty + y, r);
 		        lay->setPixel(1, startx + x, starty + y, g);
 		        lay->setPixel(2, startx + x, starty + y, b);
-	        } 
+	        }
 	    }
     }
 
@@ -209,17 +209,17 @@ void EraserTool::mouseMove(QMouseEvent *e)
         if( !img->getCurrentLayer()->visible() )
         	return;
 
-        QPoint pos = e->pos();      
+        QPoint pos = e->pos();
         int mouseX = e->x();
         int mouseY = e->y();
 
         pos = zoomed(pos);
         mouseX = zoomed(mouseX);
-        mouseY = zoomed(mouseY);        
+        mouseY = zoomed(mouseY);
 
         KisVector end(mouseX, mouseY);
         KisVector start(m_dragStart.x(), m_dragStart.y());
-            
+
         KisVector dragVec = end - start;
         float saved_dist = m_dragdist;
         float new_dist = dragVec.length();
@@ -227,13 +227,13 @@ void EraserTool::mouseMove(QMouseEvent *e)
 
         if ((int)dist < spacing)
 	    {
-            // save for next movevent        
-	        m_dragdist += new_dist; 
+            // save for next movevent
+	        m_dragdist += new_dist;
 	        m_dragStart = pos;
 	        return;
 	    }
-        else 
-	        m_dragdist = 0; 
+        else
+	        m_dragdist = 0;
 
         dragVec.normalize();
         KisVector step = start;
@@ -248,15 +248,15 @@ void EraserTool::mouseMove(QMouseEvent *e)
 	        else
 	            step += dragVec * spacing;
 
-	        QPoint p(step.x(), step.y());
-	  	  
+	        QPoint p(qRound(step.x()), qRound(step.y()));
+
 	        if (paint(p))
                img->markDirty(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
 
  	        dist -= spacing;
 	    }
         //save for next movevent
-        if (dist > 0) m_dragdist = dist; 
+        if (dist > 0) m_dragdist = dist;
         m_dragStart = pos;
     }
 
@@ -271,25 +271,25 @@ void EraserTool::mouseRelease(QMouseEvent *e)
 
 void EraserTool::optionsDialog()
 {
-    ToolOptsStruct ts;    
-    
+    ToolOptsStruct ts;
+
     ts.usePattern       = usePattern;
     ts.useGradient      = useGradient;
     ts.lineThickness    = lineThickness;
     ts.lineOpacity      = lineOpacity;
 
-    ToolOptionsDialog *pOptsDialog 
+    ToolOptionsDialog *pOptsDialog
         = new ToolOptionsDialog(tt_erasertool, ts);
 
     pOptsDialog->exec();
-    
+
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
-    
+
     lineThickness = pOptsDialog->eraserToolTab()->thickness();
     lineOpacity   = pOptsDialog->eraserToolTab()->opacity();
     usePattern    = pOptsDialog->eraserToolTab()->usePattern();
     useGradient   = pOptsDialog->eraserToolTab()->useGradient();
-    
+
 }
 

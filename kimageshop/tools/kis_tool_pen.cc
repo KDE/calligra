@@ -2,7 +2,7 @@
  *  kis_tool_pen.cc - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
- *                2001 John Califf 
+ *                2001 John Califf
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 #include "kis_tool_pen.h"
 #include "kis_dlg_toolopts.h"
 
-PenTool::PenTool(KisDoc *doc, KisView *view, 
+PenTool::PenTool(KisDoc *doc, KisView *view,
     KisCanvas *canvas, KisBrush *_brush)
   : KisTool(doc, view)
 {
@@ -46,12 +46,12 @@ PenTool::PenTool(KisDoc *doc, KisView *view,
 
     lineThickness = 1;
     lineOpacity = 1;
-        
+
     setBrush(_brush);
 }
 
 
-PenTool::~PenTool() 
+PenTool::~PenTool()
 {
 }
 
@@ -59,10 +59,10 @@ PenTool::~PenTool()
 void PenTool::setBrush(KisBrush *_brush)
 {
     m_pBrush = _brush;
-    
+
     int w = m_pBrush->pixmap().width();
     int h = m_pBrush->pixmap().height();
-    
+
     if((w < 33 && h < 33) && (w > 9 && h > 9))
     {
         QBitmap mask(w, h);
@@ -70,13 +70,13 @@ void PenTool::setBrush(KisBrush *_brush)
         mask = pix.createHeuristicMask();
         pix.setMask(mask);
         m_pView->kisCanvas()->setCursor(QCursor(pix));
-        m_Cursor = QCursor(pix);   
-    }    
-    else 
+        m_Cursor = QCursor(pix);
+    }
+    else
     {
-        m_pView->kisCanvas()->setCursor(KisCursor::brushCursor()); 
+        m_pView->kisCanvas()->setCursor(KisCursor::brushCursor());
         m_Cursor = KisCursor::brushCursor();
-    }    
+    }
 }
 
 
@@ -99,30 +99,30 @@ void PenTool::mousePress(QMouseEvent *e)
     if (e->button() != QMouseEvent::LeftButton)
         return;
 
-    if(!m_pDoc->frameBuffer())        
+    if(!m_pDoc->frameBuffer())
         return;
-        
+
     m_dragging = true;
 
     QPoint pos = e->pos();
     pos = zoomed(pos);
     m_dragStart = pos;
     m_dragdist = 0;
-    
+
     if(paint(pos))
     {
-         m_pDoc->current()->markDirty(QRect(pos 
-            - m_pBrush->hotSpot(), m_pBrush->size()));      
+         m_pDoc->current()->markDirty(QRect(pos
+            - m_pBrush->hotSpot(), m_pBrush->size()));
     }
 }
 
 
 bool PenTool::paint(QPoint pos)
-{  
+{
     KisImage * img = m_pDoc->current();
     KisLayer *lay = img->getCurrentLayer();
     KisFrameBuffer *fb = m_pDoc->frameBuffer();
-    
+
     int startx = (pos - m_pBrush->hotSpot()).x();
     int starty = (pos - m_pBrush->hotSpot()).y();
 
@@ -130,7 +130,7 @@ bool PenTool::paint(QPoint pos)
 
     if (!clipRect.intersects(lay->imageExtents()))
         return false;
-  
+
     clipRect = clipRect.intersect(lay->imageExtents());
 
     int sx = clipRect.left() - startx;
@@ -147,7 +147,7 @@ bool PenTool::paint(QPoint pos)
     int blue = m_pView->fgColor().B();
 
     bool alpha = (img->colorMode() == cm_RGBA);
-  
+
     for (int y = sy; y <= ey; y++)
     {
         sl = m_pBrush->scanline(y);
@@ -156,15 +156,15 @@ bool PenTool::paint(QPoint pos)
 	    {
             // no color blending with pen tool (only with brush)
 	        // alpha blending only (maybe)
-            
+
 	        bv = *(sl + x);
 	        if (bv < penColorThreshold) continue;
-            
-		    r   = red;   
-            g   = green; 
-            b   = blue;  
-         
-            // use foreround color  
+
+		    r   = red;
+            g   = green;
+            b   = blue;
+
+            // use foreround color
             if(!usePattern)
             {
 	            lay->setPixel(0, startx + x, starty + y, r);
@@ -176,12 +176,12 @@ bool PenTool::paint(QPoint pos)
             {
 	            fb->setPatternToPixel(lay, startx + x, starty + y, 0);
             }
-                       	  
+
             if (alpha)
 	        {
 		        lay->setPixel(3, startx + x, starty + y, bv);
 	        }
-	    } 
+	    }
     }
 
     return true;
@@ -197,17 +197,17 @@ void PenTool::mouseMove(QMouseEvent *e)
 
     if(m_dragging)
     {
-        QPoint pos = e->pos();      
+        QPoint pos = e->pos();
         int mouseX = e->x();
         int mouseY = e->y();
 
         pos = zoomed(pos);
         mouseX = zoomed(mouseX);
-        mouseY = zoomed(mouseY);        
+        mouseY = zoomed(mouseY);
 
         KisVector end(mouseX, mouseY);
         KisVector start(m_dragStart.x(), m_dragStart.y());
-            
+
         KisVector dragVec = end - start;
         float saved_dist = m_dragdist;
         float new_dist = dragVec.length();
@@ -215,13 +215,13 @@ void PenTool::mouseMove(QMouseEvent *e)
 
         if ((int)dist < spacing)
 	    {
-            // save for next movevent        
-	        m_dragdist += new_dist; 
+            // save for next movevent
+	        m_dragdist += new_dist;
 	        m_dragStart = pos;
 	        return;
 	    }
-        else 
-	        m_dragdist = 0; 
+        else
+	        m_dragdist = 0;
 
         dragVec.normalize();
         KisVector step = start;
@@ -236,15 +236,15 @@ void PenTool::mouseMove(QMouseEvent *e)
 	        else
 	            step += dragVec * spacing;
 
-	        QPoint p(step.x(), step.y());
-	  	  
+	        QPoint p(qRound(step.x()), qRound(step.y()));
+
 	        if (paint(p))
                img->markDirty(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
 
  	        dist -= spacing;
 	    }
         //save for next movevent
-        if (dist > 0) m_dragdist = dist; 
+        if (dist > 0) m_dragdist = dist;
         m_dragStart = pos;
     }
 }
@@ -254,29 +254,29 @@ void PenTool::mouseRelease(QMouseEvent *e)
 {
     if (e->button() != LeftButton)
         return;
-        
+
     m_dragging = false;
 }
 
 void PenTool::optionsDialog()
 {
-    ToolOptsStruct ts;    
-    
+    ToolOptsStruct ts;
+
     ts.usePattern       = usePattern;
     ts.useGradient      = usePattern;
     ts.penThreshold     = penColorThreshold;
     ts.opacity          = penOpacity;
-    
-    ToolOptionsDialog *pOptsDialog 
+
+    ToolOptionsDialog *pOptsDialog
         = new ToolOptionsDialog(tt_pentool, ts);
 
     pOptsDialog->exec();
-    
+
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
 
     usePattern          = pOptsDialog->penToolTab()->usePattern();
-    useGradient         = pOptsDialog->penToolTab()->useGradient();    
-    penColorThreshold   = pOptsDialog->penToolTab()->penThreshold();        
-    penOpacity          = pOptsDialog->penToolTab()->opacity();   
+    useGradient         = pOptsDialog->penToolTab()->useGradient();
+    penColorThreshold   = pOptsDialog->penToolTab()->penThreshold();
+    penOpacity          = pOptsDialog->penToolTab()->opacity();
 }

@@ -48,67 +48,67 @@ void KisGradient::setNull()
 }
 
 /*
-    mapKdeGradient - preferred method of mapping a predefined 
+    mapKdeGradient - preferred method of mapping a predefined
     kde gradient to a QImage.  This works well for 2 color
     gradients - I see no need for more colors although different
     blending methods and periodicity needs to be considred later
-    for our native gradients and gimp imports 
+    for our native gradients and gimp imports
 
     Below are the predefined types of kde gradients. Nice!
 
-    enum GradientType 
+    enum GradientType
     { VerticalGradient, HorizontalGradient,
       DiagonalGradient, CrossDiagonalGradient,
       PyramidGradient, RectangleGradient,
       PipeCrossGradient, EllipticGradient };
 */
 
-void KisGradient::mapKdeGradient(QRect gradR, 
+void KisGradient::mapKdeGradient(QRect gradR,
             KisColor startColor, KisColor endColor )
 {
     mGradientWidth  = gradR.width();
     mGradientHeight = gradR.height();
 
     gradArray.resize(mGradientWidth * mGradientHeight);
-    gradArray.fill(0); 
-   
-    QSize size(mGradientWidth, mGradientHeight);    
+    gradArray.fill(0);
+
+    QSize size(mGradientWidth, mGradientHeight);
     QColor ca(startColor.R(), startColor.G(), startColor.B());
     QColor cb(endColor.R(), endColor.G(), endColor.B());
-    
+
     // use gradient effect selected with gradient dialog
     QImage tmpImage = KImageEffect::gradient(size, ca, cb, mEffect, 0);
-    
+
     QPixmap tmpPix(mGradientWidth, mGradientHeight, 8);
     tmpPix.convertFromImage(tmpImage, QPixmap::ColorOnly);
-    
+
     gradImage = tmpPix.convertToImage();
     gradImage.convertDepth(32);
 }
 
 
-void KisGradient::mapVertGradient( QRect gradR, 
+void KisGradient::mapVertGradient( QRect gradR,
             KisColor startColor, KisColor endColor )
 {
     mGradientWidth  = gradR.width();
     mGradientHeight = gradR.height();
 
     gradArray.resize(mGradientWidth * mGradientHeight);
-    gradArray.fill(0); 
+    gradArray.fill(0);
 
     uint color = 0;
-    
+
     // draw gradient within rectanguar area defined above
     int length = gradR.height();
-    
+
     int rDiff = ( endColor.R() - startColor.R() );
     int gDiff = ( endColor.G() - startColor.G() );
     int bDiff = ( endColor.B() - startColor.B() );
-  
+
     int rl = startColor.R();
     int gl = startColor.G();
     int bl = startColor.B();
- 
+
     float rlFloat = (float)rl;
     float glFloat = (float)gl;
     float blFloat = (float)bl;
@@ -117,25 +117,25 @@ void KisGradient::mapVertGradient( QRect gradR,
     int y2 = gradR.height();
     int x1 = 0;
     int x2 = gradR.width();
-    
+
     // gradient defined vertically
     for( int y = y1 ; y < y2 ; y++ )
     {
         // calc color
-        float rlFinFloat 
+        float rlFinFloat
             = rlFloat + ((float) (y - y1) * (float)rDiff) / (float)length;
-        float glFinFloat 
+        float glFinFloat
             = glFloat + ((float) (y - y1) * (float)gDiff) / (float)length;
-        float blFinFloat 
+        float blFinFloat
             = blFloat + ((float) (y - y1) * (float)bDiff) / (float)length;
 
         uint red   = (uint)rlFinFloat;
         uint green = (uint)glFinFloat;
         uint blue  = (uint)blFinFloat;
-        
-        color = (0xff000000) | (red << 16) | (green << 8) | (blue); 
 
-        // draw uniform horizontal line of color - 
+        color = (0xff000000) | (red << 16) | (green << 8) | (blue);
+
+        // draw uniform horizontal line of color -
         for( int x = x1 ; x < x2 ; x++ )
         {
             gradArray[y * (x2 - x1) + (x - x1)] = color;
@@ -144,19 +144,18 @@ void KisGradient::mapVertGradient( QRect gradR,
 }
 
 
-void KisGradient::mapHorGradient( QRect gradR, 
-            KisColor startColor, 
-            KisColor endColor )
+void KisGradient::mapHorGradient( QRect gradR,
+                                  KisColor /*startColor*/,
+                                  KisColor /*endColor*/ )
 {
     mGradientWidth  = gradR.width();
     mGradientHeight = gradR.height();
 
     gradArray.resize(mGradientWidth * mGradientHeight);
-    gradArray.fill(0); 
+    gradArray.fill(0);
 
     // draw gradient within rectanguar area defined above
-    int length = gradR.width();
-    
+    //int length = gradR.width();
 }
 
 
@@ -171,7 +170,7 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
 
     QImage image(size, 32);
 
-    if (size.width() == 0 || size.height() == 0) 
+    if (size.width() == 0 || size.height() == 0)
     {
         kdWarning() << "Invalid image" << endl;
         return image;
@@ -185,15 +184,15 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
 
     maxDiff = QMAX(rDiff, gDiff);
     maxDiff = QMAX(bDiff, maxDiff);
-    
-    if( eff == KImageEffect::VerticalGradient 
+
+    if( eff == KImageEffect::VerticalGradient
     || eff == KImageEffect::HorizontalGradient )
     {
         uint *p;
         uint *p1; //jwc
         uint rgb;
         uint oldrgb = 0; // jwc
-        
+
         register int rl = rca << 16;
         register int gl = gca << 16;
         register int bl = bca << 16;
@@ -201,20 +200,20 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
         // vertical gradient means colors change with vertical increments
         // this is somewhat confusing - each color line is laid out
         // horizontally
-        if( eff == KImageEffect::VerticalGradient ) 
+        if( eff == KImageEffect::VerticalGradient )
         {
             if (maxDiff < 1) maxDiff = 1;
 
             deltaY = size.height()/maxDiff; //jwc
             if (deltaY < 1) deltaY = 1;
-            
-            kdDebug() << "deltaY " <<  deltaY << endl;   
+
+            kdDebug() << "deltaY " <<  deltaY << endl;
 
             int rcdelta = ((1<<16) / size.height()) * rDiff;
             int gcdelta = ((1<<16) / size.height()) * gDiff;
             int bcdelta = ((1<<16) / size.height()) * bDiff;
 
-            for ( y = 0; y < size.height(); y++ ) 
+            for ( y = 0; y < size.height(); y++ )
             {
                 p = (uint *) image.scanLine(y);
 
@@ -227,37 +226,37 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
 
 
 #ifdef DEBUG_COLORS
-            
-    kdDebug() << qRed(rgb) << " " << qGreen(rgb) << " " << qBlue(rgb) << endl;               
+
+    kdDebug() << qRed(rgb) << " " << qGreen(rgb) << " " << qBlue(rgb) << endl;
 
 #endif
-                for( x = 0; x < size.width(); x++ ) 
+                for( x = 0; x < size.width(); x++ )
                 {
-                    
+
                     *p = rgb;
                     p++;
 
                 }
-                
+
                 // dither
                 p1 = (uint *) image.scanLine(y);
-                
+
                 if(!(y % deltaY))
                 {
-                    oldrgb = rgb; //jwc                    
-                }   
+                    oldrgb = rgb; //jwc
+                }
 
-                for( x = 0; x < size.width(); x++ ) 
+                for( x = 0; x < size.width(); x++ )
                 {
                    if(x%2)
                    {
                       *p1 = oldrgb;
                    }
-                   p1++;                    
+                   p1++;
                 }
             }
         }
-        else 
+        else
         {                  // must be HorizontalGradient
 
             unsigned int *o_src = (unsigned int *)image.scanLine(0);
@@ -267,7 +266,7 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
             int gcdelta = ((1<<16) / size.width()) * gDiff;
             int bcdelta = ((1<<16) / size.width()) * bDiff;
 
-            for( x = 0; x < size.width(); x++) 
+            for( x = 0; x < size.width(); x++)
             {
 
                 rl += rcdelta;
@@ -283,7 +282,7 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
             // than calling memcpy for each scanline (on the order of ms...).
             // I think this is due to the function call overhead (mosfet).
 
-            for (y = 1; y < size.height(); ++y) 
+            for (y = 1; y < size.height(); ++y)
             {
 
                 p = (unsigned int *)image.scanLine(y);
@@ -294,7 +293,7 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
         }
     }
 
-    else 
+    else
     {
 
         float rfd, gfd, bfd;
@@ -312,8 +311,8 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
         ytable[2] = new unsigned char[h];
         w*=2, h*=2;
 
-        if ( eff == KImageEffect::DiagonalGradient 
-        || eff == KImageEffect::CrossDiagonalGradient) 
+        if ( eff == KImageEffect::DiagonalGradient
+        || eff == KImageEffect::CrossDiagonalGradient)
         {
             // Diagonal dgradient code inspired by BlackBox (mosfet)
             // BlackBox dgradient is (C) Brad Hughes, <bhughes@tcac.net> and
@@ -324,9 +323,9 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
             bfd = (float)bDiff/w;
 
             int dir;
-            for (x = 0; x < size.width(); x++, rd+=rfd, gd+=gfd, bd+=bfd) 
+            for (x = 0; x < size.width(); x++, rd+=rfd, gd+=gfd, bd+=bfd)
             {
-                dir = eff == KImageEffect::DiagonalGradient? 
+                dir = eff == KImageEffect::DiagonalGradient?
                     x : size.width() - x - 1;
                 xtable[0][dir] = (unsigned char) rd;
                 xtable[1][dir] = (unsigned char) gd;
@@ -336,17 +335,17 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
             gfd = (float)gDiff/h;
             bfd = (float)bDiff/h;
             rd = gd = bd = 0;
-            for (y = 0; y < size.height(); y++, rd+=rfd, gd+=gfd, bd+=bfd) 
+            for (y = 0; y < size.height(); y++, rd+=rfd, gd+=gfd, bd+=bfd)
             {
                 ytable[0][y] = (unsigned char) rd;
                 ytable[1][y] = (unsigned char) gd;
                 ytable[2][y] = (unsigned char) bd;
             }
 
-            for (y = 0; y < size.height(); y++) 
+            for (y = 0; y < size.height(); y++)
             {
                 unsigned int *scanline = (unsigned int *)image.scanLine(y);
-                for (x = 0; x < size.width(); x++) 
+                for (x = 0; x < size.width(); x++)
                 {
                     scanline[x] = qRgb(xtable[0][x] + ytable[0][y],
                                        xtable[1][x] + ytable[1][y],
@@ -395,7 +394,7 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
             }
             unsigned int rgb;
             int h = (size.height()+1)>>1;
-            for (y = 0; y < h; y++) 
+            for (y = 0; y < h; y++)
             {
                 unsigned int *sl1 = (unsigned int *)image.scanLine(y);
                 unsigned int *sl2 = (unsigned int *)image.scanLine(QMAX(size.height()-y-1, y));
@@ -403,17 +402,17 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
                 int w = (size.width()+1)>>1;
                 int x2 = size.width()-1;
 
-                for (x = 0; x < w; x++, x2--) 
+                for (x = 0; x < w; x++, x2--)
                 {
 		                rgb = 0;
-                        
-                    if (eff == KImageEffect::PyramidGradient) 
+
+                    if (eff == KImageEffect::PyramidGradient)
                     {
                         rgb = qRgb(rcb-rSign*(xtable[0][x]+ytable[0][y]),
                                    gcb-gSign*(xtable[1][x]+ytable[1][y]),
                                    bcb-bSign*(xtable[2][x]+ytable[2][y]));
                     }
-                    if (eff == KImageEffect::RectangleGradient) 
+                    if (eff == KImageEffect::RectangleGradient)
                     {
                         rgb = qRgb(rcb - rSign *
                                    QMAX(xtable[0][x], ytable[0][y]) * 2,
@@ -422,7 +421,7 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
                                    bcb - bSign *
                                    QMAX(xtable[2][x], ytable[2][y]) * 2);
                     }
-                    if (eff == KImageEffect::PipeCrossGradient) 
+                    if (eff == KImageEffect::PipeCrossGradient)
                     {
                         rgb = qRgb(rcb - rSign *
                                    QMIN(xtable[0][x], ytable[0][y]) * 2,
@@ -431,7 +430,7 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
                                    bcb - bSign *
                                    QMIN(xtable[2][x], ytable[2][y]) * 2);
                     }
-                    if (eff == KImageEffect::EllipticGradient) 
+                    if (eff == KImageEffect::EllipticGradient)
                     {
                         rgb = qRgb(rcb - rSign *
                                    (int)sqrt((xtable[0][x]*xtable[0][x] +
@@ -459,13 +458,13 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
     }
 
     // dither if necessary
-    if (ncols && (QPixmap::defaultDepth() < 15 )) 
+    if (ncols && (QPixmap::defaultDepth() < 15 ))
     {
 	    if ( ncols < 2 || ncols > 256 )
 	        ncols = 3;
-            
+
 	    QColor *dPal = new QColor[ncols];
-	    for (int i=0; i<ncols; i++) 
+	    for (int i=0; i<ncols; i++)
         {
 	        dPal[i].setRgb ( rca + rDiff * i / ( ncols - 1 ),
 			     gca + gDiff * i / ( ncols - 1 ),
@@ -480,13 +479,13 @@ QImage KisGradient::gradient(const QSize &size, const QColor &ca,
 }
 
 
-/* 
+/*
     adapted from kFSDither (C) 1997 Martin Jones (mjones@kde.org)
 
     Floyd-Steinberg dithering
     Ref: Bitmapped Graphics Programming in C++
         Marv Luse, Addison-Wesley Publishing, 1993.
-*/      
+*/
 
 QImage& KisGradient::dither(QImage &img, const QColor *palette, int size)
 {
@@ -533,7 +532,7 @@ QImage& KisGradient::dither(QImage &img, const QColor *palette, int size)
 
         for ( i = 1; i < img.width()-1; i++ )
         {
-            int indx = nearestColor( rerr1[i], gerr1[i], berr1[i], 
+            int indx = nearestColor( rerr1[i], gerr1[i], berr1[i],
                 palette, size );
             *dp = indx;
 
@@ -577,7 +576,7 @@ QImage& KisGradient::dither(QImage &img, const QColor *palette, int size)
 }
 
 
-int KisGradient::nearestColor( int r, int g, int b, 
+int KisGradient::nearestColor( int r, int g, int b,
     const QColor *palette, int size )
 {
     if (palette == 0)

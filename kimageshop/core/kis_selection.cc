@@ -47,19 +47,19 @@ KisSelection::~KisSelection()
 }
 
 /*
-    setBounds - set the containers for the selection. These include 
-    a rectangle, an array and a QImage.  Only the rectangle which bounds 
+    setBounds - set the containers for the selection. These include
+    a rectangle, an array and a QImage.  Only the rectangle which bounds
     the selection is required.
 */
 void KisSelection::setBounds(QRect & re)
 {
-    // resize the selection rectangle 
+    // resize the selection rectangle
     rectangle = re;
 
-    // set the array of points to same size as brush    
+    // set the array of points to same size as brush
     array.resize(rectangle.width() * rectangle.height());
     array.fill(0);
-    
+
     // reallocate the image to be same size as rectangle
     // always use 32 bits for compatibility with layers
     image.create(rectangle.width(), rectangle.height(), 32);
@@ -68,7 +68,7 @@ void KisSelection::setBounds(QRect & re)
 
 
 /*
-    setNull - resize all the containers for this selection to 0, 
+    setNull - resize all the containers for this selection to 0,
     but keep the containters.  No need to use pointers, new and delete.
 */
 void KisSelection::setNull()
@@ -76,15 +76,15 @@ void KisSelection::setNull()
     // nullify selection rectangle
     rectangle.setWidth(0);
     rectangle.setHeight(0);
-    
+
     // nullify selection array
     array.resize(0);
 }
 
 /*
     setImage - normally the image is constructed by the selection,
-    but one can also be emplanted into a selection.  todo - size needs 
-    to be checked.  If not same size as selection rectangle, it needs 
+    but one can also be emplanted into a selection.  todo - size needs
+    to be checked.  If not same size as selection rectangle, it needs
     to be clipped or scaled to fit.
 */
 void KisSelection::setImage(QImage & img)
@@ -101,27 +101,27 @@ void KisSelection::setImage(QImage & img)
 bool KisSelection::erase()
 {
     KisImage *img = pDoc->current();
-    if (!img) return false;    
+    if (!img) return false;
 
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return false;
-    
+
     QRect clipRect = rectangle;
-    
+
     if (!clipRect.intersects(lay->imageExtents()))
         return false;
-  
+
     clipRect = clipRect.intersect(lay->imageExtents());
 
     int sx = clipRect.left();
-    int sy = clipRect.top(); 
+    int sy = clipRect.top();
     int ex = clipRect.right();
     int ey = clipRect.bottom();
 
     uchar r, g, b;
 
     bool alpha = (img->colorMode() == cm_RGBA);
-      
+
     for (int y = sy; y <= ey; y++)
     {
         for (int x = sx; x <= ex; x++)
@@ -135,17 +135,17 @@ bool KisSelection::erase()
 	        r = lay->pixel(0, x,  y);
 	        g = lay->pixel(1, x,  y);
 	        b = lay->pixel(2, x,  y);
-            
+
 	        lay->setPixel(0, x, y, 255);
 	        lay->setPixel(1, x, y, 255);
 	        lay->setPixel(2, x, y, 255);
-                       	  
+
             if (alpha)
 	        {
-	            uchar a = lay->pixel(3, x, y);
+	            //uchar a = lay->pixel(3, x, y);
                 lay->setPixel(3, x, y, 255);
 	        }
-	    } 
+	    }
     }
 
     return true;
@@ -162,34 +162,34 @@ void KisSelection::reverse()
     {
         if(array[i] == 0)  array[i] = 1;
         else array[i] = 0;
-    }            
+    }
 }
 
 
-/* 
+/*
     fill - fill the selection with a color, gradient and pattern
     This is normally done with selections in place in a given
     layer, the current one, but it can also be done with any
-    layer.  
+    layer.
 */
-void KisSelection::fill(uint color, 
+void KisSelection::fill(uint color,
     KisPattern * /*pattern*/, KisGradient * /*gradient*/)
 {
     KisImage *img = pDoc->current();
-    if (!img) return;    
+    if (!img) return;
 
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return;
-    
+
     QRect clipRect = rectangle;
-    
+
     if (!clipRect.intersects(lay->imageExtents()))
         return;
-  
+
     clipRect = clipRect.intersect(lay->imageExtents());
 
     int sx = clipRect.left();
-    int sy = clipRect.top(); 
+    int sy = clipRect.top();
     int ex = clipRect.right();
     int ey = clipRect.bottom();
 
@@ -199,7 +199,7 @@ void KisSelection::fill(uint color,
 
     bool alpha = (img->colorMode() == cm_RGBA);
     bool colorBlending = false;
-      
+
     for (int y = sy; y <= ey; y++)
     {
         for (int x = sx; x <= ex; x++)
@@ -212,30 +212,30 @@ void KisSelection::fill(uint color,
             // destination binary values by channel
             if(colorBlending)
             {
-                
+
 	            //uchar r = lay->pixel(0, x,  y);
 	            //uchar g = lay->pixel(1, x,  y);
 	            //uchar b = lay->pixel(2, x,  y);
-                
+
                 // .... blending method - todo
                 // need blend(uint *source, uint *dest);
                 // sets destination pixel depending on
                 // blending algorithm
             }
-            
-            // change all pixels in selection to 
+
+            // change all pixels in selection to
             // the desired color if blending is not used
 	        lay->setPixel(0, x, y, red);
 	        lay->setPixel(1, x, y, green);
 	        lay->setPixel(2, x, y, blue);
 
-            // don't change alpha values, for now                       	  
+            // don't change alpha values, for now
             if (alpha)
 	        {
 	            uchar a = lay->pixel(3, x, y);
                 lay->setPixel(3, x, y, a);
 	        }
-	    } 
+	    }
     }
 }
 
@@ -245,21 +245,21 @@ void KisSelection::setRectangularSelection(QRect & re, KisLayer *lay)
     setBounds(re);
 
     QRect clipRect = rectangle;
-    
+
     if (!clipRect.intersects(lay->imageExtents()))
         return;
-  
+
     clipRect = clipRect.intersect(lay->imageExtents());
 
     int sx = clipRect.left();
-    int sy = clipRect.top(); 
+    int sy = clipRect.top();
     int ex = clipRect.right();
     int ey = clipRect.bottom();
 
     uchar r, g, b;
 
     bool alpha = (pDoc->current()->colorMode() == cm_RGBA);
-      
+
     for (int y = sy; y <= ey; y++)
     {
         for (int x = sx; x <= ex; x++)
@@ -267,22 +267,22 @@ void KisSelection::setRectangularSelection(QRect & re, KisLayer *lay)
             // for a rectangular selection, all pixels
             // in the rectangle bounding it are selected
             array[(y - sy) * (ex - sx) + x - sx] = 1;
-            
+
             // destination binary values by channel
 	        r = lay->pixel(0, x, y);
 	        g = lay->pixel(1, x, y);
 	        b = lay->pixel(2, x, y);
-            
+
             if(alpha)
             {
-	            uchar a = lay->pixel(3, x, y);            
+	            uchar a = lay->pixel(3, x, y);
 	            image.setPixel(x - sx, y - sy, qRgba(r, g, b, a));
-            }    
+            }
             else
             {
 	            image.setPixel(x - sx, y - sy, qRgb(r, g, b));
-            }           	  
-	    } 
+            }
+	    }
     }
 }
 
@@ -295,48 +295,48 @@ void KisSelection::setEllipticalSelection(QRect & re, KisLayer *lay)
     // construct a solid white pixmap same size as the selection
     QPixmap pix(rectangle.width(), rectangle.height());
     pix.fill();
-    
+
     // draw the filled ellipse onto that pixmap in black
     QPainter p(&pix);
-    
-    /* constructs a pen.  color is always black - it is 
+
+    /* constructs a pen.  color is always black - it is
     changed by krayon to the actual colors of each pixel
     in the ellipse in the layer below */
     QPen pen(Qt::black);
     p.setPen(pen);
-    
+
     // constructs a solid brush - we want to fill the ellipse
     QBrush brush(Qt::black);
     p.setBrush(brush);
-    
+
     // draw filled ellipse bounded by rectangle
     QRect ellipseRectangle(0, 0, pix.width(), pix.height());
     p.drawEllipse(ellipseRectangle);
-    
+
     // convert the pixmap to an image so we can access scanlines
     // always 32 bit with alpha channel
     QImage pixImage = pix.convertToImage();
     pixImage.convertDepth(32);
     pixImage.setAlphaBuffer(true);
-        
+
     // now, get the colors of each pixel from the layer if the
     // pixels lie within the selection ellipse, and transfer those
     // to the image and the mark selected pixels in the array
     QRect clipRect = rectangle;
-    
+
     if (!clipRect.intersects(lay->imageExtents()))
         return;
-  
+
     clipRect = clipRect.intersect(lay->imageExtents());
 
     int sx = clipRect.left();
-    int sy = clipRect.top(); 
+    int sy = clipRect.top();
     int ex = clipRect.right();
     int ey = clipRect.bottom();
 
     uchar r, g, b;
     uchar a = 255;
-    
+
     bool layerAlpha = (pDoc->current()->colorMode() == cm_RGBA);
 
     for (int y = sy; y <= ey; y++)
@@ -347,16 +347,16 @@ void KisSelection::setEllipticalSelection(QRect & re, KisLayer *lay)
             // in terms of the image - accounting for offset into
             // layer, image offset is always 0,0
             uint *p = (uint *)pixImage.scanLine(y - sy) + (x - sx);
-            
+
             // destination binary values by channel
 	        r = lay->pixel(0, x, y);
 	        g = lay->pixel(1, x, y);
 	        b = lay->pixel(2, x, y);
-            
-            /* if pixel has the white background filler color, 
-            set the alpha channel value in the image to 0, 
+
+            /* if pixel has the white background filler color,
+            set the alpha channel value in the image to 0,
             indicating that this pixel is transparent */
-            if(QColor(*p) != Qt::black) 
+            if(QColor(*p) != Qt::black)
             {
                 /* mark pixel as unselected in the array
                 The position in array is number of lines times
@@ -364,8 +364,8 @@ void KisSelection::setEllipticalSelection(QRect & re, KisLayer *lay)
                 array[(y - sy) * (ex - sx) + x - sx] = 0;
 
                 // this pixel is transparent
-	            a = 0;            
-                
+	            a = 0;
+
                 // set image colors to layer colors
 	            image.setPixel(x - sx, y - sy, qRgba(r, g, b, a));
             }
@@ -373,12 +373,12 @@ void KisSelection::setEllipticalSelection(QRect & re, KisLayer *lay)
             the selection. Still, if the alpha value of the layer
             pixel is 0, the image pixel is still painted transparent
             and technically is not in the selection unless the array
-            is used as a mask when pasting.  This can't be used 
+            is used as a mask when pasting.  This can't be used
             reliably with the global kapp->clipboard() without adding
-            a custom data type which makes images from other apps 
+            a custom data type which makes images from other apps
             unusable. At the worst this results in transparent pixels
             from the image not getting painted, which is the whole
-            reason to use the alpha channel here, so everything is ok */   
+            reason to use the alpha channel here, so everything is ok */
             else
             {
                 // mark pixel as selected in the array
@@ -386,17 +386,17 @@ void KisSelection::setEllipticalSelection(QRect & re, KisLayer *lay)
 
                 // get alpha value from layer
                 if(layerAlpha) a = lay->pixel(3, x, y);
-                
+
                 // set image colors to layer color values
 	            image.setPixel(x - sx, y - sy, qRgba(r, g, b, a));
-            }           	  
-	    } 
+            }
+	    }
     }
 }
 
 
 
-void KisSelection::setPolygonalSelection(QRect & re, 
+void KisSelection::setPolygonalSelection(QRect & re,
     QPointArray & /* a */, KisLayer *lay)
 {
     // set the bounding selection rectangle
@@ -405,24 +405,24 @@ void KisSelection::setPolygonalSelection(QRect & re,
     // construct a solid white pixmap same size as the selection
     QPixmap pix(rectangle.width(), rectangle.height());
     pix.fill();
-    
+
     // draw the filled ellipse onto that pixmap in black
     QPainter p(&pix);
-    
-    /* constructs a pen.  color is always black - it is 
+
+    /* constructs a pen.  color is always black - it is
     changed by krayon to the actual colors of each pixel
     in the ellipse in the layer below */
     QPen pen(Qt::black);
     p.setPen(pen);
-    
+
     // constructs a solid brush - we want to fill the ellipse
     QBrush brush(Qt::black);
     p.setBrush(brush);
-    
+
     // draw a filled ellipse bounded by rectangle
     QRect ellipseR(0, 0, pix.width(), pix.height());
     p.drawEllipse(ellipseR);
-    
+
     // convert the pixmap to an image so we can access scanlines
     QImage pixImage = pix.convertToImage();
 
@@ -430,14 +430,14 @@ void KisSelection::setPolygonalSelection(QRect & re,
     // pixels lie within the selection ellipse, and transfer those
     // to the image and the mark selected pixels in the array
     QRect clipRect = rectangle;
-    
+
     if (!clipRect.intersects(lay->imageExtents()))
         return;
-  
+
     clipRect = clipRect.intersect(lay->imageExtents());
 
     int sx = clipRect.left();
-    int sy = clipRect.top(); 
+    int sy = clipRect.top();
     int ex = clipRect.right();
     int ey = clipRect.bottom();
 
@@ -452,22 +452,22 @@ void KisSelection::setPolygonalSelection(QRect & re,
             // for a rectangular selection, all pixels
             // in the rectangle bounding it are selected
             array[(y - sy) * (ex - sx) + x - sx] = 1;
-            
+
             // destination binary values by channel
 	        r = lay->pixel(0, x,  y);
 	        g = lay->pixel(1, x,  y);
 	        b = lay->pixel(2, x,  y);
-            
+
             if(alpha)
             {
-	            uchar a = lay->pixel(3, x, y);            
+	            uchar a = lay->pixel(3, x, y);
 	            image.setPixel(x - sx, y - sy, qRgba(r, g, b, a));
-            }    
+            }
             else
             {
 	            image.setPixel(x - sx, y - sy, qRgb(r, g, b));
-            }           	  
-	    } 
+            }
+	    }
     }
 }
 
@@ -480,39 +480,39 @@ void KisSelection::setContiguousSelection(QRect & re, KisLayer *lay)
     // construct a solid white pixmap same size as the selection
     QPixmap pix(rectangle.width(), rectangle.height());
     pix.fill();
-    
+
     // draw the filled ellipse onto that pixmap in black
     QPainter p(&pix);
-    
-    /* constructs a pen.  color is always black - it is 
+
+    /* constructs a pen.  color is always black - it is
     changed by krayon to the actual colors of each pixel
     in the ellipse in the layer below */
     QPen pen(Qt::black);
     p.setPen(pen);
-    
+
     // constructs a solid brush - we want to fill the ellipse
     QBrush brush(Qt::black);
     p.setBrush(brush);
-    
+
     // draw ellipse bounded by rectangle
     QRect ellipseR(0, 0, pix.width(), pix.height());
     p.drawEllipse(ellipseR);
 
     // convert the pixmap to an image so we can access scanlines
     QImage pixImage = pix.convertToImage();
-    
+
     // now, get the colors of each pixel from the layer if the
     // pixels lie within the selection ellipse, and transfer those
     // to the image and the mark selected pixels in the array
     QRect clipRect = rectangle;
-    
+
     if (!clipRect.intersects(lay->imageExtents()))
         return;
-  
+
     clipRect = clipRect.intersect(lay->imageExtents());
 
     int sx = clipRect.left();
-    int sy = clipRect.top(); 
+    int sy = clipRect.top();
     int ex = clipRect.right();
     int ey = clipRect.bottom();
 
@@ -527,24 +527,24 @@ void KisSelection::setContiguousSelection(QRect & re, KisLayer *lay)
             // for a rectangular selection, all pixels
             // in the rectangle bounding it are selected
             array[(y - sy) * (ex - sx) + x - sx] = 1;
-            
+
             // destination binary values by channel
 	        r = lay->pixel(0, x,  y);
 	        g = lay->pixel(1, x,  y);
 	        b = lay->pixel(2, x,  y);
-            
+
             if(alpha)
             {
-	            uchar a = lay->pixel(3, x, y);            
+	            uchar a = lay->pixel(3, x, y);
 	            image.setPixel(x - sx, y - sy, qRgba(r, g, b, a));
-            }    
+            }
             else
             {
 	            image.setPixel(x - sx, y - sy, qRgb(r, g, b));
-            }           	  
-	    } 
+            }
+	    }
     }
-}      
+}
 
 
 #include "kis_selection.moc"

@@ -27,26 +27,26 @@
 #include "colorslider.h"
 
 
-ColorSlider::ColorSlider(QWidget *parent, int _colorSliderType) 
+ColorSlider::ColorSlider(QWidget *parent, int _colorSliderType)
     : QWidget(parent)
 {
     m_ColorSliderType = _colorSliderType;
-    
+
     m_pColorFrame = new ColorFrame(this, _colorSliderType);
     m_pSlider = new SliderWidget(this);
 
     m_min = 0;
-    
+
     if(_colorSliderType == 1)
         m_max = 359;
-    else    
+    else
         m_max = 255;
-    
+
     m_value = 0;
 
     connect(m_pSlider, SIGNAL(positionChanged(int)),
 		  this, SLOT(slotSliderMoved(int)));
-          
+
     connect(m_pColorFrame, SIGNAL(clicked(const QPoint&)),
 		  this, SLOT(slotFrameClicked(const QPoint&)));
 }
@@ -74,7 +74,7 @@ int ColorSlider::maxValue()
 void ColorSlider::slotSetRange(int min, int max)
 {
     if (min >= max) return;
-  
+
     m_min = min;
     m_max = max;
 }
@@ -83,9 +83,9 @@ void ColorSlider::slotSetRange(int min, int max)
 void ColorSlider::resizeEvent (QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
-    // m_pSlider->width()/2 * 2 seems stupid but is not because for example 
+    // m_pSlider->width()/2 * 2 seems stupid but is not because for example
     // m_pSlider->width() == 11 I get 10.
-    m_pColorFrame->setGeometry(m_pSlider->width()/2, 0, 
+    m_pColorFrame->setGeometry(m_pSlider->width()/2, 0,
         width()- m_pSlider->width()/2 * 2, height() - m_pSlider->height());
     slotSetValue(m_value);
 }
@@ -110,12 +110,12 @@ void ColorSlider::slotSetHue(int _hue)
         m_pColorFrame->slotSetHue(_hue);
 }
 
-void ColorSlider::slotSetSaturation(int _sat)
+void ColorSlider::slotSetSaturation(int /*_sat*/)
 {
     //m_pColorFrame->slotSetSaturation(_sat);
 }
 
-void ColorSlider::slotSetVal(int _val)
+void ColorSlider::slotSetVal(int /*_val*/)
 {
     //m_pColorFrame->slotSetValue(_val);
 }
@@ -131,7 +131,7 @@ void ColorSlider::slotSetValue(int value)
     int range = m_max - m_min;
     float v = value;
     if (m_min < 0) v += -m_min;
-  
+
     float factor = v /range;
     int x = static_cast<int>(factor * m_pColorFrame->contentsRect().width());
 
@@ -150,15 +150,15 @@ void ColorSlider::slotSliderMoved(int x)
     float factor = x;
     factor /= m_pColorFrame->contentsRect().width();
     //kdDebug(0) << "factor: " << factor << endl;
-  
+
     int range = m_max - m_min;
     //kdDebug(0) << "range: " << range << endl;
-  
+
     m_value = static_cast<int>(factor * range);
     //kdDebug(0) << "m_value: " << m_value << endl;
 
     emit valueChanged(m_value);
-    emit colorSelected(m_pColorFrame->colorAt(QPoint(x, 
+    emit colorSelected(m_pColorFrame->colorAt(QPoint(x,
         m_pColorFrame->contentsRect().height()/2)));
 }
 
@@ -166,14 +166,14 @@ void ColorSlider::slotSliderMoved(int x)
 void ColorSlider::slotFrameClicked(const QPoint& p)
 {
     QPoint local = m_pColorFrame->mapToParent(p);
-    QPoint pos = QPoint(local.x() - m_pSlider->width()/2, 
+    QPoint pos = QPoint(local.x() - m_pSlider->width()/2,
         height() - m_pSlider->height());
-  
+
     if (pos.x() < 0)
 	    pos.setX(0);
     else if (pos.x() > width() - m_pSlider->width())
 	    pos.setX(width() - m_pSlider->width());
-  
+
     m_pSlider->move(pos);
     slotSliderMoved(pos.x());
 }
@@ -183,9 +183,9 @@ void ColorSlider::mousePressEvent (QMouseEvent *e)
 {
     if (e->button() & LeftButton)
     {
-	    QPoint pos = QPoint(e->pos().x() - m_pSlider->width()/2, 
+	    QPoint pos = QPoint(e->pos().x() - m_pSlider->width()/2,
             height() - m_pSlider->height());
-	  
+
 	    if (pos.x() < 0)
 		    pos.setX(0);
 	    else if (pos.x() > width() - m_pSlider->width())
@@ -214,10 +214,10 @@ void SliderWidget::paintEvent (QPaintEvent *)
     p.begin(this);
 
     p.setPen(pen);
-    p.drawLine(0, 5, 5, 0); 
+    p.drawLine(0, 5, 5, 0);
     p.drawLine(10, 5, 5, 0);
     p.drawLine(0, 5, 10, 5);
-    p.end();                     
+    p.end();
 }
 
 
@@ -248,17 +248,17 @@ void SliderWidget::mouseMoveEvent (QMouseEvent *e)
     {
 	    QWidget *p = parentWidget();
 	    if (!p) return;
-	  
+
 	    QPoint newPos = p->mapFromGlobal(QCursor::pos()) - m_myPos;
-	  
+
 	    // don't drag vertically :-)
 	    newPos.setY(pos().y());
-	  
+
 	    if (newPos.x() < 0)
 		    newPos.setX(0);
 	    if (newPos.x() > p->width()- width())
 		    newPos.setX(p->width()- width());
-	  
+
 	    move(newPos);
 	    emit positionChanged(newPos.x());
     }
