@@ -235,6 +235,7 @@ protected:
     QRadioButton *left;
     QRadioButton *right;
     QRadioButton *center;
+    QRadioButton *standard;
     QRadioButton *multi;
     QRadioButton *vertical;
     KIntNumInput *width;

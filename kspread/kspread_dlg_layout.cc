@@ -1801,13 +1801,15 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     QButtonGroup *grp = new QButtonGroup( i18n("Horizontal"),this);
     grp->setRadioButtonExclusive( TRUE );
 
-    QGridLayout *grid2 = new QGridLayout(grp,3,1,15,7);
+    QGridLayout *grid2 = new QGridLayout(grp,3,2,15,7);
+    standard = new QRadioButton( i18n("Standard"), grp );
+    grid2->addWidget(standard,1,0);
     left = new QRadioButton( i18n("Left"), grp );
-    grid2->addWidget(left,0,0);
+    grid2->addWidget(left,0,1);
     center = new QRadioButton( i18n("Center"), grp );
-    grid2->addWidget(center,1,0);
+    grid2->addWidget(center,1,1);
     right = new QRadioButton( i18n("Right"), grp );
-    grid2->addWidget(right,2,0);
+    grid2->addWidget(right,2,1);
     grid3->addWidget(grp,0,0);
 
     if(dlg->alignX==KSpreadCell::Left)
@@ -1816,7 +1818,8 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
         center->setChecked(true);
     else if(dlg->alignX==KSpreadCell::Right)
         right->setChecked(true);
-
+    else if( dlg->alignX==KSpreadCell::Undefined)
+        standard->setChecked(true);
 
     grp = new QButtonGroup( i18n("Vertical"),this);
     grp->setRadioButtonExclusive( TRUE );
@@ -1933,6 +1936,8 @@ void CellLayoutPagePosition::apply( KSpreadCell *_obj )
     _obj->setAlign(KSpreadCell::Right);
   else if(center->isChecked())
     _obj->setAlign(KSpreadCell::Center);
+  else if( standard->isChecked())
+    _obj->setAlign(KSpreadCell::Undefined);
   if(multi->isEnabled())
         _obj->setMultiRow(multi->isChecked());
   else
