@@ -26,138 +26,155 @@ Boston, MA 02111-1307, USA.
 
 #include "ImportTags.h"
 
-static bool AddTag(QMap<QString,ParsingTag> & mapTag, const QString& strName, const bool empty)
+bool MapTag::AddTag(const QString& strName,const ParsingTag* tag)
 {
-    ParsingTag* tag=new ParsingTag(empty);
     if (!tag)
     {
         kdDebug(30503)<< "Registring tag " << strName << " failed!" << endl;
         return false;
     }
-    mapTag.insert(strName,*tag);
+    insert(strName,*tag);
     return true;
 }
 
-bool InitMapTag(QMap<QString,ParsingTag> & mapTag)
+bool MapTag::AddTag(const QString& strName, const bool empty)
+{
+    return AddTag(strName,new ParsingTag(modeDisplayUnknown,empty,QString::null));
+}
+
+bool MapTag::AddNoneTag(const QString& strName)
+{ // Note: do NOT use for empty tags (e.g. <br>)
+    return AddTag(strName,new ParsingTag(modeDisplayNone,false,"display: none;"));
+}
+
+bool MapTag::AddBlockTag(const QString& strName,const QString& strStyle)
+{
+    return AddTag(strName,new ParsingTag(modeDisplayBlock,false,strStyle));
+}
+
+bool MapTag::AddInlineTag(const QString& strName,const QString& strStyle)
+{
+    return AddTag(strName,new ParsingTag(modeDisplayInline,false,strStyle));
+}
+
+bool MapTag::InitMapTag(void)
 {
 
-    // Defulat element (must be first!)
-    AddTag(mapTag,"//UNKNOWN//",false);
+    // Default element (must be first!)
+    AddTag("//UNKNOWN//",false);
 
     // Commonly used empty elements
-    AddTag(mapTag,"br",true);
-    AddTag(mapTag,"meta",true);
-    AddTag(mapTag,"hr",true);
+    AddTag("br",true);      // TODO: how can we implement this one?
+    AddTag("meta",true);    // "display: none"
+    AddTag("hr",true);
 
     // Other empty elements
-    AddTag(mapTag,"aera",true);
-    AddTag(mapTag,"base",true);
-    AddTag(mapTag,"basefont",true);
-    AddTag(mapTag,"col",true);
-    AddTag(mapTag,"frame",true);
-    AddTag(mapTag,"img",true);
-    AddTag(mapTag,"input",true);
-    AddTag(mapTag,"isindex",true);
-    AddTag(mapTag,"link",true);
-    AddTag(mapTag,"param",true);
+    AddTag("aera",true);
+    AddTag("base",true);
+    AddTag("basefont",true);
+    AddTag("col",true);
+    AddTag("frame",true); // "display: none" as we do not support frames
+    AddTag("img",true);
+    AddTag("input",true);
+    AddTag("isindex",true);
+    AddTag("link",true);
+    AddTag("param",true);
 
-#if 1
     // Other elements (in alphabetic order)
-    AddTag(mapTag,"a",false);
-    AddTag(mapTag,"abbr",false);
-    AddTag(mapTag,"acronym",false);
-    AddTag(mapTag,"address",false);
-    AddTag(mapTag,"applet",false);
+    AddTag("a",false);
+    AddTag("abbr",false);
+    AddTag("acronym",false);
+    AddInlineTag("address","font-style:italic;");
+    AddNoneTag("applet"); // We do not support scripts!
     // <area>
-    AddTag(mapTag,"b",false);
+    AddInlineTag("b","font-weight:bold;");
     // <base>
     // <basefont>
-    AddTag(mapTag,"bdo",false);
-    AddTag(mapTag,"big",false);
-    AddTag(mapTag,"blockquote",false);
-    AddTag(mapTag,"body",false);
+    AddTag("bdo",false);
+    AddTag("big",false);
+    AddTag("blockquote",false);
+    AddTag("body",false);
     // <br>
-    AddTag(mapTag,"button",false);
-    AddTag(mapTag,"caption",false);
-    AddTag(mapTag,"center",false);
-    AddTag(mapTag,"cite",false);
-    AddTag(mapTag,"code",false);
+    AddTag("button",false);
+    AddTag("caption",false);
+    AddTag("center",false);
+    AddInlineTag("cite","font-style:italic;");
+    AddTag("code",false);
     // <col>
-    AddTag(mapTag,"colgroup",false);
-    AddTag(mapTag,"dd",false);
-    AddTag(mapTag,"del",false);
-    AddTag(mapTag,"dfn",false);
-    AddTag(mapTag,"dir",false);
-    AddTag(mapTag,"div",false);
-    AddTag(mapTag,"dl",false);
-    AddTag(mapTag,"dt",false);
-    AddTag(mapTag,"em",false);
+    AddTag("colgroup",false);
+    AddTag("dd",false);
+    AddInlineTag("del","text-decoration:line-through;"); // May need to be changed when a new KWord does know what "deleted" text is!
+    AddTag("dfn",false);
+    AddTag("dir",false);
+    AddTag("div",false);
+    AddTag("dl",false);
+    AddTag("dt",false);
+    AddInlineTag("em","font-style:italic;");
 
-    AddTag(mapTag,"fieldset",false);
-    AddTag(mapTag,"font",false);
-    AddTag(mapTag,"form",false);
+    AddTag("fieldset",false);
+    AddTag("font",false);
+    AddTag("form",false);  // Candidate for display none?
     // <frame>
-    AddTag(mapTag,"frameset",false);
-    AddTag(mapTag,"h1",false);
-    AddTag(mapTag,"h2",false);
-    AddTag(mapTag,"h3",false);
-    AddTag(mapTag,"h4",false);
-    AddTag(mapTag,"h5",false);
-    AddTag(mapTag,"h6",false);
-    AddTag(mapTag,"head",false);
+    AddNoneTag("frameset"); // We do not support framesets
+    AddBlockTag("h1","font-weight:bold;");
+    AddBlockTag("h2","font-weight:bold;");
+    AddBlockTag("h3","font-weight:bold;");
+    AddBlockTag("h4","font-weight:bold;");
+    AddBlockTag("h5","font-weight:bold;");
+    AddBlockTag("h6","font-weight:bold;");
+    AddNoneTag("head"); // <head> is always "display: none"
     // <hr>
-    AddTag(mapTag,"html",false);
-    AddTag(mapTag,"i",false);
-    AddTag(mapTag,"iframe",false);
+    AddTag("html",false);
+    AddInlineTag("i","font-style:italic;");
+    AddTag("iframe",false);
     // <img>
     // <input>
-    AddTag(mapTag,"ins",false);
+    AddInlineTag("ins","text-decoration:underline;"); // May need to be changed when a new KWord does know what "inserted" text is!
     // <isindex>
-    AddTag(mapTag,"kbd",false);
-    AddTag(mapTag,"label",false);
-    AddTag(mapTag,"legend",false);
-    AddTag(mapTag,"li",false);
+    AddTag("kbd",false);
+    AddTag("label",false);
+    AddTag("legend",false);
+    AddTag("li",false);
     // <link>
-    AddTag(mapTag,"map",false);
-    AddTag(mapTag,"menu",false);
+    AddTag("map",false);
+    AddTag("menu",false);
     // <meta>
-    AddTag(mapTag,"noframes",false);
-    AddTag(mapTag,"noscript",false);
-    AddTag(mapTag,"object",false);
-    AddTag(mapTag,"ol",false);
-    AddTag(mapTag,"option",false);
-    AddTag(mapTag,"optiongroup",false);
-    AddTag(mapTag,"p",false);
+    AddTag("noframes",false);
+    AddTag("noscript",false);
+    AddTag("object",false);
+    AddTag("ol",false);
+    AddTag("option",false);
+    AddTag("optiongroup",false);
+    AddBlockTag("p",QString::null);
     // <param>
-    AddTag(mapTag,"pre",false);
-    AddTag(mapTag,"q",false);
-    AddTag(mapTag,"s",false);
-    AddTag(mapTag,"samp",false);
-    AddTag(mapTag,"script",false);
-    AddTag(mapTag,"select",false);
-    AddTag(mapTag,"small",false);
-    AddTag(mapTag,"span",false);
-    AddTag(mapTag,"strike",false);
-    AddTag(mapTag,"strong",false);
-    AddTag(mapTag,"style",false);
-    AddTag(mapTag,"sub",false);
-    AddTag(mapTag,"sup",false);
-    AddTag(mapTag,"table",false);
-    AddTag(mapTag,"tbody",false);
-    AddTag(mapTag,"td",false);
-    AddTag(mapTag,"textarea",false);
-    AddTag(mapTag,"tfoot",false);
-    AddTag(mapTag,"th",false);
-    AddTag(mapTag,"thead",false);
-    AddTag(mapTag,"title",false);
-    AddTag(mapTag,"tr",false);
-    AddTag(mapTag,"tt",false);
-    AddTag(mapTag,"u",false);
-    AddTag(mapTag,"ul",false);
-    AddTag(mapTag,"var",false);
+    AddTag("pre",false);
+    AddTag("q",false);
+    AddInlineTag("s","text-decoration:line-through;");
+    AddTag("samp",false);
+    AddNoneTag("script"); // We do not support scripts
+    AddTag("select",false);
+    AddTag("small",false);
+    AddInlineTag("span",QString::null);
+    AddInlineTag("strike","text-decoration:line-through;");
+    AddInlineTag("strong","font-weight:bold;");
+    AddNoneTag("style"); // "display: none" but has to be treated! (TODO)
+    AddInlineTag("sub","text-position:subscript;");
+    AddInlineTag("sup","text-position:superscript;");
+    AddTag("table",false);
+    AddTag("tbody",false);
+    AddTag("td",false);
+    AddTag("textarea",false);
+    AddTag("tfoot",false);
+    AddTag("th",false);
+    AddTag("thead",false);
+    AddNoneTag("title");
+    AddTag("tr",false);
+    AddTag("tt",false);
+    AddInlineTag("u","text-decoration:underline;");
+    AddTag("ul",false);
+    AddInlineTag("var","font-style:italic;");
 
     // Non-HTML 4.01 Elements
     // No one for now!
-#endif
     return true;
 }

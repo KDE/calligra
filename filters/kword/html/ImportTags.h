@@ -22,18 +22,46 @@
 #ifndef IMPORTTAGS_H
 #define IMPORTTAGS_H
 
+typedef enum
+{
+    modeDisplayUnknown=0,
+    modeDisplayNone, // (forces child elements to be modeDisplayNone too!)
+    modeDisplayBlock,
+    modeDisplayInline
+} ModeDisplay;
+
 class ParsingTag
 {
 public:
     ParsingTag (void) { }
-    ParsingTag (const bool empty) : m_empty(empty) { }
+    ParsingTag (const ModeDisplay mode, const bool empty, const QString& strStyle)
+     : m_modeDisplay(mode), m_empty(empty), m_strStyle(strStyle) { }
     ~ParsingTag(void) { }
 public:
-    inline bool isEmptyElement(void) {return m_empty;}
+    inline bool isEmptyElement(void) const {return m_empty;}
+    inline ModeDisplay getModeDisplay(void) const {return m_modeDisplay;}
+    inline QString getStyle(void) const {return m_strStyle;}
 private:
-    bool m_empty;
+    // TODO: put the following variables in a better order!
+    ModeDisplay m_modeDisplay; // Default CSS display propety for this element
+    bool m_empty; // Is this element EMPTY in HTML's sence
+    QString m_strStyle; // Default CSS style for this element
 };
 
-bool InitMapTag(QMap<QString,ParsingTag> & mapTag);
+class MapTag : public QMap<QString,ParsingTag>
+{
+public:
+    MapTag  (void) { InitMapTag(); }
+    ~MapTag (void) {}
+private:
+    bool AddTag(const QString& strName, const ParsingTag* tag);
+    bool AddTag(const QString& strName, const bool empty); // Depreciated!
+    bool AddNoneTag(const QString& strName);
+    bool AddBlockTag(const QString& strName,const QString& strStyle);
+    bool AddInlineTag(const QString& strName,const QString& strStyle);
+    bool InitMapTag(void);
+};
+
+
 
 #endif

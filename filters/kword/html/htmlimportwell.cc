@@ -52,9 +52,7 @@ inline bool IsWhiteSpace(const QChar& ch)
 
 bool WellFilter(QTextStream& streamIn, QTextStream& streamOut)
 {
-    QMap<QString,ParsingTag> mapTag;
-
-    InitMapTag(mapTag);
+    MapTag mapTag;
 
     kdDebug(30503) << "Tag map has " << mapTag.count() << " elements!" << endl;
     if (!mapTag.count())
