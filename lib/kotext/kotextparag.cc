@@ -1252,8 +1252,8 @@ void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags )
 
 void KoTextParag::setCustomItem( int index, KoTextCustomItem * custom, KoTextFormat * currentFormat )
 {
-    kdDebug(32500) << "KoTextParag::setCustomItem " << index << "  " << (void*)custom
-                   << "  currentFormat=" << (void*)currentFormat << endl;
+    //kdDebug(32500) << "KoTextParag::setCustomItem " << index << "  " << (void*)custom
+    //               << "  currentFormat=" << (void*)currentFormat << endl;
     if ( currentFormat )
         setFormat( index, 1, currentFormat );
     at( index )->setCustomItem( custom );
@@ -1412,8 +1412,8 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
     // So abort immediately if there's none to draw.
     if ( !format->isStrikedOrUnderlined() )
         return;
-    kdDebug(32500) << "drawFontEffects wordByWord=" << format->wordByWord() <<
-        " firstChar='" << QString(firstChar) << "'" << endl;
+    //kdDebug(32500) << "drawFontEffects wordByWord=" << format->wordByWord() <<
+    //    " firstChar='" << QString(firstChar) << "'" << endl;
     // paintLines ensures that we're called word by word if wordByWord is true.
     if ( format->wordByWord() && firstChar.isSpace() )
         return;
