@@ -488,7 +488,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	  if (objList()->at(i)->isSelected)
 	    {
 	      objPtr = objList()->at(i);
-	      appendUndoListNew(objPtr);
+	      if (objPtr->objType != OT_TEXT) appendUndoListNew(objPtr);
 	    }
 	}
       
@@ -504,7 +504,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       _assign_page_obj_ = true;
 
       UndoRedoPageObjects *o = new UndoRedoPageObjects(_page_obj_,_page_obj_new_,i18n("Resize object"));
-      view->KPresenterDoc()->addUndo(o);
+      if (_page_obj_new_->objType != OT_TEXT) view->KPresenterDoc()->addUndo(o);
     }
 
   mousePressed = false;
@@ -597,7 +597,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		  if (objList()->at(i)->isSelected)
 		    {
 		      objPtr = objList()->at(i);
-		      if (_append_undo_list_)
+		      if (_append_undo_list_ && objPtr->objType != OT_TEXT)
 			appendUndoList(objPtr);
 		      oox = objPtr->ox; ooy = objPtr->oy;
 		      oow = objPtr->ow; ooh = objPtr->oh;
@@ -635,7 +635,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		}
 	      objNum = resizeObjNum;
 
-	      if (_assign_page_obj_ && getObject(objNum))
+	      if (_assign_page_obj_ && getObject(objNum) && getObject(objNum)->objType != OT_TEXT)
 		{
 		  _assign_page_obj_ = false;
 		  _page_obj_ = new PageObjects;
