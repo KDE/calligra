@@ -84,7 +84,7 @@ KexiTablePart::itemPixmap()
 void
 KexiTablePart::getTables()
 {
-	m_tableNames.clear;
+	m_tableNames.clear();
 	m_tableNames = kexiProject()->db()->tables();
 	ItemList *list=items();
 	list->clear();
