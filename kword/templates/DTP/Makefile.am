@@ -1,3 +1,8 @@
-templates_DATA = SimpleLayout.png SimpleLayout.kwt Test.png Test.kwt
-templatesdir = $(kde_datadir)/kword/templates/DTP
+template_DATA = SimpleLayout.desktop Test.desktop
+templatedir = $(kde_datadir)/kword/templates/DTP
 
+templatesrc_DATA = SimpleLayout.kwt Test.kwt
+templatesrcdir = $(kde_datadir)/kword/templates/DTP/.source
+
+templateicons_DATA = SimpleLayout.png Test.png
+templateiconsdir = $(kde_datadir)/kword/templates/DTP/.icon
