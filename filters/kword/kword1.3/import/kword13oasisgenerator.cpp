@@ -141,7 +141,7 @@ void KWord13OasisGenerator::declareStyle( KWord13Layout& layout )
 
 
 // Inspired from KoTextFormat::save but we have not the same data to start with.
-void KWord13OasisGenerator::fillGenStyleWithFormatOne( const KWord13FormatOne& one, KoGenStyle& gs, const bool style ) const
+void KWord13OasisGenerator::fillGenStyleWithFormatOne( const KWord13FormatOneData& one, KoGenStyle& gs, const bool style ) const
 {
     QString str; // helper string
     

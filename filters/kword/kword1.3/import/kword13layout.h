@@ -32,7 +32,7 @@ public:
     QString getProperty( const QString& name ) const;
 
 public:
-    KWord13FormatOne m_format; ///< Character format properties
+    KWord13FormatOneData m_format; ///< Character format properties
     QMap<QString,QString> m_layoutProperties;
     bool m_outline;
     QString m_name; ///< Name of the style (either the used one or the one currently being defined)

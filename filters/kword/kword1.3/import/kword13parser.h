@@ -29,7 +29,7 @@ class KWord13Paragraph;
 class KWord13Document;
 class KWord13Frameset;
 class KWord13Layout;
-class KWord13FormatOne;
+class KWord13FormatOneData;
 
 // ### TODO: stackItem and friends should be renamed to become unique (see AbiWord import filter), as Doxygen cannot handle multiple classes with the same name.
 
@@ -111,7 +111,7 @@ protected:
     KWord13Document* m_kwordDocument;
     KWord13Paragraph* m_currentParagraph; ///< Current paragraph
     KWord13Layout* m_currentLayout; ///< Current layout (or style)
-    KWord13FormatOne* m_currentFormat; ///< Current character format 
+    KWord13FormatOneData* m_currentFormat; ///< Current character format 
 };
 
 #endif // KWORD_1_3_PARSER_H

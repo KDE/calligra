@@ -171,7 +171,7 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
     }
     
     // ### TODO: something else must be done, as the can be many <FORMAT> kinds (and not only of id="1")
-    m_currentFormat = new KWord13FormatOne;
+    m_currentFormat = new KWord13FormatOneData;
         
     return true;    
 }

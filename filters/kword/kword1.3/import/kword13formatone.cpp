@@ -3,15 +3,15 @@
 #include "kword13utils.h"
 #include "kword13formatone.h"
 
-KWord13FormatOne::KWord13FormatOne( void )
+KWord13FormatOneData::KWord13FormatOneData( void )
 {
 }
 
-KWord13FormatOne::~KWord13FormatOne( void )
+KWord13FormatOneData::~KWord13FormatOneData( void )
 {
 }
 
-void KWord13FormatOne::xmldump( QTextStream& iostream )
+void KWord13FormatOneData::xmldump( QTextStream& iostream )
 {
     iostream << "     <formatone>"  << "\">\n";
     
@@ -25,7 +25,7 @@ void KWord13FormatOne::xmldump( QTextStream& iostream )
     iostream << "    </formatone>\n";
 }
 
-QString KWord13FormatOne::key( void ) const
+QString KWord13FormatOneData::key( void ) const
 {
     QString strKey;
     
@@ -46,7 +46,7 @@ QString KWord13FormatOne::key( void ) const
     return strKey;
 }
 
-QString KWord13FormatOne::getProperty( const QString& name ) const
+QString KWord13FormatOneData::getProperty( const QString& name ) const
 {
     QMap<QString,QString>::ConstIterator it ( m_properties.find( name ) );
     if ( it == m_properties.end() )

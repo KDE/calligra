@@ -11,11 +11,11 @@ class QTextStream;
  * Contains the data of the \<FORMAT id="1"\> children
  * also the grand-children of \<STYLE\> and \<LAYOUT\>
  */
-class KWord13FormatOne
+class KWord13FormatOneData
 {
 public:
-    KWord13FormatOne( void );
-    ~KWord13FormatOne( void );
+    KWord13FormatOneData( void );
+    ~KWord13FormatOneData( void );
     
 public:
     void xmldump( QTextStream& iostream );
