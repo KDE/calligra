@@ -6293,13 +6293,21 @@ void KPrCanvas::moveHelpLine( const QPoint & pos)
         double vi = m_view->kPresenterDoc()->horizHelplines()[m_tmpHorizHelpline];
         m_view->kPresenterDoc()->repaint(QRect( rect.left(), m_view->zoomHandler()->zoomItY(vi) -4 ,  rect.right(), m_view->zoomHandler()->zoomItY(vi) + 4 ));
         m_view->kPresenterDoc()->updateHorizHelpline( m_tmpHorizHelpline , m_view->zoomHandler()->unzoomItY(pos.y()+diffy()));
+        if( pos.y() + diffy() <= 0)
+            removeHelpLine();
+        else
+            m_view->kPresenterDoc()->updateHorizHelpline( m_tmpHorizHelpline , m_view->zoomHandler()->unzoomItY(pos.y()+diffy()));
     }
     else if ( m_tmpVertHelpline != -1 )
     {
         double vi = m_view->kPresenterDoc()->vertHelplines()[m_tmpVertHelpline];
 
         m_view->kPresenterDoc()->repaint(QRect( m_view->zoomHandler()->zoomItX(vi) -4 ,  rect.top(), m_view->zoomHandler()->zoomItX(vi) + 4 , rect.bottom()));
-        m_view->kPresenterDoc()->updateVertHelpline( m_tmpVertHelpline , m_view->zoomHandler()->unzoomItX(pos.x()+diffx()));
+        if( pos.x() + diffx() <= 0)
+            removeHelpLine();
+        else
+            m_view->kPresenterDoc()->updateVertHelpline( m_tmpVertHelpline , m_view->zoomHandler()->unzoomItX(pos.x()+diffx()));
+
     }
     m_tmpVertHelpline = -1;
     m_tmpHorizHelpline = -1;
