@@ -18,9 +18,11 @@
 */
 
 #include <klocale.h>
-
+#include "kwdoc.h"
 #include <qvbox.h>
+#include <qlayout.h>
 #include <qlineedit.h>
+#include <qpushbutton.h>
 #include <qlistbox.h>
 #include <kmessagebox.h>
 #include "kwcreatebookmarkdia.h"
@@ -73,20 +75,62 @@ void KWCreateBookmarkDia::nameChanged( const QString &text)
     enableButtonOK( !text.isEmpty() );
 }
 
-KWSelectBookmarkDia::KWSelectBookmarkDia( const QStringList & _list, QWidget *parent, const char *name )
+KWSelectBookmarkDia::KWSelectBookmarkDia( const QStringList & _list, KWDocument *_doc, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
+    m_doc=_doc;
     setCaption( i18n("Select Bookmark") );
-    QVBox *page = makeVBoxMainWidget();
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+
+    QGridLayout * grid = new QGridLayout(page, 5, 2, KDialog::marginHint(), KDialog::spacingHint());
     m_bookmarkList = new QListBox( page );
+    grid->addMultiCellWidget(m_bookmarkList, 0, 4, 0, 0);
     m_bookmarkList->insertStringList(_list);
+
     connect(m_bookmarkList,  SIGNAL( selectionChanged ()), this, SLOT(slotSelectionChanged()));
     connect(m_bookmarkList,  SIGNAL(doubleClicked ( QListBoxItem * )), this, SLOT(slotOk()));
 
+    m_pbRename = new QPushButton( i18n("Rename Bookmark"), page );
+    grid->addWidget( m_pbRename, 0, 1);
+    connect( m_pbRename, SIGNAL(clicked()), this, SLOT(slotRenameBookmark()));
+
+    m_pbDelete = new QPushButton( i18n("Delete Bookmark"), page );
+    grid->addWidget( m_pbDelete, 1, 1);
+
+    connect( m_pbDelete, SIGNAL(clicked()), this, SLOT(slotDeleteBookmark()));
+
+
     setFocus();
-    enableButtonOK( false );
+    slotSelectionChanged();
     resize( 300, 200);
 }
+
+void KWSelectBookmarkDia::slotRenameBookmark()
+{
+    QString tmp =m_bookmarkList->currentText();
+    if ( tmp.isEmpty() )
+        return;
+    QStringList lst =m_doc->listOfBookmarkName();
+    lst.remove( tmp );
+    KWCreateBookmarkDia dia( lst, tmp, this, 0 );
+    if ( dia.exec() ) {
+        QString newName = dia.bookmarkName();
+        m_doc->renameBookMark(tmp, newName );
+        m_bookmarkList->changeItem ( newName, m_bookmarkList->currentItem() );
+    }
+}
+
+void KWSelectBookmarkDia::slotDeleteBookmark()
+{
+    QString tmp =m_bookmarkList->currentText();
+    if ( !tmp.isEmpty())
+    {
+        m_doc->deleteBookMark(tmp);
+        m_bookmarkList->removeItem(m_bookmarkList->currentItem());
+    }
+}
+
 
 QString KWSelectBookmarkDia::bookmarkSelected()const
 {
@@ -95,7 +139,10 @@ QString KWSelectBookmarkDia::bookmarkSelected()const
 
 void KWSelectBookmarkDia::slotSelectionChanged()
 {
-    enableButtonOK( !m_bookmarkList->currentText().isEmpty() );
+    bool state =!m_bookmarkList->currentText().isEmpty();
+    enableButtonOK( state );
+    m_pbRename->setEnabled( state);
+    m_pbDelete->setEnabled( state );
 }
 
 #include "kwcreatebookmarkdia.moc"

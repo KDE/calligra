@@ -3920,19 +3920,31 @@ void KWDocument::insertBookMark(const QString &_name, KWTextParag *_parag, KWFra
     m_bookmarkList.append( book );
 }
 
-void KWDocument::deleteBookMark(const QString &/*_name*/)
+void KWDocument::deleteBookMark(const QString &_name)
 {
-    //todo
+    QPtrListIterator<KWBookMark> book(m_bookmarkList);
+    for ( ; book.current() ; ++book )
+    {
+        if ( book.current()->bookMarkName()==_name)
+        {
+            m_bookmarkList.remove(book.current());
+            setModified(true);
+            break;
+        }
+    }
 }
 
 void KWDocument::renameBookMark(const QString &_oldName, const QString &_newName)
 {
+    if ( _oldName==_newName)
+        return;
     QPtrListIterator<KWBookMark> book(m_bookmarkList);
     for ( ; book.current() ; ++book )
     {
         if ( book.current()->bookMarkName()==_oldName)
         {
             book.current()->setBookMarkName(_newName );
+            setModified(true);
             break;
         }
     }

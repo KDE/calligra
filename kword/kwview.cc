@@ -5777,7 +5777,7 @@ void KWView::addBookmark()
 
 void KWView::selectBookmark()
 {
-    KWSelectBookmarkDia dia( m_doc->listOfBookmarkName(), this, 0 );
+    KWSelectBookmarkDia dia( m_doc->listOfBookmarkName(), m_doc, this, 0 );
     if ( dia.exec() ) {
         QString bookName = dia.bookmarkSelected();
         KWBookMark * book = m_doc->bookMarkByName( bookName );
