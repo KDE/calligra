@@ -26,7 +26,9 @@
 #include <qdragobject.h>
 #include <qcstring.h>
 
-#include <qlistview.h>
+#include <klistview.h>
+
+//#include <qlistview.h>
 
 //class KListView;
 class QFrame;
@@ -85,7 +87,7 @@ class KexiRelationView : public QScrollView
 		ConnectionList	m_connections;
 };
 
-class KexiRelationViewTable : public QListView
+class KexiRelationViewTable : public KListView
 {
 	Q_OBJECT
 	
@@ -98,7 +100,7 @@ class KexiRelationViewTable : public QListView
 
 	protected:
 		QDragObject		*dragObject();
-		void			contentsDropEvent(QDropEvent *ev);
+		virtual bool		acceptDrag(QDropEvent *e) const;
 
 	protected slots:
 		void			slotDropped(QDropEvent *e);

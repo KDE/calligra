@@ -51,7 +51,17 @@ KexiRelationView::addTable(QString table, QStringList columns)
 {
 	RelationSource s;
 	s.table = table;
-	s.geometry = QRect(5, 5, 100, 150);
+
+	int widest = -15;
+	for(TableList::Iterator it=m_tables.begin(); it != m_tables.end(); it++)
+	{
+		if((*it).geometry.x() + (*it).geometry.width() > widest)
+		{
+			widest = (*it).geometry.x() + (*it).geometry.width();
+		}
+	}
+
+	s.geometry = QRect(widest + 20, 5, 100, 150);
 	
 	KexiRelationViewTable *tableView = new KexiRelationViewTable(this, table, columns, "someTable");
 	s.columnView = tableView;
@@ -274,25 +284,28 @@ KexiRelationView::~KexiRelationView()
 /// implementation of KexiRelationViewTable
 
 KexiRelationViewTable::KexiRelationViewTable(KexiRelationView *parent, QString table, QStringList fields, const char *name)
- : QListView(parent)
+ : KListView(parent)
 {
 	m_fieldList = fields;
 	m_table = table;
 	m_parent = parent;
-	
+
+	setAcceptDrops(true);
 	viewport()->setAcceptDrops(true);
+	setDropVisualizer(false);
 	
 	addColumn("fields");
+	setResizeMode(QListView::LastColumn);
 	header()->hide();
 	for(QStringList::Iterator it = m_fieldList.begin(); it != m_fieldList.end(); it++)
 	{
-		QListViewItem *i = new QListViewItem(this, (*it));
+		KListViewItem *i = new KListViewItem(this, (*it));
 		i->setDragEnabled(true);
 		i->setDropEnabled(true);
 	}
 	
 //	setDragEnabled
-	connect(this, SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
+	connect(this, SIGNAL(dropped(QDropEvent *, QListViewItem *)), this, SLOT(slotDropped(QDropEvent *)));
 }
 
 int
@@ -320,10 +333,20 @@ KexiRelationViewTable::dragObject()
 	return 0;
 }
 
-void
-KexiRelationViewTable::contentsDropEvent(QDropEvent *ev)
+bool
+KexiRelationViewTable::acceptDrag(QDropEvent *ev) const
 {
-	kdDebug() << "KexiRelationViewTable::dropEvent()" << endl;
+	kdDebug() << "KexiRelationViewTable::acceptDrag()" << endl;
+	if(ev->provides("kexi/field") && ev->source() != this)
+		return true;
+
+	return false;
+}
+
+void
+KexiRelationViewTable::slotDropped(QDropEvent *ev)
+{
+	qDebug("KexiRelationViewTable::slotDropped()");
 
 	QListViewItem *recever = itemAt(ev->pos());
 	if(recever)
@@ -343,17 +366,12 @@ KexiRelationViewTable::contentsDropEvent(QDropEvent *ev)
 
 		m_parent->addConnection(s);
 
-		kdDebug() << "KexiRelationViewTable::dropEvent() " << srcTable << ":" << srcField << " " << m_table << ":" << rcvField << endl;
+		kdDebug() << "KexiRelationViewTable::slotDropped() " << srcTable << ":" << srcField << " " << m_table << ":" << rcvField << endl;
 		ev->accept();
 		return;
 	}
 	ev->ignore();
-}
 
-void
-KexiRelationViewTable::slotDropped(QDropEvent *ev)
-{
-	qDebug("KexiRelationViewTable::slotDropped()");
 }
 
 KexiRelationViewTable::~KexiRelationViewTable()

@@ -67,6 +67,7 @@ KexiRelation::slotAddTable()
 	m_view->addTable(m_tableCombo->currentText(), fields);
 	
 	delete r;
+	m_tableCombo->removeItem(m_tableCombo->currentItem());
 }
 
 KexiRelation::~KexiRelation()
