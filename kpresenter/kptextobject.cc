@@ -1363,7 +1363,7 @@ void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, 
                            << " ->difference=" << difference << endl;
 #endif
         // We only auto-grow. We don't auto-shrink.
-        if(difference > 0)
+        if(difference > 0 && !isProtect())
         {
             double wantedPosition = m_doc->zoomHandler()->layoutUnitPtToPt( m_doc->zoomHandler()->pixelYToPt( difference ) ) + getRect().bottom();
             const KoPageLayout& p = m_doc->pageLayout();
@@ -1383,6 +1383,8 @@ void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, 
                 *abort = false;
             }
         }
+        else
+            m_textobj->setLastFormattedParag( 0 );
     }
 }
 
