@@ -346,7 +346,8 @@ void KivioSMLStencil::paintOutline( KivioIntraStencilData *pData )
                 break;
 
             case KivioShapeData::kstTextBox:
-                drawOutlineTextBox( pShape, pData );
+                // Don't paint text in outline mode as it makes moving harder
+                //drawOutlineTextBox( pShape, pData );
                 break;
 
 

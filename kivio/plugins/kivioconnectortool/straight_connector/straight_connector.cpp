@@ -244,7 +244,60 @@ void KivioStraightConnector::paint( KivioIntraStencilData *pData )
 
 void KivioStraightConnector::paintOutline( KivioIntraStencilData *pData )
 {
-    paint(pData);
+  KivioPainter *painter = pData->painter;
+  KoZoomHandler* zoomHandler = pData->zoomHandler;
+  double x1, y1, x2, y2;
+  double vecX, vecY;
+  double len;
+
+
+  painter->setLineStyle(m_pLineStyle);
+  double lineWidth = m_pLineStyle->width();
+  painter->setLineWidth(zoomHandler->zoomItY(lineWidth));
+
+  x1 = zoomHandler->zoomItX(m_pStart->x());
+  x2 = zoomHandler->zoomItX(m_pEnd->x());
+
+  y1 = zoomHandler->zoomItY(m_pStart->y());
+  y2 = zoomHandler->zoomItY(m_pEnd->y());
+
+
+  // Calculate the direction vector from start -> end
+  vecX = m_pEnd->x() - m_pStart->x();
+  vecY = m_pEnd->y() - m_pStart->y();
+
+  // Normalize the vector
+  len = sqrt( vecX*vecX + vecY*vecY );
+  if( len )
+  {
+    vecX /= len;
+    vecY /= len;
+
+    // Move the endpoints by the cuts
+    x1 += vecX * zoomHandler->zoomItX(m_startAH->cut());
+    y1 += vecY * zoomHandler->zoomItY(m_startAH->cut());
+
+    x2 -= vecX * zoomHandler->zoomItX(m_endAH->cut());
+    y2 -= vecY * zoomHandler->zoomItY(m_endAH->cut());
+  }
+
+
+  // Draw the line
+  painter->drawLine( x1, y1, x2, y2 );
+
+
+  // Now draw the arrow heads
+  if( len )
+  {
+    painter->setBGColor( m_pFillStyle->color() );
+
+    m_startAH->paint(painter, m_pStart->x(), m_pStart->y(), -vecX, -vecY, zoomHandler);
+    m_endAH->paint(painter, m_pEnd->x(), m_pEnd->y(), vecX, vecY, zoomHandler);
+  }
+
+  // Text
+  // Don't paint text in outline mode as it makes moving harder
+  //drawText(pData);
 }
 
 bool KivioStraightConnector::saveCustom( QDomElement &e, QDomDocument &doc )
