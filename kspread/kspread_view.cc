@@ -4111,7 +4111,7 @@ void KSpreadView::resizeRow()
         KMessageBox::error( this, i18n("Area too large!"));
     else
     {
-        KSpreadresize2 dlg( this, "Resize Row", KSpreadresize2::resize_row );
+        KSpreadResizeRow dlg( this );
         dlg.exec();
     }
 }
@@ -4122,7 +4122,7 @@ void KSpreadView::resizeColumn()
         KMessageBox::error( this, i18n("Area too large!"));
     else
         {
-        KSpreadresize2 dlg( this, "Resize Column", KSpreadresize2::resize_column );
+        KSpreadResizeColumn dlg( this );
         dlg.exec();
         }
 }

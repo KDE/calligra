@@ -24,27 +24,40 @@
 #include <kdialogbase.h>
 
 class KSpreadView;
-class KSpreadTable;
-class KSpreadCell;
-class QCheckBox;
 class KDoubleNumInput;
 
-class KSpreadresize2 : public KDialogBase
+class KSpreadResizeRow: public KDialogBase
 {
   Q_OBJECT
-public:
-  enum type_resize {resize_column,resize_row};
-  KSpreadresize2( KSpreadView* parent, const char* name,type_resize re);
 
-  type_resize type;
-  double size;
-public slots:
-  void slotOk();
-  void slotChangeState();
+public:
+  KSpreadResizeRow( KSpreadView* parent, const char* name = 0 );
+  double rowHeight;
+
+protected slots:
+  virtual void slotOk();
+  virtual void slotDefault();
+
 protected:
   KSpreadView* m_pView;
-  KDoubleNumInput *m_pSize2;
-  QCheckBox *m_pDefault;
-};
+  KDoubleNumInput *m_pHeight;
+};  
+
+class KSpreadResizeColumn: public KDialogBase
+{
+  Q_OBJECT
+
+public:
+  KSpreadResizeColumn( KSpreadView* parent, const char* name = 0 );
+  double columnWidth;
+
+protected slots:
+  virtual void slotOk();
+  virtual void slotDefault();
+
+protected:
+  KSpreadView* m_pView;
+  KDoubleNumInput *m_pWidth;
+};  
 
 #endif
