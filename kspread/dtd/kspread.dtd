@@ -304,9 +304,9 @@
 
 		Attributes:
                         valmin  Minimal value of the validate condition
-                        cond    type of condition (None, Equal, Superior etc...)
+                        cond    type of condition (None, Equal,Superior,Inferior,SuperiorEqual,InferiorEqual,Between,Different, DifferentTo)
                         valmax  Maximal value of the validate condition
-                        allow   type of value allows (ALL, NUmber etc...)
+                        allow   type of value allows (Allow_All, Allow_Number, Allow_Text,Allow_Time,Allow_Date,Allow_Integer,Allow_TextLength, Allow_List)
                         action  Action executes when it's not validate (Error, warning etc...)
 			displaymessage display or not error alert
                         displayvalidationinformation display or not input help
