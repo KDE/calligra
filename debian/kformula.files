@@ -1,0 +1,9 @@
+usr/bin/kformula
+usr/lib/kformulamain.*
+usr/lib/kde2/libkformulapart.*
+usr/share/applnk/Office/kformula.desktop
+usr/share/apps/kformula/*
+usr/share/icons/locolor/16x16/apps/kformula.xpm
+usr/share/icons/locolor/32x32/apps/kformula.xpm
+usr/share/mimelnk/application/x-kformula.desktop
+usr/share/lintian/overrides/kformula

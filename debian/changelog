@@ -1,3 +1,15 @@
+koffice (1:1.1-beta1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Added package kformula.
+  * Changed koffice-libs conflicts from << version-1 to << version-0 to
+    avoid problems with potato packages.
+  * Added koffice-libs conflicts to all application packages to avoid
+    conflicts with man pages that were once undocumented links in
+    koffice-libs.
+
+ -- Ben Burton <benb@acm.org>  Mon, 23 Apr 2001 23:41:44 -0500
+
 koffice (1:1.1-20010404-1) unstable; urgency=low
 
   * New upstream CVS pull (closes: Bug#77965).

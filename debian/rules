@@ -13,6 +13,7 @@ overrides = $(tmp)/usr/share/lintian/overrides
 pixmaps = $(tmp)/usr/share/pixmaps
 
 kugar_docs = $(tmp)/usr/share/doc/kde/HTML/en/kugar
+icons = $(tmp)/usr/share/icons
 
 build: build-stamp
 
@@ -60,7 +61,13 @@ install-stamp: build
 	done
 
 	$(INSTALL_DIR) $(pixmaps)
+	$(INSTALL_DIR) $(icons)/locolor/16x16/apps
+	$(INSTALL_DIR) $(icons)/locolor/32x32/apps
 	$(INSTALL_FILE) debian/*.xpm $(pixmaps)
+	$(INSTALL_FILE) debian/kformula.lo16.xpm \
+		$(icons)/locolor/16x16/apps/kformula.xpm
+	$(INSTALL_FILE) kformula/kformula.xpm \
+		$(icons)/locolor/32x32/apps/kformula.xpm
 
 	$(MAKE) install DESTDIR=`pwd`/$(tmp)
 
@@ -135,6 +142,7 @@ binary-arch: build install
 	dh_installchangelogs -pkoffice-libs
 	dh_installchangelogs -pkoffice-dev
 	dh_installchangelogs -pkchart kchart/CHANGES
+	dh_installchangelogs -pkformula
 	dh_installchangelogs -pkillustrator
 	dh_installchangelogs -pkivio kivio/CHANGELOG
 	dh_installchangelogs -pkoshell
@@ -156,6 +164,8 @@ binary-arch: build install
 	  -ldebian/koffice-libs/usr/lib
 	dh_shlibdeps -pkchart \
 	  -ldebian/koffice-libs/usr/lib:debian/kchart/usr/lib
+	dh_shlibdeps -pkformula \
+	  -ldebian/koffice-libs/usr/lib:debian/kformula/usr/lib
 	dh_shlibdeps -pkillustrator \
 	  -ldebian/koffice-libs/usr/lib:debian/killustrator/usr/lib
 	dh_shlibdeps -pkivio \

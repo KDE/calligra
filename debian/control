@@ -23,8 +23,25 @@ Section: x11
 Replaces: koffice-common
 Depends: ${shlibs:Depends}
 Suggests: kdebase
+Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: a chart drawing program for the KDE Office Suite
  KChart is a chart drawing application.
+ .
+ This package is part of the KDE Office Suite.
+
+Package: kformula
+Architecture: any
+Section: x11
+Depends: ${shlibs:Depends}
+Suggests: kdebase
+Conflicts: koffice-libs (<< 1:1.1-20010404-0)
+Description: a formula editor for the KDE Office Suite
+ KFormula is a formula editor that provides the basic input facilities
+ and the support functionality expected of a KOffice application.
+ .
+ Features include easy Greek letter insertion, intelligent cursor
+ movement, advanced syntax highlighting, multi-level undo support and
+ LaTeX export.
  .
  This package is part of the KDE Office Suite.
 
@@ -34,6 +51,7 @@ Section: graphics
 Replaces: koffice-common
 Depends: ${shlibs:Depends}
 Suggests: kdebase
+Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: a vector graphics tool for the KDE Office Suite
  KIllustrator is a vector graphics application.
  .
@@ -44,7 +62,7 @@ Architecture: any
 Section: graphics
 Depends: ${shlibs:Depends}
 Suggests: kdebase
-Conflicts: koffice-libs (<< 1:1.1-20010404-1)
+Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: a flowcharting program for the KDE Office Suite
  Kivio is a flowcharting program that offers basic flowcharting abilities,
  but with a twist.  Objects are scriptable, and a backend plugin system
@@ -64,6 +82,7 @@ Replaces: koffice-libs (<< 2.0.1-0)
 Depends: ${shlibs:Depends}
 Recommends: koffice
 Suggests: kdebase
+Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: the KDE Office Suite workspace
  The KOffice workspace is a desktop with easy one-click launchers for
  KOffice applications.
@@ -76,6 +95,7 @@ Section: x11
 Replaces: koffice-common
 Depends: ${shlibs:Depends}, ${perl:Depends}
 Suggests: kdebase
+Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: a presentation program for the KDE Office Suite
  KPresenter is a fully-featured presentation program.  It is sufficiently
  developed that it is already being successfully used for giving talks and
@@ -89,6 +109,7 @@ Section: graphics
 Replaces: koffice-common
 Depends: ${shlibs:Depends}
 Suggests: kdebase
+Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: an image editor for the KDE Office Suite
  Krayon is a pixel-based image manipulation program like the GIMP or
  Adobe Photoshop.  It's intended to be suitable for all your image
@@ -104,7 +125,7 @@ Section: x11
 Replaces: koffice-common
 Depends: ${shlibs:Depends}
 Suggests: kdebase
-Conflicts: koffice-libs (<< 1:1.1-20010404-1)
+Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: a spreadsheet for the KDE Office Suite
  KSpread is a powerful spreadsheet application.
  .
@@ -115,6 +136,7 @@ Architecture: any
 Section: x11
 Depends: ${shlibs:Depends}
 Suggests: kdebase
+Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: a business report maker for the KDE Office Suite
  Kugar is a tool for generating business quality reports which can
  be viewed and printed.  It includes a standalone report viewer and a
@@ -130,6 +152,7 @@ Section: x11
 Replaces: koffice-common
 Depends: ${shlibs:Depends}
 Suggests: kdebase
+Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: a word processor for the KDE Office Suite
  KWord is a frame-based wordprocessor comparable to FrameMaker.  It
  can be used for desktop publishing, but also for "normal" wordprocessing

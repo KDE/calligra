@@ -1,6 +1,6 @@
 usr/bin/kword
 usr/lib/kword.*
-usr/lib/libkwordpart.*
+usr/lib/kde2/libkwordpart.*
 usr/share/applnk/Office/kword.desktop
 usr/share/apps/kword/*
 usr/share/mimelnk/application/x-kword.desktop

@@ -11,18 +11,15 @@ usr/lib/libkofficecore.so.*
 usr/lib/libkofficecore.la
 usr/lib/libkofficeui.so.*
 usr/lib/libkofficeui.la
-usr/lib/libkoml.so.*
-usr/lib/libkoml.la
 usr/lib/libkoscript.so.*
 usr/lib/libkoscript.la
 usr/lib/libkstore.so.*
 usr/lib/libkstore.la
-usr/lib/libqt3stuff.so.*
-usr/lib/libqt3stuff.la
 usr/lib/libkwmf.*
 usr/lib/kde2/*export*
 usr/lib/kde2/*import*
 usr/lib/kde2/*filter*
+usr/lib/kde2/libkprkword.*
 usr/lib/kde2/libkspelltool.*
 usr/share/apps/koffice/*
 usr/share/mimelnk/image/x-msod.desktop
@@ -31,6 +28,7 @@ usr/share/mimelnk/text/x-csv.desktop
 usr/share/services/*export*
 usr/share/services/*import*
 usr/share/services/kodocinfopropspage.desktop
+usr/share/services/kprkword.desktop
 usr/share/services/kspelltool.desktop
 usr/share/servicetypes/*
 usr/share/templates/*

@@ -7,6 +7,8 @@ Upstream authors:
 
   KChart: Kalle Dalheimer <kalle@kde.org>,
           Laurent Montel <montell@club-internet.fr>
+  KFormula: Andrea Rizzi <rizzi@kde.org>, Stephan Kulow <coolo@kde.org>,
+            Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
   KIllustrator: Kai-Uwe Sattler <kus@iti.cs.uni-magdeburg.de> and others
   Kivio: Dave Marotti <lndshark@speakeasy.net>,
          Max Judin <max@thekompany.com>, Dmitry Poplavsky <dima@kde.org>

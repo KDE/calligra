@@ -2,6 +2,10 @@ usr/bin/kugar
 usr/lib/libkugarpart.*
 usr/share/applnk/Office/kugar.desktop
 usr/share/apps/kugar/*
+usr/share/icons/hicolor/16x16/apps/kugar.png
+usr/share/icons/hicolor/22x22/apps/kugar.png
+usr/share/icons/hicolor/32x32/apps/kugar.png
+usr/share/icons/hicolor/48x48/apps/kugar.png
 usr/share/mimelnk/application/x-kugar.desktop
 usr/share/doc/kde/HTML/en/kugar/*
 usr/share/lintian/overrides/kugar

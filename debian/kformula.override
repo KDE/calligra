@@ -1,0 +1,8 @@
+# There is no -dev package.
+kformula: non-dev-pkg-with-shlib-symlink usr/lib/kformulamain.so.0.0.0 usr/lib/kformulamain.so
+# These are modules in /usr/lib/kde2/.
+kformula: shlib-missing-in-control-file libkformulapart.so usr/lib/kde2/libkformulapart.so
+# This is inserted by debhelper and is legal.
+kformula: postrm-calls-ldconfig
+# Menu item.
+kformula: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kformula:8

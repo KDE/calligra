@@ -1,10 +1,11 @@
 # There is no -dev package.
 kivio: non-dev-pkg-with-shlib-symlink usr/lib/kivio.so.0.0.0 usr/lib/kivio.so
-kivio: non-dev-pkg-with-shlib-symlink usr/lib/libkiviopart.so.0.0.0 usr/lib/libkiviopart.so
 kivio: non-dev-pkg-with-shlib-symlink usr/lib/libkivioselecttool.so.0.0.0 usr/lib/libkivioselecttool.so
 kivio: non-dev-pkg-with-shlib-symlink usr/lib/libkiviotexttool.so.0.0.0 usr/lib/libkiviotexttool.so
 kivio: non-dev-pkg-with-shlib-symlink usr/lib/libkiviozoomtool.so.0.0.0 usr/lib/libkiviozoomtool.so
 kivio: non-dev-pkg-with-shlib-symlink usr/lib/libkivioconnectortool.so.0.0.0 usr/lib/libkivioconnectortool.so
+# These are modules in /usr/lib/kde2/.
+kivio: shlib-missing-in-control-file libkiviopart.so usr/lib/kde2/libkiviopart.so
 # This is a module.
 kivio: shlib-missing-in-control-file libstraight_connector usr/lib/kivio/libstraight_connector.so
 # This is inserted by debhelper and is legal.

@@ -1,6 +1,6 @@
 usr/bin/kspread
 usr/lib/kspread.*
-usr/lib/libkspreadpart.*
+usr/lib/kde2/libkspreadpart.*
 usr/lib/kde2/libkspreadcalc.*
 usr/lib/kde2/libcsvexport.*
 usr/lib/kde2/libcsvimport.*

@@ -1,62 +1,49 @@
---- kchart/Makefile.am	2001/03/22 14:53:21	1.79
-+++ kchart/Makefile.am	2001/04/08 21:39:14
-@@ -42,13 +42,13 @@ libkchartpart_la_SOURCES = kchart_part.c
- 	sheet.cc \
- 	sheetdlg.cc \
- 	table.cc
--libkchartpart_la_LDFLAGS = $(KDE_PLUGIN)
-+libkchartpart_la_LDFLAGS = $(KDE_PLUGIN_DEBIAN)
- libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
-                           $(top_builddir)/lib/kofficeui/libkofficeui.la
- 
+--- koffice-1.1-beta1.orig/kchart/Makefile.am
++++ koffice-1.1-beta1/kchart/Makefile.am
+@@ -49,7 +49,7 @@
  ## The kdeinit loadable module
+ lib_LTLIBRARIES = kchart.la
  kchart_la_SOURCES = main.cc
 -kchart_la_LDFLAGS = $(all_libraries) -avoid-version -module
 +kchart_la_LDFLAGS = $(all_libraries) -module
- kchart_la_LIBADD = libkchartpart.la
+ kchart_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
---- killustrator/Makefile.am	2001/03/23 18:30:52	1.34
-+++ killustrator/Makefile.am	2001/04/08 21:39:15
-@@ -21,7 +21,7 @@ lib_LTLIBRARIES = libkillustratorpart.la
- 
+--- koffice-1.1-beta1.orig/kformula/Makefile.am
++++ koffice-1.1-beta1/kformula/Makefile.am
+@@ -14,7 +14,7 @@
  ## The kdeinit loadable module
+ lib_LTLIBRARIES = kformulamain.la
+ kformulamain_la_SOURCES = main.cc
+-kformulamain_la_LDFLAGS = $(all_libraries) -module -avoid-version
++kformulamain_la_LDFLAGS = $(all_libraries) -module
+ kformulamain_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+ 
+ ## The executable
+--- koffice-1.1-beta1.orig/killustrator/Makefile.am
++++ koffice-1.1-beta1/killustrator/Makefile.am
+@@ -20,7 +20,7 @@
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES = killustrator.la
  killustrator_la_SOURCES = main.cc
 -killustrator_la_LDFLAGS = $(all_libraries) -avoid-version -module
 +killustrator_la_LDFLAGS = $(all_libraries) -module
- killustrator_la_LIBADD = libkillustratorpart.la
+ killustrator_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
-@@ -76,7 +76,7 @@ libkillustratorpart_la_SOURCES = KIllust
-        	BlendDialog.cc BlendCmd.cc stencilbarmovemanager.cc \
-        	filter_utils.cc LayerPanel.cc TabBar.cc tooldockbase.cc
- 
--libkillustratorpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-+libkillustratorpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN_DEBIAN)
- libkillustratorpart_la_LIBADD = $(top_builddir)/killustrator/filter/libfilter.la $(top_builddir)/lib/kofficeui/libkofficeui.la
- 
- METASOURCES = AUTO
---- kimageshop/Makefile.am	2001/03/22 14:53:22	1.70
-+++ kimageshop/Makefile.am	2001/04/08 21:39:15
-@@ -4,14 +4,14 @@ lib_LTLIBRARIES = libkrayonpart.la krayo
- ## The part
- libkrayonpart_la_SOURCES = dummy.cc
- 
--libkrayonpart_la_LDFLAGS = $(KDE_PLUGIN)
-+libkrayonpart_la_LDFLAGS = $(KDE_PLUGIN_DEBIAN)
- libkrayonpart_la_LIBADD = core/libkiscore.la ui/libkisui.la tools/libkistools.la \
- 	../lib/kofficeui/libkofficeui.la
- METASOURCES = AUTO
- 
+--- koffice-1.1-beta1.orig/kimageshop/Makefile.am
++++ koffice-1.1-beta1/kimageshop/Makefile.am
+@@ -12,7 +12,7 @@
  ## The kdeinit loadable module
+ lib_LTLIBRARIES = krayon.la
  krayon_la_SOURCES = main.cc
 -krayon_la_LDFLAGS = $(all_libraries) -avoid-version -module
 +krayon_la_LDFLAGS = $(all_libraries) -module
- krayon_la_LIBADD = libkrayonpart.la
+ krayon_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
---- kimageshop/plugins/example/Makefile.am	2000/12/31 23:10:16	1.3
-+++ kimageshop/plugins/example/Makefile.am	2001/04/08 21:39:15
+--- koffice-1.1-beta1.orig/kimageshop/plugins/example/Makefile.am
++++ koffice-1.1-beta1/kimageshop/plugins/example/Makefile.am
 @@ -1,6 +1,6 @@
  INCLUDES  = -I$(srcdir)/../core -I$(srcdir)/../ui -I$(srcdir)/../tools $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
  
@@ -65,35 +52,20 @@
  #libkisp_example_la_LIBADD =  ../core/libkiscore.la ../ui/libkisui.la ../tools/libkistools.la \
  #	../../lib/kofficeui/libkofficeui.la
  
---- kivio/kiviopart/Makefile.am	2001/03/20 22:53:05	1.8
-+++ kivio/kiviopart/Makefile.am	2001/04/08 21:39:15
-@@ -133,10 +133,10 @@ EXTRA_DIST = \
+--- koffice-1.1-beta1.orig/kivio/kiviopart/Makefile.am
++++ koffice-1.1-beta1/kivio/kiviopart/Makefile.am
+@@ -131,7 +131,7 @@
  #2########################################################!@#$
- lib_LTLIBRARIES =  libkiviopart.la kivio.la
+ lib_LTLIBRARIES = kivio.la
  kivio_la_SOURCES = main.cpp
 -kivio_la_LDFLAGS = $(all_libraries) -module -avoid-version
 +kivio_la_LDFLAGS = $(all_libraries) -module
- kivio_la_LIBADD = libkiviopart.la
+ kivio_la_LIBADD = ../../lib/kofficecore/libkofficecore.la
  
--libkiviopart_la_LDFLAGS = -avoid-version -module $(LIB_KOFFICEUI) $(all_libraries)
-+libkiviopart_la_LDFLAGS = -module $(LIB_KOFFICEUI) $(all_libraries)
- 
- bin_PROGRAMS = kivio
- kivio_SOURCES = dummy.cpp
---- kivio/plugins/kivioconnectortool/Makefile.am	2000/12/07 10:12:19	1.6
-+++ kivio/plugins/kivioconnectortool/Makefile.am	2001/04/09 00:59:56
-@@ -31,7 +31,7 @@ EXTRA_DIST = \
- ##############################################################
- ####                  END KDEStudio part                  ####
- #2########################################################!@#$
--libkivioconnectortool_la_LDFLAGS = -avoid-version -module -no-undefined
-+libkivioconnectortool_la_LDFLAGS = -module -no-undefined
- libkivioconnectortool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
- 
- rc_DATA = kivioconnectortool.rc
---- kivio/plugins/kivioselecttool/Makefile.am	2000/12/07 10:12:19	1.4
-+++ kivio/plugins/kivioselecttool/Makefile.am	2001/04/09 00:59:56
-@@ -27,7 +27,7 @@ EXTRA_DIST = \
+ libkiviopart_la_LDFLAGS = -avoid-version -module $(LIB_KOFFICEUI) $(all_libraries)
+--- koffice-1.1-beta1.orig/kivio/plugins/kivioselecttool/Makefile.am
++++ koffice-1.1-beta1/kivio/plugins/kivioselecttool/Makefile.am
+@@ -27,7 +27,7 @@
  ##############################################################
  ####                  END KDEStudio part                  ####
  #2########################################################!@#$
@@ -102,9 +74,20 @@
  libkivioselecttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
  
  rc_DATA = kivioselecttool.rc
---- kivio/plugins/kiviotexttool/Makefile.am	2000/12/07 10:12:19	1.4
-+++ kivio/plugins/kiviotexttool/Makefile.am	2001/04/09 00:59:56
-@@ -31,7 +31,7 @@ EXTRA_DIST = \
+--- koffice-1.1-beta1.orig/kivio/plugins/kivioconnectortool/Makefile.am
++++ koffice-1.1-beta1/kivio/plugins/kivioconnectortool/Makefile.am
+@@ -31,7 +31,7 @@
+ ##############################################################
+ ####                  END KDEStudio part                  ####
+ #2########################################################!@#$
+-libkivioconnectortool_la_LDFLAGS = -avoid-version -module -no-undefined
++libkivioconnectortool_la_LDFLAGS = -module -no-undefined
+ libkivioconnectortool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+ 
+ rc_DATA = kivioconnectortool.rc
+--- koffice-1.1-beta1.orig/kivio/plugins/kiviotexttool/Makefile.am
++++ koffice-1.1-beta1/kivio/plugins/kiviotexttool/Makefile.am
+@@ -31,7 +31,7 @@
  ##############################################################
  ####                  END KDEStudio part                  ####
  #2########################################################!@#$
@@ -113,9 +96,9 @@
  libkiviotexttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
  
  rc_DATA = kiviotexttool.rc
---- kivio/plugins/kiviozoomtool/Makefile.am	2000/12/07 10:12:19	1.5
-+++ kivio/plugins/kiviozoomtool/Makefile.am	2001/04/09 00:59:56
-@@ -27,7 +27,7 @@ EXTRA_DIST = \
+--- koffice-1.1-beta1.orig/kivio/plugins/kiviozoomtool/Makefile.am
++++ koffice-1.1-beta1/kivio/plugins/kiviozoomtool/Makefile.am
+@@ -27,7 +27,7 @@
  ##############################################################
  ####                  END KDEStudio part                  ####
  #2########################################################!@#$
@@ -124,9 +107,9 @@
  libkiviozoomtool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
  
  rc_DATA = kiviozoomtool.rc
---- koshell/Makefile.am	2001/03/22 14:02:17	1.25
-+++ koshell/Makefile.am	2001/04/08 21:39:15
-@@ -4,7 +4,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) $(all_in
+--- koffice-1.1-beta1.orig/koshell/Makefile.am
++++ koffice-1.1-beta1/koshell/Makefile.am
+@@ -4,7 +4,7 @@
  ## The kdeinit loadable module
  lib_LTLIBRARIES = koshell.la
  koshell_la_SOURCES = koshell_main.cc koshell_shell.cc
@@ -135,56 +118,53 @@
  koshell_la_LIBADD = $(LIB_KOFFICEUI)
  
  ## The executable
---- kpresenter/Makefile.am	2001/03/23 00:29:39	1.139
-+++ kpresenter/Makefile.am	2001/04/08 21:39:15
-@@ -30,13 +30,13 @@ libkpresenterpart_la_SOURCES = backdia.c
- 	textdialog.cc sidebar.cc koStream.cc \
- 	insertpagedia.ui generalconfig.ui kpimage.cc
- 
--libkpresenterpart_la_LDFLAGS = $(KDE_PLUGIN)
-+libkpresenterpart_la_LDFLAGS = $(KDE_PLUGIN_DEBIAN)
- libkpresenterpart_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la ../lib/koml/libkoml.la
- libkpresenterpart_la_METASOURCES = AUTO
- 
+--- koffice-1.1-beta1.orig/kpresenter/Makefile.am
++++ koffice-1.1-beta1/kpresenter/Makefile.am
+@@ -38,7 +38,7 @@
  ## The kdeinit loadable module
+ lib_LTLIBRARIES = kpresenter.la
  kpresenter_la_SOURCES = main.cc
 -kpresenter_la_LDFLAGS = $(all_libraries) -avoid-version -module
 +kpresenter_la_LDFLAGS = $(all_libraries) -module
- kpresenter_la_LIBADD = libkpresenterpart.la
+ kpresenter_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
---- kspread/Makefile.am	2001/03/22 14:53:22	1.150
-+++ kspread/Makefile.am	2001/04/08 21:39:15
-@@ -31,13 +31,13 @@ libkspreadpart_la_SOURCES = kspread_loca
- 	KSpreadViewIface.skel KSpreadViewIface.cc \
- 	kspread_cluster.cc
- 
--libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-+libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN_DEBIAN)
- libkspreadpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la ../lib/koscript/libkoscript.la ../lib/kofficeui/libkofficeui.la ../lib/kformula/libkformula.la -lkspell
- libkspreadpart_la_METASOURCES = AUTO
- 
+--- koffice-1.1-beta1.orig/kspread/Makefile.am
++++ koffice-1.1-beta1/kspread/Makefile.am
+@@ -38,7 +38,7 @@
  ## The kdeinit loadable module
+ lib_LTLIBRARIES =  kspread.la
  kspread_la_SOURCES = main.cc
 -kspread_la_LDFLAGS = $(all_libraries) -avoid-version -module
 +kspread_la_LDFLAGS = $(all_libraries) -module
- kspread_la_LIBADD = libkspreadpart.la 
+ kspread_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
---- kugar/part/Makefile.am	2001/03/29 12:29:25	1.3
-+++ kugar/part/Makefile.am	2001/04/08 21:39:15
-@@ -2,7 +2,7 @@ INCLUDES = -I$(srcdir)/../lib $(KOFFICE_
+--- koffice-1.1-beta1.orig/kugar/part/Makefile.am
++++ koffice-1.1-beta1/kugar/part/Makefile.am
+@@ -2,7 +2,7 @@
  
  lib_LTLIBRARIES = libkugarpart.la
  libkugarpart_la_SOURCES = kugar_part.cpp
 -libkugarpart_la_LDFLAGS = $(all_libraries) -module -avoid-version
 +libkugarpart_la_LDFLAGS = $(all_libraries) -module
- libkugarpart_la_LIBADD = ../lib/libkugar.la $(LIB_KPARTS)
+ libkugarpart_la_LIBADD = ../lib/libkugar.la $(LIB_KPARTS) $(LIB_KDEPRINT)
  
  libkugarpart_la_METASOURCES = AUTO
---- kugar/part/kugar_part.cpp	2001/03/26 16:59:33	1.3
-+++ kugar/part/kugar_part.cpp	2001/04/10 22:17:49
-@@ -78,7 +78,7 @@ KInstance *KugarFactory::instance()
+--- koffice-1.1-beta1.orig/kugar/part/kugar.desktop
++++ koffice-1.1-beta1/kugar/part/kugar.desktop
+@@ -1,7 +1,7 @@
+ [Desktop Entry]
+ Name=Kugar
+ Exec=kugar
+-Icon=
++Icon=kugar
+ MimeType=application/x-kugar;
+ Type=Application
+ DocPath=
+--- koffice-1.1-beta1.orig/kugar/part/kugar_part.cpp
++++ koffice-1.1-beta1/kugar/part/kugar_part.cpp
+@@ -78,7 +78,7 @@
  
  	if (!s_instance)
  	{
@@ -193,8 +173,8 @@
  						   I18N_NOOP("Kugar"),
  						   VERSION);
  
---- kugar/shell/main.cpp	2000/09/21 08:57:22	1.1.1.1
-+++ kugar/shell/main.cpp	2001/04/10 22:17:49
+--- koffice-1.1-beta1.orig/kugar/shell/main.cpp
++++ koffice-1.1-beta1/kugar/shell/main.cpp
 @@ -18,7 +18,7 @@
  
  int main(int argc,char **argv)
@@ -204,26 +184,19 @@
  			 I18N_NOOP("A template driven report viewer for XML data."),
  			 KAboutData::License_GPL_V2,
  			 "Copyright (c) 1999-2000 Mutiny Bay Software\n"
---- kword/Makefile.am	2001/04/04 19:23:27	1.112
-+++ kword/Makefile.am	2001/04/08 21:39:15
-@@ -19,13 +19,13 @@ libkwordpart_la_SOURCES = kwfactory.cc k
-                 border.cc resizehandles.cc kwcommand.cc \
- 		autoformat.cc autoformatdia.cc
- 
--libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-+libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN_DEBIAN)
- libkwordpart_la_LIBADD = ../lib/kofficeui/libkofficeui.la ../lib/kformula2/libkformula2.la ../qt3stuff/libqt3stuff.la -lkspell
- libkwordpart_la_METASOURCES = AUTO
- 
+--- koffice-1.1-beta1.orig/kword/Makefile.am
++++ koffice-1.1-beta1/kword/Makefile.am
+@@ -24,7 +24,7 @@
  ## The kdeinit loadable module
+ lib_LTLIBRARIES = kword.la
  kword_la_SOURCES = main.cc
 -kword_la_LDFLAGS = $(all_libraries) -avoid-version -module
 +kword_la_LDFLAGS = $(all_libraries) -module
- kword_la_LIBADD = libkwordpart.la
+ kword_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
---- lib/kwmf/Makefile.am	2001/03/22 14:02:17	1.2
-+++ lib/kwmf/Makefile.am	2001/04/08 21:39:15
+--- koffice-1.1-beta1.orig/lib/kwmf/Makefile.am
++++ koffice-1.1-beta1/lib/kwmf/Makefile.am
 @@ -2,7 +2,7 @@
  
  INCLUDES= -I$(srcdir) $(all_includes)
@@ -233,3 +206,21 @@
  libkwmf_la_LIBADD = $(KOFFICE_LIBS)
  
  ####### Files
+--- koffice-1.1-beta1.orig/admin/Makefile.common
++++ koffice-1.1-beta1/admin/Makefile.common
+@@ -91,6 +91,7 @@
+ 	    rm -rf "$$pwd/$$i"; \
+ 	    continue; \
+ 	  fi ;\
++	  if test ! "$$i" == debian; then \
+ 	  cd $$pwd/$$i ;\
+ 	  for f in * .*; do \
+ 	    if test ! -d "$$f"; then \
+@@ -102,6 +103,7 @@
+ 	      fi; \
+ 	    fi ; \
+ 	  done; \
++	  fi; \
+ 	done
+ 
+ 

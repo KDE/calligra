@@ -1,6 +1,6 @@
 usr/bin/kchart
 usr/lib/kchart.*
-usr/lib/libkchartpart.*
+usr/lib/kde2/libkchartpart.*
 usr/share/applnk/Office/kchart.desktop
 usr/share/apps/kchart/*
 usr/share/mimelnk/application/x-kchart.desktop

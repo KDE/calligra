@@ -1,7 +1,7 @@
 usr/bin/kpresenter
 usr/bin/kprconverter.pl
 usr/lib/kpresenter.*
-usr/lib/libkpresenterpart.*
+usr/lib/kde2/libkpresenterpart.*
 usr/share/applnk/Office/kpresenter.desktop
 usr/share/apps/kpresenter/*
 usr/share/mimelnk/application/x-kpresenter.desktop

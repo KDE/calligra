@@ -1,6 +1,6 @@
 usr/bin/krayon
 usr/lib/krayon.*
-usr/lib/libkrayonpart.*
+usr/lib/kde2/libkrayonpart.*
 usr/lib/libkisp_example.*
 usr/share/applnk/Office/krayon.desktop
 usr/share/apps/krayon/*

@@ -1,6 +1,6 @@
 usr/bin/kivio
 usr/lib/kivio.*
-usr/lib/libkiviopart.*
+usr/lib/kde2/libkiviopart.*
 usr/lib/libkivioconnectortool.*
 usr/lib/libkivioselecttool.*
 usr/lib/libkiviotexttool.*
