@@ -2144,14 +2144,14 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->cursor()->parag()->prev())
                 {
                     KWTableFrameSet* tableFrame=tableFrameSet();
-                    int row=cell->m_row;
-                    int col=cell->m_col-1;
+                    int row=cell->m_row-1;
+                    int col=cell->m_col;
                     do {
-                        if(col < 0) {
-                            col=tableFrame->getCols()-1;
-                            row--;
-                        }
                         if(row < 0) {
+                            col--;
+                            row=tableFrame->getRows()-1;
+                        }
+                        if(col < 0) {
                             col=tableFrame->getCols()-1;
                             row=tableFrame->getRows()-1;
                         }
@@ -2161,6 +2161,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                             fs=0;
                         }
                     } while(fs==0);
+
                 }
             }
             break;
@@ -2169,14 +2170,14 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->cursor()->parag()->next())
                 {
                     KWTableFrameSet* tableFrame=tableFrameSet();
-                    unsigned int row=cell->m_row;
-                    unsigned int col=cell->m_col+cell->m_cols;
+                    unsigned int row=cell->m_row+cell->m_rows;
+                    unsigned int col=cell->m_col;
                     do {
-                        if(col >= tableFrame->getCols()) {
-                            col=0;
-                            row++;
-                        }
                         if(row >= tableFrame->getRows()) {
+                            row=0;
+                            col++;
+                        }
+                        if(col >= tableFrame->getCols()) {
                             col=0;
                             row=0;
                         }
@@ -2186,6 +2187,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                             fs=0;
                         }
                     } while(fs==0);
+
                 }
             }
             break;
