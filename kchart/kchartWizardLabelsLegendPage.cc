@@ -217,7 +217,7 @@ void KChartWizardLabelsLegendPage::changeYLabelFont()
 
 }
 
-void KChartWizardLabelsLegendPage::changeYLabel2Font()
+void KChartWizardLabelsLegendPage::changeY2LabelFont()
 {
     if (KFontDialog::getFont( ylabel2, false, this ) == QDialog::Rejected )
         return;

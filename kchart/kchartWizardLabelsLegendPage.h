@@ -23,7 +23,7 @@ public slots:
   void apply();
   void changeXLabelFont();
   void changeYLabelFont();
-  void changeYLabel2Font();
+  void changeY2LabelFont();
   void changeTitleFont();
   void changeLegendTitleFont();
   void changeLegendTextFont();
