@@ -1352,8 +1352,10 @@ void KWView::addVariableActions( int type, const QStringList & texts,
             VariableDef v;
             v.type = type;
             v.subtype = i;
+            QCString actionName;
+            actionName.sprintf( "var-action-%d-%d", type, i );
             KAction * act = new KAction( (*it), 0, this, SLOT( insertVariable() ),
-                                         actionCollection(), "var-action" );
+                                         actionCollection(), actionName );
             m_variableDefMap.insert( act, v );
             parentMenu->insert( act );
         }
