@@ -2336,480 +2336,400 @@ void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
 
 void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
 {
-    QRect r( m_rctSelection );
-    if ( m_rctSelection.left()==0 )
-        r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-    QPen pen( _color,1,SolidLine);
+  QRect r( m_rctSelection );
+  if ( m_rctSelection.left()==0 )
+  {
+    KSpreadCell *cell = cellAt(_marker.x(), _marker.y());
 
-        // Complete rows selected ?
-    if ( isRowSelected() )
-    {
+    r.setCoords( _marker.x(), _marker.y(), _marker.x() + cell->extraXCells(),
+                 _marker.y() + cell->extraYCells() );
+  }
+
+  QPen pen( _color,1,SolidLine);
+
+  // Complete rows selected ?
+  if ( isRowSelected() )
+  {
     if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-            QString title=i18n("Change border");
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r, title );
-            m_pDoc->undoBuffer()->appendUndo( undo );
-        }
+    {
+      QString title=i18n("Change border");
+      KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r, title );
+      m_pDoc->undoBuffer()->appendUndo( undo );
+    }
 
-      KSpreadCell* c = m_cells.firstCell();
-      for( ;c; c = c->nextCell() )
+    KSpreadCell* c = m_cells.firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+      int row = c->row();
+      if ( m_rctSelection.bottom() == row )
       {
-        int row = c->row();
-        if ( m_rctSelection.bottom() == row &&!c->isObscuringForced())
-        {
-          c->clearProperty( KSpreadCell::PBottomBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
-        }
+        c->clearProperty( KSpreadCell::PBottomBorder );
+        c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
       }
-
-      RowLayout *rw=nonDefaultRowLayout(m_rctSelection.bottom());
-      rw->setBottomBorderPen(pen);
-
-      emit sig_updateView( this );
-      return;
     }
-    // Complete columns selected ?
-    else if ( isColumnSelected() )
-    {
-      //nothing
-      return;
-    }
-    else
-    {
+
+    RowLayout *rw=nonDefaultRowLayout(m_rctSelection.bottom());
+    rw->setBottomBorderPen(pen);
+
+    emit sig_updateView( this );
+    return;
+  }
+  // Complete columns selected ?
+  else if ( isColumnSelected() )
+  {
+    //nothing
+    return;
+  }
+  else
+  {
     if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-            QString title=i18n("Change border");
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
-            m_pDoc->undoBuffer()->appendUndo( undo );
-        }
+    {
+      QString title=i18n("Change border");
+      KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+      m_pDoc->undoBuffer()->appendUndo( undo );
+    }
 
     for ( int x = r.left(); x <= r.right(); x++ )
-        {
-        int y = r.bottom();
-        KSpreadCell *cell = nonDefaultCell( x, y );
-        if(!cell->isObscuringForced())
-                cell->setBottomBorderPen(pen);
-        }
-    emit sig_updateView( this, r );
+    {
+      int y = r.bottom();
+      KSpreadCell *cell = nonDefaultCell( x, y );
+      cell->setBottomBorderPen(pen);
     }
+    emit sig_updateView( this, r );
+  }
 }
 
 void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
 {
-    QRect r( m_rctSelection );
-    if ( m_rctSelection.left() == 0 )
-        r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+  QRect r( m_rctSelection );
+  if ( m_rctSelection.left()==0 )
+  {
+    KSpreadCell *cell = cellAt(_marker.x(), _marker.y());
+
+    r.setCoords( _marker.x(), _marker.y(), _marker.x() + cell->extraXCells(),
+                 _marker.y() + cell->extraYCells() );
+  }
 
 
-    QPen pen( _color,1,SolidLine);
-    // Complete rows selected ?
-    if ( isRowSelected() )
+  QPen pen( _color,1,SolidLine);
+  // Complete rows selected ?
+  if ( isRowSelected() )
+  {
+    //nothing
+    return;
+  }
+  // Complete columns selected ?
+  else if ( isColumnSelected() )
+  {
+
+    if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-      //nothing
-      return;
+      QString title=i18n("Change border");
+      KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this,
+                                                               r,title );
+      m_pDoc->undoBuffer()->appendUndo( undo );
     }
-    // Complete columns selected ?
-    else if ( isColumnSelected() )
+    KSpreadCell* c = m_cells.firstCell();
+    for( ;c; c = c->nextCell() )
     {
+      int col = c->column();
+      if ( m_rctSelection.right() == col &&!c->isObscuringForced())
+      {
+        c->clearProperty( KSpreadCell::PRightBorder );
+        c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
+      }
+    }
 
     RowLayout* rw =m_rows.first();
-      for( ; rw; rw = rw->next() )
-        {
-        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PRightBorder)))
-                {
-                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
-                        {
-                        KSpreadCell *cell = cellAt( i,  rw->row());
-                        if ( cell == m_pDefaultCell )
-                                {
-                                cell = new KSpreadCell( this, i,  rw->row() );
-				insertCell( cell );
-                                }
-                        }
-                }
-        }
-
-    if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-        QString title=i18n("Change border");
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
-        m_pDoc->undoBuffer()->appendUndo( undo );
-        }
-
-      KSpreadCell* c = m_cells.firstCell();
-      for( ;c; c = c->nextCell() )
+/*    for( ; rw; rw = rw->next() )
+    {
+      if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PRightBorder)))
       {
-        int col = c->column();
-        if ( m_rctSelection.right() == col &&!c->isObscuringForced())
+        for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
-          c->clearProperty( KSpreadCell::PRightBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
+          KSpreadCell *cell = nonDefaultCell( i,  rw->row(), true);
         }
       }
-
-      ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.right());
-      cl->setRightBorderPen(pen);
-
-      rw =m_rows.first();
-      for( ; rw; rw = rw->next() )
-        {
-        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PRightBorder)))
-                {
-                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
-                        {
-                        KSpreadCell *cell = cellAt( i,  rw->row());
-                        if ( cell == m_pDefaultCell )
-                                {
-                                cell = new KSpreadCell( this, i,  rw->row() );
-				insertCell( cell );
-                                }
-                        cell->setRightBorderPen(pen);
-                        }
-                }
-        }
-
-      emit sig_updateView( this );
-      return;
     }
-    else
+*/
+    ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.right());
+    cl->setRightBorderPen(pen);
+
+    rw =m_rows.first();
+    for( ; rw; rw = rw->next() )
     {
-    if ( !m_pDoc->undoBuffer()->isLocked() )
+      if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PRightBorder)))
+      {
+        for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
-        QString title=i18n("Change border");
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
-        m_pDoc->undoBuffer()->appendUndo( undo );
+          KSpreadCell *cell = nonDefaultCell( i,  rw->row(), true);
+          cell->setRightBorderPen(pen);
         }
+      }
+    }
+
+    emit sig_updateView( this );
+    return;
+  }
+  else
+  {
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+      QString title=i18n("Change border");
+      KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+      m_pDoc->undoBuffer()->appendUndo( undo );
+    }
 
     for ( int y = r.top(); y <= r.bottom(); y++ )
-        {
-        int x = r.right();
-        KSpreadCell *cell = nonDefaultCell( x, y );
-        if(!cell->isObscuringForced())
-                cell->setRightBorderPen(pen);
-        }
-    emit sig_updateView( this, r );
+    {
+      int x = r.right();
+      KSpreadCell *cell = nonDefaultCell( x, y );
+      cell->setRightBorderPen(pen);
     }
+    emit sig_updateView( this, r );
+  }
 }
 
 void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
 {
-    QString title=i18n("Change border");
-    QRect r( m_rctSelection );
-    if ( m_rctSelection.left()==0 )
-        r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+  QString title=i18n("Change border");
+  QRect r( m_rctSelection );
+  if ( m_rctSelection.left()==0 )
+  {
+    KSpreadCell *cell = cellAt(_marker.x(), _marker.y());
+
+    r.setCoords( _marker.x(), _marker.y(), _marker.x() + cell->extraXCells(),
+                 _marker.y() + cell->extraYCells() );
+  }
 
 
-    QPen pen( _color,1,SolidLine);
-    // Complete rows selected ?
-    if ( isRowSelected() )
-    {
-    QRect rect;
-    rect.setCoords(r.left(),r.top(),1,r.bottom());
-    if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, rect,title );
-        m_pDoc->undoBuffer()->appendUndo( undo );
-        }
+  QPen pen( _color,1,SolidLine);
 
-    for ( int y = r.top(); y <= r.bottom(); y++ )
-        {
-        int x = r.left();
-        KSpreadCell *cell = nonDefaultCell( x, y );
-        if(!cell->isObscuringForced())
-                cell->setLeftBorderPen(pen);
-        }
-    emit sig_updateView( this, rect );
-    return;
-    }
-    // Complete columns selected ?
-    else if ( isColumnSelected() )
-    {
+  // Complete columns selected ?
+  if ( isColumnSelected() )
+  {
     RowLayout* rw =m_rows.first();
-    for( ; rw; rw = rw->next() )
-        {
-        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PLeftBorder)))
-                {
-                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
-                        {
-                        KSpreadCell *cell = cellAt( i,  rw->row());
-                        if ( cell == m_pDefaultCell )
-                                {
-                                cell = new KSpreadCell( this, i,  rw->row() );
-				insertCell( cell );
-                                }
-                        }
-                }
-        }
-
-    if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r, title );
-        m_pDoc->undoBuffer()->appendUndo( undo );
-        }
-
-      KSpreadCell* c = m_cells.firstCell();
-      for( ;c; c = c->nextCell() )
+/*    for( ; rw; rw = rw->next() )
+    {
+      if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PLeftBorder)))
       {
-        int col = c->column();
-        if ( col==m_rctSelection.left() &&!c->isObscuringForced())
+        for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
-          c->clearProperty( KSpreadCell::PLeftBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
+          KSpreadCell *cell = nonDefaultCell( i,  rw->row(), true);
         }
       }
-      ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.left());
-      cl->setLeftBorderPen(pen);
-
-      rw =m_rows.first();
-      for( ; rw; rw = rw->next() )
-        {
-        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PLeftBorder)))
-                {
-                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
-                        {
-                        KSpreadCell *cell = cellAt( i,  rw->row());
-                        if ( cell == m_pDefaultCell )
-                                {
-				cell = new KSpreadCell( this, i,  rw->row() );
-				insertCell( cell );
-                                }
-                        cell->setLeftBorderPen(pen);
-                        }
-                }
-        }
-
-      emit sig_updateView( this );
-      return;
     }
-    else
-    {
+*/
     if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+      KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this,
+                                                               r, title );
+      m_pDoc->undoBuffer()->appendUndo( undo );
+    }
+
+    KSpreadCell* c = m_cells.firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+      int col = c->column();
+      if ( col==m_rctSelection.left() )
+      {
+        c->clearProperty( KSpreadCell::PLeftBorder );
+        c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
+      }
+    }
+    ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.left());
+    cl->setLeftBorderPen(pen);
+
+    rw =m_rows.first();
+    for( ; rw; rw = rw->next() )
+    {
+      if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PLeftBorder)))
+      {
+        for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
-        m_pDoc->undoBuffer()->appendUndo( undo );
+          KSpreadCell *cell = nonDefaultCell( i,  rw->row(), true);
+          cell->setLeftBorderPen(pen);
         }
+      }
+    }
+
+    emit sig_updateView( this );
+    return;
+  }
+  else
+  {
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+      KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this,
+                                                               r,title );
+      m_pDoc->undoBuffer()->appendUndo( undo );
+    }
 
     for ( int y = r.top(); y <= r.bottom(); y++ )
-        {
-        int x = r.left();
-        KSpreadCell *cell = nonDefaultCell( x, y );
-        if(!cell->isObscuringForced())
-                cell->setLeftBorderPen(pen);
-        }
-    emit sig_updateView( this, r );
+    {
+      int x = r.left();
+      KSpreadCell *cell = nonDefaultCell( x, y, true );
+      cell->setLeftBorderPen(pen);
     }
+    emit sig_updateView( this, r );
+  }
 }
 
 void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
 {
-    QRect r( m_rctSelection );
-    if ( m_rctSelection.left()==0 )
-        r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-    QString title=i18n("Change border");
-    QPen pen( _color,1,SolidLine);
-    // Complete rows selected ?
-    if ( isRowSelected() )
-    {
-    if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
-            m_pDoc->undoBuffer()->appendUndo( undo );
-        }
+  /* duplicate code in kspread_dlg_layout.cc  That needs fixed at some point
+   */
+  QRect r( m_rctSelection );
+  if ( m_rctSelection.left()==0 )
+  {
+    KSpreadCell *cell = cellAt(_marker.x(), _marker.y());
 
-      KSpreadCell* c = m_cells.firstCell();
-      for( ;c; c = c->nextCell() )
+    r.setCoords( _marker.x(), _marker.y(), _marker.x() + cell->extraXCells(),
+                 _marker.y() + cell->extraYCells() );
+  }
+
+  QString title=i18n("Change border");
+  QPen pen( _color,1,SolidLine);
+  // Complete rows selected ?
+  if ( isRowSelected() )
+  {
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+      KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+      m_pDoc->undoBuffer()->appendUndo( undo );
+    }
+
+    KSpreadCell* c = m_cells.firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+      int row = c->row();
+      if ( m_rctSelection.top() == row )
       {
-        int row = c->row();
-        if ( m_rctSelection.top() == row &&!c->isObscuringForced())
-        {
-          c->clearProperty( KSpreadCell::PTopBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
-        }
+        c->clearProperty( KSpreadCell::PTopBorder );
+        c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
       }
-
-      RowLayout *rw=nonDefaultRowLayout(m_rctSelection.top());
-      rw->setTopBorderPen(pen);
-
-      emit sig_updateView( this );
-      return;
     }
-    // Complete columns selected ?
-    else if ( isColumnSelected() )
-    {
-    QRect rect;
-    rect.setCoords(r.left(),r.top(),r.right(),1);
 
-    if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, rect,title );
-            m_pDoc->undoBuffer()->appendUndo( undo );
-        }
+    RowLayout *rw=nonDefaultRowLayout(m_rctSelection.top());
+    rw->setTopBorderPen(pen);
 
-    for ( int x = r.left(); x <= r.right(); x++ )
-        {
-        int y = r.top();
-        KSpreadCell *cell = nonDefaultCell( x, y );
-        if(!cell->isObscuringForced())
-                cell->setTopBorderPen(pen);
-        }
-    emit sig_updateView( this,rect );
+    emit sig_updateView( this );
     return;
-    }
-    else
-    {
+  }
+  // Complete columns selected ? -- the top will just be row 1, then
+  // so it's the same as in no rows/columns selected
+  else
+  {
     if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
-            m_pDoc->undoBuffer()->appendUndo( undo );
-        }
+    {
+      KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+      m_pDoc->undoBuffer()->appendUndo( undo );
+    }
 
     for ( int x = r.left(); x <= r.right(); x++ )
-        {
-        int y = r.top();
-        KSpreadCell *cell = nonDefaultCell( x, y );
-        if(!cell->isObscuringForced())
-                cell->setTopBorderPen(pen);
-        }
+    {
+      int y = r.top();
+      KSpreadCell *cell = nonDefaultCell( x, y, true );
+      cell->setTopBorderPen(pen);
+    }
     emit sig_updateView( this, r );
     }
 }
 
 void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
 {
-    QRect r( m_rctSelection );
-    if ( m_rctSelection.left()==0 )
-        r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+  QRect r( m_rctSelection );
+  if ( m_rctSelection.left()==0 )
+  {
+    KSpreadCell *cell = cellAt(_marker.x(), _marker.y());
 
-    if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-        QString title=i18n("Change border");
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
-        m_pDoc->undoBuffer()->appendUndo( undo );
-        }
-    QPen pen( _color,1,SolidLine);
-    // Complete rows selected ?
-    if ( isRowSelected() )
+    r.setCoords( _marker.x(), _marker.y(), _marker.x() + cell->extraXCells(),
+                 _marker.y() + cell->extraYCells() );
+  }
+  if ( !m_pDoc->undoBuffer()->isLocked() )
+  {
+    QString title=i18n("Change border");
+    KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this,
+                                                             r,title );
+    m_pDoc->undoBuffer()->appendUndo( undo );
+  }
+  QPen pen( _color,1,SolidLine);
+  // Complete rows selected ?
+  if ( isRowSelected() )
+  {
+    KSpreadCell* c = m_cells.firstCell();
+    for( ;c; c = c->nextCell() )
     {
-      KSpreadCell* c = m_cells.firstCell();
-      for( ;c; c = c->nextCell() )
+      int row = c->row();
+      if ( m_rctSelection.top() == row )
       {
-        int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
-        &&!c->isObscuringForced())
-        {
-          c->clearProperty( KSpreadCell::PTopBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
-          c->clearProperty( KSpreadCell::PRightBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
-          c->clearProperty( KSpreadCell::PLeftBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
-          c->clearProperty( KSpreadCell::PBottomBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
-        }
+        c->clearProperty( KSpreadCell::PTopBorder );
+        c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
       }
-
-      RowLayout *rw=nonDefaultRowLayout(m_rctSelection.top());
-      rw->setTopBorderPen(pen);
-      rw=nonDefaultRowLayout(m_rctSelection.bottom());
-      rw->setBottomBorderPen(pen);
-      for ( int y = r.top(); y <= r.bottom(); y++ )
+      else if ( m_rctSelection.bottom() == row)
       {
-        int x = r.left();
-        KSpreadCell *cell = nonDefaultCell( x, y );
-        if(!cell->isObscuringForced())
-                cell->setLeftBorderPen(pen);
+        c->clearProperty( KSpreadCell::PBottomBorder );
+        c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
       }
-      emit sig_updateView( this );
-      return;
     }
-    // Complete columns selected ?
-    else if ( isColumnSelected() )
-    {
-      KSpreadCell* c = m_cells.firstCell();
-      for( ;c; c = c->nextCell() )
-      {
-        int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
-        &&!c->isObscuringForced())
-        {
-          c->clearProperty( KSpreadCell::PTopBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
-          c->clearProperty( KSpreadCell::PRightBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
-          c->clearProperty( KSpreadCell::PLeftBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
-          c->clearProperty( KSpreadCell::PBottomBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
-        }
-      }
 
-      ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.left());
-      cl->setLeftBorderPen(pen);
-      cl=nonDefaultColumnLayout(m_rctSelection.right());
-      cl->setRightBorderPen(pen);
-      for ( int x = r.left(); x <= r.right(); x++ )
-      {
-        int y = r.top();
-        KSpreadCell *cell = cellAt( x, y );
-        if(!cell->isObscuringForced())
-        {
-         if ( cell == m_pDefaultCell )
-         {
-            cell = new KSpreadCell( this, x, y );
-	    insertCell( cell );
-         }
-         cell->setTopBorderPen(pen);
-        }
-      }
+    RowLayout *rw=nonDefaultRowLayout(m_rctSelection.top());
+    rw->setTopBorderPen(pen);
+    rw=nonDefaultRowLayout(m_rctSelection.bottom());
+    rw->setBottomBorderPen(pen);
+    for ( int y = r.top(); y <= r.bottom(); y++ )
+    {
+      KSpreadCell *cell = nonDefaultCell( r.left(), y, true );
+      cell->setLeftBorderPen(pen);
+    }
     emit sig_updateView( this );
     return;
-    }
-    else
+  }
+  // Complete columns selected ?
+  else if ( isColumnSelected() )
+  {
+    KSpreadCell* c = m_cells.firstCell();
+    for( ;c; c = c->nextCell() )
     {
+      int row = c->row();
+      if ( m_rctSelection.left() == row )
+      {
+        c->clearProperty( KSpreadCell::PLeftBorder );
+        c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
+      }
+      else if ( m_rctSelection.right() == row)
+      {
+        c->clearProperty( KSpreadCell::PRightBorder );
+        c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
+      }
+    }
+
+    ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.left());
+    cl->setLeftBorderPen(pen);
+    cl=nonDefaultColumnLayout(m_rctSelection.right());
+    cl->setRightBorderPen(pen);
     for ( int x = r.left(); x <= r.right(); x++ )
     {
-        int y = r.top();
-        KSpreadCell *cell = cellAt( x, y );
-        if(!cell->isObscuringForced())
-        {
-         if ( cell == m_pDefaultCell )
-         {
-            cell = new KSpreadCell( this, x, y );
-	    insertCell( cell );
-         }
-         cell->setTopBorderPen(pen);
-        }
+      KSpreadCell *cell = nonDefaultCell( x, r.top(), true );
+      cell->setTopBorderPen(pen);
+    }
+    emit sig_updateView( this );
+    return;
+  }
+  else
+  {
+    for ( int x = r.left(); x <= r.right(); x++ )
+    {
+      nonDefaultCell( x, r.top(), true )->setTopBorderPen(pen);
+      nonDefaultCell( x, r.bottom(), true )->setBottomBorderPen(pen);
     }
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
-        int x = r.left();
-        KSpreadCell *cell = nonDefaultCell( x, y );
-        if(!cell->isObscuringForced())
-                cell->setLeftBorderPen(pen);
-    }
-    for ( int y = r.top(); y <= r.bottom(); y++ )
-    {
-        int x = r.right();
-        KSpreadCell *cell = nonDefaultCell( x, y );
-        if(!cell->isObscuringForced())
-                cell->setRightBorderPen(pen);
-    }
-    for ( int x = r.left(); x <= r.right(); x++ )
-    {
-        int y = r.bottom();
-        KSpreadCell *cell = cellAt( x, y );
-        if(!cell->isObscuringForced())
-        {
-        if ( cell == m_pDefaultCell )
-            {
-            cell = new KSpreadCell( this, x, y );
-	    insertCell( cell );
-            }
-        cell->setBottomBorderPen(pen);
-        }
+      nonDefaultCell( r.left(), y )->setLeftBorderPen(pen);
+      nonDefaultCell( r.right(), y )->setRightBorderPen(pen);
     }
     emit sig_updateView( this, r );
-    }
+  }
 }
 
 struct SetSelectionBorderAllWorker : public KSpreadTable::CellWorkerTypeA {
@@ -2845,9 +2765,8 @@ struct SetSelectionBorderAllWorker : public KSpreadTable::CellWorkerTypeA {
 	c->clearProperty( KSpreadCell::PRightBorder );
 	c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
     }
-    bool testCondition( KSpreadCell* cell ) {
-	return ( !cell->isObscuringForced() );
-    }
+
+    bool testCondition(KSpreadCell */*cell*/) { return true; }
     void doWork( KSpreadCell* cell, bool, int, int ) {
 	//if ( cellRegion )
 	//    cell->setDisplayDirtyFlag();
@@ -2908,9 +2827,9 @@ struct SetSelectionBorderRemoveWorker : public KSpreadTable::CellWorkerTypeA {
 	c->clearProperty( KSpreadCell::PGoUpDiagonal );
 	c->clearNoFallBackProperties( KSpreadCell::PGoUpDiagonal );
     }
-    bool testCondition( KSpreadCell* cell ) {
-	return ( !cell->isObscuringForced() );
-    }
+
+    bool testCondition(KSpreadCell* /*cell*/ ){ return true; }
+
     void doWork( KSpreadCell* cell, bool, int, int ) {
 	//if ( cellRegion )
 	//    cell->setDisplayDirtyFlag();
