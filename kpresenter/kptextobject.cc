@@ -195,6 +195,14 @@ double KPTextObject::load(const QDomElement &element)
     if(!e.isNull()) {
         if ( e.hasAttribute( "protectcontent"))
             setProtectContent((bool)e.attribute( "protectcontent" ).toInt());
+        if (e.hasAttribute( "bleftpt"))
+            bleft = e.attribute( "bleftpt").toDouble();
+        if (e.hasAttribute( "brightpt"))
+            bright = e.attribute( "brightpt").toDouble();
+        if (e.hasAttribute( "btoppt"))
+            btop = e.attribute( "btoppt").toDouble();
+        if (e.hasAttribute( "bbottompt"))
+            bbottom = e.attribute( "bbottompt").toDouble();
 #if 0
         ktextobject.document()->setLineSpacing( e.attribute( attrLineSpacing ).toInt() );
         ktextobject.document()->setParagSpacing( e.attribute( attrParagSpacing ).toInt() );
@@ -395,6 +403,15 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
     QDomElement textobj=doc.createElement(tagTEXTOBJ);
     if ( isProtectContent() )
         textobj.setAttribute( "protectcontent", (int)isProtectContent());
+    if (bleft !=0.0)
+        textobj.setAttribute( "bleftpt", bleft );
+    if (bright !=0.0)
+        textobj.setAttribute( "brightpt", bright );
+    if (btop !=0.0)
+        textobj.setAttribute( "btoppt", btop );
+    if (bbottom !=0.0)
+        textobj.setAttribute( "bbottompt", bbottom );
+
 #if 0
     textobj.setAttribute(attrLineSpacing, ktextobject.document()->lineSpacing());
     textobj.setAttribute(attrParagSpacing, ktextobject.document()->paragSpacing());

@@ -2326,6 +2326,7 @@ KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, KPTextObjec
 void KPrChangeMarginCommand::execute()
 {
     m_obj->setTextMargins( m_marginsEnd.leftMargin, m_marginsEnd.topMargin, m_marginsEnd.rightMargin, m_marginsEnd.bottomMargin);
+    m_obj->resizeTextDocument();
     m_obj->kPresenterDocument()->layout(m_obj);
     m_obj->kPresenterDocument()->repaint(m_obj);
 }
@@ -2333,6 +2334,7 @@ void KPrChangeMarginCommand::execute()
 void KPrChangeMarginCommand::unexecute()
 {
     m_obj->setTextMargins( m_marginsBegin.leftMargin, m_marginsBegin.topMargin, m_marginsBegin.rightMargin, m_marginsBegin.bottomMargin);
+    m_obj->resizeTextDocument();
     m_obj->kPresenterDocument()->layout(m_obj);
     m_obj->kPresenterDocument()->repaint(m_obj);
 }

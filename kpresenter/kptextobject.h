@@ -151,7 +151,7 @@ public:
     KoRect innerRect() const;
     double innerWidth() const;
     double innerHeight() const;
-
+    void resizeTextDocument();
 
 signals:
     void repaintChanged( KPTextObject* );
@@ -169,7 +169,6 @@ protected:
     void drawParags( QPainter *p, KoZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to );
     void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
     void invalidate();
-    void resizeTextDocument();
 protected slots:
     void slotNewCommand( KCommand *cmd );
     void slotAvailableHeightNeeded();

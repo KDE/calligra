@@ -238,6 +238,7 @@
 		lineSpacing	space between line, in pt
 		paragSpacing	space between parags, in pt
 		etc.
+                bleft, bright, btop, bbottom marge in pt
 -->
 <!ELEMENT TEXTOBJ (ENUMLISTTYPE|UNSORTEDLISTTYPE|P)*>
 <!ATTLIST TEXTOBJ
@@ -252,7 +253,11 @@
                   bulletType4 NMTOKEN #REQUIRED
                   margin NMTOKEN #REQUIRED
                   paragSpacing NMTOKEN #REQUIRED
-                  protectcontent NMTOKEN #REQUIRED>
+                  protectcontent NMTOKEN #REQUIRED
+                  bleft NMTOKEN #REQUIRED
+                  bright NMTOKEN #REQUIRED                  
+                  btop NMTOKEN #REQUIRED
+                  bbottom NMTOKEN #REQUIRED>
 
 <!ELEMENT ENUMLISTTYPE EMPTY>
 <!ATTLIST ENUMLISTTYPE
