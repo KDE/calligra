@@ -36,7 +36,7 @@ KivioStencilSpawnerSet::KivioStencilSpawnerSet(const QString& name)
       m_pSelected(NULL)
 {
     m_dir = "";
-    m_name = name.isEmpty() ? QString("Undescriptiond") : name;
+    m_name = name.isEmpty() ? QString("Untitled") : name;
 
     m_pSpawners = new QPtrList<KivioStencilSpawner>;
     m_pSpawners->setAutoDelete(true);
@@ -162,12 +162,12 @@ QString KivioStencilSpawnerSet::readTitle( const QString &dir )
   QDomElement root, nodeElement;
   QDomNode node;
   QString nodeName;
-  QString description, origTitle;
+  QString title, origTitle;
   QFile f(dir+"/desc");
 
   if( f.open( IO_ReadOnly )==false )
   {
-    kdDebug(43000) << "KivioStencilSpawnerSet::readTitle() - Error opening stencil set description: " <<
+    kdDebug(43000) << "KivioStencilSpawnerSet::readTitle() - Error opening stencil set title: " <<
         dir << "/desc" << endl;
     return dir.right(dir.length() - dir.findRev('/')-1);
   }
@@ -185,7 +185,7 @@ QString KivioStencilSpawnerSet::readTitle( const QString &dir )
     if( nodeName.compare("Title")==0 && nodeElement.hasAttribute("lang"))
     {
       if(nodeElement.attribute("lang") == KGlobal::locale()->language()) {
-        description = XmlReadString( nodeElement, "data", dir );
+        title = XmlReadString( nodeElement, "data", dir );
       }
     }
     else if( nodeName.compare("Title")==0 && !nodeElement.hasAttribute("lang"))
@@ -196,11 +196,11 @@ QString KivioStencilSpawnerSet::readTitle( const QString &dir )
     node = node.nextSibling();
   }
 
-  if(description.isEmpty()) {
-    description = i18n( "Stencils", origTitle.utf8() );
+  if(title.isEmpty()) {
+    title = i18n( "Stencils", origTitle.utf8() );
   }
   
-  return description;
+  return title;
 }
 
 QString KivioStencilSpawnerSet::readId( const QString &dir )
@@ -296,7 +296,7 @@ KivioStencilSpawner* KivioStencilSpawnerSet::find( const QString& id)
     KivioStencilSpawner *pSpawner = m_pSpawners->first();
     while( pSpawner )
     {
-        // If the description matches, this is it!
+        // If the id matches, this is it!
         if( pSpawner->info()->id() == id )
         {
             return pSpawner;
