@@ -753,7 +753,8 @@ void KWView::refreshCustomMenu()
             }
         }
     }
-    if(!lst.isEmpty())
+    bool state=!lst.isEmpty();
+    if(state)
         actionInsertCustom->popupMenu()->insertSeparator();
 
     act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(), "custom-action" );
@@ -764,6 +765,7 @@ void KWView::refreshCustomMenu()
     actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
                                         this, SLOT( editCustomVars() ),
                                         actionCollection(), "edit_customvars" );
+    actionEditCustomVars->setEnabled(state);
     actionInsertCustom->insert( actionEditCustomVars );
 }
 
