@@ -361,7 +361,7 @@ void
     pos.setX(-1);
 
     uint len = _str.length();
-    if (!len)
+    if ( !len )
 	return;
 
     uint p = 0;
@@ -376,20 +376,33 @@ void
 	columnFixed = false;
 
     // Malformed ?
-    if ( p == len || _str[p] < 'A' || _str[p] > 'Z' )
+    if ( p == len )
+    {
+	kdDebug(36001) << "KSpreadPoint::init: no point after '$' (str: '" << _str.mid( p ) << "'" << endl;
+	return;
+    }
+    if ( _str[p] < 'A' || _str[p] > 'Z' )
+    {
 	if ( _str[p] < 'a' || _str[p] > 'z' )
+	{
+	    kdDebug(36001) << "KSpreadPoint::init: wrong first character in point (str: '" << _str.mid( p ) << "'" << endl;
 	    return;
-
+	}
+    }
     //default is error
     int x = -1;
     //search for the first character != text
-    QString tmpStr=_str.mid( p, _str.length()-p );
-    int result = tmpStr.find(QRegExp("[^A-Za-z]+"));
+    int result = _str.find( QRegExp("[^A-Za-z]+"), p );
 
     //get the colomn number for the character between actual position and the first non text charakter
     if ( result != -1 )
-	x = util_decodeColumnLabelText( tmpStr.mid( 0, result ) ); // x is defined now
-    p += result;
+	x = util_decodeColumnLabelText( _str.mid( p, result - p ) ); // x is defined now
+    else  // If there isn't any, then this is not a point -> return 
+    {
+	kdDebug(36001) << "KSpreadPoint::init: no number in string (str: '" << _str.mid( p, result ) << "'" << endl;
+	return;
+    }
+    p = result;
 
     //limit is KS_colMax
     if ( x > KS_colMax )
@@ -426,8 +439,14 @@ void
 	    return;
     }
 
-    int y = atoi( _str.mid( p2, p-p2 ).latin1() );
-kdDebug(36001) << "p: " << p << "  p2: " << p2 << endl;
+    //int y = atoi( _str.mid( p2, p-p2 ).latin1() );
+    bool ok;
+    int y = _str.mid( p2, p-p2 ).toInt( &ok );
+    if ( !ok )
+    {
+	kdDebug(36001) << "KSpreadPoint::init: Invalid number (str: '" << _str.mid( p2, p-p2 ) << "'" << endl;
+	return;
+    }
     if ( y > KS_rowMax )
     {
 	kdDebug(36001) << "KSpreadPoint::init: row value too high (row: " << y << ")" << endl;
