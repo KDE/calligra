@@ -254,7 +254,7 @@ public:
   virtual void textDepthMinus();
   virtual void textSpacing();
   virtual void textContentsToHeight();
-  
+
   // color bar
   virtual void setPenColor(CORBA::Long id);
   virtual void setFillColor(CORBA::Long id);
@@ -342,6 +342,12 @@ public:
     m_vToolBarExtra->setItemEnabled(ID_TOOL_WEBPRES,true);
     m_vMenuExtra->setItemEnabled(m_idMenuExtra_WepPres,true);
   }
+
+  // create a pixmapstring from a color
+  static QString colorToPixString(QColor);
+
+  // get fonts
+  static void getFonts(QStrList &lst);
 
 public slots:
 
@@ -454,12 +460,6 @@ protected:
   void setupScrollbars();
   void setupAccelerators();
   void setupRulers();
-
-  // create a pixmapstring from a color
-  QString colorToPixString(QColor);
-
-  // get fonts
-  void getFonts();
 
   void keyPressEvent(QKeyEvent*);
 

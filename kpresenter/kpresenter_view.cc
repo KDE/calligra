@@ -1568,18 +1568,18 @@ void KPresenterView::textSpacing()
 void KPresenterView::textContentsToHeight()
 {
   KTextObject *txtObj = 0L;
-  
+
   if (page->kTxtObj())
     txtObj = page->kTxtObj();
   else if (page->haveASelectedTextObj())
     txtObj = page->haveASelectedTextObj();
-  
+
   if (txtObj)
     txtObj->extendContents2Height();
 
   if (page->haveASelectedTextObj())
     m_pKPresenterDoc->repaint(false);
-    
+
   sendFocusEvent();
 }
 
@@ -3165,7 +3165,7 @@ bool KPresenterView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
   text = Q2C( i18n("&Extend Contents to Object Height") );
   m_idMenuText_TExtentCont2Height = m_vMenuText->insertItem(text,this,"textContentsToHeight",0);
 
-  
+
   // MENU Extra
   text = Q2C( i18n("&Extra") );
   _menubar->insertMenu(text,m_vMenuExtra,-1,-1);
@@ -3660,7 +3660,7 @@ bool KPresenterView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _facto
   tbFont.setPointSize(20);
 
   // fonts combobox
-  getFonts();
+  getFonts(fontList);
   OpenPartsUI::StrList fonts;
   fonts.length(fontList.count());
   for(unsigned int i = 0;i < fontList.count(); i++)
@@ -4213,7 +4213,7 @@ QString KPresenterView::colorToPixString(QColor c)
 }
 
 /*===================== load not KDE installed fonts =============*/
-void KPresenterView::getFonts()
+void KPresenterView::getFonts(QStrList &lst)
 {
   int numFonts;
   Display *kde_display;
@@ -4223,7 +4223,7 @@ void KPresenterView::getFonts()
 
   kde_display = kapp->getDisplay();
 
-  bool have_installed = kapp->getKDEFonts(&fontList);
+  bool have_installed = kapp->getKDEFonts(&lst);
 
   if (have_installed)
     return;
@@ -4263,8 +4263,8 @@ void KPresenterView::getFonts()
     if (!qfontname.contains("open look",TRUE))
       {
 	if(qfontname != "nil"){
-	  if(fontList.find(qfontname) == -1)
-	    fontList.inSort(qfontname);
+	  if(lst.find(qfontname) == -1)
+	    lst.inSort(qfontname);
 	}
       }
 

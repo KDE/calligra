@@ -19,11 +19,17 @@
 #include <qvbox.h>
 #include <qevent.h>
 
+#include <ktoolbar.h>
+
+#include "ktextobject.h"
+
 class KPresenterDoc;
 
 class QTabWidget;
 class QCheckBox;
 class QPushButton;
+class QColor;
+class QFont;
 
 /******************************************************************/
 /* Class: KPFooterHeaderEditor                                    */
@@ -46,6 +52,11 @@ protected:
   void setupHeader();
   void setupFooter();
 
+  void resizeEvent(QResizeEvent *e) {
+    QVBox::resizeEvent(e);
+    htool2->updateRects(true);
+    ftool2->updateRects(true);
+  }
   void closeEvent(QCloseEvent *e) {
     // this dialog must not get closed!!
     if (!_allowClose) {
@@ -59,10 +70,14 @@ protected:
   QTabWidget *tabwidget;
   QCheckBox *showHeader,*showFooter;
   QPushButton *updatePage,*closeDia,*penBrush1,*penBrush2;
-
+  KToolBar *htool2,*ftool2;
+  
   KPresenterDoc *doc;
   bool _allowClose;
 
+  int h_bold,h_italic,h_underline,h_color,h_aleft,h_acenter,h_aright,h_font,h_size;
+  int f_bold,f_italic,f_underline,f_color,f_aleft,f_acenter,f_aright,f_font,f_size;
+  
 protected slots:
   void slotShowHeader();
   void slotShowFooter();
@@ -70,6 +85,34 @@ protected slots:
   void slotCloseDia();
   void slotHeaderPenBrush();
   void slotFooterPenBrush();
+
+  void headerFont(const QString &f);
+  void headerSize(const QString &s);
+  void headerBold();
+  void headerItalic();
+  void headerUnderline();
+  void headerColor();
+  void headerAlignLeft();
+  void headerAlignCenter();
+  void headerAlignRight();
+  
+  void footerFont(const QString &f);
+  void footerSize(const QString &s);
+  void footerBold();
+  void footerItalic();
+  void footerUnderline();
+  void footerColor();
+  void footerAlignLeft();
+  void footerAlignCenter();
+  void footerAlignRight();
+
+  void headerFontChanged(QFont *f);
+  void headerColorChanged(QColor *c);
+  void headerAlignChanged(TxtParagraph::HorzAlign ha);
+  
+  void footerFontChanged(QFont *f);
+  void footerColorChanged(QColor *c);
+  void footerAlignChanged(TxtParagraph::HorzAlign ha);
 
 };
 
