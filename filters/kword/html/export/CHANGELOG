@@ -1,2 +1,3 @@
 === KOffice 1.4 Alpha ===
 - fix some paragraph formattings in the enhanced mode
+- fix image generation (other pictures as exported wrongly as images)

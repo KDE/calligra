@@ -147,7 +147,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
         *m_streamOut << "<img "; // This is an empty element!
         *m_streamOut << "src=\"" << escapeHtmlText(strImageName) << "\" ";
         *m_streamOut << "alt=\"" << escapeHtmlText(anchor.picture.key.filename()) << "\"";
-        *m_streamOut << (isXML()?"/>":">") << "\n";
+        *m_streamOut << (isXML()?"/>":">");
         kdDebug(30503) << "Image written" << endl;
     }
     else
@@ -196,7 +196,7 @@ bool HtmlWorker::makeClipart(const FrameAnchor& anchor)
         *m_streamOut << "<object data=\"" << escapeHtmlText(strImageName) << "\"";
         *m_streamOut << " type=\"image/svg+xml\"";
         *m_streamOut << " height=\"" << height << "\" width=\"" << width << "\">\n";
-        *m_streamOut << "</object>\n"; // <object> is *not* an empty element in HTML!
+        *m_streamOut << "</object>"; // <object> is *not* an empty element in HTML!
         // TODO: other props for image
 
         kdDebug(30506) << "Trying to save clipart to " << strImageName << endl;
