@@ -132,8 +132,7 @@ bool WMLConverter::doOpenCard( QString id, QString title )
 bool WMLConverter::doCloseCard()
 {
   // add extra paragraph between cards
-  doParagraph( " ", WMLFormatList(), WMLLayout() );
-  return TRUE;
+  return doParagraph( " ", WMLFormatList(), WMLLayout() );
 }
 
 bool WMLConverter::doParagraph( QString atext, WMLFormatList formatList,
@@ -154,7 +153,7 @@ bool WMLConverter::doParagraph( QString atext, WMLFormatList formatList,
     WMLFormat& format = *it;
     formats.append( WMLFormatAsXML(format) );
   }
-  
+
   // assemble
   root.append( "<PARAGRAPH>\n" );
   root.append( "<TEXT>" + text + "</TEXT>\n" );
@@ -225,29 +224,27 @@ KoFilter::ConversionStatus WMLImport::convert( const QCString& from, const QCStr
   QString root = filter.root;
 
   // prepare storage
-  KoStore out=KoStore( QString(m_chain->outputFile()), KoStore::Write );
+  KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
 
   // store output document
-  if( out.open( "root" ) )
+  if( out )
     {
       QCString cstring = root.utf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-
-      out.write( (const char*) cstring, cstring.length() );
-      out.close();
+      out->writeBlock( (const char*) cstring, cstring.length() );
     }
 
 
   QString documentInfo = filter.documentInfo;
 
   // store document info
-  if( out.open( "documentinfo.xml" ) )
+  out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
+  if ( out )
     {
        QCString cstring = documentInfo.utf8();
        cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
 
-       out.write( (const char*) cstring, cstring.length() );
-       out.close();
+       out->writeBlock( (const char*) cstring, cstring.length() );
      }
 
   return KoFilter::OK;
