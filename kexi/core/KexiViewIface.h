@@ -26,7 +26,13 @@
 
 class KexiView;
 
-class KEXICORE_EXPORT KexiViewIface : public KoViewIface
+#ifdef Q_WS_WIN //(js) DIRTY? - it is temporary, to fix dcopidl problems
+# define class class KEXICORE_EXPORT
+#endif
+class KexiViewIface : public KoViewIface
+#ifdef Q_WS_WIN //(js) temporary
+# undef class
+#endif
 {
     K_DCOP
 public:
