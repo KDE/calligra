@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klistview.h>
+#include <kstandarddirs.h>
 
 #include <qlayout.h>
 #include <qwhatsthis.h>
@@ -40,6 +41,7 @@
 #include <kconfig.h>
 #include <klineeditdlg.h>
 #include <qcombobox.h>
+#include <qdir.h>
 
 KoAutoFormatLineEdit::KoAutoFormatLineEdit ( QWidget * parent, const char * name )
     : QLineEdit(parent,name)
@@ -476,6 +478,23 @@ void KoAutoFormatDia::setupTab3()
 
     QStringList lst;
     lst<<i18n("Default");
+    KStandardDirs *standard = new KStandardDirs();
+    QStringList tmp = standard->findDirs("data", "koffice/autocorrect/");
+    QString path = *(tmp.end());
+    for ( QStringList::Iterator it = tmp.begin(); it != tmp.end(); ++it )
+    {
+        path =*it;
+    }
+    kdDebug()<<" path :"<<path<<endl;
+    delete standard;
+    QDir dir( path);
+    tmp =dir.entryList (QDir::Files);
+    for ( QStringList::Iterator it = tmp.begin(); it != tmp.end(); ++it )
+    {
+        if ( !(*it).contains("autocorrect"))
+            lst<<(*it).left((*it).length()-4);
+    }
+    autoFormatLanguage->insertStringList(lst);
 
     grid->addMultiCellWidget( autoFormatLanguage, 0, 0, 4, 6 );
     QLabel *lblAutoFormatLanguage = new QLabel( i18n("Remplacement and exeption for language"), tab3);
