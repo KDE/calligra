@@ -3644,8 +3644,8 @@ void KSpreadView::addModifyComment()
   if ( !m_pTable )
     return;
 
-  KSpreadComment dlg( this, "comment", 
-                      QPoint( m_pCanvas->markerColumn(), 
+  KSpreadComment dlg( this, "comment",
+                      QPoint( m_pCanvas->markerColumn(),
                               m_pCanvas->markerRow() ) );
   if( dlg.exec() )
     updateEditWidget();
@@ -4969,6 +4969,8 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
 
     m_resizeRow->setEnabled( !colSelected );
     m_equalizeRow->setEnabled( !colSelected );
+    m_validity->setEnabled( !colSelected && !rowSelected);
+    m_conditional->setEnabled( !colSelected && !rowSelected);
 
     m_resizeColumn->setEnabled( !rowSelected );
     m_equalizeColumn->setEnabled( !rowSelected );
