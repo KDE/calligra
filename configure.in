@@ -156,7 +156,7 @@ AC_OUTPUT( \
 	kimage/Makefile \
 	kimage/pics/Makefile \
 	kimageshop/Makefile \
-	kimageshop/ktl \
+	kimageshop/ktl/Makefile \
 	kimageshop/widgets/Makefile \
 	kimageshop/dialogs/Makefile \
 	kimageshop/tools/Makefile \
