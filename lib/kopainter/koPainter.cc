@@ -224,10 +224,10 @@ void KoPainter::drawVPath(ArtVpath *vec)
   gradient.b = b;
   gradient.c = c;
   gradient.spread = spread;
-  
+
   gradient.n_stops = sizeof(stops) / sizeof(stops[0]);
   gradient.stops = stops;
-  
+
   render = art_render_new(0, 0,
 			   mWidth, mHeight,
 			   mBuffer->bits(), mWidth * 4,
