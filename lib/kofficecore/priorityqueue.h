@@ -118,6 +118,8 @@ public:
             out+=QString::number(m_vector[i]->key());
             out+=", ";
         }
+        if(out.isEmpty())
+            out="(empty)";
         kdDebug() << out << endl;
         kdDebug() << "++++++++++ PriorityQueue::dump (done) ++++++++++" << endl;
     }
