@@ -426,3 +426,4 @@ Reggie, 27.8.1999:
 ------------------
 - Improved DnD
 - Removed lots of unused code in the KTextObject
+- Fix in extending contents to height

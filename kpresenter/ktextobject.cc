@@ -5600,6 +5600,9 @@ void KTextObject::setAllDistAfter( int d )
 /*================================================================*/
 void KTextObject::extendContents2Height()
 {
+    if ( height() <= neededSize().height() )
+	return;
+    
     _modified = true;
 
     if ( paragraphList.count() == 1 ) {
