@@ -24,16 +24,20 @@
 
 #include "propertyeditor.h"
 
+class QStringList;
+
 class PropertyEditorItem : public KListViewItem
 {
 	public:
-		PropertyEditorItem(KListView *parent, QString name, QVariant::Type type, QVariant value, QObject *o);
-		PropertyEditorItem(PropertyEditorItem *parent, QString name, QVariant value);
+		PropertyEditorItem(KListView *parent, const QString& name, QVariant::Type type, QVariant value, QObject *o = 0L);
+		PropertyEditorItem(PropertyEditorItem *parent, const QString& name, QVariant value);
+		PropertyEditorItem(KListView *parent, const QString& name, QVariant::Type type, QVariant value, QStringList l);
 		~PropertyEditorItem();
 
 		const QString	name() { return m_name; }
 		QVariant::Type	type() { return m_type; }
 		QVariant	value() { return m_value; }
+		QStringList	list() { return m_list; }
 
 		void		setValue(QVariant value, bool sync=false);
 
@@ -47,6 +51,7 @@ class PropertyEditorItem : public KListViewItem
 		QVariant::Type	m_type;
 		QVariant	m_value;
 		QObject		*m_object;
+		QStringList m_list;
 };
 
 #endif

@@ -27,16 +27,20 @@
 #include "propertyeditoreditor.h"
 
 class QComboBox;
+class QStringList;
 
 class PropertyEditorList : public PropertyEditorEditor
 {
 	Q_OBJECT
 
 	public:
-		PropertyEditorList(QWidget *parent, QVariant::Type type, QVariant vlaue, const char *name=0);
+		PropertyEditorList(QWidget *parent, QVariant::Type type, QVariant value, const char *name=0);
+		PropertyEditorList(QWidget *parent, QVariant::Type type, QVariant value, QStringList list, const char *name=0);
 		~PropertyEditorList() {;}
 
 		virtual QVariant	getValue();
+		
+		void setList(QStringList l);
 
 	protected:
 		QComboBox		*m_combo;
@@ -47,7 +51,7 @@ class PropertyEditorBool : public PropertyEditorList
 	Q_OBJECT
 
 	public:
-		PropertyEditorBool(QWidget *parent, QVariant::Type type, QVariant vlaue, const char *name=0);
+		PropertyEditorBool(QWidget *parent, QVariant::Type type, QVariant value, const char *name=0);
 		~PropertyEditorBool() {;}
 
 		virtual QVariant	getValue();

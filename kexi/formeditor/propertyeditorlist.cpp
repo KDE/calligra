@@ -19,10 +19,12 @@
 
 #include <qcombobox.h>
 
+#include <klocale.h>
+
 #include "propertyeditorlist.h"
 
-PropertyEditorList::PropertyEditorList(QWidget *parent, QVariant::Type type, QVariant vlaue, const char *name=0)
- : PropertyEditorEditor(parent, type, QVariant(""), name)
+PropertyEditorList::PropertyEditorList(QWidget *parent, QVariant::Type type, QVariant value, const char *name)
+ : PropertyEditorEditor(parent, type, value, name)
 {
 	m_combo = new QComboBox(this);
 	
@@ -32,10 +34,29 @@ PropertyEditorList::PropertyEditorList(QWidget *parent, QVariant::Type type, QVa
 	setWidget(m_combo);
 }
 
+PropertyEditorList::PropertyEditorList(QWidget *parent, QVariant::Type type, QVariant value, QStringList list, const char *name)
+ : PropertyEditorEditor(parent, type, value, name)
+{
+	m_combo = new QComboBox(this);
+	
+	m_combo->setGeometry(frameGeometry());
+	m_combo->insertStringList(list);
+	m_combo->setCurrentItem(value.toInt());
+	m_combo->show();
+
+	setWidget(m_combo);
+}
+
 QVariant
 PropertyEditorList::getValue()
 {
-	return QVariant(false);
+	return QVariant(m_combo->currentItem());
+}
+
+void
+PropertyEditorList::setList(QStringList l)
+{
+	m_combo->insertStringList(l);
 }
 
 /*********************
@@ -45,8 +66,8 @@ PropertyEditorList::getValue()
 PropertyEditorBool::PropertyEditorBool(QWidget *parent, QVariant::Type type, QVariant value, const char *name=0)
  : PropertyEditorList(parent, type, value, name)
 {
-	m_combo->insertItem("true");
-	m_combo->insertItem("false");
+	m_combo->insertItem(i18n("true"));
+	m_combo->insertItem(i18n("false"));
 
 	if(value.toBool())
 		m_combo->setCurrentItem(0);

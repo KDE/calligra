@@ -20,18 +20,22 @@
 #include <qsize.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qstringlist.h>
+
+#include <klocale.h>
 
 #include "propertyeditoritem.h"
 
-PropertyEditorItem::PropertyEditorItem(KListView *parent, QString name, QVariant::Type type, QVariant value, QObject *object)
+PropertyEditorItem::PropertyEditorItem(KListView *parent, const QString& name, QVariant::Type type, QVariant value, QObject *object)
  : KListViewItem(parent, name, format(value))
 {
 	m_name = name;
 	m_type = type;
 	m_value = value;
 	m_object = object;
+	m_list.clear();
 
-	switch(value.type())
+	switch(m_type)
 	{
 		case QVariant::Size:
 		{
@@ -53,20 +57,42 @@ PropertyEditorItem::PropertyEditorItem(KListView *parent, QString name, QVariant
 	}
 }
 
-PropertyEditorItem::PropertyEditorItem(PropertyEditorItem *parent, QString name, QVariant value)
+PropertyEditorItem::PropertyEditorItem(PropertyEditorItem *parent, const QString& name, QVariant value)
  : KListViewItem(parent, name, format(value))
 {
 	m_name = name;
 	m_value = value;
+	m_type = value.type();
+}
+
+PropertyEditorItem::PropertyEditorItem(KListView *parent, const QString& name, QVariant::Type type, QVariant value, QStringList l)
+ : KListViewItem(parent, name, format(value))
+{
+	m_name = name;
+	m_type = type;
+	m_value = value;
+	m_object = 0;
+	m_list = l;
+	setValue(value, false);
 }
 
 void
 PropertyEditorItem::setValue(QVariant value, bool sync)
 {
-	setText(1, value.toString());
+	if(m_type == QVariant::StringList)
+	{
+		setText(1, m_list[value.toInt()]);
+	}
+	else
+	{
+		setText(1, format(value));
+	}
+	m_value = value;
 
-	if(sync)
+	if(sync && m_object)
+	{
 		m_object->setProperty(m_name.latin1(), value);
+	}
 }
 
 
@@ -125,7 +151,15 @@ PropertyEditorItem::format(const QVariant &v)
 
 			return QString("[" + x + "," + y + "," + w + "," + h + "]");
 		}
-
+		case QVariant::Bool:
+		{
+			if(v.toBool())
+			{
+				return i18n("true");
+			}
+			
+			return i18n("false");
+		}
 		default:
 		{
 			return v.toString();

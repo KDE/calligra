@@ -87,7 +87,7 @@ PropertyEditor::slotClicked(QListViewItem *item)
 void
 PropertyEditor::createEditor(PropertyEditorItem *i, const QRect &geometry)
 {
-	kdDebug() << "PropertyEditor::createEditor()" << endl;
+	kdDebug() << "PropertyEditor::createEditor: Create editor for type " << i->type() << endl;
 	if(m_currentEditor)
 	{
 		m_editItem->setValue(m_currentEditor->getValue(), true);
@@ -108,9 +108,15 @@ PropertyEditor::createEditor(PropertyEditorItem *i, const QRect &geometry)
 		case QVariant::Int:
 			editor = new PropertyEditorSpin(viewport(), i->type(), i->value());
 			break;
+		
+		case QVariant::StringList:
+			editor = new PropertyEditorList(viewport(), i->type(), i->value(), i->list());
+			kdDebug() << "PropertyEditor::createEditor: ComboBox created!" << endl;
+			break;
 
 		default:
 			m_currentEditor = 0;
+			kdDebug() << "PropertyEditor::createEditor: No editor created!" << endl;
 			return;
 	}
 	
