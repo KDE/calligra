@@ -51,7 +51,7 @@
   <Action name="view_zoom"/>
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
-  <Action name="menuInsertTable"/>
+  <Action name="menuInserteheet"/>
   <Separator/>       
   <Menu name="Comment"><text>Cell Commen&amp;t</text>
     <Action name="addmodifycomment"/>
@@ -95,14 +95,14 @@
     <Action name="showColumn"/>
   </Menu>
   <Menu name="Sheet"><text>&amp;Sheet</text>
-  <Action name="removeTable"/>
-  <Action name="hideTable"/>
-  <Action name="showTable"/>
+  <Action name="removeSheet"/>
+  <Action name="hideSheet"/>
+  <Action name="showSheet"/>
   <Separator/>
   <Action name="sheetProperties" />
   </Menu>
   <Separator/>
-  <Action name="tableFormat"/>
+  <Action name="sheetFormat"/>
   <Action name="styles"/>  
   <Action name="stylemenu"/>
   <Action name="createStyle"/>        
@@ -183,10 +183,10 @@
  <Action name="view_zoom"/>
 </ToolBar>
 <ToolBar fullWidth="true" hidden="true" name="navigationToolBar"><text>Navigation</text>
- <Action name="firstTable"/>
- <Action name="previousTable"/>
- <Action name="nextTable"/>
- <Action name="lastTable"/>
+ <Action name="firstSheet"/>
+ <Action name="previousSheet"/>
+ <Action name="nextSheet"/>
+ <Action name="lastSheet"/>
 </ToolBar>
 <ToolBar fullWidth="true" name="fontPropertyToolBar"><text>Format</text>
  <Action name="selectFont"/>
@@ -227,11 +227,11 @@
  <Action name="backgroundColor"/>
 </ToolBar>
 <Menu name="menupage_popup">
-  <Action name="renameTable"/>
-  <Action name="insertTable"/>
-  <Action name="removeTable"/>
-  <Action name="hideTable"/>
-  <Action name="showTable"/>
+  <Action name="renameSheet"/>
+  <Action name="insertSheet"/>
+  <Action name="removeSheet"/>
+  <Action name="hideSheet"/>
+  <Action name="showSheet"/>
   <Separator/>
   <Action name="sheetProperties" />
 </Menu>

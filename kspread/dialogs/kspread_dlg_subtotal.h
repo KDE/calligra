@@ -44,7 +44,7 @@ class KSpreadSubtotalDlg : public KDialogBase
   ~KSpreadSubtotalDlg();
 
   QRect const & selection() const { return m_selection; }
-  KSpreadSheet * table() const { return m_pTable; }
+  KSpreadSheet * sheet() const { return m_pSheet; }
 
  private slots:
   void slotOk();
@@ -53,7 +53,7 @@ class KSpreadSubtotalDlg : public KDialogBase
 
  private:
   KSpreadView  *    m_pView;
-  KSpreadSheet *    m_pTable;
+  KSpreadSheet *    m_pSheet;
   QRect             m_selection;
   KSpreadSubtotal * m_dialog;
 

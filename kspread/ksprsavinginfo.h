@@ -28,20 +28,20 @@ class KSPRSavingInfo
 public:
     KSPRSavingInfo() {styleNumber = 0;}
     ~KSPRSavingInfo() {}
-    struct tableDef {
-        QString tableName;
-        KSpreadSheet *tableIndex;
+    struct sheetDef {
+        QString sheetName;
+        KSpreadSheet *sheetIndex;
     };
 
-    typedef QMap<QString, tableDef> StylePageMap;
+    typedef QMap<QString, sheetDef> StylePageMap;
 
-    void appendMasterPage( const QString &styleName, const tableDef &_def ){ m_masterPageStyle.insert( styleName,_def );}
+    void appendMasterPage( const QString &styleName, const sheetDef &_def ){ m_masterPageStyle.insert( styleName,_def );}
 
     QString masterPageName( const QString &name) {
-        tableDef _def = m_masterPageStyle[name];
-        return _def.tableName;}
+        sheetDef _def = m_masterPageStyle[name];
+        return _def.sheetName;}
 
-    tableDef pageDef( const QString &name) { return m_masterPageStyle[name]; }
+    sheetDef pageDef( const QString &name) { return m_masterPageStyle[name]; }
 
     bool findStyleName(const QString & name) const { return (m_masterPageStyle.find( name ) != m_masterPageStyle.end());}
 

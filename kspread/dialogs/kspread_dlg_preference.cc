@@ -105,7 +105,7 @@ void KSpreadpreference::slotApply()
   _spellPage->apply();
   _localePage->apply();
   m_pView->doc()->refreshInterface();
-  m_pView->slotUpdateView( m_pView->activeTable() );
+  m_pView->slotUpdateView( m_pView->activeSheet() );
 }
 
 void KSpreadpreference::slotDefault()
@@ -165,7 +165,7 @@ void parameterLocale::apply()
     {
         m_pView->doc()->emitBeginOperation( false );
         m_pView->doc()->refreshLocale();
-        m_pView->slotUpdateView( m_pView->activeTable() );
+        m_pView->slotUpdateView( m_pView->activeSheet() );
     }
 }
 
@@ -372,7 +372,7 @@ void configure::apply()
         m_oldBackupFile=state;
     }
 
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
 }
 
 
@@ -853,13 +853,13 @@ void configureLayoutPage::apply()
   {
      unsigned int sizePage = defaultSizePage->currentItem();
      config->writeEntry( "Default size page", sizePage );
-     m_pView->activeTable()->print()->setPaperFormat( (KoFormat)sizePage );
+     m_pView->activeSheet()->print()->setPaperFormat( (KoFormat)sizePage );
   }
   if( orientation != defaultOrientationPage->currentItem() )
   {
      unsigned int orientationPage = defaultOrientationPage->currentItem();
      config->writeEntry( "Default orientation page", orientationPage );
-     m_pView->activeTable()->print()->setPaperOrientation( (KoOrientation)orientationPage );
+     m_pView->activeSheet()->print()->setPaperOrientation( (KoOrientation)orientationPage );
   }
   if( unit != defaultUnit->currentItem() )
   {
@@ -867,7 +867,7 @@ void configureLayoutPage::apply()
      config->writeEntry( "Default unit page", unitPage );
      m_pView->doc()->setUnit( (KoUnit::Unit)unitPage );
   }
-  m_pView->slotUpdateView( m_pView->activeTable() );
+  m_pView->slotUpdateView( m_pView->activeSheet() );
 }
 
 configureSpellPage::configureSpellPage( KSpreadView* _view,QVBox *box , char *name )
@@ -922,7 +922,7 @@ void configureSpellPage::apply()
 
   //m_pView->doc()->addIgnoreWordAllList( m_spellConfigWidget->ignoreList() );
 
-  m_pView->slotUpdateView( m_pView->activeTable() );
+  m_pView->slotUpdateView( m_pView->activeSheet() );
 }
 
 void configureSpellPage::slotDefault()

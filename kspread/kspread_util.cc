@@ -88,9 +88,9 @@ QString util_rangeName(const QRect &_area)
 	KSpreadCell::name( _area.right(), _area.bottom() );
 }
 
-QString util_rangeName(KSpreadSheet * _table, const QRect &_area)
+QString util_rangeName(KSpreadSheet * _sheet, const QRect &_area)
 {
-    return _table->tableName() + "!" + util_rangeName(_area);
+    return _sheet->sheetName() + "!" + util_rangeName(_area);
 }
 
 QDomElement util_createElement( const QString & tagName, const QFont & font, QDomDocument & doc )
@@ -180,7 +180,7 @@ QPen util_toPen( QDomElement & element )
 
 KSpreadPoint::KSpreadPoint(const QString & _str)
 {
-    table = 0;
+    sheet = 0;
     init(_str);
 }
 
@@ -201,7 +201,7 @@ void KSpreadPoint::init(const QString & _str)
     int n = _str.find( '!' );
     if ( n != -1 )
     {
-      tableName = _str.left( n );
+      sheetName = _str.left( n );
       str = _str.right( len - n - 1 ); // remove the '!'
       len = str.length();
     }
@@ -305,41 +305,41 @@ void KSpreadPoint::init(const QString & _str)
 }
 
 KSpreadPoint::KSpreadPoint( const QString & _str, KSpreadMap * _map,
-                            KSpreadSheet * _table )
+                            KSpreadSheet * _sheet )
 {
     uint p = 0;
     int p2 = _str.find( '!' );
     if ( p2 != -1 )
     {
-        tableName = _str.left( p2++ );
+        sheetName = _str.left( p2++ );
         while ( true )
         {
-            table = _map->findTable( tableName );
-            if ( !table && tableName[0] == ' ' )
+            sheet = _map->findSheet( sheetName );
+            if ( !sheet && sheetName[0] == ' ' )
             {
-                tableName = tableName.right( tableName.length() - 1 );
+                sheetName = sheetName.right( sheetName.length() - 1 );
                 continue;
             }
             break;
         }
         p = p2;
 
-        //If the loop didn't return a table, better keep a string for isValid
-        if ( tableName.isEmpty() )
+        //If the loop didn't return a sheet, better keep a string for isValid
+        if ( sheetName.isEmpty() )
         {
             kdDebug(36001) << "KSpreadPoint: tableName is unknown" << endl;
-            tableName = "unknown";
+            sheetName = "unknown";
         }
     }
     else
     {
-        if ( _table != 0 )
+        if ( _sheet != 0 )
         {
-            table = _table;
-            tableName = _table->tableName();
+            sheet = _sheet;
+            sheetName = _sheet->sheetName();
         }
         else
-            table = 0;
+            sheet = 0;
     }
 
     init( _str.mid( p ) );
@@ -347,7 +347,7 @@ KSpreadPoint::KSpreadPoint( const QString & _str, KSpreadMap * _map,
 
 KSpreadCell *KSpreadPoint::cell() const
 {
-    return table->cellAt(pos);
+    return sheet->cellAt(pos);
 }
 
 bool KSpreadPoint::operator== (const KSpreadPoint &cell) const
@@ -366,7 +366,7 @@ bool KSpreadPoint::operator< (const KSpreadPoint &cell) const
 KSpreadRange::KSpreadRange(const QString & _str)
 {
     range.setLeft(-1);
-    table = 0;
+    sheet = 0;
 
     int p = _str.find(':');
     if (p == -1)
@@ -375,7 +375,7 @@ KSpreadRange::KSpreadRange(const QString & _str)
     KSpreadPoint ul(_str.left(p));
     KSpreadPoint lr(_str.mid(p + 1));
     range = QRect(ul.pos, lr.pos);
-    tableName = ul.tableName;
+    sheetName = ul.sheetName;
 
     leftFixed = ul.columnFixed;
     rightFixed = lr.columnFixed;
@@ -384,10 +384,10 @@ KSpreadRange::KSpreadRange(const QString & _str)
 }
 
 KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
-			   KSpreadSheet * _table)
+			   KSpreadSheet * _sheet)
 {
     range.setLeft(-1);
-    table = 0;
+    sheet = 0;
     //used area Name as range
     if (_str.at(0) == "'" && _str.at(_str.length() - 1) == "'") {
 	QString tmp = _str.right(_str.length() - 1);
@@ -397,7 +397,7 @@ KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
 	for (it = area.begin(); it != area.end(); ++it) {
 	    if ((*it).ref_name == tmp) {
 		range = (*it).rect;
-		table = _map->findTable((*it).table_name);
+		sheet = _map->findSheet((*it).sheet_name);
 		break;
 	    }
 	}
@@ -408,26 +408,26 @@ KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
 	return;
     }
     range.setLeft(-1);
-    table = 0;
+    sheet = 0;
 
     int p = 0;
     int p2 = _str.find('!');
     if (p2 != -1)
     {
-      tableName = _str.left(p2++);
+      sheetName = _str.left(p2++);
       while ( true )
       {
-	table = _map->findTable(tableName);
-        if ( !table && tableName[0] == ' ' )
+	sheet = _map->findSheet(sheetName);
+        if ( !sheet && sheetName[0] == ' ' )
         {
-          tableName = tableName.right( tableName.length() - 1 );
+          sheetName = sheetName.right( sheetName.length() - 1 );
           continue;
         }
         break;
       }
       p = p2;
     } else
-      table = _table;
+      sheet = _sheet;
 
 
     int p3 = _str.find(':', p);
@@ -486,7 +486,7 @@ bool util_isRowSelected(const QRect &selection)
 }
 
 //used in KSpreadView::slotRename
-bool util_validateTableName(const QString &name)
+bool util_validateSheetName(const QString &name)
 {
   if (name[0] == ' ')
   {
@@ -505,10 +505,10 @@ bool util_validateTableName(const QString &name)
 }
 
 
-KSpreadRangeIterator::KSpreadRangeIterator(QRect _range, KSpreadSheet* _table)
+KSpreadRangeIterator::KSpreadRangeIterator(QRect _range, KSpreadSheet* _sheet)
 {
   range = _range;
-  table = _table;
+  sheet = _sheet;
   current = QPoint(0,0);
 }
 
@@ -538,7 +538,7 @@ KSpreadCell* KSpreadRangeIterator::next()
 
   while (cell == NULL && !done)
   {
-    cell = table->getNextCellRight(current.x(), current.y());
+    cell = sheet->getNextCellRight(current.x(), current.y());
     if (cell != NULL && cell->column() > range.right())
     {
       cell = NULL;
@@ -588,12 +588,12 @@ int util_penCompare( QPen const & pen1, QPen const & pen2 )
 }
 
 
-QString convertRefToBase( const QString & table, const QRect & rect )
+QString convertRefToBase( const QString & sheet, const QRect & rect )
 {
   QPoint bottomRight( rect.bottomRight() );
 
   QString s( "$" );
-  s += table;
+  s += sheet;
   s += ".$";
   s += KSpreadCell::columnName( bottomRight.x() );
   s += '$';
@@ -602,16 +602,16 @@ QString convertRefToBase( const QString & table, const QRect & rect )
   return s;
 }
 
-QString convertRefToRange( const QString & table, const QRect & rect )
+QString convertRefToRange( const QString & sheet, const QRect & rect )
 {
   QPoint topLeft( rect.topLeft() );
   QPoint bottomRight( rect.bottomRight() );
 
   if ( topLeft == bottomRight )
-    return convertRefToBase( table, rect );
+    return convertRefToBase( sheet, rect );
 
   QString s( "$" );
-  s += table;
+  s += sheet;
   s += ".$";
   s += /*util_encodeColumnLabelText*/KSpreadCell::columnName( topLeft.x() );
   s += '$';
@@ -647,9 +647,9 @@ void insertBracket( QString & s )
 
  // e.g.: Sheet4.A1:Sheet4.E28
  //used in KSpreadSheet::saveOasis
-QString convertRangeToRef( const QString & tableName, const QRect & _area )
+QString convertRangeToRef( const QString & sheetName, const QRect & _area )
 {
-    return tableName + "." + KSpreadCell::name( _area.left(), _area.top() ) + ":" + tableName + "."+ KSpreadCell::name( _area.right(), _area.bottom() );
+    return sheetName + "." + KSpreadCell::name( _area.left(), _area.top() ) + ":" + sheetName + "."+ KSpreadCell::name( _area.right(), _area.bottom() );
 }
 
 QString convertOasisPenToString( const QPen & pen )
@@ -722,7 +722,7 @@ QPen convertOasisStringToPen( const QString &border )
     return pen;
 }
 
-//Return true when it's a reference to cell from table.
+//Return true when it's a reference to cell from sheet.
 bool localReferenceAnchor( const QString &_ref )
 {
     bool isLocalRef = (_ref.find("http://") != 0 &&

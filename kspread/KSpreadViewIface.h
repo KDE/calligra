@@ -45,7 +45,7 @@ public:
 k_dcop:
     virtual DCOPRef doc() const;
     virtual DCOPRef map() const;
-    virtual DCOPRef table() const;
+    virtual DCOPRef sheet() const;
 
     virtual void changeNbOfRecentFiles(int _nb);
 
@@ -63,9 +63,9 @@ k_dcop:
     virtual void gotoCell();
     virtual void changeAngle();
     virtual void preference();
-    virtual void nextTable();
-    virtual void previousTable();
-    virtual bool showTable(QString tableName);
+    virtual void nextSheet();
+    virtual void previousSheet();
+    virtual bool showSheet(QString sheetName);
     virtual void sortList();
     virtual void setAreaName();
     virtual void showAreaName();

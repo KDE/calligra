@@ -305,7 +305,7 @@ void KSpreadConditionalDlg::init()
   QValueList<KSpreadConditional>::iterator it1;
   QValueList<KSpreadConditional>::iterator it2;
 
-  KSpreadCell * obj = m_view->activeTable()->cellAt( m_marker.left(),
+  KSpreadCell * obj = m_view->activeSheet()->cellAt( m_marker.left(),
                                                      m_marker.top() );
 
   conditionList = obj->conditionList();
@@ -316,7 +316,7 @@ void KSpreadConditionalDlg::init()
   {
     for ( int y = m_marker.top(); y <= m_marker.bottom(); y++ )
     {
-      KSpreadCell * obj2 = m_view->activeTable()->cellAt( x, y );
+      KSpreadCell * obj2 = m_view->activeSheet()->cellAt( x, y );
       otherList = obj2->conditionList();
 
       it1 = conditionList.begin();
@@ -658,8 +658,8 @@ void KSpreadConditionalDlg::slotOk()
     newList.append( newCondition );
 
   kdDebug() << "Setting conditional list" << endl;
-  m_view->activeTable()->setConditional( m_view->selectionInfo(), newList );
-  m_view->slotUpdateView( m_view->activeTable(), m_view->selectionInfo()->selection() );
+  m_view->activeSheet()->setConditional( m_view->selectionInfo(), newList );
+  m_view->slotUpdateView( m_view->activeSheet(), m_view->selectionInfo()->selection() );
 
   accept();
 }

@@ -258,21 +258,21 @@ bool kspreadfunc_skew_pop( KSContext & context )
   return true;
 }
 
-class ContentTable : public QMap<double, int> {};
+class ContentSheet : public QMap<double, int> {};
 
 bool kspreadfunc_mode_helper( KSContext & context, QValueList<KSValue::Ptr> & args,
-                              ContentTable & table, double & number, int & value )
+                              ContentSheet & sheet, double & number, int & value )
 {
   QValueList<KSValue::Ptr>::Iterator it  = args.begin();
   QValueList<KSValue::Ptr>::Iterator end = args.end();
 
-  ContentTable::Iterator iter;
+  ContentSheet::Iterator iter;
 
   for ( ; it != end; ++it )
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, true ) )
     {
-      if ( !kspreadfunc_mode_helper( context, (*it)->listValue(), table, number, value ) )
+      if ( !kspreadfunc_mode_helper( context, (*it)->listValue(), sheet, number, value ) )
         return false;
     }
     else
@@ -280,13 +280,13 @@ bool kspreadfunc_mode_helper( KSContext & context, QValueList<KSValue::Ptr> & ar
     {
       double d = (*it)->doubleValue();
 
-      iter = table.find( d );
-      if ( iter != table.end() )
-        table[d] = ++(iter.data());
+      iter = sheet.find( d );
+      if ( iter != sheet.end() )
+        sheet[d] = ++(iter.data());
       else
       {
-        table[d] = 1;
-        iter = table.find( d );
+        sheet[d] = 1;
+        iter = sheet.find( d );
       }
 
       if ( iter.data() > value )
@@ -306,9 +306,9 @@ bool kspreadfunc_mode( KSContext & context )
 
   double number = 0.0;
   int    value  = 1;
-  ContentTable table;
+  ContentSheet sheet;
 
-  if ( !kspreadfunc_mode_helper( context, args, table, number, value ) )
+  if ( !kspreadfunc_mode_helper( context, args, sheet, number, value ) )
     return false;
 
   context.setValue( new KSValue( number ) );

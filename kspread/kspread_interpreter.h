@@ -19,7 +19,7 @@ public:
 
   KSpreadInterpreter( KSpreadDoc* );
 
-  KSParseNode* parse( KSContext& context, KSpreadSheet* table, const QString& formula );
+  KSParseNode* parse( KSContext& context, KSpreadSheet* sheet, const QString& formula );
   bool evaluate( KSContext& context, KSParseNode*, KSpreadSheet*, KSpreadCell* );
 
   KSNamespace* globalNamespace()const  { return m_global; }
@@ -27,13 +27,13 @@ public:
   virtual bool processExtension( KSContext& context, KSParseNode* node );
 
   KSpreadDoc* document()const { return m_doc; }
-  KSpreadSheet* table()const { return m_table; }
+  KSpreadSheet* sheet()const { return m_sheet; }
   KSpreadCell* cell() const { return m_cell; }
 
 private:
   KSpreadCell* m_cell;
   KSpreadDoc* m_doc;
-  KSpreadSheet* m_table;
+  KSpreadSheet* m_sheet;
 };
 
 #endif

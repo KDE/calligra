@@ -104,7 +104,7 @@ private:
   QLabel *stylelabel;
   QRadioButton *trigstyle;
   QRadioButton *statstyle;
-  QRadioButton *tablestyle;
+  QRadioButton *sheetstyle;
 };
 #endif
 

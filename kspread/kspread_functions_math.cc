@@ -1883,7 +1883,7 @@ static bool kspreadfunc_counta_helper( KSContext& context, QValueList<KSValue::P
   QValueList<KSValue::Ptr>::Iterator it  = args.begin();
 
   KSpreadMap * map = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
   KSpreadSheet * t = 0;
   KSpreadCell * cell = 0;
 
@@ -1907,10 +1907,10 @@ static bool kspreadfunc_counta_helper( KSContext& context, QValueList<KSValue::P
         left   = right;
         top    = bottom;
 
-        if ( !point.isTableKnown() )
+        if ( !point.isSheetKnown() )
           t = sheet;
         else
-          t = point.table;
+          t = point.sheet;
       }
       else
       {
@@ -1919,10 +1919,10 @@ static bool kspreadfunc_counta_helper( KSContext& context, QValueList<KSValue::P
         left   = range.range.left();
         top    = range.range.top();
 
-        if ( !range.isTableKnown() )
+        if ( !range.isSheetKnown() )
           t = sheet;
         else
-          t = range.table;
+          t = range.sheet;
       }
 
       for ( int x = left; x <= right; ++x )
@@ -1975,7 +1975,7 @@ static bool kspreadfunc_countblank_helper( KSContext& context, QValueList<KSValu
                                            int & result )
 {
   KSpreadMap   * map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
   KSpreadCell  * cell  = 0;
   KSpreadSheet * t     = 0;
 
@@ -2007,10 +2007,10 @@ static bool kspreadfunc_countblank_helper( KSContext& context, QValueList<KSValu
         left   = right;
         top    = bottom;
 
-        if ( !point.isTableKnown() )
+        if ( !point.isSheetKnown() )
           t = sheet;
         else
-          t = point.table;
+          t = point.sheet;
       }
       else
       {
@@ -2019,10 +2019,10 @@ static bool kspreadfunc_countblank_helper( KSContext& context, QValueList<KSValu
         left   = range.range.left();
         top    = range.range.top();
 
-        if ( !range.isTableKnown() )
+        if ( !range.isSheetKnown() )
           t = sheet;
         else
-          t = range.table;
+          t = range.sheet;
       }
 
       for ( int x = left; x <= right; ++x )
@@ -2187,7 +2187,7 @@ bool kspreadfunc_multipleOP( KSContext& context )
   kdDebug() << "Old values: Col: " << oldCol << ", Row: " << oldRow << endl;
 
   KSpreadCell * cell;
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
   KSpreadPoint point( extra[1]->stringValue() );
   KSpreadPoint point2( extra[3]->stringValue() );
@@ -2196,18 +2196,18 @@ bool kspreadfunc_multipleOP( KSContext& context )
   if ( ( args[1]->doubleValue() != args[2]->doubleValue() )
        || ( args[3]->doubleValue() != args[4]->doubleValue() ) )
   {
-    cell = table->cellAt( point.pos.x(), point.pos.y() );
+    cell = sheet->cellAt( point.pos.x(), point.pos.y() );
     cell->setValue( args[2]->doubleValue() );
     kdDebug() << "Setting value " << args[2]->doubleValue() << " on cell " << point.pos.x()
               << ", " << point.pos.y() << endl;
 
-    cell = table->cellAt( point2.pos.x(), point.pos.y() );
+    cell = sheet->cellAt( point2.pos.x(), point.pos.y() );
     cell->setValue( args[4]->doubleValue() );
     kdDebug() << "Setting value " << args[4]->doubleValue() << " on cell " << point2.pos.x()
               << ", " << point2.pos.y() << endl;
   }
 
-  KSpreadCell * cell1 = table->cellAt( point3.pos.x(), point3.pos.y() );
+  KSpreadCell * cell1 = sheet->cellAt( point3.pos.x(), point3.pos.y() );
   cell1->calc( false );
 
   double d = cell1->value().asFloat();
@@ -2216,10 +2216,10 @@ bool kspreadfunc_multipleOP( KSContext& context )
 
   kdDebug() << "Resetting old values" << endl;
 
-  cell = table->cellAt( point.pos.x(), point.pos.y() );
+  cell = sheet->cellAt( point.pos.x(), point.pos.y() );
   cell->setValue( oldCol );
 
-  cell = table->cellAt( point2.pos.x(), point2.pos.y() );
+  cell = sheet->cellAt( point2.pos.x(), point2.pos.y() );
   cell->setValue( oldRow );
 
   cell1->calc( false );
@@ -2250,15 +2250,15 @@ bool kspreadfunc_subtotal( KSContext & context )
 
   KSValue * c = 0;
   KSpreadCell  * cell = 0;
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
   KSpreadMap * map = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
 
   kdDebug() << "Range: " << extra[1]->stringValue() << endl;
 
-  KSpreadRange range ( extra[1]->stringValue(), map, table );
+  KSpreadRange range ( extra[1]->stringValue(), map, sheet );
   if ( !range.isValid() )
   {
-    KSpreadPoint point( extra[1]->stringValue(), map, table );
+    KSpreadPoint point( extra[1]->stringValue(), map, sheet );
 
     if ( !point.isValid() )
       return false;
@@ -2283,7 +2283,7 @@ bool kspreadfunc_subtotal( KSContext & context )
 
   for ( ; y <= bottom; ++y )
   {
-    cell = table->cellAt( x, y );
+    cell = sheet->cellAt( x, y );
     if ( cell->isDefault() || cell->text().find( "SUBTOTAL", 0, false ) != -1 )
       continue;
 

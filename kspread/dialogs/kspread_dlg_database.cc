@@ -157,10 +157,10 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
 
   // new page
 
-  m_table = new QWidget( this, "m_table" );
-  m_tableLayout = new QGridLayout( m_table, 1, 1, 11, 6, "m_tableLayout");
+  m_sheet = new QWidget( this, "m_table" );
+  m_sheetLayout = new QGridLayout( m_sheet, 1, 1, 11, 6, "m_tableLayout");
 
-  QFrame * Frame5_2 = new QFrame( m_table, "Frame5_2" );
+  QFrame * Frame5_2 = new QFrame( m_sheet, "Frame5_2" );
   Frame5_2->setFrameShape( QFrame::MShape );
   Frame5_2->setFrameShadow( QFrame::MShadow );
   QGridLayout * Frame5_2Layout = new QGridLayout( Frame5_2, 1, 1, 11, 6, "Frame5_2Layout");
@@ -180,30 +180,30 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
 
   Frame5_2Layout->addLayout( Layout21, 0, 0 );
 
-  m_tableStatus = new QLabel( Frame5_2, "m_tableStatus" );
-  m_tableStatus->setText( " " );
-  Frame5_2Layout->addWidget( m_tableStatus, 3, 0 );
+  m_sheetStatus = new QLabel( Frame5_2, "m_tableStatus" );
+  m_sheetStatus->setText( " " );
+  Frame5_2Layout->addWidget( m_sheetStatus, 3, 0 );
 
-  m_SelectTableLabel = new QLabel( Frame5_2, "m_SelectTableLabel" );
-  m_SelectTableLabel->setText( i18n( "Select tables:" ) );
-  Frame5_2Layout->addWidget( m_SelectTableLabel, 1, 0 );
+  m_SelectSheetLabel = new QLabel( Frame5_2, "m_SelectSheetLabel" );
+  m_SelectSheetLabel->setText( i18n( "Select tables:" ) );
+  Frame5_2Layout->addWidget( m_SelectSheetLabel, 1, 0 );
 
-  m_tableView = new KListView( Frame5_2, "m_tableView" );
-  m_tableView->addColumn( i18n( "Table" ) );
-  m_tableView->setRootIsDecorated( FALSE );
+  m_sheetView = new KListView( Frame5_2, "m_tableView" );
+  m_sheetView->addColumn( i18n( "Sheet" ) );
+  m_sheetView->setRootIsDecorated( FALSE );
 
-  Frame5_2Layout->addWidget( m_tableView, 2, 0 );
+  Frame5_2Layout->addWidget( m_sheetView, 2, 0 );
 
-  m_tableLayout->addWidget( Frame5_2, 0, 1 );
+  m_sheetLayout->addWidget( Frame5_2, 0, 1 );
 
-  QFrame * Frame17_2 = new QFrame( m_table, "Frame17_2" );
+  QFrame * Frame17_2 = new QFrame( m_sheet, "Frame17_2" );
   Frame17_2->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, Frame17_2->sizePolicy().hasHeightForWidth() ) );
   Frame17_2->setMinimumSize( QSize( 111, 0 ) );
   Frame17_2->setFrameShape( QFrame::NoFrame );
   Frame17_2->setFrameShadow( QFrame::Plain );
 
-  m_tableLayout->addWidget( Frame17_2, 0, 0 );
-  addPage( m_table, i18n( "Tables" ) );
+  m_sheetLayout->addWidget( Frame17_2, 0, 0 );
+  addPage( m_sheet, i18n( "Sheets" ) );
 
   m_columns = new QWidget( this, "m_columns" );
   m_columnsLayout = new QGridLayout( m_columns, 1, 1, 11, 6, "m_columnsLayout");
@@ -220,7 +220,7 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
 
   m_columnView = new KListView( Frame5_2_2, "m_columnView" );
   m_columnView->addColumn( i18n( "Column" ) );
-  m_columnView->addColumn( i18n( "Table" ) );
+  m_columnView->addColumn( i18n( "Sheet" ) );
   m_columnView->addColumn( i18n( "Data Type" ) );
   m_columnView->setRootIsDecorated( FALSE );
 
@@ -419,9 +419,9 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   connect( m_driver, SIGNAL( activated(int) ), this, SLOT( databaseDriverChanged(int) ) );
   connect( m_host, SIGNAL( textChanged(const QString &) ), this, SLOT( databaseHostChanged(const QString &) ) );
   connect( m_databaseName, SIGNAL( textChanged(const QString &) ), this, SLOT( databaseNameChanged(const QString &) ) );
-  connect( m_tableView, SIGNAL( contextMenuRequested( QListViewItem *, const QPoint &, int ) ),
-           this, SLOT( popupTableViewMenu(QListViewItem *, const QPoint &, int ) ) );
-  connect( m_tableView, SIGNAL( clicked( QListViewItem * ) ), this, SLOT( tableViewClicked( QListViewItem * ) ) );
+  connect( m_sheetView, SIGNAL( contextMenuRequested( QListViewItem *, const QPoint &, int ) ),
+           this, SLOT( popupSheetViewMenu(QListViewItem *, const QPoint &, int ) ) );
+  connect( m_sheetView, SIGNAL( clicked( QListViewItem * ) ), this, SLOT( sheetViewClicked( QListViewItem * ) ) );
 
   QStringList str = QSqlDatabase::drivers();
   m_driver->insertItem("");
@@ -434,7 +434,7 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
 
   helpButton()->hide();
   setNextEnabled(m_database, false);
-  setNextEnabled(m_table, false);
+  setNextEnabled(m_sheet, false);
   setNextEnabled(m_columns, false);
   setNextEnabled(m_options, false);
   setNextEnabled(m_result, false);
@@ -460,8 +460,8 @@ void KSpreadDatabaseDlg::switchPage( int id )
     showPage(m_database);
     break;
 
-   case eTables:
-    showPage(m_table);
+   case eSheets:
+    showPage(m_sheet);
     break;
 
    case eColumns:
@@ -490,8 +490,8 @@ void KSpreadDatabaseDlg::next()
       return;
     break;
 
-   case eTables:
-    if (!tablesDoNext())
+   case eSheets:
+    if (!sheetsDoNext())
       return;
     break;
 
@@ -527,7 +527,7 @@ void KSpreadDatabaseDlg::back()
 
 void KSpreadDatabaseDlg::accept()
 {
-  KSpreadSheet * table = m_pView->activeTable();
+  KSpreadSheet * sheet = m_pView->activeSheet();
   int top;
   int left;
   int width  = -1;
@@ -535,7 +535,7 @@ void KSpreadDatabaseDlg::accept()
   if ( m_startingRegion->isChecked() )
   {
     KSpreadRange range( m_region->text() );
-    if ( range.isTableKnown() )
+    if ( range.isSheetKnown() )
     {
       KMessageBox::error( this, i18n("You cannot specify a table here.") );
       m_region->setFocus();
@@ -543,7 +543,7 @@ void KSpreadDatabaseDlg::accept()
       return;
     }
 
-    range.table = table;
+    range.sheet = sheet;
 
     if ( !range.isValid() )
     {
@@ -560,14 +560,14 @@ void KSpreadDatabaseDlg::accept()
   else
   {
     KSpreadPoint point( m_cell->text() );
-    if ( point.isTableKnown() )
+    if ( point.isSheetKnown() )
     {
       KMessageBox::error( this, i18n("You cannot specify a table here.") );
       m_cell->setFocus();
       m_cell->selectAll();
       return;
     }
-    point.table = table;
+    point.sheet = sheet;
     //    if ( point.pos.x() < 1 || point.pos.y() < 1 )
     if ( !point.isValid() )
     {
@@ -644,7 +644,7 @@ void KSpreadDatabaseDlg::accept()
   if ( !m_pView->doc()->undoLocked() )
   {
     QRect r(left, top, count, height);
-    KSpreadUndoInsertData * undo = new KSpreadUndoInsertData( m_pView->doc(), table, r );
+    KSpreadUndoInsertData * undo = new KSpreadUndoInsertData( m_pView->doc(), sheet, r );
     m_pView->doc()->addCommand( undo );
   }
 
@@ -656,7 +656,7 @@ void KSpreadDatabaseDlg::accept()
     {
       for ( i = 0; i < count; ++i )
       {
-        cell = table->nonDefaultCell( left + i, top + y );
+        cell = sheet->nonDefaultCell( left + i, top + y );
         cell->setCellText( query.value( i ).toString() );
       }
       ++y;
@@ -672,7 +672,7 @@ void KSpreadDatabaseDlg::accept()
 
       for ( i = 0; i < count; ++i )
       {
-        cell = table->nonDefaultCell( left + i, top + y );
+        cell = sheet->nonDefaultCell( left + i, top + y );
         cell->setCellText( query.value( i ).toString() );
       }
       ++y;
@@ -682,7 +682,7 @@ void KSpreadDatabaseDlg::accept()
     }
   }
 
-  m_pView->slotUpdateView( table );
+  m_pView->slotUpdateView( sheet );
   KWizard::accept();
 }
 
@@ -717,26 +717,26 @@ bool KSpreadDatabaseDlg::databaseDoNext()
     if ( m_dbConnection->open() )
     {
       m_databaseStatus->setText( i18n("Connected. Retrieving table information...") );
-      QStringList tableList( m_dbConnection->tables() );
+      QStringList sheetList( m_dbConnection->tables() );
 
-      if ( tableList.isEmpty() )
+      if ( sheetList.isEmpty() )
       {
         KMessageBox::error( this, i18n("This database contains no tables") );
         return false;
       }
 
       unsigned int i;
-      m_tableView->clear();
+      m_sheetView->clear();
 
-      for ( i = 0; i < tableList.size(); ++i )
+      for ( i = 0; i < sheetList.size(); ++i )
       {
-        QCheckListItem * item = new QCheckListItem( m_tableView, tableList[i],
+        QCheckListItem * item = new QCheckListItem( m_sheetView, sheetList[i],
                                                     QCheckListItem::CheckBox );
         item->setOn(false);
-        m_tableView->insertItem( item );
+        m_sheetView->insertItem( item );
       }
 
-      m_tableView->setEnabled( true );
+      m_sheetView->setEnabled( true );
       m_databaseStatus->setText( " " );
     }
     else
@@ -767,25 +767,25 @@ bool KSpreadDatabaseDlg::databaseDoNext()
     m_databaseStatus->setText( " " );
     return false;
   }
-  setNextEnabled(m_table, true);
+  setNextEnabled(m_sheet, true);
 
   return true;
 }
 
-bool KSpreadDatabaseDlg::tablesDoNext()
+bool KSpreadDatabaseDlg::sheetsDoNext()
 {
   m_databaseStatus->setText( i18n("Retrieving meta data of tables...") );
-  QStringList tables;
+  QStringList sheets;
 
-  for (QListViewItem * item = (QCheckListItem *) m_tableView->firstChild(); item; item = item->nextSibling())
+  for (QListViewItem * item = (QCheckListItem *) m_sheetView->firstChild(); item; item = item->nextSibling())
   {
     if (((QCheckListItem * ) item)->isOn())
     {
-      tables.append(((QCheckListItem * ) item)->text());
+      sheets.append(((QCheckListItem * ) item)->text());
     }
   }
 
-  if (tables.empty())
+  if (sheets.empty())
   {
     KMessageBox::error( this, i18n("You have to select at least one table.") );
     return false;
@@ -794,9 +794,9 @@ bool KSpreadDatabaseDlg::tablesDoNext()
   m_columnView->clear();
   QSqlRecord info;
   QCheckListItem * item;
-  for (int i = 0; i < (int) tables.size(); ++i)
+  for (int i = 0; i < (int) sheets.size(); ++i)
   {
-    info = m_dbConnection->record( tables[i] );
+    info = m_dbConnection->record( sheets[i] );
     for (int j = 0; j < (int) info.count(); ++j)
     {
       QString name = info.fieldName(j);
@@ -804,7 +804,7 @@ bool KSpreadDatabaseDlg::tablesDoNext()
                                  QCheckListItem::CheckBox );
       item->setOn(false);
       m_columnView->insertItem( item );
-      item->setText( 1, tables[i] );
+      item->setText( 1, sheets[i] );
       QSqlField * field = info.field(name);
       item->setText( 2, QVariant::typeToName(field->type()) );
     }
@@ -1016,7 +1016,7 @@ bool KSpreadDatabaseDlg::optionsDoNext()
 
   query += "\nFROM ";
 
-  QListViewItem * item = (QCheckListItem *) m_tableView->firstChild();
+  QListViewItem * item = (QCheckListItem *) m_sheetView->firstChild();
   bool b = false;
   while ( item )
   {
@@ -1154,12 +1154,12 @@ void KSpreadDatabaseDlg::databaseDriverChanged(int index)
     setNextEnabled(m_database, false);
 }
 
-void KSpreadDatabaseDlg::popupTableViewMenu( QListViewItem *, const QPoint &, int )
+void KSpreadDatabaseDlg::popupSheetViewMenu( QListViewItem *, const QPoint &, int )
 {
   // TODO: popup menu with "Select All", "Inverse selection", "remove selection"
 }
 
-void KSpreadDatabaseDlg::tableViewClicked( QListViewItem * )
+void KSpreadDatabaseDlg::sheetViewClicked( QListViewItem * )
 {
 //   if ( item )
 //   {

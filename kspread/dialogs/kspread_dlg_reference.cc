@@ -83,11 +83,11 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   lay1->addWidget( bb );
 
   QString text;
-  QStringList tableName;
-  QPtrListIterator<KSpreadSheet> it2 ( m_pView->doc()->map()->tableList() );
+  QStringList sheetName;
+  QPtrListIterator<KSpreadSheet> it2 ( m_pView->doc()->map()->sheetList() );
   for( ; it2.current(); ++it2 )
   {
-      tableName.append( it2.current()->tableName());
+      sheetName.append( it2.current()->sheetName());
   }
 
   QValueList<Reference>::Iterator it;
@@ -95,7 +95,7 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   for ( it = area.begin(); it != area.end(); ++it )
   {
     text = (*it).ref_name;
-    if ( tableName.contains((*it).table_name ))
+    if ( sheetName.contains((*it).sheet_name ))
         m_list->insertItem(text);
   }
 
@@ -128,11 +128,11 @@ void KSpreadreference::displayAreaValues(QString const & areaName)
   {
     if ((*it).ref_name == areaName)
     {
-      if (!m_pView->doc()->map()->findTable( (*it).table_name))
-        kdDebug(36001) << "(*it).table_name '" << (*it).table_name
+      if (!m_pView->doc()->map()->findSheet( (*it).sheet_name))
+        kdDebug(36001) << "(*it).table_name '" << (*it).sheet_name
                        << "' not found!*********" << endl;
       else
-        tmpName = util_rangeName(m_pView->doc()->map()->findTable( (*it).table_name),
+        tmpName = util_rangeName(m_pView->doc()->map()->findSheet( (*it).sheet_name),
                                  (*it).rect);
       break;
     }
@@ -186,12 +186,12 @@ void KSpreadreference::slotRemove()
 
     KSpreadSheet *tbl;
 
-    for ( tbl = m_pView->doc()->map()->firstTable(); tbl != 0L; tbl = m_pView->doc()->map()->nextTable() )
+    for ( tbl = m_pView->doc()->map()->firstSheet(); tbl != 0L; tbl = m_pView->doc()->map()->nextSheet() )
     {
       tbl->refreshRemoveAreaName(textRemove);
     }
 
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
   }
 
   if ( !m_list->count() )
@@ -227,23 +227,23 @@ void KSpreadreference::slotOk()
     text = m_list->text(index);
     QValueList<Reference> area = m_pView->doc()->listArea();
 
-    if (m_pView->activeTable()->tableName() != area[ index ].table_name)
+    if (m_pView->activeSheet()->sheetName() != area[ index ].sheet_name)
     {
-      KSpreadSheet *table = m_pView->doc()->map()->findTable(area[ index ].table_name);
-      if (table)
-        m_pView->setActiveTable(table);
+      KSpreadSheet *sheet = m_pView->doc()->map()->findSheet(area[ index ].sheet_name);
+      if (sheet)
+        m_pView->setActiveSheet(sheet);
     }
 
     m_pView->canvasWidget()->
-	gotoLocation(KSpreadPoint(KSpreadCell::fullName(m_pView->activeTable(),
+	gotoLocation(KSpreadPoint(KSpreadCell::fullName(m_pView->activeSheet(),
         area[ index ].rect.left(), area[ index ].rect.top() ),
 				  m_pView->doc()->map() ) );
     m_pView->selectionInfo()->setSelection(area[ index ].rect.topLeft(),
                                            area[index].rect.bottomRight(),
-                                           m_pView->activeTable() );
+                                           m_pView->activeSheet() );
   }
 
-  m_pView->slotUpdateView( m_pView->activeTable() );
+  m_pView->slotUpdateView( m_pView->activeSheet() );
   accept();
 }
 
@@ -307,13 +307,13 @@ KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent,
 
   KSpreadEditAreaNameLayout->addWidget( m_areaName, 0, 1 );
 
-  QPtrList<KSpreadSheet> tableList = m_pView->doc()->map()->tableList();
-  for (unsigned int c = 0; c < tableList.count(); ++c)
+  QPtrList<KSpreadSheet> sheetList = m_pView->doc()->map()->sheetList();
+  for (unsigned int c = 0; c < sheetList.count(); ++c)
   {
-    KSpreadSheet * t = tableList.at(c);
+    KSpreadSheet * t = sheetList.at(c);
     if (!t)
       continue;
-    m_sheets->insertItem( t->tableName() );
+    m_sheets->insertItem( t->sheetName() );
   }
 
   QString tmpName;
@@ -323,8 +323,8 @@ KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent,
   {
     if ((*it).ref_name == areaname)
     {
-      if (!m_pView->doc()->map()->findTable( (*it).table_name))
-        kdDebug(36001) << "(*it).table_name '" << (*it).table_name
+      if (!m_pView->doc()->map()->findSheet( (*it).sheet_name))
+        kdDebug(36001) << "(*it).table_name '" << (*it).sheet_name
                        << "' not found!*********" << endl;
       else
         tmpName = util_rangeName( (*it).rect );
@@ -332,7 +332,7 @@ KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent,
     }
   }
 
-  m_sheets->setCurrentText( (*it).table_name );
+  m_sheets->setCurrentText( (*it).sheet_name );
   m_area->setText( tmpName );
 
 }
@@ -363,13 +363,13 @@ void KSpreadEditAreaName::slotOk()
 
   KSpreadSheet *sheet;
 
-  for ( sheet = m_pView->doc()->map()->firstTable(); sheet != 0L;
-        sheet = m_pView->doc()->map()->nextTable() )
+  for ( sheet = m_pView->doc()->map()->firstSheet(); sheet != 0L;
+        sheet = m_pView->doc()->map()->nextSheet() )
   {
     sheet->refreshChangeAreaName( m_areaName->text() );
   }
 
-  m_pView->slotUpdateView( m_pView->activeTable() );
+  m_pView->slotUpdateView( m_pView->activeSheet() );
   accept();
 }
 

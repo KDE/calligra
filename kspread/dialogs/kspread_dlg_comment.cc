@@ -49,7 +49,7 @@ KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoi
     multiLine->setFocus();
 
 
-    KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
+    KSpreadCell *cell = m_pView->activeSheet()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
     if(!cell->comment(marker.x(),marker.y()).isEmpty())
         multiLine->setText(cell->comment(marker.x(),marker.y()));
 
@@ -69,9 +69,9 @@ void KSpreadComment::slotTextChanged()
 void KSpreadComment::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
-    m_pView->activeTable()->setSelectionComment( m_pView->selectionInfo(),
+    m_pView->activeSheet()->setSelectionComment( m_pView->selectionInfo(),
                                                  multiLine->text().stripWhiteSpace() );
-    m_pView->slotUpdateView( m_pView->activeTable(), m_pView->selectionInfo()->selection() );
+    m_pView->slotUpdateView( m_pView->activeSheet(), m_pView->selectionInfo()->selection() );
     // m_pView->doc()->emitEndOperation();
     accept();
 }

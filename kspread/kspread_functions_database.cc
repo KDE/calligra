@@ -118,7 +118,7 @@ bool conditionMatches( KSpreadDB::Condition &cond, KSpreadCell * cell )
   return false;
 }
 
-int getFieldIndex( QString const & fieldname, QRect const & database, KSpreadSheet * table )
+int getFieldIndex( QString const & fieldname, QRect const & database, KSpreadSheet * sheet )
 {
   int r   = database.right();
   int row = database.top();
@@ -128,7 +128,7 @@ int getFieldIndex( QString const & fieldname, QRect const & database, KSpreadShe
 
   for ( int i = database.left(); i <= r; ++i )
   {
-    cell = table->cellAt( i, row );
+    cell = sheet->cellAt( i, row );
     if ( cell->isDefault() )
       continue;
 
@@ -139,7 +139,7 @@ int getFieldIndex( QString const & fieldname, QRect const & database, KSpreadShe
   return -1;
 }
 
-void parseConditions( QPtrList<KSpreadDB::ConditionList> * result, QRect const & database, QRect const & conditions, KSpreadSheet * table )
+void parseConditions( QPtrList<KSpreadDB::ConditionList> * result, QRect const & database, QRect const & conditions, KSpreadSheet * sheet )
 {
   int cCols  = conditions.width();
   int right  = conditions.right();
@@ -155,12 +155,12 @@ void parseConditions( QPtrList<KSpreadDB::ConditionList> * result, QRect const &
   // Save the databases indices of condition header
   for ( int i = left; i <= right; ++i )
   {
-    cell = table->cellAt( i, top );
+    cell = sheet->cellAt( i, top );
     if ( cell->isDefault() || cell->isEmpty() )
       list[i - 1] = -1;
     else
     {
-      int p = getFieldIndex( cell->strOutText(), database, table );
+      int p = getFieldIndex( cell->strOutText(), database, sheet );
       list[i - 1] = p;
 
       kdDebug() << "header: " << cell->strOutText() << ", " << list[i] << ", P: " << p << endl;
@@ -180,11 +180,11 @@ void parseConditions( QPtrList<KSpreadDB::ConditionList> * result, QRect const &
       cond.index = list[c];
 
       kdDebug() << "Cell: " << c+left << ", " << r << ", Str: "
-                << table->cellAt( c + left, r )->strOutText() << ", index: " << list[c] << endl;
+                << sheet->cellAt( c + left, r )->strOutText() << ", index: " << list[c] << endl;
 
-      if( !table->cellAt( c + left,r )->isEmpty() )
+      if( !sheet->cellAt( c + left,r )->isEmpty() )
       {
-        getCond( cond, table->cellAt( c + left, r )->strOutText() );
+        getCond( cond, sheet->cellAt( c + left, r )->strOutText() );
         criteria->append( cond );
       }
     }
@@ -194,7 +194,7 @@ void parseConditions( QPtrList<KSpreadDB::ConditionList> * result, QRect const &
   kdDebug() << "Criterias: " << result->count() << endl;
 }
 
-QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadSheet * table, int column, QPtrList<KSpreadDB::ConditionList> * conditions )
+QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadSheet * sheet, int column, QPtrList<KSpreadDB::ConditionList> * conditions )
 {
   kdDebug() << "***** getCellList *****" << endl;
 
@@ -211,7 +211,7 @@ QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadSheet * table, int
 
   for ( int row = top + 1; row <= bottom; ++row ) // first row contains header
   {
-    cell = table->cellAt( column, row );
+    cell = sheet->cellAt( column, row );
     kdDebug() << "Cell: " << column << ", " << row << " - " << cell->strOutText() << endl;
     if ( cell->isDefault() )
       continue;
@@ -232,7 +232,7 @@ QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadSheet * table, int
       for ( ; it != end; ++it )
       {
         KSpreadDB::Condition cond = *it;
-        conCell = table->cellAt( cond.index, row );
+        conCell = sheet->cellAt( cond.index, row );
         kdDebug() << "Checking cell: " << cond.index << ", " << row << " - " << conCell->strOutText() << endl;
         if ( !conditionMatches( cond, conCell ) )
         {
@@ -266,15 +266,15 @@ bool kspreadfunc_dsum( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
-  KSpreadRange db( extra[0]->stringValue(), map, table );
-  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+  KSpreadRange db( extra[0]->stringValue(), map, sheet );
+  KSpreadRange conditions( extra[2]->stringValue(), map, sheet );
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
 
-  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, sheet );
   if ( fieldIndex == -1 )
     return false;
 
@@ -283,9 +283,9 @@ bool kspreadfunc_dsum( KSContext & context )
   QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
   cond->setAutoDelete( true );
 
-  parseConditions( cond, db.range, conditions.range, table );
+  parseConditions( cond, db.range, conditions.range, sheet );
 
-  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, sheet, fieldIndex, cond );
 
   double sum = 0;
 
@@ -316,15 +316,15 @@ bool kspreadfunc_daverage( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
-  KSpreadRange db( extra[0]->stringValue(), map, table );
-  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+  KSpreadRange db( extra[0]->stringValue(), map, sheet );
+  KSpreadRange conditions( extra[2]->stringValue(), map, sheet );
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
 
-  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, sheet );
   if ( fieldIndex == -1 )
     return false;
 
@@ -333,9 +333,9 @@ bool kspreadfunc_daverage( KSContext & context )
   QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
   cond->setAutoDelete( true );
 
-  parseConditions( cond, db.range, conditions.range, table );
+  parseConditions( cond, db.range, conditions.range, sheet );
 
-  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, sheet, fieldIndex, cond );
 
   int    count = 0;
   double sum   = 0;
@@ -370,15 +370,15 @@ bool kspreadfunc_dcount( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
-  KSpreadRange db( extra[0]->stringValue(), map, table );
-  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+  KSpreadRange db( extra[0]->stringValue(), map, sheet );
+  KSpreadRange conditions( extra[2]->stringValue(), map, sheet );
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
 
-  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, sheet );
   if ( fieldIndex == -1 )
     return false;
 
@@ -387,9 +387,9 @@ bool kspreadfunc_dcount( KSContext & context )
   QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
   cond->setAutoDelete( true );
 
-  parseConditions( cond, db.range, conditions.range, table );
+  parseConditions( cond, db.range, conditions.range, sheet );
 
-  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, sheet, fieldIndex, cond );
 
   int count = 0;
 
@@ -422,15 +422,15 @@ bool kspreadfunc_dcounta( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
-  KSpreadRange db( extra[0]->stringValue(), map, table );
-  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+  KSpreadRange db( extra[0]->stringValue(), map, sheet );
+  KSpreadRange conditions( extra[2]->stringValue(), map, sheet );
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
 
-  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, sheet );
   if ( fieldIndex == -1 )
     return false;
 
@@ -439,9 +439,9 @@ bool kspreadfunc_dcounta( KSContext & context )
   QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
   cond->setAutoDelete( true );
 
-  parseConditions( cond, db.range, conditions.range, table );
+  parseConditions( cond, db.range, conditions.range, sheet );
 
-  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, sheet, fieldIndex, cond );
 
   int count = 0;
 
@@ -472,24 +472,24 @@ bool kspreadfunc_dget( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
-  KSpreadRange db( extra[0]->stringValue(), map, table );
-  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+  KSpreadRange db( extra[0]->stringValue(), map, sheet );
+  KSpreadRange conditions( extra[2]->stringValue(), map, sheet );
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
 
-  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, sheet );
   if ( fieldIndex == -1 )
     return false;
 
   QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
   cond->setAutoDelete( true );
 
-  parseConditions( cond, db.range, conditions.range, table );
+  parseConditions( cond, db.range, conditions.range, sheet );
 
-  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, sheet, fieldIndex, cond );
 
   KSValue value;
   int count = 0;
@@ -538,15 +538,15 @@ bool kspreadfunc_dmax( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
-  KSpreadRange db( extra[0]->stringValue(), map, table );
-  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+  KSpreadRange db( extra[0]->stringValue(), map, sheet );
+  KSpreadRange conditions( extra[2]->stringValue(), map, sheet );
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
 
-  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, sheet );
   if ( fieldIndex == -1 )
     return false;
 
@@ -555,9 +555,9 @@ bool kspreadfunc_dmax( KSContext & context )
   QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
   cond->setAutoDelete( true );
 
-  parseConditions( cond, db.range, conditions.range, table );
+  parseConditions( cond, db.range, conditions.range, sheet );
 
-  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, sheet, fieldIndex, cond );
 
   double max = 0.0;
 
@@ -594,15 +594,15 @@ bool kspreadfunc_dmin( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
-  KSpreadRange db( extra[0]->stringValue(), map, table );
-  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+  KSpreadRange db( extra[0]->stringValue(), map, sheet );
+  KSpreadRange conditions( extra[2]->stringValue(), map, sheet );
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
 
-  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, sheet );
   if ( fieldIndex == -1 )
     return false;
 
@@ -611,9 +611,9 @@ bool kspreadfunc_dmin( KSContext & context )
   QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
   cond->setAutoDelete( true );
 
-  parseConditions( cond, db.range, conditions.range, table );
+  parseConditions( cond, db.range, conditions.range, sheet );
 
-  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, sheet, fieldIndex, cond );
 
   double min = 0.0;
 
@@ -650,15 +650,15 @@ bool kspreadfunc_dproduct( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
-  KSpreadRange db( extra[0]->stringValue(), map, table );
-  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+  KSpreadRange db( extra[0]->stringValue(), map, sheet );
+  KSpreadRange conditions( extra[2]->stringValue(), map, sheet );
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
 
-  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, sheet );
   if ( fieldIndex == -1 )
     return false;
 
@@ -667,9 +667,9 @@ bool kspreadfunc_dproduct( KSContext & context )
   QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
   cond->setAutoDelete( true );
 
-  parseConditions( cond, db.range, conditions.range, table );
+  parseConditions( cond, db.range, conditions.range, sheet );
 
-  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, sheet, fieldIndex, cond );
 
   double product = 1.0;
   int count = 0;
@@ -708,15 +708,15 @@ bool kspreadfunc_dstdev( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
-  KSpreadRange db( extra[0]->stringValue(), map, table );
-  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+  KSpreadRange db( extra[0]->stringValue(), map, sheet );
+  KSpreadRange conditions( extra[2]->stringValue(), map, sheet );
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
 
-  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, sheet );
   if ( fieldIndex == -1 )
     return false;
 
@@ -725,9 +725,9 @@ bool kspreadfunc_dstdev( KSContext & context )
   QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
   cond->setAutoDelete( true );
 
-  parseConditions( cond, db.range, conditions.range, table );
+  parseConditions( cond, db.range, conditions.range, sheet );
 
-  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, sheet, fieldIndex, cond );
 
   double sum = 0.0;
   int count = 0;
@@ -782,15 +782,15 @@ bool kspreadfunc_dstdevp( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
-  KSpreadRange db( extra[0]->stringValue(), map, table );
-  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+  KSpreadRange db( extra[0]->stringValue(), map, sheet );
+  KSpreadRange conditions( extra[2]->stringValue(), map, sheet );
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
 
-  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, sheet );
   if ( fieldIndex == -1 )
     return false;
 
@@ -799,9 +799,9 @@ bool kspreadfunc_dstdevp( KSContext & context )
   QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
   cond->setAutoDelete( true );
 
-  parseConditions( cond, db.range, conditions.range, table );
+  parseConditions( cond, db.range, conditions.range, sheet );
 
-  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, sheet, fieldIndex, cond );
 
   double sum = 0.0;
   int count = 0;
@@ -855,15 +855,15 @@ bool kspreadfunc_dvar( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
-  KSpreadRange db( extra[0]->stringValue(), map, table );
-  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+  KSpreadRange db( extra[0]->stringValue(), map, sheet );
+  KSpreadRange conditions( extra[2]->stringValue(), map, sheet );
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
 
-  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, sheet );
   if ( fieldIndex == -1 )
     return false;
 
@@ -872,9 +872,9 @@ bool kspreadfunc_dvar( KSContext & context )
   QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
   cond->setAutoDelete( true );
 
-  parseConditions( cond, db.range, conditions.range, table );
+  parseConditions( cond, db.range, conditions.range, sheet );
 
-  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, sheet, fieldIndex, cond );
 
   double sum = 0.0;
   int count = 0;
@@ -928,15 +928,15 @@ bool kspreadfunc_dvarp( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
-  KSpreadRange db( extra[0]->stringValue(), map, table );
-  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+  KSpreadRange db( extra[0]->stringValue(), map, sheet );
+  KSpreadRange conditions( extra[2]->stringValue(), map, sheet );
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
 
-  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, sheet );
   if ( fieldIndex == -1 )
     return false;
 
@@ -945,9 +945,9 @@ bool kspreadfunc_dvarp( KSContext & context )
   QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
   cond->setAutoDelete( true );
 
-  parseConditions( cond, db.range, conditions.range, table );
+  parseConditions( cond, db.range, conditions.range, sheet );
 
-  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, sheet, fieldIndex, cond );
 
   double sum = 0.0;
   int count = 0;
@@ -1002,19 +1002,19 @@ bool kspreadfunc_getpivotdata( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
-  KSpreadRange db( extra[0]->stringValue(), map, table );
+  KSpreadRange db( extra[0]->stringValue(), map, sheet );
   if ( !db.isValid()  )
     return false;
 
-  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, sheet );
   if ( fieldIndex == -1 )
     return false;
 
   kdDebug() << "Fieldindex: " << fieldIndex << endl;
 
-  KSpreadCell * cell = table->cellAt( fieldIndex, db.range.bottom() );
+  KSpreadCell * cell = sheet->cellAt( fieldIndex, db.range.bottom() );
   if( cell->isEmpty() )
     return false;
 

@@ -890,7 +890,7 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
     return ok;
   }
 
-  // What is the interval (block)? If your table looks like this:
+  // What is the interval (block)? If your sheet looks like this:
   // 1 3 5 7 9
   // then the interval has the length 1 and the delta list is [2].
   // 2 200 3 300 4 400

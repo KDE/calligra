@@ -198,7 +198,7 @@ void KSpreadStyleDlg::slotOk()
 
   if ( m_view )
   {
-    KSpreadSheet * sheet = m_view->activeTable();
+    KSpreadSheet * sheet = m_view->activeSheet();
 
     if ( sheet )
     {
@@ -207,7 +207,7 @@ void KSpreadStyleDlg::slotOk()
     }
   }
 
-  m_view->slotUpdateView( m_view->activeTable() );
+  m_view->slotUpdateView( m_view->activeSheet() );
   accept();
 }
 

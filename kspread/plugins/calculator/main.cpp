@@ -120,15 +120,15 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
         if ( event->rect().left() == 0 )
             return FALSE;
 
-        KSpreadTable* table = m_view->doc()->map()->findTable( event->table() );
-        if ( !table )
+        KSpreadSheet* sheet = m_view->doc()->map()->findSheet( event->sheet() );
+        if ( !sheet )
             return FALSE;
 
         // A single cell selected ?
         if ( event->rect().left() == event->rect().right() &&
              event->rect().top() == event->rect().bottom() )
         {
-            KSpreadCell* cell = table->cellAt( event->rect().left(), event->rect().top(), false );
+            KSpreadCell* cell = sheet->cellAt( event->rect().left(), event->rect().top(), false );
             if ( !cell )
                 return FALSE;
 
@@ -143,8 +143,8 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
         }
 
         // Multiple cells selected ?
-        m_calc->setData( event->rect(), event->table().latin1() );
-        QString str = util_rangeName( table, event->rect() );
+        m_calc->setData( event->rect(), event->sheet().latin1() );
+        QString str = util_rangeName( sheet, event->rect() );
         m_calc->setLabel( str.latin1() );
 
         return FALSE;
@@ -168,19 +168,19 @@ void QtCalculator::useData()
     stats.clearAll();
 
     // How many cells ?
-    int len = ( table_range.right() - table_range.left() + 1 ) *
-              ( table_range.bottom() - table_range.top() + 1 );
+    int len = ( sheet_range.right() - sheet_range.left() + 1 ) *
+              ( sheet_range.bottom() - sheet_range.top() + 1 );
 
     double *v = new double[ len ];
     int n = 0;
-    for( int x = table_range.left(); x <= table_range.right(); x++ )
-        for( int y = table_range.top(); y <= table_range.bottom(); y++ )
+    for( int x = sheet_range.left(); x <= sheet_range.right(); x++ )
+        for( int y = sheet_range.top(); y <= sheet_range.bottom(); y++ )
         {
             KSpreadView* view = corba->view();
-            KSpreadTable* table = view->doc()->map()->findTable( table_name );
-            if ( !table )
+            KSpreadSheet* sheet = view->doc()->map()->findSheet( sheet_name );
+            if ( !sheet )
                 return;
-            KSpreadCell* cell = table->cellAt( x, y, false );
+            KSpreadCell* cell = sheet->cellAt( x, y, false );
             if ( !cell )
                 return;
 
@@ -192,7 +192,7 @@ void QtCalculator::useData()
 
     delete []v;
 
-    table_name = QString::null;
+    sheet_name = QString::null;
 }
 
 #include "main.moc"

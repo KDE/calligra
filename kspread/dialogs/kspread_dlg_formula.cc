@@ -59,7 +59,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     m_focus = 0;
     m_desc = 0;
 
-    KSpreadCell* cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),
+    KSpreadCell* cell = m_pView->activeSheet()->cellAt( m_pView->canvasWidget()->markerColumn(),
 							m_pView->canvasWidget()->markerRow() );
      m_oldText=cell->text();
     // Make sure that there is a cell editor running.
@@ -195,8 +195,8 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     connect( m_browser, SIGNAL( linkClicked( const QString& ) ),
              this, SLOT( slotShowFunction( const QString& ) ) );
 
-    // Save the name of the active table.
-    m_tableName = m_pView->activeTable()->tableName();
+    // Save the name of the active sheet.
+    m_sheetName = m_pView->activeSheet()->sheetName();
     // Save the cells current text.
     QString tmp_oldText = m_pView->canvasWidget()->editor()->text();
     // Position of the cell.
@@ -293,17 +293,17 @@ void KSpreadDlgFormula::slotOk()
     m_pView->doc()->emitBeginOperation( false );
 
     m_pView->canvasWidget()->endChoose();
-    // Switch back to the old table
-    if( m_pView->activeTable()->tableName() !=  m_tableName )
+    // Switch back to the old sheet
+    if( m_pView->activeSheet()->sheetName() !=  m_sheetName )
     {
-        KSpreadSheet *table=m_pView->doc()->map()->findTable(m_tableName);
-        if( table)
-	    m_pView->setActiveTable(table);
+        KSpreadSheet *sheet=m_pView->doc()->map()->findSheet(m_sheetName);
+        if( sheet)
+	    m_pView->setActiveSheet(sheet);
     }
 
     // Revert the marker to its original position
     m_pView->selectionInfo()->setMarker( QPoint( m_column, m_row ),
-                                         m_pView->activeTable());
+                                         m_pView->activeSheet());
 
     // If there is still an editor then set the text.
     // Usually the editor is always in place.
@@ -319,7 +319,7 @@ void KSpreadDlgFormula::slotOk()
         m_pView->canvasWidget()->editor()->setCursorPosition( pos );
     }
 
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();
     //  delete this;
 }
@@ -330,19 +330,19 @@ void KSpreadDlgFormula::slotClose()
 
     m_pView->canvasWidget()->endChoose();
 
-    // Switch back to the old table
-    if(m_pView->activeTable()->tableName() !=  m_tableName )
+    // Switch back to the old sheet
+    if(m_pView->activeSheet()->sheetName() !=  m_sheetName )
     {
-        KSpreadSheet *table=m_pView->doc()->map()->findTable(m_tableName);
-        if( !table )
+        KSpreadSheet *sheet=m_pView->doc()->map()->findSheet(m_sheetName);
+        if( !sheet )
 	    return;
-	m_pView->setActiveTable(table);
+	m_pView->setActiveSheet(sheet);
     }
 
 
     // Revert the marker to its original position
     m_pView->selectionInfo()->setMarker( QPoint( m_column, m_row ),
-                                         m_pView->activeTable() );
+                                         m_pView->activeSheet() );
 
     // If there is still an editor then reset the text.
     // Usually the editor is always in place.
@@ -353,7 +353,7 @@ void KSpreadDlgFormula::slotClose()
         m_pView->canvasWidget()->editor()->setFocus();
     }
 
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
     reject();
     //laurent 2002-01-03 comment this line otherwise kspread crash
     //but dialog box is not deleted => not good
@@ -717,7 +717,7 @@ void KSpreadDlgFormula::slotShowFunction( const QString& function )
     slotSelected( function );
 }
 
-void KSpreadDlgFormula::slotSelectionChanged( KSpreadSheet* _table, const QRect& _selection )
+void KSpreadDlgFormula::slotSelectionChanged( KSpreadSheet* _sheet, const QRect& _selection )
 {
     if ( !m_focus )
         return;
@@ -731,12 +731,12 @@ void KSpreadDlgFormula::slotSelectionChanged( KSpreadSheet* _table, const QRect&
         int dy = _selection.bottom();
         QString tmp;
         tmp.setNum( dy );
-        tmp = _table->tableName() + "!" + KSpreadCell::columnName( dx ) + tmp;
+        tmp = _sheet->sheetName() + "!" + KSpreadCell::columnName( dx ) + tmp;
         m_focus->setText( tmp );
     }
     else
     {
-        QString area = util_rangeName( _table, _selection );
+        QString area = util_rangeName( _sheet, _selection );
         m_focus->setText( area );
     }
 }

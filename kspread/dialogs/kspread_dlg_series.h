@@ -42,7 +42,7 @@ public:
 
     KSpreadSeriesDlg(KSpreadView* parent, const char* name,const QPoint &_marker);
 
-    KSpreadSheet* table;
+    KSpreadSheet* sheet;
 
 public slots:
     void slotOk();

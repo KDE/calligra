@@ -387,7 +387,7 @@ void KSpreadDlgValidity::changeIndexCond(int _index)
 
 void KSpreadDlgValidity::init()
 {
-  KSpreadCell *c = m_pView->activeTable()->cellAt( marker.left(), marker.top() );
+  KSpreadCell *c = m_pView->activeSheet()->cellAt( marker.left(), marker.top() );
   KSpreadValidity * tmpValidity=c->getValidity(0);
   if(tmpValidity!=0)
   {
@@ -740,8 +740,8 @@ void KSpreadDlgValidity::OkPressed()
   result.titleInfo = titleHelp->text();
 
   m_pView->doc()->emitBeginOperation( false );
-  m_pView->activeTable()->setValidity( m_pView->selectionInfo(),  result);
-  m_pView->slotUpdateView( m_pView->activeTable() );
+  m_pView->activeSheet()->setValidity( m_pView->selectionInfo(),  result);
+  m_pView->slotUpdateView( m_pView->activeSheet() );
   accept();
 }
 

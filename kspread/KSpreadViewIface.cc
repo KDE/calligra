@@ -61,9 +61,9 @@ DCOPRef KSpreadViewIface::map() const
     return DCOPRef( kapp->dcopClient()->appId(), m_view->doc()->map()->dcopObject()->objId() );
 }
 
-DCOPRef KSpreadViewIface::table() const
+DCOPRef KSpreadViewIface::sheet() const
 {
-    return DCOPRef( kapp->dcopClient()->appId(), m_view->activeTable()->dcopObject()->objId() );
+    return DCOPRef( kapp->dcopClient()->appId(), m_view->activeSheet()->dcopObject()->objId() );
 }
 
 void KSpreadViewIface::changeNbOfRecentFiles(int _nb)
@@ -129,19 +129,19 @@ void KSpreadViewIface::preference()
     m_view->preference();
 }
 
-void KSpreadViewIface::nextTable()
+void KSpreadViewIface::nextSheet()
 {
-    m_view->nextTable();
+    m_view->nextSheet();
 }
 
-bool KSpreadViewIface::showTable(QString tableName)
+bool KSpreadViewIface::showSheet(QString sheetName)
 {
-   return m_view->showTable(tableName);
+   return m_view->showSheet(sheetName);
 }
 
-void KSpreadViewIface::previousTable()
+void KSpreadViewIface::previousSheet()
 {
-    m_view->previousTable();
+    m_view->previousSheet();
 }
 
 void KSpreadViewIface::sortList()
@@ -287,7 +287,7 @@ void KSpreadViewIface::copyAsText()
 void KSpreadViewIface::setSelection(QRect selection)
 {
   m_view->selectionInfo()->setSelection(selection.topLeft(), selection.bottomRight(),
-                                        m_view->activeTable());
+                                        m_view->activeSheet());
 }
 
 QRect KSpreadViewIface::selection()

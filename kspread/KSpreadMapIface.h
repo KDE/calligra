@@ -39,12 +39,12 @@ public:
 				QCString& replyType, QByteArray &replyData);
 
 k_dcop:
-    virtual DCOPRef table( const QString& name );
-    virtual DCOPRef tableByIndex( int index );
-    virtual int tableCount() const;
-    virtual QStringList tableNames() const;
-    virtual QValueList<DCOPRef> tables();
-    virtual DCOPRef insertTable( const QString& name );
+    virtual DCOPRef sheet( const QString& name );
+    virtual DCOPRef sheetByIndex( int index );
+    virtual int sheetCount() const;
+    virtual QStringList sheetNames() const;
+    virtual QValueList<DCOPRef> sheets();
+    virtual DCOPRef insertSheet( const QString& name );
 
 private:
     KSpreadMap* m_map;

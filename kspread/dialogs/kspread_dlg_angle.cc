@@ -59,7 +59,7 @@ KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &
 
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 
-  KSpreadCell *cell = m_pView->activeTable()->cellAt( marker.x(), marker.y() );
+  KSpreadCell *cell = m_pView->activeSheet()->cellAt( marker.x(), marker.y() );
   int angle=-(cell->getAngle(marker.x(), marker.y()));
   m_pAngle->setValue( angle );
 }
@@ -67,8 +67,8 @@ KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &
 void KSpreadAngle::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
-    m_pView->activeTable()->setSelectionAngle(m_pView->selectionInfo(), -m_pAngle->value());
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->activeSheet()->setSelectionAngle(m_pView->selectionInfo(), -m_pAngle->value());
+    m_pView->slotUpdateView( m_pView->activeSheet() );
     // m_pView->doc()->emitEndOperation();
 
     accept();

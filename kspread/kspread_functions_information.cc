@@ -457,12 +457,12 @@ bool kspreadfunc_type( KSContext & context )
   if ( !p.isEmpty() )
   {
     KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-    KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+    KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
-    KSpreadPoint point( p, map, table );
+    KSpreadPoint point( p, map, sheet );
     if ( point.isValid() )
     {
-      KSpreadCell * cell = point.table->cellAt( point.pos.x(), point.pos.y() );
+      KSpreadCell * cell = point.sheet->cellAt( point.pos.x(), point.pos.y() );
 
       if ( cell->hasError() )
       {

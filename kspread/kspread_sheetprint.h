@@ -39,7 +39,7 @@ public:
     KSpreadSheetPrint( KSpreadSheet *sheet );
     ~KSpreadSheetPrint();
 
-    QString saveOasisTableStyleLayout( KoGenStyles &mainStyles );
+    QString saveOasisSheetStyleLayout( KoGenStyles &mainStyles );
 
     /**
      * @return false if nothing to print.
@@ -47,24 +47,24 @@ public:
     bool print( QPainter &painter, KPrinter *_printer );
 
     /**
-     * @return the printable width of the paper in millimeters.
+     * @return the prinsheet width of the paper in millimeters.
      */
-    float printableWidth()const { return m_paperWidth - m_leftBorder - m_rightBorder; }
+    float prinsheetWidth()const { return m_paperWidth - m_leftBorder - m_rightBorder; }
 
     /**
-     * @return the printable width of the paper in zoomed points.
+     * @return the prinsheet width of the paper in zoomed points.
      */
-    float printableWidthPts()const { return MM_TO_POINT( printableWidth() / m_dZoom ); }
+    float prinsheetWidthPts()const { return MM_TO_POINT( prinsheetWidth() / m_dZoom ); }
 
     /**
-     * @return the printable height of the paper in millimeters.
+     * @return the prinsheet height of the paper in millimeters.
      */
-    float printableHeight()const { return m_paperHeight - m_topBorder - m_bottomBorder; }
+    float prinsheetHeight()const { return m_paperHeight - m_topBorder - m_bottomBorder; }
 
     /**
-     * @return the printable height of the paper in zoomed points.
+     * @return the prinsheet height of the paper in zoomed points.
      */
-    float printableHeightPts()const { return MM_TO_POINT( printableHeight() / m_dZoom ); }
+    float prinsheetHeightPts()const { return MM_TO_POINT( prinsheetHeight() / m_dZoom ); }
 
     /**
      * @return the height of the paper in millimeters.
@@ -393,7 +393,7 @@ public:
     bool pageNeedsPrinting( QRect& page_range );
 
 signals:
-    void sig_updateView( KSpreadSheet *_table );
+    void sig_updateView( KSpreadSheet *_sheet );
 
 private:
 
@@ -450,7 +450,7 @@ private:
      * @param _page is the page number for which the heading is produced.
      * @param _KSpreadSheet is the name of the KSpreadSheet for which we generate the headings.
      */
-    QString completeHeading( const QString &_data, int _page, const QString &_table ) const ;
+    QString completeHeading( const QString &_data, int _page, const QString &_sheet ) const ;
 
     /**
      * Returns a rect, which contains the cols and rows to be printed.
@@ -540,7 +540,7 @@ private:
     uint m_uprintPages;
 
     /**
-     * Defined printable area
+     * Defined prinsheet area
      */
     QRect m_printRange;
 

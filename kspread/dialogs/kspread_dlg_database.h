@@ -51,7 +51,7 @@ class KSpreadDatabaseDlg : public KWizard
   Q_OBJECT
 
  public:
-  enum PageId { eDatabase = 0, eTables = 1, eColumns = 2, eOptions = 3, eResult = 4 };
+  enum PageId { eDatabase = 0, eSheets = 1, eColumns = 2, eOptions = 3, eResult = 4 };
 
   KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect, const char * name = 0, bool modal = FALSE, WFlags fl = 0 );
   virtual ~KSpreadDatabaseDlg();
@@ -65,8 +65,8 @@ class KSpreadDatabaseDlg : public KWizard
   void databaseNameChanged( const QString & s );
   void databaseHostChanged( const QString & s );
   void databaseDriverChanged( int );
-  void popupTableViewMenu( QListViewItem *, const QPoint &, int );
-  void tableViewClicked( QListViewItem * );
+  void popupSheetViewMenu( QListViewItem *, const QPoint &, int );
+  void sheetViewClicked( QListViewItem * );
   void accept();
 
  protected:
@@ -74,7 +74,7 @@ class KSpreadDatabaseDlg : public KWizard
   void back();
 
   QGridLayout  * m_databaseLayout;
-  QGridLayout  * m_tableLayout;
+  QGridLayout  * m_sheetLayout;
   QGridLayout  * m_columnsLayout;
   QGridLayout  * m_optionsLayout;
   QGridLayout  * m_resultLayout;
@@ -94,12 +94,12 @@ class KSpreadDatabaseDlg : public KWizard
   QLineEdit    * m_password;
   QLineEdit    * m_host;
   QLabel       * m_Type;
-  QWidget      * m_table;
+  QWidget      * m_sheet;
   QComboBox    * m_databaseList;
   KPushButton  * m_connectButton;
-  QLabel       * m_tableStatus;
-  QLabel       * m_SelectTableLabel;
-  KListView    * m_tableView;
+  QLabel       * m_sheetStatus;
+  QLabel       * m_SelectSheetLabel;
+  KListView    * m_sheetView;
   QWidget      * m_columns;
   KListView    * m_columnView;
   QLabel       * m_columnsStatus;
@@ -129,7 +129,7 @@ class KSpreadDatabaseDlg : public KWizard
 
   void switchPage( int id );
   bool databaseDoNext();
-  bool tablesDoNext();
+  bool sheetsDoNext();
   bool columnsDoNext();
   bool optionsDoNext();
 

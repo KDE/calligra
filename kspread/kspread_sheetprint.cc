@@ -84,7 +84,7 @@ KSpreadSheetPrint::~KSpreadSheetPrint()
   // nothing todo yet
 }
 
-QString KSpreadSheetPrint::saveOasisTableStyleLayout( KoGenStyles &mainStyles )
+QString KSpreadSheetPrint::saveOasisSheetStyleLayout( KoGenStyles &mainStyles )
 {
     KoGenStyle pageLayout( KoGenStyle::STYLE_PAGELAYOUT );
     //pageLayout.addAttribute( "style:page-usage", "all" ); FIXME
@@ -146,7 +146,7 @@ int KSpreadSheetPrint::pagesX( const QRect& cellsPrintRange )
 {
     int pages = 0;
 
-    updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( cellsPrintRange.right() ) + printableWidthPts() ) );
+    updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( cellsPrintRange.right() ) + prinsheetWidthPts() ) );
 
     for( int i = cellsPrintRange.left(); i <= cellsPrintRange.right(); i++  )
     {
@@ -160,7 +160,7 @@ int KSpreadSheetPrint::pagesY( const QRect& cellsPrintRange )
 {
     int pages = 0;
 
-    updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( cellsPrintRange.bottom() ) + printableHeightPts() ) );
+    updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( cellsPrintRange.bottom() ) + prinsheetHeightPts() ) );
 
     for( int i = cellsPrintRange.top(); i <= cellsPrintRange.bottom(); i++  )
     {
@@ -233,8 +233,8 @@ bool KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
     kdDebug()<<"cellsPrintRange() :"<<cellsPrintRange()<<endl;
     //Ensure, that our newPage lists are generated for the whole sheet to print
     //For this we add to the lists the width/height of 1 page
-    updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( cell_range.right() ) + printableWidthPts() ) );
-    updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( cell_range.bottom() ) + printableHeightPts() ) );
+    updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( cell_range.right() ) + prinsheetWidthPts() ) );
+    updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( cell_range.bottom() ) + prinsheetHeightPts() ) );
 
     // Find out how many pages need printing
     // and which cells to print on which page.
@@ -524,7 +524,7 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
 //        kdDebug(36001)<<tmp<<" offset "<<_childOffset.x()<<"/"<<_childOffset.y()<<endl;
 
         bound = it.current()->boundingRect();
-        if ( ( ( KSpreadChild* )it.current() )->table() == m_pSheet &&
+        if ( ( ( KSpreadChild* )it.current() )->sheet() == m_pSheet &&
              bound.intersects( zoomedView ) )
         {
             painter.save();
@@ -561,49 +561,49 @@ void KSpreadSheetPrint::printHeaderFooter( QPainter &painter, int pageNo )
     QFontMetrics fm = painter.fontMetrics();
 
     // print head line left
-    w = fm.width( headLeft( pageNo, m_pSheet->tableName() ) ) / m_dZoom;
+    w = fm.width( headLeft( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
         painter.drawText( m_pDoc->zoomItX( leftBorderPts() ),
                           m_pDoc->zoomItY( headFootDistance ),
-                          headLeft( pageNo, m_pSheet->tableName() ) );
+                          headLeft( pageNo, m_pSheet->sheetName() ) );
     // print head line middle
-    w = fm.width( headMid( pageNo, m_pSheet->tableName() ) ) / m_dZoom;
+    w = fm.width( headMid( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
         painter.drawText( m_pDoc->zoomItX( leftBorderPts() ) +
-                          ( m_pDoc->zoomItX( printableWidthPts() ) -
+                          ( m_pDoc->zoomItX( prinsheetWidthPts() ) -
                             w ) / 2.0,
                           m_pDoc->zoomItY( headFootDistance ),
-                          headMid( pageNo, m_pSheet->tableName() ) );
+                          headMid( pageNo, m_pSheet->sheetName() ) );
     // print head line right
-    w = fm.width( headRight( pageNo, m_pSheet->tableName() ) ) / m_dZoom;
+    w = fm.width( headRight( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
         painter.drawText( m_pDoc->zoomItX( leftBorderPts() +
-                                           printableWidthPts() ) - w,
+                                           prinsheetWidthPts() ) - w,
                           m_pDoc->zoomItY( headFootDistance ),
-                          headRight( pageNo, m_pSheet->tableName() ) );
+                          headRight( pageNo, m_pSheet->sheetName() ) );
 
     // print foot line left
-    w = fm.width( footLeft( pageNo, m_pSheet->tableName() ) ) / m_dZoom;
+    w = fm.width( footLeft( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
         painter.drawText( m_pDoc->zoomItX( leftBorderPts() ),
                           m_pDoc->zoomItY( paperHeightPts() - headFootDistance ),
-                          footLeft( pageNo, m_pSheet->tableName() ) );
+                          footLeft( pageNo, m_pSheet->sheetName() ) );
     // print foot line middle
-    w = fm.width( footMid( pageNo, m_pSheet->tableName() ) ) / m_dZoom;
+    w = fm.width( footMid( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
         painter.drawText( m_pDoc->zoomItX( leftBorderPts() ) +
-                          ( m_pDoc->zoomItX( printableWidthPts() ) -
+                          ( m_pDoc->zoomItX( prinsheetWidthPts() ) -
                             w ) / 2.0,
                           m_pDoc->zoomItY( paperHeightPts() - headFootDistance ),
-                          footMid( pageNo, m_pSheet->tableName() ) );
+                          footMid( pageNo, m_pSheet->sheetName() ) );
     // print foot line right
-    w = fm.width( footRight( pageNo, m_pSheet->tableName() ) ) / m_dZoom;
+    w = fm.width( footRight( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
         painter.drawText( m_pDoc->zoomItX( leftBorderPts() +
-                                           printableWidthPts() ) -
+                                           prinsheetWidthPts() ) -
                                            w,
                           m_pDoc->zoomItY( paperHeightPts() - headFootDistance ),
-                          footRight( pageNo, m_pSheet->tableName() ) );
+                          footRight( pageNo, m_pSheet->sheetName() ) );
 }
 
 
@@ -681,7 +681,7 @@ void KSpreadSheetPrint::updateNewPageX( int _column )
 
         while ( ( col <= _column ) && ( col < m_printRange.right() ) )
         {
-            if ( x > printableWidthPts() ) //end of page?
+            if ( x > prinsheetWidthPts() ) //end of page?
             {
                 //We found a new page, so add it to the list
                 m_lnewPageListX.append( col );
@@ -797,7 +797,7 @@ void KSpreadSheetPrint::updateNewPageY( int _row )
 
         while ( ( row <= _row ) && ( row < m_printRange.bottom() ) )
         {
-            if ( y > printableHeightPts() )
+            if ( y > prinsheetHeightPts() )
             {
                 //We found a new page, so add it to the list
                 m_lnewPageListY.append( row );
@@ -1064,9 +1064,9 @@ void KSpreadSheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
           // We need to trigger the appropriate repaintings in the cells near the
           // border of the page. The easiest way for this is to turn the borders
           // off and on (or on and off if they were off).
-//        bool bBorderWasShown = v->activeTable()->isShowPageBorders();
-//        v->activeTable()->setShowPageBorders( !bBorderWasShown );
-//        v->activeTable()->setShowPageBorders( bBorderWasShown );
+//        bool bBorderWasShown = v->activeSheet()->isShowPageBorders();
+//        v->activeSheet()->setShowPageBorders( !bBorderWasShown );
+//        v->activeSheet()->setShowPageBorders( bBorderWasShown );
 //    }
 
     m_pDoc->setModified( TRUE );
@@ -1179,7 +1179,7 @@ const char* KSpreadSheetPrint::orientationString() const
     return 0;
 }
 
-QString KSpreadSheetPrint::completeHeading( const QString &_data, int _page, const QString &_table ) const
+QString KSpreadSheetPrint::completeHeading( const QString &_data, int _page, const QString &_sheet ) const
 {
     QString page( QString::number( _page) );
     QString pages( QString::number( m_uprintPages ) );
@@ -1195,8 +1195,8 @@ QString KSpreadSheetPrint::completeHeading( const QString &_data, int _page, con
     QString t(QTime::currentTime().toString());
     QString d(QDate::currentDate().toString());
     QString ta;
-    if ( !_table.isEmpty() )
-        ta = _table;
+    if ( !_sheet.isEmpty() )
+        ta = _sheet;
 
     KoDocumentInfo * info = m_pDoc->documentInfo();
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
@@ -1322,14 +1322,14 @@ void KSpreadSheetPrint::calculateZoomForPageLimitX()
         m_dZoom = 1.0;
 
     QRect printRange = cellsPrintRange();
-    updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + printableWidthPts() ) );
+    updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + prinsheetWidthPts() ) );
     int currentPages = pagesX( printRange );
     while( ( currentPages > m_iPageLimitX ) && ( m_dZoom > 0.01 ) )
     {
         m_dZoom -= 0.01;
         updatePrintRepeatColumnsWidth();
         updateNewPageListX( 0 );
-        updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + printableWidthPts() ) );
+        updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + prinsheetWidthPts() ) );
         currentPages = pagesX( printRange );
     }
 
@@ -1354,7 +1354,7 @@ void KSpreadSheetPrint::calculateZoomForPageLimitY()
         m_dZoom = 1.0;
 
     QRect printRange = cellsPrintRange();
-    updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( printRange.bottom() ) + printableHeightPts() ) );
+    updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( printRange.bottom() ) + prinsheetHeightPts() ) );
     int currentPages = pagesY( printRange );
     while( ( currentPages > m_iPageLimitY ) && ( m_dZoom > 0.01 ) )
     {

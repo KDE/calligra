@@ -49,7 +49,7 @@
 class KSpreadCellProxy : public DCOPObjectProxy
 {
 public:
-    KSpreadCellProxy( KSpreadSheet* table, const QCString& prefix );
+    KSpreadCellProxy( KSpreadSheet* sheet, const QCString& prefix );
     ~KSpreadCellProxy();
 
     virtual bool process( const QCString& obj, const QCString& fun, const QByteArray& data,
@@ -58,14 +58,14 @@ public:
 private:
     QCString m_prefix;
     KSpreadCellIface* m_cell;
-    KSpreadSheet* m_table;
+    KSpreadSheet* m_sheet;
 };
 
-KSpreadCellProxy::KSpreadCellProxy( KSpreadSheet* table, const QCString& prefix )
+KSpreadCellProxy::KSpreadCellProxy( KSpreadSheet* sheet, const QCString& prefix )
     : DCOPObjectProxy( kapp->dcopClient() ), m_prefix( prefix )
 {
     m_cell = new KSpreadCellIface;
-    m_table = table;
+    m_sheet = sheet;
 }
 
 KSpreadCellProxy::~KSpreadCellProxy()
@@ -91,7 +91,7 @@ bool KSpreadCellProxy::process( const QCString& obj, const QCString& fun, const 
 	}
 
     QString cellID=QString::fromUtf8(obj.data() + m_prefix.length());
-    cellID=m_table->tableName()+"!"+cellID;
+    cellID=m_sheet->sheetName()+"!"+cellID;
 
     kdDebug()<<"KSpreadCellProxy::process: cellID="<<cellID<<endl;
 
@@ -103,7 +103,7 @@ bool KSpreadCellProxy::process( const QCString& obj, const QCString& fun, const 
 
     kdDebug(36001)<<"all checks finsihed, trying to access cell (x):"<<p.pos.x()<<endl;
 
-    m_cell->setCell( m_table, p.pos );
+    m_cell->setCell( m_sheet, p.pos );
     return m_cell->process( fun, data, replyType, replyData );
 }
 
@@ -117,15 +117,15 @@ KSpreadSheetIface::KSpreadSheetIface( KSpreadSheet* t )
     : DCOPObject()
 {
     m_proxy=0;
-    m_table = t;
+    m_sheet = t;
 
-    tableNameHasChanged();
+    sheetNameHasChanged();
 
 }
 
-void KSpreadSheetIface::tableNameHasChanged() {
+void KSpreadSheetIface::sheetNameHasChanged() {
   ident.resize(1);
-  QObject *currentObj = m_table;
+  QObject *currentObj = m_sheet;
     while (currentObj != 0L) {
         ident.prepend( currentObj->name() );
         ident.prepend("/");
@@ -141,7 +141,7 @@ void KSpreadSheetIface::tableNameHasChanged() {
            QCString str = objId();
            str += "/";
 	   kdDebug(36001)<<"KSpreadSheetIface::tableNameHasChanged(): new DCOP-ID:"<<objId()<<endl;
-           m_proxy = new KSpreadCellProxy( m_table, str );
+           m_proxy = new KSpreadCellProxy( m_sheet, str );
    }
 
 }
@@ -183,7 +183,7 @@ DCOPRef KSpreadSheetIface::column( int _col )
     if(_col <1)
         return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
-		    m_table->nonDefaultColumnFormat( _col )->dcopObject()->objId() );
+		    m_sheet->nonDefaultColumnFormat( _col )->dcopObject()->objId() );
 
 }
 
@@ -193,36 +193,36 @@ DCOPRef KSpreadSheetIface::row( int _row )
     if(_row <1)
         return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
-		    m_table->nonDefaultRowFormat( _row )->dcopObject()->objId() );
+		    m_sheet->nonDefaultRowFormat( _row )->dcopObject()->objId() );
 }
 
 
 QString KSpreadSheetIface::name() const
 {
-    return m_table->tableName();
+    return m_sheet->sheetName();
 }
 
 
 int KSpreadSheetIface::maxColumn() const
 {
-    return m_table->maxColumn();
+    return m_sheet->maxColumn();
 
 }
 
 bool KSpreadSheetIface::areaHasNoContent(QRect area) const
 {
 	kdDebug(36001) << "KSpreadSheetIface::areaHasNoContent("<<area<<");"<<endl;
-	return m_table->areaIsEmpty(area);
+	return m_sheet->areaIsEmpty(area);
 }
 
 bool KSpreadSheetIface::areaHasNoComments(QRect area) const
 {
-	return m_table->areaIsEmpty(area,KSpreadSheet::Comment);
+	return m_sheet->areaIsEmpty(area,KSpreadSheet::Comment);
 }
 
 int KSpreadSheetIface::maxRow() const
 {
-    return m_table->maxRow();
+    return m_sheet->maxRow();
 }
 
 bool KSpreadSheetIface::processDynamic( const QCString& fun, const QByteArray&/*data*/,
@@ -250,182 +250,182 @@ bool KSpreadSheetIface::processDynamic( const QCString& fun, const QByteArray&/*
     return TRUE;
 }
 
-bool KSpreadSheetIface::setTableName( const QString & name)
+bool KSpreadSheetIface::setSheetName( const QString & name)
 {
-    return m_table->setTableName( name);
+    return m_sheet->setSheetName( name);
 }
 
 bool KSpreadSheetIface::insertColumn( int col,int nbCol )
 {
-    return m_table->insertColumn(col,nbCol);
+    return m_sheet->insertColumn(col,nbCol);
 }
 
 bool KSpreadSheetIface::insertRow( int row,int nbRow)
 {
-    return m_table->insertRow(row,nbRow);
+    return m_sheet->insertRow(row,nbRow);
 }
 
 void KSpreadSheetIface::removeColumn( int col,int nbCol )
 {
-    m_table->removeColumn( col,nbCol );
+    m_sheet->removeColumn( col,nbCol );
 }
 
 void KSpreadSheetIface::removeRow( int row,int nbRow )
 {
-    m_table->removeRow( row,nbRow );
+    m_sheet->removeRow( row,nbRow );
 }
 
 
 bool KSpreadSheetIface::isHidden()const
 {
-    return m_table->isHidden();
+    return m_sheet->isHidden();
 }
 
 
 bool KSpreadSheetIface::showGrid() const
 {
-    return m_table->getShowGrid();
+    return m_sheet->getShowGrid();
 }
 
 bool KSpreadSheetIface::showFormula() const
 {
-    return m_table->getShowFormula();
+    return m_sheet->getShowFormula();
 }
 
 bool KSpreadSheetIface::lcMode() const
 {
-    return m_table->getLcMode();
+    return m_sheet->getLcMode();
 }
 
 bool KSpreadSheetIface::autoCalc() const
 {
-    return m_table->getAutoCalc();
+    return m_sheet->getAutoCalc();
 }
 
 bool KSpreadSheetIface::showColumnNumber() const
 {
-    return m_table->getShowColumnNumber();
+    return m_sheet->getShowColumnNumber();
 }
 
 bool KSpreadSheetIface::hideZero() const
 {
-    return m_table->getHideZero();
+    return m_sheet->getHideZero();
 }
 
 bool KSpreadSheetIface::firstLetterUpper() const
 {
-    return m_table->getFirstLetterUpper();
+    return m_sheet->getFirstLetterUpper();
 }
 
 void KSpreadSheetIface::setShowPageBorders( bool b )
 {
-    m_table->setShowPageBorders( b );
-    m_table->doc()->updateBorderButton();
+    m_sheet->setShowPageBorders( b );
+    m_sheet->doc()->updateBorderButton();
 }
 
 float KSpreadSheetIface::paperHeight()const
 {
-    return m_table->print()->paperHeight();
+    return m_sheet->print()->paperHeight();
 }
 
 float KSpreadSheetIface::paperWidth()const
 {
-    return m_table->print()->paperWidth();
+    return m_sheet->print()->paperWidth();
 }
 
 float KSpreadSheetIface::leftBorder()const
 {
-    return m_table->print()->leftBorder();
+    return m_sheet->print()->leftBorder();
 }
 
 float KSpreadSheetIface::rightBorder()const
 {
-    return m_table->print()->rightBorder();
+    return m_sheet->print()->rightBorder();
 }
 
 float KSpreadSheetIface::topBorder()const
 {
-    return m_table->print()->topBorder();
+    return m_sheet->print()->topBorder();
 }
 
 float KSpreadSheetIface::bottomBorder()const
 {
-    return m_table->print()->bottomBorder();
+    return m_sheet->print()->bottomBorder();
 }
 
 QString KSpreadSheetIface::paperFormatString() const
 {
-    return m_table->print()->paperFormatString();
+    return m_sheet->print()->paperFormatString();
 }
 
 QString KSpreadSheetIface::headLeft()const
 {
-    return m_table->print()->headLeft();
+    return m_sheet->print()->headLeft();
 }
 
 QString KSpreadSheetIface::headMid()const
 {
-    return m_table->print()->headMid();
+    return m_sheet->print()->headMid();
 }
 
 QString KSpreadSheetIface::headRight()const
 {
-    return m_table->print()->headRight();
+    return m_sheet->print()->headRight();
 }
 
 QString KSpreadSheetIface::footLeft()const
 {
-    return m_table->print()->footLeft();
+    return m_sheet->print()->footLeft();
 }
 
 QString KSpreadSheetIface::footMid()const
 {
-    return m_table->print()->footMid();
+    return m_sheet->print()->footMid();
 }
 
 QString KSpreadSheetIface::footRight()const
 {
-    return m_table->print()->footRight();
+    return m_sheet->print()->footRight();
 }
 
 void KSpreadSheetIface::setHeaderLeft(const QString & text)
 {
-    m_table->print()->setHeadFootLine( text,       headMid(), headRight(),
+    m_sheet->print()->setHeadFootLine( text,       headMid(), headRight(),
                                        footLeft(), footMid(), footRight() );
 }
 
 void KSpreadSheetIface::setHeaderMiddle(const QString & text)
 {
-    m_table->print()->setHeadFootLine( headLeft(), text,      headRight(),
+    m_sheet->print()->setHeadFootLine( headLeft(), text,      headRight(),
                                        footLeft(), footMid(), footRight() );
 
 }
 
 void KSpreadSheetIface::setHeaderRight(const QString & text)
 {
-    m_table->print()->setHeadFootLine( headLeft(), headMid(), text,
+    m_sheet->print()->setHeadFootLine( headLeft(), headMid(), text,
                                        footLeft(), footMid(), footRight() );
 }
 
 void KSpreadSheetIface::setFooterLeft(const QString & text)
 {
-    m_table->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
+    m_sheet->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
                                        text,       footMid(), footRight() );
 }
 
 void KSpreadSheetIface::setFooterMiddle(const QString & text)
 {
-    m_table->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
+    m_sheet->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
                                        footLeft(), text,      footRight() );
 }
 
 void KSpreadSheetIface::setFooterRight(const QString & text)
 {
-    m_table->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
+    m_sheet->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
                                        footLeft(), footMid(), text );
 }
 
 bool KSpreadSheetIface::isProtected() const
 {
-    return m_table->isProtected();
+    return m_sheet->isProtected();
 }

@@ -53,7 +53,7 @@ KSpreadResizeRow::KSpreadResizeRow( KSpreadView* parent, const char* name )
     QHBoxLayout *hLay = new QHBoxLayout( vLay );
 
     QRect selection( m_pView->selection() );
-    RowFormat* rl = m_pView->activeTable()->rowFormat( selection.top() );
+    RowFormat* rl = m_pView->activeSheet()->rowFormat( selection.top() );
     rowHeight = rl->dblHeight();
 
     QLabel * label1 = new QLabel( page, "label1" );
@@ -93,7 +93,7 @@ void KSpreadResizeRow::slotOk()
 
         if ( !m_pView->doc()->undoLocked() )
         {
-            KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(), m_pView->activeTable(), selection );
+            KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(), m_pView->activeSheet(), selection );
             m_pView->doc()->addCommand( undo );
         }
 
@@ -101,7 +101,7 @@ void KSpreadResizeRow::slotOk()
             m_pView->vBorderWidget()->resizeRow( height, i, false );
     }
 
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();
 }
 
@@ -123,7 +123,7 @@ KSpreadResizeColumn::KSpreadResizeColumn( KSpreadView* parent, const char* name 
     QHBoxLayout *hLay = new QHBoxLayout( vLay );
 
     QRect selection( m_pView->selection() );
-    ColumnFormat* cl = m_pView->activeTable()->columnFormat( selection.left() );
+    ColumnFormat* cl = m_pView->activeSheet()->columnFormat( selection.left() );
     columnWidth = cl->dblWidth();
 
     QLabel * label1 = new QLabel( page, "label1" );
@@ -162,7 +162,7 @@ void KSpreadResizeColumn::slotOk()
 
         if ( !m_pView->doc()->undoLocked() )
         {
-            KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(), m_pView->activeTable(), selection );
+            KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(), m_pView->activeSheet(), selection );
             m_pView->doc()->addCommand( undo );
         }
 
@@ -171,7 +171,7 @@ void KSpreadResizeColumn::slotOk()
 
     }
 
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();
 }
 

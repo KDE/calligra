@@ -416,7 +416,7 @@ public slots:
 
 protected:
 
-  KSpreadSheet* table;
+  KSpreadSheet* sheet;
   KSpreadBorderButton* borderButtons[BorderType_END];
   KSpreadBorderButton* shortcutButtons[BorderShortcutType_END];
 #define NUM_BORDER_PATTERNS 10
@@ -559,9 +559,9 @@ class CellFormatDlg : public QObject
     Q_OBJECT
 public:
     /**
-     * Create a format dlg for the rectangular area in '_table'.
+     * Create a format dlg for the rectangular area in '_sheet'.
      */
-    CellFormatDlg( KSpreadView * _view, KSpreadSheet * _table, int _left, int _top, int _right, int _bottom );
+    CellFormatDlg( KSpreadView * _view, KSpreadSheet * _sheet, int _left, int _top, int _right, int _bottom );
     CellFormatDlg( KSpreadView * _view, KSpreadCustomStyle * _style, KSpreadStyleManager * _manager,
                    KSpreadDoc * doc );
 
@@ -584,7 +584,7 @@ public:
     int exec();
 
     KSpreadDoc * getDoc() const { return m_doc; }
-    KSpreadSheet * getTable() const { return m_table; }
+    KSpreadSheet * getSheet() const { return m_sheet; }
     KSpreadCustomStyle * getStyle() const { return m_style; }
     KSpreadStyleManager * getStyleManager() const { return m_styleManager; }
 
@@ -705,7 +705,7 @@ protected:
     QTabDialog *tab;
 
     KSpreadDoc   * m_doc;
-    KSpreadSheet * m_table;
+    KSpreadSheet * m_sheet;
     KSpreadView  * m_pView;
     KSpreadCustomStyle * m_style;
     KSpreadStyleManager * m_styleManager;

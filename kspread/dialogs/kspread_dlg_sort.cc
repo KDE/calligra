@@ -201,8 +201,8 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   QHBoxLayout * resultToBoxLayout = new QHBoxLayout( resultToBox->layout() );
   resultToBoxLayout->setAlignment( Qt::AlignTop );
 
-  m_outputTable = new QComboBox( false, resultToBox, "m_outputTable" );
-  resultToBoxLayout->addWidget( m_outputTable );
+  m_outputSheet = new QComboBox( false, resultToBox, "m_outputSheet" );
+  resultToBoxLayout->addWidget( m_outputSheet );
   QSpacerItem * spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
   resultToBoxLayout->addItem( spacer );
 
@@ -280,15 +280,15 @@ void KSpreadSortDlg::init()
   }
   m_customList->insertStringList(lst);
 
-  QPtrList<KSpreadSheet> tableList = m_pView->doc()->map()->tableList();
-  for (unsigned int c = 0; c < tableList.count(); ++c)
+  QPtrList<KSpreadSheet> sheetList = m_pView->doc()->map()->sheetList();
+  for (unsigned int c = 0; c < sheetList.count(); ++c)
   {
-    KSpreadSheet * t = tableList.at(c);
+    KSpreadSheet * t = sheetList.at(c);
     if (!t)
       continue;
-    m_outputTable->insertItem( t->tableName() );
+    m_outputSheet->insertItem( t->sheetName() );
   }
-  m_outputTable->setCurrentText( m_pView->activeTable()->tableName() );
+  m_outputSheet->setCurrentText( m_pView->activeSheet()->sheetName() );
 
   QRect r = m_pView->selection();
   QString cellArea;
@@ -406,26 +406,26 @@ void KSpreadSortDlg::slotOk()
 {
   m_pView->doc()->emitBeginOperation( false );
 
-  KSpreadSheet * table = m_pView->doc()->map()->findTable( m_outputTable->currentText() );
-  if ( !table )
+  KSpreadSheet * sheet = m_pView->doc()->map()->findSheet( m_outputSheet->currentText() );
+  if ( !sheet )
   {
     KMessageBox::error( this, i18n("The selected output table does not exist.") );
-    m_outputTable->setFocus();
+    m_outputSheet->setFocus();
     m_tabWidget->setTabEnabled(m_page2, true);
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
     return;
   }
 
   KSpreadPoint outputPoint( m_outputCell->text() );
-  if ( !outputPoint.isValid() || outputPoint.isTableKnown() )
+  if ( !outputPoint.isValid() || outputPoint.isSheetKnown() )
   {
     KMessageBox::error( this, i18n("The output cell is invalid.") );
     m_outputCell->setFocus();
     m_tabWidget->setTabEnabled(m_page2, true);
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
     return;
   }
-  outputPoint.table = table;
+  outputPoint.sheet = sheet;
 
   QRect r = m_pView->selection();
   if ( r.topLeft() != outputPoint.pos )
@@ -439,7 +439,7 @@ void KSpreadSortDlg::slotOk()
     {
       KMessageBox::error( this, i18n("The output region must not overlap with the source region.") );
       m_outputCell->setFocus();
-      m_pView->slotUpdateView( m_pView->activeTable() );
+      m_pView->slotUpdateView( m_pView->activeSheet() );
       // TODO: set right tab
       return;
     }
@@ -519,7 +519,7 @@ void KSpreadSortDlg::slotOk()
 
   if ( m_sortRow->isChecked() )
   {
-    m_pView->activeTable()->sortByRow( m_pView->selection(), key1, key2, key3,
+    m_pView->activeSheet()->sortByRow( m_pView->selection(), key1, key2, key3,
                                        order1, order2, order3,
                                        firstKey, m_copyLayout->isChecked(),
                                        m_firstRowHeader->isChecked(),
@@ -527,7 +527,7 @@ void KSpreadSortDlg::slotOk()
   }
   else if (m_sortColumn->isChecked())
   {
-    m_pView->activeTable()->sortByColumn( m_pView->selection(), key1, key2, key3,
+    m_pView->activeSheet()->sortByColumn( m_pView->selection(), key1, key2, key3,
                                           order1, order2, order3,
                                           firstKey, m_copyLayout->isChecked(),
                                           m_firstRowHeader->isChecked(),
@@ -541,7 +541,7 @@ void KSpreadSortDlg::slotOk()
   delete firstKey;
   firstKey = 0L;
 
-  m_pView->slotUpdateView( m_pView->activeTable() );
+  m_pView->slotUpdateView( m_pView->activeSheet() );
   accept();
 }
 

@@ -227,7 +227,7 @@ public:
 
     void setLabel( const char *_text );
     void setValue( double _value );
-    void setData( const QRect& _range, const char *_table );
+    void setData( const QRect& _range, const char *_sheet );
     void useData();
 
 public slots:
@@ -435,8 +435,8 @@ private:
     QListBox            *paper;
     QTimer		*status_timer;
 
-    QRect               table_range;
-    QString             table_name;
+    QRect               sheet_range;
+    QString             sheet_name;
     Calculator*         corba;
     QWidget *mSmallPage;
     QWidget *mLargePage;

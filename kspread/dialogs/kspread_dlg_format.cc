@@ -71,7 +71,7 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     for( ; it != lst.end(); ++it )
     {
 	KSimpleConfig cfg( *it, TRUE );
-	cfg.setGroup( "Table-Style" );
+	cfg.setGroup( "Sheet-Style" );
 
 	Entry e;
 	e.config = *it;
@@ -151,7 +151,7 @@ void KSpreadFormatDlg::slotOk()
     if ( !m_view->doc()->undoLocked() )
     {
         QString title=i18n("Change Format");
-        KSpreadUndoCellFormat *undo = new KSpreadUndoCellFormat( m_view->doc(), m_view->activeTable(), r ,title);
+        KSpreadUndoCellFormat *undo = new KSpreadUndoCellFormat( m_view->doc(), m_view->activeSheet(), r ,title);
         m_view->doc()->addCommand( undo );
     }
     //
@@ -159,7 +159,7 @@ void KSpreadFormatDlg::slotOk()
     //
 
     // Top left corner
-    KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( r.left(), r.top() );
+    KSpreadCell* cell = m_view->activeSheet()->nonDefaultCell( r.left(), r.top() );
     cell->copy( *m_cells[0] );
 
     // Top column
@@ -167,7 +167,7 @@ void KSpreadFormatDlg::slotOk()
     for( x = r.left() + 1; x <= r.right(); ++x )
     {
 	int pos = 1 + ( ( x - r.left() - 1 ) % 2 );
-	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( x, r.top() );
+	KSpreadCell* cell = m_view->activeSheet()->nonDefaultCell( x, r.top() );
         if(!cell->isObscuringForced())
         {
         cell->copy( *m_cells[ pos ] );
@@ -191,7 +191,7 @@ void KSpreadFormatDlg::slotOk()
         }
     }
 
-    cell = m_view->activeTable()->nonDefaultCell( r.right(), r.top() );
+    cell = m_view->activeSheet()->nonDefaultCell( r.right(), r.top() );
     if ( m_cells[3] )
 	cell->setRightBorderPen( m_cells[3]->leftBorderPen( 0, 0 ) );
 
@@ -199,7 +199,7 @@ void KSpreadFormatDlg::slotOk()
     for( y = r.top() + 1; y <= r.bottom(); ++y )
     {
 	int pos = 4 + ( ( y - r.top() - 1 ) % 2 ) * 4;
-	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( r.left(), y );
+	KSpreadCell* cell = m_view->activeSheet()->nonDefaultCell( r.left(), y );
         if(!cell->isObscuringForced())
         {
         cell->copy( *m_cells[ pos ] );
@@ -228,7 +228,7 @@ void KSpreadFormatDlg::slotOk()
 	for( y = r.top() + 1; y <= r.bottom(); ++y )
         {
 	    int pos = 5 + ( ( y - r.top() - 1 ) % 2 ) * 4 + ( ( x - r.left() - 1 ) % 2 );
-	    KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( x, y );
+	    KSpreadCell* cell = m_view->activeSheet()->nonDefaultCell( x, y );
             if(!cell->isObscuringForced())
             {
             cell->copy( *m_cells[ pos ] );
@@ -255,7 +255,7 @@ void KSpreadFormatDlg::slotOk()
     // Outer right border
     for( y = r.top(); y <= r.bottom(); ++y )
     {
-	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( r.right(), y );
+	KSpreadCell* cell = m_view->activeSheet()->nonDefaultCell( r.right(), y );
         if(!cell->isObscuringForced())
         {
 	if ( y == r.top() )
@@ -279,7 +279,7 @@ void KSpreadFormatDlg::slotOk()
     // Outer bottom border
     for( x = r.left(); x <= r.right(); ++x )
     {
-	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( x, r.bottom() );
+	KSpreadCell* cell = m_view->activeSheet()->nonDefaultCell( x, r.bottom() );
         if(!cell->isObscuringForced())
         {
         if ( x == r.left() )
@@ -301,9 +301,9 @@ void KSpreadFormatDlg::slotOk()
     }
 
     m_view->selectionInfo()->setSelection( r.topLeft(), r.bottomRight(),
-                                           m_view->activeTable() );
+                                           m_view->activeSheet() );
     m_view->doc()->setModified( true );
-    m_view->slotUpdateView( m_view->activeTable() );
+    m_view->slotUpdateView( m_view->activeSheet() );
     accept();
 }
 
@@ -320,8 +320,8 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
     {
 	if ( e.tagName() == "cell" )
         {
-	    KSpreadSheet* table = m_view->activeTable();
-	    KSpreadFormat* cell = new KSpreadFormat( table, table->doc()->styleManager()->defaultStyle() );
+	    KSpreadSheet* sheet = m_view->activeSheet();
+	    KSpreadFormat* cell = new KSpreadFormat( sheet, sheet->doc()->styleManager()->defaultStyle() );
 
 	    if ( !cell->load( e.namedItem("format").toElement(), Normal ) )
 		return false;

@@ -77,7 +77,7 @@ public:
     KSpreadCell* lookup( int x, int y ) const;
 
     /**
-     * Removes all cells from the table and frees memory that
+     * Removes all cells from the sheet and frees memory that
      * was used for the clusters.
      */
     void clear();
@@ -102,7 +102,7 @@ public:
      * Moves all cells in the column marker.x() beginning with
      * the one at marker.y() one position downwards.
      *
-     * @return FALSE if a cell would drop out of the table because of that.
+     * @return FALSE if a cell would drop out of the sheet because of that.
      *         In this case the shift is not performed.
      */
     bool shiftColumn( const QPoint& marker );
@@ -117,7 +117,7 @@ public:
     /**
      * Moves all columns beginning with @p col one position
      * to the right. If that does not work because a cell would
-     * drop out of the table, then FALSE is returned.
+     * drop out of the sheet, then FALSE is returned.
      *
      * @see #removeColumn
      */

@@ -159,12 +159,12 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
   Q_ASSERT(selection_info);
 
   QPoint selection = selection_info->selection().topLeft();
-
-  KSpreadSheet* table = m_kspreadView->activeTable();
-
-  Q_ASSERT(table);
-
-  if (!table)
+  
+  KSpreadSheet* sheet = m_kspreadView->activeSheet();
+  
+  Q_ASSERT(sheet);
+  
+  if (!sheet)
     return;
 
   //now let's check if the area is really empty...
@@ -174,13 +174,13 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
   //so that should be ok, but can be improved of course
   //@todo improve calendar size prediction!
   int sizeY = 4 + (int)(0.5*(float)(start.daysTo(end)));
-
-  if (!table->areaIsEmpty(QRect(selection,QSize(sizeX,sizeY))))
+  
+  if (!sheet->areaIsEmpty(QRect(selection,QSize(sizeX,sizeY))))
   {
     if (KMessageBox::No == KMessageBox::warningYesNo(NULL,i18n("The area where the calendar is inserted is NOT empty, are you sure you want to continue, overwriting existing data? If you choose No the area that would be required for the desired calendar will be selected so you can see what data would be overwritten."),i18n("Warning")))
     {
       //select the area so the user knows what's in the way
-      selection_info->setSelection(selection,QPoint(selection.x()+sizeX,selection.y()+sizeY),table);
+      selection_info->setSelection(selection,QPoint(selection.x()+sizeX,selection.y()+sizeY),sheet);
       return;
     }
   }
@@ -194,8 +194,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
   int row = selection.y();
   int col = selection.x();
   int colstart = col; //this is where we get back after each week
-
-  table->setText(row,colstart,i18n("Calendar from %1 to %2").arg(start.toString()).arg(end.toString()));
+  sheet->setText(row,colstart,i18n("Calendar from %1 to %2").arg(start.toString()).arg(end.toString()));
 
   QDate current(start);
 //   QDate previous(current);
@@ -230,29 +229,29 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
 
     if (yearheader)
     {
-      kdDebug() << "inserting year " + QString::number(current.year()) << endl;
-      table->setText(row,colstart+6,cs->yearString(current,false));
-
+      kdDebug() << "inserting year " + QString::number(current.year()) << endl;      
+      sheet->setText(row,colstart+6,cs->yearString(current,false));
+      
       row+=2;
       yearheader=false;
     }
     if (monthheader)
     {
-      kdDebug() << "inserting month " + QString::number(current.month()) << endl;
-      table->setText(row,colstart+6,cs->monthName(current,false));
+      kdDebug() << "inserting month " + QString::number(current.month()) << endl;      
+      sheet->setText(row,colstart+6,cs->monthName(current,false));
       row+=2;
       //we always have the week number in the first column
-      table->setText(row,colstart,i18n("week"));
+      sheet->setText(row,colstart,i18n("week"));
       for (int i=1; i<8; i++)
       {
-        table->setText(row,colstart+(i-1)*2+1,cs->weekDayName(i));
+        sheet->setText(row,colstart+(i-1)*2+1,cs->weekDayName(i));
       }
       row++;
       monthheader=false;
     }
     if (weekheader)
     {
-      table->setText(row,colstart,QString::number(cs->weekNumber(current)));
+      sheet->setText(row,colstart,QString::number(cs->weekNumber(current)));
       col++;
       weekheader=false;
 
@@ -263,8 +262,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
       }
     }
 
-    table->setText(row,col,QString::number(cs->day(current)));
-
+    sheet->setText(row,col,QString::number(cs->day(current)));    
     //go to the next date
     //@todo isn't there a better way, like current++ or something??
     QDate next = current.addDays(1);

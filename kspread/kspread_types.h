@@ -1,8 +1,8 @@
 /*
 KSpread's code is IMO often hard to read. The cause of this is that there
 is no clear distinction between coordinates on the screen and coordinates
-in a table. Therefore I want to propose to define our own types to refer to
-coordinates on the table. 
+in a sheet. Therefore I want to propose to define our own types to refer to
+coordinates on the sheet. 
 This is a quick draft of how it could look like. It is definitely not complete.
 So feel free to change it and add comments. The types are very straightforward,
 so I think no further comments are needed yet.  -- Wilco --

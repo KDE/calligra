@@ -100,9 +100,9 @@ private slots:
     void slotChangeText(const QString& text );
     /**
      * Connected to @ref KSpreadView to get notified if the selection in the
-     * table changes.
+     * sheet changes.
      */
-    void slotSelectionChanged( KSpreadSheet* _table, const QRect& _selection );
+    void slotSelectionChanged( KSpreadSheet* _sheet, const QRect& _selection );
     /**
      * Called if the button @ref #selectFunction was clicked. That
      * insertes a new function call to the result.
@@ -161,7 +161,7 @@ private:
     QString m_oldText;
 
     QString m_funcName;
-    QString m_tableName;
+    QString m_sheetName;
 
     QString m_rightText;
     QString m_leftText;

@@ -142,7 +142,7 @@ protected:
 /**
  * Class RenameSheetCommand implements a command for renaming a sheet.
  *
- * \sa KSpreadSheet::setTableName
+ * \sa KSpreadSheet::setSheetName
  */
 
 class RenameSheetCommand : public KCommand

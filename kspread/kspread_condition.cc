@@ -101,7 +101,7 @@ bool KSpreadConditions::currentCondition( KSpreadConditional & condition )
   double value   = m_cell->value().asFloat();
   QString strVal = m_cell->text();
 
-  //  if ( m_cell->value().isNumber() && !m_cell->table()->getShowFormula())
+  //  if ( m_cell->value().isNumber() && !m_cell->sheet()->getShowFormula())
   //  {
 
   for ( it = m_condList.begin(); it != m_condList.end(); ++it )

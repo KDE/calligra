@@ -157,7 +157,7 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
 
   m_resultFrame->hide();
 
-  m_tableName = m_pView->activeTable()->tableName();
+  m_sheetName = m_pView->activeSheet()->sheetName();
 
   // Allow the user to select cells on the spreadsheet.
   m_pView->canvasWidget()->startChoose();
@@ -188,7 +188,7 @@ KSpreadGoalSeekDlg::~KSpreadGoalSeekDlg()
     m_sourceCell->setValue(m_oldSource);
     m_targetCell->setCalcDirtyFlag();
     m_targetCell->calc();
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
   }
 }
 
@@ -214,7 +214,7 @@ void KSpreadGoalSeekDlg::closeEvent ( QCloseEvent * e )
   e->accept();
 }
 
-void KSpreadGoalSeekDlg::slotSelectionChanged( KSpreadSheet * _table, const QRect & _selection )
+void KSpreadGoalSeekDlg::slotSelectionChanged( KSpreadSheet * _sheet, const QRect & _selection )
 {
   if ( !m_focus )
     return;
@@ -229,12 +229,12 @@ void KSpreadGoalSeekDlg::slotSelectionChanged( KSpreadSheet * _table, const QRec
     QString tmp;
 
     tmp.setNum( dy );
-    tmp = _table->tableName() + "!" + KSpreadCell::columnName( dx ) + tmp;
+    tmp = _sheet->sheetName() + "!" + KSpreadCell::columnName( dx ) + tmp;
     m_focus->setText( tmp );
   }
   else
   {
-    QString area = util_rangeName( _table, _selection );
+    QString area = util_rangeName( _sheet, _selection );
     m_focus->setText( area );
   }
 }
@@ -245,27 +245,27 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
   pDoc->emitBeginOperation( false );
   if (m_maxIter > 0)
   {
-    KSpreadSheet * table = m_pView->activeTable();
+    KSpreadSheet * sheet = m_pView->activeSheet();
 
-    KSpreadPoint source( m_sourceEdit->text(), table->map(), table );
+    KSpreadPoint source( m_sourceEdit->text(), sheet->map(), sheet );
     if (!source.isValid())
     {
       KMessageBox::error( this, i18n("Cell reference is invalid.") );
       m_sourceEdit->selectAll();
       m_sourceEdit->setFocus();
 
-      m_pView->slotUpdateView( m_pView->activeTable() );
+      m_pView->slotUpdateView( m_pView->activeSheet() );
       return;
     }
 
-    KSpreadPoint target( m_targetEdit->text(), table->map(), table );
+    KSpreadPoint target( m_targetEdit->text(), sheet->map(), sheet );
     if (!target.isValid())
     {
       KMessageBox::error( this, i18n("Cell reference is invalid.") );
       m_targetEdit->selectAll();
       m_targetEdit->setFocus();
 
-      m_pView->slotUpdateView( m_pView->activeTable() );
+      m_pView->slotUpdateView( m_pView->activeSheet() );
       return;
     }
 
@@ -277,7 +277,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
       m_targetValueEdit->selectAll();
       m_targetValueEdit->setFocus();
 
-      m_pView->slotUpdateView( m_pView->activeTable() );
+      m_pView->slotUpdateView( m_pView->activeSheet() );
       return;
     }
 
@@ -290,7 +290,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
       m_sourceEdit->selectAll();
       m_sourceEdit->setFocus();
 
-      m_pView->slotUpdateView( m_pView->activeTable() );
+      m_pView->slotUpdateView( m_pView->activeSheet() );
       return;
     }
 
@@ -300,7 +300,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
       m_targetEdit->selectAll();
       m_targetEdit->setFocus();
 
-      m_pView->slotUpdateView( m_pView->activeTable() );
+      m_pView->slotUpdateView( m_pView->activeSheet() );
       return;
     }
 
@@ -316,7 +316,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
     m_restored = false;
 
     startCalc( m_sourceCell->value().asFloat(), goal );
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
 
     return;
   }
@@ -325,7 +325,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
     if ( !pDoc->undoLocked() )
     {
       KSpreadUndoSetText * undo
-        = new KSpreadUndoSetText( pDoc, m_pView->activeTable(), QString::number(m_oldSource),
+        = new KSpreadUndoSetText( pDoc, m_pView->activeSheet(), QString::number(m_oldSource),
                                   m_sourceCell->column(), m_sourceCell->row(),
                                   m_sourceCell->formatType() );
 
@@ -336,7 +336,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
   }
   chooseCleanup();
 
-  m_pView->slotUpdateView( m_pView->activeTable() );
+  m_pView->slotUpdateView( m_pView->activeSheet() );
   accept();
 }
 
@@ -349,7 +349,7 @@ void KSpreadGoalSeekDlg::buttonCancelClicked()
     m_targetCell->setCalcDirtyFlag();
     m_targetCell->calc();
     m_restored = true;
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
   }
 
   chooseCleanup();
@@ -360,20 +360,20 @@ void KSpreadGoalSeekDlg::chooseCleanup()
 {
   m_pView->canvasWidget()->endChoose();
 
-  KSpreadSheet * table = 0;
+  KSpreadSheet * sheet = 0;
 
-  // Switch back to the old table
-  if ( m_pView->activeTable()->tableName() !=  m_tableName )
+  // Switch back to the old sheet
+  if ( m_pView->activeSheet()->sheetName() !=  m_sheetName )
   {
-    table = m_pView->doc()->map()->findTable( m_tableName );
-    if ( table )
-      m_pView->setActiveTable( table );
+    sheet = m_pView->doc()->map()->findSheet( m_sheetName );
+    if ( sheet )
+      m_pView->setActiveSheet( sheet );
   }
   else
-    table = m_pView->activeTable();
+    sheet = m_pView->activeSheet();
 
   // Revert the marker to its original position
-  m_pView->selectionInfo()->setSelection( m_marker, m_anchor, table );
+  m_pView->selectionInfo()->setSelection( m_marker, m_anchor, sheet );
 }
 
 

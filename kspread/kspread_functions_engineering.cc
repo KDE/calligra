@@ -992,7 +992,7 @@ static bool kspread_convert_volume( const QString& fromUnit,
   {
     volumeMap[ "l" ]      = 1.0; // Liter (the reference)
     volumeMap[ "tsp" ]    = 202.84; // teaspoon
-    volumeMap[ "tbs" ]    = 67.6133333333333; // tablespoon
+    volumeMap[ "tbs" ]    = 67.6133333333333; // sheetspoon
     volumeMap[ "oz" ]     = 33.8066666666667; // ounce liquid
     volumeMap[ "cup" ]    = 4.22583333333333; // cup
     volumeMap[ "pt" ]     = 2.11291666666667; // pint

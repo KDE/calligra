@@ -69,7 +69,7 @@ bool kspreadfunc_address( KSContext & context )
 {
   QValueList<KSValue::Ptr> & args = context.value()->listValue();
   bool r1c1 = false;
-  QString tableName;
+  QString sheetName;
   int absNum = 1;
 
   if ( !KSUtil::checkArgumentsCount( context, 5, "ADDRESS", false ) )
@@ -118,7 +118,7 @@ bool kspreadfunc_address( KSContext & context )
 
     absNum    = args[2]->intValue();
     r1c1      = !args[3]->boolValue();
-    tableName = args[4]->stringValue();
+    sheetName = args[4]->stringValue();
   }
 
   if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
@@ -130,9 +130,9 @@ bool kspreadfunc_address( KSContext & context )
   int row = args[0]->intValue();
   int col = args[1]->intValue();
 
-  if ( !tableName.isEmpty() )
+  if ( !sheetName.isEmpty() )
   {
-    result += tableName;
+    result += sheetName;
     result += "!";
   }
 
@@ -502,7 +502,7 @@ bool kspreadfunc_indirect( KSContext & context )
   }
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
   KSpreadPoint p( ref, map, sheet );
 

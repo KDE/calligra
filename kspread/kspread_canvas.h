@@ -71,7 +71,7 @@ class CanvasPrivate;
 /**
  * The canvas builds a part of the GUI of KSpread.
  * It contains the borders, scrollbars,
- * editwidget and of course it displays the table.
+ * editwidget and of course it displays the sheet.
  * Especially most of the user interface logic is implemented here.
  * That means that this class knows what to do when a key is pressed
  * or if the mouse button was clicked.
@@ -138,8 +138,8 @@ public:
      */
     QRect visibleCells();
 
-    KSpreadSheet* activeTable() const;
-    KSpreadSheet* findTable( const QString& _name ) const;
+    KSpreadSheet* activeSheet() const;
+    KSpreadSheet* findSheet( const QString& _name ) const;
 
     /**
      * A convenience function.
@@ -152,11 +152,11 @@ public:
 
     /**
      * Move the cursor to the specified cell. This may include switching
-     * the table. In addition @ref #KSpreadView::updateEditWidget is called.
+     * the sheet. In addition @ref #KSpreadView::updateEditWidget is called.
      *
      * @param location the cell to move to
      *
-     * @param table the table to move to.  If NULL, the active table is used
+     * @param sheet the sheet to move to.  If NULL, the active sheet is used
 
      * @param extendSelection determines wether this move of the marker is part
      *                        of a selection, that means: The user holds the
@@ -166,15 +166,15 @@ public:
      *                        selected, and the selection anchor will be reset
      *                        to this cell.
      */
-    void gotoLocation( QPoint const & location, KSpreadSheet* table = NULL,
+    void gotoLocation( QPoint const & location, KSpreadSheet* sheet = NULL,
                        bool extendSelection = false);
 
     /**
      * convenience function
      */
-    void gotoLocation( int col, int row, KSpreadSheet* table = NULL,
+    void gotoLocation( int col, int row, KSpreadSheet* sheet = NULL,
                        bool extendSelection = false)
-    {gotoLocation(QPoint(col, row), table, extendSelection);}
+    {gotoLocation(QPoint(col, row), sheet, extendSelection);}
 
 
     /**
@@ -423,9 +423,9 @@ private:
     bool m_bChoose;
     /**
      * If a choose selection is started (@ref #startChoose) the current
-     * table is saved here.
+     * sheet is saved here.
      */
-    KSpreadSheet* m_chooseStartTable;
+    KSpreadSheet* m_chooseStartSheet;
 
     /**
      * @see #setLastEditorWithFocus

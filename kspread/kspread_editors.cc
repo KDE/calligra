@@ -420,7 +420,7 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
             {
                 if ((*it).ref_name == tmp)
                 {
-                    QString tmp = (*it).table_name;
+                    QString tmp = (*it).sheet_name;
                     tmp += "!";
                     tmp += util_rangeName((*it).rect);
                     m_pView->canvasWidget()->gotoLocation( KSpreadRange(tmp, m_pView->doc()->map()));
@@ -429,7 +429,7 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
             }
 
             // Set the cell component to uppercase:
-            // Table1!a1 -> Table1!A2
+            // Sheet1!a1 -> Sheet1!A2
             int pos = ltext.find('!');
             if ( pos !=- 1 )
                 tmp = ltext.left(pos)+ltext.mid(pos).upper();
@@ -455,11 +455,11 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
                 if ( !point.isValid() && validName)
                 {
                     QRect rect( m_pView->selection() );
-                    KSpreadSheet * t = m_pView->activeTable();
+                    KSpreadSheet * t = m_pView->activeSheet();
                     // set area name on current selection/cell
 
                     m_pView->doc()->addAreaName(rect, ltext.lower(),
-                                                t->tableName());
+                                                t->sheetName());
                 }
 
                 if (!validName)
@@ -497,7 +497,7 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
 /****************************************************************
  *
  * KSpreadEditWidget
- * The line-editor that appears above the table and allows to
+ * The line-editor that appears above the sheet and allows to
  * edit the cells content.
  *
  ****************************************************************/
@@ -515,7 +515,7 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
 
   installEventFilter(m_pCanvas);
 
-  if ( !m_pCanvas->doc()->isReadWrite() || !m_pCanvas->activeTable() )
+  if ( !m_pCanvas->doc()->isReadWrite() || !m_pCanvas->activeSheet() )
     setEnabled( false );
 
   QObject::connect( m_pCancelButton, SIGNAL( clicked() ),

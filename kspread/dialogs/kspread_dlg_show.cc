@@ -77,32 +77,32 @@ void KSpreadshow::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
 
-    QStringList listTable;
+    QStringList listSheet;
 
     for (int i=0; i < list->numRows(); i++)
     {
         if (list->isSelected(i))
         {
-            listTable.append( list->text(i));
+            listSheet.append( list->text(i));
         }
     }
 
-    //m_pView->tabBar()->showTable(listTable);
+    //m_pView->tabBar()->showSheet(listSheet);
 
-    if ( listTable.count()==0 )
+    if ( listSheet.count()==0 )
         return;
 
-    KSpreadSheet *table;
-    KMacroCommand *macroUndo=new KMacroCommand( i18n("Show Table") );
-    for ( QStringList::Iterator it = listTable.begin(); it != listTable.end(); ++it )
+    KSpreadSheet *sheet;
+    KMacroCommand *macroUndo=new KMacroCommand( i18n("Show Sheet") );
+    for ( QStringList::Iterator it = listSheet.begin(); it != listSheet.end(); ++it )
     {
-        table=m_pView->doc()->map()->findTable( *it );
-        KCommand* command = new ShowSheetCommand( table );
+        sheet=m_pView->doc()->map()->findSheet( *it );
+        KCommand* command = new ShowSheetCommand( sheet );
         macroUndo->addCommand( command );
     }
     m_pView->doc()->addCommand( macroUndo );
     macroUndo->execute();
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();
 }
 

@@ -82,8 +82,8 @@ void KSpreadarea::slotOk()
     if (newName)
     {
       m_pView->doc()->emitBeginOperation( false );
-      m_pView->doc()->addAreaName(rect, tmp, m_pView->activeTable()->tableName());
-      m_pView->slotUpdateView( m_pView->activeTable() );
+      m_pView->doc()->addAreaName(rect, tmp, m_pView->activeSheet()->sheetName());
+      m_pView->slotUpdateView( m_pView->activeSheet() );
       accept();
     }
     else

@@ -143,7 +143,7 @@ signals:
 };
 
 /**
- * The widget that appears above the table and allows to
+ * The widget that appears above the sheet and allows to
  * edit the cells content.
  */
 class KSpreadEditWidget : public QLineEdit

@@ -130,7 +130,7 @@ struct st_cell
   QString xdesc;
   QString ydesc;
   KSpreadCell* cell;
-  QString table;
+  QString sheet;
   int x;
   int y;
 };
@@ -141,7 +141,7 @@ void KSpreadConsolidate::slotOk()
 
   KSpreadMap *map = m_pView->doc()->map();
 
-  KSpreadSheet* table = m_pView->activeTable();
+  KSpreadSheet* sheet = m_pView->activeSheet();
   int dx = m_pView->selectionInfo()->selection().left();
   int dy = m_pView->selectionInfo()->selection().top();
 
@@ -169,10 +169,10 @@ void KSpreadConsolidate::slotOk()
     // TODO: Check for valid
     Q_ASSERT( r.isValid() );
 
-    if ( r.table == 0 )
+    if ( r.sheet == 0 )
     {
-      r.table = table;
-      r.tableName = table->tableName();
+      r.sheet = sheet;
+      r.sheetName = sheet->sheetName();
     }
     ranges.append( r  );
   }
@@ -195,14 +195,14 @@ void KSpreadConsolidate::slotOk()
   if ( w <= ( ( desc == D_BOTH || desc == D_COL ) ? 1 : 0 ) ||
        h <= ( ( desc == D_BOTH || desc == D_ROW ) ? 1 : 0 ) )
   {
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
     KMessageBox::error( this, i18n( "The range\n%1\nis too small" ).arg( *( r.begin() ) ));
     return;
   }
 
   if( (*it).range.bottom()==KS_rowMax || (*it).range.right()== KS_colMax )
   {
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
     KMessageBox::error( this, i18n( "The range\n%1\nis too large" ).arg( *( r.begin() ) ));
     return;
   }
@@ -215,7 +215,7 @@ void KSpreadConsolidate::slotOk()
     int h2 = (*it).range.bottom() - (*it).range.top() + 1;
     if((*it).range.bottom()==KS_rowMax || (*it).range.right()== KS_colMax)
     {
-      m_pView->slotUpdateView( m_pView->activeTable() );
+      m_pView->slotUpdateView( m_pView->activeSheet() );
       KMessageBox::error( this, i18n( "The range\n%1\nis too large" ).arg( r[i]));
       return;
     }
@@ -223,14 +223,14 @@ void KSpreadConsolidate::slotOk()
 	 ( desc == D_ROW && h != h2 ) ||
 	 ( desc == D_COL && w != w2 ) )
     {
-      m_pView->slotUpdateView( m_pView->activeTable() );
+      m_pView->slotUpdateView( m_pView->activeSheet() );
       QString tmp = i18n( "The ranges\n%1\nand\n%2\nhave different size").arg( *( r.begin() ) ).arg( r[i] );
       KMessageBox::error( this, tmp);
       return;
     }
   }
 
-  // Create the consolidation table
+  // Create the consolidation sheet
   if ( desc == D_NONE )
   {
     // Check whether the destination is part of the source ...
@@ -239,13 +239,13 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).table;
+      KSpreadSheet *t = (*it).sheet;
       Q_ASSERT( t );
       QRect r;
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
-      if ( t == table && r.intersects( dest ) )
+      if ( t == sheet && r.intersects( dest ) )
       {
-        m_pView->slotUpdateView( m_pView->activeTable() );
+        m_pView->slotUpdateView( m_pView->activeSheet() );
 	QString tmp( i18n("The source tables intersect with the destination table") );
 	KMessageBox::error( this, tmp);
 	return;
@@ -261,21 +261,21 @@ void KSpreadConsolidate::slotOk()
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
         {
-	  KSpreadSheet *t = (*it).table;
+	  KSpreadSheet *t = (*it).sheet;
 	  assert( t );
 	  KSpreadCell *c = t->cellAt( x + (*it).range.left(), y + (*it).range.top() );
           if(!c->isDefault())
                 novalue=false;
 	  if ( it != ranges.begin() )
 	    formula += ";";
-	  formula += (*it).tableName + "!";
+	  formula += (*it).sheetName + "!";
 	  formula += c->name();
 	}
 	formula += ")";
 
         if(!novalue)
-	  table->setText( dy + y, dx + x,
-            m_pCopy->isChecked() ? evaluate( formula, table ) : formula );
+	  sheet->setText( dy + y, dx + x,
+            m_pCopy->isChecked() ? evaluate( formula, sheet ) : formula );
       }
     }
   }
@@ -286,7 +286,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).table;
+      KSpreadSheet *t = (*it).sheet;
       assert( t );
       kdDebug(36001) << "FROM " << (*it).range.left() << " to " << (*it).range.right() << endl;
       for( int x = (*it).range.left(); x <= (*it).range.right() ; ++x )
@@ -308,25 +308,25 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).table;
+      KSpreadSheet *t = (*it).sheet;
       assert( t );
       QRect r;
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
-      if ( t == table && r.intersects( dest ) )
+      if ( t == sheet && r.intersects( dest ) )
       {
-        m_pView->slotUpdateView( m_pView->activeTable() );
+        m_pView->slotUpdateView( m_pView->activeSheet() );
 	QString tmp( i18n("The source tables intersect with the destination table") );
 	KMessageBox::error( this, tmp);
 	return;
       }
     }
 
-    // Now create the consolidation table
+    // Now create the consolidation sheet
     int x = 0;
     QStringList::Iterator s = lst.begin();
     for( ; s != lst.end(); ++s, ++x )
     {
-      table->setText( dy, dx + x, *s );
+      sheet->setText( dy, dx + x, *s );
 
       for( int y = 1; y < h; ++y )
       {
@@ -337,7 +337,7 @@ void KSpreadConsolidate::slotOk()
         {
 	  for( int i = (*it).range.left(); i <= (*it).range.right(); ++i )
 	  {
-	    KSpreadSheet *t = (*it).table;
+	    KSpreadSheet *t = (*it).sheet;
 	    assert( t );
 	    KSpreadCell *c = t->cellAt( i, (*it).range.top() );
 	    if ( c )
@@ -348,7 +348,7 @@ void KSpreadConsolidate::slotOk()
 		count++;
 		if ( it != ranges.begin() )
 		  formula += ";";
-		formula += (*it).tableName + "!";
+		formula += (*it).sheetName + "!";
 		formula += KSpreadCell::name( i, y + (*it).range.top() );
 	      }
 	    }
@@ -356,8 +356,8 @@ void KSpreadConsolidate::slotOk()
 	}
 	formula += ")";
 
-	table->setText( dy + y, dx + x,
-          m_pCopy->isChecked() ? evaluate( formula, table ) : formula );
+	sheet->setText( dy + y, dx + x,
+          m_pCopy->isChecked() ? evaluate( formula, sheet ) : formula );
       }
     }
   }
@@ -368,7 +368,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).table;
+      KSpreadSheet *t = (*it).sheet;
       assert( t );
       for( int y = (*it).range.top(); y <= (*it).range.bottom() ; ++y )
       {
@@ -389,25 +389,25 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).table;
+      KSpreadSheet *t = (*it).sheet;
       assert( t );
       QRect r;
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
-      if ( t == table && r.intersects( dest ) )
+      if ( t == sheet && r.intersects( dest ) )
       {
-        m_pView->slotUpdateView( m_pView->activeTable() );
+        m_pView->slotUpdateView( m_pView->activeSheet() );
 	QString tmp( i18n("The source tables intersect with the destination table") );
 	KMessageBox::error( this, tmp);
 	return;
       }
     }
 
-    // Now create the consolidation table
+    // Now create the consolidation sheet
     int y = 0;
     QStringList::Iterator s = lst.begin();
     for( ; s != lst.end(); ++s, ++y )
     {
-      table->setText( dy + y, dx, *s );
+      sheet->setText( dy + y, dx, *s );
 
       for( int x = 1; x < w; ++x )
       {
@@ -418,7 +418,7 @@ void KSpreadConsolidate::slotOk()
         {
 	  for( int i = (*it).range.top(); i <= (*it).range.bottom(); i++ )
 	  {
-	    KSpreadSheet *t = (*it).table;
+	    KSpreadSheet *t = (*it).sheet;
 	    assert( t );
 	    KSpreadCell *c = t->cellAt( (*it).range.left(), i );
 	    if ( c )
@@ -429,7 +429,7 @@ void KSpreadConsolidate::slotOk()
 //		KSpreadCell *c2 = t->cellAt( x + (*it).range.left(), i );
 		count++;
 		if ( it != ranges.begin() ) formula += ";";
-		formula += (*it).tableName + "!";
+		formula += (*it).sheetName + "!";
 		formula += KSpreadCell::name( i, y + (*it).range.top() );
 	      }
 	    }
@@ -438,8 +438,8 @@ void KSpreadConsolidate::slotOk()
 
 	formula += ")";
 
-	table->setText( dy + y, dx + x,
-          m_pCopy->isChecked() ? evaluate( formula, table ) : formula );
+	sheet->setText( dy + y, dx + x,
+          m_pCopy->isChecked() ? evaluate( formula, sheet ) : formula );
       }
     }
   }
@@ -450,7 +450,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).table;
+      KSpreadSheet *t = (*it).sheet;
       assert( t );
       for( int y = (*it).range.top() + 1; y <= (*it).range.bottom() ; ++y )
       {
@@ -470,7 +470,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).table;
+      KSpreadSheet *t = (*it).sheet;
       assert( t );
       for( int x = (*it).range.left() + 1; x <= (*it).range.right() ; ++x )
       {
@@ -491,13 +491,13 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).table;
+      KSpreadSheet *t = (*it).sheet;
       assert( t );
       QRect r;
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
-      if ( t == table && r.intersects( dest ) )
+      if ( t == sheet && r.intersects( dest ) )
       {
-        m_pView->slotUpdateView( m_pView->activeTable() );
+        m_pView->slotUpdateView( m_pView->activeSheet() );
 	QString tmp( i18n("The source tables intersect with the destination table") );
 	KMessageBox::error( this, tmp);
 	return;
@@ -509,7 +509,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).table;
+      KSpreadSheet *t = (*it).sheet;
       assert( t );
       for( int x = (*it).range.left() + 1; x <= (*it).range.right() ; ++x )
       {
@@ -530,7 +530,7 @@ void KSpreadConsolidate::slotOk()
 		k.xdesc = xdesc;
 		k.ydesc = ydesc;
 		k.cell = c3;
-		k.table = (*it).tableName;
+		k.sheet = (*it).sheetName;
 		k.x = x;
 		k.y = y;
 		lst.append( k );
@@ -545,13 +545,13 @@ void KSpreadConsolidate::slotOk()
     int i = 1;
     QStringList::Iterator s = rows.begin();
     for( ; s != rows.end(); ++s, ++i )
-      table->setText( dy, dx + i, *s );
+      sheet->setText( dy, dx + i, *s );
 
     // Draw the column description
     i = 1;
     s = cols.begin();
     for( ; s != cols.end(); ++s, ++i )
-      table->setText( dy + i, dx, *s );
+      sheet->setText( dy + i, dx, *s );
 
     // Draw the data
     int x = 1;
@@ -571,19 +571,19 @@ void KSpreadConsolidate::slotOk()
 	  {
 	    count++;
   	    if ( it != ranges.begin() ) formula += ";";
-	    formula += (*it).tableName + "!";
+	    formula += (*it).sheetName + "!";
 	    formula += KSpreadCell::name( i, y + (*it).range.top() );
 	  }
 	}
 	formula += ")";
 
-	table->setText( dy + y, dx + x,
-          m_pCopy->isChecked() ? evaluate( formula, table ) : formula );
+	sheet->setText( dy + y, dx + x,
+          m_pCopy->isChecked() ? evaluate( formula, sheet ) : formula );
       }
     }
   }
   m_pView->updateEditWidget();
-  m_pView->slotUpdateView( m_pView->activeTable() );
+  m_pView->slotUpdateView( m_pView->activeSheet() );
   accept();
   delete this;
 }
@@ -622,7 +622,7 @@ QStringList KSpreadConsolidate::refs()
   return list;
 }
 
-void KSpreadConsolidate::slotSelectionChanged( KSpreadSheet* _table, const QRect& _selection )
+void KSpreadConsolidate::slotSelectionChanged( KSpreadSheet* _sheet, const QRect& _selection )
 {
   if ( _selection.left() == 0 || _selection.top() == 0 ||
        _selection.right() == 0 || _selection.bottom() == 0 )
@@ -631,7 +631,7 @@ void KSpreadConsolidate::slotSelectionChanged( KSpreadSheet* _table, const QRect
     return;
   }
 
-  QString area = util_rangeName( _table, _selection );
+  QString area = util_rangeName( _sheet, _selection );
   m_pRef->setText( area );
   m_pRef->setSelection( 0, area.length() );
 }
@@ -659,7 +659,7 @@ void KSpreadConsolidate::closeEvent ( QCloseEvent * )
     delete this;
 }
 
-QString KSpreadConsolidate::evaluate( const QString& formula, KSpreadSheet* table )
+QString KSpreadConsolidate::evaluate( const QString& formula, KSpreadSheet* sheet )
 {
   QString result = "###";
 
@@ -668,12 +668,12 @@ QString KSpreadConsolidate::evaluate( const QString& formula, KSpreadSheet* tabl
   KSContext context;
 
   // parse and evaluate formula
-  KSParseNode* code = table->doc()->interpreter()->parse( context,
-    table, formula );
+  KSParseNode* code = sheet->doc()->interpreter()->parse( context,
+    sheet, formula );
   if( !code ) return result;
 
-  context = table->doc()->context();
-  if ( !table->doc()->interpreter()->evaluate( context, code, table, 0 ) )
+  context = sheet->doc()->context();
+  if ( !sheet->doc()->interpreter()->evaluate( context, code, sheet, 0 ) )
     return result;
 
   if ( context.value()->type() == KSValue::DoubleType )

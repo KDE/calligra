@@ -41,7 +41,7 @@ public:
 
 
   /**
-   * @return the marker point of the table.  Usually is the selected cell, or if
+   * @return the marker point of the sheet.  Usually is the selected cell, or if
    * a region is selected it is the one point in the region where text would be
    * entered if the user started typing
    */
@@ -65,9 +65,9 @@ public:
   QRect selectionHandleArea() const;
 
   void setSelection( const QPoint &marker, const QPoint &anchor,
-                     KSpreadSheet* table );
+                     KSpreadSheet* sheet );
 
-  void setMarker( const QPoint &point, KSpreadSheet* table );
+  void setMarker( const QPoint &point, KSpreadSheet* sheet );
 
   /**
    * @return the 'anchor' point of the selection -- i.e. the fixed corner
@@ -101,16 +101,16 @@ public:
     { m_chooseAnchor = chooseAnchor; }
   void setChooseMarker( const QPoint &chooseMarker )
     { m_chooseMarker = chooseMarker; }
-  void setChooseCursor( KSpreadSheet* table, const QPoint &chooseCursor )
-    { m_chooseTable = table; m_chooseCursor = chooseCursor; }
-  void setChooseTable(KSpreadSheet* table) { m_chooseTable = table; }
+  void setChooseCursor( KSpreadSheet* sheet, const QPoint &chooseCursor )
+    { m_chooseSheet = sheet; m_chooseCursor = chooseCursor; }
+  void setChooseSheet(KSpreadSheet* sheet) { m_chooseSheet = sheet; }
 
   QRect getChooseRect()const;
   QPoint getChooseCursor()const { return m_chooseCursor; }
   QPoint getChooseMarker()const { return m_chooseMarker; }
   QPoint getChooseAnchor()const { return m_chooseAnchor; }
 
-  KSpreadSheet* getChooseTable()const { return m_chooseTable; }
+  KSpreadSheet* getChooseSheet()const { return m_chooseSheet; }
 
 
 private: /* private data for the above functions on selections */
@@ -130,7 +130,7 @@ private: /* private data for the above functions on selections */
   QPoint m_chooseAnchor;
   QPoint m_chooseCursor;
 
-  KSpreadSheet* m_chooseTable;
+  KSpreadSheet* m_chooseSheet;
   KSpreadView* m_pView;
 
 private:

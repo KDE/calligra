@@ -84,7 +84,7 @@ class CellBinding : public QObject
 {
     Q_OBJECT
 public:
-    CellBinding( KSpreadSheet *_table, const QRect& _area );
+    CellBinding( KSpreadSheet *_sheet, const QRect& _area );
     virtual ~CellBinding();
 
     bool contains( int _x, int _y );
@@ -101,14 +101,14 @@ public:
     virtual QRect& dataArea() { return m_rctDataArea; }
     virtual void setDataArea( const QRect _rect ) { m_rctDataArea = _rect; }
 
-    KSpreadSheet* table()const { return m_pTable; }
+    KSpreadSheet* sheet()const { return m_pSheet; }
 
 signals:
     void changed( KSpreadCell *_obj );
 
 protected:
     QRect m_rctDataArea;
-    KSpreadSheet *m_pTable;
+    KSpreadSheet *m_pSheet;
     bool m_bIgnoreChanges;
 };
 
@@ -124,15 +124,15 @@ protected:
 class KSpreadChild : public KoDocumentChild
 {
 public:
-  KSpreadChild( KSpreadDoc *parent, KSpreadSheet *_table, KoDocument* doc, const QRect& geometry );
-  KSpreadChild( KSpreadDoc *parent, KSpreadSheet *_table );
+  KSpreadChild( KSpreadDoc *parent, KSpreadSheet *_sheet, KoDocument* doc, const QRect& geometry );
+  KSpreadChild( KSpreadDoc *parent, KSpreadSheet *_sheet );
   ~KSpreadChild();
 
   KSpreadDoc* parent()const { return (KSpreadDoc*)parent(); }
-  KSpreadSheet* table()const { return m_pTable; }
+  KSpreadSheet* sheet()const { return m_pSheet; }
 
 protected:
-  KSpreadSheet *m_pTable;
+  KSpreadSheet *m_pSheet;
 };
 
 /********************************************************************
@@ -149,7 +149,7 @@ class ChartBinding : public CellBinding
     Q_OBJECT
 public:
 
-    ChartBinding( KSpreadSheet *_table, const QRect& _area, ChartChild *_child );
+    ChartBinding( KSpreadSheet *_sheet, const QRect& _area, ChartChild *_child );
     virtual ~ChartBinding();
 
     virtual void cellChanged( KSpreadCell *_obj );
@@ -162,8 +162,8 @@ class ChartChild : public KSpreadChild
 {
     Q_OBJECT
 public:
-    ChartChild( KSpreadDoc *_spread, KSpreadSheet *_table, KoDocument* doc, const QRect& _rect );
-    ChartChild( KSpreadDoc *_spread, KSpreadSheet *_table );
+    ChartChild( KSpreadDoc *_spread, KSpreadSheet *_sheet, KoDocument* doc, const QRect& _rect );
+    ChartChild( KSpreadDoc *_spread, KSpreadSheet *_sheet );
     ~ChartChild();
 
     void setDataArea( const QRect& _data );
@@ -224,7 +224,7 @@ protected:
 
 /********************************************************************
  *
- * Table
+ * Sheet
  *
  ********************************************************************/
 
@@ -252,7 +252,7 @@ public:
 
     enum LayoutDirection { LeftToRight, RightToLeft };
 
-    KSpreadSheet( KSpreadMap *_map, const QString &tableName, const char *_name=0L );
+    KSpreadSheet( KSpreadMap *_map, const QString &sheetName, const char *_name=0L );
     ~KSpreadSheet();
 
     virtual bool isEmpty( unsigned long int x, unsigned long int y ) const;
@@ -268,8 +268,8 @@ public:
     QString tableName() const { return sheetName(); }
 
     /**
-     * Renames a table. This will automatically adapt all formulas
-     * in all tables and all cells to reflect the new name.
+     * Renames a sheet. This will automatically adapt all formulas
+     * in all sheets and all cells to reflect the new name.
      *
      * If the name really changed then @ref #sig_nameChanged is emitted
      * and the GUI will reflect the change.
@@ -279,25 +279,25 @@ public:
      *             want to do that.
      *
      *
-     * @return FALSE if the table could not be renamed. Usually the reason is
+     * @return FALSE if the sheet could not be renamed. Usually the reason is
      *         that this name is already used.
      *
      * @see #changeCellTabName
      * @see KSpreadTabBar::renameTab
-     * @see #tableName
+     * @see #sheetName
      */
-    bool setTableName( const QString& name, bool init = FALSE, bool makeUndo=true );
+    bool setSheetName( const QString& name, bool init = FALSE, bool makeUndo=true );
 
     /**
-     * Saves the table and all it's children in XML format
+     * Saves the sheet and all it's children in XML format
      */
     virtual QDomElement saveXML( QDomDocument& );
     /**
-     * Loads the table and all it's children in XML format
+     * Loads the sheet and all it's children in XML format
      */
     virtual bool loadXML( const QDomElement& );
 
-    virtual bool loadOasis( const QDomElement& table, const KoOasisStyles& oasisStyles );
+    virtual bool loadOasis( const QDomElement& sheet, const KoOasisStyles& oasisStyles );
 
     virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, KSpreadGenValidationStyles &valStyle );
     void saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const;
@@ -360,7 +360,7 @@ public:
     RowFormat* nonDefaultRowFormat( int _row, bool force_creation = TRUE );
 
     /**
-     * @return the first cell of this table. Next cells can
+     * @return the first cell of this sheet. Next cells can
      * be retrieved by calling @ref KSpreadCell::nextCell.
      */
     KSpreadCell* firstCell() const;
@@ -427,7 +427,7 @@ public:
      *
      * @param _canvas If not 0 then the returned position is in screen
      *                coordinates. Otherwise the point (0|0) is in the upper
-     *                left corner of the table.
+     *                left corner of the sheet.
      */
     int columnPos( int _col, const KSpreadCanvas *_canvas = 0L ) const;
     /**
@@ -437,7 +437,7 @@ public:
      *
      * @param _canvas If not 0 then the returned position is in screen
      *                coordinates. Otherwise the point (0|0) is in the upper
-     *                left corner of the table.
+     *                left corner of the sheet.
      */
     double dblColumnPos( int _col, const KSpreadCanvas *_canvas = 0L ) const;
     /**
@@ -445,7 +445,7 @@ public:
      *
      * @param _canvas If not 0 then the returned position is in screen
      *                coordinates. Otherwise the point (0|0) is in the upper
-     *                top corner of the table.
+     *                top corner of the sheet.
      */
     int rowPos( int _row, const KSpreadCanvas *_canvas = 0L ) const;
     /**
@@ -455,7 +455,7 @@ public:
      *
      * @param _canvas If not 0 then the returned position is in screen
      *                coordinates. Otherwise the point (0|0) is in the upper
-     *                top corner of the table.
+     *                top corner of the sheet.
      */
     double dblRowPos( int _row, const KSpreadCanvas *_canvas = 0L ) const;
 
@@ -493,15 +493,15 @@ public:
     void setCalcDirtyFlag();
 
     /**
-     * Calculates all cells in the table with the CalcDirtyFlag.
+     * Calculates all cells in the sheet with the CalcDirtyFlag.
      */
   //why on earth would we want to do this?
 //    void calc();
 
     /**
-     * Recalculates the current table. If you want to recalculate EVERYTHING, then
-     * call @ref Table::setCalcDirtyFlag for all tables in the @ref #m_pMap to make
-     * sure that no invalid values in other tables make you trouble.
+     * Recalculates the current sheet. If you want to recalculate EVERYTHING, then
+     * call @ref Sheet::setCalcDirtyFlag for all sheets in the @ref #m_pMap to make
+     * sure that no invalid values in other sheets make you trouble.
      */
     void recalc();
 
@@ -653,22 +653,22 @@ public:
 
     /**
      * Moves all columns which are >= @p col one position to the right and
-     * inserts a new and empty column. After this the table is redrawn.
+     * inserts a new and empty column. After this the sheet is redrawn.
      * nbCol is the number of column which are installing
      */
     bool insertColumn( int col, int nbCol=0, bool makeUndo=true );
     /**
      * Moves all rows which are >= @p row one position down and
-     * inserts a new and empty row. After this the table is redrawn.
+     * inserts a new and empty row. After this the sheet is redrawn.
      */
     bool insertRow( int row, int nbRow=0, bool makeUndo=true );
 
     /**
-     * Deletes the column @p col and redraws the table.
+     * Deletes the column @p col and redraws the sheet.
      */
     void removeColumn( int col, int nbCol=0, bool makeUndo=true );
     /**
-     * Deletes the row @p row and redraws the table.
+     * Deletes the row @p row and redraws the sheet.
      */
     void removeRow( int row, int nbRow=0, bool makeUndo=true );
 
@@ -760,15 +760,15 @@ public:
 
     void refreshPreference() ;
 
-    void hideTable(bool _hide);
+    void hideSheet(bool _hide);
 
-    void removeTable();
+    void removeSheet();
 
     QRect selectionCellMerged(const QRect &_sel);
     /**
      * Change name of reference when the user inserts or removes a column,
      * a row or a cell (= insertion of a row [or column] on a single column [or row]).
-     * For example the formula =Table1!A1 is changed into =Table1!B1 if a Column
+     * For example the formula =Sheet1!A1 is changed into =Sheet1!B1 if a Column
      * is inserted before A.
      *
      * @param pos the point of insertion (only one coordinate may be used, depending
@@ -776,7 +776,7 @@ public:
      * @param fullRowOrColumn if true, a whole row or column has been inserted/removed.
      *                        if false, we inserted or removed a cell
      * @param ref see ChangeRef
-     * @param tabname completes the pos specification by giving the table name
+     * @param tabname completes the pos specification by giving the sheet name
      * @param undo is the handler of the undo class in case of lost cell references
      */
     void changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
@@ -796,7 +796,7 @@ public:
      * @param fullRowOrColumn if true, a whole row or column has been inserted/removed.
      *                        if false, we inserted or removed a cell
      * @param ref see ChangeRef
-     * @param tabname completes the pos specification by giving the table name
+     * @param tabname completes the pos specification by giving the sheet name
      */
     void refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref);
     /**
@@ -805,11 +805,11 @@ public:
     void refreshMergedCell();
 
     /**
-     * @return true if this table is hidden
+     * @return true if this sheet is hidden
      */
     bool isHidden()const;
     /**
-     * Hides or shows this tables
+     * Hides or shows this sheets
      */
     void setHidden( bool hidden );
 
@@ -836,7 +836,7 @@ public:
     QWidget* widget()const;
 
     /**
-     * @return a flag that indicates whether the table should paint the page breaks.
+     * @return a flag that indicates whether the sheet should paint the page breaks.
      *
      * @see #setShowPageBorders
      * @see #bShowPageBorders
@@ -857,19 +857,19 @@ public:
     CellBinding* nextCellBinding();
 
     /**
-     * Used by the 'chart' to get the table on which the chart is build.
+     * Used by the 'chart' to get the sheet on which the chart is build.
      * The cells we are interested in are in the rectangle '_range'.
      * The cells are stored row after row in '_list'.
      */
     bool getCellRectangle( const QRect &_range, QPtrList<KSpreadCell> &_list );
 
     /**
-     * A convenience function that finds a table by its name.
+     * A convenience function that finds a sheet by its name.
      */
-    KSpreadSheet *findTable( const QString & _name );
+    KSpreadSheet *findSheet( const QString & _name );
 
     /**
-     * Inserts the @p _cell into the table.
+     * Inserts the @p _cell into the sheet.
      * All cells depending on this cell will be actualized.
      * The border range will be actualized, when the cell is out of current range.
      */
@@ -977,7 +977,7 @@ public:
     /**
      * Return the currently maximum defined column of the horizontal scrollbar.
      * It's always 10 times higher than the maximum access column.
-     * In an empty table it starts with 256.
+     * In an empty sheet it starts with 256.
      */
     int maxColumn() const ;
 
@@ -992,7 +992,7 @@ public:
     /**
      * Return the currently maximum defined row of the vertical scrollbar.
      * It's always 10 times higher than the maximum access row.
-     * In an empty table it starts with 256.
+     * In an empty sheet it starts with 256.
      */
     int maxRow() const ;
 
@@ -1030,7 +1030,7 @@ public:
     void updateCellArea(const QRect &cellArea);
 
     /**
-     * Updates every cell on the table
+     * Updates every cell on the sheet
      */
     void update();
 
@@ -1179,44 +1179,44 @@ public:
 
 signals:
     void sig_refreshView();
-    void sig_updateView( KSpreadSheet *_table );
-    void sig_updateView( KSpreadSheet *_table, const QRect& );
-    void sig_updateHBorder( KSpreadSheet *_table );
-    void sig_updateVBorder( KSpreadSheet *_table );
+    void sig_updateView( KSpreadSheet *_sheet );
+    void sig_updateView( KSpreadSheet *_sheet, const QRect& );
+    void sig_updateHBorder( KSpreadSheet *_sheet );
+    void sig_updateVBorder( KSpreadSheet *_sheet );
     void sig_updateChildGeometry( KSpreadChild *_child );
     void sig_removeChild( KSpreadChild *_child );
     void sig_maxColumn( int _max_column );
     void sig_maxRow( int _max_row );
     /**
-     * @see #setTableName
+     * @see #setSheetName
      */
-    void sig_nameChanged( KSpreadSheet* table, const QString& old_name );
+    void sig_nameChanged( KSpreadSheet* sheet, const QString& old_name );
     /**
-     * Emitted if a certain area of some table has to be redrawn.
+     * Emitted if a certain area of some sheet has to be redrawn.
      * That is for example the case when a new child is inserted.
      */
     void sig_polygonInvalidated( const QPointArray& );
 
-    void sig_TableHidden( KSpreadSheet* table);
-    void sig_TableShown( KSpreadSheet* table);
-    void sig_TableRemoved( KSpreadSheet* table);
-    void sig_TableActivated( KSpreadSheet* );
+    void sig_SheetHidden( KSpreadSheet* sheet);
+    void sig_SheetShown( KSpreadSheet* sheet);
+    void sig_SheetRemoved( KSpreadSheet* sheet);
+    void sig_SheetActivated( KSpreadSheet* );
     void sig_RefreshView( KSpreadSheet* );
 
 protected:
     /**
-     * Change the name of a table in all formulas.
-     * When you change name table Table1 -> Price
-     * for all cell which refere to Table1, this function changes the name.
+     * Change the name of a sheet in all formulas.
+     * When you change name sheet Sheet1 -> Price
+     * for all cell which refere to Sheet1, this function changes the name.
      */
     void changeCellTabName( QString const & old_name,QString const & new_name );
 
     bool loadRowFormat( const QDomElement& row, int &rowIndex, const KoOasisStyles& oasisStyles, bool isLast );
     bool loadColumnFormat(const QDomElement& row, const KoOasisStyles& oasisStyles, int & indexCol );
-    bool loadTableStyleFormat( QDomElement *style );
+    bool loadSheetStyleFormat( QDomElement *style );
     void loadOasisMasterLayoutPage( KoStyleStack &styleStack );
 
-    QString saveOasisTableStyleName( KoGenStyles &mainStyles );
+    QString saveOasisSheetStyleName( KoGenStyles &mainStyles );
     void saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int maxCols, int maxRows, KSpreadGenValidationStyles &valStyle );
     void saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols, KSpreadGenValidationStyles &valStyle );
     void convertPart( const QString & part, KoXmlWriter & writer ) const;
@@ -1235,7 +1235,7 @@ protected:
     void fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList, QPtrList<AutoFillSequence>& _seqList, bool down = true );
 
     static int s_id;
-    static QIntDict<KSpreadSheet>* s_mapTables;
+    static QIntDict<KSpreadSheet>* s_mapSheets;
 
 public:
     // see kspread_sheet.cc for an explanation of this
@@ -1248,7 +1248,7 @@ public:
 	CellWorker( bool cid=true, bool es=true, bool tb=true ) : create_if_default( cid ), emit_signal( es ), type_B( tb ) { }
 	virtual ~CellWorker() { }
 
-	virtual class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) =0;
+	virtual class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) =0;
 
 	// these are only needed for type A
 	virtual bool testCondition( RowFormat* ) { return false; }
@@ -1265,7 +1265,7 @@ public:
     struct CellWorkerTypeA : public CellWorker {
 	CellWorkerTypeA( ) : CellWorker( true, true, false ) { }
 	virtual QString getUndoTitle( ) =0;
-	class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r );
+	class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r );
     };
     static QString translateOpenCalcPoint( const QString & str );
 protected:
@@ -1296,6 +1296,6 @@ private:
 };
 
 // for compatibility only, remove in the future
-typedef KSpreadSheet KSpreadTable;
+typedef KSpreadSheet KSpreadSheet;
 
 #endif  // KSPREAD_SHEET

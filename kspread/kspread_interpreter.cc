@@ -202,7 +202,7 @@ KSpreadInterpreter::KSpreadInterpreter( KSpreadDoc * doc )
   : KSInterpreter(),
     m_cell( 0 ),
     m_doc( doc ),
-    m_table( 0 )
+    m_sheet( 0 )
 {
   KSModule::Ptr m = kspreadCreateModule_KSpread( this );
   m_modules.insert( m->name(), m );
@@ -220,9 +220,9 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
   if ( !extra )
   {
     if ( node->getType() == t_cell )
-      extra = new KSParseNodeExtraPoint( node->getStringLiteral(), m_doc->map(), m_table );
+      extra = new KSParseNodeExtraPoint( node->getStringLiteral(), m_doc->map(), m_sheet );
     else if ( node->getType() == t_range )
-      extra = new KSParseNodeExtraRange( node->getStringLiteral(), m_doc->map(), m_table );
+      extra = new KSParseNodeExtraRange( node->getStringLiteral(), m_doc->map(), m_sheet );
     else
       return KSInterpreter::processExtension( context, node );
     node->setExtra( extra );
@@ -288,7 +288,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
     if ( r->range.left() == r->range.right()
          && r->range.top() == r->range.bottom() )
     {
-      KSpreadCell * cell = r->table->cellAt( r->range.x(), r->range.y() );
+      KSpreadCell * cell = r->sheet->cellAt( r->range.x(), r->range.y() );
 
       if ( cell->hasError() )
       {
@@ -328,7 +328,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       for( int x = 0; x < r->range.width(); ++x )
       {
         KSValue* c;
-        KSpreadCell* cell = r->table->cellAt( r->range.x() + x, r->range.y() + y );
+        KSpreadCell* cell = r->sheet->cellAt( r->range.x() + x, r->range.y() + y );
 
         if ( cell->hasError() )
         {
@@ -369,12 +369,12 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
   return false;
 }
 
-KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadSheet* table, const QString& formula )
+KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadSheet* sheet, const QString& formula )
 {
     // Create the parse tree.
     KSParser parser;
     // Tell the parser the locale so that it can parse localized numbers.
-    if ( !parser.parse( formula.utf8(), KSCRIPT_EXTENSION_KSPREAD, table->doc()->locale() ) )
+    if ( !parser.parse( formula.utf8(), KSCRIPT_EXTENSION_KSPREAD, sheet->doc()->locale() ) )
     {
 	context.setException( new KSException( "SyntaxError", parser.errorMessage() ) );
 	return 0;
@@ -385,17 +385,17 @@ KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadSheet* table,
     return n;
 }
 
-bool KSpreadInterpreter::evaluate( KSContext& context, KSParseNode* node, KSpreadSheet* table, KSpreadCell* cell )
+bool KSpreadInterpreter::evaluate( KSContext& context, KSParseNode* node, KSpreadSheet* sheet, KSpreadCell* cell )
 {
-    // Save the current table to make this function reentrant.
-    KSpreadSheet * t = m_table;
+    // Save the current sheet to make this function reentrant.
+    KSpreadSheet * t = m_sheet;
     KSpreadCell * c  = m_cell;
-    m_table = table;
+    m_sheet = sheet;
     m_cell  = cell;
 
     bool b = node->eval( context );
 
-    m_table = t;
+    m_sheet = t;
     m_cell  = c;
 
     return b;

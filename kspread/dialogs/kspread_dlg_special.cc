@@ -114,8 +114,8 @@ void KSpreadspecial::slotOk()
 	op = Div;
 
     m_pView->doc()->emitBeginOperation( false );
-    m_pView->activeTable()->paste( m_pView->selection(), true, sp, op );
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->activeSheet()->paste( m_pView->selection(), true, sp, op );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();
 }
 

@@ -356,8 +356,8 @@ public:
     virtual bool isProtected( int col, int row ) const;
 
     KSpreadStyle * kspreadStyle() const { return m_pStyle; }
-    KSpreadSheet* table() { return m_pTable; }
-    const KSpreadSheet* table() const { return m_pTable; }
+    KSpreadSheet* sheet() { return m_pSheet; }
+    const KSpreadSheet* sheet() const { return m_pSheet; }
 
     KLocale* locale()const;
 
@@ -395,7 +395,7 @@ protected:
      */
     virtual bool isDefault() const;
 
-    KSpreadSheet * m_pTable;
+    KSpreadSheet * m_pSheet;
     KSpreadStyle * m_pStyle;
 
     uint m_mask;
@@ -572,7 +572,7 @@ protected:
 class KSPREAD_EXPORT ColumnFormat : public KSpreadFormat
 {
 public:
-    ColumnFormat( KSpreadSheet *_table, int _column );
+    ColumnFormat( KSpreadSheet *_sheet, int _column );
     ~ColumnFormat();
 
     virtual QDomElement save( QDomDocument&, int xshift = 0, bool copy = false ) const;

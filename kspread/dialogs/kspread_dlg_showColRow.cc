@@ -57,10 +57,10 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
   lay1->addWidget( label );
   lay1->addWidget( list );
 
-  bool showColNumber=m_pView->activeTable()->getShowColumnNumber();
+  bool showColNumber=m_pView->activeSheet()->getShowColumnNumber();
   if(_type==Column)
         {
-        ColumnFormat *col=m_pView->activeTable()->firstCol();
+        ColumnFormat *col=m_pView->activeSheet()->firstCol();
 
         QString text;
         QStringList listCol;
@@ -82,7 +82,7 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
         }
   else if(_type==Row)
         {
-        RowFormat *row=m_pView->activeTable()->firstRow();
+        RowFormat *row=m_pView->activeSheet()->firstRow();
 
         QString text;
         QStringList listRow;
@@ -128,15 +128,15 @@ void KSpreadShowColRow::slotOk()
   if( typeShow==Column)
     {
       if(listSelected.count()!=0)
-	m_pView->activeTable()->showColumn(0,-1,listSelected);
+	m_pView->activeSheet()->showColumn(0,-1,listSelected);
     }
   if( typeShow==Row)
     {
       if(listSelected.count()!=0)
-	m_pView->activeTable()->showRow(0,-1,listSelected);
+	m_pView->activeSheet()->showRow(0,-1,listSelected);
     }
 
-  m_pView->slotUpdateView( m_pView->activeTable() );
+  m_pView->slotUpdateView( m_pView->activeSheet() );
   accept();
 }
 

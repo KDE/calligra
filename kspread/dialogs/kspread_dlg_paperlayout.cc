@@ -286,7 +286,7 @@ void KSpreadPaperLayout::slotOk()
       map = m_pSheet->doc()->map();
 
     if ( map )
-      sheet = map->firstTable();
+      sheet = map->firstSheet();
     else
       sheet = m_pSheet;
 
@@ -423,12 +423,12 @@ void KSpreadPaperLayout::slotOk()
       sheet->doc()->setUnit( unit );
 
       if ( map )
-        sheet = map->nextTable();
+        sheet = map->nextSheet();
       else
         sheet = 0;
     }
 
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();
 }
 
@@ -437,7 +437,7 @@ void KSpreadPaperLayout::closeEvent ( QCloseEvent * )
     delete this;
 }
 
-void KSpreadPaperLayout::slotSelectionChanged( KSpreadSheet* /*_table*/, const QRect& _selection )
+void KSpreadPaperLayout::slotSelectionChanged( KSpreadSheet* /*_sheet*/, const QRect& _selection )
 {
   if ( _selection.left() == 0 || _selection.top() == 0 ||
        _selection.right() == 0 || _selection.bottom() == 0 )

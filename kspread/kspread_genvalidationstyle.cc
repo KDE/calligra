@@ -97,7 +97,7 @@ void KSpreadGenValidationStyles::writeStyle( KoXmlWriter& writer )
 
             writer.endElement();
         }
-        writer.endElement();//close table:content-validation
+        writer.endElement();//close sheet:content-validation
     }
 }
 

@@ -60,7 +60,7 @@ class KSpreadGoalSeekDlg : public KDialog
  public slots:
   void buttonOkClicked();
   void buttonCancelClicked();
-  void slotSelectionChanged( KSpreadSheet * _table, const QRect & _selection );
+  void slotSelectionChanged( KSpreadSheet * _sheet, const QRect & _selection );
 
  protected:
   virtual void closeEvent ( QCloseEvent * );
@@ -79,7 +79,7 @@ class KSpreadGoalSeekDlg : public KDialog
   double        m_oldSource;
 
   QString       m_oldText;
-  QString       m_tableName;
+  QString       m_sheetName;
 
   QFrame      * m_startFrame;
   QLineEdit   * m_targetValueEdit;

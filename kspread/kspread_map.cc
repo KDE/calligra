@@ -41,12 +41,12 @@ bool KSpreadMap::respectCase = true;
 KSpreadMap::KSpreadMap( KSpreadDoc *_doc, const char* name )
   : QObject( _doc, name ),
     m_pDoc( _doc ),
-    m_initialActiveTable( 0 ),
+    m_initialActiveSheet( 0 ),
     m_initialMarkerColumn( 0 ),
     m_initialMarkerRow( 0 ),
     m_dcop( 0 )
 {
-  m_lstTables.setAutoDelete( true );
+  m_lstSheets.setAutoDelete( true );
 }
 
 KSpreadMap::~KSpreadMap()
@@ -59,35 +59,35 @@ void KSpreadMap::setProtected( QCString const & passwd )
   m_strPassword = passwd;
 }
 
-void KSpreadMap::addSheet( KSpreadSheet *_table )
+void KSpreadMap::addSheet( KSpreadSheet *_sheet )
 {
-  m_lstTables.append( _table );
+  m_lstSheets.append( _sheet );
 }
 
-void KSpreadMap::moveTable( const QString & _from, const QString & _to, bool _before )
+void KSpreadMap::moveSheet( const QString & _from, const QString & _to, bool _before )
 {
-  KSpreadSheet* tablefrom = findTable( _from );
-  KSpreadSheet* tableto = findTable( _to );
+  KSpreadSheet* sheetfrom = findSheet( _from );
+  KSpreadSheet* sheetto = findSheet( _to );
 
-  int from = m_lstTables.find( tablefrom ) ;
-  int to = m_lstTables.find( tableto ) ;
+  int from = m_lstSheets.find( sheetfrom ) ;
+  int to = m_lstSheets.find( sheetto ) ;
   if ( !_before )
   ++to;
 
-  if ( to > (int)m_lstTables.count() )
+  if ( to > (int)m_lstSheets.count() )
   {
-    m_lstTables.append( tablefrom );
-    m_lstTables.take( from );
+    m_lstSheets.append( sheetfrom );
+    m_lstSheets.take( from );
   }
   else if ( from < to )
   {
-    m_lstTables.insert( to, tablefrom );
-    m_lstTables.take( from );
+    m_lstSheets.insert( to, sheetfrom );
+    m_lstSheets.take( from );
   }
   else
   {
-    m_lstTables.take( from );
-    m_lstTables.insert( to, tablefrom );
+    m_lstSheets.take( from );
+    m_lstSheets.insert( to, sheetfrom );
   }
 }
 
@@ -97,24 +97,24 @@ void KSpreadMap::loadOasisSettings( KoOasisSettings &settings )
     KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap( "Views" );
     KoOasisSettings::Items firstView = viewMap.entry( 0 );
 
-    KoOasisSettings::NamedMap tablesMap = firstView.namedMap( "Tables" );
-    kdDebug()<<" loadOasisSettings( KoOasisSettings &settings ) exist : "<< !tablesMap.isNull() <<endl;
-    if ( !tablesMap.isNull() )
+    KoOasisSettings::NamedMap sheetsMap = firstView.namedMap( "Tables" );
+    kdDebug()<<" loadOasisSettings( KoOasisSettings &settings ) exist : "<< !sheetsMap.isNull() <<endl;
+    if ( !sheetsMap.isNull() )
     {
-        QPtrListIterator<KSpreadSheet> it( m_lstTables );
+        QPtrListIterator<KSpreadSheet> it( m_lstSheets );
         for( ; it.current(); ++it )
         {
-            it.current()->loadOasisSettings( tablesMap );
+            it.current()->loadOasisSettings( sheetsMap );
         }
     }
 
-    QString activeTable = firstView.parseConfigItemString( "ActiveTable" );
-    kdDebug()<<" loadOasisSettings( KoOasisSettings &settings ) activeTable :"<<activeTable<<endl;
+    QString activeSheet = firstView.parseConfigItemString( "ActiveTable" );
+    kdDebug()<<" loadOasisSettings( KoOasisSettings &settings ) activeSheet :"<<activeSheet<<endl;
 
-    if (!activeTable.isEmpty())
+    if (!activeSheet.isEmpty())
     {
         // Used by KSpreadView's constructor
-        m_initialActiveTable = findTable( activeTable );
+        m_initialActiveSheet = findSheet( activeSheet );
     }
 
 }
@@ -122,7 +122,7 @@ void KSpreadMap::loadOasisSettings( KoOasisSettings &settings )
 void KSpreadMap::saveOasisSettings( KoXmlWriter &settingsWriter )
 {
     settingsWriter.addConfigItem( "ViewId", QString::fromLatin1( "View1" ) );
-    // Save visual info for the first view, such as active table and active cell
+    // Save visual info for the first view, such as active sheet and active cell
     // It looks like a hack, but reopening a document creates only one view anyway (David)
     KSpreadView * view = static_cast<KSpreadView*>(this->doc()->views().getFirst());
     if ( view ) // no view if embedded document
@@ -131,13 +131,13 @@ void KSpreadMap::saveOasisSettings( KoXmlWriter &settingsWriter )
         view->saveCurrentSheetSelection();
         KSpreadCanvas * canvas = view->canvasWidget();
         //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
-        settingsWriter.addConfigItem( "ActiveTable",  canvas->activeTable()->tableName() );
+        settingsWriter.addConfigItem( "ActiveTable",  canvas->activeSheet()->sheetName() );
     }
 
     //<config:config-item-map-named config:name="Tables">
     settingsWriter.startElement("config:config-item-map-named" );
     settingsWriter.addAttribute("config:name","Tables" );
-    QPtrListIterator<KSpreadSheet> it( m_lstTables );
+    QPtrListIterator<KSpreadSheet> it( m_lstSheets );
     for( ; it.current(); ++it )
     {
         QPoint marker;
@@ -146,7 +146,7 @@ void KSpreadMap::saveOasisSettings( KoXmlWriter &settingsWriter )
             marker = view->markerFromSheet( *it );
         }
         settingsWriter.startElement( "config:config-item-map-entry" );
-        settingsWriter.addAttribute( "config:name", ( *it )->tableName() );
+        settingsWriter.addAttribute( "config:name", ( *it )->sheetName() );
         it.current()->saveOasisSettings( settingsWriter, marker);
         settingsWriter.endElement();
     }
@@ -171,7 +171,7 @@ bool KSpreadMap::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles )
     KoXmlWriter bodyTmpWriter( tmpFile );
 
 
-    QPtrListIterator<KSpreadSheet> it( m_lstTables );
+    QPtrListIterator<KSpreadSheet> it( m_lstSheets );
     for( ; it.current(); ++it )
     {
         it.current()->saveOasis( bodyTmpWriter, mainStyles, valStyle );
@@ -190,13 +190,13 @@ bool KSpreadMap::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles )
 QDomElement KSpreadMap::save( QDomDocument& doc )
 {
   QDomElement mymap = doc.createElement( "map" );
-  // Save visual info for the first view, such as active table and active cell
+  // Save visual info for the first view, such as active sheet and active cell
   // It looks like a hack, but reopening a document creates only one view anyway (David)
   KSpreadView * view = static_cast<KSpreadView*>(this->doc()->views().getFirst());
   if ( view ) // no view if embedded document
   {
     KSpreadCanvas * canvas = view->canvasWidget();
-    mymap.setAttribute( "activeTable", canvas->activeTable()->tableName() );
+    mymap.setAttribute( "activeTable", canvas->activeSheet()->sheetName() );
     mymap.setAttribute( "markerColumn", canvas->markerColumn() );
     mymap.setAttribute( "markerRow", canvas->markerRow() );
   }
@@ -212,7 +212,7 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
       mymap.setAttribute( "protected", "" );
   }
 
-  QPtrListIterator<KSpreadSheet> it( m_lstTables );
+  QPtrListIterator<KSpreadSheet> it( m_lstSheets );
   for( ; it.current(); ++it )
   {
     QDomElement e = it.current()->saveXML( doc );
@@ -240,51 +240,51 @@ bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles 
         kdDebug(30518) << "Password hash: '" << passwd << "'" << endl;
         m_strPassword = passwd;
     }
-    QDomNode tableNode = KoDom::namedItemNS( body, KoXmlNS::table, "table" );
+    QDomNode sheetNode = KoDom::namedItemNS( body, KoXmlNS::table, "table" );
 
     // sanity check
-    if ( tableNode.isNull() ) return false;
+    if ( sheetNode.isNull() ) return false;
 
-    while ( !tableNode.isNull() )
+    while ( !sheetNode.isNull() )
     {
-        QDomElement tableElement = tableNode.toElement();
-        if( !tableElement.isNull() )
+        QDomElement sheetElement = sheetNode.toElement();
+        if( !sheetElement.isNull() )
         {
             kdDebug()<<"  KSpreadMap::loadOasis tableElement is not null \n";
-            kdDebug()<<"tableElement.nodeName() :"<<tableElement.nodeName()<<endl;
-            if( tableElement.nodeName() == "table:table" )
+            kdDebug()<<"tableElement.nodeName() :"<<sheetElement.nodeName()<<endl;
+            if( sheetElement.nodeName() == "table:table" )
             {
-                if( !tableElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
+                if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
                 {
                     KSpreadSheet* sheet = m_pDoc->createSheet();
                     m_pDoc->addSheet( sheet );
-                    sheet->setTableName( tableElement.attributeNS( KoXmlNS::table, "name", QString::null ), true, false );
+                    sheet->setSheetName( sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ), true, false );
                 }
             }
         }
-        tableNode = tableNode.nextSibling();
+        sheetNode = sheetNode.nextSibling();
     }
 
-    // load the table
-    tableNode = body.firstChild();
-    while ( !tableNode.isNull() )
+    // load the sheet
+    sheetNode = body.firstChild();
+    while ( !sheetNode.isNull() )
     {
-        QDomElement tableElement = tableNode.toElement();
-        if( !tableElement.isNull() )
+        QDomElement sheetElement = sheetNode.toElement();
+        if( !sheetElement.isNull() )
         {
-            kdDebug()<<"tableElement.nodeName() bis :"<<tableElement.nodeName()<<endl;
-            if( tableElement.nodeName() == "table:table" )
+            kdDebug()<<"tableElement.nodeName() bis :"<<sheetElement.nodeName()<<endl;
+            if( sheetElement.nodeName() == "table:table" )
             {
-                if( !tableElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
+                if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
                 {
-                    QString name = tableElement.attributeNS( KoXmlNS::table, "name", QString::null );
-                    KSpreadSheet* sheet = m_pDoc->map()->findTable( name );
+                    QString name = sheetElement.attributeNS( KoXmlNS::table, "name", QString::null );
+                    KSpreadSheet* sheet = m_pDoc->map()->findSheet( name );
                     if( sheet )
-                        sheet->loadOasis( tableElement , oasisStyles );
+                        sheet->loadOasis( sheetElement , oasisStyles );
                 }
             }
         }
-        tableNode = tableNode.nextSibling();
+        sheetNode = sheetNode.nextSibling();
     }
 
     return true;
@@ -293,14 +293,14 @@ bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles 
 
 bool KSpreadMap::loadXML( const QDomElement& mymap )
 {
-  QString activeTable = mymap.attribute( "activeTable" );
+  QString activeSheet = mymap.attribute( "activeTable" );
   m_initialMarkerColumn = mymap.attribute( "markerColumn" ).toInt();
   m_initialMarkerRow = mymap.attribute( "markerRow" ).toInt();
 
   QDomNode n = mymap.firstChild();
   if ( n.isNull() )
   {
-      // We need at least one table !
+      // We need at least one sheet !
       m_pDoc->setErrorMessage( i18n("This document has no sheets (tables).") );
       return false;
   }
@@ -330,10 +330,10 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
       m_strPassword = QCString( "" );
   }
 
-  if (!activeTable.isEmpty())
+  if (!activeSheet.isEmpty())
   {
     // Used by KSpreadView's constructor
-    m_initialActiveTable = findTable( activeTable );
+    m_initialActiveSheet = findSheet( activeSheet );
   }
 
   return true;
@@ -341,51 +341,51 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
 
 void KSpreadMap::update()
 {
-  QPtrListIterator<KSpreadSheet> it( m_lstTables );
+  QPtrListIterator<KSpreadSheet> it( m_lstSheets );
   for( ; it.current(); ++it )
     it.current()->recalc();
 }
 
-KSpreadSheet* KSpreadMap::findTable( const QString & _name )
+KSpreadSheet* KSpreadMap::findSheet( const QString & _name )
 {
     KSpreadSheet * t;
 
-    for ( t = m_lstTables.first(); t != 0L; t = m_lstTables.next() )
+    for ( t = m_lstSheets.first(); t != 0L; t = m_lstSheets.next() )
     {
-        if ( _name == t->tableName() )
+        if ( _name == t->sheetName() )
             return t;
     }
 
     return 0L;
 }
 
-KSpreadSheet * KSpreadMap::nextTable( KSpreadSheet * currentTable )
+KSpreadSheet * KSpreadMap::nextSheet( KSpreadSheet * currentSheet )
 {
     KSpreadSheet * t;
 
-    if( currentTable == m_lstTables.last())
-      return currentTable;
+    if( currentSheet == m_lstSheets.last())
+      return currentSheet;
 
-    for ( t = m_lstTables.first(); t != 0L; t = m_lstTables.next() )
+    for ( t = m_lstSheets.first(); t != 0L; t = m_lstSheets.next() )
     {
-        if ( t  == currentTable )
-            return m_lstTables.next();
+        if ( t  == currentSheet )
+            return m_lstSheets.next();
     }
 
     return 0L;
 }
 
-KSpreadSheet * KSpreadMap::previousTable( KSpreadSheet * currentTable )
+KSpreadSheet * KSpreadMap::previousSheet( KSpreadSheet * currentSheet )
 {
     KSpreadSheet * t;
 
-    if( currentTable == m_lstTables.first())
-      return currentTable;
+    if( currentSheet == m_lstSheets.first())
+      return currentSheet;
 
-    for ( t = m_lstTables.first(); t != 0L; t = m_lstTables.next() )
+    for ( t = m_lstSheets.first(); t != 0L; t = m_lstSheets.next() )
     {
-        if ( t  == currentTable )
-            return m_lstTables.prev();
+        if ( t  == currentSheet )
+            return m_lstSheets.prev();
     }
 
     return 0L;
@@ -393,11 +393,11 @@ KSpreadSheet * KSpreadMap::previousTable( KSpreadSheet * currentTable )
 
 bool KSpreadMap::saveChildren( KoStore * _store )
 {
-  QPtrListIterator<KSpreadSheet> it( m_lstTables );
+  QPtrListIterator<KSpreadSheet> it( m_lstSheets );
   for( ; it.current(); ++it )
   {
     // set the child document's url to an internal url (ex: "tar:/0/1")
-    if ( !it.current()->saveChildren( _store, it.current()->tableName() ) )
+    if ( !it.current()->saveChildren( _store, it.current()->sheetName() ) )
       return false;
   }
   return true;
@@ -405,7 +405,7 @@ bool KSpreadMap::saveChildren( KoStore * _store )
 
 bool KSpreadMap::loadChildren( KoStore * _store )
 {
-  QPtrListIterator<KSpreadSheet> it( m_lstTables );
+  QPtrListIterator<KSpreadSheet> it( m_lstSheets );
   for( ; it.current(); ++it )
     if ( !it.current()->loadChildren( _store ) )
       return false;
@@ -426,19 +426,19 @@ KSpreadDoc * KSpreadMap::doc() const
     return m_pDoc;
 }
 
-void KSpreadMap::takeTable( KSpreadSheet * table )
+void KSpreadMap::takeSheet( KSpreadSheet * sheet )
 {
-    int pos = m_lstTables.findRef( table );
-    m_lstTables.take( pos );
-    m_lstDeletedTables.append( table );
+    int pos = m_lstSheets.findRef( sheet );
+    m_lstSheets.take( pos );
+    m_lstDeletedSheets.append( sheet );
 }
 
-void KSpreadMap::insertTable( KSpreadSheet * table )
+void KSpreadMap::insertSheet( KSpreadSheet * sheet )
 {
-    int pos = m_lstDeletedTables.findRef( table );
+    int pos = m_lstDeletedSheets.findRef( sheet );
     if ( pos != -1 )
-        m_lstDeletedTables.take( pos );
-    m_lstTables.append(table);
+        m_lstDeletedSheets.take( pos );
+    m_lstSheets.append(sheet);
 }
 
 // FIXME cache this for faster operation
@@ -446,12 +446,12 @@ QStringList KSpreadMap::visibleSheets() const
 {
     QStringList result;
 
-    QPtrListIterator<KSpreadSheet> it( m_lstTables );
+    QPtrListIterator<KSpreadSheet> it( m_lstSheets );
     for( ; it; ++it )
     {
         KSpreadSheet* sheet = it.current();
         if( !sheet->isHidden() )
-            result.append( sheet->tableName() );
+            result.append( sheet->sheetName() );
     }
 
     return result;
@@ -462,12 +462,12 @@ QStringList KSpreadMap::hiddenSheets() const
 {
     QStringList result;
 
-    QPtrListIterator<KSpreadSheet> it( m_lstTables );
+    QPtrListIterator<KSpreadSheet> it( m_lstSheets );
     for( ; it; ++it )
     {
         KSpreadSheet* sheet = it.current();
         if( sheet->isHidden() )
-            result.append( sheet->tableName() );
+            result.append( sheet->sheetName() );
     }
 
     return result;

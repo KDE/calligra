@@ -60,13 +60,13 @@ void KSpreadpasteinsert::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
     if( rb1->isChecked() )
-        m_pView->activeTable()->paste( m_pView->selection() ,
+        m_pView->activeSheet()->paste( m_pView->selection() ,
                                        true, Normal,OverWrite,true,-1);
     else if( rb2->isChecked() )
-        m_pView->activeTable()->paste( m_pView->selection() ,
+        m_pView->activeSheet()->paste( m_pView->selection() ,
                                        true, Normal,OverWrite,true,+1);
 
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();
 }
 

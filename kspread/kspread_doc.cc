@@ -95,7 +95,7 @@ public:
 
 
   // used to give every KSpreadSheet a unique default name.
-  int tableId;
+  int sheetId;
 
   // URL of the this part. This variable is only set if the load() function
   // had been called with an URL as argument.
@@ -192,7 +192,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   setInstance( KSpreadFactory::global(), false );
 
-  d->tableId = 1;
+  d->sheetId = 1;
   d->dcop = 0;
   d->isLoading = false;
   d->numOperations = 1; // don't start repainting before the GUI is done...
@@ -205,7 +205,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   connect( d->commandHistory, SIGNAL( documentRestored() ), SLOT( documentRestored() ) );
 
 
-  // Make us scriptable if the document has a name
+  // Make us scripsheet if the document has a name
   // Set a name if there is no name specified
   if ( !name )
   {
@@ -498,7 +498,7 @@ QDomDocument KSpreadDoc::saveXML()
        for the whole map as the map paper layout. */
     if ( specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
     {
-        KSpreadSheetPrint* printObject = d->workbook->firstTable()->print();
+        KSpreadSheetPrint* printObject = d->workbook->firstSheet()->print();
 
         QDomElement paper = doc.createElement( "paper" );
         paper.setAttribute( "format", printObject->paperFormatString() );
@@ -919,7 +919,7 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     loadOasisAreaName( body );
     loadOasisCellValidation( body );
 
-    // all <table:table> goes to workbook
+    // all <sheet:sheet> goes to workbook
     if ( !d->workbook->loadOasis( body, oasisStyles ) )
     {
         d->isLoading = false;
@@ -1021,7 +1021,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
   emit sigProgress( 40 );
   // In case of reload (e.g. from konqueror)
-  d->workbook->tableList().clear(); // it's set to autoDelete
+  d->workbook->sheetList().clear(); // it's set to autoDelete
 
   QDomElement styles = spread.namedItem( "styles" ).toElement();
   if ( !styles.isNull() )
@@ -1102,8 +1102,8 @@ void KSpreadDoc::loadPaper( QDomElement const & paper )
     float top = borders.attribute( "top" ).toFloat();
     float bottom = borders.attribute( "bottom" ).toFloat();
 
-    //apply to all tables
-    QPtrListIterator<KSpreadSheet> it ( d->workbook->tableList() );
+    //apply to all sheets
+    QPtrListIterator<KSpreadSheet> it ( d->workbook->sheetList() );
     for( ; it.current(); ++it )
     {
       it.current()->print()->setPaperLayout( left, top, right, bottom,
@@ -1149,7 +1149,7 @@ void KSpreadDoc::loadPaper( QDomElement const & paper )
   fcenter = fcenter.replace( "<table>", "<sheet>" );
   fright  = fright.replace(  "<table>", "<sheet>" );
 
-  QPtrListIterator<KSpreadSheet> it ( d->workbook->tableList() );
+  QPtrListIterator<KSpreadSheet> it ( d->workbook->sheetList() );
   for( ; it.current(); ++it )
   {
     it.current()->print()->setHeadFootLine( hleft, hcenter, hright,
@@ -1414,10 +1414,10 @@ QStringList KSpreadDoc::spellListIgnoreAll() const
 KSpreadSheet* KSpreadDoc::createSheet()
 {
   QString s( i18n("Sheet%1") );
-  s = s.arg( d->tableId++ );
+  s = s.arg( d->sheetId++ );
   //KSpreadSheet *t = new KSpreadSheet( d->workbook, s.latin1() );
   KSpreadSheet *t = new KSpreadSheet( d->workbook, s,s.utf8() );
-  t->setTableName( s, TRUE ); // huh? (Werner)
+  t->setSheetName( s, TRUE ); // huh? (Werner)
   return t;
 }
 
@@ -1429,20 +1429,20 @@ void KSpreadDoc::resetInterpreter()
   // Update the cell content
   // TODO
   /* KSpreadSheet *t;
-  for ( t = d->workbook->firstTable(); t != 0L; t = d->workbook->nextTable() )
+  for ( t = d->workbook->firstSheet(); t != 0L; t = d->workbook->nextSheet() )
   t->initInterpreter(); */
 
   // Perhaps something changed. Lets repaint
   emit sig_updateView();
 }
 
-void KSpreadDoc::addSheet( KSpreadSheet *_table )
+void KSpreadDoc::addSheet( KSpreadSheet *_sheet )
 {
-  d->workbook->addSheet( _table );
+  d->workbook->addSheet( _sheet );
 
   setModified( TRUE );
 
-  emit sig_addSheet( _table );
+  emit sig_addSheet( _sheet );
 }
 
 void KSpreadDoc::setZoomAndResolution( int zoom, int dpiX, int dpiY )
@@ -1588,12 +1588,12 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     int oldZoom = m_zoom;
 
     // choose sheet: the first or the active
-    KSpreadSheet* table = 0L;
+    KSpreadSheet* sheet = 0L;
     if ( !d->activeSheet )
-        table = d->workbook->firstTable();
+        sheet = d->workbook->firstSheet();
     else
-        table = d->activeSheet;
-    if ( !table )
+        sheet = d->activeSheet;
+    if ( !sheet )
         return;
 
     // only one zoom is supported
@@ -1614,7 +1614,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     kdDebug(36001)<<"paintContent-------------------------------------\n";
     painter.save();
     painter.setWorldMatrix( matrix );
-    paintContent( painter, prect, transparent, table, false );
+    paintContent( painter, prect, transparent, sheet, false );
     painter.restore();
 
     // restore zoom
@@ -1622,7 +1622,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
 }
 
-void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, KSpreadSheet* table, bool drawCursor )
+void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, KSpreadSheet* sheet, bool drawCursor )
 {
     if ( isLoading() )
         return;
@@ -1633,10 +1633,10 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
 
     double xpos;
     double ypos;
-    int left_col  = table->leftColumn( unzoomItX( rect.x() ), xpos );
-    int right_col = table->rightColumn( unzoomItX( rect.right() ) );
-    int top_row = table->topRow( unzoomItY( rect.y() ), ypos );
-    int bottom_row = table->bottomRow( unzoomItY( rect.bottom() ) );
+    int left_col  = sheet->leftColumn( unzoomItX( rect.x() ), xpos );
+    int right_col = sheet->rightColumn( unzoomItX( rect.right() ) );
+    int top_row = sheet->topRow( unzoomItY( rect.y() ), ypos );
+    int bottom_row = sheet->bottomRow( unzoomItY( rect.bottom() ) );
 
     QPen pen;
     pen.setWidth( 1 );
@@ -1649,7 +1649,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
                                 right_col - left_col + 1,
                                 bottom_row - top_row + 1) );
 
-    paintCellRegions(painter, rect, NULL, cellAreaList, table, drawCursor);
+    paintCellRegions(painter, rect, NULL, cellAreaList, sheet, drawCursor);
 }
 
 void KSpreadDoc::paintUpdates()
@@ -1658,7 +1658,7 @@ void KSpreadDoc::paintUpdates()
 
   QPtrListIterator<KoView> it( views() );
   KSpreadView  * view  = NULL;
-  KSpreadSheet * table = NULL;
+  KSpreadSheet * sheet = NULL;
 
   for (; it.current(); ++it )
   {
@@ -1666,17 +1666,17 @@ void KSpreadDoc::paintUpdates()
     view->paintUpdates();
   }
 
-  for (table = d->workbook->firstTable(); table != NULL;
-       table = d->workbook->nextTable())
+  for (sheet = d->workbook->firstSheet(); sheet != NULL;
+       sheet = d->workbook->nextSheet())
   {
-    table->clearPaintDirtyData();
+    sheet->clearPaintDirtyData();
   }
 }
 
 void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
                                   KSpreadView* view,
                                   QValueList<QRect> cellRegions,
-                                  const KSpreadSheet* table, bool drawCursor)
+                                  const KSpreadSheet* sheet, bool drawCursor)
 {
   //
   // Clip away children
@@ -1702,9 +1702,9 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   QPtrListIterator<KoDocumentChild> it( children() );
   for( ; it.current(); ++it )
   {
-    // if ( ((KSpreadChild*)it.current())->table() == table &&
+    // if ( ((KSpreadChild*)it.current())->sheet() == sheet &&
     //    !m_pView->hasDocumentInWindow( it.current()->document() ) )
-    if ( ((KSpreadChild*)it.current())->table() == table)
+    if ( ((KSpreadChild*)it.current())->sheet() == sheet)
       rgn -= it.current()->region( matrix );
   }
   painter.setClipRegion( rgn );
@@ -1720,20 +1720,20 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   {
     cellRegion = cellRegions[i];
 
-    PaintRegion(painter, unzoomedViewRect, view, cellRegion, table);
+    PaintRegion(painter, unzoomedViewRect, view, cellRegion, sheet);
   }
 
   if ((view != NULL) && drawCursor && !(painter.device()->isExtDev()))
   {
-    if (view->activeTable() == table)
+    if (view->activeSheet() == sheet)
     {
-      //    PaintNormalMarker(painter, unzoomedViewRect, view, table, view->selection());
+      //    PaintNormalMarker(painter, unzoomedViewRect, view, sheet, view->selection());
       ;
     }
 
-    if (view->selectionInfo()->getChooseTable() == table)
+    if (view->selectionInfo()->getChooseSheet() == sheet)
     {
-//      PaintChooseRect(painter, unzoomedViewRect, view, table, view->selectionInfo()->getChooseRect());
+//      PaintChooseRect(painter, unzoomedViewRect, view, sheet, view->selectionInfo()->getChooseRect());
       ;
     }
   }
@@ -1742,7 +1742,7 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
 
 void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
                              KSpreadView* view, const QRect &paintRegion,
-                             const KSpreadSheet* table)
+                             const KSpreadSheet* sheet)
 {
   /* paint region has cell coordinates (col,row) while viewRegion has world
      coordinates.  paintRegion is the cells to update and viewRegion is the
@@ -1762,12 +1762,12 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
 
   KoPoint dblCorner;
   if ( view == 0L ) //Most propably we are embedded and inactive, so no offset
-        dblCorner = KoPoint( table->dblColumnPos( paintRegion.left() ),
-                             table->dblRowPos( paintRegion.top() ) );
+        dblCorner = KoPoint( sheet->dblColumnPos( paintRegion.left() ),
+                             sheet->dblRowPos( paintRegion.top() ) );
   else
-        dblCorner = KoPoint( table->dblColumnPos( paintRegion.left() ) -
+        dblCorner = KoPoint( sheet->dblColumnPos( paintRegion.left() ) -
                                view->canvasWidget()->xOffset(),
-                             table->dblRowPos( paintRegion.top() ) -
+                             sheet->dblRowPos( paintRegion.top() ) -
                                view->canvasWidget()->yOffset() );
   KoPoint dblCurrentCellPos( dblCorner );
 
@@ -1780,15 +1780,15 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
         y <= regionBottom && dblCurrentCellPos.y() <= viewRegion.bottom();
         ++y )
   {
-    const RowFormat * row_lay = table->rowFormat( y );
+    const RowFormat * row_lay = sheet->rowFormat( y );
     dblCurrentCellPos.setX( dblCorner.x() );
 
     for ( int x = regionLeft;
           x <= regionRight && dblCurrentCellPos.x() <= viewRegion.right();
           ++x )
     {
-      const ColumnFormat *col_lay = table->columnFormat( x );
-      KSpreadCell* cell = table->cellAt( x, y );
+      const ColumnFormat *col_lay = sheet->columnFormat( x );
+      KSpreadCell* cell = sheet->cellAt( x, y );
 
       QPoint cellRef( x, y );
 
@@ -1811,14 +1811,14 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
         if ( x == regionRight )
         {
           paintBordersRight = true;
-          if ( cell->effRightBorderValue( x, y ) < table->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-            rightPen = table->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+          if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
+            rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
         }
       else
       {
         paintBordersRight = true;
-        if ( cell->effRightBorderValue( x, y ) < table->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-          rightPen = table->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+        if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
+          rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
       }
 
       // similiar for other borders...
@@ -1829,14 +1829,14 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
         if ( y == regionBottom )
         {
           paintBordersBottom = true;
-          if ( cell->effBottomBorderValue( x, y ) < table->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
-            bottomPen = table->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
+          if ( cell->effBottomBorderValue( x, y ) < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
+            bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
         }
       else
       {
         paintBordersBottom = true;
-        if ( cell->effBottomBorderValue( x, y ) < table->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
-          bottomPen = table->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
+        if ( cell->effBottomBorderValue( x, y ) < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
+          bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
       }
 
       // left border:
@@ -1846,14 +1846,14 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
         if ( x == regionLeft )
         {
           paintBordersLeft = true;
-          if ( cell->effLeftBorderValue( x, y ) < table->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-            leftPen = table->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+          if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
+            leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
         }
       else
       {
         paintBordersLeft = true;
-        if ( cell->effLeftBorderValue( x, y ) < table->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-          leftPen = table->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+        if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
+          leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
       }
 
       // top border:
@@ -1863,14 +1863,14 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
         if ( y == regionTop )
         {
           paintBordersTop = true;
-          if ( cell->effTopBorderValue( x, y ) < table->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-            topPen = table->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+          if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
+            topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
         }
       else
       {
         paintBordersTop = true;
-        if ( cell->effTopBorderValue( x, y ) < table->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-          topPen = table->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+        if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
+          topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
       }
 
       cell->paintCell( viewRegion, painter, view, dblCurrentCellPos,
@@ -1885,7 +1885,7 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
 
 // not used anywhere
 void KSpreadDoc::PaintChooseRect(QPainter& painter, const KoRect &viewRect,
-                                 KSpreadView* view, const KSpreadSheet* table,
+                                 KSpreadView* view, const KSpreadSheet* sheet,
 				 const QRect &chooseRect)
 {
   double positions[4];
@@ -1897,7 +1897,7 @@ void KSpreadDoc::PaintChooseRect(QPainter& painter, const KoRect &viewRect,
     pen.setWidth( 2 );
     pen.setStyle( DashLine );
 
-    retrieveMarkerInfo( chooseRect, table, view, viewRect, positions, paintSides );
+    retrieveMarkerInfo( chooseRect, sheet, view, viewRect, positions, paintSides );
 
     double left =   positions[0];
     double top =    positions[1];
@@ -1942,7 +1942,7 @@ void KSpreadDoc::PaintChooseRect(QPainter& painter, const KoRect &viewRect,
 
 // not used anywhere
 void KSpreadDoc::PaintNormalMarker(QPainter& painter, const KoRect &viewRect,
-                                   KSpreadView* view, const KSpreadSheet* table,
+                                   KSpreadView* view, const KSpreadSheet* sheet,
                                    const QRect &marker)
 {
   double positions[4];
@@ -1951,7 +1951,7 @@ void KSpreadDoc::PaintNormalMarker(QPainter& painter, const KoRect &viewRect,
   QPen pen( Qt::black, 3 );
   painter.setPen( pen );
 
-  retrieveMarkerInfo( marker, table, view, viewRect, positions, paintSides );
+  retrieveMarkerInfo( marker, sheet, view, viewRect, positions, paintSides );
 
   painter.setPen( pen );
 
@@ -2010,26 +2010,26 @@ void KSpreadDoc::PaintNormalMarker(QPainter& painter, const KoRect &viewRect,
 
 
 void KSpreadDoc::retrieveMarkerInfo( const QRect &marker,
-                                     const KSpreadSheet* table,
+                                     const KSpreadSheet* sheet,
                                      KSpreadView* view,
                                      const KoRect &viewRect,
                                      double positions[],
                                      bool paintSides[] )
 {
-  double xpos = table->dblColumnPos( marker.left() ) -
+  double xpos = sheet->dblColumnPos( marker.left() ) -
                 view->canvasWidget()->xOffset();
-  double ypos = table->dblRowPos( marker.top() ) -
+  double ypos = sheet->dblRowPos( marker.top() ) -
                 view->canvasWidget()->yOffset();
 
-  double x = table->dblColumnPos( marker.right() ) -
+  double x = sheet->dblColumnPos( marker.right() ) -
              view->canvasWidget()->xOffset();
-  const ColumnFormat *columnFormat = table->columnFormat( marker.right() );
+  const ColumnFormat *columnFormat = sheet->columnFormat( marker.right() );
   double tw = columnFormat->dblWidth( );
   double w = ( x - xpos ) + tw;
 
-  double y = table->dblRowPos( marker.bottom() ) -
+  double y = sheet->dblRowPos( marker.bottom() ) -
              view->canvasWidget()->yOffset();
-  const RowFormat* rowFormat = table->rowFormat( marker.bottom() );
+  const RowFormat* rowFormat = sheet->rowFormat( marker.bottom() );
   double th = rowFormat->dblHeight( );
   double h = ( y - ypos ) + th;
 
@@ -2070,12 +2070,12 @@ DCOPObject* KSpreadDoc::dcopObject()
     return d->dcop;
 }
 
-void KSpreadDoc::addAreaName(const QRect &_rect,const QString & name,const QString & tableName)
+void KSpreadDoc::addAreaName(const QRect &_rect,const QString & name,const QString & sheetName)
 {
   setModified( true );
   Reference tmp;
   tmp.rect = _rect;
-  tmp.table_name = tableName;
+  tmp.sheet_name = sheetName;
   tmp.ref_name = name;
   d->refs.append( tmp);
   emit sig_addAreaName( name );
@@ -2095,22 +2095,22 @@ void KSpreadDoc::removeArea( const QString & name)
     }
 }
 
-void KSpreadDoc::changeAreaTableName(const QString & oldName,const QString & tableName)
+void KSpreadDoc::changeAreaSheetName(const QString & oldName,const QString & sheetName)
 {
   QValueList<Reference>::Iterator it2;
   for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
         {
-        if((*it2).table_name==oldName)
-                   (*it2).table_name=tableName;
+        if((*it2).sheet_name==oldName)
+                   (*it2).sheet_name=sheetName;
         }
 }
 
-QRect KSpreadDoc::getRectArea(const QString  &_tableName)
+QRect KSpreadDoc::getRectArea(const QString  &_sheetName)
 {
   QValueList<Reference>::Iterator it2;
   for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
         {
-        if((*it2).ref_name==_tableName)
+        if((*it2).ref_name==_sheetName)
                 {
                 return (*it2).rect;
                 }
@@ -2126,7 +2126,7 @@ QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
    {
         QDomElement e = doc.createElement("reference");
         QDomElement tabname = doc.createElement( "tabname" );
-        tabname.appendChild( doc.createTextNode( (*it2).table_name ) );
+        tabname.appendChild( doc.createTextNode( (*it2).sheet_name ) );
         e.appendChild( tabname );
 
         QDomElement refname = doc.createElement( "refname" );
@@ -2181,8 +2181,8 @@ void KSpreadDoc::saveOasisAreaName( KoXmlWriter & xmlWriter )
             xmlWriter.startElement( "table:named-range" );
 
             xmlWriter.addAttribute( "table:name", ( *it ).ref_name );
-            xmlWriter.addAttribute( "table:base-cell-address", convertRefToBase( ( *it ).table_name, ( *it ).rect ) );
-            xmlWriter.addAttribute( "table:cell-range-address", convertRefToRange( ( *it ).table_name, ( *it ).rect ) );
+            xmlWriter.addAttribute( "table:base-cell-address", convertRefToBase( ( *it ).sheet_name, ( *it ).rect ) );
+            xmlWriter.addAttribute( "table:cell-range-address", convertRefToRange( ( *it ).sheet_name, ( *it ).rect ) );
 
             xmlWriter.endElement();
         }
@@ -2208,7 +2208,7 @@ void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
                 continue;
             }
 
-            // TODO: what is: table:base-cell-address
+            // TODO: what is: sheet:base-cell-address
             QString name  = e.attributeNS( KoXmlNS::table, "name", QString::null );
             QString areaPoint = e.attributeNS( KoXmlNS::table, "cell-range-address", QString::null );
             kdDebug()<<"area name : "<<name<<" areaPoint :"<<areaPoint<<endl;
@@ -2230,8 +2230,8 @@ void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
 
             KSpreadRange p( range );
 
-            addAreaName( p.range, name, p.tableName );
-            kdDebug() << "Area range: " << p.tableName << endl;
+            addAreaName( p.range, name, p.sheetName );
+            kdDebug() << "Area range: " << p.sheetName << endl;
 
             area = area.nextSibling();
         }
@@ -2251,10 +2251,10 @@ void KSpreadDoc::loadAreaName( const QDomElement& element )
         int right=0;
         int top=0;
         int bottom=0;
-        QDomElement tableName = tmp.namedItem( "tabname" ).toElement();
-        if ( !tableName.isNull() )
+        QDomElement sheetName = tmp.namedItem( "tabname" ).toElement();
+        if ( !sheetName.isNull() )
         {
-          tabname=tableName.text();
+          tabname=sheetName.text();
         }
         QDomElement referenceName = tmp.namedItem( "refname" ).toElement();
         if ( !referenceName.isNull() )
@@ -2332,7 +2332,7 @@ void KSpreadDoc::emitEndOperation()
    {
      d->numOperations = 0;
      d->delayCalculation = false;
-     for ( t = d->workbook->firstTable(); t != NULL; t = d->workbook->nextTable() )
+     for ( t = d->workbook->firstSheet(); t != NULL; t = d->workbook->nextSheet() )
      {
        //       ElapsedTime etm( "Updating table..." );
        t->update();
@@ -2409,18 +2409,18 @@ void KSpreadDoc::updateBorderButton()
       static_cast<KSpreadView *>( it.current() )->updateBorderButton();
 }
 
-void KSpreadDoc::insertTable( KSpreadSheet * table )
+void KSpreadDoc::insertSheet( KSpreadSheet * sheet )
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-	((KSpreadView*)it.current())->insertTable( table );
+	((KSpreadView*)it.current())->insertSheet( sheet );
 }
 
-void KSpreadDoc::takeTable( KSpreadSheet * table )
+void KSpreadDoc::takeSheet( KSpreadSheet * sheet )
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-	((KSpreadView*)it.current())->removeTable( table );
+	((KSpreadView*)it.current())->removeSheet( sheet );
 }
 
 void KSpreadDoc::addIgnoreWordAll( const QString & word)
@@ -2434,9 +2434,9 @@ void KSpreadDoc::clearIgnoreWordAll( )
     d->spellListIgnoreAll.clear();
 }
 
-void KSpreadDoc::setDisplayTable(KSpreadSheet *_table )
+void KSpreadDoc::setDisplaySheet(KSpreadSheet *_sheet )
 {
-    d->activeSheet = _table;
+    d->activeSheet = _sheet;
 }
 
 KSPLoadingInfo * KSpreadDoc::loadingInfo() const
@@ -2444,7 +2444,7 @@ KSPLoadingInfo * KSpreadDoc::loadingInfo() const
     return d->m_loadingInfo;
 }
 
-KSpreadSheet * KSpreadDoc::displayTable() const
+KSpreadSheet * KSpreadDoc::displaySheet() const
 {
     return d->activeSheet;
 }

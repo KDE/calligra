@@ -88,19 +88,19 @@ do { \
  *
  *****************************************************************************/
 
-CellBinding::CellBinding( KSpreadSheet *_table, const QRect& _area )
+CellBinding::CellBinding( KSpreadSheet *_sheet, const QRect& _area )
 {
   m_rctDataArea = _area;
 
-  m_pTable = _table;
-  m_pTable->addCellBinding( this );
+  m_pSheet = _sheet;
+  m_pSheet->addCellBinding( this );
 
   m_bIgnoreChanges = false;
 }
 
 CellBinding::~CellBinding()
 {
-  m_pTable->removeCellBinding( this );
+  m_pSheet->removeCellBinding( this );
 }
 
 void CellBinding::cellChanged( KSpreadCell *_cell )
@@ -122,8 +122,8 @@ bool CellBinding::contains( int _x, int _y )
  *
  *****************************************************************************/
 
-ChartBinding::ChartBinding( KSpreadSheet *_table, const QRect& _area, ChartChild *_child )
-    : CellBinding( _table, _area )
+ChartBinding::ChartBinding( KSpreadSheet *_sheet, const QRect& _area, ChartChild *_child )
+    : CellBinding( _sheet, _area )
 {
   m_child = _child;
 }
@@ -147,7 +147,7 @@ void ChartBinding::cellChanged( KSpreadCell* )
     for ( int y = 0; y < m_rctDataArea.height(); y++ )
         for ( int x = 0; x < m_rctDataArea.width(); x++ )
         {
-            cell = m_pTable->cellAt( m_rctDataArea.left() + x, m_rctDataArea.top() + y );
+            cell = m_pSheet->cellAt( m_rctDataArea.left() + x, m_rctDataArea.top() + y );
             if ( cell && cell->value().isNumber() )
                 matrix.cell( y, x ) = KoChart::Value( cell->value().asFloat() );
             else if ( cell )
@@ -162,14 +162,14 @@ void ChartBinding::cellChanged( KSpreadCell* )
        range.left = m_rctDataArea.left();
        range.right = m_rctDataArea.right();
        range.bottom = m_rctDataArea.bottom();
-       range.table = m_pTable->name(); */
+       range.sheet = m_pSheet->name(); */
 
     m_child->chart()->setData( matrix );
 
     // Force a redraw of the chart on all views
 
     /** TODO - replace the call below with something that will repaint this chart */
-//    table()->emit_polygonInvalidated( m_child->framePointArray() );
+//    sheet()->emit_polygonInvalidated( m_child->framePointArray() );
 }
 
 /******************************************************************/
@@ -275,7 +275,7 @@ public:
   // informed about changing cell contents.
   QPtrList<CellBinding> cellBindings;
 
-  // Indicates whether the table should paint the page breaks.
+  // Indicates whether the sheet should paint the page breaks.
   // Doing so costs some time, so by default it should be turned off.
   bool showPageBorders;
 
@@ -305,26 +305,26 @@ public:
 };
 
 int KSpreadSheet::s_id = 0L;
-QIntDict<KSpreadSheet>* KSpreadSheet::s_mapTables;
+QIntDict<KSpreadSheet>* KSpreadSheet::s_mapSheets;
 
 KSpreadSheet* KSpreadSheet::find( int _id )
 {
-  if ( !s_mapTables )
+  if ( !s_mapSheets )
     return 0L;
 
-  return (*s_mapTables)[ _id ];
+  return (*s_mapSheets)[ _id ];
 }
 
-KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &tableName, const char *_name )
+KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &sheetName, const char *_name )
   : QObject( map, _name )
 {
-  if ( s_mapTables == 0L )
-    s_mapTables = new QIntDict<KSpreadSheet>;
+  if ( s_mapSheets == 0L )
+    s_mapSheets = new QIntDict<KSpreadSheet>;
 
   d = new SheetPrivate;
 
   d->id = s_id++;
-  s_mapTables->insert( d->id, this );
+  s_mapSheets->insert( d->id, this );
   d->workbook = map;
   d->doc = map->doc();
 
@@ -336,7 +336,7 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &tableName, const cha
 
   d->dcop = 0;
 
-  d->name = tableName;
+  d->name = sheetName;
 
   dcopObject();
   d->cellBindings.setAutoDelete( FALSE );
@@ -1102,7 +1102,7 @@ void KSpreadSheet::valueChanged (KSpreadCell *cell)
   KSpreadPoint c;
   c.setRow (cell->row());
   c.setColumn (cell->column());
-  c.table = this;
+  c.sheet = this;
 
   //update dependencies
   d->dependencies->cellChanged (c);
@@ -1205,10 +1205,10 @@ void KSpreadSheet::valueChanged (KSpreadCell *cell)
  --> use emit_signal=false, create_if_default=false and type B
  */
 
-class KSpreadUndoAction* KSpreadSheet::CellWorkerTypeA::createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r )
+class KSpreadUndoAction* KSpreadSheet::CellWorkerTypeA::createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r )
 {
     QString title = getUndoTitle();
-    return new KSpreadUndoCellFormat( doc, table, r, title );
+    return new KSpreadUndoCellFormat( doc, sheet, r, title );
 }
 
 /*
@@ -1662,8 +1662,8 @@ struct SetSelectionUpperLowerWorker : public KSpreadSheet::CellWorker {
     SetSelectionUpperLowerWorker( int type, KSpreadSheet * s )
       : KSpreadSheet::CellWorker( false ), _type( type ),  _s( s ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
-	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
+	return new KSpreadUndoChangeAreaTextCell( doc, sheet, r );
     }
     bool testCondition( KSpreadCell* c ) {
 	return ( !c->value().isNumber() && !c->value().isBoolean() &&!c->isFormula() && !c->isDefault()
@@ -1696,8 +1696,8 @@ struct SetSelectionFirstLetterUpperWorker : public KSpreadSheet::CellWorker
     SetSelectionFirstLetterUpperWorker( KSpreadSheet * s )
       : KSpreadSheet::CellWorker( false ),  _s( s ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
-	return   new KSpreadUndoChangeAreaTextCell( doc, table, r );
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
+	return   new KSpreadUndoChangeAreaTextCell( doc, sheet, r );
     }
     bool testCondition( KSpreadCell* c ) {
 	return ( !c->value().isNumber() && !c->value().isBoolean() &&!c->isFormula() && !c->isDefault()
@@ -1726,9 +1726,9 @@ struct SetSelectionVerticalTextWorker : public KSpreadSheet::CellWorker {
     bool _b;
     SetSelectionVerticalTextWorker( bool b ) : KSpreadSheet::CellWorker( ), _b( b ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
         QString title=i18n("Vertical Text");
-	return new KSpreadUndoCellFormat( doc, table, r, title );
+	return new KSpreadUndoCellFormat( doc, sheet, r, title );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscuringForced() );
@@ -1754,9 +1754,9 @@ struct SetSelectionCommentWorker : public KSpreadSheet::CellWorker {
     QString _comment;
     SetSelectionCommentWorker( QString comment ) : KSpreadSheet::CellWorker( ), _comment( comment ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
         QString title=i18n("Add Comment");
-	return new KSpreadUndoCellFormat( doc, table, r, title );
+	return new KSpreadUndoCellFormat( doc, sheet, r, title );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscuringForced() );
@@ -1781,8 +1781,8 @@ struct SetSelectionAngleWorker : public KSpreadSheet::CellWorkerTypeA {
     SetSelectionAngleWorker( int value ) : _value( value ) { }
 
     QString getUndoTitle() { return i18n("Change Angle"); }
-    KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ){
-        return new KSpreadUndoChangeAngle( doc, table, r );
+    KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ){
+        return new KSpreadUndoChangeAngle( doc, sheet, r );
     }
 
     bool testCondition( RowFormat* rw ) {
@@ -1823,9 +1823,9 @@ void KSpreadSheet::setSelectionAngle( KSpreadSelection* selectionInfo,
 struct SetSelectionRemoveCommentWorker : public KSpreadSheet::CellWorker {
     SetSelectionRemoveCommentWorker( ) : KSpreadSheet::CellWorker( false ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
         QString title=i18n("Remove Comment");
-	return new KSpreadUndoCellFormat( doc, table, r, title );
+	return new KSpreadUndoCellFormat( doc, sheet, r, title );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscuringForced() );
@@ -1926,9 +1926,9 @@ struct SetSelectionBorderColorWorker : public KSpreadSheet::CellWorker {
     const QColor& bd_Color;
     SetSelectionBorderColorWorker( const QColor& _bd_Color ) : KSpreadSheet::CellWorker( false ), bd_Color( _bd_Color ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
         QString title=i18n("Change Border Color");
-	return new KSpreadUndoCellFormat( doc, table, r, title );
+	return new KSpreadUndoCellFormat( doc, sheet, r, title );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscuringForced() );
@@ -2346,7 +2346,7 @@ bool KSpreadSheet::shiftRow( const QRect &rect,bool makeUndo )
                 res=false;
         }
     }
-    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
     for( ; it.current(); ++it )
     {
         for(int i = rect.top(); i <= rect.bottom(); i++ )
@@ -2384,7 +2384,7 @@ bool KSpreadSheet::shiftColumn( const QRect& rect,bool makeUndo )
         }
     }
 
-    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
     for( ; it.current(); ++it )
     {
         for(int i=rect.left();i<=rect.right();i++)
@@ -2418,7 +2418,7 @@ void KSpreadSheet::unshiftColumn( const QRect & rect,bool makeUndo )
         for(int j=0;j<=(rect.bottom()-rect.top());j++)
                 d->cells.unshiftColumn( QPoint(i,rect.top()) );
 
-    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
     for( ; it.current(); ++it )
         for(int i=rect.left();i<=rect.right();i++)
                 it.current()->changeNameCellRef( QPoint( i, rect.top() ), false,
@@ -2448,7 +2448,7 @@ void KSpreadSheet::unshiftRow( const QRect & rect,bool makeUndo )
         for(int j=0;j<=(rect.right()-rect.left());j++)
                 d->cells.unshiftRow( QPoint(rect.left(),i) );
 
-    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
     for( ; it.current(); ++it )
         for(int i=rect.top();i<=rect.bottom();i++)
                 it.current()->changeNameCellRef( QPoint( rect.left(), i ), false,
@@ -2487,7 +2487,7 @@ bool KSpreadSheet::insertColumn( int col, int nbCol, bool makeUndo )
         d->sizeMaxX += columnFormat( col+i )->dblWidth();
     }
 
-    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true,
                                          KSpreadSheet::ColumnInsert, name(),
@@ -2530,7 +2530,7 @@ bool KSpreadSheet::insertRow( int row, int nbRow, bool makeUndo )
         d->sizeMaxY += rowFormat( row )->dblHeight();
     }
 
-    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true,
                                          KSpreadSheet::RowInsert, name(),
@@ -2569,7 +2569,7 @@ void KSpreadSheet::removeColumn( int col, int nbCol, bool makeUndo )
         d->sizeMaxX += columnFormat( KS_colMax )->dblWidth();
     }
 
-    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true,
                                          KSpreadSheet::ColumnRemove, name(),
@@ -2606,7 +2606,7 @@ void KSpreadSheet::removeRow( int row, int nbRow, bool makeUndo )
         d->sizeMaxY += rowFormat( KS_rowMax )->dblHeight();
     }
 
-    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true,
                                          KSpreadSheet::RowRemove, name(),
@@ -2833,7 +2833,7 @@ void KSpreadSheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
                                       ChangeRef ref, QString tabname, int nbCol,
                                       KSpreadUndoInsertRemoveAction * undo )
 {
-  bool correctDefaultTableName = (tabname == name()); // for cells without table ref (eg "A1")
+  bool correctDefaultSheetName = (tabname == name()); // for cells without sheet ref (eg "A1")
   KSpreadCell* c = d->cells.firstCell();
   for( ;c; c = c->nextCell() )
   {
@@ -2844,8 +2844,8 @@ void KSpreadSheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
       bool error = false;
       QString newText;
 
-      bool correctTableName = correctDefaultTableName;
-      //bool previousCorrectTableName = false;
+      bool correctSheetName = correctDefaultSheetName;
+      //bool previousCorrectSheetName = false;
       QChar origCh;
       for ( ; i < origText.length(); ++i )
       {
@@ -2854,29 +2854,29 @@ void KSpreadSheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
         {
           newText += origCh;
           // Reset the "correct table indicator"
-          correctTableName = correctDefaultTableName;
+          correctSheetName = correctDefaultSheetName;
         }
         else // Letter or dollar : maybe start of cell name/range
-          // (or even ':', like in a range - note that correctTable is kept in this case)
+          // (or even ':', like in a range - note that correctSheet is kept in this case)
         {
-          // Collect everything that forms a name (cell name or table name)
+          // Collect everything that forms a name (cell name or sheet name)
           QString str;
-          bool tableNameFound = false; //Table names need spaces
+          bool sheetNameFound = false; //Sheet names need spaces
           for( ; ( i < origText.length() ) &&  // until the end
                  (  ( origText[i].isLetter() || origText[i].isDigit() || origText[i] == '$' ) ||  // all text and numbers are welcome
-                    ( tableNameFound && origText[i].isSpace() ) ) //in case of a table name, we include spaces too
+                    ( sheetNameFound && origText[i].isSpace() ) ) //in case of a sheet name, we include spaces too
                ; ++i )
           {
             str += origText[i];
             if ( origText[i] == '!' )
-              tableNameFound = true;
+              sheetNameFound = true;
           }
-          // Was it a table name ?
+          // Was it a sheet name ?
           if ( origText[i] == '!' )
           {
             newText += str + '!'; // Copy it (and the '!')
-            // Look for the table name right before that '!'
-            correctTableName = ( newText.right( tabname.length()+1 ) == tabname+"!" );
+            // Look for the sheet name right before that '!'
+            correctSheetName = ( newText.right( tabname.length()+1 ) == tabname+"!" );
           }
           else // It must be a cell identifier
           {
@@ -2893,7 +2893,7 @@ void KSpreadSheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
                 newPoint = '$';
 
               if( ref == ColumnInsert
-                  && correctTableName
+                  && correctSheetName
                   && col + nbCol <= KS_colMax
                   && col >= pos.x()     // Column after the new one : +1
                   && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
@@ -2901,7 +2901,7 @@ void KSpreadSheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
                 newPoint += KSpreadCell::columnName( col + nbCol );
               }
               else if( ref == ColumnRemove
-                       && correctTableName
+                       && correctSheetName
                        && col > pos.x() // Column after the deleted one : -1
                        && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
               {
@@ -2915,7 +2915,7 @@ void KSpreadSheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
                 newPoint += '$';
 
               if( ref == RowInsert
-                  && correctTableName
+                  && correctSheetName
                   && row + nbCol <= KS_rowMax
                   && row >= pos.y() // Row after the new one : +1
                   && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
@@ -2923,7 +2923,7 @@ void KSpreadSheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
                 newPoint += QString::number( row + nbCol );
               }
               else if( ref == RowRemove
-                       && correctTableName
+                       && correctSheetName
                        && row > pos.y() // Row after the deleted one : -1
                        && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
               {
@@ -2932,7 +2932,7 @@ void KSpreadSheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
               else
                 newPoint += QString::number( row );
 
-              if( correctTableName &&
+              if( correctSheetName &&
                   ( ( ref == ColumnRemove
                       && col == pos.x() // Column is the deleted one : error
                       && ( fullRowOrColumn || row == pos.y() ) ) ||
@@ -3600,8 +3600,8 @@ void KSpreadSheet::borderRemove( KSpreadSelection* selectionInfo )
 void KSpreadSheet::sortByRow( const QRect &area, int ref_row, SortingOrder mode )
 {
   KSpreadPoint point;
-  point.table = this;
-  point.tableName = d->name;
+  point.sheet = this;
+  point.sheetName = d->name;
   point.pos = area.topLeft();
   point.columnFixed = false;
   point.rowFixed = false;
@@ -3612,8 +3612,8 @@ void KSpreadSheet::sortByRow( const QRect &area, int ref_row, SortingOrder mode 
 void KSpreadSheet::sortByColumn( const QRect &area, int ref_column, SortingOrder mode )
 {
   KSpreadPoint point;
-  point.table = this;
-  point.tableName = d->name;
+  point.sheet = this;
+  point.sheetName = d->name;
   point.pos = area.topLeft();
   point.columnFixed = false;
   point.rowFixed = false;
@@ -4428,7 +4428,7 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
 
   // Dummy cell used for swapping cells.
   // In fact we copy only content and no layout
-  // information. Imagine sorting in a table. Swapping
+  // information. Imagine sorting in a sheet. Swapping
   // the format while sorting is not what you would expect
   // as a user.
   if (!ref1->isFormula() && !ref2->isFormula())
@@ -4700,10 +4700,10 @@ struct SetSelectionMultiRowWorker : public KSpreadSheet::CellWorker
   SetSelectionMultiRowWorker( bool _enable )
     : KSpreadSheet::CellWorker( ), enable( _enable ) { }
 
-  class KSpreadUndoAction* createUndoAction( KSpreadDoc * doc, KSpreadSheet * table, QRect & r )
+  class KSpreadUndoAction* createUndoAction( KSpreadDoc * doc, KSpreadSheet * sheet, QRect & r )
   {
     QString title = i18n("Multirow");
-    return new KSpreadUndoCellFormat( doc, table, r, title );
+    return new KSpreadUndoCellFormat( doc, sheet, r, title );
   }
 
   bool testCondition( KSpreadCell * cell )
@@ -4818,9 +4818,9 @@ struct SetSelectionPrecisionWorker : public KSpreadSheet::CellWorker {
     int _delta;
     SetSelectionPrecisionWorker( int delta ) : KSpreadSheet::CellWorker( ), _delta( delta ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
         QString title=i18n("Change Precision");
-	return new KSpreadUndoCellFormat( doc, table, r, title );
+	return new KSpreadUndoCellFormat( doc, sheet, r, title );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscuringForced() );
@@ -5201,8 +5201,8 @@ struct ClearTextSelectionWorker : public KSpreadSheet::CellWorker {
     ClearTextSelectionWorker(  KSpreadSheet * s )
       : KSpreadSheet::CellWorker( ),  _s( s ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
-	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
+	return new KSpreadUndoChangeAreaTextCell( doc, sheet, r );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscured() );
@@ -5226,8 +5226,8 @@ void KSpreadSheet::clearTextSelection( KSpreadSelection* selectionInfo )
 struct ClearValiditySelectionWorker : public KSpreadSheet::CellWorker {
     ClearValiditySelectionWorker( ) : KSpreadSheet::CellWorker( ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
-	return new KSpreadUndoConditional( doc, table, r );
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
+	return new KSpreadUndoConditional( doc, sheet, r );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscured() );
@@ -5252,10 +5252,10 @@ struct ClearConditionalSelectionWorker : public KSpreadSheet::CellWorker
   ClearConditionalSelectionWorker( ) : KSpreadSheet::CellWorker( ) { }
 
   class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc,
-					     KSpreadSheet* table,
+					     KSpreadSheet* sheet,
 					     QRect& r )
   {
-    return new KSpreadUndoConditional( doc, table, r );
+    return new KSpreadUndoConditional( doc, sheet, r );
   }
   bool testCondition( KSpreadCell* cell )
   {
@@ -5355,9 +5355,9 @@ void KSpreadSheet::fillSelection( KSpreadSelection * selectionInfo, int directio
 struct DefaultSelectionWorker : public KSpreadSheet::CellWorker {
     DefaultSelectionWorker( ) : KSpreadSheet::CellWorker( true, false, true ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
         QString title=i18n("Default Parameters");
-	return new KSpreadUndoCellFormat( doc, table, r, title );
+	return new KSpreadUndoCellFormat( doc, sheet, r, title );
     }
     bool testCondition( KSpreadCell* ) {
 	return true;
@@ -5403,9 +5403,9 @@ struct SetConditionalWorker : public KSpreadSheet::CellWorker
     KSpreadSheet::CellWorker( ), conditionList( _tmp ) { }
 
   class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc,
-					     KSpreadSheet* table, QRect& r )
+					     KSpreadSheet* sheet, QRect& r )
   {
-    return new KSpreadUndoConditional( doc, table, r );
+    return new KSpreadUndoConditional( doc, sheet, r );
   }
 
   bool testCondition( KSpreadCell* )
@@ -5458,8 +5458,8 @@ struct SetValidityWorker : public KSpreadSheet::CellWorker {
     KSpreadValidity tmp;
     SetValidityWorker( KSpreadValidity _tmp ) : KSpreadSheet::CellWorker( ), tmp( _tmp ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
-	return new KSpreadUndoConditional( doc, table, r );
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
+	return new KSpreadUndoConditional( doc, sheet, r );
     }
     bool testCondition( KSpreadCell* ) {
         return true;
@@ -5540,8 +5540,8 @@ struct SetWordSpellingWorker : public KSpreadSheet::CellWorker {
     SetWordSpellingWorker( QStringList & _list,KSpreadSheet * s )
       : KSpreadSheet::CellWorker( false, false, true ), list( _list ), pos( 0 ),  sheet( s ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
-	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
+	return new KSpreadUndoChangeAreaTextCell( doc, sheet, r );
     }
     bool testCondition( KSpreadCell* ) {
         return true;
@@ -6143,7 +6143,7 @@ void KSpreadSheet::deleteCells( const QRect& rect )
 
     d->cells.setAutoDelete( false );
 
-    // Remove the cells from the table
+    // Remove the cells from the sheet
     while ( !cellStack.isEmpty() )
     {
       KSpreadCell * cell = cellStack.pop();
@@ -6451,45 +6451,45 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy, bool era
 
 QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
 {
-    QDomElement table = doc.createElement( "table" );
-    table.setAttribute( "name", d->name );
+    QDomElement sheet = doc.createElement( "table" );
+    sheet.setAttribute( "name", d->name );
 
 
     //Laurent: for oasis format I think that we must use style:direction...
-    table.setAttribute( "layoutDirection", (d->layoutDirection == RightToLeft) ? "rtl" : "ltr" );
-    table.setAttribute( "columnnumber", (int)d->showColumnNumber);
-    table.setAttribute( "borders", (int)d->showPageBorders);
-    table.setAttribute( "hide", (int)d->hide);
-    table.setAttribute( "hidezero", (int)d->hideZero);
-    table.setAttribute( "firstletterupper", (int)d->firstLetterUpper);
-    table.setAttribute( "grid", (int)d->showGrid );
-    table.setAttribute( "printGrid", (int)d->print->printGrid() );
-    table.setAttribute( "printCommentIndicator", (int)d->print->printCommentIndicator() );
-    table.setAttribute( "printFormulaIndicator", (int)d->print->printFormulaIndicator() );
+    sheet.setAttribute( "layoutDirection", (d->layoutDirection == RightToLeft) ? "rtl" : "ltr" );
+    sheet.setAttribute( "columnnumber", (int)d->showColumnNumber);
+    sheet.setAttribute( "borders", (int)d->showPageBorders);
+    sheet.setAttribute( "hide", (int)d->hide);
+    sheet.setAttribute( "hidezero", (int)d->hideZero);
+    sheet.setAttribute( "firstletterupper", (int)d->firstLetterUpper);
+    sheet.setAttribute( "grid", (int)d->showGrid );
+    sheet.setAttribute( "printGrid", (int)d->print->printGrid() );
+    sheet.setAttribute( "printCommentIndicator", (int)d->print->printCommentIndicator() );
+    sheet.setAttribute( "printFormulaIndicator", (int)d->print->printFormulaIndicator() );
     if ( d->doc->specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
-      table.setAttribute( "formular", (int)d->showFormula); //Was named different
+      sheet.setAttribute( "formular", (int)d->showFormula); //Was named different
     else
-      table.setAttribute( "showFormula", (int)d->showFormula);
-    table.setAttribute( "showFormulaIndicator", (int)d->showFormulaIndicator);
-    table.setAttribute( "lcmode", (int)d->lcMode);
-    table.setAttribute( "autoCalc", (int)d->autoCalc);
-    table.setAttribute( "borders1.2", 1);
+      sheet.setAttribute( "showFormula", (int)d->showFormula);
+    sheet.setAttribute( "showFormulaIndicator", (int)d->showFormulaIndicator);
+    sheet.setAttribute( "lcmode", (int)d->lcMode);
+    sheet.setAttribute( "autoCalc", (int)d->autoCalc);
+    sheet.setAttribute( "borders1.2", 1);
     if ( !d->password.isNull() )
     {
       if ( d->password.size() > 0 )
       {
         QCString str = KCodecs::base64Encode( d->password );
-        table.setAttribute( "protected", QString( str.data() ) );
+        sheet.setAttribute( "protected", QString( str.data() ) );
       }
       else
-        table.setAttribute( "protected", "" );
+        sheet.setAttribute( "protected", "" );
     }
 
     // paper parameters
     QDomElement paper = doc.createElement( "paper" );
     paper.setAttribute( "format", d->print->paperFormatString() );
     paper.setAttribute( "orientation", d->print->orientationString() );
-    table.appendChild( paper );
+    sheet.appendChild( paper );
 
     QDomElement borders = doc.createElement( "borders" );
     borders.setAttribute( "left", d->print->leftBorder() );
@@ -6562,26 +6562,26 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     printrange.setAttribute( "right-rect", right );
     printrange.setAttribute( "bottom-rect", bottom );
     printrange.setAttribute( "top-rect", top );
-    table.appendChild( printrange );
+    sheet.appendChild( printrange );
 
     // Print repeat columns
     QDomElement printRepeatColumns = doc.createElement( "printrepeatcolumns" );
     printRepeatColumns.setAttribute( "left", d->print->printRepeatColumns().first );
     printRepeatColumns.setAttribute( "right", d->print->printRepeatColumns().second );
-    table.appendChild( printRepeatColumns );
+    sheet.appendChild( printRepeatColumns );
 
     // Print repeat rows
     QDomElement printRepeatRows = doc.createElement( "printrepeatrows" );
     printRepeatRows.setAttribute( "top", d->print->printRepeatRows().first );
     printRepeatRows.setAttribute( "bottom", d->print->printRepeatRows().second );
-    table.appendChild( printRepeatRows );
+    sheet.appendChild( printRepeatRows );
 
     //Save print zoom
-    table.setAttribute( "printZoom", d->print->zoom() );
+    sheet.setAttribute( "printZoom", d->print->zoom() );
 
     //Save page limits
-    table.setAttribute( "printPageLimitX", d->print->pageLimitX() );
-    table.setAttribute( "printPageLimitY", d->print->pageLimitY() );
+    sheet.setAttribute( "printPageLimitX", d->print->pageLimitX() );
+    sheet.setAttribute( "printPageLimitY", d->print->pageLimitY() );
 
     // Save all cells.
     KSpreadCell* c = d->cells.firstCell();
@@ -6591,7 +6591,7 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
         {
             QDomElement e = c->save( doc );
             if ( !e.isNull() )
-                table.appendChild( e );
+                sheet.appendChild( e );
         }
     }
 
@@ -6604,7 +6604,7 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
             QDomElement e = rl->save( doc );
             if ( e.isNull() )
                 return QDomElement();
-            table.appendChild( e );
+            sheet.appendChild( e );
         }
     }
 
@@ -6617,14 +6617,14 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
             QDomElement e = cl->save( doc );
             if ( e.isNull() )
                 return QDomElement();
-            table.appendChild( e );
+            sheet.appendChild( e );
         }
     }
 
     QPtrListIterator<KoDocumentChild> chl( d->doc->children() );
     for( ; chl.current(); ++chl )
     {
-       if ( ((KSpreadChild*)chl.current())->table() == this )
+       if ( ((KSpreadChild*)chl.current())->sheet() == this )
         {
             QDomElement e;
             KSpreadChild * child = (KSpreadChild *) chl.current();
@@ -6639,11 +6639,11 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
 
             if ( e.isNull() )
                 return QDomElement();
-            table.appendChild( e );
+            sheet.appendChild( e );
         }
     }
 
-    return table;
+    return sheet;
 }
 
 bool KSpreadSheet::isLoading()
@@ -6667,7 +6667,7 @@ void KSpreadSheet::checkContentDirection( QString const & name )
   emit sig_refreshView();
 }
 
-bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
+bool KSpreadSheet::loadSheetStyleFormat( QDomElement *style )
 {
     QString hleft, hmiddle, hright;
     QString fleft, fmiddle, fright;
@@ -6803,12 +6803,12 @@ QString KSpreadSheet::getPart( const QDomNode & part )
 }
 
 
-bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyles& oasisStyles )
+bool KSpreadSheet::loadOasis( const QDomElement& sheetElement, const KoOasisStyles& oasisStyles )
 {
     d->layoutDirection = LeftToRight;
-    if ( tableElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
+    if ( sheetElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-        QString stylename = tableElement.attributeNS( KoXmlNS::table, "style-name", QString::null );
+        QString stylename = sheetElement.attributeNS( KoXmlNS::table, "style-name", QString::null );
         kdDebug()<<" style of table :"<<stylename<<endl;
         QDomElement *style = oasisStyles.styles()[stylename];
         Q_ASSERT( style );
@@ -6832,7 +6832,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
                 kdDebug()<<"oasisStyles.styles()[masterPageStyleName] :"<<masterStyle<<endl;
                 if ( masterStyle )
                 {
-                    loadTableStyleFormat( masterStyle );
+                    loadSheetStyleFormat( masterStyle );
                     if ( masterStyle->hasAttributeNS( KoXmlNS::style, "page-layout-name" ) )
                     {
                         QString masterPageLayoutStyleName=masterStyle->attributeNS( KoXmlNS::style, "page-layout-name", QString::null );
@@ -6851,7 +6851,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
 
     int rowIndex = 1;
     int indexCol = 1;
-    QDomNode rowNode = tableElement.firstChild();
+    QDomNode rowNode = sheetElement.firstChild();
     while( !rowNode.isNull() )
     {
         kdDebug()<<" rowIndex :"<<rowIndex<<" indexCol :"<<indexCol<<endl;
@@ -6878,22 +6878,22 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         rowNode = rowNode.nextSibling();
     }
 
-    if ( tableElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
+    if ( sheetElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
     {
         // e.g.: Sheet4.A1:Sheet4.E28
-        QString range = tableElement.attributeNS( KoXmlNS::table, "print-ranges", QString::null );
+        QString range = sheetElement.attributeNS( KoXmlNS::table, "print-ranges", QString::null );
         KSpreadRange p( translateOpenCalcPoint( range ) );
-        if ( tableName() == p.tableName )
+        if ( sheetName() == p.sheetName )
             d->print->setPrintRange( p.range );
     }
 
 
-    if ( tableElement.hasAttributeNS( KoXmlNS::table, "protected" ) )
+    if ( sheetElement.hasAttributeNS( KoXmlNS::table, "protected" ) )
     {
         QCString passwd( "" );
-        if ( tableElement.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
+        if ( sheetElement.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
         {
-            QString p = tableElement.attributeNS( KoXmlNS::table, "protection-key", QString::null );
+            QString p = sheetElement.attributeNS( KoXmlNS::table, "protection-key", QString::null );
             QCString str( p.latin1() );
             kdDebug(30518) << "Decoding password: " << str << endl;
             passwd = KCodecs::base64Decode( str );
@@ -7276,7 +7276,7 @@ QString KSpreadSheet::translateOpenCalcPoint( const QString & str )
         {
             if ( !inQuote )
             {
-                if ( i != 0 && i != (colonPos + 1) ) // no empty table names
+                if ( i != 0 && i != (colonPos + 1) ) // no empty sheet names
                     range += '!';
             }
             else
@@ -7607,7 +7607,7 @@ bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, 
     int maxRows= 1;
     xmlWriter.startElement( "table:table" );
     xmlWriter.addAttribute( "table:name", d->name );
-    xmlWriter.addAttribute( "table:style-name", saveOasisTableStyleName(mainStyles )  );
+    xmlWriter.addAttribute( "table:style-name", saveOasisSheetStyleName(mainStyles )  );
     if ( !d->password.isEmpty() )
     {
         xmlWriter.addAttribute("table:protected", "true" );
@@ -7639,12 +7639,12 @@ void KSpreadSheet::saveOasisPrintStyleLayout( KoGenStyle &style ) const
         style.addProperty( "style:print", printParameter );
 }
 
-QString KSpreadSheet::saveOasisTableStyleName( KoGenStyles &mainStyles )
+QString KSpreadSheet::saveOasisSheetStyleName( KoGenStyles &mainStyles )
 {
-    KoGenStyle pageStyle( KSpreadDoc::STYLE_PAGE, "table"/*FIXME I don't know if name is table*/ );
+    KoGenStyle pageStyle( KSpreadDoc::STYLE_PAGE, "table"/*FIXME I don't know if name is sheet*/ );
 
     KoGenStyle pageMaster( KSpreadDoc::STYLE_PAGEMASTER );
-    pageMaster.addAttribute( "style:page-layout-name", d->print->saveOasisTableStyleLayout( mainStyles ) );
+    pageMaster.addAttribute( "style:page-layout-name", d->print->saveOasisSheetStyleLayout( mainStyles ) );
 
     QBuffer buffer;
     buffer.open( IO_WriteOnly );
@@ -7733,19 +7733,19 @@ void KSpreadSheet::saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainSty
     }
 }
 
-bool KSpreadSheet::loadXML( const QDomElement& table )
+bool KSpreadSheet::loadXML( const QDomElement& sheet )
 {
     bool ok = false;
-    d->name = table.attribute( "name" );
+    d->name = sheet.attribute( "name" );
     if ( d->name.isEmpty() )
     {
-        d->doc->setErrorMessage( i18n("Invalid document. Table name is empty.") );
+        d->doc->setErrorMessage( i18n("Invalid document. Sheet name is empty.") );
         return false;
     }
 
     bool detectDirection = true;
     d->layoutDirection = LeftToRight;
-    QString layoutDir = table.attribute( "layoutDirection" );
+    QString layoutDir = sheet.attribute( "layoutDirection" );
     if( !layoutDir.isEmpty() )
     {
         if( layoutDir == "rtl" )
@@ -7790,7 +7790,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
 
     /* so we don't panic over finding ourself in the follwing test*/
     d->name = "";
-    while (d->workbook->findTable(testName) != NULL)
+    while (d->workbook->findSheet(testName) != NULL)
     {
       nameSuffix++;
       testName = baseName + '_' + QString::number(nameSuffix);
@@ -7799,82 +7799,82 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
 
     kdDebug(36001)<<"KSpreadSheet::loadXML: table name="<<d->name<<endl;
     setName(d->name.utf8());
-    (dynamic_cast<KSpreadSheetIface*>(dcopObject()))->tableNameHasChanged();
+    (dynamic_cast<KSpreadSheetIface*>(dcopObject()))->sheetNameHasChanged();
 
-    if( table.hasAttribute( "grid" ) )
+    if( sheet.hasAttribute( "grid" ) )
     {
-        d->showGrid = (int)table.attribute("grid").toInt( &ok );
+        d->showGrid = (int)sheet.attribute("grid").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( table.hasAttribute( "printGrid" ) )
+    if( sheet.hasAttribute( "printGrid" ) )
     {
-        d->print->setPrintGrid( (int)table.attribute("printGrid").toInt( &ok ) );
+        d->print->setPrintGrid( (int)sheet.attribute("printGrid").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( table.hasAttribute( "printCommentIndicator" ) )
+    if( sheet.hasAttribute( "printCommentIndicator" ) )
     {
-        d->print->setPrintCommentIndicator( (int)table.attribute("printCommentIndicator").toInt( &ok ) );
+        d->print->setPrintCommentIndicator( (int)sheet.attribute("printCommentIndicator").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( table.hasAttribute( "printFormulaIndicator" ) )
+    if( sheet.hasAttribute( "printFormulaIndicator" ) )
     {
-        d->print->setPrintFormulaIndicator( (int)table.attribute("printFormulaIndicator").toInt( &ok ) );
+        d->print->setPrintFormulaIndicator( (int)sheet.attribute("printFormulaIndicator").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( table.hasAttribute( "hide" ) )
+    if( sheet.hasAttribute( "hide" ) )
     {
-        d->hide = (int)table.attribute("hide").toInt( &ok );
+        d->hide = (int)sheet.attribute("hide").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( table.hasAttribute( "showFormula" ) )
+    if( sheet.hasAttribute( "showFormula" ) )
     {
-        d->showFormula = (int)table.attribute("showFormula").toInt( &ok );
+        d->showFormula = (int)sheet.attribute("showFormula").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     //Compatibility with KSpread 1.1.x
-    if( table.hasAttribute( "formular" ) )
+    if( sheet.hasAttribute( "formular" ) )
     {
-        d->showFormula = (int)table.attribute("formular").toInt( &ok );
+        d->showFormula = (int)sheet.attribute("formular").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( table.hasAttribute( "showFormulaIndicator" ) )
+    if( sheet.hasAttribute( "showFormulaIndicator" ) )
     {
-        d->showFormulaIndicator = (int)table.attribute("showFormulaIndicator").toInt( &ok );
+        d->showFormulaIndicator = (int)sheet.attribute("showFormulaIndicator").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( table.hasAttribute( "borders" ) )
+    if( sheet.hasAttribute( "borders" ) )
     {
-        d->showPageBorders = (int)table.attribute("borders").toInt( &ok );
+        d->showPageBorders = (int)sheet.attribute("borders").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( table.hasAttribute( "lcmode" ) )
+    if( sheet.hasAttribute( "lcmode" ) )
     {
-        d->lcMode = (int)table.attribute("lcmode").toInt( &ok );
+        d->lcMode = (int)sheet.attribute("lcmode").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if ( table.hasAttribute( "autoCalc" ) )
+    if ( sheet.hasAttribute( "autoCalc" ) )
     {
-        d->autoCalc = ( int )table.attribute( "autoCalc" ).toInt( &ok );
+        d->autoCalc = ( int )sheet.attribute( "autoCalc" ).toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( table.hasAttribute( "columnnumber" ) )
+    if( sheet.hasAttribute( "columnnumber" ) )
     {
-        d->showColumnNumber = (int)table.attribute("columnnumber").toInt( &ok );
+        d->showColumnNumber = (int)sheet.attribute("columnnumber").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( table.hasAttribute( "hidezero" ) )
+    if( sheet.hasAttribute( "hidezero" ) )
     {
-        d->hideZero = (int)table.attribute("hidezero").toInt( &ok );
+        d->hideZero = (int)sheet.attribute("hidezero").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( table.hasAttribute( "firstletterupper" ) )
+    if( sheet.hasAttribute( "firstletterupper" ) )
     {
-        d->firstLetterUpper = (int)table.attribute("firstletterupper").toInt( &ok );
+        d->firstLetterUpper = (int)sheet.attribute("firstletterupper").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
 
     // Load the paper layout
-    QDomElement paper = table.namedItem( "paper" ).toElement();
+    QDomElement paper = sheet.namedItem( "paper" ).toElement();
     if ( !paper.isNull() )
     {
       QString format = paper.attribute( "format" );
@@ -7924,7 +7924,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
     }
 
       // load print range
-      QDomElement printrange = table.namedItem( "printrange-rect" ).toElement();
+      QDomElement printrange = sheet.namedItem( "printrange-rect" ).toElement();
       if ( !printrange.isNull() )
       {
         int left = printrange.attribute( "left-rect" ).toInt();
@@ -7945,9 +7945,9 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
       }
 
       // load print zoom
-      if( table.hasAttribute( "printZoom" ) )
+      if( sheet.hasAttribute( "printZoom" ) )
       {
-        double zoom = table.attribute( "printZoom" ).toDouble( &ok );
+        double zoom = sheet.attribute( "printZoom" ).toDouble( &ok );
         if ( ok )
         {
           d->print->setZoom( zoom );
@@ -7955,9 +7955,9 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
       }
 
       // load page limits
-      if( table.hasAttribute( "printPageLimitX" ) )
+      if( sheet.hasAttribute( "printPageLimitX" ) )
       {
-        int pageLimit = table.attribute( "printPageLimitX" ).toInt( &ok );
+        int pageLimit = sheet.attribute( "printPageLimitX" ).toInt( &ok );
         if ( ok )
         {
           d->print->setPageLimitX( pageLimit );
@@ -7965,9 +7965,9 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
       }
 
       // load page limits
-      if( table.hasAttribute( "printPageLimitY" ) )
+      if( sheet.hasAttribute( "printPageLimitY" ) )
       {
-        int pageLimit = table.attribute( "printPageLimitY" ).toInt( &ok );
+        int pageLimit = sheet.attribute( "printPageLimitY" ).toInt( &ok );
         if ( ok )
         {
           d->print->setPageLimitY( pageLimit );
@@ -7975,7 +7975,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
       }
 
     // Load the cells
-    QDomNode n = table.firstChild();
+    QDomNode n = sheet.firstChild();
     while( !n.isNull() )
     {
         QDomElement e = n.toElement();
@@ -8024,7 +8024,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
     }
 
     // load print repeat columns
-    QDomElement printrepeatcolumns = table.namedItem( "printrepeatcolumns" ).toElement();
+    QDomElement printrepeatcolumns = sheet.namedItem( "printrepeatcolumns" ).toElement();
     if ( !printrepeatcolumns.isNull() )
     {
         int left = printrepeatcolumns.attribute( "left" ).toInt();
@@ -8033,7 +8033,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
     }
 
     // load print repeat rows
-    QDomElement printrepeatrows = table.namedItem( "printrepeatrows" ).toElement();
+    QDomElement printrepeatrows = sheet.namedItem( "printrepeatrows" ).toElement();
     if ( !printrepeatrows.isNull() )
     {
         int top = printrepeatrows.attribute( "top" ).toInt();
@@ -8041,14 +8041,14 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
         d->print->setPrintRepeatRows( qMakePair( top, bottom ) );
     }
 
-    if( !table.hasAttribute( "borders1.2" ) )
+    if( !sheet.hasAttribute( "borders1.2" ) )
     {
       convertObscuringBorders();
     }
 
-    if ( table.hasAttribute( "protected" ) )
+    if ( sheet.hasAttribute( "protected" ) )
     {
-      QString passwd = table.attribute( "protected" );
+      QString passwd = sheet.attribute( "protected" );
 
       if ( passwd.length() > 0 )
       {
@@ -8068,7 +8068,7 @@ bool KSpreadSheet::loadChildren( KoStore* _store )
     QPtrListIterator<KoDocumentChild> it( d->doc->children() );
     for( ; it.current(); ++it )
     {
-        if ( ((KSpreadChild*)it.current())->table() == this )
+        if ( ((KSpreadChild*)it.current())->sheet() == this )
         {
             if ( !it.current()->loadDocument( _store ) )
                 return false;
@@ -8101,12 +8101,12 @@ void KSpreadSheet::removeCellBinding( CellBinding *_bind )
   d->doc->setModified( true );
 }
 
-KSpreadSheet* KSpreadSheet::findTable( const QString & _name )
+KSpreadSheet* KSpreadSheet::findSheet( const QString & _name )
 {
   if ( !d->workbook )
     return 0L;
 
-  return d->workbook->findTable( _name );
+  return d->workbook->findSheet( _name );
 }
 
 // ###### Torben: Use this one instead of d->cells.insert()
@@ -8275,7 +8275,7 @@ bool KSpreadSheet::saveChildren( KoStore* _store, const QString &_path )
     QPtrListIterator<KoDocumentChild> it( d->doc->children() );
     for( ; it.current(); ++it )
     {
-        if ( ((KSpreadChild*)it.current())->table() == this )
+        if ( ((KSpreadChild*)it.current())->sheet() == this )
         {
             QString path = QString( "%1/%2" ).arg( _path ).arg( i++ );
             if ( !it.current()->document()->saveToStore( _store, path ) )
@@ -8288,19 +8288,19 @@ bool KSpreadSheet::saveChildren( KoStore* _store, const QString &_path )
 KSpreadSheet::~KSpreadSheet()
 {
     //kdDebug()<<" KSpreadSheet::~KSpreadSheet() :"<<this<<endl;
-    s_mapTables->remove( d->id );
+    s_mapSheets->remove( d->id );
 
-    //when you remove all table (close file)
+    //when you remove all sheet (close file)
     //you must reinit s_id otherwise there is not
-    //the good name between map and table
-    if( s_mapTables->count()==0)
+    //the good name between map and sheet
+    if( s_mapSheets->count()==0)
       s_id=0L;
 
     KSpreadCell* c = d->cells.firstCell();
     for( ; c; c = c->nextCell() )
-        c->tableDies();
+        c->sheetDies();
 
-    d->cells.clear(); // cells destructor needs table to still exist
+    d->cells.clear(); // cells destructor needs sheet to still exist
 
     d->painter->end();
     delete d->painter;
@@ -8351,23 +8351,23 @@ DCOPObject* KSpreadSheet::dcopObject()
     return d->dcop;
 }
 
-void KSpreadSheet::hideTable(bool _hide)
+void KSpreadSheet::hideSheet(bool _hide)
 {
     setHidden(_hide);
     if(_hide)
-        emit sig_TableHidden(this);
+        emit sig_SheetHidden(this);
     else
-        emit sig_TableShown(this);
+        emit sig_SheetShown(this);
 }
 
-void KSpreadSheet::removeTable()
+void KSpreadSheet::removeSheet()
 {
-    emit sig_TableRemoved(this);
+    emit sig_SheetRemoved(this);
 }
 
-bool KSpreadSheet::setTableName( const QString& name, bool init, bool /*makeUndo*/ )
+bool KSpreadSheet::setSheetName( const QString& name, bool init, bool /*makeUndo*/ )
 {
-    if ( map()->findTable( name ) )
+    if ( map()->findSheet( name ) )
         return FALSE;
 
     if ( isProtected() )
@@ -8382,15 +8382,15 @@ bool KSpreadSheet::setTableName( const QString& name, bool init, bool /*makeUndo
     if ( init )
         return TRUE;
 
-    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
     for ( ; it.current(); ++it )
         it.current()->changeCellTabName( old_name, name );
 
-    d->doc->changeAreaTableName( old_name, name );
+    d->doc->changeAreaSheetName( old_name, name );
     emit sig_nameChanged( this, old_name );
 
     setName(name.utf8());
-    (dynamic_cast<KSpreadSheetIface*>(dcopObject()))->tableNameHasChanged();
+    (dynamic_cast<KSpreadSheetIface*>(dcopObject()))->sheetNameHasChanged();
 
     return TRUE;
 }
@@ -8445,7 +8445,7 @@ void KSpreadSheet::convertObscuringBorders()
      its own border data, and prints it even if it is an obscured cell (as long
      as that border isn't across an obscuring border).
      Anyway, this function is used when loading a file that was stored with the
-     old way of borders.  All new files have the table attribute "borders1.2" so
+     old way of borders.  All new files have the sheet attribute "borders1.2" so
      if that isn't in the file, all the border data will be converted here.
      It's a bit of a hack but I can't think of a better way and it's not *that*
      bad of a hack.:-)
@@ -8514,7 +8514,7 @@ bool KSpreadSheet::cellIsPaintDirty( QPoint const & cell )
   bool found = false;
 
   /* Yes, this seems an inefficient method....I just want to get it working
-     now then worry about optimization later (hash table?).
+     now then worry about optimization later (hash sheet?).
      And it might not matter -- this is going to be cleared every repaint
      of the screen, so it will never grow large
   */
@@ -8564,15 +8564,15 @@ void KSpreadSheet::printDebug()
  *
  **********************************************************/
 
-KSpreadChild::KSpreadChild( KSpreadDoc *parent, KSpreadSheet *_table, KoDocument* doc, const QRect& geometry )
+KSpreadChild::KSpreadChild( KSpreadDoc *parent, KSpreadSheet *_sheet, KoDocument* doc, const QRect& geometry )
   : KoDocumentChild( parent, doc, geometry )
 {
-  m_pTable = _table;
+  m_pSheet = _sheet;
 }
 
-KSpreadChild::KSpreadChild( KSpreadDoc *parent, KSpreadSheet *_table ) : KoDocumentChild( parent )
+KSpreadChild::KSpreadChild( KSpreadDoc *parent, KSpreadSheet *_sheet ) : KoDocumentChild( parent )
 {
-  m_pTable = _table;
+  m_pSheet = _sheet;
 }
 
 
@@ -8586,14 +8586,14 @@ KSpreadChild::~KSpreadChild()
  *
  **********************************************************/
 
-ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadSheet *_table, KoDocument* doc, const QRect& geometry )
-  : KSpreadChild( _spread, _table, doc, geometry )
+ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadSheet *_sheet, KoDocument* doc, const QRect& geometry )
+  : KSpreadChild( _spread, _sheet, doc, geometry )
 {
     m_pBinding = 0;
 }
 
-ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadSheet *_table )
-  : KSpreadChild( _spread, _table )
+ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadSheet *_sheet )
+  : KSpreadChild( _spread, _sheet )
 {
     m_pBinding = 0;
 }
@@ -8606,7 +8606,7 @@ ChartChild::~ChartChild()
 void ChartChild::setDataArea( const QRect& _data )
 {
     if ( m_pBinding == 0L )
-        m_pBinding = new ChartBinding( m_pTable, _data, this );
+        m_pBinding = new ChartBinding( m_pSheet, _data, this );
     else
         m_pBinding->setDataArea( _data );
 }

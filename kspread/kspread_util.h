@@ -40,18 +40,18 @@ class QDomDocument;
 struct KSPREAD_EXPORT KSpreadPoint
 {
 public:
-  KSpreadPoint() { pos.setX( -1 ); table = 0; columnFixed = false; rowFixed = false; }
+  KSpreadPoint() { pos.setX( -1 ); sheet = 0; columnFixed = false; rowFixed = false; }
   KSpreadPoint( const QString& );
-  KSpreadPoint( const QString&, KSpreadMap*, KSpreadSheet* default_table = 0 );
+  KSpreadPoint( const QString&, KSpreadMap*, KSpreadSheet* default_sheet = 0 );
   KSpreadPoint( const KSpreadPoint& c ) {
     pos = c.pos;
-    table = c.table; tableName = c.tableName;
+    sheet = c.sheet; sheetName = c.sheetName;
     columnFixed = c.columnFixed;
     rowFixed = c.rowFixed;
   }
 
-  bool isValid() const { return ( pos.x() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
-  bool isTableKnown() const { return ( !tableName.isEmpty() && table != 0 ); }
+  bool isValid() const { return ( pos.x() >= 0 && ( sheet != 0 || sheetName.isEmpty() ) ); }
+  bool isSheetKnown() const { return ( !sheetName.isEmpty() && sheet != 0 ); }
 
   KSpreadCell* cell() const;
 
@@ -68,13 +68,13 @@ public:
   bool columnFixed() const { return m_columnFixed; }
   bool rowFixed() const { return m_rowFixed; }
   QPoint pos() const { return m_pos; }
-  QString tableName() const { return m_tableName; }
-  KSpreadSheet* table() const { return m_table; }
+  QString sheetName() const { return m_sheetName; }
+  KSpreadSheet* sheet() const { return m_sheet; }
 
 private:
   */
-  KSpreadSheet* table;
-  QString tableName;
+  KSpreadSheet* sheet;
+  QString sheetName;
   QPoint pos;
   bool columnFixed;
   bool rowFixed;
@@ -85,32 +85,32 @@ private:
 
 struct KSPREAD_EXPORT KSpreadRange
 {
-  KSpreadRange() { table = 0; range.setLeft( -1 ); }
+  KSpreadRange() { sheet = 0; range.setLeft( -1 ); }
   KSpreadRange( const QString& );
-  KSpreadRange( const QString&, KSpreadMap*, KSpreadSheet* default_table = 0 );
+  KSpreadRange( const QString&, KSpreadMap*, KSpreadSheet* default_sheet = 0 );
   KSpreadRange( const KSpreadRange& r ) {
-    table = r.table;
-    tableName = r.tableName;
+    sheet = r.sheet;
+    sheetName = r.sheetName;
     range = r.range;
   }
   KSpreadRange( const KSpreadPoint& ul, const KSpreadPoint& lr )
   {
     range = QRect( ul.pos, lr.pos );
-    if ( ul.tableName != lr.tableName )
+    if ( ul.sheetName != lr.sheetName )
     {
       range.setLeft( -1 );
       return;
     }
-    tableName = ul.tableName;
-    table = ul.table;
+    sheetName = ul.sheetName;
+    sheet = ul.sheet;
     leftFixed = ul.columnFixed;
     rightFixed = lr.columnFixed;
     topFixed = ul.rowFixed;
     bottomFixed = lr.rowFixed;
   }
 
-  bool isValid() const { return ( range.left() >= 0 && range.right() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
-  bool isTableKnown() const { return ( !tableName.isEmpty() && table != 0 ); }
+  bool isValid() const { return ( range.left() >= 0 && range.right() >= 0 && ( sheet != 0 || sheetName.isEmpty() ) ); }
+  bool isSheetKnown() const { return ( !sheetName.isEmpty() && sheet != 0 ); }
 
   int startRow () const { return range.top(); };
   int startCol () const { return range.left(); };
@@ -122,8 +122,8 @@ struct KSPREAD_EXPORT KSpreadRange
   /** do these two ranges have at least one common cell? */
   bool intersects (const KSpreadRange &r) const;
 
-  KSpreadSheet* table;
-  QString tableName;
+  KSpreadSheet* sheet;
+  QString sheetName;
   QRect range;
   bool leftFixed;
   bool rightFixed;
@@ -155,9 +155,9 @@ class KSpreadRangeIterator
 public:
   /**
    * Contstruct the iterator with the rectangular cell area and which
-   * table the area is on
+   * sheet the area is on
    */
-  KSpreadRangeIterator(QRect _range, KSpreadSheet* _table);
+  KSpreadRangeIterator(QRect _range, KSpreadSheet* _sheet);
   ~KSpreadRangeIterator();
 
   /**
@@ -173,7 +173,7 @@ public:
 private:
 
   QRect range;
-  KSpreadSheet* table;
+  KSpreadSheet* sheet;
   QPoint current;
 };
 
@@ -185,7 +185,7 @@ bool formatIsFraction (FormatType fmt);
 
 
 KSPREAD_EXPORT QString util_rangeName( const QRect &_area );
-KSPREAD_EXPORT QString util_rangeName( KSpreadSheet *_table, const QRect &_area );
+KSPREAD_EXPORT QString util_rangeName( KSpreadSheet *_sheet, const QRect &_area );
 QString util_rangeColumnName( const QRect &_area);
 QString util_rangeRowName( const QRect &_area);
 
@@ -209,7 +209,7 @@ bool util_isAllSelected(const QRect &selection);
 bool util_isColumnSelected(const QRect &selection);
 bool util_isRowSelected(const QRect &selection);
 
-bool util_validateTableName(const QString &name);
+bool util_validateSheetName(const QString &name);
 
 QDomElement util_createElement( const QString & tagName, const QFont & font, QDomDocument & doc );
 QDomElement util_createElement( const QString & tagname, const QPen & pen, QDomDocument & doc );
@@ -217,15 +217,15 @@ QFont       util_toFont( QDomElement & element );
 QPen        util_toPen( QDomElement & element );
 int         util_penCompare( QPen const & pen1, QPen const & pen2 );
 
-QString convertRefToRange( const QString & table, const QRect & rect );
-QString convertRefToBase( const QString & table, const QRect & rect );
-QString convertRangeToRef( const QString & tableName, const QRect & _area );
+QString convertRefToRange( const QString & sheet, const QRect & rect );
+QString convertRefToBase( const QString & sheet, const QRect & rect );
+QString convertRangeToRef( const QString & sheetName, const QRect & _area );
 
 void insertBracket( QString & s );
 QString convertOasisPenToString( const QPen & pen );
 QPen convertOasisStringToPen( const QString &str );
 
-//Return true when it's a reference to cell from table.
+//Return true when it's a reference to cell from sheet.
 bool localReferenceAnchor( const QString &_ref );
 
 

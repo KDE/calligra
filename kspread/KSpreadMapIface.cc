@@ -37,18 +37,18 @@ KSpreadMapIface::KSpreadMapIface( KSpreadMap* map )
     m_map = map;
 }
 
-DCOPRef KSpreadMapIface::table( const QString& name )
+DCOPRef KSpreadMapIface::sheet( const QString& name )
 {
-    KSpreadSheet* t = m_map->findTable( name );
+    KSpreadSheet* t = m_map->findSheet( name );
     if ( !t )
         return DCOPRef();
 
     return DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
 }
 
-DCOPRef KSpreadMapIface::tableByIndex( int index )
+DCOPRef KSpreadMapIface::sheetByIndex( int index )
 {
-    KSpreadSheet* t = m_map->tableList().at( index );
+    KSpreadSheet* t = m_map->sheetList().at( index );
     if ( !t )
     {
         kdDebug(36001) << "+++++ No table found at index " << index << endl;
@@ -60,16 +60,16 @@ DCOPRef KSpreadMapIface::tableByIndex( int index )
     return DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
 }
 
-int KSpreadMapIface::tableCount() const
+int KSpreadMapIface::sheetCount() const
 {
     return m_map->count();
 }
 
-QStringList KSpreadMapIface::tableNames() const
+QStringList KSpreadMapIface::sheetNames() const
 {
     QStringList names;
 
-    QPtrList<KSpreadSheet>& lst = m_map->tableList();
+    QPtrList<KSpreadSheet>& lst = m_map->sheetList();
     QPtrListIterator<KSpreadSheet> it( lst );
     for( ; it.current(); ++it )
         names.append( it.current()->name() );
@@ -77,11 +77,11 @@ QStringList KSpreadMapIface::tableNames() const
     return names;
 }
 
-QValueList<DCOPRef> KSpreadMapIface::tables()
+QValueList<DCOPRef> KSpreadMapIface::sheets()
 {
     QValueList<DCOPRef> t;
 
-    QPtrList<KSpreadSheet>& lst = m_map->tableList();
+    QPtrList<KSpreadSheet>& lst = m_map->sheetList();
     QPtrListIterator<KSpreadSheet> it( lst );
     for( ; it.current(); ++it )
         t.append( DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopObject()->objId() ) );
@@ -89,16 +89,16 @@ QValueList<DCOPRef> KSpreadMapIface::tables()
     return t;
 }
 
-DCOPRef KSpreadMapIface::insertTable( const QString& name )
+DCOPRef KSpreadMapIface::insertSheet( const QString& name )
 {
-    if ( m_map->findTable( name ) )
-        return table( name );
+    if ( m_map->findSheet( name ) )
+        return sheet( name );
 
     KSpreadSheet* t = new KSpreadSheet( m_map, name );
-    t->setTableName( name );
+    t->setSheetName( name );
     m_map->doc()->addSheet( t );
 
-    return table( name );
+    return sheet( name );
 }
 
 bool KSpreadMapIface::processDynamic(const QCString &fun, const QByteArray &/*data*/,
@@ -112,7 +112,7 @@ bool KSpreadMapIface::processDynamic(const QCString &fun, const QByteArray &/*da
     if ( fun[ len - 1 ] != ')' || fun[ len - 2 ] != '(' )
         return FALSE;
 
-    KSpreadSheet* t = m_map->findTable( fun.left( len - 2 ).data() );
+    KSpreadSheet* t = m_map->findSheet( fun.left( len - 2 ).data() );
     if ( !t )
         return FALSE;
 

@@ -46,7 +46,7 @@ public:
     bool processDynamic( const QCString& fun, const QByteArray& data,
 			 QCString& replyType, QByteArray &replyData );
 
-    void tableNameHasChanged();
+    void sheetNameHasChanged();
 k_dcop:
     virtual DCOPRef cell( int x, int y );
     virtual DCOPRef cell( const QString& name );
@@ -57,7 +57,7 @@ k_dcop:
     virtual QString name() const;
     virtual int maxColumn() const;
     virtual int maxRow() const;
-    virtual bool setTableName( const QString & name);
+    virtual bool setSheetName( const QString & name);
 
 
     virtual bool insertColumn( int col,int nbCol );
@@ -101,7 +101,7 @@ k_dcop:
     void setFooterRight(const QString & text);
     bool isProtected() const;
 private:
-    KSpreadSheet* m_table;
+    KSpreadSheet* m_sheet;
     KSpreadCellProxy* m_proxy;
     QCString ident;
 };

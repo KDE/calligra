@@ -40,7 +40,7 @@ class KSpreadCellIface : virtual public DCOPObject
 public:
     KSpreadCellIface();
 
-    void setCell( KSpreadSheet* table, const QPoint& point );
+    void setCell( KSpreadSheet* sheet, const QPoint& point );
 k_dcop:
 
     virtual bool isDefault() const;
@@ -158,7 +158,7 @@ k_dcop:
 
 private:
     QPoint m_point;
-    KSpreadSheet* m_table;
+    KSpreadSheet* m_sheet;
 };
 
 #endif

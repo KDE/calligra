@@ -87,48 +87,48 @@ void KSpreadinsert::slotOk()
     {
 	if( insRem == Insert )
         {
-	    if ( !m_pView->activeTable()->shiftRow( rect ) )
+	    if ( !m_pView->activeSheet()->shiftRow( rect ) )
 		KMessageBox::error( this, i18n("The row is full. Cannot move cells to the right.") );
 	}
 	else if( insRem == Remove )
         {
-	    m_pView->activeTable()->unshiftRow(rect);
+	    m_pView->activeSheet()->unshiftRow(rect);
 	}
     }
     else if( rb2->isChecked() )
     {
 	if( insRem == Insert )
         {
-	    if ( !m_pView->activeTable()->shiftColumn( rect ) )
+	    if ( !m_pView->activeSheet()->shiftColumn( rect ) )
 		KMessageBox::error( this, i18n("The column is full. Cannot move cells towards the bottom.") );
 	}
 	else if( insRem == Remove )
         {
-	    m_pView->activeTable()->unshiftColumn( rect );
+	    m_pView->activeSheet()->unshiftColumn( rect );
 	}
     }
     else if( rb3->isChecked() )
     {
 	if( insRem == Insert )
         {
-	    if ( !m_pView->activeTable()->insertRow( rect.top(),(rect.bottom()-rect.top() ) ) )
+	    if ( !m_pView->activeSheet()->insertRow( rect.top(),(rect.bottom()-rect.top() ) ) )
 		KMessageBox::error( this, i18n("The row is full. Cannot move cells to the right.") );
 	}
 	else if( insRem == Remove )
         {
-	    m_pView->activeTable()->removeRow( rect.top(),(rect.bottom()-rect.top() ) );
+	    m_pView->activeSheet()->removeRow( rect.top(),(rect.bottom()-rect.top() ) );
 	}
     }
     else if( rb4->isChecked() )
     {
 	if( insRem == Insert )
         {
-	    if ( !m_pView->activeTable()->insertColumn( rect.left(),(rect.right()-rect.left() )) )
+	    if ( !m_pView->activeSheet()->insertColumn( rect.left(),(rect.right()-rect.left() )) )
 		KMessageBox::error( this, i18n("The column is full. Cannot move cells towards the bottom.") );
 	}
 	else if( insRem == Remove )
         {
-	    m_pView->activeTable()->removeColumn( rect.left(),(rect.right()-rect.left() ) );
+	    m_pView->activeSheet()->removeColumn( rect.left(),(rect.right()-rect.left() ) );
 	}
     }
     else
@@ -138,7 +138,7 @@ void KSpreadinsert::slotOk()
 
     m_pView->updateEditWidget();
 
-    m_pView->slotUpdateView( m_pView->activeTable() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();
 }
 

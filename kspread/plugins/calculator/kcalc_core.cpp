@@ -195,10 +195,10 @@ void fpe_handler(int fpe_parm)
 
 }
 
-void QtCalculator::setData( const QRect& _range, const char *_table )
+void QtCalculator::setData( const QRect& _range, const char *_sheet )
 {
-  table_range = _range;
-  table_name = _table;
+  sheet_range = _range;
+  sheet_name = _sheet;
 }
 
 void QtCalculator::setValue( double _value )
@@ -723,7 +723,7 @@ void QtCalculator::EnterHyp()
   switch(kcalcdefaults.style){
   case 2:
   case 1:{
-    if ( !table_name.isEmpty() )
+    if ( !sheet_name.isEmpty() )
       useData();
 
     if(!inverse){
@@ -772,15 +772,15 @@ void QtCalculator::ExecSin(){
   }
 
   case 1:{ // stats mode
-    if ( !table_name.isEmpty() )
+    if ( !sheet_name.isEmpty() )
       useData();
 
     ComputeMean();
     break;
   }
 
-  case 2:{ // table mode
-    if ( !table_name.isEmpty() )
+  case 2:{ // sheet mode
+    if ( !sheet_name.isEmpty() )
       useData();
 
     ComputeMin();
@@ -946,15 +946,15 @@ void QtCalculator::ExecCos(){
   }
 
   case 1:{ // stats mode
-      if ( !table_name.isEmpty() )
+      if ( !sheet_name.isEmpty() )
       useData();
 
     ComputeStd();
     break;
   }
 
-  case 2:{ // table mode
-      if ( !table_name.isEmpty() )
+  case 2:{ // sheet mode
+      if ( !sheet_name.isEmpty() )
       useData();
 
     ComputeMax();
@@ -1081,7 +1081,7 @@ void QtCalculator::ExecTan(){
   case 2:
   case 1:{ // stats mode
 
-    if ( !table_name.isEmpty() )
+    if ( !sheet_name.isEmpty() )
       useData();
 
     ComputeMedean();
@@ -1211,7 +1211,7 @@ void QtCalculator::EnterLogr()
   switch(kcalcdefaults.style){
   case 2:
     {
-      if ( !table_name.isEmpty() )
+      if ( !sheet_name.isEmpty() )
         useData();
 
       ComputeSum();
@@ -1219,7 +1219,7 @@ void QtCalculator::EnterLogr()
     }
   case 1:{
 
-    if ( !table_name.isEmpty() )
+    if ( !sheet_name.isEmpty() )
       useData();
 
     if(!inverse){
@@ -1272,7 +1272,7 @@ void QtCalculator::EnterLogn()
   switch(kcalcdefaults.style){
   case 2:{
 
-    if ( !table_name.isEmpty() )
+    if ( !sheet_name.isEmpty() )
       useData();
 
     ComputeMul();
@@ -1281,7 +1281,7 @@ void QtCalculator::EnterLogn()
   }
   case 1:{
 
-    if ( !table_name.isEmpty() )
+    if ( !sheet_name.isEmpty() )
       useData();
 
     if(!inverse){

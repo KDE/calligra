@@ -73,7 +73,7 @@ class KSpellConfig;
 
 struct Reference
 {
-    QString table_name;
+    QString sheet_name;
     QString ref_name;
     QRect rect;
 };
@@ -479,7 +479,7 @@ public:
    * @see KSpreadView
    * @see KSpreadMap
    */
-  void addSheet( KSpreadSheet * _table );
+  void addSheet( KSpreadSheet * _sheet );
 
   /**
    * Change the zoom factor to @p z (e.g. 150 for 150%)
@@ -526,7 +526,7 @@ public:
   virtual void paintContent( QPainter & painter, const QRect & rect, bool transparent = false,
                              double zoomX = 1.0, double zoomY = 1.0 );
   void paintContent( QPainter & painter, const QRect & rect, bool transparent,
-                     KSpreadSheet * table, bool drawCursor = true );
+                     KSpreadSheet * sheet, bool drawCursor = true );
 
   bool docData( QString const & xmlTag, QDomElement & data );
   void deregisterPlugin( KSpreadPlugin * plugin );
@@ -548,7 +548,7 @@ public:
    * @param cellRegions a list of rectangles indicating the cell ranges needing
    *                    painted.
    *
-   * @param table the table which the cells in cellRegions come from
+   * @param sheet the sheet which the cells in cellRegions come from
    *
    * @param drawCursor whether or not to draw the selection rectangle and the choose
    *                   marker
@@ -556,20 +556,20 @@ public:
   void paintCellRegions(QPainter& painter, const QRect &viewRect,
                         KSpreadView* view,
                         QValueList<QRect> cellRegions,
-                        const KSpreadSheet* table, bool drawCursor);
+                        const KSpreadSheet* sheet, bool drawCursor);
 
   virtual DCOPObject* dcopObject();
 
-  void addAreaName(const QRect &_rect,const QString & name,const QString & tableName);
+  void addAreaName(const QRect &_rect,const QString & name,const QString & sheetName);
   const QValueList<Reference>  & listArea();
   void removeArea( const QString &name);
   KCompletion & completion();
   void addStringCompletion(const QString & stringCompletion);
 
-  void changeAreaTableName(const QString & oldName,const QString &tableName);
+  void changeAreaSheetName(const QString & oldName,const QString &sheetName);
 
 
-  QRect getRectArea(const QString &  _tableName);
+  QRect getRectArea(const QString &  _sheetName);
 
   void insertChild( KoDocumentChild * child ) { KoDocument::insertChild( child ); }
 
@@ -619,8 +619,8 @@ public:
 
   void updateBorderButton();
 
-  void insertTable( KSpreadSheet * table );
-  void takeTable( KSpreadSheet * table );
+  void insertSheet( KSpreadSheet * sheet );
+  void takeSheet( KSpreadSheet * sheet );
 
   // The user-chosen global unit
 
@@ -652,8 +652,8 @@ public:
     void addIgnoreWordAllList( const QStringList & _lst);
     QStringList spellListIgnoreAll() const ;
 
-    void setDisplayTable(KSpreadSheet *_Table );
-    KSpreadSheet * displayTable() const;
+    void setDisplaySheet(KSpreadSheet *_Sheet );
+    KSpreadSheet * displaySheet() const;
     KSPLoadingInfo * loadingInfo() const;
   void increaseNumOperation();
   void decreaseNumOperation();
@@ -675,9 +675,9 @@ public slots:
 signals:
   // Document signals
   /**
-   * Emitted if a new table is added to the document.
+   * Emitted if a new sheet is added to the document.
    */
-  void sig_addSheet( KSpreadSheet *_table );
+  void sig_addSheet( KSpreadSheet *_sheet );
   /**
    * Emitted if all views have to be updated.
    */
@@ -743,19 +743,19 @@ private:
 
   void PaintRegion(QPainter& painter, const KoRect &viewRegion,
                    KSpreadView* view, const QRect &paintRegion,
-                   const KSpreadSheet* table);
+                   const KSpreadSheet* sheet);
   void PaintChooseRect(QPainter& painter, const KoRect &viewRect,
-                       KSpreadView* view, const KSpreadSheet* table,
+                       KSpreadView* view, const KSpreadSheet* sheet,
                        const QRect &chooseRect);
   void PaintNormalMarker(QPainter& painter, const KoRect &viewRect,
-                         KSpreadView* view, const KSpreadSheet* table,
+                         KSpreadView* view, const KSpreadSheet* sheet,
                          const QRect &selection);
 
   /**
    * helper function in drawing the marker and choose marker.
    * @param marker the rectangle that represents the marker being drawn
    *               (cell coordinates)
-   * @param table the table this marker is on
+   * @param sheet the sheet this marker is on
    * @param viewRect the visible area on the canvas
    * @param positions output parameter where the viewable left, top, right, and
    *                  bottom of the marker will be.  They are stored in the array
@@ -766,7 +766,7 @@ private:
    *                   Again, these are in the order left, top, right, bottom.
    *                   This should be preallocated with a size of at least 4.
    */
-  void retrieveMarkerInfo( const QRect &marker, const KSpreadSheet* table,
+  void retrieveMarkerInfo( const QRect &marker, const KSpreadSheet* sheet,
                            KSpreadView* view, const KoRect &viewRect,
                            double positions[], bool paintSides[] );
   void loadPaper( QDomElement const & paper );

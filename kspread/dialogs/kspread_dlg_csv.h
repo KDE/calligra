@@ -76,7 +76,7 @@ class KSpreadCSVDialog : public KDialogBase
   QHBoxLayout* Layout1;
   QGridLayout* m_delimiterBoxLayout;
   QGridLayout* m_formatBoxLayout;
-  QTable* m_table;
+  QTable* m_sheet;
   QButtonGroup* m_delimiterBox;
   QRadioButton* m_radioComma;
   QRadioButton* m_radioSemicolon;
@@ -95,7 +95,7 @@ class KSpreadCSVDialog : public KDialogBase
   QLabel* TextLabel2;
   QCheckBox * m_ignoreDuplicates;
 
-  void fillTable();
+  void fillSheet();
   void fillComboBox();
   void setText(int row, int col, const QString& text);
   void adjustRows(int iRows);

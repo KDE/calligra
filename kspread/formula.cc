@@ -1302,7 +1302,7 @@ KSpreadValue Formula::eval() const
         {
           KSpreadPoint cell (c, sheet->map(), sheet);
           if (cell.isValid())
-            val1 = cell.table->value (cell.column(), cell.row());
+            val1 = cell.sheet->value (cell.column(), cell.row());
         }
         stack.push( val1 );
         break;
@@ -1314,7 +1314,7 @@ KSpreadValue Formula::eval() const
         {
           KSpreadRange range (c, sheet->map(), sheet);
           if (range.isValid())
-            val1 = range.table->valueRange (range.startCol(), range.startRow(),
+            val1 = range.sheet->valueRange (range.startCol(), range.startRow(),
                 range.endCol(), range.endRow());
         }
         stack.push( val1 );

@@ -109,7 +109,7 @@ void Inspector::Private::handleSheet()
 void Inspector::Private::handleDep()
 {  
   KSpreadPoint cellPoint;
-  cellPoint.table = sheet;
+  cellPoint.sheet = sheet;
   cellPoint.setRow( cell->row() );
   cellPoint.setColumn( cell->column() );
   
@@ -124,7 +124,7 @@ void Inspector::Private::handleDep()
     KSpreadPoint point = deps[i];
     int row = point.row();
     int column = point.column();
-    k1 = KSpreadCell::fullName( point.table, column, row );
+    k1 = KSpreadCell::fullName( point.sheet, column, row );
     
     new QListViewItem( depView, k1, k2 );
   }

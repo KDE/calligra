@@ -204,7 +204,7 @@ QValueList<KSpreadPoint> DependencyList::getDependants (const KSpreadPoint &cell
       KSpreadPoint c;
       c.setRow ((*it).cellrow);
       c.setColumn ((*it).cellcolumn);
-      c.table = (*it).cellsheet;
+      c.sheet = (*it).cellsheet;
       list.push_back (c);
     }
   }
@@ -218,7 +218,7 @@ void DependencyList::addDependency (const KSpreadPoint &cell1,
   kdDebug(36001) << "Dep. manager: added a dependency" << endl;
   
   //cell2 can be in another sheet (inter-sheet dependency)
-  KSpreadSheet *sh = cell2.table;
+  KSpreadSheet *sh = cell2.sheet;
   if (!sh)
     sh = sheet;
 
@@ -229,12 +229,12 @@ void DependencyList::addDependency (const KSpreadPoint &cell1,
 void DependencyList::addRangeDependency (const RangeDependency &rd)
 {
   //target range can be in another sheet (inter-sheet dependency)
-  KSpreadSheet *sh = rd.range.table;
+  KSpreadSheet *sh = rd.range.sheet;
   if (!sh)
     sh = sheet;
   
   KSpreadPoint cell;
-  cell.table = rd.cellsheet;
+  cell.sheet = rd.cellsheet;
   cell.setRow (rd.cellrow);
   cell.setColumn (rd.cellcolumn);
   dependencies[cell].ranges.push_back (rd.range);
@@ -257,7 +257,7 @@ void DependencyList::removeDependencies (const KSpreadPoint &cell)
   for (it1 = cells.begin(); it1 != cells.end(); ++it1)
   {
     //get sheet-pointer - needed to handle inter-sheet dependencies correctly
-    KSpreadSheet *sh = (*it1).table;
+    KSpreadSheet *sh = (*it1).sheet;
     if (!sh)
       sh = sheet;
     
@@ -287,7 +287,7 @@ void DependencyList::removeDependencies (const KSpreadPoint &cell)
   for (it1 = leads.begin(); it1 != leads.end(); ++it1)
   {
     //get sheet-pointer - needed to handle inter-sheet dependencies correctly
-    KSpreadSheet *sh = (*it1).table;
+    KSpreadSheet *sh = (*it1).sheet;
     if (!sh)
       sh = sheet;
 
@@ -345,7 +345,7 @@ void DependencyList::generateDependencies (const KSpreadPoint &cell)
     rd.cellcolumn = cell.column();
     rd.cellsheet = sheet;
     rd.range = *it2;
-    if (rd.range.table == 0) rd.range.table = sheet;
+    if (rd.range.sheet == 0) rd.range.sheet = sheet;
     addRangeDependency (rd);
   }
 }
@@ -358,7 +358,7 @@ void DependencyList::generateDependencies (const KSpreadRange &range)
       KSpreadPoint c;
       c.setRow (row);
       c.setColumn (col);
-      c.table = sheet;
+      c.sheet = sheet;
       generateDependencies (c);
     }
 }
@@ -404,7 +404,7 @@ void DependencyList::processRangeDependencies (const KSpreadPoint &cell)
       KSpreadPoint c;
       c.setRow ((*it).cellrow);
       c.setColumn ((*it).cellcolumn);
-      c.table = (*it).cellsheet;
+      c.sheet = (*it).cellsheet;
       updateCell (c);
     }
   }
@@ -420,7 +420,7 @@ void DependencyList::processDependencies (const KSpreadRange &range)
       KSpreadPoint c;
       c.setRow (row);
       c.setColumn (col);
-      c.table = sheet;
+      c.sheet = sheet;
       if (cellDeps.contains (c))
       {
         QValueList<KSpreadPoint> d = cellDeps[c];
@@ -456,7 +456,7 @@ void DependencyList::processRangeDependencies (const KSpreadRange &range)
         KSpreadPoint c;
         c.setRow ((*it2).range.startRow());
         c.setColumn ((*it2).range.startCol());
-        c.table = sheet;
+        c.sheet = sheet;
         updateCell (c);
       }
     }
@@ -510,7 +510,7 @@ KSpreadPoint DependencyList::leadingCell (const KSpreadPoint &cell) const
   KSpreadPoint c;
   c.setRow (cell.row() - cell.row() % CELLCHUNK_ROWS + 1);
   c.setColumn (cell.column() - cell.column() % CELLCHUNK_COLS + 1);
-  c.table = cell.table;
+  c.sheet = cell.sheet;
   return c;
 }
 
@@ -523,8 +523,8 @@ QValueList<KSpreadPoint> DependencyList::leadingCells (const KSpreadRange &range
   cell1.setColumn (range.startCol());
   cell2.setRow (range.endRow());
   cell2.setColumn (range.endCol());
-  cell1.table = range.table;
-  cell2.table = range.table;
+  cell1.sheet = range.sheet;
+  cell2.sheet = range.sheet;
   
   cell1 = leadingCell (cell1);
   cell2 = leadingCell (cell2);
@@ -534,7 +534,7 @@ QValueList<KSpreadPoint> DependencyList::leadingCells (const KSpreadRange &range
     {
       cell.setRow (row);
       cell.setColumn (col);
-      cell.table = range.table;
+      cell.sheet = range.sheet;
       cells.push_back (cell);
     }
   return cells;

@@ -60,8 +60,8 @@ using namespace format_LNS;
  *
  *****************************************************************************/
 
-KSpreadFormat::KSpreadFormat( KSpreadSheet * _table, KSpreadStyle * _style )
-  : m_pTable( _table ),
+KSpreadFormat::KSpreadFormat( KSpreadSheet * _sheet, KSpreadStyle * _style )
+  : m_pSheet( _sheet ),
     m_pStyle( _style ),
     m_strComment( 0 )
 {
@@ -79,8 +79,8 @@ void KSpreadFormat::defaultStyleFormat()
   if ( m_pStyle->release() )
     delete m_pStyle;
 
-  if ( m_pTable )
-    m_pStyle = m_pTable->doc()->styleManager()->defaultStyle();
+  if ( m_pSheet )
+    m_pStyle = m_pSheet->doc()->styleManager()->defaultStyle();
 
   delete m_strComment;
 }
@@ -108,7 +108,7 @@ double KSpreadFormat::globalColWidth()
 
 void KSpreadFormat::copy( const KSpreadFormat & _l )
 {
-  // TODO why is the table not copied?
+  // TODO why is the sheet not copied?
   if ( m_pStyle && m_pStyle->release() )
     delete m_pStyle;
 
@@ -393,7 +393,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     if ( m_pStyle->type() == KSpreadStyle::BUILTIN || m_pStyle->type() == KSpreadStyle::CUSTOM )
     {
         currentCellStyle.addAttribute( "style:parent-style-name", ((KSpreadCustomStyle *) m_pStyle)->name() );
-        if ( !copy && m_pTable->doc()->specialOutputFlag() != KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
+        if ( !copy && m_pSheet->doc()->specialOutputFlag() != KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
             return ""; //FIXME
     }
     else //FIXME !!!!
@@ -603,7 +603,7 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument & doc, int _col, int _row, b
   {
     format.setAttribute( "style-name", ((KSpreadCustomStyle *) m_pStyle)->name() );
 
-    if ( !copy && m_pTable->doc()->specialOutputFlag() != KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
+    if ( !copy && m_pSheet->doc()->specialOutputFlag() != KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
       return format;
   }
   else
@@ -724,7 +724,7 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc, bool force, bool copy 
   {
     format.setAttribute( "style-name", ((KSpreadCustomStyle *) m_pStyle)->name() );
 
-    if ( !copy && m_pTable->doc()->specialOutputFlag() != KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
+    if ( !copy && m_pSheet->doc()->specialOutputFlag() != KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
       return format;
   }
   else
@@ -846,7 +846,7 @@ bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm, bool paste 
 {
     if ( f.hasAttribute( "style-name" ) )
     {
-      KSpreadStyle * s = m_pTable->doc()->styleManager()->style( f.attribute( "style-name" ) );
+      KSpreadStyle * s = m_pSheet->doc()->styleManager()->style( f.attribute( "style-name" ) );
 
       //kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
       if ( s )
@@ -861,7 +861,7 @@ bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm, bool paste 
     else
     if ( f.hasAttribute( "parent" ) )
     {
-      KSpreadCustomStyle * s = (KSpreadCustomStyle *) m_pTable->doc()->styleManager()->style( f.attribute( "parent" ) );
+      KSpreadCustomStyle * s = (KSpreadCustomStyle *) m_pSheet->doc()->styleManager()->style( f.attribute( "parent" ) );
       //kdDebug() << "Loading Style, parent: " << s->name() << ": " << s << endl;
 
       if ( s )
@@ -1116,7 +1116,7 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
 #if 0
     if ( f.hasAttribute( "style-name" ) )
     {
-        KSpreadStyle * s = m_pTable->doc()->styleManager()->style( f.attribute( "style-name" ) );
+        KSpreadStyle * s = m_pSheet->doc()->styleManager()->style( f.attribute( "style-name" ) );
 
         //kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
         if ( s )
@@ -1131,7 +1131,7 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
     else
         if ( f.hasAttribute( "parent" ) )
         {
-            KSpreadCustomStyle * s = (KSpreadCustomStyle *) m_pTable->doc()->styleManager()->style( f.attribute( "parent" ) );
+            KSpreadCustomStyle * s = (KSpreadCustomStyle *) m_pSheet->doc()->styleManager()->style( f.attribute( "parent" ) );
             //kdDebug() << "Loading Style, parent: " << s->name() << ": " << s << endl;
 
             if ( s )
@@ -1146,7 +1146,7 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
 #endif
     if (  styleStack.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
     {
-        KSpreadStyle * s = m_pTable->doc()->styleManager()->style( styleStack.attributeNS( KoXmlNS::style, "parent-style-name" ) );
+        KSpreadStyle * s = m_pSheet->doc()->styleManager()->style( styleStack.attributeNS( KoXmlNS::style, "parent-style-name" ) );
 
         //kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
         if ( s )
@@ -2222,7 +2222,7 @@ const QPen& KSpreadFormat::leftBorderPen( int col, int row ) const
     const KSpreadFormat * l = fallbackFormat( col, row );
     if ( l )
       return l->leftBorderPen( col, row );
-    return table()->emptyPen();
+    return sheet()->emptyPen();
   }
 
   return m_pStyle->leftBorderPen();
@@ -2250,7 +2250,7 @@ const QPen& KSpreadFormat::topBorderPen( int col, int row ) const
     const KSpreadFormat* l = fallbackFormat( col, row );
     if ( l )
       return l->topBorderPen( col, row );
-    return table()->emptyPen();
+    return sheet()->emptyPen();
   }
 
   return m_pStyle->topBorderPen();
@@ -2278,7 +2278,7 @@ const QPen& KSpreadFormat::rightBorderPen( int col, int row ) const
     const KSpreadFormat * l = fallbackFormat( col, row );
     if ( l )
       return l->rightBorderPen( col, row );
-    return table()->emptyPen();
+    return sheet()->emptyPen();
   }
 
   return m_pStyle->rightBorderPen();
@@ -2306,7 +2306,7 @@ const QPen& KSpreadFormat::bottomBorderPen( int col, int row ) const
     const KSpreadFormat * l = fallbackFormat( col, row );
     if ( l )
       return l->bottomBorderPen( col, row );
-    return table()->emptyPen();
+    return sheet()->emptyPen();
   }
 
   return m_pStyle->bottomBorderPen();
@@ -2619,7 +2619,7 @@ bool KSpreadFormat::getDontprintText( int col, int row ) const
 
 bool KSpreadFormat::isProtected( int col, int row ) const
 {
-  return ( m_pTable->isProtected() && !notProtected( col, row ) );
+  return ( m_pSheet->isProtected() && !notProtected( col, row ) );
 }
 
 
@@ -2761,7 +2761,7 @@ bool KSpreadFormat::isDefault() const
 
 KLocale * KSpreadFormat::locale()const
 {
-  return m_pTable->doc()->locale();
+  return m_pSheet->doc()->locale();
 }
 
 /*****************************************************************************
@@ -2771,10 +2771,10 @@ KLocale * KSpreadFormat::locale()const
  *****************************************************************************/
 
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
-#define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateRow( this, m_iRow );
+#define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pSheet->emit_updateRow( this, m_iRow );
 
-RowFormat::RowFormat( KSpreadSheet * _table, int _row )
-  : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() )
+RowFormat::RowFormat( KSpreadSheet * _sheet, int _row )
+  : KSpreadFormat( _sheet, _sheet->doc()->styleManager()->defaultStyle() )
 {
     m_next = 0;
     m_prev = 0;
@@ -2816,7 +2816,7 @@ void RowFormat::setHeight( int _h, const KSpreadCanvas * _canvas )
 
 void RowFormat::setDblHeight( double _h, const KSpreadCanvas * _canvas )
 {
-  KSpreadSheet *_table = _canvas ? _canvas->activeTable() : m_pTable;
+  KSpreadSheet *_sheet = _canvas ? _canvas->activeSheet() : m_pSheet;
 
   // avoid unnecessary updates
   if ( kAbs( _h - dblHeight( _canvas ) ) < DBL_EPSILON )
@@ -2825,7 +2825,7 @@ void RowFormat::setDblHeight( double _h, const KSpreadCanvas * _canvas )
   UPDATE_BEGIN;
 
   // Lower maximum size by old height
-  _table->adjustSizeMaxY ( - dblHeight() );
+  _sheet->adjustSizeMaxY ( - dblHeight() );
 
   if ( _canvas )
     m_fHeight = ( _h / _canvas->zoom() );
@@ -2833,9 +2833,9 @@ void RowFormat::setDblHeight( double _h, const KSpreadCanvas * _canvas )
     m_fHeight = _h;
 
   // Rise maximum size by new height
-  _table->adjustSizeMaxY ( dblHeight() );
-  _table->print()->updatePrintRepeatRowsHeight();
-  _table->print()->updateNewPageListY ( row() );
+  _sheet->adjustSizeMaxY ( dblHeight() );
+  _sheet->print()->updatePrintRepeatRowsHeight();
+  _sheet->print()->updateNewPageListY ( row() );
 
   UPDATE_END;
 }
@@ -2889,7 +2889,7 @@ bool RowFormat::load( const QDomElement & row, int yshift, PasteMode sp, bool pa
 
     if ( row.hasAttribute( "height" ) )
     {
-	if ( m_pTable->doc()->syntaxVersion() < 1 ) //compatibility with old format - was in millimeter
+	if ( m_pSheet->doc()->syntaxVersion() < 1 ) //compatibility with old format - was in millimeter
 	    m_fHeight = qRound( MM_TO_POINT( row.attribute( "height" ).toDouble( &ok ) ) );
 	else
 	    m_fHeight = row.attribute( "height" ).toDouble( &ok );
@@ -2933,7 +2933,7 @@ const QPen & RowFormat::topBorderPen( int _col, int _row ) const
     // First look at the row above us
     if ( !hasProperty( PTopBorder, false ) )
     {
-	const RowFormat * rl = table()->rowFormat( _row - 1 );
+	const RowFormat * rl = sheet()->rowFormat( _row - 1 );
 	if ( rl->hasProperty( PBottomBorder ) )
 	    return rl->bottomBorderPen( _col, _row - 1 );
     }
@@ -2943,7 +2943,7 @@ const QPen & RowFormat::topBorderPen( int _col, int _row ) const
 
 void RowFormat::setTopBorderPen( const QPen & p )
 {
-    RowFormat * cl = table()->nonDefaultRowFormat( row() - 1, false );
+    RowFormat * cl = sheet()->nonDefaultRowFormat( row() - 1, false );
     if ( cl )
 	cl->clearProperty( PBottomBorder );
 
@@ -2955,7 +2955,7 @@ const QPen & RowFormat::bottomBorderPen( int _col, int _row ) const
     // First look at the row below of us
     if ( !hasProperty( PBottomBorder, false ) && ( _row < KS_rowMax ) )
     {
-	const RowFormat * rl = table()->rowFormat( _row + 1 );
+	const RowFormat * rl = sheet()->rowFormat( _row + 1 );
 	if ( rl->hasProperty( PTopBorder ) )
 	    return rl->topBorderPen( _col, _row + 1 );
     }
@@ -2967,7 +2967,7 @@ void RowFormat::setBottomBorderPen( const QPen & p )
 {
     if ( row() < KS_rowMax )
     {
-        RowFormat * cl = table()->nonDefaultRowFormat( row() + 1, FALSE );
+        RowFormat * cl = sheet()->nonDefaultRowFormat( row() + 1, FALSE );
         if ( cl )
 	    cl->clearProperty( PTopBorder );
     }
@@ -2982,28 +2982,28 @@ void RowFormat::setHide( bool _hide )
 	if ( _hide )
 	{
 	    // Lower maximum size by height of row
-	    m_pTable->adjustSizeMaxY ( - dblHeight() );
+	    m_pSheet->adjustSizeMaxY ( - dblHeight() );
 	    m_bHide = _hide; //hide must be set after we requested the height
-            m_pTable->emit_updateRow( this, m_iRow );
+            m_pSheet->emit_updateRow( this, m_iRow );
 	}
 	else
 	{
 	    // Rise maximum size by height of row
 	    m_bHide = _hide; //unhide must be set before we request the height
-	    m_pTable->adjustSizeMaxY ( dblHeight() );
-            m_pTable->emit_updateRow( this, m_iRow );
+	    m_pSheet->adjustSizeMaxY ( dblHeight() );
+            m_pSheet->emit_updateRow( this, m_iRow );
 	}
     }
 }
 
 KSpreadFormat * RowFormat::fallbackFormat( int col, int )
 {
-    return table()->columnFormat( col );
+    return sheet()->columnFormat( col );
 }
 
 const KSpreadFormat* RowFormat::fallbackFormat( int col, int ) const
 {
-    return table()->columnFormat( col );
+    return sheet()->columnFormat( col );
 }
 
 bool RowFormat::isDefault() const
@@ -3021,10 +3021,10 @@ bool RowFormat::isDefault() const
 #undef UPDATE_END
 
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
-#define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateColumn( this, m_iColumn );
+#define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pSheet->emit_updateColumn( this, m_iColumn );
 
-ColumnFormat::ColumnFormat( KSpreadSheet * _table, int _column )
-  : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() )
+ColumnFormat::ColumnFormat( KSpreadSheet * _sheet, int _column )
+  : KSpreadFormat( _sheet, _sheet->doc()->styleManager()->defaultStyle() )
 {
   m_bDisplayDirtyFlag = false;
   m_fWidth = g_colWidth;
@@ -3064,7 +3064,7 @@ void ColumnFormat::setWidth( int _w, const KSpreadCanvas * _canvas )
 
 void ColumnFormat::setDblWidth( double _w, const KSpreadCanvas * _canvas )
 {
-  KSpreadSheet *_table = _canvas ? _canvas->activeTable() : m_pTable;
+  KSpreadSheet *_sheet = _canvas ? _canvas->activeSheet() : m_pSheet;
 
   // avoid unnecessary updates
   if ( kAbs( _w - dblWidth( _canvas ) ) < DBL_EPSILON )
@@ -3073,7 +3073,7 @@ void ColumnFormat::setDblWidth( double _w, const KSpreadCanvas * _canvas )
   UPDATE_BEGIN;
 
   // Lower maximum size by old width
-  _table->adjustSizeMaxX ( - dblWidth() );
+  _sheet->adjustSizeMaxX ( - dblWidth() );
 
   if ( _canvas )
       m_fWidth = ( _w / _canvas->zoom() );
@@ -3081,9 +3081,9 @@ void ColumnFormat::setDblWidth( double _w, const KSpreadCanvas * _canvas )
       m_fWidth = _w;
 
   // Rise maximum size by new width
-  _table->adjustSizeMaxX ( dblWidth() );
-  _table->print()->updatePrintRepeatColumnsWidth();
-  _table->print()->updateNewPageListX ( column() );
+  _sheet->adjustSizeMaxX ( dblWidth() );
+  _sheet->print()->updatePrintRepeatColumnsWidth();
+  _sheet->print()->updateNewPageListX ( column() );
 
   UPDATE_END;
 }
@@ -3130,7 +3130,7 @@ bool ColumnFormat::load( const QDomElement & col, int xshift, PasteMode sp, bool
     bool ok;
     if ( col.hasAttribute( "width" ) )
     {
-	if ( m_pTable->doc()->syntaxVersion() < 1 ) //combatibility to old format - was in millimeter
+	if ( m_pSheet->doc()->syntaxVersion() < 1 ) //combatibility to old format - was in millimeter
 	    m_fWidth = qRound( MM_TO_POINT ( col.attribute( "width" ).toDouble( &ok ) ) );
 	else
 	    m_fWidth = col.attribute( "width" ).toDouble( &ok );
@@ -3179,7 +3179,7 @@ const QPen & ColumnFormat::leftBorderPen( int _col, int _row ) const
     // First look ar the right column at the right
     if ( !hasProperty( PLeftBorder, false ) )
     {
-	const ColumnFormat * cl = table()->columnFormat( _col - 1 );
+	const ColumnFormat * cl = sheet()->columnFormat( _col - 1 );
 	if ( cl->hasProperty( PRightBorder ) )
 	    return cl->rightBorderPen( _col - 1, _row );
     }
@@ -3189,7 +3189,7 @@ const QPen & ColumnFormat::leftBorderPen( int _col, int _row ) const
 
 void ColumnFormat::setLeftBorderPen( const QPen & p )
 {
-    ColumnFormat * cl = table()->nonDefaultColumnFormat( column() - 1, FALSE );
+    ColumnFormat * cl = sheet()->nonDefaultColumnFormat( column() - 1, FALSE );
     if ( cl )
 	cl->clearProperty( PRightBorder );
 
@@ -3201,7 +3201,7 @@ const QPen & ColumnFormat::rightBorderPen( int _col, int _row ) const
     // First look ar the right column at the right
     if ( !hasProperty( PRightBorder, false ) && ( _col < KS_colMax ) )
     {
-	const ColumnFormat * cl = table()->columnFormat( _col + 1 );
+	const ColumnFormat * cl = sheet()->columnFormat( _col + 1 );
 	if ( cl->hasProperty( PLeftBorder ) )
 	    return cl->leftBorderPen( _col + 1, _row );
     }
@@ -3213,7 +3213,7 @@ void ColumnFormat::setRightBorderPen( const QPen & p )
 {
     if ( column() < KS_colMax )
     {
-        ColumnFormat * cl = table()->nonDefaultColumnFormat( column() + 1, false );
+        ColumnFormat * cl = sheet()->nonDefaultColumnFormat( column() + 1, false );
         if ( cl )
             cl->clearProperty( PLeftBorder );
     }
@@ -3223,7 +3223,7 @@ void ColumnFormat::setRightBorderPen( const QPen & p )
 
 KSpreadFormat * ColumnFormat::fallbackFormat( int, int )
 {
-    return table()->defaultFormat();
+    return sheet()->defaultFormat();
 }
 
 void ColumnFormat::setHide( bool _hide )
@@ -3233,23 +3233,23 @@ void ColumnFormat::setHide( bool _hide )
 	if ( _hide )
 	{
 	    // Lower maximum size by width of column
-	    m_pTable->adjustSizeMaxX ( - dblWidth() );
+	    m_pSheet->adjustSizeMaxX ( - dblWidth() );
 	    m_bHide = _hide; //hide must be set after we requested the width
-            m_pTable->emit_updateColumn( this, m_iColumn );
+            m_pSheet->emit_updateColumn( this, m_iColumn );
 	}
 	else
         {
 	    // Rise maximum size by width of column
 	    m_bHide = _hide; //unhide must be set before we request the width
-	    m_pTable->adjustSizeMaxX ( dblWidth() );
-            m_pTable->emit_updateColumn( this, m_iColumn );
+	    m_pSheet->adjustSizeMaxX ( dblWidth() );
+            m_pSheet->emit_updateColumn( this, m_iColumn );
         }
     }
 }
 
 const KSpreadFormat * ColumnFormat::fallbackFormat( int, int ) const
 {
-    return table()->defaultFormat();
+    return sheet()->defaultFormat();
 }
 
 bool ColumnFormat::isDefault() const

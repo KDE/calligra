@@ -145,11 +145,11 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
   statstyle->adjustSize();
   statstyle->setChecked(defst->style == 1 );
 
-  tablestyle = new QRadioButton(i18n("Table mode"),stylegroup,"Table");
-  grid2->addWidget(tablestyle,2,0);
-  tablestyle->adjustSize();
+  sheetstyle = new QRadioButton(i18n("Sheet mode"),stylegroup,"Sheet");
+  grid2->addWidget(sheetstyle,2,0);
+  sheetstyle->adjustSize();
 
-  tablestyle->setChecked(defst->style == 2 );
+  sheetstyle->setChecked(defst->style == 2 );
   button3 = new QPushButton(stylegroup);
   grid2->addWidget(button3,0,1);
   button3->setText(i18n("Help"));

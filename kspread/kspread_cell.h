@@ -117,7 +117,7 @@ public:
 		 int _column, int _row );
 
     /**
-     * @see #tableDies
+     * @see #sheetDies
      */
     ~KSpreadCell();
 
@@ -218,16 +218,16 @@ public:
     void move( int column, int row );
 
     /**
-     * The @ref KSpreadSheet calls this method if the table becomes deleted.
+     * The @ref KSpreadSheet calls this method if the sheet becomes deleted.
      * At the time this method is called other cells may already be deleted or
      * in some inconsistent state.
      *
      * The purpose of this method is to clear up some variables so that the destructor
      * runs without any crash. Especially all variables referencing other cells
-     * must be voided. This method may not call any other method since the whole table
+     * must be voided. This method may not call any other method since the whole sheet
      * and all remaining cells are in an inconsistent state now.
      */
-    void tableDies();
+    void sheetDies();
 
     /**
      * Save this cell.
@@ -540,11 +540,11 @@ public:
      *
      * @param col the column of the cell
      * @param row the row of the cell
-     * @param table the table that the cell is on
+     * @param sheet the sheet that the cell is on
      * @param isDepending true if the cell is now depending on this one, false if it is not any longer
      *                    depending on it.
      */
-    void NotifyDepending( int col, int row, KSpreadSheet* table, bool isDepending );
+    void NotifyDepending( int col, int row, KSpreadSheet* sheet, bool isDepending );
 
     /**
      * Causes the format to be recalculated when the cell is drawn next time.
@@ -779,8 +779,8 @@ public:
    * function which will call @ref KSpreadSheet::updateCell once it retains
    * the control. If a function changes the contents/layout of this cell and this
    * flag is not set, then the function must set it at once. After the changes
-   * are done the function must call <tt>m_pTable->updateCell(...).
-   * The flag is cleared by the function m_pTable->updateCell.
+   * are done the function must call <tt>m_pSheet->updateCell(...).
+   * The flag is cleared by the function m_pSheet->updateCell.
    *
    * ForceExtra
    * Tells whether the cell is forced to exceed its size.

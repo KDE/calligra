@@ -39,7 +39,7 @@
 KSpreadSubtotalDlg::KSpreadSubtotalDlg( KSpreadView * parent, QRect const & selection, const char * name )
   : KDialogBase(parent, name, true, i18n( "Subtotals" ), Ok | Cancel | User1, Ok, true, KGuiItem(i18n( "Remove All" )) ),
     m_pView( parent ),
-    m_pTable( m_pView->activeTable() ),
+    m_pSheet( m_pView->activeSheet() ),
     m_selection( selection ),
     m_dialog( new KSpreadSubtotal( this ) )
 {
@@ -87,7 +87,7 @@ void KSpreadSubtotalDlg::slotOk()
   int bottom = m_selection.bottom();
   int top    = m_selection.top();
   left       = m_selection.left();
-  QString oldText = m_pTable->cellAt( mainCol, top )->strOutText();
+  QString oldText = m_pSheet->cellAt( mainCol, top )->strOutText();
   QString newText;
   QString result( " " + i18n("Result") );
   int lastChangedRow = top;
@@ -102,7 +102,7 @@ void KSpreadSubtotalDlg::slotOk()
     while ( y <= bottom )
     {
       addRow = true;
-      newText = m_pTable->cellAt( mainCol, y )->strOutText();
+      newText = m_pSheet->cellAt( mainCol, y )->strOutText();
 
       if ( ignoreEmptyCells && (newText.length() == 0) )
       {
@@ -165,7 +165,7 @@ void KSpreadSubtotalDlg::slotOk()
     }
   }
 
-  m_pView->slotUpdateView( m_pView->activeTable() );
+  m_pView->slotUpdateView( m_pView->activeSheet() );
   accept();
 }
 
@@ -178,7 +178,7 @@ void KSpreadSubtotalDlg::slotUser1()
 {
   m_pView->doc()->emitBeginOperation( false );
   removeSubtotalLines();
-  m_pView->slotUpdateView( m_pView->activeTable() );
+  m_pView->slotUpdateView( m_pView->activeSheet() );
   accept();
 }
 
@@ -199,7 +199,7 @@ void KSpreadSubtotalDlg::removeSubtotalLines()
     bool containsSubtotal = false;
     for (int x = l; x <= r; ++x )
     {
-      cell = m_pTable->cellAt( x, y );
+      cell = m_pSheet->cellAt( x, y );
       if ( cell->isDefault() || !cell->isFormula() )
         continue;
 
@@ -216,7 +216,7 @@ void KSpreadSubtotalDlg::removeSubtotalLines()
       kdDebug() << "Line " << y << " contains a subtotal " << endl;
       QRect rect( l, y, m_selection.width(), 1 );
 
-      m_pTable->unshiftColumn( rect );
+      m_pSheet->unshiftColumn( rect );
       m_selection.setHeight( m_selection.height() - 1 );
     }
   }
@@ -236,7 +236,7 @@ void KSpreadSubtotalDlg::fillColumnBoxes()
 
   for ( int i = m_selection.left(); i <= r; ++i )
   {
-    cell = m_pTable->cellAt( i, row );
+    cell = m_pSheet->cellAt( i, row );
     text = cell->strOutText();
 
     if ( text.length() > 0 )
@@ -279,12 +279,12 @@ bool KSpreadSubtotalDlg::addSubtotal( int mainCol, int column, int row, int topR
   if ( addRow )
   {
     QRect rect(m_selection.left(), row + 1, m_selection.width(), 1);
-    if ( !m_pTable->shiftColumn( rect ) )
+    if ( !m_pSheet->shiftColumn( rect ) )
       return false;
 
     m_selection.setHeight( m_selection.height() + 1 );
 
-    KSpreadCell * cell = m_pTable->nonDefaultCell( mainCol, row + 1 );
+    KSpreadCell * cell = m_pSheet->nonDefaultCell( mainCol, row + 1 );
     cell->setCellText( text );
     cell->setTextFontBold( true );
     cell->setTextFontItalic( true );
@@ -306,7 +306,7 @@ bool KSpreadSubtotalDlg::addSubtotal( int mainCol, int column, int row, int topR
   }
   formula += ")";
 
-  KSpreadCell * cell = m_pTable->nonDefaultCell( column, row + 1 );
+  KSpreadCell * cell = m_pSheet->nonDefaultCell( column, row + 1 );
   cell->setCellText( formula );
   cell->setTextFontBold( true );
   cell->setTextFontItalic( true );

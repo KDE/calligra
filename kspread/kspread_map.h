@@ -44,7 +44,7 @@ class KoOasisSettings;
 #include "kspread_sheet.h"
 
 /**
-  A map is a simple container for all tables. Usually a complete map
+  A map is a simple container for all sheets. Usually a complete map
   is saved in one file.
  */
 class KSPREAD_EXPORT KSpreadMap : public QObject
@@ -55,7 +55,7 @@ public:
    */
   KSpreadMap( KSpreadDoc *_doc, const char* name = 0 );
   /**
-   * This deletes all tables contained in this map.
+   * This deletes all sheets contained in this map.
    */
   virtual ~KSpreadMap();
 
@@ -78,51 +78,51 @@ public:
   bool checkPassword( QCString const & passwd ) const { return ( passwd == m_strPassword ); }
 
   /**
-   * The table named @param _from is being moved to the table @param _to.
+   * The sheet named @param _from is being moved to the sheet @param _to.
    * If @param _before is true @param _from is inserted before (after otherwise)   * @param _to.
    */
-  void moveTable( const QString & _from, const QString & _to, bool _before = true );
+  void moveSheet( const QString & _from, const QString & _to, bool _before = true );
 
-  KSpreadSheet* findTable( const QString & _name );
-  KSpreadSheet* nextTable( KSpreadSheet* );
-  KSpreadSheet* previousTable( KSpreadSheet* );
+  KSpreadSheet* findSheet( const QString & _name );
+  KSpreadSheet* nextSheet( KSpreadSheet* );
+  KSpreadSheet* previousSheet( KSpreadSheet* );
 
-  KSpreadSheet* initialActiveTable()const { return m_initialActiveTable; }
+  KSpreadSheet* initialActiveSheet()const { return m_initialActiveSheet; }
   int initialMarkerColumn()const { return m_initialMarkerColumn; }
   int initialMarkerRow()const { return m_initialMarkerRow; }
 
-  void addSheet( KSpreadSheet *_table );
+  void addSheet( KSpreadSheet *_sheet );
 
   /**
-   * Use the @ref #nextTable function to get all the other tables.
+   * Use the @ref #nextSheet function to get all the other sheets.
    * Attention: Function is not reentrant.
    *
-   * @return a pointer to the first table in this map.
+   * @return a pointer to the first sheet in this map.
    */
-  KSpreadSheet* firstTable() { return m_lstTables.first();  }
+  KSpreadSheet* firstSheet() { return m_lstSheets.first();  }
 
   /**
-   * Use the @ref #previousTable function to get all the other tables.
+   * Use the @ref #previousSheet function to get all the other sheets.
    * Attention: Function is not reentrant.
    *
-   * @return a pointer to the last table in this map.
+   * @return a pointer to the last sheet in this map.
    */
-  KSpreadSheet* lastTable() { return m_lstTables.last();  }
+  KSpreadSheet* lastSheet() { return m_lstSheets.last();  }
 
   /**
-   * Call @ref #firstTable first. This will set the list pointer to
-   * the first table. Attention: Function is not reentrant.
+   * Call @ref #firstSheet first. This will set the list pointer to
+   * the first sheet. Attention: Function is not reentrant.
    *
-   * @return a pointer to the next table in this map.
+   * @return a pointer to the next sheet in this map.
    */
-  KSpreadSheet* nextTable() { return m_lstTables.next();  }
+  KSpreadSheet* nextSheet() { return m_lstSheets.next();  }
 
-  QPtrList<KSpreadSheet>& tableList() { return m_lstTables; }
+  QPtrList<KSpreadSheet>& sheetList() { return m_lstSheets; }
 
   /**
-   * @return amount of tables in this map.
+   * @return amount of sheets in this map.
    */
-  int count()const { return m_lstTables.count(); }
+  int count()const { return m_lstSheets.count(); }
 
   void update();
 
@@ -136,8 +136,8 @@ public:
 
   KSpreadDoc * doc()const;
 
-  void takeTable( KSpreadSheet * table );
-  void insertTable( KSpreadSheet * table );
+  void takeSheet( KSpreadSheet * sheet );
+  void insertSheet( KSpreadSheet * sheet );
 
   QStringList visibleSheets() const;
   QStringList hiddenSheets() const;
@@ -146,10 +146,10 @@ public:
 
 private:
   /**
-   * List of all tables in this map. The list has autodelete turned on.
+   * List of all sheets in this map. The list has autodelete turned on.
    */
-  QPtrList<KSpreadSheet> m_lstTables;
-  QPtrList<KSpreadSheet> m_lstDeletedTables;
+  QPtrList<KSpreadSheet> m_lstSheets;
+  QPtrList<KSpreadSheet> m_lstDeletedSheets;
 
   /**
    * Pointer to the part which holds this map.
@@ -163,7 +163,7 @@ private:
   /**
    * Set from the XML
    */
-  KSpreadSheet * m_initialActiveTable;
+  KSpreadSheet * m_initialActiveSheet;
   int m_initialMarkerColumn;
   int m_initialMarkerRow;
 

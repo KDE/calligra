@@ -13,18 +13,18 @@
 class KSPREAD_EXPORT KSpreadSelectionChanged : public KParts::Event
 {
 public:
-    KSpreadSelectionChanged( const QRect&, const QString& table );
+    KSpreadSelectionChanged( const QRect&, const QString& sheet );
     ~KSpreadSelectionChanged();
 
     QRect rect() const { return m_rect; }
-    QString table() const { return m_table; }
+    QString sheet() const { return m_sheet; }
 
     static bool test( const QEvent* e ) { return KParts::Event::test( e, s_strSelectionChanged ); }
 
 private:
     static const char *s_strSelectionChanged;
     QRect m_rect;
-    QString m_table;
+    QString m_sheet;
 };
 
 #endif

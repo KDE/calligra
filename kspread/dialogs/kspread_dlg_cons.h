@@ -55,7 +55,7 @@ public slots:
   void slotAdd();
   void slotRemove();
 
-  void slotSelectionChanged( KSpreadSheet* _table, const QRect& _selection );
+  void slotSelectionChanged( KSpreadSheet* _sheet, const QRect& _selection );
   void slotReturnPressed();
 
 protected:
@@ -71,7 +71,7 @@ protected:
   QCheckBox* m_pCol;
   QCheckBox* m_pCopy;
 
-  QString evaluate( const QString& formula, KSpreadSheet* table );
+  QString evaluate( const QString& formula, KSpreadSheet* sheet );
 
   enum { Sum = 0, Average, Count, Max, Min, Product, StdDev, Var };
 };

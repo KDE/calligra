@@ -141,12 +141,12 @@ public:
     void setZoom( int zoom, bool updateViews ); // change the zoom value
 
     void addSheet( KSpreadSheet *_t );
-    //void removeTable( KSpreadSheet *_t );
-    void removeAllTables();
-    void setActiveTable( KSpreadSheet *_t,bool updateTable=true );
+    //void removesheet( KSpreadSheet *_t );
+    void removeAllSheets();
+    void setActiveSheet( KSpreadSheet *_t,bool updatesheet=true );
 
-    const KSpreadSheet* activeTable() const;
-    KSpreadSheet* activeTable();
+    const KSpreadSheet* activeSheet() const;
+    KSpreadSheet* activeSheet();
 
     void openPopupMenu( const QPoint &_global );
     void popupRowMenu(const QPoint & _point ) ;
@@ -228,15 +228,15 @@ public:
 
     void updateBorderButton();
 
-    void removeTable( KSpreadSheet *_t );
-    void insertTable( KSpreadSheet* table );
+    void removeSheet( KSpreadSheet *_t );
+    void insertSheet( KSpreadSheet* sheet );
     QColor borderColor() const;
 
     KSpreadSelection* selectionInfo() const;
     QRect selection(bool extend = true) const;
     QPoint marker() const;
 
-    void updateShowTableMenu();
+    void updateShowSheetMenu();
 
     /**
      * Repaint any cell with the paintDirty flag that is visible in this view
@@ -248,7 +248,7 @@ public:
      */
     void resetInsertHandle();
 
-    bool showTable(const QString& tableName);
+    bool showSheet(const QString& sheetName);
 
     QPoint markerFromSheet( KSpreadSheet *_sheet ) const;
     /*
@@ -315,10 +315,10 @@ public slots:
     void subtotals();
     void textToColumns();
     void consolidate();
-    void insertTable();
-    void removeTable();
-    void hideTable();
-    void showTable();
+    void insertSheet();
+    void removeSheet();
+    void hideSheet();
+    void showSheet();
     void helpUsing();
     void insertChart();
     void moneyFormat(bool b);
@@ -366,7 +366,7 @@ public slots:
     void borderAll();
     void borderRemove();
     void changeBorderColor();
-    void tableFormat();
+    void sheetFormat();
     void autoSum();
     void resizeRow();
     void resizeColumn();
@@ -418,7 +418,7 @@ public slots:
     void decreaseIndent();
     void copyAsText();
 
-    void moveTable( unsigned table, unsigned target );
+    void moveSheet( unsigned sheet, unsigned target );
 
     /**
      * Shows the sheet properties dialog.
@@ -429,31 +429,31 @@ public slots:
      * Switch the active sheet to the name. This slot is connected to the tab bar
      * and activated when the user selects a new sheet in the tab bar.
      */
-    void changeTable( const QString& _name );
+    void changeSheet( const QString& _name );
 
     /**
      * Switch the active sheet to the next visible sheet. Does nothing if the current
      * active sheet is the last visible sheet in the workbook.
      */
-    void nextTable();
+    void nextSheet();
 
     /**
      * Switch the active sheet to the previous visible sheet. Does nothing if the current
      * active sheet is the first visible sheet in the workbook.
      */
-    void previousTable();
+    void previousSheet();
 
     /**
      * Switch the active sheet to the first visible sheet in the workbook. Does nothing
      * if the current active sheet is already the first one.
      */
-    void firstTable();
+    void firstSheet();
 
     /**
      * Switch the active sheet to the last visible sheet in the workbook. Does nothing
      * if the current active sheet is already the last one.
      */
-    void lastTable();
+    void lastSheet();
 
     void sortList();
 
@@ -539,19 +539,19 @@ protected slots:
 public slots:
     // Document signals
     void slotRefreshView();
-    void slotUpdateView( KSpreadSheet *_table );
-    void slotUpdateView( KSpreadSheet *_table, const QRect& );
-    void slotUpdateHBorder( KSpreadSheet *_table );
-    void slotUpdateVBorder( KSpreadSheet *_table );
-    void slotChangeSelection( KSpreadSheet *_table, const QRect &oldSelection,
+    void slotUpdateView( KSpreadSheet *_sheet );
+    void slotUpdateView( KSpreadSheet *_sheet, const QRect& );
+    void slotUpdateHBorder( KSpreadSheet *_sheet );
+    void slotUpdateVBorder( KSpreadSheet *_sheet );
+    void slotChangeSelection( KSpreadSheet *_sheet, const QRect &oldSelection,
                               const QPoint &_oldMarker );
-    void slotAddTable( KSpreadSheet *_table );
+    void slotAddSheet( KSpreadSheet *_sheet );
     void slotRemoveChild( KSpreadChild *_child );
     void slotUpdateChildGeometry( KSpreadChild *_child );
-    void slotTableRenamed( KSpreadSheet* table, const QString& old_name );
-    void slotTableHidden( KSpreadSheet*_table );
-    void slotTableShown( KSpreadSheet*_table );
-    void slotTableRemoved( KSpreadSheet*_table );
+    void slotSheetRenamed( KSpreadSheet* sheet, const QString& old_name );
+    void slotSheetHidden( KSpreadSheet*_sheet );
+    void slotSheetShown( KSpreadSheet*_sheet );
+    void slotSheetRemoved( KSpreadSheet*_sheet );
     void refreshLocale();
     void extraSpelling();
 
@@ -576,8 +576,8 @@ public slots:
     virtual int bottomBorder() const;
 
 signals:
-    void sig_selectionChanged( KSpreadSheet* _table, const QRect& _selection );
-    void sig_chooseSelectionChanged(KSpreadSheet *table, const QRect& _selection);
+    void sig_selectionChanged( KSpreadSheet* _sheet, const QRect& _selection );
+    void sig_chooseSelectionChanged(KSpreadSheet *sheet, const QRect& _selection);
 
 protected:
 
@@ -610,7 +610,7 @@ private:
     
     void initView();    
 
-    bool spellSwitchToOtherTable();
+    bool spellSwitchToOtherSheet();
     void spellCleanup();
 
     void endOperation( QRect const & rect );

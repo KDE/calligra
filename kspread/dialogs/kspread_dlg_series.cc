@@ -113,8 +113,8 @@ void KSpreadSeriesDlg::slotOk()
   Series type=Linear;  // same as Horizontal
   QString tmp;
   double dstep, dend, dstart;
-  KSpreadSheet * m_pTable;
-  m_pTable = m_pView->activeTable();
+  KSpreadSheet * m_pSheet;
+  m_pSheet = m_pView->activeSheet();
 
   if(column->isChecked())
     mode = Column;
@@ -196,15 +196,15 @@ void KSpreadSeriesDlg::slotOk()
   //        double val_start = QMIN(dend, dstart);
   m_pView->doc()->emitBeginOperation( false );
 
-  m_pTable->setSeries( marker, dstart, dend, dstep, mode, type );
+  m_pSheet->setSeries( marker, dstart, dend, dstep, mode, type );
 
-  KSpreadCell * cell = m_pTable->cellAt( marker.x(), marker.y() );
+  KSpreadCell * cell = m_pSheet->cellAt( marker.x(), marker.y() );
   if ( cell->text() != 0L )
     m_pView->editWidget()->setText( cell->text() );
   else
     m_pView->editWidget()->setText( "" );
 
-  m_pView->slotUpdateView( m_pView->activeTable() );
+  m_pView->slotUpdateView( m_pView->activeSheet() );
   accept();
 }
 
