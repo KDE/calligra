@@ -934,6 +934,12 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, "style:style", (*it).name, "style:paragraph-properties" );
     }
+    styles = mainStyles.styles( STYLE_BACKGROUNDPAGEAUTO );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, "style:style", (*it).name, "style:drawing-page-properties" );
+    }
+
     contentWriter.endElement(); // office:automatic-styles
 
     // And now we can copy over the contents from the tempfile to the real one
@@ -1006,7 +1012,7 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         //FIXME fourth element is not good :(
-        (*it).style->writeStyle( &stylesWriter, "style:style", (*it).name , "style:properties" /*, "style:paragraph-properties"*/ /* I don't know whatis it*/ );
+        (*it).style->writeStyle( &stylesWriter, "style:style", (*it).name , "style:drawing-page-properties"  );
     }
     stylesWriter.endElement(); // office:automatic-styles
 

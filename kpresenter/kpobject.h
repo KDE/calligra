@@ -133,6 +133,7 @@ public:
 
     void saveOasisPosObject( KoXmlWriter &xmlWriter );
 
+
     virtual void flip(bool horizontal );
 
     virtual ObjType getType() const
@@ -426,6 +427,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation);
+    QString saveOasisBackgroundStyle( KoGenStyles& mainStyles );
 
     virtual void flip(bool horizontal );
 

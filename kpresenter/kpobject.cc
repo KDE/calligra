@@ -1265,6 +1265,12 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
+QString KP2DObject::saveOasisBackgroundStyle( KoGenStyles& mainStyles )
+{
+    //todo
+    return "";
+}
+
 void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {
     kdDebug()<<"void KP2DObject::loadOasis(const QDomElement &element)\n";
