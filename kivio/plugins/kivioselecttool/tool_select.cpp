@@ -647,125 +647,127 @@ void SelectTool::continueResizing(const QPoint &pos)
   double dx = x - m_origPoint.x();
   double dy = y - m_origPoint.y();
       
-  // Undraw the old outline
-  canvas->drawStencilXOR( m_pResizingStencil );
-
-  double sx = pData->rect.x();
-  double sy = pData->rect.y();
-  double sw = pData->rect.width();
-  double sh = pData->rect.height();
-  double ratio = sw / sh;
-
-  switch( m_resizeHandle )
-  {
-    case 1: // top left
-      if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
-        m_pResizingStencil->protection()->testBit( kpHeight )==false )
-      {
-        if((dx > dy) && (dx != 0)) {
-          dy = dx / ratio;
-        } else {
-          dx = dy * ratio;
+  if((dx > 0) || (dy > 0) || (dx < 0) || (dy < 0)) { // Do we really need to redraw?
+    // Undraw the old outline
+    canvas->drawStencilXOR( m_pResizingStencil );
+  
+    double sx = pData->rect.x();
+    double sy = pData->rect.y();
+    double sw = pData->rect.width();
+    double sh = pData->rect.height();
+    double ratio = sw / sh;
+  
+    switch( m_resizeHandle )
+    {
+      case 1: // top left
+        if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
+          m_pResizingStencil->protection()->testBit( kpHeight )==false )
+        {
+          if((dx > dy) && (dx != 0)) {
+            dy = dx / ratio;
+          } else {
+            dx = dy * ratio;
+          }
+  
+          m_pResizingStencil->setX( sx + dx );
+          m_pResizingStencil->setW( sw - dx );
+  
+          m_pResizingStencil->setY( sy + dy );
+          m_pResizingStencil->setH( sh - dy );
         }
-
-        m_pResizingStencil->setX( sx + dx );
-        m_pResizingStencil->setW( sw - dx );
-
-        m_pResizingStencil->setY( sy + dy );
-        m_pResizingStencil->setH( sh - dy );
-      }
-      break;
-
-    case 2: // top
-      if( m_pResizingStencil->protection()->testBit( kpHeight )==false )
-      {
-        m_pResizingStencil->setY( sy + dy );
-        m_pResizingStencil->setH( sh - dy );
-      }
-      break;
-
-    case 3: // top right
-      if( m_pResizingStencil->protection()->testBit( kpHeight )==false &&
-        m_pResizingStencil->protection()->testBit( kpWidth )==false )
-      {
-        if((dx > dy) && (dx != 0)) {
-          dy = -(dx / ratio);
-        } else {
-          dx = -(dy * ratio);
+        break;
+  
+      case 2: // top
+        if( m_pResizingStencil->protection()->testBit( kpHeight )==false )
+        {
+          m_pResizingStencil->setY( sy + dy );
+          m_pResizingStencil->setH( sh - dy );
         }
-
-        m_pResizingStencil->setY( sy + dy );
-        m_pResizingStencil->setH( sh - dy );
-
-        m_pResizingStencil->setW( sw + dx );
-      }
-      break;
-
-    case 4: // right
-      if( m_pResizingStencil->protection()->testBit( kpWidth )==false )
-      {
-        // see old kivio source when snaptogrid gets implemented
-        //setX( SnapToGrid(sx+sw+dx)-sx )
-        m_pResizingStencil->setW( sw + dx );
-      }
-      break;
-
-    case 5: // bottom right
-      if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
-        m_pResizingStencil->protection()->testBit( kpHeight )==false )
-      {
-        if((dx > dy) && (dx != 0)) {
-          dy = dx / ratio;
-        } else {
-          dx = dy * ratio;
+        break;
+  
+      case 3: // top right
+        if( m_pResizingStencil->protection()->testBit( kpHeight )==false &&
+          m_pResizingStencil->protection()->testBit( kpWidth )==false )
+        {
+          if((dx > dy) && (dx != 0)) {
+            dy = -(dx / ratio);
+          } else {
+            dx = -(dy * ratio);
+          }
+  
+          m_pResizingStencil->setY( sy + dy );
+          m_pResizingStencil->setH( sh - dy );
+  
+          m_pResizingStencil->setW( sw + dx );
         }
-
-        m_pResizingStencil->setW( sw + dx );
-        m_pResizingStencil->setH( sh + dy );
-      }
-      break;
-
-    case 6: // bottom
-      if( m_pResizingStencil->protection()->testBit( kpHeight )==false )
-      {
-        m_pResizingStencil->setH( sh + dy );
-      }
-      break;
-
-    case 7: // bottom left
-      if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
-        m_pResizingStencil->protection()->testBit( kpHeight )==false )
-      {
-        if((dx > dy) && (dx != 0)) {
-          dy = -(dx / ratio);
-        } else {
-          dx = -(dy * ratio);
+        break;
+  
+      case 4: // right
+        if( m_pResizingStencil->protection()->testBit( kpWidth )==false )
+        {
+          // see old kivio source when snaptogrid gets implemented
+          //setX( SnapToGrid(sx+sw+dx)-sx )
+          m_pResizingStencil->setW( sw + dx );
         }
-
-        m_pResizingStencil->setX( sx + dx );
-        m_pResizingStencil->setW( sw - dx );
-
-        m_pResizingStencil->setH( sh + dy );
-      }
-      break;
-
-    case 8: // left
-      if( m_pResizingStencil->protection()->testBit( kpWidth )==false )
-      {
-        KoPoint pinPoint = m_pResizingStencil->pinPoint();
-        m_pResizingStencil->setPinPoint(KoPoint(pinPoint.x() - (dx / 2.0), pinPoint.y()));
-        m_pResizingStencil->setX( sx + dx );
-        m_pResizingStencil->setW( sw - dx );
-      }
-      break;
-
-    default:
-      kdDebug(43000) << "SelectTool::continueResizing() - unknown resize handle: " <<  m_resizeHandle << endl;
-      break;
+        break;
+  
+      case 5: // bottom right
+        if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
+          m_pResizingStencil->protection()->testBit( kpHeight )==false )
+        {
+          if((dx > dy) && (dx != 0)) {
+            dy = dx / ratio;
+          } else {
+            dx = dy * ratio;
+          }
+  
+          m_pResizingStencil->setW( sw + dx );
+          m_pResizingStencil->setH( sh + dy );
+        }
+        break;
+  
+      case 6: // bottom
+        if( m_pResizingStencil->protection()->testBit( kpHeight )==false )
+        {
+          m_pResizingStencil->setH( sh + dy );
+        }
+        break;
+  
+      case 7: // bottom left
+        if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
+          m_pResizingStencil->protection()->testBit( kpHeight )==false )
+        {
+          if((dx > dy) && (dx != 0)) {
+            dy = -(dx / ratio);
+          } else {
+            dx = -(dy * ratio);
+          }
+  
+          m_pResizingStencil->setX( sx + dx );
+          m_pResizingStencil->setW( sw - dx );
+  
+          m_pResizingStencil->setH( sh + dy );
+        }
+        break;
+  
+      case 8: // left
+        if( m_pResizingStencil->protection()->testBit( kpWidth )==false )
+        {
+          KoPoint pinPoint = m_pResizingStencil->pinPoint();
+          m_pResizingStencil->setPinPoint(KoPoint(pinPoint.x() - (dx / 2.0), pinPoint.y()));
+          m_pResizingStencil->setX( sx + dx );
+          m_pResizingStencil->setW( sw - dx );
+        }
+        break;
+  
+      default:
+        kdDebug(43000) << "SelectTool::continueResizing() - unknown resize handle: " <<  m_resizeHandle << endl;
+        break;
+    }
+  
+    canvas->drawStencilXOR( m_pResizingStencil );
+    view()->updateToolBars();
   }
-
-  canvas->drawStencilXOR( m_pResizingStencil );
-  view()->updateToolBars();
 }
 
 

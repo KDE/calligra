@@ -1039,6 +1039,7 @@ void KivioCanvas::drawStencilXOR( KivioStencil *pStencil )
     m_dragStencilData.zoomHandler = m_pView->zoomHandler();
 
     pStencil->paintOutline( &m_dragStencilData );
+    pStencil->paintSelectionHandles( &m_dragStencilData );
 
     unclippedSpawnerPainter->painter()->restore();
 }
