@@ -1073,7 +1073,7 @@ void SelectTool::showPopupMenu( const QPoint &pos )
  * it launches the text tool on the selected stencils and switches back
  * to this tool when it's done.
  */
-void SelectTool::leftDoubleClick(const QPoint& pos)
+void SelectTool::leftDoubleClick(const QPoint& /*pos*/)
 {
   if( view()->activePage()->selectedStencils()->count() <= 0 )
     return;
@@ -1098,6 +1098,9 @@ void SelectTool::editText(QPtrList<KivioStencil>* stencils)
 void SelectTool::showProperties()
 {
   //FIXME: This needs to be implemented ;)
+  if(view()->activePage()->selectedStencils()->count() == 0) {
+    view()->paperLayoutDlg();
+  }
 }
 
 void SelectTool::editStencilText()
