@@ -1,2 +1,1 @@
-dnl Nothing to compile yet
-DO_NOT_COMPILE="$DO_NOT_COMPILE karbon"
+#DO_NOT_COMPILE="$DO_NOT_COMPILE karbon"

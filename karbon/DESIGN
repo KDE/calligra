@@ -1,0 +1,25 @@
+- vpoint
+- vlayer
+	                 / vline
+	   / vprimitive-|- vbezier
+          |              \ vrect (bounding box)
+          | 		 / vpath
+- vobject-|             |- vbitmap
+   	  |		|- vtext
+	   \ vdrawable--|- vgroup
+ 	                |- vmask
+		         \ vcompoundpath
+- vdocument:
+    + vlayer
+    + vdrawables
+
+- vview:
+    + vpointcache
+
+	  / vrectangle
+	 |- vellipse
+	 |- vpolygon
+- vmanip-|- vspiral
+	 |- vtext
+	 |- ...
+	       
