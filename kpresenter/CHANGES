@@ -354,3 +354,10 @@ Reggie, 2.7.1999:
 - Some gradient update fixes
 - Some fixes
 - Fixed gradients in headers/footers
+
+Reggie, 14.7.1999:
+------------------
+- Fixed a segfault in the textobject
+- Fixed random adding of spaces in the textobject
+- Some other small textobject fixes
+- Fixes with headers and footers

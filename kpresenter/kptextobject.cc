@@ -59,6 +59,10 @@ KPTextObject &KPTextObject::operator=( const KPTextObject & )
 /*======================= set size ===============================*/
 void KPTextObject::setSize( int _width, int _height )
 {
+//     if ( QSize( _width, _height ) == ext )
+// 	return;
+    
+    ktextobject.toggleModified( TRUE );
     KPObject::setSize( _width, _height );
     if ( move ) return;
     ktextobject.resize( ext );
@@ -70,6 +74,7 @@ void KPTextObject::setSize( int _width, int _height )
 /*======================= set size ===============================*/
 void KPTextObject::resizeBy( int _dx, int _dy )
 {
+    ktextobject.toggleModified( TRUE );
     KPObject::resizeBy( _dx, _dy );
     if ( move ) return;
     ktextobject.resize( ext );
@@ -108,7 +113,7 @@ void KPTextObject::save( ostream& out )
     out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
 	<< "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
 	<< gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
-	<< static_cast<int>( gType ) << "\" unbalanced=\"" << unbalanced << "\" xfactor=\"" << xfactor 
+	<< static_cast<int>( gType ) << "\" unbalanced=\"" << unbalanced << "\" xfactor=\"" << xfactor
 	<< "\" xfactor=\"" << yfactor << "\"/>" << endl;
     out << indent << "<PEN red=\"" << pen.color().red() << "\" green=\"" << pen.color().green()
 	<< "\" blue=\"" << pen.color().blue() << "\" width=\"" << pen.width()
@@ -935,6 +940,13 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 		    return;
 		}
 	    }
+	    
+	    if ( txtParagraph->items() == 1 ) {
+		TxtObj *item = txtParagraph->itemAt( 0 );
+		txtParagraph->append( new TxtObj( " ", item->font(), item->color(),
+						  TxtObj::NORMAL, TxtObj::SEPARATOR ) );
+	    }
+	    
 	    txtParagraph->setDepth( txtParagraph->getDepth() );
 	}
 

@@ -55,7 +55,7 @@ KPBackGround::KPBackGround( KPPixmapCollection *_pixmapCollection, KPGradientCol
     unbalanced = FALSE;
     xfactor = 100;
     yfactor = 100;
-    
+
     pixmapCollection = _pixmapCollection;
     gradientCollection = _gradientCollection;
     clipartCollection = _clipartCollection;
@@ -198,7 +198,7 @@ void KPBackGround::save( ostream& out )
     out << indent << "<BACKCOLOR2 red=\"" << backColor2.red() << "\" green=\""
 	<< backColor2.green() << "\" blue=\"" << backColor2.blue() << "\"/>" << endl;
     out << indent << "<BCTYPE value=\"" << static_cast<int>( bcType ) << "\"/>" << endl;
-    out << indent << "<BGRADIENT unbalanced=\"" << static_cast<int>( unbalanced ) 
+    out << indent << "<BGRADIENT unbalanced=\"" << static_cast<int>( unbalanced )
 	<< "\" xfactor=\"" << xfactor << "\" yfactor=\"" << yfactor << "\"/>" << endl;
 
     if ( backPix && backType == BT_PICTURE )
@@ -532,19 +532,20 @@ void KPBackGround::drawBackPix( QPainter *_painter )
 /*================================================================*/
 void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 {
-    if ( doc->hasHeader() )
-    {
+    if ( doc->hasHeader() ) {
 	QSize s( doc->header()->getKTextObject()->size() );
 	QPoint pnt( doc->header()->getKTextObject()->x(), doc->header()->getKTextObject()->y() );
 
-	if ( doc->header()->getKTextObject()->isModified() )
+	// #### Reggie: not very efficient but ok for now
+	if ( TRUE /*doc->header()->getKTextObject()->isModified()*/ ) {
 	    doc->header()->setSize( ext.width(), 10 );
+	    //qDebug( "resize h" );
+	}
 
 	doc->header()->setOrig( _offset.x(), _offset.y() );
 
 	int h = 0;
-	if ( doc->header()->getKTextObject()->isModified() )
-	{
+	if ( doc->header()->getKTextObject()->isModified() ) {
 	    for ( unsigned int i = 0; i < doc->header()->getKTextObject()->paragraphs(); i++ )
 		h += doc->header()->getKTextObject()->paragraphAt( i )->height();
 	    h += 2;
@@ -561,13 +562,12 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 	doc->header()->getKTextObject()->toggleModified( false );
     }
 
-    if ( doc->hasFooter() )
-    {
+    if ( doc->hasFooter() ) {
 	QSize s( doc->footer()->getKTextObject()->size() );
 	QPoint pnt( doc->footer()->getKTextObject()->x(), doc->footer()->getKTextObject()->y() );
 
-	if ( doc->footer()->getKTextObject()->isModified() || footerHeight <= 0 )
-	{
+	// #### Reggie: not very efficient but ok for now
+	if ( TRUE ) { //doc->footer()->getKTextObject()->isModified() || footerHeight <= 0 )
 	    doc->footer()->setSize( ext.width(), 10 );
 
 	    int h = 0;
