@@ -614,7 +614,8 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
 	  (i==last))&&nc)
 	{
 	    double avg=current/nc;
-	    avg/=18;
+	    avg/=18.0;
+	    avg/=25.0;
 	    for(int j=i-nc;j<=i;j++)
 		string->at(j).ulw=avg;
 	    nc=0;
@@ -626,7 +627,7 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
 	    (format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD))
 	{
 	    nc++;
-	    current+=format->pointSize();
+	    current+=format->height();
 	}
     }
     if ( last >= 0 && last < string->length() ) {

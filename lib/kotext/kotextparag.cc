@@ -161,7 +161,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
 
     // We use the formatting of the first char as the formatting of the counter
     KoTextFormat *format = KoParagCounter::counterFormat( this );
-    double ulw=static_cast<double>(format->pointSize())/18.0;
+    double ulw=format->height()/(18*25);
     p->save();
 
     //QColor textColor( format->color() );
