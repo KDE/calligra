@@ -3,7 +3,7 @@
 #include "kwdoc.h"
 #include <qtimer.h>
 
-#define DEBUG_FRAMELAYOUT
+//#define DEBUG_FRAMELAYOUT
 
 #ifdef NDEBUG
 #undef DEBUG_FRAMELAYOUT
@@ -67,7 +67,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         itdbg2.current()->debug();
 #endif
     double ptColumnWidth = m_doc->ptColumnWidth();
-    bool mainTextFrameResized = false;
+    int mainTextFrameResized = -1; // contains the page number of the first resized main textframe
 
     // The main loop is: "for each page". We lay out each page separately.
     for ( int pageNum = fromPage ; pageNum <= toPage ; ++pageNum )
@@ -193,13 +193,14 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
             }
         } // for all footnotes
 
-        if ( !mainTextFrameResized ) {
+        if ( mainTextFrameResized == -1 ) {
             // Test if the main text frame for this page was really resized or not.
             KoRect newColumnRect = firstColumnRect( mainTextFrameSet, pageNum, numColumns );
 #ifdef DEBUG_FRAMELAYOUT
             kdDebug(32002) << "  Comparing old=" << oldColumnRect << " and new=" << newColumnRect << endl;
 #endif
-            mainTextFrameResized = ( oldColumnRect != newColumnRect );
+            if ( oldColumnRect != newColumnRect )
+                mainTextFrameResized = pageNum;
         }
 
     } // for all pages
@@ -212,17 +213,35 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
     for ( ; it2.current() ; ++it2 )
         it2.current()->deleteFramesAfterLast( m_doc->getPages() - 1 );
 
-    if ( mainTextFrameResized ) {
+    if ( mainTextFrameResized != -1 && mainTextFrameSet->type() == FT_TEXT ) {
 #ifdef DEBUG_FRAMELAYOUT
-        kdDebug(32002) << " Done. mainTextFrameResized is true, calling invalidate (delayed)." << endl;
+        kdDebug(32002) << " Done. First maintextframe resized: " << mainTextFrameResized << endl;
 #endif
+        KWTextFrameSet* fs = static_cast<KWTextFrameSet *>(mainTextFrameSet);
+
         // m_doc->updateAllFrames(); // done by resizeMainTextFrame
 
         // Not right now, this could be called during formatting...
         //m_doc->invalidate();
         // ### This means the layout will be done during painting. Not good.
-        // What about mainTextFrameResized->invalidate() or even layout()?
-        QTimer::singleShot( 0, m_doc, SLOT( invalidate() ) );
+        // What about mainTextFrameSet->invalidate() or even layout()?
+        //QTimer::singleShot( 0, m_doc, SLOT( invalidate() ) );
+
+        // Invalidate main textframeset only, and from top of page only.
+        // Otherwise loading a long document (with headers/footers) takes ages,
+        // if we redo it all from the beginning at each new page!
+        int topLU, bottomLU;
+        if ( fs->minMaxInternalOnPage( mainTextFrameResized, topLU, bottomLU ) )
+        {
+            // Find parag at topLU
+            KoTextParag* parag = fs->paragAtLUPos( topLU );
+            if ( parag ) {
+#ifdef DEBUG_FRAMELAYOUT
+                kdDebug(32002) << " Invalidating from parag " << parag->paragId() << endl;
+#endif
+                fs->textObject()->setLastFormattedParag( parag );
+            }
+        }
     }
 }
 

@@ -95,6 +95,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     QObject::setName( m_name.utf8() ); // store name in the QObject, for DCOP users
     m_currentViewMode = 0L;
     m_currentDrawnFrame = 0L;
+    m_lastTextDocHeight = 0;
     // Create the text document to set in the text object
     KWTextDocument* textdoc = new KWTextDocument( this,
         new KoTextFormatCollection( _doc->defaultFont() ), new KWTextFormatter( this ) );
@@ -1821,7 +1822,13 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
     }
     if ( m_doc->processingType() == KWDocument::WP
          && this == m_doc->frameSet( 0 ) )
-        emit mainTextHeightChanged();
+    {
+        if ( m_lastTextDocHeight != textDocument()->height() )
+        {
+            m_lastTextDocHeight = textDocument()->height();
+            emit mainTextHeightChanged();
+        }
+    }
 }
 
 double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
@@ -2110,6 +2117,39 @@ void KWTextFrameSet::findPosition( const KoPoint &dPoint, KoTextParag * & parag,
         if ( parag )
             index = parag->length() - 1;
     }
+}
+
+bool KWTextFrameSet::minMaxInternalOnPage( int pageNum, int& topLU, int& bottomLU ) const
+{
+    QPtrListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
+    if ( !frameIt.current() )
+        return false;
+
+    // Look at all frames in the page, and keep min and max "internalY" positions
+    double topPt = frameIt.current()->internalY();
+    double bottomPt = topPt + frameIt.current()->height();
+
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        double y = frameIt.current()->internalY();
+        topPt = QMIN( topPt, y );
+        bottomPt = QMAX( bottomPt, y + frameIt.current()->height() );
+    }
+    // Convert to layout units
+    topLU = m_doc->ptToLayoutUnitPixY( topPt );
+    bottomLU = m_doc->ptToLayoutUnitPixY( bottomPt );
+    return true;
+}
+
+KoTextParag* KWTextFrameSet::paragAtLUPos( int yLU ) const
+{
+    KoTextParag* parag = textDocument()->firstParag();
+    for ( ; parag ; parag = parag->next() )
+    {
+        if ( parag->rect().bottom() >= yLU )
+            return parag;
+    }
+    return 0L;
 }
 
 KCommand * KWTextFrameSet::deleteAnchoredFrame( KWAnchor * anchor )

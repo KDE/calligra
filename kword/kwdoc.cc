@@ -3282,31 +3282,10 @@ QString KWDocument::sectionTitle( int pageNum ) const
     KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>( m_lstFrameSet.getFirst() );
     if ( !frameset )
         return QString::null;
-    QPtrList<KWFrame> frames( framesInPage( pageNum ) );
-    QPtrListIterator<KWFrame> frameIt( frames );
-    // Filter out frames, we want only frames of 'frameset'
-    while( frameIt.current() && frameIt.current()->frameSet() != frameset )
-        ++frameIt;
 
-    if ( !frameIt.current() )
+    int topLUpix, bottomLUpix;
+    if ( !frameset->minMaxInternalOnPage( pageNum, topLUpix, bottomLUpix ) )
         return QString::null;
-
-    // Look at all frames in the page, and keep min and max "internalY" positions
-    double topPt = frameIt.current()->internalY();
-    double bottomPt = topPt + frameIt.current()->height();
-    for ( ; frameIt.current(); ++frameIt )
-    {
-        if ( frameIt.current()->frameSet() == frameset )
-        {
-            double y = frameIt.current()->internalY();
-            topPt = QMIN( topPt, y );
-            bottomPt = QMAX( bottomPt, y + frameIt.current()->height() );
-        }
-    }
-
-    // Convert to layout units
-    int topLUpix = ptToLayoutUnitPixY( topPt );
-    int bottomLUpix = ptToLayoutUnitPixY( bottomPt );
 
     KoTextParag* parag = frameset->textDocument()->firstParag();
     //kdDebug(32001) << "KWDocument::sectionTitle " << pageNum

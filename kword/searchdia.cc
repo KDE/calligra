@@ -30,6 +30,8 @@
 #include "kwtextdocument.h"
 //#include <kotextdocument.h>
 
+#include <prof.h>
+
 KWFindReplace::KWFindReplace( KWCanvas * canvas, KoSearchDia * dialog ,KWTextFrameSetEdit *textView ,const QPtrList<KoTextObject> & lstObject)
     :KoFindReplace( canvas, dialog,textView ,lstObject)
 {
@@ -42,8 +44,11 @@ KWFindReplace::KWFindReplace( KWCanvas * canvas, KoReplaceDia * dialog, KWTextFr
     m_canvas= canvas;
 }
 
+int s_highlightPortion = 0;
+
 KWFindReplace::~KWFindReplace()
 {
+    PROFILE_METHOD_PRINT( s_highlightPortion, "highlightPortion" );
     //kdDebug() << "KWFindReplace::~KWFindReplace m_destroying=" << m_destroying << endl;
 }
 
@@ -54,7 +59,9 @@ void KWFindReplace::emitNewCommand(KCommand *cmd)
 
 void KWFindReplace::highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *_textdoc)
 {
+    PROFILE_METHOD_BEGIN( s_highlightPortion );
     KWTextDocument *textdoc=static_cast<KWTextDocument *>(_textdoc);
     textdoc->textFrameSet()->highlightPortion( parag, index, length,m_canvas );
+    PROFILE_METHOD_END( s_highlightPortion );
 }
 #include "searchdia.moc"

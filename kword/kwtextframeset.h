@@ -233,7 +233,23 @@ public:
     /** (Assuming this==main frameset), recalc the foot note numbers */
     void renumberFootNotes( bool repaint = true );
 
+    /**
+     * Iteration over text objects - used by KWBgSpellCheck
+     */
     virtual KWTextFrameSet* nextTextObject( KWFrameSet * ) { return this;}
+
+    /**
+     * Return the min and max LU coordinates for the text in the given page,
+     * if the frameset has any frames in this page.
+     * Used by e.g. KWDoc::sectionTitle and KWFrameLayout.
+     */
+    bool minMaxInternalOnPage( int pageNum, int& topLU, int& bottomLU ) const;
+
+    /**
+     * Find the parag at the given Y position (in LU)
+     */
+    KoTextParag* paragAtLUPos( int yLU ) const;
+
 signals:
     /** Tell the Edit object that this frame got deleted */
     void frameDeleted( KWFrame* frame );
@@ -263,6 +279,8 @@ private:
     KWViewMode * m_currentViewMode;
     /** The frame currently being drawn. */
     KWFrame * m_currentDrawnFrame;
+    /** For the mainTextHeightChanged signal. */
+    int m_lastTextDocHeight;
 };
 
 /**
