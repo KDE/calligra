@@ -80,7 +80,7 @@ protected:
   float calcArrowAngle (const Coord& p1, const Coord& p2, int direction);
 
 protected slots:
-  void updateProperties ();
+  void updateProperties (GObject::Property prop, int mask);
 
 protected:
   QList<Coord> points;

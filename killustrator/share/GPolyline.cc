@@ -38,16 +38,16 @@
 #define RAD_FACTOR 180.0 / M_PI
 
 GPolyline::GPolyline () {
-  connect (this, SIGNAL(propertiesChanged ()), this, 
-           SLOT(updateProperties ()));
+  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this, 
+           SLOT(updateProperties (GObject::Property, int)));
   points.setAutoDelete (true);
   sArrow = eArrow = 0L;
   sAngle = eAngle = 0;
 }
 
 GPolyline::GPolyline (const list<XmlAttribute>& attribs) : GObject (attribs) {
-  connect (this, SIGNAL(propertiesChanged ()), this, 
-           SLOT(updateProperties ()));
+  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this, 
+           SLOT(updateProperties (GObject::Property, int)));
   points.setAutoDelete (true);
   sArrow = eArrow = 0L;
   sAngle = eAngle = 0;
@@ -70,8 +70,8 @@ GPolyline::GPolyline (const list<XmlAttribute>& attribs) : GObject (attribs) {
 }
   
 GPolyline::GPolyline (const GPolyline& obj) : GObject (obj) {
-  connect (this, SIGNAL(propertiesChanged ()), this, 
-           SLOT(updateProperties ()));
+  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this, 
+           SLOT(updateProperties (GObject::Property, int)));
   points.setAutoDelete (true);
   QListIterator<Coord> it (obj.points);
   for (; it.current (); ++it) 
@@ -352,7 +352,9 @@ void GPolyline::calcBoundingBox () {
   updateBoundingBox (r);
 }
 
-void GPolyline::updateProperties () {
+void GPolyline::updateProperties (GObject::Property prop, int mask) {
+    if (prop == GObject::Prop_Fill)
+	return;
   if ((sArrow == 0L && outlineInfo.startArrowId > 0) ||
       (sArrow && sArrow->arrowID () != outlineInfo.startArrowId) ||
       (eArrow == 0L && outlineInfo.endArrowId > 0) ||

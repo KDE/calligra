@@ -179,7 +179,7 @@ void GObject::setOutlineInfo (const GObject::OutlineInfo& info) {
     outlineInfo.endArrowId = info.endArrowId;
   }
   updateRegion (false);
-  emit propertiesChanged ();
+  emit propertiesChanged (Prop_Outline, info.mask);
 }
 
 GObject::OutlineInfo GObject::getOutlineInfo () const {
@@ -189,25 +189,25 @@ GObject::OutlineInfo GObject::getOutlineInfo () const {
 void GObject::setOutlineShape (OutlineInfo::Shape s) {
   outlineInfo.shape = s;
   updateRegion ();
-  emit propertiesChanged ();
+  emit propertiesChanged (Prop_Outline, OutlineInfo::Custom);
 }
 
 void GObject::setOutlineColor (const QColor& color) {
   outlineInfo.color = color;
   updateRegion (false);
-  emit propertiesChanged ();
+  emit propertiesChanged (Prop_Outline, OutlineInfo::Color);
 }
 
 void GObject::setOutlineStyle (PenStyle style) {
   outlineInfo.style = style;
   updateRegion (false);
-  emit propertiesChanged ();
+  emit propertiesChanged (Prop_Outline, OutlineInfo::Style);
 }
 
 void GObject::setOutlineWidth (float width) {
   outlineInfo.width = width;
   updateRegion (false);
-  emit propertiesChanged ();
+  emit propertiesChanged (Prop_Outline, OutlineInfo::Width);
 }
 
 const QColor& GObject::getOutlineColor () const {
@@ -228,7 +228,7 @@ void GObject::setFillInfo (const GObject::FillInfo& info) {
   if (info.mask & FillInfo::Style)
     fillInfo.style = info.style;
   updateRegion (false);
-  emit propertiesChanged ();
+  emit propertiesChanged (Prop_Fill, info.mask);
 }
 
 GObject::FillInfo GObject::getFillInfo () const {
@@ -238,7 +238,7 @@ GObject::FillInfo GObject::getFillInfo () const {
 void GObject::setFillColor (const QColor& color) {
   fillInfo.color = color;
   updateRegion (false);
-  emit propertiesChanged ();
+  emit propertiesChanged (Prop_Fill, FillInfo::Color);
 }
 
 const QColor& GObject::getFillColor () const {
@@ -248,7 +248,7 @@ const QColor& GObject::getFillColor () const {
 void GObject::setFillStyle (BrushStyle b) {
   fillInfo.style = b;
   updateRegion (false);
-  emit propertiesChanged ();
+  emit propertiesChanged (Prop_Fill, FillInfo::Style);
 }
 
 BrushStyle GObject::getFillStyle () const {

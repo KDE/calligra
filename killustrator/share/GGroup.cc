@@ -27,30 +27,37 @@
 #include "GGroup.h"
 #include "GGroup.moc"
 
+#include <algorithm>
+
 #include <klocale.h>
 #include <kapp.h>
 
+struct release_obj {
+  void operator () (GObject* obj) {
+    obj->unref ();
+  }
+};
+
 GGroup::GGroup () {
-  connect (this, SIGNAL(propertiesChanged ()), this, 
-           SLOT(propagateProperties ()));
+  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this, 
+           SLOT(propagateProperties (GObject::Property, int)));
 }
 
 GGroup::GGroup (const list<XmlAttribute>& attribs) : GObject (attribs) {
-  connect (this, SIGNAL(propertiesChanged ()), this, 
-           SLOT(propagateProperties ()));
+  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this, 
+           SLOT(propagateProperties (GObject::Property, int)));
 }
 
 GGroup::GGroup (const GGroup& obj) : GObject (obj) {
-  QListIterator<GObject> it (obj.members);
-  for (; it.current (); ++it)
-    members.append (it.current ()->copy ());
-  calcBoundingBox ();
+    list<GObject*>::const_iterator i = obj.members.begin ();
+    for (; i != obj.members.end (); i++)
+	members.push_back ((*i)->copy ());
+    calcBoundingBox ();
 }
 
 GGroup::~GGroup () {
-  QListIterator<GObject> it (members);
-  for (; it.current (); ++it)
-    it.current ()->unref ();
+  for_each (members.begin (), members.end (), release_obj ());
+  members.clear ();
 }
 
 const char* GGroup::typeName () {
@@ -58,18 +65,19 @@ const char* GGroup::typeName () {
 }
 
 bool GGroup::contains (const Coord& p) {
-  QListIterator<GObject> it (members);
-
-  Coord np = p.transform (iMatrix);
-  for (; it.current (); ++it)
-    if (it.current ()->contains (np))
-      return true;
-  return false;
+    if (box.contains (p)) {
+	Coord np = p.transform (iMatrix);
+	list<GObject*>::iterator i = members.begin ();
+	for (; i != members.end (); i++)
+	    if ((*i)->contains (np))
+		return true;
+    }
+    return false;
 }
 
 void GGroup::addObject (GObject* obj) {
   obj->ref ();
-  members.append (obj);
+  members.push_back (obj);
   updateRegion ();
 }
 
@@ -77,9 +85,9 @@ void GGroup::draw (Painter& p, bool withBasePoints) {
   p.save ();
   p.setWorldMatrix (tmpMatrix, true);
 
-  QListIterator<GObject> it (members);
-  for (; it.current (); ++it)
-    it.current ()->draw (p);
+    list<GObject*>::iterator i = members.begin ();
+    for (; i != members.end (); i++)
+	(*i)->draw (p);
 
   p.restore ();
 }
@@ -89,11 +97,10 @@ GObject* GGroup::copy () {
 }
 
 void GGroup::calcBoundingBox () {
-  QListIterator<GObject> it (members);
-  Rect r = it.current ()->boundingBox ();
-  ++it;
-  for (; it.current (); ++it) {
-    r = r.unite (it.current ()->boundingBox ());
+  list<GObject*>::iterator it = members.begin ();
+  Rect r = members.front ()->boundingBox ();
+  for (it++; it != members.end (); it++) {
+    r = r.unite ((*it)->boundingBox ());
   }
 
   Coord p[4];
@@ -113,19 +120,28 @@ void GGroup::calcBoundingBox () {
   updateBoundingBox (mr);
 }
     
-void GGroup::propagateProperties () {
-  QListIterator<GObject> it (members);
-  for (; it.current (); ++it) {
-    it.current ()->setOutlineInfo (outlineInfo);
-    it.current ()->setFillInfo (fillInfo);
-  }
+void GGroup::propagateProperties (GObject::Property prop, int mask) {
+    list<GObject*>::iterator i = members.begin ();
+    for (; i != members.end (); i++) {
+      if (prop == GObject::Prop_Outline) {
+	  // don't update the custom info (shape etc.)
+	  outlineInfo.mask = mask & (GObject::OutlineInfo::Color | 
+				     GObject::OutlineInfo::Style |
+				     GObject::OutlineInfo::Width);
+	  (*i)->setOutlineInfo (outlineInfo);
+      }
+      if (prop == GObject::Prop_Fill) {
+	  fillInfo.mask = mask;
+	  (*i)->setFillInfo (fillInfo);
+      }
+    }
 }
 
 void GGroup::writeToPS (ostream& os) {
   GObject::writeToPS (os);
-  QListIterator<GObject> it (members);
-  for (; it.current (); ++it)
-    it.current ()->writeToPS (os);
+    list<GObject*>::iterator i = members.begin ();
+    for (; i != members.end (); i++)
+	(*i)->writeToPS (os);
   os << "setmatrix\n";
 }
 
@@ -135,9 +151,9 @@ void GGroup::writeToXml (XmlWriter& xml) {
   writePropertiesToXml (xml);
   xml.closeTag (false);
 
-  QListIterator<GObject> it (members);
-  for (; it.current (); ++it)
-    it.current ()->writeToXml (xml);
+    list<GObject*>::iterator i = members.begin ();
+    for (; i != members.end (); i++)
+	(*i)->writeToXml (xml);
 
   xml.endTag ();
 }

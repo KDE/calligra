@@ -63,6 +63,8 @@ protected:
   void updateRegion (bool recalcBBox = true);
 
 public:
+    enum Property { Prop_Outline, Prop_Fill };
+
   struct OutlineInfo {
     enum { 
       Color = 1, Style = 2, Width = 4, Custom = 8, All = 15
@@ -314,7 +316,7 @@ public:
 signals:
   void changed ();
   void changed (const Rect& r);
-  void propertiesChanged ();
+  void propertiesChanged (GObject::Property p, int mask);
   
 protected:
   virtual void calcBoundingBox () = 0;

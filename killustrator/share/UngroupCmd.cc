@@ -27,17 +27,6 @@
 
 UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup ???")) {
   document = doc;
-#ifdef NO_LAYERS
-  QListIterator<GObject> it (doc->getSelection ());
-  for (; it.current (); ++it) {
-    GObject* o = it.current ();
-    if (o->isA ("GGroup")) {
-      GGroup* gobj = (GGroup *) o;
-      gobj->ref ();
-      groups.append (gobj);
-    }
-  }
-#else
   for (list<GObject*>::iterator it = doc->getSelection ().begin ();
        it != doc->getSelection ().end (); it++) {
     GObject* o = *it;
@@ -47,7 +36,6 @@ UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup ???")) {
       groups.append (gobj);
     }
   }
-#endif
 }
 
 UngroupCmd::~UngroupCmd () {
@@ -65,9 +53,10 @@ void UngroupCmd::execute () {
     if (pos != -1) {
       document->setAutoUpdate (false);
       // extract the members of the group
-      QListIterator<GObject> mi (group->getMembers ());
-      for (int offs = 0; mi.current (); ++mi, ++offs) {
-	GObject* obj = mi.current ();
+      const list<GObject*> members = group->getMembers ();
+      list<GObject*>::const_iterator mi = members.begin ();
+      for (int offs = 0; mi != members.end (); mi++, offs++) {
+	GObject* obj = *mi;
 	// transform it according to the group transformation matrix
 	obj->transform (group->matrix (), true);
 	    

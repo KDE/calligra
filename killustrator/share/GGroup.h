@@ -30,9 +30,8 @@
 #include <qfont.h>
 #include <qwmatrix.h>
 #include <qpainter.h>
-#include <qdstream.h>
-#include <qdict.h>
-#include <qlist.h>
+
+#include <list>
 
 #include "Coord.h"
 #include "GObject.h"
@@ -57,16 +56,15 @@ public:
   virtual void writeToPS (ostream& os);
   virtual void writeToXml (XmlWriter&);
 
-  QListIterator<GObject> getMembers() { 
-    return QListIterator<GObject> (members); }
+  const list<GObject*>& getMembers() { return members; }
 
   void calcBoundingBox ();
     
 protected slots:
-  void propagateProperties ();
+  void propagateProperties (GObject::Property prop, int mask);
 
 private:
-  QList<GObject> members;
+  list<GObject*> members;
 };
 
 #endif
