@@ -347,6 +347,7 @@ public:
      * @return the name of this table.
      */
     QString name() { return m_strName; }
+    void setName( QString _name ) { m_strName = _name; }
   
     QRect& selectionRect() { return m_rctSelection; }
     void setSelection( const QRect &_rect, KSpreadCanvas *_canvas = 0L );

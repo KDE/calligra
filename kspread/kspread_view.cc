@@ -112,7 +112,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   QObject::connect( m_pTabBarLast, SIGNAL( clicked() ), SLOT( slotScrollToLastTable() ) );
 
   m_pTabBar = new KSpreadTabBar( this );
-  QObject::connect( m_pTabBar, SIGNAL( tabChanged( const char *) ), this, SLOT( slotChangeTable( const char* ) ) );
+  QObject::connect( m_pTabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( slotChangeTable( const QString& ) ) );
 
   // Paper and Border widgets
   m_pFrame = new QWidget( this );
@@ -1006,13 +1006,13 @@ void KSpreadView::setActiveTable( KSpreadTable *_t )
   m_pCanvas->slotMaxRow( m_pTable->maxRow() );
 }
 
-void KSpreadView::slotChangeTable( const char *_name )
+void KSpreadView::slotChangeTable( const QString& _name )
 {
   KSpreadTable *t;
 
   for ( t = m_pDoc->map()->firstTable(); t != 0L; t = m_pDoc->map()->nextTable() )
   {
-    if ( strcmp( _name, t->name() ) == 0 )
+    if ( QString::compare( _name, t->name() ) == 0 )
     {
       setActiveTable( t );
       return;

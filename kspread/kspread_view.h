@@ -366,7 +366,7 @@ protected slots:
      * When the user selects a new table using the @ref #tabBar this slot
      * is signaled.
      */
-    void slotChangeTable( const char *_name );
+    void slotChangeTable( const QString& _name );
     /**
      * Scroll @ref #tabBar.
      */

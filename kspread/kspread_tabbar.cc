@@ -21,27 +21,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "kspread_view.h"
+#include "kspread_table.h"
+#include "kspread_dlg_tabname.h"
 #include "kspread_tabbar.h"
 
-KSpreadTabBar::KSpreadTabBar( QWidget *_parent ) : QWidget( _parent )
+KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent ) : QWidget( (QWidget *)_parent )
 {
+    m_pView = _parent;
+
     leftTab = 1;
     activeTab = 0;
 }
 
-void KSpreadTabBar::addTab( const char *_text )
+void KSpreadTabBar::addTab( const QString& _text )
 {
     tabsList.append( _text );
     
     repaint();
 }
 
-void KSpreadTabBar::removeTab( const char *_text )
+void KSpreadTabBar::removeTab( const QString& _text )
 {
-    int i = tabsList.find( _text );
+    int i = tabsList.findIndex( _text );
     if ( i == -1 )
     {
-	printf("ERROR: KSpreadTable '%s' not found\n", _text );
+	printf("ERROR: KSpreadTable '%s' not found\n", _text.ascii() );
 	return;
     }
     
@@ -115,9 +120,9 @@ void KSpreadTabBar::scrollLast()
     repaint();
 }
 
-void KSpreadTabBar::setActiveTab( const char *_text )
+void KSpreadTabBar::setActiveTab( const QString& _text )
 {
-    int i = tabsList.find( _text );
+    int i = tabsList.findIndex( _text );
     if ( i == -1 )
 	return;
     
@@ -137,18 +142,20 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
     painter.begin( this );
 
     if ( leftTab > 1 )
-	paintTab( painter, -10, "", 0, 0, FALSE );
+	paintTab( painter, -10, QString(""), 0, 0, FALSE );
     
     int i = 1;
     int x = 0;
-    char *text;
-    char *active_text = 0L;
+    QString text;
+    QString active_text;
     int active_x = -1;
     int active_width = 0;
     int active_y = 0;
-    
-    for ( text = tabsList.first(); text != 0L; text = tabsList.next() )
+
+    QStringList::Iterator it;    
+    for ( it = tabsList.begin(); it != tabsList.end(); ++it )
     {
+        text = *it;
 	QFontMetrics fm = painter.fontMetrics();
 	int text_width = fm.width( text );
 	int text_y = ( height() - fm.ascent() - fm.descent() ) / 2 + fm.ascent();
@@ -171,13 +178,13 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
 	i++;
     }
 
-    if ( active_text != 0L )
+//    if ( active_text != 0L )
 	paintTab( painter, active_x, active_text, active_width, active_y, TRUE );
 	    
     painter.end();
 }
 
-void KSpreadTabBar::paintTab( QPainter & painter, int x, char *text, int text_width, int text_y, bool isactive )
+void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y, bool isactive )
 {
     QPointArray parr;
     parr.setPoints( 4, x,0, x+10,height()-1, x+10+text_width,height()-1, x+20+text_width,0 );
@@ -215,11 +222,13 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 
     int i = 1;
     int x = 0;
-    char *text;
+    QString text;
     const char *active_text = 0L;
-    
-    for ( text = tabsList.first(); text != 0L; text = tabsList.next() )
+   
+    QStringList::Iterator it;
+    for ( it = tabsList.begin(); it != tabsList.end(); ++it ) 
     {
+        text = *it;
 	QFontMetrics fm = painter.fontMetrics();
 	int text_width = fm.width( text );
 	
@@ -242,6 +251,27 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
     {
 	repaint();
 	emit tabChanged( active_text );
+    }
+}
+
+void KSpreadTabBar::mouseDoubleClickEvent( QMouseEvent* _ev )
+{
+    QString activeName;
+    QString newName;
+
+    KSpreadTable* table = m_pView->activeTable();
+    activeName = table->name();
+
+    KSpreadTableName tndlg( (KSpreadView *)this->parentWidget(), "TableName" , activeName );
+    if ( tndlg.exec() )
+    {
+        if ( ( newName = tndlg.tableName() ) != activeName )
+        {
+            table->setName( newName );
+            QStringList::Iterator it = tabsList.find( activeName );
+            (*it) = newName;
+	    repaint();
+        }	
     }
 }
 
