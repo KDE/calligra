@@ -153,13 +153,13 @@ public:
 class StructureParser : public QXmlDefaultHandler
 {
 public:
-    StructureParser(QDomElement node)
+    StructureParser(QDomDocument doc) : mainDocument(doc)
     {
+        createMainFramesetElement();
         structureStack.setAutoDelete(true);
-        mainFramesetElement=node;
         StackItem *stackItem=new(StackItem); //TODO: memory failure recovery
         stackItem->elementType=ElementTypeBottom;
-        stackItem->stackNode=node;
+        stackItem->stackNode=mainFramesetElement;
         structureStack.push(stackItem); //Security item (not to empty the stack)
     }
     virtual ~StructureParser()
@@ -175,9 +175,11 @@ public:
     virtual bool endElement( const QString&, const QString& , const QString& qName);
     virtual bool characters ( const QString & ch );
 private:
+    void createMainFramesetElement(void);
     QString indent; //DEBUG
     QStack<StackItem> structureStack;
-    QDomElement mainFramesetElement;
+    QDomDocument mainDocument;
+    QDomElement mainFramesetElement;     // The main <FRAMESET> where the body text will be under.
 };
 
 // Element <c>
@@ -592,10 +594,8 @@ inline double InchesToPoints(const double d)
     return d * 72.0;
 }
 
-static bool StartElementPageSize(QDomElement& mainFramesetElement, const QXmlAttributes& attributes)
+static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttributes& attributes)
 {
-    return true; // FIXME: something is wrong here with finding <PAPER> in the output DOM!
-
     if (attributes.value("page-scale").toDouble()!=1.0)
     {
         kdWarning(30506) << "Ignoring unsupported page scale: " << attributes.value("page-scale") << endl;
@@ -665,29 +665,19 @@ static bool StartElementPageSize(QDomElement& mainFramesetElement, const QXmlAtt
 
     // Now that we have gathered all the data, put it in the right element!
 
-    QDomElement firstElement=mainFramesetElement.ownerDocument().documentElement();
+    QDomNodeList nodeList=mainDocument.elementsByTagName("PAPER");
 
-    if (firstElement.isNull())
-    {
-        kdError(30506) << "Panic: document element cannot be found! Aborting!" << endl;
-        return false;
-    }
-
-    QDomNodeList nodeList=firstElement.elementsByTagName("PAPER");
-
-    /*
     if (!nodeList.count())
     {
-        kdError(30506) << "Panic: <PAPER> element was not created! Aborting!" << endl;
+        kdError(30506) << "Panic: no <PAPER> element was found! Aborting!" << endl;
         return false;
     }
-*/
 
     QDomElement paperElement=nodeList.item(0).toElement();
 
     if (paperElement.isNull())
     {
-        kdError(30506) << "Panic: <PAPER> element cannot be found! Aborting!" << endl;
+        kdError(30506) << "Panic: <PAPER> element cannot be accessed! Aborting!" << endl;
         return false;
     }
 
@@ -740,7 +730,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     {
         stackItem->elementType=ElementTypeIgnore; // It is in fact an empty element!
         stackItem->stackNode=structureStack.current()->stackNode;
-        success=StartElementPageSize(mainFramesetElement,attributes);
+        success=StartElementPageSize(mainDocument,attributes);
     }
     else
     {
@@ -828,30 +818,28 @@ bool StructureParser :: characters ( const QString & ch )
     return success;
 }
 
-
-static QDomElement createMainFramesetElement(QDomDocument& qDomDocumentOut)
+void StructureParser :: createMainFramesetElement(void)
 {
-    QDomElement framesetsPluralElementOut=qDomDocumentOut.createElement("FRAMESETS");
-    qDomDocumentOut.documentElement().appendChild(framesetsPluralElementOut);
+    QDomElement framesetsPluralElementOut=mainDocument.createElement("FRAMESETS");
+    mainDocument.documentElement().appendChild(framesetsPluralElementOut);
 
     //As we have a new AbiWord <section>, we think we have a KWord <FRAMESET>
-    QDomElement framesetElementOut=qDomDocumentOut.createElement("FRAMESET");
-    framesetElementOut.setAttribute("frameType",1);
-    framesetElementOut.setAttribute("frameInfo",0);
-    framesetElementOut.setAttribute("autoCreateNewFrame",1);
-    framesetElementOut.setAttribute("removable",0);
+    mainFramesetElement=mainDocument.createElement("FRAMESET");
+    mainFramesetElement.setAttribute("frameType",1);
+    mainFramesetElement.setAttribute("frameInfo",0);
+    mainFramesetElement.setAttribute("autoCreateNewFrame",1);
+    mainFramesetElement.setAttribute("removable",0);
     //Todo?  attribute "name"
-    framesetsPluralElementOut.appendChild(framesetElementOut);
-    
-    QDomElement frameElementOut=qDomDocumentOut.createElement("FRAME");
+    framesetsPluralElementOut.appendChild(mainFramesetElement);
+
+    QDomElement frameElementOut=mainDocument.createElement("FRAME");
     frameElementOut.setAttribute("left",28);
     frameElementOut.setAttribute("top",42);
     frameElementOut.setAttribute("bottom",566);
     frameElementOut.setAttribute("right",798);
     frameElementOut.setAttribute("runaround",1);
-    framesetElementOut.appendChild(frameElementOut);
+    mainFramesetElement.appendChild(frameElementOut);
 
-    return framesetElementOut; // return the main <FRAMESET> where the body text will be under.
 }
 
 ABIWORDImport::ABIWORDImport(KoFilter *parent, const char *name) :
@@ -881,8 +869,11 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     QString strHeader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     strHeader+="<DOC editor=\"KWord\" mime=\"application/x-kword\" syntaxVersion=\"1\" >\n";
     strHeader+="<ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"0\" hasFooter=\"0\" unit=\"mm\" />\n";
+
+    // <PAPER> will be partialy changed by an AbiWord <pagesize> element.
     strHeader+="<PAPER format=\"1\" width=\"595\" height=\"841\" orientation=\"0\" columns=\"1\" columnspacing=\"2\"";
     strHeader+="hType=\"0\" fType=\"0\" spHeadBody=\"9\" spFootBody=\"9\" zoom=\"100\">\n";
+
     strHeader+="<PAPERBORDERS left=\"28\" top=\"42\" right=\"28\" bottom=\"42\" />\n";
     strHeader+="</PAPER>\n";
     strHeader+="</DOC>\n";
@@ -890,7 +881,7 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     QDomDocument qDomDocumentOut(fileOut);
     qDomDocumentOut.setContent(strHeader);
 
-    StructureParser handler(createMainFramesetElement(qDomDocumentOut));
+    StructureParser handler(qDomDocumentOut);
 
     //For now, we arbitrarily decide that Qt can handle the encoding in which the file was written!!
     QXmlSimpleReader reader;
