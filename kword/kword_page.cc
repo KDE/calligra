@@ -681,7 +681,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	      
 	      if (r != 0 && (e->state() & ShiftButton) && doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager())
 		{
-		  doc->deSelectAllFrames();
+		  //doc->deSelectAllFrames();
 		  doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager()->selectUntil(doc->getFrameSet(doc->getFrameSet(mx,my)));
 		  goon = false;
 		}
@@ -856,7 +856,8 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	repaint(false);
 	KWFrame *frame = new KWFrame(insRect.x() + xOffset,insRect.y() + yOffset,insRect.width(),insRect.height());
 
-	if (insRect.width() != 0 && insRect.height() != 0)
+	insRect = insRect.normalize();
+	if (insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY())
 	  {
 	    if (frameDia)
 	      {
@@ -882,7 +883,8 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
       {
 	repaint(false);
 
-	if (insRect.width() != 0 && insRect.height() != 0 && !pixmap_name.isEmpty())
+	insRect = insRect.normalize();
+	if (insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY() && !pixmap_name.isEmpty())
 	  {
 	    KWPictureFrameSet *frameset = new KWPictureFrameSet(doc);
 	    frameset->setFileName(pixmap_name,KSize(insRect.width(),insRect.height()));
@@ -899,7 +901,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	repaint(false);
 
 	insRect = insRect.normalize();
-	if (insRect.width() != 0 && insRect.height() != 0)
+	if (insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY())
 	  {
 	    doc->insertObject(insRect,partEntry,xOffset,yOffset);
 	    buffer.fill(white);
@@ -912,7 +914,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	repaint(false);
 
 	insRect = insRect.normalize();
-	if (insRect.width() != 0 && insRect.height() != 0)
+	if (insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY())
 	  {
 	    KWGroupManager *grpMgr = new KWGroupManager(doc);
 	    QString _name;

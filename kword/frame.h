@@ -381,6 +381,7 @@ public:
   QString getName() { return name; }
 
   void selectUntil(KWFrameSet *fs);
+  bool isOneSelected(KWFrameSet *fs,unsigned int &row,unsigned int &col);
 
 protected:
   QList<Cell> cells;

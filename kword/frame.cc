@@ -476,7 +476,7 @@ void KWFrameSet::save(ostream &out)
 	  << frame->leftBrd2String() << frame->rightBrd2String() << frame->topBrd2String() 
 	  << frame->bottomBrd2String() << "bkRed=\"" << frame->getBackgroundColor().color().red()
 	  << "\" bkGreen=\"" << frame->getBackgroundColor().color().green() << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue()
-	  << "/>" << endl;
+	  << "\"/>" << endl;
     }
 }
 
@@ -793,16 +793,16 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  KWFrame rect;
 	  KWParagLayout::Border l,r,t,b;
 	  
-	  l.color = rect.getBackgroundColor().color();
+	  l.color = white;
 	  l.style = KWParagLayout::SOLID;
 	  l.ptWidth = 1;
-	  r.color = rect.getBackgroundColor().color();
+	  r.color = white;
 	  r.style = KWParagLayout::SOLID;
 	  r.ptWidth = 1;
-	  t.color = rect.getBackgroundColor().color();
+	  t.color = white;
 	  t.style = KWParagLayout::SOLID;
 	  t.ptWidth = 1;
-	  b.color = rect.getBackgroundColor().color();
+	  b.color = white;
 	  b.style = KWParagLayout::SOLID;
 	  b.ptWidth = 1;
 	  QColor c(white);
@@ -1415,13 +1415,53 @@ void KWGroupManager::selectUntil(KWFrameSet *fs)
   unsigned int row = 0,col = 0;
   getFrameSet(fs,row,col);
 
+  unsigned int srow = 0,scol = 0;
+  if (!isOneSelected(fs,srow,scol))
+    srow = scol = 0;
+
+  if (srow > row)
+    {
+      srow = srow^row;
+      row = srow^row;
+      srow = srow^row;
+    }
+
+  if (scol > col)
+    {
+      scol = scol^col;
+      col = scol^col;
+      scol = scol^col;
+    }
+
   for (unsigned int i = 0;i < cells.count();i++)
     {
-      if (cells.at(i)->row <= row && cells.at(i)->col <= col)
+      if (cells.at(i)->row <= row && cells.at(i)->col <= col &&
+	  cells.at(i)->row >= srow && cells.at(i)->col >= scol)
 	cells.at(i)->frameSet->getFrame(0)->setSelected(true);
       else
 	cells.at(i)->frameSet->getFrame(0)->setSelected(false);
     }
+}
+
+/*================================================================*/
+bool KWGroupManager::isOneSelected(KWFrameSet *fs,unsigned int &row,unsigned int &col)
+{
+  bool one = false;
+
+  for (unsigned int i = 0;i < cells.count();i++)
+    {
+      if (cells.at(i)->frameSet->getFrame(0)->isSelected() && fs != cells.at(i)->frameSet)
+	{
+	  if (!one)
+	    {
+	      row = cells.at(i)->row;
+	      col = cells.at(i)->col;
+	      one = true;
+	    }
+	}
+    }
+
+  return one;
 }
 
 /*================================================================*/

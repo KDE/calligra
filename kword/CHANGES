@@ -700,3 +700,9 @@ Reggie, 20.1.1999:
 - Setting background colors for frames works
 - setting the ranges of scrollbars is correctly now (no maxrange > minrange warnings anymore)
 - Loading, Saving and Printing background colors of frame works
+
+Reggie, 21.1.1999:
+------------------
+- Selecting multiple cells in a table is more comfortable
+- Some more fixes to avoid crashes when inserting objects
+- Fixed saving/loading background colors of frames
