@@ -887,8 +887,16 @@ QTime KPTStandardWorktime::startOfDay(int weekday) const {
     return m_weekdays.startOfDay(weekday);
 }
 
+QTime KPTStandardWorktime::startOfDay(const QDate &date) const {
+    return m_weekdays.startOfDay(date.dayOfWeek()-1);
+}
+
 QTime KPTStandardWorktime::endOfDay(int weekday) const {
     return m_weekdays.endOfDay(weekday);
+}
+    
+QTime KPTStandardWorktime::endOfDay(const QDate &date) const {
+    return m_weekdays.endOfDay(date.dayOfWeek()-1);
 }
     
 bool KPTStandardWorktime::load(QDomElement &element) {

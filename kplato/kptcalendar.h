@@ -334,8 +334,10 @@ public:
     
     /// Returns the time when the @param weekday starts
     QTime startOfDay(int weekday) const;
+    QTime startOfDay(const QDate &date) const;
     /// Returns the time when the @param weekday ends
     QTime endOfDay(int weekday) const;
+    QTime endOfDay(const QDate &date) const;
     
     KPTCalendarDay day() const { return m_day;}
     KPTCalendarWeekdays weekdays() const { return m_weekdays;}
