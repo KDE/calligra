@@ -342,7 +342,7 @@ QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
         QRect prevRect( zh->layoutUnitToPixel( prev()->rect() ) );
         if ( rct.top() < prevRect.bottom() + 1 )
         {
-            //kdDebug() << "rct.top() adjusted to " << prevRect.bottom() + 1 << " (was " << rct.top() << ")" << endl;
+            //kdDebug() << "pixelRect: rct.top() adjusted to " << prevRect.bottom() + 1 << " (was " << rct.top() << ")" << endl;
             rct.setTop( prevRect.bottom() + 1 );
         }
     }
@@ -922,15 +922,14 @@ void KoTextParag::printRTDebug( int info )
     kdDebug() << "Paragraph " << this << "   (" << paragId() << ") [changed="
               << hasChanged() << ", valid=" << isValid()
               << ", needsSpellCheck=" << string()->needsSpellCheck()
+              << ", wasMovedDown=" << wasMovedDown()
               << "] ------------------ " << endl;
     if ( prev() && prev()->paragId() + 1 != paragId() )
         kdWarning() << "  Previous paragraph " << prev() << " has ID " << prev()->paragId() << endl;
     if ( next() && next()->paragId() != paragId() + 1 )
         kdWarning() << "  Next paragraph " << next() << " has ID " << next()->paragId() << endl;
-    if ( !next() )
-        kdDebug() << "  next is 0L" << endl;
-    if ( wasMovedDown() )
-        kdDebug() << "  was moved down" << endl;
+    //if ( !next() )
+    //    kdDebug() << "  next is 0L" << endl;
     /*
       static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
       QPtrVector<QStyleSheetItem> vec = styleSheetItems();
@@ -952,7 +951,8 @@ void KoTextParag::printRTDebug( int info )
                       << " depth=" << counter()->depth()
                       << " text='" << m_layout.counter->text( this ) << "'"
                       << " width=" << m_layout.counter->width( this ) << endl;
-        kdDebug() << "  rect() : " << DEBUGRECT( rect() ) << endl;
+        kdDebug() << "  rect() : " << DEBUGRECT( rect() )
+                  << "  pixelRect() : " << DEBUGRECT( pixelRect( textDocument()->paintingZoomHandler() ) ) << endl;
 
         kdDebug() << "  topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()
                   << " leftMargin()=" << leftMargin() << " firstLineMargin()=" << firstLineMargin()
@@ -960,9 +960,10 @@ void KoTextParag::printRTDebug( int info )
 
         static const char * tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
         KoTabulatorList tabList = m_layout.tabList();
-        if ( tabList.isEmpty() )
-            kdDebug() << "Tab width: " << textDocument()->tabStopWidth() << endl;
-        else {
+        if ( tabList.isEmpty() ) {
+            if ( string()->toString().find( '\t' ) )
+                kdDebug() << "Tab width: " << textDocument()->tabStopWidth() << endl;
+        } else {
             KoTabulatorList::Iterator it = tabList.begin();
             for ( ; it != tabList.end() ; it++ )
                 kdDebug() << "Tab type:" << tabtype[(*it).type] << " at: " << (*it).ptPos << endl;
