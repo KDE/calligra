@@ -1065,7 +1065,9 @@ void KPresenterView::extraConfigPicture()
     }
 
     if ( _origPixmap.isNull() )
-        return;
+    {
+        _origPixmap=BarIcon("kpresenter", KIcon::SizeMedium);
+    }
 
     if ( confPictureDia ) {
         delete confPictureDia;
