@@ -67,7 +67,7 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
-	QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
+//	QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
 
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )

@@ -50,7 +50,8 @@ private:
 // and human resources are expensive. ;)
 
 // segment types:
-enum VSegmentType{
+enum VSegmentType
+{
 	segment_begin,		// initial moveto
 	segment_curve,		// curveto (bezier)
 	segment_curve1,		// + first ctrl-point is identical to first knot.

@@ -15,7 +15,8 @@ noinst_HEADERS = \
 
 libkarbonvisitors_la_SOURCES = \
 	vinsertknots.cc \
-	vpolygonize.cc
+	vpolygonize.cc \
+	vvisitor.cc
 
 libkarbonvisitors_la_METASOURCES = \
 	AUTO

@@ -1,7 +1,31 @@
-You need ksvgs render-engine for karbon.
-1) Check out ksvg
-2) Compile the stuff in ksvg/impl/libs
-3) Change into karbon directory
-4) Do a ln -s ../ksvg/impl/libs/art libart_lgpl
+Karbon14 is a vector graphics application within koffice.
 
-This will be fixed in the future.
+
+Files and directories:
+----------------------
+commands/
+	undo/redo operations
+
+core/
+	essential data structures
+
+data/
+	kde data
+
+pics/
+	icons and grafx
+
+render/
+	everything related to painting
+
+tests/
+	demonstration data files
+
+tools/
+	stuff you can do with the mouse
+
+ui/
+	dialog definitions and widgets
+
+visitors/
+	shape (mostly paths) manipulation stuff

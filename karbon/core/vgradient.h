@@ -10,10 +10,12 @@
 #include "vcolor.h"
 
 
-enum VGradientType{
+enum VGradientType
+{
 	gradient_linear = 0,
 	gradient_radial = 1,
-	gradient_conic  = 2 };
+	gradient_conic  = 2
+};
 
 
 class QDomElement;

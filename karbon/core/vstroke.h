@@ -12,21 +12,27 @@
 #include "vdashpattern.h"
 
 
-enum VStrokeType{
+enum VStrokeType
+{
 	stroke_none     = 0,
 	stroke_stroke   = 1,
 	stroke_gradient = 2,
-	stroke_unknown  = 3 };
+	stroke_unknown  = 3
+};
 
-enum VLineCap{
+enum VLineCap
+{
 	cap_butt   = 0,
 	cap_round  = 1,
-	cap_square = 2 };
+	cap_square = 2
+};
 
-enum VLineJoin{
+enum VLineJoin
+{
 	join_miter = 0,
 	join_round = 1,
-	join_bevel = 2 };
+	join_bevel = 2
+};
 
 
 class QDomElement;

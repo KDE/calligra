@@ -5,13 +5,16 @@
 #ifndef __VVISITOR_H__
 #define __VVISITOR_H__
 
+class VObject;
 class VPath;
+class VSegmentList;
 
 class VVisitor
 {
 public:
+	virtual void visit( VObject& object ) const;
 	virtual void visitVPath(
-		VPath& /*path*/, QPtrList<VSegmentList>& /*lists*/ ) const {}
+		VPath& /*path*/, QPtrList<VSegmentList>& /*lists*/ ) const = 0;
 };
 
 #endif

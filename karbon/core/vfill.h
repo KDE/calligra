@@ -10,15 +10,19 @@
 #include "vgradient.h"
 
 
-enum VFillRule{
+enum VFillRule
+{
 	fillrule_evenOdd = 0,
-	fillrule_winding = 1 };
+	fillrule_winding = 1
+};
 
-enum VFillType{
+enum VFillType
+{
 	fill_none     = 0,
 	fill_fill     = 1,
 	fill_gradient = 2,
-	fill_unknown  = 3 };
+	fill_unknown  = 3
+};
 
 
 class QDomElement;
