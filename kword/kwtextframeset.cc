@@ -1866,10 +1866,10 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     int w = 1;
     int pg;
     QPoint p;
-    m_canvas->ensureVisible( p.x(), p.y() + h / 2, w, h / 2 + 2 );
     KWFrame * frame = textFrameSet()->internalToContents( QPoint(x, y), p );
     if ( frame )
         m_canvas->gui()->getView()->showPageNum( frame->getPageNum() + 1 );
+    m_canvas->ensureVisible( p.x(), p.y() + h / 2, w, h / 2 + 2 );
 }
 
 void KWTextFrameSetEdit::startDrag()
