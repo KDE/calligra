@@ -676,6 +676,7 @@ void KWord13OasisGenerator::writeStartOfFile(const QString& type)
     zipWriteData(">\n");
 }
 
+// Inspired by KoTextParag::saveOasis
 void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordTextFrameset* frameset, bool main )
 {
     if ( ! frameset )
@@ -688,7 +689,7 @@ void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordText
         it != frameset->m_paragraphGroup.end(); ++it)
     {
         // Write rawly the paragrapgh (see KoTextParag::saveOasis)
-        writer.startElement( "text:p" );
+        writer.startElement( "text:p", false ); // No indent inside!
         writer.addAttribute( "text:style-name", (*it).m_layout.m_autoStyleName );
 #if 1        
         const QString paragraphText( (*it).text() );
