@@ -1616,7 +1616,7 @@ const KoParagLayout * KoTextObject::currentParagLayoutFormat() const
     return &(parag->paragLayout());
 }
 
-void KoTextObject::setParagLayoutFormat( KoParagLayout *newLayout,int flags)
+void KoTextObject::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int marginIndex)
 {
     QTextDocument *textdoc = textDocument();
     textdoc->selectAll( QTextDocument::Temp );
@@ -1630,8 +1630,7 @@ void KoTextObject::setParagLayoutFormat( KoParagLayout *newLayout,int flags)
         break;
     }
     case KoParagLayout::Margins:
-        //todo
-        //cmd= setMarginCommand( 0L, QStyleSheetItem::Margin m, newLayout->margins[] ,QTextDocument::Temp )
+        cmd= setMarginCommand( 0L, (Qt3::QStyleSheetItem::Margin)marginIndex, newLayout->margins[marginIndex] ,QTextDocument::Temp );
         break;
     case KoParagLayout::Tabulator:
         cmd= setTabListCommand( cursor, newLayout->tabList(),QTextDocument::Temp  );
@@ -1786,7 +1785,7 @@ void KoTextFormatInterface::setMargin(QStyleSheetItem::Margin m, double margin)
 {
     KoParagLayout format( *currentParagLayoutFormat() );
     format.margins[m]=margin;
-    setParagLayoutFormat(&format,KoParagLayout::Margins);
+    setParagLayoutFormat(&format,KoParagLayout::Margins,(int)m);
 }
 
 void KoTextFormatInterface::setTabList(const KoTabulatorList & tabList )

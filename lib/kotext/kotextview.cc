@@ -922,7 +922,7 @@ const KoParagLayout * KoTextView::currentParagLayoutFormat() const
     return &(parag->paragLayout());
 }
 
-void KoTextView::setParagLayoutFormat( KoParagLayout *newLayout,int flags)
+void KoTextView::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int marginIndex)
 {
     KCommand *cmd =0L;
     switch(flags)
@@ -934,6 +934,9 @@ void KoTextView::setParagLayoutFormat( KoParagLayout *newLayout,int flags)
     }
     case KoParagLayout::Tabulator:
         cmd= textObject()->setTabListCommand( m_cursor, newLayout->tabList() );
+        break;
+    case KoParagLayout::Margins:
+        cmd= textObject()->setMarginCommand(m_cursor,(Qt3::QStyleSheetItem::Margin)marginIndex, newLayout->margins[marginIndex] );
         break;
     default:
         break;

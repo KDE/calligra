@@ -51,7 +51,7 @@ public:
 
     virtual const KoParagLayout * currentParagLayoutFormat() const =0;
 
-    virtual void setParagLayoutFormat( KoParagLayout *newLayout,int flags)=0;
+    virtual void setParagLayoutFormat( KoParagLayout *newLayout,int flags, int marginIndex=-1)=0;
 
     void setBold(bool on);
     void setItalic(bool on);
@@ -227,7 +227,7 @@ public:
     /**
      * Support for changing the format in the whole textobject
      */
-    virtual void setParagLayoutFormat( KoParagLayout *newLayout,int flags);
+    virtual void setParagLayoutFormat( KoParagLayout *newLayout,int flags, int marginIndex=-1);
 
     /**
      * Support for changing the format in the whole textobject
