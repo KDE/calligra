@@ -351,3 +351,4 @@ void CSVDialog::currentCellChanged(int, int col)
 
     m_dialog->m_formatBox->setButton(id);
 }
+#include "csvdialog.moc"
