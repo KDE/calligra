@@ -465,18 +465,23 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 int x = static_cast<int>( mx / doc->zoomedResolutionX() );
                 int y = static_cast<int>( my / doc->zoomedResolutionY() );
                 KWFrameSet *fs = doc->getFrameSet( x, y );
+                bool emitChanged = false; // to emit only once
                 if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
                 {
                     // Terminate edition of that frameset
                     delete m_currentFrameSetEdit;
                     m_currentFrameSetEdit = 0L;
+                    emitChanged = true;
                     repaintAll();
                 }
                 // Edit the frameset under the mouse, if any
                 if ( fs && !m_currentFrameSetEdit )
                 {
                     m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+                    emitChanged = true;
                 }
+                if ( emitChanged )
+                    emit currentFrameSetEditChanged();
 
                 if ( m_currentFrameSetEdit )
                     m_currentFrameSetEdit->mousePressEvent( e );
@@ -503,7 +508,6 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT)
             m_currentFrameSetEdit->paste();
     }
-    emit currentFrameSetEditChanged();
 }
 
 // Called by KWTableDia
