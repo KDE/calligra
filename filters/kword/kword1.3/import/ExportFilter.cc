@@ -620,7 +620,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
     {
         if ( formatData.bgColor.isValid() )
         {
-            strElement+="fo:background-color=\"";
+            strElement+="style:text-background-color=\"";
             strElement+=formatData.bgColor.name();
             strElement+="\" ";
             key+=formatData.bgColor.name();
@@ -681,6 +681,44 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
             key+=formatData.language;
         }
     }
+
+    key += ",";
+
+    if ( force || ( formatOrigin.fontAttribute != formatData.fontAttribute ) )
+    {
+        bool smallcaps = false;
+        strElement += "fo:text-transform=\"";
+        if ( formatData.fontAttribute == "uppercase" )
+        {
+            strElement += "uppercase";
+            key += 'U';
+        }
+        else if ( formatData.fontAttribute == "lowercase" )
+        {
+            strElement += "lowercase";
+            key += 'L';
+        }
+        else if ( formatData.fontAttribute == "smallcaps" )
+        {
+            strElement += "none";
+            key += 'S';
+            smallcaps = true;
+        }
+        else
+        {
+            key += 'N';
+            strElement += "none";
+        }
+        strElement += "\" ";
+        // ### TODO: mostly issuing font-variant is not necessary.
+        strElement += "fo:font-variant=\"";
+        if ( smallcaps )
+            strElement += "small-caps";
+        else
+            strElement += "normal";
+        strElement += "\" ";
+    }
+
 
     return strElement.stripWhiteSpace(); // Remove especially trailing spaces
 }

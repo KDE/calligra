@@ -236,13 +236,13 @@ public:
     void setPgNum(const QString& subtype, const QString& value);
     bool isPageNumber(void) const;
     bool isPageCount(void) const;
-    /*
+    /**
      * Set parameters of a FIELD element
      */
     void setField(const QString& subtype, const QString& value);
     QString getFieldName(void) const;
     QString getFieldValue(void) const;
-    /*
+    /**
      * Set parameters of a FOOTNOTE element
      */
     void setFootnote( const QString& notetype, const QString& automatic, const QString& value, QValueList<ParaData>* para );
