@@ -242,9 +242,14 @@ TxtObj::TxtObj()
 {
   // init the object
   objType = TEXT;
-  objColor = black;
-  objFont = QFont("times",12);
+  objColor = yellow;
+  objFont = QFont("utopia",20);
+  objFont.setBold(true);
+  objFont.setItalic(true);
   objVertAlign = NORMAL;
+//   objColor = black;
+//   objFont = QFont("times",12);
+//   objVertAlign = NORMAL;
   objText = "";
   _origSize = 12;
 }
@@ -320,9 +325,14 @@ TxtLine::TxtLine(bool init = false)
 
   // init the object
   objList.setAutoDelete(true);
-  
+ 
+  QFont _f = QFont("utopia",20);
+  _f.setBold(true);
+  _f.setItalic(true);
   if (init)
-    append(" ",QFont("times",12),black,TxtObj::NORMAL,TxtObj::SEPARATOR);
+//     append(" ",QFont("times",12),black,TxtObj::NORMAL,TxtObj::SEPARATOR);
+ 
+    append(" ",_f,yellow,TxtObj::NORMAL,TxtObj::SEPARATOR);
 
 }
 
@@ -835,8 +845,10 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
   objEnumListType.font = QFont("times",12);
   objEnumListType.color = black;
 
-  objUnsortListType.font = QFont("times",12);
-  objUnsortListType.color = black;
+  objUnsortListType.font = QFont("symbol",20);
+  objUnsortListType.color = red;
+//   objUnsortListType.font = QFont("times",12);
+//   objUnsortListType.color = black;
   objUnsortListType.chr = '-';
   paragraphList.setAutoDelete(true);
 
@@ -856,8 +868,12 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
   drawParagraph = -1;
   drawBelow = false;
 
-  currFont = QFont("times",12);
-  currColor = black;
+  currFont = QFont("utopia",20);
+  currFont.setBold(true);
+  currFont.setItalic(true);
+  currColor = yellow;
+//   currFont = QFont("times",12);
+//   currColor = black;
 
   setMouseTracking(true);
   mousePressed = false;

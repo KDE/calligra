@@ -973,19 +973,22 @@ void Page::setupMenus()
 /*======================== clipboard cut =========================*/
 void Page::clipCut()
 {
-  //if (txtPtr) txtPtr->clipCut();
+  if (txtPtr) ;//txtPtr->clipCut();
+  else view->editCut();
 }
 
 /*======================== clipboard copy ========================*/
 void Page::clipCopy()
 {
-  //if (txtPtr) txtPtr->clipCopy();
+  if (txtPtr) ;// txtPtr->clipCopy();
+  else view->editCopy();
 }
 
 /*====================== clipboard paste =========================*/
 void Page::clipPaste()
 {
-  //if (txtPtr) txtPtr->clipPaste();
+  if (txtPtr) ;//txtPtr->clipPaste();
+  else view->editPaste();
 }
 
 /*======================= object properties  =====================*/
@@ -1102,7 +1105,8 @@ void Page::startScreenPresentation()
       objPtr = objList()->at(i);
 
       // igiiiiiiit - but it helps a little bit....
-      objPtr->oy -= (int)(_presFakt * (float)(pgNum) * (float)(QApplication::desktop()->height() / 200));
+      objPtr->oy -= (int)(_presFakt * (float)(pgNum) * (float)(QApplication::desktop()->height() / 
+							       (400 - (QApplication::desktop()->height()/5))));
 
       objPtr->ow = (int)((float)objPtr->ow * _presFakt);
       objPtr->oh = (int)((float)objPtr->oh * _presFakt);

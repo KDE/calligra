@@ -102,16 +102,20 @@ void KPresenterView_impl::cleanUp()
 /*========================== edit cut ===========================*/
 void KPresenterView_impl::editCut()
 {
+  m_pKPresenterDoc->copyObjs(xOffset,yOffset);
+  m_pKPresenterDoc->deleteObjs();
 }
 
 /*========================== edit copy ==========================*/
 void KPresenterView_impl::editCopy()
 {
+  m_pKPresenterDoc->copyObjs(xOffset,yOffset);
 }
 
 /*========================== edit paste =========================*/
 void KPresenterView_impl::editPaste()
 {
+  m_pKPresenterDoc->pasteObjs(xOffset,yOffset);
 }
 
 /*========================== edit delete ========================*/

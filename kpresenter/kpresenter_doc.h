@@ -19,10 +19,12 @@ class KPresenterDocument_impl;
 class KPresenterView_impl;
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include <document_impl.h>
 #include <view_impl.h>
 
+#include <qapp.h>
 #include <qlist.h>
 #include <qobject.h>
 #include <qrect.h>
@@ -37,6 +39,7 @@ class KPresenterView_impl;
 #include <qcursor.h>
 #include <qmsgbox.h>
 #include <qstring.h>
+#include <qclipbrd.h>
 
 #include <koPageLayoutDia.h>
 #include <koIMR.h>
@@ -254,6 +257,8 @@ public:
 
   // delete/rotate/rearrange/reorder obejcts
   void deleteObjs();
+  void copyObjs(int,int);
+  void pasteObjs(int,int);
   void rotateObjs();
   void reArrangeObjs();
 

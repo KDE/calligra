@@ -1955,6 +1955,7 @@ QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int d
   
   if (!_objList.isEmpty())
     {
+      orderList.append((int*)0);
       for (unsigned int i = 0;i < _objList.count();i++)
 	{
 	  objPtr = _objList.at(i);
@@ -1991,6 +1992,7 @@ QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int d
 int KPresenterDocument_impl::getPageOfObj(int objNum,int diffx,int diffy,float fakt = 1.0)
 {
   int i,j;
+  QRect rect;
 
   for (i = 0;i < _objList.count();i++)
     {
@@ -1999,8 +2001,10 @@ int KPresenterDocument_impl::getPageOfObj(int objNum,int diffx,int diffy,float f
 	{
 	  for (j = 0;j < _pageList.count();j++)
 	    {
-	      if (getPageSize(j+1,diffx,diffy,fakt).intersects(QRect(objPtr->ox - diffx,objPtr->oy - diffy,
-								     objPtr->ow,objPtr->oh)))	  
+	      rect = getPageSize(j+1,diffx,diffy,fakt);
+	      rect.setWidth(QApplication::desktop()->width());
+	      if (rect.intersects(QRect(objPtr->ox - diffx,objPtr->oy - diffy,
+					objPtr->ow,objPtr->oh)))	  
 		return j+1;
 	    }
 	}
@@ -2068,6 +2072,317 @@ void KPresenterDocument_impl::deleteObjs()
     }      
 }
 
+/*========================== copy objects ========================*/
+void KPresenterDocument_impl::copyObjs(int diffx,int diffy)
+{
+  QClipboard *cb = QApplication::clipboard();
+  QString clipStr = "";
+  char str[255];
+  
+  clipStr += "[KPRESENTER-DATA]";
+
+  if (!_objList.isEmpty())
+    {
+      for (unsigned int i=0;i < _objList.count();i++)
+	{
+	  objPtr = _objList.at(i);
+	  if (objPtr->isSelected)
+	    {
+	      if (objPtr->objType == OT_TEXT)
+		debug("At the moment text can't be copied to the clipboard. SORRY!");
+	      else
+		{
+		  clipStr += "[NEW_OBJECT_START]";
+		  
+		  clipStr += "[OBJ_TYPE]{";
+		  sprintf(str,"%d",(int)objPtr->objType);
+		  clipStr += str;
+		  clipStr += "}";
+		  
+		  clipStr += "[OBJ_X]{";
+		  sprintf(str,"%d",objPtr->ox - diffx);
+		  clipStr += str;
+		  clipStr += "}";
+		  
+		  clipStr += "[OBJ_Y]{";
+		  sprintf(str,"%d",objPtr->oy - diffy);
+		  clipStr += str;
+		  clipStr += "}";
+		  
+		  clipStr += "[OBJ_W]{";
+		  sprintf(str,"%d",objPtr->ow);
+		  clipStr += str;
+		  clipStr += "}";
+		  
+		  clipStr += "[OBJ_H]{";
+		  sprintf(str,"%d",objPtr->oh);
+		  clipStr += str;
+		  clipStr += "}";
+		  
+		  clipStr += "[OBJ_PRESNUM]{";
+		  sprintf(str,"%d",objPtr->presNum);
+		  clipStr += str;
+		  clipStr += "}";
+		  
+		  clipStr += "[OBJ_EFFECT]{";
+		  sprintf(str,"%d",(int)objPtr->effect);
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[GRAPHOBJ]";
+		  
+		  clipStr += "[LINE_TYPE]{";
+		  sprintf(str,"%d",(int)objPtr->graphObj->getLineType());
+		  clipStr += str;
+		  clipStr += "}";
+		  
+		  clipStr += "[RECT_TYPE]{";
+		  sprintf(str,"%d",(int)objPtr->graphObj->getRectType());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[PEN_WIDTH]{";
+		  sprintf(str,"%d",(int)objPtr->graphObj->getObjPen().width());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[PEN_STYLE]{";
+		  sprintf(str,"%d",(int)objPtr->graphObj->getObjPen().style());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[PEN_RED]{";
+		  sprintf(str,"%d",objPtr->graphObj->getObjPen().color().red());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[PEN_GREEN]{";
+		  sprintf(str,"%d",objPtr->graphObj->getObjPen().color().green());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[PEN_BLUE]{";
+		  sprintf(str,"%d",objPtr->graphObj->getObjPen().color().blue());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[BRUSH_STYLE]{";
+		  sprintf(str,"%d",(int)objPtr->graphObj->getObjBrush().style());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[BRUSH_RED]{";
+		  sprintf(str,"%d",objPtr->graphObj->getObjBrush().color().red());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[BRUSH_GREEN]{";
+		  sprintf(str,"%d",objPtr->graphObj->getObjBrush().color().green());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[BRUSH_BLUE]{";
+		  sprintf(str,"%d",objPtr->graphObj->getObjBrush().color().blue());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[FILENAME]{";
+		  sprintf(str,"%s",(const char*)objPtr->graphObj->getFileName());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[RND_X]{";
+		  sprintf(str,"%d",objPtr->graphObj->getRndX());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[RND_Y]{";
+		  sprintf(str,"%d",objPtr->graphObj->getRndY());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[NEW_OBJECT_END]";
+		}
+	    }
+	}
+    }
+  
+  cb->setText((const char*)clipStr);
+
+}
+
+/*========================= paste objects ========================*/
+void KPresenterDocument_impl::pasteObjs(int diffx,int diffy)
+{
+  QClipboard *cb = QApplication::clipboard();
+  QString clipStr = cb->text(),tag,value;
+  bool tagStarted = false,valueStarted = false;
+  QPen pen;
+  QBrush brush;
+  QColor color;
+  
+  objPtr = 0;
+
+
+  if (!clipStr.isEmpty() && clipStr.left(strlen("[KPRESENTER-DATA]")) == "[KPRESENTER-DATA]")
+    {
+      for (unsigned int i = 0;i < clipStr.length();i++)
+	{
+	  
+	  // start tag
+	  if (clipStr.mid(i,1) == "[")
+	    {
+	      tagStarted = true;
+	      tag = "";
+	    }
+
+	  // end tag
+	  else if (clipStr.mid(i,1) == "]")
+	    {
+	      if (tagStarted)
+		{
+		  tagStarted = false;
+		  if (tag == "NEW_OBJECT_START")
+		    {
+		      objPtr = new PageObjects;
+		      objPtr->isSelected = true;
+		    }
+		  else if (tag == "NEW_OBJECT_END")
+		    {
+		      _objNums++;
+		      objPtr->objNum = _objNums;
+		      objPtr->graphObj->hide();
+		      _objList.append(objPtr);
+		      repaint(objPtr->ox,objPtr->oy,
+			      objPtr->ow,objPtr->oh,false);
+		      objPtr = 0;
+		    }
+		  else if (tag == "GRAPHOBJ")
+		    {
+		      objPtr->graphObj = new GraphObj(0,"graphObj",objPtr->objType,"");
+		      objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
+		    }
+		}
+	    }
+
+	  // start value
+	  else if (clipStr.mid(i,1) == "{")
+	    {
+	      valueStarted = true;
+	      value = "";
+	    }
+
+	  // end value
+	  else if (clipStr.mid(i,1) == "}")
+	    {
+	      if (valueStarted)
+		{
+		  valueStarted = false;
+		  if (tag == "OBJ_TYPE" && objPtr)
+		    objPtr->objType = (ObjType)atoi(value);
+		  else if (tag == "OBJ_X" && objPtr)
+		    objPtr->ox = atoi(value) + diffx;
+		  else if (tag == "OBJ_Y" && objPtr)
+		    objPtr->oy = atoi(value) + diffy;
+		  else if (tag == "OBJ_W" && objPtr)
+		    objPtr->ow = atoi(value);
+		  else if (tag == "OBJ_H" && objPtr)
+		    objPtr->oh = atoi(value);
+		  else if (tag == "OBJ_PRESNUM" && objPtr)
+		    objPtr->presNum = atoi(value);
+		  else if (tag == "OBJ_EFFECT" && objPtr)
+		    objPtr->effect = (Effect)atoi(value);
+		  else if (tag == "LINE_TYPE" && objPtr && objPtr->graphObj)
+		    objPtr->graphObj->setLineType((LineType)atoi(value));
+		  else if (tag == "RECT_TYPE" && objPtr && objPtr->graphObj)
+		    objPtr->graphObj->setRectType((RectType)atoi(value));
+		  else if (tag == "PEN_WIDTH" && objPtr && objPtr->graphObj)
+		    {
+		      pen = objPtr->graphObj->getObjPen();
+		      pen.setWidth(atoi(value));
+		      objPtr->graphObj->setObjPen(pen);
+		    }
+		  else if (tag == "PEN_STYLE" && objPtr && objPtr->graphObj)
+		    {
+		      pen = objPtr->graphObj->getObjPen();
+		      pen.setStyle((PenStyle)atoi(value));
+		      objPtr->graphObj->setObjPen(pen);
+		    }
+		  else if (tag == "PEN_RED" && objPtr && objPtr->graphObj)
+		    {
+		      pen = objPtr->graphObj->getObjPen();
+		      color = pen.color();
+		      color.setRgb(atoi(value),color.green(),color.blue());
+		      pen.setColor(color);
+		      objPtr->graphObj->setObjPen(pen);
+		    }
+		  else if (tag == "PEN_GREEN" && objPtr && objPtr->graphObj)
+		    {
+		      pen = objPtr->graphObj->getObjPen();
+		      color = pen.color();
+		      color.setRgb(color.red(),atoi(value),color.blue());
+		      pen.setColor(color);
+		      objPtr->graphObj->setObjPen(pen);
+		    }
+		  else if (tag == "PEN_BLUE" && objPtr && objPtr->graphObj)
+		    {
+		      pen = objPtr->graphObj->getObjPen();
+		      color = pen.color();
+		      color.setRgb(color.red(),color.green(),atoi(value));
+		      pen.setColor(color);
+		      objPtr->graphObj->setObjPen(pen);
+		    }
+		  else if (tag == "BRUSH_STYLE" && objPtr && objPtr->graphObj)
+		    {
+		      brush = objPtr->graphObj->getObjBrush();
+		      brush.setStyle((BrushStyle)atoi(value));
+		      objPtr->graphObj->setObjBrush(brush);
+		    }
+		  else if (tag == "BRUSH_RED" && objPtr && objPtr->graphObj)
+		    {
+		      brush = objPtr->graphObj->getObjBrush();
+		      color = brush.color();
+		      color.setRgb(atoi(value),color.green(),color.blue());
+		      brush.setColor(color);
+		      objPtr->graphObj->setObjBrush(brush);
+		    }
+		  else if (tag == "BRUSH_GREEN" && objPtr && objPtr->graphObj)
+		    {
+		      brush = objPtr->graphObj->getObjBrush();
+		      color = brush.color();
+		      color.setRgb(color.red(),atoi(value),color.blue());
+		      brush.setColor(color);
+		      objPtr->graphObj->setObjBrush(brush);
+		    }
+		  else if (tag == "BRUSH_BLUE" && objPtr && objPtr->graphObj)
+		    {
+		      brush = objPtr->graphObj->getObjBrush();
+		      color = brush.color();
+		      color.setRgb(color.red(),color.green(),atoi(value));
+		      brush.setColor(color);
+		      objPtr->graphObj->setObjBrush(brush);
+		    }
+		  else if (tag == "FILENAME" && objPtr && objPtr->graphObj)
+		    objPtr->graphObj->setFileName(value);
+		  else if (tag == "RND_X" && objPtr && objPtr->graphObj)
+		    objPtr->graphObj->setRnds(atoi(value),objPtr->graphObj->getRndY());
+		  else if (tag == "RND_Y" && objPtr && objPtr->graphObj)
+		    objPtr->graphObj->setRnds(objPtr->graphObj->getRndX(),atoi(value));
+		}
+	    }
+	  
+	  // get char
+	  else
+	    {
+	      if (valueStarted)
+		value += clipStr.mid(i,1);
+	      else if (tagStarted)
+		tag += clipStr.mid(i,1);
+	    }
+	}
+    }
+}
+
 /*======================= rotate objects =========================*/
 void KPresenterDocument_impl::rotateObjs()
 {
@@ -2084,3 +2399,5 @@ void KPresenterDocument_impl::replaceObjs()
 	objPtr->graphObj->setRnds(_xRnd,_yRnd);
     }
 }
+
+
