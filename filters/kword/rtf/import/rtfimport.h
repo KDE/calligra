@@ -240,7 +240,7 @@ public:
     void addFormat( DomNode &node, KWFormat &format, RTFFormat *baseFormat );
     void addLayout( DomNode &node, QCString &name, RTFLayout &layout, bool frameBreak );
     void addParagraph( DomNode &node, bool frameBreak );
-    void addVariable(DomNode& spec, int type, QCString key);
+    void addVariable(DomNode& spec, int type, QCString key, RTFFormat* fmt=0);
     void finishTable();
     void writeOutPart( const char *name, QByteArray &array );
     void writeOutMetafile( const char *name, QByteArray &array );

@@ -22,6 +22,8 @@
 #include <kgenericfactory.h>
 #include <qwmf.h>
 #include <qcstring.h>
+#include <qstringlist.h>
+#include <qregexp.h>
 
 typedef KGenericFactory<RTFImport, KoFilter> RTFImportFactory;
 K_EXPORT_COMPONENT_FACTORY( librtfimport, RTFImportFactory( "rtfimport" ) );
@@ -579,10 +581,10 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	docInfo.addNode( "abstract" );
 	  docInfo.appendNode( doccomm );
 	docInfo.closeNode( "abstract" );
-      docInfo.closeNode( "about" );
       docInfo.addNode( "title" );
 	docInfo.appendNode( title );
       docInfo.closeNode( "title" );
+      docInfo.closeNode( "about" );
     docInfo.closeNode( "document-info" );
 
     // Write out main document and document info
@@ -1239,6 +1241,7 @@ void RTFImport::parseFldinst( RTFProperty * )
 {
     static QCString str;
     static bool formatInserted;
+    static RTFFormat fmt;
     if (token.type == RTFTokenizer::OpenGroup)
     {
 	str="";
@@ -1247,15 +1250,7 @@ void RTFImport::parseFldinst( RTFProperty * )
     else if (token.type == RTFTokenizer::PlainText)
     {
 	str+=token.text;
-	if(!formatInserted)
-	{
-	    kwFormat.fmt = state.format;
-	    kwFormat.id  = 1;
-	    kwFormat.pos = textState->length;
-	    kwFormat.len = 1;
-	    textState->formats << kwFormat;
-	    formatInserted=true;
-	}
+	fmt=state.format;
     }
     else if (token.type == RTFTokenizer::CloseGroup)
     {
@@ -1263,8 +1258,10 @@ void RTFImport::parseFldinst( RTFProperty * )
 	node.clear(7);
 	QCString key;
 	int type=-1;
-	str=str.upper();
-	if(str.find("AUTHOR")!=-1)
+	QStringList list;
+	list=QStringList::split('\\', str);
+	list[0]=list[0].upper().stripWhiteSpace();
+	if(list[0]=="AUTHOR")
 	{
 	    key="STRING";
 	    type=8;
@@ -1273,9 +1270,130 @@ void RTFImport::parseFldinst( RTFProperty * )
 	    node.setAttribute("value", "NO AUTHOR");
 	    node.closeNode("FIELD");
 	}
+	if(list[0]=="FILENAME")
+	{
+	    key="STRING";
+	    type=8;
+	    node.addNode("FIELD");
+	    node.setAttribute("subtype", 0);
+	    node.setAttribute("value", "NO FILENAME");
+	    node.closeNode("FIELD");
+	}
+	if(list[0]=="TITLE")
+	{
+	    key="STRING";
+	    type=8;
+	    node.addNode("FIELD");
+	    node.setAttribute("subtype", 10);
+	    node.setAttribute("value", "NO TITLE");
+	    node.closeNode("FIELD");
+	}
+	if(list[0]=="NUMPAGES")
+	{
+	    key="NUMBER";
+	    type=4;
+	    node.addNode("PGNUM");
+	    node.setAttribute("subtype", 1);
+	    node.setAttribute("value", 0);
+	    node.closeNode("PGNUM");
+	}
+	if(list[0]=="PAGE")
+	{
+	    key="NUMBER";
+	    type=4;
+	    node.addNode("PGNUM");
+	    node.setAttribute("subtype", 0);
+	    node.setAttribute("value", 0);
+	    node.closeNode("PGNUM");
+	}
+	if((list[0]=="TIME")||(list[0]=="DATE"))
+	{
+	    unsigned int j;
+	    for(j=1;j<list.count();j++)
+	    {
+		if(list[j][0]=='@')
+			break;
+	    }
+	    int i=list[j].find('"')+1;
+	    QString format=list[j].mid(i, list[j].find('"', i)-i);
+	    format.replace(QRegExp("am/pm"), "ap");
+	    format.replace(QRegExp("AM/PM"), "AP");
+	    for(unsigned int k=0;k<format.length();k++)
+	    {
+		if((format[k]=='y')||(format[k]=='M')||(format[k]=='d'))
+		{
+		    if(type==0)//we have date already
+		    {
+			key+=format[k].latin1();
+		    }
+		    else if(type==2)//we had time and we want date
+		    {
+			//finish time
+			addVariable(node, type, key, &fmt);
+			type=-1;
+		    }
+		    if(type==-1) //start date
+		    {
+			node.clear(7);
+			node.addNode("DATE");
+			node.setAttribute("year", 0);
+			node.setAttribute("month", 0);
+			node.setAttribute("day", 0);
+			node.setAttribute("fix", 0);
+			node.closeNode("DATE");
+			key="DATE0";
+			key+=format[k].latin1();
+			type=0;
+		    }
+		}
+		else if((format[k]=='H')||(format[k]=='h')||(format[k]=='m')||(format[k]=='s'))
+		{
+		    format[k]=format[k].lower();
+		    if(type==2)//we have time already
+		    {
+			key+=format[k].latin1();
+		    }
+		    else if(type==0)//we had date and we want time
+		    {
+			//finish time
+			addVariable(node, type, key, &fmt);
+			type=-1;
+		    }
+		    if(type==-1) //start time
+		    {
+			node.clear(7);
+			node.addNode("TIME");
+			node.setAttribute("hour", 0);
+			node.setAttribute("minute", 0);
+			node.setAttribute("second", 0);
+			node.setAttribute("fix", 0);
+			node.closeNode("TIME");
+			type=2;
+			key="TIME";
+			key+=format[k].latin1();
+		    }
+		}
+		else
+		{
+		    if(type==-1)
+		    {
+			node.clear(7);
+			node.addNode("DATE");
+			node.setAttribute("year", 0);
+			node.setAttribute("month", 0);
+			node.setAttribute("day", 0);
+			node.setAttribute("fix", 0);
+			node.closeNode("DATE");
+			type=0;
+			key="DATE0";
+		    }
+		    key+=format[k].latin1();
+		}
+	    }
+	}
 	if(type!=-1)
 	{
-	    addVariable(node, type, key);
+	    addVariable(node, type, key, &fmt);
 	    //Now add entry to properties table so that fldrslt group will be skipped    
 	    RTFProperty* fldrslt=new RTFProperty;//={0L, "@fldrslt", &RTFImport::skipGroup, 0L, true}; //uncommenting this causes internal compiler error  (but the code should be OK)
 		fldrslt->onlyValidIn=0L;
@@ -1298,7 +1416,7 @@ void RTFImport::parseFldinst( RTFProperty * )
     }
 }
 
-void RTFImport::addVariable(DomNode& spec, int type, QCString key)
+void RTFImport::addVariable(DomNode& spec, int type, QCString key, RTFFormat* fmt)
 {
     DomNode node;
 
@@ -1317,6 +1435,8 @@ void RTFImport::addVariable(DomNode& spec, int type, QCString key)
     kwFormat.id  = 4;
     kwFormat.pos = textState->length++;
     kwFormat.len = 1;
+    if(fmt)
+	kwFormat.fmt = *fmt;
     textState->text.putch( '#' );
     textState->formats << kwFormat;
 }
@@ -1540,7 +1660,7 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
 	else
 	    node.setAttribute( "len", 1);
     }
-    if (format.id == 1)
+    if ((format.id == 1)||(format.id == 4))
     {
 	// Normal text, store changes between format and base format
 	if (!baseFormat || format.fmt.color != baseFormat->color)
@@ -1618,7 +1738,7 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
 	    node.closeNode( "CHARSET" );
 	}
     }
-    else if (format.id == 4 || format.id == 6)
+    if (format.id == 4 || format.id == 6)
     {
 	// Variable or anchor
 	node.closeTag( true );
