@@ -20,7 +20,7 @@
 #ifndef deldia_h
 #define deldia_h
 
-#include <qtabdialog.h>
+#include <kdialogbase.h>
 
 class KWGroupManager;
 class KWordDocument;
@@ -34,7 +34,7 @@ class QSpinBox;
 /* Class: KWDeleteDia                                             */
 /******************************************************************/
 
-class KWDeleteDia : public QTabDialog
+class KWDeleteDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -44,7 +44,7 @@ public:
 
 protected:
     void setupTab1();
-    void closeEvent( QCloseEvent * ) { emit cancelButtonPressed(); }
+    bool doDelete();
 
     QWidget *tab1;
     QGridLayout *grid1;
@@ -57,8 +57,7 @@ protected:
     KWPage *page;
 
 protected slots:
-    void doDelete();
-
+    virtual void slotOk();
 };
 
 #endif
