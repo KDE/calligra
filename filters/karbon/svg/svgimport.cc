@@ -714,6 +714,9 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		VTransformCmd trafo( 0L, m_gc.current()->matrix );
 		trafo.visit( *obj );
 		parseStyle( obj, b );
+		// handle id
+		if( !b.attribute("id").isEmpty() )
+			obj->setName( b.attribute("id") );
 		if( grp )
 			grp->append( obj );
 		else
