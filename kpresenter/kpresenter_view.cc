@@ -1839,40 +1839,40 @@ void KPresenterView::setupActions()
 					this, SLOT( textColor() ),
 					actionCollection(), "text_color" );
 
-    actionTextAlignLeft = new KToggleAction( i18n( "Align &Left" ), "alignLeft", ALT + Key_L,
+    actionTextAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", ALT + Key_L,
 				       this, SLOT( textAlignLeft() ),
 				       actionCollection(), "text_alignleft" );
     ( (KToggleAction*)actionTextAlignLeft )->setExclusiveGroup( "align" );
     ( (KToggleAction*)actionTextAlignLeft )->setChecked( true );
 
-    actionTextAlignCenter = new KToggleAction( i18n( "Align &Center" ), "alignCenter", ALT + Key_C,
+    actionTextAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", ALT + Key_C,
 					 this, SLOT( textAlignCenter() ),
 					 actionCollection(), "text_aligncenter" );
     ( (KToggleAction*)actionTextAlignCenter )->setExclusiveGroup( "align" );
 
-    actionTextAlignRight = new KToggleAction( i18n( "Align &Right" ), "alignRight", ALT + Key_R,
+    actionTextAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", ALT + Key_R,
 					this, SLOT( textAlignRight() ),
 					actionCollection(), "text_alignright" );
     ( (KToggleAction*)actionTextAlignRight )->setExclusiveGroup( "align" );
 
 #if 0
-    actionTextTypeEnumList = new KAction( i18n( "&Enumerated List" ), "enumList", 0,
+    actionTextTypeEnumList = new KAction( i18n( "&Enumerated List" ), "enum_list", 0,
 					  this, SLOT( textEnumList() ),
 					  actionCollection(), "text_enumList" );
 #endif
-    actionTextTypeUnsortList = new KAction( i18n( "&Unsorted List" ), "unsortedList",
+    actionTextTypeUnsortList = new KAction( i18n( "&Unsorted List" ), "unsorted_list",
 					    0, this, SLOT( textUnsortList() ),
 					    actionCollection(), "text_unsortedList" );
 
-    actionTextTypeNormalText = new KAction( i18n( "&Normal Text" ), "normalText", 0,
+    actionTextTypeNormalText = new KAction( i18n( "&Normal Text" ), "text_block", 0,
 					    this, SLOT( textNormalText() ),
 					    actionCollection(), "text_normalText" );
 
-    actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ), "depth+",
+    actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ), "format_increaseindent",
 				       CTRL + Key_Plus, this, SLOT( textDepthPlus() ),
 				       actionCollection(), "text_depthPlus" );
 
-    actionTextDepthMinus = new KAction( i18n( "&Decrease Depth" ), "depth-",
+    actionTextDepthMinus = new KAction( i18n( "&Decrease Depth" ), "format_decreaseindent",
 					CTRL + Key_Minus, this, SLOT( textDepthMinus() ),
 					actionCollection(), "text_depthMinus" );
 
