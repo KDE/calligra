@@ -387,12 +387,12 @@ protected:
 
 
     /**
-     * Returns a SequenceElement constructed from the nodes first child
-     * if the nodes name matches the given name.
+     * Returns if the SequenceElement could be constructed from the nodes first child.
+     * The node name must match the given name.
      *
      * This is a service for all subclasses that contain children.
      */
-    SequenceElement* buildChild( SequenceElement* child, QDomNode node, QString name );
+    bool buildChild( SequenceElement* child, QDomNode node, QString name );
 
     /**
      * @returns our type. This is an object from our parent's syntax tree

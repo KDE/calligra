@@ -1131,8 +1131,7 @@ bool IndexElement::readContentFromDom(QDomNode& node)
         return false;
     }
 
-    content = buildChild( content, node, "CONTENT" );
-    if (content == 0) {
+    if ( !buildChild( content, node, "CONTENT" ) ) {
         kdDebug( DEBUGID ) << "Empty content in IndexElement." << endl;
         return false;
     }
@@ -1150,33 +1149,33 @@ bool IndexElement::readContentFromDom(QDomNode& node)
              lowerLeftRead && lowerMiddleRead && lowerRightRead)) {
 
         if (!upperLeftRead && (node.nodeName().upper() == "UPPERLEFT")) {
-            upperLeft = buildChild( new SequenceElement( this ), node, "UPPERLEFT" );
-            upperLeftRead = upperLeft != 0;
+            upperLeftRead = buildChild( upperLeft=new SequenceElement( this ), node, "UPPERLEFT" );
+            if ( !upperLeftRead ) return false;
         }
 
         if (!upperMiddleRead && (node.nodeName().upper() == "UPPERMIDDLE")) {
-            upperMiddle = buildChild( new SequenceElement( this ), node, "UPPERMIDDLE" );
-            upperMiddleRead = upperMiddle != 0;
+            upperMiddleRead = buildChild( upperMiddle=new SequenceElement( this ), node, "UPPERMIDDLE" );
+            if ( !upperMiddleRead ) return false;
         }
 
         if (!upperRightRead && (node.nodeName().upper() == "UPPERRIGHT")) {
-            upperRight = buildChild( new SequenceElement( this ), node, "UPPERRIGHT" );
-            upperRightRead = upperRight != 0;
+            upperRightRead = buildChild( upperRight=new SequenceElement( this ), node, "UPPERRIGHT" );
+            if ( !upperRightRead ) return false;
         }
 
         if (!lowerLeftRead && (node.nodeName().upper() == "LOWERLEFT")) {
-            lowerLeft = buildChild( new SequenceElement( this ), node, "LOWERLEFT" );
-            lowerLeftRead = lowerLeft != 0;
+            lowerLeftRead = buildChild( lowerLeft=new SequenceElement( this ), node, "LOWERLEFT" );
+            if ( !lowerLeftRead ) return false;
         }
 
         if (!lowerMiddleRead && (node.nodeName().upper() == "LOWERMIDDLE")) {
-            lowerMiddle = buildChild( new SequenceElement( this ), node, "LOWERMIDDLE" );
-            lowerMiddleRead = lowerMiddle != 0;
+            lowerMiddleRead = buildChild( lowerMiddle=new SequenceElement( this ), node, "LOWERMIDDLE" );
+            if ( !lowerMiddleRead ) return false;
         }
 
         if (!lowerRightRead && (node.nodeName().upper() == "LOWERRIGHT")) {
-            lowerRight = buildChild( new SequenceElement( this ), node, "LOWERRIGHT" );
-            lowerRightRead = lowerRight != 0;
+            lowerRightRead = buildChild( lowerRight=new SequenceElement( this ), node, "LOWERRIGHT" );
+            if ( !lowerRightRead ) return false;
         }
 
         node = node.nextSibling();

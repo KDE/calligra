@@ -76,7 +76,6 @@ struct Document::Document_Impl {
     KAction* addProductAction;
     KAction* addIntegralAction;
     KAction* addMatrixAction;
-    KAction* changeMatrixAction;
     KAction* addOneByTwoMatrixAction;
     KAction* addUpperLeftAction;
     KAction* addLowerLeftAction;
@@ -167,7 +166,6 @@ KAction* Document::getAddSumAction()           { return impl->addSumAction; }
 KAction* Document::getAddProductAction()       { return impl->addProductAction; }
 KAction* Document::getAddIntegralAction()      { return impl->addIntegralAction; }
 KAction* Document::getAddMatrixAction()        { return impl->addMatrixAction; }
-KAction* Document::getChangeMatrixAction()     { return impl->changeMatrixAction; }
 KAction* Document::getAddOneByTwoMatrixAction(){ return impl->addOneByTwoMatrixAction; }
 KAction* Document::getAddUpperLeftAction()     { return impl->addUpperLeftAction; }
 KAction* Document::getAddLowerLeftAction()     { return impl->addLowerLeftAction; }
@@ -359,11 +357,6 @@ void Document::createActions(KActionCollection* collection)
                                     CTRL + Key_8,
                                     this, SLOT(addMatrix()),
                                     collection, "formula_addmatrix");
-
-    impl->changeMatrixAction   = new KAction(i18n("Change matrix size"),
-                                    0,
-                                    this, SLOT(changeMatrix()),
-                                    collection, "formula_changematrix");
 
     impl->addOneByTwoMatrixAction   = new KAction(i18n("Add 1x2 matrix"),
                                     "onetwomatrix",
@@ -619,14 +612,6 @@ void Document::addMatrix()
 {
     if (hasFormula()) {
         Request r( req_addMatrix );
-        formula()->performRequest( &r );
-    }
-}
-
-void Document::changeMatrix()
-{
-    if (hasFormula()) {
-        Request r( req_changeMatrix );
         formula()->performRequest( &r );
     }
 }

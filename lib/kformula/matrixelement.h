@@ -27,14 +27,14 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-class MatrixSequenceElement;
 
 /**
  * A matrix.
  */
 class MatrixElement : public BasicElement {
+    friend class KFCRemoveColumn;
+    friend class KFCRemoveRow;
     friend class MatrixSequenceElement;
-    friend class KFCInsertRow;
 public:
     MatrixElement(uint rows = 1, uint columns = 1, BasicElement* parent = 0);
     ~MatrixElement();

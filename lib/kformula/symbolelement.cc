@@ -681,8 +681,7 @@ bool SymbolElement::readContentFromDom(QDomNode& node)
         return false;
     }
 
-    content = buildChild( content, node, "CONTENT" );
-    if (content == 0) {
+    if ( !buildChild( content, node, "CONTENT" ) ) {
         kdDebug( DEBUGID ) << "Empty content in SymbolElement." << endl;
         return false;
     }
@@ -694,13 +693,13 @@ bool SymbolElement::readContentFromDom(QDomNode& node)
     while (!node.isNull() && !(upperRead && lowerRead)) {
 
         if (!lowerRead && (node.nodeName().upper() == "LOWER")) {
-            lower = buildChild( new SequenceElement( this ), node, "LOWER" );
-            lowerRead = lower != 0;
+            lowerRead = buildChild( lower=new SequenceElement( this ), node, "LOWER" );
+            if ( !lowerRead ) return false;
         }
 
         if (!upperRead && (node.nodeName().upper() == "UPPER")) {
-            upper = buildChild( new SequenceElement( this ), node, "UPPER" );
-            upperRead = upper != 0;
+            upperRead = buildChild( upper=new SequenceElement( this ), node, "UPPER" );
+            if ( !upperRead ) return false;
         }
 
         node = node.nextSibling();

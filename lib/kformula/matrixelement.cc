@@ -54,19 +54,55 @@ public:
 };
 
 
-class KFCInsertRow : public Command {
+class KFCRemoveRow : public Command {
 public:
-    KFCInsertRow( const QString& name, Container* document, MatrixElement* m, uint p );
-    ~KFCInsertRow();
+    KFCRemoveRow( const QString& name, Container* document, MatrixElement* m, uint r, uint c );
+    ~KFCRemoveRow();
 
     virtual void execute();
     virtual void unexecute();
 
-private:
+protected:
     MatrixElement* matrix;
-    uint pos;
+    uint rowPos;
+    uint colPos;
 
     QPtrList<MatrixSequenceElement>* row;
+};
+
+
+class KFCInsertRow : public KFCRemoveRow {
+public:
+    KFCInsertRow( const QString& name, Container* document, MatrixElement* m, uint r, uint c );
+
+    virtual void execute()   { KFCRemoveRow::unexecute(); }
+    virtual void unexecute() { KFCRemoveRow::execute(); }
+};
+
+
+class KFCRemoveColumn : public Command {
+public:
+    KFCRemoveColumn( const QString& name, Container* document, MatrixElement* m, uint r, uint c );
+    ~KFCRemoveColumn();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    MatrixElement* matrix;
+    uint rowPos;
+    uint colPos;
+
+    QPtrList<MatrixSequenceElement>* column;
+};
+
+
+class KFCInsertColumn : public KFCRemoveColumn {
+public:
+    KFCInsertColumn( const QString& name, Container* document, MatrixElement* m, uint r, uint c );
+
+    virtual void execute()   { KFCRemoveColumn::unexecute(); }
+    virtual void unexecute() { KFCRemoveColumn::execute(); }
 };
 
 
@@ -74,44 +110,37 @@ Command* MatrixSequenceElement::buildCommand( Container* container, Request* req
 {
     switch ( *request ) {
     case req_appendColumn:
-        break;
-    case req_appendRow: {
-        MatrixElement* matrix = static_cast<MatrixElement*>( getParent() );
-        uint rows = matrix->getRows();
-        return new KFCInsertRow( i18n( "Append Row" ), container, matrix, rows );
-    }
+    case req_appendRow:
     case req_insertColumn:
-        break;
-    case req_insertRow: {
+    case req_removeColumn:
+    case req_insertRow:
+    case req_removeRow: {
         MatrixElement* matrix = static_cast<MatrixElement*>( getParent() );
         FormulaCursor* cursor = container->activeCursor();
         for ( uint row = 0; row < matrix->getRows(); row++ ) {
             for ( uint col = 0; col < matrix->getColumns(); col++ ) {
                 if ( matrix->getElement( row, col ) == cursor->getElement() ) {
-                    return new KFCInsertRow( i18n( "Insert Row" ), container, matrix, row );
+                    switch ( *request ) {
+                    case req_appendColumn:
+                        return new KFCInsertColumn( i18n( "Append Column" ), container, matrix, row, matrix->getColumns() );
+                    case req_appendRow:
+                        return new KFCInsertRow( i18n( "Append Row" ), container, matrix, matrix->getRows(), col );
+                    case req_insertColumn:
+                        return new KFCInsertColumn( i18n( "Insert Column" ), container, matrix, row, col );
+                    case req_removeColumn:
+                        return new KFCRemoveColumn( i18n( "Remove Column" ), container, matrix, row, col );
+                    case req_insertRow:
+                        return new KFCInsertRow( i18n( "Insert Row" ), container, matrix, row, col );
+                    case req_removeRow:
+                        return new KFCRemoveRow( i18n( "Remove Row" ), container, matrix, row, col );
+                    default:
+                        break;
+                    }
                 }
             }
         }
         kdDebug( DEBUGID ) << "MatrixSequenceElement::buildCommand: Sequence not found." << endl;
         break;
-    }
-    case req_removeColumn:
-        break;
-    case req_removeRow:
-        break;
-    case req_changeMatrix: {
-        //FormulaCursor* cursor = container->activeCursor();
-        MatrixElement* matrix = static_cast<MatrixElement*>( getParent() );
-        MatrixDialog* dialog = new MatrixDialog( 0, matrix->getColumns(), matrix->getRows() );
-        if ( dialog->exec() ) {
-            uint rows = dialog->h;
-            uint cols = dialog->w;
-            if ( ( rows != matrix->getRows() ) || ( cols != matrix->getColumns() ) ) {
-                // the dialog hides the normal cursor.
-                //*( impl->internCursor ) = *cursor;
-                //paste( matrix->resizedDom( rows, cols ), i18n( "Matrix size change" ) );
-            }
-        }
     }
     default:
         break;
@@ -120,8 +149,48 @@ Command* MatrixSequenceElement::buildCommand( Container* container, Request* req
 }
 
 
-KFCInsertRow::KFCInsertRow( const QString& name, Container* document, MatrixElement* m, uint p )
-    : Command( name, document ), matrix( m ), pos( p )
+KFCRemoveRow::KFCRemoveRow( const QString& name, Container* document, MatrixElement* m, uint r, uint c )
+    : Command( name, document ), matrix( m ), rowPos( r ), colPos( c ), row( 0 )
+{
+}
+
+KFCRemoveRow::~KFCRemoveRow()
+{
+    delete row;
+}
+
+void KFCRemoveRow::execute()
+{
+    FormulaCursor* cursor = getExecuteCursor();
+    row = matrix->content.at( rowPos );
+    FormulaElement* formula = matrix->formula();
+    for ( uint i = matrix->getColumns(); i > 0; i-- ) {
+        formula->elementRemoval( row->at( i-1 ) );
+    }
+    matrix->content.take( rowPos );
+    formula->changed();
+    if ( rowPos < matrix->getRows() ) {
+        matrix->getElement( rowPos, colPos )->goInside( cursor );
+    }
+    else {
+        matrix->getElement( rowPos-1, colPos )->goInside( cursor );
+    }
+    testDirty();
+}
+
+void KFCRemoveRow::unexecute()
+{
+    matrix->content.insert( rowPos, row );
+    row = 0;
+    FormulaCursor* cursor = getExecuteCursor();
+    matrix->getElement( rowPos, colPos )->goInside( cursor );
+    matrix->formula()->changed();
+    testDirty();
+}
+
+
+KFCInsertRow::KFCInsertRow( const QString& name, Container* document, MatrixElement* m, uint r, uint c )
+    : KFCRemoveRow( name, document, m, r, c )
 {
     row = new QPtrList< MatrixSequenceElement >;
     row->setAutoDelete( true );
@@ -130,34 +199,56 @@ KFCInsertRow::KFCInsertRow( const QString& name, Container* document, MatrixElem
     }
 }
 
-KFCInsertRow::~KFCInsertRow()
+
+KFCRemoveColumn::KFCRemoveColumn( const QString& name, Container* document, MatrixElement* m, uint r, uint c )
+    : Command( name, document ), matrix( m ), rowPos( r ), colPos( c )
 {
-    delete row;
+    column = new QPtrList< MatrixSequenceElement >;
+    column->setAutoDelete( true );
 }
 
-void KFCInsertRow::execute()
+KFCRemoveColumn::~KFCRemoveColumn()
 {
-    matrix->content.insert( pos, row );
-    row = 0;
+    delete column;
+}
+
+void KFCRemoveColumn::execute()
+{
     FormulaCursor* cursor = getExecuteCursor();
-    //setUnexecuteCursor(cursor);
-    matrix->content.at( pos )->at( 0 )->goInside( cursor );
+    FormulaElement* formula = matrix->formula();
+    for ( uint i = 0; i < matrix->getRows(); i++ ) {
+        column->append( matrix->getElement( i, colPos ) );
+        formula->elementRemoval( column->at( i ) );
+        matrix->content.at( i )->take( colPos );
+    }
+    formula->changed();
+    if ( colPos < matrix->getColumns() ) {
+        matrix->getElement( rowPos, colPos )->goInside( cursor );
+    }
+    else {
+        matrix->getElement( rowPos, colPos-1 )->goInside( cursor );
+    }
+    testDirty();
+}
+
+void KFCRemoveColumn::unexecute()
+{
+    for ( uint i = 0; i < matrix->getRows(); i++ ) {
+        matrix->content.at( i )->insert( colPos, column->take( 0 ) );
+    }
+    FormulaCursor* cursor = getExecuteCursor();
+    matrix->getElement( rowPos, colPos )->goInside( cursor );
     matrix->formula()->changed();
     testDirty();
 }
 
-void KFCInsertRow::unexecute()
+
+KFCInsertColumn::KFCInsertColumn( const QString& name, Container* document, MatrixElement* m, uint r, uint c )
+    : KFCRemoveColumn( name, document, m, r, c )
 {
-    /*FormulaCursor* cursor =*/ //getUnexecuteCursor();
-    getExecuteCursor();
-    row = matrix->content.at( pos );
-    FormulaElement* formula = matrix->formula();
-    for ( uint i = matrix->getColumns(); i > 0; i-- ) {
-        formula->elementRemoval( row->at( i-1 ) );
+    for ( uint i = 0; i < matrix->getRows(); i++ ) {
+        column->append( new MatrixSequenceElement( matrix ) );
     }
-    matrix->content.take( pos );
-    formula->changed();
-    testDirty();
 }
 
 

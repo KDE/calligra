@@ -341,8 +341,7 @@ bool BracketElement::readContentFromDom(QDomNode& node)
     if (!BasicElement::readContentFromDom(node)) {
         return false;
     }
-    content = buildChild( content, node, "CONTENT" );
-    if (content == 0) {
+    if ( !buildChild( content, node, "CONTENT" ) ) {
         kdDebug( DEBUGID ) << "Empty content in BracketElement." << endl;
         return false;
     }

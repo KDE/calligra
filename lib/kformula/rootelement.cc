@@ -512,17 +512,18 @@ bool RootElement::readContentFromDom(QDomNode& node)
         return false;
     }
 
-    content = buildChild( content, node, "CONTENT" );
-    if (content == 0) {
+    if ( !buildChild( content, node, "CONTENT" ) ) {
         kdDebug( DEBUGID ) << "Empty content in RootElement." << endl;
         return false;
     }
     node = node.nextSibling();
 
-    index = buildChild( new SequenceElement( this ), node, "INDEX" );
-    if (index != 0) {
-        node = node.nextSibling();
+    if ( node.nodeName().upper() == "INDEX" ) {
+        if ( !buildChild( index=new SequenceElement( this ), node, "INDEX" ) ) {
+            return false;
+        }
     }
+    node = node.nextSibling();
 
     return true;
 }

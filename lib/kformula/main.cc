@@ -49,7 +49,15 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
     int state = event->state();
     //MoveFlag flag = movementFlag(state);
 
-    if (state & Qt::ControlButton) {
+    if ( ( state & Qt::ShiftButton ) && ( state & Qt::ControlButton ) ) {
+        switch (event->key()) {
+            case Qt::Key_B: document->document()->appendColumn(); return;
+            case Qt::Key_I: document->document()->insertColumn(); return;
+            case Qt::Key_R: document->document()->removeColumn(); return;
+            case Qt::Key_Z: document->document()->redo(); return;
+        }
+    }
+    else if (state & Qt::ControlButton) {
         switch (event->key()) {
             case Qt::Key_1: document->document()->addSum(); return;
             case Qt::Key_2: document->document()->addProduct(); return;
@@ -58,7 +66,6 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_5: document->document()->addFraction(); return;
             case Qt::Key_6: document->document()->addMatrix(); return;
 	    case Qt::Key_7: document->document()->addOneByTwoMatrix(); return;
-	    case Qt::Key_8: document->document()->changeMatrix(); return;
             case Qt::Key_0: importOld("oldformula"); return;
             case Qt::Key_A: slotSelectAll(); return;
             case Qt::Key_B: document->document()->appendRow(); return;
@@ -66,6 +73,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_D: document->document()->removeEnclosing(); return;
             case Qt::Key_G: document->document()->makeGreek(); return;
             case Qt::Key_I: document->document()->insertRow(); return;
+            case Qt::Key_R: document->document()->removeRow(); return;
             case Qt::Key_L: document->document()->addGenericLowerIndex(); return;
             case Qt::Key_M: document->loadMathMl("mathml.xml"); return;
             case Qt::Key_O: document->load("test.xml"); return;
@@ -75,7 +83,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_U: document->document()->addGenericUpperIndex(); return;
             case Qt::Key_V: document->document()->paste(); return;
             case Qt::Key_X: document->document()->cut(); return;
-            case Qt::Key_Z: (state & Qt::ShiftButton) ? document->document()->redo() : document->document()->undo(); return;
+            case Qt::Key_Z: document->document()->undo(); return;
             default:
                 //cerr << "Key: " << event->key() << endl;
                 break;

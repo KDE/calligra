@@ -207,7 +207,6 @@ enum RequestID {
     req_addTextChar,
     req_appendColumn,
     req_appendRow,
-    req_changeMatrix,
     req_compactExpression,
     req_copy,
     req_cut,
