@@ -561,6 +561,8 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
             //partialText.replace (regExpApos, strApos);    // Only predefined in XHTML
             partialText.replace (regExpQuot, strQuot);
 
+            // TODO: first and last characters of partialText should not be a space (white space problems!)
+            // TODO: replace multiples spaces in non-breaking spaces!
             // Opening elements
             if ( (*paraFormatDataIt).weight > 50 )
             {
@@ -743,7 +745,7 @@ class ClassExportFilterBase
         const bool filter(const QString  &filenameIn, const QString  &filenameOut,
                           const QString  &from, const QString  &to, const QString& );
     public: //virtual
-        virtual QString getDocType(void)=0;
+        virtual QString getDocType(void) const = 0;
     protected:
         QDomDocument qDomDocumentIn;
 };
@@ -797,17 +799,19 @@ const bool ClassExportFilterBase::filter(const QString  &filenameIn, const QStri
     streamOut << "<head>" << endl;
 
     // Declare that we are using UTF-8
-    streamOut << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n";
+    streamOut << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n"; //TODO: in XHTML empty element!
 
     // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
     QString strVersion("$Revision$");
     // Eliminate the dollar signs
     //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
-    streamOut << "<meta name=\"generator\" content=\"KWord HTML Export Filter Version ="
+    streamOut << "<meta name=\"Generator\" content=\"KWord HTML Export Filter Version ="
               << strVersion.mid(10).replace(QRegExp("\\$"),"") // Note: double escape character (one for C++, one for QRegExp!)
-              << "\">" << endl;
+              << "\">" << endl; //TODO: in XHTML empty element!
 
-    streamOut << "<title>No name</title>\n"; // GRR: Just temporary! IIRC some user agents *do* choke without <TITLE> if there is a <HEAD> element
+    streamOut << "<title>No name</title>\n";  // GRR: Just temporary! <TITLE> is mandatory in HTML 4.01 !
+
+    //TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 
     streamOut << "</head>" << endl << "<body>" << endl;
 
@@ -832,10 +836,10 @@ class ClassExportFilterHtmlTransitional : public ClassExportFilterBase
         ClassExportFilterHtmlTransitional(void) {}
         virtual ~ClassExportFilterHtmlTransitional(void) {}
     public: //virtual
-        virtual QString getDocType(void);
+        virtual QString getDocType(void) const;
 };
 
-QString ClassExportFilterHtmlTransitional::getDocType(void)
+QString ClassExportFilterHtmlTransitional::getDocType(void) const
 {
     // We are TRANSITIONAL, as we want to use tags like <FONT>, <U> and explicit colours.
     return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
@@ -850,10 +854,10 @@ class ClassExportFilterXHtmlTransitional : public ClassExportFilterBase
         ClassExportFilterXHtmlTransitional(void) {}
         virtual ~ClassExportFilterXHtmlTransitional(void) {}
     public: //virtual
-        virtual QString getDocType(void);
+        virtual QString getDocType(void) const;
 };
 
-QString ClassExportFilterXHtmlTransitional::getDocType(void)
+QString ClassExportFilterXHtmlTransitional::getDocType(void) const
 {
     // We are TRANSITIONAL, as we want to use tags like <FONT>, <U> and explicit colours.
     // Note "html" is lower-case in XHTML, while "DOCTYPE" and "!PUBLIC" are upper-case!
