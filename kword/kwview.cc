@@ -226,6 +226,8 @@ void KWView::clearSelection()
         delete searchEntry;
     if (replaceEntry)
         delete replaceEntry;
+    if(!m_specialCharDlg)
+        delete m_specialCharDlg;
 }
 
 void KWView::changeNbOfRecentFiles(int _nb)
