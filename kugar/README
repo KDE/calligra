@@ -49,8 +49,8 @@ REQUIREMENTS:
 
 The following items must be installed prior to building Kugar:
 
-1. Qt version 3.0+		- http://www.trolltech.com
-2. KDE 3.0.0+			- http://www.kde.org
+1. Qt version 3.1+		- http://www.trolltech.com
+2. KDE 3.1.0+			- http://www.kde.org
 
 
 BUILDING KUGAR:

@@ -1,3 +1,4 @@
+03.01.2003	kudesigner	many visual editors for properties created - font and color combos, etc.
 29.12.2002	kudesigner	property editing in designer is coming back
 22.09.2002	kudesigner	porting to KoDocument/KoFactory/KoView/KoAcclication started
 20.09.2002	lib		transparency for labels/fields/specials/calcfields added (!without property!)
