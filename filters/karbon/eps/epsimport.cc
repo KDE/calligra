@@ -75,7 +75,7 @@ EpsImport::convert( const QCString& from, const QCString& to )
 
 	// Build ghostscript call to convert ps/eps -> ai:
 	QString command = QString(
-		"gs -q -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps %1 > %2" ).
+		"gs -q -dBATCH -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps %1 > %2" ).
 			arg( input ).arg( m_chain->outputFile() );
 
 	// Execute it:
