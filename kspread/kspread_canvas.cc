@@ -443,8 +443,8 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 
 void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_select,bool move_into_area, bool keyPress )
 {
-  //kdDebug(36001) << "KSpreadCanvas::gotoLocation" << " x=" << x << " y=" << y <<
-  //  " table=" << table << " make_select=" << (make_select ? "true" : "false" ) << endl;
+  //  kdDebug(36001) << "KSpreadCanvas::gotoLocation" << " x=" << x << " y=" << y <<
+  //    " table=" << table << " make_select=" << (make_select ? "true" : "false" ) << endl;
   if ( table )
     table->setActiveTable();
   else
@@ -461,10 +461,10 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
     extraCell.setCoords(moveX,moveY,moveX+cell->extraXCells(),moveY+cell->extraYCells());
     if( (x-markerColumn())!=0 && extraCell.contains(QPoint(markerColumn(),markerRow())))
         {
-        extraArea.setCoords( markerColumn(), 1, cell->extraXCells()+x-1, KS_rowMax );
+        extraArea.setCoords( markerColumn(), 1, QMIN(KS_colMax, cell->extraXCells()+x-1), KS_rowMax );
         if(keyPress)
                 {
-                tmpArea.setCoords( 1, markerRow(), KS_colMax, cell->extraYCells()+markerRow() );
+                tmpArea.setCoords( 1, markerRow(), KS_colMax, QMIN(KS_rowMax, cell->extraYCells()+markerRow()) );
                 if(!extraArea.contains(table->getOldPos().x(),1)&& tmpArea.contains(1,table->getOldPos().y()))
                         y=table->getOldPos().y();
                 else if( extraArea.contains(table->getOldPos().x(),1)&& table->getOldPos().y()==(cell->extraYCells()+y+1))
@@ -474,9 +474,9 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
         }
     else if((y-markerRow())!=0 && extraCell.contains(QPoint(markerColumn(),markerRow())))
         {
-        extraArea.setCoords( 1, markerRow(), KS_colMax, cell->extraYCells()+y-1 );
+        extraArea.setCoords( 1, markerRow(), KS_colMax, QMIN(KS_rowMax, cell->extraYCells()+y-1) );
 
-        tmpArea.setCoords( markerColumn(), 1, cell->extraXCells()+markerColumn(), KS_rowMax );
+        tmpArea.setCoords( markerColumn(), 1, QMIN(KS_colMax, cell->extraXCells()+markerColumn()), KS_rowMax );
         if(keyPress)
                 {
                 if( !extraArea.contains(1,table->getOldPos().y())&&tmpArea.contains(table->getOldPos().x(),1))
@@ -499,8 +499,8 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
         {
         if(keyPress && (x-markerColumn())!=0)
                 {
-                extraArea.setCoords( markerColumn(), 1, cell->extraXCells()+markerColumn(), KS_rowMax );
-                tmpArea.setCoords( 1, markerRow(), KS_colMax, cell->extraYCells()+markerRow() );
+                extraArea.setCoords( markerColumn(), 1, QMIN(KS_colMax, cell->extraXCells()+markerColumn()), KS_rowMax );
+                tmpArea.setCoords( 1, markerRow(), KS_colMax, QMIN(KS_rowMax, cell->extraYCells()+markerRow()) );
                 if( !extraArea.contains(QPoint(table->getOldPos().x(),1))&& tmpArea.contains(1,table->getOldPos().y()))
                         y=table->getOldPos().y();
                 else if( extraArea.contains(table->getOldPos().x(),1)&& table->getOldPos().y()==(cell->extraYCells()+markerRow()+1))
@@ -508,8 +508,8 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
                 }
         else if(keyPress && (y-markerRow())!=0 )
                 {
-                tmpArea.setCoords( markerColumn(), 1, cell->extraXCells()+markerColumn(), KS_rowMax );
-                extraArea.setCoords( 1, markerRow(), KS_colMax, cell->extraYCells()+markerRow() );
+                tmpArea.setCoords( markerColumn(), 1, QMIN(KS_colMax, cell->extraXCells()+markerColumn()), KS_rowMax );
+                extraArea.setCoords( 1, markerRow(), KS_colMax, QMIN(KS_rowMax, cell->extraYCells()+markerRow()) );
                 if( !extraArea.contains(QPoint(1,table->getOldPos().y()))&&tmpArea.contains(table->getOldPos().x(),1))
                         x=table->getOldPos().x();
                 else if( /*extraArea.contains(QPoint(1,table->getOldPos().y()))&&*/ table->getOldPos().x()==(cell->extraXCells()+markerColumn()+1))
@@ -548,14 +548,12 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
 
   if ( !make_select )
   {
-
       if ( selection.left() != 0 && !move_into_area)
         activeTable()->setMarker( QPoint( x, y ) );
       else if(selection.left() != 0 && move_into_area)
         activeTable()->setSelection(selection,QPoint( x, y ),this);
       else
         activeTable()->setMarker( QPoint( x, y ) );
-
   }
   else
   {
@@ -563,7 +561,7 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
       selection.setCoords( markerColumn(), markerRow(), markerColumn(), markerRow() );
 
     if ( markerColumn() == selection.left() )
-     selection.setLeft( x );
+      selection.setLeft( x );
     else
       selection.setRight( x );
 
@@ -1022,8 +1020,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
                 {
                     KSpreadCell *cell = table->cellAt( markerColumn(), markerRow() );
                     selection.setCoords( markerColumn(), markerRow(),
-                                         markerColumn() + cell->extraXCells(),
-                                         markerRow() + cell->extraYCells() );
+                                         QMIN(KS_colMax, markerColumn() + cell->extraXCells()),
+                                         QMIN(KS_rowMax, markerRow()    + cell->extraYCells()) );
                     m_rctAutoFillSrc.setCoords( markerColumn(), markerRow(),
                                                 markerColumn(), markerRow() );
                 }
@@ -1038,8 +1036,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
                 m_eMouseAction = ResizeCell;
                 KSpreadCell *cell = table->cellAt( markerColumn(), markerRow() );
                 selection.setCoords( markerColumn(), markerRow(),
-                                     markerColumn() + cell->extraXCells(),
-                                     markerRow() + cell->extraYCells() );
+                                     QMIN(KS_colMax, markerColumn() + cell->extraXCells()),
+                                     QMIN(KS_rowMax, markerRow()    + cell->extraYCells()) );
                 m_iMouseStartColumn = markerColumn();
                 m_iMouseStartRow = markerRow();
             }
@@ -1054,7 +1052,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     int row = table->topRow( _ev->pos().y(), ypos, this );
     int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
-    //you can move marker when col >KS_colMax or row >KS_rowMax
+    //you cannot move marker when col > KS_colMax or row > KS_rowMax
     if( col > KS_colMax || row > KS_rowMax){
 	kdDebug(36001) << "KSpreadCanvas::mousePressEvent: col or row is out of range: col: " << col << " row: " << row << endl;
 	return;
@@ -2166,31 +2164,31 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     int i_bottom=old_marker.bottom() ;
     //look at if column is hiding.
     //if it's hiding refreshing column+1 (or column -1 )
-    do
-    {
-        i_right++;
-        cl= activeTable()->nonDefaultColumnLayout( i_right );
-     }
-     while( cl->isHide() );
-    do
-    {
-        i_left--;
-        cl= activeTable()->nonDefaultColumnLayout( i_left );
-     }
-     while( cl->isHide() && i_left!=0);
+    if ( i_right < KS_colMax ) {
+	do {
+	    i_right++;
+	    cl = activeTable()->nonDefaultColumnLayout( i_right );
+	} while( cl->isHide() && i_right != KS_colMax );
+    }
+    if ( i_left > 1 ) {
+	do {
+	    i_left--;
+	    cl = activeTable()->nonDefaultColumnLayout( i_left );
+	} while( cl->isHide() && i_left != 1);
+    }
 
-    do
-    {
-        i_bottom++;
-        rl= activeTable()->nonDefaultRowLayout( i_bottom );
-     }
-     while( rl->isHide() );
-    do
-    {
-        i_top--;
-        rl= activeTable()->nonDefaultRowLayout( i_top );
-     }
-     while( rl->isHide() && i_top!=0);
+    if ( i_bottom < KS_rowMax ) {
+	do {
+	    i_bottom++;
+	    rl = activeTable()->nonDefaultRowLayout( i_bottom );
+	} while( rl->isHide() && i_bottom != KS_rowMax );
+    }
+    if ( i_top > 1 ) {
+	do {
+	    i_top--;
+	    rl = activeTable()->nonDefaultRowLayout( i_top );
+	} while( rl->isHide() && i_top != 1);
+    }
 
     /*old_marker_outer.setCoords( QMAX( 1, old_marker.left() - 1 ), QMAX( 1, old_marker.top() - 1 ),
                                 old_marker.right() + 1, old_marker.bottom() + 1 );*/
@@ -2216,31 +2214,32 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     i_left=old_sel.left() ;
     i_top=old_sel.top() ;
     i_bottom=old_sel.bottom() ;
-    do
-    {
-        i_right++;
-        cl= activeTable()->nonDefaultColumnLayout( i_right );
-     }
-     while( cl->isHide() );
-    do
-    {
-        i_left--;
-        cl= activeTable()->nonDefaultColumnLayout( i_left );
-     }
-     while( cl->isHide() && i_left!=0);
+    if ( i_right < KS_colMax ) {
+	do {
+	    i_right++;
+	    cl = activeTable()->nonDefaultColumnLayout( i_right );
+	} while( cl->isHide() && i_right != KS_colMax );
+    }
+    if ( i_left > 1 ) {
+	do {
+	    i_left--;
+	    cl = activeTable()->nonDefaultColumnLayout( i_left );
+	} while( cl->isHide() && i_left!=0);
+    }
 
-    do
-    {
-        i_bottom++;
-        rl= activeTable()->nonDefaultRowLayout( i_bottom );
-     }
-     while( rl->isHide() );
-    do
-    {
-        i_top--;
-        rl= activeTable()->nonDefaultRowLayout( i_top );
-     }
-     while( rl->isHide() && i_top!=0);
+    if (i_bottom < KS_rowMax) {
+	do {
+	    i_bottom++;
+	    rl = activeTable()->nonDefaultRowLayout( i_bottom );
+	} while( rl->isHide() && i_bottom != KS_rowMax );
+    }
+
+    if ( i_top > 1 ) {
+	do {
+	    i_top--;
+	    rl = activeTable()->nonDefaultRowLayout( i_top );
+ 	} while( rl->isHide() && i_top!=0);
+    }
     /*old_outer.setCoords( QMAX( 1, old_sel.left() - 1 ), QMAX( 1, old_sel.top() - 1 ),
                          old_sel.right() + 1, old_sel.bottom() + 1 );*/
     old_outer.setCoords( QMAX( 1, i_left-2  ),         QMAX( 1, i_top-2  ),
@@ -2842,7 +2841,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   {
     int h = table->rowLayout( row )->height( m_pCanvas );
     row++;
-    if ( row > KS_rowMax ) 
+    if ( row > KS_rowMax )
 	row = KS_rowMax;
     if ( _ev->pos().y() >= y + h - 1 && _ev->pos().y() <= y + h + 1
 	&& !(table->rowLayout( row )->isHide()&&row==1) )
