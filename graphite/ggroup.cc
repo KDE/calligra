@@ -70,7 +70,7 @@ GGroup::GGroup(const QDomElement &element) :
     }
 
     QDomElement e=children.firstChild().toElement();
-    for( ; !e.isNull(); e=children.nextSibling().toElement()) {
+    for( ; !e.isNull(); e=e.nextSibling().toElement()) {
 	const GObject *object=GObjectFactory::self()->create(e);
 	if(object!=0L) {
 	    if(object->isOk()) {
