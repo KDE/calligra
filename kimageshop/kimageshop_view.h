@@ -121,6 +121,7 @@ protected:
   virtual void resizeEvent(QResizeEvent* _ev);
 
   void viewLayerDialog();
+  void viewColorDialog();
 
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
   OpenPartsUI::ToolBar_var m_vToolBarTools;
