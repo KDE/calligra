@@ -1,21 +1,29 @@
 Coordinate systems
 ==================
-
+ 
 Just a quick note, to be expanded later.
-
-Document (pt values, in double)
-        |
-        | KWViewMode::normalToView
-        V
-View Mode (still pt values, in double)
-        |
-        | KWDocument::zoom*
-        V
-Zoom (pixel value, in int)
-That's also the KWCanvas (scrollview)'s contents coordinates.
-And for text framesets, there's also :
-        |
-        | KWTextFrameSet::contentsToInternal
-        V
+ 
+Document (pt values, in double, KoPoint, KoRect.)
+ |
+ |--KWDocument::zoom*
+ |
+Zoomed coordinates (pixel values, in int, QPoint, QRect) 
+This is also called the "Normal" coordinate system.
+ |         |
+ |         |--KWViewMode::normalToView
+ |         V
+ |    View Mode (pixels values, but e.g. pages are re-arranged)
+ |    That's also the KWCanvas (scrollview)'s contents coordinates.
+ |
+ |
+ |
+ | And for text framesets, there's also :
+ |
+ |--KWTextFrameSet::contentsToInternal
+ V
 Internal coordinates (pixel values for QRT)
-
+ 
+This last transformation doesn't depend on the view-mode arrangement,
+it's only about going from the frameset coord to the qrt internal coord,
+both being "one page below another".
+ 
