@@ -551,11 +551,19 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
     ulong & sentences, ulong & syllables, bool selected )
 {
     // parts of words for better counting of syllables:
+    // (only use reg exp if necessary -> speed up)
+
     QStringList subs_syl;
-    subs_syl << "cial" << "tia" << "cius" << "cious" << "giu" << "ion" << "iou" << "sia$" << "ely$";
+    subs_syl << "cial" << "tia" << "cius" << "cious" << "giu" << "ion" << "iou";
+    QStringList subs_syl_regexp;
+    subs_syl_regexp << "sia$" << "ely$";
+
     QStringList add_syl;
-    add_syl << "ia" << "riet" << "dien" << "iu" << "io" << "ii" << "[aeiouym]bl$" << "[aeiou]{3}"
-            << "^mc" << "ism$" << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
+    add_syl << "ia" << "riet" << "dien" << "iu" << "io" << "ii";
+    QStringList add_syl_regexp;
+    add_syl_regexp << "[aeiouym]bl$" << "[aeiou]{3}" << "^mc" << "ism$" 
+        << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
+
     QString s;
 
     Qt3::QTextParag * parag = textDocument()->firstParag();
@@ -609,7 +617,6 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
             QString word = *it;
             re.setPattern("[!?.,:_\"-]");    // clean word from punctuation
             word.replace(re, "");
-			//kdDebug(32002) << "word: " << word << endl;
             if ( word.length() <= 3 ) {  // extension to the original algorithm
                 syllables++;
                 continue;
@@ -620,13 +627,21 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
             QStringList syls = QStringList::split(re, word);
             int word_syllables = 0;
             for ( QStringList::Iterator it = subs_syl.begin(); it != subs_syl.end(); ++it ) {
+                if( word.find(*it, 0, false) != -1 )
+                    word_syllables--;
+            }
+            for ( QStringList::Iterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it ) {
                 re.setPattern(*it);
-                if( word.contains(re) )
+                if( word.find(re) != -1 )
                     word_syllables--;
             }
             for ( QStringList::Iterator it = add_syl.begin(); it != add_syl.end(); ++it ) {
+                if( word.find(*it, 0, false) != -1 )
+                    word_syllables++;
+            }
+            for ( QStringList::Iterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it ) {
                 re.setPattern(*it);
-                if( word.contains(re) )
+                if( word.find(re) != -1 )
                     word_syllables++;
             }
             word_syllables += syls.count();
