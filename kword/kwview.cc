@@ -175,6 +175,7 @@ void KWView::initConfig()
       changeNbOfRecentFiles(config->readNumEntry("NbRecentFile",10));
 
       doc->setShowRuler(config->readBoolEntry("Rulers",true));
+      doc->setAutoSave((config->readNumEntry("AutoSave",0))*60);
     }
 }
 
@@ -182,6 +183,7 @@ void KWView::changeNbOfRecentFiles(int _nb)
 {
     shell()->setMaxRecentItems( _nb );
 }
+
 
 /*=============================================================*/
 void KWView::initGui()

@@ -110,6 +110,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     double ptIndent = MM_TO_POINT(10.0);
     int m_iNumOfRecentFile=10;
     bool m_bShowRuler=true;
+    int m_iAutoSave=0;
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
@@ -118,8 +119,9 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
         ptIndent = config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0));
         m_iNumOfRecentFile=config->readNumEntry("NbRecentFile",10);
         m_bShowRuler=config->readBoolEntry("Rulers",true);
+        m_iAutoSave=config->readNumEntry("AutoSave",0);
     }
-
+    oldAutoSaveValue=m_iAutoSave;
     gridX=new KIntNumInput(m_iGridX, tmpQGroupBox , 10);
     gridX->setRange(1, 50, 1);
     gridX->setLabel(i18n("X grid space"));
@@ -163,6 +165,13 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     showRuler->setChecked(m_bShowRuler);
     lay1->addWidget(showRuler);
 
+    autoSave = new KIntNumInput( m_iAutoSave, tmpQGroupBox , 10);
+    autoSave->setRange(0, 60, 1);
+    autoSave->setLabel(i18n("Auto save (min):"));
+    autoSave->setSpecialValueText(i18n("No auto save"));
+    autoSave->setSuffix(i18n("min"));
+    lay1->addWidget(autoSave);
+
     box->addWidget( tmpQGroupBox);
 }
 
@@ -204,6 +213,13 @@ void configureInterfacePage::apply()
         doc->setShowRuler( ruler );
         doc->reorganizeGUI();
     }
+    int autoSaveVal=autoSave->value();
+    if(autoSaveVal!=oldAutoSaveValue)
+    {
+        config->writeEntry( "AutoSave", autoSaveVal );
+        doc->setAutoSave(autoSaveVal*60);
+    }
+
 
 
 }
@@ -217,6 +233,7 @@ void configureInterfacePage::slotDefault()
     indent->setValue( (int)newIndent );
     recentFiles->setValue(10);
     showRuler->setChecked(true);
+    autoSave->setValue(0);
 }
 
 #include "kwconfig.moc"

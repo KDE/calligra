@@ -52,9 +52,11 @@ private:
   KIntNumInput *gridX,*gridY;
   KIntNumInput *indent;
   KIntNumInput * recentFiles;
+  KIntNumInput*autoSave;
   QCheckBox *showRuler;
   int oldNbRecentFiles;
   KConfig* config;
+  int oldAutoSaveValue;
 };
 
 class KWConfig : public KDialogBase
