@@ -153,8 +153,26 @@ bool KChartPart::save( ostream& out, const char *_format ) {
   chart.setAttribute( "editor", "KChart" );
   chart.setAttribute( "mime", "application/x-kchart" );
   doc.appendChild( chart );
-  
-  
+  // now save the data
+  QDomElement data = doc.createElement("data");
+  data.setAttribute("rows", currentData.rows());
+  data.setAttribute("cols", currentData.cols());
+  for (int row = 0;row < currentData.rows();row++) {
+      for (int col = 0;col < currentData.cols();col++) {
+	// later we need a value 
+	cerr << "Row " << row << "\n";
+	KChartValue t = currentData.cell(row, col);
+	QDomElement e = doc.createElement("cell");
+	e.setAttribute("value", t.value.doubleValue());
+	  /*
+	  if ( e.isNull() )
+	      return e;
+	  */      	  
+	data.appendChild(e);
+      }
+  }
+  // now save the parameters
+  doc.appendChild(data);
 
   QBuffer buffer;
   buffer.open( IO_WriteOnly );
@@ -208,6 +226,9 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.5  1999/11/17 02:49:53  boloni
+ * -started implementing save and load.
+ *
  * Revision 1.4  1999/11/16 03:00:56  boloni
  * -enabling grid and label drawing. Some more small reorganizations
  * -one more page in the wizard.
