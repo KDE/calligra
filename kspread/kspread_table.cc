@@ -196,7 +196,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
   s_mapTables->insert( m_id, this );
 
   m_defaultLayout = new KSpreadLayout( this );
-  
+
   m_pMap = _map;
   m_pDoc = _map->doc();
   m_dcop = 0;
@@ -2135,14 +2135,14 @@ void KSpreadTable::borderRight( const QPoint &_marker,QColor _color )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left() == 0 )
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-    
+
     KSpreadUndoCellLayout *undo;
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
 	undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
 	m_pDoc->undoBuffer()->appendUndo( undo );
     }
-    
+
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
 	int x = r.right();
@@ -2152,7 +2152,7 @@ void KSpreadTable::borderRight( const QPoint &_marker,QColor _color )
    	cell->setRightBorderColor( _color );
     	cell->setRightBorderWidth( 2 );
     }
-    
+
     emit sig_updateView( this, r );
 }
 
@@ -2162,7 +2162,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, QColor _color )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-    
+
     KSpreadUndoCellLayout *undo;
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -4517,7 +4517,7 @@ bool KSpreadTable::saveChildren( KoStore* _store, const char *_path )
   for( ; it.current(); ++it )
   {
     QString path = QString( "%1/%2" ).arg( _path ).arg( i++ );
-    if ( !it.current()->document()->saveToStore( _store, "", path ) )
+    if ( !it.current()->document()->saveToStore( _store, path ) )
       return false;
   }
   return true;
@@ -4536,7 +4536,7 @@ KSpreadTable::~KSpreadTable()
     m_pPainter->end();
     delete m_pPainter;
     delete m_pWidget;
-    
+
     delete m_defaultLayout;
 }
 
@@ -4644,7 +4644,7 @@ void ChartChild::update()
 	m_pBinding->cellChanged( 0 );
 }
 
-bool ChartChild::save( ostream& out )
+bool ChartChild::save( QTextStream& out )
 {
     QString u = document()->url().url();
     QString mime = document()->mimeType();
@@ -4669,7 +4669,7 @@ bool ChartChild::loadTag( KOMLParser& parser, const string& tag, vector<KOMLAttr
 	// RECT
 	while( parser.open( 0L, tag2 ) )
 	{
-	    KOMLParser::parseTag( tag2.c_str(), name2, lst2 );
+	    parser.parseTag( tag2.c_str(), name2, lst2 );
 
 	    if ( name2 == "RECT" )
 		m_pBinding = new ChartBinding( m_table, tagToRect( lst2 ), this );

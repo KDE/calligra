@@ -155,7 +155,7 @@ public:
   void update();
 
   virtual bool loadDocument( KoStore* _store );
-  virtual bool save( ostream& out );
+  virtual bool save( QTextStream& out );
 
   KChartPart* chart();
 

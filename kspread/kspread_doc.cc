@@ -51,6 +51,7 @@
 #include <kconfig.h>
 #include <koTemplateChooseDia.h>
 #include <koFilterManager.h>
+#include <koStoreDevice.h>
 
 using namespace std;
 
@@ -159,7 +160,7 @@ bool KSpreadDoc::saveChildren( KoStore* _store, const char *_path )
   return m_pMap->saveChildren( _store, _path );
 }
 
-bool KSpreadDoc::save( ostream& out, const char* )
+QDomDocument KSpreadDoc::saveXML()
 {
   //Terminate current cell edition, if any
   KSpreadView *v;
@@ -224,32 +225,11 @@ bool KSpreadDoc::save( ostream& out, const char* )
   }
 
   QDomElement e = m_pMap->save( doc );
-  if ( e.isNull() )
-    return false;
   spread.appendChild( e );
-
-  // Save to buffer
-  QString buffer;
-  QTextStream str( &buffer, IO_WriteOnly );
-  str << doc;
-
-  // This is a terrible hack to store unicode
-  // data in a QCString in a way that
-  // QCString::length() == QCString().size().
-  // This allows us to treat the QCString like a QByteArray later on.
-  QCString s = buffer.utf8();
-  int len = s.length();
-  char tmp = s[ len - 1 ];
-  s.resize( len );
-  *( s.data() + len - 1 ) = tmp;
-
-  buffer = QString::null;
-
-  out.write( s.data(), s.size() );
 
   setModified( false );
 
-  return true;
+  return doc;
 }
 
 bool KSpreadDoc::loadChildren( KoStore* _store )
@@ -257,35 +237,9 @@ bool KSpreadDoc::loadChildren( KoStore* _store )
     return m_pMap->loadChildren( _store );
 }
 
-bool KSpreadDoc::load( istream& in, KoStore* store )
+bool KSpreadDoc::loadXML( const QDomDocument& doc )
 {
-    QBuffer buffer;
-    buffer.open( IO_WriteOnly );
-
-    char buf[ 4096 ];
-    int anz;
-    do
-    {
-	in.read( buf, 4096 );
-	anz = in.gcount();
-	buffer.writeBlock( buf, anz );
-    } while( anz > 0 );
-
-    buffer.close();
-
-    buffer.open( IO_ReadOnly );
-    QDomDocument doc;
-    doc.setContent( &buffer );
-
-    bool b = loadXML( doc, store );
-
-    buffer.close();
-
-    return b;
-}
-
-bool KSpreadDoc::loadXML( const QDomDocument& doc, KoStore* )
-{
+  kdDebug() << " loadXML" << endl;
   m_bLoading = TRUE;
 
   // <spreadsheet>
