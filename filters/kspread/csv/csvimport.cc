@@ -48,7 +48,7 @@ const bool CSVFilter::I_filter(const QString &file, KoDocument *document,
         kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
         return false;
     }
-    if(from!="text/x-csv" || to!="application/x-kspread")
+    if(from!="text/x-csv" && from!="text/plain" || to!="application/x-kspread")
     {
         kdWarning(30501) << "Invalid mimetypes " << from << " " << to << endl;
         return false;
