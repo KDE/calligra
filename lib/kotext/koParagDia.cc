@@ -83,21 +83,25 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, QWidget * parent,
 
 
     spnDepth = new QSpinBox( 0, 15, 1, gStyle );
-    grid->addWidget( spnDepth, 1, 2);
-
-    if ( !displayDepth )
+    if (  displayDepth )
+        grid->addWidget( spnDepth, 2, 2);
+    else
         spnDepth->hide();
+
     lCustom = new QLabel( gStyle, "lCustom" );
     lCustom->setText( i18n( "Custom character:" ) );
     grid->addWidget( lCustom, 3, 1);
 
     spnStart = new KoSpinBox( gStyle );
     spnStart->setMinValue ( 1);
-    grid->addWidget( spnStart, 2, 2);
+    grid->addWidget( spnStart, 1, 2);
 
     QLabel *lDepth = new QLabel( gStyle, "lDepth" );
     lDepth->setText( i18n( "Depth" ) );
-    grid->addWidget( lDepth, 2, 1);
+    if ( displayDepth )
+        grid->addWidget( lDepth, 2, 1);
+    else
+        lDepth->hide();
 
     connect( sSuffix, SIGNAL( textChanged (const QString &) ), this, SLOT( suffixChanged(const QString &) ) );
     connect( sPrefix, SIGNAL( textChanged (const QString &) ), this, SLOT( prefixChanged(const QString &) ) );
