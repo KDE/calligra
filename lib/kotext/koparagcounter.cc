@@ -672,7 +672,7 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
     {
         KoTextParag* p = parent( paragraph );
         int displayLevels = QMIN( m_displayLevels, m_depth+1 ); // can't be >depth+1
-        for ( int level = 1 ; level < displayLevels ; ++level )  {
+        for ( int level = 1 ; level < displayLevels ; ++level ) {
             //kdDebug() << "additional level=" << level << "/" << displayLevels-1 << endl;
             if ( p )
             {
@@ -683,18 +683,19 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
                     for ( unsigned i = 0; i < str.length(); i++ )
                         str[i] = ' ';
 
-                //kdDebug() << "levelText = " << str << endl;
+                str.append('.'); // hardcoded on purpose (like OO) until anyone complains
+
                 // Find the number of missing parents, and add dummy text for them.
                 int missingParents = m_depth - level - p->counter()->m_depth;
+                //kdDebug() << "levelText = " << str << " missingParents=" << missingParents << endl;
+                level += missingParents;
                 for ( ; missingParents > 0 ; --missingParents )
                     // Each missing level adds a "0"
-                    str.append('0' );
-
-                str.append('.'); // hardcoded on purpose (like OO) until anyone complains
+                    str.append( "0." );
 
                 m_cache.text.prepend( str );
                 // Prepare next iteration
-                if ( level < m_displayLevels ) // no need to calc it if we won't use it
+                if ( level < displayLevels ) // no need to calc it if we won't use it
                     p = counter->parent( p );
             }
             else // toplevel parents are missing

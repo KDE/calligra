@@ -126,7 +126,7 @@ QMap<KoParagStyle*, QString> KoStyleCollection::saveOasis( KoGenStyles& styles, 
 }
 
 
-KoParagStyle* KoStyleCollection::findStyle( const QString & _name )
+KoParagStyle* KoStyleCollection::findStyle( const QString & _name ) const
 {
     // Caching, to speed things up
     if ( m_lastStyle && m_lastStyle->name() == _name )
@@ -141,13 +141,13 @@ KoParagStyle* KoStyleCollection::findStyle( const QString & _name )
         }
     }
 
-    if(_name == "Standard") return m_styleList.at(0); // fallback..
+    if(_name == "Standard") return m_styleList.getFirst(); // fallback..
 
     return 0L;
 }
 
 
-KoParagStyle* KoStyleCollection::findStyleShortCut( const QString & _shortCut )
+KoParagStyle* KoStyleCollection::findStyleShortCut( const QString & _shortCut ) const
 {
     // Caching, to speed things up
     if ( m_lastStyle && m_lastStyle->shortCutName() == _shortCut )
@@ -224,6 +224,38 @@ void KoStyleCollection::updateStyleListOrder( const QStringList &list )
     }
 #endif
 }
+
+
+QValueVector<KoParagStyle *> KoStyleCollection::outlineStyles() const
+{
+    QValueVector<KoParagStyle *> lst( 10, 0 );
+    for ( int i = 0 ; i < 10 ; ++i ) {
+        KoParagStyle* style = outlineStyleForLevel( i );
+        if ( style )
+            lst[i] = style;
+    }
+    return lst;
+}
+
+
+KoParagStyle* KoStyleCollection::outlineStyleForLevel( int level ) const
+{
+    for( QPtrListIterator<KoParagStyle> p( m_styleList ); *p; ++p ) {
+        if ( (*p)->isOutline() && (*p)->paragLayout().counter ) {
+            int styleLevel = (*p)->paragLayout().counter->depth();
+            if ( styleLevel == level )
+                return *p;
+        }
+    }
+    return 0;
+}
+
+
+KoParagStyle* KoStyleCollection::defaultStyle() const
+{
+    return findStyle( "Standard" ); // includes the fallback to first style
+}
+
 
 /////////////
 
@@ -347,9 +379,7 @@ void KoParagStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
     int level = 0;
     bool listOK = false;
     if ( m_bOutline ) {
-        // OOo hack
-        //level = m_name.right(1).toInt(); // HACK
-        level = styleElem.attribute( "style:default-outline-level" ).toInt();
+        level = styleElem.attribute( "style:default-outline-level" ).toInt() - 1;
         listOK = context.pushOutlineListLevelStyle( level );
     }
     else {
@@ -362,7 +392,8 @@ void KoParagStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
         // into 10 kotext styles (at least those used by the document) [TODO]
         // 2) for KWord's own loading/saving, to add a hack into the file format, say
         // style:default-level.
-        level = styleElem.attribute( "style:default-level" ).toInt(); // defaults to 0, i.e. works for non-nested OOo lists too.
+        // Note that default-level defaults to "1", i.e. works for non-nested OOo lists too.
+        level = styleElem.attribute( "style:default-level", "1" ).toInt() - 1;
         const QString listStyleName = styleElem.attribute( "style:list-style-name" );
         listOK = !listStyleName.isEmpty();
         if ( listOK )
@@ -395,9 +426,9 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
     // TODO: check that this is correct
     if ( m_paragLayout.counter && m_paragLayout.counter->depth() ) {
         if ( m_bOutline )
-            gs.addAttribute( "style:default-outline-level", (int)m_paragLayout.counter->depth() );
+            gs.addAttribute( "style:default-outline-level", (int)m_paragLayout.counter->depth() + 1 );
         else
-            gs.addAttribute( "style:default-level", (int)m_paragLayout.counter->depth() );
+            gs.addAttribute( "style:default-level", (int)m_paragLayout.counter->depth() + 1 );
     }
 
     m_paragLayout.saveOasis( gs );

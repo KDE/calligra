@@ -24,6 +24,7 @@
 #include "koparaglayout.h"
 #include <qdom.h>
 #include <qptrlist.h>
+#include <qvaluevector.h>
 
 class KoGenStyles;
 class KoParagStyle;
@@ -50,8 +51,9 @@ public:
     ~KoStyleCollection();
     const QPtrList<KoParagStyle> & styleList() const { return m_styleList; }
 
-    KoParagStyle* findStyle( const QString & name );
-    KoParagStyle* findStyleShortCut( const QString & _shortCut );
+    KoParagStyle* findStyle( const QString & name ) const;
+    // ### TODO: rename findStyleByShortcut
+    KoParagStyle* findStyleShortCut( const QString & _shortCut ) const;
     /**
      * Return style number @p i.
      */
@@ -70,11 +72,23 @@ public:
     /// Return a the auto-name for each style, to be used when saving the document.
     QMap<KoParagStyle*, QString> saveOasis( KoGenStyles& styles, int styleType ) const;
 
+    /// @return the list of outline styles
+    QValueVector<KoParagStyle *> outlineStyles() const;
+
+    /// @return the [first] outline style for a given level. Can be 0 if not found.
+    KoParagStyle* outlineStyleForLevel( int level ) const;
+
+    /// @return the "default" format. There isn't really such a notion at the moment
+    /// (how would the user define it? etc.), and it's usually not needed, except
+    /// in very specific cases (e.g. in increaseOutlineLevel() for "not a heading")
+    /// The current implementation is to return Standard or the first one in the collection.
+    KoParagStyle* defaultStyle() const;
+
 private:
     QPtrList<KoParagStyle> m_styleList;
     QPtrList<KoParagStyle> m_deletedStyles;
     static int styleNumber;
-    KoParagStyle *m_lastStyle;
+    mutable KoParagStyle *m_lastStyle;
 };
 
 /**
@@ -155,18 +169,6 @@ public:
     /// Save the style to OASIS
     /// Don't use, use the method in KoStyleCollection instead
     QString saveStyle( KoGenStyles& genStyles, int styleType, const QString& parentStyleName ) const;
-
-    static int getAttribute(const QDomElement &element, const char *attributeName, int defaultValue)
-      {
-	QString value = element.attribute( attributeName );
-	return value.isNull() ? defaultValue : value.toInt();
-      }
-
-    static double getAttribute(const QDomElement &element, const char *attributeName, double defaultValue)
-      {
-	QString value = element.attribute( attributeName );
-	return value.isNull() ? defaultValue : value.toDouble();
-      }
 
     KoParagStyle * parentStyle() const {return m_parentStyle;}
     void setParentStyle( KoParagStyle *_style){ m_parentStyle = _style;}

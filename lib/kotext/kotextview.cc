@@ -1149,37 +1149,49 @@ bool KoTextView::rtl() const
     return m_cursor->parag()->string()->isRightToLeft();
 }
 
-//void KoTextView::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int marginIndex)
-KCommand* KoTextView::setParagLayoutFormatCommand( KoParagLayout *newLayout,int flags,int marginIndex)
+KCommand* KoTextView::setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex)
 {
-#if 0
-    KCommand *cmd =0L;
-    KoParagCounter c;
-    if(newLayout->counter)
-        c=*newLayout->counter;
-    switch(flags)
-    {
-    case KoParagLayout::Alignment:
-    {
-        cmd = textObject()->setAlignCommand( m_cursor, newLayout->alignment );
-        break;
-    }
-    case KoParagLayout::Tabulator:
-        cmd= textObject()->setTabListCommand( m_cursor, newLayout->tabList() );
-        break;
-    case KoParagLayout::Margins:
-        cmd= textObject()->setMarginCommand(m_cursor,(QStyleSheetItem::Margin)marginIndex, newLayout->margins[marginIndex] );
-        break;
-    case KoParagLayout::BulletNumber:
-        cmd= textObject()->setCounterCommand( m_cursor, c  );
-        break;
-    default:
-        break;
-    }
-    if (cmd)
-       textObject()->emitNewCommand( cmd );
-#endif
     return textObject()->setParagLayoutFormatCommand( m_cursor, KoTextDocument::Standard, newLayout, flags, marginIndex );
+}
+
+// Heading1 -> Heading2 -> Heading3 -> normal
+void KoTextView::increaseOutlineLevel( const KoStyleCollection* styleCollection )
+{
+    // TODO: do this for each paragraph in the selection
+    KoParagStyle* currentStyle = m_cursor->parag()->style();
+    if ( !currentStyle->isOutline() )
+        return;
+    int level = 0;
+    if ( currentStyle->paragLayout().counter )
+        level = currentStyle->paragLayout().counter->depth() + 1;
+    QValueVector<KoParagStyle *> outlineStyles = styleCollection->outlineStyles();
+    KoParagStyle* style = 0;
+    while ( level < 10 && !style ) {
+        style = outlineStyles[ level ];
+        ++level;
+    }
+    if ( !style ) // no lower-level heading exists, use standard style
+        style = styleCollection->defaultStyle();
+    if ( style ) // can't be 0
+        textObject()->applyStyle( m_cursor, style );
+}
+
+// normal -> Heading3 -> Heading2 -> Heading1
+void KoTextView::decreaseOutlineLevel( const KoStyleCollection* styleCollection )
+{
+    // TODO: do this for each paragraph in the selection
+    KoParagStyle* currentStyle = m_cursor->parag()->style();
+    int level = 9;
+    if ( currentStyle->isOutline() && currentStyle->paragLayout().counter )
+        level = currentStyle->paragLayout().counter->depth() - 1;
+    QValueVector<KoParagStyle *> outlineStyles = styleCollection->outlineStyles();
+    KoParagStyle* style = 0;
+    while ( level >= 0 && !style ) {
+        style = outlineStyles[ level ];
+        --level;
+    }
+    if ( style )
+        textObject()->applyStyle( m_cursor, style );
 }
 
 KCommand *KoTextView::setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type)
@@ -1384,6 +1396,5 @@ void KoTextView::removeLink()
             textObject()->emitNewCommand( cmd );
     }
 }
-
 
 #include "kotextview.moc"

@@ -130,6 +130,17 @@ public:
     static QCString saveOasisAlignment( Qt::AlignmentFlags alignment );
 
 private:
+    static int getAttribute(const QDomElement &element, const char *attributeName, int defaultValue) {
+        QString value = element.attribute( attributeName );
+        return value.isNull() ? defaultValue : value.toInt();
+    }
+
+    static double getAttribute(const QDomElement &element, const char *attributeName, double defaultValue) {
+        QString value = element.attribute( attributeName );
+        return value.isNull() ? defaultValue : value.toDouble();
+    }
+
+private:
     KoTabulatorList m_tabList;
     double lineSpacing;
     class Private;
