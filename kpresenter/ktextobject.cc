@@ -980,7 +980,7 @@ QRect TxtParagraph::breakLines( int wid, bool regExpMode , bool composerMode )
     linePtr = toOneLine();
     //debug( " concat lines end" );
 
-    if ( regExpMode && regExpList && !composerMode ) 
+    if ( regExpMode && regExpList && !composerMode )
 	;
 
     line = new TxtLine();
@@ -1001,7 +1001,7 @@ QRect TxtParagraph::breakLines( int wid, bool regExpMode , bool composerMode )
 	    obj = linePtr->itemAt( i );
 
 	    // if the object fits into the line or is a separator
-	    // ( separators have always to be appended, never insert a separator as first char in a line -> 
+	    // ( separators have always to be appended, never insert a separator as first char in a line ->
 	    //looks ugly! )
 	    if ( w + widthToNextSep( i ) <= wid ) { // || obj->type() == TxtObj::SEPARATOR )
 		line->append( obj );
@@ -1036,7 +1036,7 @@ void TxtParagraph::break_Lines( int wid, bool regExpMode, bool composerMode )
 {
     linePtr = toOneLine();
 
-    if ( regExpMode && regExpList && !composerMode ) 
+    if ( regExpMode && regExpList && !composerMode )
 	;
 
     line = new TxtLine();
@@ -1048,7 +1048,7 @@ void TxtParagraph::break_Lines( int wid, bool regExpMode, bool composerMode )
 	    obj = linePtr->itemAt( i );
 
 	    // if the object fits into the line or is a separator
-	    // ( separators have always to be appended, never insert a separator as first char in a line -> 
+	    // ( separators have always to be appended, never insert a separator as first char in a line ->
 	    //looks ugly! )
 	    if ( w + charsToNextSep( i ) <= wid ) { // || obj->type() == TxtObj::SEPARATOR )
 		line->append( obj );
@@ -1596,7 +1596,7 @@ void KTextObject::zoom( float _fakt )
 	txtParagraph->setOrigSpacings( txtParagraph->getLineSpacing(),
 				       txtParagraph->getDistBefore(),
 				       txtParagraph->getDistAfter() );
-	txtParagraph->setLineSpacing( static_cast<int>( static_cast<float>( txtParagraph->getLineSpacing() ) 
+	txtParagraph->setLineSpacing( static_cast<int>( static_cast<float>( txtParagraph->getLineSpacing() )
 							* _fakt ) );
 	txtParagraph->setDistBefore( static_cast<int>( static_cast<float>( txtParagraph->getDistBefore() ) * _fakt ) );
 	txtParagraph->setDistAfter( static_cast<int>( static_cast<float>( txtParagraph->getDistAfter() ) * _fakt ) );
@@ -2381,7 +2381,7 @@ void KTextObject::deleteItem( int pos )
     int para, line;
     getPara( pos, line, para );
 
-    if ( para >= 0 && para < static_cast<int>( paragraphs() ) && line >= 0 && 
+    if ( para >= 0 && para < static_cast<int>( paragraphs() ) && line >= 0 &&
 	 line < static_cast<int>( paragraphAt( para )->lines() ) )
 	deleteItem( pos, line, para );
 }
@@ -2422,9 +2422,9 @@ void KTextObject::deleteItem( int pos, int line, int para )
     if ( para < static_cast<int>( paragraphs() ) && line < static_cast<int>( paragraphAt( para )->lines() ) &&
 	 pos < static_cast<int>( paragraphAt( para )->lineAt( line )->items() ) )
     {
-	txtCursor->setMaxPosition(txtCursor->maxPosition() - 
+	txtCursor->setMaxPosition(txtCursor->maxPosition() -
 				  paragraphAt(para)->lineAt(line)->itemAt(pos)->textLength());
-	txtCursor->setPositionAbs( txtCursor->positionAbs() - 
+	txtCursor->setPositionAbs( txtCursor->positionAbs() -
 				   paragraphAt( para )->lineAt( line )->itemAt( pos )->textLength() );
 	paragraphAt( para )->lineAt( line )->deleteItem( pos );
 	if ( paragraphAt( para )->lineAt( line )->items() == 0 )
@@ -2678,7 +2678,7 @@ void KTextObject::deleteRegion( TxtCursor *_startCursor, TxtCursor *_stopCursor 
     if ( pos > textLength() - 1 )
 	pos = textLength() - 1;
     txtCursor->setPositionAbs( pos );
-    
+
     recalc();
 
     repaint( false );
@@ -3783,11 +3783,11 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 	    }
 
 	    if ( objEnumListType.type == NUMBER )
-		sprintf( chr, "%s%d%s", objEnumListType.before.data(), getParagNum( paragraphPtr ) + 
+		sprintf( chr, "%s%d%s", objEnumListType.before.data(), getParagNum( paragraphPtr ) +
 			 objEnumListType.start,
 			 objEnumListType.after.data() );
 	    else
-		sprintf( chr, "%s%c%s", objEnumListType.before.data(), getParagNum( paragraphPtr ) + 
+		sprintf( chr, "%s%c%s", objEnumListType.before.data(), getParagNum( paragraphPtr ) +
 			 objEnumListType.start,
 			 objEnumListType.after.data() );
 	    p->setFont( objEnumListType.font );
@@ -3877,7 +3877,7 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 		    fm = QFontMetrics( p->font() );
 
 		    // check, if cursor should be drawn - if yes calculate it
-		    if ( drawCursor = !drawPic && !cursorDrawn && showCursor() && 
+		    if ( drawCursor = !drawPic && !cursorDrawn && showCursor() &&
 			 static_cast<int>( txtCursor->positionParagraph() ) == row &&
 			 txtCursor->positionLine() == i && txtCursor->positionInLine() >= chars &&
 			 txtCursor->positionInLine() <= chars+len )
@@ -3914,8 +3914,8 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 			txtCursor->setYPos( y + ry );
 			txtCursor->setHeight( c2.y() - c1.y() );
 			p->setPen( QPen( Qt::black, 1, SolidLine ) );
-			if ( p->font().italic() ) 
-			    c1.setX( c1.x() + static_cast<int>( static_cast<float>( linePtr->height( paragraphPtr ) ) 
+			if ( p->font().italic() )
+			    c1.setX( c1.x() + static_cast<int>( static_cast<float>( linePtr->height( paragraphPtr ) )
 								/ 3.732 ) );
 			p->drawLine( c1, c2 );
 			cursorDrawn = true;
@@ -4462,14 +4462,14 @@ void KTextObject::recalc( bool breakAllLines )
 
 	    if ( linebreak_width < 1 )
 	    {
-		paragraphPtr->breakLines( cellWidth( 0 ) - getLeftIndent( paragraphList.at() ), 
+		paragraphPtr->breakLines( cellWidth( 0 ) - getLeftIndent( paragraphList.at() ),
 					  regexpMode, composerMode );
 		cellWidths.at( 0 )->wh = width() - xstart;
 		if ( tableFlags() & Tbl_vScrollBar ) cellWidths.at( 0 )->wh -= verticalScrollBar()->width();
 	    }
 	    else
 	    {
-		paragraphPtr->break_Lines( linebreak_width - getLeftIndent( paragraphList.at() ), 
+		paragraphPtr->break_Lines( linebreak_width - getLeftIndent( paragraphList.at() ),
 					   regexpMode, composerMode );
 		_width = max(_width,static_cast<int>(paragraphPtr->width()));
 		cellWidths.at( 0 )->wh = _width;
@@ -4708,6 +4708,16 @@ void KTextObject::splitParagraph()
 /*======================= join paragraph =========================*/
 void KTextObject::joinParagraphs( int p1, int p2 )
 {
+    if ( p1 < 0 || p2 < 0 || p1 > paragraphs() - 1 || p2 > paragraphs() -1 ) {
+	qWarning( "KTextObject::joinParagraphs(): p1 or p2 out of range" );
+	return;
+    }
+    
+    if ( txtCursor->positionParagraph() > paragraphs() - 1 ) {
+	qWarning( "KTextObject::joinParagraphs(): txtCursor->positionParagraph() out of range" );
+	return;
+    }
+    
     _modified = true;
 
     int para1n = min(p1,p2);
@@ -4934,14 +4944,14 @@ bool KTextObject::insertChar( QChar c )
 		lin->splitObj( inLine );
 	}
 	if ( lin->getAfterObj( inLine ) != -1 &&
-	     lin->itemAt( lin->getAfterObj( inLine ) )->type() != TxtObj::SEPARATOR && 
+	     lin->itemAt( lin->getAfterObj( inLine ) )->type() != TxtObj::SEPARATOR &&
 	     sameEffects( lin->itemAt( lin->getAfterObj( inLine ) ) ) )
 	{
 	    objPos = lin->getAfterObj( inLine );
 	    lin->itemAt( objPos )->append( str.data() );
 	}
 	else if ( lin->getBeforeObj( inLine ) != -1 &&
-		  lin->itemAt( lin->getBeforeObj( inLine ) )->type() != TxtObj::SEPARATOR && 
+		  lin->itemAt( lin->getBeforeObj( inLine ) )->type() != TxtObj::SEPARATOR &&
 		  sameEffects( lin->itemAt( lin->getBeforeObj( inLine ) ) ) )
 	{
 	    objPos = lin->getBeforeObj( inLine );
@@ -5180,10 +5190,10 @@ bool KTextObject::selectionInObj( int para, int line, int item )
     {
 	bool start = false, stop = false;
 
-	if ( static_cast<int>( startCursor.positionParagraph() ) < para || 
+	if ( static_cast<int>( startCursor.positionParagraph() ) < para ||
 	     static_cast<int>( startCursor.positionParagraph() ) == para
 	     && static_cast<int>( startCursor.positionLine() ) < line ) start = true;
-	else if ( static_cast<int>( startCursor.positionParagraph() ) == para && 
+	else if ( static_cast<int>( startCursor.positionParagraph() ) == para &&
 		  static_cast<int>( startCursor.positionLine() ) == line )
 	{
 	    int startInLine = startCursor.positionInLine();
@@ -5200,10 +5210,10 @@ bool KTextObject::selectionInObj( int para, int line, int item )
 	    if ( startItem <= item ) start = true;
 	}
 
-	if ( static_cast<int>( stopCursor.positionParagraph() ) > para || 
+	if ( static_cast<int>( stopCursor.positionParagraph() ) > para ||
 	     static_cast<int>( stopCursor.positionParagraph() ) == para
 	     && static_cast<int>( stopCursor.positionLine() ) > line ) stop = true;
-	else if ( static_cast<int>( stopCursor.positionParagraph() ) == para && 
+	else if ( static_cast<int>( stopCursor.positionParagraph() ) == para &&
 		  static_cast<int>( stopCursor.positionLine() ) == line )
 	{
 	    int stopInLine = stopCursor.positionInLine();
@@ -5233,7 +5243,7 @@ bool KTextObject::selectFull( int para, int line, int item, int &sx, int &sw )
     bool select_full = true;
     int i, wid;
 
-    if ( static_cast<int>( startCursor.positionParagraph() ) == para && 
+    if ( static_cast<int>( startCursor.positionParagraph() ) == para &&
 	 static_cast<int>( startCursor.positionLine() ) == line )
     {
 	int startInLine = startCursor.positionInLine();
@@ -5259,7 +5269,7 @@ bool KTextObject::selectFull( int para, int line, int item, int &sx, int &sw )
 	}
     }
 
-    if ( static_cast<int>( stopCursor.positionParagraph() ) == para && 
+    if ( static_cast<int>( stopCursor.positionParagraph() ) == para &&
 	 static_cast<int>( stopCursor.positionLine() ) == line )
     {
 	wid = 0;
@@ -5294,7 +5304,7 @@ void KTextObject::redrawSelection( TxtCursor _startCursor, TxtCursor _stopCursor
     // should be rewritten - this is too slow
     drawLine = -1;
     drawParagraph = -1;
-    for ( int i = static_cast<int>( _startCursor.positionParagraph() ); 
+    for ( int i = static_cast<int>( _startCursor.positionParagraph() );
 	  i <= static_cast<int>( _stopCursor.positionParagraph() ); i++ )
 	updateCell( i, 0, false );
 }
@@ -5600,7 +5610,7 @@ void KTextObject::extendContents2Height()
 {
     if ( height() <= neededSize().height() )
 	return;
-    
+
     _modified = true;
 
     if ( paragraphList.count() == 1 ) {
