@@ -1,16 +1,6 @@
 [Desktop Entry]
 Type=Service
-Name=KWordHTMLImportFilter
-Comment=Reggie's KWord HTML Filter
-Comment[cs]=Reggieho HTML filtr
-Comment[de]=Reggies HTML-Filter für KWord
-Comment[eo]=HTML-filtrilo por la programo Vorto
-Comment[fi]=KWord HTML-suodin
-Comment[hu]=Reggie KWord HTML Szűrője
-Comment[ja]=Reggie's KWord Ascii Filter
-Comment[no]=Reggies KWord HTML-filter
-Comment[ro]=Filtru HTML KWord, de Reggie
-Comment[sl]=Reggijev filter iz KWord v HTML
+Name=KWord HTML Import Filter
 Export=application/x-kword
 ExportDescription=KWord
 Import=text/html
