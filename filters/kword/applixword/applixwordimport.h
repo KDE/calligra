@@ -23,10 +23,22 @@
 #include <qstring.h>
 #include <qfile.h>
 #include <qobject.h>
+#include <qtextstream.h>
 
 #include <koFilter.h>
 #include <koStore.h>
 
+typedef struct 
+{
+  int c;
+  int m;
+  int y;
+  int k;
+
+  int r;
+  int g;
+  int b;
+}t_mycolor;
 
 class APPLIXWORDImport : public KoFilter {
 
@@ -39,6 +51,10 @@ public:
     virtual const bool filter(const QString &fileIn, const QString &fileOut,
                               const QString &from, const QString &to,
                               const QString &config=QString::null);
+    QChar   specCharfind     (QChar , QChar );
+    QString readTagLine      (QTextStream &, QFile &);
+    void    replaceSpecial   (QString &);
+
 };
 #endif // APPLIXWORDIMPORT_H
 

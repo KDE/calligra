@@ -15,3 +15,7 @@ METASOURCES = AUTO
 
 service_DATA = kword_applixword_import.desktop
 servicedir = $(kde_servicesdir)
+
+install-data-hook:
+	-rm -r $(kde_mimedir)/application/x-applix.desktop
+

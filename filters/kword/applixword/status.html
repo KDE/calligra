@@ -43,25 +43,51 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>11 feb 2001</td>
+     <td>04 mar 2001</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
-     <td>- Can import simple text from ApplixWord documents</td>
-     <td>- Can convert all special characters</td>
+     <td>
+       - Can import simple text from Applix Word documents<BR>
+       - Can convert all special characters<BR>
+       - Tests the headline of the document<BR>
+       - Now read a line and not a single character<BR>
+       - Ignors text in style block.<BR>
+       - Ignors text in header/footer block<BR>
+       - Can detect embedded applix objects.<BR>
+       - Reads a full applix tagline for all lineread operations. It can be one or more lines to get one tag.<BR>
+       - Can differ betwen textstr end and(&quot;) and applix quotes (/&quot;).<BR>
+       - Can read the color block and converts cmyk to rgb.<BR>
+       - Font size, bold, italic, underline, fontcolor.<BR>
+     
+     </td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
-     <td>- Get format and style information and add this into kword</td>
+     <td>
+        - Get format and style information and add this into kword<BR>
+        - Textblock style, endof line - what is a paragraph<BR>
+        - Tabulators<BR>
+        - Fontfamily<BR>
+        - Header and footer<BR>
+        - Embedded applixwear objects<BR> 
+        - Linked objects - e.g. pictures<BR>
+        - add endoffile checking with dialog in do-while loops<BR>
+        - correct loadcontrol emiting (procent)<BR>
+     </td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>History</font></b></td>
-     <td>11 feb 2001: Converts all special characters
-     <td>25 nov 2000: Written a filter that only can filter text tags out of the applixword fileformat</td>
-    </tr>
+     <td>
+      11 feb 2001: Converts all special characters<BR>
+      25 nov 2000: Written a filter that only can filter text tags out of the applixword fileformat<BR>
+      03 mar 2000: Ignors text in style block<BR>
+      09 mar 2000: Textformats: fontsize, bold, etc.<BR>
+    </td>
+   </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Authors</font></b></td>
