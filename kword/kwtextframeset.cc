@@ -865,10 +865,15 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     //Hack. Fixing the parag rect from here, to add room for the CR formatting character
     if ( parag && m_doc->viewFormattingChars() )
     {
-        if ( static_cast<KWTextParag *>( parag )->isPageBreakParag() )
+        if ( static_cast<KWTextParag *>( parag )->hardFrameBreakAfter() )
         {
-            QTextFormat * lastFormat = parag->at( 0 )->format();
-            parag->setWidth( parag->rect().width() + 20 * lastFormat->width('-') );
+            QTextFormat * lastFormat = parag->at( parag->length() - 1 )->format();
+            // keep in sync with KWTextFrameSet::adjustFlow
+            QString str = i18n( "--- Frame Break ---" );
+            int width = 0;
+            for ( int i = 0 ; i < (int)str.length() ; ++i )
+                width += lastFormat->width( str, i );
+            parag->setWidth( parag->rect().width() + width );
         }
         else if ( parag->lineStartList().count() == 1 ) // don't use lines() here, parag not formatted yet
         {
@@ -2888,13 +2893,18 @@ void KWTextFrameSet::insertParagraph( QTextCursor *cursor, KWTextFormat *current
     doKeyboardAction( cursor, currentFormat, KWTextFrameSet::ActionReturn );
 }
 
-void KWTextFrameSet::insertPageBreakParag( QTextCursor *cursor, KWTextFormat *currentFormat )
+void KWTextFrameSet::insertFrameBreak( QTextCursor *cursor, KWTextFormat *currentFormat )
 {
-    insertParagraph( cursor, currentFormat );
+    // Ensure "Frame break" is at beginning of paragraph -> create new parag if necessary
+    if ( cursor->index() > 0 )
+        insertParagraph( cursor, currentFormat );
+
     KWTextParag *parag = static_cast<KWTextParag *>( cursor->parag() );
-    parag->setPageBreakParag( true );
+    parag->setPageBreaking( parag->pageBreaking() | KWParagLayout::HardFrameBreakAfter );
+
     if ( parag->next() == 0 )
         insertParagraph( cursor, currentFormat );
+
     setLastFormattedParag( parag );
     formatMore();
     emit repaintChanged( this );

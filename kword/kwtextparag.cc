@@ -40,7 +40,6 @@ KWTextParag::KWTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool
 {
     //kdDebug() << "KWTextParag::KWTextParag " << this << endl;
     m_item = 0L;
-    m_bPageBreak = false;
 }
 
 KWTextParag::~KWTextParag()
@@ -385,20 +384,22 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
             painter.save();
             QPen pen( cg.color( QColorGroup::Highlight ) ); // ## maybe make configurable ?
             painter.setPen( pen );
-            if ( isPageBreakParag() )
+            if ( hardFrameBreakAfter() )
             {
                 QTextFormat format = *lastFormat;
                 format.setColor( pen.color() );
                 // keep in sync with KWTextFrameSet::adjustFlow
-                QString str = "--------------------"; //i18n( "Frame Break" );
+                QString str = i18n( "--- Frame Break ---" );
                 int width = 0;
                 for ( int i = 0 ; i < (int)str.length() ; ++i )
                     width += lastFormat->width( str, i );
-                kdDebug() << "KWTextParag::drawParagString page-break width=" << width << endl;
-                QTextParag::drawParagString( painter, str, 0, str.length(), at( 0 )->x,
-                                             rect().y(), at( 0 )->ascent(), width, lastFormat->height(),
-                                             drawSelections, &format, 0, selectionStarts,
-                                             selectionEnds, cg, rightToLeft );
+                QColorGroup cg2( cg );
+                cg2.setColor( QColorGroup::Base, Qt::green );
+                int last = length() - 1;
+                QTextParag::drawParagString( painter, str, 0, str.length(), at( last )->x,
+                                             lastY, at( last )->ascent(), width, lastFormat->height(),
+                                             drawSelections, &format, last, selectionStarts,
+                                             selectionEnds, cg2, rightToLeft );
             }
             else
             {
@@ -1020,13 +1021,6 @@ void KWTextParag::setParagLayout( const KWParagLayout & layout, int flags )
     if ( flags == KWParagLayout::All )
         // Don't call setStyle from here, it would overwrite any paragraph-specific settings
         setStyle( layout.style );
-}
-
-void KWTextParag::setPageBreakParag( bool b )
-{
-     m_bPageBreak = b;
-     if ( m_bPageBreak )
-         setPageBreaking( pageBreaking() | KWParagLayout::HardFrameBreakAfter );
 }
 
 #ifndef NDEBUG

@@ -149,7 +149,7 @@ public:
     void pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected );
     void insertTOC( QTextCursor * cursor );
     void insertParagraph( QTextCursor * cursor, KWTextFormat * currentFormat );
-    void insertPageBreakParag( QTextCursor * cursor, KWTextFormat *currentFormat );
+    void insertFrameBreak( QTextCursor * cursor, KWTextFormat *currentFormat );
     void selectAll( bool select );
     void selectionChangedNotify( bool enableActions = true );
     QRect paragRect( QTextParag * parag ) const;
@@ -369,7 +369,7 @@ public:
     void drawCursor( bool b );
 
     void insertParagraph() { textFrameSet()->insertParagraph( cursor, m_currentFormat ); }
-    void insertPageBreakParag() { textFrameSet()->insertPageBreakParag( cursor, m_currentFormat ); }
+    void insertFrameBreak() { textFrameSet()->insertFrameBreak( cursor, m_currentFormat ); }
     void insertVariable( int type, int subtype = 0 );
     void insertCustomVariable( const QString &name);
     void insertVariable( KWVariable *var);

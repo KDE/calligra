@@ -43,7 +43,7 @@ KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, const QChar &
 }
 
 KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, const QString &_font, const QChar &_chr, bool _modal )
-    : KDialogBase( Plain, i18n("Select a character"), User1 | Cancel, User1 , parent, name, _modal )
+    : KDialogBase( Plain, i18n("Select a character"), User1 | Close, User1 , parent, name, _modal )
 {
     initDialog(_chr,_font,true);
 
