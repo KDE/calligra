@@ -2361,7 +2361,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     grid2->addWidget(tmpLabel,0,0);
 
     width = new KDoubleNumInput( grp );
-    width->setRange( 2.0, 400.0, 1.0 );
+    width->setRange( KoUnit::ptToUnit( 2.0, dlg->getTable()->doc()->getUnit()), KoUnit::ptToUnit( 400.0, dlg->getTable()->doc()->getUnit()), KoUnit::ptToUnit( 1.0, dlg->getTable()->doc()->getUnit()) );
     width->setPrecision ( 2 );
     width->setValue ( KoUnit::ptToUnit( dlg->widthSize, dlg->getTable()->doc()->getUnit() ) );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
@@ -2382,7 +2382,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     grid2->addWidget(tmpLabel,0,2);
 
     height=new KDoubleNumInput( grp );
-    height->setRange( 2.0, 400.0, 1.0 );
+    height->setRange( KoUnit::ptToUnit( 2.0, dlg->getTable()->doc()->getUnit()), KoUnit::ptToUnit( 400.0, dlg->getTable()->doc()->getUnit()), KoUnit::ptToUnit( 1.0, dlg->getTable()->doc()->getUnit()) );
     height->setPrecision( 2 );
     height->setValue( KoUnit::ptToUnit( dlg->heigthSize, dlg->getTable()->doc()->getUnit() ) );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
