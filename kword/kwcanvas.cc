@@ -544,13 +544,13 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
 
         kdDebug() << "KWCanvas::mmEditFrameResize old rect " << DEBUGRECT( *frame ) << endl;
 
-        if ( top && newTop != y && !fs->isAFooter() )
+        if ( top && newTop != y && !fs->isAHeader()/*!fs->isAFooter()*/ )
         {
             if (newBottom - y < minFrameHeight+5)
                 y = newBottom - minFrameHeight - 5;
             y = QMAX( y, doc->ptPageTop( frame->pageNum() ) );
             newTop = y;
-        } else if ( bottom && newBottom != y && !fs->isAHeader() )
+        } else if ( bottom && newBottom != y && !fs->isAFooter()/*!fs->isAHeader()*/ )
         {
             if (y - newTop < minFrameHeight+5)
                 y = newTop + minFrameHeight + 5;
