@@ -56,7 +56,7 @@ KWTableTemplatePreview::KWTableTemplatePreview( const QString& title, KWTableSty
     m_textdoc = new KWTextDocument( m_zoomHandler );
     tableTemplate = 0L;
     origTableTemplate = 0L;
-
+    m_disableRepaint = false;
     fillContents();
 }
 
@@ -427,8 +427,8 @@ void KWTableTemplatePreview::cbFirstRowChanged( bool enable )
     else
     if ( (!enable) && ( origTableTemplate->pTopRightCorner()==origTableTemplate->pFirstRow() ) )
         tableTemplate->setTopRightCorner( tableTemplate->pBodyCell() );
-
-    repaint( true );
+    if ( !m_disableRepaint )
+        repaint( true );
 }
 
 void KWTableTemplatePreview::cbFirstColChanged( bool enable )
@@ -450,7 +450,8 @@ void KWTableTemplatePreview::cbFirstColChanged( bool enable )
     if ( (!enable) && ( origTableTemplate->pBottomLeftCorner()==origTableTemplate->pFirstCol() ) )
         tableTemplate->setBottomLeftCorner( tableTemplate->pBodyCell() );
 
-    repaint( true );
+    if ( !m_disableRepaint )
+        repaint( true );
 }
 
 void KWTableTemplatePreview::cbLastRowChanged( bool enable )
@@ -472,7 +473,8 @@ void KWTableTemplatePreview::cbLastRowChanged( bool enable )
     if ( (!enable) && ( origTableTemplate->pBottomLeftCorner()==origTableTemplate->pLastRow() ) )
         tableTemplate->setBottomLeftCorner( tableTemplate->pBodyCell() );
 
-    repaint( true );
+    if ( !m_disableRepaint )
+        repaint( true );
 }
 
 void KWTableTemplatePreview::cbLastColChanged( bool enable )
@@ -494,7 +496,8 @@ void KWTableTemplatePreview::cbLastColChanged( bool enable )
     if ( (!enable) && ( origTableTemplate->pBottomRightCorner()==origTableTemplate->pLastCol() ) )
         tableTemplate->setBottomRightCorner( tableTemplate->pBodyCell() );
 
-    repaint( true );
+    if ( !m_disableRepaint )
+        repaint( true );
 }
 
 void KWTableTemplatePreview::cbBodyChanged( bool enable )
@@ -510,7 +513,9 @@ void KWTableTemplatePreview::cbBodyChanged( bool enable )
 
     delete oldTemplate;
 
-    repaint( true );
+    if ( !m_disableRepaint )
+        repaint( true );
+
 }
 
 
@@ -622,12 +627,14 @@ void KWTableTemplateSelector::initFormat( int _format)
 
 void KWTableTemplateSelector::initPreview()
 {
+    preview->disableRepaint(true);
     preview->cbFirstRowChanged( cbFirstRow->isChecked() );
     preview->cbFirstColChanged( cbFirstCol->isChecked(  ) );
     preview->cbLastRowChanged(cbLastRow->isChecked() );
     preview->cbLastColChanged( cbLastCol->isChecked() );
     preview->cbBodyChanged( cbBody->isChecked() );
-
+    preview->disableRepaint(false);
+    preview->repaint();
 }
 
 int KWTableTemplateSelector::getFormatType() const

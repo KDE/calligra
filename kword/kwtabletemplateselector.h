@@ -59,7 +59,7 @@ public:
     ~KWTableTemplatePreview();
     void setTableTemplate(KWTableTemplate *_tableTemplate);
     KWTableTemplate *getTableTemplate()const ;
-
+    void disableRepaint(bool _b) { m_disableRepaint =_b;}
 public slots:
     void cbFirstRowChanged( bool );
     void cbFirstColChanged( bool );
@@ -81,6 +81,8 @@ protected:
     KoZoomHandler *m_zoomHandler;
     KWTableTemplate *tableTemplate;
     KWTableTemplate *origTableTemplate;
+    //necessary when we init preview
+    bool m_disableRepaint;
 private:
     QString m_contents[2][5];
 
