@@ -61,7 +61,7 @@ void KWImportStyleDia::loadFile()
                             i18n("Import Style"));
         return;
     }
-    QMap<QString, QString>*m_insertStyle = new QMap<QString, QString>();
+    QMap<QString, QString>insertStyle;
 
     // ### TODO network transparency
     KoStore* store=KoStore::createStore( url.path(), KoStore::Read );
@@ -105,7 +105,7 @@ void KWImportStyleDia::loadFile()
                     QString name =sty->name();
                     if ( m_list.findIndex( name )!=-1 )
                         sty->setName(generateStyleName( sty->translatedName() + QString( "-%1")));
-                    m_insertStyle->insert( name, sty->name());
+                    insertStyle.insert( name, sty->name());
 
                     // followingStyle is set by KWDocument::loadStyleTemplates after loading all the styles
                     sty->setFollowingStyle( sty );
@@ -133,8 +133,8 @@ void KWImportStyleDia::loadFile()
                 unsigned int i=0;
                 for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
                     QString newName =*it;
-                    if ( m_insertStyle && m_insertStyle->contains( *it ) )
-                        newName = (*m_insertStyle)[ *it ];
+                    if ( insertStyle.contains( *it ) )
+                        newName = (insertStyle)[ *it ];
 
                     KWStyle * style = findStyle(newName);
                     if ( style )
@@ -158,7 +158,6 @@ void KWImportStyleDia::loadFile()
         }
         store->close();
     }
-    delete m_insertStyle;
     delete store;
 }
 
