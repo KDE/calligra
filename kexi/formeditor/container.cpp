@@ -239,7 +239,6 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 				for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 				{
-					kdDebug() << "moving widget " << w->name() << " by " << (mev->x() - m_grab.x()) << endl;
 					int tmpx = ( ( w->x() + mev->x() - m_grab.x()) / gridX ) * gridX;
 					int tmpy = ( ( w->y() + mev->y() - m_grab.y()) / gridY ) * gridY;
 					if((tmpx != w->x()) ||(tmpy != w->y()))

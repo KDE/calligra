@@ -44,7 +44,7 @@ class PropertyCommand : public KCommand
 {
 	public:
 		PropertyCommand(ObjectPropertyBuffer *buf, const QString &name, const QVariant &oldValue, const QVariant &value, const QString &property);
-		PropertyCommand(ObjectPropertyBuffer *buf, const QStringList &names, const QVariant &oldValue, const QVariant &value, const QString &property);
+		PropertyCommand(ObjectPropertyBuffer *buf, const QMap<QString, QVariant> &oldvalues, const QVariant &value, const QString &property);
 
 		virtual void execute();
 		virtual void unexecute();
@@ -55,25 +55,28 @@ class PropertyCommand : public KCommand
 
 	protected:
 		ObjectPropertyBuffer *m_buffer;
-		QStringList    m_names;
 		QVariant   m_value;
-		QVariant   m_oldvalue;
+		QMap<QString, QVariant> m_oldvalues;
 		QString    m_property;
 };
-/*
-class GeometryPropertyCommand : public PropertyCommand
+
+class GeometryPropertyCommand : public KCommand
 {
 	public:
-		GeometryPropertyCommand(ObjectPropertyBuffer *buf, const QStringList &names, const QVariant &oldValue, const QVariant &value);
+		GeometryPropertyCommand(ObjectPropertyBuffer *buf, const QStringList &names, QPoint oldPos);
 
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
 
+		void setPos(QPoint pos);
+
 	protected:
-		Form *m_form;
-		QMap<QString,QRect>  m_geometries;
-};*/
+		ObjectPropertyBuffer *m_buffer;
+		QStringList  m_names;
+		QPoint m_oldPos;
+		QPoint m_pos;
+};
 
 class LayoutPropertyCommand : public PropertyCommand
 {

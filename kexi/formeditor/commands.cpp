@@ -38,13 +38,13 @@ namespace KFormDesigner {
 // PropertyCommand
 
 PropertyCommand::PropertyCommand(ObjectPropertyBuffer *buf, const QString &wname, const QVariant &oldValue, const QVariant &value, const QString &property)
-  : KCommand(), m_buffer(buf), m_value(value), m_oldvalue(oldValue), m_property(property)
+  : KCommand(), m_buffer(buf), m_value(value), m_property(property)
 {
-	m_names.append(wname);
+	m_oldvalues.insert(wname, oldValue);
 }
 
-PropertyCommand::PropertyCommand(ObjectPropertyBuffer *buf, const QStringList &names, const QVariant &oldValue, const QVariant &value, const QString &property)
-  : KCommand(), m_buffer(buf), m_names(names), m_value(value), m_oldvalue(oldValue), m_property(property)
+PropertyCommand::PropertyCommand(ObjectPropertyBuffer *buf, const QMap<QString, QVariant> &oldvalues, const QVariant &value, const QString &property)
+  : KCommand(), m_buffer(buf), m_value(value), m_oldvalues(oldvalues), m_property(property)
 {}
 
 void
@@ -57,18 +57,17 @@ void
 PropertyCommand::execute()
 {
 	m_buffer->m_undoing = true;
-	QWidget *w = m_buffer->m_manager->activeForm()->objectTree()->lookup(m_names.first())->widget();
+	QWidget *w = m_buffer->m_manager->activeForm()->objectTree()->lookup(m_oldvalues.begin().key())->widget();
 	m_buffer->m_manager->activeForm()->setSelWidget(w);
 	m_buffer->setWidget(w);
 
-	if(m_names.count() >= 2)
+	if(m_oldvalues.count() >= 2)
 	{
-		QStringList::Iterator it = m_names.begin();
+		QMap<QString, QVariant>::Iterator it = m_oldvalues.begin();
 		++it;
-		for(; it != m_names.end(); ++it)
+		for(; it != m_oldvalues.end(); ++it)
 		{
-			QWidget *widg = m_buffer->m_manager->activeForm()->objectTree()->lookup(*it)->widget();
-			kdDebug() << "adding to the list of widgets " << widg->name() << endl;
+			QWidget *widg = m_buffer->m_manager->activeForm()->objectTree()->lookup(it.key())->widget();
 			m_buffer->m_manager->activeForm()->addSelectedWidget(widg);
 			m_buffer->addWidget(w);
 		}
@@ -82,34 +81,82 @@ void
 PropertyCommand::unexecute()
 {
 	m_buffer->m_undoing = true;
-	QWidget *w = m_buffer->m_manager->activeForm()->objectTree()->lookup(m_names.first())->widget();
+	QWidget *w = m_buffer->m_manager->activeForm()->objectTree()->lookup(m_oldvalues.begin().key())->widget();
 	m_buffer->m_manager->activeForm()->setSelWidget(w);
 	m_buffer->setWidget(w);
 
-	if(m_names.count() >= 2)
+	(*m_buffer)[m_property]->setValue(m_oldvalues.begin().data());
+	m_buffer->m_undoing = false;
+
+	if(m_oldvalues.count() >= 2)
 	{
-		QStringList::Iterator it = m_names.begin();
+		QMap<QString, QVariant>::Iterator it = m_oldvalues.begin();
 		++it;
-		for(; it != m_names.end(); ++it)
+		for(; it != m_oldvalues.end(); ++it)
 		{
-			QWidget *widg = m_buffer->m_manager->activeForm()->objectTree()->lookup(*it)->widget();
-			kdDebug() << "adding to the list of widgets " << widg->name() << endl;
+			QWidget *widg = m_buffer->m_manager->activeForm()->objectTree()->lookup(it.key())->widget();
 			m_buffer->m_manager->activeForm()->addSelectedWidget(widg);
-			m_buffer->addWidget(w);
+			m_buffer->addWidget(widg);
+			widg->setProperty(m_property.latin1(), it.data());
 		}
 	}
-
-	(*m_buffer)[m_property]->setValue(m_oldvalue);
-	m_buffer->m_undoing = false;
 }
 
 QString
 PropertyCommand::name() const
 {
-	if(m_names.count() >= 2)
+	if(m_oldvalues.count() >= 2)
 		return i18n("Change %1 of multiple widgets" ).arg(m_property);
 	else
-		return i18n("Change %1 of widget %2" ).arg(m_property).arg(m_names.first());
+		return i18n("Change %1 of widget %2" ).arg(m_property).arg(m_oldvalues.begin().key());
+}
+
+// GeometryPropertyCommand (for multiples widgets)
+
+GeometryPropertyCommand::GeometryPropertyCommand(ObjectPropertyBuffer *buf, const QStringList &names, QPoint oldPos)
+ : KCommand(), m_buffer(buf), m_names(names), m_oldPos(oldPos)
+{}
+
+void
+GeometryPropertyCommand::execute()
+{
+	m_buffer->m_undoing = true;
+	int dx = m_pos.x() - m_oldPos.x();
+	int dy = m_pos.y() - m_oldPos.y();
+
+	for(QStringList::Iterator it = m_names.begin(); it != m_names.end(); ++it)
+	{
+		QWidget *w = m_buffer->m_manager->activeForm()->objectTree()->lookup(*it)->widget();
+		w->move(w->x() + dx, w->y() + dy);
+	}
+	m_buffer->m_undoing = false;
+}
+
+void
+GeometryPropertyCommand::unexecute()
+{
+	m_buffer->m_undoing = true;
+	int dx = m_pos.x() - m_oldPos.x();
+	int dy = m_pos.y() - m_oldPos.y();
+
+	for(QStringList::Iterator it = m_names.begin(); it != m_names.end(); ++it)
+	{
+		QWidget *w = m_buffer->m_manager->activeForm()->objectTree()->lookup(*it)->widget();
+		w->move(w->x() - dx, w->y() - dy);
+	}
+	m_buffer->m_undoing = false;
+}
+
+void
+GeometryPropertyCommand::setPos(QPoint pos)
+{
+	m_pos = pos;
+}
+
+QString
+GeometryPropertyCommand::name() const
+{
+	return i18n("Move multiple widgets");
 }
 
 // LayoutPropertyCommand
@@ -132,7 +179,7 @@ LayoutPropertyCommand::execute()
 void
 LayoutPropertyCommand::unexecute()
 {
-	Container *m_container = m_form->objectTree()->lookup(m_names.first())->container();
+	Container *m_container = m_form->objectTree()->lookup(m_oldvalues.begin().key())->container();
 	m_container->setLayout(Container::NoLayout);
 	for(QMap<QString,QRect>::Iterator it = m_geometries.begin(); it != m_geometries.end(); ++it)
 	{
@@ -147,7 +194,7 @@ LayoutPropertyCommand::unexecute()
 QString
 LayoutPropertyCommand::name() const
 {
-	return i18n("Change layout of %1").arg(m_names.first());
+	return i18n("Change layout of %1").arg(m_oldvalues.begin().key());
 }
 
 

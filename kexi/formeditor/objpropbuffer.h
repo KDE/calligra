@@ -31,6 +31,7 @@ class Form;
 class FormManager;
 class Container;
 class PropertyCommand;
+class GeometryPropertyCommand;
 
 //! A buffer which holds the property of the selected widget
 /*! This class inherits KexiPropertyBuffer and holds the properties of the selected widget, which are shown in
@@ -115,11 +116,14 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		QPtrList<QWidget> m_widgets;
 		bool		m_multiple;
 		FormManager     *m_manager;
+
 		PropertyCommand	*m_lastcom;
+		GeometryPropertyCommand *m_lastgeocom;
 		bool		m_undoing;
 
 		friend class PropertyCommand;
 		friend class LayoutPropertyCommand;
+		friend class GeometryPropertyCommand;
 };
 
 }

@@ -22,6 +22,7 @@
 #include <qstrlist.h>
 #include <qmetaobject.h>
 #include <qvariant.h>
+#include <qevent.h>
 
 #include <klocale.h>
 
@@ -44,6 +45,7 @@ ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent
 	m_object = 0;
 	m_manager = manager;
 	m_lastcom = 0;
+	m_lastgeocom = 0;
 	m_undoing = false;
 
 	connect(this, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), this, SLOT(slotChangeProperty(KexiPropertyBuffer&, KexiProperty&)));
@@ -83,19 +85,16 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty 
 		}
 		else
 		{
-			if(property == "geometry")
-				return;
-
-			QStringList list;
 			QWidget *w;
-			for(w = m_widgets.first(); w; w = m_widgets.next())
-				list.append(w->name());
-
 			if(m_lastcom && m_lastcom->property() == prop.name() && !m_undoing)
 				m_lastcom->setValue(value);
 			else if(!m_undoing)
 			{
-				m_lastcom = new PropertyCommand(this, list, m_object->property(property.latin1()), value, prop.name());
+				QMap<QString, QVariant> list;
+				for(w = m_widgets.first(); w; w = m_widgets.next())
+					list.insert(w->name(), w->property(property.latin1()));
+
+				m_lastcom = new PropertyCommand(this, list, value, prop.name());
 				m_manager->activeForm()->commandHistory()->addCommand(m_lastcom, false);
 			}
 
@@ -122,6 +121,7 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 	m_widgets.append(widg);
 	m_multiple = false;
 	m_lastcom = 0;
+	m_lastgeocom = 0;
 	checkModifiedProp();
 	kdDebug() << "loading object = " << widg->name() << endl;
 
@@ -206,6 +206,7 @@ ObjectPropertyBuffer::addWidget(QWidget *widg)
 		m_widgets.append(widg);
 
 	m_lastcom = 0;
+	m_lastgeocom = 0;
 	QString classn;
 	if(m_object->className() == widg->className())
 		classn = m_object->className();
@@ -264,6 +265,21 @@ ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
 				return false;
 
 			(*this)["geometry"]->setValue(((QWidget*)o)->geometry());
+		}
+	}
+	else if(m_multiple && ev->type() == QEvent::Move)
+	{
+		if(m_lastgeocom && !m_undoing)
+			m_lastgeocom->setPos(static_cast<QMoveEvent*>(ev)->pos());
+		else if(!m_undoing)
+		{
+			QStringList list;
+			QWidget *w;
+			for(w = m_widgets.first(); w; w = m_widgets.next())
+				list.append(w->name());
+
+			m_lastgeocom = new GeometryPropertyCommand(this, list, static_cast<QMoveEvent*>(ev)->oldPos());
+			m_manager->activeForm()->commandHistory()->addCommand(m_lastgeocom, false);
 		}
 	}
 	return false;
