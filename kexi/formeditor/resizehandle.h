@@ -85,8 +85,10 @@ class KFORMEDITOR_EXPORT ResizeHandleSet: public QObject
 		void setWidget(QWidget *modify, bool editing = false);
 		QWidget *widget() const { return m_widget; }
 
+		void  raise();
+
 	private:
-		QGuardedPtr<ResizeHandle> handles[8];
+		QGuardedPtr<ResizeHandle> m_handles[8];
 		QGuardedPtr<QWidget> m_widget;
 		QGuardedPtr<Form>   m_form;
 		bool  m_editing;

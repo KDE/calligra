@@ -132,6 +132,10 @@ FormManager::createActions(KActionCollection *parent, KMainWindow *client)
 	m_pointer->setChecked(true);
 	actions.append(m_pointer);
 
+	m_snapToGrid = new KToggleAction(i18n("Snap to Grid"), QString::null, KShortcut(0), this, SLOT(slotSnapToGrid()), parent, "snap_to_grid");
+	m_snapToGrid->setChecked(true);
+	actions.append(m_snapToGrid);
+
 	// Create the Style selection action (with a combo box in toolbar and submenu items)
 	KSelectAction *m_style = new KSelectAction( i18n("Style"), CTRL + Key_S, this, SLOT(slotStyle()), parent, "change_style");
 	m_style->setEditable(false);
@@ -305,6 +309,12 @@ FormManager::stopDraggingConnection()
 	m_connection = 0;
 	m_drawingSlot = false;
 	m_pointer->setChecked(true);
+}
+
+bool
+FormManager::snapWidgetsToGrid()
+{
+	return m_snapToGrid->isChecked();
 }
 
 void

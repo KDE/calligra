@@ -42,6 +42,10 @@
    <Action name="library_widget_Line"/>
    <Action name="library_widget_Spring"/>
   </Menu>
+  <Menu name="format">
+  <text>&amp;Format</text>
+   <Action name="snap_to_grid"/>
+  </Menu>
   <Menu name="Debug">
    <text>&amp;Debug</text>
    <Action name="dtree"/>

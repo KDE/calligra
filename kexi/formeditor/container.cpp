@@ -253,12 +253,20 @@ Container::eventFilter(QObject *s, QEvent *e)
 			if((/*s == m_container &&*/ m_form->manager()->inserting()) || ((s == m_container) && !m_toplevel))
 			{
 				int tmpx,tmpy;
-				int gridX = m_form->gridX();
-				int gridY = m_form->gridY();
-				tmpx = int( (float)mev->x() / ((float)gridX) + 0.5 ); // snap to grid
-				tmpx *= gridX;
-				tmpy = int( (float)mev->y() / ((float)gridY) + 0.5 );
-				tmpy *= gridX;
+				if(!m_form->manager()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)))
+				{
+					tmpx = mev->x();
+					tmpy = mev->y();
+				}
+				else
+				{
+					int gridX = m_form->gridX();
+					int gridY = m_form->gridY();
+					tmpx = int( (float)mev->x() / ((float)gridX) + 0.5 ); // snap to grid
+					tmpx *= gridX;
+					tmpy = int( (float)mev->y() / ((float)gridY) + 0.5 );
+					tmpy *= gridX;
+				}
 
 				m_insertBegin = QPoint(tmpx, tmpy);
 				if(m_form->formWidget())
@@ -360,16 +368,25 @@ Container::eventFilter(QObject *s, QEvent *e)
 		case QEvent::MouseMove:
 		{
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
-			if(m_form->manager()->inserting() && ((mev->state() == LeftButton) || (mev->state() == (LeftButton|ControlButton))
-			 || (mev->state() == (LeftButton|ShiftButton)) ) ) // draw the insert rect
+			if(m_form->manager()->inserting() && ((mev->state() == LeftButton) || (mev->state() == (LeftButton|ControlButton)) ||
+			(mev->state() == (LeftButton|ControlButton|AltButton)) || (mev->state() == (LeftButton|ShiftButton)) ) )
+			// draw the insert rect
 			{
 				int tmpx,tmpy;
 				int gridX = m_form->gridX();
 				int gridY = m_form->gridY();
-				tmpx = int( (float) mev->x() / ((float)gridX) + 0.5);
-				tmpx *= gridX;
-				tmpy = int( (float)mev->y() / ((float)gridY) + 0.5);
-				tmpy *= gridX;
+				if(!m_form->manager()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)) )
+				{
+					tmpx = mev->x();
+					tmpy = mev->y();
+				}
+				else
+				{
+					tmpx = int( (float) mev->x() / ((float)gridX) + 0.5);
+					tmpx *= gridX;
+					tmpy = int( (float)mev->y() / ((float)gridY) + 0.5);
+					tmpy *= gridX;
+				}
 
 				int topx = (m_insertBegin.x() < tmpx) ? m_insertBegin.x() : tmpx;
 				int topy = (m_insertBegin.y() < tmpy) ? m_insertBegin.y() : tmpy;
@@ -415,7 +432,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 					m_form->formWidget()->drawRect(r, 1);
 				return true;
 			}
-			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton)) // draw the insert rect for the copied widget
+			else if(mev->state() == (LeftButton|ControlButton)) // draw the insert rect for the copied widget
 			{
 				if((s == m_container) || (m_form->selectedWidgets()->count() > 1))
 					return true;
@@ -425,7 +442,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 					m_form->formWidget()->drawRect(m_insertRect, 2);
 				return true;
 			}
-			else if(mev->state() == Qt::LeftButton && !m_form->manager()->inserting()) // we are dragging the widget(s) to move it
+			else if( ( (mev->state() == Qt::LeftButton) || (mev->state() == (LeftButton|ControlButton|AltButton)) )
+			  && !m_form->manager()->inserting()) // we are dragging the widget(s) to move it
 			{
 				QWidget *w = m_moving;
 				if(!m_toplevel && w == m_container) // no effect for form
@@ -444,8 +462,18 @@ Container::eventFilter(QObject *s, QEvent *e)
 							w = w->parentWidget();
 					}
 
-					int tmpx = ( ( w->x() + mev->x() - m_grab.x()) / gridX ) * gridX;
-					int tmpy = ( ( w->y() + mev->y() - m_grab.y()) / gridY ) * gridY;
+					int tmpx, tmpy;
+					if(!m_form->manager()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)) )
+					{
+						tmpx = w->x() + mev->x() - m_grab.x();
+						tmpy = w->y() + mev->y() - m_grab.y();
+					}
+					else
+					{
+						tmpx = int( float( w->x() + mev->x() - m_grab.x()) / float(gridX) ) * gridX;
+						tmpy = int( float( w->y() + mev->y() - m_grab.y()) / float(gridY) ) * gridY;
+					}
+
 					if((tmpx != w->x()) || (tmpy != w->y()))
 						w->move(tmpx,tmpy);
 				}
@@ -455,6 +483,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 					m_moving->move(tmpx,tmpy);*/
 				m_move = true;
 			}
+
 			return true; // eat
 		}
 		case QEvent::Paint: // Draw the dotted background

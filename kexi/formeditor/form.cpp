@@ -163,6 +163,8 @@ Form::setSelectedWidget(QWidget *w, bool add)
 	while(wtmp && wtmp->parentWidget() && (wtmp != m_topTree->widget()))
 	{
 		wtmp->raise();
+		if(m_resizeHandles[ wtmp->name() ])
+			m_resizeHandles[ wtmp->name() ]->raise();
 		wtmp = wtmp->parentWidget();
 	}
 
@@ -227,7 +229,11 @@ Form::changeName(const QString &oldname, const QString &newname)
 		(*(m_manager->buffer()))["name"]->setValue(oldname);
 	}
 	else
+	{
 		m_connBuffer->fixName(oldname, newname);
+		ResizeHandleSet *temp = m_resizeHandles.take(oldname);
+		m_resizeHandles.insert(newname, temp);
+	}
 
 }
 

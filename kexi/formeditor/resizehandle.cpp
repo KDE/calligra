@@ -24,6 +24,7 @@
 #include <qcursor.h>
 
 #include "form.h"
+#include "formmanager.h"
 #include "resizehandle.h"
 
 #define MINIMUM_WIDTH 10
@@ -114,7 +115,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 #ifndef Q_WS_WIN
 		#warning FIXME
 #endif
-	//int m_dotSpacing = 10;
+
 	int gridX = m_set->m_form->gridX();
 	int gridY = m_set->m_form->gridY();
 
@@ -129,10 +130,13 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 	int dummyx = ev->x() - m_x;
 	int dummyy = ev->y() - m_y;
 
-	dummyy = (int) ( ((float)dummyy) / ((float)gridY) + 0.5 );
-	dummyy *= gridY;
-	dummyx = (int) ( ((float)dummyx) / ((float)gridX) + 0.5 );
-	dummyx *= gridX;
+	if(m_set->m_form->manager()->snapWidgetsToGrid() && (ev->state() != (LeftButton|ControlButton|AltButton)))
+	{
+		dummyy = (int) ( ((float)dummyy) / ((float)gridY) + 0.5 );
+		dummyy *= gridY;
+		dummyx = (int) ( ((float)dummyx) / ((float)gridX) + 0.5 );
+		dummyx *= gridX;
+	}
 
 	switch (m_pos)
 	{
@@ -236,6 +240,8 @@ ResizeHandle::~ResizeHandle()
 {
 }
 
+/////////////// ResizeHandleSet //////////////////
+
 ResizeHandleSet::ResizeHandleSet(QWidget *modify, Form *form, bool editing)
 : QObject(modify->parentWidget()), /*m_widget(modify),*/ m_form(form)
 {
@@ -256,7 +262,7 @@ ResizeHandleSet::ResizeHandleSet(QWidget *modify, Form *form, bool editing)
 ResizeHandleSet::~ResizeHandleSet()
 {
 	for (int i = 0; i < 8; i++)
-		delete handles[i];
+		delete m_handles[i];
 }
 
 void
@@ -267,19 +273,26 @@ ResizeHandleSet::setWidget(QWidget *modify, bool editing)
 
 	if(m_widget)
 		for(int i = 0; i < 8; i++)
-			delete handles[i];
+			delete m_handles[i];
 
 	QWidget *parent = modify->parentWidget();
 	m_widget = modify;
 
-	handles[0] = new ResizeHandle(this, ResizeHandle::TopLeft, editing);
-	handles[1] = new ResizeHandle(this, ResizeHandle::TopCenter, editing);
-	handles[2] = new ResizeHandle(this, ResizeHandle::TopRight, editing);
-	handles[3] = new ResizeHandle(this, ResizeHandle::LeftCenter, editing);
-	handles[4] = new ResizeHandle(this, ResizeHandle::RightCenter, editing);
-	handles[5] = new ResizeHandle(this, ResizeHandle::BottomLeft, editing);
-	handles[6] = new ResizeHandle(this, ResizeHandle::BottomCenter, editing);
-	handles[7] = new ResizeHandle(this, ResizeHandle::BottomRight, editing);
+	m_handles[0] = new ResizeHandle(this, ResizeHandle::TopLeft, editing);
+	m_handles[1] = new ResizeHandle(this, ResizeHandle::TopCenter, editing);
+	m_handles[2] = new ResizeHandle(this, ResizeHandle::TopRight, editing);
+	m_handles[3] = new ResizeHandle(this, ResizeHandle::LeftCenter, editing);
+	m_handles[4] = new ResizeHandle(this, ResizeHandle::RightCenter, editing);
+	m_handles[5] = new ResizeHandle(this, ResizeHandle::BottomLeft, editing);
+	m_handles[6] = new ResizeHandle(this, ResizeHandle::BottomCenter, editing);
+	m_handles[7] = new ResizeHandle(this, ResizeHandle::BottomRight, editing);
+}
+
+void
+ResizeHandleSet::raise()
+{
+	for(int i = 0; i < 8; i++)
+		m_handles[i]->raise();
 }
 
 }

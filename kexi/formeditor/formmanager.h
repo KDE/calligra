@@ -128,6 +128,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		void  emitCreateSlot(const QString &widget, const QString &value) { emit createFormSlot(m_active, widget, value); }
 
+		bool  snapWidgetsToGrid();
+
 	public slots:
 		/*! Creates a new blank Form with default class top widget (ie QWidget). The new Form is shown and becomes
 		   the active Form.
@@ -250,7 +252,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		// Actions
 		KActionCollection	*m_collection;
 		KMainWindow 		*m_client;
-		KToggleAction		*m_pointer, *m_dragConnection;
+		KToggleAction		*m_pointer, *m_dragConnection, *m_snapToGrid;
 
 		//! Used to delayed widgets deletion
 		QTimer m_deleteWidgetLater_timer;
