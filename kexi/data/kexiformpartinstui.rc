@@ -35,6 +35,7 @@
    <Action name="library_widget_QGroupBox"/>
    <Action name="library_widget_KTabWidget"/>
    <Separator/>
+   <Action name="library_widget_KexiSubForm"/>
    <Action name="library_widget_QLabel"/>
    <Action name="library_widget_MyPicLabel"/>
    <Action name="library_widget_KLineEdit"/>

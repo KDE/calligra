@@ -3,7 +3,7 @@ Encoding=UTF-8
 Type=Service
 ServiceTypes=KFormDesigner/WidgetFactory
 
-Name=stdwidgets
+Name=Basic Widgets
 Name[bg]=графични обекти
 Name[ca]=estris estàndard
 Name[cy]=celfigionstd

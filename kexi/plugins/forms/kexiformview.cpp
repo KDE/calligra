@@ -173,8 +173,8 @@ KexiFormScrollView::~KexiFormScrollView()
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, bool preview/*, KexiDB::Connection *conn*/)
- : KexiViewBase(win, parent, name), m_preview(preview), m_buffer(0)
+KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, bool preview, KexiDB::Connection *conn)
+ : KexiViewBase(win, parent, name), m_preview(preview), m_buffer(0), m_conn(conn)
 {
 	QHBoxLayout *l = new QHBoxLayout(this);
 	l->setAutoAdd(true);
@@ -183,6 +183,7 @@ KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *nam
 	m_scrollView->show();
 
 	m_dbform = new KexiDBForm(m_scrollView->viewport(), name/*, conn*/);
+	m_dbform->resize(QSize(400, 300));
 	m_scrollView->setWidget(m_dbform);
 	m_scrollView->setResizingEnabled(!preview);
 

@@ -123,7 +123,7 @@ KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 	//KexiFormPart::TempData *tempData = static_cast<KexiFormPart::TempData*>(dialog->tempData());
 
 	KexiFormView *view = new KexiFormView(win, parent, item.name().latin1(), (viewMode == Kexi::DataViewMode)
-	/*, win->project()->dbConnection()*/ );
+	, win->project()->dbConnection() );
 
 	return view;
 }

@@ -1042,6 +1042,10 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 	if(form->objectTree())
 		form->objectTree()->rename(form->objectTree()->name(), wname);
 	form->setInteractiveMode(false);
+
+	QDict<QLabel>  *oldBuddies = 0;
+	if(m_buddies)  // save old buddies (for subforms)
+		oldBuddies = m_buddies;
 	m_buddies = new QDict<QLabel>();
 	m_currentItem = form->objectTree();
 
@@ -1060,7 +1064,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 		it.current()->setBuddy(item->widget());
 	}
 	delete m_buddies;
-	m_buddies = 0;
+	m_buddies = oldBuddies; // and restore it
 
 	form->setInteractiveMode(true);
 }

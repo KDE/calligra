@@ -3,7 +3,7 @@ Encoding=UTF-8
 Type=Service
 ServiceTypes=KFormDesigner/WidgetFactory
 
-Name=containers
+Name=Kexi DB Widgets
 Name[bg]=контейнери
 Name[ca]=contenidors
 Name[cs]=Kontejnery
@@ -30,10 +30,10 @@ Name[sl]=vsebovalci
 Name[sr]=контејнери
 Name[sr@Latn]=контејнери
 Name[sv]=Omgivande komponenter
-Name[ta]=கொள்கலன்கள் 
+Name[ta]=கொள்கலன்கள்
 Name[tg]=контейнерҳо
 Name[wa]=contneus
 Name[xx]=xxcontainersxx
 Name[zh_CN]=容器
 
-X-KDE-Library=containers
+X-KDE-Library=kexidbwidgets

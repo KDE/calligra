@@ -65,8 +65,10 @@ class KexiFormView : public KexiViewBase
 	Q_OBJECT
 
 	public:
-		KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, bool preview/*, KexiDB::Connection *conn*/);
+		KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, bool preview, KexiDB::Connection *conn);
 		~KexiFormView();
+
+		KexiDB::Connection*    connection() { return m_conn; }
 
 	protected slots:
 		void managerPropertyChanged(KexiPropertyBuffer *b);
@@ -105,6 +107,7 @@ class KexiFormView : public KexiViewBase
 		KexiFormScrollView   *m_scrollView;
 		bool   m_preview;
 		KexiPropertyBuffer  *m_buffer;
+		KexiDB::Connection  *m_conn;
 };
 
 #endif

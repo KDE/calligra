@@ -298,6 +298,14 @@ void
 WidgetFactory::changeText(const QString&)
 {}
 
+void
+WidgetFactory::readSpecialProperty(const QString &, QDomElement &, QWidget *, ObjectTreeItem *)
+{}
+
+void
+WidgetFactory::saveSpecialProperty(const QString &, const QString &, const QVariant&, QWidget *, QDomElement &,  QDomDocument &)
+{}
+
 WidgetFactory::~WidgetFactory()
 {
 }
