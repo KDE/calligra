@@ -46,6 +46,11 @@ k_dcop:
     virtual void extraStylist();
     virtual void extraCreateTemplate();
 
+    virtual void insertTable();
+    virtual void insertPicture();
+    virtual void formatPage();
+    virtual void toolsPart();	
+
 private:
     KWView *view;
 

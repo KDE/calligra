@@ -90,3 +90,23 @@ void KWordViewIface::extraCreateTemplate()
 {
     view->extraCreateTemplate();
 }
+
+void KWordViewIface::insertTable()
+{
+    view->insertTable();
+}
+
+void KWordViewIface::insertPicture()
+{
+    view->insertPicture();
+}
+
+void KWordViewIface::formatPage()
+{
+    view->formatPage();
+}
+
+void KWordViewIface::toolsPart()
+{
+    view->toolsPart();
+}
