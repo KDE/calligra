@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
+   Modified by Joseph wenninger, 2001
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -32,11 +34,18 @@
 
 #include <qtextstream.h>
 
+#include "serialletter_interface.h"
+
 class QListBox;
 class QPushButton;
 class QLineEdit;
 class QSpinBox;
 class KWDocument;
+
+//class KWSerialLetterDataBase;
+
+
+
 
 /******************************************************************
  *
@@ -48,32 +57,47 @@ class KWSerialLetterDataBase
 {
 public:
     KWSerialLetterDataBase( KWDocument *doc_ );
+    void showConfigDialog(QWidget *); // Select datasource type  and / or configure datasource
 
-    QString getValue( const QString &name, int record = -1 ) const;
-    void setValue( const QString &name, const QString &value, int record = -1 );
-    void appendRecord();
-    void addEntry( const QString &name );
-    void removeEntry( const QString &name );
-    void removeRecord( int i );
+    QString getValue( const QString &name, int record = -1 ) const;  //accesses the plugin
 
-    const QMap< QString, QString > &getRecordEntries() const {
-        return sampleRecord;
-    }
-    int getNumRecords() const {
-        return (int)db.count();
-    }
+    const QMap< QString, QString > &getRecordEntries() const; //accesses the plugin
+    int getNumRecords() const; //accesses the plugin
 
-    void save( QDomElement& parentElem );
-    void load( QDomElement& elem );
+    void save( QDomElement& parentElem ); // save some global config + plugin config
+    void load( QDomElement& elem ); // save some global config + plugin config
 
+    KWSerialLetterDataSource *loadPlugin(const QString& name);
 protected:
-    typedef QMap< QString, QString > DbRecord;
-    typedef QValueList< DbRecord > Db;
-
+    friend class KWSerialLetterConfigDialog;
     KWDocument *doc;
-    Db db;
-    DbRecord sampleRecord;
+    class KWSerialLetterDataSource *plugin;
+    QMap<QString, QString> emptyMap;
 
+};
+
+
+class KWSerialLetterConfigDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+   KWSerialLetterConfigDialog ( QWidget *parent, KWSerialLetterDataBase *db );
+   ~KWSerialLetterConfigDialog();
+   int action;
+protected:
+    QPushButton *edit;
+    QPushButton *create;
+    QPushButton *open;
+    QPushButton *preview;
+    QPushButton *document;
+    KWSerialLetterDataBase *db_;
+protected slots:
+    void slotEditClicked();
+    void slotCreateClicked();
+    void slotOpenClicked();
+    void slotPreviewClicked();
+    void slotDocumentClicked();
 };
 
 /******************************************************************
@@ -99,103 +123,6 @@ protected:
     QListBox *names;
     QVBox *back;
 
-};
-
-/******************************************************************
- *
- * Class: KWSerialLetterEditorListItem
- *
- ******************************************************************/
-
-class KWSerialLetterEditorListItem : public QListViewItem
-{
-public:
-    KWSerialLetterEditorListItem( QListView *parent );
-    KWSerialLetterEditorListItem( QListView *parent, QListViewItem *after );
-    virtual ~KWSerialLetterEditorListItem();
-
-    virtual void setText( int i, const QString &text );
-    virtual QString text( int i ) const;
-
-    void setup();
-    void update();
-
-protected:
-    QLineEdit *editWidget;
-
-};
-
-/******************************************************************
- *
- * Class: KWSerialLetterEditorList
- *
- ******************************************************************/
-
-class KWSerialLetterEditorList : public QListView
-{
-    Q_OBJECT
-
-public:
-    KWSerialLetterEditorList( QWidget *parent, KWSerialLetterDataBase *db_ );
-    virtual ~KWSerialLetterEditorList();
-
-    void updateItems();
-    void displayRecord( int i );
-
-    void setSorting( int, bool increasing = TRUE ) {
-        QListView::setSorting( -1, increasing );
-    }
-
-protected slots:
-    void columnSizeChange( int c, int os, int ns );
-    void sectionClicked( int c );
-
-protected:
-    KWSerialLetterDataBase *db;
-    int currentRecord;
-
-};
-
-/******************************************************************
- *
- * Class: KWSerialLetterEditor
- *
- ******************************************************************/
-
-class KWSerialLetterEditor : public KDialogBase
-{
-    Q_OBJECT
-
-public:
-    KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataBase *db_ );
-
-protected:
-    void resizeEvent( QResizeEvent *e );
-
-    QSpinBox *records;
-    KWSerialLetterEditorList *dbList;
-    QVBox *back;
-    KWSerialLetterDataBase *db;
-
-    QToolButton *first;
-    QToolButton *back_;
-    QToolButton *forward;
-    QToolButton *finish;
-    QToolButton *newRecord;
-    QToolButton *newEntry;
-    QToolButton *deleteRecord;
-    QToolButton *deleteEntry;
-
-protected slots:
-    void changeRecord( int i );
-    void addEntry();
-    void addRecord();
-    void removeEntry();
-    void removeRecord();
-    void firstRecord() { records->setValue(1); }
-    void prevRecord() { records->setValue(records->value()-1); }
-    void nextRecord() { records->setValue(records->value()+1); }
-    void lastRecord() { records->setValue(records->maxValue()); }
 };
 
 #endif

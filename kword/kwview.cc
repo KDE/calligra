@@ -1615,11 +1615,14 @@ void KWView::editCustomVars()
 
 void KWView::editSerialLetterDataBase()
 {
+	m_doc->getSerialLetterDataBase()->showConfigDialog(this);
+#if 0
     KWSerialLetterEditor *dia = new KWSerialLetterEditor( this, m_doc->getSerialLetterDataBase() );
     dia->exec();
     // Don't know if we really need this so it's commented out (SL)
     // m_gui->canvasWidget()->repaintAll( FALSE );
     delete dia;
+#endif
 }
 
 void KWView::viewTextMode()

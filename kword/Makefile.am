@@ -3,8 +3,9 @@ KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula \
 	$(KOTEXT_INCLUDES) $(all_includes)
 
+kde_module_LTLIBRARIES = libkwserialletter_interface.la libkwordpart.la
+
 ## The part
-kde_module_LTLIBRARIES = libkwordpart.la 
 libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
                 kwviewmode.cc \
 		kwtextparag.cc kwtextdocument.cc \
@@ -23,8 +24,13 @@ libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
 		kwinsertlink.cc
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell
+libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell ./libkwserialletter_interface.la
 libkwordpart_la_METASOURCES = AUTO
+
+## The serial letter interface library
+libkwserialletter_interface_la_SOURCES = serialletter_interface.cc
+libkwserialletter_interface_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
+libkwserialletter_interface_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = kword.la
@@ -50,7 +56,7 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/kword
 rc_DATA = kword.rc
 
-SUBDIRS = . toolbar templates dtd pics expression autocorrect
+SUBDIRS = . serialletter toolbar templates dtd pics expression autocorrect
 
 messages: rc.cpp
 	perl ../kspread/extracti18n expression/*.xml > xml_doc.cc

@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
+   Modified by Joseph wenninger, 2001
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -26,6 +28,7 @@
 #include <qheader.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
+#include <klocale.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -36,7 +39,12 @@
 #include "serialletter.moc"
 #include "variabledlgs.h"
 #include "kwutils.h"
+#include <kmainwindow.h>
 #include "defs.h"
+#include <klibloader.h>
+#include <qfile.h>
+#include <kstdaction.h>
+#include <kaction.h>
 
 /******************************************************************
  *
@@ -47,168 +55,187 @@
 KWSerialLetterDataBase::KWSerialLetterDataBase( KWDocument *doc_ )
     : doc( doc_ )
 {
+   plugin=loadPlugin("classic");
+}
+
+KWSerialLetterDataSource *KWSerialLetterDataBase::loadPlugin(const QString& name)
+{
+  if (!name.isEmpty())
+  {
+      // get the library loader instance
+
+      KLibLoader *loader = KLibLoader::self();
+
+      // try to load the library
+      QString libname("libkwserialletter_%1");
+      KLibrary *lib = loader->library(QFile::encodeName(libname.arg(name)));
+      if (lib)
+	{
+	  // get the create_ function
+	  QString factory("create_%1");
+	  void *create = lib->symbol(QFile::encodeName(factory.arg(name)));
+
+	  if (create)
+	    {
+	      // create the module
+	      KWSerialLetterDataSource * (*func)();
+	      func = (KWSerialLetterDataSource* (*)()) create;
+	      return  func();
+	    }
+
+       }
+      kdWarning() << "Couldn't load plugin " << name <<  endl;
+  }
+  else
+  	kdWarning()<< "No plugin name specified" <<endl;
+  return 0;
 }
 
 QString KWSerialLetterDataBase::getValue( const QString &name, int record ) const
 {
-    int num = record;
-    if ( num == -1 )
-        num = doc->getSerialLetterRecord();
-
-    if ( num < 0 || num > (int)db.count() )
-        return name;
-
-    return db[ num ][ name ];
+	if (plugin)
+	{
+		if (record==-1) record=doc->getSerialLetterRecord();
+		return plugin->getValue(name,record);
+	}
+	else
+		return QString("");
 }
 
-void KWSerialLetterDataBase::setValue( const QString &name, const QString &value, int record )
+const QMap< QString, QString > &KWSerialLetterDataBase::getRecordEntries() const
 {
-    int num = record;
-    if ( num == -1 )
-        num = doc->getSerialLetterRecord();
-
-    if ( num < 0 || num > (int)db.count() )
-        return;
-
-    db[ num ][ name ] = value;
+	if (plugin)
+		return plugin->getRecordEntries();
+	else
+		return emptyMap;
 }
 
-void KWSerialLetterDataBase::appendRecord()
+int KWSerialLetterDataBase::getNumRecords() const
 {
-    DbRecord record( sampleRecord );
-    db.append( record );
+	if (plugin)
+		return plugin->getNumRecords();
+	else
+		return 0;
+
 }
 
-void KWSerialLetterDataBase::addEntry( const QString &name )
+
+void KWSerialLetterDataBase::showConfigDialog(QWidget *par)
 {
-    sampleRecord[ name ] = i18n( "No Value" );
-    Db::Iterator it = db.begin();
-    for ( ; it != db.end(); ++it )
-        ( *it )[ name ] = sampleRecord[ name ];
+	KWSerialLetterConfigDialog *dia=new KWSerialLetterConfigDialog(par,this);
+	if ( dia->exec() == QDialog::Accepted )
+	{
+		switch (dia->action)
+		{
+			case KWSLEdit:
+				break;
+			case KWSLCreate:
+			case KWSLOpen:
+				if (plugin) return plugin->showConfigDialog(par,dia->action);
+				break;
+			}
+	}
+	delete dia;
 }
 
-void KWSerialLetterDataBase::removeEntry( const QString &name )
-{
-    sampleRecord.remove( name );
-    Db::Iterator it = db.begin();
-    for ( ; it != db.end(); ++it )
-        ( *it ).remove( name );
-}
 
-void KWSerialLetterDataBase::removeRecord( int i )
-{
-    if ( i < 0 || i > (int)db.count() - 1 )
-        return;
-
-    Db::Iterator it = db.at( i );
-    db.remove( it );
-}
 
 void KWSerialLetterDataBase::save( QDomElement& /*parentElem*/ )
 {
-#if 0
-    out << otag << "<SAMPLE>" << endl;
-
-    DbRecord::Iterator it = sampleRecord.begin();
-    for ( ; it != sampleRecord.end(); ++it )
-        out << indent << "<ENTRY key=\"" << correctQString( it.key() )
-            << "\" value=\"" << correctQString( *it ) << "\"/>" << endl;
-
-    out << etag << "</SAMPLE>" << endl;
-
-    out << otag << "<DB>" << endl;
-    Db::Iterator it2 = db.begin();
-    for ( ; it2 != db.end(); ++it2 ) {
-        out << otag << "<RECORD>" << endl;
-        it = ( *it2 ).begin();
-        for ( ; it != ( *it2 ).end(); ++it ) {
-            out << indent << "<ENTRY key=\"" << correctQString( it.key() )
-                << "\" value=\"" << correctQString( *it ) << "\"/>" << endl;
-        }
-        out << etag << "</RECORD>" << endl;
-    }
-    out << etag << "</DB>" << endl;
-#endif
+//	if (plugin) plugin->save(parentElem); // Not completely sure, perhaps the database itself has to save something too (JoWenn)
 }
 
 void KWSerialLetterDataBase::load( QDomElement& /*elem*/ )
 {
-    db.clear();
-    sampleRecord.clear();
-
-#if 0
-    QString tag;
-    QString name;
-
-    while ( parser.open( QString::null, tag ) ) {
-        parser.parseTag( tag, name, lst );
-
-        if ( name == "SAMPLE" ) {
-            parser.parseTag( tag, name, lst );
-            while ( parser.open( QString::null, tag ) ) {
-                parser.parseTag( tag, name, lst );
-                if ( name == "ENTRY" ) {
-                    parser.parseTag( tag, name, lst );
-                    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-                    for( ; it != lst.end(); ++it ) {
-                        if ( ( *it ).m_strName == "key" )
-                            addEntry( ( *it ).m_strValue );
-                    }
-                } else
-                    kdError(32001) << "Unknown tag '" << name << "' in SAMPLE" << endl;
-
-                if ( !parser.close( tag ) ) {
-                    kdError(32001) << "Closing " << tag << endl;
-                    return;
-                }
-            }
-        } else if ( name == "DB" ) {
-            parser.parseTag( tag, name, lst );
-            while ( parser.open( QString::null, tag ) ) {
-                parser.parseTag( tag, name, lst );
-                if ( name == "RECORD" ) {
-                    parser.parseTag( tag, name, lst );
-                    appendRecord();
-                    while ( parser.open( QString::null, tag ) ) {
-                        parser.parseTag( tag, name, lst );
-                        if ( name == "ENTRY" ) {
-                            parser.parseTag( tag, name, lst );
-                            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-                            QString key;
-                            for( ; it != lst.end(); ++it ) {
-                                if ( ( *it ).m_strName == "key" )
-                                    key = ( *it ).m_strValue;
-                                else if ( ( *it ).m_strName == "value" )
-                                    setValue( key, ( *it ).m_strValue, db.count() - 1 );
-                            }
-                        } else
-                            kdError(32001) << "Unknown tag '" << name << "' in RECORD" << endl;
-
-                        if ( !parser.close( tag ) ) {
-                            kdError(32001) << "Closing " << tag << endl;
-                            return;
-                        }
-                    }
-                } else
-                    kdError(32001) << "Unknown tag '" << name << "' in DB" << endl;
-
-                if ( !parser.close( tag ) ) {
-                    kdError(32001) << "Closing " << tag << endl;
-                    return;
-                }
-            }
-        } else
-            kdError(32001) << "Unknown tag '" << name << "' in SERIALL" << endl;
-
-        if ( !parser.close( tag ) ) {
-            kdError(32001) << "Closing " << tag << endl;
-            return;
-        }
-    }
-#endif
+//	if (plugin) plugin->load(parentElem); // Not completely sure, perhaps the database itself has to load something too (JoWenn)
 }
 
+
 /******************************************************************
+ *
+ * Class: KWSerialLetterConfigDialog
+ *
+ ******************************************************************/
+
+KWSerialLetterConfigDialog::KWSerialLetterConfigDialog(QWidget *parent,KWSerialLetterDataBase *db)
+    : KDialogBase(Plain, i18n( "Serial Letter - Configuration" ), Close, Close, parent, "", true )
+{
+    db_=db;
+    QWidget *back = plainPage();
+    QVBoxLayout *layout=new QVBoxLayout(back);
+//    QVBox *back = new QVBox( page );
+    layout->setSpacing( 5 );
+    layout->setMargin( 5 );
+    layout->setAutoAdd(true);
+
+//    QVBox *row1 = new QVBox( back );
+//    row1->setSpacing( 5 );
+
+    QLabel *l = new QLabel( i18n( "Datasource:" ),back );
+    l->setMaximumHeight( l->sizeHint().height() );
+
+    QHBox *row1=new QHBox(back);
+    row1->setSpacing( 5 );
+    edit=new QPushButton(i18n("Edit current"),row1);
+    create=new QPushButton(i18n("Create new"),row1);
+    open=new QPushButton(i18n("Open existent"),row1);
+    QFrame *Line1 = new QFrame( back, "Line1" );
+    Line1->setFrameShape( QFrame::HLine );
+    Line1->setFrameShadow( QFrame::Sunken );
+    l = new QLabel( i18n( "Merging:" ),back );
+    l->setMaximumHeight( l->sizeHint().height() );
+    QHBox *row2=new QHBox(back);
+    row2->setSpacing( 5 );
+    preview=new QPushButton(i18n("Print preview"),row2);
+    document=new QPushButton(i18n("Create new document"),row2);
+
+    if (!db->plugin)
+    	{
+		preview->setEnabled(false);
+		document->setEnabled(false);
+		edit->setEnabled(false);
+	}
+
+    connect(edit,SIGNAL(clicked()), this, SLOT(slotEditClicked()));
+    connect(create,SIGNAL(clicked()),this,SLOT(slotCreateClicked()));
+    connect(open,SIGNAL(clicked()),this,SLOT(slotOpenClicked()));
+    connect(preview,SIGNAL(clicked()),this,SLOT(slotPreviewClicked()));
+    connect(document,SIGNAL(clicked()),this,SLOT(slotDocumentClicked()));
+}
+
+void KWSerialLetterConfigDialog::slotEditClicked()
+{action=KWSLEdit;
+ if (db_->plugin) db_->plugin->showConfigDialog((QWidget*)parent(),KWSLEdit);
+}
+
+void KWSerialLetterConfigDialog::slotCreateClicked()
+{action=KWSLCreate;done(QDialog::Accepted);}
+
+void KWSerialLetterConfigDialog::slotOpenClicked()
+{action=KWSLOpen;done(QDialog::Accepted);}
+
+void KWSerialLetterConfigDialog::slotPreviewClicked()
+{
+	action=KWSLMergePreview;
+	KMainWindow *mw=dynamic_cast<KMainWindow*>(((QWidget *)parent())->topLevelWidget());
+	if (mw)
+	{
+		KAction *ac=mw->actionCollection()->action(KStdAction::stdName(KStdAction::PrintPreview));
+		if (ac) ac->activate();
+		else kdWarning()<<"Toplevel doesn't provide a print preview action"<<endl;
+	}
+	else
+		kdWarning()<<"Toplevel is no KMainWindow->no preview"<<endl;
+}
+
+void KWSerialLetterConfigDialog::slotDocumentClicked()
+{action=KWSLMergeDocument;done(QDialog::Accepted);}
+
+KWSerialLetterConfigDialog::~KWSerialLetterConfigDialog()
+{
+}
+
+/******************************************************************KWSerialLetterConfigDialog()
  *
  * Class: KWSerialLetterVariableInsertDia
  *
@@ -253,308 +280,4 @@ void KWSerialLetterVariableInsertDia::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
     back->resize( size() );
-}
-
-/******************************************************************
- *
- * Class: KWSerialLetterEditorListItem
- *
- ******************************************************************/
-
-KWSerialLetterEditorListItem::KWSerialLetterEditorListItem( QListView *parent )
-    : QListViewItem( parent )
-{
-    editWidget = new QLineEdit( listView()->viewport() );
-    listView()->addChild( editWidget );
-}
-
-KWSerialLetterEditorListItem::KWSerialLetterEditorListItem( QListView *parent, QListViewItem *after )
-    : QListViewItem( parent, after )
-{
-    editWidget = new QLineEdit( listView()->viewport() );
-    listView()->addChild( editWidget );
-}
-
-KWSerialLetterEditorListItem::~KWSerialLetterEditorListItem()
-{
-    delete editWidget;
-}
-
-void KWSerialLetterEditorListItem::setText( int i, const QString &text )
-{
-    QListViewItem::setText( i, text );
-    if ( i == 1 )
-        editWidget->setText( text );
-}
-
-QString KWSerialLetterEditorListItem::text( int i ) const
-{
-    if ( i == 1 )
-        return editWidget->text();
-    return QListViewItem::text( i );
-}
-
-void KWSerialLetterEditorListItem::setup()
-{
-    setHeight( QMAX( listView()->fontMetrics().height(),
-                     editWidget->sizeHint().height() ) );
-    if ( listView()->columnWidth( 1 ) < editWidget->sizeHint().width() )
-        listView()->setColumnWidth( 1, editWidget->sizeHint().width() );
-}
-
-void KWSerialLetterEditorListItem::update()
-{
-    editWidget->resize( listView()->header()->cellSize( 1 ), height() );
-    listView()->moveChild( editWidget, listView()->header()->cellPos( 1 ),
-                           listView()->itemPos( this ) + listView()->contentsY() );
-    editWidget->show();
-}
-
-/******************************************************************
- *
- * Class: KWSerialLetterEditorList
- *
- ******************************************************************/
-
-KWSerialLetterEditorList::KWSerialLetterEditorList( QWidget *parent, KWSerialLetterDataBase *db_ )
-    : QListView( parent ), db( db_ )
-{
-    setSorting( -1 );
-    addColumn( i18n( "Name" ) );
-    addColumn( i18n( "Value" ) );
-    header()->setMovingEnabled( FALSE );
-    connect( header(), SIGNAL( sizeChange( int, int, int ) ),
-             this, SLOT( columnSizeChange( int, int, int ) ) );
-//     connect( header(), SIGNAL( sectionClicked( int ) ),
-//           this, SLOT( sectionClicked( int ) ) );
-    disconnect( header(), SIGNAL( sectionClicked( int ) ),
-                this, SLOT( changeSortColumn( int ) ) );
-
-    currentRecord = -1;
-}
-
-KWSerialLetterEditorList::~KWSerialLetterEditorList()
-{
-    if ( currentRecord == -1 )
-        return;
-
-    QListViewItemIterator lit( this );
-    QMap< QString, QString >::ConstIterator it = db->getRecordEntries().begin();
-    for ( ; it != db->getRecordEntries().end(); ++it ) {
-        QListViewItem *item = 0;
-        item = lit.current();
-        ++lit;
-        if ( currentRecord != -1 && item )
-            db->setValue( it.key(), item->text( 1 ), currentRecord );
-    }
-}
-
-void KWSerialLetterEditorList::columnSizeChange( int c, int, int )
-{
-    if ( c == 0 || c == 1 )
-        updateItems();
-}
-
-void KWSerialLetterEditorList::sectionClicked( int )
-{
-    updateItems();
-}
-
-void KWSerialLetterEditorList::updateItems()
-{
-    QListViewItemIterator it( this );
-    for ( ; it.current(); ++it )
-        ( (KWSerialLetterEditorListItem*)it.current() )->update();
-}
-
-void KWSerialLetterEditorList::displayRecord( int i )
-{
-    if ( i < 0 || i >= db->getNumRecords() )
-        return;
-
-    bool create = !firstChild();
-    QListViewItemIterator lit( this );
-    QMap< QString, QString >::ConstIterator it = db->getRecordEntries().begin();
-    QListViewItem *after = 0;
-    for ( ; it != db->getRecordEntries().end(); ++it ) {
-        QListViewItem *item = 0;
-        if ( create ) {
-            item = new KWSerialLetterEditorListItem( this, after );
-            item->setText( 0, it.key() );
-            after = item;
-        } else {
-            item = lit.current();
-            ++lit;
-            if ( currentRecord != -1 && item )
-                db->setValue( it.key(), item->text( 1 ), currentRecord );
-        }
-
-        if ( item )
-            item->setText( 1, db->getValue( it.key(), i ) );
-    }
-    updateItems();
-    currentRecord = i;
-}
-
-/******************************************************************
- *
- * Class: KWSerialLetterEditor
- *
- ******************************************************************/
-
-KWSerialLetterEditor::KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataBase *db_ )
-    : KDialogBase( Plain, i18n( "Serial Letter - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
-{
-    QWidget *page = plainPage();
-
-    back = new QVBox( page );
-    back->setSpacing( 5 );
-    back->setMargin( 5 );
-
-    QHBox *toolbar = new QHBox( back );
-
-    first = new QToolButton( toolbar );
-    first->setPixmap( BarIcon( "start" ) );
-    first->setFixedSize( first->sizeHint() );
-    connect(first, SIGNAL(clicked()), this, SLOT(firstRecord()));
-
-    back_ = new QToolButton( toolbar );
-    back_->setPixmap( BarIcon( "back" ) );
-    back_->setFixedSize( back_->sizeHint() );
-    connect(back_, SIGNAL(clicked()), this, SLOT(prevRecord()));
-
-    records = new QSpinBox( 1, db->getNumRecords(), 1, toolbar );
-    records->setMaximumHeight( records->sizeHint().height() );
-    connect( records, SIGNAL( valueChanged( int ) ),
-             this, SLOT( changeRecord( int ) ) );
-
-    forward = new QToolButton( toolbar );
-    forward->setPixmap( BarIcon( "forward" ) );
-    forward->setFixedSize( forward->sizeHint() );
-    connect(forward, SIGNAL(clicked()), this, SLOT(nextRecord()));
-
-    finish = new QToolButton( toolbar );
-    finish->setPixmap( BarIcon( "finish" ) );
-    finish->setFixedSize( finish->sizeHint() );
-    connect(finish, SIGNAL(clicked()), this, SLOT(lastRecord()));
-
-    QWidget *sep = new QWidget( toolbar );
-    sep->setMaximumWidth( 10 );
-
-    newRecord = new QToolButton( toolbar );
-    newRecord->setPixmap( KWBarIcon( "sl_addrecord" ) );
-    newRecord->setFixedSize( newRecord->sizeHint() );
-    connect( newRecord, SIGNAL( clicked() ),
-             this, SLOT( addRecord() ) );
-    QToolTip::add( newRecord, i18n( "Add Record" ) );
-
-    newEntry = new QToolButton( toolbar );
-    newEntry->setPixmap( KWBarIcon( "sl_addentry" ) );
-    newEntry->setFixedSize( newEntry->sizeHint() );
-    connect( newEntry, SIGNAL( clicked() ),
-             this, SLOT( addEntry() ) );
-    QToolTip::add( newEntry, i18n( "Add Entry" ) );
-
-    deleteRecord = new QToolButton( toolbar );
-    deleteRecord->setPixmap( KWBarIcon( "sl_delrecord" ) );
-    deleteRecord->setFixedSize( deleteRecord->sizeHint() );
-    connect( deleteRecord, SIGNAL( clicked() ),
-             this, SLOT( removeRecord() ) );
-    QToolTip::add( deleteRecord, i18n( "Remove Record" ) );
-
-    deleteEntry = new QToolButton( toolbar );
-    deleteEntry->setPixmap( KWBarIcon( "sl_delentry" ) );
-    deleteEntry->setFixedSize( deleteEntry->sizeHint() );
-    connect( deleteEntry, SIGNAL( clicked() ),
-             this, SLOT( removeEntry() ) );
-    QToolTip::add( deleteEntry, i18n( "Remove Entry" ) );
-
-    dbList = new KWSerialLetterEditorList( back, db );
-
-    if ( db->getNumRecords() > 0 ) {
-        records->setValue( 1 );
-        dbList->updateItems();
-    } else {
-        first->setEnabled(false);
-        back_->setEnabled(false);
-        forward->setEnabled(false);
-        finish->setEnabled(false);
-        newRecord->setEnabled(false);
-        deleteEntry->setEnabled(false);
-        deleteRecord->setEnabled(false);
-        records->setEnabled(true);
-    }
-    setInitialSize( QSize( 600, 400 ) );
-}
-
-void KWSerialLetterEditor::resizeEvent( QResizeEvent *e )
-{
-    QDialog::resizeEvent( e );
-    back->resize( size() );
-}
-
-void KWSerialLetterEditor::changeRecord( int i )
-{
-    dbList->displayRecord( i - 1 );
-}
-
-void KWSerialLetterEditor::addEntry()
-{
-    KWVariableNameDia
-        *dia = new KWVariableNameDia( this );
-    if ( dia->exec() == QDialog::Accepted ) {
-        if ( db->getNumRecords() == 0 ) {
-            first->setEnabled(true);
-            back_->setEnabled(true);
-            forward->setEnabled(true);
-            finish->setEnabled(true);
-            newRecord->setEnabled(true);
-            deleteEntry->setEnabled(true);
-            deleteRecord->setEnabled(true);
-            records->setEnabled(true);
-            addRecord();
-        }
-        dbList->clear();
-        db->addEntry( dia->getName() );
-        changeRecord( records->value() );
-        dbList->updateItems();
-    }
-    delete dia;
-}
-
-void KWSerialLetterEditor::addRecord()
-{
-    db->appendRecord();
-    records->setRange( records->minValue(), records->maxValue() + 1 );
-    records->setValue( db->getNumRecords() );
-}
-
-void KWSerialLetterEditor::removeEntry()
-{
-    if ( db->getNumRecords() == 0 )
-        return;
-
-    KWSerialLetterVariableInsertDia
-        *dia = new KWSerialLetterVariableInsertDia( this, db );
-    if ( dia->exec() == QDialog::Accepted ) {
-        dbList->clear();
-        db->removeEntry( dia->getName() );
-        changeRecord( records->value() + 1 );
-        dbList->updateItems();
-    }
-    delete dia;
-}
-
-void KWSerialLetterEditor::removeRecord()
-{
-    if ( db->getNumRecords() == 0 )
-        return;
-
-    db->removeRecord( records->value() - 1 );
-    if ( db->getNumRecords() > 0 ) {
-        records->setRange( records->minValue(), records->maxValue() - 1 );
-        records->setValue( 1 );
-        dbList->updateItems();
-    } else
-        records->setEnabled( FALSE );
 }
