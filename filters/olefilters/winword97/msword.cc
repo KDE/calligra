@@ -1424,6 +1424,7 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool 
     {
         for (unsigned i = 0; i < count; i++)
         {
+	    if (nFib > s_maxWord6Version) 
 //	    if (nFib > s_maxWord6Version || nFib == 1) 
 //	    {
 	    	bytes += MsWordGenerated::read(in + bytes, &char16);
