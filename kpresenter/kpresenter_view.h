@@ -325,6 +325,7 @@ protected slots:
     // dialog slots
     void backOk( bool );
     void afChooseOk( const QString & );
+    void slotAfchooseCanceled();
     void styleOk();
     void optionOk();
     void pgConfOk();

@@ -644,6 +644,8 @@ void KPresenterView::toolsAutoform()
     afChoose->setCaption( i18n( "KPresenter - Insert an Autoform" ) );
     QObject::connect( afChoose, SIGNAL( formChosen( const QString & ) ),
 		      this, SLOT( afChooseOk( const QString & ) ) );
+    QObject::connect( afChoose, SIGNAL( afchooseCanceled()),
+                      this,SLOT(slotAfchooseCanceled()));
     afChoose->show();
 }
 
@@ -2110,6 +2112,11 @@ void KPresenterView::afChooseOk( const QString & c )
     page->deSelectAllObj();
     page->setToolEditMode( INS_AUTOFORM );
     page->setAutoForm( fileName );
+}
+
+void KPresenterView::slotAfchooseCanceled()
+{
+    setTool( TEM_MOUSE );
 }
 
 /*=========== take changes for style dialog =====================*/

@@ -77,11 +77,13 @@ private slots:
   // autoform chosen
   void chosen();
 
+  void cancelClicked();
+
 signals:
 
   //autoform chosen
   void formChosen(const QString &);
-
+  void afchooseCanceled();
 };
 
 #endif //AFCHOOSE_H

@@ -47,6 +47,7 @@ AFChoose::AFChoose(QWidget *parent, const QString &caption, const char *name)
     getGroups();
     setupTabs();
     connect(this,SIGNAL(applyButtonPressed()),this,SLOT(chosen()));
+    connect(this,SIGNAL(cancelButtonPressed()),this,SLOT(cancelClicked()));
 }
 
 /*===================== destrcutor ===============================*/
@@ -182,6 +183,11 @@ void AFChoose::chosen()
                 emit formChosen(grpPtr->entries[grpPtr->loadWid->getCurrent()]);
         }
     }
+}
+
+void AFChoose::cancelClicked()
+{
+    emit afchooseCanceled();
 }
 
 #include <afchoose.moc>
