@@ -120,7 +120,7 @@ KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 	if (!dialog->tempData()) {
 		dialog->setTempData( new KexiFormPart::TempData(dialog) );
 	}
-	KexiFormPart::TempData *tempData = static_cast<KexiFormPart::TempData*>(dialog->tempData());
+//	KexiFormPart::TempData *tempData = static_cast<KexiFormPart::TempData*>(dialog->tempData());
 
 	KexiDBForm *view = 0;
 	view = new KexiDBForm(/*this, it, */win, parent, item.name().latin1(),

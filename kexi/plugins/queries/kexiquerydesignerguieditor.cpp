@@ -429,7 +429,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled, bool &dont
 }
 
 bool
-KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode, bool &cancelled)
+KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode, bool & /*cancelled*/)
 {
 	if (mode==Kexi::NoViewMode || (mode==Kexi::DataViewMode && !tempData()->query)) {
 		//this is not a SWITCH but fresh opening in this view mode
@@ -469,7 +469,7 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode, bool &cancelled)
 
 
 KexiDB::SchemaData*
-KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &/*cancel*/)
 {
 	buildSchema();
 	KexiQueryPart::TempData * temp = tempData();
@@ -672,7 +672,7 @@ KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString
 	return newItem;
 }
 
-void KexiQueryDesignerGuiEditor::slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e)
+void KexiQueryDesignerGuiEditor::slotDragOverTableRow(KexiTableItem * /*item*/, int /*row*/, QDragMoveEvent* e)
 {
 	if (e->provides("kexi/field")) {
 		e->acceptAction(true);
@@ -680,7 +680,7 @@ void KexiQueryDesignerGuiEditor::slotDragOverTableRow(KexiTableItem *item, int r
 }
 
 void
-KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem *item, int row, 
+KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem * /*item*/, int /*row*/, 
 	QDropEvent *ev, KexiTableItem*& newItem)
 {
 	//TODO: better check later if the source is really a table
@@ -706,7 +706,7 @@ void KexiQueryDesignerGuiEditor::slotRowInserted(KexiTableItem* item, uint row)
 	}
 }
 
-void KexiQueryDesignerGuiEditor::slotTableAdded(KexiDB::TableSchema &t)
+void KexiQueryDesignerGuiEditor::slotTableAdded(KexiDB::TableSchema & /*t*/)
 {
 	if (!d->slotTableAdded_enabled)
 		return;
@@ -714,14 +714,14 @@ void KexiQueryDesignerGuiEditor::slotTableAdded(KexiDB::TableSchema &t)
 	setDirty();
 }
 
-void KexiQueryDesignerGuiEditor::slotTableHidden(KexiDB::TableSchema &t)
+void KexiQueryDesignerGuiEditor::slotTableHidden(KexiDB::TableSchema & /*t*/)
 {
 	updateColumsData();
 	setDirty();
 }
 
 void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int colnum, 
-	QVariant newValue, KexiDB::ResultInfo* result)
+	QVariant newValue, KexiDB::ResultInfo* /*result*/)
 {
 	if (colnum==0) {//'field'
 		if (newValue.isNull()) {
