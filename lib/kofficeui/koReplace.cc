@@ -272,12 +272,13 @@ bool KoReplace::shouldRestart( bool forceAsking ) const
          && (m_options & KoReplaceDialog::PromptOnReplace) == 0 )
         return false;
     QString message;
-    if ( m_replacements )
-        message = i18n("1 replacement done.\n", "%n replacements done.\n", m_replacements );
+    if ( !m_replacements )
+        message = i18n("No text was replaced.");
     else
-        message = i18n("No replacement done.\n");
+        message = i18n("1 replacement done.", "%n replacements done.", m_replacements );
 
     // Hope this word puzzle is ok, it's a different sentence
+    message += "\n";
     message += i18n("Do you want to restart search at the beginning?");
 
     int ret = KMessageBox::questionYesNo( parentWidget(), message );
