@@ -6,7 +6,7 @@ if test -z "$LIBART_LIBS"; then
   echo ""
   all_tests=bad
 else
-  if test -z "$FONTCONFIG_LIBS"; then
+  if test -z "$LIBFONTCONFIG_LIBS"; then
     echo ""
     echo "You're missing fontconfig 1.0.1 or newer. karbon will not have text support."
     echo "You can download fontconfig from http://fontconfig.org/"
