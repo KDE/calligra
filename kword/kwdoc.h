@@ -48,6 +48,8 @@ class KoVariableFormatCollection;
 class KWVariableCollection;
 class KoTextObject;
 class KWBgSpellCheck;
+class KoStyleCollection;
+
 
 class DCOPObject;
 
@@ -252,7 +254,7 @@ public:
 
     void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd );
 
-    const QPtrList<KWStyle> & styleList() const { return m_styleList; }
+    const QPtrList<KWStyle> & styleList() const;
     /**
      * Look for a style named @p name. If not found, it will return 0L.
      */
@@ -260,7 +262,7 @@ public:
     /**
      * Return style number @p i.
      */
-    KWStyle* styleAt( int i ) { return m_styleList.at(i); }
+    KWStyle* styleAt( int i );
 
     QFont defaultFont() const { return m_defaultFont; }
 
@@ -566,11 +568,6 @@ private:
     KoPictureCollection m_imageCollection;
     KoPictureCollection m_clipartCollection;
     QPtrList<KWFrameSet> m_lstFrameSet;
-    QPtrList<KWStyle> m_styleList;
-    QPtrList<KWStyle> m_deletedStyles;
-
-    // Cached value for findStyle()
-    KWStyle *m_lastStyle;
 
     int m_pages;
     unsigned int m_itemsLoaded;
@@ -630,7 +627,7 @@ private:
     KWVariableCollection *m_varColl;
     KWBgSpellCheck *m_bgSpellCheck;
     KSpellConfig *m_pKSpellConfig;
-
+    KoStyleCollection *m_styleColl;
 };
 
 

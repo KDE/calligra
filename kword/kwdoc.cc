@@ -131,10 +131,10 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     dcop = 0;
     m_lstViews.setAutoDelete( false );
     m_lstChildren.setAutoDelete( true );
-    m_styleList.setAutoDelete( false );
-    m_deletedStyles.setAutoDelete( true );
 //    varFormats.setAutoDelete(true);
     m_lstFrameSet.setAutoDelete( true );
+
+    m_styleColl=new KoStyleCollection();
 
     setInstance( KWFactory::global(), false );
 
@@ -169,7 +169,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_headerVisible = false;
     m_footerVisible = false;
 
-    m_lastStyle = 0L;
     m_pixmapMap = 0L;
     m_clipartMap = 0L;
     m_pasteFramesetsMap = 0L;
@@ -251,6 +250,7 @@ KWDocument::~KWDocument()
     delete m_slDataBase;
     delete dcop;
     delete m_bgSpellCheck;
+    delete m_styleColl;
 }
 
 void KWDocument::initConfig()
@@ -1460,6 +1460,7 @@ void KWDocument::loadEmbedded( QDomElement embedded )
 void KWDocument::loadStyleTemplates( QDomElement stylesElem )
 {
     QValueList<QString> followingStyles;
+    QPtrList<KWStyle>m_styleList(m_styleColl->styleList());
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
@@ -1505,36 +1506,29 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
 
     unsigned int i=0;
     for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
-        KWStyle * style = findStyle(*it);
-        m_styleList.at(i++)->setFollowingStyle( style );
+        KWStyle * style = m_styleColl->findStyle(*it);
+        m_styleColl->styleAt(i++)->setFollowingStyle( style );
     }
 
+}
+
+const QPtrList<KWStyle> & KWDocument::styleList() const
+{
+    return m_styleColl->styleList();
+}
+
+KWStyle* KWDocument::styleAt( int i )
+{
+    return m_styleColl->styleAt(i);
 }
 
 KWStyle* KWDocument::addStyleTemplate( KWStyle * sty )
 {
-    // First check for duplicates.
-    for ( KWStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
-    {
-        if ( p->name() == sty->name() ) {
-            // Replace existing style
-            if ( sty != p )
-            {
-                *p = *sty;
-                delete sty;
-            }
-            return p;
-        }
-    }
-    m_styleList.append( sty );
-    return sty;
+    return m_styleColl->addStyleTemplate(sty);
 }
 
 void KWDocument::removeStyleTemplate ( KWStyle *style ) {
-    if( m_styleList.removeRef(style)) {
-        // Remember to delete this style when deleting the document
-        m_deletedStyles.append(style);
-    }
+    m_styleColl->removeStyleTemplate(style);
 }
 
 void KWDocument::progressItemLoaded()
@@ -1943,6 +1937,7 @@ QDomDocument KWDocument::saveXML()
 
     QDomElement styles = doc.createElement( "STYLES" );
     kwdoc.appendChild( styles );
+    QPtrList<KWStyle> m_styleList(m_styleColl->styleList());
     for ( KWStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
         saveStyle( p, styles );
 
@@ -2204,20 +2199,7 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
 
 KWStyle* KWDocument::findStyle( const QString & _name )
 {
-    // Caching, to speed things up
-    if ( m_lastStyle && m_lastStyle->name() == _name )
-        return m_lastStyle;
-
-    QPtrListIterator<KWStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-    {
-        if ( styleIt.current()->name() == _name ) {
-            m_lastStyle = styleIt.current();
-            return m_lastStyle;
-        }
-    }
-
-    return 0L;
+    return m_styleColl->findStyle(_name);
 }
 
 /* Update all views of this document, area can be cleared
