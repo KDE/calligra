@@ -31,7 +31,7 @@
 
 #include "kexitablepartproxy.h"
 #include "kexitablepart.h"
-#include "kexiprojectpartitem.h"
+#include "kexiprojecthandleritem.h"
 #include "kexidatatable.h"
 #include "kexialtertable.h"
 

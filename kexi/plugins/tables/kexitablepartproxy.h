@@ -22,7 +22,7 @@
 #define KEXITABLEPARTPROXY_H
 
 
-#include "kexiprojectpartproxy.h"
+#include "kexiprojecthandlerproxy.h"
 
 class KexiTablePart;
 class KexiView;

@@ -27,8 +27,9 @@ KexiViewIface::KexiViewIface( KexiView *view_ )
     view = view_;
 }
 
-
+/*
 void KexiViewIface::slotShowRelations()
 {
     view->slotShowRelations();
 }
+*/

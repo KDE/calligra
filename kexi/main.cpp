@@ -18,8 +18,8 @@
 #include <koApplication.h>
 #include <kcmdlineargs.h>
 #include <dcopclient.h>
-
-#include "kexi_aboutdata.h"
+#include <klocale.h>
+#include "core/kexi_aboutdata.h"
 
 static KCmdLineOptions options[] =
 {

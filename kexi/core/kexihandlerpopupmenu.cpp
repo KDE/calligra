@@ -19,7 +19,7 @@
 
 #include <kdebug.h>
 
-#include "kexipartpopupmenu.h"
+#include "kexihandlerpopupmenu.h"
 
 KexiPartPopupMenu::KexiPartPopupMenu(QObject *receiver)
 {
@@ -61,4 +61,4 @@ KexiPartPopupMenu::~KexiPartPopupMenu()
 {
 }
 
-#include "kexipartpopupmenu.moc"
+#include "kexihandlerpopupmenu.moc"

@@ -24,9 +24,9 @@
 #include <qobject.h>
 #include <qguardedptr.h>
 
-#include "kexiprojectpartproxy.h"
+#include "kexiprojecthandler.h"
 #include "kexiproject.h"
-#include "kexipartpopupmenu.h"
+#include "kexihandlerpopupmenu.h"
 #include "kexiview.h"
 
 class KexiProjectPartProxy : public QObject

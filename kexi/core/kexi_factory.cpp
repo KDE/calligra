@@ -24,14 +24,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-extern "C"
-{
-    void* init_libkexipart()
-    {
-        return new KexiFactory;
-    }
-};
-
 KInstance* KexiFactory::s_global = 0L;
 KAboutData* KexiFactory::s_aboutData = 0L;
 

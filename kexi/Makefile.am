@@ -1,19 +1,8 @@
 kde_module_LTLIBRARIES = libkexipart.la
-libkexipart_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
-	kexiinputtableedit.cpp kexidatetableedit.cpp kmultitabbar.cpp kexitabbrowser.cpp kexiwidget.cpp \
-	kexitableheader.cpp kexitablerm.cpp  kexitablelist.cpp kexitableitem.cpp kexitableview.cpp kexidatatable.cpp \
-	kexidialogbase.cpp kexibrowseritem.cpp kexiworkspaceMDI.cpp kexicreateprojectpage.cpp \
-	kexicreateproject.cpp kexibrowser.cpp kexiview.cpp kexiformmanager.cpp \
-	kexicreateprojectpageengine.cpp kexicreateprojectpagelocation.cpp kexicreateprojectpagedb.cpp \
-	kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp kexicreateprojectpageauth.h \
-	kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp kexialtertable.cpp kexiquerydesigner.cpp \
-	kexiquerydesignerguieditor.cpp kexirelation.cpp kexirelationdialog.cpp kexirelationview.cpp kexirelationviewtable.cpp kexiformbase.cpp \
-	kexicomboboxtableedit.cpp kexitableedit.cpp KexiViewIface.skel KexiViewIface.cpp KexiProjectIface.skel \
-	KexiProjectIface.cpp kexipartpopupmenu.cpp kexiprojectpart.cpp kexitablepart.cpp kexiquerypart.cpp \
-	kexiprojectpartitem.cpp kexiprojectpartproxy.cpp kexitablepartproxy.cpp kexiquerypartproxy.cpp
+libkexipart_la_SOURCES = kexipart.cpp
 
 libkexipart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkexipart_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  kexiDB/libkexidb.la formeditor/libkformeditor.la
+libkexipart_la_LIBADD = $(LIB_KOFFICEUI) core/libkexicore.la
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = kexi.la
@@ -31,7 +20,7 @@ dummy.cc:
 	echo > dummy.cc
 
 
-SUBDIRS = kexiDB formeditor . pics data interfaces
+SUBDIRS = kexiDB formeditor core . plugins pics data interfaces
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 

@@ -23,7 +23,7 @@
 
 #include <koDocument.h>
 #include <kexiDB/kexidb.h>
-#include <kexiformmanager.h>
+//#include <kexiformmanager.h>
 
 class KexiDoc;
 class DCOPObject;
@@ -81,7 +81,6 @@ public:
 	PartList *getParts();
 
 	KexiDB* db()const { return m_db; };
-	KexiFormManager *formManager()const {return m_formManager;}
 	bool dbIsAvaible()const { return m_dbAvaible; }
 	QString boolToString(bool b);
 	bool stringToBool(const QString &s);
@@ -90,14 +89,6 @@ signals:
 	void dbAvaible();
 	void saving(KoStore *);
 	void partListUpdated();
-
-/*
-#undef signals
-#define signals public
-signals:
-#undef signals
-#define signals protected
-*/
 
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
@@ -115,7 +106,6 @@ private:
 	void loadHandlers();
 	KexiDoc*        m_settings;
 	KexiDB*         m_db;
-	KexiFormManager *m_formManager;
 	Credentials     m_cred;
 	bool            m_dbAvaible;
 	References      m_fileReferences;

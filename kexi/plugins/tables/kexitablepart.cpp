@@ -27,10 +27,11 @@
 #include <klocale.h>
 #include <klineeditdlg.h>
 #include <kmessagebox.h>
+#include <kgenericfactory.h>
 
 #include "kexitablepart.h"
 #include "kexitablepartproxy.h"
-#include "kexiprojectpartitem.h"
+#include "kexiprojecthandleritem.h"
 #include "kexidatatable.h"
 #include "kexialtertable.h"
 
@@ -95,6 +96,6 @@ KexiTablePart::getTables()
 }
 
 
-K_EXPORT_COMPONENT_FACTORY( "kexihandler_table", KGenericFactory<KexiTablePart> );
+K_EXPORT_COMPONENT_FACTORY( kexihandler_table, KGenericFactory<KexiTablePart> )
 
 #include "kexitablepart.moc"

@@ -18,9 +18,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kexiprojectpart.h"
+#include "kexiprojecthandler.h"
 #include "kexiproject.h"
-#include "kexiprojectpartproxy.h"
+#include "kexiprojecthandlerproxy.h"
 
 #include <kdebug.h>
 
@@ -77,4 +77,4 @@ KexiProjectPart::items()
 	return m_items;
 }
 
-#include "kexiprojectpart.moc"
+#include "kexiprojecthandler.moc"

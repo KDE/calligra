@@ -17,43 +17,31 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kexiprojectpartitem.h"
+#ifndef KEXIPROJECTPARTITEM_H
+#define KEXIPROJECTPARTITEM_H
 
-KexiProjectPartItem::KexiProjectPartItem(KexiProjectPart *parent, QString name, QString mime, QString identifier)
- : QObject(parent, identifier.latin1())
+#include <qobject.h>
+
+#include "kexiprojecthandler.h"
+
+class KexiProjectPartItem : public QObject
 {
-	m_parent = parent;
-	m_name = name;
-	m_mime = mime;
-	m_identifier = identifier;
-}
+	Q_OBJECT
 
-KexiProjectPart *
-KexiProjectPartItem::projectPart()
-{
-	return m_parent;
-}
+	public:
+		KexiProjectPartItem(KexiProjectPart *parent, QString name, QString mime, QString identifier);
+		~KexiProjectPartItem();
 
-QString
-KexiProjectPartItem::name()
-{
-	return m_name;
-}
+		KexiProjectPart	*projectPart();
+		QString		name();
+		QString		mime();
+		QString		identifier();
 
-QString
-KexiProjectPartItem::mime()
-{
-	return m_mime;
-}
+	private:
+		KexiProjectPart	*m_parent;
+		QString 	m_name;
+		QString 	m_mime;
+		QString 	m_identifier;
+};
 
-QString
-KexiProjectPartItem::identifier()
-{
-	return m_identifier;
-}
-
-KexiProjectPartItem::~KexiProjectPartItem()
-{
-}
-
-#include "kexiprojectpartitem.moc"
+#endif

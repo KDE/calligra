@@ -31,8 +31,10 @@ class KexiViewIface : public KoViewIface
     K_DCOP
 public:
     KexiViewIface( KexiView *view_ );
+/*
 k_dcop:
     void slotShowRelations();
+*/
 private:
     KexiView *view;
 

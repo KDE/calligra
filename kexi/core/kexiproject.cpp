@@ -24,7 +24,7 @@
 #include "kexiview.h"
 #include "kexicreateproject.h"
 #include "kexirelation.h"
-#include "kexiprojectpart.h"
+#include "kexiprojecthandler.h"
 
 #include <koStore.h>
 
@@ -37,9 +37,6 @@
 #include <koTemplateChooseDia.h>
 #include "KexiProjectIface.h"
 
-#include "kexiquerypart.h"
-#include "kexitablepart.h"
-
 KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject* parent,
          const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
@@ -48,7 +45,7 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
 	setInstance( KexiFactory::global(), false );
 	kdDebug()<<"creating KexDB instance"<<endl;
 	m_db = new KexiDB(this);
-	m_formManager=new KexiFormManager(this);
+//	m_formManager=new KexiFormManager(this);
 	m_relationManager=new KexiRelation(this);
 	
 	m_parts = new PartList();
@@ -441,7 +438,7 @@ void KexiProject::loadHandlers()
 	KTrader::OfferList ol=KTrader::self()->query("Kexi/Handler");
 	for (KTrader::OfferList::ConstIterator it=ol.begin(); it!=ol.end(); ++it)
 	{
-		(void) KParts::ComponentFactory::createInstanceFromService<KexiProjectPart>(
-			*it,this,);	
+//		(void) KParts::ComponentFactory::createInstanceFromService<KexiProjectPart>(
+//			*it,this,);	
 	}
 }

@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kexiprojectpartproxy.h"
-#include "kexiprojectpart.h"
+#include "kexiprojecthandlerproxy.h"
+#include "kexiprojecthandler.h"
 #include "kexiview.h"
 
 KexiProjectPartProxy::KexiProjectPartProxy(KexiProjectPart *part,KexiView *view)
@@ -39,4 +39,4 @@ KexiView *KexiProjectPartProxy::kexiView()
 	return m_view;
 }
 
-#include "kexiprojectpartproxy.moc"
+#include "kexiprojecthandlerproxy.moc"

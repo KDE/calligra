@@ -15,33 +15,42 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/
+ */
 
-#ifndef KEXIPROJECTPARTITEM_H
-#define KEXIPROJECTPARTITEM_H
+#ifndef KEXITABLEPART_H
+#define KEXITABLEPART_H
 
-#include <qobject.h>
+#include "kexiprojecthandler.h"
 
-#include "kexiprojectpart.h"
+class QPixmap;
+class KexiTablePartProxy;
 
-class KexiProjectPartItem : public QObject
+class KexiTablePart : public KexiProjectPart
 {
 	Q_OBJECT
 
+	friend class KexiTablePartProxy;
+
 	public:
-		KexiProjectPartItem(KexiProjectPart *parent, QString name, QString mime, QString identifier);
-		~KexiProjectPartItem();
+		KexiTablePart(QObject *project,const char *,const QStringList &);
 
-		KexiProjectPart	*projectPart();
-		QString		name();
-		QString		mime();
-		QString		identifier();
+		virtual QString				name();
+		virtual QString				mime();
+		virtual bool				visible();
 
-	private:
-		KexiProjectPart	*m_parent;
-		QString 	m_name;
-		QString 	m_mime;
-		QString 	m_identifier;
+		virtual void hookIntoView(KexiView *view);
+
+		virtual void store (KoStore *){;}
+		virtual void load  (KoStore *){;}
+
+		virtual void executeItem(KexiView* view, QString identifier);
+
+
+		virtual QPixmap				groupPixmap();
+		virtual QPixmap				itemPixmap();
+
+		void				getTables();
+
 };
 
 #endif

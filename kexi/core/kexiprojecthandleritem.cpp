@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kexiprojectpartitem.h"
+#include "kexiprojecthandleritem.h"
 
 KexiProjectPartItem::KexiProjectPartItem(KexiProjectPart *parent, QString name, QString mime, QString identifier)
  : QObject(parent, identifier.latin1())
@@ -56,4 +56,4 @@ KexiProjectPartItem::~KexiProjectPartItem()
 {
 }
 
-#include "kexiprojectpartitem.moc"
+#include "kexiprojecthandleritem.moc"

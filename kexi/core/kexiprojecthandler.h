@@ -27,8 +27,8 @@
 
 #include "kexiproject.h"
 #include "kexidialogbase.h"
-#include "kexipartpopupmenu.h"
-#include "kexiprojectpartitem.h"
+#include "kexihandlerpopupmenu.h"
+#include "kexiprojecthandleritem.h"
 #include "kexiview.h"
 
 #define KEXIPROJECT(obj) (static_cast<KexiProject*>(obj->qt_cast("KexiProject")))
