@@ -2563,8 +2563,15 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 		if (!ts)
 			return false;
 
-		KexiDB::FieldList *fl = ts->subList("p_name", "p_mime", "p_url");
-		kdDebug() << "KexiMainWindowImpl::newObject(): fieldlist: " << fl << endl;
+		//temp. hack: avoid problems with autonumber
+		// see http://bugs.kde.org/show_bug.cgi?id=89381
+		int p_id = 3; //min is == 3
+		if (project()->dbConnection()->querySingleNumber("SELECT max(p_id) FROM kexi__parts", p_id))
+			p_id++;
+
+//		KexiDB::FieldList *fl = ts->subList("p_name", "p_mime", "p_url");
+		KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
+		kexidbg << "KexiMainWindowImpl::newObject(): fieldlist: " << (fl ? fl->debugString() : QString::null) << endl;
 		if (!fl)
 			return false;
 
@@ -2573,7 +2580,9 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 //		QStringList sl = info->ptr()->propertyNames();
 //		for (QStringList::ConstIterator it=sl.constBegin();it!=sl.constEnd();++it)
 //			kexidbg << *it << " " << info->ptr()->property(*it).toString() <<  endl;
-		if (!project()->dbConnection()->insertRecord(*fl, QVariant(info->ptr()->untranslatedGenericName()), 
+		if (!project()->dbConnection()->insertRecord(*fl, 
+				QVariant(p_id),
+				QVariant(info->ptr()->untranslatedGenericName()), 
 				QVariant(info->mime()), QVariant("http://www.koffice.org/kexi/")))
 			return false;
 
