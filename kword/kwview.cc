@@ -4587,6 +4587,35 @@ void KWView::editPersonalExpr()
 
 void KWView::textIncreaseIndent()
 {
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    double leftMargin=0.0;
+    if(!lst.isEmpty())
+        leftMargin=lst.first()->currentParagLayoutFormat()->margins[QStyleSheetItem::MarginLeft];
+    double indent = m_doc->indentValue();
+    double newVal = leftMargin + indent;
+    KMacroCommand* macroCmd = 0L;
+    for ( ; it.current() ; ++it )
+    {
+        KCommand *cmd = it.current()->setMarginCommand( QStyleSheetItem::MarginLeft, newVal );
+        if (cmd)
+        {
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand( i18n("Increase Paragraph Depth") );
+            macroCmd->addCommand(cmd);
+        }
+    }
+    if( macroCmd)
+        m_doc->addCommand(macroCmd);
+    if(!lst.isEmpty())
+    {
+        const KoParagLayout *layout=lst.first()->currentParagLayoutFormat();
+        showRulerIndent( layout->margins[QStyleSheetItem::MarginLeft], layout->margins[QStyleSheetItem::MarginFirstLine], layout->margins[QStyleSheetItem::MarginRight], lst.first()->rtl());
+    }
+#if 0
+
+
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
     {
@@ -4602,10 +4631,40 @@ void KWView::textIncreaseIndent()
                 m_doc->addCommand(cmd);
         }
     }
+#endif
 }
 
 void KWView::textDecreaseIndent()
 {
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    double leftMargin=0.0;
+    if(!lst.isEmpty())
+        leftMargin=lst.first()->currentParagLayoutFormat()->margins[QStyleSheetItem::MarginLeft];
+    double indent = m_doc->indentValue();
+    double newVal = leftMargin - indent;
+    KMacroCommand* macroCmd = 0L;
+    for ( ; it.current() ; ++it )
+    {
+        KCommand *cmd = it.current()->setMarginCommand( QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ) );
+        if (cmd)
+        {
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand( i18n("Decrease Paragraph Depth") );
+            macroCmd->addCommand(cmd);
+        }
+    }
+    if( macroCmd)
+        m_doc->addCommand(macroCmd);
+    if(!lst.isEmpty())
+    {
+        const KoParagLayout *layout=lst.first()->currentParagLayoutFormat();
+        showRulerIndent( layout->margins[QStyleSheetItem::MarginLeft], layout->margins[QStyleSheetItem::MarginFirstLine], layout->margins[QStyleSheetItem::MarginRight], lst.first()->rtl());
+    }
+
+
+#if 0
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
     {
@@ -4619,6 +4678,7 @@ void KWView::textDecreaseIndent()
                 m_doc->addCommand(cmd);
         }
     }
+#endif
 }
 
 
@@ -5335,14 +5395,14 @@ void KWView::slotFrameSetEditChanged()
     actionBorderStyle->setEnabled( rw );
 
 
-    actionFormatIncreaseIndent->setEnabled(state);
+    //actionFormatIncreaseIndent->setEnabled(state);
     actionInsertLink->setEnabled(state);
     actionCreateStyleFromSelection->setEnabled( state && hasSelection);
     bool goodleftMargin=false;
     if(state)
         goodleftMargin=(edit->currentLeftMargin()>0);
 
-    actionFormatDecreaseIndent->setEnabled(goodleftMargin && state);
+    actionFormatDecreaseIndent->setEnabled(goodleftMargin /*&& state*/);
     bool isFootNoteSelected = ((rw && edit && !edit->textFrameSet()->isFootEndNote())||(!edit&& rw));
     actionFormatBullet->setEnabled(isFootNoteSelected);
     actionFormatNumber->setEnabled(isFootNoteSelected);
