@@ -236,6 +236,8 @@ public:
 
     void repaintObj();
 
+    KPObject * getCursor(const QPoint &pos );
+
 protected:
 
 private:

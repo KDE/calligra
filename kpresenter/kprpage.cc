@@ -3263,3 +3263,19 @@ QPtrList<KoTextObject> KPrPage::objectText()
     }
     return lst;
 }
+
+
+KPObject * KPrPage::getCursor(const QPoint &pos )
+{
+    KPObject *obj=0L;
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->contains(pos)) {
+            if(it.current()->isSelected())
+                return it.current();
+            break;
+        }
+    }
+    return obj;
+}

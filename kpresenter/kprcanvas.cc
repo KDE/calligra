@@ -3933,18 +3933,22 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
     exitEditMode();
     toolEditMode = _m;
 
-    if ( toolEditMode == TEM_MOUSE ) {
+    if ( toolEditMode == TEM_MOUSE )
+    {
         setCursor( arrowCursor );
-        QPtrListIterator<KPObject> it( getObjectList() );
-        for ( ; it.current() ; ++it )
+        QPoint pos=QCursor::pos();
+        KPObject *obj=m_activePage->getCursor( pos);
+        if(obj)
+            setCursor( obj->getCursor( pos, modType ) );
+        else
         {
-            if(it.current()->contains(QCursor::pos())) {
-                if(it.current()->isSelected())
-                    setCursor( it.current()->getCursor( QCursor::pos(), modType ) );
-                break;
-            }
+            kdDebug() << "KPrCanvas::setToolEditMode" << endl;
+            obj=m_view->kPresenterDoc()->stickyPage()->getCursor( pos );
+            if(obj)
+                setCursor( obj->getCursor( pos, modType ) );
         }
-    } else
+    }
+    else
         setCursor( crossCursor );
 
     if ( updateView )
