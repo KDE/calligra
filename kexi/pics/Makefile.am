@@ -16,7 +16,8 @@ icon_ICON = button button_no test_it db form_edit lineedit business_user urlrequ
 	pixmaplabel select_item spring signalslot \
 	grid aoleft aoright aotop aobottom \
 	aowidest aotallest aoshortest aonarrowest aogrid aofit aopos2grid \
-	new_sign raise lower alignobjs
+	new_sign raise lower alignobjs \
+	sort_az sort_za
 
 icondir = $(kde_datadir)/kexi/icons
 
