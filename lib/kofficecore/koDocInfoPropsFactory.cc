@@ -24,6 +24,7 @@
 
 #include <kpropsdlg.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <assert.h>
 

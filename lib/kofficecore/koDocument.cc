@@ -18,9 +18,9 @@
 */
 
 #include <config.h>
-#ifdef HAVE_UNISTD_H
+
+#include <assert.h>
 #include <unistd.h>
-#endif
 
 #include <koDocument.h>
 #include <KoDocumentIface.h>
@@ -32,7 +32,6 @@
 #include <koQueryTrader.h>
 #include <koFilterManager.h>
 #include <koDocumentInfo.h>
-#include <cassert>
 
 #include <koStore.h>
 #include <kio/netaccess.h>
