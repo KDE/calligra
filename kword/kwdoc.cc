@@ -2296,15 +2296,15 @@ bool KWDocument::processFootNoteRequests()
 
 QString KWDocument::uniqueFramesetName( const QString& oldName )
 {
-    // make up a new name for the frameset, use Copy[digits]-[oldname] as template.
-    // Fully translatable naturally :)
-    int count=0;
-    QString searchString ("^("+ i18n("Copy%1-%2").arg("\\d*").arg("){0,1}"));
-    searchString=searchString.replace(QRegExp("\\-"), "\\-"); // escape the '-'
-    QString newName=oldName;
+    QString newName = oldName;
     if (frameSetByName( oldName ))//rename it if name frameset exists
     {
+        // make up a new name for the frameset, use Copy[digits]-[oldname] as template.
+        // Fully translatable naturally :)
+        QString searchString( "^(" + i18n("Copy%1-%2").arg("\\d*").arg("){0,1}") );
+        searchString = searchString.replace(QRegExp("\\-"), "\\-"); // escape the '-'
         QRegExp searcher(searchString);
+        int count=0;
         do {
             newName=oldName;
             newName.replace(searcher,i18n("Copy%1-%2").arg(count > 0? QString("%1").arg(count):"").arg(""));
