@@ -465,7 +465,6 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         // If we have a bottom border, then we rather exclude the linespacing. Just looks nicer IMHO.
         if ( m_layout.bottomBorder.width() > 0 )
             r.rBottom() -= zh->layoutUnitToPixelY(lineSpacing( lastLine )) + 1;
-        kdDebug()<<"lineSpacing( lastLine ) :"<<lineSpacing( lastLine )<<endl;
         //kdDebug(32500) << "KoTextParag::paint documentWidth=" << documentWidth() << " r=" << DEBUGRECT( r ) << endl;
         KoBorder::drawBorders( painter, zh, r,
                                m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
