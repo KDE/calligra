@@ -2031,3 +2031,31 @@ bool kspreadfunc_count( KSContext& context )
 
   return b;
 }
+
+// Function: FIB
+bool kspreadfunc_fib( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context, 1, "FIB", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+/*
+Lucas' formula for the nth Fibonacci number F(n) is given by
+
+         ((1+sqrt(5))/2)^n - ((1-sqrt(5))/2)^n
+  F(n) = ------------------------------------- .
+                         sqrt(5)
+
+*/
+  double n = args[0]->doubleValue();
+
+  double s = sqrt(5);
+  double result = ( pow((1+s)/2,n) - pow((1-s)/2,n) ) / s;
+
+  context.setValue( new KSValue( result ) );
+  return true;
+}
+

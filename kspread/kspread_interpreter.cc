@@ -103,6 +103,7 @@ bool kspreadfunc_delta( KSContext& context );
 bool kspreadfunc_even( KSContext& context );
 bool kspreadfunc_odd( KSContext& context );
 bool kspreadfunc_count( KSContext& context );
+bool kspreadfunc_fib( KSContext& context );
 
 // defined in kspread_functions_datetime.cc
 bool kspreadfunc_years( KSContext& context );
@@ -501,6 +502,7 @@ static const functionEntry funcTab[] = {
   { "LOGN", kspreadfunc_logn },
   { "SQRTN", kspreadfunc_sqrtn },
   { "COUNT", kspreadfunc_count },
+  { "FIB", kspreadfunc_fib }, // KSpread-specific, like Quattro-Pro's FIB
   { "CUR", kspreadfunc_cur },
   { "ROUND", kspreadfunc_round },
   { "ROUNDDOWN", kspreadfunc_rounddown },
