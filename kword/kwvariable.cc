@@ -49,11 +49,24 @@ void KWVariableSettings::changeEndNoteCounter( KoParagCounter _c )
 void KWVariableSettings::save( QDomElement &parentElem )
 {
     KoVariableSettings::save( parentElem );
+    QDomDocument doc = parentElem.ownerDocument();
+    QDomElement footNoteSettingElem = doc.createElement( "FOOTNOTESETTING" );
+    parentElem.appendChild( footNoteSettingElem );
+    m_footNoteCounter.save( footNoteSettingElem );
+    QDomElement endNoteSettingElem = doc.createElement( "ENDNOTESETTING" );
+    parentElem.appendChild( endNoteSettingElem );
+    m_footNoteCounter.save( endNoteSettingElem );
 }
 
 void KWVariableSettings::load( QDomElement &elem )
 {
     KoVariableSettings::load( elem );
+    QDomElement footNoteSettings = elem.namedItem( "FOOTNOTESETTING" ).toElement();
+    if ( !footNoteSettings.isNull() )
+        m_footNoteCounter.load( footNoteSettings );
+    QDomElement endNoteSettings = elem.namedItem( "ENDNOTESETTING" ).toElement();
+    if ( !endNoteSettings.isNull() )
+        m_footNoteCounter.load( endNoteSettings );
 }
 
 KWVariableCollection::KWVariableCollection(KWVariableSettings *_setting)

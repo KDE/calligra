@@ -80,7 +80,7 @@ don't put a </?xml...> at the end of the file!).
                             KWord can read all previous versions, but always saves in the latest.
 -->
 <!ELEMENT DOC
-    (PAPER, ATTRIBUTES, VARIABLESETTINGS, FRAMESETS, STYLES, PIXMAPS, CLIPARTS, SERIALL, (EMBEDDED*), SPELLCHECKIGNORELIST)>
+    (PAPER, ATTRIBUTES, VARIABLESETTINGS,FOOTNOTESETTING, ENDNOTESETTING, FRAMESETS, STYLES, PIXMAPS, CLIPARTS, SERIALL, (EMBEDDED*), SPELLCHECKIGNORELIST)>
 <!ATTLIST DOC
     editor CDATA #IMPLIED
     mime CDATA #FIXED "application/x-kword"
@@ -212,12 +212,55 @@ don't put a </?xml...> at the end of the file!).
         Attributes:
             startingPageNumber:     the starting page number.
             displaylink TODO: document! (#REQUIRED or #IMPLIED)
+            underlinelink:          Underlink or not by default
+            displaycomment:         Display comment
+
 -->
 <!ELEMENT VARIABLESETTINGS
     EMPTY>
 <!ATTLIST VARIABLESETTINGS
     startingPageNumber CDATA #IMPLIED
-    displaylink CDATA #REQUIRED>
+    displaylink CDATA #REQUIRED
+    underlinelink CDATA #REQUIRED
+    displaycomment CDATA #REQUIRED>
+
+
+<!--    Contains general attributes for footnote.
+
+        Attributes:    see counter !
+
+-->
+<!ELEMENT FOOTNOTESETTING
+    EMPTY>
+<!ATTLIST FOOTNOTESETTING
+    type CDATA #REQUIRED
+    depth CDATA #REQUIRED
+    bullet CDATA #IMPLIED
+    start CDATA #IMPLIED
+    numberingtype CDATA #REQUIRED
+    lefttext CDATA #IMPLIED
+    righttext CDATA #IMPLIED
+    bulletfont CDATA #IMPLIED
+    customdef CDATA #IMPLIED>
+
+<!--    Contains general attributes for endnote.
+
+        Attributes: see counter !
+
+-->
+<!ELEMENT ENDNOTESETTING
+    EMPTY>
+<!ATTLIST ENDNOTESETTING
+    type CDATA #REQUIRED
+    depth CDATA #REQUIRED
+    bullet CDATA #IMPLIED
+    start CDATA #IMPLIED
+    numberingtype CDATA #REQUIRED
+    lefttext CDATA #IMPLIED
+    righttext CDATA #IMPLIED
+    bulletfont CDATA #IMPLIED
+    customdef CDATA #IMPLIED>
+
 
 <!--    Container that has a number of FRAMESET children.
 -->
