@@ -285,6 +285,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     QDomElement selSlideElement = doc.createElement( "SELSLIDES" );
     QDomElement helpLineElement = doc.createElement( "HELPLINES" );
 
+    QDomElement settingsDoc = m_settings.documentElement();
 
     QDomElement dp = drawPage.toElement();
     QDomElement *master = m_styles[dp.attribute( "draw:master-page-name" )];
