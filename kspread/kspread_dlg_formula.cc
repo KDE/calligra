@@ -71,14 +71,9 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     grid1->addWidget( searchFunct, 0, 0 );
 
     typeFunction = new QComboBox(this);
-    typeFunction->insertItem(i18n("All"));
-    typeFunction->insertItem(i18n("Statistic"));
-    typeFunction->insertItem(i18n("Trigonometric"));
-    typeFunction->insertItem(i18n("Analytic"));
-    typeFunction->insertItem(i18n("Logic"));
-    typeFunction->insertItem(i18n("Text"));
-    typeFunction->insertItem(i18n("Time and Date"));
-    typeFunction->insertItem(i18n("Financial"));
+    QStringList cats = m_repo.groups();
+    cats.prepend( i18n("All") );
+    typeFunction->insertStringList( cats  );
     grid1->addWidget( typeFunction, 1, 0 );
 
     functions = new QListBox(this);
@@ -640,163 +635,15 @@ void KSpreadDlgFormula::slotSelectionChanged( KSpreadTable* _table, const QRect&
 
 void KSpreadDlgFormula::slotActivated( const QString& category )
 {
-    QStringList list_stat;
-    list_stat+="average";
-    list_stat+="variance";
-    list_stat+="stddev";
-    list_stat.sort();
-
-    QStringList list_anal;
-    list_anal+="sum";
-    list_anal+="sqrt";
-    list_anal+="ln";
-    list_anal+="log";
-    list_anal+="exp";
-    list_anal+="fabs";
-    list_anal+="floor";
-    list_anal+="ceil";
-    list_anal+="max";
-    list_anal+="min";
-    list_anal+="multiply";
-    list_anal+="ENT";
-    list_anal+="PI";
-    list_anal+="pow";
-    list_anal+="MOD";
-    list_anal+="sign";
-    list_anal+="INV";
-    list_anal+="DECBIN";
-    list_anal+="DECHEX";
-    list_anal+="DECOCT";
-    list_anal.sort();
-
-    QStringList list_trig;
-    list_trig+="cos";
-    list_trig+="sin";
-    list_trig+="tan";
-    list_trig+="acos";
-    list_trig+="asin";
-    list_trig+="atan";
-    list_trig+="cosh";
-    list_trig+="sinh";
-    list_trig+="tanh";
-    list_trig+="acosh";
-    list_trig+="asinh";
-    list_trig+="atanh";
-    list_trig+="degree";
-    list_trig+="radian";
-    list_trig+="PERMUT";
-    list_trig+="COMBIN";
-    list_trig+="fact";
-    list_trig+="BINO";
-    list_trig+="INVBINO";
-    list_trig+="atan2";
-    list_trig.sort();
-
-    QStringList list_logic;
-    list_logic+="if";
-    list_logic+="not";
-    list_logic+="AND";
-    list_logic+="OR";
-    list_logic+="NAND";
-    list_logic+="NOR";
-    list_logic+="ISLOGIC";
-    list_logic+="ISTEXT";
-    list_logic+="ISNUM";
-    list_logic.sort();
-
-    QStringList list_text;
-    list_text+="join";
-    list_text+="right";
-    list_text+="left";
-    list_text+="len";
-    list_text+="EXACT";
-    //list_text+="STXT";
-    list_text+="REPT";
-    list_text+="lower";
-    list_text+="upper";
-    list_text+="mid";
-    list_text+="find";
-    list_text.sort();
-
-    QStringList list_date_time;
-    list_date_time+="date";
-    list_date_time+="day";
-    list_date_time+="month";
-    list_date_time+="time";
-    list_date_time+="currentDate";
-    list_date_time+="currentTime";
-    list_date_time+="currentDateTime";
-    list_date_time+="dayOfYear";
-    list_date_time.sort();
-
-
-    QStringList list_financial;
-    list_financial+="compound";
-    list_financial+="continuous";
-    list_financial+="effective";
-    list_financial+="nominal";
-    list_financial+="FV";
-    list_financial+="FV_annuity";
-    list_financial+="PV";
-    list_financial+="PV_annuity";
-    list_financial.sort();
-    if( category == i18n("Statistic") )
-    {
-        functions->clear();
-        functions->insertStringList(list_stat);
-        listFunct.setItems(list_stat);
-    }
-    else if (category == i18n("Trigonometric"))
-    {
-        functions->clear();
-        functions->insertStringList(list_trig);
-        listFunct.setItems(list_trig);
-    }
-    else if (category == i18n("Analytic"))
-    {
-        functions->clear();
-        functions->insertStringList(list_anal);
-        listFunct.setItems(list_anal);
-    }
-    else if( category == i18n("Logic") )
-    {
-        functions->clear();
-        functions->insertStringList(list_logic);
-        listFunct.setItems(list_logic);
-    }
-    else if( category == i18n("Text") )
-    {
-        functions->clear();
-        functions->insertStringList(list_text);
-        listFunct.setItems(list_text);
-    }
-    else if( category == i18n("Time and Date") )
-    {
-        functions->clear();
-        functions->insertStringList(list_date_time);
-        listFunct.setItems(list_date_time);
-    }
-    else if( category == i18n("Financial") )
-    {
-        functions->clear();
-        functions->insertStringList(list_financial);
-        listFunct.setItems(list_financial);
-    }
-    else if(category == i18n("All"))
-    {
-        QStringList tmp;
-        tmp+=list_stat;
-        tmp+=list_trig;
-        tmp+=list_anal;
-        tmp+=list_text;
-        tmp+=list_logic;
-        tmp+=list_date_time;
-        tmp+=list_financial;
-        tmp.sort();
-        functions->clear();
-        functions->insertStringList(tmp);
-        listFunct.setItems(tmp);
-    }
+    QStringList lst;
+    if ( category == i18n("All") )
+	lst = m_repo.functionNames();
+    else
+	lst = m_repo.functionNames( category );
+    
+    functions->clear();
+    functions->insertStringList( lst );
+    listFunct.setItems( lst );
 
     // Go to the first function in the list.
     functions->setCurrentItem(0);

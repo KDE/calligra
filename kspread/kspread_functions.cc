@@ -221,6 +221,7 @@ KSpreadFunctionRepository::KSpreadFunctionRepository()
 	    if ( e.tagName() == "Group" )
 	    {
 		group = i18n( e.namedItem( "GroupName" ).toElement().text().latin1() );
+		m_groups.append( group );
 		
 		QDomNode n2 = e.firstChild();
 		for( ; !n2.isNull(); n2 = n2.nextSibling() )
@@ -258,6 +259,23 @@ QStringList KSpreadFunctionRepository::functionNames( const QString& group )
 	if ( it.current()->group() == group )
 	    lst.append( it.current()->name() );
     }
+
+    lst.sort();
+    
+    return lst;
+}
+
+QStringList KSpreadFunctionRepository::functionNames()
+{
+    QStringList lst;
+    
+    QDictIterator<KSpreadFunctionDescription> it( m_funcs );
+    for( ; it.current(); ++it )
+    {
+	lst.append( it.current()->name() );
+    }
+    
+    lst.sort();
     
     return lst;
 }

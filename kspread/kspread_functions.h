@@ -65,6 +65,7 @@ public:
     
     KSpreadFunctionDescription* function( const QString& name );
     
+    QStringList functionNames();
     QStringList functionNames( const QString& group );
     
     const QStringList& groups() const { return m_groups; }
