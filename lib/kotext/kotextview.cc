@@ -159,6 +159,10 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
             textObject()->removeSelectedText( m_cursor );
         clearUndoRedoInfo = FALSE;
         textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionReturn );
+        ASSERT( m_cursor->parag()->prev() );
+        if ( m_cursor->parag()->prev() )
+            doAutoFormat( m_cursor, static_cast<KoTextParag*>(m_cursor->parag()->prev()),
+                          m_cursor->parag()->prev()->length() - 1, '\n' );
         break;
     case Key_Delete:
         if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
@@ -222,20 +226,11 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
                     break;
                 }*/
                 QString text = e->text();
-                // Don't want a single undo/redo here.
-                /*if(textObject()->hasSelection() )
-                    frameSet()->kWordDocument()->addCommand(textObject()->replaceSelectionCommand(  m_cursor, text, QTextDocument::Standard , i18n("Insert Text")));
-                else*/
-                    textObject()->insert( m_cursor, m_currentFormat, text, false, true, i18n("Insert Text") );
 
-#warning TODO autoformat
-#if 0
-                KWAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
-                if ( autoFormat )
-                    autoFormat->doAutoFormat( m_cursor, static_cast<KWTextParag*>(m_cursor->parag()),
-                                              m_cursor->index() - 1,
-                                              text[ text.length() - 1 ] );
-#endif
+                textObject()->insert( m_cursor, m_currentFormat, text, false, true, i18n("Insert Text") );
+
+                doAutoFormat( m_cursor, static_cast<KoTextParag*>(m_cursor->parag()),
+                              m_cursor->index() - 1, text[ text.length() - 1 ] );
                 break;
             }
             // We should use KAccel instead, to make this configurable !

@@ -432,14 +432,7 @@ void KoTextObject::doKeyboardAction( QTextCursor * cursor, KoTextFormat * & /*cu
         cursor->splitAndInsertEmptyParag();
         ASSERT( cursor->parag()->prev() );
         if ( cursor->parag()->prev() )
-        {
             setLastFormattedParag( cursor->parag()->prev() );
-#warning TODO emit doAutoFormat
-/*            KWAutoFormat * autoFormat = kWordDocument()->getAutoFormat();
-            if ( autoFormat )
-                autoFormat->doAutoFormat( cursor, static_cast<KWTextParag*>(cursor->parag()->prev()),
-                cursor->parag()->prev()->length() - 1, '\n' );*/
-        }
 
         doUpdateCurrentFormat = false;
         KoStyle * style = static_cast<KoTextParag *>( cursor->parag()->prev() )->style();

@@ -72,11 +72,14 @@ public:
 		      bool onlyChanged = FALSE, bool drawCursor = FALSE, QTextCursor *cursor = 0,
 		      bool resetChanged = TRUE );
 
-protected:
-    void drawWithoutDoubleBuffer( QPainter *p, const QRect &rect, const QColorGroup &cg, const QBrush *paper = 0 );
+    /** Draw a single paragraph (used by drawWYSIWYG and by KWTextFrameSet::drawCursor).
+     * Equivalent to QTextDocument::draw, but reimplemented for wysiwyg */
     void drawParagWYSIWYG( QPainter *p, QTextParag *parag, int cx, int cy, int cw, int ch,
 		    QPixmap *&doubleBuffer, const QColorGroup &cg,
 		    bool drawCursor, QTextCursor *cursor, bool resetChanged = TRUE );
+
+protected:
+    void drawWithoutDoubleBuffer( QPainter *p, const QRect &rect, const QColorGroup &cg, const QBrush *paper = 0 );
     KoZoomHandler * m_zoomHandler;
 
 private:

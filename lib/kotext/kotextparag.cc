@@ -202,8 +202,8 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
 
     x = zh->layoutUnitToPixelX( x );
     y = zh->layoutUnitToPixelY( y );
-    h = zh->layoutUnitToPixelY( h );
-    base = zh->layoutUnitToPixelY( base );
+    h = zh->layoutUnitToPixelY( y, h );
+    base = zh->layoutUnitToPixelY( y, base );
     size = zh->layoutUnitToPixelX( size );
 
     p->setFont( newFont );
@@ -222,7 +222,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
         int height = format->height();
 
         width = zh->layoutUnitToPixelX(width);
-        height = zh->layoutUnitToPixelY(height);
+        height = zh->layoutUnitToPixelY(y,height);
         QString prefix = m_layout.counter->prefix()+ ' '/*the trailing space*/;
         int posPrefix=0;
         for ( unsigned int i = 0; i < prefix.length(); i++ )
@@ -405,7 +405,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
     }
 }
 
-// Reimplemented from QTextParag
+// Reimplemented from QTextParag - and called by QTextParag::paint
 void KoTextParag::drawParagString( QPainter &painter, const QString &s, int start, int len, int startX,
                                    int lastY, int baseLine, int bw, int h, bool drawSelections,
                                    QTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
@@ -425,11 +425,12 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     lastFormat = &localFormat;
 
     //kdDebug() << "startX in LU: " << startX << " layoutUnitToPt( startX )*zoomedResolutionX : " << zh->layoutUnitToPt( startX ) << "*" << zh->zoomedResolutionX() << endl;
-    int startXpix = zh->layoutUnitToPixelX( startX ) + at( start )->pixelxadj;
-    //kdDebug() << "KoTextParag::drawParagString startX in pixels : " << startX << endl;
+    int startXpix = zh->layoutUnitToPixelX( startX ) + at( rightToLeft ? start+len-1 : start )->pixelxadj;
+    //kdDebug() << "KoTextParag::drawParagString startX in pixels : " << startXpix << endl;
     QTextParag::drawParagString( painter, s, start, len, startXpix,
-                                 zh->layoutUnitToPixelY( lastY ), zh->layoutUnitToPixelY( baseLine ),
-                                 zh->layoutUnitToPixelX( bw ), zh->layoutUnitToPixelY( h ),
+                                 zh->layoutUnitToPixelY( lastY ), zh->layoutUnitToPixelY( lastY, baseLine ),
+                                 bw, // Note that bw is already in pixels (see QTextParag::paint)
+                                 zh->layoutUnitToPixelY( lastY, h ),
                                  drawSelections, lastFormat, i, selectionStarts,
                                  selectionEnds, cg, rightToLeft );
 
@@ -447,7 +448,7 @@ void KoTextParag::drawCursor( QPainter &painter, QTextCursor *cursor, int curx, 
     //qDebug("  drawCursor: LU: [cur]x=%d -> PIX: x=%d", curx, x );
     QTextParag::drawCursor( painter, cursor, x,
                             zh->layoutUnitToPixelY( cury ),
-                            zh->layoutUnitToPixelY( curh ), cg );
+                            zh->layoutUnitToPixelY( cury, curh ), cg );
 }
 
 void KoTextParag::setTabList( const KoTabulatorList &tabList )

@@ -103,18 +103,22 @@ class Q_EXPORT QTextStringChar
 public:
     // this is never called, initialize variables in QTextString::insert()!!!
     QTextStringChar() : lineStart( 0 ), type( Regular ), startOfRun( 0 ) {d.format=0;}
-    /*virtual*/ ~QTextStringChar(); // unnecessary expense removed
+    ~QTextStringChar();
 
     QChar c;
     enum Type { Regular, Custom, Mark, Shaped };
     uint lineStart : 1;
     uint rightToLeft : 1;
-    uint hasCursor : 1;
-    uint canBreak : 1;
+    //uint hasCursor : 1;
+    //uint canBreak : 1;
     Type type : 2;
     uint startOfRun : 1;
 
-    Q_INT8 pixelxadj; // ### added for WYSIWYG [no cost, it fits in the padding]
+    // --- added for WYSIWYG ---
+    Q_INT8 pixelxadj; // adjustment to apply to lu2pixel(x)
+    short int pixelwidth; // width in pixels
+    short int width; // width in LU
+
     int x;
     int height() const;
     int ascent() const;
@@ -1301,9 +1305,10 @@ public:
     bool allowBreakInWords() const { return biw; }
 
 protected:
-    virtual QTextParagLineStart *formatLine( QTextParag *parag, QTextString *string, QTextParagLineStart *line, QTextStringChar *start,
-					       QTextStringChar *last, int align = Qt3::AlignAuto, int space = 0 );
+    //virtual QTextParagLineStart *formatLine( QTextParag *parag, QTextString *string, QTextParagLineStart *line, QTextStringChar *start,
+    //					       QTextStringChar *last, int align = Qt3::AlignAuto, int space = 0 );
     //QTextStringChar
+
     //virtual QTextParagLineStart *bidiReorderLine( QTextParag *parag, QTextString *string, QTextParagLineStart *line, QTextStringChar *start,
     //					    QTextStringChar *last, int align, int space );
     virtual bool isBreakable( QTextString *string, int pos ) const;
@@ -1322,7 +1327,7 @@ private:
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+#if 0
 class Q_EXPORT QTextFormatterBreakInWords : public QTextFormatter
 {
 public:
@@ -1344,6 +1349,7 @@ public:
     int format( QTextDocument *doc, QTextParag *parag, int start, const QMap<int, QTextParagLineStart*> &oldLineStarts );
 
 };
+#endif
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

@@ -171,6 +171,10 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, QTextParag *parag, int cx, i
 	parag->setChanged( FALSE );
     QRect rect( m_zoomHandler->layoutUnitToPixel( parag->rect() ) );
     QRect ir( rect );
+    QRect ir_lu( parag->rect() );
+    QRect crect( cx, cy, cw, ch );
+    QRect crect_lu( m_zoomHandler->pixelToLayoutUnit( crect ) );
+
     //kdDebug() << "KoTextDocument::drawParagWYSIWYG parag->rect=" << DEBUGRECT( parag->rect() )
     //          << " ir=" << DEBUGRECT(ir) << endl;
     bool useDoubleBuffer = !parag->document()->parent();
@@ -183,7 +187,10 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, QTextParag *parag, int cx, i
     if ( useDoubleBuffer  ) {
 	painter = new QPainter;
 	if ( cx >= 0 && cy >= 0 )
-	    ir = ir.intersect( QRect( cx, cy, cw, ch ) );
+        {
+	    ir = ir.intersect( crect );
+            ir_lu = ir_lu.intersect( crect_lu );
+        }
 	if ( !doubleBuffer ||
 	     ir.width() > doubleBuffer->width() ||
 	     ir.height() > doubleBuffer->height() ) {
@@ -217,13 +224,12 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, QTextParag *parag, int cx, i
 	}
     }
 
-    painter->translate( -( ir.x() - m_zoomHandler->layoutUnitToPixelX( parag->rect().x() ) ),
-		       -( ir.y() - m_zoomHandler->layoutUnitToPixelY( parag->rect().y() ) ) );
+    painter->translate( -m_zoomHandler->layoutUnitToPixelX( ir_lu.x() - parag->rect().x() ),
+                        -m_zoomHandler->layoutUnitToPixelY( ir_lu.y() - parag->rect().y() ) );
 
-    // The cliprect is checked in layout units, in QTextParag::paint
-    QRect lu_crect( m_zoomHandler->pixelToLayoutUnit( QRect( cx, cy, cw, ch ) ) );
+    // Passing crect_lu because the cliprect is checked in layout units, in QTextParag::paint
     parag->paint( *painter, cg, drawCursor ? cursor : 0, TRUE,
-                  lu_crect.x(), lu_crect.y(), lu_crect.width(), lu_crect.height() );
+                  crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
 
 /*  if ( !flow()->isEmpty() ) {
 	painter->translate( 0, -parag->rect().y() );

@@ -69,13 +69,13 @@ int QTextCursor::x() const
 {
     QTextStringChar *c = string->at( idx );
     int curx = c->x;
-    if ( !c->rightToLeft &&
+    /*if ( !c->rightToLeft &&
          c->c.isSpace() &&
          idx > 0 &&
          ( string->alignment() & Qt3::AlignJustify ) == Qt3::AlignJustify )
-        curx = string->at( idx - 1 )->x + string->string()->width( idx - 1 );
+        curx = string->at( idx - 1 )->x + string->string()->width( idx - 1 );*/
     if ( c->rightToLeft )
-        curx += string->string()->width( idx );
+        curx += c->width; //string->string()->width( idx );
     return curx;
 }
 
@@ -621,7 +621,8 @@ QTextFormatter *QTextParag::formatter() const
 	return doc->formatter();
     if ( pFormatter )
 	return pFormatter;
-    return ( ( (QTextParag*)this )->pFormatter = new QTextFormatterBreakWords );
+    //return ( ( (QTextParag*)this )->pFormatter = new QTextFormatterBreakWords );
+    return 0L;
 }
 
 void QTextParag::setFormatter( QTextFormatter *f )

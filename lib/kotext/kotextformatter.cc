@@ -112,7 +112,6 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
             c->setFormat( &tmpFormat );
             pixelww = string->width( i );
             c->setFormat( origFormat );
-
 	} else if ( c->c == '\t' ) {
 	    int nx = parag->nextTab( i, x );
 	    if ( nx < x )
@@ -124,8 +123,7 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
 	    ww = c->format()->width( ' ' );
             pixelww = zh->layoutUnitToPixelX( ww );
 	}
-
-
+        c->width = ww;
 
         //Currently unused in KWord
 #if 0
@@ -133,7 +131,7 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
 	if ( c->isCustom() && c->customItem()->ownLine() ) {
 	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), c->height(), left, 4 ) : left;
 	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), c->height(), rm, 4 ) : 0 );
-	    QTextParagLineStart *lineStart2 = formatLine( parag, string, lineStart, firstChar, c-1, align, w - x );
+	    QTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c-1, align, w - x );
 	    c->customItem()->resize( parag->painter(), dw );
 	    if ( x != left || w != dw )
 		fullWidth = FALSE;
@@ -198,7 +196,7 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
 		    h = lineStart->baseLine + belowBaseLine;
 		    lineStart->h = h;
 		//}
-		QTextParagLineStart *lineStart2 = formatLine( parag, string, lineStart, firstChar, c-1, align, w - x );
+		QTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c-1, align, w - x );
 		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
 		y += lineStart->h;
 #ifdef DEBUG_FORMATTER
@@ -237,7 +235,7 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
 	    } else {
 		// Breakable char was found
 		i = lastBreak;
-		QTextParagLineStart *lineStart2 = formatLine( parag, string, lineStart, firstChar, parag->at( lastBreak ), align, w - string->at( i ).x );
+		QTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, parag->at( lastBreak ), align, w - string->at( i ).x );
 		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
 		y += lineStart->h;
 		lineStart = lineStart2;
@@ -365,6 +363,7 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
         // pixelxadj is the adjustement to add to lu2pixel(x), to find pixelx
         // (pixelx would be too expensive to store directly since it would require an int)
         c->pixelxadj = pixelx - zh->layoutUnitToPixelX( x );
+        c->pixelwidth = pixelww;
 #ifdef DEBUG_FORMATTER
         qDebug("LU: x=%d [equiv. to pix=%d] ; PIX: x=%d  --> adj=%d",
                x, zh->layoutUnitToPixelX( x ), pixelx, c->pixelxadj );
@@ -393,7 +392,7 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
 	// last line in a paragraph is not justified
 	if ( align == Qt3::AlignJustify )
 	    align = Qt3::AlignAuto;
-	QTextParagLineStart *lineStart2 = formatLine( parag, string, lineStart, firstChar, c, align, w - x );
+	QTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c, align, w - x );
 	h += doc ? parag->lineSpacing( linenr++ ) : 0;
 	lineStart->h = h;
 	delete lineStart2;
@@ -422,4 +421,60 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
     }*/
 
     return y;
+}
+
+QTextParagLineStart *KoTextFormatter::formatLineKo(
+    KoZoomHandler *zh,
+    QTextParag * /*parag*/, QTextString *string, QTextParagLineStart *line,
+    QTextStringChar *startChar, QTextStringChar *lastChar, int align, int space )
+{
+//QT2HACK
+//    if( string->isBidi() )
+//	return bidiReorderLine( parag, string, line, startChar, lastChar, align, space );
+    space = QMAX( space, 0 ); // #### with nested tables this gets negative because of a bug I didn't find yet, so workaround for now. This also means non-left aligned nested tables do not work at the moment
+    int start = (startChar - &string->at(0));
+    int last = (lastChar - &string->at(0) );
+    // do alignment Auto == Left in this case
+    if ( align & Qt::AlignHCenter || align & Qt::AlignRight ) {
+	if ( align & Qt::AlignHCenter )
+	    space /= 2;
+	for ( int j = start; j <= last; ++j )
+	    string->at( j ).x += space;
+    } else if ( align & Qt3::AlignJustify ) {
+	int numSpaces = 0;
+	for ( int j = start; j < last; ++j ) {
+	    if( isBreakable( string, j ) ) {
+		numSpaces++;
+	    }
+	}
+	int toAdd = 0;
+	for ( int k = start + 1; k <= last; ++k ) {
+            QTextStringChar &chr = string->at( k );
+            if ( toAdd != 0 )
+            {
+                int pixelx = chr.pixelxadj + zh->layoutUnitToPixelX( chr.x );
+                chr.x += toAdd;
+                // Seems this is necessary. This means, pixelxadj really contains
+                // some rounding-related values, that have to be recalculated when
+                // pushing things to the right.
+                pixelx += zh->layoutUnitToPixelX( toAdd );
+                chr.pixelxadj = pixelx - zh->layoutUnitToPixelX( chr.x );
+            }
+	    if( isBreakable( string, k ) && numSpaces ) {
+		int s = space / numSpaces;
+		toAdd += s;
+		space -= s;
+		numSpaces--;
+                chr.width += s;
+                chr.pixelwidth += zh->layoutUnitToPixelX( s );
+	    }
+	}
+    }
+
+    if ( last >= 0 && last < string->length() )
+	line->w = string->at( last ).x + string->width( last );
+    else
+	line->w = 0;
+
+    return new QTextParagLineStart();
 }

@@ -720,7 +720,7 @@ bool QTextCursor::place( const QPoint &p, QTextParag *s )
     while ( i < nextLine ) {
 	chr = s->at(i);
 	int cpos = x + chr->x;
-	cw = s->string()->width( i );
+	cw = chr->width; //s->string()->width( i );
 	if ( chr->isCustom() && chr->customItem()->isNested() ) {
 	    if ( pos.x() >= cpos && pos.x() <= cpos + cw &&
 		 pos.y() >= y + cy && pos.y() <= y + cy + chr->height() ) {
@@ -2920,6 +2920,8 @@ void QTextString::insert( int index, const QString &s, QTextFormat *f )
     for ( int i = 0; i < (int)s.length(); ++i ) {
 	data[ (int)index + i ].x = 0;
 	data[ (int)index + i ].pixelxadj = 0;
+	data[ (int)index + i ].pixelwidth = 0;
+	data[ (int)index + i ].width = 0;
 	data[ (int)index + i ].lineStart = 0;
 	data[ (int)index + i ].d.format = 0;
 	data[ (int)index + i ].type = QTextStringChar::Regular;
@@ -2958,6 +2960,8 @@ void QTextString::insert( int index, QTextStringChar *c )
     data[ (int)index ].c = c->c;
     data[ (int)index ].x = 0;
     data[ (int)index ].pixelxadj = 0;
+    data[ (int)index ].pixelwidth = 0;
+    data[ (int)index ].width = 0;
     data[ (int)index ].lineStart = 0;
     data[ (int)index ].rightToLeft = 0;
     data[ (int)index ].d.format = 0;
@@ -3189,6 +3193,8 @@ QMemArray<QTextStringChar> QTextString::subString( int start, int len ) const
 	a[ i ].c = c->c;
 	a[ i ].x = 0;
 	a[ i ].pixelxadj = 0;
+	a[ i ].pixelwidth = 0;
+	a[ i ].width = 0;
 	a[ i ].lineStart = 0;
 	a[ i ].rightToLeft = 0;
 	a[ i ].d.format = 0;
@@ -3206,6 +3212,8 @@ QTextStringChar *QTextStringChar::clone() const
     chr->c = c;
     chr->x = 0;
     chr->pixelxadj = 0;
+    chr->pixelwidth = 0;
+    chr->width = 0;
     chr->lineStart = 0;
     chr->rightToLeft = 0;
     chr->d.format = 0;
@@ -3707,8 +3715,8 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 	return;
     QTextStringChar *chr = at( 0 );
     ASSERT( chr );
-    if (!chr) { qDebug("paragraph %p %d, can't paint, EMPTY !", this, paragId()); return; }
-    //qDebug( "painting paragraph %p %d", this, paragId() );
+    if (!chr) { qDebug("paragraph %p %d, can't paint, EMPTY !", (void*)this, paragId()); return; }
+    //qDebug( "painting paragraph %p %d", (void*)this, paragId() );
     int i = 0;
     int h = 0;
     int baseLine = 0, lastBaseLine = 0;
@@ -3754,30 +3762,8 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
     int lasth = 0;
     for ( i = 0; i < length(); i++ ) {
 	chr = at( i );
-#if 0
-	qDebug("chr='%c' x=%d",chr->c.latin1(),chr->x);
-	if ( !str->isBidi() && is_printer( &painter ) ) { // ### fix our broken ps-printer
-	    if ( !chr->lineStart )
-	    {
-		chr->x = QMAX( chr->x, tw );
-		qDebug("chr->x adjusted to %d (tw=%d)",chr->x,tw);
-	    }
-	    else
-		tw = 0;
-	}
-#endif
-#if 0
-	cw = string()->width( i );
-	if ( chr->c == '\t' && i < length() - 1 )
-	    cw = at( i + 1 )->x - chr->x + 1;
-        if ( chr->c.unicode() == 0xad && i < length() - 1 )
-	    cw = 0;
-#else
-	if ( i < length() - 1 )
-	    cw = at( i + 1 )->x - chr->x;
-        else
-            cw = string()->width( i );
-#endif
+
+        cw = chr->pixelwidth;
 
 	// init a new line
 	if ( chr->lineStart ) {
@@ -3842,26 +3828,12 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 		    if ( !lastDirection )
 			x += str->at(i - 1).d.mark->xoff;
 		    else if ( i > 1 )
-			x -= str->at(i - 1).d.mark->xoff + str->width( i - 2 );
+			x -= str->at(i - 1).d.mark->xoff + str->at( i - 2 ).width;
 		}
-                if ( ( alignment() & Qt3::AlignJustify ) == Qt3::AlignJustify && paintEnd != -1 && at(paintEnd)->c.isSpace() )
-                    bw += str->at(paintEnd).x - str->at(paintEnd-1).x - str->width(paintEnd-1); // ## correct for RTL ?
 		drawParagString( painter, qstr, paintStart, paintEnd - paintStart + 1, x, lastY,
 				 lastBaseLine, bw, lasth, drawSelections,
 				 lastFormat, i, selectionStarts, selectionEnds, cg, lastDirection );
 	    }
-#if 0
-	    if ( !str->isBidi() && is_printer( &painter ) ) { // ### fix our broken ps-printer
-		if ( !chr->lineStart ) {
-		    // ### the next line doesn't look 100% correct for arabic
-		    tw = startX + painter.fontMetrics().width( qstr.mid(paintStart, paintEnd - paintStart +1) );
-		    chr->x = QMAX( chr->x, tw );
-		qDebug("paintEnd=%d, paintStart=%d, chr->x adjusted to %d (tw=%d)",paintEnd,paintStart,chr->x,tw);
-		} else {
-		    tw = 0;
-		}
-	    }
-#endif
 	    if ( !chr->isCustom() ) {
 		if ( chr->c != '\n' ) {
 		    paintStart = i;
@@ -3882,7 +3854,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 		    paintEnd = -1;
 		    lastFormat = chr->format();
 		    lastY = cy;
-		    startX = chr->x + string()->width( i );
+		    startX = chr->x + chr->width;
 		    bw = 0;
 		} else {
 		    chr->customItem()->resize( pntr, chr->customItem()->width );
@@ -3890,7 +3862,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 		    paintEnd = -1;
 		    lastFormat = chr->format();
 		    lastY = cy;
-		    startX = chr->x + string()->width( i );
+		    startX = chr->x + chr->width;
 		    bw = 0;
 		}
 	    }
@@ -3925,7 +3897,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 	    if ( !lastDirection )
 		x += str->at(i - 1).d.mark->xoff;
 	    else if ( i > 1 )
-		x -= str->at(i - 1).d.mark->xoff + str->width( i - 2 );
+		x -= str->at(i - 1).d.mark->xoff + str->at( i - 2 ).width;
 	}
 	drawParagString( painter, qstr, paintStart, paintEnd-paintStart+1, x, lastY,
 			 lastBaseLine, bw, h, drawSelections,
@@ -4529,8 +4501,8 @@ QTextFormatter::QTextFormatter()
 {
 }
 
-/* only used for bidi or complex text reordering
- */
+// See KoTextFormatter
+#if 0
 QTextParagLineStart *QTextFormatter::formatLine( QTextParag * /*parag*/, QTextString *string, QTextParagLineStart *line,
 						   QTextStringChar *startChar, QTextStringChar *lastChar, int align, int space )
 {
@@ -4572,6 +4544,7 @@ QTextParagLineStart *QTextFormatter::formatLine( QTextParag * /*parag*/, QTextSt
 
     return new QTextParagLineStart();
 }
+#endif
 
 //QT2HACK
 #if 0
@@ -4770,6 +4743,8 @@ void QTextFormatter::insertLineStart( QTextParag *parag, int index, QTextParagLi
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+// Superseded by KoTextFormatter
+#if 0
 QTextFormatterBreakInWords::QTextFormatterBreakInWords()
 {
 }
@@ -4825,6 +4800,7 @@ int QTextFormatterBreakInWords::format( QTextDocument *doc,QTextParag *parag,
 	} else {
 	    ww = c->format()->width( ' ' );
 	}
+        c->width = ww;
 
 	if ( c->isCustom() && c->customItem()->ownLine() ) {
 	    if ( doc )
@@ -4978,6 +4954,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	} else {
 	    ww = c->format()->width( ' ' );
 	}
+        c->width = ww;
 
 	// Custom item that forces a new line
 	if ( c->isCustom() && c->customItem()->ownLine() ) {
@@ -5249,6 +5226,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 
     return y;
 }
+#endif
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -5436,7 +5414,7 @@ void QTextFormatCollection::debug()
          if(it.currentKey() != it.current()->key())
              qDebug("**** MISMATCH key=%s (see line below for format)", it.currentKey().latin1());
 	qDebug( "format '%s' (%p): refcount: %d", it.current()->key().latin1(),
-		it.current(), it.current()->ref );
+		(void*)it.current(), it.current()->ref );
     }
     qDebug( "------------ QTextFormatCollection: debug --------------- END" );
 }

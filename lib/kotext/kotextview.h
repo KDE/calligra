@@ -27,6 +27,7 @@
 #include <koRuler.h> // for KoTabulatorList
 class KoTextObject;
 class KoTextDocument;
+class KoTextParag;
 class KoTextFormat;
 class KoParagCounter;
 class KCommand;
@@ -129,6 +130,13 @@ signals:
     void paste();
 
 protected:
+    /**
+     * Called when a character (@p ch) has been inserted into @p parag, at the given @p index.
+     * This is a virtual method rather than a signal for performance reasons.
+     */
+    virtual void doAutoFormat( QTextCursor* /*cursor*/, KoTextParag * /*parag*/,
+                               int /*index*/, QChar /*ch*/ ) { }
+
     /** Show the settings of this format in the GUI. Needs to be implemented in the application. */
     virtual void showFormat( KoTextFormat *format ) = 0;
 

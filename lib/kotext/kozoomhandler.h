@@ -101,10 +101,8 @@ public:
     { return QPoint( ptToLayoutUnit( p.x() ),
                      ptToLayoutUnit( p.y() ) ); }
     QRect ptToLayoutUnit( const KoRect &r ) const
-    { return QRect( ptToLayoutUnit( r.x() ),
-                    ptToLayoutUnit( r.y() ),
-                    ptToLayoutUnit( r.width() ),
-                    ptToLayoutUnit( r.height() ) ); }
+    { return QRect( ptToLayoutUnit( r.topLeft() ),
+                    ptToLayoutUnit( r.bottomRight() ) ); }
 
     double layoutUnitToPt( int lu ) const
     { return static_cast<double>( lu ) / static_cast<double>( m_layoutUnitFactor ); }
@@ -121,23 +119,25 @@ public:
     { return QPoint( pixelToLayoutUnitX( p.x() ),
                      pixelToLayoutUnitY( p.y() ) ); }
     QRect pixelToLayoutUnit( const QRect &r ) const
-    { return QRect( pixelToLayoutUnitX( r.x() ),
-                    pixelToLayoutUnitY( r.y() ),
-                    pixelToLayoutUnitX( r.width() ),
-                    pixelToLayoutUnitY( r.height() ) ); }
+    { return QRect( pixelToLayoutUnit( r.topLeft() ),
+                    pixelToLayoutUnit( r.bottomRight() ) ); }
 
     int layoutUnitToPixelX( int x ) const
     { return zoomItX( layoutUnitToPt( x ) ); }
     int layoutUnitToPixelY( int y ) const
     { return zoomItY( layoutUnitToPt( y ) ); }
+
+    // This variant converts a height, using y as reference.
+    // This prevents rounding problems.
+    int layoutUnitToPixelY( int y, int h ) const
+    { return layoutUnitToPixelY( y + h ) - layoutUnitToPixelY( y ); }
+
     QPoint layoutUnitToPixel( const QPoint &p ) const
     { return QPoint( layoutUnitToPixelX( p.x() ),
                      layoutUnitToPixelY( p.y() ) ); }
     QRect layoutUnitToPixel( const QRect &r ) const
-    { return QRect( layoutUnitToPixelX( r.x() ),
-                    layoutUnitToPixelY( r.y() ),
-                    layoutUnitToPixelX( r.width() ),
-                    layoutUnitToPixelY( r.height() ) ); }
+    { return QRect( layoutUnitToPixel( r.topLeft() ),
+                    layoutUnitToPixel( r.bottomRight() ) ); }
 
     // Convert fontsizes from and to the layout units and the _pixels_ (for the current zoom)
     int fontSizeToLayoutUnit( double ptSizeFloat, bool forPrint ) const;
