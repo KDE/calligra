@@ -38,7 +38,7 @@ KWAnchor::~KWAnchor()
     kdDebug() << "KWAnchor::~KWAnchor" << endl;
 }
 
-void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool /*selected TODO*/ )
+void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
     ASSERT( !m_deleted );
     if ( m_deleted ) // can't happen !
@@ -70,20 +70,26 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     p->save();
     // Determine crect in contents coords
     QRect crect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
-    nPoint = crect.topLeft(); //fallback
-    (void) fs->internalToNormal( crect.topLeft(), nPoint );
-    crect.moveTopLeft( fs->currentViewMode()->normalToView( nPoint ) );
+    QPoint cnPoint = crect.topLeft(); //fallback
+    (void) fs->internalToNormal( crect.topLeft(), cnPoint );
+    crect.moveTopLeft( fs->currentViewMode()->normalToView( cnPoint ) );
     // and go back to contents coord system
     QPoint iPoint( 0, paragy );
-    if ( fs->internalToNormal( iPoint, nPoint ) )
+    if ( fs->internalToNormal( iPoint, cnPoint ) )
     {
-        QPoint cPoint = fs->currentViewMode()->normalToView( nPoint );
+        QPoint cPoint = fs->currentViewMode()->normalToView( cnPoint );
         //kdDebug(32002) << "translate " << -cPoint.x() << "," << -cPoint.y() << endl;
         p->translate( -cPoint.x(), -cPoint.y() );
     }
     // Draw the frame
     QColorGroup cg2( cg );
     m_frameset->drawContents( p, crect, cg2, false /*?*/, false /*?*/, 0L, fs->currentViewMode() );
+
+    if ( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer ) {
+        QPoint vPoint = fs->currentViewMode()->normalToView( nPoint );
+	p->fillRect( QRect( vPoint.x(), vPoint.y(), width, height ), QBrush( cg.highlight(), QBrush::Dense4Pattern) );
+    }
+
     p->restore();
 }
 

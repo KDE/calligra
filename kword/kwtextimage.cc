@@ -79,7 +79,7 @@ void KWTextImage::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int c
     else
         p->drawPixmap( cx, cy, m_image.pixmap(), cx - x, cy - y, cw, ch );
 
-    if ( selected && placement() == PlaceInline /*&& p->device()->devType() != QInternal::Printer*/ ) {
+    if ( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer ) {
 	p->fillRect( QRect( QPoint( x, y ), m_image.size() ), QBrush( cg.highlight(), QBrush::Dense4Pattern) );
     }
 }
