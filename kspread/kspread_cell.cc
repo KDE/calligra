@@ -1804,7 +1804,12 @@ void KSpreadCell::textSize( QPainter &_paint )
     if( !verticalText(column(),row()) && !tmpAngle )
     {
         m_iOutTextWidth = fm.width( m_strOutText );
-        m_iOutTextHeight = fm.ascent() + fm.descent();
+	int offsetFont=0;
+	if((alignY(column(),row())==KSpreadCell::Bottom)&& textFontUnderline(column(), row() ))
+	   {
+	     offsetFont=fm.underlinePos()+1;
+	   }
+        m_iOutTextHeight = fm.ascent() + fm.descent()+offsetFont ;
     }
     // Rotated text ?
     else if(  tmpAngle!= 0 )
@@ -2747,11 +2752,16 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	//made an offset, otherwise ### is under red triangle
 	if( a==KSpreadCell::Right && !isEmpty() &&m_bCellTooShort )
 	  offsetCellTooShort=4;
-	 
+	 QFontMetrics fm2 = _painter.fontMetrics(); 
+	 int offsetFont=0;
+	 if((alignY(column(),row())==KSpreadCell::Bottom)&& textFontUnderline(column(), row() ))
+	   {
+	     offsetFont=fm2.underlinePos()+1;
+	   }
         int tmpAngle=getAngle(_col,_row);
         if ( !multiRow(_col,_row) && !verticalText(_col,_row) && !tmpAngle)
                 {
-                _painter.drawText( indent+_tx + m_iTextX -offsetCellTooShort, _ty + m_iTextY, m_strOutText );
+                _painter.drawText( indent+_tx + m_iTextX -offsetCellTooShort, _ty + m_iTextY - offsetFont, m_strOutText );
                 }
         else if( tmpAngle!=0)
         {
