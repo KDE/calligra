@@ -2082,6 +2082,17 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
         }
 
         switch ( e->type() ) {
+             case QEvent::AccelOverride:
+             {
+                 QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
+                 KWFormulaFrameSetEdit * formulaEdit = dynamic_cast<KWFormulaFrameSetEdit *>(m_currentFrameSetEdit);
+                 if ( !formulaEdit && keyev->state()==ControlButton&&keyev->key()==Key_R )
+                 {
+                     m_gui->getView()->editReplace();
+                     return true;
+                 }
+             }
+
             case QEvent::FocusIn:
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusInEvent();
