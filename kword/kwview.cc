@@ -611,7 +611,7 @@ void KWView::setupActions()
     connect(actionBorderColor,SIGNAL(activated()),SLOT(borderColor()));
 
 
-    actionBackgroundColor = new TKSelectColorAction( i18n( "Text Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor",true);
+    actionBackgroundColor = new TKSelectColorAction( i18n( "Text Background Color..." ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor",true);
     connect(actionBackgroundColor,SIGNAL(activated()),SLOT(backgroundColor() ));
     actionBackgroundColor->setDefaultColor(QColor());
 
@@ -1192,7 +1192,7 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
     QColor col=currentFormat.textBackgroundColor();
     actionBackgroundColor->setEnabled(true);
     actionBackgroundColor->setCurrentColor( col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
-    actionBackgroundColor->setText(i18n("Text Background Color"));
+    actionBackgroundColor->setText(i18n("Text Background Color..."));
     actionFormatColor->setCurrentColor( currentFormat.color() );
 
     switch(currentFormat.vAlign())
