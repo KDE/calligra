@@ -55,7 +55,7 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QComboBox" row="1" column="1">
+                <widget class="QComboBox" row="1" column="1" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>comboBoxEncoding</cstring>
                     </property>
@@ -82,8 +82,8 @@
                         <number>1</number>
                     </property>
                 </widget>
-                <spacer row="1" column="2">
-                    <property name="name">
+                <spacer row="1" column="3">
+                    <property name="name" stdset="0">
                         <cstring>Spacer5</cstring>
                     </property>
                     <property name="orientation">
@@ -116,6 +116,23 @@
                         <string>Most Write documents are stored using this encoding (also known as windows-1252).&lt;br&gt;&lt;br&gt;Select this if unsure.</string>
                     </property>
                 </widget>
+                <spacer row="0" column="2" rowspan="1" colspan="2">
+                    <property name="name" stdset="0">
+                        <cstring>Spacer4</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
             </grid>
         </widget>
         <widget class="QGroupBox">
@@ -128,61 +145,90 @@
             <property name="whatsThis" stdset="0">
                 <string>These advanced options allow you to finetune the importation of formatting information.  They compensate for differences between KWord and MS Write by adding extra formatting information (not found in the original document) to try to make the imported document look as close to the original as possible.&lt;br&gt;&lt;br&gt;It is safe to use the defaults, if unsure.</string>
             </property>
-            <widget class="QCheckBox">
+            <grid>
                 <property name="name">
-                    <cstring>checkBoxLinespacing</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>20</y>
-                        <width>253</width>
-                        <height>18</height>
-                    </rect>
+                <property name="margin">
+                    <number>11</number>
                 </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>0</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
+                <property name="spacing">
+                    <number>6</number>
                 </property>
-                <property name="text">
-                    <string>Compensate for &amp;linespacing differences</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string></string>
-                </property>
-                <property name="whatsThis" stdset="0">
-                    <string>Try to simulate Write's linespacing by adding some spaces before each paragraph.</string>
-                </property>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>checkBoxImageOffset</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>40</y>
-                        <width>250</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Enable &amp;image positioning</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-                <property name="whatsThis" stdset="0">
-                    <string>Use paragraph indentation to position images.</string>
-                </property>
-            </widget>
+                <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>checkBoxLinespacing</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Compensate for &amp;linespacing differences</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string></string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Try to simulate Write's linespacing by adding some spaces before each paragraph.</string>
+                    </property>
+                </widget>
+                <spacer row="0" column="2">
+                    <property name="name" stdset="0">
+                        <cstring>Spacer3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>checkBoxImageOffset</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Enable &amp;image positioning</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Use paragraph indentation to position images.</string>
+                    </property>
+                </widget>
+                <spacer row="1" column="1" rowspan="1" colspan="2">
+                    <property name="name" stdset="0">
+                        <cstring>Spacer5_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </grid>
         </widget>
         <spacer>
-            <property name="name">
+            <property name="name" stdset="0">
                 <cstring>Spacer6</cstring>
             </property>
             <property name="orientation">
