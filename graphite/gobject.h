@@ -33,23 +33,12 @@
 
 #include <graphiteglobal.h>
 
-class QDomElement;
-class QDomDocument;
-class QPoint;
-class QRect;
-class QPainter;
-class QMouseEvent;
-class QKeyEvent;
-class QResizeEvent;
 class QLineEdit;
 class QComboBox;
 class QVButtonGroup;
-class QWidgetStack;
 class QCheckBox;
 class QSlider;
-class QSizePolicy;
 
-class KDialogBase;
 class KColorButton;
 class KIntSpinBox;
 
@@ -63,7 +52,7 @@ class PWidget;
 // are used to handle the creation, selection, movement, rotation,...
 // of objects. They also provide a property dialog (lazy creation)
 // The pure virtual GObject::createM9r() factory method ensures that
-// the correct manipulator is created :) (factory method pattern)
+// the correct manipulator is created (factory method pattern)
 // The M9r is used every time a user wants to create or change an object
 // interactively.
 // First the object is "hit" - then a M9r is created and this M9r is used as
@@ -71,11 +60,10 @@ class PWidget;
 // decides to handle the event, it returns true afterwards. If the Event
 // remains unhandled, the M9r returns false and the Event has to be processed
 // by the calling method.
-// ### Note: The M9r is bound to a specific view and it won't work (correctly)
-// if you use one M9r for more than one view. Maybe I need some sort of
-// map or dict which relates a view to a M9r?
+// Note: The M9r is bound to a specific view and it won't work (correctly)
+// if you use one M9r for more than one view.
 // Whenever a repaint is needed (movement,...), the dirty rect has to be
-// set (i.e. something different to (0, 0, 0, 0)).
+// set (i.e. to make isNull() false).
 // Some of the M9rs can be in two different "modes": Create and Manipulate
 // General rule: simple M9rs support Create, complex ones do not :)
 class GObjectM9r : public KDialogBase {
@@ -93,7 +81,7 @@ public:
     const GraphitePart *document() const { return m_part; }
 
     // the handles() contain the handle rects for mouse over stuff afterwards
-    virtual void draw(QPainter &p);
+    virtual void draw(QPainter &p, const QRect &rect);
 
     // return false when you couldn't handle the event
     virtual bool mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
@@ -284,7 +272,7 @@ public:
     // All handles which are drawn are added to the list if the list
     // is != 0L. Use this list to check "mouseOver" stuff
     // drawing: setROP(Not)
-    virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L) const;
+    virtual void drawHandles(QPainter &p, const QRect &rect, QList<QRect> *handles=0L) const;
 
     // does the object contain this point? (Note: finds the most nested child which is hit!)
     virtual const GObject *hit(const QPoint &p) const = 0;
@@ -292,7 +280,7 @@ public:
     virtual const QRect &boundingRect() const = 0;  // the bounding rectangle of this object
 
     virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
-                                  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) = 0;
+                                  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) const = 0;
 
     QString name() const { return m_name; }       // name of the object (e.g. "Line001")
     void setName(const QString &name) { m_name=name; }   // set the name

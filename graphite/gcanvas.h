@@ -55,7 +55,7 @@ protected:
     virtual void keyPressEvent(QKeyEvent *e) { m_doc->keyPressEvent(e, m_view); }
     virtual void keyReleaseEvent(QKeyEvent *e) { m_doc->keyReleaseEvent(e, m_view); }
     // ### Here we should tell the document not to draw the handles
-    // when we don't have focus...
+    // ### when we don't have focus...
     virtual void focusInEvent(QFocusEvent */*e*/) {}
     virtual void focusOutEvent(QFocusEvent */*e*/) {}
 

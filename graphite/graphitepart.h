@@ -44,6 +44,8 @@ public:
 
     void setGlobalZoom(const double &zoom=1.0); // set the global zoom factor (for this view)
     virtual void paintContent(QPainter &painter, const QRect &rect, bool transparent=false);
+    void paintSelection(QPainter &painter, const QRect &rect, GraphiteView *view);
+    void paintPageBorders(QPainter &painter, const QRect &rect);
 
     virtual bool initDoc();
 
@@ -94,9 +96,6 @@ public:
 public slots:
     void setUnit(Graphite::Unit);
 
-    void edit_undo();
-    void edit_redo();
-
 signals:
     void unitChanged(Graphite::Unit);
     void layoutChanged(const QValueList<FxRect> &diff);
@@ -105,6 +104,8 @@ protected:
     virtual KoView *createViewInstance(QWidget *parent, const char *name);
 
 private slots:
+    void edit_undo();
+    void edit_redo();
     void edit_cut();
 
     void documentRestored();

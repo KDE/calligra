@@ -482,7 +482,7 @@
                                     </property>
                                     <property>
                                         <name>whatsThis</name>
-                                        <string>The format of the page may be set to a standard format like DIN A4 or Letter. To set custom values for the page size, please chose "Custom" and enter the values below.</string>
+                                        <string>The format of the page may be set to a standard format like DIN A4 or Letter. To set custom values for the page size, please choose "Custom" and enter the values below.</string>
                                     </property>
                                 </widget>
                                 <widget row="0"  column="0" >

@@ -23,6 +23,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kaction.h>
 
 #include <gbackground.h>
 #include <graphitepart.h>
@@ -103,8 +104,9 @@ const QRect &GBackground::boundingRect() const {
 }
 
 GObjectM9r *GBackground::createM9r(GraphitePart *part, GraphiteView *view,
-                              const GObjectM9r::Mode &mode) {
-    return new GBackgroundM9r(this, mode, part, view, i18n("Background"));
+                              const GObjectM9r::Mode &mode) const {
+    // Yes, this const_cast is ugly, I know
+    return new GBackgroundM9r(const_cast<GBackground*>(this), mode, part, view, i18n("Background"));
 }
 
 const FxPoint GBackground::origin() const {
@@ -142,8 +144,16 @@ bool GBackgroundM9r::mousePressEvent(QMouseEvent *e, QRect &/*dirty*/) {
     if(e->button()==Qt::RightButton) {
         if(m_popup==0) {
             m_popup=new QPopupMenu();
-            m_popup->insertItem(BarIcon(QString::fromLatin1("undo")), i18n("&Undo"), document(), SIGNAL(edit_undo()));
-            m_popup->insertItem(BarIcon(QString::fromLatin1("redo")), i18n("&Redo"), document(), SIGNAL(edit_redo()));
+            KActionCollection *collection=document()->actionCollection();
+            if(collection!=0) {
+                KAction *action=collection->action("edit_undo");
+                if(action)
+                    action->plug(m_popup);
+                action=collection->action("edit_redo");
+                if(action)
+                    action->plug(m_popup);
+                m_popup->insertSeparator();
+            }
             m_popup->insertItem(i18n("&Properties..."), this, SLOT(showPropertyDialog()));
         }
         m_popup->popup(e->pos());

@@ -29,6 +29,7 @@
 
 #include <pagelayoutdia_impl.h>
 
+#include <gline.h>
 
 GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parentWidget, widgetName, parent, name, singleViewMode), m_history(actionCollection()), m_zoom(1.0) {
@@ -44,6 +45,11 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
 
     m_nodeZero=new GBackground(QString::fromLatin1("Background"));
     m_nodeZero->resize(m_pageLayout.fxRect());
+    m_nodeZero->setBrush(Qt::red);
+    m_nodeZero->setPen(Qt::blue);
+    GLine *line=new GLine(FxPoint(10.0, 10.0), FxPoint(20.0, 20.0));
+    line->setPen(Qt::green);
+    m_nodeZero->plugChild(line);
 }
 
 GraphitePart::~GraphitePart() {
@@ -61,8 +67,22 @@ void GraphitePart::setGlobalZoom(const double &zoom) {
 }
 
 void GraphitePart::paintContent(QPainter &painter, const QRect &rect, bool transparent) {
+    // draws all the objects
+    // Note: To get the page "borders" and the selection the view calls the
+    // two functions paintPageBorders and paintSelection
+    m_nodeZero->setTransparent(transparent);
+    m_nodeZero->draw(painter, rect);
+}
 
-    // first draw the page borders (if needed)
+void GraphitePart::paintSelection(QPainter &painter, const QRect &rect, GraphiteView *view) {
+
+    GObjectM9r *manager=m_m9rMap[view];
+    if(manager)
+        manager->draw(painter, rect);
+}
+
+void GraphitePart::paintPageBorders(QPainter &painter, const QRect &rect) {
+
     int right=Graphite::double2Int(m_pageLayout.width()*GraphiteGlobal::self()->zoomedResolution());
     int bottom=Graphite::double2Int(m_pageLayout.height()*GraphiteGlobal::self()->zoomedResolution());
     if(rect.top()<=bottom) {
@@ -85,10 +105,6 @@ void GraphitePart::paintContent(QPainter &painter, const QRect &rect, bool trans
             painter.setPen(Qt::black);
         }
     }
-
-    // then all the objects
-    m_nodeZero->setTransparent(transparent);
-    m_nodeZero->draw(painter, rect);
 }
 
 bool GraphitePart::initDoc() {
@@ -193,9 +209,31 @@ void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
     // ### setGlobalZoom()
 }
 
-void GraphitePart::mousePressEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
-    //kdDebug(37001) << "MP x=" << e->x() << " y=" << e->y() << endl;
-    // ### setGlobalZoom()
+void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
+
+    kdDebug(37001) << "MP x=" << e->x() << " y=" << e->y() << endl;
+    setGlobalZoom(view->zoom());
+    GObjectM9r *manager=m_m9rMap[view];
+
+    // ### different mouse modes (tool/normal)
+    do {
+        if(manager==0) {
+            const GObject *hit=m_nodeZero->hit(e->pos());
+            if(hit==0)  // noone hit -> get outta here
+                break;
+            kdDebug() << "HIT" << endl;
+            manager=hit->createM9r(this, view);
+            m_m9rMap.insert(view, manager);
+        }
+        QRect dirty;
+        if(manager->mousePressEvent(e, dirty)) {
+            // ### erase, update,...
+            break;
+        }
+        else
+            break; // for now
+            //manager=0;  // we need a hit test
+    } while(1);  // we "break" out of the loop
 }
 
 void GraphitePart::mouseReleaseEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
@@ -225,16 +263,16 @@ void GraphitePart::setUnit(Graphite::Unit unit) {
     emit unitChanged(unit);
 }
 
+KoView *GraphitePart::createViewInstance(QWidget *parent, const char *name) {
+    return new GraphiteView(this, parent, name);
+}
+
 void GraphitePart::edit_undo() {
     m_history.undo();
 }
 
 void GraphitePart::edit_redo() {
     m_history.redo();
-}
-
-KoView *GraphitePart::createViewInstance(QWidget *parent, const char *name) {
-    return new GraphiteView(this, parent, name);
 }
 
 void GraphitePart::edit_cut() {

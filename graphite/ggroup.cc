@@ -378,8 +378,9 @@ QDomElement GGroup::save(QDomDocument &doc) const {
 }
 
 GObjectM9r *GGroup::createM9r(GraphitePart *part, GraphiteView *view,
-                              const GObjectM9r::Mode &mode) {
-    return new GGroupM9r(this, mode, part, view, i18n("Group"));
+                              const GObjectM9r::Mode &mode) const {
+    // Yes, this const_cast is ugly, I know
+    return new GGroupM9r(const_cast<GGroup*>(this), mode, part, view, i18n("Group"));
 }
 
 const FxPoint GGroup::origin() const {

@@ -68,14 +68,23 @@ void GCanvas::contentsMouseMoveEvent(QMouseEvent *e) {
 void GCanvas::viewportPaintEvent(QPaintEvent *e) {
 
     m_doc->setGlobalZoom(m_view->zoom());
-    viewport()->erase(0, 0, m_eraseWidth, m_eraseHeight);
+    // If the contents have been moved these two members are !=0 and we
+    // have to erase this rect. Note: 0,0,-2,200 deletes a rect at the right border, e.g.
+    if(m_eraseWidth!=0 && m_eraseHeight!=0) {
+#ifdef GRAPHITE_DEBUG_PAINTING
+        kdDebug(37001) << "paintEvent: m_eraseWidth=" << m_eraseWidth << " m_eraseHeight=" << m_eraseHeight << endl;
+#endif
+        viewport()->erase(0, 0, m_eraseWidth, m_eraseHeight);
+        m_eraseWidth=0;
+        m_eraseHeight=0;
+    }
     QPainter p(viewport());
-    p.setClipRect(e->rect());
 #ifdef GRAPHITE_DEBUG_PAINTING
     p.setPen(Qt::green);
     p.drawRect(e->rect());
     p.setPen(Qt::black);
 #endif // GRAPHITE_DEBUG_PAINTING
+    p.setClipRect(e->rect());
     p.setClipping(true);
     // ###   1 - define the region which has to be
     //           repainted and  call m_doc->preparePainting(zoom)!!!
@@ -108,8 +117,11 @@ void GCanvas::viewportPaintEvent(QPaintEvent *e) {
                    << " y-offet=" << contentsY() << endl;
 #endif // GRAPHITE_DEBUG_PAINTING
     p.translate(-contentsX(), -contentsY());
-    m_doc->paintContent(p, QRect(e->rect().left()+contentsX(), e->rect().top()+contentsY(),
-                                 e->rect().width(), e->rect().height()));
+    QRect r(e->rect().left()+contentsX(), e->rect().top()+contentsY(),
+            e->rect().width(), e->rect().height());
+    m_doc->paintPageBorders(p, r);
+    m_doc->paintContent(p, r);
+    m_doc->paintSelection(p, r, m_view);
     p.end();
 }
 

@@ -45,7 +45,7 @@ public:
     virtual const QRect &boundingRect() const;
 
     virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
-                                  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
+                                  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) const;
 
     virtual const FxPoint origin() const;
     virtual void setOrigin(const FxPoint &origin);

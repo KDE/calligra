@@ -43,14 +43,14 @@ public:
 
     virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false) const;
     // Do we need this? Maybe even lines should have rectangular handles... nah, doesn't look sexy :)
-    virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L) const;
+    virtual void drawHandles(QPainter &p, const QRect &rect, QList<QRect> *handles=0L) const;
 
     virtual const GLine *hit(const QPoint &p) const;
     virtual bool intersects(const QRect &r) const;
     virtual const QRect &boundingRect() const;
 
     virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
-                                  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
+                                  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) const;
 
     virtual const FxPoint origin() const { return m_a; }
     virtual void setOrigin(const FxPoint &origin);

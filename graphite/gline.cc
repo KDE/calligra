@@ -24,6 +24,7 @@
 
 #include <gline.h>
 
+#include <float.h>  // DBL_BLAH
 
 GLine::GLine(const QPoint &a, const QPoint &b, const QString &name) : GObject(name),
                                                                       m_a(a), m_b(b) {
@@ -134,7 +135,7 @@ void GLine::draw(QPainter &p, const QRect &rect, bool toPrinter) const {
     p.restore();
 }
 
-void GLine::drawHandles(QPainter &p, QList<QRect> *handles) const {
+void GLine::drawHandles(QPainter &p, const QRect &/*rect*/, QList<QRect> *handles) const {
 
     if(dirty())
         recalculate();
@@ -303,8 +304,9 @@ const QRect &GLine::boundingRect() const {
 }
 
 GObjectM9r *GLine::createM9r(GraphitePart *part, GraphiteView *view,
-                             const GObjectM9r::Mode &mode) {
-    return new GLineM9r(this, mode, part, view, i18n("Line"));
+                             const GObjectM9r::Mode &mode) const {
+    // Yes, this const_cast is ugly, I know
+    return new GLineM9r(const_cast<GLine*>(this), mode, part, view, i18n("Line"));
 }
 
 void GLine::setOrigin(const FxPoint &origin) {
@@ -376,6 +378,7 @@ bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
 
 bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // ###
+    qDebug("FOOOOOOOOOOOOOOOOO");
     return false;
 }
 

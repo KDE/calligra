@@ -66,8 +66,8 @@ GObjectM9r::~GObjectM9r() {
     delete m_handles;
 }
 
-void GObjectM9r::draw(QPainter &p) {
-    gobject()->drawHandles(p, handles());
+void GObjectM9r::draw(QPainter &p, const QRect &rect) {
+    gobject()->drawHandles(p, rect, handles());
 }
 
 void GObjectM9r::slotChanged(const QString &) {
@@ -283,8 +283,11 @@ void G2DObjectM9r::slotApply() {
 }
 
 void G2DObjectM9r::resizeEvent(QResizeEvent *e) {
-    updatePage();
-    KDialogBase::resizeEvent(e);
+
+    if(created()) {
+        updatePage();
+        KDialogBase::resizeEvent(e);
+    }
 }
 
 void G2DObjectM9r::createPropertyDialog() {
@@ -574,7 +577,7 @@ QDomElement GObject::save(QDomDocument &doc) const {
     return e;
 }
 
-void GObject::drawHandles(QPainter &p, QList<QRect> *handles) const {
+void GObject::drawHandles(QPainter &p, const QRect &/*rect*/, QList<QRect> *handles) const {
 
     if(dirty())
         recalculate();
@@ -582,7 +585,7 @@ void GObject::drawHandles(QPainter &p, QList<QRect> *handles) const {
     p.save();
     p.setPen(Qt::black);
     p.setBrush(Qt::black);
-    // ### Test RasterOp Not???
+    // ### RasterOp Not
 
     int size;
     int offset;
