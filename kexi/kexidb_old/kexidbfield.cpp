@@ -48,7 +48,7 @@ KexiDBField::sql2qt(KexiDBField::ColumnType sqltype)
 		case SQLLongVarBinary:
 		case SQLVarBinary:
 			return QVariant::CString;
-		case SQlDate:
+		case SQLDate:
 			return QVariant::Date;
 		case SQLTime:
 			return QVariant::Time;
@@ -90,7 +90,7 @@ KexiDBField::typeName(ColumnType sqltype)
 			return "Long Var Binary";
 		case SQLVarBinary:
 			return "Var Binary";
-		case SQlDate:
+		case SQLDate:
 			return "Date";
 		case SQLTime:
 			return "Time";

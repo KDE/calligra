@@ -270,7 +270,11 @@ MySqlDB::alterField(const QString& table, const QString& field, const QString& n
 	kdDebug() << "MySqlDB::alterField: Table: " << table << " Field: " << field << endl;
 	kdDebug() << "MySqlDB::alterField: DataType: " << MySqlField::sql2string(dtype) << "ColumnType: " << dtype << endl;
 	QString qstr = "ALTER TABLE " + table + " CHANGE " + field + " " + newFieldName;
-	qstr += " " + MySqlField::sql2string(dtype) + "(" + QString::number(length) + ")";
+	qstr += " " + MySqlField::sql2string(dtype);
+	
+	if(dtype != KexiDBField::SQLDate) {
+		qstr += "(" + QString::number(length) + ")";
+	}
 	
 	if(notNull)
 	{

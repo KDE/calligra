@@ -103,7 +103,7 @@ MySqlField::sqlType()
 			return KexiDBField::SQLBit;
 		case FIELD_TYPE_NEWDATE:
 		case FIELD_TYPE_DATE:
-			return KexiDBField::SQlDate;
+			return KexiDBField::SQLDate;
 		case FIELD_TYPE_DECIMAL:
 			return KexiDBField::SQLDecimal;
 		case FIELD_TYPE_DOUBLE:
@@ -180,7 +180,7 @@ MySqlField::sql2string(KexiDBField::ColumnType sqltype)
 			return "LONGBLOB";
 		case SQLVarBinary:
 			return "BLOB";
-		case SQlDate:
+		case SQLDate:
 			return "DATE";
 		case SQLTime:
 			return "TIME";

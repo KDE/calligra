@@ -34,7 +34,7 @@ class KexiDBField
 			SQLBigInt,
 			SQLBinary,
 			SQLBit,
-			SQlDate,
+			SQLDate,
 			SQLDecimal,
 			SQLDouble,
 			SQLFloat,
