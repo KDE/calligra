@@ -753,7 +753,8 @@ private:
      */
     KFind* m_find;
     KReplace* m_replace;
-    int m_startColumn;
+    int m_findLeftColumn;
+    int m_findRightColumn;
     QPoint m_findPos;
     QPoint m_findEnd;
 

@@ -3416,7 +3416,8 @@ void KSpreadView::initFindReplace()
         colStart = marker.x();
         rowStart = marker.y();
     }
-    m_startColumn = colStart;
+    m_findLeftColumn = region.left();
+    m_findRightColumn = region.right();
     m_findPos = QPoint( colStart, rowStart );
     m_findEnd = QPoint( colEnd, rowEnd );
     kdDebug() << k_funcinfo << m_findPos << " to " << m_findEnd << endl;
@@ -3495,7 +3496,7 @@ KSpreadCell* KSpreadView::findNextCell()
             if ( forw ) ++col;
             else --col;
         }
-        col = m_startColumn;
+        col = forw ? m_findLeftColumn : m_findRightColumn;
     }
     // if ( !cell )
     // No more next cell - TODO go to next sheet (if not looking in a selection)
