@@ -26,6 +26,7 @@
 #include <qbuffer.h>
 #include <kdebug.h>
 #include <ktar.h>
+#include <config.h>
 
 #define ROOTPART "root"
 #define MAINNAME "maindoc.xml"
@@ -39,7 +40,11 @@ KoStore::KoStore( const QString & _filename, Mode _mode )
   kdDebug(s_area) << "KoStore Constructor filename = " << _filename
     << " mode = " << int(_mode) << endl;
 
+#ifdef HAVE_KDEPRINT // If we have kdeprint, we have kdelibs > 2.1, so we have the new KTar
+  m_pTar = new KTarGz( _filename, "application/x-gzip" );
+#else
   m_pTar = new KTarGz( _filename );
+#endif
 
   m_bGood = m_pTar->open( _mode == Write ? IO_WriteOnly : IO_ReadOnly );
 
@@ -153,7 +158,7 @@ bool KoStore::open( const QString & _name )
     m_byteArray = f->data();
     // warning, m_byteArray can be bigger than f->data().size() (if a previous file was bigger)
     // this is why we never use m_byteArray.size()
-    m_iSize = f->data().size();
+    m_iSize = f->size();
   }
   else
     assert( 0 );
