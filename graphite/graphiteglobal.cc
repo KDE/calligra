@@ -55,8 +55,8 @@ void rotatePoint(int &x, int &y, const double &angle, const QPoint &center) {
 
     double dx=static_cast<double>(x-center.x());
     double dy=static_cast<double>(center.y()-y); // Attention: Qt coordinate system!
-    double sinalpha=std::sin(angle);
-    double cosalpha=std::cos(angle);
+    double sinalpha=sin(angle);
+    double cosalpha=cos(angle);
     x=center.x()+qRound(dx*cosalpha-dy*sinalpha);
     y=center.y()-qRound(dx*sinalpha+dy*cosalpha); // here too
 }
@@ -76,8 +76,8 @@ void rotatePoint(double &x, double &y, const double &angle, const double &cx, co
 
     double dx=x-cx;
     double dy=cy-y; // Attention: Qt coordinate system!
-    double sinalpha=std::sin(angle);
-    double cosalpha=std::cos(angle);
+    double sinalpha=sin(angle);
+    double cosalpha=cos(angle);
     x=cx+(dx*cosalpha-dy*sinalpha);
     y=cy-(dx*sinalpha+dy*cosalpha); // here too
 }

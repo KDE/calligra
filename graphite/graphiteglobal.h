@@ -92,11 +92,11 @@ inline double deg2rad(const double &deg) {
 
 inline double normalizeRad(const double &rad) {
     static double twoPi=2*M_PI;
-    return rad-static_cast<double>(std::floor(rad/twoPi))*twoPi;
+    return rad-static_cast<double>(floor(rad/twoPi))*twoPi;
 }
 
 inline double normalizeDeg(const double &deg) {
-    return deg-static_cast<double>(std::floor(deg/360.0))*360.0;
+    return deg-static_cast<double>(floor(deg/360.0))*360.0;
 }
 
 void rotatePoint(int &x, int &y, const double &angle, const QPoint &center);
