@@ -394,6 +394,7 @@ FormManager::copyWidget()
 	if(list->isEmpty())
 		return;
 
+	// We clear the current clipboard
 	m_domDoc.setContent(QString(), true);
 	QDomElement parent = m_domDoc.createElement("UI");
 	m_domDoc.appendChild(parent);
@@ -449,7 +450,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemo
 
 	int id;
 	bool ok = m_lib->createMenuActions(w->className(), w, p, container);
-	if(!ok)
+	if(!ok) // the widget doesn't have menu items, so we disable it
 	{
 		id = m_popup->insertItem(SmallIconSet(m_lib->icon(w->className())), n);
 		m_popup->setItemEnabled(id, false);
@@ -461,6 +462,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemo
 	m_popup->setItemEnabled(MenuCut, enableRemove);
 	m_popup->setItemEnabled(MenuDelete, enableRemove);
 
+	// We only enablelayout creation if more than one widget with the same parent are selected
 	bool enableLayout = false;
 	if((container->form()->selectedWidgets()->count() > 1) || (w == container->widget()))
 		enableLayout = true;
@@ -469,6 +471,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemo
 	m_popup->setItemEnabled(MenuVBox, enableLayout);
 	m_popup->setItemEnabled(MenuGrid, enableLayout);
 
+	// We create the buddy menu
 	int subid;
 	if(w->inherits("QLabel") && ((QLabel*)w)->text().contains("&") && (((QLabel*)w)->textFormat() != RichText))
 	{
@@ -480,6 +483,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemo
 			sub->setItemChecked(MenuNoBuddy, true);
 		sub->insertSeparator();
 
+		// We add al the widgets that can have focus
 		ObjectTreeC *list = container->form()->tabStops();
 		for(ObjectTreeItem *item = list->first(); item; item = list->next())
 		{
@@ -540,6 +544,7 @@ void
 FormManager::createLayout(int layoutType)
 {
 	QtWidgetList *list = m_active->selectedWidgets();
+	// if only one widget is selected (a container), we modify its layout
 	if(list->count() == 1)
 	{
 		ObjectTreeItem *item = m_active->objectTree()->lookup(list->first()->name());

@@ -191,7 +191,7 @@ WidgetFactory::changeProperty(const char *name, const QVariant &value, Container
 	if (!container->form()->manager())
 		return;
 	if(container->form()->selectedWidgets()->count() > 1)
-	{
+	{ // If eg multiple labels are selected, we only want to change the text of one of them (the one the user cliked on)
 		container->form()->selectedWidgets()->first()->setProperty(name, value);
 	}
 	else

@@ -76,16 +76,18 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 	}
 	else
 	{
-		if(!m_multiple)
+		if(!m_multiple) // one widget selected
 		{
+			// If the last command is the same, we just change its value
 			if(m_lastcom && m_lastcom->property() == prop.name() && !m_undoing)
 				m_lastcom->setValue(value);
-			else if(!m_undoing)
+			else if(!m_undoing) // we are not already undoing -> avoid recursion
 			{
 				m_lastcom = new PropertyCommand(this, QString(m_object->name()), m_object->property(property.latin1()), value, prop.name());
 				m_manager->activeForm()->addCommand(m_lastcom, false);
 			}
 
+			// If the property is changed, we add it in ObjectTreeItem modifProp
 			ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_object->name());
 			if((*this)[property.latin1()]->changed())
 				tree->addModProperty(property, m_object->property(property.latin1()));
@@ -100,6 +102,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 				m_lastcom->setValue(value);
 			else if(!m_undoing)
 			{
+				// We store lod values for each widget
 				QMap<QString, QVariant> list;
 				for(w = m_widgets.first(); w; w = m_widgets.next())
 					list.insert(w->name(), w->property(property.latin1()));
@@ -127,6 +130,7 @@ ObjectPropertyBuffer::slotResetProperty(KexiPropertyBuffer &, KexiProperty &prop
 	if(!m_multiple)
 		return;
 
+	// We use the old value in modifProp for each widget
 	for(QWidget *w = m_widgets.first(); w; w = m_widgets.next())
 	{
 		ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(w->name());
@@ -141,6 +145,7 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 	kdDebug() << "ObjectPropertyBuffer::setWidget()" << endl;
 
 	QWidget *w = widg;
+	// We select parent TabWidget or WidgetStack instead of pages
 	if(!m_manager->isTopLevel(w) && w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
 	{
 		w = w->parentWidget();
@@ -173,6 +178,7 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 
 	int count = 0;
 	QStrListIterator it(pList);
+	// We go through the list of properties
 	for(; it.current() != 0; ++it)
 	{
 		count = obj->metaObject()->findProperty(*it, true);
@@ -204,18 +210,18 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 		}
 
 		if(QString(meta->name()) == "name")
-			(*this)["name"]->setAutoSync(0);
+			(*this)["name"]->setAutoSync(0); // name should be updated only when pressing Enter
 		if (!m_manager->activeForm() || !m_manager->activeForm()->objectTree())
 			return;
 		ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(widg->name());
 		if(!tree)  return;
-		updateOldValue(tree, meta->name());
+		updateOldValue(tree, meta->name()); // update the KexiProperty.oldValue using the value in modifProp
 	}
 
 	if(m_manager->activeForm())
 	{
 		ObjectTreeItem *objectIt = m_manager->activeForm()->objectTree()->lookup(widg->name());
-		if(objectIt && objectIt->container())
+		if(objectIt && objectIt->container()) // we are a container -> layout property
 			createLayoutProperty(objectIt->container());
 	}
 
@@ -267,7 +273,7 @@ ObjectPropertyBuffer::showProperty(const QString &property, const QString &class
 		{
 			if(!m_manager->isTopLevel((QWidget*)m_object))
 				m_properties << "caption" << "icon" << "sizeIncrement" << "iconText";
-		}
+		} // we don't show these properties for a non-toplevel widget
 
 		if(!(m_properties.grep(property)).isEmpty())
 			return false;
@@ -278,7 +284,7 @@ ObjectPropertyBuffer::showProperty(const QString &property, const QString &class
 		{
 			m_properties << "font" << "paletteBackgroundColor" << "enabled" << "paletteForegroundColor"
 			   << "cursor" << "paletteBackgroundPixmap";
-		}
+		} // properties to show in multiple mode
 		if(!(m_properties.grep(property)).isEmpty())
 			return true;
 
@@ -306,7 +312,7 @@ ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
 			(*this)["geometry"]->setValue(((QWidget*)o)->geometry());
 		}
 	}
-	else if(m_multiple && ev->type() == QEvent::Move)
+	else if(m_multiple && ev->type() == QEvent::Move) // the widget is being moved, we update the property
 	{
 		if(m_lastgeocom && !m_undoing)
 			m_lastgeocom->setPos(static_cast<QMoveEvent*>(ev)->pos());
@@ -499,29 +505,6 @@ ObjectPropertyBuffer::createLayoutProperty(Container *container)
 	QStringList list;
 	QString value;
 
-	/*switch(container->layoutType())
-	{
-		case Container::NoLayout:
-		{
-			value = "NoLayout";
-			break;
-		}
-		case Container::HBox:
-		{
-			value = "HBox";
-			break;
-		}
-		case Container::VBox:
-		{
-			value = "VBox";
-			break;
-		}
-		case Container::Grid:
-		{
-			value = "Grid";
-			break;
-		}
-	}*/
 	value = Container::layoutTypeToString(container->layoutType());
 
 	list << "NoLayout" << "HBox" << "VBox" << "Grid";

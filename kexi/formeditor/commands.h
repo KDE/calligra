@@ -40,6 +40,9 @@ namespace KFormDesigner {
 class Container;
 class Form;
 
+/*! This command is used when changing a property for one or more widgets. \a oldvalues is a QMap of the old values of the property for every widget, to allow
+  reverting the change. \a value is the new value of the property. You can use the simpler constructor for a single widget.
+ */
 class KFORMEDITOR_EXPORT PropertyCommand : public KCommand
 {
 	public:
@@ -60,6 +63,8 @@ class KFORMEDITOR_EXPORT PropertyCommand : public KCommand
 		QCString    m_property;
 };
 
+/*! This command is used when moving multiples widgets at the same time, while holding Ctrl or Shift. You need to supply a list of widget names, and the
+  position of the cursor before moving. Use setPos() to tell the new cursor pos every time it changes.*/
 class KFORMEDITOR_EXPORT GeometryPropertyCommand : public KCommand
 {
 	public:
@@ -78,6 +83,7 @@ class KFORMEDITOR_EXPORT GeometryPropertyCommand : public KCommand
 		QPoint m_pos;
 };
 
+/*! This command is used when switching the layout of a Container. It remembers the old pos of every widget inside the Container. */
 class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 {
 	public:
@@ -92,7 +98,8 @@ class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 		QMap<QString,QRect>  m_geometries;
 };
 
-
+/*! This command is used when inserting a widger using toolbar or menu. You only need to give the parent Container and the widget pos.
+ The other informations are taken from FormManager. */
 class KFORMEDITOR_EXPORT InsertWidgetCommand : public KCommand
 {
 	public:
@@ -111,6 +118,8 @@ class KFORMEDITOR_EXPORT InsertWidgetCommand : public KCommand
 		QRect  m_insertRect;
 };
 
+/*! This command is used when creating a layout from some widgets using "Lay out in..." menu item. It remembers the old pos of every widget,
+ and takes care of updating ObjectTree too. You need to supply a QtWidgetList of the selected widgets. */
 class KFORMEDITOR_EXPORT CreateLayoutCommand : public KCommand
 {
 	public:
@@ -128,6 +137,7 @@ class KFORMEDITOR_EXPORT CreateLayoutCommand : public KCommand
 		int  m_type;
 };
 
+/*! This command is used when pasting widgets. You need to give the QDomDocument containing te widget(s) to paste, and optionnally the point where to paste widgets. */
 class KFORMEDITOR_EXPORT PasteWidgetCommand : public KCommand
 {
 	public:
@@ -145,6 +155,7 @@ class KFORMEDITOR_EXPORT PasteWidgetCommand : public KCommand
 		QStringList m_names;
 };
 
+/*! This command is used when deleting a widget using the "Delete" menu item. You need to give a QtWidgetList of the selected widgets. */
 class KFORMEDITOR_EXPORT DeleteWidgetCommand : public KCommand
 {
 	public:
@@ -161,6 +172,7 @@ class KFORMEDITOR_EXPORT DeleteWidgetCommand : public KCommand
 		QMap<QString, QString>  m_parents;
 };
 
+/*! This command is used when cutting widgets. It is basically a DeleteWidgetCommand which also updates the clipboard contents. */
 class KFORMEDITOR_EXPORT CutWidgetCommand : public DeleteWidgetCommand
 {
 	public:

@@ -115,6 +115,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		/*! Shows a propertybuffer in PropertyBuffer */
 		virtual void showPropertyBuffer(ObjectPropertyBuffer *buff);
+		/*! This function creates and displays the context menu corresponding to the widget \a w. The menu item are disabled if necessary, and
+		    the widget specific part is added (menu from the factory and buddy selection). */
 		void  createContextMenu(QWidget *w, Container *container, bool enableRemove);
 
 	public slots:
@@ -147,7 +149,9 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		 */
 		void pasteWidget();
 
+		/*! Displays a dialog where the user can modify the tab order of the active Form, by drag-n-drop or using up/down buttons. */
 		void editTabOrder();
+		/*! Adjusts the size of the selected widget, ie resize it to its size hint. */
 		void adjustWidgetSize();
 		/*! This slot is called when the user presses a "Widget" toolbar button or a "Widget" menu item. Prepares all Forms for
 		  creation of a new widget (ie changes cursor ...).
@@ -171,6 +175,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 	protected slots:
 		void deleteWidgetLaterTimeout();
+		/*! Slot called when a buddy is choosed in the buddy list. Sets the label buddy. */
 		void buddyChoosed(int id);
 
 		void layoutHBox();
@@ -179,33 +184,41 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 	protected:
 		void initForm(Form *form);
+		/*! Slot called by the "Lay out in..." menu items. It creates a layout from the currently selected widgets (that must have the same parent). */
 		void createLayout(int layoutType);
 
 	signals:
 		/*! this signal is emmited as the property buffer switched */
 		void bufferSwitched(KexiPropertyBuffer *buff);
+		/*! This signal is emitted when any change is made to the Form \a form, so it will need to be saved. */
 		void dirty(KFormDesigner::Form *form);
 
 	private:
+		// Enum for menu items indexes
 		enum { MenuCopy = 201, MenuCut, MenuPaste, MenuDelete, MenuHBox = 301, MenuVBox, MenuGrid, MenuNoBuddy = 501 };
+
 		ObjectPropertyBuffer	*m_buffer;
 		WidgetLibrary		*m_lib;
 		KexiPropertyEditor	*m_editor;
 		ObjectTreeView		*m_treeview;
+		// Forms
 		QPtrList<Form>		m_forms;
 		QPtrList<Form>		m_preview;
 		int			m_count;
 		Form			*m_active;
 		QWidget			*m_parent;
 
+		// Copy/Paste
 		QDomDocument		m_domDoc;
 		KPopupMenu		*m_popup;
 		QPoint			m_insertPoint;
 		QGuardedPtr<QWidget>	m_menuWidget;
 
+		// Insertion
 		bool			m_inserting;
 		QString			m_insertClass;
 
+		// Actions
 		QGuardedPtr<KActionCollection>	m_collection;
 		KMainWindow 		*m_client;
 		KToggleAction		*m_pointer;

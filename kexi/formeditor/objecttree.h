@@ -109,6 +109,7 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 		 * renames a item and returns false if name is doublicated
 		 */
 		virtual bool	rename(const QString &oldname, const QString &newname );
+		/*! Sets \a newparent as new parent for the item whose name is \a name. */
 		bool		reparent(const QString &name, const QString &newparent);
 
 		ObjectTreeItem	*lookup(const QString &name);

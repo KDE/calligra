@@ -106,6 +106,7 @@ Form::setCurrentWidget(QWidget *w)
 		emit selectionChanged(w);
 	}
 
+	// WidgetStack and TabWidget pages widgets shouldn't have resize handles, but their parent
 	if(!m_manager->isTopLevel(w) && w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
 	{
 		w = w->parentWidget();
@@ -209,6 +210,7 @@ Form::addWidgetToTabStops(ObjectTreeItem *c)
 		if(!w->children())
 		return;
 
+		// For composed widgets, we check if one of the child can have focus
 		QObjectList list = *(w->children());
 		for(QObject *obj = list.first(); obj; obj = list.next())
 		{
@@ -223,7 +225,7 @@ Form::addWidgetToTabStops(ObjectTreeItem *c)
 		}
 	}
 
-	if(m_tabstops.findRef(c) == -1)
+	if(m_tabstops.findRef(c) == -1) // not yet in the list
 		m_tabstops.append(c);
 }
 
@@ -302,9 +304,9 @@ Form::pasteWidget(QDomElement &widg, Container *cont, QPoint pos)
 	if (!container)
 		return;
 
-	fixNames(widg);
+	fixNames(widg); // to avoid nale clash
 	if(pos.isNull())
-		widg = fixPos(widg);
+		widg = fixPos(widg); // to avoid widget being at the same location
 	else
 		widg = fixPos(widg, pos);
 	m_inter = false;
@@ -321,7 +323,7 @@ Form::fixNames(QDomElement el)
 		if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "name"))
 		{
 			wname = n.toElement().text();
-			while(m_topTree->lookup(wname))
+			while(m_topTree->lookup(wname)) // name already exists
 			{
 				bool ok;
 				int num = wname.right(1).toInt(&ok, 10);
@@ -330,7 +332,7 @@ Form::fixNames(QDomElement el)
 				else
 					wname += "2";
 			}
-			if(wname != n.toElement().text())
+			if(wname != n.toElement().text()) // we change the name, so we recreate the element
 			{
 				n.removeChild(n.firstChild());
 				QDomElement type = el.ownerDocument().createElement("string");
@@ -340,7 +342,7 @@ Form::fixNames(QDomElement el)
 			}
 
 		}
-		if(n.toElement().tagName() == "widget")
+		if(n.toElement().tagName() == "widget") // fix child widgets names
 		{
 			fixNames(n.toElement());
 		}
@@ -353,6 +355,7 @@ Form::fixPos(QDomElement widg, QPoint newpos)
 {
 	QDomElement el = widg.cloneNode(true).toElement();
 	QDomElement rect;
+	// Find the widget geometry if there is one
 	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
@@ -401,7 +404,7 @@ Form::fixPos(QDomElement el)
 	if(!widg)
 		return el;
 
-	while(widg->geometry() == r)
+	while(widg->geometry() == r) // there is already a widget there, with the same size
 	{
 		widg = m_toplevel->widget()->childAt(widg->x() + 16, widg->y() + 16, false);
 		r.moveBy(10,10);

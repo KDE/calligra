@@ -58,7 +58,9 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		 */
 		void    checkModifiedProp();
 
+		//! Adds the i18n'ed description of a property (to allow factories to use new properties).
 		void addPropertyDescription(const char *property, const QString &desc);
+		//! Adds the i18n'ed description of a value (to allow factories to use new properties).
 		void addValueDescription(const char *value, const QString &desc);
 
 		FormManager*    manager()  { return m_manager; }
@@ -76,6 +78,7 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		 properties.
 		*/
 		void	slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty &prop);
+		/*! This slot is called when a property is reset using the "reload" button in PropertyEditor. */
 		void    slotResetProperty(KexiPropertyBuffer &buff, KexiProperty &prop);
 		//! This slot is called when the watched widget is destroyed. Resets the buffer.
 		void    widgetDestroyed();
@@ -95,10 +98,6 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		   \return true if the property should be shown. False otherwise.
 		 */
 		bool    showProperty(const QString &property, const QString &classname=QString::null);
-		/*! This function is used to filter the properties to be shown when multiple widgets are selected at the same time.
-		   \return true if the property should be shown. False otherwise.
-		 */
-		//bool    showMultipleProperty(const QString &property, const QString &className);
 		/*! Creates the properties related to alignment (ie hAlign, vAlign and WordBreak) for the QWidget \a obj. \a meta
 		  is the QMetaProperty for "alignment" property". ( called by setObject() )
 		 */

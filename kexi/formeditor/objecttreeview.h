@@ -48,11 +48,6 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 		//! Reimplemented to draw custom contents (copied from Property Editor)
 		virtual void setup();
 
-		/*! \return The pixmap rerpresenting the widget with \a classname, to be shown in the list.
-		   Not implemented yet.
-		 */
-		static QPixmap iconByName(const QString &classname);
-
 	private:
 		ObjectTreeItem     *m_item;
 
@@ -77,6 +72,7 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		    in the Form, and selection will be synced. Nothing happens if \a form is already the current Form.
 		 */
 		void setForm(Form *form);
+		//! Return the pixmap for a given class, to be shown next to the widget name.
 		QString  pixmapForClass(const QString &classname);
 
 	public slots:
@@ -92,6 +88,7 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		void emitSelChanged();
 		/*! Just renames the list item from \a oldname to \a newname. */
 		void renameItem(const QString &oldname, const QString &newname);
+		/*! This lot is called when the user right-click a list item. The widget context menu is shown, as inisde the Form. */
 		void displayContextMenu(KListView *list, QListViewItem *item, const QPoint &p);
 
 	signals:

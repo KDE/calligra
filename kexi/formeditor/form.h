@@ -48,6 +48,7 @@ typedef QPtrList<ObjectTreeItem> ObjectTreeC;
   This class represents one form and holds the corresponding ObjectTree and Containers.
   It takes care of widget selection and pasting widgets.
  **/
+ //! A simple class representing a form
 class KFORMEDITOR_EXPORT Form : public QObject
 {
 	Q_OBJECT
@@ -113,7 +114,9 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		static int		gridX() { return 10;}
 		//! \return the y distance between two dots in the background.
 		static int		gridY() { return 10;}
+		//! \return the default margin for all the layout inside this Form.
 		static int		defaultMargin() { return 11;}
+		//! \return the default spacing for all the layout inside this Form.
 		static int		defaultSpacing() { return 6;}
 
 		/*! Pastes the widget represented by the QDomElement \a widg in the Form. \a widg is created by FormManager::saveWidget().\n
@@ -136,12 +139,22 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		KCommandHistory*	commandHistory() { return m_history; }
 		KActionCollection*	actionCollection() { return m_collection; }
 
+		/*! Adds a widget in the form CommandList. Please use it instead of calling directly actionCollection()->addCommand(). */
 		void addCommand(KCommand *command, bool execute);
 
+		/*! \return A pointer to this Form tabstops list : it contains all the widget that can have focus ( ie no labels, etc)
+		    in the order of the tabs.*/
 		ObjectTreeC*		tabStops() { return &m_tabstops; }
+		/*! Adds the widget at the end of tabstops list. Called on widget creation. */
 		void			addWidgetToTabStops(ObjectTreeItem *c);
+		/*! \return True if the Form automatically handles tab stops. */
 		bool			autoTabStops() { return m_autoTabstops; }
+		/*! If \a autoTab is true, then the Form will automatically handle tab stops, and the "Edit Tab Order" dialog will be disabled.
+		   The tab widget will be set from the top-left to the bottom-right corner.\n
+		    If \ autoTab is false, then it's up to the user to change tab stops (which are by default in order of creation).*/
 		void			setAutoTabStops(bool autoTab) { m_autoTabstops = autoTab;}
+		/*! Tells the Form to reassign the tab stops because the widget layout has changed (called for example before saving or
+		   displaying the tab order dialog) */
 		void			autoAssignTabStops();
 
 	public slots:

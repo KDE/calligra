@@ -73,6 +73,10 @@ class WidgetLibrary;
 class ObjectTreeItem;
 class Form;
 
+/**
+ * This class is used to filter the events from any widget (and all its subwidgets) and direct it to the Container.
+ */
+//! A class to redirect events
 class KFORMEDITOR_EXPORT EventEater : public QObject
 {
 	Q_OBJECT
@@ -81,6 +85,7 @@ class KFORMEDITOR_EXPORT EventEater : public QObject
 		EventEater(QWidget *widget, Container *container);
 		~EventEater();
 
+		//! Sets the object which will receive the events
 		void  setContainer(QObject *container)  { m_container = container; }
 		bool  eventFilter(QObject *o, QEvent *ev);
 
@@ -125,7 +130,9 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		QLayout*        layout() const { return m_layout; }
 		//! \return the type of the layout associated to this Container's widget (see LayoutType enum).
 		LayoutType      layoutType() const { return m_layType; }
+		//! \return the string representing the layoutType \a type.
 		static QString  layoutTypeToString(int type);
+		//! \return the LayoutType (an int) for a given layout name.
 		static LayoutType stringToLayoutType(const QString &name);
 		int             layoutMargin() { return m_margin; }
 		int             layoutSpacing() { return m_spacing; }
@@ -156,6 +163,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 
 		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list and its resizeHandles are removed. */
 		void		unSelectWidget(QWidget *w);
+		/*! Recreates the Container layout. Calls this when a widget has been moved or added to update the layout. */
 		void		reloadLayout();
 
 	protected slots:
@@ -172,6 +180,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		   following their position (such as HorWidgetList or VerWidgetList).
 		  */
 		void		createBoxLayout(QtWidgetList *list);
+		/*! Internal function to create a GridLayout.
+		  */
 		void		createGridLayout();
 
 	private:

@@ -47,44 +47,7 @@
 
 QDict<QLabel>  *KFormDesigner::FormIO::m_buddies = 0;
 
-//typedef QPtrList<QWidget> QWidgetList;
-
 namespace KFormDesigner {
-
-// Helper classes for sorting widgets before saving (because Designer is too stupid to put them in the right order)
-/*class HorWidgetList : public QWidgetList
-{
-	public:
-	HorWidgetList() {;}
-	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
-	{
-		QWidget *w1 = static_cast<QWidget*>(item1);
-		QWidget *w2 = static_cast<QWidget*>(item2);
-
-		if(w1->x() < w2->x())
-			return -1;
-		if(w1->x() > w2->x())
-			return 1;
-		return 0; // item1 == item2
-	}
-};
-
-class VerWidgetList : public QWidgetList
-{
-	public:
-	VerWidgetList() {;}
-	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
-	{
-		QWidget *w1 = static_cast<QWidget*>(item1);
-		QWidget *w2 = static_cast<QWidget*>(item2);
-
-		if(w1->y() < w2->y())
-			return -10;
-		if(w1->y() > w2->y())
-			return 1;
-		return 0; // item1 == item2
-	}
-};*/
 
 // FormIO itself
 
@@ -140,13 +103,16 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 	uiElement.setAttribute("version", "3.1");
 	uiElement.setAttribute("stdsetdef", 1);
 
+	// We create the top class element
 	QDomElement baseClass = domDoc.createElement("class");
 	uiElement.appendChild(baseClass);
 	QDomText baseClassV = domDoc.createTextNode("QWidget");
 	baseClass.appendChild(baseClassV);
 
+	// Save the toplevel widgets, and so the whole Form
 	saveWidget(form->objectTree(), uiElement, domDoc);
 
+	// We then save the layoutdefaults element
 	QDomElement layoutDefaults = domDoc.createElement("layoutDefaults");
 	layoutDefaults.setAttribute("spacing", QString::number(Form::defaultSpacing()));
 	layoutDefaults.setAttribute("margin", QString::number(Form::defaultMargin()));
@@ -250,7 +216,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 			continue;
 		}
 		int index = form->tabStops()->findRef(item);
-		if((index != -1) && (index != i))
+		if((index != -1) && (index != i)) // the widget is not in the same place, so we move it
 		{
 			form->tabStops()->remove(item);
 			form->tabStops()->insert(i, item);
@@ -278,14 +244,14 @@ FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name, co
 	QDomElement propertyE = parent.createElement("property");
 	propertyE.setAttribute("name", name);
 
-	QDomElement type;
-	QDomText valueE;
-
 	// Checking if this property is enum or set type
 	int count = w->metaObject()->findProperty(name, true);
 	const QMetaProperty *meta = w->metaObject()->property(count, true);
 	if(meta && meta->isEnumType())
 	{
+		QDomElement type;
+		QDomText valueE;
+
 		if(meta->isSetType())
 		{
 			QStringList list = QStringList::fromStrList(meta->valueToKeys(value.toInt()));
@@ -296,7 +262,6 @@ FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name, co
 		else
 		{
 			QString s = meta->valueToKey(value.toInt());
-			kdDebug() << "the property is enum type " << s << endl;
 			type = parent.createElement("enum");
 			valueE = parent.createTextNode(s);
 			type.appendChild(valueE);
@@ -306,17 +271,17 @@ FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name, co
 		return;
 	}
 
-
 	// Saving a "normal" property
-	writeVariant(parent, type, valueE, value);
-
-	propertyE.appendChild(type);
+	writeVariant(parent, propertyE, value);
 	parentNode.appendChild(propertyE);
 }
 
 void
-FormIO::writeVariant(QDomDocument &parent, QDomElement &type, QDomText &valueE, QVariant value)
+FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant value)
 {
+	QDomElement type;
+	QDomText valueE;
+
 	switch(value.type())
 	{
 		case QVariant::String:
@@ -565,6 +530,8 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &type, QDomText &valueE, 
 		default:
 			break;
 	}
+
+	parentNode.appendChild(type);
 }
 
 void
@@ -572,11 +539,7 @@ FormIO::saveProperty(QDomElement &parentNode, QDomDocument &domDoc, const QStrin
 {
 	QDomElement propertyE = domDoc.createElement(tagName);
 	propertyE.setAttribute("name", property);
-	QDomElement type;
-	QDomText valueE;
-
-	writeVariant(domDoc, type, valueE, value);
-	propertyE.appendChild(type);
+	writeVariant(domDoc, propertyE, value);
 	parentNode.appendChild(propertyE);
 }
 
@@ -740,13 +703,17 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	if (!item)
 		return;
 	bool savedAlignment = false;
+	// we let Spacer class handle saving itself
 	if(item->className() == "Spacer")
 	{
 		Spacer::saveSpacer(item, parent, domDoc, insideGridLayout);
 		return;
 	}
 
+	// We create the "widget" element
 	QDomElement tclass = domDoc.createElement("widget");
+	parent.appendChild(tclass);
+
 	if(insideGridLayout)
 	{
 		tclass.setAttribute("row", item->gridRow());
@@ -757,12 +724,14 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			tclass.setAttribute("colspan", item->gridColSpan());
 		}
 	}
+	// For compatibility, HBox, VBox and Grid are saved as "QLayoutWidget"
 	if((item->widget()->isA("HBox")) || (item->widget()->isA("VBox")) || (item->widget()->isA("Grid")))
 		tclass.setAttribute("class", "QLayoutWidget");
-	else
+	else// Normal widgets
 		tclass.setAttribute("class", item->widget()->className());
 	prop(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
 
+	// We don't want to save the geometry if the widget is inside a layout (so parent.tagName() == "grid" for example)
 	if((parent.tagName() == "widget") || (parent.tagName() == "UI"))
 		prop(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
 
@@ -776,22 +745,22 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	else
 		lib = item->parent()->container()->form()->manager()->lib();
 
+	// We save every property in the modifProp list of the ObjectTreeItem
 	for(QMap<QString,QVariant>::Iterator it = item->modifProp()->begin(); it != item->modifProp()->end(); ++it)
 	{
 		QString name = it.key();
 		if((name == QString("hAlign")) || (name == QString("vAlign")) || (name == QString("wordbreak")))
 		{
-			if(!savedAlignment)
+			if(!savedAlignment) // not tosave it twice
 			{
 				prop(tclass, domDoc, "alignment", item->widget()->property("alignment"), item->widget());
 				savedAlignment = true;
 			}
 		}
 
-		else if((name != "name") && (name != "geometry") && (name != "layout"))
+		else if((name != "name") && (name != "geometry") && (name != "layout")) // these have already been saved
 			prop(tclass, domDoc, it.key().latin1(), item->widget()->property(it.key().latin1()), item->widget(), lib);
 	}
-	parent.appendChild(tclass);
 
 	// Saving container 's layout if there is one
 	QDomElement layout;
@@ -819,7 +788,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			default:
 				break;
 		}
-		if(!nodeName.isNull())
+		if(!nodeName.isNull()) // there is a layout
 		{
 			layout = domDoc.createElement(nodeName);
 			prop(layout, domDoc, "name", "unnamed", item->widget());
@@ -831,18 +800,19 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		}
 	}
 
-	if(!item->children()->isEmpty() && layout.isNull())
+	if(!item->children()->isEmpty() && layout.isNull()) // no layout, no special order
 	{
 		for(ObjectTreeItem *objIt = item->children()->first(); objIt; objIt = item->children()->next())
 			saveWidget(objIt, tclass, domDoc);
 	}
-	else if((!item->children()->isEmpty()) && (layout.tagName() == "grid"))
+	else if((!item->children()->isEmpty()) && (layout.tagName() == "grid")) // grid layout
 	{
 		for(ObjectTreeItem *objIt = item->children()->first(); objIt; objIt = item->children()->next())
 			saveWidget(objIt, layout, domDoc, true);
 	}
-	else if(!item->children()->isEmpty())
+	else if(!item->children()->isEmpty()) // hbox or vbox layout
 	{
+		// as we don't save geometry, we need to sort widgets in the right order, not creation order
 		QtWidgetList *list;
 		if(layout.tagName() == "hbox")
 			list = new HorWidgetList();
@@ -867,6 +837,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 void
 FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent)
 {
+	// We first look for the widget's name
 	QString wname;
 	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
@@ -880,6 +851,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	QWidget *w;
 	QString classname;
 
+	// We translate some name (for compatibility)
 	if(el.tagName() == "spacer")
 		classname = "Spacer";
 	else if(el.attribute("class") == "QLayoutWidget")
@@ -898,6 +870,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 		}
 	}
 	else
+	// We check if this classnale is an alternate one, and replace it if necessary
 		classname = lib->checkAlternateName(el.attribute("class"));
 
 	if(!parent)
@@ -906,11 +879,13 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 		w = lib->createWidget(classname, parent, wname.latin1(), container);
 
 	if(!w)  return;
+	w->show();
 
+	// We create and insert the ObjectTreeItem at the good place in the ObjectTree
 	ObjectTreeItem *tree;
 	if (!container->form()->objectTree()->lookup(wname))
 	{
-		EventEater *eater = new EventEater(w, container);
+		EventEater *eater = new EventEater(w, container); // to filter events
 		tree =  new ObjectTreeItem(lib->displayName(classname), wname, w, eater);
 		if(parent)
 		{
@@ -924,14 +899,15 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 			container->form()->objectTree()->addChild(container->tree(), tree);
 	}
 	else
-		tree = container->form()->objectTree()->lookup(wname);
+		tree = container->form()->objectTree()->lookup(wname); // the ObjectTreeItem has already been created, so we just use it
 
+	// if we are inside a Grid, we need to insert the widget in the good cell
 	if(el.parentNode().toElement().tagName() == "grid")
 	{
 		QGridLayout *layout = (QGridLayout*)container->layout();
 		if(!layout)
 			kdDebug() << "FormIO::ERROR:: the layout == 0" << endl;
-		if(el.hasAttribute("rowspan"))
+		if(el.hasAttribute("rowspan")) // widget spans multiple cells
 		{
 			layout->addMultiCellWidget(w, el.attribute("row").toInt(), el.attribute("row").toInt() + el.attribute("rowspan").toInt()-1,
 			 el.attribute("column").toInt(),  el.attribute("column").toInt() + el.attribute("colspan").toInt()-1);
@@ -947,20 +923,21 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 
 	readChildNodes(tree, container, lib, el, w);
 
+	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
 	QStringList list(container->form()->manager()->lib()->autoSaveProperties(w->className()));
 	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it)
 		tree->addModProperty(*it, w->property((*it).latin1()));
 
+	// Spacer needs to do some other loading, so we call it
 	if(el.tagName() == "spacer")
 		Spacer::loadSpacer(w, el);
-	w->show();
 }
 
 void
 FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 {
+	// We first look for the widget's name
 	QString wname;
-	//QWidget *w;
 	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "name"))
@@ -970,9 +947,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 		}
 
 	}
-
-//	w = new QWidget(parent, wname.latin1());
-//	form->createToplevel(w);
+	// And rename the widget and its ObjectTreeItem
 	container->setName(wname.latin1());
 	if(form->objectTree())
 		form->objectTree()->rename(form->objectTree()->name(), wname);
@@ -981,6 +956,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 
 	readChildNodes(form->objectTree(), form->toplevelContainer(), form->manager()->lib(), el, container);
 
+	// Now the Form is fully loaded, we can assign the buddies
 	QDictIterator<QLabel> it(*m_buddies);
 	for(; it.current(); ++it)
 	{
@@ -1014,12 +990,13 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 			if(name == "geometry")
 				hasGeometryProp = true;
 			if( ((eltag == "grid") || (eltag == "hbox") || (eltag == "vbox")) &&
-			      (name == "name"))
+			      (name == "name")) // we don't care about layout names
 				continue;
 
 			// We cannot assign the buddy now as the buddy widget may not be created yet
 			if(name == "buddy")
 				m_buddies->insert(readProp(node.firstChild(), w, name).toString(), (QLabel*)w);
+			// We load the margin of a Layout
 			else if((name == "margin") && ((eltag == "grid") || (eltag == "hbox") || (eltag == "vbox")))
 			{
 				int margin = readProp(node.firstChild(), w, name).toInt();
@@ -1030,6 +1007,7 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 						tree->container()->layout()->setMargin(margin);
 				}
 			}
+			// We load the spacing of a Layout
 			else if((name == "spacing") && ((eltag == "grid") || (eltag == "hbox") || (eltag == "vbox")))
 			{
 				int spacing = readProp(node.firstChild(), w, name).toInt();
@@ -1040,18 +1018,19 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 						tree->container()->layout()->setSpacing(spacing);
 				}
 			}
+			// If the object doesn't have this property, we let the Factory handle it (maybe a special property)
 			else if(w->metaObject()->findProperty(name.latin1(), true) == -1)
 				lib->readSpecialProperty(w->className(), node, w, tree);
-			else
+			else // we have a normal property, let's load it
 			{
 				QVariant val = readProp(node.firstChild(), w, name);
 				w->setProperty(name.latin1(), val);
 				tree->addModProperty(name, val);
 			}
 		}
-		else if(tag == "widget")
+		else if(tag == "widget") // a child widget
 		{
-			if(tree->container())
+			if(tree->container()) // we are a Container
 				loadWidget(tree->container(), lib, node);
 			else
 				loadWidget(container, lib, node, w);
@@ -1064,21 +1043,22 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 		{
 			loadLayout(node, tree);
 			readChildNodes(tree, container, lib, node, w);
-			if(tag != "grid")
+			if(tag != "grid") // no need to reload if layout is a grid
 				tree->container()->reloadLayout();
 		}
-		else
+		else // unknown tag, welet the Factory handle it
 			lib->readSpecialProperty(w->className(), node, w, tree);
 	}
 
+	// If the wigdet doesn't have a geometry property (so inside a layout), we need to move it to make sure it will be in the right place in the layout
 	if((!hasGeometryProp) && ((eltag == "widget") || (eltag == "spacer")))
 	{
 		QString parentTag = el.parentNode().toElement().tagName();
 		kdDebug() << "Moving the widget" << w->name() << " by " << tree->parent()->children()->count() << endl;
 		if(parentTag == "hbox")
-			w->move(w->x() + tree->parent()->children()->count(), w->y());
+			w->move(w->x() + tree->parent()->children()->count(), w->y()); // just right to the previous widget
 		else if(parentTag == "vbox")
-			w->move(w->x(), w->y() + tree->parent()->children()->count());
+			w->move(w->x(), w->y() + tree->parent()->children()->count()); // just under the previous widget
 	}
 }
 
@@ -1101,6 +1081,7 @@ FormIO::loadLayout(const QDomElement &el, ObjectTreeItem *tree)
 	{
 		tree->container()->m_layType = Container::Grid;
 		int nrow = 1, ncol = 1;
+		// We go through the child widgets to see the number of columns and rows in the grid
 		for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
 		{
 			if(n.toElement().tagName() == "widget")

@@ -80,7 +80,10 @@ class KFORMEDITOR_EXPORT Widget
 		void		setClassName(const QString &s) { m_class = s; }
 		void		setName(const QString &n) { m_name = n; }
 		void		setDescription(const QString &desc) { m_desc = desc;}
+		/*! Sets the C++ include file corresponding to this class, that uic will need to add when creating the file. */
 		void		setInclude(const QString &include) { m_include = include;}
+		/*! Sets an alternate name for this class. If this name is found when loading a .ui file, the className()
+		 will be used instead. It allows to support both KDE and Qt versions of widget, without duplicating code. */
 		void		setAlternateClassName(const QString &alternate) { m_alternate = alternate; }
 
 	private:
@@ -96,6 +99,8 @@ class KFORMEDITOR_EXPORT Widget
 
 typedef QPtrList<Widget> WidgetList;
 
+/*! This helper function install an event filter on \a object and all of its children, directed to \a container.
+  This is necessary to filter events for composed widgets. */
 void KFORMEDITOR_EXPORT installRecursiveEventFilter(QObject *object, QObject *container);
 /**
  * this is a poor virtual class, used for making widgets
@@ -137,12 +142,28 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		   and \a container is the parent container of this widget (to access Form etc.).
 		 */
 		virtual void		startEditing(const QString &classname, QWidget *w, Container *container)=0;
+		/*! This function is called just before the Form is previewed. It allows widgets to make changes before switching
+		 (ie for a Spacer, hiding the cross) */
 		virtual void		previewWidget(const QString &classname, QWidget *widget, Container *container)=0;
 
+		/*! This function is called when FormIO finds a property, at save time, that it cannot handle (ie not a normal property).
+		This way you can save special properties, for example the contents of a listbox.
+		  \sa readSpecialProperty()
+		 */
 		virtual void	saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		         QDomElement &parentNode,  QDomDocument &parent)=0;
+		/*! This function is called when FormIO fins a property or an unknown element in a .ui file. You can this way load a special property, for
+		  example the contents of a listbox.
+		   \sa saveSpecialProperty()
+		*/
 		virtual void            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, ObjectTreeItem *item)=0;
+		/*! This function is used to know whether the \a property for the widget \a w should be shown or not in the PropertyEditor.
+		  If \a multiple is true, then multiple widgets of the same class are selected, and you should only show properties shared by widgets
+		  (eg font, color). By default, all properties are shown if multiple == true, and none if multiple == false.
+		*/
 		virtual bool		showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple) { return !multiple; }
+		/*! You need to return here a list of the properties that should automatically be saved for a widget belonging to \a classname,
+		 and your custom properties (eg "text" for label or button, "contents" for combobox...). */
 		virtual QStringList     autoSaveProperties(const QString &classname)=0;
 
 	protected:
@@ -152,22 +173,41 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 */
 		virtual KLineEdit*	createEditor(const QString &text, QWidget *w, QRect geometry, int align,  bool useFrame=false,
 		     BackgroundMode background = Qt::NoBackground);
+		/*! This function provides a simple editing mode : it justs disable event filtering for the widget, and it install it again when
+		  the widget loose focus or Enter is pressed.
+		*/
 		virtual void     disableFilter(QWidget *w, Container *container);
+		/*! This function creates a little dialog (a KEditListBox) to modify the contents of a list (of strings). It can be used to modify the contents
+		 of a combo box for instance. The modified list is copied into \a list when the user presses "Ok".*/
 		virtual bool     editList(QWidget *w, QStringList &list);
-		/*! This function destroys the editor. */
-		virtual bool  eventFilter(QObject *obj, QEvent *ev);
-		virtual void  changeProperty(const char *name, const QVariant &value, Container *container);
-		virtual void  addPropertyDescription(Container *container, const char *prop, const QString &desc);
-		virtual void  addValueDescription(Container *container, const char *value, const QString &desc);
+		/* This function creates a little editor to modify rich text. It supports alignment, subscript and superscript and all basic formatting properties.
+		  If the user presses "Ok", the edited text is put in \a text. If he presses "Cancel", nothing happens. */
 		bool  editRichText(QWidget *w, QString &text);
+		/*! This function creates a dialog to modify the contents of a ListView. You can modify both columns and list items. The listview is
+		 automatically  updated if the user presses "Ok".*/
 		void  editListView(QListView *listview);
+
+		/*! This function destroys the editor when it looses focus or Enter is pressed. */
+		virtual bool  eventFilter(QObject *obj, QEvent *ev);
+		/*! This function is used to modify a property of a widget (eg after editing it). Please use it instead of w->setProperty()
+		 to allow sync inside PropertyEditor.
+		*/
+		virtual void  changeProperty(const char *name, const QVariant &value, Container *container);
+		/*! Adds the i18n'ed description of a property, which will be shown in PropertyEditor. */
+
+		virtual void  addPropertyDescription(Container *container, const char *prop, const QString &desc);
+		/*! Adds the i18n'ed description of a property value, which will be shown in PropertyEditor. */
+		virtual void  addValueDescription(Container *container, const char *value, const QString &desc);
 
 	protected slots:
 		/*! You have to implement this function for editing inside the Form to work. This slot is called when the line edit text changes,
-		  and you have to make it really change the good property of the widget (text, or title, etc.).
+		  and you have to make it really change the good property of the widget using changeProperty() (text, or title, etc.).
 		 */
 		virtual void  changeText(const QString &newText){;}
+		/*! This slot is called when the editor has lost focus or the user pressed Enter. It destroys the editor or installs
+		 again the event filter on the widget. */
 		virtual void  resetEditor();
+		/*! This slot is called when the editor is destroyed.*/
 		virtual void  editorDeleted();
 
 	protected:

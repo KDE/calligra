@@ -54,6 +54,10 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		FormIO(QObject *parent, const char *name);
 		~FormIO(){;}
 
+		/*! \return 0 if saving failed, 1 otherwise\n
+		    Save the Form in the \a domDoc QDomDocument. Called by saveForm().
+		    \sa saveForm()
+		 */
 		static int saveFormToDom(Form *form, QDomDocument &domDoc);
 		/*! \return 0 if saving failed, 1 otherwise\n
 		    Save the Form \a form to the file \a filename. If \a filename is null or not given,
@@ -61,15 +65,19 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    \todo Add errors code and error dialog
 		*/
 		static int saveForm(Form *form, const QString &filename=QString::null);
-		/*! \return 0 if faild otherwiese 1
-		 * uses a QByteArray as dest
+		/*! \return 0 if saving failed, 1 otherwise\n
+		 *  Saves the \a form inside the \a dest QByteArray.
+		 *  \sa saveFormToDom(), saveForm()
 		 */
 		static int saveForm(Form *form, QByteArray &dest);
 
-		static int loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf);
+		/*! \return 0 if loading failed, 1 otherwise\n
+		    Loads a form from the \a domDoc QDomDocument. Called by loadForm() and loadFormData(). */
+		static int loadFormFromDom(Form *form, QWidget *container, QDomDocument &domDoc);
 
-		/*! \return 0 if faild otherwise 1
-		 * loads widgets on ground and sets properties to ground
+		/*!  \return 0 if loading failed, 1 otherwise\n
+		 *   Loads a form from the \a src QByteArray.
+		 *  \sa loadFormFromDom(), loadForm().
 		 */
 		static int loadFormData(Form *form, QWidget *container, QByteArray &src, bool preview=false);
 
@@ -95,6 +103,10 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    This is used to copy/paste widgets.
 		*/
 		static void         loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent=0);
+		/*! Save an element in the \a domDoc as child of \a parentNode. The element will be saved like this :
+		  \code  <$(tagName) name = "$(property)">< value_as_XML ><$(tagName)/>
+		  \endcode
+		*/
 		static void         saveProperty(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName, const QString &property, const QVariant &value);
 		/*! Read an object property in the DOM doc.
 		   \param node   the QDomNode of the property
@@ -111,7 +123,8 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		static void   prop(QDomElement &parentNode, QDomDocument &parent, const char *name, const QVariant &value, QWidget *w, WidgetLibrary *lib=0);
 
 	protected:
-		static void   writeVariant(QDomDocument &parent, QDomElement &type, QDomText &valueE, QVariant value);
+		/*! Saves the QVariant \a value as text to be included in an xml file, with \a parentNode.*/
+		static void   writeVariant(QDomDocument &parent, QDomElement &parentNodeQVariant value);
 
 		/*! Creates a toplevel widget from the QDomElement \a element in the Form \a form, with \a parent as parent widget.
 		  It calls readProp() and loadWidget() to load child widgets.
@@ -131,10 +144,13 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		/*! Loads the layout (ie calls Container::setLayout() ) which type is \a name,
 		   and belonging to the widget represented by the ObjectTreeItem \a tree. */
 		static void         loadLayout(const QDomElement &el, ObjectTreeItem *tree);
+		/*! Reads the child nodes of a "widget" element. */
 		static void         readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *w);
+		/*! Adds an include file to be saved in the "includehints" part of .ui file, which is needed by uic. */
 		static void         addIncludeFile(const QString &include, QDomDocument &domDoc);
 
 	private:
+		// This dict stores buddies associations until the Form is completely loaded.
 		static QDict<QLabel>  *m_buddies;
 };
 

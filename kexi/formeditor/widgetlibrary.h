@@ -48,9 +48,10 @@ typedef QDict<Widget> Widgets;
 typedef QPtrList<KAction> Actions;
 
 /**
- * this class searches for factroies and provides KActions for widgetselection
+ * This class searches for factories and provides KActions for widgetselection
  * every widget can be located using this library.
  * calles won't borther with factories directly than, but with the Library
+ * See WidgetFactory for a description of the functions.
  */
 
 class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
@@ -99,6 +100,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		bool	createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
 
 		QString  displayName(const QString &classname);
+		/*! Checks if the \a classname is an alternate classname, and return the good classname. If \a classname is not alternate, it is returned. */
 		QString  checkAlternateName(const QString &classname);
 		QString  icon(const QString &classname);
 		QString  includeFile(const QString &classname);

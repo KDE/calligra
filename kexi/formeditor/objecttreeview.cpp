@@ -228,7 +228,7 @@ ObjectTreeView::setSelWidget(QWidget *w)
 	clearSelection();
 
 	QListViewItem *item = (QListViewItem*) findItem(w->name());
-	blockSignals(true);
+	blockSignals(true); // to avoid recursion
 	setCurrentItem(item);
 	setSelectionAnchor(item);
 	setSelected(item, true);
@@ -249,7 +249,7 @@ void
 ObjectTreeView::emitSelChanged()
 {
 	QPtrList<QListViewItem> list = selectedItems();
-	if(list.count() == 1)
+	if(list.count() == 1) // only one widget selected
 	{
 		ObjectTreeViewItem *it = static_cast<ObjectTreeViewItem*>(list.first());
 		emit selectionChanged(it->objectTree()->widget());
@@ -327,6 +327,7 @@ ObjectTreeView::loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent)
 	ObjectTreeViewItem *treeItem = new ObjectTreeViewItem(parent, item);
 	treeItem->setOpen(true);
 
+	// The item is inserted by default at the beginning, but we want it to be at the end, so we move it
 	QListViewItem *last = parent->firstChild();
 	while(last->nextSibling())
 		last = last->nextSibling();

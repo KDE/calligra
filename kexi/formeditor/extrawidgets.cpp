@@ -296,6 +296,8 @@ EditListViewDialog::EditListViewDialog(QListView *listview, QWidget *parent)
 	m_listview->setSorting(-1);
 	layout->addWidget(m_listview);
 	m_listview->setFocus();
+
+	// We copy the contents of the listview into our listview
 	for(int i = 0; i < listview->columns(); i++)
 	{
 		m_listview->addColumn(listview->columnText(i), listview->columnWidth(i));
@@ -310,6 +312,7 @@ EditListViewDialog::EditListViewDialog(QListView *listview, QWidget *parent)
 		loadChildNodes(m_listview, item, 0);
 		item = item->nextSibling();
 	}
+
 	connect(m_listview, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
 	m_listview->setSelected(m_listview->firstChild(), true);
 	if(!m_listview->firstChild())
@@ -375,9 +378,9 @@ EditListViewDialog::EditListViewDialog(QListView *listview, QWidget *parent)
 	if( exec() == QDialog::Accepted)
 	{
 		listview->clear();
+		// We copy the contents of our listview back in the listview
 		for(int i = 0; i < m_listview->columns(); i++)
 		{
-			kdDebug() << "Saving column " << listview->columnText(i) << i << endl;
 			if(listview->columns() <= i)
 				listview->addColumn(m_listview->columnText(i), m_listview->columnWidth(i));
 			else
@@ -409,7 +412,7 @@ EditListViewDialog::changeProperty(KexiPropertyBuffer &buffer, KexiProperty &pro
 	QString name = prop.name();
 	if(name == "caption")
 	{
-		m_buffer->blockSignals(true);
+		m_buffer->blockSignals(true); // we need to block signals because changeItem will modify selection, and call updateItemProperties
 		m_listbox->changeItem(prop.value().toString(), m_listbox->currentItem());
 		m_listview->setColumnText(m_listbox->currentItem(), prop.value().toString());
 		m_buffer->blockSignals(false);
@@ -433,7 +436,7 @@ EditListViewDialog::updateItemProperties(QListBoxItem *item)
 	int id = m_listbox->index(item);
 	if(m_buffer)
 	{
-		m_buffer->blockSignals(true);
+		m_buffer->blockSignals(true); // we don't want changeProperty to be called
 		(*m_buffer)["caption"]->setValue(m_listview->columnText(id), false);
 		(*m_buffer)["width"]->setValue(m_listview->columnWidth(id), false);
 		(*m_buffer)["clickable"]->setValue(QVariant(m_listview->header()->isClickEnabled(id), 4), false);
@@ -559,6 +562,7 @@ EditListViewDialog::loadChildNodes(QListView *listview, QListViewItem *item, QLi
 			newItem = new QListViewItem(listview);
 	}
 
+	// We need to move the item at the end, which is the expected behaviour (by default it is inserted at the beginning)
 	QListViewItem *last;
 	if(parent)
 		last = parent->firstChild();
@@ -569,6 +573,7 @@ EditListViewDialog::loadChildNodes(QListView *listview, QListViewItem *item, QLi
 		last = last->nextSibling();
 	newItem->moveItem(last);
 
+	// We copy the text of all the columns
 	for(int i = 0; i < listview->columns(); i++)
 		newItem->setText(i, item->text(i));
 

@@ -64,7 +64,7 @@ PropertyCommand::execute()
 	m_buffer->m_manager->activeForm()->setSelWidget(w);
 	m_buffer->setWidget(w);
 
-	if(m_oldvalues.count() >= 2)
+	if(m_oldvalues.count() >= 2) // more than one widget, we need to add the others to selection
 	{
 		QMap<QString, QVariant>::Iterator it = m_oldvalues.begin();
 		++it;
@@ -127,6 +127,7 @@ GeometryPropertyCommand::execute()
 	int dx = m_pos.x() - m_oldPos.x();
 	int dy = m_pos.y() - m_oldPos.y();
 
+	// We move every widget in our list by (dx, dy)
 	for(QStringList::Iterator it = m_names.begin(); it != m_names.end(); ++it)
 	{
 		QWidget *w = m_buffer->m_manager->activeForm()->objectTree()->lookup(*it)->widget();
@@ -142,6 +143,7 @@ GeometryPropertyCommand::unexecute()
 	int dx = m_pos.x() - m_oldPos.x();
 	int dy = m_pos.y() - m_oldPos.y();
 
+	// We move every widget in our list by (-dx, -dy) to undo the move
 	for(QStringList::Iterator it = m_names.begin(); it != m_names.end(); ++it)
 	{
 		QWidget *w = m_buffer->m_manager->activeForm()->objectTree()->lookup(*it)->widget();
@@ -170,6 +172,7 @@ LayoutPropertyCommand::LayoutPropertyCommand(ObjectPropertyBuffer *buf, const QS
 {
 	m_form = buf->m_manager->activeForm();
 	Container *m_container = m_form->objectTree()->lookup(name)->container();
+	// We save the geometry of each wigdet
 	for(ObjectTreeItem *it = m_container->tree()->children()->first(); it; it = m_container->tree()->children()->next())
 		m_geometries.insert(it->name(), it->widget()->geometry());
 }
@@ -185,6 +188,7 @@ LayoutPropertyCommand::unexecute()
 {
 	Container *m_container = m_form->objectTree()->lookup(m_oldvalues.begin().key())->container();
 	m_container->setLayout(Container::NoLayout);
+	// We put every widget back in its old location
 	for(QMap<QString,QRect>::Iterator it = m_geometries.begin(); it != m_geometries.end(); ++it)
 	{
 		ObjectTreeItem *tree = m_container->form()->objectTree()->lookup(it.key());
@@ -219,7 +223,7 @@ InsertWidgetCommand::execute()
 	if (!m_form->objectTree())
 		return;
 	Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
-	if(m_name.isEmpty())
+	if(m_name.isEmpty()) // we have to use the same name every time, so we don't recreate it if we already have one
 		m_name = m_container->form()->objectTree()->genName(m_container->form()->manager()->lib()->displayName(m_class));
 
 	QWidget *w = m_container->form()->manager()->lib()->createWidget(m_class, m_container->m_container, m_name.latin1(), m_container);
@@ -228,11 +232,11 @@ InsertWidgetCommand::execute()
 		return;
 
 	m_container->m_insertRect = m_insertRect;
-	if(!m_container->m_insertRect.isValid())
+	if(!m_container->m_insertRect.isValid()) // if the insertRect is invalid (ie only one point), we use widget' size hint
 	{
 		QSize s = w->sizeHint();
 		if(s.isEmpty())
-			s = QSize(20, 20);
+			s = QSize(20, 20); // Minimum size to avoid creating a (0,0) widget
 		m_container->m_insertRect = QRect(m_point.x(), m_point.y(), s.width(), s.height());
 	}
 	w->move(m_container->m_insertRect.x(), m_container->m_insertRect.y());
@@ -249,16 +253,16 @@ InsertWidgetCommand::execute()
 		m_container->form()->objectTree()->addChild(m_container->m_tree, new ObjectTreeItem(m_container->form()->manager()->lib()->displayName(m_class), m_name, w, eater));
 	}
 
-
+	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
 	ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
 	QStringList list(m_container->form()->manager()->lib()->autoSaveProperties(w->className()));
 	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it)
 		item->addModProperty(*it, w->property((*it).latin1()));
 
-	m_container->reloadLayout();
+	m_container->reloadLayout(); // reload the layout to take the new wigdet into account
 
 	m_container->setSelectedWidget(w, false);
-	m_form->manager()->lib()->startEditing(w->className(), w, m_container);
+	m_form->manager()->lib()->startEditing(w->className(), w, m_container); // we edit the widget on creation
 	kdDebug() << "Container::eventFilter(): widget added " << this << endl;
 }
 
@@ -297,7 +301,7 @@ CreateLayoutCommand::CreateLayoutCommand(int layoutType, QtWidgetList &list, For
 	}
 	for(QWidget *w = list.first(); w; w = list.next())
 		m_list->append(w);
-	m_list->sort();
+	m_list->sort(); // we sort them now, before creating the layout
 
 	for(QWidget *w = m_list->first(); w; w = m_list->next())
 		m_pos.insert(w->name(), w->geometry());
@@ -314,7 +318,7 @@ CreateLayoutCommand::execute()
 	if(!lib)  return;
 	Container *container = m_form->objectTree()->lookup(m_containername)->container();
 	if(!container)
-		container = m_form->toplevelContainer();
+		container = m_form->toplevelContainer(); // use toplevelContainer by default
 
 	QString classname;
 	switch(m_type)
@@ -328,7 +332,7 @@ CreateLayoutCommand::execute()
 		default: break;
 	}
 
-	if(m_name.isEmpty())
+	if(m_name.isEmpty())// the name must be generated only once
 		m_name = m_form->objectTree()->genName(classname);
 	QWidget *w = lib->createWidget(classname, container->widget(), m_name.latin1(), container);
 	ObjectTreeItem *tree = m_form->objectTree()->lookup(w->name());
@@ -336,9 +340,10 @@ CreateLayoutCommand::execute()
 		return;
 
 	container->setSelectedWidget(0, false);
-	w->move(m_pos.begin().data().topLeft());
+	w->move(m_pos.begin().data().topLeft()); // we move the layout at the position of the topleft widget
 	w->show();
 
+	// We reparent every widget to the Layout and insert them into it
 	for(QMap<QString,QRect>::Iterator it = m_pos.begin(); it != m_pos.end(); ++it)
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
@@ -351,9 +356,9 @@ CreateLayoutCommand::execute()
 	}
 
 	tree->container()->setLayout((Container::LayoutType)m_type);
-	tree->widget()->resize(tree->container()->layout()->sizeHint());
+	tree->widget()->resize(tree->container()->layout()->sizeHint()); // the layout doesn't have its own size
 	container->setSelectedWidget(w, false);
-	m_form->manager()->windowChanged(m_form->toplevelContainer()->widget());
+	m_form->manager()->windowChanged(m_form->toplevelContainer()->widget()); // to reload the ObjectTreeView
 }
 
 void
@@ -363,12 +368,12 @@ CreateLayoutCommand::unexecute()
 	if(!parent)
 		parent = m_form->objectTree();
 
+	// We reparent every widget to the Container and take them out of the layout
 	for(QMap<QString,QRect>::Iterator it = m_pos.begin(); it != m_pos.end(); ++it)
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
 		if(item && item->widget())
 		{
-			kdDebug() << m_form->objectTree()->lookup(m_containername) << endl;
 			item->widget()->reparent(parent->widget(), QPoint(0,0), true);
 			item->eventEater()->setContainer(parent->container());
 			item->widget()->setGeometry(m_pos[it.key()]);
@@ -380,8 +385,8 @@ CreateLayoutCommand::unexecute()
 		return;
 	QWidget *w = m_form->objectTree()->lookup(m_name)->widget();
 	parent->container()->setSelectedWidget(w, false);
-	parent->container()->deleteItem();
-	m_form->manager()->windowChanged(m_form->toplevelContainer()->widget());
+	parent->container()->deleteItem(); // delete the layout widget
+	m_form->manager()->windowChanged(m_form->toplevelContainer()->widget()); // to reload ObjectTreeView
 }
 
 QString
@@ -428,9 +433,9 @@ PasteWidgetCommand::execute()
 	}
 
 	kdDebug() << domDoc.toString() << endl;
-	if(!domDoc.namedItem("UI").hasChildNodes())
+	if(!domDoc.namedItem("UI").hasChildNodes()) // nothing in the doc
 		return;
-	if(domDoc.namedItem("UI").firstChild().nextSibling().toElement().tagName() != "widget")
+	if(domDoc.namedItem("UI").firstChild().nextSibling().toElement().tagName() != "widget") // only one widget, so we can paste it at cursor pos
 	{
 		QDomElement widg = domDoc.namedItem("UI").firstChild().toElement();
 		if(m_point.isNull())
@@ -438,7 +443,7 @@ PasteWidgetCommand::execute()
 		else
 			m_container->form()->pasteWidget(widg, m_container,  m_point);
 	}
-	else for(QDomNode n = domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling())
+	else for(QDomNode n = domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling()) // more than one widget
 	{
 		if(n.toElement().tagName() != "widget")
 			continue;
@@ -447,6 +452,7 @@ PasteWidgetCommand::execute()
 	}
 
 	m_names.clear();
+	// We store the names of all the created widgets, to delete them later
 	for(QDomNode n = domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		if(n.toElement().tagName() != "widget")
@@ -465,7 +471,7 @@ PasteWidgetCommand::execute()
 	if(item)
 		m_container->setSelectedWidget(item->widget(), false);
 	QStringList::Iterator it = m_names.begin();
-	for(++it; it != m_names.end(); ++it)
+	for(++it; it != m_names.end(); ++it) // We select all the pasted widgets
 	{
 		item = m_form->objectTree()->lookup(*it);
 		if(item)
@@ -478,6 +484,7 @@ PasteWidgetCommand::unexecute()
 {
 	Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
 	m_container->m_selected.clear();
+	// We just delete all the widgets we have created
 	for(QStringList::Iterator it = m_names.begin(); it != m_names.end(); ++it)
 	{
 		QWidget *w = m_container->form()->objectTree()->lookup(*it)->widget();
@@ -508,6 +515,7 @@ DeleteWidgetCommand::DeleteWidgetCommand(QtWidgetList &list, Form *form)
 		ObjectTreeItem *item = m_form->objectTree()->lookup(w->name());
 		if (!item)
 			return;
+		// We need to store both parentContainer and parentWidget as they may be different (eg for TabWidget page)
 		m_containers.insert(item->name(), m_form->parentContainer(item->widget())->widget()->name());
 		m_parents.insert(item->name(), item->parent()->name());
 		FormIO::saveWidget(item, parent, m_domDoc);
@@ -540,6 +548,7 @@ DeleteWidgetCommand::unexecute()
 	{
 		if(n.toElement().tagName() != "widget")
 			continue;
+		// We need first to know the name of the widget
 		for(QDomNode m = n.firstChild(); !m.isNull(); n = m.nextSibling())
 		{
 			if((m.toElement().tagName() == "property") && (m.toElement().attribute("name") == "name"))
