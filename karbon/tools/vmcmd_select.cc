@@ -10,7 +10,7 @@
 VMCmdSelect::VMCmdSelect( KarbonPart* part,
 		const double tlX, const double tlY,
 		const double brX, const double brY )
-	: VCommand( part, i18n("Select Object") ),
+	: VCommand( part, i18n( "Select Object" ) ),
 	  m_tlX( tlX ), m_tlY( tlY ), m_brX( brX ), m_brY( brY )
 {
 }

@@ -9,11 +9,12 @@
 #include <qpointarray.h>
 #include <koPoint.h>
 
+#include "vcontour.h"
+#include "vfill.h"
 #include "vobject.h"
+#include "vsegment.h"
 
 class QWMatrix;
-
-class VSegment;
 
 class VPath : public VObject
 {
@@ -103,7 +104,7 @@ public:
 	}
 
 	VPath& close();
-	bool isClosed() const;
+	bool isClosed() const { return m_isClosed; }
 
 	// return a reverted path:
 	VPath* revert() const;
@@ -119,15 +120,23 @@ public:
 	// apply an affine map:
 	virtual VObject& transform( const QWMatrix& m );
 
-	virtual QRect boundingBox() const;
+	virtual QRect boundingBox( const double zoomFactor ) const;
 
-	virtual VObject *clone();
+	virtual VObject* clone();
 
 private:
 	void drawBox( QPainter &painter, double x, double y, uint handleSize = 3 ); // helper function for draw()
 
 private:
-	QPtrList<VSegment> m_segments;
+	VSegmentList m_segments;
+
+	// contour:
+	VContour m_contour;
+
+	// fill:
+	VFill m_fill;
+
+	bool m_isClosed;
 };
 
 #endif

@@ -48,7 +48,7 @@ VCToolRectangle::drawTemporaryObject(
 
 	VPath* path = cmd->createPath();
 	path->setState( VObject::edit );
-	path->draw( painter, path->boundingBox() );
+	path->draw( painter, path->boundingBox( view->zoomFactor() ) );
 
 	delete( cmd );
 	delete( path );

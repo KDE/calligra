@@ -8,7 +8,7 @@
 #include "vpath.h"
 
 VMCmdDelete::VMCmdDelete( KarbonPart* part )
-	: VCommand( part, i18n("Delete Object") )
+	: VCommand( part, i18n( "Delete Object" ) )
 {
 }
 

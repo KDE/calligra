@@ -7,20 +7,28 @@ INCLUDES = \
 noinst_LTLIBRARIES = libkarboncore.la
 
 noinst_HEADERS = \
+	vboundingbox.h \
 	vcanvas.h \
 	vcommand.h \
+	vcontour.h \
+	vfill.h \
 	vglobal.h \
 	vhandle.h \
 	vlayer.h \
 	vobject.h \
-	vpath.h 
+	vpath.h \
+	vsegment.h
 
 libkarboncore_la_SOURCES = \
+	vboundingbox.cc \
 	vcanvas.cc \
 	vcommand.cc \
+	vcontour.cc \
+	vfill.cc \
 	vhandle.cc \
 	vlayer.cc \
-	vpath.cc 
+	vpath.cc \
+	vsegment.cc
 
 libkarboncore_la_METASOURCES = \
 	AUTO
