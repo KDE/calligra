@@ -2,8 +2,8 @@
 
 INCLUDES= -I../koml -I../store -I$(idldir) $(all_includes) $(MICO_INCLUDES)
 LDFLAGS	= $(all_libraries)  -version-info 1:0:0
-LIBADD  = -lkom -lkfile -lkdeui -lkdecore -lqt -lkdecore \
-	$(LIBMICO) -lXext -lX11
+LIBADD  = -lkom -lkfile -lkdeui -lkdecore -lkdecore \
+	$(LIBMICO) -lXext $(LIB_QT)
 
 ####### Files
 

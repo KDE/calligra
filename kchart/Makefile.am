@@ -9,7 +9,7 @@ LDADD =  ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la \
 	./ui/libkchartui.la ./core/libkchartcore.la \
 	../lib/koml/libkoml.la -lkom -lop -lkfile -lkfm -lkdeui -lkdecore \
-	-lqt $(LIBMICO) -lXext -lX11 $(LIBSOCKET)
+	 $(LIBMICO) -lXext  $(LIB_QT)
 
 ####### Files
 

@@ -8,7 +8,7 @@ LDFLAGS =   $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD =  ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la \
 	../lib/koml/libkoml.la -lkom -lop -lkfile -lkfm -lkdeui -lkdecore \
-	-lqt $(LIBMICO) -lXext -lX11 $(LIBSOCKET)
+	 $(LIBMICO) -lXext  $(LIB_QT)
 
 ####### Files
 

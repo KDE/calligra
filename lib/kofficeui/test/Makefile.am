@@ -1,7 +1,7 @@
 
 INCLUDES	=	-I../../kofficecore -I.. $(all_includes) $(MICO_INCLUDES) -I$(idldir)
 LDFLAGS		=	$(all_libraries) $(KDE_RPATH)
-LDADD 		=  	../libkofficeui.la ../../kofficecore/libkofficecore.la ../../koml/libkoml.la -lkstore -lkom -lkpartsui -lkparts -lkfile -lkfm -lkdeutil -lkdeui -lkdecore $(LIBMICO) -lqt -lXext -lX11 $(LIBSOCKET) 
+LDADD 		=  	../libkofficeui.la ../../kofficecore/libkofficecore.la ../../koml/libkoml.la -lkstore -lkom -lkpartsui -lkparts -lkfile -lkfm -lkdeutil -lkdeui -lkdecore $(LIBMICO)  -lXext  $(LIB_QT) 
 
 check_PROGRAMS = test
 test_SOURCES = test.cc

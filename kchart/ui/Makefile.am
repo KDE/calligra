@@ -14,7 +14,7 @@ libkchartui_la_SOURCES = \
 	KChartWizardSelectDataPage.cpp KChartWizardSetupAxesPage.cpp \
 	KChartWizardSetupDataPage.cpp
 
-libkchartui_la_LIBADD = -lkdecore -lqt -lXext -lX11
+libkchartui_la_LIBADD = -lkdecore -lXext $(LIB_QT)
 libkchartui_la_LDFLAGS = $(all_libraries) -version-info 1:0:0
 include_HEADERS = KChartWizard.h
 
@@ -49,7 +49,7 @@ main.moc: main.cpp
 test_SOURCES = main.cpp main.moc
 
 LDFLAGS = $(all_libraries)
-LDADD = libkchartui.la ../core/libkchartcore.la -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
+LDADD = libkchartui.la ../core/libkchartcore.la -lkdeui -lkdecore  -lXext  $(LIB_QT)
 
 picsdir = $(kde_toolbardir)
 pics_DATA = chart_area.gif chart_bars.gif chart_barsinfront.gif \

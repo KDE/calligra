@@ -14,7 +14,7 @@ libkchartcore_la_SOURCES = \
 	KChartLinesPainter.cpp KChartLinesPointsPainter.cpp KChartPiePainter.cpp \
 	KChartColorArray.cpp KChartData.cpp KChartPie3DPainter.cpp 
 
-libkchartcore_la_LIBADD = -lkdecore -lqt -lXext -lX11
+libkchartcore_la_LIBADD = -lkdecore -lXext $(LIB_QT)
 libkchartcore_la_LDFLAGS = $(all_libraries) -version-info 1:0:0
 include_HEADERS = KChart.h KChartTypes.h KChartColorArray.h KChartData.h KChartWidget.h
 
@@ -48,5 +48,5 @@ test11_SOURCES = main11.cpp
 test14_SOURCES = main14.cpp
 
 LDFLAGS = $(all_libraries)
-LDADD = libkchartcore.la -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
+LDADD = libkchartcore.la -lkdecore  -lXext $(LIB_QT)
 
