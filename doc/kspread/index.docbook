@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN"
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" 
 "dtd/kdex.dtd" [
   <!ENTITY kappname "&kspread;">
   <!ENTITY package "koffice">
@@ -23,7 +23,7 @@
 <authorgroup>
 <author>
 <firstname>Pamela</firstname>
-<surname>Robert</surname>
+<surname>Roberts</surname>
 <affiliation>
 <address><email>pamroberts@blueyonder.co.uk</email></address>
 </affiliation>
@@ -40,8 +40,8 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-07-20</date>
-<releaseinfo>1.02.00</releaseinfo>
+<date>2004-29-01</date>
+<releaseinfo>1.3.00</releaseinfo>
 
 
 <abstract>
@@ -66,7 +66,7 @@
 url="http://www.bricklin.com/visicalc.htm">Visicalc.</ulink></para>
 <para>
 &kspread; is a full featured spreadsheet program. It is part of the &koffice;
-productivity suite for the K Desktop Environment &kde;.</para>
+productivity suite for the K Desktop Environment (&kde;).</para>
 <para>Other &koffice; applications include &kword;, (word processing),
 &kpresenter; (slide presentation creator), &kchart; (for producing charts and
 graphs) and &kontour; (a drawing program).</para>
@@ -144,6 +144,8 @@ Documentation copyright 2002 Pamela Roberts
 <email>pamroberts@blueyonder.co.uk</email>
 </para>
 
+<para>Minor updates to documentation for &koffice; 1.3 by
+&Philip.Rodrigues; &Philip.Rodrigues.mail;.</para>
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 &underFDL;
 &underGPL;

@@ -110,7 +110,7 @@ option <guilabel>Start with an empty document</guilabel> is chosen when
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Number of recent file:</guilabel></term>
+<term><guilabel>Number of recent files:</guilabel></term>
 <listitem><para>Controls the maximum number of filenames that are shown
 when you select <menuchoice><guimenu>File</guimenu><guimenuitem>
 Open Recent</guimenuitem></menuchoice>.
@@ -120,7 +120,8 @@ Open Recent</guimenuitem></menuchoice>.
 <varlistentry>
 <term><guilabel>Auto save (min):</guilabel></term>
 <listitem><para>Here you can select the time between autosaves, or disable 
-this feature alltogether by choosing <guimenuitem>No auto save</guimenuitem>.
+this feature altogether by choosing <guilabel>No autosave</guilabel>
+(drag the slider to the far left).
 </para></listitem>
 </varlistentry>
 
@@ -246,7 +247,7 @@ box in the <guimenu>View</guimenu> menu is checked.</para>
 <para>This page of &kspread;'s configuration dialog box lets you set up the 
 default page size, orientation and units used by the printer and by the 
 <guilabel>Page Layout</guilabel> dialog box (obtained by selecting 
-<guimenuitem>Paper Layout...</guimenuitem> from the <guimenu>Format
+<guimenuitem>Page Layout...</guimenuitem> from the <guimenu>Format
 </guimenu> menu.</para>
 </sect1>
 
@@ -306,3 +307,14 @@ uppercase words, which are usually acronyms such as &kde;.
 </variablelist></para>
 </sect1>
 </chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

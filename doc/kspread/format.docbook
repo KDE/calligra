@@ -12,6 +12,7 @@
 </authorgroup>
 </chapterinfo> 
 <title>Spreadsheet Formatting</title>
+
 <sect1 id="formatfonts">
 <title>Fonts, Text, Borders and Colors</title>
 <para>To change the appearance of selected cell(s), row(s) or column(s) use
@@ -31,7 +32,7 @@ different parts of the border by clicking on the appropriate button in the
 </guilabel> section will clear any previously applied border(s). Note that you 
 can also add a diagonal strike-through line to the cell(s).</para>
 <para>The <guilabel>Text</guilabel> page lets you select the font style, size 
-and color, the cell background pattern and color can be selected from the 
+and color. The cell background pattern and color can be selected from the 
 <guilabel>Background</guilabel> page.</para>
 <para>From the <guilabel>Position</guilabel> page you can control the position 
 of text within a cell by making suitable selections in the <guilabel>Horizontal
@@ -64,8 +65,8 @@ household expenses and want to highlight any item greater than, say, one
 thousand dollars.</para>
 <para>To do this select the cell(s) then choose <guimenuitem>Conditional Cell 
 Attributes...</guimenuitem> from the <guimenu>Edit</guimenu> menu. This will 
-bring up the <guilabel>Relational Cell Attributes</guilabel> dialog box where 
-you can set the font type and color of a cell to change when the value meets 
+bring up the <guilabel>Conditional Cell Attributes</guilabel> dialog box where 
+you can make the font type and color of a cell change when the value meets 
 one or more conditions. Note that the second and third conditions only apply 
 if the previous condition(s) are not met.</para>
 <para>Use <menuchoice><guisubmenu>Clear</guisubmenu><guimenuitem>Conditional 
@@ -95,12 +96,15 @@ from it. When the cursor is in this state you can hold the <mousebutton>left
 changing the height of the upper row. A similar technique can be used to 
 change the width of a column.</para>
 
+<para>To set the row height or column width to the minimum needed to
+display the contents, select the whole row or column, and right-click
+on the row or column label. In the menu which appears, select
+<guimenuitem>Adjust Row</guimenuitem> or <guimenuitem>Adjust
+Column</guimenuitem>. The row or column will resize to the minimum
+necessary. You can also select a single cell or range of cells, and
+click <guimenuitem>Adjust Row &amp; Column</guimenuitem> from either
+the right-click menu or the <guimenu>Format</guimenu> menu.</para>
 
-<para>Selecting a cell, row or column then choosing <guimenuitem>Adjust Row
-</guimenuitem>, <guimenuitem>Adjust Column</guimenuitem> or <guimenuitem>
-Adjust Row and Column</guimenuitem> from the <guimenu>Format</guimenu> or 
-<mousebutton>right</mousebutton> mouse button menu will set the row height 
-or column width to the minimum needed to properly display the contents.</para>
 <para>You can make a number of adjacent rows or columns the same size by 
 selecting them then choosing <menuchoice><guimenu>Format</guimenu><guisubmenu>
 Row</guisubmenu><guimenuitem>Equalize Row</guimenuitem></menuchoice> or 
@@ -116,7 +120,7 @@ columns or down more than one row. This can be done by merging two or more
 cells into one. Select the cells to be merged than choose <menuchoice><guimenu>
 Data</guimenu><guimenuitem>Merge Cells</guimenuitem></menuchoice>.</para>
 <para>To reverse this process, select the merged cell then choose <guimenuitem>
-Dissociate Cells</guimenuitem> from the <guimenu>TData</guimenu> menu.</para>
+Dissociate Cells</guimenuitem> from the <guimenu>Data</guimenu> menu.</para>
 </sect1>
 
 <sect1 id="hiding">
@@ -136,7 +140,20 @@ accidental change.</para>
 <para>To un-hide a row or column select <menuchoice><guisubmenu>Row
 </guisubmenu><guimenuitem>Show Rows...</guimenuitem></menuchoice> or 
 <menuchoice><guisubmenu>Column</guisubmenu><guimenuitem>Show Columns...
-</guimenuitem></menuchoice> from the <guimenu>Format</guimenu> menu.</para>
+</guimenuitem></menuchoice> from the <guimenu>Format</guimenu>
+menu. In the dialog box which appears, you can select any number of
+rows to show (use &Ctrl;+click to select multiple rows or columns).</para>
 </sect1>
 
 </chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

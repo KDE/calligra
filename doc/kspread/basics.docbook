@@ -25,8 +25,8 @@ Kspread...</guimenuitem></menuchoice>) except for <guilabel>Completion mode
 <guimenuitem>None</guimenuitem>.
 </para>
 <para>You may also find it helpful to enable Tooltips in the K menu
-<menuchoice><guimenu>Preferences</guimenu><guisubmenu>Look &amp;
-Feel</guisubmenu><guimenuitem>Widget Settings</guimenuitem></menuchoice>
+<menuchoice><guimenu>Preferences</guimenu><guisubmenu>Appearance &amp;
+Themes</guisubmenu><guimenuitem>Style</guimenuitem></menuchoice>
 dialog box. </para></note>
 
 <sect1 id="starting">
@@ -115,7 +115,7 @@ dialog box</link>.</para>
 <para>If you hold the &Ctrl; key down while using the <keysym>arrow</keysym> 
 keys the selection will move to the start or end of the block of occupied 
 cells.</para>
-<para>To select an area of cells drag the mouse cursor across the wanted area 
+<para>To select an area of cells drag the mouse cursor across the desired area 
 with the <mousebutton>left</mousebutton> button held down, or enter the 
 references of the top left and bottom right cells separated by a colon into 
 the Formula toolbar cell reference box (for example <userinput>B7:C14
@@ -151,7 +151,7 @@ Dates should be entered in your <quote>System</quote> format, as defined in
 the K menu <menuchoice><guisubmenu>Preferences</guisubmenu> <guisubmenu>
 Personalisation</guisubmenu> <guimenuitem>Country &amp; Languages</guimenuitem>
 </menuchoice> dialog box.  If, for example, you are using the DD/MM/YYYY form 
-you should enter <userinput>30/03/2002</userinput> for 30th. March 2002. 
+you should enter <userinput>30/03/2002</userinput> for 30th March 2002. 
 Leading zeroes can be omitted from the day and month fields and only the last
 one or two digits of the year need to be entered if the date is in the current 
 century, for example <userinput>9/1/2</userinput> for 9th January 2002. 
@@ -182,20 +182,22 @@ edits.</para>
 
 <sect1 id="copypaste">
 <title>Copy, Cut and Paste</title>
+
 <para>At first glance, &kspread;'s <guimenuitem>Cut</guimenuitem>, 
 <guimenuitem>Copy</guimenuitem> and <guimenuitem>Paste</guimenuitem> appear 
 to be similar to these functions in other &kde; applications. Having selected 
 a cell or cells, you can choose <guimenuitem>Copy</guimenuitem> or 
 <guimenuitem>Cut</guimenuitem> from the <guimenu>Edit</guimenu> menu or from
 the drop down menu you get by holding the <mousebutton>right</mousebutton> 
-mouse button down on a selected cell, or just use the shortcuts 
+mouse button down on a selected cell. You can also use the shortcuts 
 <keycombo action="simul">&Ctrl;<keycap>C</keycap>
 </keycombo> or <keycombo action="simul">&Ctrl;<keycap>X</keycap>
-</keycombo>, then you can move the selection to the target cell and choose 
-<guimenuitem>Paste</guimenuitem> or use the shortcut <keycombo action="simul">
+</keycombo>, then move the selection to the target cell and choose 
+<guimenuitem>Paste</guimenuitem> or press <keycombo action="simul">
 &Ctrl;<keycap>V</keycap></keycombo>. However there are some 
 subtleties associated with these functions in &kspread; and these are discussed 
 below.</para>
+
 <para>If a cell contains a formula then the formula itself is copied rather 
 than the displayed result, and if the formula contains a reference to another 
 cell, then that reference is changed by the <guimenuitem>Cut</guimenuitem> 
@@ -249,14 +251,17 @@ special font, border or background <link linkend="formatspread">formatting
 information</link>. &kspread; has special versions of Paste that let 
 you handle these items in different ways.</para>
 
-<para><guimenuitem>Special Paste...</guimenuitem> brings up the <guilabel>
-Special Paste</guilabel> dialog box. By selecting the appropriate item from 
-the top part of this dialog you can choose to paste just <guilabel>Text
-</guilabel>, the cell <guilabel>Format</guilabel>, any <guilabel>Comment
-</guilabel> in the cell(s) or <guilabel>Everything without border</guilabel>. 
-The items in the bottom part of this dialog box allow you do do simple
-<link linkend="sumspecialpaste">arithmetic on an area of cells</link>.
+<para><menuchoice><guimenu>Edit</guimenu><guimenuitem>Special
+Paste...</guimenuitem></menuchoice>brings up the <guilabel> Special
+Paste</guilabel> dialog box. By selecting the appropriate item from
+the top part of this dialog you can choose to paste just
+<guilabel>Text </guilabel>, the cell <guilabel>Format</guilabel>, any
+<guilabel>Comment </guilabel> in the cell(s) or <guilabel>Everything
+without border</guilabel>. The items in the bottom part of this dialog
+box allow you do do simple <link linkend="sumspecialpaste">arithmetic
+on an area of cells</link>.
 </para>
+
 <para><guimenuitem>Paste with Insertion...</guimenuitem> inserts the copied 
 cell(s) into the sheet by moving the cells that would otherwise be overwritten 
 a suitable number of rows of columns down or to the right. It can also be used 
@@ -359,7 +364,7 @@ menu or their shortcuts <keycombo action="simul">&Shift;<keysym>F9</keysym>
 
 <sect1 id="sort">
 <title>Sorting Data</title>
-<para>In the simple example shown below, the data consists of the names and 
+<para>In the simple example shown below, the data consist of the names and 
 countries of a number of mountains together with their height above sea level. 
 &kspread; can sort data such as this in different ways.</para>
 <para>
@@ -374,29 +379,32 @@ countries of a number of mountains together with their height above sea level.
 </para>
 <para>We may want the data sorted so that the names are in 
 alphabetical order. To do this select the area containing the data (A2:C7 
-in this case) and choose <guimenuitem>Sort Increasing</guimenuitem> or 
-<guimenuitem>Sort Decreasing</guimenuitem> from the <guimenu>Data</guimenu> 
-menu.</para>
+in this case) and choose <guimenuitem>Sort...</guimenuitem> from the <guimenu>Data</guimenu> 
+menu. This opens the <guilabel>Sorting</guilabel> dialog box. Using the <guilabel>Sort criteria</guilabel> page of this dialog box you 
+can choose which column of the data is to be used as a primary sort key and, 
+if you wish, other columns to be used as secondary and tertiary keys. Using
+the example in the above screenshot, choosing column B as the first key and 
+column C as the second would sort the data by country and, for each country, 
+by height.</para>
 <para>Sorting is done alphanumerically, and is case sensitive, numbers coming 
 before uppercase letters which come before lowercase letters, so that cells 
 containing the entries <userinput>Cat</userinput>, <userinput>bar</userinput>, 
 <userinput>77</userinput> and <userinput>Bat</userinput> would be sorted into 
 the following order: <emphasis>77  Bat  Cat  bar</emphasis>.</para>
+<!-- Obsolete, AFAICT (Phil)
 <para>The <guimenuitem>Sort Increasing</guimenuitem> and <guimenuitem>Sort 
 Decreasing</guimenuitem> options from the <guimenu>Data</guimenu> menu options 
 sort the data according to the contents of the cells in the left column of the 
 selected area. For more complex sorting select <menuchoice><guimenu>Data
 </guimenu><guimenuitem>Sort...</guimenuitem></menuchoice> to bring up the 
 <guilabel>Sort</guilabel> dialog box.</para>
-<para>Using the <guilabel>Sort criteria</guilabel> page of this dialog box you 
-can choose which column of the data is to be used as a primary sort key and, 
-if you wish, other columns to be used as secondary and tertiary keys. Using
-the example in the above screenshot, choosing column B as the first key and 
-column C as the second would sort the data by country and, for each country, 
-by height.</para>
-<para>The <guilabel>Options</guilabel> page lets you sort by row instead of by 
-column and allows you to sort using the order of items in a custom list such 
-as January, February... instead of alphanumerically.</para>
+-->
+
+<para>The <guilabel>Options</guilabel> page of the dialog lets you
+sort by row instead of by column and allows you to sort using the
+order of items in a custom list such as January, February... instead
+of alphanumerically.</para>
+
 <para>&kspread; can also place the results of a sort into a different area of 
 the sheet, or even into a different worksheet, rather than overwriting the 
 original data. To do this enter the 
@@ -481,12 +489,12 @@ the <guilabel>Filter:</guilabel> selection is set to &kspread;.</para>
 <para>To save your workbook without changing its name, just use <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice>.</para>
 
-<para>You can also save a &kspread; workbook in a foreign format, see the 
-Import Export section for more information 
+<para>You can also save a &kspread; workbook in a foreign format: see 
+ the Import/Export section for more information 
 about doing this.</para>
-<para>When you save a modified version of an existing workbook &kspread; 
-will keep the previous version as a backup file, adding a <keysym>~</keysym> 
-symbol to the end of the filename.</para>
+<para>When you save a modified version of an existing workbook
+&kspread; will keep the previous version as a backup file, adding a
+<literal>~</literal> to the end of the filename.</para>
 <para>&kspread; can provide some protection against losing your work because 
 of a computer crash or because you have closed &kspread; without saving the 
 current workbook. It does this by automatically saving the latest version of 
@@ -497,10 +505,10 @@ saved manually.
 When you open a workbook &kspread; checks to see if an autosaved
 version exists, and if it finds one will offer to open that instead.</para>
 <para>Autosaved workbooks are saved with a file name of the form
-<filename>.yourfilename.autosave</filename>, note the leading period
-(<keysym>.</keysym>), so that <filename>spread1.ksp</filename> would be
-autosaved as <filename>.spread1.ksp.autosave</filename>. The autosave feature
-is <link linkend="configinterface">user configurable</link>.</para>
+<filename>.yourfilename.autosave</filename> (note the leading period),
+so that <filename>spread1.ksp</filename> would be autosaved as
+<filename>.spread1.ksp.autosave</filename>. The autosave feature is
+<link linkend="configinterface">user configurable</link>.</para>
 
 <sect2 id="templates">
 <title>Templates</title>
@@ -525,6 +533,7 @@ the <guilabel>Choose</guilabel> dialog box.</para>
 </sect2>
 
 </sect1>
+
 <sect1 id="printing">
 <title>Printing a Spreadsheet</title>
 <para>Printing a spreadsheet is basically done by selecting <menuchoice>
@@ -556,7 +565,7 @@ fonts, colors, borders and sizes of the cells in the worksheet, see the
 details about how to do this.</para>
 
 <para>You can also use the <guilabel>Page Layout</guilabel> dialog box,
-invoked by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Paper
+invoked by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Page
 Layout...</guimenuitem></menuchoice>, to change the orientation of the printed
 pages, the paper size (this should be suitable for your printer) and the size
 of the page borders.</para>
@@ -574,3 +583,14 @@ column(s) or row(s) on each printed page.</para>
 </sect1>
 
 </chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

@@ -290,7 +290,7 @@ Sheet2. Note that sheet names are case sensitive.</para>
 <title>Consolidating Data</title>
 <para>You may have constructed a workbook containing several worksheets 
 containing similar data but for, say, different months of the year, and wish 
-to have summary sheet containing the consolidated (sum or average) values 
+to have summary sheet containing the consolidated (&eg;, sum or average) values 
 of the corresponding data items in the other sheets.</para>
 <para>This task can be made slightly easier by using the <guimenuitem>
 Consolidate...</guimenuitem> item from the <guimenu>Data</guimenu> menu.</para>
@@ -305,9 +305,9 @@ January!A1:A10</userinput>, and can be entered automatically by selecting the
 area in the appropriate table.</para>
 <para>When you have entered the references for all of the source data sheets 
 select the cell in the target sheet where you want the top left corner of the 
-consolidated results to appear, choose <guimenuitem>sum</guimenuitem> or 
-<guimenuitem>average</guimenuitem> from the <guilabel>Function</guilabel> 
-selection box then press the <guibutton>OK</guibutton> button.</para>
+consolidated results to appear, choose the appropriate function from
+the <guilabel>Function</guilabel> 
+combo box then press the <guibutton>OK</guibutton> button.</para>
 <para>If you check the <guilabel>Copy data</guilabel> box in the <guilabel>
 Consolidate</guilabel> dialog the values resulting from the consolidation will 
 be placed into the target cells rather than the formulae to calculate them.
@@ -532,3 +532,14 @@ choose <menuchoice><guimenu>Edit</guimenu><guisubmenu>Clear</guisubmenu>
 
 </sect1>
 </chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

@@ -92,3 +92,14 @@ removed, and whether the first line(s) of the file should be ignored.</para>
 </sect1>
 </chapter>
 
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

@@ -27,7 +27,7 @@
 <phrase>Shortcut config screenshot 1</phrase>
 </textobject>
 </mediaobject>
-<para>Search through the combo box to find the action you want to add or
+<para>Search through the list box to find the action you want to add or
 change the shortcut keys for and select it by <mousebutton>left</mousebutton>
 clicking on the name. You will then be able to change the shortcut by 
 selecting the <guilabel>None</guilabel>, <guilabel>Default</guilabel> or 
@@ -68,7 +68,7 @@ press the key that will choose that item from the menu.</para>
 
 <sect1 id="configtoolbars">
 <title>Toolbars</title>
-<para>&kspread; has five toolbars; File, Edit, Math, Format and Color/Border, 
+<para>&kspread; has six toolbars: File, Edit, Math, Navigation, Format and Color/Border, 
 each of which may or may not be shown depending on the choices made in the 
 <guimenu>Settings</guimenu> menu.</para>
 <para>You can choose whether a toolbar appears at the top, left, right or 
@@ -110,3 +110,14 @@ select it in the <guilabel>Available actions:</guilabel> list then press the
 right arrow button.</para>
 </sect1>
 </chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->
