@@ -94,6 +94,37 @@ void KWTableStyleCollection::removeTableStyleTemplate ( KWTableStyle *style ) {
     }
 }
 
+void KWTableStyleCollection::updateTableStyleListOrder( const QStringList &list )
+{
+    QPtrList<KWTableStyle> orderStyle;
+    QStringList lst( list );
+    for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
+    {
+        //kdDebug()<<" style :"<<(*it)<<endl;
+        QPtrListIterator<KWTableStyle> style( m_styleList );
+        for ( ; style.current() ; ++style )
+        {
+            if ( style.current()->name() == *it)
+            {
+                orderStyle.append( style.current() );
+                //kdDebug()<<" found !!!!!!!!!!!!\n";
+                break;
+            }
+        }
+    }
+    m_styleList.setAutoDelete( false );
+    m_styleList.clear();
+    m_styleList = orderStyle;
+#if 0
+    QPtrListIterator<KoStyle> style( m_styleList );
+    for ( ; style.current() ; ++style )
+    {
+        kdDebug()<<" style.current()->name() :"<<style.current()->name()<<endl;
+    }
+#endif
+}
+
+
 /******************************************************************/
 /* Class: KWTableStyle                                            */
 /******************************************************************/

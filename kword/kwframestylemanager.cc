@@ -178,6 +178,7 @@ void KWFrameStyleManager::setupWidget(const QPtrList<KWFrameStyle> & styleList)
     {
         m_stylesList->insertItem( style.current()->translatedName() );
         m_frameStyles.append( new KWFrameStyleListItem( style.current(),new KWFrameStyle(*style.current())) );
+        m_styleOrder<<style.current()->name();
     }
 
     frame1Layout->addMultiCellWidget( m_stylesList, 0, 0, 0, 1 );
@@ -381,6 +382,7 @@ void KWFrameStyleManager::addStyle()
     noSignals=true;
     m_frameStyles.append(new KWFrameStyleListItem(0L,m_currentFrameStyle));
     m_stylesList->insertItem( str );
+    m_styleOrder<< str;
     m_stylesList->setCurrentItem( m_stylesList->count() - 1 );
     noSignals=false;
 
@@ -390,6 +392,7 @@ void KWFrameStyleManager::addStyle()
 void KWFrameStyleManager::deleteStyle()
 {
     unsigned int cur = frameStyleIndex( m_stylesList->currentItem() );
+    m_styleOrder.remove( m_stylesList->currentText());
     if ( !m_frameStyles.at(cur)->origFrameStyle() )
         m_frameStyles.take(cur );
     else {
@@ -422,6 +425,14 @@ void KWFrameStyleManager::moveUpStyle()
             break;
         }
     }
+    int pos2 = m_styleOrder.findIndex( currentStyleName );
+    if ( pos2 != -1 )
+    {
+        m_styleOrder.remove( m_styleOrder.at(pos2));
+        m_styleOrder.insert( m_styleOrder.at(pos2-1), currentStyleName);
+    }
+
+
     pos=m_stylesList->currentItem();
     noSignals=true;
     m_stylesList->changeItem( m_stylesList->text ( pos-1 ),pos);
@@ -454,6 +465,14 @@ void KWFrameStyleManager::moveDownStyle()
             break;
         }
     }
+
+    int pos2 = m_styleOrder.findIndex( currentStyleName );
+    if ( pos2 != -1 )
+    {
+        m_styleOrder.remove( m_styleOrder.at(pos2));
+        m_styleOrder.insert( m_styleOrder.at(pos2+1), currentStyleName);
+    }
+
     pos=m_stylesList->currentItem();
     noSignals=true;
     m_stylesList->changeItem( m_stylesList->text ( pos+1 ),pos);
@@ -502,7 +521,7 @@ void KWFrameStyleManager::apply()
             m_frameStyles.at(i)->apply();
         }
     }
-
+    updateFrameStyleListOrder( m_styleOrder);
     updateAllStyleLists();
     noSignals=false;
 }
@@ -516,6 +535,7 @@ void KWFrameStyleManager::renameStyle(const QString &theText) {
 
     // rename only in the GUI, not even in the underlying objects (save() does it).
     m_stylesList->changeItem( theText, index );
+    m_styleOrder[index]=theText;
 
     // Check how many styles with that name we have now
     int synonyms = 0;
@@ -559,6 +579,11 @@ void KWFrameStyleManager::removeFrameStyleTemplate( KWFrameStyle *style )
 void KWFrameStyleManager::updateAllStyleLists()
 {
     m_doc->updateAllFrameStyleLists();
+}
+
+void KWFrameStyleManager::updateFrameStyleListOrder( const QStringList &list )
+{
+    m_doc->frameStyleCollection()->updateFrameStyleListOrder( list );
 }
 
 

@@ -51,6 +51,7 @@ public:
     KWTableStyle* addTableStyleTemplate( KWTableStyle *style );
 
     void removeTableStyleTemplate ( KWTableStyle *style );
+    void updateTableStyleListOrder( const QStringList &list );
 
 private:
     QPtrList<KWTableStyle> m_styleList;

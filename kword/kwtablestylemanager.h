@@ -101,6 +101,7 @@ public:
     KWTableStyle* addTableStyleTemplate(KWTableStyle *style);
     void removeTableStyleTemplate( KWTableStyle *style );
     void updateAllStyleLists();
+    void updateTableStyleListOrder( const QStringList &list );
 
 protected:
 
@@ -122,7 +123,7 @@ protected:
     QComboBox *m_style;
     QPushButton *m_changeFrameStyleButton;
     QPushButton *m_changeStyleButton;
-
+    QStringList m_styleOrder;
     QGroupBox *previewBox;
     KWTableStylePreview *preview;
 

@@ -106,6 +106,7 @@ public:
     KWFrameStyle* addFrameStyleTemplate(KWFrameStyle *style);
     void removeFrameStyleTemplate( KWFrameStyle *style );
     void updateAllStyleLists();
+    void updateFrameStyleListOrder( const QStringList &list );
 
 protected:
     void addStyle(const QPtrList<KWFrameStyle> & style );
@@ -129,6 +130,7 @@ protected:
     KWFrameStylePreview *preview;
 
     KWFrameStyle *m_currentFrameStyle;
+    QStringList m_styleOrder;
     QPtrList<KWFrameStyleListItem> m_frameStyles;
     QPtrList<KWFrameStyleManagerTab> m_tabsList;
     int numFrameStyles;

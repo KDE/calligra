@@ -25,7 +25,7 @@
 #include <qdom.h>
 #include <qptrlist.h>
 #include <qbrush.h>
-
+#include <qstringlist.h>
 class KWFrameStyle;
 class KWFrame;
 
@@ -50,6 +50,7 @@ public:
     KWFrameStyle* addFrameStyleTemplate( KWFrameStyle *style );
 
     void removeFrameStyleTemplate ( KWFrameStyle *style );
+    void updateFrameStyleListOrder( const QStringList &list );
 
 private:
     QPtrList<KWFrameStyle> m_styleList;
