@@ -94,7 +94,7 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
     d->pmLeft = UserIcon( "koRulerLeft" );
     d->currTab = -1;
 
-    d->tabList.setAutoDelete( false );
+    d->tabList.setAutoDelete(true);
     d->removeTab=false;
     frameStart = -1;
 
@@ -105,7 +105,6 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
 /*================================================================*/
 KoRuler::~KoRuler()
 {
-    d->tabList.setAutoDelete(true);
     delete d->rb_menu;
     delete d;
 }
@@ -831,9 +830,7 @@ void KoRuler::mouseDoubleClickEvent( QMouseEvent* )
 /*================================================================*/
 void KoRuler::setTabList( const QList<KoTabulator>* _tabList )
 {
-    d->tabList.setAutoDelete( true );
     d->tabList.clear();
-    d->tabList.setAutoDelete( false );
     QListIterator<KoTabulator> it( *_tabList );
     for ( it.toFirst(); it.current(); ++it ) {
         KoTabulator *t = new KoTabulator;
