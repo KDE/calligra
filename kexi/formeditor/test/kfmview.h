@@ -12,13 +12,6 @@
  
 class QWorkspace;
 
-namespace KFormDesigner
-{
-	class Form;
-	class ObjectPropertyBuffer;
-	class WidgetLibrary;
-}
-
 class KFMView : public KMainWindow
 {
 	Q_OBJECT
@@ -27,15 +20,8 @@ class KFMView : public KMainWindow
 		KFMView();
 		~KFMView();
 
-	public slots:
-		void	debugTree();
-		void	loadForm();
-
 	private:
-		KFormDesigner::Form *m_form;
 		QWorkspace  *w;
-		KFormDesigner::ObjectPropertyBuffer *buff;
-		KFormDesigner::WidgetLibrary *l;
 };
 
 #endif

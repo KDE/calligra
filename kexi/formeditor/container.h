@@ -55,13 +55,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		 * (e.g. inserting widgets, painting the grid, ...)
 		 */
 
-		Container(Container *toplevel, QWidget *container, QObject *parent=0, const char *name=0, bool attach=false);
+		Container(Container *toplevel, QWidget *container, QObject *parent=0, const char *name=0);
 		~Container();
-
-		/**
-		 * inserts a constructed widget
-		 */
-		void		addWidget(QWidget *w, QRect r = QRect());
 
 		/**
 		 * clears the dots around selected widgets and emits the new selection.
@@ -86,9 +81,6 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		 */
 		ObjectTreeItem	*tree();
 
-		void		emitPrepareInsert( const QString &);
-//		void		emitPreparePaste();
-//		void		emitPreparePaste(QWidget *w, bool cut);
 
 		/**
 		 * registers a sub-container and adds it to the widget tree
@@ -103,12 +95,6 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		 */
 		void		modeChanged(bool e);
 
-		/**
-		 * this singal is emmited as the userselection changes,
-		 * you can probabbly ingnore the first prarameter
-		 */
-		void		selectionChanged(QWidget *selected);
-
 	public slots:
 		/**
 		 * use this function to toggle between editing and viewing mode.<br>
@@ -116,20 +102,6 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		 * if e = false one can use the form
 		 */
 		void		setEditingMode(bool e);
-
-		/**
-		 * prepares it self to for insertation (listen to click and mousemove eventFilter
-		 * and resend a signal if we are toplevel.
-		 */
-		void		slotPrepareInsert( const QString &);
-		
-//		void		slotPreparePaste(QWidget *w, bool cut);
-
-		/**
-		 * resets the ui canges, e.g. showing a position-pointer made for widgetinserting
-		 * (it is called e.g. after a widget gets created or the user abroats)
-		 */
-		void		stopInsert();
 
 		/**
 		 * @returns the watched widget
@@ -144,30 +116,21 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		Form		*form();
 
 		void		deleteItem();
-		void		copyWidget();
-		void		cutWidget();
-		void		pasteWidget();
 
 	protected slots:
 		/**
 		 * this slot uselets widgets
 		 */
-		void		slotSelectionChanged(QWidget *selected);
+		void		setSelectedWidget(QWidget *selected);
 
 		void		widgetDeleted();
+		//void		updateBackground();
 
 	signals:
-		void		prepareInsert( const QString &);
-//		void		preparePaste(QWidget *,bool);
 		void		insertStop();
 
 	protected:
 		virtual bool	eventFilter(QObject *o, QEvent *e);
-
-		/**
-		 * updates the dotted background (e.g. after a ResizeEvent)
-		 */
-		void		updateBackground();
 
 	private:
 		// the watched container and it's toplevel one...
@@ -175,30 +138,17 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		Container 	*m_toplevel;
 
 		// selection
-		ResizeHandleSet	*m_resizeHandles;
 		QWidget		*m_selected;
 
 		// moving etc.
 		QPoint		m_grab;
 		QWidget		*m_moving;
 
-		//background grid:
-		QPixmap		m_dotBg;
-		int		m_gridX;
-		int		m_gridY;
-
 		//inserting
-		bool		m_prepare;
 		QPoint		m_insertBegin;
 		QRect		m_insertRect;
-		WidgetLibrary	*m_lib;
-		QString		m_insertClass;
 		ObjectTreeItem	*m_tree;
-		
-		//Copy/Paste
-	//	QWidget		*m_copiedw;
-	//	bool		m_cut;
-		
+
 		Form		*m_form;
 };
 

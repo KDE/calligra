@@ -7,7 +7,7 @@ include $(top_srcdir)/kexi/Makefile.global
 bin_PROGRAMS = kformdesigner
 
 # set the include path for X, qt and KDE
-INCLUDES = -I$(top_srcdir)/kexi/formeditor $(all_includes) -I$(top_srcdir)/kexi/widget/propertyeditor
+INCLUDES = -I$(top_srcdir)/kexi/formeditor $(all_includes) -I$(top_srcdir)/kexi/widget/propertyeditor -I$(top_srcdir)/kexi/core
 
 kformdesigner_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 

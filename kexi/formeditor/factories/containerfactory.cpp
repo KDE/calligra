@@ -38,7 +38,13 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wTabWidget->setClassName("QTabWidget");
 	wTabWidget->setName("Tab Widget");
 	m_classes.append(wTabWidget);
-	
+
+	KFormDesigner::Widget *wWidget = new KFormDesigner::Widget(this);
+	wWidget->setPixmap("widget");
+	wWidget->setClassName("QWidget");
+	wWidget->setName("Empty Widget");
+//	wLabel->setDescription(i18n("A widget to display text or pixmaps"));
+	m_classes.append(wWidget);
 }
 
 QString
@@ -62,7 +68,7 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	{
 		QButtonGroup *w = new QButtonGroup("btn", p, n);
 		kdDebug() << "ContainerFactory::create(): container=" << container << endl;
-		new KFormDesigner::Container(container->toplevel(), w, container,"",false);
+		new KFormDesigner::Container(container, w, container);
 		return w;
 	}
 	else if(c == "QTabWidget")
@@ -79,6 +85,12 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		}
 
 		return tab;
+	}
+	else if(c == "QWidget")
+	{
+		QWidget *w = new QWidget(p, n);
+		new KFormDesigner::Container(container, w, container);
+		return w;
 	}
 
 	return 0;
@@ -101,6 +113,9 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 		menu->insertItem(i18n("Add Page"), this, SLOT(AddTabPage()) );
 		return;
 	}
+	else if(classname == "QWidget")
+	{
+	}
 	
 	return;
 }
@@ -113,7 +128,7 @@ void ContainerFactory::AddTabPage()
 
 	QTabWidget *tab = (QTabWidget *)m_widget;
 	QWidget *page = new QWidget(tab,name.latin1());
-	new KFormDesigner::Container(m_container,page,tab,"",true);
+	new KFormDesigner::Container(m_container,page,tab);
 	
 	QString n;
 	n.setNum(tab->count()+1);

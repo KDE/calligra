@@ -68,6 +68,7 @@ namespace KFormDesigner
 	public:
 		ResizeHandleSet(QWidget *modify);
 		~ResizeHandleSet();
+		void setWidget(QWidget *modify);
 		QWidget *widget() const {return m_widget;};
 	private:
 		QGuardedPtr<ResizeHandle> handles[8];

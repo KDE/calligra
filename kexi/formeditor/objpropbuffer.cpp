@@ -25,17 +25,17 @@
 
 #include "objpropbuffer.h"
 #include "form.h"
+#include "formmanager.h"
 #include "kexipropertyeditor.h"
 #include "kexipropertyeditoritem.h"
 
 namespace KFormDesigner {
 
-ObjectPropertyBuffer::ObjectPropertyBuffer(QObject *parent, const char *name)
+ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent, const char *name)
  : KexiPropertyBuffer(parent, name)
 {
-	m_list = 0;
 	m_object = 0;
-	m_form = 0;
+	m_manager = manager;
 }
 
 void
@@ -44,7 +44,7 @@ ObjectPropertyBuffer::changeProperty(const QString &property, const QVariant &va
 	kdDebug() << "ObjPropBuffer::changeProperty(): changing: " << property << endl;
 	KexiPropertyBuffer::changeProperty(property, value);
 	
-	if(qstrcmp(property, "name")==0)
+	if(property == "name")
 		emit nameChanged(m_object->name(), value.toString());
 
 	if(value.type() == QVariant::StringList)
@@ -53,27 +53,28 @@ ObjectPropertyBuffer::changeProperty(const QString &property, const QVariant &va
 		QStringList StrList(value.toStringList());
 		for(QStringList::iterator it = StrList.begin(); it != StrList.end(); ++it)
 			list.append((*it).latin1());
-		int count = m_object->metaObject()->findProperty(property, true);
+		int count = m_object->metaObject()->findProperty(property.latin1(), true);
 		const QMetaProperty *meta = m_object->metaObject()->property(count, true);
 		QVariant val = meta->keysToValue(list);
-		m_object->setProperty(property, val);
+		m_object->setProperty(property.latin1(), val);
 	}
-	m_object->setProperty(property, value);
+	m_object->setProperty(property.latin1(), value);
 	emit propertyChanged(m_object, property, value);
 }
 
 void
-ObjectPropertyBuffer::setObject(QObject *obj)
+ObjectPropertyBuffer::setObject(QWidget *widg)
 {
+	QObject *obj = (QObject*)widg; 
 	if(obj==m_object)
 		return;
 	checkModifiedProp();
+	kdDebug() << "loading object = " << widg->name() << endl;
 	
 	if(m_object)
 		m_object->removeEventFilter(this);
 
-	if(m_list)
-		m_list->reset(false);
+	m_manager->editor()->reset(false);
 	clear();
 
 	m_object = obj;
@@ -92,41 +93,34 @@ ObjectPropertyBuffer::setObject(QObject *obj)
 			QStrList keys = meta->enumKeys();
 			if(meta->isEnumType())
 			{
-			  if(meta->isSetType())
-			  {
-			  add(KexiProperty(meta->name(), QStringList::fromStrList(meta->valueToKeys(obj->property(meta->name()).toInt()))
-				, QStringList::fromStrList(keys)));
-			  }
-			  else
-			add(KexiProperty(meta->name(), meta->valueToKey(obj->property(meta->name()).toInt()), QStringList::fromStrList(keys)));
+				if(meta->isSetType())
+				{
+				kdDebug() << "set property" << endl;
+				//	QStringList list = QStringList::fromStrList(keys);
+				//	add(new KexiProperty(meta->name(), QStringList::fromStrList(meta->valueToKeys(obj->property(meta->name()).toInt())),
+				//		list, list, meta->name()));
+				}
+				else
+				{
+					add(new KexiProperty(meta->name(), meta->valueToKey(obj->property(meta->name()).toInt()),
+						QStringList::fromStrList(keys), QStringList::fromStrList(keys), meta->name()));
+				}
 			}
 			else
-			add(KexiProperty( meta->name(), obj->property(meta->name())));
+				add(new KexiProperty(meta->name(), obj->property(meta->name()), meta->name()));
 		}
 	}
-	if(m_list)
-		m_list->setBuffer(this);
-		
+
+	m_manager->editor()->setBuffer(this);
+
 	obj->installEventFilter(this);
-}
-
-void
-ObjectPropertyBuffer::setList(KexiPropertyEditor *list)
-{
-	m_list = list;
-}
-
-void
-ObjectPropertyBuffer::setForm(Form *form)
-{
-	m_form = form;
 }
 
 bool
 ObjectPropertyBuffer::showProperty(QObject *obj, const QString &property)
 {
 	QWidget *w = (QWidget*)obj;
-	if(!isTopWidget(w))
+	if(!m_manager->isTopLevel(w))
 	{
 		QStringList list;
 		list << "caption" << "icon" << "sizeIncrement" << "iconText";
@@ -137,32 +131,21 @@ ObjectPropertyBuffer::showProperty(QObject *obj, const QString &property)
 }
 
 bool
-ObjectPropertyBuffer::isTopWidget(QWidget *w)
-{
-	if(m_form)
-	return(w == m_form->objectTree()->widget()); 
-	else
-	return false;
-}
-
-bool
 ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
 {
 	if(o==m_object)
 	{
 	if((ev->type() == QEvent::Resize) || (ev->type() == QEvent::Move))
 	{
-		if((*this)["geometry"].value() == o->property("geometry")) // to avoid infinite recursion
+		if((*this)["geometry"]->value() == o->property("geometry")) // to avoid infinite recursion
 			return false;
 
-		(*this)["geometry"].setValue(((QWidget*)o)->geometry());
-		if(m_list)
-		{
-			QListViewItem *it = m_list->findItem("geometry", 0, Qt::ExactMatch);
-			KexiPropertyEditorItem *item = static_cast<KexiPropertyEditorItem*>(it);
-			item->setValue(((QWidget*)o)->geometry());
-			item->updateChildValue();
-		}
+		(*this)["geometry"]->setValue(((QWidget*)o)->geometry());
+
+		QListViewItem *it = m_manager->editor()->findItem("geometry", 0, Qt::ExactMatch);
+		KexiPropertyEditorItem *item = static_cast<KexiPropertyEditorItem*>(it);
+		item->updateValue();
+		//item->updateChildValue();
 	}
 	}
 	return false;
@@ -173,17 +156,17 @@ ObjectPropertyBuffer::checkModifiedProp()
 {
 	if(m_object)
 	{
-		ObjectTreeItem *treeIt = m_form->objectTree()->lookup(m_object->name());
-		if(m_list && treeIt)
+		ObjectTreeItem *treeIt = m_manager->activeForm()->objectTree()->lookup(m_object->name());
+		if(treeIt)
 		{
-		QListViewItem *it = m_list->firstChild()->firstChild();
-		while(it)
-		{
-			KexiPropertyEditorItem *item = static_cast<KexiPropertyEditorItem*>(it);
-			if(item->modified())
-				treeIt->addModProperty(item->text(0));
-			it = it->nextSibling();
-		}
+			QListViewItem *it = m_manager->editor()->firstChild()->firstChild();
+			while(it)
+			{
+				KexiPropertyEditorItem *item = static_cast<KexiPropertyEditorItem*>(it);
+				if(item->property()->changed())
+					treeIt->addModProperty(item->text(0));
+				it = it->nextSibling();
+			}
 		}
 	}
 }

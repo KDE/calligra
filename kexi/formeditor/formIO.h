@@ -64,6 +64,19 @@ class KEXIPROPERTYEDITOR_EXPORT FormIO : public QObject
 		   \todo Add errors code and error dialog
 		*/
 		static int loadForm(Form *form, QWidget *parent, const QString &filename=QString::null);
+		/*! Save the widget associated to the ObjectTreeItem \a item into DOM document \a domDoc, 
+		    with \a parent as parent node.
+		    It calls readProp() for each object property, readAttribute() for each attribute and 
+		    itself to save child widgets.\n
+		    This is used to copy/paste widgets.
+		*/
+		static void         saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc);
+		/*! Loads the widget associated to the QDomElement \a el into the Container \a container, 
+		    with \a parent as parent widget. \a lib is the WidgetLibrary to use to create the widget.
+		    If parent = 0, the Container::widget() is used as parent widget.
+		    This is used to copy/paste widgets.
+		*/
+		static void         loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent=0);
 
 	protected:
 		/*! Write an object property in the DOM doc.
@@ -86,19 +99,6 @@ class KEXIPROPERTYEDITOR_EXPORT FormIO : public QObject
 		*/
 		static void         readAttribute(QDomNode node, QObject *obj, const QString &name);
 
-		/*! Save the widget associated to the ObjectTreeItem \a item into DOM document \a domDoc, 
-		    with \a parent as parent node.
-		    It calls readProp() for each object property, readAttribute() for each attribute and 
-		    itself to save child widgets.\n
-		    This is used to copy/paste widgets.
-		*/
-		static void         saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc);
-		/*! Loads the widget associated to the QDomElement \a el into the Container \a container, 
-		    with \a parent as parent widget. \a lib is the WidgetLibrary to use to create the widget.
-		    If parent = 0, the Container::widget() is used as parent widget.
-		    This is used to copy/paste widgets.
-		*/
-		static void         loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent=0);
 		/*! Creates a toplevel widget from the QDomElement \a element in the Form \a form, with \a parent as parent widget.
 		  It calls readProp() and loadWidget() to load child widgets.
 		*/

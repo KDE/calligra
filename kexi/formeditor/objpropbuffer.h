@@ -27,35 +27,34 @@ class KexiPropertyEditor;
 namespace KFormDesigner {
 
 class Form;
+class FormManager;
 
 class KEXIPROPERTYEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 {
 	Q_OBJECT
 
 	public:
-		ObjectPropertyBuffer(QObject *parent, const char *name=0);
+		ObjectPropertyBuffer(FormManager *manager, QObject *parent, const char *name=0);
 		~ObjectPropertyBuffer();
 
 		void	changeProperty(const QString &property, const QVariant &value);
-		void	setObject(QObject *obj);
-		void	setList(KexiPropertyEditor *list);
-		void    setForm(Form *form);
+
 		bool    eventFilter(QObject *o, QEvent *ev);
 		void    checkModifiedProp();
-		
+	
+	public slots:
+		void	setObject(QWidget *obj);
+
 	signals:
 		void	nameChanged(const QString &oldname, const QString &newname);
 		void	propertyChanged(QObject *, const QString &property, const QVariant &v);
 
 	protected:
-		bool    isTopWidget(QWidget *w);
 		bool    showProperty(QObject *obj, const QString &property);
 	
 	private:
 		QObject		*m_object;
-		KexiPropertyEditor	*m_list;
-		Form		*m_form;
-		
+		FormManager     *m_manager;
 };
 
 }

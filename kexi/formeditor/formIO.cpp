@@ -35,6 +35,8 @@
 #include "container.h"
 #include "objpropbuffer.h"
 #include "objecttree.h"
+#include "formmanager.h"
+
 #include "formIO.h"
 
 namespace KFormDesigner {
@@ -600,7 +602,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *parent, QDomElement &el)
 			form->objectTree()->addModProperty(name);
 		}
 		if(n.toElement().tagName() == "widget")	
-			loadWidget(form->toplevelContainer(), form->widgetLibrary(), n.toElement());
+			loadWidget(form->toplevelContainer(), form->manager()->lib(), n.toElement());
 	}
 	w->show();
 	form->setInteractiveMode(true);

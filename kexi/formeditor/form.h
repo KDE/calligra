@@ -24,13 +24,16 @@
 #include <qobject.h>
 #include "objecttree.h"
 #include "widgetlibrary.h"
+#include "resizehandle.h"
 
 class QWidget;
+class QDomElement;
 
 namespace KFormDesigner {
 
 class Container;
 class ObjectPropertyBuffer;
+class FormManager;
 
 /**
  * This class provides the base for accessing KFormDesigner over an "forign" api
@@ -43,7 +46,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 	Q_OBJECT
 
 	public:
-		Form(QObject *parent=0, const char *name=0, WidgetLibrary *lib=0, ObjectPropertyBuffer *buf=0);
+		Form(FormManager *manager, const char *name=0);
 		~Form();
 
 		/**
@@ -64,13 +67,6 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		Container			*toplevelContainer() { return m_toplevel; }
 
 		/**
-		 * @returns the @ref WidgetLibrary<br>
-		 * this library is shared if you constructed this class with a pointer
-		 * to @ref FormDesigner
-		 */
-		WidgetLibrary		*widgetLibrary() { return m_widgetLib; }
-
-		/**
 		 * creates an instance of this form by using
 		 * its Property- and WidgetBuffer
 		 * @param editmode = false you can't edit that form
@@ -86,36 +82,38 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 * @returns a ptr of this form's objecttree
 		 */
 		ObjectTree		*objectTree() { return m_topTree; }
-
-		/**
-		 * @returns a list of actions assisiated with this form
-		 */
-		Actions			createActions(KActionCollection *parent);
+		FormManager*		manager() { return m_manager; }
 		
 		QWidget*		selectedWidget()  {return m_selWidget;}
-		void			setSelectedWidget(QWidget *w);
+		Container*		activeContainer();
+		void			setCurrentWidget(QWidget *w);
 		void			setInteractiveMode(bool interactive) { m_inter = interactive; }
-		
-		void			preparePaste(QWidget*w, bool cut)  {m_copiedw = w; m_cut=cut; }
-		QWidget*		copiedWidget()  {return m_copiedw;}
-		bool			isCutting() { return m_cut;}
+
 		bool			interactiveMode() { return m_inter; }
 
+		static int		gridX() { return 10;}
+		static int		gridY() { return 10;}
+		
+		void			pasteWidget(QDomElement &widg, QPoint pos=QPoint());
 
 	public slots:
-		void			insertWidget(const QString &c);
 		void			changeName(const char *oldname, const QString &newname);
-		void			saveForm();
+
+	signals:
+		void			selectionChanged(QWidget *w);
+
+	protected:
+		void  fixPos(QDomElement el, QPoint newpos);
+		void  fixNames(QDomElement el);
 
 	private:
+		FormManager		*m_manager;
 		Container		*m_toplevel;
-		WidgetLibrary		*m_widgetLib;
 		ObjectTree		*m_topTree;
-		QWidget			*m_selWidget;
-		ObjectPropertyBuffer	*m_buffer;
 		
-		QWidget 		*m_copiedw;
-		bool			m_cut;
+		QWidget			*m_selWidget;
+		ResizeHandleSet		*m_resizeHandles;
+
 		bool			m_inter;
 };
 

@@ -199,6 +199,23 @@ namespace KFormDesigner {
 		for (int i=0;i<8;i++) delete handles[i];
 	}
 
+	void
+	ResizeHandleSet::setWidget(QWidget *modify)
+	{
+		if(modify == m_widget)
+			return;
+		for (int i=0;i<8;i++) delete handles[i];
+		QWidget *parent=modify->parentWidget();
+		handles[0]=new ResizeHandle(parent,modify,ResizeHandle::TopLeft);
+		handles[1]=new ResizeHandle(parent,modify,ResizeHandle::TopCenter);
+		handles[2]=new ResizeHandle(parent,modify,ResizeHandle::TopRight);
+		handles[3]=new ResizeHandle(parent,modify,ResizeHandle::LeftCenter);
+		handles[4]=new ResizeHandle(parent,modify,ResizeHandle::RightCenter);
+		handles[5]=new ResizeHandle(parent,modify,ResizeHandle::BottomLeft);
+		handles[6]=new ResizeHandle(parent,modify,ResizeHandle::BottomCenter);
+		handles[7]=new ResizeHandle(parent,modify,ResizeHandle::BottomRight);
+	}
+
 }
 
 #include "resizehandle.moc"
