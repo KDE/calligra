@@ -64,7 +64,6 @@ bool KPGradient::removeRef()
 void KPGradient::paint()
 {
     QPainter painter;
-    kdDebug()<<"paint gradien*******************************\n";
     switch ( bcType ) {
     case BCT_PLAIN:
 	painter.begin( &pixmap );
