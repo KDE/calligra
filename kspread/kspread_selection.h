@@ -99,7 +99,7 @@ public:
 
   void setChooseAnchor(QPoint chooseAnchor) { m_chooseAnchor = chooseAnchor; }
   void setChooseMarker(QPoint chooseMarker) { m_chooseMarker = chooseMarker; }
-  void setChooseCursor(QPoint chooseCursor) { m_chooseCursor = chooseCursor; }
+  void setChooseCursor(KSpreadTable* table, QPoint chooseCursor) { m_chooseTable = table; m_chooseCursor = chooseCursor; }
   void setChooseTable(KSpreadTable* table) { m_chooseTable = table; }
 
   QRect getChooseRect()const;
