@@ -168,7 +168,7 @@ VSelection::draw( VPainter* painter, double zoomFactor ) const
 		return;
 
 	VDrawSelection op( m_objects, painter, !m_selectObjects );
-	op.visit( *static_cast<VDocument*>( parent() ) );
+	op.visitVSelection( (VSelection &)*this );
 
 	// get bounding box:
 	const KoRect& rect = boundingBox();
