@@ -3,6 +3,10 @@
 
 #include "qpro/stream.h"
 
+#ifdef __DECCXX
+#include <fstream.h>      // needed for filebuf
+#endif
+
 #ifdef USE_QT
 
 #include <qbuffer.h>
