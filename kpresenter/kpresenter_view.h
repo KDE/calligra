@@ -149,6 +149,8 @@ public slots:
     void toolsTable();
     void toolsFormula();
     void toolsObject();
+    void toolsFreehand();
+    void toolsPolyline();
 
     // extra menu
     void extraPenBrush();
@@ -613,6 +615,8 @@ private:
     KToggleAction *actionToolsDiagramm;
     KToggleAction *actionToolsTable;
     KToggleAction *actionToolsFormula;
+    KToggleAction *actionToolsFreehand;
+    KToggleAction *actionToolsPolyline;
     KoPartSelectAction *actionToolsObject;
 
     KAction *actionTextFont;

@@ -247,6 +247,7 @@ protected:
     bool ownClipping:1;
     bool inObjList:1;
     bool move:1;
+    bool resize:1;
     bool sticky:1;
 
     float presFakt;

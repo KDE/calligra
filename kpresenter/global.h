@@ -61,7 +61,9 @@ enum ObjType {
     OT_UNDEFINED = 7,
     OT_PIE = 8,
     OT_PART = 9,
-    OT_GROUP = 10
+    OT_GROUP = 10,
+    OT_FREEHAND = 11,
+    OT_POLYLINE = 12
 };
 enum LineType {
     LT_HORZ = 0,
@@ -178,7 +180,9 @@ enum ToolEditMode {
     INS_DIAGRAMM = 7,
     INS_TABLE = 8,
     INS_FORMULA = 9,
-    INS_AUTOFORM = 10
+    INS_AUTOFORM = 10,
+    INS_FREEHAND = 11,
+    INS_POLYLINE = 12
 };
 
 // offsets of the effects in the Effect2 enum accoording to a objType

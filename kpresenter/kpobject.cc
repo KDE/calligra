@@ -98,6 +98,7 @@ KPObject::KPObject()
     inObjList = true;
     cmds = 0;
     move = false;
+    resize = false;
     sticky = false;
     dcop = 0;
 }

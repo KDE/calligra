@@ -27,6 +27,8 @@
 #include <kplineobject.h>
 #include <kpellipseobject.h>
 #include <kpautoformobject.h>
+#include <kpfreehandobject.h>
+#include <kppolylineobject.h>
 
 #include <kptextobject.h>
 #include <kppixmapobject.h>
@@ -1017,6 +1019,18 @@ void PenBrushCmd::execute()
 	    dynamic_cast<KPClipartObject*>( kpobject )->setGYFactor( newBrush.yfactor );
 	    doc->repaint( kpobject );
 	    break;
+        case OT_FREEHAND:
+	    dynamic_cast<KPFreehandObject*>( kpobject )->setPen( newPen.pen );
+	    dynamic_cast<KPFreehandObject*>( kpobject )->setLineBegin( newPen.lineBegin );
+	    dynamic_cast<KPFreehandObject*>( kpobject )->setLineEnd( newPen.lineEnd );
+	    doc->repaint( kpobject );
+	    break;
+        case OT_POLYLINE:
+	    dynamic_cast<KPPolylineObject*>( kpobject )->setPen( newPen.pen );
+	    dynamic_cast<KPPolylineObject*>( kpobject )->setLineBegin( newPen.lineBegin );
+	    dynamic_cast<KPPolylineObject*>( kpobject )->setLineEnd( newPen.lineEnd );
+	    doc->repaint( kpobject );
+	    break;
 	default: break;
 	}
     }
@@ -1167,6 +1181,22 @@ void PenBrushCmd::unexecute()
 		dynamic_cast<KPClipartObject*>( kpobject )->setGYFactor( oldBrush.at( i )->yfactor );
 	    }
 	    doc->repaint( kpobject );
+	} break;
+        case OT_FREEHAND: {
+	    if ( oldPen.count() > i ) {
+		dynamic_cast<KPFreehandObject*>( kpobject )->setPen( oldPen.at( i )->pen );
+		dynamic_cast<KPFreehandObject*>( kpobject )->setLineBegin( oldPen.at( i )->lineBegin );
+		dynamic_cast<KPFreehandObject*>( kpobject )->setLineEnd( oldPen.at( i )->lineEnd );
+		doc->repaint( kpobject );
+	    }
+	} break;
+        case OT_POLYLINE: {
+	    if ( oldPen.count() > i ) {
+		dynamic_cast<KPPolylineObject*>( kpobject )->setPen( oldPen.at( i )->pen );
+		dynamic_cast<KPPolylineObject*>( kpobject )->setLineBegin( oldPen.at( i )->lineBegin );
+		dynamic_cast<KPPolylineObject*>( kpobject )->setLineEnd( oldPen.at( i )->lineEnd );
+		doc->repaint( kpobject );
+	    }
 	} break;
 	default: break;
 	}

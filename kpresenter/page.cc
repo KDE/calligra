@@ -102,6 +102,7 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
         nextPageTimer = true;
         drawLineInDrawMode = false;
         soundPlayer = 0;
+        m_drawPolyline = false;
     } else {
         view = 0;
         hide();
@@ -376,6 +377,14 @@ void Page::mousePressEvent( QMouseEvent *e )
         if ( e->button() == LeftButton ) {
             mousePressed = true;
 
+            if ( m_drawPolyline && toolEditMode == INS_POLYLINE ) {
+                m_dragStartPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                           ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                m_pointArray.putPoints( m_indexPointArray, 1, m_dragStartPoint.x(), m_dragStartPoint.y() );
+                ++m_indexPointArray;
+                return;
+            }
+
             switch ( toolEditMode ) {
                 case TEM_MOUSE: {
                     bool overObject = false;
@@ -421,6 +430,33 @@ void Page::mousePressEvent( QMouseEvent *e )
                     }
 
                 } break;
+                case INS_FREEHAND: {
+                    deSelectAllObj();
+                    mousePressed = true;
+                    insRect = QRect( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                     ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy(), 0, 0 );
+
+                    m_indexPointArray = 0;
+                    m_dragStartPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                               ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                    m_dragEndPoint = m_dragStartPoint;
+                    m_pointArray.putPoints( m_indexPointArray, 1, m_dragStartPoint.x(), m_dragStartPoint.y() );
+                    ++m_indexPointArray;
+                } break;
+                case INS_POLYLINE: {
+                    deSelectAllObj();
+                    mousePressed = true;
+                    insRect = QRect( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                     ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy(), 0, 0 );
+
+                    m_drawPolyline = true;
+                    m_indexPointArray = 0;
+                    m_dragStartPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                               ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                    m_dragEndPoint = m_dragStartPoint;
+                    m_pointArray.putPoints( m_indexPointArray, 1, m_dragStartPoint.x(), m_dragStartPoint.y() );
+                    ++m_indexPointArray;
+                } break;
                 default: {
                     deSelectAllObj();
                     mousePressed = true;
@@ -428,6 +464,28 @@ void Page::mousePressEvent( QMouseEvent *e )
                                      ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy(), 0, 0 );
                 } break;
             }
+        }
+
+        if ( e->button() == RightButton && toolEditMode == INS_POLYLINE && !m_pointArray.isNull() && m_drawPolyline ) {
+            m_drawPolyline = false;
+            m_dragStartPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                       ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+            m_pointArray.putPoints( m_indexPointArray, 1, m_dragStartPoint.x(), m_dragStartPoint.y() );
+            ++m_indexPointArray;
+
+            insertPolyline( m_pointArray );
+
+            emit objectSelectedChanged();
+            if ( toolEditMode != TEM_MOUSE && editMode )
+                repaint( false );
+            mousePressed = false;
+            modType = MT_NONE;
+            resizeObjNum = -1;
+            mouseMoveEvent( e );
+            ratio = 0.0;
+            keepRatio = false;
+
+            return;
         }
 
         if ( e->button() == RightButton && toolEditMode == TEM_MOUSE ) {
@@ -563,6 +621,10 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
     QPtrList<KPObject> _objects;
     _objects.setAutoDelete( false );
     KPObject *kpobject = 0;
+
+    if ( m_drawPolyline && toolEditMode == INS_POLYLINE ) {
+        return;
+    }
 
     if ( toolEditMode != INS_LINE )
         insRect = insRect.normalize();
@@ -721,7 +783,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 kpobject = objectList()->at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left and down" ), mv, sz,
                                                       kpobject, view->kPresenterDoc() );
-                kpobject->setMove( false );
+                kpobject->setMove( false ); 
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->addCommand( resizeCmd );
@@ -816,6 +878,10 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
         if ( !insRect.isNull() ) insertAutoform( insRect, reverse );
         setToolEditMode( TEM_MOUSE );
     } break;
+    case INS_FREEHAND:
+        if ( !m_pointArray.isNull() ) insertFreehand( m_pointArray );
+        break;
+    default: break;
     }
     emit objectSelectedChanged();
     if ( toolEditMode != TEM_MOUSE && editMode )
@@ -1021,6 +1087,41 @@ void Page::mouseMoveEvent( QMouseEvent *e )
                 view->penColorChanged( view->getPen() );
                 view->brushColorChanged( view->getBrush() );
 	    } break;
+            case INS_FREEHAND: {
+                m_dragEndPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                         ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                QPainter p( this );
+                p.setPen( QPen( black, 1, SolidLine ) );
+		p.setBrush( NoBrush );
+		p.setRasterOp( NotROP );
+                p.drawLine( m_dragStartPoint, m_dragEndPoint );
+                p.end();
+
+                m_pointArray.putPoints( m_indexPointArray, 1, m_dragStartPoint.x(), m_dragStartPoint.y() );
+                ++m_indexPointArray;
+                m_dragStartPoint = m_dragEndPoint;
+
+                mouseSelectedObject = true;
+
+                view->penColorChanged( view->getPen() );
+                view->brushColorChanged( view->getBrush() );
+            } break;
+            case INS_POLYLINE: {
+                QPainter p( this );
+                p.setPen( QPen( black, 1, SolidLine ) );
+		p.setBrush( NoBrush );
+		p.setRasterOp( NotROP );
+                p.drawLine( m_dragStartPoint, m_dragEndPoint ); // 
+                m_dragEndPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                         ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                p.drawLine( m_dragStartPoint, m_dragEndPoint );
+                p.end();
+
+                mouseSelectedObject = true;
+
+                view->penColorChanged( view->getPen() );
+                view->brushColorChanged( view->getBrush() );
+            } break;
 	    }
 	}
     } else if ( !editMode && drawMode && drawLineInDrawMode ) {
@@ -1753,6 +1854,7 @@ void Page::stopScreenPresentation()
     goingBack = false;
     currPresPage = 1;
     editMode = true;
+    drawMode = false;
     repaint( false );
     setToolEditMode( toolEditMode );
     tmpObjs.clear();
@@ -3273,6 +3375,61 @@ void Page::insertObject( QRect _r )
 }
 
 /*================================================================*/
+void Page::insertFreehand( const QPointArray &_pointArray )
+{
+    QRect rect = getDrawRect( _pointArray );
+
+    int ox = rect.x() + diffx();
+    int oy = rect.y() + diffy();
+
+    unsigned int index = 0;
+
+    QPointArray points( _pointArray );
+    QPointArray tmpPoints;
+    QPointArray::Iterator it;
+    for ( it = points.begin(); it != points.end(); ++it ) {
+        QPoint point = (*it);
+        int tmpX = point.x() - ox;
+        int tmpY = point.y() - oy;
+        tmpPoints.putPoints( index, 1, tmpX,tmpY );
+        ++index;
+    }
+
+    view->kPresenterDoc()->insertFreehand( tmpPoints, rect, view->getPen(), view->getLineBegin(),
+                                           view->getLineEnd(), diffx(), diffy() );
+
+    m_pointArray = QPointArray();
+    m_indexPointArray = 0;
+}
+
+/*================================================================*/
+void Page::insertPolyline( const QPointArray &_pointArray )
+{
+    QRect rect = getDrawRect( _pointArray );
+
+    int ox = rect.x() + diffx();
+    int oy = rect.y() + diffy();
+    unsigned int index = 0;
+
+    QPointArray points( _pointArray );
+    QPointArray tmpPoints;
+    QPointArray::Iterator it;
+    for ( it = points.begin(); it != points.end(); ++it ) {
+        QPoint point = (*it);
+        int tmpX = point.x() - ox;
+        int tmpY = point.y() - oy;
+        tmpPoints.putPoints( index, 1, tmpX,tmpY );
+        ++index;
+    }
+
+    view->kPresenterDoc()->insertPolyline( tmpPoints, rect, view->getPen(), view->getLineBegin(),
+                                           view->getLineEnd(), diffx(), diffy() );
+
+    m_pointArray = QPointArray();
+    m_indexPointArray = 0;
+}
+
+/*================================================================*/
 void Page::setToolEditMode( ToolEditMode _m, bool updateView )
 {
     exitEditMode();
@@ -4073,6 +4230,46 @@ void Page::stopSound()
 void Page::setXimPosition( int x, int y, int w, int h, QFont *f )
 {
     QWidget::setMicroFocusHint( x - view->getDiffX(), y - view->getDiffY(), w, h, true, f );
+}
+
+QRect Page::getDrawRect( const QPointArray &_points )
+{
+    int maxX = 0, maxY = 0;
+    int minX = 0, minY = 0;
+    int tmpX = 0, tmpY = 0;
+    bool first = true;
+
+    QPointArray points( _points );
+    QPointArray::Iterator it;
+    for ( it = points.begin(); it != points.end(); ++it ) {
+        QPoint point = (*it);
+        tmpX = point.x();
+        tmpY = point.y();
+
+        if ( first ) {
+            maxX = tmpX;
+            maxY = tmpY;
+            minX = tmpX;
+            minY = tmpY;
+
+            first = false;
+        }
+
+        if ( maxX < tmpX )
+            maxX = tmpX;
+        if ( maxY < tmpY )
+            maxY = tmpY;
+        if ( minX > tmpX )
+            minX = tmpX;
+        if ( minY > tmpY )
+            minY = tmpY;
+    }
+
+    QPoint topLeft = QPoint( minX, minY );
+    QPoint bottomRight = QPoint( maxX, maxY );
+    QRect rect = QRect( topLeft, bottomRight );
+
+    return rect;
 }
 
 #include <page.moc>

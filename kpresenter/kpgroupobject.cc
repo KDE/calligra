@@ -28,6 +28,8 @@
 #include <kptextobject.h>
 #include <kppixmapobject.h>
 #include <kppieobject.h>
+#include <kpfreehandobject.h>
+#include <kppolylineobject.h>
 #include <kdebug.h>
 
 #include <qpainter.h>
@@ -182,6 +184,16 @@ void KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
                         KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->getImageCollection() );
                         kppixmapobject->load(current);
                         objects.append( kppixmapobject );
+                    } break;
+                    case OT_FREEHAND: {
+                        KPFreehandObject *kpfreehandobject = new KPFreehandObject();
+                        kpfreehandobject->load( current );
+                        objects.append( kpfreehandobject );
+                    } break;
+                    case OT_POLYLINE: {
+                        KPPolylineObject *kppolylineobject = new KPPolylineObject();
+                        kppolylineobject->load( current );
+                        objects.append( kppolylineobject );
                     } break;
                     case OT_GROUP: {
                         KPGroupObject *kpgroupobject = new KPGroupObject();

@@ -270,6 +270,8 @@ protected:
     void insertPie( QRect );
     void insertObject( QRect );
     void insertAutoform( QRect, bool );
+    void insertFreehand( const QPointArray &_pointArray );
+    void insertPolyline( const QPointArray &_pointArray );
 
     void selectNext();
     void selectPrev();
@@ -319,6 +321,11 @@ private:
 
     KPresenterSoundPlayer *soundPlayer;
 
+    QPointArray m_pointArray;
+    QPoint m_dragStartPoint, m_dragEndPoint;
+    unsigned int m_indexPointArray;
+    bool m_drawPolyline;
+
 private:
     QValueList<int> pages(const QString &range);
     bool pagesHelper(const QString &chunk, QValueList<int> &list);
@@ -334,6 +341,8 @@ private:
     bool nextPageTimer;
 
     void playSound( const QString &soundFileName );
+
+    QRect getDrawRect( const QPointArray &_points );
 
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }

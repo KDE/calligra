@@ -35,6 +35,8 @@
 #include <kprcommand.h>
 #include <styledia.h>
 #include <insertpagedia.h>
+#include <kpfreehandobject.h>
+#include <kppolylineobject.h>
 
 #include <qpopupmenu.h>
 #include <qclipboard.h>
@@ -1070,6 +1072,26 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
                 } else
                     _objectList->append( kppixmapobject );
             } break;
+            case OT_FREEHAND: {
+                KPFreehandObject *kpfreehandobject = new KPFreehandObject();
+                kpfreehandobject->load(obj);
+                if ( _paste ) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Freehand" ), kpfreehandobject, this );
+                    insertCmd->execute();
+                    addCommand( insertCmd );
+                } else
+                    _objectList->append( kpfreehandobject );
+            } break;
+            case OT_POLYLINE: {
+                KPPolylineObject *kppolylineobject = new KPPolylineObject();
+                kppolylineobject->load(obj);
+                if ( _paste ) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polyline" ), kppolylineobject, this );
+                    insertCmd->execute();
+                    addCommand( insertCmd );
+                } else
+                    _objectList->append( kppolylineobject );
+            } break;
             case OT_GROUP: {
                 KPGroupObject *kpgroupobject = new KPGroupObject();
                 kpgroupobject->load(obj, this);
@@ -1531,6 +1553,18 @@ bool KPresenterDoc::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le,
 		btmp->yfactor = dynamic_cast<KPClipartObject*>( kpobject )->getGYFactor();
 		ret = true;
 		break;
+             case OT_FREEHAND:
+		ptmp->pen = QPen( dynamic_cast<KPFreehandObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPFreehandObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPFreehandObject*>( kpobject )->getLineEnd();
+		ret = true;
+		break;
+             case OT_POLYLINE:
+		ptmp->pen = QPen( dynamic_cast<KPPolylineObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPPolylineObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
+		ret = true;
+		break;
 	    default: break;
 	    }
 	    _oldPen.append( ptmp );
@@ -1593,6 +1627,18 @@ bool KPresenterDoc::setLineBegin( LineEnd lb )
 		btmp->gColor1 = dynamic_cast<KPAutoformObject*>( kpobject )->getGColor1();
 		btmp->gColor2 = dynamic_cast<KPAutoformObject*>( kpobject )->getGColor2();
 		btmp->gType = dynamic_cast<KPAutoformObject*>( kpobject )->getGType();
+		ret = true;
+	    } break;
+            case OT_FREEHAND: {
+		ptmp->pen = QPen( dynamic_cast<KPFreehandObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPFreehandObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPFreehandObject*>( kpobject )->getLineEnd();
+		ret = true;
+	    } break;
+            case OT_POLYLINE: {
+		ptmp->pen = QPen( dynamic_cast<KPPolylineObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPPolylineObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
 		ret = true;
 	    } break;
 	    default: continue; break;
@@ -1659,6 +1705,18 @@ bool KPresenterDoc::setLineEnd( LineEnd le )
 		btmp->gColor1 = dynamic_cast<KPAutoformObject*>( kpobject )->getGColor1();
 		btmp->gColor2 = dynamic_cast<KPAutoformObject*>( kpobject )->getGColor2();
 		btmp->gType = dynamic_cast<KPAutoformObject*>( kpobject )->getGType();
+		ret = true;
+	    } break;
+            case OT_FREEHAND: {
+		ptmp->pen = QPen( dynamic_cast<KPFreehandObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPFreehandObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPFreehandObject*>( kpobject )->getLineEnd();
+		ret = true;
+	    } break;
+            case OT_POLYLINE: {
+		ptmp->pen = QPen( dynamic_cast<KPPolylineObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPPolylineObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
 		ret = true;
 	    } break;
 	    default: continue; break;
@@ -1886,6 +1944,18 @@ bool KPresenterDoc::setPenColor( QColor c, bool fill )
 		btmp->gType = dynamic_cast<KPClipartObject*>( kpobject )->getGType();
 		ret = true;
 	    } break;
+            case OT_FREEHAND: {
+		ptmp->pen = QPen( dynamic_cast<KPFreehandObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPFreehandObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPFreehandObject*>( kpobject )->getLineEnd();
+		ret = true;
+	    } break;
+            case OT_POLYLINE: {
+		ptmp->pen = QPen( dynamic_cast<KPPolylineObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPPolylineObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
+		ret = true;
+	    } break;
 	    default: break;
 	    }
 	    _oldPen.append( ptmp );
@@ -1935,7 +2005,9 @@ bool KPresenterDoc::setBrushColor( QColor c, bool fill )
 
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
 	kpobject = objectList()->at( i );
-	if ( kpobject->isSelected() && kpobject->getType() != OT_LINE ) {
+	if ( kpobject->isSelected() && kpobject->getType() != OT_LINE
+                                    && kpobject->getType() != OT_FREEHAND
+                                    && kpobject->getType() != OT_POLYLINE ) {
 	    ptmp = new PenBrushCmd::Pen;
 	    btmp = new PenBrushCmd::Brush;
 	    switch ( kpobject->getType() )
@@ -2202,6 +2274,12 @@ QPen KPresenterDoc::getPen( QPen pen )
 	    case OT_TEXT:
 		return dynamic_cast<KPTextObject*>( kpobject )->getPen();
 		break;
+            case OT_FREEHAND:
+		return dynamic_cast<KPFreehandObject*>( kpobject )->getPen();
+		break;
+            case OT_POLYLINE:
+		return dynamic_cast<KPPolylineObject*>( kpobject )->getPen();
+		break;
 	    default: break;
 	    }
 	}
@@ -2229,6 +2307,12 @@ LineEnd KPresenterDoc::getLineBegin( LineEnd lb )
 	    case OT_PIE:
 		return dynamic_cast<KPPieObject*>( kpobject )->getLineBegin();
 		break;
+            case OT_FREEHAND:
+		return dynamic_cast<KPFreehandObject*>( kpobject )->getLineBegin();
+		break;
+            case OT_POLYLINE:
+		return dynamic_cast<KPPolylineObject*>( kpobject )->getLineBegin();
+		break;
 	    default: break;
 	    }
 	}
@@ -2254,6 +2338,12 @@ LineEnd KPresenterDoc::getLineEnd( LineEnd le )
 		break;
 	    case OT_PIE:
 		return dynamic_cast<KPPieObject*>( kpobject )->getLineEnd();
+		break;
+            case OT_FREEHAND:
+		return dynamic_cast<KPFreehandObject*>( kpobject )->getLineEnd();
+		break;
+            case OT_POLYLINE:
+		return dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
 		break;
 	    default: break;
 	    }
@@ -2921,6 +3011,36 @@ void KPresenterDoc::insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb,
     kpautoformobject->setSelected( true );
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this );
+    insertCmd->execute();
+    addCommand( insertCmd );
+}
+
+/*================= insert a freehand line =======================*/
+void KPresenterDoc::insertFreehand( const QPointArray &points, QRect r, QPen pen,
+                                    LineEnd lb, LineEnd le, int diffx, int diffy )
+{
+    QSize size( r.width(), r.height() );
+    KPFreehandObject *kpfreehandobject = new KPFreehandObject( points, size, pen, lb, le );
+    kpfreehandobject->setOrig( r.x() + diffx, r.y() + diffy );
+    kpfreehandobject->setSize( r.width(), r.height() );
+    kpfreehandobject->setSelected( true );
+
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Freehand" ), kpfreehandobject, this );
+    insertCmd->execute();
+    addCommand( insertCmd );
+}
+
+/*===================== insert a polyline =======================*/
+void KPresenterDoc::insertPolyline( const QPointArray &points, QRect r, QPen pen,
+                                    LineEnd lb, LineEnd le, int diffx, int diffy )
+{
+    QSize size( r.width(), r.height() );
+    KPPolylineObject *kppolylineobject = new KPPolylineObject( points, size, pen, lb, le );
+    kppolylineobject->setOrig( r.x() + diffx, r.y() + diffy );
+    kppolylineobject->setSize( r.width(), r.height() );
+    kppolylineobject->setSelected( true );
+
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polyline" ), kppolylineobject, this );
     insertCmd->execute();
     addCommand( insertCmd );
 }
@@ -3626,7 +3746,7 @@ int KPresenterDoc::getPenBrushFlags()
         kpobject = objectList()->at( i );
         if ( kpobject->isSelected() ) {
             switch ( kpobject->getType() ) {
-                case OT_LINE:
+                case OT_LINE: case OT_FREEHAND: case OT_POLYLINE:
                     flags = flags | StyleDia::SdPen;
                     flags = flags | StyleDia::SdEndBeginLine;
                     break;

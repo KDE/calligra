@@ -190,6 +190,9 @@ public:
     void insertAutoform( QRect, QPen, QBrush, LineEnd, LineEnd, FillType, QColor,
                          QColor, BCType, const QString &, bool ,int, int, int, int );
 
+    void insertFreehand( const QPointArray &, QRect, QPen, LineEnd, LineEnd, int, int );
+    void insertPolyline( const QPointArray &, QRect, QPen, LineEnd, LineEnd, int, int );
+
     // get list of pages and objects
     QPtrList<KPBackGround> *backgroundList() { return &_backgroundList; }
     QPtrList<KPObject> *objectList() { return _objectList; }

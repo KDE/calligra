@@ -59,16 +59,20 @@ void KPSlidePreview::setPage( QListViewItem *item )
 
     int w = doc->getPageRect( 0, 0, 0 ).width();
     int h = doc->getPageRect( 0, 0, 0 ).height();
-    if ( w >= h ) {
-        w = width();
-        h = height();
+    if ( w > h ) {
+        w = 297;
+        h = 210;
     }
-    else {
-        w = height();
-        h = width();
+    else if ( w < h ) {
+        w = 210;
+        h = 297;
+    }
+    else if ( w == h ) {
+        w = 297;
+        h = 297;
     }
 
-    const QImage img( pix.convertToImage().smoothScale( w, h, QImage::ScaleMin ) );
+    const QImage img( pix.convertToImage().smoothScale( w, h, QImage::ScaleFree ) );
     pix.convertFromImage( img );
     setPixmap( pix );
 }
@@ -97,7 +101,7 @@ void KPPresStructObjectItem::setPage( KPBackGround *p, int pgnum )
     page = p;
     pageNum = pgnum;
     if ( page && !parent() )
-        setPixmap( 0, KPBarIcon( "newPoint" ) );
+        setPixmap( 0, KPBarIcon( "newslide" ) );
 }
 
 /*================================================================*/
@@ -137,6 +141,12 @@ void KPPresStructObjectItem::setObject( KPObject *o, int num )
       break;
     case OT_PART:
       setPixmap( 0, KPBarIcon( "frame_query" ) );
+      break;
+    case OT_FREEHAND:
+      setPixmap( 0, KPBarIcon( "freehand" ) );
+      break;
+    case OT_POLYLINE:
+      setPixmap( 0, KPBarIcon( "polyline" ) );
       break;
     case OT_GROUP:
       setPixmap( 0, KPBarIcon( "group" ) );

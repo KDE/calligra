@@ -66,7 +66,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     topLayout->addWidget(grp1);
     QGridLayout *upperRow = new QGridLayout(grp1, 5, 4, 15);
 
-    lNum = new QLabel( i18n( "Number: " ), grp1 );
+    lNum = new QLabel( i18n( "Order of Appearance: " ), grp1 );
     lNum->setAlignment( AlignVCenter );
     upperRow->addWidget(lNum, 0, 0);
 
@@ -188,7 +188,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     topLayout->addWidget(grp2);
     QGridLayout *lowerRow = new QGridLayout(grp2, 4, 4, 15);
 
-    lDisappear = new QLabel( i18n( "Number: " ), grp2 );
+    lDisappear = new QLabel( i18n( "Order of Disappearance: " ), grp2 );
     lDisappear->setAlignment( AlignVCenter );
     lowerRow->addWidget(lDisappear, 0, 0);
 

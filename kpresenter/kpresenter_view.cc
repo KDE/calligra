@@ -771,6 +771,28 @@ void KPresenterView::toolsObject()
     page->setPartEntry( pe );
 }
 
+/*==================== insert freehand line =====================*/
+void KPresenterView::toolsFreehand()
+{
+    if ( actionToolsFreehand->isChecked() ) {
+        page->setToolEditMode( INS_FREEHAND, false );
+        page->deSelectAllObj();
+    }
+    else
+        actionToolsFreehand->setChecked(true);
+}
+
+/*====================== insert polyline =======================*/
+void KPresenterView::toolsPolyline()
+{
+    if ( actionToolsPolyline->isChecked() ) {
+        page->setToolEditMode( INS_POLYLINE, false );
+        page->deSelectAllObj();
+    }
+    else
+        actionToolsPolyline->setChecked(true);
+}
+
 /*===============================================================*/
 void KPresenterView::extraPenBrush()
 {
@@ -2235,6 +2257,16 @@ void KPresenterView::setupActions()
     actionToolsObject = new KoPartSelectAction( i18n( "&Object..." ), "frame_query",
                                                     this, SLOT( toolsObject() ),
                                                     actionCollection(), "tools_object" );
+
+    actionToolsFreehand = new KToggleAction( i18n( "&Freehand" ), "freehand", 0,
+                                             this, SLOT( toolsFreehand() ),
+                                             actionCollection(), "tools_freehand" );
+    actionToolsFreehand->setExclusiveGroup( "tools" );
+
+    actionToolsPolyline = new KToggleAction( i18n( "Po&lyline" ), "polyline", 0,
+                                             this, SLOT( toolsPolyline() ),
+                                             actionCollection(), "tools_polyline" );
+    actionToolsPolyline->setExclusiveGroup( "tools" );
 
     // ----------------- text actions
 
