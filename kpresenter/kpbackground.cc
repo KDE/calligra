@@ -354,6 +354,9 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
     {
         stylepageauto.addProperty( "presentation:transition-style", transition );
     }
+    stylepageauto.addProperty( "presentation:display-header", m_page->kPresenterDoc()->hasHeader());
+    stylepageauto.addProperty( "presentation:display-footer", m_page->kPresenterDoc()->hasFooter());
+
     if ( pageTimer != 1 )
     {
         stylepageauto.addProperty("presentation:duration", saveOasisTimer( pageTimer ));
@@ -385,6 +388,7 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
         QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
         stylepageauto.addChildElement( "sound effect", elementContents );
     }
+
 
     switch ( backType )
     {
@@ -665,6 +669,16 @@ void KPBackGround::loadOasis(KoOasisContext & context )
         //Not defined into kpresenter
         //it's global for the moment.
         kdDebug()<<" presentation:transition-type :"<<styleStack.attribute( "presentation:transition-type" )<<endl;
+    }
+    if ( styleStack.hasAttribute( "presentation:display-header" ) )
+    {
+        QString tmp = styleStack.attribute( "presentation:display-header" );
+        m_page->kPresenterDoc()->setHeader( tmp =="true" ? true : false );
+    }
+    if ( styleStack.hasAttribute( "presentation:display-footer" ) )
+    {
+        QString tmp = styleStack.attribute( "presentation:display-footer" );
+        m_page->kPresenterDoc()->setFooter(tmp =="true" ? true : false);
     }
     if ( styleStack.hasAttribute("presentation:transition-style"))
     {

@@ -76,13 +76,13 @@ typedef QMap<int, QPtrList<listAnimation> > lstMap;
 
 KPrPage::KPrPage(KPresenterDoc *_doc, KPrPage *masterPage )
 : m_doc( _doc )
-, m_masterPage( masterPage ) 
+, m_masterPage( masterPage )
 , m_dcop( 0 )
 , m_selectedSlides( true )
 {
     kdDebug(33001)<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )"<<this<<endl;
     m_objectList.setAutoDelete( false );
-    
+
     m_kpbackground= new KPBackGround( this );
 
     //don't create dcopobject by default
@@ -239,7 +239,6 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     xmlWriter.addAttribute( "draw:name", namePage ); //we must store a name
     xmlWriter.addAttribute( "draw:id", posPage );
     xmlWriter.addAttribute( "draw:master-page-name", "Standard"); //by default name of page is Standard
-
     QString styleName = m_kpbackground->saveOasisBackgroundPageStyle( store, xmlWriter, context.mainStyles() );
     kdDebug()<<" styleName :"<<styleName<<endl;
     if ( !styleName.isEmpty() )
@@ -358,7 +357,7 @@ KCommand * KPrPage::deleteSelectedObjects()
     QPtrList<KPObject> objects = getSelectedObjects( true );
 
     DeleteCmd *deleteCmd=0L;
-    
+
     if ( objects.count() > 0 ) {
         deleteCmd = new DeleteCmd( i18n( "Delete Objects" ), objects, m_doc, this );
         deleteCmd->execute();
@@ -566,7 +565,7 @@ QPtrList<KPObject> KPrPage::getSelectedObjects( bool withoutHeaderFooter ) const
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        if( it.current()->isSelected() 
+        if( it.current()->isSelected()
             && ( !withoutHeaderFooter
                  || it.current() != m_doc->header() && it.current()!= m_doc->footer() ) )
         {

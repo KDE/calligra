@@ -1190,8 +1190,8 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 
     //not define into oo spec
     settingsWriter.addConfigItem( "SnapLineIsVisible", showHelplines() );
-    settingsWriter.addConfigItem( "ShowHeader", hasHeader() );
-    settingsWriter.addConfigItem( "ShowFooter", hasFooter() );
+    //settingsWriter.addConfigItem( "ShowHeader", hasHeader() );
+    //settingsWriter.addConfigItem( "ShowFooter", hasFooter() );
 }
 
 void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
@@ -1215,16 +1215,14 @@ void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
             setUnit(KoUnit::unit(settings.parseConfigItemString("unit")));
 
 
-            setFooter( settings.parseConfigItemBool( "ShowFooter" ) );
-            setHeader( settings.parseConfigItemBool( "ShowHeader" ) );
+            //setFooter( settings.parseConfigItemBool( "ShowFooter" ) );
+            //setHeader( settings.parseConfigItemBool( "ShowHeader" ) );
         }
     }
 }
 
 void KPresenterDoc::parseOasisHelpLine( const QString &text )
 {
-
-    //FIXME : test it for the moment we doesn't reload it
     QString str;
     int newPos = text.length()-1; //start to element = 1
     for ( int pos = text.length()-1; pos >=0;--pos )
@@ -1233,7 +1231,7 @@ void KPresenterDoc::parseOasisHelpLine( const QString &text )
         {
             //point
             str = text.mid( pos+1, ( newPos-pos ) );
-            kdDebug()<<" point element  :"<< str <<endl;
+            //kdDebug()<<" point element  :"<< str <<endl;
             QStringList listVal = QStringList::split( ",", str );
             int posX = ( listVal[0].toInt()/100 );
             int posY = ( listVal[1].toInt()/100 );
@@ -1244,7 +1242,7 @@ void KPresenterDoc::parseOasisHelpLine( const QString &text )
         {
             //vertical element
             str = text.mid( pos+1, ( newPos-pos ) );
-            kdDebug()<<" vertical  :"<< str <<endl;
+            //kdDebug()<<" vertical  :"<< str <<endl;
             int posX = ( str.toInt()/100 );
             m_vertHelplines.append( MM_TO_POINT( posX ) );
             newPos = pos-1;
@@ -1253,7 +1251,7 @@ void KPresenterDoc::parseOasisHelpLine( const QString &text )
         {
             //horizontal element
             str = text.mid( pos+1, ( newPos-pos ) );
-            kdDebug()<<" horizontal  :"<< str <<endl;
+            //kdDebug()<<" horizontal  :"<< str <<endl;
             int posY = ( str.toInt()/100 );
             m_horizHelplines.append( MM_TO_POINT( posY ) );
             newPos = pos-1;
