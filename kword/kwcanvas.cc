@@ -916,7 +916,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
             {
                 if ( m_currentFrameSetEdit )
                     m_currentFrameSetEdit->mouseMoveEvent( e, normalPoint, docPoint );
-                else
+                else if ( m_doc->isReadWrite() )
                 {
                     if ( viewport()->cursor().shape() == SizeAllCursor )
                     {

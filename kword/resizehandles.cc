@@ -68,7 +68,7 @@ KWResizeHandle::KWResizeHandle( KWCanvas * p, Direction d, KWFrame *frm )
 
 void KWResizeHandle::mouseMoveEvent( QMouseEvent *e )
 {
-    if ( !mousePressed )
+    if ( !mousePressed || !m_canvas->kWordDocument()->isReadWrite() )
         return;
 
     bool shiftPressed = e->state() & ShiftButton;
