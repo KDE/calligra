@@ -33,3 +33,12 @@ KWord13FormatFour::~KWord13FormatFour(void)
 {
 }
 
+KWord13FormatSix::KWord13FormatSix( void )
+{
+    m_id = 6;
+}
+
+KWord13FormatSix::~KWord13FormatSix( void )
+{
+}
+

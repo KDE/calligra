@@ -38,5 +38,19 @@ public:
     QString m_text; ///< replacement text
 };
 
+/**
+ * \brief format for anchor
+ *
+ * For \<FORMAT id="6"\>
+ */
+class KWord13FormatSix : public KWord13Format
+{
+public:
+    KWord13FormatSix(void);
+    virtual ~KWord13FormatSix(void);
+public:
+    QString m_anchorName; ///< name of anchor
+};
+
 
 #endif // KWORD13_FORMAT_OTHER

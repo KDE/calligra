@@ -201,6 +201,11 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
         stackItem->elementType = KWord13TypeVariable;
         m_currentFormat = new KWord13FormatFour;
     }
+    else if ( id == 6 && ok ) // Anchor
+    {
+        stackItem->elementType = KWord13TypeAnchor;
+        m_currentFormat = new KWord13FormatSix;
+    }
     else
     {
         // ### TODO: provisory
