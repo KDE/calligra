@@ -340,6 +340,15 @@ QString KSpreadCellIface::getFormatType() const
         case KSpreadCell::date_format15:
         case KSpreadCell::date_format16:
 	case KSpreadCell::date_format17:
+	case KSpreadCell::date_format18:
+	case KSpreadCell::date_format19:
+	case KSpreadCell::date_format20:
+	case KSpreadCell::date_format21:
+	case KSpreadCell::date_format22:
+	case KSpreadCell::date_format23:
+	case KSpreadCell::date_format24:
+	case KSpreadCell::date_format25:
+	case KSpreadCell::date_format26:
                 stringFormat="date format";
                 break;
         case KSpreadCell::Time:
@@ -351,6 +360,9 @@ QString KSpreadCellIface::getFormatType() const
         case KSpreadCell::Time_format1:
         case KSpreadCell::Time_format2:
         case KSpreadCell::Time_format3:
+        case KSpreadCell::Time_format4:
+        case KSpreadCell::Time_format5:
+        case KSpreadCell::Time_format6:
                 stringFormat="time format";
                 break;
         case KSpreadCell::fraction_half:
