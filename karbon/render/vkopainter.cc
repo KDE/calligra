@@ -492,111 +492,111 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 	// TODO : for radials as well
 	if( m_fill->gradient().type() == gradient_linear )
 	{
-	ArtGradientLinear *linear = new ArtGradientLinear();
+		ArtGradientLinear *linear = new ArtGradientLinear();
 
-	// TODO : make variable
-	if( m_fill->gradient().spreadMethod() == gradient_spread_pad )
-		linear->spread = ART_GRADIENT_PAD;
-	else if( m_fill->gradient().spreadMethod() == gradient_spread_repeat )
-		linear->spread = ART_GRADIENT_REPEAT;
-	else if( m_fill->gradient().spreadMethod() == gradient_spread_reflect )
-		linear->spread = ART_GRADIENT_REFLECT;
+		// TODO : make variable
+		if( m_fill->gradient().spreadMethod() == gradient_spread_pad )
+			linear->spread = ART_GRADIENT_PAD;
+		else if( m_fill->gradient().spreadMethod() == gradient_spread_repeat )
+			linear->spread = ART_GRADIENT_REPEAT;
+		else if( m_fill->gradient().spreadMethod() == gradient_spread_reflect )
+			linear->spread = ART_GRADIENT_REFLECT;
 
-	ArtDRect bbox;
-	art_drect_svp( &bbox, svp );
+		ArtDRect bbox;
+		art_drect_svp( &bbox, svp );
 
-	// clamp to viewport
-	double x0 = int( bbox.x0 );
-	x0 = QMAX( x0, 0 );
-	x0 = QMIN( x0, m_width );
-	double y0 = int( bbox.y0 );
-	y0 = QMAX( y0, 0 );
-	y0 = QMIN( y0, m_height );
-	double x1 = int( bbox.x1 ) + 1;
-	x1 = QMAX( x1, 0 );
-	x1 = QMIN( x1, m_width );
-	double y1 = int( bbox.y1 ) + 1;
-	y1 = QMAX( y1, 0 );
-	y1 = QMIN( y1, m_height );
+		// clamp to viewport
+		double x0 = int( bbox.x0 );
+		x0 = QMAX( x0, 0 );
+		x0 = QMIN( x0, m_width );
+		double y0 = int( bbox.y0 );
+		y0 = QMAX( y0, 0 );
+		y0 = QMIN( y0, m_height );
+		double x1 = int( bbox.x1 ) + 1;
+		x1 = QMAX( x1, 0 );
+		x1 = QMIN( x1, m_width );
+		double y1 = int( bbox.y1 ) + 1;
+		y1 = QMAX( y1, 0 );
+		y1 = QMIN( y1, m_height );
 
-	//kdDebug() << "x1 : " << x1 << ", x0 " << x0 << endl;
-	//kdDebug() << "y1 : " << y1 << ", y0 " << y0 << endl;
-	double dx = m_fill->gradient().vector().x() - m_fill->gradient().origin().x();
-	double dy = m_fill->gradient().vector().y() - m_fill->gradient().origin().y();
-	double scale = 1.0 / ( dx * dx + dy * dy );
+		//kdDebug() << "x1 : " << x1 << ", x0 " << x0 << endl;
+		//kdDebug() << "y1 : " << y1 << ", y0 " << y0 << endl;
+		double dx = m_fill->gradient().vector().x() - m_fill->gradient().origin().x();
+		double dy = m_fill->gradient().vector().y() - m_fill->gradient().origin().y();
+		double scale = 1.0 / ( dx * dx + dy * dy );
 
-	linear->a = dx * scale;
-	linear->b = dy * scale;
-	linear->c = -( ( x0 + m_fill->gradient().origin().x() ) * linear->a +
-				   ( y0 + m_fill->gradient().origin().y() ) * linear->b );
-	//kdDebug() << "linear->a" << linear->a << endl;
-	//kdDebug() << "linear->b" << linear->b << endl;
-	//kdDebug() << "linear->c" << linear->c << endl;
+		linear->a = dx * scale;
+		linear->b = dy * scale;
+		linear->c = -( ( x0 + m_fill->gradient().origin().x() ) * linear->a +
+					   ( y0 + m_fill->gradient().origin().y() ) * linear->b );
+		//kdDebug() << "linear->a" << linear->a << endl;
+		//kdDebug() << "linear->b" << linear->b << endl;
+		//kdDebug() << "linear->c" << linear->c << endl;
 
-	// get stop array
-	int offsets = -1;
-	linear->stops = buildStopArray( offsets );
-	linear->n_stops = offsets;
+		// get stop array
+		int offsets = -1;
+		linear->stops = buildStopArray( offsets );
+		linear->n_stops = offsets;
 
-	ArtRender *render = art_render_new( x0, y0, x1 + 1, y1 + 1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
-	art_render_svp( render, svp );
-	art_render_gradient_linear( render, linear, ART_FILTER_HYPER );
-	art_render_invoke( render );
+		ArtRender *render = art_render_new( x0, y0, x1 + 1, y1 + 1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
+		art_render_svp( render, svp );
+		art_render_gradient_linear( render, linear, ART_FILTER_HYPER );
+		art_render_invoke( render );
 	}
 	else if( m_fill->gradient().type() == gradient_radial )
 	{
-	ArtGradientRadial *radial = new ArtGradientRadial();
+		ArtGradientRadial *radial = new ArtGradientRadial();
 
-	ArtDRect bbox;
-	art_drect_svp( &bbox, svp );
+		ArtDRect bbox;
+		art_drect_svp( &bbox, svp );
 
-	// clamp to viewport
-	double x0 = int( bbox.x0 );
-	x0 = QMAX( x0, 0 );
-	x0 = QMIN( x0, m_width );
-	double y0 = int( bbox.y0 );
-	y0 = QMAX( y0, 0 );
-	y0 = QMIN( y0, m_height );
-	double x1 = int( bbox.x1 ) + 1;
-	x1 = QMAX( x1, 0 );
-	x1 = QMIN( x1, m_width );
-	double y1 = int( bbox.y1 ) + 1;
-	y1 = QMAX( y1, 0 );
-	y1 = QMIN( y1, m_height );
+		// clamp to viewport
+		double x0 = int( bbox.x0 );
+		x0 = QMAX( x0, 0 );
+		x0 = QMIN( x0, m_width );
+		double y0 = int( bbox.y0 );
+		y0 = QMAX( y0, 0 );
+		y0 = QMIN( y0, m_height );
+		double x1 = int( bbox.x1 ) + 1;
+		x1 = QMAX( x1, 0 );
+		x1 = QMIN( x1, m_width );
+		double y1 = int( bbox.y1 ) + 1;
+		y1 = QMAX( y1, 0 );
+		y1 = QMIN( y1, m_height );
 
-	radial->affine[0] = m_matrix.m11();
-	radial->affine[1] = m_matrix.m12();
-	radial->affine[2] = m_matrix.m21();
-	radial->affine[3] = m_matrix.m22();
-	radial->affine[4] = m_matrix.dx();
-	radial->affine[5] = m_matrix.dy();
+		radial->affine[0] = m_matrix.m11();
+		radial->affine[1] = m_matrix.m12();
+		radial->affine[2] = m_matrix.m21();
+		radial->affine[3] = m_matrix.m22();
+		radial->affine[4] = m_matrix.dx();
+		radial->affine[5] = m_matrix.dy();
 
-	double cx = m_fill->gradient().origin().x() + x0;
-	double cy = m_fill->gradient().origin().y() + y0;
-	double fx = cx; // TODO : fx, fy should be able to be different
-	double fy = cy;
-	double r = sqrt( pow( m_fill->gradient().vector().x() - m_fill->gradient().origin().x(), 2 )
-					+ pow( m_fill->gradient().vector().y() - m_fill->gradient().origin().y(), 2 ) ) / sqrt( 2 );
+		double cx = m_fill->gradient().origin().x() + x0;
+		double cy = m_fill->gradient().origin().y() + y0;
+		double fx = cx; // TODO : fx, fy should be able to be different
+		double fy = cy;
+		double r = sqrt( pow( m_fill->gradient().vector().x() - m_fill->gradient().origin().x(), 2 ) +
+						 pow( m_fill->gradient().vector().y() - m_fill->gradient().origin().y(), 2 ) ) / sqrt( 2 );
 
-	radial->fx = (fx - cx) / r;
-	radial->fy = (fy - cy) / r;
+		radial->fx = (fx - cx) / r;
+		radial->fy = (fy - cy) / r;
 
-	double aff1[6], aff2[6];
-	art_affine_scale( aff1, r, r);
-	art_affine_translate( aff2, cx, cy );
-	art_affine_multiply( aff1, aff1, aff2 );
-	art_affine_multiply( aff1, aff1, radial->affine );
-	art_affine_invert( radial->affine, aff1 );
+		double aff1[6], aff2[6];
+		art_affine_scale( aff1, r, r);
+		art_affine_translate( aff2, cx, cy );
+		art_affine_multiply( aff1, aff1, aff2 );
+		art_affine_multiply( aff1, aff1, radial->affine );
+		art_affine_invert( radial->affine, aff1 );
 
-	// get stop array
-	int offsets = -1;
-	radial->stops = buildStopArray( offsets );
-	radial->n_stops = offsets;
+		// get stop array
+		int offsets = -1;
+		radial->stops = buildStopArray( offsets );
+		radial->n_stops = offsets;
 
-	ArtRender *render = art_render_new( x0, y0, x1 + 1, y1 + 1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
-	art_render_svp( render, svp );
-	art_render_gradient_radial( render, radial, ART_FILTER_HYPER );
-	art_render_invoke( render );
+		ArtRender *render = art_render_new( x0, y0, x1 + 1, y1 + 1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
+		art_render_svp( render, svp );
+		art_render_gradient_radial( render, radial, ART_FILTER_HYPER );
+		art_render_invoke( render );
 	}
 }
 
