@@ -527,7 +527,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	    num++;
 	    mainDoc.addFrameSet( str, 1, 7 );
 	      mainDoc.addFrame( leftMargin, paperHeight - bottomMargin-80,
-			(paperWidth - rightMargin), paperHeight-bottomMargin, 2, 1, 0 );
+			(paperWidth - rightMargin), paperHeight-bottomMargin, 0, 1, 0 );
 	      mainDoc.closeNode( "FRAME" );
 	      mainDoc.appendNode( i->node );
 	    mainDoc.closeNode( "FRAMESET" );
