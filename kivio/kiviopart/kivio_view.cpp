@@ -2025,7 +2025,6 @@ QPtrList<KAction> KivioView::clipboardActionList()
   tmp.append(m_editCut);
   tmp.append(m_editCopy);
   tmp.append(m_editPaste);
-  tmp.append(new KActionSeparator(actionCollection()));
   
   return tmp;
 }
@@ -2034,7 +2033,6 @@ QPtrList<KAction> KivioView::alignActionList()
 {
   QPtrList<KAction> tmp;
   tmp.append(m_alignAndDistribute);
-  tmp.append(new KActionSeparator(actionCollection()));
   
   return tmp;
 }
@@ -2044,7 +2042,6 @@ QPtrList<KAction> KivioView::groupActionList()
   QPtrList<KAction> tmp;
   tmp.append(m_groupAction);
   tmp.append(m_ungroupAction);
-  tmp.append(new KActionSeparator(actionCollection()));
   
   return tmp;
 }
@@ -2054,7 +2051,6 @@ QPtrList<KAction> KivioView::layerActionList()
   QPtrList<KAction> tmp;
   tmp.append(m_stencilToFront);
   tmp.append(m_stencilToBack);
-  tmp.append(new KActionSeparator(actionCollection()));
   
   return tmp;
 }

@@ -58,7 +58,6 @@ SelectTool::SelectTool( KivioView* parent ) : Kivio::MouseTool(parent, "Selectio
   
   KAction* textAction = new KAction(i18n("&Edit text..."), "text", Key_F2, this, SLOT(editStencilText()), actionCollection(), "editText");
   textActionList.append(textAction);
-  textActionList.append(new KActionSeparator(actionCollection()));
 
   m_mode = stmNone;
   m_pResizingStencil = NULL;
@@ -1040,28 +1039,57 @@ void SelectTool::showPopupMenu( const QPoint &pos )
 {
   if(!m_pMenu) {
     m_pMenu = static_cast<KPopupMenu*>(factory()->container("SelectPopup", this));
-    unplugActionList("clipboardActionList");
-    plugActionList("clipboardActionList", view()->clipboardActionList());
   }
 
-  unplugActionList("alignActionList");
-  unplugActionList("groupActionList");
-  unplugActionList("layerActionList");
-  unplugActionList("textActionList");
+  if(m_pMenu) {    
+    QPtrList<KAction> cal = view()->clipboardActionList();
+    cal.append(new KActionSeparator(actionCollection()));
+    cal.setAutoDelete(false);
+    QPtrList<KAction> aal = view()->alignActionList();
+    aal.append(new KActionSeparator(actionCollection()));
+    aal.setAutoDelete(false);
+    QPtrList<KAction> gal = view()->groupActionList();
+    gal.append(new KActionSeparator(actionCollection()));
+    gal.setAutoDelete(false);
+    QPtrList<KAction> lal = view()->layerActionList();
+    lal.append(new KActionSeparator(actionCollection()));
+    lal.setAutoDelete(false);
+    QPtrList<KAction> tal = textActionList;
+    tal.append(new KActionSeparator(actionCollection()));
+    tal.setAutoDelete(false);
+    
+    plugActionList("clipboardActionList", cal);
+    
+    if(view()->activePage()->selectedStencils()->count() > 1) {
+      plugActionList("alignActionList", aal);
+      plugActionList("groupActionList", gal);
+    }
   
-  if(view()->activePage()->selectedStencils()->count() > 1) {
-    plugActionList("alignActionList", view()->alignActionList());
-    plugActionList("groupActionList", view()->groupActionList());
-  }
-
-  if(view()->activePage()->selectedStencils()->count() > 0) {
-    plugActionList("textActionList", textActionList);
-    plugActionList("layerActionList", view()->layerActionList());
-  }
+    if(view()->activePage()->selectedStencils()->count() > 0) {
+      plugActionList("textActionList", tal);
+      plugActionList("layerActionList", lal);
+    }
   
-  if(m_pMenu) {
-    m_pMenu->popup( pos );
     m_lastPoint = view()->canvasWidget()->mapFromScreen(pos);
+    m_pMenu->exec(pos);
+    
+    unplugActionList("clipboardActionList");
+    unplugActionList("alignActionList");
+    unplugActionList("groupActionList");
+    unplugActionList("layerActionList");
+    unplugActionList("textActionList");
+    
+    KAction* tmp;
+    tmp = cal.take(cal.count() - 1);
+    delete tmp;
+    tmp = aal.take(cal.count() - 1);
+    delete tmp;
+    tmp = gal.take(cal.count() - 1);
+    delete tmp;
+    tmp = lal.take(cal.count() - 1);
+    delete tmp;
+    tmp = tal.take(cal.count() - 1);
+    delete tmp;
   } else {
     kdDebug(43000) << "What no popup! *ARGH*!" << endl;
   }
