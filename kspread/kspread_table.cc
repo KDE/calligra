@@ -2081,7 +2081,7 @@ void KSpreadTable::find( const QPoint &_marker, QString _find, long options, KSp
     else
     {
         // All cells.
-        region.setCoords( 0, 0, m_iMaxRow, m_iMaxColumn );
+        region.setCoords( 0, 0, m_iMaxColumn, m_iMaxRow );
     }
 
     // Create the class that handles all the actual Find stuff, and connect it to its
@@ -2107,7 +2107,7 @@ void KSpreadTable::find( const QPoint &_marker, QString _find, long options, KSp
     {
         for(int col = colStart ; !bck ? col < colEnd : col > colEnd ; !bck ? ++col : --col )
         {
-            KSpreadCell *cell = cellAt( col, row );
+            KSpreadCell *cell = cellAt( col, row, true /*no scrollbar updates*/ );
             if ( !cell->isDefault() && !cell->isObscured() && !cell->isFormula() )
             {
                 QString text = cell->text();
