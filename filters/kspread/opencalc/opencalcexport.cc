@@ -71,24 +71,24 @@ K_EXPORT_COMPONENT_FACTORY( libopencalcexport, OpenCalcExportFactory() )
     return false; \
   } while(0)
 
-OpenCalcExport::OpenCalcExport( KoFilter *, const char *, const QStringList & ) 
-  : KoFilter() 
+OpenCalcExport::OpenCalcExport( KoFilter *, const char *, const QStringList & )
+  : KoFilter()
 {
 }
 
-KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from, 
+KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from,
                                                     const QCString & to )
 {
   /* later...
      KSpreadLeader  * leader = new KSpreadLeader( m_chain );
      OpenCalcWorker * worker = new OpenCalcWorker();
      leader->setWorker( worker );
-     
+
      KoFilter::ConversionStatus status = leader->convert();
-     
+
      delete worker;
      delete leader;
-     
+
      return status;
   */
 
@@ -99,7 +99,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from,
 
   if ( strcmp(document->className(), "KSpreadDoc") != 0)
   {
-    kdWarning(30518) << "document isn't a KSpreadDoc but a " 
+    kdWarning(30518) << "document isn't a KSpreadDoc but a "
                      << document->className() << endl;
     return KoFilter::NotImplemented;
   }
@@ -122,7 +122,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from,
     return KoFilter::CreationError;
 
   emit sigProgress( 100 );
-  
+
   return KoFilter::OK;
 }
 
@@ -138,7 +138,7 @@ bool OpenCalcExport::writeFile( KSpreadDoc const * const ksdoc )
   if ( !exportContent( store, ksdoc ) )
     STOPEXPORT;
   else
-    filesWritten |= contentXML;    
+    filesWritten |= contentXML;
 
   // TODO: pass sheet number and cell number
   if ( !exportDocInfo( store, ksdoc ) )
@@ -191,7 +191,7 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, KSpreadDoc const * const ks
   data = meta.createElement( "meta:initial-creator" );
   data.appendChild( meta.createTextNode( authorPage->fullName() ) );
   officeMeta.appendChild( data );
-  
+
   data = meta.createElement( "meta:creator" );
   data.appendChild( meta.createTextNode( authorPage->fullName() ) );
   officeMeta.appendChild( data );
@@ -289,7 +289,7 @@ QString convertRefToBase( QString const & table, QRect const & rect )
   QString s( "$" );
   s += table;
   s += ".$";
-  s += util_encodeColumnLabelText( bottomRight.x() );
+  s += /*util_encodeColumnLabelText*/KSpreadCell::columnName( bottomRight.x() );
   s += '$';
   s += QString::number( bottomRight.y() );
 
@@ -307,18 +307,18 @@ QString convertRefToRange( QString const & table, QRect const & rect )
   QString s( "$" );
   s += table;
   s += ".$";
-  s += util_encodeColumnLabelText( topLeft.x() );
+  s += /*util_encodeColumnLabelText*/KSpreadCell::columnName( topLeft.x() );
   s += '$';
   s += QString::number( topLeft.y() );
   s += ":.$";
-  s += util_encodeColumnLabelText( bottomRight.x() );
+  s += /*util_encodeColumnLabelText*/KSpreadCell::columnName( bottomRight.x() );
   s += '$';
   s += QString::number( bottomRight.y() );
-  
+
   return s;
 }
 
-void exportNamedExpr( QDomDocument & doc, QDomElement & parent, 
+void exportNamedExpr( QDomDocument & doc, QDomElement & parent,
                       AreaList const & namedAreas )
 {
   AreaList::const_iterator it  = namedAreas.begin();
@@ -349,13 +349,13 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
   if ( ksdoc->map()->isProtected() )
   {
     body.setAttribute( "table:structure-protected", "true" );
-    
+
     QCString passwd;
     ksdoc->map()->password( passwd );
     if ( passwd.length() > 0 )
     {
       QCString str( KCodecs::base64Encode( passwd ) );
-      body.setAttribute( "table:protection-key", QString( str.data() ) );        
+      body.setAttribute( "table:protection-key", QString( str.data() ) );
     }
   }
 
@@ -372,7 +372,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
 
     QDomElement tabElem = doc.createElement( "table:table" );
     tabElem.setAttribute( "table:style-name", m_styles.sheetStyle( ts ) );
-    
+
     if ( sheet->isProtected() )
     {
       tabElem.setAttribute( "table:protected", "true" );
@@ -382,7 +382,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
       if ( passwd.length() > 0 )
       {
         QCString str( KCodecs::base64Encode( passwd ) );
-        tabElem.setAttribute( "table:protection-key", QString( str.data() ) );        
+        tabElem.setAttribute( "table:protection-key", QString( str.data() ) );
       }
     }
 
@@ -402,19 +402,19 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
     maxRowCols( sheet, maxCols, maxRows );
 
     exportSheet( doc, tabElem, sheet, maxCols, maxRows );
-    
+
     body.appendChild( tabElem );
   }
 
   KoDocument * document   = m_chain->inputDocument();
   KSpreadDoc * kspreadDoc = static_cast<KSpreadDoc *>( document );
-  
+
   AreaList namedAreas = kspreadDoc->listArea();
   if ( namedAreas.count() > 0 )
   {
     QDomElement namedExpr = doc.createElement( "table:named-expressions" );
     exportNamedExpr( doc, namedExpr, namedAreas );
-    
+
     body.appendChild( namedExpr );
   }
 
@@ -428,7 +428,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
   return true;
 }
 
-void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem, 
+void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
                                   KSpreadSheet const * const sheet, int maxCols, int maxRows )
 {
   kdDebug(30518) << "exportSheet: " << sheet->tableName() << endl;
@@ -489,7 +489,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
   }
 }
 
-void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem, 
+void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
                                   KSpreadSheet const * const sheet, int row, int maxCols )
 {
   int i = 1;
@@ -517,13 +517,13 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
     }
 
     CellStyle c;
-    CellStyle::loadData( c, cell ); // TODO: number style    
+    CellStyle::loadData( c, cell ); // TODO: number style
 
     cellElem.setAttribute( "table:style-name", m_styles.cellStyle( c ) );
 
     // group empty cells with the same style
-    if ( cell->isEmpty() && !hasComment && !cell->isObscuringForced() && !cell->isForceExtraCells() ) 
-    {  
+    if ( cell->isEmpty() && !hasComment && !cell->isObscuringForced() && !cell->isForceExtraCells() )
+    {
       int j = i + 1;
       while ( j <= maxCols )
       {
@@ -532,7 +532,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
         CellStyle c1;
         CellStyle::loadData( c1, cell1 ); // TODO: number style
 
-        if ( cell1->isEmpty() && !cell->hasProperty( KSpreadFormat::PComment ) 
+        if ( cell1->isEmpty() && !cell->hasProperty( KSpreadFormat::PComment )
              && CellStyle::isEqual( &c, c1 ) && !cell->isObscuringForced() && !cell->isForceExtraCells() )
           ++repeated;
         else
@@ -554,13 +554,13 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
       kdDebug(30518) << "Type: Number" << endl;
       KSpreadFormat::FormatType type = cell->getFormatType( i, row );
 
-      if ( type == KSpreadFormat::Percentage ) 
+      if ( type == KSpreadFormat::Percentage )
         cellElem.setAttribute( "table:value-type", "percentage" );
       else
         cellElem.setAttribute( "table:value-type", "float" );
 
       cellElem.setAttribute( "table:value", QString::number( value.asFloat() ) );
-    }      
+    }
     else
     {
       kdDebug(30518) << "Type: " << value.type() << endl;
@@ -573,7 +573,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
       QString formula( convertFormula( cell->text() ) );
       cellElem.setAttribute( "table:formula", formula );
     }
-    
+
     if ( cell->isForceExtraCells() )
     {
       int colSpan = cell->mergedXCells() + 1;
@@ -612,7 +612,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
   }
 }
 
-void OpenCalcExport::maxRowCols( KSpreadSheet const * const sheet, 
+void OpenCalcExport::maxRowCols( KSpreadSheet const * const sheet,
                                  int & maxCols, int & maxRows )
 {
   KSpreadCell const * cell = sheet->firstCell();
@@ -646,7 +646,7 @@ void OpenCalcExport::maxRowCols( KSpreadSheet const * const sheet,
 
     col = col->next();
   }
-  
+
 }
 
 bool OpenCalcExport::exportStyles( KoStore * store, KSpreadDoc const * const ksdoc )
@@ -678,12 +678,12 @@ bool OpenCalcExport::exportStyles( KoStore * store, KSpreadDoc const * const ksd
   QDomElement officeStyles = doc.createElement( "office:styles" );
   exportDefaultCellStyle( doc, officeStyles );
 
-  QDomElement fontDecls = doc.createElement( "office:font-decls" );  
+  QDomElement fontDecls = doc.createElement( "office:font-decls" );
   m_styles.writeFontDecl( doc, fontDecls );
 
   // TODO: needs in new number/date/time parser...
   //  exportDefaultNumberStyles( doc, officeStyles );
-  
+
   QDomElement defaultStyle = doc.createElement( "style:style" );
   defaultStyle.setAttribute( "style:name", "Default" );
   defaultStyle.setAttribute( "style:family", "table-cell" );
@@ -691,7 +691,7 @@ bool OpenCalcExport::exportStyles( KoStore * store, KSpreadDoc const * const ksd
 
   QDomElement autoStyles = doc.createElement( "office:automatic-styles" );
   exportPageAutoStyles( doc, autoStyles, ksdoc );
-  
+
   QDomElement masterStyles = doc.createElement( "office:master-styles" );
   exportMasterStyles( doc, masterStyles, ksdoc );
 
@@ -745,7 +745,7 @@ void OpenCalcExport::exportDefaultCellStyle( QDomDocument & doc, QDomElement & o
   style.setAttribute( "style:language-complex", "none" );
   style.setAttribute( "style:country-complex", "none" );
   style.setAttribute( "style:tab-stop-distance", "1.25cm" );
-                                   
+
   defStyle.appendChild( style );
   officeStyles.appendChild( defStyle );
   delete format;
@@ -826,7 +826,7 @@ void OpenCalcExport::exportMasterStyles( QDomDocument & doc, QDomElement & maste
   QString footerLeft;
   QString footerCenter;
   QString footerRight;
-  
+
   if ( sheet )
   {
     headerLeft   = sheet->print()->headLeft();
@@ -912,17 +912,17 @@ void OpenCalcExport::exportMasterStyles( QDomDocument & doc, QDomElement & maste
     masterPage.appendChild( footer );
   }
 
-  masterStyles.appendChild( masterPage );       
+  masterStyles.appendChild( masterPage );
 }
 
-void OpenCalcExport::addText( QString const & text, QDomDocument & doc, 
+void OpenCalcExport::addText( QString const & text, QDomDocument & doc,
                               QDomElement & parent )
 {
   if (text.length() > 0 )
     parent.appendChild( doc.createTextNode( text ) );
 }
 
-void OpenCalcExport::convertPart( QString const & part, QDomDocument & doc, 
+void OpenCalcExport::convertPart( QString const & part, QDomDocument & doc,
                                   QDomElement & parent, KSpreadDoc const * const ksdoc )
 {
   QString text;
@@ -943,7 +943,7 @@ void OpenCalcExport::convertPart( QString const & part, QDomDocument & doc,
         if ( var == "<page>" )
         {
           addText( text, doc, parent );
-          
+
           QDomElement page = doc.createElement( "text:page-number" );
           page.appendChild( doc.createTextNode( "1" ) );
           parent.appendChild( page );
@@ -951,10 +951,10 @@ void OpenCalcExport::convertPart( QString const & part, QDomDocument & doc,
         else if ( var == "<pages>" )
         {
           addText( text, doc, parent );
-          
+
           QDomElement page = doc.createElement( "text:page-count" );
           page.appendChild( doc.createTextNode( "99" ) );
-          parent.appendChild( page );          
+          parent.appendChild( page );
         }
         else if ( var == "<date>" )
         {
@@ -962,7 +962,7 @@ void OpenCalcExport::convertPart( QString const & part, QDomDocument & doc,
 
           QDomElement t = doc.createElement( "text:date" );
           t.setAttribute( "text:date-value", "0-00-00" );
-          // todo: "style:data-style-name", "N2" 
+          // todo: "style:data-style-name", "N2"
           t.appendChild( doc.createTextNode( QDate::currentDate().toString() ) );
           parent.appendChild( t );
         }
@@ -1030,7 +1030,7 @@ void OpenCalcExport::convertPart( QString const & part, QDomDocument & doc,
         {
           // no known variable:
           text += var;
-          addText( text, doc, parent );          
+          addText( text, doc, parent );
         }
 
         text = "";
@@ -1055,7 +1055,7 @@ void insertBracket( QString & s )
     c = s[i];
     if ( c == ' ' )
       s[i] = '_';
-    if ( !(c.isLetterOrNumber() || c == ' ' || c == '.' 
+    if ( !(c.isLetterOrNumber() || c == ' ' || c == '.'
            || c == '_') )
     {
       s.insert( i + 1, '[' );
@@ -1070,11 +1070,11 @@ QString OpenCalcExport::convertFormula( QString const & formula ) const
   QString s;
   QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
   int n = exp.search( formula, 0 );
-  kdDebug(30518) << "Exp: " << formula << ", n: " << n << ", Length: " << formula.length() 
+  kdDebug(30518) << "Exp: " << formula << ", n: " << n << ", Length: " << formula.length()
             << ", Matched length: " << exp.matchedLength() << endl;
 
-  bool inQuote1 = false;  
-  bool inQuote2 = false;  
+  bool inQuote1 = false;
+  bool inQuote2 = false;
   int i = 0;
   int l = (int) formula.length();
   if ( l <= 0 )
@@ -1089,7 +1089,7 @@ QString OpenCalcExport::convertFormula( QString const & formula ) const
     if ( formula[i] == '"' )
     {
       inQuote1 = !inQuote1;
-      s += formula[i];      
+      s += formula[i];
       ++i;
       continue;
     }
@@ -1157,7 +1157,7 @@ bool OpenCalcExport::writeMetaFile( KoStore * store, uint filesWritten )
 
   QDomDocument meta( type );
   meta.appendChild( meta.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
-  
+
   QDomElement content = meta.createElement( "manifest:manifest" );
   content.setAttribute( "xmlns:manifest", "http://openoffice.org/2001/manifest" );
 
