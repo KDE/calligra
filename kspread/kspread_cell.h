@@ -844,7 +844,7 @@ protected:
     /**
      * A pointer to the decimal separator
      */
-    static char decimal_point;
+    static QChar decimal_point;
 
     /**
      * Width of richText

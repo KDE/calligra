@@ -815,7 +815,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     if (!decimal_point)
     { // (decimal_point is static)
       decimal_point = KGlobal::locale()->decimalSymbol()[0];
-      kdDebug(36001) << "decimal_point is '" << decimal_point << "'" << endl;
+      kdDebug(36001) << "decimal_point is '" << decimal_point.latin1() << "'" << endl;
       // HACK
       if ( decimal_point.isNull() )
 	  decimal_point = '.';
