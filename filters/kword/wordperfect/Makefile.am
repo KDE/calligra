@@ -1,9 +1,9 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
-libwpimport_la_LDFLAGS	= -module -avoid-version -no-undefined
+libwpimport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
 libwpimport_la_LIBADD = $(KOFFICE_LIBS)
-libwpexport_la_LDFLAGS	= -module -avoid-version -no-undefined
+libwpexport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
 libwpexport_la_LIBADD = $(KOFFICE_LIBS)
 
 ####### Files

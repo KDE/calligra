@@ -8,7 +8,7 @@ INCLUDES= -I$(srcdir) -I$(top_srcdir)/kspread $(KOFFICE_INCLUDES) \
 kde_module_LTLIBRARIES = libkspreadhtmlexport.la
 
 libkspreadhtmlexport_la_SOURCES = htmlexport.cc htmlexport_factory.cc
-libkspreadhtmlexport_la_LDFLAGS = -module -avoid-version -no-undefined
+libkspreadhtmlexport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
 libkspreadhtmlexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la
 
 METASOURCES = AUTO

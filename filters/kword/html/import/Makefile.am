@@ -2,7 +2,7 @@
 
 INCLUDES = -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
 
-libhtmlimport_la_LDFLAGS = -module -avoid-version -no-undefined
+libhtmlimport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
 
 libhtmlimport_la_LIBADD = $(LIB_KHTML) $(KOFFICE_LIBS)
 

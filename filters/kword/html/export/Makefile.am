@@ -2,7 +2,7 @@
 
 INCLUDES = -I$(srcdir) $(KOFFICE_INCLUDES) -I$(srcdir)/../../libexport $(all_includes)
 
-libhtmlexport_la_LDFLAGS = -module -avoid-version -no-undefined
+libhtmlexport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
 
 libhtmlexport_la_LIBADD = $(KOFFICE_LIBS) ../../libexport/libkwordexportfilters.la
 

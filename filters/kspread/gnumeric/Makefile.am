@@ -7,11 +7,11 @@ INCLUDES= -I$(srcdir) -I$(top_srcdir)/kspread $(KOFFICE_INCLUDES) \
 kde_module_LTLIBRARIES = libgnumericexport.la libgnumericimport.la 
 
 libgnumericexport_la_SOURCES = gnumericexport.cc gnumericexport_factory.cc
-libgnumericexport_la_LDFLAGS = -module -avoid-version -no-undefined
+libgnumericexport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
 libgnumericexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la
 
 libgnumericimport_la_SOURCES = gnumericimport.cc gnumericimport_factory.cc
-libgnumericimport_la_LDFLAGS = -module -avoid-version -no-undefined
+libgnumericimport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
 libgnumericimport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la
 
 METASOURCES = AUTO
