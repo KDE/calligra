@@ -37,11 +37,9 @@ class KoHTMLDoc;
 #include <komlWriter.h>
 #include <qlist.h>
 #include <qtimer.h>
-#include <krect.h>
+#include <qrect.h>
 
 #include <kurl.h>
-#include <kurl.h>
-
 #include <kio_job.h>
 
 #include <string>
