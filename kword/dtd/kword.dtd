@@ -216,7 +216,7 @@ don't put a </?xml...> at the end of the file!).
             hasTOC:         0...the document has no TOC
                             1...the document has TOC
 
-            tabStopValue:   tabstop value
+            tabStopValue:   tabstop value in pt
 
             activeFrameset: the name of the frameset that was edited when saving the document
             cursorParagraph:if activeFrameset is a text frameset, the paragraph ID of the cursor
@@ -663,6 +663,8 @@ don't put a </?xml...> at the end of the file!).
 
 <!-- SHADOWTEXT
         Value is either 0 or 1 with 1=true and 0=false
+        When true, this text will be drawn with a shadow, defined by the
+        paragraph's SHADOW element.
 -->
 <!ELEMENT SHADOWTEXT
     EMPTY>
@@ -883,7 +885,7 @@ don't put a </?xml...> at the end of the file!).
     filling CDATA #IMPLIED
     width CDATA #IMPLIED>
 
-<!--    Defines the position of a tabulation
+<!--    Defines the attributes for shadowed text
         Attributes:
 
             distance:           Shadow distance in pt
