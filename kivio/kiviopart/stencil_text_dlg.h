@@ -35,8 +35,6 @@ public:
     virtual ~KivioStencilTextDlg();
 
     QString text();
-protected slots:
-    void textChanged();
 };
 
 #endif

@@ -30,8 +30,6 @@ KivioStencilTextDlg::KivioStencilTextDlg( QWidget *p, const QString &initText )
 
     m_text->setFocus();
 
-    connect(m_text,SIGNAL(textChanged ()),this,SLOT(textChanged()));
-    textChanged();
     resize(350,200);
 }
 
@@ -39,10 +37,6 @@ KivioStencilTextDlg::~KivioStencilTextDlg()
 {
 }
 
-void KivioStencilTextDlg::textChanged()
-{
-    enableButtonOK( !m_text->text().isEmpty());
-}
 
 QString KivioStencilTextDlg::text()
 {
