@@ -117,6 +117,18 @@ static void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString &, KW
     AllowNoSubtags (myNode);
 }
 
+static void ProcessLayoutOffsetTag( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*)
+{
+    LayoutData *layout = (LayoutData *) tagData;
+    QValueList<AttrProcessing> attrProcessingList;
+    
+    attrProcessingList.append ( AttrProcessing ("after" , "double", (void *)&layout->marginBottom ) );
+    attrProcessingList.append ( AttrProcessing ("before" , "double", (void *)&layout->marginTop ) );
+
+    ProcessAttributes (myNode, attrProcessingList);
+    AllowNoSubtags (myNode);
+}
+
 static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*)
 {
     LayoutData *layout = (LayoutData *) tagData;
@@ -412,6 +424,7 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     tagProcessingList.append ( TagProcessing ( "FORMAT",    ProcessSingleFormatTag, (void *) &formatData ) );
     tagProcessingList.append ( TagProcessing ( "TABULATOR", NULL,                   NULL            ) );
     tagProcessingList.append ( TagProcessing ( "FLOW",      ProcessLayoutFlowTag,   (void *) layout ) );
+    tagProcessingList.append ( TagProcessing ( "OFFSETS",      ProcessLayoutOffsetTag,   (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "INDENTS",   ProcessIndentsTag,      (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "OFFSETS",   NULL,                   NULL            ) );
     tagProcessingList.append ( TagProcessing ("PAGEBREAKING",ProcessLineBreakingTag,(void *) layout ) );
@@ -616,6 +629,15 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         props += QString("text-indent:%1pt;").arg(paraLayout.indentFirst);
     }
 
+    if( paraLayout.marginBottom!=0.0)
+    {
+       props += QString("margin-bottom:%1pt;").arg(paraLayout.marginBottom); 
+    }
+    if( paraLayout.marginTop!=0.0)
+    {
+       props += QString("margin-top:%1pt;").arg(paraLayout.marginTop); 
+    }
+
     // Add all AbiWord properties collected in the <FORMAT> element
     props += paraLayout.abiprops;
 
@@ -712,6 +734,7 @@ static void ProcessStyleTag (QDomNode myNode, void *, QString   &strStyles, KWEF
     tagProcessingList.append ( TagProcessing ( "NAME",          ProcessLayoutNameTag,   (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "FOLLOWING",     NULL, NULL ) );
     tagProcessingList.append ( TagProcessing ( "FLOW",          ProcessLayoutFlowTag,   (void *) layout ) );
+    tagProcessingList.append ( TagProcessing ( "OFFSETS",          ProcessLayoutOffsetTag,   (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "INDENTS",       ProcessIndentsTag,      (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "COUNTER",       ProcessCounterTag,      (void *) &layout->counter ) );
     tagProcessingList.append ( TagProcessing ( "LINESPACING",   NULL, NULL ) );
