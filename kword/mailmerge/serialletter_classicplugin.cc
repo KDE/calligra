@@ -508,7 +508,9 @@ void KWClassicMailMergeEditor::removeEntry()
         dbList->updateItems();
         updateButton();
     }
+#if defined( Q_CC_GNU )
 #warning reimplement
+#endif
 /*
     if ( db->getNumRecords() == 0 )
         return;
