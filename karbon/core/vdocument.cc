@@ -29,9 +29,6 @@
 
 #include <kdebug.h>
 
-unsigned short VDocument::DOC_OFFSETX = 0;
-unsigned short VDocument::DOC_OFFSETY = 0;
-
 VDocument::VDocument()
 	: VObject( 0L ),
 	  m_selectionMode( VDocument::ActiveLayer ),
@@ -62,8 +59,8 @@ VDocument::~VDocument()
 void
 VDocument::drawPage( VPainter *p ) const
 {
-	double left		= DOC_OFFSETX;
-	double bottom	= DOC_OFFSETY;
+	double left		= 0;
+	double bottom	= 0;
 	double right	= left + m_width;
 	double top		= bottom + m_height;
 

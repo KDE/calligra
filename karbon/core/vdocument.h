@@ -185,10 +185,6 @@ public:
 	 */
 	void append( VObject* object );
 
-	/// Offset variables to correct the page drawing in the canvas
-	static unsigned short DOC_OFFSETX;
-	static unsigned short DOC_OFFSETY;
-
 private:
 	/**
 	 * Document width.
