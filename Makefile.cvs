@@ -1,6 +1,7 @@
+
 all: 
 	@echo "This Makefile is only for the CVS repository"
-	@echo "I will delete it before making the distribution"
+	@echo "This will be deleted before making the distribution"
 	@echo ""
 	@if test ! -d admin; then \
 	   echo "Please recheckout this module!" ;\
@@ -9,21 +10,4 @@ all:
 	   echo "   link kde-common/admin to ./admin" ;\
 	   exit 1 ;\
 	fi
-	cat admin/acinclude.m4.in admin/libtool.m4.in > acinclude.m4
-	aclocal
-	autoheader
-	automake
-	autoconf
-
-dist:
-	@cat admin/acinclude.m4.in admin/libtool.m4.in > acinclude.m4; \
-	aclocal; \
-	autoheader; \
-	automake --foreign --include-deps; \
-	autoconf; \
-	LIST=`find ./po -name "*.po"`; \
-	for i in $$LIST; do \
-	 file2=`echo $$i | sed -e "s#\.po#\.gmo#"`; \
-	 msgfmt -o $$file2 $$i || touch $$file2; \
-	done
-
+	make -f admin/Makefile.cvs
