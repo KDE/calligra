@@ -709,18 +709,18 @@ QStringList KoDateVariable::subTypeFormat()
 {
     QStringList listDateFormat;
     listDateFormat<<i18n("locale");
-    listDateFormat<<i18n("dd/MM/yy");
-    listDateFormat<<i18n("dd/MM/yyyy");
-    listDateFormat<<i18n("MMM dd,yy");
-    listDateFormat<<i18n("MMM dd,yyyy");
-    listDateFormat<<i18n("dd.MMM.yyyy");
-    listDateFormat<<i18n("MMMM dd, yyyy");
-    listDateFormat<<i18n("ddd, MMM dd,yy");
-    listDateFormat<<i18n("dddd, MMM dd,yy");
-    listDateFormat<<i18n("MM-dd");
-    listDateFormat<<i18n("yyyy-MM-dd");
-    listDateFormat<<i18n("dd/yy");
-    listDateFormat<<i18n("MMMM");
+    listDateFormat<<"dd/MM/yy";
+    listDateFormat<<"dd/MM/yyyy";
+    listDateFormat<<"MMM dd,yy";
+    listDateFormat<<"MMM dd,yyyy";
+    listDateFormat<<"dd.MMM.yyyy";
+    listDateFormat<<"MMMM dd, yyyy";
+    listDateFormat<<"ddd, MMM dd,yy";
+    listDateFormat<<"dddd, MMM dd,yy";
+    listDateFormat<<"MM-dd";
+    listDateFormat<<"yyyy-MM-dd";
+    listDateFormat<<"dd/yy";
+    listDateFormat<<"MMMM";
     return listDateFormat;
 }
 
@@ -882,11 +882,11 @@ QStringList KoTimeVariable::subTypeFormat()
 {
     QStringList listTimeFormat;
     listTimeFormat<<i18n("locale");
-    listTimeFormat<<i18n("hh:mm");
-    listTimeFormat<<i18n("hh:mm:ss");
-    listTimeFormat<<i18n("hh:mm AP");
-    listTimeFormat<<i18n("hh:mm:ss AP");
-    listTimeFormat<<i18n("mm:ss.zzz");
+    listTimeFormat<<"hh:mm";
+    listTimeFormat<<"hh:mm:ss";
+    listTimeFormat<<"hh:mm AP";
+    listTimeFormat<<"hh:mm:ss AP";
+    listTimeFormat<<"mm:ss.zzz";
     return listTimeFormat;
 }
 
