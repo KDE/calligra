@@ -169,6 +169,14 @@ VComposite::currentPoint() const
 bool
 VComposite::moveTo( const KoPoint& p )
 {
+	// Append a new subpath if current subpath is not empty.
+	if( !m_paths.getLast()->isEmpty() )
+	{
+		VPath* path = new VPath( this );
+		path->moveTo( currentPoint() );
+		m_paths.append( path );
+	}
+
 	return m_paths.getLast()->moveTo( p );
 }
 
@@ -204,22 +212,14 @@ VComposite::arcTo( const KoPoint& p1, const KoPoint& p2, const double r )
 }
 
 void
-VComposite::end()
-{
-	// Don't end current subpath if it is empty.
-	if( m_paths.getLast()->isEmpty() )
-		return;
-
-	VPath* path = new VPath( this );
-	path->moveTo( currentPoint() );
-	m_paths.append( path );
-}
-
-void
 VComposite::close()
 {
 	m_paths.getLast()->close();
-	end();
+
+	// Append a new subpath.
+	VPath* path = new VPath( this );
+	path->moveTo( currentPoint() );
+	m_paths.append( path );
 }
 
 void

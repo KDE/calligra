@@ -119,12 +119,7 @@ public:
 		const KoPoint& p1, const KoPoint& p2, double r );
 
 	/**
-	 * Creates a new subpath and makes it the current one.
-	 */
-	void end();
-
-	/**
-	 * Closes the current subpath and calls end().
+	 * Closes the current subpath.
 	 */
 	void close();
 
