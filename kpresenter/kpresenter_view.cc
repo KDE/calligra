@@ -4523,9 +4523,13 @@ void KPresenterView::changeLink()
             {
                 if(!link.isEmpty() && !ref.isEmpty())
                 {
-                    KPrChangeLinkVariable*cmd=new KPrChangeLinkVariable( i18n("Change link"), m_pKPresenterDoc,oldhref, ref, oldLinkName,link, var);
-                    cmd->execute();
-                    m_pKPresenterDoc->addCommand(cmd);
+                    if( ref != oldhref || link!=oldLinkName)
+                    {
+
+                        KPrChangeLinkVariable*cmd=new KPrChangeLinkVariable( i18n("Change link"), m_pKPresenterDoc,oldhref, ref, oldLinkName,link, var);
+                        cmd->execute();
+                        m_pKPresenterDoc->addCommand(cmd);
+                    }
                 }
             }
         }
