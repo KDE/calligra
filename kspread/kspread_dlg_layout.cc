@@ -2358,13 +2358,13 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     tmpLabel->setText(i18n("Width:"));
     grid2->addWidget(tmpLabel,0,0);
 
-    width=new KIntNumInput(dlg->widthSize, grp, 10);
+    width=new KIntNumInput((int)KoUnit::ptToUnit( dlg->widthSize, dlg->getTable()->doc()->getUnit() ), grp, 10);
     if( dlg->isRowSelected )
         width->setEnabled(false);
     width->setRange(2, 400, 1);
 
     grid2->addWidget(width,0,1);
-    defaultWidth=new QCheckBox(i18n("Default width (60)"),grp);
+    defaultWidth=new QCheckBox(i18n("Default width (%1 %2)").arg(KoUnit::ptToUnit( 60, dlg->getTable()->doc()->getUnit())).arg(dlg->getTable()->doc()->getUnitName()),grp);
     if( dlg->isRowSelected )
         defaultWidth->setEnabled(false);
 
@@ -2374,14 +2374,14 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     tmpLabel->setText(i18n("Height:"));
     grid2->addWidget(tmpLabel,0,2);
 
-    height=new KIntNumInput(dlg->heigthSize, grp, 10);
+    height=new KIntNumInput((int)KoUnit::ptToUnit( dlg->heigthSize, dlg->getTable()->doc()->getUnit() ), grp, 10);
     if( dlg->isColumnSelected )
         height->setEnabled(false);
 
     height->setRange(2, 400, 1);
     grid2->addWidget(height,0,3);
 
-    defaultHeight=new QCheckBox(i18n("Default height (20)"),grp);
+    defaultHeight=new QCheckBox(i18n("Default height (%1 %2)").arg(KoUnit::ptToUnit(  20 , dlg->getTable()->doc()->getUnit())).arg(dlg->getTable()->doc()->getUnitName()),grp);
     if( dlg->isColumnSelected )
         defaultHeight->setEnabled(false);
 
@@ -2401,28 +2401,28 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
 
 void CellLayoutPagePosition::slotChangeMultiState()
 {
-m_bOptionText=true;
-if(vertical->isChecked())
-        {
+    m_bOptionText=true;
+    if(vertical->isChecked())
+    {
         vertical->setChecked(false);
-        }
+    }
 }
 
 void CellLayoutPagePosition::slotChangeVerticalState()
 {
-m_bOptionText=true;
-if(multi->isChecked())
-        {
+    m_bOptionText=true;
+    if(multi->isChecked())
+    {
         multi->setChecked(false);
-        }
+    }
 
 }
 
 void CellLayoutPagePosition::slotStateChanged(int)
 {
-if(right->isChecked() || center->isChecked())
+    if(right->isChecked() || center->isChecked())
         indent->setEnabled(false);
-else
+    else
         indent->setEnabled(true);
 
 }
@@ -2609,7 +2609,7 @@ int CellLayoutPagePosition::getSizeHeight()
   if(defaultHeight->isChecked())
         return 20;
   else
-        return height->value();
+      return (int)KoUnit::ptFromUnit( height->value(), dlg->getTable()->doc()->getUnit() );
 }
 
 int CellLayoutPagePosition::getSizeWidth()
@@ -2617,7 +2617,7 @@ int CellLayoutPagePosition::getSizeWidth()
   if(defaultWidth->isChecked())
         return 60;
   else
-        return width->value();
+        return (int)KoUnit::ptFromUnit( width->value(), dlg->getTable()->doc()->getUnit() );
 }
 
 KSpreadBorderButton::KSpreadBorderButton( QWidget *parent, const char *_name ) : QPushButton(parent,_name)

@@ -498,11 +498,11 @@ public:
      */
     int exec();
 
-    KSpreadTable* getTable() {	return table; }
+    KSpreadTable* getTable() const {	return table; }
 
     bool isSingleCell() { return ( left == right && top == bottom ); }
 
-    KLocale* locale(){return m_pView->doc()->locale();}
+    KLocale* locale()const {return m_pView->doc()->locale();}
 
     struct CellBorderLayout
     {

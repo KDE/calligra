@@ -64,7 +64,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 			if(size!=m_pView->activeTable()->rowLayout(i)->height(m_pView->canvasWidget()))
 			equals=false;
 		label=i18n("Height (%1)").arg(m_pView->doc()->getUnitName());
-                tmpCheck+=QString(" %1 %2").arg(KoUnit::ptToUnit( MM_TO_POINT( 20 ), m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
+                tmpCheck+=QString(" %1 %2").arg(KoUnit::ptToUnit(  20 , m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
 		break;
 	case resize_column:
 		setCaption( i18n("Resize Column") );
@@ -78,7 +78,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 			equals=false;
 
 		label=i18n("Width (%1)").arg(m_pView->doc()->getUnitName());
-                tmpCheck+=QString(" %1 %2").arg(KoUnit::ptToUnit( MM_TO_POINT( 60 ), m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
+                tmpCheck+=QString(" %1 %2").arg(KoUnit::ptToUnit(  60 , m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
 		break;
 	default :
 	        kdDebug(36001) <<"Err in type_resize" << endl;
@@ -90,10 +90,10 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
   	switch(type)
 	{
 	case resize_row:
-			size=(int)KoUnit::ptToUnit( MM_TO_POINT( 20 ), m_pView->doc()->getUnit() );
+			size=(int)KoUnit::ptToUnit(  20 , m_pView->doc()->getUnit() );
 			break;
 	case resize_column:
-			size=(int)KoUnit::ptToUnit( MM_TO_POINT( 60 ), m_pView->doc()->getUnit() );
+			size=(int)KoUnit::ptToUnit(  60 , m_pView->doc()->getUnit() );
 			break;
 	}
 
