@@ -38,7 +38,6 @@ KoTarStore::KoTarStore( const QString & _filename, Mode _mode, const QCString & 
     kdDebug()<<"appIdentification :"<<appIdentification<<endl;
     if ( m_bGood && _mode == Write )
         m_pTar->setOrigFileName( completeMagic( appIdentification ) );
-    kdDebug()<<"dddddddddddddddddddddddddd\n";
 }
 
 KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const QCString & appIdentification )
