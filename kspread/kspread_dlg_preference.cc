@@ -79,11 +79,24 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* name)
 
 void KSpreadpreference::slotOk()
 {
-  m_pView->activeTable()->setLcMode(m_pLcMode->isChecked());
-  m_pView->activeTable()->setShowColumnNumber(m_pColumn->isChecked());
-  m_pView->activeTable()->setShowGrid(m_pGrid->isChecked());
-  m_pView->activeTable()->setShowFormular(m_pFormula->isChecked());
-  accept();
+  if(m_pView->activeTable()->getLcMode()==m_pLcMode->isChecked()
+  && m_pView->activeTable()->getShowColumnNumber()==m_pColumn->isChecked()
+  && m_pView->activeTable()->getShowFormular()==m_pFormula->isChecked()
+  && m_pView->activeTable()->getShowGrid()==m_pGrid->isChecked())
+  {
+  //if there is any changes
+  //so it's not necessary to refresh table
+  //=> reject()
+        reject();
+  }
+  else
+  {
+        m_pView->activeTable()->setLcMode(m_pLcMode->isChecked());
+        m_pView->activeTable()->setShowColumnNumber(m_pColumn->isChecked());
+        m_pView->activeTable()->setShowGrid(m_pGrid->isChecked());
+        m_pView->activeTable()->setShowFormular(m_pFormula->isChecked());
+        accept();
+  }
 }
 
 
