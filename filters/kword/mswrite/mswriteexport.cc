@@ -25,6 +25,7 @@
 
 #include <qbuffer.h>
 #include <qcstring.h>
+#include <qfile.h>
 #include <qfont.h>
 #include <qimage.h>
 #include <qtextcodec.h>
@@ -44,7 +45,6 @@
 #include "libmswrite.h"
 
 #include "mswriteexport.h"
-#include <qfile.h>
 
 
 class MSWriteExportFactory : KGenericFactory <MSWriteExport, KoFilter>
@@ -327,7 +327,7 @@ public:
 		if (!m_device || !m_generator)
 			return false;
 
-		if (!m_device->openFile (QFile::encodeName(outFileName))) return false;
+		if (!m_device->openFile (QFile::encodeName (outFileName))) return false;
 
 		return true;
 	}
@@ -1978,8 +1978,8 @@ public:
 	template <class dtype>
 	dtype min (const dtype a, const dtype b, const dtype c)
 	{
-		if (a < b && a < c) return a;
-		if (b < a && b < c) return b;
+		if (a <= b && a <= c) return a;
+		if (b <= a && b <= c) return b;
 		return c;
 	}
 

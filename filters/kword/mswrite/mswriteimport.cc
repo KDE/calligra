@@ -1399,7 +1399,7 @@ KoFilter::ConversionStatus MSWriteImport::convert (const QCString &from, const Q
 	}
 
 	// open the .WRI file
-	if (!m_device->openFile (QFile::encodeName(m_chain->inputFile ())))
+	if (!m_device->openFile (QFile::encodeName (m_chain->inputFile ())))
 	{
 		kdError (30509) << "Could not open \'" << m_chain->inputFile () << "\'" << endl;
 		return KoFilter::FileNotFound;
