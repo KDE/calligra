@@ -54,6 +54,7 @@ public:
 private:
     void ProcessParagraphData (const QString& paraText, ValueListFormatData& paraFormatDataList);
     QString FormatDataToAbiProps(FormatData& formatData);
+    QString escapeHtmlText(const QString& strText) const;
     QString escapeCssIdentifier(const QString& strText) const;
     QString layoutToCss(LayoutData& layout) const;
     void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
@@ -61,7 +62,7 @@ private:
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
-    QString m_strCharset; // Mime charset
+    QTextCodec* m_codec; // QTextCodec in which the file will be written
     QString m_strTitle;
     CounterData::Style m_typeList; // What is the style of the current list (undefined, if we are not in a list)
     bool m_inList; // Are we currently in a list?

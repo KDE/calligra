@@ -34,6 +34,13 @@
 
 #include "ExportFilter.h"
 
+QString HtmlWorker::escapeHtmlText(const QString& strText) const
+{
+    // Escape quotes (needed in attributes)
+    // Do not escape apostrophs (only allowed in XHTML!)
+    return KWEFUtil::EscapeSgmlText(m_codec,strText,true,false);
+}
+
 
 QString HtmlWorker::escapeCssIdentifier(const QString& strText) const
 {
@@ -66,10 +73,10 @@ QString HtmlWorker::escapeCssIdentifier(const QString& strText) const
                 strReturn+=ch;
             }
         }
-        else if (ch>=QChar(161))
+        else if ((ch>=QChar(161)) && (m_codec->canEncode(ch)))
         {
             // Any Unicode character greater or egual to 161 is allowed too, even at start.
-            // FIXME: what if the encoding does not support this character? (Would need to be escaped too!)
+            // Except if the encoding cannot write the character
             strReturn+=ch;
         }
         else
@@ -110,7 +117,7 @@ void HtmlWorker::ProcessParagraphData ( QString &paraText, ValueListFormatData &
                 else
                 {
                     //Code all possible predefined HTML entities
-                    outputText += EscapeXmlText(partialText,true,false);
+                    outputText += escapeHtmlText(partialText);
                 }
                 continue; // And back to the loop
             }
@@ -193,6 +200,12 @@ void HtmlWorker::ProcessParagraphData ( QString &paraText, ValueListFormatData &
             {
                 outputText+="<sup>"; //Superscript
             }
+            if (!(*paraFormatDataIt).linkName.isEmpty())
+            {
+                outputText+="<a href=\"";
+                outputText+=escapeHtmlText((*paraFormatDataIt).linkReference);
+                outputText+="\">";
+            }
 
             // The text
             if (outputText==" ")
@@ -202,10 +215,14 @@ void HtmlWorker::ProcessParagraphData ( QString &paraText, ValueListFormatData &
             else
             {
                 //Code all possible predefined HTML entities
-                outputText += EscapeXmlText(partialText,true,false);
+                outputText += escapeHtmlText(partialText);
             }
 
             // Closing elements
+            if (!(*paraFormatDataIt).linkName.isEmpty())
+            {
+                outputText+="</a>";
+            }
             if ( 2==(*paraFormatDataIt).verticalAlignment )
             {
                 outputText+="</sup>"; //Superscript
@@ -514,32 +531,22 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& to)
     // Find out IANA/mime charset name
     if ( isUTF8() )
     {
-        m_strCharset="UTF-8";
+        m_codec=QTextCodec::codecForName("UTF-8");
     }
     else
     {
-        m_strCharset=QTextCodec::codecForLocale()->mimeName();
+        m_codec=QTextCodec::codecForLocale();
     }
 
-    kdDebug(30501) << "Charset used: " << m_strCharset << endl;
+    kdDebug(30501) << "Charset used: " << m_codec->name() << endl;
 
-    if (m_strCharset.isEmpty())
+    if (!m_codec)
     {
-        // We have a (X)HTML file to write and we have a no charset name
-        // => change to UTF-8
-        setUTF8(true);
-        m_strCharset="UTF-8";
-        kdWarning(30503) << "Encoding of (X)HTML file has been forced to UTF-8!"
-            << endl;
+        kdError(30503) << "Could not create QTextCodec! Aborting" << endl;
+        return false;
     }
-    if ( isUTF8() )
-    {
-        m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
-    }
-    else
-    {
-        m_streamOut->setEncoding( QTextStream::Locale );
-    }
+        
+    m_streamOut->setCodec( m_codec );
 
     // Make the default title
     const int result=filenameOut.findRev("/");
@@ -567,7 +574,8 @@ bool HtmlWorker::doOpenDocument(void)
 
     if (isXML())
     {   //Write out the XML declaration
-        *m_streamOut << "<?xml version=\"1.0\" encoding=\"" << m_strCharset << "\"?>" << endl;
+        *m_streamOut << "<?xml version=\"1.0\" encoding=\""
+            << m_codec->mimeName() << "\"?>" << endl;
     }
 
     // write <!DOCTYPE
@@ -615,7 +623,7 @@ bool HtmlWorker::doOpenHead(void)
 
     // Declare what charset we are using
     *m_streamOut << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=";
-    *m_streamOut << m_strCharset << '"';
+    *m_streamOut << m_codec->mimeName() << '"';
     *m_streamOut << (isXML()?" /":"") << ">\n" ;
 
     // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
@@ -633,7 +641,7 @@ bool HtmlWorker::doOpenHead(void)
         kdWarning(30503) << "Title still empty! (HtmlWorker::doOpenHead)" << endl;
         m_strTitle=i18n("Untitled");
     }
-    *m_streamOut << "<title>"<< EscapeXmlText(m_strTitle,true,false) <<"</title>\n";  // <TITLE> is mandatory!
+    *m_streamOut << "<title>"<< escapeHtmlText(m_strTitle) <<"</title>\n";  // <TITLE> is mandatory!
 
     //TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 
