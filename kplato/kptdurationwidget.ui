@@ -401,12 +401,12 @@
 <functions>
     <function access="private">init()</function>
     <function access="private" specifier="non virtual">destroy()</function>
-    <function returnType="KPlato::KPTDuration">value() const</function>
+    <function returnType="KPTDuration">value() const</function>
     <function>setVisibleFields( int fieldMask )</function>
     <function returnType="int">visibleFields()</function>
     <function>setFieldLeftscale( int f, unsigned ls )</function>
     <function>setFieldRightscale( int f, unsigned rs )</function>
-    <function>setFieldScale( int f, unsigned fullScale, unsigned scale )</function>
+    <function>setFieldScale( int f, unsigned scale )</function>
     <function>setFieldUnit( int f, QString unit )</function>
 </functions>
 <layoutdefaults spacing="6" margin="11"/>
