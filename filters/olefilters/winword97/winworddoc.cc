@@ -666,18 +666,28 @@ void WinWordDoc::gotListParagraph(
         "   <FLOW ");
     paragraph.append(justification(pap->jc));
     paragraph.append("/>\n");
+
+    const ANLD& anld = pap->anld;
+
     paragraph.append(
         "  <COUNTER type=\"");
-    paragraph.append(numbering(pap->anld.nfc));
+    paragraph.append(numbering(anld.nfc));
     paragraph.append("\" depth=\"");
     paragraph.append(QString::number((int)pap->ilvl));
     paragraph.append("\" bullet=\"183\" start=\"");
-    paragraph.append(QString::number((int)pap->anld.iStartAt));
-    paragraph.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"symbol\"/>\n");
+    paragraph.append(QString::number((int)anld.iStartAt));
+    paragraph.append("\" numberingtype=\"0\" lefttext=\"");
+    for (unsigned i = 0; i < anld.cxchTextBefore; i++)
+        paragraph.append(anld.rgxch[i]);
+    paragraph.append("\" righttext=\"");
+//    kdDebug(s_area) << "WinWordDoc::gotListParagraph '" << text << "' nfc=" << anld.nfc << " cxchTextBefore=" << anld.cxchTextBefore << " cxchTextAfter=" << anld.cxchTextAfter << endl;
+    for (unsigned i = anld.cxchTextBefore; i < anld.cxchTextAfter; i++)
+        paragraph.append(anld.rgxch[i]);
+    paragraph.append("\" bulletfont=\"symbol\"/>\n");
     paragraph.append(
         " </LAYOUT>\n");
     paragraph.append("</PARAGRAPH>\n");
-//    kdDebug() << paragraph << endl;
+//    kdDebug(s_area) << paragraph << endl;
     m_body.append(paragraph);
 }
 
@@ -748,10 +758,9 @@ void WinWordDoc::gotStyle(
         // use one of these list styles (!!). Instead, they often seem to be
         // encoded as Normal text with a number!
         unsigned i;
-        ANLD anld;
 
         // List entries are followed by more of the same.
-        anld = style.getPap()->anld;
+        const ANLD& anld = style.getPap()->anld;
         styleDef.append(
             "   <FOLLOWING name=\"");
         styleDef.append(name);
@@ -794,7 +803,7 @@ void WinWordDoc::gotStyle(
         "   </FORMAT>\n");
     styleDef.append(
         "  </STYLE>\n");
-//    kdDebug() << styleDef<<endl;
+//    kdDebug(s_area) << styleDef<<endl;
     m_body.append(styleDef);
 }
 

@@ -991,8 +991,14 @@ void Properties::apply(const MsWord::LFO &style)
             m_pap.anld.nfc = level.nfc;
             m_pap.anld.jc = level.jc;
             m_pap.anld.iStartAt = level.iStartAt;
-            kdDebug(MsWord::s_area) << "startAt from list style:" <<
+            kdDebug(MsWord::s_area) << " startAt from list style:" <<
                 m_pap.anld.iStartAt << endl;
+#if 0
+            kdDebug(MsWord::s_area) << " nfc=" << level.nfc << " rgbxchNums[0]=" << level.rgbxchNums[0] << " ixchFollow=" << level.ixchFollow << endl;
+            kdDebug(MsWord::s_area) << " maybe the anld has it? rgxch=" << m_pap.anld.rgxch << endl;
+            for ( unsigned i = 0 ; i < 9 && m_pap.anld.rgxch[i] ; ++i )
+                kdDebug() << i << ": " << m_pap.anld.rgxch[i] << " " << QString(QChar(m_pap.anld.rgxch[i])) << endl;
+#endif
 
             // Apply the variable length parts.
 
@@ -1000,7 +1006,35 @@ void Properties::apply(const MsWord::LFO &style)
             ptr2 += level.cbGrpprlPapx;
             ptr2 += level.cbGrpprlChpx;
             ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
+
+            MsWordGenerated::XCHAR ch;
+            unsigned int outIndex = 0;
+            bool found = false;
+            // According to the description of the rgbxchNums field,
+            // the text from the LVL is of the form: <prefix><place_holder><suffix>
+            // where the place holder is a level number, i.e. a char <= 9.
+            // No idea what to do with that char, but simply copying this information
+            // into the ANLD's rgxch, cxchTextBefore and cxchTextAfter, and skipping
+            // the place holder, allows a smooth import of '.' after a numberred list.
+            // (David)
+            for ( unsigned int i = 0 ; i < numberTextLength ; ++i, ++outIndex ) {
+                ptr2 += MsWordGenerated::read(ptr2, &ch);
+                m_pap.anld.rgxch[outIndex] = ch;
+                if ( ch < 10 ) { /// Found the place holder
+                    Q_ASSERT(!found);
+                    found = true;
+                    m_pap.anld.cxchTextBefore = i; // it's a length, so the last char is i-1 if i>0
+                    m_pap.anld.cxchTextAfter = numberTextLength - 1;
+                    //kdDebug(s_area) << "Properties::apply found placeholder " << ch << " at position " << i << " cxchTextBefore=" << m_pap.anld.cxchTextBefore << " cxchTextAfter=" << m_pap.anld.cxchTextAfter << endl;
+                    outIndex--; // We want to remove the place holder - this makes the next iteration overwrite it
+                }
+            } //for
+#if 0 // The old code, which was ignoring numberText completely.
             ptr2 += MsWord::read(m_document.m_fib.lid, ptr2, &numberText, numberTextLength, true, m_document.m_fib.nFib);
+            kdDebug() << "Properties::apply numberText=" << numberText << " numberTextLength=" << numberTextLength << endl;
+            for ( unsigned i = 0 ; i < numberTextLength ; ++i )
+                kdDebug() << i << ": " << numberText[i].unicode() << endl;
+#endif
             break;
         }
     }
