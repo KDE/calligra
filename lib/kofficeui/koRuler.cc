@@ -163,7 +163,8 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     double dist;
     int totalw = qRound( zoomIt(layout.ptWidth) );
     QString str;
-    QFont font = QFont( "helvetica", 8 ); // Ugh... hardcoded (Werner)
+    QFont font; // Use the global KDE font. Let's hope it's appropriate.
+    font.setPointSize( 8 );
     QFontMetrics fm( font );
 
     p.setBrush( colorGroup().brush( QColorGroup::Base ) );
@@ -317,7 +318,8 @@ void KoRuler::drawVertical( QPainter *_painter )
     int j = 0;
     int totalh = qRound( zoomIt(layout.ptHeight) );
     QString str;
-    QFont font = QFont( "helvetica", 8 );  // Hardcode the size? (Werner)
+    QFont font; // Use the global KDE font. Let's hope it's appropriate.
+    font.setPointSize( 8 ); // Hardcode the size? (Werner)
     QFontMetrics fm( font );
 
     p.setBrush( colorGroup().brush( QColorGroup::Base ) );
