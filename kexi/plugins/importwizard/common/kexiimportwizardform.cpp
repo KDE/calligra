@@ -312,7 +312,7 @@ bool KexiTableImportForm::importValues(const QString& tableName,int mapLen, int 
 	KexiTableImportSourceIface *src=KEXITABLEIMPORTSOURCEIFACE(m_filter);
 	if (!src) {
 		//error
-		return;
+		return false;
 	}
 
 	KexiDB *db=m_filterManager->project()->db();
