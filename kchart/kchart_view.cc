@@ -423,7 +423,7 @@ void KChartView::polarChart()
 
 void KChartView::mousePressEvent ( QMouseEvent *e )
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
     if( e->button() == RightButton )
         ((QPopupMenu*)factory()->container("action_popup",this))->popup(QCursor::pos());
