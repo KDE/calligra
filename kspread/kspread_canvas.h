@@ -2,11 +2,6 @@
 #define __kspread_canvas_h__
 
 #include <qlineedit.h>
-#include <qwidget.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qstring.h>
-#include <qpen.h>
 #include <qtooltip.h>
 
 #include <koQueryTrader.h>
@@ -22,6 +17,7 @@ class KSpreadPoint;
 class KSpreadRange;
 class KSpreadCellEditor;
 class KSpreadCell;
+class QWidget;
 
 
 class QPainter;

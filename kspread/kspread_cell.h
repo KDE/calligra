@@ -32,14 +32,10 @@ class QDomDocument;
 
 class KSParseNode;
 
-#include <qstring.h>
-#include <qpen.h>
-#include <qcolor.h>
+
 #include <qpainter.h>
-#include <qrect.h>
 #include <qlist.h>
 #include <qstrlist.h>
-#include <qobject.h>
 #include <qdatetime.h>
 
 #include "kspread_layout.h"

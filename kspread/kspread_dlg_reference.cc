@@ -85,7 +85,7 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
 
 void KSpreadreference::slotHighlighted(QListBoxItem * )
 {
-  QString tmp=list->text(list->currentItem());
+    QString tmp=list->text(list->currentItem());
   QString tmpName;
   QValueList<Reference>::Iterator it;
   QValueList<Reference> area=m_pView->doc()->listArea();

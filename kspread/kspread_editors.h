@@ -1,16 +1,15 @@
 #ifndef __kspread_editors_h__
 #define __kspread_editors_h__
 
-#include <qwidget.h>
-#include <qstring.h>
 #include <klineedit.h>
 #include <kcompletion.h>
+
 class KSpreadCell;
 class KSpreadCanvas;
 
 class KFormulaEdit;
 
-class QLineEdit;
+class QWidget;
 
 class KSpreadCellEditor : public QWidget
 {

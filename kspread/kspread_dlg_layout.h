@@ -20,40 +20,33 @@
 #ifndef __kspread_dlg_layout_h__
 #define __kspread_dlg_layout_h__
 
-#include <qwidget.h>
-#include <qlineedit.h>
+
 #include <qcombobox.h>
 #include <qtabdialog.h>
-#include <qcolor.h>
-#include <qfont.h>
-#include <qmessagebox.h>
-#include <qpixmap.h>
 #include <qapplication.h>
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
-#include <qframe.h>
 #include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlcdnumber.h>
 #include <qlistbox.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qscrollbar.h>
-#include <qtooltip.h>
-#include <qstring.h>
-#include <qdatetime.h>
-#include <kcolordlg.h>
 #include <kcolorbtn.h>
 #include <knuminput.h>
 #include <kcompletion.h>
-#include <klineedit.h>
-#include <kspread_view.h>
-#include <kspread_doc.h>
+#include "kspread_view.h"
+#include "kspread_cell.h"
+#include "kspread_doc.h"
+
+class QPixmap;
+class QRadioButton;
+class QPushButton;
+class QDate;
+class QTime;
+class QLabel;
+class QWidget;
 class CellLayoutDlg;
 class KSpreadTable;
-//class KSpreadView;
+class KLineEdit;
+class QFrame;
 
-#include "kspread_cell.h"
 
 class KSpreadPatternSelect : public QFrame
 {
