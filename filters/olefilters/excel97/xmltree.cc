@@ -936,6 +936,27 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
 					case 99:  // acos
 						(*stringPtr).prepend("acos(");
 						break;
+					case 142:  // SLN
+						--stringPtr;
+						*stringPtr = ";";
+						--stringPtr;
+						--stringPtr;
+						*stringPtr = ";";
+						--stringPtr;
+						(*stringPtr).prepend("SLN(");
+						break;
+					case 143:  // SYD
+						--stringPtr;
+						*stringPtr = ";";
+						--stringPtr;
+						--stringPtr;
+						*stringPtr = ";";
+						--stringPtr;
+						--stringPtr;
+						*stringPtr = ";";
+						--stringPtr;
+						(*stringPtr).prepend("SYD(");
+						break;
 					case 184:  // fact
 						(*stringPtr).prepend("fact(");
 						break;
