@@ -43,7 +43,9 @@ EpsImport::~EpsImport()
 KoFilter::ConversionStatus
 EpsImport::convert( const QCString& from, const QCString& to )
 {
-	if( to != "application/illustrator" || from != "image/x-eps" )
+	if(
+		to != "application/illustrator" ||
+		( from != "image/x-eps" && from != "application/postscript" ) )
 	{
 		return KoFilter::NotImplemented;
 	}

@@ -15,6 +15,7 @@
 #include <kdebug.h>
 
 #include "epsexport.h"
+#include "vdocument.h"
 
 
 class EpsExportFactory : KGenericFactory<EpsExport, KoFilter>
@@ -68,12 +69,23 @@ EpsExport::convert( const QCString& from, const QCString& to )
 
 	QTextStream s( &fileOut );
 
+	VDocument doc;
+	doc.load( docNode );
+
+	// find the bounding box of all objects:
+	doc.selectAllObjects();
+	const KoRect& rect = doc.selection().boundingBox();
 
 	// header:
 	s <<
 		"%!PS-Adobe-2.0\n"
-		"%%Creator: Karbon14 0.0.1\n"
-		"%%BoundingBox: 0 0 800 800" << endl;	// TODO
+		"%%Creator: Karbon14 Exportfilter\n"
+		"%%BoundingBox: "
+		<< rect.left() << " "
+		<< rect.top()  << " "
+		<< rect.right() << " "
+		<< rect.bottom()
+	<< endl;
 
 	// defs:
 	s <<
