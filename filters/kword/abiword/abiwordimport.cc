@@ -25,6 +25,9 @@
 #include <unistd.h>
 #endif
 
+#include <qmap.h>
+#include <qbuffer.h>
+#include <qpicture.h>
 #include <qfontinfo.h>
 #include <qxml.h>
 #include <qdom.h>
@@ -59,7 +62,7 @@ class StructureParser : public QXmlDefaultHandler
 {
 public:
     StructureParser(QDomDocument doc, KoFilterChain* chain)
-        : mainDocument(doc), m_chain(chain), pictureNumber(0), pictureFrameNumber(0)
+        : mainDocument(doc), m_chain(chain), m_pictureNumber(0), m_clipartNumber(0), m_pictureFrameNumber(0)
     {
         createMainFramesetElement();
         structureStack.setAutoDelete(true);
@@ -82,6 +85,11 @@ protected:
     bool clearStackUntilParagraph(StackItemStack& auxilaryStack);
     bool complexForcedBreak(StackItem* stackItem, const bool pageBreak);
 private:
+    // The method that would need too much parameters are private insted of being static
+    bool StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
+        const QXmlAttributes& attributes);
+    bool EndElementD (StackItem* stackItem);
+private:
     void createMainFramesetElement(void);
     QString indent; //DEBUG
     StackItemStack structureStack;
@@ -92,8 +100,10 @@ private:
     QDomElement clipartsElement;        // <CLIPARTS>
     StyleDataMap styleDataMap;
     KoFilterChain* m_chain;
-    uint pictureNumber;                 // unique: increment *before* use
-    uint pictureFrameNumber;            // unique: increment *before* use
+    uint m_pictureNumber;                   // unique: increment *before* use
+    uint m_clipartNumber;                   // unique: increment *before* use
+    uint m_pictureFrameNumber;              // unique: increment *before* use
+    QMap<QString,QDomElement> m_pictureMap; // Map of the <IMAGE> or <CLIPART> elements in any <FRAMSET>
 };
 
 // Element <c>
@@ -435,9 +445,8 @@ static bool StartElementS(StackItem* stackItem, StackItem* /*stackCurrent*/,
 }
 
 // <image>
-static bool StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
-    QDomDocument& mainDocument, QDomElement& framesetsPluralElement,
-    const QXmlAttributes& attributes, uint& pictureFrameNumber)
+bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
+    const QXmlAttributes& attributes)
 {
     // <image> elements can be nested in <p> or <c> elements
     if ((stackCurrent->elementType!=ElementTypeParagraph) && (stackCurrent->elementType!=ElementTypeContent))
@@ -470,12 +479,12 @@ static bool StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
     }
 
     QString strPictureFrameName("Picture ");
-    strPictureFrameName+=QString::number(++pictureFrameNumber);
+    strPictureFrameName+=QString::number(++m_pictureFrameNumber);
 
     // Create the frame set of the image
 
     QDomElement framesetElement=mainDocument.createElement("FRAMESET");
-    framesetElement.setAttribute("frameType",2);
+    framesetElement.setAttribute("frameType",-1); // -1 will be replaced when processing <d>
     framesetElement.setAttribute("frameInfo",0);
     framesetElement.setAttribute("visible",1);
     framesetElement.setAttribute("name",strPictureFrameName);
@@ -490,31 +499,9 @@ static bool StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
     // TODO: a few attributes are missing
     framesetElement.appendChild(frameElementOut);
 
-    QDomElement key=mainDocument.createElement("KEY");
-    // No name attribute!
-    key.setAttribute("filename",strDataId); // AbiWord's data id
-    //As we have no date to set, set to the *nix epoch
-    key.setAttribute("year",1970);
-    key.setAttribute("month",1);
-    key.setAttribute("day",1);
-    key.setAttribute("hour",0);
-    key.setAttribute("minute",0);
-    key.setAttribute("second",0);
-    key.setAttribute("msec",0);
-    
-    if (true) // TODO: find a way to tell if it is an image or a clipart
-    {
-        QDomElement imageElement=mainDocument.createElement("IMAGE");
-        imageElement.setAttribute("keepAspectRatio","true");
-        framesetElement.appendChild(imageElement);
-        imageElement.appendChild(key);
-    }
-    else
-    {
-        QDomElement clipartElement=mainDocument.createElement("CLIPART");
-        framesetElement.appendChild(clipartElement);
-        clipartElement.appendChild(key);
-    }
+    // <KEY>, <IMAGE> and <CLIPART> are added when processing <d>
+    //   Therefore we need to store data for further processing later
+    m_pictureMap.insert(strDataId,framesetElement,false); // false means that we want duplicate entries!
 
     // Now use the image's frame set
     QDomElement elementText=stackItem->stackElementText;
@@ -544,6 +531,7 @@ static bool StartElementD(StackItem* stackItem, StackItem* /*stackCurrent*/,
     const QXmlAttributes& attributes)
 {
     // We do not assume when we are called or if we are or not a child of <data>
+    // However, we assume that we are after all <image> elements
     stackItem->elementType=ElementTypeRealData;
 
     QString strName=attributes.value("name").stripWhiteSpace();
@@ -581,43 +569,43 @@ static bool CharactersElementD (StackItem* stackItem, QDomDocument& /*mainDocume
     return true;
 }
 
-static bool EndElementD (StackItem* stackItem, KoFilterChain* chain,
-     uint& pictureNumber, QDomDocument& mainDocument,
-     QDomElement& pixmapsElement, QDomElement& clipartsElement)
+bool StructureParser::EndElementD (StackItem* stackItem)
 {
     if (!stackItem->elementType==ElementTypeRealData)
     {
         kdError(30506) << "Wrong element type!! Aborting! (in endElementD)" << endl;
         return false;
     }
-    if (!chain)
+    if (!m_chain)
     {
         kdError(30506) << "No filter chain! Aborting! (in endElementD)" << endl;
         return false;
     }
 
-    bool isImage=true;
+    bool isImage=true; // Image ?
+    bool isSvg=false;  // SVG ?
     QString strStoreName;
 
     // stackItem->strTemp1 contains the mime type
     if (stackItem->strTemp1=="image/png")
     {
         strStoreName="pictures/picture";
-        strStoreName+=QString::number(++pictureNumber);
+        strStoreName+=QString::number(++m_pictureNumber);
         strStoreName+=".png";
     }
     else if (stackItem->strTemp1=="image/jpeg")
     {
         strStoreName="pictures/picture";
-        strStoreName+=QString::number(++pictureNumber);
+        strStoreName+=QString::number(++m_pictureNumber);
         strStoreName+=".jpeg";
     }
     else if (stackItem->strTemp1=="image/svg-xml") //Yes it is - not +
     {
         strStoreName="cliparts/clipart";
-        strStoreName+=QString::number(++pictureNumber); // For now, we use the picture number
+        strStoreName+=QString::number(++m_clipartNumber);
         strStoreName+=".svg";
         isImage=false;
+        isSvg=true;
     }
     else
     {
@@ -626,9 +614,9 @@ static bool EndElementD (StackItem* stackItem, KoFilterChain* chain,
         return true;
     }
 
+    QString strDataId=stackItem->fontName;  // AbiWord's data id
     QDomElement key=mainDocument.createElement("KEY");
-    key.setAttribute("name",strStoreName);
-    key.setAttribute("filename",stackItem->fontName); // AbiWord's data id
+    key.setAttribute("filename",strDataId);
     //As we have no date to set, set to the *nix epoch
     key.setAttribute("year",1970);
     key.setAttribute("month",1);
@@ -638,22 +626,53 @@ static bool EndElementD (StackItem* stackItem, KoFilterChain* chain,
     key.setAttribute("second",0);
     key.setAttribute("msec",0);
 
+    // Now we need to add <IMAGE> or <CLIPART> where the image or clipart is used.
+    QMap<QString,QDomElement>::Iterator it; // cannot be ConstIterator
+    while ((it=m_pictureMap.find(strDataId))!=m_pictureMap.end())
+    {
+        QDomElement element=mainDocument.createElement("dummy_name");
+        if (isImage)
+        {
+            element.setTagName("IMAGE");
+            element.setAttribute("keepAspectRatio","true");
+            it.data().setAttribute("frameType",2); // Image
+        }
+        else
+        {
+            element.setTagName("CLIPART");
+            it.data().setAttribute("frameType",5); // Clipart
+        }
+        it.data().appendChild(element);
+        element.appendChild(key);
+        m_pictureMap.erase(it);
+    }
+
+    // We need a second <KEY> element, so clone it first!
+    QDomElement secondKeyElement=key.cloneNode(false).toElement();
+    if (secondKeyElement.isNull())
+    {
+        kdError(30506)<<"Cannot clone <KEY>! Aborting!"<<endl;
+        return false;
+    }
+
+    secondKeyElement.setAttribute("name",strStoreName);
     if (isImage)
     {
-        pixmapsElement.appendChild(key);
+        pixmapsElement.appendChild(secondKeyElement);
     }
     else
     {
-        clipartsElement.appendChild(key);
+        clipartsElement.appendChild(secondKeyElement);
     }
 
-    KoStoreDevice* out=chain->storageFile(strStoreName, KoStore::Write);
+    KoStoreDevice* out=m_chain->storageFile(strStoreName, KoStore::Write);
     if(!out)
     {
         kdError(30506) << "Unable to open output file for: " << stackItem->fontName << endl;
         return false;
     }
 
+    // TODO: we cannot have a base64-coded SVG.
     if (stackItem->bold) // Is base64-coded?
     {
         kdDebug(30506) << "Decode and write base64 stream: " << stackItem->fontName << endl;
@@ -666,8 +685,10 @@ static bool EndElementD (StackItem* stackItem, KoFilterChain* chain,
     }
     else
     {
+        // Unknown text format!
         kdDebug(30506) << "Write character stream: " << stackItem->fontName << endl;
-        QCString strOut=stackItem->strTemp2.utf8();
+        // We strip the white space in front to avoid white space before a XML declaration
+        QCString strOut=stackItem->strTemp2.stripWhiteSpace().utf8();
         out->writeBlock(strOut,strOut.length());
     }
 
@@ -1023,8 +1044,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     else if ((name=="image") //TODO: upper-case?
         || (name=="i")) // old deprecated name for <image>
     {
-        success=StartElementImage(stackItem,structureStack.current(),
-            mainDocument,framesetsPluralElement,attributes,pictureFrameNumber);
+        success=StartElementImage(stackItem,structureStack.current(),attributes);
     }
     else if (name=="d") // TODO: upper-case?
     {
@@ -1084,7 +1104,7 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     }
     else if (name=="d")
     {
-        success=EndElementD(stackItem, m_chain, pictureNumber, mainDocument, pixmapsElement, clipartsElement);
+        success=EndElementD(stackItem);
     }
     else
     {
