@@ -57,7 +57,7 @@ bool KPTPart::initDoc() {
     KoTemplateChooseDia::ReturnType ret;
 
     ret = KoTemplateChooseDia::choose(KPTFactory::global(), templateDoc,
-				      "application/x-kplato", "*.kplato",
+				      "application/x-vnd.kde.kplato", "*.kplato",
 				      i18n("KPlato"),
 				      KoTemplateChooseDia::Everything,
 				      "kplato_template");
@@ -116,7 +116,7 @@ bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
     QDomElement doc = document.documentElement();
 
     // Check if this is the right app
-    if (doc.attribute("mime") != "application/x-kplato")
+    if (doc.attribute("mime") != "application/x-vnd.kde.kplato")
 	return false;
 
     QDomNodeList list = doc.childNodes();
@@ -159,7 +159,7 @@ QDomDocument KPTPart::saveXML() {
 
     QDomElement doc = document.createElement("kplato");
     doc.setAttribute("editor", "KPlato");
-    doc.setAttribute("mime", "application/x-kplato");
+    doc.setAttribute("mime", "application/x-vnd.kde.kplato");
     doc.setAttribute("version", "0.1");
     document.appendChild(doc);
 

@@ -19,7 +19,7 @@
 <!ATTLIST kplato	author CDATA #IMPLIED
 			email  CDATA #IMPLIED
 			editor CDATA #IMPLIED
-			mime   CDATA "application/x-kplato">
+			mime   CDATA "application/x-vnd.kde.kplato">
 
 <!--	The project description. This has the following fields:
 
