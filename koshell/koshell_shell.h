@@ -3,7 +3,7 @@
 
 #include <koMainWindow.h>
 #include <qlist.h>
-#include <list>
+#include <qvaluelist.h>
 
 class KoKoolBar;
 class KoDocumentEntry;
@@ -58,8 +58,8 @@ protected:
   bool isModified();
   bool requestClose();
 
-  list<Page> m_lstPages;
-  list<Page>::iterator m_activePage;
+  QValueList<Page> m_lstPages;
+  QValueList<Page>::Iterator m_activePage;
 
   KoKoolBar* m_pKoolBar;
 

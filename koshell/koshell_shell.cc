@@ -81,18 +81,18 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
   }
   else if ( _grp == m_grpDocuments )
   {
-    list<Page>::iterator it = m_lstPages.begin();
+    QValueList<Page>::Iterator it = m_lstPages.begin();
     while( it != m_lstPages.end() )
     {
-      if ( it->m_id == _item )
+      if ( (*it).m_id == _item )
       {
 	if ( m_pFrame )
 	  m_pFrame->hide();
 	m_activePage = it;
-	m_pFrame = it->m_pFrame;
+	m_pFrame = (*it).m_pFrame;
 	setView( m_pFrame );
 	m_pFrame->show();
-	interface()->setActivePart( it->m_vView->id() );
+	interface()->setActivePart( (*it).m_vView->id() );
 	return;
       }
       ++it;
@@ -102,9 +102,9 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
 
 bool KoShellWindow::isModified()
 {
-  list<Page>::iterator it = m_lstPages.begin();
+  QValueList<Page>::Iterator it = m_lstPages.begin();
   for( ; it != m_lstPages.end(); ++it )
-    if ( it->m_vDoc->isModified() )
+    if ( (*it).m_vDoc->isModified() )
       return true;
   
   return false;
@@ -238,7 +238,7 @@ bool KoShellWindow::newPage( KoDocumentEntry& _e )
   page.m_id = m_pKoolBar->insertItem( m_grpDocuments, _e.icon, i18n("No name"), this,
 				      SLOT( slotKoolBar( int, int ) ) );
   
-  m_lstPages.push_back( page );
+  m_lstPages.append( page );
   m_activePage = m_lstPages.end();
   m_activePage--;
   
@@ -337,7 +337,7 @@ bool KoShellWindow::printDlg()
 {
   assert( m_activePage != m_lstPages.end() );
 
-  return m_activePage->m_vView->printDlg();
+  return (*m_activePage).m_vView->printDlg();
 }
 
 void KoShellWindow::helpAbout()
@@ -494,7 +494,7 @@ KOffice::Document_ptr KoShellWindow::document()
   if ( m_activePage == m_lstPages.end() )
     return 0L;
   
-  return KOffice::Document::_duplicate( m_activePage->m_vDoc );
+  return KOffice::Document::_duplicate( (*m_activePage).m_vDoc );
 }
 
 KOffice::View_ptr KoShellWindow::view()
@@ -502,7 +502,7 @@ KOffice::View_ptr KoShellWindow::view()
   if ( m_activePage == m_lstPages.end() )
     return 0L;
 
-  return KOffice::View::_duplicate( m_activePage->m_vView );
+  return KOffice::View::_duplicate( (*m_activePage).m_vView );
 }
 
 void KoShellWindow::slotFileOpen()
