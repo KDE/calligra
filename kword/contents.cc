@@ -222,8 +222,8 @@ KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int dept
     if ( !style )
     {
         style = new KWStyle( name );
-        style->format().setBold(true);
-        style->format().setPointSize( KoTextZoomHandler::ptToLayoutUnitPt ( depth==-1 ? 20 : depth==0 ? 16 : 12 ) );
+        style->format().setBold( ( ( depth==-1) || ( depth==0 ) ) ? true : false );
+        style->format().setPointSize( KoTextZoomHandler::ptToLayoutUnitPt ( depth==-1 ? 20 : 12 ) );
         if ( depth == -1 )
         {
             style->paragLayout().topBorder = KoBorder( Qt::black, KoBorder::SOLID, 1 );
@@ -238,12 +238,13 @@ KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int dept
         {
             KoTabulatorList tabList;
             KoTabulator tab;
-            tab.ptPos = fs->frame( 0 )->width() - 10; // not sure why that much is necessary....
+            tab.ptPos = KoUnit::ptFromUnit( floor( KoUnit::toMM( fs->frame( 0 )->width() )  ), KoUnit::unit("mm") );
             tab.type = T_RIGHT;
             tab.filling = TF_DOTS;
             tab.ptWidth = 0.5;
             tabList.append( tab );
             style->paragLayout().setTabList( tabList );
+            style->paragLayout().margins[QStyleSheetItem::MarginLeft] = KoUnit::ptFromUnit( (depth*4.5), KoUnit::unit("mm") );
         }
         style = fs->kWordDocument()->styleCollection()->addStyleTemplate( style );     // register the new style
         fs->kWordDocument()->updateAllStyleLists();                 // show it in the UI
