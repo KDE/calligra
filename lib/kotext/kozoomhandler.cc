@@ -55,6 +55,9 @@ void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 
 void KoZoomHandler::setResolution( double resolutionX, double resolutionY )
 {
+    m_zoom = 100;
+    m_resolutionX = resolutionX;
+    m_resolutionY = resolutionY;
     m_zoomedResolutionX = resolutionX;
     m_zoomedResolutionY = resolutionY;
 }
