@@ -5177,12 +5177,6 @@ bool KSpreadTable::isOnNewPageX( int _column )
     float x = columnLayout( col )->mmWidth();
     while ( ( col <= _column ) && ( col < KS_colMax ) )
     {
-        // Should never happen
-        if ( col > KS_colMax )
-        {
-            kdDebug(36001) << "KSpreadTable::isOnNewPageX: col out of range (col: " << col << ")" << endl;
-            return FALSE;
-        }
         if ( x > m_pDoc->printableWidth() )
         {
             if ( col == _column )
@@ -5204,13 +5198,6 @@ bool KSpreadTable::isOnNewPageY( int _row )
     float y = rowLayout( row )->mmHeight();
     while ( ( row <= _row ) && ( row < KS_rowMax ) )
     {
-        // Should never happen
-        if ( row > KS_rowMax )
-        {
-            kdDebug(36001) << "KSpreadTable::isOnNewPageY: row out of range (row: " << row << ")" << endl;
-            return FALSE;
-        }
-
         if ( y > m_pDoc->printableHeight() )
         {
             if ( row == _row )
