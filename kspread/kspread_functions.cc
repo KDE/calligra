@@ -162,7 +162,7 @@ QString KSpreadFunctionDescription::toQML() const
     text += toString( type() );
     text += "</p>";
 
-    if ( !m_examples.isEmpty() )
+    if ( !m_syntax.isEmpty() )
     {
 	text += i18n("<h2>Syntax</h2><ul>");
 	QStringList::ConstIterator it = m_syntax.begin();
