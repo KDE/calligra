@@ -3,24 +3,25 @@
 
 #include <qscrollview.h>
 
-class KoRuler;
 class KarbonPart;
 class KarbonView;
 
 class VCanvas : public QScrollView {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    VCanvas( KarbonView* view, KarbonPart* part );
+	VCanvas( KarbonView* view, KarbonPart* part );
 
 protected:
-    virtual void paintEvent( QPaintEvent* event );
-    virtual void resizeEvent( QResizeEvent* event );
+	virtual void drawContents( QPainter* painter, int clipx, int clipy, int clipw, int cliph  );
+	void drawDocument( QPainter* painter, const QRect& rect );
+
+	virtual void resizeEvent( QResizeEvent* event );
 
 private:
-    KarbonPart* m_part;
-    KarbonView* m_view;
-    KoRuler* m_vRuler;
-    KoRuler* m_hRuler;
+	KarbonPart* m_part;
+	KarbonView* m_view;
+
+	double m_zoomFactor;
 };
 
 #endif

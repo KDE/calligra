@@ -18,14 +18,14 @@ static const KCmdLineOptions options[] =
 
 int main( int argc, char* argv[] )
 {
-    KCmdLineArgs::init( argc, argv, KarbonFactory::aboutData() );
-    KCmdLineArgs::addCmdLineOptions( options );
-    KoApplication app;
+	KCmdLineArgs::init( argc, argv, KarbonFactory::aboutData() );
+	KCmdLineArgs::addCmdLineOptions( options );
+	KoApplication app;
 
-    app.dcopClient()->attach();
-    app.dcopClient()->registerAs( "karbon" );
+	app.dcopClient()->attach();
+	app.dcopClient()->registerAs( "karbon" );
 
-    if ( !app.start() ) // parses command line args, create initial docs and shells
+	if ( !app.start() ) // parses command line args, create initial docs and shells
 	return 1;
-    return app.exec();
+	return app.exec();
 }

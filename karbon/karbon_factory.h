@@ -8,21 +8,21 @@ class KAboutData;
 
 class KarbonFactory : public KoFactory
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    KarbonFactory( QObject* parent = 0, const char* name = 0 );
-    ~KarbonFactory();
+	KarbonFactory( QObject* parent = 0, const char* name = 0 );
+	~KarbonFactory();
 
-    virtual KParts::Part *createPart( QWidget *parentWidget = 0,
+	virtual KParts::Part *createPart( QWidget *parentWidget = 0,
 	const char* widgetName = 0, QObject* parent = 0, const char* name = 0,
 	const char* classname = "KoDocument", const QStringList& args = QStringList() );
 
-    static KInstance* instance();
-    static KAboutData* aboutData();
+	static KInstance* instance();
+	static KAboutData* aboutData();
 
 private:
-    static KInstance*	s_instance;
-    static KAboutData*	s_aboutData;
+	static KInstance*	s_instance;
+	static KAboutData*	s_aboutData;
 };
 
 #endif

@@ -1,4 +1,3 @@
-#include <koRuler.h>
 #include <qpainter.h>
 #include <kdebug.h>
 
@@ -7,32 +6,36 @@
 #include "vcanvas.h"
 
 VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
-    : QScrollView( view, "VCanvas",
-	Qt::WNorthWestGravity | Qt::WResizeNoErase | Qt::WRepaintNoErase),
-	m_part(part), m_view(view), m_vRuler(0L), m_hRuler(0L)
+	: QScrollView( view, "canvas", WNorthWestGravity | WResizeNoErase | WRepaintNoErase ),
+	m_part( part ), m_view( view ), m_zoomFactor( 1.0 )
 {
-    viewport()->setFocusPolicy(QWidget::StrongFocus);
-    viewport()->setMouseTracking(true);
-    setMouseTracking(true);
-    setFocus();
-    viewport()->setBackgroundMode(QWidget::NoBackground);
+	viewport()->setFocusPolicy( QWidget::StrongFocus );
+	viewport()->setMouseTracking( true );
+	setMouseTracking( true );
+	setFocus();
+	viewport()->setBackgroundMode( QWidget::NoBackground );
 }
 
 void
-VCanvas::paintEvent( QPaintEvent* event )
+VCanvas::drawContents( QPainter* painter, int clipx, int clipy, int clipw, int cliph  )
 {
-    QPainter painter;
-    painter.begin( this );
-
-    // Let the document do the drawing
-    m_part->paintEverything( painter, event->rect(), false, m_view );
-
-    painter.end();
+	drawDocument( painter, QRect( clipx, clipy, clipw, cliph ) );
 }
 
 void
-VCanvas::resizeEvent( QResizeEvent* /*event*/ )
+VCanvas::drawDocument( QPainter* painter, const QRect& rect )
 {
+	QListIterator<VObject> i = m_part->m_objects;
+	for ( ; i.current() ; ++i )
+	{
+		i.current()->draw( *painter, rect, m_zoomFactor );
+	}
+}
+
+void
+VCanvas::resizeEvent( QResizeEvent* event )
+{
+	QScrollView::resizeEvent( event );
 }
 
 #include <vcanvas.moc>

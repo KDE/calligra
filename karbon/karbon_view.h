@@ -13,26 +13,29 @@ class KarbonPart;
 
 class KarbonView : public KoView
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    KarbonView( KarbonPart* part, QWidget* parent = 0, const char* name = 0 );
-    virtual ~KarbonView();
+	KarbonView( KarbonPart* part, QWidget* parent = 0, const char* name = 0 );
+	virtual ~KarbonView();
 
-    virtual QWidget* canvas() { return m_canvas; }
+	virtual void paintEverything( QPainter &p, const QRect &rect, bool transparent = false );
+
+	virtual QWidget* canvas() { return m_canvas; }
 
 protected slots:
-    void cut();
+	void cut();
 
 protected:
-    virtual void updateReadWrite( bool rw );
-    virtual void resizeEvent( QResizeEvent* event );    
+	virtual void updateReadWrite( bool rw );
+	virtual void resizeEvent( QResizeEvent* event );
 
 private:
-    void initActions();
-    
-    VCanvas* m_canvas;
-    
-    KSelectAction* m_zoomAction;
+	void initActions();
+
+	KarbonPart* m_part;
+	VCanvas* m_canvas;
+
+	KSelectAction* m_zoomAction;
 };
 
 #endif

@@ -6,16 +6,16 @@
 /**
  * This class is used for boundingboxes only.
  */
- 
+
 class VRect {
 public:
-    VRect();
-    VRect( const double& l, const double& t, const double& r, const double& b );
-    VRect( VPoint& tl, VPoint& br );
+	VRect();
+	VRect( const double& l, const double& t, const double& r, const double& b );
+	VRect( VPoint& tl, VPoint& br );
 
 private:
-    VPoint m_tl;
-    VPoint m_br;
+	VPoint m_tl;
+	VPoint m_br;
 };
 
 #endif
