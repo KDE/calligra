@@ -682,10 +682,20 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
         int pgNum = pageNum();
         frameStyle.addProperty( "text:anchor-page-number", pgNum + 1 ); // OASIS starts at 1
     }
-    frameStyle.addProperty( "fo:border-left", m_borderLeft.saveFoBorder() );
-    frameStyle.addProperty( "fo:border-right", m_borderRight.saveFoBorder() );
-    frameStyle.addProperty( "fo:border-top", m_borderTop.saveFoBorder() );
-    frameStyle.addProperty( "fo:border-bottom", m_borderBottom.saveFoBorder() );
+
+    if (  ( m_borderLeft == m_borderRight )
+          && ( m_borderLeft == m_borderTop )
+          && ( m_borderLeft == m_borderBottom ) )
+    {
+        frameStyle.addProperty( "fo:border", m_borderLeft.saveFoBorder() );
+    }
+    else
+    {
+        frameStyle.addProperty( "fo:border-left", m_borderLeft.saveFoBorder() );
+        frameStyle.addProperty( "fo:border-right", m_borderRight.saveFoBorder() );
+        frameStyle.addProperty( "fo:border-top", m_borderTop.saveFoBorder() );
+        frameStyle.addProperty( "fo:border-bottom", m_borderBottom.saveFoBorder() );
+    }
 
     if ( m_paddingLeft != 0 && ( ( m_paddingLeft == m_paddingRight )
                                  && ( m_paddingLeft == m_paddingTop )
