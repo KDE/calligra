@@ -318,7 +318,7 @@ void KprKword::convert()
             parag.appendChild( layoutElem );
             QDomElement nameElem = outdoc.createElement( "NAME" );
             layoutElem.appendChild( nameElem );
-            nameElem.setAttribute( "value", isTitle ? titleStyleName : "Standard" );
+            nameElem.setAttribute( "value", isTitle ? titleStyleName : QString("Standard") );
             QDomElement align=outdoc.createElement("FLOW");
             if(p.hasAttribute("align"))
             {
