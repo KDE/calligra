@@ -1,4 +1,14 @@
+2005-04-07  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+
+
+
 2005-04-06  Inge Wallin  <inge@lysator.liu.se>
+
+	Enable axis titles again.
+	* kchartParameterConfigPage.cc (KChartParameterConfigPage): Don't
+	disable xtitle and ytitle.
+
+	----------------------------------------------------------------
 
 	Fix line specific settings
 	* kchartConfigDialog.{h,cc} (linepage3d): resurrected page

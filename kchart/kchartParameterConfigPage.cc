@@ -90,7 +90,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     ytitle= new QLineEdit( gb2 );
     ytitle->setMaximumWidth(130);
     grid2->addWidget(ytitle, 2, 1);
-    ytitle->setEnabled(false);
+    //ytitle->setEnabled(false);
 
     // The X axis title
     tmpLabel = new QLabel( i18n( "X-title:" ), gb2 );
@@ -99,7 +99,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     xtitle= new QLineEdit( gb2 );
     xtitle->setMaximumWidth(130);
     grid2->addWidget(xtitle, 3, 1);
-    xtitle->setEnabled(false);
+    //xtitle->setEnabled(false);
 
     // Linear or logarithmic scale
     lin = new QRadioButton( i18n("Linear scale"), gb2);

@@ -24,7 +24,8 @@ Item								   Prio Status
 * Bugs
   + 41612: No titles for axes					      1	----
      - Fixed by new KDChart version					kdch
-     - Enable and activate settings in the config dialog.		inge
+     - Enable settings in the config dialog.				done
+     - Read and write the values from the axis parameters		----
   + 55606: [modified] tag doesn't work correctly.		      2 DONE
      - Set modified when data is changed.			      2 done
      - Set modified when the chart is changed through config.	      2 done
@@ -140,7 +141,7 @@ Item								   Prio Status
   + Bring back "line width" for line charts.			      1 DONE
 	Used to be on the Line3d page.
   + Check keyboard shortcuts for all tabs			     S1 INGE
-  + Enable titles for axes again.					INGE
+  + Enable titles for axes again.					DONE
 
 * Wizard
   + New data page?						     S2 ----
