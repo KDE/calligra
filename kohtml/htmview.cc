@@ -183,13 +183,10 @@ void KMyHTMLView::feedDocumentData( const char *data, bool eof )
        m_bParsing = true;
        m_lstChildren.clear();
 
-#warning "Reggie: I had to ifdef out some stuff here because of changes in KURL. Simon, please fix that!"
-#if 0
-       KURLList lst;
-       KURL::split( m_strURL, lst );
-       QString burl = lst.getLast()->url();
-       begin( burl, 0, 0 );
-#endif
+       KURL::List lst;
+       lst = KURL::split( m_strURL );
+       KURL::List::ConstIterator it = lst.last();
+       begin( it->url(), 0, 0 );
        parse();
      }
 

@@ -45,7 +45,7 @@ module KoHTML
 		slot void newView();
 		slot void insertObject();
 		
-		slot void slotStatusMsg(in string text);
+		slot void slotStatusMsg(in wstring text);
 		slot void statusCallback(in long ID);
 		
 		slot void slotURLEntered();

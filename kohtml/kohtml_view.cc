@@ -241,8 +241,9 @@ void KoHTMLView::init()
   if (!CORBA::is_nil(statusBarMan))
      m_vStatusBar = statusBarMan->registerClient(id());
 
-  m_idStatusBar_StatusMsg = m_vStatusBar->insertItem(i18n("Ready."), -1);
-  m_idStatusBar_URLMsg = m_vStatusBar->insertItem("", -1);
+  CORBA::WString_var item = Q2C( i18n("Ready.") );
+  m_idStatusBar_StatusMsg = m_vStatusBar->insertItem(item, -1);
+  m_idStatusBar_URLMsg = m_vStatusBar->insertItem(0L, -1);
 
   QListIterator<KoHTMLChild> it = m_pDoc->childIterator();
   for (; it.current(); ++it)
@@ -647,7 +648,7 @@ void KoHTMLView::viewStatusBar()
     m_vMenuOptions->setItemChecked(m_idMenuOptions_View_StatusBar, m_bStatusBarVisible);
 }     
 
-void KoHTMLView::slotStatusMsg(const char *text)
+void KoHTMLView::slotStatusMsg(CORBA::WChar *text)
 {
   if (m_vStatusBar != 0L)
      {
@@ -658,25 +659,32 @@ void KoHTMLView::slotStatusMsg(const char *text)
 
 void KoHTMLView::statusCallback(CORBA::Long ID)
 {
+#define STATUSMSG(s) \
+{ \
+  CORBA::WString_var msg = Q2C( s ); \
+  slotStatusMsg( msg.out() ); \
+} 
+
   switch (ID)
     {
-      case ID_EDIT_COPY              : slotStatusMsg(i18n("Copies the selected section to the clipboard")); break;
-      case ID_EDIT_INSERT_OBJECT     : slotStatusMsg(i18n("Inserts an embedded object into the document")); break;
-      case ID_EDIT_HTMLCODE          : slotStatusMsg(i18n("Edit the current html code")); break;
-      case ID_OPTIONS_SETTINGS       : slotStatusMsg(i18n("Change user settings")); break;
-      case ID_OPTIONS_CONFIGUREKEYS  : slotStatusMsg(i18n("Edit keybindings")); break;
-      case ID_OPTIONS_VIEW_TOOLBAR   : slotStatusMsg(i18n("Enables / disables the toolbar")); break;
-      case ID_OPTIONS_VIEW_STATUSBAR : slotStatusMsg(i18n("Enables / disables the statusbar")); break;
-      case ID_BOOKMARKS_ADD          : slotStatusMsg(i18n("Add the current url to the bookmark list")); break;
-      case ID_BOOKMARKS_EDIT         : slotStatusMsg(i18n("Edit the bookmark list")); break;
-      case ID_BACK		     : slotStatusMsg(i18n("Load the previous document in the history")); break;
-      case ID_FORWARD                : slotStatusMsg(i18n("Load the next document in the history")); break;
-      case ID_HOME		     : slotStatusMsg(i18n("Load the start document")); break;
-      case ID_RELOAD		     : slotStatusMsg(i18n("Reload the current document")); break;      
-      case ID_STOP		     : slotStatusMsg(i18n("Stop loading the current document")); break;
-      case ID_OPENURL                : slotStatusMsg(i18n("Open an URL dialog")); break;
-      default                        : slotStatusMsg(i18n("Ready."));
+      case ID_EDIT_COPY              : STATUSMSG(i18n("Copies the selected section to the clipboard")); break;
+      case ID_EDIT_INSERT_OBJECT     : STATUSMSG(i18n("Inserts an embedded object into the document")); break;
+      case ID_EDIT_HTMLCODE          : STATUSMSG(i18n("Edit the current html code")); break;
+      case ID_OPTIONS_SETTINGS       : STATUSMSG(i18n("Change user settings")); break;
+      case ID_OPTIONS_CONFIGUREKEYS  : STATUSMSG(i18n("Edit keybindings")); break;
+      case ID_OPTIONS_VIEW_TOOLBAR   : STATUSMSG(i18n("Enables / disables the toolbar")); break;
+      case ID_OPTIONS_VIEW_STATUSBAR : STATUSMSG(i18n("Enables / disables the statusbar")); break;
+      case ID_BOOKMARKS_ADD          : STATUSMSG(i18n("Add the current url to the bookmark list")); break;
+      case ID_BOOKMARKS_EDIT         : STATUSMSG(i18n("Edit the bookmark list")); break;
+      case ID_BACK		     : STATUSMSG(i18n("Load the previous document in the history")); break;
+      case ID_FORWARD                : STATUSMSG(i18n("Load the next document in the history")); break;
+      case ID_HOME		     : STATUSMSG(i18n("Load the start document")); break;
+      case ID_RELOAD		     : STATUSMSG(i18n("Reload the current document")); break;      
+      case ID_STOP		     : STATUSMSG(i18n("Stop loading the current document")); break;
+      case ID_OPENURL                : STATUSMSG(i18n("Open an URL dialog")); break;
+      default                        : STATUSMSG(i18n("Ready."));
     }
+#undef STATUSMSG    
 }
 
 void KoHTMLView::slotBack2()
@@ -1000,7 +1008,8 @@ void KoHTMLView::slotShowURL(KHTMLView *view, const char *url)
   if (!strnicmp(StatusMsg, "mailto:", 7))
      StatusMsg.remove(0, 7);
 
-  slotStatusMsg(StatusMsg);     
+  CORBA::WString_var WStatusMsg = Q2C( StatusMsg );
+  slotStatusMsg(WStatusMsg);     
 }
 
 void KoHTMLView::slotOpenURL(KHTMLView *view, const char *url, int button, const char *target)
