@@ -10,7 +10,7 @@
 #include <koFilter.h>
 #include <koFilterChain.h>
 #include <koStore.h>
-#include <kprocess.h>
+#include <kprocio.h>
 
 #include <kdebug.h>
 
@@ -40,13 +40,15 @@ EpsImport::EpsImport( KoFilter*, const char*, const QStringList& )
 
 EpsImport::~EpsImport()
 {
-	stopProc();
 }
 
 KoFilter::ConversionStatus
-EpsImport::convert( const QCString& from, const QCString& to )
+EpsImport::convert( const QCString& from, const QCString& /*to*/ )
 {
-	if ( to != "application/illustrator" || from != "image/x-eps" )
+kdDebug() << "****0" << endl;
+
+	if( from != "image/x-eps" )
+//	if( to != "application/illustrator" || from != "image/x-eps" )
 	{
 		return KoFilter::NotImplemented;
 	}
@@ -67,52 +69,38 @@ EpsImport::convert( const QCString& from, const QCString& to )
 	QByteArray byteArrayIn = storeIn->read( storeIn->size() );
 	storeIn->close();
 
-	// initialize ghostscript:
-	m_proc = new KProcess();
-	*m_proc << "gs - -q -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps";
+kdDebug() << "****1" << endl;
 
-	connect( m_proc, SIGNAL( processExited( KProcess* ) ),
-		this, SLOT( procExited( KProcess* ) ) );
-	connect( m_proc, SIGNAL( receivedStdout( KProcess*, char*, int ) ),
-		this, SLOT( procOutput( KProcess*, char*, int ) ) );
+	// initialize ghostscript:
+	KProcIO* proc = new KProcIO();
+	*proc << "gs - -q -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps";
+
+kdDebug() << "****2" << endl;
 
 	// start ghostscript:
-	m_proc->start( KProcess::DontCare, KProcess::All );
+	proc->start( KProcess::DontCare, KProcess::All );
+
+kdDebug() << "****3" << endl;
 
 	// write data to ghostscript:
-	m_proc->writeStdin( byteArrayIn, byteArrayIn.size() );
-	m_proc->closeStdin();
+	proc->fputs( byteArrayIn );
+	proc->closeWhenDone();
+
+	QString line;
+
+kdDebug() << "****4" << endl;
+
+	while( proc->readln( line, true ) )
+	{
+kdDebug() << line << endl;
+	}
+
+	// stop ghostview:
+	delete( proc );
 
 	fileOut.close();
 	delete storeIn;
 	return KoFilter::OK;
-}
-
-void
-EpsImport::procOutput( KProcess* proc, char* buffer, int len)
-{
-	QString line = QString::fromLocal8Bit( buffer, len );
-
-kdDebug() << line << endl;
-}
-
-void
-EpsImport::procFailed()
-{
-	stopProc();
-}
-
-void
-EpsImport::procExited( KProcess* proc )
-{
-	delete m_proc;
-}
-
-void
-EpsImport::stopProc()
-{
-	delete( m_proc );
-	m_proc = 0L;
 }
 
 #include "epsimport.moc"

@@ -12,8 +12,6 @@
 class QDomElement;
 class QTextStream;
 
-class KProcess;
-
 class EpsImport : public KoFilter
 {
 	Q_OBJECT
@@ -23,16 +21,6 @@ public:
 	virtual ~EpsImport();
 
 	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
-
-protected slots:
-	void procOutput( KProcess* proc, char* buffer, int len );
-	void procFailed();
-	void procExited( KProcess* proc );
-
-private:
-	void stopProc();
-
-	KProcess* m_proc;
 };
 
 #endif
