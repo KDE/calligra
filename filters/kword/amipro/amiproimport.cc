@@ -118,6 +118,9 @@ static QString AmiProLayoutAsXML( const AmiProLayout& layout )
   QString fontname = layout.fontFamily;
   if( fontname.isEmpty() ) fontname = KoGlobal::defaultFont().family();
   QString fontsize = QString::number( layout.fontSize );
+  QString fontcolor = "red=\"" + QString::number( layout.fontColor.red() ) +
+    "\"  green=\"" +  QString::number( layout.fontColor.green() ) +
+    "\"  blue=\"" + QString::number( layout.fontColor.blue() ) + "\"";
   QString boldness = layout.bold ? "75" : "50";
   QString italic = layout.italic ? "1" : "0";
   QString strikeout = layout.strikethrough ? "1" : "0";
@@ -150,6 +153,7 @@ static QString AmiProLayoutAsXML( const AmiProLayout& layout )
   result.append( "  <FORMAT id=\"1\">\n" );
   result.append( "    <FONT name=\"" + fontname + "\" />\n" );
   result.append( "    <SIZE value=\"" + fontsize + "\" />\n" );
+  result.append( "    <COLOR " + fontcolor + " />\n" );
   result.append( "    <WEIGHT value=\"" + boldness + "\" />\n" );
   result.append( "    <ITALIC value=\"" + italic  + "\" />\n" );
   result.append( "    <STRIKEOUT value=\"" + strikeout + "\" />\n" );
