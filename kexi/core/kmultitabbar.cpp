@@ -2,7 +2,7 @@
                           kmultitabbar.cpp -  description
                              -------------------
     begin                :  2001
-    copyright            : (C) 2001,2002 by Joseph Wenninger <jowenn@kde.org>
+    copyright            : (C) 2001,2002,2003 by Joseph Wenninger <jowenn@kde.org>
  ***************************************************************************/
 
 /***************************************************************************
