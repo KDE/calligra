@@ -650,10 +650,14 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
     else if ((strExtension=="jpg") || (strExtension=="jpeg"))
     {
         isImageLoaded=loadSubFile(koStoreName,image);
-        strExtension="jpg";
+        strExtension="jpg"; // ### TODO: verify
     }
-    else if ((strExtension=="gif")
-        || (strExtension=="tif") || (strExtension=="tiff"))
+    else if ((strExtension=="tif") || (strExtension=="tiff"))
+    {
+        isImageLoaded=loadSubFile(koStoreName,image);
+        strExtension="tif"; // ### TODO: verify
+    }
+    else if ((strExtension=="gif") || (strExtension=="wmf"))
         // ### TODO: Which other image formats does OOWriter support directly?
     {
         isImageLoaded=loadSubFile(koStoreName,image);
