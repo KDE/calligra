@@ -1,4 +1,5 @@
-/* This file is part of the KDE project
+/*
+   This file is part of the KDE project
    Copyright (C) 2002 Marco Zanon <info@marcozanon.com>
                   and Ariya Hidayat <ariya@kde.org>
 

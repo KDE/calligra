@@ -1,4 +1,5 @@
-/* This file is part of the KDE project
+/*
+   This file is part of the KDE project
    Copyright (C) 2002 Marco Zanon <info@marcozanon.com>
                   and Ariya Hidayat <ariya@kde.org>
 
@@ -32,11 +33,18 @@
 typedef KGenericFactory<StarWriterImport, KoFilter> StarWriterImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libstarwriterimport, StarWriterImportFactory("starwriterimport"));
 
-// get unsigned 24-bit integer at given offset
+// Get unsigned 24-bit integer at given offset
 static inline Q_UINT32 readU24(QByteArray array, Q_UINT32 p)
 {
    Q_UINT8* ptr = (Q_UINT8*) array.data();
    return (Q_UINT32) (ptr[p] + (ptr[p+1] << 8) + (ptr[p+2] << 16));
+}
+
+// Get unsigned 16-bit integer at given offset
+static inline Q_UINT16 readU16(QByteArray array, Q_UINT32 p)
+{
+   Q_UINT8* ptr = (Q_UINT8*) array.data();
+   return (Q_UINT16) (ptr[p] + (ptr[p+1] << 8));
 }
 
 StarWriterImport::StarWriterImport(KoFilter *, const char *, const QStringList&) : KoFilter()
@@ -119,7 +127,7 @@ bool StarWriterImport::checkDocumentVersion()
     if (StarWriterDocument[0x05] != 'R') return false;
 
     // Password-protection is not supported for the moment
-    Q_UINT16 flags = StarWriterDocument[0x0A] + 0x0100*StarWriterDocument[0x0B];
+    Q_UINT16 flags = readU16(StarWriterDocument, 0x0A);
     if (flags & 0x0008) return false;
 
     return true;
@@ -189,7 +197,6 @@ bool StarWriterImport::addBody()
 
     // Select nodes and pass them to parseNodes()
     len = readU24(StarWriterDocument, p+1);
-    // FIXME: is this the right frame name?
     QByteArray data(len);
     for (Q_UINT32 k=0; k<len; k++)
       data[k] = StarWriterDocument[p+k];
@@ -226,7 +233,7 @@ bool StarWriterImport::parseNodes(QByteArray n)
     QByteArray s;
 
     // Loop
-    Q_UINT32 p = 0x09;   // is it a fixed value? is it the same for headers/footers?
+    Q_UINT32 p = 0x09;   // is this a fixed value? is it the same for headers/footers?
 
     while (p < n.size()) {
         char c = n[p];
@@ -246,7 +253,7 @@ bool StarWriterImport::parseNodes(QByteArray n)
                 }
                 break;
             case 'E':
-                //if (!parseTable(s)) return false;
+                if (!parseTable(s)) return false;
                 break;
             default:
                 break;
@@ -260,16 +267,13 @@ bool StarWriterImport::parseNodes(QByteArray n)
 bool StarWriterImport::parseText(QByteArray n)
 {
     QByteArray s;
-    Q_UINT32 len, len2, len3;
+    Q_UINT16 len;
     QString text;
 
-    // Preliminary check
-    if (n[0x00] != 'T') return false;
-
     // Retrieve the paragraph (text-only)
-    len = readU24(n, 0x09) & 0xFFFF;   // FIXME: is it right?
+    len = readU16(n, 0x09);
     s.resize(len);
-    for (Q_UINT32 k = 0x00; k < len; k++)
+    for (Q_UINT16 k = 0x00; k < len; k++)
         s[k] = n[0x0B+k];
 
     // Write it to the variable
@@ -284,14 +288,12 @@ bool StarWriterImport::parseText(QByteArray n)
 bool StarWriterImport::parseTable(QByteArray n)
 {
     QByteArray s;
-    Q_UINT32 len, len2, len3;
+    Q_UINT32 len, len2;
+    Q_UINT16 len3;
     Q_UINT32 p, p2;
     QString text;
     QString tableCell, tableText, tableName;
     Q_UINT8 row, column;
-
-    // Preliminary check
-    if (n[0x00] != 'E') return false;
 
     // Set table name
     tableName = QString("Table in Frame %1").arg(framesNumber);
@@ -321,9 +323,9 @@ bool StarWriterImport::parseTable(QByteArray n)
             while (n[p] != 'T') p++;
 
             // Get cell text/value
-            len3 = readU24(n, p+0x09) & 0xFFFF;   // FIXME: is it right?
+            len3 = readU16(n, p+0x09);
             s.resize(len3);
-            for (Q_UINT32 k = 0x00; k < len3; k++)
+            for (Q_UINT16 k = 0x00; k < len3; k++)
                 s[k] = n[p+0x0B+k];
             text = convertToKWordString(s);
 
@@ -352,19 +354,18 @@ bool StarWriterImport::parseTable(QByteArray n)
     // Add anchor to bodyStuff
     bodyStuff.append("  <PARAGRAPH>\n");
     bodyStuff.append("   <TEXT xml:space=\"preserve\">#</TEXT>\n");
-    bodyStuff.append("   <FORMATS>");
+    bodyStuff.append("   <FORMATS>\n");
     bodyStuff.append("    <FORMAT id=\"6\" pos=\"0\" len=\"1\">\n");
     bodyStuff.append(QString("    <ANCHOR type=\"frameset\" instance=\"%1\" />\n").arg(tableName));
     bodyStuff.append("    </FORMAT>\n");
     bodyStuff.append("   </FORMATS>\n");
     bodyStuff.append("  </PARAGRAPH>\n");
 
-    return (n[0x00] == 'E');
+    return true;
 };
 
 bool StarWriterImport::parseGraphics(QByteArray n)
 {
-    // return (n[0x00] == 'G');
     return true;
 }
 
