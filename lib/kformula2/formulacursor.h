@@ -26,6 +26,7 @@
 
 class FormulaElement;
 class IndexElement;
+class KFormulaWidget;
 class RootElement;
 class SymbolElement;
 
@@ -41,13 +42,20 @@ class SymbolElement;
  * (The cursor has no chance to know how.)
  */
 class FormulaCursor {
+
+    // Yes, we do have a friend.
+    friend class SequenceElement;
+    
 public:
 	    
     /**
      * Creates a cursor and puts is at the beginning
-     * of the rootElement.
+     * of the formula.
+     *
+     * @param widget the widget the cursor belongs to. This might be 0.
+     * @param element the formula the cursor point to. This must not be 0.
      */
-    FormulaCursor(FormulaElement* element);
+    FormulaCursor(KFormulaWidget* widget, FormulaElement* element);
 
     // where the cursor and the mark are
     int getPos() const { return cursorPos; }
@@ -242,14 +250,17 @@ public:
      */
     class CursorData {
         friend class FormulaCursor;
+        KFormulaWidget* widget;
         BasicElement* current;
         int cursorPos;
         int markPos;
         bool selectionFlag;
+        bool linearMovement;
 
-        CursorData(BasicElement* c, int pos, int mark, bool selection)
-            : current(c), cursorPos(pos), markPos(mark), selectionFlag(selection) {}
-
+        CursorData(KFormulaWidget* w, BasicElement* c,
+                   int pos, int mark, bool selection, bool linear)
+            : widget(w), current(c), cursorPos(pos), markPos(mark),
+              selectionFlag(selection), linearMovement(linear) {}
     };
 
     /**
@@ -273,6 +284,11 @@ public:
      * A new formula has been loaded. Our current element has to change.
      */
     void formulaLoaded(FormulaElement* rootElement);
+
+    /**
+     * @returns the point inside the formula widget where the cursor is.
+     */
+    QPoint getCursorPoint() const { return cursorPoint; }
     
 private:
     
@@ -311,6 +327,11 @@ private:
 
     
     /**
+     * The widget the cursor belongs to.
+     */
+    KFormulaWidget* widget;
+    
+    /**
      * The element the cursor is inside right now.
      */
     BasicElement* current;
@@ -342,6 +363,12 @@ private:
      * left and right movement.
      */
     bool linearMovement;
+
+    /**
+     * The point in the middle of the cursor. Gets updated
+     * each time the cursor is drawn.
+     */
+    QPoint cursorPoint;
 };
 
 

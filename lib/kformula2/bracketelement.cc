@@ -253,7 +253,7 @@ Artwork* BracketElement::createBracket(char bracket)
     case '>':
     case '(':
     case ')':
-        aw->setType(static_cast<Artwork::SymbolType>(bracket));
+        aw->setType(static_cast<SymbolType>(bracket));
         break;
     }
     return aw;
@@ -287,11 +287,11 @@ bool BracketElement::readAttributesFromDom(QDomElement& element)
     }
     QString leftStr = element.attribute("LEFT");
     if(!leftStr.isNull()) {
-        left->setType(static_cast<Artwork::SymbolType>(leftStr.toInt()));
+        left->setType(static_cast<SymbolType>(leftStr.toInt()));
     }
     QString rightStr = element.attribute("RIGHT");
     if(!rightStr.isNull()) {
-        right->setType(static_cast<Artwork::SymbolType>(rightStr.toInt()));
+        right->setType(static_cast<SymbolType>(rightStr.toInt()));
     }
     return true;
 }

@@ -24,6 +24,7 @@
 #include "artwork.h"
 #include "basicelement.h"
 #include "elementindex.h"
+#include "formuladefs.h"
 
 
 /**
@@ -34,7 +35,7 @@ public:
 
     enum { contentPos, upperPos, lowerPos };
 
-    SymbolElement(Artwork::SymbolType type = Artwork::Empty, BasicElement* parent = 0);
+    SymbolElement(SymbolType type = Empty, BasicElement* parent = 0);
     ~SymbolElement();
 
     /**

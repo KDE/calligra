@@ -30,8 +30,9 @@
 
 #include "artwork.h"
 #include "basicelement.h"
-#include "elementindex.h"
 #include "contextstyle.h"
+#include "elementindex.h"
+#include "formuladefs.h"
 
 
 class BasicElement;
@@ -68,7 +69,7 @@ public:
      * formula. The cursor gets no messages if the formula changes
      * so use this with care!
      */
-    FormulaCursor* createCursor();
+    FormulaCursor* createCursor(KFormulaWidget* widget);
 
     /**
      * Gets called just before the child is removed from
@@ -183,12 +184,13 @@ public slots:
     void addFraction();
     void addRoot();
 
-    void addSymbol(Artwork::SymbolType type);
-    void addIntegral() { addSymbol(Artwork::Integral); }
-    void addProduct()  { addSymbol(Artwork::Product); }
-    void addSum()      { addSymbol(Artwork::Sum); }
+    void addSymbol(SymbolType type);
+    void addIntegral() { addSymbol(Integral); }
+    void addProduct()  { addSymbol(Product); }
+    void addSum()      { addSymbol(Sum); }
 
     void addMatrix(int rows, int columns);
+    void addMatrix(QWidget* parent);
 
     void addLowerLeftIndex();
     void addUpperLeftIndex();

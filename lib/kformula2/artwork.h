@@ -27,6 +27,8 @@
 #include <qpoint.h>
 #include <qsize.h>
 
+#include "formuladefs.h"
+
 class ContextStyle;
 class QPainter;
 
@@ -40,24 +42,6 @@ class QPainter;
  */
 class Artwork {
 public:
-    enum SymbolType {
-        LeftSquareBracket = '[',
-        RightSquareBracket = ']',
-        LeftCurlyBracket = '{',
-        RightCurlyBracket = '}',
-        LineBracket = '|',
-        LeftCornerBracket = '<',
-        RightCornerBracket = '>',
-        LeftRoundBracket = '(',
-        RightRoundBracket = ')',
-
-        // symbols that have no ascii character
-        Empty = 1000,
-        Integral,
-        Sum,
-        Product,
-        Arrow
-    };
 
     Artwork(SymbolType type = Empty);
     ~Artwork() {}

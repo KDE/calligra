@@ -226,6 +226,9 @@ void SequenceElement::drawCursor(FormulaCursor* cursor, QPainter& painter)
                          point.x()+getWidth(), point.y()+height+3);
         painter.setRasterOp(Qt::CopyROP);
     }
+    
+    cursor->cursorPoint.setX(point.x()+posX);
+    cursor->cursorPoint.setY(point.y()+height/2);
 }
 
 

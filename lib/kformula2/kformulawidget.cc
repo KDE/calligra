@@ -34,8 +34,11 @@
 
 
 KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const char* name, WFlags f)
-    : QWidget(parent, name, f), cursorVisible(false), document(doc)
+    : QWidget(parent, name, f), cursorVisible(false), cursorHasChanged(true), document(doc)
 {
+    leftBracket = '(';
+    rightBracket = ')';
+    
     // This is buggy. We do need more/other messages.
     connect(document, SIGNAL(elementWillVanish(BasicElement*)),
             this, SLOT(slotElementWillVanish(BasicElement*)));
@@ -44,38 +47,32 @@ KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const ch
     connect(document, SIGNAL(formulaChanged(int, int)),
             this, SLOT(slotFormulaChanged(int, int)));
 
-    cursor = document->createCursor();
+    cursor = document->createCursor(this);
 
     setFocusPolicy(QWidget::StrongFocus);
     setBackgroundMode(QWidget::PaletteBase);
 
     QRect rect = document->boundingRect();
     slotFormulaChanged(rect.width(), rect.height());
-    
-//     (cutAction = KStdAction::cut(this, SLOT(slotCut())))->plugAccel(accel);
-//     (copyAction = KStdAction::copy(this, SLOT(slotCopy())))->plugAccel(accel);
-//     (pasteAction = KStdAction::paste(this, SLOT(slotPaste())))->plugAccel(accel);
-//     (selectAllAction = KStdAction::selectAll(this, SLOT(slotSelectAll())))->plugAccel(accel);
-
-//     (integralElement = new KAction(i18n("Integral"), CTRL+Key_3, this, SLOT(slotIntegral()), this))->plugAccel(accel);
-//     (productElement = new KAction(i18n("Product"), CTRL+Key_2, this, SLOT(slotProduct()), this))->plugAccel(accel);
-//     (sumElement = new KAction(i18n("Sum"), CTRL+Key_1, this, SLOT(slotSum()), this))->plugAccel(accel);
-//     (rootElement = new KAction(i18n("Root"), CTRL+Key_R, this, SLOT(slotRoot()), this))->plugAccel(accel);
-//     (fractionElement = new KAction(i18n("Fraction"), CTRL+Key_F, this, SLOT(slotFraction()), this))->plugAccel(accel);
-//     (matrixElement = new KAction(i18n("Matrix"), CTRL+Key_M, this, SLOT(slotMatrix()), this))->plugAccel(accel);
-
-//     (generalUpperIndex = new KAction(i18n("Upper Index"), CTRL+Key_U, this, SLOT(slotGeneralUpperIndex()), this))->plugAccel(accel);
-//     (generalLowerIndex = new KAction(i18n("Lower Index"), CTRL+Key_L, this, SLOT(slotGeneralLowerIndex()), this))->plugAccel(accel);
-
-    //upperLeftIndex = new KAction(i18n("Upper Left Index"), CTRL+Key_I, this, SLOT(openPageL), 0);
-    //lowerLeftIndex = new KAction(i18n("Lower Left Index"), CTRL+Key_I, this, SLOT(openPageL), 0);
-    //upperRightIndex = new KAction(i18n("Upper Right Index"), CTRL+Key_I, this, SLOT(openPageL), 0);
-    //lowerRightIndex = new KAction(i18n("Lower Right Index"), CTRL+Key_I, this, SLOT(openPageL), 0);
 }
 
 KFormulaWidget::~KFormulaWidget()
 {
     delete cursor;
+}
+
+
+QPoint KFormulaWidget::getCursorPoint() const 
+{
+    return cursor->getCursorPoint();
+}
+
+
+void KFormulaWidget::tellCursorChanged(FormulaCursor* c)
+{
+    if (cursor == c) {
+        cursorHasChanged = true;
+    }
 }
 
 
@@ -91,10 +88,16 @@ void KFormulaWidget::paintEvent(QPaintEvent*)
 
     cursorVisible = false;
     showCursor();
+
+    emitCursorChanged();
 }
 
 void KFormulaWidget::keyPressEvent(QKeyEvent* event)
 {
+    if (readOnly) {
+        return;
+    }
+    
     document->setActiveCursor(cursor);
     
     QChar ch = event->text().at(0);
@@ -102,7 +105,7 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
         int latin1 = ch.latin1();
         switch (latin1) {
         case '(':
-            document->addRoundBracket();
+            document->addBracket(leftBracket, rightBracket);
             break;
         case '[':
             document->addSquareBracket();
@@ -199,8 +202,17 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
 void KFormulaWidget::focusInEvent(QFocusEvent*)
 {
     document->setActiveCursor(cursor);
+    showCursor();
+    cursorHasChanged = true;
+    emitCursorChanged();
 }
 
+void KFormulaWidget::focusOutEvent(QFocusEvent*)
+{
+    hideCursor();
+    cursorHasChanged = true;
+    emitCursorChanged();
+}
 
 void KFormulaWidget::mousePressEvent(QMouseEvent* event)
 {
@@ -220,6 +232,8 @@ void KFormulaWidget::mouseReleaseEvent(QMouseEvent* event)
     cursor->mouseRelease(event->pos(), flags);
 
     showCursor();
+
+    emitCursorChanged();
 }
 
 void KFormulaWidget::mouseDoubleClickEvent(QMouseEvent*)
@@ -266,6 +280,7 @@ void KFormulaWidget::slotSelectAll()
     cursor->moveHome();
     cursor->moveEnd(SelectMovement);
     showCursor();
+    emitCursorChanged();
 }
 
 
@@ -274,6 +289,7 @@ void KFormulaWidget::slotMoveLeft(MoveFlag flag)
     hideCursor();
     cursor->moveLeft(flag);
     showCursor();
+    emitCursorChanged();
 }
 
 void KFormulaWidget::slotMoveRight(MoveFlag flag)
@@ -281,6 +297,7 @@ void KFormulaWidget::slotMoveRight(MoveFlag flag)
     hideCursor();
     cursor->moveRight(flag);
     showCursor();
+    emitCursorChanged();
 }
 
 void KFormulaWidget::slotMoveUp(MoveFlag flag)
@@ -288,6 +305,7 @@ void KFormulaWidget::slotMoveUp(MoveFlag flag)
     hideCursor();
     cursor->moveUp(flag);
     showCursor();
+    emitCursorChanged();
 }
 
 void KFormulaWidget::slotMoveDown(MoveFlag flag)
@@ -295,6 +313,7 @@ void KFormulaWidget::slotMoveDown(MoveFlag flag)
     hideCursor();
     cursor->moveDown(flag);
     showCursor();
+    emitCursorChanged();
 }
 
 void KFormulaWidget::slotMoveHome(MoveFlag flag)
@@ -302,6 +321,7 @@ void KFormulaWidget::slotMoveHome(MoveFlag flag)
     hideCursor();
     cursor->moveHome(flag);
     showCursor();
+    emitCursorChanged();
 }
 
 void KFormulaWidget::slotMoveEnd(MoveFlag flag)
@@ -309,6 +329,7 @@ void KFormulaWidget::slotMoveEnd(MoveFlag flag)
     hideCursor();
     cursor->moveEnd(flag);
     showCursor();
+    emitCursorChanged();
 }
 
 
@@ -340,12 +361,24 @@ void KFormulaWidget::hideCursor()
 
 void KFormulaWidget::showCursor()
 {
-    if (!cursorVisible) {
+    if (readOnly && !cursor->isSelection()) {
+        return;
+    }
+    
+    if (!cursorVisible && hasFocus()) {
         cursorVisible = true;
 
         QPainter painter;
         painter.begin(this);
         cursor->draw(painter);
         painter.end();
+    }
+}
+
+void KFormulaWidget::emitCursorChanged()
+{
+    if (cursorHasChanged) {
+        cursorHasChanged = false;
+        emit cursorChanged(cursorVisible, cursor->isSelection());
     }
 }

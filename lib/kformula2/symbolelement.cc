@@ -26,7 +26,7 @@
 #include "symbolelement.h"
 
 
-SymbolElement::SymbolElement(Artwork::SymbolType type, BasicElement* parent)
+SymbolElement::SymbolElement(SymbolType type, BasicElement* parent)
     : BasicElement(parent), symbol(type)
 {
     content = new SequenceElement(this);
@@ -555,7 +555,7 @@ bool SymbolElement::readAttributesFromDom(QDomElement& element)
 
     QString typeStr = element.attribute("TYPE");
     if(!typeStr.isNull()) {
-        symbol.setType(static_cast<Artwork::SymbolType>(typeStr.toInt()));
+        symbol.setType(static_cast<SymbolType>(typeStr.toInt()));
     }
 
     return true;

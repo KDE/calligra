@@ -45,6 +45,7 @@
 #include "sequenceelement.h"
 #include "symbolelement.h"
 #include "textelement.h"
+#include "MatrixDialog.h"
 
 
 KFormulaContainer::KFormulaContainer(KCommandHistory& _history)
@@ -62,9 +63,9 @@ KFormulaContainer::~KFormulaContainer()
 }
 
 
-FormulaCursor* KFormulaContainer::createCursor()
+FormulaCursor* KFormulaContainer::createCursor(KFormulaWidget* widget)
 {
-    return new FormulaCursor(rootElement);
+    return new FormulaCursor(widget, rootElement);
 }
 
 
@@ -157,7 +158,7 @@ void KFormulaContainer::addRoot()
 }
 
 
-void KFormulaContainer::addSymbol(Artwork::SymbolType type)
+void KFormulaContainer::addSymbol(SymbolType type)
 {
     KFCAddReplacing* command = new KFCAddReplacing(i18n("Add symbol"), this);
     command->setElement(new SymbolElement(type));
@@ -171,6 +172,16 @@ void KFormulaContainer::addMatrix(int rows, int columns)
     execute(command);
 }
 
+void KFormulaContainer::addMatrix(QWidget* parent)
+{
+    MatrixDialog* dialog = new MatrixDialog(parent);
+    if (dialog->exec()) {
+        uint rows = dialog->w;
+        uint cols = dialog->h;
+        addMatrix(rows, cols);
+    }
+    delete dialog;
+}
 
 void KFormulaContainer::addLowerLeftIndex()
 {

@@ -22,6 +22,7 @@
 #define __KFORMULAWIDGET_H
 
 #include <qdom.h>
+#include <qpoint.h>
 #include <qwidget.h>
 
 //#include <kaccel.h>
@@ -47,6 +48,40 @@ public:
     KFormulaWidget(KFormulaContainer*, QWidget* parent=0, const char* name=0, WFlags f=0);
     ~KFormulaWidget();
 
+    /**
+     * Sets the char that is to be used as default
+     * left bracket.
+     */
+    void setLeftBracket(char left) { leftBracket = left; }
+
+    /**
+     * Sets the char that is to be used as default
+     * right bracket.
+     */
+    void setRightBracket(char right) { rightBracket = right; }
+
+    /**
+     * @returns the point inside the formula widget where the cursor is.
+     */
+    QPoint getCursorPoint() const;
+
+    /**
+     * Puts the widget in read only mode.
+     */
+    void setReadOnly(bool ro) { readOnly = ro; }
+
+    /**
+     * Gets called from the cursor just before it changes.
+     */
+    void tellCursorChanged(FormulaCursor* c);
+    
+signals:
+
+    /**
+     * Is emitted everytime the cursor might have changed.
+     */
+    void cursorChanged(bool visible, bool selecting);
+    
 public slots:
     
     void slotSelectAll();
@@ -75,6 +110,7 @@ protected:
     virtual void paintEvent(QPaintEvent* event);
     virtual void keyPressEvent(QKeyEvent* event);
     virtual void focusInEvent(QFocusEvent* event);
+    virtual void focusOutEvent(QFocusEvent* event);
 
     MoveFlag movementFlag(int state);
 
@@ -86,36 +122,27 @@ protected:
     FormulaCursor* getCursor() { return cursor; }
     
 private:
-    
+
+    void emitCursorChanged();
+
+    /**
+     * Whether you can see the cursor.
+     */
     bool cursorVisible;
 
-//     KAccel* accel;
-    
-//     KAction* openFile;
-//     KAction* saveFile;
-//     KAction* quitAction;
-//     KAction* undoAction;
-//     KAction* redoAction;
+    /**
+     * Whether the cursor changed since the last time
+     * we emitted a cursorChanged signal.
+     */
+    bool cursorHasChanged;
 
-//     KAction* cutAction;
-//     KAction* copyAction;
-//     KAction* pasteAction;
-//     KAction* selectAllAction;
+    /**
+     * Whether we are only allowed to read.
+     */
+    bool readOnly;
 
-//     KAction* integralElement;
-//     KAction* productElement;
-//     KAction* sumElement;
-//     KAction* rootElement;
-//     KAction* fractionElement;
-//     KAction* matrixElement;
-
-//     KAction* generalUpperIndex;
-//     KAction* generalLowerIndex;
-
-//     KAction* upperLeftIndex;
-//     KAction* lowerLeftIndex;
-//     KAction* upperRightIndex;
-//     KAction* lowerRightIndex;
+    char leftBracket;
+    char rightBracket;
     
     KFormulaContainer* document;
     FormulaCursor* cursor;

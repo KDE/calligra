@@ -23,6 +23,29 @@
 
 
 /**
+ * The symbols that are supported by our artwork.
+ */
+enum SymbolType {
+    LeftSquareBracket = '[',
+    RightSquareBracket = ']',
+    LeftCurlyBracket = '{',
+    RightCurlyBracket = '}',
+    LineBracket = '|',
+    LeftCornerBracket = '<',
+    RightCornerBracket = '>',
+    LeftRoundBracket = '(',
+    RightRoundBracket = ')',
+
+    // symbols that have no ascii character
+    Empty = 1000,
+    Integral,
+    Sum,
+    Product,
+    Arrow
+};
+
+
+/**
  * Flag for cursor movement functions.
  * Select means move selecting the text (usually Shift key)
  * Word means move by whole words  (usually Control key)

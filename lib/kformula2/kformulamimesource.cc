@@ -68,7 +68,7 @@ QByteArray KFormulaMimeSource::encodedData ( const char *format ) const
     if(QString(format)=="image/ppm") {
         KCommandHistory history;
         KFormulaContainer tmpContainer(history);
-	FormulaCursor *c=tmpContainer.createCursor();
+	FormulaCursor *c=tmpContainer.createCursor(0);
         tmpContainer.setActiveCursor(c);
         tmpContainer.paste();
         delete c;
