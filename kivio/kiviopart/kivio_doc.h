@@ -50,7 +50,7 @@ namespace Kivio {
 class KoStore;
 class QDomDocument;
 class DCOPObject;
-class KCommandHistory;
+class KoCommandHistory;
 
 class QPainter;
 class KPrinter;
@@ -137,7 +137,7 @@ class KivioDoc : public KoDocument
 
     int undoRedoLimit() const;
     void setUndoRedoLimit(int val);
-    KCommandHistory * commandHistory()const { return m_commandHistory; }
+    KoCommandHistory * commandHistory()const { return m_commandHistory; }
 
     void insertPage( KivioPage * page );
     void takePage( KivioPage * page );
@@ -170,7 +170,7 @@ class KivioDoc : public KoDocument
     void sig_updateGrid();
 
     void unitsChanged(KoUnit::Unit);
-    
+
     void initProgress();
     void progress(int);
     void endProgress();
@@ -237,10 +237,10 @@ class KivioDoc : public KoDocument
     ViewItemList* viewItemList;
 
     DCOPObject *dcop;
-    KCommandHistory * m_commandHistory;
+    KoCommandHistory * m_commandHistory;
 
     QFont m_font;
-    
+
     QTimer* m_loadTimer;
     unsigned int m_currentFile;
     KivioStencilSpawnerSet* m_currentSet;
