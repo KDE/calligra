@@ -47,7 +47,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
     out->writeBlock( cstr, cstr.length() );
 
-    kdDebug() << "######################## MSWordImport::convert ########################" << endl;
+    kdDebug() << "######################## MSWordImport::convert done ####################" << endl;
     return KoFilter::OK;
 }
 
