@@ -46,13 +46,13 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 
     int initialHeight = h + c->height(); // remember what adjustLMargin was called with
     if ( doc )
-	x = doc->flow()->adjustLMargin( y + parag->rect().y(), h + c->height(), x, 4 );
+	x = doc->flow()->adjustLMargin( y + parag->rect().y(), h + c->height(), x, 4, parag );
     int initialLMargin = x;	      // and remember the resulting adjustement we got
     int dw = parag->documentVisibleWidth() - ( doc ? ( left != x ? 0 : doc->rightMargin() ) : -4 );
 
     curLeft = x;
     int rm = parag->rightMargin();
-    int initialRMargin = doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h + c->height(), rm, 4 ) : 0;
+    int initialRMargin = doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h + c->height(), rm, 4, parag ) : 0;
     int availableWidth = dw - initialRMargin; // 'w' in QRT
 #ifdef DEBUG_FORMATTER
     qDebug( "KoTextFormatterBaseBreakWords::format left=%d initialHeight=%d initialLMargin=%d initialRMargin=%d availableWidth=%d", left, initialHeight, initialLMargin, initialRMargin, availableWidth );
@@ -139,8 +139,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	// Custom item that forces a new line
 	if ( c->isCustom() && c->customItem()->ownLine() ) {
             QTextCustomItem* ci = c->customItem();
-	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), c->height(), left, 4 ) : left;
-	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), c->height(), rm, 4 ) : 0 );
+	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), c->height(), left, 4, parag ) : left;
+	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), c->height(), rm, 4, parag ) : 0 );
 	    KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, availableWidth - x );
 	    c->customItem()->resize( parag->painter(), dw );
 	    if ( x != left || w != dw )
@@ -217,11 +217,11 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		lineStart = lineStart2;
 		tmph = c->height();
 		h = 0;
-		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), tmph, left, 4 ) : left;
+		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), tmph, left, 4, parag ) : left;
                 pixelx = zh->layoutUnitToPixelX( x );
 		initialHeight = tmph;
 		initialLMargin = x;
-		initialRMargin = ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), tmph, rm, 4 ) : 0 );
+		initialRMargin = ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), tmph, rm, 4, parag ) : 0 );
 		availableWidth = dw - initialRMargin;
 		if ( parag->isNewLinesAllowed() && c->c == '\t' ) {
 		    int nx = parag->nextTab( i, x );
@@ -265,11 +265,11 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		c = &string->at( i + 1 ); // The first char in the new line
 		tmph = c->height();
 		h = tmph;
-		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), h, left, 4 ) : left;
+		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), h, left, 4, parag ) : left;
                 pixelx = zh->layoutUnitToPixelX( x );
 		initialHeight = h;
 		initialLMargin = x;
-		initialRMargin = ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h, rm, 4 ) : 0 );
+		initialRMargin = ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h, rm, 4, parag ) : 0 );
 		availableWidth = dw - initialRMargin;
 		if ( x != left || availableWidth != dw )
 		    fullWidth = FALSE;
@@ -313,8 +313,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #ifdef DEBUG_FORMATTER
                 qDebug( "left=%d, firstlinepargin=%d => lm=%d", left, ( firstChar == &string->at(0) && doc ) ? parag->firstLineMargin() : 0, lm );
 #endif
-		int newLMargin = doc->flow()->adjustLMargin( y + parag->rect().y(), h, lm, 4 );
-		int newRMargin = doc->flow()->adjustRMargin( y + parag->rect().y(), h, rm, 4 );
+		int newLMargin = doc->flow()->adjustLMargin( y + parag->rect().y(), h, lm, 4, parag );
+		int newRMargin = doc->flow()->adjustRMargin( y + parag->rect().y(), h, rm, 4, parag );
 		initialHeight = h;
 #ifdef DEBUG_FORMATTER
 		qDebug("new height: %d => left=%d lm=%d first-char=%d newLMargin=%d newRMargin=%d", h, left, lm, (firstChar==&string->at(0)), newLMargin, newRMargin);

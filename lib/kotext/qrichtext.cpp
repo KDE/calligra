@@ -5209,9 +5209,9 @@ int KoTextFormatterBaseBreakInWords::format( KoTextDocument *doc,KoTextParag *pa
     int h = y;
     int len = parag->length();
     if ( doc )
-	x = doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), x, 4 );
+	x = doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), x, 4, parag );
     int rm = parag->rightMargin();
-    int w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), parag->rect().height(), rm, 4 ) : 0 );
+    int w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), parag->rect().height(), rm, 4, parag ) : 0 );
     bool fullWidth = TRUE;
     int minw = 0;
     bool wrapEnabled = isWrapEnabled( parag );
@@ -5257,8 +5257,8 @@ int KoTextFormatterBaseBreakInWords::format( KoTextDocument *doc,KoTextParag *pa
 
 	if ( c->isCustom() && c->customItem()->ownLine() ) {
 	    if ( doc )
-		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), left, 4 ) : left;
-	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), parag->rect().height(), rm, 4 ) : 0 );
+		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), left, 4, parag ) : left;
+	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), parag->rect().height(), rm, 4, parag ) : 0 );
 	    c->customItem()->resize( parag->painter(), dw );
 	    if ( x != left || w != dw )
 		fullWidth = FALSE;
@@ -7140,7 +7140,7 @@ void KoTextFlow::setWidth( int width )
     w = width;
 }
 
-int KoTextFlow::adjustLMargin( int yp, int, int margin, int space )
+int KoTextFlow::adjustLMargin( int yp, int, int margin, int space, KoTextParag* )
 {
     for ( KoTextCustomItem* item = leftItems.first(); item; item = leftItems.next() ) {
 	if ( item->y() == -1 )
@@ -7151,7 +7151,7 @@ int KoTextFlow::adjustLMargin( int yp, int, int margin, int space )
     return margin;
 }
 
-int KoTextFlow::adjustRMargin( int yp, int, int margin, int space )
+int KoTextFlow::adjustRMargin( int yp, int, int margin, int space, KoTextParag* )
 {
     for ( KoTextCustomItem* item = rightItems.first(); item; item = rightItems.next() ) {
 	if ( item->y() == -1 )

@@ -530,8 +530,8 @@ public:
     virtual void setPageSize( int ps );
     int pageSize() const { return pagesize; }
 
-    virtual int adjustLMargin( int yp, int h, int margin, int space );
-    virtual int adjustRMargin( int yp, int h, int margin, int space );
+    virtual int adjustLMargin( int yp, int h, int margin, int space, KoTextParag* parag );
+    virtual int adjustRMargin( int yp, int h, int margin, int space, KoTextParag* parag );
 
     virtual void registerFloatingItem( KoTextCustomItem* item );
     virtual void unregisterFloatingItem( KoTextCustomItem* item );
