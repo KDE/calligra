@@ -2855,12 +2855,15 @@ void QTextStringChar::setCustomItem( QTextCustomItem *i )
     d.custom->custom = i;
 }
 
-void QTextStringChar::loseCustomItem()
+void QTextStringChar::loseCustomItem() // setRegular() might be a better name
 {
     if ( isCustom() )
     {
-        type = Regular;
-        d.custom->custom = 0;
+	QTextFormat *f = d.custom->format;
+	d.custom->custom = 0;
+	delete d.custom;
+	type = Regular;
+	d.format = f;
     }
 }
 
