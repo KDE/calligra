@@ -1003,27 +1003,13 @@ void RTFImport::insertSymbol( RTFProperty *property )
  */
 void RTFImport::insertHexSymbol( RTFProperty * )
 {
-    token.next();
-
-    if (token.type == RTFTokenizer::PlainText)
-    {
-	if (strlen( token.text ) >= 2)
-	{
-	    int k = *token.text++;
-	    int l = *token.text++;
-	    int ch = (((k + ((k & 16) ? 0 : 9)) & 0xf) << 4) |
-		      ((l + ((l & 16) ? 0 : 9)) & 0xf);
-
 	    QTextCodec* tc=QTextCodec::codecForName(codepage);
 	    if(!tc)
 		tc=QTextCodec::codecForName("CP1252"); //in case codepage contains not supported one
-	    char tmpch[2]={ch, '\0'};
+	char tmpch[2]={token.value, '\0'};
 
 	    // TODO: Is it always a single character?
 	    insertUTF8( tc->toUnicode( tmpch ).at( 0 ).unicode() );
-	}
-	(this->*destination.destproc)();
-    }
 }
 
 /**

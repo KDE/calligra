@@ -36,7 +36,7 @@ void RTFTokenizer::open( QFile *in )
 void RTFTokenizer::next()
 {
     int ch;
-
+    value=0;
     if (!infile)
 	return;
 
@@ -159,6 +159,52 @@ void RTFTokenizer::next()
 	    {
 		--fileBufferPtr;
 	    }
+	}
+	else if (ch=='\'')
+	{
+	    type = RTFTokenizer::ControlWord;
+	    *_text++ = ch;
+	    if (fileBufferPtr == fileBufferEnd)
+	    {
+		int n = infile->readBlock( fileBuffer.data(), fileBuffer.size() );
+
+		if (n <= 0)
+		{
+		    // Return CloseGroup on EOF
+		    type = RTFTokenizer::CloseGroup;
+		    return;
+		}
+		fileBufferPtr = (uchar *)fileBuffer.data();
+		fileBufferEnd = (fileBufferPtr + n);
+	    }
+	    ch = *fileBufferPtr++;
+	    for(int i=0;i<2;i++)
+	    {
+		hasParam = true;
+		value<<=4;
+		value=value|((ch + ((ch & 16) ? 0 : 9)) & 0xf);
+
+		if (fileBufferPtr == fileBufferEnd)
+		{
+		    int n = infile->readBlock( fileBuffer.data(), fileBuffer.size() );
+	
+		    if (n <= 0)
+		    {
+			ch = ' ';
+			break;
+		    }
+		    fileBufferPtr = (uchar *)fileBuffer.data();
+		    fileBufferEnd = (fileBufferPtr + n);
+		}
+		ch = *fileBufferPtr++;
+	    }
+
+	    // If delimiter is a space, it's part of the control word
+	    if (ch != ' ')
+	    {
+		--fileBufferPtr;
+	    }
+	    
 	}
 	else
 	{
