@@ -148,8 +148,9 @@ void KChartFontConfigPage::init()
     xaxis = bottomparms.axisLabelsFont();
     yaxis = leftparms.axisLabelsFont();
 
-
+    title=_params->header1Font();
     // PENDING(kalle) Adapt
+
     //   title = _params->titleFont();
 //   xtitle = _params->xTitleFont();
 //   ytitle = _params->yTitleFont();
@@ -180,12 +181,11 @@ void KChartFontConfigPage::apply()
     _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparms );
     _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparms );
     _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
+    _params->setHeader1Font(title);
 
 //     _params->setXTitleFont(xtitle);
 //     _params->setYTitleFont(ytitle);
 
-  // PENDING(kalle) Adapt
-  //   _params->setTitleFont(title);
   extColor.setColor(index,colorButton->color());
   // PENDING(kalle) Adapt
   //   for(unsigned int i=0;i<extColor.count();i++)
