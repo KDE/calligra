@@ -324,7 +324,14 @@ KexiTableView: added new signals:
 -for checking validity of a new row, before inserting
 In a case when checking for validity failed, row edititing/inserting 
 (or cell updating) is cancelled --> editor is not removed
-
+- KexiPropertyBuffer: clear() reimplemented for proper clearing the data
+- KexiValidator class introduced
+KexiTableView: 
+-acceptEditor() returns bool, so now it's checked if we can proceed with cursor moving, etc.
+-KexiValidator is used to check whether cell editing should be accepted or not.
+Alter Table Dialog:
+-hidden "name" property added, ident. validator is now used
+-added KexiDB::RowEditBuffer* argument to aboutToUpdate and aboutToInsert signals
 
 2004-02-17
 - KexiDB::typeStringsForGroup() ustility function added

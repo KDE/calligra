@@ -35,6 +35,7 @@ namespace KexiDB
 {
 	class Cursor;
 	class TableSchema;
+	class RowEditBuffer;
 }
 
 class KexiAlterTableDialog : public KexiViewBase
@@ -81,10 +82,10 @@ class KexiAlterTableDialog : public KexiViewBase
 		void slotRowUpdated(KexiTableItem *item);
 
 		//! Called before row inserting in tableview.
-		void slotAboutToInsertRow(KexiTableItem* item, bool& allow);
+		void slotAboutToInsertRow(KexiTableItem* item, KexiDB::RowEditBuffer* buffer, bool& allow);
 
 		//! Called before row updating in tableview.
-		void slotAboutToUpdateRow(KexiTableItem* item, bool& allow);
+		void slotAboutToUpdateRow(KexiTableItem* item, KexiDB::RowEditBuffer* buffer, bool& allow);
 
 	private:
 		KexiTableView *m_view;

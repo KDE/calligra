@@ -2472,7 +2472,7 @@ bool KexiTableView::acceptRowEdit()
 	}
 	else {
 		if (d->newRowEditing) {
-			emit aboutToInsertRow(d->pCurrentItem, allow);
+			emit aboutToInsertRow(d->pCurrentItem, m_data->rowEditBuffer(), allow);
 			if (allow) {
 				kdDebug() << "-- INSERTING: " << endl;
 				m_data->rowEditBuffer()->debug();
@@ -2480,7 +2480,7 @@ bool KexiTableView::acceptRowEdit()
 			}
 		}
 		else {
-			emit aboutToUpdateRow(d->pCurrentItem, allow);
+			emit aboutToUpdateRow(d->pCurrentItem, m_data->rowEditBuffer(), allow);
 			if (allow) {
 				//accept changes for this row:
 				kdDebug() << "-- UPDATING: " << endl;

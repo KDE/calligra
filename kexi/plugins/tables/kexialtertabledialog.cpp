@@ -33,6 +33,7 @@
 #include <kexidb/tableschema.h>
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
+#include <kexidb/roweditbuffer.h>
 
 #include <kexiproject.h>
 #include <keximainwindow.h>
@@ -156,10 +157,10 @@ void KexiAlterTableDialog::init()
 		this, SLOT(slotBeforeCellChanged(KexiTableItem*,QVariant,bool&)));
 	connect(m_view, SIGNAL(rowUpdated(KexiTableItem*)),
 		this, SLOT(slotRowUpdated(KexiTableItem*)));
-	connect(m_view, SIGNAL(aboutToInsertRow(KexiTableItem*,bool&)),
-		this, SLOT(slotAboutToInsertRow(KexiTableItem*,bool&)));
-	connect(m_view, SIGNAL(aboutToUpdateRow(KexiTableItem*,bool&)),
-		this, SLOT(slotAboutToUpdateRow(KexiTableItem*,bool&)));
+	connect(m_view, SIGNAL(aboutToInsertRow(KexiTableItem*,KexiDB::RowEditBuffer*,bool&)),
+		this, SLOT(slotAboutToInsertRow(KexiTableItem*,KexiDB::RowEditBuffer*,bool&)));
+	connect(m_view, SIGNAL(aboutToUpdateRow(KexiTableItem*,KexiDB::RowEditBuffer*,bool&)),
+		this, SLOT(slotAboutToUpdateRow(KexiTableItem*,KexiDB::RowEditBuffer*,bool&)));
 
 /*	//! before closing - we'are accepting editing
 	connect(this,SIGNAL(closing()),m_view,SLOT(acceptRowEdit()));
@@ -313,21 +314,29 @@ void KexiAlterTableDialog::slotBeforeCellChanged(KexiTableItem *item, QVariant n
 void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 {
 	m_dirty = true;
+	QVariant v_name = item->at(0);
+
 	//TODO
 	//-check if the row was empty before updating
 	//if yes: we want to add a property buffer for this new row (field)
 }
 
-void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* item,bool& allow)
+void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* item, KexiDB::RowEditBuffer* buffer, bool& allow)
 {
 	m_dirty = true;
 	//TODO
 }
 
-void KexiAlterTableDialog::slotAboutToUpdateRow(KexiTableItem* item,bool& allow)
+void KexiAlterTableDialog::slotAboutToUpdateRow(KexiTableItem* item, KexiDB::RowEditBuffer* buffer, bool& allow)
 {
-	m_dirty = true;
+	KexiDB::RowEditBuffer::SimpleMap map = buffer->simpleBuffer();
+	buffer->debug();
+
 	//TODO
+
+	allow = true;
+
+	m_dirty = m_dirty | allow;
 }
 
 
