@@ -41,7 +41,6 @@
 /* Class: KWDocStructParagItem                                    */
 /******************************************************************/
 
-/*================================================================*/
 KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, QString _text, KWTextParag *_parag, KWGUI*__parent )
     : QListViewItem( _parent, _text )
 {
@@ -49,7 +48,6 @@ KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, QString _tex
     gui = __parent;
 }
 
-/*================================================================*/
 KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, QListViewItem *_after, QString _text, KWTextParag *_parag, KWGUI*__parent )
     : QListViewItem( _parent, _after, _text )
 {
@@ -57,7 +55,6 @@ KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, QListViewIte
     gui = __parent;
 }
 
-/*================================================================*/
 void KWDocStructParagItem::slotDoubleClicked( QListViewItem *_item )
 {
     if ( _item == this )
@@ -74,7 +71,6 @@ void KWDocStructParagItem::slotDoubleClicked( QListViewItem *_item )
 /* Class: KWDocStructFrameItem                                    */
 /******************************************************************/
 
-/*================================================================*/
 KWDocStructFrameItem::KWDocStructFrameItem( QListViewItem *_parent, QString _text, KWFrameSet *_frameset, KWFrame *_frame, KWGUI*__parent )
     : QListViewItem( _parent, _text )
 {
@@ -83,7 +79,6 @@ KWDocStructFrameItem::KWDocStructFrameItem( QListViewItem *_parent, QString _tex
     gui = __parent;
 }
 
-/*================================================================*/
 void KWDocStructFrameItem::slotDoubleClicked( QListViewItem *_item )
 {
     if ( _item == this )
@@ -94,7 +89,6 @@ void KWDocStructFrameItem::slotDoubleClicked( QListViewItem *_item )
 /* Class: KWDocStructTableItem                                    */
 /******************************************************************/
 
-/*================================================================*/
 KWDocStructTableItem::KWDocStructTableItem( QListViewItem *_parent, QString _text, KWTableFrameSet *_table, KWGUI*__parent )
     : QListViewItem( _parent, _text )
 {
@@ -102,7 +96,6 @@ KWDocStructTableItem::KWDocStructTableItem( QListViewItem *_parent, QString _tex
     gui = __parent;
 }
 
-/*================================================================*/
 void KWDocStructTableItem::slotDoubleClicked( QListViewItem *_item )
 {
     if ( _item == this )
@@ -116,7 +109,6 @@ void KWDocStructTableItem::slotDoubleClicked( QListViewItem *_item )
 /* Class: KWDocStructPictureItem                                  */
 /******************************************************************/
 
-/*================================================================*/
 KWDocStructPictureItem::KWDocStructPictureItem( QListViewItem *_parent, QString _text, KWPictureFrameSet *_pic, KWGUI*__parent )
     : QListViewItem( _parent, _text )
 {
@@ -124,7 +116,6 @@ KWDocStructPictureItem::KWDocStructPictureItem( QListViewItem *_parent, QString 
     gui = __parent;
 }
 
-/*================================================================*/
 void KWDocStructPictureItem::slotDoubleClicked( QListViewItem *_item )
 {
     if ( _item == this )
@@ -138,7 +129,6 @@ void KWDocStructPictureItem::slotDoubleClicked( QListViewItem *_item )
 /* Class: KWDocStructFormulaItem                                  */
 /******************************************************************/
 
-/*================================================================*/
 KWDocStructFormulaItem::KWDocStructFormulaItem( QListViewItem *_parent, QString _text, KWFormulaFrameSet *_form, KWGUI*__parent )
     : QListViewItem( _parent, _text )
 {
@@ -146,7 +136,6 @@ KWDocStructFormulaItem::KWDocStructFormulaItem( QListViewItem *_parent, QString 
     gui = __parent;
 }
 
-/*================================================================*/
 void KWDocStructFormulaItem::slotDoubleClicked( QListViewItem *_item )
 {
     if ( _item == this )
@@ -160,7 +149,6 @@ void KWDocStructFormulaItem::slotDoubleClicked( QListViewItem *_item )
 /* Class: KWDocStructPartItem                                     */
 /******************************************************************/
 
-/*================================================================*/
 KWDocStructPartItem::KWDocStructPartItem( QListViewItem *_parent, QString _text, KWPartFrameSet *_part, KWGUI*__parent )
     : QListViewItem( _parent, _text )
 {
@@ -168,7 +156,6 @@ KWDocStructPartItem::KWDocStructPartItem( QListViewItem *_parent, QString _text,
     gui = __parent;
 }
 
-/*================================================================*/
 void KWDocStructPartItem::slotDoubleClicked( QListViewItem *_item )
 {
     if ( _item == this )
@@ -182,7 +169,6 @@ void KWDocStructPartItem::slotDoubleClicked( QListViewItem *_item )
 /* Class: KWDocStructRootItem                                     */
 /******************************************************************/
 
-/*================================================================*/
 KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, KWDocument *_doc, TypeStructDocItem _type, KWGUI*__parent )
     : QListViewItem( _parent )
 {
@@ -222,7 +208,6 @@ KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, KWDocument *_doc, 
     }
 }
 
-/*================================================================*/
 void KWDocStructRootItem::setOpen( bool o )
 {
     if ( o )
@@ -255,7 +240,6 @@ void KWDocStructRootItem::setOpen( bool o )
     QListViewItem::setOpen( o );
 }
 
-/*================================================================*/
 void KWDocStructRootItem::setupArrangement()
 {
     if ( childCount() > 0 )
@@ -323,7 +307,6 @@ void KWDocStructRootItem::setupArrangement()
 
 }
 
-/*================================================================*/
 void KWDocStructRootItem::setupTextFrames()
 {
     if ( childCount() > 0 )
@@ -371,7 +354,6 @@ void KWDocStructRootItem::setupTextFrames()
         ( void )new QListViewItem( this, i18n( "Empty" ) );
 }
 
-/*================================================================*/
 void KWDocStructRootItem::setupFormulaFrames()
 {
     if ( childCount() > 0 )
@@ -407,7 +389,6 @@ void KWDocStructRootItem::setupFormulaFrames()
         ( void )new QListViewItem( this, i18n( "Empty" ) );
 }
 
-/*================================================================*/
 void KWDocStructRootItem::setupTables()
 {
     if ( childCount() > 0 )
@@ -443,7 +424,6 @@ void KWDocStructRootItem::setupTables()
         ( void )new QListViewItem( this, i18n( "Empty" ) );
 }
 
-/*================================================================*/
 void KWDocStructRootItem::setupPictures()
 {
     if ( childCount() > 0 )
@@ -478,12 +458,10 @@ void KWDocStructRootItem::setupPictures()
         ( void )new QListViewItem( this, i18n( "Empty" ) );
 }
 
-/*================================================================*/
 void KWDocStructRootItem::setupCliparts()
 {
 }
 
-/*================================================================*/
 void KWDocStructRootItem::setupEmbedded()
 {
     if ( childCount() > 0 )
@@ -522,7 +500,6 @@ void KWDocStructRootItem::setupEmbedded()
 /* Class: KWDocStructTree                                         */
 /******************************************************************/
 
-/*================================================================*/
 KWDocStructTree::KWDocStructTree( QWidget *_parent, KWDocument *_doc, KWGUI*__parent )
     : QListView( _parent )
 {
@@ -535,7 +512,6 @@ KWDocStructTree::KWDocStructTree( QWidget *_parent, KWDocument *_doc, KWGUI*__pa
     //setColumnWidthMode( 1, Manual );
 }
 
-/*================================================================*/
 void KWDocStructTree::setup()
 {
     setRootIsDecorated( true );
@@ -596,7 +572,6 @@ void KWDocStructTree::refreshTree(TypeStructDocItem _type)
 /* Class: KWDocStruct                                             */
 /******************************************************************/
 
-/*================================================================*/
 KWDocStruct::KWDocStruct( QWidget *_parent, KWDocument *_doc, KWGUI*__parent )
     : QWidget( _parent )
 {

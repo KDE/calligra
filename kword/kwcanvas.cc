@@ -1096,7 +1096,6 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
     m_mousePressed = false;
 }
 
-/*================================================================*/
 void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
 {
     QList <KWFrame> selectedFrames = doc->getSelectedFrames();
@@ -1149,7 +1148,6 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
     }
 }
 
-/*================================================================*/
 void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
 {
     QList <KWFrame> selectedFrames = doc->getSelectedFrames();
@@ -1200,7 +1198,6 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
     }
 }
 
-/*================================================================*/
 void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
 {
     QList <KWFrame> selectedFrames = doc->getSelectedFrames();
@@ -1251,7 +1248,6 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
     }
 }
 
-/*================================================================*/
 void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
 {
     QList <KWFrame> selectedFrames = doc->getSelectedFrames();
@@ -1444,7 +1440,6 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
 }
 
 
-/*================================================================*/
 void KWCanvas::editFrameProperties()
 {
     KWFrame *frame = doc->getFirstSelectedFrame();

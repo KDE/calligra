@@ -45,13 +45,11 @@
  *
  ******************************************************************/
 
-/*================================================================*/
 KWSerialLetterDataBase::KWSerialLetterDataBase( KWDocument *doc_ )
     : doc( doc_ )
 {
 }
 
-/*================================================================*/
 QString KWSerialLetterDataBase::getValue( const QString &name, int record ) const
 {
     int num = record;
@@ -64,7 +62,6 @@ QString KWSerialLetterDataBase::getValue( const QString &name, int record ) cons
     return db[ num ][ name ];
 }
 
-/*================================================================*/
 void KWSerialLetterDataBase::setValue( const QString &name, const QString &value, int record )
 {
     int num = record;
@@ -77,14 +74,12 @@ void KWSerialLetterDataBase::setValue( const QString &name, const QString &value
     db[ num ][ name ] = value;
 }
 
-/*================================================================*/
 void KWSerialLetterDataBase::appendRecord()
 {
     DbRecord record( sampleRecord );
     db.append( record );
 }
 
-/*================================================================*/
 void KWSerialLetterDataBase::addEntry( const QString &name )
 {
     sampleRecord[ name ] = i18n( "No Value" );
@@ -93,7 +88,6 @@ void KWSerialLetterDataBase::addEntry( const QString &name )
         ( *it )[ name ] = sampleRecord[ name ];
 }
 
-/*================================================================*/
 void KWSerialLetterDataBase::removeEntry( const QString &name )
 {
     sampleRecord.remove( name );
@@ -102,7 +96,6 @@ void KWSerialLetterDataBase::removeEntry( const QString &name )
         ( *it ).remove( name );
 }
 
-/*================================================================*/
 void KWSerialLetterDataBase::removeRecord( int i )
 {
     if ( i < 0 || i > (int)db.count() - 1 )
@@ -112,7 +105,6 @@ void KWSerialLetterDataBase::removeRecord( int i )
     db.remove( it );
 }
 
-/*================================================================*/
 void KWSerialLetterDataBase::save( QDomElement& /*parentElem*/ )
 {
 #if 0
@@ -140,7 +132,6 @@ void KWSerialLetterDataBase::save( QDomElement& /*parentElem*/ )
 #endif
 }
 
-/*================================================================*/
 void KWSerialLetterDataBase::load( QDomElement& /*elem*/ )
 {
     db.clear();
@@ -224,7 +215,6 @@ void KWSerialLetterDataBase::load( QDomElement& /*elem*/ )
  *
  ******************************************************************/
 
-/*================================================================*/
 KWSerialLetterVariableInsertDia::KWSerialLetterVariableInsertDia( QWidget *parent, KWSerialLetterDataBase *db )
     : QDialog( parent, "", TRUE )
 {
@@ -262,13 +252,11 @@ KWSerialLetterVariableInsertDia::KWSerialLetterVariableInsertDia( QWidget *paren
     resize( 350, 400 );
 }
 
-/*================================================================*/
 QString KWSerialLetterVariableInsertDia::getName() const
 {
     return names->text( names->currentItem() );
 }
 
-/*================================================================*/
 void KWSerialLetterVariableInsertDia::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
@@ -281,7 +269,6 @@ void KWSerialLetterVariableInsertDia::resizeEvent( QResizeEvent *e )
  *
  ******************************************************************/
 
-/*================================================================*/
 KWSerialLetterEditorListItem::KWSerialLetterEditorListItem( QListView *parent )
     : QListViewItem( parent )
 {
@@ -289,7 +276,6 @@ KWSerialLetterEditorListItem::KWSerialLetterEditorListItem( QListView *parent )
     listView()->addChild( editWidget );
 }
 
-/*================================================================*/
 KWSerialLetterEditorListItem::KWSerialLetterEditorListItem( QListView *parent, QListViewItem *after )
     : QListViewItem( parent, after )
 {
@@ -297,13 +283,11 @@ KWSerialLetterEditorListItem::KWSerialLetterEditorListItem( QListView *parent, Q
     listView()->addChild( editWidget );
 }
 
-/*================================================================*/
 KWSerialLetterEditorListItem::~KWSerialLetterEditorListItem()
 {
     delete editWidget;
 }
 
-/*================================================================*/
 void KWSerialLetterEditorListItem::setText( int i, const QString &text )
 {
     QListViewItem::setText( i, text );
@@ -311,7 +295,6 @@ void KWSerialLetterEditorListItem::setText( int i, const QString &text )
         editWidget->setText( text );
 }
 
-/*================================================================*/
 QString KWSerialLetterEditorListItem::text( int i ) const
 {
     if ( i == 1 )
@@ -319,7 +302,6 @@ QString KWSerialLetterEditorListItem::text( int i ) const
     return QListViewItem::text( i );
 }
 
-/*================================================================*/
 void KWSerialLetterEditorListItem::setup()
 {
     setHeight( QMAX( listView()->fontMetrics().height(),
@@ -328,7 +310,6 @@ void KWSerialLetterEditorListItem::setup()
         listView()->setColumnWidth( 1, editWidget->sizeHint().width() );
 }
 
-/*================================================================*/
 void KWSerialLetterEditorListItem::update()
 {
     editWidget->resize( listView()->header()->cellSize( 1 ), height() );
@@ -343,7 +324,6 @@ void KWSerialLetterEditorListItem::update()
  *
  ******************************************************************/
 
-/*================================================================*/
 KWSerialLetterEditorList::KWSerialLetterEditorList( QWidget *parent, KWSerialLetterDataBase *db_ )
     : QListView( parent ), db( db_ )
 {
@@ -361,7 +341,6 @@ KWSerialLetterEditorList::KWSerialLetterEditorList( QWidget *parent, KWSerialLet
     currentRecord = -1;
 }
 
-/*================================================================*/
 KWSerialLetterEditorList::~KWSerialLetterEditorList()
 {
     if ( currentRecord == -1 )
@@ -378,20 +357,17 @@ KWSerialLetterEditorList::~KWSerialLetterEditorList()
     }
 }
 
-/*================================================================*/
 void KWSerialLetterEditorList::columnSizeChange( int c, int, int )
 {
     if ( c == 0 || c == 1 )
         updateItems();
 }
 
-/*================================================================*/
 void KWSerialLetterEditorList::sectionClicked( int )
 {
     updateItems();
 }
 
-/*================================================================*/
 void KWSerialLetterEditorList::updateItems()
 {
     QListViewItemIterator it( this );
@@ -399,7 +375,6 @@ void KWSerialLetterEditorList::updateItems()
         ( (KWSerialLetterEditorListItem*)it.current() )->update();
 }
 
-/*================================================================*/
 void KWSerialLetterEditorList::displayRecord( int i )
 {
     if ( i < 0 || i >= db->getNumRecords() )
@@ -435,7 +410,6 @@ void KWSerialLetterEditorList::displayRecord( int i )
  *
  ******************************************************************/
 
-/*================================================================*/
 KWSerialLetterEditor::KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataBase *db_ )
     : QDialog( parent, "", TRUE ), db( db_ )
 {
@@ -521,20 +495,17 @@ KWSerialLetterEditor::KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataB
     resize( 600, 400 );
 }
 
-/*================================================================*/
 void KWSerialLetterEditor::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
     back->resize( size() );
 }
 
-/*================================================================*/
 void KWSerialLetterEditor::changeRecord( int i )
 {
     dbList->displayRecord( i - 1 );
 }
 
-/*================================================================*/
 void KWSerialLetterEditor::addEntry()
 {
     KWVariableNameDia
@@ -559,7 +530,6 @@ void KWSerialLetterEditor::addEntry()
     delete dia;
 }
 
-/*================================================================*/
 void KWSerialLetterEditor::addRecord()
 {
     db->appendRecord();
@@ -567,7 +537,6 @@ void KWSerialLetterEditor::addRecord()
     records->setValue( db->getNumRecords() );
 }
 
-/*================================================================*/
 void KWSerialLetterEditor::removeEntry()
 {
     if ( db->getNumRecords() == 0 )
@@ -584,7 +553,6 @@ void KWSerialLetterEditor::removeEntry()
     delete dia;
 }
 
-/*================================================================*/
 void KWSerialLetterEditor::removeRecord()
 {
     if ( db->getNumRecords() == 0 )

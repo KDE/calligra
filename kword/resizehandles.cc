@@ -28,7 +28,6 @@
 /* Class: KWResizeHandle                                          */
 /******************************************************************/
 
-/*================================================================*/
 KWResizeHandle::KWResizeHandle( KWCanvas * p, Direction d, KWFrame *frm )
     : QWidget( p->viewport() ), m_canvas( p ), direction( d ), frame( frm )
 {
@@ -67,7 +66,6 @@ KWResizeHandle::KWResizeHandle( KWCanvas * p, Direction d, KWFrame *frm )
     show();
 }
 
-/*================================================================*/
 void KWResizeHandle::mouseMoveEvent( QMouseEvent * )
 {
     if ( !mousePressed )
@@ -101,7 +99,6 @@ void KWResizeHandle::mouseMoveEvent( QMouseEvent * )
     }
 }
 
-/*================================================================*/
 void KWResizeHandle::mousePressEvent( QMouseEvent *e )
 {
     KWFrameSet *fs = 0;
@@ -124,14 +121,12 @@ void KWResizeHandle::mousePressEvent( QMouseEvent *e )
     m_canvas->mpEditFrame( 0, x() + e->x(), y() + e->y() );
 }
 
-/*================================================================*/
 void KWResizeHandle::mouseReleaseEvent( QMouseEvent * )
 {
     mousePressed = false;
     m_canvas->mrEditFrame();
 }
 
-/*================================================================*/
 void KWResizeHandle::updateGeometry()
 {
     KWDocument * doc = frame->getFrameSet()->kWordDocument();

@@ -37,13 +37,11 @@
  *
  ******************************************************************/
 
-/*================================================================*/
 KWContents::KWContents( KWDocument *doc )
     : m_doc( doc )
 {
 }
 
-/*================================================================*/
 void KWContents::createContents()
 {
     KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet *>(m_doc->getFrameSet( 0 ));

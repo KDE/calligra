@@ -18,7 +18,6 @@
 */
 
 #include "kwdoc.h"
-#include "kwcanvas.h"
 #include "autoformatdia.h"
 #include "autoformatdia.moc"
 #include "autoformat.h"
@@ -26,9 +25,9 @@
 
 #include <klocale.h>
 #include <kcharselect.h>
-#include <kbuttonbox.h>
 #include <kmessagebox.h>
-#include <stdlib.h>
+#include <kbuttonbox.h>
+#include <klistview.h>
 
 #include <qlayout.h>
 #include <qvbox.h>
@@ -36,7 +35,6 @@
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qfont.h>
-#include <qlistview.h>
 #include <qmap.h>
 #include <qlineedit.h>
 #include <qlabel.h>
@@ -46,8 +44,7 @@
 /* Class: KWAutoFormatDia                                         */
 /******************************************************************/
 
-/*================================================================*/
-KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWDocument *_doc, KWCanvas *_canvas )
+KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWDocument *_doc )
     : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel, Ok, parent, name, true),
       doc( _doc ),
       oBegin( doc->getAutoFormat()->getConfigTypographicQuotes().begin ),
@@ -55,15 +52,12 @@ KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWDocument 
       quotesChanged( false ),
       m_autoFormat(*doc->getAutoFormat())
 {
-    canvas = _canvas;
-
     setupTab1();
     setupTab2();
 
     setInitialSize( QSize(500, 300) );
 }
 
-/*================================================================*/
 void KWAutoFormatDia::setupTab1()
 {
     tab1 = addPage( i18n( "Simple Autocorrection" ) );
@@ -113,20 +107,26 @@ void KWAutoFormatDia::setupTab1()
     ( void )new QWidget( tab1 );
 }
 
-/*================================================================*/
 void KWAutoFormatDia::setupTab2()
 {
     tab2 = addPage( i18n( "Advanced Autocorrection" ) );
     QHBoxLayout *grid = new QHBoxLayout(tab2, 10, 5);
     grid->setAutoAdd( true );
 
-    entries = new QListView( tab2 );
-    entries->addColumn( i18n( "Find" ) );
-    entries->addColumn( i18n( "Replace" ) );
+    m_pListView = new KListView( tab2 );
+    m_pListView->addColumn( i18n( "Find" ) );
+    m_pListView->addColumn( i18n( "Replace" ) );
+    m_pListView->setRenameable( 0, true );
+    m_pListView->setRenameable( 1, true );
+    m_pListView->setItemsRenameable( true );
+    m_pListView->setAllColumnsShowFocus( true );
+
+    connect( m_pListView, SIGNAL(itemRenamed(QListViewItem *, const QString &, int)),
+             SLOT(slotItemRenamed(QListViewItem *, const QString &, int)) );
 
     QMap< QString, KWAutoFormatEntry >::Iterator it = m_autoFormat.firstAutoFormatEntry();
     for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
-        ( void )new QListViewItem( entries, it.key(), it.data().getReplace() );
+        ( void )new QListViewItem( m_pListView, it.key(), it.data().getReplace() );
 
     QVBox *buttons = new QVBox( tab2 );
     buttons->setSpacing( 5 );
@@ -143,64 +143,62 @@ void KWAutoFormatDia::setupTab2()
     ( void )new QWidget( buttons );
 }
 
-/*================================================================*/
 void KWAutoFormatDia::slotRemoveEntry()
 {
-    if(entries->currentItem()!=0)
-        {
-            doc->getAutoFormat()->removeAutoFormatEntry(entries->currentItem()->text(0));
-            refreshEntryList();
-        }
+    if(m_pListView->currentItem()!=0)
+    {
+        doc->getAutoFormat()->removeAutoFormatEntry(m_pListView->currentItem()->text(0));
+        refreshEntryList();
+    }
 }
 
-/*================================================================*/
 void KWAutoFormatDia::refreshEntryList()
 {
     QMap< QString, KWAutoFormatEntry >::Iterator it =  doc->getAutoFormat()->firstAutoFormatEntry();
-    entries->clear();
+    m_pListView->clear();
     for ( ; it != doc->getAutoFormat()->lastAutoFormatEntry(); ++it )
-        ( void )new QListViewItem( entries, it.key(), it.data().getReplace() );
+        ( void )new QListViewItem( m_pListView, it.key(), it.data().getReplace() );
 }
 
-/*================================================================*/
 void KWAutoFormatDia::addEntryList(KWAutoFormatEntry &_autoEntry)
 {
     doc->getAutoFormat()->addAutoFormatEntry( _autoEntry );
 }
 
-/*================================================================*/
 void KWAutoFormatDia::editEntryList(KWAutoFormatEntry &_autoEntry,const QString &_str)
 {
     doc->getAutoFormat()->removeAutoFormatEntry(_str);
     doc->getAutoFormat()->addAutoFormatEntry( _autoEntry );
 }
 
-/*================================================================*/
 void KWAutoFormatDia::slotAddEntry()
 {
     QString strFind;
     QString strReplace;
     KWAutoFormatEditDia *dia=new KWAutoFormatEditDia(this,"addDia",i18n("Add Entry"),strFind,strReplace);
     if(dia->exec())
-        {
-            refreshEntryList();
-        }
+    {
+        refreshEntryList();
+    }
 }
 
-/*================================================================*/
+void KWAutoFormatDia::slotItemRenamed(QListViewItem * item, const QString & newText, int column)
+{
+
+}
+
 void KWAutoFormatDia::slotEditEntry()
 {
-    if(entries->currentItem()==0)
+    if(m_pListView->currentItem()==0)
         return;
-    QString strFind=entries->currentItem()->text(0);
-    QString strReplace=entries->currentItem()->text(1);
+    QString strFind=m_pListView->currentItem()->text(0);
+    QString strReplace=m_pListView->currentItem()->text(1);
     KWAutoFormatEditDia *dia=new KWAutoFormatEditDia(this,"addDia",i18n("Edit Entry"),strFind,strReplace,true,strFind);
     if(dia->exec())
-        {
-            refreshEntryList();
-        }
+    {
+        refreshEntryList();
+    }
 }
-/*================================================================*/
 bool KWAutoFormatDia::applyConfig()
 {
     // iiiiiiiiigit - that's a hack!
@@ -238,7 +236,6 @@ void KWAutoFormatDia::slotOk()
     }
 }
 
-/*================================================================*/
 void KWAutoFormatDia::chooseQuote1()
 {
     QString f = font().family();
@@ -250,7 +247,6 @@ void KWAutoFormatDia::chooseQuote1()
     }
 }
 
-/*================================================================*/
 void KWAutoFormatDia::chooseQuote2()
 {
     QString f = font().family();
@@ -262,7 +258,6 @@ void KWAutoFormatDia::chooseQuote2()
     }
 }
 
-/*================================================================*/
 KWAutoFormatEditDia::KWAutoFormatEditDia( KWAutoFormatDia *parent, const char *name, const QString &title,const QString &findStr,const QString &replaceStr,bool _replaceEntry, const QString & _str )
     : QDialog( parent, name,TRUE )
 {
@@ -308,7 +303,6 @@ KWAutoFormatEditDia::KWAutoFormatEditDia( KWAutoFormatDia *parent, const char *n
     lineEditFind->setFocus();
 }
 
-/*================================================================*/
 void KWAutoFormatEditDia::chooseSpecialChar1()
 {
     QString f = font().family();
@@ -320,7 +314,6 @@ void KWAutoFormatEditDia::chooseSpecialChar1()
     }
 }
 
-/*================================================================*/
 void KWAutoFormatEditDia::chooseSpecialChar2()
 {
     QString f = font().family();
@@ -332,7 +325,6 @@ void KWAutoFormatEditDia::chooseSpecialChar2()
     }
 }
 
-/*================================================================*/
 void KWAutoFormatEditDia::slotOk()
 {
     if(lineEditReplace->text().isEmpty() || lineEditFind->text().isEmpty())
@@ -348,7 +340,6 @@ void KWAutoFormatEditDia::slotOk()
     accept();
 }
 
-/*================================================================*/
 void KWAutoFormatEditDia::slotCancel()
 {
     reject();

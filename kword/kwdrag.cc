@@ -26,20 +26,17 @@
 /* Class: KWDrag                                               */
 /******************************************************************/
 
-/*================================================================*/
 KWDrag::KWDrag( QWidget *dragSource, const char *name )
     : QTextDrag( dragSource, name )
 {
 }
 
-/*================================================================*/
 void KWDrag::setPlain( const QString &_plain )
 {
     setText(_plain);
     //plain = _plain;
 }
 
-/*================================================================*/
 QByteArray KWDrag::encodedData( const char *mime ) const
 {
     //kdDebug() << "KWDrag::encodedData " << mime << endl;
@@ -62,7 +59,6 @@ QByteArray KWDrag::encodedData( const char *mime ) const
     return QTextDrag::encodedData(mime);
 }
 
-/*================================================================*/
 bool KWDrag::canDecode( QMimeSource* e )
 {
     if ( e->provides( MIME_TYPE ) )
@@ -70,7 +66,6 @@ bool KWDrag::canDecode( QMimeSource* e )
     return QTextDrag::canDecode(e);
 }
 
-/*================================================================*/
 const char* KWDrag::format( int i ) const
 {
     if ( i < 4 ) // HACK, but how to do otherwise ??

@@ -30,7 +30,7 @@ class QCheckBox;
 class QVBox;
 class QHBox;
 class KCharSelect;
-class QListView;
+class KListView;
 class QLineEdit;
 
 /******************************************************************/
@@ -42,7 +42,7 @@ class KWAutoFormatDia : public KDialogBase
     Q_OBJECT
 
 public:
-    KWAutoFormatDia( QWidget *parent, const char *name, KWDocument *_doc, KWCanvas *_canvas );
+    KWAutoFormatDia( QWidget *parent, const char *name, KWDocument *_doc );
     void addEntryList(KWAutoFormatEntry &_autoEntry);
     void editEntryList(KWAutoFormatEntry &_autoEntry,const QString &_str);
 protected:
@@ -56,16 +56,16 @@ protected:
     QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper;
     QPushButton *pbQuote1, *pbQuote2, *pbEdit, *pbRemove, *pbAdd;
     KCharSelect *charselect;
-    QListView *entries;
+    KListView * m_pListView;
 
     KWDocument *doc;
     QChar oBegin, oEnd;
     bool quotesChanged;
 
-    KWCanvas *canvas;
     KWAutoFormat m_autoFormat;
 protected slots:
     virtual void slotOk();
+    void slotItemRenamed(QListViewItem * item, const QString & newText, int column);
     void slotRemoveEntry();
     void slotEditEntry();
     void chooseQuote1();

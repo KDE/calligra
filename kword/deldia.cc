@@ -42,7 +42,6 @@
 /* Class: KWDeleteDia                                             */
 /******************************************************************/
 
-/*================================================================*/
 KWDeleteDia::KWDeleteDia( QWidget *parent, const char *name, KWTableFrameSet *_table, KWDocument *_doc, DeleteType _type, KWCanvas *_canvas )
     : KDialogBase( Plain, QString::null, Ok | Cancel, Ok, parent, name, true )
 {
@@ -59,7 +58,6 @@ KWDeleteDia::KWDeleteDia( QWidget *parent, const char *name, KWTableFrameSet *_t
     setInitialSize( QSize(300, 150) );
 }
 
-/*================================================================*/
 void KWDeleteDia::setupTab1()
 {
     tab1 = plainPage();
@@ -87,7 +85,6 @@ void KWDeleteDia::setupTab1()
     grid1->setColStretch( 0, 1 );
 }
 
-/*================================================================*/
 bool KWDeleteDia::doDelete()
 {
     canvas->deleteFrameSetEditTable(table);

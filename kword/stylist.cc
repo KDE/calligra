@@ -60,7 +60,6 @@
    OK also frees all the changed ones and updates the doc if styles are deleted.
 */
 
-/*================================================================*/
 KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc )
     : KDialogBase( _parent, "Stylist", true,
                    i18n("Stylist"),

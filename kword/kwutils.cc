@@ -32,7 +32,6 @@ QString makeRomanNumber( int n )
                                 RNUnits[ ( n ) % 10 ] );
 }
 
-/*================================================================*/
 QString correctQString( const QString &str )
 {
     if ( str.lower() == "(null)" )
@@ -41,13 +40,11 @@ QString correctQString( const QString &str )
     return str;
 }
 
-/*================================================================*/
 QString correctQString( const char *str )
 {
     return correctQString( QString( str ) );
 }
 
-/*================================================================*/
 QString makeAlphaUpperNumber( int n )
 {
     QString tmp;
@@ -62,7 +59,6 @@ QString makeAlphaUpperNumber( int n )
     return tmp;
 }
 
-/*================================================================*/
 QString makeAlphaLowerNumber( int n )
 {
     QString tmp;

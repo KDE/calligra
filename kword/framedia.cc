@@ -71,7 +71,6 @@
  *      position/size
  ******************************************************************/
 
-/*================================================================*/
 KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
     : KDialogBase( Tabbed, i18n("Frame settings"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
@@ -157,7 +156,6 @@ void KWFrameDia::init() {
     setInitialSize( QSize(550, 400) );
 }
 
-/*================================================================*/
 
 void KWFrameDia::setupTab1(){ // TAB Frame Options
     //kdDebug() << "setup tab 1 Frame options"<<endl;
@@ -704,7 +702,6 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
 
 
-/*================================================================*/
 void KWFrameDia::uncheckAllRuns()
 {
     rRunNo->setChecked( false );
@@ -712,21 +709,18 @@ void KWFrameDia::uncheckAllRuns()
     rRunContur->setChecked( false );
 }
 
-/*================================================================*/
 void KWFrameDia::runNoClicked()
 {
     uncheckAllRuns();
     rRunNo->setChecked( true );
 }
 
-/*================================================================*/
 void KWFrameDia::runBoundingClicked()
 {
     uncheckAllRuns();
     rRunBounding->setChecked( true );
 }
 
-/*================================================================*/
 void KWFrameDia::runConturClicked()
 {
 
@@ -772,7 +766,6 @@ void KWFrameDia::slotFloatingToggled(bool b)
     // grp2->setEnabled( !b ); do margins make sense for floating frames ?  (I think so; Thomas)
 }
 
-/*================================================================*/
 bool KWFrameDia::applyChanges()
 {
     //kdDebug() << "KWFrameDia::applyChanges"<<endl;

@@ -33,7 +33,6 @@
 /* Class: KWFootNoteDia                                           */
 /******************************************************************/
 
-/*================================================================*/
 KWFootNoteDia::KWFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc, KWCanvas *_canvas, int _start, bool _footnote )
     : KDialogBase(Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true),
     start( _start ), footnote( _footnote)
@@ -54,7 +53,6 @@ KWFootNoteDia::KWFootNoteDia( QWidget *parent, const char *name, KWDocument *_do
     setInitialSize( QSize(300, 250) );
 }
 
-/*================================================================*/
 void KWFootNoteDia::setupTab1()
 {
     tab1 = addPage( footnote ? i18n( "Configure Footnote" ) :
@@ -72,7 +70,6 @@ void KWFootNoteDia::setupTab1()
     l->move( 5, 5 );
 }
 
-/*================================================================*/
 bool KWFootNoteDia::insertFootNote()
 {
     KWFootNote::KWFootNoteInternal *fi = new KWFootNote::KWFootNoteInternal;

@@ -48,7 +48,6 @@
 /* Class: KWTablePreview                                          */
 /******************************************************************/
 
-/*================================================================*/
 void KWTablePreview::paintEvent( QPaintEvent * )
 {
     int wid = ( width() - 10 ) / cols;
@@ -72,7 +71,6 @@ void KWTablePreview::paintEvent( QPaintEvent * )
 /* Class: KWTableDia                                              */
 /******************************************************************/
 
-/*================================================================*/
 KWTableDia::KWTableDia( QWidget* parent, const char* name, KWCanvas *_canvas, KWDocument *_doc,
 			int rows, int cols, KWTblCellSize wid, KWTblCellSize hei, bool floating )
     : KDialogBase( Tabbed, i18n("Table settings"), Ok | Cancel, Ok, parent, name, true)
@@ -86,7 +84,6 @@ KWTableDia::KWTableDia( QWidget* parent, const char* name, KWCanvas *_canvas, KW
     setInitialSize( QSize(500, 400) );
 }
 
-/*================================================================*/
 void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize hei, bool floating )
 {
     tab1 = addPage( i18n( "Geometry" ) );
@@ -175,7 +172,6 @@ void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize
     connect( nCols, SIGNAL( valueChanged( int ) ), this, SLOT( colsChanged( int ) ) );
 }
 
-/*================================================================*/
 void KWTableDia::setupTab2()
 {
     readTableStyles();
@@ -232,7 +228,6 @@ void KWTableDia::setupTab2()
     grid->activate();
 }
 
-/*================================================================*/
 void KWTableDia::readTableStyles()
 {
 #ifdef __GNUC__
@@ -240,7 +235,6 @@ void KWTableDia::readTableStyles()
 #endif
 }
 
-/*================================================================*/
 void KWTableDia::slotOk()
 {
     canvas->createTable( nRows->value(), nCols->value(),
@@ -250,20 +244,17 @@ void KWTableDia::slotOk()
     KDialogBase::slotOk();
 }
 
-/*================================================================*/
 void KWTableDia::slotClose()
 {
     canvas->setMouseMode( MM_EDIT );
     KDialogBase::slotClose();
 }
 
-/*================================================================*/
 void KWTableDia::rowsChanged( int _rows )
 {
     preview->setRows( _rows );
 }
 
-/*================================================================*/
 void KWTableDia::colsChanged( int _cols )
 {
     preview->setCols( _cols );

@@ -39,7 +39,6 @@
 /* Class: KWInsertDia                                             */
 /******************************************************************/
 
-/*================================================================*/
 KWInsertDia::KWInsertDia( QWidget *parent, const char *name, KWTableFrameSet *_table, KWDocument *_doc, InsertType _type, KWCanvas *_canvas )
     : KDialogBase( Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true )
 {
@@ -53,7 +52,6 @@ KWInsertDia::KWInsertDia( QWidget *parent, const char *name, KWTableFrameSet *_t
     setInitialSize( QSize(300, 250) );
 }
 
-/*================================================================*/
 void KWInsertDia::setupTab1()
 {
     tab1 = addPage( type == ROW ? i18n( "Insert Row" ) : i18n( "Insert Column" ) );
@@ -112,7 +110,6 @@ void KWInsertDia::setupTab1()
     grid1->setColStretch( 0, 1 );
 }
 
-/*================================================================*/
 bool KWInsertDia::doInsert()
 {
     if ( type == ROW )

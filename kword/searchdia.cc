@@ -208,7 +208,6 @@ void KWSearchContextUI::setCtxHistory( const QStringList & history )
     m_ctx->m_strings = history;
 }
 
-/*================================================================*/
 KWSearchDia::KWSearchDia( KWCanvas *canvas, const char *name, KWSearchContext *find ):
     KoFindDialog( canvas, name, find->m_options, find->m_strings )
 {
@@ -250,7 +249,6 @@ void KWReplaceDia::slotOk()
 }
 
 
-/*================================================================*/
 
 KWFindReplace::KWFindReplace( KWCanvas * canvas, KWSearchDia * dialog )
     : m_find( new KoFind( dialog->pattern(), dialog->options(), canvas ) ),

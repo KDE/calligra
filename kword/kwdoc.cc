@@ -82,19 +82,16 @@ do \
 /* Class: KWChild                                              */
 /******************************************************************/
 
-/*================================================================*/
 KWChild::KWChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc )
     : KoDocumentChild( _wdoc, _doc, _rect )
 {
 }
 
-/*================================================================*/
 KWChild::KWChild( KWDocument *_wdoc )
     : KoDocumentChild( _wdoc )
 {
 }
 
-/*================================================================*/
 KWChild::~KWChild()
 {
 }
@@ -108,7 +105,6 @@ KoDocument *KWChild::hitTest( const QPoint &, const QWMatrix & )
 /* Class: KWDocument                                      */
 /******************************************************************/
 
-/*================================================================*/
 KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
       m_unit( KWUnit::U_MM ), // footNoteManager( this ),
@@ -286,7 +282,6 @@ void KWDocument::initEmpty()
 }
 
 
-/*================================================================*/
 void KWDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf )
 {
     if ( m_processingType == WP ) {
@@ -337,7 +332,6 @@ double KWDocument::ptColumnWidth() const
         / m_pageColumns.columns;
 }
 
-/*================================================================*/
 /* append headers and footers if needed, and create enough pages for all the existing frames */
 void KWDocument::recalcFrames()
 {
@@ -819,7 +813,6 @@ void KWDocument::recalcFrames()
     emit newContentsSize();
 }
 
-/*================================================================*/
 KWDocument::~KWDocument()
 {
     delete contents;
@@ -828,7 +821,6 @@ KWDocument::~KWDocument()
     delete m_commandHistory;
 }
 
-/*================================================================*/
 bool KWDocument::loadChildren( KoStore *_store )
 {
     QListIterator<KoDocumentChild> it( children() );
@@ -840,7 +832,6 @@ bool KWDocument::loadChildren( KoStore *_store )
     return TRUE;
 }
 
-/*================================================================*/
 bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 {
     QTime dt;
@@ -1263,7 +1254,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     return TRUE;
 }
 
-/*================================================================*/
 void KWDocument::loadStyleTemplates( QDomElement stylesElem )
 {
     QValueList<QString> followingStyles;
@@ -1317,7 +1307,6 @@ void KWDocument::removeStyleTemplate ( KWStyle *style ) {
     }
 }
 
-/*================================================================*/
 void KWDocument::moveDownStyleTemplate ( const QString & _styleName )
 {
     unsigned int pos = 0;
@@ -1335,7 +1324,6 @@ void KWDocument::moveDownStyleTemplate ( const QString & _styleName )
     }
 }
 
-/*================================================================*/
 void KWDocument::moveUpStyleTemplate ( const QString & _styleName )
 {
     unsigned int pos = 0;
@@ -1363,7 +1351,6 @@ void KWDocument::progressItemLoaded()
     }
 }
 
-/*================================================================*/
 void KWDocument::loadFrameSets( QDomElement framesets )
 {
     // <FRAMESET>
@@ -1460,7 +1447,6 @@ void KWDocument::loadFrameSets( QDomElement framesets )
     }
 }
 
-/*===================================================================*/
 bool KWDocument::completeLoading( KoStore *_store )
 {
     if ( _store ) {
@@ -1545,7 +1531,6 @@ void KWDocument::processImageRequests()
     m_imageRequests2.clear();
 }
 
-/*================================================================*/
 QDomDocument KWDocument::saveXML()
 {
     QDomDocument doc( "DOC" );
@@ -1683,7 +1668,6 @@ QDomDocument KWDocument::saveXML()
     return doc;
 }
 
-/*==============================================================*/
 bool KWDocument::completeSaving( KoStore *_store )
 {
     if ( !_store )
@@ -1884,7 +1868,6 @@ KWStyle* KWDocument::findStyle( const QString & _name )
     return 0L;
 }
 
-/*================================================================*/
 /* Update all views of this document, area can be cleared
    before redrawing with the _erase flag. (false implied)
    All views EXCEPT the argument _view are updated ( 0L = all )
@@ -1919,14 +1902,12 @@ void KWDocument::setUnit( KWUnit::Unit _unit )
     }
 }
 
-/*================================================================*/
 void KWDocument::updateAllStyleLists()
 {
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
         viewPtr->updateStyleList();
 }
 
-/*================================================================*/
 void KWDocument::applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
@@ -1939,14 +1920,12 @@ void KWDocument::applyStyleChange( KWStyle * changedStyle, int paragLayoutChange
     }
 }
 
-/*================================================================*/
 void KWDocument::repaintAllViews( bool erase )
 {
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
         viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
 }
 
-/*================================================================*/
 void KWDocument::appendPage( /*unsigned int _page*/ )
 {
     int thisPageNum = m_pages-1;
@@ -2091,7 +2070,6 @@ QString KWDocument::generateFramesetName( const QString & templateName )
     return name;
 }
 
-/*================================================================*/
 /* Select the first frame where the x and y coords fall into
    returns 0 if none was selected, return 1 if selected, return 2
    if the frame was allready selected.
@@ -2116,7 +2094,6 @@ int KWDocument::selectFrame( double mx, double my, bool simulate )
     return 0;
 }
 
-/*================================================================*/
 void KWDocument::deSelectFrame( double mx, double my )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
@@ -2128,7 +2105,6 @@ void KWDocument::deSelectFrame( double mx, double my )
     }
 }
 
-/*================================================================*/
 void KWDocument::deSelectAllFrames()
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
@@ -2140,7 +2116,6 @@ void KWDocument::deSelectAllFrames()
     }
 }
 
-/*================================================================*/
 QCursor KWDocument::getMouseCursor( double mx, double my )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
@@ -2241,7 +2216,6 @@ void KWDocument::framesChanged( const QList<KWFrame> & frames, KWView * view )
         }
 }
 
-/*================================================================*/
 void KWDocument::setHeaderVisible( bool h )
 {
     m_headerVisible = h;
@@ -2249,7 +2223,6 @@ void KWDocument::setHeaderVisible( bool h )
     repaintAllViews( true );
 }
 
-/*================================================================*/
 void KWDocument::setFooterVisible( bool f )
 {
     m_footerVisible = f;
@@ -2257,7 +2230,6 @@ void KWDocument::setFooterVisible( bool f )
     repaintAllViews( true );
 }
 
-/*================================================================*/
 void KWDocument::getFrameMargins( double &l, double &r, double &t, double &b )
 {
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
@@ -2275,12 +2247,10 @@ void KWDocument::getFrameMargins( double &l, double &r, double &t, double &b )
     }
 }
 
-/*================================================================*/
 bool KWDocument::isOnlyOneFrameSelected() {
     return getSelectedFrames().count()==1;
 }
 
-/*================================================================*/
 void KWDocument::setFrameMargins( double l, double r, double t, double b )
 {
     // todo, make this more OO, and update the tableheaders as well..

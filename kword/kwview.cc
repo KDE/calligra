@@ -644,7 +644,6 @@ void KWView::createKWGUI()
     gui->show();
 }
 
-/*================================================================*/
 void KWView::showFormulaToolbar( bool show )
 {
   // This might not be exactly the right place. But these actions
@@ -680,7 +679,6 @@ void KWView::pageNumChanged()
      updatePageInfo();
 }
 
-/*================================================================*/
 void KWView::clipboardDataChanged()
 {
     // Can we paste into something ?
@@ -1680,7 +1678,7 @@ void KWView::extraSpelling()
 
 void KWView::extraAutoFormat()
 {
-    KWAutoFormatDia dia( this, 0, doc, gui->canvasWidget() );
+    KWAutoFormatDia dia( this, 0, doc );
     dia.show();
 }
 

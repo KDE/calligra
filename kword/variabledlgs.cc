@@ -38,7 +38,6 @@
  *
  ******************************************************************/
 
-/*================================================================*/
 KWVariableNameDia::KWVariableNameDia( QWidget *parent )
     : QDialog( parent, "", TRUE )
 {
@@ -92,13 +91,11 @@ void KWVariableNameDia::init()
     resize( 350, 100 );
 }
 
-/*================================================================*/
 QString KWVariableNameDia::getName() const
 {
     return names->currentText();
 }
 
-/*================================================================*/
 void KWVariableNameDia::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
@@ -111,7 +108,6 @@ void KWVariableNameDia::resizeEvent( QResizeEvent *e )
  *
  ******************************************************************/
 
-/*================================================================*/
 KWCustomVariablesListItem::KWCustomVariablesListItem( QListView *parent )
     : QListViewItem( parent )
 {
@@ -119,7 +115,6 @@ KWCustomVariablesListItem::KWCustomVariablesListItem( QListView *parent )
     listView()->addChild( editWidget );
 }
 
-/*================================================================*/
 void KWCustomVariablesListItem::setup()
 {
     setHeight( QMAX( listView()->fontMetrics().height(),
@@ -128,7 +123,6 @@ void KWCustomVariablesListItem::setup()
         listView()->setColumnWidth( 1, editWidget->sizeHint().width() );
 }
 
-/*================================================================*/
 void KWCustomVariablesListItem::update()
 {
     editWidget->resize( listView()->header()->cellSize( 1 ), height() );
@@ -137,7 +131,6 @@ void KWCustomVariablesListItem::update()
     editWidget->show();
 }
 
-/*================================================================*/
 void KWCustomVariablesListItem::setVariable( KWCustomVariable *v )
 {
     var = v;
@@ -145,14 +138,12 @@ void KWCustomVariablesListItem::setVariable( KWCustomVariable *v )
     setText( 0, v->name() );
 }
 
-/*================================================================*/
 KWCustomVariable *KWCustomVariablesListItem::getVariable() const
 {
     return var;
 
 }
 
-/*================================================================*/
 void KWCustomVariablesListItem::applyValue()
 {
     var->setValue( editWidget->text() );
@@ -164,7 +155,6 @@ void KWCustomVariablesListItem::applyValue()
  *
  ******************************************************************/
 
-/*================================================================*/
 KWCustomVariablesList::KWCustomVariablesList( QWidget *parent )
     : QListView( parent )
 {
@@ -181,7 +171,6 @@ KWCustomVariablesList::KWCustomVariablesList( QWidget *parent )
     setSorting( -1 );
 }
 
-/*================================================================*/
 void KWCustomVariablesList::setValues()
 {
     QListViewItemIterator it( this );
@@ -189,20 +178,17 @@ void KWCustomVariablesList::setValues()
         ( (KWCustomVariablesListItem *)it.current() )->applyValue();
 }
 
-/*================================================================*/
 void KWCustomVariablesList::columnSizeChange( int c, int, int )
 {
     if ( c == 0 || c == 1 )
         updateItems();
 }
 
-/*================================================================*/
 void KWCustomVariablesList::sectionClicked( int )
 {
     updateItems();
 }
 
-/*================================================================*/
 void KWCustomVariablesList::updateItems()
 {
     QListViewItemIterator it( this );
@@ -216,7 +202,6 @@ void KWCustomVariablesList::updateItems()
  *
  ******************************************************************/
 
-/*================================================================*/
 KWCustomVariablesDia::KWCustomVariablesDia( QWidget *parent, const QList<KWVariable> &variables )
     : QDialog( parent, "", TRUE )
 {
@@ -259,14 +244,12 @@ KWCustomVariablesDia::KWCustomVariablesDia( QWidget *parent, const QList<KWVaria
     list->updateItems();
 }
 
-/*================================================================*/
 void KWCustomVariablesDia::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
     back->resize( size() );
 }
 
-/*================================================================*/
 void KWCustomVariablesDia::slotOk()
 {
     list->setValues();

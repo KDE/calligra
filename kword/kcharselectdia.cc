@@ -32,7 +32,6 @@
 /* class KCharSelectDia                                           */
 /******************************************************************/
 
-/*================================================================*/
 KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _enableFont )
     : KDialogBase( Plain, i18n("Select a character"), Ok | Cancel, Ok , parent, name, true )
 {
@@ -43,7 +42,6 @@ KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, const QChar &
 
 }
 
-/*================================================================*/
 KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, const QString &_font, const QChar &_chr )
     : KDialogBase( Plain, i18n("Select a character"), User1 | Cancel, User1 , parent, name, true )
 {
@@ -71,7 +69,6 @@ void KCharSelectDia::initDialog(const QChar &_chr, const QString &_font, bool /*
     charSelect->setFocus();
 }
 
-/*================================================================*/
 bool KCharSelectDia::selectChar( QString &_font, QChar &_chr, bool _enableFont )
 {
     bool res = false;
@@ -90,19 +87,16 @@ bool KCharSelectDia::selectChar( QString &_font, QChar &_chr, bool _enableFont )
     return res;
 }
 
-/*================================================================*/
 QChar KCharSelectDia::chr()
 {
     return charSelect->chr();
 }
 
-/*================================================================*/
 QString KCharSelectDia::font()
 {
     return charSelect->font();
 }
 
-/*================================================================*/
 void KCharSelectDia::slotUser1()
 {
     emit insertChar(chr(),font());

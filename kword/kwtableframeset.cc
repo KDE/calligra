@@ -49,7 +49,6 @@ KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
         m_name = name;
 }
 
-/*================================================================*/
 KWTableFrameSet::KWTableFrameSet( KWTableFrameSet &original ) :
     KWFrameSet( original.m_doc )
 {
@@ -74,7 +73,6 @@ KWTableFrameSet::KWTableFrameSet( KWTableFrameSet &original ) :
     frames.setAutoDelete(false);
 }
 
-/*================================================================*/
 KWTableFrameSet::~KWTableFrameSet()
 {
     delete m_anchor;
@@ -170,7 +168,6 @@ void KWTableFrameSet::deleteAnchors()
     }
 }
 
-/*================================================================*/
 void KWTableFrameSet::addCell( Cell *cell )
 {
     unsigned int i;
@@ -185,7 +182,6 @@ void KWTableFrameSet::addCell( Cell *cell )
 
 }
 
-/*================================================================*/
 KoRect KWTableFrameSet::boundingRect()
 {
     KWFrame *first = getCell( 0, 0 )->getFrame( 0 );
@@ -196,7 +192,6 @@ KoRect KWTableFrameSet::boundingRect()
     return first->unite( *last );
 }
 
-/*================================================================*/
 /* returns the cell that occupies row, col. */
 KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int col )
 {
@@ -214,7 +209,6 @@ KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int 
     return 0L;
 }
 
-/*================================================================*/
 KWTableFrameSet::Cell *KWTableFrameSet::getCellByPos( double x, double y )
 {
     KWFrame *f = getFrame(x,y);
@@ -222,13 +216,11 @@ KWTableFrameSet::Cell *KWTableFrameSet::getCellByPos( double x, double y )
     return 0L;
 }
 
-/*================================================================*/
 bool KWTableFrameSet::isTableHeader( Cell *cell )
 {
     return cell->isRemoveableHeader() || ( cell->m_row == 0 );
 }
 
-/*================================================================*/
 void KWTableFrameSet::recalcCols(int _col,int _row)
 {
     unsigned int row=0,col=0;
@@ -373,7 +365,6 @@ void KWTableFrameSet::recalcCols(int _col,int _row)
     }
 }
 
-/*================================================================*/
 void KWTableFrameSet::recalcRows(int _col, int _row)
 {
     // remove automatically added headers
@@ -573,7 +564,6 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
     m_pageBoundaries.append(m_cells.count());
 }
 
-/*================================================================*/
 void KWTableFrameSet::setBoundingRect( KoRect rect )
 {
     if ( m_widthMode == TblAuto )
@@ -611,26 +601,22 @@ void KWTableFrameSet::setBoundingRect( KoRect rect )
     }
 }
 
-/*================================================================*/
 void KWTableFrameSet::setHeightMode( KWTblCellSize mode )
 {
     m_heightMode = mode;
 }
 
-/*================================================================*/
 void KWTableFrameSet::setWidthMode( KWTblCellSize mode )
 {
     m_widthMode = mode;
 }
 
-/*================================================================*/
 bool KWTableFrameSet::hasSelectedFrame()
 {
     unsigned int a=0,b=0;
     return getFirstSelected(a,b);
 }
 
-/*================================================================*/
 void KWTableFrameSet::moveBy( double dx, double dy )
 {
     // Hmm, don't want that I think....
@@ -649,7 +635,6 @@ void KWTableFrameSet::moveBy( double dx, double dy )
     recalcRows();
 }
 
-/*================================================================*/
 /*void KWTableFrameSet::drawAllRects( QPainter &p, int xOffset, int yOffset )
 {
     KWFrame *frame;
@@ -662,14 +647,12 @@ void KWTableFrameSet::moveBy( double dx, double dy )
 }*/
 
 
-/*================================================================*/
 void KWTableFrameSet::deselectAll()
 {
     for ( unsigned int i = 0; i < m_cells.count(); i++ )
         m_cells.at( i )->getFrame( 0 )->setSelected( false );
 }
 
-/*================================================================*/
 void KWTableFrameSet::refreshSelectedCell()
 {
     unsigned int row,col;
@@ -681,13 +664,11 @@ void KWTableFrameSet::refreshSelectedCell()
         cell->getFrame( 0 )->updateResizeHandles();
 }
 
-/*================================================================*/
 void KWTableFrameSet::selectUntil( double x, double y) {
     KWFrame *f = getFrame(x,y);
     if(f) selectUntil(static_cast<KWTableFrameSet::Cell *> (f->getFrameSet()));
 }
 
-/*================================================================*/
 /* the selectUntil method will select all frames from the first
    selected to the frame of the argument frameset.
 */
@@ -740,7 +721,6 @@ void KWTableFrameSet::selectUntil( Cell *cell)
     }
 }
 
-/*================================================================*/
 /* Return true if exactly one frame is selected. The parameters row
    and col will receive the values of the active row and col.
    When no frame or more then one frame is selected row and col will
@@ -764,7 +744,6 @@ bool KWTableFrameSet::isOneSelected(unsigned int &row, unsigned int &col) {
     return false;
 }
 
-/*================================================================*/
 /* returns true if at least one is selected, excluding the argument frameset.
 */
 bool KWTableFrameSet::getFirstSelected( unsigned int &row, unsigned int &col )
@@ -779,7 +758,6 @@ bool KWTableFrameSet::getFirstSelected( unsigned int &row, unsigned int &col )
     return false;
 }
 
-/*================================================================*/
 void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader )
 {
     unsigned int i = 0;
@@ -873,7 +851,6 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
         finalize();
 }
 
-/*================================================================*/
 void KWTableFrameSet::insertCol( unsigned int col )
 {
     unsigned int _cols = m_cols;
@@ -930,9 +907,7 @@ void KWTableFrameSet::insertCol( unsigned int col )
     finalize();
 }
 
-/*================================================================*/
 /* Delete all cells that are completely in this row.              */
-/*================================================================*/
 
 void KWTableFrameSet::deleteRow( unsigned int row, bool _recalc )
 {
@@ -972,9 +947,7 @@ void KWTableFrameSet::deleteRow( unsigned int row, bool _recalc )
         recalcRows();
 }
 
-/*================================================================*/
 /* Delete all cells that are completely in this col.              */
-/*================================================================*/
 void KWTableFrameSet::deleteCol( unsigned int col )
 {
     double width=0;
@@ -1020,7 +993,6 @@ void KWTableFrameSet::deleteCol( unsigned int col )
     recalcCols();
 }
 
-/*================================================================*/
 void KWTableFrameSet::updateTempHeaders()
 {
 #if 0
@@ -1049,7 +1021,6 @@ void KWTableFrameSet::updateTempHeaders()
 #endif
 }
 
-/*================================================================*/
 void KWTableFrameSet::ungroup()
 {
     for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
@@ -1063,7 +1034,6 @@ void KWTableFrameSet::ungroup()
     m_active = false;
 }
 
-/*================================================================*/
 bool KWTableFrameSet::joinCells() {
     unsigned int colBegin, rowBegin, colEnd,rowEnd;
     if ( !getFirstSelected( rowBegin, colBegin ) )
@@ -1128,7 +1098,6 @@ bool KWTableFrameSet::joinCells() {
     return true;
 }
 
-/*================================================================*/
 bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
 {
 
@@ -1213,12 +1182,10 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
     return true;
 }
 
-/*================================================================*/
 void KWTableFrameSet::viewFormatting( QPainter &/*painter*/, int )
 {
 }
 
-/*================================================================*/
 void KWTableFrameSet::preRender() {
 #if 0
     for ( unsigned int i = 0; i < m_doc->getNumFrameSets(); i++ ) {
@@ -1238,7 +1205,6 @@ void KWTableFrameSet::preRender() {
     m_isRendered=true;
 }
 
-/*================================================================*/
 /* checks the cells for missing cells or duplicates, will correct
    mistakes.
 */

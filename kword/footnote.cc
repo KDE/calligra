@@ -34,7 +34,6 @@
 /* Class: KWFootNoteManager                                       */
 /******************************************************************/
 
-/*================================================================*/
 KWFootNoteManager::KWFootNoteManager( KWDocument *_doc )
     : start( 1 ), superscript( true ), firstParag()
 {
@@ -42,7 +41,6 @@ KWFootNoteManager::KWFootNoteManager( KWDocument *_doc )
     doc = _doc;
 }
 
-/*================================================================*/
 void KWFootNoteManager::recalc()
 {
     KWFootNote *fn = 0L;
@@ -58,7 +56,6 @@ void KWFootNoteManager::recalc()
         fn->updateNames();
 }
 
-/*================================================================*/
 int KWFootNoteManager::findStart( KWFormatContext *_fc )
 {
     if ( _fc->getFrameSet() > 1 )
@@ -105,7 +102,6 @@ int KWFootNoteManager::findStart( KWFormatContext *_fc )
     return curr;
 }
 
-/*================================================================*/
 void KWFootNoteManager::insertFootNote( KWFootNote *fn )
 {
     if ( fn->getStart() == 1 ) {
@@ -128,7 +124,6 @@ void KWFootNoteManager::insertFootNote( KWFootNote *fn )
     addFootNoteText( fn );
 }
 
-/*================================================================*/
 void KWFootNoteManager::removeFootNote( KWFootNote *fn )
 {
     int n = footNotes.findRef( fn );
@@ -154,7 +149,6 @@ void KWFootNoteManager::removeFootNote( KWFootNote *fn )
     recalc();
 }
 
-/*================================================================*/
 void KWFootNoteManager::addFootNoteText( KWFootNote *fn )
 {
     bool hardBreak = false;
@@ -202,7 +196,6 @@ void KWFootNoteManager::addFootNoteText( KWFootNote *fn )
 
 }
 
-/*================================================================*/
 void KWFootNoteManager::save( QDomElement& /*parentElem*/ )
 {
 #if 0
@@ -213,7 +206,6 @@ void KWFootNoteManager::save( QDomElement& /*parentElem*/ )
 #endif
 }
 
-/*================================================================*/
 void KWFootNoteManager::load( QDomElement& /*elem*/ )
 {
 #if 0
@@ -263,7 +255,6 @@ void KWFootNoteManager::load( QDomElement& /*elem*/ )
 /* Class: KWFootNote                                              */
 /******************************************************************/
 
-/*================================================================*/
 KWFootNote::KWFootNote( KWDocument *_doc, QList<KWFootNoteInternal> *_parts )
     : start( 1 ), end( 1 )
 {
@@ -280,7 +271,6 @@ KWFootNote::KWFootNote( KWDocument *_doc, QList<KWFootNoteInternal> *_parts )
     }
 }
 
-/*================================================================*/
 int KWFootNote::setStart( int _start )
 {
     if ( parts.isEmpty() ) return _start;
@@ -301,7 +291,6 @@ int KWFootNote::setStart( int _start )
     return end;
 }
 
-/*================================================================*/
 KWFootNote *KWFootNote::copy()
 {
     KWFootNote *fn = new KWFootNote( doc, new QList<KWFootNoteInternal>( parts ) );
@@ -322,7 +311,6 @@ KWFootNote *KWFootNote::copy()
     return fn;
 }
 
-/*================================================================*/
 void KWFootNote::makeText()
 {
     text = before;
@@ -341,13 +329,11 @@ void KWFootNote::makeText()
     text += after;
 }
 
-/*================================================================*/
 void KWFootNote::setParag( KWParag *_parag )
 {
     parag = _parag->getParagName();
 }
 
-/*================================================================*/
 void KWFootNote::updateDescription( int _start )
 {
     if ( parag.isEmpty() )
@@ -371,7 +357,6 @@ void KWFootNote::updateDescription( int _start )
         kdWarning() << i18n( "Footnote couldn't find the parag with the footnote description" ) << endl;
 }
 
-/*================================================================*/
 void KWFootNote::makeTempNames()
 {
     if ( parag.isEmpty() )
@@ -391,7 +376,6 @@ void KWFootNote::makeTempNames()
 
 }
 
-/*================================================================*/
 void KWFootNote::updateNames()
 {
     if ( parag.isEmpty() )
@@ -411,7 +395,6 @@ void KWFootNote::updateNames()
 
 }
 
-/*================================================================*/
 void KWFootNote::destroy()
 {
     if ( parag.isEmpty() )
@@ -437,7 +420,6 @@ void KWFootNote::destroy()
         kdWarning() << i18n( "Footnote couldn't find the parag with the footnote description" ) << endl;
 }
 
-/*================================================================*/
 void KWFootNote::save( QDomElement& /*parentElem*/ )
 {
 #if 0
@@ -453,7 +435,6 @@ void KWFootNote::save( QDomElement& /*parentElem*/ )
 #endif
 }
 
-/*================================================================*/
 void KWFootNote::load( QDomElement& /*elem*/ )
 {
 #if 0

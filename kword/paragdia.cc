@@ -116,7 +116,6 @@ QString KWSpinBox::mapValueToText( int value )
 /* class KWPagePreview                                            */
 /******************************************************************/
 
-/*================================================================*/
 KWPagePreview::KWPagePreview( QWidget* parent, const char* name )
     : QGroupBox( i18n( "Preview" ), parent, name )
 {
@@ -128,7 +127,6 @@ KWPagePreview::KWPagePreview( QWidget* parent, const char* name )
     after = 0;
 }
 
-/*================================================================*/
 void KWPagePreview::drawContents( QPainter* p )
 {
     int wid = 148;
@@ -182,14 +180,12 @@ void KWPagePreview::drawContents( QPainter* p )
 /* class KWPagePreview2                                           */
 /******************************************************************/
 
-/*================================================================*/
 KWPagePreview2::KWPagePreview2( QWidget* parent, const char* name )
     : QGroupBox( i18n( "Preview" ), parent, name )
 {
     align = Qt::AlignLeft;
 }
 
-/*================================================================*/
 void KWPagePreview2::drawContents( QPainter* p )
 {
     int wid = 148;
@@ -261,20 +257,17 @@ void KWPagePreview2::drawContents( QPainter* p )
 /******************************************************************/
 
 
-/*================================================================*/
 KWBorderPreview::KWBorderPreview( QWidget* parent, const char* name )
     :QFrame(parent,name)
 {
 }
 
-/*================================================================*/
 void KWBorderPreview::mousePressEvent( QMouseEvent *_ev )
 {
     emit choosearea(_ev);
 }
 
 
-/*================================================================*/
 void KWBorderPreview::drawContents( QPainter* painter )
 {
     QRect r = contentsRect();
@@ -306,7 +299,6 @@ void KWBorderPreview::drawContents( QPainter* painter )
     }
 }
 
-/*================================================================*/
 QPen KWBorderPreview::setBorderPen( Border _brd )
 {
     QPen pen( black, 1, SolidLine );
@@ -339,13 +331,11 @@ QPen KWBorderPreview::setBorderPen( Border _brd )
 /* class KWNumPreview                                             */
 /******************************************************************/
 
-/*================================================================*/
 KWNumPreview::KWNumPreview( QWidget* parent, const char* name )
     : QGroupBox( i18n( "Preview" ), parent, name )
 {
 }
 
-/*================================================================*/
 void KWNumPreview::drawContents( QPainter* )
 {
 }
@@ -650,7 +640,6 @@ void KWIndentSpacingWidget::afterChanged( const QString & _text )
     prev1->setAfter( _text.toDouble() );
 }
 
-/*================================================================*/
 KWParagAlignWidget::KWParagAlignWidget( QWidget * parent, const char * name )
         : KWParagLayoutWidget( KWParagDia::PD_ALIGN, parent, name )
 {
@@ -766,7 +755,6 @@ void KWParagAlignWidget::clearAligns()
     rJustify->setChecked( false );
 }
 
-/*================================================================*/
 KWParagBorderWidget::KWParagBorderWidget( QWidget * parent, const char * name )
     : KWParagLayoutWidget( KWParagDia::PD_BORDERS, parent, name )
 {
@@ -996,7 +984,6 @@ QString KWParagBorderWidget::tabName()
     return i18n( "Borders" );
 }
 
-/*================================================================*/
 
 KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name )
     : KWParagLayoutWidget( KWParagDia::PD_NUMBERING, parent, name )
@@ -1319,7 +1306,6 @@ void KWParagCounterWidget::save( KWParagLayout & lay )
         lay.counter = new Counter( m_counter );
 }
 
-/*================================================================*/
 KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, QWidget * parent, const char * name )
     : KWParagLayoutWidget( KWParagDia::PD_TABS, parent, name ), m_unit(unit)
 {
