@@ -177,10 +177,9 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 	dist = static_cast<int>( ( 1000 * _MM_TO_POINT ) / 100 );
 
     for ( unsigned int i = 0;i <= layout.ptWidth;i += dist ) {
-	if ( unit == "pt" )
-	    str.sprintf( "%d00", j++ );  // TODO: clean up (Werner)
-	else
-	    str.sprintf( "%d", j++ );
+	str=QString::number(j++);
+	if ( unit == "pt" && j!=1)
+	    str+="00";
 	p.drawText( i - diffx - fm.width( str ) / 2, ( height() - fm.height() ) / 2,
 		    fm.width( str ), height(), AlignLeft | AlignTop, str );
     }
@@ -304,10 +303,9 @@ void KoRuler::drawVertical( QPainter *_painter )
 	dist = static_cast<int>( ( 1000 * _MM_TO_POINT ) / 100 );
 
     for ( unsigned int i = 0;i <= layout.ptHeight;i += dist ) {
-	if ( unit == "pt" )
-	    str.sprintf( "%d00", j++ );  // FIXME
-	else
-	    str.sprintf( "%d", j++ );
+	str=QString::number(j++);
+	if ( unit == "pt" && j!=1 )
+	    str+="00";
 	p.drawText( ( width() - fm.width( str ) ) / 2, i - diffy - fm.height() / 2,
 		    width(), fm.height(), AlignLeft | AlignTop, str );
     }
@@ -831,6 +829,8 @@ void KoRuler::setupMenu()
     d->mMM = d->rb_menu->insertItem( i18n( "Millimeters (mm)" ), this, SLOT( rbMM() ) );
     d->mPT = d->rb_menu->insertItem( i18n( "Points (pt)" ), this, SLOT( rbPT() ) );
     d->mINCH = d->rb_menu->insertItem( i18n( "Inches (inch)" ), this, SLOT( rbINCH() ) );
+    d->rb_menu->insertSeparator();
+    d->rb_menu->insertItem(i18n("Page Layout..."), this, SLOT(pageLayoutDia()));
     d->rb_menu->setCheckable( false );
     d->rb_menu->setItemChecked( d->mMM, true );
 }
