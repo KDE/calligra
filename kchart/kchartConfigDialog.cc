@@ -57,8 +57,8 @@ KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
     _parameterfontpage = new KChartFontConfigPage(_params,this );
     addTab( _parameterfontpage, i18n( "&Font" ) );
 
-    _backgroundpixpage = new KChartBackgroundPixmapConfigPage( _params, this );
-    addTab( _backgroundpixpage, i18n( "&Background pixmap" ) );
+    //_backgroundpixpage = new KChartBackgroundPixmapConfigPage( _params, this );
+    //addTab( _backgroundpixpage, i18n( "&Background pixmap" ) );
 
     if( ( _params->chartType() == KDChartParams::Pie &&
           _params->threeDPies() ) ||
@@ -140,7 +140,7 @@ void KChartConfigDialog::apply()
     bottomparams.setAxisLabelsColor( _colorpage->xLabelColor() );
     leftparams.setAxisLabelsColor( _colorpage->yLabelColor() );
     rightparams.setAxisLabelsColor( _colorpage->yLabel2Color() );
-    
+
     _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparams );
     _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparams );
     _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparams );
@@ -168,7 +168,7 @@ void KChartConfigDialog::apply()
           _params->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) ) {
         _hlcChart->apply();
 
-        _backgroundpixpage->apply();
+        //_backgroundpixpage->apply();
 
         // data in the params struct has changed; notify application
         emit dataChanged();
@@ -223,7 +223,7 @@ void KChartConfigDialog::defaults()
         _hlcChart->init();
     }
 
-    _backgroundpixpage->init();
+    //_backgroundpixpage->init();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 //      	_colorpage->setDataColor( i, _params->dataColor( i ) );
 }
