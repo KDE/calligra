@@ -1226,7 +1226,7 @@ bool kspreadfunc_imdiv( KSContext& context )
   return b;
 }
 
-static bool approx_equal (double a, double b)
+static bool approx_equal_delta (double a, double b)
 {
   if ( a == b )
     return TRUE;
@@ -1246,7 +1246,7 @@ bool kspreadfunc_delta( KSContext& context )
     return false;
   if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
     return false;
-  if(approx_equal(args[0]->doubleValue(), args[1]->doubleValue()))
+  if(approx_equal_delta(args[0]->doubleValue(), args[1]->doubleValue()))
         result=1;
   else
         result=0;
