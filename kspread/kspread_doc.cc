@@ -724,8 +724,6 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
 
 bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* )
 {
-    //todo Laurent just init for the moment
-    // format for oasis is not implemented
     d->m_loadingInfo = new KSPLoadingInfo;
 
     QTime dt;

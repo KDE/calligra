@@ -276,7 +276,7 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
     bool isNotProtected = false;
     if ( ( hasProperty( KSpreadFormat::PHideAll ) || !hasNoFallBackProperties( KSpreadFormat::PHideAll ) )
          && m_pStyle->hasProperty( KSpreadStyle::PHideAll ) )
-         hideAll = true;
+        hideAll = true;
 
     if ( ( hasProperty( KSpreadFormat::PHideFormula ) || !hasNoFallBackProperties( KSpreadFormat::PHideFormula ) )
          && m_pStyle->hasProperty( KSpreadStyle::PHideFormula ) )
@@ -304,20 +304,53 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
     if ( ( hasProperty( KSpreadFormat::PBackgroundColor ) || !hasNoFallBackProperties( KSpreadFormat::PBackgroundColor ) ) )
         currentCellStyle.addProperty( "fo:background-color", m_pStyle->bgColor().name() );
 
+    QPen leftBorder;
+    QPen rightBorder;
+    QPen topBorder;
+    QPen bottomBorder;
 
-#if 0
     if ( hasProperty( KSpreadFormat::PLeftBorder ) || !hasNoFallBackProperties( KSpreadFormat::PLeftBorder ) )
-        cs.left  = leftBorderPen( col, row );
-
+        leftBorder = m_pStyle->leftBorderPen();
     if ( hasProperty( KSpreadFormat::PRightBorder ) || !hasNoFallBackProperties( KSpreadFormat::PRightBorder ) )
-        cs.right = rightBorderPen( col, row );
-
+        rightBorder = m_pStyle->rightBorderPen();
     if ( hasProperty( KSpreadFormat::PTopBorder ) || !hasNoFallBackProperties( KSpreadFormat::PTopBorder ) )
-        cs.top  = topBorderPen( col, row );
-
+        topBorder = m_pStyle->topBorderPen();
     if ( hasProperty( KSpreadFormat::PBottomBorder ) || !hasNoFallBackProperties( KSpreadFormat::PBottomBorder ) )
-        cs.bottom  = bottomBorderPen( col, row );
-#endif
+        bottomBorder = m_pStyle->bottomBorderPen();
+    if ( ( leftBorder == rightBorder ) &&
+         ( leftBorder == topBorder ) &&
+         ( leftBorder == bottomBorder ) )
+    {
+        if ( ( leftBorder.width() != 0 ) && ( leftBorder.style() != Qt::NoPen ) )
+            currentCellStyle.addProperty("fo:border", convertOasisPenToString( leftBorder ) );
+    }
+    else
+    {
+        if ( ( leftBorder.width() != 0 ) && ( leftBorder.style() != Qt::NoPen ) )
+            currentCellStyle.addProperty( "fo:border-left", convertOasisPenToString( leftBorder ) );
+
+        if ( ( rightBorder.width() != 0 ) && ( rightBorder.style() != Qt::NoPen ) )
+            currentCellStyle.addProperty( "fo:border-right", convertOasisPenToString( rightBorder ) );
+
+        if ( ( topBorder.width() != 0 ) && ( topBorder.style() != Qt::NoPen ) )
+            currentCellStyle.addProperty( "fo:border-top", convertOasisPenToString( topBorder ) );
+
+        if ( ( bottomBorder.width() != 0 ) && ( bottomBorder.style() != Qt::NoPen ) )
+            currentCellStyle.addProperty( "fo:border-bottom", convertOasisPenToString( bottomBorder ) );
+    }
+
+    if ( hasProperty( KSpreadFormat::PFallDiagonal ) || !hasNoFallBackProperties( PFallDiagonal ) )
+    {
+        QPen pen( m_pStyle->fallDiagonalPen() );
+        if ( ( pen.width() != 0 ) && ( pen.style() != Qt::NoPen ) )
+            currentCellStyle.addProperty( "style:diagonal-tl-br", convertOasisPenToString( pen ) );
+    }
+    if ( hasProperty( KSpreadFormat::PGoUpDiagonal ) || hasNoFallBackProperties( PGoUpDiagonal ) )
+    {
+        QPen pen( m_pStyle->goUpDiagonalPen() );
+        if ( ( pen.width() != 0 ) && ( pen.style() != Qt::NoPen ) )
+            currentCellStyle.addProperty( "style:diagonal-bl-tr", convertOasisPenToString( pen ) );
+    }
 }
 
 
@@ -456,6 +489,18 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, int _col, 
         if ( ( bottomBorder.width() != 0 ) && ( bottomBorder.style() != Qt::NoPen ) )
             currentCellStyle.addProperty( "fo:border-bottom", convertOasisPenToString( bottomBorder ) );
 
+    }
+    if ( hasProperty( KSpreadFormat::PFallDiagonal ) || !hasNoFallBackProperties( PFallDiagonal ) )
+    {
+        QPen pen( fallDiagonalPen( _col, _row ) );
+        if ( ( pen.width() != 0 ) && ( pen.style() != Qt::NoPen ) )
+            currentCellStyle.addProperty( "style:diagonal-tl-br", convertOasisPenToString( pen ) );
+    }
+    if ( hasProperty( KSpreadFormat::PGoUpDiagonal ) || hasNoFallBackProperties( PGoUpDiagonal ) )
+    {
+        QPen pen( goUpDiagonalPen( _col, _row ) );
+        if ( ( pen.width() != 0 ) && ( pen.style() != Qt::NoPen ) )
+            currentCellStyle.addProperty( "style:diagonal-bl-tr", convertOasisPenToString( pen ) );
     }
 }
 
