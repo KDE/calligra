@@ -6,7 +6,7 @@ kexicqlinterface_la_METASOURCES = AUTO
 
 kexicqlinterface_la_SOURCES = cqldb.cpp cqlrecord.cpp 
 kexicqlinterface_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) ../../../libkexidb.la ../cql/sql/libcql.la
-kexicqlinterface_la_LDFLAGS     = -module -no-undefined $(KDE_PLUGIN)
+kexicqlinterface_la_LDFLAGS     = $(all_libraries) -module -no-undefined $(KDE_PLUGIN)
 
 bin_PROGRAMS = kexitest
 kexitest_SOURCES = ctest.cpp
