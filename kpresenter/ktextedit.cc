@@ -1534,6 +1534,23 @@ void KTextEdit::resetFormat()
     setFormat( doc->formatCollection()->defaultFormat(), KTextEditFormat::Format );
 }
 
+bool KTextEdit::event( QEvent * e )
+{
+    if ( e->type() == QEvent::AccelOverride ) {
+        QKeyEvent* ke = (QKeyEvent*) e;
+        switch ( ke->key() ) {
+        case Key_Home:
+        case Key_End:
+        case Key_Prior:
+        case Key_Next:
+          ke->accept();
+        default:
+          break;
+        }
+    }
+    return QWidget::event( e );
+}
+
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void KTextEditCommandHistory::addCommand( KTextEditCommand *cmd )

@@ -725,6 +725,7 @@ protected:
     void dragMoveEvent( QDragMoveEvent *e );
     void dragLeaveEvent( QDragLeaveEvent *e );
     void dropEvent( QDropEvent *e );
+    bool event( QEvent * e );
     bool eventFilter( QObject *o, QEvent *e );
     bool focusNextPrevChild( bool next );
 
