@@ -432,17 +432,15 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                 {
                     // ### TODO: fixed/variable date, exact custom formats
                     QString key((*paraFormatDataIt).variable.m_key.mid(4));
-                    if (key == "locale")
+                    if (key.startsWith("locale"))
                         key = QString::null; // ###TODO
                     str += "{\\field{\\*\\fldinst DATE ";
                     if (!key.isEmpty())
                     {
                         kdDebug(30515) << "Date format: " << key << endl;
-#if 0
                         str += "\\@ \"";
                         str += key;
                         str += "\" ";
-#endif
                     }
                     str += "\\* MERGEFORMAT }{\\fldrslt ";
                     str += escapeRtfText((*paraFormatDataIt).variable.m_text);
