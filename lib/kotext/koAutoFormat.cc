@@ -940,7 +940,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
                     if ( (*it).length() > maxlength )
                       maxlength = (*it).length();
                     new_wordlist.append(*it);
-                    kdDebug() << "adding word completion:" << *it << endl;
+                    //kdDebug() << "adding word completion:" << *it << endl;
                   }
                 }
                 if ( new_wordlist.isEmpty() )
@@ -950,7 +950,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
                 else
                 {
                   //we must extract the common part of the completions
-                  for (uint i = 0/*lastWord.length()*/; i<maxlength && !part; i++) //iterate through all completion words
+                  for (uint i = lastWord.length(); i<maxlength && !part; i++) //iterate through all completion words
                   {
                     QChar ch = new_wordlist.first().at(i);
                     for (QStringList::ConstIterator it = new_wordlist.begin(); it != new_wordlist.end(); ++it )
@@ -958,7 +958,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
                       if ( (*it).at(i).lower() != ch.lower() )
                       {
                         word = (*it).left(i); //the completion word is truncated here
-                        kdDebug() << "set the word completion to:" << word << endl;
+                        //kdDebug() << "set the word completion to:" << word << endl;
                         part=true; // completion of a part of a word; a space-character after the completion should not be inserted
                         break;
                       }
