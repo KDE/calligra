@@ -929,8 +929,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         }
   else
         {
-        m_iOutTextWidth = fm.width( " ");
-        m_iOutTextHeight = (fm.ascent() + fm.descent())*(m_strOutText.length()-1);
+        m_iOutTextWidth = fm.width( m_strOutText.at(0));
+        m_iOutTextHeight = (fm.ascent() + fm.descent())*(m_strOutText.length());
         }
 
   // Calculate the size of the cell
@@ -1113,7 +1113,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
                 if(!m_bVerticalText)
                         m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
                 else
-                        if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
+                        //if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
+                        if((h - m_iOutTextHeight)>0)
                                 m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
                         else
                                 m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
@@ -1390,8 +1391,8 @@ if(!m_bVerticalText)
         }
   else
         {
-        m_iOutTextWidth = fm.width( " ");
-        m_iOutTextHeight = (fm.ascent() + fm.descent())*(m_strOutText.length()-1);
+        m_iOutTextWidth = fm.width( m_strOutText.at(0));
+        m_iOutTextHeight = (fm.ascent() + fm.descent())*(m_strOutText.length());
         }
 m_fmAscent=fm.ascent();
 
