@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 2003 Lukas Tinkl <lukas@kde.org>
    Copyright 2000, 2002-2003 Laurent Montel <montel@kde.org>
    Copyright 2001-2003 Philipp Mueller <philipp.mueller@gmx.de>
@@ -41,7 +41,6 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <kdebug.h>
-#include <kdebugclasses.h>
 
 /*********************************************
  *
@@ -95,13 +94,13 @@ bool KSpreadCellProxy::process( const QCString& obj, const QCString& fun, const 
 
     QString cellID=QString::fromUtf8(obj.data() + m_prefix.length());
     cellID=m_table->tableName()+"!"+cellID;
-  
+
     kdDebug()<<"KSpreadCellProxy::process: cellID="<<cellID<<endl;
 
     KSpreadPoint p( cellID); //obj.data() + m_prefix.length() );
     if ( p.pos.x()<0 ) {
 	kdDebug(36001)<<"KSpreadCellProyxy::process: resulting KSpreadPoint is not valid"<<endl;
-        return FALSE; 
+        return FALSE;
     }
 
     kdDebug(36001)<<"all checks finsihed, trying to access cell (x):"<<p.pos.x()<<endl;

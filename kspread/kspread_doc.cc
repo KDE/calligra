@@ -56,6 +56,8 @@
 #include "kspread_util.h"
 #include "kspread_view.h"
 #include "commands.h"
+#include "ksploadinginfo.h"
+
 #include "KSpreadDocIface.h"
 
 #include "koApplication.h"
@@ -73,7 +75,7 @@ public:
   KSpreadMap* workbook;
   KSpreadStyleManager* styleManager;
   KSpreadSheet *activeSheet;
-
+    KSPLoadingInfo *m_loadingInfo;
   static QValueList<KSpreadDoc*> s_docs;
   static int s_docId;
 
@@ -155,7 +157,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
   d = new DocPrivate;
-
+  d->m_loadingInfo = 0L;
   d->workbook = new KSpreadMap( this, "Map" );
   d->styleManager = new KSpreadStyleManager();
   d->activeSheet= 0;
@@ -564,6 +566,8 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
 {
     //todo Laurent just init for the moment
     // format for oasis is not implemented
+    d->m_loadingInfo = new KSPLoadingInfo;
+
     QTime dt;
     dt.start();
 
@@ -582,6 +586,7 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     }
 
     // TODO check versions and mimetypes etc.
+    loadOasisAreaName( body );
 
     // all <table:table> goes to workbook
     if ( !d->workbook->loadOasis( body, oasisStyles ) )
@@ -589,15 +594,14 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         d->isLoading = false;
         return false;
     }
-    loadOasisAreaName( body );
-
 
     emit sigProgress( 90 );
     initConfig();
     emit sigProgress(-1);
 
     kdDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
-
+    delete d->m_loadingInfo;
+    d->m_loadingInfo = 0L;
     return true;
 }
 
@@ -2029,6 +2033,11 @@ void KSpreadDoc::clearIgnoreWordAll( )
 void KSpreadDoc::setDisplayTable(KSpreadSheet *_table )
 {
     d->activeSheet = _table;
+}
+
+KSPLoadingInfo * KSpreadDoc::loadingInfo()const
+{
+    return d->m_loadingInfo;
 }
 
 KSpreadSheet * KSpreadDoc::displayTable()const

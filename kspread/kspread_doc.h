@@ -37,6 +37,7 @@ class KSpreadMap;
 class KSpreadSheet;
 class KSpreadStyleManager;
 class KSpreadUndoAction;
+class KSPLoadingInfo;
 
 class KoStore;
 class KoCommandHistory;
@@ -632,11 +633,10 @@ public:
     QStringList spellListIgnoreAll() const ;
 
     void setDisplayTable(KSpreadSheet *_Table );
-    KSpreadSheet * displayTable()const;
-
+    KSpreadSheet * displayTable() const;
+    KSPLoadingInfo * loadingInfo() const;
   void increaseNumOperation();
   void decreaseNumOperation();
-
 public slots:
 
   //void newView(); obsloete (Werner)
@@ -732,6 +732,7 @@ private:
                            KSpreadView* view, const KoRect &viewRect,
                            double positions[], bool paintSides[] );
   void loadPaper( QDomElement const & paper );
+  KSPLoadingInfo *m_loadingInfo;
 };
 
 #endif /* KSPREAD_DOC */
