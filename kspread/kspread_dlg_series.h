@@ -42,14 +42,14 @@ KSpreadTable* table;
 
 public slots:
   void slotOk();
-  void slotClose();
+  void slotCancel();
 protected:
   KSpreadView* m_pView;
   QLineEdit* start;
   QLineEdit* end;
   QLineEdit* step;
   QPushButton* m_pOk;
-  QPushButton* m_pClose;
+  QPushButton* m_pCancel;
   QRadioButton* column;
   QRadioButton* row;
   QRadioButton* linear;

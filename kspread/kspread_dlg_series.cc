@@ -97,9 +97,9 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
-  m_pOk = bb->addButton( i18n("OK") );
+  m_pOk = bb->addButton( i18n("&OK") );
   m_pOk->setDefault( TRUE );
-  m_pClose = bb->addButton( i18n( "Close" ) );
+  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
   bb->layout();
   grid1->addWidget( bb,2,1 );
   grid2->setColStretch(0,20);
@@ -119,7 +119,7 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   start->setFocus();
 
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
 }
 
 
@@ -185,7 +185,7 @@ else
 }
 
 
-void KSpreadSeriesDlg::slotClose()
+void KSpreadSeriesDlg::slotCancel()
 {
 reject();
 }
