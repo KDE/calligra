@@ -22,7 +22,8 @@
 #define KEXIDBFACTORY_H
 
 #include <widgetfactory.h>
-#include <kexidataiteminterface.h>
+
+#include "kexiformdataiteminterface.h"
 
 #include <klineedit.h>
 
@@ -56,7 +57,7 @@ class KexiSubForm : public QScrollView
 		QString m_formName;
 };
 
-class KexiDBLineEdit : public KLineEdit, public KexiDataItemInterface
+class KexiDBLineEdit : public KLineEdit, public KexiFormDataItemInterface
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
@@ -65,18 +66,40 @@ class KexiDBLineEdit : public KLineEdit, public KexiDataItemInterface
 		KexiDBLineEdit(QWidget *parent, const char *name=0);
 		virtual ~KexiDBLineEdit();
 
-		inline QString dataSource() const { return KexiDataItemInterface::dataSource(); }
+		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
 		virtual QVariant value();
 		virtual void setInvalidState( const QString& displayText );
 
+		//! \return true if editor's value is null (not empty)
+		//! Used for checking if a given constraint within table of form is met.
+		virtual bool valueIsNull();
+
+		//! \return true if editor's value is empty (not necessary null). 
+		//! Only few data types can accept "EMPTY" property 
+		//! (use KexiDB::Field::hasEmptyProperty() to check this).
+		//! Used for checking if a given constraint within table or form is met.
+		virtual bool valueIsEmpty();
+
+		/*! \return 'readOnly' flag for this item. The flag is usually taken from
+		 the item's widget, e.g. KLineEdit::isReadOnly(). 
+		 By default, always returns false. */
+		virtual bool isReadOnly() const;
+
+		/*! \return the view widget of this item, e.g. line edit widget. */
+		virtual QWidget* widget();
+
+		virtual bool cursorAtStart();
+		virtual bool cursorAtEnd();
+		virtual void clear();
+
 	public slots:
-		inline void setDataSource(const QString &ds) { KexiDataItemInterface::setDataSource(ds); }
+		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 
 	protected slots:
 		void slotTextChanged(const QString&);
 
 	protected:
-		virtual void setValueInternal(const QVariant& value);
+		virtual void setValueInternal(const QVariant& add, bool removeOld);
 };
 
 //! Kexi Factory (DB widgets + subform)

@@ -40,7 +40,7 @@ class KEXIDATATABLE_EXPORT KexiDateTimeTableEdit : public KexiTableEdit
 
 	public:
 		KexiDateTimeTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
-		virtual QVariant value(bool &ok);
+		virtual QVariant value();
 		virtual bool valueIsNull();
 		virtual bool valueIsEmpty();
 		virtual void clear();
@@ -55,7 +55,7 @@ class KEXIDATATABLE_EXPORT KexiDateTimeTableEdit : public KexiTableEdit
 		void acceptDate();
 
 	protected:
-		virtual void init(const QString& add, bool removeOld);
+		virtual void setValueInternal(const QVariant& add, bool removeOld);
 
 		KDatePicker *m_datePicker;
 		QDateEdit* m_dateEdit;

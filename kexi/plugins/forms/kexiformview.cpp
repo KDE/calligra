@@ -48,6 +48,7 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
  , m_buffer(0)
  , m_resizeMode(KexiFormView::ResizeDefault)
  , m_query(0)
+ , m_queryIsOwned(false)
 // , m_firstFocusWidget(0)
 {
 	m_delayedFormContentsResizeOnShow = false;
@@ -60,7 +61,7 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 //moved	setViewWidget(m_scrollView);
 //	m_scrollView->show();
 
-	m_dbform = new KexiDBForm(m_scrollView->viewport(), name/*, conn*/);
+	m_dbform = new KexiDBForm(m_scrollView->viewport(), m_scrollView, name/*, conn*/);
 //	m_dbform->resize( m_scrollView->viewport()->size() - QSize(20, 20) );
 //	m_dbform->resize(QSize(400, 300));
 	m_scrollView->setWidget(m_dbform);
@@ -137,7 +138,8 @@ KexiFormView::~KexiFormView()
 //	if (m_cursor)
 //		m_conn->deleteCursor(m_cursor);
 //	delete m_provider;
-	delete m_query;
+	if (m_queryIsOwned)
+		delete m_query;
 //	delete m_data;
 }
 
@@ -282,7 +284,7 @@ KexiFormView::afterSwitchFrom(int mode)
 	if((mode == Kexi::DesignViewMode) && viewMode()==Kexi::DataViewMode) {
 		// The form may have been modified, so we must recreate the preview
 		delete m_dbform; // also deletes form()
-		m_dbform = new KexiDBForm(m_scrollView->viewport());
+		m_dbform = new KexiDBForm(m_scrollView->viewport(), m_scrollView, "KexiDBForm");
 		m_scrollView->setWidget(m_dbform);
 
 		initForm();
@@ -335,13 +337,14 @@ void KexiFormView::initDataSource()
 	//collect all data-aware widgets and create query schema
 //	if (!m_provider)
 //		m_provider = new KexiDataProvider();
-	m_scrollView->dataProvider()->setMainWidget(m_dbform);
+	m_scrollView->setMainWidget(m_dbform);
 //			if (m_cursor)
 //				m_conn->deleteCursor(m_cursor);
 	KexiDB::Cursor *cursor = 0;
-	delete m_query;
+	if (m_queryIsOwned)
+		delete m_query;
 	m_query = new KexiDB::QuerySchema();
-	QStringList sources( m_scrollView->dataProvider()->usedDataSources() );
+	QStringList sources( m_scrollView->usedDataSources() );
 	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 	KexiDB::TableSchema *tableSchema = conn->tableSchema( dataSourceString );
 	ok = tableSchema != 0;
@@ -362,13 +365,14 @@ void KexiFormView::initDataSource()
 		}
 		if (invalidSources.count()==sources.count()) {
 			//all data sources are invalid! don't execute the query
-			delete m_query;
+			if (m_queryIsOwned)
+				delete m_query;
 			m_query = 0;
 		}
 		else {
 			cursor = conn->executeQuery( *m_query );
 		}
-		m_scrollView->dataProvider()->invalidateDataSources( invalidSources );
+		m_scrollView->invalidateDataSources( invalidSources, m_query );
 		ok = cursor!=0;
 	}
 //			delete m_data;
@@ -390,29 +394,6 @@ void KexiFormView::initDataSource()
 
 		m_scrollView->setData( data, true /*owner*/ );
 	}
-/*moved
-		if (ok) {
-			m_scrollView->recordNavigator()->setRecordCount(data->count());
-			m_currentRow = m_data->first();
-			if (m_currentRow) {
-				m_currentRowNumber = 0;
-				m_provider->fillDataItems(*m_currentRow);
-				m_scrollView->recordNavigator()->setCurrentRecordNumber(1);
-			}
-//				m_provider->fillDataItems(*m_cursor);
-//				m_cursor->moveNext();
-		}
-//moved up			conn->deleteCursor(cursor);
-		if (!ok) {
-			//! @todo err message: error opening cursor
-//				m_conn->deleteCursor(m_cursor);
-//				m_cursor = 0;
-			delete m_data;
-			m_data = 0;
-			delete m_query;
-			m_query = 0;
-		}
-		*/
 }
 
 void

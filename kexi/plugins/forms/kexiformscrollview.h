@@ -34,12 +34,20 @@ namespace KFormDesigner {
 class KexiDBForm;
 
 //! @short KexiFormScrollView class provides a widget for displaying data in a form view
-/*! @see KexiTableView */
+/*! This class also implements:
+    - record navigation handling (KexiRecordNavigatorHandler)
+    - shared actions handling (KexiSharedActionClient)
+    - data-aware behaviour (KexiDataAwareObjectInterface)
+    - data provider bound to data-aware widgets (KexiFormDataProvider)
+
+    @see KexiTableView
+*/
 class KexiFormScrollView : 
 	public KexiScrollView,
 	public KexiRecordNavigatorHandler,
 	public KexiSharedActionClient,
-	public KexiDataAwareObjectInterface
+	public KexiDataAwareObjectInterface,
+	public KexiFormDataProvider
 {
 	Q_OBJECT
 	KEXI_DATAAWAREOBJECTINTERFACE
@@ -50,7 +58,26 @@ class KexiFormScrollView :
 
 		void setForm(KFormDesigner::Form *form) { m_form = form; }
 
-		KexiDataProvider* dataProvider() const { return m_provider; }
+		/*! Reimplemented from KexiDataAwareObjectInterface
+		 for checking 'readOnly' flag from a widget
+		 ('readOnly' flag from data member is still checked though). */
+		virtual bool columnEditable(int col);
+
+		/*! \return number of visible columns in this view. 
+		 There can be a number of duplicated columns defined
+		 (data-aware widgets, see KexiFormScrollView::columns()),
+		 so columns() can return greater number than dataColumns(). */
+		virtual int columns() const;
+
+		/*! \return column information for column number \a col. 
+		 Reimplemented for KexiDataAwareObjectInterface:
+		 column data corresponding to widget number is used here
+		 (see fieldNumberForColumn()). */
+		virtual KexiTableViewColumn* column(int col);
+
+		/*! \return field number within data model connected to a data-aware
+		 widget at column \a col. */
+		uint fieldNumberForColumn(int col);
 
 	public slots:
 		/*! Reimplemented to update resize policy. */
@@ -139,7 +166,7 @@ class KexiFormScrollView :
 			bool removeOld = false);
 
 		//! Implementation for KexiDataAwareObjectInterface
-		virtual KexiTableEdit *editor( int col, bool ignoreMissingEditor = false );
+		virtual KexiDataItemInterface *editor( int col, bool ignoreMissingEditor = false );
 
 		//! Implementation for KexiDataAwareObjectInterface
 		virtual void editorShowFocus( int row, int col );
@@ -168,13 +195,23 @@ class KexiFormScrollView :
 
 		KexiDBForm* dbFormWidget() const;
 
+		//! Reimplemented from KexiFormDataProvider. Reaction for change of \a item.
+		virtual void valueChanged(KexiDataItemInterface* item);
+
+		//! Implementation for KexiDataAwareObjectInterface
+		//! Called by KexiDataAwareObjectInterface::setCursorPosition() 
+		//! if cursor's position is really changed.
+		inline virtual void selectCellInternal();
+
+		/*! Reimplementation: used to refresh "editing indicator" visibility. */
+		virtual void initDataContents();
+
 		//virtual bool focusNextPrevChild( bool next );
 
 		KFormDesigner::Form *m_form;
-
 		int m_currentLocalSortColumn, m_localSortingOrder;
-
-		KexiDataProvider* m_provider;
+		//! Used in selectCellInternal() to avoid fetching the same record twice
+		KexiTableItem *m_previousItem;
 };
 
 #endif

@@ -91,7 +91,7 @@ void KexiInputTableEdit::init()
 
 	//create internal editor
 	m_lineedit = new MyLineEdit(this, "KexiInputTableEdit-KLineEdit");
-	setView(m_lineedit);
+	setViewWidget(m_lineedit);
 	if (align_right)
 		m_lineedit->setAlignment(AlignRight);
 //	m_cview->setFrame(false);
@@ -109,7 +109,7 @@ void KexiInputTableEdit::init()
 
 }
 	
-void KexiInputTableEdit::init(const QString& add, bool removeOld)
+void KexiInputTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
 #if 0 //js
 	if(!ov.isEmpty())
@@ -147,6 +147,7 @@ void KexiInputTableEdit::init(const QString& add, bool removeOld)
 		if (!removeOld)
 			origValue = m_origValue;
 		QString tmp_val;
+		QString add(add_.toString());
 
 		if (field()->isFPNumericType()) {
 //TODO: precision!
@@ -284,21 +285,25 @@ bool KexiInputTableEdit::valueIsEmpty()
 	return !m_lineedit->text().isNull() && m_lineedit->text().isEmpty();
 }
 
-QVariant KexiInputTableEdit::value(bool &ok)
+QVariant KexiInputTableEdit::value()
 {
 	if (field()->isFPNumericType()) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
 		//! js @todo PRESERVE PRECISION!
 		QString txt = m_lineedit->text();
 		if (m_decsym!=".")
 			txt = txt.replace(m_decsym,".");//convert back
-		return QVariant( txt.toDouble(&ok) );
+		bool ok;
+		const double result = txt.toDouble(&ok);
+		return ok ? QVariant(result) : QVariant();
 	}
 	else if (field()->isIntegerType()) {
-		//check constraints
-		return QVariant( m_lineedit->text().toInt(&ok) );
+		//! @todo check constraints
+		bool ok;
+		const int result = m_lineedit->text().toInt(&ok);
+		return ok ? QVariant(result) : QVariant();
 	}
 	//default: text
-	ok = true;
+//	ok = true;
 	return QVariant( m_lineedit->text() );
 }
 #if 0

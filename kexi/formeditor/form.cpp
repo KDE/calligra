@@ -405,7 +405,8 @@ Form::addWidgetToTabStops(ObjectTreeItem *c)
 		for(QObject *obj = list.first(); obj; obj = list.next())
 		{
 //			if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() != QWidget::NoFocus)) {
-			if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() & QWidget::TabFocus)) {
+//			if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() & QWidget::TabFocus)) {
+			if(obj->isWidgetType()) {//QWidget::TabFocus flag will be checked later!
 				if(d->tabstops.findRef(c) == -1) {
 					d->tabstops.append(c);
 					return;

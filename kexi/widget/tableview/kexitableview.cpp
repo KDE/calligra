@@ -1589,8 +1589,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 			{
 				//we're over editing cell and the editor has no widget
 				// - we're displaying internal values, not buffered
-				bool ok;
-				cell_value = m_editor->value(ok);
+//				bool ok;
+				cell_value = m_editor->value();
 			}
 			else {
 				//we're displaying values from edit buffer, if available
@@ -2144,7 +2144,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	QWidget *w = focusWidget();
 //	if (!w || w!=viewport() && w!=this && (!m_editor || w!=m_editor->view() && w!=m_editor)) {
 //	if (!w || w!=viewport() && w!=this && (!m_editor || w!=m_editor->view())) {
-	if (!w || w!=viewport() && w!=this && (!m_editor || !Kexi::hasParent(m_editor, w))) {
+	if (!w || w!=viewport() && w!=this && (!m_editor || !Kexi::hasParent(dynamic_cast<QObject*>(m_editor), w))) {
 		//don't process stranger's events
 		e->ignore();
 		return;
@@ -2536,8 +2536,8 @@ KexiTableEdit *KexiTableView::editor( int col, bool ignoreMissingEditor )
 
 	editor->resize(columnWidth(col)-1, rowHeight()-1);
 	editor->installEventFilter(this);
-	if (editor->view())
-		editor->view()->installEventFilter(this);
+	if (editor->widget())
+		editor->widget()->installEventFilter(this);
 	//store
 	d->editors.insert( tvcol, editor );
 	return editor;
@@ -2579,30 +2579,6 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 		kdDebug(44021) << "KexiTableView::createEditor(): COL IS READ ONLY!"<<endl;
 		return;
 	}
-	
-/*	QVariant val;
-	if (!removeOld) {
-		val = *bufferedValueAt(col);
-//		val = m_currentItem->at(col);
-//		val = m_currentItem->at(m_curCol);
-	}*/
-/*	switch(columnType(col))
-	{
-		case QVariant::Date:
-			#ifdef USE_KDE
-//			val = KGlobal::locale()->formatDate(m_currentItem->getDate(col), true);
-
-			#else
-//			val = m_currentItem->getDate(col).toString(Qt::LocalDate);
-			#endif
-			break;
-
-		default:
-//			val = m_currentItem->getText(m_curCol);
-			val = m_currentItem->getValue(m_curCol);
-
-			break;
-	}*/
 
 	const bool startRowEdit = !m_rowEditing; //remember if we're starting row edit
 
@@ -2633,21 +2609,18 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 			m_verticalHeader->setOffset(contentsY());
 		}
 	}	
-//	else {//just reinit
-//		d->pAfterInsertItem->init(columns());
-//			d->paintAfterInsertRow = true;
-//	}
 
 	m_editor = editor( col );
-	if (!m_editor)
+	QWidget *m_editorWidget = dynamic_cast<QWidget*>(m_editor);
+	if (!m_editorWidget)
 		return;
 
-	m_editor->init(*bufferedValueAt(col), addText, removeOld);
+	m_editor->setValue(*bufferedValueAt(col), addText, removeOld);
 	if (m_editor->hasFocusableWidget()) {
-		moveChild(m_editor, columnPos(m_curCol), rowPos(m_curRow));
+		moveChild(m_editorWidget, columnPos(m_curCol), rowPos(m_curRow));
 
-		m_editor->resize(columnWidth(m_curCol)-1, rowHeight()-1);
-		m_editor->show();
+		m_editorWidget->resize(columnWidth(m_curCol)-1, rowHeight()-1);
+		m_editorWidget->show();
 
 		m_editor->setFocus();
 	}
@@ -2934,10 +2907,11 @@ void KexiTableView::slotColumnWidthChanged( int, int, int )
 	//	viewport()->repaint();
 
 //	updateContents(0, 0, d->pBufferPm->width(), d->pBufferPm->height());
-	if (m_editor)
+	QWidget *m_editorWidget = dynamic_cast<QWidget*>(m_editor);
+	if (m_editorWidget)
 	{
-		m_editor->resize(columnWidth(m_curCol)-1, rowHeight()-1);
-		moveChild(m_editor, columnPos(m_curCol), rowPos(m_curRow));
+		m_editorWidget->resize(columnWidth(m_curCol)-1, rowHeight()-1);
+		moveChild(m_editorWidget, columnPos(m_curCol), rowPos(m_curRow));
 	}
 	updateGeometries();
 	updateScrollBars();
@@ -4179,7 +4153,7 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 				ke->accept();
 				return true;
 			}
-			else if (m_editor && (o==m_editor || o==m_editor->view())) {
+			else if (m_editor && (o==dynamic_cast<QObject*>(m_editor) || o==m_editor->widget())) {
 				if (   (k==Key_Tab && (k==NoButton || k==ShiftButton))
 					|| (k==Key_Enter || k==Key_Return || k==Key_Up || k==Key_Down) 
 					|| (k==Key_Left && m_editor->cursorAtStart())

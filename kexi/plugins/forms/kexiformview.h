@@ -142,6 +142,10 @@ class KexiFormView : public KexiDataAwareView
 //		KexiDataProvider* m_provider;
 //		KexiDB::Cursor *m_cursor;
 		KexiDB::QuerySchema* m_query;
+		/*! True, if m_query is created as temporary object within this form.
+		 If user selected an existing, predefined (stored) query, m_queryIsOwned will be false,
+		 so the query object will not be destroyed. */
+		bool m_queryIsOwned;
 //moved		KexiTableViewData *m_data;
 //moved		KexiTableItem *m_currentRow;
 //moved		int m_currentRowNumber;

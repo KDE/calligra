@@ -98,7 +98,10 @@ KexiTableViewColumn::KexiTableViewColumn(
 	}
 	init();
 	//setup column's readonly flag: true if this is parent table's field
-	m_readOnly = (query.parentTable()!=fieldinfo->field->table());
+	m_readOnly = (query.masterTable()!=fieldinfo->field->table());
+	kdDebug() << "KexiTableViewColumn: query.masterTable()==" 
+		<< (query.masterTable() ? query.masterTable()->name() : "notable") << ", fieldinfo->field->table()=="
+		<< (fieldinfo->field->table() ? fieldinfo->field->table()->name()  : "notable") << endl;
 //	m_visible = query.isFieldVisible(&f);
 }
 
@@ -331,8 +334,8 @@ void KexiTableViewData::addColumn( KexiTableViewColumn* col )
 
 QString KexiTableViewData::dbTableName() const
 {
-	if (m_cursor && m_cursor->query() && m_cursor->query()->parentTable())
-		return m_cursor->query()->parentTable()->name();
+	if (m_cursor && m_cursor->query() && m_cursor->query()->masterTable())
+		return m_cursor->query()->masterTable()->name();
 	return QString::null;
 }
 

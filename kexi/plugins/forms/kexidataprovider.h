@@ -20,9 +20,13 @@
 #ifndef KEXIDATAPROVIDER_H
 #define KEXIDATAPROVIDER_H
 
-#include <kexidataiteminterface.h>
+#include "kexiformdataiteminterface.h"
+#include <qdict.h>
 
 class KexiTableItem;
+namespace KexiDB {
+	class QuerySchema;
+}
 
 //! The KexiDataProvider class is a data provider for Kexi Forms
 /*! This provider collects data-aware widgets using setMainWidget().
@@ -35,40 +39,47 @@ class KexiTableItem;
  return ("name", "surname") list, so the cursor's query can be simplified 
  and thus more effective.
 */
-class KexiDataProvider : public KexiDataItemChangesListener
+class KexiFormDataProvider : public KexiDataItemChangesListener
 {
 	public:
-		KexiDataProvider();
-		~KexiDataProvider();
+		KexiFormDataProvider();
+		virtual ~KexiFormDataProvider();
 
 		/*! sets \a mainWidget to be a main widget for this data provider.
 		 Also find widgets whose will work as data items 
-		 (all of them must implement KexiDataItemInterface), so these could be 
+		 (all of them must implement KexiFormDataItemInterface), so these could be 
 		 filled with data on demand. */
 		void setMainWidget(QWidget* mainWidget);
 
 		QStringList usedDataSources() const { return m_usedDataSources; }
 
-		const QPtrList<KexiDataItemInterface>& dataItems() const { return m_dataItems; }
+		QPtrList<KexiFormDataItemInterface>& dataItems() { return m_dataItems; }
 
 		/*! Fills data items with appropriate data fetched from \a cursor. */
 		void fillDataItems(KexiTableItem& row);// KexiDB::Cursor& cursor);
 
-		//! Reaction for change of \a item.
+		//! Reaction for change of \a item. Does nothing.
 		virtual void valueChanged(KexiDataItemInterface* item);
 
 		/*! Invalidates data sources collected by this provided.
 		 \a invalidSources is the list of data sources that should 
 		 be ommited for fillDataItems(). 
 		 Used by KexiFormView::initDataSource(). */
-		void invalidateDataSources( const QValueList<uint>& invalidSources );
+		void invalidateDataSources( const QValueList<uint>& invalidSources, 
+			KexiDB::QuerySchema* query = 0 );
+
+		/*! Fills the same data provided by \a value to every data item (other than \a item) 
+		 having the same data source as \a item. This method is called immediately when 
+		 \a value is changed, so duplicated data items are quickly updated. */
+		void fillDuplicatedDataItems(KexiFormDataItemInterface* item, const QVariant& value);
 
 	protected:
 		QWidget *m_mainWidget;
-		typedef QMap<KexiDataItemInterface*,uint> KexiDataItemInterfaceToIntMap;
-		QPtrList<KexiDataItemInterface> m_dataItems;
+		QDict<char> *m_duplicatedItems;
+		typedef QMap<KexiFormDataItemInterface*,uint> KexiFormDataItemInterfaceToIntMap;
+		QPtrList<KexiFormDataItemInterface> m_dataItems;
 		QStringList m_usedDataSources;
-		QMap<KexiDataItemInterface*,uint> m_fieldNumbersForDataItems;
+		KexiFormDataItemInterfaceToIntMap m_fieldNumbersForDataItems;
 };
 
 #endif

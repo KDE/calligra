@@ -44,7 +44,7 @@ class KEXIDATATABLE_EXPORT KexiBoolTableEdit : public KexiTableEdit
 		//! (check this with KexiDB::Field::hasEmptyProperty()), 
 		virtual bool valueIsEmpty();
 
-		virtual QVariant value(bool &ok);
+		virtual QVariant value();
 
 		virtual bool cursorAtStart();
 		virtual bool cursorAtEnd();
@@ -60,7 +60,7 @@ class KEXIDATATABLE_EXPORT KexiBoolTableEdit : public KexiTableEdit
 
 	protected:
 		//! initializes this editor with \a add value
-		virtual void init(const QString& add, bool removeOld);
+		virtual void setValueInternal(const QVariant& add, bool removeOld);
 
 		void showHintButton();
 		void init();

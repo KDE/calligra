@@ -10,12 +10,19 @@ kexihandler_form_la_LIBADD = ../../core/libkexicore.la \
   ../../widget/utils/libkexiguiutils.la \
   ../../widget/tableview/libkexidatatable.la \
   ../../widget/libkexiextendedwidgets.la \
-  ../../formeditor/libkformdesigner.la
+  ../../formeditor/libkformdesigner.la \
+  ./libkexiformutils.la
 
 kexidbwidgets_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) -module
 kexidbwidgets_la_SOURCES = kexidbfactory.cpp kexilabel.cpp \
 	kexidbinputwidget.cpp
-kexidbwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la
+kexidbwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la \
+  ./libkexiformutils.la
+
+lib_LTLIBRARIES = libkexiformutils.la
+libkexiformutils_la_SOURCES = kexiformdataiteminterface.cpp
+libkexiformutils_la_LDFLAGS = $(all_libraries) -Wnounresolved
+libkexiformutils_la_LIBADD = ../../core/libkexicore.la
 
 servicesdir=$(kde_servicesdir)/kformdesigner
 services_DATA = kexidbfactory.desktop
@@ -30,4 +37,6 @@ INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 METASOURCES = AUTO
 
 include ../Makefile.common
-noinst_HEADERS = kexidbinputwidget.h
+noinst_HEADERS = kexidbinputwidget.h kexidataprovider.h kexidbfactory.h \
+	kexidbform.h kexiformpart.h kexiformscrollview.h kexiformview.h kexilabel.h \
+	kexiwidgetfactory.h

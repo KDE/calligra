@@ -52,6 +52,8 @@ class KEXIEXTWIDGETS_EXPORT KexiScrollView : public QScrollView
 
 		KexiRecordNavigator* recordNavigator() const;
 
+		inline bool preview() const { return m_preview; }
+
 	public slots:
 		/*! Make sure there is a 300px margin around the form contents to allow resizing. */
 		void refreshContentsSize();

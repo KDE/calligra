@@ -167,7 +167,7 @@ KFormDesignerPart::setupActions()
 	KStdAction::selectAll(m_manager, SLOT(selectAll()), actionCollection());
 	new KAction(i18n("Clear Widget Contents"), "editclear", KShortcut(0), m_manager, SLOT(clearWidgetContent()), actionCollection(), "clear_contents");
 	new KAction(i18n("Delete Widget"), "editdelete", KShortcut(0), m_manager, SLOT(deleteWidget()), actionCollection(), "delete_widget");
-	new KAction(i18n("Preview Form"), "filequickprint", "Ctrl+T", this, SLOT(slotPreviewForm()), actionCollection(), "preview_form");
+	new KAction(i18n("Preview Form"), "filequickprint", ALT+Key_1, this, SLOT(slotPreviewForm()), actionCollection(), "preview_form");
 	new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), m_manager, SLOT(editTabOrder()), actionCollection(), "taborder");
 	new KAction(i18n("Edit Pixmap Collection"), "icons", KShortcut(0), m_manager, SLOT(editFormPixmapCollection()), actionCollection(), "pixmap_collection");
 	new KAction(i18n("Edit Form Connections"), "connections", KShortcut(0), m_manager, SLOT(editConnections()), actionCollection(), "form_connections");

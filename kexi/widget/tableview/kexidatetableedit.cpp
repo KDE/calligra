@@ -53,13 +53,13 @@ KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *p
  : KexiTableEdit(column, parent,"KexiDateTableEdit")
 {
 	m_sentEvent = false;
-	setView( new QWidget(this) );
-	m_edit = new QDateEdit(view());
+	setViewWidget( new QWidget(this) );
+	m_edit = new QDateEdit(widget());
 	m_edit->setAutoAdvance(true);
 	m_edit->installEventFilter(this);
 	m_setNumberOnFocus = -1;
 
-	QToolButton* btn = new QToolButton(view());
+	QToolButton* btn = new QToolButton(widget());
 	btn->setText("...");
 	btn->setFixedWidth( QFontMetrics(btn->font()).width(" ... ") );
 	btn->setPopupDelay(1); //1 ms
@@ -86,7 +86,7 @@ KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *p
 	m_datePickerPopupMenu->insertItem(m_datePicker);
 	btn->setPopup(m_datePickerPopupMenu);
 	
-	QHBoxLayout* layout = new QHBoxLayout(view());
+	QHBoxLayout* layout = new QHBoxLayout(widget());
 	layout->addWidget(m_edit, 1);
 	layout->addWidget(btn, 0);
 
@@ -95,10 +95,11 @@ KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *p
 	m_acceptEditorAfterDeleteContents = true;
 }
 
-void KexiDateTableEdit::init(const QString& add, bool removeOld)
+void KexiDateTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
 	m_setNumberOnFocus = -1;
 	QDate d;
+	QString add(add_.toString());
 	if (removeOld) {
 		if (!add.isEmpty() && add[0].latin1()>='0' && add[0].latin1() <='9') {
 			m_setNumberOnFocus = add[0].latin1()-'0';
@@ -130,9 +131,9 @@ KexiDateTableEdit::slotDateChanged(QDate date)
 }
 
 QVariant 
-KexiDateTableEdit::value(bool &ok)
+KexiDateTableEdit::value()
 {
-	ok = true;
+//	ok = true;
 	return QVariant(m_edit->date());
 }
 

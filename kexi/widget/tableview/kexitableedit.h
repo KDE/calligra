@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,8 @@
 #ifndef _KEXITABLEEDIT_H_
 #define _KEXITABLEEDIT_H_
 
+#include <kexidataiteminterface.h>
+
 #include <qvariant.h>
 #include <qscrollview.h>
 
@@ -32,7 +34,7 @@ namespace KexiDB {
 
 /*! @short Abstract class for a cell editor.
 */
-class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
+class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemInterface
 {
 	Q_OBJECT
 
@@ -42,16 +44,17 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 
 		virtual ~KexiTableEdit();
 
-		/*! Just initializes \a value, and calls init(const QString& add). 
+/* moved to KexiDataItemInterface*/
+		/*! Just initializes \a value, and calls init(const QString& add, bool removeOld). 
 		 If \a removeOld is true, current value is set up as \a add.
-		 If \a removeOld if false, current value is set up as \a value + \add.
+		 If \a removeOld if false, current value is set up as \a value + \a add.
 		 \a value is stored as 'old value' -it'd be usable in the future
-		 (e.g. Combo Box editor can use old value if current vlause does not 
+		 (e.g. Combo Box editor can use old value if current value does not 
 		 match any item on the list).
-		 Called by KexiTableView. */
-		void init(QVariant value, const QString& add, bool removeOld = false);
+		 Called by KexiTableView and others. */
+/*		void init(const QVariant& value, const QString& add, bool removeOld = false);
 
-		//! @return true if editor's value is changed (compared to original value)
+		//! \return true if editor's value is changed (compared to original value)
 		virtual bool valueChanged();
 
 		//! \return true if editor's value is null (not empty)
@@ -61,33 +64,56 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		//! Only few field types can accept "EMPTY" property 
 		//! (check this with KexiDB::Field::hasEmptyProperty()), 
 		virtual bool valueIsEmpty() = 0;
+*/
 
+/* moved to KexiDataItemInterface
 		virtual QVariant value(bool &ok) = 0;
+*/
 
-		inline KexiDB::Field *field() const { return m_column->field(); }
+		//! Implemented for KexiDataItemInterface.
+		//! \return field information for this item
+		virtual KexiDB::Field *field() const { return m_column->field(); }
+
+		//! Implemented for KexiDataItemInterface.
+		//! Does nothing because instead KexiTableViewColumn is used to get field's schema.
+		virtual void setField(KexiDB::Field *field) { }
+
+		//! \return column information for this item 
+		//! (extended information, comparing to field()).
 		inline KexiTableViewColumn *column() const { return m_column; }
 
+//moved to KexiDataItemInterface
 		/*! \return true if internal editor's cursor (whatever that means, eg. line edit cursor)
 		 is at the beginning of editor's contents. This can inform table view that 
 		 after pressing "left arrow" key should stop editing and move to cell at the left 
 		 hand of the current cell. */
-		virtual bool cursorAtStart() = 0;
+//		virtual bool cursorAtStart() = 0;
 
+//moved to KexiDataItemInterface
 		/*! \return true if internal editor's cursor (whatever that means, eg. line edit cursor)
 		 is at the end of editor's contents. This can inform table view that 
 		 after pressing "right arrow" key should stop editing and move to cell at the right 
 		 hand of the current cell. */
-		virtual bool cursorAtEnd() = 0;
+//		virtual bool cursorAtEnd() = 0;
 
 		/*! Reimplemented: resizes a view(). */
 		virtual void resize(int w, int h);
 
 		/*! \return the view widget of this editor, e.g. line edit widget. */
-		QWidget* view() const { return m_view; }
+		virtual QWidget* widget() { return m_view; }
 
-		//! clears editor's data, so the data now contains NULL data
-		virtual void clear() = 0;
+		/*! Hides item's widget, if available. */
+		inline virtual void hideWidget() { hide(); }
 
+		/*! Shows item's widget, if available. */
+		inline virtual void showWidget() { show(); }
+
+//moved to KexiDataItemInterface
+		//! clears editor's data, so the data will contain NULL data
+//		virtual void clear() = 0;
+
+//moved to KexiDataItemInterface
+#if 0
 		/*! Displays additional elements that are needed for indicating that the current cell
 		 is selected. For example, combobox editor (KexiComboBoxTableEdit) moves and shows
 		 dropdown button. \a r is the rectangle for the cell. 
@@ -98,6 +124,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		 is selected. 
 		 For reimplementation. By default does nothing. */
 		virtual void hideFocus();
+#endif
 
 		/*! Paints a border for the cell described by \a x, \a y, \a w, \a h on \a p painter.
 		 The cell's value is \a val (may be usefull if you want to reimplement this method).
@@ -150,21 +177,24 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		 returns QWidget::size(). */
 		virtual QSize totalSize() { return QWidget::size(); }
 
+//moved to KexiDataItemInterface
 		/*! \return true if this editor offers a widget (e.g. line edit) that we can move focus to.
 		 Editor for boolean values has this set to false (see KexiBoolTableEdit). 
 		 You can override this flag by changing m_hasFocusableWidget in your subclass' constructor. */
-		bool hasFocusableWidget() const { return m_hasFocusableWidget; }
+//		inline bool hasFocusableWidget() const { return m_hasFocusableWidget; }
 
+//moved to KexiDataItemInterface
 		/*! Allows to define reaction for clicking on cell's contents. 
 		 Currently it's used for editor of type boolean, where we want to toggle true/false
 		 on single mouse click. \sa hasFocusableWidget(), KexiBoolTableEdit. 
 		 Default implementation does nothing. */
-		virtual void clickedOnContents() {};
+//		virtual void clickedOnContents() {};
 
+//moved to KexiDataItemInterface
 		/*! \return true if editing should be accepted immediately after
 		 deleting contents for the cell (usually using Delete key).
 		 This flag is false by default, and is true e.g. for date, time and datetime types. */
-		bool acceptEditorAfterDeleteContents() const { return m_acceptEditorAfterDeleteContents; }
+//		bool acceptEditorAfterDeleteContents() const { return m_acceptEditorAfterDeleteContents; }
 
 	signals:
 		void editRequested();
@@ -172,18 +202,20 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		void acceptRequested();
 
 	protected:
+#if 0
+//moved to KexiDataItemInterface
 		/*! Initializes this editor with \a add value, which should be somewhat added to the current
 		 value (already storted in m_origValue). 
 		 If \a removeOld is true, a value should be set to \a add, otherwise 
 		 -it should be set to current \a m_origValue + \a add, if possible.
 		 Implement this. */
-		virtual void init(const QString& add, bool removeOld) = 0;
-
+		virtual void init(const QVariant& add, bool removeOld) = 0;
+#endif
 		virtual bool eventFilter(QObject* watched, QEvent* e);
 
 		/*! Sets \a v as view widget for this editor. The view will be assigned as focus proxy
 		 for the editor, its events will be filtered, it will be resized when neede, and so on. */
-		void setView(QWidget *v);
+		void setViewWidget(QWidget *v);
 
 		/*! Moves child widget within the viewport. Use this for child widgets that 
 		 are outside of this editor widget, instead of calling QWidget::move(). */
@@ -191,7 +223,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 			m_scrollView->moveChild(child, x, y); }
 
 	//		virtual void paintEvent( QPaintEvent *pe );
-		QVariant m_origValue;
+//moved to KexiDataItemInterface: QVariant m_origValue;
 		KexiTableViewColumn *m_column;
 //		KexiDB::Field *m_field;
 //		int m_type; //! one of KexiDB::Field
@@ -200,8 +232,8 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 
 		QScrollView* m_scrollView;
 
-		bool m_hasFocusableWidget : 1;
-		bool m_acceptEditorAfterDeleteContents : 1;
+//moved to KexiDataItemInterface: 		bool m_hasFocusableWidget : 1;
+//moved to KexiDataItemInterface:		bool m_acceptEditorAfterDeleteContents : 1;
 	private:
 		QWidget* m_view;
 };

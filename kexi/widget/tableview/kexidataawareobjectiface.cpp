@@ -25,7 +25,7 @@
 */
 
 #include "kexidataawareobjectiface.h"
-#include "kexitableedit.h"
+#include "kexidataiteminterface.h"
 #include "kexivalidator.h"
 
 #include <widget/utils/kexirecordnavigator.h>
@@ -498,8 +498,8 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 		newcol = m_curCol; //no changes
 		newcol = QMAX(0, newcol); //may not be < 0 !
 	}
-	newrow = QMAX( 0, row);
-	newrow = QMIN( rows() - 1 + (isInsertingEnabled()?1:0), newrow);
+	newrow = QMAX(0, row);
+	newrow = QMIN(rows() - 1 + (isInsertingEnabled()?1:0), newrow);
 
 //	d->pCurrentItem = itemAt(d->curRow);
 //	kdDebug(44021) << "setCursorPosition(): d->curRow=" << d->curRow << " oldRow=" << oldRow << " d->curCol=" << d->curCol << " oldCol=" << oldCol << endl;
@@ -562,7 +562,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 		//show editor-dependent focus, if we're changing the current column
 		if (oldCol>=0 && oldCol<columns() && m_curCol!=oldCol) {
 			//find the editor for this column
-			KexiTableEdit *edit = editor( oldCol );
+			KexiDataItemInterface *edit = editor( oldCol );
 			if (edit) {
 				edit->hideFocus();
 			}
@@ -618,6 +618,8 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 
 		/*emit*/ itemSelected(m_currentItem);
 		/*emit*/ cellSelected(m_curCol, m_curRow);
+		/* only needed for forms */
+		selectCellInternal();
 	}
 
 	if(m_initDataContentsOnShow) {
@@ -772,7 +774,7 @@ void KexiDataAwareObjectInterface::removeEditor()
 {
 	if (!m_editor)
 		return;
-	m_editor->hide();
+	m_editor->hideWidget();
 	m_editor = 0;
 }
 
@@ -874,8 +876,10 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 			return true;
 		}
 		if (!setNull) {//get the new value 
-			bool ok;
-			newval = m_editor->value(ok);
+//			bool ok;
+			newval = m_editor->value();
+//! @todo validation rules for this value?
+/*
 			if (!ok) {
 				kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): INVALID VALUE - NOT CHANGED." << endl;
 				res = KexiValidator::Error;
@@ -885,14 +889,16 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 				editCurrentCellAgain = true;
 //				removeEditor();
 //				return true;
-			}
+			}*/
 		}
 
 		//Check other validation rules:
 		//1. check using validator
-		KexiValidator *validator = m_data->column(m_curCol)->validator();
+//		KexiValidator *validator = m_data->column(m_curCol)->validator();
+		KexiValidator *validator = column(m_curCol)->validator();
 		if (validator) {
-			res = validator->check(m_data->column(m_curCol)->field()->captionOrName(), 
+//			res = validator->check(m_data->column(m_curCol)->field()->captionOrName(), 
+			res = validator->check(column(m_curCol)->field()->captionOrName(), 
 				newval, msg, desc);
 		}
 	}
@@ -968,7 +974,7 @@ void KexiDataAwareObjectInterface::startEditCurrentCell(const QString &setText)
 		return;
 	if (m_editor) {
 		if (m_editor->hasFocusableWidget()) {
-			m_editor->show();
+			m_editor->showWidget();
 			m_editor->setFocus();
 		}
 	}
@@ -1182,7 +1188,7 @@ void KexiDataAwareObjectInterface::reloadData()
 
 	if (m_curCol>=0 && m_curCol<columns()) {
 		//find the editor for this column
-		KexiTableEdit *edit = editor( m_curCol );
+		KexiDataItemInterface *edit = editor( m_curCol );
 		if (edit) {
 			edit->hideFocus();
 		}
@@ -1203,17 +1209,21 @@ void KexiDataAwareObjectInterface::reloadData()
 	updateWidgetScrollBars();
 }
 
-int KexiDataAwareObjectInterface::columnType(int col) const
+int KexiDataAwareObjectInterface::columnType(int col)
 {
 	return (m_data && col>=0 && col<columns()) 
-		? m_data->column(col)->field()->type() 
+//		? m_data->column(col)->field()->type() 
+		? column(col)->field()->type() 
 		: KexiDB::Field::InvalidType;
 }
 
-bool KexiDataAwareObjectInterface::columnEditable(int col) const
+bool KexiDataAwareObjectInterface::columnEditable(int col)
 {
+//	KexiTableViewColumn * c = m_data->column(col);
+//	bool ro = c->readOnly();
 	return (m_data && col>=0 && col<columns()) 
-		? !m_data->column(col)->readOnly() 
+//		? !m_data->column(col)->readOnly() 
+		? !column(col)->readOnly() 
 		: false;
 }
 
@@ -1224,7 +1234,7 @@ int KexiDataAwareObjectInterface::rows() const
 	return m_data->count();
 }
 
-int KexiDataAwareObjectInterface::columns() const
+int KexiDataAwareObjectInterface::dataColumns() const
 {
 	if (!hasData())
 		return 0;
@@ -1299,11 +1309,17 @@ bool KexiDataAwareObjectInterface::deleteItem(KexiTableItem *item)/*, bool moveC
 	return true;
 }
 
+KexiTableViewColumn* KexiDataAwareObjectInterface::column(int col)
+{
+	return m_data->column(col);
+}
+
 const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col)
 {
 	if (m_rowEditing && m_data->rowEditBuffer())
 	{
-		KexiTableViewColumn* tvcol = m_data->column(col);
+//		KexiTableViewColumn* tvcol = m_data->column(col);
+		KexiTableViewColumn* tvcol = column(col);
 		if (tvcol->isDBAware) {
 //			QVariant *cv = m_data->rowEditBuffer()->at( *static_cast<KexiDBTableViewColumn*>(tvcol)->field );
 			const QVariant *cv = m_data->rowEditBuffer()->at( *tvcol->fieldinfo );

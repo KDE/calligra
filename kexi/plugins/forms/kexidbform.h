@@ -24,8 +24,12 @@
 #include <qpixmap.h>
 
 #include <kexigradientwidget.h>
-#include <kexidataiteminterface.h>
 #include <form.h>
+
+#include "kexiformdataiteminterface.h"
+
+class KexiDataAwareObjectInterface;
+class KexiFormScrollView;
 
 #define SET_FOCUS_USING_REASON(widget, reason) \
 	{ QEvent fe( QEvent::FocusIn ); \
@@ -37,17 +41,17 @@
 class KexiDBForm : 
 	public KexiGradientWidget,
 	public KFormDesigner::FormWidget,
-	public KexiDataItemInterface
+	public KexiFormDataItemInterface
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	Q_PROPERTY(bool autoTabStops READ autoTabStops WRITE setAutoTabStops DESIGNABLE true)
 
 	public:
-		KexiDBForm(QWidget *parent, const char *name="kexi_dbform");
+		KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareObject, const char *name="kexi_dbform");
 		virtual ~KexiDBForm();
 
-		inline QString dataSource() const { return KexiDataItemInterface::dataSource(); }
+		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
 
 		//! no effect
 		QVariant value() { return QVariant(); }
@@ -66,23 +70,40 @@ class KexiDBForm :
 
 		QPtrList<QWidget>* orderedFocusWidgets() const;
 
+		QPtrList<QWidget>* orderedDataAwareWidgets() const;
+		
+		int indexForDataItem( KexiDataItemInterface* item ) const;
+
 		void updateTabStopsOrder(KFormDesigner::Form* form);
 
 		virtual bool eventFilter ( QObject * watched, QEvent * e );
 
+		virtual bool valueIsNull();
+		virtual bool valueIsEmpty();
+		virtual bool isReadOnly() const;
+		virtual QWidget* widget();
+		virtual bool cursorAtStart();
+		virtual bool cursorAtEnd();
+		virtual void clear();
+
+		bool preview() const;
+
 	public slots:
 		void setAutoTabStops(bool set);
-		inline void setDataSource(const QString &ds) { KexiDataItemInterface::setDataSource(ds); }
+		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 
 	protected:
 		//! no effect
-		virtual void setValueInternal(const QVariant&) {};
+		virtual void setValueInternal(const QVariant&, bool) {}
 
-		QPixmap buffer; //!< stores grabbed entire form's area for redraw
-		QRect prev_rect; //!< previously selected rectangle
+		//! Points to a currently edited data item. 
+		//! It is cleared when the focus is moved to other 
+		KexiFormDataItemInterface *editedItem;
+
 		class Private;
 		Private *d;
+
+		friend class KexiFormScrollView;
 };
 
 #endif
-

@@ -42,7 +42,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		virtual ~KexiComboBoxTableEdit();
 
 		//! Note: Generally in current implementation this is integer > 0; may be null if no value is set
-		virtual QVariant value(bool &ok);
+		virtual QVariant value();
 
 		virtual void clear();
 //		virtual bool cursorAtStart();
@@ -89,7 +89,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		//! internal
 		void updateFocus( const QRect& r );
 
-		virtual void init(const QString& add, bool removeOld);
+		virtual void setValueInternal(const QVariant& add, bool removeOld);
 
 		virtual bool eventFilter( QObject *o, QEvent *e );
 

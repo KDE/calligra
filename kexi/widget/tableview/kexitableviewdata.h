@@ -99,7 +99,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		inline QString captionAliasOrName() const { return m_captionAliasOrName; }
 
 		/*! Assigns validator \a v for this column. 
-		 If the validator has no parent obejct, it will be owned by the column, 
+		 If the validator has no parent object, it will be owned by the column, 
 		 so you shouldn't care about destroying it. */
 		void setValidator( KexiValidator* v );
 
@@ -218,7 +218,7 @@ public:
 	*/
 	KexiTableViewData(KexiDB::Field::Type keyType, KexiDB::Field::Type valueType);
 
-	~KexiTableViewData();
+	virtual ~KexiTableViewData();
 //js	void setSorting(int key, bool order=true, short type=1);
 
 	/*! Preloads all rows provided by cursor (only for db-aware version). */

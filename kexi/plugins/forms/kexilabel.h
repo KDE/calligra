@@ -25,7 +25,7 @@
 
 #include <kpixmap.h>
 
-#include <kexidataiteminterface.h>
+#include "kexiformdataiteminterface.h"
 
 class QPainter;
 
@@ -33,23 +33,23 @@ class KexiLabelPrivate : public QLabel {
 		friend class KexiLabel;
 	public:
 		KexiLabelPrivate( KexiLabel* );
-		virtual ~KexiLabelPrivate() {}
+		virtual ~KexiLabelPrivate();
 	private:
-		QImage makeShadow( const QImage& textPixmap, const QColor &bgColor, const QRect& boundingRect );
+		QImage makeShadow( const QImage& textImage, const QColor &bgColor, const QRect& boundingRect );
 		QRect getBounding( const QImage &image, const QRect& startRect );
 		double defaultDecay( QImage& source, int i, int j );
-		KPixmap getShadowPixmap( void );
-	private:
+		KPixmap getShadowPixmap();
+
 		QRect p_shadowRect;
 };
 
 /**
-A simple label.
-The text on it may have a drop-shadow.
+An extended, data-aware, read-only text label.
+It's text may have a drop-shadow.
 
 @author Christian Nitschkowski
 */
-class KexiLabel : public QLabel, public KexiDataItemInterface {
+class KexiLabel : public QLabel, public KexiFormDataItemInterface {
 		Q_OBJECT
 		Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true )
 		Q_PROPERTY( bool shadowEnabled READ shadowEnabled WRITE setShadowEnabled DESIGNABLE true )
@@ -63,7 +63,7 @@ class KexiLabel : public QLabel, public KexiDataItemInterface {
 		virtual ~KexiLabel() {}
 
 		inline QString dataSource() const {
-			return KexiDataItemInterface::dataSource();
+			return KexiFormDataItemInterface::dataSource();
 		}
 
 		virtual QVariant value();
@@ -74,20 +74,35 @@ class KexiLabel : public QLabel, public KexiDataItemInterface {
 
 		virtual void setInvalidState( const QString& displayText );
 
+		virtual bool valueIsNull();
+
+		virtual bool valueIsEmpty();
+
+		//! always true
+		virtual bool isReadOnly() const;
+
+		virtual QWidget* widget();
+
+		//! always false
+		virtual bool cursorAtStart();
+
+		//! always false
+		virtual bool cursorAtEnd();
+
+		virtual void clear();
+
 	public slots:
 		/*!
 		Sets the datasource to \a ds
 		*/
 		inline void setDataSource( const QString &ds ) {
-			KexiDataItemInterface::setDataSource( ds );
+			KexiFormDataItemInterface::setDataSource( ds );
 		}
 
 		virtual void setText( const QString& text ) {
 			p_pixmapDirty = true;
 			QLabel::setText( text );
-			/*
-			This is necessary for KexiDataItemInterface
-			*/
+			//This is necessary for KexiFormDataItemInterface
 			valueChanged();
 			repaint();
 		}
@@ -111,7 +126,7 @@ class KexiLabel : public QLabel, public KexiDataItemInterface {
 		/*!
 		Sets value \a value for a widget.
 		*/
-		virtual void setValueInternal( const QVariant& value );
+		virtual void setValueInternal( const QVariant& add, bool removeOld );
 
 		virtual void fontChange( const QFont& font ) {
 			p_pixmapDirty = true;

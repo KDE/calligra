@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,8 +36,8 @@ KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent, c
 // ,m_type(f.type()) //copied because the rest of code uses m_type
  ,m_scrollView(parent)
  ,m_view(0)
- ,m_hasFocusableWidget(true)
- ,m_acceptEditorAfterDeleteContents(false)
+// ,m_hasFocusableWidget(true)
+// ,m_acceptEditorAfterDeleteContents(false)
 {
 	setPaletteBackgroundColor( palette().color(QPalette::Active, QColorGroup::Base) );
 	installEventFilter(this);
@@ -86,14 +86,16 @@ KexiTableEdit::~KexiTableEdit()
 {
 }
 
-void KexiTableEdit::init(QVariant value, const QString& add, bool removeOld)
+/* moved to KexiDataItemInterface
+void KexiTableEdit::init(const QVariant& value, const QVariant& add, bool removeOld)
 {
 	clear();
 	m_origValue = value;
 	init(add, removeOld);
 }
+*/
 
-void KexiTableEdit::setView(QWidget *v)
+void KexiTableEdit::setViewWidget(QWidget *v)
 {
 	m_view = v;
 	m_view->move(0,0);
@@ -112,6 +114,7 @@ void KexiTableEdit::resize(int w, int h)
 	}
 }
 
+#if 0 //moved
 void KexiTableEdit::showFocus( const QRect& /*r*/ )
 {
 }
@@ -119,6 +122,7 @@ void KexiTableEdit::showFocus( const QRect& /*r*/ )
 void KexiTableEdit::hideFocus()
 {
 }
+#endif
 
 bool
 KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
@@ -152,12 +156,14 @@ KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
 //	return QWidget::eventFilter(watched, e);
 }
 
+/* moved to KexiDataItemInterface
 bool KexiTableEdit::valueChanged()
 {
 	bool ok;
 	kdDebug() << m_origValue.toString() << " ? " << value(ok).toString() << endl;
 	return (m_origValue != value(ok)) && ok;
 }
+*/
 
 void KexiTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, int y, int w, int h )
 {

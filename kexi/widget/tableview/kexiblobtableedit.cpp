@@ -71,7 +71,7 @@ KexiBlobTableEdit::~KexiBlobTableEdit()
 }
 
 //! initializes this editor with \a add value
-void KexiBlobTableEdit::init(const QString& /*add*/, bool /*removeOld*/)
+void KexiBlobTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
 {
 	QByteArray val = m_origValue.toByteArray();
 	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << val.size() << endl;
@@ -86,7 +86,7 @@ void KexiBlobTableEdit::init(const QString& /*add*/, bool /*removeOld*/)
 	KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->name());
 	kdDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
 
-	setView( new QWidget(this) );
+	setViewWidget( new QWidget(this) );
 /*js: TODO
 	QGridLayout *g = new QGridLayout(m_view);
 
@@ -142,10 +142,10 @@ bool KexiBlobTableEdit::valueIsEmpty()
 }
 
 QVariant
-KexiBlobTableEdit::value(bool &ok)
+KexiBlobTableEdit::value()
 {
 	//todo
-	ok = true;
+//	ok = true;
 
 	if(m_content && m_content->isModified())
 	{
@@ -258,8 +258,8 @@ KexiBlobTableEdit::menu()
 	menu->insertItem(i18n("Load From File..."), this, SLOT(loadFile()));
 	menu->insertItem(i18n("Save to File..."), this, SLOT(saveFile()));
 
-	QPoint pos = mapToGlobal(view()->pos());
-	pos.setY(pos.y() + view()->height());
+	QPoint pos = mapToGlobal(widget()->pos());
+	pos.setY(pos.y() + widget()->height());
 	menu->move(pos);
 	menu->exec();
 
@@ -348,7 +348,7 @@ void KexiKIconTableEdit::init()
 	m_pixmapCache.setAutoDelete(true);
 }
 	
-void KexiKIconTableEdit::init(const QString& /*add*/, bool /*removeOld*/)
+void KexiKIconTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
 {
 	m_currentValue = m_origValue;
 }
@@ -363,9 +363,8 @@ bool KexiKIconTableEdit::valueIsEmpty()
 	return m_currentValue.isNull();
 }
 
-QVariant KexiKIconTableEdit::value(bool &ok)
+QVariant KexiKIconTableEdit::value()
 {
-	ok = true;
 	return m_currentValue;
 }
 

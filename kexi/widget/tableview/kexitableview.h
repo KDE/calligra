@@ -125,7 +125,7 @@ public:
 	};
 	
 	KexiTableView(KexiTableViewData* data=0, QWidget* parent=0, const char* name=0);
-	~KexiTableView();
+	virtual ~KexiTableView();
 
 	/*! \return current appearance settings */
 	Appearance appearance() const;

@@ -49,7 +49,7 @@ KexiTimeTableEdit::KexiTimeTableEdit(KexiTableViewColumn &column, QScrollView *p
  : KexiTableEdit(column, parent,"KexiTimeTableEdit")
 {
 	m_sentEvent = false;
-	setView( m_edit = new QTimeEdit(this) );
+	setViewWidget( m_edit = new QTimeEdit(this) );
 	m_edit->setAutoAdvance(true);
 	m_edit->installEventFilter(this);
 	m_cleared = false;
@@ -72,12 +72,13 @@ KexiTimeTableEdit::KexiTimeTableEdit(KexiTableViewColumn &column, QScrollView *p
 	m_acceptEditorAfterDeleteContents = true;
 }
 
-void KexiTimeTableEdit::init(const QString& add, bool removeOld)
+void KexiTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
 	m_cleared = !m_origValue.isValid();
 
 	m_setNumberOnFocus = -1;
 	QTime t;
+	QString add(add_.toString());
 	if (removeOld) {
 		if (!add.isEmpty() && add[0].latin1()>='0' && add[0].latin1() <='9') {
 			m_setNumberOnFocus = add[0].latin1()-'0';
@@ -103,12 +104,12 @@ bool KexiTimeTableEdit::valueIsEmpty()
 }
 
 QVariant
-KexiTimeTableEdit::value(bool &ok)
+KexiTimeTableEdit::value()
 {
-	ok = true;
+//	ok = true;
 
 	//QDateTime - a hack needed because QVariant(QTime) has broken isNull()
-	return QVariant(QDateTime( m_cleared ? QDate() : QDate(0,1,2), m_edit->time()));
+	return QVariant(QDateTime( m_cleared ? QDate() : QDate(0,1,2)/*nevermind*/, m_edit->time()));
 }
 
 bool KexiTimeTableEdit::cursorAtStart()

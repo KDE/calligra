@@ -51,20 +51,20 @@ KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, QScrol
  : KexiTableEdit(column, parent,"KexiDateTimeTableEdit")
 {
 	m_sentEvent = false;
-	setView( new QWidget(this) );
-	m_dateEdit = new QDateEdit(view());
+	setViewWidget( new QWidget(this) );
+	m_dateEdit = new QDateEdit(widget());
 	m_dateEdit->setAutoAdvance(true);
 	m_dateEdit->installEventFilter(this);
 //	m_dateEdit->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
 //TODO: width ok?
 	m_dateEdit->setFixedWidth( QFontMetrics(m_dateEdit->font()).width("8888-88-88___") );
 
-	QToolButton* dateBtn = new QToolButton(view());
+	QToolButton* dateBtn = new QToolButton(widget());
 	dateBtn->setText("...");
 	dateBtn->setFixedWidth( QFontMetrics(dateBtn->font()).width(" ... ") );
 	dateBtn->setPopupDelay(1); //1 ms
 
-	m_timeEdit = new QTimeEdit(view());
+	m_timeEdit = new QTimeEdit(widget());
 	m_timeEdit->setAutoAdvance(true);
 	m_timeEdit->installEventFilter(this);
 //TODO: use QTimeEdit::display() for better width calculation
@@ -101,7 +101,7 @@ KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, QScrol
 
 //	connect(btn, SIGNAL(clicked()), this, SLOT(slotShowDatePicker()));
 	
-	QHBoxLayout* layout = new QHBoxLayout(view());
+	QHBoxLayout* layout = new QHBoxLayout(widget());
 	layout->addWidget(m_dateEdit, 0);
 	layout->addWidget(dateBtn, 0);
 	layout->addWidget(m_timeEdit, 0);
@@ -112,7 +112,7 @@ KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, QScrol
 	m_acceptEditorAfterDeleteContents = true;
 }
 
-void KexiDateTimeTableEdit::init(const QString& /*add*/, bool /*removeOld*/)
+void KexiDateTimeTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
 {
 	m_dateEdit->setDate(m_origValue.toDate());
 	m_timeEdit->setTime(m_origValue.toTime());
@@ -144,9 +144,9 @@ KexiDateTimeTableEdit::slotDateChanged(QDate date)
 }
 
 QVariant
-KexiDateTimeTableEdit::value(bool &ok)
+KexiDateTimeTableEdit::value()
 {
-	ok = true;
+//	ok = true;
 	return QVariant(QDateTime(m_dateEdit->date(), m_timeEdit->time()));
 }
 

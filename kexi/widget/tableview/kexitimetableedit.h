@@ -33,7 +33,7 @@ class KEXIDATATABLE_EXPORT KexiTimeTableEdit : public KexiTableEdit
 
 	public:
 		KexiTimeTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
-		virtual QVariant value(bool &ok);
+		virtual QVariant value();
 		virtual bool valueIsNull();
 		virtual bool valueIsEmpty();
 		virtual void clear();
@@ -46,7 +46,7 @@ class KEXIDATATABLE_EXPORT KexiTimeTableEdit : public KexiTableEdit
 		void slotValueChanged(const QTime& t);
 
 	protected:
-		virtual void init(const QString& add, bool removeOld);
+		virtual void setValueInternal(const QVariant& add, bool removeOld);
 		void moveToFirstSection();
 
 		QTimeEdit* m_edit;

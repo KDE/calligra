@@ -7,6 +7,12 @@ All other settings are unofficial and are subject to change.
 Started: 2004-08-20, js
 -----------------------------------------------------------
 
+Group: MainWindow
+#percentage navigator's width
+-LeftDockPosition [integer: 0..100]
+#percentage property editor's width
+RightDockPosition [integer: 0..100]
+
 Group: PropertyEditor
 -FontSize [integer]
 

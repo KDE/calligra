@@ -151,10 +151,11 @@ KexiComboBoxTableEdit::~KexiComboBoxTableEdit()
 	delete d;
 }
 
-void KexiComboBoxTableEdit::init(const QString& add, bool /*removeOld*/)
+void KexiComboBoxTableEdit::setValueInternal(const QVariant& add_, bool /*removeOld*/)
 {
 	d->mouseBtnPressedWhenPopupVisible = false;
 //	m_combo->setCurrentItem(m_origValue.toInt() - 1);
+	QString add(add_.toString());
 	if (add.isEmpty()) {
 		KexiTableViewData *relData = column()->relatedData();
 		QString stringValue;
@@ -287,9 +288,9 @@ void KexiComboBoxTableEdit::hideFocus()
 	d->button->hide();
 }
 
-QVariant KexiComboBoxTableEdit::value(bool &ok)
+QVariant KexiComboBoxTableEdit::value()
 {
-	ok = true;
+//	ok = true;
 	KexiTableViewData *relData = column()->relatedData();
 	if (relData) {
 		if (d->userEnteredTextChanged) {
@@ -365,9 +366,10 @@ bool KexiComboBoxTableEdit::valueChanged()
 
 bool KexiComboBoxTableEdit::valueIsNull()
 {
-	bool ok;
-	QVariant v = value(ok);
-	return !ok || v.isNull();
+//	bool ok;
+	QVariant v( value() );
+	return v.isNull();
+//	return !ok || v.isNull();
 }
 
 bool KexiComboBoxTableEdit::valueIsEmpty()

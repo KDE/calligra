@@ -22,7 +22,7 @@
 
 #include <qwidget.h>
 
-#include <kexidataiteminterface.h>
+#include "kexiformdataiteminterface.h"
 
 /**
 KexiDBInputWidget is a special widget that appears in several different ways.
@@ -32,13 +32,13 @@ that allows the user to enter data.
 
 @author Christian Nitschkowski
 */
-class KexiDBInputWidget : public QWidget, public KexiDataItemInterface
+class KexiDBInputWidget : public QWidget, public KexiFormDataItemInterface
 {
 	Q_OBJECT
 	Q_OVERRIDE(QString text DESIGNABLE false)
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType DESIGNABLE true)
-	Q_PROPERTY(bool readOnly READ readOnly WRITE setReadOnly DESIGNABLE true)
+	Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true)
 	Q_ENUMS( WidgetType )
 
 	public:
@@ -59,7 +59,7 @@ class KexiDBInputWidget : public QWidget, public KexiDataItemInterface
 
 		virtual ~KexiDBInputWidget();
 
-		inline QString dataSource() const { return KexiDataItemInterface::dataSource(); }
+		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
 		virtual QVariant value();
 		virtual void setInvalidState( const QString& text );
 
@@ -67,9 +67,23 @@ class KexiDBInputWidget : public QWidget, public KexiDataItemInterface
 			return p_widgetType;
 		}
 
-		bool readOnly() const {
+		virtual bool isReadOnly() const {
 			return p_readOnly;
 		}
+
+		virtual bool valueIsNull();
+
+		virtual bool valueIsEmpty();
+
+		virtual QWidget* widget();
+
+		//! always false
+		virtual bool cursorAtStart();
+
+		//! always false
+		virtual bool cursorAtEnd();
+
+		virtual void clear();
 
 	public slots:
 		void setReadOnly( bool );
@@ -81,7 +95,7 @@ class KexiDBInputWidget : public QWidget, public KexiDataItemInterface
 			}
 		}
 		
-		inline void setDataSource( const QString &ds ) { KexiDataItemInterface::setDataSource( ds ); }
+		inline void setDataSource( const QString &ds ) { KexiFormDataItemInterface::setDataSource( ds ); }
 
 		void setMinValue( int value );
 		void setMaxValue( int value );
@@ -91,7 +105,7 @@ class KexiDBInputWidget : public QWidget, public KexiDataItemInterface
 		void setPrecision( int precision );
 
 	protected:
-		virtual void setValueInternal( const QVariant& value );
+		virtual void setValueInternal(const QVariant& add, bool removeOld);
 	
 	protected slots:
 		void slotValueChanged( const QString& );
@@ -110,7 +124,7 @@ class KexiDBInputWidget : public QWidget, public KexiDataItemInterface
 		int p_maxStringLength;
 		WidgetType p_widgetType;
 		QWidget* p_widget;
-		bool p_readOnly;
+		bool p_readOnly : 1;
 	};
 
 #endif

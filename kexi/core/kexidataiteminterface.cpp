@@ -19,6 +19,8 @@
 
 #include "kexidataiteminterface.h"
 
+#include <kdebug.h>
+
 KexiDataItemChangesListener::KexiDataItemChangesListener()
 {
 }
@@ -30,7 +32,10 @@ KexiDataItemChangesListener::~KexiDataItemChangesListener()
 //-----------------------------------------------
 
 KexiDataItemInterface::KexiDataItemInterface()
- : m_listener(0), m_disable_valueChanged(false)
+ : m_listener(0)
+ , m_hasFocusableWidget(true)
+ , m_disable_signalValueChanged(false)
+ , m_acceptEditorAfterDeleteContents(false)
 {
 }
 
@@ -38,21 +43,52 @@ KexiDataItemInterface::~KexiDataItemInterface()
 {
 }
 
-void KexiDataItemInterface::valueChanged()
+void KexiDataItemInterface::setValue(const QVariant& value, const QVariant& add, bool removeOld)
 {
-	if (!m_listener || m_disable_valueChanged)
+	m_disable_signalValueChanged = true; //to prevent emmiting valueChanged()
+	clear();
+	m_origValue = value;
+	setValueInternal(add, removeOld);
+	m_disable_signalValueChanged = false;
+}
+
+void KexiDataItemInterface::signalValueChanged()
+{
+	if (!m_listener || m_disable_signalValueChanged)
 		return;
 	m_listener->valueChanged(this);
 }
 
+bool KexiDataItemInterface::valueChanged()
+{
+//	bool ok;
+//	kdDebug() << m_origValue.toString() << " ? " << value(ok).toString() << endl;
+//	return (m_origValue != value(ok)) && ok;
+	kdDebug() << "KexiDataItemInterface::valueChanged(): " << m_origValue.toString() << " ? " << value().toString() << endl;
+	return m_origValue != value();
+}
+
+/*
 void KexiDataItemInterface::setValue(const QVariant& value)
 {
-	m_disable_valueChanged = true; //to prevent emmiting valueChanged()
+	m_disable_signalValueChanged = true; //to prevent emmiting valueChanged()
 	setValueInternal( value );
-	m_disable_valueChanged = false;
-}
+	m_disable_signalValueChanged = false;
+}*/
 
 void KexiDataItemInterface::installListener(KexiDataItemChangesListener* listener)
 {
 	m_listener = listener;
+}
+
+void KexiDataItemInterface::showFocus( const QRect& /*r*/ )
+{
+}
+
+void KexiDataItemInterface::hideFocus()
+{
+}
+
+void KexiDataItemInterface::clickedOnContents()
+{
 }

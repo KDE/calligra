@@ -34,19 +34,21 @@ class QObject;
 class KPopupMenu;
 class KexiTableItem;
 class KexiTableViewData;
+class KexiRecordMarker;
+class KexiRecordNavigator;
+class KexiDataItemInterface;
+
 namespace KexiDB {
 	class RowEditBuffer;
 }
-class KexiTableEdit;
-class KexiRecordMarker;
-class KexiRecordNavigator;
 
 //! default column width in pixels
 #define KEXI_DEFAULT_DATA_COLUMN_WIDTH 120
 
 //! \brief The KexiDataAwareObjectInterface is an interface for record-based data object.
 /** This interface is implemented by KexiTableView and KexiFormView 
- and used by KexiDataAwareView.
+ and used by KexiDataAwareView. If yu're implementing this interface, 
+ add KEXI_DATAAWAREOBJECTINTERFACE convenience macro just after Q_OBJECT.
 */
 class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 {
@@ -54,7 +56,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		KexiDataAwareObjectInterface();
 		virtual ~KexiDataAwareObjectInterface();
 
-		/*! Sets data for this table view. if \a owner is true, the table view will own 
+		/*! Sets data for this object. if \a owner is true, the object will own 
 		 \a data and therefore will destoy when required, else: \a data is (possibly) shared and
 		 not owned by the widget. 
 		 If widget already has _different_ data object assigned (and owns this data),
@@ -77,15 +79,23 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		/*! \return number of rows in this view. */
 		int rows() const;
 
-		/*! \return number of visible columns in this view. */
-		int columns() const;
+		/*! \return number of visible columns in this view. 
+		 By default returns dataColumns(), what is proper table view. 
+		 In case of form view, there can be a number of duplicated columns defined
+		 (data-aware widgets, see KexiFormScrollView::columns()),
+		 so columns() can return greater number than dataColumns(). */
+		virtual int columns() const { return dataColumns(); }
+
+		/*! Helper function.
+		 \return number of columns of data. */
+		int dataColumns() const;
 
 		/*! \return true if data represented by this object
 		 is not editable (it can be editable with other ways although, 
 		 outside of this object). */
 		virtual bool isReadOnly() const;
 
-		/*! Sets readOnly flag for this table view.
+		/*! Sets readOnly flag for this object.
 		 Unless the flag is set, the widget inherits readOnly flag from it's data
 		 structure assigned with setData(). The default value if false.
 
@@ -107,10 +117,10 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 this will dont work if sorting is disabled with setSortingEnabled() */
 		virtual void setSorting(int col, bool ascending=true);
 
-		/*! Enables or disables sorting for this table view
+		/*! Enables or disables sorting for this object
 			This method is different that setSorting() because it prevents both user
 			and programmer from sorting by clicking a column's header or calling setSorting().
-			By default sorting is enabled for table view.
+			By default sorting is enabled.
 		*/
 		virtual void setSortingEnabled(bool set);
 
@@ -162,7 +172,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		bool isDeleteEnabled() const;
 
 		/*! \return true if inserting empty rows are enabled (false by default).
-		 Mostly usable for not db-aware table views (e.g. used in Kexi Alter Table). 
+		 Mostly usable for not db-aware objects (e.g. used in Kexi Alter Table). 
 		 Note, that if inserting is disabled, or the data set is read-only, 
 		 this flag will be ignored. */
 		bool isEmptyRowInsertingEnabled() const { return m_emptyRowInsertingEnabled; }
@@ -177,7 +187,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		/*! \return true if filtering is enabled. */
 		inline bool isFilteringEnabled() const { return m_isFilteringEnabled; }
 
-		/*! Added for convenience: configure this table view 
+		/*! Added for convenience: configure this object 
 		 to behave more like spreadsheet (it's used for things like alter-table view).
 		 - hides navigator
 		 - disables sorting, inserting and filtering
@@ -199,7 +209,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 			SignalDelete = 3
 		};
 
-		/*! \return deletion policy for the table view. 
+		/*! \return deletion policy for this object. 
 		 The default (after allocating) is AskDelete. */
 		DeletionPolicy deletionPolicy() const { return m_deletionPolicy; }
 
@@ -233,7 +243,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		void insertItem(KexiTableItem *newItem, int row = -1);
 
 		/*! Clears entire table data, its visible representation 
-		 and deletes data at database backend (if this is db-aware table view). 
+		 and deletes data at database backend (if this is db-aware object). 
 		 Does not clear columns information.
 		 Does not destroy KexiTableViewData object (if present) but only clears its contents.
 		 Displays confirmation dialog if \a ask is true (the default is false).
@@ -272,12 +282,12 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 be between 0 and rows() (or cols() accordingly). */
 		virtual void ensureCellVisible(int row, int col/*=-1*/) = 0;
 
-		/*! Specifies, if this table view automatically accepts 
+		/*! Specifies, if this object automatically accepts 
 		 row editing (using acceptRowEdit()) on accepting any cell's edit 
 		 (i.e. after acceptEditor()). \sa acceptsRowEditAfterCellAccepting() */
 		void setAcceptsRowEditAfterCellAccepting(bool set);
 
-		/*! \return true, if this table view automatically accepts 
+		/*! \return true, if this object automatically accepts 
 		 row editing (using acceptRowEdit()) on accepting any cell's edit 
 		 (i.e. after acceptEditor()). 
 		 By default this flag is set to false.
@@ -298,6 +308,9 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		  -droppedAtRow() will be emitted on dropping
 		 By default this flag is set to false. */
 		void setDropsAtRowEnabled(bool set);
+
+		/*! \return currently used data (field/cell) editor or 0 if there is no data editing. */
+		inline KexiDataItemInterface *editor() const { return m_editor; }
 
 		/*! Cancels row editing All changes made to the editing 
 		 row during this current session will be undone. */
@@ -330,16 +343,27 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 		inline KexiTableItem *itemAt(int row) const;
 
+		/*! \return column information for column number \a col. 
+		 Default implementation just returns column # col,
+		 but for Kexi Forms column data
+		 corresponding to widget number is used here
+		 (see KexiFormScrollView::fieldNumberForColumn()). */
+		virtual KexiTableViewColumn* column(int col);
+
 		const QVariant* bufferedValueAt(int col);
 
 		//! \return a type of column \a col - one of KexiDB::Field::Type
-		int columnType(int col) const;
+		int columnType(int col);
 
 		//! \return default value for column \a col
 		QVariant columnDefaultValue(int col) const;
 
-		//! \return true is column \a col is editable
-		bool columnEditable(int col) const;
+		/*! \return true is column \a col is editable.
+		 Default implementation takes information about 'readOnly' flag from data member.
+		 Within forms, this is reimplemented for checking 'readOnly' flag from a widget
+		 ('readOnly' flag from data member is still checked though).
+		*/
+		virtual bool columnEditable(int col);
 
 		inline KexiRecordMarker* verticalHeader() const { return m_verticalHeader; }
 
@@ -392,13 +416,13 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void slotDataDestroying();
 
 	protected:
-		/*! Reimplementation for KexiDataAwareObjectInterface
+		/*! Reimplementation for KexiDataAwareObjectInterface.
 		 Initializes data contents (resizes it, sets cursor at 1st row).
 		 Sets record count for record navigator.
 		 Sets cursor positin (using setCursorPosition()) to first row or sets 
 		 (-1, -1) position if no rows are available.
 		 Called on setData(). Also called once on show event after
-		 refreshRequested() signal was received from KexiTableViewData obejct. */
+		 refreshRequested() signal was received from KexiTableViewData object. */
 		virtual void initDataContents();
 
 		/*! Clears columns information and thus all internal table data 
@@ -478,7 +502,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 dependending on its type. If \a ignoreMissingEditor is false (the default),
 		 and editor cannot be instantiated, current row editing (if present) is cancelled.
 		 */
-		virtual KexiTableEdit *editor( int col, bool ignoreMissingEditor = false ) = 0;
+		virtual KexiDataItemInterface *editor( int col, bool ignoreMissingEditor = false ) = 0;
 
 		/*! Updates editor's position, size and shows its focus (not the editor!) 
 		 for \a row and \a col, using editor(). Does nothing if editor not found. */
@@ -521,10 +545,14 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		//! for sanity checks (return true if m_data is present; else: outputs warning)
 		inline bool hasData() const;
 
-		/*! data structure displayed for this object */
+		//! Only needed for forms: called by KexiDataAwareObjectInterface::setCursorPosition() 
+		//! if cursor's position is really changed.
+		virtual void selectCellInternal() {}
+
+		//! data structure displayed for this object
 		KexiTableViewData *m_data;
 
-		/*! true if m_data member is owned by this object */
+		//! true if m_data member is owned by this object
 		bool m_owner : 1;
 
 		//! cursor position
@@ -564,7 +592,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 eg. when we're calling acceptRowEdit() during cell accepting phase. */
 		bool m_inside_acceptEditor : 1;
 
-		/*! @internal if true, this table view automatically accepts 
+		/*! @internal if true, this object automatically accepts 
 		 row editing (using acceptRowEdit()) on accepting any cell's edit 
 		 (i.e. after acceptEditor()). */
 		bool m_internal_acceptsRowEditAfterCellAccepting : 1;
@@ -572,8 +600,8 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		/*! true, if inserting empty rows are enabled (false by default) */
 		bool m_emptyRowInsertingEnabled : 1;
 
-		/*! 1 if table view is readOnly, 0 if not; 
-		 otherwise (-1 means "dont know") the 'readOnly' flag from table views' 
+		/*! Contains 1 if the object is readOnly, 0 if not; 
+		 otherwise (-1 means "dont know") the 'readOnly' flag from object's 
 		 internal data structure (KexiTableViewData *KexiTableView::m_data) is reused. 
 		 */
 		int m_readOnly;
@@ -606,8 +634,8 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 //! @todo make generic interface out of KexiRecordMarker
 		KexiRecordMarker *m_verticalHeader;
 
-//! @todo make generic interface out of KexiTableEdit
-		KexiTableEdit *m_editor;
+		KexiDataItemInterface *m_editor;
+//		KexiTableEdit *m_editor;
 
 		/*! Navigation panel, used if navigationPanelEnabled is true. */
 		KexiRecordNavigator *m_navPanel; //!< main navigation widget
@@ -646,6 +674,7 @@ inline KexiTableItem *KexiDataAwareObjectInterface::itemAt(int row) const
 	return item;
 }
 
+//! Convenience macro used for KexiDataAwareObjectInterface implementations.
 #define KEXI_DATAAWAREOBJECTINTERFACE \
 public: \
 	void connectCellSelectedSignal(const QObject* receiver, const char* intIntMember) { \

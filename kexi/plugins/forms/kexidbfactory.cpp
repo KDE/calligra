@@ -106,7 +106,7 @@ KexiSubForm::setFormName(const QString &name)
 
 KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
  : KLineEdit(parent, name)
- , KexiDataItemInterface()
+ , KexiFormDataItemInterface()
 {
 	connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
 }
@@ -121,9 +121,11 @@ void KexiDBLineEdit::setInvalidState( const QString& displayText )
 	setText(displayText);
 }
 
-void KexiDBLineEdit::setValueInternal(const QVariant& value)
+void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-	setText( value.toString() );
+	if (removeOld) 
+		setText(add.toString());
+	setText( m_origValue.toString() + add.toString() );
 }
 
 QVariant KexiDBLineEdit::value()
@@ -133,7 +135,42 @@ QVariant KexiDBLineEdit::value()
 
 void KexiDBLineEdit::slotTextChanged(const QString&)
 {
-	valueChanged();
+	signalValueChanged();
+}
+
+bool KexiDBLineEdit::valueIsNull()
+{
+	return text().isNull();
+}
+
+bool KexiDBLineEdit::valueIsEmpty()
+{
+	return text().isEmpty();
+}
+
+bool KexiDBLineEdit::isReadOnly() const
+{
+	return KLineEdit::isReadOnly();
+}
+
+QWidget* KexiDBLineEdit::widget()
+{
+	return this;
+}
+
+bool KexiDBLineEdit::cursorAtStart()
+{
+	return cursorPosition()==0;
+}
+
+bool KexiDBLineEdit::cursorAtEnd()
+{
+	return cursorPosition()==text().length();
+}
+
+void KexiDBLineEdit::clear()
+{
+	setText(QString::null);
 }
 
 //////////////////////////////////////////
@@ -184,10 +221,13 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wInput->setPixmap("edit");
 	wInput->setClassName("KexiDBInputWidget");
 	wInput->addAlternateClassName("QLabel", true/*override*/);
+//todo	wInput->addAlternateClassName("QLineEdit", true/*override*/);
+//todo	wInput->addAlternateClassName("KLineEdit", true/*override*/);
+//todo	wInput->addAlternateClassName("KexiDBLineEdit", true/*override*/); //for compat.
 	wInput->setIncludeFileName("qlabel.h");
 	wInput->setName(i18n("Input Widget"));
 	wInput->setNamePrefix(i18n("Widget name (see above)", "InputWidget"));
-	wInput->setDescription(i18n("A super-duper widget"));
+//	wInput->setDescription(i18n("A super-duper widget"));
 	m_classes.append(wInput);
 	
 	m_propDesc["dataSource"] = i18n("Data source");
@@ -225,7 +265,7 @@ KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigne
 	{
 		w = new KexiLabel(text, p, n);
 	}
-	else if(c == "KexiDBInputWidget")
+	else if(c == "KexiDBInputWidget") //todo: || c == "KexiDBLineEdit"/*for compatibility*/)
 	{
 		w = new KexiDBInputWidget(p, n);
 	}

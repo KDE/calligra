@@ -47,7 +47,7 @@ void KexiBoolTableEdit::init()
 	m_hasFocusableWidget = false;
 }
 	
-void KexiBoolTableEdit::init(const QString& /*add*/, bool /*removeOld*/)
+void KexiBoolTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
 {
 	m_currentValue = m_origValue;
 	//nothing to do more...
@@ -70,9 +70,9 @@ bool KexiBoolTableEdit::valueIsEmpty()
 	return m_currentValue.isNull();
 }
 
-QVariant KexiBoolTableEdit::value(bool &ok)
+QVariant KexiBoolTableEdit::value()
 {
-	ok = true;
+//	ok = true;
 	return m_currentValue;
 }
 

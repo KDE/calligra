@@ -422,6 +422,16 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 --connection creator
 --fix permission problems
 
+=== 0.1 TODO ===
+Forms
+-add "Set Action..." for buttons
+	ccpasteur	jstaniek: this could do the job without changing anything in form core
+	ccpasteur	jstaniek: but I'm afraid I won't have much time to help you before 0.1
+	ccpasteur	jstaniek: what you'll have to do is add a menu item in WidgetFactory::createMenu
+	ccpasteur	jstaniek: then use ObjecTTreeItem::setModifiedProperty("prop_name") when the user picks an action in the dialog
+	ccpasteur	jstaniek: and implment WidgetFactory saveSpecialProperty and readSpecialProperty
+	ccpasteur	jstaniek: slot connection would be done in readSecialProperty
+
 CCMAIL: dkite@shaw.ca
 
 TODO: add a small btn at the left of record navigator 
@@ -444,6 +454,50 @@ Migration (Import Project Wizard) TODO:
 - change drivers comboboxes to KexiDBDriverList
   (impl. this one with drv name and description columns)
 - use KexiDB::MessageTitle and KexiDB::MessageHandler for displaying errors
+
+QUICK TODO: 
+Forms:
+-change form's object caption to "caption" property, when changed and conversely!
+-new forms should have "dirty" set to true, so user can save them quickly
+
+2005-03-10..25
+Forms, TableViews
+- APIs for Forms and TableViews more integrated: 
+-- KexiTableEdit now inherits KexiDataItemInterface
+-- KexiDataItemInterface is now used in KexiDataAwareObjectInterface, 
+   not KexiTableEdit
+-- KexiFormScrollView and KexiDBForm now uses KexiDataAwareObjectInterface API
+   for dealing with r/w data
+- data-aware widgets with duplicated data source are updated concurently 
+  on editing one of them
+- within forms, "column" term is now related not to column within data model,
+  but to order of data-aware widget. This "column" value is translated to
+  column number within data model when needed. This allows to duplicate data 
+  widgets, hide them, change their ordering, etc. For example, tab order 
+  (and visual order) of data-aware widgets is independant of column ordering 
+  within data model.
+KexiDB
+- BIC CHANGE: QuerySchema::parentTable() renamed to masterTable()
+- QuerySchema::masterTable() now tries to return a table 
+  if there's only one defined
+- Connection::createTable() - on error, existing table schema object 
+  is not destroyed (i.e. it is still available e.g. 
+  using within Connection::tableSchema(const QString& ), 
+  even if the table was physically dropped. 
+  This fixes crash for "alter table dialog" when recreating table failed
+  (the dialog expects that old table schema won't be destroyed).
+- Connection::resultExists() avoid appending optimizing "LIMIT 1" suffix when
+  the query statement is not "SELECT".
+- Connection::createTableStatement(): length parameter is now only used 
+  for text and not long text field types.
+Alter Table Dialog
+- changing subType to LongText hides "length" property;
+  changing subType to Text shows "length" property. 
+
+2005-03-04
+KexiDataAwareObjectInterface (TableView)
+- fixed setting cursor position (and iterator) when changing selected 
+  row after row editing
 
 2005-03-03
 - doc/dev/compile_time_options.txt document added
@@ -3678,7 +3732,7 @@ dock windows visiblity fixed, simplified code
 - KEXI_NO_PRINT=1 (temporary) disables printing functionality
 - kexiDB/kexidb.h: KexiDBDriver *m_currentDriver moved from public slots section to private
 - kexicore and kexidb libs ported
-- kexi at least now compiles (but crushes)
+- kexi at least now compiles (but crashes)
 
 2003-03-28
 - first touch on Kexi sources for porting

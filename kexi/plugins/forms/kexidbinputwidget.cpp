@@ -95,37 +95,37 @@ void KexiDBInputWidget::setReadOnly( bool state ) {
 	p_widget->setDisabled( state );
 }
 
-void KexiDBInputWidget::setValueInternal( const QVariant& value ) {
+void KexiDBInputWidget::setValueInternal(const QVariant& add, bool removeOld) {
 	if ( dynamic_cast<KDateWidget*>( p_widget ) != 0L ) {
-		dynamic_cast<KDateWidget*>( p_widget )->setDate( value.toDate() );
+		dynamic_cast<KDateWidget*>( p_widget )->setDate( m_origValue.toDate() );
 		return;
 	}
 	if ( dynamic_cast<KDateTimeWidget*>( p_widget ) != 0L ) {
-		dynamic_cast<KDateTimeWidget*>( p_widget )->setDateTime( value.toDateTime() );
+		dynamic_cast<KDateTimeWidget*>( p_widget )->setDateTime( m_origValue.toDateTime() );
 		return;
 	}
 	if ( dynamic_cast<KTimeWidget*>( p_widget ) != 0L ) {
-		dynamic_cast<KTimeWidget*>( p_widget )->setTime( value.toTime() );
+		dynamic_cast<KTimeWidget*>( p_widget )->setTime( m_origValue.toTime() );
 		return;
 	}
 	if ( dynamic_cast<QLabel*>( p_widget ) != 0L ) {
-		dynamic_cast<QLabel*>( p_widget )->setText( value.toString() );
+		dynamic_cast<QLabel*>( p_widget )->setText( m_origValue.toString() );
 		return;
 	}
 	if ( dynamic_cast<QLineEdit*>( p_widget ) != 0L ) {
-		dynamic_cast<QLineEdit*>( p_widget )->setText( value.toString() );
+		dynamic_cast<QLineEdit*>( p_widget )->setText( m_origValue.toString() );
 		return;
 	}
 	if ( dynamic_cast<QTextEdit*>( p_widget ) != 0L ) {
-		dynamic_cast<QTextEdit*>( p_widget )->setText( value.toString() );
+		dynamic_cast<QTextEdit*>( p_widget )->setText( m_origValue.toString() );
 		return;
 	}
 	if ( dynamic_cast<KDoubleSpinBox*>( p_widget ) != 0L ) {
-		dynamic_cast<KDoubleSpinBox*>( p_widget )->setValue( value.toDouble() );
+		dynamic_cast<KDoubleSpinBox*>( p_widget )->setValue( m_origValue.toDouble() );
 		return;
 	}
 	if ( dynamic_cast<QSpinBox*>( p_widget ) != 0L ) {
-		dynamic_cast<QSpinBox*>( p_widget )->setValue( value.toInt() );
+		dynamic_cast<QSpinBox*>( p_widget )->setValue( m_origValue.toInt() );
 		return;
 	}
 }
@@ -220,11 +220,11 @@ QVariant KexiDBInputWidget::value() {
 }
 
 void KexiDBInputWidget::slotValueChanged( const QString& ) {
-	valueChanged();
+	signalValueChanged();
 }
 
 void KexiDBInputWidget::slotValueChanged() {
-	valueChanged();
+	signalValueChanged();
 }
 
 void KexiDBInputWidget::setMinValue( int value ) {
@@ -273,6 +273,39 @@ void KexiDBInputWidget::setPrecision( int precision ) {
 		box->setPrecision( precision );
 	}
 	p_precision = precision;
+}
+
+bool KexiDBInputWidget::valueIsNull()
+{
+	//! @todo ?
+	return value().isNull();
+}
+
+bool KexiDBInputWidget::valueIsEmpty()
+{
+	//! @todo ?
+	return value().toString().isEmpty();
+}
+
+QWidget* KexiDBInputWidget::widget()
+{
+	return p_widget;
+}
+
+bool KexiDBInputWidget::cursorAtStart()
+{
+	return false;
+}
+
+bool KexiDBInputWidget::cursorAtEnd()
+{
+	return false;
+}
+
+void KexiDBInputWidget::clear()
+{
+	//! @todo ?
+	setValueInternal(QString::null, true);
 }
 
 #include "kexidbinputwidget.moc"
