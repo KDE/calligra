@@ -73,3 +73,73 @@ int KWordTextFrameSetIface::paragraphsSelected()
 {
     return m_frametext->paragraphsSelected();
 }
+
+void KWordTextFrameSetIface::setBoldText( bool b )
+{
+    m_frametext->textObject()->setBoldCommand( b );
+}
+
+void KWordTextFrameSetIface::setItalicText( bool b )
+{
+    m_frametext->textObject()->setItalicCommand(b);
+}
+
+void KWordTextFrameSetIface::setUnderlineText( bool b )
+{
+    m_frametext->textObject()->setUnderlineCommand(b);
+}
+
+void KWordTextFrameSetIface::setStrikeOutText( bool b )
+{
+    m_frametext->textObject()->setStrikeOutCommand(b);
+}
+
+void KWordTextFrameSetIface::setTextColor( const QColor &col )
+{
+    m_frametext->textObject()->setTextColorCommand(col);
+}
+
+void KWordTextFrameSetIface::setTextPointSize( int s )
+{
+    m_frametext->textObject()->setPointSizeCommand( s );
+}
+
+void KWordTextFrameSetIface::setTextSubScript( bool b )
+{
+    m_frametext->textObject()->setTextSubScriptCommand( b );
+}
+
+void KWordTextFrameSetIface::setTextSuperScript( bool b )
+{
+    m_frametext->textObject()->setTextSuperScriptCommand( b );
+}
+
+void KWordTextFrameSetIface::setTextDefaultFormat()
+{
+    m_frametext->textObject()->setDefaultFormatCommand();
+}
+
+void KWordTextFrameSetIface::setTextBackgroundColor(const QColor & col)
+{
+    m_frametext->textObject()->setTextBackgroundColorCommand(col);
+}
+
+QColor KWordTextFrameSetIface::textColor() const
+{
+    return m_frametext->textObject()->textColor();
+}
+
+QFont KWordTextFrameSetIface::textFont() const
+{
+    return m_frametext->textObject()->textFont();
+}
+
+QString KWordTextFrameSetIface::textFontFamily()const
+{
+    return m_frametext->textObject()->textFontFamily();
+}
+
+QColor KWordTextFrameSetIface::textBackgroundColor() const
+{
+    return m_frametext->textObject()->textBackgroundColor();
+}
