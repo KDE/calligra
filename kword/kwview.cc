@@ -144,7 +144,8 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 /*================================================================*/
 KWView::~KWView()
 {
-    statusBar()->removeItem(statusPage);
+    if(statusBar())
+        statusBar()->removeItem(statusPage);
 }
 
 /*=============================================================*/
@@ -199,14 +200,17 @@ void KWView::initGui()
 
     showFormulaToolbar( FALSE );
 
-    statusBar()->insertItem( QString(" ")+i18n("Page %1/%2").arg(1).arg(1)+' ', statusPage );
-    // Workaround for bug in KDE-2.1[.1]'s KStatusBar (show() not called in insertItem)
-    QObjectList *l = statusBar()->queryList( "QLabel" );
-    QObjectListIt it( *l );
-    for ( ; it.current() ; ++it )
-        static_cast<QLabel *>(it.current())->show();
-    delete l;
-    statusBar()->show();
+    if(statusBar())
+    {
+        statusBar()->insertItem( QString(" ")+i18n("Page %1/%2").arg(1).arg(1)+' ', statusPage );
+        // Workaround for bug in KDE-2.1[.1]'s KStatusBar (show() not called in insertItem)
+        QObjectList *l = statusBar()->queryList( "QLabel" );
+        QObjectListIt it( *l );
+        for ( ; it.current() ; ++it )
+            static_cast<QLabel *>(it.current())->show();
+        delete l;
+        statusBar()->show();
+    }
 
     updatePageInfo();
 }
@@ -610,7 +614,7 @@ void KWView::showFormulaToolbar( bool show )
 void KWView::updatePageInfo()
 {
     KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
-    if ( edit )
+    if ( edit && statusBar())
     {
         m_currentPage = edit->currentFrame()->pageNum();
         statusBar()->changeItem( QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(doc->getPages())+' ', statusPage );
@@ -2452,8 +2456,11 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     }
     else
     {
-        //remove item when GUI is deactivated
-        statusBar()->removeItem(statusPage);
+        if(statusBar())
+        {
+            //remove item when GUI is deactivated
+            statusBar()->removeItem(statusPage);
+        }
     }
     KoView::guiActivateEvent( ev );
 }
