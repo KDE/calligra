@@ -52,6 +52,9 @@
 //#define DEBUG_FORMAT_MORE
 //#define DEBUG_VIEWAREA
 
+//#define DEBUG_NTI
+//#define DEBUG_ITN
+
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc ), undoRedoInfo( this )
 {
@@ -120,7 +123,6 @@ int KWTextFrameSet::availableHeight() const
 
 KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool mouseSelection ) const
 {
-#define DEBUG_NTI
     // Find the frame that contains nPoint. To go fast, we look them up by page number.
     int pageNum = nPoint.y() / m_doc->paperHeight();
     QListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
@@ -223,7 +225,6 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
 
 KWFrame * KWTextFrameSet::internalToNormalWithHint( QPoint iPoint, QPoint & nPoint, QPoint hintNPoint ) const
 {
-//#define DEBUG_ITN
 #ifdef DEBUG_ITN
     kdDebug() << "KWTextFrameSet::internalToNormalWithHint hintNPoint: " << hintNPoint.x() << "," << hintNPoint.y() << endl;
 #endif
@@ -277,6 +278,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
             KWPgNumVariable * var = dynamic_cast<KWPgNumVariable *>( cit.current() );
             if ( var && var->subtype() == KWPgNumVariable::VST_PGNUM_CURRENT )
             {
+                //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << frame->pageNum()+1 << endl;
                 var->setPgNum( frame->pageNum() + 1 );
                 var->resize();
                 var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !

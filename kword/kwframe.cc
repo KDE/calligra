@@ -464,8 +464,8 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
 void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame, const QRect &crect, KWViewMode *viewMode )
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
-    //kdDebug(32002) << "KWFrameSet::drawFrameBorder frameRect: " << DEBUGRECT( frameRect ) << endl;
-    //kdDebug(32002) << "KWFrameSet::drawFrameBorder outerRect: " << DEBUGRECT( outerRect ) << endl;
+    //kdDebug(32002) << "KWFrameSet::drawFrameBorder frame: " << frame
+    //               << " outerRect: " << DEBUGRECT( outerRect ) << endl;
 
     if ( !crect.intersects( outerRect ) )
     {
@@ -824,9 +824,10 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                                bool onlyChanged, bool resetChanged,
                                KWFrameSetEdit *edit, KWViewMode *viewMode )
 {
-    //kdDebug(32002) << "KWFrameSet::drawContents " << this << " " << getName()
-    //               << " onlyChanged=" << onlyChanged << " resetChanged=" << resetChanged
-    //               << endl;
+    /*kdDebug(32002) << "KWFrameSet::drawContents " << this << " " << getName()
+                   << " onlyChanged=" << onlyChanged << " resetChanged=" << resetChanged
+                   << " crect= " << DEBUGRECT(crect)
+                   << endl;*/
 
     QListIterator<KWFrame> frameIt( frameIterator() );
     KWFrame * lastRealFrame = 0L;
@@ -843,9 +844,10 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
 
         QRect r(crect);
         QRect normalFrameRect( m_doc->zoomRect( *frame ) );
-        QRect frameRect( viewMode->normalToView( normalFrameRect ) );
-        //kdDebug(32002) << "KWTFS::drawContents frame=" << frame << " cr=" << DEBUGRECT(r) << endl;
-        r = r.intersect( frameRect );
+        //QRect frameRect( viewMode->normalToView( normalFrameRect ) );
+        QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
+        //kdDebug(32002) << "KWTFS::drawContents frame=" << frame << " crect=" << DEBUGRECT(r) << endl;
+        r = r.intersect( outerRect ); // Intersect with the outerrect since we draw the border too
         //kdDebug(32002) << "                    framerect=" << DEBUGRECT(*frame) << " intersec=" << DEBUGRECT(r) << " todraw=" << !r.isEmpty() << endl;
         if ( !r.isEmpty() )
         {
@@ -859,15 +861,15 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             QRect icrect = viewMode->viewToNormal( r );
             icrect.moveBy( -offsetX, -offsetY );   // portion of the frame to be drawn, in qrt coords
 
+            // The settings come from this frame
+            KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
+
             QRegion reg = frameClipRegion( p, frame, crect, viewMode, onlyChanged );
             if ( !reg.isEmpty() )
             {
                 p->save();
                 p->setClipRegion( reg );
                 p->translate( r.x() - icrect.x(), r.y() - icrect.y() ); // This assume that viewToNormal() is only a translation
-
-                // The settings come from this frame
-                KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
 
                 QBrush bgBrush( settingsFrame->getBackgroundColor() );
                 bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
@@ -876,25 +878,24 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                 drawFrame( frame, p, icrect, cg, onlyChanged, resetChanged, edit );
 
                 p->restore();
-
-                // Now draw the frame border
-                // Clip frames on top if onlyChanged, but don't clip to the frame
-                reg = frameClipRegion( p, 0L, crect, viewMode, onlyChanged );
-                if ( !reg.isEmpty() )
-                {
-                    p->save();
-                    p->setClipRegion( reg );
-                    drawFrameBorder( p, frame, settingsFrame, crect, viewMode );
-                    p->restore();
-                }
             }
+            // Now draw the frame border
+            // Clip frames on top if onlyChanged, but don't clip to the frame
+            reg = frameClipRegion( p, 0L, crect, viewMode, onlyChanged );
+            if ( !reg.isEmpty() )
+            {
+                p->save();
+                p->setClipRegion( reg );
+                drawFrameBorder( p, frame, settingsFrame, crect, viewMode );
+                p->restore();
+            }// else kdDebug() << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
         }
         if ( !lastRealFrame || !frame->isCopy() )
         {
             lastRealFrame = frame;
             lastRealFrameTop = totalHeight;
         }
-        totalHeight += frameRect.height();
+        totalHeight += normalFrameRect.height();
     }
 }
 
@@ -1151,7 +1152,8 @@ void KWFrameSet::printDebug()
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( unsigned int j = 0; frameIt.current(); ++frameIt, ++j ) {
         KWFrame * frame = frameIt.current();
-        kdDebug() << " +-- Frame " << j << " of "<< getNumFrames() << "    (" << frame << ")" << endl;
+        QCString copy = frame->isCopy() ? "[copy]" : "";
+        kdDebug() << " +-- Frame " << j << " of "<< getNumFrames() << "    (" << frame << ")  " << copy << endl;
         printDebug( frame );
         kdDebug() << "     Rectangle : " << frame->x() << "," << frame->y() << " " << frame->width() << "x" << frame->height() << endl;
         kdDebug() << "     RunAround: "<< runaround[ frame->runAround() ] << endl;
