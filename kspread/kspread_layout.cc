@@ -1872,14 +1872,18 @@ void RowLayout::setHide( bool _hide )
 {
     if ( _hide != m_bHide ) // only if we change the status
     {
-	m_bHide=_hide;
-
 	if ( _hide )
+	{
 	    // Lower maximum size by height of row
 	    m_pTable->adjustSizeMaxY ( - height() );
+	    m_bHide=_hide; //hide must be set after we requested the height
+	}
 	else
+	{
 	    // Rise maximum size by height of row
+	    m_bHide=_hide; //unhide must be set before we request the height
 	    m_pTable->adjustSizeMaxY ( height() );
+	}
     }
 }
 
@@ -2091,13 +2095,15 @@ void ColumnLayout::setHide( bool _hide )
 {
     if ( _hide != m_bHide ) // only if we change the status
     {
-	m_bHide=_hide;
-
 	if ( _hide )
+	{
 	    // Lower maximum size by width of column
 	    m_pTable->adjustSizeMaxX ( - width() );
+	    m_bHide=_hide; //hide must be set after we requested the width
+	}
 	else
 	    // Rise maximum size by width of column
+	    m_bHide=_hide; //unhide must be set before we request the width
 	    m_pTable->adjustSizeMaxX ( width() );
     }
 }
