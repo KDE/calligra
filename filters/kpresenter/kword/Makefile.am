@@ -10,6 +10,3 @@ METASOURCES = AUTO
 
 service_DATA = kprkword.desktop
 servicedir = $(kde_servicesdir)
-
-messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/kpresenterkwordfilter.pot

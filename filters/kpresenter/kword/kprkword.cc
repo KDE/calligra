@@ -30,7 +30,7 @@
 #include <qcolor.h>
 
 typedef KGenericFactory<KprKword, KoFilter> KprKwordFactory;
-K_EXPORT_COMPONENT_FACTORY( libkprkword, KprKwordFactory( "kpresenterkwordfilter" ) )
+K_EXPORT_COMPONENT_FACTORY( libkprkword, KprKwordFactory( "kofficefilters" ) )
 
 KprKword::KprKword(KoFilter *, const char *, const QStringList&) :
     KoFilter(),

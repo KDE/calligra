@@ -29,7 +29,7 @@
 #include <koUnit.h>
 
 typedef KGenericFactory<OoImpressExport, KoFilter> OoImpressExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libooimpressexport, OoImpressExportFactory( "ooimpressexport" ) )
+K_EXPORT_COMPONENT_FACTORY( libooimpressexport, OoImpressExportFactory( "kofficefilters" ) )
 
 
 OoImpressExport::OoImpressExport( KoFilter *, const char *, const QStringList & )
