@@ -261,3 +261,25 @@ QString KPresenterDocIface::selectedForPrinting()
 {
     return doc->selectedForPrinting();
 }
+
+int KPresenterDocIface::leftBorder()
+{
+    return doc->getLeftBorder();
+}
+
+int KPresenterDocIface::topBorder()
+{
+    return doc->getTopBorder();
+}
+
+int KPresenterDocIface::bottomBorder()
+{
+    return doc->getBottomBorder();
+}
+
+bool KPresenterDocIface::isSlideSelected( int pgNum)
+{
+    if( pgNum>= doc->getPageNums())
+        return false;
+    return doc->isSlideSelected(pgNum);
+}

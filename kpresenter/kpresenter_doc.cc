@@ -84,6 +84,7 @@
 #include <koVariable.h>
 #include <koDocumentInfo.h>
 #include "kprvariable.h"
+#include "kpbackground.h"
 
 using namespace std;
 

@@ -85,6 +85,13 @@ k_dcop:
 
     virtual QString selectedForPrinting();
 
+    virtual int leftBorder();
+    virtual int topBorder();
+    virtual int bottomBorder();
+
+    //Be carefull ! when pgNum > num of page we return false
+    virtual bool isSlideSelected( int pgNum);
+
 private:
     KPresenterDoc *doc;
 

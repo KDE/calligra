@@ -48,14 +48,13 @@ class KPrVariableCollection;
 
 #include <kpobject.h>
 #include <global.h>
-#include <kpbackground.h>
 
 #include <kpimage.h>
 #include <kpgradientcollection.h>
 #include <kpclipartcollection.h>
 #include <koUnit.h>
 #include <kozoomhandler.h>
-//#include "kprvariable.h"
+
 class KoDocumentEntry;
 class KPFooterHeaderEditor;
 class KPTextObject;
