@@ -38,8 +38,6 @@ int kchartEngine::doLabels() {
       continue;
     }
 
-    //kdDebug(35001) << "Setting label " << labels << " to "
-    //               << cellval.value.stringValue() << endl;
     kdDebug(35001) <<  "Setting label " << labels << " to "
 		   << cellval.value.toString() << endl;
     //		QString l = cellval.value.stringValue();
@@ -112,7 +110,8 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
     /* step from lowest to highest puting in labels and grid at interval points */
     /* since now "odd" intervals may be requested, try to step starting at 0,   */
     /* if lowest < 0 < highest                                                  */
-  for(int i=-1; i<=1; i+=2 ) { // -1, 1
+  if ( ylbl_interval ) // avoid endless loop
+    for(int i=-1; i<=1; i+=2 ) { // -1, 1
       if( i == -1 )
 	if( lowest >= 0.0 ) //	all pos plotting
 	  continue;
@@ -192,7 +191,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	  // set back to foremost
 	}
 
-	// kdDebug(35001) << "drawing 2" << endl;
+	//kdDebug(35001) << "drawing 2" << endl;
 
 	// PENDING(kalle) Originally, here was always used one
 	// font smaller than params->yAxisFont. Do that again?
@@ -214,7 +213,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	    }
 
 
-	    // kdDebug(35001) << "drawing 3" << endl;
+	    //kdDebug(35001) << "drawing 3" << endl;
 
 	    // PENDING( original uses a 1 step smaller
 	    // font here. Do that, too?
@@ -246,7 +245,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 			 ylbl_str );
 	  }
 
-	  // kdDebug(35001) << "drawing 4" << endl;
+	  //kdDebug(35001) << "drawing 4" << endl;
 
 	if( params->do_vol() && params->yaxis2 ) {
 	  char	vylbl[16];
@@ -270,12 +269,13 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 		       vylbl );
 	  setno = 0;
 	}
+        //kdDebug(35001) << "i=" << i << " tmp_y=" << tmp_y << " ylbl_interval=" << ylbl_interval << " highest=" << highest << " lowest=" << lowest << endl;
       }
       while( ((i>0) && ((tmp_y += ylbl_interval) <= highest)) ||
 	     ((i<0) && ((tmp_y -= ylbl_interval) > lowest)) );
     }
 
-    // kdDebug(35001) << "drawing 5" << endl;
+    //kdDebug(35001) << "drawing 5" << endl;
 
     /* catch last (bottom) grid line - specific to an "off" requested interval */
     if( params->grid && params->threeD() ) {
