@@ -1592,6 +1592,7 @@ void KSpreadView::insertTable()
 {
   KSpreadTable *t = m_pDoc->createTable();
   m_pDoc->addTable( t );
+  updateEditWidget();
 }
 
 void KSpreadView::hideTable()

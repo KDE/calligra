@@ -42,7 +42,7 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* name)
   QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Table"));
   QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
-  lay1->setMargin( 5 );
+  lay1->setMargin( 20 );
   lay1->setSpacing( 10 );
 
   m_pFormula= new QCheckBox(i18n("Show formular"),tmpQGroupBox);
