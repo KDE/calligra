@@ -375,6 +375,11 @@ int KSpreadSheet::id() const
   return d->id;
 }    
 
+bool KSpreadSheet::isRightToLeft() const
+{
+  return d->rightToLeft;
+}
+
 bool KSpreadSheet::isHidden() const
 {
   return d->hide;

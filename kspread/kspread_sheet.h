@@ -301,7 +301,7 @@ public:
     virtual bool loadChildren( KoStore* _store );
 
     bool isLoading();
-    inline bool isRightToLeft() const { return m_bRightToLeft; }
+    bool isRightToLeft() const;
 
     void password( QCString & passwd ) const ;
     bool isProtected() const;
@@ -1234,22 +1234,9 @@ protected:
 
 
     bool m_bScrollbarUpdates;
-    bool m_bRightToLeft;
 
     static int s_id;
     static QIntDict<KSpreadSheet>* s_mapTables;
-
-    /**
-     * Show the grid on the screen
-     */
-    bool m_bShowGrid;
-    bool m_bShowFormula;
-    bool m_bShowFormulaIndicator;
-    bool m_bAutoCalc;
-    bool m_bLcMode;
-    bool m_bShowColumnNumber;
-    bool m_bHideZero;
-    bool m_bFirstLetterUpper;
 
     /**
      * @see #emptyPen
