@@ -1382,6 +1382,24 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>IMCONJUGATE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMCONJUGATE(complex number) returns the conjugate of a complex number of form x+yi.</Text>
+	<Syntax>IMCONJUGATE( complex number )</Syntax>
+	<Example>IMCONJUGATE("1.2+5i") returns "1.2-5i"</Example>
+	<Example>IMCONJUGATE("-i") returns "i"</Example>
+                <Example>IMCONJUGATE("12") returns "12"</Example>
+      </Help>
+    </Function>
+
+
+
   </Group>
   <Group>
     <GroupName>Logic</GroupName>

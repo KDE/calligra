@@ -2692,6 +2692,50 @@ static bool kspreadfunc_improduct( KSContext& context )
 }
 
 
+static bool kspreadfunc_imconjugate( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,1, "IMCONJUGATE",true ) )
+    return false;
+  QString tmp;
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+        {
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+                return false;
+        tmp= tmp.setNum(args[0]->doubleValue());
+        }
+  else
+        {
+        tmp=args[0]->stringValue();
+        }
+  bool ok;
+  double real=real_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  double imag=imag_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  tmp=kspreadfunc_create_complex(real,-imag);
+
+  double result=tmp.toDouble(&ok);
+  if(ok)
+        {
+        context.setValue( new KSValue(result));
+        return true;
+        }
+  context.setValue( new KSValue(tmp));
+
+  return true;
+}
+
+
 static bool kspreadfunc_polr( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -2966,16 +3010,18 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "HEX2BIN", new KSValue( new KSBuiltinFunction( module,"HEX2BIN",kspreadfunc_hex2bin) ) );
   module->addObject( "HEX2DEC", new KSValue( new KSBuiltinFunction( module,"HEX2DEC",kspreadfunc_hex2dec) ) );
   module->addObject( "HEX2OCT", new KSValue( new KSBuiltinFunction( module,"HEX2OCT",kspreadfunc_hex2oct) ) );
-  module->addObject( "COMPLEX", new KSValue( new KSBuiltinFunction( module,"COMPLEX",kspreadfunc_complex) ) );
   module->addObject( "POLR", new KSValue( new KSBuiltinFunction( module,"POLR",kspreadfunc_polr) ) );
   module->addObject( "POLA", new KSValue( new KSBuiltinFunction( module,"POLA",kspreadfunc_pola) ) );
   module->addObject( "CARX", new KSValue( new KSBuiltinFunction( module,"CARX",kspreadfunc_carx) ) );
   module->addObject( "CARY", new KSValue( new KSBuiltinFunction( module,"CARY",kspreadfunc_cary) ) );
+  //complex
+  module->addObject( "COMPLEX", new KSValue( new KSBuiltinFunction( module,"COMPLEX",kspreadfunc_complex) ) );
   module->addObject( "IMAGINARY", new KSValue( new KSBuiltinFunction( module,"IMAGINARY",kspreadfunc_complex_imag) ) );
   module->addObject( "IMREAL", new KSValue( new KSBuiltinFunction( module,"IMREAL",kspreadfunc_complex_real) ) );
   module->addObject( "IMSUM", new KSValue( new KSBuiltinFunction( module, "IMSUM", kspreadfunc_imsum ) ) );
   module->addObject( "IMSUB", new KSValue( new KSBuiltinFunction( module, "IMSUB", kspreadfunc_imsub ) ) );
   module->addObject( "IMPRODUCT", new KSValue( new KSBuiltinFunction( module, "IMPRODUCT", kspreadfunc_improduct ) ) );
+  module->addObject( "IMCONJUGATE", new KSValue( new KSBuiltinFunction( module, "IMCONJUGATE", kspreadfunc_imconjugate ) ) );
   return module;
 }
 

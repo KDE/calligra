@@ -1547,7 +1547,10 @@ void KSpreadUndoShowTable::redo()
 KSpreadUndoCellPaste::KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadTable* table, int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection,bool insert )
     : KSpreadUndoAction( _doc )
 {
-    title=i18n("Paste");
+    if(!insert)
+        title=i18n("Paste");
+    else
+        title=i18n("Paste and insert");
     m_tableName = table->tableName();
     m_selection = _selection;
     nbCol=_nbCol;
