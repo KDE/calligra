@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright 2003 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -69,9 +70,14 @@ enum KoFormat {
     PG_DIN_B3 = 20,
     PG_DIN_B4 = 21,
     PG_DIN_B6 = 22,
-    // etc.
+    PG_ISO_C5 = 23,
+    PG_US_COMM10 = 24,
+    PG_ISO_DL = 25,
+    PG_US_FOLIO = 26,
+    PG_US_LEDGER = 27,
+    PG_US_TABLOID = 28,
     // update the number below and the static arrays if you add more values to the enum
-    PG_LAST_FORMAT = 22 // used by koGlobal.cpp.
+    PG_LAST_FORMAT = PG_US_TABLOID // used by koGlobal.cpp.
 };
 
 /**

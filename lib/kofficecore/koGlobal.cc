@@ -33,11 +33,15 @@ struct PageFormatInfo
 {
     KoFormat format;
     KPrinter::PageSize kprinter;
-    const char* shortName;
-    const char* descriptiveName;
+    const char* shortName; // Short name
+    const char* descriptiveName; // Full name, which will be translated
     double width; // in mm
     double height; // in mm
 };
+
+// NOTES:
+// - the width and height of non-ISO formats are rounded
+// - the comments "should be..." indicates the exact values if the inch sizes would be multiplied by 25.4 mm/inch
 
 const PageFormatInfo pageFormatInfo[]=
 {
@@ -46,8 +50,8 @@ const PageFormatInfo pageFormatInfo[]=
     { PG_DIN_A5,        KPrinter::A5,           "A5",           I18N_NOOP("ISO A5"),       148.0,  210.0 },
     { PG_US_LETTER,     KPrinter::Letter,       "Letter",       I18N_NOOP("US Letter"),    216.0,  279.0 }, // should be 215.9 mm x 279.4 mm
     { PG_US_LEGAL,      KPrinter::Legal,        "Legal",        I18N_NOOP("US Legal"),     216.0,  356.0 }, // should be 215.9 mm x 335.6 mm
-    { PG_SCREEN,        KPrinter::A4,           "Screen",       I18N_NOOP("Screen"), PG_A4_HEIGHT, PG_A4_WIDTH }, // Custom so fall back to A4
-    { PG_CUSTOM,        KPrinter::A4,           "Custom",       I18N_NOOP("Custom"), PG_A4_WIDTH, PG_A4_HEIGHT }, // Custom so fall back to A4
+    { PG_SCREEN,        KPrinter::A4,           "Screen",       I18N_NOOP("Screen"), PG_A4_HEIGHT, PG_A4_WIDTH }, // Custom, so fall back to A4
+    { PG_CUSTOM,        KPrinter::A4,           "Custom",       I18N_NOOP("Custom"), PG_A4_WIDTH, PG_A4_HEIGHT }, // Custom, so fall back to A4
     { PG_DIN_B5,        KPrinter::B5,           "B5",           I18N_NOOP("ISO B5"),       182.0,  257.0 },
     { PG_US_EXECUTIVE,  KPrinter::Executive,    "Executive",    I18N_NOOP("US Executive"), 191.0,  254.0 }, // should be 190.5 mm x 254.0 mm
     { PG_DIN_A0,        KPrinter::A0,           "A0",           I18N_NOOP("ISO A0"),       841.0, 1189.0 },
@@ -63,7 +67,13 @@ const PageFormatInfo pageFormatInfo[]=
     { PG_DIN_B2,        KPrinter::B2,           "B2",           I18N_NOOP("ISO B2"),       515.0,  728.0 },
     { PG_DIN_B3,        KPrinter::B3,           "B3",           I18N_NOOP("ISO B3"),       364.0,  515.0 },
     { PG_DIN_B4,        KPrinter::B4,           "B4",           I18N_NOOP("ISO B4"),       257.0,  364.0 },
-    { PG_DIN_B6,        KPrinter::B6,           "B6",           I18N_NOOP("ISO B6"),       128.0,  182.0 }
+    { PG_DIN_B6,        KPrinter::B6,           "B6",           I18N_NOOP("ISO B6"),       128.0,  182.0 },
+    { PG_ISO_C5,        KPrinter::C5E,          "C5",           I18N_NOOP("ISO C5"),       163.0,  229.0 }, // Some sources tells: 162 mm x 228 mm 
+    { PG_US_COMM10,     KPrinter::Comm10E,      "Comm10",       I18N_NOOP("US Common 10"), 105.0,  241.0 }, // should be 104.775 mm x 241.3 mm
+    { PG_ISO_DL,        KPrinter::DLE,          "DL",           I18N_NOOP("ISO DL"),       110.0,  220.0 },
+    { PG_US_FOLIO,      KPrinter::Folio,        "Folio",        I18N_NOOP("US Folio"),     210.0,  330.0 }, // should be 209.54 mm x 330.2 mm
+    { PG_US_LEDGER,     KPrinter::Ledger,       "Ledger",       I18N_NOOP("US Ledger"),    432.0,  279.0 }, // should be 431.8 mm x 297.4 mm
+    { PG_US_TABLOID,    KPrinter::Tabloid,      "Tabloid",      I18N_NOOP("US Tabloid"),   279.0,  432.0 }  // should be 297.4 mm x 431.8 mm
 };
 
 int KoPageFormat::printerPageSize( KoFormat format )
@@ -109,8 +119,8 @@ KoFormat KoPageFormat::guessFormat( double width, double height )
         // We have some tolerance. 1pt is a third of a mm, this is
         // barely noticeable for a page size.
         if ( i != PG_CUSTOM
-             && kAbs( width - pageFormatInfo[i].width ) < 1
-             && kAbs( height - pageFormatInfo[i].height ) < 1 )
+             && kAbs( width - pageFormatInfo[i].width ) < 1.0
+             && kAbs( height - pageFormatInfo[i].height ) < 1.0 )
             return static_cast<KoFormat>(i);
     }
     return PG_CUSTOM;
