@@ -27,6 +27,7 @@ class KWZoomHandler;
 class KWTextFormatCollection;
 class KCommand;
 class QDomElement;
+class KMacroCommand;
 
 /**
  * This is our QTextDocument reimplementation, to create KWTextParag instead of QTextParags,
@@ -122,6 +123,9 @@ public:
 
     // Insert all the items from the map, into the existing text
     void insertItems( const QTextCursor & startCursor, int size );
+
+    // Delete all the items from the map, adding their commands into macroCmd
+    void deleteAll( KMacroCommand *macroCmd );
 };
 
 #endif

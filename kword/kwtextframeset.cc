@@ -2031,18 +2031,7 @@ void KWTextFrameSet::UndoRedoInfo::clear()
                     textdoc->addCommand( cmd );
                     KMacroCommand * macroCmd = new KMacroCommand( name );
                     macroCmd->addCommand( new KWTextCommand( textfs, /*cmd, */name ) );
-                    CustomItemsMap::Iterator it = customItemsMap.begin();
-                    for ( ; it != customItemsMap.end(); ++it )
-                    {
-                        KWTextCustomItem * item = it.data();
-                        KCommand * itemCmd = item->deleteCommand();
-                        if ( itemCmd )
-                        {
-                            macroCmd->addCommand( itemCmd );
-                            itemCmd->execute(); // the item-specific delete stuff hasn't been done
-                        }
-                        item->setDeleted( true );
-                    }
+                    customItemsMap.deleteAll( macroCmd );
                     textfs->kWordDocument()->addCommand( macroCmd );
                     cmd = 0L;
                 }
@@ -2621,7 +2610,7 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor, int selectionId, 
     undoRedoInfo.clear();
 }
 
-KCommand * KWTextFrameSet::removeSelectedTextCommand( QTextCursor * cursor, int selectionId,KWAnchor * anchor )
+KCommand * KWTextFrameSet::removeSelectedTextCommand( QTextCursor * cursor, int selectionId )
 {
     undoRedoInfo.clear();
     textdoc->selectionStart( selectionId, undoRedoInfo.id, undoRedoInfo.index );
@@ -2635,28 +2624,22 @@ KCommand * KWTextFrameSet::removeSelectedTextCommand( QTextCursor * cursor, int 
 
     textdoc->removeSelectedText( selectionId, cursor );
 
-    KMacroCommand *macro=new KMacroCommand(QString::null);
+    KMacroCommand *macroCmd = new KMacroCommand( i18n("Remove Selected Text") );
 
-    QTextCommand * cmd = new KWTextDeleteCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
-                                                  undoRedoInfo.text.rawData(),
-                                                  undoRedoInfo.customItemsMap,
-                                                  undoRedoInfo.oldParagLayouts );
+    QTextCommand *cmd = new KWTextDeleteCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
+                                                 undoRedoInfo.text.rawData(),
+                                                 undoRedoInfo.customItemsMap,
+                                                 undoRedoInfo.oldParagLayouts );
     textdoc->addCommand(cmd);
+    macroCmd->addCommand(new KWTextCommand( this, /*cmd, */QString::null ));
 
-    if(anchor)
-    {
-        KCommand *itemCmd = anchor->deleteCommand();
-        macro->addCommand(itemCmd);
-        itemCmd->execute(); // the item-specific delete stuff hasn't been done
-        anchor->setDeleted( true );
-    }
-
+    if(!undoRedoInfo.customItemsMap.isEmpty())
+        undoRedoInfo.customItemsMap.deleteAll( macroCmd );
 
     undoRedoInfo.type = UndoRedoInfo::Invalid; // we don't want clear() to create a command
     undoRedoInfo.clear();
-    macro->addCommand(new KWTextCommand( this, /*cmd, */QString::null ));
 
-    return macro;
+    return macroCmd;
 }
 
 void KWTextFrameSet::replaceSelection( QTextCursor * cursor, const QString & replacement,
@@ -3059,7 +3042,7 @@ KCommand * KWTextFrameSet::deleteAnchoredFrame( KWAnchor * anchor )
     textdoc->setSelectionStart( HighlightSelection, &c );
     c.setIndex( anchor->index() + 1 );
     textdoc->setSelectionEnd( HighlightSelection, &c );
-    KCommand *cmd = removeSelectedTextCommand( &c, HighlightSelection,anchor );
+    KCommand *cmd = removeSelectedTextCommand( &c, HighlightSelection );
 
     m_doc->repaintAllViews();
     return cmd;
@@ -3384,13 +3367,71 @@ void KWTextFrameSetEdit::moveCursor( CursorAction action )
             cursor->gotoDown();
             break;
         case MoveViewportUp:
-            /// ###
-            cursor->gotoPageUp( m_canvas->visibleHeight() );
-            break;
+        {
+            QRect crect( m_canvas->contentsX(), m_canvas->contentsY(),
+                         m_canvas->visibleWidth(), m_canvas->visibleHeight() );
+            crect = m_canvas->viewMode()->viewToNormal( crect );
+
+#if 0
+            // One idea would be: move up until first-visible-paragraph wouldn't be visible anymore
+            // First find the first-visible paragraph...
+            QTextParag *firstVis = cursor->parag();
+            while ( firstVis && crect.intersects( s->rect() ) )
+                firstVis = firstVis->prev();
+            if ( !firstVis )
+                firstVis = textFrameSet()->textDocument()->firstParag();
+            else if ( firstVis->next() )
+                firstVis = firstVis->next();
+#endif
+            // Go up of crect.height()
+            int h = crect.height();
+            QTextParag *s = cursor->parag();
+            int y = s->rect().y();
+            while ( s ) {
+                if ( y - s->rect().y() >= h )
+                    break;
+                s = s->prev();
+            }
+
+            if ( !s )
+                s = textFrameSet()->textDocument()->firstParag();
+            else if ( s->next() )
+                s = s->next();
+
+            cursor->setParag( s );
+            cursor->setIndex( 0 );
+
+            //cursor->gotoPageUp( m_canvas->visibleHeight() );
+        }
+        break;
         case MoveViewportDown:
-            /// ###
-            cursor->gotoPageDown( m_canvas->visibleHeight() );
-            break;
+        {
+            QRect crect( m_canvas->contentsX(), m_canvas->contentsY(),
+                         m_canvas->visibleWidth(), m_canvas->visibleHeight() );
+            crect = m_canvas->viewMode()->viewToNormal( crect );
+            // Go down of crect.height()
+            int h = crect.height();
+
+            QTextParag *s = cursor->parag();
+            int y = s->rect().y();
+            while ( s ) {
+                if ( s->rect().y() - y >= h )
+                    break;
+                s = s->next();
+            }
+
+            if ( !s ) {
+                s = textFrameSet()->textDocument()->lastParag();
+                cursor->setParag( s );
+                cursor->setIndex( s->length() - 1 );
+            } else {
+                if ( s->prev() )
+                    s = s->prev();
+                cursor->setParag( s );
+                cursor->setIndex( 0 );
+            }
+            //cursor->gotoPageDown( m_canvas->visibleHeight() );
+        } break;
         case MovePgUp:
             if ( m_currentFrame )
             {

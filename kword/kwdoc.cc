@@ -901,8 +901,6 @@ void KWDocument::recalcFrames()
         } break;
         }
     }
-
-    // ## why ?? ## emit newContentsSize();
 }
 
 KWDocument::~KWDocument()
@@ -2731,7 +2729,7 @@ void KWDocument::deleteTable( KWTableFrameSet *table )
     {
         emit sig_terminateEditing( table ); // to unselect its cells, especially
         KWAnchor * anchor = table->findAnchor( 0 );
-        table->anchorFrameset()->deleteAnchoredFrame( anchor );
+        addCommand( table->anchorFrameset()->deleteAnchoredFrame( anchor ) );
     }
     else
     {
@@ -2777,7 +2775,7 @@ void KWDocument::deleteFrame( KWFrame * frame )
     {
         frame->setSelected( false );
         KWAnchor * anchor = fs->findAnchor( 0 );
-        fs->anchorFrameset()->deleteAnchoredFrame( anchor );
+        addCommand( fs->anchorFrameset()->deleteAnchoredFrame( anchor ) );
     }
     else
     {

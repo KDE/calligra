@@ -22,6 +22,7 @@
 #include "kwdoc.h"
 #include "kwtextframeset.h"
 #include "kwformat.h"
+#include <kcommand.h>
 #include <kdebug.h>
 
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTextFormatCollection *fc )
@@ -93,6 +94,22 @@ void CustomItemsMap::insertItems( const QTextCursor & startCursor, int size )
             it.data()->setDeleted( false );
         }
         cursor.gotoRight();
+    }
+}
+
+void CustomItemsMap::deleteAll( KMacroCommand *macroCmd )
+{
+    Iterator it = begin();
+    for ( ; it != end(); ++it )
+    {
+        KWTextCustomItem * item = it.data();
+        KCommand * itemCmd = item->deleteCommand();
+        if ( itemCmd )
+        {
+            macroCmd->addCommand( itemCmd );
+            itemCmd->execute(); // the item-specific delete stuff hasn't been done
+        }
+        item->setDeleted( true );
     }
 }
 
