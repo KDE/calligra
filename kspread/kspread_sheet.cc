@@ -6838,18 +6838,21 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         QDomElement rowElement = rowNode.toElement();
         if( !rowElement.isNull() )
         {
-            kdDebug()<<" KSpreadSheet::loadOasis rowElement.tagName() :"<<rowElement.tagName()<<endl;
-            if ( rowElement.tagName()=="table-column" )
+            kdDebug()<<" KSpreadSheet::loadOasis rowElement.tagName() :"<<rowElement.localName()<<endl;
+            if ( rowElement.namespaceURI() == KoXmlNS::table )
             {
-                kdDebug ()<<" table-column found : index column before "<< indexCol<<endl;
-                loadColumnFormat( rowElement, oasisStyles, indexCol );
-                kdDebug ()<<" table-column found : index column after "<< indexCol<<endl;
-            }
-            else if( rowElement.tagName() == "table-row" )
-            {
-                kdDebug()<<" table-row found :index row before "<<rowIndex<<endl;
-                loadRowFormat( rowElement, rowIndex, oasisStyles, rowNode.isNull() );
-                kdDebug()<<" table-row found :index row after "<<rowIndex<<endl;
+                if ( rowElement.localName()=="table-column" )
+                {
+                    kdDebug ()<<" table-column found : index column before "<< indexCol<<endl;
+                    loadColumnFormat( rowElement, oasisStyles, indexCol );
+                    kdDebug ()<<" table-column found : index column after "<< indexCol<<endl;
+                }
+                else if( rowElement.localName() == "table-row" )
+                {
+                    kdDebug()<<" table-row found :index row before "<<rowIndex<<endl;
+                    loadRowFormat( rowElement, rowIndex, oasisStyles, rowNode.isNull() );
+                    kdDebug()<<" table-row found :index row after "<<rowIndex<<endl;
+                }
             }
         }
         rowNode = rowNode.nextSibling();
@@ -7206,7 +7209,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
         {
             ++columnIndex;
             kdDebug()<<"bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast ) cellElement.tagName() :"<<cellElement.tagName()<<endl;
-            if( cellElement.tagName() == "table-cell" )
+            if( cellElement.localName() == "table-cell" && cellElement.namespaceURI() == KoXmlNS::table)
             {
                 kdDebug()<<" create cell at row index :"<<backupRow<<endl;
                 KSpreadCell* cell = nonDefaultCell( columnIndex, backupRow );

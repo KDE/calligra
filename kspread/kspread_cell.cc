@@ -4947,7 +4947,7 @@ void KSpreadCell::loadOasisConditional( QDomElement * style )
     if ( style )//safe
     {
         QDomElement elementItem = style->firstChild().toElement();
-        kdDebug()<<" elementItem.tagName() :"<<elementItem.tagName()<<endl;
+        kdDebug()<<" elementItem.tagName() :"<<elementItem.localName()<<endl;
         elementItem = elementItem.firstChild().toElement();
         kdDebug()<<"elementItem.isNull () :"<< elementItem.isNull ()<<endl;
         if ( !elementItem.isNull() )
@@ -5182,7 +5182,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         {
             QDomElement commentElement = node.toElement();
             if( !commentElement.isNull() )
-                if( commentElement.tagName() == "p" && commentElement.namespaceURI() == KoXmlNS::text )
+                if( commentElement.localName() == "p" && commentElement.namespaceURI() == KoXmlNS::text )
                 {
                     if( !comment.isEmpty() ) comment.append( '\n' );
                     comment.append( commentElement.text() );
