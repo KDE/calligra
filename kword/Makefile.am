@@ -48,4 +48,4 @@ rc_DATA = kword.rc
 SUBDIRS = . toolbar templates dtd pics
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po $(podir)/kword.pot
+	$(XGETTEXT)  *.cc -o $(podir)/kword.pot

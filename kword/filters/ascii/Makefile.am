@@ -23,7 +23,7 @@ datasdir = $(kde_datadir)/koffice/filter
 #bin_SCRIPTS = kword_ascii
 
 messages:
-#	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../kspread_filter.pot
+#	$(XGETTEXT)  *.cc -o ../../kspread_filter.pot
 
 main.cc: main.h
 

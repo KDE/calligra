@@ -72,6 +72,6 @@ parser:
 	bison -p dep -b dep -d yacc.dep.y
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po $(podir)/kspread.pot
+	$(XGETTEXT) *.cc -o $(podir)/kspread.pot
 
 

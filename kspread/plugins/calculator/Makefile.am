@@ -41,6 +41,6 @@ rcdir = $(kde_datadir)/kspread/kpartplugins
 SUBDIRS = pics
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cpp && mv messages.po $(podir)/kspreadcalc_calc.pot
+	$(XGETTEXT) *.cpp -o $(podir)/kspreadcalc_calc.pot
 
 

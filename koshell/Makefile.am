@@ -19,5 +19,5 @@ rc_DATA = koshell_shell.rc
 ####### Implicit rules
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po $(podir)/koshell.pot
+	$(XGETTEXT) *.cc -o $(podir)/koshell.pot
 

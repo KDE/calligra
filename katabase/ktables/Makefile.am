@@ -27,7 +27,7 @@ METASOURCES = tableselect.moc ktables_server.moc ktables_doc.moc \
 	propertyeditor.moc querydialog.moc queryselect.moc 
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot $(ktables_SOURCES) -o $(podir)/ktables.pot
+	$(XGETTEXT) $(ktables_SOURCES) -o $(podir)/ktables.pot
 
 ktables.h: $(top_builddir)/lib/kofficecore/koffice.idl
 

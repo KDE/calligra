@@ -39,5 +39,5 @@ rcdir = $(kde_datadir)/kimage
 rc_DATA = kimage.rc
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po $(podir)/kimage.pot
+	$(XGETTEXT) *.cc -o $(podir)/kimage.pot
 

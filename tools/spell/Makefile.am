@@ -19,5 +19,5 @@ service_DATA = kspelltool.desktop
 servicedir = $(kde_servicesdir)
 
 messages:
-#	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po $(podir)/kspelltool.pot
+#	$(XGETTEXT)  *.cc -o $(podir)/kspelltool.pot
 
