@@ -358,7 +358,8 @@ void KPObject::saveOasisObjectStyle( KoGenStyle &styleobjectauto )
 
 bool KPObject::haveAnimation() const
 {
-    if ( effect == EF_NONE && effect3==EF3_NONE && a_fileName.isEmpty() && d_fileName.isEmpty() && ( appearTimer!=1 ) && ( disappearTimer!=1 ))
+    kdDebug()<<" effect :"<<effect<<" effect3 :"<<effect3<<" a_fileName :"<<a_fileName<<" d_fileName :"<<d_fileName<<" appearTimer :"<<appearTimer<<" disappearTimer :"<<disappearTimer<<endl;
+    if ( effect == EF_NONE && effect3==EF3_NONE && a_fileName.isEmpty() && d_fileName.isEmpty() && ( appearTimer==1 ) && ( disappearTimer==1 ))
         return false;
     else
         return true;
