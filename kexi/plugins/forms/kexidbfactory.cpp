@@ -247,7 +247,9 @@ void
 KexiDBFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
+#ifndef Q_WS_WIN
 	#warning Is there any reason to edit a lineedit in design-mode?
+#endif
 	if(classname == "KexiDBLineEdit")
 	{
 //! @todo this code should not be copied here but

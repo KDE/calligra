@@ -31,7 +31,7 @@
 
 #include "kexidbinputwidget.h"
 
-#define INTMIN -2147483648
+#define INTMIN (-2147483647 - 1)
 #define INTMAX 2147483647
 #define PRECISION 2
 #define MAXLENGTH 32767
