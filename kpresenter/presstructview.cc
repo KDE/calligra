@@ -61,33 +61,42 @@ void KPPresStructObjectItem::setObject( KPObject *o )
 	switch ( object->getType() ) {
 	case OT_PICTURE:
 	    setText( 0, i18n( "Picture" ) );
+	    setPixmap( 0, BarIcon( "mini_picture" ) );
 	    break;
 	case OT_LINE:
 	    setText( 0, i18n( "Line" ) );
+	    setPixmap( 0, BarIcon( "mini_line" ) );
 	    break;
 	case OT_RECT:
 	    setText( 0, i18n( "Rectangle" ) );
+	    setPixmap( 0, BarIcon( "mini_rect" ) );
 	    break;
 	case OT_ELLIPSE:
 	    setText( 0, i18n( "Circle/Ellipse" ) );
+	    setPixmap( 0, BarIcon( "mini_circle" ) );
 	    break;
 	case OT_TEXT:
 	    setText( 0, i18n( "Text" ) );
+	    setPixmap( 0, BarIcon( "mini_text" ) );
 	    break;
 	case OT_AUTOFORM:
 	    setText( 0, i18n( "Autoform" ) );
+	    setPixmap( 0, BarIcon( "mini_autoform" ) );
 	    break;
 	case OT_CLIPART:
 	    setText( 0, i18n( "Clipart" ) );
+	    setPixmap( 0, BarIcon( "mini_clipart" ) );
 	    break;
 	case OT_UNDEFINED:
 	    setText( 0, i18n( "Undefined" ) );
 	    break;
 	case OT_PIE:
 	    setText( 0, i18n( "Pie/Arc/Chord" ) );
+	    setPixmap( 0, BarIcon( "mini_pie" ) );
 	    break;
 	case OT_PART:
 	    setText( 0, i18n( "Embedded Part" ) );
+	    setPixmap( 0, BarIcon( "mini_part" ) );
 	    break;
 	}
     }
