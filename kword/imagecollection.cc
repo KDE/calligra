@@ -133,7 +133,7 @@ KWImage *KWImageCollection::insertImage( QString _key, KWImage &_image )
 KWImage *KWImageCollection::insertImage( QString _key, KWImage &_image, QSize _imgSize )
 {
     KWImage *image = new KWImage( doc, _image );
-    if ( image->size() != _imgSize )
+    if ( !image->isNull() && image->size() != _imgSize )
     {
         QImage __image = image->smoothScale( _imgSize.width(), _imgSize.height() );
         delete image;
@@ -161,5 +161,7 @@ KWImage *KWImageCollection::getImage( const QString filename )
         }
     }
     
-    return 0L;
+    KWImage img( doc, filename );
+    QString key;
+    return getImage( img, key );
 }

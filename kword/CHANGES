@@ -1332,4 +1332,5 @@ Reggie, 20.6.1999:
 - Selecting/Deselecting Table cells works correctly again
 - When moving/resizing frames, repaints are correct
 - Some other small fixes
+- Fixed a crash in the KWImageCollection
 
