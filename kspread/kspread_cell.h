@@ -613,7 +613,10 @@ public:
 
     void conditionAlign(QPainter &painter,int _col,int _row);
 
-
+    /**
+    * return align X when align is undefined
+    */
+    int defineAlignX();
 
 
     /**

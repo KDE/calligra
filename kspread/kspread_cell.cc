@@ -1191,14 +1191,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     m_fmAscent = fm.ascent();
     int indent=0;
-    int a = m_eAlign;
-    if ( a == KSpreadCell::Undefined )
-        {
-        if ( m_bValue || m_bDate || m_bTime)
-                a = KSpreadCell::Right;
-        else
-                a = KSpreadCell::Left;
-        }
+    int a = defineAlignX();
     //apply indent if text is align to left not when text is at right or middle
     if(  a==KSpreadCell::Left)
         indent=m_indent;
@@ -1794,14 +1787,7 @@ void KSpreadCell::offsetAlign( int _col,int _row )
                 m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
         break;
     }
-
-    if ( a == KSpreadCell::Undefined )
-    {
-        if ( m_bValue || m_bDate || m_bTime)
-            a = KSpreadCell::Right;
-        else
-            a = KSpreadCell::Left;
-    }
+    a=defineAlignX();
     if(m_pTable->getShowFormular())
         a = KSpreadCell::Left;
 
@@ -2714,14 +2700,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         if ( !m_bMultiRow && !m_bVerticalText && !m_rotateAngle)
                 {
                 int indent=0;
-                int a = m_eAlign;
-                if ( a == KSpreadCell::Undefined )
-                        {
-                        if ( m_bValue || m_bDate || m_bTime)
-                                a = KSpreadCell::Right;
-                        else
-                                a = KSpreadCell::Left;
-                        }
+                int a = defineAlignX();
                 //apply indent if text is align to left not when text is at right or middle
                 if(  a==KSpreadCell::Left)
                         indent=m_indent;
@@ -2765,14 +2744,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                     pos = i + 1;
                 }
 
-                int a = m_eAlign;
-                if ( a == KSpreadCell::Undefined )
-                {
-                    if ( m_bValue || m_bDate || m_bTime)
-                        a = KSpreadCell::Right;
-                    else
-                        a = KSpreadCell::Left;
-                }
+                int a = defineAlignX();
                 if(m_pTable->getShowFormular())
                     a = KSpreadCell::Left;
 
@@ -2911,6 +2883,19 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     }
 }
 
+int KSpreadCell::defineAlignX()
+{
+int a = m_eAlign;
+if ( a == KSpreadCell::Undefined )
+        {
+        if ( m_bValue || m_bDate || m_bTime)
+                a = KSpreadCell::Right;
+        else
+                a = KSpreadCell::Left;
+        }
+return a;
+}
+
 QString KSpreadCell::textDisplaying( QPainter &_painter)
 {
 QFontMetrics fm = _painter.fontMetrics();
@@ -2939,7 +2924,47 @@ if (( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined) && !i
 ColumnLayout *cl = m_pTable->columnLayout( column() );
 int w = cl->width();
 if( isValue())
+        {
+        if( m_eFormatNumber!=Scientific)
+                {
+                int p = (m_iPrecision == -1) ? 8 : m_iPrecision;
+                double value =m_dValue * m_dFaktor;
+                int pos=0;
+                QString localizedNumber= QString::number( (value), 'E', p);
+                if((pos=localizedNumber.find('.'))!=-1)
+                        localizedNumber=localizedNumber.replace(pos,1,decimal_point);
+                if( floatFormat( column(), row() ) == KSpreadCell::AlwaysSigned && value >= 0 )
+                        {
+                        if(locale()->positiveSign().isEmpty())
+                                localizedNumber='+'+localizedNumber;
+                        }
+                if ( m_iPrecision == -1 && localizedNumber.find(decimal_point) >= 0 )
+                        {
+                        //duplicate code it's not good I know I will fix it
+                        int start=0;
+                        if((start=localizedNumber.find('E'))!=-1)
+                                start=localizedNumber.length()-start;
+                        int i = localizedNumber.length()-start;
+                        bool bFinished = FALSE;
+
+                        while ( !bFinished && i > 0 )
+                                {
+                                QChar ch = localizedNumber[ i - 1 ];
+                                if ( ch == '0' )
+                                        localizedNumber.remove(--i,1);
+                                else
+                                        {
+                                        bFinished = TRUE;
+                                        if ( ch == decimal_point )
+                                                localizedNumber.remove(--i,1);
+                                        }
+                                }
+                        }
+                if(fm.width(localizedNumber)<w)
+                        return localizedNumber;
+                }
         return QString("###");
+        }
 else
         {
         QString tmp;
