@@ -641,6 +641,15 @@ void KWView::setupActions()
     actionConfigureHeaderFooter=new KAction( i18n( "Configure header/footer..." ), 0,
                                      this, SLOT( configureHeaderFooter() ),
                                      actionCollection(), "configure_headerfooter" );
+
+    actionInlineFrame=new KAction( i18n( "Inline Frame" ), 0,
+                                     this, SLOT( inlineFrame() ),
+                                     actionCollection(), "inline_frame" );
+
+    actionNonInlineFrame=new KAction( i18n( "Non Inline Frame" ), 0,
+                                     this, SLOT( nonInlineFrame() ),
+                                     actionCollection(), "non_inline_frame" );
+
 }
 
 
@@ -3067,6 +3076,9 @@ void KWView::updatePopupMenuChangeAction()
     // enable delete
     actionEditDelFrame->setEnabled(true );
 
+    actionInlineFrame->setEnabled(true);
+    actionNonInlineFrame->setEnabled(true);
+
     // if text frame,
     if(frame && frame->getFrameSet() && frame->getFrameSet()->type() == FT_TEXT)
         {
@@ -3074,6 +3086,8 @@ void KWView::updatePopupMenuChangeAction()
             if(m_doc->processingType()  == KWDocument::WP && frame->getFrameSet() == m_doc->getFrameSet(0))
                 {
                     actionEditDelFrame->setEnabled(false);
+                    actionInlineFrame->setEnabled(false);
+                    actionNonInlineFrame->setEnabled(false);
                 }
         }
 }
@@ -3086,34 +3100,48 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     if(!table)
     {
-        //unplugActionList( "picture_action" );
         QList<KAction> actionList= QList<KAction>();
 
         int nbFrame=m_doc->getSelectedFrames().count();
         KActionSeparator *separator=new KActionSeparator();
+        KActionSeparator *separator2=new KActionSeparator();
         if(nbFrame ==1)
         {
             KWFrame *frame=m_doc->getFirstSelectedFrame();
-            if(frame->getFrameSet()->type()==FT_PICTURE)
+            KWFrameSet *frameSet=frame->getFrameSet();
+            if(frameSet->type()==FT_PICTURE)
             {
                 actionList.append(separator);
                 actionList.append(actionChangePicture);
             }
-            else if(frame->getFrameSet()->type()==FT_CLIPART)
+            else if(frameSet->type()==FT_CLIPART)
             {
                 actionList.append(separator);
                 actionList.append(actionChangeClipart);
             }
-            else if(frame->getFrameSet()->isHeaderOrFooter())
+            else if(frameSet->isHeaderOrFooter())
             {
                 actionList.append(separator);
                 actionList.append(actionConfigureHeaderFooter);
+            }
+
+            bool state = !frameSet->isHeaderOrFooter();
+            state = state && (m_doc->processingType() == KWDocument::WP &&frameSet!=m_doc->getFrameSet( 0 ));
+            if(state)
+            {
+                actionList.append(separator2);
+                KWFrameSet * parentFs = frameSet->getGroupManager() ? frameSet->getGroupManager() : frameSet;
+                if( parentFs->isFloating())
+                    actionList.append(actionNonInlineFrame);
+                else
+                    actionList.append(actionInlineFrame);
             }
         }
         plugActionList( "picture_action", actionList );
         ((QPopupMenu*)factory()->container("frame_popup",this))->exec(_point);
         unplugActionList( "picture_action" );
         delete separator;
+        delete separator2;
     }
     else
         ((QPopupMenu*)factory()->container("frame_popup_table",this))->popup(_point);
@@ -3398,6 +3426,8 @@ void KWView::frameSelectedChanged()
     } else
     {
         actionEditDelFrame->setEnabled( false );
+        actionInlineFrame->setEnabled(false);
+        actionNonInlineFrame->setEnabled(false);
         actionEditCut->setEnabled( false );
     }
     bool frameDifferentOfPart=false;
@@ -3558,6 +3588,46 @@ void KWView::configureHeaderFooter()
         }
     }
 
+}
+
+void KWView::inlineFrame()
+{
+    KWFrame * frame = m_doc->getFirstSelectedFrame();
+    KWFrameSet * fs = frame->getFrameSet();
+    KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make FrameSet Inline") );
+    QList<FrameIndex> frameindexList;
+    QList<FrameResizeStruct> frameindexMove;
+
+    FrameIndex *index=new FrameIndex( frame );
+    FrameResizeStruct *move=new FrameResizeStruct;
+
+    move->sizeOfBegin=frame->normalize();
+
+    // turn non-floating frame into floating frame
+    KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make FrameSet Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "true" );
+    cmd->execute();
+
+    move->sizeOfEnd=frame->normalize();
+
+    frameindexList.append(index);
+    frameindexMove.append(move);
+
+    KWFrameMoveCommand *cmdMoveFrame = new KWFrameMoveCommand( i18n("Move Frame"), frameindexList, frameindexMove );
+
+    macroCmd->addCommand(cmdMoveFrame);
+    macroCmd->addCommand(cmd);
+    m_doc->addCommand(cmd);
+}
+
+void KWView::nonInlineFrame()
+{
+    KWFrame * frame = m_doc->getFirstSelectedFrame();
+    KWFrameSet * fs = frame->getFrameSet();
+    KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
+    KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make FrameSet Non-Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "false" );
+    m_doc->addCommand(cmd);
+    cmd->execute();
 }
 
 /******************************************************************/

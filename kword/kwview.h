@@ -286,6 +286,9 @@ public slots:
 
     void configureHeaderFooter();
 
+    void inlineFrame();
+    void nonInlineFrame();
+
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
@@ -423,6 +426,8 @@ private:
     KAction *actionChangePicture;
     KAction *actionChangeClipart;
     KAction *actionConfigureHeaderFooter;
+    KAction *actionInlineFrame;
+    KAction *actionNonInlineFrame;
 
 
     KCharSelectDia *m_specialCharDlg;
