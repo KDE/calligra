@@ -42,6 +42,7 @@
 #include <qslider.h>
 #include <qlayout.h>
 #include <qhbox.h>
+#include <qspinbox.h>
 
 #include <GText.h>
 #include <GPolygon.h>
@@ -53,7 +54,6 @@
 #include <units.h>
 #include <GDocument.h>
 #include <GObject.h>
-#include <FloatSpinBox.h>
 #include <CommandHistory.h>
 #include <Gradient.h>
 #include <BrushCells.h>

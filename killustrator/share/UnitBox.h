@@ -29,7 +29,7 @@
 #include <units.h>
 
 class QComboBox;
-class FloatSpinBox;
+class KDoubleNumInput;
 
 class UnitBox : public QHBox {
   Q_OBJECT
@@ -58,14 +58,15 @@ signals:
 
 protected slots:
   void unitChanged (int id);
-  void slotValueChange (float f);
+  void slotValueChanged(double f);
 
 private:
-  FloatSpinBox *valueBox;
+  KDoubleNumInput *valueBox;
   bool isUnitEnabled;
   QComboBox *unitCombo;
   MeasurementUnit unit;
   float ptMinVal, ptMaxVal; // the minimal and maximal value in points
+  float m_step;
 
   static MeasurementUnit defaultUnit;
 };

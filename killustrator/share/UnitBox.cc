@@ -26,14 +26,18 @@
 
 #include <qcombobox.h>
 #include <qlayout.h>
-
-#include <FloatSpinBox.h>
+#include <knuminput.h>
 
 MeasurementUnit UnitBox::defaultUnit = UnitPoint;
 
 UnitBox::UnitBox (QWidget* parent, const char* name) : QHBox(parent, name) {
 
-    valueBox = new FloatSpinBox (this, "valueBox");
+    valueBox = new KDoubleNumInput(this, "valueBox");
+    ptMinVal=1.0;
+    ptMaxVal=10.0;
+    m_step=1.0;
+    valueBox->setFormat("%3.2f");
+    valueBox->setRange(ptMinVal, ptMaxVal, m_step);
 
     unitCombo = new QComboBox (this, "unitCombo");
     unitCombo->insertItem (unitToString (UnitPoint));
@@ -45,8 +49,8 @@ UnitBox::UnitBox (QWidget* parent, const char* name) : QHBox(parent, name) {
     unitCombo->insertItem (unitToString (UnitCicero));
     unitCombo->setCurrentItem (int (unit = defaultUnit));
     connect (unitCombo, SIGNAL(activated(int)), this, SLOT(unitChanged(int)));
-    connect (valueBox, SIGNAL (valueChanged (float)),
-             this, SLOT(slotValueChange (float)));
+    connect (valueBox, SIGNAL (valueChanged(double)),
+             this, SLOT(slotValueChanged(double)));
     isUnitEnabled = true;
 }
 
@@ -54,14 +58,14 @@ UnitBox::~UnitBox () {
 }
 
 void UnitBox::setFormatString (const char* fmt) {
-    valueBox->setFormatString (fmt);
+    valueBox->setFormat(fmt);
 }
 
 float UnitBox::getValue () {
     if(isUnitEnabled)
-        return cvtUnitToPt (unit, valueBox->getValue ());
+        return cvtUnitToPt (unit, valueBox->value ());
     else
-        return valueBox->getValue ();
+        return valueBox->value ();
 }
 
 void UnitBox::setValue (float value) {
@@ -72,17 +76,20 @@ void UnitBox::setValue (float value) {
 }
 
 void UnitBox::setStep (float step) {
-    valueBox->setStep (step);
+    if(m_step!=step) {
+        valueBox->setRange(ptMinVal, ptMaxVal, step, false);
+        m_step=step;
+    }
 }
 
 float UnitBox::getStep () const {
-    return valueBox->getStep ();
+    return m_step;
 }
 
 void UnitBox::setRange (float minVal, float maxVal) {
     ptMinVal = minVal;
     ptMaxVal = maxVal;
-    valueBox->setRange (cvtPtToUnit (unit, minVal), cvtPtToUnit (unit, maxVal));
+    valueBox->setRange(cvtPtToUnit(unit, minVal), cvtPtToUnit(unit, maxVal), m_step, false);
 }
 
 void UnitBox::getRange (float& minVal, float& maxVal) {
@@ -98,22 +105,22 @@ void UnitBox::unitChanged (int id) {
     MeasurementUnit newUnit = (MeasurementUnit) id;
     float ptValue = getValue ();
     unit = newUnit;
-    valueBox->setRange (cvtPtToUnit (unit, ptMinVal), cvtPtToUnit (unit, ptMaxVal));
-    setValue (ptValue);
+    valueBox->setRange(cvtPtToUnit (unit, ptMinVal), cvtPtToUnit (unit, ptMaxVal), m_step, false);
+    setValue(ptValue);
 }
 
 void UnitBox::setDefaultMeasurementUnit (MeasurementUnit unit) {
     defaultUnit = unit;
 }
 
-void UnitBox::slotValueChange (float f) {
+void UnitBox::slotValueChanged(double f) {
     // convert the value according current unit
     if(isUnitEnabled){
-        float val = cvtUnitToPt (unit, f);
+        float val = cvtUnitToPt (unit, static_cast<float>(f));
         emit valueChanged (val);
     }
     else
-        emit valueChanged (f);
+        emit valueChanged(static_cast<float>(f));
 }
 
 void UnitBox::enableUnits (bool flag) {

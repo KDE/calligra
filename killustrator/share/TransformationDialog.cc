@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <knuminput.h>
 
 #include <qpushbutton.h>
 #include <qhbuttongroup.h>
@@ -45,7 +46,6 @@
 #include <GDocument.h>
 #include <GObject.h>
 #include <CommandHistory.h>
-#include <FloatSpinBox.h>
 #include <UnitBox.h>
 
 TransformationDialog::TransformationDialog (CommandHistory* cmdHist,
@@ -187,8 +187,8 @@ void TransformationDialog::createRotationWidget (QWidget* parent) {
     QHBox *hbox=new QHBox(parent);
     label = new QLabel(i18n("Angle:"), hbox);
 
-    rotAngle = new FloatSpinBox(hbox);
-    rotAngle->setRange (-360.0, +360.0);
+    rotAngle = new KDoubleNumInput(hbox);
+    rotAngle->setRange(-360.0, 360.0, 0.1, false);
     horizPosition->setStep (0.1);
     layout->addMultiCellWidget(hbox, 1, 1, 0, 1);
     layout->setRowStretch(2, 1);
@@ -399,7 +399,7 @@ void TransformationDialog::rotate (bool onDuplicate) {
 
   xcenter = horizRotCenter->getValue ();
   ycenter = vertRotCenter->getValue ();
-  angle = rotAngle->getValue ();
+  angle = rotAngle->value ();
 
   if (relativeRotCenter->isChecked ()) {
     // the given values are relative to the current bounding box
