@@ -70,7 +70,7 @@ KPrPage::KPrPage(KPresenterDoc *_doc )
     manualTitle=QString::null;
     noteText=QString::null;
 
-    dcopObject();
+    //dcopObject();
 
 }
 

@@ -40,12 +40,8 @@ int KPresenterDocIface::getNumPages()
 
 DCOPRef KPresenterDocIface::getPage( int num )
 {
-    //FIXME
-    return DCOPRef();
-#if 0
     return DCOPRef( kapp->dcopClient()->appId(),
-		    doc->backgroundList()->at( num )->dcopObject()->objId() );
-#endif
+		    doc->pageList().at( num )->dcopObject()->objId() );
 }
 
 double KPresenterDocIface::getIndentValue()
