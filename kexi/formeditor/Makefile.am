@@ -9,8 +9,9 @@ libkformeditor_la_SOURCES = container.cpp resizehandle.cpp widgetfactory.cpp obj
 	 objecttreeview.cpp spacer.cpp commands.cpp extrawidgets.cpp events.cpp
 
 METASOURCES = AUTO
-libkformeditor_la_LIBADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KIO) $(LIB_KDEFX) $(top_builddir)/kexi/widget/propertyeditor/libkexipropertyeditor.la \
-	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la $(top_builddir)/kexi/tableview/libkexidatatable.la
+libkformeditor_la_LIBADD = $(top_builddir)/kexi/widget/propertyeditor/libkexipropertyeditor.la \
+	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la $(top_builddir)/kexi/tableview/libkexidatatable.la \
+	$(LIB_KPARTS)
 
 servicetypesdir = $(kde_servicetypesdir)
 servicetypes_DATA=widgetfactory.desktop
