@@ -63,7 +63,7 @@ private:
     KDoubleNumInput* indent;
     KIntNumInput* recentFiles;
     KIntNumInput* autoSave;
-    QCheckBox *showRuler;
+    QCheckBox *showRuler, *showStatusBar;
     int oldNbRecentFiles;
     KConfig* config;
     int oldAutoSaveValue;

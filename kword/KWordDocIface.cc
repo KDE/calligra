@@ -274,6 +274,18 @@ void KWordDocIface::setShowDocStruct(bool b)
     doc->reorganizeGUI();
 }
 
+
+bool KWordDocIface::showStatusBar() const
+{
+    return doc->showStatusBar();
+}
+
+void KWordDocIface::setShowStatusBar( bool _status )
+{
+    doc->setShowStatusBar(_status);
+    doc->reorganizeGUI();
+}
+
 int KWordDocIface::startingPage()
 {
     return doc->getVariableCollection()->variableSetting()->startingPage();

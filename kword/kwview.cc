@@ -1065,7 +1065,7 @@ void KWView::updateFrameStatusBarItem()
 {
     KStatusBar * sb = statusBar();
     int nbFrame=m_doc->getSelectedFrames().count();
-    if ( sb && nbFrame > 0 )
+    if ( m_doc->showStatusBar() && sb && nbFrame > 0 )
     {
         if ( !m_sbFramesLabel )
         {
@@ -4593,6 +4593,14 @@ void KWGUI::reorganize()
         docStruct->show();
     else
         docStruct->hide();
+
+    if( view->statusBar())
+    {
+        if(view->kWordDocument()->showStatusBar())
+            view->statusBar()->show();
+        else
+            view->statusBar()->hide();
+    }
 
     panner->setGeometry( 0, 0, width(), height() );
     canvas->setGeometry( space, space, left->width() - space, left->height() - space );

@@ -179,7 +179,7 @@ public:
 
     /** Returns the frame under the mouse. (or 0 if no frame is found)
      * @param border is set to true if the mouse is on a border of the frame found.
-     * @param firstNonSelected when set to true, frameUnderMouse searches for the frame on 
+     * @param firstNonSelected when set to true, frameUnderMouse searches for the frame on
      *        top that is not selected.
      */
     KWFrame * frameUnderMouse( const QPoint& nPoint, bool* border = 0L, bool firstNonSelected = false );
@@ -245,7 +245,7 @@ public:
     void updateRuler();
 
     void repaintAllViews( bool erase = false );
-    /** Update all views of this document, area can be cleared before redrawing with the 
+    /** Update all views of this document, area can be cleared before redrawing with the
      * _erase flag. (false implied). All views EXCEPT the argument _view are updated ( give 0L for all )
      */
     void repaintAllViewsExcept( KWView *_view, bool _erase = false );
@@ -282,7 +282,7 @@ public:
     QPtrList<KWFrame> getSelectedFrames() const;
     KWFrame *getFirstSelectedFrame() const;
     /** Gather all the frames which are on a certain page and return them.
-      * The list is unordered. @see KWFrameSet::framesInPage 
+      * The list is unordered. @see KWFrameSet::framesInPage
       */
     QPtrList<KWFrame> framesInPage( int pageNum ) const;
     int frameSetNum( KWFrameSet* fs ) { return m_lstFrameSet.findRef( fs ); }
@@ -424,6 +424,9 @@ public:
     void setShowRuler(bool _ruler){ m_bShowRuler=_ruler; }
     bool showRuler() const { return m_bShowRuler; }
 
+    bool showStatusBar() const { return m_bShowStatusBar;}
+    void setShowStatusBar( bool _status ) { m_bShowStatusBar = _status;}
+
     bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
     void setDontCheckUpperWord(bool _b) { m_bDontCheckUpperWord=_b;}
 
@@ -555,7 +558,7 @@ private:
     //private helper functions for frameUnderMouse
     /** return the top-most frame under mouse, using nPoint, always returns the first found. */
     KWFrame *topFrameUnderMouse( const QPoint& nPoint, bool* border=0L);
-    /** Search the list of frames for a frame that is directly below the argument frame, 
+    /** Search the list of frames for a frame that is directly below the argument frame,
       * and return that.*/
     KWFrame *frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool *border=0L);
     /** Search if the frame (parent) has any embedded frames we might be clickin on and
@@ -618,6 +621,7 @@ private:
     bool m_bDontCheckTitleCase;
     bool m_bShowDocStruct;
     bool m_hasTOC;
+    bool m_bShowStatusBar;
 
     // The document that is used by all formulas
     KFormula::Document* m_formulaDocument;

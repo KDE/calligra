@@ -214,7 +214,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     double ptGridY=10.0;
     double ptIndent = MM_TO_POINT(10.0);
     bool bShowRuler=true;
-
+    bool oldShowStatusBar = true;
     oldNbRecentFiles=10;
     oldAutoSaveValue=KoDocument::defaultAutoSave() / 60;
     int nbPagePerRow=4;
@@ -228,6 +228,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
         bShowRuler=config->readBoolEntry("Rulers",true);
         oldAutoSaveValue=config->readNumEntry("AutoSave",oldAutoSaveValue);
         nbPagePerRow=config->readNumEntry("nbPagePerRow",nbPagePerRow);
+        oldShowStatusBar = config->readBoolEntry( "ShowStatusBar" , true );
     }
 
 
@@ -237,6 +238,9 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
                     "be used to position tabulators among others.<p>Uncheck this checkbox to disable "
                     "the rulers from being displayed.") );
     showRuler->setChecked(bShowRuler);
+
+    showStatusBar = new QCheckBox(i18n("Show status bar"),gbInterfaceGroup);
+    showStatusBar->setChecked(oldShowStatusBar);
 
     autoSave = new KIntNumInput( oldAutoSaveValue, gbInterfaceGroup );
     autoSave->setRange(0, 60, 1);
@@ -297,6 +301,8 @@ void ConfigureInterfacePage::apply()
     int nbRecent=recentFiles->value();
     bool ruler=showRuler->isChecked();
 
+    bool statusBar=showStatusBar->isChecked();
+
     config->setGroup( "Interface" );
     if(valX!=doc->gridX())
     {
@@ -321,12 +327,26 @@ void ConfigureInterfacePage::apply()
         m_pView->changeNbOfRecentFiles(nbRecent);
     }
 
+    bool refreshGUI= false;
+
     if(ruler != doc->showRuler())
     {
         config->writeEntry( "Rulers", ruler );
         doc->setShowRuler( ruler );
-        doc->reorganizeGUI();
+        refreshGUI=true;
     }
+
+    if( statusBar != doc->showStatusBar() )
+    {
+        config->writeEntry( "ShowStatusBar", statusBar );
+        doc->setShowStatusBar( statusBar );
+        refreshGUI=true;
+    }
+
+    if( refreshGUI )
+        doc->reorganizeGUI();
+
+
     int autoSaveVal=autoSave->value();
     if(autoSaveVal!=oldAutoSaveValue)
     {
@@ -354,6 +374,7 @@ void ConfigureInterfacePage::slotDefault()
     indent->setValue( newIndent );
     recentFiles->setValue(10);
     showRuler->setChecked(true);
+    showStatusBar->setChecked(true);
     autoSave->setValue(KoDocument::defaultAutoSave()/60);
 }
 

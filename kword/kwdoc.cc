@@ -152,6 +152,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_bShowDocStruct = true;
     m_bDontCheckUpperWord = false;
     m_bDontCheckTitleCase = false;
+    m_bShowStatusBar = true;
 
     m_lastViewMode="ModeNormal";
 
@@ -295,7 +296,7 @@ void KWDocument::initConfig()
       m_zoom = config->readNumEntry( "Zoom", 100 );
       m_bShowDocStruct = config->readBoolEntry("showDocStruct",true);
       m_lastViewMode= config->readEntry( "viewmode","ModeNormal");
-
+      setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ));
   }
   else
       m_zoom = 100;
@@ -2398,8 +2399,8 @@ KWFrame * KWDocument::frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool
     KoPoint docPoint( unzoomPoint( nPoint ) );
     bool allreadyFoundArgumentFrame=false;
     if (fs->isFloating()) {
-        // now lets be smart here; we know that a frame that is floating is embedded 
-        // inside its hostFrameSet frame. This basically means that the frame directly 
+        // now lets be smart here; we know that a frame that is floating is embedded
+        // inside its hostFrameSet frame. This basically means that the frame directly
         // below is the hostFrameSet frame :)
         // since we know nPoint is already in frame, we don't have to check for anchorFrame here.
         KWFrameSet *hostFrameSet = fs->anchorFrameset();
@@ -2442,7 +2443,7 @@ KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
     int page = QMIN(m_pages-1, static_cast<int>(docPoint.y() / ptPaperHeight()));
     QPtrList<KWFrame> frames = framesInPage(page);
 
-    
+
     for (KWFrame *f = frames.last();f;f=frames.prev()) { // z-order
         // only consider non-inline frames.
         if (f->frameSet()->isFloating())

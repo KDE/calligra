@@ -1220,7 +1220,6 @@ KWChangeCustomVariableValue::KWChangeCustomVariableValue( const QString &name, K
     oldValue(_oldValue),
     m_var(var)
 {
-    kdDebug()<<"newValue :"<<newValue <<" oldValue :"<<oldValue<<endl;
 }
 
 KWChangeCustomVariableValue::~KWChangeCustomVariableValue()
