@@ -457,6 +457,10 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFor
     element.appendChild(doc.createTextNode(tmpText));
     return element;
 }
+struct varDef {
+    int pos;
+    KoTextFormat format;
+};
 
 /*====================== load ktextobject ========================*/
 void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
@@ -472,7 +476,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
     int topBorder = 0;
 
     while ( !e.isNull() ) {
-        typedef QMap<KoVariable *, int>Variable;
+        typedef QMap<KoVariable *, varDef>Variable;
         Variable varMap;
         varMap.clear();
         if ( e.tagName() == tagP ) {
@@ -570,7 +574,11 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                         // If varFormat is 0 (no key specified), the default format will be used.
                         KoVariable * var =m_doc->getVariableCollection()->createVariable( type, -1, m_doc->variableFormatCollection(), varFormat, lastParag->textDocument(),m_doc );
                         var->load( varElem );
-                        varMap.insert( var, index );
+                        varDef tmp;
+                        tmp.pos = index;
+                        tmp.format = loadFormat( n );
+
+                        varMap.insert( var, tmp );
                     }
                     n = n.nextSibling().toElement();
                 }
@@ -588,7 +596,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
         for ( it=varMap.begin(); it !=varMap.end();++it)
         {
             KoTextFormat f;
-            lastParag->setCustomItem( it.data(), it.key(), lastParag->document()->formatCollection()->format( &f ) );
+            lastParag->setCustomItem( it.data().pos, it.key(), lastParag->document()->formatCollection()->format( &(it.data().format ) ));
 
             it.key()->recalc();
         }
@@ -1788,6 +1796,7 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
         {
             QDomElement variable = doc.createElement("CUSTOM");
             variable.setAttribute("pos", i);
+            saveFormat( variable, c.format() );
             paragraph.appendChild( variable );
             static_cast<KoTextCustomItem *>( c.customItem() )->save(variable );
         }
