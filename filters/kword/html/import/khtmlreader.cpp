@@ -233,7 +233,7 @@ bool KHTMLReader::parse_CommonAttributes(DOM::Element e) {
         if (s != "") {
               _writer->formatAttribute(state()->paragraph,"FLOW","align",s);
         }
-
+        return true;
 }
 
 
@@ -343,6 +343,7 @@ bool KHTMLReader::parse_TABLE(DOM::Element e) {
 
 bool KHTMLReader::parse_IMG(DOM::Element e) {
      	//QRect e=e.getRect();
+    return true;
 }
 
 
