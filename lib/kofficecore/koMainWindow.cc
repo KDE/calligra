@@ -438,8 +438,9 @@ void KoMainWindow::slotFilePrint()
 
 void KoMainWindow::slotFileQuit()
 {
-    if ( closeAllDocuments() )
-	kapp->exit();
+    // The style guide says: 'quit' closes the window.
+    // (which it calls "Application", but this does not mean kapp->quit())
+    close();
 }
 
 void KoMainWindow::slotHelpAbout()
