@@ -2059,12 +2059,13 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_copy->plug( m_pPopupMenu );
     m_paste->plug( m_pPopupMenu );
     m_specialPaste->plug( m_pPopupMenu );
+    m_insertCellCopy->plug( m_pPopupMenu );
     m_pPopupMenu->insertSeparator();
     m_delete->plug( m_pPopupMenu );
     m_adjust->plug( m_pPopupMenu );
     m_default->plug( m_pPopupMenu );
     m_areaName->plug( m_pPopupMenu );
-    m_insertCellCopy->plug( m_pPopupMenu );
+
     // If there is no selection
     QRect selection( m_pTable->selectionRect() );
     if(selection.right()!=0x7FFF && selection.bottom()!=0x7FFF )
