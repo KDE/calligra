@@ -115,6 +115,8 @@ static bool is_printer( QPainter *p )
     return p && p->device() && p->device()->devType() == QInternal::Printer;
 }
 
+//#define DEBUGBRUSH(b) "[ style:" << (b).style() << " color:" << (b).color().name() << " hasPixmap:" << (b).pixmap() << "]"
+
 void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, const QColorGroup &cg,
                                               KoZoomHandler* zoomHandler, const QBrush *paper )
 {
@@ -141,6 +143,9 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 	    continue;
 	}
 	p->translate( 0, pr.y() );
+        QBrush brush = parag->backgroundColor() ? *parag->backgroundColor() : cg.brush( QColorGroup::Base );
+        if ( brush != Qt::NoBrush )
+	    p->fillRect( QRect( 0, 0, pr.width(), pr.height() ), brush );
         //p->setBrushOrigin( p->brushOrigin() + QPoint( 0, pr.y() ) );
 	parag->paint( *p, cg, 0, FALSE );
 	p->translate( 0, -pr.y() );
@@ -298,13 +303,16 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 {
     m_bDrawFormattingChars=drawFormattingChars;
     m_bDrawingMissingSpellLine=drawingMissingSpellLine;
-    if ( isWithoutDoubleBuffer() /* || par && par->withoutDoubleBuffer */ ) {
+    if ( p->device()->devType() == QInternal::Printer ) {
+    // This stuff relies on doLayout()... simpler to just test for Printer.
+    // If someone understand doLayout() please tell me (David)
+    /*if ( isWithoutDoubleBuffer() || par && par->withoutDoubleBuffer ) { */
 	//setWithoutDoubleBuffer( TRUE );
 	QRect crect( cx, cy, cw, ch );
 	drawWithoutDoubleBuffer( p, crect, cg, zoomHandler );
 	return 0;
     }
-    setWithoutDoubleBuffer( FALSE );
+    //setWithoutDoubleBuffer( FALSE );
 
     if ( !firstParag() )
 	return 0;
