@@ -268,7 +268,7 @@ OoDrawImport::convert()
 					else if( kind == "arc" )
 						type = VEllipse::arc;
 				}
-				VEllipse *ellipse = new VEllipse( &m_document, KoPoint( x, y ), w / 2.0, h / 2.0, type, start, end );
+				VEllipse *ellipse = new VEllipse( &m_document, KoPoint( x, y ), w, h, type, start, end );
 				appendPen( *ellipse );
 				// arc has no brush
 				if( kind != "arc" )
