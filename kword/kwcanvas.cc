@@ -40,7 +40,6 @@
 #include <kdebug.h>
 #include <kapp.h>
 #include <kmessagebox.h>
-#include <koPartSelectDia.h>
 #include <config.h>
 #include <assert.h>
 
@@ -1783,12 +1782,14 @@ void KWCanvas::insertPicture( const QString & filename, bool isClipart, QSize pi
     m_pixmapSize = pixmapSize;
 }
 
-void KWCanvas::insertPart()
+void KWCanvas::insertPart( const KoDocumentEntry &entry )
 {
-    setMouseMode( MM_EDIT );
-    m_partEntry = KoPartSelectDia::selectPart( this );
+    m_partEntry = entry;
     if ( m_partEntry.isEmpty() )
+    {
+        setMouseMode( MM_EDIT );
         return;
+    }
     setMouseMode( MM_CREATE_PART );
 }
 

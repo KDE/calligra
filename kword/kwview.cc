@@ -73,6 +73,7 @@
 #include <koRuler.h>
 #include <koTabChooser.h>
 #include <koTemplateCreateDia.h>
+#include <koPartSelectAction.h>
 #include <koFrame.h>
 
 #include <ktempfile.h>
@@ -437,11 +438,11 @@ void KWView::setupActions()
                         this, SLOT( insertTable() ),
                         actionCollection(), "insert_table" );
 
-    actionToolsCreatePart = new KToggleAction( i18n( "&Object Frame" ), "frame_query",
-                                               CTRL+Key_F2 /*same as kpr*/,
-                                               this, SLOT( toolsPart() ),
-                                               actionCollection(), "tools_part" );
-    actionToolsCreatePart->setExclusiveGroup( "tools" );
+    actionToolsCreatePart = new KoPartSelectAction( i18n( "&Object Frame" ), "frame_query",
+                                                    /*CTRL+Key_F2 same as kpr,*/
+                                                    this, SLOT( toolsPart() ),
+                                                    actionCollection(), "tools_part" );
+    //actionToolsCreatePart->setExclusiveGroup( "tools" );
 
     // ------------------------- Format menu
     actionFormatFont = new KAction( i18n( "&Font..." ), ALT + CTRL + Key_F,
@@ -1289,10 +1290,11 @@ void KWView::setTool( int _mouseMode )
     case KWCanvas::MM_EDIT:
     case KWCanvas::MM_CREATE_TABLE:
     case KWCanvas::MM_CREATE_FORMULA:
+    case KWCanvas::MM_CREATE_PART:
         // No tool to activate for this mode -> deselect all the others
         actionToolsCreateText->setChecked( false );
         actionToolsCreatePix->setChecked( false );
-        actionToolsCreatePart->setChecked( false );
+        //actionToolsCreatePart->setChecked( false );
         break;
     case KWCanvas::MM_CREATE_TEXT:
         actionToolsCreateText->setChecked( true );
@@ -1300,8 +1302,8 @@ void KWView::setTool( int _mouseMode )
     case KWCanvas::MM_CREATE_PIX:
         actionToolsCreatePix->setChecked( true );
         break;
-    case KWCanvas::MM_CREATE_PART:
-        actionToolsCreatePart->setChecked( true );
+        //case KWCanvas::MM_CREATE_PART:
+        //actionToolsCreatePart->setChecked( true );
         break;
     }
 
@@ -2139,12 +2141,12 @@ void KWView::insertFormula()
 
 void KWView::toolsPart()
 {
-    if ( !actionToolsCreatePart->isChecked() )
+    /*if ( !actionToolsCreatePart->isChecked() )
     {
         actionToolsCreatePart->setChecked( true ); // always one has to be checked !
         return;
-    }
-    m_gui->canvasWidget()->insertPart();
+        }*/
+    m_gui->canvasWidget()->insertPart( actionToolsCreatePart->documentEntry() );
 }
 
 void KWView::tableInsertRow()

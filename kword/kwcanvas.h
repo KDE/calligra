@@ -126,7 +126,7 @@ public:
     MouseMode mouseMode() { return m_mouseMode; }
 
     void insertPicture( const QString &filename, bool isClipart, QSize pixmapSize );
-    void insertPart();
+    void insertPart( const KoDocumentEntry &entry );
 
     void updateCurrentFormat();
 

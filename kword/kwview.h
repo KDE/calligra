@@ -56,6 +56,7 @@ class KFontAction;
 class KColorAction;
 class KWTextFrameSetEdit;
 class TKSelectColorAction;
+class KoPartSelectAction;
 class KCharSelectDia;
 
 namespace Qt3 {
@@ -344,7 +345,7 @@ private:
     KToggleAction *actionToolsCreateText;
     KToggleAction *actionToolsCreatePix;
     KToggleAction *actionToolsCreateClip;
-    KToggleAction *actionToolsCreatePart;
+    KoPartSelectAction *actionToolsCreatePart;
 
     KAction *actionFormatFont;
     KAction *actionFormatDefault;
