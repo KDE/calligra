@@ -22,6 +22,9 @@ Boston, MA 02111-1307, USA.
 
 #include <qintdict.h>
 #include <qmap.h>
+//testing
+//#include <qintdict.h>
+
 
 #include <kexidbrecord.h>
 #include <CqlSqlInclude.h>
@@ -33,6 +36,7 @@ Boston, MA 02111-1307, USA.
 typedef QIntDict<CqlField> FieldIndex;
 typedef QIntDict<CqlString> RecordSet;
 typedef QValueVector<CqlString> DataVector;
+typedef QValueVector<bool> NullVector;
 
 class CqlRecord : public KexiDBRecord
 {
@@ -83,6 +87,7 @@ class CqlRecord : public KexiDBRecord
 		FieldIndex	m_fields;
 		RecordSet	m_data;
 		DataVector	m_datavector;
+		NullVector	m_nullvector;
 };
 
 #endif

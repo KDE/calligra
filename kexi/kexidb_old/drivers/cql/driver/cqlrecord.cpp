@@ -74,8 +74,11 @@ CqlRecord::commit(unsigned int record, bool insertBuffer=false)
 QVariant
 CqlRecord::value(unsigned int field)
 {
-	return QVariant(CqlDB::cqlString(*m_data[field]));
 	kdDebug() << "CqlRecord::value" << endl;
+//	return QVariant(CqlDB::cqlString(*m_datavector.at(field)));
+	return QVariant(CqlDB::cqlString(*m_data[field]));
+//	return QVariant("");
+//	return QVariant(m_
 }
 
 QVariant
@@ -173,14 +176,14 @@ CqlRecord::next()
 //	return false;
 	try
 	{
-		m_cursor->fetch();
+		return m_cursor->fetch();
 	}
 	catch(CqlException &err)
 	{
 		cerr << err << endl;
 	}
 	
-	return false;
+//	return false;
 //	kdDebug() << "CqlRecord::next (dbg2)" << endl;
 	
 }
@@ -200,12 +203,15 @@ CqlRecord::setupCursor()
 		CqlField *cfield = new CqlField(meta);
 		m_fields.insert(fields, cfield);
 
-		m_datavector.push_back(CqlString());
-		
+//		m_datavector.push_back(CqlString());
+		bool null;
+		m_nullvector.push_back(null);
+		CqlString *s = new CqlString();
 //		CqlString data;
-		bool flag;
-		m_cursor->bindColumn(fields, m_datavector.last(), flag, true);
-//		m_data.insert(fields, &m_datavector.last());
+//		bool flag;
+//		m_cursor->bindColumn(fields, m_datavector.last(), m_nullvector.last(), true);
+		m_cursor->bindColumn(fields, *s, m_nullvector.last(), true);
+		m_data.insert(fields, s);
 
 		kdDebug() << "CqlRecord::setupCursor: bind cursor " << fields << endl;
 		fields++;

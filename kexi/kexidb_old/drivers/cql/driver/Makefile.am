@@ -14,7 +14,7 @@ kexicqlinterface_la_LDFLAGS     = -module -no-undefined $(KDE_PLUGIN)
 
 bin_PROGRAMS = kexitest
 kexitest_SOURCES = ctest.cpp
-kexitest_LDADD = ../cql/sql/libcql.la
+kexitest_LDADD = $(LIB_KPARTS) $(LIB_QT) ../cql/sql/libcql.la libkexicqlinterface.la
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
