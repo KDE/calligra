@@ -24,14 +24,14 @@
 
 extern "C"
 {
-    void* init_kword();
+    void* init_libkword();
 }
 
 int main( int argc, char **argv )
 {
     KoApplication app( argc, argv, "kword" );
 
-    init_kword();
+    init_libkword();
 	
     KWordShell* shell = new KWordShell;
 

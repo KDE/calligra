@@ -31,7 +31,7 @@
 
 extern "C"
 {
-    void* init_kword()
+    void* init_libkword()
     {
 	/**
 	 * Initialize KWord stuff
@@ -71,7 +71,7 @@ KWordFactory::~KWordFactory()
     delete s_global;
 }
 
-QObject* KWordFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
+QObject* KWordFactory::create( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
 {
     if ( parent && !parent->inherits("KoDocument") )
     {
