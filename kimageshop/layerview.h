@@ -10,11 +10,14 @@
 #ifndef __layerlist_h__
 #define __layerlist_h__
 
+#include <qdialog.h>
 #include <qtableview.h>
 #include <qrect.h>
 
 class KImageShopDoc;
 class QPopupMenu;
+class QLineEdit;
+class KIntSpinBox;
 
 class LayerView : public QTableView
 {
@@ -22,7 +25,7 @@ class LayerView : public QTableView
 
 public:
 
-  enum action { VISIBLE, SELECTION, LINKING, OPACITY, RENAME, ADDLAYER, REMOVELAYER, ADDMASK, REMOVEMASK, UPPERLAYER, LOWERLAYER, FRONTLAYER, BACKLAYER };
+  enum action { VISIBLE, SELECTION, LINKING, PROPERTIES, ADDLAYER, REMOVELAYER, ADDMASK, REMOVEMASK, UPPERLAYER, LOWERLAYER, FRONTLAYER, BACKLAYER };
 
   LayerView(QWidget* _parent = 0, const char* _name = 0 );
   LayerView(KImageShopDoc* doc, QWidget* _parent = 0, const char* name = 0 );
@@ -35,7 +38,7 @@ public:
   void selectLayer( int _index );
   void slotInverseVisibility( int _index );
   void slotInverseLinking( int _index );
-  void slotRenameLayer( int _index );
+  void slotProperties();
 
   virtual QSize sizeHint() const;
 
@@ -53,6 +56,7 @@ protected:
 
   virtual void paintCell( QPainter*, int _row, int _col );
   virtual void mousePressEvent( QMouseEvent* _event );
+  virtual void mouseDoubleClickEvent( QMouseEvent* _event );
 
 private:
 
@@ -63,6 +67,24 @@ private:
   static QPixmap *m_eyeIcon, *m_linkIcon;
   static QRect m_eyeRect, m_linkRect;
   QPopupMenu* m_contextmenu;
+};
+
+class Layer;
+
+class PropertyDialog : QDialog
+{
+  Q_OBJECT
+
+public:
+
+  static bool editProperties( Layer& _layer );
+
+protected:
+
+  PropertyDialog( QString _layername, uchar _opacity, QWidget *_parent, const char *_name );
+
+  QLineEdit *m_name;
+  KIntSpinBox *m_spin;
 };
 
 #endif // __layerlist_h__

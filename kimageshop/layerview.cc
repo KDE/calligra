@@ -14,12 +14,17 @@
 
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qpushbutton.h>
 #include <qmessagebox.h>
 #include <qpopupmenu.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlineedit.h>
 
 #include <kstddirs.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <knuminput.h>
 
 #include "misc.h"
 #include "kimageshop_doc.h"
@@ -88,8 +93,7 @@ void LayerView::init( KImageShopDoc* doc )
   m_contextmenu->insertItem( i18n( "Selection"), SELECTION );
   m_contextmenu->insertItem( i18n( "Level" ), submenu );
   m_contextmenu->insertItem( i18n( "Linked"), LINKING );
-  m_contextmenu->insertItem( i18n( "Opacity"), OPACITY );
-  m_contextmenu->insertItem( i18n( "Rename"), RENAME );
+  m_contextmenu->insertItem( i18n( "Properties"), PROPERTIES );
 
   m_contextmenu->insertSeparator();
 
@@ -170,19 +174,6 @@ void LayerView::slotInverseLinking( int _index )
   updateCell( _index, 0 );
 }
 
-void LayerView::slotRenameLayer( int _index )
-{
-  QString layername = m_doc->layerList().at( _index )->name();
-
-  if( layername.left( 3 ) == "___" )
-    layername = layername.right( layername.length() - 3 );
-  else
-    layername = "___" + layername;
-
-  m_doc->layerList().at( _index )->setName( layername );
-  updateCell( _index, 0 );
-}
-
 void LayerView::slotMenuAction( int _id )
 {
   switch( _id )
@@ -193,11 +184,8 @@ void LayerView::slotMenuAction( int _id )
     case LINKING:
       slotInverseLinking( m_selected );
       break;
-    case OPACITY:
-      cerr << "Michael : Opacity" << endl;
-      break;
-    case RENAME:
-      slotRenameLayer( m_selected );
+    case PROPERTIES:
+      slotProperties();
       break;
     case ADDLAYER:
       slotAddLayer();
@@ -228,7 +216,7 @@ QSize LayerView::sizeHint() const
   return QSize( WIDTH, HEIGHT * 5 );
 }
 
-void LayerView::mousePressEvent( QMouseEvent* _event )
+void LayerView::mousePressEvent( QMouseEvent *_event )
 {
   int row = findRow( _event->pos().y() );
   QPoint localPoint( _event->pos().x() % cellWidth(), _event->pos().y() % cellHeight() );
@@ -255,6 +243,14 @@ void LayerView::mousePressEvent( QMouseEvent* _event )
     selectLayer( row );
     update_contextmenu( row );
     m_contextmenu->popup( mapToGlobal( _event->pos() ) );
+  }
+}
+
+void LayerView::mouseDoubleClickEvent( QMouseEvent *_event )
+{
+  if( _event->button() & LeftButton )
+  {
+    slotProperties();
   }
 }
 
@@ -352,6 +348,62 @@ void LayerView::updateAllCells()
 {
   for( int i = 0; i < m_doc->layerList().count(); i++ )
     updateCell( i, 0 );
+}
+
+void LayerView::slotProperties()
+{
+  if( PropertyDialog::editProperties( *( m_doc->layerList().at( m_selected ) ) ) )
+  {
+    QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
+
+    updateCell( m_selected, 0 );
+    m_doc->compositeImage( updateRect );
+    m_doc->slotUpdateViews( updateRect );
+  }
+}
+
+PropertyDialog::PropertyDialog( QString _layername, uchar _opacity, QWidget *_parent, const char *_name )
+  : QDialog( _parent, _name, true )
+{
+  QGridLayout *layout = new QGridLayout( this, 3, 2, 15, 7 );
+
+  m_name = new QLineEdit( _layername, this );
+  layout->addWidget( m_name, 0, 1 );
+
+  QLabel *label1 = new QLabel( m_name, i18n( "Name" ), this );
+  layout->addWidget( label1, 0, 0 );
+
+  m_spin = new KIntSpinBox( 0, 255, 1, _opacity, 10, this );
+  layout->addWidget( m_spin, 1, 1 );
+
+  QLabel *label2 = new QLabel( m_spin, i18n( "Opacity" ), this );
+  layout->addWidget( label2, 1, 0 );
+
+  QPushButton *pbOk = new QPushButton( i18n( "Ok" ), this );
+  pbOk->setDefault( true );
+  layout->addWidget( pbOk, 2, 0 );
+  QObject::connect( pbOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
+
+  QPushButton *pbCancel = new QPushButton( i18n( "Cancel" ), this );
+  layout->addWidget( pbCancel, 2, 1 );
+  QObject::connect( pbCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
+}
+ 
+bool PropertyDialog::editProperties( Layer &_layer )
+{
+  PropertyDialog *dialog;
+
+  dialog = new PropertyDialog( _layer.name(), _layer.opacity(), NULL, "opacity_dialog" );
+  if( dialog->exec() == Accepted )
+  {
+    cout << "Michael : Opacity : " << dialog->m_spin->value() << endl;
+
+    _layer.setName( dialog->m_name->text() );
+    _layer.setOpacity( dialog->m_spin->value() );
+
+    return true;
+  }
+  return false;
 }
 
 #include "layerview.moc"
