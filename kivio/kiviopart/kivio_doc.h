@@ -38,6 +38,8 @@ class ViewItemList;
 class KoStore;
 class View;
 class QDomDocument;
+class DCOPObject;
+
 
 #include <koDocument.h>
 #include <koMainWindow.h>
@@ -57,6 +59,8 @@ friend class KivioPage;
 public:
   KivioDoc( QWidget *parentWidget = 0, const char* widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
   ~KivioDoc();
+
+  virtual DCOPObject* dcopObject();
 
   virtual void addShell(KoMainWindow *shell);
 
@@ -210,6 +214,7 @@ protected:
   ViewItemList* viewItemList;
 
   KivioOptions* m_options;
+  DCOPObject *dcop;
 };
 
 #endif

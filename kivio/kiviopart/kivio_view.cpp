@@ -118,8 +118,11 @@
 #include "kivio_icon_view.h"
 
 #include "kivio_paragraph_action.h"
+#include "KIvioViewIface.h"
 
 #include <qiconview.h>
+
+
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 
@@ -130,6 +133,9 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 {
   m_pDoc = doc;
   m_pActivePage = 0;
+  dcop = 0;
+  dcopObject(); // build it
+
   bool isModified = doc->isModified();
   m_pTools = new ToolController(this);
   m_pDockManager = new StencilBarDockManager(this);
@@ -259,6 +265,15 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
 KivioView::~KivioView()
 {
+    delete dcop;
+}
+
+DCOPObject* KivioView::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KIvioViewIface( this );
+
+    return dcop;
 }
 
 void KivioView::createGeometryDock()

@@ -49,7 +49,9 @@ libkiviopart_la_SOURCES = \
 		kivio_grid_data.cpp\
 		kivio_guidelines.cpp\
 		kivio_stencil_geometry_panel.cpp\
-		kivio_viewmanager_panel.cpp
+		kivio_viewmanager_panel.cpp \
+		KIvioViewIface.skel KIvioViewIface.cc \
+		KIvioDocIface.skel KIvioDocIface.cc
 EXTRA_DIST = \
 		main.cpp\
 		kivio_canvas.cpp\
@@ -120,7 +122,9 @@ EXTRA_DIST = \
 		kivio_stencil_geometry_panel.cpp\
 		kivio_stencil_geometry_panel.h\
 		kivio_viewmanager_panel.cpp\
-		kivio_viewmanager_panel.h
+		kivio_viewmanager_panel.h \
+		KIvioViewIface.skel KIvioViewIface.cc KIvioViewIface.h \
+		KIvioDocIface.skel KIvioDocIface.cc KIvioDocIface.h
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$

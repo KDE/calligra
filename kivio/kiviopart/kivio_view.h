@@ -67,6 +67,8 @@ class TKUnitsAction;
 
 class QStringList;
 class QButton;
+class DCOPObject;
+
 
 #include <qdom.h>
 #include <qptrlist.h>
@@ -81,6 +83,8 @@ class KivioView : public KoView
 public:
   KivioView( QWidget *_parent, const char *_name, KivioDoc *_doc );
   ~KivioView();
+
+  virtual DCOPObject* dcopObject();
 
   ToolController* toolsController() { return m_pTools; }
   KivioCanvas* canvasWidget() const { return m_pCanvas; }
@@ -291,6 +295,9 @@ private:
   bool m_bShowRulers;
   bool m_bSnapGuides;
   bool m_bShowGuides;
+
+  DCOPObject *dcop;
+
 };
 
 #endif

@@ -74,6 +74,8 @@
 #include <koTemplateChooseDia.h>
 #include <koFilterManager.h>
 #include <koStoreDevice.h>
+#include <KIvioDocIface.h>
+
 
 //using namespace std;
 
@@ -89,8 +91,9 @@ int KivioDoc::s_docId = 0;
 KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* parent, const char* name, bool singleViewMode )
 : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
-  if (!s_docs)
-    s_docs = new QPtrList<KivioDoc>;
+    dcop = 0;
+    if (!s_docs)
+        s_docs = new QPtrList<KivioDoc>;
 
   s_docs->append(this);
 
@@ -129,6 +132,16 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
   m_units = (int)UnitPoint;
 
   viewItemList = new ViewItemList(this);
+  if ( name )
+      dcopObject();
+}
+
+DCOPObject* KivioDoc::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KIvioDocIface( this );
+
+    return dcop;
 }
 
 QPtrList<KivioDoc>& KivioDoc::documents()
@@ -548,6 +561,7 @@ KivioDoc::~KivioDoc()
     // spawned by plugins NEED the plugins still loaded when their destructor
     // is called or the program will slit it's throat.
     delete m_pMap;
+    delete dcop;
 
     if( m_pClipboard )
     {
