@@ -21,10 +21,11 @@
 
 #include "contextstyle.h"
 
+
 ContextStyle::ContextStyle()
         : m_zoomedResolutionX(1.0), m_zoomedResolutionY(1.0),
           defaultFont("times"), nameFont("times"), numberFont("symbol"),
-          operatorFont("symbol"), symbolFont("symbol"),
+          operatorFont("symbol"), symbolFont("symbol",12,QFont::Normal,FALSE,QFont::AnyCharSet),
           defaultColor(Qt::black), numberColor(Qt::blue),
           operatorColor(Qt::darkGreen), errorColor(Qt::darkRed),
           emptyColor(Qt::blue)
