@@ -7005,7 +7005,6 @@ void KPresenterView::insertFile()
     }
     else
         return;
-    m_pKPresenterDoc->insertFile(url.path());
 }
 
 #include <kpresenter_view.moc>

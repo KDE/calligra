@@ -175,13 +175,6 @@ protected:
     void drawParags( QPainter *p, KoZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to );
     void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
     void invalidate();
-
-    static QString underlineStyleToString( KoTextFormat::UnderlineLineStyle _lineType );
-    static QString strikeOutStyleToString( KoTextFormat::StrikeOutLineStyle _lineType );
-
-    static KoTextFormat::UnderlineLineStyle stringToUnderlineStyle( const QString & _str );
-    static KoTextFormat::StrikeOutLineStyle stringToStrikeOutStyle( const QString & _str );
-
     void recalcVerticalAlignment();
 protected slots:
     void slotNewCommand( KCommand *cmd );
