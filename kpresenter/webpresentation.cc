@@ -626,7 +626,6 @@ void KPWebPresentationWizard::createWebPresentation( const QString &_config, KPr
     KPWebPresentationWizard *dlg = new KPWebPresentationWizard( _config, _doc, _view );
 
     dlg->setCaption( i18n( "Create HTML Slideshow" ) );
-    //dlg->resize( 640, 350 );
     dlg->show();
 }
 
