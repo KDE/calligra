@@ -242,17 +242,22 @@ VClipartTool::mouseButtonPress()
 	m_keepRatio = false;
 
 	VClipartIconItem* clipartItem = m_optionsWidget->selectedClipart();
-	m_clipart = clipartItem->clipart()->clone();
-	m_clipart->setState( VObject::edit );
+        if( clipartItem)
+        {
+            m_clipart = clipartItem->clipart()->clone();
+            m_clipart->setState( VObject::edit );
 
-	m_topleft = m_bottomright = last();
+            m_topleft = m_bottomright = last();
 
-	draw();
+            draw();
+        }
 }
 
 void
 VClipartTool::mouseButtonRelease()
 {
+    if( !m_optionsWidget->selectedClipart())
+        return;
 	double s = QMAX( m_optionsWidget->selectedClipart()->originalWidth(), m_optionsWidget->selectedClipart()->originalHeight() );
 
 	if( m_clipart )
