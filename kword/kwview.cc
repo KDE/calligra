@@ -1214,9 +1214,11 @@ void KWView::setupActions()
     actionCreateFrameStyle->setToolTip( i18n( "Create a new style based on the currently selected frame." ) );
     actionCreateFrameStyle->setWhatsThis( i18n( "Create a new framestyle based on the currently selected frame." ) );
 
+#if 0 // re-enable after fixing
     actionInsertDirectCursor = new KToggleAction( i18n( "Type Anywhere Cursor" ), 0,
                                                   this, SLOT( insertDirectCursor() ),
                                                   actionCollection(), "direct_cursor" );
+#endif
 
     actionConvertToTextBox = new KAction( i18n( "Convert to Text Box" ), 0,
                                                   this, SLOT( convertToTextBox() ),
@@ -6949,7 +6951,9 @@ void KWView::deselectAllFrames()
 
 void KWView::insertDirectCursor()
 {
+#if 0
     insertDirectCursor( actionInsertDirectCursor->isChecked());
+#endif
 }
 
 void KWView::insertDirectCursor(bool b)
@@ -6959,7 +6963,9 @@ void KWView::insertDirectCursor(bool b)
 
 void KWView::updateDirectCursorButton()
 {
+#if 0
     actionInsertDirectCursor->setChecked(m_doc->insertDirectCursor());
+#endif
 }
 
 void KWView::convertTableToText()
