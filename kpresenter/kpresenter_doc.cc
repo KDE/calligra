@@ -93,7 +93,7 @@
 #include <kglobalsettings.h>
 #include <kocommandhistory.h>
 #include "koApplication.h"
-
+#include <koOasisStyles.h>
 #include <koSconfig.h>
 
 using namespace std;
@@ -893,7 +893,7 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
     return true;
 }
 
-bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&, KoStore* )
+bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles, KoStore* )
 {
     QTime dt;
     dt.start();
@@ -941,27 +941,31 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&, KoStore*
     QDomNode drawPage = body.namedItem( "draw:page" );
     if ( drawPage.isNull() ) // no slides? give up.
         return false;
+    QString masterPageName = "Standard"; // use default layout as fallback
+    QDomElement *master = oasisStyles.masterPages()[ masterPageName];
+    Q_ASSERT( master );
+    QDomElement *style =master ? oasisStyles.styles()[master->attribute( "style:page-master-name" )] : 0;
     // parse all pages
-#if 0
-    QDomElement properties = style->namedItem( "style:properties" ).toElement();
-    if ( !properties.isNull() )
+    Q_ASSERT( style );
+    if ( style )
     {
-        __pgLayout.ptWidth = KoUnit::parseValue(properties.attribute( "fo:page-width" ) );
-        __pgLayout.ptHeight = KoUnit::parseValue(properties.attribute( "fo:page-height" ) );
-        if (properties.attribute("style:print-orientation")=="portrait")
-            __pgLayout.orientation=PG_PORTRAIT;
-        else if (properties.attribute("style:print-orientation")=="landscape")
-            __pgLayout.orientation=PG_LANDSCAPE;
+        QDomElement properties( style->namedItem( "style:properties" ).toElement() );
+        if ( !properties.isNull() )
+        {
+            __pgLayout.ptWidth = KoUnit::parseValue(properties.attribute( "fo:page-width" ) );
+            __pgLayout.ptHeight = KoUnit::parseValue(properties.attribute( "fo:page-height" ) );
+            if (properties.attribute("style:print-orientation")=="portrait")
+                __pgLayout.orientation=PG_PORTRAIT;
+            else if (properties.attribute("style:print-orientation")=="landscape")
+                __pgLayout.orientation=PG_LANDSCAPE;
 
-        pageHeight = properties.attribute( "fo:page-height" ).remove( "cm" ).toDouble();
-
-        QDomElement paperBorderElement = doc.createElement( "PAPERBORDERS" );
-        __pgLayout.ptRight = KoUnit::parseValue( properties.attribute( "fo:margin-right" ) );
-        __pgLayout.ptBottom = KoUnit::parseValue( properties.attribute( "fo:margin-bottom" ) );
-        __pgLayout.ptLeft = KoUnit::parseValue( properties.attribute( "fo:margin-left" ) );
-        __pgLayout.ptLeft = KoUnit::parseValue( properties.attribute( "fo:margin-top" ) );
+            //pageHeight = properties.attribute( "fo:page-height" ).remove( "cm" ).toDouble();
+            __pgLayout.ptRight = KoUnit::parseValue( properties.attribute( "fo:margin-right" ) );
+            __pgLayout.ptBottom = KoUnit::parseValue( properties.attribute( "fo:margin-bottom" ) );
+            __pgLayout.ptLeft = KoUnit::parseValue( properties.attribute( "fo:margin-left" ) );
+            __pgLayout.ptLeft = KoUnit::parseValue( properties.attribute( "fo:margin-top" ) );
+        }
     }
-#endif
     if ( _clean )
     {
         /// ### this has already been done, no?
