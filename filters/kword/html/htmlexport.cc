@@ -41,13 +41,18 @@ const bool HTMLExport::filter(const QCString &fileIn, const QCString &fileOut,
         return false;
     }
     // read the whole file - at least I hope it does :)
-    QByteArray array=in.read(0xffffffff);
-    QCString buf((const char*)array, array.size());
+    QCString buf( in.size() );
+    int count = in.read( buf.data(), in.size() );
+    if ( count != in.size() ) {
+      kdError(30503) << "Error reading input file!" << endl;
+      in.close();
+      return false;
+    }
 
-    int begin = buf.find( "<DOC" );
-    buf.remove( 0, begin - 1 );
+    kdDebug() << buf << endl;
 
-    mainFunc( (const char*)buf );
+    int begin = buf.find( "<DOC" ); // skip <?...?>
+    mainFunc( (const char*)buf + begin );
 
     QFile f( "/tmp/kword2html" );
     if ( !f.open( IO_ReadOnly ) ) {

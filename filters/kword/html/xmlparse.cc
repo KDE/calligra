@@ -29,51 +29,9 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <kdebug.h>
 
 #include "kword_xml2html.h"
-
-/*
-** Every token is one of the following types.
-*/
-// typedef enum TokenType {
-//   TT_Word,        /* Anything besides markup and whitespace */
-//   TT_Space,       /* Spaces, not counting "\n" characters */
-//   TT_EOL,         /* A sequence of spaces ending with "\n" */
-//   TT_Markup       /* Any markup sequence */
-// } TokenType;
-
-// /*
-// ** Each token is represented by an instance of the following structure.
-// */
-// typedef struct Token Token;
-// struct Token {
-//   int offset;         /* Offset from start of file.  Used for error messages */
-//   TokenType eType;    /* What type of token is this. */
-//   char *zText;        /* The actual text of the token */
-//   Token *pNext;       /* Next token in the list */
-// };
-
-// /*
-// ** Arguments to a markup token are recorded as a list of the
-// ** following structure.
-// */
-// typedef struct Arg Arg;
-// struct Arg {
-//   int offset;      /* Index of first char of name -- for error messages */
-//   char *zName;     /* Name of argument */
-//   char *zValue;    /* Value of the argument */
-//   Arg *pNext;      /* Next argument in the list, or NULL */
-// };
-
-// /*
-// ** Markup tokens have a few extra fields, shown by this structure.
-// */
-// typedef struct Markup Markup;
-// struct Markup {
-//   Token token;       /* Base class.  Must be first */
-//   Token *pContent;   /* Tokens between <MARKUP> and </MARKUP> */
-//   Arg *pArg;         /* Arguments to this token */
-// };
 
 /*
 ** The maximum length of a line of output for error messages.
@@ -84,81 +42,6 @@
 ** The number of errors encountered
 */
 static int nError = 0;
-
-/*
-** Mark code that should never execute with the CANT_HAPPEN macro.
-** Also define our own assert macro.
-*/
-#define CANT_HAPPEN  AssertFailed(__FILE__,__LINE__)
-#ifndef ASSERT
-#define ASSERT(X)    if(!(X)){AssertFailed(__FILE__,__LINE__);}
-#endif
-static void AssertFailed(const char *zFile, int line){
-  fprintf(stderr,"Assertion filed on line %d of %s.\n", line, zFile);
-  exit(1);
-}
-
-/*
-** Open and read a file into memory.  Return a pointer
-** to the buffer containing the text of this file.  The buffer will
-** be null-terminated.  The calling function is responsible for reclaiming
-** storage using free().
-**
-** Inputs:
-** The name of the file to be read.
-**
-** Outputs:
-** A pointer to a null-terminated string that contains the complete
-** text of the file.  If the file could not be opened for any reason,
-** an error message is issued and a NULL pointer is returned.
-*/
-char *ReadFileIntoMemory(const char *fileName){
-  FILE *in;             /* Input file stream */
-  char *textBuf;        /* A buffer in which to put entire text of input */
-  int toRead;           /* Amount of input file read to read */
-  int got;              /* Amount read so far */
-  struct stat statBuf;  /* Status buffer for the file */
-
-  in = fopen(fileName,"rb");
-  if( in==0 ){
-    fprintf(stderr,"%s: can't open file.\n",fileName);
-    nError++;
-    return 0;
-  }
-  if( fstat(fileno(in),&statBuf)!=0 ){
-    fprintf(stderr,"%s: fstat() failed -- can't get size of file.\n", fileName);
-    fclose(in);
-    nError++;
-    return 0;
-  }
-  textBuf = (char*) malloc( statBuf.st_size + 1 );
-  if( textBuf==0 ){
-    fprintf(stderr,"%s: can't malloc %ld bytes to hold this file.\n",
-      fileName, statBuf.st_size + 1);
-    fclose(in);
-    nError++;
-    return 0;
-  }
-  textBuf[statBuf.st_size] = 0;
-  toRead = statBuf.st_size;
-  got = 0;
-  while( toRead ){
-    int n = fread(&textBuf[got],1,toRead,in);
-    if( n<=0 ) break;
-    toRead -= n;
-    got += n;
-  }
-  fclose(in);
-  if( got!=statBuf.st_size ){
-    fprintf(stderr,"%s: only %d of %ld bytes read from this file.\n",
-      fileName, got, statBuf.st_size);
-    free(textBuf);
-    nError++;
-    return 0;
-  }
-  textBuf[got] = 0;
-  return textBuf;
-}
 
 /*
 ** Print an error message across multiple lines (if necessary) so that
@@ -643,7 +526,7 @@ static void StrUNCpy(char *zDest, const char *zSrc, int N){
 ** XML.  The *piFile integer is left pointing at the character that
 ** terminated the parse.
 */
-Token *ParseXml(
+Token * ParseXml(
   const char *zFile,  /* Complete text of the file being parsed */
   int *piFile         /* Index of next unparsed character in zFile */
 ){
@@ -729,6 +612,7 @@ Token *ParseXml(
         }
       }
       pM->token.zText[n] = 0;
+      //kdDebug() << "Token=" << pM->token.zText << endl;
       pM->pContent = 0;
       pM->pArg = 0;
       while( isspace(zFile[i]) ){ i++; }
@@ -872,311 +756,18 @@ void PrintXml(Token *p, int indent){
         printf("%*sEnd Of Line\n", indent, "");
         break;
       case TT_Markup:
-        printf("%*sMarkup <%s", indent, "", p->zText);
+        printf("%*sMarkup <%s", indent, "", p->zText); // The tag name
         pM = (Markup*)p;
-        for(pArg = pM->pArg; pArg; pArg=pArg->pNext){
+        for(pArg = pM->pArg; pArg; pArg=pArg->pNext){ // The attributes
           printf(" %s=\"%s\"", pArg->zName, pArg->zValue);
         }
         printf(">\n");
-        PrintXml(pM->pContent, indent+3);
+        PrintXml(pM->pContent, indent+3); // The child elements
         break;
       default:
-        CANT_HAPPEN;
+        kdError() << "Can't happen" << endl;
         break;
     }
     p = p->pNext;
-  }
-}
-
-/*
-** This routine returns a pointer to the value of an argument
-** to a markup.  If the argument is not on the markup, the
-** default value specified by the 3rd argument is returned instead.
-*/
-char *GetArg(Markup *pM, const char *zArgName, char *zDefault){
-  Arg *p;
-  if( pM==0 || zArgName==0 || *zArgName==0 ) return zDefault;
-  for(p=pM->pArg; p; p=p->pNext){
-    if( StrICmp(p->zName,zArgName)==0 ){
-      return p->zValue;
-    }
-  }
-  return zDefault;
-}
-
-/*
-** Find the first instance of particular markup.
-*/
-Markup *FindMarkup(Token *p, const char *zName){
-  while( p ){
-    if( p->eType==TT_Markup ){
-      Markup *pM = (Markup*)p;
-      if( StrICmp(pM->token.zText,zName)==0 ){
-        return pM;
-      }
-    }
-    p = p->pNext;
-  }
-  return 0;
-}
-
-/*
-** Test is a token is a particular type of markup
-*/
-int IsMarkup(Token *p, const char *zName){
-  Markup *pM = (Markup*)p;
-  return p && p->eType==TT_Markup && StrICmp(pM->token.zText,zName)==0;
-}
-
-/*
-** Return the first non-space token in the list
-*/
-Token *SkipSpace(Token *p){
-  while( p && (p->eType==TT_Space || p->eType==TT_EOL) ){
-    p = p->pNext;
-  }
-  return p;
-}
-
-/*
-** Scan the list of tokens given and extract a list of words.
-** The return value is a pointer to an array of pointers to
-** strings.  The calling function should invoke free() on the
-** returned value to reclaim memory.  The array is null-terminated.
-**
-** The words can be all space-separated.  Or they can be comma-separated.
-** If there is any comma anywhere in the list, then it is assumed
-** that comma separation is used, otherwise use space separation.
-*/
-char **WordList(Token *pList, int *pN){
-  Token *p;
-  int n;
-  int nByte;
-  char *z;
-  char **az;
-  int usesCommas = 0;
-  int len;
-
-  n = nByte = 0;
-  for(p=pList; p; p=p->pNext){
-    if( p->eType!=TT_Word ) continue;
-    n++;
-    len = strlen(p->zText);
-    nByte += len + 1;
-    if( len>0 && p->zText[len-1]==',' ){ usesCommas = 1; }
-  }
-  z = (char*) malloc( nByte + (n+1)*sizeof(char*) );
-  if( z==0 ){
-    if( pN ) *pN = 0;
-    return 0;
-  }
-  az = (char**)z;
-  z += (n+1)*sizeof(char*);
-  n = 0;
-  *z = 0;
-  for(p=pList; p; p=p->pNext){
-    if( p->eType!=TT_Word ) continue;
-    if( *z==0 ){
-      az[n++] = z;
-    }else{
-      strcat(z," ");
-    }
-    strcat(z, p->zText);
-    len = strlen(z);
-    if( !usesCommas ){
-      z += len + 1;
-      *z = 0;
-    }else if( len>0 && z[len-1]==',' ){
-      z[len-1] = 0;
-      z += len;
-      *z = 0;
-    }
-  }
-  az[n] = 0;
-  if( pN ) *pN = n;
-  return az;
-}
-
-#ifdef TEST1
-void main(int argc, char **argv){
-  int i;
-  for(i=1; i<argc; i++){
-    char *zFile;
-    Token *p;
-    zFile = ReadFileIntoMemory(argv[i]);
-    if( zFile ){
-      int j = 0;
-      p = ParseXml(zFile,&j);
-      PrintXml(p, 0);
-      DeleteXml(p);
-    }
-  }
-}
-#endif
-
-
-/* Compare strings case sensitive.  Strings of digits compare
-** in numerical order */
-int StrCmp(const char *atext,const char *btext){
-  register unsigned char *a, *b, ca, cb;
-  int result;
-
-  a = (unsigned char *)atext;
-  b = (unsigned char *)btext;
-  do{
-    if( (ca= *a++)!=(cb= *b++) ) break;
-  }while( ca!=0 );
-  if( isdigit(ca) ){
-    if( !isdigit(cb) ){
-      result = 1;
-    }else{
-      int acnt, bcnt;
-      acnt = bcnt = 0;
-      while( isdigit(*a++) ) acnt++;
-      while( isdigit(*b++) ) bcnt++;
-      result = acnt - bcnt;
-      if( result==0 ) result = ca-cb;
-    }
-  }else if( isdigit(cb) ){
-    result = -1;
-  }else{
-    result = ca - cb;
-  }
-  return result;
-}
-
-/* Make a copy of a string
-*/
-char *StrDup(char *zOrig){
-  char *zNew = (char*) SafeMalloc( strlen(zOrig)+1 );
-  strcpy(zNew,zOrig);
-  return zNew;
-}
-
-/* Compare strings case sensitive.  Strings of digits compare
-** in numerical order.  No more than "n" characters are compared */
-int StrNCmp(const char *atext, const char *btext, int n){
-  register unsigned char *a, *b, ca, cb;
-  int result;
-
-  a = (unsigned char *)atext;
-  b = (unsigned char *)btext;
-  if( n>0 ){
-    do{
-      if( (ca= *a++)!=(cb= *b++) ) break;
-    }while( ca!=0 && n-- >1 );
-  }
-  if( n>0 ){
-    if( isdigit(ca) ){
-      if( !isdigit(cb) ){
-        result = 1;
-      }else{
-        int acnt, bcnt;
-        acnt = bcnt = 1;
-        while( acnt<n && isdigit(*a++) ) acnt++;
-        while( bcnt<n && isdigit(*b++) ) bcnt++;
-        result = acnt - bcnt;
-        if( result==0 ) result = ca-cb;
-      }
-    }else if( isdigit(cb) ){
-      result = -1;
-    }else{
-      result = ca - cb;
-    }
-  }else{
-    result = 0;
-  }
-  return result;
-}
-
-/* Compare two Arg structures.  Used for sorting
-*/
-static int CompareArg(Arg *pA, Arg *pB){
-  return StrICmp(pA->zName,pB->zName);
-}
-
-/*
-** Merge two sorted lists of Arg structures into a single
-** sorted list and return a pointer to the new list
-*/
-static Arg *MergeArgList(Arg *pA, Arg *pB){
-  Arg *pList = 0;
-  Arg **ppEnd = &pList;
-  Arg *p;
-  while( pA && pB ){
-    if( CompareArg(pA,pB)<=0 ){
-      p = pA;
-      pA = pA->pNext;
-    }else{
-      p = pB;
-      pB = pB->pNext;
-    }
-    p->pNext = 0;
-    *ppEnd = p;
-    ppEnd = &p->pNext;
-  }
-  if( pA==0 ){
-    *ppEnd = pB;
-  }else{
-    *ppEnd = pA;
-  }
-  return pList;
-}
-
-/*
-** Use the merge-sort algorithm to sort a linked list of
-** Arg structures.  Return a pointer to the new list.
-*/
-static Arg *SortArg(Arg *pList){
-  int i;
-  Arg *p;
-  Arg *aBucket[30];
-  int nBucket;
-
-  nBucket = sizeof(aBucket)/sizeof(aBucket[0]);
-  for(i=0; i<nBucket; i++){ aBucket[i] = 0; }
-  while( pList ){
-    p = pList;
-    pList = pList->pNext;
-    p->pNext = 0;
-    for(i=0; i<nBucket-1 && aBucket[i]; i++){
-      p = MergeArgList(aBucket[i],p);
-      aBucket[i] = 0;
-    }
-    aBucket[i] = MergeArgList(aBucket[i],p);
-  }
-  p = 0;
-  for(i=0; i<nBucket; i++){
-    p = MergeArgList(aBucket[i],p);
-  }
-  return p;
-}
-
-/*
-** Issue an error message if a markup contains an argument that is
-** not given on the list.
-*/
-void RestrictArgs(char *zFile, Markup *pM, ...){
-  int i, N;
-  va_list ap;
-  Arg *p;
-  char *z;
-  char *azAllow[500];
-
-  va_start(ap,pM);
-  z = "";
-  for(N=0; z!=0 && N<sizeof(azAllow)/sizeof(azAllow[0]); N++) {
-    z = va_arg(ap,char*);
-    azAllow[N] = z;
-  }
-  va_end(ap);
-  for(p=pM->pArg; p; p=p->pNext){
-    for(i=0; i<N-1; i++){
-      if( StrICmp(azAllow[i],p->zName)==0 ) break;
-    }
-    if( i>=N ){
-      ErrorAtChar(zFile, p->offset, 1, "Unrecognized argument");
-      nError++;
-    }
   }
 }

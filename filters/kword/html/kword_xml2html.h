@@ -67,9 +67,12 @@ struct Markup {
   Arg *pArg;         /* Arguments to this token */
 };
 
-Token *ParseXml(
-  const char *zFile,  /* Complete text of the file being parsed */
-  int *piFile         /* Index of next unparsed character in zFile */
-);
+/**
+ * @param zFile Complete text of the file being parsed
+ * @param piFile Index of next unparsed character in zFile
+ */
+Token *ParseXml( const char *zFile, int *piFile ); // defined in xmlparse.cc
+
+void PrintXml(Token *p, int indent); // defined in xmlparse.cc
 
 #endif

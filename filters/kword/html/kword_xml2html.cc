@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <kdebug.h>
 #include "kword_xml2html.h"
 
 
@@ -218,6 +219,7 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
     while(pHTMLTree->pNext){
         pHTMLTree=pHTMLTree->pNext;
     }
+    // What context are we in...
     if(pHTMLTree->ObjectType == HTML_Text) {
         if(pHTMLTree->u.TextStruct.iMargin) {
 
@@ -284,6 +286,9 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
         SearchText(pToken->pNext,pHTMLTree,Start);
         return;
     }
+
+    kdDebug() << "SearchText. Markup found. Token=" << pToken->zText << endl;
+
     if(!(strcmp(pToken->zText,"FRAMESET"))) {
         int iValue;
         int iHaveRow;
@@ -489,26 +494,31 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
         SearchText(pSaveToken->pNext,pHTMLTree,Start);
     }
     else if(!(strcmp(pToken->zText,"FORMAT"))){
-        Arg *pArg;
-        Format *pFormat;
-        tTableText *pTableText;
-        if(pHTMLTree->ObjectType == HTML_Table) {
-            tTable *pTable;
-            pTable = &(pHTMLTree->u.Table);
-            pTable = GetTable(pTable);
-            pTableText = pTable->pTextAttributes;
-            pTableText = GetTableText(pTableText);
-            pFormat = pTableText->sTextAttributes.pFormat;
-        }
-        else {
-            pFormat = pHTMLTree->u.TextStruct.pFormat;
-        }
         /* If this object is of type HTML_Null, then FORMAT does not
         ** apply to a TEXT markup (recall that the TextStruct member of
         ** the HTMLTree union is only created and populated once a valid TEXT
         ** markup is current).
+        ** This means, the format applies to e.g. a paragraph and we don't care about that.
         */
         if(pHTMLTree->ObjectType!=HTML_Null) {
+            Arg *pArg;
+            Format *pFormat;
+            tTableText *pTableText;
+            if(pHTMLTree->ObjectType == HTML_Table) {
+                tTable *pTable;
+                pTable = &(pHTMLTree->u.Table);
+                pTable = GetTable(pTable);
+                pTableText = pTable->pTextAttributes;
+                pTableText = GetTableText(pTableText);
+                pFormat = pTableText->sTextAttributes.pFormat;
+            }
+            else {
+                if(pHTMLTree->ObjectType != HTML_Text)
+                    kdWarning() << "Shouldn't that be a text ? " << (int)pHTMLTree->ObjectType << endl;
+                pFormat = pHTMLTree->u.TextStruct.pFormat;
+                kdDebug() << "Format set to " << pFormat << endl;
+            }
+            kdDebug() << "Processing FORMAT tag" << endl;
             pArg = ((Markup *)pToken)->pArg;
             while(pFormat->pNext) {
                 pFormat = pFormat->pNext;
@@ -552,199 +562,213 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
         SearchText(pToken->pNext,pHTMLTree,Start);
     }
     else if(!(strcmp(pToken->zText,"SIZE"))) {
-        Arg *pArg;
-        Format *pFormat;
-        tTableText *pTableText;
-        tTextStruct *pTextStruct;
-        if(pHTMLTree->ObjectType == HTML_Table) {
-            tTable *pTable;
-            pTable = &(pHTMLTree->u.Table);
-            pTable = GetTable(pTable);
-            pTableText = pTable->pTextAttributes;
-            pTableText = GetTableText(pTableText);
-            pFormat = pTableText->sTextAttributes.pFormat;
-            pTextStruct = &(pTableText->sTextAttributes);
-        }
-        else {
-            pFormat = pHTMLTree->u.TextStruct.pFormat;
-            pTextStruct = &(pHTMLTree->u.TextStruct);
-        }
-        if(!pTextStruct->zText) {}
-        /* SIZE may not always refer to a "TEXT" markup.  If it does
-		** not, then we're done here.
-		*/
-        else {
-            while(pFormat->pNext) {
-                pFormat = pFormat->pNext;
+        // Ignore e.g. paragraph formats
+        if(pHTMLTree->ObjectType!=HTML_Null) {
+            Arg *pArg;
+            Format *pFormat;
+            tTableText *pTableText;
+            tTextStruct *pTextStruct;
+            if(pHTMLTree->ObjectType == HTML_Table) {
+                tTable *pTable;
+                pTable = &(pHTMLTree->u.Table);
+                pTable = GetTable(pTable);
+                pTableText = pTable->pTextAttributes;
+                pTableText = GetTableText(pTableText);
+                pFormat = pTableText->sTextAttributes.pFormat;
+                pTextStruct = &(pTableText->sTextAttributes);
             }
-            pArg=((Markup*)pToken)->pArg;
-            while(pArg) {
-                if(!(strcmp(pArg->zName,"VALUE"))) {
-                    pFormat->iFontSize = atoi(pArg->zValue);
-                    break;
-                }
-                else {
-                    pArg=pArg->pNext;
-                }
+            else {
+                pFormat = pHTMLTree->u.TextStruct.pFormat;
+                pTextStruct = &(pHTMLTree->u.TextStruct);
             }
-            if(!pFormat->iFontSize) {
-                fprintf(stderr,"Error.  SIZE markup must contain a font size.\n");
-                exit(1);
+            if(!pTextStruct->zText) {}
+            /* SIZE may not always refer to a "TEXT" markup.  If it does
+            ** not, then we're done here.
+            */
+            else {
+                while(pFormat->pNext) {
+                    pFormat = pFormat->pNext;
+                }
+                pArg=((Markup*)pToken)->pArg;
+                while(pArg) {
+                    if(!(strcmp(pArg->zName,"VALUE"))) {
+                        pFormat->iFontSize = atoi(pArg->zValue);
+                        break;
+                    }
+                    else {
+                        pArg=pArg->pNext;
+                    }
+                }
+                if(!pFormat->iFontSize) {
+                    fprintf(stderr,"Error.  SIZE markup must contain a font size.\n");
+                    exit(1);
+                }
             }
         }
         SearchText(pToken->pNext,pHTMLTree,Start);
     }
     else if(!(strcmp(pToken->zText,"COLOR"))) {
-        Arg *pArg;
-        Format *pFormat;
-        tTableText *pTableText;
-        tTextStruct *pTextStruct;
-        int iFoundRed = 0;
-        int iFoundGreen = 0;
-        int iFoundBlue = 0;
-        if(pHTMLTree->ObjectType == HTML_Table) {
-            tTable *pTable;
-            pTable = &(pHTMLTree->u.Table);
-            pTable = GetTable(pTable);
-            pTableText = pTable->pTextAttributes;
-            pTableText = GetTableText(pTableText);
-            pFormat = pTableText->sTextAttributes.pFormat;
-            pTextStruct = &(pTableText->sTextAttributes);
-        }
-        else {
-            pFormat = pHTMLTree->u.TextStruct.pFormat;
-            pTextStruct = &(pHTMLTree->u.TextStruct);
-        }
-        if(!pTextStruct->zText) {}
-        /* COLOR may not always refer to a "TEXT" markup.  If it does
-        ** not, then we're done.
-        */
-        else {
-            while(pFormat->pNext) {
-                pFormat = pFormat->pNext;
+        // Ignore e.g. paragraph formats
+        if(pHTMLTree->ObjectType!=HTML_Null) {
+            Arg *pArg;
+            Format *pFormat;
+            tTableText *pTableText;
+            tTextStruct *pTextStruct;
+            int iFoundRed = 0;
+            int iFoundGreen = 0;
+            int iFoundBlue = 0;
+            if(pHTMLTree->ObjectType == HTML_Table) {
+                tTable *pTable;
+                pTable = &(pHTMLTree->u.Table);
+                pTable = GetTable(pTable);
+                pTableText = pTable->pTextAttributes;
+                pTableText = GetTableText(pTableText);
+                pFormat = pTableText->sTextAttributes.pFormat;
+                pTextStruct = &(pTableText->sTextAttributes);
             }
-            pArg=((Markup*)pToken)->pArg;
-            while(pArg) {
-                if(!(strcmp(pArg->zName,"RED"))) {
-                    pFormat->iRed = atoi(pArg->zValue);
-                    iFoundRed++;
-                }
-                else if(!(strcmp(pArg->zName,"GREEN"))) {
-                    pFormat->iGreen = atoi(pArg->zValue);
-                    iFoundGreen++;
-                }
-                else if(!(strcmp(pArg->zName,"BLUE"))) {
-                    pFormat->iBlue = atoi(pArg->zValue);
-                    iFoundBlue++;
-                }
-                pArg=pArg->pNext;
+            else {
+                pFormat = pHTMLTree->u.TextStruct.pFormat;
+                kdDebug() << "COLOR. Setting format to " << pFormat << endl;
+                pTextStruct = &(pHTMLTree->u.TextStruct);
             }
-            if((!iFoundRed)||(!iFoundGreen)||(!iFoundBlue)) {
-                printf("Error.  COLOR markup must contain information for Red, Green,"
-                       " and Blue\n");
-                exit(1);
+            if(!pTextStruct->zText) {}
+            /* COLOR may not always refer to a "TEXT" markup.  If it does
+            ** not, then we're done.
+            */
+            else if (pFormat) {
+                while(pFormat->pNext) {
+                    pFormat = pFormat->pNext;
+                }
+                pArg=((Markup*)pToken)->pArg;
+                while(pArg) {
+                    if(!(strcmp(pArg->zName,"RED"))) {
+                        pFormat->iRed = atoi(pArg->zValue);
+                        iFoundRed++;
+                    }
+                    else if(!(strcmp(pArg->zName,"GREEN"))) {
+                        pFormat->iGreen = atoi(pArg->zValue);
+                        iFoundGreen++;
+                    }
+                    else if(!(strcmp(pArg->zName,"BLUE"))) {
+                        pFormat->iBlue = atoi(pArg->zValue);
+                        iFoundBlue++;
+                    }
+                    pArg=pArg->pNext;
+                }
+                if((!iFoundRed)||(!iFoundGreen)||(!iFoundBlue)) {
+                    printf("Error.  COLOR markup must contain information for Red, Green,"
+                           " and Blue\n");
+                    exit(1);
+                }
             }
         }
         SearchText(pToken->pNext,pHTMLTree,Start);
     }
     else if(!(strcmp(pToken->zText,"WEIGHT"))) {
-        Arg *pArg;
-        tTableText *pTableText;
-        tTextStruct *pTextStruct;
-        Format *pFormat;
-        if(pHTMLTree->ObjectType == HTML_Table) {
-            tTable *pTable;
-            pTable = &(pHTMLTree->u.Table);
-            pTable = GetTable(pTable);
-            pTableText = pTable->pTextAttributes;
-            pTableText = GetTableText(pTableText);
-            pFormat = pTableText->sTextAttributes.pFormat;
-            pTextStruct = &(pTableText->sTextAttributes);
-        }
-        else {
-            pFormat = pHTMLTree->u.TextStruct.pFormat;
-            pTextStruct = &(pHTMLTree->u.TextStruct);
-        }
-        if(!pTextStruct->zText) {}
-        /* WEIGHT may not always refer to a "TEXT" markup.  If it does
-        ** not, then we're done here.
-        */
-        else {
-            while(pFormat->pNext) {
-                pFormat = pFormat->pNext;
+        // Ignore e.g. paragraph formats
+        if(pHTMLTree->ObjectType!=HTML_Null) {
+            Arg *pArg;
+            tTableText *pTableText;
+            tTextStruct *pTextStruct;
+            Format *pFormat;
+            if(pHTMLTree->ObjectType == HTML_Table) {
+                tTable *pTable;
+                pTable = &(pHTMLTree->u.Table);
+                pTable = GetTable(pTable);
+                pTableText = pTable->pTextAttributes;
+                pTableText = GetTableText(pTableText);
+                pFormat = pTableText->sTextAttributes.pFormat;
+                pTextStruct = &(pTableText->sTextAttributes);
             }
-            pArg = ((Markup*)pToken)->pArg;
-            while(pArg){
-                if(!(strcmp(pArg->zName,"VALUE"))) {
-                    pFormat->iFontWeight = atoi(pArg->zValue);
-                    break;
+            else {
+                pFormat = pHTMLTree->u.TextStruct.pFormat;
+                pTextStruct = &(pHTMLTree->u.TextStruct);
+            }
+            if(!pTextStruct->zText) {}
+            /* WEIGHT may not always refer to a "TEXT" markup.  If it does
+            ** not, then we're done here.
+            */
+            else {
+                while(pFormat->pNext) {
+                    pFormat = pFormat->pNext;
                 }
-                else {
-                    pArg=pArg->pNext;
+                pArg = ((Markup*)pToken)->pArg;
+                while(pArg){
+                    if(!(strcmp(pArg->zName,"VALUE"))) {
+                        pFormat->iFontWeight = atoi(pArg->zValue);
+                        break;
+                    }
+                    else {
+                        pArg=pArg->pNext;
+                    }
+                }
+                if(!pFormat->iFontWeight) {
+                    fprintf(stderr,"Error.  WEIGHT markup must contain a font weight.\n");
+                    exit(1);
                 }
             }
-            if(!pFormat->iFontWeight) {
-                fprintf(stderr,"Error.  WEIGHT markup must contain a font weight.\n");
-                exit(1);
-            }
-            SearchText(pToken->pNext,pHTMLTree,Start);
         }
+        SearchText(pToken->pNext,pHTMLTree,Start);
     }
     else if(!(strcmp(pToken->zText,"ITALIC"))) {
-        Arg *pArg;
-        Format *pFormat;
-        tTableText *pTableText;
-        tTextStruct *pTextStruct;
-        if(pHTMLTree->ObjectType == HTML_Table) {
-            tTable *pTable;
-            pTable = &(pHTMLTree->u.Table);
-            pTable = GetTable(pTable);
-            pTableText = pTable->pTextAttributes;
-            pTableText = GetTableText(pTableText);
-            pFormat = pTableText->sTextAttributes.pFormat;
-            pTextStruct = &(pTableText->sTextAttributes);
-        }
-        else {
-            pFormat = pHTMLTree->u.TextStruct.pFormat;
-            pTextStruct = &(pHTMLTree->u.TextStruct);
-        }
-        if(!pTextStruct->zText) {}
-        /* ITALIC may not always refer to a "TEXT" markup.  If it does
-        ** not, then the object may not have a type yet.
-        */
-        else {
-            while(pFormat->pNext) {
-                pFormat = pFormat->pNext;
+        // Ignore e.g. paragraph formats
+        if(pHTMLTree->ObjectType!=HTML_Null) {
+            Arg *pArg;
+            Format *pFormat;
+            tTableText *pTableText;
+            tTextStruct *pTextStruct;
+            if(pHTMLTree->ObjectType == HTML_Table) {
+                tTable *pTable;
+                pTable = &(pHTMLTree->u.Table);
+                pTable = GetTable(pTable);
+                pTableText = pTable->pTextAttributes;
+                pTableText = GetTableText(pTableText);
+                pFormat = pTableText->sTextAttributes.pFormat;
+                pTextStruct = &(pTableText->sTextAttributes);
             }
-            pArg=((Markup*)pToken)->pArg;
-            while(pArg){
-                if(!(strcmp(pArg->zName,"VALUE"))) {
-                    pFormat->iFontItalic = atoi(pArg->zValue)+1;
-                    /* Add 1 here because we will
-                    ** assume that if *iFontItalic
-                    ** = 0, then the ITALIC value
-                    ** hasn't been encountered
-                    ** yet.  Since 0 is a valid
-                    ** italic argument value,
-                    ** we'll add 1 to whatever we
-                    ** get.  That way, *iFontItalic
-                    ** will always be > 0 if we've
-                    ** reached this point in the
-                    ** code.
-                    */
-                    break;
+            else {
+                pFormat = pHTMLTree->u.TextStruct.pFormat;
+                pTextStruct = &(pHTMLTree->u.TextStruct);
+            }
+            if(!pTextStruct->zText) {}
+            /* ITALIC may not always refer to a "TEXT" markup.  If it does
+            ** not, then the object may not have a type yet.
+            */
+            else {
+                while(pFormat->pNext) {
+                    pFormat = pFormat->pNext;
                 }
-                else {
-                    pArg=pArg->pNext;
+                pArg=((Markup*)pToken)->pArg;
+                while(pArg){
+                    if(!(strcmp(pArg->zName,"VALUE"))) {
+                        pFormat->iFontItalic = atoi(pArg->zValue)+1;
+                        /* Add 1 here because we will
+                        ** assume that if *iFontItalic
+                        ** = 0, then the ITALIC value
+                        ** hasn't been encountered
+                        ** yet.  Since 0 is a valid
+                        ** italic argument value,
+                        ** we'll add 1 to whatever we
+                        ** get.  That way, *iFontItalic
+                        ** will always be > 0 if we've
+                        ** reached this point in the
+                        ** code.
+                        */
+                        break;
+                    }
+                    else {
+                        pArg=pArg->pNext;
+                    }
+                }
+                if(!pFormat->iFontItalic) {
+                    fprintf(stderr,"Error.  ITALIC markup must contain a font direction.\n");
+                    exit(1);
                 }
             }
-            if(!pFormat->iFontItalic) {
-                fprintf(stderr,"Error.  ITALIC markup must contain a font direction.\n");
-                exit(1);
-            }
-            SearchText(pToken->pNext,pHTMLTree,Start);
         }
+        SearchText(pToken->pNext,pHTMLTree,Start);
     }
+    // TODO ? UNDERLINE and VERTALIGN
     else if(!(strcmp(pToken->zText,"FLOW"))) {
         Arg *pArg;
         tTableText *pTableText;
@@ -911,9 +935,10 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
         SearchText(pToken->pNext,pHTMLTree,Start);
     }
     else {
+        // Process child elements
         SearchText(((Markup *)pToken)->pContent,pHTMLTree,Start);
+        // Process next sibling
         SearchText(pToken->pNext,pHTMLTree,Start);
-        return;
     }
 }
 
@@ -2006,74 +2031,49 @@ void mainFunc( const char *data ) {
     pHTMLTree = (HTMLTree *)malloc(sizeof(HTMLTree));
     pSaveHTMLTree = pHTMLTree;
     InitHTMLTree(pHTMLTree);
-    /*for(i=1;i<nInputFiles;i++)*/ {
 
-        /* We don't want to process the output file
-        ** arguments, so skip over all of those.
-        */
-/*         if(i>(nInputFiles-1)/2) continue; */
-        zXmlFile = data; //ReadIntoMemory(OutputFiles[i],&iSizeXmlFile);
-        if(!zXmlFile) {
-            exit(1);
-        }
-        OutputFile = fopen( "/tmp/kword2html" , "w" );
-        Scratch = (char *)malloc(iSizeXmlFile);
+    zXmlFile = data;
+    if(!zXmlFile)
+        return;
+
+    OutputFile = fopen( "/tmp/kword2html" , "w" );
+    Scratch = (char *)malloc(iSizeXmlFile);
 #ifdef SPARTAN
-        fprintf(OutputFile,"<HTML>\n");
+    fprintf(OutputFile,"<HTML>\n");
 #else
-        fprintf(OutputFile,"<HTML>\n<body bgcolor=white>\n");
+    fprintf(OutputFile,"<HTML>\n<body bgcolor=white>\n");
 #endif
+    kdDebug() << "Calling ParseXml" << endl;
 
-        /* Since the entire XML content that we are parsing is contained within
-        ** one giant <DOC>......</DOC> markup, we only need to call the XML
-        ** parser once (the parser will return after it encounters a completion
-        ** of the first encountered markup, and will continue to call itself
-        ** recursively until it does).
-        */
-        pToken = ParseXml(&zXmlFile[22],&j);  /* Make sure to exclude the
-                                              ** "<?xml...?> markup at the
-                                              ** beginning.  The xml parser won't
-                                              ** understand it.  It's 22
-                                              ** characters long.
-                                              */
+    /* Since the entire XML content that we are parsing is contained within
+    ** one giant <DOC>......</DOC> markup, we only need to call the XML
+    ** parser once (the parser will return after it encounters a completion
+    ** of the first encountered markup, and will continue to call itself
+    ** recursively until it does).
+    */
+    pToken = ParseXml(zXmlFile,&j);
 
-        SearchText(pToken,pHTMLTree,Scratch);
-        while((pHTMLTree)&&(pHTMLTree->ObjectType!=HTML_Null)) {
-            if((pHTMLTree->ObjectType==HTML_Text)||
-               (pHTMLTree->ObjectType==HTML_Table)) {
-                pHTMLTree=ProcessTableAndText(pHTMLTree,pHTMLTree->ObjectType,Scratch,
-                                              OutputFile);
-            }
-            else if(pHTMLTree->ObjectType==HTML_Image) {
-                pHTMLTree=ProcessImage(pHTMLTree,pHTMLTree->ObjectType,OutputFile);
-            }
+    // Debug
+    PrintXml( pToken, 0 );
+
+    kdDebug() << "Calling SearchText" << endl;
+    SearchText(pToken,pHTMLTree,Scratch);
+
+    while((pHTMLTree)&&(pHTMLTree->ObjectType!=HTML_Null)) {
+        if((pHTMLTree->ObjectType==HTML_Text)||
+           (pHTMLTree->ObjectType==HTML_Table)) {
+            pHTMLTree=ProcessTableAndText(pHTMLTree,pHTMLTree->ObjectType,Scratch,
+                                          OutputFile);
         }
-        free(pSaveHTMLTree);
-        pHTMLTree = (HTMLTree *)malloc(sizeof(HTMLTree));
-        pSaveHTMLTree = pHTMLTree;
-        InitHTMLTree(pHTMLTree);
-        fclose(OutputFile);
-        j = 0;
+        else if(pHTMLTree->ObjectType==HTML_Image) {
+            pHTMLTree=ProcessImage(pHTMLTree,pHTMLTree->ObjectType,OutputFile);
+        }
     }
+    free(pSaveHTMLTree);
+    pHTMLTree = (HTMLTree *)malloc(sizeof(HTMLTree));
+    pSaveHTMLTree = pHTMLTree;
+    InitHTMLTree(pHTMLTree);
+    fprintf(OutputFile,"</HTML>\n");
+    fclose(OutputFile);
+    j = 0;
 }
-
-
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
