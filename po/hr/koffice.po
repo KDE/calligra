@@ -1,0 +1,498 @@
+# Copyright (C) 1999 Free Software Foundation, Inc.
+# Andrej Skvorc <andrej@catv-joza.hr>, 1999
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice\n"
+"Last-Translator: Andrej Skvorc <andrej@catv-joza.hr>\n"
+"Language-Team: Croatian <hr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"                     
+
+#: kofficecore/koDocument.cc:442 kofficecore/koDocument.cc:487
+#: kofficeui/koPrintDia.cc:31
+msgid "KOffice Error"
+msgstr "KOffice gre¹ka"
+
+#: kofficecore/koDocument.cc:442
+msgid "Can not save to remote URL\n"
+msgstr "Ne mogu spremiti u udaljeni URL\n"
+
+#: kofficecore/koDocument.cc:484
+msgid "Could not write to\n"
+msgstr "Ne mogu pisati u\n"
+
+#: kofficecore/koFilterManager.cc:135
+msgid "All files (*.*)"
+msgstr "Sve datoteke (*.*)"
+
+#: kofficecore/koFilterManager.cc:166
+#, c-format
+msgid ""
+"Could not import file of type\n"
+"%s"
+msgstr "Nisam mogao uvesti taj tip datoteke\n"
+"%s"
+
+#: kofficecore/koFilterManager.cc:167
+msgid "Missing import filter"
+msgstr "Nedostaje filter za uvoz"
+
+#: kofficecore/koFilterManager.cc:181
+#, c-format
+msgid ""
+"Could not open file\n"
+"%s"
+msgstr ""
+"Ne mogu otvoriti datoteku\n"
+"%s"
+
+#: kofficecore/koFilterManager.cc:215
+#, c-format
+msgid ""
+"Could not write file\n"
+"%s"
+msgstr ""
+"Ne mogu pisati u datoteku\n"
+"%s"
+
+#: kofficecore/koIMR.cc:174
+#, c-format
+msgid "Could not start server %s"
+msgstr "Nisam mogao pokrenuti poslu¾itelja %s"
+
+#: kofficecore/koIMR.cc:175 kofficecore/koIMR.cc:186 kofficecore/koIMR.cc:197
+msgid "KSpread Error"
+msgstr "KSpread gre¹ka"
+
+#: kofficecore/koIMR.cc:185
+#, c-format
+msgid "Server %s does not implement a KOffice factory"
+msgstr "Poslu¾itelj %s nema ugraðen KOffice tvornicu"
+
+#: kofficecore/koIMR.cc:186 kofficecore/koIMR.cc:197
+msgid "Ok"
+msgstr "U redu"
+
+#: kofficecore/koIMR.cc:196
+#, c-format
+msgid "Server %s did not create a document"
+msgstr "Poslu¾itelj %s nije kreirao dokument"
+
+#: kofficecore/koMainWindow.cc:57
+msgid "New"
+msgstr "Novi"
+
+#: kofficecore/koMainWindow.cc:59
+msgid "Open File"
+msgstr "Otvori datoteku"
+
+#: kofficecore/koMainWindow.cc:61
+msgid "Save File"
+msgstr "Spremi datoteku"
+
+#: kofficecore/koMainWindow.cc:151
+msgid "&New"
+msgstr "&Nova"
+
+#: kofficecore/koMainWindow.cc:157
+msgid "&Save as..."
+msgstr "Spremi pod &drugim imenom..."
+
+#: kofficecore/koMainWindow.cc:193
+msgid "&About KOffice"
+msgstr "&O KOffice-u"
+
+#: kofficecore/koScanPlugins.cc:43
+#, c-format
+msgid ""
+"The plugins config file\n"
+"%s\n"
+"does not conatain a %s=... entry"
+msgstr ""
+"Datoteka s postavom dodataka\n"
+"%s\n"
+"ne sadr¾i %s=... unos"
+
+#: kofficecore/koScanPlugins.cc:364
+#, c-format
+msgid "Could not activate plugin %s"
+msgstr "Nisam mogao aktivirati dodatak"
+
+#: kofficecore/koScanPlugins.cc:365 kofficecore/koScanPlugins.cc:376
+#: kofficecore/koScanPlugins.cc:388
+msgid "Error in plugin"
+msgstr "Gre¹ka u dodatku"
+
+#: kofficecore/koScanPlugins.cc:375
+#, c-format
+msgid "%s is not a plugin"
+msgstr "%s nije dodatak"
+
+#: kofficecore/koScanPlugins.cc:387
+#, c-format
+msgid "Could not create plugin of type %s"
+msgstr "Nisam mogo napraviti dodatak tipa %s"
+
+#: kofficecore/koScanTools.cc:37
+#, c-format
+msgid ""
+"The DataTools config file\n"
+"%s\n"
+"does not conatain a %s=... entry"
+msgstr ""
+"DataTools datoteka s postavam\n"
+"%s\n"
+"ne sadr¾i %s=... unos"
+
+#: kofficeui/koAboutDia.cc:31
+msgid "KPresenter - About"
+msgstr "O KPresenter-u"
+
+#: kofficeui/koAboutDia.cc:35
+msgid "WMF Clipart Support (c) by Stefan Taferner <taferner@kde.org>"
+msgstr "WMF Clipart podr¹ku (c) izradio Stefan Taferner <taferner@kde.org>"
+
+#: kofficeui/koAboutDia.cc:39
+msgid "KSpread - About"
+msgstr "O KSpread"
+
+#: kofficeui/koAboutDia.cc:47
+msgid "KCharts - About"
+msgstr "O KCharts"
+
+#: kofficeui/koAboutDia.cc:55
+msgid "KImage - About"
+msgstr "O KImage-u"
+
+#: kofficeui/koAboutDia.cc:63
+msgid "KAutoformEdit - About"
+msgstr "O KAutoformEdit-u"
+
+#: kofficeui/koAboutDia.cc:71
+msgid "KOffice - About"
+msgstr "O KOffice-u"
+
+#: kofficeui/koAboutDia.cc:73
+msgid "the KOffice Team"
+msgstr "KOffice tim"
+
+#: kofficeui/koAboutDia.cc:74
+msgid "<koffice@kde.org>"
+msgstr "<koffice@kde.org>"
+
+#: kofficeui/koAboutDia.cc:91
+#, c-format
+msgid ""
+"Version: %s\n"
+"\n"
+"(c) by %s 1997 - 1998\n"
+"\n"
+"E-mail: %s \n"
+"\n"
+"The KOffice is under GNU GPL"
+msgstr ""
+"Verzija: %s\n"
+"\n"
+"(c) izradio %s 1997 - 1998\n"
+"\n"
+"E-mail: %s \n"
+"\n"
+"KOffice je besplatan pod licencom GNU GPL"
+
+#: kofficeui/koAboutDia.cc:142
+msgid "About KDE"
+msgstr "O KDE"
+
+#: kofficeui/koAboutDia.cc:143
+msgid ""
+"\n"
+"The KDE Desktop Environment was written by the KDE Team,\n"
+"a world-wide network of software engineers committed to\n"
+"free software development.\n"
+"\n"
+"Visit http://www.kde.org for more information on the KDE\n"
+"Project. Please consider joining and supporting KDE.\n"
+"\n"
+"Please report bugs at http://buglist.kde.org.\n"
+msgstr ""
+"\n"
+"KDE radna okolina napravljena je od strane KDE Tima,\n"
+"koji je ra¹iren po cijelom svijetu i na kojem rade razni programeri\n"
+"posveæeni razvoju besplatnih programa.\n"
+"\n"
+"Posjetite http://www.kde.org za vi¹e informacija o KDE\n"
+"projektu. Molimo razmislite da se pridru¾ite razvoju i podr¹ci KDE-a.\n"
+"\n"
+"Molimo prijavite gre¹ke na http://buglist.kde.org.\n"
+
+#: kofficeui/koPageLayoutDia.cc:31
+msgid "Page Preview"
+msgstr "Pregled strane"
+
+#: kofficeui/koPageLayoutDia.cc:126 kofficeui/koPageLayoutDia.cc:158
+msgid "Page Layout"
+msgstr "Izgled strane"
+
+#: kofficeui/koPageLayoutDia.cc:354
+msgid "Unit:"
+msgstr "Jedinica:"
+
+#: kofficeui/koPageLayoutDia.cc:361 kofficeui/koRuler.cc:832
+msgid "Millimeters (mm)"
+msgstr "Milimetri (mm)"
+
+#: kofficeui/koPageLayoutDia.cc:362 kofficeui/koRuler.cc:833
+msgid "Points (pt)"
+msgstr "Toèke (pt)"
+
+#: kofficeui/koPageLayoutDia.cc:363
+msgid "Inches (in)"
+msgstr "Inèi (in)"
+
+#: kofficeui/koPageLayoutDia.cc:385
+msgid "Page Format"
+msgstr "Format strane"
+
+#: kofficeui/koPageLayoutDia.cc:389
+msgid ""
+"\n"
+"Format:"
+msgstr ""
+"\n"
+"Format:"
+
+#: kofficeui/koPageLayoutDia.cc:394
+msgid ""
+"\n"
+"Orientation:"
+msgstr ""
+"\n"
+"Usmjerenje:"
+
+#: kofficeui/koPageLayoutDia.cc:401
+msgid "DIN A3"
+msgstr "DIN A3"
+
+#: kofficeui/koPageLayoutDia.cc:402
+msgid "DIN A4"
+msgstr "DIN A4"
+
+#: kofficeui/koPageLayoutDia.cc:403
+msgid "DIN A5"
+msgstr "DIN A5"
+
+#: kofficeui/koPageLayoutDia.cc:404
+msgid "US Letter"
+msgstr "US Letter"
+
+#: kofficeui/koPageLayoutDia.cc:405
+msgid "US Legal"
+msgstr "US Legal"
+
+#: kofficeui/koPageLayoutDia.cc:406
+msgid "Screen"
+msgstr "Ekran"
+
+#: kofficeui/koPageLayoutDia.cc:407
+msgid "Custom"
+msgstr "Prilagoðeno"
+
+#: kofficeui/koPageLayoutDia.cc:408
+msgid "DIN B5"
+msgstr "DIN B5"
+
+#: kofficeui/koPageLayoutDia.cc:409
+msgid "US Executive"
+msgstr "US Executive"
+
+#: kofficeui/koPageLayoutDia.cc:417
+msgid "Portrait"
+msgstr "Uspravno"
+
+#: kofficeui/koPageLayoutDia.cc:418
+msgid "Landscape"
+msgstr "Polo¾eno"
+
+#: kofficeui/koPageLayoutDia.cc:424
+msgid "Width:"
+msgstr "©irina:"
+
+#: kofficeui/koPageLayoutDia.cc:443
+msgid "Height:"
+msgstr "Visina:"
+
+#: kofficeui/koPageLayoutDia.cc:487
+msgid "Page Borders"
+msgstr "Rubovi strane"
+
+#: kofficeui/koPageLayoutDia.cc:491
+msgid ""
+"\n"
+"Left:"
+msgstr ""
+"\n"
+"Lijevo:"
+
+#: kofficeui/koPageLayoutDia.cc:509
+msgid ""
+"\n"
+"Right:"
+msgstr ""
+"\n"
+"Desno:"
+
+#: kofficeui/koPageLayoutDia.cc:527
+msgid "Top:"
+msgstr "Vrh:"
+
+#: kofficeui/koPageLayoutDia.cc:545
+msgid "Bottom:"
+msgstr "Dno:"
+
+#: kofficeui/koPageLayoutDia.cc:609
+msgid "Format and Borders"
+msgstr "Format i rubovi"
+
+#: kofficeui/koPageLayoutDia.cc:684
+msgid "Head line:"
+msgstr "Linija zaglavlja"
+
+#: kofficeui/koPageLayoutDia.cc:688 kofficeui/koPageLayoutDia.cc:720
+msgid "Left:"
+msgstr "Ljevo:"
+
+#: kofficeui/koPageLayoutDia.cc:697 kofficeui/koPageLayoutDia.cc:729
+msgid "Mid:"
+msgstr "Sredina:"
+
+#: kofficeui/koPageLayoutDia.cc:706 kofficeui/koPageLayoutDia.cc:738
+msgid "Right:"
+msgstr "Desno:"
+
+#: kofficeui/koPageLayoutDia.cc:716
+msgid ""
+"\n"
+"Foot line:"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:748
+msgid ""
+"\n"
+"Macros:"
+msgstr ""
+"\n"
+"Makroi:"
+
+#: kofficeui/koPageLayoutDia.cc:793 kofficeui/koPageLayoutDia.cc:1034
+msgid "Header and Footer"
+msgstr "Zaglavlje i podno¾je"
+
+#: kofficeui/koPageLayoutDia.cc:803
+msgid "Columns:"
+msgstr "Stupci:"
+
+#: kofficeui/koPageLayoutDia.cc:864
+msgid "Columns"
+msgstr "Stupci"
+
+#: kofficeui/koPageLayoutDia.cc:883
+msgid "Header"
+msgstr "Zaglavlje"
+
+#: kofficeui/koPageLayoutDia.cc:887
+msgid "Same header for all pages"
+msgstr "Isto zaglavlje za sve strane"
+
+#: kofficeui/koPageLayoutDia.cc:893
+msgid "Different header for the first page"
+msgstr "Razliæito zaglavlje za prvu stranu"
+
+#: kofficeui/koPageLayoutDia.cc:899
+msgid "Different header for even and odd pages"
+msgstr "Razliæito zaglavlje za parne i neparne strane"
+
+#: kofficeui/koPageLayoutDia.cc:953
+msgid "Footer"
+msgstr "Podno¾je"
+
+#: kofficeui/koPageLayoutDia.cc:957
+msgid "Same footer for all pages"
+msgstr "Isto podno¾je na svim stranicama"
+
+#: kofficeui/koPageLayoutDia.cc:963
+msgid "Different footer for the first page"
+msgstr "Razlièito podno¾je za prvu stranicu"
+
+#: kofficeui/koPageLayoutDia.cc:969
+msgid "Different footer for even and odd pages"
+msgstr "Razlièito podno¾je za parne i neparne stranice"
+
+#: kofficeui/koPartSelectDia.cc:51
+msgid "Insert Object"
+msgstr "Umetni objekt"
+
+#: kofficeui/koPartSelectDia_data.cc:36
+msgid "Select a component"
+msgstr "Oznaèi komponentu"
+
+#: kofficeui/koPrintDia.cc:23 kofficeui/koPrintDia.cc:72
+msgid "UNIX Printer"
+msgstr "UNIX pisaè"
+
+#: kofficeui/koPrintDia.cc:31
+msgid "Could not open\n"
+msgstr "Ne mogu otvoriti\n"
+
+#: kofficeui/koPrintDia.cc:58
+msgid "Print Dialog"
+msgstr "Dialog ispisa"
+
+#: kofficeui/koPrintDia.cc:187
+msgid "Print To:"
+msgstr "Ispi¹i na:"
+
+#: kofficeui/koPrintDia.cc:196
+msgid "File Name:"
+msgstr "Ime Datoteke:"
+
+#: kofficeui/koPrintDia.cc:208
+msgid "Print Command:"
+msgstr "Naredba za ispis:"
+
+#: kofficeui/koPrintDia.cc:230
+msgid "Copies:"
+msgstr "Broj kopija:"
+
+#: kofficeui/koPrintDia.cc:243
+msgid "Page Setup..."
+msgstr "Postava strane..."
+
+#: kofficeui/koPrintDia.cc:247
+msgid "Printer Name:"
+msgstr "Ime pisaèa"
+
+#: kofficeui/koRuler.cc:834
+msgid "Inches (inch)"
+msgstr "Inèa (inè)"
+
+#: kofficeui/koTabChooser.cc:140
+msgid "Tabulator &Left"
+msgstr "Tabulator &lijevo"
+
+#: kofficeui/koTabChooser.cc:141
+msgid "Tabulator &Center"
+msgstr "Tabulator &centrirano"
+
+#: kofficeui/koTabChooser.cc:142
+msgid "Tabulator &Right"
+msgstr "Tabulator &desno"
+
+#: kofficeui/koTabChooser.cc:143
+msgid "Tabulator &Decimal Point"
+msgstr ""
+
+#: kofficeui/koTemplateChooseDia.cc:45
+msgid "Choose a Template"
+msgstr "Izaberi predlo¾ak"
