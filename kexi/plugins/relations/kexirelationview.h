@@ -22,7 +22,7 @@
 
 #include <qscrollview.h>
 #include <qptrlist.h>
-#include <qmap.h>
+#include <qdict.h>
 
 #include <kexirelation.h>
 #include "kexirelationviewconnection.h"
@@ -36,7 +36,7 @@ class KexiRelation;
 class KexiRelationDialog;
 class KexiDBTable;
 
-typedef QMap<QString, KexiRelationViewTableContainer*> TableList;
+typedef QDict<KexiRelationViewTableContainer> TableList;
 typedef QPtrList<KexiRelationViewConnection> ConnectionList;
 
 class KEXI_HAND_RELAT_EXPORT KexiRelationView : public QScrollView
@@ -65,6 +65,8 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationView : public QScrollView
 		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 		void		contentsMousePressEvent(QMouseEvent *ev);
 		virtual void	keyPressEvent(QKeyEvent *ev);
+
+		void		recalculateSize();
 
 	private:
 		int			m_tableCount;

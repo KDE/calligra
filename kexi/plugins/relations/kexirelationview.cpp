@@ -41,7 +41,7 @@
 #include "kexirelationdialog.h"
 
 KexiRelationView::KexiRelationView(KexiRelationDialog *parent, const char *name,KexiRelation *relation)
- : QScrollView(parent, name)
+ : QScrollView(parent, name, WStaticContents)
 {
 	m_parent=parent;
 	m_relation=relation;
@@ -63,11 +63,12 @@ KexiRelationView::addTable(const QString &table, const KexiDBTable *t)
 {
 	kdDebug() << "KexiRelationView::addTable(): " << table << endl;
 
-	if(m_tables.contains(table))
+/*	if(m_tables.contains(table))
 	{
 		kdDebug() << "KexiRelationView::addTable(): table already exists" << endl;
 //		return;
 	}
+*/
 
 	KexiRelationViewTableContainer *c = new KexiRelationViewTableContainer(this, table, t);
 	addChild(c, 100,100);
@@ -77,7 +78,8 @@ KexiRelationView::addTable(const QString &table, const KexiDBTable *t)
 	if(m_tables.count() > 0)
 	{
 		int place = -10;
-		for(TableList::Iterator it = m_tables.begin(); it != m_tables.end(); ++it)
+		QDictIterator<KexiRelationViewTableContainer> it(m_tables);
+		for(; it.current(); ++it)
 		{
 			int right = (*it)->x() + (*it)->width();
 			if(right > place)
@@ -88,6 +90,8 @@ KexiRelationView::addTable(const QString &table, const KexiDBTable *t)
 	}
 	else
 		moveChild(c, 5, 5);
+
+	recalculateSize();
 
 	m_tables.insert(table, c);
 
@@ -144,6 +148,7 @@ void
 KexiRelationView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
 	KexiRelationViewConnection *cview;
+	p->translate((double)contentsX(), (double)contentsY());
 
 	QRect clipping(cx, cy, cw, ch);
 	for(cview = m_connectionViews.first(); cview; cview = m_connectionViews.next())
@@ -174,19 +179,24 @@ KexiRelationView::containerMoved(KexiRelationViewTableContainer *c)
 			updateContents(cview->connectionRect());
 		}
 	}
+
+//	QRect w(c->x() - 5, c->y() - 5, c->width() + 5, c->height() + 5);
+//	updateContents(w);
+
+	recalculateSize();
 }
 
 void
 KexiRelationView::setReadOnly(bool b)
 {
 	m_readOnly=b;
-	for (TableList::iterator it=m_tables.begin();it!=m_tables.end();++it)
+/*	for (TableList::iterator it=m_tables.begin();it!=m_tables.end();++it)
 	{
 //		(*it)->setReadOnly(b);
 #ifndef Q_WS_WIN
 		#warning readonly needed
 #endif
-	}
+	}*/
 }
 
 void
@@ -247,6 +257,30 @@ KexiRelationView::keyPressEvent(QKeyEvent *ev)
 
 	if(ev->key() == Key_Delete)
 		removeSelected();
+}
+
+void
+KexiRelationView::recalculateSize()
+{
+	kdDebug() << "KexiRelationView::recalculateSize()" << endl;
+
+	int width=0;
+	int height=0;
+
+	QDictIterator<KexiRelationViewTableContainer> it(m_tables);
+	for(; it.current(); ++it)
+	{
+		int cwidth = (*it)->x() + (*it)->width();
+		int cheight = (*it)->y() + (*it)->height();
+
+		if(cwidth > width)
+			width = cwidth;
+
+		if(cheight > height)
+			height = cheight;
+	}
+
+	resizeContents(width, height);
 }
 
 void

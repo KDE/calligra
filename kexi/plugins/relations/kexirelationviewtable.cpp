@@ -24,7 +24,7 @@
 #include <qpushbutton.h>
 #include <qcursor.h>
 #include <qpoint.h>
-#include <qapp.h>
+#include <qapplication.h>
 
 #include <kdebug.h>
 #include <kiconloader.h>
