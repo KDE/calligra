@@ -30,10 +30,10 @@ KAboutData * newKPTAboutData()
 {
     KAboutData * aboutData=new KAboutData( "kplato", I18N_NOOP("KPlato"),
                                            KPLATO_VERSION, KPLATO_DESCRIPTION, KAboutData::License_GPL,
-                                           I18N_NOOP("(c) 1998-2002, The KPlato Team"), 0, 
+                                           I18N_NOOP("(c) 1998-2002, The KPlato Team"), 0,
 					   "http://www.koffice.org/kplato/" );
     aboutData->addAuthor("Thomas Zander", 0, "zander@kde.org");
-    aboutData->addAuthor("Bo Thorsen", 0, "bo@suse.de");
+    aboutData->addAuthor("Bo Thorsen", 0, "bo@sonofthor.dk");
     return aboutData;
 }
 
