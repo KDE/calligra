@@ -25,7 +25,7 @@
 #ifndef DeleteCmd_h_
 #define DeleteCmd_h_
 
-#include <qlist.h>
+#include <list>
 #include "GDocument.h"
 #include "GObject.h"
 #include "Command.h"
@@ -40,7 +40,8 @@ public:
 
 private:
   GDocument* document;
-  QList<GObject> objects;
+  list<pair<int, GObject*> > objects;
+  
 };
 
 #endif

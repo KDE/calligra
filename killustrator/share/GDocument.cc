@@ -685,6 +685,8 @@ unsigned int GDocument::findIndexOfObject (GObject *obj) {
 }
 
 void GDocument::insertObjectAtIndex (GObject* obj, unsigned int idx) {
+  if (idx > objects.count ())
+    idx = objects.count ();
   objects.insert (idx, obj);
   connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
   setModified ();

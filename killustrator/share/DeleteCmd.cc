@@ -30,27 +30,35 @@ DeleteCmd::DeleteCmd (GDocument* doc) {
   QListIterator<GObject> it (doc->getSelection ());
   for (; it.current (); ++it) {
     it.current ()->ref ();
-    objects.append (it.current ());
+    // store the old position of the object
+    int pos = doc->findIndexOfObject (it.current ());
+    objects.push_back (pair<int, GObject*> (pos, it.current ()));
   }
 }
 
 DeleteCmd::~DeleteCmd () {
-  QListIterator<GObject> it (objects);
-  for (; it.current (); ++it) 
-    it.current ()->unref ();
+  list<pair<int, GObject*> >::iterator i;
+
+  for (i = objects.begin (); i != objects.end (); i++)
+    i->second->unref ();
 }
 
 void DeleteCmd::execute () {
-  QListIterator<GObject> it (objects);
-  for (; it.current (); ++it) 
-    document->deleteObject (it.current ());
+  list<pair<int, GObject*> >::iterator i;
+
+  for (i = objects.begin (); i != objects.end (); i++)
+    document->deleteObject (i->second);
 }
 
 void DeleteCmd::unexecute () {
-  QListIterator<GObject> it (objects);
-  for (; it.current (); ++it) {
-    it.current ()->ref ();
-    document->insertObject (it.current ());
+  list<pair<int, GObject*> >::iterator i;
+
+  for (i = objects.begin (); i != objects.end (); i++) {
+    // insert the object at the old position
+    int pos = i->first;
+    GObject* obj = i->second;
+    obj->ref ();
+    document->insertObjectAtIndex (obj, pos);
   }
 }
 
