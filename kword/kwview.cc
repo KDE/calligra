@@ -1342,6 +1342,8 @@ void KWView::addVariableActions( int type, const QStringList & texts,
             actionName.sprintf( "var-action-%d-%d", type, i );
             KAction * act = new KAction( (*it), 0, this, SLOT( insertVariable() ),
                                          actionCollection(), actionName );
+            // Mainly for KEditToolbar
+            act->setToolTip( i18n( "Insert variable \"%1\" into the text" ).arg( *it ) );
             m_variableDefMap.insert( act, v );
             parentMenu->insert( act );
         }
