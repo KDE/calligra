@@ -40,6 +40,9 @@ class KEXI_HAND_TBL_EXPORT KexiAlterTable : public KexiDialogBase
 
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 
+	public slots:
+		void setFocus();
+
 	protected:
 		void init(QString title, QString identifier);
 		void initView();

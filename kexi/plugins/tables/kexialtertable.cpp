@@ -79,8 +79,8 @@ KexiAlterTable::initView()
 	QSplitter *splitter = new QSplitter(Vertical, this);
 
 	m_fieldTable = new KexiTableView(splitter);
-	m_fieldTable->m_editOnDubleClick = true;
-	m_fieldTable->setRecordIndicator(true);
+	m_fieldTable->m_editOnDubleClick = false;
+//(js)THIS did not look nicely:	m_fieldTable->setRecordIndicator(true);
 	m_fieldTable->addColumn(i18n("Field Name"), QVariant::String, true);
 	QStringList strings;
 
@@ -149,8 +149,16 @@ KexiAlterTable::getFields()
 	insert->setHint(QVariant(fc));
 	insert->setInsertItem(true);
 
+	//automatically set cursor on 0,0
 	m_fieldTable->setCursor(0, 0);
+	m_fieldTable->setFocus();
 	changeShownField(m_fieldTable->selectedItem());
+}
+
+void
+KexiAlterTable::setFocus()
+{
+	m_fieldTable->setFocus();
 }
 
 void
