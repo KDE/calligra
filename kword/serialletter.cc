@@ -263,6 +263,7 @@ KWSerialLetterVariableInsertDia::KWSerialLetterVariableInsertDia( QWidget *paren
 
     setInitialSize( QSize( 350, 400 ) );
     connect(names,SIGNAL(selectionChanged () ),this,SLOT(slotSelectionChanged()));
+    setFocus();
     enableButtonOK(names->currentItem ()!=-1);
 }
 
