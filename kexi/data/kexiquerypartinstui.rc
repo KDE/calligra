@@ -7,7 +7,7 @@
     <Action name="querypart_view_toggle_history"/>
   </Menu>
   <Menu name="data">
-    <text>&amp;Dane</text>
+    <text>&amp;Data</text>
     <Action name="querypart_check_query"/>
     <Action name="querypart_execute_query"/>
     <Merge/>
