@@ -973,103 +973,23 @@ void KWParagDia::modifyClicked()
 /*================================================================*/
 void KWParagDia::delClicked()
 {
-  if(lTabs->currentItem()!=-1)
+    if(lTabs->currentItem()!=-1)
     {
-      double value=lTabs->currentText().toDouble();
-      lTabs->removeItem(lTabs->currentItem());
-      m_bListTabulatorChanged=true;
-      KoTabulator *tmp;
-      for ( tmp=_tabList.first(); tmp != 0; tmp= _tabList.next() )
+        double value=lTabs->currentText().toDouble();
+        lTabs->removeItem(lTabs->currentItem());
+        m_bListTabulatorChanged=true;
+        _tabList.remove(lTabs->currentItem());
+        eTabPos->setText("");
+        if(lTabs->count()==0)
 	{
-	  switch ( unit )
-	    {
-	    case U_MM:
-	      if(tmp->mmPos==value)
-		{
-		  switch(tmp->type)
-		    {
-		    case T_LEFT:
-		      if(rtLeft->isChecked())
-			_tabList.remove(tmp);
-		      break;
-		    case T_CENTER:
-		      if(rtCenter->isChecked())
-			_tabList.remove(tmp);
-		      break;
-		    case  T_RIGHT:
-		      if(rtRight->isChecked())
-			_tabList.remove(tmp);
-		      break;
-		    case T_DEC_PNT:
-		      if(rtDecimal->isChecked())
-			_tabList.remove(tmp);
-		      break;
-		    }
-		}
-	      break;
-	    case U_INCH:
-	      if(tmp->inchPos==value)
-		{
-		  switch(tmp->type)
-		    {
-		    case T_LEFT:
-		      if(rtLeft->isChecked())
-			_tabList.remove(tmp);
-		      break;
-		    case T_CENTER:
-		      if(rtCenter->isChecked())
-			_tabList.remove(tmp);
-		      break;
-		    case  T_RIGHT:
-		      if(rtRight->isChecked())
-			_tabList.remove(tmp);
-		      break;
-		    case T_DEC_PNT:
-		      if(rtDecimal->isChecked())
-			_tabList.remove(tmp);
-		      break;
-		    }
-		}
-
-	      break;
-	    case U_PT:
-	    default:
-	      if(tmp->ptPos==value)
-		{
-		  switch(tmp->type)
-		    {
-		    case T_LEFT:
-		      if(rtLeft->isChecked())
-			_tabList.remove(tmp);
-		      break;
-		    case T_CENTER:
-		      if(rtCenter->isChecked())
-			_tabList.remove(tmp);
-		      break;
-		    case  T_RIGHT:
-		      if(rtRight->isChecked())
-			_tabList.remove(tmp);
-		      break;
-		    case T_DEC_PNT:
-		      if(rtDecimal->isChecked())
-			_tabList.remove(tmp);
-		      break;
-		    }
-		}
-	    }
+            bDel->setEnabled(false);
+            bModify->setEnabled(false);
 
 	}
-      eTabPos->setText("");
-      if(lTabs->count()==0)
+        else
 	{
-	  bDel->setEnabled(false);
-	  bModify->setEnabled(false);
-
-	}
-      else
-	{
-	  lTabs->setCurrentItem(0);
-	  setActifItem(lTabs->currentText().toDouble());
+            lTabs->setCurrentItem(0);
+            setActifItem(lTabs->currentText().toDouble());
 	}
     }
 }

@@ -824,7 +824,6 @@ void KWCanvas::mrEditFrame()
     doc->layout();
 
     if ( frameResized ) {
-        doc->setModified( true );
         doc->recalcFrames();
         doc->updateAllFrames();
         KWGroupManager *grpMgr = frame->getFrameSet()->getGroupManager();
