@@ -74,7 +74,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     // Draw the frame
     QColorGroup cg2( cg );
     m_frame->getFrameSet()->drawContents( p, crect, cg2, false /*?*/, false /*?*/ );
-    p->restore;
+    p->restore();
 }
 
 QSize KWAnchor::size() const
