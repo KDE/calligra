@@ -28,7 +28,6 @@
 #include <qtabwidget.h>
 #include <qlabel.h>
 #include <qcursor.h>
-#include <qpixmapcache.h>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -361,6 +360,7 @@ VLayerListViewItem::VLayerListViewItem( QListView* parent, VLayer* layer, VDocum
 void
 VLayerListViewItem::update()
 {
+	// draw thumb preview (16x16)
 	QPixmap preview;
 	preview.resize( 16, 16 );
 	VKoPainter p( &preview, 16, 16, false );
@@ -380,24 +380,16 @@ VLayerListViewItem::update()
 	p.drawRect( KoRect( 0, 0, 16, 16 ) );
 	p.end();
 
+	// text description
 	setOn( m_layer->selected() );
 	setText( 0, m_layer->name() );
-	QPixmap pm;
-	QString s = ( m_layer->state() == VObject::normal_locked || m_layer->state() == VObject::hidden_locked ) ? "locked.png" : "unlocked.png";
-	if( !QPixmapCache::find( s, pm ) )
-	{
-		pm = QPixmap( KGlobal::iconLoader()->iconPath( s, KIcon::Small ) );
-		QPixmapCache::insert( s, pm );
-	}
-	setPixmap( 1, pm );
-	s = ( m_layer->state() == VObject::normal || m_layer->state() == VObject::normal_locked ) ? "14_layer_visible.png" : "14_layer_novisible.png";
-	if( !QPixmapCache::find( s, pm ) )
-	{
-		pm = QPixmap( KGlobal::iconLoader()->iconPath( s, KIcon::Small ) );
-		QPixmapCache::insert( s, pm );
-	}
-	setPixmap( 2, pm );
+
+	// set thumb preview, lock and visible pixmaps
 	setPixmap( 0, preview );
+	QString s = ( m_layer->state() == VObject::normal_locked || m_layer->state() == VObject::hidden_locked ) ? "locked.png" : "unlocked.png";
+	setPixmap( 1, *KarbonFactory::rServer()->cachePixmap( s, KIcon::Small ) );
+	s = ( m_layer->state() == VObject::normal || m_layer->state() == VObject::normal_locked ) ? "14_layer_visible.png" : "14_layer_novisible.png";
+	setPixmap( 2, *KarbonFactory::rServer()->cachePixmap( s, KIcon::Small ) );
 } // VLayerListViewItem::update
 
 void
