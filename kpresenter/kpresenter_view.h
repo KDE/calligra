@@ -116,6 +116,11 @@ public:
 
     KoZoomHandler *zoomHandler();
 
+    //used this function when we when to print/create web presentation etc...
+    //=>we unzoom it.
+    void unZoomDocument(int &dpiX,int &dpiY);
+    void zoomDocument(int zoom);
+
 signals:
     void currentPageChanged( int );
 

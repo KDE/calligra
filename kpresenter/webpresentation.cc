@@ -200,8 +200,9 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
                         doc->getPageRect( 0, 0, 0, 1.0, false ).height() ) );
     QString filename;
     QString format = imageFormat( imgFormat );
-    int p;
-
+    int p,dpiX,dpiY;
+    int oldZoom = view->kPresenterDoc()->zoomHandler()->zoom();
+    view->unZoomDocument(dpiX,dpiY);
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
         pix.resize( doc->getPageRect( 0, 0, 0, 1.0, false ).size() );
         pix.fill( Qt::white );
@@ -219,6 +220,7 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
         progressBar->setValue( ++p );
         kapp->processEvents();
     }
+    view->zoomDocument(oldZoom);
 }
 
 /*================================================================*/

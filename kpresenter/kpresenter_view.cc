@@ -376,22 +376,34 @@ void KPresenterView::setupPrinter( KPrinter &prt )
         prt.setOrientation( KPrinter::Portrait );
 }
 
+void KPresenterView::unZoomDocument(int &dpiX,int &dpiY)
+{
+    // ### HACK: disable zooming-when-printing if embedded parts are used.
+    // No koffice app supports zooming in paintContent currently.
+    // Disable in ALL cases now
+    bool doZoom=false;
+    dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
+    dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
+    m_pKPresenterDoc->zoomHandler()->setZoomAndResolution( 100, dpiX, dpiY );
+    m_pKPresenterDoc->newZoomAndResolution( false, true /* for printing*/ );
+}
+
+void KPresenterView::zoomDocument(int zoom)
+{
+    m_pKPresenterDoc->zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    m_pKPresenterDoc->newZoomAndResolution( false, false );
+    updateRuler();
+}
+
 void KPresenterView::print( KPrinter &prt )
 {
     float left_margin = 0.0;
     float top_margin = 0.0;
-
-    // ### HACK: disable zooming-when-printing if embedded parts are used.
-    // No koffice app supports zooming in paintContent currently.
-    // Disable in ALL cases now
-    bool doZoom = false;
+    int dpiX=0;
+    int dpiY=0;
     int oldZoom = m_pKPresenterDoc->zoomHandler()->zoom();
     QPaintDeviceMetrics metrics( &prt );
-    int dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
-    int dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
-    m_pKPresenterDoc->zoomHandler()->setZoomAndResolution( 100, dpiX, dpiY );
-    m_pKPresenterDoc->newZoomAndResolution( false, true /* for printing*/ );
-
+    unZoomDocument(dpiX,dpiY);
     if ( m_pKPresenterDoc->pageLayout().format == PG_SCREEN )
     {
         left_margin = 28.5;
@@ -409,8 +421,7 @@ void KPresenterView::print( KPrinter &prt )
     m_canvas->print( &painter, &prt, left_margin, top_margin );
     painter.end();
 
-    m_pKPresenterDoc->zoomHandler()->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
-    m_pKPresenterDoc->newZoomAndResolution( false, false );
+    zoomDocument(oldZoom);
     kdDebug() << "KPresenterView::print zoom&res reset" << endl;
 }
 
