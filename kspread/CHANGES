@@ -50,3 +50,8 @@ and you unselect it, when you close kspread_dlg_create, cell is recreating.
 -Add new button for choose function, you can add function if = is not here
 in the cell or editwidget = is add.
 
+1999-09-18 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+Now when you click on bold button or italic button and in the cell
+it's a richtext so you add <i> </i> or <b> </b> .
+So text is in italic or bold.

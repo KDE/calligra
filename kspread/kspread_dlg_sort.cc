@@ -67,7 +67,6 @@ KSpreadsort::KSpreadsort( KSpreadView* parent, const char* name)
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( grp, SIGNAL(pressed(int)),this,SLOT(slotpress(int)));
-
 }
 
 void KSpreadsort::init()
@@ -84,6 +83,7 @@ void KSpreadsort::init()
   	QMessageBox::warning( 0L, i18n("Error"), i18n("One cell was selected!"),
 			   i18n("Ok") );
 	_sort=ONLY;
+	
   	}
   else if(r.right()==0x7FFF)
   	{

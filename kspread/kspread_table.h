@@ -367,6 +367,10 @@ public:
     void cutSelection( const QPoint &_marker );
     enum Special_paste { ALL,Formula,Format,Wborder,Link,ALL_trans,Formula_trans,Format_trans,Wborder_trans,Link_trans};
     enum Mode_sort{ Increase,Decrease};
+    enum Type_font {bold,italic};
+
+    QString setRichTextFond(QString text,Type_font font);
+
     void paste( const QPoint &_marker,Special_paste=ALL );
 
     bool replace( const QPoint &_marker,QString _find,QString _replace );

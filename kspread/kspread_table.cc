@@ -724,9 +724,25 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	  if ( _size > 0 )
 	    it.current()->setTextFontSize( _size );
 	  if ( _italic >= 0 )
-	    it.current()->setTextFontItalic( !it.current()->textFontItalic() );
+	    	{
+	    	it.current()->setTextFontItalic( !it.current()->textFontItalic() );
+	  	if( it.current()->content()==KSpreadCell::RichText)
+	  		{
+	  		QString tmp;
+                	tmp=setRichTextFond(it.current()->text(),italic);
+                	it.current()->setText(tmp);
+	  		}
+	  	}
 	  if ( _bold >= 0 )
-	    it.current()->setTextFontBold( !it.current()->textFontBold() );
+	    	{
+	    	it.current()->setTextFontBold( !it.current()->textFontBold() );
+	  	if( it.current()->content()==KSpreadCell::RichText)
+	  		{
+	  		QString tmp;
+                	tmp=setRichTextFond(it.current()->text(),bold);
+                	it.current()->setText(tmp);
+	  		}
+	  	}
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -750,9 +766,25 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	  if ( _size > 0 )
 	    it.current()->setTextFontSize( _size );
 	  if ( _italic >= 0 )
-	    it.current()->setTextFontItalic( !it.current()->textFontItalic() );
+	  	{
+	    	it.current()->setTextFontItalic( !it.current()->textFontItalic() );
+	  	if( it.current()->content()==KSpreadCell::RichText)
+	  		{
+	  		QString tmp;
+                	tmp=setRichTextFond(it.current()->text(),italic);
+                	it.current()->setText(tmp);
+	  		}
+	  	}
 	  if ( _bold >= 0 )
-	    it.current()->setTextFontBold( !it.current()->textFontBold() );
+	  	{
+	    	it.current()->setTextFontBold( !it.current()->textFontBold() );
+	  	if( it.current()->content()==KSpreadCell::RichText)
+	  		{
+	  		QString tmp;
+                	tmp=setRichTextFond(it.current()->text(),bold);
+                	it.current()->setText(tmp);
+	  		}
+	  	}
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -792,10 +824,25 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	      if ( _size > 0 )
 		cell->setTextFontSize( _size );
 	      if ( _italic >= 0 )
+		{
 		cell->setTextFontItalic( !cell->textFontItalic() );
+	       if( cell->content()==KSpreadCell::RichText)
+                	{
+                	QString tmp;
+                	tmp=setRichTextFond(cell->text(),italic);
+                	cell->setText(tmp);
+                	}
+        	}
 	      if ( _bold >= 0 )
+		{
 		cell->setTextFontBold( !cell->textFontBold() );
-
+                if( cell->content()==KSpreadCell::RichText)
+                	{
+                	QString tmp;
+                	tmp=setRichTextFond(cell->text(),bold);
+                	cell->setText(tmp);
+                	}
+                }
 		cell->clearDisplayDirtyFlag();
 	    }
 	
@@ -803,6 +850,98 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
     }
 }
 
+QString KSpreadTable::setRichTextFond(QString text,Type_font font)
+{
+QString tmp;
+QString tmp2;
+int pos;
+if ( text.left(0) != '!' )
+	{
+	cout <<"Err not a RichText : "<<text.ascii()<<endl;
+	return text;
+	}
+else
+	{
+	switch(font)
+		{
+		case bold :
+			if(text.find("<b>")==-1)
+				{
+				tmp=text.insert(1,"<b>");
+				pos=tmp.findRev(">");
+				tmp2="<b>";
+				if(pos==tmp2.length())
+					{
+					text=tmp+"</b>";
+					}
+				else
+					{
+					text=tmp.insert((pos+1),"</b>");
+					}
+				tmp=text;
+				}
+			else
+				{
+				pos=text.find("<b>");
+				// length ( <b> ) =3
+				tmp=text.remove(pos,3);
+				pos=tmp.find("</b>");
+				if(pos==-1)
+					{
+					cout <<"Err in richText\n";
+					}
+				else
+					{
+					text=tmp.remove(pos,4);
+					}
+				
+				tmp=text;
+				}
+			break;
+		case italic :
+			if(text.find("<i>")==-1)
+				{
+				tmp=text.insert(1,"<i>");
+				pos=0;
+				pos=tmp.findRev(">");
+				tmp2="<i>";
+				if(pos==tmp2.length())
+					{
+					text=tmp+"</i>";
+					}
+				else
+					{
+					text=tmp.insert((pos+1),"</i>");
+					}
+				tmp=text;
+				}
+			else
+				{
+				pos=text.find("<i>");
+				// length( <b> )=3
+				tmp=text.remove(pos,3);
+				pos=tmp.find("</i>");
+				if(pos==-1)
+					{
+					cout <<"Err in richText\n";
+					}
+				else
+					{
+					//length(</i>) =4
+					text=tmp.remove(pos,4);
+					}
+				tmp=text;
+				}
+			break;
+		default :
+			cout <<"Err in setRichtextfont\n";
+			break;
+		}
+	}
+	
+				
+return tmp;
+}
 void KSpreadTable::setSelectionTextColor( const QPoint &_marker, QColor tb_Color )
 {
 m_pDoc->setModified( true );

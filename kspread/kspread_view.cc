@@ -1065,12 +1065,21 @@ void KSpreadView::bold()
 {
   if ( m_pTable != 0L )
     m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, -1, 1 );
+
+ KSpreadCell * cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+ if ( cell->content()==KSpreadCell::RichText )
+	    editWidget()->setText( cell->text() );
 }
 
 void KSpreadView::italic()
 {
   if ( m_pTable != 0L )
     m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, -1, -1, 1 );
+ //refresh EditWidget when you click on bold button
+ //because text changed add <i> </i>
+ KSpreadCell * cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+ if ( cell->content()==KSpreadCell::RichText )
+	    editWidget()->setText( cell->text() );
 }
 
 void KSpreadView::sortincr()
