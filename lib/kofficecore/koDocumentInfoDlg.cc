@@ -154,6 +154,13 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   (void) new QLabel( i18n( "Company :" ), grid );
   d->m_leCompany = new QLineEdit( authorInfo->company(), grid );
 
+  if ( authorInfo->company().isEmpty() )
+  {
+    QString name = d->m_emailCfg->readEntry( "Organization" );
+    if ( !name.isEmpty() )
+      d->m_leCompany->setText( name );
+  }
+
   (void) new QLabel( i18n( "EMail :" ), grid );
   d->m_leEmail = new QLineEdit( authorInfo->email(), grid );
 
@@ -262,9 +269,6 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
 
   KConfig config("kofficerc");
   config.setGroup( "Author" );
-  config.writeEntry("full-name",d->m_leFullName->text());
-  config.writeEntry("company",d->m_leCompany->text() );
-  config.writeEntry("email", d->m_leEmail->text());
   config.writeEntry("telephone", d->m_leTelephone->text());
   config.writeEntry("fax", d->m_leFax->text());
   config.writeEntry("country",d->m_leCountry->text());

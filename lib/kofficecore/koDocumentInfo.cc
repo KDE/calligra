@@ -203,9 +203,6 @@ void KoDocumentInfoAuthor::initParameters()
     if( config.hasGroup( "Author" ))
     {
         config.setGroup( "Author" );
-        m_fullName=config.readEntry("full-name","");
-        m_company=config.readEntry("company", "");
-        m_email=config.readEntry("email", "");
         m_telephone=config.readEntry("telephone", "");
         m_fax=config.readEntry("fax", "");
         m_country=config.readEntry("country", "");
