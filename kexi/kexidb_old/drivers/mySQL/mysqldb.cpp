@@ -75,8 +75,9 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 	if(socket == "")
 	{
 		QStringList sockets;
-		sockets.append("/var/lib/mysql/mysql.sock"); // Default socket FIXME: This should be less hardcoded! ;)
+		sockets.append("/var/lib/mysql/mysql.sock");
 		sockets.append("/var/run/mysqld/mysqld.sock");
+		sockets.append("/tmp/mysql.sock");
 		
 		for(QStringList::Iterator it = sockets.begin(); it != sockets.end(); it++)
 		{

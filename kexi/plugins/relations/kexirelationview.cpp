@@ -143,7 +143,7 @@ KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint
 	int rcvW = m_tables[(*conn).rcvTable].geometry.width();
 
 	if(paint)
-		p->setPen(black);
+		p->setPen(QColor(KApplication::random() % 255, KApplication::random() % 255, KApplication::random() % 255));
 
 	if(srcX < rcvX)
 	{
