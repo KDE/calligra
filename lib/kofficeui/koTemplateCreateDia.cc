@@ -234,7 +234,7 @@ void KoTemplateCreateDia::slotOk() {
     if(k<foo)
         file+=m_file.right(k);
 
-    KoTemplate *t=new KoTemplate(d->m_name->text(), ".source/"+file, tmpIcon, false, true);
+    KoTemplate *t=new KoTemplate(d->m_name->text(), QString::null, ".source/"+file, tmpIcon, false, true);
     if(!group->add(t)) {
         KoTemplate *existingTemplate=group->find(t->name());
         // if the original template is hidden, we simply force the update >:->
