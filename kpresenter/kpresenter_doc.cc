@@ -109,7 +109,7 @@ KPresenterChild::~KPresenterChild()
 /*====================== constructor =============================*/
 KPresenterDoc::KPresenterDoc()
     : _pixmapCollection(), _gradientCollection(), _clipartCollection(), _commands(), _hasHeader( false ),
-      _hasFooter( false )
+      _hasFooter( false ), urlIntern()
 {
     ADD_INTERFACE( "IDL:KOffice/Print:1.0" )
         // Use CORBA mechanism for deleting views
@@ -1139,7 +1139,7 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 {
     if ( _store )
     {
-        CORBA::String_var str = urlIntern.latin1();
+        CORBA::String_var str = urlIntern.isEmpty() ? url() : urlIntern.latin1();
 
         QValueListIterator<KPPixmapDataCollection::Key> it = pixmapCollectionKeys.begin();
 
