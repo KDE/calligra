@@ -578,36 +578,50 @@ void KoTextViewIface::removeComment()
 
 QString KoTextViewIface::underlineLineStyle() const
 {
-    //FIXME
-    //return lineStyleToString(m_textView->underlineLineStyle());
-}
-
-QString KoTextViewIface::strikeOutLineStyle()const
-{
-    //return lineStyleToString(m_textView->strikeOutLineStyle());
-}
-#if 0
-QString KoTextViewIface::lineStyleToString( KoTextFormat::LineStyle _style ) const
-{
     QString strLineType;
-    switch ( _style )
+    switch ( m_textView->underlineLineStyle() )
     {
-    case KoTextFormat::SOLID:
+    case KoTextFormat::U_SOLID:
         strLineType ="solid";
         break;
-    case KoTextFormat::DASH:
+    case KoTextFormat::U_DASH:
         strLineType ="dash";
         break;
-    case KoTextFormat::DOT:
+    case KoTextFormat::U_DOT:
         strLineType ="dot";
         break;
-    case KoTextFormat::DASH_DOT:
+    case KoTextFormat::U_DASH_DOT:
         strLineType="dashdot";
         break;
-    case KoTextFormat::DASH_DOT_DOT:
+    case KoTextFormat::U_DASH_DOT_DOT:
         strLineType="dashdotdot";
         break;
     }
     return strLineType;
+
 }
-#endif
+
+QString KoTextViewIface::strikeOutLineStyle()const
+{
+    QString strLineType;
+    switch ( m_textView->strikeOutLineStyle() )
+    {
+    case KoTextFormat::S_SOLID:
+        strLineType ="solid";
+        break;
+    case KoTextFormat::S_DASH:
+        strLineType ="dash";
+        break;
+    case KoTextFormat::S_DOT:
+        strLineType ="dot";
+        break;
+    case KoTextFormat::S_DASH_DOT:
+        strLineType="dashdot";
+        break;
+    case KoTextFormat::S_DASH_DOT_DOT:
+        strLineType="dashdotdot";
+        break;
+    }
+    return strLineType;
+
+}
