@@ -35,7 +35,7 @@ namespace wvWare {
     }
 }
 
-class KWordCharacterHandler : public wvWare::SpecialCharHandler
+class KWordReplacementHandler : public wvWare::InlineReplacementHandler
 {
 public:
     virtual wvWare::U8 hardLineBreak();
@@ -81,7 +81,7 @@ private:
     int m_sectionNumber;
     const wvWare::Style* m_paragStyle;
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
-    KWordCharacterHandler* m_charHandler;
+    KWordReplacementHandler* m_replacementHandler;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     bool m_shadowTextFound;
 };

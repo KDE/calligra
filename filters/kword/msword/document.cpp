@@ -35,17 +35,17 @@
 #include <koGlobal.h>
 
 
-wvWare::U8 KWordCharacterHandler::hardLineBreak()
+wvWare::U8 KWordReplacementHandler::hardLineBreak()
 {
     return '\n';
 }
 
-wvWare::U8 KWordCharacterHandler::nonBreakingHyphen()
+wvWare::U8 KWordReplacementHandler::nonBreakingHyphen()
 {
     return '-'; // normal hyphen for now
 }
 
-wvWare::U8 KWordCharacterHandler::nonRequiredHyphen()
+wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 {
     return 0xad; // soft hyphen, according to kword.dtd
 }
@@ -53,11 +53,11 @@ wvWare::U8 KWordCharacterHandler::nonRequiredHyphen()
 
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& mainFramesetElement )
     : m_mainDocument( mainDocument ), m_mainFramesetElement( mainFramesetElement ), m_index( 0 ),
-      m_sectionNumber( 0 ), m_paragStyle( 0L ), m_charHandler( new KWordCharacterHandler ),
+      m_sectionNumber( 0 ), m_paragStyle( 0L ), m_replacementHandler( new KWordReplacementHandler ),
       m_parser( wvWare::ParserFactory::createParser( fileName ) ), m_shadowTextFound( false )
 {
     if ( m_parser ) { // 0 in case of major error (e.g. unsupported format)
-        m_parser->setSpecialCharacterHandler( m_charHandler );
+        m_parser->setInlineReplacementHandler( m_replacementHandler );
         m_parser->setBodyTextHandler( this );
         prepareDocument();
         processStyles();
@@ -66,7 +66,7 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
 
 Document::~Document()
 {
-    delete m_charHandler;
+    delete m_replacementHandler;
 }
 
 void Document::prepareDocument()
