@@ -2789,7 +2789,9 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
 void KWView::startKSpell()
 {
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
+    m_doc->getKSpellConfig()->setIgnoreList(m_ignoreWord);
     m_kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_doc->getKSpellConfig() );
+
 
 #ifdef KSPELL_HAS_IGNORE_UPPER_WORD
      m_kspell->setIgnoreUpperWords(m_doc->dontCheckUpperWord());
@@ -2833,6 +2835,7 @@ void KWView::spellCheckerReady()
     m_kspell->cleanUp();
     delete m_kspell;
     m_kspell = 0;
+    m_ignoreWord.clear();
 }
 
 void KWView::spellCheckerMisspelling( QString old, QStringList* , unsigned pos )
@@ -2885,6 +2888,10 @@ void KWView::spellCheckerDone( const QString & )
         fs->removeHighlight();
 
     int result = m_kspell->dlgResult();
+
+    //store ignore word
+    m_ignoreWord=m_kspell->ksConfig ().ignoreList ();
+
     m_kspell->cleanUp();
     delete m_kspell;
     m_kspell = 0;
@@ -2894,6 +2901,8 @@ void KWView::spellCheckerDone( const QString & )
         // Try to check another frameset
         startKSpell();
     }
+    else
+        m_ignoreWord.clear();
 }
 
 void KWView::spellCheckerFinished()

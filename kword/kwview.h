@@ -429,6 +429,7 @@ private:
     int m_zoomViewModePreview;
 
     bool m_viewFrameBorders, m_viewTableGrid;
+    QStringList m_ignoreWord;
 };
 
 /******************************************************************/
