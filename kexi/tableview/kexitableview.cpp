@@ -1096,7 +1096,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			style().drawControl(QStyle::CE_CheckBox, p, this, r, colorGroup(), (item->getInt(col) ? QStyle::Style_On : QStyle::Style_Off) | QStyle::Style_Enabled);
 			p->setPen(pen); */
 		int s = QMAX(h - 5, 12);
-		QRect r(w/2 - s/2 + x, h/2 - s/2, s, s);
+		QRect r(w/2 - s/2 + x, h/2 - s/2 - 1, s, s);
 		p->setPen(QPen(colorGroup().text(), 1));
 		p->drawRect(r);
 		if (cell_value.asBool())
