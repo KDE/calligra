@@ -330,7 +330,7 @@ KoFilter::ConversionStatus AmiProImport::convert( const QCString& from, const QC
   AmiProConverter *converter = new AmiProConverter;
   parser->setListener( converter );
 
-  parser->process( QFile::encodeName(m_chain->inputFile()) );
+  parser->process( m_chain->inputFile() );
 
   if( converter->root.isEmpty() )
     return KoFilter::StupidError;
