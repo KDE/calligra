@@ -772,6 +772,11 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     default: break;
                 }
             }
+            if( d->action == A_HELPLINES )
+            {
+                emit moveHelpLines( e->pos(), orientation == Qt::Horizontal);
+            }
+
             return;
         } break;
         case Qt::Vertical: {
@@ -822,7 +827,6 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
             }
         } break;
     }
-
     if( d->action == A_HELPLINES )
     {
         emit moveHelpLines( e->pos(), orientation == Qt::Horizontal);
