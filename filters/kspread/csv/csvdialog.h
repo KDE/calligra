@@ -31,7 +31,15 @@ class CSVDialog : public KDialogBase
 {
     Q_OBJECT
 public:
-    enum Header { TEXT, NUMBER, DATE, CURRENCY };
+    enum Header
+    {
+        TEXT,       ///< Normal text
+        NUMBER,     ///< Number (either like locale or like C)
+        DATE,       ///< Date \todo What type exactly?
+        CURRENCY,   ///< Currency
+        COMMANUMBER,///< Number, which decimal symbol is a comma
+        POINTNUMBER,///< Number, which decimal symbol is a point/dot
+    };
 
     CSVDialog(QWidget* parent, QByteArray& fileArray, const QString seperator);
     ~CSVDialog();

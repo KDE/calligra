@@ -21,6 +21,7 @@
 #include <csvimport.h>
 
 #include <qfile.h>
+#include <qregexp.h>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -152,6 +153,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
               cell = table->nonDefaultCell( col + 1, row + 1, false, s );
               cell->setCellText( text, false, true );
               break;
+             // ### TODO: put the code for the different numbers together (at least partially)
              case CSVDialog::NUMBER:
                 {
                     bool ok = false;
@@ -159,6 +161,50 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                     // If not, try with the '.' as decimal separator
                     if ( !ok )
                         d = text.toDouble( &ok );
+                    if ( !ok )
+                    {
+                        cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell->setCellText( text, false, true );
+                        cell->setFormatType( KSpreadCell::Number );
+                    }
+                    else
+                    {
+                        cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell->setNumber( d );
+                    }
+                    cell->setPrecision( 2 );
+                    break;
+                }
+             case CSVDialog::COMMANUMBER:
+                {
+                    bool ok = false;
+                    QString tmp ( text );
+                    tmp.remove ( QRegExp( "[^0-9,Ee+-]" ) ); // Keep only 0 to 9, comma, E, e, plus, minus
+                    tmp.replace ( ',', '.' );
+                    kdDebug(30501) << "Comma: " << text << " => " << tmp << endl;
+                    const double d = tmp.toDouble( &ok );
+                    if ( !ok )
+                    {
+                        cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell->setCellText( text, false, true );
+                        cell->setFormatType( KSpreadCell::Number );
+                    }
+                    else
+                    {
+                        cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell->setNumber( d );
+                    }
+                    cell->setPrecision( 2 );
+                    break;
+                }
+             case CSVDialog::POINTNUMBER:
+                {
+                    bool ok = false;
+                    QString tmp ( text );
+                    tmp.remove ( QRegExp( "[^0-9\\.EeD+-]" ) ); // Keep only 0 to 9, dot, E, e, D, plus, minus
+                    tmp.replace ( 'D', 'E' ); // double from FORTRAN use D instead of E
+                    kdDebug(30501) << "Point: " << text << " => " << tmp << endl;
+                    const double d = tmp.toDouble( &ok );
                     if ( !ok )
                     {
                         cell = table->nonDefaultCell( col + 1, row + 1, false, s );

@@ -69,11 +69,12 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
     encodings << description.arg("CP 1258"); // Windows
     m_dialog->comboBoxEncoding->insertStringList(encodings);
 
-    ;
     m_formatList << i18n( "Text" );
     m_formatList << i18n( "Number" );
     m_formatList << i18n( "Currency" );
     m_formatList << i18n( "Date" );
+    m_formatList << i18n( "Decimal Comma Number" );
+    m_formatList << i18n( "Decimal Point Number" );
     m_dialog->m_formatComboBox->insertStringList( m_formatList );
 
     m_dialog->m_table->setReadOnly( true );
@@ -390,8 +391,14 @@ int CSVDialog::getHeader(int col)
         return NUMBER;
     else if (header == i18n("Currency"))
         return CURRENCY;
-    else
+    else if ( header == i18n( "Date" ) )
         return DATE;
+    else if ( header == i18n( "Decimal Comma Number" ) )
+        return COMMANUMBER;
+    else if ( header == i18n( "Decimal Point Number" ) )
+        return POINTNUMBER;
+    else
+        return TEXT; // Should not happen
 }
 
 QString CSVDialog::getText(int row, int col)
