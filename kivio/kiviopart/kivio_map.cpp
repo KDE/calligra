@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,7 +79,7 @@ QDomElement KivioMap::save( QDomDocument& doc )
 {
     int next = 1;
     
-  QDomElement mymap = doc.createElement("map");
+  QDomElement mymap = doc.createElement("KivioMap");
 
   // Before we save, tell all the pages/layers/stencil/targets/connectors to generate
   // their ids so we can restore connections when reloaded.
@@ -109,7 +109,7 @@ bool KivioMap::loadXML( const QDomElement& mymap )
   QDomNode n = mymap.firstChild();
   while( !n.isNull() ) {
     QDomElement e = n.toElement();
-    if ( !e.isNull() && e.tagName() == "page" ) {
+    if ( !e.isNull() && e.tagName() == "KivioPage" ) {
       KivioPage *t = m_pDoc->createPage();
       m_pDoc->addPage( t );
       if ( !t->loadXML( e ) )

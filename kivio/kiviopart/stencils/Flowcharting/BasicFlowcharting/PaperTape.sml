@@ -3,11 +3,12 @@
 	<KivioSMLStencilSpawnerInfo>
 	   <Author data="Landshark"/>
 	   <Title data="Paper Tape"/>
+	   <Id data="Paper Tape"/>
 		<Description data="Flowcharting Paper Tape Stencil"/>
 		<Version data="1.0"/>
 		<Web data="www.thekompany.com"/>
 		<Email data="landshark@ameritech.net"/>
-		<Copyright data="Copyright (C) 2000 theKompany.com. All rights reserved."/>
+		<Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. All rights reserved."/>
 		<AutoUpdate data="off"/>
 	</KivioSMLStencilSpawnerInfo>
 	<Dimensions w="72" h="54"/>

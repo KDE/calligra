@@ -3,11 +3,12 @@
 	<KivioSMLStencilSpawnerInfo>
         <Author data="Landshark"/>
         <Title data="Document"/>
+        <Id data="Document"/>
         <Description data="Flowcharting Document Stencil"/>
         <Version data="1.0"/>
         <Web data="www.thekompany.com"/>
         <Email data="landshark@ameritech.net"/>
-        <Copyright data="Copyright (C) 2000 theKompany.com. All rights reserved."/>
+        <Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. All rights reserved."/>
         <AutoUpdate data="off"/>
 	</KivioSMLStencilSpawnerInfo>
     <KivioConnectorTarget x="0.0" y="0.0"/>

@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public slots:
 protected:
   virtual void initToolBarButton(TKToolBarButton*);
 
-  QString dirDesc( const QString& dir );
+//  QString dirDesc( const QString& dir );
   QPixmap dirtPixmap( const QString& dir );
   void loadCollections( const QString& rootDirStr );
   void loadSet( QPopupMenu* menu, const QString& rootDirStr );

@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,16 +26,17 @@ class KivioStencilSpawnerInfo
 {
 protected:
     QString m_author,
-        m_title,
-        m_desc,
-        m_version,
-        m_web,
-        m_email,
-        m_autoUpdate;
+       m_title,
+       m_id,
+       m_desc,
+       m_version,
+       m_web,
+       m_email,
+       m_autoUpdate;
         
 public:
     KivioStencilSpawnerInfo();
-    KivioStencilSpawnerInfo( const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString & );
+    KivioStencilSpawnerInfo( const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString &, const QString & );
     virtual ~KivioStencilSpawnerInfo();
     
     bool loadXML( const QDomElement & );
@@ -43,6 +44,7 @@ public:
     
     QString author()        { return m_author; }
     QString title()         { return m_title; }
+    QString id()            { return m_id; }
     QString desc()          { return m_desc; }
     QString version()       { return m_version; }
     QString web()           { return m_web; }

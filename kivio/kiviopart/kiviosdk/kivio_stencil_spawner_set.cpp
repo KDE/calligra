@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,9 @@
 #include "kivio_stencil_spawner_set.h"
 
 #include <qdir.h>
+#include <qdom.h>
+#include <qfile.h>
+#include <qstring.h>
 #include <kdebug.h>
 
 KivioStencilSpawnerSet::KivioStencilSpawnerSet(const QString& name)
@@ -78,7 +81,7 @@ QDomElement KivioStencilSpawnerSet::saveXML( QDomDocument &doc )
 {
     QDomElement spawnE = doc.createElement("KivioStencilSpawnerSet");
 
-    XmlWriteString( spawnE, "desc", m_name );
+    XmlWriteString( spawnE, "id", m_id );
 
     KivioStencilSpawner *pSpawner = m_pSpawners->first();
     while( pSpawner )
@@ -98,7 +101,8 @@ bool KivioStencilSpawnerSet::loadDir( const QString &dirName )
     QString fileName;
 
     m_dir = dirName;
-    m_name = readDesc( dirName );
+    m_name = readTitle( dirName );
+    m_id = readId( dirName );
 
     d.setNameFilter("*.sml *.ksp *.spy");
 
@@ -147,8 +151,44 @@ KivioStencilSpawner* KivioStencilSpawnerSet::loadFile( const QString &fileName )
     return pSpawner;
 }
 
-QString KivioStencilSpawnerSet::readDesc( const QString &dir )
+QString KivioStencilSpawnerSet::readTitle( const QString &dir )
 {
+   QDomDocument d("StencilSPawnerSet");
+   QDomElement root;
+   QDomNode node;
+   QString nodeName;
+   QString title;
+   QFile f(dir+"/desc");
+
+   if( f.open( IO_ReadOnly )==false )
+   {
+      kdDebug() << "KivioStencilSpawnerSet::readTitle() - Error opening stencil set description: " <<
+	 dir << "/desc" << endl;
+      return "";
+   }
+
+   d.setContent(&f);
+   
+   root = d.documentElement();
+   node = root.firstChild();
+
+   while( !node.isNull() )
+   {
+      nodeName = node.nodeName();
+
+      if( nodeName.compare("Title")==0 )
+      {
+	 title = XmlReadString( node.toElement(), "data", dir );
+	 return title;
+      }
+   }
+
+   kdDebug() << "KivioStencilSpawnerSet::readTitle() - No title found in "
+	     << dir << "/desc" << endl;
+
+   return "";
+
+/*
     int pos;
 
     QFile file( dir + "/desc" );
@@ -169,16 +209,56 @@ QString KivioStencilSpawnerSet::readDesc( const QString &dir )
         ret.truncate( pos );
 
     return ret;
+*/
 }
 
-KivioStencilSpawner* KivioStencilSpawnerSet::find( const QString& title)
+QString KivioStencilSpawnerSet::readId( const QString &dir )
+{
+   QDomDocument d("StencilSPawnerSet");
+   QDomElement root;
+   QDomNode node;
+   QString nodeName;
+   QString theid;
+   QFile f(dir+"/desc");
+
+   if( f.open( IO_ReadOnly )==false )
+   {
+      kdDebug() << "KivioStencilSpawnerSet::readId() - Error opening stencil set description: " <<
+	 dir << "/desc" << endl;
+      return "";
+   }
+
+   d.setContent(&f);
+   
+   root = d.documentElement();
+   node = root.firstChild();
+
+   while( !node.isNull() )
+   {
+      nodeName = node.nodeName();
+
+      if( nodeName.compare("Id")==0 )
+      {
+	 theid = XmlReadString( node.toElement(), "data", dir );
+	 return theid;
+      }
+
+      node = node.nextSibling();
+   }
+
+   kdDebug() << "KivioStencilSpawnerSet::readId() - No id found in "
+	     << dir << "/desc" << endl;
+
+   return "";
+}
+
+KivioStencilSpawner* KivioStencilSpawnerSet::find( const QString& id)
 {
     KivioStencilSpawner *pSpawner = m_pSpawners->first();
     while( pSpawner )
     {
         // If the title matches, this is it!
-//        debug(QString("FIND %1 - %2").arg(title).arg(pSpawner->info()->title()));
-        if( pSpawner->info()->title() == title )
+        if( pSpawner->info()->id() == id )
         {
             return pSpawner;
         }

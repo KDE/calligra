@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,6 +108,7 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
 
   // Load autoLoadStencils in internal StencilSpawnerSet
   m_pInternalSet = new KivioStencilSpawnerSet("Kivio_Internal");
+  m_pInternalSet->setId("Kivio - Internal - Do Not Touch");
   QStringList list = instance()->dirs()->findAllResources("data",instance()->instanceName()+"/autoloadStencils/*",true,false);
   QStringList::ConstIterator pIt = list.begin();
   QStringList::ConstIterator pEnd = list.end();
@@ -184,9 +185,9 @@ QDomDocument KivioDoc::saveXML()
   // Save the list of stencils spawners we have loaded.
   // We save these as the following:
   //
-  // <KivioStencilSpawnerSet name="Basic Flowcharting Shapes">
-  //   <KivioSMLStencilSpawner file="blah"/>
-  //   <KivioSMLStencilSpawner file="blah"/>
+  // <KivioStencilSpawnerSet  id="whatever the id is">
+  //   <KivioSMLStencilSpawner id="whatever the id is"/>
+  //   <KivioSMLStencilSpawner id="whatever the id is"/>
   // </KivioStencilSpawnerSet>
   // ....
   //
@@ -236,7 +237,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
   while( !node.isNull() )
   {
     QString name = node.nodeName();
-    if( name == "map" )
+    if( name == "KivioMap" )
     {
         if( !m_pMap->loadXML( node.toElement() ) )
         {
@@ -246,14 +247,15 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
     }
     else if( name == "KivioStencilSpawnerSet" )
     {
-        QString desc = XmlReadString( node.toElement(), "desc", "_!@#$" );
-        if( desc == "_!@#$" )
+        QString id = XmlReadString( node.toElement(), "id", "" );
+
+        if( id == "" )
         {
-	   kdDebug() << "KivioDoc::loadXML() - Bad KivioStencilSpawnerSet found" << endl;
+	   kdDebug() << "KivioDoc::loadXML() - Bad KivioStencilSpawnerSet found, it contains no id!" << endl;
         }
         else
         {
-            loadStencilSpawnerSet( desc );
+            loadStencilSpawnerSet( id );
         }
     }
     else if( name == "ViewItems" )
@@ -286,7 +288,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
   return true;
 }
 
-bool KivioDoc::loadStencilSpawnerSet( const QString &desc )
+bool KivioDoc::loadStencilSpawnerSet( const QString &id )
 {
     KStandardDirs *dirs = KGlobal::dirs();
     QStringList dirList = dirs->findDirs("data", "kivio/stencils");
@@ -328,10 +330,11 @@ bool KivioDoc::loadStencilSpawnerSet( const QString &desc )
                         innerFI->fileName() != "." )
                     {
                         // Compare the descriptions
-                        QString foundDesc;
+                        QString foundId;
 
-                        foundDesc = KivioStencilSpawnerSet::readDesc(innerFI->absFilePath());
-                        if( foundDesc == desc)
+			// TODO: use ID system here for loading
+                        foundId = KivioStencilSpawnerSet::readId(innerFI->absFilePath());
+                        if( foundId == id)
                         {
 
                             // Load the spawner set with  rootDir + "/" + fi.fileName()
@@ -461,12 +464,13 @@ bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDi
 }
 
 
-bool KivioDoc::setIsAlreadyLoaded( QString dirName, QString name )
+// TODO: Fix for id system
+bool KivioDoc::setIsAlreadyLoaded( QString dirName, QString id )
 {
     KivioStencilSpawnerSet *pSet = m_pLstSpawnerSets->first();
     while(pSet)
     {
-        if( pSet->dir() == dirName || pSet->name() == name )
+        if( pSet->dir() == dirName || pSet->id() == id )
         {
             return true;
         }
@@ -481,21 +485,24 @@ KivioStencilSpawnerSet *KivioDoc::addSpawnerSet( QString dirName )
 {
     KivioStencilSpawnerSet *set;
 
-    QString desc = KivioStencilSpawnerSet::readDesc( dirName );
+    QString id = KivioStencilSpawnerSet::readId( dirName );
 
-    if( setIsAlreadyLoaded( dirName, desc ) )
+    if( setIsAlreadyLoaded( dirName, id ) )
     {
        kdDebug() << "KivioDoc::addSpawnerSet() - Cannot load duplicate stencil sets" << endl;
         return NULL;
     }
 
+
     set = new KivioStencilSpawnerSet();
+
     if( set->loadDir(dirName)==false )
     {
        kdDebug() << "KivioDoc::addSpawnerSet() - Error loading dir set" << endl;
         delete set;
         return NULL;
     }
+
 
     m_pLstSpawnerSets->append( set );
     setModified(true);
@@ -691,29 +698,30 @@ void KivioDoc::slotSelectionChanged()
     emit sig_selectionChanged();
 }
 
-KivioStencilSpawner* KivioDoc::findStencilSpawner( const QString& setName, const QString& title )
+KivioStencilSpawner* KivioDoc::findStencilSpawner( const QString& setId, const QString& stencilId )
 {
     KivioStencilSpawnerSet *pSpawnerSet = m_pLstSpawnerSets->first();
     while( pSpawnerSet )
     {
-        if( pSpawnerSet->name() == setName && pSpawnerSet->find(title) )
+        if( pSpawnerSet->id() == setId && pSpawnerSet->find(stencilId) )
         {
-            return pSpawnerSet->find(title);
+            return pSpawnerSet->find(stencilId);
+	    // return pSpawnerSet->find(name)
         }
         pSpawnerSet = m_pLstSpawnerSets->next();
     }
 
-    if( m_pInternalSet->name() == setName && m_pInternalSet->find(title) )
+    if( m_pInternalSet->id() == setId && m_pInternalSet->find(stencilId) )
     {
-        return m_pInternalSet->find(title);
+        return m_pInternalSet->find(stencilId);
     }
     
     return NULL;
 }
 
-KivioStencilSpawner* KivioDoc::findInternalStencilSpawner( const QString& title )
+KivioStencilSpawner* KivioDoc::findInternalStencilSpawner( const QString& stencilId )
 {
-    return m_pInternalSet->find(title);
+    return m_pInternalSet->find(stencilId);
 }
 
 void KivioDoc::setUnits(int unit)

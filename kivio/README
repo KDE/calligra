@@ -6,7 +6,7 @@ Kivio - Flowcharting for KDE
 +------------------------------------------------------------------------------+
 Dave Marotti (landshark_666@hotmail.com)
 Max Judin (theKompany)
-
+Dmitry Poplavsky (dima@kde.org)
 
 +------------------------------------------------------------------------------+
 |                                    About                                     |
@@ -25,7 +25,7 @@ source.
 
 Method 1 - Binary:
 Obtain one of the binary packages from theKompany's website and install it. More
-information is available on the website.
+information is available on the website (see bottom of this file).
 
 Method 2 - Standalone Source:
 Obtain the source tarball from theKompany's website and untar it.  Build it with
@@ -66,3 +66,4 @@ purchase of more stencils, etc... please go to
 
 -dave marotti
 landshark_666@hotmail.com
+lndshark@speakeasy.net

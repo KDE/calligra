@@ -2,7 +2,10 @@ The following people are responsible for Kivio in some way/shape/form.
 
 Dave Marotti - lndshark@speakeasy.net
 	Main author and the original author of Queesio, from which this source
-	is based.
+	is based.  Main developer.
 	
 Max Judin - max@thekompany.com
 	Responsible for most of the widgets which hold Kivio up.
+
+DmitryDmitry Poplavsky - dima@kde.org
+	Python (spy) stencil.  Python integration.

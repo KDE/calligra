@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -530,8 +530,8 @@ QDomElement Kivio1DStencil::createRootElement( QDomDocument &doc )
 {
    QDomElement e = doc.createElement("KivioPluginStencil");
 
-   XmlWriteString( e, "title", m_pSpawner->info()->title() );
-   XmlWriteString( e, "setName", m_pSpawner->set()->name() );
+   XmlWriteString( e, "id", m_pSpawner->info()->id() );
+   XmlWriteString( e, "setId", m_pSpawner->set()->id() );
 
    return e;
 }

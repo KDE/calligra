@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,8 +89,8 @@ bool KivioShape::loadXML( const QDomElement &e )
     if( m_shapeData.name() == "" ||
         m_shapeData.shapeType() == -1 )
     {
-       kdDebug() << "-LOAD KivioShape::loadXML() - Unknown shape or bad name read. Shape load aborted." << endl;
-        return false;
+       kdWarning() << "-LOAD KivioShape::loadXML() - Unknown shape or bad name read. Shape load aborted." << endl;
+       return false;
     }
 
     while( !node.isNull() )

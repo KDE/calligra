@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,14 +64,14 @@ KivioPyStencilSpawner::~KivioPyStencilSpawner()
         m_pTargets = NULL;
     }
 
-    kdDebug() << "* PyStencilSpawner "<< m_pInfo->title() << " deleted" << endl;
+    kdDebug() << "* PyStencilSpawner "<< m_pInfo->id() << " deleted" << endl;
 }
 
 QDomElement KivioPyStencilSpawner::saveXML( QDomDocument &doc )
 {
     QDomElement spawnE = doc.createElement("KivioPyStencilSpawner");
 
-    XmlWriteString( spawnE, "filename", m_filename );
+    XmlWriteString( spawnE, "id", m_pInfo->id() );
 
     return spawnE;
 }

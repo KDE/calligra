@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,7 +100,6 @@ KivioPage::KivioPage( KivioMap *_map, const char *_name )
 
 KivioPage::~KivioPage()
 {
-   kdDebug() << "AHHHHH PAGE DYING!" << endl;
   delete gLines;
   s_mapPages->remove(m_id);
 }
@@ -137,7 +136,7 @@ void KivioPage::printPage( QPainter &/*_painter*/, const QRect& /*page_range*/, 
 QDomElement KivioPage::save( QDomDocument& doc )
 {
     // Write the name and 'hide' flag first as attributes
-    QDomElement page = doc.createElement( "page" );
+    QDomElement page = doc.createElement( "KivioPage" );
     page.setAttribute( "name", m_strName );
     page.setAttribute( "hide", (int)m_bPageHide );
 
@@ -1495,7 +1494,7 @@ void KivioPage::setPaperLayout(TKPageLayout l)
   doc()->updateView(this);
 }
 
-KivioConnectorTarget *KivioPage::connectPointToTarget( KivioConnectorPoint *p, float thresh)
+KivioConnectorTarget *KivioPage::connectPointToTarget( KivioConnectorPoint *p, float /*thresh*/)
 {
    float oldX, oldY;
    KivioLayer *pLayer, *pCurLayer;

@@ -61,7 +61,6 @@ KivioGuideLines::KivioGuideLines(KivioPage* page)
 KivioGuideLines::~KivioGuideLines()
 {
   unselectAll();
-  kdDebug() << "************* GUIDES DYING" << "\n";
 }
 
 void KivioGuideLines::resize(QSize s,KivioDoc* doc)

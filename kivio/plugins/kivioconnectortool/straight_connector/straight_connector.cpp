@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@
 
 static QPixmap *pIcon = NULL;
 
-static KivioStencilSpawnerInfo sinfo = KivioStencilSpawnerInfo("Dave Marotti", "Straight Connector", "Basic Straight Connector", "0.1", "http://localhost/", "", "off");
+static KivioStencilSpawnerInfo sinfo = KivioStencilSpawnerInfo("Dave Marotti", "Straight Connector", "Dave Marotti - Straight Connector", "Basic Straight Connector", "0.1", "http://localhost/", "", "off");
 
 extern "C" {
     KivioStencil *NewStencil();

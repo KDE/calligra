@@ -3,11 +3,12 @@
 	<KivioSMLStencilSpawnerInfo>
 		<Author data="Landshark"/>
 		<Title data="Terminator"/>
+		<Id data="Terminator"/>
 		<Description data="Terminator shape"/>
 		<Version data="0.1"/>
 		<Web data="kivio.sourceforge.net"/>
 		<Email data="landshark@ameritech.net"/>
-		<Copyright data="Copyright (C) 2000 theKompany.com. All rights reserved."/>
+		<Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. All rights reserved."/>
 		<AutoUpdate data="off"/>
 	</KivioSMLStencilSpawnerInfo>
 	<Dimensions w="72.0" h="36.0"/>

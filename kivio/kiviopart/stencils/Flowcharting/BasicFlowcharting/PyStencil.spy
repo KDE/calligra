@@ -3,11 +3,12 @@
     <KivioPyStencilSpawnerInfo>
         <Author data="Dima"/>
         <Title data="Python"/>
+        <Id data="Python"/>
         <Description data="Basic flowcharting card shape"/>
         <Version data="0.1"/>
         <Web data="www.thekompany.com"/>
         <Email data="dima@kde.org"/>
-        <Copyright data="Copyright (C) 2000 theKompany.com. All rights reserved."/>
+        <Copyright data="Copyright (C) 2000 theKompany.com & Dave Marotti. All rights reserved."/>
         <AutoUpdate data="off"/>
     </KivioPyStencilSpawnerInfo>
 

@@ -3,11 +3,12 @@
 	<KivioSMLStencilSpawnerInfo>
 		<Author data="Dave Marotti"/>
 		<Title data="Data"/>
+		<Id data="Data"/>
 		<Description data="Data shape for flowcharting"/>
 		<Version data="1.0"/>
 		<Web data="www.thekompany.com"/>
 		<Email data="landshark@ameritech.net"/>
-		<Copyright data="Copyright (C) 2000 theKompany.com. All rights reserved."/>
+		<Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. All rights reserved."/>
 		<AutoUpdate data="off"/>
 	</KivioSMLStencilSpawnerInfo>
 	<Dimensions w="72.0" h="54.0"/>

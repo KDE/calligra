@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -230,7 +230,7 @@ void KivioShapeData::copyInto( KivioShapeData *pTarget ) const
         }
         else
         {
-	   kdDebug() << "KivioShapeData::copyInto() - Shape is of type text-box, but our text data doens't exist." << endl;
+	   kdWarning() << "KivioShapeData::copyInto() - Shape is of type text-box, but our text data doens't exist." << endl;
             pTarget->m_pTextData->setText("");
             pTarget->m_pTextData->setIsHtml(false);
             pTarget->m_pTextData->setHTextAlign(Qt::AlignHCenter);
@@ -259,8 +259,6 @@ bool KivioShapeData::loadXML( const QDomElement &e )
     QDomNode node;
     QDomElement ele;
 
-    kdDebug() << "-LOAD KivioShapeData::loadXML()" << endl;
-
     // Maintain backwards compatibility with the eariler betas. They saved
     // fg color and line style in this node.
     m_pLineStyle->setColor( XmlReadColor( e, "fgColor", QColor(0,0,0) ) );
@@ -275,17 +273,14 @@ bool KivioShapeData::loadXML( const QDomElement &e )
 
         if( nodeName == "KivioLineStyle" )
         {
-	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioLineStyle" << endl;
             m_pLineStyle->loadXML( ele );
         }
         else if( nodeName == "KivioFillStyle" )
         {
-	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioFillStyle" << endl;
             m_pFillStyle->loadXML( ele );
         }
         else if( nodeName == "KivioTextStyle" )
         {
-	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioText" << endl;
             
             // First make sure we are a text box
             if( m_shapeType == kstTextBox )
@@ -300,8 +295,6 @@ bool KivioShapeData::loadXML( const QDomElement &e )
         }
         else if( nodeName == "KivioText" )
         {
-	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioText - deprecated" << endl;
-
             // First make sure we are a text box
             if( m_shapeType == kstTextBox )
             {

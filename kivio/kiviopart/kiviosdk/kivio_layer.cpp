@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,8 +52,6 @@ KivioLayer::KivioLayer( KivioPage *pPage )
 
 KivioLayer::~KivioLayer()
 {
-   kdDebug() << "KivioLayer() - In the end there can be only one" << endl;
-
     if( m_pStencilList )
     {
         delete m_pStencilList;
@@ -88,20 +86,23 @@ bool KivioLayer::removeStencil( KivioStencil *pStencil )
  */
 KivioStencil *KivioLayer::loadSMLStencil( const QDomElement &stencilE )
 {
-    QString setName, title;
+    QString setId, _id;
 
-    setName = XmlReadString( stencilE, "setName", "" );
-    title = XmlReadString( stencilE, "title", "" );
+    kdDebug() << "KivioLayer::loadSMLStencil() " << setId << " " << _id << endl;
 
-    // Can't locate a stencil if it doesn't have a title or set name
-    if( setName.length() == 0 ||
-        title.length() == 0 )
+    setId = XmlReadString( stencilE, "setId", "" );
+    _id = XmlReadString( stencilE, "id", "" );
+
+
+    if( setId.length() == 0 ||
+        _id.length() == 0 )
+    {
         return NULL;
+    }
 
-    kdDebug() << "KivioLayer::loadSMLStencil() " << setName << " " << title << endl;
 
     // Locate the spawner set
-    KivioStencilSpawner *pSpawner = m_pPage->doc()->findStencilSpawner(setName,title);
+    KivioStencilSpawner *pSpawner = m_pPage->doc()->findStencilSpawner(setId,_id);
     if( pSpawner )
     {
         KivioStencil *pStencil = pSpawner->newStencil();
@@ -142,20 +143,22 @@ KivioStencil *KivioLayer::loadGroupStencil( const QDomElement &stencilE )
 
 KivioStencil *KivioLayer::loadPluginStencil( const QDomElement &stencilE )
 {
-    QString setName, title;
+    QString setId, _id;
 
-    setName = XmlReadString( stencilE, "setName", "" );
-    title = XmlReadString( stencilE, "title", "" );
+    kdDebug() << "KivioLayer::loadPluginStencil() " << setId.ascii() << " / " << _id << endl;
 
-    // Can't locate a stencil if it doesn't have a title or set name
-    if( setName.length() == 0 ||
-        title.length() == 0 )
+
+    setId = XmlReadString( stencilE, "setId", "" );
+    _id = XmlReadString( stencilE, "id", "" );
+
+
+    if( setId.length() == 0 ||
+        _id.length() == 0 )
         return NULL;
 
-    kdDebug() << "KivioLayer::loadPluginStencil() " << setName.ascii() << " " <<  title << endl;
     
     // Locate the spawner set
-    KivioStencilSpawner *pSpawner = m_pPage->doc()->findStencilSpawner(setName,title);
+    KivioStencilSpawner *pSpawner = m_pPage->doc()->findStencilSpawner(setId, _id);
     if( pSpawner )
     {
         KivioStencil *pStencil = pSpawner->newStencil();
@@ -187,9 +190,9 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-		  kdWarning() << "KivioLayer::loadXML() - Unknown KivioSMLStencil (title=" <<
-		  XmlReadString( node.toElement(), "title", "" ) << " set=" <<  
-		  XmlReadString( node.toElement(), "setName", "" ) << ") found." << endl;
+	       kdWarning() << "KivioLayer::loadXML() - Unknown KivioSMLStencil (id=" <<
+		  XmlReadString( node.toElement(), "id", "" ) << " set=" <<  
+		  XmlReadString( node.toElement(), "setId", "" ) << ") found." << endl;
             }
         }
         else if( name == "KivioGroupStencil" )
@@ -201,7 +204,7 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-	       kdDebug() << "KivioLayer::loadXML() - Unable to load KivioGroupStencil" << endl;
+	       kdWarning() << "KivioLayer::loadXML() - Unable to load KivioGroupStencil" << endl;
             }
         }
         else if( name == "KivioPluginStencil" )
@@ -213,7 +216,10 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-	       kdDebug() << "KivioLayer - Unable to load KivioPluginStencil" << endl;
+	       kdWarning() << "KivioLayer - Unable to load KivioPluginStencil" << endl;
+	       kdWarning() << "KivioLayer::loadXML() - Unable to load KivioPluginStencil (id=" <<
+		  XmlReadString( node.toElement(), "id", "" ) << " set=" <<  
+		  XmlReadString( node.toElement(), "setId", "" ) << ") found." << endl;
             }
         }
 

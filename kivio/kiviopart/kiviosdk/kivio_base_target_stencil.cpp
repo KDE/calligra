@@ -225,8 +225,8 @@ QDomElement KivioBaseTargetStencil::createRootElement( QDomDocument &doc )
 {
    QDomElement e = doc.createElement("KivioPluginStencil");
 
-   XmlWriteString( e, "title", m_pSpawner->info()->title() );
-   XmlWriteString( e, "setName", m_pSpawner->set()->name() );
+   XmlWriteString( e, "id", m_pSpawner->info()->id() );
+   XmlWriteString( e, "setId", m_pSpawner->set()->id() );
 
    return e;
 }

@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@ class KivioStencilSpawnerSet
 protected:
     QString m_dir;
     QString m_name;
+    QString m_id;
     
     QList<KivioStencilSpawner> *m_pSpawners;
     KivioStencilSpawner *m_pSelected;
@@ -45,17 +46,23 @@ public:
     QDomElement saveXML( QDomDocument & );
     
     QList<KivioStencilSpawner> *spawners() { return m_pSpawners; }
+    KivioStencilSpawner *selected() { return m_pSelected; }
+
     QString dir() { return m_dir; }
     QString name() { return m_name; }
-    KivioStencilSpawner *selected() { return m_pSelected; }
+    QString id() { return m_id; }
+
+    void setDir( const QString &s ) { m_dir=s; }
+    void setName( const QString &s ) { m_name=s; }
+    void setId( const QString &s ) { m_id=s; }
     
     KivioStencilSpawner *spawnerAt( int i ) { return m_pSpawners->at(i); }
     KivioStencilSpawner *find( const QString& );
     
     int count() { return m_pSpawners->count(); }
 
-    static QString readDesc( const QString & );
-    
+    static QString readTitle( const QString & );
+    static QString readId( const QString & );
 };
 
 #endif

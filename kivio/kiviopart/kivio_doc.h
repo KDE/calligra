@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@ public:
 
   QList<KivioStencilSpawnerSet> *spawnerSets() { return m_pLstSpawnerSets; }
 
-  KivioStencilSpawner *findStencilSpawner( const QString& setName, const QString& title );
+  KivioStencilSpawner *findStencilSpawner( const QString& setId, const QString& stencilId );
   KivioStencilSpawner *findInternalStencilSpawner( const QString& title );
 
   KivioMap* map() const { return m_pMap; }
@@ -155,9 +155,9 @@ protected:
 
 
   /**
-   * Loads a KivioStencilSpawnerSet based on it's description
+   * Loads a KivioStencilSpawnerSet based on it's id
    */
-  bool loadStencilSpawnerSet( const QString &desc );
+  bool loadStencilSpawnerSet( const QString &id );
 
   /**
    * Overloaded function of @ref KoDocument.

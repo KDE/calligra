@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "add_spawner_set_dlg.h"
+#include "kivio_stencil_spawner_set.h"
 #include "tktoolbarbutton.h"
 
 #include <ktoolbar.h>
@@ -24,7 +25,6 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstddirs.h>
-
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qlistview.h>
@@ -111,7 +111,7 @@ void AddSpawnerSetAction::loadCollections( const QString& rootDirStr )
             QPopupMenu* ch = new QPopupMenu;
             connect(ch,SIGNAL(activated(int)),SLOT(slotActivated(int)));
             loadSet( ch, rootDirStr + "/" + colFInfo->fileName() );
-            m_pPopupMenu->insertItem(QIconSet(dirtPixmap(colFInfo->absFilePath())),dirDesc(colFInfo->absFilePath()),ch);
+            m_pPopupMenu->insertItem(QIconSet(dirtPixmap(colFInfo->absFilePath())),KivioStencilSpawnerSet::readTitle(colFInfo->absFilePath()),ch);
             childMenuList.append(ch);
         }
         ++colIt;
@@ -134,14 +134,14 @@ void AddSpawnerSetAction::loadSet( QPopupMenu* menu, const QString& rootDirStr )
         if( setFInfo->fileName() != ".." &&
             setFInfo->fileName() != "." )
         {
-            menu->insertItem(QIconSet(dirtPixmap(setFInfo->absFilePath())),dirDesc(setFInfo->absFilePath()),m_id);
+            menu->insertItem(QIconSet(dirtPixmap(setFInfo->absFilePath())),KivioStencilSpawnerSet::readTitle(setFInfo->absFilePath()),m_id);
             pathList.insert( m_id, new QString(rootDirStr + "/" + setFInfo->fileName()) );
             m_id++;
         }
         ++setIt;
     }
 }
-
+/*
 QString AddSpawnerSetAction::dirDesc( const QString& dir )
 {
     QFile file( dir + "/desc" );
@@ -163,7 +163,7 @@ QString AddSpawnerSetAction::dirDesc( const QString& dir )
 
     return ret;
 }
-
+*/
 QPixmap AddSpawnerSetAction::dirtPixmap( const QString& dir )
 {
     QFile file( dir + "/icon.xpm" );
@@ -272,7 +272,7 @@ void AddSpawnerSetDlg::loadCollections( QListView *pListView, QString &rootDirSt
         if( colFInfo->fileName() != ".." &&
             colFInfo->fileName() != "." )
         {
-            pColItem = new QListViewItem( pListView, dirDesc( colFInfo->absFilePath() ), m_rootDir + "/" + colFInfo->fileName() );
+            pColItem = new QListViewItem( pListView, KivioStencilSpawnerSet::readTitle( colFInfo->absFilePath() ), m_rootDir + "/" + colFInfo->fileName() );
             setPixmap( colFInfo->absFilePath(), pColItem );
 
             pListView->insertItem( pColItem );
@@ -288,7 +288,7 @@ void AddSpawnerSetDlg::loadSet( QListView */*pListView*/, QListViewItem *pParent
 {
     QDir rootDir( rootDirStr );
     QListViewItem *pSetItem;
-
+    
     rootDir.setFilter( QDir::Dirs );
     rootDir.setSorting( QDir::Name );
 
@@ -301,7 +301,7 @@ void AddSpawnerSetDlg::loadSet( QListView */*pListView*/, QListViewItem *pParent
         if( setFInfo->fileName() != ".." &&
             setFInfo->fileName() != "." )
         {
-            pSetItem = new QListViewItem( pParentItem, dirDesc( setFInfo->absFilePath() ), rootDirStr + "/" + setFInfo->fileName() );
+            pSetItem = new QListViewItem( pParentItem, KivioStencilSpawnerSet::readTitle( setFInfo->absFilePath() ), rootDirStr + "/" + setFInfo->fileName() );
             setPixmap( setFInfo->absFilePath(), pSetItem );
 
             pParentItem->insertItem( pSetItem );

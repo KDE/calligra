@@ -3,11 +3,12 @@
     <KivioSMLStencilSpawnerInfo>
         <Author data="Landshark"/>
         <Title data="Off-Page Reference"/>
+        <Id data="Off-Page Reference"/>
         <Description data="Off-Page Reference"/>
         <Version data="0.1"/>
         <Web data="www.thekompany.com"/>
         <Email data="landshark@ameritech.net"/>
-    		<Copyright data="Copyright (C) 2000 theKompany.com. All rights reserved."/>
+    		<Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. All rights reserved."/>
         <AutoUpdate data="off"/>
     </KivioSMLStencilSpawnerInfo>
     <Dimensions w="72.0" h="72.0"/>

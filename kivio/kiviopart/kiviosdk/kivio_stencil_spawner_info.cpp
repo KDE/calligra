@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
+ * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ KivioStencilSpawnerInfo::KivioStencilSpawnerInfo()
 {
     m_author = "Joe Bob";
     m_title  = "Untitled";
+    m_id = "";
     m_desc   = "No desc";
     m_version = "1.0";
     m_web    = "http://kivio.sourceforge.net";
@@ -34,11 +35,12 @@ KivioStencilSpawnerInfo::~KivioStencilSpawnerInfo()
 {
 }
 
-KivioStencilSpawnerInfo::KivioStencilSpawnerInfo( const QString &auth, const QString &tit, const QString &des, const QString &ver, const QString &wb, 
+KivioStencilSpawnerInfo::KivioStencilSpawnerInfo( const QString &auth, const QString &tit, const QString &_id, const QString &des, const QString &ver, const QString &wb, 
                                             const QString &em, const QString &au )
 {
     m_author = auth;
     m_title = tit;
+    m_id = _id;
     m_desc = des;
     m_version = ver;
     m_web = wb;
@@ -67,6 +69,10 @@ bool KivioStencilSpawnerInfo::loadXML( const QDomElement &e )
         {
             m_title = nodeElement.attribute("data");
         }
+	else if( nodeName.compare("Id")==0 )
+	{
+	   m_id = nodeElement.attribute("data");
+	}
         else if( nodeName.compare("Description")==0 )
         {
             m_desc = nodeElement.attribute("data");

@@ -191,3 +191,13 @@
 03/06/2001
     - All but the crop abilities of export page work
     - Made the moving of already selected stencils a bit more 'user friendly.'
+
+(Dave Marotti)
+03/15/2001
+    - A slightly updated method of saving/loading stencils and files has been
+      implemented.  Now ID's are used for stencils and sets instead of the
+      name.  This will hopefully fix any internationalization issues when
+      loading Kivio files which were created in a different locale. On the
+      downside, this made all previous save files incompatible.  I know this
+      sucks, but it was necessary and writing a converter at this point in time
+      is something I don't have time to do.
