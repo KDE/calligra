@@ -1,3 +1,11 @@
+2005-03-10  Inge Wallin  <inge@lysator.liu.se>
+
+	Make the table in the data editor shrink when number of rows/cols
+	are decreased in the spinboxes.
+	* kchartDataEditor.cc (askUserForConfirmation): new static
+	function.
+	(setRows, setCols): Handle shrinking
+
 2005-03-09  Inge Wallin  <inge@lysator.liu.se>
 
 	Make the table in the data editor grow when number of rows/cols

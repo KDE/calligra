@@ -1,79 +1,82 @@
 Before release of KOffice 1.4
 -----------------------------
 
+Item								   Prio Status
+------------------------------------------------------------------------------
+
 * Bugs
-  + 77839: Program hangs when only one value for pie chart 
+  + 77839: Program hangs when only one value for pie chart 	      1	----
 	   and value = 0.
-  + 41612: No titles for axes
-  + 100004: Manual should describe stand-alone charting 
+  + 41612: No titles for axes					      1	----
+  + 100004: Manual should describe stand-alone charting  	      2	----
             (see below also)
-  + 101007: Error in reading back axis labels.
+  + 101007: Error in reading back axis labels.			      1 ----
       - Store row and column labels separately in the document		done
       - Load old type files without separately stored labels.
       - Save / Load row and column labels 
 
 
 * Wishes
-  + 14971: Data in rows or columns					DONE
+  + 14971: Data in rows or columns				      1	DONE
       - Store in document						done
       - Save / Load							done
       - Manipulate with GUI						done
       - Paint chart using it						done
 
 * Issues with KSpread
-  + Printing: The chart is the size of a thumbnail, and wrongly placed.
-  + Labels are no longer generated correctly.				DONE
+  + Printing: The chart is of thumbnail size, and wrongly placed.     2	----
+  + Labels are no longer generated correctly.			      1	DONE
 
 * Other fixes
-  + Include me in Authors						DONE
-  + Can HiLo charts be made thicker than one pixel?  
+  + Include me in Authors					      2	DONE
+  + Can HiLo charts be made thicker than one pixel?                   3 ----
     New page in config dialog like pie settings?
-  + Tooltips & What's this help?
-  + Remove the predefined bar chart?
-  + Make the settings in Edit->"Page Layout" clearer?
-  + Singular or plural for tooltips, not both.
+  + Tooltips & What's this help?				     S1 ----
+  + Remove the predefined bar chart?				      2 ----
+  + Make the settings in Edit->"Page Layout" clearer?		      1 ----
+  + Singular or plural for tooltips, not both.			     S1 ----
 
   + Fix ChangeLog re: bug titles.					DONE
-  + Grep for FIXME and fix the urgent ones.
+  + Grep for FIXME and fix the urgent ones.			      2 ----
 
 * Toolbars
-  + Separate toolbar for chart types (separate from data editor, etc).
+  + Separate toolbar for chart types (separate from config, etc).     2 ----
   + Reorder: Group pie chart with ring chart and polar.			DONE
              Group Box&Whiskers with HiLo				DONE
 
 * Icons
-  + Smaller icons for chart subtypes in config dialog.
-  + Wrong images for HiLo subtype icons.
+  + Smaller icons for chart subtypes in config dialog.                1 ----
+  + Wrong images for HiLo subtype icons.			      1 ----
 
 * Data editor
-  + Make table size handling work.
+  + Make table size handling work.					DONE
       - Make it grow when spinbox values increase.			done
-      - Make it shrink (with safety checks!) when spinbox values
+      - Make it shrink (with safety checks!) when spinbox values	done
 	are decreased.
   + Make Apply button work.						DONE
   + Smaller column widths?						DONE
 
 * Config dialog
   + Make Data page work.						DONE
-  + Pie settings at the same place as Subtype?
-  + Check *all* subpages.
-    - Axes page is ugly.
-    - Font page is ugly.
-  + Check handling of defaults.
+  + Pie settings at the same place as Subtype?			      1 ----
+  + Check *all* subpages.					     S1 ----
+    - Axes page is ugly.					     S1 --
+    - Font page is ugly.					     S1 --
+  + Check handling of defaults.					      1 ----
 
 * Wizard
   + Pages:
     - "Select Chart Type" page: Reorder like the toolbark		DONE
-                                Black border around selected type?
-  + Make Help button work.
-  + The Back button should be in the same place on all pages.
-  + Subtype page should also have icons for subtypes like config dialog.
-  + Why is Finish button disabled for two pages?
+                                Black border around selected type?    3 --
+  + Make Help button work.					      1 ----
+  + The Back button should be in the same place on all pages.	      3 ----
+  + Subtype page should have icons for subtypes like config dialog.   2 ----
+  + Why is Finish button disabled for two pages?		      1 ----
 
 * Manual
-  + Describe stand-alone charting.
-  + New screen shots.
-  + Other enhancements?
+  + Describe stand-alone charting.				     S1 ----
+  + New screen shots.						     S1 ----
+  + Other enhancements?						     S2 ----
 
 
 After release of KOffice 1.4

@@ -26,6 +26,7 @@ public:
     void setColLabels(const QStringList &colLabels);
     void getColLabels(QStringList &colLabels);
 
+    // Old stuff, soon to be removed.
     void getLegend(KChartParams* params);
     void setLegend(const QStringList &legend);
     void getXLabel(KChartParams* params);
@@ -45,7 +46,7 @@ protected slots:
     void  setCols(int cols);
 
 private:
-    // Data Editor, Old version
+    // Data Editor, Old version.  Soon to be removed.
     SheetDlg *_widget;
     QStringList *longLabels;
     QStringList *shortLabels;
@@ -56,6 +57,10 @@ private:
     QSpinBox    *m_rowsSB;
     QLabel      *m_colsLA;
     QSpinBox    *m_colsSB;
+
+    // This member is set to true if the user shrinks the data table,
+    // and confirms this by clicking OK in a warning dialog.
+    bool        m_userWantsToShrink;
 };
 
 }  //KChart namespace

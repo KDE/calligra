@@ -6,6 +6,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 #include "kdchart/KDChartAxisParams.h"
 #include "kchart_params.h"
@@ -82,6 +83,11 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
 	    this,     SLOT(setRows(int)));
     connect(m_colsSB, SIGNAL(valueChanged(int)), 
 	    this,     SLOT(setCols(int)));
+
+    // At first, assume that any shrinking of the table is a mistake.
+    // A confirmation dialog will make sure that the user knows what
+    // (s)he is doing.
+    m_userWantsToShrink = false;
 }
 
 // Set the data in the data editor.
@@ -381,6 +387,16 @@ void kchartDataEditor::getXLabel( KChartParams* params )
 //                              Slots
 
 
+static int askUserForConfirmation()
+{
+    return KMessageBox::warningContinueCancel(0,
+        i18n("You are about to shrink the data table. "
+	     "This may lead to loss of existing data in the table "
+	     "and/or the headers.\n\n"
+	     "This message will not be shown again if you click Continue"));
+}
+
+
 void kchartDataEditor::setRows(int rows)
 {
     kdDebug(35001) << "setRows called: rows = " << rows << endl;;
@@ -403,7 +419,20 @@ void kchartDataEditor::setRows(int rows)
 	}
     }
     else if (rows + 1 < m_table->numRows()) {
-	// NYI: Shrinking of the table
+	// Check that the user really wants to shrink the table.
+	if (!m_userWantsToShrink
+	    && askUserForConfirmation() == KMessageBox::Cancel) {
+
+	    // The user aborts.  Reset the number of rows and return.
+	    m_rowsSB->setValue(m_table->numRows() - 1);
+	    return;
+	}
+	
+	// Record the fact that the user knows what (s)he is doing.
+	m_userWantsToShrink = true;
+
+	// Do the actual shrinking.
+	m_table->setNumRows(rows + 1);
     }
 }
 
@@ -419,11 +448,14 @@ void kchartDataEditor::setCols(int cols)
 	return;
     }
 
-    int  oldNumCols = m_table->numCols();
     if (cols + 1 > m_table->numCols()) {
+	int  oldNumCols = m_table->numCols();
+
 	m_table->setNumCols(cols + 1);
 
 	// Set the width and numerical label for the new columns.
+	// Note that this need not be an increase of just one, but can
+	// be any number of new columns.
 	for (int col = oldNumCols; col < cols + 1; col++) {
 	    m_table->setColumnWidth(col, COLUMNWIDTH);
 	    m_table->horizontalHeader()->setLabel(col, 
@@ -431,7 +463,20 @@ void kchartDataEditor::setCols(int cols)
 	}
     }
     else if (cols + 1 < m_table->numCols()) {
-	// NYI: Shrinking of the table
+	// Check that the user really wants to shrink the table.
+	if (!m_userWantsToShrink
+	    && askUserForConfirmation() == KMessageBox::Cancel) {
+
+	    // The user aborts.  Reset the number of rows and return.
+	    m_colsSB->setValue(m_table->numCols() - 1);
+	    return;
+	}
+	
+	// Record the fact that the user knows what (s)he is doing.
+	m_userWantsToShrink = true;
+
+	// Do the actual shrinking.
+	m_table->setNumCols(cols + 1);
     }
 }
 
