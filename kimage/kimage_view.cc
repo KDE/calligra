@@ -267,7 +267,7 @@ void KImageView::viewZoomFactor()
 
   doc()->setZoomFactor( factor );
 
-  kdebug( KDEBUG_INFO, 0, "zoom factor: X: %i, Y: %i", factor.x(), factor.y() );
+  kDebugInfo( 0, "zoom factor: X: %i, Y: %i", factor.x(), factor.y() );
 
   doc()->setDrawMode( KImageDocument::ZoomFactor );
   slotUpdateView();
@@ -308,7 +308,7 @@ void KImageView::viewBackgroundColor()
 
 void KImageView::transformRotateRight()
 {
-  kdebug( KDEBUG_INFO, 0, "Rotate Right" );
+  kDebugInfo( 0, "Rotate Right" );
 
   QWMatrix matrix;
   matrix.rotate( 90 );
@@ -317,7 +317,7 @@ void KImageView::transformRotateRight()
 
 void KImageView::transformRotateLeft()
 {
-  kdebug( KDEBUG_INFO, 0, "Rotate Left" );
+  kDebugInfo( 0, "Rotate Left" );
 
   QWMatrix matrix;
   matrix.rotate( -90 );
@@ -326,7 +326,7 @@ void KImageView::transformRotateLeft()
 
 void KImageView::transformRotateAngle()
 {
-  kdebug( KDEBUG_INFO, 0, "Rotate Angle" );
+  kDebugInfo( 0, "Rotate Angle" );
 
   int angle = 0;
   KIntegerInputDialog dlg( NULL, "KImage", i18n( "Enter angle:" ) );
@@ -343,7 +343,7 @@ void KImageView::transformRotateAngle()
 
 void KImageView::transformFlipVertical()
 {
-  kdebug( KDEBUG_INFO, 0, "flipVertical" );
+  kDebugInfo( 0, "flipVertical" );
 
   QWMatrix matrix;
   QWMatrix matrix2( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
@@ -353,7 +353,7 @@ void KImageView::transformFlipVertical()
 
 void KImageView::transformFlipHorizontal()
 {
-  kdebug( KDEBUG_INFO, 0, "flipHorizontal" );
+  kDebugInfo( 0, "flipHorizontal" );
 
   QWMatrix matrix;
   QWMatrix matrix2( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
@@ -364,7 +364,7 @@ void KImageView::transformFlipHorizontal()
 
 void KImageView::transformZoomFactor()
 {
-  kdebug( KDEBUG_INFO, 0, "Zoom Factor" );
+  kDebugInfo( 0, "Zoom Factor" );
 
   QWMatrix matrix;
   int factor = (int)(matrix.m11() * 100 );
@@ -381,7 +381,7 @@ void KImageView::transformZoomFactor()
 
 void KImageView::transformZoomIn10()
 {
-  kdebug( KDEBUG_INFO, 0, "Zoom In 10" );
+  kDebugInfo( 0, "Zoom In 10" );
 
   QWMatrix matrix;
   matrix.scale( 1.1, 1.1 );
@@ -391,7 +391,7 @@ void KImageView::transformZoomIn10()
 
 void KImageView::transformZoomOut10()
 {
-  kdebug( KDEBUG_INFO, 0, "Zoom Out 10" );
+  kDebugInfo( 0, "Zoom Out 10" );
 
   QWMatrix matrix;
   matrix.scale( 0.9, 0.9 );
@@ -400,7 +400,7 @@ void KImageView::transformZoomOut10()
 
 void KImageView::transformZoomDouble()
 {
-  kdebug( KDEBUG_INFO, 0, "Zoom Double" );
+  kDebugInfo( 0, "Zoom Double" );
 
   QWMatrix matrix;
   matrix.scale( 2.0, 2.0 );
@@ -409,7 +409,7 @@ void KImageView::transformZoomDouble()
 
 void KImageView::transformZoomHalf()
 {
-  kdebug( KDEBUG_INFO, 0, "Zoom Half" );
+  kDebugInfo( 0, "Zoom Half" );
 
   QWMatrix matrix;
   matrix.scale( 0.5, 0.5 );
@@ -418,7 +418,7 @@ void KImageView::transformZoomHalf()
 
 void KImageView::transformZoomMax()
 {
-  kdebug( KDEBUG_INFO, 0, "Zoom Max" );
+  kDebugInfo( 0, "Zoom Max" );
 
   QWMatrix matrix;
   double dw = (double) width() / (double) doc()->image().width();
@@ -429,7 +429,7 @@ void KImageView::transformZoomMax()
 
 void KImageView::transformZoomMaxAspect()
 {
-  kdebug( KDEBUG_INFO, 0, "Zoom Max Aspect" );
+  kDebugInfo( 0, "Zoom Max Aspect" );
 
   QWMatrix matrix;
   double dw = (double) width() / (double) doc()->image().width();

@@ -262,18 +262,18 @@ void KImageDocument::setPositionString( QString name )
 {
   if( name == "centered" )
   {
-    kdebug( KDEBUG_INFO, 0, "Setting position 'centered'" );
+    kDebugInfo( 0, "Setting position 'centered'" );
     m_posMode = Center;
     return;
   }
   else if( name == "topleft" )
   {
-    kdebug( KDEBUG_INFO, 0, "Setting position 'lefttop'" );
+    kDebugInfo( 0, "Setting position 'lefttop'" );
     m_posMode = LeftTop;
     return;
   }
 
-  kdebug( KDEBUG_ERROR, 0, "Error: Unsupported position, using 'topleft' : " + name );
+  kDebugError( 0, "Error: Unsupported position, using 'topleft' : " + name );
 
   m_posMode = LeftTop;
 }
@@ -305,30 +305,30 @@ void KImageDocument::setSizeString( QString name )
 {
   if( name == "original" )
   {
-    kdebug( KDEBUG_INFO, 0, "Setting 'original size'" );
+    kDebugInfo( 0, "Setting 'original size'" );
     m_drawMode = OriginalSize;
     return;
   }
   else if( name == "fittoview" )
   {
-    kdebug( KDEBUG_INFO, 0, "Setting 'fit to view'" );
+    kDebugInfo( 0, "Setting 'fit to view'" );
     m_drawMode = FitToView;
     return;
   }
   else if( name == "fitwithprops" )
   {
-    kdebug( KDEBUG_INFO, 0, "Setting 'fit with props'" );
+    kDebugInfo( 0, "Setting 'fit with props'" );
     m_drawMode = FitWithProps;
     return;
   }
   else if( name == "zoomfactor" )
   {
-    kdebug( KDEBUG_INFO, 0, "Setting 'zoomfactor'" );
+    kDebugInfo( 0, "Setting 'zoomfactor'" );
     m_drawMode = ZoomFactor;
     return;
   }
 
-  kdebug( KDEBUG_ERROR, 0, "Error: Unsupported drawmode, using 'original' : " + name  );
+  kDebugError( 0, "Error: Unsupported drawmode, using 'original' : " + name  );
 
   m_drawMode = OriginalSize;
 }
@@ -384,7 +384,7 @@ bool KImageDocument::loadXML( const QDomDocument& doc, KoStore* /* store */ )
   QString hl="", hm="", hr="";
   QString fl="", fm="", fr="";
 
-  kdebug( KDEBUG_INFO, 0, "KImageDocument::loadXML()" );
+  kDebugInfo( 0, "KImageDocument::loadXML()" );
 
   if( doc.doctype().name() != "image" )
     return false;
@@ -430,7 +430,7 @@ bool KImageDocument::loadXML( const QDomDocument& doc, KoStore* /* store */ )
 
 bool KImageDocument::completeLoading( KoStore* _store )
 {
-  kdebug( KDEBUG_INFO, 0, "KImageDocument::completeLoading()" );
+  kDebugInfo( 0, "KImageDocument::completeLoading()" );
 
   QString file = "image.bmp";
 
@@ -512,7 +512,7 @@ void KImageDocument::print( QPaintDevice* _dev )
 void KImageDocument::draw( QPaintDevice* _dev, long int _width, long int _height,
 		      float _scale )
 {
-  kdebug( KDEBUG_INFO, 0, "DRAWING w=%li h=%li", _width, _height );
+  kDebugInfo( 0, "DRAWING w=%li h=%li", _width, _height );
 
   QPainter painter;
   painter.begin( _dev );
@@ -555,7 +555,7 @@ void KImageDocument::draw( QPaintDevice* _dev, long int _width, long int _height
 
 void KImageDocument::paperLayoutDlg()
 {
-  kdebug( KDEBUG_INFO, 0, "KImageDocument::paperLayoutDlg" );
+  kDebugInfo( 0, "KImageDocument::paperLayoutDlg" );
 
   KoPageLayout pl;
   pl.format = paperFormat();
@@ -878,7 +878,7 @@ void KImageDocument::transformImage( const QWMatrix& matrix )
   setModified( true );
   m_bEmpty = false;
 
-  kdebug( KDEBUG_INFO, 0, "Image manipulated with matrix" );
+  kDebugInfo( 0, "Image manipulated with matrix" );
 }
 
 float KImageDocument::printableWidth()
