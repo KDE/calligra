@@ -681,7 +681,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "NOVALUE",          10,   0 },
 	{ "NBW",              11,   0 },
 	{ "STDEV",            12,   0 },
-	{ "CURRENCY",         13,   0 },
+	{ "DOLLAR",           13,   0 },
 	{ "FIXED",            14,   0 },
 	{ "SIN",              15,   1 },
 	{ "COS",              16,   1 },
