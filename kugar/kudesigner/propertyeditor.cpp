@@ -53,6 +53,7 @@ PropertyEditor::~PropertyEditor(){
 
 void PropertyEditor::populateProperties(std::map<QString, PropPtr > *v_props,CanvasBox* item)
 {
+    table->hide();
     props = v_props;
 
     table->setNumRows(0);
@@ -67,6 +68,7 @@ void PropertyEditor::populateProperties(std::map<QString, PropPtr > *v_props,Can
         QWidget *w = (*it).second->editorOfType(this,item);
         table->setCellWidget(row-1, 1, w);
     }
+    table->show();
 }
 
 void PropertyEditor::clearProperties()
