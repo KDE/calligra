@@ -1,4 +1,1 @@
 # modules
-kpresenter: shlib-missing-in-control-file kpresenter usr/lib/kpresenter.so
-kpresenter: shlib-missing-in-control-file libkpresenterpart usr/lib/libkpresenterpart.so
-kpresenter: unused-shlib-entry-in-control-file libkochart

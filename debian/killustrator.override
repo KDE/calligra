@@ -1,4 +1,1 @@
 # modules
-killustrator: shlib-missing-in-control-file libkillustratorpart usr/lib/libkillustratorpart.so
-killustrator: shlib-missing-in-control-file killustrator usr/lib/killustrator.so
-killustrator: unused-shlib-entry-in-control-file libkochart

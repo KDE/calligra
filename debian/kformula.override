@@ -1,4 +1,1 @@
 #modules
-kformula: shlib-missing-in-control-file libkformulapart usr/lib/libkformulapart.so
-kformula: shlib-missing-in-control-file kformula usr/lib/kformula.so
-kformula: unused-shlib-entry-in-control-file libkochart
