@@ -161,7 +161,7 @@ CORBA::Boolean KWordDocument::initDoc()
     }
     else if ( ret == KoTemplateChooseDia::Empty )
     {
-        QString fileName( locate("templates", "Wordprocessing/PlainText.kwt") );
+        QString fileName( locate("kword_template", "Wordprocessing/PlainText.kwt") );
         bool ok = loadTemplate( fileName.data() );
         setURL( QString::null );
         return ok;
