@@ -319,6 +319,8 @@ public:
     QButton *okButton;
     QButton *cancelButton;
     KSpreadEditWidget *editWidget;
+    QGridLayout* viewLayout;
+    QHBoxLayout* tabScrollBarLayout;
 
     // all UI actions
     ViewActions* actions;
@@ -1643,32 +1645,24 @@ KSpreadView::~KSpreadView()
 }
 
 // should be called only once, from the constructor
+    /*
+     * Top part is the formula bar.
+     * Central part is the canvas, row header and vertical scrollbar.
+     * Bottom part is the tab bar and horizontal scrollbar.
+     *
+     * Note that canvas must the one to be created, since other
+     * widgets might depend on it.
+     */
+     
 void KSpreadView::initView()
 {
+    d->viewLayout = new QGridLayout( this, 3, 4 );
+
     // Vert. Scroll Bar
     d->calcLabel  = 0;
     d->vertScrollBar = new QScrollBar( this, "ScrollBar_2" );
     d->vertScrollBar->setRange( 0, 4096 );
     d->vertScrollBar->setOrientation( QScrollBar::Vertical );
-
-    // Horz. Scroll Bar
-    d->horzScrollBar = new QScrollBar( this, "ScrollBar_1" );
-    d->horzScrollBar->setRange( 0, 4096 );
-    d->horzScrollBar->setOrientation( QScrollBar::Horizontal );
-
-    d->tabBar = new KoTabBar( this );
-    d->tabBar->setReadOnly( !d->doc->isReadWrite() );
-    QObject::connect( d->tabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeTable( const QString& ) ) );
-    QObject::connect( d->tabBar, SIGNAL( tabMoved( unsigned, unsigned ) ),
-      this, SLOT( moveTable( unsigned, unsigned ) ) );
-    QObject::connect( d->tabBar, SIGNAL( contextMenu( const QPoint& ) ),
-      this, SLOT( popupTabBarMenu( const QPoint& ) ) );
-    QObject::connect( d->tabBar, SIGNAL( doubleClicked() ),
-      this, SLOT( slotRename() ) );
-
-    // Paper and Border widgets
-    d->frame = new QWidget( this );
-    d->frame->raise();
 
     // Edit Bar
     d->toolWidget = new QFrame( this );
@@ -1677,7 +1671,6 @@ void KSpreadView::initView()
     d->formulaBarLayout->addSpacing( 2 );
 
     d->posWidget = new KSpreadComboboxLocationEditWidget( d->toolWidget, this );
-
     d->posWidget->setMinimumWidth( 100 );
     d->formulaBarLayout->addWidget( d->posWidget );
     d->formulaBarLayout->addSpacing( 6 );
@@ -1689,7 +1682,7 @@ void KSpreadView::initView()
     d->formulaBarLayout->addSpacing( 6 );
 
     // The widget on which we display the table
-    d->canvas = new KSpreadCanvas( d->frame, this, d->doc );
+    d->canvas = new KSpreadCanvas( this, this, d->doc );
 
     // The line-editor that appears above the table and allows to
     // edit the cells content. It knows about the two buttons.
@@ -1700,8 +1693,8 @@ void KSpreadView::initView()
 
     d->canvas->setEditWidget( d->editWidget );
 
-    d->hBorderWidget = new KSpreadHBorder( d->frame, d->canvas,this );
-    d->vBorderWidget = new KSpreadVBorder( d->frame, d->canvas ,this );
+    d->hBorderWidget = new KSpreadHBorder( this, d->canvas,this );
+    d->vBorderWidget = new KSpreadVBorder( this, d->canvas ,this );
 
     d->canvas->setFocusPolicy( QWidget::StrongFocus );
     QWidget::setFocusPolicy( QWidget::StrongFocus );
@@ -1709,9 +1702,33 @@ void KSpreadView::initView()
 
     connect( this, SIGNAL( invalidated() ), d->canvas, SLOT( update() ) );
 
-    QObject::connect( d->vertScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollVert(int) ) );
-    QObject::connect( d->horzScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollHorz(int) ) );
+    QWidget* bottomPart = new QWidget( this );
+    d->tabScrollBarLayout = new QHBoxLayout( bottomPart );
+    d->tabScrollBarLayout->setAutoAdd( true );
+    d->tabBar = new KoTabBar( bottomPart );    
+    d->horzScrollBar = new QScrollBar( bottomPart, "ScrollBar_1" );
+    
+    d->horzScrollBar->setRange( 0, 4096 );
+    d->horzScrollBar->setOrientation( QScrollBar::Horizontal );
+    
+    QObject::connect( d->tabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeTable( const QString& ) ) );
+    QObject::connect( d->tabBar, SIGNAL( tabMoved( unsigned, unsigned ) ),
+      this, SLOT( moveTable( unsigned, unsigned ) ) );
+    QObject::connect( d->tabBar, SIGNAL( contextMenu( const QPoint& ) ),
+      this, SLOT( popupTabBarMenu( const QPoint& ) ) );
+    QObject::connect( d->tabBar, SIGNAL( doubleClicked() ),
+      this, SLOT( slotRename() ) );
 
+      
+    d->viewLayout->setColStretch( 1, 10 );  
+    d->viewLayout->setRowStretch( 2, 10 );  
+    d->viewLayout->addMultiCellWidget( d->toolWidget, 0, 0, 0, 2 );
+    d->viewLayout->addMultiCellWidget( d->hBorderWidget, 1, 1, 1, 2 );    
+    d->viewLayout->addWidget( d->vBorderWidget, 2, 0 );
+    d->viewLayout->addWidget( d->canvas, 2, 1 );
+    d->viewLayout->addWidget( d->vertScrollBar, 2, 2 );
+    d->viewLayout->addMultiCellWidget( bottomPart, 3, 3, 0, 2 );
+    
     KStatusBar * sb = statusBar();
     Q_ASSERT(sb);
     d->calcLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
@@ -1719,6 +1736,9 @@ void KSpreadView::initView()
     if (d->calcLabel)
         connect(d->calcLabel ,SIGNAL(itemPressed( int )),this,SLOT(statusBarClicked(int)));
 
+    // signal slot
+    QObject::connect( d->vertScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollVert(int) ) );
+    QObject::connect( d->horzScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollHorz(int) ) );
 
 }
 
@@ -2356,7 +2376,7 @@ void KSpreadView::initialPosition()
           d->tabBar->addTab( tabName );
         }
       }
-      setActiveTable( tbl );
+//      setActiveTable( tbl );
     }
 
     refreshView();
@@ -3591,6 +3611,7 @@ void KSpreadView::sheetProperties()
         d->activeSheet->setFirstLetterUpper( dlg->capitalizeFirstLetter() );
 
         slotUpdateView( d->activeSheet );
+        refreshView();
 
         // FIXME create command & undo object
     }
@@ -4831,204 +4852,51 @@ int KSpreadView::bottomBorder() const
 
 void KSpreadView::refreshView()
 {
-
   kdDebug() << "refreshing view" << endl;
 
   KSpreadSheet * table = activeTable();
   if ( !table )
     return;
 
+  d->adjustActions( !table->isProtected() );
+  d->actions->viewZoom->setZoom( d->doc->zoom() );
+  
   bool active = table->getShowFormula();
-
   if ( table && !table->isProtected() )
   {
     d->actions->alignLeft->setEnabled( !active );
     d->actions->alignCenter->setEnabled( !active );
     d->actions->alignRight->setEnabled( !active );
   }
-  active = d->doc->showFormulaBar();
-  editWidget()->showEditWidget( active );
 
-  d->actions->viewZoom->setZoom( d->doc->zoom() );
-
-  d->adjustActions( !table->isProtected() );
-
-  int posFrame = 30;
-  if ( active )
-    posWidget()->show();
-  else
-  {
-    posWidget()->hide();
-    posFrame = 0;
-  }
-
-  d->toolWidget->show();
-  if( table->layoutDirection()==KSpreadSheet::RightToLeft )
-    d->formulaBarLayout->setDirection( QBoxLayout::RightToLeft );
-  else
-    d->formulaBarLayout->setDirection( QBoxLayout::LeftToRight );
-
-  // If this value (30) is changed then topBorder() needs to
-  // be changed, too.
-  d->toolWidget->setGeometry( 0, 0, width(), /*30*/posFrame );
-  int top = /*30*/posFrame;
-
-  int widthVScrollbar  = d->vertScrollBar->sizeHint().width();// 16;
-  int heightHScrollbar = d->horzScrollBar->sizeHint().height();
-
-  int left = 0;
-  if ( table->layoutDirection()==KSpreadSheet::RightToLeft && d->doc->showVerticalScrollBar() )
-    left = widthVScrollbar;
-
-  if (!d->doc->showHorizontalScrollBar())
-    d->tabBar->setGeometry( left, height() - heightHScrollbar,
-                            width(), heightHScrollbar );
-  else
-    d->tabBar->setGeometry( left, height() - heightHScrollbar,
-                            width() / 2, heightHScrollbar );
-  if ( d->doc->showTabBar() )
-    d->tabBar->show();
-  else
-    d->tabBar->hide();
-
-  // David's suggestion: move the scrollbars to KSpreadCanvas, but keep those resize statements
-  if ( d->doc->showHorizontalScrollBar() )
-    d->horzScrollBar->show();
-  else
-    d->horzScrollBar->hide();
-
-  left = 0;
-  if ( !activeTable()->layoutDirection()==KSpreadSheet::RightToLeft )
-    left = width() - widthVScrollbar;
-
-  if ( !d->doc->showTabBar() && !d->doc->showHorizontalScrollBar())
-    d->vertScrollBar->setGeometry( left,
-                                   top,
-                                   widthVScrollbar,
-                                   height() - top );
-  else{
-      kdDebug() << k_funcinfo << "setting geom of vertScrollBar, height=" <<
-                height() - heightHScrollbar - top << endl;
-    d->vertScrollBar->setGeometry( left,
-                                   top,
-                                   widthVScrollbar,
-                                   height() - heightHScrollbar - top );
-  }
-  d->vertScrollBar->setSteps( 20 /*linestep*/, d->vertScrollBar->height() /*pagestep*/);
-
-  if ( d->doc->showVerticalScrollBar() )
-    d->vertScrollBar->show();
-  else
-  {
-    widthVScrollbar = 0;
-    d->vertScrollBar->hide();
-  }
-
-  int widthRowHeader = int( d->canvas->doc()->zoomItX( YBORDER_WIDTH ) );
-  if ( d->doc->showRowHeader() )
-    d->vBorderWidget->show();
-  else
-  {
-    widthRowHeader = 0;
-    d->vBorderWidget->hide();
-  }
-
-  int heightColHeader = int( d->canvas->doc()->zoomItY( KSpreadFormat::globalRowHeight() + 2 ) );
-  if ( d->doc->showColumnHeader() )
-    d->hBorderWidget->show();
-  else
-  {
-    heightColHeader = 0;
-    d->hBorderWidget->hide();
-  }
-
-  if ( statusBar() )
-  {
-    if ( d->doc->showStatusBar() )
-      statusBar()->show();
-    else
-      statusBar()->hide();
-  }
-
-  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
-  {
-    if ( !d->doc->showTabBar() && !d->doc->showHorizontalScrollBar() )
-      d->frame->setGeometry( widthVScrollbar, top, width() - widthVScrollbar, height() - top - heightHScrollbar);
-    else
-      d->frame->setGeometry( widthVScrollbar, top, width() - widthVScrollbar,
-                             height() - heightHScrollbar - top );
-
-    d->horzScrollBar->setGeometry( width() / 2 + widthVScrollbar,
-                                   height() - heightHScrollbar,
-                                   width() / 2 - widthVScrollbar,
-                                   heightHScrollbar );
-    d->horzScrollBar->setSteps( 20 /*linestep*/, d->horzScrollBar->width() /*pagestep*/);
-  }
-  else
-  {
-    if ( !d->doc->showTabBar() && !d->doc->showHorizontalScrollBar() )
-      d->frame->setGeometry( 0, top, width() - widthVScrollbar, height() - top - heightHScrollbar);
-    else
-      d->frame->setGeometry( 0, top, width() - widthVScrollbar,
-                             height() - heightHScrollbar - top );
-
-    int hsleft = d->doc->showTabBar() ? (width()/2) : 0;
-    int hswidth = d->doc->showTabBar() ? (width()/2) : width();
-    d->horzScrollBar->setGeometry( hsleft,
-                                   height() - heightHScrollbar,
-                                   hswidth - widthVScrollbar,
-                                   heightHScrollbar );
-    d->horzScrollBar->setSteps( 20 /*linestep*/, d->horzScrollBar->width() /*pagestep*/);
-  }
-
-  d->frame->show();
-
-  if ( !table->layoutDirection()==KSpreadSheet::RightToLeft )
-    d->canvas->setGeometry( widthRowHeader, heightColHeader,
-                            d->frame->width() - widthRowHeader, d->frame->height() - heightColHeader );
-  else
-    d->canvas->setGeometry( 0, heightColHeader,
-                          d->frame->width() - widthRowHeader - 1.0, d->frame->height() - heightColHeader );
+  d->tabBar->setReadOnly( !d->doc->isReadWrite() );
+    
+  d->toolWidget->setShown( d->doc->showFormulaBar() );
+  editWidget()->showEditWidget( d->doc->showFormulaBar() );
+  d->hBorderWidget->setShown( d->doc->showColumnHeader() );
+  d->vBorderWidget->setShown( d->doc->showRowHeader() );
+  d->vertScrollBar->setShown( d->doc->showVerticalScrollBar() );
+  d->horzScrollBar->setShown( d->doc->showHorizontalScrollBar() );
+  d->tabBar->setShown( d->doc->showTabBar() );
+  if ( statusBar() ) statusBar()->setShown( d->doc->showStatusBar() );
 
   d->canvas->updatePosWidget();
-
-  left = 0;
-  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+  
+  if( table->layoutDirection() == KSpreadSheet::LeftToRight )
   {
-    d->hBorderWidget->setGeometry( 1.0, 0,
-                                   d->frame->width() - widthRowHeader + 2.0, heightColHeader );
-
-    left = width() - widthRowHeader - widthVScrollbar;
+    d->formulaBarLayout->setDirection( QBoxLayout::LeftToRight );
+    d->viewLayout->setOrigin( QGridLayout::TopLeft );
+    d->tabScrollBarLayout->setDirection( QBoxLayout::LeftToRight );
+    d->tabBar->setReverseLayout( false );
   }
-  else
-    d->hBorderWidget->setGeometry( widthRowHeader + 1, 0,
-                                   d->frame->width() - widthRowHeader, heightColHeader );
 
-  d->vBorderWidget->setGeometry( left, heightColHeader + 1, widthRowHeader,
-                                 d->frame->height() - heightColHeader );
-
-  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+  if( table->layoutDirection() == KSpreadSheet::RightToLeft )
   {
-    int hswidth = d->doc->showTabBar() ? (width()/2) : width();
-    d->horzScrollBar->setGeometry( 0, height() - heightHScrollbar,
-        hswidth - widthVScrollbar,                                   heightHScrollbar );
-    d->horzScrollBar->setSteps( 20 /*linestep*/, d->horzScrollBar->width() /*pagestep*/);
-
-    if (!d->doc->showHorizontalScrollBar())
-      d->tabBar->setGeometry( 0, height() - heightHScrollbar,
-                            width(), heightHScrollbar );
-    else
-      d->tabBar->setGeometry( width()/2, height() - heightHScrollbar,
-                            width() / 2, heightHScrollbar );
-    if ( d->doc->showTabBar() )
-      d->tabBar->show();
-    else
-      d->tabBar->hide();
-
+    d->formulaBarLayout->setDirection( QBoxLayout::RightToLeft );
+    d->viewLayout->setOrigin( QGridLayout::TopRight );
+    d->tabScrollBarLayout->setDirection( QBoxLayout::RightToLeft );
     d->tabBar->setReverseLayout( true );
   }
-  else
-    d->tabBar->setReverseLayout( false );
 
 }
 
