@@ -247,9 +247,9 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
                 {
                     // A link
                     *m_streamOut << "<a href=\""
-                        << escapeHtmlText((*paraFormatDataIt).variable.m_hrefName)
+                        << escapeHtmlText((*paraFormatDataIt).variable.getHrefName())
                         << "\">"
-                        << escapeHtmlText((*paraFormatDataIt).variable.m_linkName)
+                        << escapeHtmlText((*paraFormatDataIt).variable.getLinkName())
                         << "</a>";
                 }
                 else
