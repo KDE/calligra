@@ -972,7 +972,7 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     if ( word.attribute( "mime" ) != "application/x-kword" )
 	return false;
 
-    QDomElement paper = doc.namedItem("PAPER").toElement();
+    QDomElement paper = word.namedItem("PAPER").toElement();
     if ( paper.isNull() )
 	return false;
     __pgLayout.format = (KoFormat)paper.attribute( "format" ).toInt();
