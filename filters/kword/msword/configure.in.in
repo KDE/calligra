@@ -40,7 +40,7 @@ if test -n "$WV2_CONFIG"; then
 
      AC_DEFINE_UNQUOTED(HAVE_WV2, 1, [Defines if your system has the wv2 library])
   else
-     AC_MSG_WARN([You need at least libwv2 0.0.6])
+     AC_MSG_WARN([You need at least libwv2 0.0.7])
   fi
 fi
 
