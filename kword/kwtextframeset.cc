@@ -158,8 +158,8 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
         //frameRect.rBottom() += 1;
         if ( theFrame->contains( dPoint ) )
         {
-            iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->left() ) );
-            iPoint.setY( m_doc->ptToLayoutUnitPixY( dPoint.y() - theFrame->top() ) + theFrame->internalY() );
+            iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->x() ) );
+            iPoint.setY( m_doc->ptToLayoutUnitPixY( dPoint.y() - theFrame->y() ) + theFrame->internalY() );
 #ifdef DEBUG_DTI
             kdDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
                       << " internalY=" << theFrame->internalY() << " because frame=" << theFrame
@@ -271,10 +271,8 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
         // r is the frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in layout units (aka internal)
         {
-            double offsetX = theFrame->x();
-            double offsetY = theFrame->y() - m_doc->layoutUnitToPixelY( theFrame->internalY() );
-            dPoint.setX( m_doc->layoutUnitPtToPt( m_doc->pixelXToPt( iPoint.x() ) ) + offsetX );
-            dPoint.setY( m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( iPoint.y() ) ) + offsetY );
+            dPoint.setX( m_doc->layoutUnitPtToPt( m_doc->pixelXToPt( iPoint.x() ) ) + theFrame->x() );
+            dPoint.setY( m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( iPoint.y() - theFrame->internalY() ) ) + theFrame->y() );
 #ifdef DEBUG_ITD
             kdDebug() << "copy: " << theFrame->isCopy() << " hintDPoint.y()=" << hintDPoint.y() << " dPoint.y()=" << dPoint.y() << endl;
 #endif
@@ -1332,8 +1330,8 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
         // r is the frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
         {
-            dPoint.setX( m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( iPoint.x() ) ) + theFrame->left() );
-            dPoint.setY( m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( iPoint.y() - theFrame->internalY() ) ) + theFrame->top() );
+            dPoint.setX( m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( iPoint.x() ) ) + theFrame->x() );
+            dPoint.setY( m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( iPoint.y() - theFrame->internalY() ) ) + theFrame->y() );
             return theFrame;
         }
     }
