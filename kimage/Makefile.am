@@ -37,6 +37,7 @@ METASOURCES = \
  kintegerinputdialog.moc
 
 idl_DATA = kimage.idl
+kimage.h : $(top_builddir)/lib/kofficecore/koffice.idl
 
 kdelnk_DATA = kimage.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
