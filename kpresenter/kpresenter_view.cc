@@ -651,10 +651,13 @@ void KPresenterView::insertPicture()
     m_canvas->setToolEditMode( INS_PICTURE );
     m_canvas->deSelectAllObj();
 
-    //url = KFileDialog::getImageOpenURL(); lukas: put this back in KDE 3.0
+    QStringList mimetypes;
+    mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
+    mimetypes += KoPictureFilePreview::clipartMimeTypes();
 
-    KFileDialog fd( QString::null, KImageIO::pattern( KImageIO::Reading ), 0, 0, true );
+    KFileDialog fd( QString::null, QString::null, 0, 0, true );
     fd.setCaption( i18n( "Insert Picture" ) );
+    fd.setMimeFilter( mimetypes );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 
     KURL url;
@@ -4021,10 +4024,13 @@ void KPresenterView::screenPenColor()
 /*====================== change pciture =========================*/
 void KPresenterView::changePicture( const QString & filename )
 {
-    //url = KFileDialog::getImageOpenURL(); lukas: put this back in KDE 3.0
+    QStringList mimetypes;
+    mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
+    mimetypes += KoPictureFilePreview::clipartMimeTypes();
 
-    KFileDialog fd( filename, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
+    KFileDialog fd( filename, QString::null, 0, 0, true );
     fd.setCaption(i18n("Select new Picture"));
+    fd.setMimeFilter( mimetypes );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 
     KURL url;
