@@ -346,8 +346,11 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 		format = "JPEG";
 	    if ( QImage::outputFormats().find( format ) == -1 )
 		format = "BMP";
+            QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
+            if ( !isStoredExtern() )
+              pictureName.prepend( m_strURL + "/" );
 	    out << indent << "<KEY " << key << " name=\"" 
-		<< QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() ).latin1() 
+		<< pictureName.latin1()
 		<< "\" />" << endl;
 	}
     }
@@ -361,8 +364,11 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 
     for( ; it2 != _clipartCollection.end(); ++it2 ) {
 	KPClipartCollection::Key key = it2.key();
+        QString clipartName = QString( "cliparts/clipart%1.wmf" ).arg( ++i );
+        if ( !isStoredExtern() )
+          clipartName.prepend( m_strURL + "/" );
 	out << indent << "<KEY " << key << " name=\"" 
-	    << QString( "cliparts/clipart%1.wmf" ).arg( ++i ).latin1() 
+	    << clipartName.latin1() 
 	    << "\" />" << endl;
     }
 
@@ -421,7 +427,7 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
     if ( !_store )
 	return true;
 
-    CORBA::String_var u = KURL( url() ).path().latin1();
+    //CORBA::String_var u = KURL( url() ).path().latin1();
     QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
 
     int i = 0;
@@ -436,7 +442,10 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
 		format = "BMP";
 
 	    QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
+
 	    QString mime = "image/" + format.lower();
+            if ( !isStoredExtern() )
+              u2.prepend( m_strURL + "/" );
 
 	    if ( _store->open( u2, mime.lower() ) ) {
 	        ostorestream out( _store );
@@ -454,6 +463,8 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
 
 	    QString u2 = QString( "cliparts/clipart%1.wmf" ).arg( ++i );
 	    QString mime = "clipart/wmf";
+            if ( !isStoredExtern() )
+              u2.prepend( m_strURL + "/" );
 
 	    if ( _store->open( u2, mime.lower() ) ) {
 	        ostorestream out( _store );
