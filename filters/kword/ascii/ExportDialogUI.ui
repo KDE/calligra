@@ -15,7 +15,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>HTML Export Dialog</string>
+        <string>Plain Text Export Dialog</string>
     </property>
     <widget class="QLayoutWidget">
         <property name="name">
