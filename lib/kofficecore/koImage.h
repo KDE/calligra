@@ -11,7 +11,7 @@ class KoImagePrivate;
 /**
  * KoImage is a container class for holding a QImage, a cached QPixmap version
  * of it, right together associated with a Key (for storage in a
- * @ref KoImageCollection . While KoImage itself is implicitly shared, note
+ * @ref KoImageCollection). While KoImage itself is implicitly shared, note
  * that the contained QImage is explicitly shared, as documented in the
  * Qt documentation.
  */
