@@ -23,6 +23,7 @@
 #include "kivio_stencil_spawner_set.h"
 
 #include <qdir.h>
+#include <kdebug.h>
 
 KivioStencilSpawnerSet::KivioStencilSpawnerSet(const QString& name)
     : m_pSpawners(NULL),
@@ -30,7 +31,7 @@ KivioStencilSpawnerSet::KivioStencilSpawnerSet(const QString& name)
 {
     m_dir = "";
     m_name = name.isEmpty() ? QString("Untitled") : name;
-    
+
     m_pSpawners = new QList<KivioStencilSpawner>;
     m_pSpawners->setAutoDelete(true);
 }
@@ -42,7 +43,7 @@ KivioStencilSpawnerSet::~KivioStencilSpawnerSet()
         delete m_pSpawners;
         m_pSpawners = NULL;
     }
-    qDebug("* StencilSpawnerSet %s deleted\n", m_name.ascii() );
+    kdDebug() << "* StencilSpawnerSet " << m_name << " deleted\n" << endl;
 }
 
 
@@ -74,7 +75,7 @@ bool KivioStencilSpawnerSet::loadXML( const QDomElement & )
  */
 QDomElement KivioStencilSpawnerSet::saveXML( QDomDocument &doc )
 {
-    qDebug("+SAVE KivioStencilSpawnerSet");
+    kdDebug() << "+SAVE KivioStencilSpawnerSet" << endl;
     QDomElement spawnE = doc.createElement("KivioStencilSpawnerSet");
 
     XmlWriteString( spawnE, "desc", m_name );
@@ -115,16 +116,16 @@ KivioStencilSpawner* KivioStencilSpawnerSet::loadFile( const QString &fileName )
     for (KivioStencilSpawner* ss = m_pSpawners->first(); ss; ss = m_pSpawners->next() )
         if (ss->fileName() == fileName)
             return ss;
-    
+
     KivioStencilSpawner *pSpawner;
-    
+
     if( fileName.contains( ".sml", false ) )
     {
         pSpawner = new KivioSMLStencilSpawner(this);
     }
     else if( fileName.contains( ".ksp", false ) )
     {
-        qDebug("-LOAD KivioStencilSpawnerSet::loadDir() - Found a PLUGIN! %s", fileName.ascii() );
+        kdDebug() << "-LOAD KivioStencilSpawnerSet::loadDir() - Found a PLUGIN! " << fileName << endl;
         pSpawner = new KivioPluginStencilSpawner(this);
     }
     else
@@ -139,7 +140,7 @@ KivioStencilSpawner* KivioStencilSpawnerSet::loadFile( const QString &fileName )
         delete pSpawner;
         return 0;
     }
-    
+
     return pSpawner;
 }
 
@@ -173,15 +174,14 @@ KivioStencilSpawner* KivioStencilSpawnerSet::find( const QString& title)
     while( pSpawner )
     {
         // If the title matches, this is it!
-        qDebug(QString("FIND %1 - %2").arg(title).arg(pSpawner->info()->title()).latin1()); // arghl! (Simon)
+        kdDebug() << "FIND " << title << " - " << pSpawner->info()->title() << endl;
         if( pSpawner->info()->title() == title )
         {
             return pSpawner;
         }
-    
+
         pSpawner = m_pSpawners->next();
     }
-    
+
     return NULL;
 }
-

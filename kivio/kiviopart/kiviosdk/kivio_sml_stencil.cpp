@@ -36,6 +36,7 @@
 #include <qpainter.h>
 #include <qbrush.h>
 #include <qcolor.h>
+#include <kdebug.h>
 
 #include <math.h>
 
@@ -190,7 +191,7 @@ KivioShape *KivioSMLStencil::locateShape( const QString &name )
  */
 QDomElement KivioSMLStencil::saveXML( QDomDocument &doc )
 {
-    qDebug("+SAVE KivioSMLStencil");
+    kdDebug() << "+SAVE KivioSMLStencil" << endl;
     QDomElement e = doc.createElement("KivioSMLStencil");
 
     XmlWriteString( e, "title", m_pSpawner->info()->title() );
@@ -353,7 +354,7 @@ void KivioSMLStencil::paintOutline( KivioIntraStencilData *pData )
 
             case KivioShapeData::kstNone:
             default:
-                qDebug("*** KivioShape::Paint AHHHHH!!! NO SHAPE!");
+                kdDebug() << "*** KivioShape::Paint AHHHHH!!! NO SHAPE!" << endl;
                 break;
         }
 
@@ -880,7 +881,7 @@ void KivioSMLStencil::drawArc( KivioShape *pShape, KivioIntraStencilData *pData 
             break;
 
         case KivioFillStyle::kcsGradient:               // Gradient
-            qDebug("KivioSMLStenciL::drawArc() - gradient fill unimplemented");
+            kdDebug() << "KivioSMLStenciL::drawArc() - gradient fill unimplemented" << endl;
             break;
 
         case KivioFillStyle::kcsPixmap:
@@ -1002,7 +1003,7 @@ void KivioSMLStencil::drawClosedPath( KivioShape *pShape, KivioIntraStencilData 
             break;
 
         case KivioFillStyle::kcsGradient:               // Gradient
-            qDebug("KivioSMLStencil::drawClosedPath() - gradient fill unimplemented");
+            kdDebug() << "KivioSMLStencil::drawClosedPath() - gradient fill unimplemented" << endl;
             break;
 
         case KivioFillStyle::kcsPixmap:
@@ -1055,7 +1056,7 @@ void KivioSMLStencil::drawEllipse( KivioShape *pShape, KivioIntraStencilData *pD
             break;
 
         case KivioFillStyle::kcsGradient:               // Gradient
-            qDebug("KivioSMLStencil::drawEllipse() - gradient fill unimplemented");
+            kdDebug() << "KivioSMLStencil::drawEllipse() - gradient fill unimplemented" << endl;
             break;
 
         case KivioFillStyle::kcsPixmap:
@@ -1197,7 +1198,7 @@ void KivioSMLStencil::drawRoundRectangle( KivioShape *pShape, KivioIntraStencilD
             break;
 
         case KivioFillStyle::kcsGradient:               // Gradient
-            qDebug("KivioSMLStenciL::drawRoundRectangle() - gradient fill unimplemented");
+            kdDebug() << "KivioSMLStenciL::drawRoundRectangle() - gradient fill unimplemented" << endl;
             break;
 
         case KivioFillStyle::kcsPixmap:
@@ -1258,7 +1259,7 @@ void KivioSMLStencil::drawPolygon( KivioShape *pShape, KivioIntraStencilData *pD
             break;
 
         case KivioFillStyle::kcsGradient:               // Gradient
-            qDebug("KivioSMLStenciL::drawPolygon() - gradient fill unimplemented");
+            kdDebug() << "KivioSMLStenciL::drawPolygon() - gradient fill unimplemented" << endl;
             break;
 
         case KivioFillStyle::kcsPixmap:
