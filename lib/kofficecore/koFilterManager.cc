@@ -397,7 +397,7 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
         // it is not available (e.g. within an OLEfilter filter).
         if (document)
         {
-            QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(sigProgress(int)));
+            QObject::connect(filter, SIGNAL(sigProgress(int)), document, SIGNAL(sigProgress(int)));
             document->emitProgress(0);
         }
         if(vec[i].implemented.lower()=="file") {
@@ -491,7 +491,7 @@ QString KoFilterManager::prepareExport( const QString & file,
         }
         else
         {
-            QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(sigProgress(int)));
+            QObject::connect(filter, SIGNAL(sigProgress(int)), document, SIGNAL(sigProgress(int)));
             if(vec[i].implemented.lower()=="file")
                 tmpFileNeeded=true;
             else if(vec[i].implemented.lower()=="kodocument") {
@@ -500,7 +500,7 @@ QString KoFilterManager::prepareExport( const QString & file,
                 //  document->changedByFilter();
                 document->emitProgress(-1);
             }
-            QObject::disconnect(filter, SIGNAL(sigProgress(int)), document, SLOT(sigProgress(int)));
+            QObject::disconnect(filter, SIGNAL(sigProgress(int)), document, SIGNAL(sigProgress(int)));
             delete filter;
         }
         ++i;
@@ -528,10 +528,10 @@ bool KoFilterManager::export_() {
             KoFilter* filter = d->m_vec[i].createFilter();
             if( !filter )
                 return false; // error already emitted in prepareExport
-            QObject::connect(filter, SIGNAL(sigProgress(int)), d->document, SLOT(sigProgress(int)));
+            QObject::connect(filter, SIGNAL(sigProgress(int)), d->document, SIGNAL(sigProgress(int)));
             ok=filter->filter(d->tmpFile, d->exportFile, d->native_format, d->mime_type, d->config );
             d->document->emitProgress(-1);
-            QObject::disconnect(filter, SIGNAL(sigProgress(int)), d->document, SLOT(sigProgress(int)));
+            QObject::disconnect(filter, SIGNAL(sigProgress(int)), d->document, SIGNAL(sigProgress(int)));
             delete filter;
         }
         ++i;
