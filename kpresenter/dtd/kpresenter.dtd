@@ -21,10 +21,11 @@
 		editor:		The program this file was written with
 		mime:		The MIME type (must always have the value application/x-kpresenter
 -->
-<!ELEMENT DOC (PAPER|BACKGROUND|OBJECTS|INFINITLOOP|MANUALSWITCH|PRESSPEED)>
+<!ELEMENT DOC (PAPER | BACKGROUND | HEADER | FOOTER | PAGETITLES | OBJECTS | INFINITLOOP | MANUALSWITCH | PRESSPEED | PIXMAPS | SELSLIDES | PIXMAPS | CLIPARTS)* >
 <!ATTLIST DOC	author CDATA #IMPLIED
 				email CDATA #IMPLIED
 				editor CDATA #IMPLIED
+                                syntaxVersion NMTOKEN #IMPLIED
 				mime CDATA "application/x-kpresenter">
 
 <!--	Describes the page format. Can have no or one PAPERBORDERS child that 
@@ -38,10 +39,11 @@
 		orientation:	0 for landscape, 1 for portrait
 -->
 <!ELEMENT PAPER (PAPERBORDERS?)>
-<!ATTLIST PAPER	format CDATA #REQUIRED
-                width CDATA #REQUIRED
-                height CDATA #REQUIRED
-                orientation CDATA #REQUIRED>
+<!ATTLIST PAPER	format NMTOKEN #REQUIRED
+                ptWidth NMTOKEN #REQUIRED
+                ptHeight NMTOKEN #REQUIRED
+                unit NMTOKEN #REQUIRED
+                orientation NMTOKEN #REQUIRED>
 
 <!--	Describes the margins of the page.
 
@@ -53,10 +55,10 @@
 		bottom:			bottom margin in pixels
 -->
 <!ELEMENT PAPERBORDERS EMPTY>
-<!ATTLIST PAPERBORDERS	left CDATA #REQUIRED
-						right CDATA #REQUIRED
-						top	CDATA #REQUIRED
-						bottom CDATA #REQUIRED>
+<!ATTLIST PAPERBORDERS	ptLeft NMTOKEN #REQUIRED
+			ptRight NMTOKEN #REQUIRED
+			ptTop NMTOKEN #REQUIRED
+			ptBottom NMTOKEN #REQUIRED>
 
 
 
@@ -81,8 +83,8 @@
                         9... part
                         10.. group
 -->
-<!ELEMENT OBJECT (ORIG|SIZE|SHADOW|EFFECTS|ANGLE|TEXTOBJ|PEN|BRUSH|RNDS|PRESNUM|FILLTYPE|GRADIENT)*>
-<!ATTLIST OBJECT		type	CDATA #REQUIRED>
+<!ELEMENT OBJECT (ORIG|SIZE|SHADOW|EFFECTS|ANGLE|TEXTOBJ|PEN|BRUSH|RNDS|PRESNUM|FILLTYPE|GRADIENT|KEY|LINETYPE|LINEEND|LINEBEGIN|PRESNUM|FILENAME|DISAPPEAR)*>
+<!ATTLIST OBJECT  type	NMTOKEN #REQUIRED>
 
 <!--	The position of an object in the document.
         Note that this is an absolute position, from the topleft corner
@@ -96,8 +98,8 @@
 -->
 <!ELEMENT ORIG EMPTY>
 <!ATTLIST ORIG
-		x		CDATA #REQUIRED
-                y		CDATA #REQUIRED>
+		x		NMTOKEN #REQUIRED
+                y		NMTOKEN #REQUIRED>
 
 
 <!--	The object's size.
@@ -109,8 +111,8 @@
 -->
 <!ELEMENT SIZE EMPTY>
 <!ATTLIST SIZE
-		width	CDATA #REQUIRED
-		height	CDATA #REQUIRED>
+		width	NMTOKEN #REQUIRED
+		height	NMTOKEN #REQUIRED>
 
 
 <!--	The objects's shadow.
@@ -125,11 +127,9 @@
 -->
 <!ELEMENT SHADOW EMPTY>
 <!ATTLIST SHADOW
-				distance		CDATA #REQUIRED
-                                direction		CDATA #REQUIRED
-				red			CDATA #REQUIRED
-				green			CDATA #REQUIRED
-				blue			CDATA #REQUIRED>
+		distance     NMTOKEN #REQUIRED
+                direction    NMTOKEN #REQUIRED
+                color        CDATA   #REQUIRED>
 
 <!--	The effects for moving from page to page.
 
@@ -140,8 +140,8 @@
 -->
 <!ELEMENT EFFECTS EMPTY>
 <!ATTLIST EFFECTS
-		effect	CDATA #REQUIRED
-		effect2 CDATA #REQUIRED>
+		effect	NMTOKEN #REQUIRED
+		effect2 NMTOKEN #REQUIRED>
 
 
 <!--	The "step" number in which the object appears, while showing the presentation.
@@ -152,7 +152,7 @@
 		value	the "step" number in the presentation.
 -->
 <!ELEMENT PRESNUM EMPTY>
-<!ATTLIST PRESNUM value CDATA #REQUIRED>
+<!ATTLIST PRESNUM value NMTOKEN #REQUIRED>
 
 
 <!--	The angle of the page
@@ -175,8 +175,17 @@
 -->
 <!ELEMENT TEXTOBJ (ENUMLISTTYPE|UNSORTEDLISTTYPE|P)*>
 <!ATTLIST TEXTOBJ
-		lineSpacing CDATA #REQUIRED
-		paragSpacing CDATA #REQUIRED>
+                  lineSpacing NMTOKEN #REQUIRED
+                  bulletColor1 CDATA #REQUIRED
+                  bulletColor2 CDATA #REQUIRED 
+                  bulletColor3 CDATA #REQUIRED 
+                  bulletColor4 CDATA #REQUIRED
+                  bulletType1 NMTOKEN #REQUIRED 
+                  bulletType2 NMTOKEN #REQUIRED
+                  bulletType3 NMTOKEN #REQUIRED
+                  bulletType4 NMTOKEN #REQUIRED
+                  margin NMTOKEN #REQUIRED
+                  paragSpacing NMTOKEN #REQUIRED>
 
 <!ELEMENT ENUMLISTTYPE EMPTY>
 <!ATTLIST ENUMLISTTYPE
@@ -215,31 +224,28 @@
 -->
 <!ELEMENT P  (TEXT)*>
 <!ATTLIST P
-		align	CDATA #REQUIRED
-		type	CDATA #REQUIRED
-		depth	CDATA #REQUIRED>
+		align	NMTOKEN #REQUIRED
+		type	NMTOKEN #REQUIRED
+		depth	NMTOKEN #REQUIRED>
 
-<!ELEMENT TEXT #PCDATA>
+<!ELEMENT TEXT (#PCDATA)>
 <!ATTLIST TEXT
 		family	CDATA	#REQUIRED
-		pointSize	CDATA #REQUIRED
-		bold	CDATA	#REQUIRED
-		italic	CDATA	#REQUIRED
-		underline		CDATA #REQUIRED
+		pointSize NMTOKEN #REQUIRED
+		underline ( 0 | 1 ) #REQUIRED
+                bold ( 0 | 1 ) #REQUIRED
+                italic ( 0 | 1 ) #REQUIRED
+                whitespace NMTOKEN #IMPLIED
 		color	CDATA	#REQUIRED>
 
 <!ELEMENT PEN EMPTY>
-<!ATTLIST PEN	red		CDATA	#REQUIRED
-		green	CDATA	#REQUIRED
-		blue	CDATA	#REQUIRED
-		width	CDATA	#REQUIRED
-		style	CDATA	#REQUIRED>
+<!ATTLIST PEN	color   CDATA	#REQUIRED
+		width	NMTOKEN	#REQUIRED
+		style	NMTOKEN	#REQUIRED>
 
 <!ELEMENT BRUSH EMPTY>
-<!ATTLIST BRUSH	red		CDATA	#REQUIRED
-		green	CDATA	#REQUIRED
-		blue	CDATA	#REQUIRED
-		style	CDATA	#REQUIRED>
+<!ATTLIST BRUSH	color   CDATA	#REQUIRED
+		style	NMTOKEN	#REQUIRED>
 
 <!ELEMENT RNDS EMPTY>
 <!ATTLIST RNDS	x		CDATA	#REQUIRED
@@ -249,30 +255,27 @@
 <!ATTLIST FILLTYPE value CDATA #REQUIRED>
 
 <!ELEMENT GRADIENT EMPTY>
-<!ATTLIST GRADIENT		red1	CDATA	#REQUIRED
-				green1	CDATA	#REQUIRED
-				blue1	CDATA	#REQUIRED
-				red2	CDATA	#REQUIRED
-				green2	CDATA	#REQUIRED
-				blue2	CDATA	#REQUIRED
-				type	CDATA	#REQUIRED>
+<!ATTLIST GRADIENT	color1	CDATA	#REQUIRED
+			color2	CDATA	#REQUIRED
+                        unbalanced NMTOKEN #REQUIRED
+                        xfactor NMTOKEN #REQUIRED
+                        yfactor NMTOKEN #REQUIRED
+		        type	NMTOKEN	#REQUIRED>
 
 <!ELEMENT INFINITLOOP EMPTY>
-<!ATTLIST INFINITLOOP value CDATA #REQUIRED>
+<!ATTLIST INFINITLOOP value NMTOKEN #REQUIRED>
 
 <!ELEMENT MANUALSWITCH EMPTY>
-<!ATTLIST MANUALSWITCH value CDATA #REQUIRED>
+<!ATTLIST MANUALSWITCH value NMTOKEN #REQUIRED>
 
 <!ELEMENT PRESSPEED EMPTY>
-<!ATTLIST PRESSPEED value CDATA #REQUIRED>
+<!ATTLIST PRESSPEED value NMTOKEN #REQUIRED>
 
 
-<!ELEMENT BACKGROUND (PAGE)*>
-<!ATTLIST BACKGROUND	rastX	CDATA	#REQUIRED
-			rastY	CDATA	#REQUIRED
-			bred	CDATA	#REQUIRED
-			bgreen	CDATA	#REQUIRED
-			bblue	CDATA	#REQUIRED>
+<!ELEMENT BACKGROUND (PAGE*) >
+<!ATTLIST BACKGROUND	rastX	NMTOKEN	#REQUIRED
+			rastY	NMTOKEN	#REQUIRED
+			color	CDATA	#REQUIRED>
 
 <!ELEMENT PAGE (BACKTYPE|BACKVIEW|BACKCOLOR1|BACKCOLOR2|BCTYPE|PGEFFECT)*>
 
@@ -280,21 +283,67 @@
 <!ATTLIST BACKTYPE value CDATA #REQUIRED>
 
 <!ELEMENT BACKVIEW EMPTY>
-<!ATTLIST BACKVIEW value CDATA #REQUIRED>
+<!ATTLIST BACKVIEW value NMTOKEN #REQUIRED>
 
 <!ELEMENT BCTYPE EMPTY>
 <!ATTLIST BCTYPE value CDATA #REQUIRED>
 
 <!ELEMENT PGEFFECT EMPTY>
-<!ATTLIST PGEFFECT value CDATA #REQUIRED>
+<!ATTLIST PGEFFECT value NMTOKEN #REQUIRED>
 
 <!ELEMENT BACKCOLOR1 EMPTY>
-<!ATTLIST BACKCOLOR1	red		CDATA	#REQUIRED
-			green		CDATA	#REQUIRED
-			blue		CDATA	#REQUIRED>
+<!ATTLIST BACKCOLOR1	color		CDATA	#REQUIRED>
 
 <!ELEMENT BACKCOLOR2 EMPTY>
 <!ATTLIST BACKCOLOR2	red		CDATA	#REQUIRED
 			green		CDATA	#REQUIRED
 			blue		CDATA	#REQUIRED>
 
+
+<!ELEMENT CLIPARTS EMPTY >
+
+<!ELEMENT DISAPPEAR EMPTY >
+<!ATTLIST DISAPPEAR doit NMTOKEN #REQUIRED
+                    effect NMTOKEN #REQUIRED
+                    num NMTOKEN #REQUIRED>
+
+
+<!ELEMENT FILENAME EMPTY >
+<!ATTLIST FILENAME value CDATA #REQUIRED >
+
+<!ELEMENT FOOTER ( ORIG, SIZE, PEN, TEXTOBJ ) >
+<!ATTLIST FOOTER show NMTOKEN #REQUIRED >
+
+<!ELEMENT HEADER ( ORIG, SIZE, PEN, TEXTOBJ ) >
+<!ATTLIST HEADER show NMTOKEN #REQUIRED >
+
+<!ELEMENT KEY EMPTY >
+<!ATTLIST KEY day NMTOKEN #REQUIRED
+              filename CDATA #REQUIRED
+              hour NMTOKEN #REQUIRED
+              minute NMTOKEN #REQUIRED
+              month NMTOKEN #REQUIRED
+              msec NMTOKEN #REQUIRED
+              name CDATA #IMPLIED
+              second NMTOKEN #REQUIRED
+              year NMTOKEN #REQUIRED>
+
+<!ELEMENT LINEBEGIN EMPTY >
+<!ATTLIST LINEBEGIN value NMTOKEN #REQUIRED >
+
+<!ELEMENT LINEEND EMPTY >
+<!ATTLIST LINEEND value NMTOKEN #REQUIRED >
+
+<!ELEMENT LINETYPE EMPTY >
+<!ATTLIST LINETYPE value NMTOKEN #REQUIRED >
+
+<!ELEMENT PIXMAPS ( KEY* ) >
+
+<!ELEMENT SELSLIDES ( SLIDE+ ) >
+<!ELEMENT SLIDE EMPTY>
+<!ATTLIST SLIDE nr NMTOKEN #REQUIRED
+                show NMTOKEN #REQUIRED>
+
+<!ELEMENT PAGETITLES ( Title+ ) >
+<!ELEMENT Title EMPTY>
+<!ATTLIST Title title CDATA #REQUIRED>
