@@ -25,7 +25,7 @@ EXTRA_DIST = \
 		kivio_connector_cursor1.xpm
 
 libkivioconnectortool_la_LDFLAGS = -module $(KDE_PLUGIN)
-libkivioconnectortool_la_LIBADD = $(all_libraries) $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+libkivioconnectortool_la_LIBADD = $(all_libraries) $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviocommon.la
 
 rc_DATA = kivioconnectortool.rc
 rcdir = $(kde_datadir)/kivio/kpartplugins

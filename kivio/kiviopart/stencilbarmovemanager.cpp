@@ -29,11 +29,14 @@
 StencilBarMoveManager::StencilBarMoveManager()
 : QObject()
 {
+#if defined Q_WS_X11 && !defined K_WS_QTONLY
   XGCValues gv;
+#endif
 
   working=false;
   noLast=true;
 
+#if defined Q_WS_X11 && !defined K_WS_QTONLY
   scr = qt_xscreen();
   root = qt_xrootwin();
 
@@ -43,6 +46,7 @@ StencilBarMoveManager::StencilBarMoveManager()
   gv.subwindow_mode = IncludeInferiors;
   long mask = GCForeground | GCFunction | GCLineWidth | GCSubwindowMode;
   rootgc = XCreateGC(qt_xdisplay(), qt_xrootwin(), mask, &gv);
+#endif
 
   timer = new QTimer(this);
 }
@@ -103,8 +107,10 @@ void StencilBarMoveManager::doMoveInternal()
   if (check(xp, yp, w, h)) {
     paintProcess(false,xp, yp, w, h);
 
+#if defined Q_WS_X11 && !defined K_WS_QTONLY
     XFlush(qt_xdisplay());
     XSync(qt_xdisplay(),false);
+#endif
   }
 }
 
@@ -117,7 +123,9 @@ void StencilBarMoveManager::stop()
   QApplication::restoreOverrideCursor();
 
   paintProcess();
+#if defined Q_WS_X11 && !defined K_WS_QTONLY
   XFlush(qt_xdisplay());
+#endif
 
   working = false;
 }
@@ -137,8 +145,10 @@ void StencilBarMoveManager::setGeometry(int _x, int _y, int _w, int _h)
   check(_x, _y, _w, _h, true);
   paintProcess(false,_x, _y, _w, _h);
 
+#if defined Q_WS_X11 && !defined K_WS_QTONLY
   XFlush(qt_xdisplay());
   XSync(qt_xdisplay(),false);
+#endif
 }
 
 void StencilBarMoveManager::drawRectangle( int _x, int _y, int _w, int _h)
@@ -151,7 +161,9 @@ void StencilBarMoveManager::drawRectangle( int _x, int _y, int _w, int _h)
   ow = _w;
   oh = _h;
 
+#if defined Q_WS_X11 && !defined K_WS_QTONLY
   XDrawRectangle(qt_xdisplay(), root, rootgc, _x, _y, _w, _h);
+#endif
   noLast = false;
 }
 
@@ -163,7 +175,9 @@ void StencilBarMoveManager::paintProcess( bool onlyDeelete, int _x, int _y, int 
   if ( ox == _x && oy == _y && ow ==_w && oh == _h )
     return;
 
+#if defined Q_WS_X11 && !defined K_WS_QTONLY
   XDrawRectangle(qt_xdisplay(), root, rootgc, ox, oy, ow, oh);
+#endif
   noLast = true;
 
   drawRectangle(_x,_y,_w,_h);
@@ -253,8 +267,10 @@ void StencilBarMoveManager::doResizeInternal()
   if (check(xp, yp, w, h)) {
     paintProcess(false,xp, yp, w, h);
 
+#if defined Q_WS_X11 && !defined K_WS_QTONLY
     XFlush(qt_xdisplay());
     XSync(qt_xdisplay(),false);
+#endif
   }
 }
 

@@ -6,7 +6,7 @@ kde_module_LTLIBRARIES =straight_connector.la
 straight_connector_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
 
 # Hack to make it work (dave m)
-straight_connector_la_LIBADD = $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+straight_connector_la_LIBADD = $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviocommon.la
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\

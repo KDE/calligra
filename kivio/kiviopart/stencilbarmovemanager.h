@@ -21,9 +21,11 @@
 
 #include <qobject.h>
 
+#if defined Q_WS_X11 && !defined K_WS_QTONLY
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#endif
 
 class QTimer;
 class QWidget;
@@ -100,10 +102,12 @@ private:
   int offX, offY;
 
   /* X-stuff */
+#if defined Q_WS_X11 && !defined K_WS_QTONLY
   Window root;
   GC rootgc;
   int scr;
   XEvent ev;
+#endif
 
   bool mirrorX;
   bool mirrorY;

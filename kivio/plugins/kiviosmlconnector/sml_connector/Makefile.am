@@ -9,7 +9,7 @@ METASOURCES = AUTO
 
 sml_connector_la_SOURCES = sml_connector.cpp
 sml_connector_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
-sml_connector_la_LIBADD = $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+sml_connector_la_LIBADD = $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviocommon.la
 
 stencildir = $(kde_datadir)/kivio/autoloadStencils
 stencil_DATA = sml_connector.xpm
