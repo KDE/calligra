@@ -253,7 +253,11 @@ kdDebug() << "KarbonView::dummyForTesting()" << endl;
 	for ( ; itr.current() ; ++itr )
 	{
 		if( VPath* path = dynamic_cast<VPath*>( itr.current() ) )
-			path->insertKnots( 2 );
+		{
+			path->insertKnots( 5 );
+			path->convertToCurves();
+			path->whirlPinch( KoPoint( 100, 100 ), 180, 1 );
+		}
 	}
 
 	m_part->repaintAllViews();

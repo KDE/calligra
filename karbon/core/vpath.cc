@@ -299,6 +299,16 @@ VPath::insertKnots( uint n )
 }
 
 void
+VPath::convertToCurves()
+{
+	QPtrListIterator<VSegmentList> itr( m_segmentLists );
+	for( ; itr.current(); ++itr )
+	{
+		itr.current()->convertToCurves();
+	}
+}
+
+void
 VPath::combine( const VPath& path )
 {
 	QPtrListIterator<VSegmentList> itr( path.m_segmentLists );
@@ -321,6 +331,16 @@ VPath::transform( const QWMatrix& m )
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
 		itr.current()->transform( m );
+	}
+}
+
+void
+VPath::whirlPinch( const KoPoint& p, double angle, double pinch )
+{
+	QPtrListIterator<VSegmentList> itr( m_segmentLists );
+	for( itr.toFirst(); itr.current(); ++itr )
+	{
+		itr.current()->whirlPinch( p, angle, pinch );
 	}
 }
 

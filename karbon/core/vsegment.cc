@@ -3,8 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qdom.h>
 #include <math.h>
+#include <qdom.h>
 
 #include "vglobal.h"
 #include "vsegment.h"
@@ -220,6 +220,9 @@ VSegment::boundingBox() const
 VSegment*
 VSegment::splitAt( double t )
 {
+	if( m_type == segment_begin )
+		return 0L;
+
 	VSegment* segment = new VSegment();
 
 	// lines are easy: no need to change the current segment:
@@ -263,6 +266,33 @@ VSegment::splitAt( double t )
 		segment->m_type = segment_curve;
 
 	return segment;
+}
+
+void
+VSegment::convertToCurve()
+{
+	if(
+		m_type == segment_begin ||
+		m_type == segment_end )
+	{
+		return;
+	}
+
+	if( m_type == segment_line )
+	{
+		m_point[0] =
+			m_prev->m_point[2] +
+			( m_point[2] - m_prev->m_point[2] ) * ( 1.0 / 3.0 );
+		m_point[1] =
+			m_prev->m_point[2] +
+			( m_point[2] - m_prev->m_point[2] ) * ( 2.0 / 3.0 );
+	}
+	else if( m_type == segment_curve1 )
+		m_point[0] = m_prev->m_point[2];
+	else if( m_type == segment_curve2 )
+		m_point[1] = m_point[2];
+
+	m_type = segment_curve;
 }
 
 void

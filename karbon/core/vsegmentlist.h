@@ -43,17 +43,22 @@ public:
 	bool isClosed() const { return m_isClosed; }
 	void close();
 
-	void transform( const QWMatrix& m );
-
 	/// "Calculate" bounding box.
 	KoRect boundingBox() const;
 
 	/// Insert n > 0 knots into each segment.
 	void insertKnots( uint n );
 
-	void save( QDomElement& element ) const;
-	void load( const QDomElement& element );
+	/// Converts all segments to curves.
+	void convertToCurves();
 
+	void transform( const QWMatrix& m );
+
+	void whirlPinch( const KoPoint& p, double angle, double pinch );
+
+	void save( QDomElement& element ) const;
+
+	void load( const QDomElement& element );
 
 	// general list stuff:
 	VSegmentList& operator=( const VSegmentList& list );

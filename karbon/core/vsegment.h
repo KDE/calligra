@@ -93,6 +93,9 @@ public:
 	 */
 	VSegment* splitAt( double t );
 
+	/// Converts segment to curves.
+	void convertToCurve();
+
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 

@@ -93,6 +93,11 @@ public:
 	void insertKnots( uint n );
 
 	/**
+	 * Converts all segments to curves.
+	 */
+	void convertToCurves();
+
+	/**
 	 * Combines two paths. For example, the letter "O" is a combination
 	 * of a larger and a smaller ellipitical path.
 	 */
@@ -107,6 +112,8 @@ public:
 
 	/// Applies an affine transformation.
 	virtual void transform( const QWMatrix& m );
+
+	void whirlPinch( const KoPoint& p, double angle, double pinch );
 
 	virtual KoRect boundingBox( const double zoomFactor ) const;
 	virtual bool intersects( const KoRect& qrect, const double zoomFactor ) const;

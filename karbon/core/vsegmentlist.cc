@@ -309,17 +309,19 @@ VSegmentList::close()
 	m_isClosed = true;
 }
 
-void
-VSegmentList::transform( const QWMatrix& m )
+KoRect
+VSegmentList::boundingBox() const
 {
+	KoRect rect;
+
 	VSegment* segment = m_first;
 	while( segment )
 	{
-		segment->setCtrlPoint1( segment->ctrlPoint1().transform( m ) );
-		segment->setCtrlPoint2( segment->ctrlPoint2().transform( m ) );
-		segment->setKnot2( segment->knot2().transform( m ) );
+		rect |= segment->boundingBox();
 		segment = segment->m_next;
 	}
+
+	return rect;
 }
 
 void
@@ -350,19 +352,79 @@ VSegmentList::insertKnots( uint n )
 	}
 }
 
-KoRect
-VSegmentList::boundingBox() const
+void
+VSegmentList::convertToCurves()
 {
-	KoRect rect;
+	// ommit "begin" segment:
+	VSegment* segment = m_first->m_next;
+
+	while( segment )
+	{
+		segment->convertToCurve();
+		segment = segment->m_next;
+	}
+}
+
+void
+VSegmentList::transform( const QWMatrix& m )
+{
+	VSegment* segment = m_first;
+	while( segment )
+	{
+		segment->setCtrlPoint1( segment->ctrlPoint1().transform( m ) );
+		segment->setCtrlPoint2( segment->ctrlPoint2().transform( m ) );
+		segment->setKnot2( segment->knot2().transform( m ) );
+		segment = segment->m_next;
+	}
+}
+
+void
+VSegmentList::whirlPinch( const KoPoint& p, double angle, double pinch )
+{
+	QWMatrix m;
+
+	double dist;
 
 	VSegment* segment = m_first;
 	while( segment )
 	{
-		rect |= segment->boundingBox();
+		dist = sqrt(
+			( p.x() - segment->ctrlPoint1().x() ) *
+			( p.x() - segment->ctrlPoint1().x() ) +
+			( p.y() - segment->ctrlPoint1().y() ) *
+			( p.y() - segment->ctrlPoint1().y() ) );
+
+		if( dist != 0 ) dist = 1.0 / dist;
+
+		m.rotate( angle * dist * pinch );
+		segment->setCtrlPoint1( segment->ctrlPoint1().transform( m ) );
+
+		m.reset();
+		dist = sqrt(
+			( p.x() - segment->ctrlPoint2().x() ) *
+			( p.x() - segment->ctrlPoint2().x() ) +
+			( p.y() - segment->ctrlPoint2().y() ) *
+			( p.y() - segment->ctrlPoint2().y() ) );
+
+		if( dist != 0 ) dist = 1.0 / dist;
+
+		m.rotate( angle * dist * pinch );
+		segment->setCtrlPoint2( segment->ctrlPoint2().transform( m ) );
+
+		m.reset();
+		dist = sqrt(
+			( p.x() - segment->knot2().x() ) *
+			( p.x() - segment->knot2().x() ) +
+			( p.y() - segment->knot2().y() ) *
+			( p.y() - segment->knot2().y() ) );
+
+		if( dist != 0 ) dist = 1.0 / dist;
+
+		m.rotate( angle * dist * pinch );
+		segment->setKnot2( segment->knot2().transform( m ) );
+
 		segment = segment->m_next;
 	}
-
-	return rect;
 }
 
 void
