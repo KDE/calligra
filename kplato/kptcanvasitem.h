@@ -217,9 +217,11 @@ public:
     void insertRelations();
     KDGanttViewItem *find(KPTNode *node);
     KDGanttViewItem *find(KDGanttViewItem *item, KPTNode *node);
-
+    KDGanttView *ganttView() const { return m_view; }
+    
 protected:
     KPTNode *m_node;  // can be KPTProject or KPTTask
+    KDGanttView *m_view;
 };
 
 /////////////////   KPTGanttViewTaskItem   ////////////////////
@@ -234,9 +236,11 @@ public:
     void insertRelations();
     KDGanttViewItem *find(KPTNode *node);
     KDGanttViewItem *find(KDGanttViewItem *item, KPTNode *node);
+    KDGanttView *ganttView() const { return m_view; }
 
 protected:
     KPTTask *m_task;
+    KDGanttView *m_view;
 };
 
 /////////////////   KPTGanttViewEventItem   ////////////////////
@@ -251,9 +255,11 @@ public:
     void insertRelations();
     KDGanttViewItem *find(KPTNode *node);
     KDGanttViewItem *find(KDGanttViewItem *item, KPTNode *node);
+    KDGanttView *ganttView() const { return m_view; }
 
 protected:
     KPTTask *m_task;
+    KDGanttView *m_view;
 };
 
 #endif

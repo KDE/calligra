@@ -656,13 +656,19 @@ void KPTPertRelationItem::printDebug( int /*info*/ )
 
 KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttView *parent, KPTNode *node)
     : KDGanttViewSummaryItem(parent, node->name()),
-	m_node(node)
+      m_node(node),
+      m_view(parent)
 {}
 
 KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNode *node)
     : KDGanttViewSummaryItem(parent, node->name()),
-	m_node(node)
-{}
+      m_node(node),
+      m_view(0)
+{
+    KPTGanttViewSummaryItem *p = dynamic_cast<KPTGanttViewSummaryItem*>(parent);
+    if (p)
+        m_view = p->ganttView();
+}
 
 void KPTGanttViewSummaryItem::insertRelations()
 {
@@ -671,10 +677,9 @@ void KPTGanttViewSummaryItem::insertRelations()
     QPtrListIterator<KPTRelation> it(m_node->dependChildNodes());
     for (; it.current(); ++it)
     {
-        KDGanttViewItem *child = 0;//find(myGantView->firstChild(), it.current()->child());
+        KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            //FIXME: This doesn't work. Maybe bug in KDGantt, maybe wrong use
             //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
         }
     }
@@ -722,13 +727,19 @@ KDGanttViewItem *KPTGanttViewSummaryItem::find(KDGanttViewItem *item, KPTNode *n
 
 KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttView *parent, KPTTask *task)
     : KDGanttViewTaskItem(parent, task->name()),
-	m_task(task)
+      m_task(task),
+      m_view(parent)
 {}
 
 KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTTask *task)
     : KDGanttViewTaskItem(parent, task->name()),
-	m_task(task)
-{}
+      m_task(task),
+      m_view()
+{
+    KPTGanttViewSummaryItem *p = dynamic_cast<KPTGanttViewSummaryItem*>(parent);
+    if (p)
+        m_view = p->ganttView();
+}
 
 void KPTGanttViewTaskItem::insertRelations()
 {
@@ -737,11 +748,10 @@ void KPTGanttViewTaskItem::insertRelations()
     QPtrListIterator<KPTRelation> it(m_task->dependChildNodes());
     for (; it.current(); ++it)
     {
-        KDGanttViewItem *child = 0;//find(myGantView->firstChild(), it.current()->child());
+        KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            //FIXME: This doesn't work. Maybe bug in KDGantt, maybe wrong use
-            //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
+            //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(group, this, child);
         }
     }
 }
@@ -788,13 +798,19 @@ KDGanttViewItem *KPTGanttViewTaskItem::find(KDGanttViewItem *item, KPTNode *node
 
 KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttView *parent, KPTTask *task)
     : KDGanttViewEventItem(parent, task->name()),
-	m_task(task)
+      m_task(task),
+      m_view(parent)
 {}
 
 KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttViewItem *parent, KPTTask *task)
     : KDGanttViewEventItem(parent, task->name()),
-	m_task(task)
-{}
+      m_task(task),
+      m_view()
+{
+    KPTGanttViewSummaryItem *p = dynamic_cast<KPTGanttViewSummaryItem*>(parent);
+    if (p)
+        m_view = p->ganttView();
+}
 
 
 void KPTGanttViewEventItem::insertRelations()
@@ -804,10 +820,9 @@ void KPTGanttViewEventItem::insertRelations()
     QPtrListIterator<KPTRelation> it(m_task->dependChildNodes());
     for (; it.current(); ++it)
     {
-        KDGanttViewItem *child = 0;//find(myGantView->firstChild(), it.current()->child());
+        KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            //FIXME: This doesn't work. Maybe bug in KDGantt, maybe wrong use
             //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
         }
     }
