@@ -975,25 +975,29 @@ void KSpreadLayout::setTextFontStrike( bool _i )
 
 void KSpreadLayout::setTextPen( const QPen& _p )
 {
-   if(!_p.color().isValid())
+   // An invalid color means "the default text color, from the color scheme"
+   // It doesn't mean "no setting here, look at fallback"
+   // Maybe we should look at the fallback color, in fact.
+   /*if(!_p.color().isValid())
         {
         clearProperty( PTextPen );
         setNoFallBackProperties( PTextPen );
         }
-    else
+    else*/
         {
         setProperty( PTextPen );
         clearNoFallBackProperties( PTextPen );
         }
 
-    setProperty( PTextPen );
-    layoutChanged();
+    //setProperty( PTextPen );
     m_textPen = _p;
+    //kdDebug() << "setTextPen: this=" << this << " pen=" << m_textPen.color().name() << " valid:" << m_textPen.color().isValid() << endl;
+    layoutChanged();
 }
 
 void KSpreadLayout::setTextColor( const QColor & _c )
 {
-   QPen p = textPen();
+    QPen p = textPen();
     p.setColor( _c );
     setTextPen( p );
 }

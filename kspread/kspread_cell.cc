@@ -779,11 +779,14 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     /**
      * A usual numeric, boolean, date, time or string value.
      */
-    QPen tmpPen;
-    tmpPen.setColor( textColor( _col, _row ) );
-    setTextPen(tmpPen);
+    ///// What's this ??? (David)
+    //QPen tmpPen;
+    //tmpPen.setColor( textColor( _col, _row ) );
+    //setTextPen(tmpPen);
     m_conditionIsTrue = false;
-    tmpPen=textPen(_col,_row);
+    //tmpPen = textPen(_col,_row);
+    //// Warning: if you re-enable the line above, apply the textColorPrint
+    // stuff. Never call QPainter::setPen with an invalid pen ! (David)
     //
     // Turn the stored value in a string
     //
@@ -893,6 +896,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
         verifyCondition();
 
+	// This method only calculates the text, and its width.
+	// No need to bother about the color (David)
+#if 0
         // Find the correct color which depends on the conditions
         // and the sign of the value.
         if ( floatColor( _col, _row ) == KSpreadCell::NegRed && v < 0.0 )
@@ -914,6 +920,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             }
             tmpPen.setColor(tmpCondition->colorcond);
         }
+#endif
     }
     else if ( isFormular() )
     {
@@ -933,7 +940,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             return;
     }
 
-    _painter.setPen(tmpPen);
+    //// useless ! _painter.setPen(tmpPen);
 
     // verifyCondition();
 
@@ -2073,7 +2080,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                             w2 - left_offset - right_offset,
                             h2 - top_offset - bottom_offset );
     //
-    // First draw the default borders so that they dont
+    // First draw the default borders so that they don't
     // overwrite any other border.
     //
     if ( left_pen.style() == Qt::NoPen &&
@@ -2181,7 +2188,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     KSpreadCell* cell_l = m_pTable->cellAt( _col - 1, _row );
     // Not yet used .... KSpreadCell* cell_b = m_pTable->cellAt( _col, _row + 1 );
 
-    // Fix the borders which meat at the top left corner
+    // Fix the borders which meet at the top left corner
     QPen vert_pen = cell_t->leftBorderPen( _col, _row - 1 );
     if ( vert_pen.style() != Qt::NoPen )
     {
@@ -2191,7 +2198,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         _painter.drawLine( _tx, _ty, _tx, _ty + bottom );
     }
 
-    // Fix the borders which meat at the top right corner
+    // Fix the borders which meet at the top right corner
     vert_pen = cell_t->rightBorderPen( _col, _row - 1 );
     if ( vert_pen.style() != Qt::NoPen )
     {
@@ -2200,9 +2207,9 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         _painter.setPen( vert_pen );
         _painter.drawLine( _tx + w, _ty, _tx + w, _ty + bottom );
     }
-    QColor textColorPrint=textColor( _col, _row);
 
-    // This cell is obscured? Then dont draw any content
+    QColor textColorPrint = textColor( _col, _row);
+    // This cell is obscured? Then don't draw any content
     if ( override_obscured )
         goto drawmarker;
     // This cell is obscuring other ones? Then we redraw their
@@ -2303,12 +2310,13 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 #endif
     }
 
-    if(_painter.device()->isExtDev()&&!textColorPrint.isValid())
-        textColorPrint=Qt::black;
-    else if(!_painter.device()->isExtDev())
+    // Resolve the text color if invalid (=default)
+    if(!textColorPrint.isValid())
     {
-        if(!textColorPrint.isValid())
-            textColorPrint=QApplication::palette().active().text();
+        if(_painter.device()->isExtDev())
+            textColorPrint = Qt::black;
+        else
+            textColorPrint = QApplication::palette().active().text();
     }
 
     /**
@@ -2325,7 +2333,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
      */
     else if ( !m_strOutText.isEmpty() && (!_painter.device()->isExtDev()||(_painter.device()->isExtDev() && !getDontprintText(_col,_row)) ))
     {
-        QPen tmpPen(textPen(_col,_row));
+        QPen tmpPen( textColorPrint );
         /*
         if ( selected && ( _col != m.left() || _row != m.top() )  )
         {
@@ -2335,7 +2343,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         }
         else*/
 
-        _painter.setPen( textPen(_col,_row) );
+        //_painter.setPen( textPen(_col,_row) );
 
         // #### Torben: This looks like duplication to me
         verifyCondition();
@@ -2365,13 +2373,13 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                 double v = m_dValue * faktor(column(),row());
                 if ( floatColor( _col, _row) == KSpreadCell::NegRed && v < 0.0 && !m_pTable->getShowFormular() )
                     tmpPen.setColor( Qt::red );
-                else
-                    tmpPen.setColor( textColorPrint );
+                //else
+                //    tmpPen.setColor( textColorPrint );
             }
-            else
-                tmpPen.setColor( textColorPrint );
+            //else
+            //    tmpPen.setColor( textColorPrint );
         }
-        _painter.setPen(tmpPen);
+        //_painter.setPen(tmpPen);
 
         if ( selected && ( _col != m.left() || _row != m.top() )  )
         {
@@ -3241,7 +3249,6 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
                 setDisplayText( oldText, updateDepends );
                 }
         }
-
 }
 
 
@@ -3676,7 +3683,7 @@ void KSpreadCell::checkValue()
     m_bBool = false;
     m_bDate = false;
     m_bTime=false;
-    // If the input is empty, we dont have a value
+    // If the input is empty, we don't have a value
     if ( m_strText.isEmpty() )
     {
       m_strOutText = "";
@@ -3690,7 +3697,7 @@ void KSpreadCell::checkValue()
     else if ( isFormular() )
         p = m_strFormularOut; // this should never happen
 
-    // If the output is empty, we dont have a value
+    // If the output is empty, we don't have a value
     if ( p.isEmpty() )
     {
       return;
@@ -3845,7 +3852,7 @@ void KSpreadCell::checkValue()
                 for ( ; yearPos > 0 && fmt[yearPos-1] != '%'; --yearPos )
                     fmt.remove( yearPos, 1 );
             }
-            kdDebug() << "KSpreadCell::checkValue short format w/o date: " << fmt << endl;
+            //kdDebug() << "KSpreadCell::checkValue short format w/o date: " << fmt << endl;
             tmpDate = locale()->readDate( m_strText, fmt );
         }
     }
@@ -3973,11 +3980,13 @@ QDomElement KSpreadCell::saveParameters( QDomDocument& doc ) const
 	format.setAttribute( "dontprinttext", "yes" );
 
     format.appendChild( createElement( "font", textFont( m_iColumn,m_iRow ), doc ) );
-    if ( textPen( m_iColumn,m_iRow).color().isValid())
-        format.appendChild( createElement( "pen", textPen( m_iColumn,m_iRow), doc ) );
-    if ( backGroundBrush(m_iColumn,m_iRow).color().isValid())
-        format.setAttribute( "brushcolor", backGroundBrush(m_iColumn,m_iRow).color().name() );
-    format.setAttribute( "brushstyle",(int)backGroundBrush(m_iColumn,m_iRow).style() );
+    QPen tp = textPen( m_iColumn, m_iRow );
+    if ( tp.color().isValid() )
+        format.appendChild( createElement( "pen", tp, doc ) );
+    QBrush bgb = backGroundBrush(m_iColumn,m_iRow);
+    if ( bgb.color().isValid())
+        format.setAttribute( "brushcolor", bgb.color().name() );
+    format.setAttribute( "brushstyle",(int)bgb.style() );
 
     QDomElement left = doc.createElement( "left-border" );
     left.appendChild( createElement( "pen", leftBorderPen(m_iColumn,m_iRow), doc ) );
