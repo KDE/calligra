@@ -103,3 +103,8 @@ DCOPRef KIvioPageIface::layerAt( int pos)
     return DCOPRef( kapp->dcopClient()->appId(),
                     m_page->layerAt(pos)->dcopObject()->objId() );
 }
+
+void KIvioPageIface::setHidePage(bool _hide)
+{
+    m_page->setHidePage(_hide);
+}

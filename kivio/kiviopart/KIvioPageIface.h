@@ -47,6 +47,7 @@ k_dcop:
     void selectAllStencils();
     void unselectAllStencils();
     int nbLayer() const;
+    void setHidePage(bool _hide);
 
 private:
     KivioPage *m_page;

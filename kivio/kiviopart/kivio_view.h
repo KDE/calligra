@@ -90,7 +90,7 @@ public:
 
   virtual DCOPObject* dcopObject();
 
-  ToolController* toolsController() { return m_pTools; }
+  ToolController* toolsController()const { return m_pTools; }
   KivioCanvas* canvasWidget() const { return m_pCanvas; }
   KivioDoc* doc()const { return m_pDoc; }
 

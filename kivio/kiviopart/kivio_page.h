@@ -145,7 +145,7 @@ public:
   void insertLayer( int, KivioLayer * );
   KivioLayer *layerAt( int );
     void takeLayer( KivioLayer *pLayer );
-  KivioGuideLines* guideLines(){ return gLines; }
+  KivioGuideLines* guideLines()const{ return gLines; }
 
   /*
    * Stencil routines

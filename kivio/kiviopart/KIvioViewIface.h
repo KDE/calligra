@@ -23,7 +23,7 @@
 #include <KoViewIface.h>
 
 #include <qstring.h>
-
+#include <qcolor.h>
 class KivioView;
 
 class KIvioViewIface : public KoViewIface
@@ -77,7 +77,8 @@ k_dcop:
     virtual void unselectAllStencils();
 
     virtual int lineWidth()const;
-
+    QColor foreGroundColor()const;
+    QColor backGroundColor()const;
 private:
     KivioView *view;
 

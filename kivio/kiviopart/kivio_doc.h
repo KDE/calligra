@@ -74,7 +74,7 @@ public:
 
   virtual bool initDoc();
 
-  KivioOptions* config() { return m_options; }
+  KivioOptions* config()const { return m_options; }
 
   virtual QCString mimeType() const { return MIME_TYPE; }
 
@@ -96,11 +96,11 @@ public:
    * Adds a KivioStencilSpawnerSet to the list of spawner sets and make it active.
    *
    */
-  KivioStencilSpawnerSet *addSpawnerSet( QString );
-  KivioStencilSpawnerSet *addSpawnerSetDuringLoad( QString );
+  KivioStencilSpawnerSet *addSpawnerSet( const QString& );
+  KivioStencilSpawnerSet *addSpawnerSetDuringLoad( const QString& );
   bool removeSpawnerSet( KivioStencilSpawnerSet * );
 
-  QPtrList<KivioStencilSpawnerSet> *spawnerSets() { return m_pLstSpawnerSets; }
+  QPtrList<KivioStencilSpawnerSet> *spawnerSets()const { return m_pLstSpawnerSets; }
 
   KivioStencilSpawner *findStencilSpawner( const QString& setId, const QString& stencilId );
   KivioStencilSpawner *findInternalStencilSpawner( const QString& title );
@@ -110,7 +110,7 @@ public:
   /**
    * @return TRUE if the document is currently loading.
    */
-  bool isLoading() { return m_bLoading; }
+  bool isLoading()const { return m_bLoading; }
 
   virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
   void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint, float, bool );
@@ -128,7 +128,7 @@ public:
   KivioGridData grid() { return gridData; }
   void setGrid(KivioGridData g) { gridData = g; emit sig_updateGrid();}
 
-  ViewItemList* viewItems() { return viewItemList; }
+  ViewItemList* viewItems()const { return viewItemList; }
 
   void initConfig();
   void saveConfig();
@@ -137,7 +137,7 @@ public:
 
     int undoRedoLimit() const;
     void setUndoRedoLimit(int val);
-    KCommandHistory * commandHistory() { return m_commandHistory; }
+    KCommandHistory * commandHistory()const { return m_commandHistory; }
 
     void insertPage( KivioPage * page );
     void takePage( KivioPage * page );

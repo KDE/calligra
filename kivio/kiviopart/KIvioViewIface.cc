@@ -204,3 +204,13 @@ void KIvioViewIface::alignStencilsDlg()
 {
     view->alignStencilsDlg();
 }
+
+QColor KIvioViewIface::foreGroundColor()const
+{
+    return view->fgColor();
+}
+
+QColor KIvioViewIface::backGroundColor()const
+{
+    return view->bgColor();
+}

@@ -526,7 +526,7 @@ bool KivioDoc::setIsAlreadyLoaded( QString dirName, QString id )
     return false;
 }
 
-KivioStencilSpawnerSet *KivioDoc::addSpawnerSet( QString dirName )
+KivioStencilSpawnerSet *KivioDoc::addSpawnerSet( const QString &dirName )
 {
     KivioStencilSpawnerSet *set;
 
@@ -557,7 +557,7 @@ KivioStencilSpawnerSet *KivioDoc::addSpawnerSet( QString dirName )
     return set;
 }
 
-KivioStencilSpawnerSet *KivioDoc::addSpawnerSetDuringLoad( QString dirName )
+KivioStencilSpawnerSet *KivioDoc::addSpawnerSetDuringLoad( const QString &dirName )
 {
     KivioStencilSpawnerSet *set;
 
