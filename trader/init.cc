@@ -21,7 +21,6 @@
 #include "typerepo_impl.h"
 
 #include <k2config.h>
-#include <k2url.h>
 #include <string.h>
 #include <kapp.h>
 
