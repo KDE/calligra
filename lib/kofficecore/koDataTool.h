@@ -29,7 +29,6 @@
 class KoDataTool;
 class QPixmap;
 class QStringList;
-class KSpellConfig;
 /**
  * This is a convenience class for @ref KService. You can use it if you have
  * a KService describing a KoDataTool. In this case the KoDataToolInfo class
@@ -136,7 +135,7 @@ public:
     KoDataTool( QObject* parent = 0, const char* name = 0 );
     //add KSpellConfig *_ksconf for spell tool
     //now spell tool used KSpellConfig local to kspread
-    virtual bool run( const QString& command, void* data, const QString& datatype, const QString& mimetype, KSpellConfig *_ksconf) = 0;
+    virtual bool run( const QString& command, void* data, const QString& datatype, const QString& mimetype) = 0;
 };
 
 #endif

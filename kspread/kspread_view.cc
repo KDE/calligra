@@ -103,6 +103,12 @@
 #include "KSpreadViewIface.h"
 #include <kdebug.h>
 
+
+struct spellStruct {
+  QString _data;
+  KSpellConfig * _ksconf;
+};
+
 /*****************************************************************************
  *
  * KSpreadView
@@ -2455,13 +2461,17 @@ void KSpreadView::slotActivateTool( int _id )
 
   QString text = cell->text();
   QString tmpText=cell->text();
-  if ( tool->run( entry->command, &text, "QString", "text/plain",m_pDoc->getKSpellConfig()) )
+  spellStruct tmpStruct;
+  tmpStruct._data=text;
+  tmpStruct._ksconf=m_pDoc->getKSpellConfig();
+  if ( tool->run( entry->command, &tmpStruct, "QString", "text/plain") )
       {
       if ( !m_pDoc->undoBuffer()->isLocked() )
         {
         KSpreadUndoSetText* undo = new KSpreadUndoSetText( m_pDoc, m_pTable, tmpText, m_pCanvas->markerColumn(), m_pCanvas->markerRow() ,cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
         m_pDoc->undoBuffer()->appendUndo( undo );
         }
+      text= tmpStruct._data;
       cell->setCellText( text, true );
       editWidget()->setText( text );
       }
