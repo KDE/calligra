@@ -1352,8 +1352,10 @@ void KWView::addVariableActions( int type, const QStringList & texts,
             VariableDef v;
             v.type = type;
             v.subtype = i;
+            QCString actionName;
+            actionName.sprintf( "var-action-%d-%d", type, i );
             KAction * act = new KAction( (*it), 0, this, SLOT( insertVariable() ),
-                                         actionCollection(), "var-action" );
+                                         actionCollection(), actionName );
             m_variableDefMap.insert( act, v );
             parentMenu->insert( act );
         }
@@ -2054,7 +2056,7 @@ void KWView::updateStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act = 0L;
-        KoStyle *tmp = m_doc->styleCollection()->findStyle( lst[ i]);
+        KoStyle *tmp = m_doc->styleCollection()->styleAt( i );
         if ( tmp )
         {
             QCString name = tmp->shortCutName().latin1();
@@ -2073,6 +2075,8 @@ void KWView::updateStyleList()
             act->setExclusiveGroup( "styleListAction" );
             actionFormatStyleMenu->insert( act );
         }
+        else
+            kdWarning() << "No style found for " << *it << endl;
     }
 }
 
@@ -2122,7 +2126,7 @@ void KWView::updateFrameStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act =0L;
-        KWFrameStyle *tmp = m_doc->frameStyleCollection()->findFrameStyle( lst[ i]);
+        KWFrameStyle *tmp = m_doc->frameStyleCollection()->frameStyleAt( i );
         if ( tmp )
         {
             QCString name = tmp->shortCutName().latin1();
@@ -2142,6 +2146,8 @@ void KWView::updateFrameStyleList()
             act->setExclusiveGroup( "frameStyleList" );
             actionFrameStyleMenu->insert( act );
         }
+        else
+            kdWarning() << "No frame style found for " << *it << endl;
     }
 }
 
@@ -2192,7 +2198,7 @@ void KWView::updateTableStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act =0L;
-        KWTableStyle *tmp = m_doc->tableStyleCollection()->findTableStyle( lst[ i]);
+        KWTableStyle *tmp = m_doc->tableStyleCollection()->tableStyleAt( i );
         if ( tmp)
         {
             QCString name = tmp->shortCutName().latin1();
@@ -2212,6 +2218,8 @@ void KWView::updateTableStyleList()
             act->setGroup( "tableStyleList" );
             actionTableStyleMenu->insert( act );
         }
+        else
+            kdWarning() << "No table style found for " << *it << endl;
     }
 }
 
@@ -2707,11 +2715,15 @@ void KWView::viewTextMode()
 {
     if ( actionViewTextMode->isChecked() )
     {
-        if ( dynamic_cast<KWViewModePreview *>(m_gui->canvasWidget()->viewMode()) )
-            m_zoomViewModePreview = m_doc->zoom();
-        showZoom( m_zoomViewModeNormal ); // share the same zoom
-        setZoom( m_zoomViewModeNormal, false );
-        m_doc->switchViewMode( new KWViewModeText( m_doc ) );
+        KWTextFrameSet* fs = KWViewModeText::determineTextFrameSet( m_doc );
+        if ( fs ) { // TODO: disable the action when there is no text frameset available
+            if ( dynamic_cast<KWViewModePreview *>(m_gui->canvasWidget()->viewMode()) )
+                m_zoomViewModePreview = m_doc->zoom();
+            showZoom( m_zoomViewModeNormal ); // share the same zoom
+            setZoom( m_zoomViewModeNormal, false );
+            m_doc->switchViewMode( new KWViewModeText( m_doc, fs ) );
+        } else
+            initGUIButton(); // ensure we show the current viewmode
     }
     else
         actionViewTextMode->setChecked( true ); // always one has to be checked !
@@ -4659,6 +4671,14 @@ void KWView::slotCounterStyleSelected()
             // else the suffix remains the default, '.'
             // TODO save this setting, to use the last one selected in the dialog?
             // (same for custom bullet char etc.)
+
+            // 68927: restart numbering, by default, if last parag wasn't numbered
+            // (and if we're not applying this to a selection)
+            if ( currentTextEdit() && !currentTextEdit()->textFrameSet()->hasSelection() ) {
+                KoTextParag* parag = currentTextEdit()->cursor()->parag();
+                if ( parag->prev() && !parag->prev()->counter() )
+                    c.setRestartCounter(true);
+            }
         }
 
         QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
@@ -5428,15 +5448,12 @@ void KWView::spellCheckerDone( const QString & )
 void KWView::clearSpellChecker()
 {
     kdDebug(32001) << "KWView::clearSpellChecker" << endl;
-    delete m_spell.kospell;
-    m_spell.kospell=0;
-#if 0
-    if ( m_spell.kspell ) {
-        m_spell.kspell->cleanUp();
-        delete m_spell.kspell;
-        m_spell.kspell = 0;
+    if ( m_spell.kospell ) {
+        m_spell.kospell->cleanUp();
+        delete m_spell.kospell;
+        m_spell.kospell = 0;
     }
-#endif
+
     delete m_spell.textIterator;
     m_spell.textIterator = 0L;
     if(m_spell.macroCmdSpellCheck)
@@ -7206,8 +7223,11 @@ void KWView::addWordToDictionary()
     if ( edit && m_doc->backgroundSpellCheckEnabled() )
     {
         QString word = edit->wordUnderCursor( *edit->cursor() );
-        if ( !word.isEmpty())
+        if ( !word.isEmpty()) {
             m_doc->addWordToDictionary( word);
+            // Re-check everything to make this word normal again
+            m_doc->reactivateBgSpellChecking();
+        }
     }
 }
 

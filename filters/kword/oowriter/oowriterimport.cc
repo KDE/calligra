@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
    Copyright (C) 2003 David Faure <faure@kde.org>
-   Copyright 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -69,8 +69,10 @@ OoWriterImport::~OoWriterImport()
 KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCString const & to )
 {
     kdDebug(30518) << "Entering Oowriter Import filter: " << from << " - " << to << endl;
-
-    if ( from != "application/vnd.sun.xml.writer" || to != "application/x-kword" )
+    if ( ( from != "application/vnd.sun.xml.writer"
+         && from != "application/vnd.sun.xml.writer.template"
+         && from != "application/vnd.sun.xml.writer.master" )
+         || to != "application/x-kword" )
     {
         kdWarning(30518) << "Invalid mimetypes " << from << " " << to << endl;
         return KoFilter::NotImplemented;
@@ -202,11 +204,35 @@ void OoWriterImport::createStyles( QDomDocument& doc )
         // ### In KWord the style says "I'm part of the outline" (TOC)
         // ### In OOo the paragraph says that (text:h)
         // Hence this hack...
-        if ( styleName.startsWith( "Heading" ) )
+        // OASIS solution for this: style:default-outline-level attribute
+        bool outline = styleName.startsWith( "Heading" );
+        if ( outline )
             styleElem.setAttribute( "outline", "true" );
 
         writeFormat( doc, styleElem, 1, 0, 0 );
         writeLayout( doc, styleElem );
+
+        // writeLayout doesn't load the counter. It's modelled differently for parags and for styles.
+        // ### missing info in the format! (fixed in OASIS)
+        const int level = styleName.right(1).toInt(); // ## HACK
+        bool listOK = false;
+        if ( level > 0 ) {
+            if ( outline )
+                listOK = pushListLevelStyle( "<outline-style>", m_outlineStyle, level );
+            else {
+                const QString listStyleName = e.attribute( "style:list-style-name" );
+                listOK = !listStyleName.isEmpty();
+                if ( listOK )
+                    listOK = pushListLevelStyle( listStyleName, level );
+            }
+        }
+        if ( listOK ) {
+            const QDomElement listStyle = m_listStyleStack.currentListStyle();
+            // The tag is either text:list-level-style-number or text:list-level-style-bullet
+            bool ordered = listStyle.tagName() == "text:list-level-style-number";
+            writeCounter( doc, styleElem, outline, level, ordered );
+            m_listStyleStack.pop();
+        }
 
         m_styleStack.clear();
     }
@@ -327,19 +353,22 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
 
     QDomElement* masterPage = m_masterPages[ masterPageName ];
     Q_ASSERT( masterPage );
+    kdDebug(30518) << "page-master-name: " << masterPage->attribute( "style:page-master-name" ) << endl;
     QDomElement *style = masterPage ? m_styles[masterPage->attribute( "style:page-master-name" )] : 0;
     Q_ASSERT( style );
     if ( style )
     {
         QDomElement properties( style->namedItem( "style:properties" ).toElement() );
+        Q_ASSERT( !properties.isNull() );
         orientation = ( (properties.attribute("style:print-orientation") != "portrait") ? PG_LANDSCAPE : PG_PORTRAIT );
         width = KoUnit::parseValue(properties.attribute("fo:page-width"));
         height = KoUnit::parseValue(properties.attribute("fo:page-height"));
+        kdDebug(30518) << "width=" << width << " height=" << height << endl;
         // guessFormat takes millimeters
         if ( orientation == PG_LANDSCAPE )
-            paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(height), MM_TO_POINT(width) );
+            paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(height), POINT_TO_MM(width) );
         else
-            paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(width), MM_TO_POINT(height) );
+            paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(width), POINT_TO_MM(height) );
 
         marginLeft = KoUnit::parseValue(properties.attribute("fo:margin-left"));
         marginTop = KoUnit::parseValue(properties.attribute("fo:margin-top"));
@@ -388,11 +417,11 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
             kdDebug() << "Found footer" << endl;
             importHeaderFooter( mainDocument, footerElem, hasEvenOddFooter, footerStyle );
         }
-        m_styleStack.pop();
     }
     else
     {
         // We have no master page! We need defaults.
+        kdWarning(30518) << "NO MASTER PAGE" << endl;
         orientation=PG_PORTRAIT;
         paperFormat=PG_DIN_A4;
         width=MM_TO_POINT(KoPageFormat::width(paperFormat, orientation));
@@ -539,7 +568,7 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
     // We do not stop if the following calls fail.
     loadAndParse("styles.xml", m_stylesDoc);
     loadAndParse("meta.xml", m_meta);
-    loadAndParse("settings.xml", m_settings);
+    // not used yet: loadAndParse("settings.xml", m_settings);
 
     emit sigProgress( 10 );
 
@@ -610,7 +639,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles, QDomDocument& 
       if ( d > 1.0 )
       {
         QString message( i18n("This document was created with the OpenOffice.org version '%1'. This filter was written for version for 1.0. Reading this file could cause strange behavior, crashes or incorrect display of the data. Do you want to continue converting the document?") );
-        message.arg( docElement.attribute( "office:version" ) );
+        message = message.arg( docElement.attribute( "office:version" ) );
         if ( KMessageBox::warningYesNo( 0, message, i18n( "Unsupported document version" ) ) == KMessageBox::No )
           return false;
       }
@@ -833,80 +862,85 @@ void OoWriterImport::applyListStyle( QDomDocument& doc, QDomElement& layoutEleme
     if ( m_listStyleStack.hasListStyle() && m_nextItemIsListItem ) {
         bool heading = paragraph.tagName() == "text:h";
         m_nextItemIsListItem = false;
-        const QDomElement listStyle = m_listStyleStack.currentListStyle();
-        const QDomElement listStyleProperties = m_listStyleStack.currentListStyleProperties();
-        QDomElement counter = doc.createElement( "COUNTER" );
-        counter.setAttribute( "numberingtype", heading ? 1 : 0 );
         int level = heading ? paragraph.attribute( "text:level" ).toInt() : m_listStyleStack.level();
-        counter.setAttribute( "depth", level - 1 ); // "depth" starts at 0
-
-        //kdDebug(30518) << "Numbered parag. heading=" << heading << " level=" << level
-        //               << " m_restartNumbering=" << m_restartNumbering << endl;
-
-        if ( m_insideOrderedList || heading ) {
-            counter.setAttribute( "type", Conversion::importCounterType( listStyle.attribute( "style:num-format" ) ) );
-            counter.setAttribute( "lefttext", listStyle.attribute( "style:num-prefix" ) );
-            counter.setAttribute( "righttext", listStyle.attribute( "style:num-suffix" ) );
-            QString dl = listStyle.attribute( "text:display-levels" );
-            if ( dl.isEmpty() )
-                dl = "1";
-            counter.setAttribute( "display-levels", dl );
-            if ( m_restartNumbering != -1 ) {
-                counter.setAttribute( "start", m_restartNumbering );
-                counter.setAttribute( "restart", "true" );
-            } else {
-                // useful?
-                counter.setAttribute( "start", listStyle.attribute( "text:start-value" ) );
-            }
-        }
-        else { // bullets, see 3.3.6 p138
-            counter.setAttribute( "type", 6 );
-            QString bulletChar = listStyle.attribute( "text:bullet-char" );
-            if ( !bulletChar.isEmpty() ) {
-#if 0 // doesn't work well. Fonts lack those symbols!
-                counter.setAttribute( "bullet", bulletChar[0].unicode() );
-                kdDebug() << "bullet code " << bulletChar[0].unicode() << endl;
-                QString fontName = listStyleProperties.attribute( "style:font-name" );
-                counter.setAttribute( "bulletfont", fontName );
-#endif
-                // Reverse engineering, I found those codes:
-                switch( bulletChar[0].unicode() ) {
-                case 8226: // small disc
-                    counter.setAttribute( "type", 10 ); // a disc bullet
-                    break;
-                case 9679: // large disc
-                    counter.setAttribute( "type", 10 ); // a disc bullet
-                    break;
-                case 57356: // losange - TODO in KWord
-                    counter.setAttribute( "type", 10 ); // a disc bullet
-                    break;
-                case 57354: // square
-                    counter.setAttribute( "type", 9 );
-                    break;
-                case 10132: // arrow
-                case 10146: // two-colors right-pointing triangle (TODO)
-                    counter.setAttribute( "bullet", 206 ); // simpler arrow symbol
-                    counter.setAttribute( "bulletfont", "symbol" );
-                    break;
-                case 10007: // cross
-                    counter.setAttribute( "bullet", 212 ); // simpler cross symbol
-                    counter.setAttribute( "bulletfont", "symbol" );
-                    break;
-                case 10004: // checkmark
-                    counter.setAttribute( "bullet", 246 ); // hmm that's sqrt
-                    counter.setAttribute( "bulletfont", "symbol" );
-                    break;
-                default:
-                    counter.setAttribute( "type", 8 ); // circle
-                    break;
-                }
-            } else { // can never happen
-                counter.setAttribute( "type", 10 ); // a disc bullet
-            }
-        }
-
-        layoutElement.appendChild(counter);
+        writeCounter( doc, layoutElement, heading, level, m_insideOrderedList );
     }
+}
+
+void OoWriterImport::writeCounter( QDomDocument& doc, QDomElement& layoutElement, bool heading, int level, bool ordered )
+{
+    const QDomElement listStyle = m_listStyleStack.currentListStyle();
+    //const QDomElement listStyleProperties = m_listStyleStack.currentListStyleProperties();
+    QDomElement counter = doc.createElement( "COUNTER" );
+    counter.setAttribute( "numberingtype", heading ? 1 : 0 );
+    counter.setAttribute( "depth", level - 1 ); // "depth" starts at 0
+
+    //kdDebug(30518) << "Numbered parag. heading=" << heading << " level=" << level
+    //               << " m_restartNumbering=" << m_restartNumbering << endl;
+
+    if ( ordered || heading ) {
+        counter.setAttribute( "type", Conversion::importCounterType( listStyle.attribute( "style:num-format" ) ) );
+        counter.setAttribute( "lefttext", listStyle.attribute( "style:num-prefix" ) );
+        counter.setAttribute( "righttext", listStyle.attribute( "style:num-suffix" ) );
+        QString dl = listStyle.attribute( "text:display-levels" );
+        if ( dl.isEmpty() )
+            dl = "1";
+        counter.setAttribute( "display-levels", dl );
+        if ( m_restartNumbering != -1 ) {
+            counter.setAttribute( "start", m_restartNumbering );
+            counter.setAttribute( "restart", "true" );
+        } else {
+            // useful?
+            counter.setAttribute( "start", listStyle.attribute( "text:start-value" ) );
+        }
+    }
+    else { // bullets, see 3.3.6 p138
+        counter.setAttribute( "type", 6 );
+        QString bulletChar = listStyle.attribute( "text:bullet-char" );
+        if ( !bulletChar.isEmpty() ) {
+#if 0 // doesn't work well. Fonts lack those symbols!
+            counter.setAttribute( "bullet", bulletChar[0].unicode() );
+            kdDebug() << "bullet code " << bulletChar[0].unicode() << endl;
+            QString fontName = listStyleProperties.attribute( "style:font-name" );
+            counter.setAttribute( "bulletfont", fontName );
+#endif
+            // Reverse engineering, I found those codes:
+            switch( bulletChar[0].unicode() ) {
+            case 8226: // small disc
+                counter.setAttribute( "type", 10 ); // a disc bullet
+                break;
+            case 9679: // large disc
+                counter.setAttribute( "type", 10 ); // a disc bullet
+                break;
+            case 57356: // losange - TODO in KWord
+                counter.setAttribute( "type", 10 ); // a disc bullet
+                break;
+            case 57354: // square
+                counter.setAttribute( "type", 9 );
+                break;
+            case 10132: // arrow
+            case 10146: // two-colors right-pointing triangle (TODO)
+                counter.setAttribute( "bullet", 206 ); // simpler arrow symbol
+                counter.setAttribute( "bulletfont", "symbol" );
+                break;
+            case 10007: // cross
+                counter.setAttribute( "bullet", 212 ); // simpler cross symbol
+                counter.setAttribute( "bulletfont", "symbol" );
+                break;
+            case 10004: // checkmark
+                counter.setAttribute( "bullet", 246 ); // hmm that's sqrt
+                counter.setAttribute( "bulletfont", "symbol" );
+                break;
+            default:
+                counter.setAttribute( "type", 8 ); // circle
+                break;
+            }
+        } else { // can never happen
+            counter.setAttribute( "type", 10 ); // a disc bullet
+        }
+    }
+
+    layoutElement.appendChild(counter);
 }
 
 static QDomElement findListLevelStyle( QDomElement& fullListStyle, int level )
@@ -952,14 +986,17 @@ bool OoWriterImport::pushListLevelStyle( const QString& listStyleName, // for de
 
 void OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list, QDomElement& currentFramesetElement )
 {
-    //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
+    //kdDebug(30518) << k_funcinfo << "parseList"<< endl;
 
     m_insideOrderedList = ( list.tagName() == "text:ordered-list" );
-    const QString listStyleName = list.attribute( "text:style-name" );
-    bool listOK = !listStyleName.isEmpty();
+    QString oldListStyleName = m_currentListStyleName;
+    if ( list.hasAttribute( "text:style-name" ) )
+        m_currentListStyleName = list.attribute( "text:style-name" );
+    bool listOK = !m_currentListStyleName.isEmpty();
     const int level = m_listStyleStack.level() + 1;
+    //kdDebug(30518) << k_funcinfo << " listOK=" << listOK << " level=" << level << endl;
     if ( listOK )
-        listOK = pushListLevelStyle( listStyleName, level );
+        listOK = pushListLevelStyle( m_currentListStyleName, level );
 
     // Iterate over list items
     for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() )
@@ -970,11 +1007,13 @@ void OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list, QDom
         m_restartNumbering = -1;
         if ( listItem.hasAttribute( "text:start-value" ) )
             m_restartNumbering = listItem.attribute( "text:start-value" ).toInt();
+        // ### Oasis: can be p h or list only.
         parseBodyOrSimilar( doc, listItem, currentFramesetElement );
         m_restartNumbering = -1;
     }
     if ( listOK )
         m_listStyleStack.pop();
+    m_currentListStyleName = oldListStyleName;
 }
 
 static int numberOfParagraphs( const QDomElement& frameset )
@@ -1083,6 +1122,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
                    || tagName == "text:modification-date"
                    || tagName == "text:time"
                    || tagName == "text:page-number"
+                   || tagName == "text:chapter"
                    || tagName == "text:file-name"
                    || tagName == "text:author-name"
                    || tagName == "text:author-initials"
@@ -1091,7 +1131,9 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
                    || tagName == "text:description"
                    || tagName == "text:variable-set"
                    || tagName == "text:page-variable-get"
-                   || tagName == "text:user-defined" ) )
+                   || tagName == "text:user-defined"
+                   || tagName.startsWith( "text:sender-")
+                      ) )
             // TODO in kword: text:printed-by, initial-creator
         {
             textData = "#";     // field placeholder
@@ -1151,8 +1193,6 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         pos += length;
     }
 }
-
-
 
 QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement& paragraph )
 {
@@ -1396,7 +1436,18 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
     if (m_styleStack.hasAttribute("fo:text-shadow")) // 3.10.21
     {
         QDomElement shadow = doc.createElement("SHADOW");
-        shadow.setAttribute("text-shadow", m_styleStack.attribute("fo:text-shadow"));
+        QString css = m_styleStack.attribute("fo:text-shadow");
+        // Workaround for OOo-1.1 bug: they forgot to save the color.
+        QStringList tokens = QStringList::split(' ', css);
+        if ( !tokens.isEmpty() ) {
+            QColor col( tokens.first() );
+            if ( !col.isValid() && tokens.count() > 1 ) {
+                col.setNamedColor( tokens.last() );
+            }
+            if ( !col.isValid() ) // no valid color found at either end -> append gray
+                css += " gray";
+        }
+        shadow.setAttribute("text-shadow", css);
         format.appendChild(shadow);
     }
 
@@ -1496,9 +1547,11 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
             bool breakInside = m_styleStack.attribute( "style:break-inside" ) == "true";
             pageBreak.setAttribute("linesTogether", breakInside ? "false" : "true"); // opposite meaning
         }
-        if ( m_styleStack.hasAttribute( "fo:keep-with-next" ) ) // 3.11.31 (the doc said style:keep-with-next but DV said it's wrong)
-            // Copy the boolean value
-            pageBreak.setAttribute("keepWithNext", m_styleStack.attribute( "fo:keep-with-next" ));
+        if ( m_styleStack.hasAttribute( "fo:keep-with-next" ) ) { // 3.11.31 (the doc said style:keep-with-next but DV said it's wrong)
+            // OASIS spec says it's "auto"/"always", not a boolean. Not sure which one OO uses.
+            QString val = m_styleStack.attribute( "fo:keep-with-next" );
+            pageBreak.setAttribute("keepWithNext", ( val == "true" || val == "always" ) ? "true" : "false");
+        }
         layoutElement.appendChild( pageBreak );
     }
 
@@ -1646,13 +1699,9 @@ void OoWriterImport::importCommonFrameProperties( QDomElement& frameElementOut )
     if ( transparent )
         frameElementOut.setAttribute( "bkStyle", 0 );
     else if ( bgColor.isValid() ) {
+        // OOwriter doesn't support fill patterns (bkStyle).
+        // But the file support is more generic, and supports: draw:stroke, svg:stroke-color, draw:fill, draw:fill-color
         frameElementOut.setAttribute( "bkStyle", 1 );
-        // TODO the OO format doesn't support fill patterns (bkStyle)
-        // To implement this in an OO-like way, we'd need to
-        // 1) convert the Qt fill patterns to draw:hatch elements (in office:styles)
-        // 2) refer to those using draw:fill="hatch" draw:fill-hatch-name="..."
-        // (OASIS extension requested, 17/01/2004)
-        // Hmm, some docu talks about: draw:stroke, svg:stroke-color, draw:fill, draw:fill-color
         frameElementOut.setAttribute( "bkRed", bgColor.red() );
         frameElementOut.setAttribute( "bkBlue", bgColor.blue() );
         frameElementOut.setAttribute( "bkGreen", bgColor.green() );
@@ -2021,14 +2070,21 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
                 subtype = 3;    // VST_PGNUM_PREVIOUS
             else if (select == "next")
                 subtype = 4;    // VST_PGNUM_NEXT
-            else
-                subtype = 0;    // VST_PGNUM_CURRENT
         }
 
         QDomElement pgnumElement ( doc.createElement("PGNUM") );
         pgnumElement.setAttribute("subtype", subtype);
         pgnumElement.setAttribute("value", object.text());
         appendKWordVariable(doc, outputFormats, object, pos, "NUMBER", 4, pgnumElement);
+    }
+    else if (tagName == "text:chapter")
+    {
+        const QString display = object.attribute( "text:display" );
+        // display can be name, number, number-and-name, plain-number-and-name, plain-number
+        QDomElement pgnumElement ( doc.createElement("PGNUM") );
+        pgnumElement.setAttribute("subtype", 2); // VST_CURRENT_SECTION
+        pgnumElement.setAttribute("value", object.text());
+        appendKWordVariable(doc, outputFormats, object, pos, "STRING", 4, pgnumElement);
     }
     else if (tagName == "text:file-name")
     {
@@ -2075,6 +2131,46 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
         authorElem.setAttribute("subtype", subtype);
         authorElem.setAttribute("value", object.text());
         appendKWordVariable(doc, outputFormats, object, pos, "STRING", 8, authorElem);
+    }
+    else if ( tagName.startsWith( "text:sender-" ) )
+    {
+        int subtype = -1;
+        const QCString afterText( tagName.latin1() + 5 );
+        if ( afterText == "sender-company" )
+            subtype = 4; //VST_COMPANYNAME;
+        else if ( afterText == "sender-firstname" )
+            ; // ## This is different from author-name, but the notion of 'sender' is unclear...
+        else if ( afterText == "sender-lastname" )
+            ; // ## This is different from author-name, but the notion of 'sender' is unclear...
+        else if ( afterText == "sender-initials" )
+            ; // ## This is different from author-initials, but the notion of 'sender' is unclear...
+        else if ( afterText == "sender-street" )
+            subtype = 14; // VST_STREET;
+        else if ( afterText == "sender-country" )
+            subtype = 9; // VST_COUNTRY;
+        else if ( afterText == "sender-postal-code" )
+            subtype = 12; //VST_POSTAL_CODE;
+        else if ( afterText == "sender-city" )
+            subtype = 13; // VST_CITY;
+        else if ( afterText == "sender-title" )
+            subtype = 15; // VST_AUTHORTITLE; // Small hack (it's supposed to be about the sender, not about the author)
+        else if ( afterText == "sender-position" )
+            subtype = 15; // VST_AUTHORTITLE; // TODO separate variable
+        else if ( afterText == "sender-phone-private" )
+            subtype = 7; // VST_TELEPHONE;
+        else if ( afterText == "sender-phone-work" )
+            subtype = 7; // VST_TELEPHONE; // ### TODO separate type
+        else if ( afterText == "sender-fax" )
+            subtype = 8; // VST_FAX;
+        else if ( afterText == "sender-email" )
+            subtype = 3; // VST_EMAIL;
+        if ( subtype != -1 )
+        {
+            QDomElement fieldElem = doc.createElement("FIELD");
+            fieldElem.setAttribute("subtype", subtype);
+            fieldElem.setAttribute("value", object.text());
+            appendKWordVariable(doc, outputFormats, object, pos, "STRING", 8, fieldElem);
+        }
     }
     else if ( tagName == "text:variable-set"
               || tagName == "text:user-defined" )

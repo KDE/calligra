@@ -1,8 +1,8 @@
-// $Header$
+//
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -173,7 +173,7 @@ QString HtmlCssWorker::textFormatToCss(const TextFormatting& formatOrigin,
         if ( formatData.bgColor.isValid() )
         {
             // Give background colour
-            strElement+="bgcolor: ";
+            strElement+="background-color: ";
             strElement+=formatData.bgColor.name();
             strElement+="; ";
         }
@@ -351,40 +351,84 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layoutOrigin,
     }
 
     if ((layout.marginBottom>=0.0)
-        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
+        && ( force || ( layoutOrigin.marginBottom != layout.marginBottom ) ) )
     {
        strLayout += QString("margin-bottom:%1pt; ").arg(layout.marginBottom);
     }
 
     if ((layout.marginTop>=0.0)
-        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
+        && ( force || ( layoutOrigin.marginTop != layout.marginTop ) ) )
     {
        strLayout += QString("margin-top:%1pt; ").arg(layout.marginTop);
     }
 
-    // TODO: Konqueror/KHTML does not support "line-height"
-    if (!force
-        && (layoutOrigin.lineSpacingType==layoutOrigin.lineSpacingType)
-        && (layoutOrigin.lineSpacing==layoutOrigin.lineSpacing))
+    if (force
+        || ( layoutOrigin.lineSpacingType != layout.lineSpacingType )
+        || ( layoutOrigin.lineSpacing != layout.lineSpacing ) )
     {
-        // Do nothing!
-    }
-    else if ( !layout.lineSpacingType )
-    {
-        // We have a custom line spacing (in points)
-        strLayout += QString("line-height:%1pt; ").arg(layout.lineSpacing);
-    }
-    else if ( 15==layout.lineSpacingType  )
-    {
-        strLayout += "line-height:1.5; "; // One-and-half
-    }
-    else if ( 20==layout.lineSpacingType  )
-    {
-        strLayout += "line-height:2.0; "; // Two
-    }
-    else if ( layout.lineSpacingType!=10  )
-    {
-        kdWarning(30503) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+        switch ( layout.lineSpacingType )
+        {
+        case LayoutData::LS_CUSTOM:
+            { 
+                // ### TODO: CSS 2 does not known neither "at-least" nor KWord's "custom"
+#if 0
+                // We have a custom line spacing (in points)
+                const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
+                strLayout += "style:line-spacing:";
+                strLayout += height;
+                strLayout += "pt; ";
+#endif
+                break;          
+            }
+        case LayoutData::LS_SINGLE:
+            {
+                strLayout += "line-height:normal; "; // One
+                break;
+            }
+        case LayoutData::LS_ONEANDHALF:
+            {
+                strLayout += "line-height:150%; "; // One-and-half
+                break;
+            }
+        case LayoutData::LS_DOUBLE:
+            {
+                strLayout += "line-height:200%; "; // Two
+                break;
+            }
+        case LayoutData::LS_MULTIPLE:
+            {
+                const QString mult ( QString::number( qRound( layout.lineSpacing * 100 ) ) );
+                strLayout += "line-height:";
+                strLayout += mult;
+                strLayout += "%; ";
+                break;
+            }
+        case LayoutData::LS_FIXED:
+            {
+                // We have a fixed line height (in points)
+                const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
+                strLayout += "line-height:";
+                strLayout += height;
+                strLayout += "pt; ";
+                break;
+            }
+        case LayoutData::LS_ATLEAST:
+            {
+                // ### TODO: CSS 2 does not known "at-least".
+                // ### TODO:  however draft CCS3 (module 'line') has 'line-stacking-strategy' to tweak this behaviour
+                // We have a at-least line height (in points)
+                const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
+                strLayout += "line-height:";
+                strLayout += height;
+                strLayout += "pt; ";
+                break;
+            }
+        default:
+            {
+                kdWarning(30503) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+                break;
+            }
+        }
     }
 
     // TODO: Konqueror/KHTML does not support "text-shadow"

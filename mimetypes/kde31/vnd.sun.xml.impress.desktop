@@ -1,0 +1,42 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=OpenOffice.org Presentation
+Comment[bg]=Презентация на OpenOffice.org
+Comment[ca]=Presentació OpenOffice.org
+Comment[cs]=Prezentace OpenOffice.org
+Comment[cy]=Cyflwyniad OpenOffice.org 
+Comment[da]=OpenOffice.org-præsentation
+Comment[de]=OpenOffice.org-Präsentation
+Comment[el]=Παρουσίαση του OpenOffice.org
+Comment[es]=Presentación de OpenOffice.org
+Comment[et]=OpenOffice.org esitlus
+Comment[fa]=OpenOffice.org نمایش
+Comment[fi]=OpenOffice.org esitys
+Comment[fr]=Présentation OpenOffice.org
+Comment[hu]=OpenOffice.org bemutató
+Comment[it]=Presentazione OpenOffice.org
+Comment[lo]=ຄອມໂພເນນຕຂອງໂປຣແກມຊຸດສໍານັກງານ K
+Comment[nb]=OpenOffice.org-presentasjon
+Comment[nl]=OpenOffice.org-presentatie
+Comment[nn]=OpenOffice.org-presentasjon
+Comment[pl]=Prezentacja OpenOffice.org
+Comment[pt]=Apresentação do OpenOffice.org
+Comment[pt_BR]=Apresentação Openoffice.org
+Comment[ru]=Презентация OpenOffice.org
+Comment[se]=OpenOffice.org presentašuvdna
+Comment[sk]=Prezentácia OpenOffice.org
+Comment[sl]=Predstavitev za OpenOffice.org
+Comment[sr]=OpenOffice.org презентација
+Comment[sv]=Openoffice.org presentation
+Comment[tg]=Тақдими OpenOffice.org
+Comment[tr]=Openoffice Sunu
+Comment[uz]=OpenOffice.org намойиши
+Comment[zh_CN]=OpenOffice.org 演示文稿
+MimeType=application/vnd.sun.xml.impress
+Type=MimeType
+Icon=008_presentation_document.xpm
+Patterns=*.sxi;*.SXI;
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.sxi
+

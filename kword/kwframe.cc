@@ -319,13 +319,13 @@ QRect KWFrame::outerRect( KWViewMode* viewMode ) const
 {
     KWDocument *doc = m_frameSet->kWordDocument();
     QRect outerRect( doc->zoomRect( *this ) );
-    bool isFrameVisible = viewMode && viewMode->drawFrameBorders();
-    if ( isFrameVisible && !m_frameSet->getGroupManager() ) {
+    if ( viewMode && !m_frameSet->getGroupManager() ) {
+        int minBorder = viewMode->drawFrameBorders() ? 1 : 0;
         KWFrame* settingsFrame = m_frameSet->settingsFrame( this );
-        outerRect.rLeft() -= KoBorder::zoomWidthX( settingsFrame->leftBorder().width(), doc, 1 );
-        outerRect.rTop() -= KoBorder::zoomWidthY( settingsFrame->topBorder().width(), doc, 1 );
-        outerRect.rRight() += KoBorder::zoomWidthX( settingsFrame->rightBorder().width(), doc, 1 );
-        outerRect.rBottom() += KoBorder::zoomWidthY( settingsFrame->bottomBorder().width(), doc, 1 );
+        outerRect.rLeft() -= KoBorder::zoomWidthX( settingsFrame->leftBorder().width(), doc, minBorder );
+        outerRect.rTop() -= KoBorder::zoomWidthY( settingsFrame->topBorder().width(), doc, minBorder );
+        outerRect.rRight() += KoBorder::zoomWidthX( settingsFrame->rightBorder().width(), doc, minBorder );
+        outerRect.rBottom() += KoBorder::zoomWidthY( settingsFrame->bottomBorder().width(), doc, minBorder );
     }
     return outerRect;
 }
@@ -559,19 +559,19 @@ KoRect KWFrame::innerRect() const
 {
     KoRect inner( this->normalize());
     inner.moveBy( bLeft(), bTop());
-    inner.setWidth( inner.width() - bLeft() - bRight() );
-    inner.setHeight( inner.height() - bTop() - bBottom() );
+    inner.setWidth( innerWidth() );
+    inner.setHeight( innerHeight() );
     return inner;
 }
 
 double KWFrame::innerWidth() const
 {
-    return width() - bLeft() - bRight();
+    return QMAX( 0.0, width() - bLeft() - bRight() );
 }
 
 double KWFrame::innerHeight() const
 {
-    return height() - bTop() - bBottom();
+    return QMAX( 0.0, height() - bTop() - bBottom() );
 }
 
 void KWFrame::setFrameMargins( double _left, double _top, double _right, double _bottom)
@@ -627,12 +627,12 @@ void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
 
 void KWFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
 {
-    //kdDebug(32001) << k_funcinfo << getName() << " deleting frame" <<  _num << " remove=" << remove << " recalc=" << recalc << endl;
+    //kdDebug(32001) << k_funcinfo << getName() << " deleting frame" <<  _num << " remove=" << remove << " recalc=" << recalc << kdBacktrace();
     KWFrame *frm = frames.at( _num );
     Q_ASSERT( frm );
+    frames.take( _num );
     if ( !remove )
     {
-        frames.take( _num );
         if (frm->isSelected()) // get rid of the resize handles
             frm->setSelected(false);
         frm->setFrameSet(0L);
@@ -640,7 +640,7 @@ void KWFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
     else {
         // ###### should something similar be done when just removing a frame from the list?
         frameDeleted( frm, recalc ); // inform kwtableframeset if necessary
-        frames.remove( _num );
+        delete frm;
         //kdDebug(32001) << k_funcinfo << frm << " deleted. Now I have " << frames.count() << " frames" << endl;
     }
 

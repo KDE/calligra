@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+MimeType=application/x-vnd.kde.kugar.mixed
+Comment=Kugar Archive File	
+Icon=kugardata
+Type=MimeType
+Patterns=*.kug
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.kug

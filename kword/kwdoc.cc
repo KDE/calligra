@@ -437,7 +437,7 @@ void KWDocument::initConfig()
       setShowRuler(config->readBoolEntry("Rulers",true));
       int defaultAutoSave = KoDocument::defaultAutoSave()/60; // in minutes
       setAutoSave(config->readNumEntry("AutoSave",defaultAutoSave)*60); // read key in minutes, call setAutoSave(seconds)
-      setBackupFile( config->readNumEntry("BackupFile", true));
+      setBackupFile( config->readBoolEntry("BackupFile", true));
 
       setNbPagePerRow(config->readNumEntry("nbPagePerRow",4));
       m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
@@ -1147,7 +1147,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         int ret = KMessageBox::warningContinueCancel(
             0, i18n("This document was created with a newer version of KWord (syntax version: %1)\n"
                     "Opening it in this version of KWord will lose some information.").arg(m_syntaxVersion),
-            i18n("File Format Mismatch"), i18n("Continue") );
+            i18n("File Format Mismatch"), KStdGuiItem::cont() );
         if ( ret == KMessageBox::Cancel )
         {
             setErrorMessage( "USER_CANCELED" );
@@ -2599,13 +2599,12 @@ bool KWDocument::completeSaving( KoStore *_store )
     }
     if (specialOutputFlag()==SaveAsKOffice1dot1)
     {
-        m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, savePictures );
+        return m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, savePictures );
     }
     else
     {
-        m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, savePictures );
+        return m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, savePictures );
     }
-    return TRUE;
 }
 
 void KWDocument::addView( KoView *_view )
@@ -2959,7 +2958,11 @@ void KWDocument::afterAppendPage( int pageNum )
         kdDebug(32002) << "KWDocument::afterAppendPage recalcFrames done" << endl;
 #endif
     }
-    // else: is there a call to updateAllFrames missing?
+    else
+    {
+        // Take into account the frames on the new page, and run updateFramesOnTopOrBelow (#73819)
+        updateAllFrames();
+    }
 
     recalcVariables( VT_PGNUM );
     emit pageNumChanged();

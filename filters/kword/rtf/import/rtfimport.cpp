@@ -97,21 +97,21 @@ static RTFProperty propertyTable[] =
         // \bin is handled in the tokenizer
 	MEMBER(	"@colortbl",	"blue",		setNumericProperty,	blue, 0 ),
 	MEMBER(	0L,		"box",		setEnumProperty,	state.layout.border, 0 ),
-	MEMBER(	0L,		"brdrb",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.layout.borders[3]) ),
+	PROP(	0L,		"brdrb",	selectLayoutBorder,	0L, 3 ),
 	PROP(	0L,		"brdrcf",	setBorderProperty,	offsetof(RTFBorder,color), 0 ),
-	PROP(	0L,		"brdrdash",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Dashes ),
-	PROP(	0L,		"brdrdashd",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::DashDot ),
-	PROP(	0L,		"brdrdashdd",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::DashDotDot ),
-	PROP(	0L,		"brdrdashsm",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Dashes ),
-	PROP(	0L,		"brdrdb",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Solid ),
-	PROP(	0L,		"brdrdot",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Dots ),
-	PROP(	0L,		"brdrhairline",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Solid ),
-	MEMBER(	0L,		"brdrl",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.layout.borders[0]) ),
-	MEMBER(	0L,		"brdrr",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.layout.borders[1]) ),
-	PROP(	0L,		"brdrs",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Solid ),
-	PROP(	0L,		"brdrsh",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Solid ),
-	MEMBER(	0L,		"brdrt",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.layout.borders[2]) ),
-	PROP(	0L,		"brdrth",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Solid ),
+	PROP(	0L,		"brdrdash",	setBorderStyle,		0L, RTFBorder::Dashes ),
+	PROP(	0L,		"brdrdashd",	setBorderStyle,		0L, RTFBorder::DashDot ),
+	PROP(	0L,		"brdrdashdd",	setBorderStyle,		0L, RTFBorder::DashDotDot ),
+	PROP(	0L,		"brdrdashsm",	setBorderStyle,		0L, RTFBorder::Dashes ),
+	PROP(	0L,		"brdrdb",	setBorderStyle,		0L, RTFBorder::Solid ),
+	PROP(	0L,		"brdrdot",	setBorderStyle,		0L, RTFBorder::Dots ),
+	PROP(	0L,		"brdrhairline",	setBorderStyle,		0L, RTFBorder::Solid ),
+	PROP(	0L,		"brdrl",	selectLayoutBorder,	0L, 0 ),
+	PROP(	0L,		"brdrr",	selectLayoutBorder,	0L, 1 ),
+	PROP(	0L,		"brdrs",	setBorderStyle,		0L, RTFBorder::Solid ),
+	PROP(	0L,		"brdrsh",	setBorderStyle,		0L, RTFBorder::Solid ),
+	PROP(	0L,		"brdrt",	selectLayoutBorder,	0L, 2 ),
+	PROP(	0L,		"brdrth",	setBorderStyle,		0L, RTFBorder::Solid ),
 	PROP(	0L,		"brdrw",	setBorderProperty,	offsetof(RTFBorder,width), 0 ),
 	PROP(	0L,		"bullet",	insertSymbol,		0L, 0x2022 ),
 	PROP(	0L,		"brsp",		setBorderProperty,	offsetof(RTFBorder,space), 0 ),
@@ -124,10 +124,10 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"chdate",	insertDateTime,		0L, TRUE ),
 	PROP(	0L,		"chpgn",	insertPageNumber,		0L, 0 ),
 	PROP(	0L,		"chtime",	insertDateTime,		0L, FALSE ),
-	MEMBER(	0L,		"clbrdrb",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[3]) ),
-	MEMBER(	0L,		"clbrdrl",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[0]) ),
-	MEMBER(	0L,		"clbrdrr",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[1]) ),
-	MEMBER(	0L,		"clbrdrt",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[2]) ),
+	PROP(	0L,		"clbrdrb",	selectLayoutBorderFromCell,	0L, 3 ),
+	PROP(	0L,		"clbrdrl",	selectLayoutBorderFromCell,	0L, 0 ),
+	PROP(	0L,		"clbrdrr",	selectLayoutBorderFromCell,	0L, 1 ),
+	PROP(	0L,		"clbrdrt",	selectLayoutBorderFromCell,	0L, 2 ),
 	MEMBER(	0L,		"clcbpat",	setNumericProperty,	state.tableCell.bgcolor, 0 ),
 	PROP(	0L,		"cs",	ignoreKeyword,		0L, 0 ), // Not supported by KWord 1.3
 	PROP(	0L,		"datafield",	skipGroup,		0L, 0 ), // Binary data in variables are not supported
@@ -218,6 +218,7 @@ static RTFProperty propertyTable[] =
 	PROP(	"Text",		"sect",		insertPageBreak,	0L, 0 ),
 	PROP(	0L,		"sectd",	setSectionDefaults,	0L, 0 ),
 	MEMBER(	0L,		"sl",		setNumericProperty,	state.layout.spaceBetween, 0 ),
+	MEMBER(	0L,		"slmult",	setToggleProperty,	state.layout.spaceBetweenMultiple, 0 ),
 	MEMBER(	"@stylesheet",	"snext",	setNumericProperty,	style.next, 0 ),
 	MEMBER(	0L,		"strike",	setToggleProperty,	state.format.strike, 0 ),
 	MEMBER(	0L,		"striked",	setToggleProperty,	state.format.striked, 0 ),
@@ -243,7 +244,7 @@ static RTFProperty propertyTable[] =
 	MEMBER(	0L,		"uc",		setNumericProperty,	state.format.uc, 0 ),
 	MEMBER(	0L,		"ul",		setUnderlineProperty,	state.format.underline, 0 ),
 	MEMBER(	0L,		"ulc",		setNumericProperty,	state.format.underlinecolor, 0 ),
-	MEMBER(	0L,		"uld",		setEnumProperty,	state.format.underline, RTFFormat::UnderlineDouble ),
+	MEMBER(	0L,		"uld",		setEnumProperty,	state.format.underline, RTFFormat::UnderlineDot ),
 	MEMBER(	0L,		"uldash",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineDash ),
 	MEMBER(	0L,		"uldashd",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineDashDot ),
 	MEMBER(	0L,		"uldashdd",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineDashDotDot ),
@@ -511,7 +512,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     // Create main document
     DomNode mainDoc( "DOC" );
       mainDoc.setAttribute( "mime", "application/x-kword" );
-      mainDoc.setAttribute( "syntaxVersion", "2" );
+      mainDoc.setAttribute( "syntaxVersion", "3" );
       mainDoc.setAttribute( "editor", "KWord's RTF Import Filter" );
       mainDoc.addNode( "PAPER" );
 	mainDoc.setAttribute( "format", 6 );
@@ -705,11 +706,14 @@ void RTFImport::ignoreKeyword( RTFProperty * )
  */
 void RTFImport::setCodepage( RTFProperty * )
 {
+    QTextCodec* oldCodec = textCodec;
     QCString cp;
     cp.setNum( token.value );
     cp.prepend("CP");
     textCodec=QTextCodec::codecForName(cp);
     kdDebug(30515) << "\\ansicpg: asked: " << cp << " given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    if ( ! textCodec )
+        textCodec = oldCodec;
 }
 
 /**
@@ -717,8 +721,11 @@ void RTFImport::setCodepage( RTFProperty * )
  */
 void RTFImport::setMacCodepage( RTFProperty * )
 {
+    QTextCodec* oldCodec = textCodec;
     textCodec=QTextCodec::codecForName("Apple Roman");
     kdDebug(30515) << "\\mac " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    if ( ! textCodec )
+        textCodec = oldCodec;
 }
 
 /**
@@ -727,8 +734,11 @@ void RTFImport::setMacCodepage( RTFProperty * )
  */
 void RTFImport::setAnsiCodepage( RTFProperty * )
 {
+    QTextCodec* oldCodec = textCodec;
     textCodec=QTextCodec::codecForName("CP1252");
     kdDebug(30515) << "\\ansi " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    if ( ! textCodec )
+        textCodec = oldCodec;
 }
 
 /**
@@ -736,8 +746,11 @@ void RTFImport::setAnsiCodepage( RTFProperty * )
  */
 void RTFImport::setPcaCodepage( RTFProperty * )
 {
+    QTextCodec* oldCodec = textCodec;
     textCodec=QTextCodec::codecForName("IBM 850"); // Qt writes the name with a space
     kdDebug(30515) << "\\pca " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    if ( ! textCodec )
+        textCodec = oldCodec;
 }
 
 /**
@@ -745,8 +758,11 @@ void RTFImport::setPcaCodepage( RTFProperty * )
  */
 void RTFImport::setPcCodepage( RTFProperty * )
 {
+    QTextCodec* oldCodec = textCodec;
     textCodec=QTextCodec::codecForName("IBM 850"); // This is an approximation
     kdDebug(30515) << "\\pc (approximation) " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    if ( ! textCodec )
+        textCodec = oldCodec;
 }
 
 /**
@@ -800,23 +816,18 @@ void RTFImport::setUnderlineProperty( RTFProperty *property )
 }
 
 
-/**
- * Sets the value of a border property specified by token.
- * @param property the property to set
- */
 void RTFImport::setBorderStyle( RTFProperty *property )
 {
     if (state.layout.border)
     {
-	RTFBorder *border = (RTFBorder *)((char *)this + (int)state.layout.border);
-	border->style = (RTFBorder::BorderStyle)property->value;
+        state.layout.border->style = static_cast <RTFBorder::BorderStyle> ( property->value );
     }
     else
     {
-	for (uint i=0; i < 4; i++)
-	{
-	    state.layout.borders[i].style = (RTFBorder::BorderStyle)property->value;
-	}
+        for (uint i=0; i < 4; i++)
+        {
+            state.layout.borders[i].style = static_cast <RTFBorder::BorderStyle> ( property->value );
+        }
     }
 }
 
@@ -828,7 +839,7 @@ void RTFImport::setBorderProperty( RTFProperty *property )
 {
     if (state.layout.border)
     {
-	*((int *)((char *)this + (int)state.layout.border + property->offset)) = token.value;
+        *((int *)(state.layout.border + property->offset)) = token.value;
     }
     else
     {
@@ -943,6 +954,16 @@ void RTFImport::setTableRowDefaults( RTFProperty * )
     }
 }
 
+void RTFImport::selectLayoutBorder( RTFProperty * property )
+{
+    state.layout.border = & state.layout.borders [ property->value ];
+}
+
+void RTFImport::selectLayoutBorderFromCell( RTFProperty * property )
+{
+    state.layout.border = & state.tableCell.borders [ property->value ];
+}
+
 /**
  */
 void RTFImport::insertParagraph( RTFProperty * )
@@ -1023,7 +1044,7 @@ void RTFImport::insertTableRow( RTFProperty * )
 	// Number of cell definitions should equal the number of cells
 	while (row.cells.count() > row.frameSets.count())
 	{
-	    row.cells.remove( row.cells.end() );
+	    row.cells.pop_back();
 	}
 	while (row.cells.count() < row.frameSets.count())
 	{
@@ -2075,7 +2096,7 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
                 }
             case RTFFormat::UnderlineSimple:
                 {
-                    st="1";
+                    st="single";
                     break;
                 }
             case RTFFormat::UnderlineDouble:
@@ -2092,38 +2113,38 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
 
             case RTFFormat::UnderlineWordByWord:
                 {
-                    st="1";
+                    st="single";
                     styleline="solid";
                     wordbyword="1";
                     break;
                 }
             case RTFFormat::UnderlineDash:
                 {
-                    st="1";
+                    st="single";
                     styleline="dash";
                     break;
                 }
             case RTFFormat::UnderlineDot:
                 {
-                    st="1";
+                    st="single";
                     styleline="dot";
                     break;
                 }
             case RTFFormat::UnderlineDashDot:
                 {
-                    st="1";
+                    st="single";
                     styleline="dashdot";
                     break;
                 }
             case RTFFormat::UnderlineDashDotDot:
                 {
-                    st="1";
+                    st="single";
                     styleline="dashdotdot";
                     break;
                 }
             case RTFFormat::UnderlineWave:
                 {
-                    st="1";
+                    st="single";
                     styleline="wave";
                     break;
                 }
@@ -2231,29 +2252,64 @@ void RTFImport::addLayout( DomNode &node, const QString &name, RTFLayout &layout
 
 
     // Linespacing
-    if (layout.spaceBetween > 0)
-    {
-	node.addNode( "LINESPACING" );
-        if( layout.spaceBetween == 360 )
-  	    node.setAttribute( "type", "oneandhalf" );
-        else if( layout.spaceBetween == 480 )
-	    node.setAttribute( "type", "double" );
-        else
-        {
-	    node.setAttribute( "type", "custom" );
-	    node.setAttribute( "spacevalue", 0.05*layout.spaceBetween );
-        }
-	node.closeNode( "LINESPACING" );
-    }
-    if (layout.spaceBetween < 0)
-    {
-        // negative linespace means "exact"
-	node.addNode( "LINESPACING" );
-	node.setAttribute( "type", "exactly" );
-	node.setAttribute( "spacevalue", -0.05*layout.spaceBetween );
-	node.closeNode( "LINESPACING" );
-    }
 
+    QString lineSpacingType;
+    QString lineSpacingValue;  
+    if ( layout.spaceBetweenMultiple )
+    {
+        // Note: 240 is a sort of magic value for one line (Once upon a time, it meant 12pt for a single line)
+        switch (layout.spaceBetween )
+        {
+        case 240:
+            {
+                //lineSpacingType = "single"; // ### TODO: does KWord really supports this?
+                break;
+            }
+        case 360:
+            {
+                lineSpacingType = "oneandhalf";
+                break;
+            }
+        case 480 :
+            {
+                lineSpacingType = "double";
+                break;
+            }
+        default:
+            {    
+                if ( layout.spaceBetween > 0 )
+                {
+                    lineSpacingType = "multiple";
+                    lineSpacingValue.setNum( layout.spaceBetween / 240.0 );
+                }
+                break;
+            }
+        }
+    }
+    else
+    {
+        if (layout.spaceBetween > 0)
+        {
+            lineSpacingType = "atleast";
+            lineSpacingValue.setNum( 0.05*layout.spaceBetween );
+        }
+        if (layout.spaceBetween < 0)
+        {
+            // negative linespace means "exact"
+            lineSpacingType = "fixed" ;
+            lineSpacingValue.setNum( -0.05*layout.spaceBetween );
+        }
+    }
+    
+    if ( ! lineSpacingType.isEmpty() )
+    {
+        node.addNode( "LINESPACING" );
+        node.setAttribute( "type", lineSpacingType );
+        if ( ! lineSpacingValue.isEmpty() )
+            node.setAttribute( "spacingvalue", lineSpacingValue );
+        node.closeNode( "LINESPACING" );
+    }
+    
 
     if (layout.keep || layout.pageBB || layout.pageBA || frameBreak || layout.keepNext)
     {

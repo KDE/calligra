@@ -1,0 +1,43 @@
+[Desktop Entry]
+Encoding=UTF-8
+MimeType=application/x-vnd.kde.kexi
+Comment=Kexi Project File
+Comment[bg]=Файл за проект на Kexi
+Comment[ca]=Fitxer de projecte Kexi
+Comment[cs]=Soubor s projektem Kexi
+Comment[cy]=Ffeil Prosiect Kexi
+Comment[da]=Kexi projektfil
+Comment[de]=Projektdatei für Kexi
+Comment[el]=Αρχείο εργασίας του Kexi
+Comment[es]=Archivo de proyecto de kexi
+Comment[et]=Kexi projektifail
+Comment[fa]=Kexi پرونده های پروژهْ
+Comment[fi]=Kexi projektitiedosto
+Comment[fr]=Fichier de projet Kexi
+Comment[hu]=Kexi projektfájl
+Comment[it]=File di progetto Kexi
+Comment[lo]=ສ້າງແຟ້ມຂໍ້ຄວາມໃຫມ່
+Comment[nb]=Kexi prosjektfil
+Comment[nl]=Kexi projectbestand
+Comment[nn]=Kexi-prosjektfil
+Comment[pl]=Plik projektu Kexi
+Comment[pt]=Ficheiro de Projecto do Kexi
+Comment[pt_BR]=Arquivo de Projeto do Kexi
+Comment[ru]=Проект Kexi
+Comment[se]=Kexi-prošeaktafiila
+Comment[sk]=Projekt Kexi
+Comment[sl]=Projektna datoteka za Kexi
+Comment[sr]=Kexi-јев пројектни фајл
+Comment[sv]=Kexi-projektfil
+Comment[tg]=Kexi Файли Лоиҳа
+Comment[tr]=Kexi Proje Dosyası
+Comment[uz]=Kexi лойиҳа файли
+Comment[zh_CN]=Kexi 项目文件
+Icon=kexi
+Type=MimeType
+Patterns=*.kexi;
+X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.kexi
+

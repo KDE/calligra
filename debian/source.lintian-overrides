@@ -1,0 +1,3 @@
+# These are bundled with all KDE source downloads.
+koffice source: source-contains-CVS-dir
+koffice source: cvsignore-file-in-source

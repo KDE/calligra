@@ -224,7 +224,7 @@ void DomNode::setAttribute( const QString& attribute, const QString& value )
     str += attribute;
     str += '=';
     str += '"';
-    str += value;
+    str += CheckAndEscapeXmlText( value );
     str += '"';
     hasAttributes = true;
 }
