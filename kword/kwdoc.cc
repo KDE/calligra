@@ -1154,9 +1154,9 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles 
         double height = KoUnit::parseValue(properties.attribute("fo:page-height"));
         // guessFormat takes millimeters
         if ( __pgLayout.orientation == PG_LANDSCAPE )
-            __pgLayout.format = KoPageFormat::guessFormat( POINT_TO_MM(height), MM_TO_POINT(width) );
+            __pgLayout.format = KoPageFormat::guessFormat( POINT_TO_MM(height), POINT_TO_MM(width) );
         else
-            __pgLayout.format = KoPageFormat::guessFormat( POINT_TO_MM(width), MM_TO_POINT(height) );
+            __pgLayout.format = KoPageFormat::guessFormat( POINT_TO_MM(width), POINT_TO_MM(height) );
         __pgLayout.ptWidth = width;
         __pgLayout.ptHeight = height;
 
