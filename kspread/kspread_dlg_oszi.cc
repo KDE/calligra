@@ -25,7 +25,7 @@ KSpreadOsziDlg::KSpreadOsziDlg( KSpreadView* view, const char* name )
     : QDialog( view, name, FALSE )
 {
     m_view = view;
-
+    setCaption(i18n("Osciloscope"));
     QVBoxLayout* lay = new QVBoxLayout( this, 6 ,6 );
     QHBoxLayout* hbox = new QHBoxLayout( lay, 6 );
     // lay->addLayout( hbox );

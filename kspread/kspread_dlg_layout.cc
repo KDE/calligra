@@ -370,7 +370,7 @@ void CellLayoutDlg::init()
         painter.fillRect( 0, 0, 100, 12, BDiagPattern );
         painter.end();
     }
-
+    
     tab = new QTabDialog( 0L, 0L, TRUE );
     tab->setGeometry( tab->x(), tab->y(), 420, 400 );
 
@@ -394,7 +394,9 @@ void CellLayoutDlg::init()
 
     // tab->setApplyButton();
     tab->setCancelButton();
-
+    
+    tab->setCaption(i18n("Cell Layout"));
+    
     connect( tab, SIGNAL( applyButtonPressed() ), this, SLOT( slotApply() ) );
     // connect( tab, SIGNAL(cancelButtonPressed()), SLOT(setup()) );
 
@@ -1254,7 +1256,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
   remove=new KSpreadBorderButton(this,"remove");
   remove->setGeometry(25,240,25,25);
-  loadIcon("borderremove",remove);
+  loadIcon("remove",remove);
 
   all=new KSpreadBorderButton(this,"all");
   all->setGeometry(60,240,25,25);

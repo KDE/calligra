@@ -233,7 +233,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_adjust = new KAction( i18n("Adjust row and column"), 0, this, SLOT( adjust() ), actionCollection(), "adjust" );
     m_default = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ), actionCollection(), "default" );
     m_areaName = new KAction( i18n("Area name"), 0, this, SLOT( setAreaName() ), actionCollection(), "areaname" );
-    m_showArea = new KAction( i18n("Show area"), 0, this, SLOT( showAreaName() ), actionCollection(), "showArea" );
+    m_showArea = new KAction( i18n("Show area..."), 0, this, SLOT( showAreaName() ), actionCollection(), "showArea" );
     m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
     m_undo->setEnabled( FALSE );
     m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );

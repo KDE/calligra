@@ -407,3 +407,7 @@ Still don't know why I get a row = -1 for a cell, but at least it loads.
 2000-04-20 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
 -bug fix
+
+2000-04-21 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add caption in kspread_dlg_layout, kspread_dlg_oszi
