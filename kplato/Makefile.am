@@ -2,7 +2,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 
 libkplatopart_la_SOURCES =  kptmilestone.cc kptnode.cc kptproject.cc \
 	kptrelation.cc kptresource.cc kpttask.cc \
-	kptduration.cc kptfactory.cc kptpart.cc kptview.cc \\
+	kptduration.cc kptfactory.cc kptpart.cc kptview.cc \
 	kptprojectdialog.cc
 
 noinst_HEADERS = defs.h kptaboutdata.h kptduration.h kptfactory.h \
