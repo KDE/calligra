@@ -68,12 +68,15 @@ void usage()
 #include "tables_test.h"
 #include "tableview_test.h"
 
+#define RETURN(code) \
+	kdDebug()<< test_name << " TEST: " << (code==0?"PASSED":"ERROR") << endl; \
+	return code
 
 int main(int argc, char** argv)
 {
 	if (argc<=2) {
 		usage();
-		return 0;
+		RETURN(0);
 	}
 	QFileInfo info=QFileInfo(argv[0]);
 	prgname = info.baseName().latin1();
@@ -96,16 +99,16 @@ int main(int argc, char** argv)
 	kdDebug() << "DRIVERS: " << endl;
 	for (QStringList::iterator it = names.begin(); it != names.end() ; ++it)
 		kdDebug() << *it << endl;
-	if (manager->error()) {
+	if (manager->error() || names.isEmpty()) {
 		manager->debugError();
-		return 1;
+		RETURN(1);
 	}
 
 	//get driver
 	KexiDB::Driver *driver = manager->driver(drv_name);
-	if (manager->error()) {
+	if (!driver || manager->error()) {
 		manager->debugError();
-		return 1;
+		RETURN(1);
 	}
 	kdDebug() << "MIME type for '" << driver->name() << "': " << driver->fileDBDriverMime() << endl;
 
@@ -122,7 +125,7 @@ int main(int argc, char** argv)
 		if (argc<=3) {
 			kdDebug() << prgname << ": name for new db?" << endl;
 			usage();
-			return 0;
+			RETURN(1);
 		}
 		db_name = QCString(argv[3]);
 //	}
@@ -132,11 +135,11 @@ int main(int argc, char** argv)
 
 	if (driver->error()) {
 		driver->debugError();
-		return 1;
+		RETURN(1);
 	}
 	if (!conn->connect()) {
 		conn->debugError();
-		return 1;
+		RETURN(1);
 	}
 
 //start test:
@@ -154,9 +157,8 @@ int main(int argc, char** argv)
 	else {
 		kdDebug() << "No such test: " << test_name << endl;
 		usage();
-		return 1;
+		RETURN(1);
 	}
-	kdDebug()<< test_name << " TEST: " << (r==0?"PASSED":"ERROR") << endl;
 
 	if (app && r==0)
 		app->exec();
@@ -169,6 +171,6 @@ int main(int argc, char** argv)
 	delete manager;
 	delete instance;
 
-	return r;
+	RETURN(r);
 }
 
