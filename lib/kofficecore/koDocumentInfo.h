@@ -38,9 +38,15 @@ public:
     bool load( const QDomDocument& doc );
     QDomDocument save();
 
-    KoDocumentInfoPage* page( const QString& name );
-    QStringList pages();
-    void  documentInfochanged() { emit sigDocumentInfoModifed();}
+    /**
+     * This info has an accessor because it's the most commonly used.
+     * Equivalent to page("about")->title() (but checking that the page exists)
+     */
+    QString title() const;
+
+    KoDocumentInfoPage* page( const QString& name ) const;
+    QStringList pages() const;
+    void documentInfochanged() { emit sigDocumentInfoModifed();}
  signals:
     void sigDocumentInfoModifed();
 };

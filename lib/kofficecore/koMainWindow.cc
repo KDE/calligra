@@ -784,6 +784,10 @@ void KoMainWindow::slotFilePrint()
     }
 
     KPrinter printer( true, QPrinter::HighResolution );
+    QString title = rootView()->koDocument()->documentInfo()->title();
+    if ( title.isNull() )
+        title = rootView()->koDocument()->url().fileName();
+    printer.setDocName( title );
 
     // ### TODO: apply global koffice settings here
 

@@ -22,6 +22,7 @@
 #include <qdom.h>
 #include <qobjectlist.h>
 #include <kconfig.h>
+#include <kdebug.h>
 
 /*****************************************
  *
@@ -74,14 +75,14 @@ QDomDocument KoDocumentInfo::save()
     return doc;
 }
 
-KoDocumentInfoPage* KoDocumentInfo::page( const QString& name )
+KoDocumentInfoPage* KoDocumentInfo::page( const QString& name ) const
 {
-    QObject* obj = child( name.latin1() );
+    QObject* obj = const_cast<KoDocumentInfo*>(this)->child( name.latin1() );
 
     return (KoDocumentInfoPage*)obj;
 }
 
-QStringList KoDocumentInfo::pages()
+QStringList KoDocumentInfo::pages() const
 {
     QStringList ret;
 
@@ -98,6 +99,17 @@ QStringList KoDocumentInfo::pages()
     }
 
     return ret;
+}
+
+QString KoDocumentInfo::title() const
+{
+    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(page( "about" ));
+    if ( !aboutPage ) {
+        kdWarning() << "'About' page not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        aboutPage->title();
 }
 
 /*****************************************
