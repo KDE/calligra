@@ -23,6 +23,7 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
+#include "vcanvas.h"
 #include "vcomposite.h"
 #include "vglobal.h"
 #include "vpainter.h"
@@ -204,27 +205,30 @@ VShapeTool::recalc()
 	m_isSquare = shiftPressed();
 	m_isCentered = ctrlPressed();
 
+	KoPoint _first = view()->canvasWidget()->snapToGrid( first() );
+	KoPoint _last = view()->canvasWidget()->snapToGrid( last() );
+
 	// Calculate radius and angle:
 	if( m_isPolar )
 	{
 		// Radius:
 		m_d1 = sqrt(
-			( last().x() - first().x() ) * ( last().x() - first().x() ) +
-			( last().y() - first().y() ) * ( last().y() - first().y() ) );
+			( _last.x() - _first.x() ) * ( _last.x() - _first.x() ) +
+			( _last.y() - _first.y() ) * ( _last.y() - _first.y() ) );
 
 		// Angle:
-		m_d2 = atan2( last().y() - first().y(), last().x() - first().x() );
+		m_d2 = atan2( _last.y() - _first.y(), _last.x() - _first.x() );
 
 		// Define pi/2 as "0.0":
 		m_d2 -= VGlobal::pi_2;
 
-		m_p = first();
+		m_p = _first;
 	}
 	else
 	// Calculate width and height:
 	{
-		m_d1 = last().x() - first().x();
-		m_d2 = last().y() - first().y();
+		m_d1 = _last.x() - _first.x();
+		m_d2 = _last.y() - _first.y();
 
 		const int m_sign1 = VGlobal::sign( m_d1 );
 // TODO: revert when we introduce y-mirroring:
@@ -246,10 +250,10 @@ VShapeTool::recalc()
 		}
 
 		m_p.setX(
-			first().x() - ( m_sign1 == -1 ? m_d1 : 0.0 ) );
+			_first.x() - ( m_sign1 == -1 ? m_d1 : 0.0 ) );
 // TODO: revert when we introduce y-mirroring:
 		m_p.setY(
-			first().y() + ( m_sign2 == -1 ? m_d2 : 0.0 ) );
+			_first.y() + ( m_sign2 == -1 ? m_d2 : 0.0 ) );
 
 		if ( m_isCentered )
 		{

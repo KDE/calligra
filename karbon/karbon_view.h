@@ -146,6 +146,8 @@ public slots:
 	void slotActiveToolChanged( VTool * );
 
 	void showRuler();
+	void showGrid();
+	void snapToGrid();
 
 protected slots:
 	// Object related operations.
@@ -199,6 +201,8 @@ private:
 	KSelectAction		*m_viewAction;
 	KAction			*m_configureAction;
 	KToggleAction		*m_showRulerAction;
+	KToggleAction		*m_showGridAction;
+	KToggleAction		*m_snapGridAction;
 	KoContextHelpAction	*m_contextHelpAction;
 	KAction			*m_deleteSelectionAction;
 	// line width

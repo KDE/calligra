@@ -37,6 +37,7 @@
 #include "vselecttool.h"
 #include <commands/vtransformcmd.h>
 #include <visitors/vselectiondesc.h>
+#include "vcanvas.h"
 
 VSelectOptionsWidget::VSelectOptionsWidget( KarbonPart *part )
 	: KDialogBase( 0L, "", true, i18n( "Insert Star" ), Ok | Cancel ), m_part( part )
@@ -362,11 +363,16 @@ VSelectTool::recalc()
 	else
 	{
 		VTransformCmd* cmd;
+		KoPoint _first = view()->canvasWidget()->snapToGrid( first() );
+		KoPoint _last = view()->canvasWidget()->snapToGrid( last() );
+		KoRect rect = view()->part()->document().selection()->boundingBox();
 
 		if( m_state == moving )
 		{
-			m_distx = last().x() - first().x();
-			m_disty = last().y() - first().y();
+			KoPoint p( rect.x() + last().x() - first().x(), rect.bottom() + last().y() - first().y() );
+			p = view()->canvasWidget()->snapToGrid( p );
+			m_distx = p.x() - rect.x();
+			m_disty = p.y() - rect.bottom();
 			if( m_lock )
 				cmd = new VTranslateCmd( 0L, abs( int( m_distx ) ) >= abs( int( m_disty ) ) ? m_distx : 0,
 											 abs( int( m_distx ) ) <= abs( int( m_disty ) ) ? m_disty : 0 );
@@ -375,54 +381,52 @@ VSelectTool::recalc()
 		}
 		else
 		{
-			KoRect rect = view()->part()->document().selection()->boundingBox();
-
 			if( m_activeNode == node_lb )
 			{
 				m_sp = KoPoint( rect.right(), rect.bottom() );
-				m_s1 = ( rect.right() - last().x() ) / double( rect.width() );
-				m_s2 = ( rect.bottom() - last().y() ) / double( rect.height() );
+				m_s1 = ( rect.right() - _last.x() ) / double( rect.width() );
+				m_s2 = ( rect.bottom() - _last.y() ) / double( rect.height() );
 			}
 			else if( m_activeNode == node_mb )
 			{
 				m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.bottom() );
 				m_s1 = 1;
-				m_s2 = ( rect.bottom() - last().y() ) / double( rect.height() );
+				m_s2 = ( rect.bottom() - _last.y() ) / double( rect.height() );
 			}
 			else if( m_activeNode == node_rb )
 			{
 				m_sp = KoPoint( rect.x(), rect.bottom() );
-				m_s1 = ( last().x() - rect.x() ) / double( rect.width() );
-				m_s2 = ( rect.bottom() - last().y() ) / double( rect.height() );
+				m_s1 = ( _last.x() - rect.x() ) / double( rect.width() );
+				m_s2 = ( rect.bottom() - _last.y() ) / double( rect.height() );
 			}
 			else if( m_activeNode == node_rm)
 			{
 				m_sp = KoPoint( rect.x(), ( rect.bottom() + rect.top() )  / 2 );
-				m_s1 = ( last().x() - rect.x() ) / double( rect.width() );
+				m_s1 = ( _last.x() - rect.x() ) / double( rect.width() );
 				m_s2 = 1;
 			}
 			else if( m_activeNode == node_rt )
 			{
 				m_sp = KoPoint( rect.x(), rect.y() );
-				m_s1 = ( last().x() - rect.x() ) / double( rect.width() );
-				m_s2 = ( last().y() - rect.y() ) / double( rect.height() );
+				m_s1 = ( _last.x() - rect.x() ) / double( rect.width() );
+				m_s2 = ( _last.y() - rect.y() ) / double( rect.height() );
 			}
 			else if( m_activeNode == node_mt )
 			{
 				m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.y() );
 				m_s1 = 1;
-				m_s2 = ( last().y() - rect.y() ) / double( rect.height() );
+				m_s2 = ( _last.y() - rect.y() ) / double( rect.height() );
 			}
 			else if( m_activeNode == node_lt )
 			{
 				m_sp = KoPoint( rect.right(), rect.y() );
-				m_s1 = ( rect.right() - last().x() ) / double( rect.width() );
-				m_s2 = ( last().y() - rect.y() ) / double( rect.height() );
+				m_s1 = ( rect.right() - _last.x() ) / double( rect.width() );
+				m_s2 = ( _last.y() - rect.y() ) / double( rect.height() );
 			}
 			else if( m_activeNode == node_lm )
 			{
 				m_sp = KoPoint( rect.right(), ( rect.bottom() + rect.top() )  / 2 );
-				m_s1 = ( rect.right() - last().x() ) / double( rect.width() );
+				m_s1 = ( rect.right() - _last.x() ) / double( rect.width() );
 				m_s2 = 1;
 			}
 

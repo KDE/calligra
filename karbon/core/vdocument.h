@@ -29,6 +29,8 @@
 
 #include "vobject.h"
 
+#include "karbon_grid_data.h"
+
 class QDomDocument;
 class QDomElement;
 class VSelection;
@@ -110,10 +112,8 @@ public:
 	void setUnit( KoUnit::Unit unit )
 		{ m_unit = unit; }
 
-    bool canRaiseLayer( VLayer* layer );
-
-    bool canLowerLayer( VLayer* layer );
-
+	bool canRaiseLayer( VLayer* layer );
+	bool canLowerLayer( VLayer* layer );
 
 	/**
 	 * Lifts the layer.
@@ -194,6 +194,8 @@ public:
 	bool saveAsPath() const { return m_saveAsPath; }
 	void saveAsPath( bool b ) { m_saveAsPath = b; }
 
+	KarbonGridData &grid() { return m_gridData; }
+
 private:
 	/**
 	 * Document width.
@@ -236,6 +238,8 @@ private:
 	QMap<const VObject *, QString>	m_objectNames;
 
 	bool m_saveAsPath;
+
+	KarbonGridData m_gridData;
 };
 
 #endif

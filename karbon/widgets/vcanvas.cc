@@ -61,6 +61,42 @@ VCanvas::pageOffsetY() const
 		return int( ( contentsHeight() - zoomedHeight ) / 2.0 );
 }
 
+KoPoint VCanvas::snapToGrid( const KoPoint &point )
+{
+	if( !m_part->document().grid().isSnap )
+		return point;
+
+	KoPoint p = point;
+
+	KoSize dist = m_part->document().grid().snap;
+	KoSize dxy = m_part->document().grid().freq;
+
+	int dx = qRound( p.x() / dxy.width() );
+	int dy = qRound( p.y() / dxy.height() );
+
+	float distx = QMIN( QABS( p.x() - dxy.width() * dx ), QABS( p.x() - dxy.width() * ( dx + 1 ) ) );
+	float disty = QMIN( QABS( p.y() - dxy.height() * dy ), QABS( p.y() - dxy.height() * ( dy + 1 ) ) );
+
+	if( distx < dist.width() )
+	{
+		if( QABS(p.x() - dxy.width() * dx ) < QABS( p.x() - dxy.width() * ( dx + 1 ) ) )
+			p.rx() = dxy.width() * dx;
+		else
+			p.rx() = dxy.width() * ( dx + 1 );
+	}
+
+	if( disty < dist.height() )
+	{
+		if( QABS( p.y() - dxy.height() * dy ) < QABS( p.y() - dxy.height() * ( dy + 1 ) ) )
+			p.ry() = dxy.height() * dy;
+		else
+			p.ry() = dxy.height() * ( dy + 1 );
+	}
+
+	return p;
+}
+
+
 VCanvas::VCanvas( QWidget *parent, KarbonViewBase* view, KarbonPartBase* part )
     : QScrollView( parent, "canvas", WStaticContents/*WNorthWestGravity*/ | WResizeNoErase  |
 	  WRepaintNoErase ), m_part( part ), m_view( view )

@@ -69,6 +69,8 @@ public:
 	int pageOffsetX() const;
 	int pageOffsetY() const;
 
+	KoPoint snapToGrid( const KoPoint & );
+
 protected:
 	virtual void dragEnterEvent( QDragEnterEvent * );
 	virtual void dropEvent( QDropEvent * );

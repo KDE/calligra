@@ -22,8 +22,9 @@
 #include "vdocument.h"
 #include "vselection.h"
 #include "vvisitor.h"
-#include "vpainter.h"
 #include "vlayer.h"
+#include "vstroke.h"
+#include "vpainter.h"
 
 #include <kdebug.h>
 
@@ -40,6 +41,7 @@ VDocument::VDocument()
 	m_layers.setAutoDelete( true );
 	m_layers.append( new VLayer( this ) );
 	m_activeLayer = m_layers.getLast();
+	m_activeLayer->setSelected( true );
 
 	m_saveAsPath = true;
 }
@@ -68,6 +70,33 @@ VDocument::drawPage( VPainter *p ) const
 	p->drawRect( m_width, - 2, 2, m_height );
 	p->drawRect( 0, - 2, m_width, 2 );
 	//p->drawRect( 0, m_height - 1, m_width, 1 );
+	// Draw Grid
+	if( m_gridData.isShow )
+	{
+		VStroke s( 0, 0.5 );
+		s.setColor( Qt::blue );
+		p->setPen( s );
+		p->setBrush( Qt::NoBrush );
+		KoPoint p0( 40, 40 );
+		while( p0.x() < m_width )
+		{
+			p->newPath();
+			p->moveTo( KoPoint( p0.x(), 0 ) );
+			p->lineTo( KoPoint( p0.x(), m_height ) );
+			p->strokePath();
+
+			p0.rx() += 40;
+		}
+		while( p0.y() < m_height )
+		{
+			p->newPath();
+			p->moveTo( KoPoint( 0, p0.y() ) );
+			p->lineTo( KoPoint( m_width, p0.y() ) );
+			p->strokePath();
+
+			p0.ry() += 40;
+		}
+	}
 }
 
 void

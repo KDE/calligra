@@ -40,6 +40,9 @@
 	<Action name="view_transform_docker"/>
 	<Separator/>
 	<Action name="view_show_ruler"/>
+	<Action name="view_show_grid"/>
+	<Separator/>
+	<Action name="view_snap_to_grid"/>
 	</Menu>
 	<Menu name="object">
 		<text>&amp;Object</text>

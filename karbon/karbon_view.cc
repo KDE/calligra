@@ -867,6 +867,12 @@ KarbonView::initActions()
 	m_showRulerAction = new KToggleAction( i18n( "Show Rulers" ), 0, this, SLOT( showRuler() ), actionCollection(), "view_show_ruler" );
 	m_showRulerAction->setToolTip( i18n( "Shows or hides rulers." ) );
 	m_showRulerAction->setChecked( true );
+	m_showGridAction = new KToggleAction( i18n( "Show Grid" ), "view_grid", this, SLOT( showGrid() ), actionCollection(), "view_show_grid" );
+	m_showGridAction->setToolTip( i18n( "Shows or hides grid." ) );
+	//m_showGridAction->setChecked( true );
+	m_snapGridAction = new KToggleAction( i18n( "Snap to Grid" ), 0, this, SLOT( snapToGrid() ), actionCollection(), "view_snap_to_grid" );
+	m_snapGridAction->setToolTip( i18n( "Snaps to grid." ) );
+	//m_snapGridAction->setChecked( true );
 	m_groupObjects = new KAction(
 		i18n( "&Group Objects" ), "14_group", QKeySequence( "Ctrl+G" ), this,
 		SLOT( groupSelection() ), actionCollection(), "selection_group" );
@@ -988,6 +994,18 @@ KarbonView::showRuler()
 		//m_vertRuler->setGeometry( 0, space, space, height() - space );
 		m_canvas->setGeometry( 0, 0, width(), height() );
 	}
+}
+
+void
+KarbonView::showGrid()
+{
+	m_part->document().grid().isShow = m_showGridAction->isChecked();
+}
+
+void
+KarbonView::snapToGrid()
+{
+	m_part->document().grid().isSnap = m_snapGridAction->isChecked();
 }
 
 void
