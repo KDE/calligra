@@ -71,7 +71,7 @@ void KImageShell::slotFileOpen()
       return;
   }
 
-  if( !openDocument( file, false /*not a temp file*/ ) )
+  if( !openDocument( file ) )
   {
     QString tmp;
     tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
