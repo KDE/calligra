@@ -29,6 +29,7 @@
 #include "rootelement.h"
 #include "numberelement.h"
 #include "operatorelement.h"
+#include "fractionelement.h"
 
 KFormulaCommand::KFormulaCommand(KFormulaContainer *document,
 				 FormulaCursor *cursor)
@@ -232,6 +233,27 @@ KFCAddRoot::KFCAddRoot(KFormulaContainer *document,FormulaCursor *cursor)
 	//cursor->setSelection(false);
     insideElement=root;
     cursor->goInsideElement(root);
+    undocursor=cursor->getCursorData();
+
+
+}
+
+KFCAddFraction::KFCAddFraction(KFormulaContainer *document,FormulaCursor *cursor)
+		        : KFCAddReplacing(document,cursor)
+{
+
+    FractionElement* frac = new FractionElement();
+
+    if(cursor->isSelection())
+    {        
+	cursor->replaceSelectionWith(frac);
+    }
+    else
+	cursor->insert(frac);
+        
+	//cursor->setSelection(false);
+    insideElement=frac;
+    cursor->goInsideElement(frac);
     undocursor=cursor->getCursorData();
 
 

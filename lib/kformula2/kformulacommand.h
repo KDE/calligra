@@ -132,7 +132,7 @@ class KFCAddReplacing : public KFormulaCommand
 {
 public:
    /**
-    * abstract class hinerited by bracket and root
+    * abstract class hinerited by bracket,fraction and root
     */
     KFCAddReplacing(KFormulaContainer *document,FormulaCursor* cursor);
 
@@ -155,6 +155,18 @@ public:
     * at cursor a root element
     */
     KFCAddRoot(KFormulaContainer *document,FormulaCursor* cursor);
+ 
+  
+};
+
+class KFCAddFraction : public KFCAddReplacing
+{
+public:
+   /**
+    * Build a addFractionElement command and add
+    * at cursor a fraction element
+    */
+    KFCAddFraction(KFormulaContainer *document,FormulaCursor* cursor);
  
   
 };

@@ -142,44 +142,22 @@ void KFormulaContainer::addOperator(FormulaCursor* cursor, QChar ch)
 
 void KFormulaContainer::addBracket(FormulaCursor* cursor, char left, char right)
 {
-/*
-    BracketElement* bracket = new BracketElement(left, right);
-    if (cursor->isSelection()) {
-        cursor->replaceSelectionWith(bracket);
-    }
-    else {
-        cursor->insert(bracket);
-        //cursor->setSelection(false);
-    }
-    cursor->goInsideElement(bracket);
-*/
 
     KFCAddBracket *command=new KFCAddBracket(this,cursor,left,right);
     execute(command);
-
-
 }
 
 void KFormulaContainer::addFraction(FormulaCursor* cursor)
 {
-    FractionElement* fraction = new FractionElement;
-    if (cursor->isSelection()) {
-        cursor->replaceSelectionWith(fraction);
-    }
-    else {
-        cursor->insert(fraction);
-        //cursor->setSelection(false);
-    }
-    cursor->goInsideElement(fraction);
+
+    KFCAddFraction *command=new KFCAddFraction(this,cursor);
+    execute(command);
+
 }
+
 
 void KFormulaContainer::addRoot(FormulaCursor* cursor)
 {
-/*    if (cursor->isSelection()) {
-	KFCRemoveSelection *command=new KFCRemoveSelection(this,cursor,BasicElement::beforeCursor);
-	execute(command);
-    }
-*/
     KFCAddRoot *command=new KFCAddRoot(this,cursor);
     execute(command);
 
@@ -340,18 +318,6 @@ void KFormulaContainer::removeSelection(FormulaCursor* cursor,
     KFCRemoveSelection *command=new KFCRemoveSelection(this,cursor,direction);
     execute(command);
 
-/*
-    QList<BasicElement> list;
-    list.setAutoDelete(true);
-    
-    cursor->remove(list, direction);
-    if (cursor->elementIsSenseless()) {
-        BasicElement* element = cursor->replaceByMainChildContent();
-        delete element;
-    }
-    //cursor->normalize(direction);
-    cursor->normalize();
-*/
 }
 
 
