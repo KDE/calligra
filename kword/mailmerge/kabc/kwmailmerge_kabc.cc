@@ -168,7 +168,7 @@ QString KWMailMergeKABC::getValue( const QString &name, int record ) const
 
     if( !uidAvailable )
     {
-        return ( QString("KAddressbook entry '") + *_UIDIterator + QString("' not available.") );
+        return ( i18n ( "KAddressbook entry '%1' not available." ).arg( *_UIDIterator ) );
     }
 
 
@@ -361,7 +361,7 @@ QString KWMailMergeKABC::getValue( const QString &name, int record ) const
         else
             longi = QString( i18n("%1 East") ).arg( geo.longitude() );
 
-        return ( lat + QString(", ") + longi );
+        return i18n( "Geographic coordinates", "%1, %2" ).arg ( lat, longi );
     }
 
     if ( name == "Title" )
@@ -386,7 +386,7 @@ QString KWMailMergeKABC::getValue( const QString &name, int record ) const
         return KABC::Secrecy::typeLabel( secrecy.type() );
     }
 
-    return ( i18n("Unkown mail merge variable: ") + name ) ;
+    return ( i18n("Unkown mail merge variable: %1").arg ( name ) ) ;
 }
 
 
