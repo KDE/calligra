@@ -47,11 +47,11 @@ class KoOasisStyles;
 class KoXmlWriter;
 
 /**
- *  The KOffice document class
+ *  The %KOffice document class
  *
- *  This class provides some functionality each KOffice document should have.
+ *  This class provides some functionality each %KOffice document should have.
  *
- *  @short The KOffice document class
+ *  @short The %KOffice document class
  */
 class KoDocument : public KParts::ReadWritePart
 {
@@ -107,7 +107,7 @@ public:
      * of @ref #element is of interest here. The method searches first in the
      * @ref KActionCollection of the first view and then in the KActionCollection of this
      * document.
-     * This allows KOffice applications to define actions in both the view and the document.
+     * This allows %KOffice applications to define actions in both the view and the document.
      * They should only define view-actions (like zooming and stuff) in the view.
      * Every action which changes the document should be defined in the document.
      *
@@ -356,7 +356,7 @@ public:
     /**
      *  Paints the data itself. Normally called by @ref paintEverthing. It does not
      *  paint the children.
-     *  It's this method that KOffice Parts have to implement.
+     *  It's this method that %KOffice Parts have to implement.
      *
      *  @param painter     The painter object into that should be drawn.
      *  @param rect        The rect that should be used in the painter object.
@@ -445,7 +445,7 @@ public:
 
 
     /**
-     *  Reimplement this method to load the contents of your KOffice document,
+     *  Reimplement this method to load the contents of your %KOffice document,
      *  from the XML document. This is for the pre-Oasis file format (maindoc.xml).
      *
      *  You are supposed to use the QDomDocument. The QIODevice is provided only
@@ -455,7 +455,7 @@ public:
     virtual bool loadXML( QIODevice *, const QDomDocument & doc ) = 0;
 
     /**
-     *  Reimplement this method to load the contents of your KOffice document,
+     *  Reimplement this method to load the contents of your %KOffice document,
      *  from the XML document ("content.xml"). The styles have been parsed already,
      *  you can find them in the oasisStyles parameter. The store can be used
      *  to load images and embedded documents.
@@ -464,13 +464,13 @@ public:
                             const QDomDocument & settings, KoStore* store ) = 0;
 
     /**
-     *  Reimplement this method to save the contents of your KOffice document,
+     *  Reimplement this method to save the contents of your %KOffice document,
      *  using the OASIS format.
      */
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter ) = 0;
 
     /**
-     *  Reimplement this to save the contents of the KOffice document into
+     *  Reimplement this to save the contents of the %KOffice document into
      *  a QDomDocument. The framework takes care of saving it to the store.
      */
     virtual QDomDocument saveXML();
@@ -485,7 +485,7 @@ public:
     QDomDocument createDomDocument( const QString& tagName, const QString& version ) const;
 
     /**
-     *  Return a correctly created QDomDocument for an old (1.3-style) KOffice document,
+     *  Return a correctly created QDomDocument for an old (1.3-style) %KOffice document,
      *  including processing instruction, complete DOCTYPE tag (with systemId and publicId), and root element.
      *  This static method can be used e.g. by filters.
      *  @param appName the app's instance name, e.g. kword, kspread, kpresenter etc.
@@ -609,7 +609,7 @@ public:
 
     /**
      * Return a DCOP interface for this document
-     * KOffice parts are strongly recommended to reimplement this method,
+     * %KOffice parts are strongly recommended to reimplement this method,
      * so that their DCOP interface provides more functionality than the basic KoDocumentIface
      */
     virtual DCOPObject * dcopObject();
@@ -659,15 +659,17 @@ public:
     int queryCloseDia();
 
     /**
-     * Set when we do not want to save external children when saving our 'main' doc.
+     * @brief Set when we do not want to save external children when saving our 'main' doc.
+     *
      * This makes it possible to save 'main' doc + all its internal children first, then
      * go on to save external children. Typically used by query close.
      * Use:
+     * @code
      *      doc->setDoNotSaveExtDoc();
      *      doc->save();    // saves doc and its internal children,
      *                            //also calls saveExternalChildren() which sets setDoNotSaveExtDoc(false)
      *      doc->saveExternalChildren();
-     *
+     * @endcode
      */
     void setDoNotSaveExtDoc( bool on = true );
 
@@ -698,7 +700,7 @@ public:
 
     /**
      * Sets the document URL to empty URL
-     * KParts doesn't allow this, but KOffice apps have e.g. templates
+     * KParts doesn't allow this, but %KOffice apps have e.g. templates
      * After using loadNativeFormat on a template, one wants
      * to set the url to KURL()
      */
@@ -726,13 +728,18 @@ public:
      * _Only_ use these functions to restore m_file (in KoMainWindow) after a
      * failed save (remember to use setURL() to restore the URL as well).
      *
-     * Do _not_ use these functions for any other purpose.
+     * @warning Do _not_ use these functions for any other purpose.
      *
      * @internal
      */
     QString &file() { return m_file; }
 
     /**
+     * _Only_ use these functions to restore m_file (in KoMainWindow) after a
+     * failed save (remember to use setURL() to restore the URL as well).
+     *
+     * @warning Do _not_ use these functions for any other purpose.
+     *
      * @internal
      */
     void setFile( const QString &file ) { m_file = file; }
@@ -820,7 +827,7 @@ protected:
      *  embedded documents. This function is called to load embedded documents.
      *
      *  An example implementation may look like this:
-     *  <PRE>
+     *  @code
      *  QPtrListIterator<KoDocumentChild> it( children() );
      *  for( ; it.current(); ++it )
      *  {
@@ -830,7 +837,7 @@ protected:
      *    }
      *  }
      *  return true;
-     *  </PRE>
+     *  @endcode
      */
     virtual bool loadChildren( KoStore* );
 
