@@ -59,6 +59,8 @@ class KSpreadStyleManager
 
   KSpreadCustomStyle * m_defaultStyle;
   Styles               m_styles; // builtin and custom made styles
+
+  void createBuiltinStyles();
 };
 
 #endif

@@ -366,7 +366,8 @@ QDomDocument KSpreadDoc::saveXML()
     for ( ; plugin != 0; plugin = m_plugins.next() )
     {
       QDomElement data( plugin->saveXML( doc ) );
-      spread.appendChild( data );
+      if ( !data.isNull() )
+        spread.appendChild( data );
     }
 
     QDomElement s = m_pStyleManager->save( doc );

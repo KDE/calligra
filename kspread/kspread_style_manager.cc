@@ -31,6 +31,8 @@ KSpreadStyleManager::KSpreadStyleManager()
 {
   m_defaultStyle->setName( "Default" );
   m_defaultStyle->setType( KSpreadStyle::BUILTIN );
+
+  createBuiltinStyles();
 }
 
 KSpreadStyleManager::~KSpreadStyleManager()
@@ -128,6 +130,25 @@ bool KSpreadStyleManager::loadXML( QDomElement const & styles )
   m_defaultStyle->setType( KSpreadStyle::BUILTIN );
 
   return true;
+}
+
+void KSpreadStyleManager::createBuiltinStyles()
+{
+  KSpreadCustomStyle * header1 = new KSpreadCustomStyle( i18n( "Header" ), m_defaultStyle );
+  QFont f( header1->font() );
+  f.setItalic( true );
+  f.setPointSize( f.pointSize() + 2 );
+  f.setBold( true );
+  header1->changeFont( f );
+  m_styles[ header1->name() ] = header1;
+
+  KSpreadCustomStyle * header2 = new KSpreadCustomStyle( i18n( "Header1" ), header1 );
+  QColor color( "#F0F0FF" );
+  header2->changeBgColor( color );
+  QPen pen( Qt::black, 1, Qt::SolidLine );
+  header2->changeBottomBorderPen( pen );
+
+  m_styles[ header2->name() ] = header2;
 }
 
 KSpreadCustomStyle * KSpreadStyleManager::style( QString const & name ) const
