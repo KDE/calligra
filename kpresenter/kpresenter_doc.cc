@@ -327,14 +327,14 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
     }
 
     makeUsedPixmapList();
-    
+
     out << otag << "<PIXMAPS>" << endl;
 
     QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
 
     for ( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it )
-    {   
-        if ( usedPixmaps.contains( it.key() ) ) 
+    {
+        if ( usedPixmaps.contains( it.key() ) )
         {
             KPPixmapDataCollection::Key key = it.key();
             out << indent << "<KEY " << key << " />" << endl;
@@ -423,10 +423,16 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
             u2 += "/";
             u2 += it.key().toString();
 
-            QString mime = "image/bmp";
+            QString format = QFileInfo( it.key().filename ).extension().upper();
+            if ( format == "JPG" )
+                format = "JPEG";
+            if ( QImage::outputFormats().find( format ) == -1 )
+                format = "BMP";
+            
+            QString mime = "image/" + format.lower();
             _store->open( u2, mime.lower() );
             ostorestream out( _store );
-            out << it.data();
+            writeImageToStream( out, it.data(), format );
             out.flush();
             _store->close();
         }
@@ -3786,10 +3792,10 @@ void KPresenterDoc::makeUsedPixmapList()
     for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() )
         if ( kpobject->getType() == OT_PICTURE )
             usedPixmaps.append( dynamic_cast<KPPixmapObject*>( kpobject )->getKey() );
-    
+
     KPBackGround *kpbackground = 0;
     for ( kpbackground = _backgroundList.first(); kpbackground; kpbackground = _backgroundList.next() )
         if ( kpbackground->getBackType() == BT_PICTURE )
             usedPixmaps.append( kpbackground->getKey() );
-                 
+
 }

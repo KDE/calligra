@@ -306,6 +306,13 @@ Reggie, 11.6.1999:
 
 Reggie, 12.6.1999:
 ------------------
-- Implemented resizing objects with keeping constraints 
+- Implemented resizing objects with keeping constraints
   (when pressing Control while resizing)
 - Fixes
+
+Reggie, 15.6.1999:
+------------------
+- Pixmaps are now (if possible) saved in native format
+  and not always in BMP => redruces file size if you
+  use compressed image formats and keeps transparency 
+  e.g. for XPMs.
