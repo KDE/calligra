@@ -93,11 +93,13 @@ public:
      */
     virtual void dispatchFontCommand( FontCommand* cmd );
 
-    CharStyle getCharStyle() const { return charStyle; }
+    CharStyle getCharStyle() const { return charStyle(); }
     void setCharStyle( CharStyle cs );
 
-    CharFamily getCharFamily() const { return charFamily; }
+    CharFamily getCharFamily() const { return charFamily(); }
     void setCharFamily( CharFamily cf );
+
+    char format() const { return m_format; }
 
     /**
      * Moves the cursor away from the given child. The cursor is
@@ -176,14 +178,28 @@ private:
 
     /**
      * The attribute of the char. "anyChar" means leave the default.
+     *
+     * This must be in sync with the definition in kformuladefs.h!
      */
-    CharStyle charStyle;
+    CharStyle charStyle() const { return static_cast<CharStyle>( m_format & 0x07 ); }
+    void charStyle( CharStyle cs )
+        { m_format = ( m_format & ( 0xff-0x07 ) ) | static_cast<char>( cs ); }
 
     /**
      * Very rarely used so it's actually a shame to have it here.
-     * There should be a better way to store font attributes.
+     *
+     * This must be in sync with the definition in kformuladefs.h!
      */
-    CharFamily charFamily;
+    CharFamily charFamily() const
+        { return static_cast<CharFamily>( m_format >> 3 ); }
+    void charFamily( CharFamily cf )
+        { m_format = ( m_format & 0x07 ) | ( static_cast<char>( cf ) << 3 ); }
+
+    /**
+     * To save space both CharStyle and CharFamily are packed into one
+     * char.
+     */
+    char m_format;
 };
 
 

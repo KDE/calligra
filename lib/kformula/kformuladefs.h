@@ -130,12 +130,13 @@ enum CharClass {
 typedef CharClass TokenType;
 
 
+// there are three bits needed to store this
 enum CharStyle {
-    normalChar = 0,
-    boldChar = 1,
-    italicChar = 2,
-    boldItalicChar = 3,
-    anyChar = 0xff
+    normalChar,
+    boldChar,
+    italicChar,
+    boldItalicChar,
+    anyChar
 };
 
 

@@ -21,6 +21,7 @@
 #ifndef KFORMULACOMMAND_H
 #define KFORMULACOMMAND_H
 
+#include <qmap.h>
 #include <qptrlist.h>
 #include <qvaluevector.h>
 
@@ -401,6 +402,8 @@ protected:
     QPtrList<TextElement>& childrenList() { return list; }
 
     void collectChildren();
+
+    void parseSequences( const QMap<SequenceElement*, int>& parents );
 
 private:
 

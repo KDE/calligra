@@ -38,15 +38,18 @@
 KFORMULA_NAMESPACE_BEGIN
 
 TextElement::TextElement(QChar ch, bool beSymbol, BasicElement* parent)
-        : BasicElement(parent), character(ch), symbol(beSymbol), charStyle( anyChar )
+        : BasicElement(parent), character(ch), symbol(beSymbol)
 {
+    charStyle( anyChar );
+    charFamily( anyFamily );
 }
 
 
 TextElement::TextElement( const TextElement& other )
     : BasicElement( other ),
       character( other.character ),
-      symbol( other.symbol )
+      symbol( other.symbol ),
+      m_format( other.m_format )
 {
 }
 
@@ -160,19 +163,28 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
     //kdDebug( DEBUGID ) << "TextElement::draw width: " << getWidth() << endl;
     //kdDebug( DEBUGID ) << endl;
 
-    QChar ch = getRealCharacter(context);
-    if ( ch != QChar::null ) {
+    // Each starting element draws the whole token
+    ElementType* token = getElementType();
+    if ( ( token != 0 ) && token->multiElement() ) {
         painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
                           context.layoutUnitToPixelY( myPos.y()+getBaseline() ),
-                          ch );
+                          token->text( static_cast<SequenceElement*>( getParent() ) ) );
     }
     else {
-        painter.setPen( QPen( context.getErrorColor(),
-                              context.layoutUnitToPixelX( context.getLineWidth() ) ) );
-        painter.drawRect( context.layoutUnitToPixelX( myPos.x() ),
-                          context.layoutUnitToPixelY( myPos.y() ),
-                          context.layoutUnitToPixelX( getWidth() ),
-                          context.layoutUnitToPixelY( getHeight() ) );
+        QChar ch = getRealCharacter(context);
+        if ( ch != QChar::null ) {
+            painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
+                              context.layoutUnitToPixelY( myPos.y()+getBaseline() ),
+                              ch );
+        }
+        else {
+            painter.setPen( QPen( context.getErrorColor(),
+                                  context.layoutUnitToPixelX( context.getLineWidth() ) ) );
+            painter.drawRect( context.layoutUnitToPixelX( myPos.x() ),
+                              context.layoutUnitToPixelY( myPos.y() ),
+                              context.layoutUnitToPixelX( getWidth() ),
+                              context.layoutUnitToPixelY( getHeight() ) );
+        }
     }
 
     // Debug
@@ -195,13 +207,13 @@ void TextElement::dispatchFontCommand( FontCommand* cmd )
 
 void TextElement::setCharStyle( CharStyle cs )
 {
-    charStyle = cs;
+    charStyle( cs );
     formula()->changed();
 }
 
 void TextElement::setCharFamily( CharFamily cf )
 {
-    charFamily = cf;
+    charFamily( cf );
     formula()->changed();
 }
 
@@ -211,7 +223,9 @@ QChar TextElement::getRealCharacter(const ContextStyle& context)
         const FontStyle& fontStyle = context.fontStyle();
         const AlphaTable* alphaTable = fontStyle.alphaTable();
         if ( alphaTable != 0 ) {
-            AlphaTableEntry ate = alphaTable->entry( character, charFamily, charStyle );
+            AlphaTableEntry ate = alphaTable->entry( character,
+                                                     charFamily(),
+                                                     charStyle() );
             if ( ate.valid() ) {
                 return ate.pos;
             }
@@ -219,7 +233,7 @@ QChar TextElement::getRealCharacter(const ContextStyle& context)
         return character;
     }
     else {
-        return getSymbolTable().character(character, charStyle);
+        return getSymbolTable().character(character, charStyle());
     }
 }
 
@@ -230,7 +244,9 @@ QFont TextElement::getFont(const ContextStyle& context)
         const FontStyle& fontStyle = context.fontStyle();
         const AlphaTable* alphaTable = fontStyle.alphaTable();
         if ( alphaTable != 0 ) {
-            AlphaTableEntry ate = alphaTable->entry( character, charFamily, charStyle );
+            AlphaTableEntry ate = alphaTable->entry( character,
+                                                     charFamily(),
+                                                     charStyle() );
             if ( ate.valid() ) {
                 return ate.font;
             }
@@ -242,7 +258,7 @@ QFont TextElement::getFont(const ContextStyle& context)
         else {
             font = context.getDefaultFont();
         }
-        switch ( charStyle ) {
+        switch ( charStyle() ) {
         case anyChar:
             break;
         case normalChar:
@@ -264,7 +280,7 @@ QFont TextElement::getFont(const ContextStyle& context)
         }
         return font;
     }
-    return context.symbolTable().font( character, charStyle );
+    return context.symbolTable().font( character, charStyle() );
 }
 
 
@@ -295,7 +311,7 @@ void TextElement::writeDom(QDomElement element)
     //element.setAttribute("CHAR", s.sprintf( "#x%05X", character ) );
     if (symbol) element.setAttribute("SYMBOL", "3");
 
-    switch ( charStyle ) {
+    switch ( charStyle() ) {
     case anyChar: break;
     case normalChar: element.setAttribute("STYLE", "normal"); break;
     case boldChar: element.setAttribute("STYLE", "bold"); break;
@@ -303,7 +319,7 @@ void TextElement::writeDom(QDomElement element)
     case boldItalicChar: element.setAttribute("STYLE", "bolditalic"); break;
     }
 
-    switch ( charFamily ) {
+    switch ( charFamily() ) {
     case normalFamily: element.setAttribute("FAMILY", "normal"); break;
     case scriptFamily: element.setAttribute("FAMILY", "script"); break;
     case frakturFamily: element.setAttribute("FAMILY", "fraktur"); break;
@@ -353,37 +369,41 @@ bool TextElement::readAttributesFromDom(QDomElement element)
 
     QString styleStr = element.attribute("STYLE");
     if ( styleStr == "normal" ) {
-        charStyle = normalChar;
+        charStyle( normalChar );
     }
     else if ( styleStr == "bold" ) {
-        charStyle = boldChar;
+        charStyle( boldChar );
     }
     else if ( styleStr == "italic" ) {
-        charStyle = italicChar;
+        charStyle( italicChar );
     }
     else if ( styleStr == "bolditalic" ) {
-        charStyle = boldItalicChar;
+        charStyle( boldItalicChar );
     }
     else {
-        charStyle = anyChar;
+        charStyle( anyChar );
     }
 
     QString familyStr = element.attribute( "FAMILY" );
     if ( familyStr == "normal" ) {
-        charFamily = normalFamily;
+        charFamily( normalFamily );
     }
     else if ( familyStr == "script" ) {
-        charFamily = scriptFamily;
+        charFamily( scriptFamily );
     }
     else if ( familyStr == "fraktur" ) {
-        charFamily = frakturFamily;
+        charFamily( frakturFamily );
     }
     else if ( familyStr == "doublestruck" ) {
-        charFamily = doubleStruckFamily;
+        charFamily( doubleStruckFamily );
     }
     else {
-        charFamily = anyFamily;
+        charFamily( anyFamily );
     }
+
+    kdDebug() << "charStyle=" << charStyle()
+              << "  charFamily=" << charFamily()
+              << "  format=" << int( format() ) << endl;
 
     return true;
 }

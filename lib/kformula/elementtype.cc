@@ -209,7 +209,7 @@ MultiElementType::MultiElementType( SequenceParser* parser )
     for ( uint i = start(); i < end(); i++ ) {
         parser->setElementType( i, this );
     }
-    //m_text = parser->text();
+    m_text = parser->text();
 }
 
 

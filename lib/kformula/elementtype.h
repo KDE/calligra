@@ -63,7 +63,7 @@ public:
      * @returns the spanned text. seq must be the original
      * parent sequence.
      */
-    QString text( SequenceElement* seq ) const;
+    virtual QString text( SequenceElement* seq ) const;
 
     /**
      * @returns the position of the first character
@@ -181,9 +181,15 @@ public:
 
     virtual bool multiElement() const { return true; }
 
+    /**
+     * @returns the spanned text. seq must be the original
+     * parent sequence.
+     */
+    virtual QString text( SequenceElement* /*seq*/ ) const { return m_text; }
+
 private:
 
-    //QString m_text;
+    QString m_text;
 };
 
 

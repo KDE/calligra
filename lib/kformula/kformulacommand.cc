@@ -18,18 +18,18 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <iostream>
 #include <klocale.h>  //This is for undo descriptions
 
-#include <qptrlist.h>
+#include <qvaluelist.h>
 
-#include "kformulacommand.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
 #include "indexelement.h"
+#include "kformulacommand.h"
 #include "matrixelement.h"
 #include "sequenceelement.h"
 #include "textelement.h"
+
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -367,6 +367,17 @@ void FontCommand::collectChildren()
 }
 
 
+void FontCommand::parseSequences( const QMap<SequenceElement*, int>& parents )
+{
+    QValueList<SequenceElement*> sequences = parents.keys();
+    for ( QValueList<SequenceElement*>::iterator i = sequences.begin();
+          i != sequences.end();
+          ++i ) {
+        ( *i )->parse();
+    }
+}
+
+
 CharStyleCommand::CharStyleCommand( CharStyle cs, const QString& name, Container* document )
     : FontCommand( name, document ), charStyle( cs )
 {
@@ -375,24 +386,32 @@ CharStyleCommand::CharStyleCommand( CharStyle cs, const QString& name, Container
 void CharStyleCommand::execute()
 {
     collectChildren();
+    QMap<SequenceElement*, int> parentCollector;
 
     styleList.clear();
     uint count = childrenList().count();
     styleList.reserve( count );
     for ( uint i=0; i<count; ++i ) {
-        styleList[i] = childrenList().at( i )->getCharStyle();
-        childrenList().at( i )->setCharStyle( charStyle );
+        TextElement* child = childrenList().at( i );
+        styleList[i] = child->getCharStyle();
+        child->setCharStyle( charStyle );
+        parentCollector[static_cast<SequenceElement*>( child->getParent() )] = 1;
     }
+    parseSequences( parentCollector );
     testDirty();
 }
 
 void CharStyleCommand::unexecute()
 {
+    QMap<SequenceElement*, int> parentCollector;
     uint count = childrenList().count();
-    styleList.reserve( count );
+    //styleList.reserve( count );
     for ( uint i=0; i<count; ++i ) {
-        childrenList().at( i )->setCharStyle( styleList[i] );
+        TextElement* child = childrenList().at( i );
+        child->setCharStyle( styleList[i] );
+        parentCollector[static_cast<SequenceElement*>( child->getParent() )] = 1;
     }
+    parseSequences( parentCollector );
     testDirty();
 }
 
@@ -406,23 +425,32 @@ void CharFamilyCommand::execute()
 {
     collectChildren();
 
+    QMap<SequenceElement*, int> parentCollector;
+
     familyList.clear();
     uint count = childrenList().count();
     familyList.reserve( count );
     for ( uint i=0; i<count; ++i ) {
-        familyList[i] = childrenList().at( i )->getCharFamily();
-        childrenList().at( i )->setCharFamily( charFamily );
+        TextElement* child = childrenList().at( i );
+        familyList[i] = child->getCharFamily();
+        child->setCharFamily( charFamily );
+        parentCollector[static_cast<SequenceElement*>( child->getParent() )] = 1;
     }
+    parseSequences( parentCollector );
     testDirty();
 }
 
 void CharFamilyCommand::unexecute()
 {
+    QMap<SequenceElement*, int> parentCollector;
     uint count = childrenList().count();
-    familyList.reserve( count );
+    //familyList.reserve( count );
     for ( uint i=0; i<count; ++i ) {
-        childrenList().at( i )->setCharFamily( familyList[i] );
+        TextElement* child = childrenList().at( i );
+        child->setCharFamily( familyList[i] );
+        parentCollector[static_cast<SequenceElement*>( child->getParent() )] = 1;
     }
+    parseSequences( parentCollector );
     testDirty();
 }
 

@@ -245,10 +245,23 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
 
     if (!isEmpty()) {
         QPtrListIterator<BasicElement> it( children );
-        for ( ; it.current(); ++it ) {
+        for ( ; it.current(); ) {
             BasicElement* child = it.current();
-	    if (!child->isInvisible()) {
+            if (!child->isInvisible()) {
                 child->draw(painter, r, context, tstyle, istyle, myPos);
+
+                // Each starting element draws the whole token
+                // This only concerns TextElements.
+                ElementType* token = child->getElementType();
+                if ( token != 0 ) {
+                    it += token->end() - token->start();
+                }
+                else {
+                    ++it;
+                }
+            }
+            else {
+                ++it;
             }
         }
     }

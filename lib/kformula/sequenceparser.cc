@@ -22,6 +22,8 @@
 #include "elementtype.h"
 #include "sequenceparser.h"
 #include "symboltable.h"
+#include "textelement.h"
+
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -155,11 +157,19 @@ void SequenceParser::readDigits()
 
 void SequenceParser::readText()
 {
+    BasicElement* element = list.at( tokenStart );
+    TextElement* beginText = static_cast<TextElement*>( element );
+    char format = beginText->format();
     type = ORDINARY;
     for ( ; tokenEnd < list.count(); tokenEnd++ ) {
-        BasicElement* element = list.at( tokenEnd );
-        if ( ( element->getTokenType() != ORDINARY ) ||
-             ( element->getCharacter() == '/' ) ) {
+        element = list.at( tokenEnd );
+        TokenType tt = element->getTokenType();
+        if ( ( ( tt != ORDINARY ) ||
+               ( element->getCharacter() == '/' ) ) &&
+             ( tt != NUMBER ) ) {
+            return;
+        }
+        if ( static_cast<TextElement*>( element )->format() != format ) {
             return;
         }
     }

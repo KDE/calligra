@@ -273,6 +273,12 @@ public:
     virtual KCommand* input( Container* container, QKeyEvent* event );
 
     /**
+     * Parses the sequence and generates a new syntax tree.
+     * Has to be called after each modification.
+     */
+    virtual void parse();
+
+    /**
      * Stores the given childrens dom in the element.
      */
     void getChildrenDom(QDomDocument doc, QDomElement elem, uint from, uint to);
@@ -397,12 +403,6 @@ protected:
      * @param child the child's number
      */
     luPixel getChildPosition( const ContextStyle& context, uint child );
-
-    /**
-     * Parses the sequence and generates a new syntax tree.
-     * Has to be called after each modification.
-     */
-    virtual void parse();
 
     /**
      * @returns whether the child is the first element of its token.
