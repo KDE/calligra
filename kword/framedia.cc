@@ -751,6 +751,12 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
         rExistingFrameset->setEnabled(false);
         lFrameSList->setEnabled(false);
     }
+    //we can't create a new frame when we select
+    //multi frame!!!!
+    if ( amount > 1 ) {
+        rNewFrameset->setChecked(false);
+        rNewFrameset->setEnabled(false);
+    }
     if(frame && frame->frameSet() == 0) {
         oldFrameSetName = doc->generateFramesetName( i18n( "Text Frameset %1" ) );
         rNewFrameset->setChecked(true);
