@@ -1299,7 +1299,7 @@ QString KisDoc::currentImage()
 /*
     current - pointer to current image
 */
-KisImage* KisDoc::current()
+KisImage* KisDoc::current() const
 {
     return m_pCurrent;
 }

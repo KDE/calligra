@@ -1296,22 +1296,18 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
     canvasGotMousePressEvent - just passes the signal on
     to the appropriate tool
 */
-void KisView::canvasGotMousePressEvent( QMouseEvent *e )
+void KisView::canvasGotMousePressEvent(QMouseEvent *e)
 {
-    buttonIsDown = true;
+	buttonIsDown = true;
 
-    int x = e->pos().x() - xPaintOffset()
-        + (int)(zoomFactor() * m_pHorz->value());
-    int y = e->pos().y() - yPaintOffset()
-        + (int)(zoomFactor() * m_pVert->value());
+	int x = e -> pos().x() - xPaintOffset() + (int)(zoomFactor() * m_pHorz -> value());
+	int y = e -> pos().y() - yPaintOffset() + (int)(zoomFactor() * m_pVert -> value());
+	QMouseEvent ev(QEvent::MouseButtonPress, QPoint(x, y), e -> globalPos(), e -> button(), e -> state());
 
-    QMouseEvent ev( QEvent::MouseButtonPress, QPoint(x, y),
-        e->globalPos(), e->button(), e->state() );
+	emit canvasMousePressEvent(&ev);
 
-    emit canvasMousePressEvent( &ev );
-
-    if ( e->button() == Qt::LeftButton )
-        m_pDoc->setModified( true );
+	if (e -> button() == Qt::LeftButton && m_pTool && m_pTool -> willModify())
+		m_pDoc -> setModified(true);
 }
 
 
@@ -2503,15 +2499,15 @@ void KisView::scrollTo( QPoint pt )
 }
 
 
-float KisView::zoomFactor()
+float KisView::zoomFactor() const
 {
-    return m_zoomFactor;
+	return m_zoomFactor;
 }
 
 
-void KisView::setZoomFactor( float zf )
+void KisView::setZoomFactor(float zf)
 {
-    m_zoomFactor = zf;
+	m_zoomFactor = zf;
 }
 
 void KisView::slotSetBrush(KisBrush* b)

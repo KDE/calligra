@@ -117,7 +117,7 @@ public:
 	/*
 	 * Return apointer to the current image.
 	 */
-    KisImage* current();
+    KisImage* current() const;
 
 	/*
 	 * Return the name of the current image.

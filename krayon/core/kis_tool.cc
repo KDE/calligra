@@ -18,40 +18,42 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <qpointarray.h>
+#include <qevent.h>
 #include <qpainter.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
+#include <qpointarray.h>
 
-#include "kis_doc.h"
-#include "kis_tool.h"
-#include "kis_view.h"
-#include "kis_cursor.h"
+#include <kdebug.h>
+#include <kmessagebox.h>
+
 #include "kis_canvas.h"
+#include "kis_cursor.h"
+#include "kis_doc.h"
+#include "kis_view.h"
+#include "kis_tool.h"
 
 KisTool::KisTool(KisDoc *doc, KisView *view)
 {
-    m_pDoc = doc;
-    m_pView = view;
-    m_Cursor = KisCursor::arrowCursor();
+	m_pDoc = doc;
+	m_pView = view;
+	m_Cursor = KisCursor::arrowCursor();
 }
 
-KisTool::~KisTool() {}
-
-QString KisTool::toolName()
+KisTool::~KisTool() 
 {
-    return "BaseTool";
 }
 
 void KisTool::optionsDialog()
 {
-    KMessageBox::sorry(NULL, "Options for current tool... coming soon", 
-        "", FALSE);  
+	KMessageBox::sorry(0, "Options for current tool... coming soon", "", false);  
+}
+
+void KisTool::setChecked(bool /*check*/)
+{
 }
 
 void KisTool::setCursor(const QCursor& c)
 {
-    m_Cursor = c;
+	m_Cursor = c;
 }
 
 void KisTool::setCursor()
@@ -59,123 +61,116 @@ void KisTool::setCursor()
 	setCursor(arrowCursor);
 }
 
-QCursor KisTool::cursor()
+QCursor KisTool::cursor() const
 {
-    return m_Cursor;
-}
-
-
-// translate integer for zoom factor
-int KisTool::zoomed(int n)
-{
-    return ((int)(n / m_pView->zoomFactor()));
+	return m_Cursor;
 }
 
 // translate integer for zoom factor
-int KisTool::zoomedX(int n)
+int KisTool::zoomed(int n) const
 {
-    // current zoom factor for this view
-    float zF = m_pView->zoomFactor();
-    return ((int)(n/zF));
+	return static_cast<int>(n / m_pView -> zoomFactor());
 }
 
 // translate integer for zoom factor
-int KisTool::zoomedY(int n)
+int KisTool::zoomedX(int n) const
 {
-    // current zoom factor for this view
-    float zF = m_pView->zoomFactor();
-    return ((int)(n/zF));    
+	// current zoom factor for this view
+	float zF = m_pView -> zoomFactor();
+
+	return static_cast<int>(n / zF);
 }
 
+// translate integer for zoom factor
+int KisTool::zoomedY(int n) const
+{
+	// current zoom factor for this view
+	float zF = m_pView -> zoomFactor();
+
+	return static_cast<int>(n / zF);    
+}
 
 // translate point for zoom factor
-QPoint KisTool::zoomed(const QPoint & point)
+QPoint KisTool::zoomed(const QPoint & pt) const
 {
-    // current zoom factor for this view
-    float zF = m_pView->zoomFactor();
+	// current zoom factor for this view
+	float zF = m_pView -> zoomFactor();
    
-    // translate startpoint for zoom factor
-    // this is almost always a from a mouse event
+	// translate startpoint for zoom factor
+	// this is almost always a from a mouse event
      
-    int startx = point.x();
-    int starty = point.y();
+	int startx = static_cast<int>(pt.x() / zF);
+	int starty = static_cast<int>(pt.y() / zF);
     
-    // just dealing with canvas, no scroll accounting        
-    return QPoint((int)(startx/zF), (int)(starty/zF));    
+	// just dealing with canvas, no scroll accounting        
+	return QPoint(startx, starty);
 }
 
+void KisTool::mousePress(QMouseEvent*)
+{
+}
 
-void KisTool::mousePress(QMouseEvent*){}
-void KisTool::mouseMove(QMouseEvent*){}
-void KisTool::mouseRelease(QMouseEvent*){}
+void KisTool::mouseMove(QMouseEvent*)
+{
+}
+
+void KisTool::mouseRelease(QMouseEvent*)
+{
+}
 
 // get QRect for draw freehand in layer.
-QRect KisTool::getDrawRect( QPointArray & points )
+QRect KisTool::getDrawRect(const QPointArray& points) const
 {
-    int maxX = 0, maxY = 0;
-    int minX = 0, minY = 0;
-    int tmpX = 0, tmpY = 0;
-    bool first = true;
+	int maxX = 0, maxY = 0;
+	int minX = 0, minY = 0;
+	int tmpX = 0, tmpY = 0;
+	bool first = true;
+	QPointArray::ConstIterator it;
 
-    QPointArray::Iterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
-        QPoint point = (*it);
-        tmpX = point.x();
-        tmpY = point.y();
+	for (it = points.begin(); it != points.end(); it++) {
+		const QPoint& pt = *it;
 
-        if ( first ) {
-            maxX = tmpX;
-            maxY = tmpY;
-            minX = tmpX;
-            minY = tmpY;
+		tmpX = pt.x();
+		tmpY = pt.y();
 
-            first = false;
-        }
+		if (first) {
+			maxX = tmpX;
+			maxY = tmpY;
+			minX = tmpX;
+			minY = tmpY;
+			first = false;
+		}
 
-        if ( maxX < tmpX )
-            maxX = tmpX;
-        if ( maxY < tmpY )
-            maxY = tmpY;
-        if ( minX > tmpX )
-            minX = tmpX;
-        if ( minY > tmpY )
-            minY = minY;
-    }
+		if (maxX < tmpX)
+			maxX = tmpX;
 
-    QPoint topLeft = QPoint( minX, minY );
-    QPoint bottomRight = QPoint( maxX, maxY );
-    QRect rect = QRect( zoomed( topLeft ), zoomed( bottomRight ) );
+		if (maxY < tmpY)
+			maxY = tmpY;
 
-    return rect;
+		if (minX > tmpX)
+			minX = tmpX;
+
+		if (minY > tmpY)
+			minY = minY;
+	}
+
+	QPoint topLeft = QPoint(minX, minY);
+	QPoint bottomRight = QPoint(maxX, maxY);
+	return QRect(zoomed(topLeft), zoomed(bottomRight));
 }
 
 // get QPointArray for draw freehand and polyline in layer.
-QPointArray KisTool::zoomPointArray( QPointArray & points )
+QPointArray KisTool::zoomPointArray(const QPointArray& points) const
 {
-    QPointArray m_points( points.size() );
+	QPointArray rc(points.size());
+	int count = 0;
+    
+	for (QPointArray::ConstIterator it = points.begin(); it != points.end(); it++) {
+		rc.setPoint(count, zoomed(*it));
+		count++;
+	}
 
-    int count = 0;
-    QPointArray::Iterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
-        m_points.setPoint( count, zoomed( *it ) );
-        ++count;
-    }
-
-    return m_points;
-}
-
-// set select cursor
-void KisTool::setSelectCursor()
-{
-    m_Cursor = KisCursor::selectCursor();
-    m_pView->kisCanvas()->setCursor( KisCursor::selectCursor() );
-}
-
-// set move cursor
-void KisTool::setMoveCursor()
-{
-    m_Cursor = KisCursor::moveCursor();
-    m_pView->kisCanvas()->setCursor( KisCursor::moveCursor() );
+	return rc;
 }
 
 // clip select area image
@@ -221,7 +216,7 @@ void KisTool::setClipImage()
 }
 
 // drag clip image
-void KisTool::dragSelectImage( QPoint dragPoint, QPoint m_hotSpot )
+void KisTool::dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot) const
 {
     KisImage *img = m_pDoc->current();
     if ( !img )
@@ -242,7 +237,7 @@ void KisTool::dragSelectImage( QPoint dragPoint, QPoint m_hotSpot )
     p.begin( m_pView->kisCanvas() );
     p.scale( zF, zF );
 
-    QRect imageRect( point.x() - m_hotSpot.x(), point.y() - m_hotSpot.y(), 
+    QRect imageRect( point.x() - hotSpot.x(), point.y() - hotSpot.y(), 
                      clipPixmap.width(), clipPixmap.height() );
     imageRect = imageRect.intersect( img->imageExtents() );
 
@@ -291,7 +286,7 @@ void KisTool::dragSelectImage( QPoint dragPoint, QPoint m_hotSpot )
 }
 
 // pasete clip image
-bool KisTool::pasteClipImage( QPoint pos )
+bool KisTool::pasteClipImage(const QPoint& pos)
 {
     KisImage *img = m_pDoc->current();
     if ( !img )
@@ -387,13 +382,14 @@ bool KisTool::pasteClipImage( QPoint pos )
     return true;
 }
 
-bool KisTool::shouldRepaint()
+bool KisTool::shouldRepaint() const
 {
 	return false;
 }
 
-void KisTool::setBrush(KisBrush *)
+void KisTool::setBrush(KisBrush *brush)
 {
+	m_pBrush = brush;
 }
 
 void KisTool::clearOld()
@@ -409,6 +405,29 @@ void KisTool::toolSelect()
 void KisTool::setPattern(KisPattern *pattern)
 {
 	m_pPattern = pattern;
+}
+
+bool KisTool::willModify() const
+{
+	return true;
+}
+
+// set select cursor
+void KisTool::setSelectCursor()
+{
+	m_Cursor = KisCursor::selectCursor();
+
+	if (m_pView)
+		m_pView -> kisCanvas() -> setCursor(KisCursor::selectCursor());
+}
+
+// set move cursor
+void KisTool::setMoveCursor()
+{
+	m_Cursor = KisCursor::moveCursor();
+
+	if (m_pView)
+		m_pView -> kisCanvas() -> setCursor(KisCursor::moveCursor());
 }
 
 #include "kis_tool.moc"

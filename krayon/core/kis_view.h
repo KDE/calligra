@@ -130,7 +130,7 @@ class KisView : public KoView {
     void 	zoom( int x, int y, float zf );
     void    zoom_in( int x, int y );
     void	zoom_out( int x, int y );
-    float   zoomFactor();
+	float zoomFactor() const;
     void    setZoomFactor( float zf );
 
     virtual void setupPrinter( KPrinter &printer );
