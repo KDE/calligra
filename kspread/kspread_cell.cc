@@ -1547,7 +1547,6 @@ bool KSpreadCell::calc(bool delay)
 
   setFlag(Flag_Progress);
 
-
   if (m_pCode == NULL)
   {
     makeFormula();
@@ -1712,9 +1711,31 @@ bool KSpreadCell::calc(bool delay)
       SelectPrivate *s = (SelectPrivate*)m_pPrivate;
       s->parse( m_strFormulaOut );
   }
+
   clearFlag(Flag_CalcDirty);
   setFlag(Flag_LayoutDirty);
   clearFlag(Flag_Progress);
+
+  // if our value changed the cells that depend on us need to be updated
+  if ( m_strFormulaOut != m_strOutText )
+  {
+    setFlag(Flag_UpdatingDeps);
+    
+    KSpreadDependency * d = 0;
+    // Every cell that references us must calculate with this new value
+    for (d = m_lstDependingOnMe.first(); d != NULL; d = m_lstDependingOnMe.next())
+    {
+      for (int c = d->Left(); c <= d->Right(); c++)
+      {
+        for (int r = d->Top(); r <= d->Bottom(); r++)
+        {
+          d->Table()->cellAt( c, r )->calc();
+        }
+      }
+    }
+
+    clearFlag(Flag_UpdatingDeps);
+  }
 
   DO_UPDATE;
 
@@ -3497,7 +3518,7 @@ void KSpreadCell::updateDepending()
     {
       for (int r = d->Top(); r <= d->Bottom(); r++)
       {
-	d->Table()->cellAt( c, r )->calc();
+        d->Table()->cellAt( c, r )->calc();
       }
     }
   }
