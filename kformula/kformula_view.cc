@@ -1,28 +1,30 @@
+// has to be included first
 #include <qprinter.h>
-#include "kformula_view.h"
-#include "kformula_doc.h"
-#include "kformula_main.h"
-#include "TextElement.h"
-#include "matrixwidget.h"
 
 #include <qpainter.h>
 #include <qstring.h>
 #include <qmsgbox.h>
 #include <qkeycode.h>
 
+#include <opUIUtils.h>
+#include <opMainWindow.h>
+#include <opMainWindowIf.h>
+
+#include <kiconloader.h>
+
+#include "kformula_view.h"
+#include "kformula_doc.h"
+#include "kformula_main.h"
+#include "TextElement.h"
+#include "matrixwidget.h"
 #include "BracketElement.h"
 #include "RootElement.h"
 #include "TextElement.h"
 #include "FractionElement.h"
 #include "MatrixElement.h"
 #include "PrefixedElement.h"
-#include <kiconloader.h>
 
-#include <opUIUtils.h>
-#include <opMainWindow.h>
-#include <opMainWindowIf.h>
-
-#include <kglobal.h>
+//#include <kglobal.h>
 
 /**********************************************************
  *
@@ -43,13 +45,13 @@ KFormulaView::KFormulaView( QWidget *_parent, const char *_name, KFormulaDoc* _d
     m_pDoc = _doc;
 
     mn_indexList = new QPopupMenu();
-    mn_indexList->insertItem(ICON("index0.xpm"),0);
+    mn_indexList->insertItem(BarIcon("index0.xpm"),0);
     mn_indexList->insertSeparator();
-    mn_indexList->insertItem(ICON("index1.xpm"),1);
+    mn_indexList->insertItem(BarIcon("index1.xpm"),1);
     mn_indexList->insertSeparator();
-    mn_indexList->insertItem(ICON("index2.xpm"),2);
+    mn_indexList->insertItem(BarIcon("index2.xpm"),2);
     mn_indexList->insertSeparator();
-    mn_indexList->insertItem(ICON("index3.xpm"),3);
+    mn_indexList->insertItem(BarIcon("index3.xpm"),3);
     mn_indexList->setMouseTracking(true);
     mn_indexList->setCheckable(false);
 
@@ -138,7 +140,7 @@ CORBA::Long KFormulaView::addToolButton( OpenPartsUI::ToolBar_ptr toolbar,
 					 const char* func,
 					 CORBA::Long _id )
 {
-    OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON(pictname) );
+    OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon(pictname) );
     CORBA::WString_var toolTip = Q2C( tooltip );
 
     CORBA::Long id =
@@ -199,38 +201,38 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "&Add Index" ) );
     m_vMenuElement->insertItem8( text, m_vMenuElement_AddIndex, -1, -1 );
 
-    OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON("index0.xpm"));
+    OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon("index0.xpm"));
     text = Q2C( i18n( "Top left" ) );
     m_idMenuElement_AddIndex_TL = m_vMenuElement_AddIndex->insertItem6( pix, text, this, "addTopLeftIndex", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(ICON("index1.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("index1.xpm") );
     text = Q2C( i18n( "Bottom left" ) );
     m_idMenuElement_AddIndex_BL = m_vMenuElement_AddIndex->insertItem6( pix, text, this, "addBottomLeftIndex", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(ICON("index2.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("index2.xpm") );
     text = Q2C( i18n( "Top right" ) );
     m_idMenuElement_AddIndex_TR = m_vMenuElement_AddIndex->insertItem6( pix, text, this, "addTopRightIndex", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(ICON("index3.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("index3.xpm") );
     text = Q2C( i18n( "Bottom right" ) );
     m_idMenuElement_AddIndex_BL = m_vMenuElement_AddIndex->insertItem6( pix, text, this, "addBottomRightIndex", 0, -1, -1 );
 
     text = Q2C( i18n( "&Add Element" ) );
     m_vMenuElement->insertItem8( text, m_vMenuElement_AddElement, -1, -1 );	
 
-    pix = OPUIUtils::convertPixmap(ICON("mini-xy.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("mini-xy.xpm") );
     text = Q2C( i18n( "Plain text" ) );
     m_idMenuElement_AddElement_T = m_vMenuElement_AddElement->insertItem6( pix, text, this, "addText", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(ICON("mini-root.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("mini-root.xpm") );
     text = Q2C( i18n( "Root" ) );
     m_idMenuElement_AddElement_R = m_vMenuElement_AddElement->insertItem6( pix, text, this, "addRoot", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(ICON("mini-bra.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("mini-bra.xpm") );
     text = Q2C( i18n( "Bracket" ) );
     m_idMenuElement_AddElement_B = m_vMenuElement_AddElement->insertItem6( pix, text, this, "addBracket", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(ICON("mini-frac.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("mini-frac.xpm") );
     text = Q2C( i18n( "Fraction" ) );
     m_idMenuElement_AddElement_F = m_vMenuElement_AddElement->insertItem6( pix, text, this, "addFraction", 0, -1, -1 );
 
@@ -248,7 +250,7 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "Set font" ) );
     m_idMenuElement_Text_Font = m_vMenuElement_Text->insertItem( text, this, "textFont", 0 );
 
-    pix = OPUIUtils::convertPixmap(ICON("split.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("split.xpm") );
     text = Q2C( i18n( "Split at current position" ) );
     m_idMenuElement_Text_Split = m_vMenuElement_Text->insertItem6( pix, text, this, "textSplit", 0, -1, -1 );
 
@@ -258,14 +260,14 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "Use pixmap" ) );
     m_idMenuElement_Root_Pixmap = m_vMenuElement_Root->insertItem( text, this, "togglePixmap", 0 );
 
-    pix = OPUIUtils::convertPixmap(ICON("rootindex.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("rootindex.xpm") );
     text = Q2C( i18n( "Add root index (Top left)" ) );
     m_idMenuElement_Root_Index = m_vMenuElement_Root->insertItem6( pix, text, this, "addTopLeftIndex", 0, -1, -1 );
 
     text = Q2C( i18n( "&Bracket" ) );
     m_vMenuElement->insertItem8( text, m_vMenuElement_Bracket, -1, -1 );	
 
-    pix = OPUIUtils::convertPixmap(ICON("delimiter.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("delimiter.xpm") );
     text = Q2C( i18n( "Set delimiter ..." ) );
     m_idMenuElement_Bracket_Type = m_vMenuElement_Bracket->insertItem6( pix, text, this, "bracketType", 0, -1, -1 );
 
@@ -287,35 +289,35 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "Use pixmap" ) );
     m_idMenuElement_Integral_Pixmap = m_vMenuElement_Integral->insertItem( text, this, "togglePixmap", 0 );
 
-    pix = OPUIUtils::convertPixmap(ICON("Ihigher.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("Ihigher.xpm") );
     text = Q2C( i18n( "Add higher limit" ) );
     m_idMenuElement_Integral_Higher = m_vMenuElement_Integral->insertItem6( pix, text, this, "addHigher", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(ICON("Ilower.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("Ilower.xpm") );
     text = Q2C( i18n( "Add lower limit" ) );
     m_idMenuElement_Integral_Lower = m_vMenuElement_Integral->insertItem6( pix, text, this, "addLower", 0, -1, -1 );
 
     text = Q2C( i18n( "&Matrix" ) );
     m_vMenuElement->insertItem8( text, m_vMenuElement_Matrix, -1, -1 );
 
-    // pix = OPUIUtils::convertPixmap(ICON("setmatrix.xpm" );
+    // pix = OPUIUtils::convertPixmap(BarIcon("setmatrix.xpm" );
     // m_idMenuElement_Matrix_Set = m_vMenuElement_Matrix->insertItem6( pix, i18n( "Set dimension" ), this, "matrixSet", 0, -1, -1 );
     text = Q2C( i18n( "Set dimension" ) );
     m_idMenuElement_Matrix_Set = m_vMenuElement_Matrix->insertItem( text, this, "matrixSet", 0 );
 
-    pix = OPUIUtils::convertPixmap(ICON("insrow.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("insrow.xpm") );
     text = Q2C( i18n( "Insert a row" ) );
     m_idMenuElement_Matrix_InsRow = m_vMenuElement_Matrix->insertItem6( pix, text, this, "matrixInsRow", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(ICON("inscol.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("inscol.xpm") );
     text = Q2C( i18n( "Insert a column" ) );
     m_idMenuElement_Matrix_InsCol = m_vMenuElement_Matrix->insertItem6( pix, text, this, "matrixInsCol", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(ICON("remrow.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("remrow.xpm") );
     text = Q2C( i18n( "Remove a row" ) );
     m_idMenuElement_Matrix_RemRow = m_vMenuElement_Matrix->insertItem6( pix, text, this, "matrixRemRow", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(ICON("remcol.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("remcol.xpm") );
     text = Q2C( i18n( "Remove a column" ) );
     m_idMenuElement_Matrix_RemCol = m_vMenuElement_Matrix->insertItem6( pix, text, this, "matrixRemCol", 0, -1, -1 );
 
@@ -703,10 +705,10 @@ void KFormulaView::slotTypeChanged( const BasicElement *elm)
 	{
 	    QString content=elm->getContent();
 
-	    OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON(content.left(1) + "higher.xpm" ));
+	    OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon(content.left(1) + "higher.xpm" ));
 	    m_vToolBarType->setButtonPixmap( m_idButtonType_AddH, pix );
 
-	    pix = OPUIUtils::convertPixmap( ICON(content.left(1) + "lower.xpm" ));
+	    pix = OPUIUtils::convertPixmap( BarIcon(content.left(1) + "lower.xpm" ));
 	    m_vToolBarType->setButtonPixmap(m_idButtonType_AddL, pix );
 	}
 
