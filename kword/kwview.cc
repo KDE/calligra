@@ -2251,9 +2251,9 @@ void KWView::changeCaseOfText()
 void KWView::editPersonalExpr()
 {
    KWEditPersonnalExpression *personalDia=new KWEditPersonnalExpression( this,"personnal" );
-   personalDia->exec();
+   if(personalDia->exec())
+       doc->refreshMenuExpression();
    delete personalDia;
-   doc->refreshMenuExpression();
 }
 
 
