@@ -1,7 +1,7 @@
 #include <qpro/common.h>
 
-#include <iostream.h>
-#include <strstream.h>
+#include <iostream>
+#include <strstream>
 
 #include <string.h>
 
@@ -474,7 +474,7 @@ void
 QpFormula::floatFuncReal(const char*)
 {
    QP_INT64   lFloat;
-   ostrstream lNum;
+   std::ostrstream lNum;
 
    cFormula >> lFloat;
 
@@ -489,7 +489,7 @@ void
 QpFormula::intFuncReal(const char*)
 {
    QP_INT16 lInt;
-   ostrstream lNum;
+   std::ostrstream lNum;
 
    cFormula >> lInt;
 

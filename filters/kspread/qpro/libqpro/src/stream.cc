@@ -31,7 +31,7 @@ QpIStream::~QpIStream()
 #else
 #include <string.h>
 #include <fstream.h>
-#include <strstream.h>
+#include <strstream>
 
 // For IRIX
 namespace std {}
@@ -60,7 +60,7 @@ QpIStream::QpIStream(unsigned char* pBuffer, unsigned int pLen)
    , cOffset(0L)
    , cStreamBuf(0)
 {
-   cStreamBuf = new strstreambuf (pBuffer, pLen);
+   cStreamBuf = new std::strstreambuf (pBuffer, pLen);
 
    cIn = new istream(cStreamBuf);
 }

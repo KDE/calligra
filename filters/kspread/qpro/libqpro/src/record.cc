@@ -2,7 +2,7 @@
 
 #include <string.h>
 
-#include <iostream.h>
+#include <iostream>
 
 #include <qpro/record.h>
 #include <qpro/formula.h>
@@ -10,7 +10,7 @@
 // -----------------------------------------------------------------------
 
 #include <iomanip.h>
-#include <strstream.h>
+#include <strstream>
 
 void
 Charout(ostream& pOut, unsigned char pChar)
@@ -32,7 +32,7 @@ Hexout(ostream& pOut, unsigned char pChar)
 int
 Hexout(char* pChar, int pLen)
 {
-   ostrstream*   lOStr = new ostrstream;
+   std::ostrstream*   lOStr = new std::ostrstream;
 
    while( pLen )
    {
@@ -57,7 +57,7 @@ Hexout(char* pChar, int pLen)
       cerr << lOStr->rdbuf() << endl;
 
       delete lOStr;
-      lOStr = new ostrstream;
+      lOStr = new std::ostrstream;
    }
 
    delete lOStr;
@@ -200,7 +200,7 @@ QpRecCell::cellRef(char* pText, QpTableNames& pTable, QP_INT16 /*pNoteBook*/, QP
 {
 //??? cope with relative/absolute references
 
-   strstream lOut(pText, 20, ios::out); // ??? ard coded len
+   std::strstream lOut(pText, 20, ios::out); // ??? ard coded len
    int       lPageRelative = pRow & 0x8000;
    int       lColRelative  = pRow & 0x4000;
    int       lRowRelative  = pRow & 0x2000;
