@@ -31,14 +31,6 @@
  kexi_la_LIBADD = $(LIB_KOFFICECORE)
  
  ## The executable
---- koffice/kexi/filters/import/csv/Makefile.am	24 Apr 2003 17:35:08 -0000	1.2
-+++ koffice/kexi/filters/import/csv/Makefile.am	8 May 2003 06:06:10 -0000
-@@ -1,4 +1,4 @@
--lib_LTLIBRARIES = kexicsvimport.la
-+kde_module_LTLIBRARIES = kexicsvimport.la
- 
- kexicsvimport_la_SOURCES = preview.ui kexicsvimport.cpp
- kexicsvimport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 --- koffice/kformula/Makefile.am	2002/07/14 12:25:12	1.70
 +++ koffice/kformula/Makefile.am	2002/09/08 00:33:30
 @@ -14,7 +14,7 @@ libkformulapart_la_METASOURCES = AUTO
