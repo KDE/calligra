@@ -738,7 +738,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     /* End Made into a function */
 
-    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins, top, left, bottom, right;
+    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins, top, left, bottom, right, orientation, paper;
 
     KoDocumentInfo *DocumentInfo = document->documentInfo();
     KoDocumentInfoAbout *aboutPage = static_cast<KoDocumentInfoAbout *>(DocumentInfo->page( "about" ));
@@ -868,6 +868,14 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
         tmp.appendChild( margins );
         sheet.appendChild(tmp);
 
+        orientation = gnumeric_doc.createElement( "gmr:orientation" );
+        QString orientString = table->print()->orientation() == PG_LANDSCAPE ? "landscape" : "portrait";
+        orientation.appendChild( gnumeric_doc.createTextNode(orientString) );
+        tmp.appendChild( orientation );
+
+        paper = gnumeric_doc.createElement( "gmr:paper" );
+        paper.appendChild( gnumeric_doc.createTextNode( table->print()->paperFormatString() ) );
+        tmp.appendChild( paper );
 
         styles = gnumeric_doc.createElement("gmr:Styles");
         sheet.appendChild(styles);
