@@ -2838,9 +2838,11 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
             return;
     }
 
+   doc()->emitBeginOperation();
     // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
     // For each column, we look for all cells right hand of it and we find the one to swap with it.
     // Much faster than the awful bubbleSort...
+    
     for ( int d = r.left();  d <= r.right(); d++ )
     {
         KSpreadCell *cell1 = cellAt( d, ref_row  );
@@ -2887,8 +2889,8 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
         }
 
     }
-
-    emit sig_updateView( this, r );
+   doc()->emitEndOperation();
+   
 }
 
 void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
@@ -2933,12 +2935,14 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
         if ( r.bottom() < r.top() )
             return;
     }
-
+   doc()->emitBeginOperation();
     // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
     // For each row, we look for all rows under it and we find the one to swap with it.
     // Much faster than the awful bubbleSort...
     // Torben: Asymptotically it is alltogether O(n^2) :-)
-    for ( int d = r.top(); d <= r.bottom(); d++ )
+
+
+   for ( int d = r.top(); d <= r.bottom(); d++ )
     {
         // Look for which row we want to swap with the one number d
         KSpreadCell *cell1 = cellAt( ref_column, d );
@@ -2983,8 +2987,7 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
                 swapCells( x, d, x, bestY );
         }
     }
-
-    emit sig_updateView( this, r );
+   doc()->emitEndOperation();
 }
 
 void KSpreadTable::swapCells( int x1, int y1, int x2, int y2 )
