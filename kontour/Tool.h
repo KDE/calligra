@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -36,30 +36,30 @@ class ToolSelectAction : public KActionMenu
 {
   Q_OBJECT
 public:
-  ToolSelectAction(QObject *parent = 0, const char *name = 0);
+  ToolSelectAction(QObject *parent = 0L, const char *name = 0L);
 
-  void insert(KAction *, int index = -1);
-  void remove(KAction* );
+  void insert(KAction *a, int index = -1);
+  void remove(KAction *a);
 
   int plug(QWidget *widget, int index = -1);
 
-  void setDefaultAction(KAction* );
-  KAction* defaultAction() { return m_def; }
+  void setDefaultAction(KAction *a);
+  KAction* defaultAction() {return mDef; }
 
-  int count() { return m_count; }
+  int count() {return mCount; }
 
 public slots:
   virtual void slotActivated();
-  void setToggleState( bool );
+  void setToggleState(bool state);
 
 protected slots:
   void childActivated();
 
 protected:
-  bool m_init;
-  KAction* m_def;
-  int m_count;
-  bool m_actSelf;
+  bool        mInit;
+  KAction    *mDef;
+  int         mCount;
+  bool        mActSelf;
 };
 
 class Tool : public QObject, public KXMLGUIClient

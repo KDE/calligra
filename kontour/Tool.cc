@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -33,45 +33,47 @@
 #include "kontour_factory.h"
 #include "ToolController.h"
 
-ToolSelectAction::ToolSelectAction(QObject* parent, const char *name):
+ToolSelectAction::ToolSelectAction(QObject *parent, const char *name):
 KActionMenu("",parent,name)
 {
-  m_actSelf = false;
-  m_init = false;
-  m_def = 0L;
-  m_count = 0;
+  mActSelf = false;
+  mInit = false;
+  mDef = 0L;
+  mCount = 0;
 }
 
-void ToolSelectAction::insert( KAction* a, int index )
+void ToolSelectAction::insert(KAction *a, int index)
 {
-  m_count++;
-  KActionMenu::insert(a,index);
-  if (!m_init) {
+  mCount++;
+  KActionMenu::insert(a, index);
+  if(!mInit)
+  {
     setDefaultAction(a);
-    m_init = true;
+    mInit = true;
   }
-  connect(a,SIGNAL(activated()),SLOT(childActivated()));
+  connect(a, SIGNAL(activated()), SLOT(childActivated()));
 }
 
-void ToolSelectAction::remove( KAction* a )
+void ToolSelectAction::remove(KAction *a)
 {
-  m_count--;
+  mCount--;
   KActionMenu::remove(a);
-  a->disconnect(this,SIGNAL(activated()));
+  a->disconnect(this, SIGNAL(activated()));
 }
 
-int ToolSelectAction::plug( QWidget* widget, int index )
+int ToolSelectAction::plug(QWidget *widget, int index)
 {
-  if ( widget->inherits("KToolBar") ) {
-    KToolBar* bar = (KToolBar*)widget;
-    int i = ( m_count == 1 ) ? KAction::plug(widget,index):KActionMenu::plug(widget,index);
-    bar->setToggle(itemId(i),true);
+  if(widget->inherits("KToolBar"))
+  {
+    KToolBar *bar = (KToolBar*)widget;
+    int i = (mCount == 1 ) ? KAction::plug(widget,index) : KActionMenu::plug(widget, index);
+    bar->setToggle(itemId(i), true);
     return i;
   }
   return -1;
 }
 
-void ToolSelectAction::setDefaultAction( KAction* a )
+void ToolSelectAction::setDefaultAction(KAction *a)
 {
   KAction::setText(a->text());
   setShortcut(KShortcut(a->shortcut().keyCodeQt()));
@@ -80,38 +82,37 @@ void ToolSelectAction::setDefaultAction( KAction* a )
   setToolTip(a->toolTip());
   setEnabled(a->isEnabled());
   setIcon(a->icon());
-
-  m_def = a;
+  mDef = a;
 }
 
 void ToolSelectAction::slotActivated()
 {
   emit activated();
 
-  if(m_def)
+  if(mDef)
   {
-    m_actSelf = true;
-    if( m_def->inherits("KToggleAction"))
+    mActSelf = true;
+    if(mDef->inherits("KToggleAction"))
     {
-      KToggleAction *ta = (KToggleAction*)m_def;
+      KToggleAction *ta = (KToggleAction*)mDef;
       ta->setChecked(false);
       ta->activate();
       ta->setChecked(true);
     }
     else
-      m_def->activate();
-    m_actSelf = false;
+      mDef->activate();
+    mActSelf = false;
   }
 }
 
 void ToolSelectAction::childActivated()
 {
   setDefaultAction((KAction*)sender());
-  if(!m_actSelf)
+  if(!mActSelf)
     activate();
 }
 
-void ToolSelectAction::setToggleState( bool state )
+void ToolSelectAction::setToggleState(bool state)
 {
   int len = containerCount();
   for(int id = 0; id < len; ++id)

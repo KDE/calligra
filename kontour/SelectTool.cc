@@ -459,21 +459,21 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
   {
     double xoff = xpos - p1.x();
     double yoff = ypos - p1.y();
-    if(e->state() & Qt::ControlButton)
+/*    if(e->state () & Qt::ControlButton)
     {
-      if(fabs(xoff) > fabs(yoff))
-      {
+      if (fabs (xoff) > fabs (yoff)) {
         yoff = xoff;
-        if((mask & (Kontour::HPosLeft | Kontour::HPosBottom)) || (mask & (Kontour::HPosRight | Kontour::HPosTop)))
+        if ((mask & (Handle::HPos_Left | Handle::HPos_Bottom)) ||
+            (mask & (Handle::HPos_Right | Handle::HPos_Top)))
           yoff = -yoff;
       }
-      else
-      {
+      else {
         xoff = yoff;
-        if((mask & (Kontour::HPosLeft | Kontour::HPosBottom)) || (mask & (Kontour::HPosRight | Kontour::HPosTop)))
+        if ((mask & (Handle::HPos_Left | Handle::HPos_Bottom)) ||
+            (mask & (Handle::HPos_Right | Handle::HPos_Top)))
           xoff = -xoff;
       }
-    }
+    }*/
     if(mask == (Kontour::HPosLeft | Kontour::HPosBottom) || mask == (Kontour::HPosLeft | Kontour::HPosTop) || mask == (Kontour::HPosRight | Kontour::HPosBottom) || mask == (Kontour::HPosRight | Kontour::HPosTop))
       scale(page, xoff, yoff, true);
     else
@@ -482,6 +482,10 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
   else if(state == S_Shear)
   {
     shear(page, x - fp.x(), y - fp.y());
+  }
+  else if(state == S_Rotate)
+  {
+    rotate(page, fp.x(), fp.y(), x, y);
   }
 }
 
@@ -676,30 +680,44 @@ void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool pe
 
 void SelectTool::scale(GPage *page, double dx, double dy, bool type, bool permanent)
 {
+  page->updateSelection();
   KoRect origbox = page->boundingBoxForSelection();
   origbox = origbox.normalize();
   KoRect newbox(origbox);
-  double sx = 1;
-  double sy = 1;
+  double sx;
+  double sy;
 
   if(mask & Kontour::HPosRight)
+  {
     newbox.setRight(newbox.right() + dx);
+    kdDebug() << "1" << endl;
+  }
   if(mask & Kontour::HPosBottom)
+  {
     newbox.setBottom(newbox.bottom() + dy);
+    kdDebug() << "2" << endl;
+  }
   if(mask & Kontour::HPosLeft)
-    newbox.setLeft(newbox.left() + dx);
+  {
+    newbox.setLeft(newbox.left() - dx);
+    kdDebug() << "3" << endl;
+  }
   if(mask & Kontour::HPosTop)
-    newbox.setTop(newbox.top() + dy);
+  {
+    newbox.setTop(newbox.top() - dy);
+    kdDebug() << "4" << endl;
+  }
 
   kdDebug() << "**********" << endl;
-
-/*  kdDebug() << "DX = " << dx << endl;
+  if(!type)
+ {
+  kdDebug() << "DX = " << dx << endl;
   kdDebug() << "DY = " << dy << endl;
   kdDebug() << "old width = " << origbox.width() << endl;
   kdDebug() << "old height = " << origbox.height() << endl;
   kdDebug() << "new width = " << newbox.width() << endl;
-  kdDebug() << "new height = " << newbox.height() << endl;*/
-
+  kdDebug() << "new height = " << newbox.height() << endl;
+}
 /*  KoRect sbox = canvas->snapScaledBoxToGrid (newbox, mask);*/
 //  sx = sbox.width() / origbox.width();
 //  sy = sbox.height() / origbox.height();
@@ -720,18 +738,25 @@ void SelectTool::scale(GPage *page, double dx, double dy, bool type, bool perman
   }
   else
   {
-/*    double xoff = origbox.x();
+    QWMatrix m1, m2, m3;
+    double xoff = origbox.x();
     double yoff = origbox.y();
     double xback = xoff;
     double yback = yoff;
-    if(mask & Kontour::HPos_Left)
-      xback = r.left() + origbox.width() * (1.0 - sx);
-    if(mask & Kontour::HPos_Top)
-      yback = r.top() + origbox.height() * (1.0 - sy);
-    QWMatrix m1, m2, m3;
+    if(mask & Kontour::HPosLeft)
+      xback = origbox.left() + origbox.width() * (1.0 - sx);
+    if(mask & Kontour::HPosTop)
+      yback = origbox.top() + origbox.height() * (1.0 - sy);
+    if(mask & Kontour::HPosCenter)
+    {
+      xback = origbox.left() + origbox.width() * 0.5 * (1.0 - sx);
+      yback = origbox.top() + origbox.height() * 0.5 * (1.0 - sy);
+    }
+
     m1.translate(-xoff, -yoff);
     m2.scale(sx, sy);
     m3.translate(xback, yback);
+
     for(QPtrListIterator<GObject> it(page->getSelection()); it.current(); ++it)
     {
       (*it)->setWorkInProgress(true);
@@ -739,7 +764,7 @@ void SelectTool::scale(GPage *page, double dx, double dy, bool type, bool perman
       (*it)->ttransform(m1);
       (*it)->ttransform(m2);
       (*it)->ttransform(m3, true);
-    }*/
+    }
     page->updateSelection();
   }
 
@@ -826,18 +851,20 @@ void SelectTool::rotate(GPage *page, double xf, double yf, double xp, double yp,
   }
   else
   {
-/*    QWMatrix m1, m2, m3;
-    m1.translate (-rotCenter.x (), -rotCenter.y ());
-    m2.rotate (angle);
-    m3.translate (rotCenter.x (), rotCenter.y ());
+    QWMatrix m1, m2, m3;
+    m1.translate(-page->handle().rotCenter().x(), -page->handle().rotCenter().y());
+    m2.rotate(angle);
+    m3.translate(page->handle().rotCenter().x(), page->handle().rotCenter().y());
 
-    for (QPtrListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
-      (*it)->setWorkInProgress (true);
-      (*it)->initTmpMatrix ();
-      (*it)->ttransform (m1);
-      (*it)->ttransform (m2);
-      (*it)->ttransform (m3, true);
-    }*/
+    for(QPtrListIterator<GObject> it(page->getSelection()); it.current(); ++it)
+    {
+      (*it)->setWorkInProgress(true);
+      (*it)->initTmpMatrix();
+      (*it)->ttransform(m1);
+      (*it)->ttransform(m2);
+      (*it)->ttransform(m3, true);
+    }
+    page->updateSelection();
   }
   MeasurementUnit unit = toolController()->view()->unit();
   QString u = unitToString(unit);
@@ -846,7 +873,7 @@ void SelectTool::rotate(GPage *page, double xf, double yf, double xp, double yp,
 
   QString msgbuf = i18n("Rotate");
   msgbuf +=" [";
-  msgbuf += QString::number(angle, 'f', 3);
+  msgbuf += QString::number(angle, 'f', 0);
   msgbuf += QString(" - ");
   msgbuf += QString::number(xval, 'f', 3);
   msgbuf += QString(" ") + u + QString(", ");

@@ -150,7 +150,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mFlatBtn->setToggleButton(true);
   mFlatBtn->setFixedWidth(20);
   mFlatBtn->setFixedHeight(20);
-  mFlatBtn->setPixmap(SmallIcon("cap_flat", KontourFactory::global()));
+  mFlatBtn->setPixmap(SmallIcon("cap_butt", KontourFactory::global()));
   connect(mCapBox, SIGNAL(pressed(int)), this, SLOT(slotCapPressed(int)));
   QPushButton *mCRoundBtn = new QPushButton(mCapBox);
   mCRoundBtn->setToggleButton(true);
