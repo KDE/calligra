@@ -58,5 +58,5 @@ void AddDetailFooterCommand::execute()
 
 void AddDetailFooterCommand::unexecute()
 {
-    m_doc->canvas()->templ->removeSection(m_section);
+    m_doc->canvas()->templ->removeReportItem(m_section);
 }

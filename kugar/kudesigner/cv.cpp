@@ -104,7 +104,7 @@ void ReportCanvas::deleteItem(QCanvasItemList &l)
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
     {
         unselectItem((CanvasBox*)*it);
-        if ( ((MyCanvas*)(canvas()))->templ->removeSection((CanvasBand *)(*it)) )
+        if ( ((MyCanvas*)(canvas()))->templ->removeReportItem(*it) )
             break;
     }
 }
@@ -747,8 +747,8 @@ void ReportCanvas::keyPressEvent( QKeyEvent *e )
         switch ( e->key() ) {
             case Qt::Key_Delete:
                 qDebug("Deleting selection");
-		unselectItem(item);
-                ( (MyCanvas*) canvas() )->templ->removeSection( (CanvasBand *) item );
+                unselectItem(item);
+                ( (MyCanvas*) canvas() )->templ->removeReportItem( item );
                 clearRequest();
                 return;
 
@@ -757,8 +757,8 @@ void ReportCanvas::keyPressEvent( QKeyEvent *e )
             case Qt::Key_Plus:
                 {
                     int size = item->props["FontSize"]->value().toInt();
-                                
-                    if ( e->key() == Qt::Key_Minus ) 
+
+                    if ( e->key() == Qt::Key_Minus )
                         size--;
                     else 
                         size++;

@@ -24,6 +24,7 @@
 #include <qpainter.h>
 
 #include "canvband.h"
+#include "canvbox.h"
 #include "canvkutemplate.h"
 #include "mycanvas.h"
 #include "creportitem.h"
@@ -113,6 +114,8 @@ CanvasBand::~CanvasBand()
     for (QCanvasItemList::Iterator it = items.begin(); it != items.end(); ++it)
     {
 //  (*it)->hide();
+        ((MyCanvas *)canvas())->selected.remove((CanvasBox*)(*it));
+        (*it)->setSelected(false);
         delete (*it);
     }
     items.clear();

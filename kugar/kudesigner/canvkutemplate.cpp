@@ -270,12 +270,12 @@ QString CanvasKugarTemplate::getXml()
 }
 
 
-bool CanvasKugarTemplate::removeSection(CanvasBand *section)
+bool CanvasKugarTemplate::removeReportItem(QCanvasItem *item)
 {
-    if (section->rtti() > 2000)
+    if (item->rtti() > 2000)
     {
-        
-        section->hide();
+
+        item->hide();
 /*        qDebug("%d items of %p in canvas()", canvas()->allItems().remove( section ), section );
         qDebug("%d items of %p removed from list",canvas()->allItems().remove( section ), section);
         qDebug("%d items of %p in canvas()", canvas()->allItems().remove( section ), section );
@@ -284,14 +284,19 @@ bool CanvasKugarTemplate::removeSection(CanvasBand *section)
         int j = ((CanvasReportItem *)section)->section()->items.remove(section);
         qDebug("Deleting section %p (%d removed, %d removed)", section, i,j);
         qDebug("Items :%d, items:%d", canvas()->allItems().contains( section ),  ((CanvasReportItem *)section)->section()->items.contains( section));*/
-        ((CanvasReportItem *)section)->section()->items.remove(section);
-        delete section;
+        CanvasReportItem *ritem = dynamic_cast<CanvasReportItem*>(item);
+        if (ritem != 0)
+        {
+            ritem->section()->items.remove(ritem);
+            qWarning("good");
+        }
+        delete item;
 //        section = 0;
         canvas()->update();
-       
+
         return true;
     }
-    if (section->rtti() > 1800)
+    if (item->rtti() > 1800)
     {
     /*    if ((*it)->rtti() == KuDesignerRttiDetail)
         {
@@ -300,25 +305,39 @@ bool CanvasKugarTemplate::removeSection(CanvasBand *section)
                 ((MyCanvas*)(canvas()))->templ->detailsCount - 1)
                 return;
         }*/
+
+        CanvasBand *section = dynamic_cast<CanvasBand *>(item);
+
         CanvasDetailHeader *header = 0;
         CanvasDetailFooter *footer = 0;
+        qWarning("1");
         removeSection(section, &header, &footer);
+        qWarning("2");
         section->hide();
+        qWarning("3");
         delete section;
+        qWarning("4");
 
         if (header)
         {
+        qWarning("5");
             header->hide();
             delete header;
+        qWarning("6");
         }
         if (footer)
         {
+        qWarning("7");
             footer->hide();
             delete footer;
+        qWarning("8");
         }
+        qWarning("9");
         arrangeSections();
+        qWarning("10");
         canvas()->update();
-        
+        qWarning("11");
+
         return true;
     }
     

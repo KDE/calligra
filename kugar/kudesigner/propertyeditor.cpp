@@ -57,7 +57,7 @@ void PropertyEditor::populateProperties(std::map<QString, PropPtr > *v_props,Can
     props = v_props;
 
     table->setNumRows(0);
-    
+
     for (std::map<QString, PropPtr >::const_iterator it = props->begin(); it != props->end(); ++it)
     {
         int row = table->numRows() + 1;

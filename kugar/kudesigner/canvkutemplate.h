@@ -53,7 +53,7 @@ public:
 
     void removeSection(CanvasBand *section, CanvasDetailHeader **header,
         CanvasDetailFooter **footer);
-    bool removeSection(CanvasBand *section);
+    bool removeReportItem(QCanvasItem *item);
 
     CanvasReportHeader *reportHeader;
     CanvasReportFooter *reportFooter;
