@@ -4174,8 +4174,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
         pix.save( tmpFile.name(), "PNG" );
         QCursor c = cursor();
         setCursor( waitCursor );
-        m_activePage->insertPicture( tmpFile.name(), e->pos().x(), e->pos().y() +
-                            ( currPgNum() - 1) * m_activePage->getZoomPageRect().height() );
+        m_activePage->insertPicture( tmpFile.name(), e->pos().x(), e->pos().y()  );
         setCursor( c );
 
         e->accept();
@@ -4205,8 +4204,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                 if ( mimetype.contains( "image" ) ) {
                     QCursor c = cursor();
                     setCursor( waitCursor );
-                    m_activePage->insertPicture( filename, e->pos().x(), e->pos().y() +
-                                        ( currPgNum() - 1) * m_activePage->getZoomPageRect().height() );
+                    m_activePage->insertPicture( filename, e->pos().x(), e->pos().y()  );
                     setCursor( c );
                 } else if ( mimetype.contains( "text" ) ) {
                     QCursor c = cursor();
