@@ -130,9 +130,14 @@ class KEXICORE_EXPORT Part : public QObject
 		
 		inline Info *info() const { return m_info; }
 
+		/*! \return part's GUI Client, so you can 
+		 create part-wide actions using this client. */
 		inline GUIClient *guiClient() const { return m_guiClient; }
 
-		inline GUIClient *instanceGuiClient(int mode = 0) const { return m_instanceGuiClients[mode]; }
+		/*! \return part's GUI Client, so you can 
+		 create instance-wide actions using this client. */
+		inline GUIClient *instanceGuiClient(int mode = 0) const
+			{ return m_instanceGuiClients[mode]; }
 
 		/**
 		 * @returns the datasource object of this part
