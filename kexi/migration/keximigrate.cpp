@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -92,7 +93,6 @@ bool KexiMigrate::performImport()
 				kdDebug() << "There were no tables to import" << endl;
 				failure = true;
 			}
-			drv_disconnect();
 			//Only create a database if all tables were successfully read
 			if(failure)
 			{
@@ -101,8 +101,23 @@ bool KexiMigrate::performImport()
 			else
 			{
 				//Create new database as we have all required info ;)
-				return createDatabase(m_todbname);
+				if (createDatabase(m_todbname)) {
+					for(uint i = 0; i < v_tableSchemas.size(); i++)
+					{
+						
+						if(!copyData(tables[i], v_tableSchemas[i]))
+						{	
+							kdDebug() << "Failed to copy table " << v_tableSchemas[i] << endl;
+							m_kexiDB->debugError();
+							failure = true;
+						}
+					}
+					return true;
+				} else {
+					return false;
+				}
 			}
+			drv_disconnect();
 		}
 		else
 		{
@@ -115,6 +130,13 @@ else
 	kdDebug() << "Couldnt connect to database server" << endl;
 	return false;
 }
+}
+
+bool KexiMigrate::copyData(const QString& table, 
+                           KexiDB::TableSchema* dstTable) {
+	kdDebug() << "Copying table " << table << endl;
+	drv_copyTable(table, dstTable);
+	return true;
 }
 
 //==================================================================================
@@ -133,9 +155,12 @@ bool KexiMigrate::createDatabase(const QString& dbname)
 				//Right, were connected..create the tables
 				for(uint i = 0; i < v_tableSchemas.size(); i++)
 				{
+/*! @todo: check this earlier: on creating table list! */
+					if (m_kexiDB->driver()->isSystemObjectName( v_tableSchemas[i]->name() ))
+						continue;
 					if(!m_kexiDB->createTable(v_tableSchemas[i]))
 					{	
-						kdDebug() << "Failed to create a table" << endl;
+						kdDebug() << "Failed to create a table" << v_tableSchemas[i] << endl;
 						m_kexiDB->debugError();
 						failure = true;
 					}

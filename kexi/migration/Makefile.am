@@ -9,7 +9,11 @@ if compile_pgsql_plugin
 pgsql_dir=pqxx
 endif
 
-SUBDIRS = . $(pgsql_dir)
+if compile_mysql_plugin
+mysql_dir=mysql
+endif
+
+SUBDIRS = . $(pgsql_dir) $(mysql_dir)
 
 libkeximigrate_la_METASOURCES = AUTO
 

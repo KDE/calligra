@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,14 +23,15 @@
 
 #include <kwizard.h>
 
-class KexiConnSelectorWidget;
-class KexiProjectSelectorWidget;
 class QHBox;
 class QVBox;
 class KComboBox;
 class KListView;
 class KLineEdit;
 class QLabel;
+class KexiConnSelectorWidget;
+class KexiProjectSelectorWidget;
+class KexiDBTitlePage;
 
 namespace KexiMigration {
 
@@ -40,8 +42,9 @@ class KEXIMIGR_EXPORT importWizard : public KWizard
 {
 Q_OBJECT
 private:
-    QVBox *introPage, *srcTypePage, *srcConnPage, *srcdbPage, *dstTypePage, *dstPage;
-    QVBox *srcdbControls;
+    QVBox *introPage, *srcTypePage, *srcConnPage, *srcdbPage, *dstTypePage, 
+		*dstPage, *srcdbControls;
+	KexiDBTitlePage* dstTitlePage;
     QHBox *finishPage;
     KComboBox *srcTypeCombo, *dstTypeCombo;
     KexiConnSelectorWidget *srcConn, *dstConn;
@@ -54,9 +57,9 @@ private:
     void setupsrcconn();
     void setupsrcdb();
     void setupdstType();
+    void setupdstTitle();
     void setupdst();
     void setupfinish();
-    void createBlankPages();
     bool checkUserInput();
 private slots:
     void nextClicked(const QString &);

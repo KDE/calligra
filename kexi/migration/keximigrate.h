@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -63,29 +64,36 @@ namespace KexiMigration
 			virtual int versionMajor() const = 0;
 			virtual int versionMinor() const = 0;
 		protected:
-			
-					
-			//Driver specific function to return table names
-			virtual bool drv_tableNames(QStringList& tablenames) = 0;
-			
-			//Driver specific implementation to read a table schema
-			virtual bool drv_readTableSchema(const QString table) = 0;
-			
-			//Driver specific connection function
+
+			//! Driver specific connection function
 			virtual bool drv_connect() = 0;
 			virtual bool drv_disconnect() = 0;
-			
+
+			//! Driver specific function to return table names
+			virtual bool drv_tableNames(QStringList& tablenames) = 0;
+
+			//! Driver specific implementation to read a table schema
+			virtual bool drv_readTableSchema(const QString table) = 0;
+
+			//! Driver specific implementation to copy a table
+			virtual bool drv_copyTable(const QString& srcTable,
+			                           KexiDB::TableSchema* dstTable) = 0;
+
 			//Generic helper functions
 			KexiDB::Field::Type userType();
-			
+
 			//Protected data members
 			//Connextiondata for external (non kexi) db
 			KexiDB::ConnectionData* m_externalData;
-			
+
 			QString m_dbName;
 			QString m_todbname;
 			KexiDB::TableSchema* m_table;
 			KexiDB::Field* m_f;
+
+			//! Destination KexiDB database.
+			KexiDB::Connection* m_kexiDB;
+
 		private:		
 			//Get the list of tables
 			bool tableNames(QStringList& tablenames);
@@ -96,13 +104,12 @@ namespace KexiMigration
 			bool readTableSchema(const QString& tabl, int i);
 			
 			//Copies data from original table to new table if required
-			bool copyData(const QString table);
+			bool copyData(const QString& table, KexiDB::TableSchema* dstTable);
 			
 			//Create the final database
 			bool createDatabase(const QString& dbname);
 			 
 			//Private data members
-			KexiDB::Connection* m_kexiDB;
 			bool m_keepData;
 			
 			std::vector<KexiDB::TableSchema*>v_tableSchemas;
@@ -114,7 +121,7 @@ namespace KexiMigration
 #define KEXIMIGRATE_DRIVER_INFO( class_name, internal_name ) \
 	int class_name::versionMajor() const { return 0; } \
 	int class_name::versionMinor() const { return 0; } \
-	K_EXPORT_COMPONENT_FACTORY(keximigrate_ ## internal_name ## migrate, \
+	K_EXPORT_COMPONENT_FACTORY(keximigrate_ ## internal_name, \
 	  KGenericFactory<KexiMigration::class_name>( "keximigrate_" #internal_name ))
     
 #endif

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,6 +40,7 @@
 #include <KexiConnSelector.h>
 #include <KexiProjectSelector.h>
 #include <KexiOpenExistingFile.h>
+#include <KexiDBTitlePage.h>
 
 using namespace KexiMigration;
 
@@ -67,17 +69,39 @@ importWizard::importWizard(QWidget *parent, const char *name)
 
     Kexi::connset().addConnectionData(conndata);
 
+    conndata = new KexiDB::ConnectionData();
+    conndata->connName = "Local MySQL connection";
+    conndata->driverName = "mysql";
+    conndata->hostName = "localhost"; // -- default //"host.net";
+    Kexi::connset().addConnectionData(conndata);
+    
     //============================================================
 
     setMinimumSize(400, 300);
-    createBlankPages();
+    introPage = new QVBox(this);
     setupintro();
+    this->addPage(introPage, i18n("Introduction"));
+    srcTypePage = new QVBox(this);
     setupsrcType();
+    this->addPage(srcTypePage, i18n("Select Source Database Type"));
+    srcConnPage = new QVBox(this);
     setupsrcconn();
+    this->addPage(srcConnPage, i18n("Select Source Connection"));
+    srcdbPage = new QVBox(this);
     setupsrcdb();
+    this->addPage(srcdbPage, i18n("Select Source Database"));
+    dstTypePage = new QVBox(this);
     setupdstType();
+    this->addPage(dstTypePage, i18n("Select Destination Database Type"));
+    setupdstTitle();
+    this->addPage(dstTitlePage, i18n("Select Destination Project's Caption"));
+    dstPage = new QVBox(this);
     setupdst();
+    this->addPage(dstPage, i18n("Select Destination Database"));
+    finishPage = new QHBox(this);
     setupfinish();
+    this->addPage(finishPage, i18n("Finished"));
+
     connect(this, SIGNAL(selected(const QString &)), this, SLOT(nextClicked(const QString &)));
     connect(this, SIGNAL(helpClicked()), this, SLOT(helpClicked()));
 }
@@ -149,22 +173,37 @@ void importWizard::setupdstType()
 
 //===========================================================
 //
+void importWizard::setupdstTitle()
+{
+	dstTitlePage = new KexiDBTitlePage(this, "KexiDBTitlePage");
+	dstTitlePage->label->setText(i18n("Destination project's caption:"));
+	dstNewDBName = dstTitlePage->le_caption;
+}
+
+//===========================================================
+//
 void importWizard::setupdst()
 {
     QVBox *dstControls = new QVBox(dstPage);
 
     dstConn = new KexiConnSelectorWidget(Kexi::connset(), dstControls, "DstConnSelector");
+	connect(dstConn->m_fileDlg,SIGNAL(accepted()),this,SLOT(next()));
+	dstConn->showAdvancedConn();
+	connect(dstConn,SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
+		this,SLOT(next()));
 
     dstConn->hideHelpers();
-    //dstConn->m_fileDlg->setMode( KexiStartupFileDialog::SavingFileBasedDB );
+		dstConn->showSimpleConn();
+	//anyway, db files will be _saved_
+		dstConn->m_fileDlg->setMode( KexiStartupFileDialog::SavingFileBasedDB );
     dstConn->m_file->btn_advanced->hide();
     dstConn->m_file->label->hide();
     dstConn->m_file->lbl->hide();
 //    dstConn->m_file->spacer7->hide();
     
 
-    dstNewDBName = new KLineEdit(dstControls);
-    dstNewDBName->setText(i18n("Enter new database name here"));
+//js    dstNewDBName = new KLineEdit(dstControls);
+//    dstNewDBName->setText(i18n("Enter new database name here"));
 }
 
 //===========================================================
@@ -195,12 +234,13 @@ bool importWizard::checkUserInput()
 
     problem = false;
     
-    if (srcTypeCombo->currentText() != "PostgreSQL")
+    if ((srcTypeCombo->currentText() != "PostgreSQL") & srcTypeCombo->currentText() != "MySQL")
     {
         problem = true;
         finishtxt = i18n("Source type was not PostgreSQL Database.");
     }
-    if ((dstNewDBName->text() == "Enter new database name here" || dstNewDBName->text().isEmpty()))
+//    if ((dstNewDBName->text() == "Enter new database name here" || dstNewDBName->text().isEmpty()))
+    if (dstNewDBName->text().isEmpty())
     {
         problem = true;
         finishtxt = finishtxt + i18n("\nNo new database name was entered.");
@@ -208,8 +248,8 @@ bool importWizard::checkUserInput()
 
     if (problem)
     {
-        finishtxt = i18n("The following problems were found with the data you entered:\n\n") + finishtxt;
-        finishtxt = finishtxt + i18n("\n\nPlease go back and correct these errors.");
+        finishtxt = i18n("The following problems were found with the data you entered:") + "\n\n"+ finishtxt;
+        finishtxt = finishtxt + "\n\n" + i18n("Please go back and correct these errors.");
     }
     else
     {
@@ -234,7 +274,7 @@ void importWizard::accept()
     KexiDB::DriverManager manager;
     MigrateManager mmanager;
     
-    kdDebug() << "Creating destiniation driver..." << endl;
+    kdDebug() << "Creating destination driver..." << endl;
     //get a driver to the destination database
     KexiDB::Driver *driver = manager.driver(dstTypeCombo->currentText());
     
@@ -246,10 +286,10 @@ void importWizard::accept()
         manager.debugError();
     }
     
-    if (!dstConn->selectedConnectionData() == 0)
+    if (dstConn->selectedConnectionData())
     {
         //server-based project
-      	kdDebug() << "Server destiniation..." << endl;
+      	kdDebug() << "Server destination..." << endl;
         cdata = dstConn->selectedConnectionData();
         dbname = dstNewDBName->text();
         
@@ -313,6 +353,9 @@ void importWizard::nextClicked(const QString & p)
         {
             srcConn->showAdvancedConn();
         }
+        else if (srcTypeCombo->currentText() == "MySQL") {
+            srcConn->showAdvancedConn();
+        }
 /*        else
         {
             KMessageBox::information(this, "Sorry, only data migration form postgresql is possible at the moment.  Please go back and change the option, or press cancel to quit", "Sorry, featuree not available");
@@ -322,7 +365,7 @@ void importWizard::nextClicked(const QString & p)
     }
     else if (currentPage() == srcdbPage)
     {
-        if (srcTypeCombo->currentText() == "PostgreSQL")
+        if ((srcTypeCombo->currentText() == "PostgreSQL") || (srcTypeCombo->currentText() == "MySQL"))
         {
             if (!srcdbname)
             {
@@ -337,10 +380,13 @@ void importWizard::nextClicked(const QString & p)
     else if (currentPage() == dstTypePage)
     {
     }
+    else if (currentPage() == dstTitlePage) {
+         dstNewDBName->setText( srcdbname->selectedProjectData()->databaseName() );
+    }
     else if (currentPage() == dstPage)
     {
         dstPage->hide();
-        if (dstTypeCombo->currentText() == "PostgreSQL")
+        if (dstTypeCombo->currentText() == "PostgreSQL" || dstTypeCombo->currentText() == "MySQL")
         {
             dstConn->showAdvancedConn();
         }
@@ -364,25 +410,6 @@ void importWizard::nextClicked(const QString & p)
         }
     }
 }
-
-void importWizard::createBlankPages()
-{
-    introPage = new QVBox(this);
-    srcTypePage = new QVBox(this);
-    srcConnPage = new QVBox(this);
-    srcdbPage = new QVBox(this);
-    dstTypePage = new QVBox(this);
-    dstPage = new QVBox(this);
-    finishPage = new QHBox(this);
-    this->addPage(introPage, i18n("Introduction"));
-    this->addPage(srcTypePage, i18n("Source Database Type"));
-    this->addPage(srcConnPage, i18n("Source Connection"));
-    this->addPage(srcdbPage, i18n("Source Database"));
-    this->addPage(dstTypePage, i18n("Destination Database Type"));
-    this->addPage(dstPage, i18n("Destination Database"));
-    this->addPage(finishPage, i18n("Finished"));
-}
-
 void importWizard::helpClicked()
 {
     if (currentPage() == introPage)
