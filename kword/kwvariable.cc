@@ -448,7 +448,7 @@ void KWFootNoteVariable::resize()
     if ( m_deleted )
         return;
     KoTextFormat *fmt = format();
-    QFont font( fmt->screenFont( 0, false ) ); // font at 100%
+    QFont font( fmt->refFont() ); // LU font
     if ( fmt->vAlign() == KoTextFormat::AlignNormal ) // if it's still normal...
     {
         int pointSize = ( ( font.pointSize() * 2 ) / 3 ); // ...force superscript
