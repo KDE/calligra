@@ -636,8 +636,8 @@ void KIllustratorView::popupForRulers()
       kdDebug() << "create"<<endl;
       m_showGrid->plug(rulerMenu);
       m_showHelplines->plug(rulerMenu);
-      m_setupGrid->plug(rulerMenu);
-      m_setupHelplines->plug(rulerMenu);
+      //m_setupGrid->plug(rulerMenu);
+      //m_setupHelplines->plug(rulerMenu);
       m_alignToGrid->plug(rulerMenu);
       m_alignToHelplines->plug(rulerMenu);
       kdDebug() << "added"<<endl;
