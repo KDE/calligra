@@ -609,7 +609,8 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
         KSpreadCell *cell = table->cellAt( markerColumn(), markerRow() );
         int w = cell->width( markerColumn(), this );
         int h = cell->height( markerRow(), this );
-
+        if(cell->extraXCells())
+                w= cell->extraWidth();
         corner = QRect( x + w - 2, y + h -1, 5, 5 );
     }
     else // if we have a rectangular selection ( not complete rows or columns )
@@ -788,6 +789,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
             KSpreadCell *cell = table->cellAt( markerColumn(), markerRow() );
             w = cell->width( markerColumn() );
             h = cell->height( markerRow() );
+            if(cell->extraXCells())
+                w= cell->extraWidth();
         }
         else // if we have a rectangular selection ( not complete rows or columns )
         {

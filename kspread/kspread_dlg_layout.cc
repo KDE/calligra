@@ -565,7 +565,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     grid->addWidget(postfix,2,1);
     precision = new KIntNumInput( dlg->precision, box, 10 );
     precision->setSpecialValueText(i18n("variable"));
-    precision->setRange(-1,8,1,false);
+    precision->setRange(-1,10,1,false);
 
     grid->addWidget(precision,1,1);
 
