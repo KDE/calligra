@@ -85,9 +85,9 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     choose->insertStringList(list);
     choose->setCurrentItem(0);
 
-    tmpQLabel = new QLabel( tmpQButtonGroup, "Label_3" );
-    tmpQLabel->setText(i18n("Minimum : " ));
-    grid1->addWidget(tmpQLabel,2,0);
+    edit1 = new QLabel( tmpQButtonGroup, "Label_3" );
+    edit1->setText(i18n("Minimum : " ));
+    grid1->addWidget(edit1,2,0);
 
 
     val_min=new QLineEdit(tmpQButtonGroup);
@@ -95,9 +95,9 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     grid1->addWidget(val_min,2,1);
     val_min->setValidator( new KFloatValidator( val_min ) );
 
-    tmpQLabel = new QLabel( tmpQButtonGroup, "Label_4" );
-    tmpQLabel->setText(i18n("Maximum : " ));
-    grid1->addWidget(tmpQLabel,3,0);
+    edit2 = new QLabel( tmpQButtonGroup, "Label_4" );
+    edit2->setText(i18n("Maximum : " ));
+    grid1->addWidget(edit2,3,0);
 
     val_max=new QLineEdit(tmpQButtonGroup);
     val_max->resize( val_max->sizeHint() );
@@ -138,7 +138,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
 
     tmpQLabel = new QLabel( tmpQButtonGroup, "Label_7" );
     tmpQLabel->setText(i18n("Message:" ));
-    grid1->addWidget(tmpQLabel,2,0);
+    grid1->addWidget(tmpQLabel,1,0);
 
      message =new QMultiLineEdit( tmpQButtonGroup);
      grid1->addMultiCellWidget(message,2,3,1,1);
@@ -155,19 +155,20 @@ void KSpreadDlgValidity::changeIndexType(int _index)
 switch(_index)
         {
         case 0:
+        case 2:
                 val_max->setEnabled(false);
                 val_min->setEnabled(false);
+                edit1->setEnabled(false);
+                edit2->setEnabled(false);
                 choose->setEnabled(false);
                 break;
         case 1:
                 val_max->setEnabled(true);
                 val_min->setEnabled(true);
+                edit1->setEnabled(true);
+                edit2->setEnabled(true);
+                changeIndexCond(choose->currentItem());
                 choose->setEnabled(true);
-                break;
-        case 2:
-                val_max->setEnabled(false);
-                val_min->setEnabled(true);
-                choose->setEnabled(false);
                 break;
         }
 }
@@ -177,25 +178,22 @@ void KSpreadDlgValidity::changeIndexCond(int _index)
 switch(_index)
         {
         case 0:
-                val_max->setEnabled(false);
-                break;
         case 1:
-                val_max->setEnabled(false);
-                break;
         case 2:
-                val_max->setEnabled(false);
-                break;
         case 3:
-                val_max->setEnabled(false);
-                break;
         case 4:
                 val_max->setEnabled(false);
+                edit1->setText(i18n("Number :"));
+                edit2->setText("");
+                edit2->setEnabled(false);
                 break;
         case 5:
-                val_max->setEnabled(true);
-                break;
         case 6:
                 val_max->setEnabled(true);
+                edit2->setEnabled(true);
+                edit1->setEnabled(true);
+                edit1->setText(i18n("Minimum : " ));
+                edit2->setText(i18n("Maximum : " ));
                 break;
         }
 }

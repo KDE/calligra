@@ -23,9 +23,7 @@
 
 #include <qcombobox.h>
 #include <qlineedit.h>
-#include <kcolorbtn.h>
 #include <qpushbutton.h>
-#include <qfont.h>
 #include <qlabel.h>
 #include "kspread_cell.h"
 #include <kdialogbase.h>
@@ -51,6 +49,8 @@ protected:
   QRect  marker;
   QLineEdit *val_max;
   QLineEdit *val_min;
+  QLabel *edit1;
+  QLabel *edit2;
   QComboBox *choose;
   QComboBox *chooseAction;
   QComboBox *chooseType;
