@@ -128,11 +128,17 @@
       </Parameter>
       <Help>
         <Text>The CONVERT() function returns a conversion from one measurement system to another.</Text>
-        <Text>Supported mass units: g (gram), sg (pieces), lbm (pound), u (atomic mass), ozm (ounce), stone, ton, grain, pweight (pennyweight), hweight (hundredweight), bron (gross registered ton).</Text>
-        <Text>Supported distance units: m (meter), in (inch), ft (feet).</Text>
+        <Text>Supported mass units: g (gram), sg (pieces), lbm (pount), u (atomic mass), ozm (ounce), stone, ton, grain, pweight (pennyweight), hweight (hundredweight), bron (gross registered ton).</Text>
+        <Text>Supported distance units: m (meter), in (inch), ft (feet), mi (mile), Nmi (nautical mile), ang (Angstrom), parse, lightyear.</Text>
         <Text>Supported pressure units: Pa (Pascal), atm (atmosphere), mmHg (mm of Mercury), psi, Torr.</Text>
+        <Text>Supported force units: N (Newton), dyn, pond.</Text>
         <Text>Supported energy units: J (Joule), e (erg), c (Thermodynamic calorie), cal (IT calorie), eV (electronvolt), HPh (Horsepower-hour), Wh (Watt-hour), flb (foot-pound), BTU.</Text>
+        <Text>Supported power unit: W (Watt), HP (horsepower), PS (Pferdestärke).</Text>
+        <Text>Supported magnetism units: T (Tesla), ga (Gauss).</Text>
         <Text>Supported temperature units: C (Celcius), F (Fahrenheit), K (Kelvin).</Text>
+        <Text>Supported volume units: l (liter), tsp (teaspoon), tbs (ablespoon), oz (ounce liquid), cup, pt (pint), qt (quart), gal (gallone), barrel, m3 (cubic meter), mi3 (cubic mile), Nmi3 (cubic Nautical mile), in3 (cubic inch), ft3 (cubic foot), yd3 (cubic yard).</Text>
+        <Text>Supported area units: m2 (square meter), mi2 (square mile), Nmi2 (square Nautical mile), in2 (square inch), ft2 (square foot), yd2 (square yard), acre, ha (hectare).</Text>
+        <Text>Supported speed units: m/s (meters per second), m/h (meters per hour), mph (miles per hour), kn (knot).</Text>
         <Syntax>CONVERT(Number; From Unit; To Unit)</Syntax>
         <Example>CONVERT(32;"C";"F") equals 89.6</Example>
       </Help>
