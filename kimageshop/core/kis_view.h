@@ -96,6 +96,8 @@ class KisView : public KoView
   void paste();
 
   // dialog action slots
+  void zoom_in();
+  void zoom_out();
   void dialog_layer();
   void dialog_color();
   void dialog_brush();

@@ -761,6 +761,14 @@ void KisView::paste()
  * dialog action slots
  */
 
+void KisView::zoom_in()
+{
+}
+
+void KisView::zoom_out()
+{
+}
+
 void KisView::dialog_layer()
 {
   /*

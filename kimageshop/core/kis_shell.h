@@ -23,29 +23,39 @@
 
 #include <koMainWindow.h>
 
+class KStatusBar;
+
 class KisShell : public KoMainWindow
 {
-    Q_OBJECT
-public:
-    KisShell( const char* name = 0 );
-    ~KisShell();
+  Q_OBJECT
 
-    /**
-     * Change these according to your native mimetype.
-     */
-    QString nativeFormatPattern() const { return "*.kis"; }
-    QString nativeFormatName() const { return "KImageShop"; }
+public:
+
+  KisShell( const char* name = 0 );
+  ~KisShell();
+
+  /**
+   * Change these according to your native mimetype.
+   */
+  QString nativeFormatPattern() const { return "*.kis"; }
+  QString nativeFormatName() const { return "KImageShop"; }
 
 public slots:
-   virtual void slotFileNew();
-   virtual void slotFileOpen();
-   virtual void slotFileSave();
-   virtual void slotFileSaveAs();
-   virtual void slotFilePrint();
-   virtual void slotFileClose();
+
+  virtual void slotFileNew();
+  virtual void slotFileOpen();
+  virtual void slotFileSave();
+  virtual void slotFileSaveAs();
+  virtual void slotFilePrint();
+  virtual void slotFileClose();
 
 protected:
-    virtual KoDocument* createDoc();
+
+  virtual KoDocument* createDoc();
+
+private:
+
+  KStatusBar *m_pStatusBar;
 };
 
-#endif
+#endif // __kimageshop_shell_h__ 

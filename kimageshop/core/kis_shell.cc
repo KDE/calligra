@@ -18,18 +18,18 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <qmessagebox.h>
-
-#include <kstddirs.h>
-#include <kimgio.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kstddirs.h>
+#include <kstatusbar.h>
 #include <kfiledialog.h>
+#include <kmessagebox.h>
 
 #include <koFilterManager.h>
 
-#include "kis_shell.h"
 #include "kis_doc.h"
+#include "kis_core.h"
+#include "kis_shell.h"
 #include "kis_factory.h"
 #include "kis_pluginserver.h"
 
@@ -37,6 +37,12 @@ KisShell::KisShell( const char* name )
     : KoMainWindow( KisFactory::global(), name )
 {
   resize(800, 600);
+
+  m_pStatusBar = new KStatusBar( this, "shell_statusbar" );
+
+  m_pStatusBar->insertItem( i18n( "a little test for the statusbar" ), 1 );
+  
+  setStatusBar( m_pStatusBar );
 }
 
 KisShell::~KisShell()
@@ -70,9 +76,7 @@ void KisShell::slotFileNew()
 
 void KisShell::slotFileOpen()
 {
-  QString filter =  KImageIO::pattern( KImageIO::Reading ) + "*.kis|KImageShop picture\n";
-
-  QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
+  QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), KisCore::readFilters() );
 
   if ( file.isNull() )
     return;
@@ -83,7 +87,7 @@ void KisShell::slotFileOpen()
     {
       QString tmp;
       tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
-      QMessageBox::critical( 0L, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+      KMessageBox::error( 0L, tmp, i18n( "IO Error" ) );
     }
 }
 
@@ -95,9 +99,7 @@ void KisShell::slotFileSave()
 
 void KisShell::slotFileSaveAs()
 {
-  QString filter =  KImageIO::pattern( KImageIO::Reading ) + "*.kis|KImageShop picture\n";
-
-  QString file = KFileDialog::getSaveFileName( getenv( "HOME" ), filter );
+  QString file = KFileDialog::getSaveFileName( getenv( "HOME" ), KisCore::writeFilters() );
 
   if ( file.isNull() )
     return;
@@ -108,7 +110,7 @@ void KisShell::slotFileSaveAs()
     {
       QString tmp;
       tmp.sprintf( i18n( "Could not save\n%s" ), file.data() );
-      QMessageBox::critical( 0L, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+      KMessageBox::error( 0L, tmp, i18n( "IO Error" ) );
     }
 }
 
