@@ -94,12 +94,12 @@ void KChartView::edit()
     if (dat->rows() == 0) {
       cerr << "Initialize with some data!!!\n";
       dat->expand(4,4);
-      for (row = 0;row < 2;row++)
-	for (col = 0;col < 2;col++) {
+      for (row = 0;row < 4;row++)
+	for (col = 0;col < 4;col++) {
 	  //	  _widget->fillCell(row,col,row+col);
 	  KChartValue t; 
 	  t.exists= true;
-	  t.value.setValue(row+col);
+	  t.value.setValue((double)row+col);
 	  cerr << "Set cell for " << row << "," << col << "\n";
 	  dat->setCell(row,col,t);
 	}

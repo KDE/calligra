@@ -24,6 +24,11 @@ public:
   void drawBackgroundImage();
   void prepareColors();
 
+  // functions to resize the chart
+  // implementation in kchartEngine_ComputeSize.cc
+  void computeSize();
+  void computeMinMaxValues();
+
   // grid plotting functions
   // implementation in kchartEngine_Grid.cc
   void drawGridAndLabels(bool do_ylbl_fractions);
@@ -32,6 +37,7 @@ public:
   void drawXTicks();
   void drawVolumeGrids();
   void draw3DAnnotation();
+  void draw3DShelf();
   
   // data plotting functions
   // implementation in kchartEngine_DataDraw.cc
@@ -76,6 +82,7 @@ private:
   int hlf_barwdth;		// half bar widths
   int hlf_hlccapwdth;		// half cap widths for HLC_I_CAP and DIAMOND
   int annote_len, annote_hgt;
+  bool do_ylbl_fractions;
   
   /* args */
   int			setno;				// affects PX() and PY()

@@ -49,6 +49,14 @@ int kchartEngine::doLabels() {
 
 
 void kchartEngine::drawBorder() {
+    if( params->border ) {
+      p->setPen( LineColor );
+      p->drawLine( PX(0), PY(lowest), PX(num_points-1+(params->do_bar()?2:0)), PY(lowest) );
+
+      setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1;
+      p->drawLine( PX(0), PY(highest), PX(num_points-1+(params->do_bar()?2:0)),  PY(highest) );
+      setno = 0;
+    }
   if( params->border ) {
     int	x1, y1, x2, y2;
     
@@ -71,6 +79,7 @@ void kchartEngine::drawBorder() {
     }
     setno = 0;
   }
+
 }
 
 void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
@@ -416,4 +425,18 @@ void kchartEngine::draw3DAnnotation() {
   p->drawLine( PX(params->annotation->point+(params->do_bar()?1:0)), PY(lowest),
 	       PX(params->annotation->point+(params->do_bar()?1:0)), PY(highest)-2 );
   setno = 0;
+}
+
+void kchartEngine::draw3DShelf() {
+      int	x2 = PX( num_points-1+(params->do_bar()?2:0) ),
+	y2 = PY( 0 );
+      
+      p->setPen( LineColor );
+      p->drawLine( PX(0), PY(0), x2, y2 );		// front line
+      setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets:
+	1;				// backmost
+      // depth for 3Ds
+      p->setPen( LineColor );
+      p->drawLine( x2, y2, PX(num_points-1+(params->do_bar()?2:0)), PY(0) );
+      setno = 0;												// set back to foremost
 }

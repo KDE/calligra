@@ -28,6 +28,7 @@ libkchart_la_SOURCES = kchart_shell.cc kchart_part.cc \
 	kchartEngine2.cc \
 	kchartEngine_DataDraw.cc \
 	kchartEngine_Grids.cc \
+	kchartEngine_ComputeSize.cc \
 	kchartWizardLabelsLegendPage.cc \
 	kchartWizardSelectChartSubTypePage.cc \
         kchartWizardSelectChartTypePage.cc \

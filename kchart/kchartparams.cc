@@ -45,9 +45,10 @@ KChartParameters::KChartParameters() :
 	label_line = false;
 	xlabel_spacing = 5;
 	ylabel_density = 80;
-	requested_ymin = -MAXFLOAT;
-	requested_ymax = -MAXFLOAT;
-	requested_yinterval = -MAXFLOAT;
+	requested_ymin = MAXDOUBLE;
+	//	requested_ymax = -MAXDOUBLE;
+	requested_ymax = -MAXDOUBLE;
+	requested_yinterval = -MAXDOUBLE;
 	shelf = true;
 	grid = true;
 	xaxis = true;
