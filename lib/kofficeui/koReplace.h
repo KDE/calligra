@@ -54,7 +54,6 @@ class QRect;
  * <pre>
  * </pre>
  */
-
 class KoReplaceDialog:
     public KoFindDialog
 {
@@ -182,7 +181,6 @@ private:
  *
  * </pre>
  */
-
 class KoReplace :
     public KDialogBase
 {
@@ -193,6 +191,25 @@ public:
     /** Will create a prompt dialog and use it as needed. */
     KoReplace(const QString &pattern, const QString &replacement, long options, QWidget *parent = 0);
     ~KoReplace();
+
+    /**
+     * Return the current options.
+     *
+     * Warning: this is usually the same value as the one passed to the constructor,
+     * but options might change _during_ the replace operation:
+     * e.g. the "All" button resets the PromptOnReplace flag.
+     *
+     */
+    long options() const { return m_options; }
+
+    /**
+     * Return the number of replacements made (i.e. the number of times
+     * the @ref replace signal was emitted).
+     * Can be used in a dialog box to tell the user how many replacements were made.
+     * You might want to combine this with a "want to restart search?" question,
+     * so the actual dialog box isn't provided by this class.
+     */
+    int numReplacements() const { return m_replacements; }
 
     /**
      * Walk the text fragment (e.g. kwrite line, kspread cell) looking for matches.
@@ -206,9 +223,14 @@ public:
     bool replace(QString &text, const QRect &expose);
 
     /**
-     * @param text  The text fragment to modify
-     * @param index The starting index where there is word found.
-     * @param matchedlength The length of word found
+     * Virtual method, which allows applications to add extra checks for
+     * validating a candidate match. It's only necessary to reimplement this
+     * if the find dialog extension has been used to provide additional
+     * criterias.
+     *
+     * @param text  The current text fragment
+     * @param index The starting index where the candidate match was found
+     * @param matchedlength The length of the candidate match
      */
     virtual bool validateMatch( const QString &/*text*/, int /*index*/, int /*matchedlength*/ ) { return true; }
 
@@ -250,6 +272,12 @@ signals:
     /**
      * Connect to this slot to implement updating of replaced text during the replace
      * operation.
+     *
+     * Extra care must be taken to properly implement the "no prompt-on-replace" case.
+     * For instance @ref highlight isn't emitted in that case (some code might rely on it),
+     * and for performance reasons one should repaint after replace() ONLY if
+     * prompt-on-replace was selected.
+     *
      * @param text The text, in which the replacement has already been done.
      * @param replacementIndex Starting index of the matched substring
      * @param replacedLength Length of the replacement string

@@ -262,7 +262,7 @@ class KoFind :
 
 public:
 
-    // Will create a prompt dialog and use it as needed.
+    /** Will create a prompt dialog and use it as needed. */
     KoFind(const QString &pattern, long options, QWidget *parent = 0);
     ~KoFind();
 
@@ -277,6 +277,26 @@ public:
      */
     bool find(const QString &text, const QRect &expose);
 
+    /**
+     * Return the current options.
+     *
+     * Warning: this is usually the same value as the one passed to the constructor,
+     * but options might change _during_ the replace operation:
+     * e.g. the "All" button resets the PromptOnReplace flag.
+     *
+     */
+    long options() const { return m_options; }
+
+    /**
+     * Virtual method, which allows applications to add extra checks for
+     * validating a candidate match. It's only necessary to reimplement this
+     * if the find dialog extension has been used to provide additional
+     * criterias.
+     *
+     * @param text  The current text fragment
+     * @param index The starting index where the candidate match was found
+     * @param matchedlength The length of the candidate match
+     */
     virtual bool validateMatch( const QString &/*text*/, int /*index*/, int /*matchedlength*/ ) { return true; }
 
     /**
@@ -303,8 +323,10 @@ public:
 
 signals:
 
-    // Connect to this signal to implement highlighting of found text during the find
-    // operation.
+    /**
+     * Connect to this signal to implement highlighting of found text during the find
+     * operation.
+     */
     void highlight(const QString &text, int matchingIndex, int matchedLength, const QRect &expose);
 
 private:

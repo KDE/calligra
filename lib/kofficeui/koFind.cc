@@ -30,8 +30,8 @@
 #include <kdebug.h>
 #include <kcombobox.h>
 #include <klocale.h>
-#include <koFind.h>
 #include <kmessagebox.h>
+#include "koFind.h"
 
 KoFindDialog::KoFindDialog(QWidget *parent, const char *name, long options, const QStringList &findStrings, bool hasSelection) :
     KDialogBase(parent, name, true, i18n("Find Text"), Ok | Cancel, Ok)
@@ -605,3 +605,4 @@ void KoFind::slotUser1()
 }
 
 #include "koFind.moc"
+

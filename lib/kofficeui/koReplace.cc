@@ -177,7 +177,7 @@ bool KoReplace::replace(QString &text, const QRect &expose)
                     kapp->enter_loop();
                 }
                 else
-                    m_index = m_index+m_matchedLength;
+                    m_index += m_matchedLength;
             }
             else
             {
@@ -237,16 +237,7 @@ int KoReplace::replace(QString &text, const QString &replacement, int index, int
 // All.
 void KoReplace::slotUser1()
 {
-    int replacedLength = KoReplace::replace(m_text, m_replacement, m_index, m_matchedLength);
-
-    // Tell the world about the replacement we made, in case someone wants to
-    // highlight it.
-    emit replace(m_text, m_index, replacedLength, m_matchedLength, m_expose);
-    m_replacements++;
-    if (m_options & KoReplaceDialog::FindBackwards)
-        m_index--;
-    else
-        m_index += replacedLength;
+    doReplace();
     m_options &= ~KoReplaceDialog::PromptOnReplace;
     kapp->exit_loop();
 }
@@ -268,13 +259,11 @@ void KoReplace::slotUser3()
 
 void KoReplace::doReplace()
 {
-    int replacedLength;
-
-    replacedLength = KoReplace::replace(m_text, m_replacement, m_index, m_matchedLength);
+    int replacedLength = KoReplace::replace(m_text, m_replacement, m_index, m_matchedLength);
 
     // Tell the world about the replacement we made, in case someone wants to
     // highlight it.
-    emit replace(m_text, m_index, replacedLength,m_matchedLength, m_expose);
+    emit replace(m_text, m_index, replacedLength, m_matchedLength, m_expose);
     m_replacements++;
     if (m_options & KoReplaceDialog::FindBackwards)
         m_index--;
