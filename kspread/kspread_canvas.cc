@@ -5014,7 +5014,10 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 
   if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
   {
-    xPos -= table->columnFormat( x + 1 )->dblWidth();
+    if ( x > KS_colMax )
+      x = KS_colMax;
+
+    xPos -= table->columnFormat( x )->dblWidth();
 
     //Loop through the columns, until we are out of range
     while ( xPos <= m_pCanvas->doc()->unzoomItX( _ev->rect().right() ) )
