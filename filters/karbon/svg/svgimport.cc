@@ -91,12 +91,13 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 {
 	VFill fill;
 	VStroke stroke;
+	QColor c;
 	GraphicsContext *gc = new GraphicsContext;
 	// set as default
 	if( m_gc.current() )
 		*gc = *( m_gc.current() );
 
-	QColor c;
+	// try normal PA
 	if( !e.attribute( "fill" ).isEmpty() )
 	{
 		c.setNamedColor( e.attribute( "fill" ) );
@@ -104,6 +105,24 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		fill.setColor( color );
 		gc->fill = fill;
 	}
+
+	// try style attr
+	QString style = e.attribute( "style" ).simplifyWhiteSpace();
+	QStringList substyles = QStringList::split( ';', style );
+    for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
+	{
+		QStringList substyle = QStringList::split( ':', (*it) );
+		QString command	= substyle[0].stripWhiteSpace();
+		QString params	= substyle[1].stripWhiteSpace();
+		if( command == "fill" )
+		{
+			c.setNamedColor( params );
+			VColor color( c );
+			fill.setColor( color );
+			gc->fill = fill;
+		}
+	}
+
 	obj->setFill( gc->fill );
 	obj->setStroke( gc->stroke );
 	m_gc.push( gc );
