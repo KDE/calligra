@@ -49,7 +49,14 @@ class KexiListBoxItem : public QListBoxPixmap {
 	protected:
 		virtual void paint( QPainter * painter ) {
 			QPen p = painter->pen();
-			p.setColor( isSelected() ? qApp->palette().disabled().highlightedText() : qApp->palette().disabled().text() );
+			if (!m_enabled && !isSelected())
+					p.setColor( qApp->palette().disabled().text() );
+//				if (listBox()->currentItem()==this)
+//					;//p.setColor( isSelected() && listBox()->hasFocus() ? qApp->palette().disabled().highlightedText() : qApp->palette().disabled().text() );
+//				else
+//kdDebug() << isSelected() << " " <<  listBox()->hasFocus() << endl;
+//					p.setColor( isSelected() && listBox()->hasFocus() ? qApp->palette().disabled().highlightedText() : qApp->palette().disabled().text() );
+//			}
 			painter->setPen(p);
 			QListBoxPixmap::paint(painter);
 		}

@@ -39,34 +39,36 @@ KexiCreateProjectPageFile::KexiCreateProjectPageFile(KexiCreateProject *parent, 
  : KexiCreateProjectPage(parent, wpic, name)
 {
 	//cool picture ;)
-	QLabel *lPic = new QLabel("", this);
+/*	QLabel *lPic = new QLabel("", this);
 	lPic->setPixmap(*wpic);
 	lPic->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 	lPic->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum));
-
+*/
 	//widgets
-	QButtonGroup *buttonBase = new QButtonGroup(this);
+	QButtonGroup *buttonBase = new QButtonGroup(m_contents);
 	buttonBase->hide();
 //	QCheckBox *bpers = new QCheckBox(i18n(), this);
-	m_btnEmbedd = new QRadioButton(i18n("Embed database into projectfile\nWARNING: You will lose transactional and\nintegrity protection."), this);
+	m_btnEmbedd = new QRadioButton(
+		i18n("Embed database into projectfile\nWARNING: You will lose transactional and\nintegrity protection.")
+		, m_contents);
 	m_btnEmbedd->toggle();
-	m_btnExtern = new QRadioButton(i18n("Database is persistent"), this);
+	m_btnExtern = new QRadioButton(i18n("Database is persistent"), m_contents);
 	connect(m_btnExtern, SIGNAL(toggled(bool)), this, SLOT(slotExternToggle(bool)));
 	buttonBase->insert(m_btnEmbedd);
 	buttonBase->insert(m_btnExtern);
 
-	m_externURL = new KURLRequester(this);
+	m_externURL = new KURLRequester(m_contents);
 	m_externURL->setEnabled(false);
 	getFile();
 
 	//layout
-	QGridLayout *g = new QGridLayout(this);
-	g->addMultiCellWidget(lPic,	0,	4,	0,	0);
+	QGridLayout *g = new QGridLayout(m_contents);
+//	g->addMultiCellWidget(lPic,	0,	4,	0,	0);
 //	g->addWidget(buttonBase,	0,	1);
 //	g->addWidget(bpers,		0,	1);
-	g->addWidget(m_btnEmbedd,	0,	1);
-	g->addWidget(m_btnExtern,	1,	1);
-	g->addWidget(m_externURL,	2,	1);
+	g->addWidget(m_btnEmbedd,	0,	0);
+	g->addWidget(m_btnExtern,	1,	0);
+	g->addWidget(m_externURL,	2,	0);
 	g->setSpacing(KDialog::spacingHint());
 
 	setProperty("caption", QVariant(i18n("File")));
