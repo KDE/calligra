@@ -20,23 +20,13 @@
 #ifndef preview_h
 #define preview_h
 
-#ifndef USE_QFD
 #include <kfiledialog.h>
 #include <kurl.h>
-#endif
 
 #include <qstring.h>
 #include <qurl.h>
 #include <qvbox.h>
 #include <qpixmap.h>
-
-/*#ifndef USE_QFD
-// WMF preview
-bool wmfPreviewHandler ( const KFileInfo*, const QString fileName, QString&, QPixmap& pixmap );
-
-// Pixmap preview
-bool pixmapPreviewHandler( const KFileInfo*, const QString fileName, QString&, QPixmap& pixmap );
-#endif*/
 
 class PixmapView;
 
@@ -48,7 +38,7 @@ public:
     Preview( QWidget *parent );
     
 public slots:
-    void showPreview( const QUrl &U );
+    void showPreview( const KURL &U );
 
 private:
     PixmapView *pixmap;
