@@ -14,7 +14,7 @@
 </mediaobject>
 <author>
 <firstname>Hagen</firstname>
-<surname>Höpfner</surname>
+<surname>H&ouml;pfner</surname>
 <affiliation>
 <address><email>Hagen.Hoepfner@gmx.de</email></address>
 </affiliation>
@@ -22,23 +22,30 @@
 <date>1999-11-08</date>
 <releaseinfo>0.07.01</releaseinfo>
 <abstract>
-<para>This Handbook describes &kontour; Version 0.7.1 by Kai-Uwe Sattler.</para>
+<para>&kontour; is a vector illustration tool for &koffice;.</para>
 </abstract>
+
 <keywordset>
 <keyword>KDE</keyword>
 <keyword>Kontour</keyword>
+<keyword>Illustration</keyword>
+<keyword>Drawing</keyword>
 </keywordset>
+
 </bookinfo>
 
 <chapter id="introduction">
 <title>Introduction</title>
 
-<para>The goal of the &kontour; project is to create a freely available vector-based drawing program with an interface comprable to that of Corel Draw&reg; or with Adobe Illustrator&reg;. </para>
+<para>The goal of the &kontour; project is to create a freely available
+vector-based drawing program with an interface comprable to that of
+Corel Draw&reg; or with Adobe Illustrator&reg;. </para>
 
 <sect1 id="about-the-author">
 <title>About the author</title>
 
 <para>The author of &kontour; is Kai-Uwe Sattler. </para>
+
 </sect1>
 
 <sect1 id="history-of-kontour">
@@ -46,187 +53,36 @@
 
 <para>From the official &kontour; home page:</para>
 
-<para>"I have started this project because I am tired of switching to Windows in order to design illustrations for papers or slides with a modern drawing tool.
-Now, for the Linux operating system and of course for other Unixes the Qt toolkit and the KDE project provide a perfect foundation for this kind of application." </para>
+<para>"I have started this project because I am tired of switching to
+Windows in order to design illustrations for papers or slides with a
+modern drawing tool.  Now, for the Linux operating system and of course
+for other Unixes the Qt toolkit and the KDE project provide a perfect
+foundation for this kind of application." </para>
 
-<para>Revision history: </para>
-
-<para><itemizedlist>
-<listitem>
-<para>25/03/1998 first preview version released </para>
-</listitem>
-<listitem>
-<para>21/04/1998 second preview version released </para>
-</listitem>
-<listitem>
-<para>23/04/1998 snapshot 0.2.1 (bug fixes only) </para>
-</listitem>
-<listitem>
-<para>02/06/1998 snapshot 0.3 released </para>
-</listitem>
-<listitem>
-<para>10/08/1998 snapshot 0.4 released </para>
-</listitem>
-<listitem>
-<para>28/08/1998 snapshot 0.4.1 released </para>
-</listitem>
-<listitem>
-<para>06/11/1998 snapshot 0.5 released </para>
-</listitem>
-<listitem>
-<para>05/01/1999 snapshot 0.6 released </para>
-</listitem>
-<listitem>
-<para>29/01/1999 snapshot 0.6.1 (bug fixes only) </para>
-</listitem>
-<listitem>
-<para>09/02/1999 snapshot 0.6.2 released </para>
-</listitem>
-<listitem>
-<para>24/02/1999 snapshot 0.6.3 released </para>
-</listitem>
-<listitem>
-<para>06/04/1999 snapshot 0.6.4 released (bug fixes only) </para>
-</listitem>
-<listitem>
-<para>09/04/1999 snapshot 0.6.5 released (bug fixes only)</para>
-</listitem>
-<listitem>
-<para>07/15/1999 snapshot 0.7 released</para>
-</listitem>
-<listitem>
-<para>10/19/1999 snapshot 0.7.1 released</para>
-</listitem>
-</itemizedlist>
-</para>
 </sect1>
 
 <sect1 id="about-the-handbook">
 <title>About the handbook</title>
 
-<para>This handbook refers mainly to the "stand-alone version" of &kontour;. Special information regarding the &kontour; component of the KOffice package is not considered. However, the information presented here applies in many respects to the KOffice component also. </para>
+<para>This handbook refers mainly to the "stand-alone version" of
+&kontour;. Special information regarding the &kontour; component of the
+&koffice; package is not considered. However, the information presented
+here applies in many respects to the &koffice; component also. </para>
 
-<para>This documentation is a translation of the original German text by Hagen Höpfner.</para>
+<para>This documentation is a translation of the original German text by
+Hagen H&ouml;pfner.</para>
 
-<para>The current version can be found on <ulink url="http://www.cs.uni-magdeburg.de/~hoepfner/kde.html">his home page</ulink>.</para>
+<para>The current version can be found on <ulink
+url="http://www.cs.uni-magdeburg.de/~hoepfner/kde.html">his home
+page</ulink>.</para>
 
-<para>Original German version: Hagen Höpfner, <ulink url="mailto:Hagen.Hoepfner@gmx.de">Hagen.Hoepfner@gmx.de</ulink></para>
+<para>Original German version: Hagen H&ouml;pfner, <ulink
+url="mailto:Hagen.Hoepfner@gmx.de">Hagen.Hoepfner@gmx.de</ulink></para>
 
 <para>English translation: Ben Skelton, <ulink url="mailto:skeltobc@elec.canterbury.ac.nz">skeltobc@elec.canterbury.ac.nz</ulink> and Winter Laite, <literal><ulink url="mailto:winlaite@lobo.net">winlaite@lobo.net</ulink></literal></para>
 </sect1>
 </chapter>
 
-<chapter id="installation">
-<title>Installation</title>
-
-<sect1 id="how-to-obtain-kontour">
-<title>How to obtain &kontour;</title>
-
-<para>The most current version of &kontour; is in the CVS repository at the
-<ulink url="http://www.kde.org">KDE Internet site</ulink>.</para>
-</sect1>
-
-<sect1 id="system-requirements">
-<title>System Requirements</title>
-
-<para>&kontour; is still strongly in the development phase, and often utilises the latest package versons. The required software packages themselves require some set of minimum hardware which is not repeated here.</para>
-
-<para>For installation the prerequisite packages are: </para>
-
-<para><itemizedlist>
-<listitem>
-<para>KDE 1.1</para>
-</listitem>
-<listitem>
-<para>QT 1.41</para>
-</listitem>
-<listitem>
-<para>gcc 2.8.x or egcs 1.x</para>
-</listitem>
-</itemizedlist>
-</para>
-</sect1>
-
-<sect1 id="compilation-and-installation">
-<title>Compilation and Installation</title>
-
-<para>To compile the source code for &kontour;, proceeds as follows: </para>
-
-<para><orderedlist><listitem>
-<para>Unpack the tar archives <literal>tar xfvz &kontour;.tar.gz</literal></para>
-</listitem>
-<listitem>
-<para>Change to the source code directory <literal>cd &kontour;</literal></para>
-</listitem>
-<listitem>
-<para>Check for required packages and create the Makefiles <literal>./configure</literal></para>
-</listitem>
-<listitem>
-<para>Compile the source code <literal>make all</literal></para>
-</listitem>
-</orderedlist>
-</para>
-
-<para>If the installing user has ROOT privileges, installing &kontour; into the KDE directory tree is done by <literal>make install</literal>.</para>
-
-<para>The following platforms were successfully tested:</para>
-
-<para><itemizedlist>
-<listitem>
-<para>RedHat 5.1 (Hagen Höpfner)</para>
-</listitem>
-<listitem>
-<para>RedHat 5.2 (Hagen Höpfner)</para>
-</listitem>
-<listitem>
-<para>SuSE 6.0 (Hagen Höpfner) </para>
-</listitem>
-<listitem>
-<para>SuSE 6.1 Cebit Beta (Hagen Höpfner)</para>
-</listitem>
-<listitem>
-<para>SuSE 6.1 (Hagen Höpfner)</para>
-</listitem>
-<listitem>
-<para>SuSE 6.2 (Joachim Ansorg)</para>
-</listitem>
-</itemizedlist>
-</para>
-
-<para>If you encounter problems, please direct them to Hagen.</para>
-</sect1>
-
-<sect1 id="installation-of-binary-packages">
-<title>Installation of binary packages</title>
-
-<para>The installation of precompiled packages under Linux depends on the package format used. &kontour; is available in rpm and deb package formats. For a successful installation be sure to select the package for your system. First, some definitions: </para>
-
-<para><itemizedlist>
-<listitem>
-<para><literal>FILENAME</literal> = name of the package file (e.g.: <literal>&kontour;&lowbar;0.6.5-1&lowbar;i386.deb</literal>)</para>
-</listitem>
-<listitem>
-<para><literal>PACKAGENAME</literal> = the created package name (usually  <literal>&kontour;</literal>)</para>
-</listitem>
-</itemizedlist>
-</para>
-
-<sect2 id="rpm">
-<title>rpm</title>
-
-<para>To install an <literal>rpm</literal> package use the command <literal>rpm -i
-FILENAME</literal>.The package may be deleted later using the command <literal>rpm -e PACKAGENAME</literal>.</para>
-</sect2>
-
-<sect2 id="deb">
-<title>deb</title>
-
-<para>Similarly for <literal>deb</literal> packages, the installation command is <literal>dpkg -i FILENAME</literal> and to remove the package <literal>dpkg -r PACKAGE&lowbar;NAME</literal>.</para>
-
-<para>In both cases ROOT privileges will almost certainly be required to install or uninstall the packages.</para>
-</sect2>
-</sect1>
-</chapter>
 
 <chapter id="usage">
 <title>Usage</title>
@@ -997,24 +853,129 @@ Suggestions and errors concerning this handbook in general should be directed to
 <chapter id="copyright">
 <title>Copyright</title>
 
-<para><screen>&kontour; is Copyright 1998-99 Kai-Uwe Sattler, kus@iti.cs.uni-magdeburg.de
+<para>&kontour; is Copyright 1998-99 Kai-Uwe Sattler,
+kus@iti.cs.uni-magdeburg.de</para>
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+&underFDL;
+&underGPL;
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-</screen>
-</para>
+
 </chapter>
+
+<appendix id="installation">
+<title>Installation</title>
+
+<sect1 id="how-to-obtain-kontour">
+<title>How to obtain &kontour;</title>
+
+<para>The most current version of &kontour; is in the CVS repository at
+the <ulink url="http://www.kde.org">KDE Internet site</ulink>.</para>
+</sect1>
+
+<sect1 id="system-requirements">
+<title>System Requirements</title>
+
+<para>&kontour; is still strongly in the development phase, and often utilises the latest package versons. The required software packages themselves require some set of minimum hardware which is not repeated here.</para>
+
+<para>For installation the prerequisite packages are: </para>
+
+<para><itemizedlist>
+<listitem>
+<para>KDE 1.1</para>
+</listitem>
+<listitem>
+<para>QT 1.41</para>
+</listitem>
+<listitem>
+<para>gcc 2.8.x or egcs 1.x</para>
+</listitem>
+</itemizedlist>
+</para>
+</sect1>
+
+<sect1 id="compilation-and-installation">
+<title>Compilation and Installation</title>
+
+<para>To compile the source code for &kontour;, proceeds as follows: </para>
+
+<para><orderedlist><listitem>
+<para>Unpack the tar archives <literal>tar xfvz &kontour;.tar.gz</literal></para>
+</listitem>
+<listitem>
+<para>Change to the source code directory <literal>cd &kontour;</literal></para>
+</listitem>
+<listitem>
+<para>Check for required packages and create the Makefiles <literal>./configure</literal></para>
+</listitem>
+<listitem>
+<para>Compile the source code <literal>make all</literal></para>
+</listitem>
+</orderedlist>
+</para>
+
+<para>If the installing user has ROOT privileges, installing &kontour; into the KDE directory tree is done by <literal>make install</literal>.</para>
+
+<para>The following platforms were successfully tested:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>RedHat 5.1 (Hagen Höpfner)</para>
+</listitem>
+<listitem>
+<para>RedHat 5.2 (Hagen Höpfner)</para>
+</listitem>
+<listitem>
+<para>SuSE 6.0 (Hagen Höpfner) </para>
+</listitem>
+<listitem>
+<para>SuSE 6.1 Cebit Beta (Hagen Höpfner)</para>
+</listitem>
+<listitem>
+<para>SuSE 6.1 (Hagen Höpfner)</para>
+</listitem>
+<listitem>
+<para>SuSE 6.2 (Joachim Ansorg)</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>If you encounter problems, please direct them to Hagen.</para>
+</sect1>
+
+<sect1 id="installation-of-binary-packages">
+<title>Installation of binary packages</title>
+
+<para>The installation of precompiled packages under Linux depends on the package format used. &kontour; is available in rpm and deb package formats. For a successful installation be sure to select the package for your system. First, some definitions: </para>
+
+<para><itemizedlist>
+<listitem>
+<para><literal>FILENAME</literal> = name of the package file (e.g.: <literal>&kontour;&lowbar;0.6.5-1&lowbar;i386.deb</literal>)</para>
+</listitem>
+<listitem>
+<para><literal>PACKAGENAME</literal> = the created package name (usually  <literal>&kontour;</literal>)</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<sect2 id="rpm">
+<title>rpm</title>
+
+<para>To install an <literal>rpm</literal> package use the command <literal>rpm -i
+FILENAME</literal>.The package may be deleted later using the command <literal>rpm -e PACKAGENAME</literal>.</para>
+</sect2>
+
+<sect2 id="deb">
+<title>deb</title>
+
+<para>Similarly for <literal>deb</literal> packages, the installation command is <literal>dpkg -i FILENAME</literal> and to remove the package <literal>dpkg -r PACKAGE&lowbar;NAME</literal>.</para>
+
+<para>In both cases ROOT privileges will almost certainly be required to install or uninstall the packages.</para>
+</sect2>
+</sect1>
+</appendix>
+
+
 &documentation.index; 
 </book>
 <!--
