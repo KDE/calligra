@@ -30,6 +30,7 @@
 #include <qdatetime.h>
 #include <qstringlist.h>
 #include <qregexp.h>
+#include <qlabel.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -51,6 +52,7 @@ KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name)
 
 	g->addWidget(m_tableView,	0,	0);
 	g->addWidget(m_statusBar,	1,	0);
+
 	connect(m_tableView, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
 }
 
@@ -71,7 +73,7 @@ KexiDataTable::executeQuery(QString queryStatement)
 	}
 
 	QSqlIndex index = cursor.primaryIndex();
-	kdDebug() << "index: " << index.fieldName(0) << endl;
+	// kdDebug() << "index: " << index.fieldName(0) << endl; /* nice joke :) */
 
 
 	QSqlRecord record = db->record(query);
@@ -90,6 +92,7 @@ KexiDataTable::executeQuery(QString queryStatement)
 	{
 		//WARNING: look for the type!!!
 		m_tableView->addColumn(record.field(i)->name(), record.field(i)->type(), true);
+		kdDebug() << "index of " << record.field(i)->name() << cursor.index(record.field(i)->name()).name() << endl;
 	}
 
 	while(query.next())
@@ -100,9 +103,12 @@ KexiDataTable::executeQuery(QString queryStatement)
 			it->setValue(i, query.value(i));
 		}
 	}
-	
-	m_statusBar->message(QString::number(query.numRowsAffected()) + " rows in " + QString::number(t.elapsed()) + "ms");
-	
+
+	QLabel *rwStatus = new QLabel("<b>Read Only</b>", m_statusBar);
+	rwStatus->setAlignment(SingleLine);
+	m_statusBar->message(QString::number(query.size()) + " records");
+	m_statusBar->addWidget(rwStatus, 0, true);
+
 	return true;
 }
 

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KexiDB/Interface
+Comment=Kexi SQL-Driver plugin
+Comment[da]=Kexi-indstik
+Comment[el]=Kexi πρόσθετο
+Comment[es]=Plugin Kexi
+Comment[pt_BR]=Plugin do Kexi
+Comment[sv]=Kexi insticksprogram

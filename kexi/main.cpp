@@ -15,11 +15,16 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <iostream.h>
+
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 
 #include "kexiapplication.h"
+
+#include "kexiDB/kexidb.h"
+#include "kexiDB/kexidbinterfacemanager.h"
 
 static const char *description =
 	I18N_NOOP("A Database Frontend");
@@ -47,5 +52,9 @@ int main(int argc, char *argv[])
 
 	KexiApplication app;
 
+	KexiDB *db = new KexiDB(0);
+	QStringList drivers = db->getDrivers();
+	db->add("mySQL");
+	
 	return app.exec();
 }  
