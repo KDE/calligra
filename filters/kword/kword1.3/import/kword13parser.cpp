@@ -452,6 +452,35 @@ bool KWord13Parser::startElementKey( const QString& name, const QXmlAttributes& 
     return true;
 }
 
+bool KWord13Parser::startElementAnchor( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem )
+{
+    if ( stackItem->elementType == KWord13TypeAnchor )
+    {
+        const QString anchorType ( attributes.value( "type" ) );
+	if ( anchorType == "grpMgr" )
+	    kdWarning(30520) << "Anchor of type grpMgr! Not tested!" << endl; // ### TODO
+        else if ( anchorType != "frameset" )
+	{
+	    kdError(30520) << "Unsupported anchor type: " << anchorType << endl;
+	    return false;
+	} 
+	const QString frameset ( attributes.value( "instance" ) );
+	if ( frameset.isEmpty() )
+	{
+	    kdError(30520) << "Anchor to an empty frameset name! Aborting!" << endl;
+	    return false;
+	}
+	// ### TODO: set anchor to the format
+	// ### TODO: add frameset name to the list of anchored framesets
+    }
+    else
+    {
+        kdError(30520) << "Anchor not child of <FORMAT id=\"6\"> Aborting!" << endl;
+	return false;
+    }
+    return true;
+}
+
 
 bool KWord13Parser::startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes )
 {
@@ -545,6 +574,10 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
     else if ( name == "KEY" )
     {
         success = startElementKey( name, attributes, stackItem );
+    }
+    else if ( name == "ANCHOR" )
+    {
+        success = startElementAnchor( name, attributes, stackItem );
     }
     else if ( name == "PICTURE" || name == "IMAGE" || name == "CLIPART" )
     {

@@ -114,6 +114,8 @@ protected:
         KWord13StackItem *stackItem, const KWord13StackItemType& allowedParentType, const KWord13StackItemType& newType );
     /// Process \<KEY\>
     bool startElementKey( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
+    /// Process \<ANCHOR\>
+    bool startElementAnchor( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
     /**
      * Get a picture key out of the individual \<KEY\> attributes
      *
