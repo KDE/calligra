@@ -229,6 +229,7 @@ public slots:
     void sort();
     void insertHyperlink();
     void goalSeek();
+    void textToColumns();
     void consolidate();
     void insertTable();
     void removeTable();
@@ -497,6 +498,7 @@ private:
     KAction* m_validity;
     KAction* m_sort;
     KAction* m_goalSeek;
+    KAction* m_textToColumns;
     KAction* m_consolidate;
     KAction* m_help;
     KAction* m_insertCellCopy;

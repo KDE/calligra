@@ -1,0 +1,110 @@
+/* This file is part of the KDE project
+   Copyright (C) 1999 David Faure <faure@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+#ifndef CSVDIALOG_H
+#define CSVDIALOG_H
+
+
+#include <qvariant.h>
+#include <qdialog.h>
+class QVBoxLayout; 
+class QHBoxLayout; 
+class QGridLayout; 
+class QButtonGroup;
+class QComboBox;
+class QLabel;
+class QLineEdit;
+class QPushButton;
+class QRadioButton;
+class QTable;
+
+class KSpreadView;
+
+class KSpreadCSVDialog : public QDialog
+{ 
+  Q_OBJECT
+
+ public:
+  
+  enum Mode { Clipboard, File, Column };
+  enum Header { TEXT, NUMBER, DATE, CURRENCY };
+
+  KSpreadCSVDialog( KSpreadView * parent, const char * name, QRect const & rect, Mode mode);
+  ~KSpreadCSVDialog();
+
+ protected:
+  void accept();
+
+
+ private:
+  KSpreadView* m_pView;
+
+  QGridLayout* MyDialogLayout;
+  QHBoxLayout* Layout1;
+  QGridLayout* m_delimiterBoxLayout;
+  QGridLayout* m_formatBoxLayout;
+  QPushButton* buttonHelp;
+  QPushButton* buttonOk;
+  QPushButton* buttonCancel;
+  QTable* m_table;
+  QButtonGroup* m_delimiterBox;
+  QRadioButton* m_radioComma;
+  QRadioButton* m_radioSemicolon;
+  QRadioButton* m_radioTab;
+  QRadioButton* m_radioSpace;
+  QRadioButton* m_radioOther;
+  QLineEdit* m_delimiterEdit;
+  QButtonGroup* m_formatBox;
+  QRadioButton* m_radioNumber;
+  QRadioButton* m_radioText;
+  QRadioButton* m_radioCurrency;
+  QRadioButton* m_radioDate;
+  QComboBox* m_comboLine;
+  QComboBox* m_comboQuote;
+  QLabel* TextLabel3;
+  QLabel* TextLabel2;
+
+  void fillTable();
+  void fillComboBox();
+  void setText(int row, int col, const QString& text);
+  void adjustRows(int iRows);
+  int  getHeader(int col);
+  QString getText(int row, int col);
+
+  int   m_adjustRows;
+  int   m_startline;
+  QChar m_textquote;
+  QString m_delimiter;
+  QString m_data;
+  QByteArray m_fileArray;
+  QRect m_targetRect;
+  Mode  m_mode;
+
+ private slots:
+  void returnPressed();
+  void formatClicked(int id);
+  void delimiterClicked(int id);
+  void lineSelected(const QString& line);
+  void textquoteSelected(const QString& mark);
+  void currentCellChanged(int, int col);
+  void textChanged ( const QString & );
+};
+
+#endif
+

@@ -98,6 +98,7 @@
   <Separator/>
   <Action name="goalSeek"/>
   <Action name="consolidate"/>
+  <Action name="textToColumns"/>
   <Action name="oszi"/>
  </Menu>
  <Menu name="table"><text>Ta&amp;ble</text>

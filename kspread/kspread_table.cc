@@ -1642,7 +1642,7 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
 			     DBL_EPSILON) + 1;
   }
 
-  KSpreadCell *cell = NULL;
+  KSpreadCell * cell = NULL;
 
   /* markers for the top-left corner of the undo region.  It'll probably
    * be the top left corner of where the series is, but if something in front
@@ -1720,7 +1720,7 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
   /* now we're going to actually loop through and set the values */
   double incr;
 
-  if (step >= 0)
+  if (step >= 0 && start < end)
   {
     for ( incr = start; incr <= end; )
     {
@@ -1731,7 +1731,55 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
         cell = cell->obscuringCells().getFirst();
       }
 
-      cell->setCellText(cellText.setNum( incr ));
+      //      cell->setCellText(cellText.setNum( incr ));
+      cell->setCellText(m_pDoc->locale()->formatNumber(incr, 9));
+      if (mode == Column)
+      {
+        ++y;
+        if (cell->isForceExtraCells())
+        {
+          y += cell->extraYCells();
+        }
+      }
+      else if (mode == Row)
+      {
+        ++x;
+        if (cell->isForceExtraCells())
+        {
+          x += cell->extraXCells();
+        }
+      }
+      else
+      {
+        kdDebug(36001) << "Error in Series::mode" << endl;
+        return;
+      }
+
+      if (type == Linear)
+        incr = incr + step;
+      else if (type == Geometric)
+        incr = incr * step;
+      else
+      {
+        kdDebug(36001) << "Error in Series::type" << endl;
+        return;
+      }
+    }
+  }
+  else
+  if (step >= 0 && start > end)
+  {
+    for ( incr = start; incr >= end; )
+    {
+      cell = nonDefaultCell( x, y );
+
+      if (cell->isObscuringForced())
+      {
+        cell = cell->obscuringCells().getFirst();
+      }
+
+      //      cell->setCellText(cellText.setNum( incr ));
+      cell->setCellText(m_pDoc->locale()->formatNumber(incr, 9));
       if (mode == Column)
       {
         ++y;
@@ -1776,7 +1824,8 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
         cell = cell->obscuringCells().getFirst();
       }
 
-      cell->setCellText(cellText.setNum( incr ));
+      //cell->setCellText(cellText.setNum( incr ));
+      cell->setCellText(m_pDoc->locale()->formatNumber(incr, 9));
       if (mode == Column)
       {
         ++y;
@@ -1802,7 +1851,9 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
       if (type == Linear)
         incr = incr + step;
       else if (type == Geometric)
+      {
         incr = incr * step;
+      }
       else
       {
         kdDebug(36001) << "Error in Series::type" << endl;

@@ -6,7 +6,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) \
 kde_module_LTLIBRARIES = libkspreadpart.la
 libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_dlg_formula.cc \
-	kspread_functions.cc \
+	kspread_functions.cc kspread_dlg_csv.cc \
 	kspread_canvas.cc \
 	kspread_doc.cc \
 	kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
@@ -72,7 +72,7 @@ noinst_HEADERS = kspread_doc.h kspread_functions.h \
 	kspread_dlg_preference.h kspread_dlg_angle.h \
 	kspread_factory.h kspread_handler.h \
 	kspread_dlg_validity.h  kspread_dlg_showColRow.h \
-	kspread_dlg_list.h \
+	kspread_dlg_list.h kspread_dlg_csv.h \
 	kspread_dlg_database.h kspread_dlg_goalseek.h \
 	kspread_events.h kspread_global.h  \
 	kspread_dlg_show.h kspread_dlg_insert.h kspread_dlg_pasteinsert.h KSpreadViewIface.h \

@@ -179,9 +179,9 @@ void KSpreadSeriesDlg::slotOk()
         KMessageBox::error( this, i18n("End and start value must be positive!") );
         return;
       }
-      if ( dstart > dend )
+      if ( dstart > dend && dstep >= 1)
       {
-        KMessageBox::error( this, i18n("End value must be greater than the start value!") );
+        KMessageBox::error( this, i18n("End value must be greater than the start value or the step must be less than '1'!") );
         return;
       }
     }
@@ -195,13 +195,14 @@ void KSpreadSeriesDlg::slotOk()
         step->setFocus();
         return;
       }
-      else if (geometric->isChecked() && dstep <= 1)
+      /*      else if (geometric->isChecked() && dstep <= 1)
       {
         KMessageBox::error( this, i18n("The step value must be greater than one. "
                                        "Otherwise the geometric series is infinite!") );
         step->setFocus();
         return;
       }
+      */
       else if ( type == Linear && dend < dstart )
       {
         KMessageBox::error( this, 

@@ -47,6 +47,7 @@
 
 #include "kspread_map.h"
 #include "kspread_dlg_scripts.h"
+#include "kspread_dlg_csv.h"
 #include "kspread_dlg_cons.h"
 #include "kspread_dlg_database.h"
 #include "kspread_dlg_goalseek.h"
@@ -560,7 +561,7 @@ void KSpreadView::initializeAreaOperationActions()
                             "sortlist" );
   m_sortList->setToolTip(i18n("Create custom lists for sorting or auto fill"));
 
-  m_sort = new KAction( i18n("Sort..."), 0, this, SLOT( sort() ),
+  m_sort = new KAction( i18n("&Sort..."), 0, this, SLOT( sort() ),
                         actionCollection(), "sort" );
   m_sort->setToolTip(i18n("Sort a group of cells."));
 
@@ -568,19 +569,23 @@ void KSpreadView::initializeAreaOperationActions()
                            SLOT( autoSum() ), actionCollection(), "autoSum" );
   m_autoSum->setToolTip(i18n("Insert the 'sum' function"));
 
-  m_sortDec = new KAction( i18n("Sort Decreasing"), "sort_decrease", 0, this,
+  m_sortDec = new KAction( i18n("Sort &Decreasing"), "sort_decrease", 0, this,
                            SLOT( sortDec() ), actionCollection(), "sortDec" );
   m_sortDec->setToolTip(i18n("Sort a group of cells in decreasing (last to first) order."));
 
-  m_sortInc = new KAction( i18n("Sort Increasing"), "sort_incr", 0, this,
+  m_sortInc = new KAction( i18n("Sort &Increasing"), "sort_incr", 0, this,
                            SLOT( sortInc() ), actionCollection(), "sortInc" );
   m_sortInc->setToolTip(i18n("Sort a group of cells in ascending (first to last) order."));
 
-  m_goalSeek = new KAction( i18n("Goal Seek"), 0, this,
+  m_goalSeek = new KAction( i18n("&Goal Seek"), 0, this,
                             SLOT( goalSeek() ), actionCollection(), "goalSeek" );
   m_goalSeek->setToolTip( i18n("Repeating calculation to find a specific value") );
 
-  m_consolidate = new KAction( i18n("Consolidate..."), 0, this,
+  m_textToColumns = new KAction( i18n("&Text to Columns"), 0, this,
+                            SLOT( textToColumns() ), actionCollection(), "textToColumns" );
+  m_textToColumns->setToolTip( i18n("Expand the content of cells to multiple columns") );
+
+  m_consolidate = new KAction( i18n("&Consolidate..."), 0, this,
                                SLOT( consolidate() ), actionCollection(),
                                "consolidate" );
   m_consolidate->setToolTip(i18n("Create a region of summary data from a group of similar regions."));
@@ -2757,6 +2762,23 @@ void KSpreadView::goalSeek()
   dlg.exec();
 }
 
+void KSpreadView::textToColumns()
+{
+  if ( m_pCanvas->editor() )
+  {
+    m_pCanvas->deleteEditor( true ); // save changes
+  }
+
+  if (activeTable()->selection().width() > 1)
+  {
+    KMessageBox::error( this, i18n("You must not select an area containing more than one column.") );
+    return;
+  }
+
+  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", activeTable()->selection(), KSpreadCSVDialog::Column );
+  dialog.exec();
+}
+
 void KSpreadView::consolidate()
 {
   if ( m_pCanvas->editor() )
@@ -2896,12 +2918,8 @@ void KSpreadView::insertFromTextfile()
     m_pCanvas->deleteEditor( true ); // save changes
   }
 
-//  QRect rect = activeTable()->selection();
-
-  KMessageBox::information( this, "Not implemented yet, work in progress...");
-
-  //  KSpreadTextfileDlg dlg(this, rect, "KSpreadDatabaseDlg");
-  //  dlg.exec();
+  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", activeTable()->selection(), KSpreadCSVDialog::File );
+  dialog.exec();
 }
 
 void KSpreadView::insertFromClipboard()
@@ -2911,12 +2929,8 @@ void KSpreadView::insertFromClipboard()
     m_pCanvas->deleteEditor( true ); // save changes
   }
 
-//  QRect rect = activeTable()->selection();
-
-  KMessageBox::information( this, "Not implemented yet, work in progress...");
-
-  //  KSpreadClipboard dlg(this, rect, "KSpreadDatabaseDlg");
-  //  dlg.exec();
+  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", activeTable()->selection(), KSpreadCSVDialog::Clipboard );
+  dialog.exec();
 }
 
 void KSpreadView::setupPrinter( KPrinter &prt )
