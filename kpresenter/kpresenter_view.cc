@@ -3877,6 +3877,13 @@ void KPresenterView::setupRulers()
     QObject::connect( h_ruler, SIGNAL( newPageLayout( KoPageLayout ) ),
 		      this, SLOT( newPageLayout( KoPageLayout ) ) );
 
+    QObject::connect( h_ruler, SIGNAL( addHelpline( const QPoint &, bool ) ),
+		      this, SLOT( addHelpline( const QPoint &, bool ) ) );
+
+    QObject::connect( h_ruler, SIGNAL( moveHelpLines( const QPoint &, bool ) ),
+		      this, SLOT( drawTmpHelpLine( const QPoint &, bool ) ) );
+
+
     connect( h_ruler, SIGNAL( doubleClicked() ), this,
              SLOT( slotHRulerDoubleClicked() ) );
     connect( h_ruler, SIGNAL( doubleClicked(double) ), this,
@@ -3888,6 +3895,13 @@ void KPresenterView::setupRulers()
 		      this, SLOT( newPageLayout( KoPageLayout ) ) );
     QObject::connect( v_ruler, SIGNAL( doubleClicked() ),
 		      this, SLOT( openPageLayoutDia() ) );
+
+    QObject::connect( v_ruler, SIGNAL( addHelpline(const QPoint &, bool ) ),
+		      this, SLOT( addHelpline( const QPoint &, bool ) ) );
+
+    QObject::connect( v_ruler, SIGNAL( moveHelpLines( const QPoint &, bool ) ),
+		      this, SLOT( drawTmpHelpLine( const QPoint &, bool ) ) );
+
 
     connect( h_ruler, SIGNAL( newLeftIndent( double ) ), this, SLOT( newLeftIndent( double ) ) );
     connect( h_ruler, SIGNAL( newFirstIndent( double ) ), this, SLOT( newFirstIndent( double ) ) );
@@ -5181,15 +5195,32 @@ void KPresenterView::slotUpdateRuler()
                 getHRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
                 getHRuler()->repaint();
             }
+            if( getVRuler())
+            {
+                getVRuler()->changeFlags(0);
+                getVRuler()->repaint();
+            }
         }
     }
     else
     {
-        if( getHRuler())
+        if( getHRuler() && kPresenterDoc()->showHelplines() )
         {
-            getHRuler()->changeFlags(0);
+            if( kPresenterDoc()->showHelplines())
+                getHRuler()->changeFlags(KoRuler::F_HELPLINES);
+            else
+                getHRuler()->changeFlags( 0 );
             getHRuler()->repaint();
         }
+        if( getVRuler())
+        {
+            if( kPresenterDoc()->showHelplines())
+                getVRuler()->changeFlags(KoRuler::F_HELPLINES);
+            else
+                getVRuler()->changeFlags(0);
+            getVRuler()->repaint();
+        }
+
         updateRuler();
     }
 }
@@ -5715,20 +5746,41 @@ void KPresenterView::viewHelpLines()
 void KPresenterView::drawTmpHelpLine( const QPoint & pos, bool _horizontal)
 {
     //todo
+    kdDebug()<<" drawTmpHelpLine( const QPoint & pos, bool _horizontal) \n";
 }
 
 void KPresenterView::addHelpline(const QPoint & pos, bool _horizontal)
 {
     if ( _horizontal )
-        m_pKPresenterDoc->addHorizHelpline( zoomHandler()->unzoomItY(pos.y()));
+        m_pKPresenterDoc->addHorizHelpline( zoomHandler()->unzoomItY(pos.y()+m_canvas->diffy()-16));
     else
-        m_pKPresenterDoc->addVertHelpline( zoomHandler()->unzoomItX(pos.x()));
-
+        m_pKPresenterDoc->addVertHelpline( zoomHandler()->unzoomItX(pos.x()+m_canvas->diffx()-16));
+    m_canvas->repaint(false);
 }
 
 void KPresenterView::updateHelpLineButton()
 {
-    actionViewShowHelpLine->setChecked( m_pKPresenterDoc->showHelplines() );
+    bool state = m_pKPresenterDoc->showHelplines();
+    actionViewShowHelpLine->setChecked( state );
+
+    if( getHRuler() )
+    {
+
+        if( state )
+            getHRuler()->changeFlags(KoRuler::F_HELPLINES);
+        else
+            getHRuler()->changeFlags( 0 );
+        getHRuler()->repaint();
+    }
+
+    if( getVRuler())
+    {
+        if( state )
+            getVRuler()->changeFlags(KoRuler::F_HELPLINES);
+        else
+            getVRuler()->changeFlags(0);
+        getVRuler()->repaint();
+    }
 }
 
 void KPresenterView::removeHelpLine()
