@@ -37,6 +37,9 @@ public:
 	// read-only access to objects:
 	const VObjectList& objects() const { return m_objects; }
 
+	virtual void setFill( const VFill &fill );
+    virtual void setStroke( const VStroke &stroke );
+
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 

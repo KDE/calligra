@@ -8,6 +8,7 @@
 
 #include "vcommand.h"
 #include "vcolor.h"
+#include "vfill.h"
 
 #include <qvaluevector.h>
 
@@ -27,7 +28,7 @@ public:
 private:
 	VObjectList m_objects;
 	VColor m_color;
-	QValueVector<VColor> m_oldcolors;
+	QValueVector<VFill> m_oldcolors;
 	float m_opacity;
 };
 

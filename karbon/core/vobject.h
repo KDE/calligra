@@ -52,6 +52,9 @@ public:
 	VFill& fill() { return m_fill; }
 	VStroke& stroke() { return m_stroke; }
 
+	virtual void setFill( const VFill &fill ) { m_fill = fill; }
+	virtual void setStroke( const VStroke &stroke ) { m_stroke = stroke; }
+
 	virtual VObject* clone() = 0;
 
 	virtual void save( QDomElement& element ) const;

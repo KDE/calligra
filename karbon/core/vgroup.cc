@@ -13,6 +13,8 @@
 
 VGroup::VGroup( const VObjectList &objects ) : VObject(), m_objects( objects )
 {
+	fill().setType( fill_unknown );
+	//stroke().setType( stroke_unknown );
 }
 
 VGroup::VGroup( const VGroup& other ) : VObject()
@@ -84,6 +86,26 @@ VObject*
 VGroup::clone()
 {
 	return new VGroup( *this );
+}
+
+void
+VGroup::setFill( const VFill &f )
+{
+	VObjectListIterator itr = m_objects;
+	for ( ; itr.current() ; ++itr )
+		itr.current()->setFill( f );
+
+	VObject::setFill( f );
+}
+
+void
+VGroup::setStroke( const VStroke &s )
+{
+	VObjectListIterator itr = m_objects;
+	for ( ; itr.current() ; ++itr )
+		itr.current()->setStroke( s );
+
+	VObject::setStroke( s );
 }
 
 void
