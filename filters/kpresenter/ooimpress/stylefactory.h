@@ -215,6 +215,30 @@ private:
         m_line_height, m_line_height_at_least, m_line_spacing;
 };
 
+class ListStyle
+{
+public:
+    ListStyle( QDomElement & e, const uint index );
+    ~ListStyle() {};
+
+    void toXML( QDomDocument & doc, QDomElement & e ) const;
+    bool operator==( const ListStyle & listStyle ) const;
+    QString name() const { return m_name; };
+
+private:
+    ListStyle() {};
+
+    typedef enum {
+        LLS_NUMBER,
+        LLS_BULLET
+    } list_level_style_t;
+
+    float m_min_label_width;
+    list_level_style_t m_listLevelStyle;
+    QString m_name, m_num_suffix, m_num_format, m_bullet_char, m_color,
+        m_font_size, m_font_family;
+};
+
 class StyleFactory
 {
 public:
@@ -230,6 +254,7 @@ public:
     QString createGradientStyle( QDomElement & gradient );
     QString createMarkerStyle( int style );
     QString createHatchStyle( int style, QString & color );
+    QString createListStyle( QDomElement & e );
     QString createPageStyle( QDomElement & e );
     QString createTextStyle( QDomElement & e );
     QString createGraphicStyle( QDomElement & e );
@@ -244,6 +269,7 @@ private:
     QPtrList<HatchStyle>        m_hatchStyles;
     QPtrList<MarkerStyle>       m_markerStyles;
     QPtrList<FillImageStyle>    m_fillImageStyles;
+    QPtrList<ListStyle>         m_listStyles;
     QPtrList<PageStyle>         m_pageStyles;
     QPtrList<TextStyle>         m_textStyles;
     QPtrList<GraphicStyle>      m_graphicStyles;

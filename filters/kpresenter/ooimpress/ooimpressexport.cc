@@ -469,7 +469,46 @@ void OoImpressExport::appendParagraph( QDomDocument & doc, QDomElement & source,
         }
     }
 
-    target.appendChild( paragraph );
+    // take care of lists
+    QDomNode counter = source.namedItem( "COUNTER" );
+    if ( !counter.isNull() )
+    {
+        QDomElement c = counter.toElement();
+        int type = c.attribute( "type" ).toInt();
+
+        int level = 1;
+        if ( c.hasAttribute( "depth" ) )
+            level = c.attribute( "depth" ).toInt() + 1;
+
+        QDomElement endOfList = target;
+        for ( int l = 0; l < level;  l++ )
+        {
+            QDomElement list;
+            if ( type == 1 )
+            {
+                list = doc.createElement( "text:ordered-list" );
+                list.setAttribute( "text:continue-numbering", "true" );
+            }
+            else
+                list = doc.createElement( "text:unordered-list" );
+
+            if ( l == 0 )
+            {
+                // create the list style
+                QString ls = m_styleFactory.createListStyle( c );
+                list.setAttribute( "text:style-name", ls );
+            }
+
+            QDomElement item = doc.createElement( "text:list-item" );
+            list.appendChild( item );
+            endOfList.appendChild( list );
+            endOfList = item;
+        }
+
+        endOfList.appendChild( paragraph );
+    }
+    else
+        target.appendChild( paragraph );
 }
 
 void OoImpressExport::appendText( QDomDocument & doc, QDomElement & source, QDomElement & target )

@@ -31,6 +31,7 @@ StyleFactory::StyleFactory()
     m_hatchStyles.setAutoDelete( true );
     m_markerStyles.setAutoDelete( true );
     m_fillImageStyles.setAutoDelete( true );
+    m_listStyles.setAutoDelete( true );
     m_pageStyles.setAutoDelete( true );
     m_textStyles.setAutoDelete( true );
     m_graphicStyles.setAutoDelete( true );
@@ -101,6 +102,10 @@ void StyleFactory::addOfficeAutomatic( QDomDocument & doc, QDomElement & automat
 
 void StyleFactory::addAutomaticStyles( QDomDocument & doc, QDomElement & autoStyles )
 {
+    ListStyle * l;
+    for ( l = m_listStyles.first(); l ; l = m_listStyles.next() )
+        l->toXML( doc, autoStyles );
+
     PageStyle * p;
     for ( p = m_pageStyles.first(); p ; p = m_pageStyles.next() )
         p->toXML( doc, autoStyles );
@@ -185,6 +190,23 @@ QString StyleFactory::createHatchStyle( int style, QString & color )
 
     m_hatchStyles.append( newHatchStyle );
     return newHatchStyle->name();
+}
+
+QString StyleFactory::createListStyle( QDomElement & e )
+{
+    ListStyle * newListStyle, * l;
+    newListStyle = new ListStyle( e, m_listStyles.count() + 1 );
+    for ( l = m_listStyles.first(); l ; l = m_listStyles.next() )
+    {
+        if ( *l == *newListStyle )
+        {
+            delete newListStyle;
+            return l->name();
+        }
+    }
+
+    m_listStyles.append( newListStyle );
+    return newListStyle->name();
 }
 
 QString StyleFactory::createPageStyle( QDomElement & e )
@@ -1103,6 +1125,7 @@ ParagraphStyle::ParagraphStyle( QDomElement & e, const uint index )
     QDomNode topBorder = e.namedItem( "TOPBORDER" );
     QDomNode bottomBorder = e.namedItem( "BOTTOMBORDER" );
     QDomNode lineSpacing = e.namedItem( "LINESPACING" );
+    QDomNode counter = e.namedItem( "COUNTER" );
 
     m_name = QString( "P%1" ).arg( index );
     if ( e.hasAttribute( "align" ) )
@@ -1174,6 +1197,9 @@ ParagraphStyle::ParagraphStyle( QDomElement & e, const uint index )
         else if ( type == "atleast" )
             m_line_height_at_least = StyleFactory::toCM( l.attribute( "spacingvalue" ) );
     }
+
+    if ( !counter.isNull() )
+        m_enable_numbering = "true";
 }
 
 void ParagraphStyle::toXML( QDomDocument & doc, QDomElement & e ) const
@@ -1255,3 +1281,124 @@ QString ParagraphStyle::parseBorder( QDomElement e )
     return QString( "%1 %2 %3" ).arg( width ).arg( style ).arg( color.name() );
 }
 
+ListStyle::ListStyle( QDomElement & e, const uint index )
+{
+    // setting some default values
+    m_min_label_width = 0.6;
+    m_color = "#000000";
+    m_font_size = "100%";
+
+    m_name = QString( "L%1" ).arg( index );
+
+    if ( e.hasAttribute( "type" ) )
+    {
+        int type = e.attribute( "type" ).toInt();
+        switch ( type )
+        {
+        case 1: // arabic numbers
+            m_listLevelStyle = LLS_NUMBER;
+            m_num_suffix = ".";
+            m_num_format = "1";
+            break;
+        case 2: // lower alphabetical
+            m_listLevelStyle = LLS_NUMBER;
+            m_num_suffix = ".";
+            m_num_format = "a";
+            break;
+        case 3: // upper alphabetical
+            m_listLevelStyle = LLS_NUMBER;
+            m_num_suffix = ".";
+            m_num_format = "A";
+            break;
+        case 4: // lower roman
+            m_listLevelStyle = LLS_NUMBER;
+            m_num_suffix = ".";
+            m_num_format = "i";
+            break;
+        case 5: // upper roman
+            m_listLevelStyle = LLS_NUMBER;
+            m_num_suffix = ".";
+            m_num_format = "I";
+            break;
+        case 6: // custom
+            m_listLevelStyle = LLS_BULLET;
+            if ( e.hasAttribute( "text" ) )
+                m_bullet_char = e.attribute( "text" );
+            break;
+        case 8: // circle bullet
+            m_listLevelStyle = LLS_BULLET;
+            break;
+        case 9: // square bullet
+            m_listLevelStyle = LLS_BULLET;
+            break;
+        case 10: // disc bullet
+            m_listLevelStyle = LLS_BULLET;
+            break;
+        case 11: // box bullet
+            m_listLevelStyle = LLS_BULLET;
+            break;
+        }
+    }
+
+    if ( e.hasAttribute( "bulletfont" ) )
+        m_font_family = e.attribute( "bulletfont" );
+}
+
+void ListStyle::toXML( QDomDocument & doc, QDomElement & e ) const
+{
+    QDomElement style = doc.createElement( "text:list-style" );
+    style.setAttribute( "style:name", m_name );
+
+    for ( int level = 1; level <= 10; level++ )
+    {
+        QDomElement listLevelStyle;
+        if ( m_listLevelStyle == LLS_NUMBER )
+        {
+            listLevelStyle = doc.createElement( "text:list-level-style-number" );
+            listLevelStyle.setAttribute( "text:level", level );
+            if ( m_num_suffix != QString::null )
+                listLevelStyle.setAttribute( "style:num-suffix", m_num_suffix );
+            if ( m_num_format != QString::null )
+                listLevelStyle.setAttribute( "style:num-format", m_num_format );
+        }
+        else
+        {
+            listLevelStyle = doc.createElement( "text:list-level-style-bullet" );
+            listLevelStyle.setAttribute( "text:level", level );
+            if ( m_bullet_char != QString::null )
+                listLevelStyle.setAttribute( "text:bullet-char", m_bullet_char );
+        }
+
+        QDomElement properties = doc.createElement( "style:properties" );
+        if ( level > 1 )
+        {
+            properties.setAttribute( "text:min-label-width",
+                                     QString( "%1cm" ).arg( m_min_label_width ) );
+            properties.setAttribute( "text:space-before",
+                                     QString( "%1cm" ).arg( m_min_label_width * ( level - 1 ) ) );
+        }
+
+        if ( m_color != QString::null )
+            properties.setAttribute( "fo:color", m_color );
+        if ( m_font_size != QString::null )
+            properties.setAttribute( "fo:font-size", m_font_size );
+        if ( m_font_family != QString::null )
+            properties.setAttribute( "fo:font-family", m_font_family );
+
+        listLevelStyle.appendChild( properties );
+        style.appendChild( listLevelStyle );
+    }
+    e.appendChild( style );
+}
+
+bool ListStyle::operator==( const ListStyle & listStyle ) const
+{
+    return ( m_listLevelStyle == listStyle.m_listLevelStyle &&
+             m_num_suffix == listStyle.m_num_suffix &&
+             m_num_format == listStyle.m_num_format &&
+             m_bullet_char == listStyle.m_bullet_char &&
+             m_min_label_width == listStyle.m_min_label_width &&
+             m_color == listStyle.m_color &&
+             m_font_size == listStyle.m_font_size &&
+             m_font_family == listStyle.m_font_family );
+}
