@@ -127,7 +127,7 @@ public:
   KCompletion listCompletion;
 
   int numOperations;
-  
+
   QValueList<KSpread::Damage*> damages;
 
   // document properties
@@ -269,7 +269,7 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     setInitDocFlags(flags);
     QString f;
-    
+
     if (flags==KoDocument::InitDocEmpty)
     {
         KConfig *config = KSpreadFactory::global()->config();
@@ -290,10 +290,10 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
         setEmpty();
         initConfig();
         d->styleManager->createBuiltinStyles();
-        
+
         return true;
     }
-    
+
     KoTemplateChooseDia::ReturnType ret;
     KoTemplateChooseDia::DialogType dlgtype;
     if (flags != KoDocument::InitDocFileNew )
@@ -835,7 +835,7 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         delete d->m_loadingInfo;
         d->m_loadingInfo = 0L;
         return false;
-    }	
+    }
     //load in first
     d->styleManager->loadOasisStyleTemplate( oasisStyles );
 
@@ -1006,7 +1006,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
    kdDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
 
   emit sig_refreshView();
-  
+
   return true;
 }
 
@@ -2079,7 +2079,7 @@ void KSpreadDoc::loadOasisCellValidation( const QDomElement&body )
     }
 }
 
-bool KSpreadDoc::saveOasisAreaName( KoXmlWriter & xmlWriter )
+void KSpreadDoc::saveOasisAreaName( KoXmlWriter & xmlWriter )
 {
     if ( listArea().count()>0 )
     {
@@ -2097,7 +2097,6 @@ bool KSpreadDoc::saveOasisAreaName( KoXmlWriter & xmlWriter )
         }
         xmlWriter.endElement();
     }
-    return true;
 }
 
 void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
@@ -2368,7 +2367,7 @@ void KSpreadDoc::addView( KoView *_view )
 void KSpreadDoc::addDamage( Damage* damage )
 {
     d->damages.append( damage );
-  
+
     if( d->damages.count() == 1 )
         QTimer::singleShot( 0, this, SLOT( flushDamages() ) );
 }

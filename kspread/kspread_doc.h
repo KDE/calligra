@@ -454,7 +454,7 @@ public:
   virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* );
   virtual bool loadChildren( KoStore* _store );
   QDomElement saveAreaName( QDomDocument& doc ) ;
-    bool saveOasisAreaName( KoXmlWriter & xmlWriter );
+    void saveOasisAreaName( KoXmlWriter & xmlWriter );
 
   void loadAreaName( const QDomElement& element );
   void loadOasisAreaName( const QDomElement& element );
@@ -656,15 +656,15 @@ public:
     KSPLoadingInfo * loadingInfo() const;
   void increaseNumOperation();
   void decreaseNumOperation();
-    
+
   void addDamage( KSpread::Damage* damage );
-  
+
 public slots:
 
   //void newView(); obsloete (Werner)
 
   void refreshInterface();
-  
+
   void flushDamages();
 
 signals:
@@ -688,7 +688,7 @@ signals:
 
   void sig_addAreaName( const QString & );
   void sig_removeAreaName( const QString & );
-  
+
   void damagesFlushed( const QValueList<KSpread::Damage*>& damages );
 
 protected:
