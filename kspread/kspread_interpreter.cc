@@ -1752,11 +1752,9 @@ static bool kspreadfunc_effective( KSContext& context )
     return false;
   double nominal = args[0]->doubleValue();
   double periods = args[1]->doubleValue();
-
-  if ( periods == 0.0 ) // Check null
-      return false;
   
-  context.setValue( new KSValue(  pow(1+nominal/periods, periods)-1));
+  context.setValue( new KSValue(  pow( 1 + nominal, periods )- 1 ) );
+  
   return true;
 }
 
@@ -1777,9 +1775,11 @@ static bool kspreadfunc_nominal( KSContext& context )
   double effective = args[0]->doubleValue();
   double periods = args[1]->doubleValue();
 
+  if ( periods == 0.0 ) // Check null
+      return false;
 
-  context.setValue( new KSValue(  periods *( pow(1+effective, 1/periods)-1)
-));
+  context.setValue( new KSValue(  pow( 1 + effective, 1 / periods ) - 1 ) );
+		    
   return true;
 }
 
