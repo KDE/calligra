@@ -279,23 +279,23 @@ void KWBorderPreview::drawContents( QPainter* painter )
     painter->setClipRect( r.x() + fm.width( 'W' ), r.y() + fm.height(), r.width() - 2 * fm.width( 'W' ),
                           r.height() - 2 * fm.height() );
 
-    if ( topBorder.ptWidth > 0 ) {
-        painter->setPen( setBorderPen( topBorder ) );
+    if ( m_topBorder.ptWidth > 0 ) {
+        painter->setPen( setBorderPen( m_topBorder ) );
         painter->drawLine( r.x() + 20, r.y() + 20, r.right() - 20, r.y() + 20 );
     }
 
-    if ( bottomBorder.ptWidth > 0 ) {
-        painter->setPen( setBorderPen( bottomBorder ) );
+    if ( m_bottomBorder.ptWidth > 0 ) {
+        painter->setPen( setBorderPen( m_bottomBorder ) );
         painter->drawLine( r.x() + 20, r.bottom() - 20, r.right() - 20, r.bottom() - 20 );
     }
 
-    if ( leftBorder.ptWidth > 0 ) {
-        painter->setPen( setBorderPen( leftBorder ) );
+    if ( m_leftBorder.ptWidth > 0 ) {
+        painter->setPen( setBorderPen( m_leftBorder ) );
         painter->drawLine( r.x() + 20, r.y() + 20, r.x() + 20, r.bottom() - 20 );
     }
 
-    if ( rightBorder.ptWidth > 0 ) {
-        painter->setPen( setBorderPen( rightBorder ) );
+    if ( m_rightBorder.ptWidth > 0 ) {
+        painter->setPen( setBorderPen( m_rightBorder ) );
         painter->drawLine( r.right() - 20, r.y() + 20, r.right() - 20, r.bottom() - 20 );
     }
 }

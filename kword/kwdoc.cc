@@ -241,8 +241,8 @@ bool KWDocument::initDoc()
     m_pageLayout.unit = PG_MM;
     m_pages = 1;
 
-    m_pageColumns.columns = 1; //STANDARD_COLUMNS;
-    m_pageColumns.ptColumnSpacing = tableCellSpacing;
+    m_pageColumns.columns = 1;
+    m_pageColumns.ptColumnSpacing = s_defaultColumnSpacing;
 
     m_pageHeaderFooter.header = HF_SAME;
     m_pageHeaderFooter.footer = HF_SAME;
@@ -282,8 +282,8 @@ void KWDocument::initEmpty()
     m_pageLayout.unit = PG_MM;
     m_pages = 1;
 
-    m_pageColumns.columns = 1; //STANDARD_COLUMNS;
-    m_pageColumns.ptColumnSpacing = tableCellSpacing;
+    m_pageColumns.columns = 1;
+    m_pageColumns.ptColumnSpacing = s_defaultColumnSpacing;
 
     m_pageHeaderFooter.header = HF_SAME;
     m_pageHeaderFooter.footer = HF_SAME;
@@ -904,8 +904,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     m_pageLayout.unit = PG_MM;
 
-    m_pageColumns.columns = 1; //STANDARD_COLUMNS;
-    m_pageColumns.ptColumnSpacing = tableCellSpacing;
+    m_pageColumns.columns = 1;
+    m_pageColumns.ptColumnSpacing = s_defaultColumnSpacing;
 
     m_pageHeaderFooter.header = HF_SAME;
     m_pageHeaderFooter.footer = HF_SAME;
@@ -2661,7 +2661,7 @@ void KWDocument::refreshFrameBorderButton()
         frame = KWFrameSet::settingsFrame(frame);
         for ( ; it.current() ; ++it )
         {
-            it.current()->showFrameBorders( frame->getLeftBorder(), frame->getRightBorder(), frame->getTopBorder(), frame->getBottomBorder() );
+            it.current()->showFrameBorders( frame->leftBorder(), frame->rightBorder(), frame->topBorder(), frame->bottomBorder() );
         }
     }
 }

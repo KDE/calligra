@@ -252,7 +252,7 @@ public slots:
 
     void slotSpecialChar(QChar , const QString &);
     void slotFrameSetEditChanged();
-    void setTool( MouseMode _mouseMode );
+    void setTool( int /*KWCanvas::MouseMode*/ _mouseMode );
     void frameSelectedChanged();
     void docStructChanged(int _type);
 

@@ -94,7 +94,7 @@ public:
      *                    allowing the caller to determine which areas remain to be painted.
      */
     virtual void createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode );
-    void drawBorders( QPainter *painter, const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas );
+    void drawBorders( QPainter& painter, const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas );
     virtual void drawContents( QPainter * painter, const QRect & crect,
                                QColorGroup & cg, bool onlyChanged, bool resetChanged,
                                KWFrameSetEdit *edit, KWViewMode *viewMode, KWCanvas *canvas );
@@ -228,7 +228,7 @@ public:
 
     virtual void updateFrames();
 
-    virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
+    virtual void moveFloatingFrame( int frameNum, const QPoint &position );
     virtual QSize floatingFrameSize( int frameNum );
     /** Store command for creating an anchored object */
     virtual KCommand * anchoredObjectCreateCommand( int frameNum );
@@ -258,6 +258,7 @@ private:
     bool m_isRendered;
     QList<Cell> m_cells;
     QValueList<int> m_pageBoundaries;
+    static const unsigned int tableCellSpacing;
 };
 
 /**

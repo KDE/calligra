@@ -126,10 +126,10 @@ KWFrame *KWFrame::getCopy() {
     frm->setNewFrameBehaviour(getNewFrameBehaviour());
     frm->setSheetSide(getSheetSide());
     frm->setPageNum(pageNum());
-    frm->setLeftBorder(getLeftBorder());
-    frm->setRightBorder(getRightBorder());
-    frm->setTopBorder(getTopBorder());
-    frm->setBottomBorder(getBottomBorder());
+    frm->setLeftBorder(leftBorder());
+    frm->setRightBorder(rightBorder());
+    frm->setTopBorder(topBorder());
+    frm->setBottomBorder(bottomBorder());
     frm->setBLeft(getBLeft());
     frm->setBRight(getBRight());
     frm->setBTop(getBTop());
@@ -229,52 +229,52 @@ void KWFrame::save( QDomElement &frameElem )
     if(runAroundGap()!=0)
         frameElem.setAttribute( "runaroundGap", runAroundGap() );
 
-    if(getLeftBorder().ptWidth!=0)
-        frameElem.setAttribute( "lWidth", getLeftBorder().ptWidth );
+    if(leftBorder().ptWidth!=0)
+        frameElem.setAttribute( "lWidth", leftBorder().ptWidth );
 
-    if(getLeftBorder().color.isValid())
+    if(leftBorder().color.isValid())
     {
-        frameElem.setAttribute( "lRed", getLeftBorder().color.red() );
-        frameElem.setAttribute( "lGreen", getLeftBorder().color.green() );
-        frameElem.setAttribute( "lBlue", getLeftBorder().color.blue() );
+        frameElem.setAttribute( "lRed", leftBorder().color.red() );
+        frameElem.setAttribute( "lGreen", leftBorder().color.green() );
+        frameElem.setAttribute( "lBlue", leftBorder().color.blue() );
     }
-    if(getLeftBorder().style != Border::SOLID)
-        frameElem.setAttribute( "lStyle", static_cast<int>( getLeftBorder().style ) );
+    if(leftBorder().style != Border::SOLID)
+        frameElem.setAttribute( "lStyle", static_cast<int>( leftBorder().style ) );
 
-    if(getRightBorder().ptWidth!=0)
-        frameElem.setAttribute( "rWidth", getRightBorder().ptWidth );
+    if(rightBorder().ptWidth!=0)
+        frameElem.setAttribute( "rWidth", rightBorder().ptWidth );
 
-    if(getRightBorder().color.isValid())
+    if(rightBorder().color.isValid())
     {
-        frameElem.setAttribute( "rRed", getRightBorder().color.red() );
-        frameElem.setAttribute( "rGreen", getRightBorder().color.green() );
-        frameElem.setAttribute( "rBlue", getRightBorder().color.blue() );
+        frameElem.setAttribute( "rRed", rightBorder().color.red() );
+        frameElem.setAttribute( "rGreen", rightBorder().color.green() );
+        frameElem.setAttribute( "rBlue", rightBorder().color.blue() );
     }
-    if(getRightBorder().style != Border::SOLID)
-        frameElem.setAttribute( "rStyle", static_cast<int>( getRightBorder().style ) );
+    if(rightBorder().style != Border::SOLID)
+        frameElem.setAttribute( "rStyle", static_cast<int>( rightBorder().style ) );
 
-    if(getTopBorder().ptWidth!=0)
-        frameElem.setAttribute( "tWidth", getTopBorder().ptWidth );
+    if(topBorder().ptWidth!=0)
+        frameElem.setAttribute( "tWidth", topBorder().ptWidth );
 
-    if(getTopBorder().color.isValid())
+    if(topBorder().color.isValid())
     {
-        frameElem.setAttribute( "tRed", getTopBorder().color.red() );
-        frameElem.setAttribute( "tGreen", getTopBorder().color.green() );
-        frameElem.setAttribute( "tBlue", getTopBorder().color.blue() );
+        frameElem.setAttribute( "tRed", topBorder().color.red() );
+        frameElem.setAttribute( "tGreen", topBorder().color.green() );
+        frameElem.setAttribute( "tBlue", topBorder().color.blue() );
     }
-    if(getTopBorder().style != Border::SOLID)
-        frameElem.setAttribute( "tStyle", static_cast<int>( getTopBorder().style ) );
+    if(topBorder().style != Border::SOLID)
+        frameElem.setAttribute( "tStyle", static_cast<int>( topBorder().style ) );
 
-    if(getBottomBorder().ptWidth!=0) {
-        frameElem.setAttribute( "bWidth", getBottomBorder().ptWidth );
+    if(bottomBorder().ptWidth!=0) {
+        frameElem.setAttribute( "bWidth", bottomBorder().ptWidth );
     }
-    if(getBottomBorder().color.isValid()) {
-        frameElem.setAttribute( "bRed", getBottomBorder().color.red() );
-        frameElem.setAttribute( "bGreen", getBottomBorder().color.green() );
-        frameElem.setAttribute( "bBlue", getBottomBorder().color.blue() );
+    if(bottomBorder().color.isValid()) {
+        frameElem.setAttribute( "bRed", bottomBorder().color.red() );
+        frameElem.setAttribute( "bGreen", bottomBorder().color.green() );
+        frameElem.setAttribute( "bBlue", bottomBorder().color.blue() );
     }
-    if(getBottomBorder().style != Border::SOLID)
-        frameElem.setAttribute( "bStyle", static_cast<int>( getBottomBorder().style ) );
+    if(bottomBorder().style != Border::SOLID)
+        frameElem.setAttribute( "bStyle", static_cast<int>( bottomBorder().style ) );
 
     if(getBackgroundColor().color().isValid())
     {
@@ -502,8 +502,8 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
     // otherwise the frames will erase the border when painting themselves.
 
     Border::drawBorders( *painter, m_doc, frameRect,
-                         settingsFrame->getLeftBorder(), settingsFrame->getRightBorder(),
-                         settingsFrame->getTopBorder(), settingsFrame->getBottomBorder(),
+                         settingsFrame->leftBorder(), settingsFrame->rightBorder(),
+                         settingsFrame->topBorder(), settingsFrame->bottomBorder(),
                          1, viewSetting );
     painter->restore();
 }
@@ -642,21 +642,22 @@ void KWFrameSet::deleteAnchors()
     emit repaintChanged( textfs );
 }
 
-void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
+void KWFrameSet::moveFloatingFrame( int frameNum, const QPoint &position )
 {
     KWFrame * frame = frames.at( frameNum );
     ASSERT( frame );
     if ( !frame ) return;
 
-    KoPoint pos( position );
+    QPoint pos( position );
     // position includes the border, we need to adjust accordingly
-    pos.rx() += Border::zoomWidthX( frame->getLeftBorder().ptWidth, m_doc, 1 );
-    pos.ry() += Border::zoomWidthY( frame->getTopBorder().ptWidth, m_doc, 1 );
-
-    if ( frame->topLeft() != pos )
+    pos.rx() += Border::zoomWidthX( frame->leftBorder().ptWidth, m_doc, 1 );
+    pos.ry() += Border::zoomWidthY( frame->topBorder().ptWidth, m_doc, 1 );
+    // Now we can unzoom
+    KoPoint kopos = m_doc->unzoomPoint( pos );
+    if ( frame->topLeft() != kopos )
     {
-        kdDebug() << "KWFrameSet::moveFloatingFrame " << pos.x() << "," << pos.y() << endl;
-        frame->moveTopLeft( pos );
+        kdDebug() << "KWFrameSet::moveFloatingFrame " << kopos.x() << "," << kopos.y() << endl;
+        frame->moveTopLeft( kopos );
         kWordDocument()->updateAllFrames();
     }
 }
@@ -839,6 +840,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                    << " crect= " << DEBUGRECT(crect)
                    << endl; */
     m_currentDrawnCanvas = canvas;
+    bool drawBorders = ( getGroupManager() == 0 );
 
     QListIterator<KWFrame> frameIt( frameIterator() );
     KWFrame * lastRealFrame = 0L;
@@ -899,21 +901,24 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                 p->restore();
             }
         }
-        QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
-        r = crect.intersect( outerRect );
-        if ( !r.isEmpty() )
+        if ( drawBorders )
         {
-            // Now draw the frame border
-            // Clip frames on top if onlyChanged, but don't clip to the frame
-            QRegion reg = frameClipRegion( p, 0L, r, viewMode, onlyChanged );
-            if ( !reg.isEmpty() )
+            QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
+            r = crect.intersect( outerRect );
+            if ( !r.isEmpty() )
             {
-                p->save();
-                p->setClipRegion( reg );
-                KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
-                drawFrameBorder( p, frame, settingsFrame, r, viewMode, canvas );
-                p->restore();
-            }// else kdDebug() << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
+                // Now draw the frame border
+                // Clip frames on top if onlyChanged, but don't clip to the frame
+                QRegion reg = frameClipRegion( p, 0L, r, viewMode, onlyChanged );
+                if ( !reg.isEmpty() )
+                {
+                    p->save();
+                    p->setClipRegion( reg );
+                    KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
+                    drawFrameBorder( p, frame, settingsFrame, r, viewMode, canvas );
+                    p->restore();
+                }// else kdDebug() << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
+            }
         }
         if ( !lastRealFrame || !frame->isCopy() )
         {

@@ -136,10 +136,10 @@ public:
     int pageNum() { return m_pageNum; }
 
     /* All borders can be custom drawn with their own colors etc. */
-    const Border &getLeftBorder() const { return brd_left; }
-    const Border &getRightBorder() const { return brd_right; }
-    const Border &getTopBorder() const { return brd_top; }
-    const Border &getBottomBorder() const { return brd_bottom; }
+    const Border &leftBorder() const { return brd_left; }
+    const Border &rightBorder() const { return brd_right; }
+    const Border &topBorder() const { return brd_top; }
+    const Border &bottomBorder() const { return brd_bottom; }
 
     void setLeftBorder( Border _brd ) { brd_left = _brd; }
     void setRightBorder( Border _brd ) { brd_right = _brd; }
@@ -473,7 +473,7 @@ public:
 
     /** Move the frame frameNum to the given position - this is called when
         the frame is anchored and the anchor moves (see KWAnchor). */
-    virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
+    virtual void moveFloatingFrame( int frameNum, const QPoint &position );
     /** Get the [zoomed] size of the "floating frame" identified by frameNum.
         By default a real frame but not for tables. */
     virtual QSize floatingFrameSize( int frameNum );

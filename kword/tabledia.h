@@ -113,7 +113,6 @@ protected slots:
     void rowsChanged( int );
     void colsChanged( int );
     virtual void slotOk();
-    virtual void slotClose();
 };
 
 #endif

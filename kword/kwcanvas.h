@@ -113,12 +113,20 @@ public:
     void mrCreatePart();
     void mrCreateFormula();
     void mrCreateTable();
-    // TODO Mouse double-click
 
+    enum MouseMode {
+        MM_EDIT = 0,
+        MM_CREATE_TEXT = 2,
+        MM_CREATE_PIX = 3,
+        MM_CREATE_TABLE = 5,
+        MM_CREATE_FORMULA = 6,
+        MM_CREATE_PART = 7
+    };
     void setMouseMode( MouseMode _mm );
-    MouseMode getMouseMode(){return m_mouseMode;}
+    MouseMode mouseMode() { return m_mouseMode; }
+
     void insertPicture( const QString &filename, bool isClipart );
-    void setPartEntry( const KoDocumentEntry & e ) { m_partEntry = e; }
+    void insertPart();
 
     void updateCurrentFormat();
 
@@ -196,7 +204,7 @@ signals:
     // Emitted by the current frameset edit when its selection changes
     void selectionChanged( bool hasSelection );
     // Emitted when Mouse Mode changed
-    void currentMouseModeChanged(MouseMode newMouseMode);
+    void currentMouseModeChanged(int newMouseMode);
     // Emitted when frames have been selected or unselected (to disable/enable the UI in kwview)
     void frameSelectedChanged();
     // Emitted when the document structure has changed

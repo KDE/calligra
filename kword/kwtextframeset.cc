@@ -907,7 +907,7 @@ void KWTextFrameSet::updateFrames()
     if ( width != textdoc->width() )
         textdoc->setWidth( width );
 
-    kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
+    //kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
 
     // Sort frames of this frameset on (page, y coord, x coord)
 

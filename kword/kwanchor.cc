@@ -50,8 +50,8 @@ void KWAnchor::move( int x, int y )
     if ( fs->internalToNormal( QPoint( x, y+paragy ), nPoint ) )
     {
         //kdDebug(32001) << "KWAnchor::draw moving frame to [zoomed pos] " << nPoint.x() << "," << nPoint.y() << endl;
-        // Move the frame to position x,y.
-        m_frameset->moveFloatingFrame( m_frameNum, KoPoint( nPoint.x() / doc->zoomedResolutionX(), nPoint.y() / doc->zoomedResolutionY() ) );
+        // Move the frame to position nPoint.
+        m_frameset->moveFloatingFrame( m_frameNum, nPoint );
     }
 }
 

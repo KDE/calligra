@@ -28,15 +28,6 @@
 // Try to add new defines and enums in the most appropriate class
 // instead of in this file. Only very global things should be here.
 
-enum MouseMode {
-    MM_EDIT = 0,
-    MM_CREATE_TEXT = 2,
-    MM_CREATE_PIX = 3,
-    MM_CREATE_TABLE = 5,
-    MM_CREATE_FORMULA = 6,
-    MM_CREATE_PART = 7
-};
-
 #define KWBarIcon( x ) BarIcon( x, KWFactory::global() )
 
 #define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
@@ -45,7 +36,6 @@ enum MouseMode {
 
 const unsigned int minFrameWidth=18;
 const unsigned int minFrameHeight=20;
-const unsigned int tableCellSpacing=3;
 
 /** The different types of framesets
  * FT_BASE = unused <br>

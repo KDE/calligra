@@ -40,6 +40,7 @@
 #include <kdebug.h>
 #include <kapp.h>
 #include <kmessagebox.h>
+#include <koPartSelectDia.h>
 #include <config.h>
 #include <assert.h>
 
@@ -1215,14 +1216,14 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
         frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
-        tmp->m_OldBorder=frame->getLeftBorder();
+        tmp->m_OldBorder=frame->leftBorder();
         tmp->m_EFrameType= FBLeft;
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
         if (_b)
         {
-            if (_frmBrd!=frame->getLeftBorder())
+            if (_frmBrd!=frame->leftBorder())
             {
                 leftFrameBorderChanged=true;
                 frame->setLeftBorder(_frmBrd);
@@ -1230,7 +1231,7 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
         }
         else
         {
-            if(frame->getLeftBorder().ptWidth!=0)
+            if(frame->leftBorder().ptWidth!=0)
             {
                 leftFrameBorderChanged=true;
                 frame->setLeftBorder(_frmBrd);
@@ -1262,7 +1263,7 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
         frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
-        tmp->m_OldBorder=frame->getRightBorder();
+        tmp->m_OldBorder=frame->rightBorder();
         tmp->m_EFrameType= FBRight;
 
         tmpBorderList.append(tmp);
@@ -1270,7 +1271,7 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
 
         if (_b)
         {
-            if (_frmBrd!=frame->getRightBorder())
+            if (_frmBrd!=frame->rightBorder())
             {
                 rightFrameBorderChanged=true;
                 frame->setRightBorder(_frmBrd);
@@ -1278,7 +1279,7 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
         }
         else
         {
-            if(frame->getRightBorder().ptWidth!=0)
+            if(frame->rightBorder().ptWidth!=0)
             {
                 frame->setRightBorder(_frmBrd);
                 rightFrameBorderChanged=true;
@@ -1311,14 +1312,14 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
         frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
-        tmp->m_OldBorder=frame->getTopBorder();
+        tmp->m_OldBorder=frame->topBorder();
         tmp->m_EFrameType= FBTop;
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
         if (_b)
         {
-            if (_frmBrd!=frame->getTopBorder())
+            if (_frmBrd!=frame->topBorder())
             {
                 topFrameBorderChanged=true;
                 frame->setTopBorder(_frmBrd);
@@ -1326,7 +1327,7 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
         }
         else
         {
-            if(frame->getTopBorder().ptWidth!=0)
+            if(frame->topBorder().ptWidth!=0)
             {
                 topFrameBorderChanged=true;
                 frame->setTopBorder(_frmBrd);
@@ -1358,14 +1359,14 @@ void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
         frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
-        tmp->m_OldBorder=frame->getBottomBorder();
+        tmp->m_OldBorder=frame->bottomBorder();
         tmp->m_EFrameType= FBBottom;
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
         if (_b)
         {
-            if (_frmBrd!=frame->getBottomBorder())
+            if (_frmBrd!=frame->bottomBorder())
             {
                 bottomFrameBorderChanged=true;
                 frame->setBottomBorder(_frmBrd);
@@ -1373,7 +1374,7 @@ void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
         }
         else
         {
-            if(frame->getBottomBorder().ptWidth!=0)
+            if(frame->bottomBorder().ptWidth!=0)
             {
                 bottomFrameBorderChanged=true;
                 frame->setBottomBorder(_frmBrd);
@@ -1413,7 +1414,7 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
         frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex;
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
-        tmp->m_OldBorder=frame->getBottomBorder();
+        tmp->m_OldBorder=frame->bottomBorder();
         tmp->m_EFrameType= FBBottom;
 
 
@@ -1427,7 +1428,7 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
 
         index=new FrameIndex;
         tmp=new FrameBorderTypeStruct;
-        tmp->m_OldBorder=frame->getTopBorder();
+        tmp->m_OldBorder=frame->topBorder();
         tmp->m_EFrameType= FBTop;
 
         index->m_pFrameSet=frame->getFrameSet();
@@ -1439,7 +1440,7 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
 
         index=new FrameIndex;
         tmp=new FrameBorderTypeStruct;
-        tmp->m_OldBorder=frame->getRightBorder();
+        tmp->m_OldBorder=frame->rightBorder();
         tmp->m_EFrameType= FBRight;
 
         index->m_pFrameSet=frame->getFrameSet();
@@ -1450,7 +1451,7 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
 
         index=new FrameIndex;
         tmp=new FrameBorderTypeStruct;
-        tmp->m_OldBorder=frame->getLeftBorder();
+        tmp->m_OldBorder=frame->leftBorder();
         tmp->m_EFrameType= FBLeft;
 
         index->m_pFrameSet=frame->getFrameSet();
@@ -1461,13 +1462,13 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
 
         if (_b)
         {
-            if (_frmBrd!=frame->getBottomBorder())
+            if (_frmBrd!=frame->bottomBorder())
                 frame->setBottomBorder(_frmBrd);
-            if (_frmBrd!=frame->getTopBorder())
+            if (_frmBrd!=frame->topBorder())
                 frame->setTopBorder(_frmBrd);
-            if (_frmBrd!=frame->getLeftBorder())
+            if (_frmBrd!=frame->leftBorder())
                 frame->setLeftBorder(_frmBrd);
-            if (_frmBrd!=frame->getRightBorder())
+            if (_frmBrd!=frame->rightBorder())
                 frame->setRightBorder(_frmBrd);
         }
         else
@@ -1745,6 +1746,15 @@ void KWCanvas::insertPicture( const QString & filename, bool isClipart )
     setMouseMode( MM_CREATE_PIX );
     m_pictureFilename = filename;
     m_isClipart = isClipart;
+}
+
+void KWCanvas::insertPart()
+{
+    setMouseMode( MM_EDIT );
+    KoDocumentEntry m_partEntry = KoPartSelectDia::selectPart( this );
+    if ( m_partEntry.isEmpty() )
+        return;
+    setMouseMode( MM_CREATE_PART );
 }
 
 void KWCanvas::contentsDragEnterEvent( QDragEnterEvent *e )

@@ -579,6 +579,9 @@ private:
     double m_indent; // in pt
 
     int m_iNbPagePerRow;
+
+    // Maybe the default value should be configurable and saved somehow?
+    static const unsigned int s_defaultColumnSpacing = 3;
 };
 
 

@@ -71,7 +71,6 @@
 #include <koDocument.h>
 #include <koRuler.h>
 #include <koTabChooser.h>
-#include <koPartSelectDia.h>
 #include <koTemplateCreateDia.h>
 #include <koFrame.h>
 
@@ -147,8 +146,8 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     connect( m_gui->canvasWidget(), SIGNAL(currentFrameSetEditChanged()),
              this, SLOT(slotFrameSetEditChanged()) );
 
-    connect( m_gui->canvasWidget(), SIGNAL(currentMouseModeChanged(MouseMode)),
-             this, SLOT(setTool(MouseMode)));
+    connect( m_gui->canvasWidget(), SIGNAL( currentMouseModeChanged(int) ),
+             this, SLOT( setTool(int) ) );
 
     // Cut and copy are directly connected to the selectionChanged signal
     if ( m_doc->isReadWrite() )
@@ -245,7 +244,7 @@ void KWView::initGui()
 
     if ( m_gui )
         m_gui->showGUI();
-    setTool( MM_EDIT );
+    setTool( KWCanvas::MM_EDIT );
     actionViewFrameBorders->setChecked( viewFrameBorders() );
     actionViewFormattingChars->setChecked( m_doc->viewFormattingChars() );
 
@@ -260,8 +259,8 @@ void KWView::initGui()
     changeZoomMenu( m_doc->zoom() );
     showZoom( m_doc->zoom() );
 
-    MouseMode mouseMode=m_gui->canvasWidget()->getMouseMode();
-    m_gui->canvasWidget()->setMouseMode( mouseMode );
+    // This is probably to emit currentMouseModeChanged and set the cursor
+    m_gui->canvasWidget()->setMouseMode( m_gui->canvasWidget()->mouseMode() );
 
     showFormulaToolbar( FALSE );
 
@@ -1160,24 +1159,24 @@ void KWView::updateReadWrite( bool readwrite )
     }
 }
 
-void KWView::setTool( MouseMode _mouseMode )
+void KWView::setTool( int _mouseMode )
 {
     switch ( _mouseMode ) {
-    case MM_EDIT:
-    case MM_CREATE_TABLE:
-    case MM_CREATE_FORMULA:
+    case KWCanvas::MM_EDIT:
+    case KWCanvas::MM_CREATE_TABLE:
+    case KWCanvas::MM_CREATE_FORMULA:
         // No tool to activate for this mode -> deselect all the others
         actionToolsCreateText->setChecked( false );
         actionToolsCreatePix->setChecked( false );
         actionToolsCreatePart->setChecked( false );
         break;
-    case MM_CREATE_TEXT:
+    case KWCanvas::MM_CREATE_TEXT:
         actionToolsCreateText->setChecked( true );
         break;
-    case MM_CREATE_PIX:
+    case KWCanvas::MM_CREATE_PIX:
         actionToolsCreatePix->setChecked( true );
         break;
-    case MM_CREATE_PART:
+    case KWCanvas::MM_CREATE_PART:
         actionToolsCreatePart->setChecked( true );
         break;
     }
@@ -1568,7 +1567,7 @@ void KWView::insertPicture()
     if ( dia.exec() == QDialog::Accepted && !dia.filename().isEmpty() )
         insertPicture( dia.filename(), dia.type() == KWInsertPicDia::IPD_CLIPART, dia.makeInline() );
     else
-        setTool( MM_EDIT );
+        setTool( KWCanvas::MM_EDIT );
 }
 
 void KWView::slotEmbedImage( const QString &filename )
@@ -1614,7 +1613,7 @@ void KWView::insertPicture( const QString &filename, bool isClipart, bool makeIn
         edit->insertFloatingFrameSet( fs, i18n("Insert Picture Inline") );
         fs->finalize(); // done last since it triggers a redraw
         // Reset the 'tool'
-        setTool( MM_EDIT );
+        setTool( KWCanvas::MM_EDIT );
     }
     else
     {
@@ -1928,28 +1927,10 @@ void KWView::extraCreateTemplate()
                                                     "kword/templates/");
 }
 
-#if 0
-void KWView::toolsEdit()
-{
-    if ( actionToolsEdit->isChecked() )
-        m_gui->canvasWidget()->setMouseMode( MM_EDIT );
-    else
-        actionToolsEdit->setChecked( true ); // always one has to be checked !
-}
-
-void KWView::toolsEditFrame()
-{
-    if ( actionToolsEditFrames->isChecked() )
-        m_gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
-    else
-        actionToolsEditFrames->setChecked( true ); // always one has to be checked !
-}
-#endif
-
 void KWView::toolsCreateText()
 {
     if ( actionToolsCreateText->isChecked() )
-        m_gui->canvasWidget()->setMouseMode( MM_CREATE_TEXT );
+        m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_CREATE_TEXT );
     else
         actionToolsCreateText->setChecked( true ); // always one has to be checked !
 }
@@ -1964,7 +1945,8 @@ void KWView::insertTable()
                                            canvas->tableHeightMode(),
                                            canvas->tableIsFloating() );
     tableDia->setCaption( i18n( "Insert Table" ) );
-    tableDia->show();
+    if ( tableDia->exec() == QDialog::Rejected )
+        canvas->setMouseMode( KWCanvas::MM_EDIT );
     delete tableDia;
 }
 
@@ -1995,19 +1977,12 @@ void KWView::toolsPart()
         actionToolsCreatePart->setChecked( true ); // always one has to be checked !
         return;
     }
-    m_gui->canvasWidget()->setMouseMode( MM_EDIT );
-
-    KoDocumentEntry pe = KoPartSelectDia::selectPart( this );
-    if ( pe.isEmpty() )
-        return;
-
-    m_gui->canvasWidget()->setMouseMode( MM_CREATE_PART );
-    m_gui->canvasWidget()->setPartEntry( pe );
+    m_gui->canvasWidget()->insertPart();
 }
 
 void KWView::tableInsertRow()
 {
-    m_gui->canvasWidget()->setMouseMode( MM_EDIT );
+    m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
     KWInsertDia dia( this, "", table, m_doc, KWInsertDia::ROW, m_gui->canvasWidget() );
@@ -2017,7 +1992,7 @@ void KWView::tableInsertRow()
 
 void KWView::tableInsertCol()
 {
-    m_gui->canvasWidget()->setMouseMode( MM_EDIT );
+    m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
     // value = 62 because a insert column = 60 +2 (border )see kwtableframeset.cc
@@ -2038,7 +2013,7 @@ void KWView::tableInsertCol()
 
 void KWView::tableDeleteRow()
 {
-    m_gui->canvasWidget()->setMouseMode( MM_EDIT );
+    m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
@@ -2068,7 +2043,7 @@ void KWView::tableDeleteRow()
 
 void KWView::tableDeleteCol()
 {
-    m_gui->canvasWidget()->setMouseMode( MM_EDIT );
+    m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
@@ -2097,7 +2072,7 @@ void KWView::tableDeleteCol()
 
 void KWView::tableJoinCells()
 {
-    //m_gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
+    //m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT_FRAME );
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
@@ -2126,7 +2101,7 @@ void KWView::tableSplitCells() {
 
 void KWView::tableSplitCells(int cols, int rows)
 {
-    //m_gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
+    //m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT_FRAME );
 
     QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
@@ -2157,7 +2132,7 @@ void KWView::tableSplitCells(int cols, int rows)
 
 void KWView::tableUngroupTable()
 {
-    m_gui->canvasWidget()->setMouseMode( MM_EDIT );
+    m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);

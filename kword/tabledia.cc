@@ -244,12 +244,6 @@ void KWTableDia::slotOk()
     KDialogBase::slotOk();
 }
 
-void KWTableDia::slotClose()
-{
-    canvas->setMouseMode( MM_EDIT );
-    KDialogBase::slotClose();
-}
-
 void KWTableDia::rowsChanged( int _rows )
 {
     preview->setRows( _rows );

@@ -116,21 +116,21 @@ public:
     KWBorderPreview( QWidget*, const char* = 0L );
     ~KWBorderPreview() {}
 
-    Border getLeftBorder() { return leftBorder; }
-    void setLeftBorder( Border _leftBorder ) { leftBorder = _leftBorder; repaint( true ); }
-    Border getRightBorder() { return rightBorder; }
-    void setRightBorder( Border _rightBorder ) { rightBorder = _rightBorder; repaint( true ); }
-    Border getTopBorder() { return topBorder; }
-    void setTopBorder( Border _topBorder ) { topBorder = _topBorder; repaint( true ); }
-    Border getBottomBorder() { return bottomBorder; }
-    void setBottomBorder( Border _bottomBorder ) { bottomBorder = _bottomBorder; repaint( true ); }
+    Border leftBorder() { return m_leftBorder; }
+    void setLeftBorder( Border _leftBorder ) { m_leftBorder = _leftBorder; repaint( true ); }
+    Border rightBorder() { return m_rightBorder; }
+    void setRightBorder( Border _rightBorder ) { m_rightBorder = _rightBorder; repaint( true ); }
+    Border topBorder() { return m_topBorder; }
+    void setTopBorder( Border _topBorder ) { m_topBorder = _topBorder; repaint( true ); }
+    Border bottomBorder() { return m_bottomBorder; }
+    void setBottomBorder( Border _bottomBorder ) { m_bottomBorder = _bottomBorder; repaint( true ); }
 
 protected:
     virtual void mousePressEvent( QMouseEvent* _ev );
     void drawContents( QPainter* );
     QPen setBorderPen( Border _brd );
 
-    Border leftBorder, rightBorder, topBorder, bottomBorder;
+    Border m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
 signals:
     void choosearea(QMouseEvent * _ev);
 

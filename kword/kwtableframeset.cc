@@ -32,6 +32,12 @@ DESCRIPTION
 #include "kwviewmode.h"
 #include "kwview.h"
 
+// I changed this to 1 because it fixes cell border drawing in the normal case
+// and because e.g. msword has no big cell-spacing by default.
+// The real fix here would be to have a spacing per line and per row, that depends
+// on the border (max of the borders of all cells on the line)
+const unsigned int KWTableFrameSet::tableCellSpacing = 1; // 3;
+
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     KWFrameSet( doc )
 {
@@ -99,16 +105,22 @@ void KWTableFrameSet::updateFrames()
     KWFrameSet::updateFrames();
 }
 
-void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &position )
+void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const QPoint &position )
 {
     Cell * cell = getCell( 0, 0 );
     ASSERT( cell );
     if ( !cell ) return;
     KoPoint currentPos = cell->getFrame( 0 )->topLeft();
-    if ( currentPos != position )
+    QPoint pos( position );
+    // position includes the border, we need to adjust accordingly
+    pos.rx() += Border::zoomWidthX( cell->getFrame( 0 )->leftBorder().ptWidth, m_doc, 1 );
+    pos.ry() += Border::zoomWidthY( cell->getFrame( 0 )->topBorder().ptWidth, m_doc, 1 );
+    // Now we can unzoom
+    KoPoint kopos = m_doc->unzoomPoint( pos );
+    if ( currentPos != kopos )
     {
-        kdDebug() << "KWTableFrameSet::moveFloatingFrame " << position.x() << "," << position.y() << endl;
-        KoPoint offset = position - currentPos;
+        kdDebug() << "KWTableFrameSet::moveFloatingFrame " << kopos.x() << "," << kopos.y() << endl;
+        KoPoint offset = kopos - currentPos;
         moveBy( offset.x(), offset.y() );
         // ## TODO apply page breaking
 
@@ -125,7 +137,21 @@ QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
 {
     // ## TODO cut into one rectangle per page
     KoRect r = boundingRect();
-    return kWordDocument()->zoomRect( r ).size();
+    QRect outerRect( m_doc->zoomRect( r ) );
+
+    // TODO: in theory, we'd need to take the max of the borders of each cell
+    // on the outside rect, to find the global rect needed. Well, if we assume constant
+    // cell borders for now it's much simpler.
+    KWFrame * firstCell = m_cells.getFirst()->getFrame( 0 );
+    KWFrame * lastCell = m_cells.getLast()->getFrame( 0 );
+    if ( firstCell && lastCell )
+    {
+        outerRect.rLeft() -= Border::zoomWidthX( firstCell->leftBorder().ptWidth, m_doc, 1 );
+        outerRect.rTop() -= Border::zoomWidthY( firstCell->topBorder().ptWidth, m_doc, 1 );
+        outerRect.rRight() += Border::zoomWidthX( lastCell->rightBorder().ptWidth, m_doc, 1 );
+        outerRect.rBottom() += Border::zoomWidthY( lastCell->bottomBorder().ptWidth, m_doc, 1 );
+    }
+    return outerRect.size();
 }
 
 KCommand * KWTableFrameSet::anchoredObjectCreateCommand( int /*frameNum*/ )
@@ -541,10 +567,10 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
                     //newFrameSet->assign( baseFrameSet );
 
                     newFrameSet->getFrame(0)->setBackgroundColor( baseFrameSet->getFrame( 0 )->getBackgroundColor() );
-                    newFrameSet->getFrame(0)->setLeftBorder( baseFrameSet->getFrame( 0 )->getLeftBorder() );
-                    newFrameSet->getFrame(0)->setRightBorder( baseFrameSet->getFrame( 0 )->getRightBorder() );
-                    newFrameSet->getFrame(0)->setTopBorder( baseFrameSet->getFrame( 0 )->getTopBorder() );
-                    newFrameSet->getFrame(0)->setBottomBorder( baseFrameSet->getFrame( 0 )->getBottomBorder() );
+                    newFrameSet->getFrame(0)->setLeftBorder( baseFrameSet->getFrame( 0 )->leftBorder() );
+                    newFrameSet->getFrame(0)->setRightBorder( baseFrameSet->getFrame( 0 )->rightBorder() );
+                    newFrameSet->getFrame(0)->setTopBorder( baseFrameSet->getFrame( 0 )->topBorder() );
+                    newFrameSet->getFrame(0)->setBottomBorder( baseFrameSet->getFrame( 0 )->bottomBorder() );
                     newFrameSet->getFrame(0)->setBLeft( baseFrameSet->getFrame( 0 )->getBLeft() );
                     newFrameSet->getFrame(0)->setBRight( baseFrameSet->getFrame( 0 )->getBRight() );
                     newFrameSet->getFrame(0)->setBTop( baseFrameSet->getFrame( 0 )->getBTop() );
@@ -1364,130 +1390,122 @@ void KWTableFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyReg
     }
 }
 
-void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas )
+void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas )
 {
-    painter->save();
+    painter.save();
 
-    QListIterator<KWFrame> frameIt = frameIterator();
-    for ( ; frameIt.current(); ++frameIt )
+    // We need 'i'
+    //QListIterator<KWFrame> frameIt = frameIterator();
+    //for ( ; frameIt.current(); ++frameIt )
+    bool topOfPage = true;
+    for(uint i = 0; i < m_cells.count(); i++)
     {
-        KWFrame *frame = frameIt.current();
-        QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
+        Cell *cell = m_cells.at(i);
+        //KWFrame *frame = frameIt.current();
+        KWFrame *frame = cell->getFrame( 0 );
+        if ( !frame )
+            continue;
 
+        // This sets topOfPage for the first cell that is on top of a page,
+        // _leaves_ it to true for the other cells in the same row,
+        // and resets it to false at the next cell in the first column.
+        if ( m_pageBoundaries.contains( i ) )
+            topOfPage = true;
+        else if ( cell->m_col == 0 )
+            topOfPage = false;
+
+        //kdDebug() << "KWTableFrameSet::drawBorders i=" << i << " row=" << cell->m_row << " col=" << cell->m_col
+        //          << " topOfPage=" << topOfPage << endl;
+
+        QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
         if ( !crect.intersects( outerRect ) )
             continue;
 
-        QRect frameRect( viewMode->normalToView( m_doc->zoomRect( *frame ) ) );
+        QRect rect( viewMode->normalToView( m_doc->zoomRect( *frame ) ) );
         // Set the background color.
         QBrush bgBrush( frame->getBackgroundColor() );
-	bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
-        painter->setBrush( bgBrush );
+	bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), &painter ) );
+        painter.setBrush( bgBrush );
 
         // Draw default borders using view settings...
-        QPen viewSetting( lightGray ); // TODO use qcolorgroup
+        QPen defaultPen( lightGray ); // TODO use qcolorgroup
         // ...except when printing, or embedded doc, or disabled.
-        if ( ( painter->device()->devType() == QInternal::Printer ) ||
+        if ( ( painter.device()->devType() == QInternal::Printer ) ||
              !canvas || !canvas->gui()->getView()->viewFrameBorders() )
         {
-            viewSetting.setColor( bgBrush.color() );
+            defaultPen.setColor( bgBrush.color() );
         }
 
         // Draw borders either as the user defined them, or using the view settings.
         // Borders should be drawn _outside_ of the frame area
         // otherwise the frames will erase the border when painting themselves.
 
-        bool printing = painter->device()->devType() == QInternal::Printer;
-
-        //    Border::drawBorders( *painter, m_doc, frameRect,
-        //         frame->getLeftBorder(), frame->getRightBorder(),
-        //         frame->getTopBorder(), frame->getBottomBorder(),
+        //    Border::drawBorders( painter, m_doc, frameRect,
+        //         frame->leftBorder(), frame->rightBorder(),
+        //         frame->topBorder(), frame->bottomBorder(),
         //         1, viewSetting );
 
-        QPen pen;
-        double width;
-        int w;
+        const int minborder = 1;
 
-        // Right
-        width = frame->getRightBorder().ptWidth;
-        if ( width > 0 )
-        {
-            w = QMAX( 1, (int)(m_doc->zoomItX( width ) + 0.5) );
-            pen = Border::borderPen( frame->getRightBorder(), w, printing );
-        }
-        else
-        {
-            w = 1;
-            pen = viewSetting;
-        }
-        painter->setPen( pen );
-        w = QMAX( w / 2, 1 );
-        painter->drawLine( frameRect.right() + w, frameRect.y(),
-                           frameRect.right() + w, frameRect.bottom() );
+        // ###### We'll need some code to ensure that this->rightborder == cell_on_right->leftborder etc.
+        Border topBorder = frame->topBorder();
+        Border bottomBorder = frame->bottomBorder();
+        Border leftBorder = frame->leftBorder();
+        Border rightBorder = frame->rightBorder();
+        int topBorderWidth = Border::zoomWidthY( topBorder.ptWidth, m_doc, minborder );
+        int bottomBorderWidth = Border::zoomWidthY( bottomBorder.ptWidth, m_doc, minborder );
+        int leftBorderWidth = Border::zoomWidthX( leftBorder.ptWidth, m_doc, minborder );
+        int rightBorderWidth = Border::zoomWidthX( rightBorder.ptWidth, m_doc, minborder );
 
-        // Bottom
-        width = frame->getBottomBorder().ptWidth;
-        if ( width > 0 )
-        {
-            w = QMAX( 1, (int)(m_doc->zoomItY( width ) + 0.5) );
-            pen = Border::borderPen( frame->getBottomBorder(), w, printing );
-        }
-        else
-        {
-            w = 1;
-            pen = viewSetting;
-        }
-        painter->setPen( pen );
-        w = QMAX( w / 2, 1 );
-        painter->drawLine( frameRect.x(),     frameRect.bottom() + w,
-                           frameRect.right(), frameRect.bottom() + w );
+        QColor defaultColor = KWDocument::defaultTextColor( &painter );
 
-//        if ( cell->m_col == 0 ) // draw left only for 1st column.
-        {
-            // Left
-            width = frame->getLeftBorder().ptWidth;
-            if ( width > 0 )
+        if ( topOfPage )  // draw top only for 1st row on every page.
+            if ( topBorderWidth > 0 )
             {
-                w = QMAX( 1, (int)(m_doc->zoomItX( width ) + 0.5) );
-                pen = Border::borderPen( frame->getLeftBorder(), w, printing );
+                if ( topBorder.ptWidth > 0 )
+                    painter.setPen( Border::borderPen( topBorder, topBorderWidth, defaultColor ) );
+                else
+                    painter.setPen( defaultPen );
+                int y = rect.top() - topBorderWidth + topBorderWidth/2;
+                painter.drawLine( rect.left()-leftBorderWidth, y, rect.right()+rightBorderWidth, y );
             }
+        if ( bottomBorderWidth > 0 )
+        {
+            if ( bottomBorder.ptWidth > 0 )
+                painter.setPen( Border::borderPen( bottomBorder, bottomBorderWidth, defaultColor ) );
             else
-            {
-                w = 1;
-                pen = viewSetting;
-            }
-            painter->setPen( pen );
-            w = QMAX( w / 2, 1 );
-            painter->drawLine( frameRect.x() - w, frameRect.y(),
-                               frameRect.x() - w, frameRect.bottom() );
+                painter.setPen( defaultPen );
+            int y = rect.bottom() + bottomBorderWidth - bottomBorderWidth/2;
+            painter.drawLine( rect.left()-leftBorderWidth, y, rect.right()+rightBorderWidth, y );
         }
-//        if ( cell->m_row == 0 ) // draw top only for 1st row.
+        if ( cell->m_col == 0 ) // draw left border only for 1st column.
+            if ( leftBorderWidth > 0 )
+            {
+                if ( leftBorder.ptWidth > 0 )
+                    painter.setPen( Border::borderPen( leftBorder, leftBorderWidth, defaultColor ) );
+                else
+                    painter.setPen( defaultPen );
+                int x = rect.left() - leftBorderWidth + leftBorderWidth/2;
+                painter.drawLine( x, rect.top()-topBorderWidth, x, rect.bottom()+bottomBorderWidth );
+            }
+        if ( rightBorderWidth > 0 )
         {
-            // Top
-            width = frame->getTopBorder().ptWidth;
-            if ( width > 0 )
-            {
-                w = QMAX( 1, (int)(m_doc->zoomItY( width ) + 0.5) );
-                pen = Border::borderPen( frame->getTopBorder(), w, printing );
-            }
+            if ( rightBorder.ptWidth > 0 )
+                painter.setPen( Border::borderPen( rightBorder, rightBorderWidth, defaultColor ) );
             else
-            {
-                w = 1;
-                pen = viewSetting;
-            }
-            painter->setPen( pen );
-            w = QMAX( w / 2, 1 );
-            painter->drawLine( frameRect.x(),     frameRect.y() - w,
-                               frameRect.right(), frameRect.y() - w );
+                painter.setPen( defaultPen );
+            int x = rect.right() + rightBorderWidth - rightBorderWidth/2;
+            painter.drawLine( x, rect.top()-topBorderWidth, x, rect.bottom()+bottomBorderWidth );
         }
     }
-    painter->restore();
+    painter.restore();
 }
 
 void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
                                     QColorGroup & cg, bool onlyChanged, bool resetChanged,
                                     KWFrameSetEdit * edit, KWViewMode * viewMode, KWCanvas *canvas )
 {
-    drawBorders( painter, crect, viewMode, canvas );
+    drawBorders( *painter, crect, viewMode, canvas );
     for (unsigned int i=0; i < m_cells.count() ; i++)
     {
         if (edit)
