@@ -39,20 +39,25 @@ public:
 	
 	virtual VComposite *shape( bool interactive = false ) const;
 
+	void refreshUnit();
+
 private:
 	class VPolygonOptionsWidget : public QGroupBox
 	{
 	public:
-		VPolygonOptionsWidget( QWidget *parent = 0L, const char *name = 0L );
+		VPolygonOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char *name = 0L );
 
 		double radius() const;
 		uint edges() const;
 		void setRadius( double value );
 		void setEdges( uint value );
 
+		void refreshUnit();
+
 	private:
 		KoUnitDoubleSpinBox	*m_radius;
 		KIntSpinBox			*m_edges;
+		KarbonPart          *m_part;
 	};
 
 	VPolygonOptionsWidget* m_optionsWidget;

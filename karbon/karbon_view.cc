@@ -1406,6 +1406,7 @@ void KarbonView::setUnit( KoUnit::Unit /*_unit*/ )
 	m_spiralTool->refreshUnit();
 	m_starTool->refreshUnit();
 	m_roundRectTool->refreshUnit();
+	m_polygonTool->refreshUnit();
 }
 
 #include "karbon_view.moc"
