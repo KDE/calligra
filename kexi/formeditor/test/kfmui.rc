@@ -45,6 +45,7 @@
   <Menu name="format">
   <text>&amp;Format</text>
    <Action name="snap_to_grid"/>
+   <Action name="align_menu"/>
   </Menu>
   <Menu name="Debug">
    <text>&amp;Debug</text>

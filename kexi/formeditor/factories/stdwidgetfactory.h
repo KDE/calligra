@@ -30,7 +30,7 @@ class KFORMEDITOR_EXPORT MyPicLabel : public QLabel
 	Q_OBJECT
 
 	public:
-		MyPicLabel(const QPixmap *pix, QWidget *parent, const char *name);
+		MyPicLabel(const QPixmap &pix, QWidget *parent, const char *name);
 		~MyPicLabel(){;}
 
 		virtual bool setProperty(const char *name, const QVariant &value);

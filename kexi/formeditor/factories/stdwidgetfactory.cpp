@@ -51,10 +51,10 @@
 #include "stdwidgetfactory.h"
 
 // Some widgets subclass to allow event filtering and some other things
-MyPicLabel::MyPicLabel(const QPixmap *pix, QWidget *parent, const char *name)
+MyPicLabel::MyPicLabel(const QPixmap &pix, QWidget *parent, const char *name)
  : QLabel(parent, name)
 {
-	setPixmap(*pix);
+	setPixmap(pix);
 	setScaledContents(false);
 }
 
@@ -278,7 +278,7 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	if(c == "QLabel")
 		w = new QLabel(i18n("Label"), p, n);
 	if(c == "MyPicLabel")
-		w = new MyPicLabel(p->topLevelWidget()->icon(), p, n);
+		w = new MyPicLabel(DesktopIcon("image"), p, n);
 
 	else if(c == "KLineEdit")
 	{

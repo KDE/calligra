@@ -103,7 +103,7 @@ class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 class KFORMEDITOR_EXPORT InsertWidgetCommand : public KCommand
 {
 	public:
-		InsertWidgetCommand(Container *container, QPoint point);
+		InsertWidgetCommand(Container *container/*, QPoint point*/);
 
 		virtual void execute();
 		virtual void unexecute();

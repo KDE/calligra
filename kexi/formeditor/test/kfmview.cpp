@@ -72,6 +72,13 @@ KFMView::KFMView()
 	//TODO
 #endif
 
+	KActionMenu *alignMenu = new KActionMenu(i18n("Align Widgets position"), QString::null, actionCollection(), "align_menu");
+	alignMenu->insert( new KAction(i18n("Align To Left"), "aoleft", KShortcut(0), manager, SLOT(alignWidgetsToLeft()), actionCollection(), "align_to_left") );
+	alignMenu->insert( new KAction(i18n("Align To Right"), "aoright", KShortcut(0), manager, SLOT(alignWidgetsToRight()), actionCollection(), "align_to_right") );
+	alignMenu->insert( new KAction(i18n("Align To Top"), "aotop", KShortcut(0), manager, SLOT(alignWidgetsToTop()), actionCollection(), "align_to_top") );
+	alignMenu->insert( new KAction(i18n("Align To Bottom"), "aobottom", KShortcut(0), manager, SLOT(alignWidgetsToBottom()), actionCollection(), "align_to_bottom") );
+	alignMenu->insert( new KAction(i18n("Align To Grid"), "grid", KShortcut(0), manager, SLOT(alignWidgetsToGrid()), actionCollection(), "align_to_grid") );
+
 	manager->createActions(actionCollection(), this);
 	connect(manager, SIGNAL(createFormSlot(Form*, const QString &, const QString &)),
 	   this, SLOT(slotCreateFormSlot(Form*, const QString&, const QString &)) );

@@ -593,10 +593,30 @@ FormManager::copyWidget()
 	if(list->isEmpty())
 		return;
 
+	for(QWidget *w = list->first(); w; w = list->next())
+	{
+		QWidget *widg;
+		// If any widget in the list is a child of this widget, we remove it from the list
+		// to avoid storing twice the same widget
+		for(widg = list->first(); widg; widg = list->next())
+		{
+			if((w != widg) && (w->child(widg->name())))
+			{
+				kdDebug() << "Removing the widget " << widg->name() << "which is a child of " << w->name() << endl;
+				list->remove(widg);
+			}
+		}
+
+		widg = list->first();
+		while(widg != w)
+			widg = list->next();
+	}
+
 	// We clear the current clipboard
 	m_domDoc.setContent(QString(), true);
 	QDomElement parent = m_domDoc.createElement("UI");
 	m_domDoc.appendChild(parent);
+	FormIO::setCurrentForm(activeForm());
 
 	QWidget *w;
 	for(w = list->first(); w; w = list->next())
@@ -604,8 +624,16 @@ FormManager::copyWidget()
 		ObjectTreeItem *it = activeForm()->objectTree()->lookup(w->name());
 		if (!it)
 			continue;
+		FormIO::setCurrentItem(it);
 		FormIO::saveWidget(it, parent, m_domDoc);
 	}
+
+	FormIO::setCurrentForm(0);
+	FormIO::setCurrentItem(0);
+
+	// remove includehints element not needed
+	if(!parent.namedItem("includehints").isNull())
+		parent.removeChild(parent.namedItem("includehints"));
 }
 
 void
@@ -929,6 +957,126 @@ FormManager::editConnections()
 
 	ConnectionDialog *dialog = new ConnectionDialog(activeForm()->toplevelContainer()->widget()->topLevelWidget());
 	dialog->exec(activeForm());
+}
+
+void
+FormManager::alignWidgetsToLeft()
+{
+	if(!activeForm() || (activeForm()->selectedWidgets()->count() < 2))
+		return;
+
+	QWidget *parentWidget = activeForm()->selectedWidgets()->first()->parentWidget();
+	int tmpx = parentWidget->width();
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+	{
+		if(w->parentWidget() != parentWidget)
+		{
+			kdDebug() << "FormManager::alignWidgetsToLeft() widgets don't have the same parent widget" << endl;
+			return;
+		}
+
+		if(w->x() < tmpx)
+			tmpx = w->x();
+	}
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+		w->move(tmpx, w->y());
+}
+
+void
+FormManager::alignWidgetsToRight()
+{
+	if(!activeForm() || (activeForm()->selectedWidgets()->count() < 2))
+		return;
+
+	QWidget *parentWidget = activeForm()->selectedWidgets()->first()->parentWidget();
+	int tmpx = 0;
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+	{
+		if(w->parentWidget() != parentWidget)
+		{
+			kdDebug() << "FormManager::alignWidgetsToRight() widgets don't have the same parent widget" << endl;
+			return;
+		}
+
+		if(w->x() + w->width() > tmpx)
+			tmpx = w->x() + w->width();
+	}
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+		w->move(tmpx - w->width(), w->y());
+}
+
+void
+FormManager::alignWidgetsToTop()
+{
+	if(!activeForm() || (activeForm()->selectedWidgets()->count() < 2))
+		return;
+
+	QWidget *parentWidget = activeForm()->selectedWidgets()->first()->parentWidget();
+	int tmpy = parentWidget->height();
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+	{
+		if(w->parentWidget() != parentWidget)
+		{
+			kdDebug() << "FormManager::alignWidgetsToLeft() widgets don't have the same parent widget" << endl;
+			return;
+		}
+
+		if(w->y() < tmpy)
+			tmpy = w->y();
+	}
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+		w->move(w->x(), tmpy);
+}
+
+void
+FormManager::alignWidgetsToBottom()
+{
+	if(!activeForm() || (activeForm()->selectedWidgets()->count() < 2))
+		return;
+
+	QWidget *parentWidget = activeForm()->selectedWidgets()->first()->parentWidget();
+	int tmpy = 0;
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+	{
+		if(w->parentWidget() != parentWidget)
+		{
+			kdDebug() << "FormManager::alignWidgetsToRight() widgets don't have the same parent widget" << endl;
+			return;
+		}
+
+		if(w->y() + w->height() > tmpy)
+			tmpy = w->y() + w->height();
+	}
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+		w->move(w->x(), tmpy - w->height());
+}
+
+void
+FormManager::alignWidgetsToGrid()
+{
+	if(!activeForm())
+		return;
+
+	int gridX = activeForm()->gridX();
+	int gridY = activeForm()->gridY();
+	int tmpx, tmpy;
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+	{
+		tmpx = int( (float)w->x() / ((float)gridX) + 0.5 );
+		tmpy = int( (float)w->y() / ((float)gridY) + 0.5 );
+
+		if((tmpx != w->x()) || (tmpy != w->y()))
+			w->move(tmpx, tmpy);
+	}
 }
 
 void

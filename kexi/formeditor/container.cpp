@@ -227,7 +227,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 						unSelectWidget(m_moving);
 					else // the widget is the only selected, so it means we want to copy it
 					{
-						m_insertRect = m_moving->geometry();
+						m_copyRect = m_moving->geometry();
 						m_state = CopyingWidget;
 						if(m_form->formWidget())
 							m_form->formWidget()->initRect();
@@ -264,7 +264,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 					tmpy *= gridX;
 				}
 
-				m_insertBegin = QPoint(tmpx, tmpy);
+				m_insertBegin = ((QWidget*)s)->mapTo(m_container, QPoint(tmpx, tmpy));
 				if(m_form->formWidget())
 					m_form->formWidget()->initRect();
 
@@ -286,8 +286,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 			{
 				if(m_form->formWidget())
 					m_form->formWidget()->clearRect();
-				KCommand *com = new InsertWidgetCommand(this, mev->pos());
+				KCommand *com = new InsertWidgetCommand(this/*, mev->pos()*/);
 				m_form->addCommand(com, true);
+				m_insertRect = QRect();
 				return true;
 			}
 			else if(s == m_container && !m_toplevel && (mev->button() != RightButton) && m_insertRect.isValid()) // we are drawing a rect to select widgets
@@ -302,31 +303,18 @@ Container::eventFilter(QObject *s, QEvent *e)
 				QRect r = QRect(QPoint(topx, topy), QPoint(botx, boty));
 
 				QWidget *w=0;
-				QtWidgetList list;
-
+				setSelectedWidget(m_container, false);
 				// We check which widgets are in the rect and select them
 				for(ObjectTreeItem *item = m_tree->children()->first(); item; item = m_tree->children()->next())
 				{
 					w = item->widget();
 					if(!w) continue;
 					if(w->geometry().intersects(r) && w != m_container)
-						list.append(w);
-				}
-
-				if(list.isEmpty())
-				{
-					setSelectedWidget(m_container, false);
-				}
-				else
-				{
-					setSelectedWidget(list.first(), false);
-					w = list.first();
-					for(w = list.next(); w; w = list.next())
 						setSelectedWidget(w, true);
 				}
 
 				m_insertRect = QRect();
-				//m_state = DoingNothing;
+				m_state = DoingNothing;
 				m_container->repaint();
 				return true;
 			}
@@ -337,10 +325,11 @@ Container::eventFilter(QObject *s, QEvent *e)
 					enable = false;
 				m_form->manager()->createContextMenu((QWidget*)s, this, enable);
 			}
-			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton) && (m_insertRect.isValid()))
+			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton) && (m_copyRect.isValid()))
 			{
-				m_state = DoingNothing;
 				// copying a widget by Ctrl+dragging
+				m_state = DoingNothing;
+				m_copyRect = QRect();
 				if(m_form->formWidget())
 					m_form->formWidget()->clearRect();
 				if(s == m_container) // should have no effect on form
@@ -360,7 +349,6 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_form->manager()->pasteWidget();
 				m_form->setInteractiveMode(true);
 
-				m_insertRect = QRect();
 				m_initialPos = QPoint();
 				//m_state = DoingNothing;
 			}
@@ -370,6 +358,17 @@ Container::eventFilter(QObject *s, QEvent *e)
 				//m_move = false;
 				m_initialPos = QPoint();
 			}
+			// cancel copying as user released Ctrl before releasing mouse button
+			else if(m_state == CopyingWidget)
+			{
+				m_state = DoingNothing;
+				m_copyRect = QRect();
+				if(m_form->formWidget())
+					m_form->formWidget()->clearRect();
+			}
+
+			m_copyRect = QRect();
+			m_insertRect = QRect();
 			m_state = DoingNothing;
 			return true; // eat
 		}
@@ -381,18 +380,19 @@ Container::eventFilter(QObject *s, QEvent *e)
 			// draw the insert rect
 			{
 				int tmpx,tmpy;
+				QPoint pos = ((QWidget*)s)->mapTo(m_container, mev->pos());
 				int gridX = m_form->gridX();
 				int gridY = m_form->gridY();
 				if(!m_form->manager()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)) )
 				{
-					tmpx = mev->x();
-					tmpy = mev->y();
+					tmpx = pos.x();
+					tmpy = pos.y();
 				}
 				else
 				{
-					tmpx = int( (float) mev->x() / ((float)gridX) + 0.5);
+					tmpx = int( (float) pos.x() / ((float)gridX) + 0.5);
 					tmpx *= gridX;
-					tmpy = int( (float)mev->y() / ((float)gridY) + 0.5);
+					tmpy = int( (float)pos.y() / ((float)gridY) + 0.5);
 					tmpy *= gridX;
 				}
 
@@ -400,8 +400,17 @@ Container::eventFilter(QObject *s, QEvent *e)
 				int topy = (m_insertBegin.y() < tmpy) ? m_insertBegin.y() : tmpy;
 				int botx = (m_insertBegin.x() > tmpx) ? m_insertBegin.x() : tmpx;
 				int boty = (m_insertBegin.y() > tmpy) ? m_insertBegin.y() : tmpy;
-				//m_insertRect = QRect(QPoint(topx, topy), QPoint(botx, boty));
-				m_insertRect = QRect(((QWidget*)s)->mapTo(m_container, QPoint(topx, topy)), ((QWidget*)s)->mapTo(m_container, QPoint(botx, boty)));
+				m_insertRect = QRect(QPoint(topx, topy), QPoint(botx, boty));
+				//m_insertRect = QRect(((QWidget*)s)->mapTo(m_container, QPoint(topx, topy)), ((QWidget*)s)->mapTo(m_container, QPoint(botx, boty)));
+
+				if(m_insertRect.x() < 0)
+					m_insertRect.setX(0);
+				if(m_insertRect.y() < 0)
+					m_insertRect.setY(0);
+				if(m_insertRect.right() > m_container->width())
+					m_insertRect.setRight(m_container->width());
+				if(m_insertRect.bottom() > m_container->height())
+					m_insertRect.setBottom(m_container->height());
 
 				if(m_form->manager()->inserting() && m_insertRect.isValid())
 				{
@@ -459,18 +468,18 @@ Container::eventFilter(QObject *s, QEvent *e)
 					m_state = CopyingWidget;
 				}
 
-				m_insertRect.moveTopLeft(m_container->mapFromGlobal( mev->globalPos()) - m_grab);
+				m_copyRect.moveTopLeft(m_container->mapFromGlobal( mev->globalPos()) - m_grab);
 
 				if(m_form->formWidget())
 				{
-					QRect drawRect = QRect(m_container->mapTo(m_form->toplevelContainer()->widget(), m_insertRect.topLeft())
-						 , m_insertRect.size());
+					QRect drawRect = QRect(m_container->mapTo(m_form->toplevelContainer()->widget(), m_copyRect.topLeft())
+						 , m_copyRect.size());
 					m_form->formWidget()->drawRect(drawRect, 2);
 				}
 				return true;
 			}
 			else if( ( (mev->state() == Qt::LeftButton) || (mev->state() == (LeftButton|ControlButton|AltButton)) )
-			  && !m_form->manager()->inserting()) // we are dragging the widget(s) to move it
+			  && !m_form->manager()->inserting() && (m_state != CopyingWidget)) // we are dragging the widget(s) to move it
 			{
 				//QWidget *w = m_moving;
 				if(!m_toplevel && m_moving == m_container) // no effect for form
@@ -480,12 +489,13 @@ Container::eventFilter(QObject *s, QEvent *e)
 				int gridX = m_form->gridX();
 				int gridY = m_form->gridY();
 
+				// If we later switch to copy mode, we need to store those info
 				if(m_form->selectedWidgets()->count() == 1)
 				{
 					if(m_initialPos.isNull())
 						m_initialPos = m_form->selectedWidgets()->first()->pos();
 					if(!m_insertRect.isValid())
-						m_insertRect = m_form->selectedWidgets()->first()->geometry();
+						m_copyRect = m_form->selectedWidgets()->first()->geometry();
 				}
 
 				for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
@@ -518,6 +528,14 @@ Container::eventFilter(QObject *s, QEvent *e)
 					m_moving->move(tmpx,tmpy);*/
 				//m_move = true;
 				m_state = MovingWidget;
+			}
+			// cancel copying as user released Ctrl
+			else if((m_state == CopyingWidget) && (mev->state() == Qt::LeftButton))
+			{
+				//m_state = DoingNothing;
+				m_copyRect = QRect();
+				if(m_form->formWidget())
+					m_form->formWidget()->clearRect();
 			}
 
 			return true; // eat
@@ -553,6 +571,16 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_state = MovingWidget;
 			break;
 		}
+		case QEvent::KeyRelease:
+		{
+			QKeyEvent *kev = static_cast<QKeyEvent*>(e);
+			if(kev->key() != Key_F2) // pressing F2 == double-clicking
+				return true;
+
+			m_state = InlineEditing;
+			m_form->manager()->lib()->startEditing(m_moving->className(), m_moving, this);
+			return true;
+		}
 		case QEvent::MouseButtonDblClick: // editing
 		{
 			kdDebug() << "Container: Mouse dbl click for widget " << s->name() << endl;
@@ -572,7 +600,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 		case QEvent::FocusIn:
 		case QEvent::FocusOut:
 		case QEvent::KeyPress:
-		case QEvent::KeyRelease:
+		//case QEvent::KeyRelease:
 			return true; // eat them
 
 		default:

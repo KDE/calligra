@@ -167,6 +167,14 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Creates a dialog to edit the current Form's PixmapCollection. */
 		void editFormPixmapCollection();
 		void editConnections();
+
+		void alignWidgetsToLeft();
+		void alignWidgetsToRight();
+		void alignWidgetsToTop();
+		void alignWidgetsToBottom();
+		void alignWidgetsToGrid();
+
+
 		/*! This slot is called when the user presses a "Widget" toolbar button or a "Widget" menu item. Prepares all Forms for
 		  creation of a new widget (ie changes cursor ...).
 		 */

@@ -122,6 +122,9 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		*/
 		static void   prop(QDomElement &parentNode, QDomDocument &parent, const char *name, const QVariant &value, QWidget *w, WidgetLibrary *lib=0);
 
+		static void    setCurrentForm(Form *form) { m_currentForm = form; }
+		static void    setCurrentItem(ObjectTreeItem *item) { m_currentItem = item; }
+
 	protected:
 		/*! Saves the QVariant \a value as text to be included in an xml file, with \a parentNode.*/
 		static void   writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant value);

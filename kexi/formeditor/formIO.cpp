@@ -493,7 +493,7 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant val
 		{
 			type = parent.createElement("pixmap");
 			QString property = parentNode.attribute("name");
-			if(m_savePixmapsInline)
+			if(m_savePixmapsInline || m_currentItem->pixmapName(property).isNull())
 				valueE = parent.createTextNode(saveImage(parent, value.toPixmap()));
 			else
 				valueE = parent.createTextNode(m_currentItem->pixmapName(property));
@@ -720,7 +720,11 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 		if(m_savePixmapsInline)
 			return loadImage(tag.ownerDocument(), text);
 		else if(m_currentForm)
+		{
+			if(m_currentItem)
+				m_currentItem->addPixmapName(name, text);
 			return m_currentForm->pixmapCollection()->getPixmap(text);
+		}
 		else return QVariant(QPixmap());
 	}
 	else if(type == "enum")

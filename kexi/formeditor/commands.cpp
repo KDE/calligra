@@ -198,13 +198,14 @@ LayoutPropertyCommand::name() const
 
 // InsertWidgetCommand
 
-InsertWidgetCommand::InsertWidgetCommand(Container *container, QPoint p)
-  : KCommand(), m_point(p)
+InsertWidgetCommand::InsertWidgetCommand(Container *container/*, QPoint p*/)
+  : KCommand()//, m_point(p)
 {
 	m_containername = container->widget()->name();
 	m_form = container->form();
 	m_class = container->form()->manager()->insertClass();
 	m_insertRect = container->m_insertRect;
+	m_point = container->m_insertBegin;
 }
 
 void
@@ -221,7 +222,7 @@ InsertWidgetCommand::execute()
 	if(!w)
 		return;
 
-	m_container->m_insertRect = m_insertRect;
+	//m_container->m_insertRect = m_insertRect;
 	// if the insertRect is invalid (ie only one point), we use widget' size hint
 	if/*(!m_container->m_insertRect.isValid() || */(( (m_insertRect.width() < 21) && (m_insertRect.height() < 21))) //|| (w->inherits("QLabel")))
 	{
@@ -240,15 +241,15 @@ InsertWidgetCommand::execute()
 			x = m_point.x();
 			y = m_point.y();
 		}
-		m_container->m_insertRect = QRect(x, y, s.width(), s.height());
+		m_insertRect = QRect(x, y, s.width(), s.height());
 	}
-	w->move(m_container->m_insertRect.x(), m_container->m_insertRect.y());
-	w->resize(m_container->m_insertRect.width()-1, m_container->m_insertRect.height()-1);
+	w->move(m_insertRect.x(), m_insertRect.y());
+	w->resize(m_insertRect.width()-1, m_insertRect.height()-1);
 	w->setStyle(&(m_container->widget()->style()));
 	w->setBackgroundOrigin(QWidget::ParentOrigin);
 	w->show();
 
-	m_container->m_insertRect = QRect();
+	//m_container->m_insertRect = QRect();
 	m_container->form()->manager()->stopInsert();
 
 	if (!m_container->form()->objectTree()->lookup(m_name))
@@ -433,6 +434,8 @@ PasteWidgetCommand::execute()
 		return;
 	}
 
+	FormIO::setCurrentForm(m_container->form());
+
 	kdDebug() << domDoc.toString() << endl;
 	if(!domDoc.namedItem("UI").hasChildNodes()) // nothing in the doc
 		return;
@@ -452,6 +455,7 @@ PasteWidgetCommand::execute()
 		m_container->form()->pasteWidget(widg, m_container);
 	}
 
+	FormIO::setCurrentForm(0);
 	m_names.clear();
 	// We store the names of all the created widgets, to delete them later
 	for(QDomNode n = domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling())
@@ -468,13 +472,10 @@ PasteWidgetCommand::execute()
 		}
 	}
 
-	ObjectTreeItem *item = m_form->objectTree()->lookup(m_names.first());
-	if(item)
-		m_container->setSelectedWidget(item->widget(), false);
-	QStringList::Iterator it = m_names.begin();
-	for(++it; it != m_names.end(); ++it) // We select all the pasted widgets
+	m_container->form()->resetSelection();
+	for(QStringList::Iterator it = m_names.begin(); it != m_names.end(); ++it) // We select all the pasted widgets
 	{
-		item = m_form->objectTree()->lookup(*it);
+		ObjectTreeItem *item = m_form->objectTree()->lookup(*it);
 		if(item)
 			m_container->setSelectedWidget(item->widget(), true);
 	}

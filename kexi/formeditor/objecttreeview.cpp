@@ -172,7 +172,7 @@ ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name, bool tabStop)
 	if(!tabStop)
 	{
 		setSelectionModeExt(Extended);
-		connect(this, SIGNAL(selectionChanged()), this, SLOT(emitSelChanged()));
+		connect(this, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 		connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint&)), this, SLOT(displayContextMenu(KListView*, QListViewItem*, const QPoint&)));
 	}
 
@@ -236,9 +236,12 @@ ObjectTreeView::findItem(const QString &name)
 void
 ObjectTreeView::setSelectedWidget(QWidget *w, bool add)
 {
+	blockSignals(true); // to avoid recursion
+
 	if(!w)
 	{
 		clearSelection();
+		blockSignals(false);
 		return;
 	}
 
@@ -248,7 +251,7 @@ ObjectTreeView::setSelectedWidget(QWidget *w, bool add)
 	if(!add)
 		clearSelection();
 
-	blockSignals(true); // to avoid recursion
+
 	QListViewItem *item = (QListViewItem*) findItem(w->name());
 	if(!add)
 	{
